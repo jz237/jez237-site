@@ -29,10 +29,10 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   if(level>=2){
    // Short offset shoots interrupt identical two-fork terminals. Their direction
    // and occurrence are deterministic, without consuming the scene RNG stream.
-   if(Math.sin(seed*13.71)>(size<.6?.65:.4)){
-    const t=.55+.08*Math.sin(seed*4.1),root=curve.getPointAt(t),axis=curve.getTangentAt(t);
-    const lateral=new T.Vector3(Math.cos(seed*2.1),.3,Math.sin(seed*2.1)).addScaledVector(axis,.6).normalize();
-    const len=size*(.066+.034*(.5+.5*Math.sin(seed*7.3))),end=root.clone().addScaledVector(lateral,len);
+   if(Math.sin(seed*13.71)>(size<.6?.65:-.15))for(let spur=0;spur<(size>=.6&&Math.sin(seed*5.7)>.2?2:1);spur++){
+    const phase=seed+spur*2.4,t=size<.6?.55+.08*Math.sin(seed*4.1):.38+spur*.34+.06*Math.sin(phase*4.1),root=curve.getPointAt(t),axis=curve.getTangentAt(t);
+    const lateral=new T.Vector3(Math.cos(phase*2.1),size>=.6?.8:.3,Math.sin(phase*2.1)).addScaledVector(axis,.6).normalize();
+    const len=size*(.066+.034*(.5+.5*Math.sin(phase*7.3))),end=root.clone().addScaledVector(lateral,len);
     const path=new T.QuadraticBezierCurve3(root,root.clone().addScaledVector(lateral,len*.45).addScaledVector(axis,len*.16),end);
     const shoot=new T.TubeGeometry(path,3,radius*.49,6,false),sp=shoot.getAttribute('position'),sc=new Float32Array(sp.count*3);
     for(let row=0;row<=3;row++){const u=row/3,center=path.getPointAt(u),color=baseColor.clone().lerp(tipColor,u*.72);
@@ -57,6 +57,17 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    if(level===1){tip.x+=Math.cos(seed+.6)*out*.20;tip.z+=Math.sin(seed+.6)*out*.20;tip.y+=size*.035*curl;}
    if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
+   if(size>=.6){
+    // Mature crowns carry outward-growing shoulder fans, then turn their finer
+    // tips upward. Inheriting the parent bearing avoids unrelated upright
+    // bouquets at every fork. All existing branches/cups and RNG draws remain.
+    const bearing=Math.atan2(delta.z,delta.x),fan=(j/(Math.ceil(count)-1)-.5);
+    const heading=bearing+fan*(level===0?1.85:1.55)+.24*Math.sin(seed*2.3+j*1.7);
+    const reach=out*(level===0?1.7:1.45)*(1+.16*Math.sin(seed+j*3.7));
+    const lift=rise*(level===0?(growth==='antler'?1.05:.72):1.3);
+    tip.set(root.x+Math.cos(heading)*reach,root.y+lift+size*.018*(1+curl),root.z+Math.sin(heading)*reach);
+    tip.addScaledVector(direction,size*(level===0?.075:.035));
+   }
    branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size),level+1,seed+j*1.73);
   }
   if(level===0&&size>=.6){

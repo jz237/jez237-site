@@ -1,11 +1,11 @@
 {
-  "buildHash": "da7cbc2221755088ba8506e53f16df6a4fc983759dc74b8441b1466ea9a6243f",
+  "buildHash": "233d133be8d80f6241e787ec7132ea6b894dfacca660645d3b3b54d8397e935c",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CsJppx-X.js",
+    "assets/index-CX9bdKrv.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T18:20:45.444Z",
-  "readyMs": 3279,
+  "checkedAt": "2026-09-23T18:48:32.974Z",
+  "readyMs": 3420,
   "samples": [
     {
       "fps": 59.99400059994003,
-      "time": 6.087500000095385,
-      "bites": 21,
-      "remaining": 15
+      "time": 5.929100000000014,
+      "bites": 20,
+      "remaining": 16
     },
     {
       "fps": 59.99700014999249,
-      "time": 10.08780000009537,
-      "bites": 33,
-      "remaining": 3
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 14.104800000095304,
+      "time": 9.929400000000014,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 18.13860000009523,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 22.13890000009515,
+      "time": 13.946399999999954,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 26.155900000095073,
+      "time": 17.96339999999989,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999255,
-      "time": 30.17290000009499,
+      "fps": 59.99400059993998,
+      "time": 21.980399999999793,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 25.9807999999997,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99999999999999,
+      "time": 29.997699999999625,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 8203384,
+    "triangles": 8348016,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 564,
@@ -107,7 +107,7 @@
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 398691,
+      "triangles": 398701,
       "placements": [
         [
           1,
@@ -146,8 +146,8 @@
         ],
         [
           14,
-          1.35,
-          3.5,
+          1.474970675119953,
+          3.5631057078247537,
           0.43,
           0.14
         ],
@@ -174,8 +174,8 @@
         ],
         [
           27,
-          2.2374922334230005,
-          3.420887121259786,
+          2.274984466846001,
+          3.3617742425195716,
           0.31,
           0.23
         ],
@@ -226,6 +226,7 @@
     "mobile",
     "coral-closeup",
     "anemone time sequence",
+    "90-second tang travel/turn sequence",
     "original reef and mature planted comparison",
     "reference-comparison.md"
   ],
@@ -235,7 +236,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Twelve thin, irregular living coral mantles follow selected exposed rock faces. Fine raised tissue and local variation; existing polyp layouts preserved with corrected attachments. Reference/planted comparative realism target remains unmet.",
+  "scope": "Mature coral crowns grow as parent-directed outward shoulder fans with upright fine tips and extra short irregular terminal shoots. Original detail retained. Two nearby infill colonies reattached without deleting them. Reference/planted quality target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -273,9 +274,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 3618,
-    "loadCurrent": 3503.5,
-    "fpsPrior": 166.4,
-    "fpsCurrent": 164
+    "loadPrior": 3207.5,
+    "loadCurrent": 3264.3,
+    "fpsPrior": 182.1,
+    "fpsCurrent": 182
   }
 }

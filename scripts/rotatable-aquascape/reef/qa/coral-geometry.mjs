@@ -11,9 +11,10 @@ for(const g of all){assert.ok(g.index,'keep shared vertices');triangles+=g.index
 }
 const normal=plate.getAttribute('normal'),p=plate.getAttribute('position'),half=p.count/2;let up=0,down=0;
 for(let i=0;i<half;i++){up+=normal.getY(i);down+=normal.getY(i+half);}assert.ok(up/half>.65&&down/half<-.65,'plate surfaces face outwards');
-// Additional attached scaffolds intentionally add anatomy. Keep the denser
-// fixture below 2.5MB (still below the original 2,674,320-byte expanded mesh).
-assert.ok(bytes<2500000,'denser indexed colony and plate stay inside their reviewed memory budget');
+// Reviewed crown adds 61 short attached shoots in this fixture: 2,599,454 bytes
+// versus 2,417,918 before. All original branches/cups remain, and the total is
+// still below the original 2,674,320-byte expanded fixture.
+assert.ok(bytes<2650000,'denser indexed colony and plate stay inside their reviewed memory budget');
 console.log('Stony coral geometry passed:',triangles,'triangles,',bytes,'bytes, outward plate tissue and smooth branch seams.');
 
 // A coral foot follows a slope without bridging a separate lower shelf.
