@@ -282,3 +282,20 @@ meniscus, ripple geometry and full depth tracing remain intact. No new render
 passes, maps or geometry. The reef-only adapter leaves freshwater files unchanged.
 An above-water inspection view is included in release screenshots. This is still
 an artistic real-time lighting approximation, not physically measured radiometry.
+
+## Colonies on sloping rock shoulders
+
+Eleven smaller branching colonies now occupy inspected exposed rock sites between
+the large crowns. Growth combines the support face normal with upward direction;
+primary roots resample the actual rock in that local frame and a thin clipped
+living foot follows its relief. Stable independent seeds preserve every existing
+organism and rubble position. Initial trials intersecting prominent encrusting
+colonies were rejected; published sites retain the sand channel and host areas.
+Full transformed geometry determines conservative fish navigation spheres.
+
+The colonies share the existing merged coral material, maps and render passes.
+Their286,453 additional source triangles retain rounded tips, fine surface maps
+and raised corallites. Only accepted anchor sites generate at startup. Fixtures
+check root attachment on horizontal, tilted and near-vertical support, finite
+geometry and containment by the navigation volume. Growth and spacing remain
+artistic approximations; this does not establish species-level coral ecology.

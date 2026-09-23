@@ -1,11 +1,11 @@
 {
-  "buildHash": "607f6eb814a4497491d60a7e0161078e0dc955a0b5eae7440533ee5af6ca3798",
+  "buildHash": "3e192028188c30c8a7e78417b362de096f3207537989cecb0df9809a007e1a99",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-BgCXFMPW.js",
+    "assets/index-BS8grsHF.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T06:48:38.829Z",
-  "readyMs": 1841,
+  "checkedAt": "2026-09-23T07:05:57.982Z",
+  "readyMs": 2282,
   "samples": [
     {
-      "fps": 59.99100134979752,
-      "time": 4.276899999856946,
-      "bites": 26,
-      "remaining": 10
+      "fps": 59.99400059993998,
+      "time": 4.306699999904631,
+      "bites": 16,
+      "remaining": 20
     },
     {
-      "fps": 59.99400059993998,
-      "time": 8.293899999856977,
-      "bites": 36,
-      "remaining": 0
+      "fps": 59.99400059994003,
+      "time": 8.340399999904655,
+      "bites": 33,
+      "remaining": 3
     },
     {
-      "fps": 59.99400059993998,
-      "time": 12.310899999856916,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 16.311199999856843,
+      "fps": 59.99100134979749,
+      "time": 12.357499999904599,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 20.328199999856757,
+      "time": 16.374399999904533,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 20.39159999990445,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.40849999990437,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 24.34529999985667,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 28.3622999998566,
+      "time": 28.40879999990425,
       "bites": 36,
       "remaining": 0
     }
@@ -77,7 +77,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 4052492,
+    "triangles": 4625398,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -92,6 +92,89 @@
     "crustStats": {
       "colonies": 63,
       "triangles": 23489
+    },
+    "infillStats": {
+      "colonies": 11,
+      "triangles": 286453,
+      "placements": [
+        [
+          1,
+          -2.38,
+          2.62,
+          0.53,
+          0.035
+        ],
+        [
+          5,
+          -2.48,
+          0.88,
+          0.48,
+          0.22
+        ],
+        [
+          8,
+          -2.08,
+          1.05,
+          0.36,
+          0.03
+        ],
+        [
+          9,
+          -3.42,
+          1.22,
+          0.33,
+          0.14
+        ],
+        [
+          11,
+          -3.87,
+          1.63,
+          0.34,
+          0.23
+        ],
+        [
+          14,
+          1.35,
+          3.5,
+          0.5,
+          0.14
+        ],
+        [
+          19,
+          3.94,
+          1.62,
+          0.48,
+          0.14
+        ],
+        [
+          22,
+          1.29,
+          1.24,
+          0.4,
+          0.025
+        ],
+        [
+          23,
+          1.05,
+          1.65,
+          0.35,
+          0.23
+        ],
+        [
+          27,
+          2.2,
+          3.48,
+          0.36,
+          0.23
+        ],
+        [
+          28,
+          3.96,
+          2.24,
+          0.37,
+          0.025
+        ]
+      ]
     }
   },
   "geometryChecks": [
@@ -108,7 +191,8 @@
     "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
     "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
     "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms",
-    "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count"
+    "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count",
+    "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail"
   ],
   "visualReview": [
     "front",
@@ -124,5 +208,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Overhead directional reef lighting; fixture-correct lamp reflection and reef-specific water attenuation. Full4,052,492 rendered triangles retained. Ready1841ms vs1817previous, near60FPS locally; other hardware unmeasured. Reference realism not reached."
+  "scope": "Eleven detailed colonies anchored to sloping rock faces. All existing detail retained; rendered4,625,398 triangles. Alternating load means2251ms vs1991.7previous; both near60FPS locally. Other hardware unmeasured. Reference realism not reached."
 }
