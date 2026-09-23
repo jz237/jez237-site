@@ -2,6 +2,7 @@ import './anemone-geometry.mjs';
 import './fish-geometry.mjs';
 import './fin-motion.mjs';
 import './water-capture.mjs';
+import './caustics.mjs';
 import './polyp-geometry.mjs';
 import './rock-surface.mjs';
 import './rock-geometry.mjs';
