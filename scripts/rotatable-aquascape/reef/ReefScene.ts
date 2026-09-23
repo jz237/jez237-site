@@ -40,8 +40,8 @@ export function buildReef(scene:T.Scene){
  const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
- const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{
-  const geo=erodedRock(x,y,z,sx,sy,sz,random),surface=encrustRock(geo);rocks.push(surface);
+ const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number,rng:()=>number=random)=>{
+  const geo=erodedRock(x,y,z,sx,sy,sz,rng),surface=encrustRock(geo);rocks.push(surface);
   // Conservative cluster of collision volumes follows the irregular rock rather than one island-sized ball.
   const r=Math.min(sx,sy,sz)*1.16;obstacles.push({center:new T.Vector3(x,y,z),radius:r});
   for(const [axis,size] of [[0,sx],[1,sy],[2,sz]] as const)if(size>r*1.2)for(const sign of [-1,1]){const center=new T.Vector3(x,y,z);center.setComponent(axis,center.getComponent(axis)+sign*(size-r)*.85);obstacles.push({center,radius:r});}
@@ -50,6 +50,10 @@ export function buildReef(scene:T.Scene){
  const formations=[[-3.6,.63,.15,.91,.55,.93],[-2.45,.55,-.6,.87,.48,.9],[-3.85,1.27,-.45,.64,.78,.72],[-2.05,1.13,-.6,.62,.75,.72],[-2.97,1.92,-.5,1.13,.57,.76],[-2.9,2.45,-.73,.82,.62,.76],[-3.1,2.91,-.95,.6,.56,.57],[-3.9,.5,1.38,.72,.39,.58],[-2.42,.51,1.45,.68,.4,.6],[-1.81,.35,-1.38,.65,.26,.52],
  [1.25,.66,-.42,.81,.59,.83],[3.35,.64,-.05,1,.6,.91],[3.25,1.4,-.72,.77,.82,.84],[1.01,1.45,-.75,.68,.78,.78],[1.68,2.35,-.81,1.12,.7,.8],[2.05,3.01,-.91,.83,.67,.74],[1.64,3.44,-1.02,.63,.49,.62],[3.4,2.11,-.82,.74,.58,.72],[3.98,.91,.65,.57,.67,.74],[2.25,.58,1.36,.88,.48,.6],[3.74,.5,1.52,.67,.42,.63],[.66,.36,1.42,.58,.22,.55],[3.99,2.09,-1.31,.56,.72,.53]];
  for(const a of formations)rock(...a as [number,number,number,number,number,number]);
+ // Smaller formations recede behind the open sand channel. Their own random stream
+ // keeps all established foreground anatomy and motion seeds unchanged.
+ const rearRandom=seeded(230926);
+ for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.83,.86,-1.66,.38,.31,.32],[.19,.35,-1.72,.41,.22,.31],[.35,.71,-1.69,.29,.38,.32],[-.89,1.13,-1.71,.29,.20,.28],[.29,1.03,-1.69,.32,.20,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
  const supports=rocks.map(g=>{g.computeBoundingSphere();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
@@ -62,15 +66,18 @@ export function buildReef(scene:T.Scene){
  }
  const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'The architecture of a reef','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
  const rockGeometry=rockMesh.geometry,rockStats={triangles:rockGeometry.index!.count/3,bufferBytes:Object.values(rockGeometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockGeometry.index!.array.byteLength,expandedBufferBytes:rockGeometry.index!.count*11*4};
- const branch=(x:number,y:number,z:number,size:number,hue:number)=>{
+ const branch=(x:number,y:number,z:number,size:number,hue:number,rng:()=>number=random)=>{
   const base=new T.Vector3(x,y,z);attachRay.set(new T.Vector3(x,y+.32,z),new T.Vector3(0,-1,0));attachRay.far=.95;
   const support=attachRay.intersectObjects(supports,false)[0];if(support)base.y=support.point.y-.012*size;
-  const colony=branchingColony(base,size,hue,random,(px,pz)=>surfaceLookup(px,base.y+.28*size,pz)?.point.y??null,hue>.9?'antler':hue>.7?'canopy':'bushy'),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
+  const colony=branchingColony(base,size,hue,rng,(px,pz)=>surfaceLookup(px,base.y+.28*size,pz)?.point.y??null,hue>.9?'antler':hue>.7?'canopy':'bushy'),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
   for(const geometry of colony){const p=geometry.getAttribute('position');for(let i=0;i<p.count;i++)radiusSquared=Math.max(radiusSquared,(p.getX(i)-center.x)**2+(p.getY(i)-center.y)**2+(p.getZ(i)-center.z)**2);}
   corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };
  for(const b of [[-3.12,3.24,-.95,1,.94],[-3.92,2.55,-.6,.8,.025],[-2.37,2.83,-.7,.72,.22],[-3.45,2.83,-.25,.82,.81],[-1.94,1.61,-.63,.63,.47],[-3.89,1.23,1.06,.5,.2],[-2.11,.63,1.61,.51,.025],[-4.27,.72,.56,.63,.28],[-1.48,.57,-1.46,.55,.8],
  [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[3.72,1.32,.88,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[2.85,.87,1.42,.44,.21],[3.45,.65,1.77,.39,.82]])branch(...b as [number,number,number,number,number]);
+ // These are full volumetric colonies, not distant cards; they share the same
+ // indexed detail and merged material as the main islands.
+ for(const b of [[-.91,1.32,-1.71,.63,.82],[.28,1.22,-1.69,.52,.23],[-.32,.57,-1.59,.40,.96]])branch(...b as [number,number,number,number,number],rearRandom);
  const plate=(x:number,y:number,z:number,r:number)=>{
   corals.push(platingColony(x,y,z,r,random()*Math.PI*2));
   for(let dx=-r*1.2;dx<=r*1.2;dx+=.18)for(let dz=-r*.92;dz<=r*.92;dz+=.18)if((dx/r)**2+(dz/(r*.76))**2<1.46)obstacles.push({center:new T.Vector3(x+dx,y+.045+.065*(dx*dx+dz*dz)/(r*r),z+dz),radius:.12});
