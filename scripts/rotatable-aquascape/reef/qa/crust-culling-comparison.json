@@ -1,0 +1,22 @@
+{
+  "fixtures": 30,
+  "allAttributesAndIndicesIdentical": true,
+  "samples": [
+    {
+      "name": "prior",
+      "ms": 24.221900000000005
+    },
+    {
+      "name": "current",
+      "ms": 15.309300000000007
+    },
+    {
+      "name": "current",
+      "ms": 16.238
+    },
+    {
+      "name": "prior",
+      "ms": 24.32220000000001
+    }
+  ]
+}

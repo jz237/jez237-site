@@ -20,14 +20,19 @@ function noise(x:number,y:number,z:number){
  const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),smooth=(n:number)=>n*n*(3-2*n),a=smooth(x-ix),b=smooth(y-iy),c=smooth(z-iz),mix=T.MathUtils.lerp;
  return mix(mix(mix(hash(ix,iy,iz),hash(ix+1,iy,iz),a),mix(hash(ix,iy+1,iz),hash(ix+1,iy+1,iz),a),b),mix(mix(hash(ix,iy,iz+1),hash(ix+1,iy,iz+1),a),mix(hash(ix,iy+1,iz+1),hash(ix+1,iy+1,iz+1),a),b),c);
 }
-// Small attached crusts, not large camouflage patches. Vertex color is baked once.
+// Baked coralline-algae mosaic follows the actual volume, without a repeating
+// image decal or an extra runtime shader. Nested scales break up smooth stone.
 export function encrustRock(g:T.BufferGeometry){
  const p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
- const chalk=new T.Color('#ddd2bb').multiplyScalar(1.85),purple=new T.Color('#a282b3').multiplyScalar(1.8),rose=new T.Color('#b9858c').multiplyScalar(1.65),olive=new T.Color('#98a288').multiplyScalar(1.5),color=new T.Color();
+ const chalk=new T.Color('#c8b797').multiplyScalar(1.45),purple=new T.Color('#9b477f').multiplyScalar(1.65),rose=new T.Color('#bd7785').multiplyScalar(1.4),olive=new T.Color('#858974').multiplyScalar(1.35),edge=new T.Color('#c9a6b5'),color=new T.Color();
  for(let i=0;i<p.count;i++){
-  const x=p.getX(i),y=p.getY(i),z=p.getZ(i),patch=noise(x*13,y*13,z*13)*.64+noise(x*37,y*37,z*37)*.36;
-  const crust=T.MathUtils.smoothstep(patch,.49,.69),variation=noise(x*4,y*4,z*4);
-  color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.55,.78)*.5).lerp(variation>.5?purple:rose,crust*.81);
+  const x=p.getX(i),y=p.getY(i),z=p.getZ(i),fine=noise(x*31,y*31,z*31),grain=noise(x*13,y*13,z*13);
+  const patch=noise(x*5.1+grain*.6,y*5.1,z*5.1)*.72+grain*.28;
+  const crust=T.MathUtils.smoothstep(patch,.44,.57),variation=noise(x*3.1,y*3.1,z*3.1);
+  color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.48,.71)*.55).lerp(variation>.48?purple:rose,crust*.94);
+  // Thin pale growing boundaries and uneven age/color within each attached patch.
+  const margin=Math.exp(-(((patch-.485)/.018)**2))*.17;
+  color.lerp(edge,margin).multiplyScalar(.78+.27*fine+.12*grain);
   colors.set([color.r,color.g,color.b],i*3);
  }
  g.setAttribute('color',new T.BufferAttribute(colors,3));return g;

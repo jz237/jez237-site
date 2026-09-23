@@ -1,12 +1,12 @@
 {
-  "buildHash": "6f120fbfc587d383eab5ecc8fea4460448c59f6daffe49ae2a53180571132420",
+  "buildHash": "45363aed090c4db170505c5fa4cc3ee391d19cf606e81d8b06b147171af8ca94",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-BvnnhRwA.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-pcH4i8yH.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T05:56:30.924Z",
-  "readyMs": 1820,
+  "checkedAt": "2026-09-23T06:16:51.560Z",
+  "readyMs": 1877,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.324199999952317,
-      "bites": 14,
-      "remaining": 22
+      "fps": 59.99400059994001,
+      "time": 4.283799999904633,
+      "bites": 20,
+      "remaining": 16
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.32449999995235,
-      "bites": 29,
-      "remaining": 7
-    },
-    {
-      "fps": 59.99700014999249,
-      "time": 12.341499999952296,
+      "fps": 59.99100134979749,
+      "time": 8.300899999904662,
       "bites": 35,
       "remaining": 1
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.358499999952233,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 20.37559999995218,
+      "time": 12.31779999990461,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.37589999995211,
+      "time": 16.31809999990454,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 20.318399999904443,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.392999999952014,
+      "time": 24.335499999904375,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 28.352599999904285,
       "bites": 36,
       "remaining": 0
     }
@@ -77,7 +77,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 4027708,
+    "triangles": 4052492,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -90,8 +90,8 @@
       "expandedBufferBytes": 41896800
     },
     "crustStats": {
-      "colonies": 10,
-      "triangles": 11097
+      "colonies": 63,
+      "triangles": 23489
     }
   },
   "geometryChecks": [
@@ -102,11 +102,12 @@
     "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
     "Basal coral tissue follows slopes without bridging disconnected lower shelves",
     "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 10885320 vs 41896800 bytes",
-    "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
+    "Clipped crust triangles nondegenerate; sampled support gap bounded; 63 colonies / 23489 triangles",
     "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
     "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes",
     "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
-    "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips"
+    "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
+    "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms"
   ],
   "visualReview": [
     "front",
@@ -121,5 +122,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Irregular spreading branching colonies, individually attached stems, slender rounded branches and finer tissue repeats. All meshes retained; same4,027,708 rendered triangles. Ready1820ms, near60FPS locally; other hardware unmeasured. Reference realism not reached."
+  "scope": "Richer baked coralline mosaic and53 additional attached surface colonies; all original fine detail retained. Rendered triangles+0.615%. Setup culling preserves exact geometry. Ready1877ms; repeated load means1790.3ms prior/1869.0ms current, near60FPS locally. Reference target not reached."
 }
