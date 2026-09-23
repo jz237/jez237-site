@@ -5,7 +5,7 @@ from mathutils import Vector
 from mathutils.geometry import tessellate_polygon
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT.parent/'assets'/'fish';OUT.mkdir(parents=True,exist_ok=True)
-DATA=json.loads((ROOT/'profiles.json').read_text())
+DATA=json.loads((ROOT/'profiles.json').read_text(encoding='utf-8'))
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=20
 scene.render.resolution_x=1100;scene.render.resolution_y=720;scene.render.resolution_percentage=100
@@ -49,19 +49,24 @@ for species,s in DATA.items():
  skinimg=bpy.data.images.load(str(clean),check_existing=True)
  skinimg.file_format='JPEG';skinimg.filepath_raw=str(OUT/(species+'-skin.jpg'));skinimg.save()
  skinimg=bpy.data.images.load(str(OUT/(species+'-skin.jpg')),check_existing=False)
- skin=make_material(species+' skin',skinimg,.44);fin=make_material(species+' fin membrane',original,.48,.9);eyeMat=make_material(species+' cornea',original,.23)
+ skin=make_material(species+' skin',skinimg,.44);fin=make_material(species+' fin membrane',skinimg,.48,.9);pectoralFin=make_material(species+' pectoral membrane',original,.48,.9);eyeMat=make_material(species+' cornea',original,.23)
  begin,end=s['range'];length=end-begin;cy=s['cy'];width=s['width'];objects=[]
  def pos(px,py,depth=0):return ((px-begin)/length-.5,(cy-py)/length,depth)
  def uv(px,py):return (px/iw,1-py/ih)
+ def trunk_thickness(t):
+  # A narrow continuous peduncle meets the thin tail membrane. Keep the
+  # head and full trunk dimensions; remove only the abrupt rear end-cap lip.
+  u=max(0,min(1,t/.12));u=u*u*(3-2*u)
+  return width*(.004+.096*u+.90*math.sin(math.pi*t)**.62)
  def surface(px,py):
   top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=max(1,(bottom-top)/2)
-  t=max(0,min(1,(px-begin)/length));thickness=width*(.10+.90*math.sin(math.pi*t)**.62)
+  t=max(0,min(1,(px-begin)/length));thickness=trunk_thickness(t)
   return thickness*math.sqrt(max(0,1-((py-mid)/radius)**2))
  vertices=[];uvs=[];faces=[];rings=88;sides=48
  for i in range(rings+1):
   px=begin+length*i/rings;top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=(bottom-top)/2
   for j in range(sides):
-   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.cos(a)*width*(.10+.90*math.sin(math.pi*t)**.62)
+   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.cos(a)*trunk_thickness(t)
    vertices.append(pos(px,py,depth));uvs.append(uv(px,py))
    if i<rings:
     n=i*sides+j;nn=i*sides+(j+1)%sides;faces.append((n,n+sides,nn+sides,nn))
@@ -88,16 +93,16 @@ for species,s in DATA.items():
     for q in [a,b,c]:
      px,py=q.x,q.y;depth=.001
      if side:
-      depth=side*(surface(pivot[0],pivot[1])+.006+max(0,pivot[0]-px)/length*.15)
+      depth=side*max(surface(px,py)+.0005,surface(pivot[0],pivot[1])+.0005+max(0,pivot[0]-px)/length*.15)
      p3=pos(px,py,depth)
      if pivot:
-      anchor=pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.006));p3=tuple(p3[k]-anchor[k] for k in range(3))
+      anchor=pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.0005));p3=tuple(p3[k]-anchor[k] for k in range(3))
      v.append(p3);tex.append(uv(px,py))
     f.append((n,n+1,n+2))
   for t in triangles:tri(*[p[q] if isinstance(q,int) else q for q in t],2 if not side else 1)
-  ob=make_mesh(name,v,f,tex,fin)
+  ob=make_mesh(name,v,f,tex,pectoralFin if side else fin)
   # All thin fins intentionally double-sided, with GPU flex at runtime.
-  if pivot:ob.location=xyz(pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.006)))
+  if pivot:ob.location=xyz(pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.0005)))
   return ob
  # Dorsal ribbon is rooted continuously into the upper trunk. Every column
  # touches the body surface, including low valleys between the dorsal spines.
@@ -161,5 +166,5 @@ for species in DATA:
 for coll in scene.collection.children:coll.hide_render=False
 bpy.ops.file.pack_all()
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'marine-fish.blend'),compress=True)
-(OUT/'model-info.json').write_text(json.dumps(metadata,indent=2)+'\n')
+(OUT/'model-info.json').write_text(json.dumps(metadata,indent=2)+'\n',encoding='utf-8',newline='\n')
 print('MARINE_MODELS',json.dumps(metadata))

@@ -1,12 +1,12 @@
 {
-  "buildHash": "efea0e22df32c523afd505428a04e18bcdf4a51af52a0ad7901c0fcece97120d",
+  "buildHash": "c93459d30f565b8e17940cd3a0560f835cbfe2812c2ce94438ae5be2e40e35c2",
   "files": [
-    "assets/anthias-BtfICPIN.glb",
-    "assets/chromis-BJi4ZRfM.glb",
-    "assets/clown-D-bxKsMk.glb",
-    "assets/gramma-d3_cP3UV.glb",
-    "assets/index-CDz0dl4K.js",
+    "assets/anthias-QcvtfU54.glb",
+    "assets/chromis-BeZMqwQ5.glb",
+    "assets/clown-zY3G7iuy.glb",
+    "assets/gramma-BgdGKcNy.glb",
     "assets/index-DdD2V56_.css",
+    "assets/index-DqAmh1lX.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -19,52 +19,52 @@
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
     "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
-    "assets/tang-BgoOVjXF.glb",
-    "assets/yellow-DDdRGU1T.glb",
+    "assets/tang-Y0Eaq3Iy.glb",
+    "assets/yellow-CCMRPYfK.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T09:39:18.583Z",
-  "readyMs": 2533,
+  "checkedAt": "2026-09-23T09:58:02.851Z",
+  "readyMs": 2381,
   "samples": [
     {
+      "fps": 59.99700014999249,
+      "time": 4.304200000000002,
+      "bites": 30,
+      "remaining": 6
+    },
+    {
+      "fps": 59.99700014999249,
+      "time": 8.321200000000042,
+      "bites": 35,
+      "remaining": 1
+    },
+    {
       "fps": 59.99400059993998,
-      "time": 4.299099999856948,
-      "bites": 17,
-      "remaining": 19
-    },
-    {
-      "fps": 59.99100134979749,
-      "time": 8.316199999856986,
-      "bites": 33,
-      "remaining": 3
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 12.333099999856936,
+      "time": 12.33829999999999,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99100134979755,
-      "time": 16.333599999856876,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 20.350499999856794,
+      "fps": 59.994000599940094,
+      "time": 16.338699999999935,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 24.350799999856715,
+      "time": 20.355599999999868,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 28.367799999856622,
+      "fps": 59.994000599940094,
+      "time": 24.372699999999757,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 28.38969999999968,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5289638,
+    "triangles": 5290438,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -204,15 +204,18 @@
     "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
     "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
     "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation",
-    "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief"
+    "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief",
+    "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup",
-    "blue-hour",
-    "reference-and-mature-planted-comparison"
+    "fish-clown",
+    "fish-tang",
+    "fish-anthias",
+    "Blender-oblique-proofs",
+    "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -220,5 +223,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Neutral overhead light and restrained ambient fill separate shelves/caves; soft animated shafts and360 depth-tested motes add water-column depth. Background, shafts and motes dim with Blue hour; shared clock freezes movement on Pause. Same5289638rendered triangles and all inhabitants retained,7200bytes static particle buffers and one new draw group; no new maps or render passes. Local normal60FPSboth. Alternating load means2250ms prior/2286current; uncapped means245.4/244.9FPS. Other hardware unmeasured. Photographic target remains unmet."
+  "scope": "Blender fish now taper into tail membranes, share color images across median-fin roots, conform paired fins around the flank and stroke outward independently. Clownfish pectoral trace excludes adjacent stripe. All20fish and scenery retained. Source triangles94912 vs94712; rendered5290438 vs5289638. SixGLBs5548928bytes vs5527308. Existing texture dimensions/material passes retained. Alternating ready means2343.7/2265ms, uncapped251.1/255.8FPS. Local60FPSboth. Photographic target remains unmet."
 }
