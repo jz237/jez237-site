@@ -1,11 +1,11 @@
 {
-  "buildHash": "cecd2d26548aafabc880d01642b5c5858a391fbc0f4febaa0fa576b5b3d11b93",
+  "buildHash": "0f6c6db08aedcfa3d7bdbb75e202d8557ff0214aacfefe16129bc9e52320dc58",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-Bn92vYV7.js",
+    "assets/index-DSopTREv.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T11:50:13.078Z",
-  "readyMs": 2329,
+  "checkedAt": "2026-09-23T15:28:43.862Z",
+  "readyMs": 2371,
   "samples": [
     {
-      "fps": 59.99100134979755,
-      "time": 4.269799999809266,
+      "fps": 59.99400059994001,
+      "time": 6.160000000047705,
       "bites": 24,
       "remaining": 12
     },
     {
       "fps": 59.99400059993998,
-      "time": 8.303399999809299,
+      "time": 10.177000000047686,
       "bites": 35,
       "remaining": 1
     },
     {
-      "fps": 59.99400059994003,
-      "time": 12.303699999809245,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979744,
-      "time": 16.320799999809182,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 20.337699999809104,
+      "fps": 59.99400059993998,
+      "time": 14.177400000047635,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.33809999980905,
+      "time": 18.17780000004756,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999255,
-      "time": 28.338399999808953,
+      "fps": 59.99400059993998,
+      "time": 22.1947000000475,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 26.2118000000474,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 30.212100000047307,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5547448,
+    "triangles": 5551288,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 556,
@@ -218,7 +218,8 @@
     "three-quarter",
     "side",
     "mobile",
-    "coral-closeup",
+    "sand-closeup",
+    "six isolated open/closed respiration studies",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -227,5 +228,47 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Resolved skeletal folds on broad encrusting coral patches; shared indexed midpoint topology, thinner attached relief. Rendered5547448triangles vs5479186 (+1.25%), no additional maps/passes/draw groups. Loads2292.8/2308.3ms; uncapped261.6/264.6FPS. Reference realism not reached."
+  "scope": "Attached gill-cover flex and localized mouth respiration with independent activity-sensitive timing; continuous instanced diffuse fish penumbras, cached full-resolution static reef shadows with softer edges; lower submerged specular sheen. Same model/texture assets. Rendered5551288triangles (+3840). Loads2314.8/2329.8ms; uncapped257.9/257.6FPS. Comparative reference realism not yet reached; refinement automation active without time cutoff.",
+  "shadowFrames": 60,
+  "respirationRenderChecks": {
+    "errors": [],
+    "report": [
+      {
+        "species": "tang",
+        "changedPixels": 2118,
+        "meanChange": 67.94995278564684
+      },
+      {
+        "species": "yellow",
+        "changedPixels": 2312,
+        "meanChange": 146.22102076124568
+      },
+      {
+        "species": "clown",
+        "changedPixels": 1390,
+        "meanChange": 62.91654676258993
+      },
+      {
+        "species": "anthias",
+        "changedPixels": 751,
+        "meanChange": 109.78428761651132
+      },
+      {
+        "species": "chromis",
+        "changedPixels": 658,
+        "meanChange": 58.37234042553192
+      },
+      {
+        "species": "gramma",
+        "changedPixels": 1145,
+        "meanChange": 82.71004366812227
+      }
+    ]
+  },
+  "performanceComparison": {
+    "loadPrior": 2314.8,
+    "loadCurrent": 2329.8,
+    "fpsPrior": 257.9,
+    "fpsCurrent": 257.6
+  }
 }

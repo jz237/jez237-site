@@ -19,6 +19,11 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
    #endif
    vReefWorld=(modelMatrix*reefWorld).xyz;`);
   shader.fragmentShader='varying vec3 vReefWorld;uniform float reefOpticsTime,reefDaylight;\n'+shader.fragmentShader;
+  // Standard materials assume an air/tissue interface. Submerged coral/rock
+  // has lower Fresnel contrast. Keep normal/roughness detail, reduce the broad
+  // air-like specular sheen. Fish already carry an explicit underwater IOR.
+  if(!(material instanceof T.MeshPhysicalMaterial))shader.fragmentShader=shader.fragmentShader.replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
+   material.specularColor*=.25;`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_end>',`#include <lights_fragment_end>
    vec3 reefNormal=inverseTransformDirection(normal,viewMatrix);
    vec2 reefUV=vReefWorld.xz+vReefWorld.y*vec2(.17,.09);
@@ -39,7 +44,7 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
    outgoingLight=outgoingLight*transmittance+vec3(.012,.047,.095)*(1.-transmittance)*reefDaylight;
    #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=>cacheKey+'-reef-optics-v1';
+ material.customProgramCacheKey=()=>cacheKey+'-reef-optics-submerged-v2';
  material.needsUpdate=true;
 }
 
