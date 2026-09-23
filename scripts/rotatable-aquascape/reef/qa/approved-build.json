@@ -1,52 +1,52 @@
 {
-  "buildHash": "244bcbb1154654bdea3e2e03779816c44ec0d6dace8d327a0dbcb9738e3d435a",
+  "buildHash": "217ca69b7784a7f5bedb20755d76d90d6d00a28f30b98623eb9cb3042dcf1fec",
   "files": [
-    "assets/index-C6vdGrmR.js",
+    "assets/index-BEGZstcZ.js",
     "assets/index-DdD2V56_.css",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T01:38:55.235Z",
-  "readyMs": 1587,
+  "checkedAt": "2026-09-23T01:53:09.816Z",
+  "readyMs": 1526,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 4.296500000000001,
-      "bites": 23,
-      "remaining": 13
+      "time": 4.346599999952316,
+      "bites": 17,
+      "remaining": 19
     },
     {
-      "fps": 59.99400059993998,
-      "time": 8.296900000000033,
-      "bites": 35,
-      "remaining": 1
+      "fps": 59.99400059994003,
+      "time": 8.363599999952346,
+      "bites": 34,
+      "remaining": 2
     },
     {
-      "fps": 59.99400059993998,
-      "time": 12.313900000000007,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 16.330999999999946,
+      "fps": 59.99400059994003,
+      "time": 12.380699999952304,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.347899999999857,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 24.36499999999977,
+      "time": 16.38099999995225,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.365299999999706,
+      "time": 20.397999999952184,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.414999999952105,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 28.415299999952005,
       "bites": 36,
       "remaining": 0
     }
@@ -65,21 +65,20 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 2305734,
+    "triangles": 2387574,
     "inhabitants": 20
   },
-  "anemoneGeometry": {
-    "tentacles": 540,
-    "outwardNormalsPercent": 100,
-    "rootAndTipContinuity": true
-  },
+  "geometryChecks": [
+    "anemone roots, tips and outward skin",
+    "fish closed bodies, smooth cheek seams and outward gills"
+  ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup",
-    "anemone-closeup",
-    "anemone-flow"
+    "clownfish",
+    "blue-tang",
+    "yellow-tang"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -87,5 +86,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Continuous anemone tissue, rooted flow and attached polyp colonies. Artistic approximation, not photographic parity; local desktop performance is not a phone guarantee."
+  "scope": "Marine anatomy/detail pass; fish still stylized and overall scene still short of photographic parity. Local desktop measurements only."
 }

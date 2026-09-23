@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {marineBody,bodySurface,gillCover,marineFin as fin} from './MarineAnatomy.ts';
 import {type Obstacle} from './ReefScene.ts';
 
 type Species='tang'|'yellow'|'clown'|'anthias'|'chromis'|'gramma';
@@ -16,32 +16,13 @@ function skin(species:Species){
   for(const [x,w] of [[185,94],[485,98],[792,80]]){g.strokeStyle='#252629';g.lineWidth=w+27;g.beginPath();g.moveTo(x-24,-20);g.bezierCurveTo(x+60,140,x-48,315,x+30,540);g.stroke();g.strokeStyle='#eff4e6';g.lineWidth=w;g.stroke();}
  }else if(species==='gramma'){const grad=g.createLinearGradient(425,0,650,0);grad.addColorStop(0,'#f7c927');grad.addColorStop(.48,'#ec983d');grad.addColorStop(.6,'#ae39cf');grad.addColorStop(1,'#8439c8');g.fillStyle=grad;g.fillRect(0,0,1024,512);g.fillStyle='#151936';g.beginPath();g.ellipse(630,65,27,29,0,0,6.28);g.fill();}
  // Subtle overlapping scales are fixed texture detail, not thousands of draw calls.
- for(let y=13;y<512;y+=11)for(let x=24;x<950;x+=15){const xx=x+(y%22?7:0);g.strokeStyle=`rgba(236,252,255,${species==='clown'?.12:.19})`;g.lineWidth=.8;g.beginPath();g.ellipse(xx,y,7,5,0,-1.3,1.3);g.stroke();g.strokeStyle='rgba(15,40,61,.11)';g.beginPath();g.ellipse(xx-1,y+2,7,5,0,1.4,4.8);g.stroke();}
+ for(let y=13;y<512;y+=11)for(let x=24;x<950;x+=15){const xx=x+(y%22?7:0);g.strokeStyle=`rgba(236,252,255,${species==='clown'?.035:.055})`;g.lineWidth=.8;g.beginPath();g.ellipse(xx,y,7,5,0,-1.3,1.3);g.stroke();g.strokeStyle='rgba(15,40,61,.032)';g.beginPath();g.ellipse(xx-1,y+2,7,5,0,1.4,4.8);g.stroke();}
  // Fine gill cover edge and cheek highlights behind the eye.
  g.strokeStyle='rgba(26,38,54,.45)';g.lineWidth=3;g.beginPath();g.moveTo(749,192);g.bezierCurveTo(715,242,727,339,784,367);g.stroke();
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;return t;
 }
-function bodyGeometry(s:Species){
- const {h,w}=specs[s],p:number[]=[],n:number[]=[],uv:number[]=[],ids:number[]=[],rings=42,sides=40;
- for(let i=0;i<=rings;i++){const t=i/rings,x=t-.5,r=Math.pow(Math.sin(Math.PI*t),.8),head=t>.82?1-(t-.82)*1.5:1;
-  for(let j=0;j<=sides;j++){const a=j/sides*6.283185,pY=Math.sin(a)*h*r*head; p.push(x,pY,Math.cos(a)*w*r);n.push(0,Math.sin(a),Math.cos(a));uv.push(t,.5+Math.sin(a)*.48);if(i<rings&&j<sides){const k=i*(sides+1)+j;ids.push(k,k+sides+1,k+1,k+1,k+sides+1,k+sides+2);}}
- }
- const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('normal',new T.Float32BufferAttribute(n,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(ids);g.computeVertexNormals();return g;
-}
-function fin(outline:T.Vector3[],color:string){
- const contour=new T.CatmullRomCurve3(outline.slice(1),false,'centripetal');outline=[outline[0],...contour.getPoints(Math.max(14,outline.length*5))];
- const p:number[]=[],uv:number[]=[],idx:number[]=[],root=outline[0];
- // Curved triangular fan with radial subdivisions, so membranes visibly flex.
- for(let i=1;i<outline.length-1;i++)for(let a=0;a<8;a++)for(let b=0;b<8-a;b++){
-  const point=(u:number,v:number)=>root.clone().addScaledVector(outline[i].clone().sub(root),u/8).addScaledVector(outline[i+1].clone().sub(root),v/8);
-  const tri=(a:T.Vector3,b:T.Vector3,c:T.Vector3)=>{const start=p.length/3;for(const v of [a,b,c]){p.push(v.x,v.y,v.z);uv.push(v.x+.5,v.y+.5);}idx.push(start,start+1,start+2);};
-  tri(point(a,b),point(a+1,b),point(a,b+1));if(a+b<7)tri(point(a+1,b),point(a+1,b+1),point(a,b+1));
- }
- const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();
- const mat=new T.MeshStandardMaterial({color,roughness:.4,metalness:.16,side:T.DoubleSide,transparent:true,opacity:.85,depthWrite:false});return new T.Mesh(g,mat);
-}
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
-type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};until:number;phase:number;pectoral:T.Group[];mouth:T.Mesh;eyes:T.Group;mode:string};
+type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string};
 export type Food={position:T.Vector3;alive:boolean;age:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private seed=Math.random()*100;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
@@ -54,6 +35,10 @@ export class ReefFish{
     group.traverse(o=>{if(o instanceof T.Mesh){o.material=(o.material as T.MeshStandardMaterial).clone();const mat=o.material as T.MeshStandardMaterial;
      if(o.name==='body'||o.name==='fin'){
       const isBody=o.name==='body';mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.vertexShader='uniform float swimTime,swimEffort;\n'+shader.vertexShader;
+       shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+        float tail=clamp((.3-position.x)/.9,0.,1.),dTail=position.x>-.6&&position.x<.3?-1./.9:0.;
+        float slope=(2.*tail*dTail*sin(swimTime*7.5-position.x*7.)-7.*tail*tail*cos(swimTime*7.5-position.x*7.))*(.018+swimEffort*.075);
+        objectNormal.x-=slope*objectNormal.z;objectNormal=normalize(objectNormal);`);
        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
         float rear=clamp((.3-position.x)/.9,0.,1.);
         transformed.z+=sin(swimTime*7.5-position.x*7.)*rear*rear*(.018+swimEffort*.075);
@@ -63,32 +48,31 @@ export class ReefFish{
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
     let position=this.destination(s,i);const radius=size*(s==='tang'||s==='yellow'?.4:.31);for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
-    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius:size*(s==='tang'||s==='yellow'?.4:.31),yaw:Math.random()*6.28,pitch:0,clock,effort,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Mesh,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring'};group.position.copy(position);this.fish.push(fish);
+    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius:size*(s==='tang'||s==='yellow'?.4:.31),yaw:Math.random()*6.28,pitch:0,clock,effort,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring'};group.position.copy(position);this.fish.push(fish);
    }
   }
  }
  private make(s:Species){
-  const group=new T.Group(),{h,w,color}=specs[s],tang=s==='tang'||s==='yellow',body=new T.Mesh(bodyGeometry(s),new T.MeshStandardMaterial({map:skin(s),roughness:.38,metalness:.28}));body.name='body';group.add(body);
+  const group=new T.Group(),{h,w,color}=specs[s],tang=s==='tang'||s==='yellow',bodyMap=skin(s),body=new T.Mesh(marineBody(specs[s]),new T.MeshStandardMaterial({map:bodyMap,roughness:.44,metalness:.10}));body.name='body';group.add(body);
   const tailColor=s==='tang'||s==='gramma'?'#ffd130':color;
-  const fins=[fin([v(-.44,0),v(-.89,.23),v(-.76,0),v(-.89,-.23),v(-.44,0)],tailColor),
-   fin([v(-.33,h*.25),v(-.39,h*1.11),v(-.05,h*(tang?1.48:1.36)),v(.23,h*.85),v(.32,h*.39)],s==='tang'?'#172e80':color),
-   fin([v(-.33,-h*.2),v(-.38,-h*1.12),v(-.02,-h*(tang?1.43:1.17)),v(.18,-h*.77)],color)];
-  const rays:T.BufferGeometry[]=[];
+  const edge=s==='clown'?'#252721':s==='tang'?'#122348':s==='yellow'?'#c9ad27':'#a29875';
+  const tail=s==='clown'||s==='gramma'?[v(-.44,0),v(-.70,.16),v(-.82,.13),v(-.84,0),v(-.82,-.13),v(-.70,-.16),v(-.44,0)]:[v(-.44,0),v(-.87,.22),v(-.75,0),v(-.87,-.22),v(-.44,0)];
+  const fins=[fin(tail,tailColor,edge),
+   fin([v(-.33,h*.25),v(-.39,h*1.11),v(-.05,h*(tang?1.48:1.36)),v(.23,h*.85),v(.32,h*.39)],s==='tang'?'#172e80':color,edge),
+   fin([v(-.33,-h*.2),v(-.38,-h*1.12),v(-.02,-h*(tang?1.43:1.17)),v(.18,-h*.77)],color,edge)];
   for(const f of fins){f.name='fin';group.add(f);}
-  for(let i=0;i<15;i++){
-   const y=(i/14-.5)*.43,curve=new T.LineCurve3(v(-.45,0),v(-.86+Math.abs(y)*.3,y));rays.push(new T.TubeGeometry(curve,6,.0018,3,false));
-  }
-  const rayMesh=new T.Mesh(mergeGeometries(rays),new T.MeshStandardMaterial({color:s==='clown'?'#391e17':'#dcc99b',transparent:true,opacity:.55}));rayMesh.name='fin';group.add(rayMesh);rays.forEach(g=>g.dispose());
   const eyes=new T.Group();eyes.name='eyes';
   for(const side of [-1,1]){
-   const eye=new T.Mesh(new T.SphereGeometry(.039,16,12),new T.MeshStandardMaterial({color:s==='yellow'?'#c4a840':'#b3a96c',roughness:.3,metalness:.45}));eye.position.set(.343,.049,w*.67*side);eye.scale.set(1,1,.42);eyes.add(eye);
-   const pupil=new T.Mesh(new T.SphereGeometry(.025,14,10),new T.MeshPhysicalMaterial({color:'#030909',roughness:.08,clearcoat:1}));pupil.position.copy(eye.position);pupil.position.z+=side*.014;pupil.scale.z=.48;eyes.add(pupil);
-   const glint=new T.Mesh(new T.SphereGeometry(.007,6,5),new T.MeshBasicMaterial({color:'#e9ffff'}));glint.position.copy(pupil.position).add(v(.006,.007,side*.008));eyes.add(glint);
-   const gill=new T.Mesh(new T.SphereGeometry(.083,14,10),new T.MeshStandardMaterial({color,roughness:.4,metalness:.22}));gill.name='gill';gill.scale.set(.62,1,.1);gill.position.set(.23,-.005,side*w*.88);group.add(gill);
-   const pivot=new T.Group();pivot.name='pectoral';pivot.position.set(.18,-.045,side*w*.86);const membrane=fin([v(0,0),v(-.25,.035,side*.18),v(-.22,-.1,side*.19),v(-.05,-.07)],s==='yellow'?'#e4e875':'#a5b6a0');pivot.add(membrane);group.add(pivot);
+   const eye=new T.Mesh(new T.SphereGeometry(.030,20,14),new T.MeshStandardMaterial({color:s==='yellow'?'#6b5d18':s==='clown'?'#755a2c':'#273344',roughness:.4,metalness:.12}));eye.position.set(.335,h*.20,side*(bodySurface(specs[s],.335,h*.20)+.001));eye.scale.set(1,1,.23);eyes.add(eye);
+   const pupil=new T.Mesh(new T.SphereGeometry(.021,18,12),new T.MeshPhysicalMaterial({color:'#030909',roughness:.08,clearcoat:1}));pupil.position.copy(eye.position);pupil.position.z+=side*.005;pupil.scale.z=.18;eyes.add(pupil);
+   const glint=new T.Mesh(new T.SphereGeometry(.0038,6,5),new T.MeshBasicMaterial({color:'#e9ffff'}));glint.position.copy(pupil.position).add(v(.006,.007,side*.004));eyes.add(glint);
+   const gill=new T.Mesh(gillCover(specs[s],side),new T.MeshStandardMaterial({map:bodyMap,roughness:.44,metalness:.10,side:T.DoubleSide}));gill.name='gill';gill.userData.side=side;group.add(gill);
+   const pivot=new T.Group();pivot.name='pectoral';pivot.position.set(.18,-.045,side*w*.86);const membrane=fin([v(0,0),v(-.25,.035,side*.18),v(-.22,-.1,side*.19),v(-.05,-.07)],s==='yellow'?'#dccd55':s==='clown'?'#dd932e':s==='tang'?'#d9c45e':'#789ba6',s==='clown'?'#353526':'#9aa88f');pivot.add(membrane);group.add(pivot);
   }
   group.add(eyes);
-  const mouth=new T.Mesh(new T.TorusGeometry(.026,.008,6,14),new T.MeshStandardMaterial({color:s==='yellow'?'#c4a82a':'#b98960',roughness:.55}));mouth.rotation.y=Math.PI/2;mouth.position.set(.493,-.012,0);mouth.name='mouth';group.add(mouth);
+  const mouth=new T.Group();mouth.name='mouth';mouth.position.set(.499,-.006,0);
+  const aperture=new T.Mesh(new T.SphereGeometry(.017,18,12),new T.MeshStandardMaterial({color:'#25251b',roughness:.65}));aperture.scale.set(.22,1,.94);mouth.add(aperture);
+  const lip=new T.Mesh(new T.TorusGeometry(.017,.0025,7,24),new T.MeshStandardMaterial({color,roughness:.48}));lip.rotation.y=Math.PI/2;lip.position.x=.002;mouth.add(lip);group.add(mouth);
   return group;
  }
  private free(p:T.Vector3,r:number){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>.3+r&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
@@ -143,8 +127,8 @@ export class ReefFish{
    if(!collision&&this.clearSegment(f.position,next,f.radius))f.position.copy(next);else{f.velocity.multiplyScalar(.65);f.until=0;}
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.52+f.velocity.length()*1.65);f.effort.value=T.MathUtils.damp(f.effort.value,f.velocity.length(),5,dt);
    for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.rotation.y=Math.sin(now*(7+f.effort.value*5)+f.phase+j)*.42;p.rotation.x=Math.cos(now*6+f.phase+j)*.15;}
-   for(const gill of f.group.children)if(gill.name==='gill')gill.scale.z=.10+.035*(1+Math.sin(now*5.5+f.phase));
-   f.mouth.scale.setScalar(1+.15*Math.sin(now*5.5+f.phase)+(target?.alive?Math.max(0,1-Math.sqrt(dist))*Math.max(0,Math.sin(now*18))*.65:0));
+   for(const gill of f.group.children)if(gill.name==='gill')gill.position.z=gill.userData.side*(.0005+.002*(1+Math.sin(now*5.5+f.phase)));
+   f.mouth.scale.set(1,.24+.09*(1+Math.sin(now*5.5+f.phase))+(target?.alive?Math.max(0,1-Math.sqrt(dist))*Math.max(0,Math.sin(now*18))*1.35:0),1);
   }
   let n=0;for(const f of this.foods)if(f.alive){this.dummy.position.copy(f.position);this.dummy.updateMatrix();this.foodMesh.setMatrixAt(n++,this.dummy.matrix);}this.foodMesh.count=n;if(n)this.foodMesh.instanceMatrix.needsUpdate=true;
  }

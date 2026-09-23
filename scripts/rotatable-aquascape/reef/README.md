@@ -33,6 +33,18 @@ and [Oregon Coast Aquarium](https://aquarium.org/animals/bubble-tip-anemone/).
 The reference guides the artistic appearance; flow and tissue shading are illustrative,
 not a species-calibrated fluid or subsurface-scattering simulation.
 
+## Marine fish detail
+
+Smooth cheek/snout profiles, recessed eyes, body-conforming breathing gill covers,
+a small opening mouth, shared-vertex fin membranes with ray detail and species
+edge colors. Clownfish and gramma have rounded tails; open-water species retain
+forked tails. The geometry check covers closed bodies, cheek normals and outward
+gills. QA includes clownfish, blue tang and yellow tang close-ups.
+
+Reference anatomy: [Aquarium of the Pacific clownfish](https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish)
+and [Florida Museum fish anatomy](https://www.floridamuseum.ufl.edu/discover-fish/fish/anatomy/).
+These models remain artistic approximations rather than taxonomic specimens.
+
 ## Rendering and behavior
 
 Shared water, glass, contact shading, adaptive effects and reflection scheduling.
