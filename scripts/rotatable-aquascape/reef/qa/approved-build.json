@@ -1,52 +1,55 @@
 {
-  "buildHash": "217ca69b7784a7f5bedb20755d76d90d6d00a28f30b98623eb9cb3042dcf1fec",
+  "buildHash": "46ade5ab2a810a13e4d3d4e9453ba1778a616658ac8e1530ea9b814837bfa3e7",
   "files": [
-    "assets/index-BEGZstcZ.js",
+    "assets/index-DbR_hIaa.js",
     "assets/index-DdD2V56_.css",
+    "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
+    "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
+    "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T01:53:09.816Z",
-  "readyMs": 1526,
+  "checkedAt": "2026-09-23T02:07:53.640Z",
+  "readyMs": 1464,
   "samples": [
     {
+      "fps": 57.59539236861051,
+      "time": 4.305999999999998,
+      "bites": 21,
+      "remaining": 15
+    },
+    {
       "fps": 59.99700014999249,
-      "time": 4.346599999952316,
-      "bites": 17,
-      "remaining": 19
+      "time": 8.322900000000038,
+      "bites": 33,
+      "remaining": 3
     },
     {
       "fps": 59.99400059994003,
-      "time": 8.363599999952346,
-      "bites": 34,
-      "remaining": 2
-    },
-    {
-      "fps": 59.99400059994003,
-      "time": 12.380699999952304,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 16.38099999995225,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 20.397999999952184,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.414999999952105,
+      "time": 12.34,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 28.415299999952005,
+      "time": 16.35699999999994,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.373999999999835,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 24.39109999999974,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 28.391299999999642,
       "bites": 36,
       "remaining": 0
     }
@@ -86,5 +89,11 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Marine anatomy/detail pass; fish still stylized and overall scene still short of photographic parity. Local desktop measurements only."
+  "scope": "Scanned rock surface and exact-detail anemone geometry memory pass. Still short of reference realism; 2.49 MB extra first-download maps. Local desktop performance only.",
+  "geometryMemory": {
+    "exactExpandedAttributes": true,
+    "previousBytes": 28717200,
+    "indexedBytes": 7621920,
+    "triangles": 159540
+  }
 }

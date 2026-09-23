@@ -4,6 +4,9 @@ import {buildAnemones} from '../Anemones.ts';
 let seed=91;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const {mesh,tentacles}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,1)],{value:0},random,p=>p.y-.28);
 assert.equal(tentacles,540);
+assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
+const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
+assert.ok(bytes<8000000, 'anemone geometry buffers remain below 8 MB');
 const p=mesh.geometry.getAttribute('position'),n=mesh.geometry.getAttribute('normal'),flex=mesh.geometry.getAttribute('anemoneFlex');
 const rings=new Map();
 for(let i=0;i<p.count;i++){

@@ -1,30 +1,34 @@
 import * as T from 'three';
 
-// Periodic value noise: no repeated grids of painted circles and no UV seam.
-function hash(x:number,y:number){let n=Math.imul(x,374761393)^Math.imul(y,668265263);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967295;}
-function noise(x:number,y:number,period:number){
- const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy,sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy);
- const a=hash(ix%period,iy%period),b=hash((ix+1)%period,iy%period),c=hash(ix%period,(iy+1)%period),d=hash((ix+1)%period,(iy+1)%period);
- return T.MathUtils.lerp(T.MathUtils.lerp(a,b,sx),T.MathUtils.lerp(c,d,sx),sy);
+// Free CC0 scanned coastal stone, locally hosted. See assets/README.md.
+export function limestoneMaps(){
+ const loader=new T.TextureLoader(),pending:Promise<unknown>[]=[];
+ const load=(url:string,color=false)=>{
+  let done!:()=>void,fail!:(error:unknown)=>void;
+  pending.push(new Promise<void>((resolve,reject)=>{done=resolve;fail=reject;}));
+  const map=loader.load(url,()=>done(),undefined,fail);
+  map.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;
+  map.repeat.set(2.4,1.6);map.anisotropy=8;return map;
+ };
+ const map=load(new URL('./assets/seaside_rock_diff_1k.jpg',import.meta.url).href,true);
+ const normalMap=load(new URL('./assets/seaside_rock_nor_gl_1k.jpg',import.meta.url).href);
+ const roughnessMap=load(new URL('./assets/seaside_rock_rough_1k.jpg',import.meta.url).href);
+ return {maps:{map,normalMap,roughnessMap},ready:Promise.all(pending)};
 }
-function texture(bytes:Uint8Array,size:number,color=false){const t=new T.DataTexture(bytes,size,size,T.RGBAFormat);t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.magFilter=T.LinearFilter;t.minFilter=T.LinearMipmapLinearFilter;t.generateMipmaps=true;t.anisotropy=8;t.needsUpdate=true;return t;}
-export function limestoneMaps(size=512){
- const heights=new Float32Array(size*size),albedo=new Uint8Array(size*size*4),normal=new Uint8Array(size*size*4),roughness=new Uint8Array(size*size*4);
- for(let y=0;y<size;y++)for(let x=0;x<size;x++){
-  const u=x/size,v=y/size,macro=noise(u*7,v*7,7),grain=noise(u*83,v*83,83),pore=noise(u*37+noise(u*9,v*9,9)*2,v*37,37);
-  const h=.6+macro*.12+grain*.16-Math.pow(Math.max(0,(pore-.51)/.49),1.5)*.54;
-  const i=(y*size+x)*4;heights[y*size+x]=h;
-  const cover=noise(u*13+.6,v*13+.2,13),detail=noise(u*151,v*151,151),cavity=T.MathUtils.clamp(.58+h*.64,.45,1),speck=.82+detail*.25;
-  // Chalk, old coralline crust and olive biofilm coexist on the same rock.
-  const crust=T.MathUtils.smoothstep(cover,.43,.71),algae=1-T.MathUtils.smoothstep(cover,.19,.43);
-  const c=[109,104,88].map((v,k)=>T.MathUtils.lerp(T.MathUtils.lerp(v,[98,101,68][k],algae*.65),[86,63,91][k],crust*.82));
-  const edge=T.MathUtils.smoothstep(cover,.49,.62);
-  for(let k=0;k<3;k++)albedo[i+k]=c[k]*cavity*speck*(1+edge*.08);
-  albedo[i+3]=255;roughness[i]=roughness[i+1]=roughness[i+2]=210+grain*38;roughness[i+3]=255;
+function hash(x:number,y:number,z:number){let n=Math.imul(x,374761393)^Math.imul(y,668265263)^Math.imul(z,1442695041);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967295;}
+function noise(x:number,y:number,z:number){
+ const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),smooth=(n:number)=>n*n*(3-2*n),a=smooth(x-ix),b=smooth(y-iy),c=smooth(z-iz),mix=T.MathUtils.lerp;
+ return mix(mix(mix(hash(ix,iy,iz),hash(ix+1,iy,iz),a),mix(hash(ix,iy+1,iz),hash(ix+1,iy+1,iz),a),b),mix(mix(hash(ix,iy,iz+1),hash(ix+1,iy,iz+1),a),mix(hash(ix,iy+1,iz+1),hash(ix+1,iy+1,iz+1),a),b),c);
+}
+// Small attached crusts, not large camouflage patches. Vertex color is baked once.
+export function encrustRock(g:T.BufferGeometry){
+ const p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
+ const chalk=new T.Color('#ddd2bb').multiplyScalar(1.85),purple=new T.Color('#a282b3').multiplyScalar(1.8),rose=new T.Color('#b9858c').multiplyScalar(1.65),olive=new T.Color('#98a288').multiplyScalar(1.5),color=new T.Color();
+ for(let i=0;i<p.count;i++){
+  const x=p.getX(i),y=p.getY(i),z=p.getZ(i),patch=noise(x*13,y*13,z*13)*.64+noise(x*37,y*37,z*37)*.36;
+  const crust=T.MathUtils.smoothstep(patch,.49,.69),variation=noise(x*4,y*4,z*4);
+  color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.55,.78)*.5).lerp(variation>.5?purple:rose,crust*.81);
+  colors.set([color.r,color.g,color.b],i*3);
  }
- for(let y=0;y<size;y++)for(let x=0;x<size;x++){
-  const dx=(heights[y*size+(x+1)%size]-heights[y*size+(x+size-1)%size])*2.9,dy=(heights[((y+1)%size)*size+x]-heights[((y+size-1)%size)*size+x])*2.9,l=Math.hypot(dx,dy,1),i=(y*size+x)*4;
-  normal[i]=(-dx/l*.5+.5)*255;normal[i+1]=(-dy/l*.5+.5)*255;normal[i+2]=(1/l*.5+.5)*255;normal[i+3]=255;
- }
- const maps={map:texture(albedo,size,true),normalMap:texture(normal,size),roughnessMap:texture(roughness,size)};for(const t of Object.values(maps))t.repeat.set(3,2);return maps;
+ g.setAttribute('color',new T.BufferAttribute(colors,3));return g.index?g.toNonIndexed():g;
 }

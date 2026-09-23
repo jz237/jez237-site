@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {buildAnemones} from './Anemones.ts';
-import {limestoneMaps} from './ReefMaterials.ts';
+import {limestoneMaps,encrustRock} from './ReefMaterials.ts';
 import {branchingColony,platingColony} from './CoralMorphology.ts';
 import {mergeVertices,mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
@@ -40,7 +40,7 @@ function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,
 export function buildReef(scene:T.Scene){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
  const rockMaps=limestoneMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
- const rockMat=new T.MeshStandardMaterial({...rockMaps,normalScale:new T.Vector2(.9,.9),roughness:.96,vertexColors:true});
+ const rockMat=new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true});
  const coralMat=new T.MeshStandardMaterial({map:coralTex,bumpMap:coralTex,bumpScale:.018,roughness:.76,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],polyps:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
@@ -52,7 +52,7 @@ export function buildReef(scene:T.Scene){
    for(const pore of pores){const d=((a-pore.a)**2+(b-pore.b)**2+(c-pore.c)**2)/(pore.r*pore.r);if(d<1)n-=pore.depth*(1-d)**2;}
    p.setXYZ(i,a*n*sx+x,b*n*sy+y,c*n*sz+z);
   }
-  geo.computeVertexNormals();const surface=colored(geo,new T.Color('#ebdfc9'),.06);rocks.push(surface);
+  geo.computeVertexNormals();const surface=encrustRock(geo);rocks.push(surface);
   // Conservative cluster of collision volumes follows the irregular rock rather than one island-sized ball.
   const r=Math.min(sx,sy,sz)*1.16;obstacles.push({center:new T.Vector3(x,y,z),radius:r});
   for(const [axis,size] of [[0,sx],[1,sy],[2,sz]] as const)if(size>r*1.2)for(const sign of [-1,1]){const center=new T.Vector3(x,y,z);center.setComponent(axis,center.getComponent(axis)+sign*(size-r)*.85);obstacles.push({center,radius:r});}
@@ -108,5 +108,5 @@ export function buildReef(scene:T.Scene){
  const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;sand.position.y=.18;sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,.185,z);const s=pick(.012,.049);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone};
+ return {group,obstacles,notes,hosts,anemone,assetsReady:rockMaps.ready};
 }
