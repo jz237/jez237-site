@@ -1,4 +1,11 @@
 import * as T from 'three';
+import {rippleHeightShader,rippleSlopeShader} from '../lib/WaterRipples.ts';
+
+// Stronger reef circulation: keep displaced geometry and its analytic normal
+// on the same wave field. Preserve the narrow glass-contact meniscus.
+function reefRipples(shader:string){
+ return shader.replaceAll('*.011','*.018').replaceAll('*.012','*.020').replaceAll('*.007','*.011');
+}
 
 /** Match the reef's own luminaire and clear-water color without changing the
  * freshwater renderer. Preserve its Fresnel, meniscus and full depth tracing. */
@@ -6,7 +13,8 @@ export function configureReefWater(water:T.Group){
  water.traverse(object=>{
   if(!(object instanceof T.Mesh)||!(object.material instanceof T.ShaderMaterial))return;
   const material=object.material;
-  material.fragmentShader=material.fragmentShader
+  material.vertexShader=material.vertexShader.replace(rippleHeightShader,reefRipples(rippleHeightShader));
+  material.fragmentShader=material.fragmentShader.replace(rippleSlopeShader,reefRipples(rippleSlopeShader))
    .replace('(6.326-world.y)','(5.835-world.y)')
    .replace('4.375-aa.x,4.375+aa.x','4.675-aa.x,4.675+aa.x')
    .replace('float z=-.37+float(strip)*.2;', 'float z=-.4166667+float(strip)*.1666667;')

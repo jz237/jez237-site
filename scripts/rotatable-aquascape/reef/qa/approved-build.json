@@ -1,12 +1,12 @@
 {
-  "buildHash": "0804034f64293510fa271f6d281400383b4fcc115dae8c745409bacbffa97e89",
+  "buildHash": "db96e60915acc63e419626dfc98ed8cef4bf3267379563fd7fa3b4fc177096ce",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-Ccg8YX5a.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-DoaHwjEZ.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -20,48 +20,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T07:59:24.102Z",
+  "checkedAt": "2026-09-23T08:23:01.116Z",
   "readyMs": 2103,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 4.32009999985695,
-      "bites": 15,
-      "remaining": 21
+      "fps": 59.99400059993998,
+      "time": 4.2879999998569485,
+      "bites": 22,
+      "remaining": 14
     },
     {
       "fps": 59.99700014999249,
-      "time": 8.337199999856987,
-      "bites": 29,
-      "remaining": 7
+      "time": 8.304999999856982,
+      "bites": 35,
+      "remaining": 1
     },
     {
-      "fps": 59.99400059993998,
-      "time": 12.33749999985693,
+      "fps": 59.99700014999249,
+      "time": 12.32199999985693,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.35449999985686,
+      "time": 16.338999999856874,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 20.371499999856763,
+      "fps": 59.99400059993998,
+      "time": 20.3559999998568,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 24.388499999856663,
+      "fps": 59.99400059993998,
+      "time": 24.373099999856702,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.994000599940094,
-      "time": 28.388899999856562,
+      "fps": 59.99400059993998,
+      "time": 28.390099999856616,
       "bites": 36,
       "remaining": 0
     }
@@ -198,15 +198,15 @@
     "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail",
     "Curved anemone axes: worst dot0.999714; analytic flow derivative agrees with finite differences; minimum sampled determinant0.603289; all540 strands and171840 triangles retained",
     "Encrusting maps: seamless wrap gradients below interior gradients; unit outward normals;637268bytes",
-    "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112"
+    "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
+    "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "fish-macros",
-    "yellow-tang-motion-pair",
-    "clownfish-motion-pair"
+    "water-above-closeup",
+    "reference-and-mature-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -214,5 +214,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Accurate rooted fin fields, pectoral attachment follows body bend, membrane normals follow full displacement gradient. All models/textures and4625398 rendered triangles retained;553392 additional shared gradient bytes. Alternating loads2085.0ms prior vs2069.7ms current;near60FPS locally. Timing variation not speed claim. Reference target unmet."
+  "scope": "Reef water with matching stronger displacement/normals, lower front viewpoint and vertically extended depth-guided underside reflection. Full capture1024x1536 retains density; planar fallback drops unused extra area. Same4625398 rendered triangles and all assets. Normal local60FPS; preliminary uncapped198.4 prior vs187.9 current, a5.3% quality cost. Reference target unmet."
 }
