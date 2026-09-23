@@ -1,11 +1,11 @@
 {
-  "buildHash": "66a7dbfa2319129b272169efbadddb8430eef593e10265031cb46a40e095e9cb",
+  "buildHash": "cecd2d26548aafabc880d01642b5c5858a391fbc0f4febaa0fa576b5b3d11b93",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-D6NOqej7.js",
+    "assets/index-Bn92vYV7.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T11:36:42.535Z",
-  "readyMs": 2307,
+  "checkedAt": "2026-09-23T11:50:13.078Z",
+  "readyMs": 2329,
   "samples": [
     {
-      "fps": 59.99100134979752,
-      "time": 4.284200000143049,
-      "bites": 26,
-      "remaining": 10
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 8.284400000143084,
-      "bites": 34,
-      "remaining": 2
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 12.30140000014302,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 16.301800000142975,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
       "fps": 59.99100134979755,
-      "time": 20.318900000142875,
+      "time": 4.269799999809266,
+      "bites": 24,
+      "remaining": 12
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 8.303399999809299,
+      "bites": 35,
+      "remaining": 1
+    },
+    {
+      "fps": 59.99400059994003,
+      "time": 12.303699999809245,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 16.320799999809182,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 24.319100000142768,
+      "time": 20.337699999809104,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.33809999980905,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 28.336200000142696,
+      "time": 28.338399999808953,
       "bites": 36,
       "remaining": 0
     }
@@ -83,11 +83,11 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5479186,
+    "triangles": 5547448,
     "inhabitants": 20,
     "polypStats": {
-      "polyps": 561,
-      "tentacles": 3240,
+      "polyps": 556,
+      "tentacles": 3288,
       "maxAttachmentError": 0.003000000000000283
     },
     "rockStats": {
@@ -97,7 +97,7 @@
     },
     "crustStats": {
       "colonies": 62,
-      "triangles": 21562
+      "triangles": 54853
     },
     "infillStats": {
       "colonies": 11,
@@ -210,14 +210,15 @@
     "Coral terminal growth: short offshoots rooted in existing branches, joined recessed axial cups, all11infill colonies and updated conservative navigation bounds",
     "All six connected recessed oral cavities: outward cap winding, ray-tested depth, normalized vertex tissue shading, animated lip uniforms and pause invariance",
     "Large coral basal footprint: irregular spread, local support retreat, sloping-root attachment, preserved cup seams and all11infill colonies",
-    "Sand relief: sealed perimeter, smooth banks, floor/food clearance and lower channel"
+    "Sand relief: sealed perimeter, smooth banks, floor/food clearance and lower channel",
+    "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "side",
     "mobile",
-    "sand-closeup",
+    "coral-closeup",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -226,5 +227,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Sculpted shallow sand banks and a lower winding channel, with warmer granular material and spatially varied partly buried rubble. Same5479186 rendered triangles,1600 rubble pieces and512px map. Loads2280.3/2271.5ms; uncapped266.7/261.9FPS. Reference realism not reached."
+  "scope": "Resolved skeletal folds on broad encrusting coral patches; shared indexed midpoint topology, thinner attached relief. Rendered5547448triangles vs5479186 (+1.25%), no additional maps/passes/draw groups. Loads2292.8/2308.3ms; uncapped261.6/264.6FPS. Reference realism not reached."
 }

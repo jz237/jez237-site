@@ -19,9 +19,18 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
   const existing=cache.get(point.key);if(existing!==undefined)return existing;
   const d=point.p.clone().sub(center),x=d.dot(u),y=d.dot(v),fade=T.MathUtils.smoothstep(point.d,0,radius*.14);
   // Low winding skeletal ridges: stationary hard coral, never soft-body waving.
-  const wave=.5+.5*Math.sin(x*57+Math.sin(y*21+seed)*1.7+seed),height=.003+fade*(profile?profile.thickness*(.42+.58*wave*wave):.013+.018*wave*wave);
+  const wave=.5+.5*Math.sin(profile?x*57+Math.sin(y*21+seed)*1.7+seed:x*39+Math.sin(y*15+seed)*2.2+seed),height=.003+fade*(profile?profile.thickness*(.42+.58*wave*wave):.013+.012*wave*wave);
   const out=point.p.clone().addScaledVector(point.n,height),c=base.clone().lerp(edge,(1-fade)*.65).multiplyScalar(.79+.14*wave+.07*Math.sin(x*17+Math.sin(y*23)));
   const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);const repeat=profile?.16:.42;uv.push(x/repeat,y/repeat);cache.set(point.key,index);return index;
+ }
+ // Resolve skeletal folds on broad colonies independently of the coarser rock.
+ // Shared midpoint keys keep adjacent displaced triangles joined. Thin basal
+ // films retain their original mesh and sampling cost.
+ function midpoint(a:Point,b:Point):Point{return {p:a.p.clone().lerp(b.p,.5),n:a.n.clone().lerp(b.n,.5).normalize(),d:(a.d+b.d)*.5,key:'m('+[a.key,b.key].sort().join('|')+')'};}
+ function triangle(a:Point,b:Point,c:Point){
+  if(profile){indices.push(vertex(a),vertex(b),vertex(c));return;}
+  const ab=midpoint(a,b),bc=midpoint(b,c),ca=midpoint(c,a);
+  for(const t of [[a,ab,ca],[ab,b,bc],[ca,bc,c],[ab,bc,ca]])indices.push(...t.map(vertex));
  }
  for(let i=0;i<source.count;i+=3){
   const ia=source.getX(i),ib=source.getX(i+1),ic=source.getX(i+2);
@@ -31,12 +40,12 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
   const dy=Math.max(Math.min(p.getY(ia),p.getY(ib),p.getY(ic))-center.y,0,center.y-Math.max(p.getY(ia),p.getY(ib),p.getY(ic)));
   const dz=Math.max(Math.min(p.getZ(ia),p.getZ(ib),p.getZ(ic))-center.z,0,center.z-Math.max(p.getZ(ia),p.getZ(ib),p.getZ(ic)));
   if(dx*dx+dy*dy+dz*dz>(radius*1.041)**2)continue;
-  const triangle=[point(ia),point(ib),point(ic)],polygon:Point[]=[];
+  const sourceTriangle=[point(ia),point(ib),point(ic)],polygon:Point[]=[];
   for(let j=0;j<3;j++){
-   const a=triangle[j],b=triangle[(j+1)%3];if(a.d>=0)polygon.push(a);
+   const a=sourceTriangle[j],b=sourceTriangle[(j+1)%3];if(a.d>=0)polygon.push(a);
    if((a.d>=0)!==(b.d>=0)){const t=a.d/(a.d-b.d);polygon.push({p:a.p.clone().lerp(b.p,t),n:a.n.clone().lerp(b.n,t).normalize(),d:0,key:[a.key,b.key].sort().join(':')});}
   }
-  for(let j=1;j+1<polygon.length;j++)indices.push(vertex(polygon[0]),vertex(polygon[j]),vertex(polygon[j+1]));
+  for(let j=1;j+1<polygon.length;j++)triangle(polygon[0],polygon[j],polygon[j+1]);
  }
  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;
 }
