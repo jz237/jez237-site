@@ -1,11 +1,11 @@
 {
-  "buildHash": "614675e11c822ca59c440caa0b17a7fc6f175c3031a484450c61d1a45fa988d0",
+  "buildHash": "3cac01ddc5570c2765e8fedcf154edf2dafcf27d976661e09afcad88ff24dbb6",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CmLQ6MWl.js",
+    "assets/index-4_mO6o32.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -22,14 +22,14 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T21:55:58.332Z",
-  "readyMs": 3964,
+  "checkedAt": "2026-09-23T22:18:03.502Z",
+  "readyMs": 4450,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 5.9158999999046475,
-      "bites": 5,
-      "remaining": 37,
+      "time": 6.074900000000022,
+      "bites": 17,
+      "remaining": 25,
       "anemones": {
         "captured": 0,
         "swallowed": 0,
@@ -43,9 +43,9 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 9.932999999904641,
-      "bites": 21,
-      "remaining": 21,
+      "time": 10.075300000000011,
+      "bites": 27,
+      "remaining": 15,
       "anemones": {
         "captured": 0,
         "swallowed": 0,
@@ -58,16 +58,16 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 13.94999999990459,
-      "bites": 33,
+      "fps": 59.99700014999255,
+      "time": 14.092299999999968,
+      "bites": 34,
       "remaining": 7,
       "anemones": {
-        "captured": 2,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
+        "carried": 1,
         "fold": [
-          0.2,
+          0,
           0.2,
           0
         ]
@@ -75,64 +75,64 @@
     },
     {
       "fps": 59.99700014999255,
-      "time": 17.966999999904527,
-      "bites": 37,
-      "remaining": 3,
+      "time": 18.109399999999905,
+      "bites": 36,
+      "remaining": 5,
       "anemones": {
-        "captured": 2,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
+        "carried": 1,
         "fold": [
+          0,
           0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 21.983999999904444,
-      "bites": 37,
-      "remaining": 3,
-      "anemones": {
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.19108199225745184,
-          0.19717371757080102,
           0
         ]
       }
     },
     {
       "fps": 59.994000599940094,
-      "time": 26.00109999990436,
-      "bites": 37,
+      "time": 22.126399999999837,
+      "bites": 38,
       "remaining": 3,
       "anemones": {
-        "captured": 2,
-        "swallowed": 2,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.12543327127504142,
-          0.14166537753093766,
+          0,
+          0.19753510566235888,
           0
         ]
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 30.018099999904233,
-      "bites": 37,
+      "fps": 59.99400059993998,
+      "time": 26.126799999999772,
+      "bites": 38,
       "remaining": 3,
       "anemones": {
-        "captured": 2,
-        "swallowed": 2,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.042869215471363534,
-          0.05794920050561794,
+          0,
+          0.1432987032991298,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979766,
+      "time": 30.14389999999967,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.059589868615247205,
           0
         ]
       }
@@ -152,7 +152,11 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 9861198,
+    "canopyStats": {
+      "colonies": 12,
+      "triangles": 700980
+    },
+    "triangles": 11321716,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
@@ -169,17 +173,17 @@
       "maxAttachmentError": 0.003000000000000225
     },
     "rockStats": {
-      "triangles": 507840,
-      "bufferBytes": 17416512,
-      "expandedBufferBytes": 67034880
+      "triangles": 539580,
+      "bufferBytes": 18505044,
+      "expandedBufferBytes": 71224560
     },
     "crustStats": {
-      "colonies": 92,
-      "triangles": 95871,
+      "colonies": 93,
+      "triangles": 93432,
       "emergentColonies": 3,
       "emergentTriangles": 100830,
       "understoryColonies": 24,
-      "understoryTriangles": 836904,
+      "understoryTriangles": 836882,
       "mantleColonies": 12,
       "mantleTriangles": 30052
     },
@@ -396,11 +400,11 @@
     "oblique",
     "side",
     "mobile",
-    "outcrop closeup before/after",
-    "flank closeup",
-    "anemone motion a/b",
+    "rear closeup",
+    "anemone/clown motion 02/05/09 and full sequence",
+    "coral macro",
     "original reef reference",
-    "mature planted aquarium and reference",
+    "mature planted comparison",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -409,7 +413,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Porous carbonate rock material with irregular pits, worn rims, mineral variation and three-axis mapping. Roughness packed into normal alpha; all geometry and inhabitants retained. Reference parity not achieved.",
+  "scope": "Clownfish dart into, out of and around their actual host canopy; twelve major coral colonies and three rear rock outcrops; tinted real rear-glass reflection. Existing details retained. Overall reference realism remains unfinished.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -447,10 +451,10 @@
     ]
   },
   "performanceComparison": {
-    "baseline": "bd21ad28d",
-    "loadPrior": 3903.5,
-    "loadCurrent": 3919,
-    "fpsPrior": 167.3,
-    "fpsCurrent": 175.4
+    "baseline": "4db446d0d",
+    "loadPrior": 4405.5,
+    "loadCurrent": 4918,
+    "fpsPrior": 237.9,
+    "fpsCurrent": 219.1
   }
 }
