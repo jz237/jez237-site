@@ -393,3 +393,13 @@ existing merged material groups. No new texture/model download or render pass.
 Tests compare tip boundaries/normals and side-cup footprints against the actual
 stem triangles. More detailed geometry has a cost; consult the saved comparison
 and progress notes rather than treating a passing test as proof of realism.
+
+## Receding coral ridge
+
+Four existing rear stones rise into an uneven ridge behind the open sand channel.
+Three larger crowns and two smaller colonies rooted into its sloping shoulders
+add a visible middle layer between the main islands. These are complete indexed
+meshes with the same axial/radial detail as the foreground, shared maps/material
+and conservative navigation volumes. Independent seeds retain the established
+foreground placements. The rear inspection camera covers the taller structures.
+This is an artistic composition change; photographic parity is still unmet.
