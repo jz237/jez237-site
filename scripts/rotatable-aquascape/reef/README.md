@@ -1,4 +1,4 @@
-# Living Reef — first 3D preview
+# Living Reef â€” first 3D preview
 
 Separate reef option built from the current jez237 planted aquarium renderer.
 The reference supplied September 22 guides the two islands, archways, white sand
@@ -11,9 +11,9 @@ and its shared freshwater biology/chemistry bundles are unchanged.
 
 ## Develop and build
 
-- `npm run dev:reef` — local preview at port 5240.
-- `npm run build:reef` — type-check, build and copy to `demos/reef-aquarium/`.
-- `npm run check:reef` — browser behavior, controls, collision and mobile checks.
+- `npm run dev:reef` â€” local preview at port 5240.
+- `npm run build:reef` â€” type-check, build and copy to `demos/reef-aquarium/`.
+- `npm run check:reef` â€” browser behavior, controls, collision and mobile checks.
   Inspect `reef/qa/front.png`, `angle.png` and `mobile.png` before releasing.
 
 The small jez237-only selector is maintained by `scripts/reef_navigation.mjs`.
@@ -299,3 +299,19 @@ and raised corallites. Only accepted anchor sites generate at startup. Fixtures
 check root attachment on horizontal, tilted and near-vertical support, finite
 geometry and containment by the navigation volume. Growth and spacing remain
 artistic approximations; this does not establish species-level coral ecology.
+
+## Curved anemone tissue motion
+
+Tentacles retain all 540 strands and their original mesh resolution, with slimmer
+shafts, smaller pale terminal areas and continuous terminal curve handles.
+A compact four-byte encoded tangent per vertex lets animated normals follow the
+curved centerline instead of assuming every strand grows straight upward.
+The rooted quadratic displacement envelope combines slow surge and a weaker
+phase-delayed eddy; motion scales with arc length to prevent short strands folding.
+This is an artistic current and curved-centerline shading approximation, not a
+physical fluid or tissue simulation.
+
+Regression checks compare analytic bending derivatives to finite differences,
+encoded axes to mesh centerlines, and sampled deformation determinants to a
+positive bound. All 171,840 anemone triangles remain; buffers use 7,725,024 bytes
+(previously 7,320,528). No new maps, downloads or render passes.
