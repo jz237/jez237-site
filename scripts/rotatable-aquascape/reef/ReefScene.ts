@@ -81,7 +81,7 @@ export function buildReef(scene:T.Scene){
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
- const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0,understoryColonies:0,understoryTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
+ const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0,understoryColonies:0,understoryTriangles:0,mantleColonies:0,mantleTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
  for(const [rockIndex,dx,dy,r,hue] of [[4,-.18,.02,.7,.12],[5,.18,.07,.56,.055],[2,-.08,-.09,.46,.8],[8,.04,.02,.43,.08],[14,-.18,.05,.66,.1],[15,.12,.06,.5,.82],[12,.18,.12,.61,.045],[17,.06,.04,.43,.22],[19,.04,.08,.49,.095],[20,.09,.04,.37,.83]]){
   const f=formations[rockIndex];attachRay.set(new T.Vector3(f[0]+dx,f[1]+dy,3),new T.Vector3(0,0,-1));attachRay.far=6;
   const hit=attachRay.intersectObject(supports[rockIndex],false)[0];if(!hit?.face)continue;
@@ -183,6 +183,24 @@ export function buildReef(scene:T.Scene){
   corals.push(...colony.geometries);obstacles.push(colony.obstacle);newGrowth.push(colony.obstacle);
   crustStats.understoryColonies++;crustStats.understoryTriangles+=colony.triangles;
  }
+ // Low living mantles occupy exposed faces beneath the branching canopy.
+ // Each is clipped to its supporting stone, preserving cavities and existing
+ // colonies. Own seeds and late insertion keep established scenery intact.
+ const mantleSurfaces:T.BufferGeometry[]=[];
+ const mantlePalette=['#a481a1','#9c9568','#67877e','#ab826b'];
+ const mantleSites=[[-3.86,1.55,.46],[-2.13,1.37,.44],[-3.17,2.94,.38],[-3.32,2.19,.36],[-3.63,.53,.42],[-2.73,.56,.33],[-2.55,1.06,.32],[-4.02,.71,.35],
+ [1.06,1.72,.45],[1.06,.56,.35],[2.90,.71,.42],[3.42,1.21,.48],[3.63,2.28,.41],[1.88,3.31,.37],[3.93,1.52,.39],[2.75,2.61,.38]];
+ for(let i=0;i<mantleSites.length;i++){
+  const [x,y,radius]=mantleSites[i];attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.2;
+  const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.z<.18)continue;
+  // Leave the established thick tissue and animal-host faces exposed.
+  if(livingCrustZones.some(o=>hit.point.distanceTo(o.center)<o.radius*.7))continue;
+  if(hit.point.distanceTo(new T.Vector3(3.05,1.35,.82))<.8||hit.point.distanceTo(new T.Vector3(-3.62,.91,1.35))<.65)continue;
+  const mantle=coralCrust((hit.object as T.Mesh).geometry,hit.point,hit.face.normal,radius,.8,2309231804+i*3.71,{color:new T.Color(mantlePalette[i%mantlePalette.length]),thickness:.014,lobed:true});
+  if(!mantle.index!.count){mantle.dispose();continue;}
+  massiveCorals.push(mantle);mantleSurfaces.push(mantle);crustStats.colonies++;crustStats.triangles+=mantle.index!.count/3;crustStats.mantleColonies++;crustStats.mantleTriangles+=mantle.index!.count/3;
+  mantle.computeBoundingSphere();obstacles.push({center:mantle.boundingSphere!.center.clone(),radius:mantle.boundingSphere!.radius+.004});
+ }
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}));
  const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Growing toward the light','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');
@@ -192,13 +210,13 @@ export function buildReef(scene:T.Scene){
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
  addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
 
- const crustSurface=topSurfaceSampler(crustSurfaces);
+ const crustSurface=topSurfaceSampler(crustSurfaces),mantleSurface=topSurfaceSampler(mantleSurfaces);
  const gardenSurface=(x:number,y:number,z:number)=>{const rock=surfaceLookup(x,y,z),crust=crustSurface(x,y,z);return crust&&(!rock||crust.point.y>rock.point.y)?crust:rock;};
  const gardens:T.BufferGeometry[]=[],polypStats={polyps:0,tentacles:0,maxAttachmentError:0};
  const colonies:[number,number,number,number,'zoanthid'|'stony'][]=[[-3.23,.48,1.81,.55,'zoanthid'],[2.18,.7,1.63,.61,'zoanthid'],[-2.4,1.08,.64,.35,'zoanthid'],[1.12,2.76,-.39,.31,'zoanthid'],[-2.42,2.09,.03,.38,'stony'],[-3.47,1.37,.64,.37,'stony'],[-2.2,.67,.97,.29,'stony'],[1.31,2.94,-.34,.37,'stony'],[2.45,1.72,.3,.42,'stony'],[3.79,.74,1.15,.32,'stony'],[.91,1.17,-.06,.28,'stony']];
  for(const [x,y,z,r,kind] of colonies){
   const sample=(px:number,pz:number)=>gardenSurface(px,y+.5,pz);
-  const garden=encrustingGarden(x,z,r,kind,sample,random);gardens.push(garden.geometry);polypStats.polyps+=garden.polypCount;polypStats.tentacles+=garden.tentacleCount;polypStats.maxAttachmentError=Math.max(polypStats.maxAttachmentError,garden.attachmentError);
+  const garden=encrustingGarden(x,z,r,kind,sample,random,(px,pz)=>mantleSurface(px,y+.5,pz));gardens.push(garden.geometry);polypStats.polyps+=garden.polypCount;polypStats.tentacles+=garden.tentacleCount;polypStats.maxAttachmentError=Math.max(polypStats.maxAttachmentError,garden.attachmentError);
  }
  const polypMat=new T.MeshStandardMaterial({vertexColors:true,map:coralTex,bumpMap:coralTex,bumpScale:.0012,roughness:.78,side:T.DoubleSide});animatePolypMaterial(polypMat,reefClock);
  const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Life across the rock','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');

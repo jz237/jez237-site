@@ -3,7 +3,7 @@ import * as T from 'three';
 type Surface=(x:number,z:number)=>{point:T.Vector3;normal:T.Vector3}|null;
 type Random=()=>number;
 /** Tissue follows sampled rock. No independent sphere or planter beneath colonies. */
-export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'|'stony',sample:Surface,random:Random){
+export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'|'stony',sample:Surface,random:Random,overlay?:Surface){
  const positions:number[]=[],colors:number[]=[],uvs:number[]=[],flex:number[]=[],indices:number[]=[];
  const base=kind==='zoanthid'?new T.Color('#504350'):new T.Color('#3e7569');
  const orange=new T.Color('#d46217'),green=new T.Color('#34774d'),cyan=new T.Color('#1b555c'),mouth=new T.Color('#243643');
@@ -14,7 +14,10 @@ export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'
  for(let row=-Math.ceil(spread/pitch);row<=Math.ceil(spread/pitch);row++)for(let col=-Math.ceil(spread/pitch);col<=Math.ceil(spread/pitch);col++){
   const dx=(col+(row%2)*.5)*pitch+(random()-.5)*pitch*.22,dz=row*pitch*.866+(random()-.5)*pitch*.22,a=Math.atan2(dz,dx);
   if(Math.hypot(dx,dz)>spread*(1+.09*Math.sin(a*5+.7)))continue;
-  const surface=sample(x+dx,z+dz);if(!surface||surface.normal.y<.25)continue;
+  let surface=sample(x+dx,z+dz);if(!surface||surface.normal.y<.25)continue;
+  // Added thin living tissue may raise an existing polyp's attachment, but must
+  // not change acceptance/RNG draws and erase or reshuffle established gardens.
+  const cover=overlay?.(x+dx,z+dz);if(cover&&cover.point.y>surface.point.y&&cover.point.y-surface.point.y<.12)surface=cover;
   const center=surface.point.clone().addScaledVector(surface.normal,.003),normal=surface.normal.clone();
   const tangent=new T.Vector3(1,0,0).addScaledVector(normal,-normal.x).normalize(),bitangent=new T.Vector3().crossVectors(tangent,normal).normalize();
   const point=(u:number,h:number,v:number)=>center.clone().addScaledVector(tangent,u).addScaledVector(normal,h).addScaledVector(bitangent,v);

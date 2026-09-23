@@ -56,3 +56,11 @@ const adjacency=new Map();for(const e of boundaryEdges.values()){if(!adjacency.h
 const visited=new Set(),pending=[0];while(pending.length){const i=pending.pop();if(visited.has(i))continue;visited.add(i);pending.push(...(adjacency.get(i)||[]).filter(j=>!visited.has(j)));}
 assert.equal(visited.size,flatP.count,'growth fronts form one connected colony');
 console.log('Connected growth fronts passed:',flatP.count,'vertices; boundary radius range',Math.min(...radii),Math.max(...radii));
+
+// Thin lobed mantles resolve their rough tissue while staying attached to the
+// curved support. Verify real ray distance, not just the displacement formula.
+const mantle=coralCrust(rock,hit.point,hit.face.normal,.46,.8,2309231804,{color:new T.Color('#a481a1'),thickness:.014,lobed:true});
+const mp=mantle.getAttribute('position'),mn=mantle.getAttribute('normal');let mantleGap=0;
+for(let i=0;i<mp.count;i+=7){const pos=new T.Vector3().fromBufferAttribute(mp,i),normal=new T.Vector3().fromBufferAttribute(mn,i);ray.set(pos.clone().addScaledVector(normal,.04),normal.clone().negate());ray.far=.15;const support=ray.intersectObject(mesh)[0];assert.ok(support);const gap=support.distance-.04;assert.ok(gap>-.001&&gap<.045,'mantle remains a thin attached layer');mantleGap=Math.max(mantleGap,gap);}
+mantle.computeBoundingSphere();for(let i=0;i<mp.count;i++)assert.ok(new T.Vector3().fromBufferAttribute(mp,i).distanceTo(mantle.boundingSphere.center)<=mantle.boundingSphere.radius+1e-6,'navigation sphere contains every new tissue vertex');
+console.log('Thin lobed mantle passed:',mantle.index.count/3,'triangles; max sampled gap',mantleGap);
