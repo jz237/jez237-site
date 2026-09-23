@@ -11,7 +11,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   const n=g.getAttribute('position').count,colors=new Float32Array(n*3);
   for(let i=0;i<n;i++)colors.set([color.r,color.g,color.b],i*3);
   g.setAttribute('color',new T.BufferAttribute(colors,3));g.setAttribute('anemoneFlex',new T.BufferAttribute(new Float32Array(n*4),4));
-  parts.push(g.toNonIndexed());g.dispose();
+  parts.push(g);
  }
  for(let k=0;k<3;k++){
   const center=(k<2?hosts[k]:new T.Vector3(3.88,.52,1.73)).clone(),scale=k===0?1:k===1?.63:.46;
@@ -45,7 +45,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
      if(j<steps&&a<sides){const idx=j*(sides+1)+a;indices.push(idx,idx+1,idx+sides+1,idx+1,idx+sides+2,idx+sides+1);}
     }
    }
-   g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('anemoneFlex',new T.Float32BufferAttribute(flex,4));g.setIndex(indices);g.computeVertexNormals();parts.push(g.toNonIndexed());g.dispose();tentacles++;
+   g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('anemoneFlex',new T.Float32BufferAttribute(flex,4));g.setIndex(indices);g.computeVertexNormals();parts.push(g);tentacles++;
   }
  }
  const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.computeBoundingSphere();geometry.boundingSphere!.radius+=.35;

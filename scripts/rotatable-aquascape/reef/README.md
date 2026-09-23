@@ -67,3 +67,16 @@ Natural-history references: Monterey Bay Aquarium's
 [clownfish](https://www.montereybayaquarium.org/animals-the-ocean/animals-a-to-z/clownfish)
 and [coral reefs](https://www.montereybayaquarium.org/animals-the-ocean/ecosystems/coral-reefs).
 No purchased models, paid generation or paid assets were used.
+
+## Scanned rock and retained geometry detail
+
+Locally hosted CC0 Seaside Rock surface maps by Dimitrios Savva / Poly Haven:
+https://polyhaven.com/a/seaside_rock (license: https://polyhaven.com/license).
+See assets/README.md for provenance. The maps are used on volumetric 3D rock,
+with small irregular crust colors baked once into vertices. This is an artistic
+live-rock material, not a scan of living coral. The three 1K maps add 2.49 MB to
+first load; rendering starts after all maps and lighting are ready.
+
+Anemones retain shared indexed vertices. All expanded attributes match the prior
+geometry exactly; buffer storage decreases from 28,717,200 to 7,621,920 bytes.
+Triangle count, shape, color, normals and animation attributes are unchanged.
