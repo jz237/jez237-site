@@ -1,0 +1,54 @@
+[
+  {
+    "version": "current",
+    "readyMs": 4770,
+    "fps": 59.99100134979752,
+    "triangles": 12123372,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 4809,
+    "fps": 59.99700014999251,
+    "triangles": 12123372,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 5353,
+    "fps": 59.99400059993998,
+    "triangles": 12123372,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 4814,
+    "fps": 59.99700014999251,
+    "triangles": 12123372,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  }
+]
