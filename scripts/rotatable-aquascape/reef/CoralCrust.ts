@@ -2,7 +2,7 @@ import * as T from 'three';
 
 /** A thin living layer on the actual indexed rock surface. The irregular boundary
  * clips triangles instead of leaving a stair-stepped grid or bridging cavities. */
-export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vector3,radius:number,hue:number,seed:number,profile?:{color:T.Color;thickness:number}){
+export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vector3,radius:number,hue:number,seed:number,profile?:{color:T.Color;thickness:number;lobed?:boolean}){
  const p=rock.getAttribute('position'),n=rock.getAttribute('normal'),source=rock.index!;
  const up=Math.abs(normal.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0),u=new T.Vector3().crossVectors(up,normal).normalize(),v=new T.Vector3().crossVectors(normal,u).normalize();
  const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],cache=new Map<string,number>();
@@ -12,7 +12,8 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
  // Broad colonies advance along several connected growth fronts instead of
  // painting a nearly circular disc on the rock. Every lobe overlaps the core;
  // the field is clipped against the real stone, so it cannot bridge a cave.
- const growth=Array.from({length:profile?0:6},(_,i)=>{
+ const lobed=!profile||profile.lobed;
+ const growth=Array.from({length:lobed?6:0},(_,i)=>{
   const angle=i*Math.PI/3+seed*.43+.24*Math.sin(i*2.7+seed),reach=radius*(.37+.14*(.5+.5*Math.sin(seed+i*4.1)));
   return {x:Math.cos(angle)*reach,y:Math.sin(angle)*reach,angle:angle+.55*Math.sin(seed+i),a:radius*(.30+.085*(.5+.5*Math.cos(seed*2+i*1.9))),b:radius*(.20+.10*(.5+.5*Math.sin(seed*1.3+i*2.3)))};
  });
@@ -28,22 +29,23 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
   if(points[i])return points[i]!;
   const point=new T.Vector3().fromBufferAttribute(p,i),delta=point.clone().sub(center),x=delta.dot(u),y=delta.dot(v),a=Math.atan2(y,x);
   const margin=radius*(.86+.095*Math.sin(a*3+seed)+.055*Math.sin(a*7-seed)+.03*Math.cos(a*13));
-  return points[i]={p:point,n:new T.Vector3().fromBufferAttribute(n,i),d:Math.min(profile?margin-delta.length():Math.min(growthDistance(x,y),radius*1.04-delta.length()),delta.dot(normal)+radius*.48),key:String(i)};
+  return points[i]={p:point,n:new T.Vector3().fromBufferAttribute(n,i),d:Math.min(lobed?Math.min(growthDistance(x,y),radius*1.04-delta.length()):margin-delta.length(),delta.dot(normal)+radius*.48),key:String(i)};
  }
  function vertex(point:Point){
   const existing=cache.get(point.key);if(existing!==undefined)return existing;
   const d=point.p.clone().sub(center),x=d.dot(u),y=d.dot(v),fade=T.MathUtils.smoothstep(point.d,0,radius*.14);
   // Low winding skeletal ridges: stationary hard coral, never soft-body waving.
-  const wave=.5+.5*Math.sin(profile?x*57+Math.sin(y*21+seed)*1.7+seed:x*39+Math.sin(y*15+seed)*2.2+seed),height=.003+fade*(profile?profile.thickness*(.42+.58*wave*wave):.013+.012*wave*wave);
+  const wave=.5+.5*Math.sin(profile?x*57+Math.sin(y*21+seed)*1.7+seed:x*39+Math.sin(y*15+seed)*2.2+seed),height=.003+fade*(profile?profile.lobed?.002+profile.thickness*wave**4:profile.thickness*(.42+.58*wave*wave):.013+.012*wave*wave);
   const out=point.p.clone().addScaledVector(point.n,height),c=base.clone().lerp(edge,(1-fade)*.65).multiplyScalar(.79+.14*wave+.07*Math.sin(x*17+Math.sin(y*23)));
-  const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);const repeat=profile?.16:.42;uv.push(x/repeat,y/repeat);cache.set(point.key,index);return index;
+  if(profile?.lobed)c.multiplyScalar(.65+.22*wave+.10*Math.sin(x*31+Math.sin(y*29+seed)));
+  const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);const repeat=profile?profile.lobed?.28:.16:.42;uv.push(x/repeat,y/repeat);cache.set(point.key,index);return index;
  }
  // Resolve skeletal folds on broad colonies independently of the coarser rock.
  // Shared midpoint keys keep adjacent displaced triangles joined. Thin basal
  // films retain their original mesh and sampling cost.
  function midpoint(a:Point,b:Point):Point{return {p:a.p.clone().lerp(b.p,.5),n:a.n.clone().lerp(b.n,.5).normalize(),d:(a.d+b.d)*.5,key:'m('+[a.key,b.key].sort().join('|')+')'};}
  function triangle(a:Point,b:Point,c:Point){
-  if(profile){indices.push(vertex(a),vertex(b),vertex(c));return;}
+  if(profile&&!profile.lobed){indices.push(vertex(a),vertex(b),vertex(c));return;}
   const ab=midpoint(a,b),bc=midpoint(b,c),ca=midpoint(c,a);
   for(const t of [[a,ab,ca],[ab,b,bc],[ca,bc,c],[ab,bc,ca]])indices.push(...t.map(vertex));
  }

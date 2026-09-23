@@ -19,3 +19,16 @@ for(const kind of ['zoanthid','stony']){
  const empty=encrustingGarden(0,0,.5,kind,()=>null,random);assert.equal(empty.polypCount,0);assert.equal(empty.geometry.index.count,0);
  console.log(kind,result.polypCount,'polyps',result.tentacleCount,'tentacles',g.index.count/3,'triangles');
 }
+
+// A thin new surface can lift attachments without changing existing animals,
+// detail counts, colors, or random draws used by later gardens.
+for(const kind of ['zoanthid','stony']){
+ const build=overlay=>{let state=518,calls=0;const rng=()=>{calls++;state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};const sample=(x,z)=>({point:new T.Vector3(x,0,z),normal:new T.Vector3(0,1,0)});return {...encrustingGarden(0,0,.4,kind,sample,rng,overlay),calls,state};};
+ const plain=build(),raised=build((x,z)=>x>0?{point:new T.Vector3(x,.016,z),normal:new T.Vector3(0,1,0)}:null);
+ assert.equal(plain.polypCount,raised.polypCount);assert.equal(plain.tentacleCount,raised.tentacleCount);assert.equal(plain.calls,raised.calls);assert.equal(plain.state,raised.state);
+ for(const attribute of ['color','uv','polypFlex'])assert.deepEqual(plain.geometry.getAttribute(attribute).array,raised.geometry.getAttribute(attribute).array);
+ const a=plain.geometry.getAttribute('position'),b=raised.geometry.getAttribute('position');let shifted=0;
+ for(let i=0;i<a.count;i++){assert.equal(a.getX(i),b.getX(i));assert.equal(a.getZ(i),b.getZ(i));const delta=b.getY(i)-a.getY(i);assert.ok(Math.abs(delta)<1e-6||Math.abs(delta-.016)<1e-6);shifted+=delta>.01?1:0;}
+ assert.ok(shifted>0&&shifted<a.count,'only the covered part of the garden is raised');
+}
+console.log('Living overlay passed: existing gardens and RNG preserved, partial surface attachment lifted.');

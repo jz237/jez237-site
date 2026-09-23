@@ -1,0 +1,98 @@
+[
+  {
+    "version": "current",
+    "readyMs": 3299,
+    "fps": 59.99999999999999,
+    "triangles": 8203384,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 3680,
+    "fps": 59.99700014999249,
+    "triangles": 8143280,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 3286,
+    "fps": 59.99700014999249,
+    "triangles": 8143280,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 3291,
+    "fps": 59.99400059994001,
+    "triangles": 8203384,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 3583,
+    "fps": 59.99400059993998,
+    "triangles": 8203384,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 3738,
+    "fps": 59.99400059993998,
+    "triangles": 8143280,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 3768,
+    "fps": 59.99400059993998,
+    "triangles": 8143280,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 3841,
+    "fps": 59.99400059993998,
+    "triangles": 8203384,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  }
+]
