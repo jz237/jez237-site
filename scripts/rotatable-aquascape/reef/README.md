@@ -35,15 +35,9 @@ not a species-calibrated fluid or subsurface-scattering simulation.
 
 ## Marine fish detail
 
-Smooth cheek/snout profiles, recessed eyes, body-conforming breathing gill covers,
-a small opening mouth, shared-vertex fin membranes with ray detail and species
-edge colors. Clownfish and gramma have rounded tails; open-water species retain
-forked tails. The geometry check covers closed bodies, cheek normals and outward
-gills. QA includes clownfish, blue tang and yellow tang close-ups.
+Six Blender-authored species now use generated photographic-style references, individually traced volumetric bodies, fine skin/fin textures, shallow eyes and body-conforming gills. Rooted fin flex and separate pectoral pivots preserve attachments during swimming; mouth positions follow each species anatomy for food contact. Geometry/textures are shared across 20 inhabitants.
 
-Reference anatomy: [Aquarium of the Pacific clownfish](https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish)
-and [Florida Museum fish anatomy](https://www.floridamuseum.ufl.edu/discover-fish/fish/anatomy/).
-These models remain artistic approximations rather than taxonomic specimens.
+See [model-source/README.md](model-source/README.md) for references, exact GPT Image prompts, the editable Blender file and regeneration instructions. The six full-resolution embedded GLBs add approximately 5.5 MB to first load and are cached as versioned assets. Tests inspect the actual exported meshes, embedded images, paired fins/gills and closed bodies. Macro review covers all six species. These models remain artistic approximations rather than taxonomic specimens.
 
 ## Rendering and behavior
 

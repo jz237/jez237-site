@@ -11,6 +11,7 @@ import {AdaptiveEffects,effectProfiles} from '../lib/AdaptiveEffects.ts';
 import {installFullscreen} from '../lib/Fullscreen.ts';
 import {buildReef,reefClock} from './ReefScene.ts';
 import {ReefFish} from './ReefFish.ts';
+import {loadMarineModels} from './MarineModels.ts';
 
 const app=document.querySelector<HTMLElement>('#app')!,container=document.querySelector<HTMLElement>('#scene')!;
 const scene=new T.Scene();scene.background=new T.Color('#051525');scene.fog=new T.FogExp2('#071d32',.012);
@@ -25,7 +26,9 @@ const key=new T.SpotLight('#c5d9ff',190,26,.91,.52,1.7);key.position.set(-3,8,3.
 const blue=new T.SpotLight('#5289ff',165,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#96b9f3',.78);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReflectionPool(),water=new AquariumWater(reflections);scene.add(water);buildAquariumGlass(scene,reflections);
-const reef=buildReef(scene),fish=new ReefFish(scene,reef.obstacles,reef.hosts);
+const reef=buildReef(scene);
+const fishModels=await loadMarineModels().catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
+const fish=new ReefFish(scene,reef.obstacles,reef.hosts,fishModels);
 const back=new T.Mesh(new T.PlaneGeometry(10.04,5.2),new T.ShaderMaterial({uniforms:{time:reefClock},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 v;uniform float time;void main(){
  float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
  float rays=pow(max(0.,sin(v.x*68.+v.y*8.+sin(time*.23)*.5)),14.)*v.y*.05;
@@ -74,6 +77,6 @@ function animate(now:number){requestAnimationFrame(animate);const elapsed=now-la
  if(frame%120===0&&fish.snapshot().food===0)$('#status').textContent=`${fish.fish.length} inhabitants · Living coral gardens`;
 }
 // Release diagnostics. Close-up inspection changes only the camera, not scene detail.
-Object.assign(window,{reefQA:{snapshot:()=>({...fish.snapshot(),time,paused,ready,triangles,effects:effectProfiles[adaptive.level].name,fps:1000/(sampleMs.reduce((a,b)=>a+b,0)/sampleMs.length),drawCalls:renderer.info.render.calls,anemoneTentacles:reef.anemone.tentacles}),feed:()=>fish.feed(),inspectFish:(species='clown')=>{const subject=fish.fish.find(f=>f.species===species)!;cameraGoal=null;controls.minDistance=.55;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(Math.sin(subject.yaw)*1.6,.19,Math.cos(subject.yaw)*1.6));controls.update();scheduler.invalidate();},inspectAnemones:()=>{cameraGoal=null;controls.minDistance=2;controls.target.set(3.05,1.56,.82);camera.position.set(3.15,2.45,4.8);controls.update();scheduler.invalidate();},inspectCorals:()=>{cameraGoal=null;controls.minDistance=3;controls.target.set(-2.85,2.6,-.1);camera.position.set(-2.85,3.45,4.9);controls.update();scheduler.invalidate();}}});
+Object.assign(window,{reefQA:{snapshot:()=>({...fish.snapshot(),time,paused,ready,triangles,effects:effectProfiles[adaptive.level].name,fps:1000/(sampleMs.reduce((a,b)=>a+b,0)/sampleMs.length),drawCalls:renderer.info.render.calls,anemoneTentacles:reef.anemone.tentacles,anatomy:fish.anatomySnapshot()}),feed:()=>fish.feed(),inspectFish:(species='clown')=>{const subject=fish.fish.find(f=>f.species===species)!;cameraGoal=null;controls.minDistance=.55;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(Math.sin(subject.yaw)*1.6,.19,Math.cos(subject.yaw)*1.6));controls.update();scheduler.invalidate();},inspectAnemones:()=>{cameraGoal=null;controls.minDistance=2;controls.target.set(3.05,1.56,.82);camera.position.set(3.15,2.45,4.8);controls.update();scheduler.invalidate();},inspectCorals:()=>{cameraGoal=null;controls.minDistance=3;controls.target.set(-2.85,2.6,-.1);camera.position.set(-2.85,3.45,4.9);controls.update();scheduler.invalidate();}}});
 Promise.all([reef.assetsReady,lighting.prepare(renderer)]).then(()=>{ready=true;$('#loading').remove();last=performance.now();requestAnimationFrame(animate);}).catch(e=>{$('#loading').textContent='The reef could not start. Please reload with WebGL enabled.';console.error(e);});
 
