@@ -1,12 +1,12 @@
 {
-  "buildHash": "b93b190b903bff47f3343417a75817e2f2c3e946de8c8a65101e2c39987a4ef4",
+  "buildHash": "911723c5a8015d1f651fc0bf328a02738131e3d0288b58c5673f796d8dd77800",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
+    "assets/index-CJJeRtFG.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-Ih5es3S7.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T17:34:22.183Z",
-  "readyMs": 3154,
+  "checkedAt": "2026-09-23T17:50:52.489Z",
+  "readyMs": 3505,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 6.162100000190753,
-      "bites": 6,
-      "remaining": 30
+      "time": 6.124300000047701,
+      "bites": 22,
+      "remaining": 14
     },
     {
       "fps": 59.99400059993998,
-      "time": 10.162400000190752,
-      "bites": 31,
-      "remaining": 5
+      "time": 10.124700000047694,
+      "bites": 35,
+      "remaining": 1
     },
     {
-      "fps": 59.99999999999999,
-      "time": 14.179400000190693,
+      "fps": 59.99100134979755,
+      "time": 14.125100000047658,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 18.15880000004759,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 22.175800000047495,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 18.196400000190632,
+      "time": 26.19270000004741,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.994000599940094,
-      "time": 22.21350000019052,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 26.230500000190457,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 30.24750000019037,
+      "fps": 59.99400059993998,
+      "time": 30.1931000000473,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 8147120,
+    "triangles": 8143280,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 564,
@@ -222,11 +222,10 @@
     "three-quarter",
     "side",
     "mobile",
-    "sand-closeup",
     "coral-closeup",
     "anemone time sequence",
-    "90-second real rendered tang traversal and turn sequence",
-    "reference-and-planted-comparison"
+    "original reef and mature planted comparison",
+    "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -234,7 +233,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Deeper asymmetric live-rock relief, nine grounded fragments and24 new small coral colonies. Stable blue-tang escape steering, displacement monitoring and bounded combined avoidance. Comparative photographic target remains unmet.",
+  "scope": "Reference-led plate growth: low spreading shelves with unequal lobes, shallow bays, independent folds and uneven pale margins. Closed geometry and seam normals repaired. Comparative realism target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -272,9 +271,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 2495.5,
-    "loadCurrent": 3190,
-    "fpsPrior": 255.2,
-    "fpsCurrent": 250.7
+    "loadPrior": 3287.5,
+    "loadCurrent": 3278.8,
+    "fpsPrior": 248.1,
+    "fpsCurrent": 255.3
   }
 }

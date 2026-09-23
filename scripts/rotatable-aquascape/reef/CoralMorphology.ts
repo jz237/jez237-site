@@ -122,18 +122,38 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
 export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[];
  const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ba9478');
+ // Unequal growth fans and narrow retreating bays replace a circular bowl.
+ // Each fan raises a different fold; its valley continues into the older
+ // tissue, so the edge reads as a grown shelf rather than a corrugated disc.
+ const fans=Array.from({length:13},(_,k)=>({angle:k*Math.PI*2/13+.085*Math.sin(seed*2+k*4.1),width:.14+.07*(.5+.5*Math.sin(k*2.8+seed)),reach:.04+.085*(.5+.5*Math.sin(k*4.7-seed)),rise:.025+.08*(.5+.5*Math.cos(k*2.3+seed*1.7))}));
+ const delta=(a:number,b:number)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
+ const margins=Array.from({length:sides+1},(_,i)=>{
+  const a=i/sides*Math.PI*2;
+  let growth=0,fold=0,bay=0;
+  for(const fan of fans){const d=delta(a,fan.angle),lobe=Math.exp(-((d/fan.width)**2));growth+=fan.reach*lobe;fold+=fan.rise*lobe;bay+=.065*Math.exp(-((delta(a,fan.angle+fan.width*1.2)/.075)**2));}
+  return {outline:.95+.075*Math.sin(a*3+seed)+.045*Math.cos(a*5-seed*.3)+growth-bay,fold};
+ });
  for(let layer=0;layer<2;layer++)for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
-  const a=i/sides*Math.PI*2,t=j/rings,rr=r*t*(1+.16*Math.sin(a*3+seed)+.08*Math.cos(a*5-seed*.3)+.055*Math.sin(a*9+seed)+.017*Math.sin(a*29));
-  const scallop=r*(Math.sin(a*17+Math.sin(a*5)*.8+seed)*.025*t**5+Math.sin(a*37-seed)*.008*t**8);
-  const raised=r*(.14*t*t+.10*Math.sin(a*2+seed)*t*t+.06*Math.sin(a*5+seed*.3)*t**3+.035*Math.sin(t*13+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
+  const a=i/sides*Math.PI*2,t=j/rings,{outline,fold}=margins[i];
+  const rr=r*t*outline,scallop=r*(Math.sin(a*19+Math.sin(a*5)*.8+seed)*.012*t**5+Math.sin(a*37-seed)*.005*t**8);
+  // A low spreading fan with local upturned lobes, not one continuous cup.
+  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
   const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
   const thickness=r*(.010+.035*(1-t)**2),py=y+raised+scallop+groove+tissueRelief-(layer?thickness:0);
   positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));
-  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.987,1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
-  if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
+  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.969+.009*Math.sin(a*7+seed),1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
+  if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=j?[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1]:[n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}
- const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setAttribute('plateTissue',new T.Uint8BufferAttribute(tissue,1,true));geo.setIndex(indices);geo.computeVertexNormals();return geo;
+ const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setAttribute('plateTissue',new T.Uint8BufferAttribute(tissue,1,true));geo.setIndex(indices);geo.computeVertexNormals();
+ // Smooth the coincident angular seam and pole without welding upper/lower
+ // tissue together. No extra geometry or per-frame work is needed.
+ const normals=geo.getAttribute('normal'),normal=new T.Vector3();
+ for(let layer=0;layer<2;layer++){
+  const start=layer*offset;normal.set(0,0,0);for(let i=0;i<=sides;i++)normal.add(new T.Vector3().fromBufferAttribute(normals,start+i));normal.normalize();for(let i=0;i<=sides;i++)normals.setXYZ(start+i,normal.x,normal.y,normal.z);
+  for(let j=1;j<=rings;j++){const a=start+j*(sides+1),b=a+sides;normal.fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,normal.x,normal.y,normal.z);normals.setXYZ(b,normal.x,normal.y,normal.z);}
+ }
+ return geo;
 }
 
 /** Conservative volumes derived from the actual closed shelf, including folds.
