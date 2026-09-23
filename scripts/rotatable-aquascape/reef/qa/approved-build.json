@@ -1,52 +1,52 @@
 {
-  "buildHash": "1248bfe5970494336daf0669f6bb9a14306f94cdf2d31749ae3e0b8a05d042ac",
+  "buildHash": "9bb19492b3d38d4474daea1a31df163af837283f19a6b8a4dad68c5e69e0c975",
   "files": [
-    "assets/index-D7yZwMeH.js",
+    "assets/index-B8Tur_ZM.js",
     "assets/index-DdD2V56_.css",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T00:48:23.699Z",
-  "readyMs": 1488,
+  "checkedAt": "2026-09-23T01:22:56.630Z",
+  "readyMs": 1507,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 4.292199999904631,
-      "bites": 21,
-      "remaining": 15
+      "time": 4.297500000047683,
+      "bites": 20,
+      "remaining": 16
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.292499999904672,
-      "bites": 34,
-      "remaining": 2
+      "fps": 59.99100134979749,
+      "time": 8.314600000047722,
+      "bites": 32,
+      "remaining": 4
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.309599999904618,
-      "bites": 36,
-      "remaining": 0
+      "time": 12.331500000047681,
+      "bites": 35,
+      "remaining": 1
     },
     {
-      "fps": 59.99700014999255,
-      "time": 16.30989999990457,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 20.31019999990447,
+      "fps": 59.99700014999244,
+      "time": 16.331800000047647,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.3272999999044,
+      "time": 20.348900000047543,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.344299999904322,
+      "time": 24.36590000004748,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 28.366200000047364,
       "bites": 36,
       "remaining": 0
     }
@@ -65,7 +65,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 2166582,
+    "triangles": 2168022,
     "inhabitants": 20
   },
   "visualReview": [
@@ -73,14 +73,14 @@
     "three-quarter",
     "side",
     "mobile",
-    "blue-hour"
+    "blue-hour",
+    "coral-closeup"
   ],
-  "plantedBehaviorTests": 264,
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
   "publication": [
     "jez237.com",
     "GitHub"
   ],
-  "scope": "First reef preview; not photographic parity. Desktop measurements are local, not a phone performance claim."
+  "scope": "Coral morphology and rock-material pass; not photographic parity. Local desktop measurements do not establish phone performance."
 }
