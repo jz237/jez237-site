@@ -3,11 +3,11 @@ import * as T from 'three';
 import {buildAnemones} from '../Anemones.ts';
 import {tissueFlow} from '../AnemoneFlow.ts';
 let seed=91;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-const {mesh,tentacles}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,1)],{value:0},random,p=>p.y-.28);
+const {mesh,tentacles,behavior}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,1)],{value:0},random,p=>p.y-.28);
 assert.equal(tentacles,540);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<11000000, 'anemone geometry buffers remain below the reviewed 11 MB budget for twelve-sided skin');
+assert.ok(bytes<15000000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15 MB');
 const p=mesh.geometry.getAttribute('position'),n=mesh.geometry.getAttribute('normal'),flex=mesh.geometry.getAttribute('anemoneFlex');
 const rings=new Map();
 for(let i=0;i<p.count;i++){
@@ -43,33 +43,39 @@ const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase
 const rootHeights=[];
 for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,12).reduce((sum,i)=>sum+p.getY(i),0)/12);
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
-let worstDot=1,minDeterminant=Infinity;const lobeRatios=[];
+let worstDot=1,minDeterminant=Infinity,minFeedingDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
- const centers=[];for(let row=0;row<19;row++){const center=new T.Vector3();for(let j=0;j<12;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*13+j]));centers.push(center.multiplyScalar(1/12));}
+ const rows=ids.length/13,cap=rows-5;const centers=[];for(let row=0;row<rows;row++){const center=new T.Vector3();for(let j=0;j<12;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*13+j]));centers.push(center.multiplyScalar(1/12));}
  const ringRadius=row=>ids.slice(row*13,row*13+12).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/12;
  // Cap sections must stay circular and perpendicular to their real centerline.
- for(const row of [14,15,16]){
+ for(const row of [cap,cap+1,cap+2]){
   const idsAt=ids.slice(row*13,row*13+12),axis=decode(ids[row*13]);
   const offsets=idsAt.map(i=>new T.Vector3().fromBufferAttribute(p,i).sub(centers[row]));
   const radii=offsets.map(o=>o.length());
   assert.ok(Math.min(...radii)/Math.max(...radii)>.96,'rounded cap is not flattened by interpolated curve frames');
   assert.ok(offsets.every(o=>Math.abs(o.clone().normalize().dot(axis))<.001),'cap frame stays perpendicular to curve tangent');
  }
- const capAspect=centers[14].distanceTo(centers[18])/ringRadius(14);
+ const capAspect=centers[cap].distanceTo(centers.at(-1))/ringRadius(cap);
  assert.ok(capAspect>.90&&capAspect<1.08,'cap rounds over within one tissue radius instead of an elongated beak: '+capAspect);
- lobeRatios.push(ringRadius(14)/ringRadius(8));
- for(let row=1;row<18;row++){
+ lobeRatios.push(Math.max(...Array.from({length:cap-Math.floor(cap*.7)},(_,i)=>Math.floor(cap*.7)+i).map(ringRadius))/ringRadius(Math.floor(cap*.55)));
+ for(let row=1;row<rows-1;row++){
   const i=ids[row*13],axis=decode(i),a=flex.getX(i)-flex.getX(ids[(row-1)*13]),b=flex.getX(ids[(row+1)*13])-flex.getX(i);
   const direction=centers[row].clone().sub(centers[row-1]).multiplyScalar(b/a).addScaledVector(centers[row+1].clone().sub(centers[row]),a/b).normalize();worstDot=Math.min(worstDot,axis.dot(direction));
   const t=flex.getX(i),phase=flex.getY(i),arc=flex.getZ(i),scale=Math.min(flex.getW(i),arc*.85);
   for(const time of [0,1,3,7,15,31]){
    const f=tissueFlow(time,t,phase),d=new T.Vector3((f[2]*t*t+2*t*f[0])*scale,0,(f[3]*t*t+2*t*f[1])*scale);
    minDeterminant=Math.min(minDeterminant,1+axis.dot(d)/arc);
+   const shrink=1-.20*t*t*(3-2*t),host=behavior.hosts[Math.floor(phase/8)].center;
+   const flowed=centers[row].clone().add(new T.Vector3(f[0]*t*t*scale,0,f[1]*t*t*scale));
+   const deformation=d.clone().multiplyScalar(shrink).addScaledVector(host.clone().sub(flowed),.20*6*t*(1-t));
+   minFeedingDeterminant=Math.min(minFeedingDeterminant,shrink*shrink*(shrink+axis.dot(deformation)/arc));
    const h=1e-5,before=tissueFlow(time,t-h,phase),after=tissueFlow(time,t+h,phase);
    for(let k=0;k<2;k++)assert.ok(Math.abs((after[k]*(t+h)**2-before[k]*(t-h)**2)/(2*h)-(f[k+2]*t*t+2*t*f[k]))<1e-6,'analytic bending derivative matches actual deformation');
   }
  }
 }
+assert.ok(minFeedingDeterminant>.08,'maximum contact contraction must not invert tentacle skin: '+minFeedingDeterminant);
+console.log('Minimum feeding deformation determinant:',minFeedingDeterminant);
 assert.ok(worstDot>.97,'compressed axis follows curved tissue: '+worstDot);assert.ok(minDeterminant>.4,'sampled motion does not fold the local deformation inside out: '+minDeterminant);
 assert.ok(Math.max(...lobeRatios)-Math.min(...lobeRatios)>.4,'slender and inflated tentacles keep individual anatomical variation');
 console.log('Curved tissue shading passed: axis alignment',worstDot,'minimum sampled deformation determinant',minDeterminant);

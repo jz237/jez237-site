@@ -10,7 +10,7 @@ const descriptions:Record<Species,string>={tang:'A laterally compressed body let
 const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.53,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
 type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number};
-export type Food={position:T.Vector3;alive:boolean;age:number};
+export type Food={position:T.Vector3;alive:boolean;age:number;sinkRate?:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private seed=Math.random()*100;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
  constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>){
@@ -99,13 +99,14 @@ export class ReefFish{
   f.until=this.clock+(recover?3:2+Math.random()*5);
   f.mode=recover?'exploring':Math.random()<.16?'hovering':'exploring';
  }
- feed(){
+ feed(sinkingSites:T.Vector3[]=[]){
   if(this.foods.some(f=>f.alive))return false;
-  this.foods.length=0;for(let i=0;i<36;i++)this.foods.push({position:v((Math.random()-.5)*3.2,4.95+Math.random()*.08,.8+(Math.random()-.5)*.9),alive:true,age:0});return true;
+  this.foods.length=0;for(let i=0;i<36;i++)this.foods.push({position:v((Math.random()-.5)*3.2,4.95+Math.random()*.08,.8+(Math.random()-.5)*.9),alive:true,age:0});
+  for(const site of sinkingSites.slice(0,6))this.foods.push({position:v(site.x,4.95,site.z),alive:true,age:0,sinkRate:.43});return true;
  }
  update(dt:number,night:boolean){
   this.clock+=dt;const now=this.clock;
-  for(const food of this.foods)if(food.alive){food.age+=dt;const next=food.position.clone();next.y-=dt*.07;next.x+=Math.sin(now*1.1+food.age*.2)*dt*.025;if(this.free(next,.028))food.position.copy(next);if(food.age>42)food.alive=false;}
+  for(const food of this.foods)if(food.alive){food.age+=dt;const next=food.position.clone();next.y-=dt*(food.sinkRate??.07);next.x+=Math.sin(now*1.1+food.age*.2)*dt*(food.sinkRate?.004:.025);if(this.free(next,.028))food.position.copy(next);if(food.age>42)food.alive=false;}
   for(let i=0;i<this.fish.length;i++){
    const f=this.fish[i],mouth=f.mouth.position.clone().multiplyScalar(f.group.scale.x).applyEuler(new T.Euler(0,f.yaw,f.pitch,'YXZ')).add(f.position);
    let target:Food|undefined,dist=Infinity;

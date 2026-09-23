@@ -115,7 +115,7 @@ export function buildReef(scene:T.Scene){
   corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };
  for(const b of [[-3.12,3.24,-.95,1,.94],[-3.92,2.55,-.6,.8,.025],[-2.37,2.83,-.7,.72,.22],[-3.45,2.83,-.25,.82,.81],[-1.94,1.61,-.63,.63,.47],[-3.89,1.23,1.06,.5,.2],[-2.11,.63,1.61,.51,.025],[-4.27,.72,.56,.63,.28],[-1.48,.57,-1.46,.55,.8],
- [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[3.72,1.32,.88,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[2.85,.87,1.42,.44,.21],[3.45,.65,1.77,.39,.82]])branch(...b as [number,number,number,number,number]);
+ [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[4.03,1.63,-.38,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[1.58,.87,1.47,.44,.21],[4.21,.65,1.50,.39,.82]])branch(...b as [number,number,number,number,number]);
  // These are full volumetric colonies, not distant cards; they share the same
  // indexed detail and merged material as the main islands.
  for(const b of [[-1.00,1.64,-1.71,1.02,.82],[.28,1.51,-1.69,.90,.23],[-.32,.57,-1.59,.53,.96]])branch(...b as [number,number,number,number,number],rearRandom);
@@ -138,7 +138,7 @@ export function buildReef(scene:T.Scene){
  const occupied=obstacles.slice(rockObstacleCount);
  // These inspected anchor sites have stable independent shape seeds; rejected
  // placement trials are not regenerated on each page load.
- for(const [seed,x,y,size,hue] of [[1,-2.3293738395249055,2.4894741716151554,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.86002344463442,1.5607145878049533,.34,.23],[14,1.474970675119953,3.5631057078247537,.43,.14],[19,3.9427001728732343,1.6899479025164776,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.274984466846001,3.3617742425195716,.31,.23],[28,3.96,2.24,.37,.025]]){
+ for(const [seed,x,y,size,hue] of [[1,-2.3293738395249055,2.4894741716151554,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.86002344463442,1.5607145878049533,.34,.23],[14,1.474970675119953,3.5631057078247537,.43,.14],[19,4.3623875879720995,1.6737468652770737,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.274984466846001,3.3617742425195716,.31,.23],[28,3.9286545634283656,2.4476474502760235,.37,.025]]){
   // Erosion can turn a former shoulder into a cavity. Reattach a displaced
   // colony to a nearby clear shoulder instead of silently deleting its detail.
   for(let attempt=0;attempt<33;attempt++){
@@ -211,7 +211,8 @@ export function buildReef(scene:T.Scene){
  const massive=batch(massiveCorals,crustMaterial,group,'Ridged encrusting colonies')!;addNote(massive,'A living surface','Closely packed coral cups have recessed centers and fine radial ridges. This tissue follows the supporting rock, while its hard skeleton remains still in the current. An artistic anatomical study.');
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
- addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
+ group.add(anemone.behavior.morsels);
+ addNote(anemone.mesh,'Shelter in the tentacles','Bubble-tip anemones can have both long and swollen, blunt-ended tentacles. The foot anchors inside the reef. Current bends the canopy; food contact causes nearby tentacles to shorten and the oral disc to fold. Watch sinking morsels during feeding. Food transfer is accelerated for observation; this is an artistic study, not a biological clock or stocking guide.');
 
  const crustSurface=topSurfaceSampler(crustSurfaces),mantleSurface=topSurfaceSampler(mantleSurfaces);
  const gardenSurface=(x:number,y:number,z:number)=>{const rock=surfaceLookup(x,y,z),crust=crustSurface(x,y,z);return crust&&(!rock||crust.point.y>rock.point.y)?crust:rock;};

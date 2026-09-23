@@ -1,12 +1,12 @@
 {
-  "buildHash": "012d9994cc5e908cea6dcddfc832eb13fbaf6a89b61cb1cbcc53c9de52d35ad5",
+  "buildHash": "f1c6b121c2f966db211d0b380eb065e4a3f035e6e76be53a84135df7cfa49d99",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
+    "assets/index-Cgn81PzN.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-E6TUqE4M.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -23,50 +23,120 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T20:55:28.341Z",
-  "readyMs": 4680,
+  "checkedAt": "2026-09-23T21:30:47.370Z",
+  "readyMs": 4484,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 5.9473999998092815,
-      "bites": 5,
-      "remaining": 31
-    },
-    {
-      "fps": 59.99700014999249,
-      "time": 9.947699999809274,
-      "bites": 31,
-      "remaining": 5
-    },
-    {
-      "fps": 59.476605868358384,
-      "time": 13.965399999809225,
-      "bites": 33,
-      "remaining": 3
+      "fps": 59.99400059993998,
+      "time": 6.035000000000019,
+      "bites": 13,
+      "remaining": 29,
+      "anemones": {
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
     },
     {
       "fps": 59.99400059993998,
-      "time": 17.982399999809147,
-      "bites": 35,
-      "remaining": 1
+      "time": 10.052000000000017,
+      "bites": 24,
+      "remaining": 18,
+      "anemones": {
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
     },
     {
       "fps": 59.99700014999244,
-      "time": 21.99939999980912,
-      "bites": 36,
-      "remaining": 0
+      "time": 14.05239999999998,
+      "bites": 29,
+      "remaining": 12,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
     },
     {
-      "fps": 59.99100134979755,
-      "time": 26.016599999809063,
-      "bites": 36,
-      "remaining": 0
+      "fps": 59.99400059993998,
+      "time": 18.069399999999963,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 22.086499999999898,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.19717259704425485,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 26.103399999999866,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.14166537753093533,
+          0
+        ]
+      }
     },
     {
       "fps": 59.99700014999255,
-      "time": 30.033399999808914,
-      "bites": 36,
-      "remaining": 0
+      "time": 30.120499999999755,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.057947235800224275,
+          0
+        ]
+      }
     }
   ],
   "checks": {
@@ -83,7 +153,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 9706644,
+    "triangles": 9861198,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
@@ -116,7 +186,7 @@
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 398701,
+      "triangles": 398721,
       "placements": [
         [
           1,
@@ -162,8 +232,8 @@
         ],
         [
           19,
-          3.9427001728732343,
-          1.6899479025164776,
+          4.3623875879720995,
+          1.6737468652770737,
           0.48,
           0.14
         ],
@@ -190,8 +260,8 @@
         ],
         [
           28,
-          3.96,
-          2.24,
+          3.9286545634283656,
+          2.4476474502760235,
           0.37,
           0.025
         ]
@@ -327,10 +397,12 @@
     "oblique",
     "side",
     "mobile",
-    "flank-closeup before/after",
-    "polyp motion frames 0/2",
+    "anemone closeup before/after",
+    "anemone motion a/b",
+    "contact frames .2/1/3/5/8.5/15/25",
+    "GPT Image anemone guide",
     "original reef reference",
-    "mature planted aquarium and its reference",
+    "mature planted aquarium and reference",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -339,7 +411,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Replace coarse radial flower stamps on encrusting coral with denser irregular cup walls, narrow oral recesses, varied septa and continuous mottled tissue. Same 512px maps and rendering work; reference quality target still unmet.",
+  "scope": "Research-guided bubble-tip anemone anatomy, irregular shared current, local contact feeding and illustrated food transfer; relocate three interfering hard corals, retain all colonies. GPT Image guide is local QA only. Reference parity not achieved.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -377,10 +449,10 @@
     ]
   },
   "performanceComparison": {
-    "baseline": "72bfd9a7a",
-    "loadPrior": 4074.5,
-    "loadCurrent": 4252.5,
-    "fpsPrior": 218.8,
-    "fpsCurrent": 204
+    "baseline": "b70d1d18f",
+    "loadPrior": 3825.5,
+    "loadCurrent": 4082,
+    "fpsPrior": 226.9,
+    "fpsCurrent": 209
   }
 }
