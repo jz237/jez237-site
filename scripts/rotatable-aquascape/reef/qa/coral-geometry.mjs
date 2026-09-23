@@ -21,3 +21,16 @@ const ap=attached.getAttribute('position'),an=attached.getAttribute('normal');
 assert.ok(attached.index.count>150,'retain a connected crust on the supported slope');
 for(const index of attached.index.array){const x=ap.getX(index),z=ap.getZ(index);assert.ok(x<.091,'do not leave disconnected tissue on the lower shelf');assert.ok(Math.abs(ap.getY(index)-slope(x,z)-.003)<1e-6,'crust hugs the actual support');assert.ok(an.getY(index)>.8,'supported tissue faces outwards');}
 console.log('Coral attachment passed: sloping support, outward normals and no detached lower-shelf fragments.');
+
+// The same random seed produces genuinely different colony architecture while
+// retaining the same branch/cup detail and bounded geometry allocation.
+const fixture=style=>{let state=684;return branchingColony(new T.Vector3(),1,.8,()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;},undefined,style);};
+const forms=['canopy','bushy','antler'].map(style=>{const meshes=fixture(style),bounds=new T.Box3();let count=0;for(const g of meshes){g.computeBoundingBox();bounds.union(g.boundingBox);count+=g.index.count;}return {style,meshes,bounds,count};});
+assert.equal(forms[0].count,forms[1].count);assert.equal(forms[1].count,forms[2].count,'shape diversity does not multiply geometry');
+assert.ok(forms[2].bounds.max.y>forms[0].bounds.max.y*1.1,'antler form grows taller than spreading canopy');
+assert.ok(forms[0].bounds.max.x-forms[0].bounds.min.x>forms[2].bounds.max.x-forms[2].bounds.min.x,'canopy spreads farther laterally');
+for(const {style,meshes} of forms){
+ for(const g of meshes.filter(g=>g.type==='TubeGeometry')){const p=g.getAttribute('position'),{radialSegments:s,tubularSegments:steps,path,radius}=g.parameters,center=path.getPointAt(1);let mean=0;for(let k=0;k<s;k++)mean+=new T.Vector3().fromBufferAttribute(p,steps*(s+1)+k).distanceTo(center);assert.ok(mean/s>radius*.58,'rounded tips must not taper to needle points');}
+ assert.deepEqual(meshes[0].getAttribute('position').array,fixture(style)[0].getAttribute('position').array,'art geometry stays reproducible');
+}
+console.log('Growth forms passed: distinct canopy, bushy and antler silhouettes; same detail count; rounded tips.');

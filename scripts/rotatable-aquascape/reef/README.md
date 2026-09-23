@@ -173,3 +173,15 @@ A geometry regression checks finite indexed attributes, nondegenerate clipped
 triangles, and thin attachment to an eroded rock fixture. The new crusts total
 11,097 source triangles; scene render triangles rise 0.55%. Full QA remains near
 60 FPS locally, startup 1666 ms versus 1634 previously. Other hardware unmeasured.
+
+## Branching growth diversity
+
+Branching colonies use three artistic architectures: broad canopies, compact
+bushes and taller antlers. Shorter terminal branchlets retain thicker, rounded
+growth tips; primary stems spread and bend at different heights. Core tissue is
+less saturated and darker than the growing tips. Existing corallite cups, maps,
+branch counts, indexed geometry and material draw groups are retained. This is
+not a named-species growth model. Joins still use overlapping flared surfaces.
+Tests compare reproducible silhouettes and rounded tips with equal detail counts.
+Rendered triangles remain 3,725,742; local QA ready 1632 ms versus 1666 previously,
+with roughly 60 FPS. Feeding and conservative collision bounds follow new shapes.
