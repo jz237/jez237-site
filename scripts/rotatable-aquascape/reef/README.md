@@ -210,3 +210,13 @@ No new texture downloads or capture passes. Scene triangles rise from 3,750,342
 to 4,045,478 (7.87%); local startup 1789 ms versus 1644, with approximately 60 FPS.
 Other hardware is unmeasured. Front, oblique, rear macro and phone evidence are
 retained in qa; the remaining reference gap is acknowledged in overnight-progress.
+
+## Underwater fish material calibration
+
+The reef runtime removes the exported clearcoat/metallic sheen, reduces optical
+contrast and separates eye, skin and fin roughness. Reference scale, iris and fin
+textures remain intact. A neutral albedo multiplier compensates for photographic
+lighting already present in the source images, with stronger compensation on the
+orange anthias. These are visual calibration values, not measured fish-tissue
+optical constants. All Blender geometry, textures, motion and breathing remain.
+No new textures, geometry or rendering passes are introduced.
