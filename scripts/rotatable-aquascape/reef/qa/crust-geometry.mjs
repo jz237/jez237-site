@@ -39,3 +39,20 @@ for(let i=0;i<fp.count;i++){
 }
 for(let i=0;i<foot.index.count;i+=3){const a=new T.Vector3().fromBufferAttribute(fp,foot.index.getX(i)),b=new T.Vector3().fromBufferAttribute(fp,foot.index.getX(i+1)),c=new T.Vector3().fromBufferAttribute(fp,foot.index.getX(i+2));assert.ok(b.sub(a).cross(c.sub(a)).length()>1e-10,'nondegenerate clipped foot triangles');}
 console.log('Clipped branching foot passed:',foot.index.count/3,'triangles; maximum sampled gap',footGap);
+
+// On flat support, distinguish a spreading colony from a circular paint patch.
+// Check the generated boundary independently of the growth-field formula.
+const flat=new T.PlaneGeometry(3,3,96,96),flatCrust=coralCrust(flat,new T.Vector3(),new T.Vector3(0,0,1),1,.2,9);
+const boundaryEdges=new Map();
+for(let i=0;i<flatCrust.index.count;i+=3)for(let j=0;j<3;j++){
+ const a=flatCrust.index.getX(i+j),b=flatCrust.index.getX(i+(j+1)%3),key=[a,b].sort((a,b)=>a-b).join(':');
+ const edge=boundaryEdges.get(key);if(edge)edge.count++;else boundaryEdges.set(key,{a,b,count:1});
+}
+const boundaryVertices=new Set([...boundaryEdges.values()].filter(e=>e.count===1).flatMap(e=>[e.a,e.b]));
+const flatP=flatCrust.getAttribute('position'),radii=[...boundaryVertices].map(i=>Math.hypot(flatP.getX(i),flatP.getY(i)));
+assert.ok(Math.max(...radii)-Math.min(...radii)>.25,'spreading fronts retain deep irregular bays');
+assert.ok(Math.max(...radii)<1.041,'colony remains within the conservative attachment envelope');
+const adjacency=new Map();for(const e of boundaryEdges.values()){if(!adjacency.has(e.a))adjacency.set(e.a,[]);if(!adjacency.has(e.b))adjacency.set(e.b,[]);adjacency.get(e.a).push(e.b);adjacency.get(e.b).push(e.a);}
+const visited=new Set(),pending=[0];while(pending.length){const i=pending.pop();if(visited.has(i))continue;visited.add(i);pending.push(...(adjacency.get(i)||[]).filter(j=>!visited.has(j)));}
+assert.equal(visited.size,flatP.count,'growth fronts form one connected colony');
+console.log('Connected growth fronts passed:',flatP.count,'vertices; boundary radius range',Math.min(...radii),Math.max(...radii));

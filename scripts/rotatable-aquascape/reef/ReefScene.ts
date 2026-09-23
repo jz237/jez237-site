@@ -75,7 +75,7 @@ export function buildReef(scene:T.Scene){
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
- const crustStats={colonies:0,triangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
+ const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
  for(const [rockIndex,dx,dy,r,hue] of [[4,-.18,.02,.7,.12],[5,.18,.07,.56,.055],[2,-.08,-.09,.46,.8],[8,.04,.02,.43,.08],[14,-.18,.05,.66,.1],[15,.12,.06,.5,.82],[12,.18,.12,.61,.045],[17,.06,.04,.43,.22],[19,.04,.08,.49,.095],[20,.09,.04,.37,.83]]){
   const f=formations[rockIndex];attachRay.set(new T.Vector3(f[0]+dx,f[1]+dy,3),new T.Vector3(0,0,-1));attachRay.far=6;
   const hit=attachRay.intersectObject(supports[rockIndex],false)[0];if(!hit?.face)continue;
@@ -143,6 +143,16 @@ export function buildReef(scene:T.Scene){
    o.center.distanceTo(new T.Vector3(3.05,1.5,.82))<.92+o.radius||o.center.distanceTo(new T.Vector3(-3.62,1.0,1.35))<.73+o.radius;
   if(blocked){colony.geometries.forEach(g=>g.dispose());continue;}
   corals.push(...colony.geometries);obstacles.push(o);occupied.push(o);infillStats.colonies++;infillStats.triangles+=colony.triangles;infillStats.placements.push([seed,x,y,size,hue]);
+ }
+ // Small upward/outward fingers grow from selected living crusts. Using the
+ // crust itself as support keeps their feet on the tissue rather than buried
+ // in the supporting rock. Independent seeds preserve all existing placement.
+ for(const [index,x,y,size,hue] of [[1,-2.72,2.52,.40,.055],[5,2.17,3.07,.44,.82],[7,3.46,2.15,.36,.22]]){
+  const tissue=massiveCorals[index];if(!tissue)continue;
+  const support=new T.Mesh(tissue,rockMat);attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.1;
+  const hit=attachRay.intersectObject(support,false)[0];if(!hit?.face)continue;
+  const colony=surfaceColony(support,hit.point,hit.face.normal,size,hue,seeded(23092340+index));
+  corals.push(...colony.geometries);obstacles.push(colony.obstacle);crustStats.emergentColonies++;crustStats.emergentTriangles+=colony.triangles;
  }
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}));
