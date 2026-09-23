@@ -1984,3 +1984,10 @@ body.cinema .window-dock { display: none; }
   .city-feature-panel { top: 165px; left: 12px; max-height: calc(100dvh - 300px); }
   .city-feature-badge { bottom: 135px; width: max-content; max-width: calc(100vw - 28px); }
 }
+
+/* Keep the valley card collapse action visible and easy to reach. */
+.readout-preset .notes-toggle { margin: 0 0 12px auto; min-height: 36px; padding: 7px 12px;
+  border: 1px solid #e4c88b70; border-radius: 8px; background: #294653;
+  color: #fff0ce; font: 600 12px var(--font); }
+body.notes-collapsed .readout-preset > :not(.notes-toggle) { display: none; }
+body.notes-collapsed .readout-preset .notes-toggle { margin: 0; }
