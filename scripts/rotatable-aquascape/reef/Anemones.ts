@@ -27,7 +27,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
  for(let k=0;k<3;k++){
   const center=(k<2?hosts[k]:new T.Vector3(3.88,.52,1.73)).clone(),scale=k===0?1:k===1?.63:.46;
   const ground=supportHeight(center);center.y=Math.min(center.y,ground+.22*scale);
-  const base=new T.Color(k===2?'#65566b':'#595b3c'),shaft=new T.Color(k===2?'#ad7b99':'#7d8550'),tip=new T.Color(k===2?'#b6c9cf':'#bdd5b3');
+  const base=new T.Color(k===2?'#65566b':'#595b3c'),shaft=new T.Color(k===2?'#ad7b99':'#89904e'),tip=new T.Color(k===2?'#b6c9cf':'#abc995');
   const footY=Math.min(center.y-.10*scale,ground-.025*scale),columnTop=center.y-.025*scale;
   const column=new T.CylinderGeometry(.57*scale,.31*scale,columnTop-footY,32,5,true),cp=column.getAttribute('position');
   for(let j=0;j<cp.count;j++){const a=Math.atan2(cp.getZ(j),cp.getX(j)),rib=1+.055*Math.sin(a*7+cp.getY(j)*4)+.022*Math.sin(a*17);const t=cp.getY(j)/(columnTop-footY)+.5,edge=discPoint(1,a,scale,k);cp.setXYZ(j,T.MathUtils.lerp(cp.getX(j)*rib,edge.x,t*t),cp.getY(j)+t*t*(edge.y+.025*scale),T.MathUtils.lerp(cp.getZ(j)*rib,edge.z,t*t));}
@@ -46,23 +46,28 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    // Regional folds guide neighboring strands, while individuals keep different
    // lengths and tip directions. Reuse the same four random draws per strand.
    const length=choose(.39,.85)*scale*(.88+.22*radial),phase=choose(0,6.28),radius=choose(.019,.032)*scale;
-   const sector=angle+k*1.73,spread=(.17+.31*radial)*scale*(1+.22*Math.sin(sector*2));
-   const height=length*(.97-.23*radial)*(.88+.16*Math.cos(sector*2+.5));
-   const curl=.115*scale*Math.sin(phase),sweep=.15*scale;
+   // Folded marginal tissue carries shorter, outward-draped strands. Adjacent
+   // regions lean together; fine individual differences keep the canopy loose.
+   const sector=angle+k*1.73,edgeDrape=T.MathUtils.smoothstep(radial,.58,1);
+   const region=Math.sin(sector*3+.65)+.35*Math.cos(sector*5-1.2);
+   const spread=(.17+.31*radial+.10*edgeDrape)*scale*(1+.22*Math.sin(sector*2));
+   const height=length*(.97-.40*radial)*(.88+.16*Math.cos(sector*2+.5))-.08*scale*edgeDrape;
+   const curl=scale*(.10*Math.sin(phase)+.065*region),sweep=.15*scale;
+   const droop=scale*edgeDrape*(.10+.08*(.5+.5*Math.sin(phase*1.3)));
    const end=root.clone().add(new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.025*scale));
-   const c1=root.clone().add(new T.Vector3(Math.cos(angle)*spread*.13,length*.44,Math.sin(angle)*spread*.13));
+   const c1=root.clone().add(new T.Vector3(Math.cos(angle)*spread*.13,length*(.40-.06*edgeDrape),Math.sin(angle)*spread*.13));
    // A finite, individually angled end handle avoids identical radial fans and
    // sharp hooks. Axes and shading below are rebuilt from the actual curve.
-   const tipDirection=new T.Vector3(Math.cos(angle)*spread+sweep*.55-Math.sin(angle)*curl*1.7,length*(.28-.33*radial+.22*Math.sin(phase)),Math.sin(angle)*spread+Math.cos(angle)*curl*1.7).normalize();
+   const tipDirection=new T.Vector3(Math.cos(angle)*spread+sweep*.55-Math.sin(angle)*curl*1.7,length*(.24-.38*radial+.30*Math.sin(phase))-droop,Math.sin(angle)*spread+Math.cos(angle)*curl*1.7).normalize();
    const c2=end.clone().addScaledVector(tipDirection,-(.27*length+.025*scale));
    // Some strands remain slender, others carry an inflated distal lobe. Tissue
    // color varies by region and individual without consuming extra scene RNG.
-   const inflation=.20+.48*(.5+.5*Math.sin(phase*2.7+angle))**2;
+   const inflation=.12+.58*(.5+.5*Math.sin(phase*2.7+angle))**2;
    const pigment=.5+.5*Math.sin(phase*1.9+sector*.7);
    const localShaft=shaft.clone().lerp(new T.Color(k===2?'#98728f':'#9b874d'),pigment*.46);
    const localTip=tip.clone().lerp(new T.Color(k===2?'#cfbecd':'#d4c589'),(.5+.5*Math.sin(phase*3.1))*.34);
    c1.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(.035*scale*Math.sin(phase*1.7)));
-   const curve=new T.CubicBezierCurve3(root,c1,c2,end),steps=18,sides=8,frames=curve.computeFrenetFrames(steps,false),arcLength=curve.getLength();
+   const curve=new T.CubicBezierCurve3(root,c1,c2,end),steps=18,sides=12,frames=curve.computeFrenetFrames(steps,false),arcLength=curve.getLength();
    // The cap's length follows its radius, not a fixed fraction of a long shaft.
    // This keeps a fleshy hemispherical end rather than an elongated pointed beak.
    const capSpan=radius*.88*(.44+inflation)/arcLength,capStart=1-capSpan;
@@ -71,12 +76,19 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
     const t=j<=14?j/14*capStart:capStart+capSpan*[.38,.70,.92,1][j-15],point=curve.getPointAt(t),shaftT=Math.min(t,capStart);
     // Smooth taper with a gently inflated end, then a continuous rounded closure.
     const width=radius*.88*(1-.56*shaftT+inflation*Math.exp(-(((shaftT-capStart)/.09)**2)))*(1+.07*Math.sin(shaftT*9+phase)*Math.sin(Math.PI*shaftT))*Math.sqrt(Math.max(0,1-(Math.max(0,t-capStart)/capSpan)**2));
-    const color=base.clone().lerp(localShaft,T.MathUtils.smoothstep(t,0,.32)).lerp(localTip,T.MathUtils.smoothstep(t,.83,1)).multiplyScalar(.82+.19*Math.sin(phase)*Math.sin(t*2.6));
+    const color=base.clone().lerp(localShaft,T.MathUtils.smoothstep(t,0,.32)).lerp(localTip,T.MathUtils.smoothstep(t,.91,.995)).multiplyScalar(.82+.19*Math.sin(phase)*Math.sin(t*2.6));
     const tangent=curve.getTangentAt(t),sum=Math.abs(tangent.x)+Math.abs(tangent.y)+Math.abs(tangent.z);let ax=tangent.x/sum,ay=tangent.y/sum;
     if(tangent.z<0){const oldX=ax;ax=(1-Math.abs(ay))*(ax>=0?1:-1);ay=(1-Math.abs(oldX))*(ay>=0?1:-1);}
+    // Reproject once per ring against the actual arc-length tangent. A skewed
+    // frame flattens rounded caps into spoon-like tips on curved strands.
+    const frame=t*steps,lo=Math.min(steps-1,Math.floor(frame)),mix=frame-lo;
+    const n=frames.normals[lo].clone().lerp(frames.normals[lo+1],mix).normalize();
+    n.addScaledVector(tangent,-n.dot(tangent)).normalize();
+    const b=new T.Vector3().crossVectors(tangent,n).normalize();
     for(let a=0;a<=sides;a++){
-     const theta=a/sides*Math.PI*2,frame=t*steps,lo=Math.min(steps-1,Math.floor(frame)),mix=frame-lo,n=frames.normals[lo].clone().lerp(frames.normals[lo+1],mix).normalize(),b=frames.binormals[lo].clone().lerp(frames.binormals[lo+1],mix).normalize(),co=Math.cos(theta),si=Math.sin(theta);
-     positions.push(point.x+width*(n.x*co+b.x*si),point.y+width*(n.y*co+b.y*si),point.z+width*(n.z*co+b.z*si));
+     const theta=a/sides*Math.PI*2,co=Math.cos(theta),si=Math.sin(theta);
+     const tissueWidth=width*(1+.055*Math.sin(theta*3+phase+t*2)*Math.sin(Math.PI*t));
+     positions.push(point.x+tissueWidth*(n.x*co+b.x*si),point.y+tissueWidth*(n.y*co+b.y*si),point.z+tissueWidth*(n.z*co+b.z*si));
      const stripe=1+.045*Math.sin(theta*3+phase+t*3)+.018*Math.cos(theta*2-t*17+phase);colors.push(color.r*stripe,color.g*stripe,color.b*stripe);uv.push(t,a/sides);flex.push(t,phase,arcLength,scale);axes.push(Math.round(ax*32767),Math.round(ay*32767));
      if(j<steps&&a<sides){const idx=j*(sides+1)+a;indices.push(idx,idx+1,idx+sides+1,idx+1,idx+sides+2,idx+sides+1);}
     }
@@ -118,7 +130,17 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    vec2 grainFootprint=fwidth(grainPhase);
    float fineMask=1.-smoothstep(1.,3.14159,grainFootprint.x+grainFootprint.y);
    float granules=sin(grainPhase.x)*sin(grainPhase.y);
-   diffuseColor.rgb*=1.+.055*mottling+.025*granules*fineMask;`);
+   diffuseColor.rgb*=1.+.055*mottling+.025*granules*fineMask;
+   float tissueRelief=.00032*mottling+.00010*granules*fineMask;`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+   roughnessFactor=clamp(roughnessFactor+.07*mottling+.035*granules*fineMask,.5,.86);`);
+  // Screen derivatives turn the filtered rest-space tissue into tiny surface
+  // relief without another texture, attribute or pass. The material remains matte.
+  shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
+   vec3 tissueDx=dFdx(-vViewPosition),tissueDy=dFdy(-vViewPosition);
+   vec3 tissueRx=cross(tissueDy,normal),tissueRy=cross(normal,tissueDx);
+   float tissueDet=dot(tissueDx,tissueRx);
+   if(abs(tissueDet)>1.e-12)normal=normalize(abs(tissueDet)*normal-sign(tissueDet)*(dFdx(tissueRelief)*tissueRx+dFdy(tissueRelief)*tissueRy));`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
    #if NUM_DIR_LIGHTS > 0
    float tissueRim=1.-abs(dot(normal,geometryViewDir));
@@ -128,7 +150,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    #endif
    #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=> 'reef-anemone-pigmented-tissue-v4';
+ material.customProgramCacheKey=()=> 'reef-anemone-filtered-tissue-v5';
  const mesh=new T.Mesh(geometry,material);mesh.name='Rooted flowing anemones';mesh.receiveShadow=true;
  return {mesh,tentacles};
 }
