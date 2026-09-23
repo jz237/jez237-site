@@ -21,7 +21,7 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
   // Low winding skeletal ridges: stationary hard coral, never soft-body waving.
   const wave=.5+.5*Math.sin(x*57+Math.sin(y*21+seed)*1.7+seed),height=.003+fade*(profile?profile.thickness*(.42+.58*wave*wave):.013+.018*wave*wave);
   const out=point.p.clone().addScaledVector(point.n,height),c=base.clone().lerp(edge,(1-fade)*.65).multiplyScalar(.79+.14*wave+.07*Math.sin(x*17+Math.sin(y*23)));
-  const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);uv.push(x/.16,y/.16);cache.set(point.key,index);return index;
+  const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);const repeat=profile?.16:.42;uv.push(x/repeat,y/repeat);cache.set(point.key,index);return index;
  }
  for(let i=0;i<source.count;i+=3){
   const ia=source.getX(i),ib=source.getX(i+1),ic=source.getX(i+2);

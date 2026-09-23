@@ -6,6 +6,7 @@ import './rock-geometry.mjs';
 import './coral-geometry.mjs';
 import './crust-geometry.mjs';
 import './surface-colony.mjs';
+import './encrusting-maps.mjs';
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
 import {readFile,stat} from 'node:fs/promises';
