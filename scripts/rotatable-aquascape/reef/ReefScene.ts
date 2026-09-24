@@ -78,15 +78,17 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  // Its own random stream
  // keeps all established foreground anatomy and motion seeds unchanged.
  const rearRandom=seeded(230926);
- for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.91,.91,-1.66,.38,.47,.32],[.19,.35,-1.72,.41,.22,.31],[.36,.81,-1.69,.29,.47,.32],[-1.00,1.35,-1.71,.34,.25,.28],[.29,1.24,-1.69,.34,.23,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
+ for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-1.42,.38,-1.65,.43,.25,.34],[-.91,.91,-1.66,.38,.47,.32],[.65,.35,-1.72,.41,.22,.31],[.36,.81,-1.69,.29,.47,.32],[-1.00,1.35,-1.71,.34,.25,.28],[.29,1.24,-1.69,.34,.23,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
  const toeRandom=seeded(2309231712);
  // Broken live-rock fragments feather the island feet into the sand. Their
  // separate stream does not reshuffle existing colonies or animal animations.
- for(const a of [[-4.48,.38,-.35,.25,.24,.32],[-4.38,.28,1.72,.25,.16,.30],[-3.24,.3,1.96,.29,.16,.19],[-1.63,.29,.96,.32,.14,.27],[.28,.26,-1.9,.3,.12,.22],[1.21,.31,1.79,.26,.17,.2],[3.07,.31,1.82,.28,.17,.23],[4.32,.32,1.49,.24,.18,.26],[4.23,.5,-1.67,.37,.3,.28]])rock(...a as [number,number,number,number,number,number],toeRandom,true);
- // Rear buttresses lift the middle-distance garden behind the sand channel.
+ for(const a of [[-4.48,.38,-.35,.25,.24,.32],[-4.38,.28,1.72,.25,.16,.30],[-3.24,.3,1.96,.29,.16,.19],[-1.63,.29,.96,.32,.14,.27],[.75,.26,-1.9,.3,.12,.22],[1.21,.31,1.79,.26,.17,.2],[3.07,.31,1.82,.28,.17,.23],[4.32,.32,1.49,.24,.18,.26],[4.23,.5,-1.67,.37,.3,.28]])rock(...a as [number,number,number,number,number,number],toeRandom,true);
+ // Lower middle-distance shoulders let the pale channel recede between the
+ // two dominant islands. The reference has distant growth here, not a third
+ // foreground-sized pinnacle blocking the valley.
  const canopyRandom=seeded(2309232235);
- for(const a of [[-1.08,1.48,-1.62,.42,.62,.37],[-.45,.98,-1.67,.48,.38,.33],[.16,1.41,-1.63,.40,.55,.35]])rock(...a as [number,number,number,number,number,number],canopyRandom);
+ for(const a of [[-1.08,1.20,-1.62,.42,.38,.37],[-.85,.75,-1.67,.48,.24,.33],[.16,1.16,-1.63,.40,.34,.35]])rock(...a as [number,number,number,number,number,number],canopyRandom);
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
@@ -125,7 +127,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[4.03,1.63,-.38,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[1.58,.87,1.47,.44,.21],[4.21,.65,1.50,.39,.82]])branch(...b as [number,number,number,number,number]);
  // These are full volumetric colonies, not distant cards; they share the same
  // indexed detail and merged material as the main islands.
- for(const b of [[-1.00,1.64,-1.71,1.02,.82],[.28,1.51,-1.69,.90,.23],[-.32,.57,-1.59,.53,.96]])branch(...b as [number,number,number,number,number],rearRandom);
+ for(const b of [[-1.00,1.48,-1.71,.72,.82],[.28,1.39,-1.69,.66,.23],[-1.20,.70,-1.40,.53,.96]])branch(...b as [number,number,number,number,number],rearRandom);
  // Asymmetric shoulder colonies interrupt the bare rear pillars. Their feet
  // follow the real stone; existing navigation includes the entire grown volume.
  for(const [rockIndex,x,y,size,hue,seed] of [[25,-1.00,.96,.59,.79,4101],[27,.34,.84,.53,.94,4102]]){
@@ -214,7 +216,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  // are full detailed colonies anchored to rock, not miniature filler or cards.
  const canopyStats={colonies:0,triangles:0};
  for(const b of [[-2.91,3.22,-.68,1.08,.81],[-3.70,2.74,-.84,.93,.23],[-2.40,2.72,-.44,.88,.035],[-3.93,1.76,-.14,.78,.82],[-2.1,1.85,-.88,.82,.94],
-  [-1.08,2.06,-1.62,1.12,.96],[.16,1.94,-1.63,.99,.81],[-.46,1.4,-1.62,.88,.23],
+  [-1.08,1.55,-1.62,.82,.96],[.16,1.51,-1.63,.75,.81],[-.55,1.10,-1.55,.64,.23],
   [1.53,3.9,-.74,1.18,.035],[2.48,3.31,-.98,1.02,.81],[3.46,2.62,-.73,.93,.23],[.89,2.9,-.63,.89,.96]]){
   const first=corals.length;branch(...b as [number,number,number,number,number],canopyRandom);canopyStats.colonies++;
   for(const g of corals.slice(first))canopyStats.triangles+=(g.index?.count??g.getAttribute('position').count)/3;
