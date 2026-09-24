@@ -13,6 +13,7 @@ for(const s of species){
  const imageFor=primitive=>gltf.textures[gltf.materials[primitive.material].pbrMetallicRoughness.baseColorTexture.index].source;
  const bodyImage=imageFor(bodyPrimitive);
  const nodes=gltf.nodes.map(n=>n.name);assert.ok(nodes.includes(s+'__body'));assert.equal(nodes.filter(n=>n.startsWith(s+'__gill')).length,2);assert.equal(nodes.filter(n=>n.startsWith(s+'__pectoral')).length,2);
+ if(s==='goby'){assert.equal(metadata[s].reference,'mandarin.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'mandarin has two independent pelvic fans');}
  for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){
   const p=read(primitive.attributes.POSITION),n=read(primitive.attributes.NORMAL),uv=read(primitive.attributes.TEXCOORD_0),indices=read(primitive.indices);
   assert.ok([...p,...n,...uv].every(Number.isFinite));assert.ok(indices.every(i=>i>=0&&i<p.length/3));totalTriangles+=indices.length/3;

@@ -1,4 +1,4 @@
-import * as T from 'three';import assert from 'node:assert/strict';import ts from 'typescript';import fs from 'node:fs';
+import * as T from 'three';import {sandHeight} from '../ReefOptics.ts';import assert from 'node:assert/strict';import ts from 'typescript';import fs from 'node:fs';
 let source=fs.readFileSync(new URL('../ReefFish.ts',import.meta.url),'utf8');
 source=source.replace("import metadata from './assets/fish/model-info.json';",'const metadata='+fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url),'utf8')+';').replace("'./MarineFinFlex.ts'",JSON.stringify(new URL('../MarineFinFlex.ts',import.meta.url).href)).replace("'./ReefOptics.ts'",JSON.stringify(new URL("../ReefOptics.ts",import.meta.url).href)).replace("'three'",JSON.stringify(import.meta.resolve('three')));
 const {ReefFish}=await import('data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText).toString('base64'));
@@ -63,12 +63,13 @@ console.log('Feeding recovery: committed escape, actual progress, food reacquisi
  try {
   const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),goby=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,goby);
   const samples=[],modes=new Set();
-  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.ok(s.sandGrains<=48);assert.ok(g.heightAboveSand<.35&&g.heightAboveSand>.12);samples.push(g);modes.add(g.mode);}}
-  assert.ok(modes.has('sifting sand')&&modes.has('resting')&&modes.has('bottom hop'));assert.ok(goby.sifts>3);
+  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.equal(s.sandGrains,0,'mandarins do not sift sand');const size=goby.group.scale.x;let support=sandHeight(g.x,g.z);for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23])support=Math.max(support,sandHeight(g.x+(Math.cos(goby.yaw)*along+Math.sin(goby.yaw)*side)*size,g.z+(-Math.sin(goby.yaw)*along+Math.cos(goby.yaw)*side)*size));assert.ok(g.y-support<.34&&g.heightAboveSand>.12,'body remains close to the supporting dune, including wide fins');samples.push(g);modes.add(g.mode);}}
+  assert.ok(modes.has('pecking')&&modes.has('resting')&&modes.has('bottom hover'));assert.ok(goby.pecks>3);
+  assert.ok(samples.filter(g=>g.mode==='resting'&&g.speed<.02).length>samples.length*.15,'mandarin makes real stationary rests, not continuous slow swimming');
   const range=Math.hypot(...['x','z'].map(k=>Math.max(...samples.map(p=>p[k]))-Math.min(...samples.map(p=>p[k]))));assert.ok(range>1);
   const mouth=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url))).goby.mouth;goby.position.set(0,1,1.4);goby.group.position.copy(goby.position);goby.goal.copy(goby.position);goby.yaw=0;goby.pitch=0;
   world.foods.push({position:new T.Vector3(mouth[0]*goby.group.scale.x,.8,1.4),alive:true,age:0,sinkRate:.025});
   for(let i=0;i<1500;i++)world.update(1/60,false);
-  assert.ok(world.snapshot().bites>0,'goby actually consumes reachable low food');console.log('Goby behavior:',{sifts:goby.sifts,range,modes:[...modes],bites:world.snapshot().bites});
+  assert.ok(world.snapshot().bites>0,'goby actually consumes reachable low food');console.log('Goby behavior:',{pecks:goby.pecks,range,modes:[...modes],bites:world.snapshot().bites});
  } finally {Math.random=originalRandom;}
 }
