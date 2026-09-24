@@ -328,13 +328,17 @@ export function groundMaterial(detail, wet = 0) {
   return m;
 }
 
-export function waterMaterial(normalTex, color = '#3a6356') {
+export function waterMaterial(normalTex, color = '#3a6356', murky = false) {
   const n = normalTex.clone(); n.needsUpdate = true;
   n.wrapS = n.wrapT = THREE.RepeatWrapping;
-  const m = new THREE.MeshStandardMaterial({
-    color: new THREE.Color(color), roughness: 0.06, metalness: 0.0, transparent: true, opacity: 0.84,
-    normalMap: n, normalScale: new THREE.Vector2(0.45, 0.45), envMapIntensity: 1.6,
-  });
+  // murky swamp water is matte (no specular), so lamps and Joe's own light
+  // pool softly on it instead of glinting
+  const m = murky
+    ? new THREE.MeshLambertMaterial({ color: new THREE.Color(color), transparent: true, opacity: 0.9, normalMap: n, normalScale: new THREE.Vector2(0.3, 0.3) })
+    : new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color), roughness: 0.06, metalness: 0.0, transparent: true, opacity: 0.84,
+      normalMap: n, normalScale: new THREE.Vector2(0.45, 0.45), envMapIntensity: 1.6,
+    });
   m.userData.tick = (t) => { n.offset.set(t * 0.012, -t * 0.03); };
   return m;
 }
