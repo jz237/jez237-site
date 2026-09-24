@@ -3,8 +3,10 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { TANK, SHELL, CG } from './config.js?v=5';
-import { getHeight } from './terrain.js?v=5';
+import { tankSurface } from './surface-art.js?v=polish2';
+import { batchRigidParts } from './render-batch.js?v=polish2';
+import { TANK, SHELL, CG } from './config.js?v=polish2';
+import { getHeight, groundSpeedFactor } from './terrain.js?v=polish2';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -16,10 +18,11 @@ const _v3a = new THREE.Vector3();
 const _v3b = new THREE.Vector3();
 
 const SCHEMES = {
-  olive: { hull: '#79895a', camo: '#5a6a3d', camo2: '#93a06b', dark: 0x4a553a, barrel: 0x5d6a47, mark: '★' },
+  olive: { hull: '#6d7853', camo: '#525d3a', camo2: '#7d8762', camo3: '#4a4632', dark: 0x434c35, barrel: 0x56613f, mark: '★' },
   desert: { hull: '#b3a279', camo: '#94815c', camo2: '#c9b990', dark: 0x77694c, barrel: 0x91825f, mark: '◆' },
   scout: { hull: '#8c9680', camo: '#6d7762', camo2: '#a3ab95', dark: 0x59624f, barrel: 0x6e7760, mark: '▲' },
   heavy: { hull: '#80714f', camo: '#62553e', camo2: '#988a68', dark: 0x4e4536, barrel: 0x615641, mark: '☠' },
+  destroyer: { hull: '#6a6e58', camo: '#4f5441', camo2: '#7e8266', camo3: '#57503b', dark: 0x3f4234, barrel: 0x535842, mark: '▼' },
   boss: { hull: '#565b63', camo: '#3c4149', camo2: '#727a85', dark: 0x2c3037, barrel: 0x454b55, mark: '⬢' },
 };
 
@@ -28,7 +31,7 @@ const camoCache = new Map();
 function camoTexture(schemeName) {
   if (camoCache.has(schemeName)) return camoCache.get(schemeName);
   const colors = SCHEMES[schemeName] ?? SCHEMES.olive;
-  const s = 128;
+  const s = 512;
   const cv = document.createElement('canvas');
   cv.width = cv.height = s;
   const ctx = cv.getContext('2d');
@@ -37,7 +40,10 @@ function camoTexture(schemeName) {
   let seed = 0;
   for (let i = 0; i < schemeName.length; i++) seed = (seed * 31 + schemeName.charCodeAt(i)) | 0;
   const rng = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
-  for (const [color, n, rMin, rMax] of [[colors.camo, 9, 10, 26], [colors.camo2, 7, 6, 16]]) {
+  // Box faces map the whole 512px map, so blotch radii are set for a
+  // 2-4 m panel: patches read at tank scale instead of giant splodges.
+  const camo3 = colors.camo3 ?? colors.camo;
+  for (const [color, n, rMin, rMax] of [[colors.camo, 30, 18, 46], [camo3, 22, 12, 32], [colors.camo2, 20, 10, 26]]) {
     ctx.fillStyle = color;
     for (let i = 0; i < n; i++) {
       const x = rng() * s, y = rng() * s;
@@ -58,6 +64,55 @@ function camoTexture(schemeName) {
     const v = rng();
     ctx.fillStyle = v > 0.5 ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.05)';
     ctx.fillRect(rng() * s, rng() * s, 1 + rng() * 2, 1 + rng() * 2);
+  }
+  // Cast-metal grain, panel welds and chipped painted edges are baked
+  // into the existing colour map (no new mesh or draw call).
+  for(let i=0;i<7000;i++) {
+    ctx.fillStyle=i%3?'rgba(30,27,22,0.07)':'rgba(228,224,198,0.12)';
+    ctx.fillRect(rng()*s,rng()*s,1+rng()*2,1+rng()*2);
+  }
+  for(const x of [12,244,500]) {
+    ctx.fillStyle='rgba(25,29,21,0.34)';ctx.fillRect(x-3,0,5,s);
+    for(let y=0;y<s;y+=5){
+      ctx.fillStyle='rgba(173,176,146,0.55)';ctx.fillRect(x-1,y,3,3);
+      ctx.fillStyle='rgba(40,43,31,0.35)';ctx.fillRect(x+2,y+2,2,3);
+    }
+  }
+  for(let i=0;i<240;i++) {
+    const x=rng()*s,y=i%2?rng()*14:s-rng()*16;
+    ctx.fillStyle='rgba(37,40,32,0.7)';ctx.fillRect(x,y,2+rng()*9,1+rng()*3);
+    ctx.fillStyle='rgba(182,181,155,0.45)';ctx.fillRect(x,y-1,2+rng()*5,1);
+  }
+  // Every box face spans the full map, so a darkened frame reads as
+  // occlusion in each crease (turret ring, sponsons, stowage) and a thin
+  // pale line inside it reads as worn paint on the edge.
+  for (const [a, b, w, alpha] of [[0, 1, 22, 0.34], [2, 3, 16, 0.22]]) {
+    for (const side of [a, b]) {
+      const horiz = side < 2, far = side % 2 === 1;
+      const g = horiz
+        ? ctx.createLinearGradient(0, far ? s : 0, 0, far ? s - w : w)
+        : ctx.createLinearGradient(far ? s : 0, 0, far ? s - w : w, 0);
+      g.addColorStop(0, `rgba(18,20,14,${alpha})`);
+      g.addColorStop(1, 'rgba(18,20,14,0)');
+      ctx.fillStyle = g;
+      if (horiz) ctx.fillRect(0, far ? s - w : 0, s, w);
+      else ctx.fillRect(far ? s - w : 0, 0, w, s);
+    }
+  }
+  ctx.fillStyle = 'rgba(196,192,160,0.16)';
+  for (let i = 0; i < 180; i++) {
+    const t = rng() * s, len = 3 + rng() * 14, edge = (rng() * 4) | 0, off = 2 + rng() * 2;
+    if (edge === 0) ctx.fillRect(t, off, len, 1.5);
+    else if (edge === 1) ctx.fillRect(t, s - off, len, 1.5);
+    else if (edge === 2) ctx.fillRect(off, t, 1.5, len);
+    else ctx.fillRect(s - off, t, 1.5, len);
+  }
+  // Dust/grime along lower panel edges, with gravity-directed runoff.
+  const mud=ctx.createLinearGradient(0,s*.62,0,s);
+  mud.addColorStop(0,'rgba(109,86,51,0)');mud.addColorStop(1,'rgba(109,86,51,0.50)');
+  ctx.fillStyle=mud;ctx.fillRect(0,0,s,s);
+  for(let i=0;i<100;i++){
+    ctx.fillStyle='rgba(58,48,30,0.22)';ctx.fillRect(rng()*s,s*.7+rng()*s*.3,1+rng()*3,8+rng()*35);
   }
   const tex = new THREE.CanvasTexture(cv);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
@@ -142,13 +197,15 @@ export function buildTankMesh(scheme = 'olive') {
   const colors = SCHEMES[scheme] ?? SCHEMES.olive;
   const camo = camoTexture(scheme);
 
-  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.74, metalness: 0.05 });
-  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xc6c6bc, roughness: 0.8, metalness: 0.05 });
-  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.8, metalness: 0.05 });
+  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.67, metalness: 0.16 });
+  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xc6c6bc, roughness: 0.77, metalness: 0.12 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.77, metalness: 0.12 });
   const barrelMat = new THREE.MeshStandardMaterial({ color: colors.barrel, roughness: 0.45, metalness: 0.3 });
   const rubberMat = new THREE.MeshStandardMaterial({ color: 0x2c2c2e, roughness: 0.95 });
   const steelMat = new THREE.MeshStandardMaterial({ color: 0x6a6a70, roughness: 0.45, metalness: 0.45 });
 
+  tankSurface(hullMat);tankSurface(accentMat);
+  tankSurface(barrelMat,'steel');tankSurface(steelMat,'steel');tankSurface(rubberMat,'rubber');
   const root = new THREE.Group();
 
   // ---- hull: trapezoid cross-section with sloped armor ----
@@ -270,6 +327,7 @@ export function buildTankMesh(scheme = 'olive') {
 
   // ---- running gear: road wheels, sprocket, idler, return rollers ----
   const roadWheels = [];
+  const wheelParts=[],hubParts=[];
   const spinning = [];
   const wheelGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.3, 14);
   const hubGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.33, 9);
@@ -280,10 +338,10 @@ export function buildTankMesh(scheme = 'olive') {
       grp.position.set(sx, 0.36, 1.6 - i * 0.8);
       const w = new THREE.Mesh(wheelGeo, rubberMat);
       w.rotation.z = Math.PI / 2;
-      grp.add(w);
+      grp.add(w);wheelParts.push({pivot:grp,source:w});w.visible=false;
       const hub = new THREE.Mesh(hubGeo, accentMat);
       hub.rotation.z = Math.PI / 2;
-      grp.add(hub);
+      grp.add(hub);hubParts.push({pivot:grp,source:hub});hub.visible=false;
       hull.add(grp);
       roadWheels.push({ grp, side, z: grp.position.z, baseY: 0.36 });
       spinning.push(grp);
@@ -318,6 +376,33 @@ export function buildTankMesh(scheme = 'olive') {
       spinning.push(roller);
     }
   }
+
+  // Ten identical wheel/hub pairs retain their suspension pivots, but render
+  // as two instanced draws. Source nodes remain as animation/transform references.
+  // Dedicated material objects keep Three from repeatedly switching one
+  // material between instanced and ordinary shader programs every frame.
+  const wheelMaterials=[rubberMat,accentMat].map(source=>{
+    const material=source.clone();material.onBeforeCompile=source.onBeforeCompile;
+    material.customProgramCacheKey=source.customProgramCacheKey;return material;
+  });
+  const wheelInstances=[new THREE.InstancedMesh(wheelGeo,wheelMaterials[0],10),new THREE.InstancedMesh(hubGeo,wheelMaterials[1],10)];
+  for(const m of wheelInstances){m.castShadow=true;m.frustumCulled=false;hull.add(m);}
+  const wheelMatrix=new THREE.Matrix4();
+  for(const {pivot,source} of [...wheelParts,...hubParts]) {
+    source.updateMatrix();source.matrixAutoUpdate=false;pivot.matrixAutoUpdate=false;
+  }
+  // Both concentric cylinders use the same local rotation. Compose the shared
+  // transform once per wheel, not once per material or again in scene traversal.
+  const wheelLocal=wheelParts[0].source.matrix;
+  function updateWheelInstances() {
+    for(let i=0;i<roadWheels.length;i++) {
+      const pivot=roadWheels[i].grp;pivot.updateMatrix();
+      wheelMatrix.multiplyMatrices(pivot.matrix,wheelLocal);
+      wheelInstances[0].setMatrixAt(i,wheelMatrix);wheelInstances[1].setMatrixAt(i,wheelMatrix);
+    }
+    wheelInstances[0].instanceMatrix.needsUpdate=true;wheelInstances[1].instanceMatrix.needsUpdate=true;
+  }
+  updateWheelInstances();
 
   // ---- circulating track links (instanced, both sides in one mesh) ----
   const links = new THREE.InstancedMesh(linkGeo, linkMat, LINKS_PER_SIDE * 2);
@@ -496,9 +581,79 @@ export function buildTankMesh(scheme = 'olive') {
   coaxMuzzle.position.set(0.34, 0.02, 0.95);
   pivot.add(coaxMuzzle);
 
+  // Tank destroyer: no rotating turret. The fighting compartment is a low
+  // armoured casemate at the front of the hull with a longer gun.
+  if (scheme === 'destroyer') {
+    turret.scale.set(1.34, 0.6, 1.18);
+    turret.position.set(0, 1.12, 0.62);
+    turret.remove(cupola); // (batching ignores .visible)
+    recoilGrp.scale.set(1.12, 1.12, 1.32);
+    pivot.position.y = 0.42;
+  }
+
+  const moving = new Set([turret,pivot,recoilGrp,links,...spinning,...exhausts,muzzle,coaxMuzzle]);
+  batchRigidParts(root,[hull,turret,pivot,recoilGrp,...spinning.filter(o=>o.isGroup)],moving);
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 
-  return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts };
+  return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts, wheelInstances, wheelParts, hubParts, updateWheelInstances };
+}
+
+// Penetration scars: a dark hole ringed by scorched, blistered paint.
+let scarMat = null;
+function scarMaterial() {
+  if (scarMat) return scarMat;
+  const s = 64, cv = document.createElement('canvas');
+  cv.width = cv.height = s;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(8,6,4,1)');
+  g.addColorStop(0.2, 'rgba(22,16,10,0.95)');
+  g.addColorStop(0.32, 'rgba(120,70,30,0.8)');
+  g.addColorStop(0.5, 'rgba(36,30,22,0.7)');
+  g.addColorStop(1, 'rgba(40,34,26,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, s, s);
+  for (let i = 0; i < 14; i++) {
+    const a = Math.random() * Math.PI * 2;
+    ctx.strokeStyle = 'rgba(30,24,16,0.5)'; ctx.lineWidth = 1 + Math.random() * 1.5;
+    ctx.beginPath(); ctx.moveTo(32 + Math.cos(a) * 8, 32 + Math.sin(a) * 8);
+    ctx.lineTo(32 + Math.cos(a) * (18 + Math.random() * 12), 32 + Math.sin(a) * (18 + Math.random() * 12)); ctx.stroke();
+  }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  scarMat = new THREE.MeshLambertMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4 });
+  return scarMat;
+}
+const scarGeo = new THREE.PlaneGeometry(0.62, 0.62);
+const _sp = new THREE.Vector3(), _sn = new THREE.Vector3(), _sq = new THREE.Quaternion();
+
+// Burnt-out look: keep each part's baked panel/weld map so the wreck still
+// reads as a tank, but scorched dark with a rusty cast. One shared material
+// per source map, so a field of wrecks adds no per-tank material cost.
+const charCache = new Map();
+export function charTankVisual(visual) {
+  visual.root.traverse(o => {
+    if (!o.isMesh || !o.material || o.userData.charred) return;
+    o.userData.charred = true;
+    const map = o.material.map ?? null;
+    const key = (map ? map.uuid : 'plain') + (o.isInstancedMesh ? ':i' : '');
+    if (!charCache.has(key)) {
+      charCache.set(key, new THREE.MeshStandardMaterial({
+        map, color: map ? 0x7a685a : 0x3a3430, roughness: 0.96, metalness: 0.06,
+      }));
+    }
+    o.material = charCache.get(key);
+  });
+  // the blast lifts and slews the turret off its ring; the gun droops
+  const turret = visual.turret, rnd = () => Math.random() - 0.5;
+  visual.wreckPose = {
+    yaw: rnd() * 1.4, tilt: rnd() * 0.3, pitchX: rnd() * 0.12, lift: 0.05 + Math.random() * 0.09,
+  };
+  turret.position.y += visual.wreckPose.lift;
+  turret.rotation.z = visual.wreckPose.tilt;
+  turret.rotation.x = visual.wreckPose.pitchX;
+  visual.pivot.rotation.x = 0.22;
+  visual.recoilGrp.position.z = -0.25;
 }
 
 export class Tank {
@@ -573,9 +728,34 @@ export class Tank {
     this.smokeTimer = 0;
     this.lowHpSmoke = 0;
     this.overturned = 0;
+    this.fixedGun = !!opts.fixedGun;
+    // knocked-out parts (seconds remaining)
+    this.trackJamT = 0;
+    this.engineHitT = 0;
+    this.turretJamT = 0;
+    this.scars = [];
   }
 
   get pos() { return this.body.position; }
+
+  // scorched penetration mark stuck to the hull where a round struck
+  addScar(point, normal) {
+    const root = this.visual.root;
+    root.updateMatrixWorld(true);
+    let m = this.scars.length >= 8 ? this.scars.shift() : new THREE.Mesh(scarGeo, scarMaterial());
+    _sp.copy(point).addScaledVector(normal, 0.04);
+    root.worldToLocal(_sp);
+    _sn.copy(normal).transformDirection(new THREE.Matrix4().copy(root.matrixWorld).invert());
+    _sq.setFromUnitVectors(new THREE.Vector3(0, 0, 1), _sn.normalize());
+    m.position.copy(_sp);
+    m.quaternion.copy(_sq);
+    m.rotateZ(Math.random() * Math.PI * 2);
+    m.scale.setScalar((0.8 + Math.random() * 0.5) / (this.scale || 1));
+    root.add(m);
+    this.scars.push(m);
+  }
+
+  get immobilized() { return this.trackJamT > 0; }
 
   speedAlongForward() {
     const fwd = this.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1));
@@ -610,6 +790,9 @@ export class Tank {
     }
     this.contacts = contacts;
     const traction = contacts / 4;
+    this.trackJamT = Math.max(0, this.trackJamT - dt);
+    this.engineHitT = Math.max(0, this.engineHitT - dt);
+    if (this.trackJamT > 0) { this.throttle = 0; this.turn = 0; }
 
     if (this.alive && traction > 0) {
       const speed = this.speedAlongForward();
@@ -621,7 +804,13 @@ export class Tank {
         // escape boost: short burst of extra track power and top speed
         this.boostT = Math.max(0, this.boostT - dt);
         const bF = this.boostT > 0 ? 1.9 : 1;
-        const bS = this.boostT > 0 ? 1.45 : 1;
+        // ground under the tracks: paths are quick, forest floor is slow
+        this.groundTimer = (this.groundTimer ?? 0) - dt;
+        if (this.groundTimer <= 0) {
+          this.groundTimer = 0.25;
+          this.ground = groundSpeedFactor(body.position.x, body.position.z);
+        }
+        const bS = (this.boostT > 0 ? 1.45 : 1) * (this.ground ?? 1) * (this.engineHitT > 0 ? 0.5 : 1);
         let force = 0;
         if (this.throttle > 0.01) {
           force = speed < this.tuning.maxSpeed * bS ? this.tuning.engineForce * bF * sc2 * this.throttle : 0;
@@ -726,6 +915,10 @@ export class Tank {
   // (gravity is vertical), then the virtual target is transformed into the
   // hull's local frame so slopes/hull tilt never throw the gun off.
   updateTurret(dt) {
+    if (this.visual.wreckPose) {
+      this.visual.turret.rotation.y = this.turretYaw + this.visual.wreckPose.yaw;
+      return;
+    }
     const root = this.visual.root;
     root.updateMatrixWorld(true);
     const pivotW = _v3a.setFromMatrixPosition(this.visual.pivot.matrixWorld);
@@ -756,8 +949,12 @@ export class Tank {
     let delta = desired - this.turretYaw;
     delta = Math.atan2(Math.sin(delta), Math.cos(delta));
     const maxStep = TANK.turretSlewRate * dt;
+    this.turretJamT = Math.max(0, this.turretJamT - dt);
+    if (this.turretJamT > 0) delta = 0; // jammed ring: the hull has to aim
     this.turretYaw += THREE.MathUtils.clamp(delta, -maxStep, maxStep);
     this.turretYaw = Math.atan2(Math.sin(this.turretYaw), Math.cos(this.turretYaw));
+    // casemate gun: only a few degrees of traverse either side
+    if (this.fixedGun) this.turretYaw = THREE.MathUtils.clamp(this.turretYaw, -0.07, 0.07);
 
     const flatLocal = Math.hypot(_v3b.x, _v3b.z);
     const pitchDes = THREE.MathUtils.clamp(
@@ -838,6 +1035,7 @@ export class Tank {
       }
     }
 
+    if(animDetail)this.visual.updateWheelInstances();
     this.updateTurret(dt);
   }
 
@@ -853,13 +1051,7 @@ export class Tank {
   }
 
   destroyVisual() {
-    // charred wreck: darken everything
-    this.visual.root.traverse(o => {
-      if (o.isMesh && o.material && !o.userData.charred) {
-        o.userData.charred = true;
-        o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
-      }
-    });
+    charTankVisual(this.visual);
   }
 
   removeFromWorld() {

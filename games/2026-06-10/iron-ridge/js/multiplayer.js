@@ -6,8 +6,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { buildTankMesh } from './tank.js?v=5';
-import { ENEMY_TYPES, CG, TANK } from './config.js?v=5';
+import { buildTankMesh, charTankVisual } from './tank.js?v=polish2';
+import { ENEMY_TYPES, CG, TANK } from './config.js?v=polish2';
 
 const ROOM_KEY = 'iron_ridge_room';
 const MP_NAME_KEY = 'iron_ridge_mp_name';
@@ -130,6 +130,7 @@ const ENEMY_TYPE_CHARS = {
   t: { name: 'standard', scheme: 'desert' },
   h: { name: 'heavy', scheme: 'heavy' },
   b: { name: 'boss', scheme: 'boss' },
+  d: { name: 'destroyer', scheme: 'destroyer' },
 };
 
 class RemoteEnemy {
@@ -180,6 +181,8 @@ class RemoteEnemy {
       this.hasState = true;
     }
     this.body.position.set(x, y, z);
+    // facing matters: clients judge rear/side/front hits from it
+    this.body.quaternion.set(qx, qy, qz, qw);
   }
 
   update(dt) {
@@ -200,12 +203,7 @@ class RemoteEnemy {
     if (!this.alive) return;
     this.alive = false;
     this.world.removeBody(this.body);
-    this.visual.root.traverse(o => {
-      if (o.isMesh && o.material && !o.userData.charred) {
-        o.userData.charred = true;
-        o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
-      }
-    });
+    charTankVisual(this.visual);
   }
 
   remove() {
