@@ -131,8 +131,8 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
 
 /** A closed, thin skeleton with independent upper tissue and lower ridges. */
 export function platingColony(x:number,y:number,z:number,r:number,seed:number){
- const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[];
- const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ba9478');
+ const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[],underside:number[]=[];
+ const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ffe7c8');
  // Unequal growth fans and narrow retreating bays replace a circular bowl.
  // Each fan raises a different fold; its valley continues into the older
  // tissue, so the edge reads as a grown shelf rather than a corrugated disc.
@@ -150,13 +150,19 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
   // A low spreading fan with local upturned lobes, not one continuous cup.
   const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
   const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
-  const thickness=r*(.010+.035*(1-t)**2),py=y+raised+scallop+groove+tissueRelief-(layer?thickness:0);
-  positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));
-  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.969+.009*Math.sin(a*7+seed),1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
+  // Older underside grows load-bearing, uneven radial ridges. The scaffold
+  // deepens toward its attachment and thins smoothly into the growing margin;
+  // upper tissue, folds and perimeter positions retain their original shape.
+  const rib=Math.max(0,Math.cos(a*19+seed+Math.sin(t*8+a*3)*.65))**2;
+  const secondary=Math.max(0,Math.cos(a*31-seed+Math.sin(t*13-a*2)*.6))**2;
+  const ribs=(.040*rib+.015*secondary)*Math.sin(Math.PI*t)**.65;
+  const thickness=r*(.010+.090*(1-t)**1.6+ribs),py=y+raised+scallop+(groove+tissueRelief)*(layer?T.MathUtils.smoothstep(t,.65,.88):1)-(layer?thickness:0);
+  positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));underside.push(layer?255:0);
+  const c=layer?bottom.clone().multiplyScalar(.84+.13*rib+.03*Math.sin(a*7+t*11+seed)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.969+.009*Math.sin(a*7+seed),1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
   if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=j?[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1]:[n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}
- const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setAttribute('plateTissue',new T.Uint8BufferAttribute(tissue,1,true));geo.setIndex(indices);geo.computeVertexNormals();
+ const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setAttribute('plateTissue',new T.Uint8BufferAttribute(tissue,1,true));geo.setAttribute('plateUnderside',new T.Uint8BufferAttribute(underside,1,true));geo.setIndex(indices);geo.computeVertexNormals();
  // Smooth the coincident angular seam and pole without welding upper/lower
  // tissue together. No extra geometry or per-frame work is needed.
  const normals=geo.getAttribute('normal'),normal=new T.Vector3();

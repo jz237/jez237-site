@@ -94,7 +94,7 @@ console.log('Folded growth margins passed: four closed skeletons, smooth seams a
 for(const [size,phase] of [[.65,.4],[1.08,2.2],[.8,5.1]]){
  const shelf=platingColony(1,2,-.5,size,phase),volumes=plateCollisionVolumes(shelf),p=shelf.getAttribute('position'),index=shelf.index,point=new T.Vector3();
  const covered=point=>volumes.some(v=>v.center.distanceToSquared(point)<=v.radius*v.radius+1e-8);
- for(let i=0;i<p.count/2;i++){const thickness=p.getY(i)-p.getY(i+p.count/2);assert.ok(thickness>size*.006&&thickness<size*.046,'fine ridges do not invert the thin skeleton');}
+ for(let i=0;i<p.count/2;i++){const thickness=p.getY(i)-p.getY(i+p.count/2);assert.ok(thickness>size*.006&&thickness<size*.115,'radial scaffold remains below the upper tissue and within reviewed depth');}
  for(let i=0;i<p.count;i++){point.fromBufferAttribute(p,i);assert.ok(covered(point),'every shelf vertex is protected');}
  for(let i=0;i<index.count;i+=3){point.set(0,0,0);for(let j=0;j<3;j++){const n=index.getX(i+j);point.x+=p.getX(n)/3;point.y+=p.getY(n)/3;point.z+=p.getZ(n)/3;}assert.ok(covered(point),'folded triangle interiors remain protected');}
  assert.ok(volumes.length<180,'plate navigation stays locally bounded');
@@ -158,3 +158,16 @@ for (const level of [0,1,2]) for(const cup of radialCorallites(tube,level,1.7,ne
  assert.ok([...edges.values()].every(n=>n<=2),'no nonmanifold cup faces');
 }
 console.log('Radial lip relief passed: recessed mouths, projecting lips, nondegenerate indexed skins.');
+
+// Pale structural underside is independently shaded; the thin growing lip and
+// original upper surface remain intact while older inner tissue gains relief.
+for(const phase of [.4,1.7,3.3,5.1]){
+ const g=platingColony(0,0,0,1,phase),p=g.getAttribute('position'),half=p.count/2,lower=g.getAttribute('plateUnderside');
+ for(let i=0;i<half;i++){assert.equal(lower.getX(i),0);assert.equal(lower.getX(i+half),1);}
+ const depth=(row,k)=>p.getY(row*193+k)-p.getY(half+row*193+k);
+ const ring=Array.from({length:192},(_,k)=>depth(19,k));
+ assert.ok(Math.max(...ring)-Math.min(...ring)>.03,'structural ribs have visible volume, not just painted lines');
+ for(let k=0;k<193;k++)assert.ok(depth(36,k)<.014,'growing margin remains thin');
+ assert.ok(depth(0,0)>.09,'older skeleton thickens toward the attachment');
+}
+console.log('Plate skeleton passed: distinct underside, tapered rim and volumetric radial supports.');

@@ -1,15 +1,15 @@
 {
-  "readyMs": 6595,
+  "readyMs": 6712,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 5.851000000000016,
-      "bites": 14,
-      "remaining": 31,
+      "fps": 59.99100134979755,
+      "time": 6.052799999904651,
+      "bites": 12,
+      "remaining": 33,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.042356471573385575,
+        "brushing": 7,
+        "maxBrush": 0.1203175083655424,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -22,30 +22,30 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 9.868000000000025,
-      "bites": 24,
-      "remaining": 20,
+      "time": 10.06979999990464,
+      "bites": 25,
+      "remaining": 19,
       "anemones": {
-        "brushing": 11,
-        "maxBrush": 0.10084694508067973,
+        "brushing": 0,
+        "maxBrush": 7.906491676030396e-8,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
-          0.006342739520947044,
+          0.02478079999999933,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 13.868299999999982,
-      "bites": 32,
-      "remaining": 11,
+      "fps": 59.99700014999244,
+      "time": 14.086799999904585,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.03999998286900489,
+        "brushing": 0,
+        "maxBrush": 3.5448662177639947e-16,
         "captured": 2,
         "swallowed": 0,
         "carried": 2,
@@ -57,13 +57,13 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 17.885499999999933,
-      "bites": 34,
-      "remaining": 9,
+      "fps": 59.99700014999244,
+      "time": 18.103799999904517,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 3,
-        "maxBrush": 0.06820646794872874,
+        "brushing": 5,
+        "maxBrush": 0.09362187705899418,
         "captured": 2,
         "swallowed": 1,
         "carried": 1,
@@ -75,55 +75,55 @@
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 21.90239999999985,
-      "bites": 34,
-      "remaining": 9,
-      "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.0003985952258004199,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.18556679007876756,
-          0.19359602529169237,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 25.919399999999744,
-      "bites": 36,
-      "remaining": 7,
+      "fps": 59.99400059993998,
+      "time": 22.104199999904434,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.06261221241910156,
+        "maxBrush": 0.00002646290555065558,
         "captured": 2,
         "swallowed": 2,
         "carried": 0,
         "fold": [
-          0.11456592200419567,
-          0.1312826600338249,
+          0.18206996149440277,
+          0.1937315569626232,
           0
         ]
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 29.919799999999594,
-      "bites": 36,
-      "remaining": 7,
+      "fps": 59.99700014999244,
+      "time": 26.121199999904324,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 6,
-        "maxBrush": 0.08558685248633265,
+        "brushing": 3,
+        "maxBrush": 0.0793954244839796,
         "captured": 2,
         "swallowed": 2,
         "carried": 0,
         "fold": [
-          0.03421651451992336,
-          0.04836264510634967,
+          0.10853219674209791,
+          0.13162225090128096,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 30.13829999990421,
+      "bites": 37,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 5,
+        "maxBrush": 0.10139252896953753,
+        "captured": 2,
+        "swallowed": 2,
+        "carried": 0,
+        "fold": [
+          0.029367271520651973,
+          0.0483607796219649,
           0
         ]
       }
@@ -382,7 +382,7 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-C9pwhOSQ.js",
+    "assets/index-DHy62fJc.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -395,29 +395,28 @@
     "assets/roughnessMap-4hZTjONg.png",
     "assets/roughnessMap-DIiV2VjT.png",
     "assets/roughnessMap-qepxckm-.png",
+    "assets/skeleton-InQKSODj.png",
     "assets/tang-DZS7dloZ.glb",
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "9c59809d9155c88a92c647cc4d0ab08cc2202468cdd7c6abdd367eb8f52abec6",
-  "checkedAt": "2026-09-24T02:48:16.554Z",
-  "scope": "Match the new anemone reference with denser, thinner tentacles and enlarged rounded pale tips; make mandarin sand rests lower and more distinct.",
+  "buildHash": "f823d936d9e8c9ae325d19c8b378ef1cf23a543a2ee08dc8ee43b7f5398c324b",
+  "checkedAt": "2026-09-24T03:10:58.831Z",
+  "scope": "Replace flat dark plate-coral undersides with pale porous tissue and a thicker, irregular radial skeleton inspired by the original reef reference.",
   "geometryChecks": [
-    "800 closed rooted strands:360 on the large right host,260 left,180 small",
-    "Every terminal knob is wider than its slender shaft; rounded cap normals and stable flow/contact deformations verified",
-    "Contact texture allocates one slot per actual strand plus the anchored tissue slot",
-    "Existing rock/colony/baked attachment metrics unchanged",
-    "Mandarin rests lower than moving hover, with stationary pelvic supports and continuing respiration",
+    "Original upper positions, colors, UVs and tissue masks are byte-identical across four phase fixtures",
+    "Closed lower skeleton, outward normals, continuous angular seam, thin rim and volumetric radial supports",
+    "Geometry-derived obstacle volumes enclose lower scaffold and triangle interiors",
+    "All original scenery statistics, fish and 800 anemone strands retained",
     "Feeding, movement, pause, collision, lighting and mobile checks passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "anemone macro and moving frame pair",
-    "seven-frame actual contact feeding sequence",
-    "32-frame actual mandarin move/rest/peck sequence",
-    "new user anemone reference"
+    "before/after underside camera comparison",
+    "original upper tissue close-up",
+    "original reef photo and planted comparison/reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -426,11 +425,11 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "dc478f589",
-    "loadPrior": 6845,
-    "loadCurrent": 6675.5,
-    "fpsPrior": 136.7,
-    "fpsCurrent": 142.7,
-    "interpretation": "Alternating serial local sessions, identical viewport and effects. No existing detail reduced. 260 additional fully articulated strands; no additional material draw or asset download."
+    "baseline": "301951966",
+    "loadPrior": 7103.5,
+    "loadCurrent": 6567.5,
+    "fpsPrior": 140.6,
+    "fpsCurrent": 137.5,
+    "interpretation": "Alternating serial local sessions, identical viewport/effects. Original upper geometry and all scene detail retained. One 436727-byte packed underside map and one byte per plate vertex; no extra triangles or material batch."
   }
 }
