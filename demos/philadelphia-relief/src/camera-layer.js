@@ -62,7 +62,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     try {
       const sources = [['data/camera-locations.json?v=20260920-2', trafficCameras],
         ['data/regional-cameras.json?v=20260924-2', regionalCameras],
-        ['data/discovered-cameras.json?v=20260924-2', discoveredCameras]];
+        ['data/discovered-cameras.json?v=20260924-3', discoveredCameras]];
       const results = await Promise.allSettled(sources.map(async ([url, parse]) => {
         const response = await fetch(url, { signal: request.signal });
         if (!response.ok) throw new Error('Camera inventory unavailable');

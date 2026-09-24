@@ -2,6 +2,16 @@
   "checked": "2026-09-24",
   "cameras": [
     {
+      "id": "found-perkasie-covered-bridge",
+      "name": "Perkasie · covered bridge restoration",
+      "source": "perkasie-borough",
+      "lon": -75.295,
+      "lat": 40.3675,
+      "location": "South Perkasie Covered Bridge · Lenape Park worksite",
+      "area": true,
+      "video": "xWUiE7m2PLQ"
+    },
+    {
       "id": "found-franklin-institute",
       "name": "Franklin Institute · Parkway",
       "source": "earthcam",
