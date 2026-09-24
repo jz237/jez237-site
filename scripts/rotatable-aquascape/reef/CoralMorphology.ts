@@ -12,16 +12,21 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
   const delta=end.clone().sub(start),middle=start.clone().lerp(end,.5);middle.x+=Math.sin(seed)*delta.length()*.12;middle.z+=Math.cos(seed*1.7)*delta.length()*.12;
   const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);if(size>=.6){const drift=.075*size*Math.sin(seed*2.31);shoulder.x+=Math.cos(seed+1.2)*drift;shoulder.z+=Math.sin(seed+1.2)*drift;middle.x-=Math.cos(seed+1.2)*drift*.45;middle.z-=Math.sin(seed+1.2)*drift*.45;}}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
-  const curve=new T.CatmullRomCurve3([start,shoulder,middle,end]),steps=level===0?8:level===1?6:4,sides=level===0?12:10;
-  const g=new T.TubeGeometry(curve,steps,radius,sides,false),p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
-  const terminal=level>=2,endScale=terminal?(growth==='antler'?.66:.70):.62;
+  const curve=new T.CatmullRomCurve3([start,shoulder,middle,end]),steps=level===0?8:level===1?6:5,sides=level===0?12:10;
+  const g=new T.TubeGeometry(curve,steps,radius,sides,false),p=g.getAttribute('position'),colors=new Float32Array(p.count*3);g.userData.branchOrder=level;
+  const terminal=level>=2,endScale=terminal?(growth==='antler'?.72:growth==='bushy'?.92:.84):.62;
+  // Young distal growth keeps a full, rounded shoulder around its axial cup.
+  // The reference has blunt irregular fingers rather than uniformly tapering
+  // twigs. Distinct growth forms keep their slender/compact identity, and local
+  // variation changes anatomy without moving colonies or consuming scene RNG.
+  const shoulderFullness=terminal?(growth==='bushy'?.48:growth==='antler'?.18:.34)*(1+.18*Math.sin(seed*2.17)):0;
   for(let j=0;j<=steps;j++){
-   const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+(level===0?.26:.36)*Math.exp(-t*15));
+   const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+(level===0?.26:.36)*Math.exp(-t*15))*(1+shoulderFullness*Math.sin(Math.PI*t)**2);
    for(let k=0;k<=sides;k++){
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
     const polypRidges=1+.075*Math.sin(angle*3+t*13+seed)+.04*Math.sin(angle*5-t*19)+.075*Math.sin(t*12+seed)*Math.sin(Math.PI*t);
     p.setXYZ(i,center.x+(p.getX(i)-center.x)*taper*polypRidges,center.y+(p.getY(i)-center.y)*taper*polypRidges,center.z+(p.getZ(i)-center.z)*taper*polypRidges);
-    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
+    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,terminal?.68:.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
    }
   }
   g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);geometries.push(g);
