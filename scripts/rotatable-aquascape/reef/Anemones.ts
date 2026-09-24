@@ -69,19 +69,23 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    // Regional folds guide neighboring strands, while individuals keep different
    // lengths and tip directions. Reuse the same four random draws per strand.
    const length=choose(.43,.88)*scale*(.88+.22*radial),phase=choose(0,6.28),radius=choose(.013,.021)*scale;
-   // Folded marginal tissue carries shorter, outward-draped strands. Adjacent
-   // regions lean together; fine individual differences keep the canopy loose.
-   const sector=angle+k*1.73,edgeDrape=T.MathUtils.smoothstep(radial,.58,1);
+   // The reference canopy is made of overlapping swept layers, not a bed of
+   // upright stems with individually hooked ends. A smooth field over the oral
+   // disc guides adjacent shafts together; only the small curl stays individual.
+   const sector=angle+k*1.73,edgeDrape=T.MathUtils.smoothstep(radial,.38,1);
    const region=Math.sin(sector*3+.65)+.35*Math.cos(sector*5-1.2);
-   const spread=(.12+.18*radial+.08*edgeDrape)*scale*(1+.25*Math.sin(sector*2));
-   const height=length*(.98-.24*radial)*(.9+.19*Math.cos(sector*2+.5))-.065*scale*edgeDrape;
-   const curl=scale*(.12*Math.sin(phase)+.075*region),sweep=.08*scale;
-   const droop=scale*edgeDrape*(.10+.08*(.5+.5*Math.sin(phase*1.3)));
-   const end=root.clone().add(new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.025*scale));
-   const c1=root.clone().add(new T.Vector3(Math.cos(angle)*spread*.30,length*(.40-.06*edgeDrape),Math.sin(angle)*spread*.13));
-   // A finite, individually angled end handle avoids identical radial fans and
-   // sharp hooks. Axes and shading below are rebuilt from the actual curve.
-   const tipDirection=new T.Vector3(Math.cos(angle)*spread+sweep*.55-Math.sin(angle)*curl*1.7,length*(.24-.38*radial+.30*Math.sin(phase))-droop,Math.sin(angle)*spread+Math.cos(angle)*curl*1.7).normalize();
+   const layer=.5+.5*Math.sin(radial*7.5+.4*Math.sin(sector)+region*.65);
+   const spread=(.12+.25*radial+.04*edgeDrape)*scale*(1+.16*Math.sin(sector*2));
+   const sweep=(.065+.06*layer)*scale;
+   const height=length*(.94-.39*radial)*(.96+.13*Math.cos(sector*2+.5))+.035*scale*layer;
+   const curl=scale*(.045*Math.sin(phase)+.055*region);
+   const reach=new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.045*scale);
+   const end=root.clone().add(reach);
+   // Spread starts low on the shaft and continues through the rounded crown.
+   // The front margin lays lower over its neighbors; interior strands rise
+   // through it. Actual curve samples remain the collision/feeding authority.
+   const c1=root.clone().add(new T.Vector3(reach.x*.25,length*(.34-.09*edgeDrape),reach.z*.25));
+   const tipDirection=new T.Vector3(reach.x*.95,length*(.26-.31*radial+.12*Math.sin(phase)),reach.z*.95).normalize();
    const c2=end.clone().addScaledVector(tipDirection,-(.27*length+.025*scale));
    // Some strands remain slender, others carry an inflated distal lobe. Tissue
    // color varies by region and individual without consuming extra scene RNG.
@@ -89,8 +93,8 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    const pigment=.5+.5*Math.sin(phase*1.9+sector*.7);
    const localShaft=shaft.clone().lerp(new T.Color(k===2?'#98728f':'#9b874d'),pigment*.46);
    const localTip=tip.clone().lerp(new T.Color(k===2?'#cfbecd':'#e0e995'),(.5+.5*Math.sin(phase*3.1))*.34);
-   c1.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(.11*scale*Math.sin(phase*1.7)));
-   c2.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(-.055*scale*Math.sin(phase*1.7)));
+   c1.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(.045*scale*Math.sin(phase*1.7)));
+   c2.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(-.025*scale*Math.sin(phase*1.7)));
    const curve=new T.CubicBezierCurve3(root,c1,c2,end),steps=24,sides=12,frames=curve.computeFrenetFrames(steps,false),arcLength=curve.getLength();
    // The cap's length follows its radius, not a fixed fraction of a long shaft.
    // This keeps a fleshy hemispherical end rather than an elongated pointed beak.
