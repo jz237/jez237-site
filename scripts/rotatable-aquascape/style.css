@@ -68,5 +68,9 @@ main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aq
 @media(max-width:850px){.views{flex-wrap:wrap;justify-content:center}.observation-caption{bottom:165px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:none}}
 
-.store-showroom nav a.saltwater-link{color:#e0fcff;background:#12506a;border:1px solid #64dce9;font-weight:700;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center}
-.store-showroom nav a.saltwater-link:hover{background:#196c83;color:#fff}
+/* Match the reef aquarium's paired habitat/home navigation. */
+.store-showroom .aquarium-header nav{gap:4px;padding:5px;border:1px solid #244058;border-radius:12px;background:#081c2b;flex-wrap:wrap;text-shadow:none;font-family:Inter,Segoe UI,system-ui,sans-serif}
+.store-showroom .aquarium-header nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:13px 18px;border:1px solid #4db7c7;border-radius:8px;color:#c6fbf3;background:#123549;font-size:13px;font-weight:400;white-space:nowrap}
+.store-showroom .aquarium-header nav a:hover{background:#205166;color:#fff}
+.store-showroom .aquarium-header nav a:focus-visible{outline:2px solid #84eced;outline-offset:4px}
+@media(max-width:640px){.store-showroom .aquarium-header nav{grid-column:1/-1;grid-row:2;justify-self:stretch}.store-showroom .aquarium-header nav a{flex:1;padding:9px 10px;font-size:12px}.store-showroom .aquarium-header .primary-tools{grid-row:3}.store-showroom .aquarium-header .scene-note{grid-row:4}}
