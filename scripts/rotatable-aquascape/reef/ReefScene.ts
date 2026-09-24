@@ -3,6 +3,7 @@ import {finishRockMaterial} from './ReefRockMaterial.ts';
 import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
 import {reefButtresses} from './ReefButtress.ts';
+import {reefAnemoneBackdrop} from './ReefAnemoneBackdrop.ts';
 import {reefFootGardens} from './ReefFootGardens.ts';
 import {plateSurfaceMaps,finishPlateMaterial} from './PlateSurface.ts';
 import {encrustingSurfaceMaps} from './EncrustingSurface.ts';
@@ -258,6 +259,10 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  // Keep only additional envelopes; do not repeat equivalent avoidance forces.
  obstacles.push(...life.obstacles.filter(o=>!obstacles.some(existing=>existing.center.distanceTo(o.center)+o.radius<=existing.radius)));
  const rockLifeStats=life.stats;
+ const backdrop=reefAnemoneBackdrop(seeded(2309240417));
+ extend(rockMesh,backdrop.rocks);extend(massive,backdrop.crusts);extend(hard,backdrop.corals);extend(zoo,backdrop.gardens);
+ obstacles.push(...backdrop.obstacles);
+ const anemoneBackdropStats=backdrop.stats;
  rockStats.triangles=rockMesh.geometry.index!.count/3;
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
@@ -288,5 +293,5 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,anemoneBackdropStats,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }

@@ -1,3 +1,4 @@
+import './anemone-backdrop.mjs';
 import './rock-ray-index.mjs';
 import './rock-life-geometry.mjs';
 import './flank-shelf-geometry.mjs';
@@ -78,7 +79,7 @@ try{
  // Actual reloads must seed different fish positions rather than repeat a film.
  await page.reload();await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});const fresh=await page.evaluate(()=>window.reefQA.snapshot());assert.notDeepEqual(fresh.positions,initial.positions);assert.equal(fresh.obstacleOverlaps,0);assert.equal(fresh.fishOverlaps,0);
  assert.deepEqual(errors,[]);report.checks={loading:true,feeding:true,spacing:true,obstacles:true,pause:true,camera:true,lighting:true,fullscreen:true,identification:true,mobile:true,randomized:true};
- report.initial={rockLifeStats:initial.rockLifeStats,footStats:initial.footStats,canopyStats:initial.canopyStats,triangles:initial.triangles,inhabitants:initial.fish,buttressStats:initial.buttressStats,polypStats:initial.polypStats,rockStats:initial.rockStats,crustStats:initial.crustStats,infillStats:initial.infillStats,flankStats:initial.flankStats};
+ report.initial={anemoneBackdropStats:initial.anemoneBackdropStats,rockLifeStats:initial.rockLifeStats,footStats:initial.footStats,canopyStats:initial.canopyStats,triangles:initial.triangles,inhabitants:initial.fish,buttressStats:initial.buttressStats,polypStats:initial.polypStats,rockStats:initial.rockStats,crustStats:initial.crustStats,infillStats:initial.infillStats,flankStats:initial.flankStats};
  // Planted navigation mounts independently of the shared freshwater renderer.
  await page.goto('http://127.0.0.1:5241/demos/rotatable-aquascape/');await page.locator('.reef-preview-link').waitFor({timeout:60000});assert.equal(await page.locator('.reef-preview-link').count(),1);assert.equal(await page.locator('.reef-preview-link').getAttribute('href'),'../reef-aquarium/');const reefLink=await page.locator('.reef-preview-link').boundingBox();assert.ok(reefLink.x>=0&&reefLink.x+reefLink.width<=390,'reef selector fits the phone');
  console.log(JSON.stringify(report,null,2));writeFileSync(resolve(out,'results.json'),JSON.stringify(report,null,2)+'\n');
