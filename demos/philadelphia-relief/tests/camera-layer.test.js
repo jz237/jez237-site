@@ -85,7 +85,8 @@ test('additional cameras have exact provider identities, bounded locations and s
     {...ats, snapshot: 'https://evil.test/image.jpg'}]) {
     assert.deepEqual(regionalCameras({cameras: [bad]}), []);
   }
-  assert.equal(regionalCameras({cameras: [{...ats, player: 'https://evil.test/player'}]})[0].player, undefined);
+  assert.equal(regionalCameras({cameras: [{...ats, video: undefined,
+    player: 'https://evil.test/player'}]})[0].player, undefined);
   assert.equal(regionalCameras({cameras: [{...de, enabled: false}]})[0].stream, undefined);
   assert.equal(new URL(cams.find(p => p.stream).url, 'https://jez237.com/demos/philadelphia-relief/').origin,
     'https://jez237.com');
@@ -95,12 +96,13 @@ test('additional cameras have exact provider identities, bounded locations and s
 test('discovered cameras have verified provider identities, bounded positions and no arbitrary media', async () => {
   const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
   const cams = discoveredCameras(doc);
-  assert.equal(cams.length, 18);
+  assert.equal(cams.length, 29);
   assert.equal(cams.filter(p => p.player).length, 10);
-  assert.ok(cams.every(p => p.discovered && hasCameraPreview(p) && !p.traffic));
-  assert.equal(new Set(cams.map(p => p.id)).size, 18);
+  assert.ok(cams.every(p => p.discovered && !p.traffic));
+  assert.equal(cams.filter(hasCameraPreview).length, 25);
+  assert.equal(new Set(cams.map(p => p.id)).size, 29);
   for (const p of cams) assert.equal(new URL(p.url).protocol, 'https:');
-  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 18);
+  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 29);
   assert.deepEqual(discoveredCameras({cameras: 'invalid'}), []);
   const sample = doc.cameras[0];
   for (const bad of [{...sample, lat: 90}, {...sample, lon: NaN}, {...sample, name: ''},
@@ -159,7 +161,7 @@ test('camera CSP allows exact public media hosts only inside the appropriate dir
   const csp = response.headers.get('Content-Security-Policy');
   const directives = csp.split(';');
   const images = directives.find(s => s.includes('img-src'));
-  for (const host of ['static.earthcam.com', 'usgs-nims-images.s3.amazonaws.com', 'www.ptztv.live', 'i.ytimg.com']) {
+  for (const host of ['static.earthcam.com', 'usgs-nims-images.s3.amazonaws.com', 'www.ptztv.live', 'i.ytimg.com', 'oemstream.online']) {
     assert.ok(images.includes('https://' + host));
     assert.ok(!directives.find(s => s.includes('script-src')).includes(host));
   }
@@ -167,4 +169,48 @@ test('camera CSP allows exact public media hosts only inside the appropriate dir
   assert.ok(frames.includes('https://www.youtube-nocookie.com'));
   assert.ok(!frames.includes('ptztv'));
   assert.ok(!frames.includes('*'));
+  assert.ok(!frames.includes('oemstream.online'));
+});
+
+test('Flood Watch links select each published camera and keep provider security checks on its own page', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
+  const rows = doc.cameras.filter(p => p.source === 'phila-oem');
+  const cams = discoveredCameras({ cameras: rows });
+  assert.equal(cams.length, 11);
+  assert.equal(cams.filter(hasCameraPreview).length, 7);
+  for (const c of cams) {
+    const n = c.id.slice('found-oem-'.length);
+    assert.equal(c.url, `https://oemstream.online/view.html?cam=cam${n}`);
+    assert.match(c.notice, /security check/);
+    assert.equal(c.stream, undefined);
+    assert.equal(c.player, undefined);
+    if (c.snapshot) assert.equal(c.previewKind, 'thumbnail');
+  }
+  for (const camera of [0, 12, '5', 1.5, '../private']) {
+    assert.deepEqual(discoveredCameras({ cameras: [{ ...rows[0], camera }] }), []);
+  }
+  const poisoned = discoveredCameras({ cameras: [{ ...rows[0],
+    url: 'https://evil.test', snapshot: 'https://evil.test', player: 'https://evil.test' }] })[0];
+  assert.equal(new URL(poisoned.url).hostname, 'oemstream.online');
+  assert.equal(poisoned.player, undefined);
+});
+
+test('four owner broadcasts upgrade existing cameras without adding duplicate map views', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/regional-cameras.json', import.meta.url)));
+  const rows = doc.cameras.filter(p => p.video);
+  assert.equal(rows.length, 4);
+  const cams = regionalCameras({ cameras: rows });
+  assert.equal(cams.length, 4);
+  for (const c of cams) {
+    assert.equal(new URL(c.url).hostname, 'www.youtube.com');
+    assert.equal(new URL(c.player).hostname, 'www.youtube-nocookie.com');
+    assert.equal(c.previewKind, 'thumbnail');
+    assert.match(c.publisherUrl, /\/streams$/);
+  }
+  const wrong = regionalCameras({ cameras: [{ ...rows[0], video: rows[1].video }] })[0];
+  assert.equal(new URL(wrong.url).hostname, 'attheshore.com');
+  assert.ok(!wrong.player.includes('youtube'));
+  const igloo = regionalCameras(doc).filter(p => p.id.startsWith('ats-igloo'));
+  assert.equal(igloo.length, 5);
+  assert.ok(igloo.every(p => Math.abs(p.lon - -75.179481) < .0001 && Math.abs(p.lat - 39.945137) < .0001));
 });

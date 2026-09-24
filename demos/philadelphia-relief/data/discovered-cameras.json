@@ -190,6 +190,116 @@
       "video": "6LtXdZJb-Kk",
       "checked": "2026-09-24",
       "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-oem-5",
+      "name": "Baynton & Church · Flood Watch",
+      "source": "phila-oem",
+      "camera": 5,
+      "lon": -75.1685115,
+      "lat": 40.0372448,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-11",
+      "name": "80th & Caesar · Flood Watch",
+      "source": "phila-oem",
+      "camera": 11,
+      "lon": -75.2488906,
+      "lat": 39.9032217,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-3",
+      "name": "77th & Elmwood · Flood Watch",
+      "source": "phila-oem",
+      "camera": 3,
+      "lon": -75.2487835,
+      "lat": 39.9088368,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-1",
+      "name": "78th & Buist · Flood Watch",
+      "source": "phila-oem",
+      "camera": 1,
+      "lon": -75.247428,
+      "lat": 39.9062446,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-10",
+      "name": "Kelly & Midvale · Flood Watch",
+      "source": "phila-oem",
+      "camera": 10,
+      "lon": -75.194467,
+      "lat": 40.0083356,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-6",
+      "name": "Godfrey & Beechwood · Flood Watch",
+      "source": "phila-oem",
+      "camera": 6,
+      "lon": -75.1571421,
+      "lat": 40.0490964,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-2",
+      "name": "Cobbs Creek & Springfield · Flood Watch",
+      "source": "phila-oem",
+      "camera": 2,
+      "lon": -75.2352589,
+      "lat": 39.9350857,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-4",
+      "name": "Belfield & Musgrave · Flood Watch",
+      "source": "phila-oem",
+      "camera": 4,
+      "lon": -75.1701359,
+      "lat": 40.0449205,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-7",
+      "name": "Ridge & Midvale · Flood Watch",
+      "source": "phila-oem",
+      "camera": 7,
+      "lon": -75.1939595,
+      "lat": 40.0089079,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-8",
+      "name": "Main Street & Shurs Lane · Flood Watch",
+      "source": "phila-oem",
+      "camera": 8,
+      "lon": -75.2183065,
+      "lat": 40.022198,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-9",
+      "name": "Columbus Boulevard & Summer Street · Flood Watch",
+      "source": "phila-oem",
+      "camera": 9,
+      "lon": -75.1397405,
+      "lat": 39.9542268,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
     }
   ]
 }

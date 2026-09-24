@@ -39,3 +39,8 @@ EarthCam's owner broadcasts 9mMnqO1UuIU (Franklin Institute) and F1EQEDL4ddU (Li
 Additional search covered public YouTube live results for Philadelphia street, skyline, rail and wildlife views; FOX29; AtTheShore/iGotView; EarthCam; 6abc Sky6; NBC10 regional cameras; and multiple camera directories. Rittenhouse fountain/south panorama and Triangle Square west/south broadcasts duplicate existing AtTheShore views. Chester railcam listings refer to Massachusetts, outside this map. The current 6abc page offers a combined radar/Sky6 program, and NBC10 offers scheduled rotating regional views; neither verifies a direct selectable feed for each location. Old Dilworth and Italian Market directory embeds are recordings, not live cameras. These were not added as new live pins. This audit does not establish complete coverage of every public camera.
 
 Run `python tools/audit-camera-streams.py --discover` from this demo to recheck all cataloged YouTube feeds and find current candidates. It runs only when invoked by a maintainer, downloads public metadata only, and adds no page-load requests, timers, paid APIs, or background video. Newly found candidates still need source and location checks before publication.
+
+
+## Expanded search, September 24
+
+See [the full search report](camera-search-2026-09-24.md) for 11 new Philadelphia OEM street-camera viewers, four upgraded live broadcasts, corrected Igloo coordinates, verification limits, and the source-by-source search record.

@@ -72,6 +72,20 @@ export function discoveredCameras(doc) {
         media.player = `https://www.youtube-nocookie.com/embed/${video}`
           + '?autoplay=1&mute=1&playsinline=1&rel=0';
       }
+    } else if (p.source === 'phila-oem' && Number.isInteger(p.camera)
+      && p.camera >= 1 && p.camera <= 11 && p.id === `found-oem-${p.camera}`) {
+      media = { provider: 'Philadelphia OEM · Flood Watch',
+        url: `https://oemstream.online/view.html?cam=cam${p.camera}`,
+        publisherUrl: 'https://flood-monitoring.phila.gov/',
+        previewNote: 'City thumbnail · capture time not supplied. '
+          + 'Live video requires the provider’s security check.',
+        notice: 'Open this camera’s page and complete the city’s security check to start live video. '
+          + 'Availability varies.' };
+      // Only these thumbnails are published by the current official city catalog.
+      if ([1, 2, 3, 5, 6, 10, 11].includes(p.camera)) {
+        media.snapshot = `https://oemstream.online/thumbs/c${String(p.camera).padStart(2, '0')}.jpg`;
+        media.previewKind = 'thumbnail';
+      }
     } else if (p.source === 'usgs' && ['NJ_Delaware_River_at_Lambertville_NJ',
       'NJ_Delaware_River_at_Trenton', 'NJ_Assunpink_Creek_at_Trenton',
       'PA_Neshaminy_Creek_near_Langhorne', 'PA_Vivotek_Schuylkill_River_at_Philadelphia',
@@ -85,7 +99,8 @@ export function discoveredCameras(doc) {
     } else if (p.source === 'ptztv' && p.id === 'found-port-philly') {
       media = { provider: 'PTZtv · Port Philly', url: 'https://www.ptztv.live/port-philly-webcam/',
         snapshot: 'https://www.ptztv.live/port-philly-webcam/images/ppw_preview.jpg',
-        previewNote: 'Provider preview · capture time not verified. Open the full camera page for video.' };
+        previewNote: 'Provider preview · capture time not verified. '
+          + 'Open the full camera page for video.' };
     } else if ((p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video))
       || (p.source === 'ironrail' && p.video === 'F1lNwIEAXJU')
       || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')
@@ -101,7 +116,8 @@ export function discoveredCameras(doc) {
         url: `https://www.youtube.com/watch?v=${p.video}`,
         snapshot: `https://i.ytimg.com/vi/${p.video}/hqdefault.jpg`,
         player: `https://www.youtube-nocookie.com/embed/${p.video}?autoplay=1&mute=1&playsinline=1&rel=0`,
-        previewNote: 'Video thumbnail · not a live frame. Play the provider video or open its camera page.' };
+        previewNote: 'Video thumbnail · not a live frame. '
+          + 'Play the provider video or open its camera page.' };
       if (p.source === 'rescue-rescue') {
         media.publisherUrl = 'https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams';
       }
@@ -141,10 +157,20 @@ export function regionalCameras(doc) {
         || !/^(?:[0-9]|1[0-9]|2[0-3])\.jpg$/.test(p.snapshot.slice(imagePath.length))) return [];
       const players = [`https://attheshore.com/combined-player?id=${id}`,
         `https://www.attheshore.com/combined-player?id=${id}`];
+      const video = { 'ats-rittenhouse554': '1vGH-8jvKcg', 'ats-rittenhouse555': 'MHK6eExbhsc',
+        'ats-igloo557': 'jAZjvlaBW3Y', 'ats-igloo558': '-J49AAW3Wik' }[p.id];
+      const broadcast = video && p.video === video ? {
+        url: `https://www.youtube.com/watch?v=${video}`,
+        snapshot: `https://i.ytimg.com/vi/${video}/hqdefault.jpg`, previewKind: 'thumbnail',
+        previewNote: 'Video thumbnail · not a live frame. Play the provider video or open its camera page.',
+        player: `https://www.youtube-nocookie.com/embed/${video}?autoplay=1&mute=1&playsinline=1&rel=0`,
+        publisherUrl: `https://www.youtube.com/channel/${id.startsWith('igloo')
+          ? 'UC-caLIi1HspXkq2Dwh-kC9A' : 'UC1ia-zIvH6uuHAEfdNUEVqA'}/streams`,
+      } : {};
       seen.add(p.id);
       return [{ ...point, url: p.url, snapshot: p.snapshot,
         player: players.includes(p.player) ? p.player : undefined,
-        provider: 'AtTheShore · iGotView', location: p.location, area: true }];
+        provider: 'AtTheShore · iGotView', location: p.location, area: true, ...broadcast }];
     }
     return [];
   });

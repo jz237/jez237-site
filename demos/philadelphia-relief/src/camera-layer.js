@@ -39,7 +39,9 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
   function populateJump() {
     jump.replaceChildren(element('option', '', 'Find a camera…'));
     jump.firstChild.value = '';
-    for (const item of items.filter(p => hasCameraPreview(p) && cameraMatchesFilter(p, filter.value))) {
+    const choices = items.filter(p => (hasCameraPreview(p) || p.discovered)
+      && cameraMatchesFilter(p, filter.value));
+    for (const item of choices) {
       const option = element('option', '', `${item.name} · ${item.provider}`);
       option.value = item.id; jump.append(option);
     }
@@ -59,8 +61,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     const timeout = setTimeout(() => request?.abort(), 12000);
     try {
       const sources = [['data/camera-locations.json?v=20260920-2', trafficCameras],
-        ['data/regional-cameras.json?v=20260920-1', regionalCameras],
-        ['data/discovered-cameras.json?v=20260924-1', discoveredCameras]];
+        ['data/regional-cameras.json?v=20260924-2', regionalCameras],
+        ['data/discovered-cameras.json?v=20260924-2', discoveredCameras]];
       const results = await Promise.allSettled(sources.map(async ([url, parse]) => {
         const response = await fetch(url, { signal: request.signal });
         if (!response.ok) throw new Error('Camera inventory unavailable');
@@ -140,7 +142,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
         }; card.append(play);
       }
     } else card.append(element('p', 'camera-card-notice',
-      'Click this gold pin or the link below to open this specific camera on 511PA. '
+      item.notice || 'Click this gold pin or the link below to open this specific camera on 511PA. '
       + 'Traffic video plays in the provider’s viewer; availability varies.'));
     card.append(element('p', 'camera-card-location', item.location),
       element('small', 'camera-card-source', `${item.provider} · ${item.id}`));
