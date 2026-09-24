@@ -1,0 +1,19 @@
+{
+  "readyMs": 9127,
+  "pausedRedraws": 0,
+  "checks": {
+    "onDemand": true,
+    "habitats": true,
+    "plantedReady": true,
+    "identification": true,
+    "closeups": true,
+    "pauseIdle": true,
+    "pausedCamera": true,
+    "pausedLighting": true,
+    "modalSuspension": true,
+    "offscreenSuspension": true,
+    "mobile": true,
+    "feeding": true,
+    "unmount": true
+  }
+}
