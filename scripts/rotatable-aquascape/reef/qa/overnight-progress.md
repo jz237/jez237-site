@@ -791,3 +791,12 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Transparent panes do not intercept clicks on inhabitants. Hidden ancestors are ignored; empty clicks replace stale notes. Orbit drags, including out-and-back drags, and multi-touch gestures do not select. Escape and the close button dismiss notes.
 - Full build:reef/check:reef plus actual desktop pointer and mobile touchscreen interactions passed. Inspected front/oblique/close-up/mobile images and field-note panels. Fixed a caption encoding error and replaced synthetic touch dispatch with a real touchscreen test after it triggered an OrbitControls pointer-capture error. No tank geometry, shader or animal behavior changed. Planted synchronization and release gates pass.
 - Prior/current serial performance and detailed click checks are saved in approved-build.json and ignored QA evidence. Publish only to jez237 and GitHub, verify both hosts, stop. The improvement automation remains deleted.
+
+
+## Inner anemone arch backing
+- User showed an exposed rear-glass gap beside the right host and requested restoration. Compared current source to the prior accepted build: identification changed no geometry; the outer seven-stone backing did not extend far enough inward.
+- Added three irregular rear stones at x2.08-2.46,z-1.51 to-1.46, with24attached crusts,3small colonies and38polyps. Existing seven backing rocks,62crusts,5colonies and all previous gardens are byte-identical in positions/attributes/indices. Original foreground reef and baked contact data remain unchanged.
+- The targeted inner-arch grid goes from17/187 to182/187solid rock intersections. New backing stays behind z-.8 and right of x1.25, retaining the foreground swim-through and central sand channel. Extended the geometry budget from500k to750k for this explicitly added three-rock section; actual726890 versus464514 previously. Whole rendered triangles17636332 to18161084; same7opaque batches.
+- Inspected actual before/after gap crops, full front, three-quarter, close-up and mobile views. The broad blue opening now reads as encrusted rock behind the anemone. This is a local coverage fix, not a claim of photographic parity.
+- build:reef/check:reef passes, including feeding, movement, collisions, pause, camera controls and identification. Planted synchronization/release checks pass. Prior/current local FPS 59.5/59.5, startup 13067/13342ms. Preserve full observations.
+- Publish only to jez237 and GitHub, verify live assets and movement, and stop. The improvement automation remains deleted.

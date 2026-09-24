@@ -1,0 +1,31 @@
+{
+  "before": {
+    "rocks": 7,
+    "rockTriangles": 74060,
+    "crusts": 62,
+    "colonies": 5,
+    "polyps": 71,
+    "tentacles": 480,
+    "triangles": 464514
+  },
+  "after": {
+    "rocks": 10,
+    "rockTriangles": 105800,
+    "crusts": 86,
+    "colonies": 8,
+    "polyps": 109,
+    "tentacles": 864,
+    "triangles": 726890
+  },
+  "originalGeometryPreserved": true,
+  "coverageBefore": {
+    "hits": 17,
+    "total": 187,
+    "ratio": 0.09090909090909091
+  },
+  "coverageAfter": {
+    "hits": 182,
+    "total": 187,
+    "ratio": 0.9732620320855615
+  }
+}
