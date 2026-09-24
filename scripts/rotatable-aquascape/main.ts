@@ -23,7 +23,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
 const storeShowroom=new URLSearchParams(location.search).get('showroom')==='hidden-reef';
-if(storeShowroom){document.body.classList.add('store-showroom');document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a class="saltwater-link" href="../reef/?showroom=hidden-reef" target="_top">Saltwater aquarium &#8599;</a>';}
+if(storeShowroom){document.body.classList.add('store-showroom');document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a class="saltwater-link" href="../reef/?showroom=hidden-reef" target="_top">&#8592; Saltwater aquarium</a><a href="../../" target="_top">Hidden Reef home</a>';}
 const aquariumHeader=document.querySelector<HTMLElement>('.aquarium-header')!;
 const primaryTools=document.querySelector<HTMLElement>('.primary-tools')!;
 primaryTools.append(document.querySelector('#learn')!);
