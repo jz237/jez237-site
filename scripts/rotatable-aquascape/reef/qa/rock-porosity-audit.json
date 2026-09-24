@@ -1,0 +1,104 @@
+{
+  "baseline": "4c55b3027",
+  "boringsPerStone": 89,
+  "geometry": "Unchanged indexed topology; only inward erosion. Sixteen seeded shapes remain inside their former radial envelope.",
+  "acceleration": "16 fixtures are byte-identical to exhaustive boring evaluation, including normals, colors inputs and indices.",
+  "rows": [
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1414,
+      "maxDisplacement": 0.0731198902026092
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1399,
+      "maxDisplacement": 0.07297937362374558
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1436,
+      "maxDisplacement": 0.07409379430992293
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1397,
+      "maxDisplacement": 0.07391074420981178
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1416,
+      "maxDisplacement": 0.07259885197144239
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1411,
+      "maxDisplacement": 0.07355691565546582
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1406,
+      "maxDisplacement": 0.07290165946700339
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1406,
+      "maxDisplacement": 0.07359325199118902
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1433,
+      "maxDisplacement": 0.07311643107191629
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1414,
+      "maxDisplacement": 0.07498752514724921
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1395,
+      "maxDisplacement": 0.07958361561227449
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1419,
+      "maxDisplacement": 0.08370917815057267
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1416,
+      "maxDisplacement": 0.08701452581523815
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1412,
+      "maxDisplacement": 0.09130673628542717
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1410,
+      "maxDisplacement": 0.0957491956358758
+    },
+    {
+      "vertices": 5361,
+      "triangles": 10580,
+      "moved": 1407,
+      "maxDisplacement": 0.09927050669344754
+    }
+  ]
+}
