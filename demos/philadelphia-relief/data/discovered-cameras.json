@@ -1,0 +1,315 @@
+{
+  "checked": "2026-09-24",
+  "cameras": [
+    {
+      "id": "found-perkasie-covered-bridge",
+      "name": "Perkasie · covered bridge restoration",
+      "source": "perkasie-borough",
+      "lon": -75.295,
+      "lat": 40.3675,
+      "location": "South Perkasie Covered Bridge · Lenape Park worksite",
+      "area": true,
+      "video": "xWUiE7m2PLQ"
+    },
+    {
+      "id": "found-franklin-institute",
+      "name": "Franklin Institute · Parkway",
+      "source": "earthcam",
+      "lon": -75.1731,
+      "lat": 39.9582,
+      "location": "The Franklin Institute · Benjamin Franklin Parkway",
+      "url": "https://www.earthcam.com/cams/pennsylvania/philadelphia/",
+      "thumbnail": "fc65c09a99e61ca67a3196f45ed48596",
+      "video": "9mMnqO1UuIU"
+    },
+    {
+      "id": "found-liberty-bell",
+      "name": "Liberty Bell · Independence Hall",
+      "source": "earthcam",
+      "lon": -75.1503,
+      "lat": 39.9496,
+      "location": "Liberty Bell Center · Independence National Historical Park",
+      "url": "https://www.earthcam.com/usa/pennsylvania/philadelphia/independencehall/",
+      "thumbnail": "9e2f1301e3566e1c24b763fef3ce1ae0",
+      "video": "F1EQEDL4ddU"
+    },
+    {
+      "id": "found-port-philly",
+      "name": "Port Philly · ships and airport approach",
+      "source": "ptztv",
+      "lon": -75.2322,
+      "lat": 39.8594,
+      "location": "Delaware River viewed from Paulsboro Sportsmen’s Club",
+      "area": true,
+      "url": "https://www.ptztv.live/port-philly-webcam/"
+    },
+    {
+      "id": "found-usgs-lambertville",
+      "name": "Delaware River · Lambertville / New Hope",
+      "source": "usgs",
+      "lon": -74.948889,
+      "lat": 40.364722,
+      "station": "NJ_Delaware_River_at_Lambertville_NJ",
+      "location": "USGS streamgage 01462000 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01462000-delaware-river-lambertville-nj"
+    },
+    {
+      "id": "found-usgs-trenton",
+      "name": "Delaware River · Trenton",
+      "source": "usgs",
+      "lon": -74.77805556,
+      "lat": 40.22166667,
+      "station": "NJ_Delaware_River_at_Trenton",
+      "location": "USGS streamgage 01463500 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01463500-delaware-river-trenton-nj"
+    },
+    {
+      "id": "found-usgs-assunpink",
+      "name": "Assunpink Creek · Trenton",
+      "source": "usgs",
+      "lon": -74.7491667,
+      "lat": 40.22416667,
+      "station": "NJ_Assunpink_Creek_at_Trenton",
+      "location": "USGS streamgage 01464000 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01464000-assunpink-creek-trenton-nj"
+    },
+    {
+      "id": "found-falcon-1",
+      "name": "Wilmington falcons · nest camera 1",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "2oqJJvDzdFY",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-falcon-2",
+      "name": "Wilmington falcons · nest camera 2",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "1qhsPj4jDT4",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-falcon-3",
+      "name": "Wilmington falcons · east rooftop",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "I1cueV9veYw",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-usgs-01465500",
+      "name": "Neshaminy Creek near Langhorne",
+      "source": "usgs",
+      "lon": -74.9568342,
+      "lat": 40.1739982,
+      "station": "PA_Neshaminy_Creek_near_Langhorne",
+      "location": "USGS streamgage 01465500 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01465500/"
+    },
+    {
+      "id": "found-usgs-01474500",
+      "name": "Schuylkill River at Philadelphia",
+      "source": "usgs",
+      "lon": -75.1885007,
+      "lat": 39.9677908,
+      "station": "PA_Vivotek_Schuylkill_River_at_Philadelphia",
+      "location": "USGS streamgage 01474500 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01474500/"
+    },
+    {
+      "id": "found-usgs-01480870",
+      "name": "East Branch Brandywine Creek below Downingtown",
+      "source": "usgs",
+      "lon": -75.6732715,
+      "lat": 39.9687191,
+      "station": "PA_East_Branch_Brandywine_Creek_below_Downingtown",
+      "location": "USGS streamgage 01480870 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01480870/"
+    },
+    {
+      "id": "found-usgs-01481000",
+      "name": "Brandywine Creek at Chadds Ford",
+      "source": "usgs",
+      "lon": -75.5932623,
+      "lat": 39.8698328,
+      "station": "PA_Brandywine_Creek_at_Chadds_Ford",
+      "location": "USGS streamgage 01481000 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01481000/"
+    },
+    {
+      "id": "found-phoenixville-rail",
+      "name": "Phoenixville · Norfolk Southern freight trains",
+      "source": "ironrail",
+      "lon": -75.473,
+      "lat": 40.115,
+      "video": "F1lNwIEAXJU",
+      "area": true,
+      "location": "Norfolk Southern Harrisburg Line near Pawlings Road · approximate viewed area",
+      "url": "https://www.youtube.com/watch?v=F1lNwIEAXJU"
+    },
+    {
+      "id": "found-willow-grove-weather",
+      "name": "Willow Grove · weather and street view",
+      "source": "willowgrove",
+      "lon": -75.11,
+      "lat": 40.14,
+      "video": "vIdA-SCcM68",
+      "area": true,
+      "location": "Willow Grove Weather Center · approximate station area",
+      "url": "https://www.youtube.com/watch?v=vIdA-SCcM68"
+    },
+    {
+      "id": "found-kensington-cam2",
+      "name": "Kensington & Allegheny · Cam 2",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "hlGz7Jq_BT0",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-kensington-cam3",
+      "name": "Kensington & Allegheny · Cam 3",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "aphvln5Zwv0",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-kensington-cam6",
+      "name": "Kensington & Allegheny · Cam 6",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "6LtXdZJb-Kk",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-oem-5",
+      "name": "Baynton & Church · Flood Watch",
+      "source": "phila-oem",
+      "camera": 5,
+      "lon": -75.1685115,
+      "lat": 40.0372448,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-11",
+      "name": "80th & Caesar · Flood Watch",
+      "source": "phila-oem",
+      "camera": 11,
+      "lon": -75.2488906,
+      "lat": 39.9032217,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-3",
+      "name": "77th & Elmwood · Flood Watch",
+      "source": "phila-oem",
+      "camera": 3,
+      "lon": -75.2487835,
+      "lat": 39.9088368,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-1",
+      "name": "78th & Buist · Flood Watch",
+      "source": "phila-oem",
+      "camera": 1,
+      "lon": -75.247428,
+      "lat": 39.9062446,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-10",
+      "name": "Kelly & Midvale · Flood Watch",
+      "source": "phila-oem",
+      "camera": 10,
+      "lon": -75.194467,
+      "lat": 40.0083356,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-6",
+      "name": "Godfrey & Beechwood · Flood Watch",
+      "source": "phila-oem",
+      "camera": 6,
+      "lon": -75.1571421,
+      "lat": 40.0490964,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-2",
+      "name": "Cobbs Creek & Springfield · Flood Watch",
+      "source": "phila-oem",
+      "camera": 2,
+      "lon": -75.2352589,
+      "lat": 39.9350857,
+      "location": "City-published intersection · live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-4",
+      "name": "Belfield & Musgrave · Flood Watch",
+      "source": "phila-oem",
+      "camera": 4,
+      "lon": -75.1701359,
+      "lat": 40.0449205,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-7",
+      "name": "Ridge & Midvale · Flood Watch",
+      "source": "phila-oem",
+      "camera": 7,
+      "lon": -75.1939595,
+      "lat": 40.0089079,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-8",
+      "name": "Main Street & Shurs Lane · Flood Watch",
+      "source": "phila-oem",
+      "camera": 8,
+      "lon": -75.2183065,
+      "lat": 40.022198,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    },
+    {
+      "id": "found-oem-9",
+      "name": "Columbus Boulevard & Summer Street · Flood Watch",
+      "source": "phila-oem",
+      "camera": 9,
+      "lon": -75.1397405,
+      "lat": 39.9542268,
+      "location": "OEM-published intersection · located with Philadelphia AIS; live playback requires provider security check",
+      "area": true
+    }
+  ]
+}

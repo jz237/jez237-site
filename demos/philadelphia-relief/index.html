@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Philadelphia Relief — A 3D Topographic Map of the Delaware Valley</title>
-<meta name="description" content="An interactive cinematic 3D relief map of Philadelphia and its suburbs with georeferenced public-domain USGS aerial imagery, real elevation, optional 3D buildings, historical views and flood layers. No API keys." />
+<meta name="description" content="Explore a miniature Delaware Valley, then zoom into photographic 3D streets and buildings. Real elevation, guided tours, historical views and flood layers in one Philadelphia map." />
 <meta name="keywords" content="Philadelphia topographic map, 3D terrain, Delaware Valley relief, Wissahickon, Schuylkill River, Main Line, Bucks County, elevation map, WebGL" />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://jez237.com/demos/philadelphia-relief/" />
 <meta property="og:title" content="Philadelphia Relief — A 3D Topographic Map" />
-<meta property="og:description" content="A cinematic, interactive relief map of Philadelphia: public-domain USGS aerial imagery draped over real elevation, optional 3D buildings, guided tours, flood scenarios and historical views. No accounts or API keys." />
+<meta property="og:description" content="A miniature Philadelphia landscape with real elevation and photographic 3D close-ups. Explore streets, take guided tours, and compare historical and flood layers." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://jez237.com/demos/philadelphia-relief/" />
 <meta property="og:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
@@ -22,7 +22,13 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090907" />
+<link rel="stylesheet" href="load/style-2647010bd702.css" />
+<link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
+<link rel="preload" as="fetch" href="data/terrain.json" crossorigin />
+<link rel="preload" as="image" href="data/imagery.webp?v=aligned2" />
+<link rel="modulepreload" href="load/app-ARTCCSUF.js" />
+<link rel="modulepreload" href="load/chunk-NSE4GZ3K.js" />
+<link rel="modulepreload" href="load/chunk-WOT6VMZA.js" />
 </head>
 <body data-theme="dusk">
 
@@ -117,7 +123,14 @@
     <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
   </div>
 
-  <div class="topbar-actions">
+  <details id="pageTools" class="topbar-actions">
+    <summary aria-label="Page tools">•••</summary>
+    <div class="page-tools-body">
+    <button type="button" class="icon-btn local-mobile-opener" id="btnLocalViews"
+      title="Cameras &amp; local views" aria-label="Cameras and local views">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.7" aria-hidden="true"><path d="M8 5l1.5-2h5L16 5h4v15H4V5z" />
+        <circle cx="12" cy="12" r="4" /></svg></button>
     <button type="button" class="icon-btn" id="btnHome" title="Reset view (H)" aria-label="Reset view">⌂</button>
     <button type="button" class="icon-btn" id="btnShot" title="Save PNG (P)" aria-label="Save a PNG of the current view">▣</button>
     <button type="button" class="icon-btn" id="btnShare" title="Copy link to this view" aria-label="Copy a link to this view">↗</button>
@@ -125,15 +138,266 @@
     <button type="button" class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Toggle fullscreen">⤢</button>
     <button type="button" class="icon-btn" id="btnKeys" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">⌘</button>
     <button type="button" class="icon-btn" id="btnAbout" title="About &amp; sources" aria-label="About and data sources">i</button>
-  </div>
+    </div>
+  </details>
 </header>
 
 <nav class="explore-nav" aria-label="Explore and customize">
   <button type="button" id="openExplore" aria-controls="shots">Explore places <span aria-hidden="true">↗</span></button>
   <button type="button" id="openCustomize" aria-controls="studio">Customize <span aria-hidden="true">☷</span></button>
   <button type="button" id="btnInspect" aria-pressed="false" title="Street inspection (I)">Street inspection</button>
+  <button type="button" id="openLocalViews">Cameras &amp; local views <span aria-hidden="true">◉</span></button>
 </nav>
+<section id="cityFeaturePanel" class="city-feature-panel" hidden aria-labelledby="cityFeatureTitle">
+  <p class="story-eyebrow">DISCOVER THE CITY</p>
+  <h2 id="cityFeatureTitle"></h2>
+  <p id="cityFeatureNote"></p>
+  <div id="cityFeatureControls"></div>
+  <p id="cityFeatureStatus" role="status"></p>
+  <button type="button" id="cityFeatureExit">Return to normal map</button>
+</section>
+<div id="cityFeatureBadge" class="city-feature-badge" hidden></div>
+<dialog id="regionalViews" class="regional-dialog" aria-labelledby="regionalTitle">
+  <header class="regional-head">
+    <div><span class="local-eyebrow">A WINDOW INTO THE DELAWARE VALLEY</span>
+      <h2 id="regionalTitle">Cameras &amp; local views</h2></div>
+    <button type="button" id="closeRegionalViews" aria-label="Close local views">✕</button>
+  </header>
+  <div class="regional-tabs" role="group" aria-label="Local view categories">
+    <button type="button" data-local-tab="cameras" aria-pressed="true">Cameras</button>
+    <button type="button" data-local-tab="street" aria-pressed="false">Street View</button>
+    <button type="button" data-local-tab="conditions" aria-pressed="false">Weather &amp; river</button>
+  </div>
+  <section data-local-pane="cameras">
+    <p class="local-intro">Public webcams and traffic views around this region.
+      Viewers open on the provider’s site in a new tab; availability and schedules vary.</p>
+    <button type="button" id="showCameraMap" class="local-link">Show camera pins on the diorama →</button>
+    <div id="regionalCameras" class="regional-cameras"></div>
+    <p class="local-footnote" id="trafficAccess">Embedded PennDOT streams require approved feed access. </p>
+  </section>
+  <section data-local-pane="street" hidden>
+    <div class="street-window" aria-hidden="true"><span>AT STREET LEVEL</span><b>360°</b></div>
+    <h3>Step into the place you’re exploring</h3>
+    <p id="streetLocation" class="local-coordinates"></p>
+    <p class="local-intro">Open the nearest available Google Street View panorama to the center of your map.
+      These are captured photographs, not live cameras. Coverage and capture dates vary.</p>
+    <a id="streetCurrent" class="local-primary" target="_blank" rel="noopener noreferrer">
+      Open Street View here ↗</a>
+    <h3 class="local-shortcut-title">Familiar places</h3>
+    <div id="streetShortcuts" class="local-actions"></div>
+    <p class="local-footnote">To choose another street, close this panel, pan or search, then open it again.
+      Panoramas open in Google Maps and keep this diorama available in its tab.</p>
+  </section>
+  <section data-local-pane="conditions" hidden>
+    <div class="local-refresh-row"><p id="conditionsStatus" role="status"></p>
+      <button type="button" id="refreshConditions" class="local-secondary">Refresh</button></div>
+    <div class="regional-conditions">
+      <article class="local-source"><span class="local-eyebrow">NEARBY WEATHER · NWS</span>
+        <h3>At the nearest reporting airport</h3><div id="regionalWeather"></div>
+        <p class="local-footnote">Airport observations can differ from conditions at the map center.</p>
+        <a id="localForecast" class="local-link" target="_blank" rel="noopener noreferrer">
+          Forecast for this map location ↗</a>
+      </article>
+      <article class="local-source"><span class="local-eyebrow">DELAWARE RIVER · NOAA</span>
+        <h3>Philadelphia water level</h3><div id="regionalWater"></div>
+        <p class="local-footnote">Station 8545240 at Philadelphia. Height relative to the tidal datum,
+          not water depth or a regional flood prediction.</p>
+        <div id="gaugeSource"></div>
+        <button type="button" id="gaugeVisit" class="local-secondary">Show gauge on map</button>
+      </article>
+    </div>
+  </section>
+</dialog>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
+<details id="mapControls" class="photo-controls" aria-label="Map presentation">
+  <summary class="map-controls-summary">View &amp; layers <span aria-hidden="true">⌄</span></summary>
+  <div class="map-controls-body">
+  <div class="photo-choice">
+    <label for="photoMode">View</label>
+    <select id="photoMode">
+      <option value="auto">Automatic · diorama to photo 3D</option>
+      <option value="relief">Diorama</option>
+      <option value="photo">Photographic close-ups</option>
+    </select>
+  </div>
+  <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
+  <button id="photoRetry" type="button" aria-label="Retry photographic detail" hidden>Retry</button>
+  <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+  <label class="power-saving"><input id="lightweightMode" type="checkbox"> Lighter graphics</label>
+  <p class="power-status">Keeps aerial detail and overlays; simplifies buildings and decorative effects.</p>
+  <label class="power-saving"><input id="powerSaving" type="checkbox"> Save power when idle</label>
+  <p id="powerStatus" class="power-status">Full image detail at every setting.</p>
+  <details class="explore-tools" id="exploreTools">
+    <summary>Miniature exhibits</summary>
+    <p class="photo-note">Explore the same geographic map from a new perspective.</p>
+    <label for="exhibitPlace">Neighborhood exhibit</label>
+    <select id="exhibitPlace">
+      <option value="current">Current map center</option>
+      <option value="Philadelphia City Hall">Center City</option>
+      <option value="Bauder Signs">Bauder Signs</option>
+      <option value="The Hidden Reef">The Hidden Reef</option>
+    </select>
+    <button type="button" id="openExhibit">Make a miniature exhibit</button>
+    <label for="modelPlace">Architectural models</label>
+    <select id="modelPlace">
+      <option value="independence-hall">Independence Hall</option>
+      <option value="museum-of-art">Philadelphia Museum of Art</option>
+      <option value="city-hall">Philadelphia City Hall</option>
+    </select>
+    <button type="button" id="openModel">Explore detailed model</button>
+    <button type="button" id="openDrawbridges">Working drawbridges · demonstration</button>
+    <button type="button" id="openUnderground">Beneath Philadelphia · cutaway</button>
+    <p id="cityFeatureLoadStatus" class="photo-note" role="status"></p>
+    <p id="exploreStatus" class="photo-note" role="status">Extra tools load only when opened.</p>
+  </details>
+  <div class="camera-layer-control">
+    <label class="camera-layer-toggle"><input type="checkbox" id="cameraLayerToggle"
+      aria-controls="cameraLayerOptions"> <span>Cameras on map</span><span aria-hidden="true">◉</span></label>
+    <div id="cameraLayerOptions" hidden>
+      <p id="cameraLayerStatus" role="status"></p>
+      <div class="camera-layer-filters">
+        <select id="cameraLayerFilter" aria-label="Camera types">
+          <option value="all">All mapped cameras</option>
+          <option value="preview">Preview-capable cameras</option>
+          <option value="discovered">Discovered public cameras · purple</option>
+        </select>
+        <select id="cameraLayerJump" aria-label="Find a camera">
+          <option value="">Find a camera…</option>
+        </select>
+      </div>
+      <p class="camera-layer-help"><i></i> Neighborhood views <i class="traffic"></i> Traffic cameras
+        <br><i class="discovered"></i> Discovered public cameras
+        <br>Hover to preview. Click gold/purple pins to open. Numbers group nearby cameras.</p>
+    </div>
+  </div>
+  <div class="camera-layer-control aircraft-controls">
+    <button type="button" id="airportCamera" class="camera-card-open">PHL airport camera · real video ↗</button>
+    <label class="camera-layer-toggle"><input type="checkbox" id="aircraftToggle"
+      aria-controls="aircraftOptions"> <span>Aircraft over the region</span><span aria-hidden="true">✈</span></label>
+    <div id="aircraftOptions" hidden>
+      <p id="aircraftStatus" role="status"></p>
+      <button type="button" id="airportSpotter">Spot from PHL · nearest reported aircraft</button>
+      <p class="photo-note">Virtual ground viewpoint; does not confirm a PHL arrival or public access.</p>
+      <div class="camera-layer-filters">
+        <select id="aircraftFilter" aria-label="Aircraft types">
+          <option value="all">All airborne aircraft</option>
+          <option value="low">Below 10,000 ft</option>
+          <option value="large">Large aircraft</option>
+          <option value="helicopter">Helicopters</option>
+        </select>
+        <select id="aircraftJump" aria-label="Follow an aircraft">
+          <option value="">Choose an aircraft…</option>
+        </select>
+      </div>
+      <div class="aircraft-actions">
+        <label><input type="checkbox" id="aircraftTrails" checked> Flight trails</label>
+        <button type="button" id="aircraftReturn" hidden>Return to map</button>
+        <button type="button" id="aircraftRetry" hidden>Retry feed</button>
+      </div>
+      <p class="aircraft-source">Reported aircraft · hover or tap a plane. Coverage varies.
+        <a href="https://adsb.fi/" target="_blank" rel="noopener noreferrer">adsb.fi</a> ·
+        <a href="https://github.com/adsbfi/opendata#terms" target="_blank"
+          rel="noopener noreferrer">Personal-use data terms</a></p>
+    </div>
+  </div>
+  <details id="moreMapLayers" class="more-map-layers">
+    <summary>More map layers <span>Water · weather · history</span></summary>
+    <div class="extra-layer">
+      <label><input id="bathymetryToggle" type="checkbox"> Reveal the riverbed</label>
+      <div id="bathymetryOptions" hidden>
+        <p id="bathymetryStatus" role="status"></p>
+        <div class="riverbed-visits">
+          <button type="button" data-riverbed-visit="delaware">Delaware waterfront</button>
+          <button type="button" data-riverbed-visit="schuylkill">Lower Schuylkill</button>
+          <button type="button" data-riverbed-visit="bristol">Bristol channel</button>
+        </div>
+        <label class="layer-range">Riverbed relief <output id="bathymetryScaleValue">6×</output>
+          <input id="bathymetryScale" type="range" min="1" max="12" step="1" value="6"
+            aria-label="Riverbed vertical exaggeration"></label>
+        <small id="bathymetryScaleNote">Riverbed relief ×6 on top of the map’s terrain scale.</small>
+        <small>Surveyed parts of the Delaware and lower Schuylkill. Gaps keep the normal map.
+          Colors show elevation below NAVD88, not today’s water depth. Uses the relief view.</small>
+        <a href="https://www.nauticalcharts.noaa.gov/data/bluetopo.html" target="_blank" rel="noopener noreferrer">NOAA BlueTopo source ↗</a>
+        <a href="data/bathymetry/sources.json" target="_blank" rel="noopener noreferrer">Survey dates &amp; provenance ↗</a>
+        <button id="bathymetryRetry" type="button" hidden>Retry riverbed download</button>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="shipsToggle" type="checkbox"> Ships on the Delaware</label>
+      <div id="shipsOptions" hidden>
+        <p id="shipsStatus" role="status"></p>
+        <select id="shipSelect" aria-label="Find a ship"><option value="">Choose a ship…</option></select>
+        <small>AISStream · reported positions · coverage varies. Starts listening when enabled.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="gaugesToggle" type="checkbox"> River gauges</label>
+      <div id="gaugesOptions" hidden>
+        <p id="gaugesStatus" role="status"></p>
+        <select id="gaugeSelect" aria-label="Find a river gauge"><option value="">Choose a gauge…</option></select>
+        <small>NOAA / NWS observations and forecasts. Click a gauge for its recent trend.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="radarToggle" type="checkbox"> Weather radar</label>
+      <div id="radarOptions" hidden>
+        <p id="radarStatus" role="status"></p>
+        <div class="radar-playback"><button id="radarPlay" type="button" disabled>Play radar</button>
+          <input id="radarFrame" type="range" min="0" max="0" value="0" aria-label="Radar observation" disabled></div>
+        <label class="layer-range">Opacity <input id="radarOpacity" type="range" min="10" max="90"
+          value="55" aria-label="Radar opacity"></label>
+        <div class="radar-legend"><span>Weak echoes</span><i></i><span>Strong</span></div>
+        <small>NOAA nowCOAST · radar reflectivity, not a forecast. Shown on the relief surface.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label for="archiveYear">Historical aerial photography</label>
+      <select id="archiveYear"><option value="off">Off · current imagery</option>
+        <option value="1996">1996 aerial photographs</option><option value="2000">2000 aerial photographs</option>
+        <option value="2004">2004 aerial photographs</option><option value="2008">2008 aerial photographs</option>
+      </select>
+      <div id="archiveOptions" hidden>
+        <p id="archiveStatus" role="status"></p>
+        <label><input id="archiveSwipe" type="checkbox" checked> Swipe comparison with today</label>
+        <label class="layer-range">Divider <input id="archiveDivider" type="range" min="0" max="100"
+          value="50" aria-label="Historical comparison divider"></label>
+        <label class="layer-range">Fade to today <input id="archiveOpacity" type="range" min="0" max="100"
+          value="100" aria-label="Historical aerial opacity"></label>
+        <button id="archiveVisit" type="button">View Center City</button>
+        <small>City of Philadelphia aerials over today's terrain. Coverage is limited to the source survey.
+          Modern 3D buildings are hidden while comparing.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="propertyToggle" type="checkbox"> Property &amp; landmark information</label>
+      <div id="propertyOptions" hidden>
+        <p>Click a building or location to find nearby city property records. Gold markers open landmark facts.</p>
+        <button id="propertyCenter" type="button">Inspect map center</button>
+        <small>Philadelphia city records only; nearest records are labeled by distance.</small>
+      </div>
+    </div>
+    <button id="refreshMapLayers" class="layer-refresh" type="button">Refresh enabled live layers</button>
+  </details>
+  <button id="closeMapControls" class="close-map-controls" type="button">Back to map</button>
+  </div>
+</details>
+<div id="mapLayerBanner" class="map-layer-banner" role="status" hidden></div>
+<section id="bathymetryLegend" class="riverbed-legend" aria-label="Riverbed elevation legend" hidden>
+  <div class="riverbed-heading"><strong>BENEATH THE RIVERS</strong>
+    <button id="bathymetryClose" type="button" aria-label="Turn off riverbed view">×</button></div>
+  <div class="riverbed-ramp" aria-hidden="true"></div>
+  <div class="riverbed-ticks"><span>0 m</span><span>8 m</span><span>22 m</span></div>
+  <p id="bathymetryReading">Move the map center over a surveyed river.</p>
+  <small>Below NAVD88 · 2 m contours · survey gaps unchanged<br>NOAA BlueTopo · not for navigation</small>
+</section>
+<div id="archiveSwipeOverlay" class="archive-swipe-overlay" hidden>
+  <span id="archivePastLabel" class="archive-side past">Historical aerial</span>
+  <span class="archive-side current">Current aerial</span>
+  <div id="archiveSwipeHandle" class="archive-swipe-handle" role="slider" tabindex="0"
+    aria-label="Historical comparison divider on map" aria-valuemin="0" aria-valuemax="100"
+    aria-valuenow="50" aria-orientation="horizontal"><span aria-hidden="true">↔</span></div>
+</div>
+<div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
   <header class="panel-head">
     <h2 id="studioTitle">Customize the map</h2>
@@ -192,8 +456,8 @@
 <footer class="readout" id="readout">
   <div class="readout-main">
     <div class="readout-preset">
+      <button id="toggleNotes" class="notes-toggle" type="button" aria-expanded="true" aria-label="Collapse field notes">− Collapse</button>
       <span class="story-eyebrow">FIELD NOTES / DELAWARE VALLEY</span>
-      <button id="toggleNotes" class="notes-toggle" type="button" aria-expanded="true">Hide notes</button>
       <span class="readout-preset-name" id="outPreset">A whole valley, in miniature</span>
       <span class="readout-preset-blurb" id="outBlurb"></span>
       <button type="button" class="story-tour" id="storyArchitecture">Explore Center City in 3D <span aria-hidden="true">↗</span></button>
@@ -356,7 +620,18 @@
         <dd>Hand-curated for this map. Elevations are sampled from the same DEM as the ground.</dd>
       </div>
       <div>
-        <dt>Buildings</dt>
+        <dt>Photographic close-ups</dt>
+        <dd>
+          Automatic view keeps the regional miniature and streams Google Photorealistic
+          3D Tiles through Cesium ion when you zoom in. The same camera, search and tours
+          work in both views. Photography shows captured lighting and source-date buildings;
+          it is not live imagery. Coverage and sharpness vary. Choose Diorama for simulated
+          lighting and illustrative models. Historical, contour, flood and comparison views
+          automatically use the relief map. Provider attribution appears on photographic views.
+        </dd>
+      </div>
+      <div>
+        <dt>Diorama buildings</dt>
         <dd>
           Optional — the aerial image is the default surface, and the
           <b>3D buildings &amp; bridges</b> layer restores the extruded model when wanted.
@@ -548,7 +823,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090907"></script>
+<script type="module" src="load/app-ARTCCSUF.js"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
