@@ -1,3 +1,4 @@
+import {pickNote} from './ReefIdentification.ts';
 import './style.css';
 import {reefDrawOrderReady,optimizeReefDrawOrder} from './ReefDrawOrder.ts';
 import * as T from 'three';
@@ -31,7 +32,7 @@ const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.34);scene.add(ambient);
 const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;key.shadow.radius=4.5;key.shadow.intensity=.82;scene.add(key,key.target);
 const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.add(fill);
-const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);buildAquariumGlass(scene,reflections);
+const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);const glassStart=scene.children.length;buildAquariumGlass(scene,reflections);const glassObjects=scene.children.slice(glassStart);
 const fishModelsPending=loadMarineModels();
 const bakeRockLife=new URLSearchParams(location.search).has('bakeRockLife');
 const rockLifeAttachments=bakeRockLife?undefined:await fetch(new URL('./assets/rock-life/attachments.json',import.meta.url)).then(r=>{if(!r.ok)throw Error('Live-rock attachment data could not load');return r.json();});
@@ -73,11 +74,32 @@ $('#light').onclick=()=>{night=!night;$('#light').textContent=night?'Daylight':'
 installFullscreen(app,$<HTMLButtonElement>('#fullscreen'));
 for(const button of Array.from(document.querySelectorAll<HTMLButtonElement>('[data-view]')))button.onclick=()=>{controls.target.set(0,2.67,0);controls.minDistance=7;document.querySelector('[data-view].active')?.classList.remove('active');button.classList.add('active');cameraGoal=new T.Vector3(...(button.dataset.view==='angle'?[11,6,17.5]:button.dataset.view==='side'?[20,4,4]:[0,3.25,17.7]) as [number,number,number]);};
 controls.addEventListener('start',()=>{cameraGoal=null;});
-const raycaster=new T.Raycaster(),pointer=new T.Vector2();let down=[0,0];renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
+const label=(object:T.Object3D,title:string,description:string)=>{object.userData.note={title,description};};
+label(water,'Water surface','Ripples catch the aquarium lights and reflect the reef below. The water surface and its reflections change with your viewing angle.');
+for(const glass of glassObjects)label(glass,'Aquarium water and glass','Clear glass encloses the water. Blue light scatters through suspended particles; the side panes reflect the reef and its inhabitants. Look through the glass and click a fish or colony to identify it.');
+label(back,'Reflective rear glass','The back pane shows a subdued reflection of the reef. Reflected fish fade as they move toward the front of the aquarium.');
+for(const o of [cabinet,lower])label(o,'Aquarium base and trim','The dark support and lower trim frame the glass aquarium.');
+label(floor,'Surrounding room','The dark surface outside the aquarium provides a quiet backdrop for the illuminated reef.');
+for(const o of [lightBar,emitter])label(o,'Reef aquarium light','An overhead light fixture illuminates the coral canopy and sends rippled light across the sand.');
+const solidTargets=[...fish.notes,...reef.notes,cabinet,lower,lightBar,emitter];
+const transparentTargets=[water,back,...glassObjects,floor];
+const raycaster=new T.Raycaster(),pointer=new T.Vector2();
+let gesture:{id:number;x:number;y:number;dragged:boolean}|null=null;
+renderer.domElement.addEventListener('pointerdown',e=>{
+ if(gesture){gesture.dragged=true;return;}if(!e.isPrimary||e.button!==0)return;
+ gesture={id:e.pointerId,x:e.clientX,y:e.clientY,dragged:false};
+});
+renderer.domElement.addEventListener('pointermove',e=>{if(gesture&&Math.hypot(e.clientX-gesture.x,e.clientY-gesture.y)>5)gesture.dragged=true;});
+renderer.domElement.addEventListener('pointercancel',()=>{gesture=null;});
 renderer.domElement.addEventListener('pointerup',e=>{
- if(Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);
- const hits=raycaster.intersectObjects([...fish.notes,...reef.notes],true);for(const hit of hits){let o:T.Object3D|null=hit.object;while(o&&!o.userData.note)o=o.parent;if(o?.userData.note){const note=o.userData.note;$('#detail h2').textContent=note.title;$('#detail p').textContent=note.description;$('#detail').hidden=false;break;}}
-});$('#close-detail').onclick=()=>{$('#detail').hidden=true;};
+ if(!gesture||gesture.id!==e.pointerId)return;const g=gesture;gesture=null;
+ if(g.dragged||Math.hypot(e.clientX-g.x,e.clientY-g.y)>5||e.button!==0)return;
+ const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);
+ const note=pickNote(raycaster,solidTargets,transparentTargets)||{title:'Open water and aquarium surroundings',description:'Blue-lit water and the dark surroundings frame the living reef. Click a visible animal, colony, rock, sand bank or aquarium feature for its field note.'};
+ $('#detail h2').textContent=note.title;$('#detail p').textContent=note.description;$('#detail').hidden=false;
+});
+$('#close-detail').onclick=()=>{$('#detail').hidden=true;};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#detail').hidden=true;});
 const sampleMs:number[]=[];let triangles=0;
 function animate(now:number){requestAnimationFrame(animate);const elapsed=now-last;last=now;if(document.hidden)return;const dt=Math.min(elapsed/1000,.04);
  if(cameraGoal){camera.position.lerp(cameraGoal,1-Math.exp(-dt*4));if(camera.position.distanceTo(cameraGoal)<.025)cameraGoal=null;}controls.update();

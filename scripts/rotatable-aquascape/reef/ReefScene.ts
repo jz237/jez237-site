@@ -1,3 +1,4 @@
+import {mergeIdentified,identifyGeometry,foodNote} from './ReefIdentification.ts';
 import {type RockLifeAttachments,reefRockLife} from './ReefRockLife.ts';
 import {finishRockMaterial} from './ReefRockMaterial.ts';
 import {reefFlankShelves} from './ReefFlankShelves.ts';
@@ -52,7 +53,7 @@ function texture(kind:'rock'|'sand'|'coral'){
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;return t;
 }
 function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,name:string){
- if(!geometries.length)return;const geometry=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());const mesh=new T.Mesh(geometry,material);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
+ if(!geometries.length)return;const geometry=mergeIdentified(geometries);geometries.forEach(g=>g.dispose());const mesh=new T.Mesh(geometry,material);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
 }
 export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
@@ -113,7 +114,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
    if(tissue.index!.count){corals.push(tissue);crustSurfaces.push(tissue);crustStats.colonies++;crustStats.triangles+=tissue.index!.count/3;}
   }
  }
- const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'The architecture of a reef','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
+ const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'Live rock and coralline algae','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
  const rockGeometry=rockMesh.geometry,rockStats={triangles:rockGeometry.index!.count/3,bufferBytes:Object.values(rockGeometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockGeometry.index!.array.byteLength,expandedBufferBytes:rockGeometry.index!.count*11*4};
  const rockObstacleCount=obstacles.length;
  const branch=(x:number,y:number,z:number,size:number,hue:number,rng:()=>number=random)=>{
@@ -222,15 +223,15 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
   for(const g of corals.slice(first))canopyStats.triangles+=(g.index?.count??g.getAttribute('position').count)/3;
  }
  const flankShelves=reefFlankShelves(supports);plates.push(...flankShelves.geometries);obstacles.push(...flankShelves.obstacles);
- coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
+ coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'Branching stony corals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}),plateMaps.skeleton);
- const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Growing toward the light','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');
+ const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Plating coral','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');
  const crustMaterial=finishEncrustingMaterial(new T.MeshStandardMaterial({...crustMaps.maps,normalScale:new T.Vector2(1.15,1.15),roughness:.92,vertexColors:true,side:T.DoubleSide}));
- const massive=batch(massiveCorals,crustMaterial,group,'Ridged encrusting colonies')!;addNote(massive,'A living surface','Closely packed coral cups have recessed centers and fine radial ridges. This tissue follows the supporting rock, while its hard skeleton remains still in the current. An artistic anatomical study.');
+ const massive=batch(massiveCorals,crustMaterial,group,'Ridged encrusting colonies')!;addNote(massive,'Encrusting stony coral','Closely packed coral cups have recessed centers and fine radial ridges. This tissue follows the supporting rock, while its hard skeleton remains still in the current. An artistic anatomical study.');
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
- group.add(anemone.behavior.morsels);
- addNote(anemone.mesh,'Shelter in the tentacles','Bubble-tip anemones can have both long and swollen, blunt-ended tentacles. The foot anchors inside the reef. Current bends the canopy; food contact causes nearby tentacles to shorten and the oral disc to fold. Watch sinking morsels during feeding. Food transfer is accelerated for observation; this is an artistic study, not a biological clock or stocking guide.');
+ group.add(anemone.behavior.morsels);anemone.behavior.morsels.userData.note=foodNote;notes.push(anemone.behavior.morsels);
+ addNote(anemone.mesh,'Anemone','Bubble-tip anemones can have both long and swollen, blunt-ended tentacles. The foot anchors inside the reef. Current bends the canopy; food contact causes nearby tentacles to shorten and the oral disc to fold. Watch sinking morsels during feeding. Food transfer is accelerated for observation; this is an artistic study, not a biological clock or stocking guide.');
 
  const crustSurface=topSurfaceSampler(crustSurfaces),mantleSurface=topSurfaceSampler(mantleSurfaces);
  const gardenSurface=(x:number,y:number,z:number)=>{const rock=surfaceLookup(x,y,z),crust=crustSurface(x,y,z);return crust&&(!rock||crust.point.y>rock.point.y)?crust:rock;};
@@ -241,12 +242,12 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
   const garden=encrustingGarden(x,z,r,kind,sample,random,(px,pz)=>mantleSurface(px,y+.5,pz));gardens.push(garden.geometry);polypStats.polyps+=garden.polypCount;polypStats.tentacles+=garden.tentacleCount;polypStats.maxAttachmentError=Math.max(polypStats.maxAttachmentError,garden.attachmentError);
  }
  const polypMat=new T.MeshStandardMaterial({vertexColors:true,map:coralTex,bumpMap:coralTex,bumpScale:.0012,roughness:.78,side:T.DoubleSide});animatePolypMaterial(polypMat,reefClock);
- const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Life across the rock','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
+ const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Rock-encrusting polyp garden','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
  // Add edge outcrops after existing gardens have attached. They share the
  // existing material batches without changing original attachment/RNG streams.
  const buttress=reefButtresses(seeded(2309231920));
  const extend=(mesh:T.Mesh,parts:T.BufferGeometry[])=>{
-  const old=mesh.geometry,merged=mergeGeometries([old,...parts],false);
+  const old=mesh.geometry,merged=mergeIdentified([old,...parts]);
   old.dispose();parts.forEach(g=>g.dispose());mesh.geometry=merged;
  };
  extend(rockMesh,buttress.rocks);extend(hard,buttress.corals);extend(zoo,buttress.gardens);
@@ -256,6 +257,8 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  const footStats=feet.stats;
  const life=reefRockLife([...supports,...buttress.rocks.map(g=>new T.Mesh(g,rockMat)),...feet.rocks.map(g=>new T.Mesh(g,rockMat))],seeded(2309240015),bakedLife);
  if(!bakedLife&&new URLSearchParams(location.search).has('bakeRockLife'))Object.assign(window,{reefRockLifeBake:life.attachments});
+ for(const g of life.crusts)identifyGeometry(g,{title:'Colorful encrusting reef growth',description:'Thin patches of living growth cover the porous rock. These sculpted crusts suggest coralline algae and other attached reef organisms, rather than one exact species.'});
+ for(const g of life.pores)identifyGeometry(g,{title:'Sponge-like reef growth',description:'Small clustered cups and recessed pores break up the rock surface. This is an artistic representation of attached sponge-like growth, not an exact species identification.'});
  extend(rockMesh,life.crusts);extend(hard,life.pores);
  // A containing existing sphere already protects the entire new patch.
  // Keep only additional envelopes; do not repeat equivalent avoidance forces.
@@ -288,12 +291,12 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  for(let i=1;i<=160;i++)rim(5.03-10.06*i/160,-2.305);
  for(let i=1;i<=74;i++)rim(-5.03,-2.305+4.61*i/74);
  const skirt=new T.BufferGeometry();skirt.setAttribute('position',new T.Float32BufferAttribute(rimPositions,3));skirt.setAttribute('color',new T.Float32BufferAttribute(rimColors,3));skirt.setAttribute('uv',new T.Float32BufferAttribute(rimUv,2));skirt.setIndex(rimIndices);skirt.computeVertexNormals();
- const top=sand.geometry;sand.geometry=mergeGeometries([top,skirt]);top.dispose();skirt.dispose();sand.receiveShadow=true;group.add(sand);
+ const top=sand.geometry;sand.geometry=mergeGeometries([top,skirt]);top.dispose();skirt.dispose();sand.receiveShadow=true;group.add(sand);sand.name='Reef sand';addNote(sand,'Reef sand','Pale carbonate sand forms banks around the reef islands and a lower channel between them. Small grains, fragments, moving light and soft fish shadows add texture to its surface.');
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){
   const x=pick(-4.94,4.94),z=pick(-2.23,2.23),bank=sandBank(x,z),patch=.5+.5*Math.sin(x*7.1+z*2.3)*Math.sin(z*5.7-x*1.8);
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
- }rubble.receiveShadow=true;group.add(rubble);
+ }rubble.receiveShadow=true;group.add(rubble);rubble.name='Coral rubble and coarse sand';addNote(rubble,'Coral rubble and coarse sand','Small pale fragments collect between the sand grains at the foot of the reef. They represent worn pieces of coral skeleton and other carbonate material.');
  return {group,obstacles,notes,hosts,anemone,anemoneBackdropStats,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }

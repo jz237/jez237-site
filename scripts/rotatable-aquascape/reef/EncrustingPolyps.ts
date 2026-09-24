@@ -1,3 +1,4 @@
+import {identifyGeometry,polypNotes} from './ReefIdentification.ts';
 import * as T from 'three';
 
 type Surface=(x:number,z:number)=>{point:T.Vector3;normal:T.Vector3}|null;
@@ -73,7 +74,7 @@ export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'
  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));geometry.setAttribute('polypFlex',new T.Float32BufferAttribute(flex,1));geometry.setAttribute('polypPhase',new T.Float32BufferAttribute(phases,1));geometry.setIndex(indices);geometry.computeVertexNormals();
  const normals=geometry.getAttribute('normal'),average=new T.Vector3();
  for(const [a,b] of seams){average.set(normals.getX(a)+normals.getX(b),normals.getY(a)+normals.getY(b),normals.getZ(a)+normals.getZ(b)).normalize();normals.setXYZ(a,average.x,average.y,average.z);normals.setXYZ(b,average.x,average.y,average.z);}
- return {geometry,polypCount,tentacleCount,attachmentError};
+ identifyGeometry(geometry,polypNotes[kind]);return {geometry,polypCount,tentacleCount,attachmentError};
 }
 export function animatePolypMaterial(material:T.MeshStandardMaterial,clock:{value:number}){
  material.onBeforeCompile=shader=>{shader.uniforms.polypTime=clock;shader.vertexShader='attribute float polypFlex; attribute float polypPhase; uniform float polypTime;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
