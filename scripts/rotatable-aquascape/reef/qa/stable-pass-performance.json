@@ -1,0 +1,155 @@
+{
+  "baseline": "3581d2e154f746f512d502c7ff7ebe88b38c0c50",
+  "method": "Four sequential local Chrome dev-build runs, native/stable/stable/native, 5-second warmup and 10-second samples, same seeded scene and full effects. No CPU throttling.",
+  "beforeMeanFrameCpuMs": 10.575621057135347,
+  "afterMeanFrameCpuMs": 8.737032445642397,
+  "beforeTaskSeconds": 6.5705105,
+  "afterTaskSeconds": 5.465625,
+  "runs": [
+    {
+      "mode": "native",
+      "readyMs": 9965,
+      "taskSeconds": 5.658419,
+      "fps": 59.99400059993998,
+      "triangles": 18577724,
+      "fishPassStats": {},
+      "frames": 602,
+      "medianMs": 8.700000047683716,
+      "p95Ms": 13.799999952316284,
+      "meanMs": 9.10348836963755,
+      "measures": [
+        {
+          "name": "reef-construction",
+          "ms": 7104.200000047684
+        },
+        {
+          "name": "reef-draw-order",
+          "ms": 1057.2999999523163
+        },
+        {
+          "name": "reef-picking",
+          "ms": 280.90000009536743
+        }
+      ]
+    },
+    {
+      "mode": "stable",
+      "readyMs": 9604,
+      "taskSeconds": 4.477271999999999,
+      "fps": 59.99100134979755,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      },
+      "frames": 601,
+      "medianMs": 7.099999904632568,
+      "p95Ms": 10.5,
+      "meanMs": 7.161064895337909,
+      "measures": [
+        {
+          "name": "reef-construction",
+          "ms": 6823
+        },
+        {
+          "name": "reef-draw-order",
+          "ms": 894.8999998569489
+        },
+        {
+          "name": "reef-picking",
+          "ms": 362.80000019073486
+        }
+      ]
+    },
+    {
+      "mode": "stable",
+      "readyMs": 11184,
+      "taskSeconds": 6.453978000000001,
+      "fps": 59.99100134979755,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      },
+      "frames": 600,
+      "medianMs": 9.899999856948853,
+      "p95Ms": 15.399999856948853,
+      "meanMs": 10.312999995946884,
+      "measures": [
+        {
+          "name": "reef-construction",
+          "ms": 7968.799999952316
+        },
+        {
+          "name": "reef-draw-order",
+          "ms": 1379.2000000476837
+        },
+        {
+          "name": "reef-picking",
+          "ms": 313.59999990463257
+        }
+      ]
+    },
+    {
+      "mode": "native",
+      "readyMs": 11973,
+      "taskSeconds": 7.482602,
+      "fps": 59.99700014999255,
+      "triangles": 18577724,
+      "fishPassStats": {},
+      "frames": 601,
+      "medianMs": 11.899999856948853,
+      "p95Ms": 17.200000047683716,
+      "meanMs": 12.047753744633146,
+      "measures": [
+        {
+          "name": "reef-construction",
+          "ms": 8412.799999952316
+        },
+        {
+          "name": "reef-draw-order",
+          "ms": 1447.5
+        },
+        {
+          "name": "reef-picking",
+          "ms": 322.7000000476837
+        }
+      ]
+    }
+  ],
+  "pixels": [
+    {
+      "view": "front",
+      "mean": 0.000004929698216735254,
+      "changed": 0,
+      "max": 1
+    },
+    {
+      "view": "angle",
+      "mean": 0,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "view": "fin",
+      "mean": 2.1433470507544582e-7,
+      "changed": 0,
+      "max": 1
+    },
+    {
+      "view": "goby",
+      "mean": 0.00000257201646090535,
+      "changed": 0,
+      "max": 1
+    },
+    {
+      "view": "mobile",
+      "mean": 0,
+      "changed": 0,
+      "max": 0
+    }
+  ],
+  "limitations": "CPU headroom improvement; both versions reach about60FPS here. Host timing varies. No demonstrated low-end GPU or startup speed claim. Pixels compare native/stable passes on the same paused scene; mobile pixel study isolates the mandarin, with full-scene mobile independently reviewed in check:reef."
+}
