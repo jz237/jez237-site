@@ -298,3 +298,36 @@ export function blobShadow() {
   g.fillStyle = grad; g.fillRect(0, 0, N, N);
   return texFrom(c, { repeat: false, srgb: false });
 }
+
+// chain-link fence: diamond wire grid on transparent
+export function fenceTexture() {
+  const N = 128, c = canvas(N, N), g = c.getContext('2d');
+  g.strokeStyle = 'rgba(190,195,200,1)'; g.lineWidth = 2.2;
+  for (let i = -N; i < N * 2; i += 16) {
+    g.beginPath(); g.moveTo(i, 0); g.lineTo(i + N, N); g.stroke();
+    g.beginPath(); g.moveTo(i, N); g.lineTo(i + N, 0); g.stroke();
+  }
+  const t = texFrom(c, { srgb: true }); return t;
+}
+
+// soft vertical streak for rain drops
+export function rainStreak() {
+  const W = 8, H = 64, c = canvas(W, H), g = c.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, 'rgba(255,255,255,0)'); grad.addColorStop(0.7, 'rgba(255,255,255,.55)'); grad.addColorStop(1, 'rgba(255,255,255,.9)');
+  g.fillStyle = grad; g.fillRect(W / 2 - 1.5, 0, 3, H);
+  return texFrom(c, { repeat: false, srgb: false });
+}
+
+// searchlight beam: bright core fading to the edges and along its length
+export function beamTexture() {
+  const W = 64, H = 128, c = canvas(W, H), g = c.getContext('2d');
+  const img = g.createImageData(W, H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const u = Math.abs(x / (W - 1) - 0.5) * 2, v = y / (H - 1);
+    const a = Math.pow(1 - u, 2.2) * (0.35 + 0.65 * (1 - v));
+    const i = (y * W + x) * 4; img.data[i] = img.data[i + 1] = img.data[i + 2] = 255; img.data[i + 3] = a * 255;
+  }
+  g.putImageData(img, 0, 0);
+  return texFrom(c, { repeat: false, srgb: false });
+}

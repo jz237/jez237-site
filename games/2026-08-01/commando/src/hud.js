@@ -19,10 +19,12 @@ export class HUD {
     this._set('lives', g.lives, v => { E.lives.innerHTML = '<i></i>'.repeat(Math.max(0, Math.min(8, v))); });
     this._set('hp', J.alive ? J.hp : 0, v => { E.hp.innerHTML = [0, 1, 2].map(i => `<i class="${i < v ? '' : 'off'}"></i>`).join(''); });
     this._set('gren', J.grenades, v => { E.gren.innerHTML = `<small>GRENADES</small>${'●'.repeat(v)}<span style="opacity:.25">${'●'.repeat(Math.max(0, 9 - v))}</span>`; });
-    let obj = 'ADVANCE TO THE FORTRESS';
+    const A = g.area;
+    let obj = 'ADVANCE';
+    for (const [p, text] of A.objectives || []) if (J.p >= p) obj = text;
     if (g.finale) obj = g.finale.phase === 'done' ? 'ENTER THE FORTRESS' : 'HOLD THE GATE';
-    else if (g.joe.p > 180) obj = 'BREAK THROUGH TO THE GATE';
-    this._set('obj', obj + `   ·   POW ${g.rescued}/${g.area.pows.length}`, v => { E.obj.textContent = v; });
+    const total = A.pows.length + g.world.dyn.cages.reduce((n, c) => n + c.n, 0);
+    this._set('obj', `${A.name}   ·   ${obj}   ·   POW ${g.rescued}/${total}`, v => { E.obj.textContent = v; });
     const prog = Math.max(0, Math.min(1, J.p / g.area.wallP));
     this._set('prog', Math.round(prog * 200), () => { E.fill.style.height = (prog * 100).toFixed(1) + '%'; E.joe.style.bottom = `calc(${(prog * 100).toFixed(1)}% - 1px)`; });
     if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) E.banner.classList.add('hidden'); }

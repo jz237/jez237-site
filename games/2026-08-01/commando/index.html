@@ -63,6 +63,7 @@
     <div class="subtitle">A TRIBUTE TO THE CLASSIC</div>
     <nav id="menu" class="menu">
       <button data-act="start" class="sel">START MISSION</button>
+      <button data-act="area">START AT: <span id="area-mode">AREA 1</span></button>
       <button data-act="controls">CONTROLS</button>
       <button data-act="music">MUSIC: <span id="music-mode">SID</span></button>
       <button data-act="quality">QUALITY: <span id="quality-mode">HIGH</span></button>
@@ -89,7 +90,7 @@
   </div>
 </div>
 
-<div id="loading" class="screen"><div class="title-inner"><div class="subtitle">LOADING&hellip;</div></div></div>
+<div id="loading" class="screen"><div class="title-inner"><div id="load-big" class="load-big"></div><div id="load-small" class="subtitle">LOADING&hellip;</div></div></div>
 
 <script>window.WASM_SEARCH_PATH = 'vendor/websid/';</script>
 <script src="vendor/websid/scriptprocessor_player.js"></script>

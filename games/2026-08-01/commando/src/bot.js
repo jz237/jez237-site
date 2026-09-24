@@ -35,6 +35,7 @@ export class Bot {
       }
       for (const b of g.bunkers || []) if (b.alive && b.active) cands.push({ x: b.x, p: b.p - 1.6, w: 3 });
       for (const tr of g.trucks) if (!tr.dead) cands.push({ x: tr.x, p: tr.p, w: 2 });
+      for (const tk of g.tanks) if (!tk.dead) cands.push({ x: tk.x, p: tk.p, w: 5 });
       for (const c of cands) {
         const d = Math.hypot(c.x - J.x, c.p - J.p);
         if (d > 4.5 && d < 13 && c.p > J.p - 2) { if (!gTgt || c.w > gTgt.w || (c.w === gTgt.w && d < gTgt.d)) gTgt = { ...c, d }; }
@@ -45,8 +46,12 @@ export class Bot {
     const f = g.finale, A = g.area;
     let gx, gp;
     const pow = g.pows.find(w => w.state === 'tied' && w.p > J.p - 3 && w.p < J.p + 14 && Math.abs(w.x - J.x) < 16);
+    const cage = g.world.dyn.cages.find(c => !c.open && c.p > J.p - 3 && c.p < J.p + 16);
+    const tank = g.tanks.find(tk => !tk.dead);
     if (f && f.phase !== 'done') { gx = clamp(J.x, -6, 6); gp = A.wallP - 12.5; }
     else if (f && f.phase === 'done') { gx = 0; gp = A.wallP + 6; }
+    else if (tank && Math.hypot(tank.x - J.x, tank.p - J.p) < 22) { gx = tank.x + (J.x > tank.x ? 5 : -5); gp = tank.p - 9; }   // circle at grenade range
+    else if (cage) { gx = cage.x; gp = cage.p - 1.8; }
     else if (pow) { gx = pow.x; gp = pow.p; }
     else {
       const ahead = J.p + 8;
@@ -84,6 +89,12 @@ export class Bot {
         if (m < R) d += (R - m) * 4;
       }
       for (const e of g.enemies) if (e.sniper && e.alive && e.laser > 0.5) { const m = Math.hypot(x - J.x, p - J.p); d += m < 0.6 ? 2 : 0; }
+      // searchlight pools and oncoming motorcycles
+      for (const sl of g.world.dyn.searchlights) if (sl.on) { const m = Math.hypot(x - sl.tx, p - sl.tp); if (m < 3.4) d += (3.4 - m) * 2 * this.skill; }
+      for (const mo of g.motos) {
+        if (mo.dead) continue;
+        for (let k = 0.2; k < 1.2; k += 0.2) { const m = Math.hypot(x - (mo.x + mo.vx * k), p - (mo.p + mo.vp * k)); if (m < 1.8) d += (1.8 - m) * 3; }
+      }
       return d;
     };
 
