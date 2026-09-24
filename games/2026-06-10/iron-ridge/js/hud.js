@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=detail3';
+import { SHELL } from './config.js?v=polish1';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
@@ -147,6 +147,48 @@ export class Hud {
     h.style.animation = 'hitPop 0.3s ease forwards';
   }
 
+  // armour-result callout under the reticle (RICOCHET / PENETRATION …)
+  armorCall(text, kind = '') {
+    let el = this.el.armorCall;
+    if (!el) {
+      el = this.el.armorCall = document.createElement('div');
+      el.id = 'armor-call';
+      this.el.hud.appendChild(el);
+    }
+    el.textContent = text;
+    el.className = kind;
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'armorCall 0.9s ease-out forwards';
+  }
+
+  // small persistent badge beside the armour bar (HULL DOWN)
+  setBadge(text) {
+    let el = this.el.badge;
+    if (!el) {
+      el = this.el.badge = document.createElement('div');
+      el.id = 'cover-badge';
+      this.el.hud.appendChild(el);
+    }
+    if (el.textContent !== text) el.textContent = text;
+    el.classList.toggle('on', !!text);
+  }
+
+  // opening orientation hint: arrow + text pointing at the nearest contact
+  setHint(text, angle = null) {
+    let el = this.el.hint;
+    if (!el) {
+      el = this.el.hint = document.createElement('div');
+      el.id = 'nav-hint';
+      el.innerHTML = '<div class="nav-arrow">▲</div><div class="nav-text"></div>';
+      this.el.hud.appendChild(el);
+    }
+    el.classList.toggle('on', !!text);
+    if (!text) return;
+    el.querySelector('.nav-text').textContent = text;
+    if (angle !== null) el.querySelector('.nav-arrow').style.transform = `rotate(${angle}rad)`;
+  }
+
   damageFlash() {
     const v = this.el.vignette;
     v.style.animation = 'none';
@@ -185,11 +227,14 @@ export class Hud {
     a.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
   }
 
-  updateArrows(enemies, camera, allies = []) {
+  updateArrows(enemies, camera, allies = [], now = 0) {
     let i = 0;
     for (const e of enemies) {
       if (i >= this.arrowPool.length) break;
-      this.placeEdgeArrow(this.arrowPool[i++], e.tank.visual.root.position, camera);
+      const a = this.arrowPool[i++];
+      this.placeEdgeArrow(a, e.tank.visual.root.position, camera);
+      // flash the chevron of an off-screen tank that just fired
+      a.classList.toggle('firing', e.firedAt !== undefined && now - e.firedAt < 0.9);
     }
     for (; i < this.arrowPool.length; i++) this.arrowPool[i].style.display = 'none';
 

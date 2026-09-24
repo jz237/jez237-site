@@ -6,8 +6,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { buildTankMesh } from './tank.js?v=detail3';
-import { ENEMY_TYPES, CG, TANK } from './config.js?v=detail3';
+import { buildTankMesh, charTankVisual } from './tank.js?v=polish1';
+import { ENEMY_TYPES, CG, TANK } from './config.js?v=polish1';
 
 const ROOM_KEY = 'iron_ridge_room';
 const MP_NAME_KEY = 'iron_ridge_mp_name';
@@ -200,12 +200,7 @@ class RemoteEnemy {
     if (!this.alive) return;
     this.alive = false;
     this.world.removeBody(this.body);
-    this.visual.root.traverse(o => {
-      if (o.isMesh && o.material && !o.userData.charred) {
-        o.userData.charred = true;
-        o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
-      }
-    });
+    charTankVisual(this.visual);
   }
 
   remove() {

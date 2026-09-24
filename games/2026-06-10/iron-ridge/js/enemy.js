@@ -3,9 +3,12 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Tank } from './tank.js?v=detail3';
-import { getHeight } from './terrain.js?v=detail3';
-import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=detail3';
+import { Tank } from './tank.js?v=polish1';
+import { getHeight } from './terrain.js?v=polish1';
+import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=polish1';
+
+const WRECK_LIFE = 90; // seconds a burnt-out hull stays on the field
+const WRECK_CAP = 7;   // most wrecks kept at once (newest win)
 
 const _v1 = new THREE.Vector3();
 const _from = new CANNON.Vec3();
@@ -408,16 +411,22 @@ export class WaveManager {
     this.trucks.length = 0;
   }
 
-  cleanup(scene, world, effects) {
-    // tick dead tanks, remove after burn-out
+  cleanup(scene, world, effects, dt = 1 / 60) {
+    // Wrecks burn, then smoulder on the field as cover and a record of the
+    // fight. The oldest go first once more than WRECK_CAP are standing.
+    let dead = 0;
     for (let i = this.enemies.length - 1; i >= 0; i--) {
       const e = this.enemies[i];
       if (e.tank.alive) continue;
-      e.deadTimer += 1 / 60;
-      if (e.deadTimer < 6 && Math.random() < 0.3) {
-        effects.burningWreck(e.tank.visual.root.position);
+      dead++;
+      e.deadTimer += dt;
+      const pos = e.tank.visual.root.position;
+      if (e.deadTimer < 6) {
+        if (Math.random() < 0.3) effects.burningWreck(pos);
+      } else {
+        effects.wreckSmoke(pos, dt, e.deadTimer);
       }
-      if (e.deadTimer > 25) {
+      if (e.deadTimer > WRECK_LIFE || dead > WRECK_CAP) {
         e.tank.removeFromWorld();
         this.enemies.splice(i, 1);
       }

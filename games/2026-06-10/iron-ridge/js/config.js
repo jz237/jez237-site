@@ -178,6 +178,7 @@ export const ARTILLERY = {
   period: 18,        // seconds between barrages
   shellCount: 6,
   warnTime: 1.4,     // red marker lead time
+  leadTime: 0.85,    // extra seconds between the marker and the shell's release
   spread: 26,        // metres around the player
   damage: 30,
 };

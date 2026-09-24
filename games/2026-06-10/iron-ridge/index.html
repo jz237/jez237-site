@@ -167,6 +167,34 @@
     text-shadow: 0 0 8px #000; will-change: transform;
   }
   .enemy-arrow.ally { color: #52a8ff; font-size: 17px; opacity: 0.9; }
+  .enemy-arrow.firing { color: #ffb347; font-size: 30px; text-shadow: 0 0 14px #ff6a00, 0 0 4px #000; }
+  #armor-call {
+    position: absolute; left: 50%; top: calc(50% + 34px); transform: translateX(-50%);
+    font: 800 15px/1 system-ui, sans-serif; letter-spacing: 3px; color: #ffe29a;
+    text-shadow: 0 1px 6px #000, 0 0 2px #000; opacity: 0; pointer-events: none; white-space: nowrap;
+  }
+  #armor-call.kill { color: #ff9c5b; font-size: 18px; }
+  #armor-call.warn { color: #cfe3ff; }
+  @keyframes armorCall {
+    0% { opacity: 0; transform: translateX(-50%) scale(1.35); }
+    12% { opacity: 1; transform: translateX(-50%) scale(1); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  }
+  #cover-badge {
+    position: absolute; left: 12px; bottom: 84px;
+    padding: 3px 8px; border-radius: 4px; background: rgba(40, 90, 50, 0.78); color: #d9ffd0;
+    font: 700 11px/1.3 system-ui, sans-serif; letter-spacing: 1.5px; white-space: nowrap; opacity: 0; transition: opacity 0.25s; pointer-events: none;
+  }
+  #cover-badge.on { opacity: 1; }
+  body.touch #cover-badge { bottom: auto; top: calc(92px + env(safe-area-inset-top, 0px)); }
+  #nav-hint {
+    position: absolute; left: 50%; top: 31%; transform: translateX(-50%); text-align: center;
+    color: #ffe29a; text-shadow: 0 1px 8px #000; opacity: 0; transition: opacity 0.5s; pointer-events: none;
+  }
+  #nav-hint.on { opacity: 1; }
+  #nav-hint .nav-arrow { font-size: 30px; line-height: 1; display: inline-block; transition: transform 0.15s linear; }
+  #nav-hint .nav-text { font: 700 13px/1.4 system-ui, sans-serif; letter-spacing: 2px; margin-top: 4px; }
 
   /* incoming-fire direction arc: a quarter-circle border rotated toward
      the threat, fading out */
@@ -633,6 +661,10 @@
       <button class="toggle-btn" id="btn-reverse-look">OFF</button>
     </div>
     <div class="option-row">
+      <div><b>Shell arc</b><br/>Show the predicted flight path and impact point</div>
+      <button class="toggle-btn" id="btn-arc">ON</button>
+    </div>
+    <div class="option-row">
       <div><b>Camera shake</b><br/>Recoil and explosion shake</div>
       <button class="toggle-btn" id="btn-shake">ON</button>
     </div>
@@ -693,7 +725,7 @@
   }
 }
 </script>
-<script type="module" src="./js/main.js?v=ridge4"></script>
+<script type="module" src="./js/main.js?v=polish1"></script>
 <script>
   // show matching controls hint
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {

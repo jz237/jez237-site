@@ -62,8 +62,14 @@ export class QualityScaler {
     this.slowTime = 0;
     this.fastTime = 0;
     this.cooldown = 0;
+    // Shader compiles and texture uploads stall the first frames after load,
+    // deploy and every level change. Don't read those hitches as a slow GPU.
+    this.grace = 6;
     this.apply(LEVELS[this.level], this.level);
   }
+
+  // ignore frame times for a while (e.g. right after DEPLOY builds the map)
+  hold(seconds) { this.grace = Math.max(this.grace, seconds); this.slowTime = 0; }
 
   // pin to a fixed level ('auto' releases back to adaptive scaling)
   setLock(level) {
@@ -75,11 +81,18 @@ export class QualityScaler {
     if (this.level !== level) {
       this.level = level;
       this.apply(LEVELS[this.level], this.level);
+      this.hold(3);
     }
   }
 
   frame(dt) {
     if (dt > 0.5) return; // tab was hidden; ignore
+    if (this.grace > 0) {
+      this.grace -= dt;
+      // track, but reset toward steady state so one spike can't linger
+      this.emaDt = this.emaDt * 0.8 + Math.min(dt, 1 / 30) * 0.2;
+      return;
+    }
     this.emaDt = this.emaDt * 0.94 + dt * 0.06;
     if (this.locked) return;
     this.cooldown -= dt;
@@ -88,16 +101,18 @@ export class QualityScaler {
     if (fps < 44) this.slowTime += dt; else this.slowTime = 0;
     if (fps > 57) this.fastTime += dt; else this.fastTime = 0;
 
-    if (this.slowTime > 1.4 && this.level > 0 && this.cooldown <= 0) {
+    if (this.slowTime > 2.5 && this.level > 0 && this.cooldown <= 0) {
       this.level--;
       this.cooldown = 4;
       this.slowTime = 0;
       this.apply(LEVELS[this.level], this.level);
-    } else if (this.fastTime > 14 && this.level < LEVELS.length - 1 && this.cooldown <= 0) {
+      this.grace = 2;
+    } else if (this.fastTime > 10 && this.level < LEVELS.length - 1 && this.cooldown <= 0) {
       this.level++;
       this.cooldown = 8;
       this.fastTime = 0;
       this.apply(LEVELS[this.level], this.level);
+      this.grace = 2;
     }
   }
 }
