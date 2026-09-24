@@ -1,0 +1,19 @@
+.aquarium-worlds{margin:22px 0;overflow:hidden;border:1px solid #467b9a;border-radius:14px;background:#071f30;box-shadow:0 15px 45px #0004;color:#e9f8fc}
+.aquarium-worlds-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;padding:26px 30px;background:linear-gradient(110deg,#09364e,#082737)}
+.aquarium-worlds h2{font:clamp(26px,2.6vw,38px)/1.15 Georgia,serif;color:#f0fbff;margin:8px 0 0}
+.aquarium-worlds-heading p{max-width:290px;margin:0;font:14px/1.6 Arial;color:#b9dae6}
+.aquarium-worlds-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#31566a}
+.aquarium-world{min-width:0;display:flex;flex-direction:column;background:#092c43}
+.aquarium-world--freshwater{background:#092e32}
+.aquarium-world-image{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#040f17}
+.aquarium-world-image img{display:block;width:100%;height:100%;object-fit:cover}
+.aquarium-world--freshwater img{transform:scale(1.58);object-position:50% 52%}
+.aquarium-world-label{position:absolute;left:18px;bottom:16px;padding:8px 12px;border:1px solid #85d8e05c;border-radius:30px;background:#061c29ed;color:#d7f9fc;font:10px/1.4 Arial;letter-spacing:1.4px}
+.aquarium-world-copy{padding:25px 30px 28px;display:flex;flex-direction:column;align-items:start;flex:1}
+.aquarium-worlds h3{font:clamp(25px,2.2vw,32px)/1.15 Georgia,serif;color:#f0fbff;margin:0 0 12px}
+.aquarium-world-copy p{font:14px/1.65 Arial;color:#c1dde5;margin:0 0 22px;max-width:440px}
+.aquarium-worlds .showroom-primary{font:700 14px/1.4 Arial;min-height:48px;margin-top:auto;gap:22px}
+.aquarium-world--freshwater .showroom-primary{background:#8ee6d0;color:#073238!important}
+.aquarium-worlds .showroom-primary:hover{background:#c0f9f8}
+.aquarium-worlds a:focus-visible{outline:3px solid #fff;outline-offset:-5px}
+@media(max-width:700px){.aquarium-worlds-heading{padding:22px;align-items:start;flex-direction:column;gap:12px}.aquarium-worlds-grid{grid-template-columns:1fr}.aquarium-world-copy{padding:22px}.aquarium-worlds .showroom-primary{width:100%;justify-content:space-between}.aquarium-world-label{left:14px;bottom:12px;font-size:9px}}
