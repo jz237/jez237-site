@@ -2,7 +2,7 @@
   'use strict';
 
   const reefAssetBase = new URL('.', document.currentScript.src);
-  const showroomUrl=new URL('../showroom/',reefAssetBase);
+  const showroomUrl=new URL('../showroom/aquarium/?showroom=hidden-reef',reefAssetBase);
   const showroomStyle=document.createElement('link');showroomStyle.rel='stylesheet';showroomStyle.href=new URL('showroom.css?v=canister-discovery-1',reefAssetBase);document.head.append(showroomStyle);
   const waterAsset = function(name) { return new URL('water-lab/' + name, reefAssetBase).href; };
 
