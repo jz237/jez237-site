@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { checkPhillyLive } from './check_philly_live.mjs';
+import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -35,7 +36,11 @@ async function verifyRelease(url) {
   // A newly uploaded Pages Worker may lag its static assets briefly. Keep all
   // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
   for (let attempt = 0; attempt < 6; attempt++) {
-    try { await checkPhillyLive(url, fetch, { requireAircraft }); return; }
+    try {
+      await checkPhillyLive(url, fetch, { requireAircraft });
+      await checkHiddenReefImages(url);
+      return;
+    }
     catch (error) {
       if (attempt === 5) throw error;
       console.log(`${error.message} Retrying the newly deployed service.`);
