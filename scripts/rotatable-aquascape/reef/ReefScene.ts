@@ -1,3 +1,4 @@
+import {type RockLifeAttachments,reefRockLife} from './ReefRockLife.ts';
 import {finishRockMaterial} from './ReefRockMaterial.ts';
 import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
@@ -52,7 +53,7 @@ function texture(kind:'rock'|'sand'|'coral'){
 function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,name:string){
  if(!geometries.length)return;const geometry=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());const mesh=new T.Mesh(geometry,material);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
 }
-export function buildReef(scene:T.Scene){
+export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
  const rockMaps=limestoneMaps(),coralMaps=coralSurfaceMaps(),crustMaps=encrustingSurfaceMaps(),plateMaps=plateSurfaceMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=finishRockMaterial(new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true}));
@@ -250,6 +251,13 @@ export function buildReef(scene:T.Scene){
  const feet=reefFootGardens(seeded(2309232345));
  extend(rockMesh,feet.rocks);extend(zoo,feet.gardens);obstacles.push(...feet.obstacles);
  const footStats=feet.stats;
+ const life=reefRockLife([...supports,...buttress.rocks.map(g=>new T.Mesh(g,rockMat)),...feet.rocks.map(g=>new T.Mesh(g,rockMat))],seeded(2309240015),bakedLife);
+ if(!bakedLife&&new URLSearchParams(location.search).has('bakeRockLife'))Object.assign(window,{reefRockLifeBake:life.attachments});
+ extend(massive,life.crusts);extend(hard,life.pores);
+ // A containing existing sphere already protects the entire new patch.
+ // Keep only additional envelopes; do not repeat equivalent avoidance forces.
+ obstacles.push(...life.obstacles.filter(o=>!obstacles.some(existing=>existing.center.distanceTo(o.center)+o.radius<=existing.radius)));
+ const rockLifeStats=life.stats;
  rockStats.triangles=rockMesh.geometry.index!.count/3;
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
@@ -268,5 +276,5 @@ export function buildReef(scene:T.Scene){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }

@@ -1,15 +1,15 @@
 {
-  "readyMs": 5374,
+  "readyMs": 6729,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 5.9330000000000185,
-      "bites": 14,
-      "remaining": 28,
+      "fps": 59.99100134979749,
+      "time": 6.086200000095381,
+      "bites": 13,
+      "remaining": 29,
       "anemones": {
-        "brushing": 3,
-        "maxBrush": 0.0759218033710474,
+        "brushing": 0,
+        "maxBrush": 0.00005264415197997321,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -22,12 +22,12 @@
     },
     {
       "fps": 59.99700014999249,
-      "time": 9.950000000000022,
-      "bites": 25,
-      "remaining": 17,
+      "time": 10.103100000095374,
+      "bites": 30,
+      "remaining": 12,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 3.9661587884923136e-7,
+        "maxBrush": 3.0169354809597457e-8,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -39,91 +39,91 @@
       }
     },
     {
-      "fps": 59.99100134979755,
-      "time": 13.967099999999977,
-      "bites": 34,
-      "remaining": 7,
+      "fps": 58.5851681882537,
+      "time": 14.134900000095344,
+      "bites": 35,
+      "remaining": 6,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.04864905682851871,
+        "brushing": 0,
+        "maxBrush": 0.006278925075834083,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
+          0,
           0.2,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 17.984099999999888,
-      "bites": 36,
-      "remaining": 5,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0005769539883711977,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0.2,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 22.001099999999788,
-      "bites": 37,
-      "remaining": 4,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 2.432794237593251e-12,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0.18890973496375332,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 26.001499999999744,
-      "bites": 37,
-      "remaining": 4,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0014622980840435632,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0.12125131096988556,
-          0,
           0
         ]
       }
     },
     {
       "fps": 59.99100134979744,
-      "time": 30.018499999999584,
+      "time": 18.1520000000953,
       "bites": 37,
       "remaining": 4,
       "anemones": {
-        "brushing": 8,
-        "maxBrush": 0.12086170997135458,
+        "brushing": 1,
+        "maxBrush": 0.049717876580703424,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 22.169000000095238,
+      "bites": 37,
+      "remaining": 4,
+      "anemones": {
+        "brushing": 2,
+        "maxBrush": 0.03764670497875064,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.039326980551264934,
           0,
+          0.1931958403798511,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 26.185900000095177,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "brushing": 2,
+        "maxBrush": 0.0615571586645247,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.13029871508688437,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.931079258852236,
+      "time": 30.205100000095044,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "brushing": 1,
+        "maxBrush": 0.07374200594574165,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.047121452080211235,
           0
         ]
       }
@@ -143,6 +143,13 @@
     "randomized": true
   },
   "initial": {
+    "rockLifeStats": {
+      "patches": 226,
+      "pores": 4094,
+      "triangles": 348524,
+      "maxAttachmentError": 0.005,
+      "colors": 7
+    },
     "footStats": {
       "rocks": 10,
       "polyps": 242,
@@ -154,7 +161,7 @@
       "colonies": 12,
       "triangles": 898980
     },
-    "triangles": 14179372,
+    "triangles": 14876420,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
@@ -361,10 +368,11 @@
   },
   "files": [
     "assets/anthias-qh5-fys7.glb",
+    "assets/attachments-Dq5rDl-Q.json",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-C2S4tLeU.js",
+    "assets/index-B2SOZvEr.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -381,27 +389,25 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "6df14e5fa618fbeac6dc6387c1d9b6478fc8e54b0638e2411dd2d2f860fab79f",
-  "checkedAt": "2026-09-24T00:06:17.370Z",
-  "scope": "More visible anemone current, per-strand clownfish contact and recovery, higher visible sand banks, denser projecting branch corallites.",
+  "buildHash": "f0d73f2f6888c7d674865c2866771284458e6851b1f95314d20a18f9d538c178",
+  "checkedAt": "2026-09-24T00:42:29.020Z",
+  "scope": "Colorful fine live-rock growth on the fronts, tops, sides and backs: 226 clipped films and4094 raised sponge-inspired pores across seven colony pigment families.",
   "geometryChecks": [
-    "540 anemone strands retained; 15,538,212 geometry bytes and8,656byte spring texture",
-    "Worst sampled simultaneous feeding/brush deformation determinant0.0947; anchored roots",
-    "Physical local contact, unrelated host unchanged, frozen time, spring recovery",
-    "91300triangle coral fixture3125742bytes; recessed mouths and attached footprints within1.492e-8",
-    "All original colony and inhabitant counts retained; rendered triangles12123372 to14179372",
-    "Sand height0.1696-0.5470, maximum slope0.8553, sealed perimeter; fish/food/shadows use matching terrain",
-    "Full existing fish/reef geometry, feeding, navigation, lighting and browser tests passed"
+    "348524 additional source triangles merged into existing materials; original colonies, fish and geometry retained",
+    "Real surface attachment within0.005001; recessed openings, nondegenerate faces, smooth angular seams and navigation coverage",
+    "600 attachment-index rays agree with Three.js including short rays and inside starts",
+    "Cached attachment fixture reproduces all attributes and obstacles byte-for-byte; source recipe and rock signature checked",
+    "Full existing reef geometry, feeding, navigation, lighting, pause, fullscreen and mobile checks passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "sand macro",
+    "rock macro",
     "coral macro",
-    "clown-brush-motion-0 through7",
-    "original reef reference",
-    "mature planted aquarium and reference"
+    "anemone motion a/b",
+    "original reef photo",
+    "mature planted render and original reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -410,11 +416,11 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "335f09832",
-    "loadPrior": 5664,
-    "loadCurrent": 5526.5,
-    "fpsPrior": 133.5,
-    "fpsCurrent": 137.2,
-    "interpretation": "Both capped runs about60FPS. Uncapped samples vary substantially; averages do not establish a performance gain."
+    "baseline": "27955cbd5",
+    "loadPrior": 6183,
+    "loadCurrent": 5897,
+    "fpsPrior": 127.2,
+    "fpsCurrent": 131.3,
+    "interpretation": "Local alternating runs only; uncapped rates overlap. New detail has geometry and transfer cost, not a universal performance gain. Cached exact attachments avoid thousands of per-visitor surface searches."
   }
 }
