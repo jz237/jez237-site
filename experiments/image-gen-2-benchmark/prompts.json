@@ -15915,5 +15915,114 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-24-factual-infographic-factual-infographic-knee-osteoarthritis",
+    "title": "Factual infographic: Knee Osteoarthritis — The Joint Under Load",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NIAMS/CDC source verification; archive_slot=2026-09-24T05:20; concept=knee-osteoarthritis-joint-load; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, museum-quality DIRECT-CANVAS medical infographic, not a photographed poster, screen, room, chart on paper, or prop arrangement. Title in large precise type: “KNEE OSTEOARTHRITIS — THE JOINT UNDER LOAD”. Portrait-oriented, sophisticated anatomical editorial illustration with dark indigo-blue field, restrained mineral-teal anatomy, warm coral for altered tissues, ivory typography, very fine but legible leader lines, soft directional clinical lighting, tactile translucent cartilage and synovial textures. No logos, URLs, bibliography, statistics, drug doses, or false promise of cure. This is general education, not a diagnosis.\n\nDominant center hero occupies nearly half the plate: a believable oblique cutaway of an adult knee under ordinary standing load, with femur, tibia, patella, articular cartilage, meniscus, synovial lining and supporting soft tissues spatially coherent. Show the osteoarthritis changes as a subtle, localized comparison inset, not a cartoon of bones grinding universally: altered cartilage and a small marginal osteophyte, while acknowledging the whole joint. Tiny magnified windows at the hero edge make cartilage surface, meniscus, and osteophyte visible without inventing microscopic cellular claims. Arrows show load path through femur and tibia; they are explanatory, not a promise that every painful knee has a given visible change.\n\nArrange EIGHT substantial, numbered supporting panels in a disciplined two-column perimeter with readable headings and short phrases; every panel should contain a specific diagram, not decorative icons: (1) “A whole-joint condition” — nested anatomical callouts for cartilage, meniscus, synovium, bone; (2) “Gradual tissue change” — side-by-side conceptual intact and OA joint surfaces plus magnified osteophyte edge, explicitly variable rather than inevitable stages; (3) “What people may feel” — knee figure with pain on movement, brief stiffness after rest, swelling, reduced range and sometimes instability; (4) “Risk is not destiny” — four small context vignettes for older age, prior injury/repetitive stress, body-weight factors and family history, presented as associations; (5) “The activity loop” — causal arrows pain → less movement → weaker surrounding muscles → added joint stress, marked “may occur”, with an exit arrow toward supported movement; (6) “Move to manage” — clinician-guided gentle walking and muscle-strengthening/physical-therapy vignettes, with measured motion arcs, not a rigid universal regimen; (7) “Weight and joint care” — weight-management support for those with overweight and a small protect-from-injury vignette; (8) “Care choices with a clinician” — branching illustrated pathway for assessment, physical therapy, symptom medicines, cane/support, and possible joint replacement only when other treatments do not work. Place the exact small footer: “Symptoms vary. A clinician can assess an individual knee. OA has no cure, but symptoms can be managed.”\n\nInclude at least THREE explicit explanatory close-up diagrams with readable labels: enlarged cartilage/bone/meniscus interface; osteophyte at the bone edge; and muscle support around the knee during controlled movement. Use ample breathing room around all text, consistent label hierarchy, clean leaders, no tiny paragraphs. Make the anatomy credible, the eight panels information-rich and nonrepetitive, with no invented statistics or extra unsupported medical claims. Generate the image itself, not instructions to a designer.",
+    "image": "images/2026-09-24-factual-infographic-factual-infographic-knee-osteoarthritis.jpg",
+    "thumb": "thumbs/2026-09-24-factual-infographic-factual-infographic-knee-osteoarthritis.webp",
+    "color": "#4e5e6a",
+    "date": "2026-09-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "knee-osteoarthritis-joint-load",
+      "imageSha256": "699235dae21076df1c6b804a5c78cca940bcd33907099dc39d7379d3e1f83a02",
+      "imageDHash": "0bcdddc9c8597171"
+    },
+    "factualInfographic": {
+      "topic": "How knee osteoarthritis affects joint tissues, symptoms and movement, and how evidence-based care can help",
+      "description": "A whole-joint anatomical plate showing knee OA tissue changes, variable symptoms, risk associations, movement and clinician-guided care.",
+      "sourceNote": "NIAMS https://www.niams.nih.gov/health-topics/osteoarthritis and CDC https://www.cdc.gov/arthritis/osteoarthritis/index.html plus https://www.cdc.gov/arthritis/caring/index.html; verified whole-joint anatomy, symptoms, risk associations, activity and care options.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-24T09:21:19.623412+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Osteoarthritis Symptoms, Causes & Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/osteoarthritis"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Osteoarthritis",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/arthritis/osteoarthritis/index.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Self-Care for Arthritis: Five Ways to Manage Your Symptoms",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/arthritis/caring/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The knee joint includes cartilage covering bone ends, bone, synovium, meniscus, and supporting ligaments and tendons; osteoarthritis can affect multiple joint tissues.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Osteoarthritis-related tissue changes develop over time and may include cartilage damage and bony edge growths called osteophytes.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Knee osteoarthritis may cause movement-related pain, stiffness after rest, swelling, a sense of instability, and reduced movement; severity varies by person.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Older age, previous joint injury or repetitive stress, obesity, and family history are associated with greater osteoarthritis risk; age alone does not make it inevitable.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Joint pain can reduce activity; inactivity may weaken muscles, potentially adding stress on the joint.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Physical activity can reduce arthritis pain and improve function; appropriately paced movement is part of self-management.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "For people with overweight or obesity, weight management can reduce arthritis-related pain and disability.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A clinician can assess symptoms and discuss physical therapy, medicines, supportive devices, and, if other treatments have not worked, joint replacement surgery.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Osteoarthritis has no cure, but symptoms can be managed; educational diagrams are not a personal diagnosis.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
