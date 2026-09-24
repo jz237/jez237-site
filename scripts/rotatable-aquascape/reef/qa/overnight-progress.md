@@ -612,3 +612,13 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - build:reef/check:reef passed: 6729ms ready,38fish bites,1anemone swallow; zero sampled obstacle/fish overlaps. Pausing, movement, breathing/fins, shadows,cameras,lighting,fullscreen,identification,mobile and randomized starts passed. New600-ray surface index test, exact-cache geometry test and root/contact/winding tests pass.
 - Alternating local load prior/current6183/5897ms; uncapped127.2/131.3FPS. Small-sample variation; no universal gain or zero-cost claim. Before/after front,angle,mobile,rock macro and animation evidence retained.
 - Planted83-asset synchronization/release gate passed; Hidden Reef untouched. Use guarded full-site Functions deployment tojez237/GitHub only. Overall realism target remains active/unmet.
+
+
+## September23 - foreground sand banks, fuller growth and orange anthias
+- Visible foreground sand banks and an uneven sealed front rim, denser mixed live-rock growth, richer orange anthias with original detailed maps. User explicitly requested all three during the00:51UTC heartbeat.
+- Broad dunes moved out from underneath the rock islands; low uneven berm continues to front glass with a closed matching skirt. Grain shading supports slope readability. Shared CPU terrain and fish-shadow GLSL updated together; food/navigation and grounded fragments follow revised relief. Original terrain mesh resolution retained. Sand bounds0.1757–0.7641, maximum slope0.8711 (steeper early trial rejected).
+- Fine growth254patches/5829pores versus226/4094 before, seven varied pigment families; local neighboring patches spaced to limit overlapping films. Extra candidate directions cover side/rear faces too. Exact attachment bake refreshed against the changed rock positions; original coral/fish geometry counts retained. Whole rendered triangles14876420→15094416. Large first-trial films looked like colored blankets and were rejected.
+- Anthias tissue tint linearRGB(.68,.34,.17), original body/scale/fin textures and eyes retained. Clearly orange in whole-tank and close-up renders.
+- build:reef/check:reef passed (6906ms ready,38fish bites,1anemone swallow); zero sampled overlaps, pause/feeding/breathing/lighting/camera/mobile/randomization checks passed. Front,angle,mobile,macro and anemone motion pairs inspected. Planted83asset sync and release gates passed; Hidden Reef untouched.
+- Local alternating startup prior/current7224/7362.5ms; uncapped113.4/122.1FPS. Small-sample observations, not a universal guarantee.
+- Reef is still below reference realism: too-repetitive branches, exposed broad rock patches and smooth tubular anemone tissue remain. Continue existing loop; no completion claim.

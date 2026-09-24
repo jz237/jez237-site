@@ -262,14 +262,26 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
  const buttressStats=buttress.stats;
- const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
+ const sand:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
  for(let i=0;i<sandPositions.count;i++){
   const x=sandPositions.getX(i),z=-sandPositions.getY(i),bank=sandBank(x,z);
   sandPositions.setZ(i,sandHeight(x,z));
-  const patch=.5+.5*Math.sin(x*4.1+Math.sin(z*2.3))*Math.sin(z*3.7+x*.8),shade=1-bank*(.035+patch*.065);
+  const patch=.5+.5*Math.sin(x*4.1+Math.sin(z*2.3))*Math.sin(z*3.7+x*.8),slopeX=(sandHeight(x+.025,z)-sandHeight(x-.025,z))/.05,slopeZ=(sandHeight(x,z+.025)-sandHeight(x,z-.025))/.05;
+  // Deposited grain variation makes the bank flanks readable under broad tank lighting.
+  const shade=1-bank*(.055+patch*.09)-Math.min(.14,Math.max(0,slopeX*.09+slopeZ*.15));
   sandColors.set([shade,shade*.995,shade*.975],i*3);
  }
- sand.geometry.setAttribute('color',new T.BufferAttribute(sandColors,3));sand.geometry.computeVertexNormals();sand.receiveShadow=true;group.add(sand);
+ sand.geometry.setAttribute('color',new T.BufferAttribute(sandColors,3));sand.geometry.computeVertexNormals();
+ // Seal the irregular substrate rim against the front and side glass. These
+ // faces share its material and batch; the visible sand edge follows the dunes.
+ const rimPositions:number[]=[],rimColors:number[]=[],rimUv:number[]=[],rimIndices:number[]=[];
+ const rim=(x:number,z:number)=>{const h=sandHeight(x,z),i=rimPositions.length/3;rimPositions.push(x,-z,.18,x,-z,h);rimColors.push(.72,.70,.66,.91,.895,.86);rimUv.push(x/2,z/2,x/2,z/2+(h-.18)/2);if(i){rimIndices.push(i-2,i,i-1,i,i+1,i-1);}};
+ for(let i=0;i<=160;i++)rim(-5.03+10.06*i/160,2.305);
+ for(let i=1;i<=74;i++)rim(5.03,2.305-4.61*i/74);
+ for(let i=1;i<=160;i++)rim(5.03-10.06*i/160,-2.305);
+ for(let i=1;i<=74;i++)rim(-5.03,-2.305+4.61*i/74);
+ const skirt=new T.BufferGeometry();skirt.setAttribute('position',new T.Float32BufferAttribute(rimPositions,3));skirt.setAttribute('color',new T.Float32BufferAttribute(rimColors,3));skirt.setAttribute('uv',new T.Float32BufferAttribute(rimUv,2));skirt.setIndex(rimIndices);skirt.computeVertexNormals();
+ const top=sand.geometry;sand.geometry=mergeGeometries([top,skirt]);top.dispose();skirt.dispose();sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){
   const x=pick(-4.94,4.94),z=pick(-2.23,2.23),bank=sandBank(x,z),patch=.5+.5*Math.sin(x*7.1+z*2.3)*Math.sin(z*5.7-x*1.8);

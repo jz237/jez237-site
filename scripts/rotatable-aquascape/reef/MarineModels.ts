@@ -29,6 +29,7 @@ export async function loadMarineModels(){
    // Reference photos already contain studio lighting; calibrate reflected color
    // to retain orange chroma under the aquarium's intense overhead illumination.
    material.color.setScalar(species==='anthias'?.40:.72);
+   if(species==='anthias'&&!label.startsWith('eye'))material.color.setRGB(.68,.34,.17);
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;
    if(label.startsWith('pectoral')){
