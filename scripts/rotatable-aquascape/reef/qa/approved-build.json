@@ -1,15 +1,15 @@
 {
-  "readyMs": 6712,
+  "readyMs": 5931,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99100134979755,
-      "time": 6.052799999904651,
-      "bites": 12,
-      "remaining": 33,
+      "fps": 59.99700014999249,
+      "time": 6.051600000143073,
+      "bites": 6,
+      "remaining": 39,
       "anemones": {
-        "brushing": 7,
-        "maxBrush": 0.1203175083655424,
+        "brushing": 2,
+        "maxBrush": 0.051822429299443404,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,109 +21,109 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 10.06979999990464,
-      "bites": 25,
-      "remaining": 19,
+      "fps": 59.99700014999249,
+      "time": 10.051900000143071,
+      "bites": 21,
+      "remaining": 23,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 7.906491676030396e-8,
+        "brushing": 1,
+        "maxBrush": 0.0005634714536545884,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
-          0.02478079999999933,
+          0.02477256373762524,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999244,
-      "time": 14.086799999904585,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99400059993998,
+      "time": 14.069000000143019,
+      "bites": 33,
+      "remaining": 11,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 3.5448662177639947e-16,
-        "captured": 2,
+        "brushing": 5,
+        "maxBrush": 0.09773363388054618,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
+        "carried": 1,
         "fold": [
           0.2,
-          0.2,
+          0,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999244,
-      "time": 18.103799999904517,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99700014999255,
+      "time": 18.086000000142928,
+      "bites": 36,
+      "remaining": 8,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.09362187705899418,
-        "captured": 2,
+        "brushing": 10,
+        "maxBrush": 0.10342439442297503,
+        "captured": 1,
         "swallowed": 1,
-        "carried": 1,
+        "carried": 0,
         "fold": [
           0.2,
-          0.2,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 22.103000000142842,
+      "bites": 37,
+      "remaining": 7,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0213109148807864,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0.1818552575511692,
+          0,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993998,
-      "time": 22.104199999904434,
-      "bites": 37,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.00002646290555065558,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.18206996149440277,
-          0.1937315569626232,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 26.121199999904324,
-      "bites": 37,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 3,
-        "maxBrush": 0.0793954244839796,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.10853219674209791,
-          0.13162225090128096,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979744,
-      "time": 30.13829999990421,
-      "bites": 37,
+      "time": 26.10340000014274,
+      "bites": 38,
       "remaining": 6,
       "anemones": {
         "brushing": 5,
-        "maxBrush": 0.10139252896953753,
-        "captured": 2,
-        "swallowed": 2,
+        "maxBrush": 0.042709735426073446,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.029367271520651973,
-          0.0483607796219649,
+          0.10853219674209813,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 30.12040000014258,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 10,
+        "maxBrush": 0.09736471651484323,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0.029368841789731384,
+          0,
           0
         ]
       }
@@ -382,16 +382,16 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-DHy62fJc.js",
+    "assets/index-6boyIA9f.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
-    "assets/map-CwlJNp5D.png",
     "assets/map-Ie55ijny.png",
+    "assets/map-rahrN3k8.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/normalMap-CVYemK4O.png",
+    "assets/normalMap-DQPJoT0j.png",
     "assets/normalMap-T-Tek4aZ.png",
-    "assets/normalMap-h91MoiuH.png",
     "assets/roughnessMap-4hZTjONg.png",
     "assets/roughnessMap-DIiV2VjT.png",
     "assets/roughnessMap-qepxckm-.png",
@@ -400,22 +400,20 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "f823d936d9e8c9ae325d19c8b378ef1cf23a543a2ee08dc8ee43b7f5398c324b",
-  "checkedAt": "2026-09-24T03:10:58.831Z",
-  "scope": "Replace flat dark plate-coral undersides with pale porous tissue and a thicker, irregular radial skeleton inspired by the original reef reference.",
+  "buildHash": "c6b3bed907393526a0aaf1b43f4f0646786f2d31be34b7241356eca27bd73d51",
+  "checkedAt": "2026-09-24T03:33:47.742Z",
+  "scope": "Break up exposed live-rock surfaces with connected coralline growth, small pale growing rims and matching granular color/normal/roughness relief.",
   "geometryChecks": [
-    "Original upper positions, colors, UVs and tissue masks are byte-identical across four phase fixtures",
-    "Closed lower skeleton, outward normals, continuous angular seam, thin rim and volumetric radial supports",
-    "Geometry-derived obstacle volumes enclose lower scaffold and triangle interiors",
-    "All original scenery statistics, fish and 800 anemone strands retained",
+    "All scenery geometry and placement statistics unchanged",
+    "Two full-resolution seamless maps: outward unit normals and matte packed roughness verified",
+    "Fine growth masks consistently drive diffuse, relief and roughness",
     "Feeding, movement, pause, collision, lighting and mobile checks passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "before/after underside camera comparison",
-    "original upper tissue close-up",
+    "fixed-camera before/after live-rock faces and base close-ups",
     "original reef photo and planted comparison/reference"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -425,11 +423,11 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "301951966",
-    "loadPrior": 7103.5,
-    "loadCurrent": 6567.5,
-    "fpsPrior": 140.6,
-    "fpsCurrent": 137.5,
-    "interpretation": "Alternating serial local sessions, identical viewport/effects. Original upper geometry and all scene detail retained. One 436727-byte packed underside map and one byte per plate vertex; no extra triangles or material batch."
+    "baseline": "3505ce843",
+    "loadPrior": 5961,
+    "loadCurrent": 6023.5,
+    "fpsPrior": 198.4,
+    "fpsCurrent": 199.1,
+    "interpretation": "Alternating serial local sessions, identical viewport/effects. All original scene geometry and shader sampling retained. Two original 1K maps grow by208498 bytes with fine colonization detail; no new texture, sampler or runtime synthesis."
   }
 }
