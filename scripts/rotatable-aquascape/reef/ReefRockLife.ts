@@ -39,7 +39,9 @@ export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLife
    const radius=Math.min(.35,Math.min(size.x,size.y,size.z)*(.28+random()*.14));
    if(radius<.065||anchors.some(a=>a.rock===rock&&a.center.distanceTo(point)<(a.radius+radius)*.84))continue;
    const pigment=(rock*3+patch*2)%palette.length,color=new T.Color(palette[pigment]),seed=rock*3.713+patch*8.123;
-   const crust=coralCrust(support.geometry,point,normal,radius,.1,seed,{color,thickness:0,lobed:true,film:true});
+   // The thin ground layer shares the rock's porous material, so its growing
+   // edge can meet the actual underlying pigment and surface grain seamlessly.
+   const crust=coralCrust(support.geometry,point,normal,radius,.1,seed,{color:color.clone().multiplyScalar(2.4),thickness:0,lobed:true,film:true,grounded:true});
    if(!crust.index!.count){crust.dispose();continue;}
    const crustUv=crust.getAttribute('uv');for(let j=0;j<crustUv.count;j++)crustUv.setXY(j,crustUv.getX(j)*2.3,crustUv.getY(j)*2.3);
    crusts.push(crust);anchors.push({center:point.clone(),radius,rock});stats.patches++;usedColors.add(pigment);
