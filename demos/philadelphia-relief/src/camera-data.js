@@ -66,6 +66,12 @@ export function discoveredCameras(doc) {
       media = { provider: 'EarthCam', url: p.url, previewKind: 'thumbnail',
         snapshot: `https://static.earthcam.com/camshots/512x288/${p.thumbnail}.jpg`,
         previewNote: 'Provider thumbnail · not a live frame. Open the camera page for live video.' };
+      const video = { 'found-franklin-institute': '9mMnqO1UuIU',
+        'found-liberty-bell': 'F1EQEDL4ddU' }[p.id];
+      if (video && p.video === video) {
+        media.player = `https://www.youtube-nocookie.com/embed/${video}`
+          + '?autoplay=1&mute=1&playsinline=1&rel=0';
+      }
     } else if (p.source === 'usgs' && ['NJ_Delaware_River_at_Lambertville_NJ',
       'NJ_Delaware_River_at_Trenton', 'NJ_Assunpink_Creek_at_Trenton',
       'PA_Neshaminy_Creek_near_Langhorne', 'PA_Vivotek_Schuylkill_River_at_Philadelphia',
@@ -82,14 +88,23 @@ export function discoveredCameras(doc) {
         previewNote: 'Provider preview · capture time not verified. Open the full camera page for video.' };
     } else if ((p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video))
       || (p.source === 'ironrail' && p.video === 'F1lNwIEAXJU')
-      || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')) {
+      || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')
+      || (p.source === 'rescue-rescue' && {
+        'found-kensington-cam2': 'hlGz7Jq_BT0',
+        'found-kensington-cam3': 'aphvln5Zwv0',
+        'found-kensington-cam6': '6LtXdZJb-Kk',
+      }[p.id] === p.video && typeof p.video === 'string')) {
       const provider = p.source === 'ironrail' ? 'Iron Rail Cams'
-        : p.source === 'willowgrove' ? 'Willow Grove Weather Center' : 'Delaware Ornithological Society';
+        : p.source === 'willowgrove' ? 'Willow Grove Weather Center'
+          : p.source === 'rescue-rescue' ? 'Rescue Rescue' : 'Delaware Ornithological Society';
       media = { provider, previewKind: 'thumbnail',
         url: `https://www.youtube.com/watch?v=${p.video}`,
         snapshot: `https://i.ytimg.com/vi/${p.video}/hqdefault.jpg`,
         player: `https://www.youtube-nocookie.com/embed/${p.video}?autoplay=1&mute=1&playsinline=1&rel=0`,
         previewNote: 'Video thumbnail · not a live frame. Play the provider video or open its camera page.' };
+      if (p.source === 'rescue-rescue') {
+        media.publisherUrl = 'https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams';
+      }
     }
     if (!media) return [];
     seen.add(p.id);

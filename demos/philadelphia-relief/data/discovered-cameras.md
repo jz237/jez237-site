@@ -19,3 +19,23 @@ Six more public cameras bring the discovery catalog to 15. Existing entries are 
 - Willow Grove Weather Center: https://www.youtube.com/watch?v=vIdA-SCcM68 is linked on the owner's streams page https://www.youtube.com/@willowgroveweathercenter/streams . Verified live and embeddable. The owner links its public station dashboard at https://www.wunderground.com/weather/us/pa/willow-grove/KPAWILLO7 ; use that published coarse location (40.14, -75.11), not an inferred residential address. The two sky cameras currently have ended broadcasts and are excluded.
 
 Rejected or deferred: Lake Solebury's owner-linked channel currently contains ended broadcasts, not a current live stream; Graterford's USGS snapshot is stale (2026-06-02); Rancocas at Pemberton is outside the diorama bounds; 2400 Chestnut's current owner page no longer publishes its former falcon feed; Saint Joseph's construction feeds could not be verified; existing AtTheShore views are duplicates. No archived footage is presented as live. New sources reuse the existing exact image/frame hosts and one-minute playback lifecycle, so there is no additional CSP exception or background polling.
+
+
+## Philadelphia coverage audit, 2026-09-24
+
+Three Kensington feeds bring the discovery catalog to 18 (746 mapped views across all catalogs; these are views, not 746 independently verified live video streams). The user's two links identified the current publisher, Rescue Rescue. Its public streams page lists a third Philadelphia feed:
+
+- Cam 2: https://www.youtube.com/watch?v=hlGz7Jq_BT0
+- Cam 3: https://www.youtube.com/watch?v=aphvln5Zwv0
+- Cam 6: https://www.youtube.com/watch?v=6LtXdZJb-Kk
+- Current publisher listings: https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams
+
+All three watch pages reported OK, playableInEmbed=true, and isLiveNow=true. All began September 20. Pins share the approximate Kensington/Allegheny elevated station viewed area (39.9965, -75.1135); these are not inferred camera mounts. The group chooser preserves each camera's direct link. A publisher link provides a route to current broadcasts if video IDs change again.
+
+The older Spotlight Rescue Cam 3 (cWd_niy8Rz8), Cam 5 (7YnjXr9uWjg), and Cam 6 (wWOWXHj9lWc) ended September 17 and are unplayable. Directory pages still advertised these as live. Other Kensington listings linked removed videos, broadcasts ended in 2024, or unrelated Rittenhouse footage. Search the current owner listings and YouTube's live results, not just cached search snippets. Do not conclude that Kensington has no live cameras from the old channel's status.
+
+EarthCam's owner broadcasts 9mMnqO1UuIU (Franklin Institute) and F1EQEDL4ddU (Liberty Bell) are live and embeddable. These upgrade the two existing pins with optional video playback; they are not counted as new locations. All five previously cataloged YouTube bird/rail/weather broadcasts were rechecked and remain live.
+
+Additional search covered public YouTube live results for Philadelphia street, skyline, rail and wildlife views; FOX29; AtTheShore/iGotView; EarthCam; 6abc Sky6; NBC10 regional cameras; and multiple camera directories. Rittenhouse fountain/south panorama and Triangle Square west/south broadcasts duplicate existing AtTheShore views. Chester railcam listings refer to Massachusetts, outside this map. The current 6abc page offers a combined radar/Sky6 program, and NBC10 offers scheduled rotating regional views; neither verifies a direct selectable feed for each location. Old Dilworth and Italian Market directory embeds are recordings, not live cameras. These were not added as new live pins. This audit does not establish complete coverage of every public camera.
+
+Run `python tools/audit-camera-streams.py --discover` from this demo to recheck all cataloged YouTube feeds and find current candidates. It runs only when invoked by a maintainer, downloads public metadata only, and adds no page-load requests, timers, paid APIs, or background video. Newly found candidates still need source and location checks before publication.
