@@ -1,6 +1,6 @@
 // One bounded instanced draw for soft ground contact; no depth capture or AO pass.
 import * as THREE from 'three';
-import { getHeight, getNormal } from './terrain.js?v=detail3';
+import { getHeight, getNormal } from './terrain.js?v=polish1';
 export class ContactShadows {
   constructor(scene) {
     this.capacity=64;this.timer=1;this.dummy=new THREE.Object3D();this.normal=new THREE.Vector3();

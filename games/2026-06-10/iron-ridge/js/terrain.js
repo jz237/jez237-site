@@ -5,9 +5,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { groundRelief, landscapeMask } from './surface-art.js?v=detail3';
-import { Simplex2, makeRng } from './noise.js?v=detail3';
-import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=detail3';
+import { groundRelief, landscapeMask } from './surface-art.js?v=polish1';
+import { Simplex2, makeRng } from './noise.js?v=polish1';
+import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=polish1';
 
 const simplex = new Simplex2(90210 + WORLD_SEED);
 const detail = new Simplex2(417 + WORLD_SEED * 3);
@@ -85,6 +85,17 @@ export function raycastTerrain(fx, fy, fz, tx, ty, tz) {
 export function forestDensity(x, z) {
   const n = simplex.fbm(x / 190 + 7.3, z / 190 - 3.1, 3, 2, 0.55);
   return THREE.MathUtils.clamp((n + 0.25) * 1.1, 0, 1);
+}
+
+// Going underfoot for tracked vehicles: the worn paths painted by
+// landscapeMask() (same analytic curves, world x/z) are firm and quick;
+// thick forest floor (roots, litter, soft loam) drags the tracks.
+export function groundSpeedFactor(x, z) {
+  const pathA = Math.abs(z - x * 0.38 - 13 * Math.sin(x * 0.019));
+  const pathB = Math.abs(x + 63 - 19 * Math.sin(z * 0.014));
+  const road = 1 - THREE.MathUtils.smoothstep(Math.min(pathA, pathB), 1.5, 4.8);
+  if (road > 0.05) return 1 + 0.14 * road;
+  return 1 - 0.16 * THREE.MathUtils.smoothstep(forestDensity(x, z), 0.35, 0.9);
 }
 
 // ---------------------------------------------------------------------

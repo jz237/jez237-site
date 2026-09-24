@@ -3,10 +3,10 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { tankSurface } from './surface-art.js?v=detail3';
-import { batchRigidParts } from './render-batch.js?v=detail3';
-import { TANK, SHELL, CG } from './config.js?v=detail3';
-import { getHeight } from './terrain.js?v=detail3';
+import { tankSurface } from './surface-art.js?v=polish1';
+import { batchRigidParts } from './render-batch.js?v=polish1';
+import { TANK, SHELL, CG } from './config.js?v=polish1';
+import { getHeight, groundSpeedFactor } from './terrain.js?v=polish1';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -18,7 +18,7 @@ const _v3a = new THREE.Vector3();
 const _v3b = new THREE.Vector3();
 
 const SCHEMES = {
-  olive: { hull: '#79895a', camo: '#5a6a3d', camo2: '#93a06b', dark: 0x4a553a, barrel: 0x5d6a47, mark: '★' },
+  olive: { hull: '#6d7853', camo: '#525d3a', camo2: '#7d8762', camo3: '#4a4632', dark: 0x434c35, barrel: 0x56613f, mark: '★' },
   desert: { hull: '#b3a279', camo: '#94815c', camo2: '#c9b990', dark: 0x77694c, barrel: 0x91825f, mark: '◆' },
   scout: { hull: '#8c9680', camo: '#6d7762', camo2: '#a3ab95', dark: 0x59624f, barrel: 0x6e7760, mark: '▲' },
   heavy: { hull: '#80714f', camo: '#62553e', camo2: '#988a68', dark: 0x4e4536, barrel: 0x615641, mark: '☠' },
@@ -39,7 +39,10 @@ function camoTexture(schemeName) {
   let seed = 0;
   for (let i = 0; i < schemeName.length; i++) seed = (seed * 31 + schemeName.charCodeAt(i)) | 0;
   const rng = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
-  for (const [color, n, rMin, rMax] of [[colors.camo, 12, 40, 104], [colors.camo2, 10, 24, 64]]) {
+  // Box faces map the whole 512px map, so blotch radii are set for a
+  // 2-4 m panel: patches read at tank scale instead of giant splodges.
+  const camo3 = colors.camo3 ?? colors.camo;
+  for (const [color, n, rMin, rMax] of [[colors.camo, 30, 18, 46], [camo3, 22, 12, 32], [colors.camo2, 20, 10, 26]]) {
     ctx.fillStyle = color;
     for (let i = 0; i < n; i++) {
       const x = rng() * s, y = rng() * s;
@@ -78,6 +81,30 @@ function camoTexture(schemeName) {
     const x=rng()*s,y=i%2?rng()*14:s-rng()*16;
     ctx.fillStyle='rgba(37,40,32,0.7)';ctx.fillRect(x,y,2+rng()*9,1+rng()*3);
     ctx.fillStyle='rgba(182,181,155,0.45)';ctx.fillRect(x,y-1,2+rng()*5,1);
+  }
+  // Every box face spans the full map, so a darkened frame reads as
+  // occlusion in each crease (turret ring, sponsons, stowage) and a thin
+  // pale line inside it reads as worn paint on the edge.
+  for (const [a, b, w, alpha] of [[0, 1, 22, 0.34], [2, 3, 16, 0.22]]) {
+    for (const side of [a, b]) {
+      const horiz = side < 2, far = side % 2 === 1;
+      const g = horiz
+        ? ctx.createLinearGradient(0, far ? s : 0, 0, far ? s - w : w)
+        : ctx.createLinearGradient(far ? s : 0, 0, far ? s - w : w, 0);
+      g.addColorStop(0, `rgba(18,20,14,${alpha})`);
+      g.addColorStop(1, 'rgba(18,20,14,0)');
+      ctx.fillStyle = g;
+      if (horiz) ctx.fillRect(0, far ? s - w : 0, s, w);
+      else ctx.fillRect(far ? s - w : 0, 0, w, s);
+    }
+  }
+  ctx.fillStyle = 'rgba(196,192,160,0.16)';
+  for (let i = 0; i < 180; i++) {
+    const t = rng() * s, len = 3 + rng() * 14, edge = (rng() * 4) | 0, off = 2 + rng() * 2;
+    if (edge === 0) ctx.fillRect(t, off, len, 1.5);
+    else if (edge === 1) ctx.fillRect(t, s - off, len, 1.5);
+    else if (edge === 2) ctx.fillRect(off, t, 1.5, len);
+    else ctx.fillRect(s - off, t, 1.5, len);
   }
   // Dust/grime along lower panel edges, with gravity-directed runoff.
   const mud=ctx.createLinearGradient(0,s*.62,0,s);
@@ -560,6 +587,35 @@ export function buildTankMesh(scheme = 'olive') {
   return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts, wheelInstances, wheelParts, hubParts, updateWheelInstances };
 }
 
+// Burnt-out look: keep each part's baked panel/weld map so the wreck still
+// reads as a tank, but scorched dark with a rusty cast. One shared material
+// per source map, so a field of wrecks adds no per-tank material cost.
+const charCache = new Map();
+export function charTankVisual(visual) {
+  visual.root.traverse(o => {
+    if (!o.isMesh || !o.material || o.userData.charred) return;
+    o.userData.charred = true;
+    const map = o.material.map ?? null;
+    const key = (map ? map.uuid : 'plain') + (o.isInstancedMesh ? ':i' : '');
+    if (!charCache.has(key)) {
+      charCache.set(key, new THREE.MeshStandardMaterial({
+        map, color: map ? 0x7a685a : 0x3a3430, roughness: 0.96, metalness: 0.06,
+      }));
+    }
+    o.material = charCache.get(key);
+  });
+  // the blast lifts and slews the turret off its ring; the gun droops
+  const turret = visual.turret, rnd = () => Math.random() - 0.5;
+  visual.wreckPose = {
+    yaw: rnd() * 1.4, tilt: rnd() * 0.3, pitchX: rnd() * 0.12, lift: 0.05 + Math.random() * 0.09,
+  };
+  turret.position.y += visual.wreckPose.lift;
+  turret.rotation.z = visual.wreckPose.tilt;
+  turret.rotation.x = visual.wreckPose.pitchX;
+  visual.pivot.rotation.x = 0.22;
+  visual.recoilGrp.position.z = -0.25;
+}
+
 export class Tank {
   constructor(scene, world, opts = {}) {
     this.scene = scene;
@@ -680,7 +736,13 @@ export class Tank {
         // escape boost: short burst of extra track power and top speed
         this.boostT = Math.max(0, this.boostT - dt);
         const bF = this.boostT > 0 ? 1.9 : 1;
-        const bS = this.boostT > 0 ? 1.45 : 1;
+        // ground under the tracks: paths are quick, forest floor is slow
+        this.groundTimer = (this.groundTimer ?? 0) - dt;
+        if (this.groundTimer <= 0) {
+          this.groundTimer = 0.25;
+          this.ground = groundSpeedFactor(body.position.x, body.position.z);
+        }
+        const bS = (this.boostT > 0 ? 1.45 : 1) * (this.ground ?? 1);
         let force = 0;
         if (this.throttle > 0.01) {
           force = speed < this.tuning.maxSpeed * bS ? this.tuning.engineForce * bF * sc2 * this.throttle : 0;
@@ -785,6 +847,10 @@ export class Tank {
   // (gravity is vertical), then the virtual target is transformed into the
   // hull's local frame so slopes/hull tilt never throw the gun off.
   updateTurret(dt) {
+    if (this.visual.wreckPose) {
+      this.visual.turret.rotation.y = this.turretYaw + this.visual.wreckPose.yaw;
+      return;
+    }
     const root = this.visual.root;
     root.updateMatrixWorld(true);
     const pivotW = _v3a.setFromMatrixPosition(this.visual.pivot.matrixWorld);
@@ -913,13 +979,7 @@ export class Tank {
   }
 
   destroyVisual() {
-    // charred wreck: darken everything
-    this.visual.root.traverse(o => {
-      if (o.isMesh && o.material && !o.userData.charred) {
-        o.userData.charred = true;
-        o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
-      }
-    });
+    charTankVisual(this.visual);
   }
 
   removeFromWorld() {

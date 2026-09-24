@@ -3,8 +3,8 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js?v=detail3';
-import { settings, setSetting } from './settings.js?v=detail3';
+import { MUTE_KEY } from './config.js?v=polish1';
+import { settings, setSetting } from './settings.js?v=polish1';
 
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
@@ -317,6 +317,28 @@ export class GameAudio {
   hitTink() { this.blast({ freq: 220, dur: 0.12, vol: 0.25, noiseVol: 0.3, noiseFreq: 2400 }); }
   damaged() { this.blast({ freq: 90, dur: 0.3, vol: 0.5, noiseVol: 0.5, noiseFreq: 500 }); }
   whiz() { this.blast({ freq: 600, dur: 0.18, vol: 0.06, noiseVol: 0.3, noiseFreq: 3200 }); }
+
+  // AP round skipping off an angled plate: bright ping sweeping down
+  ricochet() {
+    if (!this.ctx) return;
+    const ctx = this.ctx, t = ctx.currentTime;
+    const o = ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(2900, t);
+    o.frequency.exponentialRampToValueAtTime(700, t + 0.32);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.36);
+    o.connect(g).connect(this.master);
+    o.start(t); o.stop(t + 0.4);
+    this.blast({ freq: 320, dur: 0.08, vol: 0.12, noiseVol: 0.35, noiseFreq: 3600 });
+  }
+
+  // a round going through armour: a dull heavy clunk, deeper from the rear
+  penetrate(rear = false) {
+    this.blast({ freq: rear ? 70 : 95, dur: 0.22, vol: 0.55, noiseVol: 0.45, noiseFreq: 900 });
+  }
 
   // descending artillery whistle
   whistle() {

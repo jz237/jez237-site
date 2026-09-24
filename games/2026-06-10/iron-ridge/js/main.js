@@ -8,27 +8,29 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=detail3';
-import { Infantry } from './infantry.js?v=detail3';
-import { makeRng } from './noise.js?v=detail3';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=detail3';
-import { buildSky } from './sky.js?v=ridge4';
-import { Foliage } from './foliage.js?v=detail3';
-import { Props } from './props.js?v=detail3';
-import { Tank } from './tank.js?v=detail3';
-import { WaveManager } from './enemy.js?v=detail3';
-import { Projectiles } from './projectiles.js?v=detail3';
-import { surfaceDetail } from './surface-art.js?v=detail3';
-import { ContactShadows } from './contact-shadows.js?v=detail3';
-import { Effects } from './effects.js?v=detail3';
-import { GameAudio } from './audio.js?v=detail3';
-import { Input, isTouch } from './input.js?v=detail3';
-import { settings, setSetting } from './settings.js?v=detail3';
-import { Hud } from './hud.js?v=detail3';
-import { QualityScaler, LEVELS } from './quality.js?v=detail3';
-import { Minimap } from './minimap.js?v=detail3';
-import * as LB from './leaderboard.js?v=detail3';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=detail3';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=polish1';
+import { Infantry } from './infantry.js?v=polish1';
+import { makeRng } from './noise.js?v=polish1';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=polish1';
+import { buildSky } from './sky.js?v=polish1';
+import { Foliage } from './foliage.js?v=polish1';
+import { treeOcclusion } from './tree-lod.js?v=polish1';
+import { Props } from './props.js?v=polish1';
+import { Tank } from './tank.js?v=polish1';
+import { WaveManager } from './enemy.js?v=polish1';
+import { Projectiles } from './projectiles.js?v=polish1';
+import { Trajectory } from './trajectory.js?v=polish1';
+import { surfaceDetail } from './surface-art.js?v=polish1';
+import { ContactShadows } from './contact-shadows.js?v=polish1';
+import { Effects } from './effects.js?v=polish1';
+import { GameAudio } from './audio.js?v=polish1';
+import { Input, isTouch } from './input.js?v=polish1';
+import { settings, setSetting } from './settings.js?v=polish1';
+import { Hud } from './hud.js?v=polish1';
+import { QualityScaler, LEVELS } from './quality.js?v=polish1';
+import { Minimap } from './minimap.js?v=polish1';
+import * as LB from './leaderboard.js?v=polish1';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=polish1';
 
 const $ = (id) => document.getElementById(id);
 
@@ -120,6 +122,7 @@ const infantry = new Infantry(scene);
 const effects = new Effects(scene, camera);
 const contacts = new ContactShadows(scene);
 const projectiles = new Projectiles(scene, world);
+const trajectory = new Trajectory(scene);
 const audio = new GameAudio();
 const input = new Input(canvas);
 const hud = new Hud();
@@ -281,6 +284,26 @@ function haptic(ms) {
 // `vel` is the shell's travel direction — travelling the same way the hull
 // faces means the shot came from the rear.
 const _fwdArmor = new CANNON.Vec3();
+// which plate a shell struck: 'rear' | 'side' | 'front' (head-on) |
+// 'oblique' (front plate at a glancing angle — where AP rounds skip off)
+function armorFacing(tank, vel) {
+  if (!vel) return 'side';
+  tank.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1), _fwdArmor);
+  const len = Math.hypot(vel.x, vel.z) || 1;
+  const d = (vel.x * _fwdArmor.x + vel.z * _fwdArmor.z) / len;
+  if (d > 0.45) return 'rear';
+  if (d < -0.8) return 'front';
+  if (d < -0.5) return 'oblique';
+  return 'side';
+}
+// player AP vs enemy plates. Flanking pays; an angled glacis bounces rounds.
+const AP_FACING = {
+  rear: { mult: 1.5, label: 'REAR PENETRATION', kind: 'kill' },
+  side: { mult: 1.15, label: 'SIDE PENETRATION', kind: 'good' },
+  front: { mult: 0.85, label: 'PENETRATION', kind: 'good' },
+  oblique: { mult: 0.35, label: 'RICOCHET', kind: 'warn' },
+};
+
 function armorMult(tank, vel, isPlayerTarget = false) {
   if (!vel) return 1;
   tank.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1), _fwdArmor);
@@ -783,6 +806,7 @@ function damageProp(it, dmg, byPlayer) {
 // score/combo/streak payout for a kill this player earned
 function creditKillLocal(points) {
   G.kills++;
+  G.hitStop = 0.075; // a few frames of near-freeze sells the kill
   bumpCombo();
   addScore(points, 'TANK KILL', 'kill');
   hud.hitmarker(true);
@@ -933,11 +957,26 @@ function onShellHit(hit) {
     const tk = ud.tank;
     if (tk.isPlayer && !s.fromPlayer) {
       // trace back along the shell's flight for the threat direction
-      damagePlayer(Math.round((shellDmg + Math.floor(G.wave * 0.8)) * armorMult(tk, s.vel, true)),
+      damagePlayer(Math.round((shellDmg + Math.floor(G.wave * 0.8)) * armorMult(tk, s.vel, true) * (G.hullDown ? HULL_DOWN_MULT : 1)),
         s.vel ? { x: pos.x - s.vel.x, z: pos.z - s.vel.z } : pos);
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
-      if (e) { damageEnemy(e, dirDmg * armorMult(tk, s.vel), pos); G.shotsHit++; }
+      if (e) {
+        G.shotsHit++;
+        if (W?.label === 'AP') {
+          const face = armorFacing(tk, s.vel), F = AP_FACING[face];
+          hud.armorCall(F.label, F.kind);
+          if (face === 'oblique') {
+            audio.ricochet();
+            effects.ricochet(pos, s.vel, hit.normal);
+          } else {
+            audio.penetrate(face === 'rear');
+          }
+          damageEnemy(e, dirDmg * F.mult, pos);
+        } else {
+          damageEnemy(e, dirDmg * armorMult(tk, s.vel), pos);
+        }
+      }
     }
   } else if (ud?.kind === 'remoteEnemy') {
     // client: direct hit on a host-simulated enemy — forward it
@@ -1187,6 +1226,57 @@ function updateRepair(dt) {
   $('btn-repair')?.classList.toggle('active', G.repairing || mode === 'depot');
 }
 
+// Hull down: the nearest threat can see the turret over a crest but not the
+// hull. Direct hits then mostly strike the thick turret face (see onShellHit).
+const HULL_DOWN_MULT = 0.6;
+function updateHullDown(dt) {
+  G.hullDownT = (G.hullDownT ?? 0) - dt;
+  if (G.hullDownT > 0) return;
+  G.hullDownT = 0.2;
+  const p = G.player, pp = p.body.position;
+  let best = null, bestD = 200;
+  const threats = isCoopClient() ? multiplayer.enemyBlips() : waves.aliveEnemies();
+  for (const e of threats) {
+    const q = e.tank.body.position, d = Math.hypot(q.x - pp.x, q.z - pp.z);
+    if (d < bestD) { bestD = d; best = q; }
+  }
+  let down = false;
+  if (best && bestD > 25) {
+    const gx = best.x, gy = best.y + 1.6, gz = best.z;
+    const hull = raycastTerrain(gx, gy, gz, pp.x, pp.y + 0.35, pp.z);
+    const turret = raycastTerrain(gx, gy, gz, pp.x, pp.y + 2.1, pp.z);
+    down = !!hull && !turret;
+  }
+  // two agreeing samples (0.4 s) before the badge flips, so it never flickers
+  G.hullDownVote = down === G.hullDownLast ? (G.hullDownVote ?? 0) + 1 : 0;
+  G.hullDownLast = down;
+  if (down !== G.hullDown && G.hullDownVote >= 1) {
+    G.hullDown = down;
+    hud.setBadge(down ? '⛰ HULL DOWN −40%' : '');
+    if (down && !G.hullDownSaid) { G.hullDownSaid = true; hud.floater('HULL DOWN — the crest covers your hull', 'good'); }
+  }
+}
+
+// Opening seconds: an arrow toward the nearest contact until you engage.
+function updateNavHint(dt) {
+  G.hintT = (G.hintT ?? 0) + dt;
+  if (G.hintDone) return;
+  const threats = isCoopClient() ? multiplayer.enemyBlips() : waves.aliveEnemies();
+  if (G.hintT < 1.2 || !threats.length) { hud.setHint(''); return; }
+  const pp = G.player.body.position;
+  let best = null, bestD = Infinity;
+  for (const e of threats) {
+    const q = e.tank.body.position, d = Math.hypot(q.x - pp.x, q.z - pp.z);
+    if (d < bestD) { bestD = d; best = q; }
+  }
+  if (G.shotsFired > 0 || bestD < 60 || G.hintT > 30) { G.hintDone = true; hud.setHint(''); return; }
+  // bearing relative to the camera: 0 = straight ahead, + = clockwise
+  const bearing = Math.atan2(best.x - pp.x, best.z - pp.z);
+  let rel = G.camYaw - bearing;
+  rel = Math.atan2(Math.sin(rel), Math.cos(rel));
+  hud.setHint(`NEAREST CONTACT ${Math.round(bestD)} m`, rel);
+}
+
 function playerFire() {
   const p = G.player;
   if (!p) return;
@@ -1393,6 +1483,7 @@ function resetGame() {
   G.weapon = 'ap'; G.mgHeat = 0; G.mgLocked = false; G.mgAcc = 0;
   G.repairing = false; G.repairArm = 0; G.lastDmgT = -99; G.criticalSaid = false;
   G.depot = null; G.boostCd = 0; G.pendingCaches = [];
+  G.hitStop = 0; G.hullDown = false; G.hullDownSaid = false; G.hintT = 0; G.hintDone = false;
   infantry.clear();
   infantry.updateVisuals();
   G.perks = freshPerks(); G.perkPending = null; G.perkTimer = 0;
@@ -1428,6 +1519,7 @@ function startGame() {
     }
   }
   G.state = 'playing';
+  quality.hold(5); // deploy builds the battlefield; don't judge its hitches
   multiplayer.localActive = true;
   hud.showScreen(null);
   audio.ensure();
@@ -1578,6 +1670,10 @@ function fixedStep(dt) {
     if (combatSim) {
       const shot = e.think(dt, targets, world, dt);
       if (shot) {
+        e.firedAt = G.time;
+        if (p?.alive && e.tank.body.position.distanceTo(p.body.position) < 170) {
+          minimap.ping(shot.origin.x, shot.origin.z, '#ff9b3c');
+        }
         const d = camera.position.distanceTo(shot.origin);
         if (d < 200) audio.fire(Math.max(0.12, 0.85 - d / 240));
         effects.muzzleFlash(shot.origin, shot.dir);
@@ -1650,19 +1746,21 @@ function fixedStep(dt) {
       G.artilleryT -= dt;
       if (G.artilleryT <= 0) {
         G.artilleryT = ARTILLERY.period * (0.85 + Math.random() * 0.3);
-        hud.floater('⚠ INCOMING', 'warn');
+        hud.banner('⚠ ARTILLERY', 'get clear of the red markers', 1.6);
         audio.whistle();
+        setTimeout(() => audio.whistle(), 650);
         const pp = p.body.position, pv = p.body.velocity;
         for (let i = 0; i < ARTILLERY.shellCount; i++) {
           const tx = pp.x + pv.x * 1.3 + (Math.random() - 0.5) * ARTILLERY.spread * 2;
           const tz = pp.z + pv.z * 1.3 + (Math.random() - 0.5) * ARTILLERY.spread * 2;
-          G.pendingArty.push({ warnAt: G.simT + i * 0.3, fireAt: G.simT + i * 0.3 + 0.25, x: tx, z: tz, warned: false, fired: false });
+          G.pendingArty.push({ warnAt: G.simT + i * 0.3, fireAt: G.simT + i * 0.3 + ARTILLERY.leadTime, x: tx, z: tz, warned: false, fired: false });
         }
       }
       for (const a of G.pendingArty) {
         if (!a.warned && G.simT >= a.warnAt) {
           a.warned = true;
-          effects.ring(new THREE.Vector3(a.x, 0, a.z), 4, ARTILLERY.warnTime, 0xff5a3c);
+          // marker stays until the shell lands (lead + ~1.4 s of fall)
+          effects.warnMarker(a.x, a.z, ARTILLERY.leadTime + 1.45);
         }
         if (!a.fired && G.simT >= a.fireAt) {
           a.fired = true;
@@ -1772,19 +1870,20 @@ function updateCamera(dt) {
   const cp = G.camPitch, cy = G.camYaw;
   _dirCam.set(Math.sin(cy) * Math.cos(cp), -Math.sin(cp) + 0.18, Math.cos(cy) * Math.cos(cp)).normalize();
 
-  // pull in front of tree trunks blocking the view line
+  // crowns in the view line are dithered away by the foliage cut-away, so
+  // only a trunk the lens itself would sit inside pulls the camera in
   let dist = G.camDist;
-  for (let t = 2; t < dist; t += 1.2) {
+  for (const t of [dist, dist - 0.7]) {
     const px = _camTarget.x - _dirCam.x * t;
     const py = _camTarget.y - _dirCam.y * t;
     const pz = _camTarget.z - _dirCam.z * t;
     let blocked = false;
-    for (const tree of foliage.treesNear(px, pz, 1.5)) {
+    for (const tree of foliage.treesNear(px, pz, 2)) {
       const dx = px - tree.x, dz = pz - tree.z;
-      if (dx * dx + dz * dz < (tree.radius + 0.7) ** 2 &&
-          py < tree.y + tree.height * 0.8) { blocked = true; break; }
+      if (dx * dx + dz * dz < (0.45 * tree.scale + 0.55) ** 2 &&
+          py < tree.y + tree.height * 0.6) { blocked = true; break; }
     }
-    if (blocked) { dist = Math.max(3, t - 0.8); break; }
+    if (blocked) { dist = Math.max(3, t - 1.4); break; }
   }
 
   _camDesired.copy(_camTarget).addScaledVector(_dirCam, -dist);
@@ -1796,6 +1895,11 @@ function updateCamera(dt) {
   camera.position.lerp(_camDesired, k);
   _lookTarget.copy(camera.position).add(_dirCam);
   camera.lookAt(_lookTarget);
+
+  // foliage between the lens and the tank dithers away (see tree-lod.js)
+  treeOcclusion.cam.value.copy(camera.position);
+  treeOcclusion.target.value.set(root.x, root.y + 1.3, root.z);
+  treeOcclusion.on.value = 1;
 
   // FOV punch on firing
   G.fovKick *= 1 - Math.min(1, dt * 7);
@@ -1972,6 +2076,7 @@ bindRange('rng-sens', () => settings.lookSens, (v) => setSetting('lookSens', v))
 bindToggle('btn-assist', () => settings.aimAssist ?? true, (v) => setSetting('aimAssist', v));
 bindToggle('btn-autofire', () => settings.autoFire ?? isTouch, (v) => setSetting('autoFire', v));
 bindToggle('btn-reverse-look', () => input.reverseLook, (v) => input.setReverseLook(v));
+bindToggle('btn-arc', () => settings.shellArc ?? true, (v) => setSetting('shellArc', v));
 bindToggle('btn-shake', () => settings.camShake, (v) => {
   setSetting('camShake', v);
   effects.setShakeScale(v ? 1 : 0);
@@ -2255,6 +2360,17 @@ function gameFrame(dt) {
     G.player.syncVisual(alpha, dt);
     updateCamera(dt);
   }
+  if (G.state === 'playing' && G.player?.alive && (settings.shellArc ?? true) && !G.perkPending) {
+    trajectory.update(dt, G.player, G.player.shellSpeed, G.aimPoint,
+      isCoopClient() ? [] : waves.enemies, foliage, G.player.canFire());
+  } else trajectory.hide();
+  if (G.state === 'playing' && G.player?.alive) {
+    updateHullDown(dt);
+    updateNavHint(dt);
+  } else {
+    hud.setBadge('');
+    hud.setHint('');
+  }
   for (const e of waves.enemies) {
     const near = camera.position.distanceTo(e.tank.visual.root.position) < 170;
     e.tank.syncVisual(alpha, dt, near);
@@ -2263,7 +2379,7 @@ function gameFrame(dt) {
       effects.damageSmoke(e.tank.visual.root.position, e.tank.hp / e.tank.maxHp, dt);
     }
   }
-  waves.cleanup(scene, world, effects);
+  waves.cleanup(scene, world, effects, dt);
 
   // exhaust puffs under load (player + nearby enemies)
   G.exhaustAcc = (G.exhaustAcc ?? 0) + dt;
@@ -2323,7 +2439,7 @@ function gameFrame(dt) {
     hud.setScore(G.score, G.wave, G.kills, G.combo > 1 ? Math.min(SCORING.comboMax, 1 + (G.combo - 1) * 0.5) : 1);
     const hudEnemies = isCoopClient() ? multiplayer.enemyBlips() : waves.aliveEnemies();
     const allies = inCoop() ? multiplayer.allyBlips() : [];
-    hud.updateArrows(hudEnemies, camera, allies);
+    hud.updateArrows(hudEnemies, camera, allies, G.time);
     minimap.draw(G.player, isCoopClient() ? multiplayer.enemyBlips() : waves.enemies, props, G.camYaw, waves.trucks || [], allies);
     hud.setAllies(allies, multiplayer.connected);
   }
@@ -2332,6 +2448,7 @@ function gameFrame(dt) {
 
 // menu idle camera: slow orbit over the valley
 function menuFrame(dt) {
+  treeOcclusion.on.value = 0;
   const t = G.time * 0.05;
   const r = 60;
   camera.position.set(Math.cos(t) * r, 26 + Math.sin(t * 0.7) * 6, Math.sin(t) * r);
@@ -2350,6 +2467,8 @@ function loop(now) {
   last = now;
   if (dt > MAX_FRAME_DT) dt = MAX_FRAME_DT;
   if (!(dt > 0)) dt = 0.0001; // guard against clock skew / duplicate rAF
+  const realDt = dt;
+  if (G.hitStop > 0) { G.hitStop -= dt; dt *= 0.08; }
   G.time += dt;
 
   if (G.state === 'menu') menuFrame(dt);
@@ -2364,7 +2483,7 @@ function loop(now) {
     fpsTimer = 0;
     hud.setPerf(1 / quality.emaDt, LEVELS[quality.level].name);
   }
-  quality.frame(dt);
+  quality.frame(realDt);
   composer.render();
 }
 
@@ -2385,7 +2504,7 @@ requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry,
+  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry, foliage, hud,
   onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)

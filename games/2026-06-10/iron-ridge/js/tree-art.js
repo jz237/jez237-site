@@ -2,7 +2,7 @@
 // give parallax from every driving angle without per-tree camera updates.
 // Fine leaves, bark and branch shading live in one shared mipmapped texture.
 import * as THREE from 'three';
-import { makeRng } from './noise.js?v=detail3';
+import { makeRng } from './noise.js?v=polish1';
 
 export function woodlandMaterial(path = './assets/textures/woodland.png') {
   // Transparent first paint while the local atlas loads (never white cards).
@@ -97,8 +97,11 @@ export function nearTreeParts(species) {
   }
   // Individual leaf/needle sprays from First Light, oriented around each twig.
   // Full alpha cutouts preserve fine silhouettes; there are no clipped canopy discs.
-  function spray(center, direction, w, h, tint) {
+  function spray(center, direction, w, h, tint, twigShift=0) {
     const along=new THREE.Vector3(...direction).normalize();
+    // the needle texture's bare twig fills its left ~40%; sliding the card
+    // outward buries that twig in the branch instead of showing a fishbone
+    if(twigShift)center=[center[0]+along.x*w*twigShift,center[1]+along.y*w*twigShift,center[2]+along.z*w*twigShift];
     const axis=Math.abs(along.y)>.9?new THREE.Vector3(1,0,0):new THREE.Vector3(0,1,0);
     const across=new THREE.Vector3().crossVectors(along,axis).normalize();
     const cross=new THREE.Vector3().crossVectors(along,across).normalize();
@@ -125,11 +128,15 @@ export function nearTreeParts(species) {
       for(let side=0;side<5;side++){
         const a=side*Math.PI*2/5+layer*2.399,dx=Math.cos(a),dz=Math.sin(a);
         branch([0,y+.25,0],[dx*radius,y-.15,dz*radius],.027,.004);
-        for(let j=0;j<6;j++) {
-          const f=.18+j*.16,sideAngle=a+(j%2?-.6:.6);
-          const w=(.8-layer*.048)*(1.08-f*.15);
-          spray([dx*radius*f,y+.1-f*.28,dz*radius*f],
-            [Math.cos(sideAngle),.12+rng()*.18,Math.sin(sideAngle)],w,w*.85,0xc1ccad);
+        // Denser, fanned tufts: random yaw and droop, bigger toward the tip,
+        // darker toward the trunk where the crown shades itself.
+        for(let j=0;j<9;j++) {
+          const f=.14+j*.11,sideAngle=a+(j%2?-1:1)*(.35+rng()*.75);
+          const w=(.82-layer*.046)*(.9+rng()*.35)*(1.1-f*.2);
+          const droop=-.32*f+(rng()-.5)*.3;
+          const shade=new THREE.Color(0x8f9c7d).lerp(new THREE.Color(0xcdd8b6),Math.min(1,f*1.15)).getHex();
+          spray([dx*radius*f,y+.1-f*.3+(rng()-.5)*.12,dz*radius*f],
+            [Math.cos(sideAngle),droop,Math.sin(sideAngle)],w,w*.9,shade,.2);
         }
       }
     }

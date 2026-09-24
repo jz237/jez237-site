@@ -3,7 +3,7 @@
 // ridge" backdrop), circling birds, hemisphere + directional sun lighting.
 
 import * as THREE from 'three';
-import { Simplex2, makeRng } from './noise.js?v=detail3';
+import { Simplex2, makeRng } from './noise.js?v=polish1';
 
 export const SUN_DIR = new THREE.Vector3(0.55, 0.62, 0.38).normalize();
 
@@ -18,15 +18,43 @@ void main() {
 const SKY_FRAG = /* glsl */`
 varying vec3 vDir;
 uniform vec3 sunDir;
+uniform float uTime;
+
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float vnoise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+
 void main() {
-  float h = clamp(vDir.y, -0.1, 1.0);
+  vec3 dir = normalize(vDir);
+  float h = clamp(dir.y, -0.1, 1.0);
   vec3 zenith  = vec3(0.09, 0.31, 0.79);
   vec3 horizon = vec3(0.78, 0.88, 0.97);
   vec3 ground  = vec3(0.62, 0.68, 0.66);
   vec3 col = mix(horizon, zenith, pow(max(h, 0.0), 0.52));
   if (h < 0.0) col = mix(horizon, ground, clamp(-h * 8.0, 0.0, 1.0));
 
-  float sunAmt = max(dot(normalize(vDir), sunDir), 0.0);
+  // warmer, brighter horizon on the sun's side of the sky
+  vec2 flatDir = normalize(dir.xz + 1e-4), flatSun = normalize(sunDir.xz);
+  float sunSide = dot(flatDir, flatSun) * 0.5 + 0.5;
+  float band = exp(-max(h, 0.0) * 9.0);
+  col = mix(col, vec3(0.98, 0.9, 0.78), band * sunSide * sunSide * 0.3);
+  // thin milky haze hugging the horizon all round
+  col = mix(col, vec3(0.86, 0.9, 0.93), exp(-abs(h) * 26.0) * 0.45);
+
+  // high cirrus: stretched streaks, only well above the horizon
+  if (h > 0.04) {
+    vec2 uv = dir.xz / (h + 0.18) * 1.6;
+    uv = vec2(uv.x * 0.55 + uv.y * 0.35, uv.y * 2.4 - uv.x * 0.2) + vec2(uTime * 0.004, 0.0);
+    float n = vnoise(uv * 1.3) * 0.6 + vnoise(uv * 3.1) * 0.3 + vnoise(uv * 7.3) * 0.1;
+    float wisp = smoothstep(0.6, 0.88, n) * smoothstep(0.04, 0.24, h) * (1.0 - smoothstep(0.55, 0.95, h));
+    col = mix(col, vec3(0.97, 0.98, 1.0), wisp * 0.32);
+  }
+
+  float sunAmt = max(dot(dir, sunDir), 0.0);
   col += vec3(1.0, 0.94, 0.78) * pow(sunAmt, 900.0) * 0.85;  // disc
   col += vec3(1.0, 0.88, 0.62) * pow(sunAmt, 24.0) * 0.13;   // halo
   col += vec3(1.0, 0.86, 0.66) * pow(sunAmt, 6.0) * 0.07;    // warm scatter
@@ -35,7 +63,7 @@ void main() {
   gl_FragColor = vec4(col, 1.0);
 }`;
 
-function cloudTexture(seed) {
+function cloudTexture(seed, stratus = false) {
   const s = 256;
   const cv = document.createElement('canvas');
   cv.width = cv.height = s;
@@ -43,10 +71,10 @@ function cloudTexture(seed) {
   ctx.clearRect(0, 0, s, s);
   const rng = makeRng(seed);
   // layered soft blobs — white cores with a cooler shaded underside
-  for (let i = 0; i < 24; i++) {
-    const x = s * (0.18 + rng() * 0.64);
-    const y = s * (0.32 + rng() * 0.3);
-    const r = s * (0.07 + rng() * 0.15);
+  for (let i = 0; i < (stratus ? 40 : 24); i++) {
+    const x = s * (stratus ? 0.08 + rng() * 0.84 : 0.18 + rng() * 0.64);
+    const y = s * (stratus ? 0.42 + rng() * 0.14 : 0.32 + rng() * 0.3);
+    const r = s * (stratus ? 0.05 + rng() * 0.08 : 0.07 + rng() * 0.15);
     // shadow blob, offset downward
     const gs = ctx.createRadialGradient(x, y + r * 0.4, 0, x, y + r * 0.4, r * 1.05);
     gs.addColorStop(0, 'rgba(148,168,196,0.30)');
@@ -70,7 +98,7 @@ function cloudTexture(seed) {
 // camera far plane (700m). They follow the player, so they read as an
 // infinitely distant backdrop; fog is baked into the vertex colors instead
 // of applied (uniform fog at that range would erase them).
-function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq, map) {
+function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq, map, aerial = 0) {
   const N=384,rows=9,noise=new Simplex2(seed),verts=[],cols=[],uvs=[],indices=[];
   const top=new THREE.Color(topColor),haze=new THREE.Color(baseColor),c=new THREE.Color();
   const heights=[];
@@ -106,14 +134,14 @@ function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq, map) {
   // Keep haze at the hidden foot of the ridge so slopes retain their detail.
   material.onBeforeCompile=shader=>{
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRidgeHeight=position.y;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <fog_fragment>',`\n#ifdef USE_FOG\ngl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,1.0-smoothstep(-12.0,32.0,vRidgeHeight));\n#endif`);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <fog_fragment>',`\n#ifdef USE_FOG\ngl_FragColor.rgb=mix(gl_FragColor.rgb,vec3(0.6,0.7,0.8),${aerial.toFixed(3)}*(0.55+0.45*(1.0-smoothstep(0.0,110.0,vRidgeHeight))));\ngl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,1.0-smoothstep(-12.0,32.0,vRidgeHeight));\n#endif`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
       // Reuse forest/ravine detail from First Light without importing its sky.
       vec3 mountainPhoto=texture2D(map,vMapUv).rgb;
       float detail=clamp(dot(mountainPhoto,vec3(.299,.587,.114))*3.4+.45,.50,1.32);
       diffuseColor.rgb*=detail;`);
   };
-  material.customProgramCacheKey=()=> 'textured-ridge4';
+  material.customProgramCacheKey=()=> 'textured-ridge5-'+aerial.toFixed(3);
   const mesh=new THREE.Mesh(geo,material);mesh.name='distant-ridge';mesh.frustumCulled=false;return mesh;
 }
 
@@ -154,7 +182,7 @@ export function buildSky(scene) {
   const skyMat = new THREE.ShaderMaterial({
     vertexShader: SKY_VERT,
     fragmentShader: SKY_FRAG,
-    uniforms: { sunDir: { value: SUN_DIR.clone() } },
+    uniforms: { sunDir: { value: SUN_DIR.clone() }, uTime: { value: 0 } },
     side: THREE.BackSide,
     depthWrite: false,
   });
@@ -174,19 +202,21 @@ export function buildSky(scene) {
   });
   ridgeMap.colorSpace=THREE.SRGBColorSpace;ridgeMap.wrapS=THREE.MirroredRepeatWrapping;ridgeMap.anisotropy=4;
   const distant = new THREE.Group();
-  distant.add(ridgeLayer(645, 36, 125, 0x7690a1, 0x899fa5, 1201, 2.6, ridgeMap));
-  distant.add(ridgeLayer(565, 22, 96, 0x58777a, 0x768e88, 5807, 3.4, ridgeMap));
+  distant.add(ridgeLayer(645, 36, 125, 0x7690a1, 0x899fa5, 1201, 2.6, ridgeMap, 0.22));
+  distant.add(ridgeLayer(565, 22, 96, 0x58777a, 0x768e88, 5807, 3.4, ridgeMap, 0.11));
   distant.add(ridgeLayer(488, 12, 68, 0x496554, 0x607d68, 9103, 4.3, ridgeMap));
   scene.add(distant);
 
   // clouds
   const texA = cloudTexture(71);
   const texB = cloudTexture(137);
+  const texC = cloudTexture(203, true);
   const clouds = new THREE.Group();
   const cloudData = [];
   for (let i = 0; i < 26; i++) {
+    const stratus = i % 5 === 4;
     const cMat = new THREE.SpriteMaterial({
-      map: i % 2 ? texA : texB,
+      map: stratus ? texC : i % 2 ? texA : texB,
       transparent: true, opacity: 0.58 + Math.random() * 0.2,
       depthWrite: false, fog: false, color: 0xffffff,
     });
@@ -194,8 +224,11 @@ export function buildSky(scene) {
     const ang = Math.random() * Math.PI * 2;
     const rad = 260 + Math.random() * 440;
     sp.position.set(Math.cos(ang) * rad, 110 + Math.random() * 110, Math.sin(ang) * rad);
-    const sc = 130 + Math.random() * 200;
-    sp.scale.set(sc, sc * 0.42, 1);
+    const sc = stratus ? 260 + Math.random() * 220 : 90 + Math.random() * 230;
+    sp.scale.set(sc, sc * (stratus ? 0.2 : 0.36 + Math.random() * 0.14), 1);
+    // clouds toward the sun catch warmer light; the far side stays cooler
+    const toSun = (Math.cos(ang) * SUN_DIR.x + Math.sin(ang) * SUN_DIR.z) / Math.hypot(SUN_DIR.x, SUN_DIR.z);
+    cMat.color.setRGB(1, 0.97 + toSun * 0.02, 0.93 + toSun * 0.05);
     clouds.add(sp);
     cloudData.push({ sp, speed: 1.2 + Math.random() * 1.6 });
   }
@@ -227,6 +260,7 @@ export function buildSky(scene) {
   scene.add(sun.target);
 
   function update(dt, focus) {
+    skyMat.uniforms.uTime.value += dt;
     // keep sky + backdrop + shadow frustum centred on the player
     sky.position.copy(focus);
     distant.position.set(focus.x, 0, focus.z);

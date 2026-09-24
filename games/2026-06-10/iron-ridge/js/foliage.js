@@ -4,12 +4,12 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { installTreeFade, treeLodAttribute, treeBlend } from './tree-lod.js?v=detail3';
-import { barkTexture } from './surface-art.js?v=detail3';
-import { woodlandMaterial, woodlandParts, undergrowthParts, nearTreeParts, nearLeafMaterial } from './tree-art.js?v=detail3';
-import { getHeight, getNormal, forestDensity } from './terrain.js?v=detail3';
-import { makeRng } from './noise.js?v=detail3';
-import { WORLD_HALF, SCATTER, CG } from './config.js?v=detail3';
+import { installTreeFade, treeLodAttribute, treeBlend } from './tree-lod.js?v=polish1';
+import { barkTexture } from './surface-art.js?v=polish1';
+import { woodlandMaterial, woodlandParts, undergrowthParts, nearTreeParts, nearLeafMaterial } from './tree-art.js?v=polish1';
+import { getHeight, getNormal, forestDensity } from './terrain.js?v=polish1';
+import { makeRng } from './noise.js?v=polish1';
+import { WORLD_HALF, SCATTER, CG } from './config.js?v=polish1';
 
 // --- tiny non-indexed geometry merger (avoids vendoring utils) ----------
 function mergeGeoms(geoms) {

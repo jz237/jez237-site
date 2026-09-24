@@ -51,6 +51,44 @@ check line-of-sight, and lead their shots.
   mobile, and the browser heartbeat keeps lobbies fresh while players
   wait.
 
+## Combat readability (polish1, September 2026)
+
+- **Armour results:** AP hits call out what happened under the reticle. A
+  rear hit is a REAR PENETRATION (×1.5), a side hit a SIDE PENETRATION
+  (×1.15), a head-on glacis hit a PENETRATION (×0.85), and a round striking
+  the front plate at 35–60° RICOCHETs (×0.35) with a spark fan and a
+  skipping tracer. Kills get a 75 ms hit-stop.
+- **Shell arc:** a dashed predicted flight path from the gun as it actually
+  points (turret slew and barrel damping included) and a screen-sized impact
+  marker. The marker turns red when a tree or crest will catch the round short
+  of the reticle. Toggle it under Options → Shell arc.
+- **Hull down:** when the nearest threat can see your turret over a crest but
+  not your hull, a HULL DOWN badge shows and direct hits deal 40% less damage.
+- **Ground:** the worn paths are firm (+14% top speed); dense forest floor
+  drags the tracks (up to −16%).
+- **Warnings:** artillery salvos get a banner, a double whistle, and pulsing
+  red target discs about 2.3 s before each shell lands. Off-screen tanks that
+  fire flash their edge chevron and ping the minimap. For the first seconds of
+  a run an arrow points to the nearest contact until you fire or close to 60 m.
+- **Camera:** foliage inside a cone between the lens and the tank dithers
+  away in the tree shaders (no extra draw calls), so forests no longer swallow
+  the view. Only a trunk the lens itself would sit inside pulls the camera in.
+- **Effects:** explosions run flash → cooling fireball → lingering dark smoke
+  column → ground dust skirt, and throw soil clods instead of cubes. Craters
+  have a burnt bowl, a lighter ejecta lip, radial streaks and a scorch halo,
+  and follow slopes. Wrecks keep their panel detail, get a scorched finish and
+  a knocked turret, then smoulder on the field for 90 s (seven at most).
+- **Look:** the camo patches are about 2.5× finer with muted olive tones and a
+  third colour. Every panel has baked crease occlusion and worn edges. The sky
+  adds a warm sun-side horizon, a thin horizon haze and high cirrus. The two
+  far ridge layers get light aerial perspective. Stratus banks and sun-warmed
+  clouds add variety. Near pines use more, fanned, drooping needle tufts
+  that are darker toward the trunk. Each card's bare twig is now buried in the
+  branch.
+- **Quality scaler:** deploy, startup and each level change get a grace
+  window, and a step down needs 2.5 s of sustained slowness, so compile
+  hitches no longer drop a capable machine to Low.
+
 ## Art and rendering
 
 Nearby trees have bark trunks, branches and individual leaf/needle sprays
