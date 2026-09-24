@@ -1,0 +1,32 @@
+[
+  {
+    "name": "front",
+    "stats": {
+      "meshes": 2,
+      "triangles": 726268
+    },
+    "changed": 0,
+    "max": 0,
+    "mean": 0
+  },
+  {
+    "name": "oblique",
+    "stats": {
+      "meshes": 2,
+      "triangles": 726268
+    },
+    "changed": 0,
+    "max": 0,
+    "mean": 0
+  },
+  {
+    "name": "macro",
+    "stats": {
+      "meshes": 2,
+      "triangles": 726268
+    },
+    "changed": 0,
+    "max": 0,
+    "mean": 0
+  }
+]

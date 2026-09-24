@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#051525"><script type="module">
+import * as T from 'three';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {branchingColony} from '/CoralMorphology.ts';
+import {buildAnemones} from '/Anemones.ts';
+import {reefDrawOrderReady,optimizeReefDrawOrder} from '/ReefDrawOrder.ts';
+let seed=84;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+const scene=new T.Scene(),root=new T.Group();scene.add(root);scene.background=new T.Color('#061623');
+const renderer=new T.WebGLRenderer({preserveDrawingBuffer:true,antialias:true});renderer.setSize(1000,700);document.body.append(renderer.domElement);renderer.toneMapping=T.ACESFilmicToneMapping;
+scene.add(new T.HemisphereLight(0xc0dfff,0x17222f,1));const sun=new T.DirectionalLight(0xffffff,3);sun.position.set(-3,6,5);scene.add(sun);
+const coral=new T.Mesh(mergeGeometries(branchingColony(new T.Vector3(-1.6,.1,0),1.8,.8,random),false),new T.MeshStandardMaterial({vertexColors:true,roughness:.8}));root.add(coral);
+const anemone=buildAnemones([new T.Vector3(1,.1,.4),new T.Vector3(-2,.1,-2)],{value:.5},random,p=>p.y-.28);root.add(anemone.mesh);
+const camera=new T.PerspectiveCamera(38,1000/700,.1,100);camera.position.set(0,2.5,7);camera.lookAt(0,1,0);
+await reefDrawOrderReady;renderer.render(scene,camera);
+const originals=new Map();root.traverse(m=>{if(m.geometry?.index)originals.set(m.geometry,m.geometry.index.array.slice());});
+window.proof={camera,renderer,scene,optimize:()=>optimizeReefDrawOrder(root),restore:()=>{for(const [g,a] of originals){g.index.array.set(a);g.index.needsUpdate=true;}},render:()=>renderer.render(scene,camera),read:()=>{const gl=renderer.getContext(),a=new Uint8Array(1000*700*4);gl.readPixels(0,0,1000,700,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;}};
+</script>

@@ -1,0 +1,440 @@
+{
+  "readyMs": 6983,
+  "shadowFrames": 60,
+  "samples": [
+    {
+      "fps": 59.99100134979755,
+      "time": 6.00369999995233,
+      "bites": 13,
+      "remaining": 32,
+      "anemones": {
+        "brushing": 4,
+        "maxBrush": 0.09071656343615052,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 10.02059999995231,
+      "bites": 29,
+      "remaining": 16,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0000032267346357976475,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 14.037599999952251,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 4,
+        "maxBrush": 0.0705386463182261,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 18.038099999952205,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 2,
+        "maxBrush": 0.06088813176088449,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 22.055099999952137,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 2,
+        "maxBrush": 0.030101139445137023,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.1956096644669959,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 26.072099999952048,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0011662262817821103,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.13669062350040506,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 30.08909999995194,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 1,
+        "maxBrush": 0.04527000719831388,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.05309293972442437,
+          0
+        ]
+      }
+    }
+  ],
+  "checks": {
+    "loading": true,
+    "feeding": true,
+    "spacing": true,
+    "obstacles": true,
+    "pause": true,
+    "camera": true,
+    "lighting": true,
+    "fullscreen": true,
+    "identification": true,
+    "mobile": true,
+    "randomized": true
+  },
+  "initial": {
+    "anemoneBackdropStats": {
+      "rocks": 7,
+      "rockTriangles": 74060,
+      "crusts": 62,
+      "colonies": 5,
+      "polyps": 71,
+      "tentacles": 480,
+      "triangles": 463356
+    },
+    "rockLifeStats": {
+      "patches": 254,
+      "pores": 5829,
+      "triangles": 736378,
+      "maxAttachmentError": 0.005,
+      "colors": 7
+    },
+    "footStats": {
+      "rocks": 10,
+      "polyps": 242,
+      "tentacles": 1944,
+      "triangles": 386348,
+      "maxAttachmentError": 0.003000000000000315
+    },
+    "canopyStats": {
+      "colonies": 12,
+      "triangles": 934620
+    },
+    "triangles": 17642376,
+    "inhabitants": 21,
+    "buttressStats": {
+      "rocks": 9,
+      "rockTriangles": 95220,
+      "colonies": 4,
+      "coralTriangles": 186206,
+      "polyps": 97,
+      "tentacles": 912,
+      "maxAttachmentError": 0.0030000000000001505
+    },
+    "polypStats": {
+      "polyps": 564,
+      "tentacles": 3504,
+      "maxAttachmentError": 0.003000000000000225
+    },
+    "rockStats": {
+      "triangles": 849602,
+      "bufferBytes": 29888216,
+      "expandedBufferBytes": 112147464
+    },
+    "crustStats": {
+      "colonies": 93,
+      "triangles": 93432,
+      "emergentColonies": 3,
+      "emergentTriangles": 138550,
+      "understoryColonies": 24,
+      "understoryTriangles": 1153402,
+      "mantleColonies": 12,
+      "mantleTriangles": 30052
+    },
+    "infillStats": {
+      "colonies": 11,
+      "triangles": 549601,
+      "placements": [
+        [
+          1,
+          -2.3293738395249055,
+          2.4894741716151554,
+          0.47,
+          0.035
+        ],
+        [
+          5,
+          -2.48,
+          0.88,
+          0.48,
+          0.22
+        ],
+        [
+          8,
+          -2.08,
+          1.05,
+          0.36,
+          0.03
+        ],
+        [
+          9,
+          -3.42,
+          1.22,
+          0.33,
+          0.14
+        ],
+        [
+          11,
+          -3.86002344463442,
+          1.5607145878049533,
+          0.34,
+          0.23
+        ],
+        [
+          14,
+          1.474970675119953,
+          3.5631057078247537,
+          0.43,
+          0.14
+        ],
+        [
+          19,
+          4.3623875879720995,
+          1.6737468652770737,
+          0.48,
+          0.14
+        ],
+        [
+          22,
+          1.29,
+          1.24,
+          0.4,
+          0.025
+        ],
+        [
+          23,
+          1.05,
+          1.65,
+          0.35,
+          0.23
+        ],
+        [
+          27,
+          2.274984466846001,
+          3.3617742425195716,
+          0.31,
+          0.23
+        ],
+        [
+          28,
+          3.9286545634283656,
+          2.4476474502760235,
+          0.37,
+          0.025
+        ]
+      ]
+    },
+    "flankStats": {
+      "colonies": 12,
+      "triangles": 89376,
+      "attachments": [
+        [
+          0,
+          -3.92,
+          1.68,
+          0.11275640704334178,
+          0.015999999999999914
+        ],
+        [
+          1,
+          -3.77,
+          1.55,
+          0.08205625243712067,
+          0.01599999999999993
+        ],
+        [
+          2,
+          -2.18,
+          1.29,
+          -0.08703367491617708,
+          0.016000000000000052
+        ],
+        [
+          3,
+          -2.29,
+          1.14,
+          -0.11662285490846269,
+          0.015999999999999993
+        ],
+        [
+          4,
+          -3.07,
+          2.76,
+          -0.15430565272290453,
+          0.016000000000000025
+        ],
+        [
+          5,
+          -2.94,
+          2.63,
+          -0.11420143169021468,
+          0.0160000000000001
+        ],
+        [
+          6,
+          1.04,
+          1.82,
+          0.008808643348922729,
+          0.01599999999999997
+        ],
+        [
+          7,
+          1.14,
+          1.65,
+          -0.004482169313894779,
+          0.016000000000000007
+        ],
+        [
+          8,
+          2.08,
+          3.18,
+          -0.21441361356917454,
+          0.01599999999999992
+        ],
+        [
+          9,
+          2.23,
+          3.02,
+          -0.22690699737094233,
+          0.015999999999999973
+        ],
+        [
+          10,
+          3.49,
+          1.61,
+          -0.0880344678472369,
+          0.0160000000000001
+        ],
+        [
+          11,
+          3.61,
+          1.46,
+          0.665630571957534,
+          0.016000000000000125
+        ]
+      ]
+    }
+  },
+  "files": [
+    "assets/anthias-qh5-fys7.glb",
+    "assets/attachments-tGRJRB4l.json",
+    "assets/chromis-ArXoNpqP.glb",
+    "assets/clown-CVwpScsO.glb",
+    "assets/goby-Bok4otvk.glb",
+    "assets/gramma-4tsMCcIb.glb",
+    "assets/index-D_e43Ed5.js",
+    "assets/index-DdD2V56_.css",
+    "assets/map-BCNLyojM.png",
+    "assets/map-BeFEIA0e.png",
+    "assets/map-Ie55ijny.png",
+    "assets/map-rahrN3k8.png",
+    "assets/normalMap-AIoBIlzs.png",
+    "assets/normalMap-CVYemK4O.png",
+    "assets/normalMap-DQPJoT0j.png",
+    "assets/normalMap-T-Tek4aZ.png",
+    "assets/roughnessMap-4hZTjONg.png",
+    "assets/roughnessMap-DIiV2VjT.png",
+    "assets/roughnessMap-qepxckm-.png",
+    "assets/skeleton-InQKSODj.png",
+    "assets/tang-DZS7dloZ.glb",
+    "assets/yellow-BgTFl_Sa.glb",
+    "index.html"
+  ],
+  "buildHash": "8e5d6662c427c0485e9a57bf15958d044061b64797d5f609fd0aa89f62127986",
+  "checkedAt": "2026-09-24T06:07:57.004Z",
+  "scope": "Give branching coral fuller, rounded distal shoulders and a gradual pale growth margin while preserving recessed axial cups and attached radial corallites.",
+  "geometryChecks": [
+    "Canonical fixture 93820 triangles / 3216128 bytes, up 2520 / 76104 from prior",
+    "Terminal skin uses five axial sections; primary and secondary branches unchanged",
+    "Colony populations, root placements, random stream and every existing corallite retained",
+    "Radial cups follow actual widened mesh skin; attachment error below 1.5e-8",
+    "Finite meshes, smooth seams, rounded cup ends, supported roots and nondegenerate tissue checks pass",
+    "All fish navigation, substrate, breathing, anemone geometry and contact checks pass"
+  ],
+  "visualReview": [
+    "front",
+    "oblique",
+    "side",
+    "mobile",
+    "live baseline fingers-before-corals versus fingers-five-corals",
+    "compiled coral-closeup and outcrop-closeup",
+    "compiled anemone time sequence with swimming clownfish",
+    "reef reference photo",
+    "planted original and mature planted render"
+  ],
+  "plantedReleaseAndSyncPassed": true,
+  "hiddenReefFilesChanged": false,
+  "publication": [],
+  "performanceComparison": {
+    "baseline": "c76097137",
+    "loadPrior": 6465.5,
+    "loadCurrent": 6634,
+    "fpsPrior": 150,
+    "fpsCurrent": 137.5,
+    "priorTriangles": 17264616,
+    "currentTriangles": 17642376,
+    "interpretation": "Alternating serial local Chrome at 1440x854 canvas. Fuller distal branch skin adds one axial section to terminal branches, retaining every original branch and corallite. No new textures, material groups or per-frame work. Observations are local, not universal speed claims.",
+    "caveat": "Uncapped host timing is variable: final prior samples 135.1/144.1/170.9 FPS and current 137.6/143.8/130.9. Mean current throughput is 8.3% lower; first two adjacent pairs are comparable and the final pair differs substantially. Do not claim a speed gain or a precise cost from this run. All ordinary samples maintained 60 FPS; geometry increase is 2.19%. The six-section trial was rejected; five sections halve its added triangles without losing the reviewed rounded silhouette."
+  },
+  "status": "candidate: publication withheld pending performance review"
+}
