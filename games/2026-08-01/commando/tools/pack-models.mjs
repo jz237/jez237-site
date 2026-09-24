@@ -70,10 +70,10 @@ async function bundle(names, file, opt = {}) {
 
 const list = fs.readFileSync(path.join(HERE, 'models.txt'), 'utf8').trim().split(/\r?\n/).map(l => l.split(' ')[0]);
 for (const n of ['adventurer', 'swat', 'beach']) await character('man-' + n, n + '.glb', n === 'swat');
-const nature = (n) => n.startsWith('mk-') || n.startsWith('palm') || n.startsWith('toon-tree');
+const nature = (n) => n.startsWith('mk-');
 await bundle(list.filter(n => !n.startsWith('man-') && !nature(n)), 'props.glb', { tex: 256 });
 const SIMPLIFY = {
-  'palm-1': 0.35, 'palm-2': 0.35, 'palm-3': 0.35, 'palm-4': 0.5, 'mk-tree-1': 0.4, 'mk-tree-2': 0.4,
+  'mk-tree-1': 0.4, 'mk-tree-2': 0.4,
   'mk-dead-tree-1': 0.3, 'mk-dead-tree-2': 0.3, 'mk-bush-flowers': 0.5, 'mk-bush': 0.5,
 };
 await bundle(list.filter(nature), 'nature.glb', { tex: 512, dropNormals: true, simplify: SIMPLIFY });

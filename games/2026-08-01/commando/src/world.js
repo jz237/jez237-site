@@ -8,6 +8,7 @@ import * as M2 from './models2.js';
 import * as TX from './textures.js';
 import * as QA from './assets.js';
 import { mulberry, fbm, smooth, clamp } from './util.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 export const WIND = { uTime: { value: 0 } };
 
@@ -56,21 +57,65 @@ function qMat(map, amp, alpha) {
 }
 // kind table entries: [geometry, material, shadow-depth material] per part
 let QK = null;
+// palms: a curved, ringed trunk wrapped in the MegaKit bark, crowned with two
+// layers of the MegaKit fern (its long pinnate fronds read as coconut-palm
+// fronds from above) and a cluster of coconuts, so palms match the textured
+// jungle around them
+const PALM_AMP = 0.0016;
+function palmParts(seed) {
+  const r = mulberry(seed);
+  const H = 6.4 + r() * 2.4, lean = 0.5 + r() * 1.4, la = r() * Math.PI * 2;
+  const pts = [];
+  for (let i = 0; i <= 8; i++) { const t = i / 8, bend = Math.pow(t, 1.7) * lean; pts.push(new THREE.Vector3(Math.cos(la) * bend, t * H, Math.sin(la) * bend)); }
+  const curve = new THREE.CatmullRomCurve3(pts), frames = curve.computeFrenetFrames(32, false);
+  const seg = 32, rad = 9, pos = [], uv = [], idx = [];
+  for (let i = 0; i <= seg; i++) {
+    const t = i / seg, P = curve.getPointAt(t), N = frames.normals[i], B = frames.binormals[i];
+    // tapering, with a bulge at the base and a ring every ~22 cm
+    const R = 0.23 * (1 - t * 0.4) * (1 + Math.max(0, 0.12 - t) * 3) * (1 + 0.06 * Math.abs(Math.sin(t * H * 14)));
+    for (let j = 0; j <= rad; j++) {
+      const a = j / rad * Math.PI * 2, cx = Math.cos(a), sx = Math.sin(a);
+      pos.push(P.x + (N.x * cx + B.x * sx) * R, P.y + (N.y * cx + B.y * sx) * R, P.z + (N.z * cx + B.z * sx) * R);
+      uv.push(j / rad * 1.5, t * H / 1.3);
+    }
+  }
+  for (let i = 0; i < seg; i++) for (let j = 0; j < rad; j++) { const a = i * (rad + 1) + j, b = a + rad + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
+  const tube = new THREE.BufferGeometry();
+  tube.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  tube.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  tube.setIndex(idx); tube.computeVertexNormals();
+  const top = curve.getPointAt(1);
+  // coconuts: a few spheres under the crown (the bark texture reads as husk)
+  const parts = [tube];
+  for (let i = 0; i < 4; i++) {
+    const a = r() * Math.PI * 2;
+    parts.push(new THREE.SphereGeometry(0.15, 8, 6).translate(top.x + Math.cos(a) * 0.22, top.y - 0.3 - r() * 0.15, top.z + Math.sin(a) * 0.22));
+  }
+  const trunk = mergeGeometries(parts, false);
+  const fern = QA.texturedParts('nature', 'mk-fern', { w: 1 }).parts[0];
+  const layer = (w, rot, dy, tilt) => {
+    const g = fern.geo.clone();
+    g.scale(w, w * 0.9, w).rotateY(rot);
+    if (tilt) g.rotateX(tilt);
+    return g.translate(top.x, top.y + dy, top.z);
+  };
+  const crown = mergeGeometries([layer(5.4 + r() * 1.4, r() * 6.28, -0.45, 0), layer(3.6 + r() * 0.8, r() * 6.28, -0.15, (r() - 0.5) * 0.25)], false);
+  trunk.userData.shared = crown.userData.shared = true;
+  return { trunk, crown, leaf: fern.map };
+}
+
 function qKinds() {
   if (QK) return QK;
-  const vcWind = windify(M.MAT.vc.clone(), 0.0018); vcWind.userData.shared = true;
-  // the palms' atlas greens are brighter than the rest of the jungle: calm them
-  const flat = (n, fit) => {
-    const g = QA.flatGeo('nature', n, fit), c = g.attributes.color;
-    for (let i = 0; i < c.count; i++) {
-      const r = c.getX(i), gg = c.getY(i), b = c.getZ(i), l = 0.3 * r + 0.59 * gg + 0.11 * b;
-      c.setXYZ(i, (r + (l - r) * 0.3) * 0.58, (gg + (l - gg) * 0.3) * 0.58, (b + (l - b) * 0.3) * 0.5);
-    }
-    return [[g, vcWind, null]];
-  };
   const tex = (n, fit, amp) => QA.texturedParts('nature', n, fit).parts.map((p) => { const m = qMat(p.map, amp, p.alpha); return [p.geo, m.mat, m.depth]; });
+  const bark = QA.texturedParts('nature', 'mk-tree-1', { h: 9.5 }).parts.find((p) => !p.alpha).map;
+  const palm = (seed) => {
+    const P = palmParts(seed), bm = qMat(bark, PALM_AMP, false), lm = qMat(P.leaf, PALM_AMP, true);
+    bm.mat.color.setRGB(0.66, 0.66, 0.68);     // greyer than the reddish tree bark
+    lm.mat.color.setRGB(0.66, 0.72, 0.54);     // fronds a little older than the fern's lime
+    return [[P.trunk, bm.mat, bm.depth], [P.crown, lm.mat, lm.depth]];
+  };
   QK = {
-    palm0: flat('palm-1', { h: 6.6 }), palm1: flat('palm-2', { h: 8.2 }), palm2: flat('palm-3', { h: 6.9 }), palm3: flat('palm-4', { h: 6.2 }),
+    palm0: palm(11), palm1: palm(23), palm2: palm(37), palm3: palm(51),
     tree0: tex('mk-tree-1', { h: 9.5 }, 0.0011), tree1: tex('mk-tree-2', { h: 9.5 }, 0.0011),
     bigleaf: tex('mk-plant-big-2', { h: 2.2 }, 0.02), plant: tex('mk-plant', { h: 1.25 }, 0.03),
     fbush: tex('mk-bush-flowers', { h: 1.45 }, 0.02), rbush: tex('mk-bush', { h: 1.2 }, 0.02),
@@ -270,17 +315,20 @@ export class World {
     const ground = this.ground = new THREE.Mesh(geo, this.groundMat);
     ground.receiveShadow = true;
     this.root.add(ground);
-    // water: one flat animated sheet per body of water
+    // water: one animated sheet per body of water, carrying the depth to the
+    // bed at every vertex (shallows clear and pale, foam along the shore)
     this.waterMat = waterMaterial(this.tex.ground.normal, this.amb.water, this.terrain.waters.some(w => w.murky));
+    const step = this.quality === 'high' ? 0.6 : 1.0;
     for (const w of this.terrain.waters) {
-      let m;
-      if (w.t === 'band') {
-        m = new THREE.Mesh(new THREE.PlaneGeometry(X_EXTENT * 2, w.p1 - w.p0 + 8).rotateX(-Math.PI / 2), this.waterMat);
-        m.position.set(0, w.level, -(w.p0 + w.p1) / 2);
-      } else {
-        m = new THREE.Mesh(new THREE.PlaneGeometry(w.rx * 2 + 6, w.rp * 2 + 6).rotateX(-Math.PI / 2), this.waterMat);
-        m.position.set(w.x, w.level, -w.p);
-      }
+      const band = w.t === 'band';
+      const wd = band ? X_EXTENT * 2 : w.rx * 2 + 6, ht = band ? w.p1 - w.p0 + 8 : w.rp * 2 + 6;
+      const cx = band ? 0 : w.x, cp = band ? (w.p0 + w.p1) / 2 : w.p;
+      const g = new THREE.PlaneGeometry(wd, ht, Math.ceil(wd / step), Math.ceil(ht / step)).rotateX(-Math.PI / 2);
+      const pos = g.attributes.position, dep = new Float32Array(pos.count);
+      for (let i = 0; i < pos.count; i++) dep[i] = w.level - this.terrain.height(cx + pos.getX(i), cp - pos.getZ(i));
+      g.setAttribute('depth', new THREE.BufferAttribute(dep, 1));
+      const m = new THREE.Mesh(g, this.waterMat);
+      m.position.set(cx, w.level, -cp);
       m.receiveShadow = true; m.renderOrder = 1;
       this.root.add(m);
     }
@@ -494,11 +542,24 @@ export class World {
           const len = pr.x1 - pr.x0, xm = (pr.x0 + pr.x1) / 2;
           const wallGeo = new THREE.BoxGeometry(len, 1.1, 0.08);
           wallGeo.attributes.uv.array.forEach((v, i, a) => { a[i] = v * (i % 2 ? 0.5 : len / 2); });
-          M.P(wallGeo, '#9b8260');
+          M.P(wallGeo, '#b89c74');
           for (const side of [-1, 1]) {
             const w = new THREE.Mesh(wallGeo, M.MAT.planks); w.receiveShadow = true;
             w.position.set(xm, -0.68, -(pr.p + side * 0.66)); this.root.add(w);
           }
+          // timber posts holding the revetment and duckboards along the floor
+          // (nothing on the south lip: it faces the camera and would hide the
+          // soldiers inside)
+          const tp = [], wr = mulberry(Math.round(pr.p * 13));
+          for (let x = pr.x0 + 0.4; x < pr.x1 - 0.2; x += 1.5) for (const side of [-1, 1]) {
+            tp.push(M.P(new THREE.BoxGeometry(0.13, 1.5, 0.13), wr() < 0.5 ? '#6b5236' : '#5e4630', { x, y: -0.55 + wr() * 0.06, z: -(pr.p + side * 0.6), ry: (wr() - 0.5) * 0.2 }, 0.1));
+          }
+          for (let x = pr.x0 + 0.25; x < pr.x1 - 0.15; x += 0.24) {
+            tp.push(M.P(new THREE.BoxGeometry(0.15, 0.04, 0.84), wr() < 0.3 ? '#7a6143' : '#8c7250', { x: x + (wr() - 0.5) * 0.03, y: -1.17, z: -pr.p, ry: (wr() - 0.5) * 0.05 }, 0.12));
+          }
+          for (const dz of [-0.28, 0.28]) tp.push(M.P(new THREE.BoxGeometry(len - 0.3, 0.06, 0.07), '#4a3826', { x: xm, y: -1.21, z: -pr.p + dz }));
+          const tm = new THREE.Mesh(M.merge(tp), M.MAT.vc); tm.castShadow = true; tm.receiveShadow = true;
+          this.root.add(tm);
           bagRow([[pr.x0 + 0.2, pr.p + 1.05], [pr.x1 - 0.2, pr.p + 1.05]], 2);
           col.list[col.list.length - 1].bul = false;  // low parapet: fire passes over
           col.list[col.list.length - 1].enemyPass = true;

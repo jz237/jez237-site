@@ -14,14 +14,17 @@ collider is built from the same data as its mesh.
 
 Since build v5 the soldiers, vehicles, many props and much of the vegetation
 are real models from poly.pizza: [Quaternius](https://quaternius.com/) (CC0 —
-Ultimate Modular Men for the soldiers, Stylized Nature MegaKit, Ultimate Nature
-palms, a few Toon Shooter Game Kit props) and KolosStudios' Military Pack
+Ultimate Modular Men for the soldiers, Stylized Nature MegaKit, a few Toon
+Shooter Game Kit props) and KolosStudios' Military Pack
 (CC BY — tank, army trucks, tent, container, water tank; credited on the title
 screen). Build v6 replaced v5's chunky cartoon soldiers and props with these
 normal-proportion ones, for the action-movie tone. Build v7 added scanned
 ground (five CC0 Poly Haven textures blended per vertex by biome, by height on
 high quality), billowing fireballs and smoke plumes, burning wrecks, film
-grain, lens fringe and FXAA. Terrain shape, water, buildings, the fortresses,
+grain, lens fringe and FXAA. Build v8 rebuilt the palms (a ringed trunk in
+code wearing the MegaKit bark, crowned with MegaKit fern fronds), gave water
+depth shading and shore foam, and dressed the trenches with posts and
+duckboards. Terrain shape, water, buildings, the fortresses,
 barrels and the remaining foliage are still built from primitives in code.
 
 ## Layout

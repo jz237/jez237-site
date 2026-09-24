@@ -1,5 +1,5 @@
 // assets.js — models from poly.pizza: Quaternius (CC0) Ultimate Modular Men,
-// Stylized Nature MegaKit, Ultimate Nature palms and a few Toon Shooter pieces;
+// Stylized Nature MegaKit and a few Toon Shooter pieces;
 // KolosStudios' Military Pack (CC-BY). They ship packed into meshopt-compressed
 // GLBs (assets/models/, see tools/), loaded once at boot. Everything the game
 // builds from them is cached here and shared by every area.

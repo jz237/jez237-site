@@ -438,6 +438,42 @@ export function waterMaterial(normalTex, color = '#3a6356', murky = false) {
       color: new THREE.Color(color), roughness: 0.06, metalness: 0.0, transparent: true, opacity: 0.84,
       normalMap: n, normalScale: new THREE.Vector2(0.45, 0.45), envMapIntensity: 1.6,
     });
-  m.userData.tick = (t) => { n.offset.set(t * 0.012, -t * 0.03); };
+  // depth shading from the per-vertex 'depth' (metres to the bed): pale and
+  // clear in the shallows, dark in the channel, a broken foam line at the shore
+  const deep = new THREE.Color(color).multiplyScalar(murky ? 1 : 0.78), shallow = new THREE.Color(color).lerp(new THREE.Color(murky ? '#6a5a3a' : '#8aa888'), 0.55);
+  const U = { uDeep: { value: deep }, uShallow: { value: shallow }, uFoam: { value: new THREE.Color(murky ? '#9a9478' : '#e6ece2') }, uWT: { value: 0 }, uFoamK: { value: murky ? 0.45 : 0.9 } };
+  m.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, U);
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute float depth; varying float vDepth; varying vec2 vWxz;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvDepth = depth; vWxz = (modelMatrix * vec4(position, 1.0)).xz;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+        uniform vec3 uDeep; uniform vec3 uShallow; uniform vec3 uFoam; uniform float uWT; uniform float uFoamK;
+        varying float vDepth; varying vec2 vWxz;
+        float wHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        float wNoise(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(wHash(i), wHash(i + vec2(1, 0)), f.x), mix(wHash(i + vec2(0, 1)), wHash(i + vec2(1, 1)), f.x), f.y); }`)
+      .replace('#include <color_fragment>', `#include <color_fragment>
+        float dN = smoothstep(0.0, 1.6, vDepth);
+        diffuseColor.rgb = mix(uShallow, uDeep, dN);
+        // slow streaks drifting downstream (+x), strongest over deep water
+        float streak = wNoise(vec2(vWxz.x * 0.35 - uWT * 0.45, vWxz.y * 2.4)) * wNoise(vec2(vWxz.x * 0.8 - uWT * 0.7, vWxz.y * 4.6 + 3.1));
+        diffuseColor.rgb += (uShallow - uDeep) * smoothstep(0.25, 0.7, streak) * 0.45 * dN * uFoamK;
+        float edge = 1.0 - smoothstep(0.0, 0.22 + 0.07 * sin(uWT * 1.4 + vWxz.x * 0.6 + vWxz.y * 0.4), vDepth);
+        float fn = wNoise(vWxz * 2.3 + vec2(uWT * 0.3, -uWT * 0.2)) * 0.6 + wNoise(vWxz * 6.1 - uWT * 0.5) * 0.4;
+        float foam = edge * smoothstep(0.42, 0.7, fn + edge * 0.35) * uFoamK;
+        diffuseColor.rgb = mix(diffuseColor.rgb, uFoam, foam);
+        diffuseColor.a = max(mix(0.42, diffuseColor.a, smoothstep(0.0, 0.7, vDepth)), foam);`);
+  };
+  // a second, larger normal layer drifting the other way breaks up the ripples
+  const onb = m.onBeforeCompile;
+  m.onBeforeCompile = (sh) => {
+    onb(sh);
+    sh.fragmentShader = sh.fragmentShader.replace('vec3 mapN = texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0;',
+      'vec3 mapN = normalize((texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0) + (texture2D( normalMap, vNormalMapUv * 0.43 + vec2(uWT * -0.017, uWT * 0.011) ).xyz * 2.0 - 1.0) * 0.8);');
+  };
+  m.customProgramCacheKey = () => 'water-depth-' + (murky ? 'm' : 'c');
+  m.userData.tick = (t) => { n.offset.set(t * 0.012, -t * 0.03); U.uWT.value = t; };
   return m;
 }

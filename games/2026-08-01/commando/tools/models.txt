@@ -17,14 +17,6 @@ tires https://static.poly.pizza/a90102e9-2031-4a96-a3f2-4d34db1876dd.glb
 broken-car https://static.poly.pizza/ab665646-c115-492f-a72f-1120399a1dd5.glb
 pallet https://static.poly.pizza/e2109848-da3e-41c0-a96f-4471e91f78d9.glb
 debris-pile https://static.poly.pizza/54ea4531-f623-482f-bfce-b9c90b3e2de3.glb
-toon-tree-1 https://static.poly.pizza/6293cb05-07cc-4f3f-858c-06b3f720c60b.glb
-toon-tree-2 https://static.poly.pizza/a3b9aa7a-f251-4de7-aba9-91f7a34ac502.glb
-toon-tree-3 https://static.poly.pizza/a2102cc2-cbe7-4bd0-8bc5-c0d4ee6e9e0d.glb
-toon-tree-4 https://static.poly.pizza/1f921887-711e-4237-ba91-a0489e7c2ed9.glb
-palm-1 https://static.poly.pizza/4c17decd-3087-4afe-9611-cfd92cca47cd.glb
-palm-2 https://static.poly.pizza/21d44b5b-efef-4abd-96ad-fc59e4ad373b.glb
-palm-3 https://static.poly.pizza/66cd7d94-abba-471e-8d8b-c8ad30aa5c70.glb
-palm-4 https://static.poly.pizza/1ac1bf37-184f-4e45-98a8-9da30bf37ffa.glb
 mk-bush https://static.poly.pizza/5d3066f4-58ac-46d4-899c-39d9e566e9df.glb
 mk-bush-flowers https://static.poly.pizza/af83abca-9b41-4229-9652-e336a5f5eaba.glb
 mk-fern https://static.poly.pizza/f94d836f-4eb4-4db0-aa53-3ecdddffa527.glb
