@@ -1,0 +1,189 @@
+// render.js — renderer, post chain, lights and the camera rig.
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { clamp, lerp } from './util.js';
+
+const PITCH = 56 * Math.PI / 180;     // camera looks down 56° below horizontal
+const FOV = 30;
+
+// final grade: gentle split-tone (cool shadows, warm highlights) + vignette,
+// applied in linear light before the ACES output transform
+const GradeShader = {
+  uniforms: { tDiffuse: { value: null }, uVig: { value: 0.32 }, uFlash: { value: 0 }, uFlashCol: { value: new THREE.Color(1, 0.9, 0.7) }, uHurt: { value: 0 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float uVig; uniform float uFlash; uniform vec3 uFlashCol; uniform float uHurt;
+    varying vec2 vUv;
+    void main(){
+      vec4 c = texture2D(tDiffuse, vUv);
+      float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+      vec3 shadowTint = vec3(0.93, 0.98, 1.07), hiTint = vec3(1.05, 1.0, 0.92);
+      c.rgb *= mix(shadowTint, hiTint, smoothstep(0.02, 0.6, l));
+      c.rgb = mix(vec3(l), c.rgb, 1.08);
+      vec2 q = vUv - 0.5; q.x *= 1.25;
+      float v = 1.0 - uVig * smoothstep(0.25, 0.85, length(q));
+      c.rgb *= v;
+      c.rgb += uFlashCol * uFlash;
+      float edge = smoothstep(0.35, 0.8, length(vUv - 0.5));
+      c.rgb = mix(c.rgb, c.rgb * vec3(1.4, 0.35, 0.3), uHurt * edge);
+      gl_FragColor = c;
+    }`,
+};
+
+export class Renderer {
+  constructor(canvas, quality) {
+    this.canvas = canvas;
+    this.quality = quality;       // 'high' | 'low'
+    const r = this.r = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: false });
+    r.outputColorSpace = THREE.SRGBColorSpace;
+    r.toneMapping = THREE.ACESFilmicToneMapping;
+    r.toneMappingExposure = 1.05;
+    r.shadowMap.enabled = true;
+    r.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = this.scene = new THREE.Scene();
+    this.fogColor = new THREE.Color('#b9b39a');
+    scene.background = this.fogColor.clone();
+    scene.fog = new THREE.Fog(this.fogColor, 55, 140);
+
+    const cam = this.camera = new THREE.PerspectiveCamera(FOV, 1, 1, 400);
+    this.focus = new THREE.Vector3();      // ground point at screen centre
+    this.shake = 0; this.shakeT = 0; this.kick = new THREE.Vector2();
+
+    // sky environment: a painted gradient baked to a PMREM, so water, helmets,
+    // barrels and wet mud pick up a believable sky reflection
+    {
+      const sky = new THREE.Scene();
+      const mat = new THREE.ShaderMaterial({
+        side: THREE.BackSide, depthWrite: false,
+        uniforms: { uSun: { value: new THREE.Vector3(-0.62, 0.72, 0.3).normalize() } },
+        vertexShader: 'varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+        fragmentShader: `varying vec3 vD; uniform vec3 uSun;
+          void main(){ float y = vD.y;
+            vec3 zen = vec3(0.26, 0.42, 0.72), hor = vec3(0.95, 0.82, 0.62), gnd = vec3(0.22, 0.18, 0.12);
+            vec3 c = y > 0.0 ? mix(hor, zen, pow(y, 0.55)) : mix(hor * 0.6, gnd, pow(-y, 0.4));
+            c += vec3(1.6, 1.2, 0.7) * pow(max(dot(vD, uSun), 0.0), 64.0);
+            gl_FragColor = vec4(c, 1.0); }`,
+      });
+      sky.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), mat));
+      const pm = new THREE.PMREMGenerator(r);
+      scene.environment = pm.fromScene(sky, 0.02).texture;
+      scene.environmentIntensity = 0.55;
+      pm.dispose();
+    }
+    // lighting: late-afternoon sun from the west-south-west, sky/ground fill
+    this.hemi = new THREE.HemisphereLight(0xc4d8ee, 0x6a5840, 0.95);
+    scene.add(this.hemi);
+    const sun = this.sun = new THREE.DirectionalLight(0xffe0b0, 3.1);
+    this.sunDir = new THREE.Vector3(-0.62, 0.72, 0.3).normalize();
+    sun.castShadow = true;
+    const S = 30;
+    Object.assign(sun.shadow.camera, { left: -S, right: S, top: S, bottom: -S, near: 1, far: 140 });
+    sun.shadow.mapSize.set(quality === 'high' ? 2048 : 1024, quality === 'high' ? 2048 : 1024);
+    sun.shadow.bias = -0.00035; sun.shadow.normalBias = 0.035;
+    sun.shadow.radius = 3;
+    scene.add(sun); scene.add(sun.target);
+
+    this.composer = null;
+    this.buildPost();
+    this.resize();
+    addEventListener('resize', () => this.resize());
+  }
+
+  buildPost() {
+    const r = this.r;
+    const comp = this.composer = new EffectComposer(r);
+    comp.addPass(new RenderPass(this.scene, this.camera));
+    this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.35, 0.9);
+    this.bloom.enabled = this.quality === 'high';
+    comp.addPass(this.bloom);
+    this.grade = new ShaderPass(GradeShader);
+    comp.addPass(this.grade);
+    comp.addPass(new OutputPass());
+  }
+
+  setQuality(q) {
+    this.quality = q;
+    this.bloom.enabled = q === 'high';
+    const n = q === 'high' ? 2048 : 1024;
+    if (this.sun.shadow.mapSize.x !== n) {
+      this.sun.shadow.mapSize.set(n, n);
+      if (this.sun.shadow.map) { this.sun.shadow.map.dispose(); this.sun.shadow.map = null; }
+    }
+    this.resize();
+  }
+
+  resize() {
+    const w = innerWidth, h = innerHeight;
+    const dprCap = this.quality === 'high' ? 2 : 1.25;
+    this.dpr = Math.min(devicePixelRatio || 1, dprCap);
+    this.r.setPixelRatio(this.dpr);
+    this.r.setSize(w, h, false);
+    this.composer.setPixelRatio(this.dpr);
+    this.composer.setSize(w, h);
+    this.bloom.resolution.set(w / 2, h / 2);
+    this.camera.aspect = w / h;
+    this.portrait = h > w * 1.05;
+    // ground width to show at the focus point: wide on landscape, tighter on
+    // portrait (where the camera also tracks Joe sideways)
+    this.viewWidth = this.portrait ? clamp(12 + (w / h - 0.46) * 14, 12, 16) : clamp(23.5 + (w / h - 1.33) * 4, 23.5, 30);
+    const hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(FOV) / 2) * this.camera.aspect);
+    this.dist = this.viewWidth / (2 * Math.tan(hfov / 2));
+    this.camera.updateProjectionMatrix();
+    this._calib();
+  }
+
+  // ground-plane z offsets (relative to the focus) of screen rows, used for
+  // keeping Joe at a fixed height on screen and for spawning off the top edge
+  _calib() {
+    const saveF = this.focus.clone();
+    this.focus.set(0, 0, 0); this._place(0, 0);
+    this.camera.updateMatrixWorld();
+    const rowZ = (ndcY) => this.groundAtNdc(0, ndcY).z;
+    this.offJoe = rowZ(-0.28);          // Joe sits ~64% down the screen
+    this.offTop = rowZ(1.0);
+    this.offBottom = rowZ(-1.0);
+    this.halfWidthTop = Math.abs(this.groundAtNdc(1, 1).x);
+    this.halfWidthBottom = Math.abs(this.groundAtNdc(1, -1).x);
+    this.focus.copy(saveF);
+  }
+
+  groundAtNdc(nx, ny, planeY = 0) {
+    const v = new THREE.Vector3(nx, ny, 0.5).unproject(this.camera);
+    const o = this.camera.position, d = v.sub(o).normalize();
+    const t = (planeY - o.y) / d.y;
+    return new THREE.Vector3(o.x + d.x * t, planeY, o.z + d.z * t);
+  }
+
+  _place(sx, sz) {
+    const cam = this.camera, f = this.focus;
+    cam.position.set(f.x + sx, f.y + Math.sin(PITCH) * this.dist, f.z + Math.cos(PITCH) * this.dist + sz);
+    cam.lookAt(f.x + sx, f.y, f.z + sz);
+  }
+
+  update(dt, t) {
+    // screen shake: decaying jitter + directional kick
+    this.shake = Math.max(0, this.shake - dt * 2.8);
+    this.kick.multiplyScalar(Math.pow(0.0005, dt));
+    const s = this.shake * this.shake;
+    const sx = (Math.sin(t * 71) + Math.sin(t * 37.3)) * 0.5 * s * 0.9 + this.kick.x;
+    const sz = (Math.cos(t * 63) + Math.sin(t * 29.1)) * 0.5 * s * 0.9 + this.kick.y;
+    this._place(sx, sz);
+    // shadow frustum follows the focus, snapped to texels to stop shimmer
+    const S = this.sun.shadow.camera.right, texel = (2 * S) / this.sun.shadow.mapSize.x;
+    const fx = Math.round(this.focus.x / texel) * texel, fz = Math.round((this.focus.z - 4) / texel) * texel;
+    this.sun.target.position.set(fx, 0, fz);
+    this.sun.position.set(fx + this.sunDir.x * 70, this.sunDir.y * 70, fz + this.sunDir.z * 70);
+  }
+
+  addShake(a, dirX = 0, dirZ = 0) {
+    this.shake = Math.min(1.2, Math.max(this.shake, a));
+    this.kick.x += dirX; this.kick.y += dirZ;
+  }
+
+  render() { this.composer.render(); }
+}
