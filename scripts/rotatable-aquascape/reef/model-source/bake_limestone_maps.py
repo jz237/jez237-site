@@ -33,11 +33,38 @@ shade=.49+.050*grain+.013*micro+.065*rims-.20*pits-.065*floor
 albedo=np.stack([shade*1.05,shade*1.015,shade*.91],axis=-1)
 crustColor=np.stack([.40+.015*grain,.30+.025*grain,.32+.015*grain],axis=-1)
 albedo=albedo*(1-crust[...,None]*.34)+crustColor*crust[...,None]*.34
+# Fine attached coralline communities interrupt bare carbonate at several
+# scales. Boundaries follow periodic branching fields, with pale growing rims
+# and small raised grains; color, relief and roughness share the same masks.
+# This is an original material study, not a photograph or a species scan.
+growth=field(59)*.78+grain*.32+micro*.055
+pigment=field(93)
+mask=np.clip((growth-.36)/.52,0,1)
+mask=mask*mask*(3-2*mask)
+rim=np.exp(-((growth-.47)/.11)**2)
+granules=np.maximum(0,micro*.38+grain*.28-.16)
+rose=np.array([.66,.35,.48])
+violet=np.array([.49,.34,.59])
+ochre=np.array([.68,.49,.30])
+teal=np.array([.36,.55,.49])
+warm=np.clip((pigment+.35)/1.0,0,1)[...,None]
+cool=np.clip((-pigment-.4)/.95,0,1)[...,None]
+tissue=rose*(1-warm)+ochre*warm
+tissue=tissue*(1-cool)+violet*cool
+green=np.clip((field(77)-1.15)/.8,0,1)[...,None]
+tissue=tissue*(1-green)+teal*green
+tissue*=np.clip(.89+.07*grain+.06*granules,.67,1.14)[...,None]
+# Existing dissolution cavities remain visible beneath the thin colonization.
+tissue*=np.clip(1-.31*pits-.10*floor,.5,1)[...,None]
+albedo=albedo*(1-mask[...,None]*.78)+tissue*mask[...,None]*.78
+albedo+=rim[...,None]*np.array([.045,.038,.041])
+height+=mask*(.030+.030*granules)+rim*.016
 # Preserve pore color beneath sheltered films instead of black painted spots.
 dx=(np.roll(height,-1,1)-np.roll(height,1,1))*2.8
 dy=(np.roll(height,-1,0)-np.roll(height,1,0))*2.8
 normal=np.stack([-dx,dy,np.ones_like(dx)],axis=-1);normal/=np.linalg.norm(normal,axis=-1)[...,None]
 rough=np.clip(.88+.06*pits+.018*grain-.05*rims, .69,.99)
+rough=np.clip(rough-mask*.035+granules*.012,.69,.99)
 out=Path(__file__).resolve().parent.parent/'assets'/'limestone';out.mkdir(parents=True,exist_ok=True)
 for name,data in [('map',albedo),('normalMap',np.concatenate([normal*.5+.5,rough[...,None]],axis=-1))]:
  assert np.isfinite(data).all()
