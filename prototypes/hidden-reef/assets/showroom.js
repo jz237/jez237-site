@@ -5,6 +5,7 @@
   const status = document.querySelector('#tank-status');
   const close = document.querySelector('#close-tank');
   let frame = null, ready = false, pending = null, visible = true, loadingTimer;
+  let habitat=new URLSearchParams(location.search).get('habitat')==='reef'?'reef':'freshwater';
   const entryLesson=new URLSearchParams(location.search).get('lesson');
   if(['water','nitrogen','underground','day','challenges','layers','experiments','organisms'].includes(entryLesson))pending={type:'lesson',value:entryLesson};
   const send = (type, value) => {
@@ -16,25 +17,26 @@
     if (frame) { if (ready && pending) { send(pending.type,pending.value); pending=null; } return; }
     cover.hidden = true;
     frame = document.createElement('iframe');
-    frame.title = 'The Hidden Reef interactive planted aquarium';
-    frame.src = './aquarium/?showroom=hidden-reef';
+    frame.title = habitat==='reef'?'The Hidden Reef interactive coral reef':'The Hidden Reef interactive planted aquarium';
+    frame.src = habitat==='reef'?'./reef/?showroom=hidden-reef':'./aquarium/?showroom=hidden-reef';
     frame.allow = 'fullscreen';
     frame.setAttribute('allowfullscreen','');
     mount.append(frame);
     close.hidden = false;
-    status.textContent = 'Growing your aquarium… models load once you enter.';
+    status.textContent = habitat==='reef'?'Building your coral reef…':'Growing your planted aquarium…';
     loadingTimer=setTimeout(()=>{if(!ready)status.textContent='Still loading? Close and reopen the aquarium to retry, or explore the guides and planner below.';},60000);
   }
-  function closeTank() {
+  function closeTank(focus=true) {
     clearTimeout(loadingTimer);
     frame?.remove(); frame = null; ready = false; pending = null;
     cover.hidden = false; close.hidden = true;
     status.textContent = 'Aquarium closed · ready to explore again';
-    document.querySelector('#launch').focus();
+    if(focus)document.querySelector('#launch').focus();
   }
   document.querySelector('#launch').addEventListener('click',()=>{launch();mount.scrollIntoView({block:'start',behavior:'instant'});});
   close.addEventListener('click',closeTank);
   const contexts = {
+    reef:['A reef full of relationships.','Meet the reef inhabitants and explore their shelter. Plan equipment and livestock with the store team; this illustrative aquarium does not show current availability.','first-tank','saltwater','Browse saltwater essentials'],
     fish:['A school with individual personalities.','Watch browsing, bursts and regrouping. Use the feeding guide to plan a varied diet and a sensible feeding routine.','feeding-basics','food','Browse fish foods'],
     invertebrate:['Small grazers, a closer look.','Watch shrimp pick at surfaces and snails graze. Review their care needs before choosing companions for your tank.','snails-shrimp-dying','freshwater','Explore freshwater care'],
     plant:['Plants are part of the system.','Look at the leaf and root zones, then explore planted-tank care and discuss plant choices with the store team.','first-tank','additives&sub=planted','Explore planted-tank care'],
@@ -57,7 +59,7 @@
   document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{
     const type=button.dataset.action,value=button.dataset.value;
     launch({type,value});
-    context(type==='lesson'||type==='cutaway'?value:value==='plants'?'plant':['shrimp','snail'].includes(value)?'invertebrate':'fish');
+    context(habitat==='reef'?'reef':type==='lesson'||type==='cutaway'?value:value==='plants'?'plant':['shrimp','snail'].includes(value)?'invertebrate':'fish');
     document.querySelectorAll('.showroom-chips button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
     mount.scrollIntoView({block:'start',behavior:'instant'});
   }));
@@ -72,8 +74,26 @@
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;visibility();},{threshold:0}).observe(mount);
   document.addEventListener('visibilitychange',visibility);
   new MutationObserver(visibility).observe(document.body,{attributes:true,attributeFilter:['class']});
-  // The store aquarium link is the launch gesture; no second play gate.
-  launch();
+  function showHabitat(){
+    document.body.dataset.selectedHabitat=habitat;
+    document.querySelectorAll('[data-habitat]').forEach(node=>{node.hidden=node.dataset.habitat!==habitat;});
+    document.querySelectorAll('[data-habitat-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.habitatChoice===habitat)));
+    const poster=cover.querySelector('img');
+    poster.src=habitat==='reef'?'../assets/site/reef-showroom-preview.webp':'../assets/site/showroom-preview.jpg';
+    poster.alt=habitat==='reef'?'The Living Reef, with colorful coral islands, anemones and marine fish':'The Living Aquascape, with dense plants and schooling fish';
+    cover.querySelector('h2').textContent=habitat==='reef'?'A world beneath blue.':'A world worth slowing down for.';
+    context(habitat==='reef'?'reef':'plant');
+  }
+  document.querySelectorAll('[data-habitat-choice]').forEach(button=>button.addEventListener('click',()=>{
+    if(button.dataset.habitatChoice===habitat)return;
+    const running=!!frame;closeTank(false);habitat=button.dataset.habitatChoice;showHabitat();
+    const url=new URL(location.href);url.searchParams.set('habitat',habitat);url.searchParams.delete('lesson');history.replaceState(null,'',url);
+    status.textContent='Ready when you are · sound-free exploration';
+    if(running)launch();
+  }));
+  showHabitat();
+  // Deep-linked lessons are an explicit entry request; ordinary visits stay light.
+  if(pending){habitat='freshwater';showHabitat();launch();}
   // The aquarium starts independently of the optional store planner. Use the
   // same catalog URL as shopping pages so moving between them reuses cache.
   const planner=document.querySelector('#planner-grid');
@@ -93,7 +113,7 @@
     });
     return catalogPending;
   }
-  const plannerObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){plannerObserver.disconnect();preparePlanner();}},{rootMargin:'600px'});
+  const plannerObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){plannerObserver.disconnect();preparePlanner();}},{rootMargin:'0px'});
   plannerObserver.observe(planner);
   if(new URLSearchParams(location.search).has('product'))preparePlanner();
   function buildPlanner(){

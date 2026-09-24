@@ -9,11 +9,12 @@ export function accelerateReefPicking(root:T.Object3D){
   if(!(object instanceof T.Mesh)||object instanceof T.InstancedMesh||object instanceof T.SkinnedMesh)return;
   const geometry=object.geometry,index=geometry.index,position=geometry.getAttribute('position');
   if(!index||index.count<3000||geometry.groups.length||geometry.drawRange.start!==0||geometry.drawRange.count!==Infinity)return;
+  const raw=position instanceof T.BufferAttribute&&!position.normalized&&position.itemSize===3?position.array:null;
   const blockSize=256*3,count=Math.ceil(index.count/blockSize),bounds=new Float64Array(count*6);
   for(let block=0;block<count;block++){
    let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
    for(let i=block*blockSize,end=Math.min(index.count,i+blockSize);i<end;i++){
-    const vertex=index.getX(i),x=position.getX(vertex),y=position.getY(vertex),z=position.getZ(vertex);
+    const vertex=index.getX(i),offset=vertex*3,x=raw?raw[offset]:position.getX(vertex),y=raw?raw[offset+1]:position.getY(vertex),z=raw?raw[offset+2]:position.getZ(vertex);
     minX=Math.min(minX,x);minY=Math.min(minY,y);minZ=Math.min(minZ,z);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);maxZ=Math.max(maxZ,z);
    }
    bounds.set([minX,minY,minZ,maxX,maxY,maxZ],block*6);
