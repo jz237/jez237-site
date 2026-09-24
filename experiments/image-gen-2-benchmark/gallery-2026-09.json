@@ -265,6 +265,141 @@
     }
   },
   {
+    "id": "2026-09-24-factual-infographic-factual-infographic-asthma-the-narrowin",
+    "title": "Factual infographic: Asthma — The Narrowing Airway",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NHLBI/CDC verification; eight-panel anatomical direct infographic; archive_slot=2026-09-24T14:20; concept=asthma-bronchial-airway-narrowing; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical science infographic directly on an opaque portrait canvas, a museum-quality editorial anatomical plate titled “ASTHMA — THE NARROWING AIRWAY”. This is educational general information, not a diagnosis. The central, dominant hero is a luminous, accurately branching pair of human lungs, with one bronchial branch enlarged into a dramatic semi-transparent cylindrical cross-section: air passing through a broad normal lumen at left versus a visibly narrowed, inflamed lumen during a flare at right. Use precise leader lines for airway wall, inflamed lining, open lumen, and reduced air passage; make the airway anatomy the story, not a poster mockup or photographed board. Render believable moist tissue texture, finely graded vascular detail, soft clinical lighting, controlled teal/amber contrasts and dimensional but non-gory cutaway modeling. Surround the hero with EIGHT clearly separated substantive supporting panels, each with a distinct compact header, legible one-sentence takeaway, and a specific illustrative diagram: (1) “Variable airway” — paired close-up cross-sections of open versus swollen/tightened airway and an exhalation arrow; (2) “Symptoms” — four restrained pictograms for wheeze, cough, breathlessness and chest tightness, emphasizing that patterns vary; (3) “Possible triggers” — tiny source-backed vignettes of pollen, cold air, viral illness and exercise, marked “vary by person”; (4) “Environmental triggers” — smoke, dust mite, pollution and damp mold icons, with no claim that all affect everyone; (5) “Checking airflow” — explanatory close-up of a person blowing into a spirometer and a simple non-numeric airflow trace; (6) “Response test” — two simplified airflow traces before and after a clinician-administered bronchodilator, captioned as an evaluation tool, not a universal diagnosis; (7) “Personal action plan” — three clean green/yellow/red bands: doing well and daily controller; worsening and plan-guided reliever; severe trouble or medicine not helping and emergency care, with no doses or rigid thresholds; (8) “Managing over time” — clinician and patient reviewing a personal plan, monitoring symptoms and avoiding known triggers, with treatment that helps control but is not a cure. Include at least FOUR explanatory macro insets/cutaways integrated into the panel architecture: bronchial lumen comparison, inflamed airway-wall layer, spirometer mouthpiece with exhaled-air arrow, and action-plan response path. Clear large typographic hierarchy, readable short labels, elegant miniature arrows, consistent line weights, generous gutters, direct-canvas infographic only; no paper sheet, room, workbench, specimen tray, product ad, bibliography, numbers, percentages, unsupported claims, invented organs or decorative filler. Make the central mechanism and eight panels genuinely information-rich yet immediately navigable.",
+    "image": "images/2026-09-24-factual-infographic-factual-infographic-asthma-the-narrowin.jpg",
+    "thumb": "thumbs/2026-09-24-factual-infographic-factual-infographic-asthma-the-narrowin.webp",
+    "color": "#818c98",
+    "date": "2026-09-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "asthma-bronchial-airway-narrowing",
+      "imageSha256": "5019067532566b25d2e7987ed7119a9ac07cb5d8961c632ae6348e9ab9cf5d0e",
+      "imageDHash": "0f17271e9a5b1b98"
+    },
+    "factualInfographic": {
+      "topic": "asthma",
+      "description": "How variable airway inflammation and narrowing affect breathing, with symptoms, triggers, evaluation and personalized management.",
+      "sourceNote": "Verified anatomy, symptoms, triggers, evaluation and action-plan scope against NHLBI/NIH https://www.nhlbi.nih.gov/health/asthma https://www.nhlbi.nih.gov/health/asthma/symptoms https://www.nhlbi.nih.gov/health/asthma/diagnosis https://www.nhlbi.nih.gov/health/asthma/attacks and CDC https://www.cdc.gov/asthma/living-with/index.html https://www.cdc.gov/asthma/control/index.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-24T18:21:21.903914+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Asthma - What Is Asthma?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/asthma"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Living with Asthma",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/asthma/living-with/index.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Controlling Asthma",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/asthma/control/index.html"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Asthma - Symptoms",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/asthma/symptoms"
+          },
+          {
+            "id": "S5",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Asthma - Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/asthma/diagnosis"
+          },
+          {
+            "id": "S6",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Asthma - Asthma Attack",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/asthma/attacks"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Asthma is a long-term condition affecting the lung airways; airways can become inflamed and narrowed, making exhalation harder.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "An asthma flare can narrow the airway through swelling or tightening; compare a wide airway with a narrowed inflamed airway.",
+            "sourceIds": [
+              "S6"
+            ]
+          },
+          {
+            "claim": "Symptoms can include wheeze, cough, shortness of breath and chest tightness and often vary over time.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Cold air, pollen, exercise and viral infections may trigger symptoms, with triggers varying by person.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Secondhand smoke, dust mites, air pollution and mold are possible triggers for some people.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Spirometry measures how much and how fast a person exhales; bronchodilator responsiveness compares airflow before and after medicine that opens airways.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "A personalized asthma action plan made with a clinician guides monitoring and responses to worsening symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Daily controller medicine is continued in the green/yellow action-plan zones; reliever medicine is added for worsening symptoms according to the personal plan.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Severe breathing difficulty or symptoms not relieved by medicines during an attack need emergency help.",
+            "sourceIds": [
+              "S6"
+            ]
+          },
+          {
+            "claim": "There is no cure for asthma, but treatment and an action plan can help manage it.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-23-random-image-style-screen-print-the-empty-pool-orchestra",
     "title": "Screen Print: The Empty Pool Orchestra",
     "tests": "Visual formula: repurpose the spatial geometry of a disused civic venue as an ensemble performance score; continuous scene, no document framing or factual claims.; archive_slot=2026-09-23T01:20; concept=musicians-rehearse-drained-swimming-pool; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-flare\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"medium\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}]}; Requested GPT Image 2.5; backend model not independently verified; owner-approved one-run settings exception: medium quality, variable dimensions",
