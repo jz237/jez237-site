@@ -33,10 +33,10 @@ export async function loadMarineModels(){
    if(species==='anthias'&&!label.startsWith('eye'))material.color.setRGB(.68,.34,.17);
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;
-   if(label.startsWith('pectoral')){
+   if(label.startsWith('pectoral')||label.startsWith('pelvic')){
     const pivot=new T.Group();pivot.name='pectoral';pivot.position.setFromMatrixPosition(node.matrixWorld);
     geometry.translate(-pivot.position.x,-pivot.position.y,-pivot.position.z);mesh.name='fin';mesh.userData.pectoral=true;material.side=T.DoubleSide;material.depthWrite=false;
-    pivot.userData.restZ=pivot.position.z;pivot.add(mesh);group.add(pivot);
+    pivot.userData.restZ=pivot.position.z;pivot.userData.pelvic=label.startsWith('pelvic');pivot.add(mesh);group.add(pivot);
    }else if(label.startsWith('eye')){mesh.name='eye';eyes.add(mesh);
    }else if(label.startsWith('gill')){
     // Pin the anterior insertion; only the trailing opercular margin opens.

@@ -1,15 +1,33 @@
 {
-  "readyMs": 7537,
+  "readyMs": 6387,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 5.798500000000018,
-      "bites": 15,
-      "remaining": 30,
+      "fps": 59.99100134979749,
+      "time": 5.973799999904642,
+      "bites": 12,
+      "remaining": 33,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0072882183496983,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99999999999999,
+      "time": 9.990799999904636,
+      "bites": 26,
+      "remaining": 19,
       "anemones": {
         "brushing": 3,
-        "maxBrush": 0.07737549248051398,
+        "maxBrush": 0.07696776016754861,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -22,48 +40,12 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 9.815500000000014,
-      "bites": 21,
-      "remaining": 24,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 1.244497093410105e-7,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 13.832499999999971,
-      "bites": 29,
-      "remaining": 15,
+      "time": 14.007799999904591,
+      "bites": 34,
+      "remaining": 10,
       "anemones": {
         "brushing": 1,
-        "maxBrush": 0.02091588290983284,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 17.8494999999999,
-      "bites": 38,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.005725548910296415,
+        "maxBrush": 0.13763073953819854,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
@@ -76,54 +58,72 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 21.866599999999796,
+      "time": 18.024799999904527,
+      "bites": 37,
+      "remaining": 7,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.011704172060349849,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 22.041799999904438,
       "bites": 38,
       "remaining": 6,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.048905853248416176,
+        "brushing": 4,
+        "maxBrush": 0.1066759547801572,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
           0,
-          0.19386656370506486,
+          0.1935960252916925,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 26.07549999990435,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 1,
+        "maxBrush": 0.01066121885407,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.13094066302871168,
           0
         ]
       }
     },
     {
       "fps": 59.994000599940094,
-      "time": 25.866899999999696,
+      "time": 30.0925999999042,
       "bites": 38,
       "remaining": 6,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.0805737014377125,
+        "brushing": 2,
+        "maxBrush": 0.09209137104612804,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
           0,
-          0.13230442554402977,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 29.883899999999542,
-      "bites": 38,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.05693851181135562,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0,
-          0.04898694375000881,
+          0.04774080368686391,
           0
         ]
       }
@@ -161,7 +161,7 @@
       "colonies": 12,
       "triangles": 898980
     },
-    "triangles": 15128160,
+    "triangles": 15130608,
     "inhabitants": 21,
     "buttressStats": {
       "rocks": 9,
@@ -371,9 +371,9 @@
     "assets/attachments-_XvA_qTE.json",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
-    "assets/goby-3ZuNXmaD.glb",
+    "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-Cgxbx-cY.js",
+    "assets/index-Btc_ZhHS.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -390,22 +390,24 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "86d0b87c2feff1433f0db7e8a40dd32db9dfdb01a55b9c51cfbc0f19ba4c0ff1",
-  "checkedAt": "2026-09-24T01:36:22.798Z",
-  "scope": "Add detailed Blender diamond goby, independent bottom hops and rests, mouth/gill breathing, terrain-aware sand sifting and reachable sinking-food contact.",
+  "buildHash": "ef9d9f55b421a9ab1c8f16a3b57c114e248aa041baead11c1433757a95dc3459",
+  "checkedAt": "2026-09-24T02:10:06.832Z",
+  "scope": "Replace the mistaken diamond goby with the user-referenced Synchiropus splendidus: traced Blender anatomy, blue-orange markings, flexible hovering, paired pelvic fans and tiny feeding pecks.",
   "geometryChecks": [
-    "Seven closed Blender fish bodies with mapped UVs, embedded textures, separate gills/pectoral fins, modeled mouth and ray detail",
-    "Goby terrain-bound navigation, sift/rest/hop transitions and actual mouth-range low-food consumption",
-    "All reef scenery, original twenty inhabitants and full texture detail preserved; bounded48grain instancing",
+    "Seven closed Blender fish bodies with embedded skin/fin textures, real mouths and separate breathing tissue",
+    "Mandarin has separate paired pectoral and pelvic fans, two dorsal fins, rounded caudal fan and elevated eye domes",
+    "Low hovering, pauses, substrate-directed pecks, actual mouth-range food consumption and stalled-prey recovery; no sand-sifting stream",
+    "Scenery and original six fish species assets unchanged; whole-fish clearance covers tail and spread fins",
     "Geometry, attachment bake, feeding, collisions, pause, breathing, lighting and mobile suite passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "goby macro",
-    "goby rendered sifting sequence",
-    "goby isolated breathing phase pair",
+    "mandarin macro",
+    "fourteen-frame actual rendered locomotion sequence",
+    "isolated breathing phase pair",
+    "user mandarin photo",
     "original reef reference",
     "planted rendering comparison"
   ],
@@ -416,11 +418,11 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "d1df93722",
-    "loadPrior": 6367.5,
-    "loadCurrent": 6480,
-    "fpsPrior": 131.2,
-    "fpsCurrent": 130.7,
-    "interpretation": "Local alternating samples. Frame-capped runs remain near60FPS; uncapped differences are within run-to-run variation. Adds one975KB model. Measurements precede only the sediment-pool upper-bound correction (48maximum); final build retested visually and functionally."
+    "baseline": "230002fa2",
+    "loadPrior": 7074.5,
+    "loadCurrent": 6649.5,
+    "fpsPrior": 130.2,
+    "fpsCurrent": 152.7,
+    "interpretation": "Alternating local prior/current sessions at identical viewport. Not a benchmark of other computers; no detail/effect reductions. Replaces the975KB goby asset with a1216KB mandarin and removes the sand-grain draw."
   }
 }

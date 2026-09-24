@@ -19,4 +19,4 @@ export function finField(profile:Profile,x:number,y:number,z:number,pectoral=fal
  const h=.0001,f=finFreedom(profile,x,y,z,pectoral);
  return [f,(finFreedom(profile,x+h,y,z,pectoral)-finFreedom(profile,x-h,y,z,pectoral))/(2*h),(finFreedom(profile,x,y+h,z,pectoral)-finFreedom(profile,x,y-h,z,pectoral))/(2*h),(finFreedom(profile,x,y,z+h,pectoral)-finFreedom(profile,x,y,z-h,pectoral))/(2*h)];
 }
-export function bodyBend(x:number,time:number,effort:number){const rear=Math.max(0,Math.min(1,(.3-x)/.9));return Math.sin(time*7.5-x*7)*rear*rear*(.018+effort*.075);}
+export function bodyBend(x:number,time:number,effort:number,gain=1,turn=0){const rear=Math.max(0,Math.min(1,(.3-x)/.9));return rear*rear*(Math.sin(time*7.5-x*7)*(.018+effort*.075)*gain+turn);}

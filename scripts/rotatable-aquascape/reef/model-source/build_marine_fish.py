@@ -43,10 +43,11 @@ def make_mesh(name,vertices,faces,uvs,material):
 metadata=json.loads((OUT/'model-info.json').read_text()) if ONLY and (OUT/'model-info.json').exists() else {}
 for species,s in DATA.items():
  # Every species has its own traced silhouette, rather than scaling one oval.
- original=bpy.data.images.load(str(ROOT/'references'/(species+'.png')),check_existing=True)
+ reference=s.get('reference',species)
+ original=bpy.data.images.load(str(ROOT/'references'/(reference+'.png')),check_existing=True)
  iw,ih=original.size;original.file_format='JPEG';original.filepath_raw=str(OUT/(species+'-reference.jpg'));original.save()
  original=bpy.data.images.load(str(OUT/(species+'-reference.jpg')),check_existing=False)
- clean=ROOT/'references'/(species+'-skin.png')
+ clean=ROOT/'references'/(reference+'-skin.png')
  if not clean.exists():raise RuntimeError('Missing clean-flank image: '+str(clean))
  skinimg=bpy.data.images.load(str(clean),check_existing=True)
  # Force lazy pixel loading before changing filepath for the JPEG export.
@@ -143,6 +144,7 @@ for species,s in DATA.items():
   if i!=1:objects.append(fin_mesh('fin_'+str(i),polygon))
  for side in [-1,1]:
   objects.append(fin_mesh('pectoral_'+str(side),s['pec'],side,s['pec'][0]))
+  if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0]))
   # Thin conformed operculum over the same UV detail; opens subtly at runtime.
   gx,gy0,gy1=s['gill'];v=[];tex=[];f=[]
   for row in range(19):
@@ -160,7 +162,7 @@ for species,s in DATA.items():
    rr=row/8
    for col in range(33):
     a=col/32*2*math.pi;px=ex+er*rr*math.cos(a);py=ey+er*rr*math.sin(a)
-    v.append(pos(px,py,side*(surface(px,py)+.001+.0025*(1-rr*rr))));tex.append(uv(px,py))
+    v.append(pos(px,py,side*(surface(px,py)+.001+s.get('eyeDome',.0025)*(1-rr*rr))));tex.append(uv(px,py))
     if row<8 and col<32:
      a0=row*33+col;ids=(a0,a0+1,a0+34,a0+33);f.append(ids if side>0 else tuple(reversed(ids)))
   objects.append(make_mesh('eye_'+str(side),v,f,tex,eyeMat))
@@ -170,7 +172,7 @@ for species,s in DATA.items():
  bpy.context.view_layer.objects.active=objects[0]
  bpy.ops.export_scene.gltf(filepath=str(OUT/(species+'.glb')),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_animations=False,export_cameras=False,export_lights=False,export_image_format='JPEG',export_jpeg_quality=95,export_vertex_color='ACTIVE')
  triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects)
- metadata[species]={'mouth':pos(*s['mouth']),'triangles':triangles,'meshes':len(objects),'reference':species+'.png','authoring':'Blender '+bpy.app.version_string,'bodyLength':1,'width':width,'upper':[pos(x,y)[:2] for x,y in s['top']],'lower':[pos(x,y)[:2] for x,y in s['bottom']]}
+ metadata[species]={'mouth':pos(*s['mouth']),'triangles':triangles,'meshes':len(objects),'reference':reference+'.png','authoring':'Blender '+bpy.app.version_string,'bodyLength':1,'width':width,'upper':[pos(x,y)[:2] for x,y in s['top']],'lower':[pos(x,y)[:2] for x,y in s['bottom']]}
  collection=bpy.data.collections.new(species);scene.collection.children.link(collection)
  for obj in objects:
   for coll in list(obj.users_collection):coll.objects.unlink(obj)
