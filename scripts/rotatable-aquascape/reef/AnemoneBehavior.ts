@@ -9,9 +9,9 @@ export type AnemoneVisitor={position:T.Vector3;velocity:T.Vector3;group:T.Group}
  * Transfer is accelerated for observation; see qa/anemone-research-20260923.md. */
 export class AnemoneBehavior{
  readonly hosts:AnemoneHost[];
- readonly brushData=new Float32Array(541*4);
- readonly brushTexture=new T.DataTexture(this.brushData,541,1,T.RGBAFormat,T.FloatType);
- private brushVelocity=new Float32Array(541*3);
+ readonly brushData:Float32Array;
+ readonly brushTexture:T.DataTexture;
+ private brushVelocity:Float32Array;
  private brushTime=-1;private brushing=0;private maxBrush=0;
  private brushPoint=new T.Vector3();private brushAxis=new T.Vector3();private brushDelta=new T.Vector3();
  readonly anchors:{value:T.Vector4[]};
@@ -19,7 +19,7 @@ export class AnemoneBehavior{
  readonly morsels=new T.InstancedMesh(new T.SphereGeometry(.024,8,6),new T.MeshStandardMaterial({color:'#d29c65',roughness:.85}),3);
  private states=Array.from({length:3},()=>({at:-100,start:new T.Vector3(),active:false}));
  private nextContact=0;private captured=0;private swallowed=0;private dummy=new T.Object3D();private tip=new T.Vector3();
- constructor(hosts:AnemoneHost[]){this.hosts=hosts;this.anchors={value:hosts.map(h=>new T.Vector4(h.center.x,h.center.y,h.center.z,h.scale))};this.morsels.count=0;this.morsels.frustumCulled=false;this.morsels.name='Food carried by anemone tentacles';this.brushTexture.needsUpdate=true;}
+ constructor(hosts:AnemoneHost[]){this.hosts=hosts;const width=1+Math.max(0,...hosts.flatMap(h=>h.strands.map(s=>s.brushIndex)));this.brushData=new Float32Array(width*4);this.brushVelocity=new Float32Array(width*3);this.brushTexture=new T.DataTexture(this.brushData,width,1,T.RGBAFormat,T.FloatType);this.anchors={value:hosts.map(h=>new T.Vector4(h.center.x,h.center.y,h.center.z,h.scale))};this.morsels.count=0;this.morsels.frustumCulled=false;this.morsels.name='Food carried by anemone tentacles';this.brushTexture.needsUpdate=true;}
  tipAt(host:number,strand:AnemoneStrand,time:number,out:T.Vector3){
   const f=tissueFlow(time,1,strand.phase),scale=Math.min(strand.scale,strand.arc*.85),hostData=this.hosts[host],feed=this.feeding.value[host];
   const weight=T.MathUtils.smoothstep(Math.cos(strand.angle)*feed.y+Math.sin(strand.angle)*feed.z,.05,.8),fold=feed.x*weight;
