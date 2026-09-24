@@ -65,23 +65,34 @@ export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLife
     }
     if(feet.length!==sides+1)continue;
     accepted.push(h.point.clone());
-    // Uneven fleshy lobes with a small recessed osculum, not spherical beads.
-    // The foot lies just above the existing crust and follows actual triangles.
-    for(let row=0;row<4;row++)for(let k=0;k<=sides;k++){
-     const a=k/sides*Math.PI*2,radial=[1,.88,.41,.24][row],rise=[.006,height*.62,height,height*.70][row];
-     const p=row===0?feet[k].clone().addScaledVector(axis,.005):h.point.clone().addScaledVector(side,Math.cos(a)*r*radial).addScaledVector(across,Math.sin(a)*r*radial*.86).addScaledVector(axis,rise*(1+.08*Math.sin(a*3+i))+.006);
-     positions.push(p.x,p.y,p.z);const c=color.clone().multiplyScalar((row===3?.34:row===2?1.12:row===1?.9:.65)*(.86+.12*Math.sin(i*1.7+seed)));
-     colors.push(c.r,c.g,c.b);uv.push(p.x/.12,p.z/.12+p.y/.12);
-     if(row<3&&k<sides){const n=start+row*(sides+1)+k,b=n+sides+1;indices.push(n,n+1,b,n+1,b+1,b);}
+    // Keep the eight real rock contacts and their sampling stream unchanged.
+    // Above them, rounded shoulders narrow into an off-center fleshy opening.
+    // The 8-to-12 transition adds curvature where it changes the silhouette,
+    // without increasing root ray casts or turning the whole reef into beads.
+    const phase=seed+i*2.173,aspect=.66+.24*(.5+.5*Math.sin(phase*1.7));
+    const dome=height*(.48+.48*(.5+.5*Math.sin(phase*.73)));
+    const lean=r*.24*Math.sin(phase*1.13),leanAcross=r*.18*Math.cos(phase*.83);
+    const append=(p:T.Vector3,shade:number)=>{positions.push(p.x,p.y,p.z);const c=color.clone().multiplyScalar(shade*(.83+.14*Math.sin(i*1.7+seed)));colors.push(c.r,c.g,c.b);uv.push(p.x/.045,p.z/.045+p.y/.045);};
+    for(const foot of feet)append(foot.clone().addScaledVector(axis,.005),.67);
+    for(let row=0;row<4;row++)for(let k=0;k<=12;k++){
+     const a=k/12*Math.PI*2,radial=[.94,.73,.37,.23][row],rise=[.28,.80,1,.66][row];
+     const lobe=1+.13*Math.sin(a*2+phase)+.07*Math.sin(a*3-phase*.6);
+     const p=h.point.clone().addScaledVector(side,Math.cos(a)*r*radial*lobe+lean*rise).addScaledVector(across,Math.sin(a)*r*radial*aspect*lobe+leanAcross*rise).addScaledVector(axis,dome*rise*(1+.10*Math.sin(a+phase))+.006);
+     append(p,[.82,1,1.08,.30][row]*(1+.045*Math.sin(a*3+phase)));
+     if(row<3&&k<12){const n=start+9+row*13+k,b=n+13;indices.push(n,n+1,b,n+1,b+1,b);}
     }
-    const floor=positions.length/3,p=h.point.clone().addScaledVector(axis,height*.66+.006);positions.push(p.x,p.y,p.z);const dark=color.clone().multiplyScalar(.18);colors.push(dark.r,dark.g,dark.b);uv.push(p.x/.12,p.z/.12+p.y/.12);
-    for(let k=0;k<sides;k++)indices.push(start+3*(sides+1)+k,start+3*(sides+1)+k+1,floor);
+    for(let quarter=0;quarter<4;quarter++){
+     const b=start+quarter*2,t=start+9+quarter*3;
+     indices.push(b,b+1,t+1,b+1,t+2,t+1,b+1,b+2,t+2,b+2,t+3,t+2,b,t+1,t);
+    }
+    const floor=positions.length/3,p=h.point.clone().addScaledVector(axis,dome*.57+.006).addScaledVector(side,lean*.66).addScaledVector(across,leanAcross*.66);append(p,.15);
+    for(let k=0;k<12;k++)indices.push(start+48+k,start+48+k+1,floor);
     stats.pores++;stats.maxAttachmentError=Math.max(stats.maxAttachmentError,.005);
    }
    if(indices.length){
     const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();
     // Continuous normal at each duplicated ring seam.
-    const n=g.getAttribute('normal'),smooth=new T.Vector3();for(let first=0;first<positions.length/3;first+=37)for(let row=0;row<4;row++){const a=first+row*9,b=a+8;smooth.fromBufferAttribute(n,a).add(new T.Vector3().fromBufferAttribute(n,b)).normalize();n.setXYZ(a,smooth.x,smooth.y,smooth.z);n.setXYZ(b,smooth.x,smooth.y,smooth.z);}
+    const n=g.getAttribute('normal'),smooth=new T.Vector3();for(let first=0;first<positions.length/3;first+=62)for(const [offset,width] of [[0,8],[9,12],[22,12],[35,12],[48,12]]){const a=first+offset,b=a+width;smooth.fromBufferAttribute(n,a).add(new T.Vector3().fromBufferAttribute(n,b)).normalize();n.setXYZ(a,smooth.x,smooth.y,smooth.z);n.setXYZ(b,smooth.x,smooth.y,smooth.z);}
     pores.push(g);stats.triangles+=indices.length/3;
     g.computeBoundingSphere();obstacles.push({center:g.boundingSphere!.center.clone(),radius:g.boundingSphere!.radius+.006});
    }
