@@ -13,17 +13,20 @@ const FOV = 30;
 // final grade: gentle split-tone (cool shadows, warm highlights) + vignette,
 // applied in linear light before the ACES output transform
 const GradeShader = {
-  uniforms: { tDiffuse: { value: null }, uVig: { value: 0.32 }, uFlash: { value: 0 }, uFlashCol: { value: new THREE.Color(1, 0.9, 0.7) }, uHurt: { value: 0 } },
+  uniforms: {
+    tDiffuse: { value: null }, uVig: { value: 0.32 }, uFlash: { value: 0 }, uFlashCol: { value: new THREE.Color(1, 0.9, 0.7) }, uHurt: { value: 0 },
+    uShadow: { value: new THREE.Vector3(0.93, 0.98, 1.07) }, uHi: { value: new THREE.Vector3(1.05, 1.0, 0.92) }, uSat: { value: 1.08 },
+  },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: `
     uniform sampler2D tDiffuse; uniform float uVig; uniform float uFlash; uniform vec3 uFlashCol; uniform float uHurt;
+    uniform vec3 uShadow; uniform vec3 uHi; uniform float uSat;
     varying vec2 vUv;
     void main(){
       vec4 c = texture2D(tDiffuse, vUv);
       float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
-      vec3 shadowTint = vec3(0.93, 0.98, 1.07), hiTint = vec3(1.05, 1.0, 0.92);
-      c.rgb *= mix(shadowTint, hiTint, smoothstep(0.02, 0.6, l));
-      c.rgb = mix(vec3(l), c.rgb, 1.08);
+      c.rgb *= mix(uShadow, uHi, smoothstep(0.02, 0.6, l));
+      c.rgb = mix(vec3(l), c.rgb, uSat);
       vec2 q = vUv - 0.5; q.x *= 1.25;
       float v = 1.0 - uVig * smoothstep(0.25, 0.85, length(q));
       c.rgb *= v;
@@ -55,26 +58,25 @@ export class Renderer {
     this.shake = 0; this.shakeT = 0; this.kick = new THREE.Vector2();
 
     // sky environment: a painted gradient baked to a PMREM, so water, helmets,
-    // barrels and wet mud pick up a believable sky reflection
-    {
-      const sky = new THREE.Scene();
-      const mat = new THREE.ShaderMaterial({
-        side: THREE.BackSide, depthWrite: false,
-        uniforms: { uSun: { value: new THREE.Vector3(-0.62, 0.72, 0.3).normalize() } },
-        vertexShader: 'varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
-        fragmentShader: `varying vec3 vD; uniform vec3 uSun;
-          void main(){ float y = vD.y;
-            vec3 zen = vec3(0.26, 0.42, 0.72), hor = vec3(0.95, 0.82, 0.62), gnd = vec3(0.22, 0.18, 0.12);
-            vec3 c = y > 0.0 ? mix(hor, zen, pow(y, 0.55)) : mix(hor * 0.6, gnd, pow(-y, 0.4));
-            c += vec3(1.6, 1.2, 0.7) * pow(max(dot(vD, uSun), 0.0), 64.0);
-            gl_FragColor = vec4(c, 1.0); }`,
-      });
-      sky.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), mat));
-      const pm = new THREE.PMREMGenerator(r);
-      scene.environment = pm.fromScene(sky, 0.02).texture;
-      scene.environmentIntensity = 0.55;
-      pm.dispose();
-    }
+    // barrels and wet mud pick up a believable sky reflection (rebaked per area)
+    this.skyMat = new THREE.ShaderMaterial({
+      side: THREE.BackSide, depthWrite: false,
+      uniforms: {
+        uSun: { value: new THREE.Vector3(-0.62, 0.72, 0.3).normalize() },
+        uZen: { value: new THREE.Vector3(0.26, 0.42, 0.72) }, uHor: { value: new THREE.Vector3(0.95, 0.82, 0.62) },
+        uGnd: { value: new THREE.Vector3(0.22, 0.18, 0.12) }, uGlow: { value: new THREE.Vector3(1.6, 1.2, 0.7) },
+      },
+      vertexShader: 'varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+      fragmentShader: `varying vec3 vD; uniform vec3 uSun, uZen, uHor, uGnd, uGlow;
+        void main(){ float y = vD.y;
+          vec3 c = y > 0.0 ? mix(uHor, uZen, pow(y, 0.55)) : mix(uHor * 0.6, uGnd, pow(-y, 0.4));
+          c += uGlow * pow(max(dot(vD, uSun), 0.0), 64.0);
+          gl_FragColor = vec4(c, 1.0); }`,
+    });
+    this.skyScene = new THREE.Scene();
+    this.skyScene.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), this.skyMat));
+    this.pmrem = new THREE.PMREMGenerator(r);
+    this.envRT = null;
     // lighting: late-afternoon sun from the west-south-west, sky/ground fill
     this.hemi = new THREE.HemisphereLight(0xc4d8ee, 0x6a5840, 0.95);
     scene.add(this.hemi);
@@ -88,10 +90,36 @@ export class Renderer {
     sun.shadow.radius = 3;
     scene.add(sun); scene.add(sun.target);
 
+    // the player's own light at night (always present; intensity 0 by day, so
+    // the light count never changes and shaders never recompile mid-area)
+    this.joeLight = new THREE.PointLight(0xffd9a8, 0, 13, 1.2);
+    scene.add(this.joeLight);
+
     this.composer = null;
     this.buildPost();
     this.resize();
     addEventListener('resize', () => this.resize());
+  }
+
+  // lighting, sky, fog and grade for an area (see levels.js AMBIENCE)
+  applyAmbience(a) {
+    this.amb = a;
+    this.sunDir.set(...a.sunDir).normalize();
+    this.sun.color.set(a.sunColor); this.sun.intensity = a.sun;
+    this.hemi.color.set(a.hemiSky); this.hemi.groundColor.set(a.hemiGround); this.hemi.intensity = a.hemi;
+    this.fogColor.set(a.fog); this.scene.background.set(a.fog);
+    this.scene.fog.color.set(a.fog); this.scene.fog.near = a.fogNear; this.scene.fog.far = a.fogFar;
+    this.r.toneMappingExposure = a.exposure;
+    const u = this.skyMat.uniforms;
+    u.uSun.value.copy(this.sunDir); u.uZen.value.set(...a.sky.zen); u.uHor.value.set(...a.sky.hor); u.uGnd.value.set(...a.sky.gnd); u.uGlow.value.set(...a.sky.glow);
+    if (this.envRT) this.envRT.dispose();
+    this.envRT = this.pmrem.fromScene(this.skyScene, 0.02);
+    this.scene.environment = this.envRT.texture;
+    this.scene.environmentIntensity = a.env;
+    const g = this.grade.uniforms;
+    g.uShadow.value.set(...a.grade.shadow); g.uHi.value.set(...a.grade.hi); g.uSat.value = a.grade.sat; g.uVig.value = a.grade.vig;
+    this.bloom.strength = a.bloom;
+    this.joeLight.intensity = 0;
   }
 
   buildPost() {

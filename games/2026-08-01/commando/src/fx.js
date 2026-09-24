@@ -123,7 +123,8 @@ export class FX {
     this.ringTex = TX.ringTexture(); this.blobTex = TX.blobShadow();
     this.rings = [];
     for (let i = 0; i < 14; i++) {
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: this.ringTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, color: new THREE.Color(2.2, 0.35, 0.2) }));
+      // drawn without a depth test so bumps in the ground can't hide part of a warning
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: this.ringTex, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, toneMapped: false, color: new THREE.Color(2.2, 0.35, 0.2) }));
       m.visible = false; m.renderOrder = 2; scene.add(m); this.rings.push(m);
     }
     this.blobs = [];
@@ -263,6 +264,7 @@ export class FX {
 
   // ---------------------------------------------------------------- update
   update(dt) {
+    this._updateRain(dt);
     this.add.update(dt, null);
     this.smoke.update(dt, null);
     // tracers from live bullets
@@ -331,6 +333,45 @@ export class FX {
       T[tw++] = t;
     }
     T.length = tw;
+  }
+
+  // ---------------------------------------------------------------- rain
+  setRain(on) {
+    this.rainOn = on;
+    if (on && !this.rain) {
+      const N = this.quality === 'high' ? 900 : 450;
+      const g = new THREE.PlaneGeometry(0.035, 0.9).translate(0, 0.45, 0);
+      const mat = new THREE.MeshBasicMaterial({ map: TX.rainStreak(), transparent: true, depthWrite: false, color: new THREE.Color(0.75, 0.8, 0.9), opacity: 0.55, side: THREE.DoubleSide });
+      const im = this.rain = new THREE.InstancedMesh(g, mat, N);
+      im.frustumCulled = false; im.renderOrder = 5;
+      this.drops = [];
+      for (let i = 0; i < N; i++) this.drops.push({ x: (rnd() - 0.5) * 46, y: rnd() * 16, z: (rnd() - 0.5) * 40 });
+      this.scene.add(im);
+      this.rainFocus = new THREE.Vector3();
+    }
+    if (this.rain) this.rain.visible = on;
+  }
+  _updateRain(dt) {
+    if (!this.rainOn || !this.rain) return;
+    const f = this.rainFocus, N = this.drops.length;
+    // streaks face the camera around their vertical axis
+    const cam = this.camera.position, yaw = Math.atan2(cam.x - f.x, cam.z - f.z);
+    this._e.set(0.12, yaw, 0.1); this._q.setFromEuler(this._e);
+    for (let i = 0; i < N; i++) {
+      const d = this.drops[i];
+      d.y -= 17 * dt; d.x += 1.8 * dt;
+      let wx = f.x + d.x, wz = f.z + d.z;
+      // ground height is sampled once per fall, not every frame
+      if (d.gh === undefined) d.gh = this.groundH(wx, -wz);
+      if (d.y < 0) {
+        if (rnd() < 0.25) this.add.add({ x: wx, y: d.gh + 0.05, z: wz, vx: 0, vy: 0, vz: 0, life: 0.18, size: 0.18, size1: 0.35, r: 0.5, g: 0.55, b: 0.6, a: 0.5, a1: 0 });
+        d.y = 12 + rnd() * 4; d.x = (rnd() - 0.5) * 46; d.z = (rnd() - 0.5) * 40;
+        wx = f.x + d.x; wz = f.z + d.z; d.gh = this.groundH(wx, -wz);
+      }
+      this._m4.compose(this._v.set(wx, d.gh + d.y, wz), this._q, this._s.set(1, 1, 1));
+      this.rain.setMatrixAt(i, this._m4);
+    }
+    this.rain.instanceMatrix.needsUpdate = true;
   }
 
   clear() {

@@ -503,9 +503,9 @@ export function mortarGeo() {
 }
 
 // fortress wall across the whole area width with a gate in the middle
-export function fortressGroup(area, width = 96) {
+export function fortressGroup(area, width = 96, opt = {})  {
   const g = new THREE.Group(), stone = [], dark = [], wood = [];
-  const gh = area.gateHalf, H = 4.6, T = 3.0;
+  const gh = area.gateHalf, H = opt.H || 4.6, T = opt.T || 3.0;
   const segs = [[-width / 2, -gh - 2.2], [gh + 2.2, width / 2]];
   for (const [a, b] of segs) {
     const w = b - a, geo = new THREE.BoxGeometry(w, H, T);
@@ -554,7 +554,7 @@ export function fortressGroup(area, width = 96) {
   }
   const bm = new THREE.Mesh(merge(bld), MAT.stone); bm.castShadow = bm.receiveShadow = true; g.add(bm);
   const pole = new THREE.Mesh(P(new THREE.CylinderGeometry(0.06, 0.06, 6, 6), '#555', { x: gh + 2.2, y: H + 2.2 + 3, z: -0.4 }), MAT.vcMetal); g.add(pole);
-  const flag = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1.3, 8, 2), new THREE.MeshStandardMaterial({ color: 0x8e1d17, side: THREE.DoubleSide, roughness: 0.9 }));
+  const flag = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1.3, 8, 2), new THREE.MeshStandardMaterial({ color: opt.flag || 0x8e1d17, side: THREE.DoubleSide, roughness: 0.9 }));
   flag.position.set(gh + 2.2 + 1.12, H + 2.2 + 5.2, -0.4); flag.castShadow = true;
   g.add(flag); g.userData.flag = flag;
   return g;

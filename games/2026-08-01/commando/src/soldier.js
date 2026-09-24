@@ -216,6 +216,14 @@ export class Soldier {
   }
 
   get material() { return this.mesh.material; }
+  // free the per-soldier GPU objects (bone texture, material); the geometry is shared
+  dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
+    this.obj.removeFromParent();
+    this.mesh.skeleton.dispose();
+    this.mesh.material.dispose();
+  }
   setFlash(v) { this.mesh.material.userData.uFlash.value = v; }
 
   // world-space muzzle point (call after pose())
@@ -240,6 +248,12 @@ export class Soldier {
     b.shinR.rotation.set((0.15 + Math.max(0, -cw) * 0.95) * s + c * 1.95, 0, 0);
     // hips bob twice per stride, drop when crouching
     b.hips.position.y = RW.hips[1] - Math.abs(sw) * 0.05 * s - c * 0.42 + 0.02 * s;
+    // seated (motorcycle rider / sidecar gunner)
+    if (a.sit) {
+      b.thighL.rotation.set(-1.45, 0, 0.14); b.thighR.rotation.set(-1.45, 0, -0.14);
+      b.shinL.rotation.set(1.3, 0, 0); b.shinR.rotation.set(1.3, 0, 0);
+      b.hips.position.y = RW.hips[1] - 0.5;
+    }
     b.hips.rotation.set(0, sw * 0.18 * s, 0);
     // upper body: lean into the run, twist toward the aim, breathe
     const breathe = Math.sin(a.t * 2.2) * 0.015 * (1 - s);

@@ -21,9 +21,15 @@ export const AREA1 = {
     { p: -40, kind: 'lz' }, { p: 30, kind: 'jungle' }, { p: 82, kind: 'scrub' },
     { p: 99, kind: 'river' }, { p: 113, kind: 'desert' }, { p: 180, kind: 'fort' },
   ],
-  river: { p0: 100, p1: 111, bridgeHalf: 2.9 },
-  pond: { x: -11.5, p: 7, r: 3.6 },
-  checkpoints: [0, 58, 98, 140, 186],
+  // water: the river the bridge crosses, and the landing-zone pond
+  waters: [
+    { t: 'band', p0: 100, p1: 111, level: -0.62, bed: -1.7 },
+    { t: 'pool', x: -11.5, p: 7, rx: 3.6, rp: 3.1, level: -0.55, bed: -1.2 },
+  ],
+  craters: { from: 80, to: 224 },
+  gate: 'stone',
+  objectives: [[0, 'ADVANCE TO THE FORTRESS'], [180, 'BREAK THROUGH TO THE GATE']],
+  ambience: 'day',
 
   props: [
     // --- landing zone ---
