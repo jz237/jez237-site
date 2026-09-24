@@ -1,15 +1,15 @@
 {
-  "readyMs": 5931,
+  "readyMs": 6940,
   "shadowFrames": 60,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 6.051600000143073,
-      "bites": 6,
-      "remaining": 39,
+      "time": 5.993800000047704,
+      "bites": 13,
+      "remaining": 32,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.051822429299443404,
+        "brushing": 1,
+        "maxBrush": 0.011069334021128151,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -22,108 +22,108 @@
     },
     {
       "fps": 59.99700014999249,
-      "time": 10.051900000143071,
-      "bites": 21,
-      "remaining": 23,
+      "time": 10.010800000047709,
+      "bites": 26,
+      "remaining": 19,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.0005634714536545884,
-        "captured": 1,
+        "brushing": 11,
+        "maxBrush": 0.14082032429319055,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
-          0.02477256373762524,
+          0,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 14.069000000143019,
-      "bites": 33,
-      "remaining": 11,
-      "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.09773363388054618,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0.2,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 18.086000000142928,
+      "fps": 59.99999999999999,
+      "time": 14.027800000047668,
       "bites": 36,
       "remaining": 8,
       "anemones": {
-        "brushing": 10,
-        "maxBrush": 0.10342439442297503,
+        "brushing": 0,
+        "maxBrush": 0.000011130524799449698,
         "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
+        "swallowed": 0,
+        "carried": 1,
         "fold": [
-          0.2,
           0,
+          0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 22.103000000142842,
-      "bites": 37,
-      "remaining": 7,
+      "fps": 59.99100134979755,
+      "time": 18.044900000047626,
+      "bites": 38,
+      "remaining": 6,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0213109148807864,
+        "brushing": 2,
+        "maxBrush": 0.04474413157584568,
         "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
+        "swallowed": 0,
+        "carried": 1,
         "fold": [
-          0.1818552575511692,
           0,
+          0.2,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993998,
-      "time": 26.10340000014274,
-      "bites": 38,
-      "remaining": 6,
+      "time": 22.061900000047565,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.042709735426073446,
+        "brushing": 8,
+        "maxBrush": 0.09689407374343531,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.10853219674209813,
           0,
+          0.19317980556137143,
           0
         ]
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 30.12040000014258,
-      "bites": 38,
-      "remaining": 6,
+      "fps": 59.99400059993988,
+      "time": 26.078900000047476,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 10,
-        "maxBrush": 0.09736471651484323,
+        "brushing": 0,
+        "maxBrush": 0.05057100195589035,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.029368841789731384,
           0,
+          0.1302576539988385,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993988,
+      "time": 30.09590000004733,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 5,
+        "maxBrush": 0.1500457694147118,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.04712515329811189,
           0
         ]
       }
@@ -170,7 +170,7 @@
       "colonies": 12,
       "triangles": 898980
     },
-    "triangles": 16339080,
+    "triangles": 16417032,
     "inhabitants": 21,
     "buttressStats": {
       "rocks": 9,
@@ -382,8 +382,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-6boyIA9f.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-mV0l9-SF.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -400,21 +400,25 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "c6b3bed907393526a0aaf1b43f4f0646786f2d31be34b7241356eca27bd73d51",
-  "checkedAt": "2026-09-24T03:33:47.742Z",
-  "scope": "Break up exposed live-rock surfaces with connected coralline growth, small pale growing rims and matching granular color/normal/roughness relief.",
+  "buildHash": "eff85f835ed467414169e5ce11b39adf5ffbf6a41f4a9c4a021efcf2d0502c2b",
+  "checkedAt": "2026-09-24T03:59:29.950Z",
+  "scope": "Replace the anemone pale tray-like attachment with finely pleated, pigmented oral tissue and soft canopy shading tied to actual tentacle root spacing.",
   "geometryChecks": [
-    "All scenery geometry and placement statistics unchanged",
-    "Two full-resolution seamless maps: outward unit normals and matte packed roughness verified",
-    "Fine growth masks consistently drive diffuse, relief and roughness",
+    "800 detailed anchored tentacles retained",
+    "Periodic pleated oral geometry, finite normals and continuous cap/curve shading passed",
+    "Local contact/feeding deformation remains orientation-preserving",
+    "16-bit linear vertex colors preserve fine gradients",
     "Feeding, movement, pause, collision, lighting and mobile checks passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "fixed-camera before/after live-rock faces and base close-ups",
-    "original reef photo and planted comparison/reference"
+    "fixed-camera oral-before/after anemone and lower attachment views",
+    "moving macro frame pair",
+    "seven-frame contact feeding sequence",
+    "original reef and close anemone references",
+    "planted comparison and its original reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -423,11 +427,66 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "3505ce843",
-    "loadPrior": 5961,
-    "loadCurrent": 6023.5,
-    "fpsPrior": 198.4,
-    "fpsCurrent": 199.1,
-    "interpretation": "Alternating serial local sessions, identical viewport/effects. All original scene geometry and shader sampling retained. Two original 1K maps grow by208498 bytes with fine colonization detail; no new texture, sampler or runtime synthesis."
+    "baseline": "591546f2c",
+    "loadPrior": 6124,
+    "loadCurrent": 6077.5,
+    "fpsPrior": 186.1,
+    "fpsCurrent": 180.7,
+    "interpretation": "Alternating serial local sessions; no universal speed claim. Added38976 source triangles across three folded oral discs/columns, plus8745 total buffer bytes after high-precision normalized color packing. No new textures, material batches or per-frame CPU work.",
+    "firstUncapped": [
+      {
+        "version": "prior",
+        "readyMs": 6055,
+        "fps": 196.11140599117098,
+        "triangles": 16339080,
+        "drawCalls": 1,
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      },
+      {
+        "version": "current",
+        "readyMs": 6199,
+        "fps": 147.1651506192301,
+        "triangles": 16417032,
+        "drawCalls": 1,
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      },
+      {
+        "version": "current",
+        "readyMs": 6656,
+        "fps": 139.35483706970388,
+        "triangles": 16417032,
+        "drawCalls": 1,
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      },
+      {
+        "version": "prior",
+        "readyMs": 6881,
+        "fps": 149.29484109994996,
+        "triangles": 16339080,
+        "drawCalls": 1,
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      }
+    ],
+    "uncappedReview": "First sequence was nonstationary: baseline itself fell from196.1 to149.3FPS; current147.2/139.4. Saved that evidence and repeated in reversed order. Recheck prior184.4/187.9 vs current183.2/178.2, about3% lower current. No universal throughput claim."
   }
 }
