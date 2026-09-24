@@ -10,12 +10,12 @@ export function rockLifeSignature(supports:T.Mesh[]){let hash=2166136261;for(con
 export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLifeAttachments){
  const crusts:T.BufferGeometry[]=[],pores:T.BufferGeometry[]=[],obstacles:{center:T.Vector3;radius:number}[]=[];
  const stats={patches:0,pores:0,triangles:0,maxAttachmentError:0,colors:0};
- const palette=['#c26428','#ad4937','#917347','#9c526d','#596f72','#728556','#bc8352'];
+ const palette=['#ce6425','#b63e42','#ad833c','#af528c','#387e80','#789645','#d1914e'];
  const signature=rockLifeSignature(supports);if(baked&&(baked.version!==1||baked.signature!==signature))throw Error('Rock-life attachment bake is stale; rebuild it against the current rock geometry.');
  const samples:(number[]|null)[]=[];let cursor=0;
  const indices=new Map(baked?[]:supports.map(s=>[s,rockRayIndex(s)] as const));
  const normal=new T.Vector3(),point=new T.Vector3(),u=new T.Vector3(),v=new T.Vector3();
- const usedColors=new Set<number>(),anchors:{center:T.Vector3;radius:number}[]=[];
+ const usedColors=new Set<number>(),anchors:{center:T.Vector3;radius:number;rock:number}[]=[];
  const sample=(mesh:T.Mesh,origin:T.Vector3,direction:T.Vector3,far:number)=>{
   if(baked){if(cursor>=baked.samples.length)throw Error('Incomplete rock-life attachment bake');const s=baked.samples[cursor++];return s?{point:new T.Vector3(...s.slice(0,3) as [number,number,number]),face:{normal:new T.Vector3(...(baked.normals?baked.normals[s[3]]:s.slice(3,6)) as [number,number,number])},object:mesh}:undefined;}
   const hit=indices.get(mesh)!(origin,direction,far);samples.push(hit?[...hit.point.toArray(),...hit.face.normal.toArray()]:null);return hit;
@@ -23,7 +23,7 @@ export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLife
  for(let rock=0;rock<supports.length;rock++){
   const support=supports[rock];support.geometry.computeBoundingBox();const box=support.geometry.boundingBox!,center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
   // Front, top, both flanks and rear all carry life when the tank is rotated.
-  const directions=[new T.Vector3(0,.10,1),new T.Vector3(-.82,.22,.57),new T.Vector3(.82,.22,.57),new T.Vector3(0,1,.05),new T.Vector3(.2,.2,-1)];
+  const directions=[new T.Vector3(0,.10,1),new T.Vector3(-.82,.22,.57),new T.Vector3(.82,.22,.57),new T.Vector3(0,1,.05),new T.Vector3(.2,.2,-1),new T.Vector3(-.45,.68,1),new T.Vector3(.45,-.05,1),new T.Vector3(-1,.1,-.25),new T.Vector3(1,.38,-.25),new T.Vector3(-.35,.6,-1)];
   for(let patch=0;patch<directions.length;patch++){
    const outward=directions[patch].normalize(),extent=Math.max(size.x,size.y,size.z);
    const offset=new T.Vector3((random()-.5)*size.x*.46,(random()-.5)*size.y*.48,(random()-.5)*size.z*.46);
@@ -37,18 +37,18 @@ export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLife
    for(const neighbor of supports){const h=sample(neighbor,checkOrigin,checkDirection,nearest);if(h){nearest=h.point.distanceTo(checkOrigin);exposed=h;}}
    if(!exposed||exposed.object!==support||exposed.point.distanceTo(point)>.018)continue;
    const radius=Math.min(.35,Math.min(size.x,size.y,size.z)*(.28+random()*.14));
-   if(radius<.065||anchors.some(a=>a.center.distanceTo(point)<Math.min(a.radius,radius)*.85))continue;
+   if(radius<.065||anchors.some(a=>a.rock===rock&&a.center.distanceTo(point)<(a.radius+radius)*.84))continue;
    const pigment=(rock*3+patch*2)%palette.length,color=new T.Color(palette[pigment]),seed=rock*3.713+patch*8.123;
    const crust=coralCrust(support.geometry,point,normal,radius,.1,seed,{color,thickness:0,lobed:true,film:true});
    if(!crust.index!.count){crust.dispose();continue;}
    const crustUv=crust.getAttribute('uv');for(let j=0;j<crustUv.count;j++)crustUv.setXY(j,crustUv.getX(j)*2.3,crustUv.getY(j)*2.3);
-   crusts.push(crust);anchors.push({center:point.clone(),radius});stats.patches++;usedColors.add(pigment);
+   crusts.push(crust);anchors.push({center:point.clone(),radius,rock});stats.patches++;usedColors.add(pigment);
    stats.triangles+=crust.index!.count/3;
    u.crossVectors(Math.abs(normal.y)>.9?new T.Vector3(1,0,0):new T.Vector3(0,1,0),normal).normalize();v.crossVectors(normal,u).normalize();
    const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[];
-   const count=Math.round(18+radius*85),footprint=.010+radius*.025,accepted:T.Vector3[]=[];
+   const count=Math.round(24+radius*110),footprint=.010+radius*.025,accepted:T.Vector3[]=[];
    for(let i=0;i<count;i++){
-    const angle=i*2.399963+seed,reach=radius*Math.sqrt((i+.5)/count)*(.43+.22*random());
+    const angle=i*2.399963+seed,reach=radius*Math.sqrt((i+.5)/count)*(.52+.25*random());
     const target=point.clone().addScaledVector(u,Math.cos(angle)*reach).addScaledVector(v,Math.sin(angle)*reach);
     const h=sample(support,target.clone().addScaledVector(normal,.18),normal.clone().negate(),.34);
     if(!h?.face||h.face.normal.dot(normal)<.36||h.point.distanceTo(target)>.13)continue;

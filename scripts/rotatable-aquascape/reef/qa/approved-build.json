@@ -1,15 +1,15 @@
 {
-  "readyMs": 6729,
+  "readyMs": 6906,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99100134979749,
-      "time": 6.086200000095381,
-      "bites": 13,
-      "remaining": 29,
+      "fps": 59.99400059994003,
+      "time": 5.859800000190748,
+      "bites": 5,
+      "remaining": 37,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.00005264415197997321,
+        "maxBrush": 0.02279434442669059,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,13 +21,13 @@
       }
     },
     {
-      "fps": 59.99700014999249,
-      "time": 10.103100000095374,
-      "bites": 30,
-      "remaining": 12,
+      "fps": 59.99700014999255,
+      "time": 9.876800000190745,
+      "bites": 28,
+      "remaining": 14,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 3.0169354809597457e-8,
+        "maxBrush": 5.177147369503172e-7,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -39,31 +39,13 @@
       }
     },
     {
-      "fps": 58.5851681882537,
-      "time": 14.134900000095344,
-      "bites": 35,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.006278925075834083,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979744,
-      "time": 18.1520000000953,
+      "fps": 59.99700014999255,
+      "time": 13.893800000190694,
       "bites": 37,
       "remaining": 4,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.049717876580703424,
+        "brushing": 3,
+        "maxBrush": 0.0808331904893329,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
@@ -76,54 +58,72 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 22.169000000095238,
-      "bites": 37,
-      "remaining": 4,
+      "time": 17.900900000190656,
+      "bites": 38,
+      "remaining": 3,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.03764670497875064,
+        "brushing": 6,
+        "maxBrush": 0.08765485379217566,
         "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
+        "swallowed": 0,
+        "carried": 1,
         "fold": [
           0,
-          0.1931958403798511,
+          0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999244,
-      "time": 26.185900000095177,
+      "fps": 59.99400059993998,
+      "time": 21.917900000190556,
       "bites": 38,
       "remaining": 3,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.0615571586645247,
+        "brushing": 0,
+        "maxBrush": 0.00001082980472240207,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
           0,
-          0.13029871508688437,
+          0.1935409471095544,
           0
         ]
       }
     },
     {
-      "fps": 59.931079258852236,
-      "time": 30.205100000095044,
+      "fps": 59.99400059993998,
+      "time": 25.934900000190467,
       "bites": 38,
       "remaining": 3,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.07374200594574165,
+        "brushing": 2,
+        "maxBrush": 0.09471150011642394,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
           0,
-          0.047121452080211235,
+          0.13114549484901766,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 29.95200000019034,
+      "bites": 38,
+      "remaining": 3,
+      "anemones": {
+        "brushing": 4,
+        "maxBrush": 0.11229191202123663,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.04792672410126573,
           0
         ]
       }
@@ -144,9 +144,9 @@
   },
   "initial": {
     "rockLifeStats": {
-      "patches": 226,
-      "pores": 4094,
-      "triangles": 348524,
+      "patches": 254,
+      "pores": 5829,
+      "triangles": 456586,
       "maxAttachmentError": 0.005,
       "colors": 7
     },
@@ -161,7 +161,7 @@
       "colonies": 12,
       "triangles": 898980
     },
-    "triangles": 14876420,
+    "triangles": 15094416,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
@@ -368,11 +368,11 @@
   },
   "files": [
     "assets/anthias-qh5-fys7.glb",
-    "assets/attachments-Dq5rDl-Q.json",
+    "assets/attachments-_XvA_qTE.json",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-B2SOZvEr.js",
+    "assets/index-Bhrqd1VJ.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -389,25 +389,24 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "f0d73f2f6888c7d674865c2866771284458e6851b1f95314d20a18f9d538c178",
-  "checkedAt": "2026-09-24T00:42:29.020Z",
-  "scope": "Colorful fine live-rock growth on the fronts, tops, sides and backs: 226 clipped films and4094 raised sponge-inspired pores across seven colony pigment families.",
+  "buildHash": "eef057b4cc8b18e449f085d3ff6fb416917450996cd029c92c795e8a6007b2fd",
+  "checkedAt": "2026-09-24T01:07:10.823Z",
+  "scope": "Visible foreground sand banks and an uneven sealed front rim, denser mixed live-rock growth, richer orange anthias with original detailed maps.",
   "geometryChecks": [
-    "348524 additional source triangles merged into existing materials; original colonies, fish and geometry retained",
-    "Real surface attachment within0.005001; recessed openings, nondegenerate faces, smooth angular seams and navigation coverage",
-    "600 attachment-index rays agree with Three.js including short rays and inside starts",
-    "Cached attachment fixture reproduces all attributes and obstacles byte-for-byte; source recipe and rock signature checked",
-    "Full existing reef geometry, feeding, navigation, lighting, pause, fullscreen and mobile checks passed"
+    "Sand height0.1757–0.7641, maximum sampled slope0.8711; closed front rim and matching soft-shadow receiver",
+    "254 surface-attached patches and5829 recessed sponge-inspired pores; max attachment offset0.005",
+    "Original colonies/inhabitants retained; lower fragments rebedded to updated terrain",
+    "Geometry, exact attachment bake, feeding, collisions, pause, breathing, lighting and mobile suite passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
     "rock macro",
-    "coral macro",
-    "anemone motion a/b",
-    "original reef photo",
-    "mature planted render and original reference"
+    "anthias macro",
+    "anemone movement sequence",
+    "original reef reference",
+    "planted render and original reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -416,11 +415,11 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "27955cbd5",
-    "loadPrior": 6183,
-    "loadCurrent": 5897,
-    "fpsPrior": 127.2,
-    "fpsCurrent": 131.3,
-    "interpretation": "Local alternating runs only; uncapped rates overlap. New detail has geometry and transfer cost, not a universal performance gain. Cached exact attachments avoid thousands of per-visitor surface searches."
+    "baseline": "8f561be4b",
+    "loadPrior": 7224,
+    "loadCurrent": 7362.5,
+    "fpsPrior": 113.4,
+    "fpsCurrent": 122.1,
+    "interpretation": "Local alternating samples only. Frame-capped runs stay near60FPS. Additional growth adds geometry and transfer cost; no universal speed claim."
   }
 }

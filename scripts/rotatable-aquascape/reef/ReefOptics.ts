@@ -61,12 +61,16 @@ export function sandBank(x:number,z:number){
 // Low deposited dunes, scalloped island toes and a shallow channel. Food and
 // fish clearance follow this terrain; the tank perimeter remains sealed.
 export function sandHeight(x:number,z:number){
- const edge=Math.min(1,Math.max(0,(5.03-Math.abs(x))*1.25),Math.max(0,(2.305-Math.abs(z))*1.25));
+ const edge=Math.min(1,Math.max(0,(5.03-Math.abs(x))*1.0),Math.max(0,(2.305-Math.abs(z))*1.0));
  const fade=edge*edge*(3-2*edge),bank=sandBank(x,z);
  const phase=z*11.4+x*.85+Math.sin(x*1.9)*.65;
  const ripple=(Math.sin(phase)+Math.sin(phase*2+.7)*.22)*(.010+bank*.008);
  const drift=Math.sin(x*2.1+z*.7)*Math.cos(z*1.6)*.009;
- const dunes=.24*Math.exp(-((x+1.85)**2/1.05+(z-1.42)**2/.48))+.26*Math.exp(-((x-1.48)**2/.85+(z-1.58)**2/.44))+.20*Math.exp(-((x+3.85)**2/.70+(z-.98)**2/.44));
- const tongue=.10*Math.exp(-((x+.18)**2/1.4+(z-1.52)**2/.40));
- return .18+fade*(bank*.22+dunes+tongue+ripple+drift);
+ const dunes=.43*Math.exp(-((x+1.28)**2/1.00+(z-1.06)**2/.90))+.46*Math.exp(-((x-1.23)**2/1.02+(z-1.08)**2/.94))+.30*Math.exp(-((x+4.0)**2/.94+(z-.96)**2/.62));
+ const tongue=.13*Math.exp(-((x+.12+Math.sin(z*2)*.18)**2/.55+(z-.38)**2/1.5));
+ // A low front berm continues to the glass instead of flattening every bank
+ // into one ruler-straight edge. The mesh closes this varying rim down to the base.
+ const front=T.MathUtils.smoothstep(z,.72,2.18),side=T.MathUtils.smoothstep(5.03-Math.abs(x),0,.7);
+ const berm=front*side*(.045+.13*Math.exp(-((x+1.3)**2/.9))+.09*Math.exp(-((x-2.0)**2/1.2)));
+ return .18+berm+fade*(bank*.22+dunes+tongue+ripple+drift);
 }
