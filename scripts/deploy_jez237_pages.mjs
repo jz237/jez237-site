@@ -19,6 +19,16 @@ if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
 for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.html']) {
   if (!existsSync(resolve(stage, path))) throw new Error(`Upload directory is missing ${path}.`);
 }
+// A current checkout does not make a reused public upload snapshot current.
+// Reject stale policy/storefront files before they can replace a repaired site.
+for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
+  'prototypes/hidden-reef-header-preview/index.html']) {
+  const expected = readFileSync(resolve(repo, path), 'utf8').replaceAll('\r\n', '\n');
+  if (!existsSync(resolve(stage, path))
+    || readFileSync(resolve(stage, path), 'utf8').replaceAll('\r\n', '\n') !== expected) {
+    throw new Error(`Stale upload snapshot: ${path} differs from the current checkout.`);
+  }
+}
 const wranglerPackage = createRequire(import.meta.url).resolve('wrangler/package.json');
 const wrangler = resolve(dirname(wranglerPackage),
   JSON.parse(readFileSync(wranglerPackage, 'utf8')).bin.wrangler);
