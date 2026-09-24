@@ -48,7 +48,10 @@ export function reefRockLife(supports:T.Mesh[],random:()=>number,baked?:RockLife
    stats.triangles+=crust.index!.count/3;
    u.crossVectors(Math.abs(normal.y)>.9?new T.Vector3(1,0,0):new T.Vector3(0,1,0),normal).normalize();v.crossVectors(normal,u).normalize();
    const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[];
-   const count=Math.round(24+radius*110),footprint=.010+radius*.025,accepted:T.Vector3[]=[];
+   // More candidate contacts let colonies follow porous shoulders without
+   // bridging the new borings. Keep the same physical footprint and spacing;
+   // rejected roots remain rejected rather than flattening the living rock.
+   const count=Math.round(36+radius*145),footprint=.010+radius*.025,accepted:T.Vector3[]=[];
    for(let i=0;i<count;i++){
     const angle=i*2.399963+seed,reach=radius*Math.sqrt((i+.5)/count)*(.52+.25*random());
     const target=point.clone().addScaledVector(u,Math.cos(angle)*reach).addScaledVector(v,Math.sin(angle)*reach);
