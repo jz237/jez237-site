@@ -67,3 +67,6 @@ main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aq
 .observation-idle :has(:focus-visible){opacity:1}
 @media(max-width:850px){.views{flex-wrap:wrap;justify-content:center}.observation-caption{bottom:165px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:none}}
+
+.store-showroom nav a.saltwater-link{color:#e0fcff;background:#12506a;border:1px solid #64dce9;font-weight:700;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center}
+.store-showroom nav a.saltwater-link:hover{background:#196c83;color:#fff}
