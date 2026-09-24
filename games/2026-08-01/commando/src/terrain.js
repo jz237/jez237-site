@@ -4,6 +4,7 @@
 // data, so what you see is what you collide with.
 import * as THREE from 'three';
 import { fbm, noise2, pwl, smooth, clamp, lerp, hexColor, mulberry } from './util.js';
+import { GROUND } from './assets.js';
 
 export const X_EXTENT = 48;           // metres either side of centre that get ground
 
@@ -28,6 +29,19 @@ const PAL = {
 const FLOOR = {
   jungle: ['#3a4a22', '#4d3d27'], dry: ['#7a6a4c', '#6b5c42'], rock: ['#6f6860', '#4f4a44'], swamp: ['#2e3a24', '#35301f'],
 };
+
+// ground texture layers (Poly Haven scans, see tools/textures.txt): the
+// surface is a blend of these, tinted per vertex to the palette above
+export const GROUND_LAYERS = ['dirt', 'leaves', 'sand', 'mud', 'road'];
+const L_DIRT = [1, 0, 0, 0, 0], L_LEAF = [0, 1, 0, 0, 0], L_MUD = [0, 0, 0, 1, 0], L_ROAD = [0, 0, 0, 0, 1];
+// bare ground per biome (grassy patches drift toward leaf litter by PAL.k)
+const LMIX = {
+  lz: [0.75, 0.25, 0, 0, 0], jungle: [0.55, 0.45, 0, 0, 0], scrub: [0.6, 0.1, 0.3, 0, 0], river: [0.5, 0.3, 0.05, 0.15, 0],
+  desert: [0.3, 0, 0.7, 0, 0], fort: [0.6, 0, 0.4, 0, 0], beach: [0.1, 0.05, 0.85, 0, 0], camp: [0.7, 0.15, 0, 0.15, 0],
+  ravine: [0.85, 0.05, 0.1, 0, 0], swamp: [0.2, 0.3, 0, 0.5, 0], motor: [0.6, 0, 0.2, 0.2, 0],
+};
+const LFLOOR = { jungle: [0.2, 0.8, 0, 0, 0], dry: [0.6, 0.1, 0.3, 0, 0], rock: [0.9, 0.1, 0, 0, 0], swamp: [0.1, 0.4, 0, 0.5, 0] };
+const mixS = (S, T, t) => { for (let i = 0; i < 5; i++) S[i] += (T[i] - S[i]) * t; };
 
 export class Terrain {
   constructor(area) {
@@ -200,20 +214,25 @@ export class Terrain {
     return h;
   }
 
-  // ground albedo (sRGB triplet before texture detail)
-  color(x, p, h) {
+  // ground albedo (sRGB triplet before texture detail); fills S (if given)
+  // with the texture layer weights, mixed the same way as the colour
+  color(x, p, h, S = null) {
     const w = this.biomeWeights(p);
     const n1 = fbm(x * 0.11 + 7, p * 0.11, 3), n2 = fbm(x * 0.5, p * 0.5, 2), n3 = noise2(x * 1.7, p * 1.7);
     let col = [0, 0, 0], flo = [0, 0, 0], tw = 0;
+    const s = [0, 0, 0, 0, 0], sf = [0, 0, 0, 0, 0], sk = [0, 0, 0, 0, 0];
     const grassy = smooth(-0.1, 0.35, n1);
     for (const k in w) {
       const P = PAL[k]; if (!P || w[k] <= 0) continue;
       const g = mix3(C(P.a), C(P.b), grassy * P.k), F = FLOOR[P.floor];
       const f = mix3(C(F[0]), C(F[1]), smooth(-0.2, 0.3, n2));
       for (let i = 0; i < 3; i++) { col[i] += g[i] * w[k]; flo[i] += f[i] * w[k]; }
+      for (let i = 0; i < 5; i++) sk[i] = LMIX[k][i];
+      mixS(sk, L_LEAF, grassy * P.k * 0.6);
+      for (let i = 0; i < 5; i++) { s[i] += sk[i] * w[k]; sf[i] += LFLOOR[P.floor][i] * w[k]; }
       tw += w[k];
     }
-    if (tw > 0) { col = col.map(v => v / tw); flo = flo.map(v => v / tw); }
+    if (tw > 0) { col = col.map(v => v / tw); flo = flo.map(v => v / tw); for (let i = 0; i < 5; i++) { s[i] /= tw; sf[i] /= tw; } }
     // fine mottling
     const m = 1 + n2 * 0.12 + n3 * 0.05;
     col = col.map(v => v * m);
@@ -223,25 +242,35 @@ export class Terrain {
       const road = (1 - smooth(1.5, 2.9, Math.abs(rdx + noise2(p * 0.3, 1) * 0.4))) * (1 - (w.fort || 0) * 0.5) * (1 - (w.swamp || 0) * 0.6);
       const rut = (1 - smooth(0.12, 0.32, Math.abs(Math.abs(rdx) - 0.95)));
       col = mix3(col, mix3(C('#ad8d61'), C('#7d6343'), rut * 0.75), road * 0.8);
+      mixS(s, L_ROAD, road * 0.9);
     }
     // the floor beyond the corridor edge (leaf litter, rock, dry scrub, swamp)
     const hw = this.halfWidth(p), e = Math.abs(x) - hw;
     col = mix3(col, flo, smooth(-2, 3, e) * 0.85);
+    mixS(s, sf, smooth(-2, 3, e) * 0.85);
     // cliff faces read as bare rock
     if (this.bankSpan(p) < 4) {
-      const s = Math.abs(this.height(x + 0.4, p) - this.height(x - 0.4, p)) / 0.8;
-      col = mix3(col, mix3(C('#7d766c'), C('#5a544c'), smooth(-0.3, 0.4, n2)), smooth(0.6, 1.6, s) * 0.9);
+      const slope = Math.abs(this.height(x + 0.4, p) - this.height(x - 0.4, p)) / 0.8;
+      col = mix3(col, mix3(C('#7d766c'), C('#5a544c'), smooth(-0.3, 0.4, n2)), smooth(0.6, 1.6, slope) * 0.9);
+      mixS(s, L_DIRT, smooth(0.6, 1.6, slope) * 0.9);
     }
     // wet mud at the water's edge, dark soil in trenches, scorch in craters
     const wa = this.waterAt(x, p);
     if (wa) {
       col = mix3(col, wa.w.murky ? C('#3a3624') : C('#4b3d2a'), smooth(0.02, 0.4, wa.raw) * 0.9);
-      if (wa.land > 0) col = mix3(col, mix3(C('#5a4a30'), C('#4a5230'), grassy), wa.land * wa.raw * 0.8);
+      mixS(s, L_MUD, smooth(0.02, 0.4, wa.raw) * 0.9);
+      if (wa.land > 0) {
+        col = mix3(col, mix3(C('#5a4a30'), C('#4a5230'), grassy), wa.land * wa.raw * 0.8);
+        mixS(s, grassy > 0.5 ? L_LEAF : L_DIRT, wa.land * wa.raw * 0.8);
+      }
     }
     const cs = this.craterAt(x, p)[1];
     col = mix3(col, mix3(C('#4a3b2b'), C('#2e271f'), cs), cs * 0.75);
+    mixS(s, L_DIRT, cs * 0.6);
     const tr = this.trenchDepth(x, p);
     col = mix3(col, C('#4a3a27'), smooth(0.05, 0.6, tr));
+    mixS(s, L_DIRT, smooth(0.05, 0.6, tr));
+    if (S) for (let i = 0; i < 5; i++) S[i] = s[i];
     // contact shadow around props and along the fortress wall
     let ao = 1;
     for (const o of this.occ) {
@@ -275,15 +304,17 @@ export class Terrain {
     for (let x = -X_EXTENT; x <= X_EXTENT + 1e-6; x += 0.6) cols.push(x);
     const nx = cols.length, nz = rows.length;
     const pos = new Float32Array(nx * nz * 3), col = new Float32Array(nx * nz * 3), uv = new Float32Array(nx * nz * 2);
+    const spA = new Float32Array(nx * nz * 4), spB = new Float32Array(nx * nz), S = [0, 0, 0, 0, 0];
     let i = 0;
     for (let r = 0; r < nz; r++) {
       const p = rows[r];
       for (let c = 0; c < nx; c++, i++) {
         const x = cols[c]; const h = this.height(x, p);
         pos[i * 3] = x; pos[i * 3 + 1] = h; pos[i * 3 + 2] = -p;
-        const cc = this.color(x, p, h);
+        const cc = this.color(x, p, h, S);
         col[i * 3] = cc[0]; col[i * 3 + 1] = cc[1]; col[i * 3 + 2] = cc[2];
         uv[i * 2] = x / 5; uv[i * 2 + 1] = p / 5;
+        spA[i * 4] = S[0]; spA[i * 4 + 1] = S[1]; spA[i * 4 + 2] = S[2]; spA[i * 4 + 3] = S[3]; spB[i] = S[4];
       }
     }
     const idx = new Uint32Array((nx - 1) * (nz - 1) * 6);
@@ -298,11 +329,21 @@ export class Terrain {
     g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
     g.setIndex(new THREE.BufferAttribute(idx, 1));
     g.computeVertexNormals();
-    // vertex colours are authored in sRGB; convert once to linear for lighting
-    const c3 = new THREE.Color();
-    for (let j = 0; j < col.length; j += 3) {
+    g.setAttribute('splatA', new THREE.BufferAttribute(spA, 4));
+    g.setAttribute('splatB', new THREE.BufferAttribute(spB, 1));
+    // vertex colours are authored in sRGB; convert once to linear for lighting.
+    // With ground textures loaded the vertex colour becomes a tint: the blend of
+    // layer averages times the tint equals the palette colour, so every spot
+    // keeps its art-directed colour and the scans add the detail.
+    const c3 = new THREE.Color(), M = GROUND.mean;
+    for (let j = 0, v = 0; j < col.length; j += 3, v++) {
       c3.setRGB(col[j], col[j + 1], col[j + 2], THREE.SRGBColorSpace);
       col[j] = c3.r; col[j + 1] = c3.g; col[j + 2] = c3.b;
+      if (M.length !== 5) continue;
+      for (let ch = 0; ch < 3; ch++) {
+        const ref = spA[v * 4] * M[0][ch] + spA[v * 4 + 1] * M[1][ch] + spA[v * 4 + 2] * M[2][ch] + spA[v * 4 + 3] * M[3][ch] + spB[v] * M[4][ch];
+        col[j + ch] = clamp(col[j + ch] / Math.max(ref, 0.01), 0.15, 3.5);
+      }
     }
     return g;
   }
@@ -310,21 +351,79 @@ export class Terrain {
 
 // ground material: vertex colour x detail texture sampled at two scales so the
 // tiling never lines up, plus a detail normal map for grazing light
-export function groundMaterial(detail, wet = 0) {
-  const m = new THREE.MeshStandardMaterial({
-    vertexColors: true, map: detail.map, normalMap: detail.normal,
-    normalScale: new THREE.Vector2(0.9, 0.9), roughness: 0.96 - wet * 0.36, metalness: 0,
-  });
-  m.onBeforeCompile = (sh) => {
-    sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `
-      #ifdef USE_MAP
-        vec4 texA = texture2D( map, vMapUv );
-        vec4 texB = texture2D( map, vMapUv * 0.27 + vec2(0.37, 0.61) );
-        diffuseColor.rgb *= mix(texA.rgb, texB.rgb, 0.4) * 1.18;
-      #endif
-    `);
+// ground material: the five scanned layers (texture arrays) blended by the
+// per-vertex weights — by height on high quality, so pebbles poke through mud
+// and leaves — times the per-vertex tint. Each layer tiles at its own size and
+// angle so the grids never line up. Low quality skips normals and height.
+const TILE = [3.6, 3.2, 7.0, 2.6, 10.0];            // metres per tile, per layer
+const ANGLE = [0.0, 0.7, 1.9, 2.6, 0.35];
+export function groundMaterial(wet = 0, quality = 'high') {
+  const hq = quality === 'high';
+  const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 - wet * 0.25, metalness: 0 });
+  const U = {
+    uAlb: { value: GROUND.albedo }, uNrm: { value: GROUND.normal }, uWet: { value: wet },
+    uRoadMean: { value: new THREE.Vector3(...(GROUND.mean[4] || [0.3, 0.25, 0.2])) },
+    uTile: { value: TILE.map((t, i) => new THREE.Vector3(Math.cos(ANGLE[i]) / t, Math.sin(ANGLE[i]) / t, i)) },
   };
-  m.customProgramCacheKey = () => 'ground';
+  m.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, U);
+    if (hq) sh.defines = { ...(sh.defines || {}), GROUND_HQ: '' };
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute vec4 splatA; attribute float splatB; varying vec4 vSplatA; varying float vSplatB; varying vec2 vGround;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSplatA = splatA; vSplatB = splatB; vGround = vec2(position.x, -position.z);');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+        precision highp sampler2DArray;
+        uniform sampler2DArray uAlb; uniform sampler2DArray uNrm; uniform vec3 uTile[5]; uniform float uWet; uniform vec3 uRoadMean;
+        // the road scan's pale erosion streaks are toned down a little
+        vec3 layerAlb(int i, vec2 uv) { vec3 t = texture(uAlb, vec3(uv, float(i))).rgb; return i == 4 ? mix(uRoadMean, t, 0.72) : t; }
+        varying vec4 vSplatA; varying float vSplatB; varying vec2 vGround;
+        vec2 layerUv(int i) { vec3 t = uTile[i]; return vec2(vGround.x * t.x - vGround.y * t.y, vGround.x * t.y + vGround.y * t.x); }`)
+      .replace('#include <map_fragment>', `
+        float gw[5] = float[5](vSplatA.x, vSplatA.y, vSplatA.z, vSplatA.w, vSplatB);
+        vec2 guv[5];
+        for (int i = 0; i < 5; i++) guv[i] = layerUv(i);
+        vec3 gAlb = vec3(0.0); vec2 gN = vec2(0.0); float gMud = 0.0;
+        #ifdef GROUND_HQ
+          // height blend: each layer scores weight + height; only the top
+          // band survives, so the transition follows the stones and ridges
+          vec3 gNh[5]; float score[5]; float top = -1.0;
+          for (int i = 0; i < 5; i++) {
+            gNh[i] = gw[i] > 0.003 ? texture(uNrm, vec3(guv[i], float(i))).rgb : vec3(0.5, 0.5, 0.0);
+            score[i] = gw[i] > 0.003 ? gw[i] + gNh[i].b * 0.6 : -1.0;
+            top = max(top, score[i]);
+          }
+          float bsum = 0.0; float gb[5];
+          for (int i = 0; i < 5; i++) { gb[i] = max(score[i] - top + 0.22, 0.0); bsum += gb[i]; }
+          for (int i = 0; i < 5; i++) {
+            float b = gb[i] / bsum;
+            if (b > 0.0) {
+              gAlb += layerAlb(i, guv[i]) * b;
+              // map normal → world (x, north): strips are stored top row
+              // first, so green is flipped; then undo the layer's rotation
+              vec2 nt = gNh[i].rg * 2.0 - 1.0; nt.y = -nt.y;
+              vec2 cs = normalize(uTile[i].xy);
+              gN += vec2(nt.x * cs.x + nt.y * cs.y, -nt.x * cs.y + nt.y * cs.x) * b;
+            }
+          }
+          gMud = gb[3] / bsum;
+        #else
+          for (int i = 0; i < 5; i++) if (gw[i] > 0.003) gAlb += layerAlb(i, guv[i]) * gw[i];
+          gMud = gw[3];
+        #endif
+        diffuseColor.rgb *= gAlb;`)
+      .replace('#include <roughnessmap_fragment>', `float roughnessFactor = roughness - gMud * uWet * 0.3;`);
+    if (hq) sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>', `
+        // the ground is a height field: tangent = world +X, bitangent = -Z (north)
+        {
+          vec3 T = normalize((viewMatrix * vec4(1.0, 0.0, 0.0, 0.0)).xyz);
+          vec3 B = normalize((viewMatrix * vec4(0.0, 0.0, -1.0, 0.0)).xyz);
+          T = normalize(T - normal * dot(normal, T)); B = normalize(cross(normal, T));
+          vec2 nxy = gN * 0.9;
+          normal = normalize(T * nxy.x + B * nxy.y + normal * sqrt(max(1.0 - dot(nxy, nxy), 0.05)));
+        }`);
+  };
+  m.customProgramCacheKey = () => 'ground-splat-' + (hq ? 'hq' : 'lq');
   return m;
 }
 

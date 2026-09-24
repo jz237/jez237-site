@@ -5,25 +5,33 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { clamp, lerp } from './util.js';
 
 const PITCH = 56 * Math.PI / 180;     // camera looks down 56° below horizontal
 const FOV = 30;
 
 // final grade: gentle split-tone (cool shadows, warm highlights) + vignette,
+// a whisper of lens fringing toward the edges and animated film grain —
 // applied in linear light before the ACES output transform
 const GradeShader = {
   uniforms: {
     tDiffuse: { value: null }, uVig: { value: 0.32 }, uFlash: { value: 0 }, uFlashCol: { value: new THREE.Color(1, 0.9, 0.7) }, uHurt: { value: 0 },
     uShadow: { value: new THREE.Vector3(0.93, 0.98, 1.07) }, uHi: { value: new THREE.Vector3(1.05, 1.0, 0.92) }, uSat: { value: 1.08 },
+    uTime: { value: 0 }, uGrain: { value: 0.05 }, uCA: { value: 0.0022 }, uRes: { value: new THREE.Vector2(1280, 720) },
   },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
   fragmentShader: `
     uniform sampler2D tDiffuse; uniform float uVig; uniform float uFlash; uniform vec3 uFlashCol; uniform float uHurt;
     uniform vec3 uShadow; uniform vec3 uHi; uniform float uSat;
+    uniform float uTime; uniform float uGrain; uniform float uCA; uniform vec2 uRes;
     varying vec2 vUv;
+    float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     void main(){
+      vec2 off = (vUv - 0.5) * uCA;
       vec4 c = texture2D(tDiffuse, vUv);
+      c.r = texture2D(tDiffuse, vUv + off).r;
+      c.b = texture2D(tDiffuse, vUv - off).b;
       float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
       c.rgb *= mix(uShadow, uHi, smoothstep(0.02, 0.6, l));
       c.rgb = mix(vec3(l), c.rgb, uSat);
@@ -33,6 +41,9 @@ const GradeShader = {
       c.rgb += uFlashCol * uFlash;
       float edge = smoothstep(0.35, 0.8, length(vUv - 0.5));
       c.rgb = mix(c.rgb, c.rgb * vec3(1.4, 0.35, 0.3), uHurt * edge);
+      // grain: strongest in the shadows and mid-tones, like film stock
+      float gr = hash(floor(vUv * uRes) + fract(uTime * 7.31) * 413.7) - 0.5;
+      c.rgb *= 1.0 + gr * uGrain * (1.0 - smoothstep(0.35, 1.3, l));
       gl_FragColor = c;
     }`,
 };
@@ -132,11 +143,17 @@ export class Renderer {
     this.grade = new ShaderPass(GradeShader);
     comp.addPass(this.grade);
     comp.addPass(new OutputPass());
+    // the scene renders without MSAA; FXAA smooths rifles, wire and roof edges
+    this.fxaa = new ShaderPass(FXAAShader);
+    this.fxaa.enabled = this.quality === 'high';
+    comp.addPass(this.fxaa);
   }
 
   setQuality(q) {
     this.quality = q;
     this.bloom.enabled = q === 'high';
+    this.fxaa.enabled = q === 'high';
+    this.grade.uniforms.uGrain.value = q === 'high' ? 0.05 : 0.035;
     const n = q === 'high' ? 2048 : 1024;
     if (this.sun.shadow.mapSize.x !== n) {
       this.sun.shadow.mapSize.set(n, n);
@@ -156,6 +173,8 @@ export class Renderer {
     this.composer.setPixelRatio(this.dpr);
     this.composer.setSize(w, h);
     this.bloom.resolution.set(w / 2, h / 2);
+    this.fxaa.uniforms.resolution.value.set(1 / (w * this.dpr), 1 / (h * this.dpr));
+    this.grade.uniforms.uRes.value.set(w * this.dpr, h * this.dpr);
     this.camera.aspect = w / h;
     this.portrait = h > w * 1.05;
     // ground width to show at the focus point: wide on landscape, tighter on
@@ -196,6 +215,7 @@ export class Renderer {
   }
 
   update(dt, t) {
+    this.grade.uniforms.uTime.value = t;
     // screen shake: decaying jitter + directional kick
     this.shake = Math.max(0, this.shake - dt * 2.8);
     this.kick.multiplyScalar(Math.pow(0.0005, dt));

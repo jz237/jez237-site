@@ -1,7 +1,7 @@
 // textures.js — every texture in the game is painted here on canvases at boot,
 // so the whole look ships as code (no image downloads) and stays consistent.
 import * as THREE from 'three';
-import { mulberry } from './util.js';
+import { mulberry, fbm, smooth, clamp } from './util.js';
 
 // periodic gradient noise so ground detail tiles seamlessly
 function makePeriodicNoise(seed) {
@@ -232,6 +232,23 @@ export function smokePuff() {
     grad.addColorStop(0, 'rgba(255,255,255,.34)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
     g.fillStyle = grad; g.fillRect(0, 0, N, N);
   }
+  return texFrom(c, { repeat: false, srgb: false });
+}
+
+// a lumpy cloud puff for fire and smoke: fbm density inside a soft disc,
+// shaded as if lit from above-left so billows read as volumes, not blobs
+export function billowTexture(seed = 7) {
+  const N = 128, c = canvas(N, N), g = c.getContext('2d'), img = g.createImageData(N, N);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const u = x / N - 0.5, v = y / N - 0.5, d = Math.hypot(u, v) * 2;
+    const n = fbm(u * 3.2 + seed, v * 3.2 - seed, 4), n2 = fbm(u * 7 - seed, v * 7 + seed, 3);
+    const dens = smooth(1.0, 0.45, d + n * 0.45 + n2 * 0.12);
+    const shade = clamp(0.7 + 0.3 * (-(u + v) * 1.4) + n * 0.35 + n2 * 0.15, 0.25, 1);
+    const o = (y * N + x) * 4;
+    img.data[o] = img.data[o + 1] = img.data[o + 2] = 255 * shade;
+    img.data[o + 3] = 255 * dens;
+  }
+  g.putImageData(img, 0, 0);
   return texFrom(c, { repeat: false, srgb: false });
 }
 

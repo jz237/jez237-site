@@ -266,7 +266,7 @@ export class World {
   buildGround() {
     const A = this.area;
     const geo = this.terrain.buildMesh(-40, A.length + 45);
-    this.groundMat = groundMaterial(this.tex.ground, this.amb.wet || 0);
+    this.groundMat = groundMaterial(this.amb.wet || 0, this.quality);
     const ground = this.ground = new THREE.Mesh(geo, this.groundMat);
     ground.receiveShadow = true;
     this.root.add(ground);

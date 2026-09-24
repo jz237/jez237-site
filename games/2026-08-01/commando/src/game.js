@@ -880,7 +880,11 @@ export class Game {
       b.hp -= n;
       if (b.hp <= 0) {
         b.alive = false; b.c.alive = false; b.mesh.visible = false;
-        if (b.red) setTimeout(() => { if (this.world.dyn.barrels.includes(b)) this.explode(b.x, b.p, b.r || 3.1, 'barrel'); }, delay * 1000 + 60);
+        if (b.red) setTimeout(() => {
+          if (!this.world.dyn.barrels.includes(b)) return;
+          this.explode(b.x, b.p, b.r || 3.1, 'barrel');
+          if (b.big) this.fx.burn(b.x, this.h(b.x, b.p) + 0.4, -b.p, 11, 1.5);      // fuel tanks keep burning
+        }, delay * 1000 + 60);
         else this.fx.dust(b.x, this.h(b.x, b.p), -b.p, 4);
       }
     } else if (ref.crate) {
@@ -988,6 +992,7 @@ export class Game {
     if (tr.hp <= 0) {
       tr.dead = true;
       this.explode(tr.x, tr.p, 4.2, 'truck');
+      this.fx.burn(tr.x, this.h(tr.x, tr.p) + 1.3, -tr.p, 10, 1.1);
       darken(tr.mesh, 0.25);
       tr.mesh.rotation.z = 0.08;
       this.addScore(SCORE.truck + tr.cargo * 100);
@@ -1063,6 +1068,7 @@ export class Game {
     if (tk.hp <= 0) {
       tk.dead = true;
       this.explode(tk.x, tk.p, 4.8, 'tankwreck');
+      this.fx.burn(tk.x, this.h(tk.x, tk.p) + 1.7, -tk.p, 14, 1.2);
       darken(tk.mesh, 0.22);
       tk.mesh.userData.turret.rotation.z = 0.25; tk.mesh.userData.turret.position.y += 0.3;
       this.addScore(SCORE.tank);
@@ -1152,6 +1158,7 @@ export class Game {
     if (mo.hp > 0 && mo.rider && mo.rider.alive && n < 99) { mo.rider.flashT = 1; return; }
     mo.dead = true; mo.t = 0;
     this.explode(mo.x, mo.p, 2.2, 'moto');
+    this.fx.burn(mo.x, this.h(mo.x, mo.p) + 0.5, -mo.p, 5, 0.6);
     for (const s of ['rider', 'gunner']) if (mo[s] && mo[s].alive) this.killEnemy(mo[s], fx, fp, true, true);
     darken(mo.mesh, 0.3); mo.mesh.rotation.z = 1.2;
     this.addScore(SCORE.moto);
