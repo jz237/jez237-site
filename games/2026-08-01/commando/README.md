@@ -18,9 +18,11 @@ Ultimate Modular Men for the soldiers, Stylized Nature MegaKit, Ultimate Nature
 palms, a few Toon Shooter Game Kit props) and KolosStudios' Military Pack
 (CC BY — tank, army trucks, tent, container, water tank; credited on the title
 screen). Build v6 replaced v5's chunky cartoon soldiers and props with these
-normal-proportion ones, for the action-movie tone. Terrain, water, buildings,
-the fortresses, barrels and the remaining foliage are still built from
-primitives in code.
+normal-proportion ones, for the action-movie tone. Build v7 added scanned
+ground (five CC0 Poly Haven textures blended per vertex by biome, by height on
+high quality), billowing fireballs and smoke plumes, burning wrecks, film
+grain, lens fringe and FXAA. Terrain shape, water, buildings, the fortresses,
+barrels and the remaining foliage are still built from primitives in code.
 
 ## Layout
 
@@ -31,12 +33,13 @@ primitives in code.
 | `src/level1.js` … `level3.js` | area layouts in metres (props, water, encounters, POWs, patrol, finale) |
 | `src/levels.js` | the campaign order and per-area lighting/weather (`AMBIENCE`) |
 | `src/world.js` | builds an area's terrain, water, props, vegetation, night lights and colliders; disposed between areas |
-| `src/terrain.js` | analytic height + colour + water function (rivers, wadeable swamp, causeways, cliffs, AO, craters, trenches) |
+| `src/terrain.js` | analytic height + colour + water function (rivers, wadeable swamp, causeways, cliffs, AO, craters, trenches); per-vertex texture-layer weights and the splat ground shader (the palette colour becomes a tint over the scans) |
 | `src/assets.js` | loads the model GLBs at boot; turns models into shared, normalised geometry (vertex-coloured or textured), splits the tank |
 | `src/models.js`, `src/models2.js` | the procedural models (buildings, fortresses, trucks, motorcycle…) and the tank wrapper |
 | `src/soldier.js` | soldiers assembled from Modular Men parts + rifle, baked per kind into one skinned mesh (one draw call each); leg / upper-body clip halves blended from the game's speed / crouch / throw / death / aim twist; two-bone IK for the rifle's support hand and for crouching |
 | `assets/models/` | `adventurer.glb`, `swat.glb`, `beach.glb` (one rig; clips in `swat.glb`), `props.glb`, `nature.glb` — meshopt-compressed, WebP textures (2.6 MB total) |
-| `tools/` | `pack-models.mjs` rebuilds `assets/models/` from the source GLBs listed in `models.txt` |
+| `assets/textures/` | `ground-albedo.webp` / `ground-normal.webp`: the five ground layers as strips (colour; normal X/Y + height), loaded as texture arrays |
+| `tools/` | `pack-models.mjs` rebuilds `assets/models/` from the source GLBs in `models.txt`; `pack-textures.mjs` rebuilds `assets/textures/` from the Poly Haven 1K scans in `textures.txt` |
 | `src/fx.js` | particles, tracers, muzzle flashes, explosions, decals, lights, floating text |
 | `src/render.js` | renderer, sky environment, sun + shadows, bloom + grade, camera rig |
 | `src/bot.js` | autopilot (attract mode and playthrough tests); local A* around obstacles |

@@ -3,12 +3,14 @@
 // allocates per frame once the game is running.
 import * as THREE from 'three';
 import * as TX from './textures.js';
-import { mulberry, clamp } from './util.js';
+import { mulberry, clamp, smooth } from './util.js';
 
 const rnd = Math.random;
 
 class PointPool {
-  constructor(scene, max, map, additive) {
+  // opts.linear: colours are linear (HDR allowed) even with normal blending;
+  // opts.sharp: darker creases in the texture (rolling fireballs)
+  constructor(scene, max, map, additive, opts = {}) {
     this.max = max; this.n = 0;
     this.p = []; // particle records
     const g = this.geo = new THREE.BufferGeometry();
@@ -32,8 +34,9 @@ class PointPool {
           vec2 c = gl_PointCoord - 0.5; float s = sin(vR), co = cos(vR);
           vec2 uv = vec2(c.x * co - c.y * s, c.x * s + c.y * co) + 0.5;
           vec4 t = texture2D(map, uv);
+          ${opts.sharp ? 't.rgb *= t.rgb * 1.4;   // deeper folds between the billows' : ''}
           // smoke/dust colours are authored in sRGB; fire is authored in linear HDR
-          vec3 col = ${additive ? 'vC.rgb' : 'pow(max(vC.rgb, 0.0), vec3(2.2))'};
+          vec3 col = ${additive || opts.linear ? 'vC.rgb' : 'pow(max(vC.rgb, 0.0), vec3(2.2))'};
           gl_FragColor = vec4(col * t.rgb, vC.a * t.a);
           if (gl_FragColor.a < 0.004) discard; }`,
       transparent: true, depthWrite: false,
@@ -41,10 +44,13 @@ class PointPool {
     });
     this.points = new THREE.Points(g, this.mat);
     this.points.frustumCulled = false;
-    this.points.renderOrder = additive ? 3 : 2;
+    this.points.renderOrder = opts.order ?? (additive ? 3 : 2);
     scene.add(this.points);
   }
-  // p: {x,y,z, vx,vy,vz, life, size, size1, r,g,b, a, a1, drag, grav, rot, spin, fade}
+  // p: {x,y,z, vx,vy,vz, life, size, size1, r,g,b, a, a1, drag, grav, rot, spin, fadeIn}
+  // optional: cm/tm + c1 colour ramp (start → cm at tm → c1), fo (alpha holds
+  // then fades out from t = fo), wx/wz drift not slowed by drag (wind),
+  // grav < 0 is buoyancy
   add(p) {
     if (this.p.length >= this.max) this.p.shift();
     p.age = 0; p.drag ??= 0; p.grav ??= 0; p.rot ??= rnd() * 6.28; p.spin ??= 0; p.a1 ??= 0; p.size1 ??= p.size;
@@ -59,7 +65,7 @@ class PointPool {
       if (p.age >= p.life) continue;
       const k = Math.pow(1 - clamp(p.drag, 0, 0.99), dt * 60);
       p.vx *= k; p.vy *= k; p.vz *= k; p.vy -= p.grav * dt;
-      p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+      p.x += (p.vx + (p.wx || 0)) * dt; p.y += p.vy * dt; p.z += (p.vz + (p.wz || 0)) * dt;
       if (p.grav > 0 && groundH) { const gh = groundH(p.x, -p.z); if (p.y < gh + 0.03) { p.y = gh + 0.03; p.vy *= -0.3; p.vx *= 0.6; p.vz *= 0.6; } }
       p.rot += p.spin * dt;
       P[w++] = p;
@@ -70,8 +76,14 @@ class PointPool {
       const p = P[i], t = p.age / p.life;
       this.pos[i * 3] = p.x; this.pos[i * 3 + 1] = p.y; this.pos[i * 3 + 2] = p.z;
       const fade = p.fadeIn ? Math.min(1, t / p.fadeIn) : 1;
-      this.col[i * 4] = p.r; this.col[i * 4 + 1] = p.g; this.col[i * 4 + 2] = p.b;
-      this.col[i * 4 + 3] = (p.a + (p.a1 - p.a) * t) * fade;
+      let r = p.r, g = p.g, b = p.b;
+      if (p.cm) {
+        if (t < p.tm) { const k = t / p.tm; r += (p.cm[0] - r) * k; g += (p.cm[1] - g) * k; b += (p.cm[2] - b) * k; }
+        else { const k = (t - p.tm) / (1 - p.tm); r = p.cm[0] + (p.c1[0] - p.cm[0]) * k; g = p.cm[1] + (p.c1[1] - p.cm[1]) * k; b = p.cm[2] + (p.c1[2] - p.cm[2]) * k; }
+      } else if (p.c1) { r += (p.c1[0] - r) * t; g += (p.c1[1] - g) * t; b += (p.c1[2] - b) * t; }
+      this.col[i * 4] = r; this.col[i * 4 + 1] = g; this.col[i * 4 + 2] = b;
+      const al = p.fo !== undefined ? p.a * (1 - smooth(p.fo, 1, t)) : p.a + (p.a1 - p.a) * t;
+      this.col[i * 4 + 3] = al * fade;
       if (p.heat) { const h = Math.max(0, 1 - t / p.heat); this.col[i * 4] = p.r + h * 3; this.col[i * 4 + 1] = p.g + h * 1.6; this.col[i * 4 + 2] = p.b + h * 0.4; }
       this.size[i] = p.size + (p.size1 - p.size) * Math.sqrt(t);
       this.rot[i] = p.rot;
@@ -97,6 +109,12 @@ export class FX {
     const dot = TX.softDot(), puff = TX.smokePuff();
     this.add = new PointPool(scene, 1400, dot, true);
     this.smoke = new PointPool(scene, 900, puff, false);
+    // explosions: lumpy billows — fire in linear HDR that cools to soot, and
+    // heavy smoke plumes that rise and drift downwind
+    this.fire = new PointPool(scene, 800, TX.billowTexture(19), false, { linear: true, sharp: true, order: 2.6 });
+    this.plume = new PointPool(scene, 700, TX.billowTexture(7), false, { order: 2.5 });
+    this.burners = [];
+    this.wind = [0.8, -0.35];
     // tracers
     this.maxTr = 160;
     const tg = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
@@ -189,37 +207,84 @@ export class FX {
     for (let i = 0; i < 5; i++) this.debris.push({ x, y, z, vx: dirX * (2 + rnd() * 3) + (rnd() - 0.5) * 2, vy: 1 + rnd() * 2, vz: dirZ * (2 + rnd() * 3) + (rnd() - 0.5) * 2, s: [0.04, 0.04, 0.04], rx: 0, ry: 0, spin: 10, life: 0.6 + rnd() * 0.5, col: [0.28, 0.08, 0.06], bounce: 0.1 });
   }
   explosion(x, y, z, r = 3, opts = {}) {
-    const big = r > 3.2;
-    // flash + fireball
-    this.add.add({ x, y: y + 0.6, z, vx: 0, vy: 0, vz: 0, life: 0.1, size: r * 1.5, size1: r * 1.9, r: 2.4, g: 1.7, b: 0.9, a: 1, a1: 0 });
-    for (let i = 0; i < (big ? 26 : 18); i++) {
-      const a = rnd() * 6.28, s = rnd() * r * 2.2;
-      this.add.add({ x: x + Math.cos(a) * 0.3, y: y + 0.3 + rnd() * 0.6, z: z + Math.sin(a) * 0.3, vx: Math.cos(a) * s, vy: 1.5 + rnd() * r * 1.4, vz: Math.sin(a) * s, life: 0.35 + rnd() * 0.35, size: 0.9 + rnd() * r * 0.45, size1: 0.3, r: 1.6, g: 0.55, b: 0.12, a: 1, a1: 0, drag: 0.09, heat: 0.4, spin: (rnd() - 0.5) * 4 });
+    const big = r > 3.2, q = this.quality === 'high' ? 1 : 0.6, [wx, wz] = this.wind;
+    // white flash
+    this.add.add({ x, y: y + 0.8, z, vx: 0, vy: 0, vz: 0, life: 0.12, size: r * 2.2, size1: r * 2.9, r: 3, g: 2.3, b: 1.4, a: 1, a1: 0 });
+    // fireball: billows burst out and up, white-hot → orange → soot
+    const nf = Math.round((big ? 28 : 20) * q);
+    for (let i = 0; i < nf; i++) {
+      const a = rnd() * 6.28, sp = (0.25 + rnd()) * r * 1.5, core = rnd() < 0.35;
+      this.fire.add({
+        x: x + Math.cos(a) * 0.3, y: y + 0.4 + rnd() * 0.5, z: z + Math.sin(a) * 0.3,
+        vx: Math.cos(a) * sp * (core ? 0.4 : 1), vy: 1.2 + rnd() * r * (core ? 1.4 : 0.8), vz: Math.sin(a) * sp * (core ? 0.4 : 1),
+        life: 0.75 + rnd() * 0.8, size: 0.9 + rnd() * r * 0.3, size1: r * (0.75 + rnd() * 0.6),
+        r: 3.6, g: 2.2, b: 0.8, cm: [1.9, 0.62, 0.12], tm: 0.12 + rnd() * 0.1, c1: [0.06, 0.052, 0.048],
+        a: 0.97, fo: 0.55, drag: 0.07, grav: -1.4, spin: (rnd() - 0.5) * 1.6, wx: wx * 0.4, wz: wz * 0.4,
+      });
+    }
+    // smoke column: dark plumes that keep rising and drift downwind for seconds
+    const ns = Math.round((big ? 26 : 16) * q);
+    for (let i = 0; i < ns; i++) {
+      const a = rnd() * 6.28, s = rnd() * r * 0.5, k = rnd();
+      this.plume.add({
+        x: x + Math.cos(a) * s, y: y + 0.8 + rnd() * r * 0.5, z: z + Math.sin(a) * s,
+        vx: Math.cos(a) * s * 0.8, vy: 1.1 + rnd() * 2.2, vz: Math.sin(a) * s * 0.8,
+        life: 2.6 + rnd() * 3.2, size: r * (0.45 + rnd() * 0.3), size1: r * (1.5 + rnd() * 1.3),
+        r: 0.22 + k * 0.07, g: 0.205 + k * 0.07, b: 0.19 + k * 0.07, c1: [0.44, 0.42, 0.4],
+        a: 0.72, fo: 0.35, fadeIn: 0.1 + rnd() * 0.12, drag: 0.03, grav: -0.35, spin: (rnd() - 0.5) * 0.5, wx, wz,
+      });
     }
     // sparks
-    for (let i = 0; i < 24; i++) {
-      const a = rnd() * 6.28, s = 5 + rnd() * 9;
-      this.add.add({ x, y: y + 0.4, z, vx: Math.cos(a) * s, vy: 3 + rnd() * 7, vz: Math.sin(a) * s, life: 0.4 + rnd() * 0.5, size: 0.09, size1: 0.03, r: 3, g: 1.8, b: 0.5, a: 1, a1: 0, grav: 14, drag: 0.02 });
+    for (let i = 0; i < Math.round((big ? 36 : 24) * q); i++) {
+      const a = rnd() * 6.28, s = 5 + rnd() * 10;
+      this.add.add({ x, y: y + 0.4, z, vx: Math.cos(a) * s, vy: 3 + rnd() * 8, vz: Math.sin(a) * s, life: 0.4 + rnd() * 0.6, size: 0.09, size1: 0.03, r: 3, g: 1.8, b: 0.5, a: 1, a1: 0, grav: 14, drag: 0.02 });
     }
-    // smoke column
-    for (let i = 0; i < (big ? 18 : 12); i++) {
-      const a = rnd() * 6.28, s = rnd() * r * 0.7;
-      this.smoke.add({ x: x + Math.cos(a) * s * 0.4, y: y + 0.4 + rnd(), z: z + Math.sin(a) * s * 0.4, vx: Math.cos(a) * s, vy: 1.2 + rnd() * 1.8, vz: Math.sin(a) * s, life: 1.6 + rnd() * 1.8, size: 1.2 + rnd() * r * 0.4, size1: 3 + rnd() * r, r: 0.2, g: 0.18, b: 0.16, a: 0.72, a1: 0, drag: 0.04, fadeIn: 0.08, spin: (rnd() - 0.5) * 0.8 });
+    // embers: glowing bits that rain down around the blast and smoulder
+    for (let i = 0; i < Math.round((big ? 22 : 14) * q); i++) {
+      const a = rnd() * 6.28, s = 1 + rnd() * r * 1.2;
+      this.add.add({ x, y: y + 0.6, z, vx: Math.cos(a) * s, vy: 2 + rnd() * 5, vz: Math.sin(a) * s, life: 1.4 + rnd() * 2.2, size: 0.07 + rnd() * 0.05, size1: 0.04, r: 2.6, g: 0.9, b: 0.2, c1: [0.6, 0.1, 0.02], a: 1, fo: 0.6, grav: 9, drag: 0.03, spin: 0 });
     }
     // ground dust ring
     for (let i = 0; i < 14; i++) {
       const a = i / 14 * 6.28;
       this.smoke.add({ x: x + Math.cos(a) * 0.6, y: y + 0.2, z: z + Math.sin(a) * 0.6, vx: Math.cos(a) * r * 2.4, vy: 0.3, vz: Math.sin(a) * r * 2.4, life: 0.9 + rnd() * 0.4, size: 0.8, size1: 2.4, r: 0.66, g: 0.58, b: 0.46, a: 0.5, a1: 0, drag: 0.1 });
     }
-    // debris chunks
+    // debris chunks; a few burn and trail smoke as they fly
     const dc = opts.debris || [0.35, 0.28, 0.2];
     for (let i = 0; i < (big ? 18 : 12); i++) {
-      const a = rnd() * 6.28, s = 2 + rnd() * 6, sz = 0.06 + rnd() * 0.14;
-      this.debris.push({ x, y: y + 0.3, z, vx: Math.cos(a) * s, vy: 4 + rnd() * 7, vz: Math.sin(a) * s, s: [sz, sz * 0.7, sz * 1.2], rx: rnd() * 6, ry: rnd() * 6, spin: 8 + rnd() * 10, life: 1.4 + rnd() * 1.2, col: dc, bounce: 0.3 });
+      const a = rnd() * 6.28, s = 2 + rnd() * 6, sz = 0.06 + rnd() * 0.14, hot = i < (big ? 6 : 3) && q === 1;
+      this.debris.push({ x, y: y + 0.3, z, vx: Math.cos(a) * s, vy: 4 + rnd() * 7 + (hot ? 3 : 0), vz: Math.sin(a) * s, s: [sz, sz * 0.7, sz * 1.2], rx: rnd() * 6, ry: rnd() * 6, spin: 8 + rnd() * 10, life: 1.4 + rnd() * 1.2, col: hot ? [0.12, 0.1, 0.08] : dc, bounce: 0.3, trail: hot, tt: 0 });
     }
-    this.light(x, y + 1.2, z, big ? 70 : 45, 0.45, 0xff9a40);
-    this.scorchAt(x, y, z, r * 0.95);
+    this.light(x, y + 1.2, z, big ? 90 : 55, 0.6, 0xff9a40);
+    this.scorchAt(x, y, z, r * 1.05);
     this.ring(x, z, y, r * 0.8, 0.28, [0.9, 0.6, 0.35], 'shock');
+  }
+  // a wreck that keeps burning: flames licking up and a smoke plume
+  burn(x, y, z, dur = 8, s = 1) {
+    this.burners.push({ x, y, z, t: dur, dur, s, f: 0, m: 0 });
+  }
+  _updateBurners(dt) {
+    const B = this.burners, [wx, wz] = this.wind, q = this.quality === 'high' ? 1 : 0.5;
+    let w = 0;
+    for (const b of B) {
+      b.t -= dt; if (b.t <= 0) continue;
+      const k = Math.min(1, b.t / (b.dur * 0.4));      // dies down at the end
+      b.f -= dt; b.m -= dt;
+      if (b.f <= 0) {
+        b.f = 0.07 / (q * (0.4 + k * 0.6));
+        this.fire.add({ x: b.x + (rnd() - 0.5) * b.s * 1.4, y: b.y, z: b.z + (rnd() - 0.5) * b.s * 1.4, vx: 0, vy: 1.4 + rnd() * 1.2, vz: 0,
+          life: 0.5 + rnd() * 0.4, size: 0.5 * b.s * (0.6 + k * 0.4), size1: 1.1 * b.s * (0.6 + k * 0.4),
+          r: 3.8, g: 1.9, b: 0.5, cm: [2.0, 0.6, 0.1], tm: 0.3, c1: [0.08, 0.07, 0.06], a: 0.95, fo: 0.5, drag: 0.04, grav: -1, spin: (rnd() - 0.5) * 2, wx: wx * 0.3, wz: wz * 0.3 });
+      }
+      if (b.m <= 0) {
+        b.m = 0.22 / q;
+        this.plume.add({ x: b.x + (rnd() - 0.5) * b.s, y: b.y + 0.8, z: b.z + (rnd() - 0.5) * b.s, vx: 0, vy: 1.2 + rnd(), vz: 0,
+          life: 3 + rnd() * 2, size: 0.8 * b.s, size1: (2.6 + rnd()) * b.s, r: 0.15, g: 0.14, b: 0.13, c1: [0.34, 0.32, 0.3],
+          a: 0.7 * (0.5 + k * 0.5), fo: 0.3, fadeIn: 0.15, drag: 0.02, grav: -0.3, spin: (rnd() - 0.5) * 0.4, wx, wz });
+      }
+      B[w++] = b;
+    }
+    B.length = w;
   }
   scorchAt(x, y, z, s) {
     const i = this._scorchI++ % this.maxScorch;
@@ -265,8 +330,11 @@ export class FX {
   // ---------------------------------------------------------------- update
   update(dt) {
     this._updateRain(dt);
-    this.add.update(dt, null);
+    this._updateBurners(dt);
+    this.add.update(dt, this.groundH ? (x, p) => this.groundH(x, p) : null);
     this.smoke.update(dt, null);
+    this.fire.update(dt, null);
+    this.plume.update(dt, null);
     // tracers from live bullets
     const tl = this.trList; let n = 0;
     for (const b of tl) {
@@ -306,6 +374,11 @@ export class FX {
     for (const d of D) {
       d.life -= dt; if (d.life <= 0) continue;
       d.vy -= 16 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt; d.rx += d.spin * dt; d.ry += d.spin * 0.7 * dt;
+      if (d.trail && (d.tt -= dt) <= 0 && d.life > 0.4) {
+        d.tt = 0.03;
+        this.fire.add({ x: d.x, y: d.y, z: d.z, vx: 0, vy: 0.3, vz: 0, life: 0.35, size: 0.3, size1: 0.6, r: 3.2, g: 1.4, b: 0.3, c1: [0.1, 0.09, 0.08], a: 0.9, fo: 0.4, spin: 1 });
+        if (rnd() < 0.5) this.plume.add({ x: d.x, y: d.y, z: d.z, vx: 0, vy: 0.4, vz: 0, life: 1.2, size: 0.35, size1: 1.1, r: 0.2, g: 0.19, b: 0.18, a: 0.5, fo: 0.2, grav: -0.2, wx: this.wind[0], wz: this.wind[1] });
+      }
       const gh = this.groundH(d.x, -d.z);
       if (d.y < gh + 0.02) { d.y = gh + 0.02; d.vy = -d.vy * d.bounce; d.vx *= 0.55; d.vz *= 0.55; d.spin *= 0.5; }
       D[w++] = d;
@@ -375,7 +448,7 @@ export class FX {
   }
 
   clear() {
-    this.add.p.length = 0; this.smoke.p.length = 0; this.debris.length = 0;
+    this.add.p.length = 0; this.smoke.p.length = 0; this.fire.p.length = 0; this.plume.p.length = 0; this.debris.length = 0; this.burners.length = 0;
     for (const m of this.rings) m.visible = false;
     for (const m of this.blobs) m.visible = false;
     for (const m of this.lasers) m.visible = false;

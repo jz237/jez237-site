@@ -15,11 +15,53 @@ export async function loadAssets(onProgress) {
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
   const names = Object.keys(GLB);
   let done = 0;
-  await Promise.all(names.map(async (n) => {
-    GLB[n] = await loader.loadAsync(`assets/models/${n}.glb?v=${VER}`);
-    GLB[n].scene.updateMatrixWorld(true);
-    onProgress && onProgress(++done / names.length);
-  }));
+  const total = names.length + 1;
+  await Promise.all([
+    ...names.map(async (n) => {
+      GLB[n] = await loader.loadAsync(`assets/models/${n}.glb?v=${VER}`);
+      GLB[n].scene.updateMatrixWorld(true);
+      onProgress && onProgress(++done / total);
+    }),
+    loadGround().then(() => onProgress && onProgress(++done / total)),
+  ]);
+}
+
+// ------------------------------------------------------------------ ground textures
+// Poly Haven (CC0) scans packed by tools/pack-textures.mjs into two vertical
+// strips, one square layer per row: colour, and normal X/Y + height in RGB.
+// They become texture arrays sampled by the terrain shader; `mean` is each
+// layer's average linear colour (the terrain tints layers to its palette).
+export const GROUND = { albedo: null, normal: null, mean: [] };
+async function stripArray(url, srgb) {
+  const blob = await (await fetch(url)).blob();
+  const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
+  const w = bmp.width, n = Math.round(bmp.height / w);
+  const c = document.createElement('canvas'); c.width = w; c.height = bmp.height;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(bmp, 0, 0);
+  const data = new Uint8Array(g.getImageData(0, 0, w, bmp.height).data.buffer);
+  const t = new THREE.DataArrayTexture(data, w, w, n);
+  t.format = THREE.RGBAFormat; t.type = THREE.UnsignedByteType;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+  t.generateMipmaps = true; t.anisotropy = 4;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.needsUpdate = true;
+  return { t, data, w, n };
+}
+async function loadGround() {
+  const [a, nrm] = await Promise.all([stripArray(`assets/textures/ground-albedo.webp?v=${VER}`, true), stripArray(`assets/textures/ground-normal.webp?v=${VER}`, false)]);
+  GROUND.albedo = a.t; GROUND.normal = nrm.t;
+  const c = new THREE.Color(), px = a.w * a.w;
+  GROUND.mean = [];
+  for (let l = 0; l < a.n; l++) {
+    let r = 0, g = 0, b = 0, k = 0;
+    for (let i = 0; i < px; i += 7) {
+      const o = (l * px + i) * 4;
+      c.setRGB(a.data[o] / 255, a.data[o + 1] / 255, a.data[o + 2] / 255, THREE.SRGBColorSpace);
+      r += c.r; g += c.g; b += c.b; k++;
+    }
+    GROUND.mean.push([r / k, g / k, b / k]);
+  }
 }
 
 // ------------------------------------------------------------------ geometry helpers
