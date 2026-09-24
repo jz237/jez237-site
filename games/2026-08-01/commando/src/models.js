@@ -220,6 +220,15 @@ export function sandbagGeo() {
   return g;
 }
 
+export function barrelGeo(red) {
+  const body = red ? '#9a2f22' : '#4f5a34';
+  const parts = [P(new THREE.CylinderGeometry(0.34, 0.34, 0.95, 14), body, { y: 0.475 }, 0.06)];
+  for (const y of [0.18, 0.5, 0.82]) parts.push(P(new THREE.TorusGeometry(0.345, 0.025, 4, 16), '#2f2a22', { y, rx: Math.PI / 2 }));
+  parts.push(P(new THREE.CylinderGeometry(0.3, 0.3, 0.02, 14), red ? '#7d261c' : '#3f4a2a', { y: 0.955 }));
+  if (red) parts.push(P(new THREE.BoxGeometry(0.25, 0.2, 0.02), '#e8d9a0', { y: 0.6, z: 0.34 }));
+  return merge(parts);
+}
+
 export function logGeo(len) {
   const g = new THREE.CylinderGeometry(0.28, 0.32, len, 10, 1);
   P(g, '#5a4430', { rz: Math.PI / 2, y: 0.26 }, 0.2);

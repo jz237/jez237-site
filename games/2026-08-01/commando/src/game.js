@@ -3,7 +3,6 @@
 // One Game lives for the whole session; the World under it is swapped per area.
 import * as THREE from 'three';
 import { Soldier } from './soldier.js';
-import * as M from './models.js';
 import * as M2 from './models2.js';
 import { flatGeo } from './assets.js';
 import { clamp, lerp, angDiff, approach, TAU } from './util.js';
@@ -37,13 +36,14 @@ export class Game {
     this.shellGeo = new THREE.SphereGeometry(0.11, 8, 6);
     this.shellMat = new THREE.MeshStandardMaterial({ color: 0x2a2a28, roughness: 0.5, metalness: 0.4 });
   }
-  // grenades and pickups use the Quaternius kit, which loads after construction
+  // grenades and pickups use the loaded models, which arrive after construction
   initModels() {
     if (this.modelsReady) return;
     this.modelsReady = true;
     this.nadeGeo = flatGeo('props', 'grenade', { h: 0.34, cy: true });
     this.nadeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55 });
-    this.pickupGeo = { gren: flatGeo('props', 'grenade', { h: 0.62 }), med: flatGeo('props', 'crate', { w: 0.55 }, { '*': '#e9e3d2' }) };
+    // grenade resupply: an olive ammo crate; medkit: a white one
+    this.pickupGeo = { gren: flatGeo('props', 'crate', { w: 0.6 }, { Wood: '#4d5830', Wood_Light: '#6a7543' }), med: flatGeo('props', 'crate', { w: 0.55 }, { Wood: '#d8d2c2', Wood_Light: '#eee8d8' }) };
     this.pickupMat = {
       gren: new THREE.MeshStandardMaterial({ vertexColors: true, emissive: 0x2a3a08, roughness: 0.55 }),
       med: new THREE.MeshStandardMaterial({ vertexColors: true, emissive: 0x401010, roughness: 0.6 }),
@@ -948,7 +948,7 @@ export class Game {
   }
 
   spawnTruck(x, stopP) {
-    const mesh = M.truckGroup();
+    const mesh = M2.militaryTruckGroup();
     const top = this.viewTop();
     const tr = { truck: true, x, p: top + 14, stopP: Math.min(stopP, top - 3), state: 'drive', t: 0, hp: 12, mesh, cargo: 4, hw: 1.15, hl: 3.2, speed: 8, dead: false };
     this.scene.add(mesh);

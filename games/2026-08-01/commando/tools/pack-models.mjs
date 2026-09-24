@@ -1,6 +1,7 @@
-// pack-models.mjs — packs the Quaternius source GLBs (tools/raw/<name>.glb, see
-// models.txt) into the four files the game loads: soldier, enemy (rigged
-// characters), props (Toon Shooter kit) and nature (plants, trees, rocks).
+// pack-models.mjs — packs the source GLBs (tools/raw/<name>.glb, see models.txt)
+// into the files the game loads: adventurer, swat, beach (rigged Quaternius
+// Modular Men), props (KolosStudios military pack + a few Toon Shooter pieces)
+// and nature (plants, trees, rocks).
 //   npm i @gltf-transform/core @gltf-transform/extensions @gltf-transform/functions meshoptimizer sharp
 //   node tools/pack-models.mjs assets/models
 import fs from 'fs';
@@ -19,9 +20,8 @@ await MeshoptEncoder.ready; await MeshoptDecoder.ready; await MeshoptSimplifier.
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 fs.mkdirSync(OUT, { recursive: true });
 
-// every character carries all 14 weapons on its hand; keep what the game uses
-const WEAPONS = ['Revolver', 'Sniper', 'Revolver_Small', 'Pistol', 'SMG', 'GrenadeLauncher', 'ShortCannon', 'Shotgun', 'Sniper_2', 'RocketLauncher', 'AK', 'Shovel', 'Knife_2', 'Knife_1'];
-const CLIPS = ['Idle', 'Idle_Shoot', 'Run', 'Run_Gun', 'Run_Shoot', 'Walk', 'Walk_Shoot', 'Death', 'Duck', 'HitReact', 'Punch', 'Wave'];
+// the Ultimate Modular Men share one rig and 24 clips; keep the ones the game uses
+const CLIPS = ['Idle', 'Idle_Gun_Pointing', 'Idle_Gun_Shoot', 'Gun_Shoot', 'Run', 'Run_Shoot', 'Walk', 'Death', 'Punch_Right', 'Wave', 'HitRecieve'];
 
 async function finish(doc, file, { tex } = {}) {
   await doc.transform(
@@ -33,14 +33,14 @@ async function finish(doc, file, { tex } = {}) {
   console.log(file, fs.statSync(path.join(OUT, file)).size);
 }
 
-async function character(src, file, keep) {
+// same rig in every file, so only one of them needs to carry the clips
+async function character(src, file, clips) {
   const doc = await io.read(path.join(RAW, src + '.glb'));
   const root = doc.getRoot();
-  for (const n of root.listNodes()) if (WEAPONS.includes(n.getName()) && !keep.includes(n.getName())) n.dispose();
-  // the enemy file also carries an older, unprefixed copy of each clip: drop it
+  for (const n of root.listNodes()) if (n.getName() === 'Backpack') n.dispose();
   for (const a of root.listAnimations()) {
     const nm = a.getName().split('|')[1];
-    if (!nm || !CLIPS.includes(nm)) a.dispose(); else a.setName(nm);
+    if (!clips || !nm || !CLIPS.includes(nm)) a.dispose(); else a.setName(nm);
   }
   await finish(doc, file);
 }
@@ -69,10 +69,9 @@ async function bundle(names, file, opt = {}) {
 }
 
 const list = fs.readFileSync(path.join(HERE, 'models.txt'), 'utf8').trim().split(/\r?\n/).map(l => l.split(' ')[0]);
-await character('character-soldier', 'soldier.glb', ['AK']);
-await character('character-enemy', 'enemy.glb', ['AK', 'Pistol']);
+for (const n of ['adventurer', 'swat', 'beach']) await character('man-' + n, n + '.glb', n === 'swat');
 const nature = (n) => n.startsWith('mk-') || n.startsWith('palm') || n.startsWith('toon-tree');
-await bundle(list.filter(n => !n.startsWith('character') && !nature(n)), 'props.glb', { tex: 256 });
+await bundle(list.filter(n => !n.startsWith('man-') && !nature(n)), 'props.glb', { tex: 256 });
 const SIMPLIFY = {
   'palm-1': 0.35, 'palm-2': 0.35, 'palm-3': 0.35, 'palm-4': 0.5, 'mk-tree-1': 0.4, 'mk-tree-2': 0.4,
   'mk-dead-tree-1': 0.3, 'mk-dead-tree-2': 0.3, 'mk-bush-flowers': 0.5, 'mk-bush': 0.5,

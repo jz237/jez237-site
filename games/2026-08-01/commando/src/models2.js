@@ -1,12 +1,12 @@
 // models2.js — props and vehicles for Areas 2 and 3: palisades and the log
 // fort, beached boat, lily pads, prisoner cages, barracks, lamps, searchlight
-// heads, chain-link fence, fuel tanks, the tank (a Quaternius model split into
-// hull / turret / barrel) and the motorcycle with sidecar. Same conventions as
-// models.js.
+// heads, chain-link fence, fuel tanks, the army truck and tank (KolosStudios
+// models; the tank split into hull / turret / barrel) and the motorcycle with
+// sidecar. Same conventions as models.js.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { P, merge, MAT } from './models.js';
-import { tankParts } from './assets.js';
+import { tankParts, flatGeo } from './assets.js';
 import { mulberry } from './util.js';
 
 const cyl = (r0, r1, h, s = 6) => new THREE.CylinderGeometry(r0, r1, h, s);
@@ -242,7 +242,15 @@ export function fuelTankGroup() {
 }
 
 // ------------------------------------------------------------------ vehicles
-// tank (Quaternius Toon Shooter kit): hull, a turret that yaws and a barrel
+// army truck (KolosStudios Military Pack), cab facing +Z like the other vehicles
+export function militaryTruckGroup(fuel = false) {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(flatGeo('props', fuel ? 'kolos-fuel-truck' : 'kolos-truck', { w: 6.3, ry: Math.PI / 2 }), MAT.vc);
+  m.castShadow = m.receiveShadow = true; g.add(m);
+  return g;
+}
+
+// tank (KolosStudios Military Pack): hull, a turret that yaws and a barrel
 // that recoils (the barrel group rests at z = 1.0). Faces +Z like the other vehicles.
 export function tankGroup() {
   const T = tankParts(), g = new THREE.Group();
@@ -250,7 +258,7 @@ export function tankGroup() {
   const turret = new THREE.Group(); turret.position.set(0, T.deck, T.pivotZ); g.add(turret);
   const tm = new THREE.Mesh(T.turret, MAT.vc); tm.castShadow = tm.receiveShadow = true; turret.add(tm);
   const barrel = new THREE.Group(); barrel.position.set(0, 0, 1.0); turret.add(barrel);
-  const bm = new THREE.Mesh(T.barrel, MAT.vc); bm.castShadow = true; barrel.add(bm);
+  if (T.barrel) { const bm = new THREE.Mesh(T.barrel, MAT.vc); bm.castShadow = true; barrel.add(bm); }
   g.userData = { turret, barrel, muzzle: new THREE.Vector3(0, 0, 3.0) };
   return g;
 }
