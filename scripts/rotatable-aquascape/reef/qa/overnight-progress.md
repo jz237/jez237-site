@@ -835,3 +835,9 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Unthrottled local ready: before 10408/9663 ms; after 7338/7106 ms (~28% lower mean). Longest startup task 8594/8254 ->1000/1116 ms. FPS before50.0/59.0 and after60.0/60.0; host variation and no slower-GPU test limit generalization. Click handlers remain1.1–6.8ms after.
 - 18,577,724 rendered triangles and all prior scene counts/attachment results/buffer sizes retained. Reef QA and showroom bridge/lifecycle tests pass, planted tests/sync/release checks pass, internal links pass. Local showroom shell trace LCP131ms/CLS0, not a field claim. Screenshots showroom-*.png and ordinary reef QA views saved locally.
 - Hidden Reef Cloudflare deployment blocked: configured account only owns jez237-site/pinball-illusions; request to existing Hidden Reef account returns authentication error10000; documented deployment credential file absent. Publish working preview to jez237 and GitHub; do not claim hidden-reef.pages.dev updated.
+
+
+## September 24 — Direct aquarium navigation
+- Added visible Freshwater aquarium and Hidden Reef home links to the store reef header, including direct paths without query strings. Links leave embedded frames at the top level.
+- Removed the chooser UI. Storefront links go straight to freshwater; old showroom URLs forward to freshwater or reef according to habitat. Kept only a compatibility redirect at the old route. Updated navigation generator and no-script fallback to prevent reintroducing chooser links.
+- build:reef/check:reef passed; prior geometry statistics exactly preserved. Front/oblique/mobile visuals inspected. Desktop and mobile return navigation, home/category/learn links and old URLs checked in local browser. No aquarium detail, materials or behaviors changed.

@@ -1,15 +1,15 @@
 {
-  "readyMs": 8462,
+  "readyMs": 8896,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 6.947599999952338,
-      "bites": 18,
-      "remaining": 27,
+      "fps": 54.960153888430895,
+      "time": 6.9320999998569715,
+      "bites": 8,
+      "remaining": 37,
       "anemones": {
-        "brushing": 7,
-        "maxBrush": 0.09652001152350481,
+        "brushing": 2,
+        "maxBrush": 0.018269678703105648,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,31 +21,31 @@
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 10.964599999952313,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.01155642980084,
+      "time": 10.989199999856966,
+      "bites": 30,
+      "remaining": 14,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 2.293458607779491e-8,
+        "maxBrush": 1.2067705744818518e-7,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
-          0.0025461574068223166,
+          0.007127601159577616,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 14.981599999952278,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.50019833399447,
+      "time": 15.006099999856945,
+      "bites": 36,
+      "remaining": 8,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.11332836169776934,
+        "brushing": 0,
+        "maxBrush": 5.665074794695153e-10,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
@@ -57,36 +57,54 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 18.998699999952233,
-      "bites": 42,
-      "remaining": 2,
-      "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.0592066950071797,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0.2,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 22.99909999995217,
-      "bites": 42,
-      "remaining": 2,
+      "fps": 59.01155642980084,
+      "time": 19.02309999985689,
+      "bites": 37,
+      "remaining": 7,
       "anemones": {
         "brushing": 8,
-        "maxBrush": 0.12549512907079788,
+        "maxBrush": 0.0941995832446108,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.1867233694719158,
+          0.2,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 56.68398677373642,
+      "time": 23.056899999856824,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0007040704116498411,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0.18497303387344646,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 58.53373006194824,
+      "time": 27.07039999985672,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 1,
+        "maxBrush": 0.04821973833256834,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0.11357831894317374,
           0,
           0
         ]
@@ -94,35 +112,17 @@
     },
     {
       "fps": 59.99700014999255,
-      "time": 27.015899999952055,
-      "bites": 42,
-      "remaining": 2,
+      "time": 31.087399999856615,
+      "bites": 38,
+      "remaining": 6,
       "anemones": {
         "brushing": 4,
-        "maxBrush": 0.06383616157897863,
+        "maxBrush": 0.07946868046873941,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.11668954879757686,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979766,
-      "time": 31.03309999995194,
-      "bites": 42,
-      "remaining": 2,
-      "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.12788766693262985,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0.03561201786291462,
+          0.033174072169465794,
           0,
           0
         ]
@@ -132,15 +132,15 @@
   "identification": [
     {
       "title": "Reef sand",
-      "ms": 5
+      "ms": 9
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 5
+      "ms": 7
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 3
+      "ms": 7
     }
   ],
   "checks": {
@@ -396,8 +396,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-BEkiJKHt.css",
-    "assets/index-BKC9Fr5W.js",
+    "assets/index-D5qafp3j.js",
+    "assets/index-LOI2O7QL.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,16 +414,15 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "5a3f7106dbfb6f1b27436650f3ef9360cf545621a925e87bd0c1e0149c01a73c",
-  "checkedAt": "2026-09-24T18:40:33.855Z",
-  "scope": "Hidden Reef habitat integration, responsive startup, exact construction queries, suspend hidden/settled paused rendering",
+  "buildHash": "769b49d3d260e0266fa4c1fe069cfa574f09d5bb2cefd9370dfbea5c87ae6e79",
+  "checkedAt": "2026-09-24T20:07:12.385Z",
+  "scope": "Visible reef return navigation and direct aquarium storefront routing; no rendering or behavior changes",
   "visualReview": [
-    "Full reef front, oblique, coral/anemone close-up and mobile inspected: retained geometry and materials",
-    "Showroom desktop and mobile, selector, poster, both habitat controls inspected",
-    "Every prior accepted scene statistic, attachment result and buffer size unchanged",
-    "Preview uses an actual renderer screenshot; desktop entry button visible near top and tank scroll offset clears sticky store navigation."
+    "Front and oblique reef screenshots inspected",
+    "Desktop and mobile store navigation buttons visible, 44px touch targets",
+    "Both links exercised through freshwater/reef/home navigation; legacy chooser URLs redirect"
   ],
-  "performanceComparison": {
+  "previousPerformanceComparison": {
     "baseline": "915d0b144 / index-C5BAJbLj.js",
     "method": "Two before then two after runs; desktop Chrome, no CPU or network throttling. Same seeded scene and full effects. No slower physical computer tested. Local timing is not field performance.",
     "before": {
@@ -487,35 +486,24 @@
       ]
     }
   },
-  "showroom": {
-    "readyMs": 9127,
-    "pausedRedraws": 0,
-    "checks": {
-      "onDemand": true,
-      "habitats": true,
-      "plantedReady": true,
-      "identification": true,
-      "closeups": true,
-      "pauseIdle": true,
-      "pausedCamera": true,
-      "pausedLighting": true,
-      "modalSuspension": true,
-      "offscreenSuspension": true,
-      "mobile": true,
-      "feeding": true,
-      "unmount": true
-    }
-  },
-  "showroomShellTrace": {
-    "lcpMs": 131,
-    "cls": 0,
-    "method": "Local Chrome DevTools trace, unthrottled; shell only, not reef readiness or real-user speed."
-  },
-  "plantedReleaseAndSyncPassed": true,
-  "hiddenReefFilesChanged": true,
   "publication": [
+    "hidden-reef.pages.dev",
     "jez237.com",
     "GitHub"
   ],
-  "hiddenReefDeployment": "Pending access to separate Cloudflare account; available OAuth account does not own Hidden Reef"
+  "navigationChecks": [
+    {
+      "width": 1440,
+      "freshwater": true,
+      "reef": true,
+      "home": true
+    },
+    {
+      "width": 390,
+      "freshwater": true,
+      "reef": true,
+      "home": true
+    }
+  ],
+  "sceneUnchangedFromPrior": true
 }
