@@ -1,5 +1,142 @@
 [
   {
+    "id": "2026-09-24-factual-infographic-factual-infographic-migraine-the-changi",
+    "title": "Factual infographic: Migraine — The Changing Shape of an Attack",
+    "tests": "factual_subtype: medical-health-infographic; source-backed phase and symptom labels; archive_slot=2026-09-24T02:20; concept=migraine-attack-variable-phases; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, museum-quality DIRECT-CANVAS medical infographic, portrait aspect ratio at the highest automatic size/quality available, titled “MIGRAINE: MORE THAN A HEADACHE”. This is an educational anatomical plate, not a photographed poster, paper sheet, UI, room, workbench, or mockup. One dominant, beautifully modeled hero occupies the upper center: an adult with diverse, realistic features in three-quarter profile, eyes closed, head and upper shoulders at believable scale, a precise translucent cranial cutaway showing the brain and a restrained overlay of interacting nerve signals, brain chemicals and blood-vessel pathways involved in migraine pain. Use fine anatomical draftsmanship, subsurface skin and bone detail, delicate translucent layers, soft directional clinical light, midnight-indigo background, warm coral pain pathways and cool cyan sensory layers. Do NOT imply a single blood-vessel cause, or depict an invented anatomical lesion. Strong readable typographic hierarchy, precise leader lines, large concise labels, clear separated panels, generous contrast, no bibliography or URLs on image.\n\nBuild EIGHT substantial illustrated supporting panels around and below the hero, each with distinct information: (1) a horizontal four-stage episode timeline, PRODROME → OPTIONAL AURA → HEADACHE → POSTDROME, with variable-order/duration indication, not a rigid inevitable sequence; show yawning, fatigue and food craving before headache, and later fatigue/concentration difficulty. (2) a close-up first-person visual-field diagram showing a gradually evolving shimmering zigzag/bright spot labelled VISUAL AURA; adjacent tiny hand/face tingling and word-finding symbols; explicitly label “only some people, not every attack.” (3) a tight anatomical magnification window with clean callouts “nerve signals”, “brain chemicals”, “blood vessels”, and “CGRP: pain signaling”; show interacting components, no unsupported simple causal chain. (4) a sensory-symptom comparison with a one-sided throbbing pain field, nausea, light/sound/smell sensitivity; note presentation varies. (5) a small contextual strip of potential individual triggers: disrupted sleep, menstrual hormone change, altered routine; label “patterns differ by person, not universal causes.” (6) a close-up illustrated headache-diary page with legible headings ONSET, DURATION, SYMPTOMS, SLEEP, MEDICINES and an arrow to a clinician history/neurologic-exam vignette; note that scans are for suspected alternative causes, not routine proof of migraine. (7) a treatment flow diagram separating ACUTE RELIEF (quiet dark rest; clinician-chosen acute medicine) from PREVENTION (regular sleep/meals, hydration, exercise; clinician-chosen preventive care), with distinct icons and no doses or cure claims. (8) an urgent-assessment decision panel: sudden or persistent NEW aura-like symptoms, one-sided weakness or altered alertness → seek prompt medical evaluation; do not assume migraine. Make at least three explanatory close-ups—the visual-field aura, anatomy/chemical interaction, and diary-to-clinician diagram—large enough to teach, not filler. Every panel must be richly rendered yet tightly edited, with scientifically faithful arrows, crisp readable lettering, and abundant real anatomical and environmental detail. No statistics, unsupported certainty, decorative pseudo-text, branding, watermark or personal diagnosis.",
+    "image": "images/2026-09-24-factual-infographic-factual-infographic-migraine-the-changi.jpg",
+    "thumb": "thumbs/2026-09-24-factual-infographic-factual-infographic-migraine-the-changi.webp",
+    "color": "#8d8a99",
+    "date": "2026-09-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "migraine-attack-variable-phases",
+      "imageSha256": "49e44c8486bfcc07f790b14b79f90335d80b82ef57cd7364fe3045aa1f79aeb3",
+      "imageDHash": "37072a381a73524f"
+    },
+    "factualInfographic": {
+      "topic": "How migraine attacks progress through variable phases and how symptoms, evaluation, and management differ across people",
+      "description": "Source-verified medical anatomy and clinical infographic on variable migraine phases, aura, symptoms, diagnosis and individualized management.",
+      "sourceNote": "Verified against National Institute of Neurological Disorders and Stroke https://www.ninds.nih.gov/health-information/disorders/migraine and American Migraine Foundation https://americanmigrainefoundation.org/resource-library/timeline-migraine-attack/ and https://americanmigrainefoundation.org/resource-library/understanding-migraine-aura/; scope: phases, symptoms, neurologic mechanisms, evaluation, care, and aura warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-24T06:22:19.816249+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Neurological Disorders and Stroke",
+            "title": "Migraine",
+            "sourceType": "government-agency",
+            "url": "https://www.ninds.nih.gov/health-information/disorders/migraine"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Migraine Foundation",
+            "title": "The Timeline of a Migraine Attack",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://americanmigrainefoundation.org/resource-library/timeline-migraine-attack/"
+          },
+          {
+            "id": "S3",
+            "publisher": "American Migraine Foundation",
+            "title": "Understanding Migraine With Aura",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://americanmigrainefoundation.org/resource-library/understanding-migraine-aura/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Migraine is a neurologic health condition with recurrent episodes and symptoms beyond head pain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A typical episode can include prodrome, aura in some people, headache, and postdrome; phases and their order vary, and not every person has every phase.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prodrome may feature yawning, mood change, fatigue, or food cravings before head pain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Aura occurs only in some people and may include evolving zigzags or bright spots, tingling, or language difficulty; aura is not required for migraine.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Migraine head pain is often throbbing and one-sided but can vary; nausea and sensitivity to light, sound, and smell can accompany it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Postdrome can include fatigue, dizziness, and difficulty concentrating after headache subsides.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Migraine-related head pain involves interacting nerve signaling, brain chemicals, and blood vessels; CGRP is a protein involved in pain signaling.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Possible triggers vary by person and may include menstrual hormone changes, disrupted sleep, or changes in routine; a trigger is not a universal cause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A headache diary of onset, duration, associated symptoms, sleep, and medicines can help a clinician recognize patterns and guide care.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinicians diagnose migraine mainly from history and physical or neurologic examination; imaging may be used if another condition is suspected, not routinely to prove migraine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Acute care may include resting in a quiet dark room and clinician-selected medicines such as triptans or CGRP-targeting agents; treatment choice is individual.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Preventive care can involve regular sleep and meals, hydration, exercise, and clinician-selected preventive medication for suitable patients.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Sudden-onset or persistent new aura-like symptoms, one-sided weakness, or altered alertness warrant prompt medical evaluation rather than assuming migraine.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-23-random-image-style-screen-print-the-empty-pool-orchestra",
     "title": "Screen Print: The Empty Pool Orchestra",
     "tests": "Visual formula: repurpose the spatial geometry of a disused civic venue as an ensemble performance score; continuous scene, no document framing or factual claims.; archive_slot=2026-09-23T01:20; concept=musicians-rehearse-drained-swimming-pool; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-flare\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"medium\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}]}; Requested GPT Image 2.5; backend model not independently verified; owner-approved one-run settings exception: medium quality, variable dimensions",
