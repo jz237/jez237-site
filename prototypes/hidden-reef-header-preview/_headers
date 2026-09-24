@@ -1,5 +1,6 @@
 # GLTF embedded images use ImageBitmapLoader: fetch(blob:) needs connect-src,
 # even though blob: is already allowed for ordinary img elements.
+# Allow the reef's WebAssembly mesh decoder; JavaScript eval stays blocked.
 /*
   Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
@@ -7,7 +8,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Robots-Tag: noindex, nofollow, noarchive
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://cdn.shoplightspeed.com https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' blob: https://cloudflareinsights.com https://*.cloudflareinsights.com https://*.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com; media-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://cdn.shoplightspeed.com https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' blob: https://cloudflareinsights.com https://*.cloudflareinsights.com https://*.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com; media-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
 
 /assets/site/*
   Cache-Control: public, max-age=86400
