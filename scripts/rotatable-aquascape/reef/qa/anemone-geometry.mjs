@@ -37,6 +37,18 @@ for(let i=0;i<p.count;i++){
  const key=flex.getY(i)+':'+t;
  const r=rings.get(key)||{x:0,y:0,z:0,count:0,ids:[]};r.x+=p.getX(i);r.y+=p.getY(i);r.z+=p.getZ(i);r.count++;r.ids.push(i);rings.set(key,r);
 }
+// Sum independent waveform maxima to bound every possible current phase,
+// then add the full localized brush envelope. Feeding contracts toward an
+// interior host and cannot enlarge this envelope. Test actual glass placement.
+let envelopeGlassClearance=Infinity;
+for(let i=0;i<p.count;i++){
+ const t=flex.getX(i),scale=flex.getW(i),arc=flex.getZ(i),host=Math.floor(flex.getY(i)/8);
+ const offsetX=[.05,-.62,0][host],offsetZ=[.02,.35,0][host];
+ const flow=Math.min(scale,arc*.85)*t*t,brush=.18*Math.min(scale,arc)*t*t*(3-2*t);
+ envelopeGlassClearance=Math.min(envelopeGlassClearance,5.02-Math.abs(p.getX(i)+offsetX)-.38595*flow-brush,2.4-Math.abs(p.getZ(i)+offsetZ)-.15655*flow-brush);
+}
+assert.ok(envelopeGlassClearance>.01,'all-phase current plus brush envelope fits glass: '+envelopeGlassClearance);
+console.log('Conservative all-phase glass clearance:',envelopeGlassClearance);
 let facingOut=0,total=0;
 for(const r of rings.values()){r.x/=r.count;r.y/=r.count;r.z/=r.count;for(const i of r.ids){const dot=(p.getX(i)-r.x)*n.getX(i)+(p.getY(i)-r.y)*n.getY(i)+(p.getZ(i)-r.z)*n.getZ(i);if(dot>0)facingOut++;total++;}}
 assert.ok(facingOut/total>.99,'tentacle skins face outward; inverted tubes appear as split leaves');
@@ -64,6 +76,7 @@ const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase
 const rootHeights=[];
 for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,12).reduce((sum,i)=>sum+p.getY(i),0)/12);
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
+let leastGlassClearance=Infinity;
 let worstDot=1,minDeterminant=Infinity,minFeedingDeterminant=Infinity,minBrushDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
  const rowMap=new Map();for(const i of ids){const t=flex.getX(i),row=rowMap.get(t)||[];row.push(i);rowMap.set(t,row);}
@@ -96,6 +109,12 @@ for(const ids of strands.values()){
    minDeterminant=Math.min(minDeterminant,1+axis.dot(d)/arc);
    const shrink=1-.20*t*t*(3-2*t),host=behavior.hosts[Math.floor(phase/8)].center;
    const flowed=centers[row].clone().add(new T.Vector3(f[0]*t*t*scale,0,f[1]*t*t*scale));
+   // Wider swept layers must fit the real aquarium even at maximum local
+   // clownfish displacement. Fixture hosts use simplified attachment heights;
+   // map their x/z centers to the actual reef placement before checking glass.
+   const hostIndex=Math.floor(phase/8),actualXZ=[[3.05,.82],[-3.62,1.35],[3.88,1.73]][hostIndex];
+   const margin=ringRadius(row)+Math.min(flex.getW(i),arc)*.18;
+   leastGlassClearance=Math.min(leastGlassClearance,5.02-Math.abs(flowed.x-host.x+actualXZ[0])-margin,2.40-Math.abs(flowed.z-host.z+actualXZ[1])-margin);
    const deformation=d.clone().multiplyScalar(shrink).addScaledVector(host.clone().sub(flowed),.20*6*t*(1-t));
    minFeedingDeterminant=Math.min(minFeedingDeterminant,shrink*shrink*(shrink+axis.dot(deformation)/arc));
    minBrushDeterminant=Math.min(minBrushDeterminant,shrink*shrink*(shrink+axis.dot(deformation)/arc-.18*6*t*(1-t)*(1-.20*2.5)));
@@ -104,6 +123,8 @@ for(const ids of strands.values()){
   }
  }
 }
+assert.ok(leastGlassClearance>.02,'swept tissue plus full brushing remains inside glass: '+leastGlassClearance);
+console.log('Minimum sampled glass clearance including full brush:',leastGlassClearance);
 assert.ok(minFeedingDeterminant>.08,'maximum contact contraction must not invert tentacle skin: '+minFeedingDeterminant);
 console.log('Minimum feeding deformation determinant:',minFeedingDeterminant,'with worst brush',minBrushDeterminant);
 assert.ok(minBrushDeterminant>.025,'simultaneous brush and feeding must remain orientation preserving');
