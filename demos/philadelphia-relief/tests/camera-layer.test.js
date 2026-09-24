@@ -96,15 +96,15 @@ test('additional cameras have exact provider identities, bounded locations and s
 test('discovered cameras have verified provider identities, bounded positions and no arbitrary media', async () => {
   const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
   const cams = discoveredCameras(doc);
-  assert.equal(cams.length, 29);
-  assert.equal(cams.filter(p => p.player).length, 10);
+  assert.equal(cams.length, 30);
+  assert.equal(cams.filter(p => p.player).length, 11);
   assert.ok(cams.every(p => p.discovered && !p.traffic));
-  assert.equal(cams.filter(hasCameraPreview).length, 25);
-  assert.equal(new Set(cams.map(p => p.id)).size, 29);
+  assert.equal(cams.filter(hasCameraPreview).length, 26);
+  assert.equal(new Set(cams.map(p => p.id)).size, 30);
   for (const p of cams) assert.equal(new URL(p.url).protocol, 'https:');
-  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 29);
+  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 30);
   assert.deepEqual(discoveredCameras({cameras: 'invalid'}), []);
-  const sample = doc.cameras[0];
+  const sample = doc.cameras.find(p => p.source === 'earthcam');
   for (const bad of [{...sample, lat: 90}, {...sample, lon: NaN}, {...sample, name: ''},
     {...sample, url: 'https://www.earthcam.com.evil.test/camera'},
     {...sample, thumbnail: '../escape'}, {...sample, source: 'unknown'}]) {
@@ -170,6 +170,20 @@ test('camera CSP allows exact public media hosts only inside the appropriate dir
   assert.ok(!frames.includes('ptztv'));
   assert.ok(!frames.includes('*'));
   assert.ok(!frames.includes('oemstream.online'));
+});
+
+test('Perkasie construction camera accepts only the verified borough broadcast', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
+  const row = doc.cameras.find(p => p.source === 'perkasie-borough');
+  const [camera] = discoveredCameras({ cameras: [row] });
+  assert.equal(camera.url, 'https://www.youtube.com/watch?v=xWUiE7m2PLQ');
+  assert.equal(camera.provider, 'Perkasie Borough');
+  assert.equal(camera.publisherUrl, 'https://www.youtube.com/@perkasieborough5325/streams');
+  assert.equal(camera.area, true);
+  assert.equal(camera.previewKind, 'thumbnail');
+  for (const change of [{ video: '9mMnqO1UuIU' }, { video: undefined }, { id: 'found-unknown' }]) {
+    assert.deepEqual(discoveredCameras({ cameras: [{ ...row, ...change }] }), []);
+  }
 });
 
 test('Flood Watch links select each published camera and keep provider security checks on its own page', async () => {

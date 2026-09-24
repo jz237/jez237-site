@@ -104,6 +104,8 @@ export function discoveredCameras(doc) {
     } else if ((p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video))
       || (p.source === 'ironrail' && p.video === 'F1lNwIEAXJU')
       || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')
+      || (p.source === 'perkasie-borough' && p.id === 'found-perkasie-covered-bridge'
+        && p.video === 'xWUiE7m2PLQ')
       || (p.source === 'rescue-rescue' && {
         'found-kensington-cam2': 'hlGz7Jq_BT0',
         'found-kensington-cam3': 'aphvln5Zwv0',
@@ -111,7 +113,8 @@ export function discoveredCameras(doc) {
       }[p.id] === p.video && typeof p.video === 'string')) {
       const provider = p.source === 'ironrail' ? 'Iron Rail Cams'
         : p.source === 'willowgrove' ? 'Willow Grove Weather Center'
-          : p.source === 'rescue-rescue' ? 'Rescue Rescue' : 'Delaware Ornithological Society';
+          : p.source === 'perkasie-borough' ? 'Perkasie Borough'
+            : p.source === 'rescue-rescue' ? 'Rescue Rescue' : 'Delaware Ornithological Society';
       media = { provider, previewKind: 'thumbnail',
         url: `https://www.youtube.com/watch?v=${p.video}`,
         snapshot: `https://i.ytimg.com/vi/${p.video}/hqdefault.jpg`,
@@ -120,6 +123,11 @@ export function discoveredCameras(doc) {
           + 'Play the provider video or open its camera page.' };
       if (p.source === 'rescue-rescue') {
         media.publisherUrl = 'https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams';
+      }
+      if (p.source === 'perkasie-borough') {
+        media.publisherUrl = 'https://www.youtube.com/@perkasieborough5325/streams';
+        media.notice = 'Borough construction camera · activity depends on the work schedule. '
+          + 'Pin marks the bridge worksite, not a surveyed camera mount.';
       }
     }
     if (!media) return [];

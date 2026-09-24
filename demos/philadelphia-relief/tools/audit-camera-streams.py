@@ -63,6 +63,7 @@ if __name__ == '__main__':
         print(json.dumps(result))
     if '--discover' in sys.argv:
         urls = ['https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams',
+                'https://www.youtube.com/@perkasieborough5325/streams',
                 'https://www.youtube.com/channel/UC1ia-zIvH6uuHAEfdNUEVqA/streams',
                 'https://www.youtube.com/channel/UC-caLIi1HspXkq2Dwh-kC9A/streams',
                 'https://www.youtube.com/results?search_query=' + quote('Philadelphia webcam live') + '&sp=EgJAAQ%253D%253D']

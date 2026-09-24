@@ -119,3 +119,35 @@ Philadelphia live results. This is a maintainer command, not a visitor-side job.
 This follow-up adds two verified viewing angles through one external viewer, not
 two geolocated pins. The mapped total remains 757. No camera player, thumbnail,
 external request, new dependency or CSP exception is added to initial page load.
+
+## All-category follow-up
+
+Search scope includes owner-published street, business, rail, animal, construction,
+waterfront and personal streams; weather cameras are only one category.
+
+- Added **Perkasie Borough's South Perkasie Covered Bridge restoration** camera,
+  `xWUiE7m2PLQ`. The [borough project page](https://www.perkasieborough.org/information/projects/south-perkasie-covered-bridge-rehabilitation/)
+  links its official `@perkasieborough5325` channel. The channel lists this feed
+  as live; its watch page reports OK, isLiveNow and playableInEmbed. Chrome
+  playback advanced from 46803 to 46812 seconds at readyState 4. Broadcast began
+  September 21, 2026. Worksite pin uses 40.3675, -75.295 from the
+  [National Society for the Preservation of Covered Bridges' corrected guide](https://www.coveredbridgesociety.org/downloads/wg-update_2009.pdf).
+  It identifies the Lenape Park bridge, not the precise camera mount.
+- [DelVal / Whysper Wynd foal cameras](https://pennhorseracing.com/foalcams/)
+  now redirect to an offseason notice promising the next season in 2027.
+- The owner-published Birdies Out Back Delaware broadcast `wRGtrWoNtlo` ended
+  August 22, 2024; its current channel yielded no active stream. Street Souls'
+  Kensington `kLyKzCWOGag` was removed by its uploader.
+- Camp Bow Wow Philadelphia Northeast and Cherry Hill publish camera pages,
+  but current playback was not verified. Northeast's browser page was blocked
+  by the provider. No access checks were bypassed. Camguide's "Pet Shelter"
+  listing points to Camp Bow Wow, rather than a newly found animal shelter.
+- [Penn's Landing Park's project page](https://www.parkatpennslanding.com/) directs
+  camera viewers to the already mapped PennDOT network. Broad searches for local
+  railways, marinas, businesses, animal shelters and construction cameras mostly
+  returned existing views, historical streams or places outside the region.
+
+Current total: **758 mapped views, 185 with preview support, 30 purple discoveries**.
+This is one new independently verified live feed in this pass, not a claim of
+complete public-camera coverage. Its thumbnail loads on selection/hover; video
+starts only after Play. No new media host or background polling was introduced.
