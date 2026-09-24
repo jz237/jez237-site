@@ -10,6 +10,7 @@ import { checkPhillyLive } from './check_philly_live.mjs';
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const stage = resolve(process.argv[2] || '.');
 const prepareOnly = process.argv.includes('--prepare-only');
+const requireAircraft = process.argv.includes('--require-aircraft');
 const rel = relative(repo, stage);
 if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
   throw new Error('Use a separate, disposable public upload directory outside the repository.');
@@ -34,7 +35,7 @@ async function verifyRelease(url) {
   // A newly uploaded Pages Worker may lag its static assets briefly. Keep all
   // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
   for (let attempt = 0; attempt < 6; attempt++) {
-    try { await checkPhillyLive(url); return; }
+    try { await checkPhillyLive(url, fetch, { requireAircraft }); return; }
     catch (error) {
       if (attempt === 5) throw error;
       console.log(`${error.message} Retrying the newly deployed service.`);

@@ -99,7 +99,10 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   function report() {
     const rows = visibleRecords(), fresh = rows.filter(r => ageSeconds(r.data) <= STALE_AFTER).length;
     const age = lastPoll ? Math.round((Date.now() - lastPoll) / 1000) : 0;
-    const unavailable = relayUnavailable ? 'Computer relay offline or feed unavailable' : 'Feed unavailable';
+    const unavailable = relayUnavailable
+      ? 'Home relay reconnecting or provider unavailable. '
+        + 'Keep the host PC awake; recovery retries automatically'
+      : 'Feed unavailable';
     const waiting = `${rows.length} last-known aircraft. Retry in up to ${retrySeconds}s.`;
     status.textContent = loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
       : accessRequired ? 'Live aircraft need provider approval. Tracking is not active.'

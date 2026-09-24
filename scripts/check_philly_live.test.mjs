@@ -27,3 +27,19 @@ for (const route of ['detail-imagery', 'street-detail', 'aircraft']) {
     await assert.rejects(checkPhillyLive('https://example.test', mock(route)), /Function/);
   });
 }
+
+for (const failure of ['offline', 'stale', 'malformed']) {
+  test(`full aircraft check rejects ${failure} feed even when route exists`, async () => {
+    const fetcher = (url, options) => url.pathname.endsWith('/aircraft') && options.method === 'GET'
+      ? Promise.resolve(failure === 'malformed' ? new Response('<html>offline</html>')
+        : Response.json({ aircraft: [], timestamp: failure === 'stale' ? Date.now() - 180000 : Date.now() },
+          { status: failure === 'offline' ? 503 : 200 })) : mock()(url, options);
+    await assert.rejects(checkPhillyLive('https://example.test', fetcher,
+      { requireAircraft: true }), /no fresh feed/);
+  });
+}
+test('full aircraft check accepts a fresh empty region without requiring fabricated reports', async () => {
+  const fetcher = (url, options) => url.pathname.endsWith('/aircraft') && options.method === 'GET'
+    ? Promise.resolve(Response.json({ aircraft: [], timestamp: Date.now() })) : mock()(url, options);
+  await checkPhillyLive('https://example.test', fetcher, { requireAircraft: true });
+});

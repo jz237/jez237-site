@@ -2,7 +2,7 @@ import { pathToFileURL } from 'node:url';
 
 // Invalid requests exercise routing without downloading imagery or contacting
 // aircraft providers. Missing Functions otherwise look like a healthy HTML site.
-export async function checkPhillyLive(base, fetcher = fetch) {
+export async function checkPhillyLive(base, fetcher = fetch, { requireAircraft = false } = {}) {
   const root = new URL('/demos/philadelphia-relief/', base);
   const request = async (path, method = 'GET') => {
     const url = new URL(path, root);
@@ -37,9 +37,20 @@ export async function checkPhillyLive(base, fetcher = fetch) {
       throw new Error(`Philadelphia deployment blocked: ${path} Function is missing or incorrect (HTTP ${response.status}).`);
     }
   }
+  if (requireAircraft) {
+    const response = await request('aircraft');
+    let data;
+    try { data = await response.json(); } catch { /* reject non-JSON deployments */ }
+    if (!response.ok || !Array.isArray(data?.aircraft) || !Number.isFinite(data.timestamp)
+      || data.timestamp < Date.now() - 120000 || data.timestamp > Date.now() + 30000) {
+      throw new Error(`Philadelphia aircraft check failed: no fresh feed (HTTP ${response.status}).`);
+    }
+    console.log(`Aircraft data verified: ${data.aircraft.length} reports; fresh provider timestamp.`);
+  }
   console.log(`Philadelphia live checks passed: Cesium policy, imagery, neighborhoods, aircraft (${root.host}).`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await checkPhillyLive(process.argv[2] || 'https://jez237.com');
+  await checkPhillyLive(process.argv[2] || 'https://jez237.com', fetch,
+    { requireAircraft: process.argv.includes('--require-aircraft') });
 }
