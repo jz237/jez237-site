@@ -1,6 +1,7 @@
 import {mergeIdentified,identifyGeometry,foodNote} from './ReefIdentification.ts';
 import {type RockLifeAttachments,reefRockLife} from './ReefRockLife.ts';
 import {finishRockMaterial} from './ReefRockMaterial.ts';
+import {rockMicroColonies} from './RockMicroColonies.ts';
 import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
 import {reefButtresses} from './ReefButtress.ts';
@@ -265,7 +266,9 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  obstacles.push(...life.obstacles.filter(o=>!obstacles.some(existing=>existing.center.distanceTo(o.center)+o.radius<=existing.radius)));
  const rockLifeStats=life.stats;
  const backdrop=reefAnemoneBackdrop(seeded(2309240417));
- extend(rockMesh,backdrop.rocks);extend(massive,backdrop.crusts);extend(hard,backdrop.corals);extend(zoo,backdrop.gardens);
+ const microLife=rockMicroColonies([...supports.map(s=>s.geometry),...buttress.rocks,...feet.rocks,...backdrop.rocks]);
+ identifyGeometry(microLife.geometry,{title:'Colorful sponge-like microcolonies',description:'Small attached cups cluster among pink and purple coralline growth. Each has a rounded shoulder and a recessed opening. These forms represent a mixed community of reef growth, not a single identified species.'});
+ extend(rockMesh,backdrop.rocks);extend(massive,backdrop.crusts);extend(hard,[microLife.geometry,...backdrop.corals]);extend(zoo,backdrop.gardens);
  obstacles.push(...backdrop.obstacles);
  const anemoneBackdropStats=backdrop.stats;
  rockStats.triangles=rockMesh.geometry.index!.count/3;
@@ -298,5 +301,5 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);rubble.name='Coral rubble and coarse sand';addNote(rubble,'Coral rubble and coarse sand','Small pale fragments collect between the sand grains at the foot of the reef. They represent worn pieces of coral skeleton and other carbonate material.');
- return {group,obstacles,notes,hosts,anemone,anemoneBackdropStats,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,microLifeStats:microLife.stats,anemoneBackdropStats,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }

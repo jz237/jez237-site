@@ -3,6 +3,7 @@ import './draw-order.mjs';
 import './anemone-backdrop.mjs';
 import './rock-ray-index.mjs';
 import './rock-life-geometry.mjs';
+import './rock-microcolonies.mjs';
 import './flank-shelf-geometry.mjs';
 import './anemone-geometry.mjs';
 import './anemone-behavior.mjs';
@@ -40,6 +41,7 @@ try{
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  const start=Date.now();await page.goto('http://127.0.0.1:5241/demos/reef-aquarium/');await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});report.readyMs=Date.now()-start;assert.doesNotMatch(await page.locator('body').innerText(),/[\u00c2\u00c3]/,'UI text must remain correctly encoded');
  await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,21);assert.ok(initial.rockLifeStats.patches>150);assert.ok(initial.rockLifeStats.pores>3000);assert.ok(initial.rockLifeStats.triangles<750000);assert.equal(initial.rockLifeStats.colors,7);assert.equal(initial.canopyStats.colonies,12);assert.ok(initial.canopyStats.triangles>200000&&initial.canopyStats.triangles<980000);assert.equal(initial.rearGlass.visible,true);assert.equal(initial.infillStats.colonies,11);assert.ok(initial.crustStats.understoryColonies>=20,'retain the new layer of smaller coral colonies');assert.ok(initial.crustStats.understoryTriangles<1210000,'merged detailed growth stays within its reviewed geometry budget');assert.ok(initial.infillStats.triangles<580000);assert.ok(initial.polypStats.polyps>500);assert.ok(initial.polypStats.maxAttachmentError<.00301);assert.ok(initial.crustStats.colonies>30&&initial.crustStats.colonies<=100,'exposed rock retains distributed encrusting coverage');assert.ok(initial.crustStats.triangles>1000&&initial.crustStats.triangles-initial.crustStats.mantleTriangles<70000);assert.equal(initial.anemoneTentacles,800);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);assert.equal(initial.anatomy.length,21);assert.ok(initial.anatomy.every(f=>f.model.startsWith('Blender')&&f.pectoral.length===2&&f.gills.length===2),'every inhabitant uses the articulated Blender model');
+ assert.ok(initial.microLifeStats.cups>3000&&initial.microLifeStats.rocks>=45,'fine growth must cover the main islands and backing');assert.ok(initial.microLifeStats.triangles<230000,'tiny colonies remain within reviewed budget');
  assert.equal(initial.flankStats.colonies,12);assert.ok(initial.flankStats.triangles<95000);assert.ok(initial.flankStats.attachments.every(a=>Math.abs(a[4]-.016)<1e-7));
  assert.equal(initial.crustStats.mantleColonies,12,'retain the twelve reviewed exposed-face colonies');
  assert.ok(initial.crustStats.mantleTriangles>20000&&initial.crustStats.mantleTriangles<32000,'resolved mantle relief stays within its reviewed geometry allocation');
