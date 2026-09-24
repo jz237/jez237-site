@@ -641,3 +641,12 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Final build:reef/check:reef pass,21inhabitants and unchanged structural scenery metrics. Deterministic120second terrain/rest/peck/food test passes. Fourteen-frame actual rendered sequence includes bottom hover,pecking andrest; inspected fullbody/turn poses and paired breathing views. Capped measurements and uncapped comparison saved separately. Planted83asset sync and release checks pass.
 - Local startup prior/current 7074.5/6649.5ms; uncapped FPS 130.2/152.7. These measurements are local run-to-run comparisons, not guarantees for slow computers. Replacement model grows by about241KB.
 - The fish is now the requested species, but global reef reference parity has NOT been reached: repetitive branches, smooth broad rock surfaces, plate undersides and tubular anemone tissue remain. Continue the existing realism loop. Hidden Reef and planted source/assets unchanged.
+
+
+## Right anemone rear live-rock outcrop
+- Build a porous, encrusted three-dimensional rear outcrop behind the right anemone to close its bare back-glass sightline.
+- Seven irregular overlapping eroded stones,62 surface-clipped encrusting patches,five small branching colonies,71 polyps and480 fine tentacles. Added454476triangles,merged into existing material batches; no extra texture/model download. Existing random streams and baked attachment signature preserved.
+- First placement was too far behind the existing tower: inspection still showed the exposed right-side sightline. Moved the outcrop forward0.55 and outer stones outward0.12. The final front,oblique,mobile and close-up renders show growth behind the host while retaining the center cave and open water above. Compared against the user's gap screenshot and original reef photo's encrusted overlapping structure. Small far-side edge openings are natural in rotatable views; this is not an opaque background plane.
+- build:reef/check:reef,backdrop physical bounds/grounding/sightline check and freshwater83asset sync/release checks passed. Feeding and movement samples show zero fish/obstacle overlaps; paused state and the rendered anemone/clownfish time sequence reviewed.
+- Local alternating startup prior/current 5718/6266ms; uncapped FPS 176.7/170.6. Hardware-specific comparisons only.
+- Overall reference parity is still not reached: repeated branching, broad smooth exposed stone patches elsewhere and simplified anemone tissue remain. Preserve the existing improvement automation. Publish only jez237 and GitHub.
