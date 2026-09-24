@@ -40,6 +40,7 @@ export const AREA2 = {
     { t: 'crate', x: 9.6, p: 16, rot: 0.3 }, { t: 'crate', x: 10.5, p: 16.9, rot: -0.2, s: 0.8 },
     { t: 'barrel', x: -12, p: 14, red: true }, { t: 'barrel', x: -11.2, p: 14.8, red: true },
     { t: 'rock', x: 13, p: 6, s: 1.4 }, { t: 'rock', x: -14, p: 20, s: 1.2 },
+    { t: 'debris', x: -3, p: 5.5 }, { t: 'tires', x: 13.6, p: 12.8 }, { t: 'pallet', x: 11.9, p: 18.4, rot: 0.2 },
     // --- trench line & palisade ---
     { t: 'trench', x0: -15, x1: -3, p: 37 },
     { t: 'sandbags', pts: [[5, 38.2], [7.5, 39.5], [10.2, 38.6]] },
@@ -56,6 +57,7 @@ export const AREA2 = {
     { t: 'campfire', x: -4, p: 58 },
     { t: 'crate', x: 11.5, p: 62, rot: 0.4 }, { t: 'crate', x: 10.6, p: 63, rot: 0.1, s: 0.85 },
     { t: 'barrel', x: -6.5, p: 64 },
+    { t: 'pallet', x: 12.6, p: 60, rot: 0.1 }, { t: 'gascyl', x: 12.9, p: 65 }, { t: 'watertank', x: 13.6, p: 51 },
     // --- ravine ---
     { t: 'rock', x: -3.2, p: 82, s: 1.6 }, { t: 'rock', x: 4, p: 90, s: 1.3 }, { t: 'rock', x: -4.6, p: 97, s: 1.4 },
     { t: 'rock', x: 3.4, p: 104, s: 1.8 }, { t: 'rock', x: -1.2, p: 111, s: 1.0 },
@@ -67,6 +69,8 @@ export const AREA2 = {
     { t: 'sandbags', pts: [[-12.5, 154.2], [-7.5, 155.2], [-3.2, 154.6]] },
     { t: 'sandbags', pts: [[3.2, 154.8], [8, 155.4], [12.5, 154.6]] },
     { t: 'mortarpit', x: -11, p: 164 },
+    { t: 'wreck', x: 13, p: 166, rot: -0.3 }, { t: 'debris', x: 6, p: 176 },
+    { t: 'sacks', x: -13, p: 199.5, rot: 0.2, small: true },
     // --- far bank ---
     { t: 'trench', x0: -16, x1: -4, p: 186 },
     { t: 'hedgehog', x: 4, p: 170 }, { t: 'hedgehog', x: -6, p: 175 }, { t: 'hedgehog', x: 13, p: 181 },

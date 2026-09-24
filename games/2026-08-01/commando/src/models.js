@@ -1,6 +1,7 @@
-// models.js — every static model in the game, built from primitives with
-// vertex colour and the painted canvas textures. All share one camera angle
-// and one sun, which is the whole point of the rebuild.
+// models.js — the procedural models (buildings, fortress, trucks, jeep,
+// towers, foliage cards…), built from primitives with vertex colour and the
+// painted canvas textures. Palms, rocks, props and characters now mostly come
+// from the Quaternius models (assets.js); these fill in everything else.
 import * as THREE from 'three';
 import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -88,85 +89,6 @@ export function initMaterials(tex) {
 }
 
 // ------------------------------------------------------------------ vegetation
-export function palmGeo(seed) {
-  const r = mulberry(seed);
-  const H = 6.2 + r() * 2.6, lean = 0.6 + r() * 1.4, la = r() * Math.PI * 2;
-  const pts = [];
-  for (let i = 0; i <= 10; i++) {
-    const t = i / 10, bend = Math.pow(t, 1.7) * lean;
-    pts.push(new THREE.Vector3(Math.cos(la) * bend, t * H, Math.sin(la) * bend));
-  }
-  const curve = new THREE.CatmullRomCurve3(pts);
-  // ringed trunk: custom tube with tapering radius and banded colour
-  const seg = 24, rad = 8, pos = [], col = [], idx = [], uv = [];
-  const c1 = new THREE.Color('#6b5236'), c2 = new THREE.Color('#8b7453');
-  const frames = curve.computeFrenetFrames(seg, false);
-  for (let i = 0; i <= seg; i++) {
-    const t = i / seg, P0 = curve.getPointAt(t), N = frames.normals[i], B = frames.binormals[i];
-    const R = 0.24 * (1 - t * 0.38) * (i === 0 ? 1.35 : 1) + (i % 2 ? 0.012 : 0);
-    const band = (i % 2) ? c1 : c2;
-    for (let j = 0; j <= rad; j++) {
-      const a = j / rad * Math.PI * 2, cx = Math.cos(a), sx = Math.sin(a);
-      pos.push(P0.x + (N.x * cx + B.x * sx) * R, P0.y + (N.y * cx + B.y * sx) * R, P0.z + (N.z * cx + B.z * sx) * R);
-      const ao = 0.55 + 0.45 * Math.min(1, t * 4);
-      col.push(band.r * ao, band.g * ao, band.b * ao); uv.push(j / rad, t);
-    }
-  }
-  for (let i = 0; i < seg; i++) for (let j = 0; j < rad; j++) {
-    const a = i * (rad + 1) + j, b = a + rad + 1;
-    idx.push(a, b, a + 1, b, b + 1, a + 1);
-  }
-  const trunk = new THREE.BufferGeometry();
-  trunk.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  trunk.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-  trunk.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-  trunk.setIndex(idx); trunk.computeVertexNormals();
-  const top = curve.getPointAt(1);
-  const nuts = [];
-  for (let i = 0; i < 3; i++) {
-    const a = r() * Math.PI * 2;
-    nuts.push(P(new THREE.SphereGeometry(0.13, 7, 5), '#4d3b1f', { x: top.x + Math.cos(a) * 0.2, y: top.y - 0.25, z: top.z + Math.sin(a) * 0.2 }));
-  }
-  const trunkAll = merge([trunk, ...nuts]);
-
-  // fronds: drooping strips with a V-fold along the rib
-  const fronds = [];
-  const nF = 9 + ((r() * 4) | 0);
-  for (let f = 0; f < nF; f++) {
-    const yaw = f / nF * Math.PI * 2 + r() * 0.4, L = 3.2 + r() * 1.3, W = 1.25;
-    const lift = 0.5 + r() * 0.5, droop = 1.6 + r() * 0.9;
-    const segs = 9, fp = [], fu = [], fi = [];
-    for (let i = 0; i <= segs; i++) {
-      const t = i / segs, d = t * L;
-      const y = lift * Math.sin(t * Math.PI * 0.7) - droop * t * t;
-      const w = W * Math.sin(Math.PI * Math.min(1, 0.1 + t * 0.95)) * 0.5;
-      for (let k = -1; k <= 1; k++) {
-        const fold = k === 0 ? 0.12 * (1 - t) : 0;
-        fp.push(k * w, y + fold, d); fu.push(0.5 + k * 0.5, t);
-      }
-    }
-    for (let i = 0; i < segs; i++) for (let k = 0; k < 2; k++) {
-      const a = i * 3 + k, b = a + 3;
-      fi.push(a, b, a + 1, b, b + 1, a + 1);
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(fp, 3));
-    g.setAttribute('uv', new THREE.Float32BufferAttribute(fu, 2));
-    g.setIndex(fi); g.computeVertexNormals();
-    // bend normals upward so the canopy lights like foliage, not paper
-    const nrm = g.attributes.normal;
-    for (let i = 0; i < nrm.count; i++) { nrm.setY(i, Math.abs(nrm.getY(i)) * 0.6 + 0.6); }
-    const pitch = -0.15 + r() * 0.25;
-    g.applyMatrix4(new THREE.Matrix4().makeRotationX(pitch));
-    g.applyMatrix4(new THREE.Matrix4().makeRotationY(yaw));
-    g.translate(top.x, top.y, top.z);
-    const shade = 0.6 + r() * 0.25;
-    P(g, new THREE.Color(shade, shade, shade).getStyle());
-    fronds.push(g);
-  }
-  return { trunk: trunkAll, fronds: merge(fronds), height: H, top };
-}
-
 export function bushGeo(seed, dry = false) {
   const r = mulberry(seed), parts = [];
   const n = 4 + ((r() * 4) | 0);
@@ -296,28 +218,6 @@ export function sandbagGeo() {
   }
   g.computeVertexNormals();
   return g;
-}
-
-export function crateGeo() {
-  const parts = [];
-  const b = new THREE.BoxGeometry(1, 1, 1); P(b, '#b09470', { y: 0.5 }, 0.05);
-  parts.push(b);
-  // dark frame battens
-  for (const [x, z, w, d] of [[0, 0.505, 1.02, 0.02], [0, -0.505, 1.02, 0.02], [0.505, 0, 0.02, 1.02], [-0.505, 0, 0.02, 1.02]]) {
-    for (const y of [0.06, 0.94]) parts.push(P(new THREE.BoxGeometry(w, 0.12, d), '#6b5436', { x, y, z }));
-  }
-  parts.push(P(new THREE.BoxGeometry(0.02, 1.0, 1.25), '#6b5436', { x: 0.506, y: 0.5, rx: 0.78 }));
-  parts.push(P(new THREE.BoxGeometry(0.02, 1.0, 1.25), '#6b5436', { x: -0.506, y: 0.5, rx: -0.78 }));
-  return merge(parts);
-}
-
-export function barrelGeo(red) {
-  const body = red ? '#9a2f22' : '#4f5a34';
-  const parts = [P(new THREE.CylinderGeometry(0.34, 0.34, 0.95, 14), body, { y: 0.475 }, 0.06)];
-  for (const y of [0.18, 0.5, 0.82]) parts.push(P(new THREE.TorusGeometry(0.345, 0.025, 4, 16), '#2f2a22', { y, rx: Math.PI / 2 }));
-  parts.push(P(new THREE.CylinderGeometry(0.3, 0.3, 0.02, 14), red ? '#7d261c' : '#3f4a2a', { y: 0.955 }));
-  if (red) parts.push(P(new THREE.BoxGeometry(0.25, 0.2, 0.02), '#e8d9a0', { y: 0.6, z: 0.34 }));
-  return merge(parts);
 }
 
 export function logGeo(len) {

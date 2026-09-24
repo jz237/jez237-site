@@ -13,6 +13,7 @@ import { AREAS, AMBIENCE } from './levels.js';
 import { Soldier } from './soldier.js';
 import { truckGroup } from './models.js';
 import { tankGroup, motoGroup } from './models2.js';
+import { loadAssets, describe } from './assets.js';
 
 const qs = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -285,6 +286,13 @@ function prewarm() {
 }
 
 // ------------------------------------------------------------------ boot
+$('load-small').textContent = 'LOADING MODELS…';
+try {
+  await loadAssets((f) => { $('load-small').textContent = `LOADING MODELS ${Math.round(f * 100)}%`; });
+} catch (e) {
+  $('load-small').textContent = 'COULD NOT LOAD THE GAME MODELS — PLEASE RELOAD';
+  throw e;
+}
 buildArea(startArea);
 $('loading').classList.add('hidden');
 toTitle();
@@ -293,6 +301,7 @@ requestAnimationFrame((n) => { last = n; loop(n); });
 
 // ------------------------------------------------------------------ test hooks
 window.__cmd = {
+  assets: describe,
   game, R, fx, autopilot: bot,
   get world() { return world; },
   manual(on = true) { manual = on; },
