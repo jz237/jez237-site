@@ -69,7 +69,7 @@ snapshots; they are not counts of independently verified live video streams.
 | Wag Watch / Doggie VIP | Customer login or paid camera access; excluded. Morgan's Paws public dog cameras are in York, outside the map. |
 | WeatherBug regional weather stations | Listings did not establish current playable Philadelphia feeds in this run. |
 | Cherry Hill Esterbrook pickleball listing | Current linked owner site did not expose a verified public court stream. |
-| Ben.land BeeCam | Owner describes Philadelphia-suburb colonies, but camera access/location could not be verified sufficiently for a map pin. |
+| Ben.land BeeCam | Follow-up browser verification confirmed both owner-published HLS views play. Added to Cameras & local views; the owner gives only Philadelphia suburbs, so no map pin is assigned. |
 | Legacy I Love Sea Isle / Liberty One / Dockside / Penn's Landing camera directories | Old camera endpoints returned errors or referenced retired footage; not added as live. |
 | Worldcam, Spotcameras, Camscape, CamStreamer, Teleported and other directories | Used for discovery leads only; duplicates and stale listings traced back to owners before inclusion. |
 
@@ -90,3 +90,32 @@ was added to the route's CSP; no script/frame or video-host exemption was added.
 `python tools/audit-camera-streams.py` now checks both catalogs' YouTube broadcasts.
 `--discover` also searches the three current street-camera owner channels and
 Philadelphia live results. This is a maintainer command, not a visitor-side job.
+
+## Backyard / personal weather-camera follow-up
+
+- [Ben.land BeeCam](https://ben.land/beecam/): both Hive One and Hive Two reached
+  readyState 4 and advanced during explicit playback in Chrome. The owner describes
+  the site as Philadelphia suburbs, without a published camera town. Added one
+  owner-viewer card for its two feeds, without guessing residential coordinates.
+- [Willow Grove Weather Center](https://www.youtube.com/@willowgroveweathercenter/streams):
+  the channel currently lists only `vIdA-SCcM68` as live. This is already mapped;
+  added a convenient owner-channel card rather than duplicating its pin.
+- [Northeastern Weather Network](https://northeasternweather.net/), Mid-Atlantic
+  Weather Network, Windy/Meteoblue, Windfinder, WebcamGalore, CamStreamer and
+  YouTube weather/wildlife results were checked for regional leads. The old
+  HeightsWeather Newtown webcam listing could not be reached to verify its owner.
+  Doylestown IQnection and Cherry Hill Brookfield legacy listings point to the
+  retired Weather Underground camera service, not verified current video.
+- [Ambient Weather's public map](https://ambientweather.net/) was checked, including
+  its public regional station listings. Weather-station data alone did not establish
+  additional working camera feeds. No station was converted into a camera pin.
+- A directory labeled a backyard bird feeder as New Hope, Pennsylvania, but the
+  linked YouTube broadcast `bZish-38Bbs` explicitly states South Bend, Indiana.
+  Excluded. Linden, Murrysville and Reading camera leads are outside this map.
+- [Ambient Weather support](https://ambientweather.com/faqs/question/view/id/1829/)
+  records Weather Underground's camera-service closure on October 21, 2021.
+  This may explain remembered backyard cameras missing from today's directories.
+
+This follow-up adds two verified viewing angles through one external viewer, not
+two geolocated pins. The mapped total remains 757. No camera player, thumbnail,
+external request, new dependency or CSP exception is added to initial page load.

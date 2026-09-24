@@ -16,6 +16,18 @@ export const STREET_PLACES = [
   { name: 'The Hidden Reef', lat: 40.1368222, lon: -74.8827262 },
 ];
 export const CAMERA_SOURCES = [
+  { name: 'Backyard beehives · two live views', kind: 'Owner-shared wildlife cameras',
+    provider: 'Ben.land · Philadelphia suburbs',
+    text: 'Watch Hive One, Hive Two or both colonies on the owner’s BeeCam page. '
+      + 'The owner publishes only the region, so these views have no map pin. '
+      + 'Includes hive temperature, weight and activity when available.',
+    url: 'https://ben.land/beecam/' },
+  { name: 'Willow Grove backyard weather', kind: 'Owner-shared weather camera',
+    provider: 'Willow Grove Weather Center',
+    text: 'The weather station’s current live snow / no-snow camera. '
+      + 'Already marked on the map at an approximate location; older sky-camera broadcasts may be offline.',
+    url: 'https://www.youtube.com/@willowgroveweathercenter/streams',
+    place: { name: 'Willow Grove Weather Center · approximate area', lat: 40.14, lon: -75.11 } },
   { name: 'Benjamin Franklin Parkway', kind: 'Public webcam', provider: 'EarthCam · The Franklin Institute',
     text: 'Views toward Logan Square, the Parkway and the Philadelphia Museum of Art.',
     url: 'https://www.earthcam.com/usa/pennsylvania/philadelphia/', place: PARKWAY },
