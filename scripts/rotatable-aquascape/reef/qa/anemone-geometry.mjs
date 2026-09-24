@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import * as T from 'three';
-import {buildAnemones} from '../Anemones.ts';
+import {buildAnemones,discPoint} from '../Anemones.ts';
 import {tissueFlow} from '../AnemoneFlow.ts';
 let seed=91;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const {mesh,tentacles,behavior}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,1)],{value:0},random,p=>p.y-.28);
@@ -17,6 +17,19 @@ assert.equal(opticalWidth.count,mesh.geometry.getAttribute('position').count);
 assert.ok([...opticalWidth.array].every(v=>v>0),'tissue always has finite optical thickness');
 assert.ok(Math.max(...opticalWidth.array.subarray(4000,10000))-Math.min(...opticalWidth.array.subarray(4000,10000))>30,'different strand widths and thick oral tissue retain optical variation');
 const p=mesh.geometry.getAttribute('position'),n=mesh.geometry.getAttribute('normal'),flex=mesh.geometry.getAttribute('anemoneFlex');
+const colors=mesh.geometry.getAttribute('color');
+assert.ok(colors.array instanceof Uint16Array&&colors.normalized,'linear tissue color retains 16-bit precision in a compact buffer');
+for(let host=0;host<3;host++)for(const r of [.1,.4,.7,1]){
+ assert.ok(discPoint(r,0,1,host).distanceTo(discPoint(r,Math.PI*2,1,host))<1e-12,'folded disc closes periodically');
+}
+// The hidden root bed must retain pigmentation variation without uncolored
+// islands. Bright uniform oral tissue looked like a plastic tray.
+let bodyMin=Infinity,bodyMax=0,bodyCount=0;
+for(let i=0;i<p.count;i++)if(flex.getW(i)===0){
+ const value=colors.getX(i)+colors.getY(i)+colors.getZ(i);
+ assert.ok(value>0&&Number.isFinite(value));bodyMin=Math.min(bodyMin,value);bodyMax=Math.max(bodyMax,value);bodyCount++;
+}
+assert.ok(bodyCount>20000&&bodyMax/bodyMin>3,'resolved folds retain sheltered roots and varied radial pigmentation');
 const rings=new Map();
 for(let i=0;i<p.count;i++){
  assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)+n.getX(i)+n.getY(i)+n.getZ(i)),'finite positions and normals');

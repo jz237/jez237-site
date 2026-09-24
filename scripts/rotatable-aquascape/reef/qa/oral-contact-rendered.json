@@ -1,0 +1,117 @@
+{
+  "samples": [
+    {
+      "seconds": 0.2,
+      "time": 1.2577999999046336,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 11,
+      "maxBrush": 0.16191902850942433,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.002549143796147235,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 1,
+      "time": 2.341199999904634,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 9,
+      "maxBrush": 0.13930266849721837,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.10001199999997455,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 3,
+      "time": 4.641499999904638,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 3,
+      "maxBrush": 0.11861362100791277,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 5,
+      "time": 6.94169999990466,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 5,
+      "maxBrush": 0.05264034384003184,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 8.5,
+      "time": 10.742199999904633,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 11,
+      "maxBrush": 0.1631683937051948,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 15,
+      "time": 17.559199999904557,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 0,
+      "maxBrush": 0.003917798781782149,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0.11137592071767521,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 25,
+      "time": 27.87679999990434,
+      "fishBites": 0,
+      "remaining": 0,
+      "brushing": 9,
+      "maxBrush": 0.13503852642957304,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "errors": []
+}
