@@ -64,3 +64,26 @@ const mp=mantle.getAttribute('position'),mn=mantle.getAttribute('normal');let ma
 for(let i=0;i<mp.count;i+=7){const pos=new T.Vector3().fromBufferAttribute(mp,i),normal=new T.Vector3().fromBufferAttribute(mn,i);ray.set(pos.clone().addScaledVector(normal,.04),normal.clone().negate());ray.far=.15;const support=ray.intersectObject(mesh)[0];assert.ok(support);const gap=support.distance-.04;assert.ok(gap>-.001&&gap<.045,'mantle remains a thin attached layer');mantleGap=Math.max(mantleGap,gap);}
 mantle.computeBoundingSphere();for(let i=0;i<mp.count;i++)assert.ok(new T.Vector3().fromBufferAttribute(mp,i).distanceTo(mantle.boundingSphere.center)<=mantle.boundingSphere.radius+1e-6,'navigation sphere contains every new tissue vertex');
 console.log('Thin lobed mantle passed:',mantle.index.count/3,'triangles; max sampled gap',mantleGap);
+
+// A thin growing margin must inherit the actual support pigment, including
+// clipped/interpolated edge vertices, without changing its physical surface.
+const pigmented=new T.PlaneGeometry(3,3,96,96),gp=pigmented.getAttribute('position'),ground=[];
+for(let i=0;i<gp.count;i++)ground.push(.3+gp.getX(i)*.05,.4+gp.getY(i)*.04,.2);
+pigmented.setAttribute('color',new T.Float32BufferAttribute(ground,3));
+const profile={color:new T.Color('#be7238'),thickness:0,lobed:true,film:true},gain=new T.Color(1,1,1);
+const plain=coralCrust(pigmented,new T.Vector3(),new T.Vector3(0,0,1),1,.2,9,profile),blended=coralCrust(pigmented,new T.Vector3(),new T.Vector3(0,0,1),1,.2,9,{...profile,grounded:true});
+assert.deepEqual(blended.index.array,plain.index.array);for(const name of ['position','uv'])assert.deepEqual(blended.getAttribute(name).array,plain.getAttribute(name).array);
+assert.deepEqual(Object.keys(blended.attributes).sort(),Object.keys(plain.attributes).sort(),'pigment adds no GPU attributes');
+const pigmentEdges=new Map();for(let i=0;i<blended.index.count;i+=3)for(let j=0;j<3;j++){const a=blended.index.getX(i+j),b=blended.index.getX(i+(j+1)%3),key=[a,b].sort((a,b)=>a-b).join(':');const e=pigmentEdges.get(key);if(e)e.count++;else pigmentEdges.set(key,{a,b,count:1});}
+const rim=new Set([...pigmentEdges.values()].filter(e=>e.count===1).flatMap(e=>[e.a,e.b])),bp=blended.getAttribute('position'),bc=blended.getAttribute('color');let maxPigmentError=0;
+for(const i of rim){const expected=[(.3+bp.getX(i)*.05)*gain.r,(.4+bp.getY(i)*.04)*gain.g,.2*gain.b],actual=[bc.getX(i),bc.getY(i),bc.getZ(i)];for(let k=0;k<3;k++)maxPigmentError=Math.max(maxPigmentError,Math.abs(expected[k]-actual[k]));}
+assert.ok(maxPigmentError<1e-6,'clipped growing edges meet spatially varying rock pigment');
+assert.ok(bc.array.every(Number.isFinite));assert.notDeepEqual(bc.array,plain.getAttribute('color').array);
+let tissue=0;for(let i=0;i<bp.count;i++)if(Math.abs(bc.getX(i)-(.3+bp.getX(i)*.05)*gain.r)>.03)tissue++;
+assert.ok(tissue>bp.count*.15,'retain substantial colored living tissue rather than erase colonies');
+console.log('Rock-aware growing margins passed:',rim.size,'clipped boundary vertices; maximum pigment error',maxPigmentError);
+
+const film=coralCrust(rock,hit.point,hit.face.normal,.46,.8,2309231804,{...profile,grounded:true});
+const filmP=film.getAttribute('position'),filmN=film.getAttribute('normal');let minAlignment=1;
+for(let i=0;i<filmP.count;i+=7){const pos=new T.Vector3().fromBufferAttribute(filmP,i),normal=new T.Vector3().fromBufferAttribute(filmN,i);ray.set(pos.clone().addScaledVector(normal,.04),normal.clone().negate());ray.far=.10;const support=ray.intersectObject(mesh)[0];assert.ok(support);assert.ok(Math.abs((support.distance-.04)-.0014)<.0001,'microscopic film hugs actual curved support');minAlignment=Math.min(minAlignment,normal.dot(support.normal.clone().normalize()));}
+assert.ok(minAlignment>.9999,'clipped film normals continue the underlying curved rock shading');console.log('Film shading continuity passed:',minAlignment);

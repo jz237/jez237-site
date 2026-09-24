@@ -254,7 +254,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  const footStats=feet.stats;
  const life=reefRockLife([...supports,...buttress.rocks.map(g=>new T.Mesh(g,rockMat)),...feet.rocks.map(g=>new T.Mesh(g,rockMat))],seeded(2309240015),bakedLife);
  if(!bakedLife&&new URLSearchParams(location.search).has('bakeRockLife'))Object.assign(window,{reefRockLifeBake:life.attachments});
- extend(massive,life.crusts);extend(hard,life.pores);
+ extend(rockMesh,life.crusts);extend(hard,life.pores);
  // A containing existing sphere already protects the entire new patch.
  // Keep only additional envelopes; do not repeat equivalent avoidance forces.
  obstacles.push(...life.obstacles.filter(o=>!obstacles.some(existing=>existing.center.distanceTo(o.center)+o.radius<=existing.radius)));

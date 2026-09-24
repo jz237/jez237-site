@@ -1,15 +1,15 @@
 {
-  "readyMs": 5779,
+  "readyMs": 7919,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 6.104499999952335,
-      "bites": 11,
-      "remaining": 34,
+      "fps": 59.99100134979755,
+      "time": 5.915600000095385,
+      "bites": 22,
+      "remaining": 23,
       "anemones": {
-        "brushing": 6,
-        "maxBrush": 0.11524083838753726,
+        "brushing": 4,
+        "maxBrush": 0.023923092537575255,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,109 +21,109 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 10.121599999952315,
-      "bites": 24,
-      "remaining": 20,
+      "fps": 58.11700891127472,
+      "time": 9.93380000009539,
+      "bites": 39,
+      "remaining": 6,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.002849159224985035,
-        "captured": 1,
+        "brushing": 0,
+        "maxBrush": 5.086759804333858e-8,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
-          0.022106375638220092,
+          0,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 14.138599999952257,
-      "bites": 32,
-      "remaining": 11,
+      "fps": 58.01585766776259,
+      "time": 13.957800000095368,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.00005458747848100006,
-        "captured": 2,
+        "maxBrush": 0.006080128210568806,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 18.155599999952184,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 8,
-        "maxBrush": 0.09687871256637026,
-        "captured": 2,
-        "swallowed": 1,
         "carried": 1,
         "fold": [
-          0.2,
+          0,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 22.17259999995208,
-      "bites": 36,
-      "remaining": 7,
+      "fps": 58.8523786169691,
+      "time": 17.97320000009532,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 10,
+        "maxBrush": 0.10258358091857836,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 57.842475657958204,
+      "time": 21.998000000095228,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.0019516271094424866,
-        "captured": 2,
-        "swallowed": 2,
+        "maxBrush": 0.0007304714104618049,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.1822836012136696,
-          0.19303812842620205,
+          0,
+          0.19282960972128418,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 26.189599999951998,
-      "bites": 36,
-      "remaining": 7,
+      "fps": 59.41770647653005,
+      "time": 26.01780000009512,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 3,
-        "maxBrush": 0.03647077213022229,
-        "captured": 2,
-        "swallowed": 2,
+        "brushing": 5,
+        "maxBrush": 0.12471372513432967,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.10888670892714863,
-          0.12991459901464522,
+          0,
+          0.12935717213339207,
           0
         ]
       }
     },
     {
       "fps": 59.994000599940094,
-      "time": 30.189999999951848,
-      "bites": 36,
-      "remaining": 7,
+      "time": 30.034800000094997,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.03418567672201691,
-        "captured": 2,
-        "swallowed": 2,
+        "brushing": 5,
+        "maxBrush": 0.08300653320185312,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.02989191521723902,
-          0.04712330267785847,
+          0,
+          0.04631675765596526,
           0
         ]
       }
@@ -187,9 +187,9 @@
       "maxAttachmentError": 0.003000000000000225
     },
     "rockStats": {
-      "triangles": 719440,
-      "bufferBytes": 24673392,
-      "expandedBufferBytes": 94966080
+      "triangles": 849602,
+      "bufferBytes": 29888216,
+      "expandedBufferBytes": 112147464
     },
     "crustStats": {
       "colonies": 93,
@@ -377,13 +377,13 @@
   },
   "files": [
     "assets/anthias-qh5-fys7.glb",
-    "assets/attachments-C4JKOgV3.json",
+    "assets/attachments-tGRJRB4l.json",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CK2Dg5C3.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-DhKFinux.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -400,22 +400,23 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "05194893b6487cd4ac4c76701a21892329b278b853cdbf9004e446c8399d1b68",
-  "checkedAt": "2026-09-24T04:19:06.258Z",
-  "scope": "Replace repeated faceted live-rock cones with rounded, asymmetrical encrusting lobes, finer surface grain and off-center recessed openings.",
+  "buildHash": "09d6e78c5db2597538c51f3707be8e2c32131a75af8961cf1eb3f2be27e435bb",
+  "checkedAt": "2026-09-24T04:41:13.224Z",
+  "scope": "Integrate thin live-rock growth into the actual porous surface, with irregular pigment fields and rock-matched growing edges instead of smooth colored sheets.",
   "geometryChecks": [
-    "All 108174 baked attachment samples and normals exactly unchanged after actual ray-cast rebake",
-    "Mixed 8-to-12 ring topology has no open edges except the basal rock contact",
-    "Finite nondegenerate surfaces, continuous seam normals and recessed openings",
-    "Real-triangle root clearance at most .00501; generated collision envelopes contain every vertex",
-    "Cached and uncached geometry byte-identical; stale inputs rejected",
-    "Feeding, movement, pause, collision, lighting, mobile and reload behavior passed"
+    "All108174 ray-cast attachment samples and normals exactly unchanged after rebake",
+    "Clipped growing margins inherit interpolated rock pigment with less than3e-8 error in a gradient fixture",
+    "Curved thin-film normals align with actual ray-hit rock normals above.99999",
+    "Film geometry, indices and UVs unchanged by pigment treatment; no extra GPU attributes",
+    "All existing crust, rock, coral, fish and anemone geometry checks pass",
+    "Feeding, movement, pause, collision, lighting, mobile and reload controls passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "fixed-camera lobes-before/after base and coral views",
+    "live baseline and local film-before/after base/coral macros",
+    "rejected tint-only trial retained",
     "moving anemone macro frame pair",
     "original full reef and anemone references",
     "planted comparison and original reference"
@@ -427,68 +428,13 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "f18f61039",
-    "loadPrior": 6670,
-    "loadCurrent": 7126.5,
-    "fpsPrior": 185.4,
-    "fpsCurrent": 183.8,
-    "priorTriangles": 16417032,
+    "baseline": "6a0b8cc5c",
+    "loadPrior": 8225.5,
+    "loadCurrent": 7248,
+    "fpsPrior": 112.7,
+    "fpsCurrent": 118.9,
+    "priorTriangles": 16976616,
     "currentTriangles": 16976616,
-    "interpretation": "Alternating serial local Chrome sessions at the same 1440 by 854 canvas. Added 279792 source triangles for rounded shoulders and recessed asymmetric openings; retained all existing root contacts, growth placements, textures, material batches and animal behavior. No universal speed claim.",
-    "firstUncapped": [
-      {
-        "version": "current",
-        "readyMs": 6468,
-        "fps": 174.93155290754072,
-        "triangles": 16976616,
-        "drawCalls": 1,
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 7051,
-        "fps": 140.31120993585702,
-        "triangles": 16417032,
-        "drawCalls": 1,
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 7151,
-        "fps": 98.74227040517057,
-        "triangles": 16417032,
-        "drawCalls": 1,
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "current",
-        "readyMs": 9084,
-        "fps": 119.67481898418296,
-        "triangles": 16976616,
-        "drawCalls": 1,
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      }
-    ],
-    "uncappedReview": "The first series was nonstationary: unchanged baseline fell from140.3 to98.7FPS; current174.9/119.7. Retained that evidence and repeated in reversed order. Recheck prior182.4/188.5 versus current184.4/183.2, less than1% average difference. No performance gain is claimed."
+    "interpretation": "Alternating serial local Chrome sessions at the same 1440 by 854 canvas. All triangles and textures retained; thin basal films move into the existing porous rock material batch. Pigment fields and interpolated support normals are baked once into existing attributes. No added animation work, texture, draw group or GPU attribute; the existing rock shader now shades these films. No universal speed claim."
   }
 }

@@ -1,0 +1,26 @@
+{
+  "baseline": "6a0b8cc5c",
+  "attachmentSignature": "cdcf9939",
+  "attachmentSamples": 108174,
+  "attachmentsUnchanged": true,
+  "renderedTriangles": 16976616,
+  "priorRockBatch": {
+    "triangles": 719440,
+    "bufferBytes": 24673392,
+    "expandedBufferBytes": 94966080
+  },
+  "currentRockBatch": {
+    "triangles": 849602,
+    "bufferBytes": 29888216,
+    "expandedBufferBytes": 112147464
+  },
+  "rockLife": {
+    "patches": 254,
+    "pores": 5829,
+    "triangles": 736378,
+    "maxAttachmentError": 0.005,
+    "colors": 7
+  },
+  "sourceNormalsPreserved": true,
+  "noNewGPUAttributes": true
+}
