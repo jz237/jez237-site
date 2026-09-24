@@ -6,7 +6,7 @@ import {reefButtresses} from './ReefButtress.ts';
 import {reefAnemoneBackdrop} from './ReefAnemoneBackdrop.ts';
 import {reefFootGardens} from './ReefFootGardens.ts';
 import {plateSurfaceMaps,finishPlateMaterial} from './PlateSurface.ts';
-import {encrustingSurfaceMaps} from './EncrustingSurface.ts';
+import {encrustingSurfaceMaps,finishEncrustingMaterial} from './EncrustingSurface.ts';
 import {surfaceColony} from './SurfaceColony.ts';
 import {coralCrust} from './CoralCrust.ts';
 import {erodedRock} from './ReefRock.ts';
@@ -223,7 +223,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}),plateMaps.skeleton);
  const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Growing toward the light','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');
- const crustMaterial=new T.MeshStandardMaterial({...crustMaps.maps,normalScale:new T.Vector2(1.15,1.15),roughness:.92,vertexColors:true,side:T.DoubleSide});
+ const crustMaterial=finishEncrustingMaterial(new T.MeshStandardMaterial({...crustMaps.maps,normalScale:new T.Vector2(1.15,1.15),roughness:.92,vertexColors:true,side:T.DoubleSide}));
  const massive=batch(massiveCorals,crustMaterial,group,'Ridged encrusting colonies')!;addNote(massive,'A living surface','Closely packed coral cups have recessed centers and fine radial ridges. This tissue follows the supporting rock, while its hard skeleton remains still in the current. An artistic anatomical study.');
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);

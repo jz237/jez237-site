@@ -1,129 +1,129 @@
 {
-  "readyMs": 7919,
+  "readyMs": 6381,
   "shadowFrames": 60,
   "samples": [
     {
+      "fps": 59.99700014999249,
+      "time": 6.044600000190757,
+      "bites": 3,
+      "remaining": 42,
+      "anemones": {
+        "brushing": 7,
+        "maxBrush": 0.1081555226606393,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 10.061700000190761,
+      "bites": 18,
+      "remaining": 26,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 6.868305986271409e-7,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0.026171219495346672,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 14.078800000190727,
+      "bites": 35,
+      "remaining": 8,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.002843194652991881,
+        "captured": 2,
+        "swallowed": 0,
+        "carried": 2,
+        "fold": [
+          0.2,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
       "fps": 59.99100134979755,
-      "time": 5.915600000095385,
-      "bites": 22,
-      "remaining": 23,
-      "anemones": {
-        "brushing": 4,
-        "maxBrush": 0.023923092537575255,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 58.11700891127472,
-      "time": 9.93380000009539,
-      "bites": 39,
-      "remaining": 6,
+      "time": 18.095900000190703,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 5.086759804333858e-8,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 58.01585766776259,
-      "time": 13.957800000095368,
-      "bites": 39,
-      "remaining": 5,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.006080128210568806,
-        "captured": 1,
-        "swallowed": 0,
+        "maxBrush": 0.0009595639948522228,
+        "captured": 2,
+        "swallowed": 1,
         "carried": 1,
         "fold": [
-          0,
+          0.2,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 58.8523786169691,
-      "time": 17.97320000009532,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.99400059993998,
+      "time": 22.112800000190635,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
-        "brushing": 10,
-        "maxBrush": 0.10258358091857836,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
+        "brushing": 7,
+        "maxBrush": 0.13153560517546484,
+        "captured": 2,
+        "swallowed": 2,
+        "carried": 0,
         "fold": [
-          0,
-          0.2,
+          0.1816368873690618,
+          0.19345833983385421,
           0
         ]
       }
     },
     {
-      "fps": 57.842475657958204,
-      "time": 21.998000000095228,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.99400059993998,
+      "time": 26.129800000190542,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.0007304714104618049,
-        "captured": 1,
-        "swallowed": 1,
+        "maxBrush": 3.63980730899938e-8,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.19282960972128418,
+          0.10781861412481415,
+          0.13094066302871038,
           0
         ]
       }
     },
     {
-      "fps": 59.41770647653005,
-      "time": 26.01780000009512,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.99400059993988,
+      "time": 30.130200000190392,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.12471372513432967,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 0,
+        "maxBrush": 0.0002643806502879618,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.12935717213339207,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 30.034800000094997,
-      "bites": 39,
-      "remaining": 5,
-      "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.08300653320185312,
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0,
-          0.04631675765596526,
+          0.029105481231231536,
+          0.0480514152067926,
           0
         ]
       }
@@ -383,7 +383,7 @@
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-DhKFinux.js",
+    "assets/index-wzirfzP-.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -400,26 +400,23 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "09d6e78c5db2597538c51f3707be8e2c32131a75af8961cf1eb3f2be27e435bb",
-  "checkedAt": "2026-09-24T04:41:13.224Z",
-  "scope": "Integrate thin live-rock growth into the actual porous surface, with irregular pigment fields and rock-matched growing edges instead of smooth colored sheets.",
+  "buildHash": "ee4300e173dda32ed0f121e295e45f628f7362ae132260e029945f31cc478aa4",
+  "checkedAt": "2026-09-24T04:56:45.119Z",
+  "scope": "Keep fine corallite cups and rough tissue visible around curved encrusting colonies instead of stretching them into smooth plastic-looking streaks on steep sides.",
   "geometryChecks": [
-    "All108174 ray-cast attachment samples and normals exactly unchanged after rebake",
-    "Clipped growing margins inherit interpolated rock pigment with less than3e-8 error in a gradient fixture",
-    "Curved thin-film normals align with actual ray-hit rock normals above.99999",
-    "Film geometry, indices and UVs unchanged by pigment treatment; no extra GPU attributes",
-    "All existing crust, rock, coral, fish and anemone geometry checks pass",
+    "All scene geometry and attachment statistics exactly unchanged",
+    "Existing full-resolution textures and models retained",
+    "All existing geometry and behavior checks passed",
     "Feeding, movement, pause, collision, lighting, mobile and reload controls passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "live baseline and local film-before/after base/coral macros",
-    "rejected tint-only trial retained",
+    "live96fe27999 baseline and current mantle-before/after base/coral macros",
     "moving anemone macro frame pair",
-    "original full reef and anemone references",
-    "planted comparison and original reference"
+    "original full reef reference",
+    "planted rendered comparison and original reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -428,13 +425,13 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "6a0b8cc5c",
-    "loadPrior": 8225.5,
-    "loadCurrent": 7248,
-    "fpsPrior": 112.7,
-    "fpsCurrent": 118.9,
+    "baseline": "96fe27999",
+    "loadPrior": 6880.5,
+    "loadCurrent": 6767,
+    "fpsPrior": 128,
+    "fpsCurrent": 127.8,
     "priorTriangles": 16976616,
     "currentTriangles": 16976616,
-    "interpretation": "Alternating serial local Chrome sessions at the same 1440 by 854 canvas. All triangles and textures retained; thin basal films move into the existing porous rock material batch. Pigment fields and interpolated support normals are baked once into existing attributes. No added animation work, texture, draw group or GPU attribute; the existing rock shader now shades these films. No universal speed claim."
+    "interpretation": "Alternating serial local Chrome at the same1440x854 canvas. Three surface-oriented projections replace collapsed planar mapping on the existing thick encrusting material. Nine texture samples replace three on these colonies; no new textures, geometry, draw groups, animal work or per-frame CPU loops. No universal speed claim."
   }
 }
