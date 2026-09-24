@@ -118,7 +118,9 @@ export class Renderer {
   }
 
   resize() {
-    const w = innerWidth, h = innerHeight;
+    // a page opened in a hidden tab can report a 0×0 window; never let that
+    // poison the camera maths (it recalibrates on the next real resize)
+    const w = Math.max(1, innerWidth || 1280), h = Math.max(1, innerHeight || 720);
     const dprCap = this.quality === 'high' ? 2 : 1.25;
     this.dpr = Math.min(devicePixelRatio || 1, dprCap);
     this.r.setPixelRatio(this.dpr);

@@ -304,6 +304,8 @@ export class Game {
   // ------------------------------------------------------------------ camera
   updateCamera(dt) {
     const J = this.joe, A = this.area;
+    if (!Number.isFinite(this.camP)) this.camP = J.p + (Number.isFinite(this.R.offJoe) ? this.R.offJoe : 6);
+    if (!Number.isFinite(this.camX)) this.camX = 0;
     this.prevCamP = this.camP;
     // the world ends at the fortress wall; during the gate fight frame the wall
     const cap = A.wallP + 9 + this.R.offTop;
@@ -866,8 +868,10 @@ export class Game {
           en.tx = tr.x + side * rr(3, 7); en.tp = tr.p + rr(-2, 3);
         } else if (tr.cargo <= 0 && tr.t > 2.5) { tr.state = 'leave'; tr.t = 0; }
       } else if (tr.state === 'leave') {
-        tr.p += Math.min(6, tr.t * 3) * dt;
-        if (tr.p > this.viewTop() + 12) { tr.gone = true; this.scene.remove(tr.mesh); }
+        // back out fast: it must never trail along the road in front of Joe
+        tr.p += Math.min(11, 2 + tr.t * 5) * dt;
+        tr.x = lerp(tr.x, this.T.roadX(tr.p), dt * 2);
+        if (tr.p > this.viewTop() + 10 || tr.t > 9) { tr.gone = true; this.scene.remove(tr.mesh); }
       }
       const y = this.h(tr.x, tr.p);
       tr.mesh.position.set(tr.x, y + Math.sin(tr.t * 30) * 0.015 * (tr.state === 'unload' ? 0.3 : 1), -tr.p);
