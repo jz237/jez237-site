@@ -1,3 +1,4 @@
+import './identification.mjs';
 import './draw-order.mjs';
 import './anemone-backdrop.mjs';
 import './rock-ray-index.mjs';
@@ -35,9 +36,9 @@ const server=createServer(async(req,res)=>{try{let p=resolve(root,'.'+decodeURIC
 await new Promise(r=>server.listen(5241,'127.0.0.1',r));let browser;const report={};
 try{
  browser=await chromium.launch({headless:true,channel:'chrome'});
- const page=await browser.newPage({viewport:{width:1440,height:1080}}),errors=[];
+ const page=await browser.newPage({viewport:{width:1440,height:1080},hasTouch:true}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
- const start=Date.now();await page.goto('http://127.0.0.1:5241/demos/reef-aquarium/');await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});report.readyMs=Date.now()-start;
+ const start=Date.now();await page.goto('http://127.0.0.1:5241/demos/reef-aquarium/');await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});report.readyMs=Date.now()-start;assert.doesNotMatch(await page.locator('body').innerText(),/[\u00c2\u00c3]/,'UI text must remain correctly encoded');
  await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,21);assert.ok(initial.rockLifeStats.patches>150);assert.ok(initial.rockLifeStats.pores>3000);assert.ok(initial.rockLifeStats.triangles<750000);assert.equal(initial.rockLifeStats.colors,7);assert.equal(initial.canopyStats.colonies,12);assert.ok(initial.canopyStats.triangles>200000&&initial.canopyStats.triangles<980000);assert.equal(initial.rearGlass.visible,true);assert.equal(initial.infillStats.colonies,11);assert.ok(initial.crustStats.understoryColonies>=20,'retain the new layer of smaller coral colonies');assert.ok(initial.crustStats.understoryTriangles<1210000,'merged detailed growth stays within its reviewed geometry budget');assert.ok(initial.infillStats.triangles<580000);assert.ok(initial.polypStats.polyps>500);assert.ok(initial.polypStats.maxAttachmentError<.00301);assert.ok(initial.crustStats.colonies>30&&initial.crustStats.colonies<=100,'exposed rock retains distributed encrusting coverage');assert.ok(initial.crustStats.triangles>1000&&initial.crustStats.triangles-initial.crustStats.mantleTriangles<70000);assert.equal(initial.anemoneTentacles,800);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);assert.equal(initial.anatomy.length,21);assert.ok(initial.anatomy.every(f=>f.model.startsWith('Blender')&&f.pectoral.length===2&&f.gills.length===2),'every inhabitant uses the articulated Blender model');
  assert.equal(initial.flankStats.colonies,12);assert.ok(initial.flankStats.triangles<95000);assert.ok(initial.flankStats.attachments.every(a=>Math.abs(a[4]-.016)<1e-7));
  assert.equal(initial.crustStats.mantleColonies,12,'retain the twelve reviewed exposed-face colonies');
@@ -61,6 +62,15 @@ try{
  await page.getByRole('button',{name:'Full screen',exact:true}).click();assert.equal(await page.locator('#fullscreen').getAttribute('aria-pressed'),'true');await page.getByRole('button',{name:'Exit full screen',exact:true}).click();
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  const canvas=await page.locator('canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.29,canvas.y+canvas.height*.64);assert.ok(await page.locator('#detail').isVisible(),'rock identification should open');await page.getByRole('button',{name:'Close detail',exact:true}).click();
+ // Real pointer events must identify substrate, water/glass and trim, and never fire after an orbit drag.
+ report.identification=[];
+ for(const [x,y,pattern] of [[.50,.87,/sand|rubble/i],[.50,.18,/water|glass/i],[.50,.947,/base|trim/i]]){
+  const started=Date.now();await page.mouse.click(canvas.x+canvas.width*x,canvas.y+canvas.height*y);
+  const title=await page.locator('#detail h2').innerText();assert.match(title,pattern);report.identification.push({title,ms:Date.now()-started});
+  await page.keyboard.press('Escape');assert.ok(await page.locator('#detail').isHidden());
+ }
+ await page.mouse.move(canvas.x+canvas.width*.5,canvas.y+canvas.height*.5);await page.mouse.down();await page.mouse.move(canvas.x+canvas.width*.55,canvas.y+canvas.height*.5,{steps:5});await page.mouse.move(canvas.x+canvas.width*.5,canvas.y+canvas.height*.5,{steps:5});await page.mouse.up();assert.ok(await page.locator('#detail').isHidden(),'out-and-back orbit drag must not select');
+
  await page.evaluate(()=>window.reefQA.inspectWater());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'water-above.png')});
  await page.evaluate(()=>window.reefQA.inspectRear());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'rear-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectSand());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'sand-closeup.png')});
@@ -75,6 +85,8 @@ try{
  await page.evaluate(()=>window.reefQA.inspectAnemones());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'anemone-closeup.png')});await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForTimeout(800);await page.screenshot({path:resolve(out,'anemone-motion-a.png')});await page.waitForTimeout(1000);await page.screenshot({path:resolve(out,'anemone-motion-b.png')});await page.getByRole('button',{name:'Pause',exact:true}).click();await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);await page.screenshot({path:resolve(out,'mobile.png')});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
  const mobileCanvas=await page.locator('canvas').boundingBox();assert.ok(mobileCanvas.width<=390&&mobileCanvas.x>=0,'canvas must fit the phone width');
+ await page.touchscreen.tap(mobileCanvas.x+mobileCanvas.width*.5,mobileCanvas.y+mobileCanvas.height*.7);
+ assert.ok(await page.locator('#detail').isVisible(),'touch opens a field note');await page.screenshot({path:resolve(out,'mobile-identification.png')});await page.getByRole('button',{name:'Close detail',exact:true}).click();
  const mobileControl=await page.locator('#feed').boundingBox();assert.ok(mobileControl.x>=0&&mobileControl.x+mobileControl.width<=390&&mobileControl.y+mobileControl.height<844,'feeding remains visible on phone');
  await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForTimeout(500);assert.ok((await page.evaluate(()=>window.reefQA.snapshot())).time>after.time);
  // Actual reloads must seed different fish positions rather than repeat a film.
