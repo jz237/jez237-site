@@ -1,36 +1,15 @@
 {
-  "buildHash": "0c9c6ee00a80cb7755e3d75e43b1cf1708a28e1fd3679989924dd2e2d8e28558",
-  "files": [
-    "assets/anthias-qh5-fys7.glb",
-    "assets/chromis-ArXoNpqP.glb",
-    "assets/clown-CVwpScsO.glb",
-    "assets/gramma-4tsMCcIb.glb",
-    "assets/index-BIaYmF4A.js",
-    "assets/index-DdD2V56_.css",
-    "assets/map-BCNLyojM.png",
-    "assets/map-BeFEIA0e.png",
-    "assets/map-CwlJNp5D.png",
-    "assets/map-Ie55ijny.png",
-    "assets/normalMap-AIoBIlzs.png",
-    "assets/normalMap-CVYemK4O.png",
-    "assets/normalMap-T-Tek4aZ.png",
-    "assets/normalMap-h91MoiuH.png",
-    "assets/roughnessMap-4hZTjONg.png",
-    "assets/roughnessMap-DIiV2VjT.png",
-    "assets/roughnessMap-qepxckm-.png",
-    "assets/tang-DZS7dloZ.glb",
-    "assets/yellow-BgTFl_Sa.glb",
-    "index.html"
-  ],
-  "checkedAt": "2026-09-23T23:36:00.874Z",
-  "readyMs": 5382,
+  "readyMs": 5374,
+  "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 6.000200000000019,
-      "bites": 19,
-      "remaining": 23,
+      "fps": 59.99400059994003,
+      "time": 5.9330000000000185,
+      "bites": 14,
+      "remaining": 28,
       "anemones": {
+        "brushing": 3,
+        "maxBrush": 0.0759218033710474,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -42,97 +21,109 @@
       }
     },
     {
+      "fps": 59.99700014999249,
+      "time": 9.950000000000022,
+      "bites": 25,
+      "remaining": 17,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 3.9661587884923136e-7,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 13.967099999999977,
+      "bites": 34,
+      "remaining": 7,
+      "anemones": {
+        "brushing": 1,
+        "maxBrush": 0.04864905682851871,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0.2,
+          0,
+          0
+        ]
+      }
+    },
+    {
       "fps": 59.99400059993998,
-      "time": 10.017300000000006,
-      "bites": 38,
+      "time": 17.984099999999888,
+      "bites": 36,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0005769539883711977,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0.2,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 22.001099999999788,
+      "bites": 37,
       "remaining": 4,
       "anemones": {
-        "captured": 0,
-        "swallowed": 0,
+        "brushing": 0,
+        "maxBrush": 2.432794237593251e-12,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
+          0.18890973496375332,
           0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 14.034199999999936,
-      "bites": 39,
-      "remaining": 2,
-      "anemones": {
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0,
-          0.2,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993998,
-      "time": 18.03459999999987,
-      "bites": 39,
-      "remaining": 2,
+      "time": 26.001499999999744,
+      "bites": 37,
+      "remaining": 4,
       "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0014622980840435632,
         "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
+        "swallowed": 1,
+        "carried": 0,
         "fold": [
+          0.12125131096988556,
           0,
-          0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 22.051599999999763,
-      "bites": 39,
-      "remaining": 2,
+      "fps": 59.99100134979744,
+      "time": 30.018499999999584,
+      "bites": 37,
+      "remaining": 4,
       "anemones": {
+        "brushing": 8,
+        "maxBrush": 0.12086170997135458,
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
+          0.039326980551264934,
           0,
-          0.19735734505090924,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 26.06859999999968,
-      "bites": 40,
-      "remaining": 1,
-      "anemones": {
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0,
-          0.14232176158365603,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 30.085699999999537,
-      "bites": 40,
-      "remaining": 1,
-      "anemones": {
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0,
-          0.05860442370627703,
           0
         ]
       }
@@ -157,19 +148,19 @@
       "polyps": 242,
       "tentacles": 1944,
       "triangles": 386348,
-      "maxAttachmentError": 0.0030000000000003435
+      "maxAttachmentError": 0.003000000000000315
     },
     "canopyStats": {
       "colonies": 12,
-      "triangles": 700980
+      "triangles": 898980
     },
-    "triangles": 12123372,
+    "triangles": 14179372,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
       "rockTriangles": 95220,
       "colonies": 4,
-      "coralTriangles": 135366,
+      "coralTriangles": 178766,
       "polyps": 97,
       "tentacles": 912,
       "maxAttachmentError": 0.0030000000000001505
@@ -188,15 +179,15 @@
       "colonies": 93,
       "triangles": 93432,
       "emergentColonies": 3,
-      "emergentTriangles": 100830,
+      "emergentTriangles": 133030,
       "understoryColonies": 24,
-      "understoryTriangles": 836882,
+      "understoryTriangles": 1107082,
       "mantleColonies": 12,
       "mantleTriangles": 30052
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 398721,
+      "triangles": 527521,
       "placements": [
         [
           1,
@@ -368,48 +359,49 @@
       ]
     }
   },
+  "files": [
+    "assets/anthias-qh5-fys7.glb",
+    "assets/chromis-ArXoNpqP.glb",
+    "assets/clown-CVwpScsO.glb",
+    "assets/gramma-4tsMCcIb.glb",
+    "assets/index-C2S4tLeU.js",
+    "assets/index-DdD2V56_.css",
+    "assets/map-BCNLyojM.png",
+    "assets/map-BeFEIA0e.png",
+    "assets/map-CwlJNp5D.png",
+    "assets/map-Ie55ijny.png",
+    "assets/normalMap-AIoBIlzs.png",
+    "assets/normalMap-CVYemK4O.png",
+    "assets/normalMap-T-Tek4aZ.png",
+    "assets/normalMap-h91MoiuH.png",
+    "assets/roughnessMap-4hZTjONg.png",
+    "assets/roughnessMap-DIiV2VjT.png",
+    "assets/roughnessMap-qepxckm-.png",
+    "assets/tang-DZS7dloZ.glb",
+    "assets/yellow-BgTFl_Sa.glb",
+    "index.html"
+  ],
+  "buildHash": "6df14e5fa618fbeac6dc6387c1d9b6478fc8e54b0638e2411dd2d2f860fab79f",
+  "checkedAt": "2026-09-24T00:06:17.370Z",
+  "scope": "More visible anemone current, per-strand clownfish contact and recovery, higher visible sand banks, denser projecting branch corallites.",
   "geometryChecks": [
-    "GLB bodies, anatomy and outward normals",
-    "Anchored indexed anemone tentacles",
-    "Polyp roots, finite geometry, unsupported surfaces and motion attributes",
-    "Rock index matches 452 raycast hits",
-    "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
-    "Basal coral tissue follows slopes without bridging disconnected lower shelves",
-    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 10885320 vs 41896800 bytes",
-    "Clipped crust triangles nondegenerate; sampled support gap bounded; 63 colonies / 23489 triangles",
-    "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
-    "540 rooted twelve-sided tentacles; rounded perpendicular caps, outward seam-smoothed skin, recessed oral centers;10956384geometry bytes",
-    "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
-    "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
-    "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms",
-    "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count",
-    "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail",
-    "Curved anemone axes: worst dot0.995105; analytic flow derivatives checked; minimum sampled determinant0.619756;540strands and249600triangles",
-    "Encrusting maps: seamless wrap gradients below interior gradients; unit outward normals;637268bytes",
-    "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
-    "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
-    "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation",
-    "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief",
-    "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes",
-    "Folded anemones: nonplanar anchored roots, outward skins, recessed oral centers, curved-axis normals and positive sampled deformation determinant",
-    "Coral terminal growth: short offshoots rooted in existing branches, joined recessed axial cups, all11infill colonies and updated conservative navigation bounds",
-    "All six connected recessed oral cavities: outward cap winding, ray-tested depth, normalized vertex tissue shading, animated lip uniforms and pause invariance",
-    "Large coral basal footprint: irregular spread, local support retreat, sloping-root attachment, preserved cup seams and all11infill colonies",
-    "Sand relief: sealed perimeter, smooth banks, floor/food clearance and lower channel",
-    "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment",
-    "Three prior/current seeded fixtures retain2160RNG calls, exact states, all540phases and anchored root centers within2e-7; cap roundness and perpendicular axes independently checked",
-    "Nine outcrops:95,220source triangles; all vertices inside navigation bounds. Seven base stones buried0.035below actual sand; two upper stones overlap supports. Four ray-attached colonies:135,366source triangles.97new polyps/912tentacles:maximum attachment error0.003. Existing polyp/crust/infill statistics unchanged.",
-    "Soft polyp tissue: six paired old/new seeded gardens preserve RNG, counts and basal attachments; stony indices and original attributes unchanged. Zoanthid faces nondegenerate, seven-sided tentacles outward, closed tips and joined seam normals.61-polyp fixture167628triangles/7270712bytes versus102480triangles before.",
-    "Flank shelves: twelve ray-attached roots buried0.016 in stone. Each7448triangles/212358bytes. All faces finite/nondegenerate, closed consistently wound edges, positive signed volume; conservative bounds enclose all vertices. Existing rock/crust/infill/polyp/buttress statistics unchanged."
+    "540 anemone strands retained; 15,538,212 geometry bytes and8,656byte spring texture",
+    "Worst sampled simultaneous feeding/brush deformation determinant0.0947; anchored roots",
+    "Physical local contact, unrelated host unchanged, frozen time, spring recovery",
+    "91300triangle coral fixture3125742bytes; recessed mouths and attached footprints within1.492e-8",
+    "All original colony and inhabitant counts retained; rendered triangles12123372 to14179372",
+    "Sand height0.1696-0.5470, maximum slope0.8553, sealed perimeter; fish/food/shadows use matching terrain",
+    "Full existing fish/reef geometry, feeding, navigation, lighting and browser tests passed"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "lower rock macro",
-    "rear reflection",
-    "rendered depth test",
-    "reference-comparison.md"
+    "sand macro",
+    "coral macro",
+    "clown-brush-motion-0 through7",
+    "original reef reference",
+    "mature planted aquarium and reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -417,48 +409,12 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Depth-attenuated rear-glass reflections and finer multi-scale porous shading on lower live rock; existing geometry, colonies, fish and capture cadence retained.",
-  "shadowFrames": 60,
-  "respirationRenderChecks": {
-    "errors": [],
-    "report": [
-      {
-        "species": "tang",
-        "changedPixels": 2118,
-        "meanChange": 67.94995278564684
-      },
-      {
-        "species": "yellow",
-        "changedPixels": 2312,
-        "meanChange": 146.22102076124568
-      },
-      {
-        "species": "clown",
-        "changedPixels": 1390,
-        "meanChange": 62.91654676258993
-      },
-      {
-        "species": "anthias",
-        "changedPixels": 751,
-        "meanChange": 109.78428761651132
-      },
-      {
-        "species": "chromis",
-        "changedPixels": 658,
-        "meanChange": 58.37234042553192
-      },
-      {
-        "species": "gramma",
-        "changedPixels": 1145,
-        "meanChange": 82.71004366812227
-      }
-    ]
-  },
   "performanceComparison": {
-    "baseline": "e492fcebc",
-    "loadPrior": 5081,
-    "loadCurrent": 4792,
-    "fpsPrior": 206.2,
-    "fpsCurrent": 200
+    "baseline": "335f09832",
+    "loadPrior": 5664,
+    "loadCurrent": 5526.5,
+    "fpsPrior": 133.5,
+    "fpsCurrent": 137.2,
+    "interpretation": "Both capped runs about60FPS. Uncapped samples vary substantially; averages do not establish a performance gain."
   }
 }

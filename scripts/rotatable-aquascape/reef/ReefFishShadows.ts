@@ -21,10 +21,11 @@ export class ReefFishShadows {
     float left=exp(-(pow(x+2.95+sin(z*1.8)*.16,2.)/1.65+pow(z-.1,2.)/3.2));
     float right=exp(-(pow(x-2.55-sin(z*1.5)*.23,2.)/2.15+pow(z-.2,2.)/3.5));
     float toe=exp(-(pow(x-.7,2.)/.4+pow(z-1.43,2.)/.4));
-    float bank=min(1.,left+right+toe*.42),edge=min(1.,min(max(0.,(5.03-abs(x))*4.),max(0.,(2.305-abs(z))*4.)));
+    float bank=min(1.,left+right+toe*.42),edge=min(1.,min(max(0.,(5.03-abs(x))*1.25),max(0.,(2.305-abs(z))*1.25)));
     float phase=z*11.4+x*.85+sin(x*1.9)*.65;
-    float dunes=.115*exp(-(pow(x+1.85,2.)/.85+pow(z-1.42,2.)/.32))+.14*exp(-(pow(x-1.48,2.)/.65+pow(z-1.58,2.)/.26))+.09*exp(-(pow(x+3.85,2.)/.45+pow(z-.98,2.)/.30));
-    return .18+edge*edge*(3.-2.*edge)*(bank*.14+dunes+(sin(phase)+sin(phase*2.+.7)*.22)*(.010+bank*.008)+sin(x*2.1+z*.7)*cos(z*1.6)*.009);
+    float dunes=.24*exp(-(pow(x+1.85,2.)/1.05+pow(z-1.42,2.)/.48))+.26*exp(-(pow(x-1.48,2.)/.85+pow(z-1.58,2.)/.44))+.20*exp(-(pow(x+3.85,2.)/.70+pow(z-.98,2.)/.44));
+    float tongue=.10*exp(-(pow(x+.18,2.)/1.4+pow(z-1.52,2.)/.40));
+    return .18+edge*edge*(3.-2.*edge)*(bank*.22+dunes+tongue+(sin(phase)+sin(phase*2.+.7)*.22)*(.010+bank*.008)+sin(x*2.1+z*.7)*cos(z*1.6)*.009);
    }
    void main(){v=uv;strength=shadowOpacity;vec4 p=modelMatrix*instanceMatrix*vec4(position,1.);p.y=bed(p.xz)+.006;world=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}`,
    fragmentShader:`varying vec2 v;varying vec3 world;varying float strength;uniform float daylight;

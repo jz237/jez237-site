@@ -11,10 +11,9 @@ for(const g of all){assert.ok(g.index,'keep shared vertices');triangles+=g.index
 }
 const normal=plate.getAttribute('normal'),p=plate.getAttribute('position'),half=p.count/2;let up=0,down=0;
 for(let i=0;i<half;i++){up+=normal.getY(i);down+=normal.getY(i+half);}assert.ok(up/half>.65&&down/half<-.65,'plate surfaces face outwards');
-// Reviewed crown adds 61 short attached shoots in this fixture: 2,599,454 bytes
-// versus 2,417,918 before. All original branches/cups remain, and the total is
-// still below the original 2,674,320-byte expanded fixture.
-assert.ok(bytes<2650000,'denser indexed colony and plate stay inside their reviewed memory budget');
+// Staggered radial cups add 526,288 bytes to the 2,599,454-byte fixture.
+// Keep all original branches, axial cups and plate detail; bound the added layer.
+assert.ok(bytes<3150000,'projecting radial cups stay inside reviewed memory budget');
 console.log('Stony coral geometry passed:',triangles,'triangles,',bytes,'bytes, outward plate tissue and smooth branch seams.');
 
 // A coral foot follows a slope without bridging a separate lower shelf.
@@ -144,3 +143,18 @@ for(const level of [0,1,2])for(const cup of radialCorallites(tube,level,1.7,new 
  for(const a of Object.values(cup.attributes))assert.ok(a.array.every(Number.isFinite));
 }
 console.log('Radial corallite attachment passed: maximum footprint distance',worstGap);
+
+// Projecting side cups must have genuine recessed mouths and a nonzero,
+// consistently wound skin, not detached beads or flat normal-map dots.
+for (const level of [0,1,2]) for(const cup of radialCorallites(tube,level,1.7,new T.Color(.2,.3,.4),new T.Color(.8,.7,.6))){
+ const p=cup.getAttribute('position'),idx=cup.index.array,s=level<2?8:6,center=new T.Vector3(),lip=new T.Vector3();
+ for(let k=0;k<s;k++){center.add(new T.Vector3().fromBufferAttribute(p,k));lip.add(new T.Vector3().fromBufferAttribute(p,s+1+k));}
+ center.divideScalar(s);lip.divideScalar(s);const rise=lip.clone().sub(center),floor=new T.Vector3().fromBufferAttribute(p,p.count-1);
+ assert.ok(rise.length()>.004,'lip must stand proud of the branch');
+ assert.ok(floor.clone().sub(center).dot(rise)<rise.lengthSq()*.85,'mouth floor recessed below lip');
+ const edges=new Map();
+ for(let i=0;i<idx.length;i+=3){const a=new T.Vector3().fromBufferAttribute(p,idx[i]),b=new T.Vector3().fromBufferAttribute(p,idx[i+1]),c=new T.Vector3().fromBufferAttribute(p,idx[i+2]);assert.ok(b.sub(a).cross(c.sub(a)).lengthSq()>1e-18);
+  for(let j=0;j<3;j++){const key=[idx[i+j],idx[i+(j+1)%3]].sort((a,b)=>a-b).join(':');edges.set(key,(edges.get(key)||0)+1);}}
+ assert.ok([...edges.values()].every(n=>n<=2),'no nonmanifold cup faces');
+}
+console.log('Radial lip relief passed: recessed mouths, projecting lips, nondegenerate indexed skins.');

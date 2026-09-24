@@ -6,7 +6,7 @@ import {topSurfaceSampler} from '../RockSurface.ts';
 const seeded=seed=>()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};
 const detail=reefButtresses(seeded(2309231920));
 assert.equal(detail.stats.rocks,9);assert.equal(detail.stats.colonies,4);
-assert.equal(detail.stats.rockTriangles,95220);assert.ok(detail.stats.coralTriangles<150000);
+assert.equal(detail.stats.rockTriangles,95220);assert.ok(detail.stats.coralTriangles<180000);
 assert.ok(detail.stats.polyps>80);assert.ok(detail.stats.tentacles>800);
 assert.ok(detail.stats.maxAttachmentError<.00301);
 for(let index=0;index<detail.rocks.length;index++){
