@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs
 import { join } from 'node:path';
 import { createRelay } from './relay.mjs';
 import { createShipFeed } from './ships.mjs';
+import { createTunnelWatch } from './tunnel-watch.mjs';
 
 const root = process.argv[2];
 if (!root) throw new Error('Specify the private relay installation directory');
@@ -15,7 +16,7 @@ function log(message) {
   if (++logLines > 1000) { writeFileSync(logPath, ''); logLines = 0; }
   appendFileSync(logPath, `${new Date().toISOString()} ${message}\n`);
 }
-let stopping = false, tunnel, restartTimer, registerTimer, currentOrigin, lastUpdate;
+let stopping = false, tunnel, restartTimer, registerTimer, currentOrigin, lastUpdate, tunnelWatch;
 const ships = createShipFeed({ key: config.aisKey });
 const server = createRelay({ token: config.token, ships, onUpdate: value => {
   lastUpdate = value;
@@ -32,6 +33,8 @@ async function register(origin) {
     await response.body?.cancel();
     if (response.status !== 204) { log(`Tunnel registration HTTP ${response.status}`); throw new Error('Registration unavailable'); }
     log('Tunnel connected and registered; waiting for map requests');
+    // Refresh the mapping occasionally, without polling the aircraft provider.
+    if (!stopping && currentOrigin === origin) registerTimer = setTimeout(() => { void register(origin); }, 900000);
   } catch {
     if (!stopping && currentOrigin === origin) registerTimer = setTimeout(() => { void register(origin); }, 30000);
   }
@@ -43,6 +46,25 @@ function startTunnel() {
   tunnel = spawn(join(root, 'cloudflared.exe'), ['tunnel', '--no-autoupdate', '--url',
     `http://127.0.0.1:${config.port}`, '--metrics', '127.0.0.1:8938'],
     { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+  const child = tunnel;
+  tunnelWatch?.dispose();
+  tunnelWatch = createTunnelWatch({
+    probe: async () => {
+      if (!currentOrigin) return false;
+      const response = await fetch(`${currentOrigin}/health`, {
+        headers: { Authorization: `Bearer ${config.token}` },
+        redirect: 'error', signal: AbortSignal.timeout(10000),
+      });
+      await response.body?.cancel();
+      return response.status === 204 && response.headers.get('X-Philadelphia-Aircraft-Relay') === '1';
+    },
+    restart: () => {
+      if (!stopping && child === tunnel) {
+        log('Tunnel health failed three times; replacing disconnected tunnel');
+        child.kill();
+      }
+    },
+  });
   let buffer = '';
   function inspect(chunk) {
     const received = buffer + chunk.toString();
@@ -59,6 +81,7 @@ function startTunnel() {
   tunnel.stdout.on('data', inspect); tunnel.stderr.on('data', inspect);
   tunnel.on('error', () => log('Tunnel process could not start'));
   tunnel.on('close', () => {
+    tunnelWatch?.dispose();
     clearTimeout(registerTimer); currentOrigin = null;
     if (!stopping) { log('Tunnel disconnected; retrying in 30 seconds'); restartTimer = setTimeout(startTunnel, 30000); }
   });
@@ -66,6 +89,7 @@ function startTunnel() {
 function stop() {
   if (stopping) return; stopping = true;
   clearTimeout(registerTimer); clearTimeout(restartTimer); tunnel?.kill();
+  tunnelWatch?.dispose(); clearInterval(healthTimer);
   ships.dispose();
   server.close(); server.closeAllConnections();
   writeFileSync(join(root, 'status.json'), JSON.stringify({ running: false, lastUpdate }));
@@ -73,6 +97,8 @@ function stop() {
 }
 // A local file switch allows the stop shortcut to shut down both processes cleanly.
 setInterval(() => { if (existsSync(join(root, 'stop'))) stop(); }, 1000).unref();
+const healthTimer = setInterval(() => { void tunnelWatch?.check(); }, 60000);
+healthTimer.unref();
 process.on('SIGINT', stop); process.on('SIGTERM', stop); process.on('exit', () => tunnel?.kill());
 server.listen(config.port, '127.0.0.1', () => {
   writeFileSync(join(root, 'status.json'), JSON.stringify({ running: true, status: 'idle' }));

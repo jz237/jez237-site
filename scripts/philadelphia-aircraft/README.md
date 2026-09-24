@@ -2,7 +2,11 @@
 
 Experimental, free hobby relay for the Philadelphia diorama. Requires Node 20+
 and the official Windows cloudflared executable. Installation is a private copy
-under `%LOCALAPPDATA%\PhiladelphiaReliefAircraft`, not a web-served directory.
+under `%USERPROFILE%\.philadelphia-relief-aircraft`, not a web-served directory.
+Do not install in `%LOCALAPPDATA%`: packaged Codex can redirect it into its MSIX
+LocalCache, invisible at the same path to Windows startup and scheduled tasks.
+This caused the September 24 recurring offline failure. Use the stable profile
+path for every task and shortcut and verify task execution outside Codex.
 
 `run.mjs` binds only to `127.0.0.1:8937`, starts a free Quick Tunnel, and registers
 the tunnel with `workers/philly-aircraft-relay`. If cloudflared exits it restarts
@@ -18,9 +22,8 @@ and aircraft requests both require the secret. Redirects are rejected.
 
 Use the **Start Philadelphia Aircraft** shortcut to launch it invisibly, and
 **Stop Philadelphia Aircraft** to stop the helper and tunnel. Installation may
-also add the start shortcut to the current user's Windows Startup folder. Stop
-lasts until manually started or the next sign-in; remove the Startup shortcut
-to disable automatic startup. The relay does not prevent Windows from sleeping.
+also add the recovery task for the current user. Stop lasts until manually
+started again, including across sign-ins. The relay does not prevent Windows from sleeping.
 
 Only `/health`, `/aircraft` and `/ships` exist; all need authentication. The aircraft route
 has one hardcoded provider and region, rejects query strings and non-GET methods,
@@ -45,6 +48,29 @@ secret, and remove the dedicated gateway Worker and KV namespace. Removing only
 the Pages secret reverts to direct provider requests, which may still be blocked.
 
 Tests: `node --test demos/philadelphia-relief/tests/aircraft-relay.test.js`.
+
+## Automatic recovery
+
+Copy the updated `start.ps1`, `run.mjs`, `watchdog.mjs`, and `tunnel-watch.mjs` into the private
+installation and run `install-watchdog.ps1`. The user-session Windows task
+`Philadelphia Relief Aircraft Recovery` checks the local authenticated health
+endpoint every two minutes and starts a missing helper. It runs hidden, without
+elevation, saved passwords or waking the PC. The Stop shortcut's file prevents
+scheduled restarts; manual Start clears it. The same recovery check runs at sign-in.
+Remove this task when uninstalling the relay. Retire the legacy Startup shortcut
+when migrating from the redirected AppData installation.
+
+The helper checks its tunnel health once a minute and replaces the tunnel after
+three consecutive failures, including a tunnel process that stayed alive but
+lost connectivity. Registration refreshes every 15 minutes. These checks never
+request aircraft or ships; provider polling remains demand-driven. Provider
+outages, a sleeping/offline PC, and rate limits can still make the feed unavailable.
+
+Verify real aircraft delivery with
+`node scripts/check_philly_live.mjs https://jez237.com --require-aircraft`.
+Use the same `--require-aircraft` flag with the guarded Pages deployment command
+for aircraft repairs. A working POST error response alone does not prove that
+the GET feed or the home helper is working.
 
 ## Optional ship feed
 
