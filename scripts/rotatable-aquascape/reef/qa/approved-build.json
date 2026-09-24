@@ -1,15 +1,15 @@
 {
-  "readyMs": 12884,
+  "readyMs": 8087,
   "shadowFrames": 60,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 7.518900000095394,
-      "bites": 17,
-      "remaining": 28,
+      "time": 6.85610000000002,
+      "bites": 9,
+      "remaining": 36,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.09532777453926983,
+        "brushing": 0,
+        "maxBrush": 0.004782244977337445,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,18 +21,18 @@
       }
     },
     {
-      "fps": 51.4248982215556,
-      "time": 11.552600000095367,
-      "bites": 28,
-      "remaining": 16,
+      "fps": 59.994000599940094,
+      "time": 10.8731,
+      "bites": 25,
+      "remaining": 20,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.0000014774368344057252,
-        "captured": 1,
+        "maxBrush": 1.5862557009796888e-11,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
-          0.010662399999999878,
+          0,
           0,
           0
         ]
@@ -40,90 +40,90 @@
     },
     {
       "fps": 59.99700014999244,
-      "time": 15.586300000095317,
+      "time": 14.890199999999972,
       "bites": 36,
-      "remaining": 7,
+      "remaining": 8,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.04830338453812202,
-        "captured": 2,
+        "brushing": 0,
+        "maxBrush": 4.543115026676936e-20,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 19.593400000095254,
-      "bites": 37,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 13,
-        "maxBrush": 0.1433962996090602,
-        "captured": 2,
-        "swallowed": 1,
         "carried": 1,
         "fold": [
-          0.2,
+          0,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 55.37609598523304,
-      "time": 23.610400000095126,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99400059993998,
+      "time": 18.907199999999914,
+      "bites": 36,
+      "remaining": 8,
       "anemones": {
-        "brushing": 3,
-        "maxBrush": 0.1209006132455475,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
+        "brushing": 1,
+        "maxBrush": 0.028018355379613096,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
         "fold": [
-          0.18428742053681813,
-          0.19644200612588095,
+          0,
+          0.2,
           0
         ]
       }
     },
     {
       "fps": 59.99700014999255,
-      "time": 27.660600000094988,
-      "bites": 37,
+      "time": 22.924099999999846,
+      "bites": 38,
       "remaining": 6,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.06272264464783316,
-        "captured": 2,
-        "swallowed": 2,
+        "brushing": 5,
+        "maxBrush": 0.0869305384653572,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.1115910757889294,
-          0.13856236769206862,
+          0,
+          0.19513957039373284,
           0
         ]
       }
     },
     {
-      "fps": 52.167108638003675,
-      "time": 31.677800000094898,
-      "bites": 37,
+      "fps": 59.99400059993988,
+      "time": 26.941299999999725,
+      "bites": 38,
       "remaining": 6,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.0027894409226713215,
-        "captured": 2,
-        "swallowed": 2,
+        "maxBrush": 0.000011357636570949224,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.031649510592865915,
-          0.05489079134516231,
+          0,
+          0.13534514733303277,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.98800239952005,
+      "time": 30.95839999999961,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.011274095333163852,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.051814395482219625,
           0
         ]
       }
@@ -132,15 +132,15 @@
   "identification": [
     {
       "title": "Reef sand",
-      "ms": 856
+      "ms": 534
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 870
+      "ms": 541
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 1058
+      "ms": 739
     }
   ],
   "checks": {
@@ -184,7 +184,7 @@
       "colonies": 12,
       "triangles": 934149
     },
-    "triangles": 18161084,
+    "triangles": 18577724,
     "inhabitants": 21,
     "buttressStats": {
       "rocks": 9,
@@ -397,7 +397,7 @@
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-GQSzmYbK.js",
+    "assets/index-u2aLvpUK.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,61 +414,47 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "4c03b4b38abb023b8b3c4a5b9e25018f15b689d4ce09a1c7ecf46d5e7ef3719a",
-  "checkedAt": "2026-09-24T15:04:01.829Z",
-  "scope": "Restore dense live-rock coverage behind the inner arch beside the right anemone",
-  "visualReview": [
-    "Compared before/after front crops of the exact exposed-glass area",
-    "Inspected full front, oblique, anemone close-up and mobile views; new backing stays behind the existing foreground arch and central sand channel"
-  ],
-  "geometryReview": {
-    "before": {
-      "rocks": 7,
-      "rockTriangles": 74060,
-      "crusts": 62,
-      "colonies": 5,
-      "polyps": 71,
-      "tentacles": 480,
-      "triangles": 464514
-    },
-    "after": {
-      "rocks": 10,
-      "rockTriangles": 105800,
-      "crusts": 86,
-      "colonies": 8,
-      "polyps": 109,
-      "tentacles": 864,
-      "triangles": 726890
-    },
-    "originalGeometryPreserved": true,
-    "coverageBefore": {
-      "hits": 17,
-      "total": 187,
-      "ratio": 0.09090909090909091
-    },
-    "coverageAfter": {
-      "hits": 182,
-      "total": 187,
-      "ratio": 0.9732620320855615
-    }
+  "buildHash": "568b4996f5a2354c9d4330c93e02b289d7f5f69750c9747b9357e70e7147aa52",
+  "checkedAt": "2026-09-24T15:34:32.386Z",
+  "scope": "More colorful attached life across all live rock, including the new anemone backing",
+  "microLifeStats": {
+    "cups": 3720,
+    "triangles": 208320,
+    "rocks": 48
   },
-  "plantedReleaseAndSyncPassed": true,
-  "hiddenReefFilesChanged": false,
-  "publication": [
-    "jez237.com",
-    "GitHub"
+  "visualReview": [
+    "Before/after front and targeted backing crop inspected",
+    "Oblique, close-up and mobile views inspected: substantially richer pink/violet coralline cover with teal and golden patches; cavities remain visible",
+    "3,720 small sculpted cups distributed over 48 rocks; individual roots tested against real support triangles"
   ],
   "performanceComparison": {
-    "baseline": "a02e4895b",
-    "priorFPS": 59.50422957114144,
-    "currentFPS": 59.502778514870414,
-    "priorReadyMs": 13067,
-    "currentReadyMs": 13342,
+    "baseline": "c7947afad",
+    "priorFPS": 59.995500374966234,
+    "currentFPS": 59.995500374966234,
+    "priorReadyMs": 9198,
+    "currentReadyMs": 8487.5,
     "observations": [
       {
         "version": "current",
-        "readyMs": 13102,
-        "fps": 59.01155642980084,
+        "readyMs": 7887,
+        "fps": 59.99400059993998,
+        "triangles": 18577724,
+        "drawCalls": 1,
+        "drawOrderStats": {
+          "meshes": 7,
+          "triangles": 8868815
+        },
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      },
+      {
+        "version": "prior",
+        "readyMs": 8857,
+        "fps": 59.99700014999249,
         "triangles": 18161084,
         "drawCalls": 1,
         "drawOrderStats": {
@@ -484,30 +470,13 @@
       },
       {
         "version": "prior",
-        "readyMs": 13736,
+        "readyMs": 9539,
         "fps": 59.99400059993998,
-        "triangles": 17636332,
+        "triangles": 18161084,
         "drawCalls": 1,
         "drawOrderStats": {
           "meshes": 7,
-          "triangles": 8398119
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 12398,
-        "fps": 59.01445854234289,
-        "triangles": 17636332,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8398119
+          "triangles": 8660495
         },
         "canvas": {
           "x": 0,
@@ -518,13 +487,13 @@
       },
       {
         "version": "current",
-        "readyMs": 13582,
-        "fps": 59.99400059993998,
-        "triangles": 18161084,
+        "readyMs": 9088,
+        "fps": 59.99700014999249,
+        "triangles": 18577724,
         "drawCalls": 1,
         "drawOrderStats": {
           "meshes": 7,
-          "triangles": 8660495
+          "triangles": 8868815
         },
         "canvas": {
           "x": 0,
@@ -533,7 +502,12 @@
           "height": 854
         }
       }
-    ],
-    "interpretation": "Serial alternating runs; true 3D rear growth adds262376source triangles and no material batches. Small timing samples are regression checks, not a speed improvement claim."
-  }
+    ]
+  },
+  "plantedReleaseAndSyncPassed": true,
+  "hiddenReefFilesChanged": false,
+  "publication": [
+    "jez237.com",
+    "GitHub"
+  ]
 }

@@ -1,0 +1,70 @@
+[
+  {
+    "version": "current",
+    "readyMs": 7887,
+    "fps": 59.99400059993998,
+    "triangles": 18577724,
+    "drawCalls": 1,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8868815
+    },
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 8857,
+    "fps": 59.99700014999249,
+    "triangles": 18161084,
+    "drawCalls": 1,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8660495
+    },
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 9539,
+    "fps": 59.99400059993998,
+    "triangles": 18161084,
+    "drawCalls": 1,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8660495
+    },
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 9088,
+    "fps": 59.99700014999249,
+    "triangles": 18577724,
+    "drawCalls": 1,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8868815
+    },
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  }
+]

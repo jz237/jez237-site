@@ -800,3 +800,11 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Inspected actual before/after gap crops, full front, three-quarter, close-up and mobile views. The broad blue opening now reads as encrusted rock behind the anemone. This is a local coverage fix, not a claim of photographic parity.
 - build:reef/check:reef passes, including feeding, movement, collisions, pause, camera controls and identification. Planted synchronization/release checks pass. Prior/current local FPS 59.5/59.5, startup 13067/13342ms. Preserve full observations.
 - Publish only to jez237 and GitHub, verify live assets and movement, and stop. The improvement automation remains deleted.
+
+
+## Colorful living rock coverage
+- Increased irregular coralline coverage across all live-rock pieces, including the ten anemone backing rocks. Pink/violet mats are broken by smaller teal, gold and olive communities, pale growth margins and shaded pores. Existing rock positions, silhouettes, baked attachment data, corals and fish behavior are preserved.
+- Added 3,720 attached sponge-like cups on 48 rock pieces. Basal rings lie inside their supporting triangle incircles, with rounded asymmetric shoulders and recessed openings. Added identification notes and root-contact geometry regression checks. No new material batches or texture downloads.
+- Before/after evidence: rock-color-{before,after}-{front,gap,angle,closeup,mobile}.png. Actual visual inspection found much denser color on both islands and behind the right anemone, while caves and the central sand channel remain legible. This is an improvement toward the reference's mixed encrusting detail, not a claim of photographic realism.
+- build:reef/check:reef and planted synchronization/release checks passed. 208,320 added source triangles, 18,577,724 total rendered triangles, same seven opaque batches. Serial FPS 60.0 before / 60.0 after; startup 9198 / 8487.5 ms.
+- Publish only to jez237 and GitHub, verify live assets and movement, then stop. Automation remains deleted.
