@@ -210,7 +210,7 @@ export class World {
     ground.receiveShadow = true;
     this.root.add(ground);
     // water: one flat animated sheet per body of water
-    this.waterMat = waterMaterial(this.tex.ground.normal, this.amb.water);
+    this.waterMat = waterMaterial(this.tex.ground.normal, this.amb.water, this.terrain.waters.some(w => w.murky));
     for (const w of this.terrain.waters) {
       let m;
       if (w.t === 'band') {
