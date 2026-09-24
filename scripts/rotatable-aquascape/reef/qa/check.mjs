@@ -1,4 +1,5 @@
 import './identification.mjs';
+import './picking.mjs';
 import './draw-order.mjs';
 import './anemone-backdrop.mjs';
 import './rock-ray-index.mjs';

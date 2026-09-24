@@ -1,15 +1,15 @@
 {
-  "readyMs": 8087,
+  "readyMs": 9818,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 6.85610000000002,
-      "bites": 9,
-      "remaining": 36,
+      "fps": 59.99999999999994,
+      "time": 6.903300000095386,
+      "bites": 10,
+      "remaining": 35,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.004782244977337445,
+        "brushing": 2,
+        "maxBrush": 0.03211809537618041,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,109 +21,109 @@
       }
     },
     {
-      "fps": 59.994000599940094,
-      "time": 10.8731,
+      "fps": 58.52802028971372,
+      "time": 10.970500000095374,
       "bites": 25,
-      "remaining": 20,
+      "remaining": 19,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 1.5862557009796888e-11,
-        "captured": 0,
+        "maxBrush": 1.2472721852080146e-8,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 0,
+        "carried": 1,
         "fold": [
-          0,
+          0.006342739520946882,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999244,
-      "time": 14.890199999999972,
-      "bites": 36,
+      "fps": 59.01155642980084,
+      "time": 15.004100000095349,
+      "bites": 35,
       "remaining": 8,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 4.543115026676936e-20,
-        "captured": 1,
+        "brushing": 9,
+        "maxBrush": 0.10578590069360329,
+        "captured": 2,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 2,
         "fold": [
-          0,
+          0.2,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 18.907199999999914,
+      "fps": 59.99999999999999,
+      "time": 19.021200000095313,
       "bites": 36,
-      "remaining": 8,
+      "remaining": 7,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.028018355379613096,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 22.924099999999846,
-      "bites": 38,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.0869305384653572,
-        "captured": 1,
+        "brushing": 7,
+        "maxBrush": 0.05464873558156706,
+        "captured": 2,
         "swallowed": 1,
+        "carried": 1,
+        "fold": [
+          0.2,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 60.000000000000114,
+      "time": 23.038100000095227,
+      "bites": 40,
+      "remaining": 3,
+      "anemones": {
+        "brushing": 7,
+        "maxBrush": 0.1280577054318156,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.19513957039373284,
+          0.1851736753417813,
+          0.19489621623536657,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993988,
-      "time": 26.941299999999725,
-      "bites": 38,
-      "remaining": 6,
+      "time": 27.055200000095095,
+      "bites": 40,
+      "remaining": 3,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.000011357636570949224,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 11,
+        "maxBrush": 0.1258056132940891,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.13534514733303277,
+          0.11385879674647022,
+          0.13467397956279645,
           0
         ]
       }
     },
     {
-      "fps": 59.98800239952005,
-      "time": 30.95839999999961,
-      "bites": 38,
-      "remaining": 6,
+      "fps": 60.00300015000767,
+      "time": 31.072100000094963,
+      "bites": 40,
+      "remaining": 3,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.011274095333163852,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 7,
+        "maxBrush": 0.1112507953078314,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.051814395482219625,
+          0.03339282245233732,
+          0.05118707395816924,
           0
         ]
       }
@@ -132,15 +132,15 @@
   "identification": [
     {
       "title": "Reef sand",
-      "ms": 534
+      "ms": 6
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 541
+      "ms": 6
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 739
+      "ms": 15
     }
   ],
   "checks": {
@@ -396,8 +396,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
+    "assets/index-C0BYSiKu.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-u2aLvpUK.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,95 +414,43 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "568b4996f5a2354c9d4330c93e02b289d7f5f69750c9747b9357e70e7147aa52",
-  "checkedAt": "2026-09-24T15:34:32.386Z",
-  "scope": "More colorful attached life across all live rock, including the new anemone backing",
+  "buildHash": "fcad97d83a27013b05ef8235077cd4c986d106575b8860d8fcfd4e4a5f5f56a3",
+  "checkedAt": "2026-09-24T16:15:47.216Z",
+  "scope": "Exact spatial picking, one-pass geometry batches and earlier texture requests",
+  "pickingStats": {
+    "meshes": 7,
+    "blocks": 34647,
+    "bytes": 1663056
+  },
   "microLifeStats": {
     "cups": 3720,
     "triangles": 208320,
     "rocks": 48
   },
   "visualReview": [
-    "Before/after front and targeted backing crop inspected",
-    "Oblique, close-up and mobile views inspected: substantially richer pink/violet coralline cover with teal and golden patches; cavities remain visible",
-    "3,720 small sculpted cups distributed over 48 rocks; individual roots tested against real support triangles"
+    "Before/after front views inspected: unchanged rock/coral placement, materials, sand, water and reflections; fish animation phases vary",
+    "Oblique, anemone close-up and mobile inspected; fine polyp and microcolony detail retained",
+    "451 exact native-ray comparisons plus byte-identical nested/flat merge tests passed"
   ],
   "performanceComparison": {
-    "baseline": "c7947afad",
-    "priorFPS": 59.995500374966234,
-    "currentFPS": 59.995500374966234,
-    "priorReadyMs": 9198,
-    "currentReadyMs": 8487.5,
-    "observations": [
-      {
-        "version": "current",
-        "readyMs": 7887,
-        "fps": 59.99400059993998,
-        "triangles": 18577724,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8868815
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 8857,
-        "fps": 59.99700014999249,
-        "triangles": 18161084,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8660495
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 9539,
-        "fps": 59.99400059993998,
-        "triangles": 18161084,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8660495
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "current",
-        "readyMs": 9088,
-        "fps": 59.99700014999249,
-        "triangles": 18577724,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8868815
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      }
-    ]
+    "baseline": "1146f2a4e / index-u2aLvpUK.js",
+    "prior": {
+      "readyMs": 11581,
+      "fps": 59.74564930652819,
+      "clickHandlerMs": 766.9199999570847,
+      "feedbackMs": 780.0299999475479,
+      "jsHeapBytes": 1256387700
+    },
+    "current": {
+      "readyMs": 12915.5,
+      "fps": 59.50427828989666,
+      "clickHandlerMs": 4.1,
+      "feedbackMs": 18.32000002861023,
+      "jsHeapBytes": 975246057.5
+    },
+    "runs": 4,
+    "method": "Serial desktop Chrome, prior/current/current/prior, seeded fish, full visual detail; local HTTP, no throttling. Five pointer selections per run. Handler timings are not field INP.",
+    "loadCaveat": "Ready time varied 10.7–14.4 seconds under host memory pressure. Current average was 11.5% slower; no reliable overall load-time gain claimed. One current run spent 3.3 seconds before reef construction. Texture requests now start before construction, and repeated geometry copies are removed."
   },
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,

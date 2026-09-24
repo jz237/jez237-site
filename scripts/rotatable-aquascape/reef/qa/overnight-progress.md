@@ -808,3 +808,12 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Before/after evidence: rock-color-{before,after}-{front,gap,angle,closeup,mobile}.png. Actual visual inspection found much denser color on both islands and behind the right anemone, while caves and the central sand channel remain legible. This is an improvement toward the reference's mixed encrusting detail, not a claim of photographic realism.
 - build:reef/check:reef and planted synchronization/release checks passed. 208,320 added source triangles, 18,577,724 total rendered triangles, same seven opaque batches. Serial FPS 60.0 before / 60.0 after; startup 9198 / 8487.5 ms.
 - Publish only to jez237 and GitHub, verify live assets and movement, then stop. Automation remains deleted.
+
+
+## Performance: exact picking and startup allocation
+- Profiled live Chrome: page-shell LCP 111 ms and CLS 0, but these omit the long aquarium construction. Live selection handlers blocked 0.87–0.96 seconds. No field INP data.
+- Added compact bounds for 256-triangle blocks after mesh ordering. Native intersection math and face labels are retained; seven meshes use 1.66 MB of bounds. 451 rays match native results, including transformed geometry and mutation fallback.
+- Material batches now merge once after all additions instead of repeatedly copying full islands. Texture requests begin alongside model downloads before synchronous construction. All 18,577,724 rendered triangles, texture assets, fish behavior and detail are retained.
+- Four alternating serial runs: mean click handler 766.9 -> 4.1 ms; feedback 780.0 -> 18.3 ms; FPS 59.7 -> 59.5; observed JS heap 1256 -> 975 MB.
+- Startup 11581 -> 12915.5 ms averaged across noisy runs; no overall load speedup claimed. Largest remaining bottleneck is synchronous reef construction (~8.6–9 seconds) and mesh ordering (~1.1 seconds). A future worker/prebuilt geometry pipeline could address it without dropping detail, but requires separate memory/transfer and asset-size validation.
+- Evidence: performance-comparison.json and performance-{before,after}-{front,gap,angle,closeup,mobile}.png. Full build/check:reef and planted release/sync gates passed. Automation remains off; publish verified change to jez237/GitHub and stop.

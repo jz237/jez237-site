@@ -53,12 +53,18 @@ function texture(kind:'rock'|'sand'|'coral'){
  }
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;return t;
 }
-function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,name:string){
- if(!geometries.length)return;const geometry=mergeIdentified(geometries);geometries.forEach(g=>g.dispose());const mesh=new T.Mesh(geometry,material);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
-}
-export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
+export function loadReefAssets(){return {rockMaps:limestoneMaps(),coralMaps:coralSurfaceMaps(),crustMaps:encrustingSurfaceMaps(),plateMaps:plateSurfaceMaps()};}
+export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=loadReefAssets()){
+ // Keep the original parts until attachments have finished, then allocate each
+ // final material batch once. Repeatedly copying whole coral islands stalls
+ // startup and briefly retains several copies of their large vertex buffers.
+ const pending=new Map<T.Mesh,T.BufferGeometry[]>();
+ const batch=(parts:T.BufferGeometry[],material:T.Material,parent:T.Group,name:string)=>{
+  if(!parts.length)return;
+  const mesh=new T.Mesh(new T.BufferGeometry(),material);pending.set(mesh,parts.slice());mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
+ };
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
- const rockMaps=limestoneMaps(),coralMaps=coralSurfaceMaps(),crustMaps=encrustingSurfaceMaps(),plateMaps=plateSurfaceMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
+ const {rockMaps,coralMaps,crustMaps,plateMaps}=assets,sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=finishRockMaterial(new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true}));
  const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],massiveCorals:T.BufferGeometry[]=[],plates:T.BufferGeometry[]=[];
@@ -116,7 +122,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
   }
  }
  const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'Live rock and coralline algae','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
- const rockGeometry=rockMesh.geometry,rockStats={triangles:rockGeometry.index!.count/3,bufferBytes:Object.values(rockGeometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockGeometry.index!.array.byteLength,expandedBufferBytes:rockGeometry.index!.count*11*4};
+ const rockStats={triangles:0,bufferBytes:0,expandedBufferBytes:0};
  const rockObstacleCount=obstacles.length;
  const branch=(x:number,y:number,z:number,size:number,hue:number,rng:()=>number=random)=>{
   const base=new T.Vector3(x,y,z);attachRay.set(new T.Vector3(x,y+.32,z),new T.Vector3(0,-1,0));attachRay.far=.95;
@@ -247,10 +253,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  // Add edge outcrops after existing gardens have attached. They share the
  // existing material batches without changing original attachment/RNG streams.
  const buttress=reefButtresses(seeded(2309231920));
- const extend=(mesh:T.Mesh,parts:T.BufferGeometry[])=>{
-  const old=mesh.geometry,merged=mergeIdentified([old,...parts]);
-  old.dispose();parts.forEach(g=>g.dispose());mesh.geometry=merged;
- };
+ const extend=(mesh:T.Mesh,parts:T.BufferGeometry[])=>{pending.get(mesh)!.push(...parts);};
  extend(rockMesh,buttress.rocks);extend(hard,buttress.corals);extend(zoo,buttress.gardens);
  obstacles.push(...buttress.obstacles);
  const feet=reefFootGardens(seeded(2309232345));
@@ -271,6 +274,8 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments){
  extend(rockMesh,backdrop.rocks);extend(massive,backdrop.crusts);extend(hard,[microLife.geometry,...backdrop.corals]);extend(zoo,backdrop.gardens);
  obstacles.push(...backdrop.obstacles);
  const anemoneBackdropStats=backdrop.stats;
+ for(const [mesh,parts] of pending){mesh.geometry.dispose();mesh.geometry=mergeIdentified(parts);for(const part of parts)part.dispose();}
+ pending.clear();
  rockStats.triangles=rockMesh.geometry.index!.count/3;
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
