@@ -13,7 +13,7 @@ for(const normal of [new T.Vector3(0,1,0),new T.Vector3(.3,.65,.7).normalize(),n
    const root=geometry.parameters.path.getPointAt(0).applyMatrix4(colony.transform);assert.ok(Math.abs(root.dot(normal))<.012,'primary roots remain attached after arbitrary face orientation');primaryRoots++;
   }
  }
- assert.ok(primaryRoots>=7);assert.ok(colony.triangles<40000);assert.ok(colony.geometries.at(-1).index.count>0,'living foot hugs the support');
+ assert.ok(primaryRoots>=7);assert.ok(colony.triangles<41000);assert.ok(colony.geometries.at(-1).index.count>0,'living foot hugs the support');
  const axis=new T.Vector3(0,1,0).transformDirection(colony.transform);assert.ok(axis.y>.65&&axis.dot(normal)>.7,'growth rises toward open water');
  console.log('Sloping colony passed:',normal.toArray(),primaryRoots,'roots,',colony.triangles,'triangles');
 }

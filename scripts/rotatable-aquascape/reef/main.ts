@@ -34,6 +34,7 @@ const reflections=new ReefReflections(),water=new AquariumWater(reflections);con
 const reef=buildReef(scene);
 const fishModels=await loadMarineModels().catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
 const fish=new ReefFish(scene,reef.obstacles,reef.anemone.behavior.hosts.map(h=>h.center),fishModels,reef.anemone.behavior.hosts[0].scale);
+const anemoneVisitors=fish.fish.filter(f=>f.species==='clown');
 const reefDaylight={value:1};const fishShadows=new ReefFishShadows(fish,key.position,reefDaylight);scene.add(fishShadows.mesh);scene.add(reefSuspension(reefClock,reefDaylight));
 const applyOptics=(o:T.Object3D)=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshStandardMaterial)applyReefOptics(material,reefClock,reefDaylight);};
 reef.group.traverse(applyOptics);for(const inhabitant of fish.fish)inhabitant.group.traverse(applyOptics);
@@ -74,7 +75,7 @@ renderer.domElement.addEventListener('pointerup',e=>{
 const sampleMs:number[]=[];let triangles=0;
 function animate(now:number){requestAnimationFrame(animate);const elapsed=now-last;last=now;if(document.hidden)return;const dt=Math.min(elapsed/1000,.04);
  if(cameraGoal){camera.position.lerp(cameraGoal,1-Math.exp(-dt*4));if(camera.position.distanceTo(cameraGoal)<.025)cameraGoal=null;}controls.update();
- if(!paused){time+=dt;reefClock.value=time;reef.anemone.behavior.update(time,fish.foods);fish.update(dt,night);fishShadows.update();}
+ if(!paused){time+=dt;reefClock.value=time;fish.update(dt,night);reef.anemone.behavior.update(time,fish.foods,anemoneVisitors);fishShadows.update();}
  const l=night?.42:1;reefDaylight.value=T.MathUtils.damp(reefDaylight.value,night?.24:1,5,dt);ambient.intensity=T.MathUtils.damp(ambient.intensity,.34*l,5,dt);key.intensity=T.MathUtils.damp(key.intensity,245*l,5,dt);blue.intensity=T.MathUtils.damp(blue.intensity,night?95:115,5,dt);fill.intensity=T.MathUtils.damp(fill.intensity,.45*l,5,dt);water.update(time,camera.position.y,l);
  scene.updateMatrixWorld(true);
  // Cache only stationary reef geometry. Fish are omitted from this capture;

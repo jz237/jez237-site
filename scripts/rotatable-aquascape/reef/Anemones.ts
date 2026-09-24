@@ -28,6 +28,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   const f=g.getAttribute('anemoneFlex');for(let i=0;i<n;i++)f.setY(i,host*8);
   g.setAttribute('anemoneDetail',new T.Uint16BufferAttribute(new Uint16Array(n*2),2,true));
   g.setAttribute('anemoneThickness',new T.Uint8BufferAttribute(new Uint8Array(n).fill(255),1,true));
+  g.setAttribute('anemoneBrush',new T.Uint16BufferAttribute(new Uint16Array(n),1));
   parts.push(g);
  }
  for(let k=0;k<3;k++){
@@ -80,7 +81,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    // This keeps a fleshy hemispherical end rather than an elongated pointed beak.
    const lobeCenter=.83+.045*Math.sin(phase*1.7),profile=(t:number)=>radius*.93*(1-.53*t+inflation*Math.exp(-(((t-lobeCenter)/.115)**2)));
    let capStart=1-profile(1)/arcLength;for(let j=0;j<3;j++)capStart=1-profile(capStart)/arcLength;const capSpan=1-capStart;
-   anatomy[k].strands.push({tip:end.clone(),phase:phase+k*8,arc:arcLength,scale,angle});
+   anatomy[k].strands.push({tip:end.clone(),samples:[.4,.7,1].map(t=>curve.getPointAt(t)),phase:phase+k*8,arc:arcLength,scale,angle,brushIndex:tentacles+1});
    const g=new T.BufferGeometry(),positions:number[]=[],colors:number[]=[],uv:number[]=[],detail:number[]=[],thickness:number[]=[],flex:number[]=[],axes:number[]=[],indices:number[]=[];
    for(let j=0;j<=steps;j++){
     const t=j<=20?j/20*capStart:capStart+capSpan*[.38,.70,.92,1][j-21],point=curve.getPointAt(t),shaftT=Math.min(t,capStart);
@@ -107,6 +108,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('anemoneFlex',new T.Float32BufferAttribute(flex,4));g.setAttribute('anemoneAxis',new T.Int16BufferAttribute(axes,2,true));g.setIndex(indices);g.computeVertexNormals();
    g.setAttribute('anemoneDetail',new T.Uint16BufferAttribute(detail,2,true));
    g.setAttribute('anemoneThickness',new T.Uint8BufferAttribute(thickness,1,true));
+   g.setAttribute('anemoneBrush',new T.Uint16BufferAttribute(new Uint16Array(positions.length/3).fill(tentacles+1),1));
    // Weld shading across the UV seam; keep the indexed skin and every ring.
    const normals=g.getAttribute('normal');for(let row=0;row<steps;row++){const a=row*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}
    const tipNormal=curve.getTangentAt(1).normalize();for(let a=0;a<=sides;a++)normals.setXYZ(steps*(sides+1)+a,tipNormal.x,tipNormal.y,tipNormal.z);
@@ -115,13 +117,13 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
  }
  // This vertex-colored material never samples UVs; omit unused UV buffers.
  parts.forEach(g=>g.deleteAttribute('uv'));
- const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.computeBoundingSphere();geometry.boundingSphere!.radius+=.35;
+ const geometry=mergeGeometries(parts,false);parts.forEach(g=>g.dispose());geometry.computeBoundingSphere();geometry.boundingSphere!.radius+=.65;
  const behavior=new AnemoneBehavior(anatomy);
  const material=new T.MeshStandardMaterial({vertexColors:true,roughness:.64,metalness:0});
  material.onBeforeCompile=shader=>{
-  shader.uniforms.reefTime=clock;
+  shader.uniforms.reefTime=clock;shader.uniforms.anemoneBrushMap={value:behavior.brushTexture};
   shader.uniforms.anemoneAnchors=behavior.anchors;shader.uniforms.anemoneFeeding=behavior.feeding;
-  shader.vertexShader=`uniform float reefTime; uniform vec4 anemoneAnchors[3],anemoneFeeding[3]; attribute vec4 anemoneFlex; attribute vec2 anemoneAxis,anemoneDetail; attribute float anemoneThickness; varying float tissueThickness; varying vec4 anemoneSkin; varying vec2 tissueUV;\n${anemoneFlowGLSL}\n`+shader.vertexShader;
+  shader.vertexShader=`uniform sampler2D anemoneBrushMap; attribute float anemoneBrush; uniform float reefTime; uniform vec4 anemoneAnchors[3],anemoneFeeding[3]; attribute vec4 anemoneFlex; attribute vec2 anemoneAxis,anemoneDetail; attribute float anemoneThickness; varying float tissueThickness; varying vec4 anemoneSkin; varying vec2 tissueUV;\n${anemoneFlowGLSL}\n`+shader.vertexShader;
   shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
    float tissueT=anemoneFlex.x;
    vec4 flow=tissueFlow(tissueT,anemoneFlex.y);
@@ -134,11 +136,12 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    float sectorWeight=smoothstep(.05,.8,dot(vec2(cos(rootAngle),sin(rootAngle)),feeding.yz));
    float fold=feeding.x*sectorWeight,envelope=tissueT*tissueT*(3.-2.*tissueT),slope=6.*tissueT*(1.-tissueT),shrink=1.-fold*envelope;
    vec3 flowed=position+vec3(tissueBend.x,0.,tissueBend.y);
-   vec3 deformation=vec3(derivative.x,0.,derivative.y)*shrink+(host.xyz-flowed)*fold*slope;
+   vec3 brush=texture2D(anemoneBrushMap,vec2((anemoneBrush+.5)/541.,.5)).xyz*(1.-fold*2.5);
+   vec3 deformation=vec3(derivative.x,0.,derivative.y)*shrink+(host.xyz-flowed)*fold*slope+brush*slope;
    objectNormal-=gradient*dot(deformation,objectNormal)/max(.25,shrink+dot(gradient,deformation));
    objectNormal=normalize(objectNormal);`);
   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-   transformed=mix(flowed,host.xyz,fold*envelope);
+   transformed=mix(flowed,host.xyz,fold*envelope)+brush*envelope;
    if(anemoneFlex.w==0.){vec3 local=position-host.xyz;float edge=clamp(length(local.xz)/(.65*host.w),0.,1.);float anchor=smoothstep(-.12*host.w,0.,local.y);transformed.y+=feeding.x*.14*host.w*edge*edge*anchor;}
    tissueThickness=anemoneThickness;tissueUV=vec2(tissueT,anemoneDetail.y);anemoneSkin=vec4(position,anemoneFlex.w>0.?1.+tissueT:0.);`);
   // Rest-space pigmentation moves with the skin, rather than sliding through it
@@ -167,7 +170,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    if(abs(tissueDet)>1.e-12)normal=normalize(abs(tissueDet)*normal-sign(tissueDet)*(dFdx(tissueRelief)*tissueRx+dFdy(tissueRelief)*tissueRy));`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <lights_physical_pars_fragment>', '#include <lights_physical_pars_fragment>\n'+anemoneScatteringGLSL);
  };
- material.customProgramCacheKey=()=> 'reef-anemone-scattering-v7';
+ material.customProgramCacheKey=()=> 'reef-anemone-local-brush-v8';
  const mesh=new T.Mesh(geometry,material);mesh.name='Rooted flowing anemones';mesh.receiveShadow=true;
  return {mesh,tentacles,behavior};
 }

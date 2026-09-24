@@ -7,7 +7,7 @@ const {mesh,tentacles,behavior}=buildAnemones([new T.Vector3(3,1,.8),new T.Vecto
 assert.equal(tentacles,540);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<15200000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15.2 MB including one byte of optical width per vertex');
+assert.ok(bytes<15550000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15.55 MB including optical width and a two-byte per-strand brush lookup');
 const opticalWidth=mesh.geometry.getAttribute('anemoneThickness');
 assert.equal(opticalWidth.normalized,true);assert.ok(opticalWidth.array instanceof Uint8Array);
 assert.equal(opticalWidth.count,mesh.geometry.getAttribute('position').count);
@@ -48,7 +48,7 @@ const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase
 const rootHeights=[];
 for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,12).reduce((sum,i)=>sum+p.getY(i),0)/12);
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
-let worstDot=1,minDeterminant=Infinity,minFeedingDeterminant=Infinity;const lobeRatios=[];
+let worstDot=1,minDeterminant=Infinity,minFeedingDeterminant=Infinity,minBrushDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
  const rows=ids.length/13,cap=rows-5;const centers=[];for(let row=0;row<rows;row++){const center=new T.Vector3();for(let j=0;j<12;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*13+j]));centers.push(center.multiplyScalar(1/12));}
  const ringRadius=row=>ids.slice(row*13,row*13+12).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/12;
@@ -74,13 +74,15 @@ for(const ids of strands.values()){
    const flowed=centers[row].clone().add(new T.Vector3(f[0]*t*t*scale,0,f[1]*t*t*scale));
    const deformation=d.clone().multiplyScalar(shrink).addScaledVector(host.clone().sub(flowed),.20*6*t*(1-t));
    minFeedingDeterminant=Math.min(minFeedingDeterminant,shrink*shrink*(shrink+axis.dot(deformation)/arc));
+   minBrushDeterminant=Math.min(minBrushDeterminant,shrink*shrink*(shrink+axis.dot(deformation)/arc-.18*6*t*(1-t)*(1-.20*2.5)));
    const h=1e-5,before=tissueFlow(time,t-h,phase),after=tissueFlow(time,t+h,phase);
    for(let k=0;k<2;k++)assert.ok(Math.abs((after[k]*(t+h)**2-before[k]*(t-h)**2)/(2*h)-(f[k+2]*t*t+2*t*f[k]))<1e-6,'analytic bending derivative matches actual deformation');
   }
  }
 }
 assert.ok(minFeedingDeterminant>.08,'maximum contact contraction must not invert tentacle skin: '+minFeedingDeterminant);
-console.log('Minimum feeding deformation determinant:',minFeedingDeterminant);
+console.log('Minimum feeding deformation determinant:',minFeedingDeterminant,'with worst brush',minBrushDeterminant);
+assert.ok(minBrushDeterminant>.025,'simultaneous brush and feeding must remain orientation preserving');
 assert.ok(worstDot>.97,'compressed axis follows curved tissue: '+worstDot);assert.ok(minDeterminant>.4,'sampled motion does not fold the local deformation inside out: '+minDeterminant);
 assert.ok(Math.max(...lobeRatios)-Math.min(...lobeRatios)>.4,'slender and inflated tentacles keep individual anatomical variation');
 console.log('Curved tissue shading passed: axis alignment',worstDot,'minimum sampled deformation determinant',minDeterminant);

@@ -53,17 +53,20 @@ function skinPoint(tube:T.TubeGeometry,t:number,angle:number){
 /** Small projecting side cups, including the fine branchlets. Fine branchlet lips
  * use six segments and broad stem cups retain eight; existing maps retain fine tissue and septal detail. */
 export function radialCorallites(tube:T.TubeGeometry,level:number,seed:number,base:T.Color,tip:T.Color){
- const result:T.BufferGeometry[]=[],count=level===0?5:2,{path}=tube.parameters,length=path.getLength();
+ const result:T.BufferGeometry[]=[],count=level===0?10:level===1?5:4,{path}=tube.parameters,length=path.getLength();
  for(let i=0;i<count;i++){
-  const t=.2+i/count*.58+.025*Math.sin(seed*1.7+i),angle=seed+i*2.399;
-  const center=skinPoint(tube,t,angle),axis=path.getTangentAt(t),out=center.clone().sub(path.getPointAt(t)).normalize(),radius=center.distanceTo(path.getPointAt(t)),r=radius*(.28+.055*Math.sin(seed+i*1.9)),rise=r*(.85+.25*Math.sin(seed*1.3+i));
+  // Staggered projecting cups interrupt the smooth twig silhouette. Unequal
+  // lip heights and elliptical mouths avoid identical round buttons. This
+  // deterministic local pattern does not reshuffle later scene organisms.
+  const t=.14+i/count*.73+.012*Math.sin(seed*1.7+i*2.3),angle=seed+i*2.399+.21*Math.sin(i*3.7+seed);
+  const center=skinPoint(tube,t,angle),axis=path.getTangentAt(t),out=center.clone().sub(path.getPointAt(t)).normalize(),radius=center.distanceTo(path.getPointAt(t)),r=radius*(.38+.07*Math.sin(seed+i*1.9)),rise=r*(1.35+.25*Math.sin(seed*1.3+i));
   const across=new T.Vector3().crossVectors(axis,out).normalize(),positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],sides=level<2?8:6;
   // Tube rings wind opposite to the path tangent; sample their actual skin.
   for(let row=0;row<3;row++)for(let k=0;k<=sides;k++){
-   const a=k/sides*Math.PI*2,rr=r*[1,.84,.39][row];let point:T.Vector3;
-   if(row===0)point=skinPoint(tube,t+Math.sin(a)*r/length,angle-Math.cos(a)*r/radius);
-   else point=center.clone().addScaledVector(across,Math.cos(a)*rr).addScaledVector(axis,Math.sin(a)*rr+rise*.28).addScaledVector(out,rise*(row===1?1:.63));
-   positions.push(point.x,point.y,point.z);const color=base.clone().lerp(tip,row===1?.42:.08).multiplyScalar(row===2?.63:1);colors.push(color.r,color.g,color.b);uv.push(k/sides,row*.33);
+   const a=k/sides*Math.PI*2,rr=r*[1,.81,.42][row],elongation=1.18;let point:T.Vector3;
+   if(row===0)point=skinPoint(tube,t+Math.sin(a)*r*elongation/length,angle-Math.cos(a)*r/radius);
+   else point=center.clone().addScaledVector(across,Math.cos(a)*rr).addScaledVector(axis,Math.sin(a)*rr*elongation+rise*.32).addScaledVector(out,rise*(row===1?1+.17*Math.sin(a):.58));
+   positions.push(point.x,point.y,point.z);const color=base.clone().lerp(tip,row===1?.56:.08).multiplyScalar(row===2?.59:1);colors.push(color.r,color.g,color.b);uv.push(k/sides,row*.33);
    if(row<2&&k<sides){const n=row*(sides+1)+k,b=n+sides+1;indices.push(n,n+1,b,n+1,b+1,b);}
   }
   const end=positions.length/3,point=center.clone().addScaledVector(axis,rise*.28).addScaledVector(out,rise*.55);positions.push(point.x,point.y,point.z);const dark=base.clone().multiplyScalar(.51);colors.push(dark.r,dark.g,dark.b);uv.push(.5,1);
