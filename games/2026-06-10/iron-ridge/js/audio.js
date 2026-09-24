@@ -3,8 +3,8 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js?v=polish1';
-import { settings, setSetting } from './settings.js?v=polish1';
+import { MUTE_KEY } from './config.js?v=polish2';
+import { settings, setSetting } from './settings.js?v=polish2';
 
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
@@ -18,9 +18,17 @@ const MUSIC_TRACKS = {
 };
 const MUSIC_BASE = 0.62; // headroom under the combat SFX
 
-// commander voice lines (ElevenLabs), played through a radio bandpass
-const VO_LINES = ['deploy', 'armor', 'strike-ready', 'strike-in', 'critical',
-  'wave-clear', 'convoy', 'repaired', 'boss', 'streak'];
+// commander voice lines (ElevenLabs "Harry"), played through a radio
+// bandpass. name: [variant count, per-line cooldown seconds]. Variants are
+// drawn at random but never the same take twice in a row.
+const VO_LINES = {
+  deploy: [3, 0], armor: [3, 6], 'strike-ready': [3, 0], 'strike-in': [3, 0],
+  critical: [3, 20], 'wave-clear': [3, 0], convoy: [3, 0], repaired: [3, 8],
+  boss: [2, 0], streak: [2, 10], ricochet: [3, 14], bounced: [3, 12],
+  flanked: [3, 16], tracks: [2, 10], engine: [2, 12], hulldown: [2, 45],
+  artillery: [3, 20], smoke: [2, 6], rpg: [2, 30], destroyer: [2, 25],
+  kill: [3, 7], weather: [1, 0], dusk: [1, 0],
+};
 
 export class GameAudio {
   constructor() {
@@ -112,21 +120,31 @@ export class GameAudio {
 
   // -------- commander voice callouts (radio-filtered) --------
   loadVoices() {
-    for (const name of VO_LINES) {
-      fetch(`./assets/audio/vo-${name}.mp3`)
-        .then(r => r.arrayBuffer())
-        .then(buf => this.ctx.decodeAudioData(buf))
-        .then(decoded => { this.voBuffers[name] = decoded; })
-        .catch(() => {});
+    this.voLast = {};
+    this.voNext = {};
+    for (const [name, [count]] of Object.entries(VO_LINES)) {
+      this.voBuffers[name] = [];
+      for (let i = 1; i <= count; i++) {
+        fetch(`./assets/audio/vo-${name}-${i}.mp3`)
+          .then(r => r.arrayBuffer())
+          .then(buf => this.ctx.decodeAudioData(buf))
+          .then(decoded => { this.voBuffers[name][i - 1] = decoded; })
+          .catch(() => {});
+      }
     }
   }
 
   vo(name, priority = false) {
     if (!this.ctx || !(settings.voiceOn ?? true)) return;
-    const buf = this.voBuffers[name];
-    if (!buf) return;
+    const takes = (this.voBuffers[name] || []).map((b, i) => [b, i]).filter(([b]) => b);
+    if (!takes.length) return;
     const now = this.ctx.currentTime;
     if (!priority && now < this.voBusyUntil) return; // don't talk over yourself
+    if (!priority && now < (this.voNext[name] ?? 0)) return; // per-line cooldown
+    const fresh = takes.length > 1 ? takes.filter(([, i]) => i !== this.voLast[name]) : takes;
+    const [buf, idx] = fresh[(Math.random() * fresh.length) | 0];
+    this.voLast[name] = idx;
+    this.voNext[name] = now + (VO_LINES[name]?.[1] ?? 0);
     this.voBusyUntil = now + buf.duration + 0.6;
     const src = this.ctx.createBufferSource();
     src.buffer = buf;
@@ -338,6 +356,54 @@ export class GameAudio {
   // a round going through armour: a dull heavy clunk, deeper from the rear
   penetrate(rear = false) {
     this.blast({ freq: rear ? 70 : 95, dur: 0.22, vol: 0.55, noiseVol: 0.45, noiseFreq: 900 });
+  }
+
+  // smoke dischargers: a quick ripple of hollow pops
+  smokeLaunch() {
+    if (!this.ctx) return;
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => this.blast({ freq: 150, dur: 0.12, vol: 0.32, noiseVol: 0.35, noiseFreq: 1500 }), i * 70);
+    }
+  }
+
+  // rocket launch: a tearing whoosh
+  rocket(vol = 1) {
+    if (!this.ctx) return;
+    const ctx = this.ctx, t = ctx.currentTime;
+    const n = ctx.createBufferSource();
+    n.buffer = this.noiseBuffer(0.7);
+    const f = ctx.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(700, t);
+    f.frequency.exponentialRampToValueAtTime(2600, t + 0.5);
+    f.Q.value = 0.8;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.35 * vol, t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+    n.connect(f).connect(g).connect(this.master);
+    n.start(t);
+    this.blast({ freq: 120, dur: 0.15, vol: 0.3 * vol, noiseVol: 0.2 * vol, noiseFreq: 900 });
+  }
+
+  // rain bed: looping filtered noise, level 0..1
+  setRain(level) {
+    if (!this.ctx) return;
+    if (!this.rainNodes && level > 0.02) {
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.noiseBuffer(2);
+      src.loop = true;
+      const hp = this.ctx.createBiquadFilter();
+      hp.type = 'highpass'; hp.frequency.value = 900;
+      const lp = this.ctx.createBiquadFilter();
+      lp.type = 'lowpass'; lp.frequency.value = 6500;
+      const g = this.ctx.createGain();
+      g.gain.value = 0;
+      src.connect(hp).connect(lp).connect(g).connect(this.master);
+      src.start();
+      this.rainNodes = { src, g };
+    }
+    if (this.rainNodes) this.rainNodes.g.gain.setTargetAtTime(0.1 * level, this.ctx.currentTime, 0.5);
   }
 
   // descending artillery whistle

@@ -187,7 +187,34 @@
     font: 700 11px/1.3 system-ui, sans-serif; letter-spacing: 1.5px; white-space: nowrap; opacity: 0; transition: opacity 0.25s; pointer-events: none;
   }
   #cover-badge.on { opacity: 1; }
-  body.touch #cover-badge { bottom: auto; top: calc(92px + env(safe-area-inset-top, 0px)); }
+  #incoming-call {
+    position: absolute; left: 50%; bottom: 22%; transform: translateX(-50%);
+    font: 800 14px/1 system-ui, sans-serif; letter-spacing: 2.5px; color: #ffd0c0;
+    text-shadow: 0 1px 6px #000, 0 0 2px #000; opacity: 0; pointer-events: none; white-space: nowrap;
+  }
+  #incoming-call.bad { color: #ff7a5c; font-size: 16px; }
+  #incoming-call.good { color: #b8f0a8; }
+  @keyframes incomingCall {
+    0% { opacity: 0; transform: translateX(-50%) translateY(6px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    75% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  #smoke-status { margin-top: 6px; font-size: 11px; letter-spacing: 1.5px; color: var(--ink); opacity: 0.55; }
+  #smoke-status.ready { color: #cfe9c8; opacity: 1; }
+  #btn-smoke {
+    position: fixed; left: 12px; top: calc(150px + 186px * var(--tscale)); z-index: 7;
+    width: calc(52px * var(--tscale)); height: calc(52px * var(--tscale)); border-radius: 50%;
+    border: 2px solid rgba(210, 220, 210, 0.7);
+    background: rgba(30, 34, 30, 0.6); font-size: calc(22px * var(--tscale));
+    pointer-events: auto; touch-action: none; display: none;
+  }
+  body.touch #btn-smoke { display: block; }
+  body.lefty #btn-smoke { left: auto; right: 12px; }
+  #btn-smoke.cooling {
+    background: conic-gradient(rgba(10, 12, 10, 0.75) var(--cd, 0deg), rgba(30, 34, 30, 0.35) 0); opacity: 0.7;
+  }
+  body.touch #cover-badge { bottom: auto; top: calc(92px + env(safe-area-inset-top, 0px)); white-space: normal; max-width: calc(100% - 150px); }
   #nav-hint {
     position: absolute; left: 50%; top: 31%; transform: translateX(-50%); text-align: center;
     color: #ffe29a; text-shadow: 0 1px 8px #000; opacity: 0; transition: opacity 0.5s; pointer-events: none;
@@ -501,6 +528,27 @@
   body.touch #stats-panel { top: 12px; }
   body.touch #hp-panel { width: 160px; bottom: 14px; }
   body.touch #gun-panel { right: 134px; bottom: 14px; width: 150px; }
+  /* narrow portrait phones: stack the panels so nothing overlaps.
+     Gun panel bottom-right, armour bar bottom-left beside it, the fire
+     cluster lifted above the gun panel, AP·HE above the armour bar. */
+  @media (max-width: 560px) {
+    body.touch #stats-panel { min-width: 0; width: 118px; box-sizing: border-box; }
+    body.touch #gun-panel { right: 12px; left: auto; bottom: 12px; width: 160px; }
+    body.touch #hp-panel { left: 12px; bottom: 12px; width: calc(100% - 196px); }
+    body.touch #btn-wpn-touch { left: 12px; right: auto; bottom: 84px; }
+    body.touch #btn-fire { right: 14px; bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+    body.touch #btn-reload { right: 40px; bottom: calc(300px * var(--tscale) + 12px); }
+    body.touch #btn-mg { right: calc(128px * var(--tscale)); bottom: calc(196px * var(--tscale)); }
+    body.touch #btn-strike { right: calc(128px * var(--tscale)); bottom: calc(286px * var(--tscale)); }
+    body.touch #stick { bottom: 130px; }
+    body.touch.lefty #gun-panel { left: 12px; right: auto; }
+    body.touch.lefty #hp-panel { left: auto; right: 12px; }
+    body.touch.lefty #btn-wpn-touch { left: auto; right: 12px; }
+    body.touch.lefty #btn-fire { left: 14px; right: auto; }
+    body.touch.lefty #btn-reload { left: 40px; right: auto; }
+    body.touch.lefty #btn-mg { left: calc(128px * var(--tscale)); right: auto; }
+    body.touch.lefty #btn-strike { left: calc(128px * var(--tscale)); right: auto; }
+  }
 </style>
 </head>
 <body>
@@ -562,6 +610,7 @@
   <button id="btn-strike" class="hidden">✈</button>
   <button id="btn-ping">📍</button>
   <button id="btn-boost">⚡</button>
+  <button id="btn-smoke">💨</button>
   <button id="btn-pause-touch">⏸ PAUSE</button>
 </div>
 
@@ -577,7 +626,8 @@
       <b>WASD / arrows</b> — drive where you point (the hull turns itself) &nbsp;·&nbsp; <b>mouse</b> — aim &nbsp;·&nbsp; <b>click / space</b> — fire<br/>
       <b>1 / 2</b> — AP / HE shells &nbsp;·&nbsp; <b>hold right-click</b> — coax MG &nbsp;·&nbsp; <b>R</b> — restock<br/>
       <b>E</b> — field repair (sit still, or park at the green depot) &nbsp;·&nbsp; <b>F</b> — airstrike<br/>
-      <b>Shift</b> — boost &nbsp;·&nbsp; <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
+      <b>Shift</b> — boost &nbsp;·&nbsp; <b>C</b> — smoke screen &nbsp;·&nbsp; <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute<br/>
+      <b>🎮 controller</b> — sticks drive/aim · RT fire · LT MG · LB smoke · RB shell · A boost · B repair · X restock · Y airstrike · Start pause
     </div>
     <div class="controls-info hidden" id="controls-touch">
       <b>touch the left side</b> — a stick appears under your thumb; <b>push the
@@ -587,7 +637,7 @@
       <b>MG</b> — hold for the coax gun &nbsp;·&nbsp; <b>AP·HE</b> — swap shells<br/>
       <b>🔧</b> — repair (sit still, or park at the green depot) &nbsp;·&nbsp;
       <b>⚡ / double-tap drive side</b> — boost &nbsp;·&nbsp;
-      <b>⟳</b> — restock &nbsp;·&nbsp; <b>pinch</b> — zoom &nbsp;·&nbsp; <b>✈</b> — airstrike when earned
+      <b>⟳</b> — restock &nbsp;·&nbsp; <b>pinch</b> — zoom &nbsp;·&nbsp; <b>✈</b> — airstrike when earned &nbsp;·&nbsp; <b>💨</b> — smoke screen
     </div>
     <button class="btn" id="btn-play">▶ DEPLOY</button>
     <button class="btn secondary" id="btn-daily">📅 DAILY RIDGE</button><br/>
@@ -725,7 +775,7 @@
   }
 }
 </script>
-<script type="module" src="./js/main.js?v=polish1"></script>
+<script type="module" src="./js/main.js?v=polish2"></script>
 <script>
   // show matching controls hint
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {

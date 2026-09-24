@@ -3,12 +3,13 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { Simplex2 } from './noise.js?v=polish1';
-import { treadTexture } from './surface-art.js?v=polish1';
-import { getHeight, getNormal } from './terrain.js?v=polish1';
-import { SCATTER } from './config.js?v=polish1';
+import { Simplex2 } from './noise.js?v=polish2';
+import { treadTexture } from './surface-art.js?v=polish2';
+import { getHeight, getNormal } from './terrain.js?v=polish2';
+import { SCATTER } from './config.js?v=polish2';
 
 const _up = new THREE.Vector3(0, 1, 0);
+const _zeroM = new THREE.Matrix4().makeScale(0, 0, 0);
 
 function softCircleTexture(hard = false) {
   const s = 64;
@@ -361,6 +362,46 @@ export class Effects {
     scene.add(this.splats);
     this.splatHead = 0;
     for (let i = 0; i < 90; i++) this.splats.setMatrixAt(i, zeroM);
+
+    // leaves / needles shaken loose when trees are hit or knocked down
+    const leafGeo = new THREE.PlaneGeometry(0.16, 0.1);
+    const leafMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide });
+    this.leafCount = 260;
+    this.leaves = new THREE.InstancedMesh(leafGeo, leafMat, this.leafCount);
+    this.leaves.frustumCulled = false;
+    scene.add(this.leaves);
+    this.leafData = [];
+    const lc = new THREE.Color(0x5f7a3a);
+    for (let i = 0; i < this.leafCount; i++) {
+      this.leaves.setMatrixAt(i, zeroM);
+      this.leaves.setColorAt(i, lc);
+      this.leafData.push({ alive: false, p: new THREE.Vector3(), v: new THREE.Vector3(), r: new THREE.Euler(), spin: new THREE.Vector3(), life: 0, ph: 0 });
+    }
+    this.leafHead = 0;
+    this.leafTint = new THREE.Color();
+  }
+
+  // burst of leaves from a crown: at (x, y, z) spread over `radius`
+  leafBurst(x, y, z, radius = 2, count = 36, needle = false) {
+    const n = Math.max(6, Math.floor(count * (0.4 + 0.6 * this.particleScale)));
+    for (let k = 0; k < n; k++) {
+      const i = this.leafHead;
+      this.leafHead = (this.leafHead + 1) % this.leafCount;
+      const d = this.leafData[i];
+      d.alive = true;
+      const a = Math.random() * Math.PI * 2, r = Math.random() * radius;
+      d.p.set(x + Math.cos(a) * r, y + (Math.random() - 0.3) * radius, z + Math.sin(a) * r);
+      d.v.set(Math.cos(a) * (1 + Math.random() * 3), 0.5 + Math.random() * 3, Math.sin(a) * (1 + Math.random() * 3));
+      d.r.set(Math.random() * 6, Math.random() * 6, Math.random() * 6);
+      d.spin.set((Math.random() - 0.5) * 9, (Math.random() - 0.5) * 9, (Math.random() - 0.5) * 9);
+      d.life = 2.8 + Math.random() * 2.2;
+      d.ph = Math.random() * 6;
+      if (needle) this.leafTint.setHSL(0.26 + Math.random() * 0.04, 0.35, 0.22 + Math.random() * 0.1);
+      else if (Math.random() < 0.15) this.leafTint.setHSL(0.11 + Math.random() * 0.04, 0.55, 0.42);
+      else this.leafTint.setHSL(0.22 + Math.random() * 0.06, 0.45, 0.3 + Math.random() * 0.12);
+      this.leaves.setColorAt(i, this.leafTint);
+    }
+    this.leaves.instanceColor.needsUpdate = true;
   }
 
   bloodSplat(x, z) {
@@ -637,6 +678,23 @@ export class Effects {
     }
   }
 
+  // engine-deck fire on a badly damaged tank: call per frame with the rear
+  // deck's world position. Licking flames that cool to red, plus sparks.
+  engineFire(deck, frac, dt) {
+    if (frac >= 0.25) return;
+    const rate = (frac < 0.12 ? 22 : 13) * this.particleScale * dt;
+    let n = Math.floor(rate) + (Math.random() < rate % 1 ? 1 : 0);
+    while (n-- > 0) {
+      this.fire.emit(deck.x + (Math.random() - 0.5) * 1.1, deck.y + 0.1, deck.z + (Math.random() - 0.5) * 1.1,
+        (Math.random() - 0.5) * 0.5, 1.6 + Math.random() * 1.8, (Math.random() - 0.5) * 0.5,
+        0.28 + Math.random() * 0.25, 0.9 + Math.random() * 0.8, 1, 0.72, 0.3, { grow: 0.8, drag: 1.4, grav: 2, end: [0.7, 0.14, 0.02] });
+    }
+    if (Math.random() < dt * 3) {
+      this.fire.emit(deck.x, deck.y + 0.3, deck.z, (Math.random() - 0.5) * 3, 3 + Math.random() * 3, (Math.random() - 0.5) * 3,
+        0.6, 0.25, 1, 0.8, 0.4, { grav: -9, drag: 0.5 });
+    }
+  }
+
   dustPuff(x, y, z, amount = 1, driftX = 0, driftZ = 0) {
     const n = Math.max(1,Math.floor(2 * amount * this.particleScale));
     for (let i = 0; i < n; i++) {
@@ -649,7 +707,21 @@ export class Effects {
     }
   }
 
-  shellTrail(pos) {
+  shellTrail(pos, shell = null) {
+    if (shell?.owner?.rocket) {
+      // rocket: bright motor flame + a thick grey exhaust trail
+      this.fire.emit(pos.x, pos.y, pos.z, 0, 0, 0, 0.1, 0.9, 1, 0.75, 0.35, { end: [0.9, 0.25, 0.05] });
+      const g = 0.62;
+      this.smoke.emit(pos.x, pos.y, pos.z, (Math.random() - 0.5) * 0.4, 0.3, (Math.random() - 0.5) * 0.4,
+        1.1 + Math.random() * 0.6, 0.8, g, g, g * 0.97, { grow: 2.6, drag: 1.2, alpha: 0.55 });
+      return;
+    }
+    // glowing tracer streak (player gold, enemy red-orange)
+    if (shell) {
+      const mine = shell.fromPlayer;
+      this.fire.emit(pos.x, pos.y, pos.z, 0, 0, 0, 0.16, 0.55,
+        1, mine ? 0.82 : 0.45, mine ? 0.42 : 0.2, { end: mine ? [0.6, 0.3, 0.05] : [0.5, 0.08, 0.02] });
+    }
     if (Math.random() > 0.55 * this.particleScale) return;
     const g = 0.7;
     this.smoke.emit(pos.x, pos.y, pos.z, 0, 0.4, 0,
@@ -773,6 +845,33 @@ export class Effects {
         else tr.mesh.material.opacity = 0.9 * (1 - tr.t / 0.07);
       }
     }
+
+    // leaves: flutter down, settle, fade
+    for (let i = 0; i < this.leafCount; i++) {
+      const d = this.leafData[i];
+      if (!d.alive) continue;
+      d.life -= dt;
+      if (d.life <= 0) { d.alive = false; this.leaves.setMatrixAt(i, _zeroM); continue; }
+      const ground = getHeight(d.p.x, d.p.z) + 0.03;
+      if (d.p.y > ground) {
+        d.v.y += -3.2 * dt;
+        const drag = 1 - Math.min(1, dt * 1.6);
+        d.v.x = d.v.x * drag + Math.sin(this.time * 3 + d.ph) * 1.4 * dt;
+        d.v.z = d.v.z * drag + Math.cos(this.time * 2.6 + d.ph) * 1.4 * dt;
+        d.v.y = Math.max(d.v.y, -1.6); // air resistance: leaves drift
+        d.p.addScaledVector(d.v, dt);
+        d.r.x += d.spin.x * dt; d.r.y += d.spin.y * dt; d.r.z += d.spin.z * dt;
+      } else {
+        d.p.y = ground;
+        d.r.x = -Math.PI / 2;
+      }
+      this.dummy.position.copy(d.p);
+      this.dummy.rotation.copy(d.r);
+      this.dummy.scale.setScalar(Math.min(1, d.life * 1.5));
+      this.dummy.updateMatrix();
+      this.leaves.setMatrixAt(i, this.dummy.matrix);
+    }
+    this.leaves.instanceMatrix.needsUpdate = true;
 
     this.trauma = Math.max(0, this.trauma - dt * 1.6);
   }

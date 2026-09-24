@@ -8,29 +8,30 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=polish1';
-import { Infantry } from './infantry.js?v=polish1';
-import { makeRng } from './noise.js?v=polish1';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=polish1';
-import { buildSky } from './sky.js?v=polish1';
-import { Foliage } from './foliage.js?v=polish1';
-import { treeOcclusion } from './tree-lod.js?v=polish1';
-import { Props } from './props.js?v=polish1';
-import { Tank } from './tank.js?v=polish1';
-import { WaveManager } from './enemy.js?v=polish1';
-import { Projectiles } from './projectiles.js?v=polish1';
-import { Trajectory } from './trajectory.js?v=polish1';
-import { surfaceDetail } from './surface-art.js?v=polish1';
-import { ContactShadows } from './contact-shadows.js?v=polish1';
-import { Effects } from './effects.js?v=polish1';
-import { GameAudio } from './audio.js?v=polish1';
-import { Input, isTouch } from './input.js?v=polish1';
-import { settings, setSetting } from './settings.js?v=polish1';
-import { Hud } from './hud.js?v=polish1';
-import { QualityScaler, LEVELS } from './quality.js?v=polish1';
-import { Minimap } from './minimap.js?v=polish1';
-import * as LB from './leaderboard.js?v=polish1';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=polish1';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY, SMOKE, MODULES } from './config.js?v=polish2';
+import { Infantry } from './infantry.js?v=polish2';
+import { makeRng } from './noise.js?v=polish2';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=polish2';
+import { buildSky, weatherForWave } from './sky.js?v=polish2';
+import { SmokeScreens } from './smoke.js?v=polish2';
+import { Foliage } from './foliage.js?v=polish2';
+import { treeOcclusion } from './tree-lod.js?v=polish2';
+import { Props } from './props.js?v=polish2';
+import { Tank } from './tank.js?v=polish2';
+import { WaveManager } from './enemy.js?v=polish2';
+import { Projectiles } from './projectiles.js?v=polish2';
+import { Trajectory } from './trajectory.js?v=polish2';
+import { surfaceDetail } from './surface-art.js?v=polish2';
+import { ContactShadows } from './contact-shadows.js?v=polish2';
+import { Effects } from './effects.js?v=polish2';
+import { GameAudio } from './audio.js?v=polish2';
+import { Input, isTouch } from './input.js?v=polish2';
+import { settings, setSetting } from './settings.js?v=polish2';
+import { Hud } from './hud.js?v=polish2';
+import { QualityScaler, LEVELS } from './quality.js?v=polish2';
+import { Minimap } from './minimap.js?v=polish2';
+import * as LB from './leaderboard.js?v=polish2';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=polish2';
 
 const $ = (id) => document.getElementById(id);
 
@@ -48,6 +49,7 @@ renderer.toneMappingExposure = 1.14;
 const scene = new THREE.Scene();
 const FOG_COLOR = 0x81938a;
 scene.fog = new THREE.Fog(FOG_COLOR, 140, 400);
+let fogBaseFar = 400; // quality level's fog range; weather scales it
 
 const camera = new THREE.PerspectiveCamera(58, 1, 0.3, 700);
 camera.position.set(0, 8, -14);
@@ -123,6 +125,7 @@ const effects = new Effects(scene, camera);
 const contacts = new ContactShadows(scene);
 const projectiles = new Projectiles(scene, world);
 const trajectory = new Trajectory(scene);
+const smoke = new SmokeScreens(scene);
 const audio = new GameAudio();
 const input = new Input(canvas);
 const hud = new Hud();
@@ -264,6 +267,9 @@ const G = {
   perkTimer: 0,
   boostCd: 0,
   pendingCaches: [],
+  smokeCd: 0,
+  blasts: [],
+  trail: [],
 };
 
 function freshPerks() {
@@ -288,6 +294,8 @@ const _fwdArmor = new CANNON.Vec3();
 // 'oblique' (front plate at a glancing angle — where AP rounds skip off)
 function armorFacing(tank, vel) {
   if (!vel) return 'side';
+  // plunging fire (artillery, bombs, long lobs) strikes the thin roof
+  if (Math.abs(vel.y ?? 0) > Math.hypot(vel.x, vel.z) * 1.5) return 'top';
   tank.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1), _fwdArmor);
   const len = Math.hypot(vel.x, vel.z) || 1;
   const d = (vel.x * _fwdArmor.x + vel.z * _fwdArmor.z) / len;
@@ -302,7 +310,34 @@ const AP_FACING = {
   side: { mult: 1.15, label: 'SIDE PENETRATION', kind: 'good' },
   front: { mult: 0.85, label: 'PENETRATION', kind: 'good' },
   oblique: { mult: 0.35, label: 'RICOCHET', kind: 'warn' },
+  top: { mult: 1.3, label: 'TOP PENETRATION', kind: 'kill' },
 };
+// enemy rounds vs the player: angle your front plate and they skip off
+const PLAYER_FACING = {
+  rear: { mult: 1.35, label: 'HIT · REAR ARMOR', vo: 'flanked' },
+  side: { mult: 1.1, label: 'HIT · SIDE ARMOR' },
+  front: { mult: 0.85, label: 'HIT · FRONT ARMOR' },
+  oblique: { mult: 0.3, label: 'BOUNCED · ANGLED ARMOR', vo: 'bounced' },
+  top: { mult: 1.2, label: 'HIT · ROOF' },
+};
+
+// knocked-out parts on an enemy the player just penetrated; returns a label
+function rollEnemyModules(tk, face, hitY) {
+  const turretHit = hitY > tk.body.position.y + 1.05 * (tk.scale ?? 1);
+  if (turretHit && !tk.fixedGun && Math.random() < MODULES.turretJamChance) {
+    tk.turretJamT = MODULES.turretJam;
+    return 'TURRET JAMMED';
+  }
+  if (face === 'side' && Math.random() < MODULES.sideTrackChance) {
+    tk.trackJamT = MODULES.trackJam;
+    return 'TRACKS OUT';
+  }
+  if (face === 'rear' && Math.random() < MODULES.rearEngineChance) {
+    tk.engineHitT = MODULES.engineHit;
+    return 'ENGINE HIT';
+  }
+  return '';
+}
 
 function armorMult(tank, vel, isPlayerTarget = false) {
   if (!vel) return 1;
@@ -502,6 +537,7 @@ function handleHitForward(enemyId, dmg, peer) {
 function handleRemoteWave(w, hostiles) {
   if (!isCoopClient() || G.state === 'menu' || G.state === 'gameover') return;
   G.wave = w;
+  applyWaveWeather(w);
   spawnClientWaveProps(w);
   if (waves.waveSpec(w).tanks.includes('boss')) {
     hud.banner(`WAVE ${w} — IRON COLOSSUS`, 'a breakthrough monster leads this assault', 3.2);
@@ -601,7 +637,7 @@ function spawnClientWaveProps(w) {
     const squads = Math.min(4, 1 + (w >> 1));
     for (let i = 0; i < squads; i++) {
       const s = props.ringSpot(48, 95);
-      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0));
+      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0), w >= INFANTRY.rpgFromWave ? 1 : 0);
     }
   }
   G.waveHadTargets = spec.targets > 0;
@@ -621,6 +657,7 @@ function deployAfterOnlineConnect() {
 const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, L.pixelRatio));
   composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, L.pixelRatio));
+  fogBaseFar = L.fogFar;
   scene.fog.far = L.fogFar * 1.6;
   scene.fog.near = L.fogFar * 0.55;
   bloomPass.enabled = L.bloom;
@@ -822,6 +859,8 @@ function creditKillLocal(points) {
     audio.vo('strike-ready');
   } else if (G.streakKills === G.perks.strikeNeed - 1) {
     audio.vo('streak');
+  } else {
+    audio.vo('kill');
   }
 }
 
@@ -956,8 +995,30 @@ function onShellHit(hit) {
   if (ud?.kind === 'tank') {
     const tk = ud.tank;
     if (tk.isPlayer && !s.fromPlayer) {
+      // which plate took it: rockets (shaped charges) never skip off
+      let face = armorFacing(tk, s.vel);
+      if (face === 'oblique' && s.owner?.rocket) face = 'front';
+      const F = PLAYER_FACING[face];
+      if (face === 'oblique') {
+        effects.ricochet(pos, s.vel, hit.normal);
+        audio.ricochet();
+      } else if (tk.alive && G.state === 'playing') {
+        tk.addScar(pos, hit.normal);
+        // a penetration can knock out tracks (side) or the engine (rear)
+        if (face === 'side' && Math.random() < MODULES.playerTrackChance) {
+          tk.trackJamT = MODULES.playerTrackJam;
+          hud.floater('TRACKS HIT — IMMOBILIZED', 'warn');
+          audio.vo('tracks', true);
+        } else if (face === 'rear' && Math.random() < MODULES.playerEngineChance) {
+          tk.engineHitT = MODULES.playerEngineHit;
+          hud.floater('ENGINE HIT — HALF POWER', 'warn');
+          audio.vo('engine', true);
+        }
+      }
+      hud.incomingCall(F.label, face === 'oblique' ? 'good' : face === 'rear' ? 'bad' : '');
+      if (F.vo) audio.vo(F.vo);
       // trace back along the shell's flight for the threat direction
-      damagePlayer(Math.round((shellDmg + Math.floor(G.wave * 0.8)) * armorMult(tk, s.vel, true) * (G.hullDown ? HULL_DOWN_MULT : 1)),
+      damagePlayer(Math.round((shellDmg + Math.floor(G.wave * 0.8)) * F.mult * (G.hullDown ? HULL_DOWN_MULT : 1)),
         s.vel ? { x: pos.x - s.vel.x, z: pos.z - s.vel.z } : pos);
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
@@ -965,15 +1026,25 @@ function onShellHit(hit) {
         G.shotsHit++;
         if (W?.label === 'AP') {
           const face = armorFacing(tk, s.vel), F = AP_FACING[face];
-          hud.armorCall(F.label, F.kind);
+          let label = F.label;
           if (face === 'oblique') {
             audio.ricochet();
+            audio.vo('ricochet');
             effects.ricochet(pos, s.vel, hit.normal);
           } else {
             audio.penetrate(face === 'rear');
+            tk.addScar(pos, hit.normal);
+            const mod = rollEnemyModules(tk, face, pos.y);
+            if (mod) {
+              label += ` · ${mod}`;
+              effects.sparks(pos);
+              effects.dustPuff(tk.body.position.x, getHeight(tk.body.position.x, tk.body.position.z), tk.body.position.z, 1.5);
+            }
           }
+          hud.armorCall(label, F.kind);
           damageEnemy(e, dirDmg * F.mult, pos);
         } else {
+          tk.addScar(pos, hit.normal);
           damageEnemy(e, dirDmg * armorMult(tk, s.vel), pos);
         }
       }
@@ -983,9 +1054,19 @@ function onShellHit(hit) {
     if (byPlayer && ud.remoteEnemy?.alive) {
       G.shotsHit++;
       hud.hitmarker(false);
-      audio.hitTink();
-      effects.sparks(pos);
-      multiplayer.sendHit(ud.id, dirDmg * power);
+      // same armour rules as solo/host play (the host applies the damage)
+      let mult = 1;
+      if (W?.label === 'AP') {
+        const face = armorFacing(ud.remoteEnemy, s.vel), F = AP_FACING[face];
+        mult = F.mult;
+        hud.armorCall(F.label, F.kind);
+        if (face === 'oblique') { audio.ricochet(); effects.ricochet(pos, s.vel, hit.normal); }
+        else { audio.penetrate(face === 'rear'); effects.sparks(pos); }
+      } else {
+        audio.hitTink();
+        effects.sparks(pos);
+      }
+      multiplayer.sendHit(ud.id, dirDmg * power * mult);
     }
   } else if (ud?.kind === 'remoteAlly') {
     // no friendly fire — the bang is enough
@@ -996,6 +1077,8 @@ function onShellHit(hit) {
     if (byPlayer) G.shotsHit++;
     damageProp(ud.prop, 2, byPlayer);
   } else if (hit.tree) {
+    const tr = hit.tree;
+    effects.leafBurst(tr.x, tr.y + tr.height * 0.6, tr.z, tr.radius, 44, tr.variant === 0);
     foliage.topple(hit.tree, s.vel?.x ?? _dir.x, s.vel?.z ?? _dir.z, 1);
     if (byPlayer) addScore(SCORING.tree, '');
   }
@@ -1048,8 +1131,12 @@ function onShellHit(hit) {
 
   // shove trees near the blast
   for (const tree of foliage.treesNear(pos.x, pos.z, 4.2)) {
+    effects.leafBurst(tree.x, tree.y + tree.height * 0.6, tree.z, tree.radius, 26, tree.variant === 0);
     foliage.topple(tree, tree.x - pos.x, tree.z - pos.z, 0.8);
   }
+  // the blast flattens the grass around it for a while
+  G.blasts.push({ x: pos.x, z: pos.z, r: Math.max(3.5, expR * 1.1), t: 0 });
+  if (G.blasts.length > 8) G.blasts.shift();
 
   // shells, artillery and airstrikes shred infantry
   infantry.killRadius(pos.x, pos.z, Math.max(3.2, splashR), (u) => killSoldier(u, byPlayer));
@@ -1060,8 +1147,11 @@ const _infMuzzle = new THREE.Vector3();
 const _infTarget = new THREE.Vector3();
 const _infPos = new THREE.Vector3();
 
-function infantryShoot(u, target) {
+function infantryShoot(u, target, kind = 'rifle') {
   infantry.muzzleOf(u, _infMuzzle);
+  const tp = target.body.position;
+  if (smoke.blocks(_infMuzzle.x, _infMuzzle.y, _infMuzzle.z, tp.x, tp.y + 1, tp.z)) return;
+  if (kind === 'rpg') { infantryRocket(u, target); return; }
   _infTarget.set(
     target.body.position.x + (Math.random() - 0.5) * 2.4,
     target.body.position.y + 0.8 + Math.random() * 1.2,
@@ -1074,12 +1164,33 @@ function infantryShoot(u, target) {
   }
 }
 
+// shoulder-fired anti-tank rocket: slow, visible, dodgeable, lofted to hit
+function infantryRocket(u, target) {
+  const tp = target.body.position;
+  const dx = tp.x - _infMuzzle.x, dz = tp.z - _infMuzzle.z, flat = Math.hypot(dx, dz);
+  const v = INFANTRY.rpgSpeed, g = 9.81, dy = tp.y + 0.8 - _infMuzzle.y;
+  const disc = v ** 4 - g * (g * flat * flat + 2 * dy * v * v);
+  const elev = disc > 0 ? Math.atan((v * v - Math.sqrt(disc)) / (g * flat)) : 0.2;
+  const spread = (Math.random() - 0.5) * 0.06;
+  const yaw = Math.atan2(dx, dz) + spread;
+  const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(elev), Math.sin(elev), Math.cos(yaw) * Math.cos(elev));
+  projectiles.spawn(_infMuzzle.clone(), dir, v, { isPlayer: false, shellDmg: INFANTRY.rpgDamage, rocket: true }, onShellHit, 0.7);
+  effects.muzzleFlash(_infMuzzle, dir);
+  const d = camera.position.distanceTo(_infMuzzle);
+  if (d < 150) audio.rocket(Math.max(0.3, 1 - d / 150));
+  if (target.isPlayer) {
+    minimap.ping(u.x, u.z, '#ff9b3c');
+    hud.floater('⚠ RPG', 'warn');
+    audio.vo('rpg');
+  }
+}
+
 function killSoldier(u, byPlayer = true) {
   _infPos.set(u.x, getHeight(u.x, u.z) + 0.9, u.z);
   effects.spawnDebris(_infPos, 4, 0.45, 0x5c6647);
   effects.dustPuff(u.x, getHeight(u.x, u.z), u.z, 0.7);
   effects.bloodSplat(u.x, u.z);
-  if (byPlayer && G.state === 'playing') addScore(INFANTRY.points, '');
+  if (byPlayer && G.state === 'playing') addScore(u.rpg ? INFANTRY.rpgPoints : INFANTRY.points, u.rpg ? 'RPG TEAM' : '');
 }
 
 // ---------------------------------------------------------------- coax MG
@@ -1207,6 +1318,8 @@ function updateRepair(dt) {
   }
 
   if (healed > 0) {
+    // the crew fixes knocked-out parts first
+    if (p.trackJamT > 0 || p.engineHitT > 0) { p.trackJamT = 0; p.engineHitT = 0; hud.floater('TRACKS + ENGINE FIXED', 'good'); }
     p.hp = Math.min(p.maxHp, p.hp + healed);
     hud.setHp(p.hp, p.maxHp);
     if (p.hp >= 35) G.criticalSaid = false;
@@ -1224,6 +1337,34 @@ function updateRepair(dt) {
   }
   if (mode !== 'wait') hud.setRepair(mode);
   $('btn-repair')?.classList.toggle('active', G.repairing || mode === 'depot');
+}
+
+// Turret smoke dischargers: a fan of grenades thrown ahead of where the gun
+// points (enemies throw theirs toward the player). Clouds block every
+// line-of-sight check the enemy side makes.
+const _smokeO = new THREE.Vector3(), _smokeB = new THREE.Vector3();
+function fireSmoke(tank, towardX = null, towardZ = null) {
+  tank.visual.root.updateMatrixWorld(true);
+  tank.visual.muzzle.getWorldPosition(_smokeO);
+  tank.visual.pivot.getWorldPosition(_smokeB);
+  let yaw = Math.atan2(_smokeO.x - _smokeB.x, _smokeO.z - _smokeB.z);
+  if (towardX !== null) yaw = Math.atan2(towardX - tank.body.position.x, towardZ - tank.body.position.z);
+  _smokeB.y += 0.3;
+  const near = camera.position.distanceTo(_smokeB) < 120;
+  smoke.deploy(_smokeB, yaw, tank.isPlayer ? {} : { grenades: 4, range: 12 });
+  if (near) audio.smokeLaunch();
+}
+function playerSmoke() {
+  const p = G.player;
+  if (!p?.alive || G.smokeCd > 0) {
+    if (G.smokeCd > 0) hud.floater(`SMOKE RELOADING ${Math.ceil(G.smokeCd)}s`, 'warn');
+    return;
+  }
+  G.smokeCd = SMOKE.cooldown;
+  fireSmoke(p);
+  audio.vo('smoke', true);
+  hud.floater('💨 SMOKE — relocate behind it', 'good');
+  haptic(15);
 }
 
 // Hull down: the nearest threat can see the turret over a crest but not the
@@ -1252,8 +1393,11 @@ function updateHullDown(dt) {
   G.hullDownLast = down;
   if (down !== G.hullDown && G.hullDownVote >= 1) {
     G.hullDown = down;
-    hud.setBadge(down ? '⛰ HULL DOWN −40%' : '');
-    if (down && !G.hullDownSaid) { G.hullDownSaid = true; hud.floater('HULL DOWN — the crest covers your hull', 'good'); }
+    if (down && !G.hullDownSaid) {
+      G.hullDownSaid = true;
+      hud.floater('HULL DOWN — the crest covers your hull', 'good');
+      audio.vo('hulldown');
+    }
   }
 }
 
@@ -1320,8 +1464,18 @@ function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true) {
   audio.vo('armor');
 }
 
+// every wave rolls its own sky (deterministic by wave, so co-op agrees)
+function applyWaveWeather(w) {
+  const name = weatherForWave(w);
+  if (name === sky.weatherName) return;
+  sky.setWeather(name);
+  const line = name === 'dusk' ? 'dusk' : (name === 'rain' || name === 'overcast' || name === 'mist') ? 'weather' : null;
+  if (line) setTimeout(() => audio.vo(line), 4200);
+}
+
 function startWave(w) {
   G.wave = w;
+  applyWaveWeather(w);
   G.targetsBonusGiven = false;
   // last wave's uncollected bonus targets despawn; cap barrel clutter
   for (const it of [...props.items]) {
@@ -1344,13 +1498,18 @@ function startWave(w) {
     hud.banner(`WAVE ${w}`, parts.join(' • '));
   }
   audio.waveAlert();
-  announceContacts(waves.enemies.slice(before), 'ARMOR INBOUND', !bossWave);
+  const fresh = waves.enemies.slice(before);
+  announceContacts(fresh, 'ARMOR INBOUND', !bossWave);
+  if (fresh.some(e => e.typeName === 'destroyer')) {
+    setTimeout(() => audio.vo('destroyer', true), 2600);
+    hud.floater('▼ TANK DESTROYER — fixed gun, circle it', 'warn');
+  }
   // infantry screen from wave 2: rifles that sting, tracks that squish
   if (w >= 2) {
     const squads = Math.min(4, 1 + (w >> 1));
     for (let i = 0; i < squads; i++) {
       const s = props.ringSpot(48, 95);
-      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0));
+      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0), w >= INFANTRY.rpgFromWave ? 1 : 0);
     }
   }
   if (inCoop() && multiplayer.isHost()) multiplayer.sendWave(w, armor);
@@ -1484,6 +1643,9 @@ function resetGame() {
   G.repairing = false; G.repairArm = 0; G.lastDmgT = -99; G.criticalSaid = false;
   G.depot = null; G.boostCd = 0; G.pendingCaches = [];
   G.hitStop = 0; G.hullDown = false; G.hullDownSaid = false; G.hintT = 0; G.hintDone = false;
+  G.smokeCd = 0; G.blasts = []; G.trail = []; G.trailAt = null;
+  smoke.clear();
+  sky.setWeather('clear', true);
   infantry.clear();
   infantry.updateVisuals();
   G.perks = freshPerks(); G.perkPending = null; G.perkTimer = 0;
@@ -1665,10 +1827,17 @@ function fixedStep(dt) {
   if (p?.alive && G.state !== 'downed') targets.push(p);
   if (inCoop()) targets.push(...multiplayer.allyTargets());
 
+  aiCtx.wrecks.length = 0;
+  for (const e of waves.enemies) if (!e.tank.alive) aiCtx.wrecks.push(e.tank.body.position);
   for (const e of waves.enemies) {
     e.tank.savePrev();
     if (combatSim) {
-      const shot = e.think(dt, targets, world, dt);
+      const shot = e.think(dt, targets, world, dt, aiCtx);
+      if (e.wantsSmoke) {
+        e.wantsSmoke = false;
+        const tp = targets[0]?.body?.position;
+        if (tp) fireSmoke(e.tank, tp.x, tp.z);
+      }
       if (shot) {
         e.firedAt = G.time;
         if (p?.alive && e.tank.body.position.distanceTo(p.body.position) < 170) {
@@ -1691,7 +1860,7 @@ function fixedStep(dt) {
   projectiles.step(dt, foliage);
 
   // shell smoke trails
-  for (const s of projectiles.active) effects.shellTrail(s.pos);
+  for (const s of projectiles.active) effects.shellTrail(s.pos, s);
 
   // infantry advance, shoot, and get ground under tracks
   if (combatSim) {
@@ -1719,6 +1888,7 @@ function fixedStep(dt) {
     const pos = tank.body.position;
     for (const tree of foliage.treesNear(pos.x, pos.z, 2.6)) {
       if (tree.scale > 1.25) continue; // big trees stop you (visually pass-through is worse)
+      effects.leafBurst(tree.x, tree.y + tree.height * 0.55, tree.z, tree.radius, 20, tree.variant === 0);
       foliage.topple(tree, tank.body.velocity.x, tank.body.velocity.z, 0.7);
       tank.body.velocity.scale(0.86, tank.body.velocity);
       if (tank.isPlayer) { effects.shake(0.12); addScore(SCORING.tree, ''); }
@@ -1733,7 +1903,7 @@ function fixedStep(dt) {
     if (G.comboT <= 0) G.combo = 0;
 
     // pillbox guns
-    const shots = waves.updatePillboxes(dt, p, world, props, _pillboxLos);
+    const shots = waves.updatePillboxes(dt, p, world, props, _pillboxLos, smoke);
     for (const sh of shots) {
       const d = camera.position.distanceTo(sh.origin);
       if (d < 200) audio.fire(Math.max(0.12, 0.8 - d / 240));
@@ -1747,6 +1917,7 @@ function fixedStep(dt) {
       if (G.artilleryT <= 0) {
         G.artilleryT = ARTILLERY.period * (0.85 + Math.random() * 0.3);
         hud.banner('⚠ ARTILLERY', 'get clear of the red markers', 1.6);
+        audio.vo('artillery', true);
         audio.whistle();
         setTimeout(() => audio.whistle(), 650);
         const pp = p.body.position, pv = p.body.velocity;
@@ -1828,6 +1999,7 @@ function fixedStep(dt) {
   }
 }
 const _pillboxLos = new CANNON.RaycastResult();
+const aiCtx = { smoke, wrecks: [] };
 
 // ---------------------------------------------------------------- camera
 const _camTarget = new THREE.Vector3();
@@ -2190,6 +2362,8 @@ let fpsTimer = 0;
 function gameFrame(dt) {
 
   input.poll();
+  input.pollPad(dt);
+  if (input.padJustConnected) { input.padJustConnected = false; hud.floater('🎮 CONTROLLER CONNECTED', 'good'); }
 
   // drive is camera-relative on every platform: the stick vector (thumb
   // stick or WASD) is the desired travel direction; the hull turns itself
@@ -2274,6 +2448,8 @@ function gameFrame(dt) {
     hud.setMg(G.mgHeat, G.mgLocked);
 
     if (input.consumeRepair()) toggleRepair();
+    if (input.consumeSmoke()) playerSmoke();
+    if (G.smokeCd > 0) G.smokeCd -= dt;
     updateRepair(dt);
     if (input.consumePing()) {
       // squad ping on the reticle point (works solo too, as a self-marker)
@@ -2367,6 +2543,12 @@ function gameFrame(dt) {
   if (G.state === 'playing' && G.player?.alive) {
     updateHullDown(dt);
     updateNavHint(dt);
+    const p = G.player, badges = [];
+    if (G.hullDown) badges.push('⛰ HULL DOWN −40%');
+    if (p.trackJamT > 0) badges.push(`⛓ TRACKS ${p.trackJamT.toFixed(1)}s`);
+    if (p.engineHitT > 0) badges.push(`⚙ ENGINE ${Math.ceil(p.engineHitT)}s`);
+    hud.setBadge(badges.join('  ·  '));
+    hud.setSmoke(G.smokeCd, SMOKE.cooldown);
   } else {
     hud.setBadge('');
     hud.setHint('');
@@ -2425,8 +2607,11 @@ function gameFrame(dt) {
   foliage.update(dt, camera.position.x, camera.position.z);
   contacts.update(dt, camera, foliage, G.player, waves.enemies);
   effects.update(dt);
+  smoke.update(dt);
+  updateBattleVisuals(dt);
   // shadow frustum follows the camera so downed-spectate stays lit
   sky.update(dt, camera.position);
+  applyWeatherToRenderer();
 
   // HUD
   if (playingish && G.player) {
@@ -2456,7 +2641,74 @@ function menuFrame(dt) {
   foliage.update(dt, camera.position.x, camera.position.z);
   contacts.update(dt, camera, foliage, G.player, waves.enemies);
   effects.update(dt);
+  smoke.update(dt);
   sky.update(dt, camera.position);
+  applyWeatherToRenderer();
+  // gamepad: A / Start deploys from the title screen
+  input.pollPad(dt);
+  if (input.consumePadConfirm() && !$('screen-menu').classList.contains('hidden')) {
+    audio.ensure(); audio.resume();
+    startGame();
+  }
+}
+
+// weather drives fog distance/colour, exposure and the rain bed
+function applyWeatherToRenderer() {
+  const W = sky.weather;
+  scene.fog.far = fogBaseFar * 1.6 * W.fogMul;
+  scene.fog.near = fogBaseFar * 0.55 * W.fogMul;
+  gradePass.uniforms.uExposure.value = W.exposure;
+  renderer.toneMappingExposure = W.exposure;
+  audio.setRain(G.state === 'menu' ? 0 : W.rain);
+}
+
+// per-frame battle dressing: engine fires on wrecked-out hulls, black smoke
+// from hit engines, and the grass pressed down by tanks, tracks and blasts
+const _deck = new THREE.Vector3();
+const _flat = [];
+function updateBattleVisuals(dt) {
+  const tanks = [];
+  if (G.player?.alive) tanks.push(G.player);
+  for (const e of waves.enemies) if (e.tank.alive) tanks.push(e.tank);
+  for (const t of tanks) {
+    const near = camera.position.distanceTo(t.visual.root.position) < 150;
+    if (!near) continue;
+    const frac = t.hp / t.maxHp;
+    if (frac < 0.25 || t.engineHitT > 0) {
+      _deck.set(0, 1.35, -1.5);
+      t.visual.root.localToWorld(_deck);
+      if (frac < 0.25) effects.engineFire(_deck, frac, dt);
+      if (t.engineHitT > 0 && Math.random() < dt * 9) effects.exhaustPuff(_deck, 1.6);
+    }
+  }
+  // flatteners: live tanks, the player's recent track path, blasts
+  _flat.length = 0;
+  const pp = G.player?.body.position;
+  if (pp && G.player.alive) {
+    _flat.push({ x: pp.x, z: pp.z, r: 3.1, s: 1 });
+    const last = G.trail[G.trail.length - 1];
+    if (!last || Math.hypot(last.x - pp.x, last.z - pp.z) > 1.6) {
+      G.trail.push({ x: pp.x, z: pp.z, t: 0 });
+      if (G.trail.length > 12) G.trail.shift();
+    }
+  }
+  for (const tr of G.trail) {
+    tr.t += dt;
+    const k = 1 - tr.t / 30;
+    if (k > 0) _flat.push({ x: tr.x, z: tr.z, r: 2.4, s: 0.8 * k });
+  }
+  for (const e of waves.enemies) {
+    const q = e.tank.body.position;
+    if (camera.position.distanceTo(e.tank.visual.root.position) < 60) _flat.push({ x: q.x, z: q.z, r: 3.1 * (e.tank.scale ?? 1), s: 1 });
+  }
+  for (let i = G.blasts.length - 1; i >= 0; i--) {
+    const b = G.blasts[i];
+    b.t += dt;
+    const k = 1 - b.t / 9;
+    if (k <= 0) { G.blasts.splice(i, 1); continue; }
+    _flat.push({ x: b.x, z: b.z, r: b.r, s: 0.9 * k });
+  }
+  foliage.setFlatteners(_flat);
 }
 
 let pumping = false;
@@ -2504,7 +2756,7 @@ requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry, foliage, hud,
+  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry, foliage, hud, smoke, sky, startWave,
   onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)

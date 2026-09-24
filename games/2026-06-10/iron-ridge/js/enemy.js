@@ -3,9 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Tank } from './tank.js?v=polish1';
-import { getHeight } from './terrain.js?v=polish1';
-import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=polish1';
+import { Tank } from './tank.js?v=polish2';
+import { getHeight, raycastTerrain } from './terrain.js?v=polish2';
+import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=polish2';
 
 const WRECK_LIFE = 90; // seconds a burnt-out hull stays on the field
 const WRECK_CAP = 7;   // most wrecks kept at once (newest win)
@@ -33,6 +33,7 @@ export class EnemyTank {
       maxSpeed: T.maxSpeed,
       engineForce: T.engineForce,
       maxYawRate: T.maxYawRate,
+      fixedGun: T.fixedGun,
     });
     this.tank.shellDmg = T.shellDamage;
     this.wave = wave;
@@ -50,12 +51,59 @@ export class EnemyTank {
     this.stuckT = 0;
     this.unstickT = 0;
     this.unstickTurn = 1;
+    // Behaviour role. Scouts work round to your flank or rear, tank
+    // destroyers snipe from range, some mediums/heavies use cover (hull-down
+    // crests, wrecks), the rest duel in the open. The Colossus just comes.
+    this.role = typeName === 'scout' ? 'flank'
+      : typeName === 'destroyer' ? 'snipe'
+      : typeName === 'boss' ? 'engage'
+      : Math.random() < 0.55 ? 'cover' : 'engage';
+    this.flankSide = Math.random() < 0.5 ? -1 : 1;
+    this.coverPt = null;
+    this.coverT = 0;
+    this.coverShots = 0;
+    this.retreatT = 0;
+    this.scootT = 0;
+    this.lastHp = this.tank.hp;
+    this.smokeUsed = false;
+    this.wantsSmoke = false;
+  }
+
+  // pick a firing position: a hull-down spot on the ring at preferred range
+  // near our bearing, or the far side of a wreck
+  findCover(pp, wrecks) {
+    const t = this.tank, R = this.type.preferredRange;
+    const bearing = Math.atan2(t.pos.x - pp.x, t.pos.z - pp.z);
+    const eyeY = pp.y + 1.8;
+    let best = null, bestScore = Infinity;
+    const consider = (x, z, bonus) => {
+      if (Math.hypot(x, z) > PLAY_RADIUS - 25) return;
+      const gy = getHeight(x, z);
+      const hull = raycastTerrain(pp.x, eyeY, pp.z, x, gy + 0.8, z);
+      const turret = raycastTerrain(pp.x, eyeY, pp.z, x, gy + 2.6, z);
+      let score = Math.hypot(x - t.pos.x, z - t.pos.z) - bonus;
+      if (hull && !turret) score -= 60;      // hull-down: ideal
+      else if (hull && turret) score += 40;  // blind: can't shoot from there
+      if (score < bestScore) { bestScore = score; best = { x, z }; }
+    };
+    for (let k = 0; k < 9; k++) {
+      const a = bearing + (k - 4) * 0.2, r = R * (0.8 + Math.random() * 0.4);
+      consider(pp.x + Math.sin(a) * r, pp.z + Math.cos(a) * r, 0);
+    }
+    for (const w of wrecks || []) {
+      const dx = w.x - pp.x, dz = w.z - pp.z, d = Math.hypot(dx, dz);
+      if (d < 25 || d > R * 1.6) continue;
+      const k = (d + 4.5) / d; // just behind the hulk, as seen from the player
+      consider(pp.x + dx * k, pp.z + dz * k, 45);
+    }
+    return best;
   }
 
   losTo(playerBody, world) {
     const t = this.tank;
     _from.set(t.pos.x, t.pos.y + 1.8, t.pos.z);
     _to.set(playerBody.position.x, playerBody.position.y + 0.6, playerBody.position.z);
+    if (this.smoke?.blocks(_from.x, _from.y, _from.z, _to.x, _to.y + 1.2, _to.z)) return false;
     this.losResult.reset();
     world.raycastClosest(_from, _to, {
       collisionFilterMask: ~CG.ENEMY,
@@ -67,8 +115,10 @@ export class EnemyTank {
   // returns shoot request {origin, dir} when it fires.
   // `targets` is either a single tank-like {alive, body} or an array of
   // them (co-op: host player + remote allies) — the nearest alive one wins.
-  think(dt, targets, world, fixedDt) {
+  // ctx: { smoke, wrecks: [{x, z}] } — optional shared battlefield context
+  think(dt, targets, world, fixedDt, ctx = {}) {
     const t = this.tank;
+    this.smoke = ctx.smoke;
     if (!t.alive) {
       t.applyControls(fixedDt);
       return null;
@@ -117,25 +167,90 @@ export class EnemyTank {
 
     // NOTE: positive `turn` steers yaw NEGATIVE (matches player controls),
     // so steer with the negated heading error.
-    if (!player.alive) {
-      throttle = 0;
-    } else if (!this.hasLOS || dist > this.type.preferredRange + 18) {
-      // close in — pivot first, advance once roughly aligned
+    const R = this.type.preferredRange;
+    const hurt = t.hp < this.lastHp;
+    this.lastHp = t.hp;
+    if (hurt) { this.strafeDir *= -1; if (this.role === 'cover') this.coverT = 0; }
+    // badly hurt: pop smoke once and back off behind it, front plate forward
+    if (!this.smokeUsed && player.alive && t.hp < t.maxHp * 0.35 && this.typeName !== 'boss') {
+      this.smokeUsed = true;
+      this.wantsSmoke = true;
+      this.retreatT = 5;
+      this.coverPt = null;
+    }
+    const seek = () => {
       const d = headTo(pp.x, pp.z);
       turn = THREE.MathUtils.clamp(-d * 1.6, -1, 1);
       throttle = Math.abs(d) < 0.5 ? 0.95 : Math.abs(d) < 1.2 ? 0.45 : 0.05;
-    } else if (dist < this.type.minRange) {
-      // back off, keep gun on target
+    };
+    const backOff = () => {
       const d = headTo(pp.x, pp.z);
       turn = THREE.MathUtils.clamp(-d * 1.2, -1, 1);
       throttle = -0.7;
-    } else {
-      // hold range: orbit tangentially, leaning in/out to fix range error
-      const lean = THREE.MathUtils.clamp((this.type.preferredRange - dist) * 0.025, -0.45, 0.45);
+    };
+    const driveTo = (gx, gz) => {
+      const d = headTo(gx, gz);
+      turn = THREE.MathUtils.clamp(-d * 1.6, -1, 1);
+      throttle = Math.abs(d) < 0.5 ? 0.95 : Math.abs(d) < 1.2 ? 0.5 : 0.08;
+    };
+    const orbit = () => {
+      const lean = THREE.MathUtils.clamp((R - dist) * 0.025, -0.45, 0.45);
       const d = headTo(pp.x, pp.z) + this.strafeDir * (Math.PI / 2 + lean);
       const dn = Math.atan2(Math.sin(d), Math.cos(d));
       turn = THREE.MathUtils.clamp(-dn * 1.2, -1, 1);
       throttle = 0.4;
+    };
+    const engage = () => {
+      if (!this.hasLOS || dist > R + 18) seek();
+      else if (dist < this.type.minRange) backOff();
+      else orbit();
+    };
+
+    if (!player.alive) {
+      throttle = 0;
+    } else if (this.retreatT > 0) {
+      this.retreatT -= dt;
+      backOff();
+      throttle = -0.9;
+    } else if (this.role === 'snipe') {
+      // hold still and swing the whole hull onto the lead point
+      if (!this.hasLOS || dist > R + 25) seek();
+      else if (dist < this.type.minRange) backOff();
+      else if (this.scootT > 0) { this.scootT -= dt; backOff(); throttle = -0.75; }
+      else {
+        const tof = dist / SHELL.enemySpeed;
+        const d = headTo(pp.x + player.body.velocity.x * tof, pp.z + player.body.velocity.z * tof);
+        turn = THREE.MathUtils.clamp(-d * 2.2, -1, 1);
+        throttle = 0;
+      }
+    } else if (this.role === 'cover') {
+      this.coverT -= dt;
+      if (!this.coverPt || this.coverT <= 0) {
+        this.coverPt = this.findCover(pp, ctx.wrecks);
+        this.coverT = 7 + Math.random() * 4;
+        this.coverShots = 0;
+      }
+      if (!this.coverPt || dist > R + 45) engage();
+      else if (Math.hypot(this.coverPt.x - t.pos.x, this.coverPt.z - t.pos.z) > 3.5) driveTo(this.coverPt.x, this.coverPt.z);
+      else {
+        // in position: face the threat (front armour) and hold
+        const d = headTo(pp.x, pp.z);
+        turn = THREE.MathUtils.clamp(-d * 1.4, -1, 1);
+        throttle = 0;
+      }
+    } else if (this.role === 'flank') {
+      // work round to the target's side or rear before committing
+      const q = player.body.quaternion;
+      const fx = q ? 2 * (q.x * q.z + q.w * q.y) : 0, fz = q ? 1 - 2 * (q.x * q.x + q.y * q.y) : 1;
+      const a = Math.atan2(-fx, -fz) + this.flankSide * 1.05;
+      const gx = pp.x + Math.sin(a) * R * 0.85, gz = pp.z + Math.cos(a) * R * 0.85;
+      const toGoal = Math.hypot(gx - t.pos.x, gz - t.pos.z);
+      // how far round the target we are: 1 = directly behind it
+      const behind = -((t.pos.x - pp.x) * fx + (t.pos.z - pp.z) * fz) / Math.max(1, dist);
+      if (toGoal > 14 && behind < 0.35 && dist > 30) driveTo(gx, gz);
+      else engage();
+    } else {
+      engage();
     }
     // keep inside the play area
     const rad = Math.hypot(t.pos.x, t.pos.z);
@@ -181,6 +296,10 @@ export class EnemyTank {
 
       if (this.reloadT <= 0 && t.aimAlignment(this.aimGoal) > 0.9985) {
         this.reloadT = this.reload;
+        // shoot and scoot: snipers reverse off the line, cover users move
+        // on after a couple of shots so you can't pre-aim their spot
+        if (this.role === 'snipe' && Math.random() < 0.45) this.scootT = 1.6;
+        if (this.role === 'cover' && ++this.coverShots >= 2 + (Math.random() < 0.5 ? 1 : 0)) this.coverT = 0;
         return t.fire();
       }
     } else {
@@ -207,7 +326,8 @@ export class WaveManager {
     // boss waves trade one escort slot for the Colossus
     const n = Math.max(1, Math.min(6, w === 1 ? 1 : 1 + Math.floor(w / 2)) - (bossWave ? 1 : 0));
     for (let i = 0; i < n; i++) {
-      if (w >= 6 && i % 3 === 2) tanks.push('heavy');
+      if (w >= 4 && ((i === 0 && w % 2 === 0) || (w >= 9 && i % 4 === 3))) tanks.push('destroyer');
+      else if (w >= 6 && i % 3 === 2) tanks.push('heavy');
       else if (i % 2 === 1 || w <= 2) tanks.push('scout');
       else tanks.push('standard');
     }
@@ -281,7 +401,7 @@ export class WaveManager {
   }
 
   // static gun emplacements: slew toward the player, fire on LOS
-  updatePillboxes(dt, player, world, props, losResult) {
+  updatePillboxes(dt, player, world, props, losResult, smoke = null) {
     const shots = [];
     if (!player?.alive) return shots;
     const pp = player.body.position;
@@ -300,9 +420,10 @@ export class WaveManager {
       it.yaw += THREE.MathUtils.clamp(d, -step, step);
       it.pivot.rotation.y = it.yaw;
       if (Math.abs(d) > 0.04 || it.reloadT > 0) continue;
-      // LOS check
+      // LOS check (terrain/props, then any smoke screen)
       _from.set(bp.x, bp.y + 0.4, bp.z);
       _to.set(pp.x, pp.y + 0.6, pp.z);
+      if (smoke?.blocks(_from.x, _from.y, _from.z, _to.x, _to.y + 1.2, _to.z)) continue;
       losResult.reset();
       world.raycastClosest(_from, _to, { collisionFilterMask: ~CG.PROP, skipBackfaces: true }, losResult);
       if (!losResult.hasHit || losResult.body !== player.body) continue;

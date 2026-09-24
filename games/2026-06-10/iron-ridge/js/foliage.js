@@ -4,12 +4,12 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { installTreeFade, treeLodAttribute, treeBlend } from './tree-lod.js?v=polish1';
-import { barkTexture } from './surface-art.js?v=polish1';
-import { woodlandMaterial, woodlandParts, undergrowthParts, nearTreeParts, nearLeafMaterial } from './tree-art.js?v=polish1';
-import { getHeight, getNormal, forestDensity } from './terrain.js?v=polish1';
-import { makeRng } from './noise.js?v=polish1';
-import { WORLD_HALF, SCATTER, CG } from './config.js?v=polish1';
+import { installTreeFade, treeLodAttribute, treeBlend } from './tree-lod.js?v=polish2';
+import { barkTexture } from './surface-art.js?v=polish2';
+import { woodlandMaterial, woodlandParts, undergrowthParts, nearTreeParts, nearLeafMaterial } from './tree-art.js?v=polish2';
+import { getHeight, getNormal, forestDensity } from './terrain.js?v=polish2';
+import { makeRng } from './noise.js?v=polish2';
+import { WORLD_HALF, SCATTER, CG } from './config.js?v=polish2';
 
 // --- tiny non-indexed geometry merger (avoids vendoring utils) ----------
 function mergeGeoms(geoms) {
@@ -139,19 +139,34 @@ function grassGeometry() {
 // Gentle vertex-shader wind: bend scales with height² so bases stay put.
 // Phase comes from the instance's world position, so tufts don't sway in
 // lockstep.
-function addWind(mat, windU, strength) {
+// Flatteners: vec4(x, z, radius, strength) — tanks, their fresh track
+// paths and blasts press grass down (see Foliage.setFlatteners).
+export const FLAT_SLOTS = 24;
+function addWind(mat, windU, strength, flat) {
   mat.onBeforeCompile = (sh) => {
     sh.uniforms.uWind = windU;
+    sh.uniforms.uFlat = flat;
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nuniform float uWind;')
+      .replace('#include <common>', `#include <common>\nuniform float uWind;\nuniform vec4 uFlat[${FLAT_SLOTS}];`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
       {
         float ph = instanceMatrix[3][0] * 0.71 + instanceMatrix[3][2] * 0.53;
         float bend = position.y * position.y * ${strength.toFixed(3)};
         transformed.x += (sin(uWind * 1.7 + ph) + sin(uWind * 2.9 + ph * 1.7) * 0.5) * bend;
         transformed.z += cos(uWind * 1.3 + ph * 1.1) * bend * 0.6;
+        vec2 ip = vec2(instanceMatrix[3][0], instanceMatrix[3][2]);
+        float press = 0.0;
+        for (int i = 0; i < ${FLAT_SLOTS}; i++) {
+          vec4 f = uFlat[i];
+          float k = f.w * (1.0 - smoothstep(f.z * 0.55, f.z, distance(ip, f.xy)));
+          press = max(press, k);
+        }
+        // squash and lay the blades over
+        transformed.x += position.y * press * 0.9;
+        transformed.y *= 1.0 - 0.82 * press;
       }`);
   };
+  mat.customProgramCacheKey = () => 'grass-wind-flat1';
 }
 
 function flowerGeometry() {
@@ -367,7 +382,8 @@ export class Foliage {
     const gMat = new THREE.MeshStandardMaterial({
       vertexColors: true, side: THREE.DoubleSide, roughness: 1,
     });
-    addWind(gMat, this.windU, 0.24);
+    this.flat = { value: Array.from({ length: FLAT_SLOTS }, () => new THREE.Vector4(0, 0, 0, 0)) };
+    addWind(gMat, this.windU, 0.24, this.flat);
     this.grass = new THREE.InstancedMesh(grassGeometry(), gMat, SCATTER.grass);
     this.grass.castShadow = false;
     this.grass.receiveShadow = false;
@@ -376,7 +392,7 @@ export class Foliage {
     const fMat = new THREE.MeshStandardMaterial({
       vertexColors: true, side: THREE.DoubleSide, roughness: 1,
     });
-    addWind(fMat, this.windU, 0.4);
+    addWind(fMat, this.windU, 0.4, this.flat);
     this.flowers = new THREE.InstancedMesh(flowerGeometry(), fMat, SCATTER.flowers);
     this.flowers.castShadow = false;
     this.scene.add(this.flowers);
@@ -438,6 +454,15 @@ export class Foliage {
     if (this.flowers.instanceColor) this.flowers.instanceColor.needsUpdate = true;
 
     this.grassAnchor.set(cx, cz);
+  }
+
+  // list of {x, z, r, s}; extra entries are dropped, missing slots cleared
+  setFlatteners(list) {
+    const v = this.flat.value;
+    for (let i = 0; i < FLAT_SLOTS; i++) {
+      const f = list[i];
+      if (f) v[i].set(f.x, f.z, f.r, f.s); else v[i].set(0, 0, 0, 0);
+    }
   }
 
   setNearDetail(cap, radius) {

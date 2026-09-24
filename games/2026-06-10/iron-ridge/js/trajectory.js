@@ -4,8 +4,8 @@
 // impact disc turns red when something blocks the shot short of the reticle.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=polish1';
-import { getHeight } from './terrain.js?v=polish1';
+import { SHELL } from './config.js?v=polish2';
+import { getHeight } from './terrain.js?v=polish2';
 
 const MAX_PTS = 160;
 const STEP = 1 / 60;

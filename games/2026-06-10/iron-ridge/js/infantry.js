@@ -4,8 +4,8 @@
 // head, helmet, rifle) share one matrix per soldier: 4 draw calls total.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=polish1';
-import { INFANTRY } from './config.js?v=polish1';
+import { getHeight } from './terrain.js?v=polish2';
+import { INFANTRY } from './config.js?v=polish2';
 
 const _m = new THREE.Matrix4();
 const _lm = new THREE.Matrix4();
@@ -87,7 +87,13 @@ export class Infantry {
     this.legR = make(legGeo(), mats.clothDark);
     this.bootL = make(bootGeo(), mats.boot);
     this.bootR = make(bootGeo(), mats.boot);
-    this.meshes = [...this.staticMeshes, this.legL, this.legR, this.bootL, this.bootR];
+    // anti-tank rocket tube on the shoulder (rocket teams only)
+    const tube = new THREE.CylinderGeometry(0.065, 0.065, 1.15, 8);
+    tube.rotateX(Math.PI / 2);
+    tube.translate(0.17, 1.43, 0.08);
+    const tubeMat = new THREE.MeshStandardMaterial({ color: 0x3f4a33, roughness: 0.75, metalness: 0.2 });
+    this.tube = make(tube, tubeMat);
+    this.meshes = [...this.staticMeshes, this.legL, this.legR, this.bootL, this.bootR, this.tube];
 
     // per-soldier uniform tint on torso + arms
     const col = new THREE.Color();
@@ -101,7 +107,7 @@ export class Infantry {
     }
 
     this.units = new Array(INFANTRY.max).fill(null).map(() => ({
-      alive: false, x: 0, z: 0, yaw: 0, fireT: 1, phase: Math.random() * 7, walk: 0, swingAmp: 0,
+      alive: false, x: 0, z: 0, yaw: 0, fireT: 1, phase: Math.random() * 7, walk: 0, swingAmp: 0, rpg: false,
     }));
     this.time = 0;
   }
@@ -112,7 +118,8 @@ export class Infantry {
     return n;
   }
 
-  spawnSquad(x, z, n) {
+  // rpg: how many of the squad carry rocket launchers
+  spawnSquad(x, z, n, rpg = 0) {
     let spawned = 0;
     for (const u of this.units) {
       if (spawned >= n) break;
@@ -125,6 +132,8 @@ export class Infantry {
       u.yaw = Math.random() * Math.PI * 2;
       u.fireT = 1 + Math.random() * INFANTRY.reload;
       u.phase = Math.random() * 7;
+      u.rpg = spawned < rpg;
+      if (u.rpg) u.fireT = 3 + Math.random() * INFANTRY.rpgReload;
       spawned++;
     }
     return spawned;
@@ -149,7 +158,9 @@ export class Infantry {
       let dy = want - u.yaw;
       dy = Math.atan2(Math.sin(dy), Math.cos(dy));
       u.yaw += THREE.MathUtils.clamp(dy, -2.4 * dt, 2.4 * dt);
-      if (bestD > INFANTRY.stopRange) {
+      // rocket teams hang back at the edge of their range
+      const stopAt = u.rpg ? INFANTRY.stopRange * 1.9 : INFANTRY.stopRange;
+      if (bestD > stopAt) {
         // weave a little so they don't march in a laser line
         const weave = Math.sin(this.time * 1.3 + u.phase) * 0.5;
         u.x += Math.sin(u.yaw + weave) * INFANTRY.speed * dt;
@@ -160,9 +171,14 @@ export class Infantry {
         u.swingAmp = Math.max(0, u.swingAmp - dt * 6);
       }
       u.fireT -= dt;
-      if (u.fireT <= 0 && bestD < INFANTRY.fireRange) {
+      if (u.rpg) {
+        if (u.fireT <= 0 && bestD < INFANTRY.rpgRange) {
+          u.fireT = INFANTRY.rpgReload * (0.8 + Math.random() * 0.5);
+          onShoot(u, best, 'rpg');
+        }
+      } else if (u.fireT <= 0 && bestD < INFANTRY.fireRange) {
         u.fireT = INFANTRY.reload * (0.7 + Math.random() * 0.8);
-        onShoot(u, best);
+        onShoot(u, best, 'rifle');
       }
     }
   }
@@ -233,6 +249,7 @@ export class Infantry {
       _q.setFromEuler(_e);
       _m.compose(_p, _q, _s);
       for (const m of this.staticMeshes) m.setMatrixAt(i, _m);
+      this.tube.setMatrixAt(i, u.rpg ? _m : _zero);
       // legs: base × T(hip) × RotX(±swing)
       const swing = stride * 0.55 * u.swingAmp;
       for (const [mesh, boot, sideX, sign] of [
@@ -249,12 +266,12 @@ export class Infantry {
     for (const m of this.meshes) m.instanceMatrix.needsUpdate = true;
   }
 
-  // muzzle point for tracer visuals
+  // muzzle point for tracer visuals (rocket tubes fire from the shoulder)
   muzzleOf(u, out) {
     out.set(
-      u.x + Math.sin(u.yaw) * 0.6,
-      getHeight(u.x, u.z) + 1.1,
-      u.z + Math.cos(u.yaw) * 0.6,
+      u.x + Math.sin(u.yaw) * (u.rpg ? 0.75 : 0.6),
+      getHeight(u.x, u.z) + (u.rpg ? 1.45 : 1.1),
+      u.z + Math.cos(u.yaw) * (u.rpg ? 0.75 : 0.6),
     );
     return out;
   }

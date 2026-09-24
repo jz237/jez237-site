@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { settings, setSetting } from './settings.js?v=polish1';
+import { settings, setSetting } from './settings.js?v=polish2';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -39,6 +39,7 @@ export class Input {
       if (e.code === 'KeyQ') this.weaponQueued = 'cycle';
       if (e.code === 'KeyE') this.repairQueued = true;
       if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') this.boostQueued = true;
+      if (e.code === 'KeyC') this.smokeQueued = true;
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.keys.clear());
@@ -53,11 +54,11 @@ export class Input {
       this.lookDY += e.movementY * settings.lookSens;
     });
     canvas.addEventListener('mousedown', (e) => {
-      if (e.button === 0 && this.locked) { this.firing = true; this.fireQueued = true; }
+      if (e.button === 0 && this.locked) { this.firing = true; this.mouseFiring = true; this.fireQueued = true; }
       if (e.button === 2 && this.locked) this.mgHeld = true; // hold RMB = coax MG
     });
     window.addEventListener('mouseup', (e) => {
-      if (e.button === 0) this.firing = false;
+      if (e.button === 0) { this.firing = false; this.mouseFiring = false; }
       if (e.button === 2) this.mgHeld = false;
     });
     window.addEventListener('contextmenu', (e) => {
@@ -265,6 +266,70 @@ export class Input {
       this.pingQueued = true;
       e.preventDefault();
     }, { passive: false });
+
+    document.getElementById('btn-smoke')?.addEventListener('touchstart', (e) => {
+      this.smokeQueued = true;
+      e.preventDefault();
+    }, { passive: false });
+  }
+
+  // Standard-mapping gamepad. Left stick drives (camera-relative, like WASD),
+  // right stick aims, RT fires, LT holds the coax MG. Called every frame,
+  // menus included, so A/Start can deploy from the title screen.
+  pollPad(dt) {
+    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    let pad = null;
+    for (const p of pads) if (p && p.connected && p.mapping === 'standard') { pad = p; break; }
+    if (!pad) for (const p of pads) if (p && p.connected) { pad = p; break; }
+    if (!pad) {
+      if (this.padActive) { this.padActive = false; this.padFiring = false; this.firing = this.mouseFiring ?? false; this.mgHeld = false; }
+      return;
+    }
+    if (!this.padActive) { this.padActive = true; this.padJustConnected = true; }
+    const prev = this.padPrev || [];
+    const btn = (i) => !!pad.buttons[i] && (pad.buttons[i].pressed || pad.buttons[i].value > 0.5);
+    const edge = (i) => btn(i) && !prev[i];
+    const dz = (v, d = 0.18) => Math.abs(v) < d ? 0 : Math.sign(v) * (Math.abs(v) - d) / (1 - d);
+    const lx = dz(pad.axes[0] || 0), ly = dz(pad.axes[1] || 0);
+    const rx = dz(pad.axes[2] || 0, 0.12), ry = dz(pad.axes[3] || 0, 0.12);
+    if (lx || ly) {
+      const m = Math.min(1, Math.hypot(lx, ly));
+      const a = Math.atan2(lx, -ly);
+      this.stickX = Math.sin(a) * m;
+      this.stickY = Math.cos(a) * m;
+    }
+    // look: squared response for fine aim, ~2.7 rad/s at full deflection
+    const rate = 1100 * settings.lookSens * dt;
+    this.lookDX += rx * Math.abs(rx) * rate;
+    this.lookDY += ry * Math.abs(ry) * rate * 0.75;
+    // triggers
+    const rt = btn(7), lt = btn(6);
+    if (rt && !prev[7]) this.fireQueued = true;
+    if (rt !== this.padFiring) { this.padFiring = rt; this.firing = rt; }
+    if (lt !== this.padMg) { this.padMg = lt; this.mgHeld = lt; }
+    if (edge(0)) { this.boostQueued = true; this.padConfirmQueued = true; }
+    if (edge(1)) this.repairQueued = true;
+    if (edge(2)) this.reloadQueued = true;
+    if (edge(3)) this.strikeQueued = true;
+    if (edge(4)) this.smokeQueued = true;
+    if (edge(5)) this.weaponQueued = 'cycle';
+    if (edge(8)) this.pingQueued = true;
+    if (edge(9)) { this.pauseQueued = true; this.padConfirmQueued = true; }
+    if (btn(12)) this.zoomDelta -= dt * 6;
+    if (btn(13)) this.zoomDelta += dt * 6;
+    this.padPrev = pad.buttons.map((b, i) => btn(i));
+  }
+
+  consumePadConfirm() {
+    const c = this.padConfirmQueued;
+    this.padConfirmQueued = false;
+    return c;
+  }
+
+  consumeSmoke() {
+    const s = this.smokeQueued;
+    this.smokeQueued = false;
+    return s;
   }
 
   // call once per frame; keyboard becomes a camera-relative stick vector

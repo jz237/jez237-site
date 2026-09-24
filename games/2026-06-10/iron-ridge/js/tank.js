@@ -3,10 +3,10 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { tankSurface } from './surface-art.js?v=polish1';
-import { batchRigidParts } from './render-batch.js?v=polish1';
-import { TANK, SHELL, CG } from './config.js?v=polish1';
-import { getHeight, groundSpeedFactor } from './terrain.js?v=polish1';
+import { tankSurface } from './surface-art.js?v=polish2';
+import { batchRigidParts } from './render-batch.js?v=polish2';
+import { TANK, SHELL, CG } from './config.js?v=polish2';
+import { getHeight, groundSpeedFactor } from './terrain.js?v=polish2';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -22,6 +22,7 @@ const SCHEMES = {
   desert: { hull: '#b3a279', camo: '#94815c', camo2: '#c9b990', dark: 0x77694c, barrel: 0x91825f, mark: '◆' },
   scout: { hull: '#8c9680', camo: '#6d7762', camo2: '#a3ab95', dark: 0x59624f, barrel: 0x6e7760, mark: '▲' },
   heavy: { hull: '#80714f', camo: '#62553e', camo2: '#988a68', dark: 0x4e4536, barrel: 0x615641, mark: '☠' },
+  destroyer: { hull: '#6a6e58', camo: '#4f5441', camo2: '#7e8266', camo3: '#57503b', dark: 0x3f4234, barrel: 0x535842, mark: '▼' },
   boss: { hull: '#565b63', camo: '#3c4149', camo2: '#727a85', dark: 0x2c3037, barrel: 0x454b55, mark: '⬢' },
 };
 
@@ -580,12 +581,51 @@ export function buildTankMesh(scheme = 'olive') {
   coaxMuzzle.position.set(0.34, 0.02, 0.95);
   pivot.add(coaxMuzzle);
 
+  // Tank destroyer: no rotating turret. The fighting compartment is a low
+  // armoured casemate at the front of the hull with a longer gun.
+  if (scheme === 'destroyer') {
+    turret.scale.set(1.34, 0.6, 1.18);
+    turret.position.set(0, 1.12, 0.62);
+    turret.remove(cupola); // (batching ignores .visible)
+    recoilGrp.scale.set(1.12, 1.12, 1.32);
+    pivot.position.y = 0.42;
+  }
+
   const moving = new Set([turret,pivot,recoilGrp,links,...spinning,...exhausts,muzzle,coaxMuzzle]);
   batchRigidParts(root,[hull,turret,pivot,recoilGrp,...spinning.filter(o=>o.isGroup)],moving);
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 
   return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts, wheelInstances, wheelParts, hubParts, updateWheelInstances };
 }
+
+// Penetration scars: a dark hole ringed by scorched, blistered paint.
+let scarMat = null;
+function scarMaterial() {
+  if (scarMat) return scarMat;
+  const s = 64, cv = document.createElement('canvas');
+  cv.width = cv.height = s;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(8,6,4,1)');
+  g.addColorStop(0.2, 'rgba(22,16,10,0.95)');
+  g.addColorStop(0.32, 'rgba(120,70,30,0.8)');
+  g.addColorStop(0.5, 'rgba(36,30,22,0.7)');
+  g.addColorStop(1, 'rgba(40,34,26,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, s, s);
+  for (let i = 0; i < 14; i++) {
+    const a = Math.random() * Math.PI * 2;
+    ctx.strokeStyle = 'rgba(30,24,16,0.5)'; ctx.lineWidth = 1 + Math.random() * 1.5;
+    ctx.beginPath(); ctx.moveTo(32 + Math.cos(a) * 8, 32 + Math.sin(a) * 8);
+    ctx.lineTo(32 + Math.cos(a) * (18 + Math.random() * 12), 32 + Math.sin(a) * (18 + Math.random() * 12)); ctx.stroke();
+  }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  scarMat = new THREE.MeshLambertMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4 });
+  return scarMat;
+}
+const scarGeo = new THREE.PlaneGeometry(0.62, 0.62);
+const _sp = new THREE.Vector3(), _sn = new THREE.Vector3(), _sq = new THREE.Quaternion();
 
 // Burnt-out look: keep each part's baked panel/weld map so the wreck still
 // reads as a tank, but scorched dark with a rusty cast. One shared material
@@ -688,9 +728,34 @@ export class Tank {
     this.smokeTimer = 0;
     this.lowHpSmoke = 0;
     this.overturned = 0;
+    this.fixedGun = !!opts.fixedGun;
+    // knocked-out parts (seconds remaining)
+    this.trackJamT = 0;
+    this.engineHitT = 0;
+    this.turretJamT = 0;
+    this.scars = [];
   }
 
   get pos() { return this.body.position; }
+
+  // scorched penetration mark stuck to the hull where a round struck
+  addScar(point, normal) {
+    const root = this.visual.root;
+    root.updateMatrixWorld(true);
+    let m = this.scars.length >= 8 ? this.scars.shift() : new THREE.Mesh(scarGeo, scarMaterial());
+    _sp.copy(point).addScaledVector(normal, 0.04);
+    root.worldToLocal(_sp);
+    _sn.copy(normal).transformDirection(new THREE.Matrix4().copy(root.matrixWorld).invert());
+    _sq.setFromUnitVectors(new THREE.Vector3(0, 0, 1), _sn.normalize());
+    m.position.copy(_sp);
+    m.quaternion.copy(_sq);
+    m.rotateZ(Math.random() * Math.PI * 2);
+    m.scale.setScalar((0.8 + Math.random() * 0.5) / (this.scale || 1));
+    root.add(m);
+    this.scars.push(m);
+  }
+
+  get immobilized() { return this.trackJamT > 0; }
 
   speedAlongForward() {
     const fwd = this.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1));
@@ -725,6 +790,9 @@ export class Tank {
     }
     this.contacts = contacts;
     const traction = contacts / 4;
+    this.trackJamT = Math.max(0, this.trackJamT - dt);
+    this.engineHitT = Math.max(0, this.engineHitT - dt);
+    if (this.trackJamT > 0) { this.throttle = 0; this.turn = 0; }
 
     if (this.alive && traction > 0) {
       const speed = this.speedAlongForward();
@@ -742,7 +810,7 @@ export class Tank {
           this.groundTimer = 0.25;
           this.ground = groundSpeedFactor(body.position.x, body.position.z);
         }
-        const bS = (this.boostT > 0 ? 1.45 : 1) * (this.ground ?? 1);
+        const bS = (this.boostT > 0 ? 1.45 : 1) * (this.ground ?? 1) * (this.engineHitT > 0 ? 0.5 : 1);
         let force = 0;
         if (this.throttle > 0.01) {
           force = speed < this.tuning.maxSpeed * bS ? this.tuning.engineForce * bF * sc2 * this.throttle : 0;
@@ -881,8 +949,12 @@ export class Tank {
     let delta = desired - this.turretYaw;
     delta = Math.atan2(Math.sin(delta), Math.cos(delta));
     const maxStep = TANK.turretSlewRate * dt;
+    this.turretJamT = Math.max(0, this.turretJamT - dt);
+    if (this.turretJamT > 0) delta = 0; // jammed ring: the hull has to aim
     this.turretYaw += THREE.MathUtils.clamp(delta, -maxStep, maxStep);
     this.turretYaw = Math.atan2(Math.sin(this.turretYaw), Math.cos(this.turretYaw));
+    // casemate gun: only a few degrees of traverse either side
+    if (this.fixedGun) this.turretYaw = THREE.MathUtils.clamp(this.turretYaw, -0.07, 0.07);
 
     const flatLocal = Math.hypot(_v3b.x, _v3b.z);
     const pitchDes = THREE.MathUtils.clamp(

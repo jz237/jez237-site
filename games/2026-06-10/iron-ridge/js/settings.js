@@ -1,7 +1,7 @@
 // Persistent user settings — one JSON blob in localStorage. Nullable
 // defaults (aimAssist, autoFire) resolve per-device at the point of use.
 
-import { REVERSE_LOOK_KEY } from './config.js?v=polish1';
+import { REVERSE_LOOK_KEY } from './config.js?v=polish2';
 
 const KEY = 'iron_ridge_settings_v1';
 

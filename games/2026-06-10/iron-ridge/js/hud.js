@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=polish1';
+import { SHELL } from './config.js?v=polish2';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
@@ -160,6 +160,40 @@ export class Hud {
     el.style.animation = 'none';
     void el.offsetWidth;
     el.style.animation = 'armorCall 0.9s ease-out forwards';
+  }
+
+  // what an enemy round just did to us (lower centre, fades)
+  incomingCall(text, kind = '') {
+    let el = this.el.incoming;
+    if (!el) {
+      el = this.el.incoming = document.createElement('div');
+      el.id = 'incoming-call';
+      this.el.hud.appendChild(el);
+    }
+    el.textContent = text;
+    el.className = kind;
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'incomingCall 1.4s ease-out forwards';
+  }
+
+  // smoke discharger readiness (gun panel line + touch button state)
+  setSmoke(cd, total) {
+    let el = this.el.smoke;
+    if (!el) {
+      el = this.el.smoke = document.createElement('div');
+      el.id = 'smoke-status';
+      ($('gun-panel') ?? this.el.hud).appendChild(el);
+      this.el.smokeBtn = $('btn-smoke');
+    }
+    const ready = cd <= 0;
+    const text = ready ? (document.body.classList.contains('touch') ? '💨 SMOKE READY' : '💨 SMOKE READY [C]') : `💨 SMOKE ${Math.ceil(cd)}s`;
+    if (el.textContent !== text) el.textContent = text;
+    el.classList.toggle('ready', ready);
+    if (this.el.smokeBtn) {
+      this.el.smokeBtn.classList.toggle('cooling', !ready);
+      this.el.smokeBtn.style.setProperty('--cd', `${Math.max(0, Math.min(1, cd / total)) * 360}deg`);
+    }
   }
 
   // small persistent badge beside the armour bar (HULL DOWN)

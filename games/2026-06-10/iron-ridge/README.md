@@ -15,6 +15,7 @@ check line-of-sight, and lead their shots.
 | mouse — aim turret | drag right side — aim |
 | click / space — fire | FIRE button |
 | R — restock the ready rack | |
+| C — smoke screen | 💨 button |
 | F — call airstrike (earned via kill streaks) | ✈ button |
 | scroll — camera zoom | |
 | Esc — pause · M — mute | PAUSE button |
@@ -88,6 +89,49 @@ check line-of-sight, and lead their shots.
 - **Quality scaler:** deploy, startup and each level change get a grace
   window, and a step down needs 2.5 s of sustained slowness, so compile
   hitches no longer drop a capable machine to Low.
+
+## Tactics and battlefield (polish2, September 2026)
+
+- **Smoke screen:** C / 💨 / LB throws a fan of six grenades from the turret
+  dischargers. They bloom into a wall that blocks enemy tank, pillbox, rifle
+  and rocket line of sight for about 16 s. The cooldown is 24 s.
+- **Your armour matters too:** enemy rounds report where they struck.
+  Rear ×1.35, side ×1.1, front ×0.85, roof ×1.2. Rounds that hit your front
+  plate at a glancing angle BOUNCE for ×0.3; rockets never bounce.
+- **Knocked-out parts:** AP penetrations can take out an enemy's tracks
+  (side, 35%, 5 s), engine (rear, 50%, half speed for 8 s) or turret ring
+  (turret hit, 30%, 4 s). You can lose tracks (2.2 s) or engine power (6 s).
+  Field repair fixes both first.
+- **Enemy behaviour:** scouts flank toward your side or rear. About half the
+  mediums and heavies find hull-down crests or the far side of wrecks and
+  move on after a couple of shots. Badly hurt tanks pop smoke and reverse
+  out with their front plate forward.
+- **New enemies:** the turretless tank destroyer (from wave 4) has an
+  accurate long gun but only ±4° of traverse, so circle it. From wave 3 each
+  infantry squad includes an anti-tank rocket team with visible, dodgeable,
+  lofted rockets.
+- **Gamepad:** left stick drives, right stick aims, RT fires, LT holds the MG,
+  LB smoke, RB shell type, A boost, B repair, X restock, Y airstrike,
+  Back ping, Start pause, D-pad zoom. A or Start deploys from the title
+  screen.
+- **Weather:** each wave rolls a sky (clear, overcast, dusk, rain, mist) that
+  blends in over about 5 s. The sky shader, sun angle and colour, ambient
+  light, fog, exposure, cloud tint and haze on the distant ridges all
+  change. Rain adds streaks and a rain sound.
+- **Battle dressing:** penetrations leave scorch scars on hulls. Tanks below
+  25% burn from the engine deck, and hit engines pour black smoke. Tracers
+  glow (gold yours, red theirs). Trees shed leaves or needles when hit or
+  toppled. Grass lies flat under tanks, along your recent track path and
+  around blasts.
+- **Voice:** 57 commander lines, all in one ElevenLabs voice ("Harry"). Each
+  event has 2–3 takes that never repeat back to back, and every line has its
+  own cooldown. Events covered: kills, ricochets, bounces, flanking hits,
+  track and engine hits, hull-down, artillery, smoke, rockets, tank
+  destroyers and weather.
+- **Co-op guests** get the same armour-facing damage and callouts as the
+  host. Remote tank facing is now synced for that.
+- **Phones:** below 560 px wide the HUD restacks so the gun panel, armour bar
+  and weapon button no longer overlap.
 
 ## Art and rendering
 
