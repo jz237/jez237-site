@@ -1,15 +1,15 @@
 {
-  "readyMs": 12906,
+  "readyMs": 12884,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.994000599940094,
-      "time": 6.976800000000024,
-      "bites": 15,
-      "remaining": 30,
+      "fps": 59.99400059993998,
+      "time": 7.518900000095394,
+      "bites": 17,
+      "remaining": 28,
       "anemones": {
-        "brushing": 4,
-        "maxBrush": 0.056211118640266504,
+        "brushing": 1,
+        "maxBrush": 0.09532777453926983,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,109 +21,109 @@
       }
     },
     {
-      "fps": 56.24033369264655,
-      "time": 10.994000000000016,
-      "bites": 27,
-      "remaining": 18,
+      "fps": 51.4248982215556,
+      "time": 11.552600000095367,
+      "bites": 28,
+      "remaining": 16,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.000007020643062305354,
-        "captured": 0,
+        "maxBrush": 0.0000014774368344057252,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 0,
+        "carried": 1,
         "fold": [
-          0,
+          0.010662399999999878,
           0,
           0
         ]
       }
     },
     {
-      "fps": 55.3786515298353,
-      "time": 15.027499999999975,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.99700014999244,
+      "time": 15.586300000095317,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.03409221163996952,
-        "captured": 1,
+        "brushing": 5,
+        "maxBrush": 0.04830338453812202,
+        "captured": 2,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 2,
         "fold": [
-          0,
+          0.2,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 55.80876197563006,
-      "time": 19.044499999999914,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 59.99100134979755,
+      "time": 19.593400000095254,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 4,
-        "maxBrush": 0.08022514792373231,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 56.24560581204594,
-      "time": 23.078199999999782,
-      "bites": 39,
-      "remaining": 5,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0003478455053943166,
-        "captured": 1,
+        "brushing": 13,
+        "maxBrush": 0.1433962996090602,
+        "captured": 2,
         "swallowed": 1,
+        "carried": 1,
+        "fold": [
+          0.2,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 55.37609598523304,
+      "time": 23.610400000095126,
+      "bites": 37,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 3,
+        "maxBrush": 0.1209006132455475,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.19537810307460451,
+          0.18428742053681813,
+          0.19644200612588095,
           0
         ]
       }
     },
     {
       "fps": 59.99700014999255,
-      "time": 27.111899999999654,
-      "bites": 39,
-      "remaining": 5,
+      "time": 27.660600000094988,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 7.288427314544378e-13,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 1,
+        "maxBrush": 0.06272264464783316,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.13568617527452562,
+          0.1115910757889294,
+          0.13856236769206862,
           0
         ]
       }
     },
     {
-      "fps": 59.51790496974515,
-      "time": 31.12889999999952,
-      "bites": 39,
-      "remaining": 5,
+      "fps": 52.167108638003675,
+      "time": 31.677800000094898,
+      "bites": 37,
+      "remaining": 6,
       "anemones": {
-        "brushing": 10,
-        "maxBrush": 0.09962871888263726,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 0,
+        "maxBrush": 0.0027894409226713215,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.05213843117631942,
+          0.031649510592865915,
+          0.05489079134516231,
           0
         ]
       }
@@ -132,15 +132,15 @@
   "identification": [
     {
       "title": "Reef sand",
-      "ms": 771
+      "ms": 856
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 800
+      "ms": 870
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 1080
+      "ms": 1058
     }
   ],
   "checks": {
@@ -158,13 +158,13 @@
   },
   "initial": {
     "anemoneBackdropStats": {
-      "rocks": 7,
-      "rockTriangles": 74060,
-      "crusts": 62,
-      "colonies": 5,
-      "polyps": 71,
-      "tentacles": 480,
-      "triangles": 464514
+      "rocks": 10,
+      "rockTriangles": 105800,
+      "crusts": 86,
+      "colonies": 8,
+      "polyps": 109,
+      "tentacles": 864,
+      "triangles": 726890
     },
     "rockLifeStats": {
       "patches": 239,
@@ -184,7 +184,7 @@
       "colonies": 12,
       "triangles": 934149
     },
-    "triangles": 17636332,
+    "triangles": 18161084,
     "inhabitants": 21,
     "buttressStats": {
       "rocks": 9,
@@ -201,9 +201,9 @@
       "maxAttachmentError": 0.00300000000000036
     },
     "rockStats": {
-      "triangles": 847033,
-      "bufferBytes": 29767584,
-      "expandedBufferBytes": 111808356
+      "triangles": 878773,
+      "bufferBytes": 30856116,
+      "expandedBufferBytes": 115998036
     },
     "crustStats": {
       "colonies": 90,
@@ -396,8 +396,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-DB8AixeE.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-GQSzmYbK.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,56 +414,43 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "8701407f3aab2d011a24d54741792c0d7a82b013a653088bcef5d1b351fe667f",
-  "checkedAt": "2026-09-24T14:37:23.079Z",
-  "scope": "Click and touch identification for reef contents, small merged growths and visible aquarium features",
+  "buildHash": "4c03b4b38abb023b8b3c4a5b9e25018f15b689d4ce09a1c7ecf46d5e7ef3719a",
+  "checkedAt": "2026-09-24T15:04:01.829Z",
+  "scope": "Restore dense live-rock coverage behind the inner arch beside the right anemone",
   "visualReview": [
-    "Desktop and mobile field-note panels; correct labels for coral, anemone, mandarin, sand, rock, glass and lighting",
-    "Front, oblique and close-up views preserve existing appearance and all geometry"
+    "Compared before/after front crops of the exact exposed-glass area",
+    "Inspected full front, oblique, anemone close-up and mobile views; new backing stays behind the existing foreground arch and central sand channel"
   ],
-  "identificationReview": {
-    "base": "http://127.0.0.1:61038",
-    "results": [
-      {
-        "name": "light",
-        "title": "Reef aquarium light",
-        "ms": 673
-      },
-      {
-        "name": "sand",
-        "title": "Reef sand",
-        "ms": 738
-      },
-      {
-        "name": "anemone",
-        "title": "Anemone",
-        "ms": 725
-      },
-      {
-        "name": "coral",
-        "title": "Branching stony corals",
-        "ms": 745
-      },
-      {
-        "name": "glass",
-        "title": "Aquarium water and glass",
-        "ms": 740
-      },
-      {
-        "name": "rock",
-        "title": "Branching stony corals",
-        "ms": 1004
-      },
-      {
-        "name": "closeup",
-        "title": "Zoanthid polyps"
-      },
-      {
-        "name": "fish",
-        "title": "Mandarin dragonet"
-      }
-    ],
-    "errors": []
+  "geometryReview": {
+    "before": {
+      "rocks": 7,
+      "rockTriangles": 74060,
+      "crusts": 62,
+      "colonies": 5,
+      "polyps": 71,
+      "tentacles": 480,
+      "triangles": 464514
+    },
+    "after": {
+      "rocks": 10,
+      "rockTriangles": 105800,
+      "crusts": 86,
+      "colonies": 8,
+      "polyps": 109,
+      "tentacles": 864,
+      "triangles": 726890
+    },
+    "originalGeometryPreserved": true,
+    "coverageBefore": {
+      "hits": 17,
+      "total": 187,
+      "ratio": 0.09090909090909091
+    },
+    "coverageAfter": {
+      "hits": 182,
+      "total": 187,
+      "ratio": 0.9732620320855615
+    }
   },
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -472,16 +459,33 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "236eef664",
-    "priorFPS": 58.118666921319544,
-    "currentFPS": 57.2714876596518,
-    "priorReadyMs": 14005,
-    "currentReadyMs": 14406.5,
+    "baseline": "a02e4895b",
+    "priorFPS": 59.50422957114144,
+    "currentFPS": 59.502778514870414,
+    "priorReadyMs": 13067,
+    "currentReadyMs": 13342,
     "observations": [
       {
         "version": "current",
-        "readyMs": 13508,
-        "fps": 54.54297531930361,
+        "readyMs": 13102,
+        "fps": 59.01155642980084,
+        "triangles": 18161084,
+        "drawCalls": 1,
+        "drawOrderStats": {
+          "meshes": 7,
+          "triangles": 8660495
+        },
+        "canvas": {
+          "x": 0,
+          "y": 122,
+          "width": 1440,
+          "height": 854
+        }
+      },
+      {
+        "version": "prior",
+        "readyMs": 13736,
+        "fps": 59.99400059993998,
         "triangles": 17636332,
         "drawCalls": 1,
         "drawOrderStats": {
@@ -497,25 +501,8 @@
       },
       {
         "version": "prior",
-        "readyMs": 13057,
-        "fps": 56.24033369264665,
-        "triangles": 17636332,
-        "drawCalls": 1,
-        "drawOrderStats": {
-          "meshes": 7,
-          "triangles": 8398119
-        },
-        "canvas": {
-          "x": 0,
-          "y": 122,
-          "width": 1440,
-          "height": 854
-        }
-      },
-      {
-        "version": "prior",
-        "readyMs": 14953,
-        "fps": 59.99700014999244,
+        "readyMs": 12398,
+        "fps": 59.01445854234289,
         "triangles": 17636332,
         "drawCalls": 1,
         "drawOrderStats": {
@@ -531,13 +518,13 @@
       },
       {
         "version": "current",
-        "readyMs": 15305,
-        "fps": 59.99999999999999,
-        "triangles": 17636332,
+        "readyMs": 13582,
+        "fps": 59.99400059993998,
+        "triangles": 18161084,
         "drawCalls": 1,
         "drawOrderStats": {
           "meshes": 7,
-          "triangles": 8398119
+          "triangles": 8660495
         },
         "canvas": {
           "x": 0,
@@ -547,6 +534,6 @@
         }
       }
     ],
-    "interpretation": "Serial alternating runs, same geometry and shaders; identification runs on clicks only. Host timing variation is not a speed improvement claim."
+    "interpretation": "Serial alternating runs; true 3D rear growth adds262376source triangles and no material batches. Small timing samples are regression checks, not a speed improvement claim."
   }
 }
