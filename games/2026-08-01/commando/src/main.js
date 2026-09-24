@@ -11,8 +11,7 @@ import { Game } from './game.js';
 import { Bot } from './bot.js';
 import { AREAS, AMBIENCE } from './levels.js';
 import { Soldier } from './soldier.js';
-import { truckGroup } from './models.js';
-import { tankGroup, motoGroup } from './models2.js';
+import { tankGroup, motoGroup, militaryTruckGroup } from './models2.js';
 import { loadAssets, describe } from './assets.js';
 
 const qs = new URLSearchParams(location.search);
@@ -257,7 +256,7 @@ function loop(now) {
 function prewarm() {
   const warm = [], men = [], z0 = -world.area.spawn.p - 4;
   ['joe', 'rifle', 'lobber', 'officer', 'pow'].forEach((k, i) => { const s = new Soldier(k); s.obj.position.set(-4 + i * 2, 0, z0); s.a.dead = i === 1 ? 0.5 : 0; s.pose(0.016); R.scene.add(s.obj); men.push(s); });
-  for (const [mk, x] of [[truckGroup, 6], [tankGroup, -8], [motoGroup, 9]]) { const v = mk(); v.position.set(x, 0, z0); R.scene.add(v); warm.push(v); }
+  for (const [mk, x] of [[militaryTruckGroup, 6], [tankGroup, -8], [motoGroup, 9]]) { const v = mk(); v.position.set(x, 0, z0); R.scene.add(v); warm.push(v); }
   const nade = new THREE.Mesh(game.nadeGeo, game.nadeMat); nade.position.set(0, 1, z0); R.scene.add(nade); warm.push(nade);
   for (const k of ['gren', 'med']) { const m = new THREE.Mesh(game.pickupGeo[k], game.pickupMat[k]); m.position.set(2, 0.3, z0); R.scene.add(m); warm.push(m); }
   fx.explosion(0, 0, z0, 3); fx.muzzle(0, 1, z0, 0, 1); fx.ring(0, z0, 0, 2, 1, [1, 0.2, 0.1]); fx.blob(0, z0, 0, 0.3); fx.dust(0, 0, z0, 3);

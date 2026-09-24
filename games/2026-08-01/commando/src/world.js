@@ -90,11 +90,11 @@ function qObject(parts) {
   }
   return g;
 }
-// flat-colour props from the Toon Shooter kit, drawn with the shared vertex-colour material
+// flat-colour props (KolosStudios Military Pack, Toon Shooter kit), drawn with the shared vertex-colour material
 const PROP_FIT = {
-  crate: { w: 1.0 }, 'exploding-barrel': { h: 1.05 }, 'gas-tank': { h: 1.3 }, tires: { w: 1.5 }, pallet: { w: 1.5 },
-  'debris-pile': { w: 2.4 }, 'shipping-container': { w: 4.4 }, 'water-tank': { h: 3.4 }, 'barrier-single': { w: 1.9 },
-  'sack-trench': { w: 3.2 }, 'sack-trench-small': { w: 2.3 }, 'broken-car': { l: 5.2 }, 'barrier-large': { w: 3.8 }, grenade: { h: 0.3 },
+  crate: { w: 1.0 }, tires: { w: 1.5 }, pallet: { w: 1.5 }, 'debris-pile': { w: 2.4 }, 'sack-trench': { w: 3.2 },
+  'sack-trench-small': { w: 2.3 }, 'broken-car': { l: 5.2 }, grenade: { h: 0.3 },
+  'kolos-container': { w: 5.2 }, 'kolos-water-tank': { w: 1.25 }, 'kolos-tent': { w: 6.0, ry: Math.PI / 2 }, 'kolos-barrier': { w: 3.0 },
 };
 const PROP_TINT = { 'debris-pile': { Red: '#6e5236' } };
 export const propGeo = (name, tint = PROP_TINT[name]) => QA.flatGeo('props', name, PROP_FIT[name] || {}, tint);
@@ -328,7 +328,7 @@ export class World {
           break;
         }
         case 'barrel': {
-          const m = this.mesh(pr.red ? propGeo('exploding-barrel') : propGeo('exploding-barrel', { Red: '#4b5631', White: '#6f6c55' }), M.MAT.vc, pr.x, pr.p, Math.random() * 3);
+          const m = this.mesh(G('barrel' + !!pr.red, () => M.barrelGeo(pr.red)), M.MAT.vc, pr.x, pr.p, Math.random() * 3);
           const c = col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.36, bul: true });
           const rec = { mesh: m, c, x: pr.x, p: pr.p, red: !!pr.red, hp: pr.red ? 2 : 6, alive: true, r: 3.1 };
           c.ref = { barrel: rec };
@@ -350,13 +350,15 @@ export class World {
           break;
         }
         case 'parkedtruck': {
-          const g = M.truckGroup(); this.place(g, pr.x, pr.p, pr.rot || 0);
-          col.add({ k: 'b', x: pr.x, p: pr.p, hw: 1.15, hp: 3.2, rot: -(pr.rot || 0), bul: true });
+          const g = M2.militaryTruckGroup(pr.fuel ?? pr.x > 0); this.place(g, pr.x, pr.p, pr.rot || 0);
+          col.add({ k: 'b', x: pr.x, p: pr.p, hw: 1.2, hp: 3.1, rot: -(pr.rot || 0), bul: true });
           break;
         }
         case 'tent': {
-          const g = M.tentGroup(); this.place(g, pr.x, pr.p, pr.rot || 0);
-          col.add({ k: 'b', x: pr.x, p: pr.p, hw: 1.35, hp: 1.75, rot: -(pr.rot || 0), bul: true });
+          const m = this.mesh(propGeo('kolos-tent'), M.MAT.vc, pr.x, pr.p, pr.rot || 0);
+          m.geometry.computeBoundingBox();
+          const bb = m.geometry.boundingBox;
+          col.add({ k: 'b', x: pr.x, p: pr.p, hw: (bb.max.x - bb.min.x) / 2 * 0.9, hp: (bb.max.z - bb.min.z) / 2 * 0.9, rot: -(pr.rot || 0), bul: true });
           break;
         }
         case 'hut': {
@@ -398,10 +400,10 @@ export class World {
           break;
         }
         // clutter from the Toon Shooter kit
-        case 'tires': case 'gascyl': {
+        case 'tires': {
           const s = pr.s || 1;
-          this.mesh(propGeo(pr.t === 'tires' ? 'tires' : 'gas-tank'), M.MAT.vc, pr.x, pr.p, pr.rot ?? pr.p, s);
-          col.add({ k: 'c', x: pr.x, p: pr.p, r: (pr.t === 'tires' ? 0.7 : 0.5) * s, bul: true });
+          this.mesh(propGeo('tires'), M.MAT.vc, pr.x, pr.p, pr.rot ?? pr.p, s);
+          col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.7 * s, bul: true });
           break;
         }
         case 'pallet': case 'debris': {
@@ -409,8 +411,8 @@ export class World {
           break;
         }
         case 'container': case 'watertank': case 'barrier': case 'sacks': case 'wreck': {
-          const name = { container: 'shipping-container', watertank: 'water-tank', barrier: 'barrier-single', sacks: pr.small ? 'sack-trench-small' : 'sack-trench', wreck: 'broken-car' }[pr.t];
-          const m = this.mesh(propGeo(name, pr.tint), M.MAT.vc, pr.x, pr.p, pr.rot || 0, pr.s || 1);
+          const name = { container: 'kolos-container', watertank: 'kolos-water-tank', barrier: 'sack-trench-small', sacks: pr.small ? 'sack-trench-small' : 'sack-trench', wreck: 'broken-car' }[pr.t];
+          const m = this.mesh(propGeo(name), M.MAT.vc, pr.x, pr.p, pr.rot || 0, pr.s || 1);
           m.geometry.computeBoundingBox();
           const bb = m.geometry.boundingBox, s = pr.s || 1;
           col.add({ k: 'b', x: pr.x, p: pr.p, hw: (bb.max.x - bb.min.x) / 2 * s * 0.92, hp: (bb.max.z - bb.min.z) / 2 * s * 0.92, rot: -(pr.rot || 0), bul: true, cover: pr.t === 'sacks' || pr.t === 'barrier' });

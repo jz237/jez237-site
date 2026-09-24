@@ -12,11 +12,15 @@ and animation never agreed, and collision came from hand-drawn masks over the
 paintings. Here everything shares one camera and one sun, and every prop's
 collider is built from the same data as its mesh.
 
-Since build v5 the soldiers, the tank, grenades, most props and much of the
-vegetation are CC0 models by [Quaternius](https://quaternius.com/) (Toon
-Shooter Game Kit, Stylized Nature MegaKit, Ultimate Nature palms, via
-poly.pizza). Terrain, water, buildings, the fortresses and the remaining
-foliage are still built from primitives in code.
+Since build v5 the soldiers, vehicles, many props and much of the vegetation
+are real models from poly.pizza: [Quaternius](https://quaternius.com/) (CC0 —
+Ultimate Modular Men for the soldiers, Stylized Nature MegaKit, Ultimate Nature
+palms, a few Toon Shooter Game Kit props) and KolosStudios' Military Pack
+(CC BY — tank, army trucks, tent, container, water tank; credited on the title
+screen). Build v6 replaced v5's chunky cartoon soldiers and props with these
+normal-proportion ones, for the action-movie tone. Terrain, water, buildings,
+the fortresses, barrels and the remaining foliage are still built from
+primitives in code.
 
 ## Layout
 
@@ -28,10 +32,10 @@ foliage are still built from primitives in code.
 | `src/levels.js` | the campaign order and per-area lighting/weather (`AMBIENCE`) |
 | `src/world.js` | builds an area's terrain, water, props, vegetation, night lights and colliders; disposed between areas |
 | `src/terrain.js` | analytic height + colour + water function (rivers, wadeable swamp, causeways, cliffs, AO, craters, trenches) |
-| `src/assets.js` | loads the four model GLBs at boot; turns models into shared, normalised geometry (vertex-coloured or textured), splits the tank |
+| `src/assets.js` | loads the model GLBs at boot; turns models into shared, normalised geometry (vertex-coloured or textured), splits the tank |
 | `src/models.js`, `src/models2.js` | the procedural models (buildings, fortresses, trucks, motorcycle…) and the tank wrapper |
-| `src/soldier.js` | Quaternius characters baked per kind into one skinned mesh (one draw call each); clips blended from the game's speed / crouch / throw / death / aim-twist |
-| `assets/models/` | `soldier.glb`, `enemy.glb`, `props.glb`, `nature.glb` — meshopt-compressed, WebP textures (1.7 MB total) |
+| `src/soldier.js` | soldiers assembled from Modular Men parts + rifle, baked per kind into one skinned mesh (one draw call each); leg / upper-body clip halves blended from the game's speed / crouch / throw / death / aim twist; two-bone IK for the rifle's support hand and for crouching |
+| `assets/models/` | `adventurer.glb`, `swat.glb`, `beach.glb` (one rig; clips in `swat.glb`), `props.glb`, `nature.glb` — meshopt-compressed, WebP textures (2.6 MB total) |
 | `tools/` | `pack-models.mjs` rebuilds `assets/models/` from the source GLBs listed in `models.txt` |
 | `src/fx.js` | particles, tracers, muzzle flashes, explosions, decals, lights, floating text |
 | `src/render.js` | renderer, sky environment, sun + shadows, bloom + grade, camera rig |
@@ -57,11 +61,12 @@ GPU; the autopilot clears each area in 80–105 s of game time.
 `tools/models.txt` lists every source model (name → poly.pizza GLB id). To
 rebuild the packed files: download those GLBs into `tools/raw/<name>.glb`,
 `npm i @gltf-transform/core @gltf-transform/extensions @gltf-transform/functions meshoptimizer sharp`,
-then `node tools/pack-models.mjs assets/models`. The packer keeps only the AK and
-pistol of the characters' weapon sets, the clips the game uses, drops the
-MegaKit normal maps (wasted from a top-down camera), dedupes textures and
-shrinks them to WebP. Sizes and placement are tuned in code (`PROP_FIT` and
-`qKinds()` in `world.js`, `LOOKS` in `soldier.js`).
+then `node tools/pack-models.mjs assets/models`. The packer keeps only the
+clips the game uses (in one character file only — they share the rig),
+drops the MegaKit normal maps (wasted from a top-down camera), simplifies the
+densest plants, dedupes textures and shrinks them to WebP. Sizes and placement
+are tuned in code (`PROP_FIT` and `qKinds()` in `world.js`, `LOOKS` in
+`soldier.js`, `TANK_FIT` in `assets.js`).
 
 ## Releasing
 

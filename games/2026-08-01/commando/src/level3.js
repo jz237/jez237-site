@@ -61,7 +61,7 @@ export const AREA3 = {
     { t: 'crate', x: 3.5, p: 124, rot: 0.2 }, { t: 'crate', x: 4.3, p: 125, rot: -0.3, s: 0.85 },
     { t: 'barrel', x: -4.5, p: 110 }, { t: 'barrel', x: -3.8, p: 110.7 },
     { t: 'tent', x: -4, p: 160, rot: 0.2 }, { t: 'tent', x: 5.5, p: 161, rot: -0.3 },
-    { t: 'container', x: 13.8, p: 118, rot: 1.5, tint: { Red: '#47526b' } }, { t: 'watertank', x: -13.8, p: 133 },
+    { t: 'container', x: 13.8, p: 118, rot: 1.5 }, { t: 'watertank', x: -13.8, p: 133 },
     { t: 'barrier', x: -6.5, p: 93.6, rot: 0.15 }, { t: 'barrier', x: 6.5, p: 93.6, rot: -0.15 }, { t: 'pallet', x: 6.5, p: 126, rot: 0.4 },
     // --- motor pool ---
     { t: 'parkedtruck', x: -9.5, p: 176, rot: 0.2 },
@@ -72,7 +72,7 @@ export const AREA3 = {
     { t: 'barrel', x: 8.5, p: 193, red: true }, { t: 'barrel', x: 9.2, p: 193.8, red: true }, { t: 'barrel', x: 7.8, p: 194.4, red: true },
     { t: 'sandbags', pts: [[-5.5, 188], [-2.2, 188.7]] },
     { t: 'crate', x: 4, p: 202, rot: 0.5 }, { t: 'lamp', x: 0.5, p: 180 },
-    { t: 'tires', x: -6, p: 181 }, { t: 'tires', x: 6.2, p: 199, s: 0.9 }, { t: 'gascyl', x: 13.2, p: 176.6 },
+    { t: 'tires', x: -6, p: 181 }, { t: 'tires', x: 6.2, p: 199, s: 0.9 }, { t: 'barrel', x: 13.2, p: 176.6 },
     { t: 'container', x: 13.4, p: 205, rot: 1.5 }, { t: 'pallet', x: -3, p: 172, rot: 0.3 }, { t: 'debris', x: 2, p: 168 },
     { t: 'wreck', x: -13, p: 206, rot: 0.2 },
     // --- rampart ---

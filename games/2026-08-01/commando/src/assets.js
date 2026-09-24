@@ -1,13 +1,14 @@
-// assets.js — CC0 models by Quaternius (poly.pizza): the Toon Shooter Game Kit,
-// Stylized Nature MegaKit and Ultimate Nature palms. They ship packed into four
-// meshopt-compressed GLBs (assets/models/), loaded once at boot. Everything the
-// game builds from them is cached here and shared by every area.
+// assets.js — models from poly.pizza: Quaternius (CC0) Ultimate Modular Men,
+// Stylized Nature MegaKit, Ultimate Nature palms and a few Toon Shooter pieces;
+// KolosStudios' Military Pack (CC-BY). They ship packed into meshopt-compressed
+// GLBs (assets/models/, see tools/), loaded once at boot. Everything the game
+// builds from them is cached here and shared by every area.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
-export const GLB = { soldier: null, enemy: null, props: null, nature: null };
+export const GLB = { adventurer: null, swat: null, beach: null, props: null, nature: null };
 const VER = new URL(import.meta.url).searchParams.get('v') || '0';
 
 export async function loadAssets(onProgress) {
@@ -163,26 +164,30 @@ export function splitGeo(geo, pick) {
   return out;
 }
 
-// the Toon Shooter tank as hull / turret / barrel, each in its own pivot space.
-// Stretched a little lengthwise so it reads as a tank from above.
+// the KolosStudios tank as hull / turret / barrel, each in its own pivot
+// space (the model lies along X with the gun toward -X; turned to face +Z)
 let TANK = null;
+export const TANK_FIT = { s: 0.69, ry: Math.PI / 2 };
 export function tankParts() {
   if (TANK) return TANK;
-  const g = flatGeo('props', 'tank', { w: 3.5 }, { Tank_Main: '#57613b', Tank_Main2: '#454c2d' });
+  const g = flatGeo('props', 'kolos-tank', TANK_FIT);
   g.computeBoundingBox();
-  const H = g.boundingBox.max.y, deck = H * 0.49;
-  const parts = splitGeo(g, (b) => (b.min.y < deck ? 'hull' : b.min.z > 0.3 ? 'barrel' : 'turret'));
-  // turret ring centre = yaw pivot
+  const deck = g.boundingBox.max.y * 0.485;
+  // above the deck: the gun (long and forward), the turret (centred, over the
+  // middle of the hull), and the rest is stowage on the hull
+  const parts = splitGeo(g, (b) => {
+    if (b.min.y < deck) return 'hull';
+    if (b.min.z > -0.3 && (b.max.z - b.min.z > 1.6 || b.min.z > 0.3)) return 'barrel';
+    if (Math.abs(b.min.x + b.max.x) / 2 < 1.1 && b.min.z > -2.6 && b.max.z < 0.6) return 'turret';
+    return 'hull';
+  });
+  // turret centre = yaw pivot
   parts.turret.computeBoundingBox();
   const tb = parts.turret.boundingBox, pz = (tb.min.z + tb.max.z) / 2;
-  parts.hull.scale(1, 1, 1.2);
   parts.turret.translate(0, -deck, -pz);
-  parts.barrel.translate(0, -deck, -pz);
-  parts.barrel.computeBoundingBox();
-  const b0 = parts.barrel.boundingBox.min.z;
-  parts.barrel.translate(0, 0, -b0).scale(1, 1, 1.7).translate(0, 0, b0 - 1.0);
+  if (parts.barrel) parts.barrel.translate(0, -deck, -pz - 1.0);
   for (const p of Object.values(parts)) { p.userData.shared = true; p.computeBoundingSphere(); }
-  return (TANK = { ...parts, deck, pivotZ: pz * 1.2 });
+  return (TANK = { ...parts, deck, pivotZ: pz });
 }
 
 const texCache = {};
