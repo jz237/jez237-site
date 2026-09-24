@@ -1,4 +1,4 @@
-import bpy, math, json, os
+import bpy, math, json, os, sys
 import numpy as np
 from pathlib import Path
 from mathutils import Vector
@@ -6,6 +6,8 @@ from mathutils.geometry import tessellate_polygon
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT.parent/'assets'/'fish';OUT.mkdir(parents=True,exist_ok=True)
 DATA=json.loads((ROOT/'profiles.json').read_text(encoding='utf-8'))
+ONLY=sys.argv[sys.argv.index('--only')+1] if '--only' in sys.argv else None
+if ONLY:DATA={ONLY:DATA[ONLY]}
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=20
 scene.render.resolution_x=1100;scene.render.resolution_y=720;scene.render.resolution_percentage=100
@@ -38,7 +40,7 @@ def make_mesh(name,vertices,faces,uvs,material):
   for li in face.loop_indices:layer.data[li].uv=uvs[mesh.loops[li].vertex_index]
  return obj
 
-metadata={}
+metadata=json.loads((OUT/'model-info.json').read_text()) if ONLY and (OUT/'model-info.json').exists() else {}
 for species,s in DATA.items():
  # Every species has its own traced silhouette, rather than scaling one oval.
  original=bpy.data.images.load(str(ROOT/'references'/(species+'.png')),check_existing=True)
@@ -47,6 +49,8 @@ for species,s in DATA.items():
  clean=ROOT/'references'/(species+'-skin.png')
  if not clean.exists():raise RuntimeError('Missing clean-flank image: '+str(clean))
  skinimg=bpy.data.images.load(str(clean),check_existing=True)
+ # Force lazy pixel loading before changing filepath for the JPEG export.
+ _=skinimg.pixels[0]
  skinimg.file_format='JPEG';skinimg.filepath_raw=str(OUT/(species+'-skin.jpg'));skinimg.save()
  skinimg=bpy.data.images.load(str(OUT/(species+'-skin.jpg')),check_existing=False)
  skin=make_material(species+' skin',skinimg,.44);fin=make_material(species+' fin membrane',skinimg,.48,.9);pectoralFin=make_material(species+' pectoral membrane',original,.48,.9);eyeMat=make_material(species+' cornea',original,.23)
@@ -183,6 +187,6 @@ for species in DATA:
  coll=bpy.data.collections[species];coll.hide_render=False;scene.render.filepath=str(ROOT/'proofs'/(species+'-blender.png'));bpy.ops.render.render(write_still=True);coll.hide_render=True
 for coll in scene.collection.children:coll.hide_render=False
 bpy.ops.file.pack_all()
-bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'marine-fish.blend'),compress=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/((ONLY or 'marine-fish')+'.blend')),compress=True)
 (OUT/'model-info.json').write_text(json.dumps(metadata,indent=2)+'\n',encoding='utf-8',newline='\n')
 print('MARINE_MODELS',json.dumps(metadata))

@@ -18,6 +18,18 @@ The runtime shares geometry and embedded full-resolution textures across inhabit
 
 Anatomy cross-check: https://doris.ffessm.fr/Especes/Gramma-loreto-Gramma-royal-1213 (royal gramma coloration, eye line and anterior dorsal spot).
 
+## Added diamond goby
+
+A seventh species, *Valenciennea puellaris*, has its own generated reference and clean-flank image, profile, GLB and editable `goby.blend`. The original six exports are unchanged. Prompts are in `references/goby-prompts.md`; research, behavior choices and limitations are in `../qa/goby-research.md`.
+
+To rebuild only the goby without replacing the accepted models:
+
+```powershell
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only goby
+```
+
+The runtime uses its own bottom-hop/rest/sift behavior, independently moving fins, visible mouth and gill breathing, and small instanced sediment grains. This is a detailed photorealistic-style model, not proof of photographic equivalence.
+
 ## Procedural coral surface maps
 
 `generate_coral_maps.ts` generates deterministic 512 x 512 RGBA diffuse, normal

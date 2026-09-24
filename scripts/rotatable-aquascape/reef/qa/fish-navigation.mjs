@@ -3,7 +3,7 @@ let source=fs.readFileSync(new URL('../ReefFish.ts',import.meta.url),'utf8');
 source=source.replace("import metadata from './assets/fish/model-info.json';",'const metadata='+fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url),'utf8')+';').replace("'./MarineFinFlex.ts'",JSON.stringify(new URL('../MarineFinFlex.ts',import.meta.url).href)).replace("'./ReefOptics.ts'",JSON.stringify(new URL("../ReefOptics.ts",import.meta.url).href)).replace("'three'",JSON.stringify(import.meta.resolve('three')));
 const {ReefFish}=await import('data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText).toString('base64'));
 
-const models=new Map();for(const s of ['tang','yellow','clown','anthias','chromis','gramma']){const g=new T.Group(),mouth=new T.Group(),eyes=new T.Group();mouth.name='mouth';mouth.position.x=.43;eyes.name='eyes';g.add(mouth,eyes);models.set(s,g);}
+const models=new Map();for(const s of ['tang','yellow','clown','anthias','chromis','gramma','goby']){const g=new T.Group(),mouth=new T.Group(),eyes=new T.Group();mouth.name='mouth';mouth.position.x=.43;eyes.name='eyes';g.add(mouth,eyes);models.set(s,g);}
 const obstacles=[];for(const x of [-1.5,1.5])for(const y of [1,2,3])obstacles.push({center:new T.Vector3(x,y,0),radius:.65});
 for(const x of [-.75,0,.75])obstacles.push({center:new T.Vector3(x,1,-1.05),radius:.52});
 for(const seedValue of [913,411,729]){
@@ -54,4 +54,21 @@ console.log('Feeding recovery: committed escape, actual progress, food reacquisi
   assert.notDeepEqual(world.fish[0].position,world.fish[1].position,'independent pair with spacing');
   console.log('Clownfish host visits:',stats.map((s,i)=>({...s,modes:[...s.modes],visits:world.fish[i].hostVisits})));
  }finally{Math.random=originalRandom;}
+}
+
+// A bottom specialist must alternate hops/rests, remain terrain-bound and take
+// reachable sinking food without following surface flakes into open water.
+{
+ const originalRandom=Math.random;let seed=1109;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ try {
+  const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),goby=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,goby);
+  const samples=[],modes=new Set();
+  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.ok(s.sandGrains<=48);assert.ok(g.heightAboveSand<.35&&g.heightAboveSand>.12);samples.push(g);modes.add(g.mode);}}
+  assert.ok(modes.has('sifting sand')&&modes.has('resting')&&modes.has('bottom hop'));assert.ok(goby.sifts>3);
+  const range=Math.hypot(...['x','z'].map(k=>Math.max(...samples.map(p=>p[k]))-Math.min(...samples.map(p=>p[k]))));assert.ok(range>1);
+  const mouth=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url))).goby.mouth;goby.position.set(0,1,1.4);goby.group.position.copy(goby.position);goby.goal.copy(goby.position);goby.yaw=0;goby.pitch=0;
+  world.foods.push({position:new T.Vector3(mouth[0]*goby.group.scale.x,.8,1.4),alive:true,age:0,sinkRate:.025});
+  for(let i=0;i<1500;i++)world.update(1/60,false);
+  assert.ok(world.snapshot().bites>0,'goby actually consumes reachable low food');console.log('Goby behavior:',{sifts:goby.sifts,range,modes:[...modes],bites:world.snapshot().bites});
+ } finally {Math.random=originalRandom;}
 }

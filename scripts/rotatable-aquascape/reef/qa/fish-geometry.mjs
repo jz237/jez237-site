@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as T from 'three';
 const metadata=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url)));
-const species=['tang','yellow','clown','anthias','chromis','gramma'];
+const species=['tang','yellow','clown','anthias','chromis','gramma','goby'];
 let totalTriangles=0;
 for(const s of species){
  const buffer=fs.readFileSync(new URL(`../assets/fish/${s}.glb`,import.meta.url));assert.equal(buffer.readUInt32LE(0),0x46546c67);assert.equal(buffer.readUInt32LE(4),2);
@@ -35,4 +35,4 @@ for(const s of species){
   }
  }
 }
-console.log(`Blender fish geometry passed: six species, closed bodies, paired gills/fins, embedded skin textures, ${totalTriangles} source triangles.`);
+console.log(`Blender fish geometry passed: seven species, closed bodies, paired gills/fins, embedded skin textures, ${totalTriangles} source triangles.`);
