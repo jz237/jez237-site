@@ -43,3 +43,11 @@ title.
 
 Headless Chromium with `--use-angle=d3d11 --enable-gpu` renders on the real
 GPU; the autopilot clears each area in 80–105 s of game time.
+
+## Releasing
+
+The site's CDN serves `.js`/`.css` with a 4-hour browser cache that overrides
+`_headers`, but `index.html` is always revalidated. So `index.html` pins every
+module (import map) and the stylesheet to `?v=N`: **bump `v=` in
+`index.html` on every release** (all occurrences), or returning players can
+run a mix of old and new modules for hours.
