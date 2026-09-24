@@ -66,6 +66,9 @@ console.log('Feeding recovery: committed escape, actual progress, food reacquisi
   for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.equal(s.sandGrains,0,'mandarins do not sift sand');const size=goby.group.scale.x;let support=sandHeight(g.x,g.z);for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23])support=Math.max(support,sandHeight(g.x+(Math.cos(goby.yaw)*along+Math.sin(goby.yaw)*side)*size,g.z+(-Math.sin(goby.yaw)*along+Math.cos(goby.yaw)*side)*size));assert.ok(g.y-support<.34&&g.heightAboveSand>.12,'body remains close to the supporting dune, including wide fins');samples.push(g);modes.add(g.mode);}}
   assert.ok(modes.has('pecking')&&modes.has('resting')&&modes.has('bottom hover'));assert.ok(goby.pecks>3);
   assert.ok(samples.filter(g=>g.mode==='resting'&&g.speed<.02).length>samples.length*.15,'mandarin makes real stationary rests, not continuous slow swimming');
+  const resting=samples.filter(g=>g.mode==='resting'&&g.speed<.02),cruising=samples.filter(g=>g.mode==='bottom hover'&&g.speed>.08);
+  const meanHeight=rows=>rows.reduce((sum,g)=>sum+g.heightAboveSand,0)/rows.length;
+  assert.ok(meanHeight(resting)+.04<meanHeight(cruising),'mandarin visibly settles lower during stationary rests');
   const range=Math.hypot(...['x','z'].map(k=>Math.max(...samples.map(p=>p[k]))-Math.min(...samples.map(p=>p[k]))));assert.ok(range>1);
   const mouth=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url))).goby.mouth;goby.position.set(0,1,1.4);goby.group.position.copy(goby.position);goby.goal.copy(goby.position);goby.yaw=0;goby.pitch=0;
   world.foods.push({position:new T.Vector3(mouth[0]*goby.group.scale.x,.8,1.4),alive:true,age:0,sinkRate:.025});

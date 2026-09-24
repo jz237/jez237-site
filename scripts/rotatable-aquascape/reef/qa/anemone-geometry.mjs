@@ -4,10 +4,13 @@ import {buildAnemones} from '../Anemones.ts';
 import {tissueFlow} from '../AnemoneFlow.ts';
 let seed=91;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const {mesh,tentacles,behavior}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,1)],{value:0},random,p=>p.y-.28);
-assert.equal(tentacles,540);
+assert.equal(tentacles,800);
+assert.deepEqual(behavior.hosts.map(h=>h.strands.length),[360,260,180]);
+assert.equal(behavior.brushTexture.image.width,tentacles+1);
+assert.equal(behavior.brushData.length,(tentacles+1)*4);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<15550000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15.55 MB including optical width and a two-byte per-strand brush lookup');
+assert.ok(bytes<23500000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 23.5 MB including optical width and a two-byte per-strand brush lookup');
 const opticalWidth=mesh.geometry.getAttribute('anemoneThickness');
 assert.equal(opticalWidth.normalized,true);assert.ok(opticalWidth.array instanceof Uint8Array);
 assert.equal(opticalWidth.count,mesh.geometry.getAttribute('position').count);
@@ -26,7 +29,7 @@ for(const r of rings.values()){r.x/=r.count;r.y/=r.count;r.z/=r.count;for(const 
 assert.ok(facingOut/total>.99,'tentacle skins face outward; inverted tubes appear as split leaves');
 // Every tentacle has anchored root vertices and a rounded, joined tip.
 const ends=new Map();for(let i=0;i<p.count;i++){if(flex.getW(i)===0)continue;const phase=flex.getY(i),e=ends.get(phase)||{root:0,tip:0};if(flex.getX(i)===0)e.root++;if(flex.getX(i)===1)e.tip++;ends.set(phase,e);}
-assert.equal(ends.size,540);assert.ok([...ends.values()].every(e=>e.root>0&&e.tip>0));
+assert.equal(ends.size,800);assert.ok([...ends.values()].every(e=>e.root>0&&e.tip>0));
 console.log('Anemone buffers:',bytes,'bytes;',mesh.geometry.index.count/3,'triangles.');
 console.log(`Anemone geometry passed: ${tentacles} anchored tentacles, ${(100*facingOut/total).toFixed(2)}% outward normals.`);
 // A central depression belongs to the oral disc, without a cylinder cap filling it.
@@ -35,7 +38,7 @@ const centerHit=ray.intersectObject(mesh)[0];ray.set(new T.Vector3(3.10,3,.8),ne
 assert.ok(lipHit.point.y-centerHit.point.y>.05,'oral center is recessed below its surrounding lip');
 // Closed tip vertices all have a stable unit normal, rather than zero normals.
 let tips=0;for(let i=0;i<p.count;i++)if(flex.getX(i)===1){assert.ok(new T.Vector3().fromBufferAttribute(n,i).length()>.999);tips++;}
-assert.equal(tips,540*13);
+assert.equal(tips,800*13);
 // The first and last vertex in each circular row share shading after UV removal.
 for(let i=0;i<p.count-12;i++)if(flex.getW(i)>0&&flex.getX(i)<1&&i+12<p.count&&p.getX(i)===p.getX(i+12)&&p.getY(i)===p.getY(i+12))assert.ok(new T.Vector3().fromBufferAttribute(n,i).distanceTo(new T.Vector3().fromBufferAttribute(n,i+12))<1e-6);
 assert.equal(mesh.geometry.getAttribute('uv'),undefined,'no unused UV allocation for the vertex-colored skin');
@@ -84,6 +87,7 @@ assert.ok(minFeedingDeterminant>.08,'maximum contact contraction must not invert
 console.log('Minimum feeding deformation determinant:',minFeedingDeterminant,'with worst brush',minBrushDeterminant);
 assert.ok(minBrushDeterminant>.025,'simultaneous brush and feeding must remain orientation preserving');
 assert.ok(worstDot>.97,'compressed axis follows curved tissue: '+worstDot);assert.ok(minDeterminant>.4,'sampled motion does not fold the local deformation inside out: '+minDeterminant);
+assert.ok(Math.min(...lobeRatios)>1.5,'each terminal knob is visibly wider than its slender shaft');
 assert.ok(Math.max(...lobeRatios)-Math.min(...lobeRatios)>.4,'slender and inflated tentacles keep individual anatomical variation');
 console.log('Curved tissue shading passed: axis alignment',worstDot,'minimum sampled deformation determinant',minDeterminant);
 mesh.geometry.dispose();mesh.material.dispose();

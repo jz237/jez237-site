@@ -65,7 +65,7 @@ export class ReefFish{
    }
   }
  }
- private free(p:T.Vector3,r:number,clearance=r){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(clearance===r?.3:0,sandHeight(p.x,p.z)+.035)+clearance&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
+ private free(p:T.Vector3,r:number,clearance=r){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(clearance===r?.3:0,sandHeight(p.x,p.z)+(clearance===r?.035:.003))+clearance&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
  private clearSegment(a:T.Vector3,b:T.Vector3,r:number,clearance=r){
   if(!this.free(b,r,clearance))return false;const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,l=dx*dx+dy*dy+dz*dz;
   for(let i=1;i<8;i++){const t=i/8;if(a.y+dy*t<=sandHeight(a.x+dx*t,a.z+dz*t)+clearance+.035)return false;}
@@ -185,7 +185,7 @@ export class ReefFish{
   let n=0;for(const f of this.foods)if(f.alive){this.dummy.position.copy(f.position);this.dummy.updateMatrix();this.foodMesh.setMatrixAt(n++,this.dummy.matrix);}this.foodMesh.count=n;if(n)this.foodMesh.instanceMatrix.needsUpdate=true;
  }
  private updateGoby(f:Fish,dt:number,night:boolean){
-  const now=this.clock,size=f.group.scale.x,stance=f.clearance+.035;
+  const now=this.clock,size=f.group.scale.x,stance=f.clearance+.006;
   const clear=(p:T.Vector3)=>this.clearSegment(f.position,p,f.radius,f.clearance)&&this.fish.every(o=>o===f||p.distanceToSquared(o.position)>(f.radius+o.radius+.025)**2);
   let target:Food|undefined,best=Infinity;
   if(now>=f.recoverUntil)for(const food of this.foods)if(food.alive&&food.position.y-sandHeight(food.position.x,food.position.z)<.62){
@@ -198,7 +198,7 @@ export class ReefFish{
   if(target){f.mode='feeding';f.gobyCycle=0;f.until=now+1.2;}
   const arrived=Math.hypot(f.position.x-f.goal.x,f.position.z-f.goal.z)<.08;
   if(!target&&arrived&&f.mode==='bottom hover'){
-   f.mode=night||Math.random()<.3?'resting':'pecking';f.gobyCycle=now;f.until=now+(night?7:2.5)+Math.random()*(night?7:4);f.goal.copy(f.position);
+   f.mode=night||Math.random()<.45?'resting':'pecking';f.gobyCycle=now;f.until=now+(night?9:4.5)+Math.random()*(night?8:4);f.goal.copy(f.position);
    if(f.mode==='pecking')f.pecks++;
   }
   // Commit to a short route or a rest. A blocked prey item cannot perpetually
@@ -238,9 +238,12 @@ export class ReefFish{
   let bed=sandHeight(next.x,next.z);
   for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23]){
    const x=next.x+(Math.cos(f.yaw)*along+Math.sin(f.yaw)*side)*size,z=next.z+(-Math.sin(f.yaw)*along+Math.cos(f.yaw)*side)*size;
-   bed=Math.max(bed,sandHeight(x,z));
+   // The raised tail and nose do not need the full belly clearance. Applying
+   // one height to the entire footprint made rests hover above nearby dunes.
+   const raisedEnd=Math.max(0,Math.abs(along)-.25)*size*.19;
+   bed=Math.max(bed,sandHeight(x,z)-raisedEnd);
   }
-  const floor=bed+stance,desiredHeight=target?Math.max(floor,f.goal.y):floor+(f.mode==='bottom hover'?.045:0);
+  const floor=bed+stance,desiredHeight=target?Math.max(floor,f.goal.y):floor+(f.mode==='bottom hover'?.085:0);
   next.y=T.MathUtils.damp(f.position.y,desiredHeight,8,dt);
   if(clear(next)){f.position.copy(next);f.blockedTime=0;}else{f.velocity.multiplyScalar(.4);f.blockedTime+=dt;if(f.blockedTime>.7){f.until=0;f.recoverUntil=now+3;f.mode='resting';f.blockedTime=0;}}
   const moving=f.velocity.length();
@@ -252,10 +255,10 @@ export class ReefFish{
    p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value,f.waveGain.value,f.turnBend.value);
    // Broad paired fins have independent clocks. Pectoral flutter continues
    // while hovering; pelvic fans spread to support rests and soften in motion.
-   const phase=now*(pelvic?2.4:16+moving*9)+f.phase+j*.87;
-   p.rotation.x=-side*(pelvic?.73+Math.min(1,moving/.2)*.3+.06*Math.sin(phase):.77+.19*Math.sin(phase));
-   p.rotation.y=side*(pelvic?.10+.09*Math.sin(phase+.8):.38+.26*Math.sin(phase+.6));
-   p.rotation.z=pelvic?.04*Math.sin(phase):.07*Math.sin(phase+1.3);
+   const phase=now*(pelvic?2.4:16+moving*9)+f.phase+j*.87,footMotion=Math.min(1,moving/.08);
+   p.rotation.x=-side*(pelvic?.73+Math.min(1,moving/.2)*.3+.06*Math.sin(phase)*footMotion:.77+.19*Math.sin(phase));
+   p.rotation.y=side*(pelvic?.10+.09*Math.sin(phase+.8)*footMotion:.38+.26*Math.sin(phase+.6));
+   p.rotation.z=pelvic?.04*Math.sin(phase)*footMotion:.07*Math.sin(phase+1.3);
   }
   f.respiration+=dt*Math.PI*2*(night?.72:.95);this.breathe(f,peck*.8+(target?.35:0));
   if(target){const mouth=f.mouth.position.clone().multiplyScalar(size).applyEuler(f.group.rotation).add(f.position);if(mouth.distanceTo(target.position)<.065){target.alive=false;this.eatCount++;f.pecks++;f.mode='resting';f.until=now+.65;f.goal.copy(f.position);}}
