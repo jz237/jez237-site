@@ -95,12 +95,12 @@ test('additional cameras have exact provider identities, bounded locations and s
 test('discovered cameras have verified provider identities, bounded positions and no arbitrary media', async () => {
   const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
   const cams = discoveredCameras(doc);
-  assert.equal(cams.length, 15);
-  assert.equal(cams.filter(p => p.player).length, 5);
+  assert.equal(cams.length, 18);
+  assert.equal(cams.filter(p => p.player).length, 10);
   assert.ok(cams.every(p => p.discovered && hasCameraPreview(p) && !p.traffic));
-  assert.equal(new Set(cams.map(p => p.id)).size, 15);
+  assert.equal(new Set(cams.map(p => p.id)).size, 18);
   for (const p of cams) assert.equal(new URL(p.url).protocol, 'https:');
-  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 15);
+  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 18);
   assert.deepEqual(discoveredCameras({cameras: 'invalid'}), []);
   const sample = doc.cameras[0];
   for (const bad of [{...sample, lat: 90}, {...sample, lon: NaN}, {...sample, name: ''},
@@ -121,6 +121,29 @@ test('discovered cameras have verified provider identities, bounded positions an
   assert.equal(cameraMatchesFilter(cams[0], 'discovered'), true);
   assert.equal(cameraMatchesFilter(WEBCAMS[0], 'discovered'), false);
   assert.equal(cameraMatchesFilter({traffic: true}, 'preview'), false);
+});
+
+test('Kensington cameras retain three distinct feeds in a shared purple marker', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
+  const entries = doc.cameras.filter(p => p.source === 'rescue-rescue');
+  const cams = discoveredCameras({ cameras: entries });
+  assert.deepEqual(cams.map(p => new URL(p.url).searchParams.get('v')),
+    ['hlGz7Jq_BT0', 'aphvln5Zwv0', '6LtXdZJb-Kk']);
+  const groups = groupCameras(cams.map(item => ({ x: 100, y: 100, item })));
+  assert.equal(groups.length, 1);
+  assert.equal(groups[0].items.length, 3);
+  assert.equal(groups[0].discovered, true);
+  for (const p of cams) {
+    assert.equal(p.area, true);
+    assert.equal(p.publisherUrl, 'https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams');
+  }
+  for (const change of [{ video: undefined }, { video: 'wWOWXHj9lWc' },
+    { video: entries[1].video }, { id: 'found-unknown-camera' }]) {
+    assert.deepEqual(discoveredCameras({ cameras: [{ ...entries[0], ...change }] }), []);
+  }
+  const earthcam = doc.cameras.find(p => p.id === 'found-franklin-institute');
+  assert.ok(discoveredCameras({ cameras: [earthcam] })[0].player.includes('/9mMnqO1UuIU?'));
+  assert.equal(discoveredCameras({ cameras: [{ ...earthcam, video: entries[0].video }] })[0].player, undefined);
 });
 
 test('purple camera clusters remain separate from green and gold at the same position', () => {

@@ -1,5 +1,5 @@
 {
-  "checked": "2026-09-21",
+  "checked": "2026-09-24",
   "cameras": [
     {
       "id": "found-franklin-institute",
@@ -9,7 +9,8 @@
       "lat": 39.9582,
       "location": "The Franklin Institute · Benjamin Franklin Parkway",
       "url": "https://www.earthcam.com/cams/pennsylvania/philadelphia/",
-      "thumbnail": "fc65c09a99e61ca67a3196f45ed48596"
+      "thumbnail": "fc65c09a99e61ca67a3196f45ed48596",
+      "video": "9mMnqO1UuIU"
     },
     {
       "id": "found-liberty-bell",
@@ -19,7 +20,8 @@
       "lat": 39.9496,
       "location": "Liberty Bell Center · Independence National Historical Park",
       "url": "https://www.earthcam.com/usa/pennsylvania/philadelphia/independencehall/",
-      "thumbnail": "9e2f1301e3566e1c24b763fef3ce1ae0"
+      "thumbnail": "9e2f1301e3566e1c24b763fef3ce1ae0",
+      "video": "F1EQEDL4ddU"
     },
     {
       "id": "found-port-philly",
@@ -152,6 +154,42 @@
       "area": true,
       "location": "Willow Grove Weather Center · approximate station area",
       "url": "https://www.youtube.com/watch?v=vIdA-SCcM68"
+    },
+    {
+      "id": "found-kensington-cam2",
+      "name": "Kensington & Allegheny · Cam 2",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "hlGz7Jq_BT0",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-kensington-cam3",
+      "name": "Kensington & Allegheny · Cam 3",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "aphvln5Zwv0",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
+    },
+    {
+      "id": "found-kensington-cam6",
+      "name": "Kensington & Allegheny · Cam 6",
+      "source": "rescue-rescue",
+      "lon": -75.1135,
+      "lat": 39.9965,
+      "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
+      "area": true,
+      "video": "6LtXdZJb-Kk",
+      "checked": "2026-09-24",
+      "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
     }
   ]
 }
