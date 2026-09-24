@@ -54,13 +54,17 @@ def candidates(value):
 
 
 if __name__ == '__main__':
-    catalog = json.loads((Path(__file__).resolve().parent.parent / 'data/discovered-cameras.json').read_text(encoding='utf-8'))
+    data_dir = Path(__file__).resolve().parent.parent / 'data'
+    cameras = [p for name in ['discovered-cameras.json', 'regional-cameras.json']
+               for p in json.loads((data_dir / name).read_text(encoding='utf-8'))['cameras']]
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-        results = list(pool.map(check, [p for p in catalog['cameras'] if p.get('video')]))
+        results = list(pool.map(check, [p for p in cameras if p.get('video')]))
     for result in results:
         print(json.dumps(result))
     if '--discover' in sys.argv:
         urls = ['https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams',
+                'https://www.youtube.com/channel/UC1ia-zIvH6uuHAEfdNUEVqA/streams',
+                'https://www.youtube.com/channel/UC-caLIi1HspXkq2Dwh-kC9A/streams',
                 'https://www.youtube.com/results?search_query=' + quote('Philadelphia webcam live') + '&sp=EgJAAQ%253D%253D']
         for url in urls:
             try:

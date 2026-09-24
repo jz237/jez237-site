@@ -24,7 +24,7 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', stop);
 try {
-  const response = await fetch('data/regional-cameras.json?v=20260920-1');
+  const response = await fetch('data/regional-cameras.json?v=20260924-2');
   if (!response.ok) throw new Error('Camera catalog unavailable');
   const id = new URL(location.href).searchParams.get('id');
   camera = regionalCameras(await response.json()).find(p => p.id === id);
