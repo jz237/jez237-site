@@ -56,6 +56,19 @@ console.log('Feeding recovery: committed escape, actual progress, food reacquisi
  }finally{Math.random=originalRandom;}
 }
 
+// Ground-level resting must remain reachable; accelerating long after startup
+// must not snap the pectoral animation to a different phase.
+{
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models);
+ const g=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,g);
+ const a=new T.Vector3(0,sandHeight(0,1)+g.clearance+.006,1);
+ assert.ok(world.clearSegment(a,a,g.radius,g.clearance),'settled ground pose passes both endpoint and route clearance');
+ const fin=new T.Group();fin.userData.restZ=.12;fin.position.x=.13;g.pectoral.push(fin);
+ world.clock=200;g.position.set(0,sandHeight(0,1)+.25,1);g.goal.set(.6,g.position.y,1);g.yaw=0;g.mode='bottom hover';g.until=210;g.gobyCycle=200;
+ let previous;for(let i=0;i<120;i++){world.update(1/60,false);if(previous!==undefined)assert.ok(Math.abs(fin.rotation.x-previous)<.08,'fin motion stays continuous through acceleration after long elapsed time');previous=fin.rotation.x;}
+ console.log('Mandarin ground settling and continuous fin phase passed.');
+}
+
 // A bottom specialist must alternate hops/rests, remain terrain-bound and take
 // reachable sinking food without following surface flakes into open water.
 {
@@ -63,7 +76,7 @@ console.log('Feeding recovery: committed escape, actual progress, food reacquisi
  try {
   const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),goby=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,goby);
   const samples=[],modes=new Set();
-  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.equal(s.sandGrains,0,'mandarins do not sift sand');const size=goby.group.scale.x;let support=sandHeight(g.x,g.z);for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23])support=Math.max(support,sandHeight(g.x+(Math.cos(goby.yaw)*along+Math.sin(goby.yaw)*side)*size,g.z+(-Math.sin(goby.yaw)*along+Math.cos(goby.yaw)*side)*size));assert.ok(g.y-support<.34&&g.heightAboveSand>.12,'body remains close to the supporting dune, including wide fins');samples.push(g);modes.add(g.mode);}}
+  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.equal(s.sandGrains,0,'mandarins do not sift sand');const size=goby.group.scale.x;let support=sandHeight(g.x,g.z);for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23])support=Math.max(support,sandHeight(g.x+(Math.cos(goby.yaw)*along+Math.sin(goby.yaw)*side)*size,g.z+(-Math.sin(goby.yaw)*along+Math.cos(goby.yaw)*side)*size));assert.ok(g.y-support<.34&&g.heightAboveSand>goby.clearance+.003,'body remains close to the supporting dune, including wide fins');samples.push(g);modes.add(g.mode);}}
   assert.ok(modes.has('pecking')&&modes.has('resting')&&modes.has('bottom hover'));assert.ok(goby.pecks>3);
   assert.ok(samples.filter(g=>g.mode==='resting'&&g.speed<.02).length>samples.length*.15,'mandarin makes real stationary rests, not continuous slow swimming');
   const resting=samples.filter(g=>g.mode==='resting'&&g.speed<.02),cruising=samples.filter(g=>g.mode==='bottom hover'&&g.speed>.08);

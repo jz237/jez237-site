@@ -68,7 +68,9 @@ export class ReefFish{
  private free(p:T.Vector3,r:number,clearance=r){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(clearance===r?.3:0,sandHeight(p.x,p.z)+(clearance===r?.035:.003))+clearance&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
  private clearSegment(a:T.Vector3,b:T.Vector3,r:number,clearance=r){
   if(!this.free(b,r,clearance))return false;const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,l=dx*dx+dy*dy+dz*dz;
-  for(let i=1;i<8;i++){const t=i/8;if(a.y+dy*t<=sandHeight(a.x+dx*t,a.z+dz*t)+clearance+.035)return false;}
+  // Ground specialists need the same small margin along the route as at its
+  // endpoint; the open-water margin otherwise rejects their final settling.
+  for(let i=1;i<8;i++){const t=i/8;if(a.y+dy*t<=sandHeight(a.x+dx*t,a.z+dz*t)+clearance+(clearance===r?.035:.003))return false;}
   for(const o of this.obstacles){const radius=o.radius+r,c=o.center;
    if(c.x+radius<Math.min(a.x,b.x)||c.x-radius>Math.max(a.x,b.x)||c.y+radius<Math.min(a.y,b.y)||c.y-radius>Math.max(a.y,b.y)||c.z+radius<Math.min(a.z,b.z)||c.z-radius>Math.max(a.z,b.z))continue;
    const t=T.MathUtils.clamp(((c.x-a.x)*dx+(c.y-a.y)*dy+(c.z-a.z)*dz)/(l||1),0,1),x=a.x+dx*t-c.x,y=a.y+dy*t-c.y,z=a.z+dz*t-c.z;
@@ -198,7 +200,7 @@ export class ReefFish{
   if(target){f.mode='feeding';f.gobyCycle=0;f.until=now+1.2;}
   const arrived=Math.hypot(f.position.x-f.goal.x,f.position.z-f.goal.z)<.08;
   if(!target&&arrived&&f.mode==='bottom hover'){
-   f.mode=night||Math.random()<.45?'resting':'pecking';f.gobyCycle=now;f.until=now+(night?9:4.5)+Math.random()*(night?8:4);f.goal.copy(f.position);
+   f.mode=night||Math.random()<.3?'resting':'pecking';f.gobyCycle=now;f.until=now+(night?9:4.5)+Math.random()*(night?8:4);f.goal.copy(f.position);
    if(f.mode==='pecking')f.pecks++;
   }
   // Commit to a short route or a rest. A blocked prey item cannot perpetually
@@ -209,19 +211,27 @@ export class ReefFish{
   if(!target&&(now>f.until||startled)){
    let chosen:T.Vector3|undefined;
    for(let i=0;i<48;i++){
-    const a=Math.random()*Math.PI*2,reach=.28+Math.random()*1.0,p=f.position.clone().add(v(Math.cos(a)*reach,0,Math.sin(a)*reach));
+    const a=i<32?f.yaw+(Math.random()-.5)*2.7:Math.random()*Math.PI*2;
+    const reach=now<f.recoverUntil?.6+Math.random()*.6:.18+Math.random()*.52;
+    const p=f.position.clone().add(v(Math.cos(a)*reach,0,-Math.sin(a)*reach));
     p.y=sandHeight(p.x,p.z)+stance+.045;
     if(p.distanceToSquared(f.home)>12||!clear(p))continue;chosen=p;break;
    }
-   if(chosen){f.goal.copy(chosen);f.mode='bottom hover';f.until=now+6+Math.random()*3;f.gobyCycle=0;}
+   if(chosen){f.goal.copy(chosen);f.mode='bottom hover';f.until=now+6+Math.random()*3;f.gobyCycle=now;}
    else {f.mode='resting';f.until=now+1+Math.random()*2;}
    if(startled)f.recoverUntil=now+3;
   }
+  // A local patch can receive another pick without a full relocation. Night
+  // rests remain quiet, and actual pellets still require mouth contact.
+  if(!target&&!night&&f.mode==='resting'&&now-f.gobyCycle>2.0+(Math.sin(f.phase+f.pecks)*.5+.5)*2.2&&now<f.until-.8){
+   f.mode='pecking';f.gobyCycle=now;f.pecks++;
+  }
+  const stroke=Math.pow(Math.max(0,Math.sin((now-f.gobyCycle)*3.8+f.phase)),2);
   let wantedYaw=f.yaw,wantedPitch=0,speed=0,peck=0;
   if(f.mode==='bottom hover'||target){
    const delta=f.goal.clone().sub(f.position);if(target)delta.copy(target.position).sub(f.position);
    wantedYaw=Math.atan2(-delta.z,delta.x);
-   speed=(target?.36:now<f.recoverUntil?.62:.19+.085*Math.sin(now*2.1+f.phase))*(night?.6:1);
+   speed=(target?.36:now<f.recoverUntil?.62:.12+.15*stroke)*(night?.6:1);
    speed*=Math.min(1,f.position.distanceTo(f.goal)/.15);
    if(target)wantedPitch=T.MathUtils.clamp(Math.atan2(delta.y,Math.hypot(delta.x,delta.z)),-.25,.18);
   }else if(f.mode==='pecking'){
@@ -229,7 +239,7 @@ export class ReefFish{
    // Mandarin dragonets pick microfauna; no sleeper-goby sand/gill stream.
    const t=now-f.gobyCycle;peck=Math.max(0,Math.sin(Math.PI*Math.min(1,t/.65)));
    wantedPitch=-.22*peck;
-   if(t>1.0)f.mode='resting';
+   if(t>1.0){f.mode='resting';f.gobyCycle=now;}
   }
   const turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));
   const yawStep=T.MathUtils.clamp(turn,-dt*1.8,dt*1.8);f.yaw+=yawStep;f.pitch=T.MathUtils.damp(f.pitch,wantedPitch,6,dt);
@@ -248,14 +258,19 @@ export class ReefFish{
   if(clear(next)){f.position.copy(next);f.blockedTime=0;}else{f.velocity.multiplyScalar(.4);f.blockedTime+=dt;if(f.blockedTime>.7){f.until=0;f.recoverUntil=now+3;f.mode='resting';f.blockedTime=0;}}
   const moving=f.velocity.length();
   f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.32+moving*2.5);f.effort.value=T.MathUtils.damp(f.effort.value,moving,5,dt);
-  f.waveGain.value=T.MathUtils.damp(f.waveGain.value,.15+Math.min(1,moving/.25)*2.8,6,dt);
+  // Pectorals supply ordinary hovering thrust; the flexible rear body adds a
+  // stronger stroke during acceleration/escape, then relaxes during the glide.
+  f.waveGain.value=T.MathUtils.damp(f.waveGain.value,.15+Math.min(1,moving/.25)*(.7+stroke*.8)+(now<f.recoverUntil?1.2:0),6,dt);
   f.turnBend.value=T.MathUtils.damp(f.turnBend.value,-yawStep/Math.max(dt,.001)*.068,5,dt);
   for(let j=0;j<f.pectoral.length;j++){
    const p=f.pectoral[j],side=Math.sign(p.userData.restZ),pelvic=p.userData.pelvic;
    p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value,f.waveGain.value,f.turnBend.value);
    // Broad paired fins have independent clocks. Pectoral flutter continues
    // while hovering; pelvic fans spread to support rests and soften in motion.
-   const phase=now*(pelvic?2.4:16+moving*9)+f.phase+j*.87,footMotion=Math.min(1,moving/.08);
+   // Integrate frequency rather than multiplying elapsed time by current speed:
+   // acceleration must not jump the fin phase or make a resting fish quiver.
+   p.userData.flutterTime=(p.userData.flutterTime??f.phase+j*.87)+dt*(pelvic?2.4:14+moving*13+j*.31);
+   const phase=p.userData.flutterTime,footMotion=Math.min(1,moving/.08);
    p.rotation.x=-side*(pelvic?.73+Math.min(1,moving/.2)*.3+.06*Math.sin(phase)*footMotion:.77+.19*Math.sin(phase));
    p.rotation.y=side*(pelvic?.10+.09*Math.sin(phase+.8)*footMotion:.38+.26*Math.sin(phase+.6));
    p.rotation.z=pelvic?.04*Math.sin(phase)*footMotion:.07*Math.sin(phase+1.3);
