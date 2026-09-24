@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { Soldier } from './soldier.js';
 import * as M from './models.js';
 import * as M2 from './models2.js';
+import { flatGeo } from './assets.js';
 import { clamp, lerp, angDiff, approach, TAU } from './util.js';
 
 export const TUNE = {
@@ -33,17 +34,24 @@ export class Game {
     this.state = 'idle';
     this.events = [];
     this._v = new THREE.Vector3(); this._v2 = new THREE.Vector3();
-    this.pickupGeo = { gren: M.crateGeo(), med: M.crateGeo() };
-    this.pickupMat = {
-      gren: new THREE.MeshStandardMaterial({ color: 0x6f7c3a, emissive: 0x2a3a08, roughness: 0.6 }),
-      med: new THREE.MeshStandardMaterial({ color: 0xe8e2d0, emissive: 0x401010, roughness: 0.6 }),
-    };
-    this.nadeGeo = new THREE.SphereGeometry(0.11, 8, 6);
-    this.nadeMat = new THREE.MeshStandardMaterial({ color: 0x3b4128, roughness: 0.6 });
+    this.shellGeo = new THREE.SphereGeometry(0.11, 8, 6);
     this.shellMat = new THREE.MeshStandardMaterial({ color: 0x2a2a28, roughness: 0.5, metalness: 0.4 });
+  }
+  // grenades and pickups use the Quaternius kit, which loads after construction
+  initModels() {
+    if (this.modelsReady) return;
+    this.modelsReady = true;
+    this.nadeGeo = flatGeo('props', 'grenade', { h: 0.34, cy: true });
+    this.nadeMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55 });
+    this.pickupGeo = { gren: flatGeo('props', 'grenade', { h: 0.62 }), med: flatGeo('props', 'crate', { w: 0.55 }, { '*': '#e9e3d2' }) };
+    this.pickupMat = {
+      gren: new THREE.MeshStandardMaterial({ vertexColors: true, emissive: 0x2a3a08, roughness: 0.55 }),
+      med: new THREE.MeshStandardMaterial({ vertexColors: true, emissive: 0x401010, roughness: 0.6 }),
+    };
   }
 
   setWorld(world) {
+    this.initModels();
     this.clearEntities();
     this.world = world; this.area = world.area;
     this.T = world.terrain; this.col = world.col;
@@ -800,7 +808,8 @@ export class Game {
 
   // ------------------------------------------------------------------ grenades & shells
   launchNade(x, p, y, tx, tp, T, owner) {
-    const mesh = new THREE.Mesh(this.nadeGeo, owner === 'mortar' || owner === 'tank' ? this.shellMat : this.nadeMat);
+    const shell = owner === 'mortar' || owner === 'tank';
+    const mesh = new THREE.Mesh(shell ? this.shellGeo : this.nadeGeo, shell ? this.shellMat : this.nadeMat);
     mesh.castShadow = true;
     this.scene.add(mesh);
     const ty = this.T.standY(tx, tp);
@@ -1238,7 +1247,7 @@ export class Game {
     for (const k of this.pickups) {
       k.t += dt;
       const y = this.T.standY(k.x, k.p);
-      k.mesh.position.set(k.x, y + 0.25 + Math.sin(k.t * 4) * 0.08, -k.p);
+      k.mesh.position.set(k.x, y + 0.08 + Math.sin(k.t * 4) * 0.08, -k.p);
       k.mesh.rotation.y += dt * 1.6;
       k.mesh.visible = k.t < 11 || Math.floor(k.t * 8) % 2 === 0;
       if (J.alive && Math.hypot(J.x - k.x, J.p - k.p) < 1.1) {
@@ -1395,7 +1404,7 @@ function darken(obj, k) {
 // vehicles are built per spawn: free their geometry (and any materials they own)
 function disposeObj(obj) {
   obj.removeFromParent();
-  obj.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && o.material.userData.own) o.material.dispose(); });
+  obj.traverse(o => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); if (o.material && o.material.userData.own) o.material.dispose(); });
 }
 function segCircle(x0, p0, x1, p1, cx, cp, r) {
   const dx = x1 - x0, dp = p1 - p0, fx = x0 - cx, fp = p0 - cp;

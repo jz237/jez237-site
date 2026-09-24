@@ -1,10 +1,12 @@
 // models2.js — props and vehicles for Areas 2 and 3: palisades and the log
-// fort, beached boat, dead swamp trees, reeds, lily pads, prisoner cages,
-// barracks, lamps, searchlight heads, chain-link fence, fuel tanks, the tank
-// and the motorcycle with sidecar. Same conventions as models.js.
+// fort, beached boat, lily pads, prisoner cages, barracks, lamps, searchlight
+// heads, chain-link fence, fuel tanks, the tank (a Quaternius model split into
+// hull / turret / barrel) and the motorcycle with sidecar. Same conventions as
+// models.js.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { P, merge, MAT } from './models.js';
+import { tankParts } from './assets.js';
 import { mulberry } from './util.js';
 
 const cyl = (r0, r1, h, s = 6) => new THREE.CylinderGeometry(r0, r1, h, s);
@@ -113,24 +115,6 @@ export function boatGroup(sunk = false) {
   const m = new THREE.Mesh(merge(parts), MAT.vc); m.castShadow = m.receiveShadow = true; g.add(m);
   m.rotation.z = sunk ? 0.18 : 0.08; m.rotation.x = sunk ? -0.12 : -0.05;
   return g;
-}
-
-export function deadTreeGeo(seed) {
-  const r = mulberry(seed), parts = [];
-  const H = 4.5 + r() * 2.5;
-  parts.push(P(cyl(0.12, 0.28, H, 7), '#58524a', { y: H / 2, rz: (r() - 0.5) * 0.12 }, 0.18, seed));
-  const n = 3 + ((r() * 3) | 0);
-  for (let i = 0; i < n; i++) {
-    const y = H * (0.45 + r() * 0.45), L = 1.2 + r() * 1.8, a = r() * Math.PI * 2, tilt = 0.6 + r() * 0.6;
-    const b = cyl(0.03, 0.09, L, 5); b.translate(0, L / 2, 0); b.rotateZ(tilt); b.rotateY(a);
-    parts.push(P(b, '#4e4943', { y }, 0.15, seed + i));
-    // a twig off each branch
-    const tw = cyl(0.015, 0.04, L * 0.5, 4); tw.translate(0, L * 0.25, 0); tw.rotateZ(tilt * 0.4 - 0.4); tw.rotateY(a + 0.6);
-    parts.push(P(tw, '#4e4943', { y: y + Math.cos(tilt) * L * 0.6, x: Math.sin(tilt) * Math.cos(a) * L * 0.6, z: -Math.sin(tilt) * Math.sin(a) * L * 0.6 }));
-  }
-  // hanging moss rags
-  for (let i = 0; i < 4; i++) parts.push(P(box(0.08, 0.6 + r() * 0.5, 0.02), '#5d6a3e', { x: (r() - 0.5) * 1.6, y: H * (0.5 + r() * 0.3), z: (r() - 0.5) * 1.6, ry: r() * 3 }));
-  return merge(parts);
 }
 
 export function lilyGeo(seed) {
@@ -258,30 +242,15 @@ export function fuelTankGroup() {
 }
 
 // ------------------------------------------------------------------ vehicles
-// tank: hull + tracks, a turret that yaws and a barrel that recoils.
-// Faces +Z (south) like the other vehicles.
+// tank (Quaternius Toon Shooter kit): hull, a turret that yaws and a barrel
+// that recoils (the barrel group rests at z = 1.0). Faces +Z like the other vehicles.
 export function tankGroup() {
-  const g = new THREE.Group();
-  const olive = '#4f5634', dark = '#23241f';
-  const hull = [];
-  const side = new THREE.Shape();
-  side.moveTo(-2.7, 0); side.lineTo(2.3, 0); side.lineTo(2.9, 0.55); side.lineTo(2.4, 1.2); side.lineTo(-2.6, 1.2); side.lineTo(-2.9, 0.6); side.closePath();
-  const hg = new THREE.ExtrudeGeometry(side, { depth: 2.4, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 1 });
-  hg.translate(0, 0, -1.2); hg.rotateY(-Math.PI / 2);
-  hull.push(P(hg, olive, { y: 0.45 }, 0.05));
-  for (const s of [-1, 1]) {
-    hull.push(P(new RoundedBoxGeometry(0.62, 0.9, 5.6, 2, 0.28), dark, { x: s * 1.45, y: 0.45 }));
-    for (let i = 0; i < 6; i++) hull.push(P(cyl(0.3, 0.3, 0.16, 12).rotateZ(Math.PI / 2), '#3a3b33', { x: s * 1.8, y: 0.38, z: -2.1 + i * 0.84 }));
-    hull.push(P(box(0.7, 0.06, 5.2), '#43482c', { x: s * 1.45, y: 0.95 }));        // fenders
-  }
-  hull.push(P(box(0.9, 0.35, 0.5), '#3a3e28', { y: 1.8, z: -2.3 }));              // engine deck
-  const hm = new THREE.Mesh(merge(hull), MAT.vc); hm.castShadow = hm.receiveShadow = true; g.add(hm);
-  const turret = new THREE.Group(); turret.position.set(0, 1.75, -0.2); g.add(turret);
-  const tp = [P(new RoundedBoxGeometry(1.9, 0.75, 2.3, 3, 0.28), olive, { y: 0.3 }, 0.05), P(cyl(0.34, 0.34, 0.18, 12), dark, { x: -0.45, y: 0.75, z: -0.4 })];
-  const tm = new THREE.Mesh(merge(tp), MAT.vc); tm.castShadow = true; turret.add(tm);
-  const barrel = new THREE.Group(); barrel.position.set(0, 0.35, 1.0); turret.add(barrel);
-  const bm = new THREE.Mesh(merge([P(cyl(0.11, 0.13, 2.8, 10).rotateX(Math.PI / 2), '#3a3e2a', { z: 1.4 }), P(cyl(0.17, 0.17, 0.3, 10).rotateX(Math.PI / 2), dark, { z: 2.8 })]), MAT.vcMetal);
-  bm.castShadow = true; barrel.add(bm);
+  const T = tankParts(), g = new THREE.Group();
+  const hm = new THREE.Mesh(T.hull, MAT.vc); hm.castShadow = hm.receiveShadow = true; g.add(hm);
+  const turret = new THREE.Group(); turret.position.set(0, T.deck, T.pivotZ); g.add(turret);
+  const tm = new THREE.Mesh(T.turret, MAT.vc); tm.castShadow = tm.receiveShadow = true; turret.add(tm);
+  const barrel = new THREE.Group(); barrel.position.set(0, 0, 1.0); turret.add(barrel);
+  const bm = new THREE.Mesh(T.barrel, MAT.vc); bm.castShadow = true; barrel.add(bm);
   g.userData = { turret, barrel, muzzle: new THREE.Vector3(0, 0, 3.0) };
   return g;
 }

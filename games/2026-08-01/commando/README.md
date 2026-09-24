@@ -9,9 +9,14 @@ at v0.72.0-reel; `sw.js` here only retires its offline service worker.
 Why a rebuild: the 2D build mixed straight-down painted backgrounds with
 front-facing, frame-by-frame generated sprites, so perspective, scale, light
 and animation never agreed, and collision came from hand-drawn masks over the
-paintings. Here everything shares one camera and one sun, soldiers are rigged
-3D models animated procedurally, and every prop's collider is built from the
-same data as its mesh.
+paintings. Here everything shares one camera and one sun, and every prop's
+collider is built from the same data as its mesh.
+
+Since build v5 the soldiers, the tank, grenades, most props and much of the
+vegetation are CC0 models by [Quaternius](https://quaternius.com/) (Toon
+Shooter Game Kit, Stylized Nature MegaKit, Ultimate Nature palms, via
+poly.pizza). Terrain, water, buildings, the fortresses and the remaining
+foliage are still built from primitives in code.
 
 ## Layout
 
@@ -23,8 +28,11 @@ same data as its mesh.
 | `src/levels.js` | the campaign order and per-area lighting/weather (`AMBIENCE`) |
 | `src/world.js` | builds an area's terrain, water, props, vegetation, night lights and colliders; disposed between areas |
 | `src/terrain.js` | analytic height + colour + water function (rivers, wadeable swamp, causeways, cliffs, AO, craters, trenches) |
-| `src/models.js`, `src/models2.js` | every static model and vehicle, built from primitives |
-| `src/soldier.js` | rigid-skinned soldier (one draw call each) + procedural animation |
+| `src/assets.js` | loads the four model GLBs at boot; turns models into shared, normalised geometry (vertex-coloured or textured), splits the tank |
+| `src/models.js`, `src/models2.js` | the procedural models (buildings, fortresses, trucks, motorcycle…) and the tank wrapper |
+| `src/soldier.js` | Quaternius characters baked per kind into one skinned mesh (one draw call each); clips blended from the game's speed / crouch / throw / death / aim-twist |
+| `assets/models/` | `soldier.glb`, `enemy.glb`, `props.glb`, `nature.glb` — meshopt-compressed, WebP textures (1.7 MB total) |
+| `tools/` | `pack-models.mjs` rebuilds `assets/models/` from the source GLBs listed in `models.txt` |
 | `src/fx.js` | particles, tracers, muzzle flashes, explosions, decals, lights, floating text |
 | `src/render.js` | renderer, sky environment, sun + shadows, bloom + grade, camera rig |
 | `src/bot.js` | autopilot (attract mode and playthrough tests); local A* around obstacles |
@@ -43,6 +51,17 @@ title.
 
 Headless Chromium with `--use-angle=d3d11 --enable-gpu` renders on the real
 GPU; the autopilot clears each area in 80–105 s of game time.
+
+## Models
+
+`tools/models.txt` lists every source model (name → poly.pizza GLB id). To
+rebuild the packed files: download those GLBs into `tools/raw/<name>.glb`,
+`npm i @gltf-transform/core @gltf-transform/extensions @gltf-transform/functions meshoptimizer sharp`,
+then `node tools/pack-models.mjs assets/models`. The packer keeps only the AK and
+pistol of the characters' weapon sets, the clips the game uses, drops the
+MegaKit normal maps (wasted from a top-down camera), dedupes textures and
+shrinks them to WebP. Sizes and placement are tuned in code (`PROP_FIT` and
+`qKinds()` in `world.js`, `LOOKS` in `soldier.js`).
 
 ## Releasing
 

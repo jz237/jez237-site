@@ -43,6 +43,8 @@ export const AREA1 = {
     { t: 'barrel', x: 11.6, p: 11.8 }, { t: 'barrel', x: 12.3, p: 12.6 },
     { t: 'jeep', x: 10.8, p: 4.5, rot: 0.55 },
     { t: 'tent', x: -10.5, p: 26, rot: 0.25 },
+    { t: 'pallet', x: 12.4, p: 16.6, rot: 0.3 }, { t: 'tires', x: 13.4, p: 8.8 }, { t: 'gascyl', x: 13.3, p: 18.6 },
+    { t: 'debris', x: -5.5, p: 30.5 }, { t: 'wreck', x: -12.2, p: 37, rot: 0.35 },
     // --- jungle paths ---
     { t: 'hut', x: 8.2, p: 41, rot: -0.25 },
     { t: 'rock', x: -9, p: 47, s: 1.5 }, { t: 'rock', x: -7.3, p: 48.6, s: 0.9 }, { t: 'rock', x: -10.3, p: 49.8, s: 1.1 },
@@ -51,11 +53,13 @@ export const AREA1 = {
     { t: 'sandbags', pts: [[-9.5, 61.5], [-7.4, 62.6], [-5, 62.8], [-3, 62]] },
     { t: 'log', x: 1.5, p: 75, rot: 0.08, len: 6.5 },
     { t: 'crate', x: 10.2, p: 45.5, rot: 0.4 },
+    { t: 'sacks', x: 10.6, p: 72.5, rot: 0.1, small: true },
     // --- scrub ---
     { t: 'rock', x: 11, p: 84, s: 1.8 }, { t: 'rock', x: -12, p: 90, s: 2.0 }, { t: 'rock', x: -4.5, p: 95, s: 0.8 },
     { t: 'barrel', x: 7.4, p: 88.5, red: true }, { t: 'barrel', x: 8.3, p: 89.3, red: true }, { t: 'barrel', x: 7.6, p: 90.2, red: true },
     { t: 'sandbags', pts: [[-11, 86], [-8.5, 87], [-6.2, 86.7]] },
     { t: 'bush', x: 12.8, p: 93, s: 1.1, dry: true },
+    { t: 'tires', x: -9.8, p: 80.5, s: 0.9 }, { t: 'debris', x: 4, p: 83 },
     // --- river + bridge ---
     { t: 'bridge', x: 0, p0: 98.6, p1: 112.4, half: 2.9 },
     // --- desert trenches ---
@@ -73,6 +77,8 @@ export const AREA1 = {
     { t: 'barrel', x: 3.8, p: 146, red: true }, { t: 'barrel', x: 4.6, p: 146.9, red: true },
     { t: 'rock', x: -13.5, p: 134, s: 1.4 }, { t: 'rock', x: 14, p: 149, s: 1.2 },
     { t: 'sandbags', pts: [[-2.5, 160], [0, 160.8], [2.5, 160.2]] },
+    { t: 'barrier', x: -14, p: 141, rot: 0.2 }, { t: 'barrier', x: 13.2, p: 164.2, rot: -0.1 },
+    { t: 'pallet', x: -2.7, p: 131.9, rot: 0.9 }, { t: 'debris', x: 7, p: 125 }, { t: 'gascyl', x: 14.3, p: 142 },
     // --- fortress approach ---
     { t: 'bunker', x: -9, p: 197, rot: 0 },
     { t: 'sandbags', pts: [[2.2, 188], [5.5, 188.8], [9, 188.3]] },
@@ -83,6 +89,8 @@ export const AREA1 = {
     { t: 'barrel', x: 13.2, p: 186, red: true }, { t: 'barrel', x: 13.9, p: 186.9, red: true },
     { t: 'barrel', x: -12.8, p: 203.5, red: true },
     { t: 'crate', x: 9.5, p: 202, rot: 0.3 }, { t: 'crate', x: 10.4, p: 203.1, rot: -0.2, s: 0.9 },
+    { t: 'container', x: -13.4, p: 188, rot: 1.45, tint: { Red: '#5b6a45' } }, { t: 'watertank', x: 13.6, p: 212.5 },
+    { t: 'barrier', x: -8.5, p: 184.5, rot: 0.1 }, { t: 'pallet', x: 11.6, p: 200.4, rot: 0.2 },
     { t: 'tower', x: -13.2, p: 224 }, { t: 'tower', x: 13.2, p: 224 },
     { t: 'fortress', p: 230 },
   ],

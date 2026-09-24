@@ -6,6 +6,7 @@ import { Terrain, groundMaterial, waterMaterial, X_EXTENT } from './terrain.js';
 import * as M from './models.js';
 import * as M2 from './models2.js';
 import * as TX from './textures.js';
+import * as QA from './assets.js';
 import { mulberry, fbm, smooth, clamp } from './util.js';
 
 export const WIND = { uTime: { value: 0 } };
@@ -37,6 +38,66 @@ function foliageMats(map, amp, extra = {}) {
   const depth = windify(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, map, alphaTest: 0.45, side: THREE.DoubleSide }), amp);
   return { mat, depth };
 }
+
+// ------------------------------------------------------------------ Quaternius models
+// materials for the textured models; built once and shared by every area
+const qMats = new Map();
+function qMat(map, amp, alpha) {
+  const key = map.uuid + '/' + amp + '/' + alpha;
+  if (qMats.has(key)) return qMats.get(key);
+  const cut = alpha ? { alphaTest: 0.5, side: THREE.DoubleSide } : {};
+  let mat = new THREE.MeshStandardMaterial({ map, roughness: 0.88, ...cut });
+  let depth = alpha ? new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, map, ...cut }) : null;
+  if (amp > 0) { mat = windify(mat, amp); if (depth) depth = windify(depth, amp); }
+  mat.userData.shared = true; if (depth) depth.userData.shared = true;
+  const m = { mat, depth };
+  qMats.set(key, m);
+  return m;
+}
+// kind table entries: [geometry, material, shadow-depth material] per part
+let QK = null;
+function qKinds() {
+  if (QK) return QK;
+  const vcWind = windify(M.MAT.vc.clone(), 0.0018); vcWind.userData.shared = true;
+  // the palms' atlas greens are brighter than the rest of the jungle: calm them
+  const flat = (n, fit) => {
+    const g = QA.flatGeo('nature', n, fit), c = g.attributes.color;
+    for (let i = 0; i < c.count; i++) {
+      const r = c.getX(i), gg = c.getY(i), b = c.getZ(i), l = 0.3 * r + 0.59 * gg + 0.11 * b;
+      c.setXYZ(i, (r + (l - r) * 0.3) * 0.58, (gg + (l - gg) * 0.3) * 0.58, (b + (l - b) * 0.3) * 0.5);
+    }
+    return [[g, vcWind, null]];
+  };
+  const tex = (n, fit, amp) => QA.texturedParts('nature', n, fit).parts.map((p) => { const m = qMat(p.map, amp, p.alpha); return [p.geo, m.mat, m.depth]; });
+  QK = {
+    palm0: flat('palm-1', { h: 6.6 }), palm1: flat('palm-2', { h: 8.2 }), palm2: flat('palm-3', { h: 6.9 }), palm3: flat('palm-4', { h: 6.2 }),
+    tree0: tex('mk-tree-1', { h: 9.5 }, 0.0011), tree1: tex('mk-tree-2', { h: 9.5 }, 0.0011),
+    bigleaf: tex('mk-plant-big-2', { h: 2.2 }, 0.02), plant: tex('mk-plant', { h: 1.25 }, 0.03),
+    fbush: tex('mk-bush-flowers', { h: 1.45 }, 0.02), rbush: tex('mk-bush', { h: 1.2 }, 0.02),
+    qfern: tex('mk-fern', { w: 2.6 }, 0.03), tallgrass: tex('mk-tall-grass', { h: 1.1 }, 0.06), wisp: tex('mk-grass-wispy', { h: 0.75 }, 0.06),
+    rock0: tex('mk-rock-1', { w: 1.9 }, 0), rock1: tex('mk-rock-2', { w: 1.9 }, 0),
+    snag0: tex('mk-dead-tree-1', { h: 7.5 }, 0.0006), snag1: tex('mk-dead-tree-2', { h: 7.5 }, 0.0006),
+  };
+  return QK;
+}
+// a Quaternius kind as one placed object (props that aren't instanced)
+function qObject(parts) {
+  const g = new THREE.Group();
+  for (const [geo, mat, depth] of parts) {
+    const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true;
+    if (depth) m.customDepthMaterial = depth;
+    g.add(m);
+  }
+  return g;
+}
+// flat-colour props from the Toon Shooter kit, drawn with the shared vertex-colour material
+const PROP_FIT = {
+  crate: { w: 1.0 }, 'exploding-barrel': { h: 1.05 }, 'gas-tank': { h: 1.3 }, tires: { w: 1.5 }, pallet: { w: 1.5 },
+  'debris-pile': { w: 2.4 }, 'shipping-container': { w: 4.4 }, 'water-tank': { h: 3.4 }, 'barrier-single': { w: 1.9 },
+  'sack-trench': { w: 3.2 }, 'sack-trench-small': { w: 2.3 }, 'broken-car': { l: 5.2 }, 'barrier-large': { w: 3.8 }, grenade: { h: 0.3 },
+};
+const PROP_TINT = { 'debris-pile': { Red: '#6e5236' } };
+export const propGeo = (name, tint = PROP_TINT[name]) => QA.flatGeo('props', name, PROP_FIT[name] || {}, tint);
 
 // every canvas texture is painted once and shared by all areas
 let SHARED = null;
@@ -259,7 +320,7 @@ export class World {
         case 'sandbags': bagRow(pr.pts, pr.rows || 3); break;
         case 'crate': {
           const s = pr.s || 1;
-          const m = this.mesh(G('crate', M.crateGeo), M.MAT.vc, pr.x, pr.p, pr.rot || 0, s, pr.y || 0);
+          const m = this.mesh(propGeo('crate'), M.MAT.vc, pr.x, pr.p, pr.rot || 0, s, pr.y || 0);
           const c = pr.y ? null : col.add({ k: 'b', x: pr.x, p: pr.p, hw: 0.5 * s, hp: 0.5 * s, rot: -(pr.rot || 0), bul: true });
           const rec = { mesh: m, c, x: pr.x, p: pr.p, hp: 3, stacked: !!pr.y };
           if (c) c.ref = { crate: rec };
@@ -267,7 +328,7 @@ export class World {
           break;
         }
         case 'barrel': {
-          const m = this.mesh(G('barrel' + !!pr.red, () => M.barrelGeo(pr.red)), M.MAT.vc, pr.x, pr.p, Math.random() * 3);
+          const m = this.mesh(pr.red ? propGeo('exploding-barrel') : propGeo('exploding-barrel', { Red: '#4b5631', White: '#6f6c55' }), M.MAT.vc, pr.x, pr.p, Math.random() * 3);
           const c = col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.36, bul: true });
           const rec = { mesh: m, c, x: pr.x, p: pr.p, red: !!pr.red, hp: pr.red ? 2 : 6, alive: true, r: 3.1 };
           c.ref = { barrel: rec };
@@ -311,31 +372,48 @@ export class World {
         }
         case 'rock': {
           const s = pr.s || 1;
-          this.mesh(G('rock' + (rockSeed % 3), () => M.rockGeo(rockSeed * 17)), M.MAT.vc, pr.x, pr.p, rockSeed * 1.3, s, -0.1);
+          const g = this.place(qObject(qKinds()['rock' + (rockSeed % 2)]), pr.x, pr.p, rockSeed * 1.3, -0.15);
+          g.scale.setScalar(s);
           rockSeed++;
           col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.85 * s, bul: true });
           break;
         }
         case 'palm': {
-          const pg = G('palm-prop' + (pr.x > 0 ? 1 : 0), () => M.palmGeo(pr.x > 0 ? 901 : 902));
-          if (!this._palmPropMats) this._palmPropMats = foliageMats(tx.frond, 0.0022);
-          const t = this.mesh(pg.trunk, M.MAT.vc, pr.x, pr.p, 0, pr.s || 1);
-          const f = new THREE.Mesh(pg.fronds, this._palmPropMats.mat); f.customDepthMaterial = this._palmPropMats.depth;
-          f.castShadow = true; f.receiveShadow = true; t.add(f);
+          const g = this.place(qObject(qKinds()['palm' + (Math.abs(Math.round(pr.x * 3 + pr.p)) % 4)]), pr.x, pr.p, pr.p * 1.7);
+          g.scale.setScalar(pr.s || 1);
           col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.38, bul: true });
           break;
         }
         case 'bush': {
-          if (!this._bushPropMats) this._bushPropMats = foliageMats(tx.leaf, 0.025);
-          const m = this.mesh(G('bush' + !!pr.dry, () => M.leafyBushGeo(77, pr.dry)), this._bushPropMats.mat, pr.x, pr.p, 0, pr.s || 1);
-          m.customDepthMaterial = this._bushPropMats.depth;
+          const g = this.place(qObject(qKinds()[pr.dry ? 'rbush' : 'fbush']), pr.x, pr.p, pr.p * 2.3);
+          g.scale.setScalar((pr.s || 1) * 1.15);
           col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.9 * (pr.s || 1), bul: false });
           break;
         }
         case 'deadtree': {
-          this.mesh(G('dead' + rockSeed % 2, () => M2.deadTreeGeo(900 + rockSeed)), M.MAT.vc, pr.x, pr.p, pr.x, pr.s || 1, -0.1);
+          const g = this.place(qObject(qKinds()['snag' + (rockSeed % 2)]), pr.x, pr.p, pr.x, -0.1);
+          g.scale.setScalar(pr.s || 1);
           rockSeed++;
           col.add({ k: 'c', x: pr.x, p: pr.p, r: 0.35, bul: true });
+          break;
+        }
+        // clutter from the Toon Shooter kit
+        case 'tires': case 'gascyl': {
+          const s = pr.s || 1;
+          this.mesh(propGeo(pr.t === 'tires' ? 'tires' : 'gas-tank'), M.MAT.vc, pr.x, pr.p, pr.rot ?? pr.p, s);
+          col.add({ k: 'c', x: pr.x, p: pr.p, r: (pr.t === 'tires' ? 0.7 : 0.5) * s, bul: true });
+          break;
+        }
+        case 'pallet': case 'debris': {
+          this.mesh(propGeo(pr.t === 'pallet' ? 'pallet' : 'debris-pile'), M.MAT.vc, pr.x, pr.p, pr.rot ?? pr.p, pr.s || 1, -0.02);
+          break;
+        }
+        case 'container': case 'watertank': case 'barrier': case 'sacks': case 'wreck': {
+          const name = { container: 'shipping-container', watertank: 'water-tank', barrier: 'barrier-single', sacks: pr.small ? 'sack-trench-small' : 'sack-trench', wreck: 'broken-car' }[pr.t];
+          const m = this.mesh(propGeo(name, pr.tint), M.MAT.vc, pr.x, pr.p, pr.rot || 0, pr.s || 1);
+          m.geometry.computeBoundingBox();
+          const bb = m.geometry.boundingBox, s = pr.s || 1;
+          col.add({ k: 'b', x: pr.x, p: pr.p, hw: (bb.max.x - bb.min.x) / 2 * s * 0.92, hp: (bb.max.z - bb.min.z) / 2 * s * 0.92, rot: -(pr.rot || 0), bul: true, cover: pr.t === 'sacks' || pr.t === 'barrier' });
           break;
         }
         case 'log': {
@@ -544,25 +622,31 @@ export class World {
         for (let i = 0; i < nEdge; i++) {
           const e = -0.8 + Math.pow(r(), 1.6) * 22, x = side * (hw + e), pp = p + r();
           if (wf(x, pp) > 0.3 || Math.abs(x) > X_EXTENT - 0.5) continue;
-          const roll = r();
-          if (roll < 0.34) push('leaf' + ((r() * 3) | 0), x, pp, 0.8 + r() * 0.8);
-          else if (roll < 0.62) push('bush' + ((r() * 3) | 0), x, pp, 0.7 + r() * 0.9);
-          else push('fern' + ((r() * 2) | 0), x, pp, 0.8 + r() * 0.6);
+          const roll = r(), q = r();
+          if (roll < 0.34) push(q < 0.3 ? 'bigleaf' : q < 0.55 ? 'plant' : 'leaf' + ((r() * 3) | 0), x, pp, 0.8 + r() * 0.8);
+          else if (roll < 0.62) push(q < 0.17 ? 'fbush' : 'bush' + ((r() * 3) | 0), x, pp, 0.7 + r() * 0.9);
+          else push(q < 0.4 ? 'qfern' : 'fern' + ((r() * 2) | 0), x, pp, 0.8 + r() * 0.6);
+        }
+        // broadleaf canopy trees further back in the jungle
+        if (r() < v.edge * (hi ? 0.09 : 0)) {
+          const e = 5 + Math.pow(r(), 0.7) * 22, x = side * (hw + e), pp = p + r();
+          if (Math.abs(x) < X_EXTENT - 1 && wf(x, pp) < 0.05) push('tree' + ((r() * 2) | 0), x, pp, 0.8 + r() * 0.4);
         }
         // dry scrub where it's sandy or rocky
         if (r() < v.dry * 0.35) {
           const x = side * (hw + r() * 16);
-          if (wf(x, p) < 0.05) push('dry', x, p + r(), 0.5 + r() * 0.6);
+          if (wf(x, p) < 0.05) push(r() < 0.5 ? 'rbush' : 'dry', x, p + r(), 0.5 + r() * 0.6);
         }
         // boulders heaped on cliff tops and against the cliff foot
         if (r() < v.boulder * 0.7) {
           const e = r() < 0.4 ? r() * 1.5 : 2 + r() * 14, x = side * (hw + e);
-          push('boulder' + ((r() * 3) | 0), x, p + r(), e < 1.5 ? 0.5 + r() * 0.6 : 0.8 + r() * 1.6);
+          const bq = (r() * 4) | 0;
+          push(bq < 2 ? 'rock' + bq : 'boulder' + (bq - 2), x, p + r(), e < 1.5 ? 0.5 + r() * 0.6 : 0.8 + r() * 1.6);
         }
         // dead trees standing in the swamp
         if (r() < v.dead * 0.3) {
           const x = (r() * 2 - 1) * (hw + 14), pp = p + r();
-          if (!nearRoad(x, pp) && !busy(x, pp, 1.5)) push('dead' + ((r() * 2) | 0), x, pp, 0.8 + r() * 0.5, undefined, T.height(x, pp) - 0.1);
+          if (!nearRoad(x, pp) && !busy(x, pp, 1.5)) push('snag' + ((r() * 2) | 0), x, pp, (0.8 + r() * 0.5) * 0.72, undefined, T.height(x, pp) - 0.1);
         }
       }
       // reeds along every waterline; lily pads on still water
@@ -578,11 +662,27 @@ export class World {
         const x = (r() * 2 - 1) * (hw + 2), pp = p + r();
         if (nearRoad(x, pp) || wf(x, pp) > 0.1 || busy(x, pp, 0.5) || T.trenchDepth(x, pp) > 0.05) continue;
         const grassy = fbm(x * 0.11 + 7, pp * 0.11, 3);
-        if (grassy > -0.15 || r() < 0.2) push('grass', x, pp, 0.7 + r() * 0.7);
+        if (grassy > -0.15 || r() < 0.2) push(r() < 0.1 ? (r() < 0.5 ? 'tallgrass' : 'wisp') : 'grass', x, pp, 0.7 + r() * 0.7);
       }
       if (r() < 0.35) {
         const x = (r() * 2 - 1) * (hw + 4), pp = p + r();
         if (wf(x, pp) < 0.1 && !busy(x, pp, 0.4)) push('pebble' + ((r() * 3) | 0), x, pp, 0.12 + r() * 0.2);
+      }
+      // stones, and junk (pallets, debris) around camps and the fortress approach
+      if (r() < (hi ? 0.4 : 0.2)) {
+        const x = (r() * 2 - 1) * (hw + 1), pp = p + r();
+        if (!nearRoad(x, pp) && wf(x, pp) < 0.05 && !busy(x, pp, 0.6)) push('rock' + ((r() * 2) | 0), x, pp, 0.12 + r() * 0.2);
+      }
+      const junk = (w.camp || 0) + (w.motor || 0) + (w.fort || 0) * 0.6 + (w.desert || 0) * 0.5 + (w.lz || 0) * 0.4 + (w.beach || 0) * 0.4;
+      if (r() < junk * 0.05) {
+        const x = (r() * 2 - 1) * (hw - 1.5), pp = p + r();
+        if (!nearRoad(x, pp) && wf(x, pp) < 0.02 && !busy(x, pp, 1.4) && T.trenchDepth(x, pp) < 0.02) push(r() < 0.5 ? 'pallet' : 'debris', x, pp, 0.8 + r() * 0.3);
+      }
+      // low plants spilling out of the jungle onto the corridor edge
+      for (const side of [-1, 1]) {
+        if (r() >= v.edge * (hi ? 0.4 : 0.2)) continue;
+        const x = side * (hw - 0.3 - r() * 2), pp = p + r(), q = r();
+        if (!nearRoad(x, pp) && wf(x, pp) < 0.1 && !busy(x, pp, 0.8)) push(q < 0.4 ? 'plant' : q < 0.47 ? 'fbush' : q < 0.77 ? 'tallgrass' : 'wisp', x, pp, 0.6 + r() * 0.5);
       }
       // fallen leaves: thick under the jungle edge, scattered across the path
       const nL = Math.round((hi ? 9 : 4) * v.litter);
@@ -595,11 +695,8 @@ export class World {
     }
     // geometry & material per kind
     const tx = this.tex;
-    const palmVariants = [11, 23, 37, 51].map(s => M.palmGeo(s));
-    const palmF = foliageMats(tx.frond, 0.0022), leafM = foliageMats(tx.leaf, 0.02), fernM = foliageMats(tx.frond, 0.03, { color: 0xb8c890 }), grassM = foliageMats(tx.grass, 0.06);
-    const trunkMat = windify(M.MAT.vc.clone(), 0.0016);
-    const kinds = {};
-    palmVariants.forEach((pv, i) => { kinds['palm' + i] = [[pv.trunk, trunkMat, null], [pv.fronds, palmF.mat, palmF.depth]]; });
+    const leafM = foliageMats(tx.leaf, 0.02), fernM = foliageMats(tx.frond, 0.03, { color: 0xb8c890 }), grassM = foliageMats(tx.grass, 0.06);
+    const kinds = { ...qKinds() };
     for (let i = 0; i < 3; i++) kinds['leaf' + i] = [[M.broadleafGeo(300 + i), leafM.mat, leafM.depth]];
     const bushM = foliageMats(tx.leaf, 0.025);
     for (let i = 0; i < 3; i++) kinds['bush' + i] = [[M.leafyBushGeo(400 + i), bushM.mat, bushM.depth]];
@@ -611,21 +708,23 @@ export class World {
     M.P(litterGeo, '#ffffff');
     const litterMat = new THREE.MeshStandardMaterial({ map: tx.leaf, alphaTest: 0.5, roughness: 0.95, vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 });
     kinds.litter = [[litterGeo, litterMat, null]];
+    kinds.pallet = [[propGeo('pallet'), M.MAT.vc, null]];
+    kinds.debris = [[propGeo('debris-pile'), M.MAT.vc, null]];
     for (let i = 0; i < 3; i++) kinds['pebble' + i] = [[M.rockGeo(700 + i, false), M.MAT.vc, null]];
     for (let i = 0; i < 3; i++) kinds['boulder' + i] = [[M.rockGeo(820 + i, true), M.MAT.vc, null]];
-    for (let i = 0; i < 2; i++) kinds['dead' + i] = [[M2.deadTreeGeo(960 + i), M.MAT.vc, null]];
     for (let i = 0; i < 2; i++) kinds['lily' + i] = [[M2.lilyGeo(980 + i), M.MAT.vc, null]];
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), v = new THREE.Vector3(), sc = new THREE.Vector3();
     for (const ch of chunks.values()) {
       for (const [kind, items] of Object.entries(ch)) {
         for (const [geo, mat, depth] of kinds[kind]) {
           const im = new THREE.InstancedMesh(geo, mat, items.length);
+          im.name = kind;
           items.forEach(([x, y, z, rot, s], i) => {
-            q.setFromAxisAngle(up, rot); v.set(x, y - (kind.startsWith('pebble') || kind.startsWith('boulder') ? 0.1 : 0.02), z); sc.set(s, s, s);
+            q.setFromAxisAngle(up, rot); v.set(x, y - (kind.startsWith('pebble') || kind.startsWith('boulder') ? 0.1 : kind.startsWith('rock') ? 0.15 : 0.02), z); sc.set(s, s, s);
             m4.compose(v, q, sc); im.setMatrixAt(i, m4);
           });
           im.computeBoundingSphere();
-          const small = kind === 'grass' || kind === 'reed' || kind === 'litter' || kind.startsWith('pebble') || kind.startsWith('fern') || kind.startsWith('lily');
+          const small = kind === 'grass' || kind === 'reed' || kind === 'litter' || kind === 'wisp' || kind === 'tallgrass' || kind.startsWith('pebble') || kind.startsWith('fern') || kind.startsWith('lily');
           if (kind === 'litter') {
             const c = new THREE.Color(), rr = mulberry(items.length);
             items.forEach((_, i) => { const k = rr(); c.setRGB(0.75 + k * 0.5, 0.55 + k * 0.25, 0.25 + k * 0.1, THREE.SRGBColorSpace); im.setColorAt(i, c); });
@@ -666,9 +765,9 @@ export class World {
     this.scene.remove(this.root);
     const shared = new Set(Object.values(M.MAT));
     this.root.traverse((o) => {
-      if (o.geometry) o.geometry.dispose();
+      if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose();
       const mats = Array.isArray(o.material) ? o.material : o.material ? [o.material] : [];
-      for (const m of mats) if (!shared.has(m)) m.dispose();
+      for (const m of mats) if (!shared.has(m) && !m.userData.shared) m.dispose();
       if ((o.isLight || o.isInstancedMesh) && o.dispose) o.dispose();
     });
     if (this.waterMat.normalMap) this.waterMat.normalMap.dispose();
