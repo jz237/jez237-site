@@ -1,0 +1,12 @@
+{
+  "prior": {
+    "bytes": 22658832,
+    "triangles": 477120,
+    "tentacles": 800
+  },
+  "current": {
+    "bytes": 22667577,
+    "triangles": 516096,
+    "tentacles": 800
+  }
+}
