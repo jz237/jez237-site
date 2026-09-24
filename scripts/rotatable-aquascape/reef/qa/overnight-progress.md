@@ -622,3 +622,12 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - build:reef/check:reef passed (6906ms ready,38fish bites,1anemone swallow); zero sampled overlaps, pause/feeding/breathing/lighting/camera/mobile/randomization checks passed. Front,angle,mobile,macro and anemone motion pairs inspected. Planted83asset sync and release gates passed; Hidden Reef untouched.
 - Local alternating startup prior/current7224/7362.5ms; uncapped113.4/122.1FPS. Small-sample observations, not a universal guarantee.
 - Reef is still below reference realism: too-repetitive branches, exposed broad rock patches and smooth tubular anemone tissue remain. Continue existing loop; no completion claim.
+
+
+## September23 - diamond goby
+- Add detailed Blender diamond goby, independent bottom hops and rests, mouth/gill breathing, terrain-aware sand sifting and reachable sinking-food contact.
+- Generated original and clean-flank reference through built-in GPT Image; manually traced an elongated body, two separated dorsal fins, rounded caudal fin, eye and mouth. Blender5.2 exported goby.glb and goby.blend without regenerating the original six species. Reference/prompt provenance and sources saved in model-source/references/goby-prompts.md and qa/goby-research.md.
+- New behavior stays near the sand, varies short moves and rests, dips the head before mouth/opercular sifting, emits small irregular settling grains and takes reachable low food. Conservative whole-fish horizontal clearance plus five terrain stations; shortened ventral fin after macro inspection. Rejected oversized bead-like grain stream. Existing open-water fish behavior retained.
+- build:reef/check:reef pass;21inhabitants, all structural scenery metrics unchanged. Dedicated120-second deterministic bottom behavior, low-food contact and boundedgrain tests pass. Rendered time series shows sifting/grains and actual breathing-mouth/gill changes. Pause holds particles and animals. Inspected front,angle,mobile and fish macro. Planted83asset sync and release safeguards pass.
+- Local startup prior/current6367.5/6480ms; uncappedFPS131.2/130.7; capped both~60. One additional975KB model; this is a small visual feature cost, not a claimed performance improvement.
+- Still below the original reference overall: broad smooth rock areas, repetitive branching, tubular anemone tissue and flat-looking plate undersides remain. Keep existing realism loop active. Next focus remains fine colorful growth on exposed rock and natural substrate/lighting. No Hidden Reef changes.

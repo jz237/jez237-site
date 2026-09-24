@@ -2,14 +2,15 @@ import * as T from 'three';
 import {finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import metadata from './assets/fish/model-info.json';
-export type MarineSpecies='tang'|'yellow'|'clown'|'anthias'|'chromis'|'gramma';
+export type MarineSpecies='tang'|'yellow'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
 const urls={
  tang:new URL('./assets/fish/tang.glb',import.meta.url).href,
  yellow:new URL('./assets/fish/yellow.glb',import.meta.url).href,
  clown:new URL('./assets/fish/clown.glb',import.meta.url).href,
  anthias:new URL('./assets/fish/anthias.glb',import.meta.url).href,
  chromis:new URL('./assets/fish/chromis.glb',import.meta.url).href,
- gramma:new URL('./assets/fish/gramma.glb',import.meta.url).href
+ gramma:new URL('./assets/fish/gramma.glb',import.meta.url).href,
+ goby:new URL('./assets/fish/goby.glb',import.meta.url).href
 };
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,
  * fin pivots and respiration remain independent per animal at runtime. */
