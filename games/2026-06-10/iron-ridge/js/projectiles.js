@@ -5,7 +5,7 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { SHELL, CG } from './config.js?v=polish1';
+import { SHELL, CG } from './config.js?v=polish2';
 
 const _from = new CANNON.Vec3();
 const _to = new CANNON.Vec3();
@@ -17,9 +17,12 @@ export class Projectiles {
     this.pool = [];
     this.active = [];
     const geo = new THREE.SphereGeometry(SHELL.radius, 8, 6);
-    geo.scale(1, 1, 3.2); // tracer-stretched
-    const matP = new THREE.MeshBasicMaterial({ color: 0xffd089 });
-    const matE = new THREE.MeshBasicMaterial({ color: 0xff8d6a });
+    geo.scale(1.1, 1.1, 5.5); // tracer-stretched
+    // over-bright tracer cores so bloom haloes them (player gold, enemy red)
+    const matP = new THREE.MeshBasicMaterial({ fog: false });
+    matP.color.setRGB(3.4, 2.3, 0.9);
+    const matE = new THREE.MeshBasicMaterial({ fog: false });
+    matE.color.setRGB(3.2, 1.0, 0.45);
     for (let i = 0; i < SHELL.maxActive; i++) {
       const mesh = new THREE.Mesh(geo, matP);
       mesh.visible = false;

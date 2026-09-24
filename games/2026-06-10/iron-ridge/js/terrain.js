@@ -5,9 +5,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { groundRelief, landscapeMask } from './surface-art.js?v=polish1';
-import { Simplex2, makeRng } from './noise.js?v=polish1';
-import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=polish1';
+import { groundRelief, landscapeMask } from './surface-art.js?v=polish2';
+import { Simplex2, makeRng } from './noise.js?v=polish2';
+import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=polish2';
 
 const simplex = new Simplex2(90210 + WORLD_SEED);
 const detail = new Simplex2(417 + WORLD_SEED * 3);

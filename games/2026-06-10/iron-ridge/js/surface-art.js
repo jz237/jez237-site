@@ -1,6 +1,6 @@
 // Small shared procedural maps. Generated once, never painted per frame.
 import * as THREE from 'three';
-import { Simplex2, makeRng } from './noise.js?v=polish1';
+import { Simplex2, makeRng } from './noise.js?v=polish2';
 
 export function groundRelief() {
   const n = 256, height = new Float32Array(n * n), data = new Uint8Array(n * n * 4);

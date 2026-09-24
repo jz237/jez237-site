@@ -155,6 +155,14 @@ export const ENEMY_TYPES = {
     maxSpeed: 7.2, engineForce: 6200, maxYawRate: 0.8,
     preferredRange: 75, minRange: 45,
   },
+  // turretless tank destroyer: long, accurate gun fixed in the hull. It has
+  // to swing its whole hull to aim, so circling it is the counter.
+  destroyer: {
+    scheme: 'destroyer', scale: 1.05, hp: 130, points: 700,
+    shellDamage: 24, reload: 5.4, aimNoise: 0.028,
+    maxSpeed: 8.6, engineForce: 5600, maxYawRate: 0.95,
+    preferredRange: 92, minRange: 50, fixedGun: true,
+  },
   // the Iron Colossus: every-5th-wave breakthrough monster
   boss: {
     scheme: 'boss', scale: 1.5, hp: 520, points: 2500,
@@ -215,6 +223,32 @@ export const INFANTRY = {
   hitChance: 0.45,
   points: 25,
   crushRadius: 1.8,  // tracks are the best melee weapon
+  // anti-tank rocket teams (one per squad from rpgFromWave)
+  rpgFromWave: 3,
+  rpgReload: 7.5,
+  rpgRange: 85,
+  rpgSpeed: 58,
+  rpgDamage: 16,
+  rpgPoints: 60,
+};
+
+// turret smoke dischargers: a fan of grenades that bursts into a screen
+// which blocks line of sight (enemy tanks, pillboxes, rifle and rocket fire)
+export const SMOKE = {
+  cooldown: 24,      // seconds between salvos (player)
+  grenades: 6,
+  spread: 1.1,       // radians across the fan
+  range: 17,         // metres the grenades are thrown
+  radius: 5.2,       // blocking radius of each cloud once fully bloomed
+  life: 16,          // seconds a cloud lasts (fades over the final 3)
+};
+
+// knocked-out parts. Enemy chances apply to player AP penetrations.
+export const MODULES = {
+  trackJam: 5, engineHit: 8, turretJam: 4,         // enemy seconds
+  sideTrackChance: 0.35, rearEngineChance: 0.5, turretJamChance: 0.3,
+  playerTrackJam: 2.2, playerEngineHit: 6,          // player seconds
+  playerTrackChance: 0.14, playerEngineChance: 0.3,
 };
 
 export const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/iron-ridge';
