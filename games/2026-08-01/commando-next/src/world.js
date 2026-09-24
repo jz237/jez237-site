@@ -37,8 +37,9 @@ function foliageMats(map, amp, extra = {}) {
 }
 
 // ------------------------------------------------------------------ collision
+const NONE = [];
 export class Colliders {
-  constructor() { this.list = []; this.grid = new Map(); this.CELL = 6; }
+  constructor() { this.list = []; this.grid = new Map(); this.CELL = 6; this._stamp = 0; }
   _cells(p0, p1) { const a = Math.floor(p0 / this.CELL), b = Math.floor(p1 / this.CELL); const out = []; for (let i = a; i <= b; i++) out.push(i); return out; }
   add(c) {
     c.alive = true;
@@ -50,9 +51,13 @@ export class Colliders {
     this.list.push(c);
     return c;
   }
+  // every collider in the cells spanning [p - pad, p + pad], each once
   near(p, pad = 0) {
-    const a = this.grid.get(Math.floor((p - pad) / this.CELL)) || [], b = this.grid.get(Math.floor((p + pad) / this.CELL)) || [];
-    return a === b ? a : a.concat(b);
+    const a = Math.floor((p - pad) / this.CELL), b = Math.floor((p + pad) / this.CELL);
+    if (a === b) return this.grid.get(a) || NONE;
+    const out = [], stamp = ++this._stamp;
+    for (let i = a; i <= b; i++) for (const c of this.grid.get(i) || NONE) if (c._s !== stamp) { c._s = stamp; out.push(c); }
+    return out;
   }
   // signed-ish penetration test: returns push vector for a circle at (x,p,r)
   static push(c, x, p, r) {

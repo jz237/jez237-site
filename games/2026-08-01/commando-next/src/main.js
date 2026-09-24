@@ -212,7 +212,7 @@ requestAnimationFrame((n) => { last = n; loop(n); });
 
 // ------------------------------------------------------------------ test hooks
 window.__cmd = {
-  game, R, world, fx, bot,
+  game, R, world, fx, autopilot: bot,
   manual(on = true) { manual = on; },
   step(n = 1, render = true) { for (let i = 0; i < n; i++) simStep(); if (render) frame(STEP * n); return game.snapshot(); },
   // advance n sim steps, rendering every `every` steps (cheap long runs)

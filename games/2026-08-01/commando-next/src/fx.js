@@ -190,7 +190,7 @@ export class FX {
   explosion(x, y, z, r = 3, opts = {}) {
     const big = r > 3.2;
     // flash + fireball
-    this.add.add({ x, y: y + 0.6, z, vx: 0, vy: 0, vz: 0, life: 0.12, size: r * 3.2, size1: r * 3.6, r: 4, g: 3, b: 1.8, a: 1, a1: 0 });
+    this.add.add({ x, y: y + 0.6, z, vx: 0, vy: 0, vz: 0, life: 0.1, size: r * 1.5, size1: r * 1.9, r: 2.4, g: 1.7, b: 0.9, a: 1, a1: 0 });
     for (let i = 0; i < (big ? 26 : 18); i++) {
       const a = rnd() * 6.28, s = rnd() * r * 2.2;
       this.add.add({ x: x + Math.cos(a) * 0.3, y: y + 0.3 + rnd() * 0.6, z: z + Math.sin(a) * 0.3, vx: Math.cos(a) * s, vy: 1.5 + rnd() * r * 1.4, vz: Math.sin(a) * s, life: 0.35 + rnd() * 0.35, size: 0.9 + rnd() * r * 0.45, size1: 0.3, r: 1.6, g: 0.55, b: 0.12, a: 1, a1: 0, drag: 0.09, heat: 0.4, spin: (rnd() - 0.5) * 4 });
