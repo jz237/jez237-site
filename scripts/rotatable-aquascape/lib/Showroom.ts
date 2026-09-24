@@ -8,7 +8,7 @@ export function installShowroom(aquarium:Aquarium){
  document.body.classList.add('store-showroom');
  document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';
  document.querySelector('h1')!.textContent='Living Showroom';
- document.querySelector('header nav')!.innerHTML='';
+ document.querySelector('header nav')!.innerHTML='<a class="saltwater-link" href="../reef/?showroom=hidden-reef" target="_top">&#8592; Saltwater aquarium</a><a href="../../" target="_top">Hidden Reef home</a>';
  document.querySelector('.bottom-note')!.textContent='Explore • Learn • Build a tank like this';
  const send=(data:object)=>{if(parent!==window)parent.postMessage({channel:'hidden-reef-aquarium',...data},location.origin);};
  document.addEventListener('aquascape-context',event=>send({type:'context',...(event as CustomEvent).detail}));
@@ -23,6 +23,7 @@ export function installShowroom(aquarium:Aquarium){
    if(learn.getAttribute('aria-expanded')==='true')learn.click();
    const explore=document.querySelector<HTMLButtonElement>('#explore')!;
    if(explore.getAttribute('aria-expanded')!=='true')explore.click();
+   if(value==='angel')aquarium.identifyAngel(0);
    if(value==='tetra')aquarium.identifyFish(0);
    if(value==='cory')aquarium.identifyCory(0);
    if(value==='shrimp')aquarium.identifyAnimal(0);

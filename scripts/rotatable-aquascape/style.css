@@ -54,3 +54,23 @@ main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aq
 @media(max-width:1100px){main .aquarium-header{grid-template-columns:auto 1fr;gap:10px 16px}.aquarium-header .primary-tools{grid-column:1/-1;grid-row:2}.aquarium-header nav{grid-column:2;grid-row:1}.aquarium-header .scene-note{grid-row:3}.aquarium-header .primary-tools>button{max-width:none}}
 @media(max-width:850px){main .aquarium-header,main.learning-open .aquarium-header,main.exploration-open .aquarium-header{top:14px;left:14px;right:14px;grid-template-columns:auto 1fr;gap:9px 10px}.aquarium-header .primary-tools{gap:6px}.aquarium-header .primary-tools>button{font-size:11px;padding:9px 7px;min-height:46px}.primary-tools .chemistry-preview{font-size:8px}.aquarium-header .scene-note{font-size:10px;gap:6px}.learning-open .aquarium-header .primary-tools,.exploration-open .aquarium-header .primary-tools{grid-row:2}.learning-open .aquarium-header .scene-note,.exploration-open .aquarium-header .scene-note{display:none}main.aquarium-fullscreen .aquarium-header{grid-template-columns:1fr;right:14px;top:56px}.aquarium-fullscreen .primary-tools{grid-row:1}.aquarium-header .identity .eyebrow{font-size:9px}.aquarium-header h1{font-size:19px}}
 @media(max-height:500px) and (max-width:850px){main .aquarium-header{top:8px}.aquarium-header .identity,.aquarium-header nav,.aquarium-header .scene-note{display:none}.aquarium-header .primary-tools{grid-row:1}main.aquarium-fullscreen .aquarium-header{right:130px;top:8px}}
+.effects-control{display:inline-flex;align-items:center;gap:5px;margin-left:8px;pointer-events:auto;font-size:10px;color:#b4d3ce}
+.effects-control select{max-width:150px;padding:3px 6px;border:1px solid #41626a;border-radius:5px;background:#092933;color:#ddf6f4;font:inherit;cursor:pointer}
+.effects-control select:focus-visible{outline:2px solid #8cedee;outline-offset:2px}
+
+.filter-loading{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;gap:20px;background:#07151df5;color:#e4f2eb}.filter-loading button{padding:12px 22px;border:1px solid #73b0b7;border-radius:8px;background:#173c49;color:inherit;font:inherit}
+
+#observe{color:#bdf8ec;font-weight:600}#observe[aria-pressed=true]{background:#19505b;color:#fff}
+.observation-caption{position:absolute;left:20px;right:20px;bottom:125px;text-align:center;pointer-events:none;color:#e2f4ed;font-size:12px;letter-spacing:.04em;text-shadow:0 2px 5px #000}
+.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:opacity .7s}
+.observation-idle .aquarium-header,.observation-idle footer,.observation-idle .help,.observation-idle .bottom-note,.observation-idle #fullscreen{opacity:0}
+.observation-idle :has(:focus-visible){opacity:1}
+@media(max-width:850px){.views{flex-wrap:wrap;justify-content:center}.observation-caption{bottom:165px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:none}}
+
+/* Match the reef aquarium's paired habitat/home navigation. */
+.store-showroom .aquarium-header nav{gap:4px;padding:5px;border:1px solid #244058;border-radius:12px;background:#081c2b;flex-wrap:wrap;text-shadow:none;font-family:Inter,Segoe UI,system-ui,sans-serif}
+.store-showroom .aquarium-header nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:13px 18px;border:1px solid #4db7c7;border-radius:8px;color:#c6fbf3;background:#123549;font-size:13px;font-weight:400;white-space:nowrap}
+.store-showroom .aquarium-header nav a:hover{background:#205166;color:#fff}
+.store-showroom .aquarium-header nav a:focus-visible{outline:2px solid #84eced;outline-offset:4px}
+@media(max-width:640px){.store-showroom .aquarium-header nav{grid-column:1/-1;grid-row:2;justify-self:stretch}.store-showroom .aquarium-header nav a{flex:1;padding:9px 10px;font-size:12px}.store-showroom .aquarium-header .primary-tools{grid-row:3}.store-showroom .aquarium-header .scene-note{grid-row:4}}
