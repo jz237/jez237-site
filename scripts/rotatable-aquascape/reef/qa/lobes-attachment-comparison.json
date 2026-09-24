@@ -1,0 +1,20 @@
+{
+  "baseline": "f18f61039",
+  "signature": "cdcf9939",
+  "samples": 108174,
+  "unchanged": true,
+  "prior": {
+    "patches": 254,
+    "pores": 5829,
+    "triangles": 456586,
+    "maxAttachmentError": 0.005,
+    "colors": 7
+  },
+  "current": {
+    "patches": 254,
+    "pores": 5829,
+    "triangles": 736378,
+    "maxAttachmentError": 0.005,
+    "colors": 7
+  }
+}
