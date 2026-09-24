@@ -1,0 +1,568 @@
+[
+  {
+    "version": "current",
+    "readyMs": 7338,
+    "fps": 59.99700014999255,
+    "triangles": 18577724,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8868815
+    },
+    "picking": {
+      "meshes": 7,
+      "blocks": 34647,
+      "bytes": 1663056
+    },
+    "clicks": [
+      {
+        "x": 0.29,
+        "y": 0.64,
+        "handlerMs": 3.799999952316284,
+        "feedbackMs": 13.899999856948853,
+        "title": "Live rock and coralline algae"
+      },
+      {
+        "x": 0.65,
+        "y": 0.62,
+        "handlerMs": 3.8000001907348633,
+        "feedbackMs": 16.200000047683716,
+        "title": "Live rock and coralline algae"
+      },
+      {
+        "x": 0.5,
+        "y": 0.87,
+        "handlerMs": 1.5999999046325684,
+        "feedbackMs": 21,
+        "title": "Reef sand"
+      },
+      {
+        "x": 0.7,
+        "y": 0.75,
+        "handlerMs": 6.799999952316284,
+        "feedbackMs": 17.200000047683716,
+        "title": "Zoanthid polyps"
+      },
+      {
+        "x": 0.5,
+        "y": 0.18,
+        "handlerMs": 1.2000000476837158,
+        "feedbackMs": 11.799999952316284,
+        "title": "Aquarium water and glass"
+      }
+    ],
+    "measures": [
+      {
+        "name": "reef-construction",
+        "duration": 5163.200000047684
+      },
+      {
+        "name": "reef-draw-order",
+        "duration": 861.2999999523163
+      },
+      {
+        "name": "reef-picking",
+        "duration": 283.2999999523163
+      }
+    ],
+    "resources": [
+      {
+        "name": "tang-DZS7dloZ.glb",
+        "start": 604.6000001430511,
+        "end": 614.2000000476837,
+        "decoded": 950224
+      },
+      {
+        "name": "yellow-BgTFl_Sa.glb",
+        "start": 604.7000000476837,
+        "end": 616.1000001430511,
+        "decoded": 879808
+      },
+      {
+        "name": "anthias-qh5-fys7.glb",
+        "start": 604.9000000953674,
+        "end": 615.6000001430511,
+        "decoded": 943812
+      },
+      {
+        "name": "clown-CVwpScsO.glb",
+        "start": 604.9000000953674,
+        "end": 616.7999999523163,
+        "decoded": 960812
+      },
+      {
+        "name": "chromis-ArXoNpqP.glb",
+        "start": 604.9000000953674,
+        "end": 617.4000000953674,
+        "decoded": 1036980
+      },
+      {
+        "name": "gramma-4tsMCcIb.glb",
+        "start": 605,
+        "end": 618,
+        "decoded": 1030196
+      },
+      {
+        "name": "goby-Bok4otvk.glb",
+        "start": 605,
+        "end": 622.2000000476837,
+        "decoded": 1215984
+      },
+      {
+        "name": "attachments-CN7toLgy.json",
+        "start": 605.5,
+        "end": 675.2999999523163,
+        "decoded": 7322460
+      },
+      {
+        "name": "map-rahrN3k8.png",
+        "start": 605.6000001430511,
+        "end": 624.5,
+        "decoded": 1337664
+      },
+      {
+        "name": "normalMap-DQPJoT0j.png",
+        "start": 605.6000001430511,
+        "end": 633.4000000953674,
+        "decoded": 2188974
+      },
+      {
+        "name": "map-BeFEIA0e.png",
+        "start": 605.7000000476837,
+        "end": 620.7999999523163,
+        "decoded": 273812
+      },
+      {
+        "name": "normalMap-AIoBIlzs.png",
+        "start": 605.7000000476837,
+        "end": 623.6000001430511,
+        "decoded": 498801
+      },
+      {
+        "name": "roughnessMap-4hZTjONg.png",
+        "start": 605.7000000476837,
+        "end": 624,
+        "decoded": 98110
+      },
+      {
+        "name": "map-BCNLyojM.png",
+        "start": 605.7999999523163,
+        "end": 626.7000000476837,
+        "decoded": 264440
+      },
+      {
+        "name": "normalMap-T-Tek4aZ.png",
+        "start": 605.7999999523163,
+        "end": 628,
+        "decoded": 345392
+      },
+      {
+        "name": "roughnessMap-DIiV2VjT.png",
+        "start": 605.9000000953674,
+        "end": 627,
+        "decoded": 88877
+      },
+      {
+        "name": "map-Ie55ijny.png",
+        "start": 606,
+        "end": 628.2999999523163,
+        "decoded": 255072
+      },
+      {
+        "name": "normalMap-CVYemK4O.png",
+        "start": 606,
+        "end": 629.9000000953674,
+        "decoded": 347457
+      },
+      {
+        "name": "roughnessMap-qepxckm-.png",
+        "start": 606,
+        "end": 629.2999999523163,
+        "decoded": 90366
+      },
+      {
+        "name": "skeleton-InQKSODj.png",
+        "start": 606,
+        "end": 630.4000000953674,
+        "decoded": 436727
+      }
+    ],
+    "heap": 997908460,
+    "longTasks": [
+      {
+        "start": 76.90000009536743,
+        "duration": 530
+      },
+      {
+        "start": 696,
+        "duration": 73
+      },
+      {
+        "start": 853.2999999523163,
+        "duration": 77
+      },
+      {
+        "start": 930.7999999523163,
+        "duration": 86
+      },
+      {
+        "start": 1668.1000001430511,
+        "duration": 195
+      },
+      {
+        "start": 1940.5,
+        "duration": 51
+      },
+      {
+        "start": 2162.2000000476837,
+        "duration": 92
+      },
+      {
+        "start": 2843.9000000953674,
+        "duration": 808
+      },
+      {
+        "start": 3652.9000000953674,
+        "duration": 62
+      },
+      {
+        "start": 3715.100000143051,
+        "duration": 88
+      },
+      {
+        "start": 3886.5,
+        "duration": 226
+      },
+      {
+        "start": 4112.600000143051,
+        "duration": 153
+      },
+      {
+        "start": 4266.100000143051,
+        "duration": 501
+      },
+      {
+        "start": 4767.400000095367,
+        "duration": 518
+      },
+      {
+        "start": 5286.200000047684,
+        "duration": 174
+      },
+      {
+        "start": 5483,
+        "duration": 310
+      },
+      {
+        "start": 5807.799999952316,
+        "duration": 52
+      },
+      {
+        "start": 5859.900000095367,
+        "duration": 210
+      },
+      {
+        "start": 6070.700000047684,
+        "duration": 442
+      },
+      {
+        "start": 6576.900000095367,
+        "duration": 56
+      },
+      {
+        "start": 6633.400000095367,
+        "duration": 83
+      },
+      {
+        "start": 6755.700000047684,
+        "duration": 169
+      },
+      {
+        "start": 7331.100000143051,
+        "duration": 1000
+      }
+    ]
+  },
+  {
+    "version": "current",
+    "readyMs": 7106,
+    "fps": 59.99400059993998,
+    "triangles": 18577724,
+    "drawOrderStats": {
+      "meshes": 7,
+      "triangles": 8868815
+    },
+    "picking": {
+      "meshes": 7,
+      "blocks": 34647,
+      "bytes": 1663056
+    },
+    "clicks": [
+      {
+        "x": 0.29,
+        "y": 0.64,
+        "handlerMs": 5,
+        "feedbackMs": 20,
+        "title": "Live rock and coralline algae"
+      },
+      {
+        "x": 0.65,
+        "y": 0.62,
+        "handlerMs": 4.400000095367432,
+        "feedbackMs": 10.900000095367432,
+        "title": "Live rock and coralline algae"
+      },
+      {
+        "x": 0.5,
+        "y": 0.87,
+        "handlerMs": 1.3999998569488525,
+        "feedbackMs": 8.799999952316284,
+        "title": "Reef sand"
+      },
+      {
+        "x": 0.7,
+        "y": 0.75,
+        "handlerMs": 6.099999904632568,
+        "feedbackMs": 21.700000047683716,
+        "title": "Zoanthid polyps"
+      },
+      {
+        "x": 0.5,
+        "y": 0.18,
+        "handlerMs": 1.1000001430511475,
+        "feedbackMs": 22.100000143051147,
+        "title": "Aquarium water and glass"
+      }
+    ],
+    "measures": [
+      {
+        "name": "reef-construction",
+        "duration": 4816.099999904633
+      },
+      {
+        "name": "reef-draw-order",
+        "duration": 893.9000000953674
+      },
+      {
+        "name": "reef-picking",
+        "duration": 268
+      }
+    ],
+    "resources": [
+      {
+        "name": "tang-DZS7dloZ.glb",
+        "start": 596.2000000476837,
+        "end": 606.0999999046326,
+        "decoded": 950224
+      },
+      {
+        "name": "clown-CVwpScsO.glb",
+        "start": 596.2999999523163,
+        "end": 607,
+        "decoded": 960812
+      },
+      {
+        "name": "yellow-BgTFl_Sa.glb",
+        "start": 596.2999999523163,
+        "end": 607.4000000953674,
+        "decoded": 879808
+      },
+      {
+        "name": "anthias-qh5-fys7.glb",
+        "start": 596.4000000953674,
+        "end": 608.5,
+        "decoded": 943812
+      },
+      {
+        "name": "chromis-ArXoNpqP.glb",
+        "start": 596.4000000953674,
+        "end": 609.2999999523163,
+        "decoded": 1036980
+      },
+      {
+        "name": "gramma-4tsMCcIb.glb",
+        "start": 596.4000000953674,
+        "end": 609.7000000476837,
+        "decoded": 1030196
+      },
+      {
+        "name": "goby-Bok4otvk.glb",
+        "start": 596.5999999046326,
+        "end": 614.7000000476837,
+        "decoded": 1215984
+      },
+      {
+        "name": "attachments-CN7toLgy.json",
+        "start": 597.0999999046326,
+        "end": 661.9000000953674,
+        "decoded": 7322460
+      },
+      {
+        "name": "map-BeFEIA0e.png",
+        "start": 597.2000000476837,
+        "end": 614,
+        "decoded": 273812
+      },
+      {
+        "name": "map-rahrN3k8.png",
+        "start": 597.2000000476837,
+        "end": 621,
+        "decoded": 1337664
+      },
+      {
+        "name": "normalMap-DQPJoT0j.png",
+        "start": 597.2000000476837,
+        "end": 630.2999999523163,
+        "decoded": 2188974
+      },
+      {
+        "name": "normalMap-AIoBIlzs.png",
+        "start": 597.2999999523163,
+        "end": 616.5999999046326,
+        "decoded": 498801
+      },
+      {
+        "name": "roughnessMap-4hZTjONg.png",
+        "start": 597.2999999523163,
+        "end": 618.2999999523163,
+        "decoded": 98110
+      },
+      {
+        "name": "map-BCNLyojM.png",
+        "start": 597.2999999523163,
+        "end": 619.5999999046326,
+        "decoded": 264440
+      },
+      {
+        "name": "normalMap-T-Tek4aZ.png",
+        "start": 597.2999999523163,
+        "end": 622.9000000953674,
+        "decoded": 345392
+      },
+      {
+        "name": "roughnessMap-DIiV2VjT.png",
+        "start": 597.2999999523163,
+        "end": 621.7999999523163,
+        "decoded": 88877
+      },
+      {
+        "name": "map-Ie55ijny.png",
+        "start": 597.4000000953674,
+        "end": 625.5999999046326,
+        "decoded": 255072
+      },
+      {
+        "name": "normalMap-CVYemK4O.png",
+        "start": 597.4000000953674,
+        "end": 627,
+        "decoded": 347457
+      },
+      {
+        "name": "roughnessMap-qepxckm-.png",
+        "start": 597.5,
+        "end": 626.2000000476837,
+        "decoded": 90366
+      },
+      {
+        "name": "skeleton-InQKSODj.png",
+        "start": 597.5,
+        "end": 627.9000000953674,
+        "decoded": 436727
+      }
+    ],
+    "heap": 443620856,
+    "longTasks": [
+      {
+        "start": 24.799999952316284,
+        "duration": 582
+      },
+      {
+        "start": 729.5,
+        "duration": 67
+      },
+      {
+        "start": 873.0999999046326,
+        "duration": 70
+      },
+      {
+        "start": 943.7000000476837,
+        "duration": 83
+      },
+      {
+        "start": 1651.0999999046326,
+        "duration": 167
+      },
+      {
+        "start": 2078.5,
+        "duration": 79
+      },
+      {
+        "start": 2653.9000000953674,
+        "duration": 767
+      },
+      {
+        "start": 3421.7999999523163,
+        "duration": 60
+      },
+      {
+        "start": 3481.9000000953674,
+        "duration": 93
+      },
+      {
+        "start": 3637.9000000953674,
+        "duration": 212
+      },
+      {
+        "start": 3850.5,
+        "duration": 145
+      },
+      {
+        "start": 3996.5,
+        "duration": 482
+      },
+      {
+        "start": 4479,
+        "duration": 509
+      },
+      {
+        "start": 4988.5,
+        "duration": 169
+      },
+      {
+        "start": 5181.099999904633,
+        "duration": 290
+      },
+      {
+        "start": 5486.099999904633,
+        "duration": 58
+      },
+      {
+        "start": 5544.700000047684,
+        "duration": 213
+      },
+      {
+        "start": 5758.5,
+        "duration": 473
+      },
+      {
+        "start": 6295.5,
+        "duration": 60
+      },
+      {
+        "start": 6356.5,
+        "duration": 79
+      },
+      {
+        "start": 6469.299999952316,
+        "duration": 168
+      },
+      {
+        "start": 6732,
+        "duration": 163
+      },
+      {
+        "start": 7089.799999952316,
+        "duration": 1116
+      }
+    ]
+  }
+]

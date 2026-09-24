@@ -137,3 +137,13 @@
 
 /demos/philadelphia-relief/load/*.css
   Cache-Control: public, max-age=31536000, immutable
+
+# Content-hashed reef assets, including the embedded store copies.
+/demos/reef-aquarium/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/prototypes/hidden-reef/showroom/reef/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/prototypes/hidden-reef-header-preview/showroom/reef/assets/*
+  Cache-Control: public, max-age=31536000, immutable

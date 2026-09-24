@@ -1,3 +1,5 @@
+import {yieldBuild} from './BuildYield.ts';
+import {accelerateReefPicking} from './ReefPicking.ts';
 import {mergeIdentified,identifyGeometry,foodNote} from './ReefIdentification.ts';
 import {type RockLifeAttachments,reefRockLife} from './ReefRockLife.ts';
 import {finishRockMaterial} from './ReefRockMaterial.ts';
@@ -54,7 +56,7 @@ function texture(kind:'rock'|'sand'|'coral'){
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;return t;
 }
 export function loadReefAssets(){return {rockMaps:limestoneMaps(),coralMaps:coralSurfaceMaps(),crustMaps:encrustingSurfaceMaps(),plateMaps:plateSurfaceMaps()};}
-export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=loadReefAssets()){
+export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=loadReefAssets()){
  // Keep the original parts until attachments have finished, then allocate each
  // final material batch once. Repeatedly copying whole coral islands stalls
  // startup and briefly retains several copies of their large vertex buffers.
@@ -80,7 +82,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  // Two porous islands, with deliberately open caves and a winding channel.
  const formations=[[-3.6,.63,.15,.91,.55,.93],[-2.45,.55,-.6,.87,.48,.9],[-3.85,1.27,-.45,.64,.78,.72],[-2.05,1.13,-.6,.62,.75,.72],[-2.97,1.92,-.5,1.13,.57,.76],[-2.9,2.45,-.73,.82,.62,.76],[-3.1,2.91,-.95,.6,.56,.57],[-3.9,.5,1.38,.72,.39,.58],[-2.42,.51,1.45,.68,.4,.6],[-1.81,.35,-1.38,.65,.26,.52],
  [1.25,.66,-.42,.81,.59,.83],[3.35,.64,-.05,1,.6,.91],[3.25,1.4,-.72,.77,.82,.84],[1.01,1.45,-.75,.68,.78,.78],[1.68,2.35,-.81,1.12,.7,.8],[2.05,3.01,-.91,.83,.67,.74],[1.64,3.44,-1.02,.63,.49,.62],[3.4,2.11,-.82,.74,.58,.72],[3.98,.91,.65,.57,.67,.74],[2.25,.58,1.36,.88,.48,.6],[3.74,.5,1.52,.67,.42,.63],[.66,.36,1.42,.58,.22,.55],[3.99,2.09,-1.31,.56,.72,.53]];
- for(const a of formations)rock(...a as [number,number,number,number,number,number]);
+ for(const a of formations){rock(...a as [number,number,number,number,number,number]);await yieldBuild();}
  // A staggered rear ridge rises behind the open foreground sand channel. Taller
  // crowns overlap its shoulders, creating depth without a flat scenery card.
  // Its own random stream
@@ -98,6 +100,8 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  const canopyRandom=seeded(2309232235);
  for(const a of [[-1.08,1.20,-1.62,.42,.38,.37],[-.85,.75,-1.67,.48,.24,.33],[.16,1.16,-1.63,.40,.34,.35]])rock(...a as [number,number,number,number,number,number],canopyRandom);
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
+ const supportRoot=new T.Group();supportRoot.add(...supports);accelerateReefPicking(supportRoot);
+ await yieldBuild();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
  const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0,understoryColonies:0,understoryTriangles:0,mantleColonies:0,mantleTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
@@ -110,6 +114,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  // independent random stream leaves every established organism/placement intact.
  const crustRandom=seeded(23092306),crustPalette=['#794365','#9e6f83','#77785e','#897b49','#536f69'];
  for(let rockIndex=0;rockIndex<supports.length;rockIndex++){
+  await yieldBuild();
   const support=supports[rockIndex],box=support.geometry.boundingBox!,center=box.getCenter(new T.Vector3()),extent=box.getSize(new T.Vector3());
   for(let patch=0;patch<3;patch++){
    const x=center.x+(crustRandom()-.5)*extent.x*.78,y=center.y+(crustRandom()-.5)*extent.y*.8;
@@ -132,7 +137,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
   corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };
  for(const b of [[-3.12,3.24,-.95,1,.94],[-3.92,2.55,-.6,.8,.025],[-2.37,2.83,-.7,.72,.22],[-3.45,2.83,-.25,.82,.81],[-1.94,1.61,-.63,.63,.47],[-3.89,1.23,1.06,.5,.2],[-2.11,.63,1.61,.51,.025],[-4.27,.72,.56,.63,.28],[-1.48,.57,-1.46,.55,.8],
- [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[4.03,1.63,-.38,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[1.58,.87,1.47,.44,.21],[4.21,.65,1.50,.39,.82]])branch(...b as [number,number,number,number,number]);
+ [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[4.03,1.63,-.38,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[1.58,.87,1.47,.44,.21],[4.21,.65,1.50,.39,.82]]){branch(...b as [number,number,number,number,number]);await yieldBuild();}
  // These are full volumetric colonies, not distant cards; they share the same
  // indexed detail and merged material as the main islands.
  for(const b of [[-1.00,1.48,-1.71,.72,.82],[.28,1.39,-1.69,.66,.23],[-1.20,.70,-1.40,.53,.96]])branch(...b as [number,number,number,number,number],rearRandom);
@@ -156,6 +161,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  // These inspected anchor sites have stable independent shape seeds; rejected
  // placement trials are not regenerated on each page load.
  for(const [seed,x,y,size,hue] of [[1,-2.3293738395249055,2.4894741716151554,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.86002344463442,1.5607145878049533,.34,.23],[14,1.474970675119953,3.5631057078247537,.43,.14],[19,4.3623875879720995,1.6737468652770737,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.274984466846001,3.3617742425195716,.31,.23],[28,3.9286545634283656,2.4476474502760235,.37,.025]]){
+  await yieldBuild();
   // Erosion can turn a former shoulder into a cavity. Reattach a displaced
   // colony to a nearby clear shoulder instead of silently deleting its detail.
   for(let attempt=0;attempt<33;attempt++){
@@ -192,6 +198,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  [1.08,.79,.29,.22],[1.06,1.93,.33,.81],[1.39,2.72,.32,.035],[2.36,3.28,.34,.23],[2.73,2.15,.30,.92],[3.40,1.80,.34,.14],[3.89,1.23,.33,.81],[4.12,.69,.27,.22],[2.59,.90,.31,.035],[2.17,1.51,.30,.81],[3.70,.45,.25,.025],[4.05,2.37,.31,.14],[-.89,.72,.29,.23],[.29,.71,.28,.94],[-.70,1.15,.33,.035],[.37,1.10,.29,.81]];
  const newGrowth:Obstacle[]=[];
  for(let index=0;index<understorySites.length;index++){
+  await yieldBuild();
   const [x,y,size,hue]=understorySites[index];
   attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.2;
   const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.y<-.65||hit.face.normal.z<.08)continue;
@@ -210,6 +217,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  const mantleSites=[[-3.86,1.55,.46],[-2.13,1.37,.44],[-3.17,2.94,.38],[-3.32,2.19,.36],[-3.63,.53,.42],[-2.73,.56,.33],[-2.55,1.06,.32],[-4.02,.71,.35],
  [1.06,1.72,.45],[1.06,.56,.35],[2.90,.71,.42],[3.42,1.21,.48],[3.63,2.28,.41],[1.88,3.31,.37],[3.93,1.52,.39],[2.75,2.61,.38]];
  for(let i=0;i<mantleSites.length;i++){
+  await yieldBuild();
   const [x,y,radius]=mantleSites[i];attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.2;
   const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.z<.18)continue;
   // Leave the established thick tissue and animal-host faces exposed.
@@ -245,6 +253,7 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  const gardens:T.BufferGeometry[]=[],polypStats={polyps:0,tentacles:0,maxAttachmentError:0};
  const colonies:[number,number,number,number,'zoanthid'|'stony'][]=[[-3.23,.48,1.81,.55,'zoanthid'],[2.18,.7,1.63,.61,'zoanthid'],[-2.4,1.08,.64,.35,'zoanthid'],[1.12,2.76,-.39,.31,'zoanthid'],[-2.42,2.09,.03,.38,'stony'],[-3.47,1.37,.64,.37,'stony'],[-2.2,.67,.97,.29,'stony'],[1.31,2.94,-.34,.37,'stony'],[2.45,1.72,.3,.42,'stony'],[3.79,.74,1.15,.32,'stony'],[.91,1.17,-.06,.28,'stony']];
  for(const [x,y,z,r,kind] of colonies){
+  await yieldBuild();
   const sample=(px:number,pz:number)=>gardenSurface(px,y+.5,pz);
   const garden=encrustingGarden(x,z,r,kind,sample,random,(px,pz)=>mantleSurface(px,y+.5,pz));gardens.push(garden.geometry);polypStats.polyps+=garden.polypCount;polypStats.tentacles+=garden.tentacleCount;polypStats.maxAttachmentError=Math.max(polypStats.maxAttachmentError,garden.attachmentError);
  }
@@ -252,13 +261,16 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Rock-encrusting polyp garden','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
  // Add edge outcrops after existing gardens have attached. They share the
  // existing material batches without changing original attachment/RNG streams.
+ await yieldBuild();
  const buttress=reefButtresses(seeded(2309231920));
  const extend=(mesh:T.Mesh,parts:T.BufferGeometry[])=>{pending.get(mesh)!.push(...parts);};
  extend(rockMesh,buttress.rocks);extend(hard,buttress.corals);extend(zoo,buttress.gardens);
  obstacles.push(...buttress.obstacles);
+ await yieldBuild();
  const feet=reefFootGardens(seeded(2309232345));
  extend(rockMesh,feet.rocks);extend(zoo,feet.gardens);obstacles.push(...feet.obstacles);
  const footStats=feet.stats;
+ await yieldBuild();
  const life=reefRockLife([...supports,...buttress.rocks.map(g=>new T.Mesh(g,rockMat)),...feet.rocks.map(g=>new T.Mesh(g,rockMat))],seeded(2309240015),bakedLife);
  if(!bakedLife&&new URLSearchParams(location.search).has('bakeRockLife'))Object.assign(window,{reefRockLifeBake:life.attachments});
  for(const g of life.crusts)identifyGeometry(g,{title:'Colorful encrusting reef growth',description:'Thin patches of living growth cover the porous rock. These sculpted crusts suggest coralline algae and other attached reef organisms, rather than one exact species.'});
@@ -268,13 +280,15 @@ export function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,assets=lo
  // Keep only additional envelopes; do not repeat equivalent avoidance forces.
  obstacles.push(...life.obstacles.filter(o=>!obstacles.some(existing=>existing.center.distanceTo(o.center)+o.radius<=existing.radius)));
  const rockLifeStats=life.stats;
+ await yieldBuild();
  const backdrop=reefAnemoneBackdrop(seeded(2309240417));
+ await yieldBuild();
  const microLife=rockMicroColonies([...supports.map(s=>s.geometry),...buttress.rocks,...feet.rocks,...backdrop.rocks]);
  identifyGeometry(microLife.geometry,{title:'Colorful sponge-like microcolonies',description:'Small attached cups cluster among pink and purple coralline growth. Each has a rounded shoulder and a recessed opening. These forms represent a mixed community of reef growth, not a single identified species.'});
  extend(rockMesh,backdrop.rocks);extend(massive,backdrop.crusts);extend(hard,[microLife.geometry,...backdrop.corals]);extend(zoo,backdrop.gardens);
  obstacles.push(...backdrop.obstacles);
  const anemoneBackdropStats=backdrop.stats;
- for(const [mesh,parts] of pending){mesh.geometry.dispose();mesh.geometry=mergeIdentified(parts);for(const part of parts)part.dispose();}
+ for(const [mesh,parts] of pending){await yieldBuild();mesh.geometry.dispose();mesh.geometry=mergeIdentified(parts);for(const part of parts)part.dispose();}
  pending.clear();
  rockStats.triangles=rockMesh.geometry.index!.count/3;
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
