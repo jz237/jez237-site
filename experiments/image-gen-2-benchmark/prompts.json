@@ -16178,5 +16178,146 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-24-factual-infographic-factual-infographic-gerd-the-reflux-pat",
+    "title": "Factual infographic: GERD — The Reflux Pathway",
+    "tests": "medical-health-infographic; NIDDK/ACG claim-level verification; eight substantive panels; four anatomical/test closeups; archive_slot=2026-09-24T17:20; concept=gerd-esophageal-reflux-barrier; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create the FINISHED museum-quality direct-canvas medical infographic, not a photo of a poster, page, screen, room, prop board, or mocked-up print. Portrait-oriented, richly illustrated yet exceptionally legible. Header exactly “GERD: THE REFLUX PATHWAY” and small subhead “When stomach contents travel upward.” Elegant restrained ivory, deep indigo, warm coral, and teal editorial palette; precise anatomical illustration, luminous cross-sectional tissue rendering, fine stipple, gentle dimensional shading, disciplined typography and generous gutters. No logos, bibliography, numbers, doses, or invented statistics. General education, never a personalized diagnosis. All words large enough to read; short exact labels only; visually accurate anatomy before decorative flourish.\n\nDOMINANT CENTRAL HERO: a tall, medically plausible sagittal/oblique cutaway from lower chest through upper abdomen, with esophagus, lower esophageal sphincter (LES), diaphragm crossing at the esophageal hiatus, and stomach in correct continuity. A warm translucent stream of gastric contents curves upward from stomach into distal esophagus, clearly distinguished from normal downward food passage. Fine leader lines label “esophagus,” “LES,” “diaphragm,” “stomach,” and “reflux: backflow.” Show the lumen and tissue layers with believable soft anatomy; do not imply that all GERD is due to too much acid or that a hiatal hernia is present in every patient. Thin cause-and-effect arrows connect hero to the relevant panels.\n\nArrange EIGHT distinct, substantial supporting panels around the hero in a clean two-column editorial grid, each with its own informative visual and very short labels: (1) “THE USUAL BARRIER”: enlarged cross-section of LES plus diaphragm limiting backflow, contrasting closed barrier and relaxed barrier. (2) “THE REFLUX EVENT”: sequential three-step mini-diagram of stomach contents moving upward across the junction and contacting esophageal lining, no exaggerated erosion. (3) “WHAT PEOPLE FEEL”: anatomically placed heartburn behind breastbone and regurgitation toward throat, noting “symptoms vary”; a second small callout “cough or hoarseness can occur” without claiming specificity. (4) “FACTORS, NOT DESTINIES”: small separate visual icons for pregnancy, smoking, excess body weight, and hiatal hernia, labeled “may increase likelihood or symptoms,” without moralizing or showing a single body stereotype. (5) “EVALUATION PATH”: simple clinician/history-first flow to tests when symptoms persist or complications/other causes are suspected; emphasize that not everyone needs a test. (6) “TWO TEST WINDOWS”: clinically recognizable flexible-camera upper endoscopy view of esophageal lining and a separate esophageal pH-monitoring catheter/capsule schematic, labeled by what each examines. (7) “MANAGEMENT OPTIONS”: differentiated small images for individually relevant lifestyle adjustments, antacids for mild symptoms, H2 blockers, and PPIs that reduce acid; label “discuss what fits with a clinician,” no promised cure. (8) “WHEN TO SEEK CARE”: unmistakable but calm warning strip for swallowing difficulty, persistent vomiting, bleeding signs, unexplained weight loss, and chest pain; “chest pain is not automatically reflux.”\n\nAt least FOUR magnified explanatory close-up diagrams should be unmistakable: LES/diaphragm barrier geometry, mucosal contact without gratuitous injury, flexible endoscope tip viewing lining, and pH sensor in esophagus. Tie each to the central hero with slender calibrated leaders. Add a miniature neutral side-by-side of a normal junction and an optional hiatal-hernia geometry only if labeled as a possible risk factor, never the default anatomy. Use precise, readable callouts and label hierarchy, rich cross-sectional textures and softly luminous medical rendering, but never overcrowd the text. Avoid medical misinformation, statistics, drug doses, tiny citations, decorative icons without explanation, and alarmist imagery.",
+    "image": "images/2026-09-24-factual-infographic-factual-infographic-gerd-the-reflux-pat.jpg",
+    "thumb": "thumbs/2026-09-24-factual-infographic-factual-infographic-gerd-the-reflux-pat.webp",
+    "color": "#c8b3ad",
+    "date": "2026-09-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "gerd-esophageal-reflux-barrier",
+      "imageSha256": "5c043c55d0b0b2d451a1f3382db178ce0c2e5397942629606c71758d39e34b2c",
+      "imageDHash": "d4d290b4b2b0d616"
+    },
+    "factualInfographic": {
+      "topic": "gastroesophageal reflux disease",
+      "description": "Anatomical cutaway of the esophagus–stomach junction showing reflux mechanism, symptoms, associated factors, evaluation, treatment categories, and warning signs.",
+      "sourceNote": "Verified anatomy, symptoms, risk factors, evaluation and management against NIDDK https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/symptoms-causes ; https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/diagnosis ; https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/treatment and American College of Gastroenterology https://gi.org/topics/acid-reflux/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-24T21:21:29.265515+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Symptoms & Causes of GER & GERD",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/symptoms-causes"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Diagnosis of GER & GERD",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/diagnosis"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Treatment for GER & GERD",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/treatment"
+          },
+          {
+            "id": "S4",
+            "publisher": "American College of Gastroenterology",
+            "title": "Acid Reflux/GERD",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://gi.org/topics/acid-reflux/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The lower esophageal sphincter and diaphragm form barriers at the esophagus-stomach junction that usually limit backflow of stomach contents.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "GERD can develop when the lower esophageal sphincter is weak or relaxes inappropriately, permitting stomach contents to flow into the esophagus.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Reflux is movement of stomach contents upward, not necessarily excess stomach acid production.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Common symptoms include heartburn behind the breastbone and regurgitation into the throat or mouth; not everyone has both.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "GERD can also present with swallowing difficulty or pain, chronic cough, or hoarseness; these symptoms are not specific to GERD.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Obesity, pregnancy, smoking, and hiatal hernia can increase GERD likelihood or symptoms; not every person with these factors develops GERD.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Clinicians often evaluate symptoms and history first; tests may be used for possible complications, alternative causes, or persistent symptoms.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Upper GI endoscopy uses a flexible camera to inspect the esophagus and upper digestive tract and can check for complications or other problems.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Esophageal pH monitoring measures reflux-related acid exposure in the esophagus using a catheter or wireless capsule.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Selected lifestyle steps may include weight loss when appropriate, avoiding an individual trigger, changing meal timing, elevating the head for nocturnal symptoms, and smoking cessation.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Antacids may relieve mild symptoms, while H2 blockers and proton pump inhibitors reduce stomach acid production; medication choices require clinical context.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Persistent vomiting, swallowing difficulty, bleeding signs, unexplained weight loss, or chest pain warrant medical evaluation; chest pain should not be assumed to be reflux.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
