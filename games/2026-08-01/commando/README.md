@@ -1,10 +1,11 @@
-# Commando HD — Next (preview)
+# Commando HD
 
-A ground-up rebuild of `../commando/` as a real-time 3D game (three.js r181,
-vendored, no build step). Area 1 only for now. The old build stays live until
-this one overtakes it.
+A real-time 3D rebuild of Commando HD (three.js r181, vendored, no build step).
+Area 1 for now; it loops harder each time round. It replaced the 2D v0.x build
+(painted plates + sprites) on 2026-09-24 — that build is in git history, last
+at v0.72.0-reel; `sw.js` here only retires its offline service worker.
 
-Why a rebuild: the old build mixed straight-down painted backgrounds with
+Why a rebuild: the 2D build mixed straight-down painted backgrounds with
 front-facing, frame-by-frame generated sprites, so perspective, scale, light
 and animation never agreed, and collision came from hand-drawn masks over the
 paintings. Here everything shares one camera and one sun, soldiers are rigged

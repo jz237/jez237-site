@@ -17,7 +17,7 @@ const $ = (id) => document.getElementById(id);
 const store = { get(k, d) { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
 const coarse = matchMedia('(pointer: coarse)').matches;
-let quality = qs.get('q') || store.get('commandoNext.quality', coarse ? 'low' : 'high');
+let quality = qs.get('q') || store.get('commandoHD3d.quality', coarse ? 'low' : 'high');
 const R = new Renderer($('gl'), quality);
 const world = new World(AREA1, R.scene, quality);
 const fx = new FX(R.scene, R.camera, (x, p) => world.h(x, p), quality);
@@ -43,7 +43,7 @@ function menuAct(act) {
     case 'controls': $('controls-help').classList.toggle('hidden'); break;
     case 'music': { const m = audio.toggleMusic(); $('music-mode').textContent = m === 'original' ? 'SID' : 'MODERN'; break; }
     case 'quality': {
-      quality = quality === 'high' ? 'low' : 'high'; store.set('commandoNext.quality', quality);
+      quality = quality === 'high' ? 'low' : 'high'; store.set('commandoHD3d.quality', quality);
       R.setQuality(quality); $('quality-mode').textContent = quality.toUpperCase(); break;
     }
     case 'resume': setPaused(false); break;

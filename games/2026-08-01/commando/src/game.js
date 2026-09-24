@@ -1019,8 +1019,8 @@ export class Game {
     if (this.score >= this.nextLife) { this.lives++; this.nextLife += 40000; this.emit('extra-life'); }
     if (this.score > this.hi) this.hi = this.score;
   }
-  loadHi() { try { return +(localStorage.getItem('commandoNext.hi') || 50000); } catch (e) { return 50000; } }
-  saveHi() { if (this.demo) return; try { localStorage.setItem('commandoNext.hi', String(this.hi)); } catch (e) {} }
+  loadHi() { try { return +(localStorage.getItem('commandoHD3d.hi') || 50000); } catch (e) { return 50000; } }
+  saveHi() { if (this.demo) return; try { localStorage.setItem('commandoHD3d.hi', String(this.hi)); } catch (e) {} }
 
   // ------------------------------------------------------------------ per-frame visual sync
   syncVisuals(dt) {
