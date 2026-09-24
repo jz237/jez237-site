@@ -96,8 +96,16 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    // This keeps a fleshy hemispherical end rather than an elongated pointed beak.
    const tipRadius=radius*inflation,capSpan=tipRadius/arcLength,capStart=1-capSpan,neck=capStart-capSpan*1.35;
    const profile=(t:number)=>t<neck?radius*(.94-.38*t):T.MathUtils.lerp(radius*(.94-.38*neck),tipRadius,Math.sin(Math.PI*.5*T.MathUtils.clamp((t-neck)/(capStart-neck),0,1)));
-   anatomy[k].strands.push({tip:end.clone(),samples:[.4,.7,1].map(t=>curve.getPointAt(t)),phase:phase+k*8,arc:arcLength,scale,angle,brushIndex:tentacles+1});
-   const g=new T.BufferGeometry(),positions:number[]=[],colors:number[]=[],uv:number[]=[],detail:number[]=[],thickness:number[]=[],flex:number[]=[],axes:number[]=[],indices:number[]=[];
+   const crownCenter=end.clone().addScaledVector(curve.getTangentAt(1),-tipRadius*.14);
+   // Overlapping rounded profiles keep the lobes fleshy. A pure three-fold
+   // sine pinches the outline into a pointed triangle at this small scale.
+   const crownDepth=.45+.10*Math.sin(phase*1.7);
+   const crownRadius=(theta:number)=>{
+    let radius=0;for(let lobe=0;lobe<3;lobe++){const a=theta+phase-lobe*Math.PI*2/3,d=crownDepth*(1+.05*Math.sin(lobe*2+phase));radius=Math.max(radius,d*Math.cos(a)+Math.sqrt(.76*.76-d*d*Math.sin(a)**2));}return radius;
+   };
+   const crownProfile=Array.from({length:24},(_,a)=>crownRadius(a*Math.PI/12)),crownMean=crownProfile.reduce((a,b)=>a+b,0)/24;
+   anatomy[k].strands.push({tip:crownCenter.clone(),samples:[.4,.7,1].map(t=>t===1?crownCenter.clone():curve.getPointAt(t)),phase:phase+k*8,arc:arcLength,scale,angle,brushIndex:tentacles+1});
+   const g=new T.BufferGeometry(),positions:number[]=[],colors:number[]=[],uv:number[]=[],detail:number[]=[],thickness:number[]=[],flex:number[]=[],axes:number[]=[],indices:number[]=[],ringOffsets:number[]=[],ringSides:number[]=[];
    for(let j=0;j<=steps;j++){
     const t=j<=16?j/16*neck:j<=20?neck+(capStart-neck)*(j-16)/4:capStart+capSpan*[.38,.70,.92,1][j-21],point=curve.getPointAt(t),shaftT=Math.min(t,capStart);
     // Smooth taper with a gently inflated end, then a continuous rounded closure.
@@ -105,6 +113,11 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
     const opticalWidth=2*profile(shaftT);
     const color=base.clone().lerp(localShaft,T.MathUtils.smoothstep(t,0,.26)).lerp(localTip,T.MathUtils.smoothstep(t,neck-.018,capStart)).multiplyScalar(.88+.12*Math.sin(phase)*Math.sin(t*2.6));
     const tangent=curve.getTangentAt(t),sum=Math.abs(tangent.x)+Math.abs(tangent.y)+Math.abs(tangent.z);let ax=tangent.x/sum,ay=tangent.y/sum;
+    // The reference's pale ends have softly pinched lobes, not identical beads.
+    // Flatten the last part of the dome without reversing its centerline, and
+    // ease three unequal fleshy lobes in only after the slender neck.
+    const crown=T.MathUtils.clamp((t-capStart)/capSpan,0,1),lobes=T.MathUtils.smoothstep(t,neck,capStart);
+    point.addScaledVector(tangent,-tipRadius*.14*crown**6);
     if(tangent.z<0){const oldX=ax;ax=(1-Math.abs(ay))*(ax>=0?1:-1);ay=(1-Math.abs(oldX))*(ay>=0?1:-1);}
     // Reproject once per ring against the actual arc-length tangent. A skewed
     // frame flattens rounded caps into spoon-like tips on curved strands.
@@ -112,21 +125,29 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
     const n=frames.normals[lo].clone().lerp(frames.normals[lo+1],mix).normalize();
     n.addScaledVector(tangent,-n.dot(tangent)).normalize();
     const b=new T.Vector3().crossVectors(tangent,n).normalize();
-    for(let a=0;a<=sides;a++){
-     const theta=a/sides*Math.PI*2,co=Math.cos(theta),si=Math.sin(theta);
-     const tissueWidth=width*(1+.055*Math.sin(theta*3+phase+t*2)*Math.sin(Math.PI*Math.min(t,capStart)/capStart));
+    // Double the radial detail only on the crown: rounded lobes need eight
+    // samples each, while the slender shaft retains its established detail.
+    const radialSides=j>16?sides*2:sides;ringOffsets.push(positions.length/3);ringSides.push(radialSides);
+    for(let a=0;a<=radialSides;a++){
+     const theta=a/radialSides*Math.PI*2,co=Math.cos(theta),si=Math.sin(theta);
+     const crownLobe=crownProfile[(a*24/radialSides)%24]/crownMean-1;
+     const tissueWidth=width*(1+.055*Math.sin(theta*3+phase+t*2)*Math.sin(Math.PI*Math.min(t,capStart)/capStart)+lobes*crownLobe);
      positions.push(point.x+tissueWidth*(n.x*co+b.x*si),point.y+tissueWidth*(n.y*co+b.y*si),point.z+tissueWidth*(n.z*co+b.z*si));
-     const stripe=1+.045*Math.sin(theta*3+phase+t*3)+.018*Math.cos(theta*2-t*17+phase);colors.push(color.r*stripe,color.g*stripe,color.b*stripe);thickness.push(Math.round(Math.min(1,opticalWidth/.085)*255));uv.push(t,a/sides);detail.push(Math.round(((angle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2)*65535),Math.round(a/sides*65535));flex.push(t,phase+k*8,arcLength,scale);axes.push(Math.round(ax*32767),Math.round(ay*32767));
-     if(j<steps&&a<sides){const idx=j*(sides+1)+a;indices.push(idx,idx+1,idx+sides+1,idx+1,idx+sides+2,idx+sides+1);}
+     const stripe=1+.045*Math.sin(theta*3+phase+t*3)+.018*Math.cos(theta*2-t*17+phase)+lobes*crownLobe*.16;colors.push(color.r*stripe,color.g*stripe,color.b*stripe);thickness.push(Math.round(Math.min(1,opticalWidth*(1+lobes*crownLobe)/.085)*255));uv.push(t,a/radialSides);detail.push(Math.round(((angle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2)*65535),Math.round(a/radialSides*65535));flex.push(t,phase+k*8,arcLength,scale);axes.push(Math.round(ax*32767),Math.round(ay*32767));
     }
+   }
+   for(let row=0;row<steps;row++)for(let a=0;a<ringSides[row];a++){
+    const start=ringOffsets[row]+a,next=ringOffsets[row+1]+a*(ringSides[row+1]/ringSides[row]);
+    if(ringSides[row+1]===ringSides[row])indices.push(start,start+1,next,start+1,next+1,next);
+    else indices.push(start,start+1,next+1,start,next+1,next,start+1,next+2,next+1);
    }
    g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('anemoneFlex',new T.Float32BufferAttribute(flex,4));g.setAttribute('anemoneAxis',new T.Int16BufferAttribute(axes,2,true));g.setIndex(indices);g.computeVertexNormals();
    g.setAttribute('anemoneDetail',new T.Uint16BufferAttribute(detail,2,true));
    g.setAttribute('anemoneThickness',new T.Uint8BufferAttribute(thickness,1,true));
    g.setAttribute('anemoneBrush',new T.Uint16BufferAttribute(new Uint16Array(positions.length/3).fill(tentacles+1),1));
    // Weld shading across the UV seam; keep the indexed skin and every ring.
-   const normals=g.getAttribute('normal');for(let row=0;row<steps;row++){const a=row*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}
-   const tipNormal=curve.getTangentAt(1).normalize();for(let a=0;a<=sides;a++)normals.setXYZ(steps*(sides+1)+a,tipNormal.x,tipNormal.y,tipNormal.z);
+   const normals=g.getAttribute('normal');for(let row=0;row<steps;row++){const a=ringOffsets[row],b=a+ringSides[row],n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}
+   const tipNormal=curve.getTangentAt(1).normalize();for(let a=0;a<=ringSides[steps];a++)normals.setXYZ(ringOffsets[steps]+a,tipNormal.x,tipNormal.y,tipNormal.z);
    parts.push(g);tentacles++;
   }
  }

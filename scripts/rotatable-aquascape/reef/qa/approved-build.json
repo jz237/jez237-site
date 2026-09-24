@@ -1,15 +1,15 @@
 {
-  "readyMs": 6381,
+  "readyMs": 6609,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 6.044600000190757,
-      "bites": 3,
-      "remaining": 42,
+      "fps": 59.99400059993998,
+      "time": 5.9976000000000225,
+      "bites": 21,
+      "remaining": 24,
       "anemones": {
-        "brushing": 7,
-        "maxBrush": 0.1081555226606393,
+        "brushing": 4,
+        "maxBrush": 0.07042903712443549,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,18 +21,18 @@
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 10.061700000190761,
-      "bites": 18,
-      "remaining": 26,
+      "fps": 59.99400059993998,
+      "time": 10.014600000000021,
+      "bites": 33,
+      "remaining": 12,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 6.868305986271409e-7,
-        "captured": 1,
+        "maxBrush": 7.128475941365035e-9,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
-          0.026171219495346672,
+          0,
           0,
           0
         ]
@@ -40,90 +40,90 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 14.078800000190727,
-      "bites": 35,
+      "time": 14.031599999999964,
+      "bites": 36,
       "remaining": 8,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.002843194652991881,
-        "captured": 2,
+        "brushing": 4,
+        "maxBrush": 0.10687758943714945,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 18.095900000190703,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0009595639948522228,
-        "captured": 2,
-        "swallowed": 1,
         "carried": 1,
         "fold": [
-          0.2,
+          0,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 22.112800000190635,
-      "bites": 36,
+      "fps": 59.994000599940094,
+      "time": 18.0319999999999,
+      "bites": 37,
       "remaining": 7,
       "anemones": {
-        "brushing": 7,
-        "maxBrush": 0.13153560517546484,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
+        "brushing": 3,
+        "maxBrush": 0.012427076543052694,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
         "fold": [
-          0.1816368873690618,
-          0.19345833983385421,
+          0,
+          0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 26.129800000190542,
-      "bites": 36,
-      "remaining": 7,
+      "fps": 59.99700014999255,
+      "time": 22.048999999999825,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 3,
+        "maxBrush": 0.0941992435503391,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.19317896114691577,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979766,
+      "time": 26.06609999999972,
+      "bites": 38,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 6,
+        "maxBrush": 0.0862275665066921,
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.13025354761437455,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 30.08309999999959,
+      "bites": 38,
+      "remaining": 6,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 3.63980730899938e-8,
-        "captured": 2,
-        "swallowed": 2,
+        "maxBrush": 0.0004163213978086943,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.10781861412481415,
-          0.13094066302871038,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993988,
-      "time": 30.130200000190392,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0002643806502879618,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.029105481231231536,
-          0.0480514152067926,
+          0,
+          0.04712145208021315,
           0
         ]
       }
@@ -170,7 +170,7 @@
       "colonies": 12,
       "triangles": 898980
     },
-    "triangles": 16976616,
+    "triangles": 17264616,
     "inhabitants": 21,
     "buttressStats": {
       "rocks": 9,
@@ -382,8 +382,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
+    "assets/index-BYouXBvy.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-wzirfzP-.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -400,23 +400,26 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "ee4300e173dda32ed0f121e295e45f628f7362ae132260e029945f31cc478aa4",
-  "checkedAt": "2026-09-24T04:56:45.119Z",
-  "scope": "Keep fine corallite cups and rough tissue visible around curved encrusting colonies instead of stretching them into smooth plastic-looking streaks on steep sides.",
+  "buildHash": "4a8c9285df8b28b86196fcb0eb8f2d7eda7942ebf54a8028588b40f23bc08604",
+  "checkedAt": "2026-09-24T05:19:07.673Z",
+  "scope": "Replace identical round anemone ends with gently flattened, unequal fleshy lobes inspired by the user close reference, with enough radial geometry to keep those lobes rounded.",
   "geometryChecks": [
-    "All scene geometry and attachment statistics exactly unchanged",
-    "Existing full-resolution textures and models retained",
-    "All existing geometry and behavior checks passed",
-    "Feeding, movement, pause, collision, lighting, mobile and reload controls passed"
+    "All800 strands,24 axial sections and existing shaft detail retained",
+    "Crown rings increase12 to24 sides with a watertight indexed transition",
+    "Adaptive ring seam normals match;100percent sampled shaft normals face outward",
+    "Actual crown endpoints agree with feeding/brushing anatomy to1e-5",
+    "Positive minimum deformation determinant under simultaneous brush and feeding",
+    "Existing scene, collision, fish and coral checks pass"
   ],
   "visualReview": [
     "front",
     "oblique",
     "mobile",
-    "live96fe27999 baseline and current mantle-before/after base/coral macros",
-    "moving anemone macro frame pair",
-    "original full reef reference",
-    "planted rendered comparison and original reference"
+    "live baseline crown-before-anemone and local crown-after-anemone",
+    "compiled animated anemone frame pair",
+    "rejected chord-lighting trial",
+    "user anemone reference and full reef reference",
+    "planted rendering and original reference"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -425,13 +428,13 @@
     "GitHub"
   ],
   "performanceComparison": {
-    "baseline": "96fe27999",
-    "loadPrior": 6880.5,
-    "loadCurrent": 6767,
-    "fpsPrior": 128,
-    "fpsCurrent": 127.8,
+    "baseline": "d2351e1ce",
+    "loadPrior": 6578.5,
+    "loadCurrent": 6863.5,
+    "fpsPrior": 147.7,
+    "fpsCurrent": 160.6,
     "priorTriangles": 16976616,
-    "currentTriangles": 16976616,
-    "interpretation": "Alternating serial local Chrome at the same1440x854 canvas. Three surface-oriented projections replace collapsed planar mapping on the existing thick encrusting material. Nine texture samples replace three on these colonies; no new textures, geometry, draw groups, animal work or per-frame CPU loops. No universal speed claim."
+    "currentTriangles": 17264616,
+    "interpretation": "Alternating serial local Chrome at1440x854. Actual three-dimensional lobed crowns with24 radial samples only on the final eight rings; shafts retain12 sides and every axial section. Anemone source triangles516096 to660096,vertex/index bytes22667577 to28773177. No new texture or draw group. This added geometry is an explicit cost; no universal speed claim."
   }
 }

@@ -10,7 +10,7 @@ assert.equal(behavior.brushTexture.image.width,tentacles+1);
 assert.equal(behavior.brushData.length,(tentacles+1)*4);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<23500000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 23.5 MB including optical width and a two-byte per-strand brush lookup');
+assert.ok(bytes<29000000, 'retain all800 strands and24 axial sections with12-sided shafts and24-sided crowns within29MB; extra radial detail is restricted to the final eight rings');
 const opticalWidth=mesh.geometry.getAttribute('anemoneThickness');
 assert.equal(opticalWidth.normalized,true);assert.ok(opticalWidth.array instanceof Uint8Array);
 assert.equal(opticalWidth.count,mesh.geometry.getAttribute('position').count);
@@ -51,9 +51,9 @@ const centerHit=ray.intersectObject(mesh)[0];ray.set(new T.Vector3(3.10,3,.8),ne
 assert.ok(lipHit.point.y-centerHit.point.y>.05,'oral center is recessed below its surrounding lip');
 // Closed tip vertices all have a stable unit normal, rather than zero normals.
 let tips=0;for(let i=0;i<p.count;i++)if(flex.getX(i)===1){assert.ok(new T.Vector3().fromBufferAttribute(n,i).length()>.999);tips++;}
-assert.equal(tips,800*13);
+assert.equal(tips,800*25);
 // The first and last vertex in each circular row share shading after UV removal.
-for(let i=0;i<p.count-12;i++)if(flex.getW(i)>0&&flex.getX(i)<1&&i+12<p.count&&p.getX(i)===p.getX(i+12)&&p.getY(i)===p.getY(i+12))assert.ok(new T.Vector3().fromBufferAttribute(n,i).distanceTo(new T.Vector3().fromBufferAttribute(n,i+12))<1e-6);
+for(const ring of rings.values()){const first=ring.ids[0],last=ring.ids.at(-1);assert.ok(new T.Vector3().fromBufferAttribute(n,first).distanceTo(new T.Vector3().fromBufferAttribute(n,last))<1e-6,'both crown and shaft seams retain continuous shading');}
 assert.equal(mesh.geometry.getAttribute('uv'),undefined,'no unused UV allocation for the vertex-colored skin');
 // Packed curved axes must follow the actual centerline; the small signed buffer
 // keeps the extra shading data below the reviewed11MB geometry budget.
@@ -66,21 +66,29 @@ for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
 let worstDot=1,minDeterminant=Infinity,minFeedingDeterminant=Infinity,minBrushDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
- const rows=ids.length/13,cap=rows-5;const centers=[];for(let row=0;row<rows;row++){const center=new T.Vector3();for(let j=0;j<12;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*13+j]));centers.push(center.multiplyScalar(1/12));}
- const ringRadius=row=>ids.slice(row*13,row*13+12).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/12;
- // Cap sections must stay circular and perpendicular to their real centerline.
+ const rowMap=new Map();for(const i of ids){const t=flex.getX(i),row=rowMap.get(t)||[];row.push(i);rowMap.set(t,row);}
+ const rowIds=[...rowMap.values()],rows=rowIds.length,cap=rows-5;
+ assert.equal(rows,25);assert.ok(rowIds.every((row,j)=>row.length===(j<=16?13:25)),'extra radial detail is confined to the crown');
+ for(const row of rowIds)assert.ok(new T.Vector3().fromBufferAttribute(n,row[0]).distanceTo(new T.Vector3().fromBufferAttribute(n,row.at(-1)))<1e-6,'adaptive crown rings have no shading seam');
+ const centers=rowIds.map(ids=>ids.slice(0,-1).reduce((center,i)=>center.add(new T.Vector3().fromBufferAttribute(p,i)),new T.Vector3()).multiplyScalar(1/(ids.length-1)));
+ const ringRadius=row=>rowIds[row].slice(0,-1).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/(rowIds[row].length-1);
+ // The crown has deliberately pinched lobes, while staying full in every
+ // direction. This bounds the organic lobing without allowing a flattened leaf.
  for(const row of [cap,cap+1,cap+2]){
-  const idsAt=ids.slice(row*13,row*13+12),axis=decode(ids[row*13]);
+  const idsAt=rowIds[row].slice(0,-1),axis=decode(rowIds[row][0]);
   const offsets=idsAt.map(i=>new T.Vector3().fromBufferAttribute(p,i).sub(centers[row]));
   const radii=offsets.map(o=>o.length());
-  assert.ok(Math.min(...radii)/Math.max(...radii)>.96,'rounded cap is not flattened by interpolated curve frames');
+  const aspect=Math.min(...radii)/Math.max(...radii);
+  assert.ok(aspect>.53&&aspect<.84,'crown has visible fleshy lobes without collapsing into a flat spoon: '+aspect);
   assert.ok(offsets.every(o=>Math.abs(o.clone().normalize().dot(axis))<.001),'cap frame stays perpendicular to curve tangent');
  }
  const capAspect=centers[cap].distanceTo(centers.at(-1))/ringRadius(cap);
- assert.ok(capAspect>.90&&capAspect<1.08,'cap rounds over within one tissue radius instead of an elongated beak: '+capAspect);
+ assert.ok(capAspect>.82&&capAspect<.90,'softly flattened crown closes within one tissue radius: '+capAspect);
+ const strand=behavior.hosts.flatMap(h=>h.strands).find(s=>Math.fround(s.phase)===flex.getY(ids[0]));
+ assert.ok(strand&&centers.at(-1).distanceTo(strand.tip)<1e-5,'feeding and brushing use the actual crown endpoint');
  lobeRatios.push(Math.max(...Array.from({length:cap-Math.floor(cap*.7)},(_,i)=>Math.floor(cap*.7)+i).map(ringRadius))/ringRadius(Math.floor(cap*.55)));
  for(let row=1;row<rows-1;row++){
-  const i=ids[row*13],axis=decode(i),a=flex.getX(i)-flex.getX(ids[(row-1)*13]),b=flex.getX(ids[(row+1)*13])-flex.getX(i);
+  const i=rowIds[row][0],axis=decode(i),a=flex.getX(i)-flex.getX(rowIds[row-1][0]),b=flex.getX(rowIds[row+1][0])-flex.getX(i);
   const direction=centers[row].clone().sub(centers[row-1]).multiplyScalar(b/a).addScaledVector(centers[row+1].clone().sub(centers[row]),a/b).normalize();worstDot=Math.min(worstDot,axis.dot(direction));
   const t=flex.getX(i),phase=flex.getY(i),arc=flex.getZ(i),scale=Math.min(flex.getW(i),arc*.85);
   for(const time of [0,1,3,7,15,31]){
@@ -103,4 +111,11 @@ assert.ok(worstDot>.97,'compressed axis follows curved tissue: '+worstDot);asser
 assert.ok(Math.min(...lobeRatios)>1.5,'each terminal knob is visibly wider than its slender shaft');
 assert.ok(Math.max(...lobeRatios)-Math.min(...lobeRatios)>.4,'slender and inflated tentacles keep individual anatomical variation');
 console.log('Curved tissue shading passed: axis alignment',worstDot,'minimum sampled deformation determinant',minDeterminant);
+// The twelve-to-twenty-four-sided transition must remain a closed skin. Weld
+// only the intentional angular seams and closed pole, then inspect edge use.
+const selected=new Set([...strands.values()][0]),weld=new Map(),edges=new Map(),index=mesh.geometry.index;
+for(const i of selected){const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e6)).join(':');weld.set(i,key);}
+for(let i=0;i<index.count;i+=3){const a=index.getX(i),b=index.getX(i+1),c=index.getX(i+2);if(!selected.has(a))continue;assert.ok(selected.has(b)&&selected.has(c));const v=[weld.get(a),weld.get(b),weld.get(c)];if(new Set(v).size<3)continue;for(let j=0;j<3;j++){const key=[v[j],v[(j+1)%3]].sort().join('|');edges.set(key,(edges.get(key)||0)+1);}}
+assert.ok([...edges.values()].every(n=>n===1||n===2),'no nonmanifold adaptive-ring joins');
+assert.equal([...edges.values()].filter(n=>n===1).length,12,'only the anchored root is open; crown transition has no cracks');
 mesh.geometry.dispose();mesh.material.dispose();
