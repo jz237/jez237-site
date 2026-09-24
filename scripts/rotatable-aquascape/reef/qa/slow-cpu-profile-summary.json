@@ -1,0 +1,236 @@
+{
+  "cpuSlowdown": 4,
+  "profileCaveat": "CPU throttling and profiler overhead; not GPU emulation or a real low-end device. Measured FPS must be compared using the separate profiler-free paired benchmark.",
+  "profiles": {
+    "startup": {
+      "durationMs": 91428.67,
+      "topFunctions": [
+        {
+          "name": "getX",
+          "line": 0,
+          "column": 90121,
+          "selfMs": 6546.381000000005
+        },
+        {
+          "name": "qu",
+          "line": 4107,
+          "column": 58281,
+          "selfMs": 5675.732000000001
+        },
+        {
+          "name": "wasm-function[14]",
+          "line": 0,
+          "column": 9862,
+          "selfMs": 5250.705
+        },
+        {
+          "name": "X",
+          "line": 0,
+          "column": 92066,
+          "selfMs": 4655.315999999999
+        },
+        {
+          "name": "Mf",
+          "line": 4951,
+          "column": 5522,
+          "selfMs": 3093.6409999999996
+        },
+        {
+          "name": "f",
+          "line": 4951,
+          "column": 12305,
+          "selfMs": 2586.1910000000003
+        },
+        {
+          "name": "(garbage collector)",
+          "line": -1,
+          "column": -1,
+          "selfMs": 2455.382
+        },
+        {
+          "name": "getY",
+          "line": 0,
+          "column": 90300,
+          "selfMs": 2220.6459999999997
+        },
+        {
+          "name": "Lf",
+          "line": 4951,
+          "column": 10641,
+          "selfMs": 2175.8399999999997
+        },
+        {
+          "name": "getPoint",
+          "line": 0,
+          "column": 166298,
+          "selfMs": 2099.855999999998
+        },
+        {
+          "name": "C",
+          "line": 4049,
+          "column": 291,
+          "selfMs": 1868.694
+        },
+        {
+          "name": "getZ",
+          "line": 0,
+          "column": 90483,
+          "selfMs": 1839.9280000000008
+        },
+        {
+          "name": "Gu",
+          "line": 4107,
+          "column": 54561,
+          "selfMs": 1789.952
+        },
+        {
+          "name": "computeVertexNormals",
+          "line": 0,
+          "column": 100627,
+          "selfMs": 1753.6090000000008
+        },
+        {
+          "name": "Ku",
+          "line": 4107,
+          "column": 57075,
+          "selfMs": 1405.627
+        },
+        {
+          "name": "pr",
+          "line": 0,
+          "column": 88218,
+          "selfMs": 1404.1249999999998
+        },
+        {
+          "name": "gr",
+          "line": 0,
+          "column": 91925,
+          "selfMs": 1396.0249999999999
+        },
+        {
+          "name": "O",
+          "line": 4852,
+          "column": 6634,
+          "selfMs": 1334.0090000000002
+        }
+      ]
+    },
+    "steady": {
+      "durationMs": 10547.977,
+      "topFunctions": [
+        {
+          "name": "h",
+          "line": 4056,
+          "column": 2274,
+          "selfMs": 703.091
+        },
+        {
+          "name": "Tt",
+          "line": 4107,
+          "column": 39995,
+          "selfMs": 699.348
+        },
+        {
+          "name": "(program)",
+          "line": -1,
+          "column": -1,
+          "selfMs": 616.767
+        },
+        {
+          "name": "xt",
+          "line": 4107,
+          "column": 37179,
+          "selfMs": 589.86
+        },
+        {
+          "name": "upload",
+          "line": 4005,
+          "column": 9357,
+          "selfMs": 484.378
+        },
+        {
+          "name": "a",
+          "line": 4107,
+          "column": 9828,
+          "selfMs": 448.807
+        },
+        {
+          "name": "Wu.renderBufferDirect",
+          "line": 4107,
+          "column": 28744,
+          "selfMs": 398.755
+        },
+        {
+          "name": "setValue",
+          "line": 4005,
+          "column": 8392,
+          "selfMs": 359.155
+        },
+        {
+          "name": "g",
+          "line": 4056,
+          "column": 8787,
+          "selfMs": 251.804
+        },
+        {
+          "name": "uniformMatrix4fv",
+          "line": -1,
+          "column": -1,
+          "selfMs": 228.218
+        },
+        {
+          "name": "Mc",
+          "line": 4005,
+          "column": 2192,
+          "selfMs": 203.57499999999996
+        },
+        {
+          "name": "bindVertexArray",
+          "line": -1,
+          "column": -1,
+          "selfMs": 203.48399999999998
+        },
+        {
+          "name": "Dc",
+          "line": 4005,
+          "column": 1627,
+          "selfMs": 187.354
+        },
+        {
+          "name": "bt",
+          "line": 4107,
+          "column": 36724,
+          "selfMs": 165.817
+        },
+        {
+          "name": "Oc",
+          "line": 4005,
+          "column": 1740,
+          "selfMs": 164.38299999999998
+        },
+        {
+          "name": "Ec",
+          "line": 4005,
+          "column": 1430,
+          "selfMs": 159.582
+        },
+        {
+          "name": "gt",
+          "line": 4107,
+          "column": 33640,
+          "selfMs": 148.375
+        },
+        {
+          "name": "seqWithValue",
+          "line": 4005,
+          "column": 9486,
+          "selfMs": 143.34699999999998
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Startup repeatedly regenerates and welds identical IcosahedronGeometry(1,22) source meshes for different rocks. Reuse immutable topology and independently clone all buffers before erosion.",
+    "Steady rendering spends substantial CPU time selecting programs and uploading material uniforms. Share identical imported materials only within an individual fish and deformation role; preserve transparent draw objects/order and per-fish clock objects."
+  ]
+}

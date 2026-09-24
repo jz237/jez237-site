@@ -817,3 +817,11 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Four alternating serial runs: mean click handler 766.9 -> 4.1 ms; feedback 780.0 -> 18.3 ms; FPS 59.7 -> 59.5; observed JS heap 1256 -> 975 MB.
 - Startup 11581 -> 12915.5 ms averaged across noisy runs; no overall load speedup claimed. Largest remaining bottleneck is synchronous reef construction (~8.6–9 seconds) and mesh ordering (~1.1 seconds). A future worker/prebuilt geometry pipeline could address it without dropping detail, but requires separate memory/transfer and asset-size validation.
 - Evidence: performance-comparison.json and performance-{before,after}-{front,gap,angle,closeup,mobile}.png. Full build/check:reef and planted release/sync gates passed. Automation remains off; publish verified change to jez237/GitHub and stop.
+
+
+## Slow-CPU performance without detail reduction
+- Profiled startup and steady rendering at 4x CPU throttle. Repeated identical rock sphere generation/welding was avoidable; material program setup/uniform upload was prominent during rendering. Profiling is not low-end GPU emulation. Raw profiles saved locally; condensed findings in slow-cpu-profile-summary.json.
+- Cache only the immutable indexed starting topology for eroded rocks, cloning all buffers before independently applying each rock's existing erosion. Every finished vertex/normal/UV/cavity/index matches eight pre-change buffer hashes; mutation isolation tested.
+- Share identical imported materials within each fish and deformation role. Keep each fish's independent uniform objects, paired/median fin distinctions, left/right gill signs and separate transparent draw objects/order. No texture changes, merged fins, detail reduction or animation throttling.
+- Throttled prior startups 77842/39995 ms; current 38183/34133 ms. Last adjacent comparison about40 to34 seconds (15% faster). Full-set mean 58918.5 to36158 ms, heavily affected by host contention. FPS 7.3/8.3 before and 7.2/16.4 after: no reliable FPS improvement claimed.
+- Before/after desktop/front/oblique/close-up/mobile evidence in slow-cpu-*.png. Same 18,577,724 rendered triangles, seven opaque batches, all21fish and all texture/model assets. Full reef QA plus planted release/sync checks passed. Publish to jez237 and GitHub; automation remains off.

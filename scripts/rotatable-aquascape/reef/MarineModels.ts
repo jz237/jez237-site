@@ -23,6 +23,7 @@ export async function loadMarineModels(){
    if(!(node instanceof T.Mesh))return;
    const label=node.name.split('__').at(-1)!,geometry=node.geometry.clone().applyMatrix4(node.matrixWorld);
    const material=(node.material as T.MeshPhysicalMaterial).clone();material.envMapIntensity=.24;
+   material.userData.marineSourceMaterial=(node.material as T.Material).uuid;
    // Submerged tissue has a much smaller optical contrast than a varnished object
    // in air. Keep the source scale/iris detail without the broad clearcoat glare.
    material.metalness=0;material.clearcoat=0;material.ior=1.16;

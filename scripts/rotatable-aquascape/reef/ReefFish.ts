@@ -21,7 +21,14 @@ export class ReefFish{
   for(const [s,count] of [['tang',1],['yellow',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]] as [Species,number][]){
    for(let i=0;i<count;i++){
     const group=this.templates.get(s)!.clone(true),clock={value:Math.random()*7},effort={value:.5},waveGain={value:s==='goby'?.2:1},turnBend={value:0},mouthOpening={value:0},gillOpening={value:0};
-    group.traverse(o=>{if(o instanceof T.Mesh){o.material=(o.material as T.MeshStandardMaterial).clone();const mat=o.material as T.MeshStandardMaterial;
+    // Parts with the same imported material and deformation share one material
+    // within this animal. Uniforms remain independent between inhabitants;
+    // transparent meshes and their depth ordering remain separate draws.
+    const materials=new Map<string,T.MeshStandardMaterial>();
+    group.traverse(o=>{if(o instanceof T.Mesh){
+     const source=o.material as T.MeshStandardMaterial,key=[source.userData.marineSourceMaterial??source.uuid,o.name,Boolean(o.userData.pectoral),o.userData.side??0].join(':');
+     const shared=materials.get(key);if(shared){o.material=shared;return;}
+     const mat=source.clone();o.material=mat;materials.set(key,mat);
      if(o.name==='operculum'){
       mat.onBeforeCompile=shader=>{shader.uniforms.gillOpening=gillOpening;shader.uniforms.gillSide={value:o.userData.side};
        shader.vertexShader='uniform float gillOpening,gillSide;attribute float gillFlex;attribute vec3 gillGradient;\n'+shader.vertexShader;

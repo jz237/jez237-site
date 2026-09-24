@@ -11,6 +11,7 @@ import './anemone-behavior.mjs';
 import './anemone-brushing.mjs';
 import './buttress-geometry.mjs';
 import './fish-geometry.mjs';
+import './fish-materials.mjs';
 import './fish-navigation.mjs';
 import './fin-motion.mjs';
 import './water-capture.mjs';

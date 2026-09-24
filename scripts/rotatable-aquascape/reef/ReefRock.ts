@@ -1,11 +1,18 @@
 import * as T from 'three';
 import {mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
 
+// All rocks start from the same topology. Clone these immutable source buffers
+// rather than regenerating and welding the identical sphere for every stone.
+let rockTemplate:T.BufferGeometry|undefined;
+function rockBase(){
+ if(!rockTemplate){const original=new T.IcosahedronGeometry(1,22);original.deleteAttribute('normal');rockTemplate=mergeVertices(original);original.dispose();}
+ return rockTemplate.clone();
+}
+
 /** Volumetric eroded stone; cavities are geometry, not painted dark circles. */
 export function erodedRock(x:number,y:number,z:number,sx:number,sy:number,sz:number,random:()=>number){
  const pick=(a:number,b:number)=>a+(b-a)*random();
- const original=new T.IcosahedronGeometry(1,22);original.deleteAttribute('normal');
- const geometry=mergeVertices(original),p=geometry.getAttribute('position');original.dispose();
+ const geometry=rockBase(),p=geometry.getAttribute('position');
  // Keep the random draw count stable so changing the rock does not reshuffle coral.
  const pores=Array.from({length:31},()=>{
   const theta=pick(0,Math.PI*2),vertical=pick(-.93,.93),horizontal=Math.sqrt(1-vertical*vertical);
