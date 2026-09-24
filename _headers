@@ -91,18 +91,18 @@
 /computer-chronicle/feed.xml
   Cache-Control: public, max-age=300, must-revalidate
 
-# Commando HD updates frequently and ships a service worker; the worker script
-# and the code surface must always revalidate or a stale build sticks forever
+# Commando HD's code must always revalidate; sw.js is the retirement worker for
+# the old 2D build's offline cache and must never be served stale
 /games/2026-08-01/commando/sw.js
   Cache-Control: no-cache, must-revalidate
 
 /games/2026-08-01/commando/index.html
   Cache-Control: no-cache, must-revalidate
 
-/games/2026-08-01/commando/game.js
+/games/2026-08-01/commando/src/*
   Cache-Control: no-cache, must-revalidate
 
-/games/2026-08-01/commando/data/*
+/games/2026-08-01/commando/style.css
   Cache-Control: no-cache, must-revalidate
 
 # Aquarium filenames contain a content hash; new builds request new URLs.
