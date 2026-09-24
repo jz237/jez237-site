@@ -1,3 +1,4 @@
+import fs from 'node:fs';import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
 import {erodedRock} from '../ReefRock.ts';
 import {encrustRock} from '../ReefMaterials.ts';
@@ -41,3 +42,10 @@ for(let sample=0;sample<8;sample++){
  g.dispose();
 }
 console.log('Eight eroded shapes: closed surfaces, stable RNG, radial bounds',globalMinimum,globalMaximum);
+
+// Recorded from the pre-cache constructor: every vertex, normal, UV, cavity
+// attribute and index must survive topology reuse exactly.
+const parity=JSON.parse(fs.readFileSync(new URL('./rock-template-parity.json',import.meta.url)));
+const hash=g=>{const h=crypto.createHash('sha256');for(const [name,a] of Object.entries(g.attributes)){h.update(name);h.update(Buffer.from(a.array.buffer));}h.update(Buffer.from(g.index.array.buffer));return h.digest('hex');};
+for(const {sample:k,sha256} of parity){const make=()=>{let s=913+k*729;return erodedRock(k*.21,2-k*.13,.7,.8,.6,.7,()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;});};const g=make();assert.equal(hash(g),sha256);g.translate(99,99,99);g.index.array.fill(0);assert.equal(hash(make()),sha256,'modifying one rock cannot mutate the reusable source');}
+console.log('Cached topology: eight complete pre-change buffer hashes and independent geometry mutations passed.');
