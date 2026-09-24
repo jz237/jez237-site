@@ -1,0 +1,217 @@
+{
+  "rejectedSixSectionFirst": [
+    {
+      "version": "prior",
+      "readyMs": 6589,
+      "fps": 192.50207899248747,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 6792,
+      "fps": 125.74142393470125,
+      "triangles": 18020136,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 7588,
+      "fps": 124.265583599859,
+      "triangles": 18020136,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 7479,
+      "fps": 128.44913803497525,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    }
+  ],
+  "rejectedSixSectionRepeat": [
+    {
+      "version": "current",
+      "readyMs": 7068,
+      "fps": 115.16241745212866,
+      "triangles": 18020136,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 7193,
+      "fps": 129.56341857060258,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 7002,
+      "fps": 122.66202467663736,
+      "triangles": 18020136,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 7274,
+      "fps": 130.59734605637965,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 7221,
+      "fps": 131.90352186524976,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 7001,
+      "fps": 123.9458369236921,
+      "triangles": 18020136,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    }
+  ],
+  "acceptedFiveSection": [
+    {
+      "version": "current",
+      "readyMs": 6779,
+      "fps": 137.63357261500497,
+      "triangles": 17642376,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 7105,
+      "fps": 135.0719665257589,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 6727,
+      "fps": 143.79085563003696,
+      "triangles": 17642376,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 6891,
+      "fps": 144.12777885326182,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "prior",
+      "readyMs": 6501,
+      "fps": 170.93224577424002,
+      "triangles": 17264616,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    },
+    {
+      "version": "current",
+      "readyMs": 6676,
+      "fps": 130.93473015012762,
+      "triangles": 17642376,
+      "drawCalls": 1,
+      "canvas": {
+        "x": 0,
+        "y": 122,
+        "width": 1440,
+        "height": 854
+      }
+    }
+  ],
+  "assessment": "Uncapped host timing is variable: final prior samples 135.1/144.1/170.9 FPS and current 137.6/143.8/130.9. Mean current throughput is 8.3% lower; first two adjacent pairs are comparable and the final pair differs substantially. Do not claim a speed gain or a precise cost from this run. All ordinary samples maintained 60 FPS; geometry increase is 2.19%. The six-section trial was rejected; five sections halve its added triangles without losing the reviewed rounded silhouette."
+}

@@ -1,15 +1,15 @@
 {
-  "readyMs": 6493,
+  "readyMs": 6983,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 6.0498999998569625,
-      "bites": 17,
-      "remaining": 28,
+      "fps": 59.99100134979755,
+      "time": 6.00369999995233,
+      "bites": 13,
+      "remaining": 32,
       "anemones": {
-        "brushing": 6,
-        "maxBrush": 0.07554825592943637,
+        "brushing": 4,
+        "maxBrush": 0.09071656343615052,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,18 +21,18 @@
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 10.06689999985696,
-      "bites": 27,
-      "remaining": 17,
+      "fps": 59.99700014999255,
+      "time": 10.02059999995231,
+      "bites": 29,
+      "remaining": 16,
       "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.010731842165192613,
-        "captured": 1,
+        "brushing": 0,
+        "maxBrush": 0.0000032267346357976475,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
-          0.006342739520947044,
+          0,
           0,
           0
         ]
@@ -40,90 +40,90 @@
     },
     {
       "fps": 59.99700014999255,
-      "time": 14.083899999856909,
-      "bites": 35,
-      "remaining": 8,
+      "time": 14.037599999952251,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 9,
-        "maxBrush": 0.10256906188079112,
-        "captured": 2,
+        "brushing": 4,
+        "maxBrush": 0.0705386463182261,
+        "captured": 1,
         "swallowed": 0,
-        "carried": 2,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 18.100899999856825,
-      "bites": 37,
-      "remaining": 6,
-      "anemones": {
-        "brushing": 9,
-        "maxBrush": 0.1365085951980409,
-        "captured": 2,
-        "swallowed": 1,
         "carried": 1,
         "fold": [
-          0.2,
+          0,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 22.101399999856742,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99100134979755,
+      "time": 18.038099999952205,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 14,
-        "maxBrush": 0.16237291362276648,
-        "captured": 2,
-        "swallowed": 2,
+        "brushing": 2,
+        "maxBrush": 0.06088813176088449,
+        "captured": 1,
+        "swallowed": 0,
+        "carried": 1,
+        "fold": [
+          0,
+          0.2,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 22.055099999952137,
+      "bites": 39,
+      "remaining": 5,
+      "anemones": {
+        "brushing": 2,
+        "maxBrush": 0.030101139445137023,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.18556561278392797,
-          0.1958370120409635,
+          0,
+          0.1956096644669959,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993998,
-      "time": 26.11829999985663,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99100134979744,
+      "time": 26.072099999952048,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.0007925088555624609,
-        "captured": 2,
-        "swallowed": 2,
+        "maxBrush": 0.0011662262817821103,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.11456592200419674,
-          0.13736282267075542,
+          0,
+          0.13669062350040506,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993988,
-      "time": 30.13529999985649,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99100134979744,
+      "time": 30.08909999995194,
+      "bites": 39,
+      "remaining": 5,
       "anemones": {
-        "brushing": 5,
-        "maxBrush": 0.10477516526400694,
-        "captured": 2,
-        "swallowed": 2,
+        "brushing": 1,
+        "maxBrush": 0.04527000719831388,
+        "captured": 1,
+        "swallowed": 1,
         "carried": 0,
         "fold": [
-          0.03394114535606481,
-          0.05373652031699845,
+          0,
+          0.05309293972442437,
           0
         ]
       }
@@ -382,7 +382,7 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CRxmX3oK.js",
+    "assets/index-D_e43Ed5.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -400,38 +400,41 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "5eaa878d89bc7a4d7d74dcd46e5ec6658e21376d2f65790083a5a9b72f09c751",
-  "checkedAt": "2026-09-24T06:21:17.952Z",
-  "scope": "Round distal coral shoulders and pale growth margins; reorder opaque reef triangles for GPU cache reuse without removing geometry or changing vertex data.",
+  "buildHash": "8e5d6662c427c0485e9a57bf15958d044061b64797d5f609fd0aa89f62127986",
+  "checkedAt": "2026-09-24T06:07:57.004Z",
+  "scope": "Give branching coral fuller, rounded distal shoulders and a gradual pale growth margin while preserving recessed axial cups and attached radial corallites.",
   "geometryChecks": [
-    "Canonical coral fixture 93820 triangles / 3216128 bytes; every original branch and cup retained",
-    "Opaque face permutation preserves the complete oriented face multiset and byte-identical position/normal/color/UV/custom tissue attributes",
-    "Transparent, grouped and partial draws skipped",
-    "Anemone 32-entry LRU vertex-cache misses fall from 533787 to 418514 in the fixture; this is a locality proxy, not measured GPU invocations",
-    "Front, oblique and macro fixture framebuffer comparisons have zero changed channels",
-    "All fish navigation, breathing, feeding, geometry, substrate and anemone contact checks pass"
+    "Canonical fixture 93820 triangles / 3216128 bytes, up 2520 / 76104 from prior",
+    "Terminal skin uses five axial sections; primary and secondary branches unchanged",
+    "Colony populations, root placements, random stream and every existing corallite retained",
+    "Radial cups follow actual widened mesh skin; attachment error below 1.5e-8",
+    "Finite meshes, smooth seams, rounded cup ends, supported roots and nondegenerate tissue checks pass",
+    "All fish navigation, substrate, breathing, anemone geometry and contact checks pass"
   ],
   "visualReview": [
-    "live baseline coral close-up versus fuller distal growth",
-    "compiled desktop/front/oblique/side/mobile/macro",
-    "clownfish/anemone time sequence",
-    "opaque submission before/after pixel comparisons",
-    "reef reference and planted reference/render"
+    "front",
+    "oblique",
+    "side",
+    "mobile",
+    "live baseline fingers-before-corals versus fingers-five-corals",
+    "compiled coral-closeup and outcrop-closeup",
+    "compiled anemone time sequence with swimming clownfish",
+    "reef reference photo",
+    "planted original and mature planted render"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
-  "publication": [
-    "jez237.com",
-    "GitHub"
-  ],
+  "publication": [],
   "performanceComparison": {
     "baseline": "c76097137",
-    "loadPrior": 7075.5,
-    "loadCurrent": 7140,
-    "fpsPrior": 133,
-    "fpsCurrent": 134,
+    "loadPrior": 6465.5,
+    "loadCurrent": 6634,
+    "fpsPrior": 150,
+    "fpsCurrent": 137.5,
     "priorTriangles": 17264616,
     "currentTriangles": 17642376,
-    "interpretation": "Alternating serial Chrome runs at 1440x854 canvas, compared with accepted c76097137. Includes fuller coral geometry and the new opaque face order. Host timing varies; results support comparable throughput, not a universal speed gain. No simplification, texture reduction, animation throttling or lower reflection resolution."
-  }
+    "interpretation": "Alternating serial local Chrome at 1440x854 canvas. Fuller distal branch skin adds one axial section to terminal branches, retaining every original branch and corallite. No new textures, material groups or per-frame work. Observations are local, not universal speed claims.",
+    "caveat": "Uncapped host timing is variable: final prior samples 135.1/144.1/170.9 FPS and current 137.6/143.8/130.9. Mean current throughput is 8.3% lower; first two adjacent pairs are comparable and the final pair differs substantially. Do not claim a speed gain or a precise cost from this run. All ordinary samples maintained 60 FPS; geometry increase is 2.19%. The six-section trial was rejected; five sections halve its added triangles without losing the reviewed rounded silhouette."
+  },
+  "status": "candidate: publication withheld pending performance review"
 }

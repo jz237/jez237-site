@@ -11,9 +11,10 @@ for(const g of all){assert.ok(g.index,'keep shared vertices');triangles+=g.index
 }
 const normal=plate.getAttribute('normal'),p=plate.getAttribute('position'),half=p.count/2;let up=0,down=0;
 for(let i=0;i<half;i++){up+=normal.getY(i);down+=normal.getY(i+half);}assert.ok(up/half>.65&&down/half<-.65,'plate surfaces face outwards');
-// Staggered radial cups add 526,288 bytes to the 2,599,454-byte fixture.
-// Keep all original branches, axial cups and plate detail; bound the added layer.
-assert.ok(bytes<3150000,'projecting radial cups stay inside reviewed memory budget');
+// Five axial sections resolve rounded distal shoulders instead of four.
+// The reviewed fixture adds76104 bytes and2520 triangles; all existing
+// branches, radial/axial cups and plate detail remain.
+assert.ok(bytes<3250000,'rounded distal shoulders and all original cups stay inside reviewed3.25MB budget');
 console.log('Stony coral geometry passed:',triangles,'triangles,',bytes,'bytes, outward plate tissue and smooth branch seams.');
 
 // A coral foot follows a slope without bridging a separate lower shelf.
@@ -48,7 +49,7 @@ assert.deepEqual(consumed(1),consumed(.5),'extra growth must not reshuffle later
 // Offset growth stays rooted inside an existing terminal, instead of floating.
 for(const {meshes} of forms){
  const shoots=meshes.filter(g=>g.name==='Offset terminal growth');assert.ok(shoots.length>10);
- const parents=meshes.filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===4);
+ const parents=meshes.filter(g=>g.type==='TubeGeometry'&&g.userData.branchOrder===2);
  for(const shoot of shoots){const root=shoot.parameters.path.getPointAt(0);assert.ok(parents.some(g=>{let best=Infinity;for(let i=0;i<=200;i++)best=Math.min(best,g.parameters.path.getPointAt(i/200).distanceTo(root));return best<g.parameters.radius*.2;}),'new growth begins inside a parent branch');}
 }
 

@@ -1,0 +1,7 @@
+import {chromium} from 'playwright';import fs from 'node:fs';import assert from 'node:assert/strict';
+const b=await chromium.launch({headless:true,channel:'chrome'});try{const p=await b.newPage({viewport:{width:1000,height:700}});const errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:5240/qa/draw-order-pixel.html');await p.waitForFunction(()=>window.proof,null,{timeout:120000});
+const results=[];for(const [name,position,target] of [['front',[0,2.5,7],[0,1,0]],['oblique',[4,3,6],[0,1,0]],['macro',[1,1.3,3],[1,.9,.4]]]){
+ await p.evaluate(({position,target})=>{const q=window.proof;q.restore();q.camera.position.set(...position);q.camera.lookAt(...target);q.render();q.before=q.read();},{position,target});await p.screenshot({path:'reef/qa/draw-order-'+name+'-before.png'});
+ const result=await p.evaluate(()=>{const q=window.proof,stats=q.optimize();q.render();const after=q.read();let changed=0,max=0,total=0;for(let i=0;i<after.length;i++){const d=Math.abs(after[i]-q.before[i]);if(d)changed++;max=Math.max(max,d);total+=d;}return {stats,changed,max,mean:total/after.length};});await p.screenshot({path:'reef/qa/draw-order-'+name+'-after.png'});results.push({name,...result});assert.ok(result.mean<.05&&result.max<=3,'opaque permutation must preserve the rendered tissue');}
+ assert.deepEqual(errors,[]);fs.writeFileSync('reef/qa/draw-order-rendered.json',JSON.stringify(results,null,2));console.log(results);
+}finally{await b.close();}
