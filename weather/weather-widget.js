@@ -695,18 +695,23 @@
     root.innerHTML = `
       <div class="weather-dashboard-card weather-condition-${condition}">
         <div class="weather-dashboard-top" id="weather-now">
-          <div>
-            <h2>${icon} ${label}</h2>
+          <div class="weather-now-main">
+            <div class="weather-title-row">
+              <h2>${icon} ${label}</h2>
+              <div class="weather-title-tools">
+                <form class="weather-location-form" id="weather-location-form">
+                  <label for="weather-zip-input">ZIP forecast</label>
+                  <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(place?.zip || '')}">
+                  <button type="submit" id="weather-update-location">Update</button>
+                  <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
+                </form>
+                <div class="weather-refresh-row"><span id="weather-freshness"></span><button id="weather-refresh" type="button" data-weather-refresh>Refresh</button></div>
+              </div>
+            </div>
             <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
-            ${todaySummary ? `<p class="weather-day-summary"><strong>Today (${todayPeriod ? 'NWS' : 'Open-Meteo'}):</strong> ${escapeHtml(todaySummary)}</p>` : ''}
-            <div class="weather-refresh-row"><span id="weather-freshness"></span><button id="weather-refresh" type="button" data-weather-refresh>Refresh</button></div>
+            ${todaySummary ? `<p class="weather-day-summary weather-period-summary"><strong>Today (${todayPeriod ? 'NWS' : 'Open-Meteo'}):</strong> ${escapeHtml(todaySummary)}</p>` : ''}
+            ${tonightPeriod?.detailedForecast ? `<p class="weather-night-summary weather-period-summary"><strong>Tonight (National Weather Service):</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
             <p class="weather-detail-note">Refreshes every 10 minutes while this page is visible. Conditions valid ${fmtClock(current.time)} ${escapeHtml(zoneLabel)} · ${escapeHtml(source || 'Open-Meteo')}${bundle.forecastIssuedAt ? `<br>NWS forecast issued ${escapeHtml(new Date(bundle.forecastIssuedAt).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZone:TZ}))} ${escapeHtml(zoneLabel)}.` : ''}</p>
-            <form class="weather-location-form" id="weather-location-form">
-              <label for="weather-zip-input">ZIP forecast</label>
-              <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(place?.zip || '')}">
-              <button type="submit" id="weather-update-location">Update</button>
-              <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
-            </form>
           </div>
           <div class="weather-now-badge">
             <strong>${temp}°</strong>
@@ -777,8 +782,6 @@
           <iframe src="${escapeHtml(radarEmbedUrl(place))}" title="Weather map near ${escapeHtml(placeTitle)}" loading="lazy" allowfullscreen></iframe>
           <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Open ${mapLayer === 'temp' ? 'temperature' : mapLayer} on Windy ↗</a></p>
         </section>
-
-        ${tonightPeriod?.detailedForecast ? `<p class="weather-nws-summary"><strong>Tonight (National Weather Service):</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
 
         <div class="weather-air-detail">
           <span>Air quality outlook</span>
