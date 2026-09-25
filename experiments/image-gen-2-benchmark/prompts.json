@@ -16376,5 +16376,24 @@
       "imageSha256": "c576fce2e9ea2d0ef0cb1893d1c2f2b6df4ff2bb40beafa835adce3d8714ead6",
       "imageDHash": "3330283830389c9c"
     }
+  },
+  {
+    "id": "2026-09-25-intense-phobia-situation-entomophobia-the-roach-filled-util",
+    "title": "Entomophobia — The Roach-Filled Utility Hatch",
+    "tests": "Recognized entomophobia; different from this week’s submechanophobia and nyctophobia. Near-field insects, blocked retreat, repeated forms beyond crop; documentary-scale anatomy and practical light.; archive_slot=2026-09-25T17:20; concept=entomophobia-worker-cockroach-utility-hatch; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, fully photorealistic documentary photograph of an entomophobia situation, not an illustration, poster, or infographic. Put the camera at crouching worker height inside a narrow, damp basement service corridor, about a forearm's length from an open floor-level utility hatch. The viewer seems to be the worker: one ordinary work boot is trapped against the hatch rim, a gloved hand braces on rough concrete at the lower edge, and the only clear strip of floor behind that boot disappears under the advancing insects. Dozens of realistically sized cockroaches emerge from the dark opening, climb over its metal lip, crowd around the boot sole and glove, and continue across the narrow passage beyond the side edges of the frame. Make several nearest insects tack-sharp and anatomically credible: flattened oval bodies, six jointed legs, long antennae, varied adult and nymph sizes, no enlarged or monstrous specimens. Their repeated forms and antennae must occupy most of the picture; the source opening is close enough that the viewer cannot avoid them. Show three unmistakable pressure devices at once: invasive proximity to hand and boot, an obstructed retreat along the only walkway, and an apparently continuing stream out of the hatch and beyond the crop. A stained pipe and low concrete wall press in at both sides, with no spacious establishing view or reassuring exit. Light the scene only with a weak practical work light and a sickly but believable basement fluorescent, enough to read the insects and the tight geometry; wet concrete, rusted hatch hinge, small puddles, natural shadows and coherent scale. Use a restrained 28 mm documentary lens perspective, low shutter-like realism, detailed foreground with a modest falloff into the hatch, no stylized color grading, no fake fog, no exaggerated swarm effects. The immediate visual response should be a visceral reluctance to put a hand or foot anywhere, while remaining a situation that could genuinely be photographed. No injury, gore, monsters, fantasy, staged panic, labels, text, logo, watermark, or decorative graphic elements.",
+    "image": "images/2026-09-25-intense-phobia-situation-entomophobia-the-roach-filled-util.jpg",
+    "thumb": "thumbs/2026-09-25-intense-phobia-situation-entomophobia-the-roach-filled-util.webp",
+    "color": "#3e352e",
+    "date": "2026-09-25",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "entomophobia-worker-cockroach-utility-hatch",
+      "imageSha256": "631900102c85008ea22dc3841c72307e0cb178e1f244e599bb8805222aa0f649",
+      "imageDHash": "f5d6dedc664d1c1a"
+    }
   }
 ]
