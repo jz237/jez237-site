@@ -16338,5 +16338,24 @@
       "imageSha256": "290ca0338d820dd115de30f6a76fcef483064491813f4e571282c2b38d8da84b",
       "imageDHash": "4f4b43ccccc48987"
     }
+  },
+  {
+    "id": "2026-09-25-intense-phobia-situation-submechanophobia-against-the-drown",
+    "title": "Submechanophobia — Against the Drowned Intake Gate",
+    "tests": "Recognized submechanophobia; unique reservoir intake gate setting; first-person proximity, compression, depth and low visibility.; archive_slot=2026-09-25T05:20; concept=submechanophobia-diver-reservoir-intake-gate; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1448x1086\", \"backendReportedSize\": \"1448x1086\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1448x1086\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, fully photorealistic documentary underwater photograph of a genuinely frightening submechanophobia encounter, as if made by a compact camera mounted just beside a professional inspection diver’s mask. The viewer is submerged at an inactive reservoir water-intake structure during a legitimate tethered inspection. At arm’s length on the right, an enormous, weathered steel trash rack and its bolted cross-members rise out of frame and descend into turbid green-black depth; the rack occupies most of the image. A massive concrete guide wall presses close on the left. The diver’s gloved hand grips a real corroded inspection rung in the immediate foreground, and a small portion of a correctly fitted regulator hose and mask edge establishes first-person bodily presence without blocking the scene. The remaining swimming clearance is scarcely wider than shoulders; the rack and wall converge ahead, and below the narrow ledge the lake floor vanishes into low-visibility darkness. A taut, plausible safety tether runs from the diver toward the rear but disappears around the wall rather than creating an easy visible exit. A dim dive lamp reveals realistic suspended silt, algae stains, mineral streaks, aged bolts, and an unnervingly long repetition of vertical bars fading into murk. Natural gray daylight filtered through several meters of water, with restrained lamp falloff; no theatrical beams or neon. The inactive gate is visibly shut and stationary: fear arises from being beside the immense submerged mechanism and from the compressed passage and depth, not an active suction hazard. Ordinary wide-angle underwater optics with credible refraction, coherent human scale, gravity and buoyancy; authentic dive equipment, no injury. Compose for an immediate bodily sense of being trapped beside a colossal drowned machine: dangerously close foreground metal, constricted route, downward abyss, obstructed retreat, severe visibility loss. No scenic lake panorama, no safe observer viewpoint, no adventure-tourism pose, no creatures, no supernatural features, no impossible machinery, no gore, no text, no labels, no logos, no watermark, no illustration or CGI aesthetic.",
+    "image": "images/2026-09-25-intense-phobia-situation-submechanophobia-against-the-drown.jpg",
+    "thumb": "thumbs/2026-09-25-intense-phobia-situation-submechanophobia-against-the-drown.webp",
+    "color": "#414138",
+    "date": "2026-09-25",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "submechanophobia-diver-reservoir-intake-gate",
+      "imageSha256": "250bfd1991f1db73f166784977031bcb9f41eab1071cf65b5c760ce0183ce048",
+      "imageDHash": "7a7a5a6270e2a426"
+    }
   }
 ]
