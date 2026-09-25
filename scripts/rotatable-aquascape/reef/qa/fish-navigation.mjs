@@ -4,6 +4,13 @@ source=source.replace("'./ReefIdentification.ts'",JSON.stringify(new URL('../Ree
 const {ReefFish}=await import('data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText).toString('base64'));
 
 const models=new Map();for(const s of ['tang','yellow','clown','anthias','chromis','gramma','goby']){const g=new T.Group(),mouth=new T.Group(),eyes=new T.Group();mouth.name='mouth';mouth.position.x=.43;eyes.name='eyes';g.add(mouth,eyes);models.set(s,g);}
+for(const species of ['clown','goby'])for(const direction of [-1,1]){
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),f=world.fish.find(f=>f.species===species);f.yaw=0;f.yawVelocity=0;
+ let peak=0,previousYaw=0,previousBend=0;
+ for(let i=0;i<180;i++){const error=Math.atan2(Math.sin(direction*2.3-f.yaw),Math.cos(direction*2.3-f.yaw));world.flexTurn(f,error,1/60,species==='clown'?2.65:1.65,species==='clown'?1.4:1.6);peak=Math.max(peak,Math.abs(f.turnBend.value));assert.ok(Math.abs(f.yaw-previousYaw)<.045);assert.ok(Math.abs(f.turnBend.value-previousBend)<.24);if(i<30)assert.ok(direction*f.turnBend.value<0,'tail tangent trails the turning head');previousYaw=f.yaw;previousBend=f.turnBend.value;}
+ assert.ok(peak>1,'both species have a visible trunk curve, not a rigid yaw');assert.ok(Math.abs(f.yaw-direction*2.3)<.04);assert.ok(Math.abs(f.turnBend.value)<.09,'curve relaxes after the turn');
+}
+console.log('Clown/mandarin turns: bidirectional curvature, smooth heading and relaxed straightening passed.');
 const obstacles=[];for(const x of [-1.5,1.5])for(const y of [1,2,3])obstacles.push({center:new T.Vector3(x,y,0),radius:.65});
 for(const x of [-.75,0,.75])obstacles.push({center:new T.Vector3(x,1,-1.05),radius:.52});
 for(const seedValue of [913,411,729]){

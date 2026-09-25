@@ -1,0 +1,158 @@
+{
+  "baseline": "7232868dd",
+  "performance": [
+    {
+      "mode": "prior",
+      "readyMs": 8979,
+      "taskSeconds": 3.733554,
+      "fps": 59.99400059993998,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    },
+    {
+      "mode": "current",
+      "readyMs": 8724,
+      "taskSeconds": 3.6807700000000008,
+      "fps": 59.99400059993998,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    }
+  ],
+  "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Small local regression check, no low-end hardware claim.",
+  "motion": {
+    "clown": [
+      {
+        "yaw": 0,
+        "curve": 0,
+        "speed": 0,
+        "position": [
+          0,
+          3,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.33625247941231096,
+        "curve": -1.1912330047674737,
+        "speed": 0.17135909182795775,
+        "position": [
+          0.02947404463032933,
+          3,
+          1.1971586658779185
+        ]
+      },
+      {
+        "yaw": 0.9259568178955518,
+        "curve": -1.3779961205883815,
+        "speed": 0.18089930322164147,
+        "position": [
+          0.07052798691943465,
+          3,
+          1.1791973800528535
+        ]
+      },
+      {
+        "yaw": 1.572213910283207,
+        "curve": -1.397680808172663,
+        "speed": 0.2634615018422576,
+        "position": [
+          0.09638129596074856,
+          3,
+          1.1393091017124046
+        ]
+      },
+      {
+        "yaw": 2.209393612616074,
+        "curve": -1.2945204347039108,
+        "speed": 0.6734761925834503,
+        "position": [
+          0.07575102047707793,
+          3,
+          1.0237663435889914
+        ]
+      },
+      {
+        "yaw": 2.6510648197051605,
+        "curve": -0.7523199008303518,
+        "speed": 1.002659188339979,
+        "position": [
+          -0.06267173976358688,
+          3,
+          0.8614205407072535
+        ]
+      }
+    ],
+    "goby": [
+      {
+        "yaw": 0,
+        "curve": 0,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.20936475133219365,
+        "curve": -1.2178129738955126,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.5765391507651548,
+        "curve": -1.4894816031020142,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.8974419018767794,
+        "curve": -1.1437641595586256,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.8974419018767794,
+        "curve": -0.25516404635965895,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      },
+      {
+        "yaw": 0.8974419018767794,
+        "curve": -0.056930132327016096,
+        "speed": 0,
+        "position": [
+          0,
+          0.4,
+          1.2
+        ]
+      }
+    ]
+  },
+  "motionMethod": "Six actual rendered poses per species at250ms simulation intervals, normal fish update drives a controlled turn. Scene/camera isolation exists only in local routed QA. Inspected .qa-results/flex-clown-sequence.png and flex-goby-sequence.png.",
+  "validation": "Arc centerline length and cross-section thickness preserved; head pinned; normals verified against finite differences; both signed turns smooth and relax; full reef browser/behavior suite passes."
+}

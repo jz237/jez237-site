@@ -19,4 +19,12 @@ export function finField(profile:Profile,x:number,y:number,z:number,pectoral=fal
  const h=.0001,f=finFreedom(profile,x,y,z,pectoral);
  return [f,(finFreedom(profile,x+h,y,z,pectoral)-finFreedom(profile,x-h,y,z,pectoral))/(2*h),(finFreedom(profile,x,y+h,z,pectoral)-finFreedom(profile,x,y-h,z,pectoral))/(2*h),(finFreedom(profile,x,y,z+h,pectoral)-finFreedom(profile,x,y,z-h,pectoral))/(2*h)];
 }
-export function bodyBend(x:number,time:number,effort:number,gain=1,turn=0){const rear=Math.max(0,Math.min(1,(.3-x)/.9));return rear*rear*(Math.sin(time*7.5-x*7)*(.018+effort*.075)*gain+turn);}
+/** A head-pinned circular spine; signed curvature controls the trailing trunk.
+ * Carry cross-sections around the spine instead of stretching them sideways. */
+export function turnFrame(x:number,z:number,curvature:number){
+ const distance=Math.max(0,.18-x),angle=distance*curvature;
+ if(Math.abs(curvature)<.0001||distance===0)return {x,z,angle:0};
+ const s=Math.sin(angle),c=Math.cos(angle);
+ return {x:.18-s/curvature+s*z,z:(1-c)/curvature+c*z,angle};
+}
+export function bodyBend(x:number,time:number,effort:number,gain=1,turn=0){const rear=Math.max(0,Math.min(1,(.3-x)/.9)),wave=rear*rear*Math.sin(time*7.5-x*7)*(.018+effort*.075)*gain;return turnFrame(x,wave,turn).z;}
