@@ -16357,5 +16357,24 @@
       "imageSha256": "250bfd1991f1db73f166784977031bcb9f41eab1071cf65b5c760ce0183ce048",
       "imageDHash": "7a7a5a6270e2a426"
     }
+  },
+  {
+    "id": "2026-09-25-intense-phobia-situation-nyctophobia-beyond-the-last-mine-l",
+    "title": "Nyctophobia — Beyond the Last Mine Lamp",
+    "tests": "; archive_slot=2026-09-25T11:20; concept=nyctophobia-miner-failing-lamp-narrow-drift; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a single fully photorealistic documentary first-person photograph of nyctophobia inside a narrow disused mine inspection drift at the instant the surveyor's helmet lamp is failing. The viewer is the surveyor, physically inside the darkness, not looking in from an entrance. A partial helmet brim along the top edge and a mud-streaked gloved hand braced against a wet timber support at arm's length establish human scale. The lamp's last weak, uneven amber-white glow catches splintered timber grain, damp stone, a few droplets and the edge of a taut safety line; it reaches less than a meter. Immediately ahead, the cramped tunnel narrows between supports and disappears abruptly into dense, visually dominant blackness beyond the light falloff. The walls and low ceiling press to the edges of the frame, with the hand almost touching both sides. Behind, only a tiny, partly occluded sliver of distant grey daylight is visible around a sharp bend, too remote to feel like an easy exit. High-ISO full-frame helmet-camera realism, roughly 24mm lens, natural perspective and coherent support geometry, gritty low-light noise, deep charcoal shadows with just enough detail to read the suffocating timber and rock, no theatrical colored lighting. Make the unlit void and close, inescapable surfaces fill most of the frame; immediate bodily dread of darkness must be legible without caption. Credible inspection helmet and glove, physically plausible mines, no extra people, no monster, no eyes in the dark, no paranormal effects, no injury or gore, no text, signs, logos, watermarks, or stock horror-poster treatment.",
+    "image": "images/2026-09-25-intense-phobia-situation-nyctophobia-beyond-the-last-mine-l.jpg",
+    "thumb": "thumbs/2026-09-25-intense-phobia-situation-nyctophobia-beyond-the-last-mine-l.webp",
+    "color": "#1d160e",
+    "date": "2026-09-25",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "nyctophobia-miner-failing-lamp-narrow-drift",
+      "imageSha256": "c576fce2e9ea2d0ef0cb1893d1c2f2b6df4ff2bb40beafa835adce3d8714ead6",
+      "imageDHash": "3330283830389c9c"
+    }
   }
 ]
