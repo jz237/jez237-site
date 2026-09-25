@@ -1,129 +1,129 @@
 {
-  "readyMs": 10668,
+  "readyMs": 7950,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99700014999244,
-      "time": 6.988400000047701,
-      "bites": 11,
-      "remaining": 34,
-      "anemones": {
-        "brushing": 8,
-        "maxBrush": 0.14231587207134472,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
       "fps": 59.99400059993998,
-      "time": 11.005500000047684,
-      "bites": 26,
-      "remaining": 19,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0000013578978346467896,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 15.039200000047646,
-      "bites": 34,
-      "remaining": 10,
+      "time": 6.920600000190759,
+      "bites": 13,
+      "remaining": 32,
       "anemones": {
         "brushing": 5,
-        "maxBrush": 0.10981676584194314,
-        "captured": 1,
+        "maxBrush": 0.10046192440403219,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 1,
+        "carried": 0,
         "fold": [
           0,
-          0.2,
+          0,
           0
         ]
       }
     },
     {
       "fps": 59.99700014999255,
-      "time": 19.072800000047586,
-      "bites": 38,
-      "remaining": 6,
+      "time": 10.937600000190729,
+      "bites": 29,
+      "remaining": 15,
       "anemones": {
-        "brushing": 8,
-        "maxBrush": 0.10950343418433288,
+        "brushing": 0,
+        "maxBrush": 5.823010307318306e-7,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
+          0.001645177458252719,
           0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 14.95470000019067,
+      "bites": 36,
+      "remaining": 7,
+      "anemones": {
+        "brushing": 0,
+        "maxBrush": 0.0028155689805332918,
+        "captured": 2,
+        "swallowed": 0,
+        "carried": 2,
+        "fold": [
+          0.2,
           0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.985003749062734,
-      "time": 23.09010000004746,
-      "bites": 38,
-      "remaining": 6,
+      "fps": 59.99400059993998,
+      "time": 18.95500000019058,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
-        "brushing": 6,
-        "maxBrush": 0.10907993777005788,
-        "captured": 1,
+        "brushing": 0,
+        "maxBrush": 0.0010432422551481938,
+        "captured": 2,
         "swallowed": 1,
-        "carried": 0,
+        "carried": 1,
         "fold": [
-          0,
-          0.1952573910950068,
+          0.2,
+          0.2,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999255,
-      "time": 27.106800000047325,
-      "bites": 38,
+      "fps": 59.99700014999244,
+      "time": 22.98870000019054,
+      "bites": 37,
       "remaining": 6,
       "anemones": {
-        "brushing": 8,
-        "maxBrush": 0.07399848117422306,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 3,
+        "maxBrush": 0.011196285078710014,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.13568617527452562,
+          0.1869124518687462,
+          0.19525953384127054,
           0
         ]
       }
     },
     {
       "fps": 59.994000599940094,
-      "time": 31.123900000047197,
-      "bites": 38,
+      "time": 27.005700000190398,
+      "bites": 37,
       "remaining": 6,
       "anemones": {
-        "brushing": 4,
-        "maxBrush": 0.0660079727602131,
-        "captured": 1,
-        "swallowed": 1,
+        "brushing": 5,
+        "maxBrush": 0.03770690060647353,
+        "captured": 2,
+        "swallowed": 2,
         "carried": 0,
         "fold": [
-          0,
-          0.05213652336640913,
+          0.11703861272577153,
+          0.135686175274525,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 31.022700000190245,
+      "bites": 37,
+      "remaining": 6,
+      "anemones": {
+        "brushing": 6,
+        "maxBrush": 0.05588179247820066,
+        "captured": 2,
+        "swallowed": 2,
+        "carried": 0,
+        "fold": [
+          0.03589383446145196,
+          0.05213843117631911,
           0
         ]
       }
@@ -136,11 +136,11 @@
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 6
+      "ms": 5
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 4
+      "ms": 3
     }
   ],
   "checks": {
@@ -396,8 +396,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-Dso6CbUr.js",
     "assets/index-LOI2O7QL.css",
+    "assets/index-oSTmJ4f7.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,172 +414,175 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "67d9e3a80dea95c9c9169941c3a9ce1df7fece4641a94cd5607c410879fbbb28",
-  "checkedAt": "2026-09-24T21:16:14.248Z",
-  "scope": "Preserve fin back/front rendering with stable material passes to avoid repeated per-draw program setup",
+  "buildHash": "e20241b689a32d25f398ef35c066a4cb544e23cc713a31da4bf9bb8503f5eeee",
+  "checkedAt": "2026-09-25T00:07:25.858Z",
+  "scope": "Flexible clownfish and mandarin turning with a head-pinned curved spine and filtered heading",
   "visualReview": [
-    "Same-scene front, oblique, clown-fin and mandarin-fin comparisons: no visible pixel change; maximum summed RGB rounding difference1",
-    "Full reef desktop, oblique, mobile and anemone/clown animation sequence inspected"
+    "Inspected six-frame clownfish and mandarin turn sequences: trunk/tail visibly curve through turns and relax, fins follow the body",
+    "Inspected full front, oblique, mobile, close-up anemone/clown sequence; reef geometry unchanged"
   ],
   "plantedReleaseAndSyncPassed": true,
   "performanceComparison": {
-    "baseline": "3581d2e154f746f512d502c7ff7ebe88b38c0c50",
-    "method": "Four sequential local Chrome dev-build runs, native/stable/stable/native, 5-second warmup and 10-second samples, same seeded scene and full effects. No CPU throttling.",
-    "beforeMeanFrameCpuMs": 10.575621057135347,
-    "afterMeanFrameCpuMs": 8.737032445642397,
-    "beforeTaskSeconds": 6.5705105,
-    "afterTaskSeconds": 5.465625,
-    "runs": [
+    "baseline": "7232868dd",
+    "performance": [
       {
-        "mode": "native",
-        "readyMs": 9965,
-        "taskSeconds": 5.658419,
+        "mode": "prior",
+        "readyMs": 8979,
+        "taskSeconds": 3.733554,
         "fps": 59.99400059993998,
         "triangles": 18577724,
-        "fishPassStats": {},
-        "frames": 602,
-        "medianMs": 8.700000047683716,
-        "p95Ms": 13.799999952316284,
-        "meanMs": 9.10348836963755,
-        "measures": [
-          {
-            "name": "reef-construction",
-            "ms": 7104.200000047684
-          },
-          {
-            "name": "reef-draw-order",
-            "ms": 1057.2999999523163
-          },
-          {
-            "name": "reef-picking",
-            "ms": 280.90000009536743
-          }
-        ]
+        "fishPassStats": {
+          "meshes": 126,
+          "materials": 84,
+          "geometries": 42
+        }
       },
       {
-        "mode": "stable",
-        "readyMs": 9604,
-        "taskSeconds": 4.477271999999999,
-        "fps": 59.99100134979755,
+        "mode": "current",
+        "readyMs": 8724,
+        "taskSeconds": 3.6807700000000008,
+        "fps": 59.99400059993998,
         "triangles": 18577724,
         "fishPassStats": {
           "meshes": 126,
           "materials": 84,
           "geometries": 42
-        },
-        "frames": 601,
-        "medianMs": 7.099999904632568,
-        "p95Ms": 10.5,
-        "meanMs": 7.161064895337909,
-        "measures": [
-          {
-            "name": "reef-construction",
-            "ms": 6823
-          },
-          {
-            "name": "reef-draw-order",
-            "ms": 894.8999998569489
-          },
-          {
-            "name": "reef-picking",
-            "ms": 362.80000019073486
-          }
-        ]
-      },
-      {
-        "mode": "stable",
-        "readyMs": 11184,
-        "taskSeconds": 6.453978000000001,
-        "fps": 59.99100134979755,
-        "triangles": 18577724,
-        "fishPassStats": {
-          "meshes": 126,
-          "materials": 84,
-          "geometries": 42
-        },
-        "frames": 600,
-        "medianMs": 9.899999856948853,
-        "p95Ms": 15.399999856948853,
-        "meanMs": 10.312999995946884,
-        "measures": [
-          {
-            "name": "reef-construction",
-            "ms": 7968.799999952316
-          },
-          {
-            "name": "reef-draw-order",
-            "ms": 1379.2000000476837
-          },
-          {
-            "name": "reef-picking",
-            "ms": 313.59999990463257
-          }
-        ]
-      },
-      {
-        "mode": "native",
-        "readyMs": 11973,
-        "taskSeconds": 7.482602,
-        "fps": 59.99700014999255,
-        "triangles": 18577724,
-        "fishPassStats": {},
-        "frames": 601,
-        "medianMs": 11.899999856948853,
-        "p95Ms": 17.200000047683716,
-        "meanMs": 12.047753744633146,
-        "measures": [
-          {
-            "name": "reef-construction",
-            "ms": 8412.799999952316
-          },
-          {
-            "name": "reef-draw-order",
-            "ms": 1447.5
-          },
-          {
-            "name": "reef-picking",
-            "ms": 322.7000000476837
-          }
-        ]
+        }
       }
     ],
-    "pixels": [
-      {
-        "view": "front",
-        "mean": 0.000004929698216735254,
-        "changed": 0,
-        "max": 1
-      },
-      {
-        "view": "angle",
-        "mean": 0,
-        "changed": 0,
-        "max": 0
-      },
-      {
-        "view": "fin",
-        "mean": 2.1433470507544582e-7,
-        "changed": 0,
-        "max": 1
-      },
-      {
-        "view": "goby",
-        "mean": 0.00000257201646090535,
-        "changed": 0,
-        "max": 1
-      },
-      {
-        "view": "mobile",
-        "mean": 0,
-        "changed": 0,
-        "max": 0
-      }
-    ],
-    "limitations": "CPU headroom improvement; both versions reach about60FPS here. Host timing varies. No demonstrated low-end GPU or startup speed claim. Pixels compare native/stable passes on the same paused scene; mobile pixel study isolates the mandarin, with full-scene mobile independently reviewed in check:reef."
+    "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Small local regression check, no low-end hardware claim.",
+    "motion": {
+      "clown": [
+        {
+          "yaw": 0,
+          "curve": 0,
+          "speed": 0,
+          "position": [
+            0,
+            3,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.33625247941231096,
+          "curve": -1.1912330047674737,
+          "speed": 0.17135909182795775,
+          "position": [
+            0.02947404463032933,
+            3,
+            1.1971586658779185
+          ]
+        },
+        {
+          "yaw": 0.9259568178955518,
+          "curve": -1.3779961205883815,
+          "speed": 0.18089930322164147,
+          "position": [
+            0.07052798691943465,
+            3,
+            1.1791973800528535
+          ]
+        },
+        {
+          "yaw": 1.572213910283207,
+          "curve": -1.397680808172663,
+          "speed": 0.2634615018422576,
+          "position": [
+            0.09638129596074856,
+            3,
+            1.1393091017124046
+          ]
+        },
+        {
+          "yaw": 2.209393612616074,
+          "curve": -1.2945204347039108,
+          "speed": 0.6734761925834503,
+          "position": [
+            0.07575102047707793,
+            3,
+            1.0237663435889914
+          ]
+        },
+        {
+          "yaw": 2.6510648197051605,
+          "curve": -0.7523199008303518,
+          "speed": 1.002659188339979,
+          "position": [
+            -0.06267173976358688,
+            3,
+            0.8614205407072535
+          ]
+        }
+      ],
+      "goby": [
+        {
+          "yaw": 0,
+          "curve": 0,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.20936475133219365,
+          "curve": -1.2178129738955126,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.5765391507651548,
+          "curve": -1.4894816031020142,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.8974419018767794,
+          "curve": -1.1437641595586256,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.8974419018767794,
+          "curve": -0.25516404635965895,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        },
+        {
+          "yaw": 0.8974419018767794,
+          "curve": -0.056930132327016096,
+          "speed": 0,
+          "position": [
+            0,
+            0.4,
+            1.2
+          ]
+        }
+      ]
+    },
+    "motionMethod": "Six actual rendered poses per species at250ms simulation intervals, normal fish update drives a controlled turn. Scene/camera isolation exists only in local routed QA. Inspected .qa-results/flex-clown-sequence.png and flex-goby-sequence.png.",
+    "validation": "Arc centerline length and cross-section thickness preserved; head pinned; normals verified against finite differences; both signed turns smooth and relax; full reef browser/behavior suite passes."
   },
   "publication": [
     "Hidden Reef Cloudflare Pages",
     "GitHub"
   ],
-  "deploymentLimitation": "jez237-site deployment list returned authentication error10000 for current login; separate jez237 production not updated by this release"
+  "deploymentLimitation": "Separate jez237 Pages authentication unavailable under current login; do not claim domains synchronized."
 }

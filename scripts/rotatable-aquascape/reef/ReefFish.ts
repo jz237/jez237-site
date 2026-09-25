@@ -2,7 +2,7 @@ import {foodNote} from './ReefIdentification.ts';
 import * as T from 'three';
 import {sandHeight} from './ReefOptics.ts';
 import metadata from './assets/fish/model-info.json';
-import {bodyBend} from './MarineFinFlex.ts';
+import {bodyBend,turnFrame} from './MarineFinFlex.ts';
 import {type MarineSpecies} from './MarineModels.ts';
 import {type Obstacle} from './ReefScene.ts';
 
@@ -11,7 +11,7 @@ const names:Record<Species,string>={tang:'Blue tang',yellow:'Yellow tang',clown:
 const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',yellow:'Watch the yellow tang cruise around the islands and pause near the rock. Tangs graze as well as take food from the water. Its paired fins work independently while the tail supplies extra thrust.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These orange fish use the open water above the reef. Individuals keep changing position within their loose group, making short feeding trips and then returning toward shelter.',chromis:'The blue-green fish loosely associate above the reef. They keep individual spacing and change speed instead of swimming in a perfectly synchronized formation.',goby:'Synchiropus splendidus hovers close to reef rubble with fluttering pectoral fins, rests on its broad lower fins, and pecks at tiny crustaceans. Short moves and flexible turns interrupt its pauses. It is a dragonet, often called a mandarin goby; it does not sift mouthfuls of sand. The tiny food items here illustrate prey capture, not a living copepod population.',gramma:'This purple-and-yellow inhabitant keeps closer to the reef and its shelter. Watch for exploratory trips around the lower openings and retreating turns.'};
 const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
-type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};waveGain:{value:number};turnBend:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number;clearance:number;home:T.Vector3;gobyCycle:number;pecks:number};
+type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;yawVelocity:number;pitch:number;clock:{value:number};effort:{value:number};waveGain:{value:number};turnBend:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number;clearance:number;home:T.Vector3;gobyCycle:number;pecks:number};
 export type Food={position:T.Vector3;alive:boolean;age:number;sinkRate?:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private seed=Math.random()*100;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
@@ -40,7 +40,7 @@ export class ReefFish{
       const isBody=o.name==='body',isPectoral=Boolean(o.userData.pectoral);mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.uniforms.waveGain=waveGain;shader.uniforms.turnBend=turnBend;shader.uniforms.mouthOpening=mouthOpening;shader.uniforms.mouthY={value:metadata[s].mouth[1]};shader.uniforms.jawRadius={value:(metadata[s].upper.at(-1)![1]-metadata[s].lower.at(-1)![1])*1.2};shader.vertexShader='uniform float swimTime,swimEffort,waveGain,turnBend,mouthOpening,mouthY,jawRadius;\n'+(isBody?'':'attribute float finFlex; attribute vec3 finGradient;\n')+shader.vertexShader;
        shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
         float tail=clamp((.3-position.x)/.9,0.,1.),dTail=position.x>-.6&&position.x<.3?-1./.9:0.;
-        float slope=(2.*tail*dTail*sin(swimTime*7.5-position.x*7.)-7.*tail*tail*cos(swimTime*7.5-position.x*7.))*(.018+swimEffort*.075)*waveGain+2.*tail*dTail*turnBend;
+        float slope=(2.*tail*dTail*sin(swimTime*7.5-position.x*7.)-7.*tail*tail*cos(swimTime*7.5-position.x*7.))*(.018+swimEffort*.075)*waveGain;
         ${isPectoral?'slope=0.;':''}
         vec3 tissueSlope=vec3(slope,0.,0.);
         ${isBody?'':`float finPhase=swimTime*9.-position.x*8.,finAmplitude=.015+abs(position.y)*.11;
@@ -50,12 +50,17 @@ export class ReefFish{
         float jawY=position.y-mouthY,jawQ=jawY/jawRadius,jawFalloff=exp(-jawQ*jawQ);
         objectNormal.y/=1.+jawWeight*mouthOpening*jawFalloff*(1.-2.*jawQ*jawQ);
         objectNormal.x-=jawY*jawSlope*mouthOpening*jawFalloff*objectNormal.y;`:''}
-        objectNormal.z/=max(.25,1.+tissueSlope.z);objectNormal.xy-=tissueSlope.xy*objectNormal.z;objectNormal=normalize(objectNormal);`);
+        objectNormal.z/=max(.25,1.+tissueSlope.z);objectNormal.xy-=tissueSlope.xy*objectNormal.z;
+        ${(s==='clown'||s==='goby')&&!isPectoral?`float turnAngle=max(0.,.18-position.x)*turnBend;
+        float turnZ=position.z+tail*tail*sin(swimTime*7.5-position.x*7.)*(.018+swimEffort*.075)*waveGain${isBody?'':'+sin(finPhase)*finFlex*finAmplitude'};
+        if(position.x<.18&&abs(turnBend)>.0001){objectNormal.x/=max(.45,1.-turnBend*turnZ);objectNormal.xz=mat2(cos(turnAngle),-sin(turnAngle),sin(turnAngle),cos(turnAngle))*objectNormal.xz;}`:''}
+        objectNormal=normalize(objectNormal);`);
        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
         ${isBody?'transformed.y+=jawY*jawWeight*mouthOpening*jawFalloff;':''}
         float rear=clamp((.3-position.x)/.9,0.,1.);
-        ${isPectoral?'':'transformed.z+=rear*rear*(sin(swimTime*7.5-position.x*7.)*(.018+swimEffort*.075)*waveGain+turnBend);'}
+        ${isPectoral?'':'transformed.z+=rear*rear*sin(swimTime*7.5-position.x*7.)*(.018+swimEffort*.075)*waveGain;'}
         ${isBody?'':'transformed.z+=sin(swimTime*9.-position.x*8.)*finFlex*(.015+abs(position.y)*.11);'}
+        ${(s==='clown'||s==='goby')&&!isPectoral?`if(position.x<.18&&abs(turnBend)>.0001){float turnSin=sin(turnAngle),turnCos=cos(turnAngle),crossZ=transformed.z;transformed.x=.18-turnSin/turnBend+turnSin*crossZ;transformed.z=(1.-turnCos)/turnBend+turnCos*crossZ;}`:''}
        `);
        // Interior tissue receives little direct light through the small aperture.
        // Vertex depth also masks specular light; diffuse vertex color alone does not.
@@ -64,12 +69,12 @@ export class ReefFish{
         reflectedLight.directSpecular*=oralExposure;
         reflectedLight.indirectSpecular*=oralExposure;
        `);
-      };mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-localized-respiration-flex-v6`;
+      };mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-${s==='clown'||s==='goby'?'curved':'straight'}-localized-respiration-flex-v7`;
      }
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
     let position=this.destination(s,i);const radius=size*(s==='goby'?.87:s==='tang'||s==='yellow'?.4:.31),clearance=s==='goby'?size*.20:radius;for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
-    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0};group.position.copy(position);this.fish.push(fish);
+    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,yawVelocity:0,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0};group.position.copy(position);this.fish.push(fish);
    }
   }
  }
@@ -173,7 +178,8 @@ export class ReefFish{
    // Summing dozens of overlapping rock/coral proxies used to overpower the
    // route and trap a tang between opposing forces. Bound the combined force.
    desired.add(avoidance.clampLength(0,f.species==='clown'?.28:.65));
-   const wantedYaw=Math.atan2(-desired.z,desired.x),turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));const turnRate=f.species==='clown'?3.7:1.55;f.yaw+=T.MathUtils.clamp(turn,-dt*turnRate,dt*turnRate);
+   const wantedYaw=desired.lengthSq()>.00001?Math.atan2(-desired.z,desired.x):f.yaw,turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));
+   if(f.species==='clown')this.flexTurn(f,turn,dt,2.65,1.4);else f.yaw+=T.MathUtils.clamp(turn,-dt*1.55,dt*1.55);
    const pitch=T.MathUtils.clamp(Math.atan2(desired.y,Math.hypot(desired.x,desired.z)),-.28,.28);f.pitch=T.MathUtils.damp(f.pitch,pitch,2.5,dt);
    speed*=Math.max(.17,Math.cos(turn));const forward=v(Math.cos(f.yaw)*Math.cos(f.pitch),Math.sin(f.pitch),-Math.sin(f.yaw)*Math.cos(f.pitch));f.velocity.lerp(forward.multiplyScalar(speed),1-Math.exp(-dt*(f.species==='clown'?7:3)));
    const next=f.position.clone().addScaledVector(f.velocity,dt);
@@ -184,7 +190,8 @@ export class ReefFish{
     if(f.blockedTime>.65&&now>f.recoverUntil){f.recoverUntil=now+3;this.planSwim(f,i,true);f.blockedTime=0;}
    }
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.52+f.velocity.length()*1.65);f.effort.value=T.MathUtils.damp(f.effort.value,f.velocity.length(),5,dt);
-   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value);p.rotation.y=Math.sign(p.userData.restZ)*(.24+.20*Math.sin(now*(7+f.effort.value*5)+f.phase+j));p.rotation.x=Math.cos(now*6+f.phase+j)*.055;}
+   if(f.species==='clown')f.waveGain.value=T.MathUtils.damp(f.waveGain.value,1.15+.25*Math.min(1,f.velocity.length()),5,dt);
+   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j],angle=this.attachFin(f,p);p.rotation.y=angle+Math.sign(p.userData.restZ)*(.24+.20*Math.sin(now*(7+f.effort.value*5)+f.phase+j));p.rotation.x=Math.cos(now*6+f.phase+j)*.055;}
    // Activity modulates breathing smoothly, independent of tail-beat speed.
    // The mouth pumps first and the operculum follows; these are illustrative
    // species rhythms, not a water-quality or clinical respiration model.
@@ -250,12 +257,13 @@ export class ReefFish{
    if(t>1.0){f.mode='resting';f.gobyCycle=now;}
   }
   const turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));
-  const yawStep=T.MathUtils.clamp(turn,-dt*1.8,dt*1.8);f.yaw+=yawStep;f.pitch=T.MathUtils.damp(f.pitch,wantedPitch,6,dt);
+  this.flexTurn(f,turn,dt,1.65,1.6);f.pitch=T.MathUtils.damp(f.pitch,wantedPitch,6,dt);
   speed*=Math.max(0,Math.cos(turn));const forward=v(Math.cos(f.yaw)*speed,0,-Math.sin(f.yaw)*speed);f.velocity.lerp(forward,1-Math.exp(-dt*7));
   const next=f.position.clone().addScaledVector(f.velocity,dt);
   let bed=sandHeight(next.x,next.z);
   for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23]){
-   const x=next.x+(Math.cos(f.yaw)*along+Math.sin(f.yaw)*side)*size,z=next.z+(-Math.sin(f.yaw)*along+Math.cos(f.yaw)*side)*size;
+   const bent=turnFrame(along,side+bodyBend(along,f.clock.value,f.effort.value,f.waveGain.value),f.turnBend.value);
+   const x=next.x+(Math.cos(f.yaw)*bent.x+Math.sin(f.yaw)*bent.z)*size,z=next.z+(-Math.sin(f.yaw)*bent.x+Math.cos(f.yaw)*bent.z)*size;
    // The raised tail and nose do not need the full belly clearance. Applying
    // one height to the entire footprint made rests hover above nearby dunes.
    const raisedEnd=Math.max(0,Math.abs(along)-.25)*size*.19;
@@ -269,10 +277,9 @@ export class ReefFish{
   // Pectorals supply ordinary hovering thrust; the flexible rear body adds a
   // stronger stroke during acceleration/escape, then relaxes during the glide.
   f.waveGain.value=T.MathUtils.damp(f.waveGain.value,.15+Math.min(1,moving/.25)*(.7+stroke*.8)+(now<f.recoverUntil?1.2:0),6,dt);
-  f.turnBend.value=T.MathUtils.damp(f.turnBend.value,-yawStep/Math.max(dt,.001)*.068,5,dt);
   for(let j=0;j<f.pectoral.length;j++){
    const p=f.pectoral[j],side=Math.sign(p.userData.restZ),pelvic=p.userData.pelvic;
-   p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value,f.waveGain.value,f.turnBend.value);
+   const angle=this.attachFin(f,p);
    // Broad paired fins have independent clocks. Pectoral flutter continues
    // while hovering; pelvic fans spread to support rests and soften in motion.
    // Integrate frequency rather than multiplying elapsed time by current speed:
@@ -280,11 +287,26 @@ export class ReefFish{
    p.userData.flutterTime=(p.userData.flutterTime??f.phase+j*.87)+dt*(pelvic?2.4:14+moving*13+j*.31);
    const phase=p.userData.flutterTime,footMotion=Math.min(1,moving/.08);
    p.rotation.x=-side*(pelvic?.73+Math.min(1,moving/.2)*.3+.06*Math.sin(phase)*footMotion:.77+.19*Math.sin(phase));
-   p.rotation.y=side*(pelvic?.10+.09*Math.sin(phase+.8)*footMotion:.38+.26*Math.sin(phase+.6));
+   p.rotation.y=angle+side*(pelvic?.10+.09*Math.sin(phase+.8)*footMotion:.38+.26*Math.sin(phase+.6));
    p.rotation.z=pelvic?.04*Math.sin(phase)*footMotion:.07*Math.sin(phase+1.3);
   }
   f.respiration+=dt*Math.PI*2*(night?.72:.95);this.breathe(f,peck*.8+(target?.35:0));
   if(target){const mouth=f.mouth.position.clone().multiplyScalar(size).applyEuler(f.group.rotation).add(f.position);if(mouth.distanceTo(target.position)<.065){target.alive=false;this.eatCount++;f.pecks++;f.mode='resting';f.until=now+.65;f.goal.copy(f.position);}}
+ }
+ /** Curve first, then let the heading catch up. Filter angular velocity so a
+  * new nearby waypoint cannot flip a rigid animal in one abrupt motion. */
+ private flexTurn(f:Fish,error:number,dt:number,maxRate:number,maxCurve:number){
+  const wanted=T.MathUtils.clamp(error*3,-maxRate,maxRate);
+  f.yawVelocity=T.MathUtils.damp(f.yawVelocity,wanted,6,dt);
+  const step=T.MathUtils.clamp(f.yawVelocity*dt,-Math.abs(error),Math.abs(error));
+  f.yaw+=step;
+  // Tail tangent lags the new heading, instead of bending ahead of the head.
+  const curve=T.MathUtils.clamp(-(wanted*.65+f.yawVelocity*.35)*(f.species==='goby'?.95:.58),-maxCurve,maxCurve);
+  f.turnBend.value=T.MathUtils.damp(f.turnBend.value,curve,9,dt);
+ }
+ private attachFin(f:Fish,p:T.Group){
+  const x=p.userData.restX??(p.userData.restX=p.position.x),wave=bodyBend(x,f.clock.value,f.effort.value,f.waveGain.value);
+  const bent=turnFrame(x,p.userData.restZ+wave,f.turnBend.value);p.position.x=bent.x;p.position.z=bent.z;return bent.angle;
  }
  private breathe(f:Fish,bite=0){
   const inhale=.5+.5*Math.sin(f.respiration),outflow=.5+.5*Math.sin(f.respiration-.95);
