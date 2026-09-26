@@ -13,6 +13,7 @@
     { href: ROOT + '/experiments/image-gen-2-benchmark/', label: 'GPT Image 2', sections: ['experiments/image-gen-2-benchmark'] },
     { href: ROOT + '/ai-news/', label: 'AI News', sections: ['ai-news'] },
     { href: ROOT + '/computer-generated-sounds/', label: 'Music', sections: ['computer-generated-sounds', 'ai-sounds', 'experiments/sid-player', 'experiments/amiga-mod-player'] },
+    { href: ROOT + '/multimedia/', label: 'Multimedia', sections: ['multimedia'] },
     { href: ROOT + '/computer-chronicle/', label: 'Chronicle', sections: ['computer-chronicle'] },
     { href: ROOT + '/photos/', label: 'Photos', sections: ['photos', 'plants/past-years'] },
     { href: ROOT + '/games/', label: 'Arcade', sections: ['games'] },
