@@ -836,5 +836,24 @@
       "imageSha256": "cbef36531da0da5320f7cfbd88db033f8ba7ee3b35f3fff50951bd073d8ffb8a",
       "imageDHash": "5ad8c94f9d93b706"
     }
+  },
+  {
+    "id": "2026-09-26-ocean-exploration-hadal-lantern-benthic-lander-on-the-trenc",
+    "title": "Hadal Lantern — Benthic Lander on the Trench Floor",
+    "tests": "Distinct from the earlier polar-ice tethered ROV scene: autonomous stationary seafloor instrument, trench sediment, no surface ice or tethered vehicle. Fictional engineering; no identified real species or claimed dive site.; archive_slot=2026-09-26T08:08; concept=autonomous-benthic-lander-steep-trench-sediment; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a single finished, high-end photorealistic deep-ocean expedition photograph, not a card, infographic, concept sheet, illustration, or screenshot. The essential scene is a fictional autonomous benthic research lander in the first seconds after its three broad feet touch a steep, fine-sediment trench floor. Compose a low, wide three-quarter view from another submerged camera a few meters away: the lander occupies the right middle ground and is fully legible; the sloping abyssal plain falls away into nearly black negative space on the left. A small, believable pool of warm-white instrument light and one dim blue navigation indicator reveal tiny ripples, a soft crescent of fresh sediment plume around the downhill foot, and a narrow cone of suspended marine snow. Almost all surrounding water is cold, desaturated blue-black, with rapid color loss and limited range; no magical clear-water vista or sunbeams at this depth.\n\nDesign the fictional lander as credible pressure-tolerant oceanographic equipment: a compact open titanium-like frame with cross-bracing and rounded corners, three widely splayed load-bearing legs with broad mud pads, pressure-rated spherical housings and sealed cylindrical sensor modules, guarded downward-facing cameras and lamps, strain-relieved cable runs and wet-mate connectors, small acoustic transducer, clearly visible ballast/release assembly above the frame, and an enclosed buoyant recovery module; modest scratches, salt deposits, and machining marks. It is stationary, not a swimming robot; no exposed human, no scuba diver, no impossibly large windows, no propellers stirring the scene. Show realistic scale through the footpads, particulate, and a small centimeter-scale calibration marker on one leg, but no prominent labels or readable text. Keep components plausibly arranged and not overloaded with decorative machinery.\n\nThe visual story is quiet arrival and measurement at extreme depth: feet compress the silty slope, a local dusty plume drifts downslope, the camera optics and instruments face the seafloor, and the outer lights fade quickly into dark water. Use restrained documentary color grading, natural backscatter, crisp foreground engineering details with atmospheric softness in the distance, physically coherent shadows and falloff, credible geometry and material reflections. Unusual, cinematic, lonely, and scientifically grounded. No visible large animal, invented monster, fantasy architecture, wreck, logo, watermark, border, or typography.",
+    "image": "images/2026-09-26-ocean-exploration-hadal-lantern-benthic-lander-on-the-trenc.jpg",
+    "thumb": "thumbs/2026-09-26-ocean-exploration-hadal-lantern-benthic-lander-on-the-trenc.webp",
+    "color": "#191f23",
+    "date": "2026-09-26",
+    "batch": "Daily Prompt",
+    "slot": "ocean-exploration",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "autonomous-benthic-lander-steep-trench-sediment",
+      "imageSha256": "edc09dbe12ca183baceb93c6aa6cfbbe1debf973a29996756f800404b7b8297d",
+      "imageDHash": "3727270303070f37"
+    }
   }
 ]
