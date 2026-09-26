@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 26 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 24-30, 1984 — Lucasfilm Brings Movie-Scale Worlds to the Game Screen</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-09-24</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-24</guid>
+      <pubDate>Sat, 26 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Rescue on Fractalus and Ballblazer give Atari players two sharply different visions of computer play. September’s Electronic Games puts the first Lucasfilm–Atari games on its cover and asks whether filmmakers can make games worth playing. Its answer is emphatic: Rescue on Fractalus and Ballblazer bring the studio’s eye for spectacle to the Atari home-computer screen. The magazine describes a design group led by Stephen D. Arnold and Peter S. Langston, with David Fox guiding the rescue game. Also this week: Seven Cities of Gold Makes the Map the Adventure · Ultima III Packs a Whole Campaign into a Box · Educational Software Claims More of the Home Screen · The Modem Buyer Meets the Telephone Line.</description>
+    </item>
     <item>
       <title>Week of September 17-23, 1984 — Elite Opens a Galaxy of Trade and Combat on the BBC Micro</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-09-17</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-14</guid>
       <pubDate>Sun, 06 Sep 2026 12:00:00 GMT</pubDate>
       <description>A new device promises to bar unauthorized callers from computer systems reached over telephone lines. WASHINGTON — GTE Telenet introduced a device Tuesday, May 15, designed to lock unauthorized users out of computer systems reached through telephone lines. The announcement turns the fast-growing worry over modem intrusion into a commercial hardware market. Also this week: Atari Pledges a Sober XL Comeback · Lucasfilm Turns Its Cameras Toward Games · Sub-$100 Modems Call the Home Office.</description>
-    </item>
-    <item>
-      <title>Week of May 7-13, 1984 — Lucasfilm Brings the Force to Home Videogames</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-05-07</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-07</guid>
-      <pubDate>Sat, 05 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The film studio unveils Ballblazer and Rescue on Fractalus!, two Atari projects built around fresh technology and a cinematic sense of play. SAN RAFAEL, Calif. — Lucasfilm publicly entered the home videogame market May 8, unveiling the first two projects from a Games Group nurtured through its collaboration with Atari. The announcement puts one of cinema&apos;s most famous technical workshops behind software intended for Atari 8-bit computers and the 5200 console. Also this week: Pens and Tablets Challenge the Keyboard · Home Word Processing Drops Below $100 · Atari Searches for a New Mission.</description>
     </item>
   </channel>
 </rss>

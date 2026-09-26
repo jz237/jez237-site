@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-26",
+      "historicDate": "1984-09-24",
+      "displayDate": "Week of September 24-30, 1984",
+      "edition": "Issue 113 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: Lucasfilm’s first games claim the cover, while Prince moves to number one.",
+      "leadHeadline": "Lucasfilm Brings Movie-Scale Worlds to the Game Screen",
+      "storyHeadlines": [
+        "Seven Cities of Gold Makes the Map the Adventure",
+        "Ultima III Packs a Whole Campaign into a Box",
+        "Educational Software Claims More of the Home Screen",
+        "The Modem Buyer Meets the Telephone Line"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-24.png",
+      "thumb": "media/thumbs/1984-09-24.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-25",
       "historicDate": "1984-09-17",
       "displayDate": "Week of September 17-23, 1984",

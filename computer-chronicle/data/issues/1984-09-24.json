@@ -1,0 +1,372 @@
+{
+  "currentDate": "2026-09-26",
+  "historicDate": "1984-09-24",
+  "displayDate": "Week of September 24-30, 1984",
+  "edition": "Issue 113 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm late-September 1984 gaming newsprint",
+    "motifs": [
+      "Lucasfilm Games spaceship",
+      "Atari home computer",
+      "fractal landscape",
+      "1984 game boxes"
+    ],
+    "layout": "Dense 1980s weekly front page with brick-red and blue rules, halftone art, boxed charts and narrow columns"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "September 24-30, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner Lucasfilm Games lead with large halftone spaceship and Atari computer cues",
+    "secondaryRail": "Adventure games, learning software, modems, charts, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-09-24.png",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for September 24-30, 1984, led by Lucasfilm Games",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Lucasfilm takes the game makers’ desk this week, as September’s computer magazines put a new generation of play, exploration and learning under the lamp.",
+  "morningLine": "This week in 1984: Lucasfilm’s first games claim the cover, while Prince moves to number one.",
+  "lead": {
+    "headline": "Lucasfilm Brings Movie-Scale Worlds to the Game Screen",
+    "dek": "Rescue on Fractalus and Ballblazer give Atari players two sharply different visions of computer play.",
+    "body": [
+      "September’s Electronic Games puts the first Lucasfilm–Atari games on its cover and asks whether filmmakers can make games worth playing. Its answer is emphatic: Rescue on Fractalus and Ballblazer bring the studio’s eye for spectacle to the Atari home-computer screen. The magazine describes a design group led by Stephen D. Arnold and Peter S. Langston, with David Fox guiding the rescue game.",
+      "In Rescue on Fractalus, the pilot skims a hostile planet in search of stranded flyers. The instruments sit beneath a broad forward view; a rescued spaceman runs to the craft and knocks before the player opens the airlock. Such small actions, the designers tell Electronic Games, are meant to sustain the illusion of a mission rather than interrupt it with an abstract score chase.",
+      "The landscape is more than scenery. Lucasfilm’s team adapted fractal-geometry ideas so that mountains and valleys form a consistent terrain: fly between two peaks, turn around and the geography is still there. The effect gives a home-computer screen the scale of a place to explore, not merely a succession of painted backdrops.",
+      "Ballblazer takes the other route, turning futuristic sport into a swift, competitive contest. Together the titles make an unusually confident first pair for a new game label. The September article documents their contemporary reception; it should not be read as claiming that both games first reached every retail shelf during this particular week."
+    ],
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "same-month"
+  },
+  "stories": [
+    {
+      "headline": "Seven Cities of Gold Makes the Map the Adventure",
+      "body": [
+        "September’s COMPUTE! review finds Electronic Arts and Ozark Softscape sending players from Spain across an ocean whose dangers begin with provisions and navigation. In The Seven Cities of Gold, ships, crew and supplies have to be managed before an expedition can discover a shore.",
+        "The reviewer describes a game with more than 2,800 screens and a utility that can generate new continents. Trade, exploration and the decision to return home shape a voyage far more open-ended than a fixed arcade course. The Atari edition is listed at $39.95; the review says a Commodore 64 edition is coming soon."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Ultima III Packs a Whole Campaign into a Box",
+      "body": [
+        "COMPUTE! calls Exodus: Ultima III a fantasy role-playing standout in its September review. The Commodore 64 player forms a party of up to four characters, with professions, attributes and spell books to consider before setting out across Sosaria.",
+        "A cloth map, guides and magic books make the $59.95 package feel like a tabletop campaign transported to disk. The review praises the plot, color and sound while noting that repeated combat can slow the journey. It is a contemporary review, not a claim of a release this week."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Educational Software Claims More of the Home Screen",
+      "body": [
+        "A September COMPUTE! package is devoted to the educational-software boom, from advice on choosing a title to new trends in learning. The magazine’s prominent treatment is a sign that the home computer is being sold as a study tool as well as a game machine.",
+        "That promise still requires judgment at the counter. COMPUTE!’s companion pieces ask readers to examine how a program teaches, rather than trust an educational label on the carton. Its issue also includes the named learning programs The Tester and Missile Math."
+      ],
+      "sourceRefs": [
+        4,
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The Modem Buyer Meets the Telephone Line",
+      "body": [
+        "A reader in September’s COMPUTE! asks whether a modem needs a rotary phone or will work with Touch-Tone. The magazine replies that most modems work with both, and points to the Commodore 1650 as an auto-dial model that can emulate rotary dialing.",
+        "It is a small question with a large implication: going online is becoming an ordinary home-computer purchase, but compatibility between the computer, modem and telephone service is still part of the shopping list. The editors advise checking a dealer or manufacturer before buying."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Lucasfilm Games on Atari",
+      "summary": "Electronic Games examines Rescue on Fractalus and Ballblazer in its September 1984 issue.",
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Commodore 64 and Ultima III",
+      "summary": "A September COMPUTE! review surveys the Commodore 64 fantasy role-playing edition.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Rescue on Fractalus",
+      "detail": "Lucasfilm Games first-person planetary rescue game for Atari systems."
+    },
+    {
+      "name": "Ballblazer",
+      "detail": "Lucasfilm Games futuristic competitive sports game."
+    },
+    {
+      "name": "The Seven Cities of Gold",
+      "detail": "Ozark Softscape / Electronic Arts exploration game; Atari edition reviewed."
+    },
+    {
+      "name": "Exodus: Ultima III",
+      "detail": "Origin Systems fantasy role-playing game; Commodore 64 edition reviewed."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "Rescue on Fractalus — Lucasfilm Games",
+        "Ballblazer — Lucasfilm Games",
+        "The Seven Cities of Gold — Electronic Arts",
+        "Exodus: Ultima III — Origin Systems",
+        "Elite — Acornsoft"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Let’s Go Crazy — Prince and the Revolution",
+        "Missing You — John Waite",
+        "Drive — The Cars",
+        "She Bop — Cyndi Lauper",
+        "I Just Called to Say I Love You — Stevie Wonder"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "All of Me",
+        "The Wild Life",
+        "Irreconcilable Differences",
+        "The Evil That Men Do",
+        "Ghostbusters"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "The Seven Cities of Gold",
+      "price": "$39.95",
+      "note": "Price printed in September COMPUTE! review; Atari edition.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Exodus: Ultima III",
+      "price": "$59.95",
+      "note": "Price printed in September COMPUTE! review.",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Prince Takes the Top Single",
+      "summary": "“Let’s Go Crazy” leads the U.S. singles chart dated September 29.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "All of Me Holds the Weekend Screen",
+      "summary": "All of Me ranks first at the September 28–30 domestic box office.",
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Let's Go Crazy",
+      "artist": "Prince & The Revolution",
+      "chartDate": "1984-09-29",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Missing You",
+      "artist": "John Waite",
+      "chartDate": "1984-09-29",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Drive",
+      "artist": "The Cars",
+      "chartDate": "1984-09-29",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "She Bop",
+      "artist": "Cyndi Lauper",
+      "chartDate": "1984-09-29",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "I Just Called to Say I Love You",
+      "artist": "Stevie Wonder",
+      "chartDate": "1984-09-29",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Two New Worlds from Lucasfilm Games",
+    "summary": "Rescue on Fractalus sends pilots over an alien landscape; Ballblazer sends players into a futuristic sporting match.",
+    "tagline": "The screen is only the beginning."
+  },
+  "market": {
+    "headline": "The Game Box Promises a World, Not Just a Score",
+    "summary": "September coverage of Lucasfilm Games, Seven Cities of Gold and Ultima III shows software publishers selling simulated landscapes, exploration and longer adventures.",
+    "sourceRefs": [
+      0,
+      2,
+      3
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Reagan Offers a Softer Note Toward Moscow at the U.N.",
+    "summary": "In a September 24 United Nations address, President Reagan struck a more conciliatory tone toward the Soviet Union and spoke of reducing the danger of nuclear war.",
+    "sourceRefs": [
+      9,
+      10
+    ],
+    "confidence": "exact-date"
+  },
+  "bbsNote": {
+    "headline": "Choosing a Modem Before the First Call",
+    "summary": "September COMPUTE! readers are still sorting out the practicalities of linking a home computer to a phone line.",
+    "posts": [
+      {
+        "topic": "Rotary or Touch-Tone?",
+        "platform": "Home modem",
+        "text": "COMPUTE! says most modems can work with both phone systems; check the particular model before purchase."
+      },
+      {
+        "topic": "Commodore 1650",
+        "platform": "Commodore home computer",
+        "text": "The magazine identifies the Commodore 1650 auto-dial modem as a model that emulates rotary dialing."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "A Game World You Can Fly Back Through",
+    "summary": "Rescue on Fractalus keeps its alien mountains in consistent positions as the pilot turns around.",
+    "detail": "Electronic Games reports that Lucasfilm’s team adapted fractal-geometry work to create a coherent real-time planetary landscape on Atari hardware.",
+    "sourceUrls": [
+      "http://www.atarihq.com/othersec/library/lucasflm.html"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Lucasfilm coverage is from the September 1984 issue of Electronic Games; no exact-week retail-launch claim is made.",
+      "Seven Cities of Gold and Ultima III details and prices come from September COMPUTE! reviews.",
+      "Music is the September 29 chart; movies are the September 28–30 domestic weekend.",
+      "The U.N. address occurred September 24, 1984."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Electronic Games, September 1984: Lucasfilm Premiers First Two Games",
+      "url": "http://www.atarihq.com/othersec/library/lucasflm.html",
+      "date": "1984-09"
+    },
+    {
+      "title": "Electronic Games, September 1984 issue",
+      "url": "https://www.digitpress.com/library/magazines/electronic_games/electronic_games_sep84.pdf",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE!, September 1984: The Seven Cities of Gold",
+      "url": "https://www.atarimagazines.com/compute/issue52/323_1_REVIEWS_THE_SEVEN_CITIES_OF_GOLD.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE!, September 1984: Exodus: Ultima III",
+      "url": "https://www.atarimagazines.com/compute/issue52/320_1_REVIEWS_EXODUS_ULTIMA_III_FOR_COMMODORE_64.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE!, September 1984: Educational Software Explosion",
+      "url": "https://www.atarimagazines.com/compute/issue52/297_1_THE_EDUCATIONAL_SOFTWARE_EXPLOSION.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE!, September 1984: Buying the Right Modem",
+      "url": "https://www.atarimagazines.com/compute/issue52/287_2_READERS_FEEDBACK_BUYING_THE_RIGHT_MODEM.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE!, September 1984 issue index",
+      "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue52",
+      "date": "1984-09"
+    },
+    {
+      "title": "The Numbers, domestic weekend box office, September 28-30, 1984",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/09/28",
+      "date": "1984-09-30"
+    },
+    {
+      "title": "US Top 40 singles, week ending September 29, 1984",
+      "url": "https://top40weekly.com/2013/09/29/us-top-40-singles-for-the-week-ending-september-29-1984/",
+      "date": "1984-09-29"
+    },
+    {
+      "title": "Washington Post, Reagan addresses United Nations, September 24, 1984",
+      "url": "https://www.washingtonpost.com/archive/politics/1984/09/25/presidents-address-at-un-conciliatory-toward-soviets/837d5bf9-d6b8-4643-a1b9-18210617ed64/",
+      "date": "1984-09-25"
+    },
+    {
+      "title": "Ronald Reagan Presidential Foundation: United Nations address, September 24, 1984",
+      "url": "https://www.reaganfoundation.org/ronald-reagan/speeches/president-reagan-s-historic-address-to-the-united-nations-september-24-1984",
+      "date": "1984-09-24"
+    },
+    {
+      "title": "Popular Computing Weekly, September 27-October 3, 1984",
+      "url": "https://docslib.org/doc/4755927/popular-computing-weekly-1984-09-27",
+      "date": "1984-09-27"
+    }
+  ]
+}
