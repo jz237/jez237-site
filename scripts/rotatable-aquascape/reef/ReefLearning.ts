@@ -1,6 +1,7 @@
 import {ReefChemistryLab,reefReference,metricInfo,type ReefMetric,type LabAction} from './ReefChemistryLab.ts';
-type Mode='learn'|'explore'|'chemistry';
-type Actions={inspect:(subject:string)=>void;note:(subject:string)=>{title:string;description:string}|undefined;view:()=>void;feed:()=>void;light:(night:boolean)=>void;night:()=>boolean};
+import {reefTourStops} from './ReefTour.ts';
+type Mode='learn'|'explore'|'chemistry'|'tour';
+type Actions={inspect:(subject:string)=>void;note:(subject:string)=>{title:string;description:string}|undefined;view:()=>void;feed:()=>void;light:(night:boolean)=>void;night:()=>boolean;tour:(stop:number)=>void;cancelTour:()=>void};
 const subjects=[['clown','Clownfish'],['goby','Mandarin dragonet'],['tang','Blue tang'],['yellow','Yellow tang'],['anthias','Anthias'],['chromis','Blue-green chromis'],['gramma','Royal gramma'],['anemones','Host anemones'],['corals','Branching corals'],['plates','Plating corals'],['polyps','Colorful polyps'],['outcrops','Live-rock gardens'],['sand','Sand & rubble'],['water','Water surface']];
 const notes:Record<string,string>={anemones:'Tentacles move with the current and respond where a clownfish brushes them. The fish return to their host between short excursions.',corals:'Branching colonies create shelter and small spaces for water to pass. The living tissue covers a hard skeleton; each colony contains many polyps.',plates:'Thin, layered plates spread above the rock. Compare their margins and undersides from different angles.',polyps:'Look for individual oral discs and tentacle fringes growing across the rock. Coral polyps are animals.',outcrops:'The rock carries crusts, small corals and other attached life. Its porous surfaces also provide habitat for microbial communities.',sand:'Uneven banks, fine grains and scattered rubble create a varied bottom. The mandarin rests and searches close to this surface.',water:'Surface ripples reflect the reef and scatter the overhead light. In a real reef tank, surface movement also supports gas exchange.'};
 const sources=`<details class="reef-sources"><summary>Sources & model notes</summary><p>The lessons describe reef principles. The chemistry lab is a simplified mixing and mineral-use model, separate from the animated aquarium. It has no sensor readings, dosing calculation, complete nitrogen cycle or carbonate/pH solver.</p><ul><li><a href="https://oceanservice.noaa.gov/education/tutorial_corals/coral02_zooxanthellae.html" target="_blank" rel="noopener">NOAA · coral and algae partnership ↗</a></li><li><a href="https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep20-evaporation" target="_blank" rel="noopener">BRS · evaporation and freshwater top-off ↗</a></li><li><a href="https://www.bulkreefsupply.com/content/post/saltwater-aquarium-beginners-guide-episode-5" target="_blank" rel="noopener">BRS · reef water parameters ↗</a></li><li><a href="https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep19-calcium-and-alkalinity" target="_blank" rel="noopener">BRS · calcium and alkalinity ↗</a></li></ul><p>Example values are teaching starting points, not universal livestock targets. Test an actual aquarium and choose targets for its inhabitants.</p></details>`;
@@ -13,10 +14,10 @@ const lessons=[
 export function installReefLearning(actions:Actions){
  const app=document.querySelector<HTMLElement>('#app')!,tools=document.querySelector<HTMLElement>('.reef-tools')!;
  const panel=document.createElement('aside');panel.id='reef-learning';panel.hidden=true;panel.setAttribute('aria-labelledby','reef-panel-title');app.append(panel);
- const lab=new ReefChemistryLab();let mode:Mode='learn',lesson=0,subject='clown',metric:ReefMetric='salinity',opener:HTMLButtonElement|null=null;
+ const lab=new ReefChemistryLab();let mode:Mode='learn',lesson=0,tourStop=0,subject='clown',metric:ReefMetric='salinity',opener:HTMLButtonElement|null=null;
  const buttons=Array.from(tools.querySelectorAll<HTMLButtonElement>('button'));
- const close=(focus=true)=>{panel.hidden=true;app.classList.remove('reef-panel-open');for(const b of buttons)b.setAttribute('aria-expanded','false');if(focus)opener?.focus();};
- const reveal=(next:Mode,button:HTMLButtonElement)=>{if(!panel.hidden&&mode===next){close();return;}mode=next;opener=button;document.querySelector<HTMLElement>('#detail')!.hidden=true;panel.hidden=false;app.classList.add('reef-panel-open');for(const b of buttons)b.setAttribute('aria-expanded',String(b===button));render();panel.scrollTop=0;panel.querySelector<HTMLElement>('h2')!.focus({preventScroll:true});};
+ const close=(focus=true)=>{actions.cancelTour();panel.hidden=true;app.classList.remove('reef-panel-open');for(const b of buttons)b.setAttribute('aria-expanded','false');if(focus)opener?.focus();};
+ const reveal=(next:Mode,button:HTMLButtonElement)=>{if(!panel.hidden&&mode===next){close();return;}actions.cancelTour();mode=next;opener=button;document.querySelector<HTMLElement>('#detail')!.hidden=true;panel.hidden=false;app.classList.add('reef-panel-open');for(const b of buttons)b.setAttribute('aria-expanded',String(b===button));render();panel.scrollTop=0;panel.querySelector<HTMLElement>('h2')!.focus({preventScroll:true});};
  for(const b of buttons)b.onclick=()=>reveal(b.dataset.reefTool as Mode,b);
  const chart=()=>{
   const values=lab.history.map(x=>x.state[metric]),reference=reefReference[metric],info=metricInfo[metric],range=Math.max(...values,reference)-Math.min(...values,reference),pad=Math.max(range*.15,metric==='phosphate'?.005:metric==='alkalinity'?.1:metric==='nitrate'?.5:1),low=Math.max(0,Math.min(...values,reference)-pad),high=Math.max(...values,reference)+pad;
@@ -24,10 +25,14 @@ export function installReefLearning(actions:Actions){
   return `<figure class="reef-chart"><figcaption>${info.label} after each action · ${info.unit}</figcaption><svg viewBox="0 0 330 160" role="img" aria-label="${info.label} history. Exact values are in the table below."><path d="M36 20V132H312" fill="none" stroke="#42677d"/><path d="M36 ${y(reference)}H312" stroke="#8ba4b6" stroke-dasharray="4 4"/><polyline points="${values.map((v,i)=>`${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="#73eff0" stroke-width="2.5"/>${values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="#73eff0"/>`).join('')}<text x="4" y="23">${high.toFixed(info.digits)}</text><text x="4" y="135">${low.toFixed(info.digits)}</text><text x="36" y="153">Earlier</text><text x="270" y="153">Latest</text></svg><p class="reef-fine">Dashed line: starting value. Last 12 actions; vertical scale adapts.</p></figure><details><summary>History table</summary><table><thead><tr><th>Action</th><th>${info.label}</th><th>Volume</th></tr></thead><tbody>${lab.history.map(h=>`<tr><td>${h.label}</td><td>${h.state[metric].toFixed(info.digits)} ${info.unit}</td><td>${h.volume} L</td></tr>`).join('')}</tbody></table></details>`;
  };
  const render=()=>{
-  const title=mode==='learn'?'How the reef works':mode==='explore'?'Explore & identify':'Saltwater chemistry';
+  const title=mode==='tour'?'Guided reef tour':mode==='learn'?'How the reef works':mode==='explore'?'Explore & identify':'Saltwater chemistry';
   panel.innerHTML=`<div class="reef-panel-top"><span class="eyebrow">${mode==='chemistry'?'INTERACTIVE REEF LAB':'THE LIVING REEF'}</span><button data-close aria-label="Close reef guide">×</button></div><h2 id="reef-panel-title" tabindex="-1">${title}</h2><div class="reef-panel-body"></div>`;
   const body=panel.querySelector<HTMLElement>('.reef-panel-body')!;
-  if(mode==='learn'){
+  panel.classList.toggle('reef-tour-panel',mode==='tour');
+  if(mode==='tour'){
+   const stop=reefTourStops[tourStop];
+   body.innerHTML=`<p class="reef-tour-count" role="status">Stop ${tourStop+1} of ${reefTourStops.length}</p><div class="reef-tour-progress" aria-hidden="true">${reefTourStops.map((_,i)=>`<span class="${i<=tourStop?'visited':''}"></span>`).join('')}</div><h3 tabindex="-1" id="reef-tour-title">${stop.title}</h3><p>${stop.text}</p><div class="reef-pair reef-tour-navigation"><button data-tour="back" ${tourStop===0?'disabled':''}>← Back</button><button data-tour="${tourStop===reefTourStops.length-1?'finish':'next'}" class="reef-primary">${tourStop===reefTourStops.length-1?'Finish tour':'Next stop →'}</button></div><div class="reef-pair"><button data-tour="recenter">Recenter this stop</button><button data-tour="exit">End tour</button></div><p class="reef-fine">Take your time at each stop. Drag or zoom to explore; Next continues the tour. The animals keep their own routines.</p>`;
+  }else if(mode==='learn'){
    const l=lessons[lesson];body.innerHTML=`<div class="reef-lesson-tabs" role="group" aria-label="Choose a reef lesson">${lessons.map((x,i)=>`<button data-lesson="${i}" aria-pressed="${i===lesson}">${x.name}</button>`).join('')}</div><h3>${l.title}</h3><p>${l.text}</p>${l.body}<button data-inspect="${l.subject}" class="reef-primary">${l.action} ↗</button><div class="reef-pair reef-next"><button data-lesson="${(lesson+lessons.length-1)%lessons.length}">← Previous</button><button data-lesson="${(lesson+1)%lessons.length}">Next lesson →</button></div>${sources}`;
   }else if(mode==='explore'){
    const note=actions.note(subject),name=note?.title??subjects.find(x=>x[0]===subject)![1];
@@ -35,11 +40,25 @@ export function installReefLearning(actions:Actions){
   }else{
    body.innerHTML=`<p class="reef-lab-notice">Illustrative chemistry lab · separate from the animated aquarium. These are model values, not live water measurements.</p><p id="reef-lab-event" role="status">${lab.event}</p><div class="reef-readings" role="group" aria-label="Modeled saltwater readings">${(Object.keys(metricInfo) as ReefMetric[]).map(key=>`<button data-metric="${key}" aria-pressed="${metric===key}"><span>${metricInfo[key].label}</span><strong>${lab.state[key].toFixed(metricInfo[key].digits)} <small>${metricInfo[key].unit}</small></strong></button>`).join('')}</div><p>${metricInfo[metric].note}</p><p class="reef-fine">Water volume: <strong id="reef-lab-volume">${lab.volume} L</strong> / 100 L. Click a reading to plot it.</p>${chart()}<h3>What happens if…</h3><div class="reef-lab-actions"><button data-lab="evaporate" ${lab.volume<=80?'disabled':''}>Evaporate 2 L</button><button data-lab="freshwater" ${lab.volume>=100?'disabled':''}>Top off with RO/DI freshwater</button><button data-lab="saltwater" ${lab.volume>=100?'disabled':''}>Compare: saltwater top-off</button><button data-lab="uptake" ${lab.state.alkalinity<=0?'disabled':''}>One day of coral uptake</button><button data-lab="nutrients">Add a nutrient load</button><button data-lab="change">Change 20% with mixed saltwater</button><button data-reset>Reset the lab</button></div><h3>Stability before chasing numbers</h3><p>Salinity, alkalinity, calcium, magnesium and nutrients are related, but they are not interchangeable. pH and temperature need their own measurements; neither is calculated here. The lab isolates simple changes so you can see why they happen.</p>${sources}`;
   }
+  if(mode==='learn'||mode==='explore')body.insertAdjacentHTML('afterbegin','<div class="reef-tour-invite"><button data-tour="start" class="reef-primary">Start guided tour →</button><p class="reef-fine">Six living close-ups. Explore at your own pace.</p></div>');
   for(const b of Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-light]')))b.setAttribute('aria-pressed',String((b.dataset.light==='night')===actions.night()));
  };
  panel.addEventListener('click',event=>{
   const b=(event.target as HTMLElement).closest<HTMLButtonElement>('button');if(!b||b.disabled)return;
   if(b.hasAttribute('data-close')){close();return;}
+  if(b.dataset.tour){
+   const command=b.dataset.tour;
+   if(command==='finish'||command==='exit'){
+    actions.cancelTour();mode='explore';opener=buttons.find(button=>button.dataset.reefTool==='explore')!;
+    for(const button of buttons)button.setAttribute('aria-expanded',String(button===opener));
+    render();panel.scrollTop=0;panel.querySelector<HTMLButtonElement>('[data-tour="start"]')!.focus({preventScroll:true});
+    if(command==='finish')actions.tour(0);return;
+   }
+   if(command==='start'){tourStop=0;mode='tour';}
+   else if(command==='next')tourStop=Math.min(reefTourStops.length-1,tourStop+1);
+   else if(command==='back')tourStop=Math.max(0,tourStop-1);
+   render();panel.scrollTop=0;panel.querySelector<HTMLElement>('#reef-tour-title')!.focus({preventScroll:true});actions.tour(tourStop);return;
+  }
   if(b.dataset.inspect){actions.inspect(b.dataset.inspect);return;}
   if(b.dataset.scene){if(b.dataset.scene==='feed')actions.feed();else actions.view();return;}
   if(b.dataset.light){actions.light(b.dataset.light==='night');for(const button of Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-light]')))button.setAttribute('aria-pressed',String((button.dataset.light==='night')===actions.night()));return;}
