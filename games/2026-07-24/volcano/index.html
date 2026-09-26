@@ -94,7 +94,7 @@
   #actions button{border:1px solid #ffffff30;border-radius:6px;background:#0b1119c9;color:#e8ecf5;padding:11px 18px;cursor:pointer;backdrop-filter:blur(10px)}
   #actions button:first-child{border-color:#cb753b;background:#49230fca;color:#ffd5b4}
   #help{left:28px;bottom:25px;color:#c2c7cd;text-shadow:0 2px 6px #000}
-  #boot{background:linear-gradient(#080e17a8,#03070cd9),url('assets/eruption-gpt-v1.webp') center/cover}
+  #boot{background:linear-gradient(#080e17a8,#03070cd9),url('assets/landscape-clean-v2.webp') center/cover}
   #boot p{color:#b5c0cf} #boot h1{font-size:30px} #bootmsg{color:#929eae}
   #ptog{right:28px;top:26px;width:38px;height:38px}
   body.hideui #actions,body.hideui #scene-title{display:none}
@@ -131,7 +131,7 @@
   <div class="in">
     <h1>Volcano</h1>
     <div style="margin:0 0 14px"><span class="wip">LIVING ERUPTION</span></div>
-    <p>A volcanic landscape created with GPT Image, brought to life with rolling ash, flowing lava,
+    <p>A volcanic landscape created with GPT Image, brought to life with volumetric ash, flowing lava,
        heat shimmer and live eruptions. Click to enter. Drag to change the wind.</p>
     <div id="bar"><i></i></div>
     <div id="bootmsg">loading…</div>
@@ -139,11 +139,12 @@
   </div>
 </div>
 
+<script src="eruption-shaders.js?v=2"></script>
 <script>
 (function(){
 'use strict';
 
-/* GPT Image landscape with localized flow animation, registered terrain collision,
+/* GPT Image landscape with 3D density integration, registered terrain collision,
    live fluid atmosphere, ballistic particles, bloom and heat refraction. */
 
 var QS = new URLSearchParams(location.search);
@@ -161,7 +162,7 @@ var P = {
   vorticity:   21,
   turbulence:  0.42,
   turbScale:   6.5,
-  windX:       0.02,
+  windX:       0.12,
   tempDiss:    0.17,
   densDiss:    0.075,
   velDiss:     0.16,
@@ -174,7 +175,7 @@ var P = {
   exposure:    1.03,
   bloom:       0.18,
   haze:        1.00,
-  grade:       1.00,
+  grade:       0.35,
   grain:       0.15,
   zoom:        1.00,
   lava:        1.00,
@@ -187,7 +188,7 @@ var P = {
   fallout:     0.10,
   spill:       1.00,
   trails:      1.00,
-  bolts:       1.00,
+  bolts:       0.15,
   shake:       0.35,
   paused:      false,
   debug:       0
@@ -195,7 +196,7 @@ var P = {
 var DEFAULTS = Object.assign({}, P);
 
 /* Crater coordinates measured from eruption-gpt-v1.webp. */
-var VENT_U = 0.493, VENT_V = 0.488;
+var VENT_U = 0.493, VENT_V = 0.487;
 var SUMMIT_Y = 0.50;          // where the crater sits in the frame; the rest is sky for the column
 
 var ashLoad = 0;
@@ -208,7 +209,7 @@ var state = {
 /* =====================================================================
    1. ASSETS
    ===================================================================== */
-var IMG_SRC = { scene:'assets/eruption-gpt-v1.webp', ash:'assets/ash.webp' };
+var IMG_SRC = { scene:'assets/landscape-clean-v2.webp', ash:'assets/ash.webp' };
 var SFX_SRC = { rumble:'assets/audio/rumble.mp3', blast:'assets/audio/blast.mp3',
                 rockfall:'assets/audio/rockfall.mp3', thunder:'assets/audio/thunder.mp3',
                 surge:'assets/audio/surge.mp3' };
@@ -556,57 +557,9 @@ var P_FS_ASH = ['#version 300 es','precision highp float;',
 ' fc=vec4(col*a,a); }'].join('\n');
 
 /* ---- scene draws ---- */
-S.landscape = FH+`uniform sampler2D uScene,uDye;
-uniform vec4 uXf;
-uniform float uTime,uWind,uIntensity,uFlow,uPulse,uHaze,uSteam,uSpill,uDust;
-float terrainY(float x){
- if(x<0.17) return mix(0.635,0.603,x/0.17);
- if(x<0.32) return mix(0.603,0.566,(x-0.17)/0.15);
- if(x<0.43) return mix(0.566,0.486,(x-0.32)/0.11);
- if(x<0.54) return mix(0.486,0.480,(x-0.43)/0.11);
- if(x<0.65) return mix(0.480,0.591,(x-0.54)/0.11);
- return mix(0.591,0.735,(x-0.65)/0.35);
-}
-
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
-void main(){
- vec2 uv=(vUv-uXf.zw)/uXf.xy; uv.y=1.0-uv.y;
- float above=1.0-smoothstep(0.458,0.490,uv.y);
- float height=max(0.0,0.49-uv.y);
- float center=0.493+height*0.23;
- float width=0.042+height*0.47;
- float cloud=(1.0-smoothstep(width*0.60,width,abs(uv.x-center)))*above;
- float grounded=smoothstep(terrainY(uv.x)-0.008,terrainY(uv.x)+0.008,uv.y);
- cloud*=1.0-grounded;
- float n=noise(uv*vec2(19.0,24.0)+vec2(uTime*0.037,-uTime*0.10));
- vec2 flow=vec2(-0.008-height*0.025-uWind*0.038,0.025+height*0.055);
- flow+=vec2(n-0.5,noise(uv*31.0-uTime*0.05)-0.5)*0.017;
- flow*=cloud*(0.55+0.45*uIntensity);
- // Two overlapping advection phases keep the billows rising without a reset jump.
- float phase=fract(uTime*0.075), phase2=fract(uTime*0.075+0.5);
- float weight=abs(phase*2.0-1.0);
- vec2 heat=vec2(sin(uv.y*330.0-uTime*6.0),sin(uv.x*260.0+uTime*4.0));
- float hot=exp(-dot((uv-vec2(0.493,0.465))*vec2(16.0,22.0),(uv-vec2(0.493,0.465))*vec2(16.0,22.0)));
- vec2 wobble=heat*0.00065*hot*uHaze;
- vec3 a=texture(uScene,clamp(uv+flow*(phase-0.5)+wobble,0.001,0.999)).rgb;
- vec3 b=texture(uScene,clamp(uv+flow*(phase2-0.5)+wobble,0.001,0.999)).rgb;
- vec3 col=mix(a,b,weight);
- // Lava only illuminates existing photographed channels. Geometry stays fixed.
- float lava=smoothstep(0.16,0.45,col.r-max(col.g,col.b))*smoothstep(0.465,0.50,uv.y);
- float travel=0.5+0.5*sin(uv.y*175.0-uv.x*80.0-uTime*3.8+noise(uv*80.0)*5.0);
- float flicker=sin(uTime*7.0)*sin(uTime*11.3)*0.035;
- col*=1.0+lava*((uFlow-1.0)*0.55+(travel-0.4)*0.34*uFlow+flicker+uPulse*0.20);
- float ventLight=exp(-length((uv-vec2(0.493,0.49))*vec2(1.0,1.5))*19.0);
- col+=vec3(1.0,0.23,0.035)*ventLight*(0.020+uPulse*0.065)*uSpill;
- // Thin low steam, never an opaque layer over the detailed lava field.
- float steam=noise(uv*vec2(28.0,70.0)+vec2(uTime*0.05,-uTime*0.14));
- float steamBand=exp(-pow((uv.y-0.69)/0.12,2.0))*grounded;
- col+=vec3(0.17,0.18,0.20)*smoothstep(0.66,0.90,steam)*steamBand*uSteam*0.14;
- col=mix(col,col*vec3(0.87,0.88,0.89),uDust*grounded*0.12);
- // The plate is already display-referred. Decode before the HDR composite.
- fc=vec4(pow(max(col,vec3(0.0)),vec3(2.2)),1.0);
-}`;
+S.landscape = FH+window.VolcanoShaders.landscape;
+S.volume = FH+window.VolcanoShaders.volume;
+S.volumeComposite = FH+window.VolcanoShaders.composite;
 
 
 /* lit volumetric smoke: march toward the key light for self-shadowing */
@@ -701,6 +654,24 @@ function prog(vs,fs){
   o.tex=function(n,t){ var u=o._t++; gl.activeTexture(gl.TEXTURE0+u); gl.bindTexture(gl.TEXTURE_2D,t); gl.uniform1i(o.l(n),u); return o; };
   return o;
 }
+var ashHistory=new Float32Array(64),historyClock=0,eruptionAge=0,noiseTexture=null;
+function updateEruption(dt){
+  eruptionAge+=dt;historyClock+=dt;
+  while(historyClock>=0.5){
+    for(var i=63;i>0;i--)ashHistory[i]=ashHistory[i-1];
+    historyClock-=0.5;
+  }
+  ashHistory[0]=clamp(emission().rate*0.75,0,2.4);
+}
+function makeVolumeNoise(){
+  var data=new Uint8Array(64*64*64),seed=73517;
+  for(var i=0;i<data.length;i++){seed=(Math.imul(seed,1664525)+1013904223)|0;data[i]=(seed>>>24);}
+  noiseTexture=gl.createTexture();gl.bindTexture(gl.TEXTURE_3D,noiseTexture);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T,gl.TEXTURE_WRAP_R].forEach(function(k){gl.texParameteri(gl.TEXTURE_3D,k,gl.REPEAT);});
+  gl.texImage3D(gl.TEXTURE_3D,0,gl.R8,64,64,64,0,gl.RED,gl.UNSIGNED_BYTE,data);
+}
 var PR={}, quadVAO, emptyVAO, boltVAO, boltBuf;
 var boltPts=new Float32Array(2*160), boltN=0, boltLife=0;
 
@@ -776,13 +747,14 @@ function initGL(){
   }catch(e){ console.error('[volcano] shader:',e.message); return 'shader compile failed'; }
 
   for(var n in IMG) if(IMG[n]) TEX[n]=makeTex(IMG[n], n==='lava'?gl.REPEAT:gl.CLAMP_TO_EDGE);
+  makeVolumeNoise();
   gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE);
   return null;
 }
 
 function alloc(){
   ['vel','dye','pres','part'].forEach(function(k){ if(FB[k]) FB[k].destroy(); });
-  ['div','curl','obs','probe','scene','bright','b1','b2'].forEach(function(k){ if(FB[k]) FB[k].destroy(); });
+  ['div','curl','obs','probe','scene','bright','b1','b2','volume'].forEach(function(k){ if(FB[k]) FB[k].destroy(); });
   FB={};
   var sw=state.simW, sh2=state.simH, HF=gl.HALF_FLOAT;
   var dw=state.dyeW, dh=state.dyeH;
@@ -796,6 +768,8 @@ function alloc(){
   FB.part  = dbl(PART_DIM,PART_DIM,gl.RGBA32F,gl.NEAREST,2);
   if(!FB.part.ok){ FB.part.destroy(); FB.part=dbl(PART_DIM,PART_DIM,gl.RGBA16F,gl.NEAREST,2); }
   var cw=canvas.width, ch=canvas.height;
+  var volumeScale=state.W<760?0.50:Math.min(0.65,1000/cw);
+  FB.volume=fbo(Math.max(8,Math.round(cw*volumeScale)),Math.max(8,Math.round(ch*volumeScale)),gl.RGBA16F,gl.LINEAR);
   FB.scene = fbo(cw,ch,gl.RGBA16F,gl.LINEAR);
   var bw=Math.max(8,cw>>2), bh=Math.max(8,ch>>2);
   FB.bright= fbo(bw,bh,gl.RGBA16F,gl.LINEAR);
@@ -992,6 +966,7 @@ var STAGES=[
 ];
 var stageIdx=0;
 function restartSequence(){
+  ashHistory.fill(0);historyClock=0;eruptionAge=0;
   ashLoad=0;
   stageIdx=0; state.stage='calm'; state.stageT=0; state.shake=0; state.flash=0;
   clearFields();
@@ -1028,7 +1003,7 @@ function advanceStage(dt){
   boltLife*=Math.pow(0.0005,dt);
   /* ash-column lightning */
   if((state.stage==='column'||state.stage==='sustain') && Math.random()<dt*0.55){
-    state.flash=Math.max(state.flash,0.10+Math.random()*0.16);
+    state.flash=Math.max(state.flash,(0.025+Math.random()*0.035)*P.bolts);
     if(P.bolts>0.01) spawnBolt();
     play('thunder',0.35+Math.random()*0.3, 0.85+Math.random()*0.4);
   }
@@ -1079,7 +1054,7 @@ function spawnBolt(){
 
 function onStageEnter(name){
   if(name==='blast'){
-    state.flash=0.85; state.shake=0.55;
+    state.flash=0.08; state.shake=0.16;
     play('blast',1.0,0.92);
     setTimeout(function(){ play('rockfall',0.6,1.0); },900);
     setTimeout(function(){ play('surge',0.7,1.0); },400);
@@ -1142,11 +1117,22 @@ function render(){
   var p=PR.landscape.use();
   p.v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3])
    .f('uTime',state.t).f('uWind',P.windX).f('uIntensity',P.intensity)
-   .f('uFlow',P.lava).f('uPulse',emission().rate).f('uHaze',P.haze)
+   .f('uAge',eruptionAge).f('uFlow',P.lava).f('uPulse',emission().rate).f('uHaze',P.haze)
    .f('uSteam',P.steam).f('uSpill',P.spill).f('uDust',clamp(ashLoad*P.dust,0,1))
    .tex('uScene',TEX.scene);
   blit(FB.scene);
-  drawSmoke(0);
+  // Integrate ash at a bounded resolution, then composite in linear HDR.
+  gl.disable(gl.BLEND);
+  var vp=PR.volume.use();
+  vp.v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3])
+    .f('uTime',state.t).f('uWind',P.windX).f('uTurb',P.turbulence)
+    .f('uBuoy',P.buoyancy).f('uSpill',P.spill).f('uCooling',P.densDiss)
+    .f('uSteps',state.W<760?32:56);
+  gl.uniform1fv(vp.l('uHistory'),ashHistory);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_3D,noiseTexture);gl.uniform1i(vp.l('uNoise'),0);
+  blit(FB.volume);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+  PR.volumeComposite.use().tex('uVolume',FB.volume.tex);blit(FB.scene);
   drawSmoke(1);
 
   if(P.ashfall>0.01) drawParticles('ash');
@@ -1242,7 +1228,7 @@ function resize(){
    ===================================================================== */
 var SPEC=[
   ['intensity','Eruption intensity',0,2,0.01,2],
-  ['buoyancy','Buoyancy',0,5,0.01,2],
+  ['buoyancy','Plume rise',0,5,0.01,2],
   ['vorticity','Vorticity',0,40,0.5,1],
   ['turbulence','Turbulence',0,2,0.01,2],
   ['turbScale','Eddy scale',1,12,0.1,1],
@@ -1255,8 +1241,6 @@ var SPEC=[
   ['ashfall','Ash fall',0,2,0.01,2],
   ['lava','Lava flows',0,2.5,0.01,2],
   ['pressRetain','Pressure retention',0,0.98,0.01,2],
-  ['ceiling','Anvil height',0.3,1.0,0.01,2],
-  ['spread','Anvil spread',0,1.5,0.01,2],
   ['steam','Steam off flows',0,3,0.01,2],
   ['dust','Ash accumulation',0,2,0.01,2],
   ['fallout','Ash fallout',0,2.5,0.01,2],
@@ -1314,7 +1298,7 @@ function buildUI(){
 
   var h=document.createElement('p'); h.className='hint';
   h.textContent='Click the sky to trigger a fresh blast. Drag left/right to push the wind. '+
-                'GPT Image landscape with animated ash and lava. Intensity adds live activity to the photographed eruption.';
+                'The ash grows from freshly emitted material. Turn intensity down to let it disperse. Lava advances through fixed channels.';
   b.appendChild(h);
 }
 
@@ -1374,14 +1358,15 @@ function frame(now){
   lastT=rt;
   var t0=performance.now();
 
-  cam.x=lerp(cam.x,cam.tx,clamp(wall*2.2,0,1));
-  cam.y=lerp(cam.y,cam.ty,clamp(wall*2.2,0,1));
+  if(!P.paused){ cam.x=lerp(cam.x,cam.tx,clamp(wall*2.2,0,1));
+  cam.y=lerp(cam.y,cam.ty,clamp(wall*2.2,0,1)); }
   layout();
 
-  if(!P.paused){
+  if(state.started && !P.paused){
     var dt=clamp(wall,0.004,0.033);
     state.t+=dt;
     advanceStage(dt);
+    updateEruption(dt);
     step(dt);
   }
   render();
@@ -1419,6 +1404,7 @@ function begin(){
   if(actx && actx.state==='suspended') actx.resume();
   startRumble();
   restartSequence();
+  erupt();
 }
 
 Promise.all([loadImages(), loadAudio()]).then(function(){
@@ -1442,16 +1428,16 @@ Promise.all([loadImages(), loadAudio()]).then(function(){
 
   if(QA){
     window.__volcanoQA={
-      state:state, params:P,
+      state:state, params:P, render:render, gl:gl,
       begin:begin,
       stats:function(){ return {fps:state.fps,ms:state.ms,residual:state.residual,nan:state.nanTick>0,
                                 sim:[state.simW,state.simH],dye:[state.dyeW,state.dyeH],particles:PART_DIM*PART_DIM,
                                 stage:state.stage,started:state.started,
-                                assets:Object.keys(TEX).length, image:[IMG.scene.width,IMG.scene.height], renderError:gl.getError()}; },
+                                assets:Object.keys(TEX).length, image:[IMG.scene.width,IMG.scene.height], volume:[FB.volume.w,FB.volume.h], ashHistory:Array.from(ashHistory), eruptionAge:eruptionAge, renderError:gl.getError()}; },
       set:function(k,v){ P[k]=v; if(k==='zoom') layout(); },
       erupt:erupt, restart:restartSequence, bolt:spawnBolt,
       setStage:function(n){ for(var i=0;i<STAGES.length;i++) if(STAGES[i].name===n){ stageIdx=i; state.stage=n; state.stageT=0; onStageEnter(n); return true; } return false; },
-      step:function(n){ for(var i=0;i<(n||1);i++){ state.t+=0.016; advanceStage(0.016); step(0.016); } },
+      step:function(n){ for(var i=0;i<(n||1);i++){ state.t+=0.016; advanceStage(0.016); updateEruption(0.016); step(0.016); } },
       vent:ventWorld, ash:function(){ return ashLoad; }
     };
   }
