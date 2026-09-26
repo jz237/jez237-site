@@ -1,25 +1,21 @@
-# Volcano — Living Eruption
+# Volcano — Living Eruption v2
 
-The scene uses `assets/eruption-gpt-v1.webp`, generated with the built-in GPT Image tool on September 19, 2026. The original 1672 × 941 PNG was encoded as WebP at quality 94 without cropping or retouching.
+GPT Image supplied a clean photographic background (`assets/landscape-clean-v2.webp`) by removing the static eruption from the earlier landscape. The original generated ash photograph is no longer loaded by the renderer. The mountain and background stay stationary.
 
-The WebGL2 landscape shader applies overlapping advection phases to the ash column, channel-masked lava pulses, localized heat refraction, steam and vent light. A measured terrain skyline and the vent at image UV `(0.493, 0.488)` share the scene's cover/zoom transform with the fluid simulation. Ballistic fragments stop at the terrain; ash and embers remain independent particles. Existing audio is reused.
+## Live rendering
 
-The generated image depicts an ongoing eruption: setting live intensity to zero does not erase the photographed plume or lava. This is an animated photographic composite, not a freely orbitable 3D landscape or a geophysical model.
+- A 64-sample emission history advects new ash up a three-dimensional density field. The fragment shader integrates transmittance along the view ray, with three light-direction density probes for self-shadowing, cool ambient illumination and localized orange crater light.
+- Three scales of advected volume noise provide billowing shapes and evolving smaller turbulence. Wind changes the column trajectory. Turning intensity off allows the existing material to leave the frame; restart clears its history.
+- The volume renders to a bounded intermediate target: 56 ray steps on desktop, 32 on narrow screens. A deterministic 64-cubed R8 noise texture occupies 256 KiB. No video, external image API or runtime generation is used.
+- Lava channels are extracted from the background color within the mountain region. A flow front advances downhill while hot material and dark cooling crust travel within the fixed channels. The underlying photographic rock stays stationary.
+- Live embers, cooling ballistic bombs, terrain collisions, flank ash, sound, heat refraction and restrained bloom remain active.
+
+This is a fixed-view photographic terrain and procedural volumetric eruption, not an orbitable 3D terrain or a scientific eruption forecast.
 
 ## Controls
 
-- Click/tap the landscape or **Erupt** for another blast.
-- Drag horizontally to change wind; dragging does not trigger a blast.
-- Scroll or use the panel slider to zoom.
-- **Space** or **Pause** freezes simulation and mutes audio.
-- **Sound on/off** toggles audio.
-- **P** opens controls, **R** restarts, **H** hides the interface, **D** shows diagnostics.
-- Append `?qa` to expose the existing `window.__volcanoQA` test hooks.
+Click/tap or **Erupt** adds a blast. Drag horizontally for wind; scroll or use the panel to zoom. **Space/Pause** freezes and mutes, **Sound** toggles audio, **P** opens controls, **R** restarts, **H** hides the interface and **D** shows diagnostics. `?qa` exposes rendering/simulation hooks for regression checks.
 
-## Validation
+## Image provenance
 
-Checked at 1440 × 900 and portrait touch-browser emulation at 390 × 844: asset loads, shader compilation, GL errors, numerical stability, eruption, pause/resume, mute, controls panel, zoom, reset, restart and drag wind. Both checks passed without page exceptions or failed demo asset requests. Portrait emulation is not a physical phone performance test.
-
-## Image direction
-
-A documentary-style panoramic basaltic stratovolcano at blue-hour twilight, detailed cooling lava channels, charcoal cauliflower ash billows lit orange from below, rugged foreground, distant hazy mountains and coherent natural exposure. No text, logos, UI or artificial geometric cone. Full generation prompt is recorded in `assets/eruption-gpt-v1-prompt.txt`.
+The clean plate was edited using the built-in GPT Image tool on September 26, 2026. Source: the earlier generated erupting volcano. The edit preserves the camera, mountain, lava channels and twilight environment while removing all airborne smoke and ejecta. Original dimensions: 1672 × 941. Encoded as WebP at quality 94. Full prompt: `assets/landscape-clean-v2-prompt.txt`.
