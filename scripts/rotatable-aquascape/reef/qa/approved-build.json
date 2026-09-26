@@ -1,15 +1,15 @@
 {
-  "readyMs": 8652,
+  "readyMs": 7581,
   "shadowFrames": 60,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 6.946400000001512,
+      "fps": 59.99400059993998,
+      "time": 6.890100000000024,
       "bites": 11,
       "remaining": 34,
       "anemones": {
-        "brushing": 4,
-        "maxBrush": 0.06284762799042647,
+        "brushing": 6,
+        "maxBrush": 0.10418527741711381,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -21,31 +21,31 @@
       }
     },
     {
-      "fps": 59.49724825226839,
-      "time": 10.963400000001489,
-      "bites": 23,
-      "remaining": 21,
+      "fps": 59.99700014999244,
+      "time": 10.907000000000018,
+      "bites": 27,
+      "remaining": 17,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 8.145381625184601e-9,
+        "maxBrush": 0.0003515840571829516,
         "captured": 1,
         "swallowed": 0,
         "carried": 1,
         "fold": [
-          0.0020763080447743073,
+          0.00306783132065283,
           0,
           0
         ]
       }
     },
     {
-      "fps": 59.99100134979744,
-      "time": 14.980500000001456,
-      "bites": 31,
-      "remaining": 12,
+      "fps": 59.99400059993998,
+      "time": 14.924099999999996,
+      "bites": 32,
+      "remaining": 11,
       "anemones": {
-        "brushing": 0,
-        "maxBrush": 1.967771155662124e-17,
+        "brushing": 1,
+        "maxBrush": 0.0011852164331694703,
         "captured": 2,
         "swallowed": 0,
         "carried": 2,
@@ -58,12 +58,12 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 19.004100000001404,
-      "bites": 36,
-      "remaining": 7,
+      "time": 18.924399999999924,
+      "bites": 35,
+      "remaining": 8,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 9.096574034068518e-26,
+        "maxBrush": 0.009947223585866506,
         "captured": 2,
         "swallowed": 1,
         "carried": 1,
@@ -75,55 +75,55 @@
       }
     },
     {
-      "fps": 57.142857142857146,
-      "time": 23.011000000001324,
-      "bites": 37,
-      "remaining": 6,
+      "fps": 59.99700014999244,
+      "time": 22.957999999999824,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.0996019666037264,
+        "brushing": 20,
+        "maxBrush": 0.1320405338814572,
         "captured": 2,
         "swallowed": 2,
         "carried": 0,
         "fold": [
-          0.18676196032242653,
-          0.19585983844929783,
+          0.18634399634076126,
+          0.195611042604329,
           0
         ]
       }
     },
     {
-      "fps": 59.99400059993988,
-      "time": 27.028000000001196,
-      "bites": 39,
-      "remaining": 4,
+      "fps": 60.00300015000745,
+      "time": 26.974999999999707,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
         "brushing": 0,
-        "maxBrush": 0.000693772439762799,
+        "maxBrush": 0.000795475111964631,
         "captured": 2,
         "swallowed": 2,
         "carried": 0,
         "fold": [
-          0.11675726072311461,
-          0.13742894519652693,
+          0.11598239284981667,
+          0.13669464175536003,
           0
         ]
       }
     },
     {
       "fps": 59.99700014999255,
-      "time": 31.045000000001078,
-      "bites": 39,
-      "remaining": 4,
+      "time": 30.991999999999592,
+      "bites": 36,
+      "remaining": 7,
       "anemones": {
         "brushing": 2,
-        "maxBrush": 0.04312417831077087,
+        "maxBrush": 0.09938140577517514,
         "captured": 2,
         "swallowed": 2,
         "carried": 0,
         "fold": [
-          0.03566932985409053,
-          0.053800037033607674,
+          0.03505410751545708,
+          0.053096775422539814,
           0
         ]
       }
@@ -132,15 +132,15 @@
   "identification": [
     {
       "title": "Reef sand",
-      "ms": 5
+      "ms": 6
     },
     {
       "title": "Aquarium water and glass",
-      "ms": 8
+      "ms": 4
     },
     {
       "title": "Aquarium base and trim",
-      "ms": 4
+      "ms": 3
     }
   ],
   "checks": {
@@ -396,8 +396,8 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CglRV3me.css",
-    "assets/index-glUMN1ex.js",
+    "assets/index-CTtv3-ri.js",
+    "assets/index-DouRi2np.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-Ie55ijny.png",
@@ -414,49 +414,23 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "f855d7808bf377f56072aa420d72d91965086c6d43e2376f6ee36eece56fd7ce",
-  "checkedAt": "2026-09-26T20:51:00.510Z",
-  "scope": "Freshwater-style reef learning toolbar, living close-ups and independent saltwater chemistry lab",
+  "buildHash": "a73335a918d04d7947a505a1fcc625ec738b287247031e34393153ba3f257f21",
+  "checkedAt": "2026-09-26T22:54:17.676Z",
+  "scope": "Six-stop guided reef tour with smooth user-paced camera movement",
   "visualReview": [
-    "Desktop front: turquoise toolbar follows the freshwater order and retains habitat/home navigation.",
-    "Desktop lessons and chemistry: readable right panel alongside the actual animated reef. Living close-up actions frame animals and coral.",
-    "390px phone: reef stays visible above independently scrolling guide; sticky close button and reopening at top verified.",
-    "Front, oblique, close-up and mobile inspected; full geometry/materials/fish behavior preserved."
+    "Inspected all six desktop stops, phone start/host views and seven rendered frames moving from left branching coral to right host.",
+    "Camera eases through the clear space in front of the reef. Back, Next, Recenter and End remain readable; mobile tank remains above the guide.",
+    "No change to reef geometry, materials, animal behavior or freshwater. Existing front/oblique/mobile browser screenshots reviewed."
   ],
   "plantedReleaseAndSyncPassed": true,
-  "learningReview": {
-    "baseline": "4436485e2 reef build / 352f6ccc7 site",
-    "learning": {
-      "checks": {
-        "lessons": true,
-        "closeups": true,
-        "lighting": true,
-        "feeding": true,
-        "chemistry": true,
-        "labIndependent": true,
-        "keyboardFocus": true,
-        "mobile": true,
-        "tablet": true,
-        "fullscreen": true,
-        "navigation": true
-      },
-      "errors": [],
-      "scene": {
-        "fish": 21,
-        "triangles": 18579180,
-        "fishPassStats": {
-          "meshes": 126,
-          "materials": 84,
-          "geometries": 42
-        }
-      }
-    },
+  "tourReview": {
+    "baseline": "832e59c43",
     "performance": [
       {
         "mode": "prior",
-        "readyMs": 8596,
-        "taskSeconds": 3.469958,
-        "fps": 59.99700014999255,
+        "readyMs": 8067,
+        "taskSeconds": 3.112165000000001,
+        "fps": 59.99700014999244,
         "triangles": 18577724,
         "fishPassStats": {
           "meshes": 126,
@@ -466,9 +440,9 @@
       },
       {
         "mode": "current",
-        "readyMs": 8689,
-        "taskSeconds": 3.6205789999999993,
-        "fps": 58.53373006194824,
+        "readyMs": 7563,
+        "taskSeconds": 2.754798000000001,
+        "fps": 59.99400059993998,
         "triangles": 18577724,
         "fishPassStats": {
           "meshes": 126,
@@ -477,25 +451,45 @@
         }
       }
     ],
-    "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Local regression sample only. Current 58.53 versus prior 60.00 FPS; 8689 versus 8596ms ready; no speedup claimed.",
+    "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Local regression sample, not a speedup or low-end hardware claim.",
+    "tourChecks": {
+      "sixStops": true,
+      "smoothCamera": true,
+      "frontCorridor": true,
+      "pausePreserved": true,
+      "dragInterrupts": true,
+      "recenter": true,
+      "rapidNavigation": true,
+      "escapeFocus": true,
+      "switchCancels": true,
+      "finish": true,
+      "mobile": true,
+      "reducedMotion": true,
+      "feeding": true
+    },
+    "learningChecks": {
+      "lessons": true,
+      "closeups": true,
+      "lighting": true,
+      "feeding": true,
+      "chemistry": true,
+      "labIndependent": true,
+      "keyboardFocus": true,
+      "mobile": true,
+      "tablet": true,
+      "fullscreen": true,
+      "navigation": true
+    },
     "visualReview": [
-      "Desktop front: turquoise toolbar follows the freshwater order and retains habitat/home navigation.",
-      "Desktop lessons and chemistry: readable right panel alongside the actual animated reef. Living close-up actions frame animals and coral.",
-      "390px phone: reef stays visible above independently scrolling guide; sticky close button and reopening at top verified.",
-      "Front, oblique, close-up and mobile inspected; full geometry/materials/fish behavior preserved."
+      "Inspected all six desktop stops, phone start/host views and seven rendered frames moving from left branching coral to right host.",
+      "Camera eases through the clear space in front of the reef. Back, Next, Recenter and End remain readable; mobile tank remains above the guide.",
+      "No change to reef geometry, materials, animal behavior or freshwater. Existing front/oblique/mobile browser screenshots reviewed."
     ],
-    "science": "Independent illustrative 100L mixing/mineral-use lab, explicitly not live measurements or a coupled reef simulation. Conservative evaporation/top-off/water-change mass balance; pure-CaCO3 calcium/alkalinity uptake; explicitly hypothetical nutrient load. No pH solver, dosing calculator or universal livestock targets.",
-    "validation": "Full check:reef including new chemistry mass-balance tests; targeted browser interactions/keyboard/fullscreen/responsive controls; planted sync/release and storefront link checks all pass.",
-    "sources": [
-      "https://oceanservice.noaa.gov/education/tutorial_corals/coral02_zooxanthellae.html",
-      "https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep20-evaporation",
-      "https://www.bulkreefsupply.com/content/post/saltwater-aquarium-beginners-guide-episode-5",
-      "https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep19-calcium-and-alkalinity"
-    ]
+    "validation": "Camera continuity/front corridor/reduced-motion/cancellation unit checks; full reef QA; browser tour interruption/rapid navigation/fish-pause preservation/finish/keyboard/mobile; existing learning panels; planted sync/release and storefront links."
   },
   "publication": [
     "Hidden Reef Cloudflare Pages",
     "GitHub"
   ],
-  "deploymentLimitation": "September26: separate jez237 Pages deployment list returns authentication error10000; do not claim domains synchronized."
+  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under current login; do not claim domains synchronized."
 }

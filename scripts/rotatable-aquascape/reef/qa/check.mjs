@@ -1,5 +1,6 @@
 import './identification.mjs';
 import './chemistry-lab.mjs';
+import './tour-camera.mjs';
 import './picking.mjs';
 import './draw-order.mjs';
 import './anemone-backdrop.mjs';

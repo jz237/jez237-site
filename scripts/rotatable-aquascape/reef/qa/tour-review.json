@@ -1,0 +1,64 @@
+{
+  "baseline": "832e59c43",
+  "performance": [
+    {
+      "mode": "prior",
+      "readyMs": 8067,
+      "taskSeconds": 3.112165000000001,
+      "fps": 59.99700014999244,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    },
+    {
+      "mode": "current",
+      "readyMs": 7563,
+      "taskSeconds": 2.754798000000001,
+      "fps": 59.99400059993998,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    }
+  ],
+  "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Local regression sample, not a speedup or low-end hardware claim.",
+  "tourChecks": {
+    "sixStops": true,
+    "smoothCamera": true,
+    "frontCorridor": true,
+    "pausePreserved": true,
+    "dragInterrupts": true,
+    "recenter": true,
+    "rapidNavigation": true,
+    "escapeFocus": true,
+    "switchCancels": true,
+    "finish": true,
+    "mobile": true,
+    "reducedMotion": true,
+    "feeding": true
+  },
+  "learningChecks": {
+    "lessons": true,
+    "closeups": true,
+    "lighting": true,
+    "feeding": true,
+    "chemistry": true,
+    "labIndependent": true,
+    "keyboardFocus": true,
+    "mobile": true,
+    "tablet": true,
+    "fullscreen": true,
+    "navigation": true
+  },
+  "visualReview": [
+    "Inspected all six desktop stops, phone start/host views and seven rendered frames moving from left branching coral to right host.",
+    "Camera eases through the clear space in front of the reef. Back, Next, Recenter and End remain readable; mobile tank remains above the guide.",
+    "No change to reef geometry, materials, animal behavior or freshwater. Existing front/oblique/mobile browser screenshots reviewed."
+  ],
+  "validation": "Camera continuity/front corridor/reduced-motion/cancellation unit checks; full reef QA; browser tour interruption/rapid navigation/fish-pause preservation/finish/keyboard/mobile; existing learning panels; planted sync/release and storefront links."
+}
