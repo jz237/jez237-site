@@ -29,7 +29,10 @@ const input = new Input($('gl'));
 const game = new Game({ R, fx, hud, audio });
 const bot = new Bot(game);
 
-let mode = 'title';          // title | play | paused | loading | continue
+let mode = 'title';          // title | play | paused | loading | continue | demo
+// WATCH DEMO: the autopilot plays the whole campaign from Area 1, with the
+// HUD, banners and music a player gets; any key or tap hands back to the title
+let demoStartedAt = 0, demoFinished = false;
 let manual = qs.has('test'); // tests drive the clock themselves
 let botOn = false;
 let startArea = clampArea(+(qs.get('area') || store.get('commandoHD3d.startArea', 1)));
@@ -71,6 +74,7 @@ function menuAct(act) {
   audio.unlock();
   switch (act) {
     case 'start': startGame(); break;
+    case 'demo': startWatchDemo(); break;
     case 'area': startArea = startArea % AREAS.length + 1; store.set('commandoHD3d.startArea', startArea); $('area-mode').textContent = 'AREA ' + startArea; break;
     case 'controls': $('controls-help').classList.toggle('hidden'); break;
     case 'music': { const m = audio.toggleMusic(); $('music-mode').textContent = m === 'original' ? 'SID' : 'MODERN'; break; }
@@ -90,6 +94,7 @@ for (const scr of ['title', 'pause']) {
   });
 }
 addEventListener('keydown', (e) => {
+  if (mode === 'demo') { e.preventDefault(); if (performance.now() - demoStartedAt > 400) exitDemo(); return; }
   if (mode === 'continue') { if (['Space', 'Enter', 'KeyJ', 'KeyZ'].includes(e.code)) { e.preventDefault(); doContinue(); } return; }
   const scr = mode === 'title' ? 'title' : mode === 'paused' ? 'pause' : null;
   if (!scr) return;
@@ -99,7 +104,10 @@ addEventListener('keydown', (e) => {
   if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); menuAct(menuButtons(scr)[sel].dataset.act); }
   if (mode === 'paused' && (e.code === 'Escape' || e.code === 'KeyP')) setPaused(false);
 });
-addEventListener('pointerdown', () => { if (mode === 'continue') doContinue(); });
+addEventListener('pointerdown', () => {
+  if (mode === 'continue') doContinue();
+  else if (mode === 'demo' && performance.now() - demoStartedAt > 400) exitDemo();   // not the tap that started it
+});
 
 function renderHiscores() { $('hiscores').innerHTML = `HI-SCORE <b>${String(game.hi).padStart(7, '0')}</b>`; }
 
@@ -110,12 +118,29 @@ function startDemo() {
 }
 function toTitle() {
   mode = 'title'; sel = 0; highlight('title');
+  $('demo-tag').classList.add('hidden');
   $('title').classList.remove('hidden'); $('pause').classList.add('hidden');
   hud.show(false); hud.hideBanner(); $('touch').classList.add('hidden');
   renderHiscores();
   audio.stopMusic();
   demoArea = game.areaNum || startArea;
   startDemo();
+}
+function startWatchDemo() {
+  audio.unlock().then(() => audio.music('main'));
+  botOn = true; input.forced = null;
+  $('title').classList.add('hidden');
+  hud.show(true); hud.hideBanner();
+  $('touch').classList.add('hidden');
+  $('demo-tag').classList.remove('hidden');
+  mode = 'demo'; demoStartedAt = performance.now(); demoFinished = false;
+  const go = () => { game.newGame({ showcase: true }); game.godMode = false; };
+  if (game.areaNum !== 1 || !world) loadArea(1, go); else go();
+}
+function exitDemo() {
+  $('demo-tag').classList.add('hidden');
+  botOn = false;
+  toTitle();
 }
 function startGame() {
   audio.unlock().then(() => audio.music('main'));
@@ -163,15 +188,19 @@ function handleEvents() {
       case 'clear':
         if (live) {
           hud.banner(ev.last ? 'MISSION ACCOMPLISHED' : 'AREA CLEAR', `BONUS ${ev.bonus}\nPRISONERS RESCUED ${game.rescued}`, 5.5);
+          if (mode === 'demo' && ev.last) demoFinished = true;
           audio.music('clear');
         }
         break;
-      case 'area-done': nextArea(); break;
+      case 'area-done':
+        if (mode === 'demo' && demoFinished) { exitDemo(); break; }   // mission accomplished — the demo is over
+        nextArea(); break;
       case 'gameover':
         if (live) { hud.banner('GAME OVER', `SCORE ${game.score}`, 30); audio.music('gameover'); }
         break;
       case 'gameover-done':
         if (mode === 'title') { demoArea = demoArea % AREAS.length + 1; startDemo(); }
+        else if (mode === 'demo') { hud.toast('DEMO CONTINUES', 1.6); audio.music('main'); game.continueGame(); }   // an arcade credit, never a stop
         else { mode = 'continue'; contT = 9.99; }
         break;
     }
@@ -314,6 +343,8 @@ window.__cmd = {
   },
   area(n) { buildArea(clampArea(n)); game.startArea(); return game.snapshot(); },
   bot(on = true) { botOn = on; },
+  watchDemo() { startWatchDemo(); return mode; },
+  demoState: () => ({ mode, demoFinished, area: game.areaNum, loop: game.loop, continues: game.continues, lives: game.lives, score: game.score, rescued: game.rescued, tally: game.deathTally || {} }),
   god(on = true) { game.godMode = on; },
   input(I) { input.forced = I; },
   state: () => game.snapshot(),

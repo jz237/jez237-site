@@ -160,7 +160,8 @@ function clipSet() {
   const half = (name, lower) => new THREE.AnimationClip(name + (lower ? ':legs' : ':upper'), by[name].duration,
     by[name].tracks.filter((t) => LOWER.has(t.name.split('.')[0]) === lower));
   CLIPS = {};
-  for (const n of ['Death', 'Punch_Right', 'Idle', 'Run', 'Walk']) CLIPS[n] = { clip: by[n], group: 'full' };
+  // HitRecieve and Wave drive the build-v9 death catalogue (deaths.js)
+  for (const n of ['Death', 'Punch_Right', 'Idle', 'Run', 'Walk', 'HitRecieve', 'Wave']) CLIPS[n] = { clip: by[n], group: 'full' };
   CLIPS.StandLegs = { clip: half('Idle_Gun_Pointing', true), group: 'lower' };
   CLIPS.RunLegs = { clip: half('Run', true), group: 'lower' };
   CLIPS.Aim = { clip: half('Idle_Gun_Pointing', false), group: 'upper' };
@@ -173,13 +174,16 @@ function makeMaterial(look) {
   const u = m.userData;
   u.uRim = { value: new THREE.Color(...look.rim) };
   u.uFlash = { value: 0 };
+  u.uChar = { value: 0 };
   m.onBeforeCompile = (sh) => {
-    sh.uniforms.uRim = u.uRim; sh.uniforms.uFlash = u.uFlash;
+    sh.uniforms.uRim = u.uRim; sh.uniforms.uFlash = u.uFlash; sh.uniforms.uChar = u.uChar;
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform vec3 uRim; uniform float uFlash;')
+      .replace('#include <common>', '#include <common>\nuniform vec3 uRim; uniform float uFlash; uniform float uChar;')
       .replace('#include <opaque_fragment>', `
         float fres = pow(1.0 - saturate(dot(normal, normalize(vViewPosition))), 2.2);
         outgoingLight += uRim * fres;
+        // scorched by a blast: soot-black with a faint ember glow at the edges
+        outgoingLight = mix(outgoingLight, vec3(0.045, 0.04, 0.035) + vec3(0.55, 0.16, 0.03) * fres, uChar);
         outgoingLight = mix(outgoingLight, vec3(1.0, 0.95, 0.85), uFlash);
         #include <opaque_fragment>`);
   };
@@ -248,7 +252,7 @@ export class Soldier {
       this.act[name] = { a, w: 0, dur: clip.duration };
     }
     this.fresh = true;
-    this.a = { phase: 0, speed: 0, twist: 0, crouch: 0, aim: 1, recoil: 0, throwT: -1, dead: 0, deadDir: 1, deadSpin: 0, t: Math.random() * 10, wave: 0 };
+    this.a = { phase: 0, speed: 0, twist: 0, crouch: 0, aim: 1, recoil: 0, throwT: -1, dead: 0, deadDir: 1, deadSpin: 0, t: Math.random() * 10, wave: 0, hit: -1, dwave: -1 };
   }
 
   get material() { return this.mesh.material; }
@@ -262,6 +266,7 @@ export class Soldier {
     this.mesh.material.dispose();
   }
   setFlash(v) { this.mesh.material.userData.uFlash.value = v; }
+  setChar(v) { this.mesh.material.userData.uChar.value = v; }
 
   // world-space muzzle point (call after pose())
   muzzle(out) {
@@ -281,6 +286,10 @@ export class Soldier {
     const f = ((a.phase / (Math.PI * 2)) % 1 + 1) % 1;
     if (a.dead > 0) {
       add('Death', 1); time.Death = Math.min(1, a.dead) * this.act.Death.dur * 0.98;
+    } else if (a.hit >= 0) {
+      add('HitRecieve', 1); time.HitRecieve = clamp(a.hit, 0, 1) * this.act.HitRecieve.dur * 0.98;
+    } else if (a.dwave >= 0) {
+      add('Wave', 1); time.Wave = clamp(a.dwave, 0, 1) * this.act.Wave.dur * 0.98;
     } else if (throwing) {
       add('Punch_Right', 1); time.Punch_Right = clamp(a.throwT / 0.8, 0, 1) * this.act.Punch_Right.dur * 0.9;
     } else {
