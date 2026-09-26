@@ -108,6 +108,80 @@
     .ai-sounds-card-animation i {
       display: none;
     }
+    /* Multimedia card: a running film strip around a looping reel */
+    .mm-card-animation {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      height: auto;
+      aspect-ratio: 2 / 1;
+      min-height: 108px;
+      background: #000 url('assets/home-cards/multimedia-card-poster-20260926.webp') center / cover no-repeat;
+    }
+    .mm-card-animation video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.06) contrast(1.05);
+    }
+    .mm-card-animation::before,
+    .mm-card-animation::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 10px;
+      z-index: 3;
+      background: repeating-linear-gradient(90deg, transparent 0 6px, rgba(236,226,204,.72) 6px 11px, transparent 11px 14px) 0 50% / 100% 4px no-repeat, #04060a;
+      animation: mmFilmRun .9s linear infinite;
+      pointer-events: none;
+    }
+    .mm-card-animation::before { top: 0; }
+    .mm-card-animation::after { bottom: 0; animation-direction: reverse; }
+    @keyframes mmFilmRun { to { background-position: 14px 50%, 0 0; } }
+    .mm-card-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.55) 100%), repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
+      pointer-events: none;
+    }
+    .mm-card-tag,
+    .mm-card-rec {
+      position: absolute;
+      z-index: 4;
+      font: 700 9px/1 'Courier New', monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #ffe7b0;
+      text-shadow: 0 1px 2px #000;
+    }
+    .mm-card-tag {
+      left: 8px;
+      top: 16px;
+      padding: 3px 6px 3px 16px;
+      border: 1px solid rgba(255,231,176,.45);
+      border-radius: 4px;
+      background: rgba(5,8,14,.62);
+    }
+    .mm-card-tag::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      width: 5px;
+      height: 5px;
+      margin-top: -2.5px;
+      border-radius: 50%;
+      background: #ff4d4d;
+      box-shadow: 0 0 6px #ff4d4d;
+      animation: mmRec 1.2s steps(1) infinite;
+    }
+    .mm-card-rec { right: 8px; bottom: 16px; }
+    @keyframes mmRec { 50% { opacity: .15; } }
+    .hub-card:hover .mm-card-animation video { filter: saturate(1.15) contrast(1.08) brightness(1.06); }
   </style>
   <link rel="stylesheet" href="assets/workbench-theme.css" />
 </head>
@@ -288,6 +362,19 @@
             <p>Free online browser games, HTML5 arcade remakes &amp; playable experiments.</p>
             <span>Play →</span>
           </a>
+          <a class="hub-card" href="multimedia/">
+            <div class="hub-card-media mm-card-animation" aria-hidden="true">
+              <video autoplay muted loop playsinline preload="auto" tabindex="-1" poster="assets/home-cards/multimedia-card-poster-20260926.webp">
+                <source src="assets/home-cards/multimedia-card-loop-20260926.mp4" type="video/mp4" />
+              </video>
+              <i class="mm-card-vignette"></i>
+              <b class="mm-card-tag">Now showing</b>
+              <b class="mm-card-rec" data-mm-card-tc>00:35:00</b>
+            </div>
+            <h2>Multimedia</h2>
+            <p>A screening room for game captures, AI films &amp; renders. Now showing: Port Richmond.</p>
+            <span>Watch →</span>
+          </a>
           <a class="hub-card" href="demos/">
             <div class="hub-card-media" style="background-image:url('demos/assets/skynet.png')"></div>
             <h2>Website Demos</h2>
@@ -390,6 +477,26 @@
       <span aria-hidden="true" style="display:inline-block;margin:0 10px;color:rgba(255,255,255,0.22)">·</span>
       <a href="mailto:jez@jez237.com" style="color:var(--brand-gold)">jez@jez237.com</a>
     </footer>
+    <script>
+      // Multimedia card: film timecode (MM:SS:FF) that runs with the looping reel preview.
+      (function () {
+        var v = document.querySelector('.mm-card-animation video');
+        var tc = document.querySelector('[data-mm-card-tc]');
+        if (!v || !tc) return;
+        function pad(n) { return n < 10 ? '0' + n : '' + n; }
+        function tick() {
+          var t = 35 + (v.currentTime || 0), s = Math.floor(t);
+          tc.textContent = pad(Math.floor(s / 60)) + ':' + pad(s % 60) + ':' + pad(Math.floor((t % 1) * 30));
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        function play() { var p = v.play && v.play(); if (p && p.catch) p.catch(function () {}); }
+        // Run the reel only while the card is on screen.
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) play(); else v.pause(); }); }, { threshold: 0.2 }).observe(v);
+        } else play();
+      })();
+    </script>
     <script>
       // Lazy-load the llms.txt contents into the collapsible when opened
       (function () {
@@ -554,7 +661,7 @@
 
   <script src="assets/app.js"></script>
   <script src="assets/site-enhance.js" defer></script>
-  <script src="assets/side-menu.js?v=chronicle-20260612" defer></script>
+  <script src="assets/side-menu.js?v=multimedia-20260926" defer></script>
   <script src="assets/nav.js?v=nav-20260702b" defer></script>
   <script src="assets/space-fx.js?v=20260702b" defer></script>
 </body>
