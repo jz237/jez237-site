@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 25 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 17-23, 1984 — Elite Opens a Galaxy of Trade and Combat on the BBC Micro</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-09-17</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-17</guid>
+      <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Acornsoft’s new space game turns a 32K home computer into an open-ended universe. Acornsoft releases Elite for the BBC Micro on September 20, opening a new kind of journey at the home-computer keyboard. Ian Bell and David Braben have built a space game in which a pilot can trade, fight and roam rather than simply chase a fixed score. The ship begins with the humble rank of Harmless; the coveted destination is Elite. Also this week: Seven Cities of Gold Sends Players Across an Uncharted Map · Ultima III Turns Fantasy Quest into a Four-Character Expedition · Word Flyer Makes Reading Practice a Shared Game · The Fat Mac Gives Macintosh Four Times the Memory.</description>
+    </item>
     <item>
       <title>Week of September 10-16, 1984 — Apple Unveils a 512K Macintosh</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-09-10</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-07</guid>
       <pubDate>Sat, 05 Sep 2026 12:00:00 GMT</pubDate>
       <description>The film studio unveils Ballblazer and Rescue on Fractalus!, two Atari projects built around fresh technology and a cinematic sense of play. SAN RAFAEL, Calif. — Lucasfilm publicly entered the home videogame market May 8, unveiling the first two projects from a Games Group nurtured through its collaboration with Atari. The announcement puts one of cinema&apos;s most famous technical workshops behind software intended for Atari 8-bit computers and the 5200 console. Also this week: Pens and Tablets Challenge the Keyboard · Home Word Processing Drops Below $100 · Atari Searches for a New Mission.</description>
-    </item>
-    <item>
-      <title>Week of April 30-May 6, 1984 — Hanover&apos;s 650,000 Visitors See the Portable Future</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-04-30</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-30</guid>
-      <pubDate>Fri, 04 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Epson lifts the lid on a lap-size LCD machine as Commodore signals a 16-bit business turn. HANOVER, West Germany — One of Europe&apos;s largest computer fairs drew roughly 650,000 visitors this week, turning the exhibition floor into a vivid measure of how quickly electronic computing is moving from specialist rooms toward desks, briefcases and homes. Also this week: Chuck Peddle Rides Back to Victor with the PlusPC · One Box, Two Computer Worlds · Can a Computer Teach Music? · Early Macintosh Verdict: Brilliant, but Boxed In.</description>
     </item>
   </channel>
 </rss>

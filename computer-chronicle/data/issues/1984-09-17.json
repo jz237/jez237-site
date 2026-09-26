@@ -1,0 +1,420 @@
+{
+  "currentDate": "2026-09-25",
+  "historicDate": "1984-09-17",
+  "displayDate": "Week of September 17-23, 1984",
+  "edition": "Issue 112 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm September 1984 newsprint, star charts and BBC Micro game art",
+    "motifs": [
+      "Elite spacecraft",
+      "BBC Micro",
+      "wireframe galaxy",
+      "home-computer game boxes"
+    ],
+    "layout": "Dense 1980s weekly front page with brick-red and blue rules, halftone art, boxed charts and narrow columns"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "September 17-23, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner Elite lead with large wireframe spacecraft halftone and BBC Micro game-box cues",
+    "secondaryRail": "Adventure games, reading software, the Fat Mac, charts, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-09-17.png",
+    "alt": "GPT Image 2 newspaper front page for the week of September 17-23, 1984, led by Elite on the BBC Micro",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A galaxy fits inside the BBC Micro this week, while other game makers find new worlds in history, fantasy and the classroom.",
+  "morningLine": "This week in 1984: Elite takes off, and the computer-game horizon suddenly looks vast.",
+  "milestone": {
+    "title": "Elite launches on the BBC Micro",
+    "note": "Its open-ended 3D trading-and-combat world helped define the space-simulation genre and demonstrated how expansive a home-computer game could feel."
+  },
+  "lead": {
+    "headline": "Elite Opens a Galaxy of Trade and Combat on the BBC Micro",
+    "dek": "Acornsoft’s new space game turns a 32K home computer into an open-ended universe.",
+    "body": [
+      "Acornsoft releases Elite for the BBC Micro on September 20, opening a new kind of journey at the home-computer keyboard. Ian Bell and David Braben have built a space game in which a pilot can trade, fight and roam rather than simply chase a fixed score. The ship begins with the humble rank of Harmless; the coveted destination is Elite.",
+      "The view from the cockpit is a wireframe three-dimensional world, its ships and stations drawn in spare, sharp lines. Behind those lines sits a startling expanse: eight galaxies of 256 worlds each. Procedural generation makes that scale possible on a BBC Micro with just 32K of memory, leaving the player with the impression of a much larger universe than the machine’s specifications suggest.",
+      "Trading cargo between systems offers one route upward, while combat and riskier choices promise others. Elite asks players to make their own stories from those decisions. It is not an arcade round with three lives and a final score; it is a continuing career, with every docking and departure another chance to change its course.",
+      "The launch package helps carry that fiction beyond the screen. Alongside the game come manuals, a ship-recognition chart and Robert Holdstock’s novella The Dark Wheel. A later contemporary Beebug review lists the cassette at £14.95 and the disc at £17.65, including VAT. For players opening the box this week, the smallest BBC Micro now holds a remarkably large frontier."
+    ],
+    "sourceRefs": [
+      10,
+      11,
+      12
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "Seven Cities of Gold Sends Players Across an Uncharted Map",
+      "body": [
+        "In its September review, COMPUTE! turns to The Seven Cities of Gold, Ozark Softscape and Electronic Arts’s exploration game. A player outfits a voyage in Spain, sails west and weighs trade, settlement and conflict in the Americas. Food and crew matter as much as any discovery, giving the journey the hazards of an expedition rather than a simple screen-by-screen contest.",
+        "Reviewer James V. Trunzo counts more than 2,800 screens and notes a utility for generating new continents. The Atari edition is available at $39.95, with a Commodore 64 version described as forthcoming. The review is evidence of the game’s presence on September shelves, not a claim that it launched this particular week."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Ultima III Turns Fantasy Quest into a Four-Character Expedition",
+      "body": [
+        "The September COMPUTE! review of Exodus: Ultima III finds a fantasy campaign built around a party rather than a lone hero. Players may assemble up to four adventurers from five races and eleven professions, and keep twenty characters on a disk. Spell books, a playbook, quick-reference guide and cloth map make the box feel like a portable campaign kit.",
+        "Origin Systems lists the game at $59.95, with editions for Apple II, Atari 400/800, Commodore 64, IBM PC and PCjr. Reviewer David K. Peacock praises its graphics and music while noting that combat and repeated dungeon journeys can slow the expedition."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Word Flyer Makes Reading Practice a Shared Game",
+      "body": [
+        "Electronic Arts ChildWare’s Word Flyer gives Atari owners a joystick-driven lesson that puts two players on the same side. Rather than competing, they build a cumulative score together, steering through letter and word exercises drawn from a built-in list of more than 2,000 words.",
+        "A September COMPUTE! review describes early levels built around letters and two-letter words, then more advanced matching. The 48K disk edition is listed at $35 for Atari 400/800 and XL machines. Its cooperative scoring is an unusual choice on a shelf full of contests."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The Fat Mac Gives Macintosh Four Times the Memory",
+      "body": [
+        "Apple’s Macintosh 512K, introduced September 10, remains fresh in shop-window discussion this week. The compact computer keeps its nine-inch monochrome display, 400K floppy drive and 8 MHz Motorola 68000, but expands built-in RAM from 128K to 512K.",
+        "That fourfold memory increase gives graphical programs and documents more breathing room. It is context from the preceding week, not a new September 17-23 announcement; shoppers now have a roomier version of the machine Apple launched in January."
+      ],
+      "sourceRefs": [
+        4,
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "BBC Micro and Elite",
+      "summary": "32K BBC Micro hosts wireframe 3D trading and combat across eight galaxies of 256 worlds.",
+      "sourceRefs": [
+        10,
+        11,
+        12
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "title": "Macintosh 512K",
+      "summary": "512K RAM, 8 MHz 68000, 400K floppy and nine-inch monochrome display; introduced September 10.",
+      "sourceRefs": [
+        4,
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Elite",
+      "detail": "BBC Micro space trading and combat; cassette and disc editions."
+    },
+    {
+      "name": "The Seven Cities of Gold",
+      "detail": "Atari exploration game; Commodore 64 version forthcoming in September review."
+    },
+    {
+      "name": "Exodus: Ultima III",
+      "detail": "Party-based fantasy role-playing game reviewed for Commodore 64."
+    },
+    {
+      "name": "Word Flyer",
+      "detail": "Atari cooperative reading game from Electronic Arts ChildWare."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "Elite — Acornsoft",
+        "The Seven Cities of Gold — Electronic Arts",
+        "Exodus: Ultima III — Origin Systems"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Missing You — John Waite",
+        "Let's Go Crazy — Prince and the Revolution",
+        "She Bop — Cyndi Lauper",
+        "What's Love Got to Do with It — Tina Turner",
+        "Drive — The Cars"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "All of Me",
+        "The Evil That Men Do",
+        "Ghostbusters"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Elite BBC Micro cassette",
+      "price": "£14.95",
+      "note": "Contemporary review price; not a verified launch-week advertisement.",
+      "sourceRefs": [
+        12
+      ]
+    },
+    {
+      "item": "Elite BBC Micro disc",
+      "price": "£17.65",
+      "note": "Contemporary review price; not a verified launch-week advertisement.",
+      "sourceRefs": [
+        12
+      ]
+    },
+    {
+      "item": "The Seven Cities of Gold",
+      "price": "$39.95",
+      "note": "Contemporary review price; not a verified launch-week advertisement.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Exodus: Ultima III",
+      "price": "$59.95",
+      "note": "Contemporary review price; not a verified launch-week advertisement.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Word Flyer",
+      "price": "$35.00",
+      "note": "Contemporary review price; not a verified launch-week advertisement.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Ghostbusters Holds Third at the Box Office",
+      "summary": "Ghostbusters remained third at the September 21–23 domestic box office after sixteen weeks.",
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Macintosh 512K Reaches the Counter",
+      "summary": "The 512K Macintosh introduced September 10 remains the month’s conspicuous personal-computer hardware update.",
+      "sourceRefs": [
+        4,
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Missing You",
+      "artist": "John Waite",
+      "chartDate": "1984-09-22",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Let's Go Crazy",
+      "artist": "Prince and the Revolution",
+      "chartDate": "1984-09-22",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "She Bop",
+      "artist": "Cyndi Lauper",
+      "chartDate": "1984-09-22",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-09-22",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Drive",
+      "artist": "The Cars",
+      "chartDate": "1984-09-22",
+      "sourceUrls": [
+        "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Chart Your Course with Elite",
+    "summary": "A BBC Micro pilot trades and fights among hundreds of generated worlds. Cassette and disc editions are listed in period coverage.",
+    "tagline": "Your next voyage begins at the keyboard."
+  },
+  "market": {
+    "headline": "Adventure Takes More of the Software Shelf",
+    "summary": "Elite arrives as September reviews keep Seven Cities of Gold and Ultima III in view; game boxes now promise worlds to explore as much as scores to chase.",
+    "sourceRefs": [
+      10,
+      11,
+      12,
+      1,
+      0
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Bomb Strikes U.S. Embassy Annex Near Beirut",
+    "summary": "A September 20 van bombing at the U.S. Embassy annex northeast of Beirut killed at least 23 people, according to the following day’s Washington Post report; early casualty figures were provisional.",
+    "sourceRefs": [
+      13
+    ],
+    "confidence": "exact-date"
+  },
+  "gadgetWatch": {
+    "headline": "Revox B225 CD Player Gets September Equipment Review",
+    "summary": "Audio magazine’s September 1984 equipment profile covers the Revox B225; this is period coverage, not a verified launch that week.",
+    "sourceRefs": [
+      9
+    ],
+    "confidence": "same-month"
+  },
+  "bbsNote": {
+    "headline": "Timex/Sinclair Users Trade BBS Addresses and Meet on CompuServe",
+    "summary": "A September 1984 Timelinez report recounts use of the Westridge 2050 modem and Mterm, a CompuServe T/S special-interest group and Wednesday conference, plus free and local BBSs.",
+    "posts": [
+      {
+        "topic": "CompuServe CEM 450 SIG",
+        "platform": "CompuServe",
+        "text": "A period user report identifies a weekly Wednesday T/S real-time conference and database section XA-4."
+      },
+      {
+        "topic": "Zebra Systems and Bay Area boards",
+        "platform": "BBS",
+        "text": "The same report mentions Zebra Systems, Neighborhood Story Board, Parent’s Resource Net, Peacenet, and Land of the Lost."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "A Word Game Where Both Players Win",
+    "summary": "Word Flyer makes its two-player score cooperative rather than competitive.",
+    "detail": "Its flying-word game has a rest nest where the player can pause the timer, and birds react to correct or incorrect matches.",
+    "sourceUrls": [
+      "https://www.atarimagazines.com/compute/issue52/325_1_REVIEWS_WORD_FLYER.php"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Elite launch is dated September 20 by retrospective histories; 1984 Beebug provides period package and price evidence.",
+      "Seven Cities of Gold, Ultima III, Word Flyer, modem and CD-player items are September period coverage, not claimed launch-week releases.",
+      "The Macintosh 512K was introduced September 10, the preceding week.",
+      "Music follows the September 22 chart; movies follow the September 21-23 weekend.",
+      "The Beirut embassy-annex bulletin follows a September 21 contemporary report."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! review: Exodus: Ultima III",
+      "url": "https://www.atarimagazines.com/compute/issue52/320_1_REVIEWS_EXODUS_ULTIMA_III_FOR_COMMODORE_64.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE! review: The Seven Cities of Gold",
+      "url": "https://www.atarimagazines.com/compute/issue52/323_1_REVIEWS_THE_SEVEN_CITIES_OF_GOLD.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "COMPUTE! review: Word Flyer",
+      "url": "https://www.atarimagazines.com/compute/issue52/325_1_REVIEWS_WORD_FLYER.php",
+      "date": "1984-09"
+    },
+    {
+      "title": "Timelinez: T/S On-Line, Modems and BBS Report",
+      "url": "https://timexsinclair.com/article/t-s-on-line-modems-and-bbs-report/index.html",
+      "date": "1984-09"
+    },
+    {
+      "title": "Mac 512K Fat Mac",
+      "url": "https://lowendmac.com/1984/mac-512k-fat-mac/",
+      "date": "1984-09-10"
+    },
+    {
+      "title": "EveryMac: Macintosh 512K specs",
+      "url": "https://everymac.com/systems/apple/mac_classic/specs/mac_512k.html",
+      "date": "undated"
+    },
+    {
+      "title": "Top40weekly: September 22, 1984 singles",
+      "url": "https://top40weekly.com/2013/09/22/us-top-40-singles-for-the-week-ending-september-22-1984/",
+      "date": "1984-09-22"
+    },
+    {
+      "title": "Box Office Mojo weekend 38",
+      "url": "https://www.boxofficemojo.com/weekend/1984W38/",
+      "date": "1984-09-21/1984-09-23"
+    },
+    {
+      "title": "New York Times: Reagan Seeks Cut in Steel Imports",
+      "url": "https://www.nytimes.com/1984/09/19/business/reagan-seeks-cut-in-steel-imports-through-accords.html",
+      "date": "1984-09-19"
+    },
+    {
+      "title": "Audio: Revox B225 profile",
+      "url": "https://www.gammaelectronics.xyz/audio_09-1984_revox.html",
+      "date": "1984-09"
+    },
+    {
+      "title": "BBC News: Gaming milestone for Elite game",
+      "url": "http://news.bbc.co.uk/2/hi/technology/8261272.stm",
+      "date": "2009-09-21"
+    },
+    {
+      "title": "Scanline Artifacts: Elite at 40",
+      "url": "https://scanlineartifacts.co.uk/2024/09/20/four-decades-of-waltzing-the-blue-danube-elite-at-40/",
+      "date": "2024-09-20"
+    },
+    {
+      "title": "Beebug: Elite review",
+      "url": "http://www.elitehomepage.org/archive/a4110020.htm",
+      "date": "1984-11"
+    },
+    {
+      "title": "Washington Post: Bomb Kills 23 at U.S. Embassy in Lebanon",
+      "url": "https://www.washingtonpost.com/archive/politics/1984/09/21/bomb-kills-23-at-us-embassy-in-lebanon/a56a0e19-a188-46ee-af9b-6632f688e780/",
+      "date": "1984-09-21"
+    }
+  ]
+}
