@@ -27,11 +27,41 @@ depth shading and shore foam, and dressed the trenches with posts and
 duckboards. Terrain shape, water, buildings, the fortresses,
 barrels and the remaining foliage are still built from primitives in code.
 
+## Build v9 (2026-09-26): fourteen ways to die, and a watchable demo
+
+**Deaths** (`src/deaths.js`). Every enemy used to play the one Death clip
+with the same `enemy-down` sound. Now each kill picks a death from what hit
+him and where he stood, and each has its own motion, effects and voice
+(ElevenLabs renders in `assets/sfx/die-*`, `body-*`, `bike-crash`):
+bullets — classic drop, double-hit stagger, spin-out, drop to the knees and
+face-plant, stiff-plank topple, thrown flying backwards (point blank or on a
+kill streak); blasts — launched tumbling end over end, corkscrewed straight
+up, log-rolled along the ground, scorched soot-black and coughing before he
+drops; situational — splash into water, flailing fall from towers and ledges,
+motorcycle riders thrown over the handlebars, and the officer's theatrical
+exit (reels round, waves goodbye, then falls). Choice is weighted and never
+repeats the previous death; voices are gated to two per 250 ms so a grenade
+among six men is not six screams at once. Purely visual: the soldier is dead
+the moment he is hit. Two rules the first draft broke, both now in the code:
+styles that end in the Death clip must not add their own 90° tilt (the clip
+already lies him on his back — together they buried him head-first), and the
+rig is posed upright before the body is tilted (the kneeling IK works in
+world space). `__cmd.game.forceDeath = 'launch'` forces a style;
+`game.deathTally` counts them.
+
+**WATCH DEMO** (title menu). The autopilot plays a full scored campaign from
+Area 1 with the HUD, banners and music a player gets; game over is an
+automatic continue, and after MISSION ACCOMPLISHED it hands back to the
+title. Any key or tap exits. Its score never touches the saved hi-score
+(`newGame({ showcase: true })`). Verified: all three areas in ~5 min of game
+time with zero continues. Test hooks: `__cmd.watchDemo()`, `__cmd.demoState()`.
+
 ## Layout
 
 | file | what |
 |---|---|
 | `src/main.js` | boot, shader pre-warm, menus, attract demo, fixed 60 Hz loop, test hooks |
+| `src/deaths.js` | build v9 death catalogue: choosing a death, its motion, effects and voice |
 | `src/game.js` | simulation: Joe, enemy AI, bullets, grenades, trucks, tank, motorcycles, searchlights, bunker, mortars, POWs and cages, finale, continues, scoring |
 | `src/level1.js` … `level3.js` | area layouts in metres (props, water, encounters, POWs, patrol, finale) |
 | `src/levels.js` | the campaign order and per-area lighting/weather (`AMBIENCE`) |

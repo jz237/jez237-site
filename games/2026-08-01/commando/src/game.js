@@ -6,6 +6,7 @@ import { Soldier } from './soldier.js';
 import * as M2 from './models2.js';
 import { flatGeo } from './assets.js';
 import { clamp, lerp, angDiff, approach, TAU } from './util.js';
+import { pickDeath, beginDeath, stepDeath } from './deaths.js';
 
 export const TUNE = {
   joeSpeed: 5.6, joeAccel: 55, joeRadius: 0.42, wadeSpeed: 0.55,
@@ -63,6 +64,9 @@ export class Game {
     this.score = 0; this.lives = TUNE.lives; this.nextLife = 20000;
     this.carryGren = TUNE.grenStart;       // grenades carry over from area to area
     this.demo = !!opts.demo;
+    // WATCH DEMO (build v9): the autopilot plays a full, scored campaign that
+    // must never overwrite the player's hi-score
+    this.showcase = !!opts.showcase;
     this.continues = 0;
     this.startArea();
   }
@@ -689,15 +693,23 @@ export class Game {
     a.deadDir = (fromP > e.p) ? 1 : -1; a.deadSpin = rnd() - 0.5;
     a.throwT = -1; a.crouch = 0; a.sit = 0;
     const by = this.baseY(e), gy = this.T.standY(e.x, e.p);
-    this.corpses.push({ obj: e.s.obj, s: e.s, t: 0, e, fall: Math.max(0, by - gy), byBlast: byBlast || !!e.bike, vx: (e.x - fromX) || rnd() - 0.5, vp: (e.p - fromP) || rnd() - 0.5 });
-    delete e.baseY; e.bike = null;
+    const bike = e.bike;
+    const corpse = { obj: e.s.obj, s: e.s, t: 0, e, fall: Math.max(0, by - gy), byBlast: byBlast || !!bike, vx: (e.x - fromX) || rnd() - 0.5, vp: (e.p - fromP) || rnd() - 0.5, silent, bike };
+    this.corpses.push(corpse);
+    delete e.baseY; e.bike = null; a.sit = 0;
     this.kills++;
     this.chain++; this.chainT = 1.8;
+    // build v9: pick how he dies — by what hit him and where he stood
+    corpse.style = this.forceDeath || pickDeath({ e, fromX, fromP, byBlast: corpse.byBlast, bike: !!bike,
+      fall: corpse.fall, water: !e.trench && this.T.waterFrac(e.x, e.p) > 0.35, chain: this.chain, last: this._lastDeath });
+    this._lastDeath = corpse.style;
+    this.deathTally = this.deathTally || {};
+    this.deathTally[corpse.style] = (this.deathTally[corpse.style] || 0) + 1;
+    beginDeath(this, corpse);
     const mult = 1 + Math.min(4, Math.floor(this.chain / 3));
     const pts = e.points * mult;
     this.addScore(pts);
     this.fx.text(e.x, by + 2, -e.p, mult > 1 ? `${pts}  x${mult}` : String(pts), pts >= 1000 ? 'big' : '');
-    if (!silent) this.audio.play('enemy-down', { gain: 0.55, pan: this.pan(e.x) }, 50);
     // occasional supply drop
     const dropP = e.type === 'lobber' && !e.ledge ? 0.45 : e.sniper || e.elevated ? 0 : 0.07;
     if (rnd() < dropP && !e.trench && !e.mortar && this.T.waterFrac(e.x, e.p) < 0.3) this.dropPickup(e.x, e.p, 'gren');
@@ -708,24 +720,11 @@ export class Game {
   }
 
   updateCorpses(dt) {
+    // each corpse runs its own death (deaths.js): stagger, spin, topple, fly,
+    // tumble, roll, scorch, splash, fall — then settles and melts away at 7-9s
     for (const c of this.corpses) {
       c.t += dt;
-      const s = c.s, e = c.e;
-      if (c.t < 0.5) {
-        // knockback slide
-        const k = (c.byBlast ? 5 : 2.2) * (1 - c.t * 2) * dt;
-        const L = Math.hypot(c.vx, c.vp) || 1;
-        e.x += c.vx / L * k; e.p += c.vp / L * k;
-      }
-      s.a.dead = Math.min(1, c.t * 2.8);
-      s.a.speed = 0; s.a.recoil = 0;
-      let y = this.T.standY(e.x, e.p) + (e.trench ? e.yCur : 0);
-      if (c.fall > 0) y += Math.max(0, c.fall - 9.8 * c.t * c.t * 0.5);
-      s.obj.position.set(e.x, y, -e.p);
-      s.obj.rotation.y = Math.PI - e.face;
-      s.setFlash(Math.max(0, 0.9 - c.t * 8));
-      s.pose(dt);
-      if (c.t > 7) s.obj.position.y -= (c.t - 7) * 0.4;
+      stepDeath(this, c, dt);
       if (c.t > 9) c.dead = true;
     }
     this.corpses = this.corpses.filter(c => { if (c.dead) c.s.dispose(); return !c.dead; });
@@ -1157,6 +1156,7 @@ export class Game {
     mo.hp -= n;
     if (mo.hp > 0 && mo.rider && mo.rider.alive && n < 99) { mo.rider.flashT = 1; return; }
     mo.dead = true; mo.t = 0;
+    this.audio.play('bike-crash', { gain: 0.55, pan: this.pan(mo.x) }, 120);
     this.explode(mo.x, mo.p, 2.2, 'moto');
     this.fx.burn(mo.x, this.h(mo.x, mo.p) + 0.5, -mo.p, 5, 0.6);
     for (const s of ['rider', 'gunner']) if (mo[s] && mo[s].alive) this.killEnemy(mo[s], fx, fp, true, true);
@@ -1321,10 +1321,10 @@ export class Game {
     if (this.demo) return;
     this.score += n;
     if (this.score >= this.nextLife) { this.lives++; this.nextLife += 40000; this.emit('extra-life'); }
-    if (this.score > this.hi) this.hi = this.score;
+    if (this.score > this.hi && !this.showcase) this.hi = this.score;
   }
   loadHi() { try { return +(localStorage.getItem('commandoHD3d.hi') || 50000); } catch (e) { return 50000; } }
-  saveHi() { if (this.demo) return; try { localStorage.setItem('commandoHD3d.hi', String(this.hi)); } catch (e) {} }
+  saveHi() { if (this.demo || this.showcase) return; try { localStorage.setItem('commandoHD3d.hi', String(this.hi)); } catch (e) {} }
 
   // ------------------------------------------------------------------ per-frame visual sync
   syncVisuals(dt) {

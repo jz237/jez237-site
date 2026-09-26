@@ -85,3 +85,12 @@ h2 { font-family: var(--title-font); font-weight: 400; font-size: 54px; margin: 
   .hud-obj { display: none; }
   .menu button { min-width: 220px; }
 }
+
+/* build v9: WATCH DEMO tag */
+#demo-tag { position: fixed; top: 44px; left: 50%; transform: translateX(-50%); z-index: 30;
+  font: 600 12px/1 ui-monospace, Menlo, monospace; letter-spacing: .18em; color: #f3dc9a;
+  background: rgba(10, 12, 8, .62); border: 1px solid rgba(243, 220, 154, .45); border-radius: 3px;
+  padding: 7px 12px; pointer-events: none; animation: demoPulse 1.6s ease-in-out infinite; }
+#demo-tag .t { display: none; }
+@media (pointer: coarse) { #demo-tag .k { display: none; } #demo-tag .t { display: inline; } }
+@keyframes demoPulse { 50% { opacity: .55; } }
