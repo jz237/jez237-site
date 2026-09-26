@@ -496,8 +496,9 @@ Jez provided or explicitly approved.
 
 Videos Jez adds over time live in two places:
 
-- GitHub vault `https://github.com/jz237/multimedia`, served by GitHub Pages at
-  `https://jz237.github.io/multimedia/`. Holds the full-resolution masters:
+- GitHub repo `https://github.com/jz237/multimedia` (video hosting only), served
+  by GitHub Pages at `https://jz237.github.io/multimedia/` (the Pages root
+  redirects to jez237.com/multimedia/). Holds the full-resolution masters:
   `<slug>/<slug>-1080p.mp4` (H.264 + AAC, +faststart, under 100 MB, which is
   GitHub's per-file limit), plus `poster.jpg`, `thumb.webp` (960x540),
   `og.jpg` (1200x630), `catalog.json` and the README table.
@@ -507,7 +508,11 @@ Videos Jez adds over time live in two places:
   optionally with a lite copy hosted here for link previews (Cloudflare Pages
   files must stay under 25 MiB), plus chapters.
 
-To add a video: push the master to the vault, add its `catalog.json` entry
+Do not add links or cards for that repo on the site pages. Jez removed the
+"GitHub vault" card on 2026-09-26. The site plays the files from it and
+nothing more.
+
+To add a video: push the master to that repo, add its `catalog.json` entry
 and README row, add a reel card (newest first) and a watch page on
 jez237.com, then update `sitemap.xml`. The CSP `media-src` already allows
 `https://jz237.github.io`. Older site-hosted clips in `/multimedia/`
