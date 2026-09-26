@@ -6966,5 +6966,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-26-factual-infographic-factual-infographic-acrophobia-at-the-g",
+    "title": "Factual infographic: Acrophobia — At the Glass Skywalk",
+    "tests": "factual_subtype: phobia-infographic; phobia: acrophobia; sources verified 2026-09-26; no subjective non-Monday review; archive_slot=2026-09-26T04:08; concept=acrophobia-guarded-glass-skywalk; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished museum-quality, richly illustrated educational infographic directly on a tall portrait canvas, not a photograph of a poster, desk, screen, book or prop arrangement. Title: ACROPHOBIA — WHEN HEIGHT FEELS LIKE DANGER. Dominant hero, upper central third: immersive realistic cutaway of a public glass-floor observation skywalk high over a rocky coastal valley. An adult visitor pauses with a hand on its substantial continuous guardrail, feet planted on the transparent deck; far below, layered mist, narrow river, stone strata and tiny trees establish scale. Show laminated floor framing, bolts, rail posts, cold morning sidelight, reflections, mist depth, fabric texture and an anxious but dignified expression. The person remains on a protected public walkway, never at an unguarded edge. A restrained translucent overlay traces their downward gaze into the apparent drop and contrasts it with the visible barrier and stable deck. Anxiety is real; actual danger depends on the setting. Never show a falling person, sensational peril, monsters, gore or invented statistics.\nAround and beneath this hero, organize EIGHT substantive, generously spaced panels, each with short readable labels, precise leader lines and distinct illustrated content: (1) THE FEAR — acrophobia is intense fear of heights, shown with a miniature high viewpoint; (2) TRIGGERS — three small vignettes of glass skywalk, high window and stair landing, captioned contexts vary; (3) SENSORY UNCERTAINTY — CLOSE-UP DIAGRAM of sightline, visible horizon and depth cues through the transparent floor, label The view can feel overwhelming, without a speculative neurological mechanism; (4) BODY ALARM — illustrated torso CLOSE-UP with callouts noticeable heartbeat, shaking, lightheadedness and nausea, qualified Possible, not universal; (5) ACTION LOOP — a three-stage CAUSE/EFFECT DIAGRAM height cue → anxiety → avoidance, with a returning arrow and Brief relief can make the next encounter harder; (6) DANGER CHECK — side-by-side cutaway of protected skywalk rail and deck versus an unguarded cliff edge, with fear can exceed actual risk and real hazards still need protection; (7) HELP — compassionate clinical consultation vignette and a STEP DIAGRAM CBT + planned, gradual exposure with a professional, showing conversation and modest safe steps, never forced exposure or risky acts; (8) WHEN TO REACH OUT — speaking with a GP or qualified mental health professional if symptoms affect daily life. Unite all panels into one cohesive design with ample negative space, dark-slate and sea-glass typography, crisp off-white labeling, restrained copper accent arrows, fine graphite rules, meticulous tactile detail and large legible words. At least four explanatory close-up or diagram panels are visible: sightline, body alarm, action loop and danger-check. No prevalence numbers, diagnostic rules, unsupported physiology, cures, bibliography, URLs, logo or watermark.",
+    "image": "images/2026-09-26-factual-infographic-factual-infographic-acrophobia-at-the-g.jpg",
+    "thumb": "thumbs/2026-09-26-factual-infographic-factual-infographic-acrophobia-at-the-g.webp",
+    "color": "#788286",
+    "date": "2026-09-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "acrophobia-guarded-glass-skywalk",
+      "imageSha256": "17fb1380248b6a399a794c1ecfef72a57a0f5cbf3da62e1ba540d38b829fe0d6",
+      "imageDHash": "09497b4a198d5c5d"
+    },
+    "factualInfographic": {
+      "topic": "Acrophobia: fear of heights, body alarm, avoidance, and evidence-based support",
+      "description": "Acrophobia and height-related fear illustrated through a guarded public skywalk, variable bodily symptoms, avoidance, actual-risk appraisal and evidence-based help.",
+      "sourceNote": "NIMH: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; NHS Every Mind Matters: https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/self-help-cbt-techniques/facing-your-fears/ . Verified scope: height phobias, variable symptoms, avoidance and evidence-based help.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-26T08:10:02.283270+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Health Service",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS Every Mind Matters",
+            "title": "Facing your fears",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/self-help-cbt-techniques/facing-your-fears/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Fear of heights is a specific-phobia example; phobic fear can be disproportionate to actual danger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A height situation can trigger severe anxiety and worry.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible phobia symptoms include dizziness, noticeable heartbeat, nausea and shaking; symptoms vary.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A phobia can prompt avoidance and immediate anxiety at the feared situation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoidance may bring short-term relief yet make a feared situation harder to face later.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The fight-or-flight response can be heightened in situations that are not actually dangerous.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is an established phobia treatment; exposure therapy can involve planned, gradual confrontation of feared situations.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Someone whose phobia symptoms affect life can seek help from a GP or qualified mental health professional.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Actual height hazards require safety precautions; protection features matter in assessing actual danger.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
