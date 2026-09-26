@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-09-26-ocean-exploration-the-blue-margin-rov-beneath-the-pressure-",
+    "title": "The Blue Margin — ROV Beneath the Pressure Ridge",
+    "tests": "; archive_slot=2026-09-26T00:08; concept=tethered-rov-polar-ice-pressure-ridge; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, high-end photorealistic underwater expedition photograph, landscape composition, depicting a fictional but physically credible polar research dive under a sea-ice pressure ridge. We are about 12 meters below a flat winter ice sheet, looking obliquely upward along the ragged underside of a massive ridge keel that descends from the ceiling toward the dark water. The ice is the true main subject: overlapping translucent blue and white slabs, compression fractures, entrained bubbles, scalloped melt facets, old pressure seams, and an immense hanging triangular keel that recedes into cold cobalt shadow. Near the lower-right foreground, a compact, convincingly pressure-rated tethered research ROV, roughly one meter long, hovers with a slight nose-down working attitude. Its brushed titanium and painted yellow pressure housings, sealed viewport, four guarded thrusters, flotation block, paired camera lights, and a small folded sampling manipulator are clearly readable and correctly assembled. A real-looking umbilical leaves the vehicle in a gentle tensioned arc, travels upward along the ice underside, and vanishes through a small distant borehole with a dim patch of surface daylight; no loose impossible cable loops. Vehicle lights graze the ice at a shallow angle, carving out facets without turning the scene into a neon fantasy. Weak diffuse daylight filters through the ice overhead, giving turquoise edges and deep blue shadows; suspended fine particles and modest backscatter are visible in the light cones, with realistic color loss and underwater optics. Tiny drifting ice crystals give scale. Broad negative space of near-black water under the keel, subtle depth falloff, a dramatic but natural field-documentary composition with the ROV about one fifth of frame width and the ridge dwarfing it. No humans underwater, no scuba divers, no sea monsters, no invented wildlife, no signs, no labels, no text, no infographic panels, no logo or watermark. Avoid CGI sheen, toy-like machinery, impossible geometry, decorative fantasy lighting, and fabric/craft textures. The final image must feel like a carefully lit frame captured by a real scientific expedition camera.",
+    "image": "images/2026-09-26-ocean-exploration-the-blue-margin-rov-beneath-the-pressure-.jpg",
+    "thumb": "thumbs/2026-09-26-ocean-exploration-the-blue-margin-rov-beneath-the-pressure-.webp",
+    "color": "#294e62",
+    "date": "2026-09-26",
+    "batch": "Daily Prompt",
+    "slot": "ocean-exploration",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "tethered-rov-polar-ice-pressure-ridge",
+      "imageSha256": "cbef36531da0da5320f7cfbd88db033f8ba7ee3b35f3fff50951bd073d8ffb8a",
+      "imageDHash": "5ad8c94f9d93b706"
+    }
+  },
+  {
     "id": "2026-09-25-intense-phobia-situation-submechanophobia-against-the-drown",
     "title": "Submechanophobia — Against the Drowned Intake Gate",
     "tests": "Recognized submechanophobia; unique reservoir intake gate setting; first-person proximity, compression, depth and low visibility.; archive_slot=2026-09-25T05:20; concept=submechanophobia-diver-reservoir-intake-gate; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1448x1086\", \"backendReportedSize\": \"1448x1086\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1448x1086\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
