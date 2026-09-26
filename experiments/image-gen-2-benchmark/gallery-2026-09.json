@@ -38,6 +38,119 @@
     }
   },
   {
+    "id": "2026-09-26-factual-infographic-factual-infographic-claustrophobia-the-",
+    "title": "Factual infographic: Claustrophobia — The Museum Elevator",
+    "tests": "phobia: claustrophobia; museum elevator scenario; NHS and NIMH source verification; no subjective non-Monday review; archive_slot=2026-09-26T12:08; concept=claustrophobia-museum-elevator-enclosure; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the FINISHED IMAGE as an elegant, direct-canvas, portrait educational infographic, not a photographed poster, not a museum object display. TITLE: “CLAUSTROPHOBIA | WHEN AN ENCLOSED SPACE FEELS DANGEROUS”. Central dominant hero: a credible contemporary museum passenger elevator viewed in a cinematic three-quarter cutaway, doors closed but normal and functional, a worried adult visitor holding a folded exhibition map, warm gallery visible through a narrow window, brushed steel seams, floor numerals, reflected amber ceiling lights, subtle fingerprints on handrail, patterned stone floor, a small ordinary elevator control panel. The geometry feels enclosed from the visitor’s perspective, yet there is no mechanical peril or trapped-person claim. Render the person respectfully, not as spectacle; the visual atmosphere expresses alarm without monsters, danger, gore, or invented pathology. Use clear leader lines from hero to exactly EIGHT substantial, well-separated illustrated explanatory panels, arranged as an integrated museum-science atlas around it. Each panel has a concise, legible heading and one or two short labels, with illustrated information, not paragraphs: (1) DEFINITION: enclosed-space fear; show an inset cross-section of the elevator volume versus the visitor’s perceived narrowing field. (2) TRIGGERS: three miniature context vignettes of lift, tunnel and windowless room; include an anticipatory thought bubble before entry. (3) SENSORY UNCERTAINTY: close-up diagram of the elevator door seam, ceiling and limited sightline; caption that the setting can feel threatening even when no hazard is apparent. (4) BODY ALARM: precise cutaway of a neutral human upper torso with simple pulse, breath and perspiration symbols labelled “rapid heartbeat”, “short breath”, “sweating”; no unsupported brain or hormone mechanism. (5) FEELING AND ATTENTION: face-and-hands close-up depicting trembling and dizziness, with a concise “fear of losing control” thought label. (6) AVOIDANCE LOOP: clear three-step curved arrow diagram “anticipation → avoiding lift → fear remains”; depict choosing stairs without shaming the person. (7) PERCEIVED vs ACTUAL: paired spatial diagrams; perceived cramped enclosure on one side, objectively ordinary museum lift on the other; explicitly label “felt alarm” versus “check the real setting”, not an assurance that every lift is safe. (8) EVIDENCE-BASED HELP: calm clinician-and-visitor planning diagram, simple graduated steps toward a feared setting with permission and support, label “CBT” and “gradual exposure with a professional”; never suggest forcing a person into a feared space. Make at least THREE panels true explanatory close-ups/diagrams, especially the elevator cross-section, torso symptoms, and avoidance feedback loop. Crisp sans-serif hierarchy, accurate readable typography, no microtext, no invented numbers, statistics, diagnosis rules or bibliography on the art. Palette: teal-black, oxidized copper, muted ivory and humane warm amber; finely engraved line work mixed with realistic environmental textures, restrained translucent overlays and directional lighting. Composition is information-rich yet clean, with hero scene occupying roughly half the page and the eight panels each large enough to read.",
+    "image": "images/2026-09-26-factual-infographic-factual-infographic-claustrophobia-the-.jpg",
+    "thumb": "thumbs/2026-09-26-factual-infographic-factual-infographic-claustrophobia-the-.webp",
+    "color": "#3a3c36",
+    "date": "2026-09-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "claustrophobia-museum-elevator-enclosure",
+      "imageSha256": "f8993d8cfe7033fff0ebb2f5e702705cb286f3fc0470bdf9754f89ee553dcb23",
+      "imageDHash": "13d30d0d59456049"
+    },
+    "factualInfographic": {
+      "topic": "Claustrophobia: fear of enclosed spaces, body alarm, avoidance, and evidence-based support",
+      "description": "A richly illustrated, source-backed educational plate on claustrophobia, its triggers, physical and emotional responses, avoidance feedback, and care.",
+      "sourceNote": "NHS, Claustrophobia: https://www.nhs.uk/mental-health/conditions/claustrophobia/; NIMH, Phobias and Phobia-Related Disorders: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders. Verified enclosed-space triggers, symptoms, avoidance and CBT/exposure support; no invented statistics.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-26T16:09:48.127462+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Health Service (NHS)",
+            "title": "Claustrophobia",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/claustrophobia/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health (NIMH)",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Claustrophobia is an intense fear of confined or enclosed spaces; fear can be out of proportion to actual danger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Lifts, tunnels and enclosed rooms can trigger claustrophobia; even thinking about a confined situation can trigger anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The same enclosed-space setting can be physically ordinary while felt danger is intense; distinguish perceived alarm from assessed situational danger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Claustrophobia may produce sweating, trembling, shortness of breath and rapid heartbeat.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A person may feel dizzy, confused or afraid of losing control during an intense reaction.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoiding enclosed spaces can reinforce fear and restrict daily activities.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A person may anticipate a feared encounter before entering a confined space.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioural therapy explores thoughts, feelings and behaviour and develops ways of responding to the phobia.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method that gradually approaches feared situations, sometimes with professional help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A GP or qualified mental-health professional can help a person plan care when fear affects daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-26-factual-infographic-factual-infographic-acrophobia-at-the-g",
     "title": "Factual infographic: Acrophobia — At the Glass Skywalk",
     "tests": "factual_subtype: phobia-infographic; phobia: acrophobia; sources verified 2026-09-26; no subjective non-Monday review; archive_slot=2026-09-26T04:08; concept=acrophobia-guarded-glass-skywalk; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
