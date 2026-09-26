@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-09-25-intense-phobia-situation-gephyrophobia-midspan-on-the-cable",
+    "title": "Gephyrophobia — Midspan on the Cable Footbridge",
+    "tests": "Recognized gephyrophobia; distinct from this week’s submerged machinery, darkness, and insect phobias. First-person steep-down crossing with exposed foothold, narrow path, obscured exits, and gorge depth; documentary optics and plausible structure.; archive_slot=2026-09-25T23:20; concept=gephyrophobia-rain-midspan-suspension-footbridge-gorge; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1312x1199\", \"backendReportedSize\": \"1312x1199\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1312x1199\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a single finished, fully photorealistic documentary photograph depicting gephyrophobia, the fear of crossing bridges. First-person camera at standing eye height on the exact midpoint of a narrow, rain-soaked pedestrian suspension bridge, aimed steeply down over the viewer’s own realistic wet hiking boots and one gloved hand clenched hard around the cold steel side cable. The near boot has just met a slick dark timber slat; a narrow irregular gap between adjacent slats opens straight onto the river gorge far below. Keep the bridge deck and the dizzying drop as the overwhelming subject: converging wet planks and taut cables draw the eye into a steep, uninterrupted vertical fall; the river below is small, fast, and partly lost in wind-driven mist. The nearest planks, riveted cable clamps, water beads, frayed but serviceable anti-slip strips, and stretched mesh edge are sharply detailed; progressively deeper geometry becomes less distinct through rain. Visible pressure devices: the exposed foothold and immediate gap inches from the lens, the severe near-to-abyss depth cue, the walkway only a boot-width or two wider than the walker, and the long continuation of the bridge behind and ahead with both ends hidden by rain and perspective. A gust visibly bows the side mesh and drives rain diagonally across frame, but the structure remains physically plausible and intact. Natural overcast light, cold slate-gray water and weathered brown timber, restrained contrast, ordinary 28-mm documentary lens perspective, believable scale and gravity, no impossible camera height, no drone view. The human body is only partial foreground evidence of being trapped in the crossing; no other people, no scenic panorama, no safe-looking landing, no spectacle. The immediate impression should be a visceral need to avoid the next step, not adventure tourism. No injury, gore, supernatural element, monster, stylized horror lighting, illustration, typography, logos, or watermark.",
+    "image": "images/2026-09-25-intense-phobia-situation-gephyrophobia-midspan-on-the-cable.jpg",
+    "thumb": "thumbs/2026-09-25-intense-phobia-situation-gephyrophobia-midspan-on-the-cable.webp",
+    "color": "#545656",
+    "date": "2026-09-25",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1312x1199",
+    "dedup": {
+      "conceptKey": "gephyrophobia-rain-midspan-suspension-footbridge-gorge",
+      "imageSha256": "cb05b06cd992732b84bc82dd45c2762e510b135e69cd99b80cedcabeba37d0ac",
+      "imageDHash": "b5f476941d477274"
+    }
+  },
+  {
     "id": "2026-09-25-intense-phobia-situation-entomophobia-the-roach-filled-util",
     "title": "Entomophobia — The Roach-Filled Utility Hatch",
     "tests": "Recognized entomophobia; different from this week’s submechanophobia and nyctophobia. Near-field insects, blocked retreat, repeated forms beyond crop; documentary-scale anatomy and practical light.; archive_slot=2026-09-25T17:20; concept=entomophobia-worker-cockroach-utility-hatch; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
