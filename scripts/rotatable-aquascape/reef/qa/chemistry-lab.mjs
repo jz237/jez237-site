@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {ReefChemistryLab,reefReference} from '../ReefChemistryLab.ts';
+const lab=new ReefChemistryLab(),close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+assert.equal(lab.apply('freshwater'),false,'full tank cannot be topped off');
+lab.apply('evaporate');assert.equal(lab.volume,98);
+for(const key of Object.keys(reefReference))close(lab.state[key]*lab.volume,reefReference[key]*100);
+lab.apply('freshwater');for(const key of Object.keys(reefReference))close(lab.state[key],reefReference[key]);
+lab.apply('evaporate');lab.apply('saltwater');assert.ok(lab.state.salinity>35,'salt top-off adds salt');
+lab.reset();lab.apply('uptake');close(lab.state.alkalinity,8);close(lab.state.calcium,426.425);close(lab.state.salinity,35);
+lab.apply('nutrients');lab.apply('change');close(lab.state.nitrate,5.6);close(lab.state.phosphate,.056);close(lab.state.alkalinity,8.1);
+for(let i=0;i<100;i++){lab.apply('evaporate');lab.apply('uptake');}assert.equal(lab.volume,80);assert.equal(lab.history.length,12);assert.ok(Object.values(lab.state).every(x=>Number.isFinite(x)&&x>=0));
+lab.reset();assert.deepEqual(lab.state,reefReference);assert.equal(lab.history.length,1);
+console.log('Reef chemistry lab: salt/mineral conservation, freshwater vs salt top-off, uptake, mixing, limits and reset passed.');

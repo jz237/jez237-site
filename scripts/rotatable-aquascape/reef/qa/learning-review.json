@@ -1,0 +1,69 @@
+{
+  "baseline": "4436485e2 reef build / 352f6ccc7 site",
+  "learning": {
+    "checks": {
+      "lessons": true,
+      "closeups": true,
+      "lighting": true,
+      "feeding": true,
+      "chemistry": true,
+      "labIndependent": true,
+      "keyboardFocus": true,
+      "mobile": true,
+      "tablet": true,
+      "fullscreen": true,
+      "navigation": true
+    },
+    "errors": [],
+    "scene": {
+      "fish": 21,
+      "triangles": 18579180,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    }
+  },
+  "performance": [
+    {
+      "mode": "prior",
+      "readyMs": 8596,
+      "taskSeconds": 3.469958,
+      "fps": 59.99700014999255,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    },
+    {
+      "mode": "current",
+      "readyMs": 8689,
+      "taskSeconds": 3.6205789999999993,
+      "fps": 58.53373006194824,
+      "triangles": 18577724,
+      "fishPassStats": {
+        "meshes": 126,
+        "materials": 84,
+        "geometries": 42
+      }
+    }
+  ],
+  "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Local regression sample only. Current 58.53 versus prior 60.00 FPS; 8689 versus 8596ms ready; no speedup claimed.",
+  "visualReview": [
+    "Desktop front: turquoise toolbar follows the freshwater order and retains habitat/home navigation.",
+    "Desktop lessons and chemistry: readable right panel alongside the actual animated reef. Living close-up actions frame animals and coral.",
+    "390px phone: reef stays visible above independently scrolling guide; sticky close button and reopening at top verified.",
+    "Front, oblique, close-up and mobile inspected; full geometry/materials/fish behavior preserved."
+  ],
+  "science": "Independent illustrative 100L mixing/mineral-use lab, explicitly not live measurements or a coupled reef simulation. Conservative evaporation/top-off/water-change mass balance; pure-CaCO3 calcium/alkalinity uptake; explicitly hypothetical nutrient load. No pH solver, dosing calculator or universal livestock targets.",
+  "validation": "Full check:reef including new chemistry mass-balance tests; targeted browser interactions/keyboard/fullscreen/responsive controls; planted sync/release and storefront link checks all pass.",
+  "sources": [
+    "https://oceanservice.noaa.gov/education/tutorial_corals/coral02_zooxanthellae.html",
+    "https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep20-evaporation",
+    "https://www.bulkreefsupply.com/content/post/saltwater-aquarium-beginners-guide-episode-5",
+    "https://www.bulkreefsupply.com/content/post/5-minute-saltwater-aquarium-guide-ep19-calcium-and-alkalinity"
+  ]
+}
