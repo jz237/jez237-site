@@ -54,6 +54,9 @@ use these instructions before writing code or snippets.
   Discord's AI Sounds channel, with full waveform players.
 - `/computer-generated-sounds/` - computer-generated sound hub linking to
   Commodore 64 SID music, Commodore Amiga music, and AI-generated music.
+- `/multimedia/` - the multimedia screening room: game captures, AI films
+  and renders. One watch page per video at `/multimedia/<slug>/`. See the
+  Multimedia section below.
 - `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
 - `/demos/model-s-studio/` - interactive Tesla Model S Plaid exploded-view
@@ -488,6 +491,28 @@ context, and audio file.
 
 Do not invent generic artwork. If adding per-track images, use artwork
 Jez provided or explicitly approved.
+
+## Multimedia
+
+Videos Jez adds over time live in two places:
+
+- GitHub vault `https://github.com/jz237/multimedia`, served by GitHub Pages at
+  `https://jz237.github.io/multimedia/`. Holds the full-resolution masters:
+  `<slug>/<slug>-1080p.mp4` (H.264 + AAC, +faststart, under 100 MB, which is
+  GitHub's per-file limit), plus `poster.jpg`, `thumb.webp` (960x540),
+  `og.jpg` (1200x630), `catalog.json` and the README table.
+- jez237.com `/multimedia/` screening room. `index.html` has the featured
+  "Now showing" reel and the reel-shelf cards. Each video gets
+  `/multimedia/<slug>/index.html`: a watch page that plays the GitHub master,
+  optionally with a lite copy hosted here for link previews (Cloudflare Pages
+  files must stay under 25 MiB), plus chapters.
+
+To add a video: push the master to the vault, add its `catalog.json` entry
+and README row, add a reel card (newest first) and a watch page on
+jez237.com, then update `sitemap.xml`. The CSP `media-src` already allows
+`https://jz237.github.io`. Older site-hosted clips in `/multimedia/`
+(Anatidaephobia, the Vengeance Cybertect van) are unlisted. Only add them to
+the shelf if Jez asks.
 
 ## Games, weather, ops, and prototypes
 
