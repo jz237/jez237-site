@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-27T19:05:40.292703+00:00",
+  "checkedAt": "2026-09-27T19:10:06.832272+00:00",
   "scope": "Research-informed swimming, habitat, schooling, feeding and night refuge behavior for all seven reef fish species",
   "files": [
     "assets/anthias-qh5-fys7.glb",
@@ -38,7 +38,7 @@
     "allThreeReefBuildCopies": true,
     "freshwaterReleaseAndSyncGuards": true,
     "browserReview": true,
-    "liveHiddenReefBytes": false
+    "liveHiddenReefBytes": true
   },
   "browserReview": {
     "method": "Codex browser UI; automatic browser launcher not run",
@@ -59,7 +59,8 @@
     "consoleErrors": 0,
     "screenshots": [
       "D:/Projects/thehiddenreef/reef-swimming-mobile.png",
-      "D:/Projects/thehiddenreef/reef-swimming-oblique.png"
+      "D:/Projects/thehiddenreef/reef-swimming-oblique.png",
+      "D:/Projects/thehiddenreef/reef-swimming-live.png"
     ]
   },
   "validationNotes": [
@@ -68,8 +69,19 @@
     "Eighteen isolated feeding cases across six swimming species require actual mouth contact; separate mandarin terrain/feeding checks pass.",
     "School alignment is checked against an unrelated-fish counterfactual, not against profile constants.",
     "Speeds and rhythms are authored animation estimates, not measured adult physiological performance. Research sources are in SWIMMING-RESEARCH.md and the reef guide.",
-    "Freshwater source and bundles remain unchanged; existing 83-asset sync and release guards pass."
+    "Freshwater source and bundles remain unchanged; existing 83-asset sync and release guards pass.",
+    "Published Hidden Reef JS/CSS match the tested build; live species guide and source links reviewed, with no browser console errors."
   ],
-  "publication": [],
-  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under the current login (previously confirmed Cloudflare error 10000); do not report both domains synchronized."
+  "publication": [
+    "Hidden Reef Cloudflare Pages",
+    "GitHub main"
+  ],
+  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under the current login (previously confirmed Cloudflare error 10000); do not report both domains synchronized.",
+  "deployment": {
+    "sourceCommit": "4507e09e22df0387e3b79d33bb66ab5014df2144",
+    "preview": "https://077bb5d3.hidden-reef.pages.dev",
+    "production": "https://hidden-reef.pages.dev/showroom/reef/",
+    "verifiedJs": "assets/index-BUjWe4kg.js",
+    "verifiedCss": "assets/index-DouRi2np.css"
+  }
 }
