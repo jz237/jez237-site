@@ -8,8 +8,19 @@ node nexttoken.mjs   # ~50 min on CPU → nexttoken.json
 node post.mjs        # adds prompt token IDs → nexttoken.final.json
 node post2.mjs       # re-decodes generated pieces so multi-byte (CJK) tokens aren't U+FFFD
 node embed.mjs       # ~1 min → embeddings.json
-cp nexttoken.final.json ../../how-ai-works/data/nexttoken.json
-cp embeddings.json ../../how-ai-works/data/embeddings.json
+node extras.mjs      # ~15 min → nexttoken.v2.json (adds "pick the first token" branches) + maths.json
+node chat.mjs        # ~3 min → chat.json (base vs chat-tuned SmolLM2)
+cp nexttoken.v2.json ../../how-ai-works/data/nexttoken.json
+cp embeddings.json maths.json chat.json ../../how-ai-works/data/
+```
+
+Video and share image (serve the site on :8811 first, e.g. `python3 -m http.server 8811` from the repo root):
+
+```bash
+node record.mjs      # captioned tour → video/*.webm, ~70 s
+ffmpeg -i video/*.webm -vf "setpts=PTS/1.15,fps=30" -c:v libx264 -crf 27 -preset slow -pix_fmt yuv420p -movflags +faststart -an ../../how-ai-works/media/tour.mp4
+ffmpeg -ss 22.5 -i video/*.webm -frames:v 1 -q:v 3 ../../how-ai-works/media/tour-poster.jpg
+node og.mjs          # 1200×630 share image → how-ai-works/media/og.jpg
 ```
 
 After copying, bump the `?v=` stamp on the data fetches (and `lab.js`/`lab.css` if touched) so caches refresh.
@@ -21,3 +32,6 @@ For each prompt in `PROMPTS` it samples rollouts at every temperature in `TEMPS`
 
 ## embed.mjs
 Model: `Xenova/all-MiniLM-L6-v2`. It embeds the phrases in `GROUPS` plus the search `QUERIES`, projects them to 2D with a small built-in t-SNE, and stores the full cosine-similarity matrix. Queries are placed at the similarity-weighted centre of their three nearest items.
+
+## extras.mjs and chat.mjs
+`extras.mjs` extends the Qwen trie with a greedy continuation for each of the root's top-10 tokens (`p.picks`), and asks the base model some sums (`maths.json`; greedy, no tools). `chat.mjs` uses **SmolLM2-360M base vs SmolLM2-360M-Instruct** for the before/after-training comparison. Qwen2.5-0.5B "base" was tried first but answers questions almost like a chat model (lots of Q&A in its pretraining), which hid the contrast.
