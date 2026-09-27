@@ -38,6 +38,105 @@
     }
   },
   {
+    "id": "2026-09-26-factual-infographic-factual-infographic-hemophobia-before-t",
+    "title": "Factual infographic: Hemophobia — Before the Blood Test",
+    "tests": "factual_subtype: phobia-infographic; phobia: hemophobia; sources verified 2026-09-26; no subjective non-Monday review; archive_slot=2026-09-26T20:08; concept=hemophobia-clinic-sealed-blood-vial; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished image itself: a sophisticated, portrait-oriented, museum-quality medical-psychology infographic titled “HEMOPHOBIA — BEFORE THE BLOOD TEST”. Direct-to-canvas editorial illustration, not a photographed poster, page on a table, wall chart mockup, or screen. A dramatic, compassionate dominant hero scene fills the central upper half: an adult patient in a believable bright outpatient blood-draw room sits safely in a chair, hands gripping the armrests, looking anxiously away from a tiny sealed blood specimen vial on a counter; a calm clinician nearby, no needle entering skin, no wound or gore. Make the fear legible through tightened posture and narrowed attention, not horror effects. Textured woven clothing, brushed-steel tray, translucent vial, subtle daylight and clinical task lighting, dimensional tile and glass; warm human skin tones against cool teal and muted burgundy. The vial is small and safely contained. Integrate fine leader lines and translucent diagram overlays directly around the hero. Below and around it build SEVEN distinct, spacious illustrated information panels with crisp short readable headings and minimal exact labels, each genuinely explanatory: (1) DEFINITION: small blood-drop icon and “Intense fear of blood” with a side-by-side cue that feeling of danger can exceed actual danger in this supervised setting; (2) TRIGGER: close-up diagram of the sealed specimen vial and sight/anticipation arrows toward attention, explicitly separate fear of blood from fear of needles; (3) BODY ALARM: anatomical bust cutaway with callouts “dizziness”, “noticeable heartbeat”, “trembling”, “nausea”, each marked “may occur”; (4) ATTENTION: tight eye-and-vial close-up showing how a tiny visual cue can dominate the person's focus, caption “anticipation can raise anxiety”; (5) AVOIDANCE LOOP: three-stage circular diagram “blood cue → anxiety → avoidance”, caption “avoidance can interfere with care”, no unsupported cure claim; (6) PERCEIVED / ACTUAL: paired calibrated vignettes, subjective alarm signal contrasted with a safely contained specimen and attentive clinician, label “fear can be out of proportion to danger”; (7) SUPPORT: clinician-and-patient consultation vignette with gentle stepped-path diagram, labels “talk to a clinician”, “CBT”, “planned exposure therapy”, “support is available”, no do-it-yourself exposure instructions. Include at least four fully drawn macro diagrams/close-ups: sealed vial, facial attention, body-symptom bust, three-stage avoidance arrows, plus the paired context comparison. Carefully engineered magazine-grade typographic hierarchy: large title, informative one-line deck “Understanding blood-related fear”, panel headings, few large legible labels; no invented statistics, diagnosis checklist, citations, logos, or URLs in image. Retain coherent clinical realism, rich tactile microdetail, nuanced body language, and plenty of breathing room for legibility. Output one fully composed detailed educational illustration, not loose panels or text-only poster.",
+    "image": "images/2026-09-26-factual-infographic-factual-infographic-hemophobia-before-t.jpg",
+    "thumb": "thumbs/2026-09-26-factual-infographic-factual-infographic-hemophobia-before-t.webp",
+    "color": "#a19f9c",
+    "date": "2026-09-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hemophobia-clinic-sealed-blood-vial",
+      "imageSha256": "4e9c38c179c7b613839b572c68d8669ff8052501629d4d053e9e6f0340abf463",
+      "imageDHash": "0ecce122261c2c23"
+    },
+    "factualInfographic": {
+      "topic": "Hemophobia: fear of blood, body alarm, avoidance, and evidence-based support",
+      "description": "An evidence-based infographic explaining hemophobia in a supervised blood-test setting, possible anxiety symptoms, avoidance, risk perception, and professional CBT/exposure support.",
+      "sourceNote": "Verified scope: NHS Phobias https://www.nhs.uk/mental-health/conditions/phobias/ and NIMH Phobias and Phobia-Related Disorders https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-27T00:09:10.089888+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Fear of blood is a recognized example of a specific phobia.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A phobia involves intense fear or anxiety out of proportion to actual danger.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seeing or anticipating the feared object can trigger severe worry or immediate anxiety.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A phobia can cause dizziness, noticeable heartbeat, chest tightness, nausea, or trembling; responses vary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People may actively avoid a feared object or situation; avoidance can interfere with daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Professional support can include cognitive behavioral therapy and exposure therapy.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exposure therapy helps people engage with situations they have been avoiding and is a CBT method; treatment should be planned with a qualified professional.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Someone whose phobia affects their life can seek help from a GP or other health care provider.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-26-factual-infographic-factual-infographic-claustrophobia-the-",
     "title": "Factual infographic: Claustrophobia — The Museum Elevator",
     "tests": "phobia: claustrophobia; museum elevator scenario; NHS and NIMH source verification; no subjective non-Monday review; archive_slot=2026-09-26T12:08; concept=claustrophobia-museum-elevator-enclosure; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
