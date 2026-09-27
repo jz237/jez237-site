@@ -68,17 +68,33 @@
       b.x = wrapX(x + b.vx);
       syncIndex(b);
     }
+    landingPlatform(b) {
+      if (b.kind !== 'player') return super.landingPlatform(b);
+      // Support the feet, not the wider body: the arcade overlap margin could
+      // re-land a rider every tick after its support point had left the ledge.
+      const previousY = b.y - b.vy;
+      return this.platforms.find(p => this.xInPlat(b.x, p)
+        && previousY <= p.y + 2 && b.y >= p.y - 1) || null;
+    }
     integrate(b) {
       if (b.kind !== 'player' || b.materializing || !b.alive) return super.integrate(b);
-      const vx = b.vx, vy = b.vy, eventStart = this.events.length;
+      const vx = b.vx, vy = b.vy, previousY = b.y, eventStart = this.events.length;
       if (!b.onGround && !b.grabbed) {
         if (!b.flapHeld && b.vy < 0) b.vy *= .985;
         // Replace only the player's gravity; enemies retain their established AI.
         b.vy = clamp(b.vy + FLIGHT.gravity, -FLIGHT.maxRise, FLIGHT.maxFall)
           - (b.flapHeld ? PHYS.GRAV_DOWN : PHYS.GRAV_UP);
       }
+      const fallingVy = b.vy + (b.flapHeld ? PHYS.GRAV_DOWN : PHYS.GRAV_UP);
       super.integrate(b);
-      const contact = this.events.slice(eventStart).some(e => e.type === 'cthud' && e.birdId === b.id);
+      const contact = this.events.slice(eventStart).find(e => e.type === 'cthud' && e.birdId === b.id);
+      const ledge = contact && this.platforms.find(p => p.id === contact.platform);
+      // A descending body may graze the cliff after its feet leave the top.
+      // Slide past that edge instead of bouncing upward into an endless hover.
+      if (ledge && fallingVy > 0 && b.vy < 0 && !this.xInPlat(b.x, ledge)) {
+        b.vy = fallingVy;
+        b.y = previousY + fallingVy;
+      }
       if (contact && vx * b.vx < 0) {
         b.vx = -Math.sign(vx) * Math.min(FLIGHT.maxWallRebound, Math.abs(vx) * FLIGHT.wallRebound);
       }
