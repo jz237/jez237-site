@@ -611,5 +611,24 @@
       "imageSha256": "5c83c1d64b0668a2addac25cb344612636eaa14a920b05d358d6e0dbc04f18aa",
       "imageDHash": "2110076181801000"
     }
+  },
+  {
+    "id": "2026-09-27-outer-space-exploration-enceladus-plume-traverse-future-pro",
+    "title": "Enceladus Plume Traverse — Future Probe Artist Impression",
+    "tests": "Scientifically informed artist impression; fictional unflown future probe, not direct observation or Cassini image. NASA Enceladus overview: https://science.nasa.gov/mission/cassini/science/enceladus/ ; ESA Cassini plume sampling: https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Cassini_samples_the_icy_spray_of_Enceladus_water_plumes; archive_slot=2026-09-27T12:20; concept=enceladus-plume-sampling-probe; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a single magnificent, scientifically informed space-exploration artist impression, not a photograph or Cassini image. A proposed, unflown robotic sampling probe makes a tangential pass across the sparse south-polar water-vapor and ice-grain jets of Saturn’s moon Enceladus. Compose from an exterior camera a few spacecraft lengths away: the small spacecraft occupies the right foreground in a dynamic three-quarter view, the curved bright icy limb of Enceladus fills the lower and left frame, and the actual south polar terrain has long, dark bluish, roughly parallel tiger-stripe fractures cut through fractured, brilliant water ice. Several separate, finely filamented translucent jets spring from points along those fissures and fan into a diffuse, delicate plume. Backlighting from the distant Sun makes the ice grains glint without turning the plume into thick smoke, fire, magic light or a solid waterfall. Place Saturn behind the moon in the far upper background, its cream and muted ochre atmosphere and razor-thin rings convincingly huge yet partially occluded by Enceladus; use orbital geometry and lighting that feel credible, not a montage of floating planets. The fictional near-future probe is engineered and mission-specific: compact asymmetric instrument bus clad in gold and dark multilayer insulation, a forward-facing protected particle inlet and mass-spectrometer housing oriented into the relative plume flow, articulated sensor boom, communications dish angled away from the plume, radiator surface, folded or compact power appendages, small attitude-control nozzles with no firing exhaust, and a subtle sacrificial dust shield on the leading edge. Give it plausible seams, fasteners, thermal blankets, instrument apertures and scale; no crew or cockpit. Set a clear gap between probe and surface so it is visibly a flyby, not a landing. Thin scattered grains sparkle between camera and craft, while most space remains deep black. Restrained natural colors: pearl-white Enceladus, blue-gray fissure shadows, warm Saturn, copper-gold foil and cold solar rim light. Crisp monumental planetary detail, delicate plume physics, strong visual hierarchy, cinematic but truthful illumination, high dynamic range and intricate materials. No captions, annotations, labels, diagrams, borders, logos, watermark, mission patch, or text. Do not imply this future craft is a real launched mission or that the scene is a direct photograph.",
+    "image": "images/2026-09-27-outer-space-exploration-enceladus-plume-traverse-future-pro.jpg",
+    "thumb": "thumbs/2026-09-27-outer-space-exploration-enceladus-plume-traverse-future-pro.webp",
+    "color": "#6f6f72",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "outer-space-exploration",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "enceladus-plume-sampling-probe",
+      "imageSha256": "88cf3c0d96f3ae078a705ba124e8e87c576fa456653f0870b72c79c2ceb6e224",
+      "imageDHash": "7bd97d1d0d070303"
+    }
   }
 ]
