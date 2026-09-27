@@ -74,6 +74,21 @@ test('real platform side impact stays damped on subsequent physics ticks', () =>
   assert.ok(Math.abs(p.x-x) < 3);
   assert.ok(Math.abs(p.vx) < .1);
 });
+test('feet past either ledge fall instead of repeatedly landing on the body overlap margin', () => {
+  for (const x of [79.5, 168.5]) for (const face of [-1, 1]) {
+    const {e,p} = arena();
+    e.platforms = new JoustEngine().platforms.filter(p => p.id === 'midTop');
+    Object.assign(p, {x,y:74,vx:0,vy:0,onGround:true,face});
+    advance(e,p,{},20);
+    assert.equal(p.onGround,false);assert.ok(p.y > 80);
+  }
+  const {e,p} = arena();
+  e.platforms = new JoustEngine().platforms.filter(p => p.id === 'topR');
+  Object.assign(p,{x:-9,y:62,vx:0,vy:0,onGround:true});
+  advance(e,p,{},20);
+  assert.equal(p.onGround,true,'wrapped platform support must still work');
+  assert.equal(p.y,62);
+});
 test('platform underside and ceiling contacts produce a small vertical rebound', () => {
   const {e,p} = arena();
   e.platforms = new JoustEngine().platforms.filter(x => x.id === 'midTop');

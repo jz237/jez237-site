@@ -1,5 +1,14 @@
 # Modern Joust 1.12 — flight controls
 
+## 1.12.1 — ledge alignment
+
+Standing artwork is anchored at the painted feet, in both facing directions.
+Landing now requires the feet to be above a platform, preventing the old body
+overlap margin from holding a rider in the air beyond either ledge. Wrapped
+platform support and the 1.12 control tuning are preserved.
+
+## 1.12.0
+
 Left and right now accelerate the rider on every simulation tick, without needing
 to flap. Opposite input brakes quickly, and releasing the direction slows drift.
 
