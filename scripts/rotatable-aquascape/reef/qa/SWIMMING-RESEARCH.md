@@ -31,11 +31,13 @@ None should be reused as a generic adult cruise speed. Routine travel, holding p
 
 The authored motion should retain a steady head, a traveling rear-body wave, independent fins, smooth acceleration/braking, coasts, inspection pauses and gradual upright turns. Individual timing must vary. Benthic and host-associated fish still need real front-to-back movement and changing terrain height, with collision clearance; apparent depth must never come from crossing solid scenery.
 
-## Implementation validation — underway
+## Implementation validation
 
-The species profiles and behavior changes are implemented. Simulation validation is **underway**, not fully complete: the initial three seeded, two-minute community runs pass spacing, upright movement, independent timing and local habitat assertions; dedicated feeding checks also pass. Night-refuge review found and corrected repeated recovery before shelter arrival. The three-seed `night-refuge.mjs` regression now confirms that anthias and chromis descend to accessible lower water, genuinely rest, retain fish/rock clearance and freeze on pause. Full-suite results, visual review and deployment verification are still **pending**; this document does not certify a release.
+Species profiles, local habitat behavior, independent stroke/glide and fin phases, school coordination, food capture and nighttime refuges are implemented. Three seeded daytime communities and three seeded day/night communities pass finite upright motion, spacing, independent timing, local habitat and paused-state checks. Eighteen feeding fixtures require actual mouth contact; existing mandarin and anemone-host checks also pass.
 
-Acceptance review should confirm:
+The non-browser reef suite and TypeScript build passed. Desktop, oblique, close-up and phone views were reviewed through the Codex browser, including feeding, pause/resume and blue-hour settling. The Hidden Reef production JS/CSS match the tested build, and the live species notes/source links were verified. See `approved-build.json` for scope and the separate jez237 Cloudflare access limitation.
+
+The checks cover:
 
 - The seven species visibly differ in route size, preferred habitat, pauses and feeding responses.
 - Chromis align and maintain spacing without identical synchronized loops; sheltered species return to safe home regions.
@@ -45,6 +47,3 @@ Acceptance review should confirm:
 
 Detailed working notes: [schooling, host and benthic species](species-research-school-host.md) and [tang, butterflyfish and gramma](species-research-tangs-gramma.md).
 
-## Final local validation
-
-The TypeScript build, non-browser reef QA modules, three seeded daytime communities, three seeded day/night communities, 18 real mouth-contact feeding fixtures and existing mandarin/host navigation checks passed. Front, oblique, close-up and 390-by-844 phone views were reviewed in the Codex browser, including feed, pause/resume and blue hour. The three published-folder build copies match. Live publication verification is recorded separately in `approved-build.json`.
