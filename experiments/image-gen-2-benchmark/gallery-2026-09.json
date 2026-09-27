@@ -57,6 +57,116 @@
     }
   },
   {
+    "id": "2026-09-27-factual-infographic-factual-infographic-mysophobia-the-shar",
+    "title": "Factual infographic: Mysophobia — The Shared Door Handle",
+    "tests": "Phobia infographic; mysophobia; direct-canvas seven panels and three explanatory close-ups; no visible germs, invented statistics or self-directed exposure advice.; archive_slot=2026-09-27T18:20; concept=mysophobia-shared-library-door-handle; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the FINISHED direct-canvas portrait factual infographic, not a photographed poster or page mockup. Title, in large crisp type: “MYSOPHOBIA — THE SHARED DOOR HANDLE”; subtitle: “When contamination uncertainty becomes a fear trigger.” Museum-quality editorial medical illustration; precise readable typography, disciplined navy–warm ivory–oxidized copper palette, luminous teal wayfinding, tactile realism, no logos, no citations or URLs on image. Hero occupies the central upper half: an adult of indeterminate ethnicity in a public library vestibule, hand paused a few centimeters from a brushed stainless-steel pull handle. Natural afternoon light grazes fine fingerprints, a worn edge and condensation traces; rain-damp coat fabric, tiled floor, reflected glass doors, distant ordinary visitors establish everyday context. Show fear through attentive posture, tense fingers and shallow visual focus, not melodrama. Make the handle LOOK ordinary; do not depict visible pathogens or falsely imply a specific contamination level. A thin outlined annotation separates “uncertain cleanliness” from “known hazard.”\nAround the hero build SEVEN substantial, numbered illustrated panels, each visually distinct and large enough for succinct readable labels: (1) DEFINITION: “Mysophobia / germophobia: extreme fear of germs and contamination,” with a simple face-to-surface-to-thought vignette; (2) TRIGGER MAP: close-up diagram of the shared handle, an unfamiliar surface, and an uncertainty question bubble—“Is it clean?”—without claiming germs are visible; (3) BODY ALARM: anatomical torso cutaway with heartbeat, trembling hand and lightheaded-head callouts, clear physiological arrows but no invented internal mechanism; (4) PERCEIVED / ACTUAL: two calibrated side-by-side scales, “felt threat can exceed known danger” beside “real-world hygiene still matters,” with no numerical risk estimate; (5) AVOIDANCE LOOP: three-step circular diagram, notice handle → avoid touching → short-term relief → fear remains, explicitly framed as a possible phobia pattern, not universal; (6) FUNCTIONAL COST: contextual vignette of taking a long route away from the door and missing an ordinary activity, caption “avoidance may restrict daily life”; (7) SUPPORT: calm clinician-and-patient consultation diagram and a staged pathway labeled “discuss concerns → CBT → guided exposure when appropriate,” conveying treatment as individualized and supported, never an instruction to force exposure. Include at least THREE magnified explanatory inset close-ups: fingertip hovering near handle (trigger uncertainty), pulse/trembling hand (body alarm), and a branching path from avoidance to supported care (response). Use clear hairline leaders, generous separation, concise wording, coherent arrows and purposeful iconography. Keep all copy factual and legible, with no fabricated prevalence, safety guarantees, diagnostic checklist, gore or microorganisms represented as directly visible. The complete infographic should be exceptionally detailed yet visually coherent.",
+    "image": "images/2026-09-27-factual-infographic-factual-infographic-mysophobia-the-shar.jpg",
+    "thumb": "thumbs/2026-09-27-factual-infographic-factual-infographic-mysophobia-the-shar.webp",
+    "color": "#696863",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "mysophobia-shared-library-door-handle",
+      "imageSha256": "ba839862a479da018fa6d9e361cf641459c771c2a78e1c52638e087ee8bb5271",
+      "imageDHash": "6bcb876572f42167"
+    },
+    "factualInfographic": {
+      "topic": "Mysophobia: fear of germs and contamination, triggers, body alarm, avoidance, and evidence-based support",
+      "description": "Educational infographic on contamination fear centered on an ordinary shared door handle; seven source-backed panels and three explanatory insets.",
+      "sourceNote": "Cleveland Clinic: https://my.clevelandclinic.org/health/diseases/22436-mysophobia-germophobia ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; NIMH: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders . Verified definition, trigger type, phobia symptoms/avoidance and CBT/exposure support; no surface contamination claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-27T22:20:34Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Mysophobia (Germophobia): Causes, Symptoms & Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22436-mysophobia-germophobia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Mysophobia, also called germophobia, is an extreme fear of germs and contamination.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "An uncertain-cleanliness public surface can be a trigger for mysophobia.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobia can produce fear out of proportion to the actual danger, without implying that all public surfaces are germ-free.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include intense anxiety, a noticeable heartbeat, dizziness, and trembling.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People with specific phobias may avoid feared objects or situations.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance can interfere with daily life; phobia treatment can help.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioral therapy is an effective treatment for phobias.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT approach that helps people engage with situations they have been avoiding; it can be planned with a qualified professional.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A healthcare professional can evaluate phobia symptoms and discuss next steps if fear affects daily life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-26-ocean-exploration-the-blue-margin-rov-beneath-the-pressure-",
     "title": "The Blue Margin — ROV Beneath the Pressure Ridge",
     "tests": "; archive_slot=2026-09-26T00:08; concept=tethered-rov-polar-ice-pressure-ridge; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
