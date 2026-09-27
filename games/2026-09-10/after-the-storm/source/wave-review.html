@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wave realism review</title><style>body{margin:0;background:#12313c;color:#ecf9ff;font:13px system-ui;overflow:hidden}nav{position:absolute;top:8px;left:8px;z-index:2;background:#102d39cc;padding:8px;border-radius:8px;max-width:92vw}nav.hide{display:none}button,select{padding:6px;margin:2px}output{display:block;max-width:80vw;white-space:pre-wrap}canvas{display:block}</style></head><body><nav id="nav"><select id="venue"></select><select id="sea"><option value="surf">Big surf</option><option value="course">Venue conditions</option><option value="calm">Calm</option><option value="chop">Wind chop</option><option value="storm">Storm swell</option></select><select id="cam"><option>chase</option><option>low</option><option>high</option><option>sun</option><option>away</option></select><button id="play">Play / freeze</button><button id="hide">Hide panel (H)</button><output id="status"></output></nav><script type="module">
+// Deterministic water views for before/after comparison of the shared wave model.
+// URL: ?venue=greyhaven&sea=surf&t=60&cam=chase&freeze=1. The foam atlas is warmed
+// for eight seconds before the requested time so crest and shore foam are present.
+import * as T from '../vendor/three.module.js';import {makeSky,makeOcean,shared} from '../ocean.js';import {makeCourseWorld} from '../course-world.js';import {COURSES,getCourse} from '../courses.js';import {createRace,raceWeather} from '../race-core.js';import {makeCurlingBreakers} from '../curling-breakers.js';import {makeCrestSpray} from '../crest-spray.js';import {cloudScene,weatherUniforms} from '../weather-light.js';import {setWaterCharacter} from '../water-character.js';import {wave} from '../simulation.js';import {skyColors} from '../ocean.js';
+const q=new URLSearchParams(location.search),venue=q.get('venue')||'greyhaven',sea=q.get('sea')||'surf',cam=q.get('cam')||'chase',target=Number(q.get('t')||60);
+const $=id=>document.getElementById(id);
+for(const c of COURSES){const o=document.createElement('option');o.value=c.id;o.textContent=c.name;$('venue').append(o);}
+$('venue').value=venue;$('sea').value=sea;$('cam').value=cam;
+const go=()=>{const u=new URLSearchParams(location.search);u.set('venue',$('venue').value);u.set('sea',$('sea').value);u.set('cam',$('cam').value);location.search=u;};
+$('venue').onchange=$('sea').onchange=$('cam').onchange=go;
+const course=getCourse(venue),state=createRace({course,seaState:sea});setWaterCharacter(course);
+const weather=raceWeather(state,target),storm=weather.storm;
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(1);renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=weather.night?1.4:1.06;
+window.shaderErrors=0;renderer.debug.onShaderError=(gl,program,vs,fs)=>{window.shaderErrors++;console.error('Shader error',gl.getProgramInfoLog(program),gl.getShaderInfoLog(vs),gl.getShaderInfoLog(fs));};
+const scene=new T.Scene();scene.fog=new T.FogExp2(course.sky[0],weather.fog);const camera=new T.PerspectiveCamera(62,innerWidth/innerHeight,.15,1800);
+const sun=new T.DirectionalLight(course.theme==='resort'?0xffc782:0xffedcc,weather.night?.22:3.5-storm*2);const ambient=new T.HemisphereLight(0xbad6e0,0x565039,weather.night?.66:.78-storm*.12);scene.add(sun,sun.target,ambient);
+const sky=makeSky(scene);document.body.append(renderer.domElement);
+const ocean=makeOcean(renderer,scene,camera);ocean.setVenue(course);const world=makeCourseWorld(scene,course,ocean),breakers=makeCurlingBreakers(scene),spray=makeCrestSpray(scene);breakers.reset(course);cloudScene(scene);
+const envScene=new T.Scene();envScene.add(sky.clone());shared.storm.value=storm;shared.seaLevel.value=weather.seaLevel;const pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(envScene,.04,.1,2000).texture;scene.environmentIntensity=weather.night?.45:.62;
+sun.position.copy(skyColors.skySun.value).multiplyScalar(260);
+// Stand at the first rider's grid slot and look along the start heading, or toward/away from the sun.
+const r=state.racers[0],sd=skyColors.skySun.value;let view,fx,fz,ox,oz,rig;
+function setCam(name){view=name;let heading=r.heading;if(name==='sun')heading=Math.atan2(sd.x,sd.z);if(name==='away')heading=Math.atan2(-sd.x,-sd.z);fx=Math.sin(heading);fz=Math.cos(heading);ox=r.x+fx*18;oz=r.z+fz*18;rig={chase:[-7,2.6,34],low:[-4,1.15,30],high:[-14,16,70],sun:[-6,2.4,40],away:[-6,2.4,40]}[name]||[-7,2.6,34];}
+setCam(cam);
+let time=Math.max(0,target-8),playing=q.get('freeze')==='0';
+function place(){const base=wave(ox,oz,time,storm);camera.position.set(ox+fx*rig[0],Math.max(base+1,shared.seaLevel.value+rig[1]),oz+fz*rig[0]);camera.lookAt(ox+fx*rig[2],shared.seaLevel.value+(view==='high'?0:.6),oz+fz*rig[2]);}
+// Render synchronously and post a JPEG to the local capture server (hidden panes may not tick rAF).
+window.capture=async(names=['chase','low','high','sun','away'],tag='')=>{ocean.render(camera);if(window.shaderErrors)throw new Error(window.shaderErrors+' shader compile error(s)');const saved=[];for(const n of names){setCam(n);step(0);ocean.render(camera);const url=renderer.domElement.toDataURL('image/jpeg',.93),name=`${tag}${venue}-${sea}-${n}.jpg`;saved.push(await fetch('http://127.0.0.1:4180/save?name='+name,{method:'POST',body:url}).then(r=>r.text()));}setCam(cam);return saved;};
+function step(dt){time+=dt;shared.time.value=time;weatherUniforms.weatherTime.value=time;weatherUniforms.weatherStorm.value=storm;weatherUniforms.weatherSun.value.copy(skyColors.skySun.value);place();ocean.mat.uniforms.craft.value.set(camera.position.x,camera.position.z,0,0);world.update(time,storm,null,Infinity,[],[1,camera.position]);breakers.update(time,storm,camera.position,'high');spray.update(time,storm,camera.position,'high');ocean.updateFoam(dt,camera.position.x,camera.position.z);}
+while(time<target-1e-6)step(Math.min(1/30,target-time));
+let last=performance.now(),frames=0;
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;step(playing?dt:0);ocean.render(camera);frames++;$('status').textContent=JSON.stringify({venue,sea,cam,storm:+storm.toFixed(2),time:+time.toFixed(2),playing,ready:frames>3});document.body.dataset.ready=frames>3?'1':'0';requestAnimationFrame(frame);}
+$('play').onclick=()=>playing=!playing;$('hide').onclick=()=>$('nav').classList.toggle('hide');addEventListener('keydown',e=>{if(e.code==='KeyH')$('nav').classList.toggle('hide');if(e.code==='Space')playing=!playing;});
+// Synchronous frame cost: foam update plus reflection, refraction and main passes, waiting on the GPU.
+window.bench=(frames=120)=>{const gl=renderer.getContext();setCam('chase');for(let i=0;i<10;i++){step(1/60);ocean.render(camera);}gl.finish();const t0=performance.now();for(let i=0;i<frames;i++){step(1/60);ocean.render(camera);}gl.finish();return +((performance.now()-t0)/frames).toFixed(3);};
+addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();ocean.resize();});
+if(q.get('panel')==='0')$('nav').classList.add('hide');
+requestAnimationFrame(frame);
+</script></body></html>

@@ -20,18 +20,19 @@ export function makeFoamField(renderer,common,uniforms){
  vec2 beachUV=(p-previousCenter)/previousSpan+.5;
  float beachInside=step(0.,beachUV.x)*step(beachUV.x,1.)*step(0.,beachUV.y)*step(beachUV.y,1.);
  vec2 oldBeach=texture2D(previousFoam,beachUV).ba*beachInside*foamReady;
- vec2 q=p-swellShift(p);float h;vec2 shift,grad;mat2 J;swellAt(q,h,shift,grad,J);float compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);
+ vec2 q=swellInverse(p);float h;vec2 shift,grad;mat2 J;swellAt(q,h,shift,grad,J);float compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);
  // Include the same variable surf sets that lift the hulls and rendered water.
  vec3 surface=waveSurface(p);h=surface.x;
  vec2 direction=normalize(surface.yz+vec2(.001));
  float curvature=h*2.-waveSurface(p+direction*1.5).x-waveSurface(p-direction*1.5).x;
  float crest=smoothstep(.018,.13,curvature)*smoothstep(.25,1.15,h)
   *smoothstep(.10,.32,length(surface.yz));
- crest=max(crest,smoothstep(.16,.34,compression)*storm*.35);
+ // Whitecaps from compressed wind-sea crests leave short-lived patches downwind.
+ float whitecap=smoothstep(.2,.32,compression)*smoothstep(-.1,.3,h);
  float bottom=floorDepth(p),depth=height(p)-bottom;
  float breaker=customTerrain*(1.-smoothstep(.3,2.1,depth))*smoothstep(.01,.18,depth)
   *(.28+.72*smoothstep(-.1,.7,h));
- float source=max(crest*(.19+.26*smoothstep(.8,1.8,h)),breaker*1.3);
+ float source=max(max(crest*(.19+.26*smoothstep(.8,1.8,h)),breaker*1.3),whitecap*.95);
  // Analytic accumulation remains stable when rendering is throttled.
  vec2 life=foamLifeStep(old,source,foamDt);float density=life.r,bubbles=life.g;
  // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.
