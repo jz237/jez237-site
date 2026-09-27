@@ -1,0 +1,68 @@
+[
+  {
+    "file": "public/models/coupe.glb",
+    "bytes": 11132280,
+    "sha256": "a7067ef4b0651322dbb8edcedbcf8589e871942952e6e44d7c99f236ad096993",
+    "source": "Car Concept / Blender adaptation"
+  },
+  {
+    "file": "public/models/hatch.glb",
+    "bytes": 11135456,
+    "sha256": "3e716920392683b2ab10579576c70d41e77902054f196202acceae65ab62c219",
+    "source": "Car Concept / Blender adaptation"
+  },
+  {
+    "file": "public/models/hemlock.webp",
+    "bytes": 171084,
+    "sha256": "04a9aa8be677b859ffc686347a512fa59e8733ae538d5521639a8564bad6c86f",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/maple.webp",
+    "bytes": 247604,
+    "sha256": "308f7959b7bb6ad04d2e660f94811d7b5568265947da0c7f650913949e01f1af",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/needle.webp",
+    "bytes": 55480,
+    "sha256": "e3f91f8567ec9062d471fba5d8993964e30ab6c3ad722c0fec0f85d235ca1510",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/pine.webp",
+    "bytes": 155192,
+    "sha256": "7ce3d246da5e4b26e6453e90f3932d36fe224cb6f15292c941676d03066641a7",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/pine3d.glb",
+    "bytes": 181604,
+    "sha256": "37c678546de6a69af6b4a4a9782d4236461f9989fce44fc72b7e3869f99203d5",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/rocks-lod.glb",
+    "bytes": 2044060,
+    "sha256": "9ff6999370677ea8fb1ef524b8caf601e041016afd146ee9f3c675e8775c80e7",
+    "source": "Poly Haven / rock_moss_set_01"
+  },
+  {
+    "file": "public/models/sedan.glb",
+    "bytes": 11148020,
+    "sha256": "910308ba66ce1f3c8d7efdbe865ac614a9afc3c9535ecc15236797d1040733bc",
+    "source": "Car Concept / Blender adaptation"
+  },
+  {
+    "file": "public/models/spruce.webp",
+    "bytes": 154904,
+    "sha256": "9ed33ca58f765b586ecca4ef5bd9f163d400f6f744dc8c09c8e0fa82723df5f2",
+    "source": "User First Light project"
+  },
+  {
+    "file": "public/models/spruce3d.glb",
+    "bytes": 244084,
+    "sha256": "26f516877e2697486449e22583e9a21e1ec2f2de51118c5335a8756e81de467f",
+    "source": "User First Light project"
+  }
+]

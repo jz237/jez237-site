@@ -1,0 +1,492 @@
+[
+  {
+    "id": "coupe-idle",
+    "file": "coupe-idle.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern naturally aspirated V8 sports coupe, deep resonant exhaust engine at constant 850 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "73d90d0bb901d8a78b67d68e90b9da171b311d0175643d71d711c36ac2c6ee6f",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "coupe-low",
+    "file": "coupe-low.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern naturally aspirated V8 sports coupe, deep resonant exhaust engine at constant 2200 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "88b921bc056dd50f26521033d46a7a96a6a6190aa18de3b06bbf692738fd296e",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "coupe-mid",
+    "file": "coupe-mid.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern naturally aspirated V8 sports coupe, deep resonant exhaust engine at constant 4100 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "be004994f169305c370c384eac2dc42419d42bdaa35ff98be90867e2c817465a",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "coupe-high",
+    "file": "coupe-high.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern naturally aspirated V8 sports coupe, deep resonant exhaust engine at constant 6500 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "c00b500456cd822c7d96b08e73f7024172ae0d605096d62b46957a4d9dd83a0d",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "coupe-load",
+    "file": "coupe-load.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern naturally aspirated V8 sports coupe, deep resonant exhaust, steady engine under hard acceleration load at 3500 RPM, intake induction roar. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "856bad3af7262c881dab636640771fdf1a692217fd3bbf2cbb713d73d879d693",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "coupe-shift",
+    "file": "coupe-shift.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern naturally aspirated V8 sports coupe, deep resonant exhaust, single quick mechanical paddle gear upshift, exhaust interruption and subtle clunk. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "e43a439e24fade0f3809acaa68d4e4ff0c75d30a90facca3623f85427d3c1a7f",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "coupe-exhaust",
+    "file": "coupe-exhaust.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern naturally aspirated V8 sports coupe, deep resonant exhaust, one sharp realistic exhaust overrun burble and pop. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "a46ede317ff93e518bd12624f80002e37637c2d363c8a416db4f25d2a45536ac",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "coupe-damaged",
+    "file": "coupe-damaged.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern naturally aspirated V8 sports coupe, deep resonant exhaust, uneven sputtering damaged engine with faint metallic knocking, steady. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "baedf59f25932f0f509e53020d8b00f141ed674c5b9bc55d5e7a8925a145a283",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "sedan-idle",
+    "file": "sedan-idle.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern twin turbo inline six performance sedan, smooth metallic exhaust engine at constant 850 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "85b47b1e9598e3ef04d517b0fcc5703dec895d10ae67fbf52661225a343ca226",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "sedan-low",
+    "file": "sedan-low.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern twin turbo inline six performance sedan, smooth metallic exhaust engine at constant 2200 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "633c27dc692d08cc10d0e9f7aa19ed61c983675a0234d1b5125cfc51b0af5621",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "sedan-mid",
+    "file": "sedan-mid.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern twin turbo inline six performance sedan, smooth metallic exhaust engine at constant 4100 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "25425431721a41eb60a28f7bc8128299ca99445a646f8d9604d9e76438e67c8e",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "sedan-high",
+    "file": "sedan-high.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern twin turbo inline six performance sedan, smooth metallic exhaust engine at constant 6500 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "495928f565181aeb3c4241651a143ab40b59b4a2f50e0409c224cde86ffe7257",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "sedan-load",
+    "file": "sedan-load.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern twin turbo inline six performance sedan, smooth metallic exhaust, steady engine under hard acceleration load at 3500 RPM, intake induction roar. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "5b2384704b892146cfee9bf54715785d5b6c862416542c85896bf55bfd443c5d",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "sedan-shift",
+    "file": "sedan-shift.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern twin turbo inline six performance sedan, smooth metallic exhaust, single quick mechanical paddle gear upshift, exhaust interruption and subtle clunk. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "7be73aa461320e891d13381d3c0d018de685c0a8518a6566a2346259bbf60cdf",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "sedan-exhaust",
+    "file": "sedan-exhaust.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern twin turbo inline six performance sedan, smooth metallic exhaust, one sharp realistic exhaust overrun burble and pop. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "c70f4f13e3ebedc43acd2e5f17ca19a3cf019dddc45572188c52fe3dcf622bad",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "sedan-damaged",
+    "file": "sedan-damaged.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern twin turbo inline six performance sedan, smooth metallic exhaust, uneven sputtering damaged engine with faint metallic knocking, steady. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "10d2556b661579d413397591ad978078071a3b7c712a5d06fe376290e1bc898a",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "hatch-idle",
+    "file": "hatch-idle.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern turbo four cylinder sports hatchback, raspy exhaust engine at constant 850 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "4457344e3557cd017c3bd7696253f95fc057b66c78b2912712980b2c8c121354",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "hatch-low",
+    "file": "hatch-low.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern turbo four cylinder sports hatchback, raspy exhaust engine at constant 2200 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "bdb7471d23fd055813cac005da29bc3e0947153d9a516335be5d9f5820c17cd7",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "hatch-mid",
+    "file": "hatch-mid.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern turbo four cylinder sports hatchback, raspy exhaust engine at constant 4100 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "7ace4840b05385ed3644fcf90e19fe193945d615b09f59e1ec785fc84ebf49d8",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "hatch-high",
+    "file": "hatch-high.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady continuous modern turbo four cylinder sports hatchback, raspy exhaust engine at constant 6500 RPM. Stationary close microphone, completely stable revs, no driving past, no gear changes. Isolated mechanical engine and exhaust only. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "5df0f0adcdd72da8d87be3e669ef72fe757294523f6429a5f988b3423671d6d4",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "hatch-load",
+    "file": "hatch-load.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern turbo four cylinder sports hatchback, raspy exhaust, steady engine under hard acceleration load at 3500 RPM, intake induction roar. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "abb4826ffbffa5e04ad057aa02106af4d82a0ac1b374e09bfd94658dc6531b23",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "hatch-shift",
+    "file": "hatch-shift.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern turbo four cylinder sports hatchback, raspy exhaust, single quick mechanical paddle gear upshift, exhaust interruption and subtle clunk. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "4e32c567b6d226266d7109634db1e58c4a524bad3217e2e52acc100451fbf5f7",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "hatch-exhaust",
+    "file": "hatch-exhaust.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern turbo four cylinder sports hatchback, raspy exhaust, one sharp realistic exhaust overrun burble and pop. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "3655276dcb1a618686284ae85dbe0c24fb52c0d6dae71de07cc5b74a727456da",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "hatch-damaged",
+    "file": "hatch-damaged.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "modern turbo four cylinder sports hatchback, raspy exhaust, uneven sputtering damaged engine with faint metallic knocking, steady. Isolated close recording. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "aa016153401b6260d922f79cee758ad4258d56560d2a018ce77d8259604c4c1c",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "tires",
+    "file": "tires.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Continuous realistic car tires squealing and scrubbing across dry asphalt in a sustained drift. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "0ec747bfa0ef896c88b2e1b9acce859490b6b2294cf9767c43d34cdf4f2c2955",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "gravel",
+    "file": "gravel.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Continuous close gravel crunch and fine stones spraying under fast car tires on a quarry road. No music, no voices, no speech.",
+      "duration_seconds": 5,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "1bf2f87ea830e650608b3cc0a8d19948d3c0cc3f16eab60571a7ba2ac0e58606",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=4.96:d=0.04"
+  },
+  {
+    "id": "skid",
+    "file": "skid.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Short tire skid braking hard on rough asphalt, close and dry. No music, no voices, no speech.",
+      "duration_seconds": 2,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "f6de2eed1df32a33f627dbe21ee17a8bb983c5e690e3ac147cda727515411a3d",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.96:d=0.04"
+  },
+  {
+    "id": "suspension",
+    "file": "suspension.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "One car suspension compression, dull chassis thump and brief spring rattle. No music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "e6bab2d0c571fd5927ecb26ef3bb0b85f1aef5f015f7fbcd2dec68bf06ec798b",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.46:d=0.04"
+  },
+  {
+    "id": "impact-light",
+    "file": "impact-light.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Single realistic low speed car body collision, sharp sheet metal dent and plastic crack. Dry close recording. No music, no voices, no speech.",
+      "duration_seconds": 2,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "088fb9cfc91357aad6119298bc9bc3e775e3e545588884491417dd9b6e9db1da",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.96:d=0.04"
+  },
+  {
+    "id": "impact-medium",
+    "file": "impact-medium.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Single forceful car crash with crunching metal body panels, bumper breaking and small debris falling. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 3,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "78fc503b891c2b50f6cbc2686f377073148e0ef0b3ede4b935c24f3af2724f27",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=2.96:d=0.04"
+  },
+  {
+    "id": "impact-heavy",
+    "file": "impact-heavy.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Single heavy high speed collision between two sports cars, deep impact thud, crushing metal and glass scattering. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "03d656aebf6c725bfce018e55b74345f966bc66732d541c39ae1b5d03c6010ff",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "scrape",
+    "file": "scrape.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Continuous harsh metal car body scraping a concrete barrier with gritty friction. No music, no voices, no speech.",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "fd7afd89bb4563c9793bb93ad5b1fea6da7ded12bf5a584f64a0dde19fddb89f",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=3.96:d=0.04"
+  },
+  {
+    "id": "glass",
+    "file": "glass.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "One automotive side window shattering, small glass fragments scattering onto asphalt. No music, no voices, no speech.",
+      "duration_seconds": 2,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "fa962f13926264c75b58a2ba248fc994299a7a348a191d26ee7833c67b6bf0da",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.96:d=0.04"
+  },
+  {
+    "id": "debris",
+    "file": "debris.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A loose metal bumper hitting gravel and bouncing twice with metallic clattering. No music, no voices, no speech.",
+      "duration_seconds": 2,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "63fee5998a96078394cdb9d9b75f8f9b7653966a2001efa6089579e8c8053e9e",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=1.96:d=0.04"
+  },
+  {
+    "id": "ambience",
+    "file": "ambience.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Quiet woodland quarry in late afternoon, soft wind in pine trees, distant birds and very faint industrial hum. No vehicles or people nearby. No music, no voices, no speech.",
+      "duration_seconds": 12,
+      "loop": true,
+      "prompt_influence": 0.5,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "1c05006405283f39937ad1006dc62139770208ad353758a7ecc8200d4f1fc737",
+    "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=11.96:d=0.04"
+  }
+]
