@@ -1,12 +1,12 @@
 // Joust MODERN 3D — shell: state machine, input, screens, HUD, options, achievements,
-// leaderboard, kill-cam, rumble, main loop. The SAME deterministic engine as the retro
-// remake is authoritative — this shell only feeds it inputs and draws its snapshots in 3D.
+// leaderboard, kill-cam, rumble, main loop. Arcade rules use the Modern flight
+// profile for responsive steering, gentler lift and damped collision recoil.
 'use strict';
 
 const VERSION = 'v' + (window.__V3 || '0.9.0');
 const ASSET_Q = '?v=' + (window.__V3 || '0.9.0');
 const DATA = window.JOUST_DATA;
-const { JoustEngine } = window.JOUST_ENGINE;
+const { ModernJoustEngine: JoustEngine } = window.JOUST_FLIGHT;
 const { Renderer3D } = window.JOUST_RENDER3D;
 const { AudioSys } = window.JOUST_AUDIO;
 const { WORLD, PHRASES, waveInfo, PHYS } = DATA;
@@ -736,8 +736,8 @@ function drawHelp() {
   const W = hudCanvas.width, H = hudCanvas.height;
   txtD('HOW TO PLAY', W / 2, H * 0.08, Math.round(H / 16), '#ffd23a', true);
   const lines = [
-    'You ride a war-bird over a lava arena. TAP or HOLD FLAP to climb;',
-    'release to glide. Momentum carries you — push the opposite way to brake.',
+    'You ride a war-bird over a lava arena. HOLD FLAP for a gentle climb;',
+    'Steer any time. Release the direction to slow; opposite direction brakes fast.',
     'The arena wraps left ↔ right.',
     '',
     'JOUST: on contact the HIGHER LANCE wins and unseats the rider.',
