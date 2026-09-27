@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "quarry-impact-online",
+  "account_id": "b70f40a9b52c84500e27911887514208",
+  "workers_dev": true,
+  "main": "worker.ts",
+  "compatibility_date": "2026-09-27",
+  "compatibility_flags": ["nodejs_compat"],
+  "build": { "command": "node prepare-rapier.mjs" },
+  "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+  "durable_objects": { "bindings": [{ "name": "ROOMS", "class_name": "QuarryRoom" }, { "name": "ADMISSION", "class_name": "QuarryAdmission" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["QuarryRoom", "QuarryAdmission"] }],
+  "vars": { "ALLOWED_ORIGINS": "https://jez237.com,https://www.jez237.com,https://jz237.github.io,https://jez237-site.pages.dev,http://127.0.0.1:8795,http://localhost:8795" },
+  "observability": { "enabled": true, "head_sampling_rate": 0.1, "logs": { "invocation_logs": false } }
+}

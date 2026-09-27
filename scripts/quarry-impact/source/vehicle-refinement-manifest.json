@@ -1,0 +1,32 @@
+{
+  "source": "KhronosGroup/glTF-Sample-Assets CarConcept, CC-BY-4.0; see public/licenses/CarConcept-LICENSE.md",
+  "prepared_by": "tools/refine_cars.py after tools/prepare_concept.py",
+  "editable_files": "source/models-refined/*.blend",
+  "changes": [
+    "Split front hood, fenders and bumper and rear bumper and quarters into independently damageable panels",
+    "Add 1.2mm inner sheet and boundary rims while preserving original exterior corner normals and UVs",
+    "Add engine bay, radiator fins, hoses, crash rails, strut braces and underfloor exhaust",
+    "Reduce hidden wiper, rim, brake-pad and seat-frame density",
+    "Repair window gasket/rear-glass classification"
+  ],
+  "files": [
+    {
+      "path": "public/models/coupe.glb",
+      "sha256": "b2b4228534fe4c5a0c07ede2853e94b67c61032403f1936fe6baab32a0af27ea",
+      "triangles": 189533,
+      "bytes": 9685700
+    },
+    {
+      "path": "public/models/sedan.glb",
+      "sha256": "2e5a4ea99a25a46a6955bacbd31ef870de81d158073ae7665b7c136827cb4033",
+      "triangles": 189307,
+      "bytes": 9655124
+    },
+    {
+      "path": "public/models/hatch.glb",
+      "sha256": "e6ad17a6b1a94b9af340ff24da45bb399418f5e8d16d734182e78985d61e4147",
+      "triangles": 189487,
+      "bytes": 9675140
+    }
+  ]
+}

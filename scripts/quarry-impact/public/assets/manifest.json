@@ -122,5 +122,26 @@
     "source": "https://polyhaven.com/a/coast_sand_rocks_02",
     "license": "CC0-1.0",
     "sha256": "02209fc6bb56673585fa29ab78f96651975317839292c31a96844ab7d90a413d"
+  },
+  {
+    "file": "gravel_diff.jpg",
+    "source": "https://polyhaven.com/a/gravel_floor",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/gravel_floor/gravel_floor_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "98d19a873c896682fa1c2d5257262fde7630c8e0b5079485c7ca0a4e8738c42b"
+  },
+  {
+    "file": "gravel_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/gravel_floor",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/gravel_floor/gravel_floor_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "a0de44a5600edf5ede9efdef18c996a1c4c4a2326842ef9cd6a3e19356fa6af7"
+  },
+  {
+    "file": "gravel_rough.jpg",
+    "source": "https://polyhaven.com/a/gravel_floor",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/gravel_floor/gravel_floor_rough_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "696b03f23ff3e3cdee5f48fa16b1ab15ab03df1f8f19a5e661445a054d2a1fb1"
   }
 ]

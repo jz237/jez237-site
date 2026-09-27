@@ -15,6 +15,7 @@ export class Effects {
   colors: Float32Array;
   sizes: Float32Array;
   alphas: Float32Array;
+  types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
   debris: { mesh: T.Mesh; body: R.RigidBody; age: number }[] = [];
@@ -29,12 +30,14 @@ export class Effects {
     this.colors = new Float32Array(count * 3);
     this.sizes = new Float32Array(count);
     this.alphas = new Float32Array(count);
+    this.types = new Float32Array(count);
     this.geometry = new T.BufferGeometry();
     for (const [name, array, size] of [
       ['position', this.positions, 3],
       ['color', this.colors, 3],
       ['size', this.sizes, 1],
       ['alpha', this.alphas, 1],
+      ['kind', this.types, 1],
     ] as const)
       this.geometry.setAttribute(name, new T.BufferAttribute(array, size));
     const material = new T.ShaderMaterial({
@@ -42,10 +45,21 @@ export class Effects {
       depthWrite: false,
       vertexColors: true,
       uniforms: { scale: { value: window.innerHeight } },
-      vertexShader:
-        'attribute float size; attribute float alpha; varying vec3 vColor; varying float vAlpha; uniform float scale; void main(){vColor=color;vAlpha=alpha;vec4 p=modelViewMatrix*vec4(position,1.);gl_PointSize=min(100.,size*scale/max(1.,-p.z));gl_Position=projectionMatrix*p;}',
-      fragmentShader:
-        'varying vec3 vColor; varying float vAlpha; void main(){float r=length(gl_PointCoord-.5)*2.;float a=smoothstep(1.,.05,r)*vAlpha;gl_FragColor=vec4(vColor,a);}',
+      vertexShader: `attribute float size; attribute float alpha; attribute float kind;
+varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed; uniform float scale;
+void main(){vColor=color;vAlpha=alpha;vKind=kind;vSeed=fract(position.x*.13+position.z*.27);vec4 p=modelViewMatrix*vec4(position,1.);gl_PointSize=min(120.,size*scale/max(1.,-p.z));gl_Position=projectionMatrix*p;}`,
+      fragmentShader: `varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
+void main(){
+ vec2 uv=gl_PointCoord-.5;float r=length(uv)*2.;float a;
+ if(vKind==1.) {a=(1.-smoothstep(.08,.26,abs(uv.x)))*(1.-smoothstep(.15,.5,abs(uv.y)));}
+ else if(vKind==3.) {a=1.-smoothstep(.18,.5,max(abs(uv.x+uv.y*.4),abs(uv.y)));}
+ else {float n=noise(uv*8.+vSeed*27.)*.6+noise(uv*17.-vSeed*13.)*.3; a=smoothstep(1.,.18,r+n*.24)*(n*.6+.4);}
+ gl_FragColor=vec4(vColor,a*vAlpha);
+ #include <tonemapping_fragment>
+ #include <colorspace_fragment>
+}`,
     });
     this.points = new T.Points(this.geometry, material);
     this.points.frustumCulled = false;
@@ -59,12 +73,22 @@ export class Effects {
         size: 1,
         type: 0,
       });
+    const tread = new Uint8Array(64 * 128 * 4);
+    for (let y = 0; y < 128; y++) for (let x = 0; x < 64; x++) {
+      const edge = Math.max(0, 1 - Math.pow(Math.abs(x - 31.5) / 31.5, 5));
+      const grain = .55 + Math.random() * .45;
+      const groove = x % 15 < 2 ? .15 : 1;
+      const i = (y * 64 + x) * 4;
+      tread.set([255, 255, 255, Math.round(255 * edge * grain * groove * Math.sin(Math.PI * (y + .5) / 128))], i);
+    }
+    const treadMap = new T.DataTexture(tread, 64, 128); treadMap.needsUpdate = true;
     this.marks = new T.InstancedMesh(
       new T.PlaneGeometry(0.24, 1),
       new T.MeshBasicMaterial({
         color: 0x24221e,
+        map: treadMap,
         transparent: true,
-        opacity: 0.23,
+        opacity: 0.43,
         depthWrite: false,
       }),
       1000,
@@ -94,12 +118,14 @@ export class Effects {
         (Math.random() - 0.5) * force,
       );
       s.max = s.life =
-        type === 1 ? 0.3 + Math.random() * 0.5 : 1.5 + Math.random() * 2;
-      s.size = type === 1 ? 0.025 : 0.2 + Math.random() * 0.3;
+        type === 1 ? 0.15 + Math.random() * 0.35 : type === 3 ? .6 + Math.random() * .5 : 1.5 + Math.random() * 2;
+      s.size = type === 1 ? 0.025 : type === 3 ? .015 + Math.random() * .035 : 0.25 + Math.random() * 0.35;
       s.type = type;
+      this.types[i] = type;
       const col = new T.Color(
-        type === 1 ? 0xffb954 : type === 2 ? 0x3c3b37 : 0xafa28b,
+        type === 1 ? 0xffcd87 : type === 3 ? 0xa4c5c8 : type === 2 ? 0x333430 : 0x9f957f,
       );
+      col.multiplyScalar(.8 + Math.random() * .3);
       col.toArray(this.colors, i * 3);
     }
   }
@@ -120,7 +146,11 @@ export class Effects {
     geometry.computeBoundingBox();
     const center = geometry.boundingBox!.getCenter(new T.Vector3());
     geometry.translate(-center.x, -center.y, -center.z);
-    const mesh = new T.Mesh(geometry, (source.material as T.Material).clone());
+    const originalMaterial = source.material as T.Material;
+    const detachedMaterial = originalMaterial.clone();
+    detachedMaterial.onBeforeCompile = originalMaterial.onBeforeCompile;
+    detachedMaterial.customProgramCacheKey = originalMaterial.customProgramCacheKey;
+    const mesh = new T.Mesh(geometry, detachedMaterial);
     source.matrixWorld.decompose(mesh.position, mesh.quaternion, mesh.scale);
     mesh.position.copy(center.applyMatrix4(source.matrixWorld));
     mesh.castShadow = true;
@@ -161,18 +191,20 @@ export class Effects {
     this.debris.splice(i, 1);
   }
   update(dt: number) {
+    (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
       if (p.life > 0) {
         p.life -= dt;
         p.p.addScaledVector(p.v, dt);
-        p.v.y += (p.type === 1 ? -7 : 0.18) * dt;
+        const solid = p.type === 1 || p.type === 3;
+        p.v.y += (solid ? -9 : p.type === 2 ? .6 : .18) * dt;
         p.v.multiplyScalar(Math.exp(-dt * 0.6));
         this.positions.set(p.p.toArray(), i * 3);
         this.sizes[i] =
-          p.size * (p.type === 1 ? 1 : 1 + (p.max - p.life) * 1.8);
+          p.size * (solid ? 1 : 1 + (p.max - p.life) * 1.5);
         this.alphas[i] =
-          Math.max(0, p.life / p.max) * (p.type === 1 ? 1 : 0.28);
+          Math.max(0, p.life / p.max) * (solid ? 1 : .4) * (solid ? 1 : Math.min(1, (p.max - p.life) * 12));
       } else this.alphas[i] = 0;
     }
     for (const a of Object.values(this.geometry.attributes))

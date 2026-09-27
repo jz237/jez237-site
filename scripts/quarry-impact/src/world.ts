@@ -1,19 +1,64 @@
+import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { pbr, url } from './assets';
 import { terrainHeight, trackPoint } from './rules';
+import { forestScenery, updateForestView } from './scenery-vegetation';
+import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
 const rand = () => {
   seed = (seed * 1664525 + 1013904223) >>> 0;
   return seed / 4294967296;
 };
 const dummy = new T.Object3D();
+// A narrow translucent shoreline keeps shallow water embedded in the aggregate.
+// Vertex opacity fades both the water edge and the wider damp margin in-place.
+function softShoreMaterial(material: T.MeshStandardMaterial) {
+  material.onBeforeCompile = shader => {
+    shader.vertexShader = 'attribute float shoreAlpha; varying float vShoreAlpha;\n' + shader.vertexShader;
+    shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvShoreAlpha = shoreAlpha;');
+    shader.fragmentShader = 'varying float vShoreAlpha;\n' + shader.fragmentShader;
+    shader.fragmentShader = shader.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\ndiffuseColor.a *= vShoreAlpha;');
+  };
+  material.customProgramCacheKey = () => 'soft-quarry-shore-v1';
+  return material;
+}
+function puddleGeometry(radius: number, variations: number[], wet: boolean) {
+  const segments = 192;
+  const rings = wet ? [[0, .65], [.9, .75], [1, .65], [1.1, .24], [1.23, 0]] : [[0, 1], [.88, 1], [.965, .82], [1, 0]];
+  const positions: number[] = [], uv: number[] = [], alpha: number[] = [], indices: number[] = [];
+  for (const [r, opacity] of rings) {
+    for (let j = 0; j <= segments; j++) {
+      const a = j / segments * Math.PI * 2;
+      const contour = 1 + Math.sin(a * 3 + variations[0] * 6.28) * .105
+        + Math.sin(a * 5 + variations[7] * 6.28) * .066
+        + Math.sin(a * 11 + variations[14] * 6.28) * .025
+        + Math.sin(a * 23 + variations[21] * 6.28) * .008;
+      // Uneven capillary spread avoids a uniform decorative outline.
+      const spread = wet && r > 1 ? 1 + (r - 1) * (.2 + .18 * Math.sin(a * 7 + variations[28] * 6.28)) : 1;
+      const x = Math.cos(a) * radius * contour * r * spread;
+      const y = Math.sin(a) * radius * contour * r * spread;
+      positions.push(x, y, 0); uv.push(x / 2, y / 2); alpha.push(opacity);
+      if (j < segments && r !== 0) {
+        const b = positions.length / 3 - 1, p = b - segments - 1;
+        indices.push(p, b, p + 1, p + 1, b, b + 1);
+      }
+    }
+  }
+  const g = new T.BufferGeometry();
+  g.setAttribute('position', new T.Float32BufferAttribute(positions, 3));
+  g.setAttribute('uv', new T.Float32BufferAttribute(uv, 2));
+  g.setAttribute('shoreAlpha', new T.Float32BufferAttribute(alpha, 1));
+  g.setIndex(indices); g.computeVertexNormals();
+  return g;
+}
 export class Quarry {
   derbyWalls: T.Group = new T.Group();
   derbyColliders: R.Collider[] = [];
   props: { mesh: T.Mesh; body: R.RigidBody; start: T.Vector3 }[] = [];
   scenery = new T.Group();
+  collisionPhysics: ReturnType<typeof createQuarryPhysics>;
   road: T.Mesh;
   checkpoint = new T.Group();
   sun: T.DirectionalLight;
@@ -21,10 +66,12 @@ export class Quarry {
     public scene: T.Scene,
     public physics: R.World,
   ) {
+    this.collisionPhysics=createQuarryPhysics(R,physics,false);
+    this.derbyColliders=this.collisionPhysics.walls;
     scene.add(this.scenery, this.derbyWalls, this.checkpoint);
-    scene.fog = new T.FogExp2(0xaaa995, 0.0028);
-    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.55));
-    this.sun = new T.DirectionalLight(0xffdfba, 2.4);
+    scene.fog = new T.FogExp2(0xb3bbc0, 0.0016);
+    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.3));
+    this.sun = new T.DirectionalLight(0xffdfba, 3);
     this.sun.position.set(-70, 95, 45);
     this.sun.castShadow = true;
     Object.assign(this.sun.shadow.camera, {
@@ -39,32 +86,20 @@ export class Quarry {
     this.sun.shadow.bias = -0.00015;
     this.sun.shadow.normalBias = 0.035;
     scene.add(this.sun, this.sun.target);
-    const ground = pbr('mud', 1, {
-      color: 0xb5ac8c,
-      normalScale: new T.Vector2(0.65, 0.65),
-    });
-    const rock = pbr('rock', 1, { color: 0xaaa699 });
+    const ground = quarryGround();
+    const rock = quarryRock();
     const asphalt = pbr('asphalt', 1);
-    const geo = new T.PlaneGeometry(640, 640, 192, 192);
-    geo.rotateX(-Math.PI / 2);
-    const pos = geo.attributes.position,
-      uv = geo.attributes.uv;
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i),
-        z = pos.getZ(i);
-      pos.setY(i, terrainHeight(x, z));
-      uv.setXY(i, x / 9, z / 9);
-    }
+    const groundData=terrainGeometry();
+    const geo=new T.BufferGeometry();
+    geo.setAttribute('position',new T.BufferAttribute(groundData.positions,3));
+    geo.setIndex(new T.BufferAttribute(groundData.indices,1));
+    const groundUV=new Float32Array(groundData.positions.length/3*2);
+    for(let i=0;i<groundData.positions.length/3;i++){groundUV[i*2]=groundData.positions[i*3]/9;groundUV[i*2+1]=groundData.positions[i*3+2]/9;}
+    geo.setAttribute('uv',new T.BufferAttribute(groundUV,2));
     geo.computeVertexNormals();
     const terrain = new T.Mesh(geo, ground);
     terrain.receiveShadow = true;
     scene.add(terrain);
-    physics.createCollider(
-      R.ColliderDesc.trimesh(
-        new Float32Array(pos.array),
-        new Uint32Array(geo.index!.array),
-      ).setFriction(0.85),
-    );
     // Broad arena floor: small aggregate at a believable real-world scale.
     const arenaGeo = new T.CircleGeometry(45, 96);
     arenaGeo.rotateX(-Math.PI / 2);
@@ -72,67 +107,23 @@ export class Quarry {
     for (let i = 0; i < aUV.count; i++)
       aUV.setXY(
         i,
-        arenaGeo.attributes.position.getX(i) / 6,
-        arenaGeo.attributes.position.getZ(i) / 6,
+        arenaGeo.attributes.position.getX(i) / 2,
+        arenaGeo.attributes.position.getZ(i) / 2,
       );
     const arena = new T.Mesh(
       arenaGeo,
-      pbr('coast_sand_rocks_02', 1, { color: 0x9b947e }),
+      quarryAggregate(),
     );
     arena.position.y = 0.018;
     arena.receiveShadow = true;
     scene.add(arena);
-    // Quarry benches form irregular exposed walls, rather than a flat background ring.
-    const vertices: number[] = [],
-      indices: number[] = [],
-      uvs: number[] = [];
-    const rings = [
-      { r: 137, h: 0 },
-      { r: 148, h: 13 },
-      { r: 155, h: 14 },
-      { r: 164, h: 28 },
-      { r: 175, h: 29 },
-      { r: 187, h: 40 },
-    ];
-    for (let j = 0; j < rings.length; j++)
-      for (let i = 0; i <= 192; i++) {
-        const a = (i / 192) * Math.PI * 2;
-        const wobble =
-          Math.sin(a * 9) * 5 +
-          Math.cos(a * 17) * 2 +
-          Math.sin(a * 61 + j * 3.2) * 1.1;
-        const r = rings[j].r + wobble;
-        vertices.push(
-          Math.sin(a) * r * 1.08,
-          rings[j].h + Math.sin(a * 5) * 3 + Math.sin(a * 37 + j * 0.7) * 1.3,
-          Math.cos(a) * r,
-        );
-        uvs.push((i / 192) * 95, j * 2.4);
-      }
-    for (let j = 0; j < rings.length - 1; j++)
-      for (let i = 0; i < 192; i++) {
-        const a = j * 193 + i;
-        indices.push(a, a + 193, a + 1, a + 1, a + 193, a + 194);
-      }
-    const cliffGeo = new T.BufferGeometry();
-    cliffGeo.setAttribute(
-      'position',
-      new T.Float32BufferAttribute(vertices, 3),
-    );
-    cliffGeo.setAttribute('uv', new T.Float32BufferAttribute(uvs, 2));
-    cliffGeo.setIndex(indices);
-    cliffGeo.computeVertexNormals();
+    // Exposed faces share their actual irregular geometry with the physics wall.
+    const cliffGeo = quarryCliffs();
     rock.side = T.DoubleSide;
     const cliffs = new T.Mesh(cliffGeo, rock);
     cliffs.receiveShadow = true;
     cliffs.castShadow = true;
-    scene.add(cliffs);
-    physics.createCollider(
-      R.ColliderDesc.trimesh(
-        new Float32Array(vertices),
-        new Uint32Array(indices),
-      ),
-    );
+    this.scenery.add(cliffs);
     // Closed ribbon uses the exact same centerline as AI and checkpoints.
     const rp: number[] = [],
       ru: number[] = [],
@@ -145,7 +136,7 @@ export class Quarry {
         const x = p.x + tangent.y * side * 6,
           z = p.z - tangent.x * side * 6;
         rp.push(x, terrainHeight(x, z) + 0.06, z);
-        ru.push(side === -1 ? 0 : 1, i / 5);
+        ru.push(x / 2, z / 2);
       }
     }
     for (let i = 0; i < 360; i++) {
@@ -169,10 +160,11 @@ export class Quarry {
     }
     this.road = new T.Mesh(roadGeo, [
       asphalt,
-      pbr('coast_sand_rocks_02', 1, { color: 0xaaa48c }),
+      quarryAggregate(),
     ]);
     this.road.receiveShadow = true;
     scene.add(this.road);
+    roadsideDetails(this.scenery);
     // Concrete arena barriers with hazard stripes and openable access for other modes.
     const concrete = pbr('rock', 1, { color: 0x9b9b8f });
     const stripe = this.hazardMaterial();
@@ -187,15 +179,6 @@ export class Quarry {
         this.derbyWalls,
       );
       wall.rotation.y = a;
-      const col = physics.createCollider(
-        R.ColliderDesc.cuboid(2.11, 0.58, 0.375)
-          .setTranslation(x, 0.58, z)
-          .setRotation(
-            new T.Quaternion().setFromAxisAngle(new T.Vector3(0, 1, 0), a),
-          )
-          .setFriction(0.5),
-      );
-      this.derbyColliders.push(col);
       const label = new T.Mesh(new T.PlaneGeometry(3.8, 0.23), stripe);
       label.position.set(
         x - Math.sin(a) * 0.386,
@@ -206,29 +189,38 @@ export class Quarry {
       this.derbyWalls.add(label);
     }
     // Scanned-texture scree at the foot of the walls.
-    const stoneGeo = new T.IcosahedronGeometry(1, 1);
-    const sp = stoneGeo.attributes.position;
-    for (let i = 0; i < sp.count; i++)
-      sp.setXYZ(
-        i,
-        sp.getX(i) * (1 + rand() * 0.35),
-        sp.getY(i) * (1 + rand() * 0.35),
-        sp.getZ(i) * (1 + rand() * 0.35),
-      );
+    const stoneGeo=new T.BufferGeometry();
+    stoneGeo.setAttribute('position',new T.BufferAttribute(SCREE_POSITIONS.slice(),3));
+    stoneGeo.setAttribute('uv',new T.BufferAttribute(SCREE_UVS.slice(),2));
+    const sp=stoneGeo.attributes.position;
     stoneGeo.computeVertexNormals();
+    stoneGeo.setAttribute('color', new T.Float32BufferAttribute(new Float32Array(sp.count*3).fill(1), 3));
     const stones = new T.InstancedMesh(stoneGeo, rock, 360);
     stones.castShadow = true;
     stones.receiveShadow = true;
-    for (let i = 0; i < 360; i++) {
-      const a = rand() * Math.PI * 2,
-        r = 132 + rand() * 14;
-      dummy.position.set(Math.sin(a) * r * 1.06, rand() * 2, Math.cos(a) * r);
-      dummy.scale.set(1 + rand() * 3, 0.7 + rand() * 3, 1 + rand() * 3);
-      dummy.rotation.set(rand(), rand() * 6, rand());
+    for(const [i,p] of screePlacements().entries()){
+      dummy.position.set(p.x,p.y,p.z);
+      dummy.scale.set(p.sx,p.sy,p.sz);
+      dummy.rotation.set(p.rx,p.ry,p.rz);
       dummy.updateMatrix();
       stones.setMatrixAt(i, dummy.matrix);
     }
     scene.add(stones);
+    const aggregate = new T.InstancedMesh(stoneGeo, rock, 460);
+    aggregate.receiveShadow=true;
+    for(let i=0;i<460;i++) {
+      let x:number,z:number;
+      if(i<170) {
+        const a=rand()*Math.PI*2,r=40+rand()*5;x=Math.sin(a)*r;z=Math.cos(a)*r;
+      } else {
+        const t=rand(),p=trackPoint(t),q=trackPoint(t+.001),angle=Math.atan2(q.x-p.x,q.z-p.z),side=rand()<.5?-1:1,offset=7+rand()*3;
+        x=p.x+Math.cos(angle)*side*offset;z=p.z-Math.sin(angle)*side*offset;
+      }
+      const s=.055+rand()*.16;
+      dummy.position.set(x,terrainHeight(x,z)+s*.13+.025,z);dummy.scale.set(s,s*.38,s*.7);dummy.rotation.set(rand(),rand()*6.28,rand());dummy.updateMatrix();aggregate.setMatrixAt(i,dummy.matrix);
+      const tint=.7+rand()*.3;aggregate.setColorAt(i,new T.Color(tint,tint*.97,tint*.91));
+    }
+    aggregate.computeBoundingSphere();this.scenery.add(aggregate);
     this.industrial();
     this.playground();
     this.fences();
@@ -259,6 +251,7 @@ export class Quarry {
     ring.position.y = 4.8;
     this.checkpoint.add(ring);
     this.checkpoint.visible = false;
+    batchScenery(this.scenery, new Set(this.props.map(p => p.mesh)));
   }
   box(
     p: T.Vector3,
@@ -272,14 +265,6 @@ export class Quarry {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     parent.add(mesh);
-    if (solid)
-      this.physics.createCollider(
-        R.ColliderDesc.cuboid(s.x / 2, s.y / 2, s.z / 2).setTranslation(
-          p.x,
-          p.y,
-          p.z,
-        ),
-      );
     return mesh;
   }
   hazardMaterial() {
@@ -344,16 +329,9 @@ export class Quarry {
       );
   }
   industrial() {
-    const metal = new T.MeshStandardMaterial({
-      color: 0x555f59,
-      metalness: 0.6,
-      roughness: 0.75,
-    });
-    const yellow = new T.MeshStandardMaterial({
-      color: 0xb99c46,
-      metalness: 0.4,
-      roughness: 0.72,
-    });
+    const worksStart=this.scenery.children.length;
+    const metal = weatheredMetal(0x555f59);
+    const yellow = weatheredMetal(0xc29e48);
     const rubber = new T.MeshStandardMaterial({
       color: 0x222727,
       roughness: 0.95,
@@ -373,6 +351,33 @@ export class Quarry {
       );
     this.box(new T.Vector3(-72, 8.2, -39), new T.Vector3(22, 0.4, 14), metal);
     this.box(new T.Vector3(-72, 2, -32.3), new T.Vector3(6, 4, 0.15), rubber);
+    const glass = new T.MeshPhysicalMaterial({ color:0x769291, metalness:.3, roughness:.19, clearcoat:.65 });
+    for (const x of [-79.5,-76.5,-67.5,-64.5]) {
+      this.box(new T.Vector3(x,5.8,-32.30),new T.Vector3(2.2,1.35,.07),rubber);
+      this.box(new T.Vector3(x,5.8,-32.24),new T.Vector3(1.97,1.13,.05),glass);
+      this.box(new T.Vector3(x,5.8,-32.18),new T.Vector3(.07,1.2,.04),metal);
+    }
+    for(let i=0;i<15;i++) this.box(new T.Vector3(-72,.2+i*.255,-32.18),new T.Vector3(5.85,.045,.12),metal);
+    const roof=this.box(new T.Vector3(-72,8.75,-35.65),new T.Vector3(22.4,.15,7.1),metal);
+    roof.rotation.x=.15;
+    const rearRoof=this.box(new T.Vector3(-72,8.75,-42.35),new T.Vector3(22.4,.15,7.1),metal);
+    rearRoof.rotation.x=-.15;
+    for(const x of [-82.7,-61.3]) {
+      this.box(new T.Vector3(x,4,-31.98),new T.Vector3(.15,8,.15),metal);
+      this.box(new T.Vector3(x,.22,-31.7),new T.Vector3(.17,.17,.7),metal);
+    }
+    this.box(new T.Vector3(-72,8.1,-31.7),new T.Vector3(22.6,.22,.22),metal);
+    // Exposed conveyor truss feeds the loading towers and breaks up the blocky silhouette.
+    const conveyor=new T.Group();conveyor.position.set(-80,5.5,-56);conveyor.rotation.z=-.18;this.scenery.add(conveyor);
+    this.box(new T.Vector3(0,0,0),new T.Vector3(24,.15,1.7),rubber,conveyor);
+    for(const z of [-.94,.94]) {
+      for(const y of [-.6,.15])this.box(new T.Vector3(0,y,z),new T.Vector3(25,.09,.09),metal,conveyor);
+      for(let i=0;i<12;i++) {
+        const strut=this.box(new T.Vector3(-11+i*2,-.23,z),new T.Vector3(.06,2.1,.06),metal,conveyor);
+        strut.rotation.z=i%2===0?1.19:-1.19;
+      }
+    }
+    for(const x of [-89,-72])for(const z of [-57.3,-54.7])this.box(new T.Vector3(x,2.2,z),new T.Vector3(.15,4.4,.15),metal);
     this.sign('BLACKRIDGE WORKS', -72, -31, 0, 0.85);
     for (let i = 0; i < 3; i++) {
       const x = -92 + i * 8,
@@ -388,6 +393,7 @@ export class Quarry {
           metal,
         );
     }
+    for(const structure of this.scenery.children.slice(worksStart))structure.position.add(WORKS_OFFSET);
     // Parked articulated excavator, tracked base, hydraulic boom, bucket and cab glazing.
     const ex = new T.Group();
     ex.position.set(62, terrainHeight(62, -42), -42);
@@ -451,9 +457,6 @@ export class Quarry {
       metal,
       ex,
     );
-    this.physics.createCollider(
-      R.ColliderDesc.cuboid(3, 2, 3).setTranslation(62, 2, -42),
-    );
     for (let i = 0; i < 5; i++) {
       const x = -63 + i * 7,
         z = 59;
@@ -478,52 +481,29 @@ export class Quarry {
   }
   playground() {
     const concrete = pbr('rock', 1, { color: 0x777971 });
-    for (const [x, z] of [
-      [65, 20],
-      [-65, 12],
-      [30, -70],
-    ]) {
-      const y = terrainHeight(x, z);
-      const points = [
-        -4, 0, -8, 4, 0, -8, -4, 2, 8, 4, 2, 8, -4, 0, 8, 4, 0, 8,
-      ];
-      const idx = [0, 2, 1, 1, 2, 3, 2, 4, 3, 3, 4, 5, 0, 4, 2, 1, 3, 5];
+    for (const {x,y,z} of RAMPS) {
+      const points=RAMP_POINTS, idx=RAMP_INDICES;
       const g = new T.BufferGeometry();
       g.setAttribute('position', new T.Float32BufferAttribute(points, 3));
       g.setAttribute(
         'uv',
         new T.Float32BufferAttribute([0, 0, 1, 0, 0, 2, 1, 2, 0, 2, 1, 2], 2),
       );
-      g.setIndex(idx);
+      g.setIndex(new T.BufferAttribute(idx,1));
       g.computeVertexNormals();
       const m = new T.Mesh(g, concrete);
       m.position.set(x, y, z);
       m.castShadow = true;
       m.receiveShadow = true;
       this.scenery.add(m);
-      this.physics.createCollider(
-        R.ColliderDesc.trimesh(
-          new Float32Array(points),
-          new Uint32Array(idx),
-        ).setTranslation(x, y, z),
-      );
     }
     const barrelMat = new T.MeshStandardMaterial({
       color: 0x95633f,
       metalness: 0.6,
       roughness: 0.8,
     });
-    for (let i = 0; i < 22; i++) {
-      const x = 55 + rand() * 12,
-        z = -12 + rand() * 20,
-        y = terrainHeight(x, z) + 0.6;
-      const body = this.physics.createRigidBody(
-        R.RigidBodyDesc.dynamic().setTranslation(x, y, z),
-      );
-      this.physics.createCollider(
-        R.ColliderDesc.cylinder(0.55, 0.34).setMass(28).setFriction(0.7),
-        body,
-      );
+    for (const {id,x,y,z} of BARRELS) {
+      const body=this.collisionPhysics.props[id].body;
       const mesh = new T.Mesh(
         new T.CylinderGeometry(0.34, 0.34, 1.1, 16),
         barrelMat,
@@ -532,27 +512,33 @@ export class Quarry {
       this.scenery.add(mesh);
       this.props.push({ mesh, body, start: new T.Vector3(x, y, z) });
     }
-    const water = new T.MeshPhysicalMaterial({
-      color: 0x444b43,
-      metalness: 0.5,
-      roughness: 0.14,
+    const water = softShoreMaterial(new T.MeshPhysicalMaterial({
+      color: 0x56625e,
+      metalness: 0.05,
+      roughness: 0.045,
+      clearcoat: 1,
+      clearcoatRoughness: .055,
+      ior: 1.33,
       transparent: true,
-      opacity: 0.68,
-    });
+      opacity: 0.85,
+      depthWrite: false,
+    }));
+    const wetSoil = softShoreMaterial(new T.MeshStandardMaterial({ color:0x514d40,roughness:.48,transparent:true,opacity:.4,depthWrite:false }));
     for (let i = 0; i < 12; i++) {
       const a = rand() * 6.28,
         r = 10 + rand() * 27;
-      const pg = new T.CircleGeometry(1.3 + rand() * 2.5, 32);
-      const pp = pg.attributes.position;
-      for (let k = 1; k < pp.count; k++) {
-        const f = 0.85 + rand() * 0.3;
-        pp.setXY(k, pp.getX(k) * f, pp.getY(k) * f);
-      }
+      const radius = 1.3 + rand() * 2.5;
+      // Preserve the deterministic placement sequence while smoothing the contour.
+      const variations = Array.from({ length: 33 }, rand);
+      const pg = puddleGeometry(radius, variations, false);
       const p = new T.Mesh(pg, water);
       p.rotation.x = -Math.PI / 2;
       p.position.set(Math.sin(a) * r, 0.025, Math.cos(a) * r);
       p.scale.y = 0.45 + rand() * 0.6;
       this.scenery.add(p);
+      const wet = new T.Mesh(puddleGeometry(radius, variations, true), wetSoil);
+      wet.rotation.copy(p.rotation);wet.position.copy(p.position);wet.position.y=.022;
+      wet.scale.set(1,p.scale.y,1);this.scenery.add(wet);
     }
   }
   fences() {
@@ -590,94 +576,7 @@ export class Quarry {
   }
   async trees() {
     await this.scannedRocks();
-    const loader = new GLTFLoader();
-    const needles = new T.TextureLoader().load(url('models/needle.webp'));
-    needles.colorSpace = T.SRGBColorSpace;
-    needles.anisotropy = 8;
-    for (const kind of ['pine', 'spruce']) {
-      const gltf = await loader.loadAsync(url('models/' + kind + '3d.glb'));
-      const bounds = new T.Box3().setFromObject(gltf.scene);
-      const h = bounds.max.y - bounds.min.y;
-      const positions: { p: T.Vector3; s: number; r: number }[] = [];
-      for (let i = 0; i < 240; i++) {
-        const a = rand() * Math.PI * 2,
-          r = 164 + rand() * 118;
-        const x = Math.sin(a) * r * 1.08,
-          z = Math.cos(a) * r;
-        positions.push({
-          p: new T.Vector3(x, terrainHeight(x, z), z),
-          s: (9 + rand() * 14) / h,
-          r: rand() * 6.28,
-        });
-      }
-      for (let i = 0; i < 65; i++) {
-        const a = rand() * Math.PI * 2,
-          r = 118 + rand() * 14;
-        const x = Math.sin(a) * r,
-          z = Math.cos(a) * r;
-        positions.push({
-          p: new T.Vector3(x, terrainHeight(x, z), z),
-          s: (6 + rand() * 9) / h,
-          r: rand() * 6.28,
-        });
-      }
-      const photo = new T.TextureLoader().load(url('models/' + kind + '.webp'));
-      photo.colorSpace = T.SRGBColorSpace;
-      photo.anisotropy = 8;
-      const treeMaterial = new T.MeshStandardMaterial({
-        map: photo,
-        alphaTest: 0.4,
-        side: T.DoubleSide,
-        roughness: 0.92,
-        color: 0xb4b9a7,
-      });
-      const treeGeo = new T.PlaneGeometry(0.64, 1);
-      treeGeo.translate(0, 0.5, 0);
-      const crowns = new T.InstancedMesh(
-        treeGeo,
-        treeMaterial,
-        positions.length * 3,
-      );
-      crowns.castShadow = true;
-      crowns.receiveShadow = true;
-      positions.forEach((p, i) => {
-        for (let k = 0; k < 3; k++) {
-          dummy.position.copy(p.p);
-          dummy.scale.setScalar(p.s * h);
-          dummy.rotation.set(0, p.r + (k * Math.PI) / 3, 0);
-          dummy.updateMatrix();
-          crowns.setMatrixAt(i * 3 + k, dummy.matrix);
-        }
-      });
-      crowns.computeBoundingSphere();
-      this.scenery.add(crowns);
-      gltf.scene.updateMatrixWorld(true);
-      gltf.scene.traverse((o) => {
-        if (!(o instanceof T.Mesh)) return;
-        const geometry = o.geometry.clone().applyMatrix4(o.matrixWorld);
-        const mat = (o.material as T.MeshStandardMaterial).clone();
-        if (o.name === 'leaves') {
-          mat.map = needles;
-          mat.alphaTest = 0.4;
-          mat.color.setHex(kind === 'pine' ? 0x9eab83 : 0x809982);
-          mat.side = T.DoubleSide;
-          mat.roughness = 0.9;
-        } else mat.color.setHex(0x524b39);
-        const nearby = positions.slice(-65);
-        const mesh = new T.InstancedMesh(geometry, mat, nearby.length);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        nearby.forEach((p, i) => {
-          dummy.position.copy(p.p);
-          dummy.scale.setScalar(p.s);
-          dummy.rotation.set(0, p.r, 0);
-          dummy.updateMatrix();
-          mesh.setMatrixAt(i, dummy.matrix);
-        });
-        mesh.computeBoundingSphere();
-        this.scenery.add(mesh);
-      });
-    }
+    await forestScenery(this.scenery, rand);
   }
 
   async scannedRocks() {
@@ -694,23 +593,14 @@ export class Quarry {
       const size = bb.getSize(new T.Vector3());
       const normalizer = 1 / Math.max(size.x, size.y, size.z);
       geo.scale(normalizer, normalizer, normalizer);
-      const count = 60;
+      const count = 36;
       const mesh = new T.InstancedMesh(geo, o.material, count);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
-      for (let i = 0; i < count; i++) {
-        const a = ((i + variant * 0.17) / count) * Math.PI * 2;
-        const r = 135 + rand() * 28;
-        const x = Math.sin(a) * r * 1.08,
-          z = Math.cos(a) * r;
-        dummy.position.set(x, terrainHeight(x, z) - 1, z);
-        const scale = 6 + rand() * 16;
-        dummy.scale.set(
-          scale * (0.7 + rand() * 0.5),
-          scale * (0.6 + rand() * 0.7),
-          scale,
-        );
-        dummy.rotation.set(0, rand() * 6.28, rand() * 0.3);
+      for (const [i,p] of rockPlacements(variant).entries()) {
+        dummy.position.set(p.x,p.y,p.z);
+        dummy.scale.set(p.sx,p.sy,p.sz);
+        dummy.rotation.set(0,p.yaw,p.roll);
         dummy.updateMatrix();
         mesh.setMatrixAt(i, dummy.matrix);
       }
@@ -725,14 +615,20 @@ export class Quarry {
     this.derbyColliders.forEach((c) => c.setEnabled(derby));
     this.checkpoint.visible = mode === 'race';
   }
-  update() {
+  update(camera?: T.Camera) {
+    if(camera)updateForestView(camera);
     for (const p of this.props) {
       p.mesh.position.copy(p.body.translation());
       p.mesh.quaternion.copy(p.body.rotation());
     }
   }
+  applyProps(states:{id:number;p:{x:number;y:number;z:number};q:{x:number;y:number;z:number;w:number};v:{x:number;y:number;z:number};av:{x:number;y:number;z:number}}[]) {
+    for(const state of states){const p=this.props[state.id];if(!p)continue;p.body.setBodyType(R.RigidBodyType.KinematicPositionBased,true);p.body.setTranslation(state.p,true);p.body.setRotation(state.q,true);p.body.setLinvel(state.v,true);p.body.setAngvel(state.av,true);p.mesh.position.copy(state.p);p.mesh.quaternion.copy(state.q);}
+  }
   resetProps() {
     for (const p of this.props) {
+      p.body.setBodyType(R.RigidBodyType.Dynamic,true);
+      p.body.setRotation({x:0,y:0,z:0,w:1},true);
       p.body.setTranslation(p.start, true);
       p.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
       p.body.setAngvel({ x: 0, y: 0, z: 0 }, true);

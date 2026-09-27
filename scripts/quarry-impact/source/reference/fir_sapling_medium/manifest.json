@@ -1,0 +1,58 @@
+[
+  {
+    "file": "fir_sapling_medium.bin",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/fir_sapling_medium/fir_sapling_medium.bin",
+    "license": "CC0-1.0",
+    "sha256": "e3f3fabcaa1bacfc8b1feca5e6500b13c63a0e45cd812e663d01d31b042d73b1",
+    "bytes": 74159400
+  },
+  {
+    "file": "textures/fir_sapling_medium_branches_nor_gl_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_branches_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "fc12db22e058f81340a4d4d08c0f2a50bb0a8960c9fc23a760e625bf2d9d1970",
+    "bytes": 3920997
+  },
+  {
+    "file": "textures/fir_sapling_medium_branches_diff_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_branches_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "c3dbce0207d9b0e6d1ef3d2e3c3ba394722464c898e6d4eb6b76439ada76e0b3",
+    "bytes": 2839282
+  },
+  {
+    "file": "textures/fir_sapling_medium_branches_arm_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_branches_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "774c585e2f92082de4bf2955ade4f405dc73bf62899a71b1876788ce21d54784",
+    "bytes": 2783615
+  },
+  {
+    "file": "textures/fir_sapling_medium_twigs_nor_gl_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_twigs_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "874596561e6fa69ae6fc381e77180298441bd469b3918bb493436ea829ccd815",
+    "bytes": 1611490
+  },
+  {
+    "file": "textures/fir_sapling_medium_twigs_diff_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_twigs_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "6b2abdb5d0bf01d44aea517a1010a41cc63b891ffc7daba3972180e57a8d0b7f",
+    "bytes": 908300
+  },
+  {
+    "file": "textures/fir_sapling_medium_twigs_arm_2k.jpg",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_sapling_medium/fir_sapling_medium_twigs_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "16f785953e0c72931c478801064b8e552675e76c62a2880bedc7e8e90593ca14",
+    "bytes": 1271524
+  }
+]

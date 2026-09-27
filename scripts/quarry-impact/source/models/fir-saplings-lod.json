@@ -1,0 +1,21 @@
+{
+  "source": "https://polyhaven.com/a/fir_sapling",
+  "license": "CC0-1.0",
+  "modifications": "Gameplay LODs; normalized root X; normal/ARM maps at1k, diffuse maps at2k, JPEG quality90.",
+  "meshes": [
+    {
+      "name": "fir_sapling_a",
+      "triangles": 14000
+    },
+    {
+      "name": "fir_sapling_b",
+      "triangles": 14000
+    },
+    {
+      "name": "fir_sapling_c",
+      "triangles": 14000
+    }
+  ],
+  "runtime_file": "public/models/fir-saplings-lod.glb",
+  "sha256": "9bf314948e5866112974aee906741d877d975232f782eae95343f8604726d515"
+}

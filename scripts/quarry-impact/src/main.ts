@@ -3,7 +3,7 @@ import R from '@dimforge/rapier3d-compat';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
+import { QuarryAO, LocalReflections } from './rendering';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
@@ -11,6 +11,9 @@ import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
 import { Effects } from './effects';
 import { Sound } from './audio';
+import { OnlineView } from './online-view';
+import { OnlineUI } from './online-ui';
+import { landscapeHeight } from './quarry-layout';
 import {
   DEFINITIONS,
   clamp,
@@ -49,6 +52,7 @@ let mode: Mode = 'derby',
   state:
     | 'loading'
     | 'menu'
+    | 'lobby'
     | 'countdown'
     | 'playing'
     | 'paused'
@@ -70,6 +74,7 @@ let hood = false,
   statusUntil = 0;
 let qualityScale = 1;
 const frames: number[] = [];
+let capturedFrames:number[]|null=null;
 let benchmarkStart = 0;
 const benchmarkSamples: {
   time: number;
@@ -91,18 +96,17 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = T.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = false;
 renderer.toneMapping = T.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.03;
+renderer.toneMappingExposure = 1;
 renderer.outputColorSpace = T.SRGBColorSpace;
 renderer.info.autoReset = false;
 const scene = new T.Scene();
 const camera = new T.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 850);
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const ao = new SSAOPass(scene, camera, innerWidth, innerHeight);
-ao.kernelRadius = 5;
-ao.minDistance = 0.001;
-ao.maxDistance = 0.12;
+const ao = new QuarryAO(scene, camera);
+const reflections = new LocalReflections(renderer, scene);
 composer.addPass(ao);
 composer.addPass(new OutputPass());
 composer.addPass(new SMAAPass());
@@ -113,6 +117,8 @@ orbit.maxDistance = 22;
 orbit.maxPolarAngle = Math.PI * 0.48;
 orbit.enableDamping = true;
 let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
+let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
+const isPlayer=(c:Vehicle)=>c===cars[0];
 const modes = {
   derby: {
     label: 'DEMOLITION DERBY',
@@ -139,6 +145,7 @@ function loading(message: string) {
   ui.innerHTML = `<div class="menu"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1></div><div class="loading"><div class="eyebrow">${message}</div><div></div></div></div>`;
 }
 function menu() {
+  if (online?.active) online.disconnect();
   state = 'menu';
   orbit.enabled = false;
   sound.pause(false);
@@ -164,6 +171,36 @@ function menu() {
     pause(true);
   document.querySelector<HTMLButtonElement>('#fullscreen')!.onclick =
     fullScreen;
+  const onlineButton=document.createElement('button');onlineButton.id='online';onlineButton.textContent='PLAY ONLINE ↗';
+  onlineButton.onclick=()=>onlineUI.show();ui.querySelector('.footer > div')!.prepend(onlineButton);
+}
+function leaveOnline() {
+  online.disconnect();onlinePhase='';keys.clear();testInput=null;
+  const url=new URL(location.href);url.searchParams.delete('room');history.replaceState(null,'',url);
+  createCars(true);menu();
+}
+async function connectOnline(endpoint:string,room:string,name:string) {
+  await sound.init();online.reset();online.active=true;onlinePhase='';
+  try {online.network.connect({endpoint,room,name,kind});}catch(error){online.active=false;throw error;}
+}
+function receiveOnline() {
+  const s=online.network.snapshot;if(!online.active||!s)return;
+  online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  const changed=onlinePhase!==s.phase;onlinePhase=s.phase;
+  if(s.phase==='lobby') {
+    state='lobby';orbit.enabled=false;onlineUI.lobby(s,changed);return;
+  }
+  kind=cars[0].kind;quarry.setMode(mode);
+  if(changed) {
+    if(s.phase==='result') {
+      finish(s.ranking[0]===online.network.id?'EVENT WINNER':mode==='race'?'RACE COMPLETE':'DERBY COMPLETE');
+    }else if(state==='paused') resumeState=s.phase;
+    else {state=s.phase;orbit.enabled=false;hud();sound.pause(false);}
+  }
+  if(s.phase==='result') {
+    const button=document.querySelector<HTMLButtonElement>('#again');
+    if(button){button.disabled=!online.network.isHost;button.textContent=online.network.isHost?'RUN IT BACK ↗':'WAITING FOR HOST REMATCH';}
+  }
 }
 function createCars(attract = false) {
   sound.clearCars();
@@ -221,6 +258,7 @@ function createCars(attract = false) {
   sound.attach(cars);
 }
 async function start() {
+  if(online?.active) {if(online.network.isHost)online.network.start(mode);return;}
   const btn = document.querySelector<HTMLButtonElement>('#start');
   if (btn) {
     btn.disabled = true;
@@ -244,8 +282,9 @@ async function start() {
   sound.pause(false);
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="270" height="220"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="270" height="220"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
+  if(online?.active)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="network-status" id="network-status"></div>');
 }
 function text(id: string, t: string) {
   const e = document.getElementById(id);
@@ -291,7 +330,7 @@ function updateHud() {
     mode === 'derby'
       ? cars.filter((c) => c.health > 0).length + ' / 8'
       : mode === 'race'
-        ? `${rankRace().findIndex((c) => c.id === 0) + 1} / 8`
+        ? `${online?.active?(online.network.snapshot?.ranking.indexOf(online.network.id)??0)+1:rankRace().findIndex(isPlayer) + 1} / 8`
         : traffic
           ? 'TRAFFIC ON'
           : 'SOLO',
@@ -338,12 +377,12 @@ function drawMap() {
   x.stroke();
   for (const car of cars) {
     x.fillStyle =
-      car.id === 0 ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
+      isPlayer(car) ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
     x.beginPath();
     x.arc(
       ox + car.current.x * scale,
       oz - car.current.z * scale,
-      car.id === 0 ? 5 : 3,
+      isPlayer(car) ? 5 : 3,
       0,
       Math.PI * 2,
     );
@@ -362,6 +401,7 @@ function pause(settingsOnly = false) {
   resumeState = state;
   state = 'paused';
   keys.clear();
+  online?.network.clearInput();
   sound.pause(true);
   orbit.enabled = false;
   ui.innerHTML += `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<p>W / ↑ accelerate · S / ↓ brake & reverse<br>A D / ← → steer · Space handbrake · C camera<br>R recover · M mute · F fullscreen · Escape pause${mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : ''}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`;
@@ -383,10 +423,12 @@ function pause(settingsOnly = false) {
     };
   document.querySelector<HTMLButtonElement>('#resume')!.onclick = resume;
   const restart = document.querySelector<HTMLButtonElement>('#restart');
-  if (restart) restart.onclick = () => start();
+  if (restart) {restart.onclick = () => start();if(online?.active)restart.remove();}
+  if(online?.active)ui.querySelector('#overlay h2')!.textContent='CONTROLS PAUSED · ROOM CONTINUES';
   const mm = document.querySelector<HTMLButtonElement>('#main-menu');
   if (mm)
     mm.onclick = () => {
+      if(online?.active){leaveOnline();return;}
       createCars(true);
       menu();
     };
@@ -402,6 +444,7 @@ function resume() {
   if (state !== 'paused') return;
   document.getElementById('overlay')?.remove();
   state = resumeState as typeof state;
+  if(online?.active && ['playing','countdown'].includes(state))hud();
   if (resumeState === 'menu') menu();
   sound.pause(false);
   lastFrame = performance.now();
@@ -426,6 +469,8 @@ function applyQuality() {
     quarry.sun.shadow.needsUpdate = true;
   }
   ao.enabled = settings.quality !== 'medium';
+  reflections.enabled = settings.quality !== 'medium';
+  reflections.interval = settings.quality === 'ultra' ? 3 : 6;
   renderer.shadowMap.enabled = settings.quality !== 'medium';
 }
 function fullScreen() {
@@ -433,6 +478,7 @@ function fullScreen() {
   else document.documentElement.requestFullscreen().catch(() => {});
 }
 function recover() {
+  if(online?.active){online.network.recover();return;}
   const p = cars[0];
   if (!p) return;
   if (mode === 'playground') {
@@ -467,8 +513,8 @@ function input(): Input {
   let throttle = keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0,
     brake = 0;
   let steer =
-    (keys.has('KeyA') || keys.has('ArrowLeft') ? -1 : 0) +
-    (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0);
+    (keys.has('KeyA') || keys.has('ArrowRight') ? -1 : 0) +
+    (keys.has('KeyD') || keys.has('ArrowLeft') ? 1 : 0);
   let handbrake = keys.has('Space');
   const reverse = keys.has('KeyS') || keys.has('ArrowDown');
   if (reverse) {
@@ -604,26 +650,29 @@ function finish(title: string) {
   resultTitle = title;
   state = 'result';
   sound.pause(true);
-  const ordered = mode === 'derby' ? derbyOrder(cars) : rankRace();
-  const rank = ordered.findIndex((c) => c.id === 0) + 1;
+  const ordered = online?.active ? (online.network.snapshot?.ranking??[]).map(id=>cars.find(c=>c.id===id)!).filter(Boolean) : mode === 'derby' ? derbyOrder(cars) : rankRace();
+  const rank = ordered.findIndex(isPlayer) + 1;
   saved.best ??= {};
   const score =
     mode === 'derby' ? cars[0].inflicted : elapsed + cars[0].penalty;
   if (
-    (mode !== 'race' || cars[0].finished) &&
+    !online?.active && (mode !== 'race' || cars[0].finished) &&
     (!saved.best[mode] ||
       (mode === 'derby' ? score > saved.best[mode] : score < saved.best[mode]))
   )
     saved.best[mode] = score;
   persist();
-  ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${modes[mode].label} / RESULTS</div><h2>${title}</h2><p>Finished ${rank} of ${cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${mode === 'derby' ? Math.round(cars[0].inflicted) + ' damage inflicted' : formatTime(elapsed + cars[0].penalty) + ' including recovery penalties'}</p>${ordered.map((c, i) => `<div class="results-row ${c.id === 0 ? 'player' : ''}"><span>${String(i + 1).padStart(2, '0')} &nbsp; ${c.id === 0 ? 'YOU' : DEFINITIONS[c.kind].name + ' #' + c.id}</span><span>${mode === 'derby' ? Math.ceil(c.health) + '%' : c.finished ? formatTime(c.finishTime) : 'LAP ' + Math.min(3, c.lap)}</span></div>`).join('')}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
+  ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${modes[mode].label} / RESULTS</div><h2>${title}</h2><p>Finished ${rank} of ${cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${mode === 'derby' ? Math.round(cars[0].inflicted) + ' damage inflicted' : formatTime(elapsed + cars[0].penalty) + ' including recovery penalties'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${String(i + 1).padStart(2, '0')} &nbsp; ${isPlayer(c) ? 'YOU' : DEFINITIONS[c.kind].name + ' #' + c.id}</span><span>${mode === 'derby' ? Math.ceil(c.health) + '%' : c.finished ? formatTime(c.finishTime) : 'LAP ' + Math.min(3, c.lap)}</span></div>`).join('')}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
   document.querySelector<HTMLButtonElement>('#again')!.onclick = () => start();
   document.querySelector<HTMLButtonElement>('#back')!.onclick = () => {
+    if(online?.active){leaveOnline();return;}
     createCars(true);
     menu();
   };
+  if(online?.active && !online.network.isHost){const b=document.querySelector<HTMLButtonElement>('#again')!;b.disabled=true;b.textContent='WAITING FOR HOST REMATCH';}
 }
 function step(dt: number) {
+  if(online?.active)return;
   if (state === 'countdown') {
     countdown -= dt;
     if (countdown <= 0) {
@@ -722,23 +771,18 @@ function step(dt: number) {
     else if (alive.length <= 1) finish('LAST CAR STANDING');
     else if (elapsed >= 300) finish('TIME’S UP');
   }
-  quarry.update();
   fx.update(dt);
-  if (mode === 'race') {
-    const p = CHECKPOINTS[cars[0].nextCheckpoint];
-    quarry.checkpoint.position.set(p.x, terrainHeight(p.x, p.z), p.z);
-    const ahead = CHECKPOINTS[(cars[0].nextCheckpoint + 1) % 24];
-    quarry.checkpoint.rotation.y = Math.atan2(ahead.x - p.x, ahead.z - p.z);
-  }
 }
 function updateCamera(dt: number) {
   const p = cars[0];
   if (!p) return;
+  quarry.sun.position.copy(p.root.position).add(new T.Vector3(-70, 65, 45));
+  quarry.sun.target.position.copy(p.root.position);
   if (state === 'inspect') {
     orbit.update();
     return;
   }
-  if (state === 'menu') {
+  if (state === 'menu' || state === 'lobby') {
     const a = 1.5 + Math.sin(clock * 0.055) * 0.12;
     const target = p.current.clone().add(new T.Vector3(0, 0.1, 0));
     camera.position.set(
@@ -761,8 +805,8 @@ function updateCamera(dt: number) {
     : target
         .clone()
         .addScaledVector(f, -7.4 - Math.abs(p.speed) * 0.04)
-        .add(new T.Vector3(0, 3.4, 0));
-  desired.y = Math.max(desired.y, terrainHeight(desired.x, desired.z) + 0.65);
+        .add(new T.Vector3(0, 2.65, 0));
+  desired.y = Math.max(desired.y, landscapeHeight(desired.x, desired.z) + 0.65);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
   const look = target
     .clone()
@@ -776,8 +820,6 @@ function updateCamera(dt: number) {
     dt,
   );
   camera.updateProjectionMatrix();
-  quarry.sun.position.copy(target).add(new T.Vector3(-70, 95, 45));
-  quarry.sun.target.position.copy(target);
 }
 function frame(now: number) {
   requestAnimationFrame(frame);
@@ -786,11 +828,19 @@ function frame(now: number) {
   lastFrame = now;
   clock += dt;
   if (!physics || state === 'loading') return;
+  // Include long stalls in the sustained benchmark, including event restarts.
+  if(capturedFrames&&capturedFrames.length<50_000&&Number.isFinite(raw)&&raw>0)capturedFrames.push(raw*1000);
   if (raw < 1) {
     frames.push(raw * 1000);
     if (frames.length > 600) frames.shift();
   }
-  if (['playing', 'countdown'].includes(state)) {
+  if(online?.active) {
+    if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.setInput({throttle:0,steer:0,brake:1,handbrake:false});
+    const s=online.network.sample();if(s){online.apply(s,dt);quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
+    accumulator+=dt;let n=0;while(accumulator>=1/60 && n++<4){physics.step();fx.update(1/60);accumulator-=1/60;}
+    sound.update(cars,camera,dt);
+    const net=document.getElementById('network-status');if(net)net.textContent=online.network.connected?`ROOM ${online.network.room} · ${online.network.latency} MS`:online.network.reconnecting?'RECONNECTING · CONTROLS CLEARED':`${online.network.disconnectReason} · ESC TO LEAVE`;
+  } else if (['playing', 'countdown'].includes(state)) {
     accumulator += dt;
     let n = 0;
     while (accumulator >= 1 / 60 && n++ < 4) {
@@ -801,7 +851,15 @@ function frame(now: number) {
     sound.update(cars, camera, dt);
   }
   updateCamera(dt);
+  quarry.update(camera);
+  if(mode==='race'&&cars[0]) {
+    const p=CHECKPOINTS[cars[0].nextCheckpoint],ahead=CHECKPOINTS[(cars[0].nextCheckpoint+1)%24];
+    quarry.checkpoint.position.set(p.x,terrainHeight(p.x,p.z),p.z);
+    quarry.checkpoint.rotation.y=Math.atan2(ahead.x-p.x,ahead.z-p.z);
+  }
   renderer.info.reset();
+  if (cars[0]) reflections.update(cars[0].root);
+  renderer.shadowMap.needsUpdate = true;
   composer.render();
   hudTime += dt;
   if (hudTime > 0.12) {
@@ -822,6 +880,8 @@ function frame(now: number) {
   }
 }
 addEventListener('keydown', (e) => {
+  if(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement)return;
+  if(state==='lobby')return;
   if (
     ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(
       e.code,
@@ -837,11 +897,11 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyM') sound.mute();
   if (e.code === 'KeyC') hood = !hood;
   if (e.code === 'KeyR' && state === 'playing') recover();
-  if (e.code === 'KeyT' && mode === 'playground' && state === 'playing') {
+  if (!online?.active && e.code === 'KeyT' && mode === 'playground' && state === 'playing') {
     traffic = !traffic;
     start();
   }
-  if (e.code === 'KeyI' && mode === 'playground') {
+  if (!online?.active && e.code === 'KeyI' && mode === 'playground') {
     if (state === 'inspect') resume();
     else if (state === 'playing') {
       state = 'inspect';
@@ -856,7 +916,7 @@ addEventListener('keydown', (e) => {
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => {
-  keys.clear();
+  keys.clear();online?.network.clearInput();
   if (['playing', 'countdown'].includes(state)) pause();
 });
 document.addEventListener('visibilitychange', () => {
@@ -881,28 +941,26 @@ async function boot() {
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
   quarry = new Quarry(scene, physics);
+  online=new OnlineView(scene,physics,fx,sound,()=>cars,next=>{cars=next;});
+  onlineUI=new OnlineUI(ui,online.network,{connect:connectOnline,leave:leaveOnline});
+  online.network.addEventListener('snapshot',receiveOnline);
+  online.network.addEventListener('connected',()=>{const url=new URL(location.href);url.searchParams.set('room',online.network.room);history.replaceState(null,'',url);sound.pause(!['playing','countdown'].includes(state));});
+  online.network.addEventListener('error',e=>{const message=(e as CustomEvent<string>).detail;onlineUI.message(message);toast(message,8);});
+  online.network.addEventListener('disconnected',e=>{keys.clear();online.network.clearInput();sound.pause(true);onlineUI.message((e as CustomEvent<string>).detail);toast(online.network.reconnecting?'Connection lost · reconnecting':online.network.disconnectReason+' · press Escape to leave',8);});
   await Promise.all([
     loadCars(loading),
     environment(renderer, scene),
     quarry.trees(),
+    onlineUI.configure(),
   ]);
-  const reflectionTarget = new T.WebGLCubeRenderTarget(256, {
-    type: T.HalfFloatType,
-  });
-  const reflectionCamera = new T.CubeCamera(0.1, 450, reflectionTarget);
-  reflectionCamera.position.set(0, 2, 0);
-  reflectionCamera.update(renderer, scene);
-  const reflectionGenerator = new T.PMREMGenerator(renderer);
-  scene.environment = reflectionGenerator.fromCubemap(
-    reflectionTarget.texture,
-  ).texture;
-  scene.environmentIntensity = 0.8;
-  reflectionTarget.dispose();
-  reflectionGenerator.dispose();
   createCars(true);
   applyQuality();
   menu();
+  if(new URL(location.href).searchParams.has('room'))onlineUI.show();
   (window as any).__quarry = {
+    get network(){return {active:online.active,connected:online.network.connected,id:online.network.id,room:online.network.room,snapshot:online.network.snapshot};},
+    connectOnline,leaveOnline,
+    startOnline:(m:Mode)=>online.network.start(m),
     get state() {
       return state;
     },
@@ -928,12 +986,15 @@ async function boot() {
         elapsed,
         collisions,
         drawCalls: renderer.info.render.calls,
+        reflectionUpdates: reflections.updates,
         triangles: renderer.info.render.triangles,
         geometry: renderer.info.memory.geometries,
         textures: renderer.info.memory.textures,
         meanMs: frames.reduce((a, b) => a + b, 0) / frames.length,
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
+        activeParticles: fx.particles.filter(p=>p.life>0).length,
+        debris: fx.debris.length,
         voices: sound.activeVoices,
         loops: sound.loops.size,
         state,
@@ -958,10 +1019,21 @@ async function boot() {
       settings.quality = v;
       applyQuality();
     },
+    lighting: (v:{fog?:number;sun?:number;sky?:number;exposure?:number;ambient?:number;tone?:string})=>{
+      if(v.fog!==undefined)(scene.fog as T.FogExp2).density=v.fog;
+      if(v.sun!==undefined)quarry.sun.intensity=v.sun;
+      if(v.sky!==undefined)scene.environmentIntensity=v.sky;
+      if(v.exposure!==undefined)renderer.toneMappingExposure=v.exposure;
+      if(v.ambient!==undefined)scene.children.forEach(o=>{if(o instanceof T.HemisphereLight)o.intensity=v.ambient!;});
+      if(v.tone)renderer.toneMapping=v.tone==='agx'?T.AgXToneMapping:T.ACESFilmicToneMapping;
+      reflections.update(cars[0].root,true);
+    },
     benchmark: () => {
       benchmarkStart = performance.now();
       benchmarkSamples.length = 0;
+      capturedFrames=[];
     },
+    endBenchmark:()=>{const report={samples:[...benchmarkSamples],frames:capturedFrames??[]};benchmarkStart=0;capturedFrames=null;return report;},
     setTime: (v: number) => {
       elapsed = v;
     },
@@ -1018,6 +1090,8 @@ async function boot() {
     setHealth: (id: number, h: number) => {
       cars[id].health = h;
     },
+    keyboardInput: () => input(),
+    clearTestInput: () => { testInput = null; },
     setInput: (v: Input) => {
       testInput = v;
     },
