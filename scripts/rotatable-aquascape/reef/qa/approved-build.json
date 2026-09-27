@@ -1,394 +1,6 @@
 {
-  "readyMs": 7581,
-  "shadowFrames": 60,
-  "samples": [
-    {
-      "fps": 59.99400059993998,
-      "time": 6.890100000000024,
-      "bites": 11,
-      "remaining": 34,
-      "anemones": {
-        "brushing": 6,
-        "maxBrush": 0.10418527741711381,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 10.907000000000018,
-      "bites": 27,
-      "remaining": 17,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.0003515840571829516,
-        "captured": 1,
-        "swallowed": 0,
-        "carried": 1,
-        "fold": [
-          0.00306783132065283,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 14.924099999999996,
-      "bites": 32,
-      "remaining": 11,
-      "anemones": {
-        "brushing": 1,
-        "maxBrush": 0.0011852164331694703,
-        "captured": 2,
-        "swallowed": 0,
-        "carried": 2,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 18.924399999999924,
-      "bites": 35,
-      "remaining": 8,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.009947223585866506,
-        "captured": 2,
-        "swallowed": 1,
-        "carried": 1,
-        "fold": [
-          0.2,
-          0.2,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 22.957999999999824,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 20,
-        "maxBrush": 0.1320405338814572,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.18634399634076126,
-          0.195611042604329,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 60.00300015000745,
-      "time": 26.974999999999707,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 0,
-        "maxBrush": 0.000795475111964631,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.11598239284981667,
-          0.13669464175536003,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 30.991999999999592,
-      "bites": 36,
-      "remaining": 7,
-      "anemones": {
-        "brushing": 2,
-        "maxBrush": 0.09938140577517514,
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.03505410751545708,
-          0.053096775422539814,
-          0
-        ]
-      }
-    }
-  ],
-  "identification": [
-    {
-      "title": "Reef sand",
-      "ms": 6
-    },
-    {
-      "title": "Aquarium water and glass",
-      "ms": 4
-    },
-    {
-      "title": "Aquarium base and trim",
-      "ms": 3
-    }
-  ],
-  "checks": {
-    "loading": true,
-    "feeding": true,
-    "spacing": true,
-    "obstacles": true,
-    "pause": true,
-    "camera": true,
-    "lighting": true,
-    "fullscreen": true,
-    "identification": true,
-    "mobile": true,
-    "randomized": true
-  },
-  "initial": {
-    "anemoneBackdropStats": {
-      "rocks": 10,
-      "rockTriangles": 105800,
-      "crusts": 86,
-      "colonies": 8,
-      "polyps": 109,
-      "tentacles": 864,
-      "triangles": 726890
-    },
-    "rockLifeStats": {
-      "patches": 239,
-      "pores": 5814,
-      "triangles": 732249,
-      "maxAttachmentError": 0.005,
-      "colors": 7
-    },
-    "footStats": {
-      "rocks": 10,
-      "polyps": 243,
-      "tentacles": 1968,
-      "triangles": 389096,
-      "maxAttachmentError": 0.003000000000000315
-    },
-    "canopyStats": {
-      "colonies": 12,
-      "triangles": 934149
-    },
-    "triangles": 18577724,
-    "inhabitants": 21,
-    "buttressStats": {
-      "rocks": 9,
-      "rockTriangles": 95220,
-      "colonies": 4,
-      "coralTriangles": 186204,
-      "polyps": 96,
-      "tentacles": 912,
-      "maxAttachmentError": 0.0030000000000001505
-    },
-    "polypStats": {
-      "polyps": 569,
-      "tentacles": 3480,
-      "maxAttachmentError": 0.00300000000000036
-    },
-    "rockStats": {
-      "triangles": 878773,
-      "bufferBytes": 30856116,
-      "expandedBufferBytes": 115998036
-    },
-    "crustStats": {
-      "colonies": 90,
-      "triangles": 95427,
-      "emergentColonies": 3,
-      "emergentTriangles": 138540,
-      "understoryColonies": 24,
-      "understoryTriangles": 1153400,
-      "mantleColonies": 12,
-      "mantleTriangles": 29972
-    },
-    "infillStats": {
-      "colonies": 11,
-      "triangles": 549568,
-      "placements": [
-        [
-          1,
-          -2.3293738395249055,
-          2.4894741716151554,
-          0.47,
-          0.035
-        ],
-        [
-          5,
-          -2.499291317277716,
-          0.947289264208271,
-          0.48,
-          0.22
-        ],
-        [
-          8,
-          -2.1488490119123806,
-          1.0626417387525964,
-          0.36,
-          0.03
-        ],
-        [
-          9,
-          -3.42,
-          1.22,
-          0.33,
-          0.14
-        ],
-        [
-          11,
-          -3.8039767698821128,
-          1.5187768929564154,
-          0.34,
-          0.23
-        ],
-        [
-          14,
-          1.474970675119953,
-          3.5631057078247537,
-          0.43,
-          0.14
-        ],
-        [
-          19,
-          4.3623875879720995,
-          1.6737468652770737,
-          0.48,
-          0.14
-        ],
-        [
-          22,
-          1.29,
-          1.24,
-          0.4,
-          0.025
-        ],
-        [
-          23,
-          1.05,
-          1.65,
-          0.35,
-          0.23
-        ],
-        [
-          27,
-          2.274984466846001,
-          3.3617742425195716,
-          0.31,
-          0.23
-        ],
-        [
-          28,
-          3.9286545634283656,
-          2.4476474502760235,
-          0.37,
-          0.025
-        ]
-      ]
-    },
-    "flankStats": {
-      "colonies": 12,
-      "triangles": 89376,
-      "attachments": [
-        [
-          0,
-          -3.92,
-          1.68,
-          0.11085192974571978,
-          0.016000000000000014
-        ],
-        [
-          1,
-          -3.77,
-          1.55,
-          0.08205625243712067,
-          0.01599999999999993
-        ],
-        [
-          2,
-          -2.18,
-          1.29,
-          -0.08703367491617708,
-          0.016000000000000052
-        ],
-        [
-          3,
-          -2.29,
-          1.14,
-          -0.11674206629332318,
-          0.015999999999999986
-        ],
-        [
-          4,
-          -3.07,
-          2.76,
-          -0.15430565272290453,
-          0.016000000000000025
-        ],
-        [
-          5,
-          -2.94,
-          2.63,
-          -0.11420143169021468,
-          0.0160000000000001
-        ],
-        [
-          6,
-          1.04,
-          1.82,
-          0.008808643348922729,
-          0.01599999999999997
-        ],
-        [
-          7,
-          1.14,
-          1.65,
-          -0.004482169313894779,
-          0.016000000000000007
-        ],
-        [
-          8,
-          2.08,
-          3.18,
-          -0.27048761346990435,
-          0.016000000000000094
-        ],
-        [
-          9,
-          2.23,
-          3.02,
-          -0.24606022418047235,
-          0.01599999999999992
-        ],
-        [
-          10,
-          3.49,
-          1.61,
-          -0.0880344678472369,
-          0.0160000000000001
-        ],
-        [
-          11,
-          3.61,
-          1.46,
-          0.665630571957534,
-          0.016000000000000125
-        ]
-      ]
-    }
-  },
+  "checkedAt": "2026-09-27T18:35:19.873789+00:00",
+  "scope": "Replace yellow tang with Blender-authored Chaetodon semilarvatus",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/attachments-CN7toLgy.json",
@@ -396,7 +8,7 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CTtv3-ri.js",
+    "assets/index-CPkS0Tlh.js",
     "assets/index-DouRi2np.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -409,87 +21,60 @@
     "assets/roughnessMap-4hZTjONg.png",
     "assets/roughnessMap-DIiV2VjT.png",
     "assets/roughnessMap-qepxckm-.png",
+    "assets/semilarvatus-WtGca7pG.glb",
     "assets/skeleton-InQKSODj.png",
     "assets/tang-DZS7dloZ.glb",
-    "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "buildHash": "a73335a918d04d7947a505a1fcc625ec738b287247031e34393153ba3f257f21",
-  "checkedAt": "2026-09-26T22:54:17.676Z",
-  "scope": "Six-stop guided reef tour with smooth user-paced camera movement",
-  "visualReview": [
-    "Inspected all six desktop stops, phone start/host views and seven rendered frames moving from left branching coral to right host.",
-    "Camera eases through the clear space in front of the reef. Back, Next, Recenter and End remain readable; mobile tank remains above the guide.",
-    "No change to reef geometry, materials, animal behavior or freshwater. Existing front/oblique/mobile browser screenshots reviewed."
-  ],
-  "plantedReleaseAndSyncPassed": true,
-  "tourReview": {
-    "baseline": "832e59c43",
-    "performance": [
-      {
-        "mode": "prior",
-        "readyMs": 8067,
-        "taskSeconds": 3.112165000000001,
-        "fps": 59.99700014999244,
-        "triangles": 18577724,
-        "fishPassStats": {
-          "meshes": 126,
-          "materials": 84,
-          "geometries": 42
-        }
-      },
-      {
-        "mode": "current",
-        "readyMs": 7563,
-        "taskSeconds": 2.754798000000001,
-        "fps": 59.99400059993998,
-        "triangles": 18577724,
-        "fishPassStats": {
-          "meshes": 126,
-          "materials": 84,
-          "geometries": 42
-        }
-      }
-    ],
-    "performanceMethod": "Sequential prior/current shipped-build Chrome samples, full effects, 1440x1080, 4-second warmup and 8-second sample. Local regression sample, not a speedup or low-end hardware claim.",
-    "tourChecks": {
-      "sixStops": true,
-      "smoothCamera": true,
-      "frontCorridor": true,
-      "pausePreserved": true,
-      "dragInterrupts": true,
-      "recenter": true,
-      "rapidNavigation": true,
-      "escapeFocus": true,
-      "switchCancels": true,
-      "finish": true,
-      "mobile": true,
-      "reducedMotion": true,
-      "feeding": true
-    },
-    "learningChecks": {
-      "lessons": true,
-      "closeups": true,
-      "lighting": true,
-      "feeding": true,
-      "chemistry": true,
-      "labIndependent": true,
-      "keyboardFocus": true,
-      "mobile": true,
-      "tablet": true,
-      "fullscreen": true,
-      "navigation": true
-    },
-    "visualReview": [
-      "Inspected all six desktop stops, phone start/host views and seven rendered frames moving from left branching coral to right host.",
-      "Camera eases through the clear space in front of the reef. Back, Next, Recenter and End remain readable; mobile tank remains above the guide.",
-      "No change to reef geometry, materials, animal behavior or freshwater. Existing front/oblique/mobile browser screenshots reviewed."
-    ],
-    "validation": "Camera continuity/front corridor/reduced-motion/cancellation unit checks; full reef QA; browser tour interruption/rapid navigation/fish-pause preservation/finish/keyboard/mobile; existing learning panels; planted sync/release and storefront links."
+  "buildHash": "68a54f222d96d85061d79c46a50cded1a52f3c214a276b8eb5762049fe0d7e61",
+  "checks": {
+    "typescriptBuild": true,
+    "reefGeometryAndBehaviorModules": true,
+    "semilarvatusClosedBodyAndPairedFins": true,
+    "semilarvatusNavigationThreeSeeds": true,
+    "storefrontLinks": true,
+    "browserReview": true,
+    "liveHiddenReefBytes": true
   },
+  "browserReview": {
+    "method": "Codex browser UI",
+    "views": [
+      "front",
+      "oblique",
+      "fish close-up",
+      "390x844 phone"
+    ],
+    "actions": [
+      "Explore selector and species note",
+      "feed",
+      "pause/resume"
+    ],
+    "mobileScrollWidth": 390,
+    "mobileViewportWidth": 390,
+    "screenshots": [
+      "D:/Projects/thehiddenreef/semilarvatus-live.png",
+      "D:/Projects/thehiddenreef/semilarvatus-reef-angle.png",
+      "D:/Projects/thehiddenreef/semilarvatus-reef-mobile.png"
+    ]
+  },
+  "model": {
+    "species": "Chaetodon semilarvatus",
+    "file": "semilarvatus-WtGca7pG.glb",
+    "bytes": 1137504,
+    "triangles": 16712,
+    "authoring": "Blender 5.2.1 LTS",
+    "source": "model-source/semilarvatus.blend"
+  },
+  "validationNotes": [
+    "Existing geometry, materials, fin motion, navigation, reef/coral modules passed. Navigation now also checks semilarvatus in three blocked-route seeds.",
+    "Reviewed Blender proof and corrected the forehead contour before export.",
+    "Reviewed actual fish swimming and independent fins in browser; no new frame-rate or screenshot-baseline numbers claimed.",
+    "Freshwater source and bundles unchanged; existing 83-asset sync and tested-build release guard pass.",
+    "Active Hidden Reef JS, CSS and new GLB match local build bytes."
+  ],
   "publication": [
     "Hidden Reef Cloudflare Pages",
-    "GitHub"
+    "GitHub main"
   ],
-  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under current login; do not claim domains synchronized."
+  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under current login (Cloudflare error 10000); domains are not synchronized."
 }
