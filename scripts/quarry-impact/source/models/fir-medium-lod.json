@@ -1,0 +1,55 @@
+{
+  "source": "https://polyhaven.com/a/fir_sapling_medium",
+  "license": "CC0-1.0",
+  "modifications": "Three variants at150k near/40k far triangles; root X normalized; normal andARM1k, diffuse2k. Split pervariant for static-host25MiB filelimit; runtime shares material textures acrossvariants.",
+  "files": [
+    {
+      "variant": "a",
+      "runtime_file": "public/models/fir-medium-a.glb",
+      "bytes": 20696920,
+      "sha256": "638aea52e2e1da1a476616a186342206ce608fdc21ad0f7b0804890f3799186d",
+      "meshes": [
+        {
+          "name": "fir_sapling_medium_a_NEAR",
+          "triangles": 150000
+        },
+        {
+          "name": "fir_sapling_medium_a_FAR",
+          "triangles": 40000
+        }
+      ]
+    },
+    {
+      "variant": "b",
+      "runtime_file": "public/models/fir-medium-b.glb",
+      "bytes": 19020864,
+      "sha256": "9291b31eb96caa2b81ffd734c9460653b4b47d8ea817a47a91342d8b24d20d03",
+      "meshes": [
+        {
+          "name": "fir_sapling_medium_b_NEAR",
+          "triangles": 150000
+        },
+        {
+          "name": "fir_sapling_medium_b_FAR",
+          "triangles": 40000
+        }
+      ]
+    },
+    {
+      "variant": "c",
+      "runtime_file": "public/models/fir-medium-c.glb",
+      "bytes": 19074188,
+      "sha256": "bd61e04351aad10b78d765cdb45bdebdcc2cacf3b8613d20d0861225ba603e8d",
+      "meshes": [
+        {
+          "name": "fir_sapling_medium_c_NEAR",
+          "triangles": 150000
+        },
+        {
+          "name": "fir_sapling_medium_c_FAR",
+          "triangles": 40000
+        }
+      ]
+    }
+  ]
+}
