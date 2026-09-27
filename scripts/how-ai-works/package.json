@@ -1,0 +1,9 @@
+{
+  "name": "how-ai-works-data",
+  "private": true,
+  "type": "module",
+  "description": "Offline generators for how-ai-works/data/*.json",
+  "dependencies": {
+    "@huggingface/transformers": "4.3.0"
+  }
+}
