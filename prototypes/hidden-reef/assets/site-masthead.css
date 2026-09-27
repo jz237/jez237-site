@@ -621,7 +621,7 @@ html:has(body.link-modal-open) { overflow: hidden; }
   scrollbar-color: #407b92 #071a27;
 }
 .link-modal__gallery { min-width: 0; align-self: start; }
-.link-modal__gallery.has-thumbs { grid-template-columns: 64px minmax(0, 1fr); }
+.link-modal__gallery.has-thumbs { grid-template-columns: 66px minmax(0, 1fr); }
 .link-modal__media,
 .link-modal__gallery.has-thumbs .link-modal__media {
   min-height: 0;
@@ -677,6 +677,23 @@ html:has(body.link-modal-open) { overflow: hidden; }
 .link-modal__zoom-pane { left: 39%; right: 16px; top: 16px; bottom: 16px; width: auto; min-width: 0; }
 @media (min-width: 1080px) {
   .link-modal__facts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1200px) {
+  .link-modal__panel { width: min(1600px, 100%) !important; }
+}
+@media (min-width: 1200px) and (min-height: 760px) {
+  .link-modal__layout { grid-template-columns: minmax(0, .42fr) minmax(0, .58fr); }
+  .link-modal__media,
+  .link-modal__gallery.has-thumbs .link-modal__media { height: min(740px, calc(100dvh - 136px)); padding: 28px; }
+  .link-modal__thumbs { max-height: min(740px, calc(100dvh - 136px)); }
+  .link-modal__body { padding: 28px 32px; gap: 18px; }
+  .link-modal .link-modal__body h2 { font-size: clamp(30px, 2.2vw, 40px); }
+  .link-modal__facts span { font-size: 16px; padding: 12px; }
+  .link-modal__actions .btn { font-size: 16px; padding: 13px 12px; }
+  .link-modal__status,
+  .link-modal__details li,
+  .link-modal__related a { font-size: 16px; }
+  .link-modal__zoom-pane { left: 43%; }
 }
 @media (max-width: 760px) {
   .link-modal { padding: 10px !important; }
