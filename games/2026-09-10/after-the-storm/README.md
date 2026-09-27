@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.12.0 · TIDELINE** — September 15, 2026. Repairs the sky longitude seam and improves scenery throughout the nine venues: dry-bank undergrowth, reeds, driftwood, stonework, harbor paving, city facades, and layered snowy ice. See [SCENERY-2.12.md](SCENERY-2.12.md) for verification and limits.
+**v2.18.0 · TIDELINE** — September 27, 2026. Waves break on the beaches: crests of the shared swell steepen at each break line, throw a lip, plunge and run up the sand as whitewater, timed from the visible swell and sized by exposure and sea state. Visual only; racing is unchanged. See [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md). Previous release: [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 
