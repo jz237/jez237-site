@@ -1,14 +1,15 @@
 {
-  "checkedAt": "2026-09-27T19:10:06.832272+00:00",
-  "scope": "Research-informed swimming, habitat, schooling, feeding and night refuge behavior for all seven reef fish species",
+  "checkedAt": "2026-09-27T19:39:13.911964+00:00",
+  "scope": "Two detailed articulated Pacific cleaner shrimp; compatibility-based omission of Christmas tree worms",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/attachments-CN7toLgy.json",
     "assets/chromis-ArXoNpqP.glb",
+    "assets/cleaner-shrimp-CbY7vtlW.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-BUjWe4kg.js",
+    "assets/index-B1-9fqxT.js",
     "assets/index-DouRi2np.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -26,62 +27,47 @@
     "assets/tang-DZS7dloZ.glb",
     "index.html"
   ],
-  "buildHash": "26f66f86dcdca3e963abee08cb811c1b82317898abaddebdf9e8e212a3b47cee",
+  "buildHash": "543abdc62300d534f8b75a2806891f476c92a0bb1b1d40aa823fc1d3574eacae",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by exact build bytes",
   "checks": {
     "typescriptBuild": true,
     "reefGeometryAndBehaviorModules": true,
-    "speciesMotionThreeSeeds": true,
-    "nightRefugeThreeSeeds": true,
-    "actualMouthCaptures18": true,
-    "finDeformationNormals": true,
+    "cleanerAnatomyRigAndFooting": true,
+    "cleanerPauseAndIndependentMotion": true,
+    "existingSpeciesAndNightBehavior": true,
     "allThreeReefBuildCopies": true,
     "freshwaterReleaseAndSyncGuards": true,
-    "browserReview": true,
-    "liveHiddenReefBytes": true
+    "browserReview": true
   },
   "browserReview": {
     "method": "Codex browser UI; automatic browser launcher not run",
     "views": [
       "front",
       "three-quarter",
-      "fish close-up",
+      "shrimp close-up",
       "390x844 phone"
     ],
     "actions": [
       "feed",
       "pause/resume",
       "blue hour/daylight",
-      "species guide"
+      "cleaner shrimp guide"
     ],
     "mobileScrollWidth": 390,
     "mobileViewportWidth": 390,
     "consoleErrors": 0,
     "screenshots": [
-      "D:/Projects/thehiddenreef/reef-swimming-mobile.png",
-      "D:/Projects/thehiddenreef/reef-swimming-oblique.png",
-      "D:/Projects/thehiddenreef/reef-swimming-live.png"
+      "D:/Projects/thehiddenreef/cleaner-shrimp-closeup.png",
+      "D:/Projects/thehiddenreef/cleaner-shrimp-oblique.png",
+      "D:/Projects/thehiddenreef/cleaner-shrimp-mobile.png"
     ]
   },
   "validationNotes": [
-    "All non-browser reef QA modules passed, including geometry, materials, fin normals, navigation, chemistry and anemone behavior. Caustics/browser checks reviewed through Codex UI; no new frame-rate or screenshot-baseline measurements claimed.",
-    "Three two-minute full communities and three five-minute day/night communities retain 21 fish, individual motion, upright turns, fish/obstacle clearance and paused state.",
-    "Eighteen isolated feeding cases across six swimming species require actual mouth contact; separate mandarin terrain/feeding checks pass.",
-    "School alignment is checked against an unrelated-fish counterfactual, not against profile constants.",
-    "Speeds and rhythms are authored animation estimates, not measured adult physiological performance. Research sources are in SWIMMING-RESEARCH.md and the reef guide.",
-    "Freshwater source and bundles remain unchanged; existing 83-asset sync and release guards pass.",
-    "Published Hidden Reef JS/CSS match the tested build; live species guide and source links reviewed, with no browser console errors."
+    "All non-browser reef QA modules passed, including 60-second two-shrimp articulated foot-contact checks, individual antenna motion, invitation responses and complete pause.",
+    "Existing fish species, feeding, fin normals, night refuge, coral, rock, anemone and chemistry tests pass. No new frame-rate benchmark claimed.",
+    "Freshwater source and assets remain unchanged and existing release guards pass.",
+    "Christmas tree worms were omitted due to semilarvatus polychaete predation risk. Pair count is a social/display choice, not a volume-based stocking formula. See CLEANER-SHRIMP.md."
   ],
-  "publication": [
-    "Hidden Reef Cloudflare Pages",
-    "GitHub main"
-  ],
-  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under the current login (previously confirmed Cloudflare error 10000); do not report both domains synchronized.",
-  "deployment": {
-    "sourceCommit": "4507e09e22df0387e3b79d33bb66ab5014df2144",
-    "preview": "https://077bb5d3.hidden-reef.pages.dev",
-    "production": "https://hidden-reef.pages.dev/showroom/reef/",
-    "verifiedJs": "assets/index-BUjWe4kg.js",
-    "verifiedCss": "assets/index-DouRi2np.css"
-  }
+  "publication": [],
+  "deploymentLimitation": "Separate jez237 Pages authentication was previously unavailable under the current login (Cloudflare error 10000); do not report both domains synchronized."
 }
