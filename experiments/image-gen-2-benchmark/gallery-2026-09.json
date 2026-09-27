@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-09-27-intense-phobia-situation-ophidiophobia-across-the-flooded-s",
+    "title": "Ophidiophobia — Across the Flooded Snake Survey Path",
+    "tests": "Intense-phobia situation: sharp snake foreground, additional near-leg repetition, constricted flooded channel and obstructed retreat. Documentary optics; no gore or fantasy.; archive_slot=2026-09-27T16:20; concept=water-snakes-flooded-survey-channel; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1448x1086\", \"backendReportedSize\": \"1448x1086\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1448x1086\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, fully photorealistic documentary photograph of ophidiophobia, viewed from the first-person position of a wetland field worker stopped in a narrow, flooded survey cut. The camera is at knee height and tipped slightly downward, a natural 28 mm wide-angle lens without fisheye distortion. The near edge of one mud-spattered chest wader and a gloved hand gripping a bent reed enter the bottom corners, establishing that the viewer is standing in ankle-deep opaque brown water. A thick, anatomically credible dark water snake crosses the water only a hand's breadth in front of the boot, its wet scales, head, eyes, and continuous body sharply resolved. Two more snakes emerge from matted reeds immediately beside the worker's legs, and a fourth sinuous body is partly visible where the narrow channel bends, so the repeated forms continue beyond the crop without becoming a fantastical swarm. Their bodies rest and move according to gravity and water displacement; subtle ripples and disturbed duckweed show their paths. No striking, bared fangs, injury, or false species markers. The water channel is hemmed in by shoulder-high reeds and muddy banks; reeds and a fallen branch hide the route forward while the channel behind disappears at the frame edge. The snakes and constricted water occupy almost the whole image, with no scenic horizon, open walkway, distant observers, or visible safe exit. Flat late-afternoon overcast light filtered through reeds, muted olive, peat brown, and slate gray; realistic wet sheen, fine sediment, insect-chewed reed leaves, and small natural imperfections. Preserve plausible scale, coherent reflections, recognizable snake anatomy, and a credible field-documentary camera. The composition should convey unavoidable, immediate proximity through the foreground snake, the repeated snakes at both legs, and the obstructed retreat. Make the fear legible from the image alone while remaining an ordinary photographable encounter. No text, graphics, logos, watermarks, gore, fantasy, cinematic monster treatment, or exaggerated CGI.",
+    "image": "images/2026-09-27-intense-phobia-situation-ophidiophobia-across-the-flooded-s.jpg",
+    "thumb": "thumbs/2026-09-27-intense-phobia-situation-ophidiophobia-across-the-flooded-s.webp",
+    "color": "#514b3f",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "water-snakes-flooded-survey-channel",
+      "imageSha256": "706be74eb0a729d4047618027367d8f7609caf4e33af29324b1c35904bda2eb4",
+      "imageDHash": "ebe6c646a797252d"
+    }
+  },
+  {
     "id": "2026-09-26-ocean-exploration-the-blue-margin-rov-beneath-the-pressure-",
     "title": "The Blue Margin — ROV Beneath the Pressure Ridge",
     "tests": "; archive_slot=2026-09-26T00:08; concept=tethered-rov-polar-ice-pressure-ridge; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
