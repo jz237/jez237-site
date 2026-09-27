@@ -552,3 +552,11 @@ kbd {
   padding: 0 12px;
   text-decoration: none;
 }
+.online-dialog { max-height:92vh; overflow:auto; pointer-events:auto; }
+.online-dialog label { display:block; margin:16px 0 7px; font-size:11px; letter-spacing:1px; }
+.online-dialog input,.online-dialog select { width:100%; padding:12px; color:#eeeede; background:#14211d; border:1px solid #7b8a7755; border-radius:2px; }
+.online-dialog details { margin-top:18px; font-size:11px; }
+.online-dialog summary { cursor:pointer; }
+.online-dialog .online-message { min-height:20px; color:#e4c477; }
+.online-roster { margin:16px 0; }
+.network-status { position:absolute; top:96px; left:35px; font-size:10px; color:#e4c477; letter-spacing:1px; }

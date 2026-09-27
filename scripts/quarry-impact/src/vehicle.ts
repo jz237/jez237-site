@@ -9,6 +9,8 @@ import {
   type CarKind,
 } from './rules';
 import { Effects } from './effects';
+import { landscapeHeight } from './quarry-layout';
+import type { GlassState } from './car-materials';
 export type Input = {
   throttle: number;
   steer: number;
@@ -25,6 +27,7 @@ export class Vehicle {
   wheels: T.Object3D[] = [];
   panels: T.Mesh[] = [];
   glass: T.Mesh[] = [];
+  brakeLights = new Set<T.MeshStandardMaterial>();
   health = 100;
   inflicted = 0;
   speed = 0;
@@ -34,6 +37,7 @@ export class Vehicle {
   steering = 0;
   input: Input = { throttle: 0, steer: 0, brake: 0, handbrake: false };
   slip = 0;
+  remoteGrounded?: boolean;
   surface = 'gravel';
   damageLeft = 0;
   damageRight = 0;
@@ -91,7 +95,7 @@ export class Vehicle {
     );
     this.roof = world.createCollider(
       R.ColliderDesc.cuboid(0.65, 0.24, 0.65)
-        .setTranslation(0, 0.38, -0.1)
+        .setTranslation(0, kind === 'coupe' ? .12 : .2, -0.1)
         .setMass(0)
         .setFriction(0.5)
         .setActiveEvents(R.ActiveEvents.CONTACT_FORCE_EVENTS)
@@ -129,11 +133,13 @@ export class Vehicle {
       if (o instanceof T.Mesh) {
         if (o.name.startsWith('panel_')) this.panels.push(o);
         if (o.name.startsWith('glass_')) this.glass.push(o);
+        const mat = o.material as T.MeshStandardMaterial;
+        if (mat.name.includes('Brakelight')) this.brakeLights.add(mat);
       }
     });
   }
   place(x: number, z: number, yaw: number, repair = false) {
-    const p = { x, y: terrainHeight(x, z) + 0.89, z };
+    const p = { x, y: landscapeHeight(x, z) + 0.89, z };
     const q = new T.Quaternion().setFromAxisAngle(new T.Vector3(0, 1, 0), yaw);
     this.body.setTranslation(p, true);
     this.body.setRotation(q, true);
@@ -161,18 +167,28 @@ export class Vehicle {
     });
     for (const p of this.panels) {
       p.visible = true;
+      p.userData.damage = 0;
       (p.geometry.attributes.position.array as Float32Array).set(
         p.userData.original,
       );
       p.geometry.attributes.position.needsUpdate = true;
-      p.geometry.computeVertexNormals();
+      if (p.userData.originalNormals) {
+        (p.geometry.attributes.normal.array as Float32Array).set(p.userData.originalNormals);
+        p.geometry.attributes.normal.needsUpdate = true;
+      } else p.geometry.computeVertexNormals();
+      p.geometry.computeBoundingSphere();
+      const wear = p.geometry.attributes.impactWear;
+      if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }
       p.geometry.deleteAttribute('color');
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
     }
     for (const g of this.glass) {
       g.visible = true;
-      (g.material as T.MeshStandardMaterial).opacity = 0.5;
+      g.userData.damage = 0;
+      (g.material as T.MeshStandardMaterial).opacity = 0.28;
+      const state = (g.material as T.Material).userData.glassState as GlassState | undefined;
+      if (state) state.damage.value = 0;
     }
   }
   preStep(dt: number) {
@@ -285,8 +301,8 @@ export class Vehicle {
         }
       }
       if (this.health < 42) {
-        const p = this.current.clone().addScaledVector(this.forward, 1.1);
-        p.y += 0.45;
+        const p = this.current.clone().addScaledVector(this.forward, 1.45);
+        p.y += 0.05;
         this.fx.emit(p, 1, 2, 0.3);
       }
     }
@@ -294,16 +310,18 @@ export class Vehicle {
   render(alpha: number) {
     this.root.position.lerpVectors(this.previous, this.current, alpha);
     this.root.quaternion.slerpQuaternions(this.previousQ, this.currentQ, alpha);
+    for (const material of this.brakeLights) material.emissiveIntensity = this.input.brake > .05 || this.input.handbrake ? 3.5 : .8;
     for (let i = 0; i < 4; i++) {
       const w = this.wheels[i];
       if (!w) continue;
       w.position.y =
-        0.8 - 0.12 - (this.controller.wheelSuspensionLength(i) ?? 0.36);
-      w.rotation.set(0, i < 2 ? this.steering : 0, 0);
+        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? 0.36);
+      const sideDamage = i % 2 ? this.damageRight : this.damageLeft;
+      w.rotation.set(0, i < 2 ? this.steering : 0, (i % 2 ? -1 : 1) * Math.min(.19, sideDamage * .002));
       w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
     }
   }
-  hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number) {
+  hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false) {
     if (damage < 0.1 || this.health <= 0) return;
     this.health = Math.max(0, this.health - damage);
     this.lastHit = time;
@@ -319,49 +337,68 @@ export class Vehicle {
         .transformDirection(panel.matrixWorld.clone().invert());
       const pos = panel.geometry.attributes.position;
       const original = panel.userData.original as Float32Array;
-      const colors =
-        panel.geometry.attributes.color ??
-        new T.BufferAttribute(new Float32Array(pos.count * 3).fill(1), 3);
+      const wear = panel.geometry.attributes.impactWear as T.BufferAttribute;
+      const v = new T.Vector3(), orig = new T.Vector3(), offset = new T.Vector3();
+      const tangent = new T.Vector3(0, 1, 0).cross(dir);
+      if (tangent.lengthSq() < .001) tangent.set(1, 0, 0);
+      tangent.normalize();
+      const side = new T.Vector3().crossVectors(tangent, dir).normalize();
+      const radius = Math.min(1.48, .65 + damage * .034);
       let affected = 0;
+      let maximum = 0;
       for (let i = 0; i < pos.count; i++) {
-        const v = new T.Vector3(pos.getX(i), pos.getY(i), pos.getZ(i));
-        const dist = v.distanceTo(at);
-        if (dist > 1.35) continue;
-        const strength =
-          Math.pow(1 - dist / 1.35, 2) * Math.min(0.38, damage * 0.027);
+        orig.fromArray(original, i * 3);
+        v.fromBufferAttribute(pos, i);
+        const dist = orig.distanceTo(at);
+        if (dist > radius) continue;
+        const weight = Math.pow(1 - dist / radius, 1.6);
+        const strength = weight * Math.min(.52, damage * .024);
+        // Coherent folds use original body coordinates. Adjacent duplicate
+        // vertices receive identical displacement, keeping welded seams intact.
+        const crease = Math.sin(orig.dot(tangent) * 17 + orig.dot(side) * 8);
         v.addScaledVector(dir, strength);
-        const orig = new T.Vector3().fromArray(original, i * 3);
-        const diff = v.clone().sub(orig);
-        if (diff.length() > 0.72) v.copy(orig).add(diff.setLength(0.72));
+        v.addScaledVector(side, crease * strength * .22);
+        v.addScaledVector(tangent, Math.sin(orig.dot(side) * 15) * strength * .1);
+        offset.copy(v).sub(orig);
+        if (offset.lengthSq() > .81) v.copy(orig).add(offset.setLength(.9));
         pos.setXYZ(i, v.x, v.y, v.z);
-        const shade = Math.max(0.3, colors.getX(i) - strength * 0.8);
-        colors.setXYZ(i, shade, shade, shade);
+        if (wear) wear.setXY(i, Math.min(1, wear.getX(i) + strength * 2.8), Math.min(1, wear.getY(i) + strength * 1.7));
+        maximum = Math.max(maximum, weight);
         affected++;
       }
       if (affected) {
         pos.needsUpdate = true;
-        colors.needsUpdate = true;
-        panel.geometry.setAttribute('color', colors);
+        if (wear) wear.needsUpdate = true;
         panel.geometry.computeVertexNormals();
-        (panel.material as T.MeshStandardMaterial).vertexColors = true;
-        (panel.material as T.Material).needsUpdate = true;
+        panel.geometry.computeBoundingSphere();
+        panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;
         if (
-          damage > 9 &&
-          this.health < 70 &&
+          panel.userData.damage > 16 && damage > 7 && maximum > .18 &&
           (panel.name.includes('bumper') ||
             panel.name.includes('hood') ||
             panel.name.includes('mirror'))
-        )
-          this.fx.detach(panel, this.velocity.clone().multiplyScalar(0.65));
+        ) {
+          if (quiet) panel.visible = false;
+          else this.fx.detach(panel, this.velocity.clone().multiplyScalar(0.65));
+        }
       }
     }
     for (const glass of this.glass) {
-      const center = new T.Box3()
-        .setFromObject(glass)
-        .getCenter(new T.Vector3());
-      if (center.distanceTo(point) < 1.8 && damage > 4) {
-        glass.visible = false;
-        this.fx.emit(center, 12, 1, 2);
+      const bounds = new T.Box3().setFromObject(glass);
+      const distance = bounds.distanceToPoint(point);
+      if (distance < 1.25 && damage > 3) {
+        glass.userData.damage = (glass.userData.damage || 0) + damage * (1 - distance / 1.25);
+        const mat = glass.material as T.MeshPhysicalMaterial;
+        const state = mat.userData.glassState as GlassState | undefined;
+        if (state) {
+          state.damage.value = Math.min(1, glass.userData.damage / 24);
+          state.impact.value.copy(glass.worldToLocal(point.clone()));
+        }
+        const laminated = /Windshield|Rearwindow/.test(glass.name);
+        // Laminated screens retain their shattered sheet. Tempered side glass
+        // cracks first, then releases fragments on a second substantial blow.
+        if (!laminated && glass.userData.damage > 24) glass.visible = false;
+        if (!quiet) this.fx.emit(bounds.getCenter(new T.Vector3()), Math.ceil(damage * .55), 3, 1.7);
       }
     }
     const def = DEFINITIONS[this.kind];
@@ -370,18 +407,22 @@ export class Vehicle {
       y: 0.25,
       z: def.halfLength - 0.12 - (100 - this.health) * 0.0015,
     });
-    this.fx.emit(point, Math.ceil(damage * 2), 1, 2 + damage * 0.1);
-    this.fx.emit(point, Math.ceil(damage), 0, 2);
+    if (!quiet) {
+      this.fx.emit(point, Math.ceil(damage), 1, 1.5 + damage * 0.07);
+      this.fx.emit(point, Math.ceil(damage), 0, 2);
+    }
   }
   dispose() {
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);
     this.root.removeFromParent();
+    const materials = new Set<T.Material>();
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
         if (o.name.startsWith('panel_')) o.geometry.dispose();
-        (o.material as T.Material).dispose();
+        materials.add(o.material as T.Material);
       }
     });
+    for (const material of materials) material.dispose();
   }
 }

@@ -166,7 +166,7 @@ export class Sound {
       const loops = this.loops.get(car.id);
       if (!loops) continue;
       const prior = this.history.get(car.id);
-      const grounded = [0, 1, 2, 3].some((i) =>
+      const grounded = car.remoteGrounded ?? [0, 1, 2, 3].some((i) =>
         car.controller.wheelIsInContact(i),
       );
       if (prior) {
@@ -196,7 +196,7 @@ export class Sound {
         ),
       );
       const rpm = car.rpm,
-        level = car.id === 0 ? 0.38 : 0.22;
+        level = car === cars[0] ? 0.38 : 0.22;
       for (const [name, l] of loops) {
         l.pan.positionX.value = car.current.x;
         l.pan.positionY.value = car.current.y;

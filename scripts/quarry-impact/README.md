@@ -4,6 +4,8 @@ A standalone 3D browser demolition game set in Blackridge Quarry, with three veh
 
 ## Play
 
+[Play Quarry Impact](https://jez237.com/games/2026-09-27/quarry-impact/) in a desktop browser. It is listed under **Unfinished** on the [games page](https://jez237.com/games/).
+
 Double-click **Play-Quarry-Impact.cmd**, or run `node serve.mjs` and open **http://127.0.0.1:8795/**. The launcher starts a hidden local server. Node.js is required; the prepared game does not require an npm install. The server binds only to this computer.
 
 Choose a car and mode, then enter the event:
@@ -18,7 +20,8 @@ Choose a car and mode, then enter the event:
 |---|---|
 | W / Up | Accelerate |
 | S / Down | Brake, then reverse |
-| A D / Left Right | Steer |
+| A D | Steer left / right |
+| Left Right arrows | Reversed steering, as requested |
 | Space | Handbrake |
 | C | Chase / hood camera |
 | R | Recover; repair in playground |
@@ -28,7 +31,13 @@ Choose a car and mode, then enter the event:
 | M | Mute |
 | F | Fullscreen |
 
-Standard gamepad: left stick steers, right trigger accelerates, left trigger brakes/reverses, bottom face button is the handbrake. Menus use pointer/keyboard. Losing focus pauses an event and clears held keys. Settings and best results are saved only in this browser.
+Standard gamepad: left stick steers, right trigger accelerates, left trigger brakes/reverses, bottom face button is the handbrake. Menus use pointer/keyboard. Losing focus pauses a solo event and clears held keys. Online, controls pause while the shared event continues. Settings and solo best results are saved only in this browser.
+
+## Online rooms
+
+Choose **Create room**, copy the invitation link, and send it to the other players. Rooms hold eight cars, with AI in unused places. The host starts events and rematches; disconnected players can rejoin their seat. Car physics and scoring run on the server.
+
+The bundled `public/multiplayer.json` connects to the deployed service at `wss://quarry-impact-online.quarry-impact-free.workers.dev`. Hosting uses the verified dedicated Cloudflare Free account, with four simultaneous rooms and daily service limits. Reaching a Free limit may temporarily prevent online play; no paid plan or overage spending is authorized. Solo modes remain available. See `multiplayer/README.md` for local setup, limits and deployment details.
 
 ## Rendering and damage
 
@@ -46,25 +55,18 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 
 ## Development
 
-`npm install` then `npm run dev` starts Vite. Stop the standalone server first if it already owns port 8795. `npm run build` checks TypeScript and produces `dist/`, a static, self-contained site that supports subdirectory hosting. No deployment was performed.
+`npm install` then `npm run dev` starts Vite. Stop the standalone server first if it already owns port 8795. `npm run build` checks TypeScript and produces `dist/`, a static site that supports subdirectory hosting. The multiplayer server is a separate Worker under `multiplayer/`; the static game makes no ElevenLabs requests.
 
 - `npm test`: repeatable rules checks.
 - `npm run qa`: Chrome browser integration checks against the local server; reports and screenshots go to `outputs/`.
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
 - `tools/rocks.py`: reduces the scanned rocks for gameplay.
+- `python tools/restore-scenery-sources.py`: restores the large CC0 fir source buffers/textures from recorded URLs and verifies SHA-256 hashes. These raw inputs are omitted from the GitHub snapshot; the small source glTF files, manifests, editable Blender scenes and prepared runtime models are retained.
+- Blender: run `tools/prepare-fir-saplings.py` and `tools/prepare-fir-medium.py` with `blender --background --python <script>` to rebuild fir detail levels. `tools/split-fir-medium.py` re-exports three files below the static host’s size limit.
 - `tools/assets.py`: downloads photographic textures and records provenance.
 - `tools/audio.py`: explicit ElevenLabs generation, using `ELEVENLABS_API_KEY` from the environment. Never run automatically during builds. It checks quota and refuses overage-enabled accounts; completed clips are reused.
 
 Implementation modules separate assets, world, vehicle dynamics/damage, rules, audio and effects. `window.__quarry` is a local QA interface for scenario setup and performance reports; it is not an online API or a remote service.
 
 See `CREDITS.md` for asset licensing and `VALIDATION.md` for verification and measured performance.
-
-## Published edition
-
-Play: https://jez237.com/games/2026-09-27/quarry-impact/
-
-Listed under **Unfinished** in the [games catalog](https://jez237.com/games/).
-This folder contains the editable project and its local assets. Run `npm ci` and
-`npm run build` here; copy `dist/` into `games/2026-09-27/quarry-impact/` for release.
-Follow the repository deployment instructions in `AGENTS.md`.

@@ -1,0 +1,59 @@
+# Quarry Impact online authority
+
+Private six-character rooms, eight cars, AI fills disconnected/unoccupied slots. The server runs Rapier 0.19.3 at a fixed 60 Hz; clients send controls at 20 Hz and receive shared authoritative transforms, collisions, damage, checkpoints and results. Client position/damage/score messages are rejected. Clients render snapshots with one snapshot interval of interpolation. There is currently no local input prediction, so internet latency affects steering response.
+
+## Run and validate
+
+Install the game's dependencies first (`npm install` in `quarry-impact`), then `npm install` in this directory. The separate `package.json` pins Wrangler. No hosting plan is changed by installation or local development.
+
+- `npm run types`: regenerate environment/runtime types.
+- `npm run check`: typecheck server and shared protocol.
+- `npm test`: authority, physics, admission and actual Worker lifecycle tests, including browser Vehicle replay and delayed-RPC race regressions.
+- `npm run dev`: local Worker on `127.0.0.1:8789`.
+- `npm run test:live`: connect two real WebSocket clients, compare authoritative snapshots, verify input movement, reconnect, reject forged positions and foreign origins.
+- `npm run test:admission`: verify the timeout Close frame under connection churn and readable terminal admission rejection. Reports whether TCP closure has also completed; the local Wrangler proxy can defer TCP cleanup after the Close handshake.
+- `npm run deploy:dry`: package without publishing.
+
+Wrangler 4.142.0 is pinned in this directory's package and lockfile. Run the listed npm commands here so they use this local version and the configured 2026-09-27 compatibility date. The parent workspace's older Wrangler is not required.
+
+## Client integration
+
+`src/network.ts` exports `QuarryNetwork`, an EventTarget. Connect using `{ endpoint: 'wss://<verified-worker-host>', room?, name, kind }`. The endpoint is the service root, without `/rooms/`. The adapter appends `/rooms/ABCDEF`. Do not embed credentials in the endpoint or browser bundle.
+
+Events: `connected`, `snapshot`, `disconnected`, `error`. Methods: `start(mode)`, `setInput(controls)`, `clearInput()`, `recover()`, `sample()`, `drainDamage()`, `disconnect()`. Properties: `id`, `room`, `isHost`, `shareURL`, `snapshot`, `latency`. Local player ID is not necessarily zero.
+
+Stop the local authoritative simulation while online. Apply server car transforms and fields to rendered vehicles. Apply damage visually, then restore health/mechanical values from the snapshot. The server is the only authority over physical consequences. Pause/focus loss must call `clearInput`; online simulation continues for other players.
+
+Every damage event has a unique increasing `id` within its event, `car`, local impact position/direction and the car's `repair` serial. IDs reset when the host starts another event, as does the simulation tick. Clear event-deduplication state on rematch. Complete per-car `dents` are included in welcome/rejoin snapshots, in local model coordinates, so a late entrant can reconstruct visible damage at the car's current location. Ordinary snapshots omit this historical array. Live snapshots repeat only ten seconds/up to 128 recent damage events. Deduplicate by ID and ignore events with an older repair serial. Each life can have at most 334 accepted impacts (>0.3 damage into 100 health); a defensive 334-entry cap applies. Repair clears the car's history. Clear client per-car dedupe history on repair, or prune IDs older than the repeated event window.
+
+## Lifetime and validation
+
+- Eight player slots, with up to sixteen briefly pending WebSockets so a full-room token reconnect can replace its old connection. Names are length-limited and stripped of markup characters.
+- Cryptographically random room codes and opaque reconnection tokens. Reconnection tokens remain in sessionStorage and server-side persistence, never shared in invitation URLs.
+- 1 KiB input limit; 90 incoming messages per second per authenticated connection; input sequences reject replay/out-of-order controls; controls are finite and clamped.
+- Input goes neutral after 350 ms without updates. A disconnected player becomes AI immediately, retains its reclaimable slot for 60 seconds, and keeps existing damage/location when rejoining. Host authority passes to another connected player.
+- Origins are explicitly allowed in Wrangler config. Lobby/result input and pings are suppressed to allow WebSocket hibernation. The server has an active interval only during a live event with connected humans. AI does not keep empty rooms running.
+- A durable admission ledger caps the service at four rooms before allocating terrain or cars. It allows three new rooms per network per ten minutes, sixty connection attempts per network per minute, and 240 connection attempts globally per minute. Existing-room joins/reconnects still work when the room cap is reached. Rate keys are salted hashes; raw IP addresses are never stored or logged. At most 256 recent network keys are retained.
+- A new room reserves capacity for thirty seconds and allocates its Rapier world only after a valid hello. Silent sockets receive a timeout Close frame at ten seconds. Closing sockets do not count toward the sixteen pending/open connection allowance. Empty rooms and their leases are removed after two minutes; the disconnected-car reclaim window remains sixty seconds.
+- Rooms have a fixed two-hour lifetime that reconnects cannot extend. Serialized alarm scheduling always preserves the earliest pending/empty/hard deadline; handlers and the simulation loop also enforce hard expiry directly. Versioned activity updates prevent delayed idle RPCs from shortening a newly active room's lease.
+- Durable snapshots are written every five seconds and on joins/disconnects. An unexpected runtime restart may roll back up to five seconds, then restores cars and token ownership. This is recovery, not seamless live failover. Lobby/result rooms hibernate without a recurring simulation timer or periodic keepalive alarm.
+- Admission denial sends a readable protocol error and terminal 4004 Close frame, avoiding indefinite retries. Invocation logs are disabled to avoid recording every gameplay input; sampled error/custom logs remain available. Origin checks protect browser use but are not authentication against non-browser clients.
+- Existing tests verify a real frontal collision and driving parity to 0.1 mm across 240 simulation ticks. Local and production two-client authority smoke passed. Production browser checks passed independent movement, shared snapshots, pause/focus input clearing, token rejoin with damage history, host succession and eight-slot full-room feedback. Packet loss, eight geographically distributed players and long-running production quota usage still need verification.
+
+The browser Quarry and server instantiate the same `src/quarry-layout.ts` collider factory: landscape terrain, fractured cliff geometry, arena barriers, ramps, industrial buildings/containers/silos/conveyor/excavator, fence wires/posts, signs, scanned-rock convex hulls, scree and mature tree trunks. Full render geometry is retained for terrain/cliffs; solid rock proxies are convex hulls from the same normalized bundled GLB; thin foliage and fine gravel are decorative. Scanned forest placements are shared with the visual module. Twenty-two barrel rigid bodies are authoritative `snapshot.props` entries and have deterministic IDs/starts. `Quarry.applyProps` applies their transforms online; reset restores dynamic mode, start positions and upright rotation. The parity test constructs the actual browser Quarry class and compares every static collider shape/transform and mesh geometry with the server, then verifies an identical barrel impulse trajectory.
+
+Race AI uses the offline corner-speed controller, reverse recovery, off-track/rollover penalties and obstacle avoidance. Wheel contact booleans come from the server controller for landing audio. Restored damage event IDs include all saved per-car historical dents, preventing reuse after old recent-event buffers expire.
+
+## Deployment status / no-spend constraint
+
+As of 2026-09-27, the user requires Free-plan hosting with no additional spending and authorized a dedicated account named Quarry Impact Free. Its Workers plan was verified in the Cloudflare dashboard as **Free, $0, Current plan**. Wrangler explicitly targets account `b70f40a9b52c84500e27911887514208`; the refreshed OAuth session can access that account. Publication is separate from the site's existing static deployment path.
+
+The Worker was published on 2026-09-27 at `https://quarry-impact-online.quarry-impact-free.workers.dev` (WebSocket root: `wss://quarry-impact-online.quarry-impact-free.workers.dev`), version `f52a9566-f53e-4fd0-b571-afc83155456a`. Cloudflare reports a 696.29 KiB gzip upload and 3 ms startup. Final local validation passed all fifteen authority/lifecycle tests, typechecking, two-client WebSocket smoke and admission-timeout checks. Production HTTPS health and two-client WebSocket smoke passed, including shared transforms/props, movement, reconnect and spoof/origin rejection. A silent production client received 1008 Join timeout and completed the TCP close handshake within the ten-second server deadline (9.16 seconds after its connection opened); the deferred TCP closure observed in the local Wrangler proxy did not occur in production. Production browser QA passed all eight integration checks.
+
+Workers `standard:true` and `default_usage_model:standard` API values also occur on Free accounts and must not be used to infer a Paid plan. The subscription/billing APIs remain unavailable to this OAuth grant; dashboard plan verification is the evidence. The original site account was also subsequently verified as Free in the dashboard and has not been downgraded or otherwise changed.
+
+The Free plan stops affected operations at its daily limits rather than charging overages. SQLite Durable Objects include 100,000 requests/day, 13,000 GB-s/day, and 100,000 SQLite writes/day. A full eight-human room at the current input rate uses approximately 29,520 billable DO requests/hour before admission, alarms and other overhead; the shared daily request allowance therefore supports roughly 3.4 such room-hours. Service may be temporarily unavailable when a Free limit is exhausted. Never upgrade a plan automatically. Application admission limits reduce abuse; they are not a billing cap on a Paid account.
+
+References: [Durable Objects pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/), [WebSocket server](https://developers.cloudflare.com/durable-objects/examples/websocket-server/), [Workers WebAssembly](https://developers.cloudflare.com/workers/runtime-apis/webassembly/javascript/).
+
+`prepare-rapier.mjs` rebuilds the pinned installed Rapier source-map sources with a precompiled WASM initializer. This avoids Workers' prohibition on runtime WASM compilation. Rapier remains Apache-2.0; the original attribution is in `public/licenses/RAPIER-LICENSE.txt`. Generated artifacts are ignored, reproducible local build output.

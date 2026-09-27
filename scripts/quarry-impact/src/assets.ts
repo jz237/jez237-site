@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import type { CarKind } from './rules';
+import { finishGlass, finishPaint } from './car-materials';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -39,7 +40,9 @@ function batch(group: THREE.Object3D, root: boolean) {
     const g = mergeGeometries(geos);
     if (g) {
       const mesh = new THREE.Mesh(g, m);
-      mesh.castShadow = true;
+      // Interiors, radiator fins and brake hardware do not need a second full
+      // render into the shadow map. Outer panels and tires supply the silhouette.
+      mesh.castShadow = !root && m.name.startsWith('Tire');
       mesh.receiveShadow = true;
       mesh.name = 'detail_' + m.name;
       group.add(mesh);
@@ -63,45 +66,65 @@ export async function loadCars(progress: (s: string) => void) {
 }
 export function cloneCar(kind: CarKind, color: number) {
   const root = templates.get(kind)!.clone(true);
+  const materials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
-    o.castShadow = true;
+    o.castShadow = o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) || o.name.includes('Tire');
     o.receiveShadow = true;
     const old = o.material as THREE.MeshStandardMaterial;
-    o.material = old.clone();
+    // One paint material per color per car; wear is carried by each panel's
+    // vertex attribute. Window material instances keep independent crack states.
+    const glass = o.name.startsWith('glass_');
+    if (!glass && materials.has(old)) o.material = materials.get(old)!;
+    else {
+      o.material = old.clone();
+      if (!glass) materials.set(old, o.material);
+    }
     const m = o.material as THREE.MeshPhysicalMaterial;
     if (old.name.startsWith('paint')) {
-      m.color.setHex(color);
-      m.metalness = 0.65;
-      m.roughness = 0.28;
-      if ('clearcoat' in m) m.clearcoat = 0.8;
+      const trim = old.name.includes('Paint 2');
+      m.color.setHex(trim ? 0x202529 : color);
+      m.metalness = trim ? .18 : 0.48;
+      m.roughness = trim ? .38 : 0.24;
+      m.normalScale.setScalar(.055);
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : 1; m.clearcoatRoughness = 0.12; }
+      finishPaint(m);
     }
     if (o.name.startsWith('panel_')) {
       o.geometry = o.geometry.clone();
       o.userData.original = new Float32Array(
         o.geometry.attributes.position.array,
       );
+      o.userData.originalNormals = new Float32Array(o.geometry.attributes.normal.array);
+      o.geometry.setAttribute('impactWear', new THREE.BufferAttribute(new Float32Array(o.geometry.attributes.position.count * 2), 2));
+      o.userData.damage = 0;
     }
     if (old.name.includes('Headlight')) {
       m.emissive.setHex(0xe2f1ff);
-      m.emissiveIntensity = 2;
+      m.emissiveIntensity = 3;
     }
     if (old.name.includes('Brakelight')) {
       m.emissive.setHex(0xff1105);
-      m.emissiveIntensity = 1.5;
+      m.emissiveIntensity = 0.8;
     }
+    if (old.name.includes('Tire')) { m.roughness = 0.94; m.metalness = 0; m.color.copy(old.color).multiplyScalar(.72); }
+    if (old.name.startsWith('Interior')) m.roughness = Math.max(.7, m.roughness);
     if (o.name.startsWith('glass_')) {
       m.transmission = 0;
-      m.color.setHex(0x29434a);
-      m.metalness = 0.25;
+      m.color.setHex(0x476166);
+      m.metalness = 0.15;
       m.transparent = true;
-      m.opacity = 0.5;
-      m.side = THREE.DoubleSide;
+      m.opacity = 0.28;
+      m.side = THREE.FrontSide;
       m.depthWrite = false;
-      m.roughness = 0.12;
+      m.roughness = 0.055;
+      m.envMapIntensity = 1.2;
+      finishGlass(m, o.geometry);
+      o.userData.damage = 0;
+      o.castShadow = false;
     }
   });
-  root.position.y = -0.8;
+  root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);
   return root;
 }
 export const textures = new Map<string, THREE.Texture>();
@@ -135,10 +158,11 @@ export async function environment(
   hdr.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = hdr;
   scene.backgroundRotation.y = 1.9;
+  scene.environmentRotation.y = 1.9;
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromEquirectangular(hdr);
   scene.environment = target.texture;
-  scene.environmentIntensity = 0.65;
+  scene.environmentIntensity = 0.5;
   pmrem.dispose();
   return target;
 }
