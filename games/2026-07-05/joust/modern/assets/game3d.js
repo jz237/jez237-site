@@ -41,17 +41,8 @@ document.addEventListener('keydown', kickAmbience);
 
 // ─── save / options / stats ───
 const SAVE_KEY = 'joust3d_save_v1';
-const defaultKeys = () => ({
-  p1: { left: 'ArrowLeft', right: 'ArrowRight', flap: 'ArrowUp' },
-  p2: { left: 'KeyA', right: 'KeyD', flap: 'KeyW' },
-});
-let save = {
-  hi: 0, scores: [], maxWave: 1, unlockAll: false,
-  stats: { games: 0, kills: 0, pteroKills: 0, eggs: 0, maxChain: 0, waves: 0, deaths: 0 },
-  feats: {},
-  opts: { sfx: 0.7, mus: 0.5, quality: 'high', camShake: true, rumble: true, difficulty: 'normal', lives: 5, keys: defaultKeys() },
-};
-try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && s.opts) { save = Object.assign(save, s); if (!save.opts.keys) save.opts.keys = defaultKeys(); if (!save.stats) save.stats = { games: 0, kills: 0, pteroKills: 0, eggs: 0, maxChain: 0, waves: 0, deaths: 0 }; if (!save.feats) save.feats = {}; } } catch (e) {}
+let save = window.JOUST_RUNTIME.defaults();
+try { save = window.JOUST_RUNTIME.normalizeSave(JSON.parse(localStorage.getItem(SAVE_KEY))); } catch (e) {}
 // one-time migration: v1.0.0 saves persisted the old 3-mount default; Rev.4-authentic is 5
 if (!save._rev2) { if (save.opts.lives === 3) save.opts.lives = 5; save._rev2 = true; }
 function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} }
@@ -108,6 +99,7 @@ function pi_for(code) {
   return -1;
 }
 window.addEventListener('keydown', e => {
+  if (e.target instanceof Element && e.target.closest('button,a') && ['Enter','Space','Tab'].includes(e.code)) return;
   if (rebindTarget) { if (e.code === 'Escape') { rebindTarget = null; flash('CANCELLED'); } else doRebind(e.code); e.preventDefault(); return; }
   if (!e.repeat) {
     const p = pi_for(e.code);
@@ -129,14 +121,29 @@ window.addEventListener('keydown', e => {
       e.code === kk.p2.left || e.code === kk.p2.right || e.code === kk.p2.flap) e.preventDefault();
 });
 window.addEventListener('keyup', e => { keys[e.code] = false; if (e.code === 'Escape') escDownAt = 0; });
-window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; escDownAt = 0; touch.left = touch.right = touch.flapHeld = false; });
+function clearInput() {
+  for (const k in keys) keys[k] = false;
+  flapQueue.fill(false); escDownAt = 0;
+  touch.left = touch.right = touch.flapHeld = false;
+  pad.left = pad.right = pad.flapHeld = false;
+  pad._escOwned = false;
+}
+function setPaused(value) {
+  paused = value; acc = 0; clearInput();
+  updateGameControls();
+}
+window.addEventListener('blur', () => {
+  clearInput();
+  if (['playing','intro','clear'].includes(state)) setPaused(true);
+});
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    if (state === 'playing') paused = true;
-    for (const k in keys) keys[k] = false; escDownAt = 0;
+    if (['playing','intro','clear'].includes(state)) setPaused(true);
+    clearInput(); acc = 0;
     if (audio.stopMusic) audio.stopMusic();
     if (amb._started) amb.pause();
   } else {
+    lastT = performance.now();
     if (state === 'title' && audio.startMusic) audio.startMusic();
     if (amb._started) amb.play().catch(() => {});
   }
@@ -186,30 +193,30 @@ function setupTouch() {
   if (!isTouch) return;
   touch.active = true; touch.device = true;
   const bar = document.createElement('div'); bar.id = 'touchbar';
-  bar.innerHTML = `<button id="tL">◀</button><button id="tR">▶</button><div class="sp"></div><button id="tF">FLAP</button>`;
+  bar.innerHTML = `<button id="tL" aria-label="Steer left">◀</button><button id="tR" aria-label="Steer right">▶</button><div class="sp"></div><button id="tF" aria-label="Flap to climb">FLAP</button>`;
   document.body.appendChild(bar);
   const bind = (id, on, off) => {
     const el = document.getElementById(id);
-    const d = e => { e.preventDefault(); touch.active = true; on(); };
+    const d = e => { e.preventDefault(); el.setPointerCapture(e.pointerId); touch.active = true; on(); };
     const u = e => { e.preventDefault(); off(); };
     el.addEventListener('pointerdown', d); el.addEventListener('pointerup', u);
-    el.addEventListener('pointerleave', u); el.addEventListener('pointercancel', u);
+    el.addEventListener('lostpointercapture', u); el.addEventListener('pointercancel', u);
   };
   bind('tL', () => touch.left = true, () => touch.left = false);
   bind('tR', () => touch.right = true, () => touch.right = false);
   const f = document.getElementById('tF');
   f.addEventListener('pointerdown', e => {
-    e.preventDefault(); touch.active = true; touch.flapHeld = true; audio.init();
+    e.preventDefault(); f.setPointerCapture(e.pointerId); touch.active = true; touch.flapHeld = true; audio.init();
     if (state === 'title') startFromTitle();
     else if (state === 'intro') { introTimer = 0; flapQueue[0] = true; }
     else if (state === 'playing') flapQueue[0] = true;
     else advanceScreen();
   });
   const flapUp = e => { e.preventDefault(); touch.flapHeld = false; };
-  f.addEventListener('pointerup', flapUp); f.addEventListener('pointerleave', flapUp); f.addEventListener('pointercancel', flapUp);
+  f.addEventListener('pointerup', flapUp); f.addEventListener('lostpointercapture', flapUp); f.addEventListener('pointercancel', flapUp);
   window._touchbar = bar;
 }
-function updateTouchVis() { if (window._touchbar) window._touchbar.style.display = (touch.device && (state === 'playing' || state === 'intro')) ? 'flex' : 'none'; }
+function updateTouchVis() { if (window._touchbar) window._touchbar.style.display = (touch.device && !paused && (state === 'playing' || state === 'intro')) ? 'flex' : 'none'; }
 function evToCanvas(e) { const r = hudCanvas.getBoundingClientRect(); return { x: (e.clientX - r.left) * (hudCanvas.width / r.width), y: (e.clientY - r.top) * (hudCanvas.height / r.height) }; }
 
 // ─── gamepad (+ rumble) ───
@@ -225,7 +232,11 @@ function pollGamepad() {
   if (!navigator.getGamepads) return;
   let gp = null; for (const g of navigator.getGamepads()) { if (g && g.connected) { gp = g; break; } }
   _gpRef = gp;
-  if (!gp) { pad.left = pad.right = pad.flapHeld = false; return; }
+  if (!gp) {
+    if (pad._escOwned) escDownAt = 0;
+    for (const k in pad) pad[k] = false;
+    return;
+  }
   pad.on = true;
   const ax = gp.axes[0] || 0, ay = gp.axes[1] || 0, B = i => gp.buttons[i] && gp.buttons[i].pressed;
   pad.left = ax < -0.35 || B(14); pad.right = ax > 0.35 || B(15);
@@ -235,14 +246,18 @@ function pollGamepad() {
   if (edge(flapNow, 'flap') && (state === 'playing' || state === 'intro')) {
     flapQueue[0] = true; if (state === 'intro') introTimer = 0;
   }
-  const upNow = ay < -0.5 || B(12), downNow = ay > 0.5 || B(13), okNow = B(0) || B(9), escNow = B(1) || B(8) || B(3);
+  const upNow = ay < -0.5 || B(12), downNow = ay > 0.5 || B(13), okNow = B(0) || B(9);
+  // B is a flap in flight and Back is restart; one button must never do both.
+  const escNow = state === 'playing' && !paused ? B(8) : B(1) || B(8) || B(3);
   const pauseNow = B(9), up = edge(upNow, 'up'), down = edge(downNow, 'down'), ok = edge(okNow, 'ok'), esc = edge(escNow, 'esc'), pauseEdge = edge(pauseNow, 'pause');
-  if (state !== 'playing') {
+  if (paused) {
+    if (pauseEdge || ok || esc) setPaused(false);
+  } else if (state !== 'playing') {
     if (up) handleKeyUI({ code: 'ArrowUp' }); if (down) handleKeyUI({ code: 'ArrowDown' });
     if (pad.left && !pad._padLeftWas) handleKeyUI({ code: 'ArrowLeft' }); if (pad.right && !pad._padRightWas) handleKeyUI({ code: 'ArrowRight' });
     if (ok) { audio.init(); handleKeyUI({ code: 'Enter' }); } if (esc) handleKeyUI({ code: 'Escape' });
   } else {
-    if (pauseEdge) paused = !paused;
+    if (pauseEdge) setPaused(true);
     if (esc && !escDownAt) { escDownAt = performance.now(); pad._escOwned = true; }
     // only release a PAD-initiated hold — clearing unconditionally would wipe the
     // keyboard's hold-ESC every frame whenever any gamepad is connected
@@ -264,6 +279,7 @@ async function postGlobal(initials, sc, wv) {
 // ─── run control ───
 let pendingMode = '1p';
 function startRun(wv) {
+  clearInput(); _lastSnap = null;
   mode = pendingMode || '1p';
   engine = new JoustEngine({ mode, wave: wv || 1, lives: save.opts.lives, difficulty: save.opts.difficulty, seed: (Date.now() & 0xffff) ^ 0x1234, holdUntilInput: true });
   renderer.clearViews();
@@ -273,6 +289,7 @@ function startRun(wv) {
   gotoIntro();
 }
 function gotoIntro() {
+  acc = 0; renderer.previousPoses = null;
   state = 'intro'; introTimer = 210;
   bannerLines = bannerForWave(engine.wave, engine.waveType);
   audio.play('start');
@@ -372,25 +389,31 @@ function processEvents(evs, quiet) {
       case 'playerOut': if (!quiet) flash('PLAYER ' + ((e.pi || 0) + 1) + ' OUT'); break;
       case 'spawn': renderer.burst('spark', e.x, e.y, { n: 10, col: '#66ccff', up: true }); break;
       case 'bounce': renderer.burst('spark', e.x, e.y, { n: 5, col: '#ffffff' }); if (!quiet && save.opts.camShake) renderer.shakeBy(1.5); break;
-      case 'troll': renderer.burst('spark', e.x, WORLD.FLOOR, { n: 6, col: '#ff6a00' }); if (!quiet) grantFeatOnEscapeWatch(); break;
+      case 'troll': renderer.burst('spark', e.x, WORLD.FLOOR, { n: 6, col: '#ff6a00' }); break;
       case 'lavaEscape': if (!quiet) grantFeat('trollEscape'); break;
     }
   }
 }
-// troll escape detection: engine emits no explicit escape event — watch score bump via addScore LAVA_ESCAPE?
-// simpler: engine emits 'troll' on grab; if the player survives (no death within the grab), grant on next waveClear.
-let _trollWatch = false;
-function grantFeatOnEscapeWatch() { _trollWatch = true; }
+// Observe the actual escape; an enemy grab or a later wave clear must not award it.
+function tickEngine(inputs) {
+  const grabbed = engine.players.filter(p => p.alive && p.grabbed);
+  renderer.captureFrame(engine.snapshot());
+  const snap = engine.tick(inputs);
+  processEvents(snap.events);
+  if (grabbed.some(p => p.alive && !p.grabbed && p.vy < PHYS.TROLL_BREAKFREE)) grantFeat('trollEscape');
+  return snap;
+}
 
 // ─── main loop ───
 let acc = 0, lastT = performance.now();
 function frame(now) {
   requestAnimationFrame(frame);
+  if (document.hidden) { lastT = now; acc = 0; return; }
   let dt = now - lastT; lastT = now; if (dt > 200) dt = 200;
   pollGamepad();
   renderer.resize();
   const frameUnits = Math.min(4, dt / STEP_MS);   // 60Hz-normalized so timers are FPS-independent
-  renderer.updateFx(frameUnits);
+  renderer.updateFx(paused ? 0 : frameUnits);
   // ambience swells during play, sits low behind menus, ducks out when paused
   if (amb._started) {
     const ambT = paused ? 0 : (state === 'playing' || state === 'intro' || state === 'clear') ? 0.32 * save.opts.sfx : 0.10 * save.opts.sfx;
@@ -403,34 +426,37 @@ function frame(now) {
     if (killCam > 0) { killCam -= frameUnits; renderer.punchT = Math.max(renderer.punchT, 0.7); }
     while (acc >= STEP_MS) {
       acc -= STEP_MS;
-      const snap = engine.tick(readInputs());
-      processEvents(snap.events);
+      tickEngine(readInputs());
       if (engine.gameOver) { if (killCam <= 0) { onGameOver(); } break; }
-      if (engine.waveCleared && engine.clearTimer <= 0) { if (_trollWatch) { grantFeat('trollEscape'); _trollWatch = false; } onWaveCleared(); break; }
+      if (engine.waveCleared && engine.clearTimer <= 0) { onWaveCleared(); break; }
     }
     if (engine.gameOver && killCam <= 0 && state === 'playing') onGameOver();
     if (escDownAt && now - escDownAt > 800) { escDownAt = 0; restartWaveCostLife(); }
   } else if (state === 'title' || state === 'attract') {
     acc += dt; while (acc >= STEP_MS) { acc -= STEP_MS; stepAttract(); }
-  } else if (state === 'intro') {
+  } else if (state === 'intro' && !paused) {
     introTimer -= frameUnits; if (introTimer <= 0) state = 'playing';
-  } else if (state === 'clear') {
+  } else if (state === 'clear' && !paused) {
     clearTimer -= frameUnits; if (clearTimer <= 0) advanceAfterClear();
   }
 
   draw(now, dt);
   updateTouchVis();
+  updateGameControls();
 }
 
 function restartWaveCostLife() {
+  clearInput(); noDeathStreak = 0;
   for (const p of engine.players) {
     if (p.out) continue;
-    p.lives--; p.eggStreak = 0;
+    p.lives--; p.eggStreak = 0; save.stats.deaths++;
     if (p.lives <= 0) p.out = true;
   }
   paused = false;
+  persist();
   if (engine.players.every(p => p.out)) { onGameOver(); return; }
   engine.startWave(engine.wave);
+  for (const p of engine.players) if (!p.out) p.deathsThisWave = 1;
   renderer.clearViews();
   flash('RESTARTING WAVE');
   gotoIntro();
@@ -444,6 +470,7 @@ function startAttract() {
 }
 function stepAttract() {
   if (!attract || attract.gameOver || attract.wave > 6) startAttract();
+  if (attract.waveCleared && attract.clearTimer <= 0) { attract.nextWave(); renderer.previousPoses = null; }
   const p = attract.players[0];
   let inp = { left: false, right: false, flap: false };
   if (p && p.alive) {
@@ -457,6 +484,7 @@ function stepAttract() {
     if (p.y > targetY + 6 || p.y > WORLD.FLOOR - 45) { if (attract._fc % 8 === 0) inp.flap = true; }
     else if (attract._fc % 20 === 0) inp.flap = true;
   }
+  renderer.captureFrame(attract.snapshot());
   attract.tick([inp]);
   processEvents(attract.events, true);
 }
@@ -465,15 +493,23 @@ function stepAttract() {
 const FONT = `'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif`;
 const DFONT = `Cinzel,'Times New Roman',serif`;   // vendored knightly display face
 try { document.fonts.load('900 100px Cinzel'); document.fonts.load('700 100px Cinzel'); } catch (e) {}
-function txt(s, x, y, size, col, align, weight) {
+function txt(s, x, y, size, col, align, weight, maxWidth) {
+  const W = hudCanvas.width;
+  if (W < hudCanvas.height) size = Math.min(size, W / 25);
   ctx.font = `${weight || 800} ${size}px ${FONT}`;
   ctx.textAlign = align || 'center'; ctx.textBaseline = 'middle';
+  const available = maxWidth || (align === 'left' ? W-x-W*.04 : align === 'right' ? x-W*.04 : Math.min(x,W-x)*1.85);
+  const measured = ctx.measureText(String(s)).width;
+  if (measured > available) ctx.font = `${weight || 800} ${size * available / measured}px ${FONT}`;
   ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fillText(s, x + 1.5, y + 2);
   ctx.fillStyle = col || '#fff'; ctx.fillText(s, x, y);
 }
 // display text: Cinzel caps with a dark outline and optional warm glow (headings/banners)
 function txtD(s, x, y, size, col, glow) {
+  size = Math.min(size, hudCanvas.width / 12);
   ctx.font = `800 ${size}px ${DFONT}`;
+  const width = ctx.measureText(String(s)).width;
+  if (width > hudCanvas.width * .9) { size *= hudCanvas.width * .9 / width; ctx.font = `800 ${size}px ${DFONT}`; }
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.lineJoin = 'round';
   if (glow) { ctx.shadowColor = 'rgba(255,170,50,.45)'; ctx.shadowBlur = Math.max(10, size * 0.35); }
@@ -496,7 +532,9 @@ function draw(now, dt) {
   if (state === 'title' || state === 'attract') snap = _lastSnap = (attract ? attract.snapshot() : null);
   else if (engine && (state === 'playing' || state === 'intro' || state === 'clear') && !paused) snap = _lastSnap = engine.snapshot();
   else snap = _lastSnap;
-  renderer.render(snap, dt);
+  renderer.motionEnabled = save.opts.camShake;
+  const live = !paused && (state === 'playing' || state === 'title' || state === 'attract');
+  renderer.render(snap, paused ? 0 : dt, live ? Math.min(1, acc / STEP_MS) : 1);
 
   if (state === 'title' || state === 'attract') drawTitle(now);
   else if (state === 'help') { dim(); drawHelp(); }
@@ -506,12 +544,12 @@ function draw(now, dt) {
   else if (state === 'feats') { dim(); drawFeats(); }
   else if (state === 'hsentry') { dim(); drawHsEntry(); }
   else if (state === 'intro') { drawHUD(); drawBanner(); }
-  else if (state === 'playing') { renderer.drawFloats(txt); drawHUD(); drawEscHold(now); if (!engine.started || engine.players.some(p => p.safe)) drawStartPrompt(now); if (paused) drawPause(); if (killCam > 0) drawKillCam(); }
+  else if (state === 'playing') { renderer.drawFloats(txt); drawHUD(); drawFlightGuide(); drawEscHold(now); if (!engine.started || engine.players.some(p => p.safe)) drawStartPrompt(now); if (killCam > 0) drawKillCam(); }
   else if (state === 'clear') { drawHUD(); drawClear(); }
   else if (state === 'gameover') drawGameOver();
 
   drawVignette(W, H);
-  drawToasts(W, H);
+  drawToasts(W, H, paused ? 0 : dt / STEP_MS);
   if (flashMsg && now < flashUntil) txt(flashMsg, W / 2, H * 0.16, Math.round(H / 20), '#ffcc44');
 }
 function dim() { ctx.fillStyle = 'rgba(3,5,14,0.7)'; ctx.fillRect(0, 0, hudCanvas.width, hudCanvas.height); }
@@ -520,11 +558,11 @@ function drawVignette(W, H) {
   g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.34)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 }
-function drawToasts(W, H) {
+function drawToasts(W, H, fu) {
   const u = H / 720;
   let y = H * 0.2;
   for (const t of featToasts) {
-    t.t++;
+    t.t += fu;
     const a = t.t < 20 ? t.t / 20 : t.t > 160 ? 1 - (t.t - 160) / 30 : 1;
     ctx.globalAlpha = Math.max(0, a);
     panel(W - 340 * u, y, 300 * u, 54 * u, 12 * u);
@@ -571,9 +609,9 @@ function drawTitle(now) {
 
 function drawHUD() {
   const W = hudCanvas.width, H = hudCanvas.height;
-  const u = H / 720;                 // scale factor: HUD layout was designed at 720p
+  const u = Math.min(H / 720, W / 720); // keep 2P score cards separate on portrait screens
   const P = engine.players;
-  const fs = Math.round(H / 34);
+  const fs = Math.max(12, Math.round(21 * u));
   // P1 score card
   panel(14 * u, 12 * u, 200 * u, 58 * u, 12 * u);
   txt('P1', 34 * u, 28 * u, fs * 0.66, '#ffd23a', 'left');
@@ -596,7 +634,26 @@ function drawHUD() {
   }
   // next special
   const nxt = nextSpecial(engine.wave);
-  if (nxt) txt(nxt, W - 22 * u, H - 24 * u, fs * 1.1, '#ff8a00', 'right');
+  if (nxt && !touch.device) txt(nxt, W - 22 * u, H - 24 * u, Math.max(11, 14 * u), '#c5a373', 'right', 500);
+}
+function drawFlightGuide() {
+  if (paused || killCam > 0) return;
+  const W = hudCanvas.width, H = hudCanvas.height;
+  const u = Math.min(W / 1280, H / 720);
+  for (const p of engine.players) {
+    if (!p.alive || p.out) continue;
+    const pt = renderer.worldToScreen(p.x, p.y - 28);
+    const size = Math.max(9, 12 * u);
+    const x = Math.max(20, Math.min(W - 20, pt.x));
+    txt('P' + (p.pi + 1), x, pt.y - 5 * u, size, p.pi ? '#9cdfff' : '#ffe29a', 'center', 700);
+    ctx.fillStyle = p.pi ? '#9cdfff' : '#ffe29a';
+    ctx.beginPath(); ctx.moveTo(x - 3 * u, pt.y + 5 * u); ctx.lineTo(x + 3 * u, pt.y + 5 * u); ctx.lineTo(x, pt.y + 9 * u); ctx.fill();
+  }
+  const p = engine.players[0];
+  if (!p || !p.alive || p.safe) return;
+  const danger = p.grabbed ? 'LAVA TROLL — FLAP TO BREAK FREE' : p.y > WORLD.FLOOR - 36 && !p.onGround && engine.overLava(p.x) ? 'LAVA BELOW — GAIN HEIGHT' : '';
+  const hint = danger || (engine.wave === 1 && engine.waveTime < 1100 ? 'GET ABOVE YOUR RIVAL  ·  HOLD FLAP TO CLIMB, RELEASE TO GLIDE' : '');
+  if (hint) txt(hint, W / 2, H * (touch.device ? .81 : .90), Math.max(10, Math.min(W / 65, H / 56)), danger ? '#ffc78d' : '#bed0e0', 'center', 600);
 }
 // spare mounts (the one you ride isn't a spare — mirror the retro HUD semantics)
 function drawLivesGlyphs(x, y, lives, col, u) {
@@ -611,7 +668,8 @@ function drawLivesGlyphs(x, y, lives, col, u) {
   }
 }
 function nextSpecial(wv) {
-  for (let n = wv + 1; n <= wv + 5; n++) { const t = waveInfo(n).type; if (t === 'survival') return 'S'; if (t === 'gladiator') return 'G'; if (t === 'egg') return 'E'; if (t === 'ptero') return 'P'; }
+  const names = {survival:'SURVIVAL',gladiator:'GLADIATOR',egg:'EGG WAVE',ptero:'PTERODACTYL'};
+  for (let n = wv + 1; n <= wv + 5; n++) { const label = names[waveInfo(n).type]; if (label) return 'NEXT: ' + label + ' · WAVE ' + n; }
   return '';
 }
 function drawBanner() {
@@ -694,8 +752,12 @@ function drawHelp() {
     '',
     'Extra mount every 20,000 · P pause · hold ESC restart (−1 life)',
   ];
-  const fs = Math.round(H / 36);
-  for (let i = 0; i < lines.length; i++) txt(lines[i], W / 2, H * 0.16 + i * (H * 0.047), fs, i === 0 ? '#fff' : '#c9d0e0', 'center', 600);
+  const fs = Math.round(Math.min(H / 36, W / 29));
+  ctx.font = `600 ${fs}px ${FONT}`;
+  const wrapped=[];
+  for(const line of lines){let row='';for(const word of line.split(' ')){const next=row?row+' '+word:word;if(row&&ctx.measureText(next).width>W*.86){wrapped.push(row);row=word;}else row=next;}wrapped.push(row);}
+  const lineHeight=Math.min(H*.047,H*.75/wrapped.length);
+  for (let i = 0; i < wrapped.length; i++) txt(wrapped[i], W / 2, H * 0.16 + i * lineHeight, fs, i === 0 ? '#fff' : '#c9d0e0', 'center', 600);
   txt('ENTER / ESC TO RETURN', W / 2, H * 0.95, Math.round(H / 30), '#7fd4ff');
 }
 function OPT_ROWS() {
@@ -710,11 +772,17 @@ function OPT_ROWS() {
     ['REMAP P1 FLAP', () => keyName(save.opts.keys.p1.flap), () => rebindTarget = { player: 'p1', action: 'flap' }],
     ['REMAP P2 FLAP', () => keyName(save.opts.keys.p2.flap), () => rebindTarget = { player: 'p2', action: 'flap' }],
     ['ALL WAVES (PASS:1234)', () => save.unlockAll ? 'UNLOCKED' : 'LOCKED', () => { promptUnlock(); }],
-    ['RESET PROGRESS', () => '', () => { if (confirm('Reset progress, scores, achievements and options?')) { save.maxWave = 1; save.unlockAll = false; save.scores = []; save.hi = 0; save.feats = {}; save.stats = { games: 0, kills: 0, pteroKills: 0, eggs: 0, maxChain: 0, waves: 0, deaths: 0 }; persist(); flash('RESET'); } }],
+    ['RESET PROGRESS', () => '', () => { if (confirm('Reset progress, scores, achievements and options?')) { save = window.JOUST_RUNTIME.defaults(); save._rev2 = true; audio.setSfx(save.opts.sfx); audio.setMus(save.opts.mus); renderer.setQuality(save.opts.quality); persist(); flash('RESET'); } }],
   ];
 }
 function keyName(code) { return code.replace('Arrow', '').replace('Key', '').replace('Digit', '').toUpperCase(); }
-function doRebind(code) { const t = rebindTarget; save.opts.keys[t.player][t.action] = code; rebindTarget = null; persist(); flash('BOUND ' + keyName(code)); }
+function doRebind(code) {
+  if (!/^(Key[A-Z]|Digit[0-9]|Arrow(Up|Down|Left|Right)|Space|Shift(Left|Right)|Control(Left|Right)|Numpad[0-9])$/.test(code) || ['KeyP','KeyQ'].includes(code)) { flash('CHOOSE A DIFFERENT KEY'); return; }
+  const t = rebindTarget;
+  const conflict = Object.entries(save.opts.keys).some(([p,bindings]) => Object.entries(bindings).some(([a,v]) => v === code && !(p === t.player && a === t.action)));
+  if (conflict) { flash('KEY ALREADY IN USE'); return; }
+  save.opts.keys[t.player][t.action] = code; rebindTarget = null; persist(); flash('BOUND ' + keyName(code));
+}
 function promptUnlock() { const p = prompt('Enter unlock password:'); if (p === '1234') { save.unlockAll = true; persist(); flash('ALL WAVES UNLOCKED'); } else if (p != null) flash('WRONG PASSWORD'); }
 function drawOptions() {
   const W = hudCanvas.width, H = hudCanvas.height;
@@ -722,9 +790,9 @@ function drawOptions() {
   const rows = OPT_ROWS(), y0 = H * 0.19, dy = H * 0.066;
   for (let i = 0; i < rows.length; i++) {
     const sel = i === optIdx, y = y0 + i * dy;
-    if (sel) panel(W * 0.2, y - dy * 0.4, W * 0.6, dy * 0.8, 9);
-    txt(rows[i][0], W * 0.24, y, Math.round(H / 30), sel ? '#ffe14d' : '#c9c9d6', 'left');
-    txt(rows[i][1](), W * 0.76, y, Math.round(H / 30), sel ? '#fff' : '#8fa', 'right');
+    if (sel) panel(W * 0.06, y - dy * 0.4, W * 0.88, dy * 0.8, 9);
+    txt(rows[i][0], W * 0.09, y, Math.min(H / 30, W / 32), sel ? '#ffe14d' : '#c9c9d6', 'left', 700, W * .60);
+    txt(rows[i][1](), W * 0.91, y, Math.min(H / 30, W / 32), sel ? '#fff' : '#8fa', 'right', 700, W * .2);
   }
   txt(rebindTarget ? 'PRESS A KEY…' : '← → CHANGE · ESC BACK', W / 2, H * 0.95, Math.round(H / 30), '#7fd4ff');
 }
@@ -766,7 +834,7 @@ function drawFeats() {
   const s = save.stats;
   txt(`GAMES ${s.games} · KILLS ${s.kills} · PTEROS ${s.pteroKills} · EGGS ${s.eggs} · BEST CHAIN x${s.maxChain} · WAVES ${s.waves}`,
     W / 2, H * 0.155, Math.round(H / 42), '#8a93a8', 'center', 600);
-  const cols = 2, cw = W * 0.42, x0 = W * 0.06, y0 = H * 0.22, rh = H * 0.115;
+  const cols = W < H ? 1 : 2, cw = W * (cols === 1 ? .88 : .42), x0 = W * 0.06, y0 = H * 0.22, rh = H * (cols === 1 ? .058 : .115);
   for (let i = 0; i < FEATS.length; i++) {
     const [id, name, desc] = FEATS[i];
     const c = i % cols, r = (i / cols) | 0;
@@ -775,8 +843,8 @@ function drawFeats() {
     panel(x, y, cw, rh * 0.82, 12);
     ctx.globalAlpha = got ? 1 : 0.45;
     txt(got ? '🏆' : '🔒', x + 26, y + rh * 0.4, Math.round(H / 30), got ? '#ffd23a' : '#666');
-    txt(name, x + 52, y + rh * 0.27, Math.round(H / 36), got ? '#ffe14d' : '#9aa', 'left');
-    txt(desc, x + 52, y + rh * 0.58, Math.round(H / 48), got ? '#c9d0e0' : '#778', 'left', 600);
+    txt(name, x + 52, y + rh * 0.27, Math.min(H / 36,W / 30), got ? '#ffe14d' : '#9aa', 'left', 700, cw-64);
+    txt(desc, x + 52, y + rh * 0.61, Math.min(H / 48,W / 36), got ? '#c9d0e0' : '#778', 'left', 600, cw-64);
     ctx.globalAlpha = 1;
   }
   txt('ESC TO RETURN', W / 2, H * 0.96, Math.round(H / 30), '#7fd4ff');
@@ -809,16 +877,21 @@ function menuAction(i) {
   else if (i === 1) { pendingMode = '2p'; startRun(1); }
   else if (i === 2) state = 'help';
   else if (i === 3) { state = 'options'; optIdx = 0; }
-  else if (i === 4) { state = 'waveselect'; wsInput = ''; }
+  else if (i === 4) { state = 'waveselect'; wsInput = ''; wsPage = 0; }
   else if (i === 5) { state = 'scores'; fetchGlobal(); }
   else if (i === 6) state = 'feats';
 }
 function advanceScreen() { if (state === 'gameover' || state === 'help' || state === 'scores' || state === 'feats') backToTitle(); }
-function backToTitle() { state = 'title'; menuIdx = 0; paused = false; if (!attract) startAttract(); audio.init(); audio.startMusic(); }
+function backToTitle() { persist(); clearInput(); state = 'title'; menuIdx = 0; paused = false; acc = 0; _lastSnap = null; startAttract(); audio.init(); audio.startMusic(); }
 
 function handleKeyUI(e) {
   const code = e.code;
-  if (e.repeat && ['Enter', 'Escape', 'Space'].includes(code)) return;
+  if (e.repeat && ['Enter', 'Escape', 'Space', 'KeyP'].includes(code)) return;
+  if (['playing','intro','clear'].includes(state) && paused) {
+    if (code === 'KeyP' || code === 'Escape' || code === 'Enter') setPaused(false);
+    else if (code === 'KeyQ') backToTitle();
+    return;
+  }
   if (state === 'playing') {
     if (paused) {
       if (code === 'KeyP' || code === 'Escape' || code === 'Enter') paused = false;
@@ -826,7 +899,7 @@ function handleKeyUI(e) {
       return;
     }
     if (code === 'Escape' && !escDownAt) escDownAt = performance.now();
-    if (code === 'KeyP') paused = true;
+    if (code === 'KeyP' && !e.repeat) setPaused(true);
     return;
   }
   const N = 7;
@@ -862,6 +935,7 @@ function handleKeyUI(e) {
     if (code === 'Backspace') hsPos = Math.max(0, hsPos - 1);
     if (code === 'Enter') commitHs();
   } else if (state === 'clear' || state === 'intro') {
+    if (code === 'KeyP' && !e.repeat) setPaused(true);
     if (code === 'Enter' || code === 'Space') { if (state === 'intro') introTimer = 0; }
   }
 }
@@ -869,6 +943,7 @@ function bumpInitial(d) { const c = (hsInitials.charCodeAt(hsPos) - 65 + d + 26)
 
 // touch on menus
 hudCanvas.addEventListener('pointerdown', e => {
+  if (paused) return;
   audio.init(); audio.resume();
   const c = evToCanvas(e), H = hudCanvas.height, W = hudCanvas.width;
   if (state === 'title') {
@@ -882,13 +957,52 @@ hudCanvas.addEventListener('pointerdown', e => {
     else if (c.y > H * 0.9) backToTitle();
   } else if (state === 'waveselect') {
     if (c.y > H * 0.86) { backToTitle(); return; }
-    const cols = 5, col = Math.floor((c.x - W * 0.2) / (W * 0.15)), row = Math.round((c.y - H * 0.28) / (H * 0.1));
-    if (col >= 0 && col < cols && row >= 0) { const n = wsPage * 25 + row * cols + col + 1; const maxW = save.unlockAll ? 99 : save.maxWave; if (n >= 1 && n <= maxW) { pendingMode = '1p'; startRun(n); } }
+    const cols = 5, col = Math.round((c.x - W * 0.2) / (W * 0.15)), row = Math.round((c.y - H * 0.28) / (H * 0.1));
+    if (col >= 0 && col < cols && row >= 0 && row < 5) { const n = wsPage * 25 + row * cols + col + 1; const maxW = save.unlockAll ? 99 : save.maxWave; if (n >= 1 && n <= maxW) { pendingMode = '1p'; startRun(n); } }
   } else if (state === 'hsentry') {
     if (c.y > H * 0.65) { commitHs(); return; }
     if (c.x < W * 0.4) hsPos = Math.max(0, hsPos - 1); else if (c.x > W * 0.6) hsPos = Math.min(2, hsPos + 1); else bumpInitial(c.y < H * 0.45 ? 1 : -1);
   }
 });
+
+// Accessible pause controls, available to mouse, touch, keyboard and controller.
+const pauseMenu = document.getElementById('pause-menu');
+const pauseButton = document.getElementById('pause-button');
+const menuBack = document.getElementById('menu-back');
+const arenaLink = document.getElementById('arena-link');
+hudCanvas.tabIndex = -1;
+function updateGameControls() {
+  const running = ['playing','intro','clear'].includes(state);
+  const wasOpen = !pauseMenu.hidden;
+  pauseMenu.hidden = !(running && paused);
+  pauseButton.hidden = !running || paused;
+  pauseButton.parentElement.classList.toggle('playing',running);
+  document.body.classList.toggle('in-game',running&&!paused);
+  document.getElementById('wave-pages').hidden = state !== 'waveselect';
+  document.getElementById('wave-prev').disabled = wsPage <= 0;
+  document.getElementById('wave-next').disabled = wsPage >= Math.min(3,Math.floor(((save.unlockAll?99:save.maxWave)-1)/25));
+  arenaLink.hidden = running;
+  menuBack.hidden = running || state === 'title' || state === 'hsentry';
+  if (!pauseMenu.hidden && !wasOpen) document.getElementById('resume').focus({preventScroll:true});
+  if (pauseMenu.hidden && wasOpen) hudCanvas.focus({preventScroll:true});
+  updateTouchVis();
+}
+pauseButton.addEventListener('click', () => setPaused(true));
+document.getElementById('resume').addEventListener('click', () => setPaused(false));
+document.getElementById('restart').addEventListener('click', () => { restartWaveCostLife(); updateGameControls(); });
+document.getElementById('quit').addEventListener('click', () => { backToTitle(); updateGameControls(); });
+menuBack.addEventListener('click', () => { rebindTarget = null; backToTitle(); hudCanvas.focus({preventScroll:true}); });
+document.getElementById('wave-prev').addEventListener('click', () => { wsPage = Math.max(0,wsPage-1); });
+document.getElementById('wave-next').addEventListener('click', () => { wsPage = Math.min(3,wsPage+1); });
+pauseMenu.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const items = [...pauseMenu.querySelectorAll('button,a')];
+  const i = items.indexOf(document.activeElement);
+  if (e.shiftKey && i <= 0) { items.at(-1).focus(); e.preventDefault(); }
+  else if (!e.shiftKey && i === items.length - 1) { items[0].focus(); e.preventDefault(); }
+});
+glCanvas.addEventListener('webglcontextlost', e => { e.preventDefault(); if (['playing','intro','clear'].includes(state)) setPaused(true); flash('GRAPHICS PAUSED — RESTORING'); });
+glCanvas.addEventListener('webglcontextrestored', () => { renderer.setQuality(save.opts.quality); flash('GRAPHICS RESTORED'); });
 
 // boot
 setupTouch();
@@ -904,7 +1018,7 @@ window.__joustQA = {
   engine: () => engine, state: () => state, wave: () => engine && engine.wave,
   start: (wv, m) => { pendingMode = m || '1p'; startRun(wv || 1); engine.started = true; state = 'playing'; },
   playReal: (wv, m) => { pendingMode = m || '1p'; startRun(wv || 1); introTimer = 1; window.__joustQA.bot = true; },
-  tick: (n, inp) => { for (let i = 0; i < (n || 1); i++) { const s = engine.tick(inp || readInputs()); processEvents(s.events); } return engine.snapshot(); },
+  tick: (n, inp) => { for (let i = 0; i < (n || 1); i++) tickEngine(inp || readInputs()); return engine.snapshot(); },
   setState: s => state = s, snapshot: () => engine && engine.snapshot(), version: VERSION,
   renderer: () => renderer, modern: true,
 };

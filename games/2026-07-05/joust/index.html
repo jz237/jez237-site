@@ -3,125 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b13">
 <title>Joust — Choose Your Arena</title>
-<meta name="description" content="Joust two ways: the faithful 1982 Williams arcade remake with ROM-exact physics and bit-exact sound, or the fully modernized 3D edition — same gameplay, new world.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><ellipse cx='7' cy='9' rx='5' ry='4' fill='%23ffe14d'/><path d='M9 7 Q13 4 14 2' stroke='%23ffe14d' stroke-width='2' fill='none'/><rect x='5' y='2' width='3' height='4' fill='%23ffd23a'/><line x1='6' y1='3' x2='15' y2='1' stroke='%23e8e8f0' stroke-width='1'/></svg>">
+<meta name="description" content="Choose your Joust arena: the classic arcade remake or a volcanic world in Modern 3D. Play solo or with a friend.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚔</text></svg>">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;min-height:100%;background:#05060f;color:#e8e8f0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;overflow-x:hidden}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:28px 16px;position:relative}
-#embers{position:fixed;inset:0;z-index:0;pointer-events:none}
-.wrap{position:relative;z-index:1;width:100%;max-width:980px;display:flex;flex-direction:column;align-items:center}
-h1{font-family:'Courier New',monospace;font-weight:900;font-size:clamp(52px,11vw,104px);letter-spacing:.06em;line-height:1;
-  background:linear-gradient(180deg,#fff2b0 0%,#ffd23a 45%,#c47a12 78%,#8a4a08 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 3px 0 rgba(0,0,0,.55)) drop-shadow(0 0 26px rgba(255,160,40,.28))}
-.sub{margin-top:8px;color:#9aa3b8;letter-spacing:.34em;font-size:clamp(10px,1.7vw,14px);text-transform:uppercase;text-align:center}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px;width:100%;margin-top:38px}
-@media (max-width:720px){.cards{grid-template-columns:1fr}}
-a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border-radius:18px;overflow:hidden;position:relative;
-  background:linear-gradient(180deg,#0d1020,#080a16);border:1px solid rgba(255,255,255,.08);
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;outline:none}
-a.card:hover,a.card:focus-visible{transform:translateY(-5px)}
-a.card.retro:hover,a.card.retro:focus-visible{border-color:rgba(255,210,58,.7);box-shadow:0 10px 44px rgba(255,170,40,.18),0 0 0 1px rgba(255,210,58,.35)}
-a.card.modern:hover,a.card.modern:focus-visible{border-color:rgba(127,212,255,.7);box-shadow:0 10px 44px rgba(80,160,255,.2),0 0 0 1px rgba(127,212,255,.35)}
-.art{height:190px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.art img{width:100%;height:100%;object-fit:cover;object-position:center 32%}
-.retro .art{background:
-  radial-gradient(ellipse 120% 55% at 50% 118%, rgba(255,60,10,.5), transparent 60%),
-  linear-gradient(180deg,#03040c 55%,#160a08 100%)}
-.modern .art{background:
-  radial-gradient(ellipse 130% 70% at 50% 125%, rgba(255,90,20,.45), transparent 62%),
-  radial-gradient(ellipse 60% 45% at 78% 18%, rgba(120,170,255,.22), transparent 70%),
-  linear-gradient(180deg,#0a0d22 40%,#241017 100%)}
-.art svg{width:78%;height:86%}
-.retro .art::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.32) 0 2px,transparent 2px 4px);pointer-events:none}
-.badge{position:absolute;top:12px;left:12px;font-size:11px;font-weight:800;letter-spacing:.18em;padding:5px 10px;border-radius:99px}
-.retro .badge{background:rgba(255,210,58,.14);color:#ffd23a;border:1px solid rgba(255,210,58,.45)}
-.modern .badge{background:rgba(127,212,255,.12);color:#7fd4ff;border:1px solid rgba(127,212,255,.45)}
-.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.body h2{font-size:24px;letter-spacing:.04em}
-.retro .body h2{font-family:'Courier New',monospace;color:#ffd23a}
-.modern .body h2{color:#bfe6ff}
-.tag{color:#8a93a8;font-size:13.5px;line-height:1.45}
-ul.feats{list-style:none;margin-top:2px;display:flex;flex-direction:column;gap:5px}
-ul.feats li{font-size:12.5px;color:#aab3c6;padding-left:16px;position:relative}
-ul.feats li::before{content:'▸';position:absolute;left:0;top:0}
-.retro ul.feats li::before{color:#ffd23a}.modern ul.feats li::before{color:#7fd4ff}
-.play{margin-top:auto;align-self:flex-start;font-weight:800;font-size:13px;letter-spacing:.22em;padding:11px 26px;border-radius:10px}
-.retro .play{background:linear-gradient(180deg,#ffd23a,#d99a16);color:#241a02}
-.modern .play{background:linear-gradient(180deg,#7fd4ff,#2f8fc4);color:#04121e}
-.foot{margin-top:34px;display:flex;gap:26px;align-items:center;color:#59617a;font-size:12.5px}
-.foot a{color:#8a93a8;text-decoration:none}.foot a:hover{color:#cdd5e8}
-.hint{color:#59617a;font-size:11.5px;letter-spacing:.12em;margin-top:12px}
-@media (max-width:720px){.hint{display:none}.art{height:150px}}
+@font-face{font-family:Cinzel;src:url('modern/assets/fonts/cinzel.woff2') format('woff2');font-weight:400 900;font-display:swap}
+*{box-sizing:border-box}html{color-scheme:dark;background:#080b13}body{margin:0;min-height:100svh;color:#eef2f7;font:15px/1.6 'Segoe UI',Arial,sans-serif;background:radial-gradient(ellipse at 78% 20%,#19324350,transparent 52%),radial-gradient(ellipse at 18% 80%,#59301624,transparent 55%)}
+a{color:inherit}button,a{-webkit-tap-highlight-color:transparent}a:focus-visible{outline:3px solid #e9f3ff;outline-offset:6px}#embers{position:fixed;inset:0;pointer-events:none;opacity:.6}.wrap{position:relative;width:min(1120px,100% - 64px);margin:auto;padding:28px 0 24px}.topline{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#a0abba}.back{text-decoration:none;letter-spacing:.04em;font-size:13px;padding:6px 0}.back:hover{color:#fff}.edition{display:flex;align-items:center;gap:9px}.edition::before{content:'';width:5px;height:5px;background:#f5c966;border-radius:50%;box-shadow:0 0 12px #e6a833}
+header{text-align:center;padding:20px 0 28px}.eyebrow{margin:0;color:#b8a37c;font-size:10px;font-weight:700;letter-spacing:.3em;text-transform:uppercase}h1{margin:0;font:800 clamp(60px,8vw,98px)/1.2 Cinzel,Georgia,serif;letter-spacing:.08em;color:#f4d48a;text-shadow:0 4px 24px #d7952820}header p:last-child{margin:7px 0 0;color:#a5afbf;font-size:14px}header p strong{font-weight:500;color:#edf1f7}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{--accent:#edc768;--glow:#c9943b;position:relative;display:flex;flex-direction:column;min-width:0;text-decoration:none;border:1px solid #ffffff18;border-radius:16px;background:linear-gradient(145deg,#171d27,#10141d);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}.modern{--accent:#91d9ed;--glow:#4fa2c3}.card:hover,.card:focus-visible{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 18px 60px #0005,0 0 28px color-mix(in srgb,var(--glow) 12%,transparent)}
+.art{position:relative;aspect-ratio:16/9;background:#05070b;overflow:hidden;border-bottom:1px solid #ffffff10}.art img{display:block;width:100%;height:100%;object-fit:contain}.retro .art img{image-rendering:pixelated}.art::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 45px #0003}.badge{position:absolute;z-index:1;top:14px;left:14px;padding:5px 10px;border:1px solid #ffffff24;border-radius:5px;background:#070b13e8;backdrop-filter:blur(10px);font-size:9px;font-weight:700;letter-spacing:.17em;color:var(--accent)}
+.body{padding:24px 26px 26px;display:flex;flex-direction:column;flex:1}.heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.number{font:12px/1 ui-monospace,monospace;color:#737f91}h2{font:700 28px/1.2 Cinzel,Georgia,serif;margin:0;color:#f1eee6}.modern h2{color:#e1f2f7}.tag{font-size:14px;color:#a4afc0;margin:13px 0 18px;max-width:44ch;min-height:3.2em}.features{display:flex;gap:8px;flex-wrap:wrap;list-style:none;padding:0;margin:0 0 24px}.features li{font-size:11px;color:#b7c2d1;padding:3px 9px;border:1px solid #ffffff12;border-radius:5px;background:#ffffff03}.play{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--accent);color:#111b20;border:1px solid #ffffff20;border-radius:7px;font-size:12px;font-weight:800;letter-spacing:.12em}.play .arrow{font-size:20px;line-height:1;transition:transform .2s}.card:hover .arrow{transform:translateX(4px)}
+.below{display:flex;justify-content:space-between;gap:20px;margin-top:23px;color:#909bad;font-size:12px}.hint{display:flex;align-items:center;gap:7px}kbd{font:11px/1.4 inherit;border:1px solid #ffffff20;border-radius:4px;padding:1px 5px;color:#c4cedd}.footer{margin:24px 0 0;padding-top:16px;border-top:1px solid #ffffff0d;display:flex;justify-content:space-between;gap:16px;font-size:10px;color:#718094;letter-spacing:.04em}
+@media(min-width:900px) and (min-height:800px){.wrap{padding-top:38px}header{padding:35px 0 40px}}
+@media(min-width:701px) and (max-height:850px){.wrap{max-width:1000px;padding:16px 0}.topline{font-size:10px}header{padding:8px 0 20px}h1{font-size:68px}.art{aspect-ratio:auto;height:25vh;min-height:170px}.body{padding:18px 22px}.tag{margin:10px 0 14px}.features{margin-bottom:18px}.below{margin-top:16px}.footer{margin-top:16px;padding-top:12px}}
+@media(max-width:700px){.wrap{width:calc(100% - 32px);padding-top:16px}.cards{grid-template-columns:1fr;gap:20px}header{padding:20px 0 24px}.edition{font-size:9px;letter-spacing:.1em}.body{padding:20px}.tag{min-height:0}.below{justify-content:center;text-align:center}.hint{display:none}.footer{flex-wrap:wrap;justify-content:center;text-align:center}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.card:hover,.card:focus-visible{transform:none}#embers{display:none}}
 </style>
 </head>
 <body>
-<canvas id="embers"></canvas>
-<div class="wrap">
-  <h1>JOUST</h1>
-  <div class="sub">Williams 1982 · Two ways to fly</div>
-
-  <div class="cards">
-    <a class="card retro" href="retro/" id="cardRetro">
-      <div class="art">
-        <span class="badge">RETRO ARCADE</span>
-        <img src="art/retro.webp" alt="Retro Joust title screen" loading="lazy">
-      </div>
-      <div class="body">
-        <h2>RETRO</h2>
-        <div class="tag">The faithful remake — physics ported from the original 6809 source, real ROM sprites, bit-exact emulated arcade sound.</div>
-        <ul class="feats">
-          <li>ROM-exact flap physics &amp; wave tables</li>
-          <li>Bit-exact Williams sound-board audio</li>
-          <li>CRT filter · 2-player · global scores</li>
-        </ul>
-        <span class="play">PLAY RETRO</span>
-      </div>
+<canvas id="embers" aria-hidden="true"></canvas>
+<main class="wrap">
+  <nav class="topline" aria-label="Navigation"><a class="back" href="../../">← All games</a><span class="edition">The arcade collection</span></nav>
+  <header><p class="eyebrow">A Williams classic · 1982</p><h1>JOUST</h1><p>Two ways to fly. <strong>Choose your arena.</strong></p></header>
+  <section class="cards" aria-label="Choose your Joust edition">
+    <a class="card retro" href="retro/" id="cardRetro" aria-labelledby="retroTitle retroPlay">
+      <div class="art"><span class="badge">THE ORIGINAL SPIRIT</span><img src="art/retro.webp" alt="The complete classic Joust arcade title screen" width="760" height="622" fetchpriority="high"></div>
+      <div class="body"><div class="heading"><h2 id="retroTitle">Retro Arcade</h2><span class="number">01 / CLASSIC</span></div><p class="tag">Pixel riders. Familiar rivalries. The arcade remake, with original sprites and emulated Williams sound.</p><ul class="features"><li>Classic physics</li><li>CRT effect</li><li>1–2 players</li></ul><span class="play" id="retroPlay">PLAY RETRO <span class="arrow" aria-hidden="true">↗</span></span></div>
     </a>
-
-    <a class="card modern" href="modern/" id="cardModern">
-      <div class="art">
-        <span class="badge">MODERN 3D</span>
-        <img src="art/modern.webp" alt="Modern 3D Joust title screen" loading="lazy">
-      </div>
-      <div class="body">
-        <h2>MODERN&nbsp;3D</h2>
-        <div class="tag">The same game, re-imagined — a real-time 3D volcanic arena driven by the very same ROM-faithful engine underneath.</div>
-        <ul class="feats">
-          <li>Full 3D world · dynamic light &amp; lava</li>
-          <li>Achievements, stats &amp; kill-cam</li>
-          <li>Own global leaderboard · gamepad rumble</li>
-        </ul>
-        <span class="play">PLAY MODERN</span>
-      </div>
+    <a class="card modern" href="modern/" id="cardModern" aria-labelledby="modernTitle modernPlay">
+      <div class="art"><span class="badge">A NEW PERSPECTIVE</span><img src="art/modern.webp?v=1.11.0" alt="Riders duelling above floating rock platforms and glowing lava in Modern 3D" width="760" height="428" fetchpriority="high"></div>
+      <div class="body"><div class="heading"><h2 id="modernTitle">Modern 3D</h2><span class="number">02 / REIMAGINED</span></div><p class="tag">Take flight over a living volcanic arena. The same jousting rules, with atmospheric depth and modern effects.</p><ul class="features"><li>Volcanic arena</li><li>Achievements</li><li>Gamepad ready</li></ul><span class="play" id="modernPlay">PLAY MODERN <span class="arrow" aria-hidden="true">↗</span></span></div>
     </a>
-  </div>
-
-  <div class="hint">← → CHOOSE · ENTER PLAY</div>
-  <div class="foot">
-    <a href="../../">← All games</a>
-    <span>Same rules · same physics · one legend</span>
-  </div>
-</div>
+  </section>
+  <div class="below"><span>Get above your opponent. Win the joust.</span><span class="hint"><kbd>←</kbd><kbd>→</kbd> choose <kbd>Enter</kbd> play</span></div>
+  <footer class="footer"><span>Keyboard · gamepad · touch</span><span>Two editions. One arcade legend.</span></footer>
+</main>
 <script>
-(function(){
-  // ember particles
-  const cv=document.getElementById('embers'),cx=cv.getContext('2d');let W,H,ps=[];
-  function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener('resize',rs);
-  for(let i=0;i<46;i++)ps.push({x:Math.random()*1,y:Math.random()*1,s:.6+Math.random()*1.8,v:.12+Math.random()*.5,w:Math.random()*6.28,o:.14+Math.random()*.4});
-  (function anim(){requestAnimationFrame(anim);cx.clearRect(0,0,W,H);
-    for(const p of ps){p.y-=p.v*.0016;p.w+=.014;if(p.y<-.02){p.y=1.04;p.x=Math.random()}
-      const x=(p.x+Math.sin(p.w)*.012)*W,y=p.y*H;
-      cx.globalAlpha=p.o*(.6+.4*Math.sin(p.w*1.7));cx.fillStyle='#ff9a3c';
-      cx.beginPath();cx.arc(x,y,p.s,0,6.28);cx.fill()}
-    cx.globalAlpha=1})();
-  // keyboard nav
-  const cards=[document.getElementById('cardRetro'),document.getElementById('cardModern')];let idx=-1;
-  addEventListener('keydown',e=>{
-    if(e.code==='ArrowLeft'||e.code==='ArrowRight'){idx=idx<0?(e.code==='ArrowRight'?1:0):(idx+1)%2;cards[idx].focus();e.preventDefault()}
-    else if(e.code==='Enter'&&idx>=0){cards[idx].click()}
+(() => {
+  const cards = [...document.querySelectorAll('.card')];
+  addEventListener('keydown', e => {
+    if (e.altKey || e.ctrlKey || e.metaKey || !['ArrowLeft','ArrowRight'].includes(e.key)) return;
+    const current = cards.indexOf(document.activeElement);
+    const next = current < 0 ? (e.key === 'ArrowRight' ? 1 : 0) : (current + (e.key === 'ArrowRight' ? 1 : cards.length - 1)) % cards.length;
+    cards[next].focus(); e.preventDefault();
+    // Enter stays native: it always activates the link that actually has focus.
   });
+  const cv = document.getElementById('embers'), cx = cv.getContext('2d');
+  if (!cx) return;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let w = 0, h = 0, raf = 0, last = 0;
+  const ps = Array.from({length:24}, () => ({x:Math.random(),y:Math.random(),s:.5+Math.random(),v:.012+Math.random()*.02,phase:Math.random()*6.28}));
+  function resize(){w=innerWidth;h=innerHeight;const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(w*d);cv.height=Math.round(h*d);cv.style.width=w+'px';cv.style.height=h+'px';cx.setTransform(d,0,0,d,0,0)}
+  function draw(now){const dt=last?Math.min((now-last)/1000,.05):0;last=now;cx.clearRect(0,0,w,h);for(const p of ps){p.y-=p.v*dt;p.phase+=dt*.5;if(p.y<0){p.y=1;p.x=Math.random()}cx.globalAlpha=.12+Math.sin(p.phase)**2*.22;cx.fillStyle='#e6b873';cx.beginPath();cx.arc((p.x+Math.sin(p.phase)*.007)*w,p.y*h,p.s,0,Math.PI*2);cx.fill()}raf=requestAnimationFrame(draw)}
+  function sync(){cancelAnimationFrame(raf);last=0;if(!document.hidden&&!motion.matches)raf=requestAnimationFrame(draw);else cx.clearRect(0,0,w,h)}
+  addEventListener('resize',resize);document.addEventListener('visibilitychange',sync);motion.addEventListener('change',sync);resize();sync();
 })();
 </script>
 </body>

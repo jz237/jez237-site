@@ -19,6 +19,7 @@ const SPAN = WORLD.WRAP_SPAN;             // 302
 const X3 = ex => ex - HALF_W;
 const Y3 = ey => HALF_H - ey;
 const LAVA_Y = Y3(WORLD.LAVA_Y);          // -103
+const PLAY_CLIP = [new T.Plane(new T.Vector3(1,0,0), HALF_W-WORLD.WRAP_MIN),new T.Plane(new T.Vector3(-1,0,0), WORLD.WRAP_MAX-HALF_W)];
 
 // deterministic hash noise for geometry jitter
 function hash(n) { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
@@ -220,13 +221,15 @@ function eggView() {
 function trollView() {
   const g = new T.Group();
   g.scale.setScalar(1.25);   // menacing — reads against full-size birds
-  const m = new T.MeshStandardMaterial({ color: 0x2a0a04, roughness: 0.55, emissive: 0xff4a10, emissiveIntensity: 1.45, flatShading: true });
-  const palm = new T.Mesh(new T.BoxGeometry(6.5, 7, 3.4), m); palm.position.y = 3; g.add(palm);
+  const m = new T.MeshStandardMaterial({ color: 0x39312b, roughness: 0.9, emissive: 0xff4a10, emissiveIntensity: 0.12, flatShading: true });
+  const hot = new T.MeshStandardMaterial({ color: 0xff722c, emissive: 0xff3908, emissiveIntensity: 1.7, roughness:.6 });
+  const palm = new T.Mesh(new T.IcosahedronGeometry(4.2,1), m); palm.scale.set(.9,1,.55); palm.position.y = 3; g.add(palm);
   const fingers = [];
   for (let i = 0; i < 4; i++) {
     const fg = new T.Group(); fg.position.set(-2.4 + i * 1.7, 6.4, 0);
-    const f = new T.Mesh(new T.BoxGeometry(1.15, 4.6, 1.5), m); f.position.y = 2.1; fg.add(f);
-    const f2 = new T.Mesh(new T.BoxGeometry(1.0, 2.8, 1.3), m); f2.position.y = 5.4; f2.rotation.x = 0.5; fg.add(f2);
+    const f = new T.Mesh(new T.CylinderGeometry(.58,.76,4.6,6), m); f.position.y = 2.1; fg.add(f);
+    const f2 = new T.Mesh(new T.CylinderGeometry(.4,.62,2.8,6), m); f2.position.y = 5.4; f2.rotation.x = 0.5; fg.add(f2);
+    const joint = new T.Mesh(new T.IcosahedronGeometry(.67,0),hot);joint.scale.y=.24;joint.position.y=4.1;fg.add(joint);
     g.add(fg); fingers.push(fg);
   }
   const thumb = new T.Group(); thumb.position.set(3.6, 4, 0.6);
@@ -292,15 +295,16 @@ class Particles {
       }
     }
   }
-  update() {
+  update(fu = 1) {
+    if (fu <= 0) return;
     // no live particles and buffers already flushed → skip the per-frame GPU upload entirely
     if (!this.live.length && !this._dirty) return;
     this._dirty = this.live.length > 0;
     const drop = [];
     for (const p of this.live) {
-      p.t++;
+      p.t += fu;
       if (p.t >= p.life) { drop.push(p); this.pos[p.i * 3 + 1] = -9999; continue; }
-      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.z += p.vz;
+      p.x += p.vx * fu; p.y += p.vy * fu + p.g * fu * fu * .5; p.z += p.vz * fu; p.vy += p.g * fu;
       const f = 1 - p.t / p.life;
       this.pos[p.i * 3] = p.x; this.pos[p.i * 3 + 1] = p.y; this.pos[p.i * 3 + 2] = p.z;
       this._c.set(p.c).multiplyScalar(Math.max(0.05, f));
@@ -383,9 +387,10 @@ void main(){
   c = aces(c + bloom * uStr);
   c = pow(c, vec3(1.0/2.2));
   // baked colour grade: per-channel histogram match toward the repainted master plate
-  c = vec3(texture2D(tG, vec2(c.r, 0.5)).r,
+  vec3 graded = vec3(texture2D(tG, vec2(c.r, 0.5)).r,
            texture2D(tG, vec2(c.g, 0.5)).g,
            texture2D(tG, vec2(c.b, 0.5)).b);
+  c = mix(c, graded, 0.42);
   gl_FragColor = vec4(c, 1.0);
 }`;
 // FXAA (compact 3.11-style). AA lives HERE, not in a multisampled RT — MSAA resolve of
@@ -417,7 +422,7 @@ class PostFX {
   constructor(gl) {
     this.gl = gl;
     this.enabled = false;
-    this.exposure = 1.2; this.threshold = 0.62; this.strength = 0.9;
+    this.exposure = 1.22; this.threshold = 0.95; this.strength = 0.30;
     this.MIPS = 4;
     const sm = (fs, un) => new T.ShaderMaterial({ vertexShader: FSQ_VS, fragmentShader: fs, uniforms: un, depthTest: false, depthWrite: false });
     this.brightU = { tD: { value: null }, uTh: { value: this.threshold }, uExp: { value: this.exposure } };
@@ -507,6 +512,7 @@ class Renderer3D {
     this.canvas = canvas; this.hud = hudCanvas; this.hctx = hudCanvas.getContext('2d');
     this.gl = new T.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     this.gl.outputColorSpace = T.SRGBColorSpace;
+    this.gl.localClippingEnabled = true;
     this.gl.toneMapping = T.ACESFilmicToneMapping; this.gl.toneMappingExposure = 1.12;
     this.gl.shadowMap.enabled = true;
     this.gl.shadowMap.type = T.PCFSoftShadowMap;
@@ -519,16 +525,20 @@ class Renderer3D {
     this._v3 = new T.Vector3();
 
     this.views = new Map();       // entity id → view
+    this.previousPoses = null;
+    this.motionEnabled = true;
     this.platVisible = {};        // platform id → bool (burn detection)
     this.post = new PostFX(this.gl);
     new T.TextureLoader().load('assets/tex/grade.png' + Q, tex => {
       tex.minFilter = tex.magFilter = T.LinearFilter;
       tex.wrapS = tex.wrapT = T.ClampToEdgeWrapping;
       tex.colorSpace = T.NoColorSpace;   // raw curve data, not colour
+      this.post.compU.tG.value.dispose();
       this.post.compU.tG.value = tex;
     });
     this.buildLights();
     this.buildSky();
+    this.buildAtmosphere();
     this.buildLava();
     this.buildPlatforms();
     this.particles = new Particles(this.scene);
@@ -536,7 +546,9 @@ class Renderer3D {
   }
 
   setQuality(q) {
-    this.quality = q;
+    this.quality = ['low','medium','high'].includes(q) ? q : 'high';
+    q = this.quality;
+    this.clearViews();
     PUPPET_LOWQ = q === 'low';   // views built after this skip the far-wing echo
     const pr = q === 'high' ? Math.min(window.devicePixelRatio || 1, 2) : q === 'medium' ? Math.min(window.devicePixelRatio || 1, 1.25) : 1;
     this.gl.setPixelRatio(pr);
@@ -555,6 +567,7 @@ class Renderer3D {
     this.gl.toneMapping = this.post.enabled ? T.NoToneMapping : T.ACESFilmicToneMapping;
     if (this.lavaMat) this.lavaMat.uniforms.uBoost.value = this.post.enabled ? 1.0 : 0.75;
     this.emberEvery = q === 'high' ? 5 : q === 'medium' ? 8 : 14;
+    if (this.atmosphere) this.atmosphere.visible = q !== 'low';
     this.scene.traverse(o => { if (o.material && !o.material.isShaderMaterial) o.material.needsUpdate = true; });
     this._resizeNow();
   }
@@ -606,27 +619,48 @@ class Renderer3D {
     });
     const hor = new T.Mesh(new T.PlaneGeometry(3400, 230), glowMat);
     hor.position.set(0, LAVA_Y + 86, -640); this.scene.add(hor);
-    // jagged basalt ridges rising out of the molten sea (parallax layers, concept-style).
-    // irregular polyline peaks — never clean triangles, they read as paper cutouts.
-    // the near layer breaks up the distance-faded sea so it doesn't read as a flat wall.
-    for (const [z, hMax, c] of [[-450, 46, 0x100c12], [-620, 150, 0x090710], [-750, 230, 0x040309]]) {
-      const pts = [new T.Vector2(-1700, LAVA_Y - 90)];
-      let x = -1700, k = 0;
-      while (x < 1700) {
-        const w = (z === -450 ? 90 : 48) + hash(x * 1.7 + z) * (z === -450 ? 260 : 130);
-        const peak = LAVA_Y + 20 + hash(x * 2.3 + z) * hMax * (0.55 + 0.45 * Math.sin(k * 1.7 + z));
-        // ragged ascent: shoulder, notch, peak, spur, foot
-        pts.push(new T.Vector2(x + w * (0.16 + hash(x + 11) * 0.1), LAVA_Y + 8 + (peak - LAVA_Y) * 0.35));
-        pts.push(new T.Vector2(x + w * 0.3, LAVA_Y + 4 + (peak - LAVA_Y) * (0.2 + hash(x + 5) * 0.2)));
-        pts.push(new T.Vector2(x + w * (0.42 + hash(x + 3) * 0.14), peak));
-        pts.push(new T.Vector2(x + w * (0.62 + hash(x + 7) * 0.1), LAVA_Y + 6 + (peak - LAVA_Y) * (0.3 + hash(x + 9) * 0.25)));
-        pts.push(new T.Vector2(x + w * (0.85 + hash(x + 13) * 0.12), LAVA_Y + 2 + hash(x * 3.1) * 12));
-        x += w; k++;
+    // Modeled basalt terrain replaces the flat triangular silhouettes. Each range has
+    // a ridgeline, eroded flanks and real normals to catch the cool skylight.
+    this.ridges = [];
+    for (const [z, hMax, c] of [[-410,66,0x292a30],[-610,140,0x30343e],[-800,210,0x384151]]) {
+      const nx=180, nz=16, positions=[], colors=[], indices=[];
+      const tint=new T.Color(c);
+      for(let j=0;j<=nz;j++) for(let i=0;i<=nx;i++) {
+        const x=-1700+i*3400/nx, depth=j/nz;
+        const broad=.48+.24*Math.sin(x*.008+z)+.16*Math.sin(x*.018+z*.21);
+        const crags=Math.abs(Math.sin(x*.061+z))*.11+hash(i+z)*.065;
+        const ridge=Math.pow(Math.sin(depth*Math.PI),1.45);
+        const height=hMax*(broad+crags)*ridge;
+        positions.push(x,LAVA_Y-8+height+(hash(i*7+j*13+z)-.5)*7*ridge,-depth*240);
+        const grain=.76+hash(i*31+j+z)*.42;
+        colors.push(tint.r*grain,tint.g*grain,tint.b*grain);
+        if(i<nx&&j<nz){const a=j*(nx+1)+i,b=a+nx+1;indices.push(a,b,a+1,b,b+1,a+1);}
       }
-      pts.push(new T.Vector2(1700, LAVA_Y - 90));
-      const m = new T.Mesh(new T.ShapeGeometry(new T.Shape(pts)), new T.MeshBasicMaterial({ color: c, fog: false }));
-      m.position.z = z; this.scene.add(m);
-      (this.ridges = this.ridges || []).push(m);
+      const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setIndex(indices);geo.computeVertexNormals();
+      const mat=new T.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:.08,side:T.DoubleSide,fog:false,emissive:0x08090e,emissiveIntensity:.45});
+      const mesh=new T.Mesh(geo,mat);mesh.position.z=z;this.scene.add(mesh);this.ridges.push(mesh);
+    }
+  }
+
+  buildAtmosphere() {
+    // Animated dust-lit shafts sit behind the combat plane; no overlaid haze on riders.
+    this.atmosphere = new T.Group();
+    this.scene.add(this.atmosphere);
+    this.shafts = [];
+    for (let i = 0; i < 3; i++) {
+      const mat = new T.ShaderMaterial({
+        transparent:true,depthWrite:false,blending:T.AdditiveBlending,
+        uniforms:{uTime:{value:0},uPhase:{value:i*2.4}},
+        vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+        fragmentShader:`varying vec2 vUv;uniform float uTime;uniform float uPhase;
+          void main(){float width=mix(.49,.09,vUv.y);float edge=1.0-smoothstep(width*.35,width,abs(vUv.x-.5));
+          float end=smoothstep(0.0,.22,vUv.y)*(1.0-smoothstep(.85,1.0,vUv.y));
+          float drift=.82+.18*sin(vUv.y*18.0+uTime*.4+uPhase);
+          gl_FragColor=vec4(.25,.48,.70,edge*end*drift*.11);}`,
+      });
+      const mesh = new T.Mesh(new T.PlaneGeometry(80+i*18,330),mat);
+      mesh.position.set(-110+i*100,55,-110-i*35);mesh.rotation.z=-.18+i*.06;
+      this.atmosphere.add(mesh);this.shafts.push(mesh);
     }
   }
 
@@ -678,7 +712,7 @@ class Renderer3D {
           cw = bw / card.fw; ch = bh / card.fh;
           left = wx0 - card.fx * cw; top = wy1 + card.fy * ch;
         }
-        const mat = new T.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: 0 });
+        const mat = new T.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: 0, clippingPlanes:PLAY_CLIP });
         loader.load(`assets/tex/plat-${bor ? bor.key : def.id}.png` + Q, tex => {
           tex.colorSpace = T.SRGBColorSpace;
           tex.anisotropy = Math.min(4, maxAniso);
@@ -724,10 +758,13 @@ class Renderer3D {
     const w = this._lw || innerWidth, h = this._lh || innerHeight;
     // re-apply pixel ratio here too — the window may have moved to a different-DPI display
     const q = this.quality;
-    this.gl.setPixelRatio(q === 'high' ? Math.min(window.devicePixelRatio || 1, 2) : q === 'medium' ? Math.min(window.devicePixelRatio || 1, 1.25) : 1);
+    const ratio = q === 'high' ? Math.min(window.devicePixelRatio || 1, 2) : q === 'medium' ? Math.min(window.devicePixelRatio || 1, 1.25) : 1;
+    // Bound the post-processing buffers on 4K/high-DPI displays.
+    this.gl.setPixelRatio(Math.min(ratio, Math.sqrt((q === 'high' ? 4000000 : 2200000) / (w * h))));
     this.gl.setSize(w, h, false);
     const db = this.gl.getDrawingBufferSize(new T.Vector2());
-    this.post.setSize(db.x, db.y, q === 'high' ? 4 : 2);
+    if (this.post.enabled) this.post.setSize(db.x, db.y, q === 'high' ? 4 : 2);
+    else { this.post.dispose(); this.post._w = this.post._h = 0; }
     this.hud.width = w * (window.devicePixelRatio > 1.4 ? 1.5 : 1); this.hud.height = h * (window.devicePixelRatio > 1.4 ? 1.5 : 1);
     this.camera.aspect = w / h;
     // fit the playfield with headroom for lances/heads (~20 units above feet-origin)
@@ -745,7 +782,7 @@ class Renderer3D {
   }
 
   // ─── fx API (mirrors the retro renderer so the shell port is mechanical) ───
-  shakeBy(n) { this.shake = Math.min(14, this.shake + n); if (n >= 5) this.punchT = 1; }
+  shakeBy(n) { if (!this.motionEnabled) return; this.shake = Math.min(14, this.shake + n); if (n >= 5) this.punchT = 1; }
   addEffect(frames, ex, ey, sizeMul, dur) {
     const x = X3(ex), y = Y3(ey);
     // layered kill-pop: white-hot core, warm body, ember risers (bloom does the rest)
@@ -766,7 +803,7 @@ class Renderer3D {
     }
   }
   updateFx(fu) {
-    fu = fu || 1;   // 60Hz-normalized frame units so fx age at the same speed on any refresh rate
+    fu = fu ?? 1;   // zero freezes effects while paused
     for (const f of this.floats) f.t += fu;
     this.floats = this.floats.filter(f => f.t < 65);
     this.shake *= Math.pow(0.88, fu); if (this.shake < 0.05) this.shake = 0;
@@ -777,8 +814,11 @@ class Renderer3D {
   getView(ent, kindKey, builder) {
     let v = this.views.get(ent.id);
     if (!v || v.kindKey !== kindKey) {
-      if (v) { this.scene.remove(v.main.group); this.scene.remove(v.ghost.group); }
+      if (v) this.disposeView(v);
       const main = builder(), ghost = builder();
+      for (const view of [main,ghost]) view.group.traverse(o => {
+        if (o.material) for (const m of (Array.isArray(o.material) ? o.material : [o.material])) m.clippingPlanes = PLAY_CLIP;
+      });
       this.scene.add(main.group); this.scene.add(ghost.group);
       v = { main, ghost, kindKey, seen: 0 };
       this.views.set(ent.id, v);
@@ -790,7 +830,7 @@ class Renderer3D {
     const g = bv.group, s = bv.state, P = bv.meta;
     g.visible = alive !== false;
     if (!g.visible) return;
-    dt = dt || 0.0166;
+    dt = dt ?? 0.0166;
     g.position.set(X3(e.x) + xOff, Y3(e.y), 0);
     g.rotation.y = e.face === 1 ? 0 : Math.PI;   // sprite flip via back face (DoubleSide)
     // PUPPET flap: a continuous cycle position c drives the wing angle along the rig's
@@ -876,7 +916,7 @@ class Renderer3D {
   posePtero(pv, e, t, xOff, dt) {
     const g = pv.group, s = pv.state, P = pv.meta;
     g.visible = true;
-    dt = dt || 0.0166;
+    dt = dt ?? 0.0166;
     g.position.set(X3(e.x) + xOff, Y3(e.y), 0);
     g.rotation.y = e.face === 1 ? 0 : Math.PI;
     g.rotation.z = -(e.vy || 0) * 0.05;
@@ -906,17 +946,28 @@ class Renderer3D {
 
 
   // ─── main render ───
-  render(snap, dtMs) {
-    this.time += (dtMs || 16.6) / 1000;
+  captureFrame(snap) { this.previousPoses = window.JOUST_RUNTIME.capturePoses(snap); }
+
+  render(snap, dtMs, alpha = 1) {
+    snap = window.JOUST_RUNTIME.interpolateSnapshot(snap, this.previousPoses, alpha, WORLD);
+    const elapsed = Math.max(0, Math.min(100, dtMs ?? 16.6));
+    this.time += elapsed / 1000;
     const t = this.time;
-    const dt = Math.min(0.05, (dtMs || 16.6) / 1000);   // puppet integration step
+    const dt = Math.min(0.05, elapsed / 1000);
+    const fu = elapsed / (1000 / 60);
+    this._prevEmbT = this._embT || 0;
+    this._particleClock = (this._particleClock || 0) + fu;
+    this._embT = Math.floor(this._particleClock);
+    const particleTick = this._embT > this._prevEmbT;
+    this._emitParticles = particleTick;
+    for (const shaft of this.shafts) shaft.material.uniforms.uTime.value = t;
     this.lavaMat.uniforms.uT.value = t;
     // flicker lava lights + ambient embers
     let li = 0;
     for (const pl of this.lavaLights) pl.intensity = 30 + Math.sin(t * (3.1 + li) + li * 2.4) * 7 + hash((t * 6 | 0) + li++) * 6;
     // spawn pads breathe
     if (this.pads) { let pi = 0; for (const d of this.pads) d.material.opacity = 0.08 + 0.06 * (0.5 + 0.5 * Math.sin(t * 2.1 + pi++ * 1.7)); }
-    if ((this._embT = (this._embT || 0) + 1) % (this.emberEvery || 6) === 0)
+    if (this._due(this.emberEvery || 6))
       this.particles.burst((Math.random() - 0.5) * 320, LAVA_Y + 2, 'ember', { n: 1 });
     // ambient world motion — the cave breathes (skipped on LOW along with other extras)
     if (this.sky) this.sky.rotation.y = Math.sin(t * 0.02) * 0.012;
@@ -924,12 +975,12 @@ class Renderer3D {
       let ri = 0;
       for (const m of this.ridges) m.position.x = Math.sin(t * 0.045 + ri++ * 2.1) * 5;
     }
-    if (this.quality !== 'low' && this._embT % 97 === 0) {
+    if (this._due(97) && this.quality !== 'low') {
       const d = PLATFORMS[(Math.random() * PLATFORMS.length) | 0];
       if (d) this.particles.spawn(X3(d.x1 + Math.random() * (d.x2 - d.x1)), Y3(d.y) - 9, -6,
         { sp: 0.04, vy: -0.55, c: 0xff7a22, life: 46, g: -0.035 });
     }
-    this.particles.update();
+    this.particles.update(fu);
 
     const seen = new Set();
     if (snap) {
@@ -1002,7 +1053,7 @@ class Renderer3D {
         g.rotation.z = Math.sin(t * 11) * 0.05 * frac;
         for (const f of v.main.fingers) f.rotation.x = -0.5 - frac * 0.75 - Math.sin(t * 13) * 0.06;
         v.main.light.intensity = 14 + frac * 30 + Math.sin(t * 21) * 5;
-        if (this.quality !== 'low' && (this._embT % 3) === 0)
+        if (this._due(3) && this.quality !== 'low')
           this.particles.spawn(X3(bx) + (Math.random() - 0.5) * 8, g.position.y + 8, 3,
             { sp: 0.5, vy: 0.7 + Math.random() * 0.5, c: 0xff8a22, life: 26, g: -0.05 });
         this.shakeBy(frac * 0.5);
@@ -1013,18 +1064,19 @@ class Renderer3D {
       // (above) takes over if they dip into the grab zone
       this._reachUpdate(snap, t, dt);
     }
-    // hide views for entities gone this frame
+    // Release per-entity geometry/materials; textures are cached and shared.
     for (const [id, v] of this.views) {
-      if (!seen.has(id)) { v.main.group.visible = false; if (v.ghost) v.ghost.group.visible = false; }
+      if (!seen.has(id)) { this.disposeView(v); this.views.delete(id); }
     }
 
     // camera: sway toward players' centroid, shake, punch-in
     let cx = 0, n = 0;
     if (snap) for (const p of snap.players) if (!p.out && p.alive) { cx += X3(p.x); n++; }
-    const targetSway = n ? Math.max(-14, Math.min(14, (cx / n) * 0.10)) : 0;
-    this.swayX += (targetSway - this.swayX) * 0.03;
-    const shx = (Math.random() - 0.5) * this.shake, shy = (Math.random() - 0.5) * this.shake;
-    const dist = this.camDist * (1 - this.punchT * 0.045);
+    const targetSway = n && this.motionEnabled ? Math.max(-8, Math.min(8, (cx / n) * 0.055)) : 0;
+    this.swayX += (targetSway - this.swayX) * (1 - Math.exp(-dt * 2.5));
+    if (elapsed > 0) { this._shx = this.motionEnabled ? (Math.random() - 0.5) * this.shake : 0; this._shy = this.motionEnabled ? (Math.random() - 0.5) * this.shake : 0; }
+    const shx = this._shx || 0, shy = this._shy || 0;
+    const dist = this.camDist * (1 - (this.motionEnabled ? this.punchT : 0) * 0.025);
     this.camera.position.set(this.swayX + shx, 6 + shy, dist);
     this.camera.lookAt(this.swayX * 0.55, -6, 0);
     if (this.post.enabled && this.post.rtScene) this.post.render(this.scene, this.camera);
@@ -1035,14 +1087,16 @@ class Renderer3D {
     // wrap ghost: duplicate near the seam so entities never pop at the edges
     const near = e.x < 30 ? SPAN : (e.x > WORLD.VIEW_W - 30 ? -SPAN : 0);
     if (near && v.main.group.visible) {
+      // Ghosts mirror the exact pose. Advancing an independent clock causes a pop at wrap.
+      Object.assign(v.ghost.state, v.main.state);
       v.ghost.group.visible = true;
-      if (kind === 'bird') this.poseBird(v.ghost, e, t, near, true, dt);
-      else this.posePtero(v.ghost, e, t, near, dt);
+      if (kind === 'bird') this.poseBird(v.ghost, e, t, near, true, 0);
+      else { this.posePtero(v.ghost, e, t, near, 0); v.ghost.body.visible = !e.attack; v.ghost.atk.visible = !!e.attack; }
     } else if (v.ghost) v.ghost.group.visible = false;
   }
   // energize sparkles during materialize — cool motes rising through the forming bird
   _spawnSparkle(e) {
-    if (!(e.materializing > 0) || this.quality === 'low' || this._embT % 3 !== 0) return;
+    if (!this._due(3) || !(e.materializing > 0) || this.quality === 'low') return;
     this.particles.spawn(X3(e.x) + (Math.random() - 0.5) * 18, Y3(e.y) + 2 + Math.random() * 34, 2,
       { sp: 0.35, vy: 0.5 + Math.random() * 0.4, c: 0x9fd4ff, life: 26, g: -0.02 });
   }
@@ -1065,7 +1119,7 @@ class Renderer3D {
     if (activeTroll) {
       // the FLOOR row platforms carry bridge:true — their y is the platform TOP, not
       // WORLD.FLOOR, so never match on y (that filter silently found nothing in v1.9)
-      const spans = snap.platforms.filter(p => p.bridge).map(p => [p.x1, p.x2]).sort((a2, b2) => a2[0] - b2[0]);
+      const spans = snap.platforms.filter(p => p.id === 'base' || p.bridge).map(p => [p.x1, p.x2]).sort((a2, b2) => a2[0] - b2[0]);
       const overLava = x => !spans.some(sp => x >= sp[0] - 2 && x <= sp[1] + 2);
       gaps = [];
       let cur = 0;
@@ -1106,7 +1160,7 @@ class Renderer3D {
     for (let i = 0; i < v.fingers.length; i++)
       v.fingers[i].rotation.x = -0.15 - a * 0.45 + Math.sin(t * 7 + i * 1.3) * 0.18 * a;
     v.light.intensity = a * 24 + Math.sin(t * 17) * 4 * a;
-    if (this.quality !== 'low' && a > 0.3 && (this._embT % 5) === 0)
+    if (this._due(5) && this.quality !== 'low' && a > 0.3)
       this.particles.spawn(v.group.position.x + (Math.random() - 0.5) * 10, v.group.position.y + 10, 2,
         { sp: 0.3, vy: 0.5, c: 0xff7a22, life: 22, g: -0.04 });
   }
@@ -1121,9 +1175,28 @@ class Renderer3D {
     } else if (v.ghost) v.ghost.group.visible = false;
   }
 
+  disposeView(v) {
+    const geometries = new Set(), materials = new Set();
+    for (const view of [v.main,v.ghost]) if (view) {
+      this.scene.remove(view.group);
+      view.group.traverse(o => {
+        if (o.geometry) geometries.add(o.geometry);
+        if (o.material) for (const m of (Array.isArray(o.material) ? o.material : [o.material])) materials.add(m);
+      });
+    }
+    for (const g of geometries) g.dispose();
+    for (const m of materials) m.dispose();
+  }
+
+  _due(period) { return Math.floor(this._embT / period) > Math.floor(this._prevEmbT / period); }
+
   clearViews() {
-    for (const [, v] of this.views) { this.scene.remove(v.main.group); if (v.ghost) this.scene.remove(v.ghost.group); }
+    for (const [, v] of this.views) this.disposeView(v);
     this.views.clear();
+    this.previousPoses = null;
+    this.floats.length = 0;
+    this.shake = this.punchT = 0;
+    if (this.reachV) { this.reachV.group.visible = false; this.reachAmt = 0; this.pokePh = -1; this.pokeT = 2.5; }
   }
 }
 
