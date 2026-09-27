@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-27",
+      "historicDate": "1984-10-01",
+      "displayDate": "Week of October 1-7, 1984",
+      "edition": "Issue 114 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A starship, a store shelf, and a modem line: the home computer has places to go.",
+      "leadHeadline": "Sundog Opens a Galaxy Behind the Apple II Screen",
+      "storyHeadlines": [
+        "Game Designers Take Questions Over the Modem",
+        "Spy Hunter and Tapper Head for the Home Screen",
+        "Commodore Aims the Plus/4 at the Household Desk",
+        "Atari’s New Owner Confronts the Next Machine"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-01.png",
+      "thumb": "media/thumbs/1984-10-01.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-26",
       "historicDate": "1984-09-24",
       "displayDate": "Week of September 24-30, 1984",
