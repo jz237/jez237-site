@@ -1,0 +1,9 @@
+{
+  "name": "choplifter-rescue-run-3d",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "test": "node flight-controls.test.mjs"
+  }
+}
