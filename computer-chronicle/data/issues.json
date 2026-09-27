@@ -4,6 +4,429 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "visualProfile": {
+        "tone": "Warm October 1984 gaming newsprint",
+        "motifs": [
+          "Sundog Apple II space adventure",
+          "star charts",
+          "floppy disks",
+          "computer-game boxes"
+        ],
+        "layout": "Dense 1980s weekly front page with brick-red and blue rules, halftone art, boxed charts and narrow columns"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "October 1-7, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Banner Sundog gaming lead with large halftone spaceship and Apple II window graphics",
+        "secondaryRail": "Arcade ports, Plus/4, Atari, charts, prices and world bulletin",
+        "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-09-27",
+      "historicDate": "1984-10-01",
+      "displayDate": "Week of October 1-7, 1984",
+      "edition": "Issue 114 - Weekly 1984 Computer & Culture Chronicle",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-10-01.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for October 1-7, 1984, led by Sundog",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "October’s game shelves open onto sprawling new worlds, while home-computer makers recalculate the price of a machine for work and play.",
+      "morningLine": "A starship, a store shelf, and a modem line: the home computer has places to go.",
+      "lead": {
+        "headline": "Sundog Opens a Galaxy Behind the Apple II Screen",
+        "dek": "FTL’s $40 space adventure turns icons, trade and survival into a living star map.",
+        "body": [
+          "October’s Computer Gaming World gives its gaming spotlight to Sundog: Frozen Legacy, an Apple II adventure from FTL Games of San Diego. Reviewer Ken Ryall credits Bruce Webster with a remarkably broad design: the player must supply and settle a colony, but the route runs across twelve star systems, eighteen planets and more than fifty cities. This is the magazine’s October appraisal, not a claim of a launch this week.",
+          "The controls make the voyage feel different from a conventional command-line game. A joystick moves through icons, menus and overlapping windows that FTL calls Zoom Action Graphics. Ryall finds the arrangement reminiscent of the Macintosh interface; the effect is to put piloting, trading and personal chores within reach of a screen pointer instead of a typed vocabulary.",
+          "The captain earns a living as well as pursuing the colony mission. Goods change price between markets, the ship needs repairs, and its pilot has to eat, rest and mind his health. Between ports, pirates can force a fight in which shields and weapons consume precious fuel. Each decision at the trading counter may shape the next flight.",
+          "At $40, Sundog asks Apple II owners to buy into a whole itinerary rather than a short arcade round. Its October review captures the direction of computer gaming: larger simulated places, more personal choices and a graphical language that invites exploration."
+        ],
+        "sourceRefs": [
+          8
+        ],
+        "confidence": "same-month"
+      },
+      "stories": [
+        {
+          "headline": "Game Designers Take Questions Over the Modem",
+          "body": [
+            "October Computer Gaming World looks back on CompuServe GameSIG conferences held from June through August. Richard Garriott, Michael Berlyn and Scott Adams fielded questions from far-flung players who could meet their favorite designers by typing into a shared online room.",
+            "Garriott described Ultima IV as a quest to develop a character into an Avatar through eight virtues, rather than merely dispatch an evil enemy. He invited suggestions for non-player characters; a projected Christmas arrival was a plan, not a shipped-game announcement.",
+            "Berlyn discussed Infocom’s design and testing routine and looked ahead to Cutthroats and The Hitchhiker’s Guide to the Galaxy. Adams outlined the Marvel Questprobe license and a fuller-sentence parser planned for later installments. The exchanges show game fans beginning to shape the conversation around the games themselves."
+          ],
+          "sourceRefs": [
+            8
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Spy Hunter and Tapper Head for the Home Screen",
+          "body": [
+            "Sega Enterprises is bringing Bally/Midway arcade favorites Spy Hunter and Tapper to home-computer customers, according to October COMPUTE!. The notice names Commodore 64, IBM PC and PCjr, Atari and Apple II families, with disk and cartridge formats offered across the line; it does not say which format belongs to every machine.",
+            "Spy Hunter mixes driving with gunfire, while Tapper carries its barroom rush through four screens and a bonus round. At a suggested $39.95 apiece, the ports promise arcade familiarity on machines already sitting at home."
+          ],
+          "sourceRefs": [
+            9
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore Aims the Plus/4 at the Household Desk",
+          "body": [
+            "Commodore’s coming Plus/4 is presented in October COMPUTE! as a $300 productivity machine with 64K of memory and a built-in 3-Plus-1 suite: word processing, spreadsheet, file management and business graphics. BASIC 3.5 adds more than seventy-five commands, and the graphics specification promises 320-by-200 resolution with 128 hues.",
+            "The bargain has a boundary. The machine lacks the Commodore 64’s sprites and SID sound and is largely incompatible with VIC-20 and C64 software. Its accompanying Commodore 16 is pitched at $100. A national advertising campaign is planned for October 8, after this issue week; retail availability this week is unconfirmed."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Atari’s New Owner Confronts the Next Machine",
+          "body": [
+            "In October Creative Computing, John J. Anderson surveys Atari’s consumer division after Jack Tramiel’s July purchase. The 800XL appears likely to carry on for now, while the modem-equipped 1450XL looks doubtful to him. The larger question is what machine could restore Atari’s momentum.",
+            "Anderson revisits the Lorraine prototype from Amiga: a Motorola 68000 design with custom graphics, sound and input/output chips and four-channel stereo. These are prototype claims and October analysis, not a new product announcement or shipping specifications for this week."
+          ],
+          "sourceRefs": [
+            11
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Commodore Plus/4",
+          "summary": "64K, 7501 eight-bit processor, 128 hues, 320×200 graphics; planned $300.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "Commodore 16",
+          "summary": "16K companion at planned $100.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "3-Plus-1",
+          "detail": "Plus/4 built-in word processor, spreadsheet, file manager and business graphics."
+        },
+        {
+          "name": "BASIC 3.5",
+          "detail": "Plus/4 resident BASIC with more than 75 commands."
+        },
+        {
+          "name": "Sundog: Frozen Legacy",
+          "detail": "FTL Games graphical Apple II space adventure reviewed in October."
+        },
+        {
+          "name": "Spy Hunter",
+          "detail": "Sega home-computer port of Bally/Midway arcade driving game."
+        },
+        {
+          "name": "Tapper",
+          "detail": "Sega home-computer port of Bally/Midway arcade game."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Sundog: Frozen Legacy",
+            "Road to Moscow",
+            "Seven Cities of Gold",
+            "Spy Hunter",
+            "Tapper"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "Let’s Go Crazy — Prince and the Revolution",
+            "I Just Called to Say I Love You — Stevie Wonder",
+            "Drive — The Cars",
+            "Missing You — John Waite",
+            "She Bop — Cyndi Lauper"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Teachers",
+            "All of Me",
+            "Places in the Heart"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore Plus/4",
+          "price": "$300 planned",
+          "note": "$300 planned; planned price, retail availability unconfirmed.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 16",
+          "price": "$100 planned",
+          "note": "$100 planned; planned price, retail availability unconfirmed.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Computer Gaming World, October issue",
+          "price": "$2.95 cover price",
+          "note": "$2.95 cover price; October period price; exact-week sale unconfirmed.",
+          "sourceRefs": []
+        },
+        {
+          "item": "Sundog: Frozen Legacy, Apple II",
+          "price": "$40",
+          "note": "$40; October period price; exact-week sale unconfirmed.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "item": "Road to Moscow, Commodore 64",
+          "price": "$30",
+          "note": "$30; October period price; exact-week sale unconfirmed.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "item": "Spy Hunter and Tapper home ports",
+          "price": "$39.95 each suggested",
+          "note": "$39.95 each suggested; October period price; exact-week sale unconfirmed.",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "Dragonriders of Pern",
+          "price": "$39.95",
+          "note": "$39.95; October period price; exact-week sale unconfirmed.",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Road to Moscow Plots a Campaign",
+          "summary": "October Computer Gaming World reviews the $30 Commodore 64 strategy game by Philip Gardocki and Bob Best.",
+          "sourceRefs": [
+            8
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "October Screens Bring Teachers to No. 1",
+          "summary": "Teachers leads the domestic box office for the October 5-7 weekend.",
+          "sourceRefs": [
+            6
+          ],
+          "confidence": "exact-week"
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Let’s Go Crazy",
+          "artist": "Prince and the Revolution",
+          "chartDate": "1984-10-06",
+          "sourceUrls": [
+            "https://mail.musicchartsarchive.com/singles-chart/1984-10-06"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "I Just Called to Say I Love You",
+          "artist": "Stevie Wonder",
+          "chartDate": "1984-10-06",
+          "sourceUrls": [
+            "https://mail.musicchartsarchive.com/singles-chart/1984-10-06"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Drive",
+          "artist": "The Cars",
+          "chartDate": "1984-10-06",
+          "sourceUrls": [
+            "https://mail.musicchartsarchive.com/singles-chart/1984-10-06"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Missing You",
+          "artist": "John Waite",
+          "chartDate": "1984-10-06",
+          "sourceUrls": [
+            "https://mail.musicchartsarchive.com/singles-chart/1984-10-06"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "She Bop",
+          "artist": "Cyndi Lauper",
+          "chartDate": "1984-10-06",
+          "sourceUrls": [
+            "https://mail.musicchartsarchive.com/singles-chart/1984-10-06"
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A Galaxy in an Apple II Disk Drive",
+        "summary": "Sundog: Frozen Legacy promises trading, travel and colony-building across a network of star systems.",
+        "tagline": "Chart your course."
+      },
+      "market": {
+        "headline": "The $40 Adventure Meets the $300 Computer",
+        "summary": "October period coverage places ambitious games and lower-priced productivity computers side by side, as publishers and hardware makers court different home buyers.",
+        "sourceRefs": [
+          8,
+          0
+        ],
+        "confidence": "same-month"
+      },
+      "worldAnchor": {
+        "headline": "Troops retake Golden Temple complex after Sikh militants seize it",
+        "summary": "Indian troops retook the Golden Temple complex in Amritsar on October 1 after militants seized it, according to a contemporary UPI report.",
+        "sourceRefs": [
+          7
+        ],
+        "confidence": "exact-date"
+      },
+      "bbsNote": {
+        "headline": "From GameSIG conferences to Western Union’s EasyLink",
+        "summary": "October CGW documents how modem-equipped game fans used CompuServe GameSIG to question designers and play Diplomacy by electronic mail; October Creative Computing reviews Western Union’s EasyLink messaging service. Conference dates in CGW are June–August, so this is October publication context, not a same-week event.",
+        "posts": [
+          {
+            "topic": "Designer conversations",
+            "platform": "CompuServe GameSIG",
+            "text": "Scorpia reports conferences with Richard Garriott, Michael Berlyn and Scott Adams, with attendees typing questions from around the country."
+          },
+          {
+            "topic": "Online strategy play",
+            "platform": "CompuServe GameSIG / The Source",
+            "text": "CGW reports Diplomacy players organizing play by electronic mail, with Russell Sipe and Doug Beyerlein among the pioneers."
+          },
+          {
+            "topic": "Commercial messaging",
+            "platform": "Western Union EasyLink",
+            "text": "Brian J. Murphy reports no start-up fee, a $25 monthly minimum after three months, 30 cents per minute for EasyLink-to-EasyLink messaging at 300 baud, and Telex/Mailgram access."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "A word processor that stops at 99 lines",
+        "summary": "The Plus/4 bundled productivity software sounds ambitious, but Compute! found a severe writing limit.",
+        "detail": "Compute! reports the built-in 3-Plus-1 word processor limits a document to 99 lines and displays a horizontally scrolling 77-column line on a 40-column screen.",
+        "sourceUrls": [
+          "https://www.atarimagazines.com/compute/issue53/018_1_Commodore_Prepares_To_Roll_Out_The_Plus_4.php"
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Computing features are drawn from October 1984 period press; no October 1-7 launch is asserted.",
+          "GameSIG conferences took place June-August and are reported retrospectively in October.",
+          "Plus/4 advertising was scheduled to start October 8; availability this week is unverified.",
+          "Music chart is dated October 6; movie list is the October 5-7 domestic weekend."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Compute!, Plus/4 hands-on",
+          "url": "https://www.atarimagazines.com/compute/issue53/018_1_Commodore_Prepares_To_Roll_Out_The_Plus_4.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Computer Gaming World issue 4.5 index",
+          "url": "https://cgwmuseum.org/galleries/index.php?id=18&pub=2&year=1984",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute!, Magic Voice review",
+          "url": "https://www.atarimagazines.com/compute/issue53/036_2_REVIEWS_Magic_Voice_Speech_For_The_64.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute!, 1541 reader letter",
+          "url": "https://www.atarimagazines.com/compute/issue53/006_2_READERS_FEEDBACK_Rattling_Commodore_1541.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Timelinez modem and BBS report",
+          "url": "https://timexsinclair.com/article/t-s-on-line-modems-and-bbs-report/index.html",
+          "date": "1984-10-06"
+        },
+        {
+          "title": "Billboard Hot 100 chart archive",
+          "url": "https://mail.musicchartsarchive.com/singles-chart/1984-10-06",
+          "date": "1984-10-06"
+        },
+        {
+          "title": "The Numbers weekend box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/10/05",
+          "date": "1984-10-06"
+        },
+        {
+          "title": "UPI Golden Temple report",
+          "url": "https://www.upi.com/Archives/1984/10/01/Sikh-militants-take-over-temple-surrender-to-troops/8770465451200/",
+          "date": "1984-10-06"
+        },
+        {
+          "title": "Computer Gaming World, October 1984 complete issue",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_4.5.pdf",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute!, new arcade games notice",
+          "url": "https://www.atarimagazines.com/compute/issue53/083_4_NEWS_PRODUCTS_New_Arcade_Games.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute!, Dragonriders of Pern review",
+          "url": "https://www.atarimagazines.com/compute/issue53/036_1_REVIEWS_Dragonriders_Of_Pern_For_Commodore_64_And_Atari.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Creative Computing, Outpost: Atari",
+          "url": "https://www.atarimagazines.com/creative/v10n10/187_Outpost_Atari_Jack_Tram.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Creative Computing, Telecommunications Talk",
+          "url": "https://www.atarimagazines.com/creative/v10n10/150_Telecommunications_talk_.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Tunecaster weekly rock Top 20",
+          "url": "https://www.tunecaster.com/charts/80/rock8440.html",
+          "date": "1984-10-06"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-09-26",
       "historicDate": "1984-09-24",
       "displayDate": "Week of September 24-30, 1984",
