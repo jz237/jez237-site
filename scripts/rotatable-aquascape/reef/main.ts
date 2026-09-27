@@ -91,7 +91,7 @@ const inspectReef=(subject:string)=>{
  cancelTourCamera();
  const qa=(window as any).reefQA;
  const methods:Record<string,string>={anemones:'inspectAnemones',corals:'inspectCorals',outcrops:'inspectOutcrops',sand:'inspectSand',water:'inspectWater',polyps:'inspectPolyps',plates:'inspectPlates'};
- if(methods[subject])qa[methods[subject]]();else if(['clown','tang','yellow','anthias','chromis','gramma','goby'].includes(subject))qa.inspectFish(subject);wake();
+ if(methods[subject])qa[methods[subject]]();else if(['clown','tang','semilarvatus','anthias','chromis','gramma','goby'].includes(subject))qa.inspectFish(subject);wake();
 };
 const learning=installReefLearning({inspect:inspectReef,note:subject=>fish.fish.find(f=>f.species===subject)?.group.userData.note,view:()=>document.querySelector<HTMLButtonElement>('[data-view="front"]')!.click(),feed:()=>document.querySelector<HTMLButtonElement>('#feed')!.click(),light:value=>{if(night!==value)document.querySelector<HTMLButtonElement>('#light')!.click();},night:()=>night,tour:visitTourStop,cancelTour:cancelTourCamera});
 const showroom=installReefShowroom({visibility:visible=>{suspended=!visible;last=performance.now();sampleMs.length=0;wake();},explore:subject=>{

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as T from 'three';
 const metadata=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url)));
-const species=['tang','yellow','clown','anthias','chromis','gramma','goby'];
+const species=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 let totalTriangles=0;
 for(const s of species){
  const buffer=fs.readFileSync(new URL(`../assets/fish/${s}.glb`,import.meta.url));assert.equal(buffer.readUInt32LE(0),0x46546c67);assert.equal(buffer.readUInt32LE(4),2);
@@ -14,6 +14,7 @@ for(const s of species){
  const bodyImage=imageFor(bodyPrimitive);
  const nodes=gltf.nodes.map(n=>n.name);assert.ok(nodes.includes(s+'__body'));assert.equal(nodes.filter(n=>n.startsWith(s+'__gill')).length,2);assert.equal(nodes.filter(n=>n.startsWith(s+'__pectoral')).length,2);
  if(s==='goby'){assert.equal(metadata[s].reference,'mandarin.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'mandarin has two independent pelvic fans');}
+ if(s==='semilarvatus'){assert.equal(metadata[s].reference,'semilarvatus.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'butterflyfish retains independent paired pelvic fins');assert.ok(!metadata.yellow,'the retired yellow tang is not an active species');}
  for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){
   const p=read(primitive.attributes.POSITION),n=read(primitive.attributes.NORMAL),uv=read(primitive.attributes.TEXCOORD_0),indices=read(primitive.indices);
   assert.ok([...p,...n,...uv].every(Number.isFinite));assert.ok(indices.every(i=>i>=0&&i<p.length/3));totalTriangles+=indices.length/3;

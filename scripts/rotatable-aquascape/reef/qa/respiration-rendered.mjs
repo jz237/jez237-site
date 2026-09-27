@@ -9,7 +9,7 @@ try{
  await page.goto(`http://127.0.0.1:${server.address().port}/demos/reef-aquarium/`);await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});await page.waitForTimeout(1500);
  await page.locator('#pause').click();await page.screenshot({path:'reef/qa/respiration-light-front.png'});
  await page.evaluate(()=>window.reefQA.inspectSand());await page.waitForTimeout(400);await page.screenshot({path:'reef/qa/respiration-light-sand.png'});
- for(const species of ['tang','yellow','clown','anthias','chromis','gramma']){
+ for(const species of ['tang','semilarvatus','clown','anthias','chromis','gramma']){
   await page.evaluate(s=>{window.reefQA.respirationStudy(s,-Math.PI/2,true);},species);await page.waitForTimeout(400);
   const a=await page.screenshot({path:`reef/qa/breathing-${species}-closed.png`});
   await page.evaluate(s=>window.reefQA.respirationStudy(s,Math.PI/2),species);await page.waitForTimeout(400);
