@@ -15,7 +15,7 @@
   }
 
   function getFocusable(container) {
-    return [...container.querySelectorAll('button, [href], select, input, textarea, [tabindex]:not([tabindex="-1"])')]
+    return [...container.querySelectorAll('button, [href], select, input, textarea, summary, [tabindex]:not([tabindex="-1"])')]
       .filter(el => !el.disabled && el.getClientRects().length > 0);
   }
 
@@ -59,7 +59,21 @@
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a><button class="btn secondary link-modal__share" type="button">Copy link</button></div></div></section>';
+    modal.innerHTML = `
+      <div class="link-modal__backdrop" data-link-close></div>
+      <section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title">
+        <header class="link-modal__heading"><span class="link-modal__eyebrow">Product details</span><button class="link-modal__close" type="button" data-link-close>Close</button></header>
+        <div class="link-modal__layout">
+          <div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div>
+          <div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div>
+          <div class="link-modal__body">
+            <h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div>
+            <div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a><button class="btn secondary link-modal__share" type="button">Copy link</button></div>
+            <div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div>
+            <details class="link-modal__source"><summary>Product source &amp; reference</summary><div class="link-modal__meta"></div></details>
+          </div>
+        </div>
+      </section>`;
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
@@ -807,11 +821,8 @@
     const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
     const url = new URL(href);
     const brand = card?.querySelector('.thr-brand')?.textContent?.trim() || extractBrand(title) || 'Hidden Reef';
-    const detailItems = details.length ? details : [
-      'Listed under ' + departmentName + ' / ' + categoryName + '.',
-      'Current online price is shown for reference.',
-      'Availability and final price are confirmed on the store page or in person.'
-    ];
+    const detailItems = details;
+
     const relatedHtml = context.related.length
       ? '<strong>Related products</strong><div>' + context.related.map(item => '<a class="product-link" href="' + escapeHtml(item.productUrl) + '">' + escapeHtml(item.name) + '</a>').join('') + '</div>'
       : '';
@@ -838,7 +849,8 @@
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('link-modal-open');
-    modal.querySelector('.link-modal__panel').scrollTop = 0;
+    modal.querySelector('.link-modal__layout').scrollTop = 0;
+    modal.querySelector('.link-modal__source').open = false;
     modal.querySelector('.link-modal__close').focus();
     if (sourceImageRect && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       window.requestAnimationFrame(() => {
