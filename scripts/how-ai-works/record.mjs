@@ -28,34 +28,34 @@ await cap('', 'How AI Works · a 60-second tour');
 await wait(2600);
 
 await scrollTo('#map .map-figure', 60); await cap('1', 'A request travels through an AI system');
-await click('#mapPlay'); await wait(4600); await click('#mapPlay');
+await click('#mapPlay'); await wait(4400); await click('#mapPlay');
 
-await scrollTo('#genloop', 30); await cap('2', 'The model writes one token at a time');
-await wait(5200);
-
-await scrollTo('#tokens .lab-card-body', 30); await cap('3', 'It reads numbered chunks, not letters');
+await scrollTo('#tokens .lab-card-body', 30); await cap('2', 'It reads numbered chunks, not letters');
 await click('[data-token-preset="strawberry"]'); await wait(1700); await click('#tokenIdsToggle'); await wait(2000);
 
-await scrollTo('#ntPrompts', 20); await cap('4', 'Every next token has odds… then the dice roll');
+await scrollTo('#ntPrompts', 20); await cap('3', 'Every next token has odds… then the dice roll');
 await click('#ntStep'); await wait(2500); await click('#ntStep'); await wait(2400);
 
-await scrollTo('#chatCompare', 30); await cap('5', 'Chat training turns a text-continuer into an assistant');
-await click('[data-cc="1"]'); await wait(4200);
+await scrollTo('.attn-stage', 120); await cap('4', 'Words look back at earlier words');
+await click('[data-adj="small"]'); await wait(1900); await click('[data-adj="big"]'); await wait(1700);
 
-await scrollTo('.attn-stage', 120); await cap('6', 'Attention links words to what they refer to');
-await click('[data-adj="small"]'); await wait(1900); await click('[data-adj="big"]'); await wait(1800);
+await scrollTo('#genloop', 30); await cap('5', 'Put together: one token at a time, on repeat');
+await wait(5000);
 
-await scrollTo('#embQueries', 20); await cap('7', 'Similar meanings sit close together');
-await click('[data-q="6"]'); await wait(3200);
+await scrollTo('#chatCompare', 30); await cap('6', 'Chat training turns a text-continuer into an assistant');
+await click('[data-cc="1"]'); await wait(4000);
 
-await scrollTo('.ctx-controls', 20); await cap('8', 'It only sees what fits in its window');
-await click('#ctxMemory'); await click('#ctxAuto'); await wait(4000); await click('#ctxAuto');
+await scrollTo('.ctx-controls', 20); await cap('7', 'It only sees what fits in its window');
+await click('#ctxMemory'); await click('#ctxAuto'); await wait(3800); await click('#ctxAuto');
+
+await scrollTo('#embQueries', 20); await cap('8', 'Apps find the right notes by meaning');
+await click('[data-q="0"]'); await wait(3000);
 
 await scrollTo('#tools .tool-grid', 20); await cap('9', 'Tools check facts, but web pages can carry traps');
 await click('[data-tool="trap"]'); await wait(4000);
 
 await scrollTo('#agent-loop .scenario-picker', 20); await cap('10', 'Agents loop until the check really passes');
-await click('[data-scenario="layout"]'); await click('#autoStep'); await wait(5600);
+await click('[data-scenario="recipe"]'); await click('#autoStep'); await wait(5600);
 
 await scrollTo('#hallucination .hal-grid', 20); await cap('11', 'Sounding sure is not the same as being right');
 await page.evaluate(() => { const c = document.querySelectorAll('[data-claim]'); c[2].click(); c[4].click(); }); await wait(600);

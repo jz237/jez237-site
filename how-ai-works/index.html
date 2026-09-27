@@ -1248,7 +1248,7 @@
       .stack-layer { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="lab.css?v=20260928" />
+  <link rel="stylesheet" href="lab.css?v=20260929" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 
 <meta name="description" content="An interactive, plain-English guide to how AI language models actually work — tokens, embeddings, attention, and training, with hands-on visual demos." />
@@ -1258,13 +1258,13 @@
 <meta property="og:title" content="How AI Works — Interactive Guide" />
 <meta property="og:description" content="An interactive, plain-English guide to how AI language models actually work — tokens, embeddings, attention, and training, with hands-on visual demos." />
 <meta property="og:url" content="https://jez237.com/how-ai-works/" />
-<meta property="og:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260928" />
+<meta property="og:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260929" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="The How AI Works next-token machine: a probability wheel sampling the next word of a sentence." />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="How AI Works — Interactive Guide" />
-<meta name="twitter:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260928" />
+<meta name="twitter:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260929" />
 </head>
 <body>
   <header id="site-nav"></header>
@@ -1282,24 +1282,25 @@
         <nav class="lab-nav">
           <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
           <span class="rail-act">Act I · Inside the model</span>
-          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Generation loop</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
           <a href="#next-token"><svg viewBox="0 0 24 24"><path d="M4 20V14"/><path d="M9 20V6"/><path d="M14 20v-9"/><path d="M19 20v-4"/></svg>Next token</a>
           <a href="#attention"><svg viewBox="0 0 24 24"><path d="M4 17c3-9 13-9 16 0"/><path d="M8 17c1.5-4 6.5-4 8 0"/><circle cx="4" cy="18" r="1"/><circle cx="20" cy="18" r="1"/></svg>Attention</a>
-          <a href="#embeddings"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.6"/><circle cx="9" cy="10" r="1.6"/><circle cx="17" cy="15" r="1.6"/><circle cx="15" cy="18" r="1.6"/><circle cx="18" cy="6" r="1.6"/></svg>Embeddings</a>
+          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Putting it together</a>
           <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
           <span class="rail-act">Act II · Around the model</span>
           <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context &amp; memory</a>
+          <a href="#embeddings"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.6"/><circle cx="9" cy="10" r="1.6"/><circle cx="17" cy="15" r="1.6"/><circle cx="15" cy="18" r="1.6"/><circle cx="18" cy="6" r="1.6"/></svg>Finding notes</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
           <span class="rail-act">Act III · Agents in the wild</span>
           <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
           <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
           <a href="#systems"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 6v12"/><path d="M16 6v12"/></svg>Systems</a>
-          <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Concepts</a>
           <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
           <a href="#hallucination"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/><path d="M9 11h4"/></svg>Spot the fake</a>
+          <span class="rail-act">Reference</span>
+          <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Glossary</a>
         </nav>
       </aside>
 
@@ -1308,21 +1309,20 @@
           <div class="hero-copy">
             <span class="kicker">Interactive AI lab</span>
             <h1>How AI Works</h1>
-            <p>AI feels mysterious until you separate the parts. Inside the model: tokens, attention, and a probability for every possible next word. Around it: context, memory, prompts, and tools. On top: agents that loop, check their work, and stop for permission. Every part below is something you can poke.</p>
+            <p>AI chatbots can feel like magic. This page opens one up: how it reads your words, how it picks each next word, and how apps turn that into assistants that use tools and check their work. Everything here is clickable, and nothing needs an account.</p>
             <div class="hero-actions">
-              <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
+              <button class="lab-button primary" id="startTour" type="button">Take the 6-stop tour</button>
               <button class="lab-button" id="watchTour" type="button"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Watch the 60-second tour</button>
-              <a href="#next-token">Sample the next token</a>
-              <a href="training-alignment.html">Training &amp; alignment deep dive</a>
-              <a href="../">Back to Home</a>
             </div>
+            <p class="hero-links">Or jump to <a href="#next-token">the next-token machine</a> · <a href="training-alignment.html">how models are trained</a> · <a href="../">home</a></p>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in three acts: inside the model, around the model, and agents in the wild.</p>
+              <p id="tourCopy">Six quick stops cover the essentials. Prefer everything? Switch to the full tour.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
                 <button class="lab-button" id="nextTour" type="button">Next stop</button>
+                <button class="tour-mode" id="tourMode" type="button">Switch to the full tour (17 stops)</button>
               </div>
             </div>
           </div>
@@ -1374,64 +1374,8 @@
         <div class="act-banner" id="act-1">
           <span>Act I</span>
           <h2>Inside the model</h2>
-          <p>A language model is a function: numbers go in, one probability for every possible next token comes out. Everything else is built around that.</p>
+          <p>Inside, a language model does one thing: it looks at the text so far and gives odds for every possible next piece of text. Everything else is built around that.</p>
         </div>
-
-        <section id="diagrams" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">The core trick</span>
-              <h2>The Generation Loop</h2>
-              <p>A model does not write a whole answer at once. It reads everything in its context, scores every possible next token, picks one, glues it onto the end, and runs again. This animation uses real token IDs and real probabilities from a small open model.</p>
-              <p class="gist"><b>In one line</b>The model writes one token at a time, and each new token is added to the text before it guesses the next.</p>
-            </div>
-            <span class="status-pill">Real model data</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="genloop" id="genloop">
-              <div class="gl-text" id="glText" aria-live="polite"></div>
-              <div class="gl-stages">
-                <button class="gl-stage" data-gl="0" type="button"><b>1</b><strong>Token IDs</strong><div class="gl-ids" id="glIds"></div></button>
-                <button class="gl-stage" data-gl="1" type="button"><b>2</b><strong>Vectors</strong><div class="gl-vecs" id="glVecs"></div></button>
-                <button class="gl-stage" data-gl="2" type="button"><b>3</b><strong>Transformer layers</strong><div class="gl-layers" id="glLayers"></div></button>
-                <button class="gl-stage" data-gl="3" type="button"><b>4</b><strong>Next-token scores</strong><div class="gl-probs" id="glProbs"></div></button>
-              </div>
-              <svg class="gl-return" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M97 1 V6 H3 V1"/></svg>
-              <div class="gl-return-label">picked token is appended → the loop runs again</div>
-            </div>
-            <div class="control-row" style="margin-top: 14px">
-              <button class="lab-button primary" id="glPlay" type="button">Play</button>
-              <button class="lab-button" id="glStep" type="button">One stage</button>
-              <button class="lab-button" id="glReset" type="button">Reset</button>
-            </div>
-            <div class="trace-note" id="glNote" aria-live="polite"></div>
-            <div class="diagram-grid" style="margin-top: 16px">
-              <article class="diagram-panel">
-                <h3>Agent Loop</h3>
-                <svg class="orbit-diagram" viewBox="0 0 220 150" aria-label="Agent loop: read, plan, act, observe, verify">
-                  <ellipse class="orbit-track" cx="110" cy="75" rx="88" ry="52"/>
-                  <circle class="orbit-dot" r="5"><animateMotion dur="6s" repeatCount="indefinite" path="M198,75 A88,52 0 1,1 22,75 A88,52 0 1,1 198,75"/></circle>
-                  <g class="orbit-nodes">
-                    <text x="110" y="18">Read</text><text x="200" y="60">Plan</text><text x="176" y="138">Act</text><text x="44" y="138">Observe</text><text x="22" y="60">Verify</text>
-                  </g>
-                  <text class="orbit-core" x="110" y="80">loop until done</text>
-                </svg>
-                <p>An agent keeps cycling until it has enough evidence or hits a limit. Good agents know when to stop and report what they verified.</p>
-              </article>
-              <article class="diagram-panel">
-                <h3>Context vs Memory</h3>
-                <div class="cm-diagram" aria-label="Memory is loaded into the context window, which is the only thing the model reads">
-                  <div class="cm-drawer"><strong>Memory file</strong><span>saved fact</span><span>preference</span></div>
-                  <div class="cm-arrow"><i></i><em>loaded in</em></div>
-                  <div class="cm-window"><strong>Context window</strong><span class="cm-mem">memory</span><span>chat</span><span>files</span><span>tool results</span></div>
-                  <div class="cm-arrow"><i></i><em>read by</em></div>
-                  <div class="cm-model"><strong>Model</strong><span>no memory of its own</span></div>
-                </div>
-                <p>The model itself is stateless: it only knows what is in the context window right now. "Memory" is text the app saves and loads back into that window each session.</p>
-              </article>
-            </div>
-          </div>
-        </section>
 
         <section id="tokens" class="lab-card">
           <div class="lab-card-header">
@@ -1486,7 +1430,7 @@
             <div>
               <span class="kicker">Probabilities, then a dice roll</span>
               <h2>Next-Token Machine</h2>
-              <p>At every step the model gives a probability to <em>every</em> token in its vocabulary (about 150,000 here). Then the app <strong>samples</strong> one. <strong>Temperature</strong> reshapes those odds: at 0 it always takes the top pick, and higher values flatten the curve so unlikely tokens get a real chance. That's why the same prompt can give different answers.</p>
+              <p>At every step the model gives a probability to <em>every</em> token in its vocabulary (about 150,000 of them). Then the app <strong>samples</strong> one. <strong>Temperature</strong> reshapes those odds: at 0 it always takes the top pick, and higher values flatten the curve so unlikely tokens get a real chance. That's why the same prompt can give different answers.</p>
               <p class="gist"><b>In one line</b>The model gives odds for every possible next word, then the app rolls the dice.</p>
             </div>
             <span class="status-pill" id="ntStatus">Loading model data…</span>
@@ -1495,6 +1439,7 @@
             <div class="preset-row" id="ntPrompts" aria-label="Prompts"></div>
             <div class="nt-grid">
               <div class="nt-left">
+                <p class="nt-raw">This is a <b>raw</b> model, not a chatbot: it continues text instead of answering, a bit like autocomplete. The before-and-after demo further down shows the difference.</p>
                 <div class="nt-text" id="ntText" aria-live="polite"></div>
                 <div class="nt-temp">
                   <label for="ntTemp">Temperature <strong id="ntTempLabel">1.0</strong></label>
@@ -1529,7 +1474,7 @@
             <div>
               <span class="kicker">How words find each other</span>
               <h2>Attention</h2>
-              <p>Each layer lets every token look back at every earlier token and pull in what's relevant. That's <strong>attention</strong>. Many "heads" run in parallel, each learning a different kind of lookup. Click a word to see where it looks, then flip the last word and watch "it" change its mind.</p>
+              <p>Each layer lets every token look back at every earlier token and pull in what's relevant. That's <strong>attention</strong>. Many "heads" run in parallel, each learning a different kind of lookup. Click a word to see where it looks, then flip the last word and watch the link move.</p>
               <p class="gist"><b>In one line</b>Each word looks back at earlier words to work out what they mean together.</p>
             </div>
             <span class="status-pill">Click a word</span>
@@ -1551,39 +1496,47 @@
               <button class="lab-button" data-adj="small" type="button">…too small</button>
             </div>
             <div class="attn-probe" id="attnProbe"></div>
-            <p class="fine-print">The arcs are a simplified illustration of what attention heads do. Real heads are messier and spread across dozens of layers. The trophy/suitcase percentages are measured from a real model (Qwen2.5-0.5B), by asking it to complete "The thing that was too big was the…".</p>
+            <p class="fine-print">The arcs show, in simplified form, what a well-trained model learns to do. Real attention is messier and spread across dozens of layers. The percentages come from a real (tiny) model, measured by asking it to finish "The thing that was too big was the…".</p>
           </div>
         </section>
 
-        <section id="embeddings" class="lab-card">
+        <section id="diagrams" class="lab-card">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Meaning as coordinates</span>
-              <h2>Embedding Map</h2>
-              <p>Inside a model, and inside every search system that feeds one, text becomes a long list of numbers called a vector. Similar meanings land near each other even when they share no words. Each star below is a real 384-number embedding, squashed to 2D so you can see it. Pick a search to see what's closest.</p>
-              <p class="gist"><b>In one line</b>Similar meanings get similar numbers, which is how computers find related ideas.</p>
+              <span class="kicker">Putting it together</span>
+              <h2>The Generation Loop</h2>
+              <p>Now the whole trip, start to finish. The text becomes token numbers, each number becomes a list of meaning-numbers, the layers let the words compare notes (that's attention), and out come odds for the next token. One is picked, glued onto the end, and the whole thing runs again. Real token IDs and probabilities from the same small model.</p>
+              <p class="gist"><b>In one line</b>The model writes one token at a time, and each new token is added to the text before it guesses the next.</p>
             </div>
-            <span class="status-pill">Real embeddings</span>
+            <span class="status-pill">Real model data</span>
           </div>
           <div class="lab-card-body">
-            <div class="preset-row" id="embQueries" aria-label="Search queries"></div>
-            <div class="emb-grid">
-              <div class="emb-map" id="embMap"><svg id="embSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" aria-label="Embedding scatter plot"></svg><div class="emb-tip" id="embTip" hidden></div></div>
-              <div class="emb-side">
-                <div class="emb-legend" id="embLegend"></div>
-                <div class="emb-results" id="embResults" aria-live="polite"><p>Pick a search above, or click any star.</p></div>
+            <div class="genloop" id="genloop">
+              <div class="gl-text" id="glText" aria-live="polite"></div>
+              <div class="gl-stages">
+                <button class="gl-stage" data-gl="0" type="button"><b>1</b><strong>Token IDs</strong><em>text as numbers</em><div class="gl-ids" id="glIds"></div></button>
+                <button class="gl-stage" data-gl="1" type="button"><b>2</b><strong>Vectors</strong><em>each number becomes a meaning list</em><div class="gl-vecs" id="glVecs"></div></button>
+                <button class="gl-stage" data-gl="2" type="button"><b>3</b><strong>Transformer layers</strong><em>words compare notes</em><div class="gl-layers" id="glLayers"></div></button>
+                <button class="gl-stage" data-gl="3" type="button"><b>4</b><strong>Next-token scores</strong><em>odds for every token</em><div class="gl-probs" id="glProbs"></div></button>
               </div>
+              <svg class="gl-return" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M97 1 V6 H3 V1"/></svg>
+              <div class="gl-return-label">picked token is appended → the loop runs again</div>
             </div>
-            <p class="fine-print" id="embSource">Sentence embeddings from all-MiniLM-L6-v2, projected to 2D with t-SNE. The 2D layout is approximate; the similarity scores come from the full 384 dimensions.</p>
+            <div class="control-row" style="margin-top: 14px">
+              <button class="lab-button primary" id="glPlay" type="button">Play</button>
+              <button class="lab-button" id="glStep" type="button">One stage</button>
+              <button class="lab-button" id="glReset" type="button">Reset</button>
+            </div>
+            <div class="trace-note" id="glNote" aria-live="polite"></div>
           </div>
         </section>
 
         <section id="training-roadmap" class="lab-card">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Separate deep dive</span>
-              <h2>Where the Weights Come From</h2>
-              <p>Everything above uses a model that already exists. How it got its billions of weights (pretraining, fine-tuning, RLHF) is a big topic, so it has its own page with hands-on demos.</p>
+              <span class="kicker">How it learned</span>
+              <h2>Where the Model Came From</h2>
+              <p>Everything above uses a model that was already trained. Training tuned its billions of internal numbers (called <em>weights</em>) by showing it huge amounts of text. That's a big topic with its own page, but the biggest single change is easy to see right here.</p>
               <p class="gist"><b>In one line</b>Training is where the model learned. Chatting with it does not change it.</p>
             </div>
             <span class="status-pill">Deep dive live</span>
@@ -1616,7 +1569,7 @@
         <div class="act-banner" id="act-2">
           <span>Act II</span>
           <h2>Around the model</h2>
-          <p>The model only ever sees one thing: the context window. Apps decide what goes into it: your chat, saved memory, files, and tool results.</p>
+          <p>The model only ever sees one thing: its context window. Apps decide what goes into it: your chat, saved notes, search results, and tool results.</p>
         </div>
 
         <section id="context" class="lab-card">
@@ -1632,7 +1585,7 @@
           <div class="lab-card-body">
             <div class="ctx-controls">
               <div class="ctx-field">
-                <span>Window size</span>
+                <span>Window size <i class="ctx-hint">1K tokens ≈ 750 words</i></span>
                 <div class="control-row" id="ctxSizes"></div>
               </div>
               <div class="ctx-field">
@@ -1646,7 +1599,7 @@
                 <span>Extras</span>
                 <div class="control-row">
                   <button class="lab-button" id="ctxMemory" type="button" aria-pressed="false">Memory file: off</button>
-                  <button class="lab-button" id="ctxHeat" type="button" aria-pressed="false">Show recall strength</button>
+                  <button class="lab-button" id="ctxHeat" type="button" aria-pressed="false">Show what gets remembered best</button>
                 </div>
               </div>
             </div>
@@ -1662,6 +1615,7 @@
                   <span class="legend-pill" style="--pill-color: var(--lab-orange)">tool result</span>
                   <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
                 </div>
+                <p class="fine-print">The <b>system prompt</b> is the app's own instructions, sent before your first message every time.</p>
               </div>
               <div class="ctx-side">
                 <div class="control-row">
@@ -1677,15 +1631,38 @@
           </div>
         </section>
 
+        <section id="embeddings" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Finding the right notes</span>
+              <h2>Embedding Map</h2>
+              <p>An app can't paste everything you own into the window, so it searches for what's relevant first. Many search systems turn each piece of text into a long list of numbers (an <em>embedding</em>), where similar meanings land close together even with no words in common. Each star below is a real one, squashed from 384 numbers down to 2D. Pick a search to see what's closest.</p>
+              <p class="gist"><b>In one line</b>Similar meanings get similar numbers, which is how apps find the right notes to show the model.</p>
+            </div>
+            <span class="status-pill">Real embeddings</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" id="embQueries" aria-label="Search queries"></div>
+            <div class="emb-grid">
+              <div class="emb-map" id="embMap"><svg id="embSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" aria-label="Embedding scatter plot"></svg><div class="emb-tip" id="embTip" hidden></div></div>
+              <div class="emb-side">
+                <div class="emb-legend" id="embLegend"></div>
+                <div class="emb-results" id="embResults" aria-live="polite"><p>Pick a search above, or click any star.</p></div>
+              </div>
+            </div>
+            <p class="fine-print" id="embSource">Sentence embeddings from all-MiniLM-L6-v2, projected to 2D with t-SNE. The 2D layout is approximate; the similarity scores come from the full 384 dimensions.</p>
+          </div>
+        </section>
+
         <section id="prompts" class="lab-card">
           <div class="lab-card-header">
             <div>
               <span class="kicker">Same model, better instructions</span>
               <h2>Prompt Pruning</h2>
-              <p>A vague request is compatible with dozens of reasonable jobs, so the model has to guess which one you meant. Every constraint you add prunes wrong branches. Better prompts don't make the model smarter; they leave it less to guess.</p>
+              <p>A vague request fits dozens of reasonable plans, so the model has to guess which one you meant. Every constraint you add prunes wrong branches. Better prompts don't make the model smarter; they leave it less to guess.</p>
               <p class="gist"><b>In one line</b>Say what you want, what not to touch, and how to check it.</p>
             </div>
-            <span class="status-pill" id="promptPill">12 possible jobs</span>
+            <span class="status-pill" id="promptPill">12 possible plans</span>
           </div>
           <div class="lab-card-body">
             <div class="preset-row" aria-label="Prompt presets">
@@ -1764,14 +1741,14 @@
               <p>Watch the loop run. Every lap adds to the context window: plans, tool calls, results. When a check fails, the agent goes around again. When an action is risky, it stops at the gate and waits for you.</p>
               <p class="gist"><b>In one line</b>Agents repeat plan → act → check until the job is really done, or stop to ask you.</p>
             </div>
-            <span class="status-pill">No API required</span>
+            <span class="status-pill">Watch it loop</span>
           </div>
           <div class="lab-card-body">
             <div class="scenario-picker" aria-label="Agent scenarios">
               <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
               <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
-              <button class="lab-button" data-scenario="layout" type="button">Fix layout (2 laps)</button>
-              <button class="lab-button" data-scenario="restart" type="button">Restart service (gate)</button>
+              <button class="lab-button" data-scenario="recipe" type="button">Dinner recipe (2 laps)</button>
+              <button class="lab-button" data-scenario="booking" type="button">Book &amp; pay (gate)</button>
             </div>
             <div class="circuit-board">
               <div class="circuit-wrap">
@@ -1781,7 +1758,7 @@
               <div class="agent-console">
                 <div class="console-readout" id="agentConsole"></div>
                 <div class="control-row circuit-gate" id="circuitGate" hidden>
-                  <button class="lab-button primary" id="gateYes" type="button">Approve restart</button>
+                  <button class="lab-button primary" id="gateYes" type="button">Approve payment</button>
                   <button class="lab-button" id="gateNo" type="button">Deny</button>
                 </div>
                 <div class="control-row">
@@ -1801,7 +1778,7 @@
             <div>
               <span class="kicker">Observable work</span>
               <h2>Trace Viewer</h2>
-              <p>A useful AI run leaves an outside trail: what was requested, what it checked, what it observed, and how it verified the result. You do not need hidden chain-of-thought to judge whether the work is trustworthy.</p>
+              <p>A useful AI run leaves an outside trail: what was requested, what it checked, what it observed, and how it verified the result. You don't need to see inside the model's head to judge whether the work can be trusted.</p>
               <p class="gist"><b>In one line</b>Trust work you can see being checked.</p>
             </div>
             <span class="status-pill">Audit trail</span>
@@ -1847,28 +1824,12 @@
           </div>
         </section>
 
-        <section id="concepts" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Plain terms</span>
-              <h2>Concept Decoder</h2>
-              <p>AI terms get thrown around loosely. Pick a concept to see the useful definition, a practical example, and the common misunderstanding to avoid.</p>
-              <p class="gist"><b>In one line</b>Plain-English definitions for the buzzwords.</p>
-            </div>
-            <span class="status-pill">Tap a term</span>
-          </div>
-          <div class="lab-card-body concept-grid">
-            <div class="concept-list" id="conceptList"></div>
-            <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
-          </div>
-        </section>
-
         <section id="builder" class="lab-card">
           <div class="lab-card-header">
             <div>
               <span class="kicker">Assemble the system</span>
               <h2>Build an Agent Stack</h2>
-              <p>Most real AI systems are a stack of choices. Add or remove layers and watch the profile change shape.</p>
+              <p>Most real AI systems are a stack of choices. It starts with just a model and its context. Add layers and watch what you gain, and what new risks need checks.</p>
               <p class="gist"><b>In one line</b>More power needs more safety checks.</p>
             </div>
             <span class="status-pill">Interactive model</span>
@@ -1880,6 +1841,7 @@
                 <div class="iso-stage"><div class="iso-stack" id="stackVisual" aria-label="Agent stack layers"></div></div>
                 <svg class="radar" id="builderRadar" viewBox="-120 -110 240 220" aria-label="Capability, risk and oversight radar"></svg>
               </div>
+              <p class="fine-print" style="margin:0">Scores are illustrative, to show the trade-off, not measurements.</p>
               <div class="metric-row">
                 <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong></div>
                 <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong></div>
@@ -1944,6 +1906,22 @@
           </div>
         </section>
 
+        <section id="concepts" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Reference</span>
+              <h2>Glossary</h2>
+              <p>AI terms get thrown around loosely. Pick a concept to see the useful definition, a practical example, and the common misunderstanding to avoid.</p>
+              <p class="gist"><b>In one line</b>Plain-English definitions for the buzzwords.</p>
+            </div>
+            <span class="status-pill">Tap a term</span>
+          </div>
+          <div class="lab-card-body concept-grid">
+            <div class="concept-list" id="conceptList"></div>
+            <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
+          </div>
+        </section>
+
         <footer>
           <a href="../">Home</a> · <a href="training-alignment.html">Training &amp; alignment</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
         </footer>
@@ -1951,12 +1929,12 @@
     </div>
     <dialog class="tour-video" id="tourVideo" aria-label="60-second video tour">
       <div class="tv-head"><strong>How AI Works in 60 seconds</strong><button class="lab-button" id="tourVideoClose" type="button">Close</button></div>
-      <video id="tourVideoEl" controls playsinline preload="none" poster="media/tour-poster.jpg?v=20260928" src="media/tour.mp4?v=20260928"></video>
+      <video id="tourVideoEl" controls playsinline preload="none" poster="media/tour-poster.jpg?v=20260929" src="media/tour.mp4?v=20260929"></video>
       <p class="fine-print">A silent, captioned run-through of the page. Everything in it is interactive below.</p>
     </dialog>
   </main>
 
-  <script src="lab.js?v=20260928" defer></script>
+  <script src="lab.js?v=20260929" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>

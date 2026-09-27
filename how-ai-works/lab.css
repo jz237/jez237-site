@@ -480,3 +480,13 @@ html.calm body::before, html.calm body::after, html.calm .ai-lab::before { anima
   .maths-row { grid-template-columns: 1fr; gap: 4px; }
   .lane { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* =================== v3: readability pass =================== */
+.hero-links { margin: 14px 0 0 !important; color: var(--lab-muted) !important; font-size: 14px !important; }
+.hero-links a { color: #9be8ff; }
+.tour-mode { margin-left: auto; padding: 4px 2px; border: 0; background: none; color: #9be8ff; font-size: 12.5px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.gl-stage em { display: block; margin-top: -4px; color: var(--lab-muted); font-size: 11px; font-style: normal; font-weight: 600; line-height: 1.3; }
+.nt-raw { margin: 0 0 8px; padding: 8px 11px; border-radius: 8px; border: 1px dashed rgba(255,176,96,0.55); background: rgba(255,176,96,0.07); color: #ffe2c2; font-size: 13px; line-height: 1.45; }
+.nt-raw b { color: var(--lab-orange); }
+.ctx-hint { margin-left: 6px; color: var(--lab-muted); font-style: normal; font-weight: 700; letter-spacing: 0; text-transform: none; }
+.attn-probe .probe-label { color: var(--lab-dim); font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
