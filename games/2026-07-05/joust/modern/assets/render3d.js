@@ -51,6 +51,13 @@ const PLAT_CARDS = {
   upperR: { fx: 0.074, fy: 0.0863, fw: 0.8525, fh: 0.5908, w: [48.1542, -26.4857, 109.9145, -1.6596] },
   midWrapR: { fx: 0.0778, fy: 0.0814, fw: 0.8403, fh: 0.5688, w: [100.1774, -32.9964, 151.905, -10.6322] },
 };
+// Actual opaque walking lips inside the padded painted textures: x1, x2, y, w, h.
+// The master-plate crop boxes include empty margins and are not support surfaces.
+const PLAT_LIPS = {
+  base: [32, 565, 10, 569, 175], midTop: [28, 282, 10, 292, 133],
+  topL: [0, 169, 10, 184, 115], topR: [29, 202, 10, 203, 124],
+  midWrapL: [0, 233, 10, 243, 108], midWrapR: [60, 201, 10, 202, 117],
+};
 
 // ═══ painted bird sprites (v1.5) — frames sliced from gpt-image-2 repaints of the 3D
 // models (tools/bird-sheet → fal-edit → slice-birds). Unlit DoubleSide planes: facing
@@ -701,7 +708,7 @@ class Renderer3D {
         // floorL/floorR: the master plate only painted their on-screen part, leaving the
         // outer collision extent INVISIBLE ("standing on lava"). They borrow slices of the
         // base slab texture instead, UV-remapped (never texture clones — those render flat).
-        const BORROW = { floorL: { key: 'base', u: [0.02, 0.34] }, floorR: { key: 'base', u: [0.66, 0.98] } };
+        const BORROW = { floorL: { key: 'base', u: [0.06, 0.36] }, floorR: { key: 'base', u: [0.68, 0.99] } };
         const bor = BORROW[def.id];
         const srcCard = bor ? PLAT_CARDS[bor.key] : card;
         const [wx0, wy0, wx1, wy1] = card.w;
@@ -710,9 +717,14 @@ class Renderer3D {
         if (bor) {
           // full collision box, extended toward the base slab so the joint tucks UNDER it
           const ext = def.id === 'floorL' ? [2, 12] : [12, 2];
-          cw = bw + ext[0] + ext[1]; ch = (bh / srcCard.fh);
-          left = wx0 - ext[0]; top = wy1 + srcCard.fy * ch;
+          cw = def.x2 - def.x1 + ext[0] + ext[1]; ch = (bh / srcCard.fh);
+          left = X3(def.x1) - ext[0]; top = Y3(def.y) + 10 / 175 * ch;
           uvs = [bor.u[0], bor.u[1]];
+        } else if (PLAT_LIPS[def.id]) {
+          const [x1, x2, y, width, height] = PLAT_LIPS[def.id];
+          cw = (def.x2 - def.x1) * width / (x2 - x1); ch = bh / card.fh;
+          left = X3(def.x1) - x1 / width * cw;
+          top = Y3(def.y) + y / height * ch;
         } else {
           cw = bw / card.fw; ch = bh / card.fh;
           left = wx0 - card.fx * cw; top = wy1 + card.fy * ch;
@@ -730,9 +742,9 @@ class Renderer3D {
             for (let i = 0; i < uv.count; i++) uv.setX(i, uvs[0] + uv.getX(i) * (uvs[1] - uvs[0]));
           }
           const p = new T.Mesh(geo, mat);
-          // z −8: just behind the gameplay plane so birds pass in front, painted top
-          // edge still lands exactly on the collision surface
-          p.position.set(left + cw / 2 + off, top - ch / 2, bor ? -8.6 : -8);   // borrowed slices tuck behind
+          // Keep the walking lip on the gameplay plane: a deep background offset
+          // creates perspective drift between the visible edge and standing feet.
+          p.position.set(left + cw / 2 + off, top - ch / 2, bor ? -0.02 : -0.01);
           p.renderOrder = 1;
           g.add(p);
         }
