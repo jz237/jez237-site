@@ -353,12 +353,20 @@ export class Vehicle {
         if (dist > radius) continue;
         const weight = Math.pow(1 - dist / radius, 1.6);
         const strength = weight * Math.min(.52, damage * .024);
-        // Coherent folds use original body coordinates. Adjacent duplicate
-        // vertices receive identical displacement, keeping welded seams intact.
-        const crease = Math.sin(orig.dot(tangent) * 17 + orig.dot(side) * 8);
+        // One compact crease follows this contact instead of applying a repeating
+        // wave across the body. Original coordinates keep duplicated seam
+        // vertices welded and make quiet network replay exactly reproducible.
+        offset.copy(orig).sub(at);
+        const across = offset.dot(tangent) / radius;
+        const along = offset.dot(side) / radius;
+        const creaseDistance = Math.abs(across + .32 * along - .08);
+        const ridge = Math.max(0, 1 - creaseDistance / .3);
+        const shoulder = Math.max(0, 1 - creaseDistance / .72);
+        const span = Math.max(0, 1 - (along + .1) * (along + .1));
+        const buckle = (ridge - shoulder * .24) * span;
         v.addScaledVector(dir, strength);
-        v.addScaledVector(side, crease * strength * .22);
-        v.addScaledVector(tangent, Math.sin(orig.dot(side) * 15) * strength * .1);
+        v.addScaledVector(side, -buckle * strength * .28);
+        v.addScaledVector(tangent, -across * strength * .08 * span);
         offset.copy(v).sub(orig);
         if (offset.lengthSq() > .81) v.copy(orig).add(offset.setLength(.9));
         pos.setXYZ(i, v.x, v.y, v.z);

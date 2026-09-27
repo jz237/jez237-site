@@ -1,4 +1,4 @@
-import { nearTrees, saplingPlacements, landscapeHeight } from './quarry-layout';
+import { nearTrees, saplingPlacements, landscapeHeight, quarryRim } from './quarry-layout';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
@@ -137,7 +137,17 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     const textures = new T.TextureLoader(), dummy = new T.Object3D();
     const track = Array.from({ length: 120 }, (_, i) => trackPoint(i / 120));
     const clearOfRoad = (x: number, z: number, margin = 10) => track.every(p => Math.hypot(x - p.x, z - p.z) > margin);
-    for (const kind of ['pine', 'spruce']) {
+    // Mix silhouettes at the distant forest edge without increasing tree count.
+    // Card widths follow their source images instead of stretching every species
+    // to the same cone. Nearby trees remain scanned branch geometry.
+    const distantSpecies = [
+        { kind: 'pine', count: 110, aspect: 461 / 1024, minHeight: 12, heightRange: 14 },
+        { kind: 'spruce', count: 96, aspect: 402 / 1024, minHeight: 11, heightRange: 13 },
+        { kind: 'hemlock', count: 88, aspect: 486 / 1024, minHeight: 10, heightRange: 12 },
+        { kind: 'maple', count: 76, aspect: 712 / 1024, minHeight: 10, heightRange: 10 },
+    ];
+    let distantIndex=0;
+    for (const { kind, count, aspect, minHeight, heightRange } of distantSpecies) {
         const photo = textures.load(url('models/' + kind + '.webp'));
         photo.colorSpace = T.SRGBColorSpace;
         photo.anisotropy = 8;
@@ -155,22 +165,32 @@ export async function forestScenery(parent: T.Group, random: () => number) {
       `);
         };
         material.customProgramCacheKey = () => 'quarry-distant-tree-billboard-v1';
-        const geo = new T.PlaneGeometry(.64, 1);
+        const geo = new T.PlaneGeometry(aspect, 1);
         geo.translate(0, .5, 0);
-        const trees = new T.InstancedMesh(geo, material, 185);
+        const trees = new T.InstancedMesh(geo, material, count);
         // Baked photographs supply fine twig silhouettes; their shadow maps would add
         // little at this distance and previously tripled alpha-tested overdraw.
         trees.castShadow = false;
         trees.receiveShadow = false;
-        for (let i = 0; i < 185; i++) {
-            const a = random() * Math.PI * 2, r = 181 + random() * 95, x = Math.sin(a) * r * 1.08, z = Math.cos(a) * r;
+        for (let i = 0; i < count; i++) {
+            // Use the same 370 cards in coherent two-layer stands, concentrated
+            // behind the true crest instead of isolated across a 95m-wide lawn.
+            // Six random draws per tree preserve the later understory sequence.
+            const azimuth=random(),depth=random(),size=random(),stand=distantIndex%12;
+            const center=stand/12*Math.PI*2+Math.sin(stand*2.7)*.075;
+            const width=.47+Math.sin(stand*1.8+.6)*.085;
+            const a=center+(azimuth-.5)*width;
+            const front=distantIndex%5<3,offset=front?5+depth*13:22+depth*24;
+            const r=Math.max(182,quarryRim(a).r+offset),x=Math.sin(a)*r*1.08,z=Math.cos(a)*r;
             dummy.position.set(x, landscapeHeight(x, z), z);
             dummy.rotation.set(0, 0, 0);
-            const h = 10 + random() * 16;
+            const growth=T.MathUtils.clamp(.53+Math.sin(stand*2.13)*.21+(size-.5)*.38+(front?-.04:.08),0,1);
+            const h = minHeight + growth * heightRange;
             dummy.scale.setScalar(h);
             dummy.updateMatrix();
             trees.setMatrixAt(i, dummy.matrix);
             trees.setColorAt(i, new T.Color().setRGB(.82 + random() * .16, .87 + random() * .13, .85 + random() * .15));
+            distantIndex++;
         }
         trees.computeBoundingSphere();
         parent.add(trees);

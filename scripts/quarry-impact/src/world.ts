@@ -2,7 +2,7 @@ import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { pbr, url } from './assets';
+import { pbr, texture, url } from './assets';
 import { terrainHeight, trackPoint } from './rules';
 import { forestScenery, updateForestView } from './scenery-vegetation';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
@@ -12,6 +12,18 @@ const rand = () => {
   return seed / 4294967296;
 };
 const dummy = new T.Object3D();
+// Poly Haven's cladding scan covers 2.7 metres. Keep ribs at that scale on
+// every face instead of stretching one photograph across the whole shed.
+function claddingUV(mesh: T.Mesh<T.BoxGeometry>) {
+  const { position, normal, uv } = mesh.geometry.attributes;
+  for (let i = 0; i < position.count; i++) {
+    const x = position.getX(i), y = position.getY(i), z = position.getZ(i);
+    const nx = normal.getX(i), ny = normal.getY(i);
+    uv.setXY(i, (Math.abs(nx) > .5 ? z : x) / 2.7,
+      (Math.abs(ny) > .5 ? z : y) / 2.7);
+  }
+  return mesh;
+}
 // A narrow translucent shoreline keeps shallow water embedded in the aggregate.
 // Vertex opacity fades both the water edge and the wider damp margin in-place.
 function softShoreMaterial(material: T.MeshStandardMaterial) {
@@ -332,21 +344,29 @@ export class Quarry {
     const worksStart=this.scenery.children.length;
     const metal = weatheredMetal(0x555f59);
     const yellow = weatheredMetal(0xc29e48);
+    const arm = texture('cladding_arm', 1);
+    const cladding = new T.MeshStandardMaterial({
+      color: 0xb4bab2, map: texture('cladding_diff', 1, true),
+      normalMap: texture('cladding_nor_gl', 1), normalScale: new T.Vector2(.65, .65),
+      roughness: 1, roughnessMap: arm, metalness: .65, metalnessMap: arm,
+      aoMap: arm, aoMapIntensity: .4,
+    });
     const rubber = new T.MeshStandardMaterial({
       color: 0x222727,
       roughness: 0.95,
     });
-    this.box(
+    claddingUV(this.box(
       new T.Vector3(-72, 4, -39),
       new T.Vector3(21, 8, 13),
-      metal,
+      cladding,
       this.scenery,
       true,
-    );
-    for (let i = 0; i < 42; i++)
+    ));
+    // Sheet joints have real relief; the smaller corrugations use the scan.
+    for (let i = 0; i < 16; i++)
       this.box(
-        new T.Vector3(-82.3 + i * 0.5, 4, -32.4),
-        new T.Vector3(0.07, 7.8, 0.08),
+        new T.Vector3(-82.2 + i * 1.35, 4, -32.47),
+        new T.Vector3(0.025, 7.8, 0.055),
         metal,
       );
     this.box(new T.Vector3(-72, 8.2, -39), new T.Vector3(22, 0.4, 14), metal);
@@ -358,9 +378,9 @@ export class Quarry {
       this.box(new T.Vector3(x,5.8,-32.18),new T.Vector3(.07,1.2,.04),metal);
     }
     for(let i=0;i<15;i++) this.box(new T.Vector3(-72,.2+i*.255,-32.18),new T.Vector3(5.85,.045,.12),metal);
-    const roof=this.box(new T.Vector3(-72,8.75,-35.65),new T.Vector3(22.4,.15,7.1),metal);
+    const roof=claddingUV(this.box(new T.Vector3(-72,8.75,-35.65),new T.Vector3(22.4,.15,7.1),cladding));
     roof.rotation.x=.15;
-    const rearRoof=this.box(new T.Vector3(-72,8.75,-42.35),new T.Vector3(22.4,.15,7.1),metal);
+    const rearRoof=claddingUV(this.box(new T.Vector3(-72,8.75,-42.35),new T.Vector3(22.4,.15,7.1),cladding));
     rearRoof.rotation.x=-.15;
     for(const x of [-82.7,-61.3]) {
       this.box(new T.Vector3(x,4,-31.98),new T.Vector3(.15,8,.15),metal);
@@ -382,16 +402,36 @@ export class Quarry {
     for (let i = 0; i < 3; i++) {
       const x = -92 + i * 8,
         z = -50;
-      const silo = new T.Mesh(new T.CylinderGeometry(2.7, 2.7, 13, 24), metal);
-      silo.position.set(x, 9, z);
-      silo.castShadow = true;
-      this.scenery.add(silo);
-      for (const dx of [-2, 2])
+      const section = (top: number, bottom: number, height: number, y: number) => {
+        const mesh = new T.Mesh(new T.CylinderGeometry(top, bottom, height, 32), metal);
+        mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true;
+        this.scenery.add(mesh);
+      };
+      // Hopper, rolled shell and shallow roof stay inside the original silo
+      // proxy (radius 2.7, y 2.5–15.5); driving collision geometry is unchanged.
+      section(.58, .58, .5, 2.75);
+      section(2.66, .58, 2.5, 4.25);
+      section(2.66, 2.66, 9, 10);
+      section(.48, 2.66, 1, 15);
+      for (const y of [5.5, 8.5, 11.5, 14.5]) {
+        const ring = new T.Mesh(new T.TorusGeometry(2.66, .035, 5, 32), metal);
+        ring.rotation.x = Math.PI / 2; ring.position.set(x, y, z);
+        ring.castShadow = true; ring.receiveShadow = true; this.scenery.add(ring);
+      }
+      for (const dx of [-1.72, 1.72]) for (const dz of [-1.72, 1.72]) {
         this.box(
-          new T.Vector3(x + dx, 2, z),
-          new T.Vector3(0.25, 4, 0.25),
+          new T.Vector3(x + dx, 2.8, z + dz),
+          new T.Vector3(0.2, 5.6, 0.2),
           metal,
         );
+        this.box(new T.Vector3(x + dx, .1, z + dz), new T.Vector3(.42, .2, .42), metal);
+      }
+      for (const dx of [-.3, .3])
+        this.box(new T.Vector3(x + dx, 8.8, z + 2.63), new T.Vector3(.045, 11.4, .045), metal);
+      for (let rung = 0; rung < 36; rung++)
+        this.box(new T.Vector3(x, 3.3 + rung * .31, z + 2.63), new T.Vector3(.64, .035, .06), metal);
+      for (const y of [5.5, 8.5, 11.5, 14.2])
+        this.box(new T.Vector3(x, y, z + 2.57), new T.Vector3(.73, .1, .14), metal);
     }
     for(const structure of this.scenery.children.slice(worksStart))structure.position.add(WORKS_OFFSET);
     // Parked articulated excavator, tracked base, hydraulic boom, bucket and cab glazing.

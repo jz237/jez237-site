@@ -89,7 +89,7 @@ export function createQuarryPhysics(R:typeof Rapier,world:Rapier.World,derby:boo
 }
 const quarryLevels = [0, 1.2, 9, 10.4, 12.1, 21, 22.2, 25, 35, 38, 43];
 const quarryRadii = [136, 139, 143, 150, 155, 161, 167, 175, 180, 190, 205];
-function cliffPoint(a: number, j: number) {
+function originalCliffPoint(a: number, j: number) {
     const broad = Math.sin(a * 3 + .4) * 11 + Math.sin(a * 7) * 5 + Math.cos(a * 13 + .3) * 2.8;
     const fractures = Math.sin(a * 37 + j * .3) * 1.8 + Math.sin(a * 91 + j * 1.7) * .56;
     const r = quarryRadii[j] + broad + fractures + Math.sin(a * 5 + j * .8) * j * .55;
@@ -98,16 +98,47 @@ function cliffPoint(a: number, j: number) {
     return { r, y };
 }
 const smooth = (a: number, b: number, n: number) => { const f = clamp((n - a) / (b - a), 0, 1); return f * f * (3 - 2 * f); };
+const collapseSectors = [[.42,.24],[1.35,.19],[2.24,.32],[3.88,.35],[5.19,.23]];
+function sectorWeight(a:number, center:number, width:number) {
+    const d=Math.abs(Math.atan2(Math.sin(a-center),Math.cos(a-center)));
+    return 1-smooth(width*.32,width,d);
+}
+function quarryProfile(a:number) {
+    const original=quarryLevels.map((_,j)=>originalCliffPoint(a,j));
+    const toe=original[0],crest=original[original.length-1],span=crest.r-toe.r,rise=crest.y-toe.y;
+    const collapse=Math.max(...collapseSectors.map(([center,width])=>sectorWeight(a,center,width)));
+    // Tall extraction faces alternate with slumped talus. The grid and its toe
+    // remain unchanged; only its interior profile changes, so ledges terminate
+    // instead of continuing as eleven concentric bands around the whole quarry.
+    const cutRadius=[0,.065,.09,.12,.15,.185,.225,.30,.51,.75,1];
+    const cutHeight=[0,.04,.20,.37,.54,.71,.87,.905,.94,.975,1];
+    const talusRadius=[0,.05,.12,.22,.34,.46,.59,.71,.82,.92,1];
+    const recess=sectorWeight(a,.96,.27)*5.5+sectorWeight(a,3.25,.3)*4.2+sectorWeight(a,5.81,.2)*3.8;
+    const result=[toe];
+    for(let j=1;j<original.length;j++) {
+        const fraction=lerp(cutRadius[j],talusRadius[j],collapse);
+        const height=lerp(cutHeight[j],talusRadius[j],collapse);
+        const recessed=recess*Math.sin(j/(original.length-1)*Math.PI)*(1-collapse);
+        const desiredR=lerp(original[j].r,toe.r+span*fraction+recessed,.4);
+        const desiredY=lerp(original[j].y,toe.y+rise*height,.42);
+        const left=original.length-1-j,previous=result[j-1];
+        result.push({r:clamp(desiredR,previous.r+.9,crest.r-left*.9),y:clamp(desiredY,previous.y+.04,crest.y-left*.04)});
+    }
+    return result;
+}
+/** Actual crest used to keep distant forest stands behind exposed quarry faces. */
+export function quarryRim(a:number) { return quarryProfile(a).at(-1)!; }
 // The old radial terrain slope used to poke through the rock wall as a large,
 // smooth pale curtain. Terrain behind each bench now follows its actual section.
 // All driveable roads, ramps and the entire arena remain on the original surface.
 export function landscapeHeight(x: number, z: number) {
     const r = Math.hypot(x / 1.08, z), a = Math.atan2(x / 1.08, z), original = terrainHeight(x, z);
-    let previous = cliffPoint(a, 0);
+    const profile=quarryProfile(a);
+    let previous = profile[0];
     if (r < previous.r)
         return original;
     for (let j = 1; j < quarryLevels.length; j++) {
-        const next = cliffPoint(a, j);
+        const next = profile[j];
         if (r <= next.r)
             return lerp(previous.y, next.y, clamp((r - previous.r) / (next.r - previous.r), 0, 1)) - 2;
         previous = next;
@@ -117,6 +148,7 @@ export function landscapeHeight(x: number, z: number) {
 export function cliffGeometry() {
     const positions: number[] = [], uv: number[] = [], colors: number[] = [], indices: number[] = [];
     const segments = 360, subdivisions = 3;
+    const profiles=Array.from({length:segments+1},(_,i)=>quarryProfile(i/segments*Math.PI*2));
     // Sharp bench breaks remain, but fractured intermediate faces cast real relief
     // and disrupt the smooth stretched-quadrilateral appearance of a terrain ring.
     for (let j = 0; j < quarryLevels.length - 1; j++)
@@ -125,8 +157,11 @@ export function cliffGeometry() {
             for (let i = 0; i <= segments; i++)
                 for (const end of [0, 1]) {
                     const a = i / segments * Math.PI * 2, t = (band + end) / subdivisions;
-                    const low = cliffPoint(a, j), high = cliffPoint(a, j + 1);
-                    const breakage = Math.sin(t * Math.PI) * (Math.sin(a * 63 + j * 1.8) * .9 + Math.sin(a * 117 + j * .7) * .35);
+                    const low = profiles[i][j], high = profiles[i][j + 1];
+                    const rawBreakage = Math.sin(t * Math.PI) * (Math.sin(a * 63 + j * 1.8) * .9 + Math.sin(a * 117 + j * .7) * .35);
+                    // Narrow headwall rows need bounded relief to keep every
+                    // radial strip ordered and its collider faces non-inverting.
+                    const breakage=clamp(rawBreakage,-(high.r-low.r)*.22,(high.r-low.r)*.22);
                     const r = lerp(low.r, high.r, t) + breakage;
                     const y = lerp(low.y, high.y, t) + breakage * .45;
                     positions.push(Math.sin(a) * r * 1.08, y, Math.cos(a) * r);

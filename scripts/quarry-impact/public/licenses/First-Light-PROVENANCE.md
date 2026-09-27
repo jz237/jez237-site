@@ -6,7 +6,7 @@ Verified against the user's existing `jez237-site` checkout at commit `9cef73066
 
 First Light's [README, Photographic trees (v0.56.0)](https://github.com/jz237/jez237-site/blob/9cef73066064ddcc585f1b8c61b46b27aded2f08/games/2026-09-13/first-light/README.md#photographic-trees-v0560) records pine, spruce and hemlock as generated isolated reference images, cut from white backgrounds and reduced to tree cards. Its Broadleaves (v0.58.0) section records maple as generated through the same process. Its [art pipeline](https://github.com/jz237/jez237-site/blob/9cef73066064ddcc585f1b8c61b46b27aded2f08/games/2026-09-13/first-light/ART-PIPELINE.md) identifies that reference workflow as GPT Image through fal (`openai/gpt-image-2`).
 
-These are reused generated images under the original generation account terms, not identified as CC0 photographs. The source project records the generation process, but the original prompts and generation receipts are not present in this source snapshot. Quarry Impact incurred no new generation or purchase for these images. The current scene loads pine and spruce as distant billboards; hemlock and maple are retained legacy assets.
+These are reused generated images under the original generation account terms, not identified as CC0 photographs. The source project records the generation process, but the original prompts and generation receipts are not present in this source snapshot. Quarry Impact incurred no new generation or purchase for these images. The current scene loads all four species as distant billboards, keeping 370 total trees with varied silhouettes and source-image aspect ratios.
 
 | Quarry Impact file | SHA-256 |
 | --- | --- |

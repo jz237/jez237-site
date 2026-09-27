@@ -3,30 +3,32 @@
   "prepared_by": "tools/refine_cars.py after tools/prepare_concept.py",
   "editable_files": "source/models-refined/*.blend",
   "changes": [
-    "Split front hood, fenders and bumper and rear bumper and quarters into independently damageable panels",
+    "Split hood, fenders, front and rear bumpers and rear quarters into independently damageable panels",
     "Add 1.2mm inner sheet and boundary rims while preserving original exterior corner normals and UVs",
-    "Add engine bay, radiator fins, hoses, crash rails, strut braces and underfloor exhaust",
+    "Replace inherited Engine cuboid with recessed engine bay, thin radiator core and fins, bowed bumper beam, hollow crash rails, mounting plates and fasteners",
+    "Route continuous cooling hoses, intake runners and wiring; add battery connections, coolant cap, strut braces and underfloor exhaust",
+    "Scale original crash assembly for each prepared wheelbase, width and height; reuse the same four material groups without new textures",
     "Reduce hidden wiper, rim, brake-pad and seat-frame density",
-    "Repair window gasket/rear-glass classification"
+    "Repair window gasket and rear-glass classification"
   ],
   "files": [
     {
       "path": "public/models/coupe.glb",
-      "sha256": "b2b4228534fe4c5a0c07ede2853e94b67c61032403f1936fe6baab32a0af27ea",
-      "triangles": 189533,
-      "bytes": 9685700
+      "sha256": "b864da9afe5d0a8a6c75467598bb085273d4d68c0f9e21d3d24ec749a67f4a2f",
+      "bytes": 9696968,
+      "triangles": 188597
     },
     {
       "path": "public/models/sedan.glb",
-      "sha256": "2e5a4ea99a25a46a6955bacbd31ef870de81d158073ae7665b7c136827cb4033",
-      "triangles": 189307,
-      "bytes": 9655124
+      "sha256": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
+      "bytes": 9666464,
+      "triangles": 188371
     },
     {
       "path": "public/models/hatch.glb",
-      "sha256": "e6ad17a6b1a94b9af340ff24da45bb399418f5e8d16d734182e78985d61e4147",
-      "triangles": 189487,
-      "bytes": 9675140
+      "sha256": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
+      "bytes": 9686488,
+      "triangles": 188551
     }
   ]
 }
