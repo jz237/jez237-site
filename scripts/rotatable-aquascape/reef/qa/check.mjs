@@ -1,4 +1,5 @@
 import './identification.mjs';
+import './cleaner-shrimp.mjs';
 import './chemistry-lab.mjs';
 import './tour-camera.mjs';
 import './picking.mjs';
