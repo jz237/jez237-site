@@ -16777,5 +16777,24 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-27-outer-space-exploration-prometheus-at-io-s-terminator-an-ar",
+    "title": "Prometheus at Io’s Terminator — An Artist’s Impression",
+    "tests": "Scientifically informed artist impression, not direct observation or a JunoCam reproduction. NASA Io facts: https://science.nasa.gov/jupiter/jupiter-moons/io/facts/ ; JPL observed Prometheus plume: https://www.jpl.nasa.gov/images/pia26235-io-plume-captured-by-junocam/ .; archive_slot=2026-09-27T00:20; concept=io-prometheus-terminator-plume; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a finished, breathtaking scientifically informed space artist’s impression, not an actual spacecraft photograph and not an infographic. Main subject: Jupiter’s volcanic moon Io seen from a plausible nearby orbital vantage, its curved limb cutting diagonally from lower left to upper right across a deep nearly black field. Let the terminator occupy the dramatic center. Just beyond the dark edge at the location of an active volcanic vent inspired by Prometheus, show one broad, delicate, umbrella-like volcanic plume of fine sulfur-dioxide frost and dust silhouetted against space, lit obliquely by the distant Sun; the plume is a fine particulate veil, not a terrestrial smoke column, rocket exhaust, flame fountain, or implausibly tall geyser. On the sunlit terrain reveal specific Io textures: ochre, ivory, sulfur-yellow and rusty-red deposits, dark collapsed volcanic paterae and one restrained glowing lava edge, with geological scale and relief rather than a smooth painted sphere. On the nightside leave most terrain genuinely dark, with subtle scattering at the plume only. In the far background, Jupiter may appear as a large partially cropped, softly banded disk with physically credible scale and restrained color, positioned so it does not eclipse the plume or turn the composition into a generic planet poster. Use an intentional asymmetrical composition, convincing hard sunlight, extremely fine surface texture, sober documentary color grading and a sense of enormous silence and orbital distance. Io has only a tenuous atmosphere; do not paint Earthlike blue atmospheric haze, oceans, clouds, vegetation, astronauts, ships, magical glows, or invented celestial objects. This is an original reconstruction informed by observations of an Io plume at Prometheus, not a recreation or alteration of the JunoCam image. No labels, borders, logos, watermark, typography, or UI.",
+    "image": "images/2026-09-27-outer-space-exploration-prometheus-at-io-s-terminator-an-ar.jpg",
+    "thumb": "thumbs/2026-09-27-outer-space-exploration-prometheus-at-io-s-terminator-an-ar.webp",
+    "color": "#3f3427",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "outer-space-exploration",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "io-prometheus-terminator-plume",
+      "imageSha256": "5c83c1d64b0668a2addac25cb344612636eaa14a920b05d358d6e0dbc04f18aa",
+      "imageDHash": "2110076181801000"
+    }
   }
 ]
