@@ -141,7 +141,8 @@ void main(){
  // Seconds since the bore passed this row (plunge splash seaward of the landing point).
  vPassed=rowU>=up?tb:rowU>=0.?tb-(d0-sqrt(slope*rowU+h0))/k:-1.;
  vU=rowU;vFront=front;vReach=reach;vSwash=ts/tsw;vUp=up;vUb=ub;vTau=tau;vDepth=water-groundY;
- vAlpha=pow(edge,1.6)*(1.-smoothstep(life-2.5,life,time-t0));
+ // Whitewater tapers over about a quarter of the ribbon at each end (edge^4 of the sine profile).
+ vAlpha=pow(edge,4.)*(1.-smoothstep(life-2.5,life,time-t0));
  gl_Position=projectionMatrix*viewMatrix*vec4(vWorld,1.);
 }`;
 const carpetFragment=`${fragmentCommon}
