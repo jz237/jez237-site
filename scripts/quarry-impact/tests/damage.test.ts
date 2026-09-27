@@ -55,3 +55,96 @@ test('laminated windshield cracks without disappearing after a substantial nearb
   assert.equal((car.glass[0].material as T.Material).userData.glassState.damage.value,0);
   car.dispose();world.free();
 });
+
+function sheetCar(duplicateVertices = false) {
+  const model = new T.Group();
+  for (const code of ['FL','FR','RL','RR']) {
+    const wheel = new T.Group(); wheel.name = 'wheel_' + code; model.add(wheel);
+  }
+  let geometry = new T.PlaneGeometry(4,2,32,16);
+  geometry.translate(0,.8,2);
+  if (duplicateVertices) geometry = geometry.toNonIndexed() as T.PlaneGeometry;
+  const material = new T.MeshPhysicalMaterial(); material.name = 'paint_test';
+  const panel = new T.Mesh(geometry,material); panel.name = 'panel_front'; model.add(panel);
+  templates.set('hatch',model);
+  const world = new R.World({x:0,y:-9.81,z:0});
+  const car = new Vehicle(0,'hatch',0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(){}} as any);
+  car.place(0,0,0); car.root.updateMatrixWorld(true);
+  return {car, panel:car.panels[0], close(){car.dispose();world.free();}};
+}
+function strike(car: Vehicle, x: number, damage = 12, quiet = false) {
+  const point = car.model.localToWorld(new T.Vector3(x,.8,2));
+  car.hit(point,new T.Vector3(0,0,-1),damage,1,quiet);
+}
+
+test('a localized buckle follows the contact and does not form repeating corrugations',()=>{
+  const a = sheetCar(), b = sheetCar();
+  try {
+    strike(a.car,-.25); strike(b.car,.25);
+    const pa = a.panel.geometry.attributes.position, pb = b.panel.geometry.attributes.position;
+    const oa = a.panel.userData.original as Float32Array;
+    const ob = b.panel.userData.original as Float32Array;
+    // The center row has exactly representable 0.125 m spacing. Moving a
+    // contact 0.5 m should move its buckle four vertices, not leave it tied
+    // to a world-space wave pattern.
+    const row = 8 * 33;
+    for (let x=9;x<=19;x++) {
+      const ia=row+x, ib=ia+4;
+      for (let axis=0;axis<3;axis++) {
+        const da=pa.array[ia*3+axis]-oa[ia*3+axis];
+        const db=pb.array[ib*3+axis]-ob[ib*3+axis];
+        assert.ok(Math.abs(da-db)<1e-6,'buckle must move with contact');
+      }
+    }
+    let last=0, signChanges=0;
+    for (let x=6;x<=23;x++) {
+      const i=row+x, delta=pa.getY(i)-oa[i*3+1];
+      if (Math.abs(delta)<1e-5) continue;
+      const sign=Math.sign(delta);
+      if(last && sign!==last)signChanges++;
+      last=sign;
+    }
+    assert.ok(signChanges<=2,`single local buckle, not ${signChanges} alternating folds`);
+    assert.ok(Array.from(pa.array).some((v,i)=>Math.abs(v-oa[i])>.01));
+  } finally {a.close();b.close();}
+});
+
+test('repeated impacts keep duplicate vertices welded, bound displacement and replay bitwise after repair',()=>{
+  const {car,panel,close}=sheetCar(true);
+  try {
+    const original=panel.userData.original as Float32Array;
+    const originalNormals=new Float32Array(panel.geometry.attributes.normal.array);
+    const hits=[-.125,0,.125,0,-.125,0,.125,0,0];
+    for(const x of hits)strike(car,x,10);
+    assert.equal(car.health,10);
+    assert.equal(car.damageLeft,20);assert.equal(car.damageRight,70);
+    const position=panel.geometry.attributes.position;
+    const dented=new Float32Array(position.array);
+    const normals=new Float32Array(panel.geometry.attributes.normal.array);
+    const wear=new Float32Array(panel.geometry.attributes.impactWear.array);
+    const seen=new Map<string,number[]>();let maximum=0,duplicates=0;
+    for(let i=0;i<position.count;i++) {
+      const key=Array.from(original.slice(i*3,i*3+3)).join(',');
+      const value=[position.getX(i),position.getY(i),position.getZ(i)];
+      assert.ok(value.every(Number.isFinite));
+      if(seen.has(key)){assert.deepEqual(value,seen.get(key));duplicates++;}
+      else seen.set(key,value);
+      const displacement=Math.hypot(...value.map((v,axis)=>v-original[i*3+axis]));
+      maximum=Math.max(maximum,displacement);
+      assert.ok(displacement<=.900001,'total displacement remains capped at 0.9 m');
+      // Vertices beyond every contact radius must remain exactly untouched.
+      if(Math.abs(original[i*3])>1.2)assert.deepEqual(value,Array.from(original.slice(i*3,i*3+3)));
+    }
+    assert.ok(duplicates>100,'fixture must exercise duplicated seam vertices');
+    assert.ok(maximum>.89,'test must actually reach the displacement cap');
+    car.repair();
+    assert.deepEqual(new Float32Array(position.array),original);
+    assert.deepEqual(new Float32Array(panel.geometry.attributes.normal.array),originalNormals);
+    assert.ok(Array.from(panel.geometry.attributes.impactWear.array).every(v=>v===0));
+    assert.equal(car.health,100);assert.equal(car.damageLeft,0);assert.equal(car.damageRight,0);
+    for(const x of hits)strike(car,x,10,true);
+    assert.deepEqual(new Uint8Array((position.array as Float32Array).buffer),new Uint8Array(dented.buffer));
+    assert.deepEqual(new Float32Array(panel.geometry.attributes.normal.array),normals);
+    assert.deepEqual(new Float32Array(panel.geometry.attributes.impactWear.array),wear);
+  } finally {close();}
+});

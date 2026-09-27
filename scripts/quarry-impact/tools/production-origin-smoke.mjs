@@ -5,7 +5,7 @@ import fs from 'node:fs/promises';
 // Run only after publication is confirmed. This deliberately does not read
 // QUARRY_TEST_ENDPOINT or write the server field: production supplies its URL.
 const url='https://jez237.com/games/2026-09-27/quarry-impact/';
-const output='outputs/multiplayer/production-origin';
+const output=process.env.QUARRY_PRODUCTION_QA_OUTPUT??'outputs/multiplayer/production-origin';
 const report={ok:false,url,started:new Date().toISOString(),checks:{},errors:[],browserErrors:[],failedRequests:[],httpErrors:[],cspViolations:[]};
 const contexts=[];
 let browser;
@@ -112,10 +112,20 @@ try{
       for(const violation of violations)add(report.cspViolations,{client:client.label,...violation});
     }
     assert.deepEqual(report.httpErrors,[],'No HTTP asset errors');
-    assert.deepEqual(report.failedRequests,[],'No failed resource requests');
+    // Chrome can cancel optional Analytics sendBeacon requests after a page
+    // transition. Retain those observations, but fail on every game request
+    // and every other network error rather than treating telemetry as an asset.
+    report.canceledTelemetry=report.failedRequests.filter(request=>{
+      const address=new URL(request.url);
+      return request.error==='net::ERR_ABORTED' &&
+        (address.hostname==='www.google-analytics.com'||address.hostname==='region1.google-analytics.com') &&
+        address.pathname==='/g/collect';
+    });
+    const failedResources=report.failedRequests.filter(request=>!report.canceledTelemetry.includes(request));
+    assert.deepEqual(failedResources,[],'No failed game or other resource requests');
     assert.deepEqual(report.browserErrors,[],'No browser errors');
     assert.deepEqual(report.cspViolations,[],'No CSP violations');
-    return {httpErrors:0,failedRequests:0,browserErrors:0,cspViolations:0};
+    return {httpErrors:0,failedResources:0,canceledTelemetry:report.canceledTelemetry.length,browserErrors:0,cspViolations:0};
   });
   report.ok=true;
 }catch(error){report.errors.push({error:String(error),stack:error.stack});}

@@ -14,7 +14,12 @@ float quarryNoise(vec2 p) {
 function surfaceShader(material: T.MeshStandardMaterial, fragment: string, name: string) {
     material.onBeforeCompile = (shader) => {
         shader.vertexShader = 'varying vec3 vQuarryPosition;\n' + shader.vertexShader;
-        shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvQuarryPosition=(modelMatrix*vec4(transformed,1.0)).xyz;');
+        shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+vec4 quarryWorldPosition=vec4(transformed,1.0);
+#ifdef USE_INSTANCING
+quarryWorldPosition=instanceMatrix*quarryWorldPosition;
+#endif
+vQuarryPosition=(modelMatrix*quarryWorldPosition).xyz;`);
         shader.fragmentShader = 'varying vec3 vQuarryPosition;\n' + noise + shader.fragmentShader;
         shader.fragmentShader = shader.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n' + fragment);
     };
@@ -54,37 +59,86 @@ export function quarryGround() {
     return mat;
 }
 export function quarryAggregate() {
-    const material = surfaceShader(pbr('gravel', 1, { color: 0xbbb8b0, normalScale: new T.Vector2(.55, .55) }), `
+    const material = surfaceShader(pbr('gravel', 1, { color: 0xb2b0a7, normalScale: new T.Vector2(.62, .62) }), `
     vec2 p=vQuarryPosition.xz;
-    float wear=quarryNoise(p*.051)*.7+quarryNoise(p*.17)*.3;
+    vec2 quarryMudUV=p/1.6;
+    float wear=quarryNoise(p*.055)*.72+quarryNoise(p*.24)*.28;
+    float fines=quarryNoise(p*.43+vec2(4.2,1.7));
+    float arenaWeight=1.0-smoothstep(40.0,45.0,length(p));
+    float sweep=abs(length((p-vec2(-5.0,3.0))*vec2(1.0,1.12))-25.0);
+    float crossing=abs(p.y*.84-p.x*.54+8.0+sin(p.x*.065)*2.0);
+    float tracks=max(1.0-smoothstep(1.0,3.2,sweep),1.0-smoothstep(1.2,3.8,crossing));
+    float quarryCompaction=tracks*arenaWeight*mix(.6,1.0,fines);
+    float islands=smoothstep(.39,.74,wear+fines*.13);
+    float quarrySoil=clamp(max(islands*.9,quarryCompaction*.94),0.0,.97);
     float mono=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
-    diffuseColor.rgb=mix(diffuseColor.rgb,vec3(mono),.36)*mix(.68,1.02,wear);
-  `, 'quarry-aggregate-v1');
+    diffuseColor.rgb=mix(diffuseColor.rgb,vec3(mono),.48)*mix(.67,1.0,wear);
+    vec3 dirt=texture2D(quarryDirt,quarryMudUV).rgb;
+    float earth=dot(dirt,vec3(.2126,.7152,.0722));
+    vec3 packedSoil=mix(dirt,vec3(earth*.93,earth*.83,earth*.66),.86)*.58;
+    diffuseColor.rgb=mix(diffuseColor.rgb,packedSoil,quarrySoil);
+    diffuseColor.rgb*=mix(1.0,.88,quarryCompaction);
+  `, 'quarry-aggregate-v2');
     const dirt = texture('mud_diff', 1, true);
+    const dirtNormal = texture('mud_nor_gl', 1);
+    const dirtRoughness = texture('mud_rough', 1);
     const base = material.onBeforeCompile;
     material.onBeforeCompile = (shader, renderer) => {
         base(shader, renderer);
         shader.uniforms.quarryDirt = { value: dirt };
-        shader.fragmentShader = 'uniform sampler2D quarryDirt;\n' + shader.fragmentShader;
-        shader.fragmentShader = shader.fragmentShader.replace('diffuseColor.rgb=mix(diffuseColor.rgb,vec3(mono),.36)*mix(.68,1.02,wear);', `
-      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(mono),.36)*mix(.66,1.05,wear);
-      float soil=smoothstep(.45,.69,quarryNoise(p*.062+vec2(12.7,4.3))+quarryNoise(p*.21)*.11);
-      vec3 dirt=texture2D(quarryDirt,p/4.7).rgb;
-      float earth=dot(dirt,vec3(.2126,.7152,.0722));
-      diffuseColor.rgb=mix(diffuseColor.rgb,mix(dirt,vec3(earth*.92,earth*.85,earth*.7),.7)*.58,soil*.8);
-    `);
-        shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=max(.86,roughnessFactor);');
+        shader.uniforms.quarryDirtNormal = { value: dirtNormal };
+        shader.uniforms.quarryDirtRoughness = { value: dirtRoughness };
+        shader.fragmentShader = 'uniform sampler2D quarryDirt;\nuniform sampler2D quarryDirtNormal;\nuniform sampler2D quarryDirtRoughness;\n' + shader.fragmentShader;
+        shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+float mudRoughness=texture2D(quarryDirtRoughness,quarryMudUV).g;
+float looseRoughness=mix(.83,.98,roughnessFactor);
+float packedRoughness=mix(.72,.93,mudRoughness)-quarryCompaction*.035;
+roughnessFactor=mix(looseRoughness,packedRoughness,quarrySoil);`);
+        // These layers have different UV scales. Transform each tangent-space
+        // normal through its own derivative frame before blending in view space.
+        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `
+#ifdef USE_NORMALMAP_TANGENTSPACE
+vec3 gravelN=texture2D(normalMap,vNormalMapUv).xyz*2.0-1.0;
+gravelN.xy*=normalScale*mix(1.0,.55,quarryCompaction);
+vec3 dirtN=texture2D(quarryDirtNormal,quarryMudUV).xyz*2.0-1.0;
+dirtN.xy*=mix(.46,.22,quarryCompaction);
+mat3 dirtFrame=getTangentFrame(-vViewPosition,nonPerturbedNormal,quarryMudUV);
+#if defined(DOUBLE_SIDED) && !defined(FLAT_SHADED)
+dirtFrame[0]*=faceDirection; dirtFrame[1]*=faceDirection;
+#endif
+normal=normalize(mix(normalize(tbn*gravelN),normalize(dirtFrame*dirtN),quarrySoil));
+#else
+#include <normal_fragment_maps>
+#endif`);
     };
     return material;
 }
 export function quarryRock() {
-    return surfaceShader(pbr('rock', 1, { color: 0xb5b1a2, normalScale: new T.Vector2(1.25, 1.25), vertexColors: true }), `
+    const material = surfaceShader(pbr('rock', 1, { color: 0xa7a69c, normalScale: new T.Vector2(.78, .78), vertexColors: true }), `
     vec3 q=vQuarryPosition;
     float streak=quarryNoise(q.xz*.28+vec2(q.y*.019));
     float bedding=sin(q.y*2.3+quarryNoise(q.xz*.075)*3.0)*.5+.5;
     float runoff=smoothstep(.48,.77,streak)*(1.0-smoothstep(3.0,30.0,q.y));
-    diffuseColor.rgb*=mix(.79,1.06,bedding)*mix(1.0,.65,runoff);
-  `, 'quarry-rock-v3');
+    float up=abs(normalize(cross(dFdx(q),dFdy(q))).y);
+    float quarryDust=smoothstep(.63,.96,up)*smoothstep(.2,.74,quarryNoise(q.xz*.11+q.y*.03))*.78;
+    vec3 grit=texture2D(quarryRockDust,q.xz/2.0).rgb;
+    float grayGrit=dot(grit,vec3(.2126,.7152,.0722));
+    vec3 dryFines=mix(grit,vec3(grayGrit),.64)*vec3(.37,.36,.33);
+    diffuseColor.rgb*=mix(.83,1.03,bedding)*mix(1.0,.7,runoff);
+    diffuseColor.rgb=mix(diffuseColor.rgb,dryFines,quarryDust*.72);
+  `, 'quarry-rock-v4');
+    const gravel = texture('gravel_diff', 1, true);
+    const base = material.onBeforeCompile;
+    material.onBeforeCompile = (shader, renderer) => {
+        base(shader, renderer);
+        shader.uniforms.quarryRockDust = { value: gravel };
+        shader.fragmentShader = 'uniform sampler2D quarryRockDust;\n' + shader.fragmentShader;
+        shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+roughnessFactor=mix(max(.84,roughnessFactor),.98,quarryDust);`);
+        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>',
+            T.ShaderChunk.normal_fragment_maps.replace('mapN.xy *= normalScale;', 'mapN.xy *= normalScale * mix(1.0,.4,quarryDust);'));
+    };
+    return material;
 }
 export function weatheredMetal(color: number) {
     return surfaceShader(new T.MeshStandardMaterial({ color, metalness: .57, roughness: .74 }), `

@@ -93,7 +93,13 @@ test('actual rendered Quarry and authoritative server use identical static geome
     if(spec.shape==='mesh'){assert.deepEqual(a.vertices(),b.vertices(),spec.id);assert.deepEqual(a.indices(),b.indices(),spec.id);}
   });
   const terrain=terrainGeometry();assert.ok(scene.children.some(o=>o instanceof T.Mesh && o.geometry.attributes.position.count===terrain.positions.length/3 && (o.geometry.attributes.position.array as Float32Array).every((n,i)=>n===terrain.positions[i])));
-  assert.ok(cliffGeometry().positions.length>50_000);assert.equal(nearTrees('fir-0').length,16);
+  const cliff=cliffGeometry();assert.ok(cliff.positions.length>50_000);
+  let renderedCliff:T.Mesh|undefined;
+  scene.traverse(o=>{if(o instanceof T.Mesh && !(o instanceof T.InstancedMesh) && o.geometry.attributes.position.count===cliff.positions.length/3 && (o.geometry.attributes.position.array as Float32Array).every((n,i)=>n===cliff.positions[i]))renderedCliff=o;});
+  assert.ok(renderedCliff,'Visible cliff must retain the exact shared collision vertices');
+  assert.deepEqual(renderedCliff.geometry.index!.array,cliff.indices,'Visible cliff triangles must match the shared collider');
+  assert.deepEqual(quarry.collisionPhysics.statics.get('quarry-cliffs')!.vertices(),cliff.positions);
+  assert.equal(nearTrees('fir-0').length,16);
   assert.equal(server.props.length,22);quarry.props.forEach((p,i)=>assert.deepEqual(p.body.translation(),server.props[i].body.translation()));
   const impulse={x:80,y:20,z:12};quarry.props[0].body.applyImpulse(impulse,true);server.props[0].body.applyImpulse(impulse,true);
   for(let i=0;i<60;i++){browserWorld.step();server.world.step();}

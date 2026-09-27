@@ -89,7 +89,7 @@ let keys = new Set<string>();
 let testInput: Input | null = null;
 const renderer = new T.WebGLRenderer({
   canvas,
-  antialias: true,
+  antialias: false, // Composer renders offscreen; SMAA supplies final edge antialiasing.
   powerPreference: 'high-performance',
 });
 renderer.setSize(innerWidth, innerHeight);

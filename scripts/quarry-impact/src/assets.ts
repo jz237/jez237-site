@@ -128,12 +128,19 @@ export function cloneCar(kind: CarKind, color: number) {
   return root;
 }
 export const textures = new Map<string, THREE.Texture>();
+const surfaceTextures = new Map<string, THREE.Texture>();
 export function texture(name: string, repeat = 1, color = false) {
+  // Terrain, shoulders and cliff shaders often use the same maps. Share only
+  // identical sampling/color settings; different UV repeats need separate objects.
+  const key = `${name}:${repeat}:${color ? 'srgb' : 'linear'}`;
+  const existing = surfaceTextures.get(key);
+  if (existing) return existing;
   const t = new THREE.TextureLoader().load(url('assets/' + name + '.jpg'));
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(repeat, repeat);
   t.anisotropy = 8;
   if (color) t.colorSpace = THREE.SRGBColorSpace;
+  surfaceTextures.set(key, t);
   textures.set(name, t);
   return t;
 }

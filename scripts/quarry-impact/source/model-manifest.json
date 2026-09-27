@@ -1,8 +1,8 @@
 [
   {
     "file": "public/models/coupe.glb",
-    "bytes": 9685700,
-    "sha256": "b2b4228534fe4c5a0c07ede2853e94b67c61032403f1936fe6baab32a0af27ea",
+    "bytes": 9696968,
+    "sha256": "b864da9afe5d0a8a6c75467598bb085273d4d68c0f9e21d3d24ec749a67f4a2f",
     "source": "Car Concept / Blender adaptation and refinement",
     "license": "CC-BY-4.0",
     "prepared_by": [
@@ -49,8 +49,8 @@
   },
   {
     "file": "public/models/hatch.glb",
-    "bytes": 9675140,
-    "sha256": "e6ad17a6b1a94b9af340ff24da45bb399418f5e8d16d734182e78985d61e4147",
+    "bytes": 9686488,
+    "sha256": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
     "source": "Car Concept / Blender adaptation and refinement",
     "license": "CC-BY-4.0",
     "prepared_by": [
@@ -103,8 +103,8 @@
   },
   {
     "file": "public/models/sedan.glb",
-    "bytes": 9655124,
-    "sha256": "2e5a4ea99a25a46a6955bacbd31ef870de81d158073ae7665b7c136827cb4033",
+    "bytes": 9666464,
+    "sha256": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
     "source": "Car Concept / Blender adaptation and refinement",
     "license": "CC-BY-4.0",
     "prepared_by": [

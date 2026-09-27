@@ -1,6 +1,20 @@
 # Validation — September 27, 2026
 
-## Visual and multiplayer revision — current checks
+## Scenery and wreck refinement — current build
+
+- Production build/typecheck passes: `index-BE2lWZPa.js`. All twenty-one frontend tests pass, including new checks for localized folds, welded vertices, bounded repeated damage, exact repair and bitwise multiplayer replay. All fifteen backend tests and server typechecking pass with the final terrain source.
+- Blender crash assemblies replace the oversized engine block with a recessed radiator, hollow rails, brackets and routed hoses. Binary GLB comparison preserves all 105 non-structure nodes per car, including exterior positions, normals, UVs, transforms and embedded textures. Each car has 936 fewer triangles. Three-car intact/damaged inspections pass with no browser errors.
+- The photographic ground now blends normal and roughness maps as well as color; rock relief and dry roughness are more restrained. The workshop has CC0 corrugated-metal maps at their recorded 2.7-metre scale, plus silo hoppers, seams, ladders and supports. All 25 texture/environment provenance hashes and all three final car hashes were verified.
+- Distant forest uses four credited species and the same 370 cards arranged behind the quarry rim. Close scanned trees remain shared, instanced geometry. Texture sharing reduces duplicate GPU uploads; dead particles are clipped before rasterization and redundant default-framebuffer MSAA is disabled while compositor SMAA remains.
+- Quarry cuts vary the extraction steps and collapsed sectors at the same 21,600 cliff triangles. Geometry checks preserve the exact original toe, 4,320 road-corridor samples and arena heights; all joins are continuous, faces remain ordered and backing terrain stays below the rock. Browser and server use the same final visible/collision vertices and indices. Final layout SHA-256: `088a5b3ad478b5389c35a5d424d463a3e31319968053c74ce2d7895ad84a3eac`.
+- Final offline browser suite passes driving, braking, localized damage, complete repair, inspection, all 72 race checkpoints over three laps, derby outcomes and six restarts. All 35 audio files load; there are no browser or HTTP errors. Actual keyboard events confirm ArrowLeft=+1, ArrowRight=-1, A=-1 and D=+1.
+- Reviewed 1440p car/scenery comparisons are under `outputs/crash-assembly/`, `outputs/buckle-deformation/` and `outputs/visual/`. Broad exposed surfaces, some rock intersections, sparse near foliage and flat distant cards still limit realism. This remains below Wreckfest 2 visual fidelity.
+- The final build completed a fresh 610-second Ultra run on the RTX 5090 at 2560 × 1440, across six derby events: **36,652 frames, 16.683 ms mean / 59.94 FPS average; median 16.7 ms, p95 16.8 ms, p99 16.8 ms**. Six frames (0.016%) exceeded 33.34 ms. These are whole-frame intervals, not isolated GPU timings.
+- Texture count stayed at **109**; geometry count ranged **652–669**. Sampled JavaScript heap cycled between **167.4 and 229.8 MB**, starting at 194.4 MB and ending at 222.9 MB, with later event samples returning near 172 MB. No sustained resource growth or browser errors were observed; heap does not measure total browser/GPU memory. Other hardware has not been measured.
+- Report: `outputs/benchmark-BE2lWZPa-ultra-1440p.json`, which records the actual loaded build URL, GPU and WebGL context settings; the matching PNG is retained. No concurrent agent browser tests ran. The previous release's 54.0 FPS run below is historical, rather than an isolated A/B measurement of any one optimization.
+- Publication results are pending the final release checks.
+
+## Earlier published visual and multiplayer revision
 
 - TypeScript production build and sixteen frontend unit tests pass. Latest visual build is `index-BbVpi3Xv.js`.
 - Actual keyboard events prove reversed arrow steering (Left=+1, Right=-1), with A/D unchanged.
@@ -58,6 +72,6 @@ The 60 FPS target is approached but not held through every pileup/rematch. High 
 
 ## Practical limits
 
-Damage uses rigid-body physics with localized mesh deformation and simplified collision-shape changes. The three car bodies are dimensioned variants of a shared licensed concept design. Distant foliage uses photographic cards; close foliage adds geometry. These choices make a detailed browser game feasible; they do not reproduce a native AAA structural crash engine.
+Damage uses rigid-body physics with localized mesh deformation and simplified collision-shape changes. The three car bodies are dimensioned variants of a shared licensed concept design. Distant foliage uses generated tree cards with documented provenance; close foliage uses scanned geometry. These choices make a detailed browser game feasible; they do not reproduce a native AAA structural crash engine.
 
 Keyboard and automated controller-independent driving were exercised. Standard gamepad mappings are implemented, but no physical gamepad was connected for this validation. Rapier emits an upstream initialization deprecation warning; it did not prevent execution.
