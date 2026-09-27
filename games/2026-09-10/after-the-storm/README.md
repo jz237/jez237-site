@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.17.0 · TIDELINE** — September 26, 2026. More realistic waves: long-crested Big Surf swell with sharp crests and steeper leading faces, a wind sea with short steep crests and trailing whitecaps in the Wind chop and Storm swell sea states, and filtered distant water. Venue conditions keep their calibrated surface, and hull queries stay on the rendered surface. Skis moving backwards are no longer driven further astern. See [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md) for findings, validation and limits. Previous release: [WATER-POLISH-2.16.md](WATER-POLISH-2.16.md).
+**v2.18.0 · TIDELINE** — September 27, 2026. Waves break on the beaches: crests of the shared swell steepen at each break line, throw a lip, plunge and run up the sand as whitewater, timed from the visible swell and sized by exposure and sea state. Visual only; racing is unchanged. See [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md). Previous release: [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 
