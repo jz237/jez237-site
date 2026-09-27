@@ -1,0 +1,98 @@
+import * as T from 'three';import {sandHeight} from '../ReefOptics.ts';import assert from 'node:assert/strict';import ts from 'typescript';import fs from 'node:fs';
+let source=fs.readFileSync(new URL('../ReefFish.ts',import.meta.url),'utf8');
+source=source.replace("'./MarineBehavior.ts'",JSON.stringify(new URL('../MarineBehavior.ts',import.meta.url).href)).replace("'./ReefIdentification.ts'",JSON.stringify(new URL('../ReefIdentification.ts',import.meta.url).href)).replace("import metadata from './assets/fish/model-info.json';",'const metadata='+fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url),'utf8')+';').replace("'./MarineFinFlex.ts'",JSON.stringify(new URL('../MarineFinFlex.ts',import.meta.url).href)).replace("'./ReefOptics.ts'",JSON.stringify(new URL("../ReefOptics.ts",import.meta.url).href)).replace("'three'",JSON.stringify(import.meta.resolve('three')));
+const {ReefFish}=await import('data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText).toString('base64'));
+
+const models=new Map();for(const s of ['tang','semilarvatus','clown','anthias','chromis','gramma','goby']){const g=new T.Group(),mouth=new T.Group(),eyes=new T.Group();mouth.name='mouth';mouth.position.x=.43;eyes.name='eyes';g.add(mouth,eyes);models.set(s,g);}
+for(const species of ['clown','goby'])for(const direction of [-1,1]){
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),f=world.fish.find(f=>f.species===species);f.yaw=0;f.yawVelocity=0;
+ let peak=0,previousYaw=0,previousBend=0;
+ for(let i=0;i<180;i++){const error=Math.atan2(Math.sin(direction*2.3-f.yaw),Math.cos(direction*2.3-f.yaw));world.flexTurn(f,error,1/60,species==='clown'?2.65:1.65,species==='clown'?1.4:1.6);peak=Math.max(peak,Math.abs(f.turnBend.value));assert.ok(Math.abs(f.yaw-previousYaw)<.045);assert.ok(Math.abs(f.turnBend.value-previousBend)<.24);if(i<30)assert.ok(direction*f.turnBend.value<0,'tail tangent trails the turning head');previousYaw=f.yaw;previousBend=f.turnBend.value;}
+ assert.ok(peak>1,'both species have a visible trunk curve, not a rigid yaw');assert.ok(Math.abs(f.yaw-direction*2.3)<.04);assert.ok(Math.abs(f.turnBend.value)<.09,'curve relaxes after the turn');
+}
+console.log('Clown/mandarin turns: bidirectional curvature, smooth heading and relaxed straightening passed.');
+const obstacles=[];for(const x of [-1.5,1.5])for(const y of [1,2,3])obstacles.push({center:new T.Vector3(x,y,0),radius:.65});
+for(const x of [-.75,0,.75])obstacles.push({center:new T.Vector3(x,1,-1.05),radius:.52});
+for(const species of ['tang','semilarvatus'])for(const seedValue of [913,411,729]){
+const originalRandom=Math.random;let seed=seedValue;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+try{
+const world=new ReefFish(new T.Scene(),obstacles,[new T.Vector3(3,1,1),new T.Vector3(-3,1,1)],models);
+const f=world.fish.find(f=>f.species===species);world.fish.splice(0,world.fish.length,f);f.position.set(0,1,.4);f.group.position.copy(f.position);f.progressPosition.copy(f.position);f.goal.set(0,1,-1.7);f.until=20;f.yaw=Math.PI/2;
+const samples=[];for(let i=0;i<7200;i++){world.update(1/60,false);if(i%60===0){const s=world.snapshot();assert.equal(s.obstacleOverlaps,0);assert.equal(s.fishOverlaps,0);samples.push(s.positions[0]);}}
+let minRange=Infinity;for(let i=10;i<samples.length;i++){const w=samples.slice(i-10,i+1),range=Math.hypot(...['x','y','z'].map(k=>Math.max(...w.map(p=>p[k]))-Math.min(...w.map(p=>p[k]))));minRange=Math.min(minRange,range);}
+console.log({minRange,start:samples[0],end:samples.at(-1)});assert.ok(minRange>.25,species+' escapes a blocked goal and does not stay quivering');
+
+}finally{Math.random=originalRandom;}
+}
+
+// A valid food segment does not guarantee an uncrowded lane. Recovery must
+// temporarily take priority over food, then restore normal feeding eligibility.
+{
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models);world.fish.splice(1);const f=world.fish[0];
+ f.position.set(0,2,0);f.group.position.copy(f.position);f.progressPosition.copy(f.position);f.goal.set(-1,2,0);f.yaw=Math.PI;f.until=2;f.recoverUntil=2;
+ world.foods.push({position:new T.Vector3(1,2,0),alive:true,age:0});
+ for(let i=0;i<30;i++){world.update(1/60,false);assert.equal(f.goal.x,-1,'food cannot overwrite the committed escape waypoint');assert.equal(f.mode,'exploring');}
+ assert.ok(f.position.x<-.04,'fish makes actual escape progress while food is present');
+ f.recoverUntil=0;world.update(1/60,false);assert.equal(f.mode,'feeding','food becomes eligible after recovery');
+ // The displacement watchdog must also work while a pellet remains selected.
+ f.position.set(0,2,0);f.progressPosition.copy(f.position);f.progressAt=-10;f.recoverUntil=0;world.update(1/60,false);
+ assert.ok(f.recoverUntil>world.clock,'feeding does not disable the progress watchdog');assert.equal(f.mode,'exploring');
+console.log('Feeding recovery: committed escape, actual progress, food reacquisition and feeding watchdog passed.');
+}
+
+// Host-centered swimming must include returns, excursions, pauses and speed
+// changes rather than a pair tracing the same orbit forever.
+{
+ const originalRandom=Math.random;let seed=98237;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ try{
+  const host=new T.Vector3(3,1,.6),world=new ReefFish(new T.Scene(),[],[host],models);
+  world.fish.splice(0,world.fish.length,...world.fish.filter(f=>f.species==='clown'));
+  const stats=world.fish.map(()=>({modes:new Set(),min:Infinity,max:0,near:0,far:0}));
+  for(let i=0;i<6000;i++){
+   world.update(1/60,false);const snap=world.snapshot();assert.equal(snap.fishOverlaps,0);
+   world.fish.forEach((f,j)=>{const s=stats[j];s.modes.add(f.mode);s.min=Math.min(s.min,f.velocity.length());s.max=Math.max(s.max,f.velocity.length());const radius=Math.hypot(f.position.x-host.x,f.position.z-host.z);if(radius<.55)s.near++;if(radius>.82)s.far++;});
+  }
+  for(const [j,s] of stats.entries()){
+   assert.ok(s.near>50&&s.far>50,'leave canopy and return among tentacles');
+   assert.ok(s.max>.65&&s.min<.12,'visible darts and deceleration');
+   assert.ok(s.modes.has('sheltering')&&s.modes.has('darting from anemone')&&s.modes.has('returning to anemone'));
+   assert.ok(world.fish[j].hostVisits>3,'repeated completed host visits');
+  }
+  assert.notDeepEqual(world.fish[0].position,world.fish[1].position,'independent pair with spacing');
+  console.log('Clownfish host visits:',stats.map((s,i)=>({...s,modes:[...s.modes],visits:world.fish[i].hostVisits})));
+ }finally{Math.random=originalRandom;}
+}
+
+// Ground-level resting must remain reachable; accelerating long after startup
+// must not snap the pectoral animation to a different phase.
+{
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models);
+ const g=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,g);
+ const a=new T.Vector3(0,sandHeight(0,1)+g.clearance+.006,1);
+ assert.ok(world.clearSegment(a,a,g.radius,g.clearance),'settled ground pose passes both endpoint and route clearance');
+ const fin=new T.Group();fin.userData.restZ=.12;fin.position.x=.13;g.pectoral.push(fin);
+ world.clock=200;g.position.set(0,sandHeight(0,1)+.25,1);g.goal.set(.6,g.position.y,1);g.yaw=0;g.mode='bottom hover';g.until=210;g.gobyCycle=200;
+ let previous;for(let i=0;i<120;i++){world.update(1/60,false);if(previous!==undefined)assert.ok(Math.abs(fin.rotation.x-previous)<.08,'fin motion stays continuous through acceleration after long elapsed time');previous=fin.rotation.x;}
+ console.log('Mandarin ground settling and continuous fin phase passed.');
+}
+
+// A bottom specialist must alternate hops/rests, remain terrain-bound and take
+// reachable sinking food without following surface flakes into open water.
+{
+ const originalRandom=Math.random;let seed=1109;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ try {
+  const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models),goby=world.fish.find(f=>f.species==='goby');world.fish.splice(0,world.fish.length,goby);
+  const samples=[],modes=new Set();
+  for(let i=0;i<7200;i++){world.update(1/60,false);if(i%30===0){const s=world.snapshot(),g=s.positions[0];assert.equal(s.obstacleOverlaps,0);assert.equal(s.sandGrains,0,'mandarins do not sift sand');const size=goby.group.scale.x;let support=sandHeight(g.x,g.z);for(const along of [-.78,-.4,0,.25,.5])for(const side of [-.23,.23])support=Math.max(support,sandHeight(g.x+(Math.cos(goby.yaw)*along+Math.sin(goby.yaw)*side)*size,g.z+(-Math.sin(goby.yaw)*along+Math.cos(goby.yaw)*side)*size));assert.ok(g.y-support<.34&&g.heightAboveSand>goby.clearance+.003,'body remains close to the supporting dune, including wide fins');samples.push(g);modes.add(g.mode);}}
+  assert.ok(modes.has('pecking')&&modes.has('resting')&&modes.has('bottom hover'));assert.ok(goby.pecks>3);
+  assert.ok(samples.filter(g=>g.mode==='resting'&&g.speed<.02).length>samples.length*.15,'mandarin makes real stationary rests, not continuous slow swimming');
+  const resting=samples.filter(g=>g.mode==='resting'&&g.speed<.02),cruising=samples.filter(g=>g.mode==='bottom hover'&&g.speed>.08);
+  const meanHeight=rows=>rows.reduce((sum,g)=>sum+g.heightAboveSand,0)/rows.length;
+  assert.ok(meanHeight(resting)+.04<meanHeight(cruising),'mandarin visibly settles lower during stationary rests');
+  const range=Math.hypot(...['x','z'].map(k=>Math.max(...samples.map(p=>p[k]))-Math.min(...samples.map(p=>p[k]))));assert.ok(range>1);
+  const mouth=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url))).goby.mouth;goby.position.set(0,1,1.4);goby.group.position.copy(goby.position);goby.goal.copy(goby.position);goby.yaw=0;goby.pitch=0;
+  world.foods.push({position:new T.Vector3(mouth[0]*goby.group.scale.x,.8,1.4),alive:true,age:0,sinkRate:.025});
+  for(let i=0;i<1500;i++)world.update(1/60,false);
+  assert.ok(world.snapshot().bites>0,'goby actually consumes reachable low food');console.log('Goby behavior:',{pecks:goby.pecks,range,modes:[...modes],bites:world.snapshot().bites});
+ } finally {Math.random=originalRandom;}
+}
