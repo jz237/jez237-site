@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.16.0 · TIDELINE** — September 19, 2026. Clearer wave faces and spilling crests, motion-driven carving spray and rider weight transfer, distinct landing audio, and a progressive speed lens. Physics and graphics budgets are preserved. See [WATER-POLISH-2.16.md](WATER-POLISH-2.16.md) for validation and performance limits. Previous optimization: [LATENCY-FPS-2.15.md](LATENCY-FPS-2.15.md).
+**v2.17.0 · TIDELINE** — September 26, 2026. More realistic waves: long-crested Big Surf swell with sharp crests and steeper leading faces, a wind sea with short steep crests and trailing whitecaps in the Wind chop and Storm swell sea states, and filtered distant water. Venue conditions keep their calibrated surface, and hull queries stay on the rendered surface. Skis moving backwards are no longer driven further astern. See [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md) for findings, validation and limits. Previous release: [WATER-POLISH-2.16.md](WATER-POLISH-2.16.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 

@@ -60,7 +60,9 @@ void main(){
  vec3 scatter=mix(waterScatter,waterScatter*.48,storm)*(1.-night*.75);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
  vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*.032,vec2(.002),vec2(.998));
- float roughness=.036+storm*.025+localGust.z*.025;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
+ float roughness=.036+storm*.025+localGust.z*.025;// Wind sea the far mesh no longer resolves still roughens distant reflections.
+ float unresolved=(.015+storm*.045)*smoothstep(20.,220.,dist);
+ float blur=clamp((roughness+unresolved)*16.+dist*.003,0.,4.);
  vec3 reflected=texture2D(reflection,reflectUV,blur).rgb;
  vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=panoramaRadiance(reflectedRay,sun,skyHorizon,skyZenith,night,storm);
  reflected=mix(reflected,skyFallback,.30*panoramaReady);
@@ -91,7 +93,7 @@ void main(){
  col+=vec3(.045,.29,.22)*backlight*crest*(1.-nv)*(.35+.65*max(0.,dot(faceNormal,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
  // Finite sun highlight with slope variance to soften distant glints and prevent aliasing.
  vec3 H=normalize(V+sun);float nh=max(0.,dot(N,H)),nl=max(0.,dot(N,sun));float variance=dot(dFdx(N),dFdx(N))+dot(dFdy(N),dFdy(N));
- float alpha2=roughness*roughness+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
+ float glint=roughness+unresolved*.5,alpha2=glint*glint+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
  float smithV=2.*nv/(nv+sqrt(alpha2+(1.-alpha2)*nv*nv));float smithL=2.*nl/(nl+sqrt(alpha2+(1.-alpha2)*nl*nl));
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
  col+=mix(vec3(1.,.94,.82),vec3(1.,.70,.32),skyWarmth)*min(22.,spec)*nl*4.8*cloudLight*(1.-storm*.88)*(1.-night*.97);

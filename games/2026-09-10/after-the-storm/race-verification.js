@@ -146,7 +146,7 @@ function authoredParkInput(state,r){
 function authoredStuntInput(state,r){
  if(state.phase==='countdown')return {};
  const targets=state.verifyStuntOuter?state.course.stuntLayout.outerVerificationTargets:state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
- if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;v.diveJump=!!state.course.ramps.find(a=>a.diveJump&&Math.hypot(a.x-r.x,a.z-r.z)<a.length)?.diveJump;}else if(h.landingId>v.rampLanding)v.rampJump=false;
+ if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;v.diveJump=!!state.course.ramps.find(a=>a.diveJump&&Math.hypot(a.x-r.x,a.z-r.z)<a.length)?.diveJump;}else if(h.landingId>v.rampLanding)v.rampJump=v.diveJump=false;
  let q=targets[Math.min(v.index,targets.length-1)],along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
  // Crossing an infinite waypoint plane far to one side does not complete a
  // corner approach. Physical rings still use their own scoring collision.
