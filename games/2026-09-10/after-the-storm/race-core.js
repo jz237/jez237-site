@@ -10,7 +10,7 @@ import {gustAt} from './wind-gusts.js';
 import {setBoundaryWaves} from './boundary-waves.js';
 import {createSprayField,stepSprayField} from './rival-spray.js';
 import {contactHandling} from './handling.js';
-import {surfStrength,surfSeed} from './surf-waves.js';
+import {surfStrength,surfSeed} from './surf-waves.js';import {windSea} from './wave-model.js';
 import {stepRaceFlip,demoFlipInput} from './race-flips.js';
 import {demoTrafficInput} from './demo-traffic.js';
 import {mooredBoatCollision} from './moored-boats.js';
@@ -45,7 +45,7 @@ export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false}={}){
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
- frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=Math.floor(waveSeed)%997;surfStrength.value=seaState==='surf'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
+ frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=Math.floor(waveSeed)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
  if(mode==='stunt'||mode==='practice')course=stuntCourse(course,{freeRide:mode==='practice'});
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:['practice','stunt'].includes(mode)?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
@@ -173,7 +173,7 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||!s.handicap)return 0;
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
 export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
  if(s.phase==='countdown'){for(const r of s.racers)if(r.human){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
- frontEnabled.value=s.seaState==='surf'||s.seaState==='storm'?1:0;setWaterCharacter(s.course);setLocalWater(s.localWater);s.time+=dt;if(s.course.passage?.enabled&&s.racers.some(r=>r.lap>1)&&s.passageOpenedAt===Infinity){s.passageOpenedAt=s.time;if(s.course.passage.kind==='gate')s.racers.forEach(r=>announce(r,s,'SLUICE OPENING · INNER CHANNEL AVAILABLE'));}s.weather=raceWeather(s);surfSeed.value=s.waveSeed;surfStrength.value=s.seaState==='surf'?1:0;setCourseWaveTrain(s.course.waveTrain);setBoundaryWaves(s.course);waterLevel.value=s.weather.seaLevel;
+ frontEnabled.value=s.seaState==='surf'||s.seaState==='storm'?1:0;setWaterCharacter(s.course);setLocalWater(s.localWater);s.time+=dt;if(s.course.passage?.enabled&&s.racers.some(r=>r.lap>1)&&s.passageOpenedAt===Infinity){s.passageOpenedAt=s.time;if(s.course.passage.kind==='gate')s.racers.forEach(r=>announce(r,s,'SLUICE OPENING · INNER CHANNEL AVAILABLE'));}s.weather=raceWeather(s);surfSeed.value=s.waveSeed;surfStrength.value=s.seaState==='surf'?1:0;windSea.value=s.seaState==='chop'||s.seaState==='storm'?1:0;setCourseWaveTrain(s.course.waveTrain);setBoundaryWaves(s.course);waterLevel.value=s.weather.seaLevel;
  craftFields.forEach((c,i)=>{const r=s.racers[i];Object.assign(c,r?{x:r.x,z:r.z,heading:r.heading,turn:r.turn,bowWet:r.hydro.bowWet,sternWet:r.hydro.sternWet,power:Math.min(1,r.speed/18)*r.hydro.wet}:{power:0});});
  for(const r of s.racers){if(r.finishTime!==null||r.dq)continue;let c=r.human?(Array.isArray(input)?input[r.player]||{}:r.player===0?input:{}):aiInput(s,r),stats=r.stats;const ox=r.x,oz=r.z,oldY=r.hydro.y;r.raceTime=s.time;if(r.human&&rocketStart(r,c.throttle||0,s.time))announce(r,s,'ROCKET START · MAX POWER');if(stepWipeout(r,c,dt,s.time))announce(r,s,'BACK ABOARD');if(r.wipeout)c={throttle:0};r.collision=Math.max(0,r.collision-dt);r.recover=Math.max(0,r.recover-dt);
  const ice=iceContact(s.course,r);r.onIce=ice?.id||'';if(ice)supportOnIce(r,ice,0);r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);r.riderLean=clamp(c.lean||0,-1,1);
@@ -188,7 +188,9 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  const topEnd=smoothThrottle((r.throttle-.95)/.05)*smoothThrottle((forward/(rated*.5)-.95)/.10),maximum=rated*.5*(1+topEnd);
  const ratio=clamp(forward/maximum,-1.5,1.5),response=1+r.throttle*(.85+2.4*ratio**2);
  const exitDrive=s.seaState==='surf'?cornerDrive(r,c,dt,ratio):0;
- const acceleration=ice?0:response*(stats.accel*(s.seaState==='surf'?1.27:1.1)*(1+r.handicapBoost)*r.throttle*r.hydro.intake*(1+exitDrive)-ratio**2*stats.accel*(.08+.92*r.hydro.wet))-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
+ // Hull drag always opposes motion. Braking still backs a slow ski away from trouble,
+ // but no longer drives one that landed facing backwards further astern (was 39 m/s after 1 s).
+ const acceleration=ice?0:response*(stats.accel*(s.seaState==='surf'?1.27:1.1)*(1+r.handicapBoost)*r.throttle*r.hydro.intake*(1+exitDrive)-ratio*Math.abs(ratio)*stats.accel*(.08+.92*r.hydro.wet))-(c.brake?clamp(forward+7,-1,1)*velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
  const rx=fz,rz=-fx,lateral=r.vx*rx+r.vz*rz,grip=ice?0:stats.grip*contact.grip*(s.seaState==='surf'?landingGrip(r,dt):1)*(1+r.quickTurn*.42)*(c.slide?.28:1)*(.04+.96*contact.contact);r.vx-=rx*lateral*(1-Math.exp(-grip*dt));r.vz-=rz*lateral*(1-Math.exp(-grip*dt));
  if(!r.throttle){const coast=Math.exp(-(.015+.285*r.hydro.wet)*dt);r.vx*=coast;r.vz*=coast;}if(r.recover){r.vx*=Math.exp(-4*dt);r.vz*=Math.exp(-4*dt);}
  const waterResponse=ice?(supportOnIce(r,ice,dt,(x,z)=>wave(x,z,s.time,s.weather.storm)),{slopeX:0,slopeZ:0,landing:false}):stepHydro(r.hydro,r,s.time,dt,(x,z,t)=>wave(x,z,t,s.weather.storm),{dampen:!!c.dampen,lean:c.lean||0,dive:!!c.dive});

@@ -33,11 +33,16 @@ void main(){
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  vec3 localGust=gustAt(p,time,storm);
- float detailStrength=(.36+storm*.065+localGust.z*.09)*(1.-smoothstep(75.,300.,dist)*.6);
+ // Preserve the small ripples, but keep their normal variance subordinate to
+ // steep metre-scale faces. Pixel footprint fades only unresolved frequencies.
+ float faceSlope=length(surface.yz);
+ float footprint=max(length(dFdx(p)),length(dFdy(p)));
+ float faceCoherence=1.-smoothstep(.16,.70,faceSlope)*.34;
+ float detailStrength=(.36+storm*.065+localGust.z*.09)*(1.-smoothstep(75.,300.,dist)*.6)*faceCoherence;
  // Capillary ripples travel with the longer waves instead of sliding as a single sheet.
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
- vec2 ripple=(r1+r2*.60+r3*.28)*detailStrength;
+ vec2 ripple=(r1+r2*.60+r3*.28*(1.-smoothstep(.08,.45,footprint)))*detailStrength;
  // Rain impacts are independent short-lived expanding rings, rather than a global ripple loop.
  if(storm>.32){vec2 grid=p*1.6;vec2 cell=floor(grid);for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++){
   vec2 c=cell+vec2(float(i),float(j));float cycle=time*1.4+hash(c);float epoch=floor(cycle);vec2 point=c+vec2(hash(c+epoch),hash(c+epoch+23.));vec2 delta=(grid-point)/1.6;float age=fract(cycle);float d=length(delta);float ring=d-age*.43;
@@ -55,7 +60,9 @@ void main(){
  vec3 scatter=mix(waterScatter,waterScatter*.48,storm)*(1.-night*.75);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
  vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*.032,vec2(.002),vec2(.998));
- float roughness=.036+storm*.025+localGust.z*.025;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
+ float roughness=.036+storm*.025+localGust.z*.025;// Wind sea the far mesh no longer resolves still roughens distant reflections.
+ float unresolved=(.015+storm*.045)*smoothstep(20.,220.,dist);
+ float blur=clamp((roughness+unresolved)*16.+dist*.003,0.,4.);
  vec3 reflected=texture2D(reflection,reflectUV,blur).rgb;
  vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=panoramaRadiance(reflectedRay,sun,skyHorizon,skyZenith,night,storm);
  reflected=mix(reflected,skyFallback,.30*panoramaReady);
@@ -70,17 +77,23 @@ void main(){
  // Broad wave-face lighting is intentionally stronger than capillary detail:
  // reveal the existing displaced troughs and crests at racing distance.
  float cloudLight=cloudVisibility(worldP);
- float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));
+ vec3 faceNormal=normalize(vec3(-surface.y,1.,-surface.z));
+ float faceLight=smoothstep(-.24,.38,dot(faceNormal,sun)-sun.y);
  float trough=smoothstep(.12,1.4,seaLevel-worldP.y)*(1.-smoothstep(1.,4.,verticalDepth)*.35);
- col*=(.57+.66*faceLight)*(1.-trough*.25)*mix(.70,1.,cloudLight);
- col+=vec3(.004,.026,.024)*smoothstep(.1,1.2,worldP.y-seaLevel)*faceLight*(1.-night);
+ // Tint transmitted light, leaving the reflected sky's radiance coherent.
+ // Sloped faces deepen toward blue-green; elevated sunward shoulders transmit
+ // a little more turquoise. Flat stretches retain their venue's water colour.
+ float faceShape=smoothstep(.07,.52,faceSlope);
+ float faceShade=mix(1.,.66+.52*faceLight,faceShape)*(1.-trough*.22);
+ col*=mix(faceShade,1.,fresnel*.8)*mix(.78,1.,cloudLight);
+ col+=waterScatter*faceShape*faceLight*.17*(1.-fresnel)*(1.-night)*cloudLight;
  // Forward scattering through thinner, backlit crests gives water depth without
  // a uniform neon rim. It vanishes under thick storm cloud or at night.
- float backlight=pow(max(0.,dot(V,-sun)),3.),crest=smoothstep(.12,1.4,worldP.y-seaLevel)*smoothstep(.05,.5,length(surface.yz));
- col+=vec3(.045,.29,.22)*backlight*crest*(1.-nv)*(.25+.75*max(0.,dot(N,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
+ float backlight=pow(max(0.,dot(V,-sun)),3.),crest=smoothstep(.12,1.4,worldP.y-seaLevel)*smoothstep(.05,.5,faceSlope);
+ col+=vec3(.045,.29,.22)*backlight*crest*(1.-nv)*(.35+.65*max(0.,dot(faceNormal,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
  // Finite sun highlight with slope variance to soften distant glints and prevent aliasing.
  vec3 H=normalize(V+sun);float nh=max(0.,dot(N,H)),nl=max(0.,dot(N,sun));float variance=dot(dFdx(N),dFdx(N))+dot(dFdy(N),dFdy(N));
- float alpha2=roughness*roughness+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
+ float glint=roughness+unresolved*.5,alpha2=glint*glint+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
  float smithV=2.*nv/(nv+sqrt(alpha2+(1.-alpha2)*nv*nv));float smithL=2.*nl/(nl+sqrt(alpha2+(1.-alpha2)*nl*nl));
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
  col+=mix(vec3(1.,.94,.82),vec3(1.,.70,.32),skyWarmth)*min(22.,spec)*nl*4.8*cloudLight*(1.-storm*.88)*(1.-night*.97);
@@ -109,7 +122,8 @@ void main(){
  float capPatch=noise(p*.15+surface.yz*.8-vec2(time*.10,time*.06));
  float cap=breakingCrest*smoothstep(.40,.67,capPatch);
  float capLace=mix(smoothstep(.24,.65,turbulence),.72,smoothstep(55.,180.,dist));
- foam+=cap*capLace*structure*.78;
+ // The compact spilling lip remains legible beyond the near-field lace.
+ foam+=cap*capLace*mix(structure,.82,smoothstep(40.,150.,dist))*1.05;
  // Aerated streaks spill from the crest down the lee face; large-scale height
  // still comes entirely from the shared displacement and buoyancy model.
  vec2 downFace=normalize(surface.yz+vec2(.001));
