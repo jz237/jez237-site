@@ -576,7 +576,7 @@
 
       <article id="pretraining" class="outline-card wide">
         <h2>2. Pretraining</h2>
-        <p class="lead">Pretraining is one deceptively simple game played at staggering scale: <strong>guess the next token</strong>. The model reads a chunk of text with the ending hidden, predicts what comes next, and gets measured on how wrong it was — a number called the <em>loss</em>. An algorithm called backpropagation works out how to adjust each of the model's billions of weights to be slightly less wrong next time. Repeat trillions of times on thousands of specialized chips for months, and the model is forced to absorb grammar, facts, reasoning patterns, and style — because all of those help it guess better.</p>
+        <p class="lead">Pretraining is one deceptively simple game played at staggering scale: <strong>guess the next token</strong>. The model reads a chunk of text with the ending hidden, predicts what comes next, and gets measured on how wrong it was — a number called the <em>loss</em>. An algorithm called backpropagation works out which direction to nudge each of the model's billions of weights, and an optimizer makes the nudge so it is slightly less wrong next time. Do that for trillions of predictions, processed in batches of millions of tokens at a time on thousands of specialized chips for months, and the model is forced to absorb grammar, facts, reasoning patterns, and style — because all of those help it guess better.</p>
         <div class="demo-box">
           <h3>Train a tiny model yourself</h3>
           <p class="demo-sub">Real demo — a real (toy) statistical model learning from real example sentences</p>
@@ -650,7 +650,7 @@
           </div>
         </div>
         <ul>
-          <li><strong>The chain:</strong> human rankings → reward model → reinforcement learning. No single person writes the assistant's personality; it emerges from millions of comparisons.</li>
+          <li><strong>The chain:</strong> human rankings → reward model → reinforcement learning. Labs deliberately shape the assistant's character with written guidelines and hand-crafted examples, but the fine-grained behavior is tuned by a huge number of these comparisons.</li>
           <li><strong>Variants:</strong> RLAIF replaces some human raters with AI raters; Constitutional AI has the model critique itself against written principles; DPO trains directly on preference pairs and skips the separate reward model.</li>
           <li><strong>The balance problem:</strong> if raters reward caution too much, the model becomes uselessly over-cautious; reward confidence too much and it becomes a smooth-talking guesser. Alignment is steering between those ditches, and it is never finished.</li>
         </ul>
