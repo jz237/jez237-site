@@ -16,6 +16,8 @@ import './fish-geometry.mjs';
 import './fish-materials.mjs';
 import './stable-fish-passes.mjs';
 import './fish-navigation.mjs';
+import './species-motion.mjs';
+import './night-refuge.mjs';
 import './fin-motion.mjs';
 import './water-capture.mjs';
 import './caustics.mjs';
