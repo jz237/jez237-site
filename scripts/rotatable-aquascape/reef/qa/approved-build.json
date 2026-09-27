@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-09-27T18:35:19.873789+00:00",
-  "scope": "Replace yellow tang with Blender-authored Chaetodon semilarvatus",
+  "checkedAt": "2026-09-27T19:05:40.292703+00:00",
+  "scope": "Research-informed swimming, habitat, schooling, feeding and night refuge behavior for all seven reef fish species",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/attachments-CN7toLgy.json",
@@ -8,7 +8,7 @@
     "assets/clown-CVwpScsO.glb",
     "assets/goby-Bok4otvk.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CPkS0Tlh.js",
+    "assets/index-BUjWe4kg.js",
     "assets/index-DouRi2np.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -26,55 +26,50 @@
     "assets/tang-DZS7dloZ.glb",
     "index.html"
   ],
-  "buildHash": "68a54f222d96d85061d79c46a50cded1a52f3c214a276b8eb5762049fe0d7e61",
+  "buildHash": "26f66f86dcdca3e963abee08cb811c1b82317898abaddebdf9e8e212a3b47cee",
+  "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by exact build bytes",
   "checks": {
     "typescriptBuild": true,
     "reefGeometryAndBehaviorModules": true,
-    "semilarvatusClosedBodyAndPairedFins": true,
-    "semilarvatusNavigationThreeSeeds": true,
-    "storefrontLinks": true,
+    "speciesMotionThreeSeeds": true,
+    "nightRefugeThreeSeeds": true,
+    "actualMouthCaptures18": true,
+    "finDeformationNormals": true,
+    "allThreeReefBuildCopies": true,
+    "freshwaterReleaseAndSyncGuards": true,
     "browserReview": true,
-    "liveHiddenReefBytes": true
+    "liveHiddenReefBytes": false
   },
   "browserReview": {
-    "method": "Codex browser UI",
+    "method": "Codex browser UI; automatic browser launcher not run",
     "views": [
       "front",
-      "oblique",
+      "three-quarter",
       "fish close-up",
       "390x844 phone"
     ],
     "actions": [
-      "Explore selector and species note",
       "feed",
-      "pause/resume"
+      "pause/resume",
+      "blue hour/daylight",
+      "species guide"
     ],
     "mobileScrollWidth": 390,
     "mobileViewportWidth": 390,
+    "consoleErrors": 0,
     "screenshots": [
-      "D:/Projects/thehiddenreef/semilarvatus-live.png",
-      "D:/Projects/thehiddenreef/semilarvatus-reef-angle.png",
-      "D:/Projects/thehiddenreef/semilarvatus-reef-mobile.png"
+      "D:/Projects/thehiddenreef/reef-swimming-mobile.png",
+      "D:/Projects/thehiddenreef/reef-swimming-oblique.png"
     ]
   },
-  "model": {
-    "species": "Chaetodon semilarvatus",
-    "file": "semilarvatus-WtGca7pG.glb",
-    "bytes": 1137504,
-    "triangles": 16712,
-    "authoring": "Blender 5.2.1 LTS",
-    "source": "model-source/semilarvatus.blend"
-  },
   "validationNotes": [
-    "Existing geometry, materials, fin motion, navigation, reef/coral modules passed. Navigation now also checks semilarvatus in three blocked-route seeds.",
-    "Reviewed Blender proof and corrected the forehead contour before export.",
-    "Reviewed actual fish swimming and independent fins in browser; no new frame-rate or screenshot-baseline numbers claimed.",
-    "Freshwater source and bundles unchanged; existing 83-asset sync and tested-build release guard pass.",
-    "Active Hidden Reef JS, CSS and new GLB match local build bytes."
+    "All non-browser reef QA modules passed, including geometry, materials, fin normals, navigation, chemistry and anemone behavior. Caustics/browser checks reviewed through Codex UI; no new frame-rate or screenshot-baseline measurements claimed.",
+    "Three two-minute full communities and three five-minute day/night communities retain 21 fish, individual motion, upright turns, fish/obstacle clearance and paused state.",
+    "Eighteen isolated feeding cases across six swimming species require actual mouth contact; separate mandarin terrain/feeding checks pass.",
+    "School alignment is checked against an unrelated-fish counterfactual, not against profile constants.",
+    "Speeds and rhythms are authored animation estimates, not measured adult physiological performance. Research sources are in SWIMMING-RESEARCH.md and the reef guide.",
+    "Freshwater source and bundles remain unchanged; existing 83-asset sync and release guards pass."
   ],
-  "publication": [
-    "Hidden Reef Cloudflare Pages",
-    "GitHub main"
-  ],
-  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under current login (Cloudflare error 10000); domains are not synchronized."
+  "publication": [],
+  "deploymentLimitation": "Separate jez237 Pages authentication remains unavailable under the current login (previously confirmed Cloudflare error 10000); do not report both domains synchronized."
 }
