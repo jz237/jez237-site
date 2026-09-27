@@ -2,10 +2,10 @@ import * as T from 'three';
 import {finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import metadata from './assets/fish/model-info.json';
-export type MarineSpecies='tang'|'yellow'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
+export type MarineSpecies='tang'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
 const urls={
  tang:new URL('./assets/fish/tang.glb',import.meta.url).href,
- yellow:new URL('./assets/fish/yellow.glb',import.meta.url).href,
+ semilarvatus:new URL('./assets/fish/semilarvatus.glb',import.meta.url).href,
  clown:new URL('./assets/fish/clown.glb',import.meta.url).href,
  anthias:new URL('./assets/fish/anthias.glb',import.meta.url).href,
  chromis:new URL('./assets/fish/chromis.glb',import.meta.url).href,

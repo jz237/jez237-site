@@ -7,9 +7,9 @@ import {type MarineSpecies} from './MarineModels.ts';
 import {type Obstacle} from './ReefScene.ts';
 
 type Species=MarineSpecies;
-const names:Record<Species,string>={tang:'Blue tang',yellow:'Yellow tang',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
-const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',yellow:'Watch the yellow tang cruise around the islands and pause near the rock. Tangs graze as well as take food from the water. Its paired fins work independently while the tail supplies extra thrust.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These orange fish use the open water above the reef. Individuals keep changing position within their loose group, making short feeding trips and then returning toward shelter.',chromis:'The blue-green fish loosely associate above the reef. They keep individual spacing and change speed instead of swimming in a perfectly synchronized formation.',goby:'Synchiropus splendidus hovers close to reef rubble with fluttering pectoral fins, rests on its broad lower fins, and pecks at tiny crustaceans. Short moves and flexible turns interrupt its pauses. It is a dragonet, often called a mandarin goby; it does not sift mouthfuls of sand. The tiny food items here illustrate prey capture, not a living copepod population.',gramma:'This purple-and-yellow inhabitant keeps closer to the reef and its shelter. Watch for exploratory trips around the lower openings and retreating turns.'};
-const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
+const names:Record<Species,string>={tang:'Blue tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
+const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',semilarvatus:'Chaetodon semilarvatus, the golden or bluecheek butterflyfish, has fine orange vertical stripes and a blue-gray patch behind the eye. Watch its independent fins, gentle cruising and pauses near the reef. This Red Sea species feeds on coral polyps and other small invertebrates; this mixed display is illustrative, not a coral-safe stocking recommendation.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These orange fish use the open water above the reef. Individuals keep changing position within their loose group, making short feeding trips and then returning toward shelter.',chromis:'The blue-green fish loosely associate above the reef. They keep individual spacing and change speed instead of swimming in a perfectly synchronized formation.',goby:'Synchiropus splendidus hovers close to reef rubble with fluttering pectoral fins, rests on its broad lower fins, and pecks at tiny crustaceans. Short moves and flexible turns interrupt its pauses. It is a dragonet, often called a mandarin goby; it does not sift mouthfuls of sand. The tiny food items here illustrate prey capture, not a living copepod population.',gramma:'This purple-and-yellow inhabitant keeps closer to the reef and its shelter. Watch for exploratory trips around the lower openings and retreating turns.'};
+const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},semilarvatus:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
 type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;yawVelocity:number;pitch:number;clock:{value:number};effort:{value:number};waveGain:{value:number};turnBend:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number;clearance:number;home:T.Vector3;gobyCycle:number;pecks:number};
 export type Food={position:T.Vector3;alive:boolean;age:number;sinkRate?:number};
@@ -18,7 +18,7 @@ export class ReefFish{
  constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>,private hostScale=1){
   this.templates=templates;
   this.foodMesh=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),new T.MeshStandardMaterial({color:'#cf9d67',roughness:.8}),48);this.foodMesh.count=0;this.foodMesh.name="Food morsels";this.foodMesh.userData.note=foodNote;this.notes.push(this.foodMesh);scene.add(this.foodMesh);
-  for(const [s,count] of [['tang',1],['yellow',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]] as [Species,number][]){
+  for(const [s,count] of [['tang',1],['semilarvatus',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]] as [Species,number][]){
    for(let i=0;i<count;i++){
     const group=this.templates.get(s)!.clone(true),clock={value:Math.random()*7},effort={value:.5},waveGain={value:s==='goby'?.2:1},turnBend={value:0},mouthOpening={value:0},gillOpening={value:0};
     // Parts with the same imported material and deformation share one material
@@ -73,7 +73,7 @@ export class ReefFish{
      }
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
-    let position=this.destination(s,i);const radius=size*(s==='goby'?.87:s==='tang'||s==='yellow'?.4:.31),clearance=s==='goby'?size*.20:radius;for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
+    let position=this.destination(s,i);const radius=size*(s==='goby'?.87:s==='tang'||s==='semilarvatus'?.4:.31),clearance=s==='goby'?size*.20:radius;for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
     const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,yawVelocity:0,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0};group.position.copy(position);this.fish.push(fish);
    }
   }
@@ -98,7 +98,7 @@ export class ReefFish{
    else if(s==='anthias')p=v(-2.2+(Math.random()-.5)*3,3.55+Math.random()*1.35,(Math.random()-.5)*3);
    else if(s==='chromis')p=v(2.8+(Math.random()-.5)*2.5,3.65+Math.random()*1.25,(Math.random()-.5)*3);
    else p=v((Math.random()-.5)*8.5,.8+Math.random()*3.6,(Math.random()-.5)*3.6);
-   if(this.free(p,s==='goby'?.45:s==='tang'||s==='yellow'?.36:.2,s==='goby'?.154:s==='tang'||s==='yellow'?.36:.2))return p;
+   if(this.free(p,s==='goby'?.45:s==='tang'||s==='semilarvatus'?.36:.2,s==='goby'?.154:s==='tang'||s==='semilarvatus'?.36:.2))return p;
   }
   return v((index%7-3)*.5,4.8,1.3);
  }
@@ -160,7 +160,7 @@ export class ReefFish{
    // still have a nonzero velocity and animated tail without getting anywhere.
    if(f.position.distanceToSquared(f.progressPosition)>.025){f.progressPosition.copy(f.position);f.progressAt=now;}
    else if(now>=f.recoverUntil&&now-f.progressAt>2.4){f.recoverUntil=now+4;this.planSwim(f,i,true);f.progressAt=now;target=undefined;}
-   const desired=f.goal.clone().sub(f.position);let speed=(f.species==='tang'||f.species==='yellow'?.47:.34)*(night?.42:1);
+   const desired=f.goal.clone().sub(f.position);let speed=(f.species==='tang'||f.species==='semilarvatus'?.47:.34)*(night?.42:1);
    speed*=.75+.35*Math.sin(now*.83+f.phase);if(f.mode==='hovering')speed*=.2;if(target)speed=1.2+(Math.sin(now*6+f.phase)+1)*.35;
    if(f.species==='clown'&&!target){
     const dart=f.hostLeg===1?1.6:f.hostLeg===0?1.1:.72;
@@ -195,7 +195,7 @@ export class ReefFish{
    // Activity modulates breathing smoothly, independent of tail-beat speed.
    // The mouth pumps first and the operculum follows; these are illustrative
    // species rhythms, not a water-quality or clinical respiration model.
-   const base=f.species==='tang'||f.species==='yellow'?.88:1.12;
+   const base=f.species==='tang'||f.species==='semilarvatus'?.88:1.12;
    f.respiration+=dt*2*Math.PI*(base*(night?.78:1)+Math.min(f.effort.value,1.7)*.20)*(.93+.07*Math.sin(f.phase));
    this.breathe(f,target?.alive?Math.max(0,1-Math.sqrt(dist))*Math.max(0,Math.sin(now*18))*1.35:0);
   }

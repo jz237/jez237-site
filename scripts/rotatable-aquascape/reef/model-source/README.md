@@ -1,5 +1,25 @@
 # Marine fish reference and Blender sources
 
+## Golden butterflyfish replacement — September 27, 2026
+
+The former yellow tang slot now loads `semilarvatus.glb`, a separately authored
+*Chaetodon semilarvatus* model, and identifies it as Golden butterflyfish.
+`semilarvatus.blend` is the editable Blender 5.2 source. Rebuild only this model:
+
+```powershell
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only semilarvatus
+```
+
+Its traced rounded body, reduced sail profile, short snout, fine orange stripes,
+blue cheek patch and independent paired pelvic fins come from the generated
+reference and clean-flank texture. The runtime preserves traveling body waves,
+independent fins, breathing, varied cruising, inspection pauses and 3D routing.
+The previous yellow assets remain as historical sources but are not loaded.
+See `references/semilarvatus-prompts.md` for generation provenance. This is an
+artistic reconstruction, not a measured specimen. Natural-history reference:
+https://doris.ffessm.fr/Especes/Chaetodon-semilarvatus-Poisson-papillon-jaune-masque-5223
+The species can feed on coral; the display is not a coral-safe stocking guide.
+
 Six photorealistic-style reference images were created with the built-in GPT Image tool: palette surgeonfish, yellow tang, ocellaris clownfish, female lyretail anthias, blue-green chromis and royal gramma. These are generated artistic references, not photographs of measured specimens. No paid API fallback, purchases or third-party paid assets were used.
 
 `references/prompts.json` contains all six generation prompts and the clean-flank edit prompt. Original images are `<species>.png`; `<species>-skin.png` removes the near-side pectoral from the texture so a separate animated 3D fin can move without revealing a painted duplicate.
