@@ -1248,6 +1248,7 @@
       .stack-layer { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="lab.css?v=20260927" />
 
 <meta name="description" content="An interactive, plain-English guide to how AI language models actually work — tokens, embeddings, attention, and training, with hands-on visual demos." />
 <link rel="canonical" href="https://jez237.com/how-ai-works/" />
@@ -1272,20 +1273,28 @@
           <strong>Jez237</strong>
           <span>AI workbench / interactive guide</span>
         </a>
+        <div class="rail-progress" aria-hidden="true"><span id="railProgress"></span></div>
         <nav class="lab-nav">
           <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
-          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
-          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Diagrams</a>
+          <span class="rail-act">Act I · Inside the model</span>
+          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Generation loop</a>
           <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
-          <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context</a>
+          <a href="#next-token"><svg viewBox="0 0 24 24"><path d="M4 20V14"/><path d="M9 20V6"/><path d="M14 20v-9"/><path d="M19 20v-4"/></svg>Next token</a>
+          <a href="#attention"><svg viewBox="0 0 24 24"><path d="M4 17c3-9 13-9 16 0"/><path d="M8 17c1.5-4 6.5-4 8 0"/><circle cx="4" cy="18" r="1"/><circle cx="20" cy="18" r="1"/></svg>Attention</a>
+          <a href="#embeddings"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.6"/><circle cx="9" cy="10" r="1.6"/><circle cx="17" cy="15" r="1.6"/><circle cx="15" cy="18" r="1.6"/><circle cx="18" cy="6" r="1.6"/></svg>Embeddings</a>
+          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
+          <span class="rail-act">Act II · Around the model</span>
+          <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context &amp; memory</a>
           <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
           <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
+          <span class="rail-act">Act III · Agents in the wild</span>
           <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
           <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
           <a href="#systems"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 6v12"/><path d="M16 6v12"/></svg>Systems</a>
           <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Concepts</a>
           <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
           <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
+          <a href="#hallucination"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/><path d="M9 11h4"/></svg>Spot the fake</a>
         </nav>
       </aside>
 
@@ -1294,17 +1303,16 @@
           <div class="hero-copy">
             <span class="kicker">Interactive AI lab</span>
             <h1>How AI Works</h1>
-            <span class="construction-note">Under construction</span>
-            <p>AI feels mysterious until you separate the parts: tokens, context, model prediction, tool use, memory, and verification. This page lets you poke each part directly.</p>
+            <p>AI feels mysterious until you separate the parts. Inside the model: tokens, attention, and a probability for every possible next word. Around it: context, memory, prompts, and tools. On top: agents that loop, check their work, and stop for permission. Every part below is something you can poke.</p>
             <div class="hero-actions">
               <button class="lab-button primary" id="startTour" type="button">Start guided tour</button>
-              <a href="#agent-loop">Run the agent loop</a>
+              <a href="#next-token">Sample the next token</a>
               <a href="training-alignment.html">Training &amp; alignment deep dive</a>
               <a href="../">Back to Home</a>
             </div>
             <div class="tour-panel" aria-live="polite">
               <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Walk through the lab in order: system map, training, diagrams, tokens, context, prompts, tools, agent loop, trace, systems, concepts, stack building, and failure modes.</p>
+              <p id="tourCopy">Walk through the lab in three acts: inside the model, around the model, and agents in the wild.</p>
               <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
               <div class="control-row">
                 <button class="lab-button" id="prevTour" type="button">Previous</button>
@@ -1325,26 +1333,225 @@
             <div>
               <span class="kicker">Illustrated overview</span>
               <h2>AI System Map</h2>
-              <p>The illustration shows the same system as a physical workbench. Pick a station to see what that part contributes to an agent run.</p>
+              <p>The illustration shows an agent system as a physical workbench. Press play to watch a request travel through it, or pick a station to zoom in.</p>
             </div>
             <span class="status-pill">Generated illustration</span>
           </div>
           <div class="lab-card-body map-layout">
             <figure class="map-figure" aria-label="Illustrated AI agent system map">
-              <img src="../assets/ai-explainer/ai-system-map.jpg?v=ai-system-map-20260526" alt="Illustrated AI agent system with input, token blocks, context window, model core, tools, memory, verification, and final output stations." />
-              <button class="map-marker active" style="--x: 10%; --y: 47%" data-map="input" type="button" aria-label="Input station">1</button>
-              <button class="map-marker" style="--x: 27%; --y: 56%" data-map="tokens" type="button" aria-label="Token station">2</button>
-              <button class="map-marker" style="--x: 43%; --y: 48%" data-map="context" type="button" aria-label="Context station">3</button>
-              <button class="map-marker" style="--x: 59%; --y: 43%" data-map="model" type="button" aria-label="Model core">4</button>
-              <button class="map-marker" style="--x: 74%; --y: 28%" data-map="tools" type="button" aria-label="Tool station">5</button>
-              <button class="map-marker" style="--x: 76%; --y: 61%" data-map="memory" type="button" aria-label="Memory station">6</button>
-              <button class="map-marker" style="--x: 84%; --y: 66%" data-map="verify" type="button" aria-label="Verification station">7</button>
-              <button class="map-marker" style="--x: 93%; --y: 55%" data-map="answer" type="button" aria-label="Final answer station">8</button>
+              <div class="map-zoom" id="mapZoom">
+                <img src="../assets/ai-explainer/ai-system-map.jpg?v=ai-system-map-20260526" alt="Illustrated AI agent system with input, token blocks, context window, model core, tools, memory, verification, and final output stations." />
+                <svg class="map-flow" id="mapFlow" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+                <div class="map-sparks" id="mapSparks" aria-hidden="true"></div>
+                <button class="map-marker active" style="--x: 10%; --y: 47%" data-map="input" type="button" aria-label="Input station">1</button>
+                <button class="map-marker" style="--x: 27%; --y: 56%" data-map="tokens" type="button" aria-label="Token station">2</button>
+                <button class="map-marker" style="--x: 43%; --y: 48%" data-map="context" type="button" aria-label="Context station">3</button>
+                <button class="map-marker" style="--x: 59%; --y: 43%" data-map="model" type="button" aria-label="Model core">4</button>
+                <button class="map-marker" style="--x: 74%; --y: 28%" data-map="tools" type="button" aria-label="Tool station">5</button>
+                <button class="map-marker" style="--x: 76%; --y: 61%" data-map="memory" type="button" aria-label="Memory station">6</button>
+                <button class="map-marker" style="--x: 84%; --y: 66%" data-map="verify" type="button" aria-label="Verification station">7</button>
+                <button class="map-marker" style="--x: 93%; --y: 55%" data-map="answer" type="button" aria-label="Final answer station">8</button>
+              </div>
+              <button class="lab-button map-unzoom" id="mapUnzoom" type="button" hidden>Zoom out</button>
             </figure>
             <div class="map-side">
+              <div class="control-row">
+                <button class="lab-button primary" id="mapPlay" type="button">Play a request through</button>
+              </div>
               <div class="map-buttons" id="mapButtons"></div>
               <div class="map-readout" id="mapReadout" aria-live="polite"></div>
             </div>
+          </div>
+        </section>
+
+        <div class="act-banner" id="act-1">
+          <span>Act I</span>
+          <h2>Inside the model</h2>
+          <p>A language model is a function: numbers go in, one probability for every possible next token comes out. Everything else is built around that.</p>
+        </div>
+
+        <section id="diagrams" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">The core trick</span>
+              <h2>The Generation Loop</h2>
+              <p>A model does not write a whole answer at once. It reads everything in its context, scores every possible next token, picks one, glues it onto the end, and runs again. This animation uses real token IDs and real probabilities from a small open model.</p>
+            </div>
+            <span class="status-pill">Real model data</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="genloop" id="genloop">
+              <div class="gl-text" id="glText" aria-live="polite"></div>
+              <div class="gl-stages">
+                <button class="gl-stage" data-gl="0" type="button"><b>1</b><strong>Token IDs</strong><div class="gl-ids" id="glIds"></div></button>
+                <button class="gl-stage" data-gl="1" type="button"><b>2</b><strong>Vectors</strong><div class="gl-vecs" id="glVecs"></div></button>
+                <button class="gl-stage" data-gl="2" type="button"><b>3</b><strong>Transformer layers</strong><div class="gl-layers" id="glLayers"></div></button>
+                <button class="gl-stage" data-gl="3" type="button"><b>4</b><strong>Next-token scores</strong><div class="gl-probs" id="glProbs"></div></button>
+              </div>
+              <svg class="gl-return" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M97 1 V6 H3 V1"/></svg>
+              <div class="gl-return-label">picked token is appended → the loop runs again</div>
+            </div>
+            <div class="control-row" style="margin-top: 14px">
+              <button class="lab-button primary" id="glPlay" type="button">Play</button>
+              <button class="lab-button" id="glStep" type="button">One stage</button>
+              <button class="lab-button" id="glReset" type="button">Reset</button>
+            </div>
+            <div class="trace-note" id="glNote" aria-live="polite"></div>
+            <div class="diagram-grid" style="margin-top: 16px">
+              <article class="diagram-panel">
+                <h3>Agent Loop</h3>
+                <svg class="orbit-diagram" viewBox="0 0 220 150" aria-label="Agent loop: read, plan, act, observe, verify">
+                  <ellipse class="orbit-track" cx="110" cy="75" rx="88" ry="52"/>
+                  <circle class="orbit-dot" r="5"><animateMotion dur="6s" repeatCount="indefinite" path="M198,75 A88,52 0 1,1 22,75 A88,52 0 1,1 198,75"/></circle>
+                  <g class="orbit-nodes">
+                    <text x="110" y="18">Read</text><text x="200" y="60">Plan</text><text x="176" y="138">Act</text><text x="44" y="138">Observe</text><text x="22" y="60">Verify</text>
+                  </g>
+                  <text class="orbit-core" x="110" y="80">loop until done</text>
+                </svg>
+                <p>An agent keeps cycling until it has enough evidence or hits a limit. Good agents know when to stop and report what they verified.</p>
+              </article>
+              <article class="diagram-panel">
+                <h3>Context vs Memory</h3>
+                <div class="cm-diagram" aria-label="Memory is loaded into the context window, which is the only thing the model reads">
+                  <div class="cm-drawer"><strong>Memory file</strong><span>saved fact</span><span>preference</span></div>
+                  <div class="cm-arrow"><i></i><em>loaded in</em></div>
+                  <div class="cm-window"><strong>Context window</strong><span class="cm-mem">memory</span><span>chat</span><span>files</span><span>tool results</span></div>
+                  <div class="cm-arrow"><i></i><em>read by</em></div>
+                  <div class="cm-model"><strong>Model</strong><span>no memory of its own</span></div>
+                </div>
+                <p>The model itself is stateless: it only knows what is in the context window right now. "Memory" is text the app saves and loads back into that window each session.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="tokens" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Text becomes numbers</span>
+              <h2>Token Playground</h2>
+              <p>Models never see letters. A tokenizer chops text into pieces it learned from data: <em>common</em> chunks become one token, rare ones get split. In English a token averages about three-quarters of a word. Type anything below. This uses a real tokenizer (OpenAI's <code>o200k</code>). Every model family has its own, but they all work this way.</p>
+            </div>
+            <span class="status-pill" id="tokStatus">Loading tokenizer…</span>
+          </div>
+          <div class="lab-card-body two-col">
+            <div>
+              <div class="preset-row" aria-label="Token examples">
+                <button class="lab-button active" data-token-preset="clear" type="button">Plain English</button>
+                <button class="lab-button" data-token-preset="strawberry" type="button">Strawberry</button>
+                <button class="lab-button" data-token-preset="numbers" type="button">Numbers</button>
+                <button class="lab-button" data-token-preset="rare" type="button">Rare words</button>
+                <button class="lab-button" data-token-preset="languages" type="button">Other languages</button>
+                <button class="lab-button" data-token-preset="code" type="button">Code</button>
+              </div>
+              <textarea id="tokenInput" aria-label="Text to tokenize"></textarea>
+              <div class="metric-row">
+                <div class="metric"><span>Tokens</span><strong id="tokenCount">0</strong></div>
+                <div class="metric"><span>Characters / token</span><strong id="tokenRatio">0</strong></div>
+                <div class="metric"><span>Words / token</span><strong id="tokenWords">0</strong></div>
+              </div>
+              <div class="trace-note" id="tokenHint"></div>
+            </div>
+            <div>
+              <div class="control-row" style="margin-bottom: 10px">
+                <button class="lab-button" id="tokenIdsToggle" type="button" aria-pressed="false">Show what the model sees (IDs)</button>
+              </div>
+              <div class="token-output" id="tokenOutput" aria-live="polite"></div>
+              <p class="fine-print">Each colour is one token. A <b>·</b> marks a leading space: most tokens carry the space in front of them, so " cat" and "cat" are different tokens.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="next-token" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Probabilities, then a dice roll</span>
+              <h2>Next-Token Machine</h2>
+              <p>At every step the model gives a probability to <em>every</em> token in its vocabulary (about 150,000 here). Then the app <strong>samples</strong> one. <strong>Temperature</strong> reshapes those odds: at 0 it always takes the top pick, and higher values flatten the curve so unlikely tokens get a real chance. That's why the same prompt can give different answers.</p>
+            </div>
+            <span class="status-pill" id="ntStatus">Loading model data…</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" id="ntPrompts" aria-label="Prompts"></div>
+            <div class="nt-grid">
+              <div class="nt-left">
+                <div class="nt-text" id="ntText" aria-live="polite"></div>
+                <div class="nt-temp">
+                  <label for="ntTemp">Temperature <strong id="ntTempLabel">1.0</strong></label>
+                  <input id="ntTemp" type="range" min="0" max="7" step="1" value="4" />
+                  <div class="nt-temp-scale"><span>0 · greedy</span><span>1 · raw odds</span><span>2 · chaos</span></div>
+                  <p id="ntTempNote"></p>
+                </div>
+                <div class="control-row">
+                  <button class="lab-button primary" id="ntStep" type="button">Sample next token</button>
+                  <button class="lab-button" id="ntAuto" type="button">Auto-generate</button>
+                  <button class="lab-button" id="ntReset" type="button">Reset</button>
+                  <button class="lab-button" id="ntFive" type="button">Run it 5 times</button>
+                </div>
+              </div>
+              <div class="nt-right">
+                <div class="nt-wheel-wrap">
+                  <svg class="nt-wheel" id="ntWheel" viewBox="-110 -110 220 220" aria-hidden="true"><g id="ntWheelSpin"></g></svg>
+                  <div class="nt-pointer" aria-hidden="true"></div>
+                  <div class="nt-wheel-hub" id="ntHub">spin</div>
+                </div>
+                <div class="nt-bars" id="ntBars"></div>
+              </div>
+            </div>
+            <div class="nt-runs" id="ntRuns" aria-live="polite"></div>
+            <p class="fine-print" id="ntSource"></p>
+          </div>
+        </section>
+
+        <section id="attention" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">How words find each other</span>
+              <h2>Attention</h2>
+              <p>Each layer lets every token look back at every earlier token and pull in what's relevant. That's <strong>attention</strong>. Many "heads" run in parallel, each learning a different kind of lookup. Click a word to see where it looks, then flip the last word and watch "it" change its mind.</p>
+            </div>
+            <span class="status-pill">Click a word</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" aria-label="Attention heads">
+              <button class="lab-button active" data-head="coref" type="button">Reference head</button>
+              <button class="lab-button" data-head="prev" type="button">Previous-word head</button>
+              <button class="lab-button" data-head="syntax" type="button">Grammar head</button>
+            </div>
+            <div class="attn-stage">
+              <div class="attn-inner" id="attnInner">
+                <svg class="attn-arcs" id="attnArcs" aria-hidden="true"></svg>
+                <div class="attn-words" id="attnWords"></div>
+              </div>
+            </div>
+            <div class="control-row" style="margin-top: 12px">
+              <button class="lab-button active" data-adj="big" type="button">…too big</button>
+              <button class="lab-button" data-adj="small" type="button">…too small</button>
+            </div>
+            <div class="attn-probe" id="attnProbe"></div>
+            <p class="fine-print">The arcs are a simplified illustration of what attention heads do. Real heads are messier and spread across dozens of layers. The trophy/suitcase percentages are measured from a real model (Qwen2.5-0.5B), by asking it to complete "The thing that was too big was the…".</p>
+          </div>
+        </section>
+
+        <section id="embeddings" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">Meaning as coordinates</span>
+              <h2>Embedding Map</h2>
+              <p>Inside a model, and inside every search system that feeds one, text becomes a long list of numbers called a vector. Similar meanings land near each other even when they share no words. Each star below is a real 384-number embedding, squashed to 2D so you can see it. Pick a search to see what's closest.</p>
+            </div>
+            <span class="status-pill">Real embeddings</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" id="embQueries" aria-label="Search queries"></div>
+            <div class="emb-grid">
+              <div class="emb-map" id="embMap"><svg id="embSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" aria-label="Embedding scatter plot"></svg><div class="emb-tip" id="embTip" hidden></div></div>
+              <div class="emb-side">
+                <div class="emb-legend" id="embLegend"></div>
+                <div class="emb-results" id="embResults" aria-live="polite"><p>Pick a search above, or click any star.</p></div>
+              </div>
+            </div>
+            <p class="fine-print" id="embSource">Sentence embeddings from all-MiniLM-L6-v2, projected to 2D with t-SNE. The 2D layout is approximate; the similarity scores come from the full 384 dimensions.</p>
           </div>
         </section>
 
@@ -1352,8 +1559,8 @@
           <div class="lab-card-header">
             <div>
               <span class="kicker">Separate deep dive</span>
-              <h2>Training and Alignment Roadmap</h2>
-              <p>This page mostly explains what happens when you use an AI system. Model training and RLHF are a deeper topic, so they have their own full page with hands-on demos.</p>
+              <h2>Where the Weights Come From</h2>
+              <p>Everything above uses a model that already exists. How it got its billions of weights (pretraining, fine-tuning, RLHF) is a big topic, so it has its own page with hands-on demos.</p>
             </div>
             <span class="status-pill">Deep dive live</span>
           </div>
@@ -1361,14 +1568,9 @@
             <div class="scope-callout">
               <div>
                 <h3>How models are made</h3>
-                <p>The deep dive covers pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants — including a tiny model you can train yourself and a preference-ranking demo.</p>
+                <p>The deep dive covers pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants. It includes a tiny model you can train yourself and a preference-ranking demo.</p>
                 <div class="scope-tags" aria-label="Training outline topics">
-                  <span>Pretraining</span>
-                  <span>Fine-tuning</span>
-                  <span>RLHF</span>
-                  <span>Alignment</span>
-                  <span>Evals</span>
-                  <span>Data issues</span>
+                  <span>Pretraining</span><span>Fine-tuning</span><span>RLHF</span><span>Alignment</span><span>Evals</span><span>RAG</span>
                 </div>
               </div>
               <a class="lab-button primary" href="training-alignment.html">Open the deep dive</a>
@@ -1376,96 +1578,66 @@
           </div>
         </section>
 
-        <section id="diagrams" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Mental models</span>
-              <h2>Three Diagrams Worth Remembering</h2>
-              <p>These are the useful shapes underneath most AI systems: the text pipeline, the agent loop, and the difference between temporary context and durable memory.</p>
-            </div>
-          </div>
-          <div class="lab-card-body diagram-grid">
-            <article class="diagram-panel diagram-panel-wide">
-              <h3>Model Pipeline</h3>
-              <div class="pipeline-diagram" id="pipelineDiagram" aria-label="Prompt to response pipeline">
-                <span data-stage="0" class="active">Prompt</span><i></i><span data-stage="1">Tokens</span><i></i><span data-stage="2">Model</span><i></i><span data-stage="3">Response</span>
-              </div>
-              <div class="control-row" style="margin-top: 14px">
-                <button class="lab-button" id="pipelineRun" type="button">Send a prompt through</button>
-              </div>
-              <div class="trace-note" id="pipelineNote" aria-live="polite"></div>
-              <p>Text is chopped into tokens, processed through the model, then decoded back into text. The model is predicting the next useful pieces, not looking up a literal answer book. Tap a stage, or send a prompt through to watch the whole trip.</p>
-            </article>
-            <article class="diagram-panel">
-              <h3>Agent Loop</h3>
-              <div class="loop-diagram" aria-label="Agent loop diagram">
-                <span>Read</span><span>Plan</span><span>Tool</span><span>Observe</span>
-                <b>Loop until done</b>
-              </div>
-              <p>An agent keeps cycling until it has enough evidence or hits a limit. Good agents know when to stop and report what they verified.</p>
-            </article>
-            <article class="diagram-panel">
-              <h3>Context vs Memory</h3>
-              <div class="memory-diagram" aria-label="Context and memory diagram">
-                <div><strong>Context</strong><span>visible now</span><span>summary</span><span class="faded">drops out</span></div>
-                <div><strong>Memory</strong><span>saved fact</span><span>preference</span><span>workflow rule</span></div>
-              </div>
-              <p>Context is the working desk. Memory is the labeled drawer. If a fact needs to survive future sessions, it belongs in memory or a source file.</p>
-            </article>
-          </div>
-        </section>
-
-        <section id="tokens" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Text becomes pieces</span>
-              <h2>Token Playground</h2>
-              <p>Models do not read text exactly like humans do. They see chunks called tokens — in English, one token averages about three-quarters of a word. This is an approximate local demo, but it shows why wording and length matter. Real models accept anywhere from thousands to over a million tokens at once; the meter here fills against a tiny 120-token demo budget so you can watch it move.</p>
-            </div>
-          </div>
-          <div class="lab-card-body two-col">
-            <div>
-              <div class="preset-row" aria-label="Token examples">
-                <button class="lab-button" data-token-preset="short" type="button">Short</button>
-                <button class="lab-button active" data-token-preset="clear" type="button">Clear</button>
-                <button class="lab-button" data-token-preset="logs" type="button">Copied logs</button>
-                <button class="lab-button" data-token-preset="overloaded" type="button">Overloaded</button>
-              </div>
-              <textarea id="tokenInput">Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.</textarea>
-              <div class="meter"><span id="tokenMeter"></span></div>
-              <div class="metric-row">
-                <div class="metric"><span>Approx tokens</span><strong id="tokenCount">0</strong></div>
-                <div class="metric"><span>Demo budget used</span><strong id="contextUse">0%</strong></div>
-                <div class="metric"><span>Why it matters</span><strong id="tokenHint">Short</strong></div>
-              </div>
-            </div>
-            <div class="token-output" id="tokenOutput" aria-live="polite"></div>
-          </div>
-        </section>
+        <div class="act-banner" id="act-2">
+          <span>Act II</span>
+          <h2>Around the model</h2>
+          <p>The model only ever sees one thing: the context window. Apps decide what goes into it: your chat, saved memory, files, and tool results.</p>
+        </div>
 
         <section id="context" class="lab-card">
           <div class="lab-card-header">
             <div>
               <span class="kicker">What the model can see</span>
-              <h2>Context Window Visualizer</h2>
-              <p>A chat can be long while the model's active view is limited. Older material may stay visible, get summarized, or fall out unless it is saved somewhere durable.</p>
+              <h2>Context Window &amp; Memory</h2>
+              <p>Everything inside the window is visible to the model <em>at once</em>. Nothing fades until the window is full. Then the <strong>app</strong> (not the model) decides what to cut or summarize. Memory survives because the app loads it back in at the start of every session.</p>
             </div>
+            <span class="status-pill" id="ctxPill">0% full</span>
           </div>
           <div class="lab-card-body">
-            <div class="context-controls">
-              <div>
-                <label for="contextRange" class="status-pill">Conversation length: <span id="contextLabel">6</span> turns</label>
-                <input id="contextRange" type="range" min="4" max="14" value="6" />
-                <div class="context-legend">
-                  <span class="legend-pill" style="--pill-color: var(--lab-green)">visible now</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-violet)">saved memory</span>
-                  <span class="legend-pill" style="--pill-color: #60758a">dropped</span>
+            <div class="ctx-controls">
+              <div class="ctx-field">
+                <span>Window size</span>
+                <div class="control-row" id="ctxSizes"></div>
+              </div>
+              <div class="ctx-field">
+                <span>When it overflows, the app will…</span>
+                <div class="control-row">
+                  <button class="lab-button active" data-ctx-policy="truncate" type="button">Drop oldest</button>
+                  <button class="lab-button" data-ctx-policy="compact" type="button">Summarize oldest</button>
                 </div>
               </div>
-              <button class="lab-button" id="memoryToggle" type="button" aria-pressed="false">Save key fact</button>
+              <div class="ctx-field">
+                <span>Extras</span>
+                <div class="control-row">
+                  <button class="lab-button" id="ctxMemory" type="button" aria-pressed="false">Memory file: off</button>
+                  <button class="lab-button" id="ctxHeat" type="button" aria-pressed="false">Show recall strength</button>
+                </div>
+              </div>
             </div>
-            <div class="context-stack" id="contextStack"></div>
+            <div class="ctx-grid">
+              <div>
+                <div class="ctx-tank" id="ctxTank" aria-label="Context window cells"></div>
+                <div class="ctx-heat-legend" id="ctxHeatLegend" hidden><span>strong recall</span><i></i><span>weaker in the middle</span><i></i><span>strong recall</span></div>
+                <div class="context-legend">
+                  <span class="legend-pill" style="--pill-color: #8fb3c9">system prompt</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-violet)">memory</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-green)">you</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-cyan)">assistant</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-orange)">tool result</span>
+                  <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
+                </div>
+              </div>
+              <div class="ctx-side">
+                <div class="control-row">
+                  <button class="lab-button primary" id="ctxAdd" type="button">Next turn</button>
+                  <button class="lab-button" id="ctxAuto" type="button">Auto chat</button>
+                  <button class="lab-button" id="ctxNew" type="button">New session</button>
+                </div>
+                <div class="ctx-meter"><span id="ctxMeter"></span></div>
+                <div class="ctx-readout" id="ctxReadout" aria-live="polite"></div>
+                <div class="ctx-log" id="ctxLog"></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1473,23 +1645,26 @@
           <div class="lab-card-header">
             <div>
               <span class="kicker">Same model, better instructions</span>
-              <h2>Prompt Quality Compare</h2>
-              <p>Better prompts do not make the model magical. They reduce ambiguity, supply constraints, and tell the model what a useful answer looks like.</p>
+              <h2>Prompt Pruning</h2>
+              <p>A vague request is compatible with dozens of reasonable jobs, so the model has to guess which one you meant. Every constraint you add prunes wrong branches. Better prompts don't make the model smarter; they leave it less to guess.</p>
             </div>
+            <span class="status-pill" id="promptPill">12 possible jobs</span>
           </div>
-          <div class="lab-card-body two-col">
-            <div class="mini-panel">
-              <h3>Choose the prompt</h3>
-              <div class="control-row">
-                <button class="lab-button active" data-prompt="weak" type="button">Vague</button>
-                <button class="lab-button" data-prompt="clear" type="button">Clear</button>
-                <button class="lab-button" data-prompt="agent" type="button">Agent-ready</button>
-              </div>
-              <div class="prompt-output" id="promptText"></div>
+          <div class="lab-card-body">
+            <div class="preset-row" aria-label="Prompt presets">
+              <button class="lab-button active" data-prompt="weak" type="button">Vague</button>
+              <button class="lab-button" data-prompt="clear" type="button">Clear</button>
+              <button class="lab-button" data-prompt="agent" type="button">Agent-ready</button>
             </div>
-            <div class="mini-panel">
-              <h3>Likely result</h3>
-              <div class="prompt-output" id="promptResult"></div>
+            <div class="prompt-chips" id="promptChips" aria-label="Constraints"></div>
+            <div class="prompt-grid">
+              <div class="mini-panel">
+                <h3>The prompt</h3>
+                <div class="prompt-output" id="promptText"></div>
+                <div class="ambiguity"><span>Ambiguity</span><div class="meter"><span id="ambiguityMeter"></span></div></div>
+                <p class="prompt-result" id="promptResult"></p>
+              </div>
+              <div class="prompt-tree-wrap"><svg class="prompt-tree" id="promptTree" viewBox="0 0 560 420" aria-label="Interpretation tree"></svg></div>
             </div>
           </div>
         </section>
@@ -1499,39 +1674,50 @@
             <div>
               <span class="kicker">Guessing vs checking</span>
               <h2>Tool Use Simulator</h2>
-              <p>A plain model predicts an answer from its training and current context. A tool-using agent can inspect files, search, run commands, generate images, or ask for approval.</p>
+              <p>A model can't touch anything by itself. It only writes text. To use a tool it writes a structured request; the app around it (the <strong>harness</strong>) checks permissions, runs it, and pastes the result back into the context. Then the model reads that evidence and carries on.</p>
             </div>
           </div>
-          <div class="lab-card-body tool-grid">
-            <div class="tool-list">
-              <button class="lab-button active" data-tool="guess" type="button">No tool</button>
-              <button class="lab-button" data-tool="files" type="button">Search files</button>
-              <button class="lab-button" data-tool="web" type="button">Check web</button>
-              <button class="lab-button" data-tool="image" type="button">Generate image</button>
-              <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
-            </div>
-            <div>
-              <div class="tool-readout" id="toolReadout"></div>
-              <div class="tool-compare">
-                <div class="compare-panel">
-                  <strong>Model guesses</strong>
-                  <p id="guessPanel">A model can produce a plausible answer from context, but it may invent details when the answer depends on current files, dates, or external state.</p>
+          <div class="lab-card-body">
+            <div class="tool-grid">
+              <div class="tool-list">
+                <button class="lab-button active" data-tool="guess" type="button">No tool</button>
+                <button class="lab-button" data-tool="files" type="button">Search files</button>
+                <button class="lab-button" data-tool="web" type="button">Check web</button>
+                <button class="lab-button" data-tool="image" type="button">Generate image</button>
+                <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
+              </div>
+              <div>
+                <div class="toolcall" id="toolCall">
+                  <div class="tc-step" data-tc="0"><b>Model writes</b><pre id="tcJson"></pre></div>
+                  <div class="tc-pipe"><i></i></div>
+                  <div class="tc-step" data-tc="1"><b>Harness runs it</b><span id="tcRun"></span><div class="control-row tc-approve" id="tcApprove" hidden><button class="lab-button primary" id="tcYes" type="button">Approve</button><button class="lab-button" id="tcNo" type="button">Deny</button></div></div>
+                  <div class="tc-pipe"><i></i></div>
+                  <div class="tc-step" data-tc="2"><b>Result → context</b><pre id="tcResult"></pre></div>
+                  <div class="tc-pipe"><i></i></div>
+                  <div class="tc-step" data-tc="3"><b>Model answers</b><span id="tcAnswer"></span></div>
                 </div>
-                <div class="compare-panel">
-                  <strong>Agent checks</strong>
-                  <p id="checkPanel">A tool-using agent can inspect the actual source of truth, then answer with less guesswork and clearer evidence.</p>
+                <div class="control-row" style="margin-top: 12px"><button class="lab-button" id="tcReplay" type="button">Replay</button></div>
+                <div class="tool-compare">
+                  <div class="compare-panel"><strong>Model guesses</strong><p id="guessPanel"></p></div>
+                  <div class="compare-panel"><strong>Agent checks</strong><p id="checkPanel"></p></div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="agent-loop" class="lab-card lab-grid">
+        <div class="act-banner" id="act-3">
+          <span>Act III</span>
+          <h2>Agents in the wild</h2>
+          <p>An agent is a model in a loop with tools, memory, and boundaries. The interesting part is what it checks, and when it stops.</p>
+        </div>
+
+        <section id="agent-loop" class="lab-card">
           <div class="lab-card-header">
             <div>
               <span class="kicker">Step through it</span>
-              <h2>Agent Loop Simulator</h2>
-              <p>An agent is a model wrapped in a loop. It reads the request, checks context, chooses tools when needed, observes the result, and decides whether to keep going or answer.</p>
+              <h2>Agent Loop Circuit</h2>
+              <p>Watch the loop run. Every lap adds to the context window: plans, tool calls, results. When a check fails, the agent goes around again. When an action is risky, it stops at the gate and waits for you.</p>
             </div>
             <span class="status-pill">No API required</span>
           </div>
@@ -1539,17 +1725,27 @@
             <div class="scenario-picker" aria-label="Agent scenarios">
               <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
               <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
-              <button class="lab-button" data-scenario="layout" type="button">Fix layout</button>
+              <button class="lab-button" data-scenario="layout" type="button">Fix layout (2 laps)</button>
+              <button class="lab-button" data-scenario="restart" type="button">Restart service (gate)</button>
             </div>
-            <div class="agent-board">
-              <div class="agent-flow" id="agentFlow"></div>
+            <div class="circuit-board">
+              <div class="circuit-wrap">
+                <svg class="circuit" id="circuit" viewBox="0 0 400 400" aria-label="Agent loop circuit"></svg>
+                <div class="circuit-lap" id="circuitLap">Lap 1</div>
+              </div>
               <div class="agent-console">
                 <div class="console-readout" id="agentConsole"></div>
+                <div class="control-row circuit-gate" id="circuitGate" hidden>
+                  <button class="lab-button primary" id="gateYes" type="button">Approve restart</button>
+                  <button class="lab-button" id="gateNo" type="button">Deny</button>
+                </div>
                 <div class="control-row">
                   <button class="lab-button primary" id="nextStep" type="button">Next step</button>
                   <button class="lab-button" id="autoStep" type="button">Auto run</button>
                   <button class="lab-button" id="resetStep" type="button">Reset</button>
                 </div>
+                <div class="ctx-strip-label"><span>Context window this run</span><strong id="stripTokens">0 tokens</strong></div>
+                <div class="ctx-strip" id="ctxStrip"></div>
               </div>
             </div>
           </div>
@@ -1582,7 +1778,7 @@
             <div>
               <span class="kicker">Different jobs, different tradeoffs</span>
               <h2>Local, Cloud, Agent, Media</h2>
-              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it. Pick a job below and see which system fits.</p>
+              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it. Pick a job below and see which system fits. Some jobs need two at once.</p>
             </div>
             <span class="status-pill">Match the job</span>
           </div>
@@ -1597,9 +1793,9 @@
               <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
               <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
               <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
-              <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models translate prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+              <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models turn prompts into pixels or sound. They need visual direction, not just facts.</p></article>
             </div>
-            <div class="trace-note" id="systemNote" aria-live="polite">Pick a job above to see which kind of system fits it best — and why the others are a worse match.</div>
+            <div class="trace-note" id="systemNote" aria-live="polite">Pick a job above to see which kind of system fits it best, and why the others are a worse match.</div>
           </div>
         </section>
 
@@ -1623,14 +1819,17 @@
             <div>
               <span class="kicker">Assemble the system</span>
               <h2>Build an Agent Stack</h2>
-              <p>Most real AI systems are a stack of choices. Add or remove capabilities below and watch the profile change.</p>
+              <p>Most real AI systems are a stack of choices. Add or remove layers and watch the profile change shape.</p>
             </div>
             <span class="status-pill">Interactive model</span>
           </div>
           <div class="lab-card-body builder-grid">
             <div class="builder-options" id="builderOptions"></div>
             <div class="builder-output">
-              <div class="stack-visual" id="stackVisual" aria-label="Agent stack layers"></div>
+              <div class="builder-visuals">
+                <div class="iso-stage"><div class="iso-stack" id="stackVisual" aria-label="Agent stack layers"></div></div>
+                <svg class="radar" id="builderRadar" viewBox="-120 -110 240 220" aria-label="Capability, risk and oversight radar"></svg>
+              </div>
               <div class="metric-row">
                 <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong></div>
                 <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong></div>
@@ -1654,7 +1853,7 @@
             <div class="failure-card" id="failureCard"></div>
             <div class="quiz-card">
               <h3>Quick checkpoint</h3>
-              <p id="quizQuestion">Question: “What changed in the latest deployed website commit?”</p>
+              <p id="quizQuestion"></p>
               <div class="preset-row" id="quizPicker" aria-label="Checkpoint questions"></div>
               <div class="control-row">
                 <button class="lab-button" data-quiz="guess" type="button">Let the model guess</button>
@@ -1665,674 +1864,42 @@
           </div>
         </section>
 
+        <section id="hallucination" class="lab-card">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker">A game about grounding</span>
+              <h2>Spot the Hallucination</h2>
+              <p>An assistant summarized the notes on the left. Every sentence sounds fine, but some aren't backed by the source. Tap the ones you think are unsupported, then turn on grounding to check each claim against the evidence.</p>
+            </div>
+            <span class="status-pill" id="halScore">Round 1 of 3</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="hal-grid">
+              <div class="hal-source">
+                <span class="hal-label" id="halSourceTitle">Source</span>
+                <ol id="halSource"></ol>
+              </div>
+              <div class="hal-claims">
+                <span class="hal-label">Assistant's summary: tap the unsupported claims</span>
+                <div id="halClaims"></div>
+                <div class="control-row" style="margin-top: 12px">
+                  <button class="lab-button primary" id="halCheck" type="button">Turn on grounding</button>
+                  <button class="lab-button" id="halNext" type="button" hidden>Next round</button>
+                </div>
+                <div class="quiz-result" id="halResult" aria-live="polite">Fluent is not the same as supported.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <footer>
-          <a href="../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+          <a href="../">Home</a> · <a href="training-alignment.html">Training &amp; alignment</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
         </footer>
       </div>
     </div>
   </main>
 
-  <script>
-    const scenarios = {
-      garden: [
-        ['01', 'Read request', 'Extract intent, constraints, and what would count as done.', 'USER: "Find my latest garden photo and write a caption."\n\nIntent: add a useful caption.\nRisk: private metadata, wrong folder, stale assumptions.'],
-        ['02', 'Load context', 'Use visible chat, saved instructions, and relevant files.', 'CONTEXT: site uses photos/garden/ and resized JPEGs.\nMEMORY: captions should be casual, not stiff.'],
-        ['03', 'Plan', 'Break the job into small checks before touching files.', 'PLAN:\n1. Inspect image.\n2. Resize safely.\n3. Add page entry.\n4. Verify layout.'],
-        ['04', 'Choose tool', 'Use tools when guessing is weaker than checking.', 'TOOL SELECTED: filesystem + image inspection.\nReason: the model cannot know the file dimensions by memory.'],
-        ['05', 'Observe result', 'Read tool output and update the next move.', 'OBSERVATION: image is 3024x4032, portrait, contains garden bed with redbud.\nNext: crop/resize to site convention.'],
-        ['06', 'Answer or continue', 'Stop when the task is verified, otherwise loop again.', 'FINAL: page updated, image resized, layout checked, commit ready.\nLoop ends because verification passed.']
-      ],
-      weather: [
-        ['01', 'Read request', 'Find the actual decision being asked for.', 'USER: "Should I water tonight?"\n\nIntent: watering advice.\nRisk: guessing weather from memory would be useless.'],
-        ['02', 'Load context', 'Use location, garden preferences, and recent task history.', 'CONTEXT: Philadelphia / Zone 7a.\nMemory: new plantings dry out faster than established shrubs.'],
-        ['03', 'Plan', 'Separate facts from judgment.', 'PLAN:\n1. Check forecast.\n2. Check rain timing.\n3. Consider new plantings.\n4. Give concise recommendation.'],
-        ['04', 'Choose tool', 'Use live data for unstable facts.', 'TOOL SELECTED: weather lookup.\nReason: precipitation and temperature change hourly.'],
-        ['05', 'Observe result', 'Turn raw data into a practical decision.', 'OBSERVATION: rain likely overnight, humidity high, no heat spike.\nNext: advise skipping most watering, check containers.'],
-        ['06', 'Answer or continue', 'Answer with caveats when evidence is limited.', 'FINAL: skip beds tonight, water containers if light, revisit tomorrow morning if rain misses.']
-      ],
-      layout: [
-        ['01', 'Read request', 'Translate subjective feedback into testable layout checks.', 'USER: "Those buttons are not centered."\n\nIntent: visual alignment fix.\nRisk: changing the wrong container.'],
-        ['02', 'Load context', 'Inspect CSS and the actual rendered page.', 'CONTEXT: sidebar uses generated nav plus shared global styles.\nClue: inherited nav padding may affect alignment.'],
-        ['03', 'Plan', 'Make a small visual fix and verify at multiple widths.', 'PLAN:\n1. Locate sidebar rules.\n2. Reset inherited spacing.\n3. Screenshot desktop/tablet.\n4. Push cache-busted update.'],
-        ['04', 'Choose tool', 'Use browser screenshots because this is visual.', 'TOOL SELECTED: local server + Chrome screenshot.\nReason: code inspection alone cannot prove centering.'],
-        ['05', 'Observe result', 'Compare screenshot against the requested frame.', 'OBSERVATION: button stack now fills the sidebar frame evenly.\nNext: check labels do not clip.'],
-        ['06', 'Answer or continue', 'Report exactly what changed and how it was verified.', 'FINAL: sidebar nav centered, screenshots checked at 1280px and 1024px, commit pushed.']
-      ]
-    };
-    let steps = scenarios.garden;
-    let stepIndex = 0;
-    let autoTimer = null;
-    let memorySaved = false;
-    let tourIndex = 0;
-    let quizKind = 'commit';
-    const tourStops = [
-      ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
-      ['training-roadmap', 'Training', 'This runtime guide links to a full deep dive on model training, fine-tuning, RLHF, alignment, and evaluation — with demos you can poke.'],
-      ['diagrams', 'Diagrams', 'The three shapes to remember are pipeline, loop, and memory. Most AI behavior fits into one of those.'],
-      ['tokens', 'Tokens', 'Models operate on chunks of text. More text means more context pressure, cost, and chances for the important part to get buried.'],
-      ['context', 'Context and memory', 'The active context is temporary. Durable memory is how key facts survive beyond the visible chat.'],
-      ['prompts', 'Prompt quality', 'Clear prompts reduce hidden assumptions. Agent-ready prompts also include constraints, verification, and expected output.'],
-      ['tools', 'Tool checking', 'Tools turn the model from a guesser into an inspector. The model still reasons, but it reasons from fresher evidence.'],
-      ['agent-loop', 'Agent loop', 'An agent is not just a chat response. It repeats: read, plan, choose a tool, observe, and decide whether to continue.'],
-      ['trace', 'Trace viewer', 'A trustworthy run shows observable steps: request, tool call, observation, verification, and final answer. Hidden reasoning is not the audit trail.'],
-      ['systems', 'Systems', 'Local models, cloud models, agents, and media models are different systems with different strengths and tradeoffs.'],
-      ['concepts', 'Concept decoder', 'Once the moving pieces make sense, the vocabulary gets easier: tokens, context, memory, tools, grounding, verification, and approvals.'],
-      ['builder', 'Agent stack', 'A useful agent is assembled from capabilities: model, context, tools, memory, approvals, and verification.'],
-      ['failure', 'Failure modes', 'Most AI mistakes come from missing evidence, stale info, bad instructions, wrong tools, or unsafe permissions.']
-    ];
-
-    function renderAgent() {
-      const flow = document.getElementById('agentFlow');
-      const consoleBox = document.getElementById('agentConsole');
-      flow.innerHTML = steps.map((s, i) => {
-        const cls = i === stepIndex ? 'active' : i < stepIndex ? 'done' : '';
-        return `<article class="flow-step ${cls}"><span>${s[0]}</span><strong>${s[1]}</strong><p>${s[2]}</p></article>`;
-      }).join('');
-      consoleBox.textContent = steps[stepIndex][3];
-    }
-
-    function advanceAgent() {
-      stepIndex = (stepIndex + 1) % steps.length;
-      renderAgent();
-    }
-
-    function setScenario(kind) {
-      steps = scenarios[kind];
-      stepIndex = 0;
-      document.querySelectorAll('[data-scenario]').forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === kind));
-      renderAgent();
-    }
-
-    const mapStations = {
-      input: ['1', 'Input', 'The user request enters first. A good system extracts intent, constraints, and what done should look like.', 'Bad input is recoverable if the agent asks a focused question or checks the source of truth.'],
-      tokens: ['2', 'Tokens', 'Text becomes model-readable chunks. Token pressure matters because long messy input can bury the important clue.', 'Short, clear context usually beats a giant undigested paste.'],
-      context: ['3', 'Context', 'The working window holds instructions, visible conversation, files, tool results, and images for this run.', 'If a fact is not in context or retrievable by tool, the model may not know it.'],
-      model: ['4', 'Model core', 'The model predicts useful next text or actions from the current context. It is the reasoning engine, not the whole system.', 'Better models help, but even strong models need evidence.'],
-      tools: ['5', 'Tools', 'Tools let the agent inspect reality: files, commands, browser state, images, or live data.', 'Tool output still needs interpretation. The tool gives evidence; it does not replace judgment.'],
-      memory: ['6', 'Memory', 'Memory stores selected durable facts, preferences, and workflow lessons so they survive future sessions.', 'Memory should be curated. Saving everything creates noise.'],
-      verify: ['7', 'Verification', 'The checkpoint proves the work: tests, screenshots, scans, syntax checks, source comparisons, or live page checks.', 'This is where confident claims become inspected claims.'],
-      answer: ['8', 'Final answer', 'The final response should say what changed, what was verified, and where to see it.', 'A concise closeout is part of the system, not an afterthought.']
-    };
-
-    function renderMapStation(key) {
-      const item = mapStations[key];
-      document.querySelectorAll('[data-map]').forEach(btn => btn.classList.toggle('active', btn.dataset.map === key));
-      document.getElementById('mapButtons').innerHTML = Object.entries(mapStations).map(([id, station]) => {
-        return `<button class="lab-button ${id === key ? 'active' : ''}" data-map-button="${id}" type="button">${station[0]} ${station[1]}</button>`;
-      }).join('');
-      document.getElementById('mapReadout').innerHTML = `<span class="status-pill">Station ${item[0]}</span><h3>${item[1]}</h3><p>${item[2]}</p><div class="trace-note">${item[3]}</div>`;
-      document.querySelectorAll('[data-map-button]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.mapButton)));
-    }
-
-    function splitTokens(text) {
-      return (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|\d+|[^\sA-Za-z\d]/g) || []).flatMap(part => {
-        if (part.length <= 8 || /[^A-Za-z]/.test(part)) return [part];
-        const out = [];
-        for (let i = 0; i < part.length; i += 6) out.push(part.slice(i, i + 6));
-        return out;
-      });
-    }
-
-    function renderTokens() {
-      const input = document.getElementById('tokenInput').value;
-      const tokens = splitTokens(input);
-      document.getElementById('tokenOutput').innerHTML = tokens.map(t => `<span class="token">${escapeHtml(t)}</span>`).join('');
-      document.getElementById('tokenCount').textContent = tokens.length;
-      const pct = Math.min(100, Math.round(tokens.length / 120 * 100));
-      document.getElementById('contextUse').textContent = pct + '%';
-      document.getElementById('tokenMeter').style.width = pct + '%';
-      document.getElementById('tokenHint').textContent = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
-    }
-
-    const tokenPresets = {
-      short: 'Explain AI agents simply.',
-      clear: 'Ask Claw to check the latest garden photo, write a caption, and add it to the website without leaking private metadata.',
-      logs: 'Here is a copied error log: TypeError: Cannot read properties of undefined, at renderAgent, at HTMLButtonElement, after clicking Next step. Explain what likely broke and where to inspect first.',
-      overloaded: 'Fix the AI page and make it better and more interactive and add a bunch of examples and make the mobile layout nice and maybe add diagrams and also explain tokens and context and tools and hallucinations and memory and local models and cloud models and make it look cool.'
-    };
-
-    function setTokenPreset(kind) {
-      document.querySelectorAll('[data-token-preset]').forEach(btn => btn.classList.toggle('active', btn.dataset.tokenPreset === kind));
-      document.getElementById('tokenInput').value = tokenPresets[kind];
-      renderTokens();
-    }
-
-    const contextMessages = [
-      ['Turn 1', 'User asks for a garden photo page.'],
-      ['Turn 2', 'Assistant checks project structure.'],
-      ['Turn 3', 'User says captions should be funny.'],
-      ['Turn 4', 'Assistant resizes images and edits HTML.'],
-      ['Turn 5', 'User changes the homepage nav.'],
-      ['Turn 6', 'Assistant verifies with screenshots.'],
-      ['Turn 7', 'User asks about AI education content.'],
-      ['Turn 8', 'Assistant proposes an agent simulator.'],
-      ['Turn 9', 'User says to proceed.'],
-      ['Turn 10', 'Assistant edits the AI explainer page.'],
-      ['Turn 11', 'Browser verification finds a mobile issue.'],
-      ['Turn 12', 'Assistant fixes responsive layout.'],
-      ['Turn 13', 'User asks for another interaction.'],
-      ['Turn 14', 'Assistant adds a tool-use demo.']
-    ];
-
-    function renderContext() {
-      const count = Number(document.getElementById('contextRange').value);
-      document.getElementById('contextLabel').textContent = count;
-      const visibleFrom = Math.max(0, count - 5);
-      const summaryFrom = Math.max(0, count - 9);
-      document.getElementById('contextStack').innerHTML = contextMessages.slice(0, count).map((msg, i) => {
-        let state = 'dropped';
-        let label = 'dropped';
-        if (memorySaved && i === 2) { state = 'memory'; label = 'saved'; }
-        else if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
-        else if (i >= summaryFrom) { state = 'summary'; label = 'summary'; }
-        return `<div class="context-item ${state}"><strong>${msg[0]}</strong><span>${msg[1]}</span><span class="context-state">${label}</span></div>`;
-      }).join('');
-    }
-
-    function toggleMemory() {
-      memorySaved = !memorySaved;
-      const button = document.getElementById('memoryToggle');
-      button.classList.toggle('active', memorySaved);
-      button.setAttribute('aria-pressed', String(memorySaved));
-      button.textContent = memorySaved ? 'Key fact saved' : 'Save key fact';
-      renderContext();
-    }
-
-    const prompts = {
-      weak: {
-        text: 'Make the AI page better.',
-        result: 'The model has to guess what better means: more text, different styling, new sections, or bug fixes. You may get a generic answer.'
-      },
-      clear: {
-        text: 'Improve the How AI Works page by adding interactive demos for tokens, context, prompts, tools, and failure modes. Keep it static and compatible with GitHub Pages.',
-        result: 'The model has scope, constraints, and implementation boundaries. The output is more likely to match the actual job.'
-      },
-      agent: {
-        text: 'Edit the existing site, preserve unrelated files, verify desktop/mobile layout, commit the change, and give me the live cache-busted link.',
-        result: 'Now it is agent-ready: it describes actions, safety constraints, verification, and final reporting.'
-      }
-    };
-
-    function renderPrompt(kind) {
-      document.querySelectorAll('[data-prompt]').forEach(btn => btn.classList.toggle('active', btn.dataset.prompt === kind));
-      document.getElementById('promptText').textContent = prompts[kind].text;
-      document.getElementById('promptResult').textContent = prompts[kind].result;
-    }
-
-    const tools = {
-      guess: 'REQUEST: "What changed on the site?"\n\nMODEL ONLY: I can describe likely changes, but I may be wrong if I have not inspected the repo.',
-      files: 'TOOL: rg + file reads\n\nRESULT: The page contains an agent simulator, token playground, context visualizer, prompt comparison, tool simulator, system tradeoffs, and failure modes.',
-      web: 'TOOL: web/browser check\n\nRESULT: Useful for current facts or deployed pages. Also requires prompt-injection caution because external pages are untrusted input.',
-      image: 'TOOL: image generation\n\nRESULT: Best when the page needs a new bitmap asset, thumbnail, texture, or visual reference. Not needed for every UI.',
-      approve: 'TOOL: external action\n\nRESULT: Restarting services, spending money, publishing public posts, or changing credentials should pause for approval first.'
-    };
-    const toolCompare = {
-      guess: [
-        'A model may say the page was probably updated recently because the conversation mentioned it. That can sound confident while still being unverified.',
-        'An agent checks the repository, commit history, or deployed page before saying what changed.'
-      ],
-      files: [
-        'Without reading files, the model can only infer structure from memory or chat context.',
-        'File search gives exact paths, text, and line-level evidence. That is the right move for site edits.'
-      ],
-      web: [
-        'For current facts, a model-only answer can be stale the moment it is written.',
-        'A web check can confirm live state, but external pages must be treated as untrusted input.'
-      ],
-      image: [
-        'A text model can describe an image idea, but it cannot create the bitmap itself.',
-        'An image tool creates a real asset, then the agent should place it and verify that it loads.'
-      ],
-      approve: [
-        'The model may know what command would restart a service, but knowing is not permission.',
-        'A safer agent pauses before destructive, public, paid, credential, or service-level actions.'
-      ]
-    };
-
-    function renderTool(kind) {
-      document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.toggle('active', btn.dataset.tool === kind));
-      document.getElementById('toolReadout').textContent = tools[kind];
-      document.getElementById('guessPanel').textContent = toolCompare[kind][0];
-      document.getElementById('checkPanel').textContent = toolCompare[kind][1];
-    }
-
-    const traces = {
-      good: {
-        badge: 'Healthy run',
-        note: 'This is what you want from an agent: enough public structure to review the work, without exposing private internal reasoning.',
-        steps: [
-          ['Request', 'User asks to add an interactive AI page section.', 'The task has a clear target and an existing page to edit.'],
-          ['Visible plan', 'Agent chooses a small next module: explain observable traces.', 'A short public plan is useful because it sets scope and gives the user something concrete to judge.'],
-          ['Tool call', 'Read local HTML/CSS/JS and find the tour/nav structure.', 'The agent inspects the actual source instead of assuming where the section belongs.'],
-          ['Observation', 'Page already has tour stops, nav items, modules, and static JavaScript.', 'The new feature should fit that existing pattern rather than introduce a framework.'],
-          ['Verification', 'Run syntax checks, screenshot the page, and scan staged changes for secrets.', 'The agent proves the static page still loads and no accidental private data is being shipped.'],
-          ['Final answer', 'Report commit, what changed, and the cache-busted live link.', 'A good closeout is short, specific, and tied to evidence.']
-        ]
-      },
-      bad: {
-        badge: 'Weak run',
-        note: 'This trace is weak because it jumps from request to confidence. The missing middle is where most mistakes hide.',
-        steps: [
-          ['Request', 'User asks to improve the page.', 'The goal is broad and could mean design, content, interactivity, or bug fixes.'],
-          ['Assumption', 'Agent decides what the page probably looks like from memory.', 'No file read, no screenshot, and no check against the current repo.'],
-          ['Confident answer', 'Agent says the page was improved.', 'Confidence is not evidence. It may be describing work that never happened.'],
-          ['No observation', 'There is no tool result to compare against.', 'Without an observation, the agent cannot know whether the change exists or works.'],
-          ['No verification', 'No syntax check, no layout check, no commit check.', 'The user has to find mistakes manually.'],
-          ['Correction needed', 'The next run must inspect the source and verify the rendered page.', 'Bad traces are fixable, but they cost time and trust.']
-        ]
-      },
-      blocked: {
-        badge: 'Approval boundary',
-        note: 'Stopping is part of good agent behavior. A capable agent still needs permission boundaries.',
-        steps: [
-          ['Request', 'User asks for an action that changes service state or publishes externally.', 'The agent can understand the task, but capability is not permission.'],
-          ['Risk check', 'Action touches a restart, public post, credential, payment, or destructive change.', 'These are approval-required categories because mistakes have real consequences.'],
-          ['Pause', 'Agent explains what it would do and asks for explicit approval.', 'This is better than quietly doing something powerful and hoping it was okay.'],
-          ['Wait', 'No command runs until the user confirms that exact action.', 'The trace should show that the boundary was respected.'],
-          ['Proceed or cancel', 'If approved, the agent acts and verifies. If not, it stops cleanly.', 'Good automation has brakes.'],
-          ['Report', 'Final answer says whether the action happened or was intentionally not run.', 'No ambiguity about external effects.']
-        ]
-      }
-    };
-    let currentTrace = 'good';
-    let traceIndex = 0;
-
-    function renderTrace(kind) {
-      currentTrace = kind;
-      traceIndex = 0;
-      document.querySelectorAll('[data-trace]').forEach(btn => btn.classList.toggle('active', btn.dataset.trace === kind));
-      renderTraceStep();
-    }
-
-    function renderTraceStep() {
-      const trace = traces[currentTrace];
-      document.getElementById('traceList').innerHTML = trace.steps.map((step, index) => {
-        return `<button class="trace-row ${index === traceIndex ? 'active' : ''}" data-trace-step="${index}" type="button"><b>${index + 1}</b><span><strong>${step[0]}</strong><span>${step[1]}</span></span></button>`;
-      }).join('');
-      const step = trace.steps[traceIndex];
-      document.getElementById('traceOutput').innerHTML = `<span class="status-pill">${trace.badge}</span><h3>${step[0]}</h3><p>${step[1]}</p><p>${step[2]}</p><div class="trace-note">${trace.note}</div>`;
-      document.querySelectorAll('[data-trace-step]').forEach(btn => btn.addEventListener('click', () => {
-        traceIndex = Number(btn.dataset.traceStep);
-        renderTraceStep();
-      }));
-    }
-
-    const concepts = {
-      token: {
-        label: 'Token',
-        short: 'A chunk of text the model reads or writes.',
-        definition: 'A token is a piece of text: sometimes a whole short word, sometimes part of a word, sometimes punctuation. Models process tokens, not raw letters or human meanings directly.',
-        example: 'Long pasted logs consume many tokens. If the important error is buried near the bottom, the model may spend attention on noise before it reaches the useful clue.',
-        avoid: 'Not exactly a word.',
-        better: 'A model-sized text piece.'
-      },
-      context: {
-        label: 'Context',
-        short: 'The working material visible right now.',
-        definition: 'Context is the active bundle the model can use for this answer: your latest message, relevant previous messages, files, tool results, images, and instructions.',
-        example: 'When an agent edits a page, the current HTML and CSS need to be in context or retrieved with tools. Otherwise it is guessing the structure.',
-        avoid: 'The model remembers everything.',
-        better: 'The model uses what is currently loaded.'
-      },
-      memory: {
-        label: 'Memory',
-        short: 'Durable facts saved outside the moment.',
-        definition: 'Memory is information intentionally saved so future sessions can reuse it: preferences, stable facts, project rules, and lessons learned.',
-        example: 'A note like "GitHub username is jz237, not jez237" belongs in memory because it prevents repeated mistakes.',
-        avoid: 'Memory is the whole chat log.',
-        better: 'Memory is selected durable context.'
-      },
-      model: {
-        label: 'Model',
-        short: 'The prediction engine doing the language work.',
-        definition: 'The model is the trained neural network that turns input tokens into output tokens. It does not automatically inspect your computer or the live web unless a system gives it tools.',
-        example: 'A stronger model may reason better about a bug, but it still needs the actual code to fix the right file.',
-        avoid: 'The model is the whole assistant.',
-        better: 'The model is one part of the assistant.'
-      },
-      training: {
-        label: 'Training',
-        short: 'The process that creates the model weights.',
-        definition: 'Training is the expensive learning phase before normal use. The system shows the model many examples, measures prediction error, and adjusts weights so future predictions get better.',
-        example: 'A base language model learns broad text patterns during pretraining. Later tuning can make it follow instructions or specialize in code.',
-        avoid: 'Training happens every time you chat.',
-        better: 'Training creates the model; inference uses it.'
-      },
-      alignment: {
-        label: 'Alignment',
-        short: 'Tuning model behavior toward human goals.',
-        definition: 'Alignment is the post-training work that tries to make a capable model more useful, honest, safe, and controllable. RLHF is one common alignment method.',
-        example: 'Humans may rank two answers, a reward model learns that preference, and reinforcement learning nudges the assistant toward the preferred behavior.',
-        avoid: 'Alignment makes models perfect.',
-        better: 'Alignment shapes behavior and still needs evals.'
-      },
-      tool: {
-        label: 'Tool',
-        short: 'A controlled action outside the model.',
-        definition: 'A tool lets the agent do something the model cannot do internally: read files, run commands, search the web, create images, inspect screenshots, or send messages.',
-        example: 'For "what changed in the latest commit," git is the right tool. The model should not answer from memory.',
-        avoid: 'Tools make answers automatically correct.',
-        better: 'Tools provide evidence the model must interpret.'
-      },
-      agent: {
-        label: 'Agent',
-        short: 'A model plus loop, tools, and boundaries.',
-        definition: 'An agent wraps a model in a process: read the task, plan, use tools when useful, observe results, verify, and decide whether to continue or stop.',
-        example: 'Editing the website is agent work because it involves reading files, changing code, checking screenshots, committing, and pushing.',
-        avoid: 'Agent means smarter chatbot.',
-        better: 'Agent means model plus action loop.'
-      },
-      grounding: {
-        label: 'Grounding',
-        short: 'Tying claims to evidence.',
-        definition: 'Grounding means anchoring an answer in sources the system can inspect: files, tool output, screenshots, documents, or live data.',
-        example: 'A browser screenshot grounds a layout fix better than saying "the CSS looks centered."',
-        avoid: 'Grounding removes all mistakes.',
-        better: 'Grounding reduces unsupported claims.'
-      },
-      verification: {
-        label: 'Verification',
-        short: 'Checking that the result actually works.',
-        definition: 'Verification is the proof step after work is done: syntax checks, tests, screenshots, link checks, secret scans, or comparing output to the request.',
-        example: 'For this static page, useful verification is JS syntax, Chrome rendering, DOM checks, and a staged secret scan.',
-        avoid: 'No error message means verified.',
-        better: 'Verification is an explicit check.'
-      },
-      approval: {
-        label: 'Approval',
-        short: 'A human checkpoint before risky action.',
-        definition: 'Approval is the boundary that stops an agent before destructive, public, paid, credential, or service-level actions.',
-        example: 'Restarting OpenClaw or publishing a public post should pause for explicit confirmation.',
-        avoid: 'Approval is just caution.',
-        better: 'Approval controls real-world side effects.'
-      },
-      hallucination: {
-        label: 'Hallucination',
-        short: 'A plausible answer without enough evidence.',
-        definition: 'A hallucination is not random nonsense. It is often a fluent, reasonable-looking answer produced when the model lacks grounding or overextends from weak context.',
-        example: 'Saying a homepage tile exists without reading the HTML would be a classic hallucination risk.',
-        avoid: 'Hallucination means the model is broken.',
-        better: 'Hallucination means the claim is unsupported.'
-      }
-    };
-    let conceptKey = 'token';
-
-    function renderConcept(key) {
-      conceptKey = key;
-      document.getElementById('conceptList').innerHTML = Object.entries(concepts).map(([id, item]) => {
-        return `<button class="concept-card ${id === key ? 'active' : ''}" data-concept="${id}" type="button"><strong>${item.label}</strong><span>${item.short}</span></button>`;
-      }).join('');
-      const item = concepts[key];
-      document.getElementById('conceptDetail').innerHTML = `<span class="status-pill">Core concept</span><h3>${item.label}</h3><p>${item.definition}</p><div class="concept-example">${item.example}</div><div class="concept-pair"><div><strong>Avoid thinking</strong><span>${item.avoid}</span></div><div><strong>Better mental model</strong><span>${item.better}</span></div></div>`;
-      document.querySelectorAll('[data-concept]').forEach(btn => btn.addEventListener('click', () => renderConcept(btn.dataset.concept)));
-    }
-
-    const failures = {
-      hallucination: ['Hallucination', 'The model fills in a plausible answer without evidence. Reduce it by giving sources, using tools, and asking it to separate known facts from assumptions.'],
-      stale: ['Stale information', 'Training data and memory can be outdated. For current prices, laws, model releases, schedules, or live websites, the system needs fresh lookup.'],
-      context: ['Missing context', 'The model may not see the file, previous decision, image, or private instruction that matters. Put key facts in the current context or durable memory.'],
-      prompt: ['Weak prompt', 'Ambiguous requests force the model to choose hidden assumptions. Better prompts say the goal, constraints, output shape, and what not to change.'],
-      tool: ['Wrong tool', 'A coding agent should inspect code. A research agent should cite sources. A media job may need an image tool. Good agents pick the right instrument.'],
-      permission: ['Permission boundary', 'A capable agent still needs limits. Destructive actions, external posts, secrets, payments, and service restarts deserve explicit approval.']
-    };
-    const quizQuestions = {
-      commit: {
-        label: 'Latest commit',
-        question: 'Question: “What changed in the latest deployed website commit?”',
-        tool: 'Correct. Latest deployed commit is current state, so the agent should inspect git or the live page before answering.',
-        guess: 'Risky. The model might remember an earlier commit from the chat, but that is not proof of the latest deployed state.'
-      },
-      weather: {
-        label: 'Tonight weather',
-        question: 'Question: “Will it rain enough tonight that I can skip watering?”',
-        tool: 'Correct. Weather is live and unstable, so the agent should check a forecast before advising.',
-        guess: 'Risky. Weather changes too quickly for memory or training data to be reliable.'
-      },
-      definition: {
-        label: 'Concept',
-        question: 'Question: “What is a token in an AI model?”',
-        tool: 'Usually unnecessary. A general concept can be answered from model knowledge unless exact source wording is required.',
-        guess: 'Reasonable. This is stable conceptual knowledge, so a plain explanation is fine.'
-      },
-      restart: {
-        label: 'Restart service',
-        question: 'Question: “Restart the site service now.”',
-        tool: 'Partly right, but the key point is approval. The agent should pause before service restarts unless explicitly authorized.',
-        guess: 'Wrong direction. This is not a question to guess about; it is an action with operational risk.'
-      }
-    };
-    const builderLayers = [
-      {
-        key: 'model',
-        title: 'Reasoning model',
-        desc: 'Turns instructions and context into next actions or answers.',
-        color: 'var(--lab-cyan)',
-        capability: 2,
-        risk: 1,
-        oversight: 1,
-        defaultOn: true
-      },
-      {
-        key: 'context',
-        title: 'Context window',
-        desc: 'Carries the current task, visible chat, files, and constraints.',
-        color: 'var(--lab-green)',
-        capability: 2,
-        risk: 1,
-        oversight: 1,
-        defaultOn: true
-      },
-      {
-        key: 'tools',
-        title: 'Tools',
-        desc: 'Lets the agent inspect files, browse, run commands, or create media.',
-        color: 'var(--lab-violet)',
-        capability: 3,
-        risk: 3,
-        oversight: 2,
-        defaultOn: true
-      },
-      {
-        key: 'memory',
-        title: 'Memory',
-        desc: 'Persists preferences, facts, and workflow lessons across sessions.',
-        color: 'var(--lab-gold)',
-        capability: 2,
-        risk: 2,
-        oversight: 2,
-        defaultOn: true
-      },
-      {
-        key: 'approvals',
-        title: 'Approvals',
-        desc: 'Adds checkpoints for destructive, public, credential, or service actions.',
-        color: 'var(--lab-orange)',
-        capability: 1,
-        risk: -2,
-        oversight: 3,
-        defaultOn: true
-      },
-      {
-        key: 'verification',
-        title: 'Verification',
-        desc: 'Checks results with tests, screenshots, scans, or source comparisons.',
-        color: 'var(--lab-rose)',
-        capability: 2,
-        risk: -2,
-        oversight: 2,
-        defaultOn: true
-      }
-    ];
-
-    function renderFailure(kind) {
-      document.querySelectorAll('[data-failure]').forEach(btn => btn.classList.toggle('active', btn.dataset.failure === kind));
-      const [title, copy] = failures[kind];
-      document.getElementById('failureCard').innerHTML = `<h3>${title}</h3><p>${copy}</p>`;
-    }
-
-    function renderTour() {
-      const [id, title, copy] = tourStops[tourIndex];
-      document.getElementById('tourTitle').textContent = `${tourIndex + 1}/${tourStops.length}: ${title}`;
-      document.getElementById('tourCopy').textContent = copy;
-      document.getElementById('tourProgress').innerHTML = tourStops.map((stop, index) => {
-        return `<button class="tour-dot ${index === tourIndex ? 'active' : ''}" data-tour-index="${index}" type="button" aria-label="Tour stop ${index + 1}"></button>`;
-      }).join('');
-      document.querySelectorAll('.lab-card').forEach(card => card.classList.toggle('tour-active', card.id === id));
-      document.querySelectorAll('[data-tour-index]').forEach(btn => btn.addEventListener('click', () => moveTour(Number(btn.dataset.tourIndex), true)));
-    }
-
-    function moveTour(index, scroll) {
-      tourIndex = (index + tourStops.length) % tourStops.length;
-      renderTour();
-      if (scroll) document.getElementById(tourStops[tourIndex][0]).scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function answerQuiz(kind) {
-      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.toggle('active', btn.dataset.quiz === kind));
-      document.getElementById('quizResult').textContent = quizQuestions[quizKind][kind];
-    }
-
-    function renderQuiz(kind) {
-      quizKind = kind;
-      document.getElementById('quizQuestion').textContent = quizQuestions[kind].question;
-      document.getElementById('quizPicker').innerHTML = Object.entries(quizQuestions).map(([key, value]) => {
-        return `<button class="lab-button ${key === kind ? 'active' : ''}" data-quiz-kind="${key}" type="button">${value.label}</button>`;
-      }).join('');
-      document.querySelectorAll('[data-quiz-kind]').forEach(btn => btn.addEventListener('click', () => renderQuiz(btn.dataset.quizKind)));
-      document.querySelectorAll('[data-quiz]').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('quizResult').textContent = 'Pick the safer approach.';
-    }
-
-    function renderBuilder() {
-      const selected = builderLayers.filter(layer => document.getElementById(`stack-${layer.key}`)?.checked);
-      document.getElementById('stackVisual').innerHTML = selected.length
-        ? selected.map(layer => `<div class="stack-layer" style="--layer-color:${layer.color}"><strong>${layer.title}</strong><span>${layer.desc}</span></div>`).join('')
-        : '<div class="stack-layer"><strong>No stack</strong><span>A model needs at least instructions and context to do useful work.</span></div>';
-      const capability = selected.reduce((sum, layer) => sum + layer.capability, 0);
-      const risk = Math.max(0, selected.reduce((sum, layer) => sum + layer.risk, 0));
-      const oversight = selected.reduce((sum, layer) => sum + layer.oversight, 0);
-      document.getElementById('builderCapability').textContent = capability;
-      document.getElementById('builderRisk').textContent = risk;
-      document.getElementById('builderOversight').textContent = oversight;
-      const hasTools = selected.some(layer => layer.key === 'tools');
-      const hasApprovals = selected.some(layer => layer.key === 'approvals');
-      const hasVerify = selected.some(layer => layer.key === 'verification');
-      let summary = 'This stack can answer basic questions, but it is limited.';
-      if (hasTools && hasVerify && hasApprovals) {
-        summary = 'This is the strongest practical setup: tools provide evidence, verification checks the result, and approvals keep risky actions bounded.';
-      } else if (hasTools && !hasApprovals) {
-        summary = 'Powerful but risky: tools let the agent act, but missing approvals makes destructive or public actions easier to mishandle.';
-      } else if (hasTools && !hasVerify) {
-        summary = 'Useful but less dependable: the agent can inspect or act, but it lacks a final proof step.';
-      } else if (!hasTools && hasVerify) {
-        summary = 'Conservative: it can reason and review, but without tools it cannot inspect current files or live state.';
-      }
-      document.getElementById('builderSummary').textContent = summary;
-    }
-
-    function initBuilder() {
-      document.getElementById('builderOptions').innerHTML = builderLayers.map(layer => {
-        return `<label class="builder-option"><input id="stack-${layer.key}" type="checkbox" ${layer.defaultOn ? 'checked' : ''}><span><strong>${layer.title}</strong><span>${layer.desc}</span></span></label>`;
-      }).join('');
-      builderLayers.forEach(layer => document.getElementById(`stack-${layer.key}`).addEventListener('change', renderBuilder));
-      renderBuilder();
-    }
-
-    function escapeHtml(value) {
-      return value.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-    }
-
-    const pipelineStages = [
-      ['Prompt', 'Everything loaded for this run goes in first: your message, the system instructions, files, and earlier conversation.'],
-      ['Tokens', 'The text is split into model-sized chunks. The model never sees raw letters or whole documents — only tokens.'],
-      ['Model', 'Billions of learned weights turn the input into a prediction of the most useful next token, repeated again and again.'],
-      ['Response', 'Predicted tokens are decoded back into text. Replies stream out one token at a time — that is why answers appear to type themselves.']
-    ];
-    let pipelineTimer = null;
-    function renderPipelineStage(index) {
-      document.querySelectorAll('#pipelineDiagram span').forEach(el => el.classList.toggle('active', Number(el.dataset.stage) === index));
-      const [title, copy] = pipelineStages[index];
-      document.getElementById('pipelineNote').innerHTML = `<strong>${title}:</strong> ${copy}`;
-    }
-    function stopPipeline() {
-      if (!pipelineTimer) return;
-      clearInterval(pipelineTimer);
-      pipelineTimer = null;
-      document.getElementById('pipelineRun').textContent = 'Send a prompt through';
-    }
-    function runPipeline() {
-      if (pipelineTimer) { stopPipeline(); return; }
-      let index = 0;
-      renderPipelineStage(0);
-      document.getElementById('pipelineRun').textContent = 'Stop';
-      pipelineTimer = setInterval(() => {
-        index += 1;
-        if (index >= pipelineStages.length) { stopPipeline(); return; }
-        renderPipelineStage(index);
-      }, 1200);
-    }
-
-    const systemJobs = {
-      journal: ['Local model', 0, 'A private journaling helper should stay on your machine. A local model keeps every word offline — no service ever sees it. A cloud model would work, but sends your private writing to someone else\'s computer.'],
-      bug: ['Cloud model', 1, 'A gnarly bug benefits from the strongest reasoning available, and frontier models live in the cloud. A local model may not be sharp enough, and you do not need tools acting on your machine just to think a problem through.'],
-      site: ['Agent', 2, 'Updating a website end-to-end means reading files, editing code, verifying in a browser, and pushing — a loop of actions with tools, not a single answer. That is agent work.'],
-      thumb: ['Media model', 3, 'A thumbnail is pixels, not prose. An image model creates the actual asset. A text model can only describe what the thumbnail should look like.']
-    };
-    function renderSystemJob(kind) {
-      const [tile, index, copy] = systemJobs[kind];
-      document.querySelectorAll('[data-job]').forEach(btn => btn.classList.toggle('active', btn.dataset.job === kind));
-      document.querySelectorAll('.system-tile').forEach((el, i) => el.classList.toggle('active', i === index));
-      document.getElementById('systemNote').innerHTML = `<strong>Best fit: ${tile}.</strong> ${copy}`;
-    }
-
-    document.getElementById('nextStep').addEventListener('click', advanceAgent);
-    document.getElementById('resetStep').addEventListener('click', () => { stepIndex = 0; renderAgent(); });
-    document.getElementById('autoStep').addEventListener('click', (event) => {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-        event.currentTarget.textContent = 'Auto run';
-        return;
-      }
-      event.currentTarget.textContent = 'Stop';
-      autoTimer = setInterval(advanceAgent, 1300);
-    });
-    document.getElementById('tokenInput').addEventListener('input', renderTokens);
-    document.getElementById('contextRange').addEventListener('input', renderContext);
-    document.getElementById('memoryToggle').addEventListener('click', toggleMemory);
-    document.getElementById('startTour').addEventListener('click', () => moveTour(0, true));
-    document.getElementById('prevTour').addEventListener('click', () => moveTour(tourIndex - 1, true));
-    document.getElementById('nextTour').addEventListener('click', () => moveTour(tourIndex + 1, true));
-    document.getElementById('mobileTour').addEventListener('click', () => moveTour(0, true));
-    document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
-    document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
-    document.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.map)));
-    document.getElementById('pipelineRun').addEventListener('click', runPipeline);
-    document.querySelectorAll('#pipelineDiagram span').forEach(el => el.addEventListener('click', () => { stopPipeline(); renderPipelineStage(Number(el.dataset.stage)); }));
-    document.querySelectorAll('[data-job]').forEach(btn => btn.addEventListener('click', () => renderSystemJob(btn.dataset.job)));
-    document.querySelectorAll('[data-scenario]').forEach(btn => btn.addEventListener('click', () => setScenario(btn.dataset.scenario)));
-    document.querySelectorAll('[data-token-preset]').forEach(btn => btn.addEventListener('click', () => setTokenPreset(btn.dataset.tokenPreset)));
-    document.querySelectorAll('[data-prompt]').forEach(btn => btn.addEventListener('click', () => renderPrompt(btn.dataset.prompt)));
-    document.querySelectorAll('[data-tool]').forEach(btn => btn.addEventListener('click', () => renderTool(btn.dataset.tool)));
-    document.querySelectorAll('[data-trace]').forEach(btn => btn.addEventListener('click', () => renderTrace(btn.dataset.trace)));
-    document.querySelectorAll('[data-quiz]').forEach(btn => btn.addEventListener('click', () => answerQuiz(btn.dataset.quiz)));
-    document.getElementById('failureTabs').innerHTML = Object.keys(failures).map((key, i) => `<button class="lab-button ${i === 0 ? 'active' : ''}" data-failure="${key}" type="button">${failures[key][0]}</button>`).join('');
-    document.querySelectorAll('[data-failure]').forEach(btn => btn.addEventListener('click', () => renderFailure(btn.dataset.failure)));
-
-    renderAgent();
-    renderMapStation('input');
-    renderTokens();
-    renderContext();
-    renderPrompt('weak');
-    renderTool('guess');
-    renderTrace('good');
-    renderConcept('token');
-    renderFailure('hallucination');
-    renderQuiz('commit');
-    initBuilder();
-    renderPipelineStage(0);
-    renderTour();
-  </script>
+  <script src="lab.js?v=20260927" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>
