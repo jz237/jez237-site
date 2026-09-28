@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "generator": "tools/author-quarry-roadside.py",
+  "conforming_helper": "tools/quarry_surface_clip.py",
+  "base": "source/models/quarry-roadside-base.json",
+  "source": "Original authored terrain and Poly Haven Rock Moss Set 01 fragments",
+  "source_url": "https://polyhaven.com/a/rock_moss_set_01",
+  "license": "CC0-1.0 for scans; original authored terrain",
+  "runtime_maps": "Shared Poly Haven Rock Ground color/normal/roughness at 1.5m physical scale, blended with existing soil/gravel/rock maps and Rock Moss Set 01 scan atlas; no embedded textures",
+  "sector": {
+    "startDegrees": 112,
+    "endDegrees": 151,
+    "sectionDegrees": [
+      112,
+      122,
+      137,
+      151
+    ]
+  },
+  "minimum_track_clearance": 9.5,
+  "surface_triangles": 32703,
+  "fragment_count": 800,
+  "solid_fragment_count": 262,
+  "meshes": [
+    {
+      "name": "RoadsideGround_0_near",
+      "triangles": 8866
+    },
+    {
+      "name": "RoadsideFragments_0_near",
+      "triangles": 20943
+    },
+    {
+      "name": "RoadsideGround_0_far",
+      "triangles": 8866
+    },
+    {
+      "name": "RoadsideFragments_0_far",
+      "triangles": 5895
+    },
+    {
+      "name": "RoadsideGround_1_near",
+      "triangles": 12197
+    },
+    {
+      "name": "RoadsideFragments_1_near",
+      "triangles": 26917
+    },
+    {
+      "name": "RoadsideGround_1_far",
+      "triangles": 12197
+    },
+    {
+      "name": "RoadsideFragments_1_far",
+      "triangles": 7745
+    },
+    {
+      "name": "RoadsideGround_2_near",
+      "triangles": 11640
+    },
+    {
+      "name": "RoadsideFragments_2_near",
+      "triangles": 25135
+    },
+    {
+      "name": "RoadsideGround_2_far",
+      "triangles": 11640
+    },
+    {
+      "name": "RoadsideFragments_2_far",
+      "triangles": 7146
+    }
+  ],
+  "assets": [
+    {
+      "file": "public/models/quarry-roadside.glb",
+      "bytes": 6793264,
+      "sha256": "da7e3be52bf0d91ab1ce196d56c622fe1ee3d7de55923f9418f16a0b3587f1cc"
+    },
+    {
+      "file": "source/models/quarry-roadside.blend",
+      "bytes": 6426630,
+      "sha256": "34930b25c1ca2ff0cb538a5d445f42b93c57856edc2ee74dd85d59571d709f9f"
+    },
+    {
+      "file": "src/quarry-roadside-data.json",
+      "bytes": 2495999,
+      "sha256": "f1015e204191e5adc0e239cfa00f999873d754df10b0a0b0c50a78f64c09a048"
+    },
+    {
+      "file": "source/models/quarry-roadside-base.json",
+      "bytes": 3936662,
+      "sha256": "0a7fdd72d3f4f8a7aff955c45a2f49bd4156439d0c0d94f04cc1ade2d4e2aac4"
+    }
+  ]
+}

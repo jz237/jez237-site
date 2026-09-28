@@ -2,6 +2,8 @@ import { terrainHeight, trackPoint, clamp } from './rules';
 import rockHulls from './quarry-rock-hulls.json';
 import screePositions from './quarry-scree.json';
 import authoredCut from './quarry-cut-collision.json';
+import roadsideData from './quarry-roadside-data.json';
+import { createSurfaceSampler } from './quarry-surface-sampler';
 import type Rapier from '@dimforge/rapier3d-compat';
 export type Point = {x:number;y:number;z:number};
 export type Rotation = Point & {w:number};
@@ -11,6 +13,14 @@ export function seededRandom(seed:number){return ()=>{seed=(seed*1664525+1013904
 export type MeshData={positions:Float32Array;indices:Uint32Array};
 export const QUARRY_CUT_SECTOR=authoredCut.sector;
 export function quarryCutGeometry():MeshData { return {positions:new Float32Array(authoredCut.positions),indices:new Uint32Array(authoredCut.indices)}; }
+export function quarryRoadsideGeometry():MeshData {return {positions:new Float32Array(roadsideData.surface.positions),indices:new Uint32Array(roadsideData.surface.indices)};}
+let roadsideSampler:ReturnType<typeof createSurfaceSampler>|undefined;
+const sampleRoadside=()=>roadsideSampler??=createSurfaceSampler(quarryRoadsideGeometry());
+/** Exact authored surface, or undefined outside its footprint. Base terrain is unchanged. */
+export const quarryRoadsideHeight=(x:number,z:number)=>sampleRoadside().height(x,z);
+export const scenerySurfaceHeight=(x:number,z:number)=>quarryRoadsideHeight(x,z)??landscapeHeight(x,z);
+export const overlapsQuarryRoadside=(x:number,z:number,padding=0)=>sampleRoadside().overlaps(x,z,padding);
+const reseatedRoadsideTrees=new Set(['fir-0-10','fir-1-5']);
 function overlapsAuthoredCut(x:number,z:number,padding=0) {
   const a=(Math.atan2(x/1.08,z)*180/Math.PI+360)%360,r=Math.hypot(x/1.08,z),margin=Math.asin(Math.min(.99,padding/Math.max(1,r)))*180/Math.PI;
   if(a+margin<QUARRY_CUT_SECTOR.startCell||a-margin>QUARRY_CUT_SECTOR.endCellExclusive)return false;
@@ -37,12 +47,12 @@ export function rockPlacements(variant:number){const r=seededRandom(419831+varia
   const sx=scale*(.7+r()*.5),sy=scale*(.6+r()*.7),sz=scale,footprint=scale*.32;
   const y=Math.min(landscapeHeight(x,z),landscapeHeight(x-footprint,z),landscapeHeight(x+footprint,z),landscapeHeight(x,z-footprint),landscapeHeight(x,z+footprint))-scale*.12;
   return {x,y,z,sx,sy,sz,yaw:r()*6.28,roll:r()*.3};
-}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)*.65));}
+}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)*.65)).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)*.65));}
 export const SCREE_POSITIONS=new Float32Array(screePositions.positions);
 export const SCREE_UVS=new Float32Array(screePositions.uv);
-export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)));}
+export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz))).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)));}
 export function nearTrees(kind:string){const r=seededRandom(749211+(Number(kind.split('-')[1])||0)*284171),track=Array.from({length:120},(_,i)=>trackPoint(i/120));const items=[];
-  for(let i=0;i<512&&items.length<16;i++){const a=r()*Math.PI*2,radius=116+r()*25,x=Math.sin(a)*radius,z=Math.cos(a)*radius;if(!track.every(p=>Math.hypot(x-p.x,z-p.z)>10))continue;items.push({x,z,height:4+r()*6,yaw:r()*6.28});}return items;
+  for(let i=0;i<512&&items.length<16;i++){const a=r()*Math.PI*2,radius=116+r()*25,x=Math.sin(a)*radius,z=Math.cos(a)*radius;if(!track.every(p=>Math.hypot(x-p.x,z-p.z)>10))continue;items.push({x,z,height:4+r()*6,yaw:r()*6.28});}return items.map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>reseatedRoadsideTrees.has(kind+'-'+p.colliderIndex)||!overlapsQuarryRoadside(p.x,p.z,p.height*.014));
 }
 export function saplingPlacements(variant:number){const r=seededRandom(863041+variant*31);return Array.from({length:20},(_,i)=>{const t=(i+r())/20,p=trackPoint(t),q=trackPoint(t+.001),a=Math.atan2(q.x-p.x,q.z-p.z),side=r()<.4?-1:1,offset=9+r()*7;return {x:p.x+Math.cos(a)*side*offset,z:p.z-Math.sin(a)*side*offset,height:.85+r()*2.2,yaw:r()*6.28};});}
 export function quarryColliderLayout():ColliderSpec[]{
@@ -51,6 +61,8 @@ export function quarryColliderLayout():ColliderSpec[]{
   const cylinder=(id:string,x:number,y:number,z:number,h:number,r:number)=>items.push({id,shape:'cylinder',p:{x,y,z},halfHeight:h/2,radius:r});
   items.push({id:'terrain',shape:'mesh',p:origin,data:terrainGeometry(),friction:.85},{id:'quarry-cliffs',shape:'mesh',p:origin,data:cliffGeometry(),friction:.85});
   items.push({id:'quarry-cut',shape:'mesh',p:origin,data:quarryCutGeometry(),friction:.85});
+  items.push({id:'quarry-roadside',shape:'mesh',p:origin,data:quarryRoadsideGeometry(),friction:.85});
+  for(const solid of roadsideData.solids)items.push({id:'quarry-roadside-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});
   for(let i=0;i<66;i++){const a=i/66*Math.PI*2;box('arena-'+i,Math.sin(a)*46,.58,Math.cos(a)*46,4.22,1.16,.75,yawRotation(a),true);}
   RAMPS.forEach((p,i)=>items.push({id:'ramp-'+i,shape:'mesh',p,data:{positions:RAMP_POINTS,indices:RAMP_INDICES}}));
   box('works-building',-72,4,-39,21,8,13);box('works-roof',-72,8.2,-39,22,.4,14);
@@ -72,12 +84,12 @@ export function quarryColliderLayout():ColliderSpec[]{
   const sign=(id:string,x:number,z:number,yaw:number,scale:number)=>{const y=terrainHeight(x,z);box('sign-board-'+id,x,y+4*scale,z,9*scale,2.25*scale,.12*scale,yawRotation(yaw));for(const side of [-3.6,3.6])box('sign-post-'+id+'-'+side,x+Math.cos(yaw)*side*scale,y+1.7*scale,z-Math.sin(yaw)*side*scale,.12*scale,3.8*scale,.12*scale,yawRotation(yaw));};
   sign('works',-72,-31,0,.85);
   for(let i=0;i<12;i++){const p=trackPoint(i/12),q=trackPoint(i/12+.002),a=Math.atan2(q.x-p.x,q.z-p.z);sign('track-'+i,p.x+Math.cos(a)*9,p.z-Math.sin(a)*9,a+Math.PI,.55);}
-  rockHulls.forEach((rock,variant)=>rockPlacements(variant).forEach((p,i)=>{const points=new Float32Array(rock.points.length);for(let j=0;j<points.length;j+=3){points[j]=rock.points[j]*p.sx;points[j+1]=rock.points[j+1]*p.sy;points[j+2]=rock.points[j+2]*p.sz;}const sy=Math.sin(p.yaw/2),cy=Math.cos(p.yaw/2),sz=Math.sin(p.roll/2),cz=Math.cos(p.roll/2);items.push({id:'scanned-rock-'+variant+'-'+i,shape:'hull',points,p:{x:p.x,y:p.y,z:p.z},q:{x:sy*sz,y:sy*cz,z:cy*sz,w:cy*cz}});}));
-  screePlacements().forEach((p,i)=>{const points=new Float32Array(SCREE_POSITIONS.length);for(let j=0;j<points.length;j+=3){points[j]=SCREE_POSITIONS[j]*p.sx;points[j+1]=SCREE_POSITIONS[j+1]*p.sy;points[j+2]=SCREE_POSITIONS[j+2]*p.sz;}
+  rockHulls.forEach((rock,variant)=>rockPlacements(variant).forEach(p=>{const points=new Float32Array(rock.points.length);for(let j=0;j<points.length;j+=3){points[j]=rock.points[j]*p.sx;points[j+1]=rock.points[j+1]*p.sy;points[j+2]=rock.points[j+2]*p.sz;}const sy=Math.sin(p.yaw/2),cy=Math.cos(p.yaw/2),sz=Math.sin(p.roll/2),cz=Math.cos(p.roll/2);items.push({id:'scanned-rock-'+variant+'-'+p.colliderIndex,shape:'hull',points,p:{x:p.x,y:p.y,z:p.z},q:{x:sy*sz,y:sy*cz,z:cy*sz,w:cy*cz}});}));
+  screePlacements().forEach(p=>{const points=new Float32Array(SCREE_POSITIONS.length);for(let j=0;j<points.length;j+=3){points[j]=SCREE_POSITIONS[j]*p.sx;points[j+1]=SCREE_POSITIONS[j+1]*p.sy;points[j+2]=SCREE_POSITIONS[j+2]*p.sz;}
     const c1=Math.cos(p.rx/2),c2=Math.cos(p.ry/2),c3=Math.cos(p.rz/2),s1=Math.sin(p.rx/2),s2=Math.sin(p.ry/2),s3=Math.sin(p.rz/2);
-    items.push({id:'scree-'+i,shape:'hull',points,p:{x:p.x,y:p.y,z:p.z},q:{x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3}});
+    items.push({id:'scree-'+p.colliderIndex,shape:'hull',points,p:{x:p.x,y:p.y,z:p.z},q:{x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3}});
   });
-  for(const kind of ['fir-0','fir-1','fir-2'])nearTrees(kind).forEach((p,i)=>cylinder('tree-'+kind+'-'+i,p.x,landscapeHeight(p.x,p.z)+p.height/2,p.z,p.height,p.height*.014));
+  for(const kind of ['fir-0','fir-1','fir-2'])nearTrees(kind).forEach(p=>cylinder('tree-'+kind+'-'+p.colliderIndex,p.x,scenerySurfaceHeight(p.x,p.z)+p.height/2,p.z,p.height,p.height*.014));
   for(const item of items)if(item.id.startsWith('works-')||item.id.startsWith('silo-')||item.id.startsWith('conveyor')||item.id.startsWith('sign-board-works')||item.id.startsWith('sign-post-works')){
     item.p={x:item.p.x+WORKS_OFFSET.x,y:item.p.y+WORKS_OFFSET.y,z:item.p.z+WORKS_OFFSET.z};
   }

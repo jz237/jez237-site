@@ -8,7 +8,9 @@ import { parseClientMessage, type ServerMessage } from './protocol';
 import { templates } from '../src/assets';
 import { Vehicle } from '../src/vehicle';
 import { Quarry } from '../src/world';
-import { quarryColliderLayout, createQuarryPhysics, terrainGeometry, cliffGeometry, BARRELS, nearTrees } from '../src/quarry-layout';
+import { quarryColliderLayout, createQuarryPhysics, terrainGeometry, cliffGeometry, quarryRoadsideGeometry, quarryRoadsideHeight, BARRELS, nearTrees } from '../src/quarry-layout';
+import roadsideData from '../src/quarry-roadside-data.json';
+import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import {corridorObstructions} from './corridor-check';
 await R.init();
 const model=new T.Group();for(const name of ['FL','FR','RL','RR']){const w=new T.Group();w.name='wheel_'+name;model.add(w);}templates.set('coupe',model);
@@ -99,7 +101,11 @@ test('actual rendered Quarry and authoritative server use identical static geome
   assert.ok(renderedCliff,'Visible cliff must retain the exact shared collision vertices');
   assert.deepEqual(renderedCliff.geometry.index!.array,cliff.indices,'Visible cliff triangles must match the shared collider');
   assert.deepEqual(quarry.collisionPhysics.statics.get('quarry-cliffs')!.vertices(),cliff.positions);
-  assert.equal(nearTrees('fir-0').length,16);
+  for(const kind of ['fir-0','fir-1','fir-2']){
+    const placements=nearTrees(kind);
+    assert.equal(layout.filter(s=>s.id.startsWith('tree-'+kind+'-')).length,placements.length);
+    for(const p of placements)assert.ok(quarry.collisionPhysics.statics.has('tree-'+kind+'-'+p.colliderIndex));
+  }
   assert.equal(server.props.length,22);quarry.props.forEach((p,i)=>assert.deepEqual(p.body.translation(),server.props[i].body.translation()));
   const impulse={x:80,y:20,z:12};quarry.props[0].body.applyImpulse(impulse,true);server.props[0].body.applyImpulse(impulse,true);
   for(let i=0;i<60;i++){browserWorld.step();server.world.step();}
@@ -147,6 +153,31 @@ test('actual Rapier contacts stop moving bodies at all three authored quarry sec
       assert.ok(contacts>0,`section ${lo}–${hi} must produce solver contact, not only a ray hit`);
       assert.ok(new T.Vector3().copy(body.translation()).sub(probe.center).dot(probe.normal)>.15,'body must remain on the exposed side of the face');
       assert.ok(new T.Vector3().copy(body.linvel()).dot(probe.normal)>-.2,'collision must stop incoming velocity');
+      world.removeRigidBody(body);
+    }
+  } finally {world.free();}
+});
+
+test('actual roadside collider supports a falling body on the raised surface in every spatial section',()=>{
+  const world=new R.World({x:0,y:-9.81,z:0}),quarry=createQuarryPhysics(R,world,false),data=quarryRoadsideGeometry(),base=createSurfaceSampler(terrainGeometry());
+  try {
+    const ground=quarry.statics.get('quarry-roadside');assert.ok(ground);world.step();
+    for(const section of roadsideData.surface.sections){
+      let center:T.Vector3|undefined;
+      for(let i=section.firstTriangle*3;i<(section.firstTriangle+section.triangleCount)*3;i+=27){
+        const a=new T.Vector3().fromArray(data.positions,data.indices[i]*3),b=new T.Vector3().fromArray(data.positions,data.indices[i+1]*3),c=new T.Vector3().fromArray(data.positions,data.indices[i+2]*3);
+        const p=a.clone().add(b).add(c).multiplyScalar(1/3),normal=b.sub(a).cross(c.sub(a)).normalize();
+        if(normal.y<.98||p.y-(base.height(p.x,p.z)??p.y)<.2)continue;
+        const hit=world.castRay(new R.Ray({x:p.x,y:p.y+3,z:p.z},{x:0,y:-1,z:0}),5,true);
+        if(hit?.collider.handle===ground.handle&&Math.abs(hit.timeOfImpact-3)<.002){center=p;break;}
+      }
+      assert.ok(center,`section ${section.id} needs an exposed raised contact probe`);
+      const body=world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(center.x,center.y+2,center.z).setCcdEnabled(true));
+      const ball=world.createCollider(R.ColliderDesc.ball(.25).setMass(100).setFriction(.9).setRestitution(0),body);let contacts=0;
+      for(let i=0;i<120;i++){world.step();world.contactPair(ball,ground,m=>contacts+=m.numContacts());}
+      assert.ok(contacts>0,'authored roadside must produce solver contact');
+      const end=body.translation(),height=quarryRoadsideHeight(end.x,end.z);assert.notEqual(height,undefined);
+      assert.ok(end.y-height!>.22&&end.y-height!<.29,'body must settle on the exact raised mesh, not the old ground below');
       world.removeRigidBody(body);
     }
   } finally {world.free();}

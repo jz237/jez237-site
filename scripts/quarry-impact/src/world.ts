@@ -1,4 +1,4 @@
-import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, WORKS_OFFSET } from './quarry-layout';
+import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -6,6 +6,8 @@ import { pbr, texture, url } from './assets';
 import { terrainHeight, trackPoint } from './rules';
 import { forestScenery, updateForestView } from './scenery-vegetation';
 import { loadQuarryCut } from './scenery-cut';
+import { loadQuarryRoadside } from './scenery-roadside';
+import { quarryRoadsideGround } from './scenery-roadside-material';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
 const rand = () => {
@@ -76,6 +78,7 @@ export class Quarry {
   checkpoint = new T.Group();
   sun: T.DirectionalLight;
   private cutLODs: T.LOD[] = [];
+  private roadsideLODs: T.LOD[] = [];
   private rockMaterial: T.MeshStandardMaterial;
   constructor(
     public scene: T.Scene,
@@ -223,8 +226,7 @@ export class Quarry {
       stones.setMatrixAt(i, dummy.matrix);
     }
     scene.add(stones);
-    const aggregate = new T.InstancedMesh(stoneGeo, rock, 460);
-    aggregate.receiveShadow=true;
+    const aggregateMatrices: T.Matrix4[] = [], aggregateColors: T.Color[] = [];
     for(let i=0;i<460;i++) {
       let x:number,z:number;
       if(i<170) {
@@ -234,9 +236,18 @@ export class Quarry {
         x=p.x+Math.cos(angle)*side*offset;z=p.z-Math.sin(angle)*side*offset;
       }
       const s=.055+rand()*.16;
-      dummy.position.set(x,terrainHeight(x,z)+s*.13+.025,z);dummy.scale.set(s,s*.38,s*.7);dummy.rotation.set(rand(),rand()*6.28,rand());dummy.updateMatrix();aggregate.setMatrixAt(i,dummy.matrix);
-      const tint=.7+rand()*.3;aggregate.setColorAt(i,new T.Color(tint,tint*.97,tint*.91));
+      dummy.position.set(x,terrainHeight(x,z)+s*.13+.025,z);dummy.scale.set(s,s*.38,s*.7);dummy.rotation.set(rand(),rand()*6.28,rand());dummy.updateMatrix();
+      const tint=.7+rand()*.3;
+      // Consume the original random sequence before filtering, preserving every
+      // retained chip and all scenery generated after this batch.
+      if (!overlapsQuarryRoadside(x,z,s)) {
+        aggregateMatrices.push(dummy.matrix.clone());
+        aggregateColors.push(new T.Color(tint,tint*.97,tint*.91));
+      }
     }
+    const aggregate = new T.InstancedMesh(stoneGeo, rock, aggregateMatrices.length);
+    aggregate.receiveShadow=true;
+    aggregateMatrices.forEach((matrix,i)=>{aggregate.setMatrixAt(i,matrix);aggregate.setColorAt(i,aggregateColors[i]);});
     aggregate.computeBoundingSphere();this.scenery.add(aggregate);
     this.industrial();
     this.playground();
@@ -657,6 +668,9 @@ export class Quarry {
     });
     if (!scannedMaterial) throw new Error('Scanned quarry rock material is missing');
     this.cutLODs = await loadQuarryCut(this.scenery, this.rockMaterial, scannedMaterial);
+    this.roadsideLODs = await loadQuarryRoadside(this.scenery, {
+      ground: quarryRoadsideGround(), rock: this.rockMaterial, scannedRock: scannedMaterial,
+    });
   }
   setMode(mode: string) {
     const derby = mode === 'derby';
@@ -668,6 +682,7 @@ export class Quarry {
     if(camera) {
       updateForestView(camera);
       for (const lod of this.cutLODs) lod.update(camera);
+      for (const lod of this.roadsideLODs) lod.update(camera);
     }
     for (const p of this.props) {
       p.mesh.position.copy(p.body.translation());

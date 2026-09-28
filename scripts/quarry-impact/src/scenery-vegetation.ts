@@ -1,4 +1,5 @@
-import { nearTrees, saplingPlacements, landscapeHeight, quarryRim } from './quarry-layout';
+import { nearTrees, saplingPlacements, landscapeHeight, scenerySurfaceHeight, quarryRim, overlapsQuarryRoadside } from './quarry-layout';
+import { roadsideSaplings, roadsideGroundCover } from './scenery-flora-placement';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
@@ -14,6 +15,8 @@ type Plant = {
     z: number;
     height: number;
     yaw: number;
+    ground?: number;
+    width?: number;
 };
 type TreeBatch = {
     material: T.MeshStandardMaterial;
@@ -46,7 +49,12 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
         const variant = large ? variantOf(tree.name) : index;
         const level = large && tree.name.endsWith('_FAR') ? 1 : 0;
         const normalization = normalizers.get(large ? String(variant) : tree.name)!;
-        const placements: Plant[] = large ? nearTrees('fir-' + variant) : saplingPlacements(variant).slice(0, 12);
+        // Filter after the original slice so the new approach does not populate
+        // previously empty distant areas with replacement procedural saplings.
+        const placements: Plant[] = large ? nearTrees('fir-' + variant) : [
+            ...saplingPlacements(variant).slice(0, 12).filter(p => !overlapsQuarryRoadside(p.x, p.z)),
+            ...roadsideSaplings(variant),
+        ];
         for (const plant of placements) {
             const cx = Math.floor(plant.x / 56) * 56 + 28, cz = Math.floor(plant.z / 56) * 56 + 28, key = cx + ':' + cz;
             if (!cells.has(key))
@@ -56,9 +64,10 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
                 cell.levels.set(level, new Map());
             const batches = cell.levels.get(level)!;
             const scale = plant.height / normalization.height;
-            dummy.position.set(plant.x - cx, landscapeHeight(plant.x, plant.z) - normalization.bottom * scale, plant.z - cz);
+            const ground = plant.ground ?? (large ? scenerySurfaceHeight(plant.x, plant.z) : landscapeHeight(plant.x, plant.z));
+            dummy.position.set(plant.x - cx, ground - normalization.bottom * scale, plant.z - cz);
             dummy.rotation.set(0, plant.yaw, 0);
-            dummy.scale.setScalar(scale);
+            dummy.scale.set(scale * (plant.width ?? 1), scale, scale * (plant.width ?? 1));
             dummy.updateMatrix();
             // Keep each variant's PBR materials shared by every spatial cell and LOD.
             tree.traverse(o => {
@@ -199,12 +208,16 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         await scannedForest(parent, 'models/fir-medium-' + variant + '.glb', true);
     await scannedForest(parent, 'models/fir-saplings-lod.glb', false);
     const p: number[] = [], colors: number[] = [], idx: number[] = [];
-    const addBlade = (x: number, z: number, h: number, a: number, brown: boolean) => {
-        const ground = landscapeHeight(x, z), w = h * .04, dx = Math.cos(a), dz = Math.sin(a), bend = h * .28;
+    const addBlade = (x: number, z: number, h: number, a: number, brown: boolean,
+        ground = landscapeHeight(x, z), suppressed = false, shade = .7 + random() * .35, width = 1) => {
+        // Even suppressed old tufts consume their former color random draw,
+        // preserving every procedural blade outside the authored footprint.
+        if (suppressed) return;
+        const w = h * .04 * width, dx = Math.cos(a), dz = Math.sin(a), bend = h * .28;
         const n = p.length / 3;
         p.push(x - dx * w, ground, z - dz * w, x + dx * w, ground, z + dz * w, x + Math.sin(a) * bend - dx * w * .5, ground + h * .65, z + Math.cos(a) * bend - dz * w * .5, x + Math.sin(a) * bend + dx * w * .5, ground + h * .65, z + Math.cos(a) * bend + dz * w * .5, x + Math.sin(a) * bend * 1.7, ground + h, z + Math.cos(a) * bend * 1.7);
         const color = new T.Color(brown ? 0x877854 : 0x5a6843);
-        color.multiplyScalar(.7 + random() * .35);
+        color.multiplyScalar(shade);
         for (let i = 0; i < 5; i++)
             colors.push(color.r * (.62 + i * .075), color.g * (.62 + i * .075), color.b * (.62 + i * .075));
         idx.push(n, n + 1, n + 2, n + 1, n + 3, n + 2, n + 2, n + 3, n + 4);
@@ -214,9 +227,12 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         if (!clearOfRoad(x, z, 8.2))
             continue;
         const brown = random() > .5;
+        const suppressed = overlapsQuarryRoadside(x, z, .7);
         for (let j = 0; j < 8; j++)
-            addBlade(x + (random() - .5) * .75, z + (random() - .5) * .75, .25 + random() * .65, random() * 6.28, brown);
+            addBlade(x + (random() - .5) * .75, z + (random() - .5) * .75, .25 + random() * .65, random() * 6.28, brown, undefined, suppressed);
     }
+    for (const blade of roadsideGroundCover())
+        addBlade(blade.x, blade.z, blade.height, blade.yaw, blade.brown, blade.ground, false, blade.shade, blade.width);
     const geo = new T.BufferGeometry();
     geo.setAttribute('position', new T.Float32BufferAttribute(p, 3));
     geo.setAttribute('color', new T.Float32BufferAttribute(colors, 3));
