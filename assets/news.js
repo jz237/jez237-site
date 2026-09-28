@@ -84,6 +84,8 @@ const SIGNAL_ORDER = [
 
 function isLikelyBadImage(url) {
   if (!url) return true;
+  // Only locally cached thumbnails are allowed by the site's CSP; remote images would just be blocked.
+  if (/^https?:\/\//i.test(url)) return true;
   const u = url.toLowerCase();
   return (
     u.includes('sprite') ||
