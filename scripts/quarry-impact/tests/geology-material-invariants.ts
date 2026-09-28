@@ -1,3 +1,4 @@
+import {restoreWestWallObjects} from './quarry-west-wall-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -24,7 +25,7 @@ export function restoreGeologySurfaceSource(bytes:Buffer){
  * Geometry, transforms, instance data, maps on unrelated consumers and every
  * non-shader parameter outside the declared photo/normal changes stay exact. */
 export function restoreGeologyObjects(objects:any[]){
-  const restored=structuredClone(objects);let count=0;
+  const restored=restoreWestWallObjects(objects);let count=0;
   assert.equal(restored.length,baseline.objects.length);
   for(let i=0;i<restored.length;i++)for(let j=0;j<baseline.objects[i].materials.length;j++){
     const old=baseline.objects[i].materials[j];

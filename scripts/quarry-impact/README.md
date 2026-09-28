@@ -119,4 +119,4 @@ See `CREDITS.md` for asset licensing and `VALIDATION.md` for verification and me
 
 ## Recovery checkpoint
 
-The September 28 recovery release preserves the completed playable game and the interrupted western quarry-wall work. The new wall is not enabled: its Blender export and shared collision integration were unfinished when work stopped. Draft code, frozen geometry and an exact recovery manifest are saved in [source/recovery/west-wall/README.md](source/recovery/west-wall/README.md).
+The September 28 recovery checkpoint preserved the interrupted western wall work. That wall is now exported and integrated: three sections of fractured extraction faces, a collapsed rubble channel and grounded toe closure share their collision surface with online play. The original recovery snapshots remain preserved in [source/recovery/west-wall/README.md](source/recovery/west-wall/README.md); see [the completed asset record](source/models/quarry-west-wall.md) for current details.

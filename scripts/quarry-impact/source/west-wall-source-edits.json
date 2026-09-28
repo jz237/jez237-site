@@ -1,0 +1,68 @@
+{
+  "src/quarry-layout.ts": [
+    {
+      "before": "import { createSurfaceSampler }",
+      "after": "import { sector as westWallSector, positions as westWallPositions, indices as westWallIndices, solids as westWallSolids } from './quarry-west-wall-collision.json';\r\nimport { createSurfaceSampler }"
+    },
+    {
+      "before": "export const QUARRY_EAST_BAY_SECTOR=eastBaySector;",
+      "after": "export const QUARRY_EAST_BAY_SECTOR=eastBaySector;\r\nexport const QUARRY_WEST_WALL_SECTOR=westWallSector;"
+    },
+    {
+      "before": "export function quarryRoadsideGeometry()",
+      "after": "export function quarryWestWallGeometry():MeshData {return {positions:new Float32Array(westWallPositions),indices:new Uint32Array(westWallIndices)};}\r\nlet westWallSampler:ReturnType<typeof createSurfaceSampler>|undefined;\r\nconst sampleWestWall=()=>westWallSampler??=createSurfaceSampler(quarryWestWallGeometry());\r\nexport const quarryWestWallHeight=(x:number,z:number)=>sampleWestWall().height(x,z);\r\n// Major rubble can extend beyond the wall toe. Conservative bounded footprints\r\n// remove only old overlapping scatter, leaving the road and terrain unchanged.\r\nconst westWallFootprints=westWallSolids.map(s=>{\r\n  let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity;\r\n  for(let i=0;i<s.points.length;i+=3){minX=Math.min(minX,s.points[i]);maxX=Math.max(maxX,s.points[i]);minZ=Math.min(minZ,s.points[i+2]);maxZ=Math.max(maxZ,s.points[i+2]);}\r\n  return {minX,maxX,minZ,maxZ};\r\n});\r\nexport const overlapsQuarryWestWall=(x:number,z:number,padding=0)=>sampleWestWall().overlaps(x,z,padding)||westWallFootprints.some(b=>x+padding>=b.minX&&x-padding<=b.maxX&&z+padding>=b.minZ&&z-padding<=b.maxZ);\r\nexport function quarryRoadsideGeometry()"
+    },
+    {
+      "before": "&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz)*.65)",
+      "after": "&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryWestWall(p.x,p.z,Math.max(p.sx,p.sz)*.65)"
+    },
+    {
+      "before": "&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz))",
+      "after": "&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryWestWall(p.x,p.z,Math.max(p.sx,p.sz))"
+    },
+    {
+      "before": "  items.push({id:'quarry-roadside'",
+      "after": "  items.push({id:'quarry-west-wall',shape:'mesh',p:origin,data:quarryWestWallGeometry(),friction:.85});\r\n  for(const solid of westWallSolids)items.push({id:'quarry-west-wall-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});\r\n  items.push({id:'quarry-roadside'"
+    },
+    {
+      "before": "                if(i>=QUARRY_EAST_BAY_SECTOR.startCell&&i<QUARRY_EAST_BAY_SECTOR.endCellExclusive)continue;",
+      "after": "                if(i>=QUARRY_EAST_BAY_SECTOR.startCell&&i<QUARRY_EAST_BAY_SECTOR.endCellExclusive)continue;\r\n                if(i>=QUARRY_WEST_WALL_SECTOR.startCell&&i<QUARRY_WEST_WALL_SECTOR.endCellExclusive)continue;"
+    }
+  ],
+  "src/world.ts": [
+    {
+      "before": "import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, WORKS_OFFSET } from './quarry-layout';\n",
+      "after": "import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, overlapsQuarryWestWall, WORKS_OFFSET } from './quarry-layout';\n"
+    },
+    {
+      "before": "import { loadQuarryEastBay } from './scenery-east-bay';\n",
+      "after": "import { loadQuarryEastBay } from './scenery-east-bay';\r\nimport { loadQuarryWestWall } from './scenery-west-wall';\n"
+    },
+    {
+      "before": "  private eastBayLODs: T.LOD[] = [];\n",
+      "after": "  private eastBayLODs: T.LOD[] = [];\r\n  private westWallLODs: T.LOD[] = [];\n"
+    },
+    {
+      "before": "      if (!overlapsQuarryRoadside(x,z,s) && !overlapsQuarryHeadwall(x,z,s) && !overlapsQuarryEastBay(x,z,s)) {\n",
+      "after": "      if (!overlapsQuarryRoadside(x,z,s) && !overlapsQuarryHeadwall(x,z,s) && !overlapsQuarryEastBay(x,z,s) && !overlapsQuarryWestWall(x,z,s)) {\n"
+    },
+    {
+      "before": "    this.eastBayLODs = await loadQuarryEastBay(this.scenery, this.rockMaterial, scannedMaterial);\n",
+      "after": "    this.eastBayLODs = await loadQuarryEastBay(this.scenery, this.rockMaterial, scannedMaterial);\r\n    this.westWallLODs = await loadQuarryWestWall(this.scenery, this.rockMaterial, scannedMaterial);\n"
+    },
+    {
+      "before": "      for (const lod of this.eastBayLODs) lod.update(camera);\n",
+      "after": "      for (const lod of this.eastBayLODs) lod.update(camera);\r\n      for (const lod of this.westWallLODs) lod.update(camera);\n"
+    }
+  ],
+  "src/main.ts": [
+    {
+      "before": "scenerySurfaceHeight, quarryExtensionHeight }",
+      "after": "scenerySurfaceHeight, quarryExtensionHeight, quarryWestWallHeight }"
+    },
+    {
+      "before": "quarryExtensionHeight(desired.x, desired.z) ?? -Infinity);",
+      "after": "quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity);"
+    }
+  ]
+}

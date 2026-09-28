@@ -1,3 +1,4 @@
+import {restoreWestWallCliffs,assertWestWallEvolution,stripWestSource} from './quarry-west-wall-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -27,6 +28,7 @@ function frozenScatter(){
   return legacyScatter;
 }
 export function restoreEastBayCliffs<T extends MeshData>(g:T):T{
+  g=restoreWestWallCliffs(g);
   assert.equal(eastBayArrayHash(g.positions),eastBayBefore.cliff.positions,'all original ring vertices stay exact');
   assert.equal(eastBayArrayHash(g.indices),eastBayArrayHash(new Uint32Array(eastBayBefore.cliff.retainedIndicesAfterReplacement)),'only30 East Bay cells may be removed');
   const indices:number[]=[];
@@ -41,6 +43,7 @@ export function restoreEastBayCliffs<T extends MeshData>(g:T):T{
 /** Validate the complete bounded replacement before historical gates see the
  * reconstructed released state. No old fixture/hash is rewritten or omitted. */
 export function assertEastBayEvolution(layout:ColliderSpec[]){
+  layout=assertWestWallEvolution(layout);
   const current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length,'unique collider identities');
   const data=eastBayData(),surface={positions:new Float32Array(data.positions),indices:new Uint32Array(data.indices)},sample=createSurfaceSampler(surface);
   const wall=current.get('quarry-east-bay');assert.ok(wall?.shape==='mesh');assert.deepEqual(wall,{id:'quarry-east-bay',shape:'mesh',p:{x:0,y:0,z:0},data:surface,friction:.85});
@@ -68,6 +71,7 @@ export function assertEastBayEvolution(layout:ColliderSpec[]){
 /** Exact source inverse. Each replacement is intentionally narrow and unique;
  * the result must recover the deployed layout SHA, including line endings. */
 export function stripEastBayLayout(source:Buffer){
+  source=stripWestSource('src/quarry-layout.ts',source);
   let text=source.toString('utf8');const nl=text.includes('\r\n')?'\r\n':'\n';
   const remove=(lines:string[])=>{const token=lines.join(nl)+nl;assert.equal(text.split(token).length,2,'unique approved East Bay addition');text=text.replace(token,'');};
   remove(["import { sector as eastBaySector, positions as eastBayPositions, indices as eastBayIndices, solids as eastBaySolids } from './quarry-east-bay-collision.json';"]);

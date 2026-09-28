@@ -1,3 +1,4 @@
+import {stripWestSource} from './quarry-west-wall-invariants';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -16,6 +17,7 @@ export const gripRuleBody=[
 /** Preserve each historical whole-file guard by reversing only the explicitly
  * approved surface classification/cache edits and recovering its original SHA. */
 export function historicGripBytes(file:string,bytes:Buffer){
+  bytes=stripWestSource(file,bytes);
   if(file!=='src/rules.ts'&&file!=='multiplayer/simulation.ts')return bytes;
   const expected=gripBefore.workerInputs.find((r:any)=>r.file===file).expected;
   let source=bytes.toString('utf8');const nl=source.includes('\r\n')?'\r\n':'\n';
