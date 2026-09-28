@@ -5,6 +5,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { QuarryAO, LocalReflections } from './rendering';
 import { StaticQuarryShadows, DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
+import { prepareNorthForestFloor } from './scenery-north-floor';
+import { northForestDiagnostics } from './scenery-north-forest';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
@@ -980,6 +982,7 @@ async function boot() {
     loadCars(loading),
     environment(renderer, scene),
     prepareArenaFloor(),
+    prepareNorthForestFloor(),
     quarry.trees(),
     onlineUI.configure(),
   ]);
@@ -993,6 +996,8 @@ async function boot() {
   menu();
   if(new URL(location.href).searchParams.has('room'))onlineUI.show();
   (window as any).__quarry = {
+    get northForest() { return northForestDiagnostics(camera); },
+    get cameraPose() { return { position: camera.position.toArray(), quaternion: camera.quaternion.toArray(), target: orbit.target.toArray(), fov: camera.fov, aspect: camera.aspect }; },
     get network(){return {active:online.active,connected:online.network.connected,id:online.network.id,room:online.network.room,snapshot:online.network.snapshot};},
     connectOnline,leaveOnline,
     startOnline:(m:Mode)=>online.network.start(m),

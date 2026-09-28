@@ -1,18 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { captureArenaFloor, arenaRead, arenaHash } from '../tools/arena-floor-audit';
+import { quarryColliderLayout } from '../src/quarry-layout';
+import { assertNorthForestEvolution, assertNorthForestLayoutSource, northForestBaseline } from './north-forest-invariants';
 
 const baseline=JSON.parse(arenaRead('tests/fixtures/arena-floor-baseline.json').toString());
 let current:ReturnType<typeof captureArenaFloor>|undefined;
 const capture=()=>current??=captureArenaFloor();
 const geometryOnly=({materials:_materials,name:_name,...geometry}:any)=>geometry;
 
-test('arena appearance keeps all deployed Worker inputs, physical colliders and car assets exact',async()=>{
+test('arena appearance preserves its historical physics and cars through the explicitly additive forest milestone',async()=>{
   const result=await capture();
   assert.equal(result.workerInputs.length,17);
-  assert.deepEqual(result.workerInputs,baseline.workerInputs,'this material milestone must require no new server physics');
-  assert.ok(result.workerInputs.every(i=>i.current===i.expected));
-  assert.equal(result.colliders.length,1547);assert.deepEqual(result.colliders,baseline.colliders);
+  assertNorthForestLayoutSource();assertNorthForestEvolution(quarryColliderLayout());
+  assert.deepEqual(result.workerInputs.filter(i=>i.file!=='src/quarry-layout.ts'),baseline.workerInputs.filter((i:any)=>i.file!=='src/quarry-layout.ts'));
+  const oldIds=new Set(baseline.colliders.map((s:any)=>s.id));
+  assert.deepEqual(result.colliders.filter(s=>oldIds.has(s.id)),baseline.colliders,'all original1547 arena-era colliders stay exact');
   for(const [file,expected] of Object.entries(baseline.protectedFiles)){
     if(file==='src/scenery-surfaces.ts')continue; // Arena factory integration may edit this source; actual other material outputs are checked below.
     assert.equal(arenaHash(arenaRead(file)),expected,`${file} stays byte-identical`);
@@ -44,6 +47,28 @@ test('arena material change cannot add draw objects, alter other materials, or p
   assert.equal(wear.length,1,'only the exact historical arena-wear mesh receives this opacity exception');
   assert.equal(wear[0].materials.length,1);assert.equal(wear[0].materials[0].opacity,.045);
   wear[0].materials[0].opacity=.22; // Approved visual refinement; all other fields below remain exact.
+  // The later northern woodland changes only the shader of the exact existing
+  // terrain mesh. Its physical vertices, material parameters and base shader
+  // uniforms stay frozen; real new shader composition has separate CPU gates.
+  const terrainSHA=northForestBaseline.physics.terrain.positions;
+  const terrain=others.filter(o=>o.geometry.attributes.position.sha256===terrainSHA),oldTerrain=baseline.objects.filter((o:any)=>o.geometry.attributes.position.sha256===terrainSHA);
+  assert.equal(terrain.length,1);assert.equal(oldTerrain.length,1);assert.equal(terrain[0].materials.length,1);
+  const nextShader=terrain[0].materials[0].shader,oldShader=oldTerrain[0].materials[0].shader;
+  assert.equal(nextShader.vertexSHA256,oldShader.vertexSHA256);assert.match(nextShader.programKey,/^north-woodland-floor-v/);
+  for(const [key,value] of Object.entries(oldShader.uniforms))assert.deepEqual(nextShader.uniforms[key],value);
+  terrain[0].materials[0].shader=oldShader;
+  // The same later milestone adds the registered mineral transition to the
+  // three exact pre-existing quarryRock consumers. Restore only their shader
+  // descriptors for this historical comparison, after checking composition.
+  const oldOthers=baseline.objects.filter((o:any)=>o.role==='other');let crestConsumers=0;
+  for(let i=0;i<oldOthers.length;i++)for(let j=0;j<oldOthers[i].materials.length;j++){
+    const original=oldOthers[i].materials[j].shader;if(original?.programKey!=='quarry-rock-v5')continue;
+    const next=others[i].materials[j].shader;assert.equal(others[i].geometry.attributes.position.sha256,oldOthers[i].geometry.attributes.position.sha256);
+    assert.equal(next.vertexSHA256,original.vertexSHA256);assert.match(next.programKey,/^north-woodland-crest-v/);
+    for(const [key,value]of Object.entries(original.uniforms))assert.deepEqual(next.uniforms[key],value);
+    others[i].materials[j].shader=original;crestConsumers++;
+  }
+  assert.equal(crestConsumers,3,'only the three historical rock-factory mesh consumers receive the crest wrapper');
   assert.deepEqual(others,baseline.objects.filter((o:any)=>o.role==='other'),
     'roads, walls, signs, props, every unrelated shader and existing instance matrices/colors remain exact; arena wear changes only opacity');
   assert.deepEqual(result.random,baseline.random);assert.deepEqual(result.random,{seed:1417743577,calls:3954});

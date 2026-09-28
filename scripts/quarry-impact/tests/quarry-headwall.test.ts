@@ -10,6 +10,7 @@ import { exactMinimumClearance } from './mesh-clearance';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import { loadQuarryHeadwall } from '../src/scenery-headwall';
 import { trackPoint } from '../src/rules';
+import { assertNorthForestEvolution } from './north-forest-invariants';
 
 const read=(path:string)=>JSON.parse(readFileSync(new URL(path,import.meta.url),'utf8'));
 const baseline=read('./fixtures/quarry-headwall-baseline.json');
@@ -55,7 +56,7 @@ test('headwall replaces only its35 wrapped legacy cells and preserves earlier as
   for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
     assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
   const old=new Map<string,{id:string;hash:string;p:{x:number;y:number;z:number}}>(baseline.colliders.map((s:{id:string})=>[s.id,s]));
-  const layout=quarryColliderLayout(),current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
+  const layout=assertNorthForestEvolution(quarryColliderLayout()),current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
   for(const spec of layout){
     if(spec.id==='quarry-cliffs')continue; // Exact replacement independently asserted above.
     if(old.has(spec.id))assert.equal(hash(Buffer.from(JSON.stringify(spec))),old.get(spec.id)!.hash,`${spec.id} must preserve its shape and transform`);

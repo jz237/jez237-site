@@ -212,5 +212,121 @@
     "scale_metres": 1.5,
     "resolution": "1k",
     "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "north_litter_diff.jpg",
+    "source": "https://polyhaven.com/a/forrest_ground_03",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_03/forrest_ground_03_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 3522953,
+    "sha256": "187a8e33773473939c0e85b5e10ae94eb9e8d91463ab8b74e122d833d2d84dc6",
+    "source_md5": "605bfa541b0d406bcf88a16a8c82b821",
+    "scale_metres": 2,
+    "resolution": "2k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "north_litter_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/forrest_ground_03",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_03/forrest_ground_03_nor_gl_1k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 1587102,
+    "sha256": "2f2a18622ff1fde203ad7b17f12da5e46608b77b27307f6a91cc5a016cc72e41",
+    "source_md5": "9f44096b43a0f796ae6f52d7fe784698",
+    "scale_metres": 2,
+    "resolution": "1k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "north_litter_rough.jpg",
+    "source": "https://polyhaven.com/a/forrest_ground_03",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_03/forrest_ground_03_rough_1k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 418230,
+    "sha256": "faa2fc4305cb839a2240ffa84de513dc16671879915a13c88fb319d5e168e926",
+    "source_md5": "99b60c4ba1dc799e8eddf6e2f1460c09",
+    "scale_metres": 2,
+    "resolution": "1k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "north_fir_twig_diff.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_twig_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "5504646d484a08649a9cd14402860063e69fd10072238f5afe72214e6bf478be",
+    "sha256": "5504646d484a08649a9cd14402860063e69fd10072238f5afe72214e6bf478be",
+    "bytes": 1141996,
+    "modifications": "Original 2k photograph copied unchanged",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_a_diff.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_a_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "34dc75688c783a9ecbbd79f072449f270baededb5787f556846c03759fa2f818",
+    "sha256": "70669aaa280f11a01f1189a10b99c8429cef6a23d9c4aa6e87d734937c2b6d9a",
+    "bytes": 1896228,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_a_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_a_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "783e714a9916f411ed6686e2558f469e4b3e0de407c9e2ed797f97020b7bf6e9",
+    "sha256": "197b4883671ad3f87f21bc39ffa930d0d97306300d580e40c9095dfe6f28bd16",
+    "bytes": 845443,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_a_arm.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_a_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "16af3415ff42805b26443da5063d0dae3ea37475a1b65eced181c50ff785cb43",
+    "sha256": "4b5b0281f66589cf06d621feb2cb527b718bdc872ef9ef77cad241476b228f74",
+    "bytes": 558447,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_b_diff.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_b_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "ce30477f492b6aeee5c467350024fa375eb5f95e19f4ab60a2dc778c1559b696",
+    "sha256": "d13324b6ce5b60f78b99447be0592877727fa33ef67dbe8f99ce19638dfa3da3",
+    "bytes": 1538961,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_b_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_b_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "e8c30af34534ae51f24f445b4a77f650f52f3e0771ef92ce834bbc148b2ad979",
+    "sha256": "52fb2e1397cec839b8bb0076b777259d3d331a17740ddc2939f43098ede23825",
+    "bytes": 771952,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "north_fir_trunk_b_arm.jpg",
+    "source": "https://polyhaven.com/a/fir_tree_01",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/fir_tree_01/fir_tree_01_trunk_b_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "sourceSha256": "d865a74f5fcd3871e99898612fa93ce7bd9ab396cd9208794ca349d30aef8c8e",
+    "sha256": "991fae3c33189cb43513f2aaafa18aae360f72158f6574ba09631e7751a1fb7d",
+    "bytes": 485883,
+    "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
+    "generator": "tools/prepare-north-fir-geometry.py"
   }
 ]

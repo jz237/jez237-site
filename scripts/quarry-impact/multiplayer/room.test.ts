@@ -11,6 +11,7 @@ import { Quarry } from '../src/world';
 import { quarryColliderLayout, createQuarryPhysics, terrainGeometry, cliffGeometry, quarryRoadsideGeometry, quarryRoadsideHeight, BARRELS, nearTrees } from '../src/quarry-layout';
 import roadsideData from '../src/quarry-roadside-data.json';
 import headwallData from '../src/quarry-headwall-collision.json';
+import northForest from '../src/quarry-north-forest.json';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import {corridorObstructions} from './corridor-check';
 await R.init();
@@ -94,7 +95,15 @@ test('actual rendered Quarry and authoritative server use identical static geome
   browserWorld.step();server.world.step();assert.deepEqual(corridorObstructions(browserWorld,quarry.collisionPhysics.statics),[],'The full road center ±6m corridor must remain clear of unintended solid scenery');
   layout.forEach((spec,i)=>{const a=quarry.collisionPhysics.statics.get(spec.id)!,b=serverStatics[i];assert.equal(a.shapeType(),b.shapeType(),spec.id);assert.deepEqual(a.translation(),b.translation(),spec.id);assert.deepEqual(a.rotation(),b.rotation(),spec.id);
     if(spec.shape==='mesh'){assert.deepEqual(a.vertices(),b.vertices(),spec.id);assert.deepEqual(a.indices(),b.indices(),spec.id);}
+    if(spec.shape==='cylinder'){assert.equal(a.radius(),Math.fround(spec.radius),spec.id);assert.equal(a.halfHeight(),Math.fround(spec.halfHeight),spec.id);assert.equal(a.radius(),b.radius(),spec.id);assert.equal(a.halfHeight(),b.halfHeight(),spec.id);}
+    if(spec.shape==='hull')assert.deepEqual(a.vertices(),b.vertices(),spec.id);
   });
+  for(const [trees,prefix]of [[northForest.trees,'tree-north-'],[northForest.mediumTrees,'tree-north-medium-']] as const)for(const tree of trees){
+    const index=layout.findIndex(s=>s.id===prefix+tree.id);assert.ok(index>=0,'every visible new trunk is part of both authoritative worlds');
+    const a=quarry.collisionPhysics.statics.get(prefix+tree.id)!,b=serverStatics[index];
+    const ray=new R.Ray({x:tree.x-tree.trunkRadius-1,y:tree.y+Math.min(1.3,tree.trunkHeight/2),z:tree.z},{x:1,y:0,z:0});
+    const clientHit=a.castRay(ray,2,false),serverHit=b.castRay(ray,2,false);assert.equal(clientHit,serverHit);assert.ok(clientHit!==null&&Math.abs(clientHit-1)<3e-5);
+  }
   const terrain=terrainGeometry();assert.ok(scene.children.some(o=>o instanceof T.Mesh && o.geometry.attributes.position.count===terrain.positions.length/3 && (o.geometry.attributes.position.array as Float32Array).every((n,i)=>n===terrain.positions[i])));
   const cliff=cliffGeometry();assert.ok(cliff.positions.length>50_000);
   let renderedCliff:T.Mesh|undefined;

@@ -2,6 +2,7 @@ import { nearTrees, saplingPlacements, landscapeHeight, scenerySurfaceHeight, qu
 import { roadsideSaplings, roadsideGroundCover } from './scenery-flora-placement';
 import { backdropFirs, composeForestBackdrop, BACKDROP_CENTER, type BackdropCard } from './scenery-backdrop';
 import { composeNorthHeadwallBackdrop } from './scenery-north-backdrop';
+import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
@@ -37,6 +38,7 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
     const gltf = await new GLTFLoader().loadAsync(url(file));
     gltf.scene.updateMatrixWorld(true);
     const cells = new Map<string, Cell>(), geometries = new Map<T.Mesh, T.BufferGeometry>();
+    const northSaplings: NorthSaplingPart[] = [];
     const dummy = new T.Object3D(), normalizers = new Map<string, {
         height: number;
         bottom: number;
@@ -152,8 +154,23 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
             }
         m.dispose();
     }
+    for (const [index, tree] of gltf.scene.children.entries()) {
+        const variant = large ? variantOf(tree.name) : index;
+        const level = large && tree.name.endsWith('_FAR') ? 1 : 0;
+        const normalization = normalizers.get(large ? String(variant) : tree.name)!;
+        tree.traverse(object => {
+            if (!(object instanceof T.Mesh)) return;
+            const material = forestMaterials.get((large ? 'medium:' : 'sapling:') + (object.material as T.Material).name)!;
+            // Reuse the existing uploaded geometry as well as its maps. The new
+            // stand instances apply the same normalization in their transforms.
+            const geometry = geometries.get(object)!;
+            northSaplings.push({ variant, level, sourceHeight: normalization.height,
+                sourceBottom: normalization.bottom, geometry, material });
+        });
+    }
     // All cells keep full 360-degree coverage. The renderer culls their bounded
     // geometry independently for the main view, reflection cube faces and shadows.
+    return northSaplings;
 }
 export async function forestScenery(parent: T.Group, random: () => number) {
     const textures = new T.TextureLoader(), dummy = new T.Object3D();
@@ -186,7 +203,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
             distantIndex++;
         }
     }
-    const composedCards = composeNorthHeadwallBackdrop(composeForestBackdrop(originalCards));
+    const composedCards = composeNorthForestCards(composeNorthHeadwallBackdrop(composeForestBackdrop(originalCards)));
     for (const { kind, aspect } of distantSpecies) {
         const placements = composedCards.filter(p => p.kind === kind);
         const photo = textures.load(url('models/' + kind + '.webp'));
@@ -244,9 +261,10 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         trees.computeBoundingSphere();
         parent.add(trees);
     }
+    const northMedium: NorthSaplingPart[] = [];
     for (const variant of ['a', 'b', 'c'])
-        await scannedForest(parent, 'models/fir-medium-' + variant + '.glb', true);
-    await scannedForest(parent, 'models/fir-saplings-lod.glb', false);
+        northMedium.push(...await scannedForest(parent, 'models/fir-medium-' + variant + '.glb', true));
+    const northSaplings = await scannedForest(parent, 'models/fir-saplings-lod.glb', false);
     const p: number[] = [], colors: number[] = [], idx: number[] = [];
     const addBlade = (x: number, z: number, h: number, a: number, brown: boolean,
         ground = landscapeHeight(x, z), suppressed = false, shade = .7 + random() * .35, width = 1) => {
@@ -281,4 +299,5 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     const grasses = new T.Mesh(geo, new T.MeshStandardMaterial({ vertexColors: true, roughness: 1, side: T.DoubleSide }));
     grasses.receiveShadow = true;
     parent.add(grasses);
+    forestLODs.push(...await loadNorthForest(parent, forestMaterials, northSaplings, northMedium));
 }

@@ -6,6 +6,8 @@ import { composeNorthHeadwallBackdrop } from '../src/scenery-north-backdrop';
 import { type BackdropCard } from '../src/scenery-backdrop';
 import { quarryRim, terrainGeometry } from '../src/quarry-layout';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
+import { northForestBaseline } from './north-forest-invariants';
+import { inNorthForest } from '../tools/north-forest-edge-audit';
 
 const baseline = JSON.parse(readFileSync(new URL('./fixtures/north-forest-before.json', import.meta.url), 'utf8')) as Awaited<ReturnType<typeof captureForestCards>>;
 const angle = (x: number, z: number) => (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
@@ -20,7 +22,13 @@ test('actual forest renderer keeps all384 cards/four draws, original RNG and eve
     for (let i = 0; i < baseline.cards.length; i++) {
         const before = baseline.cards[i], after = current.cards[i];
         assert.equal(after.kind, before.kind); assert.deepEqual(after.color, before.color);
-        if (!local(before.matrix[12], before.matrix[14])) assert.deepEqual(after, before, `off-sector card${i}`);
+        if (!local(before.matrix[12], before.matrix[14])) {
+            // The subsequent woodland milestone expands only its measured52
+            // original cards to350–45. The new fixture/regression proves that
+            // exact exception, retaining this older immutable headwall proof.
+            const edge=northForestBaseline.forest.cards[i];
+            if(!inNorthForest(edge.matrix[12],edge.matrix[14]))assert.deepEqual(after, before, `off-sector card${i}`);
+        }
         else { assert.notDeepEqual(after.matrix, before.matrix); moved++; }
     }
     assert.equal(moved, baseline.cards.filter(c => local(c.matrix[12], c.matrix[14])).length);

@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { assertNorthForestEvolution } from './north-forest-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -72,7 +73,7 @@ test('roadside surface is finite, upward wound, exactly sampled and remains outs
 
 test('roadside filtering preserves surviving legacy colliders and removes overlapping shared scatter',()=>{
   const before=JSON.parse(readFileSync(new URL('./fixtures/quarry-roadside-colliders.json',import.meta.url),'utf8')) as {id:string;hash:string;p:{x:number;y:number;z:number}}[];
-  const old=new Map(before.map(s=>[s.id,s])),layout=quarryColliderLayout(),current=new Map(layout.map(s=>[s.id,s]));
+  const old=new Map(before.map(s=>[s.id,s])),layout=assertNorthForestEvolution(quarryColliderLayout()),current=new Map(layout.map(s=>[s.id,s]));
   const reseatedTrees=new Set(['tree-fir-0-10','tree-fir-1-5']);
   assert.equal(current.size,layout.length,'collider IDs must be unique');
   for(const spec of layout){

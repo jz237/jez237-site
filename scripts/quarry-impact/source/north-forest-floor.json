@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "description": "Material weights beneath the authored northern woodland; source photographs remain unchanged.",
+  "placements": "src/quarry-north-forest.json",
+  "size": [512, 336],
+  "bounds": [-96, 80, 224, 290],
+  "channels": ["coverage", "organicLitter", "crestMineral", "litterVariation"],
+  "ellipseConvention": "major axis = (cos(yaw), sin(yaw)) in world XZ; yaw is radians",
+  "coverageMargin": 4,
+  "organicEdge": [0.65, 1.02],
+  "crest": {"source": "source/north-forest-crest.json", "halfWidth": 6, "outerFullWidth": 12, "outerFadeWidth": 18},
+  "textureScaleMetres": {"litter": 2.0, "mineral": 1.8, "soil": 2.2},
+  "photographs": ["assets/north_litter_diff.jpg", "assets/north_litter_nor_gl.jpg", "assets/north_litter_rough.jpg"]
+}
