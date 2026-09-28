@@ -5,8 +5,8 @@ const policy = [
   // confined to the photographic viewer, not the site's global policy.
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
-  "img-src 'self' data: blob: https://cdn.jsdelivr.net https://*.cesium.com https://*.cesium.com.cn https://*.googleapis.com https://*.gstatic.com https://www.google-analytics.com",
-  "connect-src 'self' blob: https://cdn.jsdelivr.net https://*.cesium.com https://*.cesium.com.cn https://*.googleapis.com https://*.gstatic.com https://cloudflareinsights.com https://*.google-analytics.com https://www.googletagmanager.com",
+  "img-src 'self' data: blob: https://cdn.jsdelivr.net https://*.cesium.com https://*.cesium.com.cn https://*.googleapis.com https://*.gstatic.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
+  "connect-src 'self' blob: https://cdn.jsdelivr.net https://*.cesium.com https://*.cesium.com.cn https://*.googleapis.com https://*.gstatic.com https://cloudflareinsights.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.googletagmanager.com",
   "worker-src 'self' blob: https://cdn.jsdelivr.net",
   "font-src 'self' data:",
   "frame-src 'self'", "frame-ancestors 'self'", "base-uri 'self'", "object-src 'none'", "form-action 'self'", "upgrade-insecure-requests",
