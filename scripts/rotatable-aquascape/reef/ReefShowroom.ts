@@ -4,6 +4,7 @@ export function installReefShowroom(actions:{visibility:(visible:boolean)=>void;
  const send=(data:object)=>{if(embedded&&parent!==window)parent.postMessage({channel:'hidden-reef-aquarium',...data},location.origin);};
  if(embedded){
   document.body.classList.add('store-showroom');
+  document.querySelectorAll<HTMLAnchorElement>('[data-filtration-link]').forEach(link=>link.href='../filtration/');
   const brand=document.querySelector<HTMLAnchorElement>('header .eyebrow')!;
   brand.textContent='THE HIDDEN REEF';brand.href='../../';brand.target='_top';
   document.querySelector('h1')!.textContent='Living Reef';

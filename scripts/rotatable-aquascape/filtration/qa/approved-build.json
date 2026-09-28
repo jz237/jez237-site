@@ -1,0 +1,122 @@
+{
+  "checkedAt": "2026-09-28T23:49:55.823Z",
+  "scope": "Separate educational animated exploded filtration studio, reef toolbar and Water & flow links",
+  "files": [
+    "assets/index-Dg1eXeoJ.js",
+    "assets/index-vl4A24zB.css",
+    "index.html"
+  ],
+  "buildHash": "4c40a13a3da8b0b26d928ba186e77341507fd19808a82224f32183bec75f51e4",
+  "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
+  "checks": {
+    "typescriptBuild": true,
+    "browser": true,
+    "visual": true,
+    "performance": true,
+    "synchronizedAssets": true
+  },
+  "browser": {
+    "checks": {
+      "completeParts": true,
+      "allAssembliesExplodeInspectIsolate": true,
+      "sensorTriggeredAdvanceThenStop": true,
+      "bubbleMotion": true,
+      "pause": true,
+      "pointerSelection": true,
+      "assemblySequence": true,
+      "reset": true,
+      "pausedIdle": true,
+      "mobileReducedMotion": true,
+      "noRuntimeErrors": true
+    },
+    "views": [
+      {
+        "system": "system",
+        "parts": 37,
+        "triangles": 46878,
+        "calls": 319
+      },
+      {
+        "system": "roller",
+        "parts": 8,
+        "triangles": 5050,
+        "calls": 97
+      },
+      {
+        "system": "skimmer",
+        "parts": 11,
+        "triangles": 28286,
+        "calls": 122
+      },
+      {
+        "system": "biology",
+        "parts": 5,
+        "triangles": 143250,
+        "calls": 346
+      },
+      {
+        "system": "return",
+        "parts": 7,
+        "triangles": 9758,
+        "calls": 51
+      }
+    ],
+    "errors": [],
+    "idleFrames": 0,
+    "checkedAt": "2026-09-28T23:44:24.629Z"
+  },
+  "performance": {
+    "baseline": "9923eca5e",
+    "method": "Serial local Chrome, full reef detail, 1440x1080, seeded scene. 2.5 s warmup, 6 s sample. Not a low-end hardware claim.",
+    "results": [
+      {
+        "mode": "prior-reef",
+        "readyMs": 7278,
+        "taskSeconds": 2.4088639999999995,
+        "fps": 60.15162875935731,
+        "triangles": 18764012,
+        "fish": 21
+      },
+      {
+        "mode": "current-reef",
+        "readyMs": 7647,
+        "taskSeconds": 2.640638000000001,
+        "fps": 60.08555117246447,
+        "triangles": 18764012,
+        "fish": 21
+      },
+      {
+        "mode": "filtration",
+        "readyMs": 1098,
+        "taskSeconds": 0.7062199999999998,
+        "fps": 60.014629604941206,
+        "triangles": 46914,
+        "parts": 42
+      }
+    ]
+  },
+  "visualReview": {
+    "views": [
+      "desktop-system",
+      "roller-exploded",
+      "skimmer-exploded",
+      "return-exploded",
+      "biology-exploded",
+      "mobile-skimmer-exploded",
+      "roller-cycle-rising",
+      "roller-cycle-clear",
+      "skimmer-motion-0",
+      "skimmer-motion-3"
+    ],
+    "findings": [
+      "All five assemblies inspected assembled, exploded, labeled and isolated, including desktop front/top/oblique and phone controls.",
+      "Reviewed actual roller time sequence: upstream water rises behind translucent fleece; the indexed spools advance briefly, water falls and spools stop.",
+      "Reviewed skimmer time sequence: bubbles rise inside the tapered body; amber foam enters the annular collection cup; water leaves separately below.",
+      "Legible mobile layout, reduced-motion behavior and no horizontal overflow.",
+      "Original generic educational geometry with explanatory scale/motion limits, not manufacturer CAD or a claim of photographic realism."
+    ],
+    "rawEvidence": ".qa-results/filtration/",
+    "consoleErrors": 0
+  },
+  "deploymentStatus": "Tested locally; publication is a separate step."
+}
