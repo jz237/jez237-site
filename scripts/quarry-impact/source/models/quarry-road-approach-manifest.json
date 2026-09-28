@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "generator": "tools/author-quarry-road-approach.py",
+  "sector": {
+    "startSegment": 123,
+    "endSegmentExclusive": 182,
+    "segments": 360
+  },
+  "lengthMetres": 111.83494691325326,
+  "masks": "COLOR_0 RGB = coverage, compaction, drainage; UV0 = longitudinal metres, signed lateral metres; restore Blender V on road meshes only.",
+  "physics": "Exact existing lane planes; thin visual shoulders/skirt and fragments only. No collision or traction changes.",
+  "source": "Original geometry and existing CC0 Rock Moss Set 01 scanned fragments",
+  "source_url": "https://polyhaven.com/a/rock_moss_set_01",
+  "runtime_maps": "Existing shared gravel, mud, Rock Ground, forest/rock ground and scanned rock atlas; no embedded texture maps.",
+  "fragmentCount": 260,
+  "meshes": [
+    {
+      "name": "RoadLane",
+      "triangles": 19163
+    },
+    {
+      "name": "RoadSkirt",
+      "triangles": 5845
+    },
+    {
+      "name": "RoadFragments_0_near",
+      "triangles": 11088
+    },
+    {
+      "name": "RoadFragments_0_far",
+      "triangles": 3124
+    },
+    {
+      "name": "RoadFragments_1_near",
+      "triangles": 7632
+    },
+    {
+      "name": "RoadFragments_1_far",
+      "triangles": 2148
+    }
+  ],
+  "assets": [
+    {
+      "file": "public/models/quarry-road-approach.glb",
+      "bytes": 4078236,
+      "sha256": "4640593e812aefce4cac24d126db482d4ad701f0e74ff9aa4615c5a1c306f1df"
+    },
+    {
+      "file": "source/models/quarry-road-approach.blend",
+      "bytes": 3963960,
+      "sha256": "b53f7777131cd0e1466836979aac874da7c65c8838cf616facbd48300cee4316"
+    },
+    {
+      "file": "source/models/quarry-road-approach-data.json",
+      "bytes": 2249699,
+      "sha256": "ed6fed58a32f41df4d3eb5fa5f1c50d807c0fc98f957210e16002e257636d6a6"
+    },
+    {
+      "file": "source/models/quarry-road-approach-base.json",
+      "bytes": 113004,
+      "sha256": "8f309e21fa7cdcf282ecf03b3cd1cd8224b5be5f87511efbda4133d1af0ce72c"
+    }
+  ]
+}
