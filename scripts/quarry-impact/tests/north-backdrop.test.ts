@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import R from '@dimforge/rapier3d-compat';
 import * as T from 'three';
@@ -35,7 +36,7 @@ test('shared52 stems/root bands are strictly additive to every1919 accepted coll
   assert.equal(assertNorthBackdropEvolution(quarryColliderLayout()).length,1919); // East Bay evolution is independently checked before restoring the older woodland state.
   stripNorthBackdropLayout(readForestFile('src/quarry-layout.ts'));
   assert.deepEqual(currentNorthForestPhysics().terrain,before.physics.terrain);
-  for(const input of before.workerInputs)if(input.file!=='src/quarry-layout.ts'&&!input.file.includes('/.generated/'))assert.equal(forestHash(readForestFile(input.file)),input.sha256,input.file+' remains unchanged');
+  for(const input of before.workerInputs)if(input.file!=='src/quarry-layout.ts'&&!input.file.includes('/.generated/'))assert.equal(forestHash(historicGripBytes(input.file,readForestFile(input.file))),input.sha256,input.file+' remains unchanged outside the later grip correction');
 });
 
 test('replacement roots seat on actual terrain using actual decoded low-Trunk support vertices',async()=>{

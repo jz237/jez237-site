@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import { assertNorthForestEvolution } from './north-forest-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -33,7 +34,7 @@ test('roadside additions preserve every baseline road/arena sample and existing 
   // list is independently checked in quarry-extension.test.ts.
   for(const [path,expected] of Object.entries(baseline.files)){
     if(path==='src/quarry-layout.ts')continue; // New shared helpers belong here.
-    assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must remain unchanged during the roadside milestone`);
+    assert.equal(hash(historicGripBytes(path,readFileSync(new URL('../'+path,import.meta.url)))),expected,`${path} remains exact outside the later grip correction`);
   }
 });
 

@@ -1,3 +1,4 @@
+import { circuitSurfaceAt } from './circuit-grip';
 export type Mode = 'derby' | 'playground' | 'race';
 export type CarKind = 'coupe' | 'sedan' | 'hatch';
 export const clamp = (n: number, a: number, b: number) =>
@@ -70,10 +71,7 @@ export function terrainHeight(x: number, z: number) {
 export function surfaceAt(x: number, z: number) {
   const radius = Math.hypot(x, z);
   if (radius < 44) return 'gravel';
-  let dist = Infinity;
-  for (const p of CHECKPOINTS)
-    dist = Math.min(dist, Math.hypot(x - p.x, z - p.z));
-  return dist < 11 && z > -20 ? 'asphalt' : 'gravel';
+  return circuitSurfaceAt(x, z);
 }
 export function advanceCheckpoint(
   x: number,

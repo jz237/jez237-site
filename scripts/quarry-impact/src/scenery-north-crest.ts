@@ -52,6 +52,6 @@ if(northCrestBlend>.001) {
 #endif
 #include <clearcoat_normal_fragment_begin>`);
   };
-  material.customProgramCacheKey = () => 'north-woodland-crest-v1';
+  material.customProgramCacheKey = () => 'north-woodland-crest-geology-v2';
   return material;
 }

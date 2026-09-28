@@ -15,6 +15,7 @@ import eastBayData from '../src/quarry-east-bay-collision.json';
 import northForest from '../src/quarry-north-forest.json';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import {corridorObstructions} from './corridor-check';
+import {readFileSync} from 'node:fs';
 await R.init();
 const model=new T.Group();for(const name of ['FL','FR','RL','RR']){const w=new T.Group();w.name='wheel_'+name;model.add(w);}templates.set('coupe',model);
 const makePeer=()=>{const messages:ServerMessage[]=[];const closed:number[]=[];const peer:Peer={send:m=>messages.push(structuredClone(m)),close:c=>closed.push(c)};return {peer,messages,closed};};
@@ -74,6 +75,33 @@ test('headless authoritative handling replays the original Vehicle suspension, t
     assert.ok(Math.hypot(actual.x-expected.x,actual.y-expected.y,actual.z-expected.z)<.0001,`Replay drift at tick ${i}: ${JSON.stringify(actual)} vs ${JSON.stringify(expected)}`);
   }
   original.dispose();sim.dispose();reference.dispose();
+});
+
+test('shared grip replays actual Vehicle motion in a former lane gap and across the authored pavement edge',()=>{
+  const base=JSON.parse(readFileSync(new URL('../source/circuit-surface-base.json',import.meta.url),'utf8')),row=base.rows[353];
+  for(const crossing of [false,true]){
+    const sim=new Simulation(R,'playground'),reference=new Simulation(R,'playground');
+    for(const c of sim.cars.slice(1))c.body.setEnabled(false);for(const c of reference.cars)c.body.setEnabled(false);
+    const car=new Vehicle(0,'coupe',0xffffff,new T.Scene(),reference.world,{emit(){},mark(){},detach(){}} as never),c=sim.cars[0];
+    const heading=crossing?row.lateral:row.tangent,offset=crossing?4.8:0;
+    car.place(row.center.x+row.lateral.x*offset,row.center.z+row.lateral.z*offset,Math.atan2(heading.x,heading.z));
+    c.body.setTranslation(car.body.translation(),true);c.body.setRotation(car.body.rotation(),true);
+    Object.assign(c.state,{p:{...car.body.translation()},q:{...car.body.rotation()}});sim.phase='playing';
+    const states=new Set<string>();
+    try{
+      for(let i=0;i<300;i++){
+        if(i===120&&crossing){const velocity={x:heading.x*8,y:0,z:heading.z*8};car.body.setLinvel(velocity,true);c.body.setLinvel(velocity,true);}
+        const controls={throttle:!crossing&&i>=120&&i<210?1:0,steer:i>=130&&i<150?.035:0,brake:i>=(crossing?150:210)?1:0,handbrake:false};
+        car.input=controls;car.preStep(1/60);reference.world.step();car.postStep(1/60,i/60);
+        sim.setInput(0,controls);sim.step(new Set([0,1,2,3,4,5,6,7]));
+        assert.equal(c.state.surface,car.surface);states.add(car.surface);
+        const actual=c.body.translation(),expected=car.body.translation();
+        assert.ok(Math.hypot(actual.x-expected.x,actual.y-expected.y,actual.z-expected.z)<.0001,`surface replay drift at tick${i}, crossing=${crossing}`);
+        for(let wheel=0;wheel<4;wheel++)assert.equal(c.controller.wheelFrictionSlip(wheel),car.controller.wheelFrictionSlip(wheel));
+      }
+      assert.ok(states.has('asphalt'));if(crossing)assert.ok(states.has('gravel'));
+    }finally{car.dispose();sim.dispose();reference.dispose();}
+  }
 });
 test('room snapshots restore car condition, transforms, event state and private reconnection tokens',()=>{
   const room=new Room('ABCDEF',R),p=makePeer();room.connect(p.peer,hello());room.receive(0,p.peer,JSON.stringify({type:'start',mode:'race'}));for(let i=0;i<200;i++)room.step();

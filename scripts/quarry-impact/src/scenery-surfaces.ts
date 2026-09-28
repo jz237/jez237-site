@@ -1,4 +1,5 @@
 import { cliffGeometry } from './quarry-layout';
+import { quarryGeology } from './scenery-geology-material';
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { pbr, texture } from './assets';
@@ -116,32 +117,7 @@ normal=normalize(mix(normalize(tbn*gravelN),normalize(dirtFrame*dirtN),quarrySoi
     return material;
 }
 export function quarryRock() {
-    // A 3.6-metre tile keeps the photographed dry-rock detail readable from the
-    // road. The same material joins authored and surrounding cuts.
-    const material = surfaceShader(pbr('rock', 1, { color: 0xffffff, normalScale: new T.Vector2(.7, .7), vertexColors: true }), `
-    vec3 q=vQuarryPosition;
-    float streak=quarryNoise(q.xz*.28+vec2(q.y*.019));
-    float runoff=smoothstep(.48,.77,streak)*(1.0-smoothstep(3.0,30.0,q.y));
-    float up=abs(normalize(cross(dFdx(q),dFdy(q))).y);
-    float quarryDust=smoothstep(.63,.96,up)*smoothstep(.2,.74,quarryNoise(q.xz*.11+q.y*.03))*.78;
-    vec3 grit=texture2D(quarryRockDust,q.xz/2.0).rgb;
-    float grayGrit=dot(grit,vec3(.2126,.7152,.0722));
-    vec3 dryFines=mix(grit,vec3(grayGrit),.64)*vec3(.37,.36,.33);
-    diffuseColor.rgb*=mix(.9,1.04,quarryNoise(q.xz*.06))*mix(1.0,.7,runoff);
-    diffuseColor.rgb=mix(diffuseColor.rgb,dryFines,quarryDust*.72);
-  `, 'quarry-rock-v5');
-    const gravel = texture('gravel_diff', 1, true);
-    const base = material.onBeforeCompile;
-    material.onBeforeCompile = (shader, renderer) => {
-        base(shader, renderer);
-        shader.uniforms.quarryRockDust = { value: gravel };
-        shader.fragmentShader = 'uniform sampler2D quarryRockDust;\n' + shader.fragmentShader;
-        shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-roughnessFactor=mix(max(.84,roughnessFactor),.98,quarryDust);`);
-        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>',
-            T.ShaderChunk.normal_fragment_maps.replace('mapN.xy *= normalScale;', 'mapN.xy *= normalScale * mix(1.0,.4,quarryDust);'));
-    };
-    return material;
+    return quarryGeology();
 }
 export function weatheredMetal(color: number) {
     return surfaceShader(new T.MeshStandardMaterial({ color, metalness: .57, roughness: .74 }), `

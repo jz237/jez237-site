@@ -1,5 +1,6 @@
 import test from 'node:test';
 import {restoreCircuitSurfaceSource} from './circuit-surface-invariants';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -53,7 +54,7 @@ test('east bay changes only the exact sector, intersecting stable scatter and ex
   stripEastBayLayout(readFileSync(new URL('../src/quarry-layout.ts',import.meta.url)));
   for(const [file,sha]of Object.entries(baseline.files)){
     if(['src/quarry-layout.ts','src/world.ts'].includes(file))continue;
-    const bytes=readFileSync(new URL('../'+file,import.meta.url));
+    const bytes=historicGripBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
     assert.equal(hash(file==='src/scenery-surfaces.ts'?restoreCircuitSurfaceSource(bytes):bytes),sha,file+' retains released bytes outside the explicitly validated later circuit integration');
   }
 });

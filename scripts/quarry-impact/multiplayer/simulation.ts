@@ -116,7 +116,7 @@ export class Simulation {
     for(let i=0;i<4;i++) {
       c.controller.setWheelSteering(i,i<2?s.steering:0); c.controller.setWheelEngineForce(i,force*(s.kind==='coupe'?(i>1?.5:0):.25));
       c.controller.setWheelBrake(i,!alive?18:s.input.brake*90+(s.input.handbrake&&i>1?100:0));
-      c.controller.setWheelFrictionSlip(i,(surfaceAt(s.p.x,s.p.z)==='asphalt'?3.2:2.4)*(s.input.handbrake&&i>1?.6:1));
+      c.controller.setWheelFrictionSlip(i,(s.surface==='asphalt'?3.2:2.4)*(s.input.handbrake&&i>1?.6:1));
       c.controller.setWheelSuspensionStiffness(i,30-(i%2?s.damageRight:s.damageLeft)*.06);
     }
     c.controller.updateVehicle(STEP,undefined,undefined,co=>co.parent()?.handle!==c.body.handle);

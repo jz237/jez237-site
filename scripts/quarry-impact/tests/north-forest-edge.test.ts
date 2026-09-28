@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -21,9 +22,9 @@ test('northern woodland keeps all old solids, terrain, car bytes and original sh
   assert.deepEqual(physics.terrain,before.physics.terrain);assert.deepEqual(physics.nearTrees,before.physics.nearTrees);assert.deepEqual(physics.saplings,before.physics.saplings);
   for(const [file,expected] of Object.entries(before.files))if(file.startsWith('public/models/')||['src/rules.ts','src/vehicle.ts','src/assets.ts','src/car-materials.ts','src/scenery-north-backdrop.ts','src/scenery-backdrop.ts','src/scenery-flora-placement.ts','src/static-shadows.ts'].includes(file))
     if(file==='src/static-shadows.ts')assertNorthBackdropShadowSource();
-    else assert.equal(forestHash(readForestFile(file)),expected,`${file} is not part of northern tree authoring`);
+    else assert.equal(forestHash(historicGripBytes(file,readForestFile(file))),expected,`${file} is not part of northern tree authoring, except the separately validated later grip correction`);
   for(const entry of before.workerInputs)if(entry.file!=='src/quarry-layout.ts'&&!entry.file.startsWith('multiplayer/.generated/'))
-    assert.equal(forestHash(readForestFile(entry.file)),entry.expected,`${entry.file} remains frozen`);
+    assert.equal(forestHash(historicGripBytes(entry.file,readForestFile(entry.file))),entry.expected,`${entry.file} remains frozen outside the later grip correction`);
 });
 
 test('actual renderer changes only52 authorized photo-card transforms, retaining all old GLBs, materials, grass and RNG',async()=>{

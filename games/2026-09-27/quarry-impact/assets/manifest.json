@@ -397,5 +397,80 @@
     "scale_metres": 3,
     "resolution": "1k",
     "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "geology_rock_diff.jpg",
+    "source": "https://polyhaven.com/a/rock_face_03",
+    "authors": {
+      "Dario Barresi": "Photography",
+      "Rico Cilliers": "Processing"
+    },
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_face_03/rock_face_03_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "bytes": 3814362,
+    "sha256": "644ee79df7ffbf5f6afc330b64dd3f33794bab8820915fe61ffe0c88ecfd7ece",
+    "source_md5": "657add9e8a8dffaeed19bdfc58078b59",
+    "scale_metres": 2.7,
+    "source_dimensions_mm": [
+      2699.9995708465576,
+      2699.9995708465576
+    ],
+    "scale_source": "https://api.polyhaven.com/info/rock_face_03",
+    "checksums_source": "https://api.polyhaven.com/files/rock_face_03",
+    "source_files_hash": "d48f9ea2b7ecd038fa76a01c54309b8aa1e80d1e",
+    "resolution": "2k",
+    "generator": "tools/prepare-geology-material.mjs",
+    "notes": "Original downloaded JPEG; no image transformation. OpenGL normal and roughness remain linear material data."
+  },
+  {
+    "file": "geology_rock_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/rock_face_03",
+    "authors": {
+      "Dario Barresi": "Photography",
+      "Rico Cilliers": "Processing"
+    },
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_face_03/rock_face_03_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "bytes": 4473242,
+    "sha256": "a498cef4ba6191f6959b6d03fb835263c77271948264a289af24497ab7111dec",
+    "source_md5": "279b33e71ae6275cafa24e6597024c98",
+    "scale_metres": 2.7,
+    "source_dimensions_mm": [
+      2699.9995708465576,
+      2699.9995708465576
+    ],
+    "scale_source": "https://api.polyhaven.com/info/rock_face_03",
+    "checksums_source": "https://api.polyhaven.com/files/rock_face_03",
+    "source_files_hash": "d48f9ea2b7ecd038fa76a01c54309b8aa1e80d1e",
+    "resolution": "2k",
+    "generator": "tools/prepare-geology-material.mjs",
+    "notes": "Original downloaded JPEG; no image transformation. OpenGL normal and roughness remain linear material data."
+  },
+  {
+    "file": "geology_rock_rough.jpg",
+    "source": "https://polyhaven.com/a/rock_face_03",
+    "authors": {
+      "Dario Barresi": "Photography",
+      "Rico Cilliers": "Processing"
+    },
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_rough_1k.jpg",
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "bytes": 638904,
+    "sha256": "9e3d9a2fd75244892e7acb6bab2eaed1279299510a7970672c0ee27ff1c19fea",
+    "source_md5": "bbb2c7dafde3f81808fa7404d4527a56",
+    "scale_metres": 2.7,
+    "source_dimensions_mm": [
+      2699.9995708465576,
+      2699.9995708465576
+    ],
+    "scale_source": "https://api.polyhaven.com/info/rock_face_03",
+    "checksums_source": "https://api.polyhaven.com/files/rock_face_03",
+    "source_files_hash": "d48f9ea2b7ecd038fa76a01c54309b8aa1e80d1e",
+    "resolution": "1k",
+    "generator": "tools/prepare-geology-material.mjs",
+    "notes": "Original downloaded JPEG; no image transformation. OpenGL normal and roughness remain linear material data."
   }
 ]

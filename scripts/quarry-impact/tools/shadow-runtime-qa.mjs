@@ -7,6 +7,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
 import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
+import { geologyRuntimeAssetPlan } from './geology-runtime-assets.mjs';
 
 const phase=process.env.QUARRY_SHADOW_PHASE;
 assert.ok(phase,'Set QUARRY_SHADOW_PHASE to a new evidence name');
@@ -18,6 +19,7 @@ const neutral={throttle:0,steer:0,brake:1,handbrake:false};
 const northBackdrop=process.env.QUARRY_SHADOW_NORTH_BACKDROP==='1';
 const contextOnly=process.env.QUARRY_SHADOW_CONTEXT_ONLY==='1';
 const circuit=process.env.QUARRY_SHADOW_CIRCUIT==='1';
+const geology=process.env.QUARRY_SHADOW_GEOLOGY==='1';
 // A saved, terrain-supported transition view puts the actual atlas on screen.
 // Freeze the fixture here so the reusable tool never depends on excluded outputs.
 const backdropView=northBackdrop?{player:[-112.80609574938819,226.57773218412194,7.2094670054408025],
@@ -42,31 +44,42 @@ try{
   if(circuit){
     report.circuitAssetsExpected=await circuitRuntimeAssetPlan();
     assetPaths.push(...report.circuitAssetsExpected.map(asset=>asset.file));
-    await page.addInitScript(()=>{
-      window.__circuitShaderAudit={generation:0,programs:[]};
-      window.addEventListener('webglcontextrestored',()=>window.__circuitShaderAudit.generation++,true);
+  }
+  let geologyRequests;
+  if(geology){
+    report.geologyAssetsExpected=await geologyRuntimeAssetPlan();
+    geologyRequests=await observeForestRequests(page,url,report.geologyAssetsExpected);
+  }
+  if(circuit||geology){
+    await page.addInitScript(({circuit,geology})=>{
+      const audits=[
+        ...(circuit?[{key:'__circuitShaderAudit',marker:'uniform float circuitReady'}]:[]),
+        ...(geology?[{key:'__geologyShaderAudit',marker:'vec4 geologyPhoto'}]:[]),
+      ];
+      for(const audit of audits)window[audit.key]={generation:0,programs:[]};
+      window.addEventListener('webglcontextrestored',()=>{for(const audit of audits)window[audit.key].generation++;},true);
       const proto=WebGL2RenderingContext.prototype,link=proto.linkProgram,use=proto.useProgram;
-      const records=new WeakMap();let current;
+      const records=new WeakMap(),current=new WeakMap();
       proto.linkProgram=function(program){
         const result=link.call(this,program),sources=(this.getAttachedShaders(program)||[]).map(shader=>this.getShaderSource(shader)||'');
-        if(sources.some(source=>source.includes('uniform float circuitReady'))){
+        for(const audit of audits)if(sources.some(source=>source.includes(audit.marker))){
           const linked=this.getProgramParameter(program,this.LINK_STATUS),samplers=[];
           if(linked)for(let i=0;i<this.getProgramParameter(program,this.ACTIVE_UNIFORMS);i++){
             const uniform=this.getActiveUniform(program,i);
-            if([this.SAMPLER_2D,this.SAMPLER_CUBE,this.SAMPLER_2D_ARRAY,this.SAMPLER_2D_SHADOW].includes(uniform.type))samplers.push({name:uniform.name,size:uniform.size});
+            if([this.SAMPLER_2D,this.SAMPLER_CUBE,this.SAMPLER_3D,this.SAMPLER_2D_ARRAY,this.SAMPLER_2D_SHADOW,this.SAMPLER_2D_ARRAY_SHADOW,this.SAMPLER_CUBE_SHADOW,this.INT_SAMPLER_2D,this.INT_SAMPLER_3D,this.INT_SAMPLER_CUBE,this.INT_SAMPLER_2D_ARRAY,this.UNSIGNED_INT_SAMPLER_2D,this.UNSIGNED_INT_SAMPLER_3D,this.UNSIGNED_INT_SAMPLER_CUBE,this.UNSIGNED_INT_SAMPLER_2D_ARRAY].includes(uniform.type))samplers.push({name:uniform.name,size:uniform.size});
           }
-          const record={generation:window.__circuitShaderAudit.generation,linked,samplers,draws:0,
+          const record={generation:window[audit.key].generation,linked,samplers,draws:0,
             limit:this.getParameter(this.MAX_TEXTURE_IMAGE_UNITS),log:this.getProgramInfoLog(program)};
-          records.set(program,record);window.__circuitShaderAudit.programs.push(record);
+          records.set(program,[...(records.get(program)||[]),record]);window[audit.key].programs.push(record);
         }
         return result;
       };
-      proto.useProgram=function(program){current=records.get(program);return use.call(this,program);};
+      proto.useProgram=function(program){current.set(this,records.get(program)||[]);return use.call(this,program);};
       for(const name of ['drawElements','drawArrays','drawElementsInstanced','drawArraysInstanced']){
         const draw=proto[name];
-        proto[name]=function(...args){if(current)current.draws++;return draw.apply(this,args);};
+        proto[name]=function(...args){for(const record of current.get(this)||[])record.draws++;return draw.apply(this,args);};
       }
-    });
+    },{circuit,geology});
   }
   let forestRequests;
   if(northBackdrop){
@@ -117,6 +130,10 @@ try{
   });
   await page.goto(url);
   await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
+  if(geology){
+    report.geologyAssets=[];await verifyForestRequests(geologyRequests,report.geologyAssets);
+    assert.equal(report.geologyAssets.length,3,'All three cliff photographs must load from actual application requests');
+  }
   if(northBackdrop){
     await verifyForestRequests(forestRequests,report.forestAssets);
     assert.equal(report.forestAssets.filter(record=>/north-backdrop-\d-(albedo|normal-depth)\.png$/.test(record.file||record.asset||'')).length,6,'Observe all six actual atlas requests');
@@ -310,6 +327,20 @@ try{
         `Generation ${generation} must draw the actual surface maps and fixed-shadow sampler`);
     }
     mark('actual circuit surface shaders fit the texture limit and render before and after context restoration');
+  }
+  if(geology){
+    report.geologyShader=await page.evaluate(()=>window.__geologyShaderAudit);
+    assert.ok(report.geologyShader.programs.length>0,'The actual geology material must compile and render');
+    for(const program of report.geologyShader.programs){
+      assert.ok(program.linked,program.log||'Geology shader must link');
+      assert.ok(program.samplers.reduce((sum,sampler)=>sum+sampler.size,0)<=program.limit,'Geology shader must fit the actual texture-unit limit');
+    }
+    for(const generation of report.contextRecovery.supported?[0,1]:[0]){
+      assert.ok(report.geologyShader.programs.some(program=>program.generation===generation&&program.draws>0&&
+        ['map','normalMap','roughnessMap','geologyWeatheredColor','geologyWeatheredNormal','geologyWeatheredRough','quarryStaticMap'].every(name=>program.samplers.some(sampler=>sampler.name===name))),
+        `Generation ${generation} must draw the actual photographic geology and fixed-shadow sampler`);
+    }
+    mark('actual geology photographs load and the shader fits the sampler limit and draws before and after context restoration');
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.passed=true;
 }catch(error){
