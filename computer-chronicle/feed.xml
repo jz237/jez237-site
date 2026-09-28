@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 27 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 28 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 8-14, 1984 — Computer Games Claim the Fall Spotlight</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-10-08</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-08</guid>
+      <pubDate>Mon, 28 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Election simulations, adventures and strategy titles make the home computer the liveliest game machine in October’s magazine racks. Electronic Games puts the changing game market on its October cover: President Elect and Campaign ’84 turn the American campaign season into computer play. Its fall software preview ranges across strategy and adventure titles, a field the magazine now treats as the center of electronic gaming. These are October magazine features, not claims that either title was released during this particular week. Also this week: IBM Tries to Rescue the PCjr Before Christmas · Macintosh Owners Begin Looking Under the Hood · Home-Computer Forecasts Outrun the Console Market.</description>
+    </item>
     <item>
       <title>Week of October 1-7, 1984 — Sundog Opens a Galaxy Behind the Apple II Screen</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-10-01</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-28</guid>
       <pubDate>Tue, 08 Sep 2026 12:00:00 GMT</pubDate>
       <description>Atlanta fills with 851 suppliers, IBM-compatible machines and a new contest to put every office task inside one package. Comdex/Spring opened on a scale that made the personal-computer boom impossible to miss. Computerworld counted 851 suppliers, 158 of them first-time exhibitors, and expected well over 45,000 visitors. The aisles offered a working map of an industry still multiplying around the IBM PC standard. Also this week: Framework Bets $695 That Ideas Belong in an Outline · Delayed Windows Leaves PC Software on Islands · TeleVideo Puts PCs Around an $8,995 Multiuser Hub.</description>
-    </item>
-    <item>
-      <title>Week of May 21-27, 1984 — Atari Bets on Compatibility with $140 7800 ProSystem</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-05-21</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-21</guid>
-      <pubDate>Mon, 07 Sep 2026 12:00:00 GMT</pubDate>
-      <description>A sharper arcade-style machine promises to preserve the vast Atari 2600 cartridge shelf. Atari unveiled the 7800 ProSystem on May 21, pitching a $140 console as the company’s answer to a home videogame business shaken by falling sales and crowded store shelves. The new machine promised more elaborate arcade-style action while meeting owners on familiar ground: it could also play Atari 2600 cartridges. Also this week: Ashton-Tate Unwraps dBASE III for IBM PCs · NEC Breaks the $2,000 Barrier for a Complete 16-bit Business Micro · Telemail Intrusions Put Online Security on the Front Page.</description>
     </item>
   </channel>
 </rss>

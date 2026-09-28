@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-28",
+      "historicDate": "1984-10-08",
+      "displayDate": "Week of October 8-14, 1984",
+      "edition": "Issue 115 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A campaign on disk, a fresh keyboard, and a busy modem line mark October at the computer shop.",
+      "leadHeadline": "Computer Games Claim the Fall Spotlight",
+      "storyHeadlines": [
+        "IBM Tries to Rescue the PCjr Before Christmas",
+        "Macintosh Owners Begin Looking Under the Hood",
+        "Home-Computer Forecasts Outrun the Console Market"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-08.png",
+      "thumb": "media/thumbs/1984-10-08.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-27",
       "historicDate": "1984-10-01",
       "displayDate": "Week of October 1-7, 1984",
