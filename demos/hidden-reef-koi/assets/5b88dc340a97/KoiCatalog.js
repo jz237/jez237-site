@@ -20,4 +20,5 @@ const descriptions={
  ochiba:['Ochiba Shigure','Gray · brown','Brown patches over a gray base suggest fallen leaves on water.']
 };
 const roster=['kohaku','sanke','yamabuki','showa','orenji','karasu','tancho','bekko','sanke','asagi','platinum','chagoi','shiroutsuri','hiutsuri','kujaku','doitsu','goshiki','benigoi','ochiba','kohaku'];
-export const varieties=roster.map((id,i)=>{const [name,colors,note]=descriptions[id];return{id,name:name+(i===8?' · juvenile':i===19?' · gin-rin':''),colors,note};});
+const names=['Ember','Mosaic','Sol','Onyx','Amber','Shadow','Ruby','Pebble','Flicker','Indigo','Pearl','Copper','Domino','Saffron','Opal','Silk','Storm','Crimson','Autumn','Spark'];
+export const varieties=roster.map((id,i)=>{const [name,colors,note]=descriptions[id];return{id,nickname:names[i],name:name+(i===8?' · juvenile':i===19?' · gin-rin':''),colors,note};});

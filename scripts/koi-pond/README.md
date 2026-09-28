@@ -1,6 +1,6 @@
-# Hidden Reef Stillwater — tutorial garden revision
+# Hidden Reef Stillwater — named koi and customer care
 
-Preview location: https://jez237.com/demos/hidden-reef-koi/
+Live location: https://jez237.com/demos/hidden-reef-koi/
 
 This revision adapts **Koi Pond Garden by Sourany Phomhome**, released under the MIT license at https://github.com/souranyp-stack/koi-pond-garden. Its rendering foundation replaces the earlier simplified Stillwater renderer. The required copyright and MIT permission notice are preserved in `public/LICENSES.txt`, together with the Three.js and dat.GUI licenses. This is an adapted work, not a claim of independent authorship of the upstream engine. The tutorial is https://www.youtube.com/watch?v=uSCUkGlHY30.
 
@@ -16,7 +16,16 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 
 `dist` is a static, self-hosted page. It makes no calls to AI services, analytics or remote asset hosts. The renderer synthesizes its textures and meshes at startup, so first load includes texture generation and shader compilation. Automatic quality adjustment trades resolution before effects on slower devices.
 
-## What changed
+## Current experience
+
+- Opens immediately in a stationary Garden view; fish, water and foliage remain alive. The moving tour is optional.
+- Wheel and trackpad scrolling over the scene zoom in/out in all camera modes.
+- Every one of the twenty fish has a unique name, with its variety retained in the guide and follow-camera label.
+- Feeding drops food directly onto visible water without a hand, arm or forced camera move.
+- Sixteen searchable, sourced care topics cover pond planning, buying, quarantine, KHV, water tests, nitrogen cycling, oxygen, alkalinity, source water, diet, seasons, health and variety identification.
+- The top-left preview badge is removed.
+
+## Rendering and behavior
 
 - Preserved the tutorial's integrated HDR render pipeline: depth-aware reflection and refraction, absorption, Fresnel, ripple simulation, underwater caustics and koi shadows, foliage transmission, sky lighting, ambient occlusion, bloom and depth of field.
 - Widened the southern open basin and shoreline while keeping the bridge and northern approach intact. The new starting composition favors the pond and garden together.
@@ -31,7 +40,7 @@ The chemistry model uses mg/L as nitrogen, with explicit nitrogen mass balance a
 
 Node tests exercise the actual scene's simulation function against its actual basin geometry for 150 simulated seconds, plus a feeding run and freeze check. They verify finite positions, basin/floor/surface bounds, upright attitude, variable speed, continuous depth exploration and independent phases. The shared body curve is checked for a steady head, traveling phase, growing tail amplitude and a matching analytical slope. Chemistry tests cover speciation, nitrogen conservation, aeration/filter comparisons and nonnegative long-run state.
 
-Browser checks cover initial rendering, garden and underwater cameras, variety selection/following, chemistry controls, weather, feeding, pause and phone layout. The browser preview may throttle background WebGL tabs; FPS from a background tab is not a device benchmark.
+Interaction tests also exercise fixed-view startup, bounded/reversible zoom, hand-free feeding and food cleanup. Browser checks cover initial rendering, garden and underwater cameras, variety selection/following, chemistry controls, weather, feeding, pause and phone layout. The browser preview may throttle background WebGL tabs; FPS from a background tab is not a device benchmark.
 
 ## Publishing
 
