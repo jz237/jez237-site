@@ -4,11 +4,14 @@ import { chromium } from '@playwright/test';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 const phase=process.env.QUARRY_CUT_PHASE || 'after';
 const focused=process.env.QUARRY_CUT_FOCUSED==='1';
 const roadsideOnly=process.env.QUARRY_CUT_ROADSIDE==='1';
 const extension=process.env.QUARRY_CUT_EXTENSION==='1';
+const road=process.env.QUARRY_CUT_ROAD==='1';
+const roadEnds=process.env.QUARRY_CUT_ROAD_ENDS==='1';
 assert.match(phase,/^[a-z0-9][a-z0-9_-]*$/i);
 const output=path.resolve(process.env.QUARRY_CUT_OUTPUT || 'outputs/quarry-cut',phase);
 const url=process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/';
@@ -26,11 +29,27 @@ if(extension)views.splice(0,views.length,
   {name:'extension-front',player:[58,-87,0],position:[58,4,-93],target:[68,10,-144]},
   {name:'extension-reverse',player:[26,-88,0],position:[30,4,-98],target:[65,10,-149]},
   {name:'extension-join',player:[80,-77,0],position:[87,3.5,-92],target:[103,10,-124]});
+if(road)views.splice(0,views.length,
+  {name:'road-shoulder',player:[93,-61,0],position:[99,2.6,-63],target:[86,.1,-73]},
+  {name:'road-reverse',player:[45,-85,0],position:[49,2.6,-84],target:[79,.1,-83]});
 const track=Array.from({length:481},(_,i)=>{
   const a=i/480*Math.PI*2;
   return {x:108*Math.sin(a)+12*Math.sin(a*3),z:88*Math.cos(a)+9*Math.sin(a*2)};
 });
-const report={phase,url,focused,extension,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
+if(roadEnds){
+  views.splice(0,views.length,...[
+    {name:'road-entry',cell:122,direction:1},
+    {name:'road-exit',cell:183,direction:-1},
+  ].map(({name,cell,direction})=>{
+    const a=cell/360*Math.PI*2,b=(cell+.2)/360*Math.PI*2;
+    const p={x:108*Math.sin(a)+12*Math.sin(a*3),z:88*Math.cos(a)+9*Math.sin(a*2)};
+    const q={x:108*Math.sin(b)+12*Math.sin(b*3),z:88*Math.cos(b)+9*Math.sin(b*2)};
+    const n=Math.hypot(q.x-p.x,q.z-p.z),fx=(q.x-p.x)/n*direction,fz=(q.z-p.z)/n*direction;
+    return {name,player:[p.x,p.z,Math.atan2(fx,fz)],
+      position:[p.x-fx*8,3.1,p.z-fz*8],target:[p.x+fx*16,.4,p.z+fz*16]};
+  }));
+}
+const report={phase,url,focused,extension,road,roadEnds,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],hood:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
 let browser;
 await fs.mkdir(output,{recursive:true});
 assert.equal(await fs.access(path.join(output,'report.json')).then(()=>true,()=>false),false,
@@ -49,6 +68,8 @@ try {
   await page.goto(url);
   await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
   report.bundle=await page.locator('script[type="module"]').getAttribute('src');
+  const buildResponse=await page.request.get(new URL(report.bundle,url).href);
+  report.buildSha256=createHash('sha256').update(await buildResponse.body()).digest('hex');
   report.gpu=await page.evaluate(()=>{const gl=document.querySelector('canvas').getContext('webgl2'),ext=gl.getExtension('WEBGL_debug_renderer_info');return ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);});
   await page.evaluate(async()=>{
     await __quarry.start('playground');__quarry.autopilot(false);__quarry.setQuality('ultra');
@@ -82,16 +103,16 @@ try {
   // Freeze between samples and advance only fixed simulation steps. These are
   // chase poses following a physically moving car, not arbitrary fly-throughs.
   // Camera easing/FOV animation is intentionally held fixed for comparison.
-  if(!focused&&!roadsideOnly){
-  await page.evaluate(({track,neutral,extension})=>{
+  if(!focused&&!roadsideOnly&&!roadEnds){
+  await page.evaluate(({track,neutral,extension,road})=>{
     // Start ahead of the sector so the normal forward chase view contains the
     // approaching extraction faces, rather than starting beside them.
-    const index=extension?164:149;
+    const index=extension||road?164:149;
     const start=track[index],next=track[index+1],yaw=Math.atan2(next.x-start.x,next.z-start.z);
     __quarry.resume();__quarry.setInput(neutral);__quarry.teleport(0,start.x,start.z,yaw);__quarry.simulate(.25);
     __quarry.velocity(0,Math.sin(yaw)*13,0,Math.cos(yaw)*13);
     __quarry.captureCamera([start.x,5,start.z+8],[start.x,1,start.z]);
-  },{track,neutral,extension});
+  },{track,neutral,extension,road});
   for(let sample=0;sample<=4;sample++){
     const pose=await page.evaluate(({sample,track})=>{
       const q=__quarry;
@@ -122,6 +143,22 @@ try {
     const name=`moving-chase-${String(sample).padStart(2,'0')}`;
     await page.screenshot({path:path.join(output,name+'.png')});
     report.moving.push({name,...pose,frameTimes,...await captureStats()});
+    if(road && sample%2===0){
+      const hoodPose=await page.evaluate(()=>{
+        const c=__quarry.inspect()[0],p=c.position,f=c.forward;
+        const scale=Math.hypot(f[0],f[2]),fx=f[0]/scale,fz=f[2]/scale;
+        // Match the gameplay hood offset and sightline. As with chase captures,
+        // leave the fixture's FOV fixed to compare surface detail consistently.
+        const position=[p[0]+fx*1.35,p[1]+.58,p[2]+fz*1.35];
+        const target=[p[0]+fx*22,p[1]+.5,p[2]+fz*22];
+        __quarry.captureCamera(position,target);
+        return {position,target};
+      });
+      await page.waitForTimeout(700);
+      const hoodName=`moving-hood-${String(sample).padStart(2,'0')}`;
+      await page.screenshot({path:path.join(output,hoodName+'.png')});
+      report.hood.push({name:hoodName,...hoodPose,...await captureStats()});
+    }
   }
   const first=report.moving[0].car.position,last=report.moving.at(-1).car.position;
   report.movementMetres=Math.hypot(last[0]-first[0],last[2]-first[2]);

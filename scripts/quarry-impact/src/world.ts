@@ -8,6 +8,8 @@ import { forestScenery, updateForestView } from './scenery-vegetation';
 import { loadQuarryCut } from './scenery-cut';
 import { loadQuarryRoadside } from './scenery-roadside';
 import { loadQuarryExtension } from './scenery-extension';
+import { loadQuarryRoadApproach, ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
+import { quarryRoadSurface } from './scenery-road-material';
 import { quarryRoadsideGround } from './scenery-roadside-material';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
@@ -81,6 +83,7 @@ export class Quarry {
   private cutLODs: T.LOD[] = [];
   private roadsideLODs: T.LOD[] = [];
   private extensionLODs: T.LOD[] = [];
+  private roadApproachLODs: T.LOD[] = [];
   private rockMaterial: T.MeshStandardMaterial;
   constructor(
     public scene: T.Scene,
@@ -172,9 +175,10 @@ export class Quarry {
     let begin = 0,
       last = 0;
     for (let i = 0; i <= 360; i++) {
-      const mat = i === 360 ? -1 : trackPoint(i / 360).z < -20 ? 1 : 0;
+      const authored = i >= ROAD_APPROACH_START && i < ROAD_APPROACH_END;
+      const mat = i === 360 || authored ? -1 : trackPoint(i / 360).z < -20 ? 1 : 0;
       if (mat !== last) {
-        roadGeo.addGroup(begin * 6, (i - begin) * 6, last);
+        if (last >= 0) roadGeo.addGroup(begin * 6, (i - begin) * 6, last);
         begin = i;
         last = mat;
       }
@@ -674,6 +678,9 @@ export class Quarry {
       ground: quarryRoadsideGround(), rock: this.rockMaterial, scannedRock: scannedMaterial,
     });
     this.extensionLODs = await loadQuarryExtension(this.scenery, this.rockMaterial, scannedMaterial);
+    this.roadApproachLODs = await loadQuarryRoadApproach(this.scenery, {
+      lane: quarryRoadSurface('aggregate'), skirt: quarryRoadSurface('ground'), scannedRock: scannedMaterial,
+    });
   }
   setMode(mode: string) {
     const derby = mode === 'derby';
@@ -687,6 +694,7 @@ export class Quarry {
       for (const lod of this.cutLODs) lod.update(camera);
       for (const lod of this.roadsideLODs) lod.update(camera);
       for (const lod of this.extensionLODs) lod.update(camera);
+      for (const lod of this.roadApproachLODs) lod.update(camera);
     }
     for (const p of this.props) {
       p.mesh.position.copy(p.body.translation());

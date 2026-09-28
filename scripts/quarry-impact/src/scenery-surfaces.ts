@@ -3,6 +3,7 @@ import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { pbr, texture } from './assets';
 import { terrainHeight, trackPoint } from './rules';
+import { ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
 // Original scenery shaders. Photographic maps remain the locally bundled CC0 scans.
 const noise = `
 float quarryHash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123); }
@@ -162,21 +163,27 @@ export function quarryCliffs() {
     geometry.computeVertexNormals();
     return geometry;
 }
-function ribbon(offset0: number, offset1: number, segments: number, irregular = false) {
+/** Visible track overlays; the authored approach owns its complete cross section. */
+export function roadRibbon(offset0: number, offset1: number, segments: number, irregular = false, anchorInner = false) {
     const positions: number[] = [], uv: number[] = [], indices: number[] = [];
     for (let i = 0; i <= segments; i++) {
         const p = trackPoint(i / segments), q = trackPoint((i + .1) / segments);
         const d = new T.Vector2(q.x - p.x, q.z - p.z).normalize();
         for (let edge = 0; edge < 2; edge++) {
-            const offset = (edge === 0 ? offset0 : offset1) + (irregular ? Math.sin(i * .31) * .45 + Math.sin(i * .83) * .17 : 0);
+            const offset = (edge === 0 ? offset0 : offset1) + (irregular && !(anchorInner && edge === 0) ? Math.sin(i * .31) * .45 + Math.sin(i * .83) * .17 : 0);
             const x = p.x + d.y * offset, z = p.z - d.x * offset;
             positions.push(x, terrainHeight(x, z) + .067, z);
             uv.push(edge, i / 6);
         }
     }
     for (let i = 0; i < segments; i++) {
+        // The authored mesh replaces the complete lane/shoulder cross section.
+        if (i >= ROAD_APPROACH_START && i < ROAD_APPROACH_END) continue;
         const b = i * 2;
-        indices.push(b, b + 2, b + 1, b + 1, b + 2, b + 3);
+        // Negative-side shoulders run from the inner edge toward negative
+        // offsets. Reverse their winding so both shoulders face the sky.
+        if (offset1 >= offset0) indices.push(b, b + 2, b + 1, b + 1, b + 2, b + 3);
+        else indices.push(b, b + 1, b + 2, b + 1, b + 3, b + 2);
     }
     const g = new T.BufferGeometry();
     g.setAttribute('position', new T.Float32BufferAttribute(positions, 3));
@@ -188,7 +195,7 @@ function ribbon(offset0: number, offset1: number, segments: number, irregular = 
 export function roadsideDetails(parent: T.Group) {
     const shoulders = quarryAggregate();
     for (const side of [-1, 1]) {
-        const g = ribbon(side * 5.78, side * 8.6, 360, true);
+        const g = roadRibbon(side * 5.78, side * 8.6, 360, true, true);
         const p = g.attributes.position, u = g.attributes.uv;
         for (let i = 0; i < p.count; i++)
             u.setXY(i, p.getX(i) / 2, p.getZ(i) / 2);
@@ -199,8 +206,25 @@ export function roadsideDetails(parent: T.Group) {
     // Frayed asphalt margins and dark compressed wheel channels break the perfect
     // ribbon silhouette without creating hundreds of transparent decal draws.
     const marks = new T.MeshStandardMaterial({ color: 0x272b27, transparent: true, opacity: .22, depthWrite: false, roughness: .96, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 });
+    const trackMarks = marks.clone();
+    trackMarks.onBeforeCompile = shader => {
+        shader.vertexShader = 'attribute float wearAlpha; varying float vWearAlpha;\n' + shader.vertexShader;
+        shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvWearAlpha=wearAlpha;');
+        shader.fragmentShader = 'varying float vWearAlpha;\n' + shader.fragmentShader;
+        shader.fragmentShader = shader.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\ndiffuseColor.a*=vWearAlpha;');
+    };
+    trackMarks.customProgramCacheKey = () => 'road-marks-transition-v1';
     for (const offset of [-3.6, -2.6, 2.6, 3.6]) {
-        const m = new T.Mesh(ribbon(offset - .16, offset + .16, 360, true), marks);
+        const geometry = roadRibbon(offset - .16, offset + .16, 360, true);
+        const fade = new Float32Array(geometry.getAttribute('position').count);
+        for (let i = 0; i < fade.length; i++) {
+            const cell = Math.floor(i / 2);
+            const distance = Math.max(ROAD_APPROACH_START - cell, cell - ROAD_APPROACH_END, 0);
+            const t = Math.min(1, distance / 4);
+            fade[i] = t * t * (3 - 2 * t);
+        }
+        geometry.setAttribute('wearAlpha', new T.BufferAttribute(fade, 1));
+        const m = new T.Mesh(geometry, trackMarks);
         m.receiveShadow = true;
         parent.add(m);
     }

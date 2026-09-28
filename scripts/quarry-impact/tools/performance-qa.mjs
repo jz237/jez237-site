@@ -49,6 +49,12 @@ try {
   const sceneryBytes = await sceneryResponse.body();
   report.sceneryAsset = { url: sceneryURL, bytes: sceneryBytes.length,
     sha256: createHash('sha256').update(sceneryBytes).digest('hex') };
+  const roadURL = new URL('models/quarry-road-approach.glb', report.pageURL).href;
+  const roadResponse = await page.request.get(roadURL);
+  assert.equal(roadResponse.status(), 200, 'The authored road must be served');
+  const roadBytes = await roadResponse.body();
+  report.roadAsset = { url: roadURL, bytes: roadBytes.length,
+    sha256: createHash('sha256').update(roadBytes).digest('hex') };
   await page.evaluate(async quality => {
     await __quarry.start('derby'); __quarry.autopilot(true); __quarry.setQuality(quality); __quarry.mute();
   }, quality);
@@ -100,12 +106,26 @@ try {
     const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
     return a >= 139 && a <= 172;
   }).length;
+  const roadCentres = Array.from({ length: 360 }, (_, i) => {
+    const a = i / 360 * Math.PI * 2;
+    return [108 * Math.sin(a) + 12 * Math.sin(a * 3), 88 * Math.cos(a) + 9 * Math.sin(a * 2)];
+  });
+  report.roadApproachVisits = raceSamples.filter(s => {
+    const [x, , z] = s.cars[0].position;
+    let cell = 0, distance = Infinity;
+    for (const [i, p] of roadCentres.entries()) {
+      const d = Math.hypot(x - p[0], z - p[1]);
+      if (d < distance) { cell = i; distance = d; }
+    }
+    return cell >= 123 && cell < 182 && distance < 12;
+  }).length;
   await page.screenshot({ path: screenshot });
   assert.ok(frames.length > seconds * 10, 'Capture must contain continuous rendered frames');
   assert.ok(frames.length < 50000, 'Frame capture must not reach the runtime sample cap');
   assert.ok(report.samples.every(s => s.cars.length === 8), 'All sampled events must have eight cars');
   assert.ok(raceSamples.length > 0 && report.roadsideVisits > 0, 'Racing must visit the authored approach');
   assert.ok(report.extensionVisits > 0, 'Racing must visit the extended wall');
+  assert.ok(report.roadApproachVisits > 0, 'Racing must drive on the new gravel approach');
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } catch (error) {
@@ -115,5 +135,5 @@ try {
   report.browserClosed = true;
   await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, JSON.stringify(report, null, 2));
-  console.log(JSON.stringify({ output, passed: report.passed, buildURL: report.buildURL, timing: report.timing, memory: report.memory, roadsideVisits: report.roadsideVisits, failure: report.failure }));
+  console.log(JSON.stringify({ output, passed: report.passed, buildURL: report.buildURL, timing: report.timing, memory: report.memory, roadsideVisits: report.roadsideVisits, roadApproachVisits: report.roadApproachVisits, failure: report.failure }));
 }

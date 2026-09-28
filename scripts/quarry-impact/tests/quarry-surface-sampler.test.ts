@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
-import { exactMinimumClearance } from './mesh-clearance';
+import { exactMinimumClearance, projectedOverlapAreas } from './mesh-clearance';
 
 test('surface seating uses triangle interpolation, handles boundaries and excludes empty footprint space',()=>{
   // Sloping square at negative coordinates and a separate high triangle leave
@@ -35,4 +35,13 @@ test('clearance clips vertical/overhanging faces in3D and seating chooses the hi
   assert.ok(Math.abs(report.worst!.point[0])<1e-7&&Math.abs(report.worst!.point[2])<1e-7,'vertical face must detect the interior terrain peak');
   const folded={positions:new Float32Array([-1,0,-1,1,0,-1,0,0,1,-1,2,-1,1,2,-1,0,2,1]),indices:new Uint32Array([0,2,1,3,4,5])};
   assert.equal(createSurfaceSampler(folded).height(0,0),2,'camera/fragment seating must use the highest intersected sheet regardless of winding');
+});
+
+test('projected coverage detects a narrow missing strip and counts double-covered ground',()=>{
+  const surface={positions:new Float32Array([-1,0,-1,1,0,-1,1,0,1,-1,0,1]),indices:new Uint32Array([0,3,1,1,3,2])};
+  const base={positions:new Float32Array([-1,0,-1,-.01,0,-1,-.01,0,1,-1,0,1,.01,0,-1,1,0,-1,1,0,1,.01,0,1]),indices:new Uint32Array([0,3,1,1,3,2,4,7,5,5,7,6])};
+  const areas=projectedOverlapAreas(surface,base);assert.equal(areas.length,2);
+  assert.ok(Math.abs(areas[0]-1.98)<1e-7);assert.ok(Math.abs(areas[1]-1.98)<1e-7);
+  const doubled=projectedOverlapAreas(surface,{positions:base.positions,indices:new Uint32Array([...base.indices,...base.indices])});
+  assert.ok(Math.abs(doubled.reduce((a,b)=>a+b,0)-7.92)<1e-7);
 });
