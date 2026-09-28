@@ -8,6 +8,7 @@ import northForest from './quarry-north-forest.json';
 import northBackdrop from './quarry-north-backdrop.json';
 import { sector as extensionSector, positions as extensionPositions, indices as extensionIndices, solids as extensionSolids } from './quarry-extension-collision.json';
 import { sector as headwallSector, positions as headwallPositions, indices as headwallIndices, solids as headwallSolids } from './quarry-headwall-collision.json';
+import { sector as eastBaySector, positions as eastBayPositions, indices as eastBayIndices, solids as eastBaySolids } from './quarry-east-bay-collision.json';
 import { createSurfaceSampler } from './quarry-surface-sampler';
 import type Rapier from '@dimforge/rapier3d-compat';
 export type Point = {x:number;y:number;z:number};
@@ -19,6 +20,7 @@ export type MeshData={positions:Float32Array;indices:Uint32Array};
 export const QUARRY_CUT_SECTOR=authoredCut.sector;
 export const QUARRY_EXTENSION_SECTOR=extensionSector;
 export const QUARRY_HEADWALL_SECTOR=headwallSector;
+export const QUARRY_EAST_BAY_SECTOR=eastBaySector;
 export function quarryCutGeometry():MeshData { return {positions:new Float32Array(authoredCut.positions),indices:new Uint32Array(authoredCut.indices)}; }
 export function quarryExtensionGeometry():MeshData {return {positions:new Float32Array(extensionPositions),indices:new Uint32Array(extensionIndices)};}
 let extensionSampler:ReturnType<typeof createSurfaceSampler>|undefined;
@@ -31,6 +33,11 @@ const sampleHeadwall=()=>headwallSampler??=createSurfaceSampler(quarryHeadwallGe
 /** Highest exact wall hit, including authored overhangs; undefined outside it. */
 export const quarryHeadwallHeight=(x:number,z:number)=>sampleHeadwall().height(x,z);
 export const overlapsQuarryHeadwall=(x:number,z:number,padding=0)=>sampleHeadwall().overlaps(x,z,padding);
+export function quarryEastBayGeometry():MeshData {return {positions:new Float32Array(eastBayPositions),indices:new Uint32Array(eastBayIndices)};}
+let eastBaySampler:ReturnType<typeof createSurfaceSampler>|undefined;
+const sampleEastBay=()=>eastBaySampler??=createSurfaceSampler(quarryEastBayGeometry());
+export const quarryEastBayHeight=(x:number,z:number)=>sampleEastBay().height(x,z);
+export const overlapsQuarryEastBay=(x:number,z:number,padding=0)=>sampleEastBay().overlaps(x,z,padding);
 export function quarryRoadsideGeometry():MeshData {return {positions:new Float32Array(roadsideData.surface.positions),indices:new Uint32Array(roadsideData.surface.indices)};}
 let roadsideSampler:ReturnType<typeof createSurfaceSampler>|undefined;
 const sampleRoadside=()=>roadsideSampler??=createSurfaceSampler(quarryRoadsideGeometry());
@@ -65,10 +72,10 @@ export function rockPlacements(variant:number){const r=seededRandom(419831+varia
   const sx=scale*(.7+r()*.5),sy=scale*(.6+r()*.7),sz=scale,footprint=scale*.32;
   const y=Math.min(landscapeHeight(x,z),landscapeHeight(x-footprint,z),landscapeHeight(x+footprint,z),landscapeHeight(x,z-footprint),landscapeHeight(x,z+footprint))-scale*.12;
   return {x,y,z,sx,sy,sz,yaw:r()*6.28,roll:r()*.3};
-}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)*.65)).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryExtension(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryHeadwall(p.x,p.z,Math.max(p.sx,p.sz)*.65));}
+}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)*.65)).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryExtension(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryHeadwall(p.x,p.z,Math.max(p.sx,p.sz)*.65)&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz)*.65));}
 export const SCREE_POSITIONS=new Float32Array(screePositions.positions);
 export const SCREE_UVS=new Float32Array(screePositions.uv);
-export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz))).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryExtension(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryHeadwall(p.x,p.z,Math.max(p.sx,p.sz)));}
+export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz))).map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>!overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryExtension(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryHeadwall(p.x,p.z,Math.max(p.sx,p.sz))&&!overlapsQuarryEastBay(p.x,p.z,Math.max(p.sx,p.sz)));}
 export function nearTrees(kind:string){const r=seededRandom(749211+(Number(kind.split('-')[1])||0)*284171),track=Array.from({length:120},(_,i)=>trackPoint(i/120));const items=[];
   for(let i=0;i<512&&items.length<16;i++){const a=r()*Math.PI*2,radius=116+r()*25,x=Math.sin(a)*radius,z=Math.cos(a)*radius;if(!track.every(p=>Math.hypot(x-p.x,z-p.z)>10))continue;items.push({x,z,height:4+r()*6,yaw:r()*6.28});}return items.map((p,colliderIndex)=>({...p,colliderIndex})).filter(p=>reseatedRoadsideTrees.has(kind+'-'+p.colliderIndex)||!overlapsQuarryRoadside(p.x,p.z,p.height*.014));
 }
@@ -83,6 +90,8 @@ export function quarryColliderLayout():ColliderSpec[]{
   for(const solid of extensionSolids)items.push({id:'quarry-extension-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});
   items.push({id:'quarry-headwall',shape:'mesh',p:origin,data:quarryHeadwallGeometry(),friction:.85});
   for(const solid of headwallSolids)items.push({id:'quarry-headwall-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});
+  items.push({id:'quarry-east-bay',shape:'mesh',p:origin,data:quarryEastBayGeometry(),friction:.85});
+  for(const solid of eastBaySolids)items.push({id:'quarry-east-bay-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});
   items.push({id:'quarry-roadside',shape:'mesh',p:origin,data:quarryRoadsideGeometry(),friction:.85});
   for(const solid of roadsideData.solids)items.push({id:'quarry-roadside-solid-'+solid.id,shape:'hull',p:origin,points:new Float32Array(solid.points),friction:.85});
   for(let i=0;i<66;i++){const a=i/66*Math.PI*2;box('arena-'+i,Math.sin(a)*46,.58,Math.cos(a)*46,4.22,1.16,.75,yawRotation(a),true);}
@@ -234,6 +243,7 @@ export function cliffGeometry() {
                 if(i>=QUARRY_CUT_SECTOR.startCell&&i<QUARRY_CUT_SECTOR.endCellExclusive)continue;
                 if(i>=QUARRY_EXTENSION_SECTOR.startCell&&i<QUARRY_EXTENSION_SECTOR.endCellExclusive)continue;
                 if(QUARRY_HEADWALL_SECTOR.cellRanges.some(([start,end])=>i>=start&&i<end))continue;
+                if(i>=QUARRY_EAST_BAY_SECTOR.startCell&&i<QUARRY_EAST_BAY_SECTOR.endCellExclusive)continue;
                 const b = start + i * 2;
                 indices.push(b, b + 1, b + 2, b + 2, b + 1, b + 3);
             }

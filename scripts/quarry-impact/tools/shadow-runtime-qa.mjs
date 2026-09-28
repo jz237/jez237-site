@@ -21,7 +21,7 @@ const contextOnly=process.env.QUARRY_SHADOW_CONTEXT_ONLY==='1';
 const backdropView=northBackdrop?{player:[-112.80609574938819,226.57773218412194,7.2094670054408025],
   position:[-112.80609574938819,45.120813459170904,226.57773218412194],
   target:[-96.81826620196813,43.120813459170904,238.59394233385893]}:null;
-const assetPaths=['assets/sky.hdr','assets/arena-floor-mask.rgba.gz','models/quarry-headwall.glb',
+const assetPaths=['assets/sky.hdr','assets/arena-floor-mask.rgba.gz','models/quarry-headwall.glb','models/quarry-east-bay.glb',
   'models/quarry-extension.glb','models/coupe.glb','models/sedan.glb','models/hatch.glb'];
 const report={phase,url,startedAt:new Date().toISOString(),viewport:{width:2560,height:1440},
   contextOnly,

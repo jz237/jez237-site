@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {assertEastBayEvolution,stripEastBayLayout} from './quarry-east-bay-invariants';
 import type {ColliderSpec} from '../src/quarry-layout';
 export const northBackdropBefore=JSON.parse(readFileSync(new URL('./fixtures/north-backdrop-before.json',import.meta.url),'utf8'));
 export const northBackdropData=()=>JSON.parse(readFileSync(new URL('../src/quarry-north-backdrop.json',import.meta.url),'utf8'));
@@ -10,6 +11,7 @@ const hash=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('h
  * only the 52 declared stems and their accepted root bands may be added.
  */
 export function assertNorthBackdropEvolution(layout:ColliderSpec[]){
+  if(layout.some(s=>s.id==='quarry-east-bay'))layout=assertEastBayEvolution(layout);
   const old=new Map<string,string>(northBackdropBefore.physics.colliders.map((s:any)=>[s.id,s.sha256]));
   assert.equal(old.size,1919);
   const current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
@@ -33,7 +35,7 @@ export function assertNorthBackdropEvolution(layout:ColliderSpec[]){
  * the previously deployed layout remains present before older gates run.
  */
 export function stripNorthBackdropLayout(source:Buffer){
-  let bytes=source;const nl=bytes.includes(Buffer.from('\r\n'))?'\r\n':'\n';
+  let bytes=source.includes(Buffer.from("from './quarry-east-bay-collision.json'"))?stripEastBayLayout(source):source;const nl=bytes.includes(Buffer.from('\r\n'))?'\r\n':'\n';
   const block=["  for(const p of northBackdrop.trees){","    cylinder('tree-'+p.id,p.x,p.y+p.trunkHeight/2,p.z,p.trunkHeight,p.trunkRadius);","    const base=northForest.rootHulls.find(h=>h.variant===p.variant)!;","    base.parts.forEach((part,index)=>{","      const points=new Float32Array(part.map((n,i)=>n*p.height*(i%3===1?1:p.width)));","      items.push({id:'tree-'+p.id+'-root-'+index,shape:'hull',p:{x:p.x,y:p.y,z:p.z},q:yawRotation(p.yaw),points});","    });","  }"].join(nl);
   for(const text of ["import northBackdrop from './quarry-north-backdrop.json';",block]){
     const token=Buffer.from(text),at=bytes.indexOf(token);assert.ok(at>=0);assert.equal(bytes.indexOf(token,at+token.length),-1);

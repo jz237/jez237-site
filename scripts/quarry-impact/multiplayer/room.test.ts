@@ -11,6 +11,7 @@ import { Quarry } from '../src/world';
 import { quarryColliderLayout, createQuarryPhysics, terrainGeometry, cliffGeometry, quarryRoadsideGeometry, quarryRoadsideHeight, BARRELS, nearTrees } from '../src/quarry-layout';
 import roadsideData from '../src/quarry-roadside-data.json';
 import headwallData from '../src/quarry-headwall-collision.json';
+import eastBayData from '../src/quarry-east-bay-collision.json';
 import northForest from '../src/quarry-north-forest.json';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import {corridorObstructions} from './corridor-check';
@@ -243,6 +244,42 @@ test('wrapped northern headwall faces and gully stop real Rapier bodies on both 
     candidates.sort((a,b)=>b.area-a.area);
     const regions:{name:string;lo:number;hi:number;minY:number;maxY:number;closure?:boolean}[]=[{name:'west of zero',lo:350.5,hi:359.5,minY:-.1,maxY:.6},{name:'east of zero',lo:360.5,hi:369,minY:-.1,maxY:.6},{name:'last extraction face',lo:374.5,hi:384.5,minY:-.1,maxY:.6},{name:'collapsed gully',lo:369.5,hi:373.5,minY:.5,maxY:1},{name:'closed inherited toe gap',lo:350,hi:385,minY:-.01,maxY:.01,closure:true}];
     if(candidates.some(p=>p.normal.y<-.1))regions.push({name:'overhanging fracture',lo:350,hi:385,minY:-1,maxY:-.1});
+    for(const region of regions){
+      const probe=candidates.find(p=>{
+        if(p.closure!==!!region.closure)return false;
+        if(p.angle<region.lo||p.angle>region.hi||p.normal.y<region.minY||p.normal.y>region.maxY)return false;
+        const start=p.center.clone().addScaledVector(p.normal,1.5),direction=p.normal.clone().negate();
+        const hit=world.castRay(new R.Ray(start,direction),3,false);
+        return hit?.collider.handle===wall.handle&&Math.abs(hit.timeOfImpact-1.5)<.002;
+      });
+      assert.ok(probe,`${region.name} must expose a collision surface`);
+      const start=probe.center.clone().addScaledVector(probe.normal,1.5),velocity=probe.normal.clone().multiplyScalar(-12);
+      const body=world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(start.x,start.y,start.z).setLinvel(velocity.x,velocity.y,velocity.z).setCcdEnabled(true).setCanSleep(false));
+      const ball=world.createCollider(R.ColliderDesc.ball(.2).setMass(100).setRestitution(0),body);let contacts=0;
+      for(let i=0;i<45;i++){world.step();world.contactPair(ball,wall,m=>contacts+=m.numContacts());}
+      assert.ok(contacts>0,`${region.name} must produce solver contacts`);
+      assert.ok(new T.Vector3().copy(body.translation()).sub(probe.center).dot(probe.normal)>.1,`${region.name} must stop penetration`);
+      assert.ok(new T.Vector3().copy(body.linvel()).dot(probe.normal)>-.2,`${region.name} must stop incoming velocity`);
+      world.removeRigidBody(body);
+    }
+  } finally {world.free();}
+});
+
+test('East Bay extraction faces, collapse and grounded toe closure produce real authoritative Rapier contacts',()=>{
+  const world=new R.World({x:0,y:0,z:0}),quarry=createQuarryPhysics(R,world,false);
+  try {
+    const wall=quarry.statics.get('quarry-east-bay');assert.ok(wall);world.step();
+    const positions=wall.vertices(),indices=wall.indices();
+    const candidates:{center:T.Vector3;normal:T.Vector3;area:number;angle:number;closure:boolean}[]=[];
+    for(let i=0;i<indices.length;i+=3){
+      const a=new T.Vector3().fromArray(positions,indices[i]*3),b=new T.Vector3().fromArray(positions,indices[i+1]*3),c=new T.Vector3().fromArray(positions,indices[i+2]*3);
+      const center=a.clone().add(b).add(c).multiplyScalar(1/3),normal=b.sub(a).cross(c.sub(a)),area=normal.length();normal.normalize();
+      if((center.y>6||i/3>=eastBayData.toeClosure.firstTriangle)&&area>.1&&normal.dot(new T.Vector3(-center.x,0,-center.z).normalize())>.1)
+        candidates.push({center,normal,area,angle:(Math.atan2(center.x/1.08,center.z)*180/Math.PI+360)%360,closure:i/3>=eastBayData.toeClosure.firstTriangle});
+    }
+    candidates.sort((a,b)=>b.area-a.area);
+    const regions:{name:string;lo:number;hi:number;minY:number;maxY:number;closure?:boolean}[]=[{name:'main extraction face',lo:27,hi:40,minY:-.1,maxY:.6},{name:'subsidiary face',lo:47,hi:54,minY:-.1,maxY:.6},{name:'collapsed talus channel',lo:42,hi:47,minY:.5,maxY:1},{name:'closed inherited toe gap',lo:25,hi:55,minY:-.01,maxY:.01,closure:true}];
+    if(candidates.some(p=>p.normal.y<-.1))regions.push({name:'overhanging fracture',lo:25,hi:55,minY:-1,maxY:-.1});
     for(const region of regions){
       const probe=candidates.find(p=>{
         if(p.closure!==!!region.closure)return false;

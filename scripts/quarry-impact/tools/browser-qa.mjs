@@ -2,7 +2,10 @@ import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-await fs.mkdir('outputs', { recursive: true });
+const output = process.env.QUARRY_BROWSER_QA_OUTPUT ?? 'outputs';
+await fs.mkdir(output, { recursive: true });
+if (process.env.QUARRY_BROWSER_QA_OUTPUT)
+  assert.equal(await fs.access(output + '/browser-qa.json').then(() => true, () => false), false, 'Use a fresh evidence directory');
 const browser = await chromium.launch({
   channel: 'chrome',
   headless: true,
@@ -26,7 +29,7 @@ try {
   report.buildURL = await page.locator('script[type="module"]').evaluate(node => node.src);
   const buildResponse = await page.request.get(report.buildURL);
   report.buildSha256 = createHash('sha256').update(await buildResponse.body()).digest('hex');
-  await page.screenshot({ path: 'outputs/menu.png' });
+  await page.screenshot({ path: output + '/menu.png' });
   await page.click('#start');
   await page.waitForFunction(() => window.__quarry?.state === 'countdown');
   report.audio = await page.evaluate(() => window.__quarry.stats.audio);
@@ -67,7 +70,7 @@ try {
   await page.evaluate(() =>
     window.__quarry.captureCamera([5, 2.6, -13], [0, 0.9, -20]),
   );
-  await page.screenshot({ path: 'outputs/damaged.png' });
+  await page.screenshot({ path: output + '/damaged.png' });
   report.repair = await page.evaluate(() => {
     const q = window.__quarry;
     q.resume();
@@ -96,7 +99,7 @@ try {
   assert.equal(report.race.result, 'FINISH LINE');
   assert.equal(report.race.cars[0].passed, 72);
   assert.ok(report.race.cars[0].health > 0);
-  await page.screenshot({ path: 'outputs/race-results.png' });
+  await page.screenshot({ path: output + '/race-results.png' });
   report.timeout = await page.evaluate(async () => {
     const q = window.__quarry;
     await q.start('derby');
@@ -144,11 +147,11 @@ try {
   report.passed = false;
   report.failure = e.stack;
   console.error(e);
-  await page.screenshot({ path: 'outputs/qa-failure.png' }).catch(() => {});
+  await page.screenshot({ path: output + '/qa-failure.png' }).catch(() => {});
   process.exitCode = 1;
 } finally {
   await fs.writeFile(
-    'outputs/browser-qa.json',
+    output + '/browser-qa.json',
     JSON.stringify(report, null, 2),
   );
   console.log(

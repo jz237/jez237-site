@@ -54,11 +54,34 @@ async function addRidgeStops(forest) {
   const ridge = prepareNorthRidgeStops();
   return { ...forest, stops: [...forest.stops, ...ridge.stops], ridge };
 }
+async function eastBayAssetPlan() {
+  const file = 'models/quarry-east-bay.glb', manifestPath = 'source/models/quarry-east-bay-manifest.json';
+  const html = await fs.readFile('dist/index.html', 'utf8');
+  const modules = [...html.matchAll(/(?:src|href)="\.\/([^"?#]+\.js)"/g)].map(match => match[1]);
+  const code = (await Promise.all(modules.map(module => fs.readFile(path.join('dist', module), 'utf8')))).join('\n');
+  if (!code.includes('quarry-east-bay.glb')) return null; // Historical frozen builds remain usable.
+  const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  const record = manifest.assets.find(asset => asset.file === 'public/' + file);
+  assert.ok(record, 'The east-bay manifest must identify its runtime GLB');
+  for (const root of ['public', 'dist']) {
+    const bytes = await fs.readFile(path.join(root, file));
+    assert.equal(bytes.length, record.bytes, `The ${root} east-bay size must match its manifest`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), record.sha256, `The ${root} east-bay hash must match its manifest`);
+  }
+  return { file, bytes: record.bytes, sha256: record.sha256, manifest: manifestPath };
+}
+async function addEastBayStops(forest, enabled) {
+  if (!forest || !enabled) return forest;
+  const { prepareEastBayStops } = await tsImport('./east-bay-stop-preflight.ts', import.meta.url);
+  const eastBay = prepareEastBayStops();
+  return { ...forest, stops: [...forest.stops, ...eastBay.stops], eastBay };
+}
 // Optional CPU-only preflight deliberately produces no performance pass/fail.
 // It lets placement changes be checked before reserving the isolated GPU run.
 if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
-  const { stops, sourceSha256, ridge } = await addRidgeStops(await prepareForestStops());
-  const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops, ridge,
+  const eastBayAsset = await eastBayAssetPlan();
+  const { stops, sourceSha256, ridge, eastBay } = await addEastBayStops(await addRidgeStops(await prepareForestStops()), !!eastBayAsset);
+  const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops, ridge, eastBay, eastBayAsset,
     measuredFrames: 0, browserLaunched: false };
   await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, JSON.stringify(plan, null, 2) + '\n');
@@ -73,19 +96,26 @@ let browser;
 try {
   await fs.mkdir(path.dirname(output), { recursive: true });
   const forestAssets = await forestRuntimeAssetPlan();
+  const eastBayAsset = await eastBayAssetPlan();
+  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : [])];
   report.forestAssetsExpected = forestAssets;
+  report.eastBayAssetExpected = eastBayAsset;
   const hasForest = forestAssets.some(asset => /quarry-north-fir-\d\.glb$/.test(asset.file));
   const hasRidge = forestAssets.some(asset => /north-backdrop-0-albedo\.png$/.test(asset.file));
   const foreground = hasForest && seconds >= 480 ? await prepareForestStops() : null;
-  const forest = hasRidge ? await addRidgeStops(foreground) : foreground;
+  const forest = await addEastBayStops(hasRidge ? await addRidgeStops(foreground) : foreground, !!eastBayAsset);
   const forestStart = seconds * (hasRidge ? .41 : .45);
-  const forestDuration = forest ? Math.min(16 * forest.stops.length, seconds * (hasRidge ? .17 : .08)) : 0;
+  // At610s all seven stops retain16s:250.1–362.1, entirely within the
+  // middle derby244–366. Shorter runs scale only this interval, never a race block.
+  const inspectionCapacity = eastBayAsset ? seconds * .6 - forestStart - 2 : seconds * (hasRidge ? .17 : .08);
+  const forestDuration = forest ? Math.min(16 * forest.stops.length, inspectionCapacity) : 0;
   const stopDuration = forest ? forestDuration / forest.stops.length : 0;
   report.forestProtocol = { enabled: !!forest, startSeconds: forest ? forestStart : null,
     durationSeconds: forest ? forestDuration : 0, stopSeconds: forest ? stopDuration : 0,
     placementSha256: forest?.sourceSha256, stops: forest?.stops ?? [],
     ridgePlacementSha256: forest?.ridge?.placementsSHA256,
-    description: 'Placed, braked inspections at three foreground stands and, when present, two ridge close/transition poses with eight live cars, real physics and the ordinary chase camera. This is not a physical forest driving route.',
+    eastBayCollisionSha256: forest?.eastBay?.collisionSha256,
+    description: 'Placed, braked inspections at three foreground stands, two ridge close/transition poses and, when present, two east-bay close/oblique poses, with eight live cars, real physics and the ordinary chase camera. These are not physical driving routes.',
     reasonIfDisabled: forest ? undefined : hasForest ? 'Runs shorter than 480 seconds omit the forest interval' : 'Built application has no authored northern fir assets',
     diagnosticsMeaning: 'Cell visible flags are scene flags, not frustum visibility. Cell triangle/draw counts describe the selected LOD before culling; renderer stats describe actual submissions.' };
   if (forest) report.protocol += ` Within the middle derby block, ${forest.stops.length} placed braked forest inspections replace at most ${forestDuration} seconds; both race blocks and all previous coverage assertions remain intact.`;
@@ -95,7 +125,7 @@ try {
   ] });
   const page = await browser.newPage({ viewport: { width: 2560, height: 1440 }, deviceScaleFactor: 1 });
   const pageURL = process.env.QUARRY_QA_URL ?? 'http://127.0.0.1:8795/';
-  const forestRequests = await observeForestRequests(page, pageURL, forestAssets);
+  const forestRequests = await observeForestRequests(page, pageURL, observedAssets);
   const arenaMaskPath = 'assets/arena-floor-mask.rgba.gz';
   const arenaMaskURL = new URL(arenaMaskPath, pageURL).href;
   const arenaMaskResponse = page.waitForResponse(response => response.url() === arenaMaskURL, { timeout: 120000 });
@@ -106,7 +136,10 @@ try {
   page.on('response', r => { if (r.status() >= 400) report.errors.push(`${r.status()} ${r.url()}`); });
   await page.goto(pageURL);
   await page.waitForFunction(() => window.__quarry?.state === 'menu', null, { timeout: 120000 });
-  await verifyForestRequests(forestRequests, report.forestAssets);
+  const verifiedAssets = [];
+  await verifyForestRequests(forestRequests, verifiedAssets);
+  report.forestAssets = verifiedAssets.filter(asset => asset.file !== eastBayAsset?.file);
+  report.eastBayAsset = verifiedAssets.find(asset => asset.file === eastBayAsset?.file) ?? null;
   const maskResponse = await arenaMaskResponse;
   assert.equal(maskResponse.status(), 200, 'The application must request the arena mask');
   const maskBytes = await maskResponse.body(), localMask = await fs.readFile(path.join('dist', arenaMaskPath));
@@ -233,10 +266,12 @@ try {
     return { ...stop, visits: near.length, samples: near,
         timing: summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop === stop.id).map(sample => sample.ms)) };
   });
-  report.forestStops = inspectedStops.filter(stop => stop.kind !== 'ridge');
+  report.forestStops = inspectedStops.filter(stop => !stop.kind);
   report.ridgeStops = inspectedStops.filter(stop => stop.kind === 'ridge').map(stop => ({ ...stop,
     actualDistances: stop.samples.map(sample => Math.hypot(...sample.camera.position.map((value, i) => value - stop.targetCenter[i]))) }));
+  report.eastBayStops = inspectedStops.filter(stop => stop.kind === 'east-bay');
   report.ridgeTiming = summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop.startsWith('ridge-')).map(sample => sample.ms));
+  report.eastBayTiming = summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop.startsWith('east-bay-')).map(sample => sample.ms));
   report.northForestCloseVisits = report.forestStops.reduce((sum, stop) => sum + stop.visits, 0);
   report.northForestDiagnosticsAvailable = report.forestStops.some(stop => stop.samples.some(sample => sample.northForest !== null));
   for (const stop of report.forestStops) {
@@ -278,6 +313,10 @@ try {
     const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
     return a >= 350 || a <= 25;
   }).length;
+  report.eastBayRaceVisits = raceSamples.filter(s => {
+    const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
+    return a >= 25 && a <= 55;
+  }).length;
   report.roadApproachVisits = raceSamples.filter(s => {
     const [x, , z] = s.cars[0].position;
     let cell = 0, distance = Infinity;
@@ -303,7 +342,7 @@ try {
         const aboveGround = sample.cars[0].position[1] - sample.forestGroundAtCar;
         return aboveGround > .25 && aboveGround < 1.8;
       }), `${stop.id} must settle onto the unchanged terrain`);
-      if (stop.kind !== 'ridge' && report.northForestDiagnosticsAvailable) assert.ok(stop.samples.every(sample =>
+      if (!stop.kind && report.northForestDiagnosticsAvailable) assert.ok(stop.samples.every(sample =>
         Array.isArray(sample.northForest) && sample.northForest.some(cell =>
           cell.id === `north-forest-${stop.id}` && cell.visible && cell.lod === 0
           && Number.isFinite(cell.triangles) && cell.triangles > 0 && cell.draws > 0 && cell.distance < 55)),
@@ -316,6 +355,20 @@ try {
         `${stop.id} must stay safely inside automatic recovery`);
       assert.ok(stop.samples.every(sample => sample.northRidge?.some(cell => cell.id === 'north-ridge-' + stop.standId && (cell.near || cell.far) && cell.atlas)),
         `${stop.id} must retain real geometry and the complementary atlas pass`);
+    }
+    if (eastBayAsset) {
+      assert.equal(report.eastBayStops.length, 2, 'Both new wall inspection directions must be sampled');
+      assert.ok(report.eastBayRaceVisits > 0, 'Normal racing must also pass the new east bay');
+      assert.ok(report.eastBayAsset?.observedApplicationRequest, 'The application itself must load the manifest-matched east-bay GLB');
+      for (const stop of report.eastBayStops) assert.ok(stop.samples.every(sample => {
+        const delta = stop.targetCenter.map((value, i) => value - sample.camera.position[i]);
+        // camera.target is the paused OrbitControls target; ordinary chase
+        // orientation is authoritative in the recorded camera quaternion.
+        const [x, y, z, w] = sample.camera.quaternion;
+        const forward = [-2 * (x * z + w * y), -2 * (y * z - w * x), -1 + 2 * (x * x + y * y)];
+        const cosine = delta.reduce((sum, value, i) => sum + value * forward[i], 0) / (Math.hypot(...delta) * Math.hypot(...forward));
+        return cosine > Math.cos(sample.camera.fov * Math.PI / 360);
+      }), `${stop.id} must retain the wall target inside the ordinary chase view`);
     }
     assert.ok(report.forestFrameSamples.length > forestDuration * 10, 'Forest interval must contain continuous frames');
   }
