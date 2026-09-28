@@ -1,3 +1,4 @@
+@import './water.css';
 @import './panel.css';
 :root{--accent:#ddae68;--accent-2:#95703d;--ink:#f3f0e6;--ink-soft:#e2e8ded9;--glass:rgba(15,35,26,.5)}
 *{box-sizing:border-box}button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #e4b777;outline-offset:3px}[hidden]{display:none!important}
