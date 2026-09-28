@@ -1,8 +1,9 @@
-node_modules/
 dist/
-*.blend1
+node_modules/
 qa/*.png
-
+qa/*.webp
+*.blend1
+__pycache__/
 qa/v1-source/
 qa/varieties.txt
 qa/new-motion.txt
