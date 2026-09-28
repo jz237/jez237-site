@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import {gzipSync} from 'node:zlib';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {quarryColliderLayout} from '../src/quarry-layout';
+const file='tests/fixtures/quarry-east-bay-legacy-scatter.json.gz';assert.equal(fs.existsSync(file),false);
+const baseline=JSON.parse(fs.readFileSync('tests/fixtures/quarry-east-bay-baseline.json','utf8'));
+const lookup=new Map(baseline.colliders.map((c:any)=>[c.id,c.sha256]));
+const selected=quarryColliderLayout().filter(s=>/^(scanned-rock-|scree-)/.test(s.id));
+for(const spec of selected)assert.equal(createHash('sha256').update(JSON.stringify(spec)).digest('hex'),lookup.get(spec.id));
+fs.writeFileSync(file,gzipSync(JSON.stringify(selected,(_k,v)=>ArrayBuffer.isView(v)?Array.from(v as any):v),{level:9}));
+console.log(JSON.stringify({file,count:selected.length,bytes:fs.statSync(file).size}));
