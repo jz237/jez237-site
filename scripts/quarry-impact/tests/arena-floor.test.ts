@@ -14,7 +14,7 @@ import {historicGripBytes} from './circuit-grip-invariants';
 
 const baseline=JSON.parse(arenaRead('tests/fixtures/arena-floor-baseline.json').toString());
 let current:ReturnType<typeof captureArenaFloor>|undefined;
-const capture=()=>current??=captureArenaFloor();
+const capture=()=>current??=captureArenaFloor({historicalWorkyard:true});
 const geometryOnly=({materials:_materials,name:_name,...geometry}:any)=>geometry;
 
 test('arena appearance preserves its historical physics and cars through the explicitly additive forest milestone',async()=>{

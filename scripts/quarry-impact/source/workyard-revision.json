@@ -1,0 +1,41 @@
+{
+  "previousRelease": "5ae55c09a983b5cae8b92c3d9d2d3fd62d7cc84e",
+  "scope": "Industrial scenery, lighting and presentation-only crash response. Shared Worker/physics inputs unchanged.",
+  "files": {
+    "src/assets.ts": {
+      "before": "19443cd8d2944c68793bcc08a5019378e3c15c4d7a5287a0d725a18a821fbee8",
+      "after": "b61978b03456b5e1970edb8451bd0125656aa2e60514147a4450e5955deb8f52",
+      "snapshot": "tests/fixtures/workyard-before-assets.ts.gz"
+    },
+    "src/audio.ts": {
+      "before": "c43cc51e6d28896e43cedcd9947fa49f1746c251f22114bf207535bad4e5b166",
+      "after": "f5a450d5ac07ff9bb5b5943bef9866159511d9aa4e62554c6e01902073d27501",
+      "snapshot": "tests/fixtures/workyard-before-audio.ts.gz"
+    },
+    "src/effects.ts": {
+      "before": "f8c2b95da53c984ea71fcc61db3f6a23045126897cfc16a5dc5270b00c690e81",
+      "after": "177739dda322fe4af2add39235aa53e8e635c1b1f14a0cd5b34ceb75491e788a",
+      "snapshot": "tests/fixtures/workyard-before-effects.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "d15ce4e89cffd5ef76a4a7085f95fed44fa7b58cde907cd8f3b035f2f33b677a",
+      "after": "34583555c2d19f0beb2016540c07dc55b61c10779640d73546e222515002d122",
+      "snapshot": "tests/fixtures/workyard-before-main.ts.gz"
+    },
+    "src/rendering.ts": {
+      "before": "9af3997ca08596b21d5dcd7bc62709bb68af798c901e968e72bc2e84ed7ccf7b",
+      "after": "a7ec242a2473286a227ddade2b5889fffff13092fc22b770dbaad1c1f3ddea19",
+      "snapshot": "tests/fixtures/workyard-before-rendering.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "1eb89480b755a305c29e494c8a80f81071181d6feed1e638d06999484d857ac5",
+      "after": "5d21295226b5ba90dec3bdd696b65fb8bd694a8fa4586e80a5b122cb99f5571c",
+      "snapshot": "tests/fixtures/workyard-before-vehicle.ts.gz"
+    },
+    "src/world.ts": {
+      "before": "c69d052a1bb7317decba14989badc5838943ebd34d46d76193f8bb5089f0e687",
+      "after": "6530a3b67d039272bdc4c48818375a34fc8bb00f0f609e18954a7a3ceee0cbe1",
+      "snapshot": "tests/fixtures/workyard-before-world.ts.gz"
+    }
+  }
+}

@@ -69,7 +69,7 @@ test('attaching route coordinates changes only one new attribute and preserves t
 });
 
 test('actual road integration changes only lane/shoulder shading and the previous paved wear weights',async()=>{
-  const current=await captureArenaFloor();
+  const current=await captureArenaFloor({historicalWorkyard:true});
   restoreCircuitObjects(current.objects);
   assert.deepEqual(current.random,circuitBefore.random);
   assert.deepEqual(current.colliders,quarryColliderLayout().map(s=>({id:s.id,sha256:westHash(JSON.stringify(s))})));

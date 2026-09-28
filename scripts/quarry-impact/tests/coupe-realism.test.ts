@@ -1,3 +1,4 @@
+import {restoreWorkyardBytes} from './workyard-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -26,7 +27,7 @@ test('new coupe keeps every existing glass mesh, wheel pivot and unaffected body
   }
   const revision=JSON.parse(readProject('source/coupe-realism-revision.json').toString());
   for(const [file,entry]of Object.entries<any>(revision.files)){
-    assert.equal(hash(readProject(file)),entry.after);
+    assert.equal(hash(restoreWorkyardBytes(file,readProject(file))),entry.after);
     assert.equal(hash(restoreCoupeBytes(file,readProject(file))),entry.before);
   }
   const manifest=JSON.parse(readProject('source/coupe-detail-manifest.json').toString());
@@ -78,4 +79,15 @@ test('western ground cover is deterministic, grounded and leaves the 12m driving
     assert.ok(Math.min(...track.map(q=>Math.hypot(p.x-q.x,p.z-q.z)))>6.85);
     assert.ok(p.x< -55&&p.x> -110&&p.z>15&&p.z<85,'all dressing is confined to the selected western bend');
   }
+});
+
+test('real vehicle suppresses duplicate breakage on disabled contacts and clears presentation on repair',async()=>{
+  const {car,close}=await actualCar();
+  try{
+    car.hit(car.current.clone().add(new T.Vector3(0,.3,1.9)),new T.Vector3(0,0,-1),24,1);
+    assert.ok(Math.hypot(...Object.values(car.impactResponse.velocity))>0);
+    car.health=0;car.impactEffects={glass:true,debris:true};car.hit(car.current,new T.Vector3(1,0,0),30,2);assert.deepEqual(car.impactEffects,{glass:false,debris:false});
+    car.repair();assert.deepEqual(car.impactResponse.offset,{x:0,y:0,z:0});assert.deepEqual(car.impactResponse.velocity,{x:0,y:0,z:0});
+    car.hit(car.current.clone().add(new T.Vector3(0,.3,1.9)),new T.Vector3(0,0,-1),24,3,true);assert.deepEqual(car.impactResponse.velocity,{x:0,y:0,z:0},'snapshot replay creates no fresh camera kick');
+  }finally{close();}
 });

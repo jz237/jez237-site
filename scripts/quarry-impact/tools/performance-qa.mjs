@@ -7,6 +7,7 @@ import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } f
 import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 import { geologyRuntimeAssetPlan } from './geology-runtime-assets.mjs';
 import { tsImport } from 'tsx/esm/api';
+import {workyardRuntimeAssetPlan} from './workyard-runtime-assets.mjs';
 
 // Use a unique output name, a frozen dist, and no concurrent GPU QA/export.
 // All presented timing is wall-clock frame spacing, not isolated GPU time.
@@ -137,7 +138,9 @@ try {
   const westWallAsset = await westWallAssetPlan();
   const circuitAssets = await circuitAssetsForBuild();
   const geologyAssets = await geologyAssetsForBuild();
-  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...(westWallAsset ? [westWallAsset] : []), ...circuitAssets, ...geologyAssets];
+  const workyardAssets = await workyardRuntimeAssetPlan();
+  report.workyardAssetsExpected=workyardAssets;
+  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...(westWallAsset ? [westWallAsset] : []), ...circuitAssets, ...geologyAssets,...workyardAssets];
   report.geologyAssetsExpected = geologyAssets;
   report.forestAssetsExpected = forestAssets;
   report.eastBayAssetExpected = eastBayAsset;
@@ -187,6 +190,8 @@ try {
   report.forestAssets = verifiedAssets.filter(asset => forestFiles.has(asset.file));
   report.circuitAssets = verifiedAssets.filter(asset => circuitFiles.has(asset.file));
   report.geologyAssets = verifiedAssets.filter(asset => geologyAssets.some(expected => expected.file === asset.file));
+  report.workyardAssets=verifiedAssets.filter(asset=>workyardAssets.some(expected=>expected.file===asset.file));
+  assert.equal(report.workyardAssets.length,workyardAssets.length,'Observe all new workyard files loaded by the real game');
   assert.equal(report.geologyAssets.length, geologyAssets.length, 'Observe every expected geology asset request');
   assert.equal(report.circuitAssets.length, circuitAssets.length, 'Observe every expected circuit asset request');
   report.westWallAsset = verifiedAssets.find(asset=>asset.file===westWallAsset?.file)??null;

@@ -1,0 +1,292 @@
+{
+  "generator": "tools/author-workyard.py",
+  "geometryLicense": "Original Quarry Impact work",
+  "materials": "public/assets/workyard/manifest.json",
+  "parts": [
+    {
+      "name": "container_LOD0_yard_paint",
+      "triangles": 5820
+    },
+    {
+      "name": "container_LOD1_yard_paint",
+      "triangles": 2210
+    },
+    {
+      "name": "container_LOD0_yard_steel",
+      "triangles": 3384
+    },
+    {
+      "name": "container_LOD1_yard_steel",
+      "triangles": 1284
+    },
+    {
+      "name": "container_LOD0_yard_rust",
+      "triangles": 288
+    },
+    {
+      "name": "container_LOD1_yard_rust",
+      "triangles": 93
+    },
+    {
+      "name": "container_LOD0_yard_chrome",
+      "triangles": 432
+    },
+    {
+      "name": "container_LOD1_yard_chrome",
+      "triangles": 164
+    },
+    {
+      "name": "container_LOD0_yard_letter",
+      "triangles": 751
+    },
+    {
+      "name": "container_LOD1_yard_letter",
+      "triangles": 284
+    },
+    {
+      "name": "container_LOD0_yard_black",
+      "triangles": 420
+    },
+    {
+      "name": "container_LOD1_yard_black",
+      "triangles": 150
+    },
+    {
+      "name": "excavator_LOD0_yard_yellow",
+      "triangles": 1188
+    },
+    {
+      "name": "excavator_LOD1_yard_yellow",
+      "triangles": 450
+    },
+    {
+      "name": "excavator_LOD0_yard_steel",
+      "triangles": 15186
+    },
+    {
+      "name": "excavator_LOD1_yard_steel",
+      "triangles": 5770
+    },
+    {
+      "name": "excavator_LOD0_yard_rust",
+      "triangles": 12204
+    },
+    {
+      "name": "excavator_LOD1_yard_rust",
+      "triangles": 4636
+    },
+    {
+      "name": "excavator_LOD0_yard_rubber",
+      "triangles": 280
+    },
+    {
+      "name": "excavator_LOD1_yard_rubber",
+      "triangles": 106
+    },
+    {
+      "name": "excavator_LOD0_yard_glass",
+      "triangles": 432
+    },
+    {
+      "name": "excavator_LOD1_yard_glass",
+      "triangles": 164
+    },
+    {
+      "name": "excavator_LOD0_yard_chrome",
+      "triangles": 1772
+    },
+    {
+      "name": "excavator_LOD1_yard_chrome",
+      "triangles": 666
+    },
+    {
+      "name": "excavator_LOD0_yard_letter",
+      "triangles": 655
+    },
+    {
+      "name": "excavator_LOD1_yard_letter",
+      "triangles": 248
+    },
+    {
+      "name": "excavator_LOD0_yard_black",
+      "triangles": 3240
+    },
+    {
+      "name": "excavator_LOD1_yard_black",
+      "triangles": 1230
+    },
+    {
+      "name": "conveyor_LOD0_yard_yellow",
+      "triangles": 6804
+    },
+    {
+      "name": "conveyor_LOD1_yard_yellow",
+      "triangles": 2584
+    },
+    {
+      "name": "conveyor_LOD0_yard_steel",
+      "triangles": 8416
+    },
+    {
+      "name": "conveyor_LOD1_yard_steel",
+      "triangles": 3198
+    },
+    {
+      "name": "conveyor_LOD0_yard_rubber",
+      "triangles": 4320
+    },
+    {
+      "name": "conveyor_LOD1_yard_rubber",
+      "triangles": 1640
+    },
+    {
+      "name": "conveyor_LOD0_yard_black",
+      "triangles": 616
+    },
+    {
+      "name": "conveyor_LOD1_yard_black",
+      "triangles": 234
+    },
+    {
+      "name": "workshop_LOD0_yard_yellow",
+      "triangles": 216
+    },
+    {
+      "name": "workshop_LOD1_yard_yellow",
+      "triangles": 82
+    },
+    {
+      "name": "workshop_LOD0_yard_steel",
+      "triangles": 6184
+    },
+    {
+      "name": "workshop_LOD1_yard_steel",
+      "triangles": 2348
+    },
+    {
+      "name": "workshop_LOD0_yard_glass",
+      "triangles": 432
+    },
+    {
+      "name": "workshop_LOD1_yard_glass",
+      "triangles": 164
+    },
+    {
+      "name": "workshop_LOD0_yard_chrome",
+      "triangles": 36
+    },
+    {
+      "name": "workshop_LOD1_yard_chrome",
+      "triangles": 12
+    },
+    {
+      "name": "workshop_LOD0_yard_concrete",
+      "triangles": 432
+    },
+    {
+      "name": "workshop_LOD1_yard_concrete",
+      "triangles": 164
+    },
+    {
+      "name": "workshop_LOD0_yard_letter",
+      "triangles": 218
+    },
+    {
+      "name": "workshop_LOD1_yard_letter",
+      "triangles": 81
+    },
+    {
+      "name": "workshop_LOD0_yard_black",
+      "triangles": 648
+    },
+    {
+      "name": "workshop_LOD1_yard_black",
+      "triangles": 246
+    },
+    {
+      "name": "workshop_LOD0_yard_cladding",
+      "triangles": 4416
+    },
+    {
+      "name": "workshop_LOD1_yard_cladding",
+      "triangles": 1677
+    },
+    {
+      "name": "silo_LOD0_yard_steel",
+      "triangles": 2868
+    },
+    {
+      "name": "silo_LOD1_yard_steel",
+      "triangles": 1088
+    },
+    {
+      "name": "silo_LOD0_yard_chrome",
+      "triangles": 4264
+    },
+    {
+      "name": "silo_LOD1_yard_chrome",
+      "triangles": 1612
+    },
+    {
+      "name": "silo_LOD0_yard_concrete",
+      "triangles": 432
+    },
+    {
+      "name": "silo_LOD1_yard_concrete",
+      "triangles": 164
+    },
+    {
+      "name": "silo_LOD0_yard_letter",
+      "triangles": 132
+    },
+    {
+      "name": "silo_LOD1_yard_letter",
+      "triangles": 50
+    },
+    {
+      "name": "barrier_LOD0_yard_yellow",
+      "triangles": 108
+    },
+    {
+      "name": "barrier_LOD1_yard_yellow",
+      "triangles": 52
+    },
+    {
+      "name": "barrier_LOD0_yard_steel",
+      "triangles": 480
+    },
+    {
+      "name": "barrier_LOD1_yard_steel",
+      "triangles": 182
+    },
+    {
+      "name": "barrier_LOD0_yard_concrete",
+      "triangles": 108
+    },
+    {
+      "name": "barrier_LOD1_yard_concrete",
+      "triangles": 40
+    },
+    {
+      "name": "barrier_LOD0_yard_black",
+      "triangles": 232
+    },
+    {
+      "name": "barrier_LOD1_yard_black",
+      "triangles": 104
+    }
+  ],
+  "files": [
+    {
+      "path": "public/models/quarry-workyard.glb",
+      "bytes": 12715352,
+      "sha256": "df98a724dedf3b64c05a7a3043a5e6d18a0eb3acd132051956a58a429ad0eb61"
+    },
+    {
+      "path": "source/models/quarry-workyard.blend",
+      "bytes": 3880711,
+      "sha256": "471f49419e068c6ffd88a42dc1dbcddcd189f90cfeff53aaae00be0719aa6cc5"
+    }
+  ],
+  "note": "Near and far meshes are alternatives; prototypes placed by scenery-workyard.ts. Existing collision shapes retained."
+}

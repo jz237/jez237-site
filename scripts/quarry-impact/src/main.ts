@@ -47,6 +47,7 @@ const settings = {
   effects: saved.effects ?? 0.8,
   ambience: saved.ambience ?? 0.45,
 };
+const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
 sound.levels = {
   engine: settings.engine,
@@ -104,7 +105,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = T.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = false;
 renderer.toneMapping = T.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1;
+renderer.toneMappingExposure = .96;
 renderer.outputColorSpace = T.SRGBColorSpace;
 renderer.info.autoReset = false;
 const scene = new T.Scene();
@@ -285,6 +286,7 @@ async function start() {
   state = countdown ? 'countdown' : 'playing';
   orbit.enabled = false;
   quarry.setMode(mode);
+  cameraImpactOffset.set(0,0,0);
   camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
   hud();
   sound.pause(false);
@@ -731,17 +733,7 @@ function step(dt: number) {
       b.hit(point, va.clone().sub(vb).normalize(), damage, elapsed);
       if (a) a.inflicted += damage;
     }
-    sound.shot(
-      damage > 15
-        ? 'impact-heavy'
-        : damage > 5
-          ? 'impact-medium'
-          : 'impact-light',
-      point,
-      Math.min(1, 0.3 + damage / 25),
-    );
-    if (damage > 7) sound.shot('glass', point, 0.2);
-    if (damage > 10) sound.shot('debris', point, 0.25);
+    sound.impact(damage, point, !!(a?.impactEffects.glass || b?.impactEffects.glass), !!(a?.impactEffects.debris || b?.impactEffects.debris));
     if (a?.id === 0 || b?.id === 0)
       toast(damage > 12 ? 'HEAVY IMPACT' : 'CONTACT', 0.8);
   });
@@ -788,10 +780,12 @@ function updateCamera(dt: number) {
   quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
   quarry.sun.target.position.copy(p.root.position);
   if (state === 'inspect') {
+    cameraImpactOffset.set(0,0,0);
     orbit.update();
     return;
   }
   if (state === 'menu' || state === 'lobby') {
+    cameraImpactOffset.set(0,0,0);
     const a = 1.5 + Math.sin(clock * 0.055) * 0.12;
     const target = p.current.clone().add(new T.Vector3(0, 0.1, 0));
     camera.position.set(
@@ -817,12 +811,18 @@ function updateCamera(dt: number) {
         .add(new T.Vector3(0, 2.65, 0));
   const cameraGround = Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity);
   desired.y = Math.max(desired.y, cameraGround + 0.65);
+  camera.position.sub(cameraImpactOffset);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
   const look = target
     .clone()
     .addScaledVector(f, hood ? 22 : 4)
     .add(new T.Vector3(0, 0.5, 0));
   camera.lookAt(look);
+  const response = p.impactResponse.step(state === 'playing' ? dt : 0);
+  cameraImpactOffset.copy(response.offset).multiplyScalar(hood ? .65 : 1);
+  camera.position.add(cameraImpactOffset);
+  camera.rotateZ(response.roll * (hood ? .6 : 1));
+  camera.rotateX(response.pitch);
   camera.fov = T.MathUtils.damp(
     camera.fov,
     hood ? 66 : 52 + Math.min(8, Math.abs(p.speed) * 0.2),
@@ -1034,6 +1034,8 @@ async function boot() {
         nearShadowSize: quarry.sun.shadow.mapSize.toArray(), nearShadowExtent: quarry.sun.shadow.camera.right-quarry.sun.shadow.camera.left,
         staticShadows: staticShadows?.stats};
     },
+    get impactState() { const p=cars[0];return p?{offset:{...p.impactResponse.offset},velocity:{...p.impactResponse.velocity},roll:p.impactResponse.roll,pitch:p.impactResponse.pitch,effects:{...p.impactEffects}}:null; },
+    get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
     get stats() {
       const times = [...frames].sort((a, b) => a - b);
       return {

@@ -1,3 +1,4 @@
+import {ImpactResponse} from './impact-response';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { cloneCar } from './assets';
@@ -27,6 +28,8 @@ export class Vehicle {
   model: T.Group;
   wheels: T.Object3D[] = [];
   panels: T.Mesh[] = [];
+  readonly impactResponse = new ImpactResponse();
+  impactEffects = {glass:false,debris:false};
   glass: T.Mesh[] = [];
   brakeLights = new Set<T.MeshStandardMaterial>();
   health = 100;
@@ -157,6 +160,8 @@ export class Vehicle {
     if (repair) this.repair();
   }
   repair() {
+    this.impactResponse.reset();
+    this.impactEffects = {glass:false,debris:false};
     this.health = 100;
     this.damageLeft = this.damageRight = 0;
     this.lastHit = -100;
@@ -324,9 +329,11 @@ export class Vehicle {
     }
   }
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false) {
+    this.impactEffects = {glass:false,debris:false};
     if (damage < 0.1 || this.health <= 0) return;
     this.health = Math.max(0, this.health - damage);
     this.lastHit = time;
+    if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
     const local = this.root.worldToLocal(point.clone());
     if (local.x < 0) this.damageLeft += damage;
@@ -390,7 +397,7 @@ export class Vehicle {
             panel.name.includes('mirror'))
         ) {
           if (quiet) panel.visible = false;
-          else this.fx.detach(panel, this.velocity.clone().multiplyScalar(0.65));
+          else { this.fx.detach(panel, this.velocity.clone().multiplyScalar(0.65)); this.impactEffects.debris = true; }
         }
       }
     }
@@ -398,7 +405,9 @@ export class Vehicle {
       const bounds = new T.Box3().setFromObject(glass);
       const distance = bounds.distanceToPoint(point);
       if (distance < 1.25 && damage > 3) {
-        glass.userData.damage = (glass.userData.damage || 0) + damage * (1 - distance / 1.25);
+        const before = glass.userData.damage || 0;
+        glass.userData.damage = before + damage * (1 - distance / 1.25);
+        if (before < 7 && glass.userData.damage >= 7 || before <= 24 && glass.userData.damage > 24) this.impactEffects.glass = true;
         const mat = glass.material as T.MeshPhysicalMaterial;
         const state = mat.userData.glassState as GlassState | undefined;
         if (state) {
@@ -419,8 +428,7 @@ export class Vehicle {
       z: def.halfLength - 0.12 - (100 - this.health) * 0.0015,
     });
     if (!quiet) {
-      this.fx.emit(point, Math.ceil(damage), 1, 1.5 + damage * 0.07);
-      this.fx.emit(point, Math.ceil(damage), 0, 2);
+      this.fx.impact?.(point, direction, damage);
     }
   }
   dispose() {
