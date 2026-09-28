@@ -1,9 +1,9 @@
 {
   "title": "Philly Weather Almanac",
   "location": "Philly 19111",
-  "date": "Sunday, September 27, 2026",
+  "date": "Monday, September 28, 2026",
   "image": "almanac/latest.jpg",
   "imageWebp": "almanac/latest.webp",
-  "archiveImage": "almanac/philly-weather-almanac-2026-09-27.jpg",
+  "archiveImage": "almanac/philly-weather-almanac-2026-09-28.jpg",
   "source": "GPT Image 2 weather almanac"
 }
