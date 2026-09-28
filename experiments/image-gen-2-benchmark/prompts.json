@@ -16944,5 +16944,24 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-27-intense-phobia-situation-cynophobia-pinned-at-the-farmyard-",
+    "title": "Cynophobia — Pinned at the Farmyard Gate",
+    "tests": "Photoreal cynophobia; near muzzle, flanking dogs, constricted fenced lane, closed gate. No gore or fantasy.; archive_slot=2026-09-27T20:20; concept=cynophobia-territorial-dogs-narrow-farmyard-gate; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, fully photorealistic documentary photograph of an immediately frightening but physically credible cynophobia situation. First-person human eye-level camera at the end of a narrow, muddy farmyard service passage, the viewer pressed back against a closed galvanized livestock gate whose cold horizontal bar and latch are tight against the lower edge of the frame. A real, muscular adult farm dog is less than an arm's length away, filling most of the central frame: alert eyes fixed directly toward the lens, ears and neck tense, mouth open mid-bark with natural teeth and saliva, muzzle sharply detailed without grotesque exaggeration. Two more ordinary, correctly proportioned loose dogs crowd in from either side at different distances, their shoulders and heads cutting off both margins; a fourth form is partially visible beyond them in the narrow lane, so the viewer sees no open way forward. One human gloved hand grips the gate at the extreme near foreground, grounding the camera in the trapped person's position, but no full person is posed for the camera. Weathered plank fencing closes in tightly on both sides; the gate blocks the retreat behind the lens. Damp straw and boot-height mud show believable gravity and scale. Flat late-afternoon overcast light, restrained earth colors, fine fur texture, realistic dog anatomy and body language, natural 35 mm documentary optics with modest near-field perspective and deep enough focus to read the flanking dogs. The dogs dominate the image, not a scenic farm view. Build visceral fear through the face-to-face muzzle proximity, repeated dogs hemming both sides, constricted corridor, and visibly shut gate, while depicting no biting, contact injury, gore, panic theater, or cruelty. No supernatural or fantasy elements, no impossible pack behavior, no stock horror lighting, no text, captions, labels, logos, or watermark.",
+    "image": "images/2026-09-27-intense-phobia-situation-cynophobia-pinned-at-the-farmyard-.jpg",
+    "thumb": "thumbs/2026-09-27-intense-phobia-situation-cynophobia-pinned-at-the-farmyard-.webp",
+    "color": "#474444",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "cynophobia-territorial-dogs-narrow-farmyard-gate",
+      "imageSha256": "85b12e9e00ba5fad18bea606c8c959446fce95fb2bcb58647e6d6952d18c6341",
+      "imageDHash": "5f69cc6a2ad39296"
+    }
   }
 ]
