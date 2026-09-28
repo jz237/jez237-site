@@ -3,6 +3,7 @@ import json
 import math
 import os
 import re
+import glob
 import hashlib
 import html
 import urllib.request
@@ -30,6 +31,7 @@ TOP_LATEST_COUNT = 50
 HIGH_SCORE_EDITORIAL_OVERRIDE = 4.0
 MAX_OG_FETCH_PER_RUN = 20
 MAX_THUMBNAIL_FETCH_PER_RUN = 30
+MAX_PUBLISHED_THUMBNAIL_FETCH = 40
 MAX_THUMBNAIL_BYTES = 4 * 1024 * 1024
 IMAGE_CACHE_TTL_DAYS = 7
 EXCLUDED_TOPIC_PATTERNS = [
@@ -446,6 +448,15 @@ def cache_thumbnail(image_url, item_url, cache_items, now):
     if local_path and os.path.exists(os.path.join(BASE, local_path)):
         return local_path, False
 
+    # The filename is derived from the image URL, so a file from an earlier run can be reused
+    # even when the runtime cache (data/) was not kept, as in the GitHub Action.
+    digest = hashlib.sha1(image_url.encode("utf-8")).hexdigest()[:18]
+    existing = sorted(glob.glob(os.path.join(THUMBNAIL_DIR, f"news-{digest}.*")))
+    if existing:
+        local_path = f"public/thumbnails/{os.path.basename(existing[0])}"
+        cache_items[cache_key] = {"sourceImage": image_url, "localPath": local_path, "checkedAt": now.isoformat()}
+        return local_path, False
+
     try:
         headers = {
             "User-Agent": USER_AGENT,
@@ -466,7 +477,6 @@ def cache_thumbnail(image_url, item_url, cache_items, now):
                 return image_url, False
 
         ext = image_extension(content_type, image_url)
-        digest = hashlib.sha1(image_url.encode("utf-8")).hexdigest()[:18]
         filename = f"news-{digest}.{ext}"
         disk_path = os.path.join(THUMBNAIL_DIR, filename)
         local_path = f"public/thumbnails/{filename}"
@@ -1286,6 +1296,21 @@ def main():
         reverse=True,
     )[:8]
     try_worthy_items = tool_items
+    published_fetched = 0
+    for it in latest + daily_top + tool_items:
+        if published_fetched >= MAX_PUBLISHED_THUMBNAIL_FETCH:
+            break
+        source_image = it.get("image", "")
+        if not source_image or is_local_thumbnail(source_image) or source_image.startswith("data:"):
+            continue
+        local_image, fetched_thumb = cache_thumbnail(source_image, it.get("url", ""), cache_items, now)
+        if is_local_thumbnail(local_image):
+            if not it.get("imageOriginal"):
+                it["imageOriginal"] = source_image
+            it["image"] = local_image
+        if fetched_thumb:
+            published_fetched += 1
+            thumb_fetched += 1
     public_thumbnail_paths = {
         it.get("image", "")
         for it in (latest + daily_top + tool_items)
@@ -1300,6 +1325,20 @@ def main():
             it.pop("published_dt", None)
 
     save_json(STORE_PATH, {"updatedAt": now.isoformat(), "items": all_items})
+
+    def public_view(items):
+        # The site's CSP only allows local thumbnails; publish anything else without an image
+        # so the page shows its placeholder instead of a blocked request.
+        out = []
+        for it in items:
+            image = it.get("image", "")
+            if image and not is_local_thumbnail(image) and not image.startswith("data:"):
+                it = dict(it, image="", imageOriginal=it.get("imageOriginal") or image)
+            out.append(it)
+        return out
+
+    latest, daily_top, tool_items, try_worthy_items = (
+        public_view(latest), public_view(daily_top), public_view(tool_items), public_view(try_worthy_items))
     save_json(IMAGE_CACHE_PATH, {"updatedAt": now.isoformat(), "items": cache_items})
     save_json(os.path.join(PUBLIC_DIR, "ai-news-latest.json"), {
         "updatedAt": now.isoformat(),
