@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreWreckBytes} from './wreck-invariants';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
@@ -10,6 +11,7 @@ const revision=JSON.parse(read('source/workyard-revision.json').toString());
  * geometry, actual constructor surfaces, physics and effects have separate
  * tests in workyard.test.ts and impact-response.test.ts. */
 export function restoreWorkyardBytes(file:string,bytes:Buffer){
+  bytes=restoreWreckBytes(file,bytes);
   const entry=revision.files[file];if(!entry||hash(bytes)===entry.before)return bytes;
   assert.equal(hash(bytes),entry.after,file+': workyard revision has unrecorded changes');
   const old=gunzipSync(read(entry.snapshot));assert.equal(hash(old),entry.before,file+': previous release recovered exactly');return old;

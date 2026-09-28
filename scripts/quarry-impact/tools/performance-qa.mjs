@@ -254,7 +254,7 @@ try {
         northForest: __quarry.northForest ?? null, northRidge: __quarry.northRidge ?? null,
         camera: __quarry.cameraPose ?? null };
     });
-    if (time >= nextSample) {
+    if (time >= nextSample && snapshot.stats.state !== 'menu') {
       const forestStop = activeForest >= 0 ? forest.stops[activeForest] : null;
       const position = snapshot.cars[0].position;
       report.samples.push({ time, ...snapshot, forestStop: forestStop?.id ?? null,
@@ -301,7 +301,7 @@ try {
       }, modes[nextBlock]);
       report.events.push({ time, mode: modes[nextBlock], reason: 'resume normal benchmark after forest inspections' });
       activeForest = -1; block = nextBlock;
-    } else if (nextBlock !== block || snapshot.stats.state === 'result') {
+    } else if (nextBlock !== block || snapshot.stats.state === 'result' || snapshot.stats.state === 'menu') {
       report.events.push({ time, mode: modes[nextBlock], reason: nextBlock !== block ? 'scheduled block' : 'completed event', previous: snapshot });
       block = nextBlock;
       await page.evaluate(async mode => { await __quarry.start(mode); __quarry.autopilot(true); }, modes[block]);

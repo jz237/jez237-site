@@ -48,8 +48,9 @@ function tussock() {
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('color',new T.Float32BufferAttribute(c,3));g.setIndex(idx);g.computeVertexNormals();return g;
 }
 
-export function dressWestVerge(parent:T.Group,saplings:readonly NorthSaplingPart[]) {
-  const plants=westVergePlacements(),lods:T.LOD[]=[],dummy=new T.Object3D();
+export function dressWestVerge(parent:T.Group,saplings:readonly NorthSaplingPart[],extra?:{plants:ReturnType<typeof westVergePlacements>;centers:readonly number[];label:string}) {
+  const plants=extra?.plants??westVergePlacements(),lods:T.LOD[]=[],dummy=new T.Object3D();
+  const centers=extra?.centers??[.837,.865,.893];
   const grassGeometry=tussock(),grassMaterial=new T.MeshStandardMaterial({name:'Western verge bent grass',vertexColors:true,roughness:1,side:T.DoubleSide,envMapIntensity:.25});
   const chipGeometry=new T.BufferGeometry();chipGeometry.setAttribute('position',new T.BufferAttribute(SCREE_POSITIONS.slice(),3));chipGeometry.setAttribute('uv',new T.BufferAttribute(SCREE_UVS.slice(),2));chipGeometry.computeVertexNormals();chipGeometry.computeBoundingBox();
   const bounds=chipGeometry.boundingBox!,size=bounds.getSize(new T.Vector3());chipGeometry.translate(-bounds.getCenter(new T.Vector3()).x,-bounds.min.y,-bounds.getCenter(new T.Vector3()).z);chipGeometry.scale(1/size.y,1/size.y,1/size.y);
@@ -64,10 +65,10 @@ export function dressWestVerge(parent:T.Group,saplings:readonly NorthSaplingPart
     }
     mesh.receiveShadow=true;mesh.castShadow=sourceHeight!==1;mesh.computeBoundingSphere();return mesh;
   }
-  for(let cell=0;cell<3;cell++) {
-    const center=trackPoint(.837+cell*.028),lod=new T.LOD();lod.name='west-verge-'+cell;lod.position.set(center.x,landscapeHeight(center.x,center.z),center.z);lod.autoUpdate=false;
+  for(let cell=0;cell<centers.length;cell++) {
+    const center=trackPoint(extra?centers[cell]:.837+cell*.028),lod=new T.LOD();lod.name=(extra?.label??'west-verge')+'-'+cell;lod.position.set(center.x,landscapeHeight(center.x,center.z),center.z);lod.autoUpdate=false;
     const subset=(all:VergePlant[])=>all.filter(p=>{
-      const nearest=[0,1,2].map(i=>{const c=trackPoint(.837+i*.028);return Math.hypot(c.x-p.x,c.z-p.z);});
+      const nearest=centers.map((t,i)=>{const c=trackPoint(extra?t:.837+i*.028);return Math.hypot(c.x-p.x,c.z-p.z);});
       return nearest.indexOf(Math.min(...nearest))===cell;
     });
     for(let level=0;level<2;level++) {

@@ -136,7 +136,13 @@ test('repeated impacts keep duplicate vertices welded, bound displacement and re
       if(Math.abs(original[i*3])>1.2)assert.deepEqual(value,Array.from(original.slice(i*3,i*3+3)));
     }
     assert.ok(duplicates>100,'fixture must exercise duplicated seam vertices');
-    assert.ok(maximum>.89,'test must actually reach the displacement cap');
+    assert.ok(maximum>.5,'stationary repeated contacts must still produce a substantial dent');
+    // Compression now follows the current sheet in small increments. A fixed
+    // contact must not keep pushing rest vertices through their neighbours.
+    for(let i=0;i<position.count;i+=3){
+      const a=new T.Vector3().fromBufferAttribute(position,i),b=new T.Vector3().fromBufferAttribute(position,i+1),c=new T.Vector3().fromBufferAttribute(position,i+2);
+      assert.ok(b.sub(a).cross(c.sub(a)).z>0,'repeated frontal impacts must not reverse sheet triangles');
+    }
     car.repair();
     assert.deepEqual(new Float32Array(position.array),original);
     assert.deepEqual(new Float32Array(panel.geometry.attributes.normal.array),originalNormals);

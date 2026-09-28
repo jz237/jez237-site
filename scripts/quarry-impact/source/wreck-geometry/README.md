@@ -1,0 +1,16 @@
+# Wreck geometry and inspection
+
+This revision builds on release `9923eca5ee14029e440339eeccd213799f2ae3fb`.
+
+- Original panel triangles with long edges are subdivided once at asset loading. Body skins and glass target 14 cm edges, inner hardware 23 cm, with six bounded refinement rounds. The existing GLB assets, wheel pivots, photographic maps and intact surface shape are retained.
+- Every body panel, glass sheet and non-wheel interior mesh uses a deformation field in the same vehicle frame. The field respects imported mesh transforms and limits total displacement to 90 cm. Each impact advances the current surface in four small increments, so a fixed contact does not keep adding offsets to rest vertices until neighbouring triangles fold through each other. Upper cabin resistance reduces roof distortion from side impacts. UV seams keep matching displacement; authored smooth/hard normal boundaries are retained.
+- Bumpers and their grille inserts, hood/vent pieces and mirror assemblies have common release decisions. Heavy blows expose the existing inner hardware; no new structural soft-body simulation is claimed. Loose pieces retain the existing 36-part cap. Screens follow the surrounding body; laminated glass remains present and tempered side glass can break away.
+- Sedan/hatch scratch directions now follow impact direction in rest coordinates with derivative filtering and reduced clearcoat on bare metal. The coupe retains its earlier calibrated finish.
+- A destroyed solo derby/race car enters a five-second frozen inspection view. Drag/scroll adjusts the camera. Losing focus pauses the countdown; restarting or returning to the menu cancels the hold. Successful events retain results screens. Playground retains manual repair and inspection. Online room lifecycle is unchanged.
+- Remaining procedural banks receive shallow, bounded surface cleavage and erosion staining using existing photographic geology. Foreground conifers at the remaining banks reuse existing far-branch GLBs; the more distant photographic trees remain. These are decorative distant trees at the existing card locations. Four route areas reuse the existing bent grass, small saplings and photographed scree with a minimum 7.1 m centreline clearance.
+
+All 23 deployed shared simulation inputs remain byte-identical. Terrain collision, health/handling/scoring, the multiplayer service and the 35 ElevenLabs files remain unchanged. No additional asset purchase, sound generation, hosting plan or expenditure is involved. Internet multiplayer testing is excluded by the user's instruction.
+
+Reproduction: `npm ci`, `npm run build`, then the scripts in `tools/wreck-geometry-qa.mjs`, `tools/wreck-hold-qa.mjs`, `tools/bank-scenery-qa.mjs` and `tools/performance-qa.mjs`. Each requires a fresh evidence path as specified in its source. Geometry/repair/transform tests are in `tests/wreck-geometry.test.ts`; older milestone fixtures are preserved through the hash-checked inverse in `source/wreck-revision.json`.
+
+This is still rigid-body physics with bounded visual deformation. It can retain smooth-looking compression and intersections after extreme repeated impacts; it does not reproduce production soft-body crash simulation.

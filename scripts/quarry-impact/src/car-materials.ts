@@ -3,7 +3,7 @@ import * as T from 'three';
 // Body-space shading survives dents and detached parts without swimming UVs.
 // Damage is separate from base color: exposed alloy reflects as metal while
 // dusty paint gets rougher and loses its clearcoat highlights.
-export function finishPaint(material: T.MeshPhysicalMaterial) {
+export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = false) {
   material.onBeforeCompile = (shader) => {
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;')
@@ -43,8 +43,21 @@ roughnessFactor=mix(roughnessFactor,.43,bareMetal);
 metalnessFactor=mix(metalnessFactor,.02,dust);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
 `);
+    if (contactWear) {
+      shader.vertexShader=shader.vertexShader
+        .replace('attribute vec2 impactWear;', 'attribute vec2 impactWear; attribute vec3 restPosition; attribute vec3 impactAxis; varying vec3 vImpactAxis;')
+        .replace('vBodyPosition = position;', 'vBodyPosition = restPosition; vImpactAxis = impactAxis;');
+      shader.fragmentShader=shader.fragmentShader
+        .replace('varying vec3 vBodyPosition;', 'varying vec3 vImpactAxis; varying vec3 vBodyPosition;')
+        .replace('float grain=bodyNoise(vBodyPosition*340.);', 'float grain=mix(bodyNoise(vBodyPosition*340.),.5,clamp(length(fwidth(vBodyPosition))*340.,0.,1.));')
+        .replace('float scrapeLines=smoothstep(.75,.96,abs(sin(vBodyPosition.y*235.+vBodyPosition.z*29.+sin(vBodyPosition.x*12.))));', `
+float across=dot(vBodyPosition,vImpactAxis)*310.;
+float alias=clamp(fwidth(across),0.,1.);
+float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*21.)*2.))),.24,alias);`)
+        .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\n#endif');
+    }
   };
-  material.customProgramCacheKey = () => 'quarry-layered-paint-v3';
+  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-v1' : 'quarry-layered-paint-v3';
 }
 
 export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; };

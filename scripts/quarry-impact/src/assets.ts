@@ -5,6 +5,8 @@ import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import type { CarKind } from './rules';
 import { finishGlass, finishPaint } from './car-materials';
 import { configureCoupe } from './coupe-realism';
+import { prepareWreckGeometry } from './wreck-geometry';
+import { wreckTopology } from './wreck-topology';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -62,6 +64,19 @@ export async function loadCars(progress: (s: string) => void) {
     progress('Preparing ' + kind + ' bodywork');
     const gltf = await loader.loadAsync(url('models/' + kind + '.glb'));
     batch(gltf.scene, true);
+    // Shared refined templates are built once. Cars clone their deformable
+    // buffers; no remeshing, loading or asynchronous work occurs during a hit.
+    gltf.scene.traverse(o => {
+      if (!(o instanceof THREE.Mesh)) return;
+      let parent = o.parent;
+      while (parent && parent !== gltf.scene) {
+        if (parent.name.startsWith('wheel_')) return;
+        parent = parent.parent;
+      }
+      const old = o.geometry;
+      o.geometry = wreckTopology(old, o.name.startsWith('detail_') ? .23 : .14);
+      old.dispose();
+    });
     templates.set(kind, gltf.scene);
   }
 }
@@ -89,7 +104,7 @@ export function cloneCar(kind: CarKind, color: number) {
       m.roughness = trim ? .38 : 0.24;
       m.normalScale.setScalar(.055);
       if ('clearcoat' in m) { m.clearcoat = trim ? .45 : 1; m.clearcoatRoughness = 0.12; }
-      finishPaint(m);
+      finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {
       o.geometry = o.geometry.clone();
@@ -125,6 +140,7 @@ export function cloneCar(kind: CarKind, color: number) {
       o.castShadow = false;
     }
   });
+  prepareWreckGeometry(root);
   if (kind === 'coupe') configureCoupe(root);
   root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);
   return root;

@@ -12,7 +12,8 @@ import {
 import { Effects } from './effects';
 import { landscapeHeight } from './quarry-layout';
 import type { GlassState } from './car-materials';
-import { finishCoupeDent, repairCoupePanel } from './coupe-realism';
+import { repairCoupePanel } from './coupe-realism';
+import { dentGeometry, repairWreckGeometry } from './wreck-geometry';
 export type Input = {
   throttle: number;
   steer: number;
@@ -185,12 +186,13 @@ export class Vehicle {
       p.geometry.computeBoundingSphere();
       const wear = p.geometry.attributes.impactWear;
       if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }
-      if (this.kind === 'coupe') repairCoupePanel(p);
+      repairCoupePanel(p);
       p.geometry.deleteAttribute('color');
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
     }
     for (const g of this.glass) {
+      repairWreckGeometry(g);
       g.visible = true;
       g.userData.damage = 0;
       (g.material as T.MeshStandardMaterial).opacity = this.kind === 'coupe' ? .24 : .28;
@@ -338,70 +340,36 @@ export class Vehicle {
     const local = this.root.worldToLocal(point.clone());
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
+    const contact = this.model.worldToLocal(point.clone());
+    const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
+    const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();
     for (const panel of this.panels) {
       if (!panel.visible) continue;
-      const at = panel.worldToLocal(point.clone());
-      const dir = direction
-        .clone()
-        .transformDirection(panel.matrixWorld.clone().invert());
-      const pos = panel.geometry.attributes.position;
-      const original = panel.userData.original as Float32Array;
-      const wear = panel.geometry.attributes.impactWear as T.BufferAttribute;
-      const v = new T.Vector3(), orig = new T.Vector3(), offset = new T.Vector3();
-      const tangent = new T.Vector3(0, 1, 0).cross(dir);
-      if (tangent.lengthSq() < .001) tangent.set(1, 0, 0);
-      tangent.normalize();
-      const side = new T.Vector3().crossVectors(tangent, dir).normalize();
-      const radius = Math.min(1.48, .65 + damage * .034);
-      let affected = 0;
-      let maximum = 0;
-      for (let i = 0; i < pos.count; i++) {
-        orig.fromArray(original, i * 3);
-        v.fromBufferAttribute(pos, i);
-        const dist = orig.distanceTo(at);
-        if (dist > radius) continue;
-        const weight = Math.pow(1 - dist / radius, 1.6);
-        const strength = weight * Math.min(.52, damage * .024);
-        // One compact crease follows this contact instead of applying a repeating
-        // wave across the body. Original coordinates keep duplicated seam
-        // vertices welded and make quiet network replay exactly reproducible.
-        offset.copy(orig).sub(at);
-        const across = offset.dot(tangent) / radius;
-        const along = offset.dot(side) / radius;
-        const creaseDistance = Math.abs(across + .32 * along - .08);
-        const ridge = Math.max(0, 1 - creaseDistance / .3);
-        const shoulder = Math.max(0, 1 - creaseDistance / .72);
-        const span = Math.max(0, 1 - (along + .1) * (along + .1));
-        const buckle = (ridge - shoulder * .24) * span;
-        v.addScaledVector(dir, strength);
-        v.addScaledVector(side, -buckle * strength * .28);
-        v.addScaledVector(tangent, -across * strength * .08 * span);
-        offset.copy(v).sub(orig);
-        if (offset.lengthSq() > .81) v.copy(orig).add(offset.setLength(.9));
-        pos.setXYZ(i, v.x, v.y, v.z);
-        if (wear) wear.setXY(i, Math.min(1, wear.getX(i) + strength * 2.8), Math.min(1, wear.getY(i) + strength * 1.7));
-        maximum = Math.max(maximum, weight);
-        affected++;
-      }
-      if (affected) {
-        pos.needsUpdate = true;
-        if (wear) wear.needsUpdate = true;
-        panel.geometry.computeVertexNormals();
-        if (this.kind === 'coupe') finishCoupeDent(panel, at, dir, damage);
-        panel.geometry.computeBoundingSphere();
-        panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;
-        if (
-          panel.userData.damage > 16 && damage > 7 && maximum > .18 &&
-          (panel.name.includes('bumper') ||
-            panel.name.includes('hood') ||
-            panel.name.includes('mirror'))
-        ) {
-          if (quiet) panel.visible = false;
-          else { this.fx.detach(panel, this.velocity.clone().multiplyScalar(0.65)); this.impactEffects.debris = true; }
-        }
+      const maximum = dentGeometry(panel, contact, impactDirection, damage);
+      panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;
+      const assembly = panel.userData.detachAssembly as string | null;
+      if (assembly) {
+        if (!assemblies.has(assembly)) assemblies.set(assembly, { panels: [], damage: 0, weight: 0 });
+        const group = assemblies.get(assembly)!;
+        group.panels.push(panel);
+        group.damage = Math.max(group.damage, panel.userData.damage);
+        group.weight = Math.max(group.weight, maximum);
       }
     }
+    // Finish deforming every member before releasing any of them. Grilles,
+    // mirror inserts and bonnet vents cannot remain suspended over a wreck.
+    for (const [name, group] of assemblies) {
+      const threshold = name === 'hood' ? 36 : name.startsWith('mirror') ? 22 : 28;
+      if (group.damage <= threshold || damage <= 7 || group.weight <= .18) continue;
+      for (const panel of group.panels) {
+        if (quiet) panel.visible = false;
+        else this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65));
+      }
+      if (!quiet) this.impactEffects.debris = true;
+    }
     for (const glass of this.glass) {
+      if (!glass.visible) continue;
+      dentGeometry(glass, contact, impactDirection, damage);
       const bounds = new T.Box3().setFromObject(glass);
       const distance = bounds.distanceToPoint(point);
       if (distance < 1.25 && damage > 3) {
@@ -438,7 +406,7 @@ export class Vehicle {
     const materials = new Set<T.Material>();
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
-        if (o.name.startsWith('panel_')) o.geometry.dispose();
+        if (/^(panel_|glass_)/.test(o.name)) o.geometry.dispose();
         materials.add(o.material as T.Material);
       }
     });

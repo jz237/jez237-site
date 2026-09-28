@@ -2,7 +2,7 @@
 
 A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 35 locally bundled ElevenLabs sound effects.
 
-The latest workyard pass adds detailed Blender industrial props, photographic worn metal and concrete, foundation dirt and track marks, clearer shaded materials, and restrained directional crash feedback. The editable assets and their provenance are included. See `source/workyard/README.md` for the scope and `VALIDATION.md` for measured results. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
+The latest pass focuses on wrecks: refined panel topology, shared deformation for bodywork, glass and internal structure, connected bumper/hood/mirror attachments, and filtered impact scratches. Wrecking out of a solo derby or race holds the scene for five seconds with an orbit camera, then returns to the menu. The timer pauses on focus loss. The remaining quarry banks have shallow rock relief, foreground conifer cards have been replaced with existing branch geometry, and four more route sections have gravel and grass verge patches. See `source/wreck-geometry/README.md` and `VALIDATION.md`. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
 
 ## Play
 

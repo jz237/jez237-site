@@ -560,3 +560,6 @@ kbd {
 .online-dialog .online-message { min-height:20px; color:#e4c477; }
 .online-roster { margin:16px 0; }
 .network-status { position:absolute; top:96px; left:35px; font-size:10px; color:#e4c477; letter-spacing:1px; }
+.wreck-note{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);display:grid;gap:9px;min-width:320px;padding:20px 28px;text-align:center;background:#121a1bdd;border:1px solid #d9c48655;pointer-events:none;box-shadow:0 10px 35px #0005}
+.wreck-note strong{font-size:26px;letter-spacing:.09em;color:#e4c799}
+.wreck-note span{font-size:11px;letter-spacing:.09em;color:#ccd0cb}

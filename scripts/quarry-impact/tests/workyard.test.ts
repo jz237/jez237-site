@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {restoreWreckBytes} from './wreck-invariants';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -46,5 +47,5 @@ test('all 23 deployed simulation inputs remain byte-identical; previous source f
   const record=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(record.sourceHashes).length,23);
   for(const [p,expected]of Object.entries(record.sourceHashes))assert.equal(hash(read(p)),expected,p);
   const revision=JSON.parse(read('source/workyard-revision.json').toString());assert.ok(Object.keys(revision.files).length>=6);
-  for(const [p,entry]of Object.entries<any>(revision.files)){assert.equal(hash(read(p)),entry.after);assert.equal(hash(restoreWorkyardBytes(p,read(p))),entry.before);}
+  for(const [p,entry]of Object.entries<any>(revision.files)){assert.equal(hash(restoreWreckBytes(p,read(p))),entry.after);assert.equal(hash(restoreWorkyardBytes(p,read(p))),entry.before);}
 });
