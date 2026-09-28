@@ -2,25 +2,565 @@
   "version": 1,
   "generator": "tools/generate-north-floor.mjs",
   "source": "source/north-forest-floor.json",
-  "sourceSha256": "21571ced6649a6fa6bb6f77d887d3b6faa35e3dd530b3801f5202714d01ed9cd",
+  "sourceSha256": "4a000bccb7e7f7080ae3a07101fc50895f0f3deaa839e02e3f5fc08d5bafeae6",
   "placements": "src/quarry-north-forest.json",
   "placementsSha256": "c7fc8beef7927bf9a1df0ce8e53a2565ac00d0c84236ad0eb2a2e36403142bdf",
+  "backdropPlacements": "src/quarry-north-backdrop.json",
+  "backdropPlacementsSha256": "3d750b6e328bc9b5f80c79e61cfaec85d6559aecc2b81271956c95fbb187bff6",
+  "extension": {
+    "method": "Six tangent ellipses from actual root/crown envelopes, overlapping matching foreground stands; unchanged mineral crest and opening fields",
+    "addedRoots": 52,
+    "stands": [
+      {
+        "id": "backdrop-floor-stand-0",
+        "x": -40.589151998626285,
+        "z": 256.5663257053045,
+        "yaw": 0.1599804816005587,
+        "majorRadius": 12.638187141061326,
+        "minorRadius": 26.195558809935775,
+        "groundWeight": 0.96,
+        "rootCount": 6,
+        "sourceStand": "stand-0"
+      },
+      {
+        "id": "backdrop-floor-stand-1",
+        "x": -13.336975870019309,
+        "z": 279.8931135112159,
+        "yaw": 0.013901098523188512,
+        "majorRadius": 30.892913289802195,
+        "minorRadius": 25.420898039988458,
+        "groundWeight": 0.96,
+        "rootCount": 12,
+        "sourceStand": "stand-1"
+      },
+      {
+        "id": "backdrop-floor-stand-2",
+        "x": 35.053373176737736,
+        "z": 276.355390607018,
+        "yaw": -0.12462334072456098,
+        "majorRadius": 10.991546855968611,
+        "minorRadius": 26.787707411960824,
+        "groundWeight": 0.96,
+        "rootCount": 8,
+        "sourceStand": "stand-2"
+      },
+      {
+        "id": "backdrop-floor-stand-3",
+        "x": 95.47937868918812,
+        "z": 261.1838771261796,
+        "yaw": -0.35160281025550816,
+        "majorRadius": 11.656813179117092,
+        "minorRadius": 25.68911625563068,
+        "groundWeight": 0.96,
+        "rootCount": 8,
+        "sourceStand": "stand-3"
+      },
+      {
+        "id": "backdrop-floor-stand-4",
+        "x": 142.58038140299038,
+        "z": 238.68385047133768,
+        "yaw": -0.5520839876140331,
+        "majorRadius": 22.696369088714466,
+        "minorRadius": 27.370402016178772,
+        "groundWeight": 0.96,
+        "rootCount": 9,
+        "sourceStand": "stand-4"
+      },
+      {
+        "id": "backdrop-floor-stand-5",
+        "x": 177.39736008612988,
+        "z": 194.08048660286553,
+        "yaw": -0.7410948139937928,
+        "majorRadius": 16.609407159652022,
+        "minorRadius": 27.09054688778606,
+        "groundWeight": 0.96,
+        "rootCount": 9,
+        "sourceStand": "stand-5"
+      }
+    ],
+    "allowedFootprints": [
+      {
+        "id": "backdrop-floor-stand-0",
+        "x": -40.589151998626285,
+        "z": 256.5663257053045,
+        "yaw": 0.1599804816005587,
+        "majorRadius": 17.657276103451334,
+        "minorRadius": 32.045036787044346
+      },
+      {
+        "id": "backdrop-floor-stand-1",
+        "x": -13.336975870019309,
+        "z": 279.8931135112159,
+        "yaw": 0.013901098523188512,
+        "majorRadius": 37.03010422880258,
+        "minorRadius": 31.222928044937753
+      },
+      {
+        "id": "backdrop-floor-stand-2",
+        "x": 35.053373176737736,
+        "z": 276.355390607018,
+        "yaw": -0.12462334072456098,
+        "majorRadius": 15.909779100896689,
+        "minorRadius": 32.67345449094343
+      },
+      {
+        "id": "backdrop-floor-stand-3",
+        "x": 95.47937868918812,
+        "z": 261.1838771261796,
+        "yaw": -0.35160281025550816,
+        "majorRadius": 16.615792986338015,
+        "minorRadius": 31.507574626288058
+      },
+      {
+        "id": "backdrop-floor-stand-4",
+        "x": 142.58038140299038,
+        "z": 238.68385047133768,
+        "yaw": -0.5520839876140331,
+        "majorRadius": 28.331521695398227,
+        "minorRadius": 33.291839139669726
+      },
+      {
+        "id": "backdrop-floor-stand-5",
+        "x": 177.39736008612988,
+        "z": 194.08048660286553,
+        "yaw": -0.7410948139937928,
+        "majorRadius": 21.871733348180708,
+        "minorRadius": 32.99484288466296
+      },
+      {
+        "id": "backdrop-root-north-backdrop-0",
+        "x": -30.235668182373047,
+        "z": 264.2125549316406,
+        "yaw": 0,
+        "majorRadius": 7.579798715653394,
+        "minorRadius": 7.579798715653394
+      },
+      {
+        "id": "backdrop-root-north-backdrop-1",
+        "x": 147.36695861816406,
+        "z": 224.9632568359375,
+        "yaw": 0,
+        "majorRadius": 7.444833271863877,
+        "minorRadius": 7.444833271863877
+      },
+      {
+        "id": "backdrop-root-north-backdrop-12",
+        "x": 12.713220596313477,
+        "z": 278.6397705078125,
+        "yaw": 0,
+        "majorRadius": 6.987035991010519,
+        "minorRadius": 6.987035991010519
+      },
+      {
+        "id": "backdrop-root-north-backdrop-24",
+        "x": 170.88711547851562,
+        "z": 203.9395751953125,
+        "yaw": 0,
+        "majorRadius": 8.241238200340057,
+        "minorRadius": 8.241238200340057
+      },
+      {
+        "id": "backdrop-root-north-backdrop-25",
+        "x": 100.63091278076172,
+        "z": 253.92137145996094,
+        "yaw": 0,
+        "majorRadius": 6.910738184059451,
+        "minorRadius": 6.910738184059451
+      },
+      {
+        "id": "backdrop-root-north-backdrop-36",
+        "x": 36.80348205566406,
+        "z": 279.3123779296875,
+        "yaw": 0,
+        "majorRadius": 7.3432912499051515,
+        "minorRadius": 7.3432912499051515
+      },
+      {
+        "id": "backdrop-root-north-backdrop-37",
+        "x": 155.24887084960938,
+        "z": 252.32992553710938,
+        "yaw": 0,
+        "majorRadius": 8.867510770520104,
+        "minorRadius": 8.867510770520104
+      },
+      {
+        "id": "backdrop-root-north-backdrop-48",
+        "x": -3.898817539215088,
+        "z": 299.6012878417969,
+        "yaw": 0,
+        "majorRadius": 8.605385053387518,
+        "minorRadius": 8.605385053387518
+      },
+      {
+        "id": "backdrop-root-north-backdrop-49",
+        "x": 194.32852172851562,
+        "z": 204.60626220703125,
+        "yaw": 0,
+        "majorRadius": 7.4795579007096835,
+        "minorRadius": 7.4795579007096835
+      },
+      {
+        "id": "backdrop-root-north-backdrop-60",
+        "x": -50.94154739379883,
+        "z": 273.0741882324219,
+        "yaw": 0,
+        "majorRadius": 8.076276366679437,
+        "minorRadius": 8.076276366679437
+      },
+      {
+        "id": "backdrop-root-north-backdrop-61",
+        "x": 98.26260375976562,
+        "z": 279.1935119628906,
+        "yaw": 0,
+        "majorRadius": 8.344870147245654,
+        "minorRadius": 8.344870147245654
+      },
+      {
+        "id": "backdrop-root-north-backdrop-73",
+        "x": 34.70026397705078,
+        "z": 298.2159729003906,
+        "yaw": 0,
+        "majorRadius": 8.224888723623168,
+        "minorRadius": 8.224888723623168
+      },
+      {
+        "id": "backdrop-root-north-backdrop-85",
+        "x": -33.091468811035156,
+        "z": 257.6229553222656,
+        "yaw": 0,
+        "majorRadius": 7.295052874478197,
+        "minorRadius": 7.295052874478197
+      },
+      {
+        "id": "backdrop-root-north-backdrop-96",
+        "x": 147.68820190429688,
+        "z": 229.1614227294922,
+        "yaw": 0,
+        "majorRadius": 8.076495226980047,
+        "minorRadius": 8.076495226980047
+      },
+      {
+        "id": "backdrop-root-north-backdrop-97",
+        "x": -3.9938805103302,
+        "z": 281.2060852050781,
+        "yaw": 0,
+        "majorRadius": 8.28127612525361,
+        "minorRadius": 8.28127612525361
+      },
+      {
+        "id": "backdrop-root-north-backdrop-108",
+        "x": 183.5244140625,
+        "z": 193.97872924804688,
+        "yaw": 0,
+        "majorRadius": 7.888773172285099,
+        "minorRadius": 7.888773172285099
+      },
+      {
+        "id": "backdrop-root-north-backdrop-109",
+        "x": 97.93519592285156,
+        "z": 260.7315979003906,
+        "yaw": 0,
+        "majorRadius": 8.703135676791579,
+        "minorRadius": 8.703135676791579
+      },
+      {
+        "id": "backdrop-root-north-backdrop-125",
+        "x": 34.22604751586914,
+        "z": 280.23358154296875,
+        "yaw": 0,
+        "majorRadius": 7.104129377755213,
+        "minorRadius": 7.104129377755213
+      },
+      {
+        "id": "backdrop-root-north-backdrop-136",
+        "x": 145.41744995117188,
+        "z": 254.4962615966797,
+        "yaw": 0,
+        "majorRadius": 8.407877365414683,
+        "minorRadius": 8.407877365414683
+      },
+      {
+        "id": "backdrop-root-north-backdrop-137",
+        "x": 12.195059776306152,
+        "z": 300.0921936035156,
+        "yaw": 0,
+        "majorRadius": 7.761570673117278,
+        "minorRadius": 7.761570673117278
+      },
+      {
+        "id": "backdrop-root-north-backdrop-148",
+        "x": 190.9915313720703,
+        "z": 202.82028198242188,
+        "yaw": 0,
+        "majorRadius": 8.054650234344125,
+        "minorRadius": 8.054650234344125
+      },
+      {
+        "id": "backdrop-root-north-backdrop-161",
+        "x": -48.7608528137207,
+        "z": 274.8679504394531,
+        "yaw": 0,
+        "majorRadius": 8.533885434750468,
+        "minorRadius": 8.533885434750468
+      },
+      {
+        "id": "backdrop-root-north-backdrop-172",
+        "x": 100.84420776367188,
+        "z": 280.460205078125,
+        "yaw": 0,
+        "majorRadius": 8.768048921686631,
+        "minorRadius": 8.768048921686631
+      },
+      {
+        "id": "backdrop-root-north-backdrop-173",
+        "x": 30.45848846435547,
+        "z": 291.59124755859375,
+        "yaw": 0,
+        "majorRadius": 7.26154431027002,
+        "minorRadius": 7.26154431027002
+      },
+      {
+        "id": "backdrop-root-north-backdrop-184",
+        "x": -33.56890869140625,
+        "z": 263.3235168457031,
+        "yaw": 0,
+        "majorRadius": 7.4098819425433184,
+        "minorRadius": 7.4098819425433184
+      },
+      {
+        "id": "backdrop-root-north-backdrop-185",
+        "x": 150.5726318359375,
+        "z": 227.59930419921875,
+        "yaw": 0,
+        "majorRadius": 6.8605821129255595,
+        "minorRadius": 6.8605821129255595
+      },
+      {
+        "id": "backdrop-root-north-backdrop-196",
+        "x": -9.078446388244629,
+        "z": 280.3287048339844,
+        "yaw": 0,
+        "majorRadius": 7.300287072043108,
+        "minorRadius": 7.300287072043108
+      },
+      {
+        "id": "backdrop-root-north-backdrop-197",
+        "x": 171.1903533935547,
+        "z": 201.3199005126953,
+        "yaw": 0,
+        "majorRadius": 8.364567614080398,
+        "minorRadius": 8.364567614080398
+      },
+      {
+        "id": "backdrop-root-north-backdrop-208",
+        "x": 96.00454711914062,
+        "z": 263.5737609863281,
+        "yaw": 0,
+        "majorRadius": 6.981184278623866,
+        "minorRadius": 6.981184278623866
+      },
+      {
+        "id": "backdrop-root-north-backdrop-209",
+        "x": 30.237865447998047,
+        "z": 279.96661376953125,
+        "yaw": 0,
+        "majorRadius": 7.776505243800367,
+        "minorRadius": 7.776505243800367
+      },
+      {
+        "id": "backdrop-root-north-backdrop-225",
+        "x": 139.39285278320312,
+        "z": 266.3919677734375,
+        "yaw": 0,
+        "majorRadius": 8.720840890733294,
+        "minorRadius": 8.720840890733294
+      },
+      {
+        "id": "backdrop-root-north-backdrop-226",
+        "x": 10.63549518585205,
+        "z": 300.4901428222656,
+        "yaw": 0,
+        "majorRadius": 8.254546778918451,
+        "minorRadius": 8.254546778918451
+      },
+      {
+        "id": "backdrop-root-north-backdrop-237",
+        "x": 200.34738159179688,
+        "z": 202.5164794921875,
+        "yaw": 0,
+        "majorRadius": 8.597752268120276,
+        "minorRadius": 8.597752268120276
+      },
+      {
+        "id": "backdrop-root-north-backdrop-238",
+        "x": -38.652671813964844,
+        "z": 278.47808837890625,
+        "yaw": 0,
+        "majorRadius": 8.895989672934265,
+        "minorRadius": 8.895989672934265
+      },
+      {
+        "id": "backdrop-root-north-backdrop-249",
+        "x": 102.78459930419922,
+        "z": 280.7083740234375,
+        "yaw": 0,
+        "majorRadius": 7.749041510404645,
+        "minorRadius": 7.749041510404645
+      },
+      {
+        "id": "backdrop-root-north-backdrop-250",
+        "x": 41.23980712890625,
+        "z": 295.2364196777344,
+        "yaw": 0,
+        "majorRadius": 8.651605700578619,
+        "minorRadius": 8.651605700578619
+      },
+      {
+        "id": "backdrop-root-north-backdrop-261",
+        "x": -43.24158477783203,
+        "z": 259.24603271484375,
+        "yaw": 0,
+        "majorRadius": 6.7634599335271695,
+        "minorRadius": 6.7634599335271695
+      },
+      {
+        "id": "backdrop-root-north-backdrop-262",
+        "x": 153.2562713623047,
+        "z": 221.8812713623047,
+        "yaw": 0,
+        "majorRadius": 7.6707729493888355,
+        "minorRadius": 7.6707729493888355
+      },
+      {
+        "id": "backdrop-root-north-backdrop-274",
+        "x": 12.474458694458008,
+        "z": 280.3545837402344,
+        "yaw": 0,
+        "majorRadius": 8.124092570282993,
+        "minorRadius": 8.124092570282993
+      },
+      {
+        "id": "backdrop-root-north-backdrop-285",
+        "x": 177.66763305664062,
+        "z": 192.6439208984375,
+        "yaw": 0,
+        "majorRadius": 6.681493447186154,
+        "minorRadius": 6.681493447186154
+      },
+      {
+        "id": "backdrop-root-north-backdrop-286",
+        "x": 89.58834075927734,
+        "z": 265.64288330078125,
+        "yaw": 0,
+        "majorRadius": 7.344772167073581,
+        "minorRadius": 7.344772167073581
+      },
+      {
+        "id": "backdrop-root-north-backdrop-298",
+        "x": 36.426395416259766,
+        "z": 272.39111328125,
+        "yaw": 0,
+        "majorRadius": 6.474191008901158,
+        "minorRadius": 6.474191008901158
+      },
+      {
+        "id": "backdrop-root-north-backdrop-314",
+        "x": 146.56040954589844,
+        "z": 253.74928283691406,
+        "yaw": 0,
+        "majorRadius": 7.109392932330064,
+        "minorRadius": 7.109392932330064
+      },
+      {
+        "id": "backdrop-root-north-backdrop-315",
+        "x": 9.166414260864258,
+        "z": 296.5829162597656,
+        "yaw": 0,
+        "majorRadius": 8.016781469459833,
+        "minorRadius": 8.016781469459833
+      },
+      {
+        "id": "backdrop-root-north-backdrop-327",
+        "x": 189.89044189453125,
+        "z": 213.15476989746094,
+        "yaw": 0,
+        "majorRadius": 7.122438466316796,
+        "minorRadius": 7.122438466316796
+      },
+      {
+        "id": "backdrop-root-north-backdrop-338",
+        "x": -49.31849670410156,
+        "z": 276.49951171875,
+        "yaw": 0,
+        "majorRadius": 8.202138264167747,
+        "minorRadius": 8.202138264167747
+      },
+      {
+        "id": "backdrop-root-north-backdrop-350",
+        "x": 107.42838287353516,
+        "z": 278.74383544921875,
+        "yaw": 0,
+        "majorRadius": 8.115593144990475,
+        "minorRadius": 8.115593144990475
+      },
+      {
+        "id": "backdrop-root-north-backdrop-351",
+        "x": 42.71977615356445,
+        "z": 292.55767822265625,
+        "yaw": 0,
+        "majorRadius": 8.637697362728849,
+        "minorRadius": 8.637697362728849
+      },
+      {
+        "id": "backdrop-root-north-backdrop-362",
+        "x": -28.0257625579834,
+        "z": 263.48504638671875,
+        "yaw": 0,
+        "majorRadius": 8.301551308663662,
+        "minorRadius": 8.301551308663662
+      },
+      {
+        "id": "backdrop-root-north-backdrop-363",
+        "x": 145.68325805664062,
+        "z": 230.5283660888672,
+        "yaw": 0,
+        "majorRadius": 8.096621366788751,
+        "minorRadius": 8.096621366788751
+      },
+      {
+        "id": "backdrop-root-north-backdrop-374",
+        "x": 9.337685585021973,
+        "z": 283.4436950683594,
+        "yaw": 0,
+        "majorRadius": 7.475945957942379,
+        "minorRadius": 7.475945957942379
+      },
+      {
+        "id": "backdrop-root-north-backdrop-375",
+        "x": 176.42747497558594,
+        "z": 193.84580993652344,
+        "yaw": 0,
+        "majorRadius": 7.198881005572329,
+        "minorRadius": 7.198881005572329
+      }
+    ]
+  },
   "crest": "source/north-forest-crest.json",
   "crestSha256": "6871357178c9b5b78e639b1fe2524301598763eb9f415e3964513e0407f6cd2d",
   "file": "assets/north-forest-floor.rgba.gz",
-  "bytes": 83692,
-  "sha256": "eebc2d609fa6d27b0e231a5d241d3c912bd366a0ce169d643878227e96e8d604",
-  "decodedBytes": 688128,
-  "decodedSha256": "f45095baa75dd16d70a147147e7d4e99d46e911f486781a6dabf7491d0476774",
+  "bytes": 145897,
+  "sha256": "b33e0f6efeb4217220b7870b97269461bac55f8ab39f44e4eee55f862ac6e5ea",
+  "decodedBytes": 786432,
+  "decodedSha256": "2e3a914076b5edc198e3180d8761d4cc46921d2829bc258b3180d09aa34400fc",
   "size": [
     512,
-    336
+    384
   ],
   "bounds": [
     -96,
     80,
     224,
-    290
+    320
   ],
   "channels": [
     "coverage",
@@ -32,8 +572,8 @@
   "runtimeFiles": [
     {
       "file": "assets/north-forest-floor.rgba.gz",
-      "bytes": 83692,
-      "sha256": "eebc2d609fa6d27b0e231a5d241d3c912bd366a0ce169d643878227e96e8d604"
+      "bytes": 145897,
+      "sha256": "b33e0f6efeb4217220b7870b97269461bac55f8ab39f44e4eee55f862ac6e5ea"
     },
     {
       "file": "assets/north_litter_diff.jpg",

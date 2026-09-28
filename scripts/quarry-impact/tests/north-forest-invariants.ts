@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import type { ColliderSpec } from '../src/quarry-layout';
+import {assertNorthBackdropEvolution,stripNorthBackdropLayout} from './north-backdrop-invariants';
 
 export const northForestBaseline=JSON.parse(readFileSync(new URL('./fixtures/north-forest-edge-before.json',import.meta.url),'utf8'));
 export const northForestData=()=>JSON.parse(readFileSync(new URL('../src/quarry-north-forest.json',import.meta.url),'utf8'));
@@ -14,6 +15,7 @@ export const northMediumId=(id:string)=>`tree-north-medium-${id}`;
  * collider remains byte-identical; the only additions are manifest trunk shapes.
  */
 export function assertNorthForestEvolution(layout:ColliderSpec[]){
+  layout=assertNorthBackdropEvolution(layout);
   const current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length,'all collider IDs must remain unique');
   const expected=new Map<string,string>(northForestBaseline.physics.colliders.map((s:{id:string;sha256:string})=>[s.id,s.sha256]));
   assert.equal(expected.size,1547);
@@ -39,7 +41,7 @@ export function assertNorthForestEvolution(layout:ColliderSpec[]){
  * authorized additions; changing any existing placement/math still fails.
  */
 export function assertNorthForestLayoutSource(){
-  let bytes=readFileSync(new URL('../src/quarry-layout.ts',import.meta.url));
+  let bytes=stripNorthBackdropLayout(readFileSync(new URL('../src/quarry-layout.ts',import.meta.url)));
   const lineEnding=bytes.includes(Buffer.from('\r\n'))?'\r\n':'\n';
   const block=["  for(const p of northForest.trees){","    cylinder('tree-north-'+p.id,p.x,p.y+p.trunkHeight/2,p.z,p.trunkHeight,p.trunkRadius);","    const base=northForest.rootHulls.find(h=>h.variant===p.variant)!;","    base.parts.forEach((part,index)=>{","      const points=new Float32Array(part.map((n,i)=>n*p.height*(i%3===1?1:p.width)));","      items.push({id:'tree-north-root-'+p.id+'-'+index,shape:'hull',p:{x:p.x,y:p.y,z:p.z},q:yawRotation(p.yaw),points});","    });","  }","  for(const p of northForest.mediumTrees)cylinder('tree-north-medium-'+p.id,p.x,p.y+p.trunkHeight/2,p.z,p.trunkHeight,p.trunkRadius);"].join(lineEnding);
   for(const statement of ["import northForest from './quarry-north-forest.json';",block]){

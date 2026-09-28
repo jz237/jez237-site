@@ -20,6 +20,55 @@ export function ellipseDistance(x, z, ellipse, margin = 0) {
   return Math.hypot((dx * c + dz * s) / (ellipse.majorRadius + margin), (-dx * s + dz * c) / (ellipse.minorRadius + margin));
 }
 
+/** Fit litter to the actual new root envelope, then overlap the accepted front
+ * stand. This uses private placement data only; no world RNG or terrain edits. */
+export function mergeNorthBackdropFloor(spec, foreground, backdrop) {
+  if (!backdrop) return { placements: foreground, extension: { stands: [], allowedFootprints: [] } };
+  const stands = [], allowedFootprints = [];
+  const radius = tree => Math.max(2.4, tree.height * (tree.width ?? 1) * .28);
+  for (const group of backdrop.stands) {
+    const roots = backdrop.trees.filter(tree => tree.stand === group.id);
+    if (!roots.length) continue;
+    const cx = roots.reduce((sum, tree) => sum + tree.x, 0) / roots.length;
+    const cz = roots.reduce((sum, tree) => sum + tree.z, 0) / roots.length;
+    const length = Math.hypot(cx, cz), nx = cx / length, nz = cz / length;
+    // Tangent is the major axis; the second axis points outward from the quarry.
+    const tx = nz, tz = -nx;
+    let t0 = Infinity, t1 = -Infinity, r0 = Infinity, r1 = -Infinity;
+    for (const tree of roots) {
+      const crown = radius(tree), tangent = tree.x * tx + tree.z * tz, radial = tree.x * nx + tree.z * nz;
+      t0 = Math.min(t0, tangent - crown); t1 = Math.max(t1, tangent + crown);
+      r0 = Math.min(r0, radial - crown); r1 = Math.max(r1, radial + crown);
+    }
+    const front = foreground.stands.find(stand => stand.id === group.id);
+    if (front) {
+      // The new ellipse starts inside existing litter, so it connects rather
+      // than forming a row of isolated dark discs around the background trees.
+      r0 = Math.min(r0, front.x * nx + front.z * nz + front.minorRadius * .45);
+    }
+    const tangent = (t0 + t1) / 2, radial = (r0 + r1) / 2;
+    const stand = { id: 'backdrop-floor-' + group.id, x: tangent * tx + radial * nx,
+      z: tangent * tz + radial * nz, yaw: Math.atan2(tz, tx),
+      majorRadius: Math.max(8, (t1 - t0) / 2), minorRadius: Math.max(8, (r1 - r0) / 2),
+      groundWeight: .96, rootCount: roots.length, sourceStand: group.id };
+    stands.push(stand);
+    // Independent preservation tests can use this explicit conservative support
+    // envelope. Existing noise bounds are ±.1225 (organic), ±.06125 (coverage).
+    allowedFootprints.push({ id: stand.id, x: stand.x, z: stand.z, yaw: stand.yaw,
+      majorRadius: Math.max((stand.majorRadius + spec.coverageMargin) * 1.06125, stand.majorRadius * 1.1425),
+      minorRadius: Math.max((stand.minorRadius + spec.coverageMargin) * 1.06125, stand.minorRadius * 1.1425) });
+  }
+  for (const tree of backdrop.trees) {
+    const support = radius(tree) * 1.6;
+    allowedFootprints.push({ id: 'backdrop-root-' + tree.id, x: tree.x, z: tree.z,
+      yaw: 0, majorRadius: support, minorRadius: support });
+  }
+  return { placements: { ...foreground, stands: [...foreground.stands, ...stands],
+      trees: [...foreground.trees, ...backdrop.trees] },
+    extension: { method: 'Six tangent ellipses from actual root/crown envelopes, overlapping matching foreground stands; unchanged mineral crest and opening fields',
+      addedRoots: backdrop.trees.length, stands, allowedFootprints } };
+}
+
 /** Each sample is generated at its texel centre, matching the GPU's UV lookup. */
 export function sampleNorthFloor(x, z, spec, placements, crest = { points: [] }) {
   const small = noise(x * .43 + 11, z * .43 - 8), medium = noise(x * .105, z * .105), broad = noise(x * .034 - 7, z * .034 + 9);
@@ -85,13 +134,16 @@ export function rasterNorthFloor(spec, placements, crest = { points: [] }) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const sourcePath = 'source/north-forest-floor.json';
   const source = fs.readFileSync(path.join(root, sourcePath)), spec = JSON.parse(source);
-  const placementBytes = fs.readFileSync(path.join(root, spec.placements)), placements = JSON.parse(placementBytes);
+  const placementBytes = fs.readFileSync(path.join(root, spec.placements)), foreground = JSON.parse(placementBytes);
+  const backdropBytes = spec.backdropPlacements ? fs.readFileSync(path.join(root, spec.backdropPlacements)) : null;
+  const { placements, extension } = mergeNorthBackdropFloor(spec, foreground, backdropBytes ? JSON.parse(backdropBytes) : null);
   const crestBytes = fs.readFileSync(path.join(root, spec.crest.source)), crest = JSON.parse(crestBytes);
   const bytes = rasterNorthFloor(spec, placements, crest), compressed = gzipSync(bytes, { level: 9 });
   const file = 'assets/north-forest-floor.rgba.gz';
   fs.writeFileSync(path.join(root, 'public', file), compressed);
   const manifest = { version: 1, generator: 'tools/generate-north-floor.mjs', source: sourcePath,
     sourceSha256: hash(source), placements: spec.placements, placementsSha256: hash(placementBytes),
+    ...(backdropBytes ? { backdropPlacements: spec.backdropPlacements, backdropPlacementsSha256: hash(backdropBytes), extension } : {}),
     crest: spec.crest.source, crestSha256: hash(crestBytes),
     file, bytes: compressed.length, sha256: hash(compressed), decodedBytes: bytes.length, decodedSha256: hash(bytes),
     size: spec.size, bounds: spec.bounds, channels: spec.channels,

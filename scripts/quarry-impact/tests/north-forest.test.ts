@@ -8,13 +8,14 @@ import { quarryRim, terrainGeometry } from '../src/quarry-layout';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import { northForestBaseline } from './north-forest-invariants';
 import { inNorthForest } from '../tools/north-forest-edge-audit';
+import {restoreNorthBackdropCards} from './north-backdrop-invariants';
 
 const baseline = JSON.parse(readFileSync(new URL('./fixtures/north-forest-before.json', import.meta.url), 'utf8')) as Awaited<ReturnType<typeof captureForestCards>>;
 const angle = (x: number, z: number) => (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
 const local = (x: number, z: number) => { const a = angle(x, z); return a >= 350 || a <= 25; };
 
 test('actual forest renderer keeps all384 cards/four draws, original RNG and every off-sector transform/color', async () => {
-    const current = await captureForestCards();
+    const actual = await captureForestCards(), current={...actual,cards:restoreNorthBackdropCards(actual.cards)};
     assert.equal(baseline.cards.length, 384); assert.equal(current.cards.length, baseline.cards.length);
     assert.equal(current.draws, baseline.draws); assert.equal(current.draws, 4);
     assert.equal(current.finalRandom, baseline.finalRandom, 'regrouping must not change later grass random draws');

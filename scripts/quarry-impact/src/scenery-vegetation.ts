@@ -7,11 +7,13 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
 import { trackPoint } from './rules';
+import { replacesNorthBackdropCard, updateNorthRidgeView } from './scenery-north-ridge';
 const forestLODs: T.LOD[] = [];
 const forestMaterials = new Map<string, T.MeshStandardMaterial>();
 export function updateForestView(camera: T.Camera) {
     for (const lod of forestLODs)
         lod.update(camera);
+    updateNorthRidgeView(camera);
 }
 type Plant = {
     x: number;
@@ -205,7 +207,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     }
     const composedCards = composeNorthForestCards(composeNorthHeadwallBackdrop(composeForestBackdrop(originalCards)));
     for (const { kind, aspect } of distantSpecies) {
-        const placements = composedCards.filter(p => p.kind === kind);
+        const placements = composedCards.filter(p => p.kind === kind && !replacesNorthBackdropCard(p.x, p.z));
         const photo = textures.load(url('models/' + kind + '.webp'));
         photo.colorSpace = T.SRGBColorSpace;
         photo.anisotropy = 8;

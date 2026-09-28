@@ -1,0 +1,491 @@
+{
+  "source": "https://polyhaven.com/a/fir_tree_01",
+  "license": "CC0-1.0",
+  "generators": [
+    "tools/prepare-north-backdrop.py",
+    "tools/bake-north-backdrop.py",
+    "tools/pack-north-backdrop.py"
+  ],
+  "runtimeMetadata": "src/quarry-north-backdrop-atlas.json",
+  "method": "Accepted decoded near models, emission-only albedo/object normal/depth. No sun, AO, exposure, fog, or instance tint. Native source normal textures and UV transforms. Area-filtered premultiplied linear attributes before straight RGBA packing.",
+  "sampling": {
+    "azimuthCount": 8,
+    "elevationsDegrees": [
+      -10,
+      25
+    ],
+    "sourcePixels": [
+      512,
+      1024
+    ],
+    "atlasPixels": [
+      1024,
+      2048
+    ],
+    "tilePixels": [
+      256,
+      512
+    ],
+    "innerPixels": [
+      240,
+      496
+    ],
+    "gutterPixels": 8,
+    "maxSafeMip": 3
+  },
+  "runtimeFiles": [
+    {
+      "file": "models/north-backdrop-0-albedo.png",
+      "bytes": 1503088,
+      "sha256": "0b36755cd37b650ed4954b850ef04ec5d29dbeaf48f263aa0fecccd02b3d0e8e",
+      "role": "Straight sRGB albedo + linear coverage"
+    },
+    {
+      "file": "models/north-backdrop-0-normal-depth.png",
+      "bytes": 1887058,
+      "sha256": "3fca1be57ca00ed9e723bec8066832d594637b83dc65aa12c89b1710199f1ee0",
+      "role": "Linear object-space normal RGB + view-depth A"
+    },
+    {
+      "file": "models/north-backdrop-1-albedo.png",
+      "bytes": 1598263,
+      "sha256": "38556e24aa13d2ba815dfef83c561fece382e387559e6c24955afbb186eca04e",
+      "role": "Straight sRGB albedo + linear coverage"
+    },
+    {
+      "file": "models/north-backdrop-1-normal-depth.png",
+      "bytes": 2000421,
+      "sha256": "edc0738c3dc97f0dfbdf480ec07cea88a9ff0062d33eca13c831da17e29a1676",
+      "role": "Linear object-space normal RGB + view-depth A"
+    },
+    {
+      "file": "models/north-backdrop-2-albedo.png",
+      "bytes": 1232087,
+      "sha256": "92301f9352ce0a4ce6a50ffe34bb77caa8b833ee5b82275fd67dc3329a4f89cb",
+      "role": "Straight sRGB albedo + linear coverage"
+    },
+    {
+      "file": "models/north-backdrop-2-normal-depth.png",
+      "bytes": 1521577,
+      "sha256": "32094b50f4667759484f54beb67cf7ec8543adceadf391d6cd1bf64d8e4ce199",
+      "role": "Linear object-space normal RGB + view-depth A"
+    }
+  ],
+  "sources": [
+    {
+      "sourceFile": "models/quarry-north-fir-0.glb",
+      "sourceSha256": "c38cccc0fd17e5215aebe8f821dc17629c0a7e62a87b6a53a5c3cee37ad82ef3",
+      "decodedSha256": "930f3aa6ccacde72890663830dddc3f405c6cea0cb957acd51bdff00fed84678"
+    },
+    {
+      "sourceFile": "models/quarry-north-fir-1.glb",
+      "sourceSha256": "33a1e2a44959837b90e7f755feb17324840bf1510bbfafdfdd37b8bb71a4cbcb",
+      "decodedSha256": "f0e54202052a202f548f5491d661ccc6e81bea0868bc84949812b3bdbb791943"
+    },
+    {
+      "sourceFile": "models/quarry-north-fir-2.glb",
+      "sourceSha256": "aaee2b603eedbf2d55b1d98742de1d204d187202b70186292467f34cb12f7ecd",
+      "decodedSha256": "7f116d277bc75b071c0425195b93854e0785b5291438271c3974726f20f43021"
+    }
+  ],
+  "materialInputs": [
+    {
+      "sourceFile": "models/fir-medium-a.glb",
+      "imageName": "fir_sapling_medium_branches_nor_gl_2k",
+      "bytes": 249445,
+      "sha256": "7c8650c637cd1f6bf4c12d7a6111debbc6004e9cd0f5fae0773900cd8c9c2d17"
+    },
+    {
+      "sourceFile": "models/fir-medium-a.glb",
+      "imageName": "fir_sapling_medium_branches_diff_2k",
+      "bytes": 2839282,
+      "sha256": "c3dbce0207d9b0e6d1ef3d2e3c3ba394722464c898e6d4eb6b76439ada76e0b3"
+    },
+    {
+      "sourceFile": "models/fir-medium-a.glb",
+      "imageName": "fir_sapling_medium_twigs_nor_gl_2k",
+      "bytes": 122370,
+      "sha256": "54a60fa598712db35ada7cdff79fd0fc03f1ee796c673f76b541053bcc9e49c5"
+    },
+    {
+      "sourceFile": "assets/north_fir_twig_diff.jpg",
+      "bytes": 1141996,
+      "sha256": "5504646d484a08649a9cd14402860063e69fd10072238f5afe72214e6bf478be"
+    },
+    {
+      "sourceFile": "assets/north_fir_trunk_a_diff.jpg",
+      "bytes": 1896228,
+      "sha256": "70669aaa280f11a01f1189a10b99c8429cef6a23d9c4aa6e87d734937c2b6d9a"
+    },
+    {
+      "sourceFile": "assets/north_fir_trunk_a_nor_gl.jpg",
+      "bytes": 845443,
+      "sha256": "197b4883671ad3f87f21bc39ffa930d0d97306300d580e40c9095dfe6f28bd16"
+    },
+    {
+      "sourceFile": "assets/north_fir_trunk_b_diff.jpg",
+      "bytes": 1538961,
+      "sha256": "d13324b6ce5b60f78b99447be0592877727fa33ef67dbe8f99ce19638dfa3da3"
+    },
+    {
+      "sourceFile": "assets/north_fir_trunk_b_nor_gl.jpg",
+      "bytes": 771952,
+      "sha256": "52fb2e1397cec839b8bb0076b777259d3d331a17740ddc2939f43098ede23825"
+    }
+  ],
+  "variants": [
+    {
+      "variant": 0,
+      "views": [
+        {
+          "index": 0,
+          "coverage": 0.1381186842918396,
+          "sourceCoverage": 0.1379183828830719,
+          "relativeCoverageChange": 0.0014523184261630018,
+          "frontFacingMedian": 0.943911315046359
+        },
+        {
+          "index": 1,
+          "coverage": 0.14118508994579315,
+          "sourceCoverage": 0.14091384410858154,
+          "relativeCoverageChange": 0.001924905525979348,
+          "frontFacingMedian": 0.9409645078163241
+        },
+        {
+          "index": 2,
+          "coverage": 0.1417318731546402,
+          "sourceCoverage": 0.1413111686706543,
+          "relativeCoverageChange": 0.002977149562511938,
+          "frontFacingMedian": 0.9428676133956717
+        },
+        {
+          "index": 3,
+          "coverage": 0.14035183191299438,
+          "sourceCoverage": 0.1400182694196701,
+          "relativeCoverageChange": 0.0023822783605795816,
+          "frontFacingMedian": 0.9425754697617003
+        },
+        {
+          "index": 4,
+          "coverage": 0.141787588596344,
+          "sourceCoverage": 0.14145928621292114,
+          "relativeCoverageChange": 0.0023208259578568757,
+          "frontFacingMedian": 0.9419686167388969
+        },
+        {
+          "index": 5,
+          "coverage": 0.14429672062397003,
+          "sourceCoverage": 0.14403465390205383,
+          "relativeCoverageChange": 0.0018194699318290208,
+          "frontFacingMedian": 0.945065155573711
+        },
+        {
+          "index": 6,
+          "coverage": 0.14453022181987762,
+          "sourceCoverage": 0.14423322677612305,
+          "relativeCoverageChange": 0.002059130551211874,
+          "frontFacingMedian": 0.9455317928597733
+        },
+        {
+          "index": 7,
+          "coverage": 0.13877533376216888,
+          "sourceCoverage": 0.1383204162120819,
+          "relativeCoverageChange": 0.003288867706915166,
+          "frontFacingMedian": 0.9450955414834046
+        },
+        {
+          "index": 8,
+          "coverage": 0.1431586742401123,
+          "sourceCoverage": 0.1429605782032013,
+          "relativeCoverageChange": 0.0013856689683322543,
+          "frontFacingMedian": 0.9433926258448468
+        },
+        {
+          "index": 9,
+          "coverage": 0.14356094598770142,
+          "sourceCoverage": 0.14317157864570618,
+          "relativeCoverageChange": 0.0027195854490000837,
+          "frontFacingMedian": 0.9426646373550462
+        },
+        {
+          "index": 10,
+          "coverage": 0.14413154125213623,
+          "sourceCoverage": 0.14361447095870972,
+          "relativeCoverageChange": 0.0036004052375415707,
+          "frontFacingMedian": 0.9445271239426514
+        },
+        {
+          "index": 11,
+          "coverage": 0.1377624124288559,
+          "sourceCoverage": 0.1374962478876114,
+          "relativeCoverageChange": 0.0019357949422886822,
+          "frontFacingMedian": 0.9487232556265612
+        },
+        {
+          "index": 12,
+          "coverage": 0.13540615141391754,
+          "sourceCoverage": 0.135016530752182,
+          "relativeCoverageChange": 0.0028857256186700653,
+          "frontFacingMedian": 0.9491643946432865
+        },
+        {
+          "index": 13,
+          "coverage": 0.13823944330215454,
+          "sourceCoverage": 0.13802935183048248,
+          "relativeCoverageChange": 0.001522078231085855,
+          "frontFacingMedian": 0.9486701935197884
+        },
+        {
+          "index": 14,
+          "coverage": 0.1373027116060257,
+          "sourceCoverage": 0.13693685829639435,
+          "relativeCoverageChange": 0.002671693466484104,
+          "frontFacingMedian": 0.9479789799739211
+        },
+        {
+          "index": 15,
+          "coverage": 0.13995833694934845,
+          "sourceCoverage": 0.1396331936120987,
+          "relativeCoverageChange": 0.0023285533248849077,
+          "frontFacingMedian": 0.9450536400715285
+        }
+      ]
+    },
+    {
+      "variant": 1,
+      "views": [
+        {
+          "index": 0,
+          "coverage": 0.15514613687992096,
+          "sourceCoverage": 0.15530745685100555,
+          "relativeCoverageChange": -0.001038713622355969,
+          "frontFacingMedian": 0.92338347485803
+        },
+        {
+          "index": 1,
+          "coverage": 0.15304139256477356,
+          "sourceCoverage": 0.15284782648086548,
+          "relativeCoverageChange": 0.0012663973598101563,
+          "frontFacingMedian": 0.9219241999380084
+        },
+        {
+          "index": 2,
+          "coverage": 0.16190142929553986,
+          "sourceCoverage": 0.16198815405368805,
+          "relativeCoverageChange": -0.0005353771617118142,
+          "frontFacingMedian": 0.9218069957884052
+        },
+        {
+          "index": 3,
+          "coverage": 0.16046497225761414,
+          "sourceCoverage": 0.1604028344154358,
+          "relativeCoverageChange": 0.0003873861855669958,
+          "frontFacingMedian": 0.919100678210141
+        },
+        {
+          "index": 4,
+          "coverage": 0.15498878061771393,
+          "sourceCoverage": 0.15532423555850983,
+          "relativeCoverageChange": -0.0021597076566298723,
+          "frontFacingMedian": 0.9189939864661756
+        },
+        {
+          "index": 5,
+          "coverage": 0.15686018764972687,
+          "sourceCoverage": 0.1568639576435089,
+          "relativeCoverageChange": -2.4033524581912324e-05,
+          "frontFacingMedian": 0.9216826082256429
+        },
+        {
+          "index": 6,
+          "coverage": 0.15896286070346832,
+          "sourceCoverage": 0.15890377759933472,
+          "relativeCoverageChange": 0.0003718168631747787,
+          "frontFacingMedian": 0.9225858830998139
+        },
+        {
+          "index": 7,
+          "coverage": 0.15943002700805664,
+          "sourceCoverage": 0.15946996212005615,
+          "relativeCoverageChange": -0.0002504240389136214,
+          "frontFacingMedian": 0.9245446336807039
+        },
+        {
+          "index": 8,
+          "coverage": 0.16008563339710236,
+          "sourceCoverage": 0.16042108833789825,
+          "relativeCoverageChange": -0.0020910900447783654,
+          "frontFacingMedian": 0.9231846008565989
+        },
+        {
+          "index": 9,
+          "coverage": 0.15670688450336456,
+          "sourceCoverage": 0.1567503958940506,
+          "relativeCoverageChange": -0.00027758392849897007,
+          "frontFacingMedian": 0.9245483406451143
+        },
+        {
+          "index": 10,
+          "coverage": 0.16005080938339233,
+          "sourceCoverage": 0.16004472970962524,
+          "relativeCoverageChange": 3.798734127724579e-05,
+          "frontFacingMedian": 0.9259139164470447
+        },
+        {
+          "index": 11,
+          "coverage": 0.15750394761562347,
+          "sourceCoverage": 0.15778179466724396,
+          "relativeCoverageChange": -0.0017609576073491784,
+          "frontFacingMedian": 0.9267266686698621
+        },
+        {
+          "index": 12,
+          "coverage": 0.1540955752134323,
+          "sourceCoverage": 0.1542603224515915,
+          "relativeCoverageChange": -0.0010679819381997913,
+          "frontFacingMedian": 0.9258629547700654
+        },
+        {
+          "index": 13,
+          "coverage": 0.1579868346452713,
+          "sourceCoverage": 0.15767160058021545,
+          "relativeCoverageChange": 0.0019993078264939346,
+          "frontFacingMedian": 0.9281259550482581
+        },
+        {
+          "index": 14,
+          "coverage": 0.15830935537815094,
+          "sourceCoverage": 0.15845638513565063,
+          "relativeCoverageChange": -0.000927887868790056,
+          "frontFacingMedian": 0.9268774164546001
+        },
+        {
+          "index": 15,
+          "coverage": 0.15922237932682037,
+          "sourceCoverage": 0.1594441533088684,
+          "relativeCoverageChange": -0.0013909195003120045,
+          "frontFacingMedian": 0.9245955512394607
+        }
+      ]
+    },
+    {
+      "variant": 2,
+      "views": [
+        {
+          "index": 0,
+          "coverage": 0.09796509146690369,
+          "sourceCoverage": 0.09783843159675598,
+          "relativeCoverageChange": 0.0012945819764338395,
+          "frontFacingMedian": 0.8839896112408427
+        },
+        {
+          "index": 1,
+          "coverage": 0.09692823886871338,
+          "sourceCoverage": 0.09654825180768967,
+          "relativeCoverageChange": 0.00393572181690649,
+          "frontFacingMedian": 0.882803099499758
+        },
+        {
+          "index": 2,
+          "coverage": 0.09845467656850815,
+          "sourceCoverage": 0.09832815825939178,
+          "relativeCoverageChange": 0.0012866945883660552,
+          "frontFacingMedian": 0.8808384402269649
+        },
+        {
+          "index": 3,
+          "coverage": 0.09669589251279831,
+          "sourceCoverage": 0.09648675471544266,
+          "relativeCoverageChange": 0.0021675285687909884,
+          "frontFacingMedian": 0.8778991408671855
+        },
+        {
+          "index": 4,
+          "coverage": 0.09660077095031738,
+          "sourceCoverage": 0.09660443663597107,
+          "relativeCoverageChange": -3.7945313707488104e-05,
+          "frontFacingMedian": 0.881509385981537
+        },
+        {
+          "index": 5,
+          "coverage": 0.09843204915523529,
+          "sourceCoverage": 0.09817434847354889,
+          "relativeCoverageChange": 0.0026249288708630747,
+          "frontFacingMedian": 0.8932420904571902
+        },
+        {
+          "index": 6,
+          "coverage": 0.10113909840583801,
+          "sourceCoverage": 0.1012057363986969,
+          "relativeCoverageChange": -0.0006584408673868669,
+          "frontFacingMedian": 0.8886168314590978
+        },
+        {
+          "index": 7,
+          "coverage": 0.09739312529563904,
+          "sourceCoverage": 0.09741108119487762,
+          "relativeCoverageChange": -0.00018433117688798628,
+          "frontFacingMedian": 0.8911918527198113
+        },
+        {
+          "index": 8,
+          "coverage": 0.0979447215795517,
+          "sourceCoverage": 0.09779699146747589,
+          "relativeCoverageChange": 0.0015105793118894706,
+          "frontFacingMedian": 0.8817873541591215
+        },
+        {
+          "index": 9,
+          "coverage": 0.10177457332611084,
+          "sourceCoverage": 0.10152919590473175,
+          "relativeCoverageChange": 0.0024168163570341683,
+          "frontFacingMedian": 0.8867824613505813
+        },
+        {
+          "index": 10,
+          "coverage": 0.10064252465963364,
+          "sourceCoverage": 0.10099689662456512,
+          "relativeCoverageChange": -0.0035087411274505875,
+          "frontFacingMedian": 0.8864619390001287
+        },
+        {
+          "index": 11,
+          "coverage": 0.09833937883377075,
+          "sourceCoverage": 0.09812904894351959,
+          "relativeCoverageChange": 0.002143400883995339,
+          "frontFacingMedian": 0.8889709921989931
+        },
+        {
+          "index": 12,
+          "coverage": 0.09961536526679993,
+          "sourceCoverage": 0.0993373841047287,
+          "relativeCoverageChange": 0.002798353958849642,
+          "frontFacingMedian": 0.8917187825529587
+        },
+        {
+          "index": 13,
+          "coverage": 0.10072707384824753,
+          "sourceCoverage": 0.10046954452991486,
+          "relativeCoverageChange": 0.002563257547723685,
+          "frontFacingMedian": 0.8943549009614362
+        },
+        {
+          "index": 14,
+          "coverage": 0.10022925585508347,
+          "sourceCoverage": 0.10028518736362457,
+          "relativeCoverageChange": -0.0005577245255403707,
+          "frontFacingMedian": 0.8861115629804968
+        },
+        {
+          "index": 15,
+          "coverage": 0.09705127030611038,
+          "sourceCoverage": 0.09695886820554733,
+          "relativeCoverageChange": 0.0009530030854647542,
+          "frontFacingMedian": 0.8888743732385948
+        }
+      ]
+    }
+  ],
+  "runtimeMetadataSha256": "ed507cb756ef212bad5ad96835d88ab413af209fa4a9fd4b427b2c4cd11da024",
+  "gpuBytesWithMipmaps": 67108864
+}

@@ -12,6 +12,7 @@ import { northMineralGLSL } from '../src/scenery-north-mineral';
 import { quarryRim, terrainGeometry } from '../src/quarry-layout';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import { NORTH_FLOOR_SIZE, NORTH_FLOOR_BOUNDS, NORTH_FLOOR_PATH, loadNorthForestFloor } from '../src/scenery-north-floor-mask';
+import { northBackdropData } from './north-backdrop-invariants';
 
 function sampler(bytes:Uint8Array){
   const [width,height]=NORTH_FLOOR_SIZE,[x0,z0,x1,z1]=NORTH_FLOOR_BOUNDS;
@@ -26,6 +27,7 @@ test('bundled woodland weights match their source, cover exact roots and remain 
   const compressed=readForestFile('public/'+NORTH_FLOOR_PATH),bytes=gunzipSync(compressed),manifest=JSON.parse(readForestFile('source/north-forest-floor-manifest.json').toString()),data=northForestData();
   assert.equal(forestHash(compressed),manifest.sha256);assert.equal(forestHash(bytes),manifest.decodedSha256);
   assert.equal(forestHash(readForestFile(manifest.source)),manifest.sourceSha256);assert.equal(forestHash(readForestFile(manifest.placements)),manifest.placementsSha256);
+  assert.equal(manifest.backdropPlacements,'src/quarry-north-backdrop.json');assert.equal(forestHash(readForestFile(manifest.backdropPlacements)),manifest.backdropPlacementsSha256);
   assert.equal(forestHash(readForestFile(manifest.crest)),manifest.crestSha256);
   assert.equal(manifest.runtimeFiles.length,4,'the mask and registered photographic material set are all tracked');
   for(const file of manifest.runtimeFiles){const asset=readForestFile('public/'+file.file);assert.equal(asset.length,file.bytes);assert.equal(forestHash(asset),file.sha256);}
@@ -34,7 +36,7 @@ test('bundled woodland weights match their source, cover exact roots and remain 
   const sample=sampler(bytes),[width,height]=NORTH_FLOOR_SIZE;
   for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(x===0||y===0||x===width-1||y===height-1)
     assert.deepEqual([...bytes.subarray((y*width+x)*4,(y*width+x)*4+4)],[0,0,0,0],'neutral edge texels must not smear forest outside its world footprint');
-  for(const tree of [...data.trees,...data.mediumTrees]){
+  for(const tree of [...data.trees,...data.mediumTrees,...northBackdropData().trees]){
     const organic=sample(tree.x,tree.z,1),mineral=sample(tree.x,tree.z,2);
     assert.ok(sample(tree.x,tree.z)>.9,`coverage is registered to ${tree.id}`);
     assert.ok(organic+mineral>.75,`the authored organic or crest-mineral material reaches ${tree.id} rather than mirroring acrossZ`);
@@ -45,11 +47,40 @@ test('bundled woodland weights match their source, cover exact roots and remain 
     for(const side of [-8,0,8])assert.equal(sample(p.x+(q.z-p.z)/length*side,p.z-(q.x-p.x)/length*side),0,'the road corridor remains unchanged');
   }
   for(let x=-45;x<=45;x+=3)for(let z=-45;z<=45;z+=3)assert.equal(sample(x,z),0,'arena material is outside the woodland footprint');
-  for(const [x,z] of [[-320,-320],[320,320],[-180,230],[250,230],[0,310]])assert.equal(sample(x,z),0);
+  for(const [x,z] of [[-320,-320],[320,320],[-180,230],[250,230],[0,325]])assert.equal(sample(x,z),0);
   const centers=data.stands.map((p:any)=>sample(p.x,p.z,1));assert.ok(centers.filter((v:number)=>v>.6).length>=4);
   for(const opening of data.openings){
     const organic=sample(opening.x,opening.z,1);assert.ok(organic<.45,'deliberate openings retain mineral soil instead of a continuous litter carpet');
   }
+});
+
+test('ridge litter extends texel-aligned coverage only within the52 declared root and six stand footprints, preserving every old mineral pixel',()=>{
+  const frozen=readForestFile('tests/fixtures/north-floor-before-backdrop.rgba.gz');
+  assert.equal(forestHash(frozen),'eebc2d609fa6d27b0e231a5d241d3c912bd366a0ce169d643878227e96e8d604');
+  const old=gunzipSync(frozen),current=gunzipSync(readForestFile('public/'+NORTH_FLOOR_PATH)),manifest=JSON.parse(readForestFile('source/north-forest-floor-manifest.json').toString()),data=northBackdropData();
+  assert.equal(old.length,512*336*4);assert.deepEqual(NORTH_FLOOR_SIZE,[512,384]);assert.deepEqual(NORTH_FLOOR_BOUNDS,[-96,80,224,320]);
+  assert.equal((320-80)/384,.625,'old and new rows retain identical texel centres');
+  const extension=manifest.extension;assert.equal(extension.addedRoots,52);assert.equal(extension.stands.length,6);assert.equal(extension.allowedFootprints.length,58);
+  assert.equal(extension.stands.reduce((n:number,s:any)=>n+s.rootCount,0),52);
+  for(const tree of data.trees){
+    const p=extension.allowedFootprints.find((p:any)=>p.id==='backdrop-root-'+tree.id);assert.ok(p);
+    assert.deepEqual([p.x,p.z,p.yaw],[tree.x,tree.z,0]);assert.equal(p.majorRadius,p.minorRadius);
+    assert.ok(p.majorRadius>0&&p.majorRadius<11,'a declared footprint cannot silently permit unrelated whole-scene changes');
+  }
+  for(const stand of extension.stands){
+    const p=extension.allowedFootprints.find((p:any)=>p.id===stand.id);assert.ok(p);
+    assert.deepEqual([p.x,p.z,p.yaw],[stand.x,stand.z,stand.yaw]);
+    assert.ok(p.majorRadius<40&&p.minorRadius<40);assert.ok(stand.rootCount>0);
+  }
+  let protectedPixels=0,changedPixels=0;
+  for(let y=0;y<336;y++)for(let x=0;x<512;x++){
+    const wx=-96+(x+.5)*.625,wz=80+(y+.5)*.625,i=(y*512+x)*4;
+    const authorized=extension.allowedFootprints.some((p:any)=>{const c=Math.cos(p.yaw),s=Math.sin(p.yaw),dx=wx-p.x,dz=wz-p.z;return Math.hypot((dx*c+dz*s)/p.majorRadius,(-dx*s+dz*c)/p.minorRadius)<=1;});
+    assert.equal(current[i+2],old[i+2],'the original crest-mineral channel stays exactly unchanged everywhere');
+    if(!authorized){assert.ok(current.subarray(i,i+4).equals(old.subarray(i,i+4)),`unapproved mask change at ${wx},${wz}`);protectedPixels++;}
+    else if(!current.subarray(i,i+4).equals(old.subarray(i,i+4)))changedPixels++;
+  }
+  assert.ok(protectedPixels>140000);assert.ok(changedPixels>20000,'the extension actually connects litter beneath the new roots');
 });
 
 test('actual woodland loader retries missing/malformed assets and shares one correctly oriented linear texture',async()=>{

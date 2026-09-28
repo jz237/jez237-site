@@ -97,9 +97,18 @@ uniform vec2 quarryStaticSize;
 uniform float quarryStaticEnabled;
 uniform float quarryStaticBias;
 varying vec4 vQuarryStaticCoord;
+#ifdef QUARRY_STATIC_FRAGMENT_SURFACE
+uniform mat4 quarryStaticMatrix;
+uniform float quarryStaticNormalBias;
+#endif
 float quarryStaticVisibility() {
-  if (quarryStaticEnabled < 0.5 || vQuarryStaticCoord.z < 0.0) return 1.0;
-  return getShadow(quarryStaticMap, quarryStaticSize, 1.0, quarryStaticBias, 1.0, vQuarryStaticCoord);
+  #ifdef QUARRY_STATIC_FRAGMENT_SURFACE
+  vec4 coordinate = quarryStaticMatrix * vec4(quarryStaticSurfacePosition + quarryStaticSurfaceNormal * quarryStaticNormalBias, 1.0);
+  #else
+  vec4 coordinate = vQuarryStaticCoord;
+  #endif
+  if (quarryStaticEnabled < 0.5 || coordinate.z < 0.0) return 1.0;
+  return getShadow(quarryStaticMap, quarryStaticSize, 1.0, quarryStaticBias, 1.0, coordinate);
 }
 #endif
 `;
@@ -158,8 +167,14 @@ export class StaticQuarryShadows {
           shader.fragmentShader = shader.fragmentShader.replace('#include <shadowmap_pars_fragment>', '#include <shadowmap_pars_fragment>\n' + fragmentDeclarations);
           // The quarry deliberately has one directional sun. Restrict the merge
           // to its index so future non-solar directional lights stay independent.
-          const lights = T.ShaderChunk.lights_fragment_begin.replace(nearShadowExpression,
-            'min(' + nearShadowExpression + ', (UNROLLED_LOOP_INDEX == 0 ? quarryStaticVisibility() : 1.0))');
+          // Reprojected tree fragments provide their actual world surface. A
+          // moving shadow coordinate interpolated across the source billboard
+          // would shade a different depth, so these distant receivers use the
+          // complete fixed scenery map. Ordinary surfaces keep both maps.
+          const visibility = material.userData.quarryStaticFragmentSurface
+            ? '(UNROLLED_LOOP_INDEX == 0 ? quarryStaticVisibility() : ' + nearShadowExpression + ')'
+            : 'min(' + nearShadowExpression + ', (UNROLLED_LOOP_INDEX == 0 ? quarryStaticVisibility() : 1.0))';
+          const lights = T.ShaderChunk.lights_fragment_begin.replace(nearShadowExpression, visibility);
           shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_begin>', lights);
         };
         material.customProgramCacheKey = () => key + '|quarry-static-shadow-v1';

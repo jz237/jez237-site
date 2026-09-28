@@ -21,7 +21,14 @@ const allViews = [
   { name: 'rim-transition', player: [77, 198, 0], position: [81.19677, 33.1, 206.56137], target: [52, 33, 231] },
   { name: 'north-overview', player: [0, 196, 0], position: [-20, 43, 194], target: [73, 39, 234] },
   { name: 'forest-mineral-join', player: [65, 144, 0], position: [65, 42, 144], target: [83, 31, 220] },
+  ...JSON.parse(process.env.QUARRY_FOREST_EXTRA_VIEWS || '[]'),
 ];
+for (const view of allViews) {
+  assert.match(view.name, /^[a-z0-9][a-z0-9_-]*$/i);
+  for (const field of ['player', 'position', 'target'])
+    assert.ok(Array.isArray(view[field]) && view[field].length === 3 && view[field].every(Number.isFinite), `Invalid ${view.name}/${field}`);
+}
+assert.equal(new Set(allViews.map(view => view.name)).size, allViews.length, 'Camera names must be unique');
 const selectedViews = process.env.QUARRY_FOREST_VIEWS?.split(',');
 const views = selectedViews ? allViews.filter(v => selectedViews.includes(v.name)) : allViews;
 assert.ok(views.length && (!selectedViews || views.length === selectedViews.length), 'Unknown forest view');
@@ -156,8 +163,30 @@ try {
     const frameTimes = await sample(); await page.screenshot({ path: path.join(output, `${view.name}.png`) });
     report.views.push({ ...view, frameTimes, ...await page.evaluate(() => ({
       stats: __quarry.stats, car: __quarry.inspect()[0], daylight: __quarry.daylight,
-      northForest: __quarry.northForest ?? null, actualCamera: __quarry.cameraPose ?? null })) });
+      northForest: __quarry.northForest ?? null, northRidge: __quarry.northRidge ?? null,
+      actualCamera: __quarry.cameraPose ?? null })) });
     console.log(`Captured ${phase}/${view.name}`);
+    if (process.env.QUARRY_FOREST_STATIONARY_VIEW === view.name) {
+      const warmupMs = 5000, sampleMs = 20000;
+      await page.waitForTimeout(warmupMs);
+      await page.evaluate(() => __quarry.benchmark());
+      const started = performance.now();
+      await page.waitForTimeout(sampleMs);
+      const benchmark = await page.evaluate(() => __quarry.endBenchmark());
+      const elapsedMs = performance.now() - started;
+      const frames = benchmark.frames, sorted = [...frames].sort((a, b) => a - b);
+      assert.ok(frames.length > 100, 'Stationary timing must contain actual rendered frames');
+      const meanMs = frames.reduce((sum, value) => sum + value, 0) / frames.length;
+      report.stationaryTiming = { view: view.name, warmupMs, requestedSampleMs: sampleMs, elapsedMs,
+        count: frames.length, meanMs, fps: 1000 / meanMs,
+        p50Ms: sorted[Math.floor(sorted.length * .5)], p95Ms: sorted[Math.floor(sorted.length * .95)],
+        p99Ms: sorted[Math.floor(sorted.length * .99)], over33p34Ms: frames.filter(value => value > 33.34).length,
+        frames, note: 'Stationary inspection, whole-frame intervals after warm-up; not GPU timing or a sustained gameplay benchmark.',
+        ...await page.evaluate(() => ({ stats: __quarry.stats, northForest: __quarry.northForest,
+          northRidge: __quarry.northRidge, actualCamera: __quarry.cameraPose })) };
+      await page.screenshot({ path: path.join(output, `${view.name}-timed.png`) });
+      console.log(`Stationary ${view.name}: ${meanMs.toFixed(3)}ms mean / ${report.stationaryTiming.p95Ms.toFixed(3)}ms p95`);
+    }
   }
   if (!selectedViews) {
   await page.evaluate(({ track, neutral }) => {

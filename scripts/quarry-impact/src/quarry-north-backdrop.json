@@ -1,0 +1,1115 @@
+{
+  "version": 1,
+  "units": "metres; world Y up; yaw radians; normalized model scale=(height*width,height,height*width)",
+  "sector": {
+    "startDegrees": 350,
+    "endDegrees": 45
+  },
+  "sourceFixture": {
+    "file": "tests/fixtures/north-backdrop-before.json",
+    "sha256": "71d5c0c7261d82b636c108ed659a890469f18207c95f62c07e8a7bda453adeab"
+  },
+  "sourceModels": [
+    {
+      "variant": 0,
+      "file": "public/models/quarry-north-fir-0.glb",
+      "sha256": "c38cccc0fd17e5215aebe8f821dc17629c0a7e62a87b6a53a5c3cee37ad82ef3"
+    },
+    {
+      "variant": 1,
+      "file": "public/models/quarry-north-fir-1.glb",
+      "sha256": "33a1e2a44959837b90e7f755feb17324840bf1510bbfafdfdd37b8bb71a4cbcb"
+    },
+    {
+      "variant": 2,
+      "file": "public/models/quarry-north-fir-2.glb",
+      "sha256": "aaee2b603eedbf2d55b1d98742de1d204d187202b70186292467f34cb12f7ecd"
+    }
+  ],
+  "rootSeating": {
+    "source": "source/models/quarry-north-fir-proxies.json",
+    "sha256": "7c69be77759e2453b481782274fa5a6be1e8632717813ac663268a049fc7f376",
+    "burialMetres": 0.025,
+    "method": "Minimum exact terrain support under the rotated/scaled accepted low-Trunk footprint; same support data as existing northern mature trees"
+  },
+  "stands": [
+    {
+      "id": "stand-0",
+      "x": -43.15380986531576,
+      "y": 38.79126637902866,
+      "z": 267.43902587890625
+    },
+    {
+      "id": "stand-1",
+      "x": -3.946909407774607,
+      "y": 35.36517857759583,
+      "z": 283.90958913167316
+    },
+    {
+      "id": "stand-2",
+      "x": 35.851515769958496,
+      "y": 35.3127849015634,
+      "z": 286.18812561035156
+    },
+    {
+      "id": "stand-3",
+      "x": 99.18484878540039,
+      "y": 43.647865219219014,
+      "z": 270.3719425201416
+    },
+    {
+      "id": "stand-4",
+      "x": 147.90965610080295,
+      "y": 43.583729563787216,
+      "z": 240.1223398844401
+    },
+    {
+      "id": "stand-5",
+      "x": 183.9172075059679,
+      "y": 37.18103459249394,
+      "z": 200.9806365966797
+    }
+  ],
+  "trees": [
+    {
+      "id": "north-backdrop-0",
+      "sourceCardIndex": 0,
+      "sourceCardKind": "pine",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": -30.235668182373047,
+      "y": 37.17974839005255,
+      "z": 264.2125549316406,
+      "height": 15.974946022033691,
+      "width": 1.0591080269310622,
+      "yaw": 5.191486990042703,
+      "trunkRadius": 0.12351011300060216,
+      "trunkHeight": 13.4189546585083,
+      "seating": {
+        "centerGroundY": 37.45555586678263,
+        "centerBaseline": 37.43055586678263,
+        "burialHeight": 0.2508074767300812
+      }
+    },
+    {
+      "id": "north-backdrop-1",
+      "sourceCardIndex": 1,
+      "sourceCardKind": "pine",
+      "stand": "stand-4",
+      "variant": 0,
+      "x": 147.36695861816406,
+      "y": 41.738617746127034,
+      "z": 224.9632568359375,
+      "height": 15.174914360046387,
+      "width": 1.095092269789893,
+      "yaw": 6.106511262556475,
+      "trunkRadius": 0.1213108992959962,
+      "trunkHeight": 12.746928062438965,
+      "seating": {
+        "centerGroundY": 42.04072273720448,
+        "centerBaseline": 42.015722737204484,
+        "burialHeight": 0.2771049910774508
+      }
+    },
+    {
+      "id": "north-backdrop-12",
+      "sourceCardIndex": 12,
+      "sourceCardKind": "pine",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": 12.713220596313477,
+      "y": 34.30242159795163,
+      "z": 278.6397705078125,
+      "height": 14.982975006103516,
+      "width": 1.0409189412370323,
+      "yaw": 3.6054076458487874,
+      "trunkRadius": 0.11385125610351958,
+      "trunkHeight": 12.585699005126953,
+      "seating": {
+        "centerGroundY": 34.51107997362186,
+        "centerBaseline": 34.48607997362186,
+        "burialHeight": 0.1836583756702339
+      }
+    },
+    {
+      "id": "north-backdrop-24",
+      "sourceCardIndex": 24,
+      "sourceCardKind": "pine",
+      "stand": "stand-5",
+      "variant": 0,
+      "x": 170.88711547851562,
+      "y": 37.585976929108604,
+      "z": 203.9395751953125,
+      "height": 17.986783981323242,
+      "width": 1.0227298555430024,
+      "yaw": 2.0193283016548715,
+      "trunkRadius": 0.13428803317518395,
+      "trunkHeight": 15.108898544311522,
+      "seating": {
+        "centerGroundY": 37.91119351251554,
+        "centerBaseline": 37.88619351251554,
+        "burialHeight": 0.3002165834069359
+      }
+    },
+    {
+      "id": "north-backdrop-25",
+      "sourceCardIndex": 25,
+      "sourceCardKind": "pine",
+      "stand": "stand-3",
+      "variant": 0,
+      "x": 100.63091278076172,
+      "y": 43.37499205621518,
+      "z": 253.92137145996094,
+      "height": 14.570274353027344,
+      "width": 1.0587140984018333,
+      "yaw": 2.934352574168643,
+      "trunkRadius": 0.1126080105884687,
+      "trunkHeight": 12.239030456542968,
+      "seating": {
+        "centerGroundY": 43.63252105477412,
+        "centerBaseline": 43.60752105477412,
+        "burialHeight": 0.2325289985589407
+      }
+    },
+    {
+      "id": "north-backdrop-36",
+      "sourceCardIndex": 36,
+      "sourceCardKind": "pine",
+      "stand": "stand-2",
+      "variant": 0,
+      "x": 36.80348205566406,
+      "y": 35.114442625288945,
+      "z": 279.3123779296875,
+      "height": 16.317182540893555,
+      "width": 1.0045407698489726,
+      "yaw": 0.4332489574609559,
+      "trunkRadius": 0.11965630831318662,
+      "trunkHeight": 13.706433334350585,
+      "seating": {
+        "centerGroundY": 35.383744883566735,
+        "centerBaseline": 35.358744883566736,
+        "burialHeight": 0.2443022582777914
+      }
+    },
+    {
+      "id": "north-backdrop-37",
+      "sourceCardIndex": 37,
+      "sourceCardKind": "pine",
+      "stand": "stand-4",
+      "variant": 0,
+      "x": 155.24887084960938,
+      "y": 44.616952707878674,
+      "z": 252.32992553710938,
+      "height": 19.02265739440918,
+      "width": 1.0405250127078034,
+      "yaw": 1.3482732299747273,
+      "trunkRadius": 0.14449292103749276,
+      "trunkHeight": 15.97903221130371,
+      "seating": {
+        "centerGroundY": 44.89620902257432,
+        "centerBaseline": 44.87120902257432,
+        "burialHeight": 0.25425631469564536
+      }
+    },
+    {
+      "id": "north-backdrop-48",
+      "sourceCardIndex": 48,
+      "sourceCardKind": "pine",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": -3.898817539215088,
+      "y": 34.812135426526574,
+      "z": 299.6012878417969,
+      "height": 19.474239349365234,
+      "width": 0.9863516841549426,
+      "yaw": 5.130354920446626,
+      "trunkRadius": 0.14022167609314481,
+      "trunkHeight": 16.358361053466798,
+      "seating": {
+        "centerGroundY": 35.08487987417014,
+        "centerBaseline": 35.05987987417014,
+        "burialHeight": 0.2477444476435693
+      }
+    },
+    {
+      "id": "north-backdrop-49",
+      "sourceCardIndex": 49,
+      "sourceCardKind": "pine",
+      "stand": "stand-5",
+      "variant": 0,
+      "x": 194.32852172851562,
+      "y": 37.38322677596913,
+      "z": 204.60626220703125,
+      "height": 16.33068084716797,
+      "width": 1.0223359270137735,
+      "yaw": 6.0453791929603975,
+      "trunkRadius": 0.12187672472138544,
+      "trunkHeight": 13.717771911621094,
+      "seating": {
+        "centerGroundY": 37.624381577911734,
+        "centerBaseline": 37.599381577911736,
+        "burialHeight": 0.21615480194260783
+      }
+    },
+    {
+      "id": "north-backdrop-60",
+      "sourceCardIndex": 60,
+      "sourceCardKind": "pine",
+      "stand": "stand-0",
+      "variant": 0,
+      "x": -50.94154739379883,
+      "y": 39.94679135186654,
+      "z": 273.0741882324219,
+      "height": 18.620222091674805,
+      "width": 0.9681625984609127,
+      "yaw": 3.5442755762527103,
+      "trunkRadius": 0.13160003901062475,
+      "trunkHeight": 15.640986557006835,
+      "seating": {
+        "centerGroundY": 40.26099855146845,
+        "centerBaseline": 40.23599855146845,
+        "burialHeight": 0.2892071996019112
+      }
+    },
+    {
+      "id": "north-backdrop-61",
+      "sourceCardIndex": 61,
+      "sourceCardKind": "pine",
+      "stand": "stand-3",
+      "variant": 0,
+      "x": 98.26260375976562,
+      "y": 43.64012902407597,
+      "z": 279.1935119628906,
+      "height": 18.550018310546875,
+      "width": 1.0041468413197434,
+      "yaw": 4.459299848766482,
+      "trunkRadius": 0.13597667873860103,
+      "trunkHeight": 15.582015380859374,
+      "seating": {
+        "centerGroundY": 43.879986989916944,
+        "centerBaseline": 43.854986989916945,
+        "burialHeight": 0.21485796584097727
+      }
+    },
+    {
+      "id": "north-backdrop-73",
+      "sourceCardIndex": 73,
+      "sourceCardKind": "pine",
+      "stand": "stand-2",
+      "variant": 0,
+      "x": 34.70026397705078,
+      "y": 35.75457184635108,
+      "z": 298.2159729003906,
+      "height": 18.620601654052734,
+      "width": 0.9859577556257135,
+      "yaw": 2.873220504572566,
+      "trunkRadius": 0.13402162429118106,
+      "trunkHeight": 15.641305389404296,
+      "seating": {
+        "centerGroundY": 36.03603522458002,
+        "centerBaseline": 36.01103522458002,
+        "burialHeight": 0.2564633782289434
+      }
+    },
+    {
+      "id": "north-backdrop-85",
+      "sourceCardIndex": 85,
+      "sourceCardKind": "pine",
+      "stand": "stand-0",
+      "variant": 0,
+      "x": -33.091468811035156,
+      "y": 36.873321318696604,
+      "z": 257.6229553222656,
+      "height": 16.8259220123291,
+      "width": 0.9677686699316836,
+      "yaw": 1.2871411603786502,
+      "trunkRadius": 0.1188702812135956,
+      "trunkHeight": 14.133774490356444,
+      "seating": {
+        "centerGroundY": 37.14718200645053,
+        "centerBaseline": 37.12218200645053,
+        "burialHeight": 0.24886068775392545
+      }
+    },
+    {
+      "id": "north-backdrop-96",
+      "sourceCardIndex": 96,
+      "sourceCardKind": "pine",
+      "stand": "stand-4",
+      "variant": 0,
+      "x": 147.68820190429688,
+      "y": 42.54615571771072,
+      "z": 229.1614227294922,
+      "height": 16.949953079223633,
+      "width": 1.0635953413788228,
+      "yaw": 5.069222850850549,
+      "trunkRadius": 0.1316036052610588,
+      "trunkHeight": 14.237960586547851,
+      "seating": {
+        "centerGroundY": 42.880055317202476,
+        "centerBaseline": 42.85505531720248,
+        "burialHeight": 0.3088995994917596
+      }
+    },
+    {
+      "id": "north-backdrop-97",
+      "sourceCardIndex": 97,
+      "sourceCardKind": "pine",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": -3.9938805103302,
+      "y": 34.93222022087252,
+      "z": 281.2060852050781,
+      "height": 16.810962677001953,
+      "width": 1.0995795842376537,
+      "yaw": 5.98424712336432,
+      "trunkRadius": 0.1349404368623914,
+      "trunkHeight": 14.12120864868164,
+      "seating": {
+        "centerGroundY": 35.19421393354593,
+        "centerBaseline": 35.16921393354593,
+        "burialHeight": 0.23699371267341007
+      }
+    },
+    {
+      "id": "north-backdrop-108",
+      "sourceCardIndex": 108,
+      "sourceCardKind": "pine",
+      "stand": "stand-5",
+      "variant": 0,
+      "x": 183.5244140625,
+      "y": 36.80299633903258,
+      "z": 193.97872924804688,
+      "height": 16.844043731689453,
+      "width": 1.045406255684793,
+      "yaw": 3.4831435066566336,
+      "trunkRadius": 0.12854474142339556,
+      "trunkHeight": 14.148996734619141,
+      "seating": {
+        "centerGroundY": 37.01562720260027,
+        "centerBaseline": 36.99062720260027,
+        "burialHeight": 0.18763086356769065
+      }
+    },
+    {
+      "id": "north-backdrop-109",
+      "sourceCardIndex": 109,
+      "sourceCardKind": "pine",
+      "stand": "stand-3",
+      "variant": 0,
+      "x": 97.93519592285156,
+      "y": 43.67107693057019,
+      "z": 260.7315979003906,
+      "height": 17.964502334594727,
+      "width": 1.0813904985436238,
+      "yaw": 4.398167779170405,
+      "trunkRadius": 0.14181448759057702,
+      "trunkHeight": 15.090181961059569,
+      "seating": {
+        "centerGroundY": 43.86877188704389,
+        "centerBaseline": 43.84377188704389,
+        "burialHeight": 0.17269495647370547
+      }
+    },
+    {
+      "id": "north-backdrop-125",
+      "sourceCardIndex": 125,
+      "sourceCardKind": "spruce",
+      "stand": "stand-2",
+      "variant": 1,
+      "x": 34.22604751586914,
+      "y": 34.987481770591316,
+      "z": 280.23358154296875,
+      "height": 15.000336647033691,
+      "width": 1.0571383842849171,
+      "yaw": 0.1890002178519883,
+      "trunkRadius": 0.1823604639379128,
+      "trunkHeight": 12.6002827835083,
+      "seating": {
+        "centerGroundY": 35.23259699926872,
+        "centerBaseline": 35.20759699926872,
+        "burialHeight": 0.22011522867740752
+      }
+    },
+    {
+      "id": "north-backdrop-136",
+      "sourceCardIndex": 136,
+      "sourceCardKind": "spruce",
+      "stand": "stand-4",
+      "variant": 1,
+      "x": 145.41744995117188,
+      "y": 45.481849134403,
+      "z": 254.4962615966797,
+      "height": 18.712100982666016,
+      "width": 1.0029650557320564,
+      "yaw": 3.9710819083238875,
+      "trunkRadius": 0.2158272091568501,
+      "trunkHeight": 15.718164825439452,
+      "seating": {
+        "centerGroundY": 45.79652180129984,
+        "centerBaseline": 45.77152180129984,
+        "burialHeight": 0.28967266689684124
+      }
+    },
+    {
+      "id": "north-backdrop-137",
+      "sourceCardIndex": 137,
+      "sourceCardKind": "spruce",
+      "stand": "stand-1",
+      "variant": 1,
+      "x": 12.195059776306152,
+      "y": 34.77980235873369,
+      "z": 300.0921936035156,
+      "height": 16.675437927246094,
+      "width": 1.0389492985908872,
+      "yaw": 4.8861061808376585,
+      "trunkRadius": 0.1992367471893944,
+      "trunkHeight": 14.007367858886719,
+      "seating": {
+        "centerGroundY": 35.02609011876262,
+        "centerBaseline": 35.00109011876262,
+        "burialHeight": 0.22128776002892891
+      }
+    },
+    {
+      "id": "north-backdrop-148",
+      "sourceCardIndex": 148,
+      "sourceCardKind": "spruce",
+      "stand": "stand-5",
+      "variant": 1,
+      "x": 190.9915313720703,
+      "y": 37.35625989869896,
+      "z": 202.82028198242188,
+      "height": 18.257076263427734,
+      "width": 0.9847759700380265,
+      "yaw": 2.3850025641299717,
+      "trunkRadius": 0.20675999485481567,
+      "trunkHeight": 15.335944061279296,
+      "seating": {
+        "centerGroundY": 37.60118713608012,
+        "centerBaseline": 37.57618713608012,
+        "burialHeight": 0.21992723738116382
+      }
+    },
+    {
+      "id": "north-backdrop-161",
+      "sourceCardIndex": 161,
+      "sourceCardKind": "spruce",
+      "stand": "stand-0",
+      "variant": 1,
+      "x": -48.7608528137207,
+      "y": 39.63787449772137,
+      "z": 274.8679504394531,
+      "height": 19,
+      "width": 1.0025711272028275,
+      "yaw": 1.713947492449827,
+      "trunkRadius": 0.2190617912938178,
+      "trunkHeight": 15.959999999999999,
+      "seating": {
+        "centerGroundY": 39.94863707931998,
+        "centerBaseline": 39.92363707931998,
+        "burialHeight": 0.2857625815986111
+      }
+    },
+    {
+      "id": "north-backdrop-172",
+      "sourceCardIndex": 172,
+      "sourceCardKind": "spruce",
+      "stand": "stand-3",
+      "variant": 1,
+      "x": 100.84420776367188,
+      "y": 43.853304106336175,
+      "z": 280.460205078125,
+      "height": 17.818260192871094,
+      "width": 1.0983977986499667,
+      "yaw": 5.496029182921726,
+      "trunkRadius": 0.2250726843736523,
+      "trunkHeight": 14.967338562011719,
+      "seating": {
+        "centerGroundY": 44.160048455995465,
+        "centerBaseline": 44.13504845599547,
+        "burialHeight": 0.2817443496592915
+      }
+    },
+    {
+      "id": "north-backdrop-173",
+      "sourceCardIndex": 173,
+      "sourceCardKind": "spruce",
+      "stand": "stand-2",
+      "variant": 1,
+      "x": 30.45848846435547,
+      "y": 35.17720924782649,
+      "z": 291.59124755859375,
+      "height": 16.46596908569336,
+      "width": 0.9843820415087975,
+      "yaw": 0.12786814825591128,
+      "trunkRadius": 0.18640124903594912,
+      "trunkHeight": 13.83141403198242,
+      "seating": {
+        "centerGroundY": 35.43397138454566,
+        "centerBaseline": 35.40897138454566,
+        "burialHeight": 0.23176213671916912
+      }
+    },
+    {
+      "id": "north-backdrop-184",
+      "sourceCardIndex": 184,
+      "sourceCardKind": "spruce",
+      "stand": "stand-0",
+      "variant": 1,
+      "x": -33.56890869140625,
+      "y": 37.68269303379387,
+      "z": 263.3235168457031,
+      "height": 15.311777114868164,
+      "width": 1.0802087129559368,
+      "yaw": 3.9099498387278104,
+      "trunkRadius": 0.1902090230786789,
+      "trunkHeight": 12.861892776489258,
+      "seating": {
+        "centerGroundY": 38.04437237978904,
+        "centerBaseline": 38.01937237978904,
+        "burialHeight": 0.33667934599517224
+      }
+    },
+    {
+      "id": "north-backdrop-185",
+      "sourceCardIndex": 185,
+      "sourceCardKind": "spruce",
+      "stand": "stand-4",
+      "variant": 1,
+      "x": 150.5726318359375,
+      "y": 42.31273107480013,
+      "z": 227.59930419921875,
+      "height": 15.849628448486328,
+      "width": 0.9661929558147676,
+      "yaw": 4.824974111241581,
+      "trunkRadius": 0.1761086926309016,
+      "trunkHeight": 13.313687896728515,
+      "seating": {
+        "centerGroundY": 42.624845811111044,
+        "centerBaseline": 42.599845811111045,
+        "burialHeight": 0.28711473631091167
+      }
+    },
+    {
+      "id": "north-backdrop-196",
+      "sourceCardIndex": 196,
+      "sourceCardKind": "spruce",
+      "stand": "stand-1",
+      "variant": 1,
+      "x": -9.078446388244629,
+      "y": 35.28920915900763,
+      "z": 280.3287048339844,
+      "height": 15.343674659729004,
+      "width": 1.062019627261907,
+      "yaw": 2.3238704945338946,
+      "trunkRadius": 0.18739576189396367,
+      "trunkHeight": 12.888686714172362,
+      "seating": {
+        "centerGroundY": 35.537605182266866,
+        "centerBaseline": 35.51260518226687,
+        "burialHeight": 0.2233960232592338
+      }
+    },
+    {
+      "id": "north-backdrop-197",
+      "sourceCardIndex": 197,
+      "sourceCardKind": "spruce",
+      "stand": "stand-5",
+      "variant": 1,
+      "x": 171.1903533935547,
+      "y": 37.27347267425184,
+      "z": 201.3199005126953,
+      "height": 17.004411697387695,
+      "width": 1.0980038701207377,
+      "yaw": 3.238894767047666,
+      "trunkRadius": 0.21471546330786737,
+      "trunkHeight": 14.283705825805663,
+      "seating": {
+        "centerGroundY": 37.530123319305986,
+        "centerBaseline": 37.50512331930599,
+        "burialHeight": 0.23165064505414534
+      }
+    },
+    {
+      "id": "north-backdrop-208",
+      "sourceCardIndex": 208,
+      "sourceCardKind": "spruce",
+      "stand": "stand-3",
+      "variant": 1,
+      "x": 96.00454711914062,
+      "y": 43.44555236341943,
+      "z": 263.5737609863281,
+      "height": 14.928668975830078,
+      "width": 1.0438305415678768,
+      "yaw": 0.7377911503399787,
+      "trunkRadius": 0.17920450715217512,
+      "trunkHeight": 12.540081939697265,
+      "seating": {
+        "centerGroundY": 43.701018308563846,
+        "centerBaseline": 43.67601830856385,
+        "burialHeight": 0.23046594514441665
+      }
+    },
+    {
+      "id": "north-backdrop-209",
+      "sourceCardIndex": 209,
+      "sourceCardKind": "spruce",
+      "stand": "stand-2",
+      "variant": 1,
+      "x": 30.237865447998047,
+      "y": 34.67102757875107,
+      "z": 279.96661376953125,
+      "height": 16.07522964477539,
+      "width": 1.0798147844267076,
+      "yaw": 1.65281542285375,
+      "trunkRadius": 0.19962011228505402,
+      "trunkHeight": 13.503192901611328,
+      "seating": {
+        "centerGroundY": 34.96430616198328,
+        "centerBaseline": 34.93930616198328,
+        "burialHeight": 0.26827858323220966
+      }
+    },
+    {
+      "id": "north-backdrop-225",
+      "sourceCardIndex": 225,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-4",
+      "variant": 1,
+      "x": 139.39285278320312,
+      "y": 46.28388034099722,
+      "z": 266.3919677734375,
+      "height": 18.441503524780273,
+      "width": 1.0555626701680012,
+      "yaw": 3.72683316871492,
+      "trunkRadius": 0.22386087107909122,
+      "trunkHeight": 15.490862960815429,
+      "seating": {
+        "centerGroundY": 46.55474668598705,
+        "centerBaseline": 46.52974668598705,
+        "burialHeight": 0.24586634498982818
+      }
+    },
+    {
+      "id": "north-backdrop-226",
+      "sourceCardIndex": 226,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": 10.63549518585205,
+      "y": 34.77527458547356,
+      "z": 300.4901428222656,
+      "height": 16.880014419555664,
+      "width": 1.091546913026832,
+      "yaw": 4.641857441228691,
+      "trunkRadius": 0.13450489171005509,
+      "trunkHeight": 14.179212112426757,
+      "seating": {
+        "centerGroundY": 35.00786494530982,
+        "centerBaseline": 34.98286494530982,
+        "burialHeight": 0.20759035983626006
+      }
+    },
+    {
+      "id": "north-backdrop-237",
+      "sourceCardIndex": 237,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-5",
+      "variant": 1,
+      "x": 200.34738159179688,
+      "y": 37.11509523810545,
+      "z": 202.5164794921875,
+      "height": 18.5,
+      "width": 1.0373735844739713,
+      "yaw": 2.140753824521004,
+      "trunkRadius": 0.2207012300968374,
+      "trunkHeight": 15.54,
+      "seating": {
+        "centerGroundY": 37.373768796167845,
+        "centerBaseline": 37.348768796167846,
+        "burialHeight": 0.23367355806239942
+      }
+    },
+    {
+      "id": "north-backdrop-238",
+      "sourceCardIndex": 238,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": -38.652671813964844,
+      "y": 38.32558668904013,
+      "z": 278.47808837890625,
+      "height": 18.5,
+      "width": 1.0733578273328022,
+      "yaw": 3.0557780970347754,
+      "trunkRadius": 0.14495697458129495,
+      "trunkHeight": 15.54,
+      "seating": {
+        "centerGroundY": 38.64928184210531,
+        "centerBaseline": 38.62428184210531,
+        "burialHeight": 0.29869515306518224
+      }
+    },
+    {
+      "id": "north-backdrop-249",
+      "sourceCardIndex": 249,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-3",
+      "variant": 1,
+      "x": 102.78459930419922,
+      "y": 44.07163990534297,
+      "z": 280.7083740234375,
+      "height": 16.97138023376465,
+      "width": 1.0191844987799412,
+      "yaw": 0.5546744803270881,
+      "trunkRadius": 0.19891512805726208,
+      "trunkHeight": 14.255959396362304,
+      "seating": {
+        "centerGroundY": 44.383621368354156,
+        "centerBaseline": 44.35862136835416,
+        "burialHeight": 0.28698146301118754
+      }
+    },
+    {
+      "id": "north-backdrop-250",
+      "sourceCardIndex": 250,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-2",
+      "variant": 0,
+      "x": 41.23980712890625,
+      "y": 36.14271862659776,
+      "z": 295.2364196777344,
+      "height": 18.301925659179688,
+      "width": 1.055168741638772,
+      "yaw": 1.4696987528408596,
+      "trunkRadius": 0.1409748250317498,
+      "trunkHeight": 15.373617553710936,
+      "seating": {
+        "centerGroundY": 36.438509184273045,
+        "centerBaseline": 36.413509184273046,
+        "burialHeight": 0.2707905576752836
+      }
+    },
+    {
+      "id": "north-backdrop-261",
+      "sourceCardIndex": 261,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-0",
+      "variant": 1,
+      "x": -43.24158477783203,
+      "y": 38.96184535737641,
+      "z": 259.24603271484375,
+      "height": 15.081995964050293,
+      "width": 1.0009954130859113,
+      "yaw": 5.251780443312758,
+      "trunkRadius": 0.17361560097223758,
+      "trunkHeight": 12.668876609802245,
+      "seating": {
+        "centerGroundY": 39.194136522934784,
+        "centerBaseline": 39.169136522934785,
+        "burialHeight": 0.2072911655583738
+      }
+    },
+    {
+      "id": "north-backdrop-262",
+      "sourceCardIndex": 262,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-4",
+      "variant": 0,
+      "x": 153.2562713623047,
+      "y": 41.18144133547963,
+      "z": 221.8812713623047,
+      "height": 16.51166534423828,
+      "width": 1.0369796559447422,
+      "yaw": 6.16680471582653,
+      "trunkRadius": 0.12499250564852343,
+      "trunkHeight": 13.869798889160156,
+      "seating": {
+        "centerGroundY": 41.470637384707615,
+        "centerBaseline": 41.44563738470762,
+        "burialHeight": 0.26419604922798356
+      }
+    },
+    {
+      "id": "north-backdrop-274",
+      "sourceCardIndex": 274,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-1",
+      "variant": 0,
+      "x": 12.474458694458008,
+      "y": 34.340966846427214,
+      "z": 280.3545837402344,
+      "height": 17.79966926574707,
+      "width": 1.0187905702507123,
+      "yaw": 4.580725371632614,
+      "trunkRadius": 0.1323791869711291,
+      "trunkHeight": 14.951722183227538,
+      "seating": {
+        "centerGroundY": 34.597915756575446,
+        "centerBaseline": 34.57291575657545,
+        "burialHeight": 0.23194891014823327
+      }
+    },
+    {
+      "id": "north-backdrop-285",
+      "sourceCardIndex": 285,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-5",
+      "variant": 1,
+      "x": 177.66763305664062,
+      "y": 36.444934134543686,
+      "z": 192.6439208984375,
+      "height": 15.461104393005371,
+      "width": 0.9646172416978516,
+      "yaw": 2.079621754924927,
+      "trunkRadius": 0.17151155054160883,
+      "trunkHeight": 12.987327690124511,
+      "seating": {
+        "centerGroundY": 36.738590525882756,
+        "centerBaseline": 36.71359052588276,
+        "burialHeight": 0.2686563913390714
+      }
+    },
+    {
+      "id": "north-backdrop-286",
+      "sourceCardIndex": 286,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-3",
+      "variant": 0,
+      "x": 89.58834075927734,
+      "y": 42.41252441701568,
+      "z": 265.64288330078125,
+      "height": 16.38472557067871,
+      "width": 1.0006014845566824,
+      "yaw": 2.9946460274386983,
+      "trunkRadius": 0.11968043932954717,
+      "trunkHeight": 13.763169479370116,
+      "seating": {
+        "centerGroundY": 42.692025901167085,
+        "centerBaseline": 42.66702590116709,
+        "burialHeight": 0.2545014841514046
+      }
+    },
+    {
+      "id": "north-backdrop-298",
+      "sourceCardIndex": 298,
+      "sourceCardKind": "hemlock",
+      "stand": "stand-2",
+      "variant": 0,
+      "x": 36.426395416259766,
+      "y": 34.532782734361135,
+      "z": 272.39111328125,
+      "height": 14.710033416748047,
+      "width": 0.9824123988626524,
+      "yaw": 1.4085666832447825,
+      "trunkRadius": 0.10549463027896977,
+      "trunkHeight": 12.35642807006836,
+      "seating": {
+        "centerGroundY": 34.79268131451899,
+        "centerBaseline": 34.76768131451899,
+        "burialHeight": 0.2348985801578536
+      }
+    },
+    {
+      "id": "north-backdrop-314",
+      "sourceCardIndex": 314,
+      "sourceCardKind": "maple",
+      "stand": "stand-4",
+      "variant": 2,
+      "x": 146.56040954589844,
+      "y": 45.39942783781593,
+      "z": 253.74928283691406,
+      "height": 16.562135696411133,
+      "width": 0.9581602846039459,
+      "yaw": 3.4825844291059522,
+      "trunkRadius": 0.15393105232946788,
+      "trunkHeight": 13.91219398498535,
+      "seating": {
+        "centerGroundY": 45.68384706144932,
+        "centerBaseline": 45.65884706144932,
+        "burialHeight": 0.25941922363339387
+      }
+    },
+    {
+      "id": "north-backdrop-315",
+      "sourceCardIndex": 315,
+      "sourceCardKind": "maple",
+      "stand": "stand-1",
+      "variant": 2,
+      "x": 9.166414260864258,
+      "y": 34.65779583501136,
+      "z": 296.5829162597656,
+      "height": 18,
+      "width": 0.9941445274627767,
+      "yaw": 4.397608701619723,
+      "trunkRadius": 0.17357763449500083,
+      "trunkHeight": 15.12,
+      "seating": {
+        "centerGroundY": 34.91337349778327,
+        "centerBaseline": 34.88837349778327,
+        "burialHeight": 0.23057766277190694
+      }
+    },
+    {
+      "id": "north-backdrop-327",
+      "sourceCardIndex": 327,
+      "sourceCardKind": "maple",
+      "stand": "stand-5",
+      "variant": 2,
+      "x": 189.89044189453125,
+      "y": 38.09129577857592,
+      "z": 213.15476989746094,
+      "height": 16.28998565673828,
+      "width": 0.9759554417687468,
+      "yaw": 2.811529357425808,
+      "trunkRadius": 0.15421351143587703,
+      "trunkHeight": 13.683587951660156,
+      "seating": {
+        "centerGroundY": 38.32252831450816,
+        "centerBaseline": 38.29752831450816,
+        "burialHeight": 0.20623253593224433
+      }
+    },
+    {
+      "id": "north-backdrop-338",
+      "sourceCardIndex": 338,
+      "sourceCardKind": "maple",
+      "stand": "stand-0",
+      "variant": 2,
+      "x": -49.31849670410156,
+      "y": 39.64507271471721,
+      "z": 276.49951171875,
+      "height": 17.082151412963867,
+      "width": 1.071782113215886,
+      "yaw": 0.31042574071812057,
+      "trunkRadius": 0.17759094009470341,
+      "trunkHeight": 14.349007186889647,
+      "seating": {
+        "centerGroundY": 39.946529039471876,
+        "centerBaseline": 39.92152903947188,
+        "burialHeight": 0.27645632475466897
+      }
+    },
+    {
+      "id": "north-backdrop-350",
+      "sourceCardIndex": 350,
+      "sourceCardKind": "maple",
+      "stand": "stand-3",
+      "variant": 2,
+      "x": 107.42838287353516,
+      "y": 44.71370295077653,
+      "z": 278.74383544921875,
+      "height": 17.193700790405273,
+      "width": 1.0535930275218561,
+      "yaw": 5.007531703703791,
+      "trunkRadius": 0.17571708371965983,
+      "trunkHeight": 14.44270866394043,
+      "seating": {
+        "centerGroundY": 44.968750377063145,
+        "centerBaseline": 44.94375037706315,
+        "burialHeight": 0.23004742628661745
+      }
+    },
+    {
+      "id": "north-backdrop-351",
+      "sourceCardIndex": 351,
+      "sourceCardKind": "maple",
+      "stand": "stand-2",
+      "variant": 2,
+      "x": 42.71977615356445,
+      "y": 36.12204478273937,
+      "z": 292.55767822265625,
+      "height": 17.695463180541992,
+      "width": 1.089577270380687,
+      "yaw": 5.922555976217563,
+      "trunkRadius": 0.18702157236265587,
+      "trunkHeight": 14.864189071655273,
+      "seating": {
+        "centerGroundY": 36.452569703293406,
+        "centerBaseline": 36.42756970329341,
+        "burialHeight": 0.3055249205540349
+      }
+    },
+    {
+      "id": "north-backdrop-362",
+      "sourceCardIndex": 362,
+      "sourceCardKind": "maple",
+      "stand": "stand-1",
+      "variant": 2,
+      "x": -28.0257625579834,
+      "y": 36.51382379118659,
+      "z": 263.48504638671875,
+      "height": 17.896636962890625,
+      "width": 1.0354039418278262,
+      "yaw": 3.421452359509875,
+      "trunkRadius": 0.17974341003133373,
+      "trunkHeight": 15.033175048828124,
+      "seating": {
+        "centerGroundY": 36.94289942434787,
+        "centerBaseline": 36.91789942434787,
+        "burialHeight": 0.40407563316128403
+      }
+    },
+    {
+      "id": "north-backdrop-363",
+      "sourceCardIndex": 363,
+      "sourceCardKind": "maple",
+      "stand": "stand-4",
+      "variant": 2,
+      "x": 145.68325805664062,
+      "y": 42.69251017887262,
+      "z": 230.5283660888672,
+      "height": 16.86859703063965,
+      "width": 1.071388184686657,
+      "yaw": 4.336476632023647,
+      "trunkRadius": 0.17530631084341716,
+      "trunkHeight": 14.169621505737304,
+      "seating": {
+        "centerGroundY": 43.04482582475844,
+        "centerBaseline": 43.01982582475844,
+        "burialHeight": 0.3273156458858253
+      }
+    },
+    {
+      "id": "north-backdrop-374",
+      "sourceCardIndex": 374,
+      "sourceCardKind": "maple",
+      "stand": "stand-1",
+      "variant": 2,
+      "x": 9.337685585021973,
+      "y": 34.47315803086642,
+      "z": 283.4436950683594,
+      "height": 16.404970169067383,
+      "width": 1.0172148561337961,
+      "yaw": 1.8353730153159593,
+      "trunkRadius": 0.1618675798929488,
+      "trunkHeight": 13.7801749420166,
+      "seating": {
+        "centerGroundY": 34.704865076426245,
+        "centerBaseline": 34.679865076426246,
+        "burialHeight": 0.2067070455598241
+      }
+    },
+    {
+      "id": "north-backdrop-375",
+      "sourceCardIndex": 375,
+      "sourceCardKind": "maple",
+      "stand": "stand-5",
+      "variant": 2,
+      "x": 176.42747497558594,
+      "y": 36.576053564159245,
+      "z": 193.84580993652344,
+      "height": 15.257258415222168,
+      "width": 1.053199098992627,
+      "yaw": 2.7503972878297307,
+      "trunkRadius": 0.15586862891529374,
+      "trunkHeight": 12.81609706878662,
+      "seating": {
+        "centerGroundY": 36.85816618073598,
+        "centerBaseline": 36.83316618073598,
+        "burialHeight": 0.2571126165767339
+      }
+    }
+  ]
+}
