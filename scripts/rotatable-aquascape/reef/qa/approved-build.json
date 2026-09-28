@@ -1,0 +1,89 @@
+{
+  "checkedAt": "2026-09-28T23:49:55.823Z",
+  "scope": "Add separate filtration studio links; preserve current reef renderer, animal motion and full detail",
+  "files": [
+    "assets/anthias-qh5-fys7.glb",
+    "assets/attachments-CN7toLgy.json",
+    "assets/chromis-ArXoNpqP.glb",
+    "assets/cleaner-shrimp-CbY7vtlW.glb",
+    "assets/clown-CVwpScsO.glb",
+    "assets/goby-Bok4otvk.glb",
+    "assets/gramma-4tsMCcIb.glb",
+    "assets/index-DBjqBxyQ.css",
+    "assets/index-Di90eq1i.js",
+    "assets/map-BCNLyojM.png",
+    "assets/map-BeFEIA0e.png",
+    "assets/map-Ie55ijny.png",
+    "assets/map-rahrN3k8.png",
+    "assets/normalMap-AIoBIlzs.png",
+    "assets/normalMap-CVYemK4O.png",
+    "assets/normalMap-DQPJoT0j.png",
+    "assets/normalMap-T-Tek4aZ.png",
+    "assets/roughnessMap-4hZTjONg.png",
+    "assets/roughnessMap-DIiV2VjT.png",
+    "assets/roughnessMap-qepxckm-.png",
+    "assets/semilarvatus-WtGca7pG.glb",
+    "assets/skeleton-InQKSODj.png",
+    "assets/tang-DZS7dloZ.glb",
+    "index.html"
+  ],
+  "buildHash": "389343b1c7bb409013f2525cd79dcdb8605c0244d7bb147903d510b72a290e56",
+  "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
+  "checks": {
+    "typescriptBuild": true,
+    "reefGeometryAndBehaviorModules": true,
+    "allThreeReefBuildCopies": true,
+    "freshwaterReleaseAndSyncGuards": true,
+    "browserReview": true,
+    "visual": true,
+    "performance": true
+  },
+  "browserReview": {
+    "readyMs": 8060,
+    "checks": {
+      "loading": true,
+      "feeding": true,
+      "spacing": true,
+      "obstacles": true,
+      "pause": true,
+      "camera": true,
+      "lighting": true,
+      "fullscreen": true,
+      "identification": true,
+      "mobile": true,
+      "randomized": true
+    },
+    "learningChecks": {
+      "lessons": true,
+      "closeups": true,
+      "lighting": true,
+      "feeding": true,
+      "chemistry": true,
+      "labIndependent": true,
+      "keyboardFocus": true,
+      "mobile": true,
+      "tablet": true,
+      "fullscreen": true,
+      "navigation": true
+    },
+    "consoleErrors": 0,
+    "views": [
+      "front",
+      "oblique",
+      "mobile",
+      "filtration toolbar",
+      "water-flow lesson"
+    ]
+  },
+  "validationNotes": [
+    "Full build:reef/check:reef and targeted learning browser checks passed.",
+    "Current-main cleaner shrimp, butterflyfish and all existing fish/reef details preserved. Reef edits are navigation/UI only.",
+    "See filtration-review.json and filtration/qa/approved-build.json for before/after measurements, limits and evidence."
+  ],
+  "publication": [
+    "Hidden Reef Cloudflare Pages",
+    "GitHub main"
+  ],
+  "deploymentStatus": "Tested locally; current build not yet verified on production.",
+  "deploymentLimitation": "Separate jez237 Pages account returns Cloudflare authentication error 10000; do not report both domains synchronized."
+}

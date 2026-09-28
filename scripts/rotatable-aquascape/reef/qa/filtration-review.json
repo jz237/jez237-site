@@ -1,0 +1,76 @@
+{
+  "checkedAt": "2026-09-28T23:49:55.823Z",
+  "scope": "Navigation-only reef change; new filtration renderer is loaded on its separate page",
+  "baseline": "9923eca5e",
+  "checks": {
+    "loading": true,
+    "feeding": true,
+    "spacing": true,
+    "obstacles": true,
+    "pause": true,
+    "camera": true,
+    "lighting": true,
+    "fullscreen": true,
+    "identification": true,
+    "mobile": true,
+    "randomized": true
+  },
+  "learningChecks": {
+    "lessons": true,
+    "closeups": true,
+    "lighting": true,
+    "feeding": true,
+    "chemistry": true,
+    "labIndependent": true,
+    "keyboardFocus": true,
+    "mobile": true,
+    "tablet": true,
+    "fullscreen": true,
+    "navigation": true
+  },
+  "performance": {
+    "baseline": "9923eca5e",
+    "method": "Serial local Chrome, full reef detail, 1440x1080, seeded scene. 2.5 s warmup, 6 s sample. Not a low-end hardware claim.",
+    "results": [
+      {
+        "mode": "prior-reef",
+        "readyMs": 7278,
+        "taskSeconds": 2.4088639999999995,
+        "fps": 60.15162875935731,
+        "triangles": 18764012,
+        "fish": 21
+      },
+      {
+        "mode": "current-reef",
+        "readyMs": 7647,
+        "taskSeconds": 2.640638000000001,
+        "fps": 60.08555117246447,
+        "triangles": 18764012,
+        "fish": 21
+      },
+      {
+        "mode": "filtration",
+        "readyMs": 1098,
+        "taskSeconds": 0.7062199999999998,
+        "fps": 60.014629604941206,
+        "triangles": 46914,
+        "parts": 42
+      }
+    ]
+  },
+  "visualReview": {
+    "views": [
+      "reef front",
+      "reef oblique",
+      "reef mobile",
+      "reef toolbar link",
+      "Water & flow lesson link"
+    ],
+    "findings": [
+      "Four matching learning actions remain reachable on desktop and in a two-by-two mobile layout.",
+      "Geometry, inhabitants, lighting and all current main fish/cleaner-shrimp work preserved.",
+      "Same 18,764,012 front-view triangles and 21 fish before/after. About 60 FPS in both local runs; no slower-hardware or loading-speed improvement claimed."
+    ]
+  },
+  "publication": "Hidden Reef full-site staging plus GitHub main; separate jez237 account currently returns authentication error 10000."
+}
