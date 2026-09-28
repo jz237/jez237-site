@@ -118,7 +118,7 @@ try{
     report.canceledTelemetry=report.failedRequests.filter(request=>{
       const address=new URL(request.url);
       return request.error==='net::ERR_ABORTED' &&
-        (address.hostname==='www.google-analytics.com'||address.hostname==='region1.google-analytics.com') &&
+        ['www.google-analytics.com','region1.google-analytics.com','analytics.google.com'].includes(address.hostname) &&
         address.pathname==='/g/collect';
     });
     const failedResources=report.failedRequests.filter(request=>!report.canceledTelemetry.includes(request));
