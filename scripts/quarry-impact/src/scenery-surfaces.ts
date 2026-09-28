@@ -252,6 +252,9 @@ export function roadsideDetails(parent: T.Group) {
     g.setAttribute('uv', new T.Float32BufferAttribute(u, 2));
     g.setIndex(ind);
     g.computeVertexNormals();
+    // The authored floor carries interrupted physical wear. Retain these old
+    // arcs as faint historical marks; road marks cloned above keep their opacity.
+    marks.opacity = .045;
     const wear = new T.Mesh(g, marks);
     wear.receiveShadow = true;
     parent.add(wear);

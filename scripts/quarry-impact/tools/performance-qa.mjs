@@ -29,12 +29,24 @@ try {
     '--disable-renderer-backgrounding', '--ignore-gpu-blocklist',
   ] });
   const page = await browser.newPage({ viewport: { width: 2560, height: 1440 }, deviceScaleFactor: 1 });
+  const pageURL = process.env.QUARRY_QA_URL ?? 'http://127.0.0.1:8795/';
+  const arenaMaskPath = 'assets/arena-floor-mask.rgba.gz';
+  const arenaMaskURL = new URL(arenaMaskPath, pageURL).href;
+  const arenaMaskResponse = page.waitForResponse(response => response.url() === arenaMaskURL, { timeout: 120000 });
+  arenaMaskResponse.catch(() => {});
   page.on('pageerror', e => report.errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') report.errors.push(m.text()); });
   page.on('requestfailed', r => report.errors.push(`${r.url()} ${r.failure()?.errorText}`));
   page.on('response', r => { if (r.status() >= 400) report.errors.push(`${r.status()} ${r.url()}`); });
-  await page.goto(process.env.QUARRY_QA_URL ?? 'http://127.0.0.1:8795/');
+  await page.goto(pageURL);
   await page.waitForFunction(() => window.__quarry?.state === 'menu', null, { timeout: 120000 });
+  const maskResponse = await arenaMaskResponse;
+  assert.equal(maskResponse.status(), 200, 'The application must request the arena mask');
+  const maskBytes = await maskResponse.body(), localMask = await fs.readFile(path.join('dist', arenaMaskPath));
+  const maskHash = createHash('sha256').update(maskBytes).digest('hex');
+  assert.equal(maskHash, createHash('sha256').update(localMask).digest('hex'), 'The actual loaded mask must match the frozen dist');
+  report.arenaMaskAsset = { url: maskResponse.url(), bytes: maskBytes.length, sha256: maskHash,
+    observedApplicationRequest: true, resourceType: maskResponse.request().resourceType() };
   Object.assign(report, await page.evaluate(() => {
     const canvas = document.querySelector('canvas'), gl = canvas.getContext('webgl2');
     const ext = gl.getExtension('WEBGL_debug_renderer_info');

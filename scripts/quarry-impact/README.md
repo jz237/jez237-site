@@ -47,6 +47,8 @@ The road-facing quarry has a Blender-built cut, an adjoining extraction bay with
 
 The northern arena headwall replaces another 35 degrees of the old terraces with two fractured faces and a narrow collapse channel. Its Blender source reuses the existing photographic rock maps and scanned fragments. Nearby and distant meshes share their section boundaries, and solo and online play use the same wall collision surface. Existing forest cards behind this wall are regrouped without adding trees or texture files.
 
+The derby floor blends photographic gravel, broken stone and fines across authored working areas, interrupted wheel paths and loose deposits. Damp sediment follows the actual twelve puddle outlines, and the outer edge matches the surrounding terrain material. One locally bundled material mask controls the blend; the floor, water and driving physics keep their original geometry. This adds surface variation, not physical ruts or soft ground.
+
 A 112-metre gravel approach joins the lane, shoulders and surrounding ground in one authored surface. Interrupted compaction, deposited fines and loose margins reuse the existing photographic maps at metre scale. Small shoulder fragments add relief while the lane and physical terrain retain their original heights. The rest of the circuit also has corrected shoulder winding and anchored inner edges.
 
 The three bodies are dimensioned derivatives of the licensed Car Concept asset, prepared in Blender and paired with separate mass, power, wheelbase, drive, sound, and damage profiles. They share a design family; they are not licensed production-car replicas.
@@ -65,7 +67,7 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 
 `npm install` then `npm run dev` starts Vite. Stop the standalone server first if it already owns port 8795. `npm run build` checks TypeScript and produces `dist/`, a static site that supports subdirectory hosting. The multiplayer server is a separate Worker under `multiplayer/`; the static game makes no ElevenLabs requests.
 
-- `npm test`: repeatable rules checks.
+- `npm test`: repeatable rules, vehicle and scenery checks. After `npm ci`, the arena audit rebuilds the pinned multiplayer Rapier adapter locally if its ignored generated file is absent, then verifies it against the tracked deployment reference; private release reports are not required.
 - `npm run qa`: Chrome browser integration checks against the local server; reports and screenshots go to `outputs/`.
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
@@ -83,6 +85,7 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `node tools/prepare-industrial-material.mjs`: restores the CC0 workshop maps from recorded URLs and verifies original checksums.
 - `node tools/prepare-roadside-material.mjs`: restores the CC0 broken-rock maps with verified source checksums.
 - `tools/quarry-cut-qa.mjs`: captures matched 1440p scenery and moving-car views with short frame-time diagnostics; preserve comparisons with `QUARRY_CUT_PHASE` and `QUARRY_CUT_OUTPUT`.
+- `node tools/generate-arena-mask.mjs`: rebuilds the compact local material mask from editable `source/arena-floor-mask.json` and frozen actual puddle contours. It performs no downloads and does not run during gameplay. `tools/arena-surface-qa.mjs` captures matched driving, low ground, shoreline and boundary views; use a new `QUARRY_ARENA_PHASE` for each comparison.
 - Add `QUARRY_CUT_ROAD=1` for gravel close views, moving chase poses and hood-position inspections, or `QUARRY_CUT_ROAD_ENDS=1` for both joins. These comparisons hold field of view fixed and do not replace the sustained benchmark.
 - `tools/check-published-build.mjs`: verifies the published bundle and authored GLB against local hashes after deployment; use `QUARRY_RELEASE_CHECK_OUTPUT` to retain each report.
 - `tools/performance-qa.mjs`: measures sustained frame intervals and resource counts across eight-car derby and racing events. Set `QUARRY_PERFORMANCE_OUTPUT` to a distinct JSON path to retain each run with its corresponding screenshot and loaded build URL; the default duration is 610 seconds.

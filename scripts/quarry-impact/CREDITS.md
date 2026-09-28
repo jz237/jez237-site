@@ -70,6 +70,8 @@ The forest edge above the extraction bay recomposes 50 existing distant cards an
 
 The northern arena headwall is original Blender geometry using the existing CC0 Rock Boulder Dry maps and Rock Moss Set 01 fragments credited above. Its generator, editable scene, frozen boundary and output hashes are under `tools/author-quarry-headwall.py` and `source/models/quarry-headwall*`. The forest composition reuses 31 existing First Light tree cards, retaining their previously documented provenance. This pass adds no maps, generated imagery or purchased assets.
 
+The arena material mask is original Quarry Impact engineering data: authored vehicle paths, working areas, deposits and sediment distribution measured against the existing puddle contours. Editable definitions, the offline generator and compressed/decoded hashes are retained in `source/arena-floor-mask*` and `tools/generate-arena-mask.mjs`. It reuses the credited CC0 gravel, mud and Rock Ground photographs. No new photograph, generated artwork or purchased asset was used for this surface pass.
+
 ## Sound
 
 All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from original Quarry Impact prompts using the user's account. They are provided under the applicable ElevenLabs account terms, not represented as CC0. No Wreckfest audio was used. File-level prompts, settings, hashes and post-processing are in `public/audio/manifest.json`; original MP3s and quota records are in `source/audio/`.

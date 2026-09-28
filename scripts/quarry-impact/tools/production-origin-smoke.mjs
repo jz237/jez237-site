@@ -35,14 +35,14 @@ async function openPage(label,address){
   p.on('response',response=>{if(response.status()>=400)add(report.httpErrors,{client:label,url:response.url(),status:response.status()});});
   p.on('response',response=>{
     const file=new URL(response.url()).pathname.split('/').pop();
-    if(!['coupe.glb','sedan.glb','hatch.glb','quarry-headwall.glb'].includes(file))return;
+    if(!['coupe.glb','sedan.glb','hatch.glb','quarry-headwall.glb','arena-floor-mask.rgba.gz'].includes(file))return;
     const record=(async()=>{
       assert.equal(response.status(),200);
-      const bytes=await response.body(),local=await fs.readFile('dist/models/'+file);
+      const bytes=await response.body(),local=await fs.readFile('dist/'+(file==='arena-floor-mask.rgba.gz'?'assets/':'models/')+file);
       const hash=data=>createHash('sha256').update(data).digest('hex');
       assert.equal(hash(bytes),hash(local),`${label}: actual loaded ${file} must match the tested asset`);
-      const collection=file==='quarry-headwall.glb'?observed.sceneryAssets:observed.vehicleAssets;
-      collection.push({file,bytes:bytes.length,sha256:hash(bytes)});
+      const collection=['quarry-headwall.glb','arena-floor-mask.rgba.gz'].includes(file)?observed.sceneryAssets:observed.vehicleAssets;
+      collection.push({file,bytes:bytes.length,sha256:hash(bytes),observedApplicationRequest:true});
     })();
     record.catch(()=>{});vehicleResponses.push(record);
   });
@@ -62,7 +62,7 @@ async function openPage(label,address){
   await p.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
   await Promise.all(vehicleResponses);
   assert.equal(observed.vehicleAssets.length,3,'Each production browser loads all three verified cars');
-  assert.equal(observed.sceneryAssets.length,1,'Each production browser loads the verified arena headwall');
+  assert.equal(observed.sceneryAssets.length,2,'Each production browser loads the verified arena headwall and material mask');
   observed.moduleScripts=await p.locator('script[type="module"]').evaluateAll(nodes=>nodes.map(n=>n.src));
   return {p,observed,label};
 }
