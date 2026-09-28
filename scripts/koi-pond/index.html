@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102824"><meta name="description" content="Explore an original living koi garden: animated 3D koi, a woodland waterfall, and an interactive pond water learning lab."><title>Stillwater · The Hidden Reef Koi Garden</title></head>
+<body><main id="app">
+ <div id="scene" aria-label="Interactive three-dimensional koi pond"></div>
+ <header><a class="brand" href="../../"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M7 26Q18 6 30 13Q20 29 7 26ZM7 26l-4-7m4 7l-1 6M27 14l1 1"/></svg><span>THE HIDDEN REEF<small>THE LIVING COLLECTION</small></span></a><span class="preview-label">DESIGN PREVIEW <i></i></span></header>
+ <section class="intro"><p class="eyebrow">A GARDEN IN MOTION</p><h1>Stillwater<span>.</span></h1><p>A quiet place to look a little closer.</p></section>
+ <nav class="learn-nav" aria-label="Explore the pond"><button data-panel="koi"><span>01</span> Meet the koi <b>↗</b></button><button data-panel="water"><span>02</span> Water lab <b>↗</b></button><button data-panel="pond"><span>03</span> A living pond <b>↗</b></button></nav>
+ <div class="scene-caption"><span class="live-dot"></span><span id="scene-label">Seven koi. No two journeys alike.</span></div>
+ <footer><div class="view-controls" role="group" aria-label="Camera views"><button data-view="garden" class="selected">Garden</button><button data-view="overhead">Overhead</button><button data-view="waterline">Waterline</button></div><div class="actions"><button id="feed">Feed the koi <span>✦</span></button><button id="pause" aria-pressed="false">Pause</button><button id="light" aria-pressed="false">Evening</button><button id="quality" aria-pressed="false">Quality: auto</button><button id="fullscreen" aria-pressed="false">Full screen</button></div><p class="hint">Drag to explore · Scroll to zoom · Tap water for ripples · Select a koi</p></footer>
+ <aside id="panel" hidden aria-labelledby="panel-title"><button id="close-panel" aria-label="Close guide">×</button><div id="panel-body"></div></aside>
+ <div id="loading" role="status"><div class="loading-mark">S<span>•</span></div><p>Growing your quiet corner.</p><small>Preparing the garden and its inhabitants</small></div>
+ <div id="toast" role="status" aria-live="polite"></div>
+</main><script type="module" src="/src/main.js"></script></body></html>

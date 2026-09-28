@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-28",
+  "scope": "GitHub and jez237 review preview only; not Hidden Reef production",
+  "checks": {
+    "nodeTests": 7,
+    "productionBuild": true,
+    "desktopViewport": "1280x720",
+    "phoneViewport": "390x844",
+    "horizontalOverflow": false,
+    "browserRuntimeErrors": 0,
+    "feeding": true,
+    "cameraViews": true,
+    "pauseResume": true,
+    "lighting": true,
+    "qualityOverride": true,
+    "waterLabWarmNoAeration24h": "1.9 mg/L oxygen; explanatory warning shown",
+    "waterLabReset": true
+  },
+  "files": {
+    "index.html": "37d513b1c08befdf657b6e7e47feabc73e55e6cf0a7939810a6d225e74b14cdf",
+    "LICENSES.txt": "c986082f3472bf14da78aee57ae91c800c7053a15eb0f06776a33448074d0ef5",
+    "assets/index-b4YtYWYY.css": "e07355e780c0d0ec20f02453957e96cdf0ef21428fc7eff82840b5021f16dd6c",
+    "assets/index-Cjk4vdIg.js": "ed77baa2391acb0a0be3a583e21996551bbce63e0b9b3b30a6d49af76ba3fc7e",
+    "models/asagi.png": "47e81a1cc310f7c6ccff485331442d089cf5d0a50b44958af47d75e712bc36a6",
+    "models/kohaku.png": "81b5021a13c7edc9a524c38f6fe53f21176c92d94683077dc6d9b329f8cf9fd4",
+    "models/koi-scales.png": "ff23ff6835e14c71fcf87d0cdac3b045a45c0f4c60a635cf570120dd9a7b06b7",
+    "models/koi.glb": "3355ba219315ccdf1b563dcfdfd3bfb49ac44c04aa620c459ee95cf7a9639382",
+    "models/ochiba.png": "b8849e1371b50991990f9e2a664bf220361d729f3b5bfd7131bdc9f09e734d51",
+    "models/ogon.png": "ef44e1eab85ea4f08fb635af1af29d55388b29ae33c8712e5c144251cd564b6b",
+    "models/sanke.png": "41e9b5e99775547ccb0fbef4ed9b29d9d58b22b47a07191598eb86d06323d504",
+    "models/shiro.png": "15ced053c172109c2ab7b9bd2edde1b3682c09a9780df52e6e3be7f7b6aed1c7",
+    "models/showa.png": "fc3d8d01a3191bc45bcb7b7bb4ec65b34f131e3f101e467a0ac743d8a63cd540"
+  }
+}
