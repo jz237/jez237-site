@@ -23,9 +23,10 @@
   "files": [
     {
       "path": "public/models/coupe.glb",
-      "sha256": "43162e8383f6c002a03611071b0147f87b7b2c49e10618e31d4af3b41b9a7e39",
-      "bytes": 9983372,
-      "triangles": 195811
+      "sha256": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea",
+      "bytes": 11355504,
+      "triangles": 216893,
+      "detail_manifest": "source/coupe-detail-manifest.json"
     },
     {
       "path": "public/models/sedan.glb",

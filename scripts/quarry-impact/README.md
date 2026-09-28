@@ -65,7 +65,7 @@ The paved circuit uses a separate three-metre asphalt photograph for aggregate d
 
 The three bodies are dimensioned derivatives of the licensed Car Concept asset, prepared in Blender and paired with separate mass, power, wheelbase, drive, sound, and damage profiles. They share a design family; they are not licensed production-car replicas.
 
-The coupe adds a recessed rear plate, lamp dividers, hollow exhaust outlets and concealed bumper reinforcement and mounts. These details reuse existing materials; body dust varies smoothly without the former coarse checker pattern. The model retains the same damage panels, wheel pivots and driving physics.
+The coupe adds a recessed rear plate, lamp dividers, hollow exhaust outlets and concealed bumper reinforcement and mounts. These details reuse existing materials; body dust varies smoothly without the former coarse checker pattern. The latest coupe detail pass adds a real opening and recessed honeycomb grille, four separately damageable lamp lenses, tire ribs, wheel fasteners and drilled-brake detail. Neutral glass and restrained paint reflections improve material separation. Impact-directed wear and normals follow local dents; nearby interior trim and concealed crash structure deform with the skin. The original wheel pivots and driving physics remain intact. The western bend adds irregular grass pockets, scanned young firs and small photographed scree fragments outside the driving lane. This is a focused art improvement; the broader game is still short of Wreckfest 2 fidelity.
 
 Rapier handles fixed-step rigid-body physics and raycast wheel suspension. Steering assistance supports forgiving driving. Impacts deform individual body meshes, alter their shading, break glass, detach parts, shrink simplified colliders, and affect steering, suspension and power. This is localized visual deformation with rigid-body physics, not a full structural soft-body simulation.
 
@@ -86,6 +86,8 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
 - Blender: `--background --python tools/refine_cars.py -- --kind coupe` rebuilds only the coupe refinement, checking that sedan and hatch assets remain unchanged. Refined editable scenes and hashes are recorded in `source/vehicle-refinement-manifest.json`.
+- Blender: `--background --python tools/detail-coupe.py` derives the detailed coupe from the retained refined scene and writes `source/models-detailed/coupe.blend` plus the runtime GLB. `source/coupe-detail-manifest.json` records provenance and exact outputs. See `source/coupe-realism.md` for scope and reproduction.
+- `tools/coupe-realism-qa.mjs`: twenty matched intact, damaged, repaired, lighting and western-bend views; use a fresh `QUARRY_CAR_QA_OUTPUT` directory.
 - `tools/coupe-rear-qa.mjs`: matched intact, damaged, repaired and lighting-diagnostic browser views at 1440p; set a new `QUARRY_CAR_QA_OUTPUT` directory for each comparison. The actual-car tests also exercise runtime batching, local damage, exact repair and multiplayer damage replay.
 - `tools/rocks.py`: reduces the scanned rocks for gameplay.
 - Blender: run `tools/author-quarry-cut.py` to reproduce the road-facing cut, rubble, detail levels and shared collision proxy. Editable source and hashes are in `source/models/quarry-cut*`.

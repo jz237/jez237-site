@@ -1,0 +1,60 @@
+{
+  "scope": "Authorized coupe appearance/damage-shading and decorative western verge; no physics change. Historical snapshots are compared only after verifying the exact new revision.",
+  "files": {
+    "src/assets.ts": {
+      "before": "ca1c2bd504af80230390640b29589cc5db5d001daf57fb414e95b69a3aedbc52",
+      "after": "19443cd8d2944c68793bcc08a5019378e3c15c4d7a5287a0d725a18a821fbee8",
+      "edits": [
+        {
+          "before": "import type { CarKind } from './rules';\nimport { finishGlass, finishPaint } from './car-materials';\nexport const base = import.meta.env?.BASE_URL ?? './';\nexport const url = (p: string) => base + p;\n",
+          "after": "import type { CarKind } from './rules';\nimport { finishGlass, finishPaint } from './car-materials';\nimport { configureCoupe } from './coupe-realism';\nexport const base = import.meta.env?.BASE_URL ?? './';\nexport const url = (p: string) => base + p;\n"
+        },
+        {
+          "before": "    }\n  });\n  root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);\n  return root;\n",
+          "after": "    }\n  });\n  if (kind === 'coupe') configureCoupe(root);\n  root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);\n  return root;\n"
+        }
+      ]
+    },
+    "src/vehicle.ts": {
+      "before": "74fb9cf16599bedf7554924a6de48331003a0aea18e797aaf93708604678e413",
+      "after": "1eb89480b755a305c29e494c8a80f81071181d6feed1e638d06999484d857ac5",
+      "edits": [
+        {
+          "before": "import { landscapeHeight } from './quarry-layout';\nimport type { GlassState } from './car-materials';\nexport type Input = {\n  throttle: number;\n",
+          "after": "import { landscapeHeight } from './quarry-layout';\nimport type { GlassState } from './car-materials';\nimport { finishCoupeDent, repairCoupePanel } from './coupe-realism';\nexport type Input = {\n  throttle: number;\n"
+        },
+        {
+          "before": "      const wear = p.geometry.attributes.impactWear;\n      if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }\n      p.geometry.deleteAttribute('color');\n      (p.material as T.MeshStandardMaterial).vertexColors = false;\n",
+          "after": "      const wear = p.geometry.attributes.impactWear;\n      if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }\n      if (this.kind === 'coupe') repairCoupePanel(p);\n      p.geometry.deleteAttribute('color');\n      (p.material as T.MeshStandardMaterial).vertexColors = false;\n"
+        },
+        {
+          "before": "      g.visible = true;\n      g.userData.damage = 0;\n      (g.material as T.MeshStandardMaterial).opacity = 0.28;\n      const state = (g.material as T.Material).userData.glassState as GlassState | undefined;\n      if (state) state.damage.value = 0;\n",
+          "after": "      g.visible = true;\n      g.userData.damage = 0;\n      (g.material as T.MeshStandardMaterial).opacity = this.kind === 'coupe' ? .24 : .28;\n      const state = (g.material as T.Material).userData.glassState as GlassState | undefined;\n      if (state) state.damage.value = 0;\n"
+        },
+        {
+          "before": "        if (wear) wear.needsUpdate = true;\n        panel.geometry.computeVertexNormals();\n        panel.geometry.computeBoundingSphere();\n        panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;\n",
+          "after": "        if (wear) wear.needsUpdate = true;\n        panel.geometry.computeVertexNormals();\n        if (this.kind === 'coupe') finishCoupeDent(panel, at, dir, damage);\n        panel.geometry.computeBoundingSphere();\n        panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;\n"
+        }
+      ]
+    },
+    "src/scenery-vegetation.ts": {
+      "before": "ef31047784f8777714277ea4b7d4022434c274ed7012f65b894908bd0788b7cc",
+      "after": "1c988e029ee27666b564d6b1e1337e0ca454b276029ae9a297269a8011100629",
+      "edits": [
+        {
+          "before": "import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';\nimport * as T from 'three';\nimport { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';\nimport { url } from './assets';\n",
+          "after": "import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';\nimport * as T from 'three';\nimport { dressWestVerge } from './scenery-west-verge';\nimport { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';\nimport { url } from './assets';\n"
+        },
+        {
+          "before": "    grasses.receiveShadow = true;\n    parent.add(grasses);\n    forestLODs.push(...await loadNorthForest(parent, forestMaterials, northSaplings, northMedium));\n}\n",
+          "after": "    grasses.receiveShadow = true;\n    parent.add(grasses);\n    forestLODs.push(...dressWestVerge(parent, northSaplings));\n    forestLODs.push(...await loadNorthForest(parent, forestMaterials, northSaplings, northMedium));\n}\n"
+        }
+      ]
+    },
+    "public/models/coupe.glb": {
+      "before": "43162e8383f6c002a03611071b0147f87b7b2c49e10618e31d4af3b41b9a7e39",
+      "after": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea",
+      "snapshot": "tests/fixtures/coupe-realism-original.glb.gz"
+    }
+  }
+}

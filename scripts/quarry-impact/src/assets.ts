@@ -4,6 +4,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import type { CarKind } from './rules';
 import { finishGlass, finishPaint } from './car-materials';
+import { configureCoupe } from './coupe-realism';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -124,6 +125,7 @@ export function cloneCar(kind: CarKind, color: number) {
       o.castShadow = false;
     }
   });
+  if (kind === 'coupe') configureCoupe(root);
   root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);
   return root;
 }

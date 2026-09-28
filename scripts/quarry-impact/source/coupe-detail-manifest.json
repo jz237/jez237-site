@@ -1,0 +1,28 @@
+{
+  "source": "CarConcept CC-BY-4.0, original artist attribution retained in public/licenses/CarConcept-LICENSE.md",
+  "generator": "tools/detail-coupe.py",
+  "input": {
+    "source\\models-refined\\coupe.blend": "712ec81be836d6c650d3a0aec8325fa2fcf05e03c0b85e85179890e4bd707380",
+    "public\\models\\sedan.glb": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
+    "public\\models\\hatch.glb": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c"
+  },
+  "changes": [
+    "Real clipped lower intake, recessed surround and open honeycomb",
+    "Four separately deformable lamp lenses with fitted optical divisions",
+    "Wheel-attached lug bolts, molded tire ribs and drilled brake details",
+    "Cabin piping; original silhouette, wheel pivots and glass geometry retained"
+  ],
+  "files": [
+    {
+      "path": "public/models/coupe.glb",
+      "bytes": 11355504,
+      "sha256": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea"
+    },
+    {
+      "path": "source/models-detailed/coupe.blend",
+      "bytes": 10802336,
+      "sha256": "03fc5d4d3ef740244ae404f2fa8610e81c5bccb25a559915f3bb45486d5a9f4f"
+    }
+  ],
+  "triangles": 216893
+}

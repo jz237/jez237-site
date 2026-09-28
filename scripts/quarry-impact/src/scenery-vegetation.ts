@@ -4,6 +4,7 @@ import { backdropFirs, composeForestBackdrop, BACKDROP_CENTER, type BackdropCard
 import { composeNorthHeadwallBackdrop } from './scenery-north-backdrop';
 import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';
 import * as T from 'three';
+import { dressWestVerge } from './scenery-west-verge';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
 import { trackPoint } from './rules';
@@ -301,5 +302,6 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     const grasses = new T.Mesh(geo, new T.MeshStandardMaterial({ vertexColors: true, roughness: 1, side: T.DoubleSide }));
     grasses.receiveShadow = true;
     parent.add(grasses);
+    forestLODs.push(...dressWestVerge(parent, northSaplings));
     forestLODs.push(...await loadNorthForest(parent, forestMaterials, northSaplings, northMedium));
 }

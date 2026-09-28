@@ -11,6 +11,7 @@ import {
 import { Effects } from './effects';
 import { landscapeHeight } from './quarry-layout';
 import type { GlassState } from './car-materials';
+import { finishCoupeDent, repairCoupePanel } from './coupe-realism';
 export type Input = {
   throttle: number;
   steer: number;
@@ -179,6 +180,7 @@ export class Vehicle {
       p.geometry.computeBoundingSphere();
       const wear = p.geometry.attributes.impactWear;
       if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }
+      if (this.kind === 'coupe') repairCoupePanel(p);
       p.geometry.deleteAttribute('color');
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
@@ -186,7 +188,7 @@ export class Vehicle {
     for (const g of this.glass) {
       g.visible = true;
       g.userData.damage = 0;
-      (g.material as T.MeshStandardMaterial).opacity = 0.28;
+      (g.material as T.MeshStandardMaterial).opacity = this.kind === 'coupe' ? .24 : .28;
       const state = (g.material as T.Material).userData.glassState as GlassState | undefined;
       if (state) state.damage.value = 0;
     }
@@ -378,6 +380,7 @@ export class Vehicle {
         pos.needsUpdate = true;
         if (wear) wear.needsUpdate = true;
         panel.geometry.computeVertexNormals();
+        if (this.kind === 'coupe') finishCoupeDent(panel, at, dir, damage);
         panel.geometry.computeBoundingSphere();
         panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;
         if (

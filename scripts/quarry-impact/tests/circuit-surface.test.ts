@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+import {restoreCoupeBytes} from './coupe-realism-invariants';
 import {assertWestWallEvolution,westHash} from './quarry-west-wall-invariants';
 import {quarryColliderLayout} from '../src/quarry-layout';
 import test from 'node:test';
@@ -74,7 +76,7 @@ test('actual road integration changes only lane/shoulder shading and the previou
   assert.deepEqual(assertWestWallEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:westHash(JSON.stringify(s))})),circuitBefore.colliders);
   assert.deepEqual(current.arena,circuitBefore.arena);
   assert.deepEqual(current.puddles,circuitBefore.puddles);
-  for(const [file,hash]of Object.entries(circuitBefore.protectedFiles))if(file!=='src/scenery-surfaces.ts')assert.equal(current.protectedFiles[file],hash,`${file}: unrelated cars/material sources stay exact`);
+  for(const [file,hash]of Object.entries(circuitBefore.protectedFiles))if(file!=='src/scenery-surfaces.ts')assert.equal(westHash(restoreCoupeBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),hash,`${file}: unrelated cars/material sources stay exact`);
 });
 
 test('every existing circuit triangle makes the terrain bedrock exposure term exactly zero',()=>{
