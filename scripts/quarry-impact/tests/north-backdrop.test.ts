@@ -32,7 +32,7 @@ test('northern replacement reuses exactly the52 accepted card roots/heights and 
 });
 
 test('shared52 stems/root bands are strictly additive to every1919 accepted collider and all prior Worker inputs',()=>{
-  assertNorthBackdropEvolution(quarryColliderLayout());assert.equal(quarryColliderLayout().length,2283);
+  assert.equal(assertNorthBackdropEvolution(quarryColliderLayout()).length,1919); // East Bay evolution is independently checked before restoring the older woodland state.
   stripNorthBackdropLayout(readForestFile('src/quarry-layout.ts'));
   assert.deepEqual(currentNorthForestPhysics().terrain,before.physics.terrain);
   for(const input of before.workerInputs)if(input.file!=='src/quarry-layout.ts'&&!input.file.includes('/.generated/'))assert.equal(forestHash(readForestFile(input.file)),input.sha256,input.file+' remains unchanged');

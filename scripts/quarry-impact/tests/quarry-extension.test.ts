@@ -1,3 +1,4 @@
+import {restoreEastBayCliffs} from './quarry-east-bay-invariants';
 import test from 'node:test';
 import { assertNorthForestEvolution } from './north-forest-invariants';
 import assert from 'node:assert/strict';
@@ -33,7 +34,7 @@ function originalApron(){
 }
 
 test('wall extension replaces only its33 legacy cells and preserves the prior cut, roadside and surviving collider IDs',()=>{
-  const cliff=cliffGeometry(),terrain=terrainGeometry(),expected:number[]=[];
+  const cliff=restoreEastBayCliffs(cliffGeometry()),terrain=terrainGeometry(),expected:number[]=[];
   assert.equal(hashArray(cliff.positions),baseline.cliffPositions);
   assert.equal(hashArray(terrain.positions),baseline.terrainPositions);assert.equal(hashArray(terrain.indices),baseline.terrainIndices);
   for(let band=0;band<30;band++)for(let cell=0;cell<360;cell++){

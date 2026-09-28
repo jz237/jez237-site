@@ -1,3 +1,4 @@
+import {restoreEastBayCliffs} from './quarry-east-bay-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -44,7 +45,7 @@ function closureBoundary(g:ReturnType<typeof quarryHeadwallGeometry>,data:Return
 }
 
 test('headwall replaces only its35 wrapped legacy cells and preserves earlier assets and surviving collider IDs',()=>{
-  const cliff=cliffGeometry(),terrain=terrainGeometry(),expected:number[]=[];
+  const cliff=restoreEastBayCliffs(cliffGeometry()),terrain=terrainGeometry(),expected:number[]=[];
   assert.equal(hashArray(cliff.positions),baseline.cliffPositions);
   assert.equal(hashArray(terrain.positions),baseline.terrainPositions);assert.equal(hashArray(terrain.indices),baseline.terrainIndices);
   for(let band=0;band<30;band++)for(let cell=0;cell<360;cell++){

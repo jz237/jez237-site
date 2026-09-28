@@ -1,3 +1,7 @@
+import {assertEastBayEvolution,eastBayHash,restoreEastBayCliffs,eastBayArrayHash,eastBayBefore,eastBayData} from './quarry-east-bay-invariants';
+import * as T from 'three';
+import {cliffGeometry} from '../src/quarry-layout';
+import {createSurfaceSampler} from '../src/quarry-surface-sampler';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { captureArenaFloor, arenaRead, arenaHash } from '../tools/arena-floor-audit';
@@ -15,7 +19,8 @@ test('arena appearance preserves its historical physics and cars through the exp
   assertNorthForestLayoutSource();assertNorthForestEvolution(quarryColliderLayout());
   assert.deepEqual(result.workerInputs.filter(i=>i.file!=='src/quarry-layout.ts'),baseline.workerInputs.filter((i:any)=>i.file!=='src/quarry-layout.ts'));
   const oldIds=new Set(baseline.colliders.map((s:any)=>s.id));
-  assert.deepEqual(result.colliders.filter(s=>oldIds.has(s.id)),baseline.colliders,'all original1547 arena-era colliders stay exact');
+  assert.deepEqual(result.colliders,quarryColliderLayout().map(s=>({id:s.id,sha256:eastBayHash(s)})),'actual arena capture uses the real current physics');
+  assert.deepEqual(assertEastBayEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:eastBayHash(s)})).filter(s=>oldIds.has(s.id)),baseline.colliders,'the bounded East Bay wall/scatter evolution reconstructs every original arena-era collider');
   for(const [file,expected] of Object.entries(baseline.protectedFiles)){
     if(file==='src/scenery-surfaces.ts')continue; // Arena factory integration may edit this source; actual other material outputs are checked below.
     assert.equal(arenaHash(arenaRead(file)),expected,`${file} stays byte-identical`);
@@ -60,6 +65,18 @@ test('arena material change cannot add draw objects, alter other materials, or p
   // The same later milestone adds the registered mineral transition to the
   // three exact pre-existing quarryRock consumers. Restore only their shader
   // descriptors for this historical comparison, after checking composition.
+  // East Bay removes only independently verified legacy wall index cells.
+  // Recomputed render normals must match that exact new index buffer, before
+  // this older arena gate reconstructs the historical descriptor in memory.
+  const actualCliff=cliffGeometry(),oldCliff=restoreEastBayCliffs(actualCliff),mesh=new T.BufferGeometry();
+  mesh.setAttribute('position',new T.BufferAttribute(actualCliff.positions,3));mesh.setIndex(new T.BufferAttribute(actualCliff.indices,1));mesh.computeVertexNormals();
+  const wall=others.filter(o=>o.geometry.attributes.position.sha256===eastBayArrayHash(actualCliff.positions));
+  const oldWall=baseline.objects.filter((o:any)=>o.geometry.attributes.position.sha256===eastBayArrayHash(oldCliff.positions));
+  assert.equal(wall.length,1);assert.equal(oldWall.length,1);
+  assert.equal(wall[0].geometry.indices.sha256,eastBayArrayHash(actualCliff.indices));
+  assert.equal(wall[0].geometry.attributes.normal.sha256,eastBayArrayHash(mesh.attributes.normal.array));
+  wall[0].geometry.indices=structuredClone(oldWall[0].geometry.indices);
+  wall[0].geometry.attributes.normal=structuredClone(oldWall[0].geometry.attributes.normal);mesh.dispose();
   const oldOthers=baseline.objects.filter((o:any)=>o.role==='other');let crestConsumers=0;
   for(let i=0;i<oldOthers.length;i++)for(let j=0;j<oldOthers[i].materials.length;j++){
     const original=oldOthers[i].materials[j].shader;if(original?.programKey!=='quarry-rock-v5')continue;
@@ -69,6 +86,19 @@ test('arena material change cannot add draw objects, alter other materials, or p
     others[i].materials[j].shader=original;crestConsumers++;
   }
   assert.equal(crestConsumers,3,'only the three historical rock-factory mesh consumers receive the crest wrapper');
+  // Only scree intersecting the new wall is removed. Build the two matrix
+  // streams from frozen original placements; the original stream must first
+  // match the immutable arena fixture, then the retained stream must match
+  // the actual renderer, preserving every retained transform and its order.
+  const matrixBytes=(items:any[])=>{const out=new Float32Array(items.length*16),dummy=new T.Object3D();items.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.scale.set(p.sx,p.sy,p.sz);dummy.rotation.set(p.rx,p.ry,p.rz);dummy.updateMatrix();out.set(dummy.matrix.elements,i*16);});return out;};
+  const full=eastBayBefore.scatter.scree,fullSHA=eastBayArrayHash(matrixBytes(full));
+  const oldScree=oldOthers.filter((o:any)=>o.instanceMatrix===fullSHA);assert.equal(oldScree.length,1,'frozen placements recover the exact historical renderer');
+  const newScree=others.filter((o:any)=>o.castShadow&&o.instanceCount!==undefined&&o.geometry.attributes.position.sha256===oldScree[0].geometry.attributes.position.sha256);assert.equal(newScree.length,1);
+  const data=eastBayData(),surface=createSurfaceSampler({positions:new Float32Array(data.positions),indices:new Uint32Array(data.indices)});
+  const keep=full.filter((p:any)=>!surface.overlaps(p.x,p.z,Math.max(p.sx,p.sz)));
+  assert.equal(newScree[0].instanceCount,keep.length);assert.equal(newScree[0].instanceMatrix,eastBayArrayHash(matrixBytes(keep)));
+  newScree[0].instanceCount=oldScree[0].instanceCount;newScree[0].instanceMatrix=oldScree[0].instanceMatrix;
+
   assert.deepEqual(others,baseline.objects.filter((o:any)=>o.role==='other'),
     'roads, walls, signs, props, every unrelated shader and existing instance matrices/colors remain exact; arena wear changes only opacity');
   assert.deepEqual(result.random,baseline.random);assert.deepEqual(result.random,{seed:1417743577,calls:3954});
