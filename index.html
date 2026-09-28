@@ -581,9 +581,11 @@
           thumb.target = '_blank';
           thumb.rel = 'noopener';
 
-          if (item.image) {
+          // Only locally cached thumbnails are allowed by the site's CSP; skip remote ones.
+          const localImage = item.image && !/^https?:\/\//i.test(item.image) ? item.image : '';
+          if (localImage) {
             const image = document.createElement('img');
-            image.src = item.image;
+            image.src = localImage;
             image.alt = '';
             image.loading = 'lazy';
             image.referrerPolicy = 'no-referrer';
