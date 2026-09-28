@@ -2,6 +2,8 @@
  * MIT license: ../LICENSES.txt. Hidden Reef scene and behavior changes, 2026. */
 import {spineGLSL, spineOffset, advanceNeeds, depthTarget, limitAttitude} from './KoiKinematics.js';
 import {installGuide} from './Guide.js';
+import {varieties} from './KoiCatalog.js';
+import {fovFromWheel} from './PondCamera.js';
 const THREE=window.THREE, dat=window.dat;
 
 /* global THREE, dat */
@@ -38,7 +40,7 @@ const P = {
   godRays: true,
   grain: 0.01,
   vignette: 0.20,
-  cameraMode: 'Cinematic',
+  cameraMode: 'Manual',
   holdCamera: false,       // hold the current shot (no camera motion at all)
   freezeScene: false,      // stop time: fish, water, wind, everything
   stayAbove: true,         // cinematic path skips the underwater dive unless enabled
@@ -6246,7 +6248,11 @@ function setupControls() {
     if (STROKE.active && STROKE.phaseStart >= 0) { STROKE.user = clamp((STROKE.user < 0 ? 0.3 : STROKE.user) + dx * 0.0025 * (STROKE.along.dot(_hr.crossVectors(camera.getWorldDirection(_hf), _up)) > 0 ? 1 : -1), 0.1, 0.85); return; }
     if (P.cameraMode === 'Manual' && !P.holdCamera) { CTRL.yaw -= dx * 0.0032; CTRL.pitch = clamp(CTRL.pitch - dy * 0.0032, -1.45, 1.45); }
   });
-  canvas.addEventListener('wheel', (e) => { if (P.cameraMode !== 'Manual') return; e.preventDefault(); CTRL.speedMul = clamp((CTRL.speedMul || 1) * (e.deltaY > 0 ? 0.85 : 1.18), 0.05, 5); toast(`Fly speed ×${CTRL.speedMul.toFixed(2)}`); }, { passive: false });
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    camera.fov = fovFromWheel(camera.fov, e.deltaY, e.deltaMode, canvas.clientHeight);
+    camera.updateProjectionMatrix();
+  }, { passive: false });
   canvas.addEventListener('pointerup', (e) => {
     CTRL.dragging = false; STROKE.user = -1;
     if (CTRL.moved < 5) {                               // a click: drop a ripple where the ray meets the water
@@ -6316,7 +6322,7 @@ function setClean(v) {
 }
 function toggleCameraMode() { P.cameraMode = P.cameraMode === 'Cinematic' ? 'Manual' : 'Cinematic'; onCameraMode(); }
 function updateFreeCamera(dt) {
-  // WASD / arrows move, Q down, Space (or R) up, Shift sprint, Alt fine, mouse wheel sets base speed
+  // WASD / arrows move, Q down, Space (or R) up, Shift sprint, Alt fine, mouse wheel zooms the lens
   const k = CTRL.keys, sp = (k.ShiftLeft || k.ShiftRight ? 3.5 : 1.3) * (CTRL.speedMul || 1) * (k.AltLeft || k.AltRight ? 0.2 : 1) * dt;
   camera.rotation.set(CTRL.pitch, CTRL.yaw, 0, 'YXZ');
   camera.getWorldDirection(_fwd); _right.crossVectors(_fwd, camera.up).normalize();
@@ -6333,7 +6339,8 @@ function onCameraMode() {
   } else PATH.blend = 0;
   if (GUI_CTRL.cam) GUI_CTRL.cam.updateDisplay();
   setBtnLabel('tb-cam', P.cameraMode === 'Cinematic' ? 'Manual camera' : 'Cinematic camera');
-  toast(P.cameraMode === 'Manual' ? 'Manual camera: drag to look · WASD move · Q down · Space up · Shift faster · wheel speed' : P.cameraMode === 'Follow koi' ? 'Following a koi (K for the next fish)' : P.cameraMode === 'Follow turtle' ? 'Following the turtle' : 'Cinematic camera');
+  if (P.cameraMode !== 'Manual') document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view==='Tour' && P.cameraMode==='Cinematic')));
+  toast(P.cameraMode === 'Manual' ? 'Manual camera: drag to look · WASD move · Q down · Space up · Shift faster · wheel zoom' : P.cameraMode === 'Follow koi' ? `Following ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].nickname} · ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].name} (K for next)` : P.cameraMode === 'Follow turtle' ? 'Following the turtle' : 'Cinematic camera');
 }
 
 /* ------------------------------------------------------------------ 13b. CINEMATIC PATH, DIVE EFFECTS & AUDIO */
@@ -6476,14 +6483,21 @@ const VIEWS = {
   'Waterfall': () => [wfWorld(1.45, 0.55, 0.62), wfWorld(-0.45, 0, 0.35)],
 };
 const TWEEN = { t: 1, from: new THREE.Vector3(), to: new THREE.Vector3(), q0: new THREE.Quaternion(), q1: new THREE.Quaternion() };
-function goToView(name) {
+function goToView(name, immediate = false) {
   if (name === 'Turtle') { P.cameraMode = 'Follow turtle'; FOLLOW.initT = false; onCameraMode(); return; }
   const v = VIEWS[name]; if (!v) return;
   const [pos, look] = v();
   P.cameraMode = 'Manual'; if (GUI_CTRL.cam) GUI_CTRL.cam.updateDisplay();
   TWEEN.from.copy(camera.position); TWEEN.q0.copy(camera.quaternion); TWEEN.to.copy(pos);
   _pm.lookAt(pos, look, _up); TWEEN.q1.setFromRotationMatrix(_pm); TWEEN.t = 0;
-  toast(name);
+  camera.fov = 52; camera.updateProjectionMatrix();
+  if (immediate) {
+    camera.position.copy(pos); camera.quaternion.copy(TWEEN.q1); TWEEN.t = 1;
+    const e = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
+    CTRL.yaw = e.y; CTRL.pitch = e.x;
+  }
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === name)));
+  if (!immediate) toast(name);
 }
 function updateCamera(dt, t) {
   if (P.holdCamera || (P.cleanView && P.cameraMode !== 'Manual')) return;   // hold the shot: nothing moves the camera
@@ -7008,7 +7022,7 @@ function updateAudio(dt) {
 }
 
 /* ------------------------------------------------------------------ 13c. FEEDING THE KOI */
-// A hand reaches out over the water and sprinkles floating pellets; koi sense it (distance-delayed), rush in,
+// Floating food falls gently onto the water; koi sense it (distance-delayed), rush in,
 // crowd and gulp at the surface with splashes; excitement decays naturally once the food is gone.
 const FEED = { active: false, t: 0, point: new THREE.Vector3(), toward: new THREE.Vector3(), side: new THREE.Vector3(),
   pellets: [], excite: 0, linger: 0, hand: null, shot: null, emitted: 0 };
@@ -7218,7 +7232,9 @@ function buildHand() {
   root.traverse((o) => o.layers.set(LAYER.BOTH));                   // fingers dipped in the water stay visible through it
   scene.add(root);
   FEED.hand = { root, J, tips, mesh: hand, palm: palmBone };
-  // floating pellets
+}
+function buildFeeding() {
+  // Floating food is independent of the optional upstream hand rig.
   const pg = new THREE.IcosahedronGeometry(0.0058, 2);
   const ppos = pg.attributes.position;
   for (let i = 0; i < ppos.count; i++) { const k = 1 + 0.12 * vnoise3(ppos.getX(i) * 900, ppos.getY(i) * 900, ppos.getZ(i) * 900, 4); ppos.setXYZ(i, ppos.getX(i) * k, ppos.getY(i) * k * 0.85, ppos.getZ(i) * k); }
@@ -7280,17 +7296,18 @@ function feedingShot(nx, nz) {
   return { pos, look: new THREE.Vector3(sh.x - sh.nx * 1.15, WATER_Y - 0.1, sh.z - sh.nz * 1.15), drop: new THREE.Vector3(sh.x - sh.nx * 0.6, WATER_Y, sh.z - sh.nz * 0.6) };
 }
 function startFeeding() {
-  if (!FEED.hand || FEED.active && FEED.t < 4.5 || STROKE.active) return;
-  FEED.col = { lift: 0 }; FEED.hpInit = false;
-  const shot = P.cameraMode === 'Cinematic' ? feedingShot(0.9, 5.8) : feedingShot(camera.position.x, camera.position.z);
-  FEED.shot = shot; FEED.point.copy(shot.drop);
-  FEED.toward.set(shot.pos.x - shot.drop.x, 0, shot.pos.z - shot.drop.z).normalize();
-  FEED.side.set(-FEED.toward.z, 0, FEED.toward.x);
+  if (!FEED.pelletMesh || FEED.active || STROKE.active) return;
+  // Aim at visible water; fall back to a known open part of the basin.
+  const direction = camera.getWorldDirection(new THREE.Vector3());
+  const distance = Math.abs(direction.y) > 0.001 ? (WATER_Y-camera.position.y)/direction.y : -1;
+  const hit = camera.position.clone().addScaledVector(direction, distance).setY(WATER_Y);
+  FEED.point.set(0, WATER_Y, 1);
+  if (distance > 0 && distance < 80 && sdf(hit.x, hit.z) < -0.65) FEED.point.copy(hit);
+  FEED.shot = null; FEED.pellets.length = 0;
   FEED.active = true; FEED.t = 0; FEED.emitted = 0; FEED.linger = 0;
-  if (P.holdCamera) setHold(false);
-  for (let i = 0; i < KOI.fish.length; i++) { const f = KOI.fish[i]; f.react = Math.hypot(f.p.x - FEED.point.x, f.p.z - FEED.point.z) * 0.22 + rr(0.6, 1.4); }
+  for (const f of KOI.fish) f.react = Math.hypot(f.p.x-FEED.point.x, f.p.z-FEED.point.z)*0.22 + rr(0.6,1.4);
   $('feedbtn').disabled = true;
-  toast('Feeding the koi');
+  toast('A little food on the water · watch the koi gather');
   if (typeof audioEvent === 'function') audioEvent('feedStart');
 }
 function nearestFood(pos) {
@@ -7304,69 +7321,33 @@ function nearestFood(pos) {
   return FEED.active ? FEED.point : null;
 }
 function updateFeeding(dt, t) {
-  if (!FEED.hand) return;
-  const H = FEED.hand;
+  if (!FEED.pelletMesh || dt <= 0) return;
   FEED.excite = lerp(FEED.excite, FEED.active ? 1 : 0, 1 - Math.exp(-dt * (FEED.active ? 2 : 0.35)));
   if (FEED.active) {
     FEED.t += dt;
-    const T = FEED.t;
-    // first-person hand: reaches in from the lower-right edge once the camera has settled, sprinkles, withdraws
-    const Th = T - 1.0;
-    camera.getWorldDirection(_hf); _hr.crossVectors(_hf, _up).normalize(); _hu.crossVectors(_hr, _hf);
-    const hold = _hh.copy(camera.position).addScaledVector(_hf, 0.5).addScaledVector(_hr, 0.05).addScaledVector(_hu, -0.06);
-    // retracted near the (off-screen) shoulder: never parked inside the bank
-    const shoulderF = _hs.copy(camera.position).addScaledVector(_hr, 0.3).addScaledVector(_hu, -0.6).addScaledVector(_hf, -0.05);
-    const away = _ha.copy(shoulderF).lerp(hold, 0.25);
-    let k, pinch = 1, rub = 0;
-    const sm = (x) => { x = clamp(x, 0, 1); return x * x * x * (x * (x * 6 - 15) + 10); };   // zero speed at both ends
-    if (Th < 0) _hp.copy(away);
-    else if (Th < 1.0) { k = sm(Th); _hp.lerpVectors(away, hold, k); }
-    else if (Th < 3.0) { _hp.copy(hold); _hp.addScaledVector(_hu, Math.sin((Th - 1.0) * 5) * 0.004 * smoothstep(1.0, 1.4, Th)); rub = smoothstep(1.0, 1.35, Th) * (1 - smoothstep(2.7, 3.0, Th)); pinch = lerp(1, 0.55, smoothstep(1.2, 3.0, Th)); }
-    else if (Th < 4.1) { k = sm((Th - 3.0) / 1.1); _hp.lerpVectors(hold, away, k); pinch = lerp(0.55, 0.2, k); }
-    else _hp.copy(away);
-    // follow-spring: the hand glides even while the camera is still settling into the shot
-    // spring runs in camera space, so the first-person hand stays glued to the view while the camera is still gliding in
-    _hp.sub(camera.position); const lx = _hp.dot(_hr), ly = _hp.dot(_hu), lz = _hp.dot(_hf);
-    if (!FEED.hpInit || !H.root.visible) { FEED.hp = new THREE.Vector3(lx, ly, lz); FEED.hpInit = true; }
-    else FEED.hp.lerp(_tip.set(lx, ly, lz), 1 - Math.exp(-dt * 14));
-    _hp.copy(camera.position).addScaledVector(_hr, FEED.hp.x).addScaledVector(_hu, FEED.hp.y).addScaledVector(_hf, FEED.hp.z);
-    H.root.visible = Th > -0.05 && Th < 4.1;
-    if (H.root.visible) {
-      H.root.position.copy(_hp);
-      // forearm points from an off-screen shoulder (lower right, level with the camera) to the wrist; palm down
-      const shoulder = _hs.copy(camera.position).addScaledVector(_hr, 0.3).addScaledVector(_hu, -0.6).addScaledVector(_hf, -0.05);
-      const X = _hx.subVectors(_hp, shoulder).normalize(), Y = _hy.set(0, 1, 0).addScaledVector(X, -X.y).normalize(), Z = _hz.crossVectors(X, Y);
-      H.root.quaternion.setFromRotationMatrix(_hm.makeBasis(X, Y, Z));
-      H.root.rotateX(0.42 + 0.05 * Math.sin(T * 2.1));                                   // rolled thumb-side up: a natural three-quarter view
-      H.palm.rotation.set(0, -0.1, -0.3 + 0.05 * Math.sin(T * 1.7));                      // wrist only gently flexed toward the water
-      poseHand(pinch, rub, T);
-      resolveHandCollisions(H, false, FEED.col || (FEED.col = { lift: 0 }), dt);   // never through koi, rocks or the bank
-      // release pellets from between thumb and fingertips while rubbing
-      if (rub > 0 && FEED.pellets.length < 70) {
-        const want = Math.floor((Th - 1.0) * 24);
-        while (FEED.emitted < want) {
-          FEED.emitted++;
-          H.J.index[2].children[0].getWorldPosition(_tip); H.J.thumb[2].children[0].getWorldPosition(_tip2);
-          _tip.lerp(_tip2, 0.5);
-          FEED.pellets.push({ x: _tip.x, y: _tip.y - 0.01, z: _tip.z, vx: rr(-0.25, 0.25) - FEED.toward.x * 0.15, vy: rr(-0.1, 0.1), vz: rr(-0.25, 0.25) - FEED.toward.z * 0.15, fl: false, eaten: false, rot: rand() * 6, ph: rand() * 6 });
-        }
-      }
+    const want = Math.min(42, Math.floor(Math.max(0,FEED.t-0.15)*20));
+    while (FEED.emitted < want) {
+      FEED.emitted++;
+      const angle=rand()*Math.PI*2, radius=Math.sqrt(rand())*.28;
+      FEED.pellets.push({x:FEED.point.x+Math.cos(angle)*radius, y:WATER_Y+rr(.25,.45), z:FEED.point.z+Math.sin(angle)*radius,
+        vx:rr(-.07,.07), vy:0, vz:rr(-.07,.07), fl:false, eaten:false, rot:rand()*6, ph:rand()*6, age:0});
     }
-    const left = FEED.pellets.filter((q) => !q.eaten).length;
-    if (T > 5.2 && left === 0) { FEED.linger += dt; if (FEED.linger > 2.5) endFeeding(); }
-    if (T > 45) endFeeding();
+    if (FEED.t > 3 && FEED.pellets.every(q=>q.eaten)) { FEED.linger += dt; if (FEED.linger > 2.5) endFeeding(); }
+    if (FEED.t > 45) endFeeding();
   }
   // pellets: fall, splash, float and drift; nudged by fish; eaten when a mouth reaches them
   const F = KOI.fish, n = Math.min(P.fishCount | 0, F.length);
   let c = 0;
   for (const q of FEED.pellets) {
+    q.age = (q.age || 0) + dt;
+    if (q.age > 45) q.eaten = true;
     if (q.eaten) continue;
     if (!q.fl) {
       q.vy -= 9.81 * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.z += q.vz * dt;
       const wh = waterHeightAt(q.x, q.z, t);
       if (q.y <= wh) { q.fl = true; q.y = wh; q.vx *= 0.15; q.vz *= 0.15; addDrop(q.x, q.z, 0.035, -0.0018); if (typeof audioEvent === 'function' && rand() < 0.4) audioEvent('plip'); }
     } else {
-      q.x += q.vx * dt; q.z += q.vz * dt; q.vx *= 0.99; q.vz *= 0.99;
+      q.x += q.vx * dt; q.z += q.vz * dt; q.vx *= Math.exp(-.603*dt); q.vz *= Math.exp(-.603*dt);
       q.y = waterHeightAt(q.x, q.z, t) + 0.0015;
       if (sdf(q.x, q.z) > -0.08) { q.vx *= -0.5; q.vz *= -0.5; }
       for (let i = 0; i < n; i++) {
@@ -7563,7 +7544,7 @@ function resolveHandCollisions(H, skipFish, state, dt) {
   return { total, fishLift };
 }
 function endFeeding() {
-  FEED.active = false; FEED.hand.root.visible = false; FEED.shot = null;
+  FEED.active = false; FEED.shot = null;
   if (P.cameraMode === 'Manual') { const e = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ'); CTRL.yaw = e.y; CTRL.pitch = e.x; }
   FEED.pellets = FEED.pellets.filter((q) => !q.eaten);
   $('feedbtn').disabled = false;
@@ -8079,7 +8060,7 @@ async function init() {
     buildPrecip();
     buildMountains();
     if (typeof buildKoi === 'function') buildKoi();
-    buildHand();
+    buildFeeding();
     updateSun(); updateWaves(); updateClarity();
     makeTargets();
     buildPost();
@@ -8127,6 +8108,7 @@ function installHiddenReef() {
   });
   $('scene-settings').onclick=()=>{ const d=document.querySelector('.dg.ac'); const show=d.style.display==='none';d.style.display=show?'':'none';$('scene-settings').setAttribute('aria-expanded',String(show));if(show)GUI_CTRL.gui.open();};
   document.querySelector('.dg.ac').style.display='none';
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { goToView('Garden'); P.freezeScene=true; }
+  goToView('Garden', true);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) setFreeze(true);
 }
 init();

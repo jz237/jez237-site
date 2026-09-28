@@ -17,4 +17,4 @@ await cp(path.join(root,'public'),dist,{recursive:true});
 await cp(path.join(root,'src'),path.join(dist,assetPath),{recursive:true});
 const html=await readFile(path.join(root,'index.html'),'utf8');
 await writeFile(path.join(dist,'index.html'),html.replaceAll('./src/',`./${assetPath}/`));
-console.log('Built Hidden Reef Stillwater v3: static, self-hosted, no remote assets.');
+console.log('Built Hidden Reef Stillwater: named koi, customer care, self-hosted assets.');

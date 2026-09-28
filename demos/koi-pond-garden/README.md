@@ -1,88 +1,53 @@
-# 🌸 Koi Pond Garden
+# Hidden Reef Stillwater — named koi and customer care
 
-An ultra-realistic, interactive Japanese koi pond garden — rendered in real time in the browser with [Three.js](https://threejs.org) and custom shaders. The **entire garden lives in one HTML file**: no build step, no bundler, no asset folder. Every mesh, texture, sound and animation is generated procedurally in code. The only external dependencies are Three.js and dat.gui, loaded from a CDN.
+Live location: https://jez237.com/demos/hidden-reef-koi/
 
-**▶️ [Live demo](https://souranyp-stack.github.io/koi-pond-garden/)** · one file · works on desktop and mobile
-&nbsp;·&nbsp; ⭐ **If you like it, star the repo** — it helps others find it.
+This revision adapts **Koi Pond Garden by Sourany Phomhome**, released under the MIT license at https://github.com/souranyp-stack/koi-pond-garden. Its rendering foundation replaces the earlier simplified Stillwater renderer. The required copyright and MIT permission notice are preserved in `public/LICENSES.txt`, together with the Three.js and dat.GUI licenses. This is an adapted work, not a claim of independent authorship of the upstream engine. The tutorial is https://www.youtube.com/watch?v=uSCUkGlHY30.
 
-![Koi pond garden — live footage](demo.gif)
+![Stillwater garden](stillwater.png)
 
-<sub>Recorded live in the browser. ▲ Above: the whole scene runs from one HTML file. Below: the pond from above.</sub>
+## Run and build
 
-![Koi pond garden — from above](screenshot.jpg)
+Editable project: `../../scripts/koi-pond/`. Run the commands below from that directory. The root `index.html` and `koi-pond.html` are built copies; both open the same current garden. Original upstream screenshots and prompt files are retained for provenance.
 
-## Features
+Node 24 or later. No package installation is required; Three.js r160 and dat.GUI are vendored under their original licenses.
 
-- **20 koi across 18 real varieties** (Kohaku, Sanke, Showa, Ogon, Asagi, Tancho, Utsuri, butterfly long-fins, Gin Rin sparklers, Doitsu and more) in small, medium and jumbo sizes, each with procedurally generated scales, patterns and fins.
-- **Physically simulated water** — a live ripple simulation plus Gerstner waves, real reflection and refraction passes, caustics, Beer–Lambert absorption and crystal-clear water by default.
-- **A full garden** — an arched bridge, a pavilion, a rock waterfall, sakura, a red maple, a bamboo grove, sacred lotus, water lilies, iris beds, stone lanterns and distant mountains.
-- **Pond life** — a frog that leaps when you click it, a turtle sunning on a rock, and dragonflies darting over the surface.
-- **Feed and stroke the koi** — a first-person hand reaches in to sprinkle food (the fish crowd and jostle) or to gently stroke a fish that swims up to your hand.
-- **Weather and seasons** — sunny, rain, autumn and snowy winter, each with matching light, fog and water.
-- **A cinematic film tour** that flies through the whole garden, above and below the water.
-- **Procedural audio** — water, leaves, the waterfall, a bamboo *shishi-odoshi* knock and more, all synthesized with the Web Audio API.
-
-## Controls
-
-| Key | Action | | Key | Action |
-|---|---|---|---|---|
-| `C` | Cinematic / manual camera | | `E` | Feed the koi |
-| `P` | Hold the current shot | | `G` | Stroke a koi |
-| `O` | Freeze time | | `K` | Follow a koi |
-| `V` | Clean view (hide UI) | | `T` | Change weather / season |
-| `M` | Mute / unmute | | `H` | Show the control panel |
-| `I` | Show / hide the guide | | | |
-
-**Manual camera:** drag to look, `W` `A` `S` `D` to move, `Q` / `Space` down / up, `Shift` to move faster. Click the water for ripples, or click the frog to make it leap.
-
-## Run it locally
-
-It's a single file, so you can just open it — but a local server avoids browser security limits on textures and audio:
-
-```bash
-git clone https://github.com/souranyp-stack/koi-pond-garden.git
-cd koi-pond-garden
-python3 -m http.server 8765
-# then open http://localhost:8765/koi-pond.html
+```sh
+npm test
+npm run build
+python -m http.server 8797 --bind 127.0.0.1 --directory dist
 ```
 
-Or simply double-click `koi-pond.html` to open it directly in your browser.
+`dist` is a static, self-hosted page. It makes no calls to AI services, analytics or remote asset hosts. The renderer synthesizes its textures and meshes at startup, so first load includes texture generation and shader compilation. Automatic quality adjustment trades resolution before effects on slower devices.
 
-## How it's made
+## Current experience
 
-Everything you see is built by code when the page loads — there are no `.png`, `.glb`, `.mp3` or font files anywhere:
+- Opens immediately in a stationary Garden view; fish, water and foliage remain alive. The moving tour is optional.
+- Wheel and trackpad scrolling over the scene zoom in/out in all camera modes.
+- Every one of the twenty fish has a unique name, with its variety retained in the guide and follow-camera label.
+- Feeding drops food directly onto visible water without a hand, arm or forced camera move.
+- Sixteen searchable, sourced care topics cover pond planning, buying, quarantine, KHV, water tests, nitrogen cycling, oxygen, alkalinity, source water, diet, seasons, health and variety identification.
+- The top-left preview badge is removed.
 
-- **Geometry** (koi bodies, rocks, the bridge, trees, the hand) is generated from curves, noise and instancing at runtime.
-- **Textures** (koi patterns, scales, bark, stone, the pond floor) are drawn into canvases and data arrays in code.
-- **Water, lighting, shadows, caustics and depth of field** are custom GLSL shaders running on the GPU via WebGL.
-- **Sound** is synthesized with the Web Audio API — no recordings.
+## Rendering and behavior
 
-That's why the whole thing is one ~560 KB text file instead of a folder of megabytes of assets, and why anyone can open it and read exactly how any part works.
+- Preserved the tutorial's integrated HDR render pipeline: depth-aware reflection and refraction, absorption, Fresnel, ripple simulation, underwater caustics and koi shadows, foliage transmission, sky lighting, ambient occlusion, bloom and depth of field.
+- Widened the southern open basin and shoreline while keeping the bridge and northern approach intact. The new starting composition favors the pond and garden together.
+- Added Hidden Reef branding, garden / water / underwater view buttons, a fish guide matching all 20 displayed individuals, and a separate interactive water-chemistry lesson.
+- Pinned the koi's head during the traveling body wave; grew lateral flex toward the tail; preserved separately animated paired fins, tail membranes, breathing and eyes.
+- Reduced maximum turning rate and acceleration, feeding rush speed, pitch and roll. Fish vary depth continuously and choose new preferred depths, alternate bursts with glides and inspection pauses, retain loose social spacing, and track local hunger, energy and a fading feeding-location memory.
+- Corrected freeze behavior and final floor/surface bounds after crowding. Muted audio by default, kept technical settings out of the opening view, and added a reduced-motion initial state.
 
-## The prompt
+The chemistry model uses mg/L as nitrogen, with explicit nitrogen mass balance and user-supplied pH. Its readings are illustrative, separate from the visual scene, and are not a stocking or treatment prescription. Care sources and model limits are available in the guide.
 
-This project was built by directing [Claude](https://claude.ai) in rounds — describe, run, screenshot, measure, fix, repeat. The [`prompt/`](prompt/) folder contains the one-shot prompt that specifies the whole build, so you can rebuild a garden like this yourself:
+## Validation
 
-- [`prompt/one-shot-prompt.txt`](prompt/one-shot-prompt.txt) — the full specification, paste into a fresh session.
-- [`prompt/edit-existing-file.txt`](prompt/edit-existing-file.txt) — a short prompt for editing this file without rewriting it.
+Node tests exercise the actual scene's simulation function against its actual basin geometry for 150 simulated seconds, plus a feeding run and freeze check. They verify finite positions, basin/floor/surface bounds, upright attitude, variable speed, continuous depth exploration and independent phases. The shared body curve is checked for a steady head, traveling phase, growing tail amplitude and a matching analytical slope. Chemistry tests cover speciation, nitrogen conservation, aeration/filter comparisons and nonnegative long-run state.
 
-## Tech
+Interaction tests also exercise fixed-view startup, bounded/reversible zoom, hand-free feeding and food cleanup. Browser checks cover initial rendering, garden and underwater cameras, variety selection/following, chemistry controls, weather, feeding, pause and phone layout. The browser preview may throttle background WebGL tabs; FPS from a background tab is not a device benchmark.
 
-- [Three.js](https://threejs.org) r160 (WebGL renderer)
-- [dat.gui](https://github.com/dataarts/dat.gui) for the control panel
-- Custom GLSL shaders, procedural textures, and the Web Audio API
-- No build step, no framework, no assets
+## Publishing
 
-## Show your support
+Publish only to GitHub and jez237 until the user accepts this for the Hidden Reef site. The repository's root `AGENTS.md` deployment wrapper must be used to preserve all public assets and Pages Functions. Do not use a standalone static upload for jez237-site.
 
-If this made you smile, please **⭐ star the repo** and share it — it genuinely helps more people find it. Built something with the [prompt](prompt/)? I'd love to see it.
-
-## License
-
-[MIT](LICENSE) © 2026 Sourany Phomhome. Free to use, modify and share, including commercially — just keep the copyright notice. A mention or a star is always appreciated. ⭐
-
-*Built with [Claude](https://claude.ai).*
-
-## Jez237 hosted copy
-
-This hosted copy bundles Three.js r160 and dat.gui 0.7.9 locally in `vendor/` to comply with the site content-security policy. Their original licences are preserved alongside the scripts. The upstream project and its MIT copyright remain unchanged.
+Previous Blender-authored models and their generator remain archived in the repository's `model-source` directory; the v3 runtime uses the upstream procedural koi with revised kinematics.
