@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 const phase=process.env.QUARRY_CUT_PHASE || 'after';
 const focused=process.env.QUARRY_CUT_FOCUSED==='1';
 const roadsideOnly=process.env.QUARRY_CUT_ROADSIDE==='1';
+const extension=process.env.QUARRY_CUT_EXTENSION==='1';
 assert.match(phase,/^[a-z0-9][a-z0-9_-]*$/i);
 const output=path.resolve(process.env.QUARRY_CUT_OUTPUT || 'outputs/quarry-cut',phase);
 const url=process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/';
@@ -20,11 +21,16 @@ const views=[
   {name:'right-end',player:[66,-83,0],position:[78,3,-98],target:[128,12,-129]},
 ];
 if(roadsideOnly)views.splice(0,views.length,{name:'roadside-close',player:[98,-72,0],position:[104,2.9,-77],target:[116,1.8,-83]});
+if(extension)views.splice(0,views.length,
+  {name:'extension-approach',player:[78,-82,0],position:[90,4,-80],target:[73,9,-138]},
+  {name:'extension-front',player:[58,-87,0],position:[58,4,-93],target:[68,10,-144]},
+  {name:'extension-reverse',player:[26,-88,0],position:[30,4,-98],target:[65,10,-149]},
+  {name:'extension-join',player:[80,-77,0],position:[87,3.5,-92],target:[103,10,-124]});
 const track=Array.from({length:481},(_,i)=>{
   const a=i/480*Math.PI*2;
   return {x:108*Math.sin(a)+12*Math.sin(a*3),z:88*Math.cos(a)+9*Math.sin(a*2)};
 });
-const report={phase,url,focused,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
+const report={phase,url,focused,extension,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
 let browser;
 await fs.mkdir(output,{recursive:true});
 assert.equal(await fs.access(path.join(output,'report.json')).then(()=>true,()=>false),false,
@@ -77,12 +83,15 @@ try {
   // chase poses following a physically moving car, not arbitrary fly-throughs.
   // Camera easing/FOV animation is intentionally held fixed for comparison.
   if(!focused&&!roadsideOnly){
-  await page.evaluate(({track,neutral})=>{
-    const start=track[149],next=track[150],yaw=Math.atan2(next.x-start.x,next.z-start.z);
+  await page.evaluate(({track,neutral,extension})=>{
+    // Start ahead of the sector so the normal forward chase view contains the
+    // approaching extraction faces, rather than starting beside them.
+    const index=extension?164:149;
+    const start=track[index],next=track[index+1],yaw=Math.atan2(next.x-start.x,next.z-start.z);
     __quarry.resume();__quarry.setInput(neutral);__quarry.teleport(0,start.x,start.z,yaw);__quarry.simulate(.25);
     __quarry.velocity(0,Math.sin(yaw)*13,0,Math.cos(yaw)*13);
     __quarry.captureCamera([start.x,5,start.z+8],[start.x,1,start.z]);
-  },{track,neutral});
+  },{track,neutral,extension});
   for(let sample=0;sample<=4;sample++){
     const pose=await page.evaluate(({sample,track})=>{
       const q=__quarry;

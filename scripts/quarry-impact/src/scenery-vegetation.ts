@@ -1,5 +1,6 @@
 import { nearTrees, saplingPlacements, landscapeHeight, scenerySurfaceHeight, quarryRim, overlapsQuarryRoadside } from './quarry-layout';
 import { roadsideSaplings, roadsideGroundCover } from './scenery-flora-placement';
+import { backdropFirs, composeForestBackdrop, BACKDROP_CENTER, type BackdropCard } from './scenery-backdrop';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
@@ -17,6 +18,7 @@ type Plant = {
     yaw: number;
     ground?: number;
     width?: number;
+    backdrop?: boolean;
 };
 type TreeBatch = {
     material: T.MeshStandardMaterial;
@@ -27,6 +29,7 @@ type TreeBatch = {
 type Cell = {
     x: number;
     z: number;
+    backdrop: boolean;
     levels: Map<number, Map<T.Mesh, TreeBatch>>;
 };
 async function scannedForest(parent: T.Group, file: string, large: boolean) {
@@ -51,14 +54,21 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
         const normalization = normalizers.get(large ? String(variant) : tree.name)!;
         // Filter after the original slice so the new approach does not populate
         // previously empty distant areas with replacement procedural saplings.
-        const placements: Plant[] = large ? nearTrees('fir-' + variant) : [
+        const placements: Plant[] = large ? [
+            ...nearTrees('fir-' + variant),
+            ...(level === 1 ? backdropFirs(variant) : []),
+        ] : [
             ...saplingPlacements(variant).slice(0, 12).filter(p => !overlapsQuarryRoadside(p.x, p.z)),
             ...roadsideSaplings(variant),
         ];
         for (const plant of placements) {
-            const cx = Math.floor(plant.x / 56) * 56 + 28, cz = Math.floor(plant.z / 56) * 56 + 28, key = cx + ':' + cz;
+            // The distant firs share one bounded patch per variant, rather
+            // than paying another three material draws for every isolated trunk.
+            const cx = plant.backdrop ? BACKDROP_CENTER.x : Math.floor(plant.x / 56) * 56 + 28;
+            const cz = plant.backdrop ? BACKDROP_CENTER.z : Math.floor(plant.z / 56) * 56 + 28;
+            const key = (plant.backdrop ? 'backdrop:' : '') + cx + ':' + cz;
             if (!cells.has(key))
-                cells.set(key, { x: cx, z: cz, levels: new Map() });
+                cells.set(key, { x: cx, z: cz, backdrop: !!plant.backdrop, levels: new Map() });
             const cell = cells.get(key)!;
             if (!cell.levels.has(level))
                 cell.levels.set(level, new Map());
@@ -99,7 +109,7 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
     }
     for (const cell of cells.values()) {
         const lod = new T.LOD();
-        lod.name = large ? 'scanned-fir-cell' : 'sapling-cell';
+        lod.name = cell.backdrop ? 'backdrop-fir-cell' : large ? 'scanned-fir-cell' : 'sapling-cell';
         lod.autoUpdate = false;
         lod.position.set(cell.x, 0, cell.z);
         for (const [level, batches] of [...cell.levels.entries()].sort((a, b) => a[0] - b[0])) {
@@ -108,7 +118,9 @@ async function scannedForest(parent: T.Group, file: string, large: boolean) {
                 const mesh = new T.InstancedMesh(batch.geometry, batch.material, batch.matrices.length);
                 batch.matrices.forEach((matrix, i) => { mesh.setMatrixAt(i, matrix); mesh.setColorAt(i, batch.colors[i]); });
                 mesh.computeBoundingSphere();
-                mesh.castShadow = true;
+                // This branch geometry remains a distant silhouette from all
+                // driving views; it does not expand the moving shadow workload.
+                mesh.castShadow = !cell.backdrop;
                 mesh.receiveShadow = true;
                 group.add(mesh);
             }
@@ -156,7 +168,26 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         { kind: 'maple', count: 76, aspect: 712 / 1024, minHeight: 10, heightRange: 10 },
     ];
     let distantIndex=0;
-    for (const { kind, count, aspect, minHeight, heightRange } of distantSpecies) {
+    const originalCards: BackdropCard[] = [];
+    for (const { kind, count, minHeight, heightRange } of distantSpecies) {
+        for (let i = 0; i < count; i++) {
+            // Preserve the original six random draws per tree, including trees
+            // being recomposed locally, so all later grass is unchanged.
+            const azimuth=random(),depth=random(),size=random(),stand=distantIndex%12;
+            const center=stand/12*Math.PI*2+Math.sin(stand*2.7)*.075;
+            const width=.47+Math.sin(stand*1.8+.6)*.085;
+            const a=center+(azimuth-.5)*width;
+            const front=distantIndex%5<3,offset=front?5+depth*13:22+depth*24;
+            const r=Math.max(182,quarryRim(a).r+offset),x=Math.sin(a)*r*1.08,z=Math.cos(a)*r;
+            const growth=T.MathUtils.clamp(.53+Math.sin(stand*2.13)*.21+(size-.5)*.38+(front?-.04:.08),0,1);
+            originalCards.push({kind,x,z,ground:landscapeHeight(x,z),height:minHeight+growth*heightRange,
+                color:[.82+random()*.16,.87+random()*.13,.85+random()*.15]});
+            distantIndex++;
+        }
+    }
+    const composedCards = composeForestBackdrop(originalCards);
+    for (const { kind, aspect } of distantSpecies) {
+        const placements = composedCards.filter(p => p.kind === kind);
         const photo = textures.load(url('models/' + kind + '.webp'));
         photo.colorSpace = T.SRGBColorSpace;
         photo.anisotropy = 8;
@@ -176,30 +207,18 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         material.customProgramCacheKey = () => 'quarry-distant-tree-billboard-v1';
         const geo = new T.PlaneGeometry(aspect, 1);
         geo.translate(0, .5, 0);
-        const trees = new T.InstancedMesh(geo, material, count);
+        const trees = new T.InstancedMesh(geo, material, placements.length);
         // Baked photographs supply fine twig silhouettes; their shadow maps would add
         // little at this distance and previously tripled alpha-tested overdraw.
         trees.castShadow = false;
         trees.receiveShadow = false;
-        for (let i = 0; i < count; i++) {
-            // Use the same 370 cards in coherent two-layer stands, concentrated
-            // behind the true crest instead of isolated across a 95m-wide lawn.
-            // Six random draws per tree preserve the later understory sequence.
-            const azimuth=random(),depth=random(),size=random(),stand=distantIndex%12;
-            const center=stand/12*Math.PI*2+Math.sin(stand*2.7)*.075;
-            const width=.47+Math.sin(stand*1.8+.6)*.085;
-            const a=center+(azimuth-.5)*width;
-            const front=distantIndex%5<3,offset=front?5+depth*13:22+depth*24;
-            const r=Math.max(182,quarryRim(a).r+offset),x=Math.sin(a)*r*1.08,z=Math.cos(a)*r;
-            dummy.position.set(x, landscapeHeight(x, z), z);
+        for (const [i, plant] of placements.entries()) {
+            dummy.position.set(plant.x, plant.ground, plant.z);
             dummy.rotation.set(0, 0, 0);
-            const growth=T.MathUtils.clamp(.53+Math.sin(stand*2.13)*.21+(size-.5)*.38+(front?-.04:.08),0,1);
-            const h = minHeight + growth * heightRange;
-            dummy.scale.setScalar(h);
+            dummy.scale.set(plant.height * (plant.width ?? 1), plant.height, plant.height);
             dummy.updateMatrix();
             trees.setMatrixAt(i, dummy.matrix);
-            trees.setColorAt(i, new T.Color().setRGB(.82 + random() * .16, .87 + random() * .13, .85 + random() * .15));
-            distantIndex++;
+            trees.setColorAt(i, new T.Color().setRGB(...plant.color));
         }
         trees.computeBoundingSphere();
         parent.add(trees);

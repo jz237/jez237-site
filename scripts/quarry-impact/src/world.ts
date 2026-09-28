@@ -7,6 +7,7 @@ import { terrainHeight, trackPoint } from './rules';
 import { forestScenery, updateForestView } from './scenery-vegetation';
 import { loadQuarryCut } from './scenery-cut';
 import { loadQuarryRoadside } from './scenery-roadside';
+import { loadQuarryExtension } from './scenery-extension';
 import { quarryRoadsideGround } from './scenery-roadside-material';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
@@ -79,6 +80,7 @@ export class Quarry {
   sun: T.DirectionalLight;
   private cutLODs: T.LOD[] = [];
   private roadsideLODs: T.LOD[] = [];
+  private extensionLODs: T.LOD[] = [];
   private rockMaterial: T.MeshStandardMaterial;
   constructor(
     public scene: T.Scene,
@@ -671,6 +673,7 @@ export class Quarry {
     this.roadsideLODs = await loadQuarryRoadside(this.scenery, {
       ground: quarryRoadsideGround(), rock: this.rockMaterial, scannedRock: scannedMaterial,
     });
+    this.extensionLODs = await loadQuarryExtension(this.scenery, this.rockMaterial, scannedMaterial);
   }
   setMode(mode: string) {
     const derby = mode === 'derby';
@@ -683,6 +686,7 @@ export class Quarry {
       updateForestView(camera);
       for (const lod of this.cutLODs) lod.update(camera);
       for (const lod of this.roadsideLODs) lod.update(camera);
+      for (const lod of this.extensionLODs) lod.update(camera);
     }
     for (const p of this.props) {
       p.mesh.position.copy(p.body.translation());

@@ -17,7 +17,7 @@ try {
   assert.equal(document.status, 200);
   assert.ok((await document.text()).includes(build), 'Production must serve the tested application bundle');
   assert.ok(document.headers.get('content-security-policy')?.includes('wss://quarry-impact-online.quarry-impact-free.workers.dev'));
-  const files = [...new Set([...bundled, 'models/quarry-cut.glb', 'models/quarry-roadside.glb', 'multiplayer.json', 'assets/scree_diff.jpg', 'assets/scree_nor_gl.jpg', 'assets/scree_rough.jpg'])];
+  const files = [...new Set([...bundled, 'models/quarry-cut.glb', 'models/quarry-roadside.glb', 'models/quarry-extension.glb', 'multiplayer.json', 'assets/scree_diff.jpg', 'assets/scree_nor_gl.jpg', 'assets/scree_rough.jpg'])];
   for (const file of files) {
     const response = await fetch(new URL(file, base), { signal: AbortSignal.timeout(60000) });
     assert.equal(response.status, 200, file);

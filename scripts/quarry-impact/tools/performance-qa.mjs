@@ -43,6 +43,12 @@ try {
   }));
   const buildResponse = await page.request.get(report.buildURL);
   report.buildSha256 = createHash('sha256').update(await buildResponse.body()).digest('hex');
+  const sceneryURL = new URL('models/quarry-extension.glb', report.pageURL).href;
+  const sceneryResponse = await page.request.get(sceneryURL);
+  assert.equal(sceneryResponse.status(), 200, 'The final authored wall must be served');
+  const sceneryBytes = await sceneryResponse.body();
+  report.sceneryAsset = { url: sceneryURL, bytes: sceneryBytes.length,
+    sha256: createHash('sha256').update(sceneryBytes).digest('hex') };
   await page.evaluate(async quality => {
     await __quarry.start('derby'); __quarry.autopilot(true); __quarry.setQuality(quality); __quarry.mute();
   }, quality);
@@ -58,7 +64,7 @@ try {
       const { benchmarkSamples, ...stats } = __quarry.stats;
       return { stats, mode: __quarry.mode, cars: __quarry.cars, heap: performance.memory?.usedJSHeapSize };
     });
-    if (time >= nextSample) { report.samples.push({ time, ...snapshot }); nextSample += 10; }
+    if (time >= nextSample) { report.samples.push({ time, ...snapshot }); nextSample += 5; }
     const nextBlock = Math.min(4, Math.floor(time / (seconds / modes.length)));
     if (nextBlock !== block || snapshot.stats.state === 'result') {
       report.events.push({ time, mode: modes[nextBlock], reason: nextBlock !== block ? 'scheduled block' : 'completed event', previous: snapshot });
@@ -90,11 +96,16 @@ try {
     const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
     return a >= 105 && a <= 155;
   }).length;
+  report.extensionVisits = raceSamples.filter(s => {
+    const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
+    return a >= 139 && a <= 172;
+  }).length;
   await page.screenshot({ path: screenshot });
   assert.ok(frames.length > seconds * 10, 'Capture must contain continuous rendered frames');
   assert.ok(frames.length < 50000, 'Frame capture must not reach the runtime sample cap');
   assert.ok(report.samples.every(s => s.cars.length === 8), 'All sampled events must have eight cars');
   assert.ok(raceSamples.length > 0 && report.roadsideVisits > 0, 'Racing must visit the authored approach');
+  assert.ok(report.extensionVisits > 0, 'Racing must visit the extended wall');
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } catch (error) {
