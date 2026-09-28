@@ -76,8 +76,11 @@ roadsideDeposit*=mix(.91,1.05,quarryNoise(vQuarryPosition.xz*.17));
 roadsideDeposit*=mix(1.0,.73,roadsideDrain);
 diffuseColor.rgb=mix(diffuseColor.rgb,roadsideDeposit,roadsideCoverage);
 #include <alphamap_fragment>`);
-    shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
+    // Preserve the surrounding terrain floor before applying the painted local
+    // mixture, so compacted drainage can use its own restrained roughness.
+    shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>\nroughnessFactor=max(.89,roughnessFactor);', `
 #include <roughnessmap_fragment>
+roughnessFactor=max(.89,roughnessFactor);
 float roadsideFineRoughness=texture2D(roadsideDirtRoughness,roadsideDirtUV).g;
 float roadsideStoneRoughness=roadsideSample(roadsideGravelRoughness,roadsideStoneUV,roadsideWeights,roadsideA,roadsideB,roadsideC).g;
 float roadsideRoughness=mix(mix(.83,.96,roadsideFineRoughness),mix(.88,1.0,roadsideStoneRoughness),roadsideStone);
@@ -98,6 +101,6 @@ vec3 roadsideN=normalize(mix(normalize(roadsideFineFrame*roadsideFineN),normaliz
 normal=normalize(mix(normal,roadsideN,roadsideCoverage));
 #endif`);
   };
-  material.customProgramCacheKey = () => 'authored-roadside-ground-v3';
+  material.customProgramCacheKey = () => 'authored-roadside-ground-v4';
   return material;
 }

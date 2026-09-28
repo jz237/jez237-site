@@ -16,25 +16,29 @@ function height(t:Triangle,x:number,z:number){
   return u*a[1]+v*b[1]+(1-u-v)*c[1];
 }
 function overlap(a:Triangle,b:Triangle){
-  let polygon=a.points.map(p=>[p[0],p[2]]);
+  // Carry the full3D vertex while clipping against each terrain triangle's
+  // vertical prism. This also handles vertical faces and folded/overhanging
+  // walls, where surface height is not a single-valued function of XZ.
+  let polygon:Point[]=a.points.map(p=>[...p]);
   const [p,q,r]=b.points,orientation=Math.sign((q[0]-p[0])*(r[2]-p[2])-(q[2]-p[2])*(r[0]-p[0]));
   for(let edge=0;edge<3&&polygon.length;edge++){
     const from=b.points[edge],to=b.points[(edge+1)%3];
-    const distance=(point:number[])=>orientation*((to[0]-from[0])*(point[1]-from[2])-(to[2]-from[2])*(point[0]-from[0]));
-    const clipped:number[][]=[];
+    const distance=(point:Point)=>orientation*((to[0]-from[0])*(point[2]-from[2])-(to[2]-from[2])*(point[0]-from[0]));
+    const clipped:Point[]=[];
     for(let i=0;i<polygon.length;i++){
       const start=polygon[i],end=polygon[(i+1)%polygon.length],ds=distance(start),de=distance(end),insideS=ds>=-1e-9,insideE=de>=-1e-9;
       if(insideS)clipped.push(start);
-      if(insideS!==insideE){const t=ds/(ds-de);clipped.push([start[0]+(end[0]-start[0])*t,start[1]+(end[1]-start[1])*t]);}
+      if(insideS!==insideE){const t=ds/(ds-de);clipped.push(start.map((n,j)=>n+(end[j]-n)*t) as Point);}
     }
     polygon=clipped;
   }
   return polygon;
 }
 
-/** On each projected triangle intersection both heights are affine, so the
- * minimum difference lies at an overlap vertex: original vertices, terrain
- * grid/diagonal crossings, or new mesh edges. No sampling spacing is involved.
+/** Clip each3D surface triangle by every overlapping terrain triangle's
+ * vertical prism. Height minus the terrain plane is affine on that polygon,
+ * so its minimum lies at a clipped vertex, even for vertical/overhanging faces.
+ * No sampling spacing or single-valued surface assumption is involved.
  */
 export function exactMinimumClearance(surface:Mesh,base:Mesh){
   const cells=new Map<string,Triangle[]>(),size=8;
@@ -51,8 +55,8 @@ export function exactMinimumClearance(surface:Mesh,base:Mesh){
     for(const b of candidates){
       if(b.bounds[1]<minX||b.bounds[0]>maxX||b.bounds[3]<minZ||b.bounds[2]>maxZ)continue;
       const polygon=overlap(t,b);if(polygon.length)covered=true;
-      for(const [x,z] of polygon){
-        const y=height(t,x,z),by=height(b,x,z),delta=y-by;overlapVertices++;
+      for(const [x,y,z] of polygon){
+        const by=height(b,x,z),delta=y-by;overlapVertices++;
         if(delta<minimum){minimum=delta;worst={triangle:t.id,baseTriangle:b.id,point:[x,y,z],baseHeight:by};}
       }
     }

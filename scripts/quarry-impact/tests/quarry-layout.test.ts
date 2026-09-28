@@ -5,15 +5,15 @@ import { readFileSync } from 'node:fs';
 import { cliffGeometry, landscapeHeight, quarryRim, quarryColliderLayout } from '../src/quarry-layout';
 import { terrainHeight, trackPoint } from '../src/rules';
 
-test('quarry cuts preserve the toe and driving surfaces, replacing only the authored sector',()=>{
+test('quarry cuts preserve the toe and driving surfaces, replacing only the two authored sectors',()=>{
   const g=cliffGeometry(),toe=[];
   const expected:number[]=[];
   for(let band=0;band<30;band++)for(let cell=0;cell<360;cell++){
-    if(cell>=118&&cell<139)continue;
+    if(cell>=118&&cell<172)continue;
     const b=band*722+cell*2;expected.push(b,b+1,b+2,b+2,b+1,b+3);
   }
-  assert.deepEqual(g.indices,new Uint32Array(expected),'exactly the 21 authored cells replace the old cliff faces');
-  assert.equal(g.indices.length/3,20340);
+  assert.deepEqual(g.indices,new Uint32Array(expected),'exactly the21 cut cells and33 extension cells replace the old cliff faces');
+  assert.equal(g.indices.length/3,18360);
   assert.equal(g.positions.length/3,21660);
   for(let i=0;i<=360;i++)toe.push(...g.positions.slice(i*6,i*6+3));
   const toeBytes=new Float32Array(toe);

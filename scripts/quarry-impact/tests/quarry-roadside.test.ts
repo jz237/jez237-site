@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { landscapeHeight, terrainGeometry, cliffGeometry, quarryRoadsideGeometry, quarryRoadsideHeight, scenerySurfaceHeight, overlapsQuarryRoadside, quarryColliderLayout, rockPlacements, screePlacements, nearTrees } from '../src/quarry-layout';
+import { landscapeHeight, terrainGeometry, cliffGeometry, quarryExtensionGeometry, quarryRoadsideGeometry, quarryRoadsideHeight, scenerySurfaceHeight, overlapsQuarryRoadside, quarryColliderLayout, rockPlacements, screePlacements, nearTrees } from '../src/quarry-layout';
 import { trackPoint } from '../src/rules';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
 import { exactMinimumClearance } from './mesh-clearance';
@@ -28,7 +28,8 @@ test('roadside additions preserve every baseline road/arena sample and existing 
   assert.equal(hashArray(terrain.positions),baseline.terrainPositionSHA256,'additive patch must not resample the underlying terrain');
   assert.equal(hashArray(terrain.indices),baseline.terrainIndexSHA256);
   assert.equal(hashArray(cliff.positions),baseline.cliffPositionSHA256);
-  assert.equal(hashArray(cliff.indices),baseline.cliffIndexSHA256);
+  // The later wall extension replaces33 cells; its exact retained triangle
+  // list is independently checked in quarry-extension.test.ts.
   for(const [path,expected] of Object.entries(baseline.files)){
     if(path==='src/quarry-layout.ts')continue; // New shared helpers belong here.
     assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must remain unchanged during the roadside milestone`);
@@ -75,6 +76,7 @@ test('roadside filtering preserves surviving legacy colliders and removes overla
   const reseatedTrees=new Set(['tree-fir-0-10','tree-fir-1-5']);
   assert.equal(current.size,layout.length,'collider IDs must be unique');
   for(const spec of layout){
+    if(spec.id==='quarry-cliffs')continue; // Exact extension replacement has its own baseline test.
     if(old.has(spec.id)){
       const original=old.get(spec.id)!;
       if(reseatedTrees.has(spec.id)){
@@ -82,7 +84,7 @@ test('roadside filtering preserves surviving legacy colliders and removes overla
         assert.equal(hash(Buffer.from(JSON.stringify({...spec,p:{...spec.p,y:original.p.y}}))),original.hash,`${spec.id} may move vertically only; its XZ, shape and ID must stay fixed`);
       } else assert.equal(hash(Buffer.from(JSON.stringify(spec))),original.hash,`${spec.id} must retain its prior transform and shape`);
     }
-    else assert.match(spec.id,/^quarry-roadside(?:$|-solid-)/,'only authored roadside colliders may be added');
+    else assert.match(spec.id,/^(quarry-roadside(?:$|-solid-)|quarry-extension(?:$|-solid-)|tree-backdrop-)/,'only accepted authored scenery colliders may be added');
   }
   for(const id of old.keys())if(!current.has(id))assert.match(id,/^(scanned-rock-|scree-|tree-)/,'fixed structures/terrain must remain unchanged');
   for(let variant=0;variant<6;variant++)for(const p of rockPlacements(variant))assert.equal(overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)*.65),false);
@@ -96,7 +98,7 @@ test('roadside filtering preserves surviving legacy colliders and removes overla
 test('roadside end seams remain feathered and its solid fragments stay seated on exact ground',()=>{
   const data=JSON.parse(readFileSync(new URL('../src/quarry-roadside-data.json',import.meta.url),'utf8'));
   const cut=JSON.parse(readFileSync(new URL('../src/quarry-cut-collision.json',import.meta.url),'utf8'));
-  const visibleBase=[terrainGeometry(),cliffGeometry(),{positions:new Float32Array(cut.positions),indices:new Uint32Array(cut.indices.slice(0,cut.wallTriangleCount*3))}].map(mesh=>createSurfaceSampler(mesh));
+  const visibleBase=[terrainGeometry(),cliffGeometry(),quarryExtensionGeometry(),{positions:new Float32Array(cut.positions),indices:new Uint32Array(cut.indices.slice(0,cut.wallTriangleCount*3))}].map(mesh=>createSurfaceSampler(mesh));
   const ground=quarryRoadsideGeometry();let boundaryVertices=0;
   for(let i=0;i<ground.positions.length;i+=3){
     const x=ground.positions[i],y=ground.positions[i+1],z=ground.positions[i+2],angle=Math.atan2(x/1.08,z)*180/Math.PI;

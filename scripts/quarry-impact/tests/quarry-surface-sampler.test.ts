@@ -26,3 +26,13 @@ test('clearance audit detects an interior base peak even when every new mesh ver
   for(let i=1;i<surface.positions.length;i+=3)surface.positions[i]=1.2;
   assert.ok(Math.abs(exactMinimumClearance(surface,base).minimum-.2)<1e-7);
 });
+
+test('clearance clips vertical/overhanging faces in3D and seating chooses the highest sheet',()=>{
+  const base={positions:new Float32Array([-1,0,-1,1,0,-1,1,0,1,-1,0,1,0,1,0]),indices:new Uint32Array([0,4,1,1,4,2,2,4,3,3,4,0])};
+  const surface={positions:new Float32Array([0,.4,-1,0,.4,1,0,2,0,-1,2,-1,1,2,-1,0,2,1]),indices:new Uint32Array([0,1,2,3,4,5])};
+  const report=exactMinimumClearance(surface,base);assert.equal(report.coveredTriangles,2);
+  assert.ok(Number.isFinite(report.minimum));assert.ok(Math.abs(report.minimum+.6)<1e-7);
+  assert.ok(Math.abs(report.worst!.point[0])<1e-7&&Math.abs(report.worst!.point[2])<1e-7,'vertical face must detect the interior terrain peak');
+  const folded={positions:new Float32Array([-1,0,-1,1,0,-1,0,0,1,-1,2,-1,1,2,-1,0,2,1]),indices:new Uint32Array([0,2,1,3,4,5])};
+  assert.equal(createSurfaceSampler(folded).height(0,0),2,'camera/fragment seating must use the highest intersected sheet regardless of winding');
+});
