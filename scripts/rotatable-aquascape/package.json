@@ -16,7 +16,9 @@
     "check:live": "node qa/verify-live.mjs",
     "dev:reef": "vite --config reef/vite.config.ts",
     "build:reef": "tsc --noEmit -p reef/tsconfig.json && vite build --config reef/vite.config.ts && node ../publish_reef_assets.mjs",
-    "check:reef": "node reef/qa/check.mjs"
+    "check:reef": "node reef/qa/check.mjs",
+    "build:filtration": "tsc --noEmit -p filtration/tsconfig.json && vite build --config filtration/vite.config.ts && node ../publish_filtration_assets.mjs",
+    "check:filtration": "node filtration/qa/browser.mjs"
   },
   "dependencies": {
     "meshoptimizer": "1.1.1",
