@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "generator": "tools/generate-arena-mask.mjs",
+  "reproduction": "node tools/generate-arena-mask.mjs",
+  "provenance": "Original engineering material-mask data authored for Quarry Impact. No source photograph, AI generation, purchased input or world RNG.",
+  "authored": {
+    "path": "source/arena-floor-mask.json",
+    "bytes": 7432,
+    "sha256": "59bf1228eff80bdd673946eb226a6637d98740f3df3672e0cac20da26c1c3727"
+  },
+  "frozenWorld": {
+    "path": "source/arena-floor-base.json",
+    "bytes": 1198972,
+    "sha256": "033fc54502f26d94f35f4a198e40f21c6da00ee2a54aa5081712a1a1614decfb"
+  },
+  "asset": {
+    "path": "public/assets/arena-floor-mask.rgba.gz",
+    "bytes": 229716,
+    "sha256": "bcd9ca4c517cb8eb620e8f7be83e6a89289ab40804311649a7d539e43d8d13f4"
+  },
+  "decoded": {
+    "bytes": 4194304,
+    "sha256": "b36192669a9f2fae5a699119a9029f8ae528197a82160878ae831d9df4fdda39"
+  },
+  "texture": {
+    "width": 1024,
+    "height": 1024,
+    "format": "RGBA8 linear",
+    "bounds": [
+      -48,
+      -48,
+      48,
+      48
+    ],
+    "channels": [
+      "compaction",
+      "fineSediment",
+      "looseAggregate",
+      "wetness"
+    ],
+    "rowZeroWorldZ": -48,
+    "flipY": false,
+    "texelSizeMetres": 0.09375,
+    "sampleUV": "(worldXZ + vec2(48.0)) / 96.0",
+    "edgeFade": [
+      40,
+      45
+    ],
+    "gpuBytesWithMipmaps": 5592404
+  },
+  "geometryAndPhysicsChanges": "None. Existing arena, water/wet geometry and all collider inputs remain untouched.",
+  "features": {
+    "paths": [
+      {
+        "id": "south-arrival",
+        "approximateLength": 53.52851319669058,
+        "pairedPasses": 4,
+        "tireWidth": 0.31
+      },
+      {
+        "id": "south-sidepass",
+        "approximateLength": 41.50561089422935,
+        "pairedPasses": 3,
+        "tireWidth": 0.27
+      },
+      {
+        "id": "west-crossing",
+        "approximateLength": 70.77256214757361,
+        "pairedPasses": 4,
+        "tireWidth": 0.34
+      },
+      {
+        "id": "east-braking",
+        "approximateLength": 30.176922772852606,
+        "pairedPasses": 3,
+        "tireWidth": 0.39
+      },
+      {
+        "id": "north-escape",
+        "approximateLength": 48.77785508548243,
+        "pairedPasses": 4,
+        "tireWidth": 0.3
+      },
+      {
+        "id": "northwest-turn",
+        "approximateLength": 32.043097476015554,
+        "pairedPasses": 3,
+        "tireWidth": 0.33
+      },
+      {
+        "id": "east-turn",
+        "approximateLength": 35.04692095898258,
+        "pairedPasses": 4,
+        "tireWidth": 0.29
+      },
+      {
+        "id": "southwest-brake",
+        "approximateLength": 22.034304299198542,
+        "pairedPasses": 2,
+        "tireWidth": 0.42
+      },
+      {
+        "id": "short-recovery",
+        "approximateLength": 13.51784862547612,
+        "pairedPasses": 2,
+        "tireWidth": 0.35
+      }
+    ],
+    "compactedWorkingAreas": 5,
+    "fans": 4,
+    "looseIslands": 13,
+    "looseOutliers": 26,
+    "waterContours": [
+      {
+        "id": 0,
+        "centre": [
+          26.36234059137368,
+          0.01610751611194778
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      },
+      {
+        "id": 1,
+        "centre": [
+          2.44171411801041,
+          -14.361188967766378
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 2.4
+      },
+      {
+        "id": 2,
+        "centre": [
+          22.837836790019242,
+          -19.4213353138478
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 2
+      },
+      {
+        "id": 3,
+        "centre": [
+          2.905539295962149,
+          36.643271257371204
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      },
+      {
+        "id": 4,
+        "centre": [
+          -10.46993179808819,
+          -14.68035181706637
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 1.9
+      },
+      {
+        "id": 5,
+        "centre": [
+          31.898106137282408,
+          -3.236360429259273
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      },
+      {
+        "id": 6,
+        "centre": [
+          23.31188441042008,
+          14.108433106607352
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      },
+      {
+        "id": 7,
+        "centre": [
+          9.446836909860508,
+          10.275441983622995
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 2.2
+      },
+      {
+        "id": 8,
+        "centre": [
+          -29.751306496834207,
+          0.35073722597103085
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 1.8
+      },
+      {
+        "id": 9,
+        "centre": [
+          0.7867761642883531,
+          23.875193959404253
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      },
+      {
+        "id": 10,
+        "centre": [
+          6.722163729104133,
+          -24.889065230076927
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 2.1
+      },
+      {
+        "id": 11,
+        "centre": [
+          -27.717038809434122,
+          -2.46406694295358
+        ],
+        "contourSamples": 193,
+        "maximumExteriorReach": 1.16,
+        "fineSedimentTongueReach": 0
+      }
+    ]
+  },
+  "channelStatistics": [
+    {
+      "name": "compaction",
+      "max": 0.6235294117647059,
+      "arenaMean": 0.04933207462407316,
+      "arenaCoverageAbove20": 0.14139601328536455,
+      "arenaCoverageAbove50": 0.005841360368276495
+    },
+    {
+      "name": "fineSediment",
+      "max": 0.807843137254902,
+      "arenaMean": 0.06201379834072047,
+      "arenaCoverageAbove20": 0.06024006498996966,
+      "arenaCoverageAbove50": 0.031637017756188136
+    },
+    {
+      "name": "looseAggregate",
+      "max": 0.7176470588235294,
+      "arenaMean": 0.0765528280269844,
+      "arenaCoverageAbove20": 0.13069974744544102,
+      "arenaCoverageAbove50": 0.08954910445369188
+    },
+    {
+      "name": "wetness",
+      "max": 0.9411764705882353,
+      "arenaMean": 0.033196615571684754,
+      "arenaCoverageAbove20": 0.04398980939591381,
+      "arenaCoverageAbove50": 0.03561046913252759
+    }
+  ]
+}
