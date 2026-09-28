@@ -1,6 +1,7 @@
 import { terrainHeight, trackPoint, clamp } from './rules';
 import rockHulls from './quarry-rock-hulls.json';
 import screePositions from './quarry-scree.json';
+import authoredCut from './quarry-cut-collision.json';
 import type Rapier from '@dimforge/rapier3d-compat';
 export type Point = {x:number;y:number;z:number};
 export type Rotation = Point & {w:number};
@@ -8,6 +9,14 @@ const lerp=(a:number,b:number,t:number)=>a+(b-a)*t;
 export const yawRotation=(yaw:number):Rotation=>({x:0,y:Math.sin(yaw/2),z:0,w:Math.cos(yaw/2)});
 export function seededRandom(seed:number){return ()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};}
 export type MeshData={positions:Float32Array;indices:Uint32Array};
+export const QUARRY_CUT_SECTOR=authoredCut.sector;
+export function quarryCutGeometry():MeshData { return {positions:new Float32Array(authoredCut.positions),indices:new Uint32Array(authoredCut.indices)}; }
+function overlapsAuthoredCut(x:number,z:number,padding=0) {
+  const a=(Math.atan2(x/1.08,z)*180/Math.PI+360)%360,r=Math.hypot(x/1.08,z),margin=Math.asin(Math.min(.99,padding/Math.max(1,r)))*180/Math.PI;
+  if(a+margin<QUARRY_CUT_SECTOR.startCell||a-margin>QUARRY_CUT_SECTOR.endCellExclusive)return false;
+  const profile=quarryProfile(a*Math.PI/180);
+  return r+padding>=profile[0].r&&r-padding<=profile.at(-1)!.r;
+}
 export type ColliderSpec={id:string;p:Point;q?:Rotation;derby?:boolean;friction?:number}&(
   {shape:'box';half:Point}|{shape:'cylinder';halfHeight:number;radius:number}|{shape:'mesh';data:MeshData}|{shape:'hull';points:Float32Array});
 export const RAMP_POINTS=new Float32Array([-4,0,-8,4,0,-8,-4,2,8,4,2,8,-4,0,8,4,0,8]);
@@ -28,10 +37,10 @@ export function rockPlacements(variant:number){const r=seededRandom(419831+varia
   const sx=scale*(.7+r()*.5),sy=scale*(.6+r()*.7),sz=scale,footprint=scale*.32;
   const y=Math.min(landscapeHeight(x,z),landscapeHeight(x-footprint,z),landscapeHeight(x+footprint,z),landscapeHeight(x,z-footprint),landscapeHeight(x,z+footprint))-scale*.12;
   return {x,y,z,sx,sy,sz,yaw:r()*6.28,roll:r()*.3};
-});}
+}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)*.65));}
 export const SCREE_POSITIONS=new Float32Array(screePositions.positions);
 export const SCREE_UVS=new Float32Array(screePositions.uv);
-export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};});}
+export function screePlacements(){const r=seededRandom(310198);return Array.from({length:360},()=>{const a=r()*Math.PI*2,radius=128+r()*16,x=Math.sin(a)*radius*1.06,z=Math.cos(a)*radius;return {x,y:landscapeHeight(x,z)-.12,z,sx:.15+r()*1.2,sy:.12+r()*.8,sz:.15+r()*1.2,rx:r(),ry:r()*6,rz:r()};}).filter(p=>!overlapsAuthoredCut(p.x,p.z,Math.max(p.sx,p.sz)));}
 export function nearTrees(kind:string){const r=seededRandom(749211+(Number(kind.split('-')[1])||0)*284171),track=Array.from({length:120},(_,i)=>trackPoint(i/120));const items=[];
   for(let i=0;i<512&&items.length<16;i++){const a=r()*Math.PI*2,radius=116+r()*25,x=Math.sin(a)*radius,z=Math.cos(a)*radius;if(!track.every(p=>Math.hypot(x-p.x,z-p.z)>10))continue;items.push({x,z,height:4+r()*6,yaw:r()*6.28});}return items;
 }
@@ -41,6 +50,7 @@ export function quarryColliderLayout():ColliderSpec[]{
   const box=(id:string,x:number,y:number,z:number,sx:number,sy:number,sz:number,q?:Rotation,derby=false)=>items.push({id,shape:'box',p:{x,y,z},half:{x:sx/2,y:sy/2,z:sz/2},q,derby});
   const cylinder=(id:string,x:number,y:number,z:number,h:number,r:number)=>items.push({id,shape:'cylinder',p:{x,y,z},halfHeight:h/2,radius:r});
   items.push({id:'terrain',shape:'mesh',p:origin,data:terrainGeometry(),friction:.85},{id:'quarry-cliffs',shape:'mesh',p:origin,data:cliffGeometry(),friction:.85});
+  items.push({id:'quarry-cut',shape:'mesh',p:origin,data:quarryCutGeometry(),friction:.85});
   for(let i=0;i<66;i++){const a=i/66*Math.PI*2;box('arena-'+i,Math.sin(a)*46,.58,Math.cos(a)*46,4.22,1.16,.75,yawRotation(a),true);}
   RAMPS.forEach((p,i)=>items.push({id:'ramp-'+i,shape:'mesh',p,data:{positions:RAMP_POINTS,indices:RAMP_INDICES}}));
   box('works-building',-72,4,-39,21,8,13);box('works-roof',-72,8.2,-39,22,.4,14);
@@ -169,6 +179,7 @@ export function cliffGeometry() {
                     colors.push(shade, shade * .988, shade * .965);
                 }
             for (let i = 0; i < segments; i++) {
+                if(i>=QUARRY_CUT_SECTOR.startCell&&i<QUARRY_CUT_SECTOR.endCellExclusive)continue;
                 const b = start + i * 2;
                 indices.push(b, b + 1, b + 2, b + 2, b + 1, b + 3);
             }

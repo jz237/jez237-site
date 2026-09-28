@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "source": "Original authored geometry with Poly Haven Rock Moss Set 01 fragments",
+  "source_url": "https://polyhaven.com/a/rock_moss_set_01",
+  "license": "CC0-1.0 for scanned fragments; original authored cut",
+  "generator": "tools/author-quarry-cut.py",
+  "base": "source/models/quarry-cut-base.json",
+  "sector": {
+    "startCell": 118,
+    "endCellExclusive": 139
+  },
+  "sections": [
+    118,
+    125,
+    132,
+    139
+  ],
+  "uv_metres_per_tile": 3.6,
+  "runtime_maps": "Existing rock_* (repeat1, 3.6m UV scale) and Rock Moss Set 01 atlas; no embedded textures",
+  "meshes": [
+    {
+      "name": "CutRock_0_near",
+      "vertices": 3149,
+      "triangles": 6114
+    },
+    {
+      "name": "CutRubble_0_near",
+      "vertices": 9228,
+      "triangles": 11311
+    },
+    {
+      "name": "CutRock_0_far",
+      "vertices": 1805,
+      "triangles": 3468
+    },
+    {
+      "name": "CutRubble_0_far",
+      "vertices": 3893,
+      "triangles": 3884
+    },
+    {
+      "name": "CutRock_1_near",
+      "vertices": 3193,
+      "triangles": 6202
+    },
+    {
+      "name": "CutRubble_1_near",
+      "vertices": 9697,
+      "triangles": 11308
+    },
+    {
+      "name": "CutRock_1_far",
+      "vertices": 1849,
+      "triangles": 3556
+    },
+    {
+      "name": "CutRubble_1_far",
+      "vertices": 4023,
+      "triangles": 3882
+    },
+    {
+      "name": "CutRock_2_near",
+      "vertices": 3145,
+      "triangles": 6106
+    },
+    {
+      "name": "CutRubble_2_near",
+      "vertices": 9875,
+      "triangles": 11309
+    },
+    {
+      "name": "CutRock_2_far",
+      "vertices": 1801,
+      "triangles": 3460
+    },
+    {
+      "name": "CutRubble_2_far",
+      "vertices": 4020,
+      "triangles": 3881
+    }
+  ],
+  "rubble_count": 78,
+  "solid_rubble_count": 42,
+  "collision_triangles": 19068,
+  "collision_vertices": 9894,
+  "assets": [
+    {
+      "file": "source/models/quarry-cut-base.json",
+      "bytes": 127517,
+      "sha256": "c1e9cf73ac29272d49d123f46e7e9cb88011f6a77d8d665f02c2b10038e29085"
+    },
+    {
+      "file": "public/models/quarry-cut.glb",
+      "bytes": 4363444,
+      "sha256": "a5af7b9f507242426c812930db9b6233691bb6b9c2b203f38076d9317c82b4dd"
+    },
+    {
+      "file": "source/models/quarry-cut.blend",
+      "bytes": 4082977,
+      "sha256": "0c84945fa7f67f691bd1ba0586971953f6aab149d966e95fd4e8283dd8f04ae3"
+    },
+    {
+      "file": "src/quarry-cut-collision.json",
+      "bytes": 839585,
+      "sha256": "68ae33add9a963344d2d62d3642d0dbabf3e18a7b53057e0701e20b9d9c440d2"
+    }
+  ]
+}

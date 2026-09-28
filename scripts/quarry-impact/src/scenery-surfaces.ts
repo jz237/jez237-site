@@ -114,19 +114,20 @@ normal=normalize(mix(normalize(tbn*gravelN),normalize(dirtFrame*dirtN),quarrySoi
     return material;
 }
 export function quarryRock() {
-    const material = surfaceShader(pbr('rock', 1, { color: 0xa7a69c, normalScale: new T.Vector2(.78, .78), vertexColors: true }), `
+    // A 3.6-metre tile keeps the photographed dry-rock detail readable from the
+    // road. The same material joins authored and surrounding cuts.
+    const material = surfaceShader(pbr('rock', 1, { color: 0xffffff, normalScale: new T.Vector2(.7, .7), vertexColors: true }), `
     vec3 q=vQuarryPosition;
     float streak=quarryNoise(q.xz*.28+vec2(q.y*.019));
-    float bedding=sin(q.y*2.3+quarryNoise(q.xz*.075)*3.0)*.5+.5;
     float runoff=smoothstep(.48,.77,streak)*(1.0-smoothstep(3.0,30.0,q.y));
     float up=abs(normalize(cross(dFdx(q),dFdy(q))).y);
     float quarryDust=smoothstep(.63,.96,up)*smoothstep(.2,.74,quarryNoise(q.xz*.11+q.y*.03))*.78;
     vec3 grit=texture2D(quarryRockDust,q.xz/2.0).rgb;
     float grayGrit=dot(grit,vec3(.2126,.7152,.0722));
     vec3 dryFines=mix(grit,vec3(grayGrit),.64)*vec3(.37,.36,.33);
-    diffuseColor.rgb*=mix(.83,1.03,bedding)*mix(1.0,.7,runoff);
+    diffuseColor.rgb*=mix(.9,1.04,quarryNoise(q.xz*.06))*mix(1.0,.7,runoff);
     diffuseColor.rgb=mix(diffuseColor.rgb,dryFines,quarryDust*.72);
-  `, 'quarry-rock-v4');
+  `, 'quarry-rock-v5');
     const gravel = texture('gravel_diff', 1, true);
     const base = material.onBeforeCompile;
     material.onBeforeCompile = (shader, renderer) => {

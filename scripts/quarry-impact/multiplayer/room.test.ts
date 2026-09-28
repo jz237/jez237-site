@@ -8,7 +8,7 @@ import { parseClientMessage, type ServerMessage } from './protocol';
 import { templates } from '../src/assets';
 import { Vehicle } from '../src/vehicle';
 import { Quarry } from '../src/world';
-import { quarryColliderLayout, terrainGeometry, cliffGeometry, BARRELS, nearTrees } from '../src/quarry-layout';
+import { quarryColliderLayout, createQuarryPhysics, terrainGeometry, cliffGeometry, BARRELS, nearTrees } from '../src/quarry-layout';
 import {corridorObstructions} from './corridor-check';
 await R.init();
 const model=new T.Group();for(const name of ['FL','FR','RL','RR']){const w=new T.Group();w.name='wheel_'+name;model.add(w);}templates.set('coupe',model);
@@ -117,4 +117,37 @@ test('authority completes derby, preserves disabled obstacles, rematches fresh, 
   assert.equal(ai.state.penalty,5);assert.ok(Math.hypot(ai.state.p.x,ai.state.p.z)>70);assert.equal(ai.offTrack,0);
   assert.equal(room.sim.recover(1),false,'Recovery spam is rate limited');room.sim.elapsed+=6;assert.equal(room.sim.recover(1),true);assert.equal(ai.state.penalty,10);
   room.sim.elapsed=899.995;room.step();assert.equal(room.sim.phase,'result');room.dispose();
+});
+
+test('actual Rapier contacts stop moving bodies at all three authored quarry sections',()=>{
+  const world=new R.World({x:0,y:0,z:0}),quarry=createQuarryPhysics(R,world,false);
+  try {
+    const cut=quarry.statics.get('quarry-cut');assert.ok(cut,'authored cut must be a real fixed collider');
+    const positions=cut.vertices(),indices=cut.indices();
+    const candidates:{center:T.Vector3;normal:T.Vector3;area:number;angle:number}[]=[];
+    for(let i=0;i<indices.length;i+=3){
+      const a=new T.Vector3().fromArray(positions,indices[i]*3),b=new T.Vector3().fromArray(positions,indices[i+1]*3),c=new T.Vector3().fromArray(positions,indices[i+2]*3);
+      const center=a.clone().add(b).add(c).multiplyScalar(1/3),normal=b.sub(a).cross(c.sub(a)),area=normal.length();normal.normalize();
+      const inward=new T.Vector3(-center.x,0,-center.z).normalize(),angle=Math.atan2(center.x/1.08,center.z)*180/Math.PI;
+      if(center.y>2&&center.y<35&&normal.y>=0&&normal.y<.85&&normal.dot(inward)>.25)candidates.push({center,normal,area,angle});
+    }
+    candidates.sort((a,b)=>b.area-a.area);
+    for(const [lo,hi] of [[118,125],[125,132],[132,139]]){
+      const probe=candidates.find(p=>{
+        if(p.angle<=lo+.5||p.angle>=hi-.5)return false;
+        const start=p.center.clone().addScaledVector(p.normal,1.5),direction=p.normal.clone().negate();
+        const hit=cut.castRayAndGetNormal(new R.Ray(start,direction),3,false);
+        return hit!==null&&Math.abs(hit.timeOfImpact-1.5)<.03&&new T.Vector3().copy(hit.normal).dot(p.normal)>.8;
+      });
+      assert.ok(probe,`section ${lo}–${hi} must expose an inward-facing collision surface`);
+      const start=probe.center.clone().addScaledVector(probe.normal,1.5),velocity=probe.normal.clone().multiplyScalar(-12);
+      const body=world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(start.x,start.y,start.z).setLinvel(velocity.x,velocity.y,velocity.z).setCcdEnabled(true).setCanSleep(false));
+      const ball=world.createCollider(R.ColliderDesc.ball(.25).setMass(100).setRestitution(0),body);let contacts=0;
+      for(let step=0;step<45;step++){world.step();world.contactPair(ball,cut,manifold=>{contacts+=manifold.numContacts();});}
+      assert.ok(contacts>0,`section ${lo}–${hi} must produce solver contact, not only a ray hit`);
+      assert.ok(new T.Vector3().copy(body.translation()).sub(probe.center).dot(probe.normal)>.15,'body must remain on the exposed side of the face');
+      assert.ok(new T.Vector3().copy(body.linvel()).dot(probe.normal)>-.2,'collision must stop incoming velocity');
+      world.removeRigidBody(body);
+    }
+  } finally {world.free();}
 });
