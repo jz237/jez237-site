@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { pbr, texture, url } from './assets';
 import { terrainHeight, trackPoint } from './rules';
 import { forestScenery, updateForestView } from './scenery-vegetation';
+import { loadQuarryCut } from './scenery-cut';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
 const rand = () => {
@@ -74,6 +75,8 @@ export class Quarry {
   road: T.Mesh;
   checkpoint = new T.Group();
   sun: T.DirectionalLight;
+  private cutLODs: T.LOD[] = [];
+  private rockMaterial: T.MeshStandardMaterial;
   constructor(
     public scene: T.Scene,
     public physics: R.World,
@@ -100,6 +103,7 @@ export class Quarry {
     scene.add(this.sun, this.sun.target);
     const ground = quarryGround();
     const rock = quarryRock();
+    this.rockMaterial = rock;
     const asphalt = pbr('asphalt', 1);
     const groundData=terrainGeometry();
     const geo=new T.BufferGeometry();
@@ -207,10 +211,11 @@ export class Quarry {
     const sp=stoneGeo.attributes.position;
     stoneGeo.computeVertexNormals();
     stoneGeo.setAttribute('color', new T.Float32BufferAttribute(new Float32Array(sp.count*3).fill(1), 3));
-    const stones = new T.InstancedMesh(stoneGeo, rock, 360);
+    const scree = screePlacements();
+    const stones = new T.InstancedMesh(stoneGeo, rock, scree.length);
     stones.castShadow = true;
     stones.receiveShadow = true;
-    for(const [i,p] of screePlacements().entries()){
+    for(const [i,p] of scree.entries()){
       dummy.position.set(p.x,p.y,p.z);
       dummy.scale.set(p.sx,p.sy,p.sz);
       dummy.rotation.set(p.rx,p.ry,p.rz);
@@ -623,8 +628,10 @@ export class Quarry {
     const gltf = await new GLTFLoader().loadAsync(url('models/rocks-lod.glb'));
     gltf.scene.updateMatrixWorld(true);
     let variant = 0;
+    let scannedMaterial: T.MeshStandardMaterial | undefined;
     gltf.scene.traverse((o) => {
       if (!(o instanceof T.Mesh)) return;
+      scannedMaterial ??= o.material as T.MeshStandardMaterial;
       const geo = o.geometry.clone().applyMatrix4(o.matrixWorld);
       geo.computeBoundingBox();
       const bb = geo.boundingBox!;
@@ -633,11 +640,11 @@ export class Quarry {
       const size = bb.getSize(new T.Vector3());
       const normalizer = 1 / Math.max(size.x, size.y, size.z);
       geo.scale(normalizer, normalizer, normalizer);
-      const count = 36;
-      const mesh = new T.InstancedMesh(geo, o.material, count);
+      const placements = rockPlacements(variant);
+      const mesh = new T.InstancedMesh(geo, o.material, placements.length);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
-      for (const [i,p] of rockPlacements(variant).entries()) {
+      for (const [i,p] of placements.entries()) {
         dummy.position.set(p.x,p.y,p.z);
         dummy.scale.set(p.sx,p.sy,p.sz);
         dummy.rotation.set(0,p.yaw,p.roll);
@@ -648,6 +655,8 @@ export class Quarry {
       this.scenery.add(mesh);
       variant++;
     });
+    if (!scannedMaterial) throw new Error('Scanned quarry rock material is missing');
+    this.cutLODs = await loadQuarryCut(this.scenery, this.rockMaterial, scannedMaterial);
   }
   setMode(mode: string) {
     const derby = mode === 'derby';
@@ -656,7 +665,10 @@ export class Quarry {
     this.checkpoint.visible = mode === 'race';
   }
   update(camera?: T.Camera) {
-    if(camera)updateForestView(camera);
+    if(camera) {
+      updateForestView(camera);
+      for (const lod of this.cutLODs) lod.update(camera);
+    }
     for (const p of this.props) {
       p.mesh.position.copy(p.body.translation());
       p.mesh.quaternion.copy(p.body.rotation());
