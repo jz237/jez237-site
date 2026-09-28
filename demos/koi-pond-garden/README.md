@@ -82,3 +82,7 @@ If this made you smile, please **⭐ star the repo** and share it — it genuine
 [MIT](LICENSE) © 2026 Sourany Phomhome. Free to use, modify and share, including commercially — just keep the copyright notice. A mention or a star is always appreciated. ⭐
 
 *Built with [Claude](https://claude.ai).*
+
+## Jez237 hosted copy
+
+This hosted copy bundles Three.js r160 and dat.gui 0.7.9 locally in `vendor/` to comply with the site content-security policy. Their original licences are preserved alongside the scripts. The upstream project and its MIT copyright remain unchanged.
