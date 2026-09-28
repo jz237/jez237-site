@@ -1,3 +1,4 @@
+import {restoreCoupeBytes} from './coupe-realism-invariants';
 import test from 'node:test';
 import {restoreCircuitSurfaceSource} from './circuit-surface-invariants';
 import {historicGripBytes} from './circuit-grip-invariants';
@@ -55,7 +56,7 @@ test('west wall changes only the exact sector, intersecting stable scatter and e
   for(const file of ['src/quarry-layout.ts','src/world.ts','src/main.ts'])stripWestSource(file,readFileSync(new URL('../'+file,import.meta.url)));
   for(const [file,sha]of Object.entries(baseline.files)){
     if(['src/quarry-layout.ts','src/world.ts','src/main.ts'].includes(file))continue;
-    const bytes=readFileSync(new URL('../'+file,import.meta.url));
+    const bytes=restoreCoupeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
     assert.equal(hash(bytes),sha,file+' retains released bytes outside the explicitly validated later circuit integration');
   }
 });

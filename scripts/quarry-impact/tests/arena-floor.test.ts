@@ -1,3 +1,4 @@
+import {restoreCoupeBytes} from './coupe-realism-invariants';
 import {restoreWestWallCliffs} from './quarry-west-wall-invariants';
 import {assertEastBayEvolution,eastBayHash,restoreEastBayCliffs,eastBayArrayHash,eastBayBefore,eastBayData} from './quarry-east-bay-invariants';
 import * as T from 'three';
@@ -26,7 +27,7 @@ test('arena appearance preserves its historical physics and cars through the exp
   assert.deepEqual(assertEastBayEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:eastBayHash(s)})).filter(s=>oldIds.has(s.id)),baseline.colliders,'the bounded East Bay wall/scatter evolution reconstructs every original arena-era collider');
   for(const [file,expected] of Object.entries(baseline.protectedFiles)){
     if(file==='src/scenery-surfaces.ts')continue; // Arena factory integration may edit this source; actual other material outputs are checked below.
-    assert.equal(arenaHash(arenaRead(file)),expected,`${file} stays byte-identical`);
+    assert.equal(arenaHash(restoreCoupeBytes(file,arenaRead(file))),expected,`${file} stays byte-identical`);
   }
 });
 
