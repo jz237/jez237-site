@@ -857,9 +857,19 @@ attribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;
 vBodyPosition = position; vImpactWear = impactWear;`),e.fragmentShader=e.fragmentShader.replace("#include <common>",`#include <common>
 varying vec3 vBodyPosition; varying vec2 vImpactWear;
 float bodyNoise(vec3 p) { return fract(sin(dot(floor(p),vec3(127.1,311.7,74.7)))*43758.5453); }
+// Interpolate deposited dust across cell boundaries; unfiltered floor noise
+// makes the lower body look like a coarse checkerboard at chase distance.
+float bodySilt(vec3 p) {
+  vec3 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+  return mix(
+    mix(mix(bodyNoise(i),bodyNoise(i+vec3(1.,0.,0.)),f.x),
+        mix(bodyNoise(i+vec3(0.,1.,0.)),bodyNoise(i+vec3(1.,1.,0.)),f.x),f.y),
+    mix(mix(bodyNoise(i+vec3(0.,0.,1.)),bodyNoise(i+vec3(1.,0.,1.)),f.x),
+        mix(bodyNoise(i+vec3(0.,1.,1.)),bodyNoise(i+vec3(1.,1.,1.)),f.x),f.y),f.z);
+}
 `).replace("#include <color_fragment>",`#include <color_fragment>
 float grain=bodyNoise(vBodyPosition*340.);
-float silt=bodyNoise(vBodyPosition*36.);
+float silt=bodySilt(vBodyPosition*36.);
 float lowBody=1.-smoothstep(.3,1.05,vBodyPosition.y);
 float dust=clamp(lowBody*(.18+silt*.16)+vImpactWear.x*.18,0.,.56);
 float scratch=clamp(vImpactWear.x,0.,1.);
@@ -874,7 +884,7 @@ roughnessFactor=mix(roughnessFactor,.43,bareMetal);
 `).replace("#include <metalnessmap_fragment>",`#include <metalnessmap_fragment>
 metalnessFactor=mix(metalnessFactor,.02,dust);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
-`)},n.customProgramCacheKey=()=>"quarry-layered-paint-v2"}function R8(n,e){e.computeBoundingBox();const t=e.boundingBox.getSize(new y),i={damage:{value:0},impact:{value:e.boundingBox.getCenter(new y)},axes:{value:new y(t.x<t.z?0:1,t.x<t.z||t.y>t.z?1:0,0)}};return n.userData.glassState=i,n.onBeforeCompile=s=>{s.uniforms.glassDamage=i.damage,s.uniforms.glassImpact=i.impact,s.uniforms.glassAxes=i.axes,s.vertexShader=s.vertexShader.replace("#include <common>",`#include <common>
+`)},n.customProgramCacheKey=()=>"quarry-layered-paint-v3"}function R8(n,e){e.computeBoundingBox();const t=e.boundingBox.getSize(new y),i={damage:{value:0},impact:{value:e.boundingBox.getCenter(new y)},axes:{value:new y(t.x<t.z?0:1,t.x<t.z||t.y>t.z?1:0,0)}};return n.userData.glassState=i,n.onBeforeCompile=s=>{s.uniforms.glassDamage=i.damage,s.uniforms.glassImpact=i.impact,s.uniforms.glassAxes=i.axes,s.vertexShader=s.vertexShader.replace("#include <common>",`#include <common>
 varying vec3 vGlassPosition;`).replace("#include <begin_vertex>",`#include <begin_vertex>
 vGlassPosition=position;`),s.fragmentShader=s.fragmentShader.replace("#include <common>",`#include <common>
 varying vec3 vGlassPosition; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes;`).replace("#include <color_fragment>",`#include <color_fragment>

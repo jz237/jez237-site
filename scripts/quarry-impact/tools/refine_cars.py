@@ -4,10 +4,28 @@ Run after prepare_concept.py. Keeps the source artist's silhouette and credit,
 adds real sheet-metal edges, split crash panels and an exposed engine bay.
 The untouched first preparation remains in source/models/; refined editable
 files are saved separately. Dimensions below use Blender Z-up coordinates.
+
+To regenerate only one car:
+  blender --background --python tools/refine_cars.py -- --kind coupe
 """
-import bpy, pathlib, math, json, struct, hashlib
+import bpy, pathlib, math, json, struct, hashlib, argparse, sys
 from mathutils import Vector
+from mathutils.bvhtree import BVHTree
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+CAR_KINDS = ('coupe', 'sedan', 'hatch')
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--kind', choices=(*CAR_KINDS, 'all'), default='all',
+                    help='Export only this derivative; default preserves the all-car workflow.')
+args = parser.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
+selected_kinds = CAR_KINDS if args.kind == 'all' else (args.kind,)
+# A focused export must not silently rewrite another car's editable or runtime
+# derivative. Keep the existing shared manifest entries, but verify these files.
+preserved_hashes = {}
+for other in CAR_KINDS:
+    if other in selected_kinds:continue
+    for relative in [f'public/models/{other}.glb', f'source/models-refined/{other}.blend']:
+        path = ROOT/relative
+        if path.exists():preserved_hashes[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
 
 def material(name, color, metallic, roughness):
     m = bpy.data.materials.new(name); m.use_nodes = True
@@ -199,7 +217,224 @@ def sheet_shell(obj, thickness=.0012):
     mesh.normals_split_custom_set(normals)
     obj.data=mesh
 
-for kind in ['coupe','sedan','hatch']:
+
+def inset_plate_pocket(obj, contour, floor):
+    """Clip an exact opening, then construct deliberate bevel/floor edge loops.
+
+    Original vertices keep their identities; this is important for the inward
+    sheet's corner-normal averages at distant UV seams. No analytic bump normals.
+    """
+    source=obj.data;layers=list(source.uv_layers)
+    vertices=[v.co.copy() for v in source.vertices];faces=[];normals=[];uv_values=[[] for _ in layers];mats=[]
+    cut_cache={};border={}
+    def cross(a,b,p):return (b[0]-a[0])*(p.z-a[1])-(b[1]-a[1])*(p.x-a[0])
+    def key(p):return tuple(round(v,7) for v in p)
+    def interpolate(a,b,t):
+        return (a[0].lerp(b[0],t),a[1].lerp(b[1],t).normalized(),[u.lerp(v,t) for u,v in zip(a[2],b[2])],None)
+    def split(poly,a,b):
+        inside=[];outside=[]
+        if not poly:return inside,outside
+        prev=poly[-1];dp=cross(a,b,prev[0])
+        for cur in poly:
+            dc=cross(a,b,cur[0])
+            if (dp>=0)!=(dc>=0):
+                hit=interpolate(prev,cur,dp/(dp-dc));inside.append(hit);outside.append(hit)
+            (inside if dc>=0 else outside).append(cur);prev=cur;dp=dc
+        return inside,outside
+    def index(record):
+        p,n,u,old=record
+        if old is not None:return old
+        k=key(p)
+        if k not in cut_cache:cut_cache[k]=len(vertices);vertices.append(p)
+        return cut_cache[k]
+    def add(poly,material):
+        if len(poly)<3:return
+        for j in range(1,len(poly)-1):
+            tri=[poly[0],poly[j],poly[j+1]]
+            if (tri[1][0]-tri[0][0]).cross(tri[2][0]-tri[0][0]).length_squared<1e-20:continue
+            faces.append([index(r) for r in tri]);mats.append(material)
+            for p,n,u,old in tri:
+                normals.append(n)
+                for values,uv in zip(uv_values,u):values.append(uv)
+    for poly in source.polygons:
+        records=[(source.vertices[source.loops[i].vertex_index].co.copy(),source.corner_normals[i].vector.copy(),
+                  [layer.data[i].uv.copy() for layer in layers],source.loops[i].vertex_index) for i in poly.loop_indices]
+        ps=[r[0] for r in records]
+        if max(p.y for p in ps)<1.65 or min(p.x for p in ps)>.33 or max(p.x for p in ps)<-.33 or min(p.z for p in ps)>1.102 or max(p.z for p in ps)<.872:
+            add(records,poly.material_index);continue
+        remainder=records;outside=[]
+        for a,b in zip(contour,contour[1:]+contour[:1]):
+            remainder,piece=split(remainder,a,b)
+            if piece:outside.append(piece)
+            if not remainder:break
+        for piece in outside:add(piece,poly.material_index)
+        # Only the actual rounded opening, not the quarter's centre split, is
+        # bevelled. The two half-pockets meet on the original symmetry plane.
+        for record in remainder:
+            p=record[0]
+            if any(abs(cross(a,b,p))<1e-7 and min(a[0],b[0])-1e-6<=p.x<=max(a[0],b[0])+1e-6 and min(a[1],b[1])-1e-6<=p.z<=max(a[1],b[1])+1e-6 for a,b in zip(contour,contour[1:]+contour[:1])):
+                border[key(p)]=record
+    left=obj.name.endswith('_L')
+    def angle(record):
+        p=record[0];a=math.atan2(p.z-.987,p.x)
+        return a+math.tau if left and a<0 else a
+    boundary=sorted(border.values(),key=angle)
+    if len(boundary)<10:raise RuntimeError(f'Incomplete pocket opening on {obj.name}')
+    # Five tightly controlled profile loops. Outer custom normals are untouched;
+    # inner bevel normals below come from these actual faces, not a height field.
+    loops=[]
+    for inset,depth in [(0,0),(.004,.002),(.011,.012),(.020,None),(.027,None)]:
+        loop=[]
+        for record in boundary:
+            p,n,u,old=record
+            gx=max(abs(p.x)-(.314-.027),0)*(1 if p.x>=0 else -1)
+            gz=max(abs(p.z-.987)-(.109-.027),0)*(1 if p.z>=.987 else -1)
+            outward=Vector((gx,0,gz))
+            if outward.length<1e-8:
+                outward=Vector((1 if p.x>=0 else -1,0,0)) if abs(p.x)/.314>abs(p.z-.987)/.109 else Vector((0,0,1 if p.z>=.987 else -1))
+            outward.normalize();q=p-outward*inset
+            # Centre endpoints must meet the other panel exactly.
+            if abs(p.x)<.0001:q.x=p.x
+            q.y=p.y-depth if depth is not None else floor+(.004 if inset==.020 else 0)
+            ri=record if inset==0 else (q,n.copy(),[v.copy() for v in u],None)
+            loop.append(index(ri))
+        loops.append(loop)
+    generated=[]
+    for k in range(len(loops)-1):
+        for j in range(len(boundary)-1):
+            face=[loops[k][j],loops[k][j+1],loops[k+1][j+1],loops[k+1][j]]
+            # +Y is the rear-facing side in Blender.
+            if (vertices[face[1]]-vertices[face[0]]).cross(vertices[face[2]]-vertices[face[0]]).y<0:face.reverse()
+            generated.append(face)
+    centre=len(vertices);vertices.append(Vector((0,floor,.987)))
+    for j in range(len(boundary)-1):
+        face=[loops[-1][j],loops[-1][j+1],centre]
+        if (vertices[face[1]]-vertices[face[0]]).cross(vertices[face[2]]-vertices[face[0]]).y<0:face.reverse()
+        generated.append(face)
+    averaged={}
+    for face in generated:
+        n=(vertices[face[1]]-vertices[face[0]]).cross(vertices[face[2]]-vertices[face[0]])
+        for vi in face:averaged.setdefault(vi,Vector());averaged[vi]+=n
+    original_border={index(record):record for record in boundary}
+    for face in generated:
+        records=[]
+        for vi in face:
+            p=vertices[vi]
+            if vi in original_border:records.append(original_border[vi])
+            else:
+                normal=averaged[vi].normalized()
+                records.append((p,normal,[Vector((p.x,p.z)) for _ in layers],vi))
+        add(records,0)
+    mesh=bpy.data.meshes.new(source.name+'_plate_pocket');mesh.from_pydata(vertices,[],faces);mesh.update()
+    for material in source.materials:mesh.materials.append(material)
+    for poly,mi in zip(mesh.polygons,mats):poly.use_smooth=True;poly.material_index=mi
+    for layer,values in zip(layers,uv_values):
+        uv=mesh.uv_layers.new(name=layer.name)
+        for value,datum in zip(values,uv.data):datum.uv=value
+    mesh.normals_split_custom_set(normals);obj.data=mesh
+
+
+def coupe_rear_bodywork():
+    """A manufactured plate pocket, with the existing outer silhouette retained."""
+    panels=[o for o in bpy.context.scene.objects if o.type=='MESH' and
+            (o.name.startswith('panel_rear_quarter_') or o.name.startswith('panel_bumper_rear'))]
+    ps=[];faces=[]
+    for obj in panels:
+        at=len(ps);ps.extend([v.co.copy() for v in obj.data.vertices])
+        faces.extend([tuple(at+i for i in poly.vertices) for poly in obj.data.polygons])
+    bvh=BVHTree.FromPolygons(ps,faces)
+    def surface(x,z):
+        hit=bvh.ray_cast(Vector((x,3,z)),Vector((0,-1,0)),3)[0]
+        if hit is None:raise RuntimeError(f'Rear surface missing at {x},{z}')
+        return hit.y
+    floor=surface(0,.987)-.058
+    contour=[]
+    for cx,cz,start in [(.287,.082,0),(-.287,.082,90),(-.287,-.082,180),(.287,-.082,270)]:
+        for i in range(9):
+            a=math.radians(start+i*90/8);contour.append((cx+.027*math.cos(a),.987+cz+.027*math.sin(a)))
+    for obj in panels:
+        if obj.name.startswith('panel_rear_quarter_'):inset_plate_pocket(obj,contour,floor)
+    # The plate is fixed to the rear closure, above the detachable lower bumper.
+    # Its bracket/backplate is real geometry added below, so a wreck cannot leave
+    # a suspended plaque where the bumper used to be.
+    plate=bpy.data.objects.get('License Plate')
+    if plate is None:raise RuntimeError('Expected prepared unbranded license plate')
+    bounds=[(min(v.co[i] for v in plate.data.vertices),max(v.co[i] for v in plate.data.vertices)) for i in range(3)]
+    for v in plate.data.vertices:
+        v.co.x=(v.co.x-(bounds[0][0]+bounds[0][1])*.5)*(.52/(bounds[0][1]-bounds[0][0]))
+        v.co.y=floor+.009+(v.co.y-bounds[1][1])*.18
+        v.co.z=.986+(v.co.z-(bounds[2][0]+bounds[2][1])*.5)*(.112/(bounds[2][1]-bounds[2][0]))
+    return floor
+
+
+def coupe_rear_hardware(plate_floor):
+    """Fixed body mounts and exhaust remain behind the removable painted shell."""
+    steel=bpy.data.materials['Structure galvanized steel'];iron=bpy.data.materials['Structure cast alloy']
+    rubber=bpy.data.materials['Structure hoses'];heat=bpy.data.materials['Structure heat shield']
+    for name in ['Structure exhaust','Structure exhaust.001']:
+        for vertex in bpy.data.objects[name].data.vertices:
+            vertex.co.y=min(vertex.co.y,1.43)
+    # Backplate, two stamped reinforcement channels and plate mount fill the
+    # former empty rear cavity without putting structure through intact paint.
+    box('Structure rear closure backplate',(0,1.70,.87),(1.54,.025,.42),iron,.008)
+    box('Structure rear bumper beam',(0,1.78,.64),(1.65,.075,.105),steel,.014)
+    for side in [-1,1]:
+        box('Structure rear crash mount',(side*.59,1.58,.63),(.13,.37,.12),steel,.010)
+        box('Structure rear beam bracket',(side*.59,1.82,.64),(.21,.019,.155),iron,.004)
+        for x in [side*.59-.071,side*.59+.071]:
+            tube('Structure rear beam fastener',(x,1.833,.64),(x,1.847,.64),.012,steel,6)
+        box('Structure rear closure vertical rib',(side*.48,1.723,.88),(.046,.028,.36),steel,.004)
+    box('Structure plate mounting tray',(0,plate_floor-.008,.986),(.555,.021,.146),rubber,.012)
+    for side in [-1,1]:
+        box('Structure plate body bracket',(side*.20,(1.728+plate_floor)*.5,.986),(.03,plate_floor-1.728,.065),steel,.003)
+        tube('Structure plate fastener',(side*.226,plate_floor+.010,1.022),(side*.226,plate_floor+.014,1.022),.005,steel,8)
+    # Hollow rolled stainless outlets, placed below the existing valance so they
+    # remain part of the fixed exhaust after the cosmetic bumper is lost.
+    for side in [-1,1]:
+        cx=side*.57;cz=.338;front=1.96;back=1.70;radius=.056;wall=.004
+        verts=[];faces=[];n=24
+        for y,r in [(back,radius),(front,radius),(front,radius-wall),(back,radius-wall)]:
+            for j in range(n):
+                a=j*math.tau/n;verts.append((cx+math.cos(a)*r,y,cz+math.sin(a)*r*.79))
+        for row in range(3):
+            for j in range(n):faces.append((row*n+j,row*n+(j+1)%n,(row+1)*n+(j+1)%n,(row+1)*n+j))
+        mesh=bpy.data.meshes.new('Structure rolled exhaust outlet');mesh.from_pydata(verts,[],faces);mesh.update();mesh.materials.append(heat)
+        obj=bpy.data.objects.new(mesh.name,mesh);bpy.context.collection.objects.link(obj)
+        for p in mesh.polygons:p.use_smooth=True
+        tube('Structure exhaust outlet dark throat',(cx,back,cz),(cx,back+.008,cz),radius-wall,rubber,24)
+        routed_tube('Structure rear exhaust connection',[(side*.29,1.43,.29),(side*.40,1.57,.31),(cx,1.70,cz)],.042,heat,10)
+    # Small optical separators are set into the existing lamp lens. They reuse
+    # the concealed rubber material; lamp emission and original housings remain.
+    lights=bpy.data.objects['BodyTaillights'];p=[v.co for v in lights.data.vertices]
+    lamp=BVHTree.FromPolygons(p,[tuple(poly.vertices) for poly in lights.data.polygons])
+    for side in [-1,1]:
+        for i in range(7):
+            x=side*(.292+i*.042);hits=[]
+            for j in range(22):
+                z=1.145+j*.002
+                hit=lamp.ray_cast(Vector((x,2,z)),Vector((0,-1,0)),1)[0]
+                if hit is not None:hits.append(hit)
+            if len(hits)<5:continue
+            a,b=hits[1],hits[-2]
+            a.y+=.0015;b.y+=.0015
+            tube('Structure taillamp optical separator',a,b,.0018,rubber,6)
+    # Geometry-only plate lettering uses an existing alloy, so no image/material
+    # or draw group is added. Readable from the rear (+Blender Y).
+    bpy.ops.object.text_add(location=(0,plate_floor+.013,.986),rotation=(math.pi/2,0,math.pi))
+    text=bpy.context.object;text.name='Structure fictional plate lettering';text.data.body='QI 237'
+    text.data.align_x='CENTER';text.data.align_y='CENTER';text.data.size=.061;text.data.extrude=.0003;text.data.bevel_depth=0
+    text.data.materials.append(steel);bpy.ops.object.convert(target='MESH')
+    # Ensure every new fixed mesh matches the attributes expected by batching.
+    for o in list(bpy.context.scene.objects):
+        if o.type!='MESH' or not o.name.startswith('Structure'):continue
+        bpy.ops.object.select_all(action='DESELECT');o.select_set(True);bpy.context.view_layer.objects.active=o
+        bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
+        if not o.data.uv_layers:
+            uv=o.data.uv_layers.new(name='UVMap')
+            for loop in o.data.loops:
+                p=o.data.vertices[loop.vertex_index].co;uv.data[loop.index].uv=(p.x,p.y+p.z)
+
+for kind in selected_kinds:
     bpy.ops.wm.open_mainfile(filepath=str(ROOT/'source/models'/f'{kind}.blend'))
     obsolete_engine=bpy.data.objects.get('Engine')
     if obsolete_engine is None:raise RuntimeError('Prepared source no longer contains expected obsolete Engine mesh')
@@ -217,6 +452,7 @@ for kind in ['coupe','sedan','hatch']:
     partition(hood,lambda c:'panel_bumper_front' if c.z<.66 else 'panel_hood' if abs(c.x)<.72 else 'panel_front_fender_'+('L' if c.x<0 else 'R'))
     rear=bpy.data.objects.get('panel_bumper_rear')
     partition(rear,lambda c:'panel_bumper_rear' if c.z<.83 else 'panel_rear_quarter_'+('L' if c.x<0 else 'R'))
+    rear_plate_floor=coupe_rear_bodywork() if kind=='coupe' else None
     for o in list(bpy.context.scene.objects):
         if o.type!='MESH' or not o.name.startswith('panel_'):continue
         if not any(m and m.name.startswith('paint') for m in o.data.materials):continue
@@ -224,14 +460,20 @@ for kind in ['coupe','sedan','hatch']:
         sheet_shell(o)
     # Permanent parts are batched into the same four material groups at runtime.
     front_structure(kind)
+    if kind=='coupe':coupe_rear_hardware(rear_plate_floor)
     out=ROOT/'source/models-refined';out.mkdir(parents=True,exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(out/f'{kind}.blend'))
     bpy.ops.export_scene.gltf(filepath=str(ROOT/'public/models'/f'{kind}.glb'),export_format='GLB',export_apply=True,export_yup=True)
     print('REFINED',kind,flush=True)
 
+for relative, expected in preserved_hashes.items():
+    if hashlib.sha256((ROOT/relative).read_bytes()).hexdigest() != expected:
+        raise RuntimeError(f'Unselected car was unexpectedly modified: {relative}')
+
 record={
     'source':'KhronosGroup/glTF-Sample-Assets CarConcept, CC-BY-4.0; see public/licenses/CarConcept-LICENSE.md',
     'prepared_by':'tools/refine_cars.py after tools/prepare_concept.py',
+    'focused_export':'blender --background --python tools/refine_cars.py -- --kind coupe; unselected GLB and refined Blender hashes are verified unchanged',
     'editable_files':'source/models-refined/*.blend',
     'changes':[
         'Split hood, fenders, front and rear bumpers and rear quarters into independently damageable panels',
@@ -241,12 +483,22 @@ record={
         'Scale original crash assembly for each prepared wheelbase, width and height; reuse the same four material groups without new textures',
         'Reduce hidden wiper, rim, brake-pad and seat-frame density',
         'Repair window gasket and rear-glass classification'
-    ],'files':[]
+    ],
+    'coupe_only_changes':[
+        'Construct a rounded rear license-plate recess with explicit clipped opening, bevel loops and flat pocket floor; retain untouched exterior normals and vertex identities',
+        'Raise and widen the existing unbranded plate into the pocket with body-mounted tray, brackets, fasteners and geometry-only fictional lettering',
+        'Add concealed rear closure backplate, reinforcement ribs, bumper beam and crash mounts',
+        'Add hollow rolled exhaust outlets with routed connections, shortening inherited exhaust ends to eliminate duplicate visible stubs',
+        'Add small optical separators inside the existing rear lamps; reuse existing Structure materials and all embedded images',
+        'Preserve original lower bumper and its detach ID, wheel pivots, glass and forward panel geometry; no global normal or UV changes'
+    ],'files':[], 'editable_file_records':[]
 }
-for kind in ['coupe','sedan','hatch']:
+for kind in CAR_KINDS:
     path=ROOT/'public/models'/f'{kind}.glb';data=path.read_bytes();length=struct.unpack_from('<I',data,12)[0];gltf=json.loads(data[20:20+length])
     record['files'].append({'path':f'public/models/{kind}.glb','sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),
       'triangles':sum(gltf['accessors'][p['indices']]['count']//3 for mesh in gltf['meshes'] for p in mesh['primitives'])})
+    editable=ROOT/'source/models-refined'/f'{kind}.blend';editable_data=editable.read_bytes()
+    record['editable_file_records'].append({'path':f'source/models-refined/{kind}.blend','sha256':hashlib.sha256(editable_data).hexdigest(),'bytes':len(editable_data)})
 (ROOT/'source/vehicle-refinement-manifest.json').write_text(json.dumps(record,indent=2))
 # Keep the shared model inventory current without touching scenery provenance.
 inventory_path=ROOT/'source/model-manifest.json'

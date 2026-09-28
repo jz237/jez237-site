@@ -49,6 +49,8 @@ A 112-metre gravel approach joins the lane, shoulders and surrounding ground in 
 
 The three bodies are dimensioned derivatives of the licensed Car Concept asset, prepared in Blender and paired with separate mass, power, wheelbase, drive, sound, and damage profiles. They share a design family; they are not licensed production-car replicas.
 
+The coupe adds a recessed rear plate, lamp dividers, hollow exhaust outlets and concealed bumper reinforcement and mounts. These details reuse existing materials; body dust varies smoothly without the former coarse checker pattern. The model retains the same damage panels, wheel pivots and driving physics.
+
 Rapier handles fixed-step rigid-body physics and raycast wheel suspension. Steering assistance supports forgiving driving. Impacts deform individual body meshes, alter their shading, break glass, detach parts, shrink simplified colliders, and affect steering, suspension and power. This is localized visual deformation with rigid-body physics, not a full structural soft-body simulation.
 
 ## Audio
@@ -65,6 +67,8 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `npm run qa`: Chrome browser integration checks against the local server; reports and screenshots go to `outputs/`.
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
+- Blender: `--background --python tools/refine_cars.py -- --kind coupe` rebuilds only the coupe refinement, checking that sedan and hatch assets remain unchanged. Refined editable scenes and hashes are recorded in `source/vehicle-refinement-manifest.json`.
+- `tools/coupe-rear-qa.mjs`: matched intact, damaged, repaired and lighting-diagnostic browser views at 1440p; set a new `QUARRY_CAR_QA_OUTPUT` directory for each comparison. The actual-car tests also exercise runtime batching, local damage, exact repair and multiplayer damage replay.
 - `tools/rocks.py`: reduces the scanned rocks for gameplay.
 - Blender: run `tools/author-quarry-cut.py` to reproduce the road-facing cut, rubble, detail levels and shared collision proxy. Editable source and hashes are in `source/models/quarry-cut*`.
 - Blender: run `tools/author-quarry-roadside.py` to reproduce the adjoining deposits and fragments. It uses `tools/quarry_surface_clip.py` to conform ground triangles to the shared terrain. Source and hashes are in `source/models/quarry-roadside*`.

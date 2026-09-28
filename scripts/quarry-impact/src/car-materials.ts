@@ -12,10 +12,20 @@ export function finishPaint(material: T.MeshPhysicalMaterial) {
       .replace('#include <common>', `#include <common>
 varying vec3 vBodyPosition; varying vec2 vImpactWear;
 float bodyNoise(vec3 p) { return fract(sin(dot(floor(p),vec3(127.1,311.7,74.7)))*43758.5453); }
+// Interpolate deposited dust across cell boundaries; unfiltered floor noise
+// makes the lower body look like a coarse checkerboard at chase distance.
+float bodySilt(vec3 p) {
+  vec3 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+  return mix(
+    mix(mix(bodyNoise(i),bodyNoise(i+vec3(1.,0.,0.)),f.x),
+        mix(bodyNoise(i+vec3(0.,1.,0.)),bodyNoise(i+vec3(1.,1.,0.)),f.x),f.y),
+    mix(mix(bodyNoise(i+vec3(0.,0.,1.)),bodyNoise(i+vec3(1.,0.,1.)),f.x),
+        mix(bodyNoise(i+vec3(0.,1.,1.)),bodyNoise(i+vec3(1.,1.,1.)),f.x),f.y),f.z);
+}
 `)
       .replace('#include <color_fragment>', `#include <color_fragment>
 float grain=bodyNoise(vBodyPosition*340.);
-float silt=bodyNoise(vBodyPosition*36.);
+float silt=bodySilt(vBodyPosition*36.);
 float lowBody=1.-smoothstep(.3,1.05,vBodyPosition.y);
 float dust=clamp(lowBody*(.18+silt*.16)+vImpactWear.x*.18,0.,.56);
 float scratch=clamp(vImpactWear.x,0.,1.);
@@ -34,7 +44,7 @@ metalnessFactor=mix(metalnessFactor,.02,dust);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
 `);
   };
-  material.customProgramCacheKey = () => 'quarry-layered-paint-v2';
+  material.customProgramCacheKey = () => 'quarry-layered-paint-v3';
 }
 
 export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; };
