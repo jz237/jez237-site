@@ -1,0 +1,46 @@
+{
+  "previousRelease": "9923eca5ee14029e440339eeccd213799f2ae3fb",
+  "scope": "Deformation topology, coherent body/window/structure damage, grouped attachments, five-second solo wreck inspection, shallow bank relief, branch trees and verge patches. All shared simulation inputs unchanged.",
+  "files": {
+    "src/assets.ts": {
+      "before": "b61978b03456b5e1970edb8451bd0125656aa2e60514147a4450e5955deb8f52",
+      "after": "2d9a068c72f0ab655acf2d43d1b1c1edc2db5ccb4c4495fcbacdff7b4b27ca9f",
+      "snapshot": "tests/fixtures/wreck-before-assets.ts.gz"
+    },
+    "src/car-materials.ts": {
+      "before": "9359e382fd2a4298ef303294f6e91b1bd68dea745d1a40c8604e2143855c207d",
+      "after": "8b349abd31a308dbe49f9afa9591a2316e27daf95711cfce41ecad2e267e23c8",
+      "snapshot": "tests/fixtures/wreck-before-car-materials.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "34583555c2d19f0beb2016540c07dc55b61c10779640d73546e222515002d122",
+      "after": "af5d8c67b18afb4af8995b14ea4feeae1ba1a41b8ce444cda645b32f77f44fd8",
+      "snapshot": "tests/fixtures/wreck-before-main.ts.gz"
+    },
+    "src/scenery-vegetation.ts": {
+      "before": "1c988e029ee27666b564d6b1e1337e0ca454b276029ae9a297269a8011100629",
+      "after": "699d5b9a0b919b83659498270022a36446e20c8e060611649b6d31384fe43b30",
+      "snapshot": "tests/fixtures/wreck-before-scenery-vegetation.ts.gz"
+    },
+    "src/scenery-west-verge.ts": {
+      "before": "ddc5e3f13b2a54bc4ccbaa005f17f5702356ae534470f207bca6fd52b1a3ce46",
+      "after": "e3a87ffb8930d4be694f6124e648e68207f0127f82a6353e8de06ccfa8258d60",
+      "snapshot": "tests/fixtures/wreck-before-scenery-west-verge.ts.gz"
+    },
+    "src/style.css": {
+      "before": "62fa3011c58f3d54edb1e46f30ff88851b3e845e2e37cf816f8abb96094a8e2f",
+      "after": "c878ea3e2e6f2ffd58530ba216f5fbd4a5f1286a8b652a254d42f9cf1b10ea0e",
+      "snapshot": "tests/fixtures/wreck-before-style.css.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "5d21295226b5ba90dec3bdd696b65fb8bd694a8fa4586e80a5b122cb99f5571c",
+      "after": "b9eb2a88a05e765636baac440d130f271dd4338247eea7adfce3eb3642613c93",
+      "snapshot": "tests/fixtures/wreck-before-vehicle.ts.gz"
+    },
+    "src/world.ts": {
+      "before": "6530a3b67d039272bdc4c48818375a34fc8bb00f0f609e18954a7a3ceee0cbe1",
+      "after": "9954036f5d696906581f04a711b2d283e1bc075190deeecec40f85c32a419435",
+      "snapshot": "tests/fixtures/wreck-before-world.ts.gz"
+    }
+  }
+}
