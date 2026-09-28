@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 
 const phase=process.env.QUARRY_CUT_PHASE || 'after';
 const focused=process.env.QUARRY_CUT_FOCUSED==='1';
+const roadsideOnly=process.env.QUARRY_CUT_ROADSIDE==='1';
 assert.match(phase,/^[a-z0-9][a-z0-9_-]*$/i);
 const output=path.resolve(process.env.QUARRY_CUT_OUTPUT || 'outputs/quarry-cut',phase);
 const url=process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/';
@@ -18,6 +19,7 @@ const views=[
   {name:'left-end',player:[96,-43,0],position:[104,3,-48],target:[143,13,-78]},
   {name:'right-end',player:[66,-83,0],position:[78,3,-98],target:[128,12,-129]},
 ];
+if(roadsideOnly)views.splice(0,views.length,{name:'roadside-close',player:[98,-72,0],position:[104,2.9,-77],target:[116,1.8,-83]});
 const track=Array.from({length:481},(_,i)=>{
   const a=i/480*Math.PI*2;
   return {x:108*Math.sin(a)+12*Math.sin(a*3),z:88*Math.cos(a)+9*Math.sin(a*2)};
@@ -74,7 +76,7 @@ try {
   // Freeze between samples and advance only fixed simulation steps. These are
   // chase poses following a physically moving car, not arbitrary fly-throughs.
   // Camera easing/FOV animation is intentionally held fixed for comparison.
-  if(!focused){
+  if(!focused&&!roadsideOnly){
   await page.evaluate(({track,neutral})=>{
     const start=track[149],next=track[150],yaw=Math.atan2(next.x-start.x,next.z-start.z);
     __quarry.resume();__quarry.setInput(neutral);__quarry.teleport(0,start.x,start.z,yaw);__quarry.simulate(.25);

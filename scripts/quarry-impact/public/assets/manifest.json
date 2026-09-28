@@ -176,5 +176,41 @@
     "scale_metres": 2.7,
     "resolution": "1k",
     "notes": "Packed ambient occlusion, roughness and metallic channels."
+  },
+  {
+    "file": "scree_diff.jpg",
+    "source": "https://polyhaven.com/a/rock_ground",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_ground/rock_ground_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "258eb28b52706570d721e0b0f5e08ebcc9d4e3829c11abc54a8ca103fd552f06",
+    "source_md5": "755dba4b148e8a9ceb6a0abd50d3f0e3",
+    "scale_metres": 1.5,
+    "resolution": "2k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "scree_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/rock_ground",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_ground/rock_ground_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "08b5280aad66563d642398d3bb018568e54df8aa3140c077adabe39598c7449d",
+    "source_md5": "585ebc43db21b612c342e1b26d289be3",
+    "scale_metres": 1.5,
+    "resolution": "2k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "scree_rough.jpg",
+    "source": "https://polyhaven.com/a/rock_ground",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_ground/rock_ground_rough_1k.jpg",
+    "license": "CC0-1.0",
+    "sha256": "2585e6eda380d10b081448fd98bc4e8c37b3e8947a26ec7d95d361920d36b2e7",
+    "source_md5": "67be099b9edb59d2fcb3377c5fccbf88",
+    "scale_metres": 1.5,
+    "resolution": "1k",
+    "notes": "Original downloaded JPEG; no image transformation."
   }
 ]

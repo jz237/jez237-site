@@ -43,7 +43,7 @@ The bundled `public/multiplayer.json` connects to the deployed service at `wss:/
 
 Three.js renders layered photographic ground and cliff materials, scanned rocks and near fir trees, photographic workshop cladding, detailed car interiors and exposed crash structures, shadows, ambient occlusion, and quarry environment reflections. Ultra targets the user's RTX 5090 at 1440p. High reduces resolution and shadows; Medium also disables ambient occlusion and shadows. No ray tracing is required.
 
-One road-facing sector has a Blender-built cut with broken extraction faces and seated rubble. Three adjoining sections switch between near and distant meshes. Solo play and the multiplayer server share the detailed wall geometry and simplified rubble collisions. The broader quarry still contains procedural terrain and distant tree cards; this remains a visual work in progress.
+One road-facing sector has a Blender-built cut with broken extraction faces and seated rubble. Its adjoining approach connects low rubble deposits, drainage channels and grouped young firs from the road shoulder to the wall. Painted material masks blend photographic broken-rock and soil maps into the surrounding terrain. Spatial sections switch between near and distant fragments while retaining the same ground surface. Solo play and the multiplayer server share the wall and deposit geometry, with simplified rubble collisions. The broader quarry still contains procedural terrain and distant tree cards; this remains a visual work in progress.
 
 The three bodies are dimensioned derivatives of the licensed Car Concept asset, prepared in Blender and paired with separate mass, power, wheelbase, drive, sound, and damage profiles. They share a design family; they are not licensed production-car replicas.
 
@@ -65,13 +65,15 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
 - `tools/rocks.py`: reduces the scanned rocks for gameplay.
 - Blender: run `tools/author-quarry-cut.py` to reproduce the road-facing cut, rubble, detail levels and shared collision proxy. Editable source and hashes are in `source/models/quarry-cut*`.
+- Blender: run `tools/author-quarry-roadside.py` to reproduce the adjoining deposits and fragments. It uses `tools/quarry_surface_clip.py` to conform ground triangles to the shared terrain. Source and hashes are in `source/models/quarry-roadside*`.
 - `python tools/restore-scenery-sources.py`: restores the large CC0 fir source buffers/textures from recorded URLs and verifies SHA-256 hashes. These raw inputs are omitted from the GitHub snapshot; the small source glTF files, manifests, editable Blender scenes and prepared runtime models are retained. The one editable scene over the static host's 25 MiB per-file limit, `source/models/fir-medium.blend` (50 MB), is also restored by this script from the site's R2 bucket (SHA-256 checked) instead of living in the repository, because Cloudflare Pages rejects any deployment containing a file that large.
 - Blender: run `tools/prepare-fir-saplings.py` and `tools/prepare-fir-medium.py` with `blender --background --python <script>` to rebuild fir detail levels. `tools/split-fir-medium.py` re-exports three files below the static host’s size limit.
 - `tools/assets.py`: downloads photographic textures and records provenance.
 - `node tools/prepare-industrial-material.mjs`: restores the CC0 workshop maps from recorded URLs and verifies original checksums.
+- `node tools/prepare-roadside-material.mjs`: restores the CC0 broken-rock maps with verified source checksums.
 - `tools/quarry-cut-qa.mjs`: captures matched 1440p scenery and moving-car views with short frame-time diagnostics; preserve comparisons with `QUARRY_CUT_PHASE` and `QUARRY_CUT_OUTPUT`.
 - `tools/check-published-build.mjs`: verifies the published bundle and authored GLB against local hashes after deployment; use `QUARRY_RELEASE_CHECK_OUTPUT` to retain each report.
-- `tools/performance-qa.mjs`: measures sustained frame intervals and resource counts. Set `QUARRY_BENCH_OUTPUT` to a distinct JSON path to retain each run with its corresponding screenshot and loaded build URL.
+- `tools/performance-qa.mjs`: measures sustained frame intervals and resource counts across eight-car derby and racing events. Set `QUARRY_PERFORMANCE_OUTPUT` to a distinct JSON path to retain each run with its corresponding screenshot and loaded build URL; the default duration is 610 seconds.
 - `tools/audio.py`: explicit ElevenLabs generation, using `ELEVENLABS_API_KEY` from the environment. Never run automatically during builds. It checks quota and refuses overage-enabled accounts; completed clips are reused.
 
 Implementation modules separate assets, world, vehicle dynamics/damage, rules, audio and effects. `window.__quarry` is a local QA interface for scenario setup and performance reports; it is not an online API or a remote service.

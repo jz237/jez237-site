@@ -13,7 +13,7 @@ import { Effects } from './effects';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
 import { OnlineUI } from './online-ui';
-import { landscapeHeight } from './quarry-layout';
+import { scenerySurfaceHeight } from './quarry-layout';
 import {
   DEFINITIONS,
   clamp,
@@ -806,7 +806,7 @@ function updateCamera(dt: number) {
         .clone()
         .addScaledVector(f, -7.4 - Math.abs(p.speed) * 0.04)
         .add(new T.Vector3(0, 2.65, 0));
-  desired.y = Math.max(desired.y, landscapeHeight(desired.x, desired.z) + 0.65);
+  desired.y = Math.max(desired.y, scenerySurfaceHeight(desired.x, desired.z) + 0.65);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
   const look = target
     .clone()
