@@ -1,0 +1,146 @@
+[
+  {
+    "file": "container_side-diff.jpg",
+    "source": "https://polyhaven.com/a/container_side",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/container_side/container_side_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Dimitrios Savva": "All"
+    },
+    "scaleMetres": [
+      1.940000057220459,
+      1.9399999380111694
+    ],
+    "bytes": 1833036,
+    "md5": "6c9e41a68d17430477cf740aed4315c1",
+    "sha256": "f6d88ea2c1f7e6edb3d969af5610017bc8ccf455ef45f99ba5bac60a3963fda4"
+  },
+  {
+    "file": "container_side-normal.jpg",
+    "source": "https://polyhaven.com/a/container_side",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/container_side/container_side_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Dimitrios Savva": "All"
+    },
+    "scaleMetres": [
+      1.940000057220459,
+      1.9399999380111694
+    ],
+    "bytes": 2632795,
+    "md5": "5e969a314c345a9437e4c92eae6c68a6",
+    "sha256": "5bf3d7b304d98bec2065ad2501926cf880e014442bd1457a6a60df79be3a4d34"
+  },
+  {
+    "file": "container_side-arm.jpg",
+    "source": "https://polyhaven.com/a/container_side",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/container_side/container_side_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Dimitrios Savva": "All"
+    },
+    "scaleMetres": [
+      1.940000057220459,
+      1.9399999380111694
+    ],
+    "bytes": 1856806,
+    "md5": "9d66bd38ebbbf25dec503a6242d52799",
+    "sha256": "1000abab0c63c5e755690db659550e53f6668c8bb3adf965198494578cc80e62"
+  },
+  {
+    "file": "rusty_painted_metal-diff.jpg",
+    "source": "https://polyhaven.com/a/rusty_painted_metal",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rusty_painted_metal/rusty_painted_metal_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Amal Kumar": "All"
+    },
+    "scaleMetres": [
+      2.200000047683716,
+      2.200000047683716
+    ],
+    "bytes": 1930544,
+    "md5": "dd4f975d539100c4d31fa91d41e1ea71",
+    "sha256": "883118fafabb56304f9e33ea2da3c183379b1c1b1c5a4702fdc335b0cf84614f"
+  },
+  {
+    "file": "rusty_painted_metal-normal.jpg",
+    "source": "https://polyhaven.com/a/rusty_painted_metal",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rusty_painted_metal/rusty_painted_metal_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Amal Kumar": "All"
+    },
+    "scaleMetres": [
+      2.200000047683716,
+      2.200000047683716
+    ],
+    "bytes": 2293576,
+    "md5": "f9fe4bf3312f06b0eacd7c57470d6285",
+    "sha256": "2289c10422d5082aea3cf37661008b281c4aec20f6d0b574df6d7887573eb70c"
+  },
+  {
+    "file": "rusty_painted_metal-arm.jpg",
+    "source": "https://polyhaven.com/a/rusty_painted_metal",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rusty_painted_metal/rusty_painted_metal_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Amal Kumar": "All"
+    },
+    "scaleMetres": [
+      2.200000047683716,
+      2.200000047683716
+    ],
+    "bytes": 1552679,
+    "md5": "1ae307c9293e24227313d18f857c226b",
+    "sha256": "56f5428c8417f75cd0826fb8aa555d3f2e9cae872640912f32376b6357fac8d7"
+  },
+  {
+    "file": "concrete_layers_02-diff.jpg",
+    "source": "https://polyhaven.com/a/concrete_layers_02",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_layers_02/concrete_layers_02_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "scaleMetres": [
+      2,
+      2
+    ],
+    "bytes": 2555097,
+    "md5": "f98d5155e8d298931320879be082d136",
+    "sha256": "f70070187573ad05457c65c3efe7fb25fe1e071a5490c760e5b90f845aab9b91"
+  },
+  {
+    "file": "concrete_layers_02-normal.jpg",
+    "source": "https://polyhaven.com/a/concrete_layers_02",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_layers_02/concrete_layers_02_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "scaleMetres": [
+      2,
+      2
+    ],
+    "bytes": 3389363,
+    "md5": "8421eb5b33a8afbf845565676abc7f44",
+    "sha256": "6985e0782adb226423d81cdd080b0e06012fdfb20eb3952d2459218fdd3977e9"
+  },
+  {
+    "file": "concrete_layers_02-arm.jpg",
+    "source": "https://polyhaven.com/a/concrete_layers_02",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/concrete_layers_02/concrete_layers_02_arm_2k.jpg",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "scaleMetres": [
+      2,
+      2
+    ],
+    "bytes": 2201538,
+    "md5": "6c4b6def4da22681bac6888c9820d503",
+    "sha256": "6e86bf081415d6950c19112d8b11427efa771690b6669251a7d2123305f19250"
+  }
+]
