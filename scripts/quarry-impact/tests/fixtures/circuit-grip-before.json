@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "capturedAt": "2026-09-28T13:37:34.293Z",
+  "deployedVersion": "fc5aec33-02d2-4b35-9c48-b8f3db3cf792",
+  "workerInputs": [
+    {
+      "file": "multiplayer/.generated/rapier-worker.mjs",
+      "expected": "1cffca7a027f5404a4fafa7895e6bd4bd44b58120d391680957de6e9acfc8435"
+    },
+    {
+      "file": "src/rules.ts",
+      "expected": "6914f5077203b1acfc2592790a8f75443d120a0a8a62f3229f215cd005a4d36f"
+    },
+    {
+      "file": "src/quarry-rock-hulls.json",
+      "expected": "684d509b54c477f79e0fc01205c1424ae2c15596d0ab010b74e94105e439d613"
+    },
+    {
+      "file": "src/quarry-scree.json",
+      "expected": "c2d2eb13354aa19a656b96ea30473a39b6b1920246eea7b06168fee65de70881"
+    },
+    {
+      "file": "src/quarry-cut-collision.json",
+      "expected": "68ae33add9a963344d2d62d3642d0dbabf3e18a7b53057e0701e20b9d9c440d2"
+    },
+    {
+      "file": "src/quarry-roadside-data.json",
+      "expected": "f1015e204191e5adc0e239cfa00f999873d754df10b0a0b0c50a78f64c09a048"
+    },
+    {
+      "file": "src/quarry-backdrop-trees.json",
+      "expected": "8cb669bb79882da6ad6c239b4143c3497c8511de4bf62dba3cf7f16744f76755"
+    },
+    {
+      "file": "src/quarry-extension-collision.json",
+      "expected": "ceaa20fc0b050438eafd956ab2f6389679c51c9972c9b6157d5a1c3b997a5065"
+    },
+    {
+      "file": "src/quarry-surface-sampler.ts",
+      "expected": "d19316361592b4254a3743ef06deb803271f835c637663ec68e892e8c5f16925"
+    },
+    {
+      "file": "src/quarry-layout.ts",
+      "expected": "5364c0604d5406414462e5db6634d1d9b77ae2c5268c7ac381e4a7a215d5a889"
+    },
+    {
+      "file": "multiplayer/protocol.ts",
+      "expected": "715af86b7320e71f0e2297d2f10b2ce518a8e8bf8a56ef554195711e754ee5fa"
+    },
+    {
+      "file": "multiplayer/simulation.ts",
+      "expected": "dc9c0d56c0251da1b3aaa060d4bf60767ab88d87381e164a7ac5e5980526e0f5"
+    },
+    {
+      "file": "multiplayer/room.ts",
+      "expected": "53f7cfc9749aa8394fa29e89cad5fc62ed9e909a288c2adff9968aee6d952c16"
+    },
+    {
+      "file": "multiplayer/admission.ts",
+      "expected": "fe129cb53115c4607be99a9648426825b13b8d2daeed60adee5b6b5a9694d825"
+    },
+    {
+      "file": "multiplayer/worker.ts",
+      "expected": "45eae2daae3e68d27771b5d3901bdf9619e9fa3be4ffbb2e8af24c299b821896"
+    },
+    {
+      "file": "multiplayer/wrangler.jsonc",
+      "expected": "6b96407b0abc87896c3a08d07690817d16a8b903a2a825f7c9978a3d18e794d9"
+    },
+    {
+      "file": "src/quarry-headwall-collision.json",
+      "expected": "d1fab66ff5e587c2f7a64a1b53e30445439be334c1f6b103337034d0834af889"
+    },
+    {
+      "file": "src/quarry-north-forest.json",
+      "expected": "c7fc8beef7927bf9a1df0ce8e53a2565ac00d0c84236ad0eb2a2e36403142bdf"
+    },
+    {
+      "file": "src/quarry-north-backdrop.json",
+      "expected": "3d750b6e328bc9b5f80c79e61cfaec85d6559aecc2b81271956c95fbb187bff6"
+    },
+    {
+      "file": "src/quarry-east-bay-collision.json",
+      "expected": "4dcdb16dd06c5e0fea1009f0cb6ddd0ae2c3ee4b0529810b449dffce093b686f"
+    }
+  ],
+  "colliderSHA256": "621c36330aa4ba8370ce4c1f775cfa733e36495197554f1485dd5303b20988b3",
+  "colliderCount": 2287,
+  "rulesSource": "export type Mode = 'derby' | 'playground' | 'race';\nexport type CarKind = 'coupe' | 'sedan' | 'hatch';\nexport const clamp = (n: number, a: number, b: number) =>\n  Math.max(a, Math.min(b, n));\nexport const wrap = (v: number) => Math.atan2(Math.sin(v), Math.cos(v));\nexport const DEFINITIONS = {\n  coupe: {\n    name: 'VESPER GT',\n    subtitle: '5.0 V8 · Rear-wheel drive',\n    mass: 1480,\n    force: 11300,\n    halfLength: 2.325,\n    halfWidth: 0.99,\n    wheelbase: 2.72,\n    color: 0xc9d4ca,\n  },\n  sedan: {\n    name: 'KESSLER R6',\n    subtitle: 'Twin-turbo six · All-wheel drive',\n    mass: 1650,\n    force: 12400,\n    halfLength: 2.475,\n    halfWidth: 0.96,\n    wheelbase: 2.98,\n    color: 0x40566d,\n  },\n  hatch: {\n    name: 'STRYDE RS',\n    subtitle: 'Turbo four · All-wheel drive',\n    mass: 1290,\n    force: 9700,\n    halfLength: 2.075,\n    halfWidth: 0.92,\n    wheelbase: 2.46,\n    color: 0xafa044,\n  },\n};\nexport function damageFromImpulse(impulse: number) {\n  return clamp((impulse - 1700) / 930, 0, 28);\n}\nexport function derbyOrder<\n  T extends { health: number; inflicted: number; id: number },\n>(cars: T[]) {\n  return [...cars].sort(\n    (a, b) => b.health - a.health || b.inflicted - a.inflicted || a.id - b.id,\n  );\n}\nexport function trackPoint(t: number) {\n  const a = t * Math.PI * 2;\n  return {\n    x: 108 * Math.sin(a) + 12 * Math.sin(a * 3),\n    z: 88 * Math.cos(a) + 9 * Math.sin(a * 2),\n  };\n}\nexport const CHECKPOINTS = Array.from({ length: 24 }, (_, i) =>\n  trackPoint(i / 24),\n);\nexport function terrainHeight(x: number, z: number) {\n  const d = Math.hypot(x / 1.08, z);\n  if (d < 60) return 0;\n  const rim = clamp((d - 137) / 50, 0, 1);\n  return (\n    Math.sin(x * 0.034) *\n      Math.sin(z * 0.041) *\n      Math.min((d - 60) / 35, 1) *\n      1.7 +\n    rim * rim * (40 + 5 * Math.sin(Math.atan2(z, x) * 7))\n  );\n}\nexport function surfaceAt(x: number, z: number) {\n  const radius = Math.hypot(x, z);\n  if (radius < 44) return 'gravel';\n  let dist = Infinity;\n  for (const p of CHECKPOINTS)\n    dist = Math.min(dist, Math.hypot(x - p.x, z - p.z));\n  return dist < 11 && z > -20 ? 'asphalt' : 'gravel';\n}\nexport function advanceCheckpoint(\n  x: number,\n  z: number,\n  next: number,\n  lastDistance: number,\n) {\n  const p = CHECKPOINTS[next];\n  const distance = Math.hypot(x - p.x, z - p.z);\n  return { passed: distance < 12 && distance < lastDistance, distance };\n}\n",
+  "simulationSHA256": "dc9c0d56c0251da1b3aaa060d4bf60767ab88d87381e164a7ac5e5980526e0f5",
+  "vehicleSHA256": "74fb9cf16599bedf7554924a6de48331003a0aea18e797aaf93708604678e413",
+  "maskSHA256": "53882d04d9c08c22cc59b06ad7d23eb0edeb729a63ea4f1e0716818b2d488ff6",
+  "baseSHA256": "ce9cbf18f2f961b7ece8d88316485dd3fc822e377b8f9ad2ca1280b87e059409"
+}
