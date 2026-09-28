@@ -1205,6 +1205,8 @@
     hallucination: ['Hallucination', 'The model fills in a plausible answer without evidence. Reduce it by giving sources, using tools, and asking it to separate known facts from assumptions.'],
     stale: ['Stale information', 'Training data has a cutoff and memory can be outdated. For current prices, laws, model releases, schedules, or live websites, the system needs a fresh lookup.'],
     context: ['Missing context', 'The model may not see the file, previous decision, image, or private instruction that matters. Put key facts in the current context or durable memory.'],
+    middle: ['Lost in the middle', 'Everything in the window is visible, but in a very long context the model uses facts at the start and the end more reliably than facts buried in the middle. Put key instructions first, or repeat them near the end.'],
+    injection: ['Prompt injection', 'Web pages, emails, and files can hide text aimed at the AI ("ignore your instructions and…"). A careful agent treats anything it reads as information, never as orders from you. Try the booby-trapped page in the Tools section.'],
     prompt: ['Weak prompt', 'Ambiguous requests force the model to choose hidden assumptions. Better prompts say the goal, constraints, output shape, and what not to change.'],
     tool: ['Wrong tool', 'A question about your files needs a file search. A question about today needs a live lookup. A picture needs an image tool. Good agents pick the right instrument.'],
     permission: ['Permission boundary', 'A capable agent still needs limits. Deleting, posting, sending messages, sharing secrets, and spending money deserve your explicit approval.']

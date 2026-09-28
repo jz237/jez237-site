@@ -106,7 +106,12 @@
   </url>
   <url>
     <loc>https://jez237.com/how-ai-works/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-09-28</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/how-ai-works/training-alignment</loc>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
