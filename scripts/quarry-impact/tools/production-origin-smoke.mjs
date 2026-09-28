@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 
 // Run only after publication is confirmed. This deliberately does not read
 // QUARRY_TEST_ENDPOINT or write the server field: production supplies its URL.
@@ -22,7 +23,8 @@ async function openPage(label,address){
     window.__originSmokeCSP=[];
     window.addEventListener('securitypolicyviolation',e=>window.__originSmokeCSP.push({directive:e.effectiveDirective,blocked:e.blockedURI,disposition:e.disposition}));
   });
-  const p=await context.newPage(),observed={config:null,webSockets:[]};
+  const p=await context.newPage(),observed={config:null,webSockets:[],vehicleAssets:[]};
+  const vehicleResponses=[];
   const configURL=new URL('multiplayer.json',url).href;
   const configResponse=p.waitForResponse(r=>r.url()===configURL,{timeout:120000});
   // Mark the promise handled while goto/asset preparation is still in progress.
@@ -31,6 +33,18 @@ async function openPage(label,address){
   p.on('console',message=>{if(message.type()==='error')add(report.browserErrors,{client:label,error:message.text()});});
   p.on('requestfailed',request=>add(report.failedRequests,{client:label,url:request.url(),error:request.failure()?.errorText}));
   p.on('response',response=>{if(response.status()>=400)add(report.httpErrors,{client:label,url:response.url(),status:response.status()});});
+  p.on('response',response=>{
+    const file=new URL(response.url()).pathname.split('/').pop();
+    if(!['coupe.glb','sedan.glb','hatch.glb'].includes(file))return;
+    const record=(async()=>{
+      assert.equal(response.status(),200);
+      const bytes=await response.body(),local=await fs.readFile('dist/models/'+file);
+      const hash=data=>createHash('sha256').update(data).digest('hex');
+      assert.equal(hash(bytes),hash(local),`${label}: actual loaded ${file} must match the tested asset`);
+      observed.vehicleAssets.push({file,bytes:bytes.length,sha256:hash(bytes)});
+    })();
+    record.catch(()=>{});vehicleResponses.push(record);
+  });
   p.on('websocket',socket=>observed.webSockets.push(socket.url()));
   const response=await p.goto(address,{waitUntil:'domcontentloaded',timeout:120000});
   assert.equal(response.status(),200,'Published game document must load');
@@ -45,6 +59,8 @@ async function openPage(label,address){
   assert.ok(connect.split(/\s+/).includes(endpointOrigin),'Published CSP must allow the configured secure WebSocket origin');
   observed.connectPolicy=connect;
   await p.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
+  await Promise.all(vehicleResponses);
+  assert.equal(observed.vehicleAssets.length,3,'Each production browser loads all three verified cars');
   observed.moduleScripts=await p.locator('script[type="module"]').evaluateAll(nodes=>nodes.map(n=>n.src));
   return {p,observed,label};
 }

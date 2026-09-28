@@ -55,6 +55,12 @@ try {
   const roadBytes = await roadResponse.body();
   report.roadAsset = { url: roadURL, bytes: roadBytes.length,
     sha256: createHash('sha256').update(roadBytes).digest('hex') };
+  const coupeURL = new URL('models/coupe.glb', report.pageURL).href;
+  const coupeResponse = await page.request.get(coupeURL);
+  assert.equal(coupeResponse.status(), 200, 'The final coupe must be served');
+  const coupeBytes = await coupeResponse.body();
+  report.coupeAsset = { url: coupeURL, bytes: coupeBytes.length,
+    sha256: createHash('sha256').update(coupeBytes).digest('hex') };
   await page.evaluate(async quality => {
     await __quarry.start('derby'); __quarry.autopilot(true); __quarry.setQuality(quality); __quarry.mute();
   }, quality);

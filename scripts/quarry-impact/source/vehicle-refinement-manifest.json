@@ -1,6 +1,7 @@
 {
   "source": "KhronosGroup/glTF-Sample-Assets CarConcept, CC-BY-4.0; see public/licenses/CarConcept-LICENSE.md",
   "prepared_by": "tools/refine_cars.py after tools/prepare_concept.py",
+  "focused_export": "blender --background --python tools/refine_cars.py -- --kind coupe; unselected GLB and refined Blender hashes are verified unchanged",
   "editable_files": "source/models-refined/*.blend",
   "changes": [
     "Split hood, fenders, front and rear bumpers and rear quarters into independently damageable panels",
@@ -11,12 +12,20 @@
     "Reduce hidden wiper, rim, brake-pad and seat-frame density",
     "Repair window gasket and rear-glass classification"
   ],
+  "coupe_only_changes": [
+    "Construct a rounded rear license-plate recess with explicit clipped opening, bevel loops and flat pocket floor; retain untouched exterior normals and vertex identities",
+    "Raise and widen the existing unbranded plate into the pocket with body-mounted tray, brackets, fasteners and geometry-only fictional lettering",
+    "Add concealed rear closure backplate, reinforcement ribs, bumper beam and crash mounts",
+    "Add hollow rolled exhaust outlets with routed connections, shortening inherited exhaust ends to eliminate duplicate visible stubs",
+    "Add small optical separators inside the existing rear lamps; reuse existing Structure materials and all embedded images",
+    "Preserve original lower bumper and its detach ID, wheel pivots, glass and forward panel geometry; no global normal or UV changes"
+  ],
   "files": [
     {
       "path": "public/models/coupe.glb",
-      "sha256": "b864da9afe5d0a8a6c75467598bb085273d4d68c0f9e21d3d24ec749a67f4a2f",
-      "bytes": 9696968,
-      "triangles": 188597
+      "sha256": "43162e8383f6c002a03611071b0147f87b7b2c49e10618e31d4af3b41b9a7e39",
+      "bytes": 9983372,
+      "triangles": 195811
     },
     {
       "path": "public/models/sedan.glb",
@@ -29,6 +38,23 @@
       "sha256": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
       "bytes": 9686488,
       "triangles": 188551
+    }
+  ],
+  "editable_file_records": [
+    {
+      "path": "source/models-refined/coupe.blend",
+      "sha256": "712ec81be836d6c650d3a0aec8325fa2fcf05e03c0b85e85179890e4bd707380",
+      "bytes": 10301127
+    },
+    {
+      "path": "source/models-refined/sedan.blend",
+      "sha256": "141b24a87ad4884606caadb9c843b5e97eef667f4fab8ce3414335635115eeed",
+      "bytes": 11760240
+    },
+    {
+      "path": "source/models-refined/hatch.blend",
+      "sha256": "5a97f841b03f327565988b2613466295519f89270d23468d0aab14935a53d338",
+      "bytes": 14090096
     }
   ]
 }
