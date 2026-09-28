@@ -1,3 +1,4 @@
+import {restoreWestWallCliffs} from './quarry-west-wall-invariants';
 import {assertEastBayEvolution,eastBayHash,restoreEastBayCliffs,eastBayArrayHash,eastBayBefore,eastBayData} from './quarry-east-bay-invariants';
 import * as T from 'three';
 import {cliffGeometry} from '../src/quarry-layout';
@@ -70,7 +71,7 @@ test('arena material change cannot add draw objects, alter other materials, or p
   // East Bay removes only independently verified legacy wall index cells.
   // Recomputed render normals must match that exact new index buffer, before
   // this older arena gate reconstructs the historical descriptor in memory.
-  const actualCliff=cliffGeometry(),oldCliff=restoreEastBayCliffs(actualCliff),mesh=new T.BufferGeometry();
+  const actualCliff=restoreWestWallCliffs(cliffGeometry()),oldCliff=restoreEastBayCliffs(actualCliff),mesh=new T.BufferGeometry();
   mesh.setAttribute('position',new T.BufferAttribute(actualCliff.positions,3));mesh.setIndex(new T.BufferAttribute(actualCliff.indices,1));mesh.computeVertexNormals();
   const wall=others.filter(o=>o.geometry.attributes.position.sha256===eastBayArrayHash(actualCliff.positions));
   const oldWall=baseline.objects.filter((o:any)=>o.geometry.attributes.position.sha256===eastBayArrayHash(oldCliff.positions));

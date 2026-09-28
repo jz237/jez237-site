@@ -1,3 +1,4 @@
+import {assertWestWallEvolution} from './quarry-west-wall-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -40,7 +41,7 @@ test('numeric grip profile reproduces deterministically and preserves every sour
 test('grip source evolution preserves all collision shapes, vehicle controls, checkpoint/AI/scoring bytes and prior Worker inputs',()=>{
   for(const row of before.workerInputs)assert.equal(hash(historicGripBytes(row.file,read(row.file))),row.expected,row.file);
   assert.equal(hash(read('src/vehicle.ts')),before.vehicleSHA256);
-  const colliders=quarryColliderLayout().map(s=>({id:s.id,sha256:hash(JSON.stringify(s))}));
+  const colliders=assertWestWallEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:hash(JSON.stringify(s))}));
   assert.equal(colliders.length,2287);assert.equal(hash(JSON.stringify(colliders)),before.colliderSHA256);
 });
 

@@ -72,11 +72,33 @@ async function eastBayAssetPlan() {
   }
   return { file, bytes: record.bytes, sha256: record.sha256, manifest: manifestPath };
 }
+async function westWallAssetPlan() {
+  const file = 'models/quarry-west-wall.glb', manifestPath = 'source/models/quarry-west-wall-manifest.json';
+  const html = await fs.readFile('dist/index.html', 'utf8');
+  const modules = [...html.matchAll(/(?:src|href)="\.\/([^"?#]+\.js)"/g)].map(match => match[1]);
+  const code = (await Promise.all(modules.map(module => fs.readFile(path.join('dist', module), 'utf8')))).join('\n');
+  if (!code.includes('quarry-west-wall.glb')) return null; // Historical frozen builds remain usable.
+  const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  const record = manifest.assets.find(asset => asset.file === 'public/' + file);
+  assert.ok(record, 'The west-wall manifest must identify its runtime GLB');
+  for (const root of ['public', 'dist']) {
+    const bytes = await fs.readFile(path.join(root, file));
+    assert.equal(bytes.length, record.bytes, `The ${root} west-wall size must match its manifest`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), record.sha256, `The ${root} west-wall hash must match its manifest`);
+  }
+  return { file, bytes: record.bytes, sha256: record.sha256, manifest: manifestPath };
+}
 async function addEastBayStops(forest, enabled) {
   if (!forest || !enabled) return forest;
   const { prepareEastBayStops } = await tsImport('./east-bay-stop-preflight.ts', import.meta.url);
   const eastBay = prepareEastBayStops();
   return { ...forest, stops: [...forest.stops, ...eastBay.stops], eastBay };
+}
+async function addWestWallStops(forest, enabled) {
+  if (!forest || !enabled) return forest;
+  const { prepareWestWallStops } = await tsImport('./west-wall-stop-preflight.ts', import.meta.url);
+  const westWall = prepareWestWallStops();
+  return { ...forest, stops: [...forest.stops, ...westWall.stops], westWall };
 }
 async function circuitAssetsForBuild() {
   const html = await fs.readFile('dist/index.html', 'utf8');
@@ -94,7 +116,8 @@ async function geologyAssetsForBuild() {
 // It lets placement changes be checked before reserving the isolated GPU run.
 if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
   const eastBayAsset = await eastBayAssetPlan();
-  const { stops, sourceSha256, ridge, eastBay } = await addEastBayStops(await addRidgeStops(await prepareForestStops()), !!eastBayAsset);
+  const westWallAsset = await westWallAssetPlan();
+  const { stops, sourceSha256, ridge, eastBay } = await addWestWallStops(await addEastBayStops(await addRidgeStops(await prepareForestStops()), !!eastBayAsset), !!westWallAsset);
   const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops, ridge, eastBay, eastBayAsset,
     measuredFrames: 0, browserLaunched: false };
   await fs.mkdir(path.dirname(output), { recursive: true });
@@ -111,9 +134,10 @@ try {
   await fs.mkdir(path.dirname(output), { recursive: true });
   const forestAssets = await forestRuntimeAssetPlan();
   const eastBayAsset = await eastBayAssetPlan();
+  const westWallAsset = await westWallAssetPlan();
   const circuitAssets = await circuitAssetsForBuild();
   const geologyAssets = await geologyAssetsForBuild();
-  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...circuitAssets, ...geologyAssets];
+  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...(westWallAsset ? [westWallAsset] : []), ...circuitAssets, ...geologyAssets];
   report.geologyAssetsExpected = geologyAssets;
   report.forestAssetsExpected = forestAssets;
   report.eastBayAssetExpected = eastBayAsset;
@@ -121,22 +145,24 @@ try {
   const hasForest = forestAssets.some(asset => /quarry-north-fir-\d\.glb$/.test(asset.file));
   const hasRidge = forestAssets.some(asset => /north-backdrop-0-albedo\.png$/.test(asset.file));
   const foreground = hasForest && seconds >= 480 ? await prepareForestStops() : null;
-  const forest = await addEastBayStops(hasRidge ? await addRidgeStops(foreground) : foreground, !!eastBayAsset);
-  const forestStart = seconds * (hasRidge ? .41 : .45);
+  const forest = await addWestWallStops(await addEastBayStops(hasRidge ? await addRidgeStops(foreground) : foreground, !!eastBayAsset), !!westWallAsset);
+  const forestStart = seconds * (westWallAsset ? 223/610 : hasRidge ? .41 : .45);
+  const blockEnds = westWallAsset ? [97,219,391,513].map(t=>t*seconds/610) : [1,2,3,4].map(n=>n*seconds/5);
   // At610s all seven stops retain16s:250.1–362.1, entirely within the
   // middle derby244–366. Shorter runs scale only this interval, never a race block.
-  const inspectionCapacity = eastBayAsset ? seconds * .6 - forestStart - 2 : seconds * (hasRidge ? .17 : .08);
-  const forestDuration = forest ? Math.min(16 * forest.stops.length, inspectionCapacity) : 0;
+  const inspectionCapacity = westWallAsset ? seconds*162/610 : eastBayAsset ? seconds * .6 - forestStart - 2 : seconds * (hasRidge ? .17 : .08);
+  const forestDuration = forest ? Math.min((westWallAsset ? 18 : 16) * forest.stops.length, inspectionCapacity) : 0;
   const stopDuration = forest ? forestDuration / forest.stops.length : 0;
   report.forestProtocol = { enabled: !!forest, startSeconds: forest ? forestStart : null,
     durationSeconds: forest ? forestDuration : 0, stopSeconds: forest ? stopDuration : 0,
     placementSha256: forest?.sourceSha256, stops: forest?.stops ?? [],
     ridgePlacementSha256: forest?.ridge?.placementsSHA256,
     eastBayCollisionSha256: forest?.eastBay?.collisionSha256,
-    description: 'Placed, braked inspections at three foreground stands, two ridge close/transition poses and, when present, two east-bay close/oblique poses, with eight live cars, real physics and the ordinary chase camera. These are not physical driving routes.',
+    description: 'Placed, braked inspections at three foreground stands, two ridge close/transition poses and, when present, two east-bay and two western-wall close/oblique poses, with eight live cars, real physics and the ordinary chase camera. These are not physical driving routes.',
     reasonIfDisabled: forest ? undefined : hasForest ? 'Runs shorter than 480 seconds omit the forest interval' : 'Built application has no authored northern fir assets',
     diagnosticsMeaning: 'Cell visible flags are scene flags, not frustum visibility. Cell triangle/draw counts describe the selected LOD before culling; renderer stats describe actual submissions.' };
   if (forest) report.protocol += ` Within the middle derby block, ${forest.stops.length} placed braked forest inspections replace at most ${forestDuration} seconds; both race blocks and all previous coverage assertions remain intact.`;
+  if(westWallAsset) report.protocol='Eight cars for610s:97s derby,122s race,172s middle block including nine18s placed inspections in a normal race event,122s race,97s derby. The inspection player is braked off track, so event completion cannot interrupt coverage. All physics and AI remain live; no time acceleration. Changed protocol, not an identical historical timing comparison.';
   browser = await chromium.launch({ channel: 'chrome', headless: true, args: [
     '--autoplay-policy=no-user-gesture-required', '--disable-background-timer-throttling',
     '--disable-renderer-backgrounding', '--ignore-gpu-blocklist',
@@ -163,6 +189,7 @@ try {
   report.geologyAssets = verifiedAssets.filter(asset => geologyAssets.some(expected => expected.file === asset.file));
   assert.equal(report.geologyAssets.length, geologyAssets.length, 'Observe every expected geology asset request');
   assert.equal(report.circuitAssets.length, circuitAssets.length, 'Observe every expected circuit asset request');
+  report.westWallAsset = verifiedAssets.find(asset=>asset.file===westWallAsset?.file)??null;
   report.eastBayAsset = verifiedAssets.find(asset => asset.file === eastBayAsset?.file) ?? null;
   const maskResponse = await arenaMaskResponse;
   assert.equal(maskResponse.status(), 200, 'The application must request the arena mask');
@@ -230,16 +257,16 @@ try {
         forestGroundAtCar: forestStop ? forest.backdropGroundHeight(position[0], position[2]) : null });
       nextSample += 5;
     }
-    const nextBlock = Math.min(4, Math.floor(time / (seconds / modes.length)));
+    const nextBlock = blockEnds.filter(end=>time>=end).length;
     const nextForest = forest && time >= forestStart && time < forestStart + forestDuration
       ? Math.min(forest.stops.length - 1, Math.floor((time - forestStart) / stopDuration)) : -1;
     if (nextForest >= 0) {
       if (nextForest !== activeForest || snapshot.stats.state === 'result') {
         const stop = forest.stops[nextForest];
-        const reset = snapshot.stats.state === 'result';
-        await page.evaluate(async ({ stop, reset, startRecorder }) => {
+        const reset = snapshot.stats.state === 'result' || !!westWallAsset && activeForest === -1;
+        await page.evaluate(async ({ stop, reset, startRecorder, inspectionMode }) => {
           const q = __quarry;
-          if (reset) await q.start('derby');
+          if (reset) await q.start(inspectionMode);
           q.autopilot(false); q.setInput({ throttle: 0, steer: 0, brake: 1, handbrake: false });
           q.teleport(0, stop.x, stop.z, stop.yaw);
           if (startRecorder) {
@@ -254,12 +281,12 @@ try {
             };
             window.__forestPerformance.raf = requestAnimationFrame(frame);
           } else window.__forestPerformance.phase = stop.id;
-        }, { stop, reset, startRecorder: !forestRecorderStarted });
+        }, { stop, reset, startRecorder: !forestRecorderStarted, inspectionMode: westWallAsset ? 'race' : 'derby' });
         forestRecorderStarted = true;
         if (activeForest >= 0) forestRanges.at(-1).endSeconds = time;
         activeForest = nextForest; activeForestSince = time;
         forestRanges.push({ stop: stop.id, startSeconds: time });
-        report.events.push({ time, mode: 'derby', reason: reset ? 'forest stop event restart' : 'placed braked forest inspection', stop });
+        report.events.push({ time, mode: westWallAsset ? 'race' : 'derby', reason: reset ? 'forest stop event restart' : 'placed braked forest inspection', stop });
       }
     } else if (activeForest >= 0) {
       forestRanges.at(-1).endSeconds = time;
@@ -294,6 +321,7 @@ try {
   report.ridgeStops = inspectedStops.filter(stop => stop.kind === 'ridge').map(stop => ({ ...stop,
     actualDistances: stop.samples.map(sample => Math.hypot(...sample.camera.position.map((value, i) => value - stop.targetCenter[i]))) }));
   report.eastBayStops = inspectedStops.filter(stop => stop.kind === 'east-bay');
+  report.westWallStops = inspectedStops.filter(stop => stop.kind === 'west-wall');
   report.ridgeTiming = summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop.startsWith('ridge-')).map(sample => sample.ms));
   report.eastBayTiming = summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop.startsWith('east-bay-')).map(sample => sample.ms));
   report.northForestCloseVisits = report.forestStops.reduce((sum, stop) => sum + stop.visits, 0);
@@ -320,7 +348,8 @@ try {
     const values = report.samples.map(s => key === 'heap' ? s.heap : s.stats[key]).filter(Number.isFinite);
     return [key, { min: Math.min(...values), max: Math.max(...values), first: values[0], last: values.at(-1) }];
   }));
-  const raceSamples = report.samples.filter(s => s.mode === 'race');
+  const raceSamples = report.samples.filter(s => !s.forestStop && s.mode === 'race');
+  report.westWallRaceVisits = raceSamples.filter(s=>{const p=s.cars[0].position,a=(Math.atan2(p[0]/1.08,p[2])*180/Math.PI+360)%360;return a>=275&&a<=325;}).length;
   report.roadsideVisits = raceSamples.filter(s => {
     const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
     return a >= 105 && a <= 155;
@@ -384,7 +413,7 @@ try {
       assert.equal(report.eastBayStops.length, 2, 'Both new wall inspection directions must be sampled');
       assert.ok(report.eastBayRaceVisits > 0, 'Normal racing must also pass the new east bay');
       assert.ok(report.eastBayAsset?.observedApplicationRequest, 'The application itself must load the manifest-matched east-bay GLB');
-      for (const stop of report.eastBayStops) assert.ok(stop.samples.every(sample => {
+      for (const stop of [...report.eastBayStops,...report.westWallStops]) assert.ok(stop.samples.every(sample => {
         const delta = stop.targetCenter.map((value, i) => value - sample.camera.position[i]);
         // camera.target is the paused OrbitControls target; ordinary chase
         // orientation is authoritative in the recorded camera quaternion.
@@ -396,6 +425,7 @@ try {
     }
     assert.ok(report.forestFrameSamples.length > forestDuration * 10, 'Forest interval must contain continuous frames');
   }
+  if(westWallAsset){assert.ok(report.westWallAsset?.observedApplicationRequest);assert.equal(report.westWallStops.length,2);assert.ok(report.westWallRaceVisits>0,'Normal racing must pass the western wall');}
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } catch (error) {

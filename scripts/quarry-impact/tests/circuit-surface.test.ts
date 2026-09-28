@@ -1,3 +1,5 @@
+import {assertWestWallEvolution,westHash} from './quarry-west-wall-invariants';
+import {quarryColliderLayout} from '../src/quarry-layout';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
@@ -68,7 +70,8 @@ test('actual road integration changes only lane/shoulder shading and the previou
   const current=await captureArenaFloor();
   restoreCircuitObjects(current.objects);
   assert.deepEqual(current.random,circuitBefore.random);
-  assert.deepEqual(current.colliders,circuitBefore.colliders);
+  assert.deepEqual(current.colliders,quarryColliderLayout().map(s=>({id:s.id,sha256:westHash(JSON.stringify(s))})));
+  assert.deepEqual(assertWestWallEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:westHash(JSON.stringify(s))})),circuitBefore.colliders);
   assert.deepEqual(current.arena,circuitBefore.arena);
   assert.deepEqual(current.puddles,circuitBefore.puddles);
   for(const [file,hash]of Object.entries(circuitBefore.protectedFiles))if(file!=='src/scenery-surfaces.ts')assert.equal(current.protectedFiles[file],hash,`${file}: unrelated cars/material sources stay exact`);

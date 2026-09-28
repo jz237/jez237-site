@@ -1,3 +1,5 @@
+> Historical recovery snapshot. The saved wall milestone is now completed; see [the current asset record](../../models/quarry-west-wall.md). The interrupted files below remain preserved for provenance.
+
 # Western quarry wall recovery checkpoint
 
 Saved September 28, 2026 after the user requested recovery and publication when the agent credit allowance was exhausted.

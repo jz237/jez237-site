@@ -19,7 +19,7 @@ import { Effects } from './effects';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
 import { OnlineUI } from './online-ui';
-import { scenerySurfaceHeight, quarryExtensionHeight } from './quarry-layout';
+import { scenerySurfaceHeight, quarryExtensionHeight, quarryWestWallHeight } from './quarry-layout';
 import {
   DEFINITIONS,
   clamp,
@@ -815,7 +815,7 @@ function updateCamera(dt: number) {
         .clone()
         .addScaledVector(f, -7.4 - Math.abs(p.speed) * 0.04)
         .add(new T.Vector3(0, 2.65, 0));
-  const cameraGround = Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity);
+  const cameraGround = Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity);
   desired.y = Math.max(desired.y, cameraGround + 0.65);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
   const look = target

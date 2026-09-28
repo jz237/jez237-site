@@ -1,3 +1,4 @@
+import {assertWestWallEvolution} from './quarry-west-wall-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -94,7 +95,7 @@ export async function assertCircuitPhysicsUnchanged(){
     assert.equal(historical,expected,`${file}: historical circuit inputs remain exact outside the separately validated grip correction`);
     return {file,expected,current,historical};
   });
-  const colliders=quarryColliderLayout().map(s=>({id:s.id,sha256:circuitHash(JSON.stringify(s))}));
+  const colliders=assertWestWallEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:circuitHash(JSON.stringify(s))}));
   assert.equal(colliders.length,2287);assert.deepEqual(colliders,circuitBefore.colliders);
   return {deployedVersion:circuitBefore.deployedVersion,inputs,colliders};
 }
