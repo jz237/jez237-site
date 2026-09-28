@@ -32,6 +32,8 @@ Photographic textures, HDRI and scanned rocks from **Poly Haven**, **CC0 1.0**:
 
 - https://polyhaven.com/a/forrest_ground_01
 
+- https://polyhaven.com/a/forrest_ground_03
+
 - https://polyhaven.com/a/bark_brown_02
 
 - https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky
@@ -41,6 +43,8 @@ Photographic textures, HDRI and scanned rocks from **Poly Haven**, **CC0 1.0**:
 - https://polyhaven.com/a/fir_sapling
 
 - https://polyhaven.com/a/fir_sapling_medium
+
+- https://polyhaven.com/a/fir_tree_01
 
 - https://polyhaven.com/a/corrugated_iron_02
 
@@ -72,6 +76,10 @@ The northern arena headwall is original Blender geometry using the existing CC0 
 
 The arena material mask is original Quarry Impact engineering data: authored vehicle paths, working areas, deposits and sediment distribution measured against the existing puddle contours. Editable definitions, the offline generator and compressed/decoded hashes are retained in `source/arena-floor-mask*` and `tools/generate-arena-mask.mjs`. It reuses the credited CC0 gravel, mud and Rock Ground photographs. No new photograph, generated artwork or purchased asset was used for this surface pass.
 
+The northern woodland adds three mature variants from Poly Haven **Fir Tree 01**, under CC0 1.0. Original download URLs, source checksums and license records are retained in `source/reference/fir_tree_01/`; `tools/restore-scenery-sources.py` restores the large original files excluded from the release repository. Preparation retains complete needle pieces with distance-dependent cross-section compensation, simplifies woody geometry, and preserves the original A/B photographed trunk maps and repeating UVs. The source C trunk has no texture coordinates and receives a documented cylindrical projection using the existing branch material. `tools/prepare-north-fir-geometry.py` and `tools/author-north-firs.py` reproduce the runtime variants; editable Blender scenes are retained locally, and exact generated-file hashes are recorded under `source/models/quarry-north-fir*`. The oversized editable scenes are reproduced with those tools rather than included in static delivery. Runtime geometry uses Draco compression with a locally bundled Apache-licensed decoder. New twig and trunk photographs retain their CC0 source records in `public/assets/manifest.json`; reused young firs, material maps and distant cards retain the provenance above.
+
+The northern forest-floor material weights and stand placements are original Quarry Impact work. `source/north-forest-floor.json`, `src/quarry-north-forest.json` and `tools/generate-north-floor.mjs` reproduce the locally bundled mask; its manifest records source hashes and compressed/decoded output hashes. The needle litter uses **Forrest Ground 03**, by **Rob Tuytel**, from Poly Haven under **CC0 1.0**, at its documented two-metre scale. `tools/prepare-north-floor-material.mjs` verifies the official checksums and bundles the original color, normal and roughness photographs. Existing mud and gravel sources are reused. A locally bounded gravel treatment shares photograph phase and shading across the original northern crest. No paid asset, generated image or additional sound generation was used for this woodland update.
+
 ## Sound
 
 All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from original Quarry Impact prompts using the user's account. They are provided under the applicable ElevenLabs account terms, not represented as CC0. No Wreckfest audio was used. File-level prompts, settings, hashes and post-processing are in `public/audio/manifest.json`; original MP3s and quota records are in `source/audio/`.
@@ -81,6 +89,8 @@ All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from ori
 - Three.js — MIT.
 
 - Rapier / Dimforge — Apache-2.0.
+
+- Google Draco — Apache-2.0; the locally bundled decoder comes from the pinned Three.js distribution. Its license is included in `public/models/draco/LICENSE`.
 
 - Vite and TypeScript — their bundled open-source licenses.
 

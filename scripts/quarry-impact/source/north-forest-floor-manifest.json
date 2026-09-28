@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "generator": "tools/generate-north-floor.mjs",
+  "source": "source/north-forest-floor.json",
+  "sourceSha256": "21571ced6649a6fa6bb6f77d887d3b6faa35e3dd530b3801f5202714d01ed9cd",
+  "placements": "src/quarry-north-forest.json",
+  "placementsSha256": "c7fc8beef7927bf9a1df0ce8e53a2565ac00d0c84236ad0eb2a2e36403142bdf",
+  "crest": "source/north-forest-crest.json",
+  "crestSha256": "6871357178c9b5b78e639b1fe2524301598763eb9f415e3964513e0407f6cd2d",
+  "file": "assets/north-forest-floor.rgba.gz",
+  "bytes": 83692,
+  "sha256": "eebc2d609fa6d27b0e231a5d241d3c912bd366a0ce169d643878227e96e8d604",
+  "decodedBytes": 688128,
+  "decodedSha256": "f45095baa75dd16d70a147147e7d4e99d46e911f486781a6dabf7491d0476774",
+  "size": [
+    512,
+    336
+  ],
+  "bounds": [
+    -96,
+    80,
+    224,
+    290
+  ],
+  "channels": [
+    "coverage",
+    "organicLitter",
+    "crestMineral",
+    "litterVariation"
+  ],
+  "attribution": "Original authored material weights. Photographic sources and CC0 licenses are recorded in assets/manifest.json.",
+  "runtimeFiles": [
+    {
+      "file": "assets/north-forest-floor.rgba.gz",
+      "bytes": 83692,
+      "sha256": "eebc2d609fa6d27b0e231a5d241d3c912bd366a0ce169d643878227e96e8d604"
+    },
+    {
+      "file": "assets/north_litter_diff.jpg",
+      "bytes": 3522953,
+      "sha256": "187a8e33773473939c0e85b5e10ae94eb9e8d91463ab8b74e122d833d2d84dc6"
+    },
+    {
+      "file": "assets/north_litter_nor_gl.jpg",
+      "bytes": 1587102,
+      "sha256": "2f2a18622ff1fde203ad7b17f12da5e46608b77b27307f6a91cc5a016cc72e41"
+    },
+    {
+      "file": "assets/north_litter_rough.jpg",
+      "bytes": 418230,
+      "sha256": "faa2fc4305cb839a2240ffa84de513dc16671879915a13c88fb319d5e168e926"
+    }
+  ]
+}

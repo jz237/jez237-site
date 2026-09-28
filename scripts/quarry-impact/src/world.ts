@@ -1,6 +1,8 @@
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import { DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
+import { northForestGround } from './scenery-north-floor';
+import { northForestRock } from './scenery-north-crest';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { pbr, texture, url } from './assets';
@@ -14,7 +16,7 @@ import { loadQuarryRoadApproach, ROAD_APPROACH_START, ROAD_APPROACH_END } from '
 import { quarryRoadSurface } from './scenery-road-material';
 import { quarryArenaSurface } from './scenery-arena-material';
 import { quarryRoadsideGround } from './scenery-roadside-material';
-import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
+import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
 const rand = () => {
   seed = (seed * 1664525 + 1013904223) >>> 0;
@@ -113,8 +115,8 @@ export class Quarry {
     this.sun.shadow.bias = -0.00015;
     this.sun.shadow.normalBias = 0.035;
     scene.add(this.sun, this.sun.target);
-    const ground = quarryGround();
-    const rock = quarryRock();
+    const ground = northForestGround();
+    const rock = northForestRock();
     this.rockMaterial = rock;
     const asphalt = pbr('asphalt', 1);
     const groundData=terrainGeometry();

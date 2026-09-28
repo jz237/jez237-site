@@ -8,3 +8,9 @@ outputs-*.log
 
 # Over the 25 MiB Cloudflare Pages per-file limit; restored from R2 by tools/restore-scenery-sources.py
 source/models/fir-medium.blend
+
+# Reproduced locally from CC0 sources by the tracked mature-fir authoring tools.
+# These editable scenes exceed the static host's per-file limit.
+source/models/quarry-north-fir-0.blend
+source/models/quarry-north-fir-1.blend
+source/models/quarry-north-fir-2.blend

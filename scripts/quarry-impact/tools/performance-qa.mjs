@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
+import { tsImport } from 'tsx/esm/api';
 
 // Use a unique output name, a frozen dist, and no concurrent GPU QA/export.
 // All presented timing is wall-clock frame spacing, not isolated GPU time.
@@ -16,20 +18,73 @@ assert.ok(['ultra', 'high', 'medium'].includes(quality));
 assert.equal(await fs.access(output).then(() => true, () => false), false, 'Keep earlier evidence');
 const screenshot = output.replace(/\.json$/, '') + '.png';
 const modes = ['derby', 'race', 'derby', 'race', 'derby'];
+const summarizeFrames = frames => {
+  if (!frames.length) return null;
+  const sorted = [...frames].sort((a, b) => a - b), meanMs = frames.reduce((a, b) => a + b, 0) / frames.length;
+  return { frames: frames.length, meanMs, fps: 1000 / meanMs, p50: sorted[Math.floor(sorted.length * .5)],
+    p95: sorted[Math.floor(sorted.length * .95)], p99: sorted[Math.floor(sorted.length * .99)],
+    over33ms: frames.filter(value => value > 33.34).length };
+};
+async function prepareForestStops() {
+  const bytes = await fs.readFile('src/quarry-north-forest.json'), placements = JSON.parse(bytes);
+  const { backdropGroundHeight } = await tsImport('../src/scenery-backdrop.ts', import.meta.url);
+  const { quarryRim, quarryColliderLayout } = await tsImport('../src/quarry-layout.ts', import.meta.url);
+  const solidTrunks = quarryColliderLayout().filter(collider => collider.id.startsWith('tree-') && collider.shape === 'cylinder');
+  const stops = ['stand-0', 'stand-3', 'stand-5'].map(id => {
+    const stand = placements.stands.find(value => value.id === id); assert.ok(stand, id);
+    const angle = Math.atan2(stand.x / 1.08, stand.z), nx = Math.sin(angle), nz = Math.cos(angle);
+    for (const front of [14, 11, 17, 8]) for (const lateral of [0, -4, 4, -7, 7]) {
+      const x = stand.x - nx * front + nz * lateral, z = stand.z - nz * front - nx * lateral;
+      const rimMargin = Math.hypot(x / 1.08, z) - quarryRim(Math.atan2(x / 1.08, z)).r;
+      const trunkClearance = Math.min(...solidTrunks.map(tree => Math.hypot(x - tree.p.x, z - tree.p.z) - tree.radius));
+      const ground = backdropGroundHeight(x, z);
+      const slope = Math.hypot((backdropGroundHeight(x + 2, z) - backdropGroundHeight(x - 2, z)) / 4,
+        (backdropGroundHeight(x, z + 2) - backdropGroundHeight(x, z - 2)) / 4);
+      if (rimMargin < 8 || trunkClearance < 4.2 || slope > .42) continue;
+      return { id, variant: stand.variant, x, z, ground, yaw: Math.atan2(stand.x - x, stand.z - z),
+        stand: { x: stand.x, z: stand.z }, rimMargin, trunkClearance, slope };
+    }
+    throw new Error(`No safe placed inspection position before ${id}`);
+  });
+  return { stops, sourceSha256: createHash('sha256').update(bytes).digest('hex'), backdropGroundHeight };
+}
+// Optional CPU-only preflight deliberately produces no performance pass/fail.
+// It lets placement changes be checked before reserving the isolated GPU run.
+if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
+  const { stops, sourceSha256 } = await prepareForestStops();
+  const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops,
+    measuredFrames: 0, browserLaunched: false };
+  await fs.mkdir(path.dirname(output), { recursive: true });
+  await fs.writeFile(output, JSON.stringify(plan, null, 2) + '\n');
+  console.log(JSON.stringify(plan)); process.exit(0);
+}
 const report = {
   startedAt: new Date().toISOString(), seconds, quality, viewport: [2560, 1440],
   protocol: 'Five equal blocks alternating eight-car derby and scenic racing; restart completed events. Eight-second warm-up before capture. No camera or physics time acceleration.',
-  events: [], samples: [], errors: [], output, screenshot,
+  events: [], samples: [], errors: [], forestAssets: [], forestStops: [], output, screenshot,
 };
 let browser;
 try {
   await fs.mkdir(path.dirname(output), { recursive: true });
+  const forestAssets = await forestRuntimeAssetPlan();
+  report.forestAssetsExpected = forestAssets;
+  const hasForest = forestAssets.some(asset => /quarry-north-fir-\d\.glb$/.test(asset.file));
+  const forest = hasForest && seconds >= 480 ? await prepareForestStops() : null;
+  const forestStart = seconds * .45, forestDuration = Math.min(48, seconds * .08), stopDuration = forestDuration / 3;
+  report.forestProtocol = { enabled: !!forest, startSeconds: forest ? forestStart : null,
+    durationSeconds: forest ? forestDuration : 0, stopSeconds: forest ? stopDuration : 0,
+    placementSha256: forest?.sourceSha256, stops: forest?.stops ?? [],
+    description: 'Placed, braked inspection at three trunk-clear northern stands with eight live cars, real physics and the ordinary chase camera. This is not a physical forest driving route.',
+    reasonIfDisabled: forest ? undefined : hasForest ? 'Runs shorter than 480 seconds omit the forest interval' : 'Built application has no authored northern fir assets',
+    diagnosticsMeaning: 'Cell visible flags are scene flags, not frustum visibility. Cell triangle/draw counts describe the selected LOD before culling; renderer stats describe actual submissions.' };
+  if (forest) report.protocol += ' Within the middle derby block, three placed braked forest inspections replace at most 48 seconds; both race blocks and all previous coverage assertions remain intact.';
   browser = await chromium.launch({ channel: 'chrome', headless: true, args: [
     '--autoplay-policy=no-user-gesture-required', '--disable-background-timer-throttling',
     '--disable-renderer-backgrounding', '--ignore-gpu-blocklist',
   ] });
   const page = await browser.newPage({ viewport: { width: 2560, height: 1440 }, deviceScaleFactor: 1 });
   const pageURL = process.env.QUARRY_QA_URL ?? 'http://127.0.0.1:8795/';
+  const forestRequests = await observeForestRequests(page, pageURL, forestAssets);
   const arenaMaskPath = 'assets/arena-floor-mask.rgba.gz';
   const arenaMaskURL = new URL(arenaMaskPath, pageURL).href;
   const arenaMaskResponse = page.waitForResponse(response => response.url() === arenaMaskURL, { timeout: 120000 });
@@ -40,6 +95,7 @@ try {
   page.on('response', r => { if (r.status() >= 400) report.errors.push(`${r.status()} ${r.url()}`); });
   await page.goto(pageURL);
   await page.waitForFunction(() => window.__quarry?.state === 'menu', null, { timeout: 120000 });
+  await verifyForestRequests(forestRequests, report.forestAssets);
   const maskResponse = await arenaMaskResponse;
   assert.equal(maskResponse.status(), 200, 'The application must request the arena mask');
   const maskBytes = await maskResponse.body(), localMask = await fs.readFile(path.join('dist', arenaMaskPath));
@@ -87,16 +143,64 @@ try {
   const start = performance.now();
   report.events.push({ time: 0, mode: 'derby', reason: 'initial warmed event' });
   let block = 0, nextSample = 0, nextLog = 60;
+  let activeForest = -1, activeForestSince = 0, forestRecorderStarted = false;
+  const forestRanges = [];
   while ((performance.now() - start) / 1000 < seconds) {
     await page.waitForTimeout(2000);
     const time = (performance.now() - start) / 1000;
     const snapshot = await page.evaluate(() => {
       const { benchmarkSamples, ...stats } = __quarry.stats;
-      return { stats, mode: __quarry.mode, cars: __quarry.cars, heap: performance.memory?.usedJSHeapSize };
+      return { stats, mode: __quarry.mode, cars: __quarry.cars, heap: performance.memory?.usedJSHeapSize,
+        northForest: __quarry.northForest ?? null };
     });
-    if (time >= nextSample) { report.samples.push({ time, ...snapshot }); nextSample += 5; }
+    if (time >= nextSample) {
+      const forestStop = activeForest >= 0 ? forest.stops[activeForest] : null;
+      const position = snapshot.cars[0].position;
+      report.samples.push({ time, ...snapshot, forestStop: forestStop?.id ?? null,
+        forestSettledSeconds: forestStop ? time - activeForestSince : null,
+        forestGroundAtCar: forestStop ? forest.backdropGroundHeight(position[0], position[2]) : null });
+      nextSample += 5;
+    }
     const nextBlock = Math.min(4, Math.floor(time / (seconds / modes.length)));
-    if (nextBlock !== block || snapshot.stats.state === 'result') {
+    const nextForest = forest && time >= forestStart && time < forestStart + forestDuration
+      ? Math.min(2, Math.floor((time - forestStart) / stopDuration)) : -1;
+    if (nextForest >= 0) {
+      if (nextForest !== activeForest || snapshot.stats.state === 'result') {
+        const stop = forest.stops[nextForest];
+        const reset = snapshot.stats.state === 'result';
+        await page.evaluate(async ({ stop, reset, startRecorder }) => {
+          const q = __quarry;
+          if (reset) await q.start('derby');
+          q.autopilot(false); q.setInput({ throttle: 0, steer: 0, brake: 1, handbrake: false });
+          q.teleport(0, stop.x, stop.z, stop.yaw);
+          if (startRecorder) {
+            // Independent rAF intervals use the same browser frame timestamps
+            // as the engine, and only run during this short forest interval.
+            window.__forestPerformance = { running: true, phase: stop.id, samples: [], previous: null };
+            const frame = now => {
+              const capture = window.__forestPerformance;
+              if (!capture.running) return;
+              if (capture.previous !== null) capture.samples.push({ stop: capture.phase, ms: now - capture.previous });
+              capture.previous = now; capture.raf = requestAnimationFrame(frame);
+            };
+            window.__forestPerformance.raf = requestAnimationFrame(frame);
+          } else window.__forestPerformance.phase = stop.id;
+        }, { stop, reset, startRecorder: !forestRecorderStarted });
+        forestRecorderStarted = true;
+        if (activeForest >= 0) forestRanges.at(-1).endSeconds = time;
+        activeForest = nextForest; activeForestSince = time;
+        forestRanges.push({ stop: stop.id, startSeconds: time });
+        report.events.push({ time, mode: 'derby', reason: reset ? 'forest stop event restart' : 'placed braked forest inspection', stop });
+      }
+    } else if (activeForest >= 0) {
+      forestRanges.at(-1).endSeconds = time;
+      await page.evaluate(async mode => {
+        window.__forestPerformance.running = false; cancelAnimationFrame(window.__forestPerformance.raf);
+        __quarry.clearTestInput(); await __quarry.start(mode); __quarry.autopilot(true);
+      }, modes[nextBlock]);
+      report.events.push({ time, mode: modes[nextBlock], reason: 'resume normal benchmark after forest inspections' });
+      activeForest = -1; block = nextBlock;
+    } else if (nextBlock !== block || snapshot.stats.state === 'result') {
       report.events.push({ time, mode: modes[nextBlock], reason: nextBlock !== block ? 'scheduled block' : 'completed event', previous: snapshot });
       block = nextBlock;
       await page.evaluate(async mode => { await __quarry.start(mode); __quarry.autopilot(true); }, modes[block]);
@@ -107,6 +211,26 @@ try {
     }
   }
   report.actualSeconds = (performance.now() - start) / 1000;
+  report.forestFrameSamples = await page.evaluate(() => window.__forestPerformance?.samples ?? []);
+  report.forestTiming = summarizeFrames(report.forestFrameSamples.map(sample => sample.ms));
+  report.forestRanges = forestRanges;
+  report.forestStops = (forest?.stops ?? []).map(stop => {
+    const samples = report.samples.filter(sample => sample.forestStop === stop.id && sample.forestSettledSeconds >= 5
+      && sample.stats.state === 'playing');
+    const near = samples.filter(sample => Math.hypot(sample.cars[0].position[0] - stop.x, sample.cars[0].position[2] - stop.z) < 3);
+    return { ...stop, visits: near.length, samples: near,
+      timing: summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop === stop.id).map(sample => sample.ms)) };
+  });
+  report.northForestCloseVisits = report.forestStops.reduce((sum, stop) => sum + stop.visits, 0);
+  report.northForestDiagnosticsAvailable = report.forestStops.some(stop => stop.samples.some(sample => sample.northForest !== null));
+  for (const stop of report.forestStops) {
+    stop.selectedNearCells = stop.samples.map(sample => ({ time: sample.time,
+      cells: (sample.northForest ?? []).filter(cell => cell.visible && cell.lod === 0),
+      submittedTriangles: sample.stats.triangles, submittedDraws: sample.stats.drawCalls }));
+    const selected = stop.selectedNearCells.flatMap(sample => sample.cells);
+    stop.selectedNearTriangleRange = selected.length
+      ? [Math.min(...selected.map(cell => cell.triangles)), Math.max(...selected.map(cell => cell.triangles))] : null;
+  }
   const result = await page.evaluate(() => ({ ...__quarry.endBenchmark(), final: __quarry.stats, cars: __quarry.cars }));
   report.engineSamples = result.samples;
   report.frames = result.frames;
@@ -155,6 +279,22 @@ try {
   assert.ok(report.extensionVisits > 0, 'Racing must visit the extended wall');
   assert.ok(report.headwallVisits > 0, 'Racing must visit the arena headwall');
   assert.ok(report.roadApproachVisits > 0, 'Racing must drive on the new gravel approach');
+  if (forest) {
+    for (const stop of report.forestStops) {
+      assert.ok(stop.visits >= (stopDuration >= 14 ? 2 : 1), `${stop.id} needs settled close inspection samples`);
+      assert.ok(stop.samples.every(sample => Math.abs(sample.cars[0].speed) < 1), `${stop.id} must remain braked`);
+      assert.ok(stop.samples.every(sample => {
+        const aboveGround = sample.cars[0].position[1] - sample.forestGroundAtCar;
+        return aboveGround > .25 && aboveGround < 1.8;
+      }), `${stop.id} must settle onto the unchanged terrain`);
+      if (report.northForestDiagnosticsAvailable) assert.ok(stop.samples.every(sample =>
+        Array.isArray(sample.northForest) && sample.northForest.some(cell =>
+          cell.id === `north-forest-${stop.id}` && cell.visible && cell.lod === 0
+          && Number.isFinite(cell.triangles) && cell.triangles > 0 && cell.draws > 0 && cell.distance < 55)),
+        `${stop.id} must exercise its actual near LOD, not merely stand near a far-level forest`);
+    }
+    assert.ok(report.forestFrameSamples.length > forestDuration * 10, 'Forest interval must contain continuous frames');
+  }
   assert.deepEqual(report.errors, []);
   report.passed = true;
 } catch (error) {

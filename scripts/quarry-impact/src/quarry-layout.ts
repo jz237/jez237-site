@@ -4,6 +4,7 @@ import screePositions from './quarry-scree.json';
 import authoredCut from './quarry-cut-collision.json';
 import roadsideData from './quarry-roadside-data.json';
 import backdropTrees from './quarry-backdrop-trees.json';
+import northForest from './quarry-north-forest.json';
 import { sector as extensionSector, positions as extensionPositions, indices as extensionIndices, solids as extensionSolids } from './quarry-extension-collision.json';
 import { sector as headwallSector, positions as headwallPositions, indices as headwallIndices, solids as headwallSolids } from './quarry-headwall-collision.json';
 import { createSurfaceSampler } from './quarry-surface-sampler';
@@ -111,6 +112,15 @@ export function quarryColliderLayout():ColliderSpec[]{
   });
   for(const kind of ['fir-0','fir-1','fir-2'])nearTrees(kind).forEach(p=>cylinder('tree-'+kind+'-'+p.colliderIndex,p.x,scenerySurfaceHeight(p.x,p.z)+p.height/2,p.z,p.height,p.height*.014));
   for(const p of backdropTrees)cylinder('tree-backdrop-'+p.id,p.x,p.y+p.height/2,p.z,p.height,p.height*.014);
+  for(const p of northForest.trees){
+    cylinder('tree-north-'+p.id,p.x,p.y+p.trunkHeight/2,p.z,p.trunkHeight,p.trunkRadius);
+    const base=northForest.rootHulls.find(h=>h.variant===p.variant)!;
+    base.parts.forEach((part,index)=>{
+      const points=new Float32Array(part.map((n,i)=>n*p.height*(i%3===1?1:p.width)));
+      items.push({id:'tree-north-root-'+p.id+'-'+index,shape:'hull',p:{x:p.x,y:p.y,z:p.z},q:yawRotation(p.yaw),points});
+    });
+  }
+  for(const p of northForest.mediumTrees)cylinder('tree-north-medium-'+p.id,p.x,p.y+p.trunkHeight/2,p.z,p.trunkHeight,p.trunkRadius);
   for(const item of items)if(item.id.startsWith('works-')||item.id.startsWith('silo-')||item.id.startsWith('conveyor')||item.id.startsWith('sign-board-works')||item.id.startsWith('sign-post-works')){
     item.p={x:item.p.x+WORKS_OFFSET.x,y:item.p.y+WORKS_OFFSET.y,z:item.p.z+WORKS_OFFSET.z};
   }

@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { overlapsQuarryHeadwall, type ColliderSpec } from '../src/quarry-layout';
+import { assertNorthForestEvolution } from './north-forest-invariants';
 
 export const headwallBaseline=JSON.parse(readFileSync(new URL('./fixtures/quarry-headwall-baseline.json',import.meta.url),'utf8'));
 const hash=(s:ColliderSpec)=>createHash('sha256').update(JSON.stringify(s)).digest('hex');
 /** Preserve historical milestones instead of rewriting their original evidence. */
 export function assertHeadwallEvolution(layout:ColliderSpec[]){
+  layout=assertNorthForestEvolution(layout); // Later additive trunks are proved independently; retain every historical wall assertion.
   const before=new Map<string,{id:string;p:{x:number;y:number;z:number};hash:string}>(headwallBaseline.colliders.map((s:{id:string})=>[s.id,s]));
   const current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length,'shared collider IDs remain unique');
   for(const spec of layout){

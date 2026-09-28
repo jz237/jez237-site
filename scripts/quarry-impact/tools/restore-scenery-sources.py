@@ -11,7 +11,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 
-for asset in ("fir_sapling", "fir_sapling_medium"):
+for asset in ("fir_sapling", "fir_sapling_medium", "fir_tree_01"):
     directory = ROOT / "source" / "reference" / asset
     records = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
     for record in records:

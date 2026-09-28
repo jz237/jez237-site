@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { assertNorthForestEvolution } from './north-forest-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -44,7 +45,7 @@ test('wall extension replaces only its33 legacy cells and preserves the prior cu
   for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
     assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
   const old=new Map<string,{id:string;hash:string;p:{x:number;y:number;z:number}}>(baseline.colliders.map((s:{id:string})=>[s.id,s]));
-  const layout=quarryColliderLayout(),current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
+  const layout=assertNorthForestEvolution(quarryColliderLayout()),current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
   for(const spec of layout){
     if(spec.id==='quarry-cliffs')continue; // Exact replacement independently asserted above.
     if(old.has(spec.id))assert.equal(hash(Buffer.from(JSON.stringify(spec))),old.get(spec.id)!.hash,`${spec.id} must preserve its shape and transform`);
