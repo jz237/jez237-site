@@ -204,8 +204,28 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         vec4 mvPosition=viewMatrix*vec4(billboard,1.0);
         gl_Position=projectionMatrix*mvPosition;
       `);
+            // A photographed canopy already contains leaf-facing and internal
+            // shade variation. Its lighting proxy must not use the arbitrary
+            // +/-Z normal of the flat source card, or an opposite-side sun
+            // turns the entire tree black. A world-up canopy response stays
+            // consistent as this silhouette rotates in main/reflection views.
+            // Override after DOUBLE_SIDED's face flip; preserve photograph,
+            // instance tint, alpha test, fog and all existing PBR light hooks.
+            shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_begin>', `
+        #include <normal_fragment_begin>
+        normal=transformDirection(vec3(0.0,1.0,0.0),viewMatrix);
+        nonPerturbedNormal=normal;
+      `);
+            // Approximate the canopy's mixed projected leaf area instead of
+            // lighting every photographed leaf as one upward opaque face.
+            // Preserve indirect sky/fill response and the photo's own shading.
+            shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_end>', `
+        #include <lights_fragment_end>
+        reflectedLight.directDiffuse *= 0.5;
+        reflectedLight.directSpecular *= 0.5;
+      `);
         };
-        material.customProgramCacheKey = () => 'quarry-distant-tree-billboard-v1';
+        material.customProgramCacheKey = () => 'quarry-distant-tree-billboard-canopy-v3';
         const geo = new T.PlaneGeometry(aspect, 1);
         geo.translate(0, .5, 0);
         const trees = new T.InstancedMesh(geo, material, placements.length);

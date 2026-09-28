@@ -4,6 +4,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { QuarryAO, LocalReflections } from './rendering';
+import { StaticQuarryShadows, DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
@@ -118,6 +119,8 @@ orbit.maxDistance = 22;
 orbit.maxPolarAngle = Math.PI * 0.48;
 orbit.enableDamping = true;
 let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
+let staticShadows: StaticQuarryShadows | undefined;
+let environmentTarget: T.WebGLRenderTarget | undefined;
 let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
 const isPlayer=(c:Vehicle)=>c===cars[0];
 const modes = {
@@ -469,6 +472,7 @@ function applyQuality() {
     quarry.sun.shadow.map = null;
     quarry.sun.shadow.needsUpdate = true;
   }
+  staticShadows?.setQuality(settings.quality);
   ao.enabled = settings.quality !== 'medium';
   reflections.enabled = settings.quality !== 'medium';
   reflections.interval = settings.quality === 'ultra' ? 3 : 6;
@@ -777,7 +781,7 @@ function step(dt: number) {
 function updateCamera(dt: number) {
   const p = cars[0];
   if (!p) return;
-  quarry.sun.position.copy(p.root.position).add(new T.Vector3(-70, 65, 45));
+  quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
   quarry.sun.target.position.copy(p.root.position);
   if (state === 'inspect') {
     orbit.update();
@@ -860,6 +864,10 @@ function frame(now: number) {
     quarry.checkpoint.rotation.y=Math.atan2(ahead.x-p.x,ahead.z-p.z);
   }
   renderer.info.reset();
+  if (staticShadows) {
+    for (const car of cars) staticShadows.bindReceivers(car.root);
+    staticShadows.prepare(renderer);
+  }
   if (cars[0]) reflections.update(cars[0].root);
   renderer.shadowMap.needsUpdate = true;
   composer.render();
@@ -935,6 +943,25 @@ canvas.addEventListener('webglcontextlost', (e) => {
   if (['playing', 'countdown'].includes(state)) pause();
   toast('Graphics context lost. Reload to restore.', 20);
 });
+canvas.addEventListener('webglcontextrestored', () => {
+  // Render-target contents are lost with the context, unlike source HDR data.
+  if (environmentTarget && scene.background instanceof T.Texture) {
+    const generator = new T.PMREMGenerator(renderer);
+    try {
+      // A fresh PMREMGenerator needs to allocate its own filtering planes.
+      // Passing an old target here skips that initialization in Three r181.
+      const replacement = generator.fromEquirectangular(scene.background);
+      scene.environment = replacement.texture;
+      environmentTarget.dispose();
+      environmentTarget = replacement;
+    } finally {
+      generator.dispose();
+    }
+  }
+  reflections.invalidate();
+  staticShadows?.invalidate();
+  if (quarry) quarry.sun.shadow.needsUpdate = true;
+});
 async function boot() {
   loading('PREPARING THE QUARRY');
   await R.init();
@@ -949,14 +976,19 @@ async function boot() {
   online.network.addEventListener('connected',()=>{const url=new URL(location.href);url.searchParams.set('room',online.network.room);history.replaceState(null,'',url);sound.pause(!['playing','countdown'].includes(state));});
   online.network.addEventListener('error',e=>{const message=(e as CustomEvent<string>).detail;onlineUI.message(message);toast(message,8);});
   online.network.addEventListener('disconnected',e=>{keys.clear();online.network.clearInput();sound.pause(true);onlineUI.message((e as CustomEvent<string>).detail);toast(online.network.reconnecting?'Connection lost · reconnecting':online.network.disconnectReason+' · press Escape to leave',8);});
-  await Promise.all([
+  const prepared = await Promise.all([
     loadCars(loading),
     environment(renderer, scene),
     prepareArenaFloor(),
     quarry.trees(),
     onlineUI.configure(),
   ]);
+  environmentTarget = prepared[1];
+  staticShadows = new StaticQuarryShadows(scene, new Set<T.Object3D>([
+    quarry.derbyWalls, quarry.checkpoint, ...quarry.props.map(prop => prop.mesh),
+  ]));
   createCars(true);
+  staticShadows.bindReceivers(scene);
   applyQuality();
   menu();
   if(new URL(location.href).searchParams.has('room'))onlineUI.show();
@@ -983,6 +1015,16 @@ async function boot() {
         inflicted: c.inflicted,
       }));
     },
+    get daylight() {
+      return {sunDirection: quarry.sun.position.clone().sub(quarry.sun.target.position).normalize().toArray(), sun: quarry.sun.intensity,
+        sunColor: quarry.sun.color.getHex(), sky: scene.environmentIntensity,
+        ambient: (scene.children.find(o => o instanceof T.HemisphereLight) as T.HemisphereLight)?.intensity,
+        tone: renderer.toneMapping === T.AgXToneMapping ? 'agx' : 'aces',
+        backgroundRotation: scene.backgroundRotation.toArray(), environmentRotation: scene.environmentRotation.toArray(),
+        fog: (scene.fog as T.FogExp2).density, exposure: renderer.toneMappingExposure,
+        nearShadowSize: quarry.sun.shadow.mapSize.toArray(), nearShadowExtent: quarry.sun.shadow.camera.right-quarry.sun.shadow.camera.left,
+        staticShadows: staticShadows?.stats};
+    },
     get stats() {
       const times = [...frames].sort((a, b) => a - b);
       return {
@@ -990,6 +1032,7 @@ async function boot() {
         collisions,
         drawCalls: renderer.info.render.calls,
         reflectionUpdates: reflections.updates,
+        staticShadows: staticShadows?.stats,
         triangles: renderer.info.render.triangles,
         geometry: renderer.info.memory.geometries,
         textures: renderer.info.memory.textures,
@@ -1022,7 +1065,8 @@ async function boot() {
       settings.quality = v;
       applyQuality();
     },
-    lighting: (v:{fog?:number;sun?:number;sky?:number;exposure?:number;ambient?:number;tone?:string})=>{
+    lighting: (v:{fog?:number;sun?:number;sky?:number;exposure?:number;ambient?:number;tone?:string;staticShadows?:boolean})=>{
+      if(v.staticShadows!==undefined && staticShadows)staticShadows.enabled=v.staticShadows;
       if(v.fog!==undefined)(scene.fog as T.FogExp2).density=v.fog;
       if(v.sun!==undefined)quarry.sun.intensity=v.sun;
       if(v.sky!==undefined)scene.environmentIntensity=v.sky;
