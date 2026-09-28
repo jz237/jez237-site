@@ -1,6 +1,7 @@
 import { nearTrees, saplingPlacements, landscapeHeight, scenerySurfaceHeight, quarryRim, overlapsQuarryRoadside } from './quarry-layout';
 import { roadsideSaplings, roadsideGroundCover } from './scenery-flora-placement';
 import { backdropFirs, composeForestBackdrop, BACKDROP_CENTER, type BackdropCard } from './scenery-backdrop';
+import { composeNorthHeadwallBackdrop } from './scenery-north-backdrop';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
@@ -185,7 +186,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
             distantIndex++;
         }
     }
-    const composedCards = composeForestBackdrop(originalCards);
+    const composedCards = composeNorthHeadwallBackdrop(composeForestBackdrop(originalCards));
     for (const { kind, aspect } of distantSpecies) {
         const placements = composedCards.filter(p => p.kind === kind);
         const photo = textures.load(url('models/' + kind + '.webp'));

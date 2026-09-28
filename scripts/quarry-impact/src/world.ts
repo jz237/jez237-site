@@ -1,4 +1,4 @@
-import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, WORKS_OFFSET } from './quarry-layout';
+import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -8,6 +8,7 @@ import { forestScenery, updateForestView } from './scenery-vegetation';
 import { loadQuarryCut } from './scenery-cut';
 import { loadQuarryRoadside } from './scenery-roadside';
 import { loadQuarryExtension } from './scenery-extension';
+import { loadQuarryHeadwall } from './scenery-headwall';
 import { loadQuarryRoadApproach, ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
 import { quarryRoadSurface } from './scenery-road-material';
 import { quarryRoadsideGround } from './scenery-roadside-material';
@@ -83,6 +84,7 @@ export class Quarry {
   private cutLODs: T.LOD[] = [];
   private roadsideLODs: T.LOD[] = [];
   private extensionLODs: T.LOD[] = [];
+  private headwallLODs: T.LOD[] = [];
   private roadApproachLODs: T.LOD[] = [];
   private rockMaterial: T.MeshStandardMaterial;
   constructor(
@@ -246,7 +248,7 @@ export class Quarry {
       const tint=.7+rand()*.3;
       // Consume the original random sequence before filtering, preserving every
       // retained chip and all scenery generated after this batch.
-      if (!overlapsQuarryRoadside(x,z,s)) {
+      if (!overlapsQuarryRoadside(x,z,s) && !overlapsQuarryHeadwall(x,z,s)) {
         aggregateMatrices.push(dummy.matrix.clone());
         aggregateColors.push(new T.Color(tint,tint*.97,tint*.91));
       }
@@ -678,6 +680,7 @@ export class Quarry {
       ground: quarryRoadsideGround(), rock: this.rockMaterial, scannedRock: scannedMaterial,
     });
     this.extensionLODs = await loadQuarryExtension(this.scenery, this.rockMaterial, scannedMaterial);
+    this.headwallLODs = await loadQuarryHeadwall(this.scenery, this.rockMaterial, scannedMaterial);
     this.roadApproachLODs = await loadQuarryRoadApproach(this.scenery, {
       lane: quarryRoadSurface('aggregate'), skirt: quarryRoadSurface('ground'), scannedRock: scannedMaterial,
     });
@@ -694,6 +697,7 @@ export class Quarry {
       for (const lod of this.cutLODs) lod.update(camera);
       for (const lod of this.roadsideLODs) lod.update(camera);
       for (const lod of this.extensionLODs) lod.update(camera);
+      for (const lod of this.headwallLODs) lod.update(camera);
       for (const lod of this.roadApproachLODs) lod.update(camera);
     }
     for (const p of this.props) {

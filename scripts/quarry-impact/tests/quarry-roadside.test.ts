@@ -84,7 +84,7 @@ test('roadside filtering preserves surviving legacy colliders and removes overla
         assert.equal(hash(Buffer.from(JSON.stringify({...spec,p:{...spec.p,y:original.p.y}}))),original.hash,`${spec.id} may move vertically only; its XZ, shape and ID must stay fixed`);
       } else assert.equal(hash(Buffer.from(JSON.stringify(spec))),original.hash,`${spec.id} must retain its prior transform and shape`);
     }
-    else assert.match(spec.id,/^(quarry-roadside(?:$|-solid-)|quarry-extension(?:$|-solid-)|tree-backdrop-)/,'only accepted authored scenery colliders may be added');
+    else assert.match(spec.id,/^(quarry-roadside(?:$|-solid-)|quarry-extension(?:$|-solid-)|quarry-headwall(?:$|-solid-)|tree-backdrop-)/,'only accepted authored scenery colliders may be added');
   }
   for(const id of old.keys())if(!current.has(id))assert.match(id,/^(scanned-rock-|scree-|tree-)/,'fixed structures/terrain must remain unchanged');
   for(let variant=0;variant<6;variant++)for(const p of rockPlacements(variant))assert.equal(overlapsQuarryRoadside(p.x,p.z,Math.max(p.sx,p.sz)*.65),false);

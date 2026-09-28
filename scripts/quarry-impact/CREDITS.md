@@ -68,6 +68,8 @@ Runtime models are `public/models/fir-medium-a.glb`, `fir-medium-b.glb`, `fir-me
 
 The forest edge above the extraction bay recomposes 50 existing distant cards and adds 14 short cards from the same credited images, leaving 320 off-sector cards unchanged. Three additional scanned firs reuse only the existing distant geometry, bringing the medium-tree instance count to 51. Shared placement data keeps their solid trunks at the same terrain height in solo and online play. This composition adds no maps or materials.
 
+The northern arena headwall is original Blender geometry using the existing CC0 Rock Boulder Dry maps and Rock Moss Set 01 fragments credited above. Its generator, editable scene, frozen boundary and output hashes are under `tools/author-quarry-headwall.py` and `source/models/quarry-headwall*`. The forest composition reuses 31 existing First Light tree cards, retaining their previously documented provenance. This pass adds no maps, generated imagery or purchased assets.
+
 ## Sound
 
 All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from original Quarry Impact prompts using the user's account. They are provided under the applicable ElevenLabs account terms, not represented as CC0. No Wreckfest audio was used. File-level prompts, settings, hashes and post-processing are in `public/audio/manifest.json`; original MP3s and quota records are in `source/audio/`.

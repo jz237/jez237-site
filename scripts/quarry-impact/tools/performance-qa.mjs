@@ -56,6 +56,12 @@ try {
   report.roadAsset = { url: roadURL, bytes: roadBytes.length,
     sha256: createHash('sha256').update(roadBytes).digest('hex') };
   const coupeURL = new URL('models/coupe.glb', report.pageURL).href;
+  const headwallURL = new URL('models/quarry-headwall.glb', report.pageURL).href;
+  const headwallResponse = await page.request.get(headwallURL);
+  assert.equal(headwallResponse.status(), 200, 'The arena headwall must be served');
+  const headwallBytes = await headwallResponse.body();
+  report.headwallAsset = { url: headwallURL, bytes: headwallBytes.length,
+    sha256: createHash('sha256').update(headwallBytes).digest('hex') };
   const coupeResponse = await page.request.get(coupeURL);
   assert.equal(coupeResponse.status(), 200, 'The final coupe must be served');
   const coupeBytes = await coupeResponse.body();
@@ -116,6 +122,10 @@ try {
     const a = i / 360 * Math.PI * 2;
     return [108 * Math.sin(a) + 12 * Math.sin(a * 3), 88 * Math.cos(a) + 9 * Math.sin(a * 2)];
   });
+  report.headwallVisits = raceSamples.filter(s => {
+    const [x, , z] = s.cars[0].position, a = (Math.atan2(x / 1.08, z) * 180 / Math.PI + 360) % 360;
+    return a >= 350 || a <= 25;
+  }).length;
   report.roadApproachVisits = raceSamples.filter(s => {
     const [x, , z] = s.cars[0].position;
     let cell = 0, distance = Infinity;
@@ -131,6 +141,7 @@ try {
   assert.ok(report.samples.every(s => s.cars.length === 8), 'All sampled events must have eight cars');
   assert.ok(raceSamples.length > 0 && report.roadsideVisits > 0, 'Racing must visit the authored approach');
   assert.ok(report.extensionVisits > 0, 'Racing must visit the extended wall');
+  assert.ok(report.headwallVisits > 0, 'Racing must visit the arena headwall');
   assert.ok(report.roadApproachVisits > 0, 'Racing must drive on the new gravel approach');
   assert.deepEqual(report.errors, []);
   report.passed = true;

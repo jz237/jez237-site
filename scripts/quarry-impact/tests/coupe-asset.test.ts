@@ -5,6 +5,8 @@ import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { describeCar, currentPhysicsInvariants, loadCarWithoutImages, readProject, sha256 } from '../tools/car-asset-audit';
 import { loadCars, templates } from '../src/assets';
+import { assertHeadwallEvolution, headwallBaseline } from './quarry-headwall-invariants';
+import { quarryColliderLayout } from '../src/quarry-layout';
 import { Vehicle } from '../src/vehicle';
 import type { Dent } from '../multiplayer/protocol';
 
@@ -59,9 +61,11 @@ test('coupe rear detailing cannot change other cars, handling, deployed server i
     if(file==='src/car-materials.ts')continue;
     assert.equal(sha256(readProject(file)),expected,`${file} must remain byte-identical`);
   }
-  const physics=currentPhysicsInvariants();assert.equal(physics.workerInputs.length,16);assert.ok(physics.workerInputs.filter(i=>i.available).every(i=>i.unchanged));
+  const physics=currentPhysicsInvariants();assert.equal(physics.workerInputs.length,16);assert.ok(physics.workerInputs.filter(i=>i.available&&i.file!=='src/quarry-layout.ts').every(i=>i.unchanged));
   assert.ok(physics.workerInputs.filter(i=>!i.available).every(i=>i.file==='multiplayer/.generated/rapier-worker.mjs'),'only the build-generated WASM adapter may be absent in a fresh checkout');
-  assert.deepEqual(physics.colliders,baseline.physics.colliders);assert.equal(physics.colliders.length,1543);
+  assert.deepEqual(headwallBaseline.colliders.map((s:{id:string;hash:string})=>({id:s.id,sha256:s.hash})),baseline.physics.colliders);
+  assert.equal(headwallBaseline.colliders.length,1543);
+  assertHeadwallEvolution(quarryColliderLayout()); // Intentional later world change; original car proof above remains frozen.
 });
 
 let prepared:Promise<void>|undefined;
