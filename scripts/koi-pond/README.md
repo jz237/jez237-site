@@ -24,6 +24,7 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 - Feeding drops food directly onto visible water without a hand, arm or forced camera move.
 - Sixteen searchable, sourced care topics cover pond planning, buying, quarantine, KHV, water tests, nitrogen cycling, oxygen, alkalinity, source water, diet, seasons, health and variety identification.
 - The top-left preview badge is removed.
+- The Water Lab includes oxygen/TAN/nitrite/nitrate/alkalinity trends, a recorded-sample inspector, interactive pH and temperature response curves, a 24-hour aeration or biofilter comparison, dilution diagrams, a sample log, and sourced explanations of nitrogen units, hardness and buffering.
 
 ## Rendering and behavior
 
@@ -34,11 +35,11 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 - Reduced maximum turning rate and acceleration, feeding rush speed, pitch and roll. Fish vary depth continuously and choose new preferred depths, alternate bursts with glides and inspection pauses, retain loose social spacing, and track local hunger, energy and a fading feeding-location memory.
 - Corrected freeze behavior and final floor/surface bounds after crowding. Muted audio by default, kept technical settings out of the opening view, and added a reduced-motion initial state.
 
-The chemistry model uses mg/L as nitrogen, with explicit nitrogen mass balance and user-supplied pH. Its readings are illustrative, separate from the visual scene, and are not a stocking or treatment prescription. Care sources and model limits are available in the guide.
+The chemistry model uses mg/L as nitrogen, with explicit nitrogen mass balance and user-supplied pH. Its readings are illustrative, separate from the visual scene, and are not a stocking or treatment prescription. Care sources and model limits are available in the guide. History retains the last 97 hourly or control-change records. Comparison experiments clone the current sample and never advance or overwrite the visitor's experiment; pH remains a selected input rather than a solved buffer equilibrium.
 
 ## Validation
 
-Node tests exercise the actual scene's simulation function against its actual basin geometry for 150 simulated seconds, plus a feeding run and freeze check. They verify finite positions, basin/floor/surface bounds, upright attitude, variable speed, continuous depth exploration and independent phases. The shared body curve is checked for a steady head, traveling phase, growing tail amplitude and a matching analytical slope. Chemistry tests cover speciation, nitrogen conservation, aeration/filter comparisons and nonnegative long-run state.
+Node tests exercise the actual scene's simulation function against its actual basin geometry for 150 simulated seconds, plus a feeding run and freeze check. They verify finite positions, basin/floor/surface bounds, upright attitude, variable speed, continuous depth exploration and independent phases. The shared body curve is checked for a steady head, traveling phase, growing tail amplitude and a matching analytical slope. Chemistry and chart tests cover speciation, nitrogen conservation, independent aeration/filter comparisons, real-time graph coordinates, immutable history, dilution, response curves, accessible empty/single-point charts and nonnegative long-run state.
 
 Interaction tests also exercise fixed-view startup, bounded/reversible zoom, hand-free feeding and food cleanup. Browser checks cover initial rendering, garden and underwater cameras, variety selection/following, chemistry controls, weather, feeding, pause and phone layout. The browser preview may throttle background WebGL tabs; FPS from a background tab is not a device benchmark.
 
