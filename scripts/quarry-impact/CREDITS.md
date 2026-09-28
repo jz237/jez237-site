@@ -26,6 +26,8 @@ Photographic textures, HDRI and scanned rocks from **Poly Haven**, **CC0 1.0**:
 
 - https://polyhaven.com/a/aerial_asphalt_01
 
+- https://polyhaven.com/a/asphalt_02
+
 - https://polyhaven.com/a/brown_mud_leaves_01
 
 - https://polyhaven.com/a/coast_sand_rocks_02
@@ -63,6 +65,8 @@ The adjoining extraction bay is original Blender geometry using the same credite
 The eastern quarry bay is original Blender geometry using the existing CC0 **Rock Boulder Dry** maps and **Rock Moss Set 01** fragments. Its editable source, frozen boundaries, original apron normals, generator and output hashes are retained under `tools/author-quarry-east-bay.py` and `source/models/quarry-east-bay*`. The exact wall and large rubble proxies are shared by local and online physics. No new textures or imagery were downloaded.
 
 The connected gravel lane and shoulders are original Blender geometry, material masks and placement work. They reuse the existing CC0 gravel, mud and Rock Ground maps, with small fragments from the credited rock scan. `tools/author-quarry-road-approach.py` reproduces the surface and fragments from frozen road and terrain references. Editable source and generated-file hashes are retained under `source/models/quarry-road-approach*`. This pass adds no texture files or purchased assets.
+
+The paved circuit uses **Asphalt 02**, by **Rob Tuytel**, from Poly Haven under **CC0 1.0**. Original two-kilopixel color/normal and one-kilopixel roughness JPEGs retain the documented three-metre scale; `tools/prepare-circuit-material.mjs` verifies the official source checksums and records local hashes. **Aerial Asphalt 01** supplies only broad color variation at thirty metres, matching the current asset page and numeric dimensions. Its older API scale string says fifteen metres; that metadata discrepancy is retained in the manifest. The former two-metre runtime scale was incorrect for this aerial photograph. No photograph is re-encoded. Finite repair polygons, paired rubber paths and mineral deposits are original engineering data in `source/circuit-surface.json`, rasterized locally by `tools/generate-circuit-surface.mjs`; they are not photographs or newly generated AI artwork. Existing gravel, mud and forest-floor photographs retain their credits above. No paid assets or audio generation were used.
 
 The connected roadside approach is original Blender geometry and placement work, using the same CC0 scanned fragments with **Rock Ground** by **Rob Tuytel**, also CC0 from Poly Haven. Original 2k color/normal and 1k roughness JPEGs retain its documented 1.5-metre physical scale, blended into the existing gravel and mud maps. `tools/prepare-roadside-material.mjs` verifies the official source checksums and records local SHA-256 hashes; downloads are an explicit development step, never part of gameplay. `tools/author-quarry-roadside.py` and `tools/quarry_surface_clip.py` reproduce the deposited ground, graded fragments, material masks and shared collision data; editable source and hashes are retained under `source/models/quarry-roadside*`. Grouped understory reuses the credited scanned fir saplings. No audio generation or purchases were needed for this scenery pass.
 

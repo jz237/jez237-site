@@ -12,6 +12,7 @@ import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
 import { prepareArenaFloor } from './scenery-arena-material';
+import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
 import { Effects } from './effects';
@@ -984,6 +985,7 @@ async function boot() {
     environment(renderer, scene),
     prepareArenaFloor(),
     prepareNorthForestFloor(),
+    prepareCircuitSurface(),
     quarry.trees(),
     onlineUI.configure(),
   ]);

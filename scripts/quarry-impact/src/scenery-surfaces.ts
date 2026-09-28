@@ -4,6 +4,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { pbr, texture } from './assets';
 import { terrainHeight, trackPoint } from './rules';
 import { ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
+import { attachCircuitCoordinates, isCircuitAsphaltCell } from './scenery-circuit-layout';
 // Original scenery shaders. Photographic maps remain the locally bundled CC0 scans.
 const noise = `
 float quarryHash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123); }
@@ -192,13 +193,17 @@ export function roadRibbon(offset0: number, offset1: number, segments: number, i
     g.computeVertexNormals();
     return g;
 }
-export function roadsideDetails(parent: T.Group) {
-    const shoulders = quarryAggregate();
+export function roadsideDetails(parent: T.Group, circuitMaterial?: T.MeshStandardMaterial) {
+    const shoulders = circuitMaterial ?? quarryAggregate();
     for (const side of [-1, 1]) {
         const g = roadRibbon(side * 5.78, side * 8.6, 360, true, true);
         const p = g.attributes.position, u = g.attributes.uv;
         for (let i = 0; i < p.count; i++)
             u.setXY(i, p.getX(i) / 2, p.getZ(i) / 2);
+        attachCircuitCoordinates(g, .1);
+        const edgeBlend = new Float32Array(p.count);
+        for (let i = 0; i < p.count; i++) edgeBlend[i] = i % 2 === 0 ? 1 : 0;
+        g.setAttribute('circuitEdge', new T.BufferAttribute(edgeBlend, 1));
         const m = new T.Mesh(g, shoulders);
         m.receiveShadow = true;
         parent.add(m);
@@ -221,7 +226,9 @@ export function roadsideDetails(parent: T.Group) {
             const cell = Math.floor(i / 2);
             const distance = Math.max(ROAD_APPROACH_START - cell, cell - ROAD_APPROACH_END, 0);
             const t = Math.min(1, distance / 4);
-            fade[i] = t * t * (3 - 2 * t);
+            // Paved sections now use finite, authored tire passes. Keep the
+            // previous markings on gravel and preserve all ribbon geometry.
+            fade[i] = isCircuitAsphaltCell(cell) ? 0 : t * t * (3 - 2 * t);
         }
         geometry.setAttribute('wearAlpha', new T.BufferAttribute(fade, 1));
         const m = new T.Mesh(geometry, trackMarks);

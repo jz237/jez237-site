@@ -6,6 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
+import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 
 const phase=process.env.QUARRY_SHADOW_PHASE;
 assert.ok(phase,'Set QUARRY_SHADOW_PHASE to a new evidence name');
@@ -16,6 +17,7 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const neutral={throttle:0,steer:0,brake:1,handbrake:false};
 const northBackdrop=process.env.QUARRY_SHADOW_NORTH_BACKDROP==='1';
 const contextOnly=process.env.QUARRY_SHADOW_CONTEXT_ONLY==='1';
+const circuit=process.env.QUARRY_SHADOW_CIRCUIT==='1';
 // A saved, terrain-supported transition view puts the actual atlas on screen.
 // Freeze the fixture here so the reusable tool never depends on excluded outputs.
 const backdropView=northBackdrop?{player:[-112.80609574938819,226.57773218412194,7.2094670054408025],
@@ -37,6 +39,35 @@ try{
     '--disable-background-timer-throttling','--disable-renderer-backgrounding',
   ]});
   page=await browser.newPage({viewport:report.viewport,deviceScaleFactor:1});
+  if(circuit){
+    report.circuitAssetsExpected=await circuitRuntimeAssetPlan();
+    assetPaths.push(...report.circuitAssetsExpected.map(asset=>asset.file));
+    await page.addInitScript(()=>{
+      window.__circuitShaderAudit={generation:0,programs:[]};
+      window.addEventListener('webglcontextrestored',()=>window.__circuitShaderAudit.generation++,true);
+      const proto=WebGL2RenderingContext.prototype,link=proto.linkProgram,use=proto.useProgram;
+      const records=new WeakMap();let current;
+      proto.linkProgram=function(program){
+        const result=link.call(this,program),sources=(this.getAttachedShaders(program)||[]).map(shader=>this.getShaderSource(shader)||'');
+        if(sources.some(source=>source.includes('uniform float circuitReady'))){
+          const linked=this.getProgramParameter(program,this.LINK_STATUS),samplers=[];
+          if(linked)for(let i=0;i<this.getProgramParameter(program,this.ACTIVE_UNIFORMS);i++){
+            const uniform=this.getActiveUniform(program,i);
+            if([this.SAMPLER_2D,this.SAMPLER_CUBE,this.SAMPLER_2D_ARRAY,this.SAMPLER_2D_SHADOW].includes(uniform.type))samplers.push({name:uniform.name,size:uniform.size});
+          }
+          const record={generation:window.__circuitShaderAudit.generation,linked,samplers,draws:0,
+            limit:this.getParameter(this.MAX_TEXTURE_IMAGE_UNITS),log:this.getProgramInfoLog(program)};
+          records.set(program,record);window.__circuitShaderAudit.programs.push(record);
+        }
+        return result;
+      };
+      proto.useProgram=function(program){current=records.get(program);return use.call(this,program);};
+      for(const name of ['drawElements','drawArrays','drawElementsInstanced','drawArraysInstanced']){
+        const draw=proto[name];
+        proto[name]=function(...args){if(current)current.draws++;return draw.apply(this,args);};
+      }
+    });
+  }
   let forestRequests;
   if(northBackdrop){
     const plan=await forestRuntimeAssetPlan({publicAssets:true});
@@ -266,6 +297,20 @@ try{
     }
   }else report.contextRecovery={supported:null,skipped:true,reason:'Explicit QUARRY_SHADOW_CONTEXT_RESTORE=0'};
   const final=await sample('final');assert.equal(final.stats.staticShadows.ready,true);assert.equal(final.contextLost,false);
+  if(circuit){
+    report.circuitShader=await page.evaluate(()=>window.__circuitShaderAudit);
+    assert.ok(report.circuitShader.programs.length>0,'The actual circuit shader must compile and render');
+    for(const program of report.circuitShader.programs){
+      assert.ok(program.linked,program.log||'Circuit shader must link');
+      assert.ok(program.samplers.reduce((sum,sampler)=>sum+sampler.size,0)<=program.limit,'Circuit shader must fit the actual texture-unit limit');
+    }
+    for(const generation of report.contextRecovery.supported?[0,1]:[0]){
+      assert.ok(report.circuitShader.programs.some(program=>program.generation===generation&&program.draws>0&&
+        ['circuitMask','circuitMicro','circuitNormal','circuitRough','quarryStaticMap'].every(name=>program.samplers.some(sampler=>sampler.name===name))),
+        `Generation ${generation} must draw the actual surface maps and fixed-shadow sampler`);
+    }
+    mark('actual circuit surface shaders fit the texture limit and render before and after context restoration');
+  }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.passed=true;
 }catch(error){
   report.passed=false;report.error=error.stack??String(error);process.exitCode=1;

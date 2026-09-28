@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { captureArenaFloor, arenaRead, arenaHash } from '../tools/arena-floor-audit';
 import { quarryColliderLayout } from '../src/quarry-layout';
 import { assertNorthForestEvolution, assertNorthForestLayoutSource, northForestBaseline } from './north-forest-invariants';
+import { restoreCircuitObjects } from './circuit-surface-invariants';
 
 const baseline=JSON.parse(arenaRead('tests/fixtures/arena-floor-baseline.json').toString());
 let current:ReturnType<typeof captureArenaFloor>|undefined;
@@ -46,7 +47,7 @@ test('actual arena, twelve water surfaces and twelve damp margins preserve every
 test('arena material change cannot add draw objects, alter other materials, or perturb the later scenery RNG',async()=>{
   const result=await capture();
   assert.equal(result.objects.length,baseline.objects.length);assert.equal(result.objects.length,231);
-  const others=structuredClone(result.objects.filter(o=>o.role==='other'));
+  const others=restoreCircuitObjects(result.objects).filter((o:any)=>o.role==='other');
   const wearSHA='74fdab72e3510e26464697cbc7b2c61a7fecb58c99186f2c4193a369b51dcaf2';
   const wear=others.filter(o=>o.geometry.attributes.position.sha256===wearSHA);
   assert.equal(wear.length,1,'only the exact historical arena-wear mesh receives this opacity exception');
