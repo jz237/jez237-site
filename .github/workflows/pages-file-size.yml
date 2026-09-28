@@ -1,0 +1,40 @@
+name: Pages File Size Guard
+
+# Cloudflare Pages rejects a whole deployment if any file is over 25 MiB, and
+# its Git builds publish the repository root. This names the offending file
+# instead of leaving a silent "Build failed" on the Cloudflare check.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  file-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject files over 25 MiB (no clone; reads the Git tree via the API)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          limit=26214400
+          tree="$(gh api "repos/${GITHUB_REPOSITORY}/git/trees/${SHA}?recursive=1")"
+          if [ "$(jq -r '.truncated' <<<"$tree")" = "true" ]; then
+            echo "::warning::Git tree listing was truncated; some files were not size-checked."
+          fi
+          oversized="$(jq -r --argjson limit "$limit" '.tree[] | select(.type == "blob" and .size > $limit) | "\(.size)\t\(.path)"' <<<"$tree")"
+          if [ -n "$oversized" ]; then
+            while IFS=$'\t' read -r size path; do
+              echo "::error file=${path}::${path} is ${size} bytes, over Cloudflare Pages' 25 MiB (${limit}-byte) per-file limit. Host it on R2 and restore it with a script instead."
+            done <<<"$oversized"
+            exit 1
+          fi
+          echo "All tracked files are under 25 MiB."
