@@ -12,6 +12,7 @@ const roadsideOnly=process.env.QUARRY_CUT_ROADSIDE==='1';
 const extension=process.env.QUARRY_CUT_EXTENSION==='1';
 const road=process.env.QUARRY_CUT_ROAD==='1';
 const roadEnds=process.env.QUARRY_CUT_ROAD_ENDS==='1';
+const headwall=process.env.QUARRY_CUT_HEADWALL==='1';
 assert.match(phase,/^[a-z0-9][a-z0-9_-]*$/i);
 const output=path.resolve(process.env.QUARRY_CUT_OUTPUT || 'outputs/quarry-cut',phase);
 const url=process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/';
@@ -36,6 +37,16 @@ const track=Array.from({length:481},(_,i)=>{
   const a=i/480*Math.PI*2;
   return {x:108*Math.sin(a)+12*Math.sin(a*3),z:88*Math.cos(a)+9*Math.sin(a*2)};
 });
+// Approach the north wall from the eastern bend. Playground permits both
+// directions; this follows the actual road with the normal chase offsets.
+if(headwall)track.reverse();
+if(headwall)views.splice(0,views.length,
+  {name:'rear-centre',player:[0,-20,0],position:[0,1.25,-25.8],target:[0,.78,-21]},
+  {name:'rear-chase',player:[0,-20,0],position:[0,3.7,-28],target:[0,.85,-16]},
+  {name:'headwall-approach',player:[12,65,0],position:[10,3.7,56],target:[20,13,144]},
+  {name:'headwall-toe',player:[12,90,0],position:[9,3,99],target:[23,17,154]},
+  {name:'headwall-west-join',player:[-31,92,0],position:[-38,4,96],target:[-25,18,157]},
+  {name:'headwall-east-join',player:[61,85,0],position:[68,4,85],target:[67,18,142]});
 if(roadEnds){
   views.splice(0,views.length,...[
     {name:'road-entry',cell:122,direction:1},
@@ -49,7 +60,7 @@ if(roadEnds){
       position:[p.x-fx*8,3.1,p.z-fz*8],target:[p.x+fx*16,.4,p.z+fz*16]};
   }));
 }
-const report={phase,url,focused,extension,road,roadEnds,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],hood:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
+const report={phase,url,focused,extension,road,roadEnds,headwall,viewport:{width:2560,height:1440},quality:'ultra',settleMs:1500,sampleMs:3000,views:[],moving:[],hood:[],errors:[],failedRequests:[],modules:[],modelUrls:[]};
 let browser;
 await fs.mkdir(output,{recursive:true});
 assert.equal(await fs.access(path.join(output,'report.json')).then(()=>true,()=>false),false,
@@ -104,15 +115,15 @@ try {
   // chase poses following a physically moving car, not arbitrary fly-throughs.
   // Camera easing/FOV animation is intentionally held fixed for comparison.
   if(!focused&&!roadsideOnly&&!roadEnds){
-  await page.evaluate(({track,neutral,extension,road})=>{
+  await page.evaluate(({track,neutral,extension,road,headwall})=>{
     // Start ahead of the sector so the normal forward chase view contains the
     // approaching extraction faces, rather than starting beside them.
-    const index=extension||road?164:149;
+    const index=headwall?415:extension||road?164:149;
     const start=track[index],next=track[index+1],yaw=Math.atan2(next.x-start.x,next.z-start.z);
     __quarry.resume();__quarry.setInput(neutral);__quarry.teleport(0,start.x,start.z,yaw);__quarry.simulate(.25);
     __quarry.velocity(0,Math.sin(yaw)*13,0,Math.cos(yaw)*13);
     __quarry.captureCamera([start.x,5,start.z+8],[start.x,1,start.z]);
-  },{track,neutral,extension,road});
+  },{track,neutral,extension,road,headwall});
   for(let sample=0;sample<=4;sample++){
     const pose=await page.evaluate(({sample,track})=>{
       const q=__quarry;
@@ -167,6 +178,16 @@ try {
   }
   report.modules=await page.evaluate(()=>[...new Set([...Array.from(document.scripts,s=>s.src),...performance.getEntriesByType('resource').map(r=>r.name)].filter(u=>/\.js(?:\?|$)/.test(u)))]);
   report.modelUrls=[...new Set(report.modelUrls)];
+  if(headwall){
+    const assetUrl=report.modelUrls.find(u=>u.endsWith('/models/quarry-headwall.glb'));
+    assert.ok(assetUrl,'The scene must actually load the authored headwall');
+    const response=await page.request.get(assetUrl),bytes=await response.body();
+    assert.equal(response.status(),200);
+    const sha256=createHash('sha256').update(bytes).digest('hex');
+    const local=await fs.readFile('public/models/quarry-headwall.glb');
+    assert.equal(sha256,createHash('sha256').update(local).digest('hex'));
+    report.headwallAsset={url:assetUrl,bytes:bytes.length,sha256};
+  }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);
   report.passed=true;
 }catch(error){report.passed=false;report.failure=String(error);process.exitCode=1;}

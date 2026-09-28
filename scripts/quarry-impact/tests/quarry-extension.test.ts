@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { cliffGeometry, terrainGeometry, quarryColliderLayout, quarryExtensionGeometry, quarryExtensionHeight, overlapsQuarryExtension } from '../src/quarry-layout';
+import { cliffGeometry, terrainGeometry, quarryColliderLayout, quarryExtensionGeometry, quarryExtensionHeight, overlapsQuarryExtension, overlapsQuarryHeadwall } from '../src/quarry-layout';
 import { collisionMesh, probeSummary, surfaceProbes } from './quarry-cut-probes';
 import { exactMinimumClearance } from './mesh-clearance';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
@@ -36,11 +36,11 @@ test('wall extension replaces only its33 legacy cells and preserves the prior cu
   assert.equal(hashArray(cliff.positions),baseline.cliffPositions);
   assert.equal(hashArray(terrain.positions),baseline.terrainPositions);assert.equal(hashArray(terrain.indices),baseline.terrainIndices);
   for(let band=0;band<30;band++)for(let cell=0;cell<360;cell++){
-    if(cell>=118&&cell<172)continue;
+    if((cell>=118&&cell<172)||cell>=350||cell<25)continue;
     const b=band*722+cell*2;expected.push(b,b+1,b+2,b+2,b+1,b+3);
   }
   assert.deepEqual(cliff.indices,new Uint32Array(expected));
-  assert.equal(cliff.indices.length/3,18360);
+  assert.equal(cliff.indices.length/3,16260);
   for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
     assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
   const old=new Map<string,{id:string;hash:string;p:{x:number;y:number;z:number}}>(baseline.colliders.map((s:{id:string})=>[s.id,s]));
@@ -48,11 +48,11 @@ test('wall extension replaces only its33 legacy cells and preserves the prior cu
   for(const spec of layout){
     if(spec.id==='quarry-cliffs')continue; // Exact replacement independently asserted above.
     if(old.has(spec.id))assert.equal(hash(Buffer.from(JSON.stringify(spec))),old.get(spec.id)!.hash,`${spec.id} must preserve its shape and transform`);
-    else assert.match(spec.id,/^(quarry-extension(?:$|-solid-)|tree-backdrop-)/);
+    else assert.match(spec.id,/^(quarry-extension(?:$|-solid-)|quarry-headwall(?:$|-solid-)|tree-backdrop-)/);
   }
   for(const [id,spec] of old)if(!current.has(id)){
     assert.match(id,/^(scanned-rock-|scree-)/,'only intersecting legacy rock scatter may be removed');
-    assert.ok(overlapsQuarryExtension(spec.p.x,spec.p.z,12),`${id} cannot disappear outside the new sector`);
+    assert.ok(overlapsQuarryExtension(spec.p.x,spec.p.z,12)||overlapsQuarryHeadwall(spec.p.x,spec.p.z,12),`${id} cannot disappear outside the new sector`);
   }
   const spec=current.get('quarry-extension');assert.ok(spec?.shape==='mesh');assert.deepEqual(spec.p,{x:0,y:0,z:0});
   assert.deepEqual(spec.data,quarryExtensionGeometry());

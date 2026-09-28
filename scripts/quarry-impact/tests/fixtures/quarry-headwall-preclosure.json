@@ -1,0 +1,6 @@
+{
+  "collisionSHA256": "040e944325c877f1117c4ea754766f3ad4716670d5c7e3206db88ba59dfce4a9",
+  "wallTriangles": 17030,
+  "expandedTriangleSHA256": "00db61b3bc505ec6b3868c6e36a59a5a265697aba4349c1664e4fea46d3d05c9",
+  "note": "Accepted refined upper/apron triangle stream before additive toe closure. Original world baseline is preserved separately."
+}

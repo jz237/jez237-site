@@ -8,6 +8,7 @@ import { terrainGeometry, quarryColliderLayout } from '../src/quarry-layout';
 import { surfaceAt } from '../src/rules';
 import { exactMinimumClearance, projectedOverlapAreas } from './mesh-clearance';
 import { createSurfaceSampler } from '../src/quarry-surface-sampler';
+import { assertHeadwallEvolution, headwallBaseline } from './quarry-headwall-invariants';
 import { loadQuarryRoadApproach } from '../src/scenery-road-approach';
 
 const read=(path:string)=>JSON.parse(readFileSync(new URL(path,import.meta.url),'utf8'));
@@ -29,10 +30,10 @@ test('the authored road approach preserves every physical terrain triangle, coll
   const terrain=terrainGeometry(),colliders=quarryColliderLayout();
   assert.equal(hashArray(terrain.positions),baseline.terrainPositionSHA256);
   assert.equal(hashArray(terrain.indices),baseline.terrainIndexSHA256);
-  assert.equal(colliders.length,1543);
-  assert.deepEqual(colliders.map(s=>({id:s.id,hash:hash(Buffer.from(JSON.stringify(s)))})),baseline.colliders,
-    'a visual road and shoulder replacement must add, remove or move no solid obstacle');
-  for(const [path,expected] of Object.entries(baseline.files))
+  assert.deepEqual(headwallBaseline.colliders.map((s:{id:string;hash:string})=>({id:s.id,hash:s.hash})),baseline.colliders,
+    'historical visual road proof remains exact before the later headwall milestone');
+  assertHeadwallEvolution(colliders);
+  for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
     assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
   assert.equal(base.sector.startCell,123);assert.equal(base.sector.endCellExclusive,182);assert.equal(base.sector.segments,360);
   assert.equal(base.sector.startCell/base.sector.segments,base.sector.movingStartIndex480/480);
