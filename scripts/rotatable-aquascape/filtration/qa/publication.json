@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "0c2eced3651ae52bdadfb3851d4d4298ffea6002",
+  "preview": "https://b325aed4.hidden-reef.pages.dev/showroom/filtration/",
+  "production": "https://hidden-reef.pages.dev/showroom/filtration/",
+  "deployment": "https://88826841.hidden-reef.pages.dev",
+  "verification": {
+    "base": "https://hidden-reef.pages.dev",
+    "checkedAt": "2026-09-28T23:56:31.766Z",
+    "assets": [
+      "reef/./assets/index-Di90eq1i.js",
+      "reef/./assets/index-DBjqBxyQ.css",
+      "filtration/./assets/index-Dg1eXeoJ.js",
+      "filtration/./assets/index-vl4A24zB.css"
+    ],
+    "checks": {
+      "exactActiveAssetsAndStoreImages": true,
+      "reefToolbarLessonAndReturnNavigation": true,
+      "mobileNavigation": true
+    },
+    "errors": []
+  },
+  "limitation": "The separate jez237 account returns Cloudflare authentication error 10000; that mirror was not deployed."
+}
