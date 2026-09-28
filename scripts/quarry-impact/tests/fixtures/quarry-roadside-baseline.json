@@ -1,0 +1,17 @@
+{
+  "capturedAt": "2026-09-28T01:07:00.995Z",
+  "roadSamples": 10080,
+  "roadSHA256": "8469fb7acb017e727465066ae04dae48eb0c76bd98294abc9e48d82405f1af87",
+  "arenaSamples": 1961,
+  "arenaSHA256": "9c1aa53b7ef33acd5b3afad4a184425ed44af452ad1c1056c4989a374b3eb87a",
+  "terrainPositionSHA256": "f9b6b3762628b21e565ce454ef13197d0692d8ba2dee292518e5316e43c6660e",
+  "terrainIndexSHA256": "776383df4806e539dab3db2069aeac1de156cb66bb6227c78ff71f390bbf5ade",
+  "cliffPositionSHA256": "4ade32015c7e08db698dd4c9ec6f7a14bb34570fd046041f9480305bf4a31098",
+  "cliffIndexSHA256": "47391dd3398a7b579a90539c3af4cc465def56de244952a961cdaff8a9172052",
+  "files": {
+    "src/quarry-layout.ts": "0b13cfd10211ac38562c3480340e726a927ee462900ad448b08ff41a719743cd",
+    "src/quarry-cut-collision.json": "68ae33add9a963344d2d62d3642d0dbabf3e18a7b53057e0701e20b9d9c440d2",
+    "public/models/quarry-cut.glb": "a5af7b9f507242426c812930db9b6233691bb6b9c2b203f38076d9317c82b4dd",
+    "source/models/quarry-cut-base.json": "c1e9cf73ac29272d49d123f46e7e9cb88011f6a77d8d665f02c2b10038e29085"
+  }
+}
