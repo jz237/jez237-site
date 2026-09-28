@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -34,7 +35,7 @@ test('the authored road approach preserves every physical terrain triangle, coll
     'historical visual road proof remains exact before the later headwall milestone');
   assertHeadwallEvolution(colliders);
   for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
-    assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
+    assert.equal(hash(historicGripBytes(path,readFileSync(new URL('../'+path,import.meta.url)))),expected,`${path} retains accepted bytes outside the explicit later grip correction`);
   assert.equal(base.sector.startCell,123);assert.equal(base.sector.endCellExclusive,182);assert.equal(base.sector.segments,360);
   assert.equal(base.sector.startCell/base.sector.segments,base.sector.movingStartIndex480/480);
   assert.ok(base.lengthMetres>110&&base.lengthMetres<113);

@@ -5,6 +5,7 @@ import { attachCircuitCoordinates, circuitFrame, CIRCUIT_ARC_METRES, CIRCUIT_LEN
 import { surfaceAt } from '../src/rules';
 import { circuitBase as base, circuitBefore, assertCircuitPhysicsUnchanged, restoreCircuitObjects } from './circuit-surface-invariants';
 import { captureArenaFloor } from '../tools/arena-floor-audit';
+import { historicalSurfaceAt } from './circuit-grip-invariants';
 
 const geometry=(data:any)=>{
   const g=new T.BufferGeometry();
@@ -15,9 +16,9 @@ const geometry=(data:any)=>{
   return g;
 };
 
-test('circuit material coordinates retain every deployed physics input, collider and sampled grip classification',async()=>{
+test('circuit material coordinates retain historical physics inputs/colliders through the explicit later grip correction',async()=>{
   await assertCircuitPhysicsUnchanged();
-  for(const sample of base.tractionSamples)assert.equal(surfaceAt(sample.x,sample.z),sample.surface,`grip at cell ${sample.cell}, lateral ${sample.lateral}`);
+  for(const sample of base.tractionSamples)assert.equal(historicalSurfaceAt(sample.x,sample.z),sample.surface,`historical grip at cell ${sample.cell}, lateral ${sample.lateral}`);
 });
 
 test('route metres follow the frozen actual lane, wrap continuously, and preserve distinct lane/shoulder frames',()=>{

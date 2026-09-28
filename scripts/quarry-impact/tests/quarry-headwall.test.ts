@@ -1,5 +1,6 @@
 import {restoreEastBayCliffs} from './quarry-east-bay-invariants';
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -55,7 +56,7 @@ test('headwall replaces only its35 wrapped legacy cells and preserves earlier as
   assert.deepEqual(cliff.indices,new Uint32Array(expected));
   assert.equal(cliff.indices.length/3,16260);
   for(const [path,expected] of Object.entries(baseline.files))if(path!=='src/quarry-layout.ts')
-    assert.equal(hash(readFileSync(new URL('../'+path,import.meta.url))),expected,`${path} must retain its accepted bytes`);
+    assert.equal(hash(historicGripBytes(path,readFileSync(new URL('../'+path,import.meta.url)))),expected,`${path} retains accepted bytes outside the later grip correction`);
   const old=new Map<string,{id:string;hash:string;p:{x:number;y:number;z:number}}>(baseline.colliders.map((s:{id:string})=>[s.id,s]));
   const layout=assertNorthForestEvolution(quarryColliderLayout()),current=new Map(layout.map(s=>[s.id,s]));assert.equal(current.size,layout.length);
   for(const spec of layout){

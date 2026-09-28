@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "generator": "tools/export-circuit-grip.mjs",
+  "output": "src/circuit-grip-profile.json",
+  "bytes": 90397,
+  "sha256": "03892c6db43ceaadadfeff2751a61308591a20a59282462f15a718c624c59a81",
+  "base": "source/circuit-surface-base.json",
+  "baseSha256": "ce9cbf18f2f961b7ece8d88316485dd3fc822e377b8f9ad2ca1280b87e059409",
+  "mask": "public/assets/circuit-surface.rgba.gz",
+  "maskSha256": "53882d04d9c08c22cc59b06ad7d23eb0edeb729a63ea4f1e0716818b2d488ff6",
+  "rawMaskSha256": "6b9abc742c0dcf1da7dbb7aa4d0c2105fd5cd91dbf766ef94ef1063b96550cf6",
+  "policy": "Physical asphalt is the base-resolution, bilinearly sampled authored R channel >= 0.5 inside an existing paved lane triangle. Camera mip level, shader micro-grain and G/B/A appearance do not change grip. Both U endpoints repeat; V clamps.",
+  "vertices": 722,
+  "triangles": 720,
+  "pavedCells": 207,
+  "decodedRedBytes": 262144,
+  "runPairs": 6614,
+  "runtime": "Synchronous numeric RLE expansion once; no image/async I/O/Three dependency. Geometry and render assets are unchanged."
+}

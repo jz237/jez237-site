@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
 import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
+import { geologyRuntimeAssetPlan } from './geology-runtime-assets.mjs';
 import { tsImport } from 'tsx/esm/api';
 
 // Use a unique output name, a frozen dist, and no concurrent GPU QA/export.
@@ -83,6 +84,12 @@ async function circuitAssetsForBuild() {
   const code = (await Promise.all(modules.map(module => fs.readFile(path.join('dist', module), 'utf8')))).join('\n');
   return circuitRuntimeAssetPlan({ historical: !code.includes('circuit-surface.rgba.gz') });
 }
+async function geologyAssetsForBuild() {
+  const html = await fs.readFile('dist/index.html', 'utf8');
+  const modules = [...html.matchAll(/(?:src|href)="\.\/([^"?#]+\.js)"/g)].map(match => match[1]);
+  const code = (await Promise.all(modules.map(module => fs.readFile(path.join('dist', module), 'utf8')))).join('\n');
+  return geologyRuntimeAssetPlan({ historical: !code.includes('vec4 geologyPhoto') });
+}
 // Optional CPU-only preflight deliberately produces no performance pass/fail.
 // It lets placement changes be checked before reserving the isolated GPU run.
 if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
@@ -97,7 +104,7 @@ if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
 const report = {
   startedAt: new Date().toISOString(), seconds, quality, viewport: [2560, 1440],
   protocol: 'Five equal blocks alternating eight-car derby and scenic racing; restart completed events. Eight-second warm-up before capture. No camera or physics time acceleration.',
-  events: [], samples: [], errors: [], forestAssets: [], circuitAssets: [], forestStops: [], output, screenshot,
+  events: [], samples: [], errors: [], forestAssets: [], circuitAssets: [], geologyAssets: [], forestStops: [], output, screenshot,
 };
 let browser;
 try {
@@ -105,7 +112,9 @@ try {
   const forestAssets = await forestRuntimeAssetPlan();
   const eastBayAsset = await eastBayAssetPlan();
   const circuitAssets = await circuitAssetsForBuild();
-  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...circuitAssets];
+  const geologyAssets = await geologyAssetsForBuild();
+  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...circuitAssets, ...geologyAssets];
+  report.geologyAssetsExpected = geologyAssets;
   report.forestAssetsExpected = forestAssets;
   report.eastBayAssetExpected = eastBayAsset;
   report.circuitAssetsExpected = circuitAssets;
@@ -151,6 +160,8 @@ try {
   const circuitFiles = new Set(circuitAssets.map(asset => asset.file));
   report.forestAssets = verifiedAssets.filter(asset => forestFiles.has(asset.file));
   report.circuitAssets = verifiedAssets.filter(asset => circuitFiles.has(asset.file));
+  report.geologyAssets = verifiedAssets.filter(asset => geologyAssets.some(expected => expected.file === asset.file));
+  assert.equal(report.geologyAssets.length, geologyAssets.length, 'Observe every expected geology asset request');
   assert.equal(report.circuitAssets.length, circuitAssets.length, 'Observe every expected circuit asset request');
   report.eastBayAsset = verifiedAssets.find(asset => asset.file === eastBayAsset?.file) ?? null;
   const maskResponse = await arenaMaskResponse;

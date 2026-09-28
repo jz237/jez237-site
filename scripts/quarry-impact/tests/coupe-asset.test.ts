@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -70,9 +71,9 @@ test('coupe rear detailing cannot change other cars, handling, deployed server i
       assert.equal(sha256(restored),expected,'restoring only the approved environment intensity must recover the original assets.ts bytes');
       continue;
     }
-    assert.equal(sha256(readProject(file)),expected,`${file} must remain byte-identical`);
+    assert.equal(sha256(historicGripBytes(file,readProject(file))),expected,`${file} must remain byte-identical outside the later shared grip correction`);
   }
-  const physics=currentPhysicsInvariants();assert.equal(physics.workerInputs.length,16);assert.ok(physics.workerInputs.filter(i=>i.available&&i.file!=='src/quarry-layout.ts').every(i=>i.unchanged));
+  const physics=currentPhysicsInvariants();assert.equal(physics.workerInputs.length,16);assert.ok(physics.workerInputs.filter(i=>i.available&&i.file!=='src/quarry-layout.ts').every(i=>sha256(historicGripBytes(i.file,readProject(i.file)))===i.expected));
   assert.ok(physics.workerInputs.filter(i=>!i.available).every(i=>i.file==='multiplayer/.generated/rapier-worker.mjs'),'only the build-generated WASM adapter may be absent in a fresh checkout');
   assert.deepEqual(headwallBaseline.colliders.map((s:{id:string;hash:string})=>({id:s.id,sha256:s.hash})),baseline.physics.colliders);
   assert.equal(headwallBaseline.colliders.length,1543);

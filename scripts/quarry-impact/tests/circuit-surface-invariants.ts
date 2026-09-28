@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { quarryColliderLayout } from '../src/quarry-layout';
+import { historicGripBytes } from './circuit-grip-invariants';
+import { restoreGeologyObjects, restoreGeologySurfaceSource } from './geology-material-invariants';
 
 export const circuitBefore=JSON.parse(readFileSync(new URL('./fixtures/circuit-surface-baseline.json',import.meta.url),'utf8'));
 export const circuitBase=JSON.parse(readFileSync(new URL('../source/circuit-surface-base.json',import.meta.url),'utf8'));
@@ -13,7 +15,7 @@ const descriptor=(values:Float32Array,itemSize:number)=>({count:values.length/it
  * enumerated edits are the complete surface-factory integration; every other
  * source byte must still recover the immutable published checksum. */
 export function restoreCircuitSurfaceSource(bytes:Buffer){
-  let source=bytes.toString('utf8');const nl=source.includes('\r\n')?'\r\n':'\n';
+  let source=restoreGeologySurfaceSource(bytes).toString('utf8');const nl=source.includes('\r\n')?'\r\n':'\n';
   const replace=(from:string[],to:string[])=>{
     const token=from.join(nl);assert.equal(source.split(token).length,2,'unique approved circuit integration');source=source.replace(token,to.join(nl));
   };
@@ -31,7 +33,7 @@ export function restoreCircuitSurfaceSource(bytes:Buffer){
  * attributes remain exact; only these two material consumers and the four
  * former asphalt wear weights may evolve. Frozen fixtures are never rewritten. */
 export function restoreCircuitObjects(objects:any[]){
-  const restored=structuredClone(objects),old=circuitBefore.objects;
+  const restored=restoreGeologyObjects(objects),old=circuitBefore.objects;
   assert.equal(restored.length,old.length);
   const laneSHA=circuitArrayHash(new Float32Array(circuitBase.lane.positions));
   const shoulderSHA=circuitArrayHash(new Float32Array(circuitBase.shoulders.flatMap((s:any)=>s.positions)));
@@ -88,8 +90,9 @@ export async function assertCircuitPhysicsUnchanged(){
   assert.equal(circuitBefore.workerInputs.length,20);
   const inputs=circuitBefore.workerInputs.map(({file,expected}:{file:string;expected:string})=>{
     const current=circuitHash(readFileSync(new URL('../'+file,import.meta.url)));
-    assert.equal(current,expected,`${file}: all deployed Worker inputs remain byte-identical`);
-    return {file,expected,current};
+    const historical=circuitHash(historicGripBytes(file,readFileSync(new URL('../'+file,import.meta.url))));
+    assert.equal(historical,expected,`${file}: historical circuit inputs remain exact outside the separately validated grip correction`);
+    return {file,expected,current,historical};
   });
   const colliders=quarryColliderLayout().map(s=>({id:s.id,sha256:circuitHash(JSON.stringify(s))}));
   assert.equal(colliders.length,2287);assert.deepEqual(colliders,circuitBefore.colliders);

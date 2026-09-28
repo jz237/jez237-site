@@ -8,6 +8,7 @@ import { captureArenaFloor, arenaRead, arenaHash } from '../tools/arena-floor-au
 import { quarryColliderLayout } from '../src/quarry-layout';
 import { assertNorthForestEvolution, assertNorthForestLayoutSource, northForestBaseline } from './north-forest-invariants';
 import { restoreCircuitObjects } from './circuit-surface-invariants';
+import {historicGripBytes} from './circuit-grip-invariants';
 
 const baseline=JSON.parse(arenaRead('tests/fixtures/arena-floor-baseline.json').toString());
 let current:ReturnType<typeof captureArenaFloor>|undefined;
@@ -18,7 +19,7 @@ test('arena appearance preserves its historical physics and cars through the exp
   const result=await capture();
   assert.equal(result.workerInputs.length,17);
   assertNorthForestLayoutSource();assertNorthForestEvolution(quarryColliderLayout());
-  assert.deepEqual(result.workerInputs.filter(i=>i.file!=='src/quarry-layout.ts'),baseline.workerInputs.filter((i:any)=>i.file!=='src/quarry-layout.ts'));
+  assert.deepEqual(result.workerInputs.filter(i=>i.file!=='src/quarry-layout.ts').map(i=>({...i,current:arenaHash(historicGripBytes(i.file,arenaRead(i.file)))})),baseline.workerInputs.filter((i:any)=>i.file!=='src/quarry-layout.ts'));
   const oldIds=new Set(baseline.colliders.map((s:any)=>s.id));
   assert.deepEqual(result.colliders,quarryColliderLayout().map(s=>({id:s.id,sha256:eastBayHash(s)})),'actual arena capture uses the real current physics');
   assert.deepEqual(assertEastBayEvolution(quarryColliderLayout()).map(s=>({id:s.id,sha256:eastBayHash(s)})).filter(s=>oldIds.has(s.id)),baseline.colliders,'the bounded East Bay wall/scatter evolution reconstructs every original arena-era collider');

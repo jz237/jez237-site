@@ -163,6 +163,6 @@ test('crest wrapper preserves the original rock shader and registers identical s
     const s=a.fragmentShader,branch=s.indexOf('if(northCrestBlend>.001)');assert.ok(s.indexOf('northCrestDx=dFdx(northCrestUV)')<branch);
     assert.ok(s.includes('getTangentFrame(-vViewPosition,nonPerturbedNormal,northCrestUV)'));
     for(const map of ['quarryRockDust','northCrestNormal','northCrestRough'])assert.ok(s.includes(`textureGrad(${map},northCrestUV,northCrestDx,northCrestDy)`),'all rock seam channels use the same physical texture registration');
-    assert.match(rock.customProgramCacheKey(),/^north-woodland-crest-v/);for(const m of [base,rock,floor])m.dispose();
+    assert.match(rock.customProgramCacheKey(),/^north-woodland-crest-geology-v/);for(const m of [base,rock,floor])m.dispose();
   }finally{T.TextureLoader.prototype.load=original;}
 });

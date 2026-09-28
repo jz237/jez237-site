@@ -24,6 +24,8 @@ Photographic textures, HDRI and scanned rocks from **Poly Haven**, **CC0 1.0**:
 
 - https://polyhaven.com/a/rock_boulder_dry
 
+- https://polyhaven.com/a/rock_face_03
+
 - https://polyhaven.com/a/aerial_asphalt_01
 
 - https://polyhaven.com/a/asphalt_02
@@ -57,6 +59,8 @@ Photographic textures, HDRI and scanned rocks from **Poly Haven**, **CC0 1.0**:
 The last three ground/bark texture sets were copied from the user's existing After the Storm project. The scanned rock set was copied from the user's rotatable-aquascape project and reduced in Blender to approximately 1,500 triangles per rock. Texture download URLs and hashes are recorded in `public/assets/manifest.json`. Scenery generation, terrain, industrial structures, ramps, barriers, signs and effects are original Quarry Impact code.
 
 The quarry workshop uses **Corrugated Iron 02**, photographed by **Sergej Majboroda** and processed by **Jenelle van Heerden**, from Poly Haven under CC0. Its original 2k color and 1k normal/packed ARM JPEG maps retain the documented 2.7-metre physical scale on walls and roof. `tools/prepare-industrial-material.mjs` is an explicit development download with source checksum verification; it is never called during builds or gameplay.
+
+The geological material trial uses **Rock Face 03**, photographed by **Dario Barresi** and processed by **Rico Cilliers**, from Poly Haven under **CC0 1.0**. Original 2k diffuse/OpenGL normal and 1k roughness JPEGs retain the documented **2.7-metre** physical scale. `tools/prepare-geology-material.mjs` verifies official file checksums and byte counts, then records exact local SHA-256 hashes in `public/assets/manifest.json`. The images are bundled locally without resizing, recoloring or re-encoding; no request occurs during gameplay. `source/geology-material.md` records preparation, scale and the intended trial, without claiming visual acceptance. Existing Rock Boulder Dry photographs remain unchanged. No paid assets or audio generation were used.
 
 The road-facing quarry cut is original Blender geometry with fragments derived from the CC0 **Rock Moss Set 01** scan. Its editable scene, frozen boundary reference, source records and generated-file hashes are retained under `source/models/quarry-cut*`; `tools/author-quarry-cut.py` reproduces the geometry and shared collision proxy. Runtime detail levels reuse the existing **Rock Boulder Dry** wall maps and rock scan atlas rather than embedding duplicate textures in the GLB.
 
