@@ -11,6 +11,7 @@ import { loadQuarryExtension } from './scenery-extension';
 import { loadQuarryHeadwall } from './scenery-headwall';
 import { loadQuarryRoadApproach, ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
 import { quarryRoadSurface } from './scenery-road-material';
+import { quarryArenaSurface } from './scenery-arena-material';
 import { quarryRoadsideGround } from './scenery-roadside-material';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, quarryGround, quarryRock, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
@@ -138,7 +139,7 @@ export class Quarry {
       );
     const arena = new T.Mesh(
       arenaGeo,
-      quarryAggregate(),
+      quarryArenaSurface(),
     );
     arena.position.y = 0.018;
     arena.receiveShadow = true;
