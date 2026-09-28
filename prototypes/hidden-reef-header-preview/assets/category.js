@@ -407,6 +407,12 @@
       categoryHeroRotator = 0;
     }
     el.classList.remove('is-rotating');
+    el.classList.remove('pond-garden-hero');
+    if (cat?.slug === 'pond' && !sub && window.THR_POND_PREVIEW) {
+      window.THR_POND_PREVIEW.render(el, assetBase);
+      document.getElementById('page-title').textContent = 'Pond & Water Garden — The Hidden Reef';
+      return;
+    }
     const title = sub ? sub.name : (cat ? cat.name + ' Dept.' : 'All Products');
     const desc = sub ? sub.description : (cat ? cat.description : 'Browse our full catalog');
     const sourceUrl = sub ? sub.sourceUrl : '';
