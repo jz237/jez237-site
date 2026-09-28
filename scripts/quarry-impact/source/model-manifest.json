@@ -1,0 +1,135 @@
+[
+  {
+    "file": "public/models/coupe.glb",
+    "bytes": 11355504,
+    "sha256": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea",
+    "source": "Car Concept / Blender adaptation and refinement",
+    "license": "CC-BY-4.0",
+    "prepared_by": [
+      "tools/prepare_concept.py",
+      "tools/refine_cars.py"
+    ],
+    "details": "source/vehicle-refinement-manifest.json",
+    "detail_manifest": "source/coupe-detail-manifest.json"
+  },
+  {
+    "file": "public/models/fir-medium-a.glb",
+    "bytes": 20696920,
+    "sha256": "638aea52e2e1da1a476616a186342206ce608fdc21ad0f7b0804890f3799186d",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "license": "CC0-1.0",
+    "source_manifest": "source/reference/fir_sapling_medium/manifest.json",
+    "details": "source/models/fir-medium-lod.json"
+  },
+  {
+    "file": "public/models/fir-medium-b.glb",
+    "bytes": 19020864,
+    "sha256": "9291b31eb96caa2b81ffd734c9460653b4b47d8ea817a47a91342d8b24d20d03",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "license": "CC0-1.0",
+    "source_manifest": "source/reference/fir_sapling_medium/manifest.json",
+    "details": "source/models/fir-medium-lod.json"
+  },
+  {
+    "file": "public/models/fir-medium-c.glb",
+    "bytes": 19074188,
+    "sha256": "bd61e04351aad10b78d765cdb45bdebdcc2cacf3b8613d20d0861225ba603e8d",
+    "source": "https://polyhaven.com/a/fir_sapling_medium",
+    "license": "CC0-1.0",
+    "source_manifest": "source/reference/fir_sapling_medium/manifest.json",
+    "details": "source/models/fir-medium-lod.json"
+  },
+  {
+    "file": "public/models/fir-saplings-lod.glb",
+    "bytes": 5691816,
+    "sha256": "9bf314948e5866112974aee906741d877d975232f782eae95343f8604726d515",
+    "source": "https://polyhaven.com/a/fir_sapling",
+    "license": "CC0-1.0",
+    "source_manifest": "source/reference/fir_sapling/manifest.json",
+    "details": "source/models/fir-saplings-lod.json"
+  },
+  {
+    "file": "public/models/hatch.glb",
+    "bytes": 9686488,
+    "sha256": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
+    "source": "Car Concept / Blender adaptation and refinement",
+    "license": "CC-BY-4.0",
+    "prepared_by": [
+      "tools/prepare_concept.py",
+      "tools/refine_cars.py"
+    ],
+    "details": "source/vehicle-refinement-manifest.json"
+  },
+  {
+    "file": "public/models/hemlock.webp",
+    "bytes": 171084,
+    "sha256": "04a9aa8be677b859ffc686347a512fa59e8733ae538d5521639a8564bad6c86f",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": false,
+    "provenance_status": "Generated tree reference documented in First Light README and ART-PIPELINE; original account terms, not CC0."
+  },
+  {
+    "file": "public/models/maple.webp",
+    "bytes": 247604,
+    "sha256": "308f7959b7bb6ad04d2e660f94811d7b5568265947da0c7f650913949e01f1af",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": false,
+    "provenance_status": "Generated tree reference documented in First Light README and ART-PIPELINE; original account terms, not CC0."
+  },
+  {
+    "file": "public/models/pine.webp",
+    "bytes": 155192,
+    "sha256": "7ce3d246da5e4b26e6453e90f3932d36fe224cb6f15292c941676d03066641a7",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": true,
+    "provenance_status": "Generated tree reference documented in First Light README and ART-PIPELINE; original account terms, not CC0."
+  },
+  {
+    "file": "public/models/pine3d.glb",
+    "bytes": 181604,
+    "sha256": "37c678546de6a69af6b4a4a9782d4236461f9989fce44fc72b7e3869f99203d5",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": false,
+    "provenance_status": "Original seeded Blender geometry documented in First Light source and asset credits."
+  },
+  {
+    "file": "public/models/rocks-lod.glb",
+    "bytes": 2044060,
+    "sha256": "9ff6999370677ea8fb1ef524b8caf601e041016afd146ee9f3c675e8775c80e7",
+    "source": "Poly Haven / rock_moss_set_01"
+  },
+  {
+    "file": "public/models/sedan.glb",
+    "bytes": 9666464,
+    "sha256": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
+    "source": "Car Concept / Blender adaptation and refinement",
+    "license": "CC-BY-4.0",
+    "prepared_by": [
+      "tools/prepare_concept.py",
+      "tools/refine_cars.py"
+    ],
+    "details": "source/vehicle-refinement-manifest.json"
+  },
+  {
+    "file": "public/models/spruce.webp",
+    "bytes": 154904,
+    "sha256": "9ed33ca58f765b586ecca4ef5bd9f163d400f6f744dc8c09c8e0fa82723df5f2",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": true,
+    "provenance_status": "Generated tree reference documented in First Light README and ART-PIPELINE; original account terms, not CC0."
+  },
+  {
+    "file": "public/models/spruce3d.glb",
+    "bytes": 244084,
+    "sha256": "26f516877e2697486449e22583e9a21e1ec2f2de51118c5335a8756e81de467f",
+    "source": "User First Light project",
+    "provenance": "public/licenses/First-Light-PROVENANCE.md",
+    "runtime_used": false,
+    "provenance_status": "Original seeded Blender geometry documented in First Light source and asset credits."
+  }
+]

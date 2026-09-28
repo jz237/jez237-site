@@ -1,0 +1,61 @@
+{
+  "source": "KhronosGroup/glTF-Sample-Assets CarConcept, CC-BY-4.0; see public/licenses/CarConcept-LICENSE.md",
+  "prepared_by": "tools/refine_cars.py after tools/prepare_concept.py",
+  "focused_export": "blender --background --python tools/refine_cars.py -- --kind coupe; unselected GLB and refined Blender hashes are verified unchanged",
+  "editable_files": "source/models-refined/*.blend",
+  "changes": [
+    "Split hood, fenders, front and rear bumpers and rear quarters into independently damageable panels",
+    "Add 1.2mm inner sheet and boundary rims while preserving original exterior corner normals and UVs",
+    "Replace inherited Engine cuboid with recessed engine bay, thin radiator core and fins, bowed bumper beam, hollow crash rails, mounting plates and fasteners",
+    "Route continuous cooling hoses, intake runners and wiring; add battery connections, coolant cap, strut braces and underfloor exhaust",
+    "Scale original crash assembly for each prepared wheelbase, width and height; reuse the same four material groups without new textures",
+    "Reduce hidden wiper, rim, brake-pad and seat-frame density",
+    "Repair window gasket and rear-glass classification"
+  ],
+  "coupe_only_changes": [
+    "Construct a rounded rear license-plate recess with explicit clipped opening, bevel loops and flat pocket floor; retain untouched exterior normals and vertex identities",
+    "Raise and widen the existing unbranded plate into the pocket with body-mounted tray, brackets, fasteners and geometry-only fictional lettering",
+    "Add concealed rear closure backplate, reinforcement ribs, bumper beam and crash mounts",
+    "Add hollow rolled exhaust outlets with routed connections, shortening inherited exhaust ends to eliminate duplicate visible stubs",
+    "Add small optical separators inside the existing rear lamps; reuse existing Structure materials and all embedded images",
+    "Preserve original lower bumper and its detach ID, wheel pivots, glass and forward panel geometry; no global normal or UV changes"
+  ],
+  "files": [
+    {
+      "path": "public/models/coupe.glb",
+      "sha256": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea",
+      "bytes": 11355504,
+      "triangles": 216893,
+      "detail_manifest": "source/coupe-detail-manifest.json"
+    },
+    {
+      "path": "public/models/sedan.glb",
+      "sha256": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
+      "bytes": 9666464,
+      "triangles": 188371
+    },
+    {
+      "path": "public/models/hatch.glb",
+      "sha256": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
+      "bytes": 9686488,
+      "triangles": 188551
+    }
+  ],
+  "editable_file_records": [
+    {
+      "path": "source/models-refined/coupe.blend",
+      "sha256": "712ec81be836d6c650d3a0aec8325fa2fcf05e03c0b85e85179890e4bd707380",
+      "bytes": 10301127
+    },
+    {
+      "path": "source/models-refined/sedan.blend",
+      "sha256": "141b24a87ad4884606caadb9c843b5e97eef667f4fab8ce3414335635115eeed",
+      "bytes": 11760240
+    },
+    {
+      "path": "source/models-refined/hatch.blend",
+      "sha256": "5a97f841b03f327565988b2613466295519f89270d23468d0aab14935a53d338",
+      "bytes": 14090096
+    }
+  ]
+}
