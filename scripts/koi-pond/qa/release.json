@@ -1,8 +1,9 @@
 {
   "date": "2026-09-28",
+  "revision": "Expanded woodland, articulated koi and living water",
   "scope": "GitHub and jez237 review preview only; not Hidden Reef production",
   "checks": {
-    "nodeTests": 7,
+    "nodeTests": 8,
     "productionBuild": true,
     "desktopViewport": "1280x720",
     "phoneViewport": "390x844",
@@ -12,15 +13,17 @@
     "cameraViews": true,
     "pauseResume": true,
     "lighting": true,
-    "qualityOverride": true,
-    "waterLabWarmNoAeration24h": "1.9 mg/L oxygen; explanatory warning shown",
-    "waterLabReset": true
+    "waterLabAdvance": true,
+    "fixedLengthSpine": true,
+    "steadyHead": true,
+    "travelingWave": true,
+    "renderingObservedFPS": "34\u201360 (local browser, full water detail; device-dependent)"
   },
   "files": {
-    "index.html": "37d513b1c08befdf657b6e7e47feabc73e55e6cf0a7939810a6d225e74b14cdf",
-    "LICENSES.txt": "c986082f3472bf14da78aee57ae91c800c7053a15eb0f06776a33448074d0ef5",
+    "index.html": "95fd99875f25183bad47451de84408ddddde2d360d020d00f90e6f658238fb5a",
+    "LICENSES.txt": "1da0c42e8c27b80fc957b904d5cc46d7873ee1564f0f8e5be9acb3fa3523a54d",
     "assets/index-b4YtYWYY.css": "e07355e780c0d0ec20f02453957e96cdf0ef21428fc7eff82840b5021f16dd6c",
-    "assets/index-Cjk4vdIg.js": "ed77baa2391acb0a0be3a583e21996551bbce63e0b9b3b30a6d49af76ba3fc7e",
+    "assets/index-LYGc_L8b.js": "d18434ad3bf030e75401aa8f8666e04055a2c1b6e20d52e4fcd5f901c1eae0b9",
     "models/asagi.png": "47e81a1cc310f7c6ccff485331442d089cf5d0a50b44958af47d75e712bc36a6",
     "models/kohaku.png": "81b5021a13c7edc9a524c38f6fe53f21176c92d94683077dc6d9b329f8cf9fd4",
     "models/koi-scales.png": "ff23ff6835e14c71fcf87d0cdac3b045a45c0f4c60a635cf570120dd9a7b06b7",
@@ -29,6 +32,19 @@
     "models/ogon.png": "ef44e1eab85ea4f08fb635af1af29d55388b29ae33c8712e5c144251cd564b6b",
     "models/sanke.png": "41e9b5e99775547ccb0fbef4ed9b29d9d58b22b47a07191598eb86d06323d504",
     "models/shiro.png": "15ced053c172109c2ab7b9bd2edde1b3682c09a9780df52e6e3be7f7b6aed1c7",
-    "models/showa.png": "fc3d8d01a3191bc45bcb7b7bb4ec65b34f131e3f101e467a0ac743d8a63cd540"
+    "models/showa.png": "fc3d8d01a3191bc45bcb7b7bb4ec65b34f131e3f101e467a0ac743d8a63cd540",
+    "textures/bark_willow_diffuse.jpg": "c7de3072c2320934a3d9f5bc6c9cb58819952c0b3bd04f4e71b24cf89dbb6ad6",
+    "textures/bark_willow_nor_gl.jpg": "9d5a771315a85c2d890526af9826843e7967ed3330da49bef7e86c3e5a6c0b6a",
+    "textures/bark_willow_rough.jpg": "4de7f44cbd2c787555a8504ca35fe2f036a33e4d180d0ee9b17d3c20380ac965",
+    "textures/forrest_ground_01_diffuse.jpg": "3dd6875cb3908e022a3c45ebbffa5e84c670ff2691fbbb6dc9ea4bff88523800",
+    "textures/forrest_ground_01_nor_gl.jpg": "32528a7cdee962cc0b248ee4023a74d0df175737ea90e1eb425122351e0bdab4",
+    "textures/forrest_ground_01_rough.jpg": "30d8b56a03d7b12da16f58011b675662a40e58e1cdc768119a5f03968140058c",
+    "textures/gravelly_sand_diffuse.jpg": "bc1624594ce807f04eaa023f6f9df93ffefd20904570cd46ca302b954ef80eec",
+    "textures/gravelly_sand_nor_gl.jpg": "7ccb08525d46520a6d00262f4f73483b3569cc6cbc2908da069f033290d1c2f8",
+    "textures/gravelly_sand_rough.jpg": "57188f62c17950f96a5f2b8ce11bc9776e2b5bff8eff5c903402d89553ba3654",
+    "textures/mossy_rock_diffuse.jpg": "4dbf37f1b0465c9c8914213163923be159716f5b97fb6946437b6c5e143ef540",
+    "textures/mossy_rock_nor_gl.jpg": "232cdd6a9fdfd01bb8bb1f8f604c53dbca79fa0d3d7995edf85c9945757aa8df",
+    "textures/mossy_rock_rough.jpg": "0a18bdeb08444b730170b0477f13940ce6cd4d82d06137df661f96d1e2a6a66e",
+    "textures/sources.json": "d117d38caa9c75017e900fda2c39362439c5d03283de00de146767d2cf1651eb"
   }
 }

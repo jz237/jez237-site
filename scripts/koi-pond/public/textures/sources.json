@@ -1,0 +1,86 @@
+[
+  {
+    "file": "forrest_ground_01_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_nor_gl_1k.jpg",
+    "asset": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "mossy_rock_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_nor_gl_1k.jpg",
+    "asset": "https://polyhaven.com/a/mossy_rock",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "bark_willow_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_nor_gl_1k.jpg",
+    "asset": "https://polyhaven.com/a/bark_willow",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "forrest_ground_01_diffuse.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_diff_1k.jpg",
+    "asset": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "forrest_ground_01_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_rough_1k.jpg",
+    "asset": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "mossy_rock_diffuse.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_diff_1k.jpg",
+    "asset": "https://polyhaven.com/a/mossy_rock",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "mossy_rock_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_rough_1k.jpg",
+    "asset": "https://polyhaven.com/a/mossy_rock",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "bark_willow_diffuse.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_diff_1k.jpg",
+    "asset": "https://polyhaven.com/a/bark_willow",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "file": "bark_willow_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_willow/bark_willow_rough_1k.jpg",
+    "asset": "https://polyhaven.com/a/bark_willow",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://polyhaven.com/license"
+  },
+  {
+    "licenseUrl": "https://polyhaven.com/license",
+    "file": "gravelly_sand_diffuse.jpg",
+    "asset": "https://polyhaven.com/a/gravelly_sand",
+    "license": "CC0 1.0",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravelly_sand/gravelly_sand_diff_1k.jpg"
+  },
+  {
+    "licenseUrl": "https://polyhaven.com/license",
+    "file": "gravelly_sand_nor_gl.jpg",
+    "asset": "https://polyhaven.com/a/gravelly_sand",
+    "license": "CC0 1.0",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravelly_sand/gravelly_sand_nor_gl_1k.jpg"
+  },
+  {
+    "licenseUrl": "https://polyhaven.com/license",
+    "file": "gravelly_sand_rough.jpg",
+    "asset": "https://polyhaven.com/a/gravelly_sand",
+    "license": "CC0 1.0",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravelly_sand/gravelly_sand_rough_1k.jpg"
+  }
+]

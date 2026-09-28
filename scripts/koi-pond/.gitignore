@@ -2,3 +2,7 @@ node_modules/
 dist/
 *.blend1
 qa/*.png
+
+qa/v1-source/
+qa/varieties.txt
+qa/new-motion.txt
