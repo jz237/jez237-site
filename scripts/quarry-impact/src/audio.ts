@@ -1,3 +1,4 @@
+import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
 import * as T from 'three';
@@ -105,7 +106,10 @@ export class Sound {
     this.loops.clear();
     this.history.clear();
   }
-  shot(id: string, p: T.Vector3, volume = 1) {
+  impact(damage:number,p:T.Vector3,glass=false,debris=false) {
+    for(const layer of impactSoundLayers(damage,glass,debris))this.shot(layer.id,p,layer.volume,layer);
+  }
+  shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,
       buf = this.buffers.get(id);
@@ -116,7 +120,7 @@ export class Sound {
     if (this.lastShot.size > 200) this.lastShot.clear();
     const source = c.createBufferSource();
     source.buffer = buf;
-    source.playbackRate.value = 0.93 + Math.random() * 0.14;
+    source.playbackRate.value = (options?.rate ?? 1) * (0.96 + Math.random() * 0.08);
     const gain = c.createGain();
     gain.gain.value = Math.min(1, volume);
     const pan = c.createPanner();
@@ -134,7 +138,13 @@ export class Sound {
       gain.disconnect();
       pan.disconnect();
     };
-    source.start();
+    if(options) {
+      const at=c.currentTime+options.delay,duration=Math.min(options.duration,buf.duration/source.playbackRate.value);
+      gain.gain.setValueAtTime(Math.min(1,volume),at);
+      gain.gain.setValueAtTime(Math.min(1,volume),at+Math.max(.02,duration-.12));
+      gain.gain.exponentialRampToValueAtTime(.001,at+duration);
+      source.start(at);source.stop(at+duration);
+    }else source.start();
   }
   update(cars: Vehicle[], camera: T.Camera, dt: number) {
     if (!this.ready) return;

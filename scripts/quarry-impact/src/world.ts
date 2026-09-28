@@ -1,3 +1,4 @@
+import {loadWorkyard, workyardFences} from './scenery-workyard';
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, overlapsQuarryWestWall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import { DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
@@ -89,6 +90,7 @@ export class Quarry {
   road: T.Mesh;
   checkpoint = new T.Group();
   sun: T.DirectionalLight;
+  private workyardLODs: T.LOD[] = [];
   private cutLODs: T.LOD[] = [];
   private roadsideLODs: T.LOD[] = [];
   private extensionLODs: T.LOD[] = [];
@@ -104,9 +106,9 @@ export class Quarry {
     this.collisionPhysics=createQuarryPhysics(R,physics,false);
     this.derbyColliders=this.collisionPhysics.walls;
     scene.add(this.scenery, this.derbyWalls, this.checkpoint);
-    scene.fog = new T.FogExp2(0xb3bbc0, 0.0016);
-    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.18));
-    this.sun = new T.DirectionalLight(0xfff1dc, 3);
+    scene.fog = new T.FogExp2(0xa5b1bb, 0.0011);
+    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.8));
+    this.sun = new T.DirectionalLight(0xfff1dc, 2.65);
     this.sun.position.copy(DAYLIGHT_DIRECTION).multiplyScalar(DAYLIGHT_DISTANCE);
     this.sun.castShadow = true;
     Object.assign(this.sun.shadow.camera, {
@@ -377,183 +379,8 @@ export class Quarry {
       );
   }
   industrial() {
-    const worksStart=this.scenery.children.length;
-    const metal = weatheredMetal(0x555f59);
-    const yellow = weatheredMetal(0xc29e48);
-    const arm = texture('cladding_arm', 1);
-    const cladding = new T.MeshStandardMaterial({
-      color: 0xb4bab2, map: texture('cladding_diff', 1, true),
-      normalMap: texture('cladding_nor_gl', 1), normalScale: new T.Vector2(.65, .65),
-      roughness: 1, roughnessMap: arm, metalness: .65, metalnessMap: arm,
-      aoMap: arm, aoMapIntensity: .4,
-    });
-    const rubber = new T.MeshStandardMaterial({
-      color: 0x222727,
-      roughness: 0.95,
-    });
-    claddingUV(this.box(
-      new T.Vector3(-72, 4, -39),
-      new T.Vector3(21, 8, 13),
-      cladding,
-      this.scenery,
-      true,
-    ));
-    // Sheet joints have real relief; the smaller corrugations use the scan.
-    for (let i = 0; i < 16; i++)
-      this.box(
-        new T.Vector3(-82.2 + i * 1.35, 4, -32.47),
-        new T.Vector3(0.025, 7.8, 0.055),
-        metal,
-      );
-    this.box(new T.Vector3(-72, 8.2, -39), new T.Vector3(22, 0.4, 14), metal);
-    this.box(new T.Vector3(-72, 2, -32.3), new T.Vector3(6, 4, 0.15), rubber);
-    const glass = new T.MeshPhysicalMaterial({ color:0x769291, metalness:.3, roughness:.19, clearcoat:.65 });
-    for (const x of [-79.5,-76.5,-67.5,-64.5]) {
-      this.box(new T.Vector3(x,5.8,-32.30),new T.Vector3(2.2,1.35,.07),rubber);
-      this.box(new T.Vector3(x,5.8,-32.24),new T.Vector3(1.97,1.13,.05),glass);
-      this.box(new T.Vector3(x,5.8,-32.18),new T.Vector3(.07,1.2,.04),metal);
-    }
-    for(let i=0;i<15;i++) this.box(new T.Vector3(-72,.2+i*.255,-32.18),new T.Vector3(5.85,.045,.12),metal);
-    const roof=claddingUV(this.box(new T.Vector3(-72,8.75,-35.65),new T.Vector3(22.4,.15,7.1),cladding));
-    roof.rotation.x=.15;
-    const rearRoof=claddingUV(this.box(new T.Vector3(-72,8.75,-42.35),new T.Vector3(22.4,.15,7.1),cladding));
-    rearRoof.rotation.x=-.15;
-    for(const x of [-82.7,-61.3]) {
-      this.box(new T.Vector3(x,4,-31.98),new T.Vector3(.15,8,.15),metal);
-      this.box(new T.Vector3(x,.22,-31.7),new T.Vector3(.17,.17,.7),metal);
-    }
-    this.box(new T.Vector3(-72,8.1,-31.7),new T.Vector3(22.6,.22,.22),metal);
-    // Exposed conveyor truss feeds the loading towers and breaks up the blocky silhouette.
-    const conveyor=new T.Group();conveyor.position.set(-80,5.5,-56);conveyor.rotation.z=-.18;this.scenery.add(conveyor);
-    this.box(new T.Vector3(0,0,0),new T.Vector3(24,.15,1.7),rubber,conveyor);
-    for(const z of [-.94,.94]) {
-      for(const y of [-.6,.15])this.box(new T.Vector3(0,y,z),new T.Vector3(25,.09,.09),metal,conveyor);
-      for(let i=0;i<12;i++) {
-        const strut=this.box(new T.Vector3(-11+i*2,-.23,z),new T.Vector3(.06,2.1,.06),metal,conveyor);
-        strut.rotation.z=i%2===0?1.19:-1.19;
-      }
-    }
-    for(const x of [-89,-72])for(const z of [-57.3,-54.7])this.box(new T.Vector3(x,2.2,z),new T.Vector3(.15,4.4,.15),metal);
-    this.sign('BLACKRIDGE WORKS', -72, -31, 0, 0.85);
-    for (let i = 0; i < 3; i++) {
-      const x = -92 + i * 8,
-        z = -50;
-      const section = (top: number, bottom: number, height: number, y: number) => {
-        const mesh = new T.Mesh(new T.CylinderGeometry(top, bottom, height, 32), metal);
-        mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true;
-        this.scenery.add(mesh);
-      };
-      // Hopper, rolled shell and shallow roof stay inside the original silo
-      // proxy (radius 2.7, y 2.5–15.5); driving collision geometry is unchanged.
-      section(.58, .58, .5, 2.75);
-      section(2.66, .58, 2.5, 4.25);
-      section(2.66, 2.66, 9, 10);
-      section(.48, 2.66, 1, 15);
-      for (const y of [5.5, 8.5, 11.5, 14.5]) {
-        const ring = new T.Mesh(new T.TorusGeometry(2.66, .035, 5, 32), metal);
-        ring.rotation.x = Math.PI / 2; ring.position.set(x, y, z);
-        ring.castShadow = true; ring.receiveShadow = true; this.scenery.add(ring);
-      }
-      for (const dx of [-1.72, 1.72]) for (const dz of [-1.72, 1.72]) {
-        this.box(
-          new T.Vector3(x + dx, 2.8, z + dz),
-          new T.Vector3(0.2, 5.6, 0.2),
-          metal,
-        );
-        this.box(new T.Vector3(x + dx, .1, z + dz), new T.Vector3(.42, .2, .42), metal);
-      }
-      for (const dx of [-.3, .3])
-        this.box(new T.Vector3(x + dx, 8.8, z + 2.63), new T.Vector3(.045, 11.4, .045), metal);
-      for (let rung = 0; rung < 36; rung++)
-        this.box(new T.Vector3(x, 3.3 + rung * .31, z + 2.63), new T.Vector3(.64, .035, .06), metal);
-      for (const y of [5.5, 8.5, 11.5, 14.2])
-        this.box(new T.Vector3(x, y, z + 2.57), new T.Vector3(.73, .1, .14), metal);
-    }
-    for(const structure of this.scenery.children.slice(worksStart))structure.position.add(WORKS_OFFSET);
-    // Parked articulated excavator, tracked base, hydraulic boom, bucket and cab glazing.
-    const ex = new T.Group();
-    ex.position.set(62, terrainHeight(62, -42), -42);
-    ex.rotation.y = -0.8;
-    this.scenery.add(ex);
-    for (const x of [-1.6, 1.6]) {
-      this.box(new T.Vector3(x, 0.6, 0), new T.Vector3(1, 1, 5.2), rubber, ex);
-      for (let j = 0; j < 18; j++)
-        this.box(
-          new T.Vector3(x, 1.12, -2.5 + j * 0.29),
-          new T.Vector3(1.05, 0.08, 0.15),
-          metal,
-          ex,
-        );
-    }
-    this.box(
-      new T.Vector3(0, 1.6, 0),
-      new T.Vector3(3.3, 1.2, 3.8),
-      yellow,
-      ex,
-    );
-    this.box(
-      new T.Vector3(-0.8, 3, -0.3),
-      new T.Vector3(1.6, 1.8, 2),
-      metal,
-      ex,
-    );
-    this.box(
-      new T.Vector3(-0.8, 3.2, 0.72),
-      new T.Vector3(1.3, 1.2, 0.025),
-      new T.MeshPhysicalMaterial({
-        color: 0x809ba2,
-        metalness: 0.6,
-        roughness: 0.16,
-      }),
-      ex,
-    );
-    for (const [a, b, width] of [
-      [new T.Vector3(0.5, 2, 1), new T.Vector3(0.5, 7, 4), 0.65],
-      [new T.Vector3(0.5, 7, 4), new T.Vector3(0.5, 3, 8), 0.5],
-    ] as [T.Vector3, T.Vector3, number][]) {
-      const d = b.clone().sub(a);
-      const beam = new T.Mesh(
-        new T.BoxGeometry(width, d.length(), width),
-        yellow,
-      );
-      beam.position.copy(a).add(b).multiplyScalar(0.5);
-      beam.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.normalize());
-      ex.add(beam);
-      const piston = new T.Mesh(
-        new T.CylinderGeometry(0.08, 0.08, d.length() + 3, 12),
-        metal,
-      );
-      piston.position.copy(beam.position).add(new T.Vector3(0.35, 0, 0));
-      piston.quaternion.copy(beam.quaternion);
-      ex.add(piston);
-    }
-    this.box(
-      new T.Vector3(0.5, 2.5, 8),
-      new T.Vector3(1.7, 1.3, 1.5),
-      metal,
-      ex,
-    );
-    for (let i = 0; i < 5; i++) {
-      const x = -63 + i * 7,
-        z = 59;
-      this.box(
-        new T.Vector3(x, 1.3, z),
-        new T.Vector3(5.8, 2.6, 2.5),
-        new T.MeshStandardMaterial({
-          color: [0x59665d, 0x8d5947, 0x626d73][i % 3],
-          metalness: 0.5,
-          roughness: 0.8,
-        }),
-        this.scenery,
-        true,
-      );
-      for (let n = 0; n < 18; n++)
-        this.box(
-          new T.Vector3(x - 2.8 + n * 0.32, 1.3, z + 1.27),
-          new T.Vector3(0.07, 2.5, 0.05),
-          metal,
-        );
-    }
+    // Retain the original freestanding works sign and its collision proxy.
+    this.sign('BLACKRIDGE WORKS', -54, -31, 0, .85);
   }
   playground() {
     const concrete = pbr('rock', 1, { color: 0x777971 });
@@ -617,40 +444,9 @@ export class Quarry {
       wet.scale.set(1,p.scale.y,1);this.scenery.add(wet);
     }
   }
-  fences() {
-    const metal = new T.MeshStandardMaterial({
-      color: 0x6b716b,
-      metalness: 0.6,
-      roughness: 0.7,
-    });
-    const positions: number[] = [];
-    for (let i = 0; i < 100; i++) {
-      const a = (i / 100) * Math.PI * 2,
-        r = 50;
-      const x = Math.sin(a) * r,
-        z = Math.cos(a) * r;
-      if (i > 22 && i < 30) continue;
-      this.box(new T.Vector3(x, 2, z), new T.Vector3(0.07, 4, 0.07), metal);
-      const b = ((i + 1) / 100) * Math.PI * 2;
-      for (let j = 0; j < 4; j++) {
-        const h = 1.5 + j * 0.6;
-        positions.push(x, h, z, Math.sin(b) * r, h, Math.cos(b) * r);
-      }
-    }
-    const g = new T.BufferGeometry();
-    g.setAttribute('position', new T.Float32BufferAttribute(positions, 3));
-    this.scenery.add(
-      new T.LineSegments(
-        g,
-        new T.LineBasicMaterial({
-          color: 0x69736e,
-          transparent: true,
-          opacity: 0.5,
-        }),
-      ),
-    );
-  }
+  fences() { workyardFences(this.scenery); }
   async trees() {
+    this.workyardLODs = await loadWorkyard(this.scenery, this.derbyWalls);
     await this.scannedRocks();
     await forestScenery(this.scenery, rand);
   }
@@ -708,6 +504,7 @@ export class Quarry {
   update(camera?: T.Camera) {
     if(camera) {
       updateForestView(camera);
+      for (const lod of this.workyardLODs) lod.update(camera);
       for (const lod of this.cutLODs) lod.update(camera);
       for (const lod of this.roadsideLODs) lod.update(camera);
       for (const lod of this.extensionLODs) lod.update(camera);

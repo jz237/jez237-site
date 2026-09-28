@@ -1,3 +1,4 @@
+import {restoreWorkyardBytes} from './workyard-invariants';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
@@ -9,6 +10,7 @@ const revision = JSON.parse(read('source/coupe-realism-revision.json').toString(
  * authorized revision, then undo only its recorded rendering hooks/model swap.
  * coupe-realism.test.ts independently tests the actual new asset and damage. */
 export function restoreCoupeBytes(file:string, bytes:Buffer) {
+  bytes=restoreWorkyardBytes(file,bytes);
   const entry=revision.files[file];
   if(!entry || hash(bytes)===entry.before) return bytes;
   assert.equal(hash(bytes),entry.after,file+': current visual revision has unreviewed edits');

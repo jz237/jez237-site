@@ -1,3 +1,4 @@
+import {restoreWorkyardBytes} from './workyard-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -13,6 +14,7 @@ export const westArrayHash=(a:ArrayBufferView)=>westHash(new Uint8Array(a.buffer
 const edits=JSON.parse(read('source/west-wall-source-edits.json').toString());
 /** Reverse only declared integration edits and require the frozen full-file SHA. */
 export function stripWestSource(file:string,bytes:Buffer){
+  if(file==='src/world.ts'||file==='src/main.ts')bytes=restoreWorkyardBytes(file,bytes);
   if(!edits[file]||!bytes.includes(Buffer.from('WestWall'))&&!bytes.includes(Buffer.from('westWall')))return bytes;
   let source=bytes.toString();
   for(const {before,after} of [...edits[file]].reverse()){

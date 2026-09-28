@@ -7,12 +7,12 @@ export class QuarryAO extends GTAOPass {
   resolutionScale = 0.65;
   constructor(scene: T.Scene, camera: T.PerspectiveCamera) {
     super(scene, camera, 512, 512);
-    this.updateGtaoMaterial({ radius: 1.4, distanceExponent: 1.5,
+    this.updateGtaoMaterial({ radius: 1.05, distanceExponent: 1.5,
       thickness: 0.65, distanceFallOff: 0.7, scale: 1, samples: 12,
       screenSpaceRadius: false });
     this.updatePdMaterial({ radius: 5, lumaPhi: 8, depthPhi: 1,
       normalPhi: 4, samples: 12, rings: 2 });
-    this.blendIntensity = 0.75;
+    this.blendIntensity = 0.68;
   }
   override setSize(width: number, height: number) {
     super.setSize(Math.max(1, Math.round(width * (this.resolutionScale ?? 0.65))),

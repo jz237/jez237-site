@@ -1,4 +1,5 @@
 /** Exercise the real Quarry constructor without WebGL or image decoding. */
+import {restoreWorkyardBytes} from '../tests/workyard-invariants';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -34,12 +35,13 @@ function materialInfo(m:T.Material){
 function geometryInfo(g:T.BufferGeometry){return {type:g.type,attributes:Object.fromEntries(Object.entries(g.attributes).map(([k,v])=>[k,{count:v.count,itemSize:v.itemSize,normalized:v.normalized,sha256:typedHash(v.array)}])),
   indices:g.index?{count:g.index.count,sha256:typedHash(g.index.array)}:null,groups:g.groups,drawRange:{start:g.drawRange.start,count:Number.isFinite(g.drawRange.count)?g.drawRange.count:null}};}
 
-export async function captureArenaFloor(){
-  const worldSource=arenaRead('src/world.ts').toString();
+export async function captureArenaFloor(options:{historicalWorkyard?:boolean}={}){
+  const bytes=arenaRead('src/world.ts');
+  const worldSource=(options.historicalWorkyard?restoreWorkyardBytes('src/world.ts',bytes):bytes).toString();
   if(!worldSource.includes('let seed = 9311;')||!worldSource.includes('return seed / 4294967296;'))throw new Error('RNG audit hook no longer matches the real world source');
   const instrumented=worldSource.replace('let seed = 9311;','let seed = 9311; let __arenaAuditCalls=0;').replace('return seed / 4294967296;','__arenaAuditCalls++; return seed / 4294967296;')+'\nexport const __arenaAuditState=()=>({seed,calls:__arenaAuditCalls});\n';
   const bundled=await build({stdin:{contents:instrumented,loader:'ts',sourcefile:'world.ts',resolveDir:path.join(root,'src')},bundle:true,platform:'node',format:'esm',packages:'external',write:false,logLevel:'silent'});
-  const moduleFile=path.join(root,'outputs','.arena-audit-world.mjs');fs.mkdirSync(path.dirname(moduleFile),{recursive:true});fs.writeFileSync(moduleFile,bundled.outputFiles[0].contents);
+  const moduleFile=path.join(root,'outputs',`.arena-audit-world-${process.pid}-${options.historicalWorkyard?'historical':'current'}.mjs`);fs.mkdirSync(path.dirname(moduleFile),{recursive:true});fs.writeFileSync(moduleFile,bundled.outputFiles[0].contents);
   const {Quarry,__arenaAuditState}=await import(pathToFileURL(moduleFile).href+'?audit='+Date.now());
   const originalDocument=globalThis.document,originalTextureLoad=T.TextureLoader.prototype.load,textures:T.Texture[]=[];
   const makeCanvas=()=>{

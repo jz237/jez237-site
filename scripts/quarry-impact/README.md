@@ -2,6 +2,8 @@
 
 A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 35 locally bundled ElevenLabs sound effects.
 
+The latest workyard pass adds detailed Blender industrial props, photographic worn metal and concrete, foundation dirt and track marks, clearer shaded materials, and restrained directional crash feedback. The editable assets and their provenance are included. See `source/workyard/README.md` for the scope and `VALIDATION.md` for measured results. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
+
 ## Play
 
 [Play Quarry Impact](https://jez237.com/games/2026-09-27/quarry-impact/) in a desktop browser. It is listed under **Unfinished** on the [games page](https://jez237.com/games/).

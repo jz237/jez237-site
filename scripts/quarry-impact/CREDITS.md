@@ -117,3 +117,15 @@ All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from ori
 - Third-party runtime license texts are bundled under `public/licenses/` and copied into the static build.
 
 Wreckfest 2 served only as a gameplay and fidelity reference. No Wreckfest branding, models, textures, code or audio is bundled.
+
+## Industrial workyard detail
+
+The containers, tracked excavator, conveyor, workshop, silos and worn concrete barriers are original Blender geometry, authored with `tools/author-workyard.py`. Editable source and export hashes are in `source/models/quarry-workyard*`. The fence uses original rounded fittings and a filtered chain-link shader. Terrain dressing reuses the credited gravel and scree photographs.
+
+New photographic materials, all **CC0 1.0** from Poly Haven:
+
+- [Container Side](https://polyhaven.com/a/container_side), **Dimitrios Savva**, 1.94 m scale.
+- [Rusty Painted Metal](https://polyhaven.com/a/rusty_painted_metal), **Amal Kumar**, 2.2 m scale.
+- [Concrete Layers 02](https://polyhaven.com/a/concrete_layers_02), **Rob Tuytel**, 2 m scale.
+
+The nine original 2k JPEGs are bundled locally with their source URLs, official checksums and local hashes in `public/assets/workyard/manifest.json`; source metadata is retained in `source/workyard/`. Existing cladding maps are reused. The crash sound refinement reuses the existing ElevenLabs recordings; this update generated no additional audio and incurred no asset purchases.

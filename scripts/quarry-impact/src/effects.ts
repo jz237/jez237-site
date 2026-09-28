@@ -1,3 +1,4 @@
+import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 type Particle = {
@@ -127,6 +128,22 @@ void main(){
       );
       col.multiplyScalar(.8 + Math.random() * .3);
       col.toArray(this.colors, i * 3);
+    }
+  }
+  impact(point:T.Vector3, direction:T.Vector3, damage:number) {
+    if(damage<.8)return;
+    const spark=Math.min(24,Math.max(0,Math.floor((damage-3)*.62)));
+    const start=this.cursor;
+    this.emit(point,spark,1,1.2+Math.min(2,damage*.045));
+    for(let j=start;j<this.cursor;j++){
+      const p=this.particles[j%this.particles.length];p.v.addScaledVector(direction,1.4);p.max=p.life=Math.min(p.life,.36);
+    }
+    const ground=landscapeHeight(point.x,point.z),at=point.clone();
+    if(point.y-ground<1.8)at.y=ground+.10;
+    const dustStart=this.cursor;
+    this.emit(at,Math.min(22,Math.ceil(damage*.58)),0,1.35);
+    for(let j=dustStart;j<this.cursor;j++){
+      const p=this.particles[j%this.particles.length];p.v.addScaledVector(direction,.75);p.v.y=Math.max(.10,Math.min(.65,p.v.y));p.max=p.life=.85+Math.random()*.8;
     }
   }
   mark(p: T.Vector3, yaw: number, length: number) {
