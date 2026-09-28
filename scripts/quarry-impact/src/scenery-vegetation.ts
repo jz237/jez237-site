@@ -5,6 +5,7 @@ import { composeNorthHeadwallBackdrop } from './scenery-north-backdrop';
 import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';
 import * as T from 'three';
 import { dressWestVerge } from './scenery-west-verge';
+import { bankForestCards, addBankForest, dressBankVerges } from './scenery-bank-relief';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { url } from './assets';
 import { trackPoint } from './rules';
@@ -207,8 +208,9 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         }
     }
     const composedCards = composeNorthForestCards(composeNorthHeadwallBackdrop(composeForestBackdrop(originalCards)));
+    const branchCards = bankForestCards(composedCards.filter(p=>!replacesNorthBackdropCard(p.x,p.z))), replacedCards = new Set(branchCards);
     for (const { kind, aspect } of distantSpecies) {
-        const placements = composedCards.filter(p => p.kind === kind && !replacesNorthBackdropCard(p.x, p.z));
+        const placements = composedCards.filter(p => p.kind === kind && !replacesNorthBackdropCard(p.x, p.z) && !replacedCards.has(p));
         const photo = textures.load(url('models/' + kind + '.webp'));
         photo.colorSpace = T.SRGBColorSpace;
         photo.anisotropy = 8;
@@ -268,6 +270,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     for (const variant of ['a', 'b', 'c'])
         northMedium.push(...await scannedForest(parent, 'models/fir-medium-' + variant + '.glb', true));
     const northSaplings = await scannedForest(parent, 'models/fir-saplings-lod.glb', false);
+    addBankForest(parent,branchCards,northMedium);
     const p: number[] = [], colors: number[] = [], idx: number[] = [];
     const addBlade = (x: number, z: number, h: number, a: number, brown: boolean,
         ground = landscapeHeight(x, z), suppressed = false, shade = .7 + random() * .35, width = 1) => {
@@ -303,5 +306,6 @@ export async function forestScenery(parent: T.Group, random: () => number) {
     grasses.receiveShadow = true;
     parent.add(grasses);
     forestLODs.push(...dressWestVerge(parent, northSaplings));
+    forestLODs.push(...dressBankVerges(parent,northSaplings));
     forestLODs.push(...await loadNorthForest(parent, forestMaterials, northSaplings, northMedium));
 }

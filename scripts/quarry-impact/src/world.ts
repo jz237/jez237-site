@@ -1,4 +1,5 @@
 import {loadWorkyard, workyardFences} from './scenery-workyard';
+import { fractureBankGeometry } from './scenery-bank-relief';
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, overlapsQuarryWestWall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
 import { DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
@@ -156,7 +157,8 @@ export class Quarry {
     arena.receiveShadow = true;
     scene.add(arena);
     // Exposed faces share their actual irregular geometry with the physics wall.
-    const cliffGeo = quarryCliffs();
+    const baseCliffGeo = quarryCliffs();
+    const cliffGeo = fractureBankGeometry(baseCliffGeo);baseCliffGeo.dispose();
     rock.side = T.DoubleSide;
     const cliffs = new T.Mesh(cliffGeo, rock);
     cliffs.receiveShadow = true;

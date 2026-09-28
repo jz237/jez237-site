@@ -64,8 +64,10 @@ let mode: Mode = 'derby',
     | 'playing'
     | 'paused'
     | 'result'
+    | 'wrecked'
     | 'inspect' = 'loading';
 let resumeState = 'playing';
+let wreckHold = 0;
 let cars: Vehicle[] = [];
 let elapsed = 0,
   countdown = 3.5,
@@ -156,6 +158,8 @@ function loading(message: string) {
 function menu() {
   if (online?.active) online.disconnect();
   state = 'menu';
+  wreckHold = 0;
+  keys.clear(); testInput = null;
   orbit.enabled = false;
   sound.pause(false);
   quarry.setMode(mode);
@@ -267,6 +271,7 @@ function createCars(attract = false) {
   sound.attach(cars);
 }
 async function start() {
+  wreckHold = 0;
   if(online?.active) {if(online.network.isHost)online.network.start(mode);return;}
   const btn = document.querySelector<HTMLButtonElement>('#start');
   if (btn) {
@@ -456,7 +461,8 @@ function resume() {
   state = resumeState as typeof state;
   if(online?.active && ['playing','countdown'].includes(state))hud();
   if (resumeState === 'menu') menu();
-  sound.pause(false);
+  sound.pause(resumeState === 'wrecked');
+  if (resumeState === 'wrecked') orbit.enabled = true;
   lastFrame = performance.now();
 }
 function applyQuality() {
@@ -673,6 +679,19 @@ function finish(title: string) {
   )
     saved.best[mode] = score;
   persist();
+  if (!online?.active && cars[0].health <= 0) {
+    state = 'wrecked'; wreckHold = 5;
+    keys.clear(); testInput = null; accumulator = 0;
+    for (const car of cars) { car.input = {throttle:0,steer:0,brake:1,handbrake:false}; car.render(1); }
+    const player = cars[0];
+    const offset = new T.Vector3(-4.2, 1.8, 5.2).applyQuaternion(player.currentQ);
+    // Keep the inspection camera above a rolled car, including hood-camera losses.
+    offset.y = 1.8; camera.position.copy(player.current).add(offset);
+    camera.fov = 52; camera.updateProjectionMatrix();
+    orbit.target.copy(player.current); orbit.enabled = true; orbit.update();
+    ui.innerHTML = '<div class="wreck-note"><strong>WRECKED OUT</strong><span>DRAG TO LOOK AROUND &middot; SCROLL TO ZOOM</span><span>RETURNING TO QUARRY IN <b id="wreck-count">5</b></span></div>';
+    return;
+  }
   ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${modes[mode].label} / RESULTS</div><h2>${title}</h2><p>Finished ${rank} of ${cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${mode === 'derby' ? Math.round(cars[0].inflicted) + ' damage inflicted' : formatTime(elapsed + cars[0].penalty) + ' including recovery penalties'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${String(i + 1).padStart(2, '0')} &nbsp; ${isPlayer(c) ? 'YOU' : DEFINITIONS[c.kind].name + ' #' + c.id}</span><span>${mode === 'derby' ? Math.ceil(c.health) + '%' : c.finished ? formatTime(c.finishTime) : 'LAP ' + Math.min(3, c.lap)}</span></div>`).join('')}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
   document.querySelector<HTMLButtonElement>('#again')!.onclick = () => start();
   document.querySelector<HTMLButtonElement>('#back')!.onclick = () => {
@@ -779,7 +798,7 @@ function updateCamera(dt: number) {
   if (!p) return;
   quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
   quarry.sun.target.position.copy(p.root.position);
-  if (state === 'inspect') {
+  if (state === 'inspect' || state === 'wrecked' || state === 'paused' && resumeState === 'wrecked') {
     cameraImpactOffset.set(0,0,0);
     orbit.update();
     return;
@@ -857,8 +876,13 @@ function frame(now: number) {
       step(1 / 60);
       accumulator -= 1 / 60;
     }
-    for (const c of cars) c.render(accumulator / (1 / 60));
+    for (const c of cars) c.render(state === 'wrecked' ? 1 : accumulator / (1 / 60));
     sound.update(cars, camera, dt);
+  }
+  if (state === 'wrecked') {
+    wreckHold = Math.max(0, wreckHold - dt);
+    text('wreck-count', String(Math.ceil(wreckHold)));
+    if (wreckHold === 0) { createCars(true); menu(); }
   }
   updateCamera(dt);
   quarry.update(camera);
@@ -926,15 +950,15 @@ addEventListener('keydown', (e) => {
         '<div class="inspect-note">DRAG TO ORBIT · SCROLL TO ZOOM · I / ESC TO RETURN</div>';
     }
   }
-  keys.add(e.code);
+  if (state === 'playing' || state === 'countdown') keys.add(e.code);
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => {
   keys.clear();online?.network.clearInput();
-  if (['playing', 'countdown'].includes(state)) pause();
+  if (['playing', 'countdown', 'wrecked'].includes(state)) pause();
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && ['playing', 'countdown'].includes(state)) pause();
+  if (document.hidden && ['playing', 'countdown', 'wrecked'].includes(state)) pause();
 });
 addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
@@ -944,7 +968,7 @@ addEventListener('resize', () => {
 });
 canvas.addEventListener('webglcontextlost', (e) => {
   e.preventDefault();
-  if (['playing', 'countdown'].includes(state)) pause();
+  if (['playing', 'countdown', 'wrecked'].includes(state)) pause();
   toast('Graphics context lost. Reload to restore.', 20);
 });
 canvas.addEventListener('webglcontextrestored', () => {
@@ -1099,7 +1123,7 @@ async function boot() {
       const c = cars[id],
         d = new T.Vector3(
           side === 'left' ? -1 : side === 'right' ? 1 : 0,
-          0.1,
+          side === 'roof' ? .55 : 0.1,
           side === 'rear' ? -2 : side === 'front' ? 2 : 0,
         ).applyQuaternion(c.currentQ);
       c.hit(

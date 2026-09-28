@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {bankForestCards} from '../src/scenery-bank-relief';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {assertEastBayEvolution,stripEastBayLayout} from './quarry-east-bay-invariants';
@@ -53,7 +54,12 @@ export function restoreNorthBackdropCards(current:any[]){
   const ids=new Set(northBackdropData().trees.map((t:any)=>t.sourceCardIndex));assert.equal(ids.size,52);
   assert.deepEqual([...ids].sort((a:any,b:any)=>a-b),northBackdropBefore.localCards.map((p:any)=>p.index).sort((a:number,b:number)=>a-b));
   const expected=northBackdropBefore.forest.cards.filter((_:any,index:number)=>!ids.has(index));
-  assert.equal(current.length,332);assert.deepEqual(current,expected,'every remaining photographic card stays byte-identical and in the same order');
+  // The later wreck/scenery revision replaces only its recorded foreground
+  // conifers. Verify that exact filter before reconstructing this milestone.
+  const selected=bankForestCards(expected.map((c:any)=>({kind:c.kind,x:c.matrix[12],z:c.matrix[14],ground:c.matrix[13],height:c.matrix[5],color:c.color} as any)));
+  const removed=new Set(selected.map(c=>c.x+':'+c.z));
+  const remaining=expected.filter((c:any)=>!removed.has(c.matrix[12]+':'+c.matrix[14]));
+  assert.deepEqual(current,remaining,'all cards outside the precise bank foreground replacement remain exact');
   return northBackdropBefore.forest.cards;
 }
 
