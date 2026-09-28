@@ -230,20 +230,6 @@
       font-size: clamp(2.6rem, 7vw, 5.6rem);
       line-height: 0.94;
     }
-    .construction-note {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 12px;
-      padding: 5px 9px;
-      border: 1px solid rgba(230,189,103,0.38);
-      border-radius: 999px;
-      color: #f4d18a;
-      background: rgba(230,189,103,0.1);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
     @keyframes galaxy-slow-turn {
       from { transform: rotate(-1deg) scale(1.03); }
       to { transform: rotate(359deg) scale(1.03); }
@@ -1857,7 +1843,7 @@
             <div>
               <span class="kicker">Where it goes wrong</span>
               <h2>Failure Modes</h2>
-              <p>Most AI mistakes are not mysterious. They usually come from missing context, stale information, weak instructions, bad tool choice, or permission boundaries.</p>
+              <p>Most AI mistakes are not mysterious. They usually come from missing context, stale information, weak instructions, bad tool choice, untrusted input, or permission boundaries.</p>
               <p class="gist"><b>In one line</b>Most mistakes come from missing, stale, or unchecked information.</p>
             </div>
           </div>
@@ -1934,7 +1920,7 @@
     </dialog>
   </main>
 
-  <script src="lab.js?v=20260929b" defer></script>
+  <script src="lab.js?v=20260928c" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>

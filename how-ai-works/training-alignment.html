@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>AI Training and Alignment - Deep Dive</title>
+  <meta name="description" content="How AI models are made, explained with hands-on demos: training data, pretraining a tiny model yourself, fine-tuning, RLHF preference ranking, evals, RAG, and the open questions." />
+  <link rel="canonical" href="https://jez237.com/how-ai-works/training-alignment" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Jez237" />
+  <meta property="og:title" content="AI Training and Alignment — Deep Dive" />
+  <meta property="og:description" content="How AI models are made: pretraining, fine-tuning, RLHF, evals and RAG, each with a small demo you can poke." />
+  <meta property="og:url" content="https://jez237.com/how-ai-works/training-alignment" />
+  <meta property="og:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260929" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
@@ -28,6 +37,8 @@
     * { box-sizing: border-box; }
     html { background: var(--lab-bg); scroll-behavior: smooth; }
     body {
+      position: relative;
+      overflow-x: hidden;
       margin: 0;
       min-height: 100vh;
       color: var(--lab-text);
@@ -37,9 +48,77 @@
         radial-gradient(circle at 86% 0%, rgba(230,189,103,0.12), transparent 24%),
         linear-gradient(180deg, #020813 0%, #051427 55%, #020813 100%);
     }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      inset: -8vh -18vw -14vh;
+      background:
+        linear-gradient(90deg, rgba(2,7,17,0.82), rgba(2,7,17,0.02) 17%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.82)),
+        linear-gradient(180deg, rgba(2,7,17,0.62), rgba(2,7,17,0.02) 24%, rgba(2,7,17,0.18) 70%, rgba(2,7,17,0.84)),
+        url("../assets/galaxy-home-20260702.webp") center 42% / cover no-repeat;
+      opacity: 0.96;
+      filter: saturate(1.28) contrast(1.08);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      animation: galaxy-drift 28s ease-in-out infinite alternate;
+    }
+    body::after {
+      inset: -38vmax -42vmax;
+      background:
+        linear-gradient(90deg, rgba(1,4,12,0.52), rgba(1,4,12,0.0) 17%, rgba(1,4,12,0.0) 83%, rgba(1,4,12,0.52)),
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.08), transparent 34%),
+        url("../assets/galaxy-home-20260702.webp") center 50% / cover no-repeat;
+      opacity: 0.3;
+      filter: saturate(1.22) contrast(1.06) blur(0.4px);
+      mix-blend-mode: screen;
+      transform-origin: 50% 50%;
+      animation: galaxy-slow-turn 210s linear infinite;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+      mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
+    }
+    /* Match the home/sound-page galaxy: the single body layer above reads dim, so
+       add a second bright galaxy layer bleeding into the gutters, and host the
+       twinkling stars + meteors above it (z -1) but below the .ai-lab content. */
+    .outline-page::before {
+      content: "";
+      position: fixed;
+      inset: -8vh -18vw -14vh;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(2,7,17,0.8), rgba(2,7,17,0.0) 16%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.8)),
+        linear-gradient(180deg, rgba(2,7,17,0.76), rgba(2,7,17,0.0) 24%, rgba(2,7,17,0.18) 72%, rgba(2,7,17,0.86)),
+        url("../assets/galaxy-home-20260702.webp") center 42% / cover no-repeat;
+      opacity: 0.96;
+      filter: saturate(1.28) contrast(1.08);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      animation: galaxy-drift 28s ease-in-out infinite alternate;
+    }
+    .outline-page [data-space-fx] {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    @keyframes galaxy-slow-turn {
+      from { transform: rotate(-1deg) scale(1.03); }
+      to { transform: rotate(359deg) scale(1.03); }
+    }
+    @keyframes galaxy-drift {
+      from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
+      to { transform: translate3d(1.5%, 1%, 0) scale(1.08); }
+    }
     a { color: var(--lab-cyan); }
     button, input { font: inherit; }
     .outline-page {
+      position: relative;
+      z-index: 1;
       max-width: 1080px;
       margin: 0 auto;
       padding: 28px clamp(14px, 4vw, 42px) 72px;
@@ -105,7 +184,7 @@
       padding: 10px 14px;
       border: 1px solid rgba(86,163,232,0.42);
       border-radius: 8px;
-      color: var(--lab-text);
+      color: var(--lab-text) !important;
       background: rgba(255,255,255,0.06);
       text-decoration: none;
       font-weight: 800;
@@ -117,7 +196,7 @@
       color: #fff;
     }
     .button.primary {
-      color: #10202b;
+      color: #10202b !important;
       border-color: rgba(230,189,103,0.8);
       background: linear-gradient(135deg, var(--lab-gold), #ff8b74);
     }
@@ -134,7 +213,7 @@
       padding: 6px 11px;
       border: 1px solid rgba(96,156,216,0.3);
       border-radius: 999px;
-      color: #d8eaf2;
+      color: #d8eaf2 !important;
       background: rgba(255,255,255,0.04);
       text-decoration: none;
       font-size: 12px;
@@ -526,6 +605,7 @@
   <header id="site-nav"></header>
 
   <main class="outline-page">
+    <div data-space-fx aria-hidden="true"></div>
     <section class="outline-hero">
       <span class="kicker">Deep dive</span>
       <h1>AI Training and Alignment</h1>
@@ -1034,5 +1114,6 @@
   </script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="../assets/space-fx.js?v=20260702b" defer></script>
 </body>
 </html>
