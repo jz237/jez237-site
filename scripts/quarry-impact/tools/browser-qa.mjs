@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 await fs.mkdir('outputs', { recursive: true });
 const browser = await chromium.launch({
   channel: 'chrome',
@@ -22,6 +23,9 @@ const report = {};
 try {
   await page.goto(process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/');
   await page.waitForFunction(() => window.__quarry?.state === 'menu', null, { timeout: 120000 });
+  report.buildURL = await page.locator('script[type="module"]').evaluate(node => node.src);
+  const buildResponse = await page.request.get(report.buildURL);
+  report.buildSha256 = createHash('sha256').update(await buildResponse.body()).digest('hex');
   await page.screenshot({ path: 'outputs/menu.png' });
   await page.click('#start');
   await page.waitForFunction(() => window.__quarry?.state === 'countdown');

@@ -64,3 +64,30 @@ export function exactMinimumClearance(surface:Mesh,base:Mesh){
   }
   return {minimum,overlapVertices,coveredTriangles,worst};
 }
+
+/** Exact projected overlap area per surface triangle. Unlike point samples,
+ * this detects narrow missing strips and unintended overlapping ground sheets.
+ */
+export function projectedOverlapAreas(surface:Mesh,base:Mesh):Float64Array{
+  const cells=new Map<string,Triangle[]>(),size=8;
+  for(const t of triangles(base))for(let x=Math.floor(t.bounds[0]/size);x<=Math.floor(t.bounds[1]/size);x++)
+    for(let z=Math.floor(t.bounds[2]/size);z<=Math.floor(t.bounds[3]/size);z++){
+      const key=x+','+z,list=cells.get(key)??[];list.push(t);cells.set(key,list);
+    }
+  const result=new Float64Array(surface.indices.length/3);
+  for(const t of triangles(surface)){
+    const candidates=new Set<Triangle>();
+    for(let x=Math.floor(t.bounds[0]/size);x<=Math.floor(t.bounds[1]/size);x++)for(let z=Math.floor(t.bounds[2]/size);z<=Math.floor(t.bounds[3]/size);z++)
+      for(const b of cells.get(x+','+z)??[])candidates.add(b);
+    for(const b of candidates){
+      if(b.bounds[1]<t.bounds[0]||b.bounds[0]>t.bounds[1]||b.bounds[3]<t.bounds[2]||b.bounds[2]>t.bounds[3])continue;
+      const polygon=overlap(t,b);let twiceArea=0;
+      for(let i=1;i+1<polygon.length;i++){
+        const [a,c,d]=[polygon[0],polygon[i],polygon[i+1]];
+        twiceArea+=(c[0]-a[0])*(d[2]-a[2])-(c[2]-a[2])*(d[0]-a[0]);
+      }
+      result[t.id]+=Math.abs(twiceArea)*.5;
+    }
+  }
+  return result;
+}
