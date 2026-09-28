@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
+import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 import { tsImport } from 'tsx/esm/api';
 
 // Use a unique output name, a frozen dist, and no concurrent GPU QA/export.
@@ -76,6 +77,12 @@ async function addEastBayStops(forest, enabled) {
   const eastBay = prepareEastBayStops();
   return { ...forest, stops: [...forest.stops, ...eastBay.stops], eastBay };
 }
+async function circuitAssetsForBuild() {
+  const html = await fs.readFile('dist/index.html', 'utf8');
+  const modules = [...html.matchAll(/(?:src|href)="\.\/([^"?#]+\.js)"/g)].map(match => match[1]);
+  const code = (await Promise.all(modules.map(module => fs.readFile(path.join('dist', module), 'utf8')))).join('\n');
+  return circuitRuntimeAssetPlan({ historical: !code.includes('circuit-surface.rgba.gz') });
+}
 // Optional CPU-only preflight deliberately produces no performance pass/fail.
 // It lets placement changes be checked before reserving the isolated GPU run.
 if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
@@ -90,16 +97,18 @@ if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
 const report = {
   startedAt: new Date().toISOString(), seconds, quality, viewport: [2560, 1440],
   protocol: 'Five equal blocks alternating eight-car derby and scenic racing; restart completed events. Eight-second warm-up before capture. No camera or physics time acceleration.',
-  events: [], samples: [], errors: [], forestAssets: [], forestStops: [], output, screenshot,
+  events: [], samples: [], errors: [], forestAssets: [], circuitAssets: [], forestStops: [], output, screenshot,
 };
 let browser;
 try {
   await fs.mkdir(path.dirname(output), { recursive: true });
   const forestAssets = await forestRuntimeAssetPlan();
   const eastBayAsset = await eastBayAssetPlan();
-  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : [])];
+  const circuitAssets = await circuitAssetsForBuild();
+  const observedAssets = [...forestAssets, ...(eastBayAsset ? [eastBayAsset] : []), ...circuitAssets];
   report.forestAssetsExpected = forestAssets;
   report.eastBayAssetExpected = eastBayAsset;
+  report.circuitAssetsExpected = circuitAssets;
   const hasForest = forestAssets.some(asset => /quarry-north-fir-\d\.glb$/.test(asset.file));
   const hasRidge = forestAssets.some(asset => /north-backdrop-0-albedo\.png$/.test(asset.file));
   const foreground = hasForest && seconds >= 480 ? await prepareForestStops() : null;
@@ -138,7 +147,11 @@ try {
   await page.waitForFunction(() => window.__quarry?.state === 'menu', null, { timeout: 120000 });
   const verifiedAssets = [];
   await verifyForestRequests(forestRequests, verifiedAssets);
-  report.forestAssets = verifiedAssets.filter(asset => asset.file !== eastBayAsset?.file);
+  const forestFiles = new Set(forestAssets.map(asset => asset.file));
+  const circuitFiles = new Set(circuitAssets.map(asset => asset.file));
+  report.forestAssets = verifiedAssets.filter(asset => forestFiles.has(asset.file));
+  report.circuitAssets = verifiedAssets.filter(asset => circuitFiles.has(asset.file));
+  assert.equal(report.circuitAssets.length, circuitAssets.length, 'Observe every expected circuit asset request');
   report.eastBayAsset = verifiedAssets.find(asset => asset.file === eastBayAsset?.file) ?? null;
   const maskResponse = await arenaMaskResponse;
   assert.equal(maskResponse.status(), 200, 'The application must request the arena mask');

@@ -1,0 +1,854 @@
+{
+  "version": 1,
+  "generator": "tools/generate-circuit-surface.mjs",
+  "source": "source/circuit-surface.json",
+  "sourceSha256": "af78c6cee663958180d6a9f4ef0517ef33f014760200530085f2df6074c49bf6",
+  "base": "source/circuit-surface-base.json",
+  "baseSha256": "ce9cbf18f2f961b7ece8d88316485dd3fc822e377b8f9ad2ca1280b87e059409",
+  "width": 2048,
+  "height": 128,
+  "format": "RGBA8 linear engineering weights; row-major, positive U along increasing arc; flipY false",
+  "channels": {
+    "R": "Irregular aged-asphalt coverage; mineral surface outside",
+    "G": "Finite resurfaced repair patches",
+    "B": "Interrupted paired wheel rubber",
+    "A": "Loose gravel/mineral incursions"
+  },
+  "longitudinalPeriodMetres": 624.8215745987343,
+  "lateralBoundsMetres": [
+    -10,
+    10
+  ],
+  "textureSettings": {
+    "colorSpace": "NoColorSpace",
+    "flipY": false,
+    "wrapS": "RepeatWrapping",
+    "wrapT": "ClampToEdgeWrapping",
+    "minFilter": "LinearMipmapLinearFilter",
+    "magFilter": "LinearFilter",
+    "generateMipmaps": true,
+    "anisotropy": 8
+  },
+  "output": "public/assets/circuit-surface.rgba.gz",
+  "gzipBytes": 17624,
+  "gzipSha256": "53882d04d9c08c22cc59b06ad7d23eb0edeb729a63ea4f1e0716818b2d488ff6",
+  "rawBytes": 1048576,
+  "rawSha256": "6b9abc742c0dcf1da7dbb7aa4d0c2105fd5cd91dbf766ef94ef1063b96550cf6",
+  "provenance": "Original hand-authored circuit engineering data. No photographic pixels, geometry, collisions or runtime RNG are modified.",
+  "stats": [
+    {
+      "nonzeroTexels": 82247,
+      "maximum": 255,
+      "weightedAreaSquareMetres": 3804.985189112979
+    },
+    {
+      "nonzeroTexels": 3052,
+      "maximum": 224,
+      "weightedAreaSquareMetres": 92.05788581355704
+    },
+    {
+      "nonzeroTexels": 1605,
+      "maximum": 117,
+      "weightedAreaSquareMetres": 19.072714756516337
+    },
+    {
+      "nonzeroTexels": 9165,
+      "maximum": 229,
+      "weightedAreaSquareMetres": 306.96330964191014
+    }
+  ],
+  "featureRecords": [
+    {
+      "id": "north-short-repair",
+      "channel": 1,
+      "atSegment": 5,
+      "anchorMetres": 12.580184899108241,
+      "points": [
+        [
+          9.88018489910824,
+          -2.9
+        ],
+        [
+          14.380184899108242,
+          -2.7
+        ],
+        [
+          14.68018489910824,
+          -0.3
+        ],
+        [
+          13.18018489910824,
+          0
+        ],
+        [
+          10.080184899108241,
+          -0.15
+        ]
+      ],
+      "featherMetres": 0.16,
+      "strength": 0.72
+    },
+    {
+      "id": "north-east-old-patch",
+      "channel": 1,
+      "atSegment": 28,
+      "anchorMetres": 63.14023308979284,
+      "points": [
+        [
+          59.34023308979284,
+          1
+        ],
+        [
+          61.24023308979284,
+          0.75
+        ],
+        [
+          66.44023308979284,
+          1.2
+        ],
+        [
+          66.84023308979283,
+          3.8
+        ],
+        [
+          63.940233089792834,
+          4.1
+        ],
+        [
+          59.24023308979284,
+          3.6
+        ]
+      ],
+      "featherMetres": 0.2,
+      "strength": 0.7
+    },
+    {
+      "id": "east-braking-repair",
+      "channel": 1,
+      "atSegment": 52,
+      "anchorMetres": 99.54125142595124,
+      "points": [
+        [
+          96.64125142595124,
+          -3.4
+        ],
+        [
+          103.44125142595125,
+          -3.1
+        ],
+        [
+          103.04125142595124,
+          -0.45
+        ],
+        [
+          100.34125142595124,
+          -0.25
+        ],
+        [
+          96.94125142595125,
+          -0.7
+        ]
+      ],
+      "featherMetres": 0.16,
+      "strength": 0.88
+    },
+    {
+      "id": "east-short-cross-repair",
+      "channel": 1,
+      "atSegment": 66,
+      "anchorMetres": 120.65798880152862,
+      "points": [
+        [
+          119.75798880152861,
+          -0.7
+        ],
+        [
+          122.05798880152862,
+          -0.3
+        ],
+        [
+          122.25798880152861,
+          3.9
+        ],
+        [
+          120.15798880152862,
+          4.05
+        ],
+        [
+          119.55798880152862,
+          2.4
+        ]
+      ],
+      "featherMetres": 0.12,
+      "strength": 0.78
+    },
+    {
+      "id": "east-outer-scar",
+      "channel": 1,
+      "atSegment": 83,
+      "anchorMetres": 150.26785211785887,
+      "points": [
+        [
+          146.16785211785887,
+          2.8
+        ],
+        [
+          148.36785211785886,
+          2.35
+        ],
+        [
+          153.96785211785885,
+          2.8
+        ],
+        [
+          153.36785211785886,
+          4.95
+        ],
+        [
+          147.86785211785886,
+          4.9
+        ],
+        [
+          145.96785211785885,
+          4.3
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.68
+    },
+    {
+      "id": "west-service-patch",
+      "channel": 1,
+      "atSegment": 279,
+      "anchorMetres": 486.5655726722451,
+      "points": [
+        [
+          483.76557267224507,
+          -4.2
+        ],
+        [
+          489.46557267224506,
+          -4
+        ],
+        [
+          489.8655726722451,
+          -1.65
+        ],
+        [
+          485.96557267224506,
+          -1.3
+        ],
+        [
+          483.5655726722451,
+          -1.9
+        ]
+      ],
+      "featherMetres": 0.16,
+      "strength": 0.82
+    },
+    {
+      "id": "west-long-narrow-repair",
+      "channel": 1,
+      "atSegment": 308,
+      "anchorMetres": 521.8896839475999,
+      "points": [
+        [
+          517.1896839475999,
+          0.6
+        ],
+        [
+          526.1896839475999,
+          0.9
+        ],
+        [
+          525.8896839475999,
+          2.15
+        ],
+        [
+          521.0896839476,
+          2.4
+        ],
+        [
+          517.3896839475999,
+          1.9
+        ]
+      ],
+      "featherMetres": 0.14,
+      "strength": 0.63
+    },
+    {
+      "id": "north-west-cutback",
+      "channel": 1,
+      "atSegment": 340,
+      "anchorMetres": 576.1079898427853,
+      "points": [
+        [
+          574.1079898427853,
+          -0.6
+        ],
+        [
+          579.0079898427853,
+          -0.8
+        ],
+        [
+          579.5079898427853,
+          2
+        ],
+        [
+          577.0079898427853,
+          2.25
+        ],
+        [
+          573.7579898427853,
+          1.45
+        ]
+      ],
+      "featherMetres": 0.16,
+      "strength": 0.76
+    },
+    {
+      "id": "north-inner-fines",
+      "channel": 3,
+      "atSegment": 12,
+      "anchorMetres": 29.581962780862938,
+      "points": [
+        [
+          23.581962780862938,
+          -9.6
+        ],
+        [
+          24.581962780862938,
+          -6
+        ],
+        [
+          28.081962780862938,
+          -4.7
+        ],
+        [
+          30.581962780862938,
+          -5.2
+        ],
+        [
+          35.381962780862935,
+          -5.8
+        ],
+        [
+          36.58196278086294,
+          -9.6
+        ]
+      ],
+      "featherMetres": 0.26,
+      "strength": 0.72
+    },
+    {
+      "id": "east-cut-shed",
+      "channel": 3,
+      "atSegment": 40,
+      "anchorMetres": 82.59788481807233,
+      "points": [
+        [
+          75.59788481807233,
+          9.6
+        ],
+        [
+          76.59788481807233,
+          6.5
+        ],
+        [
+          80.49788481807234,
+          5.5
+        ],
+        [
+          83.19788481807232,
+          4.1
+        ],
+        [
+          85.49788481807234,
+          4.6
+        ],
+        [
+          88.49788481807234,
+          6.3
+        ],
+        [
+          89.19788481807232,
+          9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.88
+    },
+    {
+      "id": "east-apex-sweep",
+      "channel": 3,
+      "atSegment": 71,
+      "anchorMetres": 128.97268724257137,
+      "points": [
+        [
+          121.97268724257137,
+          -9.6
+        ],
+        [
+          122.57268724257136,
+          -6.8
+        ],
+        [
+          126.37268724257137,
+          -5.6
+        ],
+        [
+          128.07268724257136,
+          -4.25
+        ],
+        [
+          130.37268724257137,
+          -4.75
+        ],
+        [
+          134.07268724257136,
+          -6.1
+        ],
+        [
+          136.07268724257136,
+          -9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.84
+    },
+    {
+      "id": "asphalt-east-termination",
+      "channel": 3,
+      "atSegment": 96,
+      "anchorMetres": 174.23936879359283,
+      "points": [
+        [
+          169.23936879359283,
+          9.6
+        ],
+        [
+          170.23936879359283,
+          6.6
+        ],
+        [
+          173.53936879359284,
+          4.7
+        ],
+        [
+          176.33936879359283,
+          5.35
+        ],
+        [
+          180.03936879359284,
+          7.8
+        ],
+        [
+          180.33936879359283,
+          9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.81
+    },
+    {
+      "id": "asphalt-west-entry",
+      "channel": 3,
+      "atSegment": 266,
+      "anchorMetres": 470.69443229730814,
+      "points": [
+        [
+          464.99443229730815,
+          -9.6
+        ],
+        [
+          466.5944322973081,
+          -6.1
+        ],
+        [
+          470.39443229730813,
+          -4.5
+        ],
+        [
+          473.0944322973081,
+          -5.15
+        ],
+        [
+          475.89443229730813,
+          -6.8
+        ],
+        [
+          477.69443229730814,
+          -9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.9
+    },
+    {
+      "id": "west-drainage-mouth",
+      "channel": 3,
+      "atSegment": 294,
+      "anchorMetres": 504.7272946439009,
+      "points": [
+        [
+          498.7272946439009,
+          9.6
+        ],
+        [
+          499.5272946439009,
+          6.1
+        ],
+        [
+          502.8272946439009,
+          5.2
+        ],
+        [
+          505.8272946439009,
+          4.2
+        ],
+        [
+          508.3272946439009,
+          5.6
+        ],
+        [
+          511.9272946439009,
+          7.4
+        ],
+        [
+          512.3272946439009,
+          9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.86
+    },
+    {
+      "id": "north-west-shoulder-break",
+      "channel": 3,
+      "atSegment": 329,
+      "anchorMetres": 553.7173370854805,
+      "points": [
+        [
+          548.5173370854804,
+          -9.6
+        ],
+        [
+          548.8173370854805,
+          -6.5
+        ],
+        [
+          552.0173370854804,
+          -5.1
+        ],
+        [
+          554.3173370854805,
+          -4.7
+        ],
+        [
+          556.9173370854805,
+          -5.3
+        ],
+        [
+          559.8173370854805,
+          -7.4
+        ],
+        [
+          560.0173370854804,
+          -9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.75
+    },
+    {
+      "id": "north-wrap-outer-margin",
+      "channel": 3,
+      "atSegment": 354,
+      "anchorMetres": 609.6383816044952,
+      "points": [
+        [
+          604.0383816044952,
+          9.6
+        ],
+        [
+          605.2383816044952,
+          6.3
+        ],
+        [
+          608.8383816044952,
+          5.4
+        ],
+        [
+          611.2383816044952,
+          4.65
+        ],
+        [
+          613.7383816044952,
+          5.5
+        ],
+        [
+          616.1383816044952,
+          9.6
+        ]
+      ],
+      "featherMetres": 0.22,
+      "strength": 0.73
+    },
+    {
+      "id": "north-turn-entry",
+      "channel": 2,
+      "atSegment": 21,
+      "anchorMetres": 49.546934316410486,
+      "points": [
+        [
+          40.546934316410486,
+          -1.8
+        ],
+        [
+          47.546934316410486,
+          -1.5
+        ],
+        [
+          54.546934316410486,
+          -0.5
+        ],
+        [
+          62.546934316410486,
+          0
+        ]
+      ],
+      "spans": [
+        [
+          0.04,
+          0.34
+        ],
+        [
+          0.41,
+          0.65
+        ],
+        [
+          0.77,
+          0.96
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.27,
+      "approximateLengthMetres": 22.075634895561592,
+      "strength": 0.32
+    },
+    {
+      "id": "east-brake-and-release",
+      "channel": 2,
+      "atSegment": 56,
+      "anchorMetres": 105.27886673195083,
+      "points": [
+        [
+          92.27886673195083,
+          0.8
+        ],
+        [
+          100.27886673195083,
+          1
+        ],
+        [
+          110.27886673195083,
+          0
+        ],
+        [
+          121.27886673195083,
+          -0.5
+        ]
+      ],
+      "spans": [
+        [
+          0,
+          0.29
+        ],
+        [
+          0.35,
+          0.67
+        ],
+        [
+          0.8,
+          0.95
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.3,
+      "approximateLengthMetres": 29.036264824301277,
+      "strength": 0.46
+    },
+    {
+      "id": "east-apex-correction",
+      "channel": 2,
+      "atSegment": 77,
+      "anchorMetres": 139.42819813906766,
+      "points": [
+        [
+          131.42819813906766,
+          -0.5
+        ],
+        [
+          136.42819813906766,
+          -0.2
+        ],
+        [
+          142.42819813906766,
+          1.2
+        ],
+        [
+          149.42819813906766,
+          1.4
+        ]
+      ],
+      "spans": [
+        [
+          0.03,
+          0.43
+        ],
+        [
+          0.55,
+          0.86
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.27,
+      "approximateLengthMetres": 18.108695268203572,
+      "strength": 0.37
+    },
+    {
+      "id": "west-exit-rubber",
+      "channel": 2,
+      "atSegment": 275,
+      "anchorMetres": 481.6873167786093,
+      "points": [
+        [
+          471.6873167786093,
+          1.4
+        ],
+        [
+          479.6873167786093,
+          1.3
+        ],
+        [
+          486.6873167786093,
+          0.4
+        ],
+        [
+          493.6873167786093,
+          -0.1
+        ]
+      ],
+      "spans": [
+        [
+          0.02,
+          0.31
+        ],
+        [
+          0.39,
+          0.61
+        ],
+        [
+          0.73,
+          0.98
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.27,
+      "approximateLengthMetres": 22.05640011288928,
+      "strength": 0.35
+    },
+    {
+      "id": "west-braking-rubber",
+      "channel": 2,
+      "atSegment": 315,
+      "anchorMetres": 531.2270753240807,
+      "points": [
+        [
+          521.2270753240807,
+          -0.8
+        ],
+        [
+          527.2270753240807,
+          -0.5
+        ],
+        [
+          536.2270753240807,
+          0.45
+        ],
+        [
+          545.2270753240807,
+          0.8
+        ]
+      ],
+      "spans": [
+        [
+          0.05,
+          0.26
+        ],
+        [
+          0.34,
+          0.73
+        ],
+        [
+          0.83,
+          0.96
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.29,
+      "approximateLengthMetres": 24.054689652418723,
+      "strength": 0.42
+    },
+    {
+      "id": "north-wrap-passage",
+      "channel": 2,
+      "atSegment": 359,
+      "anchorMetres": 622.2874321062167,
+      "points": [
+        [
+          617.2874321062167,
+          0
+        ],
+        [
+          622.5874321062166,
+          0
+        ],
+        [
+          628.2874321062167,
+          0.35
+        ],
+        [
+          634.2874321062167,
+          0.5
+        ]
+      ],
+      "spans": [
+        [
+          0,
+          0.31
+        ],
+        [
+          0.39,
+          0.73
+        ],
+        [
+          0.82,
+          1
+        ]
+      ],
+      "gaugeMetres": 1.5,
+      "tireWidthMetres": 0.26,
+      "approximateLengthMetres": 17.00818823803375,
+      "strength": 0.27
+    }
+  ],
+  "boundaries": [
+    183.33244011078696,
+    456.09098493313786
+  ],
+  "stepMetres": [
+    0.3050886594720382,
+    0.15625
+  ]
+}

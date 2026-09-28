@@ -59,6 +59,8 @@ The derby floor blends photographic gravel, broken stone and fines across author
 
 A 112-metre gravel approach joins the lane, shoulders and surrounding ground in one authored surface. Interrupted compaction, deposited fines and loose margins reuse the existing photographic maps at metre scale. Small shoulder fragments add relief while the lane and physical terrain retain their original heights. The rest of the circuit also has corrected shoulder winding and anchored inner edges.
 
+The paved circuit uses a separate three-metre asphalt photograph for aggregate detail and the original aerial photograph at thirty metres for broad wear. Finite repairs, interrupted rubber marks and asymmetric mineral deposits follow the track's measured arc length. The same material joins the lane to its shoulders, fading into the existing terrain at their outer edges. These are surface materials; road geometry, collisions and handling retain their existing values.
+
 The three bodies are dimensioned derivatives of the licensed Car Concept asset, prepared in Blender and paired with separate mass, power, wheelbase, drive, sound, and damage profiles. They share a design family; they are not licensed production-car replicas.
 
 The coupe adds a recessed rear plate, lamp dividers, hollow exhaust outlets and concealed bumper reinforcement and mounts. These details reuse existing materials; body dust varies smoothly without the former coarse checker pattern. The model retains the same damage panels, wheel pivots and driving physics.
@@ -100,6 +102,7 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `tools/assets.py`: downloads photographic textures and records provenance.
 - `node tools/prepare-industrial-material.mjs`: restores the CC0 workshop maps from recorded URLs and verifies original checksums.
 - `node tools/prepare-roadside-material.mjs`: restores the CC0 broken-rock maps with verified source checksums.
+- `node tools/prepare-circuit-material.mjs`: restores the CC0 Asphalt 02 photographs with verified source checksums. `node tools/generate-circuit-surface.mjs` reproduces the compressed four-channel material mask from `source/circuit-surface.json` and its frozen route reference, without network access. The lane and shoulders use the same periodic metre coordinates; `node --import tsx tools/audit-circuit-surface.ts` checks the preserved geometry, grip and deployed multiplayer inputs.
 - `tools/quarry-cut-qa.mjs`: captures matched 1440p scenery and moving-car views with short frame-time diagnostics; preserve comparisons with `QUARRY_CUT_PHASE` and `QUARRY_CUT_OUTPUT`.
 - `node tools/generate-arena-mask.mjs`: rebuilds the compact local material mask from editable `source/arena-floor-mask.json` and frozen actual puddle contours. It performs no downloads and does not run during gameplay. `tools/arena-surface-qa.mjs` captures matched driving, low ground, shoreline and boundary views; use a new `QUARRY_ARENA_PHASE` for each comparison.
 - Add `QUARRY_CUT_ROAD=1` for gravel close views, moving chase poses and hood-position inspections, or `QUARRY_CUT_ROAD_ENDS=1` for both joins. These comparisons hold field of view fixed and do not replace the sustained benchmark.

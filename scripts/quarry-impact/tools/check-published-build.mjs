@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { forestRuntimeAssetPlan } from './forest-runtime-assets.mjs';
+import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 
 // Read-only release check. Run after the site's mandatory deployment wrapper.
 const base = 'https://jez237.com/games/2026-09-27/quarry-impact/';
@@ -15,13 +16,15 @@ const report = { checkedAt: new Date().toISOString(), base, build, files: [], fo
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 try {
   const forestAssets = await forestRuntimeAssetPlan({ publicAssets: true });
+  const circuitAssets = await circuitRuntimeAssetPlan();
+  report.circuitAssetsExpected = circuitAssets;
   report.forestAssetsExpected = forestAssets;
   const document = await fetch(base, { signal: AbortSignal.timeout(60000) });
   assert.equal(document.status, 200);
   assert.ok((await document.text()).includes(build), 'Production must serve the tested application bundle');
   assert.ok(document.headers.get('content-security-policy')?.includes('wss://quarry-impact-online.quarry-impact-free.workers.dev'));
   const files = [...new Set([...bundled, 'models/quarry-cut.glb', 'models/quarry-roadside.glb', 'models/quarry-extension.glb', 'models/quarry-headwall.glb', 'models/quarry-east-bay.glb', 'models/quarry-road-approach.glb', 'models/coupe.glb', 'models/sedan.glb', 'models/hatch.glb', 'multiplayer.json', 'assets/scree_diff.jpg', 'assets/scree_nor_gl.jpg', 'assets/scree_rough.jpg', 'assets/arena-floor-mask.rgba.gz', ...forestAssets.map(asset => asset.file)])];
-  for (const file of files) {
+  for (const file of [...files, ...circuitAssets.map(asset => asset.file)]) {
     const response = await fetch(new URL(file, base), { signal: AbortSignal.timeout(60000) });
     assert.equal(response.status, 200, file);
     const remote = Buffer.from(await response.arrayBuffer()), local = await fs.readFile(path.join('dist', file));

@@ -25,21 +25,51 @@
     "source": "https://polyhaven.com/a/aerial_asphalt_01",
     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/aerial_asphalt_01/aerial_asphalt_01_diff_2k.jpg",
     "license": "CC0-1.0",
-    "sha256": "a85ce28b8e6ed90acb0234832969b27f5b73fe055a0d5b94f34fc2943d319fb5"
+    "sha256": "a85ce28b8e6ed90acb0234832969b27f5b73fe055a0d5b94f34fc2943d319fb5",
+    "scale_metres": 30,
+    "scale_record": {
+      "source": "https://api.polyhaven.com/info/aerial_asphalt_01",
+      "dimensions_mm": [
+        30000,
+        30000
+      ],
+      "legacy_scale": "15x15 M",
+      "decision": "Current numeric dimensions and asset page agree on 30 m. The circuit uses diffuse only for macro variation."
+    }
   },
   {
     "file": "asphalt_nor_gl.jpg",
     "source": "https://polyhaven.com/a/aerial_asphalt_01",
     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/aerial_asphalt_01/aerial_asphalt_01_nor_gl_2k.jpg",
     "license": "CC0-1.0",
-    "sha256": "cb7e5b75ff47ad672ab820f71b77566419b612e52e7791c5ed90a7fa27b71807"
+    "sha256": "cb7e5b75ff47ad672ab820f71b77566419b612e52e7791c5ed90a7fa27b71807",
+    "scale_metres": 30,
+    "scale_record": {
+      "source": "https://api.polyhaven.com/info/aerial_asphalt_01",
+      "dimensions_mm": [
+        30000,
+        30000
+      ],
+      "legacy_scale": "15x15 M",
+      "decision": "Current numeric dimensions and asset page agree on 30 m. The circuit uses diffuse only for macro variation."
+    }
   },
   {
     "file": "asphalt_rough.jpg",
     "source": "https://polyhaven.com/a/aerial_asphalt_01",
     "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/aerial_asphalt_01/aerial_asphalt_01_rough_2k.jpg",
     "license": "CC0-1.0",
-    "sha256": "20fdcdc9fc2a3efef83fd8a3453d2bc0a8543ee3ebb2badf148e4c142704eeff"
+    "sha256": "20fdcdc9fc2a3efef83fd8a3453d2bc0a8543ee3ebb2badf148e4c142704eeff",
+    "scale_metres": 30,
+    "scale_record": {
+      "source": "https://api.polyhaven.com/info/aerial_asphalt_01",
+      "dimensions_mm": [
+        30000,
+        30000
+      ],
+      "legacy_scale": "15x15 M",
+      "decision": "Current numeric dimensions and asset page agree on 30 m. The circuit uses diffuse only for macro variation."
+    }
   },
   {
     "file": "mud_diff.jpg",
@@ -328,5 +358,44 @@
     "bytes": 485883,
     "modifications": "Bark color retained at 2k; normal/ARM resized to 1k with Lanczos; JPEG quality94, no chroma subsampling",
     "generator": "tools/prepare-north-fir-geometry.py"
+  },
+  {
+    "file": "circuit_asphalt_diff.jpg",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/asphalt_02/asphalt_02_diff_2k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 3075676,
+    "sha256": "28f5ba8690553f192c0e5e1a5ff40f34765b4b93f4cc7059b1a3e9c795b6c28c",
+    "source_md5": "336af399fd98a39ab986d8b3bf73b4ff",
+    "scale_metres": 3,
+    "resolution": "2k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "circuit_asphalt_nor_gl.jpg",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/asphalt_02/asphalt_02_nor_gl_2k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 4943950,
+    "sha256": "ffe49db71a0fd34c1e259625df66a302a237597d6ef655307987ec4e45bc6f21",
+    "source_md5": "77ebd1cc0b020ccaa1c6b58f103d1f75",
+    "scale_metres": 3,
+    "resolution": "2k",
+    "notes": "Original downloaded JPEG; no image transformation."
+  },
+  {
+    "file": "circuit_asphalt_rough.jpg",
+    "source": "https://polyhaven.com/a/asphalt_02",
+    "author": "Rob Tuytel",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_02/asphalt_02_rough_1k.jpg",
+    "license": "CC0-1.0",
+    "bytes": 544032,
+    "sha256": "70ba3edc65525eb4dc366cf010ca7ae0bd34e0251ff0225c2dad627a873d0712",
+    "source_md5": "ec80a2929797c1b3ffc121c4f665585a",
+    "scale_metres": 3,
+    "resolution": "1k",
+    "notes": "Original downloaded JPEG; no image transformation."
   }
 ]

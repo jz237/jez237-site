@@ -55,10 +55,14 @@ const boundsPath = path.join(root, 'src/quarry-road-approach-bounds.json');
 const bounds = fs.existsSync(boundsPath) ? JSON.parse(fs.readFileSync(boundsPath, 'utf8')) : {};
 const start = Number(bounds.startSegment ?? /ROAD_APPROACH_START\s*=\s*(\d+)/.exec(loader)?.[1] ?? 123);
 const end = Number(bounds.endSegmentExclusive ?? /ROAD_APPROACH_END\s*=\s*(\d+)/.exec(loader)?.[1] ?? 182);
+const circuit = sourceModule('src/scenery-circuit-layout.ts', {
+  three: T, './rules': rules, './quarry-road-approach-bounds.json': { default: bounds },
+});
 const surfaces = sourceModule('src/scenery-surfaces.ts', {
   three: T,
   './assets': assets,
   './rules': rules,
+  './scenery-circuit-layout': circuit,
   './scenery-road-approach': { ROAD_APPROACH_START: start, ROAD_APPROACH_END: end },
   './quarry-layout': { cliffGeometry() { throw new Error('Cliff geometry is outside this CPU audit'); } },
   'three/addons/utils/BufferGeometryUtils.js': { mergeGeometries },
@@ -113,6 +117,12 @@ for (const shoulder of group.children.slice(0, 2)) {
 }
 for (const marks of group.children.slice(2, 6)) {
   const geometry = marks.geometry, fade = geometry.getAttribute('wearAlpha');
+  for(let cell=0;cell<=360;cell++) {
+    const distance=Math.max(start-cell,cell-end,0), t=Math.min(1,distance/4);
+    const expected=circuit.isCircuitAsphaltCell(cell)?0:Math.fround(t*t*(3-2*t));
+    assert.equal(fade.getX(cell*2),expected,'hide only the obsolete paved wear; gravel fade remains exact');
+    assert.equal(fade.getX(cell*2+1),expected);
+  }
   for (let j = 0; j < geometry.index.count; j += 6) {
     const cell = Math.floor(Math.min(...geometry.index.array.slice(j, j + 6)) / 2);
     assert.ok(cell < start || cell >= end, 'Legacy mark geometry overlaps the replacement');

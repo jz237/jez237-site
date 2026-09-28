@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
+import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 
 // Run only after publication is confirmed. This deliberately does not read
 // QUARRY_TEST_ENDPOINT or write the server field: production supplies its URL.
@@ -10,7 +11,7 @@ const url='https://jez237.com/games/2026-09-27/quarry-impact/';
 const output=process.env.QUARRY_PRODUCTION_QA_OUTPUT??'outputs/multiplayer/production-origin';
 const report={ok:false,url,started:new Date().toISOString(),checks:{},errors:[],browserErrors:[],failedRequests:[],httpErrors:[],cspViolations:[]};
 const contexts=[];
-let browser, forestAssets = [];
+let browser, forestAssets = [], circuitAssets = [];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const network=p=>p.evaluate(()=>window.__quarry.network);
 function add(array,value){if(array.length<30&&!array.some(x=>JSON.stringify(x)===JSON.stringify(value)))array.push(value);}
@@ -24,8 +25,8 @@ async function openPage(label,address){
     window.__originSmokeCSP=[];
     window.addEventListener('securitypolicyviolation',e=>window.__originSmokeCSP.push({directive:e.effectiveDirective,blocked:e.blockedURI,disposition:e.disposition}));
   });
-  const p=await context.newPage(),observed={config:null,webSockets:[],vehicleAssets:[],sceneryAssets:[],forestAssets:[]};
-  const forestRequests=await observeForestRequests(p,url,forestAssets);
+  const p=await context.newPage(),observed={config:null,webSockets:[],vehicleAssets:[],sceneryAssets:[],forestAssets:[],circuitAssets:[]};
+  const forestRequests=await observeForestRequests(p,url,[...forestAssets,...circuitAssets]);
   const vehicleResponses=[];
   const configURL=new URL('multiplayer.json',url).href;
   const configResponse=p.waitForResponse(r=>r.url()===configURL,{timeout:120000});
@@ -62,7 +63,11 @@ async function openPage(label,address){
   assert.ok(connect.split(/\s+/).includes(endpointOrigin),'Published CSP must allow the configured secure WebSocket origin');
   observed.connectPolicy=connect;
   await p.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
-  await verifyForestRequests(forestRequests,observed.forestAssets);
+  const verifiedAssets=[];
+  await verifyForestRequests(forestRequests,verifiedAssets);
+  observed.forestAssets=verifiedAssets.filter(asset=>forestAssets.some(expected=>asset.file===expected.file));
+  observed.circuitAssets=verifiedAssets.filter(asset=>circuitAssets.some(expected=>asset.file===expected.file));
+  assert.equal(observed.circuitAssets.length,4,'Each production browser loads the verified circuit surface');
   await Promise.all(vehicleResponses);
   assert.equal(observed.vehicleAssets.length,3,'Each production browser loads all three verified cars');
   assert.equal(observed.sceneryAssets.length,3,'Each production browser loads the verified headwall, east bay and arena material mask');
@@ -98,7 +103,9 @@ async function drive(client){
 try{
   await fs.mkdir(output,{recursive:true});
   forestAssets=await forestRuntimeAssetPlan();
+  circuitAssets=await circuitRuntimeAssetPlan();
   report.forestAssetsExpected=forestAssets;
+  report.circuitAssetsExpected=circuitAssets;
   browser=await chromium.launch({channel:'chrome',headless:true,args:['--autoplay-policy=no-user-gesture-required','--disable-background-timer-throttling','--disable-renderer-backgrounding','--ignore-gpu-blocklist']});
   let host,guest,invite;
   await check('published-configuration-csp-and-invite',async()=>{

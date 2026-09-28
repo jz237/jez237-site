@@ -16,6 +16,8 @@ import { loadQuarryEastBay } from './scenery-east-bay';
 import { loadQuarryRoadApproach, ROAD_APPROACH_START, ROAD_APPROACH_END } from './scenery-road-approach';
 import { quarryRoadSurface } from './scenery-road-material';
 import { quarryArenaSurface } from './scenery-arena-material';
+import { quarryCircuitSurface } from './scenery-circuit-material';
+import { attachCircuitCoordinates } from './scenery-circuit-layout';
 import { quarryRoadsideGround } from './scenery-roadside-material';
 import { batchScenery, quarryAggregate, landscapeHeight, quarryCliffs, roadsideDetails, weatheredMetal } from './scenery-surfaces';
 let seed = 9311;
@@ -120,7 +122,7 @@ export class Quarry {
     const ground = northForestGround();
     const rock = northForestRock();
     this.rockMaterial = rock;
-    const asphalt = pbr('asphalt', 1);
+    const asphalt = quarryCircuitSurface();
     const groundData=terrainGeometry();
     const geo=new T.BufferGeometry();
     geo.setAttribute('position',new T.BufferAttribute(groundData.positions,3));
@@ -180,6 +182,8 @@ export class Quarry {
     roadGeo.setAttribute('uv', new T.Float32BufferAttribute(ru, 2));
     roadGeo.setIndex(ri);
     roadGeo.computeVertexNormals();
+    attachCircuitCoordinates(roadGeo);
+    roadGeo.setAttribute('circuitEdge', new T.Float32BufferAttribute(new Float32Array(rp.length / 3).fill(1), 1));
     let begin = 0,
       last = 0;
     for (let i = 0; i <= 360; i++) {
@@ -197,7 +201,7 @@ export class Quarry {
     ]);
     this.road.receiveShadow = true;
     scene.add(this.road);
-    roadsideDetails(this.scenery);
+    roadsideDetails(this.scenery, asphalt);
     // Concrete arena barriers with hazard stripes and openable access for other modes.
     const concrete = pbr('rock', 1, { color: 0x9b9b8f });
     const stripe = this.hazardMaterial();
