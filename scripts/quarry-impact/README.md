@@ -62,7 +62,7 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
 - `tools/rocks.py`: reduces the scanned rocks for gameplay.
-- `python tools/restore-scenery-sources.py`: restores the large CC0 fir source buffers/textures from recorded URLs and verifies SHA-256 hashes. These raw inputs are omitted from the GitHub snapshot; the small source glTF files, manifests, editable Blender scenes and prepared runtime models are retained.
+- `python tools/restore-scenery-sources.py`: restores the large CC0 fir source buffers/textures from recorded URLs and verifies SHA-256 hashes. These raw inputs are omitted from the GitHub snapshot; the small source glTF files, manifests, editable Blender scenes and prepared runtime models are retained. The one editable scene over the static host's 25 MiB per-file limit, `source/models/fir-medium.blend` (50 MB), is also restored by this script from the site's R2 bucket (SHA-256 checked) instead of living in the repository, because Cloudflare Pages rejects any deployment containing a file that large.
 - Blender: run `tools/prepare-fir-saplings.py` and `tools/prepare-fir-medium.py` with `blender --background --python <script>` to rebuild fir detail levels. `tools/split-fir-medium.py` re-exports three files below the static host’s size limit.
 - `tools/assets.py`: downloads photographic textures and records provenance.
 - `node tools/prepare-industrial-material.mjs`: restores the CC0 workshop maps from recorded URLs and verifies original checksums.

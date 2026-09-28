@@ -5,3 +5,6 @@ outputs/
 
 *.blend1
 outputs-*.log
+
+# Over the 25 MiB Cloudflare Pages per-file limit; restored from R2 by tools/restore-scenery-sources.py
+source/models/fir-medium.blend
