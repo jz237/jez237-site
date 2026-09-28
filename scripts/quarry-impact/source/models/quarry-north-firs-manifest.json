@@ -1,0 +1,766 @@
+{
+  "source": "https://polyhaven.com/a/fir_tree_01",
+  "license": "CC0-1.0",
+  "generator": "tools/prepare-north-fir-geometry.py + tools/author-north-firs.py",
+  "convention": "glTF Y up; root baseline0; source height normalized1; original glTF UV/flipY=false",
+  "modifications": "Complete needle sampling with documented cross-section compensation; woody simplification; original A/B trunk maps and repeating UVs retained. Official C trunk has no UV attribute, so only C receives documented cylindrical bark coordinates. No whole-tree billboard replacement.",
+  "compression": {
+    "format": "KHR_draco_mesh_compression",
+    "positionBits": 18,
+    "normalBits": 10,
+    "uvBits": 14,
+    "cpuDecoder": "tools/decode-north-draco.mjs",
+    "proxyPreparation": "tools/fit-north-fir-proxies.py"
+  },
+  "variants": [
+    {
+      "variant": 0,
+      "sourceNode": "fir_tree_01_a_LOD0",
+      "sourceHeight": 18.925109282135963,
+      "sourceOrigin": [
+        0.03737209737300873,
+        -0.08020533621311188,
+        -0.023885482922196388
+      ],
+      "normalizedStemHeight": 0.84,
+      "rootHull": [
+        [
+          -0.03005334734916687,
+          0.01322354655712843,
+          -0.021129287779331207
+        ],
+        [
+          -0.029445834457874298,
+          0.014286751858890057,
+          -0.024774441495537758
+        ],
+        [
+          -0.028821514919400215,
+          0.014438704587519169,
+          -0.025694185867905617
+        ],
+        [
+          -0.0277851615101099,
+          0.0016922256909310818,
+          0.022030416876077652
+        ],
+        [
+          -0.027444109320640564,
+          0.0014101375127211213,
+          0.022739620879292488
+        ],
+        [
+          -0.02392277866601944,
+          0.014996431767940521,
+          -0.028718547895550728
+        ],
+        [
+          -0.02336396835744381,
+          0.015101861208677292,
+          -0.029007548466324806
+        ],
+        [
+          -0.01624244451522827,
+          0.01527695544064045,
+          -0.03045753575861454
+        ],
+        [
+          -0.012103358283638954,
+          0.00014751315757166594,
+          0.03031831793487072
+        ],
+        [
+          -0.004747385159134865,
+          0.014967059716582298,
+          -0.03017827309668064
+        ],
+        [
+          -0.00452550919726491,
+          0.0015181780327111483,
+          0.031429488211870193
+        ],
+        [
+          -0.0024312424939125776,
+          0.04404739290475845,
+          0.005759791005402803
+        ],
+        [
+          -3.279811153333867e-06,
+          0.045222438871860504,
+          0.006201649084687233
+        ],
+        [
+          0.005642817821353674,
+          0.05439412221312523,
+          -0.007652639411389828
+        ],
+        [
+          0.007505507208406925,
+          0.053138721734285355,
+          0.0017888506408780813
+        ],
+        [
+          0.012740342877805233,
+          0.0013109163846820593,
+          0.030428443104028702
+        ],
+        [
+          0.019474517554044724,
+          0.014587421901524067,
+          -0.028150582686066628
+        ],
+        [
+          0.02305036038160324,
+          0.0018525549676269293,
+          0.02428339794278145
+        ],
+        [
+          0.02533370815217495,
+          0.015048439614474773,
+          -0.02460516430437565
+        ],
+        [
+          0.026025375351309776,
+          0.0027161322068423033,
+          0.020170411095023155
+        ],
+        [
+          0.02871052548289299,
+          0.013846359215676785,
+          -0.022973813116550446
+        ],
+        [
+          0.029382383450865746,
+          0.01392038818448782,
+          -0.0217888243496418
+        ],
+        [
+          0.029473165050148964,
+          0.013868252746760845,
+          -0.021296270191669464
+        ]
+      ],
+      "stemCenterMethod": "Mean of actual trunk triangle sections at normalized heights .055, .08 and .11",
+      "sourceNeedles": 804651,
+      "lods": [
+        {
+          "level": "near",
+          "completeNeedles": 174000,
+          "needleTriangles": 696000,
+          "crossSectionScale": 1.8,
+          "longitudinalScale": 1
+        },
+        {
+          "level": "far",
+          "completeNeedles": 110000,
+          "needleTriangles": 440000,
+          "crossSectionScale": 2.85,
+          "longitudinalScale": 1
+        }
+      ],
+      "runtimeFile": "models/quarry-north-fir-0.glb",
+      "geometry": [
+        {
+          "level": "near",
+          "triangles": 821699,
+          "bounds": [
+            [
+              -0.1719125360250473,
+              0.0,
+              -0.18563149869441986
+            ],
+            [
+              0.17289182543754578,
+              0.9982835650444031,
+              0.15377849340438843
+            ]
+          ],
+          "meshes": [
+            "NorthFir_0_near_Wood",
+            "NorthFir_0_near_Needles",
+            "NorthFir_0_near_Trunk"
+          ]
+        },
+        {
+          "level": "far",
+          "triangles": 494891,
+          "bounds": [
+            [
+              -0.17193329334259033,
+              3.206857002169272e-08,
+              -0.18564577400684357
+            ],
+            [
+              0.17245879769325256,
+              0.9980643391609192,
+              0.1528845876455307
+            ]
+          ],
+          "meshes": [
+            "NorthFir_0_far_Wood",
+            "NorthFir_0_far_Needles",
+            "NorthFir_0_far_Trunk"
+          ]
+        }
+      ],
+      "authoringVertexBandRadiusEstimate": 0.01617363090230553,
+      "proxySource": "source/models/quarry-north-fir-proxies.json; fitted after export from actual Trunk sections"
+    },
+    {
+      "variant": 1,
+      "sourceNode": "fir_tree_01_b_LOD0",
+      "sourceHeight": 14.055205553770065,
+      "sourceOrigin": [
+        0.021688515320420265,
+        -0.08676454424858093,
+        -0.01635308563709259
+      ],
+      "normalizedStemHeight": 0.84,
+      "rootHull": [
+        [
+          -0.04206501320004463,
+          0.013247370719909668,
+          -0.0007349254447035491
+        ],
+        [
+          -0.03541367128491402,
+          0.014948742464184761,
+          -0.031123191118240356
+        ],
+        [
+          -0.03502070531249046,
+          0.0150650255382061,
+          -0.03206094726920128
+        ],
+        [
+          -0.0325152613222599,
+          0.010295524261891842,
+          0.028052963316440582
+        ],
+        [
+          -0.030917266383767128,
+          0.015762029215693474,
+          -0.03898854926228523
+        ],
+        [
+          -0.028613513335585594,
+          0.008918983861804008,
+          0.03407759219408035
+        ],
+        [
+          -0.022598063573241234,
+          0.016230527311563492,
+          -0.04378044605255127
+        ],
+        [
+          -0.020246613770723343,
+          0.006645191460847855,
+          0.03953283652663231
+        ],
+        [
+          -0.013909716159105301,
+          0.005955511704087257,
+          0.0406351238489151
+        ],
+        [
+          -0.010945389047265053,
+          0.05421707034111023,
+          0.00431732228025794
+        ],
+        [
+          -0.008051129989326,
+          0.05494258552789688,
+          0.007878082804381847
+        ],
+        [
+          -0.006992941256612539,
+          0.05458391085267067,
+          0.00860764179378748
+        ],
+        [
+          -0.005034524481743574,
+          0.05429547280073166,
+          0.008702169172465801
+        ],
+        [
+          0.0006566278752870858,
+          0.01875082217156887,
+          -0.04868633300065994
+        ],
+        [
+          0.004061078652739525,
+          0.05484000965952873,
+          0.0072818719781935215
+        ],
+        [
+          0.028755340725183487,
+          0.014953047037124634,
+          -0.04352885112166405
+        ],
+        [
+          0.028783222660422325,
+          0.015086430124938488,
+          -0.04343827813863754
+        ],
+        [
+          0.03184674307703972,
+          0.0144137442111969,
+          -0.04273921251296997
+        ],
+        [
+          0.03483002260327339,
+          0.013706875033676624,
+          -0.040526896715164185
+        ],
+        [
+          0.03516567498445511,
+          0.002665777923539281,
+          0.0345010831952095
+        ],
+        [
+          0.0379689522087574,
+          0.004231256898492575,
+          0.03284318372607231
+        ],
+        [
+          0.041712161153554916,
+          0.0049513718113303185,
+          0.026466183364391327
+        ],
+        [
+          0.04473072290420532,
+          0.013313418254256248,
+          -0.02933170273900032
+        ],
+        [
+          0.04565449804067612,
+          0.012688602320849895,
+          -0.022741347551345825
+        ]
+      ],
+      "stemCenterMethod": "Mean of actual trunk triangle sections at normalized heights .055, .08 and .11",
+      "sourceNeedles": 432704,
+      "lods": [
+        {
+          "level": "near",
+          "completeNeedles": 141000,
+          "needleTriangles": 564000,
+          "crossSectionScale": 1.8,
+          "longitudinalScale": 1
+        },
+        {
+          "level": "far",
+          "completeNeedles": 90000,
+          "needleTriangles": 360000,
+          "crossSectionScale": 2.85,
+          "longitudinalScale": 1
+        }
+      ],
+      "runtimeFile": "models/quarry-north-fir-1.glb",
+      "geometry": [
+        {
+          "level": "near",
+          "triangles": 672327,
+          "bounds": [
+            [
+              -0.18402321636676788,
+              0.0,
+              -0.22197429835796356
+            ],
+            [
+              0.21395981311798096,
+              0.9996527433395386,
+              0.2083471566438675
+            ]
+          ],
+          "meshes": [
+            "NorthFir_1_near_Wood",
+            "NorthFir_1_near_Needles",
+            "NorthFir_1_near_Trunk"
+          ]
+        },
+        {
+          "level": "far",
+          "triangles": 403051,
+          "bounds": [
+            [
+              -0.18406279385089874,
+              -2.671083905170235e-07,
+              -0.22201447188854218
+            ],
+            [
+              0.214007169008255,
+              0.9996610879898071,
+              0.208370178937912
+            ]
+          ],
+          "meshes": [
+            "NorthFir_1_far_Wood",
+            "NorthFir_1_far_Needles",
+            "NorthFir_1_far_Trunk"
+          ]
+        }
+      ],
+      "authoringVertexBandRadiusEstimate": 0.01152330813179365,
+      "proxySource": "source/models/quarry-north-fir-proxies.json; fitted after export from actual Trunk sections"
+    },
+    {
+      "variant": 2,
+      "sourceNode": "fir_tree_01_c_LOD0",
+      "sourceHeight": 14.520581595599651,
+      "sourceOrigin": [
+        0.03318687900900841,
+        -0.09382282942533493,
+        -0.0032132689375430346
+      ],
+      "normalizedStemHeight": 0.84,
+      "rootHull": [
+        [
+          -0.04902776703238487,
+          0.01556065957993269,
+          -0.012227905914187431
+        ],
+        [
+          -0.04877615347504616,
+          0.014713293872773647,
+          -0.009749858640134335
+        ],
+        [
+          -0.048534516245126724,
+          0.01503381971269846,
+          -0.009630498476326466
+        ],
+        [
+          -0.048386819660663605,
+          0.015117478556931019,
+          -0.016723565757274628
+        ],
+        [
+          -0.04782864451408386,
+          0.014677471481263638,
+          -0.0190727561712265
+        ],
+        [
+          -0.0454997643828392,
+          0.00881693884730339,
+          0.00025123931118287146
+        ],
+        [
+          -0.041435059159994125,
+          0.0149694150313735,
+          -0.030838992446660995
+        ],
+        [
+          -0.03489844873547554,
+          0.016273217275738716,
+          -0.038966525346040726
+        ],
+        [
+          -0.030896872282028198,
+          0.006858293432742357,
+          0.02713203988969326
+        ],
+        [
+          -0.027797572314739227,
+          0.017705872654914856,
+          -0.043463874608278275
+        ],
+        [
+          -0.0236592385917902,
+          0.003440792905166745,
+          0.03125865384936333
+        ],
+        [
+          -0.008478205651044846,
+          0.035550590604543686,
+          0.006657714024186134
+        ],
+        [
+          -0.0066061364486813545,
+          0.03532031551003456,
+          0.010011228732764721
+        ],
+        [
+          -0.004492817912250757,
+          0.035137277096509933,
+          0.01147505920380354
+        ],
+        [
+          -0.0020447492133826017,
+          0.03508603200316429,
+          0.012012330815196037
+        ],
+        [
+          -0.000892947893589735,
+          0.018020857125520706,
+          -0.045293644070625305
+        ],
+        [
+          0.0012466664193198085,
+          0.0350305438041687,
+          0.01117501687258482
+        ],
+        [
+          0.004717586562037468,
+          0.04648765176534653,
+          -0.008583090268075466
+        ],
+        [
+          0.006024928297847509,
+          0.001994808902963996,
+          0.03649319335818291
+        ],
+        [
+          0.006246811244636774,
+          0.03504481166601181,
+          0.007747120223939419
+        ],
+        [
+          0.008726684376597404,
+          0.03658228740096092,
+          0.0038190390914678574
+        ],
+        [
+          0.018619682639837265,
+          0.005459427833557129,
+          0.034390777349472046
+        ],
+        [
+          0.01891288161277771,
+          0.020985620096325874,
+          -0.04214213788509369
+        ],
+        [
+          0.02190258353948593,
+          0.02055075764656067,
+          -0.039940282702445984
+        ],
+        [
+          0.025993170216679573,
+          0.006638516206294298,
+          0.02917705476284027
+        ],
+        [
+          0.029447326436638832,
+          0.019013013690710068,
+          -0.026808002963662148
+        ],
+        [
+          0.031922824680805206,
+          0.010115773417055607,
+          0.020439617335796356
+        ],
+        [
+          0.03235708177089691,
+          0.015068959444761276,
+          -0.013807031325995922
+        ],
+        [
+          0.032468538731336594,
+          0.01484453771263361,
+          -0.012990946881473064
+        ],
+        [
+          0.03516468033194542,
+          0.012587654404342175,
+          0.001998909516260028
+        ]
+      ],
+      "stemCenterMethod": "Mean of actual trunk triangle sections at normalized heights .055, .08 and .11",
+      "sourceNeedles": 90541,
+      "lods": [
+        {
+          "level": "near",
+          "completeNeedles": 90541,
+          "needleTriangles": 362164,
+          "crossSectionScale": 1.8,
+          "longitudinalScale": 1
+        },
+        {
+          "level": "far",
+          "completeNeedles": 68000,
+          "needleTriangles": 272000,
+          "crossSectionScale": 2.85,
+          "longitudinalScale": 1
+        }
+      ],
+      "runtimeFile": "models/quarry-north-fir-2.glb",
+      "geometry": [
+        {
+          "level": "near",
+          "triangles": 436583,
+          "bounds": [
+            [
+              -0.19149163365364075,
+              0.0,
+              -0.20616500079631805
+            ],
+            [
+              0.24281975626945496,
+              0.9999995827674866,
+              0.20476876199245453
+            ]
+          ],
+          "meshes": [
+            "NorthFir_2_near_Wood",
+            "NorthFir_2_near_Needles",
+            "NorthFir_2_near_Trunk"
+          ]
+        },
+        {
+          "level": "far",
+          "triangles": 313650,
+          "bounds": [
+            [
+              -0.1915234923362732,
+              0.0,
+              -0.20621708035469055
+            ],
+            [
+              0.2428511679172516,
+              0.9998743534088135,
+              0.20478537678718567
+            ]
+          ],
+          "meshes": [
+            "NorthFir_2_far_Wood",
+            "NorthFir_2_far_Needles",
+            "NorthFir_2_far_Trunk"
+          ]
+        }
+      ],
+      "authoringVertexBandRadiusEstimate": 0.008944168427367515,
+      "proxySource": "source/models/quarry-north-fir-proxies.json; fitted after export from actual Trunk sections"
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "file": "models/quarry-north-fir-0.glb",
+      "bytes": 14477352,
+      "sha256": "c38cccc0fd17e5215aebe8f821dc17629c0a7e62a87b6a53a5c3cee37ad82ef3"
+    },
+    {
+      "file": "models/quarry-north-fir-1.glb",
+      "bytes": 11973060,
+      "sha256": "33a1e2a44959837b90e7f755feb17324840bf1510bbfafdfdd37b8bb71a4cbcb"
+    },
+    {
+      "file": "models/quarry-north-fir-2.glb",
+      "bytes": 8285352,
+      "sha256": "aaee2b603eedbf2d55b1d98742de1d204d187202b70186292467f34cb12f7ecd"
+    },
+    {
+      "file": "assets/north_fir_twig_diff.jpg",
+      "bytes": 1141996,
+      "sha256": "5504646d484a08649a9cd14402860063e69fd10072238f5afe72214e6bf478be"
+    },
+    {
+      "file": "assets/north_fir_trunk_a_diff.jpg",
+      "bytes": 1896228,
+      "sha256": "70669aaa280f11a01f1189a10b99c8429cef6a23d9c4aa6e87d734937c2b6d9a"
+    },
+    {
+      "file": "assets/north_fir_trunk_a_nor_gl.jpg",
+      "bytes": 845443,
+      "sha256": "197b4883671ad3f87f21bc39ffa930d0d97306300d580e40c9095dfe6f28bd16"
+    },
+    {
+      "file": "assets/north_fir_trunk_a_arm.jpg",
+      "bytes": 558447,
+      "sha256": "4b5b0281f66589cf06d621feb2cb527b718bdc872ef9ef77cad241476b228f74"
+    },
+    {
+      "file": "assets/north_fir_trunk_b_diff.jpg",
+      "bytes": 1538961,
+      "sha256": "d13324b6ce5b60f78b99447be0592877727fa33ef67dbe8f99ce19638dfa3da3"
+    },
+    {
+      "file": "assets/north_fir_trunk_b_nor_gl.jpg",
+      "bytes": 771952,
+      "sha256": "52fb2e1397cec839b8bb0076b777259d3d331a17740ddc2939f43098ede23825"
+    },
+    {
+      "file": "assets/north_fir_trunk_b_arm.jpg",
+      "bytes": 485883,
+      "sha256": "991fae3c33189cb43513f2aaafa18aae360f72158f6574ba09631e7751a1fb7d"
+    },
+    {
+      "file": "models/fir-medium-a.glb",
+      "bytes": 20696920,
+      "sha256": "638aea52e2e1da1a476616a186342206ce608fdc21ad0f7b0804890f3799186d",
+      "role": "Existing embedded branch/twig PBR maps and understory geometry reused without duplication"
+    },
+    {
+      "file": "models/fir-medium-b.glb",
+      "bytes": 19020864,
+      "sha256": "9291b31eb96caa2b81ffd734c9460653b4b47d8ea817a47a91342d8b24d20d03",
+      "role": "Existing embedded branch/twig PBR maps and understory geometry reused without duplication"
+    },
+    {
+      "file": "models/fir-medium-c.glb",
+      "bytes": 19074188,
+      "sha256": "bd61e04351aad10b78d765cdb45bdebdcc2cacf3b8613d20d0861225ba603e8d",
+      "role": "Existing embedded branch/twig PBR maps and understory geometry reused without duplication"
+    },
+    {
+      "file": "models/fir-saplings-lod.glb",
+      "bytes": 5691816,
+      "sha256": "9bf314948e5866112974aee906741d877d975232f782eae95343f8604726d515",
+      "role": "Existing embedded branch/twig PBR maps and understory geometry reused without duplication"
+    },
+    {
+      "file": "models/draco/draco_wasm_wrapper.js",
+      "bytes": 58456,
+      "sha256": "8bb2952d2ba7d67e1414f8df819410cb0434a666be53f671fff75f68843d76f6",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google/draco",
+      "role": "Locally bundled standard Draco decoder from installed Three.js"
+    },
+    {
+      "file": "models/draco/draco_decoder.wasm",
+      "bytes": 192420,
+      "sha256": "a680d927bed9cb864ddbd63521868891af2bfbe755092761b4837487618df8ac",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google/draco",
+      "role": "Locally bundled standard Draco decoder from installed Three.js"
+    }
+  ],
+  "optionalRuntimeFiles": [
+    {
+      "file": "models/draco/draco_decoder.js",
+      "bytes": 512465,
+      "sha256": "8625489da79a805f4f2a7d511c3e52d8b4085608a9d2a4d5f4f9de5db0aea04f",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google/draco",
+      "role": "Locally bundled standard Draco decoder from installed Three.js"
+    },
+    {
+      "file": "models/draco/LICENSE",
+      "bytes": 13898,
+      "sha256": "d3709b0fb4b8a94bbb1d02b8a2e484f258b0d9c5c5a01f940391f3fe662cd1a4",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google/draco",
+      "role": "Locally bundled standard Draco decoder from installed Three.js"
+    }
+  ],
+  "authoringFiles": [
+    {
+      "file": "source/models/quarry-north-fir-0.blend",
+      "bytes": 64804788,
+      "sha256": "e8a400acc1bfa414cfb2c9e2e5677e1ea6c0a5d0b1ebded38071f7388d4c29be",
+      "distribution": "Local editable source, omitted from static delivery because it exceeds25MiB; reproducible with tracked tools and restored CC0 source"
+    },
+    {
+      "file": "source/models/quarry-north-fir-1.blend",
+      "bytes": 52676954,
+      "sha256": "3a4d3f04dc24e16cc3d00d8eb04c0fb22841575f88a74004c63cd242604976a1",
+      "distribution": "Local editable source, omitted from static delivery because it exceeds25MiB; reproducible with tracked tools and restored CC0 source"
+    },
+    {
+      "file": "source/models/quarry-north-fir-2.blend",
+      "bytes": 36343671,
+      "sha256": "03317da4df74048e895bb8cd8361b81a373b2548151af1196baad251f6b63afa",
+      "distribution": "Local editable source, omitted from static delivery because it exceeds25MiB; reproducible with tracked tools and restored CC0 source"
+    }
+  ]
+}
