@@ -110,6 +110,10 @@ export class LocalReflections {
       this.renderer.setRenderTarget(oldTarget, oldFace, oldMip);
     }
   }
+  invalidate() {
+    this.initialized = false;
+    this.face = 0;
+  }
   dispose() {
     this.cube.dispose();
     this.filtered?.dispose();

@@ -169,7 +169,7 @@ export async function environment(
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromEquirectangular(hdr);
   scene.environment = target.texture;
-  scene.environmentIntensity = 0.5;
+  scene.environmentIntensity = 0.28;
   pmrem.dispose();
   return target;
 }

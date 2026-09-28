@@ -1,5 +1,6 @@
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
+import { DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { pbr, texture, url } from './assets';
@@ -96,9 +97,9 @@ export class Quarry {
     this.derbyColliders=this.collisionPhysics.walls;
     scene.add(this.scenery, this.derbyWalls, this.checkpoint);
     scene.fog = new T.FogExp2(0xb3bbc0, 0.0016);
-    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.3));
-    this.sun = new T.DirectionalLight(0xffdfba, 3);
-    this.sun.position.set(-70, 95, 45);
+    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.18));
+    this.sun = new T.DirectionalLight(0xfff1dc, 3);
+    this.sun.position.copy(DAYLIGHT_DIRECTION).multiplyScalar(DAYLIGHT_DISTANCE);
     this.sun.castShadow = true;
     Object.assign(this.sun.shadow.camera, {
       left: -75,

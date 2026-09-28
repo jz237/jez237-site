@@ -43,6 +43,8 @@ The bundled `public/multiplayer.json` connects to the deployed service at `wss:/
 
 Three.js renders layered photographic ground and cliff materials, scanned rocks and near fir trees, photographic workshop cladding, detailed car interiors and exposed crash structures, shadows, ambient occlusion, and quarry environment reflections. Ultra targets the user's RTX 5090 at 1440p. High reduces resolution and shadows; Medium also disables ambient occlusion and shadows. No ray tracing is required.
 
+Sunlight now follows the bright region in the bundled HDR sky. A cached shadow map covers fixed quarry scenery beyond the moving car-shadow map, so distant ledges, rock recesses and rubble cast consistent shadows. Ultra uses a 4096-square static map, High uses 2048, and Medium disables it. The fixed capture excludes cars and movable props and retains one stable scenery detail level. Distant photo trees use an approximate canopy lighting response; they remain flat imagery rather than fully modelled crowns.
+
 The road-facing quarry has a Blender-built cut, an adjoining extraction bay with fractured faces and a collapsed chute, and seated rubble. Its approach connects low rubble deposits, drainage channels and grouped young firs from the road shoulder to the wall. Painted material masks blend photographic broken-rock and soil maps into the surrounding terrain. Spatial sections switch between near and distant geometry. Solo play and the multiplayer server share the near wall and deposit surfaces, with simplified rubble collisions. The broader quarry still contains procedural terrain and distant tree cards; this remains a visual work in progress.
 
 The northern arena headwall replaces another 35 degrees of the old terraces with two fractured faces and a narrow collapse channel. Its Blender source reuses the existing photographic rock maps and scanned fragments. Nearby and distant meshes share their section boundaries, and solo and online play use the same wall collision surface. Existing forest cards behind this wall are regrouped without adding trees or texture files.
@@ -69,6 +71,8 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 
 - `npm test`: repeatable rules, vehicle and scenery checks. After `npm ci`, the arena audit rebuilds the pinned multiplayer Rapier adapter locally if its ignored generated file is absent, then verifies it against the tracked deployment reference; private release reports are not required.
 - `npm run qa`: Chrome browser integration checks against the local server; reports and screenshots go to `outputs/`.
+- `QUARRY_DAYLIGHT_PHASE=<new-name> node tools/daylight-qa.mjs`: matched 1440p daylight, moving chase and isolated-lighting comparisons. The report verifies loaded assets and measures sky/sun alignment from the actual HDR. Set environment variables using your shell syntax.
+- `QUARRY_SHADOW_PHASE=<new-name> node tools/shadow-runtime-qa.mjs`: real WebGL cache, replacement-car, quality-cycle and context-recovery checks; run with no other GPU test active.
 - `python tools/audio-qa.py`: decode, duration, peak, silence and loop-boundary measurements.
 - `tools/prepare_concept.py`: Blender car preparation; editable `.blend` files are under `source/models/`.
 - Blender: `--background --python tools/refine_cars.py -- --kind coupe` rebuilds only the coupe refinement, checking that sedan and hatch assets remain unchanged. Refined editable scenes and hashes are recorded in `source/vehicle-refinement-manifest.json`.

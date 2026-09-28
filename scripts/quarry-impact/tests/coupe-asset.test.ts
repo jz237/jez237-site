@@ -59,6 +59,17 @@ test('coupe rear detailing cannot change other cars, handling, deployed server i
     // This milestone also authorizes trilinear interpolation of the existing
     // paint silt noise. Keep its old hash as provenance, not a physics invariant.
     if(file==='src/car-materials.ts')continue;
+    if(file==='src/assets.ts'){
+      // The later daylight calibration changes only this scene-level intensity.
+      // Restore its exact original statement in memory and compare every byte
+      // against the immutable car-era fixture; car loading/batching stay frozen.
+      const bytes=readProject(file),current=Buffer.from('scene.environmentIntensity = 0.28;'),original=Buffer.from('scene.environmentIntensity = 0.5;');
+      const at=bytes.indexOf(current);assert.ok(at>=0,'the approved daylight statement must exist exactly');
+      assert.equal(bytes.indexOf(current,at+current.length),-1,'only one intensity statement may receive this exception');
+      const restored=Buffer.concat([bytes.subarray(0,at),original,bytes.subarray(at+current.length)]);
+      assert.equal(sha256(restored),expected,'restoring only the approved environment intensity must recover the original assets.ts bytes');
+      continue;
+    }
     assert.equal(sha256(readProject(file)),expected,`${file} must remain byte-identical`);
   }
   const physics=currentPhysicsInvariants();assert.equal(physics.workerInputs.length,16);assert.ok(physics.workerInputs.filter(i=>i.available&&i.file!=='src/quarry-layout.ts').every(i=>i.unchanged));
