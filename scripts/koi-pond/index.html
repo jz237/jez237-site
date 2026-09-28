@@ -1,13 +1,44 @@
-<!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102824"><meta name="description" content="Explore an original living koi garden: animated 3D koi, a woodland waterfall, and an interactive pond water learning lab."><title>Stillwater · The Hidden Reef Koi Garden</title></head>
-<body><main id="app">
- <div id="scene" aria-label="Interactive three-dimensional koi pond"></div>
- <header><a class="brand" href="../../"><svg viewBox="0 0 36 36" aria-hidden="true"><path d="M7 26Q18 6 30 13Q20 29 7 26ZM7 26l-4-7m4 7l-1 6M27 14l1 1"/></svg><span>THE HIDDEN REEF<small>THE LIVING COLLECTION</small></span></a><span class="preview-label">DESIGN PREVIEW <i></i></span></header>
- <section class="intro"><p class="eyebrow">A GARDEN IN MOTION</p><h1>Stillwater<span>.</span></h1><p>A quiet place to look a little closer.</p></section>
- <nav class="learn-nav" aria-label="Explore the pond"><button data-panel="koi"><span>01</span> Meet the koi <b>↗</b></button><button data-panel="water"><span>02</span> Water lab <b>↗</b></button><button data-panel="pond"><span>03</span> A living pond <b>↗</b></button></nav>
- <div class="scene-caption"><span class="live-dot"></span><span id="scene-label">Seven koi. No two journeys alike.</span></div>
- <footer><div class="view-controls" role="group" aria-label="Camera views"><button data-view="garden" class="selected">Garden</button><button data-view="overhead">Overhead</button><button data-view="waterline">Waterline</button></div><div class="actions"><button id="feed">Feed the koi <span>✦</span></button><button id="pause" aria-pressed="false">Pause</button><button id="light" aria-pressed="false">Evening</button><button id="quality" aria-pressed="false">Quality: auto</button><button id="fullscreen" aria-pressed="false">Full screen</button></div><p class="hint">Drag to explore · Scroll to zoom · Tap water for ripples · Select a koi</p></footer>
- <aside id="panel" hidden aria-labelledby="panel-title"><button id="close-panel" aria-label="Close guide">×</button><div id="panel-body"></div></aside>
- <div id="loading" role="status"><div class="loading-mark">S<span>•</span></div><p>Growing your quiet corner.</p><small>Preparing the garden and its inhabitants</small></div>
- <div id="toast" role="status" aria-live="polite"></div>
-</main><script type="module" src="/src/main.js"></script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Stillwater — The Hidden Reef Koi Garden</title><meta name="description" content="Explore a detailed Japanese koi garden, watch its fish, and learn how pond water works. A Hidden Reef demo preview."><meta name="theme-color" content="#142a22"><link rel="icon" href="data:,"><link rel="stylesheet" href="./src/scene.css"><link rel="stylesheet" href="./src/reef.css"></head><body id="app">
+<canvas aria-label="Interactive 3D koi pond garden" id="c" tabindex="0"></canvas>
+<div id="loader"><h1>Stillwater · The Hidden Reef</h1><div class="bar"><i id="loadbar"></i></div><p id="loadmsg">Starting</p></div>
+<div id="hud" class="glass"></div>
+<aside id="help" class="glass" aria-label="Guide">
+  <header><span class="help-title">Guide</span>
+    <button id="help-close" class="icon-btn" type="button" title="Hide the guide (I)" aria-label="Hide the guide">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <p class="lead">Click the water for ripples and a splash, or the frog to make it leap.</p>
+  <dl>
+    <div><dt><kbd>C</kbd></dt><dd>Camera mode</dd></div>
+    <div><dt><kbd>E</kbd></dt><dd>Feed the koi</dd></div>
+    <div><dt><kbd>P</kbd></dt><dd>Hold shot</dd></div>
+    <div><dt><kbd>G</kbd></dt><dd>Stroke a koi</dd></div>
+    <div><dt><kbd>O</kbd></dt><dd>Freeze time</dd></div>
+    <div><dt><kbd>K</kbd></dt><dd>Follow a koi</dd></div>
+    <div><dt><kbd>V</kbd></dt><dd>Clean view</dd></div>
+    <div><dt><kbd>T</kbd></dt><dd>Weather</dd></div>
+    <div><dt><kbd>M</kbd></dt><dd>Mute / unmute</dd></div>
+    <div><dt><kbd>H</kbd></dt><dd>Control panel</dd></div>
+    <div><dt><kbd>I</kbd></dt><dd>Hide this guide</dd></div>
+  </dl>
+  <p class="foot">Manual · <kbd>Drag</kbd> look · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move · <kbd>Q</kbd> <kbd>Space</kbd> down / up · <kbd>Shift</kbd> faster</p>
+</aside>
+<button id="help-open" class="glass icon-btn" type="button" title="Show the guide (I)" aria-label="Show the guide">?</button>
+<div id="toast" class="glass"></div>
+<div id="cleanhint" class="glass">Clean view · press V or Esc to bring the controls back</div>
+<div id="caption" aria-live="polite"></div>
+<div id="toolbar" class="glass" role="toolbar" aria-label="Scene controls">
+  <button id="tb-cam" class="sec" type="button" title="Switch between cinematic and manual camera (C)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5h10v9h-10z"/><path d="M13.5 10.5l6-3v9l-6-3"/></svg><span class="lbl">Manual camera</span></button>
+  <button id="tb-hold" class="sec" type="button" aria-pressed="false" title="Hold the current shot (P)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="11" width="13" height="9" rx="2.2"/><path d="M8.5 11V8.2a3.5 3.5 0 0 1 7 0V11"/></svg><span class="lbl">Hold shot</span></button>
+  <button id="tb-freeze" class="sec" type="button" aria-pressed="false" title="Freeze time (O)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M10 9v6M14 9v6"/></svg><span class="lbl">Freeze time</span></button>
+  <button id="tb-clean" class="sec" type="button" title="Hide all overlays for screenshots (V, Esc to exit)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg><span class="lbl">Clean view</span></button>
+  <button id="tb-weather" class="sec" type="button" title="Change the weather / season (T)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8.5" r="3"/><path d="M8.5 2.5v1.2M2.5 8.5h1.2M4.3 4.3l.9.9M12.7 4.3l-.9.9"/><path d="M8.5 19.5h9a3.5 3.5 0 0 0 .2-7 5 5 0 0 0-9.4 1.3 2.9 2.9 0 0 0 .2 5.7z"/></svg><span class="lbl">Sunny</span></button>
+  <button id="tb-sound" class="sec" type="button" aria-pressed="false" title="Mute / unmute (M)" aria-label="Mute"><svg viewBox="0 0 24 24" aria-hidden="true" class="ic-on"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.2 6.5a7.6 7.6 0 0 1 0 11"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" class="ic-off"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span class="lbl">Sound</span></button>
+  <span class="sep" aria-hidden="true"></span>
+  <button id="strokebtn" type="button" title="Gently stroke a koi (G)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V6.8a1.4 1.4 0 0 1 2.8 0V12M10.8 11.5V5.4a1.4 1.4 0 0 1 2.8 0v6.1M13.6 11.6V6.6a1.4 1.4 0 0 1 2.8 0v6.6M16.4 10.4a1.4 1.4 0 0 1 2.8 0v4.3a6.8 6.8 0 0 1-6.8 6.8h-.6a6.3 6.3 0 0 1-5.4-3.1l-1.9-3.3a1.4 1.4 0 0 1 2.4-1.4L8 15"/></svg><span class="lbl">Stroke a koi</span></button>
+  <button id="feedbtn" class="primary" type="button" title="Feed the koi (E)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7.5" cy="6.5" r="1.3"/><circle cx="12" cy="4.5" r="1.3"/><circle cx="16.5" cy="7" r="1.3"/><circle cx="11" cy="9.5" r="1.3"/><path d="M3.5 13.5c1.5 4 5 6.5 8.5 6.5s7-2.5 8.5-6.5"/></svg><span class="lbl">Feed the koi</span></button>
+</div>
+<header id="reef-brand"><span class="reef-mark" aria-hidden="true">◈</span><div><strong>THE HIDDEN REEF</strong><span>STILLWATER / KOI GARDEN</span></div><small>DEMO PREVIEW</small></header>
+<nav id="learn-nav" aria-label="Learn about the pond"><button data-panel="koi">Meet the koi</button><button data-panel="water">Water lab</button><button data-panel="pond">Pond life</button></nav>
+<nav id="view-nav" aria-label="Pond views"><button data-view="Garden">Garden</button><button data-view="Pond">At the water</button><button data-view="Underwater">Underwater</button><button data-view="Tour">Take a tour</button><button id="scene-settings" aria-expanded="false">Settings</button></nav>
+<aside id="panel" role="dialog" aria-labelledby="panel-title" hidden><button id="close-panel" aria-label="Close guide">×</button><div id="panel-body"></div></aside>
+<script src="./vendor/three.min.js"></script><script src="./vendor/dat.gui.min.js"></script><script type="module" src="./src/GardenEngine.js"></script></body></html>
