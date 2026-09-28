@@ -27,3 +27,16 @@
 .pond-preview-image:focus-visible{outline-offset:-5px}
 .pond-garden-hero~.catalog-frame #products{scroll-margin-top:110px}
 @media(max-width:760px){.cat-header.pond-garden-hero{grid-template-columns:1fr}.pond-preview-media{min-height:0;aspect-ratio:16/9}.pond-preview-copy{padding:24px}.pond-garden-hero h1{font-size:34px}.pond-preview-explore{width:100%}.pond-preview-topics{margin-bottom:19px}.pond-preview-label{left:14px;bottom:13px;font-size:9px}.pond-preview-toggle{top:11px;right:11px;min-height:40px}.pond-preview-shop{padding-top:15px;min-height:44px}}
+
+/* Opens a separate, on-demand 3D exhibit without loading WebGL in shopping. */
+.pond-filter-feature{grid-column:1/-1;display:grid;grid-template-columns:148px minmax(0,1fr) auto;gap:23px;align-items:center;background:linear-gradient(110deg,#0e2229,#17382e);border-top:1px solid #50716a;text-decoration:none;padding:15px 27px 15px 17px;color:#e6f3e6!important}
+.pond-filter-feature:hover{background:linear-gradient(110deg,#152e34,#205043)}
+.pond-filter-feature>img{width:148px;height:112px;object-fit:cover;border:1px solid #4d6761;border-radius:7px;display:block}
+.pond-filter-copy{display:grid;gap:7px;min-width:0}
+.pond-filter-kicker{font:700 9px/1.4 Arial,sans-serif;letter-spacing:1.4px;color:#b7dfc6}
+.pond-filter-copy strong{font:25px/1.2 Georgia,serif;letter-spacing:-.3px;color:#eef4e8}
+.pond-filter-copy>span:last-child{font:12px/1.6 Arial,sans-serif;color:#bbd4d1;max-width:510px}
+.pond-filter-action{display:flex;gap:22px;align-items:center;white-space:nowrap;font:700 12px/1.4 Arial,sans-serif;border:1px solid #759e8d;border-radius:6px;padding:13px;color:#d8f4df}
+.pond-filter-action span{font-size:20px}
+@media(max-width:980px){.pond-filter-feature{grid-template-columns:115px minmax(0,1fr);gap:15px;padding:17px}.pond-filter-feature>img{width:115px;height:105px;grid-row:1/3}.pond-filter-action{grid-column:2;width:max-content;padding:8px 13px;margin-top:-3px}.pond-filter-copy strong{font-size:23px}.pond-filter-copy>span:last-child{font-size:11px}}
+@media(max-width:480px){.pond-filter-feature{grid-template-columns:82px minmax(0,1fr);padding:17px 14px;gap:12px}.pond-filter-feature>img{width:82px;height:110px}.pond-filter-copy strong{font-size:21px}.pond-filter-kicker{font-size:8px;letter-spacing:.9px}.pond-filter-copy>span:last-child{font-size:11px}.pond-filter-action{font-size:11px}}
