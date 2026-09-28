@@ -48,11 +48,17 @@ async function prepareForestStops() {
   });
   return { stops, sourceSha256: createHash('sha256').update(bytes).digest('hex'), backdropGroundHeight };
 }
+async function addRidgeStops(forest) {
+  if (!forest) return forest;
+  const { prepareNorthRidgeStops } = await tsImport('./ridge-stop-preflight.ts', import.meta.url);
+  const ridge = prepareNorthRidgeStops();
+  return { ...forest, stops: [...forest.stops, ...ridge.stops], ridge };
+}
 // Optional CPU-only preflight deliberately produces no performance pass/fail.
 // It lets placement changes be checked before reserving the isolated GPU run.
 if (process.env.QUARRY_PERFORMANCE_PLAN_ONLY === '1') {
-  const { stops, sourceSha256 } = await prepareForestStops();
-  const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops,
+  const { stops, sourceSha256, ridge } = await addRidgeStops(await prepareForestStops());
+  const plan = { kind: 'forest-inspection-placement-preflight', sourceSha256, stops, ridge,
     measuredFrames: 0, browserLaunched: false };
   await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, JSON.stringify(plan, null, 2) + '\n');
@@ -69,15 +75,20 @@ try {
   const forestAssets = await forestRuntimeAssetPlan();
   report.forestAssetsExpected = forestAssets;
   const hasForest = forestAssets.some(asset => /quarry-north-fir-\d\.glb$/.test(asset.file));
-  const forest = hasForest && seconds >= 480 ? await prepareForestStops() : null;
-  const forestStart = seconds * .45, forestDuration = Math.min(48, seconds * .08), stopDuration = forestDuration / 3;
+  const hasRidge = forestAssets.some(asset => /north-backdrop-0-albedo\.png$/.test(asset.file));
+  const foreground = hasForest && seconds >= 480 ? await prepareForestStops() : null;
+  const forest = hasRidge ? await addRidgeStops(foreground) : foreground;
+  const forestStart = seconds * (hasRidge ? .41 : .45);
+  const forestDuration = forest ? Math.min(16 * forest.stops.length, seconds * (hasRidge ? .17 : .08)) : 0;
+  const stopDuration = forest ? forestDuration / forest.stops.length : 0;
   report.forestProtocol = { enabled: !!forest, startSeconds: forest ? forestStart : null,
     durationSeconds: forest ? forestDuration : 0, stopSeconds: forest ? stopDuration : 0,
     placementSha256: forest?.sourceSha256, stops: forest?.stops ?? [],
-    description: 'Placed, braked inspection at three trunk-clear northern stands with eight live cars, real physics and the ordinary chase camera. This is not a physical forest driving route.',
+    ridgePlacementSha256: forest?.ridge?.placementsSHA256,
+    description: 'Placed, braked inspections at three foreground stands and, when present, two ridge close/transition poses with eight live cars, real physics and the ordinary chase camera. This is not a physical forest driving route.',
     reasonIfDisabled: forest ? undefined : hasForest ? 'Runs shorter than 480 seconds omit the forest interval' : 'Built application has no authored northern fir assets',
     diagnosticsMeaning: 'Cell visible flags are scene flags, not frustum visibility. Cell triangle/draw counts describe the selected LOD before culling; renderer stats describe actual submissions.' };
-  if (forest) report.protocol += ' Within the middle derby block, three placed braked forest inspections replace at most 48 seconds; both race blocks and all previous coverage assertions remain intact.';
+  if (forest) report.protocol += ` Within the middle derby block, ${forest.stops.length} placed braked forest inspections replace at most ${forestDuration} seconds; both race blocks and all previous coverage assertions remain intact.`;
   browser = await chromium.launch({ channel: 'chrome', headless: true, args: [
     '--autoplay-policy=no-user-gesture-required', '--disable-background-timer-throttling',
     '--disable-renderer-backgrounding', '--ignore-gpu-blocklist',
@@ -151,7 +162,8 @@ try {
     const snapshot = await page.evaluate(() => {
       const { benchmarkSamples, ...stats } = __quarry.stats;
       return { stats, mode: __quarry.mode, cars: __quarry.cars, heap: performance.memory?.usedJSHeapSize,
-        northForest: __quarry.northForest ?? null };
+        northForest: __quarry.northForest ?? null, northRidge: __quarry.northRidge ?? null,
+        camera: __quarry.cameraPose ?? null };
     });
     if (time >= nextSample) {
       const forestStop = activeForest >= 0 ? forest.stops[activeForest] : null;
@@ -163,7 +175,7 @@ try {
     }
     const nextBlock = Math.min(4, Math.floor(time / (seconds / modes.length)));
     const nextForest = forest && time >= forestStart && time < forestStart + forestDuration
-      ? Math.min(2, Math.floor((time - forestStart) / stopDuration)) : -1;
+      ? Math.min(forest.stops.length - 1, Math.floor((time - forestStart) / stopDuration)) : -1;
     if (nextForest >= 0) {
       if (nextForest !== activeForest || snapshot.stats.state === 'result') {
         const stop = forest.stops[nextForest];
@@ -214,13 +226,17 @@ try {
   report.forestFrameSamples = await page.evaluate(() => window.__forestPerformance?.samples ?? []);
   report.forestTiming = summarizeFrames(report.forestFrameSamples.map(sample => sample.ms));
   report.forestRanges = forestRanges;
-  report.forestStops = (forest?.stops ?? []).map(stop => {
+  const inspectedStops = (forest?.stops ?? []).map(stop => {
     const samples = report.samples.filter(sample => sample.forestStop === stop.id && sample.forestSettledSeconds >= 5
       && sample.stats.state === 'playing');
     const near = samples.filter(sample => Math.hypot(sample.cars[0].position[0] - stop.x, sample.cars[0].position[2] - stop.z) < 3);
     return { ...stop, visits: near.length, samples: near,
-      timing: summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop === stop.id).map(sample => sample.ms)) };
+        timing: summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop === stop.id).map(sample => sample.ms)) };
   });
+  report.forestStops = inspectedStops.filter(stop => stop.kind !== 'ridge');
+  report.ridgeStops = inspectedStops.filter(stop => stop.kind === 'ridge').map(stop => ({ ...stop,
+    actualDistances: stop.samples.map(sample => Math.hypot(...sample.camera.position.map((value, i) => value - stop.targetCenter[i]))) }));
+  report.ridgeTiming = summarizeFrames(report.forestFrameSamples.filter(sample => sample.stop.startsWith('ridge-')).map(sample => sample.ms));
   report.northForestCloseVisits = report.forestStops.reduce((sum, stop) => sum + stop.visits, 0);
   report.northForestDiagnosticsAvailable = report.forestStops.some(stop => stop.samples.some(sample => sample.northForest !== null));
   for (const stop of report.forestStops) {
@@ -280,18 +296,26 @@ try {
   assert.ok(report.headwallVisits > 0, 'Racing must visit the arena headwall');
   assert.ok(report.roadApproachVisits > 0, 'Racing must drive on the new gravel approach');
   if (forest) {
-    for (const stop of report.forestStops) {
+    for (const stop of inspectedStops) {
       assert.ok(stop.visits >= (stopDuration >= 14 ? 2 : 1), `${stop.id} needs settled close inspection samples`);
       assert.ok(stop.samples.every(sample => Math.abs(sample.cars[0].speed) < 1), `${stop.id} must remain braked`);
       assert.ok(stop.samples.every(sample => {
         const aboveGround = sample.cars[0].position[1] - sample.forestGroundAtCar;
         return aboveGround > .25 && aboveGround < 1.8;
       }), `${stop.id} must settle onto the unchanged terrain`);
-      if (report.northForestDiagnosticsAvailable) assert.ok(stop.samples.every(sample =>
+      if (stop.kind !== 'ridge' && report.northForestDiagnosticsAvailable) assert.ok(stop.samples.every(sample =>
         Array.isArray(sample.northForest) && sample.northForest.some(cell =>
           cell.id === `north-forest-${stop.id}` && cell.visible && cell.lod === 0
           && Number.isFinite(cell.triangles) && cell.triangles > 0 && cell.draws > 0 && cell.distance < 55)),
         `${stop.id} must exercise its actual near LOD, not merely stand near a far-level forest`);
+    }
+    for (const stop of report.ridgeStops) {
+      assert.ok(stop.actualDistances.every(distance => distance >= stop.expectedDistanceBand[0] && distance <= stop.expectedDistanceBand[1]),
+        `${stop.id} must exercise its actual shader distance band with the normal chase camera`);
+      assert.ok(stop.samples.every(sample => Math.hypot(sample.cars[0].position[0], sample.cars[0].position[2]) < 250),
+        `${stop.id} must stay safely inside automatic recovery`);
+      assert.ok(stop.samples.every(sample => sample.northRidge?.some(cell => cell.id === 'north-ridge-' + stop.standId && (cell.near || cell.far) && cell.atlas)),
+        `${stop.id} must retain real geometry and the complementary atlas pass`);
     }
     assert.ok(report.forestFrameSamples.length > forestDuration * 10, 'Forest interval must contain continuous frames');
   }

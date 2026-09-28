@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const treeManifest = 'source/models/quarry-north-firs-manifest.json';
+const ridgeManifest = 'source/models/quarry-north-backdrop-manifest.json';
 const floorManifest = 'source/north-forest-floor-manifest.json';
 const floorFile = 'assets/north-forest-floor.rgba.gz';
 const treeFiles = [0, 1, 2].map(i => `models/quarry-north-fir-${i}.glb`);
@@ -41,6 +42,7 @@ export async function forestRuntimeAssetPlan({ historical = false, publicAssets 
   const code = (await Promise.all(modules.map(file => fs.readFile(path.join('dist', file), 'utf8')))).join('\n');
   const includeFloor = code.includes('north-forest-floor.rgba.gz') || publicAssets;
   const includeTrees = code.includes('quarry-north-fir-') || publicAssets;
+  const includeRidge = code.includes('north-backdrop-0-albedo.png') || publicAssets;
   const records = new Map();
   if (includeFloor) {
     const manifest = JSON.parse(await fs.readFile(floorManifest, 'utf8'));
@@ -69,6 +71,17 @@ export async function forestRuntimeAssetPlan({ historical = false, publicAssets 
       records.set(file, { ...record, manifest: treeManifest, optionalBrowserRequest: true });
     }
     for (const file of treeFiles) assert.ok(records.has(file), `Missing authored fir variant ${file}`);
+  }
+  if (includeRidge) {
+    const manifest = JSON.parse(await fs.readFile(ridgeManifest, 'utf8'));
+    assert.equal(manifest.runtimeFiles.length, 6, 'Three baked fir variants each need color and normal/depth');
+    for (const record of manifest.runtimeFiles) {
+      const file = assetPath(record.file);
+      assert.ok(!records.has(file), `Duplicate ridge atlas ${file}`);
+      records.set(file, { ...record, manifest: ridgeManifest });
+    }
+    for (const variant of [0, 1, 2]) for (const layer of ['albedo', 'normal-depth'])
+      assert.ok(records.has(`models/north-backdrop-${variant}-${layer}.png`), 'Missing baked ridge layer');
   }
   const plan = [];
   for (const [file, record] of records) {

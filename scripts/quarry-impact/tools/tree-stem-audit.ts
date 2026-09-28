@@ -99,8 +99,8 @@ export async function auditNorthTreeStems(){
 
 /** Independent support extraction from the shipped near Trunk, including the
  * source tool's lexicographic unique ordering for coincident support extrema. */
-export async function auditNorthTreeSeating(){
-  const data=JSON.parse(readForestFile('src/quarry-north-forest.json').toString()),terrain=createSurfaceSampler(terrainGeometry()),assets:any[]=[],trees:any[]=[];
+export async function auditNorthTreeSeating(dataOverride?:{trees:any[];rootSeating:any}){
+  const data=dataOverride??JSON.parse(readForestFile('src/quarry-north-forest.json').toString()),terrain=createSurfaceSampler(terrainGeometry()),assets:any[]=[],trees:any[]=[];
   const order=(a:number[],b:number[])=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2];
   for(const variant of [0,1,2]){
     const file=`public/models/quarry-north-fir-${variant}.glb`,bytes=readForestFile(file),loader=new GLTFLoader().register(()=>({name:'SEATING_CPU_IMAGES',loadTexture:async()=>new T.Texture()}));

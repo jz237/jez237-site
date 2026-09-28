@@ -5,6 +5,7 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { url } from './assets';
+import { loadNorthRidge } from './scenery-north-ridge';
 
 export type NorthSaplingPart = { variant: number; level: number; sourceHeight: number; sourceBottom: number;
     geometry: T.BufferGeometry; material: T.MeshStandardMaterial };
@@ -136,6 +137,7 @@ export async function loadNorthForest(parent: T.Group,
         }
         parent.add(lod); northCells.push(lod);
     }
+    await loadNorthRidge(parent, geometry, materials);
     return northCells;
 }
 

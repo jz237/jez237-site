@@ -10,6 +10,7 @@ import { trackPoint } from '../src/rules';
 import { staticCasterScene, fitStaticShadowCamera } from '../src/static-shadows';
 import { updateForestView } from '../src/scenery-vegetation';
 import { auditNorthTreeSeating, auditNorthTreeStems } from '../tools/tree-stem-audit';
+import {restoreNorthBackdropCards,assertNorthBackdropShadowSource} from './north-backdrop-invariants';
 
 let captured:ReturnType<typeof captureNorthForest>|undefined;
 const current=()=>captured??=captureNorthForest();
@@ -19,13 +20,14 @@ test('northern woodland keeps all old solids, terrain, car bytes and original sh
   const physics=currentNorthForestPhysics();assertNorthForestLayoutSource();assertNorthForestEvolution(quarryColliderLayout());
   assert.deepEqual(physics.terrain,before.physics.terrain);assert.deepEqual(physics.nearTrees,before.physics.nearTrees);assert.deepEqual(physics.saplings,before.physics.saplings);
   for(const [file,expected] of Object.entries(before.files))if(file.startsWith('public/models/')||['src/rules.ts','src/vehicle.ts','src/assets.ts','src/car-materials.ts','src/scenery-north-backdrop.ts','src/scenery-backdrop.ts','src/scenery-flora-placement.ts','src/static-shadows.ts'].includes(file))
-    assert.equal(forestHash(readForestFile(file)),expected,`${file} is not part of northern tree authoring`);
+    if(file==='src/static-shadows.ts')assertNorthBackdropShadowSource();
+    else assert.equal(forestHash(readForestFile(file)),expected,`${file} is not part of northern tree authoring`);
   for(const entry of before.workerInputs)if(entry.file!=='src/quarry-layout.ts'&&!entry.file.startsWith('multiplayer/.generated/'))
     assert.equal(forestHash(readForestFile(entry.file)),entry.expected,`${entry.file} remains frozen`);
 });
 
 test('actual renderer changes only52 authorized photo-card transforms, retaining all old GLBs, materials, grass and RNG',async()=>{
-  const after=await current();assert.equal(after.cards.length,384);assert.equal(after.cards.length,before.forest.cards.length);
+  const actual=await current(),after={...actual,cards:restoreNorthBackdropCards(actual.cards)};assert.equal(after.cards.length,384);assert.equal(after.cards.length,before.forest.cards.length);
   assert.deepEqual(after.random,before.forest.random,'added flora must not consume or reorder the existing random stream');
   let local=0;for(let i=0;i<after.cards.length;i++){
     const old=before.forest.cards[i],next=after.cards[i];assert.equal(next.kind,old.kind);assert.deepEqual(next.color,old.color);

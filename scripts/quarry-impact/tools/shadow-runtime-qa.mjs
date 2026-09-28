@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
 
 const phase=process.env.QUARRY_SHADOW_PHASE;
 assert.ok(phase,'Set QUARRY_SHADOW_PHASE to a new evidence name');
@@ -13,9 +14,17 @@ const output=path.resolve(process.env.QUARRY_SHADOW_OUTPUT||'outputs/daylight/sh
 const url=process.env.QUARRY_QA_URL||'http://127.0.0.1:8795/';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const neutral={throttle:0,steer:0,brake:1,handbrake:false};
+const northBackdrop=process.env.QUARRY_SHADOW_NORTH_BACKDROP==='1';
+const contextOnly=process.env.QUARRY_SHADOW_CONTEXT_ONLY==='1';
+// A saved, terrain-supported transition view puts the actual atlas on screen.
+// Freeze the fixture here so the reusable tool never depends on excluded outputs.
+const backdropView=northBackdrop?{player:[-112.80609574938819,226.57773218412194,7.2094670054408025],
+  position:[-112.80609574938819,45.120813459170904,226.57773218412194],
+  target:[-96.81826620196813,43.120813459170904,238.59394233385893]}:null;
 const assetPaths=['assets/sky.hdr','assets/arena-floor-mask.rgba.gz','models/quarry-headwall.glb',
   'models/quarry-extension.glb','models/coupe.glb','models/sedan.glb','models/hatch.glb'];
 const report={phase,url,startedAt:new Date().toISOString(),viewport:{width:2560,height:1440},
+  contextOnly,
   protocol:'Real rendered frames with stationary/moving views, replacement cars, AI events, quality cycles and optional real WebGL context recovery. Counts are resource/capture diagnostics, not GPU timings.',
   assets:[],checks:[],samples:[],quality:[],screenshots:[],errors:[],failedRequests:[],consoleWarnings:[]};
 await fs.mkdir(output,{recursive:true});
@@ -28,6 +37,37 @@ try{
     '--disable-background-timer-throttling','--disable-renderer-backgrounding',
   ]});
   page=await browser.newPage({viewport:report.viewport,deviceScaleFactor:1});
+  let forestRequests;
+  if(northBackdrop){
+    const plan=await forestRuntimeAssetPlan({publicAssets:true});
+    report.forestAssets=[];forestRequests=await observeForestRequests(page,url,plan);
+    await page.addInitScript(()=>{
+      window.__ridgeShaderAudit={generation:0,programs:[]};
+      window.addEventListener('webglcontextrestored',()=>{window.__ridgeShaderAudit.generation++;},true);
+      for(const Constructor of [window.WebGLRenderingContext,window.WebGL2RenderingContext]){
+        if(!Constructor)continue;
+        const proto=Constructor.prototype,linked=proto.linkProgram,used=proto.useProgram;
+        const records=new WeakMap();let current;
+        proto.linkProgram=function(program){
+          const result=linked.call(this,program),sources=(this.getAttachedShaders(program)||[]).map(s=>this.getShaderSource(s)||'');
+          if(sources.some(s=>s.includes('uniform sampler2D northAlbedo'))){
+            const success=this.getProgramParameter(program,this.LINK_STATUS),uniforms=[];
+            if(success)for(let i=0;i<this.getProgramParameter(program,this.ACTIVE_UNIFORMS);i++)uniforms.push(this.getActiveUniform(program,i).name);
+            const record={generation:window.__ridgeShaderAudit.generation,linked:success,draws:0,uniforms,
+              fragmentSurface:sources.some(s=>s.includes('#define QUARRY_STATIC_FRAGMENT_SURFACE')&&s.includes('quarryStaticSurfacePosition + quarryStaticSurfaceNormal')),
+              log:this.getProgramInfoLog(program)};
+            records.set(program,record);window.__ridgeShaderAudit.programs.push(record);
+          }
+          return result;
+        };
+        proto.useProgram=function(program){current=records.get(program);return used.call(this,program);};
+        for(const name of ['drawElements','drawArrays','drawElementsInstanced','drawArraysInstanced']){
+          const draw=proto[name];if(!draw)continue;
+          proto[name]=function(...args){if(current)current.draws++;return draw.apply(this,args);};
+        }
+      }
+    });
+  }
   page.setDefaultTimeout(20000);
   page.on('pageerror',error=>report.errors.push({type:'page',message:error.message}));
   page.on('console',message=>{
@@ -46,6 +86,10 @@ try{
   });
   await page.goto(url);
   await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
+  if(northBackdrop){
+    await verifyForestRequests(forestRequests,report.forestAssets);
+    assert.equal(report.forestAssets.filter(record=>/north-backdrop-\d-(albedo|normal-depth)\.png$/.test(record.file||record.asset||'')).length,6,'Observe all six actual atlas requests');
+  }
   const frames=async(count=120)=>page.evaluate(count=>new Promise((resolve,reject)=>{
     const timeout=setTimeout(()=>reject(new Error(`No ${count} rendered frames within 20 seconds`)),20000);
     let remaining=count;
@@ -100,6 +144,7 @@ try{
   await frames();const initial=await sample('initial-warmed-ultra');
   assert.equal(initial.stats.staticShadows.size,4096);assert.equal(initial.stats.staticShadows.ready,true);
   assert.ok(initial.stats.staticShadows.captures>=1);assert.ok(initial.stats.staticShadows.captureDraws>0);
+  if(!contextOnly){
   await frames(180);const stationary=await sample('stationary-cubemap-cycles');
   assertCached(initial,stationary,'stationary reflection cycles');assertResourcesStable(initial,stationary,'stationary reflection cycles');
   assert.ok(stationary.stats.reflectionUpdates>=initial.stats.reflectionUpdates+2,'actual reflection faces/filter cycles must advance');
@@ -149,6 +194,7 @@ try{
     report.quality.push({quality,size,recapture,captures:after.stats.staticShadows.captures,resources:{textures:after.stats.textures,geometry:after.stats.geometry}});
   }
   mark('Ultra/High/Medium/repeated-quality transitions allocate and capture only when needed');
+  }
 
   if(process.env.QUARRY_SHADOW_SCREENSHOTS==='1'){
     const views=[{name:'white-car',player:[0,-20,0],position:[-5,1.75,-25],target:[0,.8,-20]},
@@ -165,6 +211,20 @@ try{
   }
 
   if(process.env.QUARRY_SHADOW_CONTEXT_RESTORE!=='0'){
+    if(northBackdrop){
+      await page.evaluate(({view,neutral})=>{
+        const q=__quarry;q.resume();q.setInput(neutral);q.autopilot(false);
+        q.teleport(0,...view.player);q.simulate(.25);q.velocity(0,0,0,0);q.simulate(1/60);q.pause();
+        document.querySelector('#ui').style.visibility='hidden';
+      },{view:backdropView,neutral});
+      // Chase FOV persists from the earlier moving-event check. Settle it while
+      // paused before freezing inspection; context loss briefly resumes chase.
+      await frames(240);
+      await page.evaluate(view=>__quarry.captureCamera(view.position,view.target),backdropView);
+      await frames();await page.screenshot({path:path.join(output,'ridge-before-context-loss.png')});
+      report.ridgeBefore=await page.evaluate(()=>({camera:__quarry.cameraPose,ridge:__quarry.northRidge,shader:window.__ridgeShaderAudit}));
+      assert.ok(report.ridgeBefore.shader.programs.some(p=>p.generation===0&&p.linked&&p.draws>0&&p.fragmentSurface&&p.uniforms.includes('quarryStaticMap')),'Actual atlas fragment-surface shadow receiver must render before context loss');
+    }
     await page.evaluate(neutral=>{__quarry.resume();__quarry.setInput(neutral);__quarry.autopilot(false);},neutral);
     const before=await sample('before-context-loss');
     report.contextRecovery=await page.evaluate(()=>{
@@ -185,6 +245,20 @@ try{
       assert.equal(recovered.stats.staticShadows.captures,before.stats.staticShadows.captures+1,'context restoration invalidates exactly one static capture');
       assert.equal(recovered.contextLost,false);assert.equal(report.contextRecovery.stateAtRestore,'paused');
       await frames();const stable=await sample('context-restored-stable');assertCached(recovered,stable,'restored context');assertResourcesStable(recovered,stable,'restored context');
+      if(northBackdrop){
+        await page.evaluate(view=>{__quarry.captureCamera(view.position,view.target);document.querySelector('#ui').style.visibility='hidden';},backdropView);
+        await frames();await page.screenshot({path:path.join(output,'ridge-after-context-restored.png')});
+        report.ridgeAfter=await page.evaluate(()=>({camera:__quarry.cameraPose,ridge:__quarry.northRidge,shader:window.__ridgeShaderAudit}));
+        assert.equal(report.ridgeAfter.shader.generation,1,'One actual restored WebGL generation');
+        assert.ok(report.ridgeAfter.shader.programs.some(p=>p.generation===1&&p.linked&&p.draws>0&&p.fragmentSurface&&['quarryStaticMap','northAlbedo','northNormalDepth'].every(u=>p.uniforms.includes(u))),'Restored context must draw a newly linked atlas shader with actual fragment shadow and both atlas samplers');
+        const {fov:beforeFov,...beforePose}=report.ridgeBefore.camera,{fov:afterFov,...afterPose}=report.ridgeAfter.camera;
+        assert.deepEqual(afterPose,beforePose,'Matched atlas receiver restore spatial pose');
+        report.ridgeFovDeltaDegrees=afterFov-beforeFov;
+        // One real physics frame before context loss can move the braked car on
+        // this slope, legitimately shifting the speed-sensitive chase FOV.
+        assert.ok(Math.abs(afterFov-beforeFov)<.05,'Settled chase FOV must stay within0.05degrees across real context recovery');
+        mark('six actual atlas assets load and fragment-surface static-shadow receiver renders again after real context restoration');
+      }
       await page.evaluate(()=>{__quarry.resume();__quarry.setInput({throttle:.35,steer:0,brake:0,handbrake:false});});await frames(60);
       const resumed=await sample('context-restored-resumed');assert.equal(resumed.state,'playing');assertCached(recovered,resumed,'resumed restored game');
       await page.screenshot({path:path.join(output,'context-restored.png')});
