@@ -1,0 +1,360 @@
+{
+  "visualProfile": {
+    "tone": "Autumn 1984 computer-game newsprint",
+    "motifs": [
+      "Apple II and Commodore game boxes",
+      "floppy disks",
+      "campaign-game screen",
+      "IBM PCjr keyboard"
+    ],
+    "layout": "Dense period weekly with brick-red and blue rules, boxed charts and halftone art"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "October 8-14, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Wide computer-gaming banner and large halftone of a home computer with election-game disks",
+    "secondaryRail": "PCjr repair, Macintosh user-group news, charts, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-09-28",
+  "historicDate": "1984-10-08",
+  "displayDate": "Week of October 8-14, 1984",
+  "edition": "Issue 115 - Weekly 1984 Computer & Culture Chronicle",
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-10-08.png",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for October 8-14, 1984, led by computer games",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The game shelf is moving from the console cabinet toward the home computer, even as IBM tries to make its own junior machine more inviting.",
+  "morningLine": "A campaign on disk, a fresh keyboard, and a busy modem line mark October at the computer shop.",
+  "lead": {
+    "headline": "Computer Games Claim the Fall Spotlight",
+    "dek": "Election simulations, adventures and strategy titles make the home computer the liveliest game machine in October’s magazine racks.",
+    "body": [
+      "Electronic Games puts the changing game market on its October cover: President Elect and Campaign ’84 turn the American campaign season into computer play. Its fall software preview ranges across strategy and adventure titles, a field the magazine now treats as the center of electronic gaming. These are October magazine features, not claims that either title was released during this particular week.",
+      "Editor Arnie Katz argues that strategy contests and adventures account for more than half of computer-game software sales. That is his contemporary assessment, not an independently audited sales figure. What a buyer can see for certain is the widening menu: disks ask players to manage campaigns, explore worlds and make decisions beyond the reflexes of an arcade cabinet.",
+      "The magazine’s Ultima II Game of the Month feature looks backward at a durable role-playing favorite, while a Parker Brothers advertisement puts Frogger II: ThreeeDeep! on Atari, ColecoVision and Commodore 64 shopping lists. The same pages therefore catch both sides of the shift: familiar arcade names follow players home, while computer-native designs claim more room on the shelf.",
+      "It is a turbulent handoff, not the disappearance of consoles overnight. Electronic Games cites an Electronics Industries Association projection that 1984 home-computer sales will rise to 6.6 million units, against a projected 5 million console units. Forecasts can miss their mark, but in this autumn preview they explain why publishers are crowding around the keyboard."
+    ],
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "same-month"
+  },
+  "stories": [
+    {
+      "headline": "IBM Tries to Rescue the PCjr Before Christmas",
+      "body": [
+        "IBM’s summer repair campaign is still under examination in October’s COMPUTE!. The company announced a full-stroke cordless keyboard on July 31 and offered it free to existing PCjr owners, addressing one of the machine’s most visible complaints. This is an October assessment of an earlier announcement, not a fresh launch this week.",
+        "The enhanced PCjr combines 128K of memory and a 360K disk drive with that revised keyboard, but the expense of building a larger system remains conspicuous. IBM lists each snap-on 128K memory module at $325, with an IBM configuration extending to 512K. A Colorpaint cartridge is listed at $99 and a speech attachment at $300.",
+        "At a $999 list price, the enhanced machine must convince families that it can work as well as play. COMPUTE! also reports a $699 local ComputerLand offer observed in early August; that discount is a reported example, not a nationwide October price. The crucial question for the holiday shelf is whether a better keyboard and more memory can repair the PCjr’s reputation."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Macintosh Owners Begin Looking Under the Hood",
+      "body": [
+        "The October Washington Apple Pi Journal shows Macintosh ownership turning into hands-on study. Raymond Hobbs’s “Mac Innards” appears on page 16, a sign that owners are beginning to examine the young machine itself rather than merely admire its screen.",
+        "The user group also carries David Morganstein’s Systat review and Hobbs’s comparison of three Multiplan versions. Such reports matter at a store counter: a program’s name alone does not tell an Apple II, Macintosh or IBM PC owner whether the edition on offer fits the work at hand.",
+        "George Kinal’s Telecomm SIG news appears on page 20. Its listing is evidence of an active modem-minded group, though the article’s specific claims have not been independently checked here. Together the issue reads like a working club notebook for a platform finding its practical habits."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Home-Computer Forecasts Outrun the Console Market",
+      "body": [
+        "Electronic Games cites an Electronics Industries Association estimate of 4.3 million home computers sold in 1983 at an average $440, and a forecast of 6.6 million in 1984 at an average $400. Those figures explain the pressure to put recognizable games on computer disks and cartridges.",
+        "The same report projects console unit sales down from 6.65 million in 1983 to 5 million in 1984. These are industry estimates and forecasts printed in October, not final audited results. For publishers preparing the next season, however, the direction of the forecast is enough to change the conversation."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM PCjr",
+      "summary": "Enhanced model: 128K RAM, 360K floppy, new keyboard; October COMPUTE! analysis.",
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Commodore Plus/4",
+      "summary": "Reviewed in October Personal Computer World; no exact-week release asserted.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "IBM PC AT",
+      "summary": "BYTE October issue includes a PC AT product article; original launch was August, not this week.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Multiplan",
+      "detail": "October Washington Apple Pi compares Apple II, Macintosh and IBM PC editions."
+    },
+    {
+      "name": "Systat",
+      "detail": "Reviewed by David Morganstein in October Washington Apple Pi Journal."
+    },
+    {
+      "name": "PCjr Colorpaint",
+      "detail": "IBM cartridge graphics program, listed at $99 in October COMPUTE! report."
+    },
+    {
+      "name": "President Elect and Campaign ’84",
+      "detail": "Election games inspired October Electronic Games cover; do not present as new releases this week."
+    },
+    {
+      "name": "Ultima II",
+      "detail": "October Electronic Games Game of the Month retrospective feature."
+    },
+    {
+      "name": "Frogger II: ThreeeDeep!",
+      "detail": "Parker Brothers advertises Atari, ColecoVision and Commodore 64 versions in October issue."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "President Elect",
+        "Campaign ’84",
+        "Ultima II",
+        "Frogger II: ThreeeDeep!"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "I Just Called to Say I Love You — Stevie Wonder",
+        "Let’s Go Crazy — Prince & The Revolution",
+        "Drive — The Cars",
+        "Hard Habit to Break — Chicago",
+        "Lucky Star — Madonna"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Teachers",
+        "Places in the Heart",
+        "All of Me",
+        "Irreconcilable Differences",
+        "Ghostbusters"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Enhanced IBM PCjr",
+      "price": "$999 list; $699 observed local discount in August",
+      "note": "$999 list; $699 observed local discount in August; October period listing unless otherwise stated, not a verified same-week transaction.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "IBM PCjr 128K expansion module",
+      "price": "$325 list",
+      "note": "$325 list; October period listing unless otherwise stated, not a verified same-week transaction.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "IBM PCjr Colorpaint cartridge",
+      "price": "$99 list",
+      "note": "$99 list; October period listing unless otherwise stated, not a verified same-week transaction.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Electronic Games single copy",
+      "price": "$2.95",
+      "note": "$2.95; October period listing unless otherwise stated, not a verified same-week transaction.",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "October BYTE covers using a mouse with Lotus 1-2-3 and database reviews",
+      "summary": "October BYTE covers using a mouse with Lotus 1-2-3 and database reviews. This appears in October period coverage; an exact-week announcement is not asserted.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "CBS Software and Acorn license selected games for BBC Micro conversion, reported by Electronic Games in October",
+      "summary": "CBS Software and Acorn license selected games for BBC Micro conversion, reported by Electronic Games in October. This appears in October period coverage; an exact-week announcement is not asserted.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "I Just Called to Say I Love You",
+      "artist": "Stevie Wonder",
+      "chartDate": "1984-10-13",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-10-13"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Let’s Go Crazy",
+      "artist": "Prince & The Revolution",
+      "chartDate": "1984-10-13",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-10-13"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Drive",
+      "artist": "The Cars",
+      "chartDate": "1984-10-13",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-10-13"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Hard Habit to Break",
+      "artist": "Chicago",
+      "chartDate": "1984-10-13",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-10-13"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Lucky Star",
+      "artist": "Madonna",
+      "chartDate": "1984-10-13",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-10-13"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "The Campaign Fits on a Floppy",
+    "summary": "President Elect and Campaign ’84 place election strategy on the October computer-game shelf.",
+    "tagline": "Cast your strategy before the polls close."
+  },
+  "market": {
+    "headline": "A Forecast in Favor of the Keyboard",
+    "summary": "Electronic Games reports an EIA forecast of 6.6 million home-computer sales in 1984, versus 5 million console units; both are projections, not final results.",
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Bush and Ferraro face off in vice-presidential debate",
+    "summary": "Vice President George H. W. Bush and Geraldine Ferraro met in the October 11 vice-presidential debate, a national campaign marker for this week.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "Apple hobbyists sustain a telecomputing beat",
+    "summary": "October Washington Apple Pi Journal lists George Kinal’s Telecomm SIG News, a contemporaneous user-group route into modem culture; specifics of that article need original-page verification.",
+    "posts": [
+      {
+        "topic": "Telecomm SIG",
+        "platform": "Washington Apple Pi",
+        "text": "George Kinal’s telecom column appears on page 20 of the October 1984 issue."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "M.U.L.E. masters could earn a signed “skinner” certificate",
+    "summary": "October Electronic Games says Ozark Softscape rewarded exceptionally high M.U.L.E. scores with hand-lettered certificates.",
+    "detail": "The magazine describes a colony-total threshold over 100,000 and certificates signed by the designers; a quirky period contest, not a new game launch."
+  },
+  "accuracyLedger": {
+    "items": [
+      "October computing stories come from period magazine issues; no exact-week hardware or software launch is claimed.",
+      "The PCjr keyboard and memory changes were announced July 31 and are revisited in October coverage.",
+      "EIA market figures are estimates and forecasts reported by Electronic Games, not final audited results.",
+      "Music chart is dated October 13; movie ranking is the October 12-14 domestic weekend."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Electronic Games, October 1984",
+      "url": "https://archive.org/stream/Electronic_Games_Volume_02_Number_15_1984-10_Reese_Communications_US/Electronic_Games_Volume_02_Number_15_1984-10_Reese_Communications_US_djvu.txt",
+      "date": "1984-10"
+    },
+    {
+      "title": "COMPUTE!, IBM’s New & Improved PCjr",
+      "url": "https://www.atarimagazines.com/compute/issue53/020_1_IBMs_New_Improved_PCjr.php",
+      "date": "1984-10"
+    },
+    {
+      "title": "Washington Apple Pi Journal, October 1984",
+      "url": "https://www.wap.org/journal/entries/1984-10-v06-n10.html",
+      "date": "1984-10"
+    },
+    {
+      "title": "BYTE, October 1984 contents",
+      "url": "https://www.computinghistory.org.uk/det/2731/Byte-October-1984/",
+      "date": "1984-10"
+    },
+    {
+      "title": "Personal Computer World, October 1984 contents",
+      "url": "https://www.computinghistory.org.uk/det/2602/Personal-Computer-World-October-1984/",
+      "date": "1984-10"
+    },
+    {
+      "title": "Billboard Hot 100 chart, October 13, 1984",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-10-13",
+      "date": "1984-10-13"
+    },
+    {
+      "title": "Box Office Mojo weekend October 12–14, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W41/",
+      "date": "1984-10-14"
+    },
+    {
+      "title": "White House News Summary, October 12, 1984",
+      "url": "https://i-p-o.org/WHITE-HOUSE-NEWS-SUMMARY-12-Oct-1984-A10.pdf",
+      "date": "1984-10-12"
+    }
+  ]
+}
