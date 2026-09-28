@@ -11,7 +11,8 @@ import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 
 const phase = process.env.QUARRY_CLIFF_PHASE || 'baseline';
 assert.match(phase, /^[a-z0-9][a-z0-9_-]*$/i);
-const expected = phase === 'baseline' ? './assets/index-NMtzVGSo.js' : process.env.QUARRY_CLIFF_EXPECTED_BUNDLE;
+const historicalBaseline = phase === 'baseline' && !process.env.QUARRY_CLIFF_EXPECTED_BUNDLE;
+const expected = historicalBaseline ? './assets/index-NMtzVGSo.js' : process.env.QUARRY_CLIFF_EXPECTED_BUNDLE;
 assert.ok(expected, 'Candidate needs an exact expected application module');
 const output = path.resolve(process.env.QUARRY_CLIFF_OUTPUT || 'outputs/cliff-material', phase);
 const url = process.env.QUARRY_QA_URL || 'http://127.0.0.1:8795/';
@@ -39,6 +40,17 @@ const views = [
   inspection('legacy-medium', 'legacy-west', [-75, 3, 51], [-135, 18, 96]),
   inspection('legacy-close', 'legacy-west', [-110, 3, 68], [-143, 17, 88]),
 ];
+for (const view of JSON.parse(process.env.QUARRY_CLIFF_ADDITIONAL_VIEWS || '[]')) {
+  assert.match(view.name, /^[a-z0-9][a-z0-9_-]*$/i);
+  assert.ok(!views.some(existing => existing.name === view.name), 'Unique additional view name');
+  if (view.degrees !== undefined) {
+    assert.ok(Number.isFinite(view.degrees));
+    views.push(driving(view.name, view.sector || 'legacy-west', view.degrees, !!view.hood));
+  } else {
+    assert.ok([view.position, view.aim].every(vector => Array.isArray(vector) && vector.length === 3 && vector.every(Number.isFinite)));
+    views.push(inspection(view.name, view.sector || 'legacy-west', view.position, view.aim));
+  }
+}
 const selected = process.env.QUARRY_CLIFF_VIEWS?.split(',');
 const captures = selected ? views.filter(view => selected.includes(view.name)) : views;
 assert.ok(captures.length && (!selected || captures.length === selected.length), 'Unknown requested view');
@@ -54,7 +66,7 @@ const extras = ['assets/sky.hdr', 'assets/arena-floor-mask.rgba.gz',
   ...['rock', 'gravel'].flatMap(name => ['diff', 'nor_gl', 'rough'].map(channel => `assets/${name}_${channel}.jpg`)),
   ...['coupe', 'sedan', 'hatch', 'quarry-cut', 'quarry-extension', 'quarry-headwall', 'quarry-east-bay', 'quarry-road-approach', 'quarry-roadside', 'rocks-lod'].map(name => `models/${name}.glb`),
   expected.replace(/^\.\//, ''), ...[...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="\.\/([^"]+)"/g)].map(match => match[1]),
-  ...(phase === 'baseline' ? [] : ['diff', 'nor_gl', 'rough'].map(channel => `assets/geology_rock_${channel}.jpg`)),
+  ...(historicalBaseline ? [] : ['diff', 'nor_gl', 'rough'].map(channel => `assets/geology_rock_${channel}.jpg`)),
   ...JSON.parse(process.env.QUARRY_CLIFF_EXTRA_ASSETS || '[]')];
 const retired = JSON.parse(process.env.QUARRY_CLIFF_RETIRED_ASSETS || '[]');
 assert.ok(phase !== 'baseline' || retired.length === 0, 'Baseline requires all historical cliff maps');
@@ -68,7 +80,7 @@ for (const file of extras) if (!retired.includes(file) && !plan.some(asset => as
   }
 }
 report.retiredExpectedAssets = retired;
-report.geologyProgramsExpected = phase !== 'baseline';
+report.geologyProgramsExpected = !historicalBaseline;
 let browser, page;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--ignore-gpu-blocklist', '--autoplay-policy=no-user-gesture-required'] });
@@ -126,7 +138,8 @@ try {
   assert.deepEqual(report.errors, [], 'Boot and initial shaders must pass');
   report.bundle = await page.locator('script[type="module"]').getAttribute('src'); assert.equal(report.bundle, expected);
   report.bundleSha256 = report.assets.find(asset => asset.file === expected.replace(/^\.\//, '')).sha256;
-  if (phase === 'baseline') assert.equal(report.bundleSha256, '841e09c8658ed520948330123b331de9000cf6c1f1f294af748df7f4621f20f0');
+  if (historicalBaseline) assert.equal(report.bundleSha256, '841e09c8658ed520948330123b331de9000cf6c1f1f294af748df7f4621f20f0');
+  if (process.env.QUARRY_CLIFF_EXPECTED_SHA256) assert.equal(report.bundleSha256, process.env.QUARRY_CLIFF_EXPECTED_SHA256);
   report.daylight = await page.evaluate(() => __quarry.daylight);
   report.gpu = await page.evaluate(() => { const gl = document.querySelector('canvas').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info'); return gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER); });
   await page.locator('[data-car="coupe"]').click();

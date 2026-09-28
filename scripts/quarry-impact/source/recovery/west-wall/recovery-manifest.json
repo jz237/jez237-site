@@ -1,0 +1,85 @@
+{
+  "status": "Unfinished source saved; not enabled in runtime",
+  "runtime": "index-Dew9mhki.js",
+  "runtimeSHA256": "b51476a668aafc2e0d3ed072a7528261647393a2bab0f21f7921e09bb8446d60",
+  "files": [
+    {
+      "original": "src/world.ts",
+      "savedAs": "src__world.ts",
+      "bytes": 30199,
+      "sha256": "c69d052a1bb7317decba14989badc5838943ebd34d46d76193f8bb5089f0e687"
+    },
+    {
+      "original": "src/scenery-west-wall.ts",
+      "savedAs": "src__scenery-west-wall.ts",
+      "bytes": 3530,
+      "sha256": "f68ef838051a666d2b114b17dd58db1cf4a87e9b041b9607a9702cc411c4e12b"
+    },
+    {
+      "original": "tools/check-published-build.mjs",
+      "savedAs": "tools__check-published-build.mjs",
+      "bytes": 4317,
+      "sha256": "0fbf153f328165a5d72c1fb9ed66724c6c58a4c282809d35665e05777f82784f"
+    },
+    {
+      "original": "tools/production-origin-smoke.mjs",
+      "savedAs": "tools__production-origin-smoke.mjs",
+      "bytes": 11518,
+      "sha256": "34aea3ac103f6b23365d0277817775a30ce59b3a49007a88312e6a689ad582f7"
+    },
+    {
+      "original": "CREDITS.md",
+      "savedAs": "CREDITS.md",
+      "bytes": 18118,
+      "sha256": "e3298e5138ae04aa8d964ef0dbb479abcdfc46da682d562d3cc5ed35e2e86935"
+    },
+    {
+      "original": "src/scenery-west-wall.ts",
+      "retainedAt": "src/scenery-west-wall.ts",
+      "bytes": 3530,
+      "sha256": "f68ef838051a666d2b114b17dd58db1cf4a87e9b041b9607a9702cc411c4e12b"
+    },
+    {
+      "original": "tools/author-quarry-west-wall.py",
+      "retainedAt": "tools/author-quarry-west-wall.py",
+      "bytes": 32526,
+      "sha256": "cb2ef29933618a5e584017f55d163cc4418ed7fafb1853d3befcec56fdc17636"
+    },
+    {
+      "original": "tools/export-quarry-west-wall-base.ts",
+      "retainedAt": "tools/export-quarry-west-wall-base.ts",
+      "bytes": 9037,
+      "sha256": "39056b7d04922a6d899ddc619c6b9a02975957bbc77444d1c67b6df68650f750"
+    },
+    {
+      "original": "tools/west-wall-qa.mjs",
+      "retainedAt": "tools/west-wall-qa.mjs",
+      "bytes": 976,
+      "sha256": "6eb61a9dbb0938e2da7a38499d218414c0fe687df45f6387be05b1c6fd6ac776"
+    },
+    {
+      "original": "tools/cliff-material-qa.mjs",
+      "retainedAt": "tools/cliff-material-qa.mjs",
+      "bytes": 15352,
+      "sha256": "dfc1a307ffee920747b5a9649d3ef7033c63810c31c64225ed0fbd3e16d0daf5"
+    },
+    {
+      "original": "source/models/quarry-west-wall-base.json",
+      "retainedAt": "source/models/quarry-west-wall-base.json",
+      "bytes": 822548,
+      "sha256": "bc252ff3cf24f03c2a2d7b7149e6b60c0b51b5b2f487bccd14836d9ee5f9a2f4"
+    },
+    {
+      "original": "tests/fixtures/quarry-west-wall-baseline.json",
+      "retainedAt": "tests/fixtures/quarry-west-wall-baseline.json",
+      "bytes": 2468991,
+      "sha256": "d1d19a70720c280576123d6112b7e40034b059ee86f8e20d6669599757e3e06a"
+    },
+    {
+      "original": "tests/fixtures/quarry-west-wall-legacy-scatter.json.gz",
+      "retainedAt": "tests/fixtures/quarry-west-wall-legacy-scatter.json.gz",
+      "bytes": 5171804,
+      "sha256": "5e1da4bfe7f7c485c6ec42d4910353211b5928f1c2ab500f6f9066b58d6bc539"
+    }
+  ]
+}
