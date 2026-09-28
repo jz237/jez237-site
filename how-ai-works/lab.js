@@ -583,7 +583,7 @@
         svg.innerHTML = arcs.join('') || (src === 0 ? `<text x="${sx}" y="${sy - 30}" style="animation-delay:0s">first token: nothing earlier to look at</text>` : '');
       });
       let msg;
-      if (src === 8 && head === 'coref') msg = '"it" is ambiguous at this point. The model reads left to right and hasn\'t seen "big" or "small" yet, so attention is split between trophy and suitcase.';
+      if (src === 8 && head === 'coref') msg = '"it" is ambiguous at this point. Each word can only look back at the words before it, and "big" or "small" hasn\'t appeared yet, so attention is split between trophy and suitcase.';
       else if (src === ADJ && head === 'coref') msg = `At "${adj}" the pieces come together: a well-trained model looks back from here and links "it" to the <strong>${adj === 'big' ? 'trophy' : 'suitcase'}</strong>. Flip the word and watch the link move.`;
       else if (head === 'prev') msg = 'A previous-word head is one of the simplest patterns found in real models: each token mostly looks at the token right before it.';
       else if (head === 'syntax') msg = 'Grammar-like heads link verbs to subjects and words to the phrase they belong to. Researchers have found heads that track this kind of structure.';
@@ -929,11 +929,15 @@
   const circuitScenarios = {
     garden: [
       [0, 'USER: "Find my latest garden photo and write a caption."\n\nIntent: add a useful caption.\nRisk: private metadata, wrong folder, stale assumptions.', 'user', 40],
-      [1, 'PLAN:\n1. Inspect the newest image.\n2. Strip location data, resize.\n3. Add a page entry with caption.\n4. Verify the layout.\n\nMEMORY (loaded into context): captions should be casual.', 'plan', 160],
-      [2, 'TOOL CALL:\n{"tool": "inspect_image", "path": "photos/garden/latest.jpg"}\n\nReason: the model cannot know the file by memory.', 'call', 60],
-      [3, 'OBSERVATION:\nTall photo of the garden bed with the redbud.\nIt contains GPS location data, which must be removed first.', 'result', 900],
-      [4, 'CHECK:\nThe photo shows on the page at phone and desktop size, caption present, location data removed. ✓ Pass.', 'result', 1300],
-      ['done', 'FINAL: photo added with a caption, location data removed, checked on phone and desktop. The loop ends because the check passed.', 'answer', 120]
+      [1, 'PLAN:\n1. Find the newest photo.\n2. Resize it and add it to the page with a caption.\n3. Check the page and the file.\n\nMEMORY (loaded into context): captions should be casual.', 'plan', 160],
+      [2, 'TOOL CALL:\n{"tool": "add_photo", "path": "photos/garden/latest.jpg", "max_width": 1600, "caption": "The redbud showing off again"}', 'call', 60],
+      [3, 'OBSERVATION:\nAdded to the page draft: tall photo of the garden bed with the redbud.', 'result', 900],
+      [4, 'CHECK: ✗ FAIL\nThe file still carries GPS location data, which would show where you live. Going around again.', 'result', 200, 'fail'],
+      [1, 'PLAN (lap 2):\nStrip the location data before anything is published.', 'plan', 90],
+      [2, 'TOOL CALL:\n{"tool": "strip_metadata", "path": "photos/garden/latest-1600.jpg"}', 'call', 50],
+      [3, 'OBSERVATION:\nLocation data removed. File re-saved.', 'result', 300],
+      [4, 'CHECK:\nThe photo shows on the page at phone and desktop size, caption present, and the file has no location data. ✓ Pass.', 'result', 1100],
+      ['done', 'FINAL: photo added with a caption. The first check caught GPS data in the file, so I removed it and checked again on phone and desktop.', 'answer', 120]
     ],
     weather: [
       [0, 'USER: "Should I water tonight?"\n\nIntent: a watering decision.\nRisk: guessing weather from memory would be useless.', 'user', 30],
@@ -1384,7 +1388,7 @@
     document.addEventListener('haw:tokenizer', () => { if (!first) render(); });
     $('#mathsCard').innerHTML = '';
     const note = document.createElement('p'); note.className = 'fine-print';
-    note.textContent = `Guesses are real, from ${data.model}. Chunks shown use GPT-4o's tokenizer; some other tokenizers split every digit separately. Either way, the model never carries the one.`;
+    note.textContent = `Guesses are real, from ${data.model}. Chunks shown use GPT-4o's tokenizer; some other tokenizers split every digit separately. Either way, answering in one shot, there is no column of digits to carry the one across.`;
     $('#mathsDrawer .deeper-body').appendChild(note);
   }
 
@@ -1409,7 +1413,7 @@
     };
     $('#ccQuestions').innerHTML = data.pairs.map((p, i) => `<button class="lab-button" data-cc="${i}" type="button">${esc(p.q.length > 34 ? p.q.slice(0, 32) + '…' : p.q)}</button>`).join('');
     $$('[data-cc]').forEach(b => b.addEventListener('click', () => show(Number(b.dataset.cc))));
-    $('#ccSource').textContent = `Real outputs, greedy decoding. Left: ${data.base}. Right: ${data.chat}. Same size, same architecture. The only difference is chat training. Look closely and the tuned model's coding answer is fluent but partly wrong. Training teaches the shape of a helpful answer, not guaranteed facts.`;
+    $('#ccSource').textContent = `Real outputs, greedy decoding. Left: ${data.base}. Right: ${data.chat}. Same size, same architecture. The only difference is chat training. Look closely and the tuned model is fluent but still wrong in places: it calls a token a kind of label for concepts (it is really a chunk of text), and its coding answer mixes up a JavaScript error with Python. Training teaches the shape of a helpful answer, not guaranteed facts.`;
     let started = false;
     whenVisible($('#chatCompare'), v => { if (v && !started) { started = true; show(0); } }, '-60px');
   }
@@ -1476,15 +1480,27 @@
     fetch('data/chat.json?v=20260929').then(r => r.json()).then(d => safe('chat', () => initChatCompare(d))).catch(() => { $('#chatCompare').hidden = true; });
     fetch('data/embeddings.json?v=20260929').then(r => r.json()).then(d => safe('embeddings', () => initEmbeddings(d)))
       .catch(() => { $('#embResults').innerHTML = '<p>Could not load the embedding data.</p>'; });
-    loadNextToken().then(d => {
-      safe('genloop', () => initGenLoop(d));
-      safe('next-token', () => initNextToken(d));
-      safe('attention', () => initAttention(d));
-    }).catch(err => {
-      console.error(err);
-      $('#ntStatus').textContent = 'Data unavailable';
-      $('#glNote').textContent = 'Could not load the model data for this animation.';
-      safe('attention', () => initAttention(null));
+    // The model data is ~330 KB, so fetch it only when one of the demos that use it comes near the screen.
+    let ntStarted = false;
+    const ntWatchers = [];
+    const startNextToken = () => {
+      if (ntStarted) return;
+      ntStarted = true;
+      ntWatchers.forEach(io => io && io.disconnect());
+      loadNextToken().then(d => {
+        safe('genloop', () => initGenLoop(d));
+        safe('next-token', () => initNextToken(d));
+        safe('attention', () => initAttention(d));
+      }).catch(err => {
+        console.error(err);
+        $('#ntStatus').textContent = 'Data unavailable';
+        $('#glNote').textContent = 'Could not load the model data for this animation.';
+        safe('attention', () => initAttention(null));
+      });
+    };
+    ['#next-token', '#attention', '#genloop'].forEach(sel => {
+      const el = $(sel);
+      if (el) ntWatchers.push(whenVisible(el, v => { if (v) startNextToken(); }, '500px'));
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
