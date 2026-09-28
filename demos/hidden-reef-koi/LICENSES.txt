@@ -2265,3 +2265,10 @@ Repository: https://github.com/websockets/ws
 Typography: DM Sans and Manrope are requested from Google Fonts and distributed under the SIL Open Font License.
 https://fonts.google.com/specimen/DM+Sans
 https://fonts.google.com/specimen/Manrope
+
+
+Landscape texture maps: Poly Haven, CC0 1.0 (public domain dedication).
+Assets: forrest_ground_01, mossy_rock, bark_willow, gravelly_sand.
+https://polyhaven.com/license
+https://creativecommons.org/publicdomain/zero/1.0/
+Exact asset and download URLs: textures/sources.json

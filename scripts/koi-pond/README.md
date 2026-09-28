@@ -23,13 +23,13 @@ The output in `dist/` is relocatable under a subdirectory. The preview route is 
 blender --background --python model-source/build_koi.py -- --render
 ```
 
-The woodland scene, shoreline, pond bowl, deck, bench, cascade, pebbles, planting, water-lily flowers and surface textures are original procedural geometry and textures in `src/PondScene.js`. The reference pond was viewed for broad visual inspiration. Its source, meshes, textures, layout and interaction implementation were not copied. Library notices remain in `public/LICENSES.txt`.
+The woodland scene, shoreline, pond bowl, deck, bench, cascade, pebbles, planting, water-lily flowers are original procedural geometry in `src/PondScene.js`. Foliage maps, lily veins, fish skins, and water effects are authored for this scene. Ground, gravel, bark and mossy-rock PBR maps come from Poly Haven under CC0 1.0; exact source URLs are recorded in `public/textures/sources.json`. The reference pond was viewed for broad visual inspiration. Its source, meshes, textures, layout and interaction implementation were not copied. Library notices remain in `public/LICENSES.txt`.
 
 ## Inhabitants and motion
 
 Seven illustrative koi varieties: Kohaku, Taisho Sanke, Showa, Yamabuki Ogon, Asagi, Shiro Utsuri and Ochiba. This is a variety display, not a volume-based stocking recommendation or show-quality grading tool.
 
-The simulation uses separate phases and decisions for each fish: a rearward traveling body wave with a steady head, independently moving paired fins, glides, inspection pauses, gradual upright turns and continuous depth changes. Local food perception, hunger, energy, nearby fish and memory influence their behavior. Pellets are removed only after a mouth reaches them, or after their visible lifetime ends. The anatomy is three-dimensional; fish are not sprites. Motion rates are authored for the experience, not measurements of individual real koi.
+The simulation uses separate phases and decisions for each fish: an arc-length-preserving 16-segment spine with a steady head, independently flexing paired fins, glides, inspection pauses, gradual upright turns and continuous depth changes. Local food perception, hunger, energy, nearby fish and memory influence their behavior. Pellets are removed only after a mouth reaches them, or after their visible lifetime ends. The anatomy is three-dimensional; fish are not sprites. Motion rates are authored for the experience, not measurements of individual real koi.
 
 ## Water lab
 
@@ -52,6 +52,10 @@ Drag to orbit; scroll/pinch to zoom. Camera presets, koi selection and inspectio
 
 ## Verification
 
-`tests/pond.test.mjs` exercises two minutes of swimming, depth/floor bounds, upright turns, individual phases, speed variation, pause, mouth contact, satiation, ammonia speciation, nitrogen balance, water-change dilution, aeration/filter comparisons and long-run finite/nonnegative chemistry.
+`tests/pond.test.mjs` exercises two minutes of swimming, fixed spine length, pinned-head and traveling-wave amplitude/phase, depth/floor bounds, upright turns, individual phases, speed variation, pause, mouth contact, satiation, ammonia speciation, nitrogen balance, water-change dilution, aeration/filter comparisons and long-run finite/nonnegative chemistry.
 
 Browser checks cover desktop and 390 × 844 layouts, camera views, feeding, guide selection, warm low-oxygen scenario, reset, pause/resume, lighting and render errors. This is a stylized real-time garden; botanical placement and plumbing are illustrative.
+
+## Expanded garden revision
+
+The basin is roughly 4.6 times the original preview area. Rolling terrain supports layered green canopies, red maples, pink flowering trees, dense understory, ferns, iris leaves and 12,600 curved grass blades. The original terrace, bench and slate cascade remain in a distinct layout. The water combines planar reflection/refraction, depth absorption, moving caustics, fish wakes, ripple interaction and cascade spray.

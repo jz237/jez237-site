@@ -70,3 +70,20 @@ test('water changes dilute waste and long scenarios remain finite and nonnegativ
  for(const value of Object.values(lab.state)){assert.ok(Number.isFinite(value));assert.ok(value>=0);}
  lab.reset();assert.equal(lab.hours,0);assert.equal(lab.state.oxygen,8);assert.equal(lab.history.length,1);
 });
+
+import {createSpine,updateSpine,SPINE_LENGTH,HEAD_PIN,sampleSpine} from '../src/KoiSpine.js';
+test('strong body waves retain spine length, pin the head, and travel into the tail',()=>{
+ const points=createSpine(),tail=[],mid=[];
+ for(let n=0;n<120;n++){
+  updateSpine(points,n/120*Math.PI*2,.9,.2);
+  assert.deepEqual(points[0].toArray(),[HEAD_PIN,0,0]);
+  let length=0;for(let j=1;j<points.length;j++)length+=Math.hypot(points[j].x-points[j-1].x,points[j].y-points[j-1].y);
+  assert.ok(Math.abs(length-SPINE_LENGTH)<1e-10,'flex does not stretch the spine');
+  tail.push(points.at(-1).y);mid.push(sampleSpine(points,-.08).y);
+ }
+ assert.ok(Math.max(...tail)-Math.min(...tail)>.16,'tail sweeps visibly');
+ assert.ok(Math.max(...mid)-Math.min(...mid)>.035,'flex reaches the body, not only the tail');
+ assert.ok(Math.max(...mid)-Math.min(...mid)<Math.max(...tail)-Math.min(...tail),'wave amplitude grows toward the tail');
+ const midPeak=mid.indexOf(Math.max(...mid)),tailPeak=tail.indexOf(Math.max(...tail));
+ assert.ok(Math.abs(midPeak-tailPeak)>8,'the wave travels instead of bending as a rigid paddle');
+});
