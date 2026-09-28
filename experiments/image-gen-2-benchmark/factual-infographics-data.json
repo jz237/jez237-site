@@ -7401,5 +7401,129 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-27-factual-infographic-factual-infographic-emetophobia-the-res",
+    "title": "Factual infographic: Emetophobia — The Restaurant Table",
+    "tests": "factual_subtype=phobia-infographic; phobia=emetophobia; seven educational panels and three explanatory close-ups; direct-canvas portrait; no actual vomiting, invented statistic, or self-directed exposure advice.; archive_slot=2026-09-27T22:20; concept=emetophobia-restaurant-meal-body-alarm; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the FINISHED direct-canvas portrait museum-quality educational infographic, not a poster photograph, framed print, workbench, or UI mockup. Title in large impeccable typography: “EMETOPHOBIA — AT THE RESTAURANT TABLE”; subtitle: “When fear of vomiting takes over.” A sophisticated editorial medical-illustration plate, exceptionally detailed but instantly legible: warm amber restaurant atmosphere contrasted with cool indigo/coral explanatory diagrams; restrained cream type, confident hierarchy, genuine breathing room. No logos, citations, bibliography, invented numbers, gore, actual vomit, or graphic illness.\n\nDOMINANT HERO, upper 45%: immersive realistic oblique view at an unfamiliar restaurant table. A fully clothed adult diner pauses over an untouched meal, hand hovering near a water glass, anxious but dignified expression, subtle other patrons softly out of focus, a visible path to the exit in the far background. Tactile walnut grain, ceramic glaze, condensation on glass, folded linen, readable menu edge, tungsten pendants and window reflections, true-scale hands and cutlery. Fear is conveyed by attention and uncertainty rather than actual hazard: a very subtle translucent annotation traces the diner's gaze from plate to body sensation to distant doorway. No person is shown vomiting, no spoiled food, no claim that the meal is unsafe.\n\nBeneath and beside hero: SEVEN substantive distinct illustrated panels, large readable labels and succinct source-backed callouts, no tiny paragraphs. 1 “THE FEAR”: a clean two-way vignette of concern about vomiting oneself or seeing another person vomit; use neutral human silhouettes and a non-graphic icon. 2 “TRIGGER CUES”: three small visual examples—unfamiliar meal, ambiguous stomach sensation, noticing a possibly unwell person—clearly labeled as possible cues, not danger evidence. 3 “UNCERTAINTY”: a diagram of ambiguous internal sensation plus thought “What if I’m sick?” leading to attention on the exit; not a literal diagnosis. 4 “BODY ALARM”: four crisp physiological icons with labels heart racing, breathing changes, nausea, light-headedness, with note “anxiety sensations are not proof of imminent vomiting.” 5 “MONITOR & CHECK”: illustrated close-up of noticing body sensations, checking a food date, seeking reassurance, each tied to fear-driven monitoring. 6 “AVOIDANCE LOOP”: careful circular causal diagram fear → avoid meal/place → brief relief → fear persists / life narrows, visually distinguished from ordinary reasonable food safety. 7 “HELP”: reassuring clinical consultation vignette; “CBT and clinician-guided exposure can help”; show collaborative gradual planning with a qualified clinician, never an exposure assignment or unsafe ingestion.\n\nInclude THREE large explanatory close-ups integrated across panels with strong leader lines: (A) an anatomical but gentle chest/upper-abdomen cutaway connecting rapid heartbeat, breathing shift and nausea sensations, no organs exaggerated; (B) split-lens comparison “perceived threat” vs “evidence of danger” using the SAME ordinary restaurant table, making clear context and proportion matter rather than declaring all illness risks imaginary; (C) magnified avoidance-loop node with near-term relief arrow and longer-term limitation arrow, genuinely explanatory not decorative. Add fine micro-annotations only where legible, calibrated line weights, carefully aligned edges, non-repeating icons, ample contrast, realistic material surfaces and cinematic but controlled lighting. Source-grounded educational tone, no statistics, no universal claims. Do not render as a photographed page or surround it with props.",
+    "image": "images/2026-09-27-factual-infographic-factual-infographic-emetophobia-the-res.jpg",
+    "thumb": "thumbs/2026-09-27-factual-infographic-factual-infographic-emetophobia-the-res.webp",
+    "color": "#7e756c",
+    "date": "2026-09-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "emetophobia-restaurant-meal-body-alarm",
+      "imageSha256": "64b7ed7c629a7fc75cc539ea724d29ccdcfd5f2e97319d13ce6402c449f124ec",
+      "imageDHash": "0d5459294c442b2a"
+    },
+    "factualInfographic": {
+      "topic": "Emetophobia: fear of vomiting, internal and external triggers, body alarm, avoidance, and evidence-based support",
+      "description": "Educational portrait infographic on emetophobia using an illustrative restaurant setting, seven distinct panels, and three explanatory close-ups.",
+      "sourceNote": "Verified emetophobia-specific fear, sensations, checking and avoidance with Oxford Health NHS Foundation Trust https://oxfordhealth.nhs.uk/ohspic/problems/emetophobia/ and clinical CBT treatment considerations with the Cognitive Behaviour Therapist https://www.cambridge.org/core/journals/the-cognitive-behaviour-therapist/article/treating-a-specific-phobia-of-vomiting-emetophobia-an-updated-protocol/2478FBE69E1E137A77F4EBC909DE1229 ; general specific-phobia definition and CBT/exposure support from NIMH https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders . No numerical claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-28T02:21:33.437538+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Oxford Health NHS Foundation Trust",
+            "title": "Emetophobia - OHSPIC",
+            "sourceType": "government-agency",
+            "url": "https://oxfordhealth.nhs.uk/ohspic/problems/emetophobia/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "the Cognitive Behaviour Therapist",
+            "title": "Treating a specific phobia of vomiting (emetophobia): an updated protocol",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.cambridge.org/core/journals/the-cognitive-behaviour-therapist/article/treating-a-specific-phobia-of-vomiting-emetophobia-an-updated-protocol/2478FBE69E1E137A77F4EBC909DE1229"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Emetophobia is a marked fear or anxiety of vomiting oneself or seeing others vomit.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Unfamiliar restaurant food, nausea or stomach sensations, and noticing possible illness in others can be triggers; the restaurant scene is illustrative, not a dangerous incident.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Fear may involve uncertainty about being sick, losing control, or being unable to leave a situation.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Anxiety may bring increased heart rate, altered breathing, nausea, and light-headedness; these sensations do not by themselves prove vomiting is imminent.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "People may monitor internal sensations or others for illness signs and interpret ambiguous sensations as evidence vomiting is near.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance of restaurants or certain foods, date-checking, excessive cleaning, and reassurance seeking may occur; these behaviours may narrow daily life.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "A phobia response can be out of proportion to the actual danger, while ordinary food-safety caution remains reasonable.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance can bring short-term relief yet maintain fear and interfere with daily activities.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT, including clinician-guided exposure approaches adapted to emetophobia, is an evidence-based treatment; a qualified professional can help individualize care.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The graphic offers education, not diagnosis or instructions to induce vomiting, eat unsafe food, or abandon hygiene.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
