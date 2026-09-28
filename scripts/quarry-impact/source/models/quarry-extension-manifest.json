@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "generator": "tools/author-quarry-extension.py",
+  "base": "source/models/quarry-extension-base.json",
+  "source": "Original authored quarry geometry and Poly Haven Rock Moss Set 01 CC0 fragments",
+  "source_url": "https://polyhaven.com/a/rock_moss_set_01",
+  "runtime_maps": "Shared Rock Boulder Dry color/normal/roughness plus existing Rock Moss Set 01 atlas; no embedded textures",
+  "sector": {
+    "startCell": 139,
+    "endCellExclusive": 172
+  },
+  "preservedLowerRows": [
+    0,
+    6
+  ],
+  "gullyDegrees": [
+    155.0,
+    161.75
+  ],
+  "wallTriangleCount": 62681,
+  "solidCount": 132,
+  "meshes": [
+    {
+      "name": "ExtensionRock_0_near",
+      "triangles": 21025
+    },
+    {
+      "name": "ExtensionRubble_0_near",
+      "triangles": 9190
+    },
+    {
+      "name": "ExtensionRock_0_far",
+      "triangles": 12357
+    },
+    {
+      "name": "ExtensionRubble_0_far",
+      "triangles": 2337
+    },
+    {
+      "name": "ExtensionRock_1_near",
+      "triangles": 21025
+    },
+    {
+      "name": "ExtensionRubble_1_near",
+      "triangles": 27579
+    },
+    {
+      "name": "ExtensionRock_1_far",
+      "triangles": 12357
+    },
+    {
+      "name": "ExtensionRubble_1_far",
+      "triangles": 7008
+    },
+    {
+      "name": "ExtensionRock_2_near",
+      "triangles": 20631
+    },
+    {
+      "name": "ExtensionRubble_2_near",
+      "triangles": 18382
+    },
+    {
+      "name": "ExtensionRock_2_far",
+      "triangles": 11963
+    },
+    {
+      "name": "ExtensionRubble_2_far",
+      "triangles": 4673
+    }
+  ],
+  "assets": [
+    {
+      "file": "public/models/quarry-extension.glb",
+      "bytes": 8693544,
+      "sha256": "674803ec9f8c42868ba9bfe0fcf441a159be933a1bf58eaab56affdf63048a33"
+    },
+    {
+      "file": "source/models/quarry-extension.blend",
+      "bytes": 8229502,
+      "sha256": "9b2a2375f85f72855f8e58ad7d0581186228f5ac8715555f2eeda3f40cc19bea"
+    },
+    {
+      "file": "src/quarry-extension-collision.json",
+      "bytes": 2993923,
+      "sha256": "ceaa20fc0b050438eafd956ab2f6389679c51c9972c9b6157d5a1c3b997a5065"
+    },
+    {
+      "file": "source/models/quarry-extension-base.json",
+      "bytes": 192132,
+      "sha256": "9c14b298d7eb96994f084c91315eefecc0947fcb4e777ba40dbd0fc3043e9001"
+    }
+  ]
+}
