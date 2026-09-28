@@ -1,3 +1,11 @@
+# September 28 recovery publication
+
+At the user's request after the agent credit allowance was exhausted, the interrupted western wall work was preserved and the runtime restored to the last fully validated release. The wall generator, immutable boundary/collision baseline, unused loader, fifteen-view baseline tooling and exact interrupted integration snapshots are retained under the paths listed in `source/recovery/west-wall/README.md` and its SHA-256 manifest. The Blender generator parses, but no new western GLB, collision JSON, editable scene or validated wall export exists; this scenery is not enabled in the game.
+
+A fresh TypeScript/Vite build reproduces `index-Dew9mhki.js` byte-for-byte, SHA-256 `b51476a668aafc2e0d3ed072a7528261647393a2bab0f21f7921e09bb8446d60`. Frontend tests pass **127/127**, backend tests **21/21**, and both TypeScript checks pass. Existing ten-minute performance findings below describe this same runtime; no new performance result is claimed. All 22 server source inputs still match the previously verified deployed Worker, so recovery requires no server redeployment or account/plan change. No spending or audio regeneration occurred.
+
+The last completed cliff material and pavement-grip improvements, all modes, reversed arrow steering, normal WASD controls, 35 ElevenLabs effects, and Free-account internet multiplayer remain included. Publication and live-check evidence for this recovery is recorded separately after deployment. Local recovery logs: `outputs/recovery-frontend-tests.log`, `outputs/recovery-backend-tests.log` and `outputs/recovery-source-verification.json`.
+
 # Validation — September 27–28, 2026
 
 ## Fractured cliff material and pavement grip — published and verified

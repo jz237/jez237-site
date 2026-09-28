@@ -116,3 +116,7 @@ Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-en
 Implementation modules separate assets, world, vehicle dynamics/damage, rules, audio and effects. `window.__quarry` is a local QA interface for scenario setup and performance reports; it is not an online API or a remote service.
 
 See `CREDITS.md` for asset licensing and `VALIDATION.md` for verification and measured performance.
+
+## Recovery checkpoint
+
+The September 28 recovery release preserves the completed playable game and the interrupted western quarry-wall work. The new wall is not enabled: its Blender export and shared collision integration were unfinished when work stopped. Draft code, frozen geometry and an exact recovery manifest are saved in [source/recovery/west-wall/README.md](source/recovery/west-wall/README.md).
