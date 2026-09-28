@@ -202,5 +202,27 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Desktop & mobile · Original educational reconstruction, not factory CAD"
+  },
+  {
+    "id": "010",
+    "title": "Koi Pond Garden",
+    "category": "3D · Interactive garden",
+    "description": "A quiet Japanese garden brought to life. Feed colourful koi, explore above and below the water, and drift through changing weather and seasons. Created by Sourany Phomhome (Sourany Studio).",
+    "url": "koi-pond-garden/",
+    "image": "assets/koi-pond-garden.jpg",
+    "imageAlt": "Koi swimming in the original project’s Japanese garden pond, surrounded by rocks and plants",
+    "source": "https://github.com/jz237/koi-pond-garden",
+    "features": [
+      "Feed and stroke the koi",
+      "Cinematic & underwater cameras",
+      "Weather and seasons",
+      "Procedural garden soundscape"
+    ],
+    "facts": [
+      "20 koi · 18 varieties",
+      "Three.js · WebGL",
+      "MIT licensed"
+    ],
+    "note": "WebGL · Best on desktop · By Sourany Phomhome · Preview supplied by the original project"
   }
 ]
