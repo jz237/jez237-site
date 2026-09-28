@@ -21,7 +21,12 @@
           <ul class="pond-preview-topics" aria-label="Explore in the garden"><li>Meet the koi</li><li>Water lab</li><li>Seasonal care</li></ul>
           <a class="pond-preview-explore" href="${gardenUrl}" aria-label="Explore the koi garden">Explore the koi garden <span aria-hidden="true">↗</span></a>
           <a class="pond-preview-shop" href="#products">Shop pond supplies <span aria-hidden="true">↓</span></a>
-        </div>`;
+        </div>
+        <a class="pond-filter-feature" href="../learn/filtoclear/">
+          <img src="${assetBase}/site/filtoclear-exploded-preview.png" width="510" height="410" alt="The FiltoClear 5200 separated into its housing, colorful foam rings and UV components" loading="lazy">
+          <span class="pond-filter-copy"><span class="pond-filter-kicker">NEW · THE EQUIPMENT COLLECTION</span><strong>What happens inside a pond filter?</strong><span>Take apart the OASE FiltoClear 5200 in 3D. Follow the water, inspect 32 assemblies and watch the cleaning cycle.</span></span>
+          <span class="pond-filter-action">Explore the filter <span aria-hidden="true">↗</span></span>
+        </a>`;
 
       const video = section.querySelector('video');
       const toggle = section.querySelector('.pond-preview-toggle');
