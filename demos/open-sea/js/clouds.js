@@ -88,7 +88,7 @@ float cloudPresence(vec2 xz) {
   vec3 w = texture(uWeather, (xz + uCloudB.zw) / 52000.0).rgb;
   float wn = (w.r * 0.6 + w.g * 0.28 + w.b * 0.12 - 0.5) * 1.9 + 0.5;   // stretch contrast of the weather noise
   float c = uCloudA.x;
-  float thr = 0.64 - 0.30 * c - 0.32 * smoothstep(0.82, 1.0, c);      // approx. quantile of the noise
+  float thr = max(0.64 - 0.30 * c - 0.32 * smoothstep(0.82, 1.0, c), 0.11);   // even a full deck keeps thin patches and breaks      // approx. quantile of the noise
   return smoothstep(thr - 0.07, thr + 0.07, wn) * step(0.004, c);
 }
 float cloudDensity(vec3 p, float detailAmt) {
@@ -186,7 +186,7 @@ vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
     }
     vec3 Ls = vec3(0.0);
     float a = 1.0, b = 1.0;
-    for (int n = 0; n < 3; n++) { Ls += b * exp(-od * a) * sunPhase[n]; a *= 0.5; b *= 0.5; }
+    for (int n = 0; n < 3; n++) { Ls += b * exp(-od * a) * sunPhase[n]; a *= 0.36; b *= 0.66; }
     float powder = 1.0 - 0.55 * exp(-ext * dt * 0.6);
     vec3 S = E * Ls * mix(1.0, 0.5, dark) * mix(0.55, 1.0, powder) * 4.0 * PI * 0.12;
     float ambOcc = (0.30 + 0.70 * exp(-od * 0.06 * (1.0 - h))) * mix(1.0, 0.55, dark);

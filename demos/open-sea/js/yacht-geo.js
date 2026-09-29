@@ -176,7 +176,7 @@ export function buildYacht() {
   }, 12, 10, MAT.KEEL);
   B.grid((u, v) => { const z = -0.36 - v * 1.52; const chord = 2.2 - 1.15 * v, xr = -0.35 + 0.55 * v, t = u * 2 - 1; const half = 0.05 * (1 - 0.5 * v); return [xr + t * chord / 2, z, -0.001 - half * Math.sqrt(Math.max(0, 1 - t * t))]; }, 12, 10, MAT.KEEL, true);
   B.grid((u, v) => { const a = u * Math.PI * 2, b = v * Math.PI; return [0.05 + 0.55 * Math.cos(b), -1.9 + 0.13 * Math.sin(b) * Math.cos(a), 0.13 * Math.sin(b) * Math.sin(a)]; }, 16, 10, MAT.KEEL, true);
-  for (const s of [1, -1]) B.grid((u, v) => { const z = -0.02 - v * 1.5; const c = 0.55 - 0.15 * v, xr = -4.35 - 0.12 * v, t = u * 2 - 1; return [xr + t * c / 2, z, s * (0.001 + 0.03 * Math.sqrt(Math.max(0, 1 - t * t)))]; }, 8, 8, MAT.KEEL, s < 0);
+  for (const s of [1, -1]) B.grid((u, v) => { const z = 0.10 - v * 1.62; const c = 0.55 - 0.15 * v, xr = -3.95 - 0.12 * v, t = u * 2 - 1; return [xr + t * c / 2, z, s * (0.001 + 0.03 * Math.sqrt(Math.max(0, 1 - t * t)))]; }, 8, 8, MAT.KEEL, s < 0);
 
   // Sails are separate buffers: their geometry is bent in the vertex shader.
   const mesh = { verts: new Float32Array(B.v), idx: new Uint32Array(B.i) };

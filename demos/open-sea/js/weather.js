@@ -22,7 +22,8 @@ void main() {
   float fi = float(gl_InstanceID);
   if (fi >= uCount) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vAlpha = 0.0; vRel = vec3(0.0); return; }
   vec3 h = hash33(vec3(fi, fi * 0.37, 11.0));
-  vec3 vel = uWindV;                                    // includes the fall (negative y)
+  float sz = 0.55 + 1.1 * fract(h.x * 17.31 + h.z * 5.73);   // drops come in different sizes: different fall speeds and streak lengths
+  vec3 vel = uWindV * mix(0.8, 1.25, sz * 0.75);        // includes the fall (negative y)
   vec3 p0 = vec3((h.x * 2.0 - 1.0) * uRadius, h.y * uHeight, (h.z * 2.0 - 1.0) * uRadius);
   // world-anchored drops that wrap around the camera
   vec3 pos = p0 + vel * (uTime + h.x * 7.0);
@@ -43,7 +44,7 @@ void main() {
   float w = 1.35;
   c.xy += perp * side * w * 0.5 / uViewport * c.w * 2.0;
   float dist = length(rel);
-  vAlpha = uIntensity * 0.75 * (0.5 + h.y * 0.5) * (1.0 - t * 0.9) / (1.0 + dist / 16.0) * smoothstep(0.3, 1.5, dist);
+  vAlpha = uIntensity * 0.75 * (0.35 + h.y * 0.5) * (0.6 + 0.6 * sz) * (1.0 - t * 0.9) / (1.0 + dist / 16.0) * smoothstep(0.3, 1.5, dist);
   vRel = rel;
   gl_Position = c;
 }`;

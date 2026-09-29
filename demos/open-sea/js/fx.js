@@ -150,7 +150,7 @@ void main() {
     const int N = 12;
     float tau = 0.0;
     vec3 base = uCam;
-    float dens0 = uRain * uRain * 0.00034 + uRain * 0.00006;
+    float dens0 = uRain * uRain * 0.00046 + uRain * 0.00007;
     for (int i = 0; i < N; i++) {
       float f0 = float(i) / float(N), f1 = float(i + 1) / float(N);
       float t = dm * 0.5 * (f0 * f0 + f1 * f1), dt = dm * (f1 * f1 - f0 * f0);

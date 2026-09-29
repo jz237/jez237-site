@@ -10,16 +10,16 @@ Open `index.html` from any static server. It needs WebGL 2 with float render tar
 
 | Layer | Method |
 | --- | --- |
-| Waves | Tessendorf FFT ocean, five spectral cascades (2.4 km down to 4.7 m tiles, 256²), JONSWAP wind sea plus a swell, choppy horizontal displacement, capillary dispersion. Sea state 0-9 sets significant wave height (3 cm to 14 m) and wind. |
+| Waves | Tessendorf FFT ocean, five spectral cascades (2.4 km down to 4.7 m tiles, 256²), JONSWAP wind sea plus a swell, choppy horizontal displacement, capillary dispersion. Sea state 0-9 sets significant wave height (1 cm to 14 m) and wind (0.3 to 29 m/s). |
 | Roughness | Per-cascade slope moments are mip-mapped (LEAN-style), so distant water turns into glitter roughness instead of shimmering; an unresolved-ripple term tops it up to the Cox-Munk slope variance. |
-| Whitecaps | Foam is stored per Lagrangian wave-particle (it rides the waves), decays exponentially, and is thresholded against bubble-cell lace noise so old foam breaks into a net instead of a blob. Coverage is servoed to a Monahan-style whitecap fraction by an asynchronous GPU read-back. |
+| Whitecaps | Foam is generated where the surface folds over itself (Jacobian < threshold), stored per Lagrangian surface particle so it rides the waves, and decays exponentially. It is drawn by thresholding that field against fractal noise (ragged, multi-scale edges) plus a cell-wall lace that only carves holes where the foam is thin, so fresh foam is a dense white sheet and old foam breaks into a net instead of a cotton-ball blob. Total coverage is servoed to a Monahan-style whitecap fraction by an asynchronous GPU read-back. |
 | Sky | Hillaire-style atmosphere (transmittance, multiple-scattering and sky-view LUTs) with sun **and** moon as light sources, ozone twilight, stars and a Milky Way. |
 | Clouds | Ray-marched volumetric layer (Perlin-Worley shape + Worley detail, adaptive stride, multiple-scattering approximation). A sun-projected shadow map darkens the sea; a hemi-octahedral environment map feeds reflections and ambient light. |
-| Water shading | Roughness-aware Fresnel, Gaussian-slope glitter for sun and moon, sub-surface colour, refraction of the submerged hull, aerial perspective. |
+| Water shading | Roughness-aware Fresnel, Gaussian-slope glitter for sun and moon, sub-surface colour, a planar mirror image of the yacht in calm water, refraction of the submerged hull, aerial perspective toward the local horizon colour. |
 | Yacht | Procedural 11.5 m sloop. Hull height/pitch/roll follow the water through asynchronous GPU wave probes; wake = analytic Kelvin pattern + persistent foam trail + hull ripples. |
 | Weather | Rain streaks, a patchy rain veil, fractal lightning with return strokes that light the clouds and the sea. |
 | Ripples | Damped 2D wave equation on a toroidal height field with a **fixed 1/120 s step** (see below). |
-| Underwater | Beer-Lambert absorption (red dies first), colour-preserving path radiance, caustic-modulated sun shafts, Snell's window, fish schools and marine snow. |
+| Underwater | Beer-Lambert absorption (red dies first), colour-preserving path radiance (no grey veil), caustic-modulated sun shafts, Snell's window with total internal reflection outside it, fish schools and marine snow. |
 
 ## Keeping the ripple solver stable
 
@@ -60,3 +60,16 @@ URL parameters (with `shot=1` the page is driven by the harness instead of `requ
 
 Headless Chromium on a machine without a GPU uses SwiftShader; expect seconds per frame there. On a real GPU the
 demo adapts its render resolution to hold a playable frame rate (`AUTO`), or fix it with the quality button.
+
+## Status and known limits
+
+* All the development stills were rendered with a **software renderer** (headless Chromium on SwiftShader, seconds per
+  frame). The demo has not been run on a real GPU by its author, so real-time frame rate is unverified. The resolution
+  governor (`AUTO`) exists to hold a playable rate but has only been exercised through the harness.
+* The water is a height field with choppy displacement: waves steepen and fold, but they cannot overturn or throw
+  spray. Whitecaps are a shading effect on the simulated foam field, not particles; there is no airborne spray.
+* Clouds are a single ray-marched layer. There are no cirrus or multi-layer skies and the layer is not lit by
+  neighbouring clouds beyond the multiple-scattering approximation.
+* The yacht is a procedural low-poly sloop (flat-shaded hull panels, no fittings beyond rails, mast and rigging).
+* There is no sound.
+* It needs WebGL 2 with `EXT_color_buffer_float`; without it the page shows a message instead of the scene.

@@ -174,6 +174,7 @@ class App {
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
     const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under };
+    { const fr = Math.hypot(flash[0], flash[1], flash[2]) || 1; ctx.flashLight = flash[3] > 0 ? [flash[0] / fr, flash[1] / fr, flash[2] / fr, Math.min(1.4, this.lightning.flash) * 4.0 / (1 + (fr / 350) * (fr / 350))] : [0, 1, 0, 0]; }
     this.ctx = ctx;
 
     // underwater beam bookkeeping for caustics
@@ -251,7 +252,19 @@ class App {
   }
 }
 
-const app = new App();
+let app;
+try { app = new App(); } catch (e) {
+  // no WebGL 2 / float render targets / shader failure: say so instead of leaving a black page
+  const f = document.getElementById('fail');
+  if (f) {
+    f.style.display = 'flex';
+    const d = document.createElement('div');
+    d.style.cssText = 'margin-top:12px;opacity:.55;font:12px monospace;white-space:pre-wrap;max-width:720px';
+    d.textContent = String(e && e.message || e).slice(0, 500);
+    f.firstElementChild.appendChild(d);
+  }
+  throw e;
+}
 window.__sea = {
   app,
   set(p) { Object.assign(app.state, p.state || {}); if (p.cam) Object.assign(app.cam, p.cam); },

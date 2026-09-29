@@ -84,7 +84,7 @@ function probit(pv) {
   return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
 }
 // Whitecap fraction of the surface for a 10 m wind (Monahan-like, nudged up for visual readability)
-export const whitecapFraction = U => Math.min(0.5, 9e-6 * Math.pow(Math.max(U, 0), 3.4));
+export const whitecapFraction = U => Math.min(0.5, 1.3e-5 * Math.pow(Math.max(U, 0), 3.4));
 
 const COMMON = `
 const float PI = 3.14159265359;

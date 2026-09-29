@@ -81,7 +81,7 @@ void main() {
     float sw = smoothstep(0.85, 0.12, ds);
     float bowSplash = smoothstep(1.6, 0.0, length(b - vec2(5.4, 0.0))) * 1.3;
     float n = 0.35 + 1.1 * vnoise(q * 2.3 + uTime * 0.5) * (0.5 + 0.8 * vnoise(q * 0.7 - uTime * 0.2));
-    stamp = (ring * 0.75 + sw * 0.95 + bowSplash) * n * uSpeedK;
+    stamp = (ring * 0.42 + sw * 1.15 + bowSplash) * n * uSpeedK;
   }
   o = vec4(clamp(prevVal * uDecay + stamp * uAdd, 0.0, 1.3), 0.0, 0.0, 1.0);
 }`;
