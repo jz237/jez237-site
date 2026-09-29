@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 29 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 15-21, 1984 — Commodore Readies the Plus/4 for the Holiday Shelf</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-10-15</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-15</guid>
+      <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
+      <description>A $300 “productivity machine” promises an office in ROM, but the C64’s immense game library will not follow it. Commodore’s Plus/4 is moving toward the holiday counter with an unusual pitch for a home computer: useful software is already inside. An October COMPUTE! hands-on report lists the machine at $300 with 64K of RAM and four integrated applications collectively called 3-Plus-1. The magazine’s reporting predates this week, so an exact October 15 launch is not established. Also this week: Archon II and Skyfox broaden Electronic Arts’ games line · Spy Hunter and Tapper arrive on home computers · A color printer for the home desk at $239 · IBM tries a second act for the PCjr.</description>
+    </item>
     <item>
       <title>Week of October 8-14, 1984 — Computer Games Claim the Fall Spotlight</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-10-08</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-04</guid>
       <pubDate>Wed, 09 Sep 2026 12:00:00 GMT</pubDate>
       <description>Lower tags on personal computers, drives, displays and adapters turn up the pressure in an increasingly crowded compatible market. IBM moved to sharpen its position in personal computing this week with price reductions across portions of the PC line. The changes reached beyond a single box: the company’s June hardware list covered the PC, XT, Portable PC, disk drives, displays and adapters, giving dealers and buyers a fresh schedule for assembling complete systems. Also this week: Postal Service Votes to Abandon E-COM · Computer Games Start Learning New Tricks · Copy Protection Draws Fire from Paying Customers.</description>
-    </item>
-    <item>
-      <title>Week of May 28-June 3, 1984 — Comdex/Spring Shows the Micro Market Still Surging</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-05-28</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-28</guid>
-      <pubDate>Tue, 08 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Atlanta fills with 851 suppliers, IBM-compatible machines and a new contest to put every office task inside one package. Comdex/Spring opened on a scale that made the personal-computer boom impossible to miss. Computerworld counted 851 suppliers, 158 of them first-time exhibitors, and expected well over 45,000 visitors. The aisles offered a working map of an industry still multiplying around the IBM PC standard. Also this week: Framework Bets $695 That Ideas Belong in an Outline · Delayed Windows Leaves PC Software on Islands · TeleVideo Puts PCs Around an $8,995 Multiuser Hub.</description>
     </item>
   </channel>
 </rss>
