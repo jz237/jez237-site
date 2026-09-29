@@ -1,3 +1,13 @@
+# Pause control repair - September 29, 2026
+
+The initial published demo check exposed a pause/resume regression: appending the settings overlay with `innerHTML +=` recreated the HUD and discarded its event handlers. Pause now inserts only the new overlay and preserves the existing controls.
+
+Runtime **index-DdESImtd.js**, **9,705,759 bytes**, SHA-256 **a409c49ce9580ec30d9e35abf19669d0a536a0d6cfe128899878547ddd69b8fb**. All **159 solo tests** and the production build pass. The expanded browser regression checks camera/car selectors after pause and focus loss, the pause button and Exit Demo after resuming, all seven views, automatic rematch and all eight AI race completions. Evidence: `outputs/demo-ai-fire/solo-pause-fix.log`, `build-pause-fix.log`, `demo-pause-fix/report.json`.
+
+This changes only overlay insertion. The engine/fire implementation and performance captures below are unchanged but were captured on the preceding bundle; their exact hashes remain recorded. No new performance claim, internet multiplayer testing, audio generation or spending. The two initial live checks in `outputs/demo-ai-fire/live/` failed and led to this repair; they are not passing publication evidence.
+
+---
+
 # Demo cameras, solo AI and variable fire - September 29, 2026
 
 Final application **index-fuCEwr7X.js**, **9,705,738 bytes**, SHA-256 **ae74a7334a48b31e5b611bfec50484a9e16febaae225e13c4dd41e9d195607c4**. Implementation and limits are in `source/demo-ai-fire.md`.
