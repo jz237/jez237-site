@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { modelTransport } from './model-transport.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const treeManifest = 'source/models/quarry-north-firs-manifest.json';
@@ -101,6 +102,7 @@ export async function forestRuntimeAssetPlan({ historical = false, publicAssets 
 }
 
 export async function observeForestRequests(page, base, plan) {
+  const transportPlan=await Promise.all(plan.map(async asset=>({...asset,transport:await modelTransport(asset.file)})));
   // Chromium's default inspector resource limit is below one authored fir GLB.
   // Increase only this QA session's response cache before application loading.
   const session = await page.context().newCDPSession(page);
@@ -128,8 +130,8 @@ export async function observeForestRequests(page, base, plan) {
     const request = requests.get(event.requestId);
     if (request) { clearTimeout(request.timer); request.reject(new Error(`${request.info.url}: ${event.errorText}`)); }
   });
-  const observations = plan.filter(asset => !asset.optionalBrowserRequest).map(asset => {
-    const url = new URL(asset.file, base).href;
+  const observations = transportPlan.filter(asset => !asset.optionalBrowserRequest).map(asset => {
+    const url = new URL(asset.transport?.file??asset.file, base).href;
     const response = new Promise((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error(`Application did not request ${url}`)), 120000);
       timer.unref(); waiting.set(url, { resolve, reject, timer });
@@ -145,8 +147,9 @@ export async function verifyForestRequests(observations, output) {
   for (const { asset, response: pending } of observations) {
     const response = await pending;
     assert.equal(response.status, 200, `${asset.file} application request`);
-    assert.equal(response.bytes, asset.bytes, `${asset.file} actual response size`);
-    assert.equal(response.sha256, asset.sha256, `${asset.file} actual application bytes must match public/dist`);
+    const expected=asset.transport??asset;
+    assert.equal(response.bytes, expected.bytes, `${asset.file} actual response size`);
+    assert.equal(response.sha256, expected.sha256, `${asset.file} actual transport bytes must match public/dist`);
     output.push({ ...asset, url: response.url, observedApplicationRequest: true,
       resourceType: response.resourceType });
   }

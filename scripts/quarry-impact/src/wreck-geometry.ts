@@ -1,5 +1,6 @@
 import * as T from 'three';
 import { finishCoupeDent } from './coupe-realism';
+const impactBounds = new T.Box3();
 
 /** Every skin, seal, window and inner panel is bent in metres in the same
  * vehicle frame. Mesh origins and export transforms must not open seams. */
@@ -43,12 +44,16 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
   const g = mesh.geometry, position = g.attributes.position;
   const rest = mesh.userData.wreckRest as T.BufferAttribute;
   const toModel = mesh.userData.wreckToModel as T.Matrix4, fromModel = mesh.userData.wreckFromModel as T.Matrix4;
+  const radius = Math.min(1.48, .65 + damage * .034);
+  // Conservative model-space broad phase: skip only panels entirely outside
+  // the impact sphere. Bounds follow previous dents and arbitrary export axes.
+  if (!g.boundingBox) g.computeBoundingBox();
+  if (impactBounds.copy(g.boundingBox!).applyMatrix4(toModel).distanceToPoint(contact) >= radius) return 0;
   const wear = g.attributes.impactWear;
   const tangent = new T.Vector3(0, 1, 0).cross(direction);
   if (tangent.lengthSq() < .001) tangent.set(1, 0, 0);
   tangent.normalize();
   const vertical = new T.Vector3().crossVectors(tangent, direction).normalize();
-  const radius = Math.min(1.48, .65 + damage * .034);
   const orig = new T.Vector3(), current = new T.Vector3(), offset = new T.Vector3();
   let maximum = 0;
   for (let i = 0; i < position.count; i++) {

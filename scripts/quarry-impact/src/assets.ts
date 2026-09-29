@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from './model-loader';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import type { CarKind } from './rules';
@@ -61,9 +61,12 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  for (const kind of ['coupe', 'sedan', 'hatch'] as CarKind[]) {
+  const kinds: CarKind[] = ['coupe', 'sedan', 'hatch'];
+  // Start independent transfers together; preserve template processing order.
+  const loaded = await Promise.all(kinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb'))));
+  for (const [index, kind] of kinds.entries()) {
     progress('Preparing ' + kind + ' bodywork');
-    const gltf = await loader.loadAsync(url('models/' + kind + '.glb'));
+    const gltf = loaded[index];
     alignWreckSeams(gltf.scene);
     // Keep the window seals with the moving door instead of batching them
     // into a fixed material group across the whole car.

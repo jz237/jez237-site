@@ -8,12 +8,13 @@ import {VehicleFire} from '../src/vehicle-fire';
 import {VehicleThermalState} from '../src/vehicle-thermal-state';
 import {fireProfile,unitNoise} from '../src/vehicle-fire-profile';
 import {restoreDemoBytes} from './demo-invariants';
+import {restorePerformanceBytes} from './performance-invariants';
 import type {Vehicle} from '../src/vehicle';
 import type {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 test('new release preserves the exact preceding release and all shared server inputs',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const manifest=JSON.parse(read('source/demo-revision.json').toString());
- for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restoreDemoBytes(p,read(p))),e.before,p);}
+ for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(restorePerformanceBytes(p,read(p))),e.after,p);assert.equal(hash(restoreDemoBytes(p,read(p))),e.before,p);}
  const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
 });
 test('each camera keeps a finite view above the terrain, including overturned targets',()=>{

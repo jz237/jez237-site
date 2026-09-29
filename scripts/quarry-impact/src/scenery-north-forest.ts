@@ -2,7 +2,7 @@ import { quarryRim, seededRandom } from './quarry-layout';
 import { backdropGroundHeight, type BackdropCard } from './scenery-backdrop';
 import north from './quarry-north-forest.json';
 import * as T from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from './model-loader';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { url } from './assets';
 import { loadNorthRidge } from './scenery-north-ridge';
