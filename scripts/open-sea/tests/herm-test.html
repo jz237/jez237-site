@@ -1,0 +1,48 @@
+<!doctype html><meta charset="utf-8"><title>herm test</title>
+<canvas id="c" width="64" height="64"></canvas>
+<script type="module">
+import { initGL, gl, readF32, bindFBO, drawFS } from '/demos/open-sea/js/gl.js';
+import { OceanSim } from '/demos/open-sea/js/ocean.js';
+window.run = () => {
+  initGL(document.getElementById('c'));
+  const N = 256;
+  const o = new OceanSim({ N, cascades: 5 });
+  o.setSea(4, 0); o.cur = { ...o.target }; o._regen();
+  const res = {};
+  // H0 symmetry: RG(pm) == BA(p)
+  const fh = o.h0Fbos[0];
+  const h0 = readF32(fh, 0, 0, N, N);
+  let worst = 0, cnt = 0, nz = 0;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const a = (y * N + x) * 4, b = (((N - y) % N) * N + ((N - x) % N)) * 4;
+    const d = Math.hypot(h0[a + 2] - h0[b], h0[a + 3] - h0[b + 1]);
+    worst = Math.max(worst, d); if (h0[a] !== 0 || h0[a+1] !== 0) nz++;
+  }
+  res.h0Asym = worst;
+  res.samples = [];
+  for (const [x,y] of [[3,5],[10,0],[0,7],[250,3],[5,250]]) {
+    const a = (y * N + x) * 4;
+    // search where RG equals BA(p)
+    let best = null, bd = 1e9;
+    for (let yy = 0; yy < N; yy++) for (let xx = 0; xx < N; xx++) {
+      const b = (yy * N + xx) * 4; const d = Math.hypot(h0[a+2]-h0[b], h0[a+3]-h0[b+1]);
+      if (d < bd) { bd = d; best = [xx, yy]; }
+    }
+    res.samples.push({ p: [x,y], ba: [h0[a+2], h0[a+3]], rg: [h0[a], h0[a+1]], bestMatch: best, bd, expected: [(N-x)%N, (N-y)%N] });
+  } res.h0NonZero = nz;
+  // Evolved spectrum symmetry
+  o.progEvolve.use().t('uH0', 0, o.h0).i('uLayer', 0).i('uN', N).f('uL', o.defs[0].L).f('uTimeFrac', 0.37).i('uTest', 1);
+  bindFBO(o.fboA); drawFS();
+  const e0 = readF32(o.fboA, 0, 0, N, N);
+  let w2 = 0, mx = 0;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const a = (y * N + x) * 4, b = (((N - y) % N) * N + ((N - x) % N)) * 4;
+    // P1 = h (Dx zeroed) -> Hermitian: P1(-k) = conj(P1(k))
+    const d = Math.hypot(e0[a] - e0[b], e0[a + 1] + e0[b + 1]);
+    w2 = Math.max(w2, d); mx = Math.max(mx, Math.hypot(e0[a], e0[a+1]));
+  }
+  res.evolveAsym = w2; res.evolveMax = mx;
+  return res;
+};
+window.ready = true;
+</script>
