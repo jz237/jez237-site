@@ -35,7 +35,7 @@ function fit(){
  const size=box.getSize(new T.Vector3()),extent=Math.max(size.x,size.z)*.72+1;
  key.position.copy(center).add(new T.Vector3(-5,10,7));key.target.position.copy(center);
  Object.assign(key.shadow.camera,{left:-extent,right:extent,top:extent,bottom:-extent,near:.1,far:40});key.shadow.camera.updateProjectionMatrix();if(renderer)renderer.shadowMap.needsUpdate=true;
- const dir=view==='front'?new T.Vector3(0,.055,1):view==='top'?new T.Vector3(.001,1,.001):new T.Vector3(system==='system'?.32:.7,system==='system'?.30:.48,1).normalize();
+ const dir=view==='front'?new T.Vector3(0,.055,1):view==='top'?new T.Vector3(.001,1,.001):(system==='roller'?new T.Vector3(1.4,.6,.85):new T.Vector3(system==='system'?.32:.7,system==='system'?.30:.48,1)).normalize();
  dir.normalize();const right=new T.Vector3().crossVectors(new T.Vector3(0,1,0),dir).normalize(),up=new T.Vector3().crossVectors(dir,right).normalize(),tanV=Math.tan(T.MathUtils.degToRad(camera.fov/2)),tanH=tanV*camera.aspect;let distance=1;
  for(const b of bounds)for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const corner=new T.Vector3(x,y,z).sub(center),depth=corner.dot(dir);distance=Math.max(distance,Math.abs(corner.dot(right))/(tanH*.92)+depth,Math.abs(corner.dot(up))/(tanV*.85)+depth);}
  distance*=.94;

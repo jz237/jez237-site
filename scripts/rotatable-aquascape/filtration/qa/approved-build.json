@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-09-29T02:06:01.810Z",
-  "scope": "Whole sump composition, connected plumbing, glass structure and animated water; aquarium source unchanged",
+  "checkedAt": "2026-09-29T02:39:55.358Z",
+  "scope": "Detailed fleece roller materials, moving fabric, mechanical hardware and wet chamber; aquarium source unchanged",
   "files": [
-    "assets/index-CbHBNrY6.js",
+    "assets/index-DPpNs5tW.js",
     "assets/index-vl4A24zB.css",
     "assets/rock-layers.bin-D_ajDSSg.gz",
     "index.html"
   ],
-  "buildHash": "065d6b612e359a24d3e496d50e0f215b7a7778b0b27093e67799d57f36ba07d0",
+  "buildHash": "8eee3ccd049b154e88980b1f5bf0c032dcc9571e77e94b46b0710b8013c0332f",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
   "checks": {
     "typescriptBuild": true,
@@ -34,14 +34,14 @@
       {
         "system": "system",
         "parts": 37,
-        "triangles": 1465006,
-        "calls": 432
+        "triangles": 1300350,
+        "calls": 457
       },
       {
         "system": "roller",
         "parts": 8,
-        "triangles": 580394,
-        "calls": 107
+        "triangles": 415738,
+        "calls": 132
       },
       {
         "system": "skimmer",
@@ -64,48 +64,48 @@
     ],
     "errors": [],
     "idleFrames": 0,
-    "checkedAt": "2026-09-29T02:04:32.264Z"
+    "checkedAt": "2026-09-29T02:34:45.988Z"
   },
   "performance": {
-    "baseline": "37bae10e5434d931579bc48c649aa9828e3ee944",
+    "baseline": "92d692fc303ac927ca66e258d4f1a91e6739e180",
     "method": "Serial local Chrome 1440x1080 DPR1; 1s scene warmup then 4s RAF and browser-task sample. This is not a low-end hardware claim.",
     "runs": [
       {
         "mode": "before",
-        "readyMs": 4604,
+        "readyMs": 5320,
         "scenes": [
           {
             "system": "system",
-            "fps": 60.06679627128309,
-            "taskSeconds": 1.090097,
-            "triangles": 1048472,
-            "calls": 276
+            "fps": 59.88173357636513,
+            "taskSeconds": 1.3250579999999994,
+            "triangles": 1077190,
+            "calls": 313
           },
           {
             "system": "roller",
-            "fps": 60.04734022655641,
-            "taskSeconds": 0.7099720000000005,
+            "fps": 60.1027482668358,
+            "taskSeconds": 0.7716650000000005,
             "triangles": 387236,
             "calls": 71
           },
           {
             "system": "skimmer",
-            "fps": 60.14774882699412,
-            "taskSeconds": 0.7712240000000001,
+            "fps": 60.21236727036632,
+            "taskSeconds": 0.7868289999999991,
             "triangles": 412212,
             "calls": 93
           },
           {
             "system": "biology",
-            "fps": 55.108096650959546,
-            "taskSeconds": 0.47013899999999964,
+            "fps": 52.44362310500583,
+            "taskSeconds": 0.500197,
             "triangles": 1015384,
             "calls": 18
           },
           {
             "system": "return",
-            "fps": 60.20935868297873,
-            "taskSeconds": 0.5632970000000004,
+            "fps": 60.09825191391738,
+            "taskSeconds": 0.6542159999999999,
             "triangles": 72972,
             "calls": 25
           }
@@ -113,40 +113,40 @@
       },
       {
         "mode": "after",
-        "readyMs": 4610,
+        "readyMs": 6121,
         "scenes": [
           {
             "system": "system",
-            "fps": 60.10124940798391,
-            "taskSeconds": 1.023675,
-            "triangles": 1077190,
-            "calls": 313
+            "fps": 59.611403487247465,
+            "taskSeconds": 1.3656699999999997,
+            "triangles": 979726,
+            "calls": 336
           },
           {
             "system": "roller",
-            "fps": 60.07877549012172,
-            "taskSeconds": 0.6616200000000001,
-            "triangles": 387236,
-            "calls": 71
+            "fps": 53.14636458920945,
+            "taskSeconds": 0.835108,
+            "triangles": 289772,
+            "calls": 94
           },
           {
             "system": "skimmer",
-            "fps": 60.04584412995816,
-            "taskSeconds": 0.7174050000000003,
+            "fps": 60.05781499229314,
+            "taskSeconds": 0.8882580000000004,
             "triangles": 412212,
             "calls": 93
           },
           {
             "system": "biology",
-            "fps": 60.03387803905937,
-            "taskSeconds": 0.5001569999999997,
+            "fps": 59.78477481085907,
+            "taskSeconds": 0.5311959999999996,
             "triangles": 1015384,
             "calls": 18
           },
           {
             "system": "return",
-            "fps": 60.13574209002897,
-            "taskSeconds": 0.5360270000000007,
+            "fps": 60.13874332502797,
+            "taskSeconds": 0.6672400000000014,
             "triangles": 72972,
             "calls": 25
           }
@@ -157,19 +157,49 @@
   },
   "visualReview": {
     "findings": [
-      "Reviewed the complete sump against the existing generated system reference and immediately previous published 37bae10e5 build. The new lower camera angle exposes chamber contents and uses more of the viewport width.",
-      "Rebuilt the installed plumbing with socketed PVC bends, ridged unions, elastomer seals, a valve body/handle and a return riser seated on the pump discharge. The emergency drain stays dry in normal operation.",
-      "Thicker glass panels, silicone joints, edge tint, a fixed inlet divider, operating-level graduations, cable clips and a cushioned base give the enclosure a constructed rather than diagrammatic appearance. All additions remain with their parent component when separated.",
-      "Raised operating water and matched baffle heights. Added irregular traveling surface ripples, a falling sheet, localized small bubbles at the final baffle, wet menisci, restrained moving light on the bottom and small glass droplets. Rejected the first regular washboard ripple render.",
-      "The surface texture is generated once from a cached scalar height field; animation updates texture offsets/uniforms and 900 small local bubbles, without rebuilding meshes each frame.",
-      "Preserved the detailed roller, skimmer, living-rock and pump exhibits, the 42 selectable parts, all lessons, pointer picking, explosion/isolation, pause, reset and reduced-motion behavior. Freshwater/reef aquarium source and bundles are unchanged.",
-      "Front, top, perspective, exploded and mobile views are inspected, alongside actual water time sequences. Pixel-identical paused captures verify that the new wet effects freeze. Functional checks do not establish realism.",
-      "The overall installation reads more convincingly, but foam scattering, fluid turbulence and object reflections still do not match the generated reference. Dimensions and water motion remain illustrative rather than engineering specifications."
+      "Compared the fleece roller against the existing generated roller reference and the immediately previous 92d692fc3 published system build. The reference is a material and hardware appearance guide, not an engineering drawing.",
+      "Replaced the simple rolls with irregular wound profiles, fine nonwoven fiber textures, layered end-grain, open core collars, axle hardware and edge fuzz. The clean roll remains pale while the loaded roll and outgoing strip have a distinct tan/brown debris load.",
+      "Rebuilt the frame with shaped side plates, bearing collars, socket screws, base rails, feet, clear wet panels and fine comb slots. The removable cradle has genuine open slats and curved lower support rails.",
+      "Added a die-cast-style gear cover, split gasket, countersunk socket screws, fluted motor can, end caps, a small identification plate, cable gland and strain relief. A mounted level probe, lens and illuminated indicator replace the simple sensor box.",
+      "Rebuilt the hollow inlet union and downward outlet while keeping the connection to the whole-system drain aligned. The chamber has moving water and local bubbles. These effects disappear during separation and freeze on pause.",
+      "The continuous fleece now has actual curved, subdivided, subtly wrinkled geometry and surface-bound debris that moves during an advance. Corrected roll winding so the used spool winds up while the clean spool feeds down; the existing sensor timing is preserved.",
+      "The original eight selectable roller parts and 42 total parts remain. Fine details follow their parent part in explosion and isolation. Static sensor hardware is batched while the LED remains independently animated.",
+      "Reviewed assembled, exploded, front, top, close-up, isolated hardware and phone views, including rendered advancing sequences and identical paused frames. Passing functional checks are not proof of photographic realism.",
+      "Foam, wet reflections and microscopic fiber scattering remain simpler than the generated reference; this pass is a visual improvement, not photographic parity. No purchases or image-generation services were used."
     ],
-    "evidence": "filtration/qa/system-evidence/",
+    "evidence": "filtration/qa/roller-evidence/",
     "references": "filtration/qa/references/",
     "method": "Built-in GPT Image; five independent subjects. Exact prompts in reference-prompts.json.",
     "photographicParity": false
   },
-  "deploymentStatus": "Validated locally; publication recorded separately."
+  "deploymentStatus": "Validated locally; publication recorded separately.",
+  "rollerMotion": {
+    "checks": {
+      "sensorCycleAdvancesUpTakeupThenStops": true,
+      "allVisibleMotionFreezes": true,
+      "detailPartsStaySelectable": true,
+      "mobileAndReducedMotion": true
+    },
+    "frames": [
+      {
+        "time": 4.2071000000000005,
+        "angle": 0.3465600000000006
+      },
+      {
+        "time": 4.540500000000001,
+        "angle": 0.8800000000000003
+      },
+      {
+        "time": 4.890500000000003,
+        "angle": 1.4400000000000008
+      },
+      {
+        "time": 5.207400000000006,
+        "angle": 1.9470400000000037
+      }
+    ],
+    "errors": [],
+    "checkedAt": "2026-09-29T02:39:24.497Z"
+  },
+  "performanceNote": "The five-view sweep used the same geometry counts/materials before final cloth-debris phase coupling and sensor bracket placement corrections. Those changes were rechecked in rendered motion sequences and isolated part views on the final build."
 }

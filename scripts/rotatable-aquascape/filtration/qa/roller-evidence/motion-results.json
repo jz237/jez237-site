@@ -1,0 +1,28 @@
+{
+  "checks": {
+    "sensorCycleAdvancesUpTakeupThenStops": true,
+    "allVisibleMotionFreezes": true,
+    "detailPartsStaySelectable": true,
+    "mobileAndReducedMotion": true
+  },
+  "frames": [
+    {
+      "time": 4.2071000000000005,
+      "angle": 0.3465600000000006
+    },
+    {
+      "time": 4.540500000000001,
+      "angle": 0.8800000000000003
+    },
+    {
+      "time": 4.890500000000003,
+      "angle": 1.4400000000000008
+    },
+    {
+      "time": 5.207400000000006,
+      "angle": 1.9470400000000037
+    }
+  ],
+  "errors": [],
+  "checkedAt": "2026-09-29T02:39:24.497Z"
+}
