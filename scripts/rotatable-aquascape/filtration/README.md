@@ -12,6 +12,10 @@ Separate 3D educational exhibit, linked from the reef's top learning toolbar and
 
 40 selectable components in total. Each has its own name, purpose and care/context note. Smooth separation slider and assembly sequence; labels, click picking, keyboard-accessible part selector, isolate/clear, orbit/zoom, camera presets, fit/reset, flow toggle and motion pause. Each system has four reader-paced explanations. Static water-route guide and primary reference links remain below the 3D view.
 
+The whole system, fleece roller, skimmer and return pump also have four-step animated cutaways below their 3D controls. `See how it works` jumps to the guide; each step's `Find this part in 3D` returns to and selects the corresponding component. The whole-system guide distinguishes main sump flow from the skimmer's local loop. The roller follows debris onto used fleece and shows sensor-triggered advance and stop. The skimmer separates rising foam/waste from the lower water outlet, and the pump traces the center inlet through the impeller and volute.
+
+These SVG guides animate only on request, finish after one 16-second cycle, honor local/global pause and suspend offscreen or in a hidden tab. Numbered steps remain usable without animation. They add no image downloads or additional WebGL context. The accepted magnified live-rock biofilm remains separate and unchanged.
+
 This is a generic teaching reconstruction, not product CAD, an equipment sizing tool, a service procedure or a water-chemistry solver. Flows, timings, proportions and microbe sizes are illustrative. Manufacturer sources are linked beside the relevant topics.
 
 ## Build and verification
@@ -21,6 +25,8 @@ From `scripts/rotatable-aquascape`:
 ```
 npm run build:filtration
 npm run check:filtration
+node filtration/qa/process-guides.mjs
+node filtration/qa/biofilm.mjs
 node filtration/qa/realism-browser.mjs
 ```
 

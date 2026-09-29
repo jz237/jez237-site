@@ -3,6 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {studioEnvironment} from './SurfaceDetail.ts';
 import {makeFiltration,type Part} from './model.ts';
 import {systems,descriptions,type System} from './content.ts';
+import {processDiagram} from './ProcessDiagram.ts';
 import {biologyDiagram} from './BiologyDiagram.ts';
 import './style.css';
 
@@ -14,6 +15,8 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let system:System='system',lesson=0,selected:string|null=null,isolate=false,labels=false,flow=true,paused=reduced.matches,explosion=0,targetExplosion=0,time=0,sequence=false,sequenceTime=0,experimentTime=-1,view='perspective',dirty=true;
 const model=makeFiltration();
 document.querySelector('.stage')!.append($('biology-key'));
+document.querySelector('.stage')!.append($('process-guide'));
+const process=processDiagram($('process-guide'),()=>setPaused(false),id=>{inspect(id);setExplosionTarget(0);fit();viewport.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});viewport.focus({preventScroll:true});});
 const bio=biologyDiagram($('biology-key'),()=>{setPaused(false);flow=true;model.setFlow(true);flowUI();});
 $('explorer').insertBefore(document.querySelector('.inspector')!,document.querySelector('.lesson'));
 let onScreen=true;
@@ -56,9 +59,9 @@ function inspect(id:string|null){
  $('part-kind').textContent=d?.kind||'LOOK CLOSER';$('part-title').textContent=d?.title||'Every part has a purpose.';$('part-description').textContent=d?.description||'Select a piece in the model or choose it above. Separate the assembly to reveal what sits inside.';$('part-care').textContent=d?.care||'';
  $<HTMLButtonElement>('isolate').disabled=!id;$<HTMLButtonElement>('clear').disabled=!id;$('isolate').setAttribute('aria-pressed','false');selection.visible=!!id;changed();status();
 }
-function changeSystem(next:System){bio.reset();system=next;lesson=0;inspect(null);model.setView(system);experimentTime=-1;sequence=false;explosion=targetExplosion=0;model.setExplosion(0);view='perspective';
+function changeSystem(next:System){bio.reset();process.setSystem(next);system=next;lesson=0;inspect(null);model.setView(system);experimentTime=-1;sequence=false;explosion=targetExplosion=0;model.setExplosion(0);view='perspective';
  all<HTMLButtonElement>('[data-system]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.system===system)));all<HTMLButtonElement>('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
- document.querySelector<HTMLElement>('.stage')!.dataset.scene=system;bio.setEnabled(system==='biology');$('bio-focus').hidden=system!=='biology';document.querySelector<HTMLElement>('.legend')!.hidden=system==='biology';flowUI();
+ document.querySelector<HTMLElement>('.stage')!.dataset.scene=system;bio.setEnabled(system==='biology');$('bio-focus').hidden=system!=='biology';$('process-focus').hidden=system==='biology';document.querySelector<HTMLElement>('.legend')!.hidden=system==='biology';flowUI();
  const d=systems[system];$('system-title').textContent=d.title;$('system-description').textContent=d.text;$('scene-name').textContent=d.name.toUpperCase();$('experiment').textContent=d.experiment;
  const parts=model.parts.filter(p=>system==='system'?p.system!=='biology':p.system===system);$('part-count').textContent=`${parts.length} SELECTABLE COMPONENTS`;
  $<HTMLSelectElement>('parts').innerHTML='<option value="">Select a component…</option>'+parts.map(p=>`<option value="${p.id}">${descriptions[p.id].title}</option>`).join('');
@@ -73,6 +76,7 @@ function placeLabels(){const w=viewport.clientWidth,h=viewport.clientHeight,occu
 all<HTMLButtonElement>('[data-system]').forEach(b=>b.addEventListener('click',()=>changeSystem(b.dataset.system as System)));
 all<HTMLButtonElement>('[data-view]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.view!;all('[data-view]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fit();}));
 $('fit').onclick=fit;
+$('process-focus').onclick=()=>{$('process-guide').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});$('process-play').focus({preventScroll:true});};
 $('bio-focus').onclick=()=>{$('biology-key').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});$('bio-play').focus({preventScroll:true});};
 slider.oninput=()=>{sequence=false;targetExplosion=explosion=Number(slider.value)/100;model.setExplosion(explosion);explosionUI();fit();status();};
 $('explode-button').onclick=()=>{sequence=false;setExplosionTarget(targetExplosion>.5?0:1);explosionUI();};
@@ -80,13 +84,14 @@ $('sequence').onclick=()=>{sequence=!sequence;sequenceTime=0;if(sequence){setPau
 $('reset').onclick=()=>{setPaused(reduced.matches);labels=false;flow=true;model.setFlow(true);flowUI();$('labels-toggle').setAttribute('aria-pressed','false');time=0;changeSystem(system);};
 $('flow').onclick=()=>{flow=!flow;model.setFlow(flow);flowUI();changed();};
 $('labels-toggle').onclick=()=>{labels=!labels;$('labels-toggle').setAttribute('aria-pressed',String(labels));changed();};
-function setPaused(v:boolean){paused=v;bio.setPaused(v);$('pause').textContent=paused?'Resume motion':'Pause motion';$('pause').setAttribute('aria-pressed',String(paused));status();changed();}
+function setPaused(v:boolean){paused=v;bio.setPaused(v);process.setPaused(v);$('pause').textContent=paused?'Resume motion':'Pause motion';$('pause').setAttribute('aria-pressed',String(paused));status();changed();}
 $('pause').onclick=()=>setPaused(!paused);
 $('lesson-prev').onclick=()=>{lesson=Math.max(0,lesson-1);lessonUI();};$('lesson-next').onclick=()=>{lesson=Math.min(systems[system].lessons.length-1,lesson+1);lessonUI();};
 $<HTMLSelectElement>('parts').onchange=()=>inspect($<HTMLSelectElement>('parts').value||null);
 $('clear').onclick=()=>{const was=isolate;inspect(null);if(was)fit();};
 $('isolate').onclick=()=>{isolate=!isolate;model.isolate(isolate?selected:null);$('isolate').setAttribute('aria-pressed',String(isolate));fit();status();};
-$('experiment').onclick=()=>{if(system==='biology'){bio.start();$('biology-key').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});return;}if(system==='roller'){experimentTime=0;setExplosionTarget(0);setPaused(false);inspect('sensor');}else{lesson=(lesson+1)%systems[system].lessons.length;lessonUI();if(system==='skimmer')inspect('venturi');else if(system==='return')inspect('pump-rotor');else inspect(['overflow','roller-frame','baffle-1','return-pipe'][lesson]);setExplosionTarget(0);flow=true;model.setFlow(true);flowUI();setPaused(false);}};
+$('experiment').onclick=()=>{if(system==='biology'){bio.start();$('biology-key').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});}else if(system==='roller'){experimentTime=0;setExplosionTarget(0);setPaused(false);inspect('sensor');viewport.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});}else{process.start();$('process-guide').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});}};
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){inspect(null);sequence=false;explosionUI();}});
 document.addEventListener('visibilitychange',changed);
 const initialHash=location.hash.slice(1);changeSystem(initialHash in systems?initialHash as System:'system');setPaused(reduced.matches);
@@ -108,5 +113,5 @@ try{
   controls!.update();if(selected){const p=model.parts.find(p=>p.id===selected)!;selection.box.setFromObject(p.group);}
   if(dirty||moving){scene.updateMatrixWorld(true);placeLabels();renderer!.render(scene,camera);frames++;dirty=false;}status();
  });
- (window as any).filtrationQA={snapshot:()=>({...model.snapshot(),biology:bio.snapshot(),system,paused,selected,isolate,time,experimentTime,sequence,frames,triangles:renderer!.info.render.triangles,calls:renderer!.info.render.calls,ready:model.isReady()}),project:(id:string)=>{const p=model.parts.find(p=>p.id===id)!;const box=new T.Box3().setFromObject(p.group),v=box.getCenter(new T.Vector3()).project(camera),b=viewport.getBoundingClientRect();return{x:b.x+(v.x*.5+.5)*b.width,y:b.y+(-v.y*.5+.5)*b.height};}};
+ (window as any).filtrationQA={snapshot:()=>({...model.snapshot(),biology:bio.snapshot(),process:process.snapshot(),system,paused,selected,isolate,time,experimentTime,sequence,frames,triangles:renderer!.info.render.triangles,calls:renderer!.info.render.calls,ready:model.isReady()}),project:(id:string)=>{const p=model.parts.find(p=>p.id===id)!;const box=new T.Box3().setFromObject(p.group),v=box.getCenter(new T.Vector3()).project(camera),b=viewport.getBoundingClientRect();return{x:b.x+(v.x*.5+.5)*b.width,y:b.y+(-v.y*.5+.5)*b.height};}};
 }catch(error){console.error(error);$('loading').hidden=true;$('fallback').hidden=false;}

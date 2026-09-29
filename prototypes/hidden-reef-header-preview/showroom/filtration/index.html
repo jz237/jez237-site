@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07151e"><meta name="description" content="Take a reef filtration system apart in 3D. Explore a fleece roller, protein skimmer, live-rock biology and return pump with animated water paths and selectable components."><title>Inside the reef · Filtration studio</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237ce9db' d='M32 4C24 20 10 32 10 43a22 22 0 0044 0C54 32 40 20 32 4Z'/%3E%3C/svg%3E">  <script type="module" crossorigin src="./assets/index-WuP2YQ5N.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-DJwE7OIz.css">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07151e"><meta name="description" content="Take a reef filtration system apart in 3D. Explore a fleece roller, protein skimmer, live-rock biology and return pump with animated water paths and selectable components."><title>Inside the reef · Filtration studio</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%237ce9db' d='M32 4C24 20 10 32 10 43a22 22 0 0044 0C54 32 40 20 32 4Z'/%3E%3C/svg%3E">  <script type="module" crossorigin src="./assets/index-D36Tr1Hs.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-kaNpkfKs.css">
 </head>
 <body><a class="skip" href="#explorer">Skip to controls</a>
 <header><a class="brand" id="home" href="../../">THE HIDDEN REEF <span>/ FILTRATION STUDIO</span></a><a class="back" id="reef-link" href="../reef/?showroom=hidden-reef">← Back to the living reef</a></header>
@@ -13,8 +13,9 @@
 <div id="labels" aria-hidden="true"></div><div id="tooltip" hidden></div>
 <div id="loading" role="status">Preparing the filtration studio…</div>
 <div id="fallback" hidden role="alert"><h2>The 3D view could not start.</h2><p>This view needs WebGL 2. The illustrated flow guide and all component descriptions below remain available.</p><a href="#field-guide">Read the filtration guide ↓</a></div>
-<div class="view-tools" role="group" aria-label="Camera views"><button data-view="perspective" aria-pressed="true">Perspective</button><button data-view="front" aria-pressed="false">Front</button><button data-view="top" aria-pressed="false">Top</button><button id="fit">Fit view</button><button id="bio-focus" hidden>Magnify surface ↓</button></div>
+<div class="view-tools" role="group" aria-label="Camera views"><button data-view="perspective" aria-pressed="true">Perspective</button><button data-view="front" aria-pressed="false">Front</button><button data-view="top" aria-pressed="false">Top</button><button id="fit">Fit view</button><button id="bio-focus" hidden>Magnify surface ↓</button><button id="process-focus">See how it works ↓</button></div>
 <p class="gesture">Drag to orbit · Pinch or scroll to zoom · Select a part</p>
+<section id="process-guide" class="biology-lab process-lab" aria-label="Illustrated filtration process"></section>
 <section id="biology-key" class="biology-lab" aria-label="Magnified live-rock biofilm" hidden></section>
 <div class="transport"><div class="transport-title"><div><span class="eyebrow">EXPLODED VIEW</span><h2 id="assembly-state">Everything connected.</h2></div><output id="amount" for="explode">0%</output></div><label class="sr-only" for="explode">Separate the assembly</label><input type="range" id="explode" min="0" max="100" value="0"><div class="range-labels"><span>ASSEMBLED</span><span>EXPLODED</span></div><div class="transport-buttons"><button id="explode-button" class="primary">Explode assembly ↗</button><button id="sequence" aria-pressed="false">Play assembly sequence</button><button id="reset">Reset</button></div></div>
 </section>

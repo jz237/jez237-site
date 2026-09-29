@@ -45,3 +45,40 @@
 @media(min-width:741px) and (max-width:1100px){.bio-heading{display:block}.bio-scale{display:inline-block;margin-top:10px}.bio-explanation{display:block}.bio-explanation button{margin-top:12px}.bio-compounds{grid-template-columns:1fr 20px 1fr 20px 1fr}.bio-formula{font-size:16px}.bio-step-buttons button{flex-direction:column;gap:2px}}
 @media(max-width:740px){.stage[data-scene=biology] .scene-head{margin:20px 14px 10px}.stage[data-scene=biology] #viewport{height:300px}.stage[data-scene=biology] #labels{top:42px;height:300px}.biology-lab{margin:16px 10px}.bio-heading{padding:14px 12px 12px;display:block}.bio-heading h3{font-size:23px}.bio-heading .eyebrow{font-size:8px}.bio-scale{display:inline-block;border:0;padding:0;margin-top:7px}.bio-window{margin:0 10px}.bio-compounds{grid-template-columns:1fr 17px 1fr 17px 1fr;padding:11px 7px 0}.bio-formula{font-size:14px;letter-spacing:-.035em}.bio-compounds strong{font-size:11px}.bio-compounds small{font-size:9px}.bio-arrow{font-size:20px}.bio-layer-labels{font-size:9px;padding:8px;gap:5px}.bio-layer-labels i{margin-right:4px;width:10px}.bio-step-buttons{padding:10px 10px 0;gap:4px}.bio-step-buttons button{flex-direction:column;gap:1px;font-size:10px;line-height:1.45;min-height:62px;padding:6px 3px}.bio-explanation{display:block;padding:14px 12px}.bio-explanation h4{font-size:15px}.bio-explanation p{font-size:12px}.bio-explanation button{margin-top:12px;width:100%}.bio-note{padding:11px 12px}.bio-surface{min-height:92px}.stage[data-scene=biology] .gesture{margin-bottom:15px}}
 @media(prefers-reduced-motion:reduce){.bio-compounds>div,.bio-zone ellipse{transition:none}}
+
+/* All equipment keeps its complete 3D model above an optional, finite visual explanation. */
+.stage:not([data-scene=biology]){height:auto;position:relative;display:flex;flex-direction:column;background:#132631}
+.stage:not([data-scene=biology]) .scene-head{position:relative;inset:auto;margin:20px 24px 12px}
+.stage:not([data-scene=biology]) #viewport{position:relative;inset:auto;height:500px;flex:none}
+.stage:not([data-scene=biology]) #labels{top:44px;bottom:auto;height:500px}
+.stage:not([data-scene=biology]) .view-tools{position:relative;inset:auto;align-self:center;margin:10px 14px 0}
+.stage:not([data-scene=biology]) .gesture{position:relative;inset:auto;text-align:center;margin:9px 12px 18px}
+.stage:not([data-scene=biology]) .transport{position:relative;inset:auto}
+.process-window{margin:0 16px;border:1px solid #3f606b;border-radius:8px;background:radial-gradient(ellipse at 45% 30%,#1b3d4a,#0e2632);overflow:hidden}
+.process-window svg{display:block;width:100%;height:auto;max-height:460px}
+.process-window .p-glass{fill:#a5d0d1;fill-opacity:.07;stroke:#b6d2d2;stroke-width:3}
+.process-window .p-pipe{fill:none;stroke:#62868e;stroke-width:14;stroke-linejoin:round;stroke-linecap:round}
+.process-window .p-route,.process-window .p-route-muted{fill:none;stroke:#77d6ee;stroke-width:3;stroke-linejoin:round;stroke-linecap:round;marker-end:url(#p-arrow)}
+.process-window .p-route{opacity:.38}.process-window .p-route.active{opacity:1;stroke-width:4}
+.process-window .p-air{stroke:#e4efe6;marker-end:url(#p-arrow-air)}.process-window .p-waste{stroke:#e8bd77;marker-end:url(#p-arrow-waste)}
+.process-window .p-bubble{fill:#d9f0e8;fill-opacity:.07;stroke:#e0f1e6;stroke-width:1.8}
+.process-window .p-number circle{fill:#112a34;stroke:#b8d3cc;stroke-width:1.4}
+.process-window .p-number text{fill:#dcf4e5;text-anchor:middle;font:600 15px 'Segoe UI',sans-serif}
+.process-window .p-caption{fill:#d8e8e8;font:15px 'Segoe UI',sans-serif}
+.process-window .p-halo{fill:#bbe8cf;fill-opacity:0;stroke:#a8decf;stroke-opacity:0;stroke-width:2;pointer-events:none}
+.process-window .p-halo.active{fill-opacity:.07;stroke-opacity:.6}
+#p-tracer>circle:first-child{fill:#75d8f0;stroke:#d5f8ff;stroke-width:1.5}
+#p-tracer[data-kind=air]>circle:first-child{fill:#0f3040;stroke:#e4efe6;stroke-width:2.5}
+#p-tracer[data-kind=waste]>circle:first-child{fill:#deb774;stroke:#ffdf9f}
+.process-key{list-style:none;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:0 16px;margin:12px 0 4px;font-size:11px;color:#c1d6dc}
+.process-symbol{display:inline-block;width:8px;height:8px;vertical-align:middle;border-radius:50%;background:#77d6ee;margin-right:6px}
+.process-symbol-1{background:none;border:1px solid #e4efe6}.process-symbol-2{background:#e8bd77}
+.process-lab[data-process=roller] .process-symbol-1{background:#e8bd77;border:0}.process-lab[data-process=roller] .process-symbol-2{background:#e7ddc1;border-radius:1px}
+.process-lab[data-process=return] .process-symbol-1{background:#7dc4b4;border:0;border-radius:1px}.process-lab[data-process=return] .process-symbol-2{background:none;border:1px solid #bed8d6}
+.process-steps{grid-template-columns:repeat(4,1fr)}
+.process-actions{display:flex;flex-direction:column;gap:7px;flex:none}
+.process-actions button{font-size:11px;min-width:145px}
+.process-actions #process-part{background:transparent;border-color:#365660;color:#b7dbdf}
+@media(min-width:1550px){.stage:not([data-scene=biology]) #viewport,.stage:not([data-scene=biology]) #labels{height:550px}}
+@media(max-width:1100px){.process-steps{grid-template-columns:1fr 1fr}.process-steps button{flex-direction:row;min-height:44px}.process-explanation{display:block}.process-actions{margin-top:14px;flex-direction:row;flex-wrap:wrap}.process-actions button{min-width:0;flex:1}}
+@media(max-width:740px){.stage:not([data-scene=biology]) .scene-head{margin:20px 14px 10px}.stage:not([data-scene=biology]) #viewport{height:320px}.stage:not([data-scene=biology]) #labels{top:42px;height:320px}.process-window{margin:0 10px}.process-window svg{max-height:none}.process-key{font-size:10px;display:grid;gap:8px;padding:0 12px}.process-steps button{font-size:11px;gap:7px;padding:9px 5px}.process-actions{flex-direction:column}.process-actions button{margin:0;width:100%}.process-explanation h4{font-size:16px}}
