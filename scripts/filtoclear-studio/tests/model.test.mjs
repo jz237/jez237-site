@@ -27,6 +27,14 @@ test('cleaning lifts the bottom plate and compresses the foam, then restores the
  for(const p of f.foam)assert.ok(p.object.scale.y<.9);
  f.pose(0,false,0);for(const p of f.parts.values()){assert.ok(p.object.position.distanceTo(p.base)<1e-9);assert.equal(p.object.scale.y,1);}
 });
-test('cutaway removes only the front shell and restores it without changing assembled positions',()=>{
+test('cutaway opens the shell, foam and supports and restores every front sector',()=>{
  f.pose(0,true);assert.ok(f.fronts.every(p=>!p.visible));f.pose(0,false);assert.ok(f.fronts.every(p=>p.visible));
+});
+
+test('cutaway exposes all four foam cores while keeping the rear media and model positions intact',()=>{
+ f.pose(0,true);
+ for(const p of f.foam){assert.ok(p.meshes.some(m=>m.visible),p.id);assert.ok(p.meshes.some(m=>!m.visible),p.id);assert.ok(p.object.position.distanceTo(p.base)<1e-9);}
+ for(const id of ['mesh','base-plate','spacer-top']){const p=f.parts.get(id);assert.ok(p.meshes.some(m=>m.visible));assert.ok(p.meshes.some(m=>!m.visible));}
+ f.pose(1,false);for(const p of f.foam)assert.ok(p.meshes.every(m=>m.visible));
+ f.pose(0,true,1);f.pose(0,false,0);for(const p of f.parts.values())assert.ok(p.object.position.distanceTo(p.base)<1e-9);
 });
