@@ -48,6 +48,8 @@ Panel (top left): camera mode, presets, sea state, time of day, cloud cover, rai
 
 ## Development
 
+The harness scripts need Playwright: `cd scripts/open-sea && npm install && npx playwright install chromium`.
+
 ```bash
 python3 -m http.server 8791            # from the repository root
 node scripts/open-sea/shot.mjs out.png "t=16.5&sea=4&cloud=0.35&ycam=30,5,60" 8 2 1280x720

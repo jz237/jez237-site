@@ -20,7 +20,7 @@ export function initUI(app, rig) {
     <div id="body">
       <div class="seg" id="modes" role="group" aria-label="Camera">${['TOUR', 'FLY', 'BOAT', 'DIVE'].map(m => `<button data-m="${m.toLowerCase()}">${m}</button>`).join('')}</div>
       <div class="seg" id="presets" role="group" aria-label="Presets">${Object.keys(PRESETS).map(p => `<button data-p="${p}">${p}</button>`).join('')}</div>
-      <label class="row">SEA<input id="sea" type="range" min="0" max="9" step="0.05" aria-label="Sea state"><output id="seaO"></output></label>
+      <label class="row">SEA<input id="seaState" type="range" min="0" max="9" step="0.05" aria-label="Sea state"><output id="seaO"></output></label>
       <label class="row">TIME<input id="tod" type="range" min="0" max="24" step="0.05" aria-label="Time of day"><output id="todO"></output></label>
       <div class="seg" id="times" role="group" aria-label="Time presets">${Object.keys(TIMES).map(p => `<button data-t="${p}">${p}</button>`).join('')}</div>
       <label class="row">CLOUD<input id="cloud" type="range" min="0" max="1" step="0.01" aria-label="Cloud cover"><output id="cloudO"></output></label>
@@ -29,7 +29,7 @@ export function initUI(app, rig) {
     </div>`;
   const $ = id => document.getElementById(id);
   const paint = el => { const min = +el.min, max = +el.max; el.style.setProperty('--v', `${((+el.value - min) / (max - min)) * 100}%`); };
-  const sliders = { sea: $('sea'), tod: $('tod'), cloud: $('cloud'), rain: $('rain') };
+  const sliders = { sea: $('seaState'), tod: $('tod'), cloud: $('cloud'), rain: $('rain') };
   const outs = { sea: v => (+v).toFixed(1), tod: fmtTime, cloud: v => Math.round(v * 100) + '%', rain: v => Math.round(v * 100) + '%' };
   for (const [k, el] of Object.entries(sliders)) {
     el.value = G[k];
