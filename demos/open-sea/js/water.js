@@ -305,26 +305,31 @@ void main() {
     float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
     vec2 warp = vec2(vnoise(base * 0.55 + 3.0), vnoise(base * 0.55 + 9.0)) - 0.5;
     vec2 q = base + warp * 2.2;
-    float l0 = lace(q * 0.42 + 13.0, pm * 0.42), l1 = lace(q * 1.6, pm * 1.6), l2 = lace(q * 5.5 + 7.0, pm * 5.5), l3 = lace(q * 19.0 + 3.0, pm * 19.0);
-    float lc = 0.22 * l0 + 0.22 * l1 + 0.30 * l2 + 0.26 * l3;
-    // patchy thickness (rafts and gaps), only mildly elongated along the flow
-    float st1 = vnoise(vec2(q.x * 0.42, q.y * 1.3) + 21.0), st2 = vnoise(vec2(q.x * 1.1, q.y * 3.1) + 5.0);
-    float streak = st1 * 0.6 + st2 * 0.4;
-    float mott = vnoise(q * 0.8 + 41.0) * 0.6 + vnoise(q * 2.9) * 0.4;
-    float t = (D - 0.42) * 1.9 + (lc - 0.5) * 0.72 * (1.0 - 0.35 * D) + (streak - 0.5) * 0.42 + (mott - 0.5) * 0.30;   // sparse lace where the foam is old, a dense sheet where it is fresh
+    // fractal patchiness: every octave that is coarser than a pixel is kept, finer ones fade to their mean
+    float nz = (vnoise(q * 0.30 + 13.0) - 0.5) * 1.00 * (1.0 - smoothstep(0.30, 0.9, pm * 0.30))
+             + (vnoise(q * 0.85 + 5.0) - 0.5) * 0.85 * (1.0 - smoothstep(0.30, 0.9, pm * 0.85))
+             + (vnoise(q * 2.4 + 29.0) - 0.5) * 0.65 * (1.0 - smoothstep(0.30, 0.9, pm * 2.4))
+             + (vnoise(q * 6.5 + 3.0) - 0.5) * 0.50 * (1.0 - smoothstep(0.30, 0.9, pm * 6.5));
+    float nfine = (vnoise(q * 17.0 + 11.0) - 0.5) * (1.0 - smoothstep(0.30, 0.9, pm * 17.0))
+                + (vnoise(q * 44.0 + 7.0) - 0.5) * 0.7 * (1.0 - smoothstep(0.30, 0.9, pm * 44.0));
+    float t = (D - 0.40) * 1.5 + nz + nfine * 0.35;   // sparse and ragged where the foam is old, a dense sheet where it is fresh
+    // thin foam is a net of bubble walls with the dark water showing through the holes; dense foam has only a few
+    float lz = lace(q * 7.0 + 3.0, pm * 7.0);
+    float netK = 1.0 - smoothstep(0.10, 0.80, t);
+    t -= (1.0 - lz) * 0.30 * netK;
     float cov = smoothstep(0.0, 0.05 + 0.10 * smoothstep(0.15, 1.2, pm), t);   // distant patches get soft, broken edges instead of crisp confetti
-    float thick = smoothstep(0.02, 0.55, t);
+    float thick = smoothstep(0.0, 0.75, t);
     // far away, patches are smaller than a pixel: keep their average whiteness as a soft haze instead of speckle
     float farK = smoothstep(0.9, 4.5, pm);
     cov = mix(cov, clamp(D * 0.9 * (0.55 + 0.9 * vnoise(q * 0.13 + 3.0)), 0.0, 1.0), farK);
     thick = mix(thick, D, farK);
     vec3 Efoam = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.6 + 0.4 * n.y);
     Efoam = mix(vec3(luma(Efoam)), Efoam, 0.6) * 1.18;   // foam scatters light many times: whiter than the light that reaches it
-    float bubble = mix(0.58, 1.0, l3) * mix(0.74, 1.0, l2) * (0.9 + 0.1 * l1);
+    float bubble = clamp(0.86 + 0.55 * nfine, 0.55, 1.0);
     float alb = mix(0.30, 0.97, pow(thick, 0.7)) * bubble;
-    vec3 foamCol = vec3(alb, alb * 0.996, alb * 0.99) * Efoam / PI * (0.80 + 0.30 * l1);
-    // bright bubble-wall highlights facing the sun
-    foamCol += sunE * (l3 * l2) * 0.030 * pow(sat(dot(n, uSunDir)), 2.0) * thick;
+    vec3 foamCol = vec3(alb, alb * 0.996, alb * 0.99) * Efoam / PI * clamp(0.92 + 0.35 * nz, 0.7, 1.15);
+    // bright bubble highlights facing the sun
+    foamCol += sunE * max(nfine, 0.0) * 0.10 * pow(sat(dot(n, uSunDir)), 2.0) * thick;
     // thin foam is see-through: water colour and reflection show between the bubbles
     foamCol = mix(refl + body * 0.8 + foamCol * 0.5, foamCol, smoothstep(0.1, 0.7, thick));
     col = mix(col, foamCol, cov);
