@@ -17202,5 +17202,107 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-belostoma-flumineum",
+    "title": "Factual infographic: Belostoma flumineum — The Egg-Bearing Father",
+    "tests": "Species and mechanism checked against UF IFAS and ITIS; no prior Belostoma topic in full factual archive.; archive_slot=2026-09-29T04:20; concept=belostoma-flumineum-male-dorsal-egg-brooding-freshwater; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, sophisticated, direct-canvas natural-history infographic in a tall portrait composition, not a photographed poster, specimen tray, page mockup, or tabletop. Title clearly: “Factual infographic: Belostoma flumineum — The Egg-Bearing Father”; smaller italic scientific name beneath. The dominant visual, taking roughly half the canvas, is a naturalistic underwater macro portrait of one correctly proportioned male Belostoma flumineum, a dark brown, relatively narrow giant water bug a few centimeters long, just below a pond surface among submerged stems. Show six anatomically correct legs, especially the muscular grasping front pair; folded forewings; true-bug head and short piercing beak; two slender abdominal breathing appendages meeting the waterline. A clustered clutch of individual oval eggs is visibly GLUED ON TOP OF THE MALE'S BACK, not inside him, not underneath him, not carried in a nest. Render layered wet chitin, wing veins, small water bubbles, wavering sunlit sediment and authentic macrophotographic focus with exceptionally crisp egg, head, leg and body details. An unobtrusive accurate 20–30 mm body-length scale cue sits beside the adult; never depict a monster-sized bug.\n\nBuild an elegant exhibit-grade information architecture around the insect: eight distinct, large, readable illustrated modules with precise concise labels and thin leader lines, all subordinate to the giant insect hero. (1) Enlarged dorsal close-up of the separate eggs bonded to the male’s back, label “Eggs glued to male’s back.” (2) Three-step visual sequence, female places eggs on the male → male bears developing clutch → aquatic nymphs hatch; distinguish each life stage visually and avoid invented timings or counts. (3) Large head close-up with the piercing beak labeled, showing realistic eyes and antennae without adding invented mandibles. (4) Large foreleg close-up showing the grasping prey-capture legs, with a small generic aquatic insect prey silhouette, no sensational gore. (5) Cutaway at the surface showing the paired abdominal respiratory appendages contacting air as the body hangs below the water. (6) A nymph-versus-adult comparison: smaller wingless aquatic nymph and winged adult, simple life-cycle cue. (7) A restrained freshwater pond/ditch habitat vignette and compact North America context map with southern Canada, New England, and southern U.S. regions only, no precise unsupported boundary. (8) A clear genus comparison: Belostoma eggs on male's back versus Lethocerus eggs deposited above water on vegetation, tiny but legible silhouettes. At least three of those close-ups/diagrams should be visually substantial, and all modules must teach distinct verified biology rather than repeat generic captions.\n\nThe insect and biological views occupy most of the canvas; use a coherent ink-and-naturalistic-macro-science aesthetic with deep freshwater green, umber cuticle, muted cream labels and controlled copper highlights. Strong typographic hierarchy, generous spacing, readable short phrases, polished tiny callouts, and precise separation between arrows. No citations or URLs in the artwork, no speculation about why eggs are carried, no unsupported numerical egg count, no invented anatomy or additional legs, no anthropomorphic face, no logo or watermark.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-belostoma-flumineum.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-belostoma-flumineum.webp",
+    "color": "#595332",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "belostoma-flumineum-male-dorsal-egg-brooding-freshwater",
+      "imageSha256": "1138b8d10028788a9fe3c3b4710890dcb42b193647d11b7e2bf74cf356b0f094",
+      "imageDHash": "9b19b6a969490505"
+    },
+    "factualInfographic": {
+      "topic": "How Belostoma flumineum males carry and brood eggs glued to their backs in freshwater",
+      "description": "Species-specific illustrated account of dorsal paternal egg brooding, freshwater anatomy, respiratory posture, feeding apparatus, development, range and comparison with Lethocerus.",
+      "sourceNote": "University of Florida IFAS Extension https://ask.ifas.ufl.edu/publication/IN578 and Integrated Taxonomic Information System https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=103689 — verified species, taxonomy, dorsal clutch, habitat, anatomy, development and genus-level comparison.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T08:22:44.671223+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS Extension",
+            "title": "Giant Water Bugs, Electric Light Bugs, Lethocerus, Abedus, Belostoma (Insecta: Hemiptera: Belostomatidae)",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN578"
+          },
+          {
+            "id": "S2",
+            "publisher": "Integrated Taxonomic Information System",
+            "title": "ITIS Report: Belostoma flumineum",
+            "sourceType": "government-agency",
+            "url": "https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=103689"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Belostoma flumineum is a valid insect species in Hemiptera, family Belostomatidae; giant water bug is the family common name.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Belostoma flumineum is a relatively narrow, dark, freshwater giant water bug, at least 20 mm and under 30 mm in the University of Florida identification key.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Females of Belostoma glue eggs to males’ backs; egg-bearing males carry the dorsal clutch.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The eggs develop and hatch into aquatic nymphs, which grow toward winged adults.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Giant water bugs live in freshwater ponds and ditches and hang below the surface to breathe through paired abdominal appendages.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Giant water bugs are aquatic predators that seize prey with strong front legs and use a piercing beak.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Belostoma flumineum has a North American range extending from southern Canada and New England into parts of the southern United States.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Belostoma and Abedus carry eggs on males’ backs; Lethocerus deposits eggs above water on vegetation or other objects.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult insect has six legs, a head, thorax and abdomen, and folded true-bug forewings.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
