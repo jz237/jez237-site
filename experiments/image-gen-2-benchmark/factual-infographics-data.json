@@ -7525,5 +7525,120 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-sea-butterfly-a-she",
+    "title": "Factual infographic: Sea Butterfly — A Shell in Changing Seawater",
+    "tests": "; archive_slot=2026-09-29T00:20; concept=limacina-helicina-aragonite-shell-dissolution-seawater; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
+    "prompt": "Create the finished image itself: a premium, richly illustrated, edge-to-edge portrait SCIENTIFIC INFOGRAPHIC, not a poster photographed on a wall or a prop arrangement. Title in a large restrained header: SEA BUTTERFLY / A SHELL IN CHANGING SEAWATER. Subject is the shelled planktonic sea snail Limacina helicina; make its biology specific rather than a generic butterfly or shell-less sea angel. A dominant, scientifically credible translucent living sea butterfly occupies the upper middle: tiny coiled glassy aragonite shell with subtle outer organic skin, two soft wing-like lobes of its modified foot extended into dark blue seawater, believable internal body silhouette, suspended particulates and a delicate mucus feeding web. Precise leader lines identify wing-like foot, aragonite shell, and mucus food web. This is a direct-canvas museum plate with deep pelagic midnight blue, turquoise water-light, pale shell ivory and restrained coral warning accents, crisp readable typography, sophisticated spatial hierarchy and luminous macro natural-history rendering. No desk, paper edge, frame, museum case, fake photo, watermark, or tiny citations.\n\nSurround the hero with EIGHT substantive, distinct illustrated panels, each large enough for readable short labels: (1) SWIM — a three-position movement sequence showing the foot lobes propelling a shelled snail through the water column; (2) FEED — close-up of a mucus web intercepting suspended plankton particles, with a short arrow to the mouth between the lobes; (3) SHELL SECTION — enlarged cutaway of the coiled aragonite calcium-carbonate shell and outer periostracum, its real structure distinguished from decorative glass; (4) CARBONATE CHEMISTRY — a clean cause-and-effect diagram, atmospheric CO2 entering seawater → changed carbonate chemistry → less available carbonate ion → lower aragonite saturation, with only these verified relationships; (5) SATURATION COMPARE — two side-by-side magnified shell surfaces in more- versus less-saturated water, labeling the undersaturated side dissolution favored, not asserting instant destruction; (6) PUGET SOUND LAB — concise observation panel comparing relatively intact shell surface and greater dissolution damage after undersaturated treatments, marked controlled experiment; (7) CALIFORNIA CURRENT FIELD — simple coast cross-section with upwelling of CO2-rich water and a sampled pteropod shell showing severe damage, marked field correlation; (8) FOOD-WEB & LIMITS — pteropod to fish ecological link beside a small careful note, shell damage does not mean every animal dies.\n\nAt least FOUR prominent true explanatory close-ups must be visibly integrated: modified-foot base, mucus-net strands and trapped particles, shell wall/periostracum cross-section, and high-magnification intact-versus-etched shell surface. Add a compact process ribbon connecting living animal → environmental chemistry → shell condition, a clear LAB / FIELD legend, large high-contrast labels, short informative captions only, accurate leader lines, precise visual separation of observation and mechanism, plausible ocean light scattering and tactile microtexture. Dense educational content, not filler. Avoid exact statistics, pH values, unsupported universal claims, invented organs, and overly decorative symbols.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-sea-butterfly-a-she.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-sea-butterfly-a-she.webp",
+    "color": "#314859",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "limacina-helicina-aragonite-shell-dissolution-seawater",
+      "imageSha256": "a302eaf603713d44c3f0da0c118f2fa62300e3f8fa31c666031e4f94e5f8d0f7",
+      "imageDHash": "130f27e7a5b968e5"
+    },
+    "factualInfographic": {
+      "topic": "How the shelled pteropod Limacina helicina swims, feeds, and experiences aragonite-shell dissolution in low-saturation seawater",
+      "description": "How Limacina helicina swims with a modified foot, captures food with mucus, and shows aragonite-shell dissolution under low-saturation conditions.",
+      "sourceNote": "Woods Hole Oceanographic Institution https://www.whoi.edu/ocean-learning-hub/ocean-facts/pteropod/; PLOS ONE https://pmc.ncbi.nlm.nih.gov/articles/PMC4146564/; NOAA Ocean Acidification Program https://oceanacidification.noaa.gov/oap_pubs/limacina-helicina-shell-dissolution-as-an-indicator-of-declining-habitat-suitability-owing-to-ocean-acidification-in-the-california-current-ecosystem/ verify anatomy, feeding, carbonate chemistry and observed shell damage.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T04:22:40.139694+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Woods Hole Oceanographic Institution",
+            "title": "Creature feature: Pteropod",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.whoi.edu/ocean-learning-hub/ocean-facts/pteropod/"
+          },
+          {
+            "id": "S2",
+            "publisher": "PLOS ONE",
+            "title": "Shell Condition and Survival of Puget Sound Pteropods Are Impaired by Ocean Acidification Conditions",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4146564/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NOAA Ocean Acidification Program",
+            "title": "Limacina helicina shell dissolution as an indicator of declining habitat suitability owing to ocean acidification in the California Current Ecosystem",
+            "sourceType": "government-agency",
+            "url": "https://oceanacidification.noaa.gov/oap_pubs/limacina-helicina-shell-dissolution-as-an-indicator-of-declining-habitat-suitability-owing-to-ocean-acidification-in-the-california-current-ecosystem/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Shelled pteropods are planktonic marine snails; sea-butterfly swimming wings are a modified gastropod foot.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Limacina helicina has a delicate aragonitic calcium-carbonate shell with an outer periostracum.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Limacina helicina uses a mucus web to collect suspended food; shelled pteropods can capture plankton particles in this web.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pteropods are prey in marine food webs, including fish in the North Pacific.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Absorbed carbon dioxide changes seawater carbonate chemistry and reduces carbonate-ion availability and aragonite saturation.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "When aragonite saturation is below one, dissolution of calcium carbonate is favored; shell building may still occur while exposure damages existing shell.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Puget Sound experiments with L. helicina found greater shell dissolution under aragonite-undersaturated conditions than oversaturated treatments.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "California Current field sampling found severe pteropod-shell damage correlated with the extent of aragonite-undersaturated habitat.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Observed shell damage does not establish that all exposed animals die; survival effects varied by treatment in the Puget Sound experiment.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coastal upwelling can bring carbon-dioxide-rich, low-saturation water toward the surface in the northeastern Pacific.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
