@@ -17,3 +17,5 @@ Evidence: [desktop](biology-key-evidence/desktop-biology.png), [phone](biology-k
 No new FPS benchmark for this HTML/CSS clarification. Full browser sweep confirms identical draw-call and triangle counts to the previous accepted build. Previous measured performance is retained in approved-skimmer-rock-build.json.
 
 Build hash: bdfa1e1d6ad06acf9508a7b6c854194b1538387b07bc9935e6a1183009fa1389. Publication recorded separately.
+
+Published and verified on Hidden Reef from 7766d0343410d1175d3a8660a29a5cba9ad2228b. Preview and live checks confirmed exact active JS/CSS and rock bytes, store images, pond exhibit, desktop/mobile teaching key, and reef return navigation. Live screenshots are in biology-key-evidence. GitHub main contains the source and synchronized copies. The jez237 copy remains blocked by its previously recorded expired account authentication; no new upload was attempted there.
