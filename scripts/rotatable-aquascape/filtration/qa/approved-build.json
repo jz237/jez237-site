@@ -1,20 +1,21 @@
 {
-  "checkedAt": "2026-09-29T06:35:28.817Z",
-  "scope": "Explain the enlarged yellow/blue-green microbial symbols and dotted nitrogen-conversion diagram directly above the live-rock model",
+  "checkedAt": "2026-09-29T07:07:03.730Z",
+  "scope": "Replace detached microbial symbols and dotted nitrogen path with an attached-biofilm cross-section and a finite, step-by-step nitrogen illustration",
   "files": [
-    "assets/index-BitFPu0M.css",
-    "assets/index-DVX9lGwC.js",
+    "assets/index-DJwE7OIz.css",
+    "assets/index-WuP2YQ5N.js",
     "assets/rock-layers.bin-B60TwGSm.gz",
     "index.html"
   ],
-  "buildHash": "bdfa1e1d6ad06acf9508a7b6c854194b1538387b07bc9935e6a1183009fa1389",
+  "buildHash": "70908129f367260b13af0e545c6df0b302995542243c1109b814c51b574d7b60",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
   "checks": {
     "typescriptBuild": true,
     "browser": true,
     "visual": true,
     "synchronizedAssets": true,
-    "unchangedSceneGeometry": true
+    "diagramAnimation": true,
+    "preservedRockDetail": true
   },
   "browser": {
     "checks": {
@@ -51,9 +52,9 @@
       },
       {
         "system": "biology",
-        "parts": 5,
-        "triangles": 1872210,
-        "calls": 65
+        "parts": 3,
+        "triangles": 1846866,
+        "calls": 59
       },
       {
         "system": "return",
@@ -64,28 +65,29 @@
     ],
     "errors": [],
     "idleFrames": 0,
-    "checkedAt": "2026-09-29T06:34:15.415Z"
+    "checkedAt": "2026-09-29T07:03:22.900Z"
   },
-  "layout": {
+  "diagram": {
     "checks": {
+      "finiteAnimationPauseAndVisibility": true,
       "desktop": true,
       "phone": true,
       "narrow-phone": true
     },
     "errors": [],
-    "checkedAt": "2026-09-29T06:33:40.846Z"
+    "checkedAt": "2026-09-29T07:05:18.395Z"
   },
   "visualReview": {
-    "evidence": "filtration/qa/biology-key-evidence/",
+    "evidence": "filtration/qa/biofilm-evidence/",
     "findings": [
-      "Visible color-and-text key identifies yellow as ammonia to nitrite and blue-green as nitrite to nitrate.",
-      "The caption explains that symbols are enlarged teaching aids, real microbes live in microscopic surface films, and the dotted path represents chemical-conversion order.",
-      "The irrelevant Water/Air/Waste legend is hidden for biology; its flow control is named Pathway on/off.",
-      "Reviewed desktop, 390px phone and 320px narrow-phone views; the key remains above the canvas without covering the model, including after explosion.",
-      "Existing geometry, motion, rock assets and all 42 selectable components are unchanged."
+      "Removed both symbolic 3D microbe groups and the dotted nitrogen path; all three real rock sections retain the exact packed geometry and growth.",
+      "A clearly labeled magnified surface shows cells embedded in a film over rough porous rock.",
+      "Named compounds, oxygen arrows and three numbered steps explain ammonia to nitrite to nitrate; nitrate remains in the water.",
+      "A finite 12-second user-started animation follows nitrogen with a labeled N. Manual steps, local and global pause, replay, reset and offscreen suspension verified.",
+      "Reviewed desktop, 390px and 320px phones, assembled/exploded rock, and an actual time sequence. Rock controls remain together; Magnify surface scrolls and focuses the explanation."
     ]
   },
-  "performanceNote": "No new FPS benchmark for this HTML/CSS clarification. Full browser sweep confirms identical draw-call and triangle counts to the previous accepted build. Previous measured performance is retained in approved-skimmer-rock-build.json.",
-  "previousApprovedBuild": "approved-skimmer-rock-build.json",
-  "deploymentStatus": "Validated locally; publication recorded separately."
+  "performanceNote": "No slow-hardware claim or new FPS baseline. Rock asset bytes unchanged; biology decreases from 65 to 59 calls and from 1,872,210 to 1,846,866 triangles. Other assemblies retain their prior counts. Added compressed JS is about 2.2 kB and CSS about 0.8 kB; the SVG needs no extra download or WebGL context. Animation sleeps offscreen and stops after one cycle.",
+  "previousApprovedBuild": "approved-biology-key-build.json",
+  "deploymentStatus": "Local validation complete; publication recorded separately."
 }
