@@ -243,3 +243,40 @@ export function checkError(label) {
   if (e !== gl.NO_ERROR) console.error(`GL error 0x${e.toString(16)} at ${label}`);
   return e;
 }
+
+// Non-blocking GPU->CPU readback through a pixel-pack buffer + fence. Results arrive a few frames later.
+export class AsyncReadback {
+  constructor(floats) {
+    this.n = floats;
+    this.buf = gl.createBuffer();
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.buf);
+    gl.bufferData(gl.PIXEL_PACK_BUFFER, floats * 4, gl.STREAM_READ);
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null);
+    this.sync = null;
+    this.data = new Float32Array(floats);
+    this.busy = false;
+  }
+  request(fbo, x, y, w, h) {
+    if (this.busy) return false;
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo.fbo);
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.buf);
+    gl.readPixels(x, y, w, h, gl.RGBA, gl.FLOAT, 0);
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    this.sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+    gl.flush();
+    this.busy = true;
+    return true;
+  }
+  poll() {
+    if (!this.busy) return false;
+    const st = gl.clientWaitSync(this.sync, 0, 0);
+    if (st === gl.TIMEOUT_EXPIRED) return false;
+    gl.deleteSync(this.sync); this.sync = null;
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.buf);
+    gl.getBufferSubData(gl.PIXEL_PACK_BUFFER, 0, this.data);
+    gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null);
+    this.busy = false;
+    return true;
+  }
+}

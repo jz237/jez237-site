@@ -74,6 +74,11 @@ vec2 skyDirToUV(vec3 d) {
   float v = 0.5 + 0.5 * sign(el) * sqrt(abs(el) / (0.5 * PI));
   return vec2(az / TAU + 0.5, v);
 }
+vec2 dirToHemiOct(vec3 d) {
+  vec3 a = abs(d);
+  vec2 p = d.xz / max(a.x + a.y + a.z, 1e-5);
+  return vec2(p.x + p.y, p.x - p.y) * 0.5 + 0.5;
+}
 vec3 skyUVToDir(vec2 uv) {
   float t = (uv.y - 0.5) * 2.0;
   float el = sign(t) * t * t * 0.5 * PI;

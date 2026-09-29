@@ -8,7 +8,7 @@ uniform sampler2D uSrc;
 uniform vec2 uTexel;
 uniform float uFirst;
 out vec4 o;
-vec3 fetch(vec2 uv) { vec3 c = texture(uSrc, uv).rgb; return uFirst > 0.5 ? min(c, vec3(4000.0)) : c; }
+vec3 fetch(vec2 uv) { vec3 c = texture(uSrc, uv).rgb; return uFirst > 0.5 ? min(c, vec3(1200.0)) : c; }
 void main() {
   vec2 uv = vUv, t = uTexel;
   vec3 a = fetch(uv + t * vec2(-2, 2)), b = fetch(uv + t * vec2(0, 2)), c = fetch(uv + t * vec2(2, 2));
@@ -85,7 +85,7 @@ void main() {
   vec2 px = gl_FragCoord.xy;
   float n1 = hash21(px + fract(uTime) * 71.0), n2 = hash21(px * 1.37 + 13.0 + fract(uTime * 1.3) * 53.0);
   float tri = n1 + n2 - 1.0;
-  s += tri * (1.0 / 255.0) * (1.0 + uGrain * 3.0 * (1.0 - l));
+  s += tri * (1.0 / 255.0) * (1.0 + uGrain * 3.0 * (1.0 - min(l, 1.0)));
   o = vec4(s, 1.0);
 }`;
 
@@ -119,6 +119,16 @@ export class Post {
       this.down.push({ t: a, f: makeFBO([a]), w: bw, h: bh }); this.up.push({ t: b, f: makeFBO([b]), w: bw, h: bh });
       bw = Math.max(2, bw >> 1); bh = Math.max(2, bh >> 1);
     }
+  }
+
+  // Copy the scene colour and depth so passes can read what has been drawn so far.
+  copyScene() {
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, this.fbo.fbo);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, this.fboCopy.fbo);
+    gl.blitFramebuffer(0, 0, this.w, this.h, 0, 0, this.w, this.h, gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT, gl.NEAREST);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fbo.fbo);     // keep drawing into the HDR target
+    gl.viewport(0, 0, this.w, this.h);
   }
 
   bloom() {
@@ -160,7 +170,7 @@ export class Post {
     bindFBO(null, w, h);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     this.pTone.use().t('uHdr', 0, this.color).t('uBloom', 1, this.up[0].t).t('uExpo', 2, this.expo[this.expoIdx])
-      .f('uBloomAmt', opts.bloom ?? 0.035).f('uTime', time).f('uGrain', opts.grain ?? 0.5).f('uVignette', opts.vignette ?? 0.28)
+      .f('uBloomAmt', opts.bloom ?? 0.02).f('uTime', time).f('uGrain', opts.grain ?? 0.5).f('uVignette', opts.vignette ?? 0.28)
       .f('uEVBias', opts.ev ?? 1).f('uFlash', 0).v2('uRes', w, h);
     drawFS();
   }

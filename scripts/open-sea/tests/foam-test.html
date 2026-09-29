@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>foam test</title>
+<canvas id="c" width="64" height="64"></canvas>
+<script type="module">
+import { initGL, gl, readF32, makeFBO } from '/demos/open-sea/js/gl.js';
+import { OceanSim, seaParams } from '/demos/open-sea/js/ocean.js';
+window.run = async (sea, steps = 300) => {
+  initGL(document.getElementById('c'));
+  const o = new OceanSim({ N: 256, cascades: 5 });
+  o.servoLog = [];
+  o.setSea(sea, 0.0); o.cur = { ...o.target }; o.dirty = true;
+  o.freezeServo = !!window.FREEZE; for (let i = 0; i < steps; i++) { o.update(0.1); if (i % 3 === 2) { gl.finish(); await new Promise(r => setTimeout(r, 0)); } }
+  const out = { log: o.servoLog.filter(r => r[1] === 1).map(r => r.map(v => +v.toFixed(4)).join(',')).slice(0, 40), sea, U: o.cur.U, hs: o.cur.hs };
+  const N = o.N;
+  out.layers = [];
+  for (let l = 0; l < o.count; l++) {
+    const f = makeFBO([{ tex: o.foamTex, layer: l }]);
+    const d = readF32(f, 0, 0, N, N);
+    let n1 = 0, n2 = 0, n3 = 0, mx = 0, sum = 0, sg = 0;
+    for (let i = 0; i < N * N; i++) { const v = d[i * 4]; sg += d[i * 4 + 1]; sum += v; if (v > 0.1) n1++; if (v > 0.4) n2++; if (v > 0.8) n3++; mx = Math.max(mx, v); }
+    out.layers.push({ target: o.foamTarget[l], dz: o.foamDz[l], servoMean: o.foamMean[l], l, mean: sum / (N * N), srcMean: sg / (N * N), gt01: n1 / (N * N), gt04: n2 / (N * N), gt08: n3 / (N * N), max: mx });
+  }
+  return out;
+};
+window.ready = true;
+</script>

@@ -15,10 +15,11 @@ page.on('console', m => { const t = m.text(); if (!/GPU stall|GL Driver Message/
 page.on('pageerror', e => logs.push('[pageerror] ' + e.message));
 await page.goto(`${base}?shot=1&${query}`);
 await page.waitForFunction(() => window.__seaReady, null, { timeout: 60000 }).catch(() => {});
+if (!(await page.evaluate(() => !!window.__sea))) { for (const l of logs) console.log(l); await browser.close(); process.exit(2); }
 const t0 = Date.now();
 const res = await page.evaluate(async ([warm, frames]) => {
   const s = window.__sea;
-  s.warm(warm, 0.1);
+  await s.warm(warm, 0.1);
   let r; for (let i = 0; i < frames; i++) r = s.shot(0.033);
   return r;
 }, [parseFloat(warm), parseInt(frames)]);
