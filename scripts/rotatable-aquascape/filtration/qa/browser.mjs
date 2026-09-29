@@ -18,7 +18,7 @@ try{
  report.checks.allAssembliesExplodeInspectIsolate=true;
  await page.locator('[data-system="roller"]').click();let a=await snap();await page.waitForTimeout(500);assert.equal((await snap()).rollerAngle,a.rollerAngle);
  await page.locator('#experiment').click();for(const [delay,label] of [[300,'start'],[3300,'rising'],[1700,'advancing'],[1700,'clear']]){await page.waitForTimeout(delay);await shot('roller-cycle-'+label);}
- a=await snap();assert.ok(a.rollerAngle<-.5);assert.ok(a.experimentTime>6);await page.waitForTimeout(400);assert.equal((await snap()).rollerAngle,a.rollerAngle);report.checks.sensorTriggeredAdvanceThenStop=true;
+ a=await snap();assert.ok(a.rollerAngle>.5);assert.ok(a.experimentTime>6);await page.waitForTimeout(400);assert.equal((await snap()).rollerAngle,a.rollerAngle);report.checks.sensorTriggeredAdvanceThenStop=true;
  await page.locator('[data-system="skimmer"]').click();const b=await snap();await page.waitForTimeout(500);assert.notDeepEqual((await snap()).bubble,b.bubble);for(let i=0;i<4;i++){await page.waitForTimeout(200);await shot('skimmer-motion-'+i);}report.checks.bubbleMotion=true;
  await page.locator('#pause').click();a=await snap();await page.waitForTimeout(400);assert.equal((await snap()).time,a.time);assert.equal((await snap()).rotorAngle,a.rotorAngle);report.checks.pause=true;
  await page.locator('#flow').click();assert.equal((await snap()).flow,false);await page.locator('#flow').click();

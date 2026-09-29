@@ -57,27 +57,6 @@ export function addSurfaceDetail(parts:Part[],groups:Record<string,T.Group>,m:Pa
  const pumpD=detail('skimmer-pump');const plate=mesh(pumpD,new T.PlaneGeometry(.3,.16),lettering('SKIM','AIR / WATER'),[0,.027,-.579]);plate.rotation.y=Math.PI;
  const haze=mesh(groups.skimmer,new T.CylinderGeometry(.30,.83,1.55,64,1,true),milk,[0,1.77,0]);
 
- // Real fleece structure: fine crossed fibers, irregular pores, edge fuzz and trapped particles.
- const clean=canvas((c,n)=>{const r=seeded(90);c.fillStyle='#dcdccf';c.fillRect(0,0,n,n);for(let i=0;i<63000;i++){const x=r()*n,y=r()*n;c.strokeStyle=r()>.2?'rgba(255,255,246,.34)':'rgba(76,82,66,.18)';c.lineWidth=.45+r()*.8;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+3-r()*6,y+3,x+10-r()*20,y+14-r()*20);c.stroke();}for(let i=0;i<1500;i++){c.fillStyle='rgba(62,66,53,.14)';c.beginPath();c.ellipse(r()*n,r()*n,1+r()*2,.5+r(),r()*TAU,0,TAU);c.fill();}});clean.colorSpace=T.SRGBColorSpace;
- const dirty=canvas((c,n)=>{c.drawImage(clean.image,0,0);const r=seeded(739);for(let i=0;i<16000;i++){const x=r()*n,y=r()*n,s=.4+Math.pow(r(),3)*17;const grad=c.createRadialGradient(x,y,0,x,y,s+1);grad.addColorStop(0,`rgba(65,48,20,${.05+r()*.3})`);grad.addColorStop(1,'rgba(91,72,33,0)');c.fillStyle=grad;c.fillRect(x-s-1,y-s-1,s*2+2,s*2+2);}});dirty.colorSpace=T.SRGBColorSpace;
- const fuzzMaterial=new T.LineBasicMaterial({color:0xf4efe0,transparent:true,opacity:.32});
- for(const [id,used] of [['clean-roll',false],['waste-roll',true]] as const){const rotor=get(id).children[0] as T.Group;const extra=new T.Group();rotor.add(extra);const fiberMap=used?dirty:clean;
-  for(const child of rotor.children)if(child instanceof T.Mesh&&child.geometry instanceof T.CylinderGeometry&&child.geometry.parameters.radiusTop>.25){child.material=new T.MeshStandardMaterial({map:fiberMap,bumpMap:fiberMap,bumpScale:.005,roughness:.98,color:0xfffff4});const pos=child.geometry.attributes.position;for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i),a=Math.atan2(z,x),k=1+.006*Math.sin(a*19+pos.getY(i)*23);pos.setXYZ(i,x*k,pos.getY(i),z*k);}child.geometry.computeVertexNormals();}
-  const r=seeded(used?24:37),lines:number[]=[];for(let i=0;i<1900;i++){const x=(r()-.5)*1.72,a=r()*TAU,rad=.312,dx=(r()-.5)*.018,dr=.003+r()*.014;lines.push(x,Math.cos(a)*rad,Math.sin(a)*rad,x+dx,Math.cos(a+.006)*(rad+dr),Math.sin(a+.006)*(rad+dr));}
-  const gg=new T.BufferGeometry();gg.setAttribute('position',new T.Float32BufferAttribute(lines,3));extra.add(new T.LineSegments(gg,fuzzMaterial));
-  for(const x of [-.86,.86])for(let j=0;j<34;j++){const rad=.075+j*.0067;ring(extra,[x,0,0],rad,.0014,used?m.rubber:m.white,'x');}
- }
- const fleece=get('fleece');fleece.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.MeshStandardMaterial;material.map!.image=dirty.image;material.map!.needsUpdate=true;material.bumpMap=clean;material.bumpScale=.004;}});
- const fd=detail('fleece'),r=seeded(15),stripCurve=new T.CatmullRomCurve3([new T.Vector3(0,2.42,-.78),new T.Vector3(0,.64,-.69),new T.Vector3(0,.42,0),new T.Vector3(0,.64,.69),new T.Vector3(0,2.42,.78)]);
- const debris=instances(fd,new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:0x6b5938,roughness:.85}),380,(_,o)=>{const f=.34+r()*.63,v=stripCurve.getPoint(f),s=.003+Math.pow(r(),3)*.02;o.position.set((r()-.5)*1.58,v.y,v.z+(f>.5?.008:-.008));o.scale.set(s*1.6,s,s*.45);o.rotation.set(r()*3,r()*3,r()*3);});debris.castShadow=true;
- const frame=detail('roller-frame');for(const z of [-.94,.94]){
-  const wall=mesh(frame,new T.BoxGeometry(1.85,.62,.026),acrylic,[0,.54,z]);wall.renderOrder=4;
-  for(let i=0;i<25;i++)mesh(frame,new T.BoxGeometry(.036,.17,.05),wetBlack,[-.88+i*.073,.925,z]);
-  for(const y of [.22,.87])mesh(frame,new T.BoxGeometry(1.89,.035,.04),wetBlack,[0,y,z]);
- }
- for(const x of [-.85,.85])for(let j=0;j<6;j++)mesh(frame,new T.BoxGeometry(.04,.4,.055),wetBlack,[x,.18,-.83+j*.33]);
- const motor=detail('roller-motor');band(motor,[0,-.36,0],.125,.21,m.dark);for(let i=0;i<12;i++){const a=i/12*TAU;const fin=mesh(motor,new T.BoxGeometry(.025,.18,.017),m.dark,[Math.cos(a)*.13,-.36,Math.sin(a)*.13]);fin.rotation.y=-a;}
- const badge=mesh(motor,new T.PlaneGeometry(.27,.22),lettering('ROLL','LEVEL DRIVE'),[.23,0,0]);badge.rotation.y=Math.PI/2;
  const pd=detail('pump-motor');const label=mesh(pd,new T.PlaneGeometry(.38,.24),lettering('RETURN','WET ROTOR'),[.01,.504,-.19]);label.rotation.x=-Math.PI/2;
  // Mold seam, strain relief, shaft seats and mounting slots stay inspectable after separation.
  ring(pd,[0,0,-.52],.463,.008,m.rubber,'z');for(let i=0;i<7;i++)ring(pd,[-.49,.285,-.65-i*.025],.048-i*.002,.006,m.rubber,'z');
