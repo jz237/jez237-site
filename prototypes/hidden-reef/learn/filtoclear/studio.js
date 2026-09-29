@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {RoomEnvironment} from './vendor/RoomEnvironment.js';
-import {buildFilter} from './model.js';
+import {buildFilter} from './model.js?v=detail-2';
 import {PARTS,GROUPS,LESSONS,smooth} from './data.js';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const state={mode:'assembled',amount:0,target:0,selected:null,isolated:false,system:'all',labels:false,paused:reduced.matches,rotate:false,sequence:false,sequenceTime:0,lesson:0,tab:'parts',ready:false,time:0};
@@ -79,7 +79,7 @@ async function init(){try{
  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(37,stage.clientWidth/stage.clientHeight,.05,120);camera.position.set(5.5,3.8,7.5);
  controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.085;controls.minDistance=1.3;controls.maxDistance=35;controls.maxPolarAngle=Math.PI*.9;controls.target.set(0,1.5,0);controls.addEventListener('start',()=>camTween=null);
  const pmrem=new THREE.PMREMGenerator(renderer);environment=pmrem.fromScene(new RoomEnvironment(),.025);scene.environment=environment.texture;scene.environmentIntensity=.6;pmrem.dispose();
- scene.add(new THREE.HemisphereLight(0xc5e9f1,0x0c1824,2.5));const key=new THREE.DirectionalLight(0xe5f6ec,4);key.position.set(-3,8,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-7,right:7,top:9,bottom:-5,near:.5,far:25});key.shadow.bias=-.001;scene.add(key);const rim=new THREE.DirectionalLight(0x68d0cc,2.6);rim.position.set(5,4,-3);scene.add(rim);const fill=new THREE.DirectionalLight(0xe9be87,1.0);fill.position.set(-5,2,-3);scene.add(fill);
+ scene.add(new THREE.HemisphereLight(0xc5e9f1,0x0c1824,2.5));const key=new THREE.DirectionalLight(0xe5f6ec,4);key.position.set(-3,8,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-7,right:7,top:9,bottom:-5,near:.5,far:25});key.shadow.bias=-.001;scene.add(key);const rim=new THREE.DirectionalLight(0x68d0cc,2.6);rim.position.set(5,4,-3);scene.add(rim);const fill=new THREE.DirectionalLight(0xe9ddc7,2.2);fill.position.set(-5,2.3,3);scene.add(fill);
  const floor=new THREE.Mesh(new THREE.CircleGeometry(14,96),new THREE.ShadowMaterial({opacity:.21}));floor.rotation.x=-Math.PI/2;floor.position.y=-.04;floor.receiveShadow=true;scene.add(floor);
  for(let i=1;i<6;i++){const ring=new THREE.Mesh(new THREE.TorusGeometry(i*.85,.003,4,100),new THREE.MeshBasicMaterial({color:0x80beb2,transparent:true,opacity:.035}));ring.rotation.x=-Math.PI/2;ring.position.y=-.02;scene.add(ring);}
  filter=buildFilter();scene.add(filter.root);buildFlow();for(const p of PARTS){const el=document.createElement('span');el.className='part-label';el.textContent=p.name;el.hidden=true;$('labels').append(el);labelEls.set(p.id,el);}
