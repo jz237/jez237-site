@@ -3,6 +3,7 @@ import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js'
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import type {Part} from './model.ts';
 import {addSurfaceDetail} from './SurfaceDetail.ts';
+import {detailSump} from './SumpDetail.ts';
 
 // Generated product references guide appearance. Dimensions and assembly remain teaching models.
 const TAU=Math.PI*2;
@@ -81,22 +82,12 @@ export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  torus(screen,[0,0,-.13],.455,.018,m.teal,'z');
  for(const a of [.25,2.35,4.45])bolt(screen,[Math.cos(a)*.412,Math.sin(a)*.412,.153],m,'z',.019);
  mergeStatic(screen);
- // Water surfaces carry a fine normal disturbance rather than a flat blue volume.
- const ripple=texture((c,n)=>{const data=c.createImageData(n,n);for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4,u=x/n*TAU,v=y/n*TAU;data.data[i]=128+20*Math.cos(u*7+Math.sin(v*4));data.data[i+1]=128+20*Math.cos(v*9+Math.sin(u*3));data.data[i+2]=250;data.data[i+3]=255;}c.putImageData(data,0,0);},256);
- const waterMat=new T.MeshPhysicalMaterial({color:0xa8c1bb,roughness:.11,metalness:.15,envMapIntensity:1.8,transparent:true,opacity:.37,depthWrite:false,normalMap:ripple,normalScale:new T.Vector2(.7,.7),side:T.DoubleSide});
- const waterClock={value:0};waterMat.onBeforeCompile=shader=>{shader.uniforms.flowTime=waterClock;shader.vertexShader='uniform float flowTime;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.z += .007*sin(position.x*12.0+flowTime*1.3)*sin(position.y*17.0-flowTime*1.9)+.004*sin(position.x*27.0+position.y*21.0+flowTime*2.1);');};
- const surfaces:T.Mesh[]=[];for(const [x,y,w] of [[-1.82,1.229,8.2],[2.78,1.229,.89],[4.55,.935,2.69]]){const surface=add(groups.system,new T.PlaneGeometry(w,3.5,Math.ceil(w*12),40),waterMat,[x,y,0]);surface.rotation.x=-Math.PI/2;surfaces.push(surface);}
- // Short falling sheet over the final baffle and rippled lower-chamber landing. Hidden while separated.
- const falls=new T.BufferGeometry(),vertices:number[]=[],uvs:number[]=[],indices:number[]=[];
- for(let i=0;i<=18;i++){const t=i/18,x=3.26+.18*t,y=1.229-.294*t*t;for(let j=0;j<=32;j++){vertices.push(x,y,-1.73+3.46*j/32);uvs.push(t,j/32*5);if(i<18&&j<32){const a=i*33+j;indices.push(a,a+33,a+1,a+1,a+33,a+34);}}}
- falls.setAttribute('position',new T.Float32BufferAttribute(vertices,3));falls.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));falls.setIndex(indices);falls.computeVertexNormals();surfaces.push(add(groups.system,falls,waterMat));
- const meniscus=new T.MeshPhysicalMaterial({color:0xc4d7ce,roughness:.08,transparent:true,opacity:.45,depthWrite:false});
- for(const z of [-1.75,1.75]){for(const [l,r,y] of [[-5.91,3.23,1.229],[3.44,5.9,.935]])surfaces.push(tube(groups.system,[[l,y,z],[r,y,z]],.009,meniscus));}
  const foam=new T.BufferGeometry(),count=3200,fp=new Float32Array(count*3),random=rng(88);for(let i=0;i<count;i++){const a=random()*TAU,r=Math.sqrt(random())*.28;fp[i*3]=Math.cos(a)*r;fp[i*3+1]=2.55+random()*.58;fp[i*3+2]=Math.sin(a)*r;}foam.setAttribute('position',new T.BufferAttribute(fp,3));const cloud=new T.Points(foam,new T.PointsMaterial({color:0xc1a77a,map:bubbleMap,size:.041,transparent:true,opacity:.7,depthWrite:false,alphaTest:.02}));groups.skimmer.add(cloud);
  const fine=addSurfaceDetail(parts,groups,m);
+ const sump=detailSump(parts,groups,m);
  for(const p of parts){if(p.id==='sensor')continue;if(!['clean-roll','waste-roll','pump-rotor','needle-wheel'].includes(p.id))batchPart(p.group);else{for(const c of p.group.children)if(c instanceof T.Group)batchPart(c);}}
  rootShadows();function rootShadows(){for(const g of Object.values(groups))g.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.Material;o.castShadow=!material.transparent;o.receiveShadow=!material.transparent;}});}
- return {visibility:(visible:boolean)=>{for(const s of surfaces)s.visible=visible;cloud.visible=visible;fine.visibility(visible);},update:(time:number)=>{fine.update(time);waterClock.value=time;ripple.offset.set(time*.008,time*.004);for(let i=0;i<count;i++)fp[i*3+1]=2.56+((i*.618/count+time*.047)%1)*.6;foam.attributes.position.needsUpdate=true;}};
+ return {visibility:(visible:boolean)=>{cloud.visible=visible;fine.visibility(visible);sump.visibility(visible);},update:(time:number)=>{fine.update(time);sump.update(time);for(let i=0;i<count;i++)fp[i*3+1]=2.56+((i*.618/count+time*.047)%1)*.6;foam.attributes.position.needsUpdate=true;}};
 }
 
 export function rockMaterial(){
