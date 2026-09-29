@@ -34,3 +34,9 @@ Serial local Chrome 1440x1080 DPR1; 1s scene warmup then 4s RAF and browser-task
 Initial ready time: 3845 ms before, 5022 ms after. These are single-run desktop measurements, not low-end guarantees. Additional details increase draw calls and CPU work. The compressed on-demand rock asset decreased from 5,112,638 to 4,230,701 bytes (-881,937 bytes) after detached fragments were removed. Full geometry and independent component selection are retained.
 
 [Full performance measurements](skimmer-rock-evidence/performance.json). Build hash: bffd872a2c195655852c23379e6887038440565cc443c07504d364de61d129f9. Checks validate functionality and regressions, not photographic realism. Publication status is recorded in publication.json.
+
+## Publication
+
+Published Hidden Reef from 11298574bc1078a5b2b2afedee0bd0ac690f8430; verified exact active JS/CSS, compressed rock bytes, site images, preserved pond exhibit and desktop/phone navigation. [Live skimmer](https://hidden-reef.pages.dev/showroom/filtration/?v=11298574b#skimmer), [live rock](https://hidden-reef.pages.dev/showroom/filtration/?v=11298574b#biology). GitHub main contains the source and evidence.
+
+jez237 remains at its previous release because its Cloudflare login still cannot refresh (400, not logged in). No jez237 upload was attempted. The complete synchronized files are committed, ready for its guarded deployment workflow once login is restored. This is not a claim that both sites are synchronized.
