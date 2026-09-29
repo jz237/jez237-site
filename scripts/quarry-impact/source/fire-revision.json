@@ -1,0 +1,26 @@
+{
+  "previousRelease": "f21a7502d202555920aaeb6981c1148f05d94d00",
+  "scope": "Presentation-only vehicle combustion, smoke and offline ElevenLabs effects. Shared simulation unchanged.",
+  "files": {
+    "src/audio.ts": {
+      "before": "f5a450d5ac07ff9bb5b5943bef9866159511d9aa4e62554c6e01902073d27501",
+      "after": "b8b7a14d06435cbca543be380f57921f2cbe6f787ea460e1d3891c787a83f231",
+      "snapshot": "tests/fixtures/fire-before-audio.ts.gz"
+    },
+    "src/effects.ts": {
+      "before": "177739dda322fe4af2add39235aa53e8e635c1b1f14a0cd5b34ceb75491e788a",
+      "after": "268467b5e4a672966547511645596adc848a367607d102350a324d6737dc8cbc",
+      "snapshot": "tests/fixtures/fire-before-effects.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "af5d8c67b18afb4af8995b14ea4feeae1ba1a41b8ce444cda645b32f77f44fd8",
+      "after": "94f93d6d10153100474deca599cd227dd4a0bb8821b7c19d6aed4b01e8d8f4c8",
+      "snapshot": "tests/fixtures/fire-before-main.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "b9eb2a88a05e765636baac440d130f271dd4338247eea7adfce3eb3642613c93",
+      "after": "4b6bd646bdaa3565dce9ed27de7cc82b0f19a443b8abd0651fa4fdc82a7b87f5",
+      "snapshot": "tests/fixtures/fire-before-vehicle.ts.gz"
+    }
+  }
+}

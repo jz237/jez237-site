@@ -234,6 +234,12 @@ void main(){
   }
   reset() {
     for (const p of this.particles) p.life = 0;
+    // Menu frames do not advance this pool. Clear the uploaded attributes too,
+    // otherwise the final sparks can remain visible over the new attract car.
+    this.alphas.fill(0);
+    this.sizes.fill(0);
+    this.geometry.attributes.alpha.needsUpdate = true;
+    this.geometry.attributes.size.needsUpdate = true;
     while (this.debris.length) this.removeDebris(0);
     const mat = new T.Matrix4().makeScale(0, 0, 0);
     for (let i = 0; i < 1000; i++) this.marks.setMatrixAt(i, mat);

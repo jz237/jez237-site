@@ -33,7 +33,7 @@ try {
   await page.click('#start');
   await page.waitForFunction(() => window.__quarry?.state === 'countdown');
   report.audio = await page.evaluate(() => window.__quarry.stats.audio);
-  assert.equal(report.audio, 35);
+  assert.equal(report.audio, 38);
   report.driving = await page.evaluate(async () => {
     const q = window.__quarry;
     await q.start('playground');
