@@ -1,23 +1,88 @@
 {
-  "sourceCommit": "0c2eced3651ae52bdadfb3851d4d4298ffea6002",
-  "preview": "https://b325aed4.hidden-reef.pages.dev/showroom/filtration/",
-  "production": "https://hidden-reef.pages.dev/showroom/filtration/",
-  "deployment": "https://88826841.hidden-reef.pages.dev",
-  "verification": {
-    "base": "https://hidden-reef.pages.dev",
-    "checkedAt": "2026-09-28T23:56:31.766Z",
-    "assets": [
-      "reef/./assets/index-Di90eq1i.js",
-      "reef/./assets/index-DBjqBxyQ.css",
-      "filtration/./assets/index-Dg1eXeoJ.js",
-      "filtration/./assets/index-vl4A24zB.css"
-    ],
-    "checks": {
-      "exactActiveAssetsAndStoreImages": true,
-      "reefToolbarLessonAndReturnNavigation": true,
-      "mobileNavigation": true
-    },
-    "errors": []
+  "sourceCommit": "b98aed788743b5b9a99be56af9a5f84d87d7f6d3",
+  "testedBuildHash": "662fc706474fdd3d6faa0d39cd83271e18cb8558ed4b6b0f9b8fd5fc9937e65a",
+  "publishedAt": "2026-09-29T01:09:40.875Z",
+  "hiddenReef": {
+    "deploymentSourceCommit": "9bb30e5a769619bad2bc661aa6a363f502d7345b",
+    "preview": "https://1ee9ccdd.hidden-reef.pages.dev/showroom/filtration/",
+    "production": "https://hidden-reef.pages.dev/showroom/filtration/",
+    "deployment": "https://aba9e03f.hidden-reef.pages.dev",
+    "stagedPreviewEquivalence": "All 464 files in the final current-main stage matched the verified preview byte-for-byte.",
+    "verification": {
+      "base": "https://hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T01:08:40.515Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-ClUxO3zw.js",
+        "filtration/./assets/index-vl4A24zB.css",
+        "showroom/filtration/assets/rock-layers.bin-j1o763Al.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-ClUxO3zw.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-vl4A24zB.css": "public, max-age=31536000, immutable"
+      }
+    }
   },
-  "limitation": "The separate jez237 account returns Cloudflare authentication error 10000; that mirror was not deployed."
+  "jez237": {
+    "deploymentSourceCommit": "7b1724d554850319f4ab52d0801db28dc6c98aae",
+    "preview": "https://e134cabf.jez237-site.pages.dev",
+    "deployment": "https://fb3ac5b1.jez237-site.pages.dev",
+    "production": "https://jez237.com/demos/reef-filtration/",
+    "workflow": "scripts/deploy_jez237_pages.mjs; full site + Functions, preview/current-main/production guards passed",
+    "verification": {
+      "base": "https://jez237.com/prototypes/hidden-reef",
+      "checkedAt": "2026-09-29T01:06:30.215Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-ClUxO3zw.js",
+        "filtration/./assets/index-vl4A24zB.css",
+        "showroom/filtration/assets/rock-layers.bin-j1o763Al.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-ClUxO3zw.js": "public, max-age=14400, must-revalidate",
+        "filtration/./assets/index-vl4A24zB.css": "public, max-age=14400, must-revalidate"
+      }
+    },
+    "standaloneDemo": {
+      "base": "https://jez237.com/demos/reef-filtration/",
+      "checkedAt": "2026-09-29T01:08:26.885Z",
+      "exactAssets": [
+        "./assets/index-ClUxO3zw.js",
+        "./assets/index-vl4A24zB.css",
+        "assets/rock-layers.bin-j1o763Al.gz"
+      ],
+      "passed": true
+    }
+  },
+  "visualReview": "realism-review.md",
+  "limitations": [
+    "Improved geometry/materials remain educational renderings, not a photographic match.",
+    "Initial scene ready time increased from 1.32s to 3.02s on the measured local Chrome run; approximately 60fps retained.",
+    "Low-end hardware was not tested."
+  ]
 }

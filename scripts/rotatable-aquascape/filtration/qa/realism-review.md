@@ -39,3 +39,7 @@ Initial ready time was 1318 ms before and 3023 ms after in this run. Richer geom
 [Full measurements](realism-evidence/performance.json). [Mobile view](realism-evidence/mobile-skimmer-exploded.png). [Roller rising](realism-evidence/roller-cycle-rising.png), [advancing](realism-evidence/roller-cycle-advancing.png), [stopped](realism-evidence/roller-cycle-clear.png). [Skimmer time 0](realism-evidence/skimmer-motion-0.png), [later](realism-evidence/skimmer-motion-3.png).
 
 Build and browser checks passed. The goal of this pass was a visible improvement toward the generated references. **Photographic parity has not been reached.** Publication and live asset verification are recorded separately in publication.json.
+
+## Publication
+
+Published to [Hidden Reef](https://hidden-reef.pages.dev/showroom/filtration/) and [jez237](https://jez237.com/demos/reef-filtration/). The complete-site safeguards passed, including preserved aquarium assets, store images and the pond exhibit. Exact active bundles and full rock geometry verified on both sites; desktop/mobile return navigation passed without runtime errors. See [publication receipt](publication.json).
