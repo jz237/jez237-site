@@ -13,7 +13,7 @@ export const SET = [
   ['02-fresh-noon-glitter', 'noyacht=1&t=16.6&sea=4&cloud=0.3&cam=0,3.2,0,5.3,-0.02&look=sun,-0.36,0.0'],
   ['03-rough-afternoon-yacht', 't=16.4&sea=6.3&cloud=0.75&ycam=46,11,35'],
   ['04-storm-dusk-rain-lightning', 't=18.2&sea=8.7&cloud=1&rain=0.9&light=1&bolt=0.25&ycam=42,7,120'],
-  ['05-sunset-glitter', 'noyacht=1&t=18.25&sea=3&cloud=0.35&cam=0,3.0,0,4.75,0.01&look=sun,0.05,0.30'],
+  ['05-sunset-glitter', 'noyacht=1&t=18.15&sea=3&cloud=0.15&cam=0,3.0,0,4.75,0.01&look=sun,0.05,0.30'],
   ['06-moonlit-night', 'noyacht=1&t=26&sea=3&cloud=0.08&cam=0,3.0,0,0.9,0.14&look=moon,-0.20,0.15'],
   ['07-underwater-shafts-up', 't=12.6&sea=3&cloud=0.25&under=1&cam=0,-6,0,4.0,0.5&look=sun,-0.42,0.2'],
   ['08-underwater-fish-hull', 't=12.6&sea=3&cloud=0.25&under=1&ycam=9,-5,80,-3'],
