@@ -2,9 +2,11 @@
 
 A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 38 locally bundled ElevenLabs sound effects.
 
-The latest wreck pass adds tighter compression folds, cleaner panel-cut edges, raised and twisted hoods, hanging bumpers, sprung doors with their window seals, and locally displaced wheels. Paint chips expose primer and metal; engine-bay soot persists after cooling and clears on repair. The five-second solo wreck camera starts on the side with the most damage. See `source/wreck-finish.md` for the implementation and its limits.
+Choose **Watch Demo** for autonomous derby or circuit events with seven spectator views: automatic director, overhead, following drone, chase, hood, trackside and free orbit. Pick a car to follow, or let the director choose; events repeat automatically. The new solo AI commits to intercepts, slows for corners, avoids obstacles and backs away from prolonged shoving matches. See `source/demo-ai-fire.md`.
 
-Damaged cars now develop engine-bay smoke, turbulent flames, rising embers and a short fuel burst after a severe final impact. Sorted volume effects include smoke illumination and nearby fire lighting. Fire roar, crackling and explosive bursts are positional ElevenLabs recordings; ordinary impacts retain metal, glass and loose-part layers. Vehicle bodies stay frozen during the five-second wreck inspection while fire and sound continue. Repair clears the effects; pause and mute are respected. See `source/vehicle-fire.md` for implementation, audio provenance and limits.
+The preceding wreck pass adds tighter compression folds, cleaner panel-cut edges, raised and twisted hoods, hanging bumpers, sprung doors with their window seals, and locally displaced wheels. Paint chips expose primer and metal; engine-bay soot persists after cooling and clears on repair. The five-second solo wreck camera starts on the side with the most damage. See `source/wreck-finish.md` for the implementation and its limits.
+
+Damaged cars develop smoke, turbulent flames and rising embers from several damage-weighted locations. Plume size, rhythm, density and source positions vary between cars. Roughly 10% of critical damage episodes can produce one delayed fuel explosion after sustained burning; a final collision no longer automatically explodes. Sorted volume effects include smoke illumination and nearby fire lighting. Fire roar, crackling and explosive bursts are positional ElevenLabs recordings; ordinary impacts retain metal, glass and loose-part layers. Vehicle bodies stay frozen during the five-second wreck inspection while fire and sound continue. Repair clears the effects; pause and mute are respected. See `source/vehicle-fire.md` for implementation, audio provenance and limits.
 
 The preceding geometry pass added refined panel topology, shared deformation for bodywork, glass and internal structure, connected bumper/hood/mirror attachments, and filtered impact scratches. Wrecking out of a solo derby or race holds the scene for five seconds with an orbit camera, then returns to the menu. The timer pauses on focus loss. The remaining quarry banks have shallow rock relief, foreground conifer cards have been replaced with existing branch geometry, and four more route sections have gravel and grass verge patches. See `source/wreck-geometry/README.md` and `VALIDATION.md`. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
 
@@ -18,6 +20,7 @@ Choose a car and mode, then enter the event:
 
 - **Demolition derby:** eight cars; last functioning car wins. At five minutes, remaining condition wins, with damage inflicted breaking ties. Disabled cars remain physical obstacles.
 - **Destruction playground:** free driving, crash ramps, movable barrels, optional AI traffic, repair, and an orbit camera for examining damage.
+- **Watch Demo:** derby or circuit with all eight cars driven by AI. Use the camera and car selectors, C to cycle cameras, [ / ] to switch cars, Space to pause. Free orbit supports dragging and zooming. No player best results are recorded.
 - **Quarry circuit:** three laps on a mixed asphalt/gravel route. Ordered checkpoints prevent shortcuts; recovery costs five seconds. A destroyed car retires from the race.
 
 ## Controls
@@ -41,7 +44,7 @@ Standard gamepad: left stick steers, right trigger accelerates, left trigger bra
 
 ## Online rooms
 
-Choose **Play Online**, leave the room code empty and press **Connect**. Copy the invitation link and send it to the other players. Rooms hold eight cars, with AI in unused places. The host starts events and rematches; disconnected players can rejoin their seat. Car physics and scoring run on the server.
+Choose **Play Online**, leave the room code empty and press **Connect**. Copy the invitation link and send it to the other players. Rooms hold eight cars, with AI in unused places. The host starts events and rematches; disconnected players can rejoin their seat. Car physics and scoring run on the server. The latest driving improvements apply to solo and demo events; online rooms retain the existing server AI.
 
 The bundled `public/multiplayer.json` connects to the deployed service at `wss://quarry-impact-online.quarry-impact-free.workers.dev`. Hosting uses the verified dedicated Cloudflare Free account, with four simultaneous rooms and daily service limits. Reaching a Free limit may temporarily prevent online play; no paid plan or overage spending is authorized. Solo modes remain available. See `multiplayer/README.md` for local setup, limits and deployment details.
 

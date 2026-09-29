@@ -46,6 +46,12 @@ button:disabled {
 #ui select {
   pointer-events: auto;
 }
+#watch-demo {margin-top:20px;padding:13px 23px;border-color:#d9c58c99;color:#f1d99d;}
+.demo-toolbar {position:absolute;top:108px;left:38px;display:flex;gap:12px;align-items:end;padding:13px 16px;background:#101b19db;border:1px solid #83938155;backdrop-filter:blur(10px);}
+.demo-toolbar label {display:flex;flex-direction:column;gap:7px;color:#d9c58c;font-size:9px;letter-spacing:2px;}
+.demo-toolbar select {max-width:210px;background:#24302b;color:#efefdf;border:1px solid #83938177;padding:9px;font-size:11px;}
+.demo-toolbar button {min-height:34px;}
+@media(max-width:900px){.demo-toolbar{top:90px;left:18px;right:18px;flex-wrap:wrap;gap:8px}.demo-toolbar select{max-width:155px;font-size:10px}}
 .menu {
   height: 100%;
   background:

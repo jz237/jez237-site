@@ -1,0 +1,26 @@
+{
+  "previousRelease": "f11dedbb1f2626628c1f5ce781c9122e64a29330",
+  "scope": "Solo/demo driving, spectator cameras, variable vehicle fire and rare delayed cosmetic fuel bursts. Worker inputs and audio files unchanged.",
+  "files": {
+    "src/main.ts": {
+      "before": "c4d358c884025b0bef0481f6d56a484e3b068dc95172aa649e27c37b1daca3b1",
+      "after": "e2722030c58533648fb1246e183c945cb35a92bee1a13fc0451af87f51292cd0",
+      "snapshot": "tests/fixtures/demo-before-main.ts.gz"
+    },
+    "src/style.css": {
+      "before": "c878ea3e2e6f2ffd58530ba216f5fbd4a5f1286a8b652a254d42f9cf1b10ea0e",
+      "after": "1bb12e1141eb68fdac39a9e595b01af537a536262fa376047bf853111695281b",
+      "snapshot": "tests/fixtures/demo-before-style.css.gz"
+    },
+    "src/vehicle-fire.ts": {
+      "before": "54cca336937ddfe9ee116791f4f6e13d9878222704cd9bd767a165f8b22ce361",
+      "after": "dd80ea2f4ebc039088b2f261bc1b70ad2c049073942bb953c9af0b267c64f836",
+      "snapshot": "tests/fixtures/demo-before-vehicle-fire.ts.gz"
+    },
+    "src/vehicle-thermal-state.ts": {
+      "before": "1d62fe67e877a3e281056c1cc4fe54fd2acb5889a3c118f8c50e44388babc92c",
+      "after": "d410cb0cf17ad32faaff4dc87c314bcbccc20f1f6975fe70c15a696fd63e9033",
+      "snapshot": "tests/fixtures/demo-before-vehicle-thermal-state.ts.gz"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Vehicle fire, smoke and sound
 
+This is the historical first fire pass. The later [demo and fire update](demo-ai-fire.md) replaces the single engine-bay emitter and automatic final-impact burst with varied damage-weighted sources and rare delayed explosions. Its optimized shader uses four to seven smoke samples and four to six flame samples, depending on quality. The audio provenance below remains current.
+
 This presentation increment builds on `f21a7502d202555920aaeb6981c1148f05d94d00`. Shared physics, collision, health, scoring and all 23 deployed Worker inputs remain unchanged. No internet multiplayer test or server deployment is included.
 
 Original Three.js code in `src/vehicle-fire.ts` integrates a turbulent density field through sorted instanced billboards. A deterministic 64-cubed R8 noise texture is generated locally; no downloaded or AI-generated visual media is used. Density attenuation, sun-facing shading, hot soot, flame temperature colors, airflow, buoyancy and two nearby point lights give the puffs depth. Quality settings use nine, seven or five volume steps. There are at most 640 volume particles and two fire lights, in addition to the existing 1,800 spark/dust particles and 36 loose parts. The pool is reused, and repair/restart clears it.
