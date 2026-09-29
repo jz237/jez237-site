@@ -42,8 +42,9 @@ function fit(){
  controls.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.03,distance/200);camera.far=Math.max(100,distance*6);camera.updateProjectionMatrix();controls.update();changed();
 }
 function lessonUI(){const a=systems[system],l=a.lessons[lesson];$('lesson-count').textContent=`HOW IT WORKS / ${lesson+1} OF ${a.lessons.length}`;$('lesson-title').textContent=l[0];$('lesson-text').textContent=l[1];$<HTMLButtonElement>('lesson-prev').disabled=lesson===0;$<HTMLButtonElement>('lesson-next').disabled=lesson===a.lessons.length-1;}
-function status(){let t=paused?'Motion paused. Orbit and inspect at your own pace.':system==='system'?'Gravity down. Pumped return up. Water paths are illustrative.':system==='roller'?experimentTime<0?'Fleece stationary · normal filtration':experimentTime<4?'Debris builds up · upstream water rises':experimentTime<6?'Sensor triggered · advancing fresh fleece':'Fresh section in place · motor stopped':system==='skimmer'?'Air enters below; foam leaves above. Water exits separately.':system==='biology'?'Enlarged habitat · amber ammonia step → teal nitrite step.':'Impeller turning at a slowed inspection speed.';
- if(explosion>.04)t='Parts separated · water paths hidden until reassembled.';
+function flowUI(){$('flow').textContent=(system==='biology'?'Pathway ':'Flow ')+(flow?'on':'off');$('flow').setAttribute('aria-pressed',String(flow));}
+function status(){let t=paused?'Motion paused. Orbit and inspect at your own pace.':system==='system'?'Gravity down. Pumped return up. Water paths are illustrative.':system==='roller'?experimentTime<0?'Fleece stationary · normal filtration':experimentTime<4?'Debris builds up · upstream water rises':experimentTime<6?'Sensor triggered · advancing fresh fleece':'Fresh section in place · motor stopped':system==='skimmer'?'Air enters below; foam leaves above. Water exits separately.':system==='biology'?'Yellow: ammonia → nitrite. Blue-green: nitrite → nitrate.':'Impeller turning at a slowed inspection speed.';
+ if(explosion>.04)t=system==='biology'?'Rock sections separated · the diagram path is hidden.':'Parts separated · water paths hidden until reassembled.';
  if(isolate)t='Isolated component · choose Clear selection to restore the assembly.';
  if($('operation-status').textContent!==t)$('operation-status').textContent=t;
 }
@@ -54,6 +55,7 @@ function inspect(id:string|null){
 }
 function changeSystem(next:System){system=next;lesson=0;inspect(null);model.setView(system);experimentTime=-1;sequence=false;explosion=targetExplosion=0;model.setExplosion(0);view='perspective';
  all<HTMLButtonElement>('[data-system]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.system===system)));all<HTMLButtonElement>('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+ document.querySelector<HTMLElement>('.stage')!.dataset.scene=system;$('biology-key').hidden=system!=='biology';document.querySelector<HTMLElement>('.legend')!.hidden=system==='biology';flowUI();
  const d=systems[system];$('system-title').textContent=d.title;$('system-description').textContent=d.text;$('scene-name').textContent=d.name.toUpperCase();$('experiment').textContent=d.experiment;
  const parts=model.parts.filter(p=>system==='system'?p.system!=='biology':p.system===system);$('part-count').textContent=`${parts.length} SELECTABLE COMPONENTS`;
  $<HTMLSelectElement>('parts').innerHTML='<option value="">Select a component…</option>'+parts.map(p=>`<option value="${p.id}">${descriptions[p.id].title}</option>`).join('');
@@ -71,8 +73,8 @@ $('fit').onclick=fit;
 slider.oninput=()=>{sequence=false;targetExplosion=explosion=Number(slider.value)/100;model.setExplosion(explosion);explosionUI();fit();status();};
 $('explode-button').onclick=()=>{sequence=false;setExplosionTarget(targetExplosion>.5?0:1);explosionUI();};
 $('sequence').onclick=()=>{sequence=!sequence;sequenceTime=0;if(sequence){setPaused(false);inspect(null);}explosionUI();changed();};
-$('reset').onclick=()=>{setPaused(reduced.matches);labels=false;flow=true;model.setFlow(true);$('flow').textContent='Flow on';$('flow').setAttribute('aria-pressed','true');$('labels-toggle').setAttribute('aria-pressed','false');time=0;changeSystem(system);};
-$('flow').onclick=()=>{flow=!flow;model.setFlow(flow);$('flow').textContent=flow?'Flow on':'Flow off';$('flow').setAttribute('aria-pressed',String(flow));changed();};
+$('reset').onclick=()=>{setPaused(reduced.matches);labels=false;flow=true;model.setFlow(true);flowUI();$('labels-toggle').setAttribute('aria-pressed','false');time=0;changeSystem(system);};
+$('flow').onclick=()=>{flow=!flow;model.setFlow(flow);flowUI();changed();};
 $('labels-toggle').onclick=()=>{labels=!labels;$('labels-toggle').setAttribute('aria-pressed',String(labels));changed();};
 function setPaused(v:boolean){paused=v;$('pause').textContent=paused?'Resume motion':'Pause motion';$('pause').setAttribute('aria-pressed',String(paused));status();changed();}
 $('pause').onclick=()=>setPaused(!paused);
@@ -80,7 +82,7 @@ $('lesson-prev').onclick=()=>{lesson=Math.max(0,lesson-1);lessonUI();};$('lesson
 $<HTMLSelectElement>('parts').onchange=()=>inspect($<HTMLSelectElement>('parts').value||null);
 $('clear').onclick=()=>{const was=isolate;inspect(null);if(was)fit();};
 $('isolate').onclick=()=>{isolate=!isolate;model.isolate(isolate?selected:null);$('isolate').setAttribute('aria-pressed',String(isolate));fit();status();};
-$('experiment').onclick=()=>{if(system==='roller'){experimentTime=0;setExplosionTarget(0);setPaused(false);inspect('sensor');}else{lesson=(lesson+1)%systems[system].lessons.length;lessonUI();if(system==='skimmer')inspect('venturi');else if(system==='return')inspect('pump-rotor');else if(system==='biology')inspect(lesson<2?'ammonia':'nitrite');else inspect(['overflow','roller-frame','baffle-1','return-pipe'][lesson]);setExplosionTarget(0);flow=true;model.setFlow(true);$('flow').setAttribute('aria-pressed','true');$('flow').textContent='Flow on';setPaused(false);}};
+$('experiment').onclick=()=>{if(system==='roller'){experimentTime=0;setExplosionTarget(0);setPaused(false);inspect('sensor');}else{lesson=(lesson+1)%systems[system].lessons.length;lessonUI();if(system==='skimmer')inspect('venturi');else if(system==='return')inspect('pump-rotor');else if(system==='biology')inspect(lesson<2?'ammonia':'nitrite');else inspect(['overflow','roller-frame','baffle-1','return-pipe'][lesson]);setExplosionTarget(0);flow=true;model.setFlow(true);flowUI();setPaused(false);}};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){inspect(null);sequence=false;explosionUI();}});
 document.addEventListener('visibilitychange',changed);
 const initialHash=location.hash.slice(1);changeSystem(initialHash in systems?initialHash as System:'system');setPaused(reduced.matches);
