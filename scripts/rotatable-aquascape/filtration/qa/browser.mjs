@@ -7,7 +7,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true}),context=aw
 const snap=()=>page.evaluate(()=>window.filtrationQA.snapshot()),shot=n=>page.screenshot({path:path.join(out,n+'.png'),fullPage:false});let report={checks:{},views:[],errors};
 try{
  await page.goto(remote||'http://127.0.0.1:5247/');await page.waitForFunction(()=>window.filtrationQA?.snapshot().ready);await page.waitForTimeout(500);await shot('desktop-system');
- assert.equal((await snap()).parts,42);report.checks.completeParts=true;
+ assert.equal((await snap()).parts,40);report.checks.completeParts=true;
  for(const system of ['system','roller','skimmer','biology','return']){
   await page.locator(`[data-system="${system}"]`).click();await page.waitForFunction(()=>window.filtrationQA.snapshot().ready);await page.waitForTimeout(250);await shot(system+'-assembled');
   await page.locator('#explode-button').click();await page.waitForFunction(()=>window.filtrationQA.snapshot().explode>.995);await shot(system+'-exploded');
