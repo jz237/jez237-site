@@ -212,7 +212,7 @@ export function buildRigging() {
   const mx = DIM.MAST_X, dh = DIM.DECK_H, top = dh + DIM.MAST_H;
   const add = (a, b, w) => L.push(...a, ...b, w);
   add([5.25, dh + 0.35, 0], [mx + 0.05, top - 1.8, 0], 0.016);        // forestay
-  add([mx + 0.32, top, 0], [-5.55, dh + 0.85, 0], 0.015);            // backstay
+  add([mx + 0.32, top, 0], [-5.55, dh + 0.15, 0], 0.015);            // backstay
   for (const s of [1, -1]) {
     add([mx + 0.02, top - 2.0, 0], [mx + 0.05, dh + 0.1, s * 1.72], 0.014);     // cap shroud
     add([mx, dh + 5.6, s * 1.15], [mx - 0.25, dh + 0.1, s * 1.72], 0.008);      // lower

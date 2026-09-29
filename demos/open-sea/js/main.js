@@ -243,7 +243,7 @@ class App {
     const keyScale = under ? 0.55 : 1;
     this.post.exposure(dt, sk.key * keyScale, this.frame === 0);
     this.post.bloom();
-    this.post.tonemap(this.w, this.h, this.time, { night: 1 - smoothstep(0.03, 0.17, sk.key) });
+    this.post.tonemap(this.w, this.h, this.time, { night: 1 - smoothstep(0.03, 0.17, sk.key), ev: 1 - 0.42 * S.storm });
     if (this.photoReq) {
       this.photoReq = false;
       canvas.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `open-sea-${Date.now()}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png');

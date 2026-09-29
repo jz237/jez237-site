@@ -353,7 +353,7 @@ export class Yacht {
       const mean = (pb[0] * 2 + pb[1] + pb[2] + pb[3] + pb[4]) / 6;
       const pitchT = clamp(Math.atan2(pb[1] - pb[2], 8.4) * 0.7, -0.17, 0.17);
       const rollT = clamp(-Math.atan2(pb[3] - pb[4], 3.4) * 0.38, -0.16, 0.16);
-      this.y = this.heave.step(mean + 0.02, h);
+      this.y = this.heave.step(mean - 0.10, h);
       this.pitch = this.pitchS.step(pitchT, h);
       this.roll = clamp(this.rollS.step(this.heelTarget + rollT, h), -0.5, 0.5);
       this.yaw = this.yawS.step(0.012 * Math.sin(this.t * 0.31) + 0.25 * rollT * Math.sign(this.tack), h);
