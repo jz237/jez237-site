@@ -124,7 +124,7 @@ class App {
     if (this.yachtOn) {
       this.yacht.feed(this.probe);
       this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs });
-      this.trail.update(dt, this.yacht, this.time);
+      this.trail.update(dt, this.yacht, this.time, this.sim.cur.U);
     }
     if (this.probe.fresh) {
       this.surfaceAtCam = this.probe.get(5)[0];
@@ -153,6 +153,7 @@ class App {
     const S = this.state, cam = this.cam;
     const sk = skyState(S.tod);
     sk.haze = S.haze;
+    sk.overcast = Math.min(1, Math.max(0, (S.cloud - 0.5) / 0.4));
     this.sk = sk;
     const aspect = this.w / this.h;
     const P = m4.perspective(cam.fov, aspect, NEAR, FAR);
@@ -172,7 +173,7 @@ class App {
     C.renderEnv(this.sky, sk, camAbs, this.q === 'low' ? 50 : 70, flash);
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
-    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx };
+    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under };
     this.ctx = ctx;
 
     // underwater beam bookkeeping for caustics

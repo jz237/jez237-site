@@ -49,13 +49,16 @@ const YACHT_FS = `
 #include <atmo.sample>
 #include <lighting>
 #include <underwater>
+#include <water.uv>
+uniform sampler2DArray uDisp;
+uniform vec2 uYachtCen;    // centre of the cascade frame relative to the camera (xz)
 in vec3 vLocal;
 in vec3 vN;
 in vec3 vRel;
 in vec4 vAttr;
 uniform vec3 uSunLocal, uMoonLocal;
 uniform vec3 uMainTri[3], uJibTri[3];
-uniform float uWet, uRefl, uCamY, uMirrorY;
+uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam;
 layout(location = 0) out vec4 o;
 
 float tri(vec3 p, vec3 l, vec3 a, vec3 b, vec3 c) {
@@ -72,6 +75,22 @@ float sailShadow(vec3 p, vec3 l) {
   if (l.y < 0.02) return 1.0;
   return tri(p, l, uMainTri[0], uMainTri[1], uMainTri[2]) * tri(p, l, uJibTri[0], uJibTri[1], uJibTri[2]);
 }
+// true height of the wave surface at a camera-relative position (Eulerian, from the choppy displacement)
+float waterHeightAt(vec2 relXZ) {
+  vec2 gp = relXZ - uYachtCen, dd = vec2(0.0);
+  float h = 0.0;
+  for (int it = 0; it < 2; it++) {
+    vec2 g = gp - dd;
+    h = 0.0; dd = vec2(0.0);
+    for (int i = 0; i < 5; i++) {
+      if (i >= uCascades) break;
+      vec4 d = textureLod(uDisp, vec3(cascUV(i, g), float(i)), 0.0);
+      dd += toWorld(d.xz, i);
+      h += d.y;
+    }
+  }
+  return h;
+}
 float ggx(float nh, float a2) { float d = nh * nh * (a2 - 1.0) + 1.0; return a2 / (PI * d * d); }
 
 void main() {
@@ -86,7 +105,7 @@ void main() {
     float z = p.y;
     albedo = vec3(0.84, 0.855, 0.86); rough = 0.2;
     float boot = smoothstep(0.03, 0.0, abs(z - 0.03)) ;
-    if (z < -0.02) { albedo = vec3(0.10, 0.075, 0.07); rough = 0.55; }   // red-brown antifouling
+    if (z < -0.02) { albedo = vec3(0.075, 0.055, 0.052); rough = 0.55; }   // red-brown antifouling
     else if (z < 0.075) { albedo = vec3(0.02, 0.05, 0.11); rough = 0.35; }
     float cove = smoothstep(0.035, 0.02, abs(z - (0.66 + 0.0016 * p.x * p.x + (p.x > 0.0 ? 0.0042 * p.x * p.x : 0.0)) ));
     albedo = mix(albedo, vec3(0.03, 0.07, 0.16), cove);
@@ -155,24 +174,26 @@ void main() {
   float below = smoothstep(-0.25, 0.1, R.y);
   envR = mix(lightGround(), envR, below);
   vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - max(dot(N, V), 0.0), 5.0);
-  col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : 1.0);
+  col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : mix(0.4, 1.0, metal));   // painted surfaces: the sky/sea fill is a weak sheen, not a second light
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky
-  float sub = smoothstep(0.02, -0.10, p.y);
+  float wy = vRel.y + uCamY;
+  float hw = wy > uMirrorY + 2.5 ? -1e3 : waterHeightAt(vRel.xz);
+  float sub = smoothstep(hw + 0.02, hw - 0.10, wy);
   if (sub > 0.0) {
     vec3 sunWv, beamV, Ed0;
     underwaterLight(sunWv, beamV, Ed0);
-    float zd = max(-p.y, 0.0) + 0.1;
+    float zd = max(hw - wy, 0.0) + 0.1;
     float cg = causticGainRel(vRel, zd, sunWv, 0.3);
     // downwelling light is ~20x stronger than upwelling: undersides are dark silhouettes, tops and flanks catch the beams
-    float eN = 0.04 + 0.30 * (1.0 - abs(N.y)) + 0.86 * max(N.y, 0.0);
-    vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI;
+    float eN = 0.04 + 0.17 * (1.0 - abs(N.y)) + 0.80 * max(N.y, 0.0);
+    vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI * exp(-KD * zd);
     col = mix(col, uwl, sub);
   }
   // aerial perspective
   float dist = length(vRel);
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001;
-  vec3 T = exp(-ext * dist);
+  vec3 T = uUnderCam > 0.5 ? vec3(1.0) : exp(-ext * dist);   // under water the medium is applied by the composite pass
   vec3 hd = normalize(vec3(-V.x, 0.0, -V.z));
   vec3 Lh = horizonColor(hd);
   col = col * T + Lh * (1.0 - T);
@@ -410,8 +431,14 @@ export class Yacht {
       bindLighting(p, ctx);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
+      if (ctx.sim) {
+        const sim = ctx.sim, cx = this.x, cz = this.z;
+        const { scale, off } = sim.cascadeUniforms(cx, cz);
+        p.t('uDisp', 8, sim.disp).i('uCascades', sim.count).v4v('uCasc', scale).v2v('uCen', off).v2('uYachtCen', cx - camAbs[0], cz - camAbs[2]);
+        if (sim.count > 1) p.v2('uNoiseOrg', scale[5] * cx + scale[6] * cz, -scale[6] * cx + scale[5] * cz);
+      }
       p.v3v('uMainTri', flat(mainTri)).v3v('uJibTri', flat(jibTri)).f('uWet', 1)
-        .f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
+        .f('uUnderCam', ctx.under ? 1 : 0).f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     let p = this.progHull.use();

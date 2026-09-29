@@ -105,8 +105,11 @@ vec3 moonIrradiance() {
   float vis = smoothstep(-0.012, 0.004, uMoonDir.y);
   return uMoonCol * texture(uTransLUT, transUV(r, max(uMoonDir.y, -0.05))).rgb * vis;
 }
+uniform float uOvercast;   // 0 clear .. 1 solid deck: the air below a cloud deck is lit by grey diffuse light, not directly by the sun
 vec3 skyRadiance(vec3 d) {
   vec2 uv = skyDirToUV(d);
-  return texture(uSkyLUT, uv).rgb + uAirglow;
+  vec3 L = texture(uSkyLUT, uv).rgb;
+  L = mix(L, vec3(dot(L, vec3(0.2126, 0.7152, 0.0722))) * vec3(0.97, 1.0, 1.04), uOvercast * 0.7);
+  return L + uAirglow;
 }
 `);
