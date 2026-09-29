@@ -17304,5 +17304,134 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-kelp-forest-buoyant",
+    "title": "Factual infographic: Kelp Forest — Buoyant Blades in Moving Water",
+    "tests": "; archive_slot=2026-09-29T08:20; concept=giant-kelp-pneumatocyst-buoyancy-layered-forest-habitat; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
+    "prompt": "Create the finished image itself: an edge-to-edge, museum-quality PORTRAIT SCIENTIFIC INFOGRAPHIC directly on the canvas, not a photographed poster, field kit, specimen tray or room. Large restrained title: GIANT KELP / BUOYANT BLADES IN MOVING WATER. The dominant hero is an immersive yet anatomically precise full-height cutaway through a temperate coastal kelp forest: bright wave-rippled surface and floating golden-brown canopy at top, long supple olive-gold stipes and blade clusters swaying in turquoise midwater, branching holdfast gripping a dark textured rocky reef at bottom. A few correctly scaled sea otters at the surface, rockfish among fronds, and urchins, anemones and sea stars near rock provide habitat context without obscuring the kelp. Sun shafts, suspended particles, subtle current lines, translucent gas bladders, wet blade texture and credible underwater depth cues; sophisticated high-contrast typography, short large labels and precise leader lines. Label GIANT KELP — BROWN ALGA, NOT A LAND PLANT; HOLDFAST; FLEXIBLE STIPE; BLADE; GAS-FILLED PNEUMATOCYST; SURFACE CANOPY. Distinguish root-like and leaf-like forms from true plant organs.\n\nArrange EIGHT substantial, individually framed explanatory panels around the hero, each with a distinct illustrated mechanism and a readable one-line takeaway: (1) ROCK ANCHOR — macro cutaway of branching holdfast mechanically gripping rough reef, label anchor, not root; (2) BUOYANCY — magnified blade base and inflated pneumatocyst, upward force arrow keeping blades near light; (3) FLEX IN CURRENT — three-position stipe silhouette bending with moving water while remaining attached; (4) LIGHT & WATER — coastal cross-section showing sunlit shallow water, rocky bottom and nutrient-bearing current as favorable conditions, not a universal range map; (5) VERTICAL NEIGHBORHOODS — clearly separated canopy / midwater / seafloor mini-sections with sea otter, fish, and invertebrate shelter; (6) GRAZER BALANCE — small food-web triangle, sea otter consumes urchin, urchin grazes kelp, with careful label 'overgrazing can create barrens in some places'; (7) STRESSORS — paired cause-and-effect vignettes: prolonged warm water stresses kelp and sediment runoff reduces light or smothers young kelp; (8) DRIFT & HABITAT — detached blade becoming drift food beside a shelter-and-nursery inset, with no quantitative carbon claim.\n\nIntegrate at least FOUR conspicuous explanatory close-ups, not thumbnail decorations: holdfast-rock interface, gas bladder/blade junction, flexible stipe cross-profile in moving water, and urchin grazing on kelp versus a rocky barren patch. Add a narrow process ribbon from rocky attachment → buoyant upward growth → surface canopy → layered habitat, a small physical-material color key, fine leader lines that do not cross, ample negative space between panels, large legible labels and concise factual text. The hero should occupy at least half the visual area; this must feel like an expert natural-history exhibit with tactile kelp and reef surfaces, luminous ocean optics and precise information hierarchy, not a sparse school poster. No exact measurements, percentages, URLs, bibliography, logo, watermark, decorative fake text or unsupported claims.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-kelp-forest-buoyant.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-kelp-forest-buoyant.webp",
+    "color": "#455848",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "giant-kelp-pneumatocyst-buoyancy-layered-forest-habitat",
+      "imageSha256": "48aae636e3f14cd0e960c15a85e2c2a3a617d8a238ece7a78d38df9192d49247",
+      "imageDHash": "860ecfc6ce4ddd9e"
+    },
+    "factualInfographic": {
+      "topic": "How giant kelp forms a buoyant, vertically layered coastal forest and supports a food web",
+      "description": "Giant kelp anatomy, buoyancy, vertical forest habitat, grazer balance, and environmental pressures in cool coastal waters.",
+      "sourceNote": "NOAA Office of National Marine Sanctuaries https://sanctuaries.noaa.gov/visit/ecosystems/kelpdesc.html; Monterey Bay Aquarium https://www.montereybayaquarium.org/animals-the-ocean/ecosystems/kelp-forest verify kelp structure, habitat layers, grazing, and stressors.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T12:21:40.574597+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA Office of National Marine Sanctuaries",
+            "title": "Kelp Forest",
+            "sourceType": "government-agency",
+            "url": "https://sanctuaries.noaa.gov/visit/ecosystems/kelpdesc.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "Monterey Bay Aquarium",
+            "title": "Kelp forest",
+            "sourceType": "museum",
+            "url": "https://www.montereybayaquarium.org/animals-the-ocean/ecosystems/kelp-forest"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Giant kelp is a brown alga, not a land plant, and has no true roots, stems, or leaves.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A branching holdfast anchors giant kelp to rocky seafloor; it is not a nutrient-absorbing root system.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Flexible stipes carry leaf-like blades upward through moving water toward sunlight.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Gas-filled pneumatocysts buoy blades and help form a surface canopy.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Kelp grows in cool, sunlit, nutrient-rich nearshore water with rocky substrate; currents deliver nutrients.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Kelp forest habitat is vertically layered into canopy, midwater, and rocky seafloor.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The canopy shelters animals, including sea otters; fish shelter among midwater fronds.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Holdfasts and the rocky seafloor shelter invertebrates such as sea stars, anemones, and urchins.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sea urchins graze kelp, while sea otters consume urchins and can help limit overgrazing; unchecked grazing can create urchin barrens in some places.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Marine heatwaves and warming water can stress kelp; sediment runoff can reduce light or smother young kelp.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Kelp forest structure supplies food, shelter, and nursery habitat to marine animals.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Detached kelp fronds can become food for grazers and decomposers in the forest food web.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
