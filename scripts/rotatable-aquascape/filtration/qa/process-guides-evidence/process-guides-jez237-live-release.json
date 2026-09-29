@@ -1,0 +1,31 @@
+{
+  "base": "https://jez237.com/prototypes/hidden-reef",
+  "checkedAt": "2026-09-29T15:48:15.498Z",
+  "assets": [
+    "reef/./assets/index-Di90eq1i.js",
+    "reef/./assets/index-DBjqBxyQ.css",
+    "filtration/./assets/index-D36Tr1Hs.js",
+    "filtration/./assets/index-kaNpkfKs.css",
+    "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
+    "learn/filtoclear/index.html",
+    "learn/filtoclear/model.js"
+  ],
+  "checks": {
+    "exactActiveAssetsAndStoreImages": true,
+    "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
+    "fullRockAssetAndPondExhibitPreserved": true,
+    "fourProcessGuidesAnd3DLinks": true,
+    "visibleBiofilmDiagram": true,
+    "reefToolbarLessonAndReturnNavigation": true,
+    "phoneProcessGuide": true,
+    "mobileBiofilmDiagram": true,
+    "mobileNavigation": true
+  },
+  "errors": [],
+  "cacheHeaders": {
+    "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+    "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+    "filtration/./assets/index-D36Tr1Hs.js": "public, max-age=14400, must-revalidate",
+    "filtration/./assets/index-kaNpkfKs.css": "public, max-age=14400, must-revalidate"
+  }
+}

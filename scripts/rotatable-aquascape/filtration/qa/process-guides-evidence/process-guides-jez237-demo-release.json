@@ -1,0 +1,17 @@
+{
+  "base": "https://jez237.com/demos/reef-filtration/",
+  "checkedAt": "2026-09-29T15:49:12.258Z",
+  "exactAssets": [
+    "assets/index-D36Tr1Hs.js",
+    "assets/index-kaNpkfKs.css",
+    "assets/rock-layers.bin-B60TwGSm.gz"
+  ],
+  "checks": {
+    "exactTestedAssets": true,
+    "animationAndPause": true,
+    "phoneLayout": true,
+    "returnToStandaloneReef": true
+  },
+  "errors": [],
+  "passed": true
+}
