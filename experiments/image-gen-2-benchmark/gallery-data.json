@@ -17433,5 +17433,123 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus",
+    "title": "Factual infographic: Hymenopus coronatus — A Flower on a Leaf",
+    "tests": "Sources fetched 2026-09-29; juvenile-on-leaf emphasis follows field observations; no unsupported numerical size or universal prey claim.; archive_slot=2026-09-29T12:20; concept=orchid-mantis-juvenile-flowerlike-leaf-bee-ambush; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the FINISHED direct-canvas scientific infographic, not a photographed poster, specimen tray, workbook, museum case, or mockup. Portrait-oriented museum-quality biological plate, richly illustrated and highly legible. Subject: a real juvenile female orchid mantis, Hymenopus coronatus (Mantodea: Hymenopodidae), a predatory insect from tropical Southeast Asia. Main headline exactly “ORCHID MANTIS: A FLOWER ON A LEAF”; subhead “Hymenopus coronatus | juvenile female | flowerlike predator”. The dominant central hero, taking over half the visual area, is an enormous naturalistic macro rendering of one juvenile perched directly on a broad green living leaf in a humid Southeast Asian forest understory. Correct insect anatomy: distinct head, thorax, abdomen, six legs total, enlarged folded raptorial front legs, two pairs of walking legs bearing pale broad petal-like femoral lobes, white-to-blush-pink body and upward-curved juvenile abdomen. Do not add extra limbs, petals growing from the body, or an actual orchid blossom behind it. Show leaf veins, dew, soft broken canopy light, fine cuticle texture, articulated joints, realistic compound eyes and mouthparts; restrained cinematic macro depth of field but every essential structure clearly readable. An approaching oriental honeybee may appear in a small separate behavior inset, not falsely posed as pollinating the mantis.\n\nSurround the hero with SEVEN substantial distinct scientific panels, integrated into the same flat direct canvas with crisp leader lines and spacious readable type, not seven tiny boxes: (1) enlarged femoral-lobe close-up, dorsal and profile views, labeling “petal-like femoral lobes” and “mid- and hind-legs”; show their bilateral form, not extra floral organs. (2) enlarged head and folded raptorial-foreleg close-up, labeling “eyes”, “mouthparts”, and “grasping forelegs”; preserve the six-leg count across the organism. (3) enlarged white/pink cuticle and curved juvenile abdomen close-up, labeling “broad abdomen” and “juvenile upward bend”. (4) a clear visible-light / ultraviolet-sensitive comparison of the same juvenile against foliage, with simple white/pink versus UV-absorbing silhouette and the concise label “flowerlike signal contrasts with leaf background”; do not imply that humans directly see UV. (5) three-step mechanism sequence with large accurate mini-scenes: “perch on leaf → visiting bee approaches → raptorial forelegs seize prey”; label it an observed predator–prey encounter, never nectar reward. (6) qualitative juvenile-versus-adult female comparison, showing a leaf-perched curved-abdomen juvenile beside a winged adult female with less-upturned abdomen; no invented durations or measurements. (7) habitat and scale context: layered tropical Southeast Asian understory leaves and a bee-sized context silhouette; use “Southeast Asian tropical forest” and “insect-sized ambush predator”, without invented numerical range or dimensions. Put three or more scientific explanatory macro windows unmistakably large enough to inspect, and give all seven panels meaningful visual content. Fine ivory hairlines, dark forest-green typography, muted blush and botanical greens, pale matte background field, professional editorial hierarchy, precise but not tiny labels; microscopy-grade texture and believable lighting. No bibliography, URL, watermark, decorative pseudo-data, invented statistics, exact size bars, taxonomic errors, or unsupported claims. The biology, not paragraphs, occupies most of the canvas.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus.webp",
+    "color": "#a3a189",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "orchid-mantis-juvenile-flowerlike-leaf-bee-ambush",
+      "imageSha256": "345d16fb0333579cddab0fa4c502de8dbbe3b9365a10fa8c78a7838379193e05",
+      "imageDHash": "1b6818c26ed35b9b"
+    },
+    "factualInfographic": {
+      "topic": "How juvenile orchid mantises (Hymenopus coronatus) use flowerlike morphology and visual signals to attract and capture visiting insects from foliage",
+      "description": "Juvenile female orchid mantis morphology and visual predatory deception on foliage, including documented bee approach and capture.",
+      "sourceNote": "Verified morphology, UV-associated visual signal, leaf-perching juveniles and observed bee approach/capture from Nature Communications https://www.nature.com/articles/s41467-023-40355-1 ; Macquarie University https://researchers.mq.edu.au/en/publications/coloration-and-morphology-of-the-orchid-mantis-ihymenopus-coronat/ ; Zoological Science https://bioone.org/journals/zoological-science/volume-31/issue-12/zs140126/Double-Trick-Visual-and-Chemical-Mimicry-by-the-Juvenile-Orchid/10.2108/zs140126.full .",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T16:21:59.128691+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Nature Communications",
+            "title": "Evolutionary genomics of camouflage innovation in the orchid mantis",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41467-023-40355-1"
+          },
+          {
+            "id": "S2",
+            "publisher": "Macquarie University",
+            "title": "Coloration and morphology of the orchid mantis Hymenopus coronatus (Mantodea: Hymenopodidae)",
+            "sourceType": "university",
+            "url": "https://researchers.mq.edu.au/en/publications/coloration-and-morphology-of-the-orchid-mantis-ihymenopus-coronat/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Zoological Science",
+            "title": "“Double-Trick” Visual and Chemical Mimicry by the Juvenile Orchid Mantis Hymenopus coronatus used in Predation of the Oriental Honeybee Apis cerana",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://bioone.org/journals/zoological-science/volume-31/issue-12/zs140126/Double-Trick-Visual-and-Chemical-Mimicry-by-the-Juvenile-Orchid/10.2108/zs140126.full"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hymenopus coronatus is an orchid mantis (Mantodea: Hymenopodidae), a predatory insect with six legs and raptorial forelegs.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The species is reported from tropical Southeast Asian habitats including Thailand, Malaysia and Indonesia; observed juvenile mantises rested or hunted on leaves.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The white and pink orchid mantis has broad abdomen and petal-like lobes on the mid- and hind-leg femora, producing a generalized flowerlike silhouette rather than copying one particular orchid species.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The petal-like femoral lobes have bilaterally symmetric shape patterns in juvenile and adult females.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Orchid mantis body white primarily absorbs ultraviolet light; visual comparison found low color contrast among body parts and can make the insect resemble UV-absorbing flowers to hymenopteran observers.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "In field observations, a juvenile mantis on foliage contrasted with nearby leaves in ultraviolet-sensitive imaging.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Field observations found juvenile females on leaves and adult females in some cases on flowers; juveniles bend the abdomen upward while adult wings constrain that posture.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Oriental honeybees were observed approaching juvenile female mantises as though to land on a flower; juveniles captured visiting bees with their predatory forelegs.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The depicted sequence is approach to flowerlike visual signal, hover near juvenile mantis, then foreleg capture; this is observed behavior, not nectar exchange or pollination by the mantis.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Juvenile and adult female forms differ in wing development and posture; a small stage comparison is qualitative and not a timed life-cycle chart.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
