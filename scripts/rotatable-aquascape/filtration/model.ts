@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {materials,roundedBox,vessel,enrich,rockMaterial,bubbleMap,fibers} from './Realism.ts';
 import {loadRock} from './LoadRock.ts';
-import {growRock} from './SurfaceDetail.ts';
+import {growRock} from './RockLife.ts';
 import {describe,type System} from './content.ts';
 export type Part={id:string;system:System;group:T.Group;base:T.Vector3;offset:T.Vector3;label:T.Vector3};
 type XYZ=[number,number,number];
@@ -78,8 +78,8 @@ export function makeFiltration(){
  flow('skimmer',[[1.13,2.72,0],[1.14,2.08,0],[1.17,1,.38],[0,.85,.98],[0,.57,.98],[0,.57,.45]],0xf3ffff,28,.15);
  flow('skimmer',[[0,.6,1.2],[0,.58,.75],[0,.65,0],[0,1,0],[.65,1.2,0],[.9,.65,-.2],[1.5,.58,-.2]],0x65dfff,34,.12);
  flow('skimmer',[[0,2.45,0],[0,2.8,0],[0,3.2,0],[.27,3.22,0],[.43,2.91,0],[.6,2.86,0]],0xeeb47a,28,.13);
- const bubbles=new T.BufferGeometry(),bubbleCount=22000,bb=new Float32Array(bubbleCount*3);bubbles.setAttribute('position',new T.BufferAttribute(bb,3));const bubbleCloud=new T.Points(bubbles,new T.PointsMaterial({color:0xecffff,map:bubbleMap,size:.058,transparent:true,opacity:.85,depthWrite:false,alphaTest:.02}));bubbleCloud.renderOrder=8;groups.skimmer.add(bubbleCloud);
- animators.push(time=>{for(let i=0;i<bubbleCount;i++){const f=(i/bubbleCount+time*(.1+(i%7)*.004))%1,y=1+f*2.2,r=(.76*(1-f)+.06)*Math.sqrt(((i*37)%22003)/22003),a=i*2.4+time*.4;bb[i*3]=Math.cos(a)*r;bb[i*3+1]=y;bb[i*3+2]=Math.sin(a)*r;}bubbles.attributes.position.needsUpdate=true;});
+ const bubbles=new T.BufferGeometry(),bubbleCount=22000,bb=new Float32Array(bubbleCount*3);bubbles.setAttribute('position',new T.BufferAttribute(bb,3));const bubbleCloud=new T.Points(bubbles,new T.PointsMaterial({color:0xecffff,map:bubbleMap,size:.050,transparent:true,opacity:.75,depthWrite:false,alphaTest:.02}));const bubbleSizes=Float32Array.from({length:bubbleCount},(_,i)=>.55+((i*673)%22003)/22003*.85);bubbles.setAttribute('bubbleSize',new T.BufferAttribute(bubbleSizes,1));bubbleCloud.material.onBeforeCompile=shader=>{shader.vertexShader='attribute float bubbleSize;\nvarying float bubbleHeight;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nbubbleHeight=position.y;').replace('gl_PointSize = size;','gl_PointSize = size * bubbleSize;');shader.fragmentShader='varying float bubbleHeight;\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\ndiffuseColor.rgb *= mix(vec3(1.0),vec3(.72,.59,.38),smoothstep(2.45,3.20,bubbleHeight));');};bubbleCloud.renderOrder=8;groups.skimmer.add(bubbleCloud);
+ animators.push(time=>{for(let i=0;i<bubbleCount;i++){const f=(i/bubbleCount+time*(.105+(i%13)*.006))%1,y=1+f*2.2,r=(.73*(1-f)+.065)*Math.sqrt(((i*37)%22003)/22003)*(1+.11*Math.sin(time*1.9+i*.073+f*14)),a=i*2.39996+time*(.17+(i%5)*.017)+.10*Math.sin(f*11+i*.03);bb[i*3]=Math.cos(a)*r;bb[i*3+1]=y;bb[i*3+2]=Math.sin(a)*r;}bubbles.attributes.position.needsUpdate=true;});
  // Return pump with independently separated rotor/shaft/seal/volute/strainer.
  assembly('return',[4.48,.08,.1]);
  const feet=part('return','pump-base','Pump cradle & rubber feet','VIBRATION CONTROL','The cradle holds the pump horizontally. Four rubber pads soften contact with the sump floor.','Keeping the intake clear matters more than the illustrative orientation shown here.',[0,.12,0],[0,-.5,0]);box(feet,[0,0,0],[1.25,.12,1.65],teal);for(const x of [-.45,.45])for(const z of [-.6,.6])cylinder(feet,[x,-.08,z],.1,.12,rubber);
