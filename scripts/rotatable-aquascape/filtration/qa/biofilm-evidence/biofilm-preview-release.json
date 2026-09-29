@@ -1,0 +1,28 @@
+{
+  "base": "https://e0d24482.hidden-reef.pages.dev",
+  "checkedAt": "2026-09-29T07:08:50.344Z",
+  "assets": [
+    "reef/./assets/index-Di90eq1i.js",
+    "reef/./assets/index-DBjqBxyQ.css",
+    "filtration/./assets/index-WuP2YQ5N.js",
+    "filtration/./assets/index-DJwE7OIz.css",
+    "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
+    "learn/filtoclear/index.html",
+    "learn/filtoclear/model.js"
+  ],
+  "checks": {
+    "exactActiveAssetsAndStoreImages": true,
+    "fullRockAssetAndPondExhibitPreserved": true,
+    "visibleBiofilmDiagram": true,
+    "reefToolbarLessonAndReturnNavigation": true,
+    "mobileBiofilmDiagram": true,
+    "mobileNavigation": true
+  },
+  "errors": [],
+  "cacheHeaders": {
+    "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+    "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+    "filtration/./assets/index-WuP2YQ5N.js": "public, max-age=31536000, immutable",
+    "filtration/./assets/index-DJwE7OIz.css": "public, max-age=31536000, immutable"
+  }
+}

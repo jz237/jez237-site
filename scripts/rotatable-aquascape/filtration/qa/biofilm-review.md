@@ -17,3 +17,5 @@ The three-step narrative is informed by the [MIT Sea Grant saltwater aquaculture
 QA caught an offscreen-test setup with part of the graphic still visible; the final test first ensures the graphic is fully offscreen in a shorter viewport, then verifies no clock advance and correct resume. Cells were placed on the actual illustrated surface contour after visual review.
 
 Before/after, manual stages and time-sequence frames are in biofilm-evidence. Build hash: 70908129f367260b13af0e545c6df0b302995542243c1109b814c51b574d7b60.
+
+Published on Hidden Reef from 240336bb5d8bc96b3c9265194bfd49463aed8846. Preview and production checks confirmed exact active JS/CSS, preserved rock bytes, store images, pond exhibit, the desktop/mobile diagram and navigation back to the reef. Live evidence is saved beside this review. GitHub main contains source and synchronized build copies. The previously recorded jez237 authentication blocker remains; no upload was attempted there.

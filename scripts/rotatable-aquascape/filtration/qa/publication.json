@@ -1,19 +1,19 @@
 {
-  "sourceCommit": "7766d0343410d1175d3a8660a29a5cba9ad2228b",
-  "testedBuildHash": "bdfa1e1d6ad06acf9508a7b6c854194b1538387b07bc9935e6a1183009fa1389",
-  "publishedAt": "2026-09-29T06:42:07.510303+00:00",
+  "sourceCommit": "240336bb5d8bc96b3c9265194bfd49463aed8846",
+  "testedBuildHash": "70908129f367260b13af0e545c6df0b302995542243c1109b814c51b574d7b60",
+  "publishedAt": "2026-09-29T07:11:56.849278+00:00",
   "status": "Hidden Reef and GitHub published; jez237 still awaits renewed account login",
   "hiddenReef": {
-    "deploymentSourceCommit": "7766d0343410d1175d3a8660a29a5cba9ad2228b",
-    "preview": "https://375e58a0.hidden-reef.pages.dev",
+    "deploymentSourceCommit": "240336bb5d8bc96b3c9265194bfd49463aed8846",
+    "preview": "https://e0d24482.hidden-reef.pages.dev",
     "previewVerification": {
-      "base": "https://375e58a0.hidden-reef.pages.dev",
-      "checkedAt": "2026-09-29T06:39:15.920Z",
+      "base": "https://e0d24482.hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T07:08:50.344Z",
       "assets": [
         "reef/./assets/index-Di90eq1i.js",
         "reef/./assets/index-DBjqBxyQ.css",
-        "filtration/./assets/index-DVX9lGwC.js",
-        "filtration/./assets/index-BitFPu0M.css",
+        "filtration/./assets/index-WuP2YQ5N.js",
+        "filtration/./assets/index-DJwE7OIz.css",
         "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
         "learn/filtoclear/index.html",
         "learn/filtoclear/model.js"
@@ -21,29 +21,29 @@
       "checks": {
         "exactActiveAssetsAndStoreImages": true,
         "fullRockAssetAndPondExhibitPreserved": true,
-        "visibleBiologyKey": true,
+        "visibleBiofilmDiagram": true,
         "reefToolbarLessonAndReturnNavigation": true,
-        "mobileBiologyKey": true,
+        "mobileBiofilmDiagram": true,
         "mobileNavigation": true
       },
       "errors": [],
       "cacheHeaders": {
         "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
         "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-DVX9lGwC.js": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-BitFPu0M.css": "public, max-age=31536000, immutable"
+        "filtration/./assets/index-WuP2YQ5N.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DJwE7OIz.css": "public, max-age=31536000, immutable"
       }
     },
     "production": "https://hidden-reef.pages.dev/showroom/filtration/",
-    "deployment": "https://81f1d5ce.hidden-reef.pages.dev",
+    "deployment": "https://9836baae.hidden-reef.pages.dev",
     "verification": {
       "base": "https://hidden-reef.pages.dev",
-      "checkedAt": "2026-09-29T06:40:52.878Z",
+      "checkedAt": "2026-09-29T07:10:28.392Z",
       "assets": [
         "reef/./assets/index-Di90eq1i.js",
         "reef/./assets/index-DBjqBxyQ.css",
-        "filtration/./assets/index-DVX9lGwC.js",
-        "filtration/./assets/index-BitFPu0M.css",
+        "filtration/./assets/index-WuP2YQ5N.js",
+        "filtration/./assets/index-DJwE7OIz.css",
         "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
         "learn/filtoclear/index.html",
         "learn/filtoclear/model.js"
@@ -51,17 +51,17 @@
       "checks": {
         "exactActiveAssetsAndStoreImages": true,
         "fullRockAssetAndPondExhibitPreserved": true,
-        "visibleBiologyKey": true,
+        "visibleBiofilmDiagram": true,
         "reefToolbarLessonAndReturnNavigation": true,
-        "mobileBiologyKey": true,
+        "mobileBiofilmDiagram": true,
         "mobileNavigation": true
       },
       "errors": [],
       "cacheHeaders": {
         "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
         "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-DVX9lGwC.js": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-BitFPu0M.css": "public, max-age=31536000, immutable"
+        "filtration/./assets/index-WuP2YQ5N.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DJwE7OIz.css": "public, max-age=31536000, immutable"
       }
     }
   },
@@ -115,11 +115,11 @@
     "lastLoginCheck": "2026-09-29T03:58:56.904Z",
     "latestLoginResult": "Wrangler whoami failed to refresh auth token: 400 Bad Request; Not logged in. No jez237 upload attempted."
   },
-  "visualReview": "biology-key-review.md",
-  "previousPublication": "publication-skimmer-rock.json",
+  "visualReview": "biofilm-review.md",
+  "previousPublication": "publication-biology-key.json",
   "limitations": [
-    "Microbial symbols and dotted pathway are an enlarged conceptual diagram, not actual microbial size or coloration.",
-    "No new performance benchmark for the HTML/CSS clarification; model detail and draw-call/triangle counts are unchanged.",
+    "The magnified biofilm, N marker, colors and timing are conceptual; this is not a balanced chemical-reaction or rate simulation.",
+    "No slow-hardware performance claim. Rock detail remains unchanged; removed symbolic geometry reduces scene rendering counts.",
     "The jez237 production copy remains on the previous authenticated release."
   ]
 }
