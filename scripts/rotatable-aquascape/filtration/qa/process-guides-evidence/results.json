@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "systemMotionPauseVisibility": true,
+    "rollerMotionPauseVisibility": true,
+    "skimmerMotionPauseVisibility": true,
+    "returnMotionPauseVisibility": true,
+    "desktop": true,
+    "phone": true,
+    "narrow-phone": true
+  },
+  "errors": [],
+  "checkedAt": "2026-09-29T07:34:21.783Z"
+}

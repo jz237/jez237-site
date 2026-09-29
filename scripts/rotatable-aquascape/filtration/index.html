@@ -11,8 +11,9 @@
 <div id="labels" aria-hidden="true"></div><div id="tooltip" hidden></div>
 <div id="loading" role="status">Preparing the filtration studio…</div>
 <div id="fallback" hidden role="alert"><h2>The 3D view could not start.</h2><p>This view needs WebGL 2. The illustrated flow guide and all component descriptions below remain available.</p><a href="#field-guide">Read the filtration guide ↓</a></div>
-<div class="view-tools" role="group" aria-label="Camera views"><button data-view="perspective" aria-pressed="true">Perspective</button><button data-view="front" aria-pressed="false">Front</button><button data-view="top" aria-pressed="false">Top</button><button id="fit">Fit view</button><button id="bio-focus" hidden>Magnify surface ↓</button></div>
+<div class="view-tools" role="group" aria-label="Camera views"><button data-view="perspective" aria-pressed="true">Perspective</button><button data-view="front" aria-pressed="false">Front</button><button data-view="top" aria-pressed="false">Top</button><button id="fit">Fit view</button><button id="bio-focus" hidden>Magnify surface ↓</button><button id="process-focus">See how it works ↓</button></div>
 <p class="gesture">Drag to orbit · Pinch or scroll to zoom · Select a part</p>
+<section id="process-guide" class="biology-lab process-lab" aria-label="Illustrated filtration process"></section>
 <section id="biology-key" class="biology-lab" aria-label="Magnified live-rock biofilm" hidden></section>
 <div class="transport"><div class="transport-title"><div><span class="eyebrow">EXPLODED VIEW</span><h2 id="assembly-state">Everything connected.</h2></div><output id="amount" for="explode">0%</output></div><label class="sr-only" for="explode">Separate the assembly</label><input type="range" id="explode" min="0" max="100" value="0"><div class="range-labels"><span>ASSEMBLED</span><span>EXPLODED</span></div><div class="transport-buttons"><button id="explode-button" class="primary">Explode assembly ↗</button><button id="sequence" aria-pressed="false">Play assembly sequence</button><button id="reset">Reset</button></div></div>
 </section>
