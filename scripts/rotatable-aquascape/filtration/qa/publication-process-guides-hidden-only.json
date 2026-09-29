@@ -2,7 +2,7 @@
   "sourceCommit": "7b1d6d5cf71b95cc6e0f178829930b5d6fc44366",
   "testedBuildHash": "33550200db0932df6b72b044e62a82116160edda06a363361b8d056d18fe99e7",
   "publishedAt": "2026-09-29T07:41:59.149Z",
-  "status": "GitHub main contains the improvements; Hidden Reef and jez237 both serve the tested filtration build",
+  "status": "Hidden Reef and GitHub published; jez237 still awaits renewed account login",
   "hiddenReef": {
     "deploymentSourceCommit": "7b1d6d5cf71b95cc6e0f178829930b5d6fc44366",
     "preview": "https://09fddfbd.hidden-reef.pages.dev",
@@ -70,68 +70,60 @@
     }
   },
   "jez237": {
-    "status": "Verified live; exact tested filtration assets already present when checked",
-    "production": "https://jez237.com/demos/reef-filtration/",
-    "verification": {
-      "base": "https://jez237.com/prototypes/hidden-reef",
-      "checkedAt": "2026-09-29T15:48:15.498Z",
-      "assets": [
-        "reef/./assets/index-Di90eq1i.js",
-        "reef/./assets/index-DBjqBxyQ.css",
-        "filtration/./assets/index-D36Tr1Hs.js",
-        "filtration/./assets/index-kaNpkfKs.css",
-        "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
-        "learn/filtoclear/index.html",
-        "learn/filtoclear/model.js"
-      ],
-      "checks": {
-        "exactActiveAssetsAndStoreImages": true,
-        "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
-        "fullRockAssetAndPondExhibitPreserved": true,
-        "fourProcessGuidesAnd3DLinks": true,
-        "visibleBiofilmDiagram": true,
-        "reefToolbarLessonAndReturnNavigation": true,
-        "phoneProcessGuide": true,
-        "mobileBiofilmDiagram": true,
-        "mobileNavigation": true
+    "status": "Blocked before preview upload; previous production retained",
+    "blocker": "Cloudflare API authentication error 10000 / invalid access token 9109; refresh returned 400. Desktop Chrome is signed in to the Hidden Reef account, not the jez237 account. User asked to switch to jrbaud@gmail.com.",
+    "previousPublication": {
+      "deploymentSourceCommit": "92d692fc303ac927ca66e258d4f1a91e6739e180",
+      "preview": "https://5645ed58.jez237-site.pages.dev",
+      "deployment": "https://4a05e491.jez237-site.pages.dev",
+      "production": "https://jez237.com/demos/reef-filtration/",
+      "workflow": "scripts/deploy_jez237_pages.mjs; full site plus Functions, preview/current-main/production checks passed",
+      "verification": {
+        "base": "https://jez237.com/prototypes/hidden-reef",
+        "checkedAt": "2026-09-29T02:11:22.511Z",
+        "assets": [
+          "reef/./assets/index-Di90eq1i.js",
+          "reef/./assets/index-DBjqBxyQ.css",
+          "filtration/./assets/index-CbHBNrY6.js",
+          "filtration/./assets/index-vl4A24zB.css",
+          "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+          "learn/filtoclear/index.html",
+          "learn/filtoclear/model.js"
+        ],
+        "checks": {
+          "exactActiveAssetsAndStoreImages": true,
+          "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
+          "fullRockAssetAndPondExhibitPreserved": true,
+          "reefToolbarLessonAndReturnNavigation": true,
+          "mobileNavigation": true
+        },
+        "errors": [],
+        "cacheHeaders": {
+          "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+          "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+          "filtration/./assets/index-CbHBNrY6.js": "public, max-age=14400, must-revalidate",
+          "filtration/./assets/index-vl4A24zB.css": "public, max-age=14400, must-revalidate"
+        }
       },
-      "errors": [],
-      "cacheHeaders": {
-        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
-        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-D36Tr1Hs.js": "public, max-age=14400, must-revalidate",
-        "filtration/./assets/index-kaNpkfKs.css": "public, max-age=14400, must-revalidate"
+      "standaloneDemo": {
+        "base": "https://jez237.com/demos/reef-filtration/",
+        "checkedAt": "2026-09-29T02:12:31.233Z",
+        "exactAssets": [
+          "./assets/index-CbHBNrY6.js",
+          "./assets/index-vl4A24zB.css",
+          "assets/rock-layers.bin-D_ajDSSg.gz"
+        ],
+        "passed": true
       }
     },
-    "standaloneDemo": {
-      "base": "https://jez237.com/demos/reef-filtration/",
-      "checkedAt": "2026-09-29T15:49:12.258Z",
-      "exactAssets": [
-        "assets/index-D36Tr1Hs.js",
-        "assets/index-kaNpkfKs.css",
-        "assets/rock-layers.bin-B60TwGSm.gz"
-      ],
-      "checks": {
-        "exactTestedAssets": true,
-        "animationAndPause": true,
-        "phoneLayout": true,
-        "returnToStandaloneReef": true
-      },
-      "errors": [],
-      "passed": true
-    },
-    "siteChecks": {
-      "philadelphiaFunctionsAndCesiumPolicy": true,
-      "hiddenReefStoreImages": true,
-      "pondFilterLinks": true
-    },
-    "method": "Inspected the existing production deployment after fetching current GitHub main. No duplicate upload was needed. This verification does not infer an unknown deployment commit or deployment time."
+    "lastLoginCheck": "2026-09-29T03:58:56.904Z",
+    "latestLoginResult": "Wrangler whoami failed to refresh auth token: 400 Bad Request; Not logged in. No jez237 upload attempted."
   },
   "visualReview": "process-guides-review.md",
-  "previousPublication": "publication-process-guides-hidden-only.json",
+  "previousPublication": "publication-biofilm.json",
   "limitations": [
     "Original generic teaching diagrams; shapes and timings are illustrative, not manufacturer CAD or measured performance.",
-    "No slow-hardware performance claim. All 3D part, triangle and draw-call counts and the rock asset are unchanged."
-  ],
-  "verifiedAt": "2026-09-29T15:50:12.632Z"
+    "No slow-hardware performance claim. All 3D part, triangle and draw-call counts and the rock asset are unchanged.",
+    "The jez237 production copy remains on the previous authenticated release."
+  ]
 }
