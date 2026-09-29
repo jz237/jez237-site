@@ -66,4 +66,6 @@ export CLOUDFLARE_ACCOUNT_ID
 curl -A "Mozilla/5.0 Hidden Reef Cloudflare verify" -fsSI --max-time 20 \
   https://hidden-reef.pages.dev/ >/dev/null
 
+node "$SCRIPT_DIR/check_pond_filter_links.mjs" https://hidden-reef.pages.dev --hidden-reef
+
 echo "Hidden Reef deployed to Cloudflare with checkout footer links removed."

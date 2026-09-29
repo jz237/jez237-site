@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { checkPhillyLive } from './check_philly_live.mjs';
 import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
+import { checkPondFilterLinks } from './check_pond_filter_links.mjs';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -22,7 +23,13 @@ for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.h
 // A current checkout does not make a reused public upload snapshot current.
 // Reject stale policy/storefront files before they can replace a repaired site.
 for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
-  'prototypes/hidden-reef-header-preview/index.html']) {
+  'prototypes/hidden-reef-header-preview/index.html',
+  'demos/hidden-reef-koi/index.html', 'demos/hidden-reef-koi/koi-pond.html',
+  'demos/koi-pond-garden/index.html', 'demos/koi-pond-garden/koi-pond.html',
+  'prototypes/hidden-reef/learn/koi-pond/index.html',
+  'prototypes/hidden-reef-header-preview/learn/koi-pond/index.html',
+  'prototypes/hidden-reef/assets/pond-preview.js',
+  'prototypes/hidden-reef-header-preview/assets/pond-preview.js']) {
   const expected = readFileSync(resolve(repo, path), 'utf8').replaceAll('\r\n', '\n');
   if (!existsSync(resolve(stage, path))
     || readFileSync(resolve(stage, path), 'utf8').replaceAll('\r\n', '\n') !== expected) {
@@ -49,6 +56,7 @@ async function verifyRelease(url) {
     try {
       await checkPhillyLive(url, fetch, { requireAircraft });
       await checkHiddenReefImages(url);
+      await checkPondFilterLinks(url);
       return;
     }
     catch (error) {

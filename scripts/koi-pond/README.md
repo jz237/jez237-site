@@ -10,7 +10,7 @@ Node 24 or later. No package installation is required; Three.js r160 and dat.GUI
 
 ```sh
 npm test
-npm run build
+npm run build:sites
 python -m http.server 8797 --bind 127.0.0.1 --directory dist
 ```
 
@@ -48,3 +48,5 @@ Interaction tests also exercise fixed-view startup, bounded/reversible zoom, han
 Publish only to GitHub and jez237 until the user accepts this for the Hidden Reef site. The repository's root `AGENTS.md` deployment wrapper must be used to preserve all public assets and Pages Functions. Do not use a standalone static upload for jez237-site.
 
 Previous Blender-authored models and their generator remain archived in the repository's `model-source` directory; the v3 runtime uses the upstream procedural koi with revised kinematics.
+
+The storefronts host the pond at `learn/koi-pond/` and link to their own `learn/filtoclear/` exhibit. `build:sites` synchronizes both demo routes and both storefronts; keep the pond shopping links on the current host.

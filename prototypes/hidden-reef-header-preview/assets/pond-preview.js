@@ -1,8 +1,8 @@
 // Lightweight recorded preview. The interactive pond opens only when requested.
 (() => {
-  const gardenUrl = 'https://jez237.com/demos/hidden-reef-koi/';
   window.THR_POND_PREVIEW = {
     render(section, assetBase) {
+      const gardenUrl = new URL(`${assetBase}/../learn/koi-pond/`, document.baseURI).href;
       section.classList.add('pond-garden-hero');
       section.setAttribute('aria-label', 'Pond and water garden');
       section.innerHTML = `
