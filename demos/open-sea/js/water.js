@@ -21,6 +21,7 @@ uniform vec4 uWake;        // reserved
 out vec3 vRel;
 out vec2 vG;
 out float vJ;
+out vec2 vD;
 void main() {
   // geo-morph: odd lattice vertices slide onto the coarser lattice near the level's outer edge
   vec2 gi = aGrid;
@@ -42,11 +43,12 @@ void main() {
   }
   vec3 rel = vec3(uCenterRel.x + g.x + D.x, D.y - uCamY, uCenterRel.y + g.y + D.z);
   // ship wake (long components only; the fragment stage adds the finer ripples)
-  int wt = uSpacing < 1.0 ? 20 : (uSpacing < 3.0 ? 14 : 8);
-  rel.y += kelvinWake(rel.xz, uSpacing > 12.0 ? 0 : wt).x;
+  // same term count on every level (a per-level count made the rings disagree, leaving cracks at their seams); fades with distance
+  float wfade = 1.0 - smoothstep(120.0, 300.0, length(rel.xz));
+  if (wfade > 0.0) rel.y += kelvinWake(rel.xz, 16).x * wfade;
   float r2 = dot(rel.xz, rel.xz);
   rel.y -= r2 / (2.0 * 6371000.0);
-  vRel = rel; vG = g; vJ = J;
+  vRel = rel; vG = g; vJ = J; vD = D.xz;
   gl_Position = uVP * vec4(rel, 1.0);
 }`;
 
@@ -104,6 +106,7 @@ const WATER_FS = `
 in vec3 vRel;
 in vec2 vG;
 in float vJ;
+in vec2 vD;
 uniform sampler2DArray uSlope;
 uniform sampler2DArray uFoam;
 uniform float uMssRes, uTime, uHs;
@@ -271,7 +274,7 @@ void main() {
         if (z1 < zw) ruv = suv;
         vec3 sc = texture(uScene, ruv).rgb;
         vec3 Tw = exp(-CATT * thick);
-        body = body * (1.0 - Tw) + sc * Tw * (1.0 - F) * exp(-KD * thick * 0.6);
+        body = body * (1.0 - Tw) + sc * Tw * (1.0 - F) * exp(-KD * thick * 1.4);
       }
     }
   }
@@ -283,39 +286,41 @@ void main() {
     float f = texture(uFoam, vec3(cascUV(i, vG), float(i))).x;
     D = max(D, i == 3 ? f * 0.85 : f);
   }
-  D = max(D, min(trail, 1.2) * 0.72);
+  float wnd = smoothstep(3.0, 18.0, uWindSpeed);
+  D = max(D, min(trail, 1.2) * 0.72 * (1.0 - 0.5 * wnd));
   vec3 col = refl + body;
   if (D > 0.012) {
-    float wnd = smoothstep(3.0, 18.0, uWindSpeed);
     vec4 c1 = uCasc[1];
-    vec2 x0 = uNoiseOrg + vec2(c1.y * vG.x + c1.z * vG.y, -c1.z * vG.x + c1.y * vG.y);   // absolute lagrangian metres, cascade-1 frame
+    vec2 gF = vG + 0.6 * vD;   // part of the choppy displacement: the pattern rides with the water without being squeezed to hair on steep fronts
+    vec2 x0 = uNoiseOrg + vec2(c1.y * gF.x + c1.z * gF.y, -c1.z * gF.x + c1.y * gF.y);   // absolute lagrangian metres, cascade-1 frame
     vec2 wl = vec2(c1.y * uWind.x + c1.z * uWind.y, -c1.z * uWind.x + c1.y * uWind.y);
     // foam is dragged into streaks along the wind; wake foam streams along the wake
     vec2 wk = vec2(c1.y * uWakeA.z + c1.z * uWakeA.w, -c1.z * uWakeA.z + c1.y * uWakeA.w);
     float tw = clamp(trail / max(D, 0.02), 0.0, 1.0);
     vec2 dir = normalize(mix(wl, wk, tw * tw) + 1e-4);
     vec2 perp = vec2(-dir.y, dir.x);
-    float stretch = 1.0 + 5.0 * wnd + 3.0 * tw + 0.8;
+    float stretch = 1.2 + 1.0 * wnd + 1.4 * tw;
     vec2 base = vec2(dot(x0, dir) / stretch, dot(x0, perp));
     vec2 pxm = vec2(length(dFdx(base)), length(dFdy(base)));
     float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
     vec2 warp = vec2(vnoise(base * 0.55 + 3.0), vnoise(base * 0.55 + 9.0)) - 0.5;
-    vec2 q = base + warp * 2.6;
-    float l1 = lace(q * 1.3, pm * 1.3), l2 = lace(q * 4.6 + 7.0, pm * 4.6), l3 = lace(q * 16.0 + 3.0, pm * 16.0);
-    float lc = 0.45 * l1 + 0.33 * l2 + 0.22 * l3;
-    // streaky thickness: long along the flow, short across it
-    float st1 = vnoise(vec2(q.x * 0.22, q.y * 1.7) + 21.0), st2 = vnoise(vec2(q.x * 0.6, q.y * 5.3) + 5.0);
+    vec2 q = base + warp * 2.2;
+    float l0 = lace(q * 0.42 + 13.0, pm * 0.42), l1 = lace(q * 1.6, pm * 1.6), l2 = lace(q * 5.5 + 7.0, pm * 5.5), l3 = lace(q * 19.0 + 3.0, pm * 19.0);
+    float lc = 0.22 * l0 + 0.22 * l1 + 0.30 * l2 + 0.26 * l3;
+    // patchy thickness (rafts and gaps), only mildly elongated along the flow
+    float st1 = vnoise(vec2(q.x * 0.42, q.y * 1.3) + 21.0), st2 = vnoise(vec2(q.x * 1.1, q.y * 3.1) + 5.0);
     float streak = st1 * 0.6 + st2 * 0.4;
     float mott = vnoise(q * 0.8 + 41.0) * 0.6 + vnoise(q * 2.9) * 0.4;
-    float t = D * 1.30 + (lc - 0.5) * 0.50 * (1.0 - 0.4 * D) + (streak - 0.5) * 0.95 + (mott - 0.5) * 0.25 - 0.36;
-    float cov = smoothstep(0.0, 0.11, t);
-    float thick = smoothstep(0.05, 0.95, t);
+    float t = (D - 0.42) * 1.9 + (lc - 0.5) * 0.72 * (1.0 - 0.35 * D) + (streak - 0.5) * 0.42 + (mott - 0.5) * 0.30;   // sparse lace where the foam is old, a dense sheet where it is fresh
+    float cov = smoothstep(0.0, 0.05 + 0.10 * smoothstep(0.15, 1.2, pm), t);   // distant patches get soft, broken edges instead of crisp confetti
+    float thick = smoothstep(0.02, 0.55, t);
     // far away, patches are smaller than a pixel: keep their average whiteness as a soft haze instead of speckle
-    float farK = smoothstep(0.35, 1.6, pm);
-    cov = mix(cov, clamp(D * 0.9, 0.0, 1.0), farK);
+    float farK = smoothstep(0.9, 4.5, pm);
+    cov = mix(cov, clamp(D * 0.9 * (0.55 + 0.9 * vnoise(q * 0.13 + 3.0)), 0.0, 1.0), farK);
     thick = mix(thick, D, farK);
     vec3 Efoam = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.6 + 0.4 * n.y);
-    float bubble = mix(0.72, 1.0, l3) * mix(0.82, 1.0, l2);
+    Efoam = mix(vec3(luma(Efoam)), Efoam, 0.6) * 1.18;   // foam scatters light many times: whiter than the light that reaches it
+    float bubble = mix(0.58, 1.0, l3) * mix(0.74, 1.0, l2) * (0.9 + 0.1 * l1);
     float alb = mix(0.30, 0.97, pow(thick, 0.7)) * bubble;
     vec3 foamCol = vec3(alb, alb * 0.996, alb * 0.99) * Efoam / PI * (0.80 + 0.30 * l1);
     // bright bubble-wall highlights facing the sun

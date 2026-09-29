@@ -59,7 +59,7 @@ void main() {
     }
     r = e + 1.49 * 0.25 * a + 1.09 * 0.25 * b + 0.21 * 0.25 * c;
     // skylight is scattered again by ground, sea, cloud and aerosol: the irradiance is less blue than the zenith radiance
-    r = mix(vec3(dot(r, vec3(0.2126, 0.7152, 0.0722))), r, 0.70);
+    r = mix(vec3(dot(r, vec3(0.2126, 0.7152, 0.0722))), r, 0.52);
   } else if (i == 3) {
     // light bounced up from a dark sea: a fraction of what falls on it, tinted teal
     vec3 s = sunIrradiance(0.0) * max(uSunDir.y, 0.0) + moonIrradiance() * max(uMoonDir.y, 0.0);

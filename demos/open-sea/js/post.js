@@ -104,7 +104,7 @@ void main() {
   float l = luma(c);
   c = mix(c, vec3(l), smoothstep(1.0, 8.0, l) * 0.5);
   c = agx(c);
-  c = mix(c, c * c * (3.0 - 2.0 * c), 0.55);   // extra shoulder/toe contrast for a photographic look
+  c = mix(c, c * c * (3.0 - 2.0 * c), 0.38);   // extra shoulder/toe contrast for a photographic look
   float lc = luma(c); c = clamp(mix(vec3(lc), c, 1.14), 0.0, 1.0);
   vec2 q = vUv - 0.5;
   c *= 1.0 - uVignette * smoothstep(0.25, 0.85, dot(q, q) * 1.6);

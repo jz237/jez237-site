@@ -106,7 +106,10 @@ float cloudDensity(vec3 p, float detailAmt) {
     vec3 dn = texture(uDetail, vec3(xz.x, p.y * 1.3, xz.y) / 950.0).rgb;
     float dfbm = dot(dn, vec3(0.625, 0.25, 0.125));
     float hi = mix(dfbm, 1.0 - dfbm, sat(h * 8.0));
-    base = remap(base, hi * 0.5 * detailAmt, 1.0, 0.0, 1.0);
+    // a second, finer erosion octave gives the tops their cauliflower edge and the bases their ragged rims
+    vec3 dn2 = texture(uDetail, vec3(xz.x, p.y * 1.7, xz.y) / 280.0 + 0.37).rgb;
+    float hi2 = mix(dot(dn2, vec3(0.625, 0.25, 0.125)), 1.0 - dot(dn2, vec3(0.625, 0.25, 0.125)), sat(h * 6.0));
+    base = remap(base, (hi * 0.5 + hi2 * 0.22) * detailAmt, 1.0, 0.0, 1.0);
   }
   return sat(base) * mix(1.0, 0.8, uCloudA.y);
 }

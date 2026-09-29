@@ -12,9 +12,9 @@ export const SET = [
   ['01-glass-morning-yacht', 't=7.6&sea=0.3&cloud=0.15&ycam=34,3.2,58'],
   ['02-fresh-noon-glitter', 'noyacht=1&t=13.8&sea=4&cloud=0.3&cam=0,3.2,0,5.3,-0.02'],
   ['03-rough-afternoon-yacht', 't=16.4&sea=6.3&cloud=0.75&ycam=46,11,35'],
-  ['04-storm-dusk-rain-lightning', 't=18.2&sea=8.7&cloud=1&rain=0.9&light=1&ycam=42,7,120'],
-  ['05-sunset-glitter', 'noyacht=1&t=18.55&sea=3&cloud=0.35&cam=0,3.0,0,4.75,0.01'],
-  ['06-moonlit-night', 'noyacht=1&t=23.4&sea=3&cloud=0.15&cam=0,3.0,0,0.9,0.14'],
+  ['04-storm-dusk-rain-lightning', 't=18.2&sea=8.7&cloud=1&rain=0.9&light=1&bolt=0.25&ycam=42,7,120'],
+  ['05-sunset-glitter', 'noyacht=1&t=18.25&sea=3&cloud=0.35&cam=0,3.0,0,4.75,0.01&look=sun,0.05,0.30'],
+  ['06-moonlit-night', 'noyacht=1&t=26&sea=3&cloud=0.08&cam=0,3.0,0,0.9,0.14&look=moon,-0.20,0.15'],
   ['07-underwater-shafts-up', 't=12.6&sea=3&cloud=0.25&under=1&cam=0,-6,0,4.0,0.5'],
   ['08-underwater-fish-hull', 't=12.6&sea=3&cloud=0.25&under=1&ycam=9,-5,80,-3'],
   ['09-yacht-low-close', 't=15.2&sea=3.5&cloud=0.4&ycam=13,1.9,105,3.2'],
@@ -24,7 +24,7 @@ export const SET = [
 ];
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 for (const [name, q] of SET) {
-  if (filter && !name.includes(filter)) continue;
+  if (filter && !new RegExp(filter).test(name)) continue;
   const t0 = Date.now();
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
   const logs = [];

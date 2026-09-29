@@ -98,7 +98,7 @@ export class Trail {
     this.acc = 0;
   }
   // called with a fixed-ish step; the map only needs ~30 Hz
-  update(dt, yacht, time) {
+  update(dt, yacht, time, U = 0) {
     const S = TRAIL_SIZE, m = v => v - Math.floor(v / S) * S;
     const cur = [m(yacht.x), m(yacht.z)];
     const prev = this.prev || cur;
@@ -106,7 +106,7 @@ export class Trail {
     const fwd = [Math.cos(yacht.psi), Math.sin(yacht.psi)];
     bindFBO(this.otherF); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uPrevPos', prev[0], prev[1]).v2('uFwd', fwd[0], fwd[1])
-      .f('uDecay', Math.exp(-dt / 6.5)).f('uAdd', Math.min(dt, 0.1) * 3.2).f('uDiff', 1 - Math.exp(-dt * 1.4)).f('uSize', S).f('uTime', time).f('uSpeedK', speedK)
+      .f('uDecay', Math.exp(-dt / (6.5 / (1 + 0.9 * Math.min(1, Math.max(0, (U - 3) / 15)))))).f('uAdd', Math.min(dt, 0.1) * 3.2).f('uDiff', 1 - Math.exp(-dt * 1.4)).f('uSize', S).f('uTime', time).f('uSpeedK', speedK)
       .v4('uWakeA', 0, 0, 1, 0).v4('uWakeB', 0, 0, 0, 0);
     drawFS();
     [this.cur, this.other] = [this.other, this.cur]; [this.curF, this.otherF] = [this.otherF, this.curF];

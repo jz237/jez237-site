@@ -234,7 +234,7 @@ export class Sky {
 
   setLightUniforms(p, s, camAlt) {
     p.v3('uSunDir', s.sunDir).v3('uSunCol', s.sunCol).v3('uMoonDir', s.moonDir).v3('uMoonCol', s.moonCol)
-      .v3('uAirglow', s.airglow).f('uCamAlt', camAlt).f('uHaze', s.haze);
+      .v3('uAirglow', s.airglow).f('uCamAlt', camAlt).f('uHaze', s.haze).f('uOvercast', s.overcast || 0);
   }
 
   updateLUT(s, camAlt) {
