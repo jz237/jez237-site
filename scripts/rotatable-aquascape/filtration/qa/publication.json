@@ -1,20 +1,20 @@
 {
-  "sourceCommit": "96ec78d70cea6c9ac23f85a299f0dcffed721b80",
-  "testedBuildHash": "8eee3ccd049b154e88980b1f5bf0c032dcc9571e77e94b46b0710b8013c0332f",
-  "publishedAt": "2026-09-29T02:50:04.492355+00:00",
-  "status": "Hidden Reef and GitHub published; jez237 deployment awaiting renewed account login",
+  "sourceCommit": "11298574bc1078a5b2b2afedee0bd0ac690f8430",
+  "testedBuildHash": "bffd872a2c195655852c23379e6887038440565cc443c07504d364de61d129f9",
+  "publishedAt": "2026-09-29T03:58:56.904Z",
+  "status": "Hidden Reef and GitHub published; jez237 still awaits renewed account login",
   "hiddenReef": {
-    "deploymentSourceCommit": "96ec78d70cea6c9ac23f85a299f0dcffed721b80",
-    "preview": "https://4b37a7de.hidden-reef.pages.dev",
+    "deploymentSourceCommit": "11298574bc1078a5b2b2afedee0bd0ac690f8430",
+    "preview": "https://c7478739.hidden-reef.pages.dev",
     "previewVerification": {
-      "base": "https://4b37a7de.hidden-reef.pages.dev",
-      "checkedAt": "2026-09-29T02:43:05.023Z",
+      "base": "https://c7478739.hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T03:56:03.865Z",
       "assets": [
         "reef/./assets/index-Di90eq1i.js",
         "reef/./assets/index-DBjqBxyQ.css",
-        "filtration/./assets/index-DPpNs5tW.js",
+        "filtration/./assets/index-CoUZZ_hP.js",
         "filtration/./assets/index-vl4A24zB.css",
-        "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+        "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
         "learn/filtoclear/index.html",
         "learn/filtoclear/model.js"
       ],
@@ -28,21 +28,21 @@
       "cacheHeaders": {
         "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
         "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-DPpNs5tW.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-CoUZZ_hP.js": "public, max-age=31536000, immutable",
         "filtration/./assets/index-vl4A24zB.css": "public, max-age=31536000, immutable"
       }
     },
     "production": "https://hidden-reef.pages.dev/showroom/filtration/",
-    "deployment": "https://360c277d.hidden-reef.pages.dev",
+    "deployment": "https://9b18cefc.hidden-reef.pages.dev",
     "verification": {
       "base": "https://hidden-reef.pages.dev",
-      "checkedAt": "2026-09-29T02:45:43.589Z",
+      "checkedAt": "2026-09-29T03:58:15.898Z",
       "assets": [
         "reef/./assets/index-Di90eq1i.js",
         "reef/./assets/index-DBjqBxyQ.css",
-        "filtration/./assets/index-DPpNs5tW.js",
+        "filtration/./assets/index-CoUZZ_hP.js",
         "filtration/./assets/index-vl4A24zB.css",
-        "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+        "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
         "learn/filtoclear/index.html",
         "learn/filtoclear/model.js"
       ],
@@ -56,7 +56,7 @@
       "cacheHeaders": {
         "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
         "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
-        "filtration/./assets/index-DPpNs5tW.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-CoUZZ_hP.js": "public, max-age=31536000, immutable",
         "filtration/./assets/index-vl4A24zB.css": "public, max-age=31536000, immutable"
       }
     }
@@ -107,12 +107,14 @@
         ],
         "passed": true
       }
-    }
+    },
+    "lastLoginCheck": "2026-09-29T03:58:56.904Z",
+    "latestLoginResult": "Wrangler whoami failed to refresh auth token: 400 Bad Request; Not logged in. No jez237 upload attempted."
   },
-  "visualReview": "roller-review.md",
-  "previousPublication": "publication-system.json",
+  "visualReview": "skimmer-rock-review.md",
+  "previousPublication": "publication-roller.json",
   "limitations": [
-    "Richer roller materials add draw calls and some frame-rate cost; measured ranges are in roller-review.md. Low-end hardware was not tested.",
-    "Microscopic fibers and wet reflections remain simpler than the reference; photographic parity is not claimed."
+    "The reference images guide appearance; wet optics, rock structure and foam remain illustrative. Photographic parity is not claimed.",
+    "Desktop measurements remained around 60 FPS, but added materials and hardware increase CPU work and draw calls. Slow-computer performance is unverified."
   ]
 }
