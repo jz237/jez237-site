@@ -5,6 +5,7 @@ import type {Part} from './model.ts';
 import {addSurfaceDetail} from './SurfaceDetail.ts';
 import {detailSump} from './SumpDetail.ts';
 import {detailRoller} from './RollerDetail.ts';
+import {detailSkimmer} from './SkimmerDetail.ts';
 
 // Generated product references guide appearance. Dimensions and assembly remain teaching models.
 const TAU=Math.PI*2;
@@ -52,7 +53,7 @@ export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  const base=detail('skimmer-base');for(let i=0;i<8;i++){const a=i/8*TAU;bolt(base,[Math.cos(a)*.94,.14,Math.sin(a)*.94],m,'y');}
  const chamber=detail('reaction-body');add(chamber,vessel(.91,.91,.52),m.shell,[0,-1.08,0]);annulus(chamber,[0,-1.34,0],.95,.85,.055,m.white);annulus(chamber,[0,-.825,0],.94,.86,.07,m.white);annulus(chamber,[0,.83,0],.415,.34,.055,m.white);for(let i=0;i<6;i++){const a=i/6*TAU;bolt(chamber,[Math.cos(a)*.9,-1.29,Math.sin(a)*.9],m,'y',.025);}
  const skimmerMotor=get('skimmer-pump');skimmerMotor.clear();const housing=cyl(skimmerMotor,[0,0,0],.23,.5,m.white);housing.rotation.x=Math.PI/2;for(let i=0;i<12;i++){const a=i/12*TAU;const rib=box(skimmerMotor,[Math.cos(a)*.23,Math.sin(a)*.23,0],[.025,.04,.42],m.dark);rib.rotation.z=a-Math.PI/2;}box(skimmerMotor,[0,-.17,0],[.63,.12,.53],m.white);for(const x of [-.23,.23])bolt(skimmerMotor,[x,.03,.26],m,'z',.025);tube(skimmerMotor,[[-.16,0,-.26],[-.32,.07,-.33],[-.37,.33,-.65]],.024,m.rubber);mergeStatic(skimmerMotor);
- const cup=detail('cup');annulus(cup,[0,-.32,0],.8,.33,.045,edge);annulus(cup,[0,.31,0],.8,.744,.032,m.white);tube(cup,[[.72,-.21,0],[.9,-.22,0],[.96,-.42,0]],.034,m.rubber);
+ const cup=detail('cup');annulus(cup,[0,-.32,0],.8,.33,.045,edge);annulus(cup,[0,.31,0],.8,.744,.032,m.white);
  const neck=detail('neck');union(neck,[0,-.3,0],.385,m);
  const lid=get('cup-lid');(lid.children[0] as T.Mesh).material=m.white;const ld=detail('cup-lid');annulus(ld,[0,.05,0],.78,.75,.01,m.rubber);for(let i=0;i<8;i++){const a=i/8*TAU;bolt(ld,[Math.cos(a)*.7,.063,Math.sin(a)*.7],m,'y',.019);}
  const out=detail('skimmer-outlet');union(out,[.32,.52,0],.2,m);for(let i=0;i<10;i++){const a=i/10*TAU;box(out,[.32+Math.cos(a)*.17,.81,Math.sin(a)*.17],[.024,.14,.024],m.dark);}
@@ -71,19 +72,17 @@ export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  torus(screen,[0,0,-.13],.455,.018,m.teal,'z');
  for(const a of [.25,2.35,4.45])bolt(screen,[Math.cos(a)*.412,Math.sin(a)*.412,.153],m,'z',.019);
  mergeStatic(screen);
- const foam=new T.BufferGeometry(),count=3200,fp=new Float32Array(count*3),random=rng(88);for(let i=0;i<count;i++){const a=random()*TAU,r=Math.sqrt(random())*.28;fp[i*3]=Math.cos(a)*r;fp[i*3+1]=2.55+random()*.58;fp[i*3+2]=Math.sin(a)*r;}foam.setAttribute('position',new T.BufferAttribute(fp,3));const cloud=new T.Points(foam,new T.PointsMaterial({color:0xc1a77a,map:bubbleMap,size:.041,transparent:true,opacity:.7,depthWrite:false,alphaTest:.02}));groups.skimmer.add(cloud);
  const fine=addSurfaceDetail(parts,groups,m);
  const sump=detailSump(parts,groups,m);
  const roller=detailRoller(parts,groups,m);
+ const skimmer=detailSkimmer(parts,groups,m);
  for(const p of parts){if(!['clean-roll','waste-roll','pump-rotor','needle-wheel'].includes(p.id))batchPart(p.group);else{for(const c of p.group.children)if(c instanceof T.Group)batchPart(c);}}
  rootShadows();function rootShadows(){for(const g of Object.values(groups))g.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.Material;o.castShadow=!material.transparent;o.receiveShadow=!material.transparent;}});}
- return {visibility:(visible:boolean)=>{cloud.visible=visible;fine.visibility(visible);sump.visibility(visible);roller.visibility(visible);},update:(time:number)=>{fine.update(time);sump.update(time);roller.update(time);for(let i=0;i<count;i++)fp[i*3+1]=2.56+((i*.618/count+time*.047)%1)*.6;foam.attributes.position.needsUpdate=true;}};
+ return {visibility:(visible:boolean)=>{fine.visibility(visible);sump.visibility(visible);roller.visibility(visible);skimmer.visibility(visible);},update:(time:number)=>{fine.update(time);sump.update(time);roller.update(time);skimmer.update(time);}};
 }
 
 export function rockMaterial(){
- const pits=texture((c,n)=>{const random=rng(492);c.fillStyle='#999';c.fillRect(0,0,n,n);for(let i=0;i<5300;i++){const x=random()*n,y=random()*n,r=.5+random()*3;const g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'#222');g.addColorStop(.4,'#555');g.addColorStop(.7,'#bcbcbc');g.addColorStop(1,'#999');c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2);}});
- // Mineral flecks and dark pore centers break up the broad coralline color patches.
- const mineral=texture((c,n)=>{const random=rng(328),data=c.createImageData(n,n);for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4,v=183+random()*66+6*Math.sin(x*.12)*Math.cos(y*.17);data.data[i]=v;data.data[i+1]=v*.985;data.data[i+2]=v*.95;data.data[i+3]=255;}c.putImageData(data,0,0);for(let i=0;i<3200;i++){const x=random()*n,y=random()*n,r=.3+random()*1.8;c.fillStyle=random()>.35?'rgba(51,40,25,.32)':'rgba(255,249,231,.55)';c.beginPath();c.ellipse(x,y,r,r*.65,random()*TAU,0,TAU);c.fill();}});
- mineral.colorSpace=T.SRGBColorSpace;
- return new T.MeshStandardMaterial({color:0xffffff,vertexColors:true,map:mineral,roughness:.57,bumpMap:pits,bumpScale:.027,metalness:0});
+ const pits=texture((c,n)=>{const random=rng(492);c.fillStyle='#aaa';c.fillRect(0,0,n,n);for(let i=0;i<19000;i++){const x=random()*n,y=random()*n,r=.6+Math.pow(random(),2)*5.5,g=c.createRadialGradient(x-r*.12,y-r*.1,0,x,y,r);g.addColorStop(0,'#242424');g.addColorStop(.38,'#555');g.addColorStop(.69,'#dedede');g.addColorStop(1,'#aaa');c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2);}for(let i=0;i<3500;i++){c.strokeStyle='rgba(50,50,50,.35)';c.lineWidth=.7;const x=random()*n,y=random()*n;c.beginPath();c.moveTo(x,y);c.lineTo(x+random()*8,y+random()*7);c.stroke();}},1024);
+ const mineral=texture((c,n)=>{const random=rng(328);c.fillStyle='#e2dcd1';c.fillRect(0,0,n,n);for(let i=0;i<27000;i++){const x=random()*n,y=random()*n,r=.3+Math.pow(random(),3)*4;c.fillStyle=random()>.48?'rgba(52,44,31,.32)':'rgba(255,251,235,.52)';c.beginPath();c.ellipse(x,y,r,r*.6,random()*TAU,0,TAU);c.fill();}},1024);mineral.colorSpace=T.SRGBColorSpace;
+ return new T.MeshPhysicalMaterial({color:0xffffff,vertexColors:true,map:mineral,roughness:.66,bumpMap:pits,bumpScale:.044,metalness:0,clearcoat:.16,clearcoatRoughness:.4});
 }
