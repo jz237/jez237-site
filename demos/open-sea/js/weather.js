@@ -60,7 +60,7 @@ void main() {
   if (vAlpha <= 0.001) discard;
   vec3 dir = normalize(vRel);
   // drops refract and reflect the surroundings: a blend of sky brightness and direct light
-  vec3 col = envRadiance(normalize(vec3(dir.x, 0.35, dir.z)), 3.0) * 1.4 + lightSun() * 0.06 * cloudShadowAt(vRel.xz) + lightSky() * 0.05 / PI;
+  vec3 col = envRadiance(normalize(vec3(dir.x, 0.35, dir.z)), 3.0) * 1.05 + lightSun() * 0.06 * cloudShadowAt(vRel.xz) + lightSky() * 0.05 / PI;
   col += lightMoon() * 0.05;
   o = vec4(col, vAlpha);
 }`;

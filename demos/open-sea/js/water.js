@@ -60,11 +60,11 @@ uniform vec2 uNoiseOrg;    // level centre in the cascade-1 frame (metres, unwra
 vec2 cascUV(int i, vec2 g) {
   vec4 c = uCasc[i];
   vec2 uv = uCen[i] + vec2(c.y * g.x + c.z * g.y, -c.z * g.x + c.y * g.y) * c.x;
-  if (i >= 3) {
+  if (i >= 2) {
     // smooth low-frequency warp of the finest cascades breaks up the visible repetition of their tiles
     vec4 c1 = uCasc[1];
     vec2 a = uNoiseOrg + vec2(c1.y * g.x + c1.z * g.y, -c1.z * g.x + c1.y * g.y);
-    float sc = i == 3 ? 130.0 : 60.0, amp = i == 3 ? 20.0 : 9.0;
+    float sc = i == 2 ? 330.0 : (i == 3 ? 130.0 : 60.0), amp = i == 2 ? 16.0 : (i == 3 ? 20.0 : 9.0);
     vec2 w = vec2(vnoise(a / sc), vnoise(a / sc + 17.3)) * 2.0 - 1.0;
     uv += w * amp * c.x;
   }
@@ -235,6 +235,7 @@ void main() {
   float lodR = clamp(log2(1.0 + sqrt(sigma2) * 40.0) * 1.2, 0.0, 6.0);
   vec3 Lsky = envRadiance(R, lodR);
   float F = fresnelRough(nv, sigma2);
+  F = mix(F, 1.0, 0.4 * (1.0 - smoothstep(0.03, 0.22, nv)));   // shadowing/multiple bounces keep even rough water reflective at grazing
   vec3 refl = F * Lsky * mix(0.35, 1.0, below);
   if (uReflOn > 0.5) {
     // mirror image of the yacht, distorted by the local wave slope and blurred by the roughness
@@ -249,12 +250,17 @@ void main() {
   // The slope variance below the mesh/texture resolution is drawn as individual facets: each footprint-sized cell of
   // water gets its own random tilt, so the mean lobe is unchanged but a still frame shows discrete sparkles.
   float jv = 0.5 * uMssRes * mix(gk, 1.0, 0.5) * 0.85;
-  vec2 cid = floor(gx / max(0.03, dist * 0.0011));
+  float fpm = max(length(dFdx(gx)), length(dFdy(gx)));             // ground footprint of a pixel (m)
+  float jk = 1.0 - smoothstep(0.12, 0.9, fpm);                     // far away a pixel holds thousands of facets: use the smooth statistical lobe
+  jv *= jk;
+  vec2 cid = floor(gx / max(0.03, fpm * 0.8));
   vec2 hh = hash22(cid + 17.0);
   vec2 gj = sqrt(-2.0 * log(max(hh.x, 1e-3))) * vec2(cos(6.2831853 * hh.y), sin(6.2831853 * hh.y));
   vec3 nj = normalize(vec3(-(S.x + gj.x * sqrt(jv)), 1.0, -(S.y + gj.y * sqrt(jv))));
   float alphaJ = max(2.0 * (sigma2 - jv), 4.4e-5);
-  vec3 spec = glitter(nj, V, uSunDir, sunE, alphaJ) + glitter(nj, V, uMoonDir, moonE, alphaJ);
+  // a glint needs the sun disc itself: thin cloud gives diffuse light, not a mirror image
+  float discVis = smoothstep(0.55, 0.92, shadow);
+  vec3 spec = glitter(nj, V, uSunDir, sunE * discVis, alphaJ) + glitter(nj, V, uMoonDir, moonE * discVis, alphaJ);
 
   // ---- water body: light scattered up out of the sea --------------------------------------
   float worldY = rel.y + uCamAbs.y;

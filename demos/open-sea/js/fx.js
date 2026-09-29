@@ -100,7 +100,7 @@ uniform float uUnder, uSurfY;
 uniform float uRain, uTime, uCloudBase, uFlash;
 out vec4 o;
 vec3 uSunW, uBeamCol, uEd0;
-const float BSC = 0.055;                        // scattering coefficient (1/m)
+const float BSC = 0.085;                        // scattering coefficient (1/m)
 
 float hg(float c, float g) { float g2 = g * g; return (1.0 - g2) / (4.0 * PI * pow(1.0 + g2 - 2.0 * g * c, 1.5)); }
 float causticGain(vec3 p, float z, float dt) { return causticGainRel(p - uCam, z, uSunW, dt); }
