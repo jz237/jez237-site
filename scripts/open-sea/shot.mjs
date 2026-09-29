@@ -23,7 +23,7 @@ const res = await page.evaluate(async ([warm, frames]) => {
   let r; for (let i = 0; i < frames; i++) r = s.shot(0.033);
   return r;
 }, [parseFloat(warm), parseInt(frames)]);
-const png = await page.screenshot({ type: 'png' });
+const png = await page.screenshot({ type: 'png', timeout: 240000 });
 writeFileSync(out, png);
 console.log(JSON.stringify(res), `${((Date.now() - t0) / 1000).toFixed(1)}s`);
 for (const l of logs.slice(0, 30)) console.log(l);

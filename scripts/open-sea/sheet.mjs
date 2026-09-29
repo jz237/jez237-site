@@ -19,7 +19,7 @@ for (const q of list) {
   await page.waitForFunction(() => window.__seaReady, null, { timeout: 60000 }).catch(() => {});
   if (!(await page.evaluate(() => !!window.__sea))) { console.log(q, 'LOAD FAILED', logs.join('\n')); process.exit(2); }
   await page.evaluate(async ([w]) => { const s = window.__sea; await s.warm(w, 0.1); s.shot(0.033); s.shot(0.033); }, [parseFloat(warm)]);
-  pngs.push(await page.screenshot({ type: 'png' }));
+  pngs.push(await page.screenshot({ type: 'png', timeout: 240000 }));
   if (logs.length) console.log(q, logs.slice(0, 3));
   await page.close();
 }

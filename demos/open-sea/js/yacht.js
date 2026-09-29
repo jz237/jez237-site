@@ -47,6 +47,7 @@ const YACHT_FS = `
 #include <atmo>
 #include <atmo.sample>
 #include <lighting>
+#include <underwater>
 in vec3 vLocal;
 in vec3 vN;
 in vec3 vRel;
@@ -154,6 +155,14 @@ void main() {
   vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - max(dot(N, V), 0.0), 5.0);
   col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : 1.0);
 
+  // parts below the waterline are lit by the light that made it through the surface, not by the sky
+  float sub = smoothstep(0.02, -0.10, p.y);
+  if (sub > 0.0) {
+    vec3 sunWv, beamV, Ed0;
+    underwaterLight(sunWv, beamV, Ed0);
+    vec3 uwl = albedo * (Ed0 * (0.5 + 0.5 * clamp(N.y + 0.3, 0.0, 1.0)) + beamV * max(dot(N, -sunWv), 0.0) * 0.6) / PI;
+    col = mix(col, uwl, sub);
+  }
   // aerial perspective
   float dist = length(vRel);
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001;
@@ -371,7 +380,7 @@ export class Yacht {
     const setCommon = (p) => {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
-      p.v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
+      p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
       p.v3v('uMainTri', flat(mainTri)).v3v('uJibTri', flat(jibTri)).f('uWet', 1);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
