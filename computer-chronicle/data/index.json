@@ -2,6 +2,235 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-29",
+      "historicDate": "1984-10-15",
+      "displayDate": "Week of October 15-21, 1984",
+      "edition": "Issue 116 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A $300 computer with software in ROM meets $40 strategy games and arcade favorites on disk.",
+      "leadHeadline": "Commodore Readies the Plus/4 for the Holiday Shelf",
+      "storyHeadlines": [
+        "Archon II and Skyfox broaden Electronic Arts’ games line",
+        "Spy Hunter and Tapper arrive on home computers",
+        "A color printer for the home desk at $239",
+        "IBM tries a second act for the PCjr"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-15.png",
+      "thumb": "media/thumbs/1984-10-15.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-28",
+      "historicDate": "1984-10-08",
+      "displayDate": "Week of October 8-14, 1984",
+      "edition": "Issue 115 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A campaign on disk, a fresh keyboard, and a busy modem line mark October at the computer shop.",
+      "leadHeadline": "Computer Games Claim the Fall Spotlight",
+      "storyHeadlines": [
+        "IBM Tries to Rescue the PCjr Before Christmas",
+        "Macintosh Owners Begin Looking Under the Hood",
+        "Home-Computer Forecasts Outrun the Console Market"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-08.png",
+      "thumb": "media/thumbs/1984-10-08.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-27",
+      "historicDate": "1984-10-01",
+      "displayDate": "Week of October 1-7, 1984",
+      "edition": "Issue 114 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A starship, a store shelf, and a modem line: the home computer has places to go.",
+      "leadHeadline": "Sundog Opens a Galaxy Behind the Apple II Screen",
+      "storyHeadlines": [
+        "Game Designers Take Questions Over the Modem",
+        "Spy Hunter and Tapper Head for the Home Screen",
+        "Commodore Aims the Plus/4 at the Household Desk",
+        "Atari’s New Owner Confronts the Next Machine"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-01.png",
+      "thumb": "media/thumbs/1984-10-01.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-26",
+      "historicDate": "1984-09-24",
+      "displayDate": "Week of September 24-30, 1984",
+      "edition": "Issue 113 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: Lucasfilm’s first games claim the cover, while Prince moves to number one.",
+      "leadHeadline": "Lucasfilm Brings Movie-Scale Worlds to the Game Screen",
+      "storyHeadlines": [
+        "Seven Cities of Gold Makes the Map the Adventure",
+        "Ultima III Packs a Whole Campaign into a Box",
+        "Educational Software Claims More of the Home Screen",
+        "The Modem Buyer Meets the Telephone Line"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-24.png",
+      "thumb": "media/thumbs/1984-09-24.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-25",
+      "historicDate": "1984-09-17",
+      "displayDate": "Week of September 17-23, 1984",
+      "edition": "Issue 112 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: Elite takes off, and the computer-game horizon suddenly looks vast.",
+      "leadHeadline": "Elite Opens a Galaxy of Trade and Combat on the BBC Micro",
+      "storyHeadlines": [
+        "Seven Cities of Gold Sends Players Across an Uncharted Map",
+        "Ultima III Turns Fantasy Quest into a Four-Character Expedition",
+        "Word Flyer Makes Reading Practice a Shared Game",
+        "The Fat Mac Gives Macintosh Four Times the Memory"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-17.png",
+      "thumb": "media/thumbs/1984-09-17.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-09-23",
+      "historicDate": "1984-09-10",
+      "displayDate": "Week of September 10-16, 1984",
+      "edition": "Issue 111 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: the Macintosh gets 512K, and the game shelf ignores hardware boundaries.",
+      "leadHeadline": "Apple Unveils a 512K Macintosh",
+      "storyHeadlines": [
+        "AtariSoft Sends Arcade Favorites Across the Home-Computer Aisle",
+        "PC Compatibles Compete on Price, Portability and Speed",
+        "Framework Packs Six Office Tools Into One Box"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-10.jpg",
+      "thumb": "media/thumbs/1984-09-10.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-22",
+      "historicDate": "1984-09-03",
+      "displayDate": "Week of September 3-9, 1984",
+      "edition": "Issue 110 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: Hubot promises a robotic companion for the living room, even if the chores remain yours.",
+      "leadHeadline": "The $4,000 Robot Rolls Into the Home",
+      "storyHeadlines": [
+        "Digital Equipment Pays $1.1 Million Export Fine",
+        "September's PC Market Fills With Compatibles and Databases",
+        "Hard Disks Promise to End Macintosh Floppy Shuffling"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-03.jpg",
+      "thumb": "media/thumbs/1984-09-03.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-21",
+      "historicDate": "1984-08-27",
+      "displayDate": "Week of August 27-September 2, 1984",
+      "edition": "Issue 109 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Amiga changes hands, the PC/AT flexes its muscle, and adventurous games redraw the home-computer map.",
+      "leadHeadline": "Commodore Bets on Amiga's High-Tech Macintosh Rival",
+      "storyHeadlines": [
+        "IBM's PC/AT Launch Echoes Through the Week",
+        "Home-Computer Games Move Beyond the Arcade Formula",
+        "Macintosh and PCjr Face the Review Bench"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-27.jpg",
+      "thumb": "media/thumbs/1984-08-27.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-20",
+      "historicDate": "1984-08-20",
+      "displayDate": "Week of August 20-26, 1984",
+      "edition": "Issue 108 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The AT sets a new pace, software owns the showroom, and home computers find fresh routes onto the telephone line.",
+      "leadHeadline": "IBM's PC/AT Pushes Personal Computing Into a New Generation",
+      "storyHeadlines": [
+        "Software Becomes the Home-Computer Show's Main Event",
+        "Low-Cost Adapters Put Atari and Apple Owners on the Line",
+        "Infocom Sends Adventurers Diving for Treasure in Cutthroats"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-20.jpg",
+      "thumb": "media/thumbs/1984-08-20.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-09-19",
+      "historicDate": "1984-08-13",
+      "displayDate": "Week of August 13-19, 1984",
+      "edition": "Issue 107 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The AT arrives, adventures keep adults up late, and 1200-baud life gathers speed.",
+      "leadHeadline": "IBM's PC/AT Opens a Second Generation of Personal Computing",
+      "storyHeadlines": [
+        "DOS 3.0 and PC Network Prepare IBM Machines to Share",
+        "Home-Computer Adventures Hook a Growing Adult Audience"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-13.jpg",
+      "thumb": "media/thumbs/1984-08-13.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-09-18",
+      "historicDate": "1984-08-06",
+      "displayDate": "Week of August 6-12, 1984",
+      "edition": "Issue 106 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Amiga shows its colors, Symphony meets Framework, and Marvel's Hulk crashes into the adventure-game aisle.",
+      "leadHeadline": "Behind Closed Doors, Amiga's Lorraine Points to a New Generation",
+      "storyHeadlines": [
+        "Symphony and Framework Fight to Define Integrated Software",
+        "Compaq Deskpro Turns Compatibility into a Speed Contest",
+        "Questprobe Sends the Hulk into the Adventure Machine",
+        "IBM's Price Cuts Put PC-Compatible Makers in a Squeeze"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-06.jpg",
+      "thumb": "media/thumbs/1984-08-06.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-17",
+      "historicDate": "1984-07-30",
+      "displayDate": "Week of July 30-August 5, 1984",
+      "edition": "Issue 105 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Public-domain programs dial into homes, Tramiel starts remaking Atari, and Shadowkeep crosses from disk to novel.",
+      "leadHeadline": "Free Software Travels the Phone Lines",
+      "storyHeadlines": [
+        "Tramiel Takes Atari and the Ax Falls",
+        "A Fantasy Computer Game Becomes a Novel",
+        "BYTE Surveys the Small-System Frontier"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-30.jpg",
+      "thumb": "media/thumbs/1984-07-30.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-16",
+      "historicDate": "1984-07-23",
+      "displayDate": "Week of July 23-29, 1984",
+      "edition": "Issue 104 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Game makers test the boundaries of copying as Atari reorganizes and Apple turns up the Macintosh line.",
+      "leadHeadline": "Activision Forces 'Cuthbert in the Jungle' Off the Market",
+      "storyHeadlines": [
+        "Tramiel's Atari Shake-Up Reaches Britain",
+        "Apple Plans to Double Macintosh Production",
+        "A Computer Fantasy Game Becomes an Alan Dean Foster Novel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-23.jpg",
+      "thumb": "media/thumbs/1984-07-23.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-15",
+      "historicDate": "1984-07-16",
+      "displayDate": "Week of July 16-22, 1984",
+      "edition": "Issue 103 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The modem line meets the law while Atari changes hands and software prices tumble.",
+      "leadHeadline": "FBI Seizes Home Computers in Huntsville Hacker Probe",
+      "storyHeadlines": [
+        "Tramiel Takes Atari Into a New, Hard-Cost Era",
+        "Imagine Software's Million-Pound Dream Bursts",
+        "Apple IIc Brings 128K and Plug-In Simplicity Home",
+        "£1.99 Games Ignite a British Software Price War"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-16.jpg",
+      "thumb": "media/thumbs/1984-07-16.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-14",
       "historicDate": "1984-07-09",
       "displayDate": "Week of July 9-15, 1984",
