@@ -10,7 +10,7 @@ const base = process.env.SEA_URL || 'http://localhost:8791/demos/open-sea/index.
 mkdirSync(outDir, { recursive: true });
 export const SET = [
   ['01-glass-morning-yacht', 't=7.6&sea=0.3&cloud=0.15&ycam=34,3.2,58'],
-  ['02-fresh-noon-glitter', 'noyacht=1&t=13.8&sea=4&cloud=0.3&cam=0,3.2,0,5.3,-0.02'],
+  ['02-fresh-noon-glitter', 'noyacht=1&t=16.6&sea=4&cloud=0.3&cam=0,3.2,0,5.3,-0.02&look=sun,-0.36,0.0'],
   ['03-rough-afternoon-yacht', 't=16.4&sea=6.3&cloud=0.75&ycam=46,11,35'],
   ['04-storm-dusk-rain-lightning', 't=18.2&sea=8.7&cloud=1&rain=0.9&light=1&bolt=0.25&ycam=42,7,120'],
   ['05-sunset-glitter', 'noyacht=1&t=18.25&sea=3&cloud=0.35&cam=0,3.0,0,4.75,0.01&look=sun,0.05,0.30'],
