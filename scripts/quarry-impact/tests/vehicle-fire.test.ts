@@ -9,6 +9,7 @@ import type {Vehicle} from '../src/vehicle';
 import {DEFINITIONS} from '../src/rules';
 import {DAYLIGHT_DIRECTION} from '../src/static-shadows';
 import {restoreFireBytes} from './fire-invariants';
+import {restoreWreckFinishBytes} from './wreck-finish-invariants';
 import {Effects} from '../src/effects';
 import type R from '@dimforge/rapier3d-compat';
 test('damage causes progressive fire; only a catastrophic final blow bursts once per repair',()=>{
@@ -48,7 +49,7 @@ test('actual renderer keeps bounded world-space plumes at rotated engine bays an
 test('fire revision preserves prior sources, simulation and original 35 ElevenLabs clips',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const revision=JSON.parse(read('source/fire-revision.json').toString());
- for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restoreFireBytes(p,read(p))),e.before,p);}
+ for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreWreckFinishBytes(p,read(p))),e.after,p);assert.equal(hash(restoreFireBytes(p,read(p))),e.before,p);}
  const record=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(record.sourceHashes))assert.equal(hash(read(p)),h,p);
  const audio=JSON.parse(read('public/audio/manifest.json').toString());assert.equal(audio.length,38);
  for(const clip of audio){assert.equal(hash(read('source/audio/'+clip.id+'.mp3')),clip.sha256);if(clip.runtimeSha256)assert.equal(hash(read('public/audio/'+clip.file)),clip.runtimeSha256);}

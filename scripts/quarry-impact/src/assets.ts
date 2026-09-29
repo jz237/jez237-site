@@ -7,6 +7,7 @@ import { finishGlass, finishPaint } from './car-materials';
 import { configureCoupe } from './coupe-realism';
 import { prepareWreckGeometry } from './wreck-geometry';
 import { wreckTopology } from './wreck-topology';
+import { alignWreckSeams } from './wreck-seams';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -63,6 +64,10 @@ export async function loadCars(progress: (s: string) => void) {
   for (const kind of ['coupe', 'sedan', 'hatch'] as CarKind[]) {
     progress('Preparing ' + kind + ' bodywork');
     const gltf = await loader.loadAsync(url('models/' + kind + '.glb'));
+    alignWreckSeams(gltf.scene);
+    // Keep the window seals with the moving door instead of batching them
+    // into a fixed material group across the whole car.
+    gltf.scene.traverse(o=>{if(o.name.startsWith('seal_BodyDoor'))o.name='panel_'+o.name;});
     batch(gltf.scene, true);
     // Shared refined templates are built once. Cars clone their deformable
     // buffers; no remeshing, loading or asynchronous work occurs during a hit.

@@ -20,7 +20,7 @@ import { VehicleFire } from './vehicle-fire';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
 import { OnlineUI } from './online-ui';
-import { scenerySurfaceHeight, quarryExtensionHeight, quarryWestWallHeight } from './quarry-layout';
+import { scenerySurfaceHeight, quarryExtensionHeight, quarryWestWallHeight, landscapeHeight } from './quarry-layout';
 import {
   DEFINITIONS,
   clamp,
@@ -689,9 +689,9 @@ function finish(title: string) {
     keys.clear(); testInput = null; accumulator = 0;
     for (const car of cars) { car.input = {throttle:0,steer:0,brake:1,handbrake:false}; car.render(1); }
     const player = cars[0];
-    const offset = new T.Vector3(-4.2, 1.8, 5.2).applyQuaternion(player.currentQ);
-    // Keep the inspection camera above a rolled car, including hood-camera losses.
-    offset.y = 1.8; camera.position.copy(player.current).add(offset);
+    const offset = player.wreckParts.inspectionOffset(player.currentQ);
+    camera.position.copy(player.current).add(offset);
+    camera.position.y=Math.max(camera.position.y,landscapeHeight(camera.position.x,camera.position.z)+1.2);
     camera.fov = 52; camera.updateProjectionMatrix();
     orbit.target.copy(player.current); orbit.enabled = true; orbit.update();
     ui.innerHTML = '<div class="wreck-note"><strong>WRECKED OUT</strong><span>DRAG TO LOOK AROUND &middot; SCROLL TO ZOOM</span><span>RETURNING TO QUARRY IN <b id="wreck-count">5</b></span></div>';
@@ -889,6 +889,7 @@ function frame(now: number) {
     if (wreckHold === 0) { createCars(true); menu(); }
   }
   updateCamera(dt);
+  for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();}
   const effectsActive=['playing','countdown','wrecked'].includes(state);
   vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
@@ -1172,6 +1173,9 @@ async function boot() {
       cars.map((c) => ({
         id: c.id,
         panels: c.panels.length,
+        burn: c.wreckFinish.soot.value,
+        loose: c.wreckParts.assemblies.filter(a=>a.loose>0&&a.members.some(p=>p.mesh.visible)).map(a=>({name:a.name,loose:a.loose})),
+        wheelDamage: Array.from(c.wreckParts.wheelDamage),
         detached: c.panels.filter((p) => !p.visible).length,
         glass: c.glass.filter((p) => !p.visible).length,
         position: c.current.toArray(),

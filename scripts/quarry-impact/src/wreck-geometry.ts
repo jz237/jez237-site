@@ -27,14 +27,15 @@ export function prepareWreckGeometry(root: T.Group) {
     const rest = new T.BufferAttribute(new Float32Array(object.userData.original), 3);
     rest.applyMatrix4(object.userData.wreckToModel);
     object.userData.wreckRest = rest;
+    object.geometry.setAttribute('wreckPosition', rest.clone());
     object.geometry.setAttribute('restPosition',new T.BufferAttribute(new Float32Array(object.userData.original),3));
     object.geometry.setAttribute('impactAxis',new T.BufferAttribute(new Float32Array(rest.count*3),3));
     const bounds = new T.Box3().setFromBufferAttribute(rest);
     const name = object.name.toLowerCase();
     object.userData.detachAssembly = name.includes('mirror') ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'mirror-left' : 'mirror-right')
-      : /bumper_front|bumper_grille|bumper_intake/.test(name) ? 'front-bumper'
+      : /bumper_front|bumper_grille|bumper_intake|bodyhoodunder/.test(name) ? 'front-bumper'
       : /bumper_rear/.test(name) ? 'rear-bumper'
-      : /panel_hood\d*|bodyhoodtopgrill/.test(name) ? 'hood' : null;
+      : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood' : null;
   });
 }
 
@@ -62,18 +63,26 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
     // Advect in small bounded increments through the current dent. Reapplying
     // a full offset to rest vertices folds triangles through one another on
     // repeated hits, producing saw-toothed tears instead of compressed metal.
-    for (let step=0;step<4;step++) {
+    for (let step=0;step<8;step++) {
       offset.copy(current).sub(contact);
       const distance=offset.length();if(distance>=radius)break;
       const weight=Math.pow(1-distance/radius,1.25);
-      const strength=weight*Math.min(.72,damage*.038)*(1-roof*.64)/4;
+      // Compression approaches the displacement budget smoothly. A hard cap
+      // left flat plateaus and sawtooth boundaries after repeated contacts.
+      const used=current.distanceToSquared(orig)/.81;
+      const strength=weight*Math.min(.78,damage*.041)*(1-roof*.64)*Math.max(0,1-used)/8;
       const across=offset.dot(tangent)/radius,along=offset.dot(vertical)/radius;
-      const crease=Math.abs(across+.32*along-.08);
-      const ridge=Math.max(0,1-crease/.28),shoulder=Math.max(0,1-crease/.67);
-      const span=Math.max(0,1-(along+.1)**2),buckle=(ridge-shoulder*.24)*span;
+      const depth=offset.dot(direction);
+      // Alternating folds follow the compressed length of the sheet, rather
+      // than a single smooth dent. This common field also bends its seals,
+      // glazing and underlying hardware without opening mesh-transform seams.
+      const phase=depth*12.5+across*1.8;
+      const fold=Math.sin(phase)*(.55+.45*Math.sin(phase*.5+.7));
+      const span=Math.max(0,1-(along+.1)**2);
+      const buckle=fold*span*Math.min(1,damage/15);
       current.addScaledVector(direction,strength);
-      current.addScaledVector(vertical,-buckle*strength*.24);
-      current.addScaledVector(tangent,-across*strength*.1*span);
+      current.addScaledVector(vertical,-buckle*strength*.37);
+      current.addScaledVector(tangent,-across*strength*.12*span);
       accumulated+=strength;maximum=Math.max(maximum,weight);
     }
     offset.copy(current).sub(orig);
