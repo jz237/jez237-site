@@ -1,20 +1,20 @@
 {
-  "checkedAt": "2026-09-29T03:53:24.246Z",
-  "scope": "Protein-skimmer hardware, foam and wet materials; live-rock geometry and fine surface growth",
+  "checkedAt": "2026-09-29T06:35:28.817Z",
+  "scope": "Explain the enlarged yellow/blue-green microbial symbols and dotted nitrogen-conversion diagram directly above the live-rock model",
   "files": [
-    "assets/index-CoUZZ_hP.js",
-    "assets/index-vl4A24zB.css",
+    "assets/index-BitFPu0M.css",
+    "assets/index-DVX9lGwC.js",
     "assets/rock-layers.bin-B60TwGSm.gz",
     "index.html"
   ],
-  "buildHash": "bffd872a2c195655852c23379e6887038440565cc443c07504d364de61d129f9",
+  "buildHash": "bdfa1e1d6ad06acf9508a7b6c854194b1538387b07bc9935e6a1183009fa1389",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
   "checks": {
     "typescriptBuild": true,
     "browser": true,
     "visual": true,
-    "performance": true,
-    "synchronizedAssets": true
+    "synchronizedAssets": true,
+    "unchangedSceneGeometry": true
   },
   "browser": {
     "checks": {
@@ -64,123 +64,28 @@
     ],
     "errors": [],
     "idleFrames": 0,
-    "checkedAt": "2026-09-29T03:52:06.172Z"
+    "checkedAt": "2026-09-29T06:34:15.415Z"
   },
-  "motion": {
+  "layout": {
     "checks": {
-      "animatedBubbleSequence": true,
-      "visibleFoamFreezes": true,
-      "componentSelectionAndIsolation": true,
-      "mobileAndReducedMotion": true
+      "desktop": true,
+      "phone": true,
+      "narrow-phone": true
     },
     "errors": [],
-    "checkedAt": "2026-09-29T03:50:58.400Z"
-  },
-  "performance": {
-    "baseline": "96ec78d70cea6c9ac23f85a299f0dcffed721b80",
-    "method": "Serial local Chrome 1440x1080 DPR1; 1s scene warmup then 4s RAF and browser-task sample. This is not a low-end hardware claim.",
-    "runs": [
-      {
-        "mode": "before",
-        "readyMs": 3845,
-        "scenes": [
-          {
-            "system": "system",
-            "fps": 60.24999999982043,
-            "taskSeconds": 0.8708680000000006,
-            "triangles": 979726,
-            "calls": 336
-          },
-          {
-            "system": "roller",
-            "fps": 60.144746693107805,
-            "taskSeconds": 0.5554290000000002,
-            "triangles": 289772,
-            "calls": 94
-          },
-          {
-            "system": "skimmer",
-            "fps": 60.05332535926943,
-            "taskSeconds": 0.5405319999999998,
-            "triangles": 412212,
-            "calls": 93
-          },
-          {
-            "system": "biology",
-            "fps": 60.162763991853204,
-            "taskSeconds": 0.36430200000000035,
-            "triangles": 1015384,
-            "calls": 18
-          },
-          {
-            "system": "return",
-            "fps": 60.04584412995816,
-            "taskSeconds": 0.3933080000000011,
-            "triangles": 72972,
-            "calls": 25
-          }
-        ]
-      },
-      {
-        "mode": "after",
-        "readyMs": 5022,
-        "scenes": [
-          {
-            "system": "system",
-            "fps": 60.069790628026404,
-            "taskSeconds": 1.2616240000000003,
-            "triangles": 1049822,
-            "calls": 359
-          },
-          {
-            "system": "roller",
-            "fps": 60.14774882699412,
-            "taskSeconds": 0.8376720000000004,
-            "triangles": 289772,
-            "calls": 94
-          },
-          {
-            "system": "skimmer",
-            "fps": 60.06080845346109,
-            "taskSeconds": 0.8904160000000001,
-            "triangles": 482308,
-            "calls": 116
-          },
-          {
-            "system": "biology",
-            "fps": 60.12674018280444,
-            "taskSeconds": 0.7034330000000004,
-            "triangles": 936104,
-            "calls": 33
-          },
-          {
-            "system": "return",
-            "fps": 60.209358683158,
-            "taskSeconds": 0.6825220000000005,
-            "triangles": 72972,
-            "calls": 25
-          }
-        ]
-      }
-    ],
-    "errors": []
+    "checkedAt": "2026-09-29T06:33:40.846Z"
   },
   "visualReview": {
+    "evidence": "filtration/qa/biology-key-evidence/",
     "findings": [
-      "Reused the saved GPT Image skimmer and biology references. They guide appearance rather than exact construction specifications. No new generation, purchased assets or paid APIs were used.",
-      "The skimmer now has a fluted pump housing, mounting feet, shaft bearings, four rows of needle-wheel pins, a hollow venturi throat, union seals and diffuser standoffs. The existing selectable components and rotating pivot remain intact.",
-      "The collection cup has an annular waste pool, meniscus, fine foam raft, uneven deposits, small water droplets, a hose barb and clamp. The lid has actual vent holes, a knurled handle and fasteners; the clear silencer exposes its channels and baffles.",
-      "Individual rising bubbles vary in size, speed and lateral drift. A small irregular foam cap moves at the riser. Rendered time sequences visibly differ; pause produces identical images. Flow effects hide when parts are separated or isolated.",
-      "Live rock now has less regular pore geometry, small-scale carbonate breakup, stronger cavity color variation, fine mineral/pit textures and richer coralline colors. Detached implicit-surface chips are removed so each teaching section remains connected. The full geometry is baked and still loaded only when Living rock is selected.",
-      "Surface-sampled lobed crusts, chalk fragments, clustered open sponge pores, curled calcareous tubes and short turf filaments replace repeated round surface beads. New growth avoids planar teaching cuts and stays with its own rock slice.",
-      "The first candidate had broad flat crust chips and an overly sparse bubble column. The final version uses smaller textured crusts and denser varied bubbles. Reviewed front, top, oblique, close-up, isolated, exploded, whole-system and phone views.",
-      "The model remains a teaching illustration: rock cut faces and pore distribution, wet optical scattering and foam are simpler than the generated references. Photographic parity is not claimed. Enlarged microbial markers remain symbolic.",
-      "Freshwater and reef aquarium source, site images, navigation and other educational exhibits were not changed. Functional tests cover all 42 parts, assembly, selection, isolation, sensor cycle, flow, pause, reset, mobile and reduced motion."
-    ],
-    "evidence": "filtration/qa/skimmer-rock-evidence/",
-    "references": "filtration/qa/references/",
-    "method": "Saved built-in GPT Image appearance studies, not engineering specifications.",
-    "photographicParity": false
+      "Visible color-and-text key identifies yellow as ammonia to nitrite and blue-green as nitrite to nitrate.",
+      "The caption explains that symbols are enlarged teaching aids, real microbes live in microscopic surface films, and the dotted path represents chemical-conversion order.",
+      "The irrelevant Water/Air/Waste legend is hidden for biology; its flow control is named Pathway on/off.",
+      "Reviewed desktop, 390px phone and 320px narrow-phone views; the key remains above the canvas without covering the model, including after explosion.",
+      "Existing geometry, motion, rock assets and all 42 selectable components are unchanged."
+    ]
   },
+  "performanceNote": "No new FPS benchmark for this HTML/CSS clarification. Full browser sweep confirms identical draw-call and triangle counts to the previous accepted build. Previous measured performance is retained in approved-skimmer-rock-build.json.",
+  "previousApprovedBuild": "approved-skimmer-rock-build.json",
   "deploymentStatus": "Validated locally; publication recorded separately."
 }
