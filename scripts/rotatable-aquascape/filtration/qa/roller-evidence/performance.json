@@ -1,0 +1,89 @@
+{
+  "baseline": "92d692fc303ac927ca66e258d4f1a91e6739e180",
+  "method": "Serial local Chrome 1440x1080 DPR1; 1s scene warmup then 4s RAF and browser-task sample. This is not a low-end hardware claim.",
+  "runs": [
+    {
+      "mode": "before",
+      "readyMs": 5320,
+      "scenes": [
+        {
+          "system": "system",
+          "fps": 59.88173357636513,
+          "taskSeconds": 1.3250579999999994,
+          "triangles": 1077190,
+          "calls": 313
+        },
+        {
+          "system": "roller",
+          "fps": 60.1027482668358,
+          "taskSeconds": 0.7716650000000005,
+          "triangles": 387236,
+          "calls": 71
+        },
+        {
+          "system": "skimmer",
+          "fps": 60.21236727036632,
+          "taskSeconds": 0.7868289999999991,
+          "triangles": 412212,
+          "calls": 93
+        },
+        {
+          "system": "biology",
+          "fps": 52.44362310500583,
+          "taskSeconds": 0.500197,
+          "triangles": 1015384,
+          "calls": 18
+        },
+        {
+          "system": "return",
+          "fps": 60.09825191391738,
+          "taskSeconds": 0.6542159999999999,
+          "triangles": 72972,
+          "calls": 25
+        }
+      ]
+    },
+    {
+      "mode": "after",
+      "readyMs": 6121,
+      "scenes": [
+        {
+          "system": "system",
+          "fps": 59.611403487247465,
+          "taskSeconds": 1.3656699999999997,
+          "triangles": 979726,
+          "calls": 336
+        },
+        {
+          "system": "roller",
+          "fps": 53.14636458920945,
+          "taskSeconds": 0.835108,
+          "triangles": 289772,
+          "calls": 94
+        },
+        {
+          "system": "skimmer",
+          "fps": 60.05781499229314,
+          "taskSeconds": 0.8882580000000004,
+          "triangles": 412212,
+          "calls": 93
+        },
+        {
+          "system": "biology",
+          "fps": 59.78477481085907,
+          "taskSeconds": 0.5311959999999996,
+          "triangles": 1015384,
+          "calls": 18
+        },
+        {
+          "system": "return",
+          "fps": 60.13874332502797,
+          "taskSeconds": 0.6672400000000014,
+          "triangles": 72972,
+          "calls": 25
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
