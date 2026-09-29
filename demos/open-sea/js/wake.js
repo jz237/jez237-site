@@ -2,7 +2,7 @@
 import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS, defineChunk } from './gl.js';
 import './glsl.js';
 
-export const TRAIL_SIZE = 256;   // metres covered by the (toroidal) trail map
+export const TRAIL_SIZE = 128;   // metres covered by the (toroidal) trail map
 export const TRAIL_RES = 1024;
 
 defineChunk('wake', `

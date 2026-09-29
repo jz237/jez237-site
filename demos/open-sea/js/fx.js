@@ -94,11 +94,12 @@ vec3 uSunW, uBeamCol, uEd0;
 const float BSC = 0.035;                        // scattering coefficient (1/m)
 
 float hg(float c, float g) { float g2 = g * g; return (1.0 - g2) / (4.0 * PI * pow(1.0 + g2 - 2.0 * g * c, 1.5)); }
-float causticGain(vec3 p, float z) {
+float causticGain(vec3 p, float z, float dt) {
   // trace the mean refracted beam back to the surface, then look up focusing at that entry point
   vec2 q = p.xz + uSunW.xz * (z / max(-uSunW.y, 0.15)) * -1.0;
   vec2 uv = fract((uCausticInfo.xy + (q - uCam.xz)) / uCausticInfo.z);
-  vec2 g = textureLod(uCaustic, uv, 0.0).rg;
+  float lod = clamp(log2(max(dt * 0.6, 0.047) / 0.047), 0.0, 6.0);   // blur the pattern in proportion to the step length
+  vec2 g = textureLod(uCaustic, uv, lod).rg;
   float gz = z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
   return gz;
 }
@@ -120,7 +121,7 @@ void main() {
     const int N = 30;
     vec3 T = vec3(1.0), Lp = vec3(0.0), Lsh = vec3(0.0);
     float cosS = -dot(uSunW, dir);
-    float ph = 0.9 * hg(cosS, 0.86) + 0.1 * hg(cosS, 0.0) + 0.06;
+    float ph = 0.85 * hg(cosS, 0.89) + 0.012;
     for (int i = 0; i < N; i++) {
       float fa = (float(i) + jit * 0.0) / float(N), fb = (float(i) + 1.0) / float(N);
       float ta = dmax * fa * fa, tb = dmax * fb * fb;
@@ -130,7 +131,7 @@ void main() {
       vec3 Ts = exp(-CATT * dt);
       Lp += T * RRS * uEd0 * exp(-KD * z) * (1.0 - Ts);
       vec3 beam = uBeamCol * exp(-CATT * z / max(-uSunW.y, 0.25));
-      Lsh += T * beam * (causticGain(p, z) * BSC * ph * dt);
+      Lsh += T * beam * (causticGain(p, z, dt) * BSC * ph * dt);
       T *= Ts;
     }
     if (dist < 1e4) {
@@ -167,7 +168,7 @@ export class Fx {
   constructor() {
     this.prog = new Program('fx.composite', FS_VERT, FX_FS);
     this.pCaustic = new Program('fx.caustic', FS_VERT, CAUSTIC_FS);
-    this.caustic = tex2D(CAUSTIC_RES, CAUSTIC_RES, { fmt: 'rg16f', filter: 'linear', wrap: 'repeat' });
+    this.caustic = tex2D(CAUSTIC_RES, CAUSTIC_RES, { fmt: 'rg16f', filter: 'linear', wrap: 'repeat', mips: true });
     this.fCaustic = makeFBO([this.caustic]);
   }
 
@@ -177,8 +178,10 @@ export class Fx {
     const { scale, off } = sim.cascadeUniforms(cx, cz);
     bindFBO(this.fCaustic); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     this.pCaustic.use().t('uSlope', 0, sim.slope).i('uCascades', sim.count).v4v('uCasc', scale).v2v('uCen', off)
-      .v3('uSunDirW', sunW[0], sunW[1], sunW[2]).v2('uDepths', 2.2, 7.0).f('uSize', CAUSTIC_SIZE);
+      .v3('uSunDirW', sunW[0], sunW[1], sunW[2]).v2('uDepths', 2.2, 7.0).f('uSize', CAUSTIC_SIZE)
+      .v2('uNoiseOrg', scale[5] * cx + scale[6] * cz, -scale[6] * cx + scale[5] * cz);
     drawFS();
+    gl.bindTexture(gl.TEXTURE_2D, this.caustic.tex); gl.generateMipmap(gl.TEXTURE_2D);
     this.center = [cx, cz];
   }
 

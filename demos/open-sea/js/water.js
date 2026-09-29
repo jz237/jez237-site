@@ -10,24 +10,17 @@ export const CLIP_S0 = 0.2;        // finest cell size (m)
 const WATER_VS = `
 #include <common>
 #include <wake>
+#include <water.uv>
 layout(location = 0) in vec2 aGrid;
 uniform mat4 uVP;
 uniform vec2 uCenterRel;   // level centre relative to the camera (xz)
 uniform float uSpacing, uCamY;
-uniform int uCascades;
-uniform vec2 uCen[5];
-uniform vec4 uCasc[5];     // invL, cos, sin, L
 uniform sampler2DArray uDisp;
 uniform float uGridN;      // texture size N
 uniform vec4 uWake;        // reserved
 out vec3 vRel;
 out vec2 vG;
 out float vJ;
-vec2 cascUV(int i, vec2 g) {
-  vec4 c = uCasc[i];
-  return uCen[i] + vec2(c.y * g.x + c.z * g.y, -c.z * g.x + c.y * g.y) * c.x;
-}
-vec2 toWorld(vec2 v, int i) { vec4 c = uCasc[i]; return vec2(c.y * v.x - c.z * v.y, c.z * v.x + c.y * v.y); }
 void main() {
   // geo-morph: odd lattice vertices slide onto the coarser lattice near the level's outer edge
   vec2 gi = aGrid;
@@ -61,9 +54,19 @@ defineChunk('water.uv', `
 uniform int uCascades;
 uniform vec2 uCen[5];
 uniform vec4 uCasc[5];
+uniform vec2 uNoiseOrg;    // level centre in the cascade-1 frame (metres, unwrapped)
 vec2 cascUV(int i, vec2 g) {
   vec4 c = uCasc[i];
-  return uCen[i] + vec2(c.y * g.x + c.z * g.y, -c.z * g.x + c.y * g.y) * c.x;
+  vec2 uv = uCen[i] + vec2(c.y * g.x + c.z * g.y, -c.z * g.x + c.y * g.y) * c.x;
+  if (i >= 3) {
+    // smooth low-frequency warp of the finest cascades breaks up the visible repetition of their tiles
+    vec4 c1 = uCasc[1];
+    vec2 a = uNoiseOrg + vec2(c1.y * g.x + c1.z * g.y, -c1.z * g.x + c1.y * g.y);
+    float sc = i == 3 ? 130.0 : 60.0, amp = i == 3 ? 20.0 : 9.0;
+    vec2 w = vec2(vnoise(a / sc), vnoise(a / sc + 17.3)) * 2.0 - 1.0;
+    uv += w * amp * c.x;
+  }
+  return uv;
 }
 vec2 toWorld(vec2 v, int i) { vec4 c = uCasc[i]; return vec2(c.y * v.x - c.z * v.y, c.z * v.x + c.y * v.y); }
 `);
@@ -107,13 +110,13 @@ uniform float uMssRes, uTime, uHs;
 uniform vec2 uWind;        // wind direction (unit)
 uniform float uWindSpeed;
 uniform float uUnder;
+uniform int uDbg;
 uniform sampler2D uTrail, uRipple, uScene, uSceneDepth;
 uniform vec3 uRippleInfo;   // camera x, z modulo tile, tile size
 uniform vec2 uRes;
 uniform vec3 uFwdV;
-uniform float uNear, uFar, uRippleAmt, uRippleTexel, uHasScene;
+uniform float uNear, uFar, uRippleAmt, uRippleTexel, uHasScene, uCamDepth;
 uniform vec3 uTrailInfo;   // origin x, origin z (camera position modulo map), map size
-uniform vec2 uNoiseOrg;
 layout(location = 0) out vec4 o;
 
 vec3 Rw_foamUnder(vec3 Ed0) { return vec3(0.35, 0.55, 0.65) * Ed0 * 0.6; }
@@ -146,6 +149,7 @@ void main() {
   float varSum = 0.0;
   for (int i = 0; i < 5; i++) {
     if (i >= uCascades) break;
+    if (uDbg == i + 1) continue;
     vec4 s = texture(uSlope, vec3(cascUV(i, vG), float(i)));
     S += toWorld(s.xy, i);
     varSum += max(s.z - s.x * s.x, 0.0) + max(s.w - s.y * s.y, 0.0);
@@ -168,7 +172,7 @@ void main() {
   float trail = 0.0;
   {
     vec2 dy = rel.xz - uWakeA.xy;
-    float m = smoothstep(112.0, 88.0, length(dy)) * uWakeB.z;
+    float m = smoothstep(58.0, 46.0, length(dy)) * uWakeB.z;
     if (m > 0.0) trail = texture(uTrail, fract((uTrailInfo.xy + rel.xz) / uTrailInfo.z)).r * m;
   }
   float sigma2 = 0.5 * varSum + 0.5 * uMssRes;
@@ -180,7 +184,7 @@ void main() {
     vec3 I = -V;
     vec3 sunWv, beamV, Ed0;
     underwaterLight(sunWv, beamV, Ed0);
-    vec3 Lunder = RRS * Ed0;
+    vec3 Lunder = RRS * Ed0 * exp(-KD * max(uCamDepth, 0.2));   // medium radiance at the camera's depth: no seam at the horizon
     float cosI = max(dot(-I, Nd), 1e-3);
     vec3 rf = refract(I, Nd, 1.333);
     vec3 colU = Lunder;
@@ -199,6 +203,7 @@ void main() {
       Lw += min(lightSun() * shd / (PI * SR * SR), vec3(60000.0)) * disc * step(0.0, uSunDir.y);
       colU = mix(Lunder, Lw, 1.0 - Fr);
       colU = Lw * (1.0 - Fr) + Lunder * Fr;
+      colU = mix(colU, Lunder, smoothstep(0.35, 0.02, cosT) * 0.0);
     }
     // foam and bubbles seen from underneath
     float Db = 0.0;
