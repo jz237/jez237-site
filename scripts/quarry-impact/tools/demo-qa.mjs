@@ -30,6 +30,7 @@ try{
  const frozen=await page.evaluate(()=>({cars:__quarry.cars,fire:__quarry.fireState}));await page.waitForTimeout(600);assert.deepEqual(await page.evaluate(()=>({cars:__quarry.cars,fire:__quarry.fireState})),frozen);
  await page.click('#resume');await page.evaluate(()=>window.dispatchEvent(new Event('blur')));assert.equal(await page.evaluate(()=>__quarry.state),'paused');await page.click('#resume');
  report.checks.push('pause and focus loss freeze demo and fire');
+ await page.selectOption('#demo-camera','trackside');await page.waitForFunction(()=>__quarry.demo.view==='trackside');await page.selectOption('#demo-car','6');await page.waitForFunction(()=>__quarry.demo.followed===6);report.checks.push('camera and follow controls retain handlers after pause and blur');
  await page.evaluate(()=>{__quarry.setHealth(0,0);__quarry.simulate(.1);});assert.equal(await page.evaluate(()=>__quarry.state),'playing');report.checks.push('car zero wrecking does not end spectator event');
  await page.evaluate(()=>{__quarry.setTime(299.95);__quarry.simulate(.2);});assert.equal(await page.evaluate(()=>__quarry.state),'result');
  await page.waitForFunction(()=>__quarry.state==='countdown',null,{timeout:20000});assert.equal(await page.evaluate(()=>__quarry.demo.active),true);
@@ -38,6 +39,7 @@ try{
  report.race=await page.evaluate(()=>{__quarry.simulate(180);return {cars:__quarry.cars,state:__quarry.state,ai:__quarry.aiState,stats:__quarry.stats};});
  assert.ok(report.race.cars.filter(c=>c.passed>=24).length>=6,'at least six AI complete a full lap');
  await page.selectOption('#demo-camera','overview');await page.waitForTimeout(500);await page.screenshot({path:out+'/race-overview.png'});report.checks.push('race demo advances every AI through checkpoints');
+ await page.click('#pause');await page.waitForFunction(()=>__quarry.state==='paused');await page.click('#resume');await page.waitForFunction(()=>__quarry.state==='playing');
  await page.click('#demo-exit');assert.equal(await page.evaluate(()=>__quarry.state),'menu');assert.equal(await page.evaluate(()=>__quarry.demo.active),false);
  await page.click('#start');await page.waitForFunction(()=>__quarry.state==='countdown',null,{timeout:30000});assert.equal(await page.evaluate(()=>__quarry.demo.active),false);report.checks.push('exit restores normal player mode');
  if(process.env.QUARRY_DEMO_BENCHMARK==='1'){

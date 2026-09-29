@@ -4,7 +4,7 @@
   "files": {
     "src/main.ts": {
       "before": "c4d358c884025b0bef0481f6d56a484e3b068dc95172aa649e27c37b1daca3b1",
-      "after": "e2722030c58533648fb1246e183c945cb35a92bee1a13fc0451af87f51292cd0",
+      "after": "a13fa904c3c81ccaf20596fcc9f97a82271647efb7afe315eb1a4733106b4ed1",
       "snapshot": "tests/fixtures/demo-before-main.ts.gz"
     },
     "src/style.css": {

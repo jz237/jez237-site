@@ -6,6 +6,8 @@ September 29, 2026. No new assets, audio generation, paid services or online-roo
 
 Choose **Watch Demo** on the main menu. The derby or circuit runs with eight AI cars, including the first car. Select the event, select a car or let the director choose, and switch among seven views: automatic director, overhead overview, follow drone, chase, hood, trackside and mouse-controlled free orbit. C cycles views, [ / ] changes the followed car, and Space pauses. Escape, settings, mute and fullscreen remain available. Losing focus pauses the event and clears input.
 
+Pause adds its overlay without recreating the underlying controls, so camera, car selection, pause and exit stay interactive after resuming.
+
 Derbies continue when the first car is destroyed. Events show an eight-second ending, then repeat. Circuit demos finish when all cars finish or retire, with a ten-minute limit. Demo results never overwrite local player records. Leaving the demo restores the regular player controls and the existing five-second wreck inspection.
 
 `src/demo-director.ts` frames the interpolated car poses, limits camera positions against terrain height, and chooses active cars based on proximity to action and speed. The overview includes the arena or entire circuit. Trackside positions stay fixed while watching cars pass. Free orbit tracks the chosen car while allowing drag and scroll. This does not implement full line-of-sight collision against all scenery.
