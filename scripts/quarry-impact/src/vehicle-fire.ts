@@ -123,6 +123,7 @@ export class VehicleFire {
       e.origin.set(0,.22,DEFINITIONS[car.kind].halfLength*.54).applyQuaternion(car.root.quaternion).add(car.root.position);
       const impact=car.impactSerial!==e.impactSerial?car.lastDamage:Math.max(0,state.health-car.health);
       const ignition=state.advance(car.health,dt,impact);e.impactSerial=car.impactSerial;
+      car.wreckFinish?.advance(state.heat,dt);
       if(ignition){for(let j=0;j<11;j++)this.spawn(e,2,true);this.spark(e.origin,22,1,3.6);this.bursts.push({id:car.id,position:e.origin.clone(),heat:state.heat,burst:1});}
       const scale=this.quality==='medium'?.6:1;
       e.smoke+=dt*state.smoke*8*scale;e.flame+=dt*state.heat*29*scale;e.embers+=dt*state.heat*5;

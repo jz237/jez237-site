@@ -114,9 +114,11 @@ function applyDent(car:Vehicle,dent:Dent,quiet:boolean,time:number){
 test('actual loaded coupe rear panels deform locally, detach reproducibly, and repair restores the original asset',async()=>{
   await productionTemplates();const {car,calls,close}=damageCar();
   try{
-    assert.equal(car.panels.filter(p=>!p.name.startsWith('panel_inner_')).length,35);assert.equal(car.glass.length,5);assert.equal(car.wheels.length,4);assert.ok(car.brakeLights.size>0,'real rear lamps remain connected to the brake material');
+    assert.equal(car.panels.filter(p=>!p.name.startsWith('panel_inner_')&&!p.name.startsWith('panel_seal_')).length,35);
+    assert.equal(car.panels.filter(p=>p.name.startsWith('panel_seal_')).length,2,'two original window seals remain with the hinged doors');
+    assert.equal(car.glass.length,5);assert.equal(car.wheels.length,4);assert.ok(car.brakeLights.size>0,'real rear lamps remain connected to the brake material');
     let drawMeshes=0;templates.get('coupe')!.traverse(o=>{if(o instanceof T.Mesh)drawMeshes++;});
-    assert.ok(drawMeshes<=realismBefore.runtime.meshes+12,'new damageable optics and wheel detail stay within12 additional draws');
+    assert.ok(drawMeshes<=realismBefore.runtime.meshes+14,'optics, wheel detail and the two moving window seals stay within14 additional draws');
     const original=capture(car),rear=car.panels.find(p=>p.name==='panel_bumper_rear001')!,front=car.panels.find(p=>p.name==='panel_bumper_front')!;
     assert.ok(rear&&front);const bounds=new T.Box3().setFromObject(rear),point=bounds.getCenter(new T.Vector3());point.z=bounds.min.z+.015;
     const local=car.root.worldToLocal(point.clone()),dents:Dent[]=[12,11,9,24].map((damage,i)=>({id:i+1,repair:0,damage,localPoint:{x:local.x+(i-1)*.14,y:local.y,z:local.z},localDirection:{x:0,y:0,z:1}}));

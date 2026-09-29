@@ -9,11 +9,13 @@ try{
  await page.goto(process.env.QUARRY_QA_URL||'http://127.0.0.1:8795/');await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
  report.bundle=await page.locator('script[type="module"][src^="./assets/index-"]').getAttribute('src');
  for(const mode of ['derby','race']){
-  await page.evaluate(async mode=>{await __quarry.start(mode);__quarry.autopilot(false);__quarry.simulate(4);__quarry.teleport(0,0,-20,0);__quarry.damage(0,25,'front');__quarry.damage(0,28,'left');__quarry.damage(0,25,'front');},mode);
+  await page.evaluate(async mode=>{await __quarry.start(mode);__quarry.autopilot(false);__quarry.simulate(4);__quarry.teleport(0,0,-20,0);__quarry.damage(0,25,mode==='race'?'left':'front');__quarry.damage(0,28,'left');__quarry.damage(0,25,mode==='race'?'left':'front');},mode);
   await page.keyboard.press('KeyC');
   const start=performance.now();
   await page.evaluate(()=>{__quarry.damage(0,24,'rear');__quarry.simulate(.1);});
   const before=await page.evaluate(()=>({state:__quarry.state,car:__quarry.cars,pose:__quarry.cameraPose}));assert.equal(before.state,'wrecked');
+  const [cx,,cz]=before.pose.position,[px,,pz]=before.car[0].position;
+  assert.ok(mode==='race'?cx<px:cz>pz,'inspection starts on the most damaged side');
   assert.equal(await page.locator('.dialog').count(),0,'wreck view is unobstructed');
   await page.mouse.move(1600,640);await page.mouse.down();await page.mouse.move(2000,730,{steps:12});await page.mouse.up();await page.waitForTimeout(1100);
   const after=await page.evaluate(()=>({state:__quarry.state,car:__quarry.cars,pose:__quarry.cameraPose}));assert.equal(after.state,'wrecked');

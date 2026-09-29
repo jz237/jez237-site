@@ -14,6 +14,8 @@ import { landscapeHeight } from './quarry-layout';
 import type { GlassState } from './car-materials';
 import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry, repairWreckGeometry } from './wreck-geometry';
+import { WreckFinish } from './wreck-finish';
+import { WreckAttachments } from './wreck-attachments';
 export type Input = {
   throttle: number;
   steer: number;
@@ -27,6 +29,8 @@ export class Vehicle {
   controller: R.DynamicRayCastVehicleController;
   root = new T.Group();
   model: T.Group;
+  readonly wreckFinish: WreckFinish;
+  readonly wreckParts: WreckAttachments;
   wheels: T.Object3D[] = [];
   panels: T.Mesh[] = [];
   readonly impactResponse = new ImpactResponse();
@@ -144,6 +148,8 @@ export class Vehicle {
         if (mat.name.includes('Brakelight')) this.brakeLights.add(mat);
       }
     });
+    this.wreckFinish = new WreckFinish(this.model,def.halfLength);
+    this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth);
   }
   place(x: number, z: number, yaw: number, repair = false) {
     const p = { x, y: landscapeHeight(x, z) + 0.89, z };
@@ -163,6 +169,8 @@ export class Vehicle {
     if (repair) this.repair();
   }
   repair() {
+    this.wreckFinish.reset();
+    this.wreckParts.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
@@ -360,7 +368,7 @@ export class Vehicle {
     // Finish deforming every member before releasing any of them. Grilles,
     // mirror inserts and bonnet vents cannot remain suspended over a wreck.
     for (const [name, group] of assemblies) {
-      const threshold = name === 'hood' ? 36 : name.startsWith('mirror') ? 22 : 28;
+      const threshold = name === 'hood' ? 42 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32;
       if (group.damage <= threshold || damage <= 7 || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
@@ -390,6 +398,7 @@ export class Vehicle {
         if (!quiet) this.fx.emit(bounds.getCenter(new T.Vector3()), Math.ceil(damage * .55), 3, 1.7);
       }
     }
+    this.wreckParts.hit(contact,impactDirection,damage);
     const def = DEFINITIONS[this.kind];
     this.collider.setHalfExtents({
       x: def.halfWidth - 0.06 - (100 - this.health) * 0.0008,
