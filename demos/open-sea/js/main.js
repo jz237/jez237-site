@@ -64,6 +64,7 @@ class App {
     this.w = w; this.h = h;
     this.post.resize(w, h);
     this.clouds.resize(w, h);
+    this.yacht.resizeRefl(w, h);
   }
 
   setQuality(mode) {
@@ -102,6 +103,10 @@ class App {
     const S = this.state;
     this.time += dt;
     if (this.ycam) this.placeRelativeToYacht(this.ycam);
+    if (this.lookBody) {     // test helper: aim at the sun or moon
+      const sk = skyState(this.state.tod), d = this.lookBody[0] === 'sun' ? sk.sunDir : sk.moonDir;
+      this.cam.yaw = Math.atan2(d[0], -d[2]) + (this.lookBody[2] || 0); this.cam.pitch = Math.asin(d[1]) + (this.lookBody[1] || 0);
+    }
     if (this.easeOn) {
       const G = this.goal, ez = (a, b, r) => a + clamp(b - a, -r * dt, r * dt);
       let dtod = ((G.tod - S.tod + 36) % 24) - 12;
@@ -109,7 +114,7 @@ class App {
       S.sea = G.sea; S.cloud = ez(S.cloud, G.cloud, 0.28); S.rain = ez(S.rain, G.rain, 0.22); S.lightning = G.lightning;
     }
     S.storm = clamp(0.62 * S.rain + 0.38 * (S.lightning > 0 ? 1 : 0) + 0.18 * smoothstep(6.5, 9, S.sea), 0, 1);
-    S.haze = 1 + 3.2 * S.rain + 0.8 * S.storm;
+    S.haze = 6 + 22 * S.rain + 8 * S.storm;       // marine air is far hazier than the clear-air default
     const wv = [Math.cos(S.windDir), Math.sin(S.windDir)];
     this.sim.setSea(S.sea, S.windDir);
     this.sim.update(dt);
@@ -167,7 +172,7 @@ class App {
     C.renderEnv(this.sky, sk, camAbs, this.q === 'low' ? 50 : 70, flash);
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
-    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel };
+    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx };
     this.ctx = ctx;
 
     // underwater beam bookkeeping for caustics
@@ -190,13 +195,15 @@ class App {
     if (this.yachtOn) this.yacht.draw(ctx, VPf, camAbs);
     if (this.yachtOn) this.fish.draw(ctx, VPf, camAbs);
 
+    const reflOn = this.yachtOn && !under;
+    if (reflOn) { this.yacht.drawReflection(ctx, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
     this.post.copyScene();
     const wind = [Math.cos(S.windDir), Math.sin(S.windDir)];
     const mS = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
-      p.f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0);
+      p.f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
       p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
       p.v4('uWakeB', Y.speed, 0.11 * Math.pow(Y.speed / 3, 2), this.yachtOn ? 1 : 0, 0);
@@ -205,6 +212,7 @@ class App {
       p.v3('uTrailInfo', mod(cam.x), mod(cam.z), Sm);
       p.t('uRipple', 17, this.ripples.cur).v3('uRippleInfo', mS(cam.x), mS(cam.z), RIPPLE_SIZE).f('uRippleTexel', 1 / this.ripples.N)
         .f('uRippleAmt', 1.0);
+      p.t('uReflTex', 18, this.yacht.reflTex).f('uReflOn', reflOn ? 1 : 0);
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
         .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', this.yachtOn && !under ? 1 : 0);
     });
@@ -233,7 +241,7 @@ class App {
     const keyScale = under ? 0.55 : 1;
     this.post.exposure(dt, sk.key * keyScale, this.frame === 0);
     this.post.bloom();
-    this.post.tonemap(this.w, this.h, this.time);
+    this.post.tonemap(this.w, this.h, this.time, { night: 1 - smoothstep(0.03, 0.17, sk.key) });
     if (this.photoReq) {
       this.photoReq = false;
       canvas.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `open-sea-${Date.now()}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png');
@@ -254,6 +262,7 @@ window.__sea = {
     app.step(dt);
     if (app.ycam) app.placeRelativeToYacht(app.ycam);
     // honour the camera immediately for the underwater test (probe latency)
+    if (app.forceBolt) { const L = app.lightning; L._bolt(app.cam, app.cam.yaw + app.forceBolt); L.t = 0.032; L.flash = 0.7; app.forceBolt = 0; }
     app.post.first = true;
     app.render(dt); gl.finish();
     return { frame: app.frame, w: app.w, h: app.h, under: app.under };
@@ -279,6 +288,8 @@ const applyURL = () => {
     const [x, y, z, yaw, pitch, fov] = params.get('cam').split(',').map(Number);
     Object.assign(app.cam, { x, y, z, yaw, pitch }); if (fov) app.cam.fov = fov * Math.PI / 180;
   }
+  if (params.has('look')) { const [b, po, yo] = params.get('look').split(','); app.lookBody = [b, parseFloat(po || 0), parseFloat(yo || 0)]; }
+  if (params.has('bolt')) app.forceBolt = parseFloat(params.get('bolt')) || 0.01;
   if (params.has('dbg')) app.dbg = parseInt(params.get('dbg'));
   if (params.has('under')) app.under = params.get('under') === '1';
 };

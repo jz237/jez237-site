@@ -1,5 +1,5 @@
 // The sailing yacht: rendering (hull, sails, rigging), sailing physics and wave-following dynamics.
-import { gl, Program, defineChunk } from './gl.js';
+import { gl, Program, defineChunk, tex2D, depthTex, makeFBO, bindFBO } from './gl.js';
 import { m4, clamp, lerp, smoothstep } from './math.js';
 import { buildYacht, buildRigging, DIM, SAILS, MAT, sheer, waterlineHalfBeam } from './yacht-geo.js';
 import { bindLighting } from './lighting.js';
@@ -26,7 +26,8 @@ void main() {
   float yF = uSailShape.x, yH = uSailShape.y;
   p.y = yF + (p.y - yF) * (1.0 - 0.42 * reef);
   p.x = uSail.y + (p.x - uSail.y) * (1.0 - 0.18 * reef);
-  float a = a0 * (1.0 + 0.30 * v);
+  float isSail = step(abs(aAttr.z - ${MAT.SAIL}.0), 0.5);
+  float a = a0 * (1.0 + 0.30 * v * isSail);
   float dz = sgn * p.z + uSail.z * sin(uSail.w * 9.0 + p.x * 2.3 + p.y * 1.7) * 0.10 * (0.2 + 0.8 * u) * (0.5 + 0.5 * sin(uSail.w * 2.1 + p.y));
   float dx = p.x - uSail.y;
   float c = cos(a), s = sin(a);
@@ -54,7 +55,7 @@ in vec3 vRel;
 in vec4 vAttr;
 uniform vec3 uSunLocal, uMoonLocal;
 uniform vec3 uMainTri[3], uJibTri[3];
-uniform float uWet;
+uniform float uWet, uRefl, uCamY, uMirrorY;
 layout(location = 0) out vec4 o;
 
 float tri(vec3 p, vec3 l, vec3 a, vec3 b, vec3 c) {
@@ -74,6 +75,7 @@ float sailShadow(vec3 p, vec3 l) {
 float ggx(float nh, float a2) { float d = nh * nh * (a2 - 1.0) + 1.0; return a2 / (PI * d * d); }
 
 void main() {
+  if (uRefl > 0.5 && vRel.y + uCamY < uMirrorY - 0.04) discard;   // only what stands above the water is mirrored
   vec3 N = normalize(vN);
   if (!gl_FrontFacing) N = -N;
   vec3 V = normalize(-vRel);
@@ -84,7 +86,7 @@ void main() {
     float z = p.y;
     albedo = vec3(0.84, 0.855, 0.86); rough = 0.2;
     float boot = smoothstep(0.03, 0.0, abs(z - 0.03)) ;
-    if (z < -0.02) { albedo = vec3(0.028, 0.035, 0.05); rough = 0.55; }
+    if (z < -0.02) { albedo = vec3(0.10, 0.075, 0.07); rough = 0.55; }   // red-brown antifouling
     else if (z < 0.075) { albedo = vec3(0.02, 0.05, 0.11); rough = 0.35; }
     float cove = smoothstep(0.035, 0.02, abs(z - (0.66 + 0.0016 * p.x * p.x + (p.x > 0.0 ? 0.0042 * p.x * p.x : 0.0)) ));
     albedo = mix(albedo, vec3(0.03, 0.07, 0.16), cove);
@@ -107,10 +109,10 @@ void main() {
     rough = 0.55;
   } else if (mat == ${MAT.ALU}) { albedo = vec3(0.78, 0.8, 0.82); metal = 1.0; rough = 0.33; }
   else if (mat == ${MAT.STEEL}) { albedo = vec3(0.86, 0.87, 0.9); metal = 1.0; rough = 0.18; }
-  else if (mat == ${MAT.KEEL}) { albedo = vec3(0.025, 0.032, 0.048); rough = 0.6; }
+  else if (mat == ${MAT.KEEL}) { albedo = vec3(0.10, 0.075, 0.07); rough = 0.6; }
   else if (mat == ${MAT.TRIM}) { albedo = vec3(0.05, 0.05, 0.055); rough = 0.4; }
   else if (mat == ${MAT.SAIL}) {
-    albedo = vec3(0.86, 0.85, 0.80); rough = 0.85; trans = 0.32;
+    albedo = vec3(0.92, 0.90, 0.84); rough = 0.85; trans = 0.45;
     float seam = smoothstep(0.012, 0.0, abs(fract(vAttr.y * 14.0) - 0.5) - 0.485 + 0.003) * 0.18;
     float wv = 0.94 + 0.06 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0);
     albedo *= wv * (1.0 - seam);
@@ -160,7 +162,11 @@ void main() {
   if (sub > 0.0) {
     vec3 sunWv, beamV, Ed0;
     underwaterLight(sunWv, beamV, Ed0);
-    vec3 uwl = albedo * (Ed0 * (0.5 + 0.5 * clamp(N.y + 0.3, 0.0, 1.0)) + beamV * max(dot(N, -sunWv), 0.0) * 0.6) / PI;
+    float zd = max(-p.y, 0.0) + 0.1;
+    float cg = causticGainRel(vRel, zd, sunWv, 0.3);
+    // downwelling light is ~20x stronger than upwelling: undersides are dark silhouettes, tops and flanks catch the beams
+    float eN = 0.04 + 0.30 * (1.0 - abs(N.y)) + 0.86 * max(N.y, 0.0);
+    vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI;
     col = mix(col, uwl, sub);
   }
   // aerial perspective
@@ -168,7 +174,7 @@ void main() {
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001;
   vec3 T = exp(-ext * dist);
   vec3 hd = normalize(vec3(-V.x, 0.0, -V.z));
-  vec3 Lh = skyRadiance(normalize(vec3(hd.x, 0.01, hd.z)));
+  vec3 Lh = horizonColor(hd);
   col = col * T + Lh * (1.0 - T);
   o = vec4(col, 1.0);
 }`;
@@ -196,7 +202,7 @@ void main() {
   float wpx = aW * uViewport.y * 0.5 / max(c.w, 0.1) * 1.4;   // projected width in pixels (approx)
   float px = max(wpx, 1.15);
   c.xy += perp * side * px * 0.5 / uViewport * c.w * 2.0;
-  vAlpha = clamp(wpx / px, 0.0, 1.0);
+  vAlpha = clamp(0.30 + 0.70 * wpx / px, 0.0, 1.0);
   vRel = mix(wa.xyz, wb.xyz, t);
   gl_Position = c;
 }`;
@@ -240,7 +246,7 @@ export class Yacht {
       const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, m.idx, gl.STATIC_DRAW);
       return { vao, count: m.idx.length };
     };
-    this.hull = mk(g.hull); this.main = mk(g.main); this.jib = mk(g.jib);
+    this.hull = mk(g.hull); this.main = mk(g.main); this.jib = mk(g.jib); this.boom = mk(g.boom);
     this.progHull = new Program('yacht.hull', YACHT_VS, YACHT_FS);
     this.progSail = new Program('yacht.sail', YACHT_VS, YACHT_FS, 'SAIL');
     this.progRig = new Program('yacht.rig', RIG_VS, RIG_FS);
@@ -255,7 +261,7 @@ export class Yacht {
 
     // pose
     this.x = 0; this.z = 0; this.psi = 0; this.speed = 2.5;
-    this.heave = new Spring(3.2, 0.62); this.pitchS = new Spring(2.5, 0.55); this.rollS = new Spring(2.2, 0.35);
+    this.heave = new Spring(3.2, 0.62); this.pitchS = new Spring(2.5, 0.55); this.rollS = new Spring(2.2, 0.55);
     this.yawS = new Spring(0.9, 0.7);
     this.heaveV = 0; this.pitch = 0; this.roll = 0; this.yaw = 0;
     this.y = 0;
@@ -297,11 +303,11 @@ export class Yacht {
     vk *= 1 - 0.05 * Math.min(6, env.hs);                 // pounding
     this.speedTarget = Math.max(0.35, vk * 0.5144);
     this.reef = smoothstep(11, 19, U);
-    const heel = Math.min(0.42, 0.0034 * U * U * (1 - 0.45 * this.reef));
+    const heel = Math.min(0.30, 0.0030 * U * U * (1 - 0.5 * this.reef));
     this.heelTarget = -heel * this.tack;                  // leeward is opposite the wind side
     const slack = 1 - smoothstep(0.8, 3.5, U);
     this.flutter = slack;
-    this.sailAngTarget = -this.tack * clamp(0.38 + 0.08 * (1 - smoothstep(4, 14, U)) + 0.5 * slack, 0.3, 1.1);
+    this.sailAngTarget = -this.tack * clamp(lerp(0.16, 0.42, smoothstep(0.4, 4.5, U)) + 0.10 * smoothstep(9, 16, U), 0.14, 0.62);
   }
 
   update(dt, env) {
@@ -322,11 +328,11 @@ export class Yacht {
 
       const pb = this.probeH;
       const mean = (pb[0] * 2 + pb[1] + pb[2] + pb[3] + pb[4]) / 6;
-      const pitchT = Math.atan2(pb[1] - pb[2], 8.4) * 0.92;
-      const rollT = -Math.atan2(pb[3] - pb[4], 3.4) * 0.85;
+      const pitchT = clamp(Math.atan2(pb[1] - pb[2], 8.4) * 0.7, -0.17, 0.17);
+      const rollT = clamp(-Math.atan2(pb[3] - pb[4], 3.4) * 0.38, -0.16, 0.16);
       this.y = this.heave.step(mean + 0.02, h);
       this.pitch = this.pitchS.step(pitchT, h);
-      this.roll = this.rollS.step(this.heelTarget + rollT, h);
+      this.roll = clamp(this.rollS.step(this.heelTarget + rollT, h), -0.5, 0.5);
       this.yaw = this.yawS.step(0.012 * Math.sin(this.t * 0.31) + 0.25 * rollT * Math.sign(this.tack), h);
     }
     if (steps === 6) this.acc = 0;
@@ -371,7 +377,29 @@ export class Yacht {
     });
   }
 
-  draw(ctx, VP, camAbs) {
+  resizeRefl(w, h) {
+    const rw = Math.max(64, w >> 1), rh = Math.max(64, h >> 1);
+    if (this.reflTex && this.reflTex.w === rw && this.reflTex.h === rh) return;
+    this.reflTex = tex2D(rw, rh, { fmt: 'rgba16f', filter: 'linear', mips: true });
+    this.reflDepth = depthTex(rw, rh);
+    this.reflFbo = makeFBO([this.reflTex], this.reflDepth);
+  }
+
+  // Mirror image of the yacht about the local water level, for the water shader to sample.
+  drawReflection(ctx, VP) {
+    const cam = ctx.cam;
+    const dy = 2 * (this.y - cam.y);
+    // camera-relative mirror: y' = 2 (waterY - camY) - y
+    const Mir = new Float64Array([1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, dy, 0, 1]);
+    const VPm = Float32Array.from(m4.mul(Float64Array.from(VP), Mir));
+    bindFBO(this.reflFbo);
+    gl.clearColor(0, 0, 0, 0); gl.clearDepth(1); gl.depthMask(true);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    this.draw(ctx, VPm, ctx.camAbs, true);
+    gl.bindTexture(gl.TEXTURE_2D, this.reflTex.tex); gl.generateMipmap(gl.TEXTURE_2D);
+  }
+
+  draw(ctx, VP, camAbs, mirror = false) {
     const rel = new Float64Array(this.M); rel[12] = this.x - camAbs[0]; rel[13] = this.y - ctx.cam.y; rel[14] = this.z - camAbs[2];
     const Mf = Float32Array.from(rel);
     const sunL = this.toLocalDir(ctx.sk.sunDir), moonL = this.toLocalDir(ctx.sk.moonDir);
@@ -380,8 +408,10 @@ export class Yacht {
     const setCommon = (p) => {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
+      if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
-      p.v3v('uMainTri', flat(mainTri)).v3v('uJibTri', flat(jibTri)).f('uWet', 1);
+      p.v3v('uMainTri', flat(mainTri)).v3v('uJibTri', flat(jibTri)).f('uWet', 1)
+        .f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     let p = this.progHull.use();
@@ -392,6 +422,9 @@ export class Yacht {
     const time = ctx.time || 0;
     p.v4('uSail', this.sailAng, DIM.MAST_X, this.flutter, time).v4('uSailShape', SAILS.main.tack[1], SAILS.main.head[1], this.reef, SAILS.main.tack[0]);
     gl.bindVertexArray(this.main.vao); gl.drawElements(gl.TRIANGLES, this.main.count, gl.UNSIGNED_INT, 0);
+    p.v4('uSail', this.sailAng, DIM.MAST_X, 0, time).v4('uSailShape', SAILS.main.tack[1], SAILS.main.head[1], 0, SAILS.main.tack[0]);
+    gl.bindVertexArray(this.boom.vao); gl.drawElements(gl.TRIANGLES, this.boom.count, gl.UNSIGNED_INT, 0);
+    p.v4('uSail', this.sailAng, DIM.MAST_X, this.flutter, time).v4('uSailShape', SAILS.main.tack[1], SAILS.main.head[1], this.reef, SAILS.main.tack[0]);
     p.v4('uSail', this.sailAng * 0.55, SAILS.jib.tack[0], this.flutter * 0.8, time + 3.1).v4('uSailShape', SAILS.jib.tack[1], SAILS.jib.head[1], this.reef * 0.6, SAILS.jib.tack[0]);
     gl.bindVertexArray(this.jib.vao); gl.drawElements(gl.TRIANGLES, this.jib.count, gl.UNSIGNED_INT, 0);
     // rigging

@@ -196,10 +196,10 @@ void main() {
   // stars
   if (uStarLevel > 0.0 && d.y > -0.05) {
     vec3 dc = uStarRot * d;
-    vec3 s = starLayer(dc, 38.0, 0.16, px) + starLayer(dc, 92.0, 0.13, px) + starLayer(dc, 190.0, 0.10, px);
+    vec3 s = starLayer(dc, 38.0, 0.22, px) + starLayer(dc, 92.0, 0.18, px) + starLayer(dc, 190.0, 0.14, px);
     s += milkyWay(dc);
     float horizon = smoothstep(-0.02, 0.12, d.y);
-    L += s * uStarLevel * horizon * 4.0;
+    L += s * uStarLevel * horizon * 16.0;
   }
   // clouds
   float alpha = 1.0;

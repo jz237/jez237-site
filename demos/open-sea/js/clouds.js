@@ -129,9 +129,9 @@ vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
   if (ro.y < yb) { tN = (yb - ro.y) / rd.y; tF = (yt - ro.y) / rd.y; }
   else if (ro.y < yt) { tN = 0.0; tF = (yt - ro.y) / rd.y; }
   else return vec4(0.0, 0.0, 0.0, 1.0);
-  const float MAXD = 95000.0;
+  const float MAXD = 165000.0;
   if (tN > MAXD) return vec4(0.0, 0.0, 0.0, 1.0);
-  tF = min(min(tF, tN + 28000.0), MAXD);
+  tF = min(min(tF, tN + 34000.0), MAXD);
   float len = tF - tN;
 
   float midAlt = 0.5 * (yb + yt);
@@ -207,7 +207,7 @@ vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
   vec3 Linf = skyRadiance(rd);
   L = L * Ta + Linf * (1.0 - Ta) * (1.0 - T);
   // fade the far rim of the layer into the haze
-  float fade = smoothstep(MAXD * 0.6, MAXD, tN);
+  float fade = smoothstep(MAXD * 0.45, MAXD, tN);
   L *= 1.0 - fade; T = mix(T, 1.0, fade);
   return vec4(L, T);
 }

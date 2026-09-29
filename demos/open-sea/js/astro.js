@@ -40,7 +40,7 @@ export function skyState(hours) {
   const pre = 1 / level;
   // Mood: auto-exposure aims darker after sunset so night still reads as night.
   const lg = Math.log10(level);
-  const key = lerp(0.045, 0.19, smoothstep(-5.6, -2.0, lg));
+  const key = lerp(0.028, 0.19, smoothstep(-5.6, -2.0, lg));
   return {
     sunDir: sun.dir, moonDir: moon.dir, sunAlt, moonAlt, pre, level, key, MOON_E, dayLevel, moonLevel,
     sunCol: [pre, pre, pre * 0.995],

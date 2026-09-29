@@ -152,7 +152,7 @@ void main() {
   float zc = max(uCamAbs.y * -1.0, 0.0);
   vec3 lit = (Ed0 * 0.06 + beam * 0.35) * exp(-KD * (zc + vRel.y * -1.0 * 0.0));
   vec3 col = lit * exp(-CATT * dist);
-  o = vec4(col, a * 0.7);
+  o = vec4(col * 1.6, a * 0.9);
 }`;
 
 export class Fish {
@@ -175,7 +175,7 @@ export class Fish {
     const rng = mulberry32(777);
     this.fish = [];
     const mk = (n, species, len, gen) => { for (let i = 0; i < n; i++) this.fish.push({ sp: species, len: len * (0.85 + 0.3 * rng()), seed: rng() * 1000, r: rng(), r2: rng(), r3: rng(), gen }); };
-    mk(230, 0, 0.16, 'ball'); mk(46, 1, 0.42, 'ring'); mk(5, 2, 1.15, 'roam');
+    mk(260, 0, 0.21, 'ball'); mk(46, 1, 0.55, 'ring'); mk(6, 2, 1.4, 'roam');
     this.snow = new Program('snow', SNOW_VS, SNOW_FS);
     this.nFish = this.fish.length;
   }
@@ -185,7 +185,7 @@ export class Fish {
     const s = f.seed;
     if (f.gen === 'ball') {
       // tight rotating bait ball around a slowly wandering centre
-      const cx = c[0] + 7.5 * Math.sin(t * 0.05) - 1.5, cz = c[2] + 5.0 * Math.cos(t * 0.043 + 1.0), cy = -6.5 + 1.2 * Math.sin(t * 0.09);
+      const cx = c[0] + 4.5 * Math.sin(t * 0.05) - 1.0, cz = c[2] + 3.5 * Math.cos(t * 0.043 + 1.0) - 3.0, cy = -5.2 + 1.0 * Math.sin(t * 0.09);
       const rad = 0.6 + 1.9 * Math.pow(f.r, 0.6) * (1 + 0.15 * Math.sin(t * 0.7 + s));
       const th = t * (0.55 + 0.35 * f.r2) + f.r3 * 6.283, ph = f.r2 * 3.1416 + 0.4 * Math.sin(t * 0.3 + s);
       return [cx + rad * Math.sin(ph) * Math.cos(th), cy + rad * 0.75 * Math.cos(ph), cz + rad * Math.sin(ph) * Math.sin(th)];

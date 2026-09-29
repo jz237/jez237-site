@@ -111,7 +111,8 @@ uniform vec2 uWind;        // wind direction (unit)
 uniform float uWindSpeed;
 uniform float uUnder;
 uniform int uDbg;
-uniform sampler2D uTrail, uRipple, uScene, uSceneDepth;
+uniform sampler2D uTrail, uRipple, uScene, uSceneDepth, uReflTex;
+uniform float uReflOn;
 uniform vec3 uRippleInfo;   // camera x, z modulo tile, tile size
 uniform vec2 uRes;
 uniform vec3 uFwdV;
@@ -147,12 +148,18 @@ void main() {
   vec3 V = -rel / dist;
   vec2 S = vec2(0.0);
   float varSum = 0.0;
+  // wind comes in gusts: the short waves are much stronger in patches (cat's paws) and weak in slicks, most obviously in light air
+  vec2 gx = uNoiseOrg + vec2(uCasc[1].y * vG.x + uCasc[1].z * vG.y, -uCasc[1].z * vG.x + uCasc[1].y * vG.y);
+  float gn = vnoise(gx / 380.0) * 0.6 + vnoise(gx / 130.0 + 5.0) * 0.4;
+  float gk = mix(0.10, 1.9, smoothstep(0.32, 0.68, gn));
+  gk = mix(1.0, gk, 0.12 + 0.88 * exp(-uWindSpeed / 5.5));
   for (int i = 0; i < 5; i++) {
     if (i >= uCascades) break;
     if (uDbg == i + 1) continue;
     vec4 s = texture(uSlope, vec3(cascUV(i, vG), float(i)));
-    S += toWorld(s.xy, i);
-    varSum += max(s.z - s.x * s.x, 0.0) + max(s.w - s.y * s.y, 0.0);
+    float w = i >= 2 ? gk : 1.0;
+    S += toWorld(s.xy, i) * w;
+    varSum += (max(s.z - s.x * s.x, 0.0) + max(s.w - s.y * s.y, 0.0)) * w * w;
   }
   float comp = max(1.0 + vJ, 0.45);
   S /= comp;
@@ -175,10 +182,11 @@ void main() {
     float m = smoothstep(58.0, 46.0, length(dy)) * uWakeB.z;
     if (m > 0.0) trail = texture(uTrail, fract((uTrailInfo.xy + rel.xz) / uTrailInfo.z)).r * m;
   }
-  float sigma2 = 0.5 * varSum + 0.5 * uMssRes;
+  float sigma2 = 0.5 * varSum + 0.5 * uMssRes * mix(gk, 1.0, 0.5);
+  S *= 1.0 - 0.7 * smoothstep(900.0, 6000.0, dist);   // mean tilt of far facets is unresolved: leave it to the roughness
   vec3 n = normalize(vec3(-S.x, 1.0, -S.y));
-  if (!gl_FrontFacing) n = -n;
-  if (!gl_FrontFacing) {
+  if (uUnder > 0.5) n = -n;
+  if (uUnder > 0.5) {
     // seen from below: Snell's window onto the sky, total internal reflection outside it
     vec3 Nd = n;                                   // already flipped: points down towards the viewer
     vec3 I = -V;
@@ -201,9 +209,10 @@ void main() {
       float px = length(fwidth(rfd));
       float disc = smoothstep(cos(SR) - 1.5 * px * SR, cos(SR) + 1.5 * px * SR, cs);
       Lw += min(lightSun() * shd / (PI * SR * SR), vec3(60000.0)) * disc * step(0.0, uSunDir.y);
-      colU = mix(Lunder, Lw, 1.0 - Fr);
+      // near the critical angle the window edge is softened by the surface roughness
+      float sinT = 1.333 * sqrt(max(1.0 - cosI * cosI, 0.0));
+      Fr = max(Fr, smoothstep(0.90 - sqrt(sigma2), 1.0 + sqrt(sigma2), sinT));
       colU = Lw * (1.0 - Fr) + Lunder * Fr;
-      colU = mix(colU, Lunder, smoothstep(0.35, 0.02, cosT) * 0.0);
     }
     // foam and bubbles seen from underneath
     float Db = 0.0;
@@ -224,6 +233,15 @@ void main() {
   vec3 Lsky = envRadiance(R, lodR);
   float F = fresnelRough(nv, sigma2);
   vec3 refl = F * Lsky * mix(0.35, 1.0, below);
+  if (uReflOn > 0.5) {
+    // mirror image of the yacht, distorted by the local wave slope and blurred by the roughness
+    vec3 rgt = normalize(cross(uFwdV, vec3(0.0, 1.0, 0.0)));
+    vec2 fH = normalize(uFwdV.xz + 1e-5);
+    vec2 ruv = gl_FragCoord.xy / uRes + vec2(dot(S, rgt.xz), dot(S, fH)) * 0.045;
+    float lodM = clamp(log2(1.0 + sqrt(sigma2) * 70.0), 0.0, 4.0);
+    vec4 rc = textureLod(uReflTex, ruv, lodM);
+    refl = F * (Lsky * mix(0.35, 1.0, below) * (1.0 - rc.a) + rc.rgb);
+  }
   float alpha2 = 2.0 * sigma2;
   vec3 spec = glitter(n, V, uSunDir, sunE, alpha2) + glitter(n, V, uMoonDir, moonE, alpha2);
 
@@ -265,37 +283,52 @@ void main() {
     float f = texture(uFoam, vec3(cascUV(i, vG), float(i))).x;
     D = max(D, i == 3 ? f * 0.85 : f);
   }
-  D = max(D, min(trail, 1.2) * 0.95);
+  D = max(D, min(trail, 1.2) * 0.72);
   vec3 col = refl + body;
-  if (D > 0.015) {
-    float wnd = smoothstep(6.0, 24.0, uWindSpeed);
+  if (D > 0.012) {
+    float wnd = smoothstep(3.0, 18.0, uWindSpeed);
     vec4 c1 = uCasc[1];
     vec2 x0 = uNoiseOrg + vec2(c1.y * vG.x + c1.z * vG.y, -c1.z * vG.x + c1.y * vG.y);   // absolute lagrangian metres, cascade-1 frame
     vec2 wl = vec2(c1.y * uWind.x + c1.z * uWind.y, -c1.z * uWind.x + c1.y * uWind.y);
-    vec2 perp = vec2(-wl.y, wl.x);
-    vec2 base = vec2(dot(x0, wl) / (1.0 + 2.2 * wnd), dot(x0, perp));
+    // foam is dragged into streaks along the wind; wake foam streams along the wake
+    vec2 wk = vec2(c1.y * uWakeA.z + c1.z * uWakeA.w, -c1.z * uWakeA.z + c1.y * uWakeA.w);
+    float tw = clamp(trail / max(D, 0.02), 0.0, 1.0);
+    vec2 dir = normalize(mix(wl, wk, tw * tw) + 1e-4);
+    vec2 perp = vec2(-dir.y, dir.x);
+    float stretch = 1.0 + 5.0 * wnd + 3.0 * tw + 0.8;
+    vec2 base = vec2(dot(x0, dir) / stretch, dot(x0, perp));
     vec2 pxm = vec2(length(dFdx(base)), length(dFdy(base)));
-    float pm = max(pxm.x, pxm.y);
-    vec2 warp = vec2(vnoise(base * 0.8 + 3.0), vnoise(base * 0.8 + 9.0)) - 0.5;
-    vec2 q = base + warp * 1.4;
-    float l1 = lace(q * 1.6, pm * 1.6), l2 = lace(q * 5.5 + 7.0, pm * 5.5), l3 = lace(q * 19.0 + 3.0, pm * 19.0);
-    float lc = 0.5 * l1 + 0.32 * l2 + 0.18 * l3;
-    float mottle = vnoise(q * 0.7 + 21.0) * 0.6 + vnoise(q * 2.3) * 0.4;
-    float t = D * 1.35 + (lc - 0.5) * 0.9 * (1.0 - 0.5 * D) + (mottle - 0.5) * 0.35 - 0.42;
-    float cov = smoothstep(0.0, 0.20, t);
-    float thick = smoothstep(0.05, 0.85, t);
+    float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
+    vec2 warp = vec2(vnoise(base * 0.55 + 3.0), vnoise(base * 0.55 + 9.0)) - 0.5;
+    vec2 q = base + warp * 2.6;
+    float l1 = lace(q * 1.3, pm * 1.3), l2 = lace(q * 4.6 + 7.0, pm * 4.6), l3 = lace(q * 16.0 + 3.0, pm * 16.0);
+    float lc = 0.45 * l1 + 0.33 * l2 + 0.22 * l3;
+    // streaky thickness: long along the flow, short across it
+    float st1 = vnoise(vec2(q.x * 0.22, q.y * 1.7) + 21.0), st2 = vnoise(vec2(q.x * 0.6, q.y * 5.3) + 5.0);
+    float streak = st1 * 0.6 + st2 * 0.4;
+    float mott = vnoise(q * 0.8 + 41.0) * 0.6 + vnoise(q * 2.9) * 0.4;
+    float t = D * 1.30 + (lc - 0.5) * 0.50 * (1.0 - 0.4 * D) + (streak - 0.5) * 0.95 + (mott - 0.5) * 0.25 - 0.36;
+    float cov = smoothstep(0.0, 0.11, t);
+    float thick = smoothstep(0.05, 0.95, t);
+    // far away, patches are smaller than a pixel: keep their average whiteness as a soft haze instead of speckle
+    float farK = smoothstep(0.35, 1.6, pm);
+    cov = mix(cov, clamp(D * 0.9, 0.0, 1.0), farK);
+    thick = mix(thick, D, farK);
     vec3 Efoam = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.6 + 0.4 * n.y);
-    float alb = mix(0.42, 0.86, thick) * (0.80 + 0.30 * l2 + 0.1 * l3);
-    vec3 foamCol = vec3(alb, alb * 0.995, alb * 0.985) * Efoam / PI * (0.78 + 0.22 * l1);
-    // thin foam lets some of the water colour through
-    foamCol = mix(foamCol, foamCol * vec3(0.78, 0.92, 1.0) + body * 0.6, (1.0 - thick) * 0.5);
+    float bubble = mix(0.72, 1.0, l3) * mix(0.82, 1.0, l2);
+    float alb = mix(0.30, 0.97, pow(thick, 0.7)) * bubble;
+    vec3 foamCol = vec3(alb, alb * 0.996, alb * 0.99) * Efoam / PI * (0.80 + 0.30 * l1);
+    // bright bubble-wall highlights facing the sun
+    foamCol += sunE * (l3 * l2) * 0.030 * pow(sat(dot(n, uSunDir)), 2.0) * thick;
+    // thin foam is see-through: water colour and reflection show between the bubbles
+    foamCol = mix(refl + body * 0.8 + foamCol * 0.5, foamCol, smoothstep(0.1, 0.7, thick));
     col = mix(col, foamCol, cov);
   }
   col += spec * (1.0 - clamp(D * 1.6, 0.0, 0.9));
 
   // aerial perspective toward the horizon colour in this azimuth
   vec3 hd = normalize(vec3(-V.x, 0.0, -V.z));
-  vec3 Lh = skyRadiance(normalize(vec3(hd.x, 0.01, hd.z)));
+  vec3 Lh = horizonColor(hd);
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001; // per metre at sea level
   vec3 T = exp(-ext * dist);
   col = col * T + Lh * (1.0 - T);
@@ -342,7 +375,7 @@ export class Water {
     gl.bindVertexArray(this.vao);
     p.m4('uVP', vp).f('uCamY', cam.y).i('uCascades', sim.count).f('uGridN', sim.N);
     p.t('uDisp', 8, sim.disp).t('uSlope', 9, sim.slope).t('uFoam', 10, sim.foamTex);
-    p.f('uHs', sim.cur.hs).f('uMssRes', Math.max(0.004, 0.003 + 0.00512 * sim.cur.U - sim.mss * 0.85));
+    p.f('uHs', sim.cur.hs).f('uMssRes', Math.max(0.0006, (0.003 + 0.00512 * sim.cur.U) * Math.min(1, Math.max(0, (sim.cur.U - 0.2) / 2.8)) - sim.mss * 0.85));
     if (setExtra) setExtra(p);
     let prev = null;
     for (let l = 0; l < CLIP_LEVELS; l++) {
