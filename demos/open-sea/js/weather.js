@@ -40,10 +40,10 @@ void main() {
   vec2 d = (cb.xy / cb.w - ca.xy / ca.w) * uViewport;
   vec2 dir = length(d) > 1e-3 ? normalize(d) : vec2(0.0, 1.0);
   vec2 perp = vec2(-dir.y, dir.x);
-  float w = 1.0;
+  float w = 1.35;
   c.xy += perp * side * w * 0.5 / uViewport * c.w * 2.0;
   float dist = length(rel);
-  vAlpha = uIntensity * 0.22 * (0.5 + h.y * 0.5) * (1.0 - t * 0.85) / (1.0 + dist / 9.0) * smoothstep(0.3, 1.5, dist);
+  vAlpha = uIntensity * 0.75 * (0.5 + h.y * 0.5) * (1.0 - t * 0.9) / (1.0 + dist / 16.0) * smoothstep(0.3, 1.5, dist);
   vRel = rel;
   gl_Position = c;
 }`;

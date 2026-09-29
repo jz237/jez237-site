@@ -9,6 +9,8 @@ uniform vec3 uShadowInfo;   // centre x, centre z, extent
 uniform float uShadowAvg;
 uniform vec4 uFlashLight;   // xyz direction to flash, w pre-exposed irradiance
 vec3 envRadiance(vec3 d, float lod) { return textureLod(uEnv, dirToHemiOct(d), lod).rgb; }
+// Colour of the air at the horizon in a given azimuth, including whatever cloud deck lies there (env map), for aerial perspective.
+vec3 horizonColor(vec3 dirH) { return envRadiance(normalize(vec3(dirH.x, 0.03, dirH.z)), 1.2); }
 vec3 lightSun() { return texelFetch(uLightTex, ivec2(0, 0), 0).rgb; }
 vec3 lightMoon() { return texelFetch(uLightTex, ivec2(1, 0), 0).rgb; }
 vec3 lightSky() { return texelFetch(uLightTex, ivec2(2, 0), 0).rgb; }   // irradiance on a horizontal plane
@@ -21,11 +23,12 @@ float cloudShadowAt(vec2 relXZ) {
 }
 // Diffuse ambient radiance arriving at a surface with normal n (cosine-weighted, blurred env).
 vec3 ambientFor(vec3 n) {
-  vec3 up = envRadiance(normalize(vec3(n.x * 0.8, max(n.y, 0.0) * 0.9 + 0.35, n.z * 0.8)), 4.5);
-  vec3 hz = envRadiance(normalize(vec3(n.x, 0.15, n.z)), 4.5);
   float t = clamp(n.y, -1.0, 1.0);
-  vec3 skyPart = mix(hz, up, smoothstep(-0.2, 0.9, t)) * (0.5 + 0.5 * smoothstep(-1.0, 0.6, t));
-  return mix(skyPart, lightGround(), smoothstep(0.1, -0.7, t) * 0.85);
+  vec3 sky = lightSky() / PI;                                 // uniform-hemisphere equivalent radiance (not zenith-blue)
+  vec3 hemi = sky * mix(0.62, 1.05, smoothstep(-0.2, 1.0, t));
+  vec3 side = envRadiance(normalize(vec3(n.x, 0.28, n.z)), 5.0);   // sun-side / horizon glow for walls
+  vec3 a = mix(hemi, 0.65 * hemi + 0.35 * side, 1.0 - abs(t));
+  return mix(a, lightGround(), smoothstep(0.1, -0.7, t) * 0.85);
 }
 `);
 
@@ -55,6 +58,8 @@ void main() {
       c += envR(normalize(vec3(cs.x * 0.993, 0.122, cs.y * 0.993)), 5.0);
     }
     r = e + 1.49 * 0.25 * a + 1.09 * 0.25 * b + 0.21 * 0.25 * c;
+    // skylight is scattered again by ground, sea, cloud and aerosol: the irradiance is less blue than the zenith radiance
+    r = mix(vec3(dot(r, vec3(0.2126, 0.7152, 0.0722))), r, 0.70);
   } else if (i == 3) {
     // light bounced up from a dark sea: a fraction of what falls on it, tinted teal
     vec3 s = sunIrradiance(0.0) * max(uSunDir.y, 0.0) + moonIrradiance() * max(uMoonDir.y, 0.0);

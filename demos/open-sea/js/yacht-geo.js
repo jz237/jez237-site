@@ -85,13 +85,13 @@ export const SAILS = {
     tack: [DIM.MAST_X + 0.12, DIM.DECK_H + DIM.BOOM_H, 0],
     head: [DIM.MAST_X + 0.10, DIM.DECK_H + DIM.MAST_H - 0.6, 0],
     clew: [DIM.MAST_X - DIM.BOOM_LEN, DIM.DECK_H + DIM.BOOM_H + 0.12, 0],
-    roach: 0.55, draft: 0.34,
+    roach: 0.55, draft: 0.60,
   },
   jib: {
     tack: [5.05, DIM.DECK_H + 0.55, 0],
     head: [DIM.MAST_X + 0.28, DIM.DECK_H + DIM.MAST_H - 1.9, 0],
     clew: [-0.15, DIM.DECK_H + 1.15, 0],
-    roach: 0.18, draft: 0.30,
+    roach: 0.18, draft: 0.52,
   },
 };
 
@@ -158,7 +158,6 @@ export function buildYacht() {
   // mast, boom, spreaders
   const mx = DIM.MAST_X, dh = DIM.DECK_H;
   B.tube([mx, dh, 0], [mx, dh + DIM.MAST_H, 0], 0.085, 0.045, MAT.ALU, 14, false, 1.25);
-  B.tube([mx, dh + DIM.BOOM_H, 0], [mx - DIM.BOOM_LEN, dh + DIM.BOOM_H + 0.10, 0], 0.055, 0.045, MAT.ALU, 10, false, 1);
   for (const [h, len] of [[5.6, 1.15], [10.3, 0.85]]) for (const s of [1, -1]) B.tube([mx, dh + h, 0], [mx - 0.1, dh + h + 0.08, s * len], 0.018, 0.012, MAT.ALU, 6);
   B.tube([mx + 0.05, dh + DIM.MAST_H - 0.05, 0], [mx + 0.35, dh + DIM.MAST_H + 0.02, 0], 0.03, 0.02, MAT.STEEL, 6);
   // bow roller / pulpit stanchions & pushpit
@@ -177,7 +176,7 @@ export function buildYacht() {
   }, 12, 10, MAT.KEEL);
   B.grid((u, v) => { const z = -0.36 - v * 1.52; const chord = 2.2 - 1.15 * v, xr = -0.35 + 0.55 * v, t = u * 2 - 1; const half = 0.05 * (1 - 0.5 * v); return [xr + t * chord / 2, z, -0.001 - half * Math.sqrt(Math.max(0, 1 - t * t))]; }, 12, 10, MAT.KEEL, true);
   B.grid((u, v) => { const a = u * Math.PI * 2, b = v * Math.PI; return [0.05 + 0.55 * Math.cos(b), -1.9 + 0.13 * Math.sin(b) * Math.cos(a), 0.13 * Math.sin(b) * Math.sin(a)]; }, 16, 10, MAT.KEEL, true);
-  for (const s of [1, -1]) B.grid((u, v) => { const z = -0.28 - v * 1.25; const c = 0.55 - 0.15 * v, xr = -4.35 - 0.12 * v, t = u * 2 - 1; return [xr + t * c / 2, z, s * (0.001 + 0.03 * Math.sqrt(Math.max(0, 1 - t * t)))]; }, 8, 8, MAT.KEEL, s < 0);
+  for (const s of [1, -1]) B.grid((u, v) => { const z = -0.02 - v * 1.5; const c = 0.55 - 0.15 * v, xr = -4.35 - 0.12 * v, t = u * 2 - 1; return [xr + t * c / 2, z, s * (0.001 + 0.03 * Math.sqrt(Math.max(0, 1 - t * t)))]; }, 8, 8, MAT.KEEL, s < 0);
 
   // Sails are separate buffers: their geometry is bent in the vertex shader.
   const mesh = { verts: new Float32Array(B.v), idx: new Uint32Array(B.i) };
@@ -198,7 +197,13 @@ export function buildYacht() {
     }, nu, nv, mat, false);
     return { verts: new Float32Array(S2.v), idx: new Uint32Array(S2.i) };
   };
-  return { hull: mesh, main: sailMesh(SAILS.main, MAT.SAIL, 36, 44), jib: sailMesh(SAILS.jib, MAT.SAIL, 32, 40) };
+  const BB = new Builder();
+  BB.tube([DIM.MAST_X + 0.02, DIM.DECK_H + DIM.BOOM_H, 0], [DIM.MAST_X - DIM.BOOM_LEN, DIM.DECK_H + DIM.BOOM_H + 0.10, 0], 0.06, 0.048, MAT.ALU, 10, false, 1);
+  // gooseneck and clew fittings
+  BB.box([DIM.MAST_X + 0.02, DIM.DECK_H + DIM.BOOM_H, 0], [0.09, 0.07, 0.07], MAT.STEEL);
+  BB.box([DIM.MAST_X - DIM.BOOM_LEN, DIM.DECK_H + DIM.BOOM_H + 0.10, 0], [0.06, 0.06, 0.06], MAT.STEEL);
+  return { hull: mesh, main: sailMesh(SAILS.main, MAT.SAIL, 36, 44), jib: sailMesh(SAILS.jib, MAT.SAIL, 32, 40),
+    boom: { verts: new Float32Array(BB.v), idx: new Uint32Array(BB.i) } };
 }
 
 // Rigging lines (local coordinates): [x0,y0,z0,x1,y1,z1,width]
@@ -206,10 +211,10 @@ export function buildRigging() {
   const L = [];
   const mx = DIM.MAST_X, dh = DIM.DECK_H, top = dh + DIM.MAST_H;
   const add = (a, b, w) => L.push(...a, ...b, w);
-  add([5.25, dh + 0.35, 0], [mx + 0.05, top - 1.8, 0], 0.012);        // forestay
-  add([mx + 0.32, top, 0], [-5.55, dh + 0.85, 0], 0.011);            // backstay
+  add([5.25, dh + 0.35, 0], [mx + 0.05, top - 1.8, 0], 0.016);        // forestay
+  add([mx + 0.32, top, 0], [-5.55, dh + 0.85, 0], 0.015);            // backstay
   for (const s of [1, -1]) {
-    add([mx + 0.02, top - 2.0, 0], [mx + 0.05, dh + 0.1, s * 1.72], 0.010);     // cap shroud
+    add([mx + 0.02, top - 2.0, 0], [mx + 0.05, dh + 0.1, s * 1.72], 0.014);     // cap shroud
     add([mx, dh + 5.6, s * 1.15], [mx - 0.25, dh + 0.1, s * 1.72], 0.008);      // lower
     add([mx, dh + 10.3, s * 0.85], [mx, dh + 5.6, s * 1.15], 0.006);
     add([mx, dh + 5.6, 0], [mx, dh + 5.6, s * 1.15], 0.006);
@@ -220,7 +225,7 @@ export function buildRigging() {
     let prev = null;
     for (let x = -4.6; x <= 4.61; x += 0.55) {
       const b = halfBeam(x) * 0.93, p = [x, sheer(x) + 0.09 + h, s * b];
-      if (prev) add(prev, p, 0.005);
+      if (prev) add(prev, p, 0.009);
       prev = p;
     }
   }

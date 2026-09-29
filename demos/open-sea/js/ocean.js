@@ -8,7 +8,7 @@ const TLOOP = 400;
 
 // ---- sea state table: Douglas-like 0..9 -> significant height, 10 m wind ---------------
 const TABLE = [
-  { hs: 0.025, U: 0.4 }, { hs: 0.10, U: 1.6 }, { hs: 0.35, U: 3.3 }, { hs: 0.9, U: 5.4 },
+  { hs: 0.010, U: 0.3 }, { hs: 0.07, U: 1.4 }, { hs: 0.35, U: 3.3 }, { hs: 0.9, U: 5.4 },
   { hs: 1.9, U: 8.0 }, { hs: 3.1, U: 11.0 }, { hs: 4.8, U: 14.5 }, { hs: 7.0, U: 18.5 },
   { hs: 10.0, U: 23 }, { hs: 14.0, U: 29 },
 ];
@@ -25,7 +25,7 @@ export function seaParams(s) {
   return {
     s, hs, U, tp,
     gamma: lerp(3.3, 2.0, s / 9),
-    spread: 2 + 9 * smoothstep(0, 4, s),
+    spread: 2 + 13 * smoothstep(0, 4, s),
     swellHs, swellTp, swellGamma: 6, swellSpread: 40,
     swellOffset: 0.6,
     chop: lerp(0.55, 1.05, smoothstep(1.5, 8, s)),
@@ -113,7 +113,7 @@ float jonswap(float w, float A, float wp, float gam) {
 float spreadD(vec2 kn, float ang, float w, float wp, float sp) {
   // cos^(2s)(theta/2) written as ((1+cos theta)/2)^s: no atan branch cut, exactly symmetric.
   float cosT = dot(kn, vec2(cos(ang), sin(ang)));
-  float mu = w > wp ? -2.5 : 5.0;
+  float mu = w > wp ? -1.6 : 5.0;
   float s = clamp(sp * pow(w / wp, mu), 0.4, 300.0);
   return sqrt(s + 0.25) / (2.0 * sqrt(PI)) * pow(max(0.5 * (1.0 + cosT), 0.0), s);
 }

@@ -10,6 +10,16 @@ export const CAUSTIC_RES = 512;
 import { defineChunk } from './gl.js';
 defineChunk('underwater', `
 uniform float uUseSun;       // 1: sun drives the underwater beam, 0: moon
+uniform sampler2D uCaustic;
+uniform vec3 uCausticInfo;   // camera x, z modulo the caustic tile, tile size (m)
+// Focusing of the sun beam at a point rel (camera-relative) that lies z metres below the surface.
+float causticGainRel(vec3 rel, float z, vec3 sunW, float dtBlur) {
+  vec2 q = rel.xz - sunW.xz * (z / max(-sunW.y, 0.15));
+  vec2 uv = fract((uCausticInfo.xy + q) / uCausticInfo.z);
+  float lod = clamp(log2(max(dtBlur * 0.6, 0.047) / 0.047), 0.0, 6.0);
+  vec2 g = textureLod(uCaustic, uv, lod).rg;
+  return z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
+}
 const vec3 CATT = vec3(0.41, 0.100, 0.046);     // beam attenuation c = a + b   (1/m)
 const vec3 KD   = vec3(0.34, 0.078, 0.030);     // diffuse attenuation
 const vec3 RRS  = vec3(0.0045, 0.0200, 0.0330); // remote-sensing reflectance of clear blue water (1/sr)
@@ -81,28 +91,19 @@ const FX_FS = `
 #include <lighting>
 in vec2 vUv;
 #include <underwater>
-uniform sampler2D uScene, uDepth, uCaustic;
+uniform sampler2D uScene, uDepth;
 uniform mat4 uInvVP;
 uniform vec3 uFwd;
 uniform float uNear, uFar;
 uniform vec3 uCam;            // absolute camera position, y = height above mean sea level
 uniform float uUnder, uSurfY;
 uniform float uRain, uTime, uCloudBase, uFlash;
-uniform vec3 uCausticInfo;    // camera modulo tile x, z, tile size
 out vec4 o;
 vec3 uSunW, uBeamCol, uEd0;
-const float BSC = 0.035;                        // scattering coefficient (1/m)
+const float BSC = 0.055;                        // scattering coefficient (1/m)
 
 float hg(float c, float g) { float g2 = g * g; return (1.0 - g2) / (4.0 * PI * pow(1.0 + g2 - 2.0 * g * c, 1.5)); }
-float causticGain(vec3 p, float z, float dt) {
-  // trace the mean refracted beam back to the surface, then look up focusing at that entry point
-  vec2 q = p.xz + uSunW.xz * (z / max(-uSunW.y, 0.15)) * -1.0;
-  vec2 uv = fract((uCausticInfo.xy + (q - uCam.xz)) / uCausticInfo.z);
-  float lod = clamp(log2(max(dt * 0.6, 0.047) / 0.047), 0.0, 6.0);   // blur the pattern in proportion to the step length
-  vec2 g = textureLod(uCaustic, uv, lod).rg;
-  float gz = z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
-  return gz;
-}
+float causticGain(vec3 p, float z, float dt) { return causticGainRel(p - uCam, z, uSunW, dt); }
 
 void main() {
   vec3 scene = texture(uScene, vUv).rgb;
@@ -121,7 +122,9 @@ void main() {
     const int N = 30;
     vec3 T = vec3(1.0), Lp = vec3(0.0), Lsh = vec3(0.0);
     float cosS = -dot(uSunW, dir);
-    float ph = 0.85 * hg(cosS, 0.89) + 0.012;
+    float ph = 0.85 * hg(cosS, 0.89) + 0.02;
+    // the underwater light field is far brighter looking up than down
+    float aniso = mix(0.45, 2.4, smoothstep(-1.0, 0.25, dir.y)) * (1.0 + 0.6 * smoothstep(0.25, 1.0, dir.y));
     for (int i = 0; i < N; i++) {
       float fa = (float(i) + jit * 0.0) / float(N), fb = (float(i) + 1.0) / float(N);
       float ta = dmax * fa * fa, tb = dmax * fb * fb;
@@ -129,7 +132,7 @@ void main() {
       vec3 p = uCam + dir * t;
       float z = max(uSurfY - p.y, 0.0);
       vec3 Ts = exp(-CATT * dt);
-      Lp += T * RRS * uEd0 * exp(-KD * z) * (1.0 - Ts);
+      Lp += T * RRS * uEd0 * exp(-KD * z) * aniso * (1.0 - Ts);
       vec3 beam = uBeamCol * exp(-CATT * z / max(-uSunW.y, 0.25));
       Lsh += T * beam * (causticGain(p, z, dt) * BSC * ph * dt);
       T *= Ts;
@@ -138,7 +141,7 @@ void main() {
       vec3 ph_ = uCam + dir * dist;
       float zo = max(uSurfY - ph_.y, 0.0);
       col = scene * exp(-KD * zo);
-    } else col = RRS * uEd0 * exp(-KD * 40.0);
+    } else col = vec3(0.0);
     // remaining transmittance for the part of the path beyond dmax
     col = col * T + Lp + Lsh;
   } else if (uRain > 0.01) {
@@ -147,14 +150,14 @@ void main() {
     const int N = 12;
     float tau = 0.0;
     vec3 base = uCam;
-    float dens0 = uRain * uRain * 0.0011 + uRain * 0.00012;
+    float dens0 = uRain * uRain * 0.00034 + uRain * 0.00006;
     for (int i = 0; i < N; i++) {
       float f0 = float(i) / float(N), f1 = float(i + 1) / float(N);
       float t = dm * 0.5 * (f0 * f0 + f1 * f1), dt = dm * (f1 * f1 - f0 * f0);
       vec3 p = base + dir * t;
       float cellN = vnoise((p.xz + vec2(uTime * 14.0, uTime * 6.0)) / 1900.0) * 0.6 + vnoise((p.xz + vec2(uTime * 25.0, 0.0)) / 620.0) * 0.4;
       float hm = smoothstep(uCloudBase + 200.0, uCloudBase - 300.0, p.y);
-      float ptch = mix(0.45, 1.35, smoothstep(0.25, 0.8, cellN));
+      float ptch = mix(0.35, 1.9, smoothstep(0.3, 0.75, cellN));
       tau += dens0 * ptch * hm * dt;
     }
     float Tr = exp(-tau);
@@ -185,16 +188,21 @@ export class Fx {
     this.center = [cx, cz];
   }
 
+  // bind the caustic map (unit 6) and its addressing for any program that includes the 'underwater' chunk
+  bindCaustic(p, cam) {
+    const S = CAUSTIC_SIZE, m = v => v - Math.floor(v / S) * S;
+    p.t('uCaustic', 6, this.caustic).v3('uCausticInfo', m(cam.x), m(cam.z), S);
+  }
+
   composite(post, ctx, o) {
     const p = this.prog.use();
     bindLighting(p, ctx);
-    p.t('uScene', 4, post.colorCopy).t('uDepth', 5, post.depthCopy).t('uCaustic', 6, this.caustic);
+    p.t('uScene', 4, post.colorCopy).t('uDepth', 5, post.depthCopy);
+    this.bindCaustic(p, ctx.cam);
     p.m4('uInvVP', o.invVP).v3('uFwd', o.fwd[0], o.fwd[1], o.fwd[2]).f('uNear', o.near).f('uFar', o.far)
       .v3('uCam', ctx.cam.x, ctx.cam.y, ctx.cam.z).f('uUnder', o.under ? 1 : 0).f('uSurfY', o.surfY)
       .f('uRain', o.rain).f('uTime', ctx.time).f('uCloudBase', o.cloudBase).f('uFlash', o.flash)
       .f('uUseSun', o.useSun ? 1 : 0);
-    const S = CAUSTIC_SIZE, m = v => v - Math.floor(v / S) * S;
-    p.v3('uCausticInfo', m(ctx.cam.x), m(ctx.cam.z), S);
     drawFS();
   }
 }

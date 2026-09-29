@@ -64,7 +64,7 @@ const TONE_FS = `
 #include <common>
 in vec2 vUv;
 uniform sampler2D uHdr, uBloom, uExpo;
-uniform float uBloomAmt, uTime, uGrain, uVignette, uEVBias, uFlash;
+uniform float uBloomAmt, uTime, uGrain, uVignette, uEVBias, uFlash, uNight;
 uniform vec2 uRes;
 out vec4 o;
 vec3 aces(vec3 x) { return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0); }
@@ -96,12 +96,16 @@ void main() {
   vec3 bloom = texture(uBloom, vUv).rgb;
   float E = texture(uExpo, vec2(0.5)).r * uEVBias;
   vec3 c = (hdr + bloom * uBloomAmt) * E;
+  // low light: rods take over (less colour, blue shift) and the sensor gets noisy
+  float ll0 = luma(c);
+  c = mix(c, vec3(ll0) * vec3(0.86, 0.97, 1.18), 0.5 * uNight);
+  c *= 1.0 + (hash21(gl_FragCoord.xy * 1.13 + fract(uTime * 3.1) * 91.0) - 0.5) * 0.10 * uNight;
   // gentle highlight desaturation like a film shoulder
   float l = luma(c);
   c = mix(c, vec3(l), smoothstep(1.0, 8.0, l) * 0.5);
   c = agx(c);
   c = mix(c, c * c * (3.0 - 2.0 * c), 0.55);   // extra shoulder/toe contrast for a photographic look
-  float lc = luma(c); c = clamp(mix(vec3(lc), c, 1.28), 0.0, 1.0);
+  float lc = luma(c); c = clamp(mix(vec3(lc), c, 1.14), 0.0, 1.0);
   vec2 q = vUv - 0.5;
   c *= 1.0 - uVignette * smoothstep(0.25, 0.85, dot(q, q) * 1.6);
   vec3 s = srgb(c);
@@ -109,7 +113,7 @@ void main() {
   vec2 px = gl_FragCoord.xy;
   float n1 = hash21(px + fract(uTime) * 71.0), n2 = hash21(px * 1.37 + 13.0 + fract(uTime * 1.3) * 53.0);
   float tri = n1 + n2 - 1.0;
-  s += tri * (1.0 / 255.0) * (1.0 + uGrain * 3.0 * (1.0 - min(l, 1.0)));
+  s += tri * (1.0 / 255.0) * (1.0 + uGrain * 3.0 * (1.0 - min(l, 1.0)) + 4.0 * uNight);
   o = vec4(s, 1.0);
 }`;
 
@@ -195,7 +199,7 @@ export class Post {
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     this.pTone.use().t('uHdr', 0, this.color).t('uBloom', 1, this.up[0].t).t('uExpo', 2, this.expo[this.expoIdx])
       .f('uBloomAmt', opts.bloom ?? 0.02).f('uTime', time).f('uGrain', opts.grain ?? 0.5).f('uVignette', opts.vignette ?? 0.28)
-      .f('uEVBias', opts.ev ?? 1).f('uFlash', 0).v2('uRes', w, h);
+      .f('uEVBias', opts.ev ?? 1).f('uFlash', 0).f('uNight', opts.night ?? 0).v2('uRes', w, h);
     drawFS();
   }
 }
