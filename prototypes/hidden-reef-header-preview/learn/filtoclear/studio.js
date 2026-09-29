@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {RoomEnvironment} from './vendor/RoomEnvironment.js';
-import {buildFilter} from './model.js?v=detail-2';
+import {buildFilter} from './model.js?v=cutaway-detail-3';
 import {PARTS,GROUPS,LESSONS,smooth} from './data.js';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const state={mode:'assembled',amount:0,target:0,selected:null,isolated:false,system:'all',labels:false,paused:reduced.matches,rotate:false,sequence:false,sequenceTime:0,lesson:0,tab:'parts',ready:false,time:0};
+const state={mode:'cutaway',amount:0,target:0,selected:null,isolated:false,system:'all',labels:false,paused:reduced.matches,rotate:false,sequence:false,sequenceTime:0,lesson:0,tab:'parts',ready:false,time:0};
 let renderer,scene,camera,controls,filter,flowRoot,camTween,environment,resizeObserver;
 const flowPaths=[],ray=new THREE.Raycaster(),pointer=new THREE.Vector2(),labelEls=new Map();
 const stage=$('viewport'),status=$('scene-status');
@@ -48,14 +48,14 @@ $('explode').oninput=e=>{stopSequence();state.mode=+e.target.value?'exploded':'a
 $('explode').onchange=()=>fitView();
 $('sequence').onclick=()=>{if(state.sequence){stopSequence();return;}mode('exploded',{stop:false});state.sequence=true;state.sequenceTime=0;state.amount=0;state.target=0;state.paused=false;setPause(false);$('sequence').setAttribute('aria-pressed','true');$('sequence').textContent='■ Stop sequence';};
 $('pause').onclick=()=>setPause(!state.paused);$('rotate').onclick=()=>{state.rotate=!state.rotate;$('rotate').setAttribute('aria-pressed',String(state.rotate));};
-$('reset').onclick=()=>{selected(null);state.rotate=false;state.labels=false;$('rotate').setAttribute('aria-pressed','false');$('labels-toggle').setAttribute('aria-pressed','false');$('part-search').value='';options();mode('assembled');cameraView('perspective');};
+$('reset').onclick=()=>{selected(null);state.rotate=false;state.labels=false;$('rotate').setAttribute('aria-pressed','false');$('labels-toggle').setAttribute('aria-pressed','false');$('part-search').value='';options();mode('cutaway');cameraView('perspective');};
 $('fit').onclick=()=>fitView();document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>cameraView(b.dataset.view));
 $('tour-start').onclick=()=>chapter(0);$('previous').onclick=()=>chapter(state.lesson-1);$('next').onclick=()=>chapter(state.lesson+1);$('lesson-replay').onclick=()=>chapter(state.lesson);
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{status.textContent='Fullscreen is unavailable in this browser';}};
 addEventListener('keydown',e=>{if(e.key==='Escape'){selected(null);state.system='all';$('system').value='all';styleParts();}});
 reduced.addEventListener('change',e=>{if(e.matches){setPause(true);state.rotate=false;$('rotate').setAttribute('aria-pressed','false');stopSequence();}});
 
-function bounds(){filter.pose(state.target,['cutaway','flow','cleaning'].includes(state.mode));filter.root.updateMatrixWorld(true);const box=new THREE.Box3();for(const p of filter.parts.values())if(p.object.visible)box.expandByObject(p.object);filter.pose(state.amount,['cutaway','flow','cleaning'].includes(state.mode));return box.isEmpty()?new THREE.Box3(new THREE.Vector3(-1,0,-1),new THREE.Vector3(1,3,1)):box;}
+function bounds(){filter.pose(state.target,!state.isolated&&['cutaway','flow','cleaning'].includes(state.mode));filter.root.updateMatrixWorld(true);const box=new THREE.Box3();for(const p of filter.parts.values())if(p.object.visible)box.expandByObject(p.object);filter.pose(state.amount,!state.isolated&&['cutaway','flow','cleaning'].includes(state.mode));return box.isEmpty()?new THREE.Box3(new THREE.Vector3(-1,0,-1),new THREE.Vector3(1,3,1)):box;}
 function fitView(direction){if(!camera||!filter)return;const box=bounds(),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());const aspect=stage.clientWidth/stage.clientHeight;const vfov=camera.fov*Math.PI/180,hfov=2*Math.atan(Math.tan(vfov/2)*aspect);const diagonal=Math.sqrt(size.x**2+size.z**2);const distance=Math.max(size.y/(2*Math.tan(vfov/2)),diagonal/(2*Math.tan(hfov/2)))*1.22+size.z*.25;
  const dir=direction??camera.position.clone().sub(controls.target).normalize();const pos=center.clone().addScaledVector(dir,Math.max(3.0,distance));center.y+=size.y*.025;
  camTween={from:camera.position.clone(),to:pos,start:controls.target.clone(),target:center,time:0};if(reduced.matches){camera.position.copy(pos);controls.target.copy(center);camTween=null;controls.update();}}
@@ -87,13 +87,13 @@ async function init(){try{
  renderer.domElement.addEventListener('pointermove',e=>{const hit=intersect(e);const el=$('tooltip');el.hidden=!hit||!!pointerStart;renderer.domElement.style.cursor=hit?'pointer':'grab';if(hit){el.textContent=filter.parts.get(hit.object.userData.part).name;const r=stage.getBoundingClientRect();el.style.left=Math.min(e.clientX-r.left+14,stage.clientWidth-210)+'px';el.style.top=Math.max(10,e.clientY-r.top-35)+'px';}});renderer.domElement.addEventListener('pointerleave',()=>{$('tooltip').hidden=true;pointerStart=null;});
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();$('error').hidden=false;state.ready=false;});
  resizeObserver=new ResizeObserver(()=>{const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);});resizeObserver.observe(stage);
- state.ready=true;document.body.dataset.ready='true';document.body.dataset.partCount=PARTS.length;$('loading').hidden=true;cameraView('perspective');renderer.setAnimationLoop(frame);
+ state.ready=true;document.body.dataset.ready='true';document.body.dataset.partCount=PARTS.length;$('loading').hidden=true;mode('cutaway',{fit:false});filter.pose(0,true);cameraView('perspective');renderer.setAnimationLoop(frame);
  }catch(error){console.error('Filter studio:',error);$('loading').hidden=true;$('error').hidden=false;status.textContent='TEXT EXPLORER AVAILABLE';}
 }
 function frame(now){const dt=Math.min((now-last)/1000,.05);last=now;if(!state.ready||document.hidden)return;
  if(!state.paused){state.time+=dt;if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;if(t<4)state.target=smooth(t/4);else if(t<7)state.target=1;else if(t<11)state.target=1-smooth((t-7)/4);else{stopSequence();mode('assembled',{fit:true});}}}
  if(!state.paused)state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*6));if(Math.abs(state.amount-state.target)<.0001)state.amount=state.target;
- const cut=['cutaway','flow','cleaning'].includes(state.mode),clean=state.mode==='cleaning'?(Math.sin(state.time*2.0)*.5+.5):0;
+ const cut=!state.isolated&&['cutaway','flow','cleaning'].includes(state.mode),clean=state.mode==='cleaning'?(Math.sin(state.time*2.0)*.5+.5):0;
  filter.pose(state.amount,cut,clean,state.time,state.mode==='flow');if(state.mode==='cleaning'){filter.parts.get('valve').object.rotation.y=Math.PI/2;filter.parts.get('waste-cap').object.position.x+=.5;filter.parts.get('waste-cap').object.position.y-=.5;}
  filter.alignment.visible=state.mode==='exploded'&&!state.isolated&&state.system==='all';
  if(camTween){camTween.time+=dt;const t=smooth(Math.min(1,camTween.time/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.start,camTween.target,t);if(t>=1)camTween=null;}
