@@ -1,0 +1,86 @@
+{
+  "previousRelease": "be2a80254199583fa3718a011935eb02023bf1f6",
+  "scope": "Loading and client rendering work; original assets, physics, handling, damage field and server inputs preserved.",
+  "files": {
+    "index.html": {
+      "before": "5de1cfeec08a0e3a49dc3544df762ec7464729a54d504c3bc734242dce5b1365",
+      "after": "e21df8110286b14ae39ad34a21ac42a88246a1c961eab0601609cc2573aa023f",
+      "snapshot": "tests/fixtures/performance-before-index.html.gz"
+    },
+    "src/assets.ts": {
+      "before": "43db6db7615efe078477f5181d7c932dcf2f4da3a5014e2481e384af36ac1ad6",
+      "after": "c71ee86b74145a33846ba0bf6204863385964319bb1c07ff0f4054aad7c1076b",
+      "snapshot": "tests/fixtures/performance-before-src-assets.ts.gz"
+    },
+    "src/audio.ts": {
+      "before": "b8b7a14d06435cbca543be380f57921f2cbe6f787ea460e1d3891c787a83f231",
+      "after": "4da7b292bc5b7cb692e171b736019994a0619809778bb482ed29b771b7d78631",
+      "snapshot": "tests/fixtures/performance-before-src-audio.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "a13fa904c3c81ccaf20596fcc9f97a82271647efb7afe315eb1a4733106b4ed1",
+      "after": "9d1c9b3a18bd0cdd6f597441279ea286f1653a9a6fb1fe61894d06097f1e5373",
+      "snapshot": "tests/fixtures/performance-before-src-main.ts.gz"
+    },
+    "src/scenery-cut.ts": {
+      "before": "f6a40b04d368e89e513091feef360e6e645bee9c322a32c783d0bc0d19dd9dea",
+      "after": "bf6ccaabf14c9dbc686f42aa0e6f5d05c5a028c212a1b456a91ee783b8eb37a0",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-cut.ts.gz"
+    },
+    "src/scenery-east-bay.ts": {
+      "before": "078011f5a9f1c985a243cc2f99246cca1f3e65d2d2e7a41855e4c406c850bd5b",
+      "after": "d2af62e766bb85579de56dcc008fafa987c27b5f46a986551334711acfc47091",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-east-bay.ts.gz"
+    },
+    "src/scenery-extension.ts": {
+      "before": "7fd8b826d2cc7ba6adb857c9ecba3f10428ea7364879bc4381fb7e67b5de49e9",
+      "after": "8e8df2322bbc6b08379d0415fe4c035da6069ded92398097f48c4c9bc8420169",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-extension.ts.gz"
+    },
+    "src/scenery-headwall.ts": {
+      "before": "d0104d07ded7ef94d510bb5e0918a59754f53ec29e8901f5422bca0aa05d3866",
+      "after": "79cc7b2fe49675fc3e56f7d1fdb44fbaa883a012a901faab14ef665676dc0fa4",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-headwall.ts.gz"
+    },
+    "src/scenery-north-forest.ts": {
+      "before": "d1170133a4b7ca1faa31c2b3ec03411a670db57a3985cbbafda1615896bd9a0e",
+      "after": "28d4ac801f3571cc8ca89aae145c125863c6c88d68774a93ec60f0a7a1b2ffcf",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-north-forest.ts.gz"
+    },
+    "src/scenery-road-approach.ts": {
+      "before": "53e5c20a413c243a66b59efe1db5722dde34125dd2be47eb4dfa0be0ab853b8e",
+      "after": "03e954f32e7acf26fa0457452f6c0b73d73a5b69f0233ee5dbb3dd62c8220518",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-road-approach.ts.gz"
+    },
+    "src/scenery-roadside.ts": {
+      "before": "11117aa0306c2e5a23a128a701efcc8044f4cc34dd0e36a179f382a10aa899e9",
+      "after": "ce9f0621d0f098d55a3c020b8ec2abbea0f30552ead1fa71f95d4a2f9d133097",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-roadside.ts.gz"
+    },
+    "src/scenery-vegetation.ts": {
+      "before": "699d5b9a0b919b83659498270022a36446e20c8e060611649b6d31384fe43b30",
+      "after": "c0325f61bccea1a6fb18a53d4e5eea59cfcba36809c5b81fdd9516c436e936ac",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-vegetation.ts.gz"
+    },
+    "src/scenery-west-wall.ts": {
+      "before": "f68ef838051a666d2b114b17dd58db1cf4a87e9b041b9607a9702cc411c4e12b",
+      "after": "87ce3c49a5f0225f9d9bd6752f8601fe0691ef835a4f3bab6584b6081862cb17",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-west-wall.ts.gz"
+    },
+    "src/scenery-workyard.ts": {
+      "before": "8fddc1ed8b78d64d80ff97005f8ec7db64d491d35e9591b15fe5b85ca87c8f99",
+      "after": "3c5e3bff5a156aaab0eae081ca508842ef730735035fa139f7eb157585a4ebe5",
+      "snapshot": "tests/fixtures/performance-before-src-scenery-workyard.ts.gz"
+    },
+    "src/world.ts": {
+      "before": "9954036f5d696906581f04a711b2d283e1bc075190deeecec40f85c32a419435",
+      "after": "b6aa8a430dc0793078b6cf931cfd29772d6c7a174da7b9a8f3156b059ffbcfca",
+      "snapshot": "tests/fixtures/performance-before-src-world.ts.gz"
+    },
+    "src/wreck-geometry.ts": {
+      "before": "21ea019e98d3c792cf0a9fd0a75100623224846d81ddc9bc0a600c3c098b2a13",
+      "after": "4e6432f6967c0564b50dfbe08538e36b8bd3434cab47aef001fb7937df63f740",
+      "snapshot": "tests/fixtures/performance-before-src-wreck-geometry.ts.gz"
+    }
+  }
+}
