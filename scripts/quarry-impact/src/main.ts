@@ -17,6 +17,8 @@ import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
 import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
+import {DrivingBrain} from './driving-brain';
+import {DemoDirector, DEMO_CAMERAS, type DemoCamera} from './demo-director';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
 import { OnlineUI } from './online-ui';
@@ -51,6 +53,8 @@ const settings = {
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
 let vehicleFire:VehicleFire | undefined;
+const drivers=new DrivingBrain(),director=new DemoDirector();
+let demo=false,demoRestart=0;
 sound.levels = {
   engine: settings.engine,
   effects: settings.effects,
@@ -158,6 +162,7 @@ function loading(message: string) {
   ui.innerHTML = `<div class="menu"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1></div><div class="loading"><div class="eyebrow">${message}</div><div></div></div></div>`;
 }
 function menu() {
+  demo=false;demoRestart=0;director.reset();orbit.maxDistance=22;orbit.enablePan=true;
   if (online?.active) online.disconnect();
   state = 'menu';
   wreckHold = 0;
@@ -181,7 +186,10 @@ function menu() {
         menu();
       }),
   );
-  document.querySelector<HTMLButtonElement>('#start')!.onclick = () => start();
+  document.querySelector<HTMLButtonElement>('#start')!.onclick = () => start(false);
+  const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';
+  watch.onclick=()=>{if(mode==='playground')mode='derby';void start(true);};
+  ui.querySelector('.intro')!.append(watch);
   document.querySelector<HTMLButtonElement>('#settings')!.onclick = () =>
     pause(true);
   document.querySelector<HTMLButtonElement>('#fullscreen')!.onclick =
@@ -195,6 +203,7 @@ function leaveOnline() {
   createCars(true);menu();
 }
 async function connectOnline(endpoint:string,room:string,name:string) {
+  demo=false;
   await sound.init();online.reset();online.active=true;onlinePhase='';
   try {online.network.connect({endpoint,room,name,kind});}catch(error){online.active=false;throw error;}
 }
@@ -218,6 +227,7 @@ function receiveOnline() {
   }
 }
 function createCars(attract = false) {
+  drivers.reset();
   sound.clearCars();
   vehicleFire?.reset();
   for (const c of cars) c.dispose();
@@ -273,7 +283,8 @@ function createCars(attract = false) {
   });
   sound.attach(cars);
 }
-async function start() {
+async function start(watch=demo) {
+  demo=watch;demoRestart=0;director.reset();keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost)online.network.start(mode);return;}
   const btn = document.querySelector<HTMLButtonElement>('#start');
@@ -302,7 +313,18 @@ async function start() {
 function hud() {
   ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="270" height="220"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
+  if(demo)demoHud();
   if(online?.active)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="network-status" id="network-status"></div>');
+}
+function demoHud(){
+  ui.querySelector('.hud-title')!.textContent='LIVE DEMO / '+modes[mode].label;
+  ui.querySelector('.controls')!.innerHTML='<kbd>C</kbd> CAMERA <kbd>[</kbd><kbd>]</kbd> CAR <kbd>SPACE</kbd> PAUSE · FREE ORBIT: DRAG / SCROLL';
+  ui.querySelector('.status-row > span')!.id='follow-name';
+  ui.querySelector('.hud')!.insertAdjacentHTML('beforeend',`<div class="demo-toolbar"><label>VIEW<select id="demo-camera">${Object.entries(DEMO_CAMERAS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><label>FOLLOW<select id="demo-car"><option value="auto">Director chooses</option>${cars.map(c=>`<option value="${c.id}">#${c.id+1} ${DEFINITIONS[c.kind].name}</option>`).join('')}</select></label><label>EVENT<select id="demo-event"><option value="derby">Demolition derby</option><option value="race">Quarry circuit</option></select></label><button class="small-button" id="demo-exit">EXIT DEMO</button></div>`);
+  const view=document.querySelector<HTMLSelectElement>('#demo-camera')!;view.value=director.view;view.onchange=()=>director.select(view.value as DemoCamera);
+  const follow=document.querySelector<HTMLSelectElement>('#demo-car')!;follow.onchange=()=>{if(follow.value==='auto'){director.manual=false;director.select('director');view.value='director';}else director.follow(+follow.value);};
+  const event=document.querySelector<HTMLSelectElement>('#demo-event')!;event.value=mode;event.onchange=()=>{mode=event.value as Mode;void start(true);};
+  document.querySelector<HTMLButtonElement>('#demo-exit')!.onclick=()=>{createCars(true);menu();};
 }
 function text(id: string, t: string) {
   const e = document.getElementById(id);
@@ -313,8 +335,9 @@ function toast(t: string, duration = 3) {
   statusUntil = clock + duration;
 }
 function updateHud() {
-  if (!['playing', 'countdown'].includes(state)) return;
-  const player = cars[0];
+  if (!['playing', 'countdown'].includes(state)&&!(demo&&state==='result')) return;
+  const player = demo?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
+  if(demo){text('follow-name',`#${player.id+1} ${DEFINITIONS[player.kind].name}`);const view=document.querySelector<HTMLSelectElement>('#demo-camera');if(view)view.value=director.view;const follow=document.querySelector<HTMLSelectElement>('#demo-car');if(follow)follow.value=director.manual?String(director.followed):'auto';}
   text('health', Math.ceil(player.health) + '%');
   const hb = document.getElementById('health-bar')!;
   hb.style.width = player.health + '%';
@@ -348,7 +371,7 @@ function updateHud() {
     mode === 'derby'
       ? cars.filter((c) => c.health > 0).length + ' / 8'
       : mode === 'race'
-        ? `${online?.active?(online.network.snapshot?.ranking.indexOf(online.network.id)??0)+1:rankRace().findIndex(isPlayer) + 1} / 8`
+        ? `${online?.active?(online.network.snapshot?.ranking.indexOf(online.network.id)??0)+1:rankRace().indexOf(player) + 1} / 8`
         : traffic
           ? 'TRAFFIC ON'
           : 'SOLO',
@@ -356,9 +379,9 @@ function updateHud() {
   document.getElementById('countdown')!.innerHTML =
     state === 'countdown'
       ? `<strong>${Math.ceil(countdown)}</strong><p>${mode === 'derby' ? 'SURVIVE THE IMPACT' : 'FIND YOUR LINE'}</p>`
-      : '';
-  if (player.rollTime > 2) toast('OVERTURNED — PRESS R TO RECOVER', 1);
-  if (mode === 'race') {
+      : demo&&state==='result'?`<p>${resultTitle}</p><p>NEXT EVENT IN ${Math.ceil(demoRestart)}</p>`:'';
+  if (!demo&&player.rollTime > 2) toast('OVERTURNED — PRESS R TO RECOVER', 1);
+  if (!demo&&mode === 'race') {
     const target = CHECKPOINTS[player.nextCheckpoint];
     const d = new T.Vector3(
       target.x - player.current.x,
@@ -395,12 +418,12 @@ function drawMap() {
   x.stroke();
   for (const car of cars) {
     x.fillStyle =
-      isPlayer(car) ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
+      (demo?car.id===director.followed:isPlayer(car)) ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
     x.beginPath();
     x.arc(
       ox + car.current.x * scale,
       oz - car.current.z * scale,
-      isPlayer(car) ? 5 : 3,
+      (demo?car.id===director.followed:isPlayer(car)) ? 5 : 3,
       0,
       Math.PI * 2,
     );
@@ -415,14 +438,14 @@ function formatTime(t: number) {
     .padStart(2, '0')}`;
 }
 function pause(settingsOnly = false) {
-  if (['loading', 'result', 'paused'].includes(state)) return;
+  if (['loading', 'paused'].includes(state)||state==='result'&&!demo) return;
   resumeState = state;
   state = 'paused';
   keys.clear();
   online?.network.clearInput();
   sound.pause(true);
   orbit.enabled = false;
-  ui.innerHTML += `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<p>W / ↑ accelerate · S / ↓ brake & reverse<br>A D / ← → steer · Space handbrake · C camera<br>R recover · M mute · F fullscreen · Escape pause${mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : ''}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`;
+  ui.innerHTML += `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<p>${demo?'C camera · [ / ] choose car<br>Space / Escape pause · M mute · F fullscreen<br>Free orbit: drag to look around, scroll to zoom':"W / ↑ accelerate · S / ↓ brake & reverse<br>A D / ← → steer · Space handbrake · C camera<br>R recover · M mute · F fullscreen · Escape pause"+(mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : '')}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`;
   const quality = document.querySelector<HTMLSelectElement>('#quality')!;
   quality.value = settings.quality;
   quality.onchange = () => {
@@ -555,92 +578,26 @@ function input(): Input {
   return { throttle, steer, brake, handbrake };
 }
 function ai(car: Vehicle, dt: number): Input {
-  if (car.health <= 0 || car.finished)
-    return { throttle: 0, steer: 0, brake: 1, handbrake: false };
-  let target: T.Vector3;
-  if (mode === 'derby') {
-    const opponents = cars.filter((c) => c.id !== car.id && c.health > 0);
-    opponents.sort(
-      (a, b) =>
-        a.current.distanceToSquared(car.current) -
-        b.current.distanceToSquared(car.current),
-    );
-    const idx =
-      Math.floor((elapsed + car.aiPhase) / 5) % Math.min(3, opponents.length);
-    const other = opponents[idx] ?? opponents[0];
-    if (!other) return { throttle: 0, steer: 0, brake: 1, handbrake: false };
-    target = other.current.clone().addScaledVector(other.velocity, 0.35);
-    if (Math.hypot(car.current.x, car.current.z) > 41) target.set(0, 0, 0);
-  } else if (mode === 'race') {
-    const p = CHECKPOINTS[car.nextCheckpoint];
-    target = new T.Vector3(
-      p.x + Math.sin(car.aiPhase) * 2,
-      0,
-      p.z + Math.cos(car.aiPhase) * 2,
-    );
-  } else {
-    const p = trackPoint((elapsed * 0.011 + car.id * 0.18) % 1);
-    target = new T.Vector3(p.x, 0, p.z);
-  }
-  if (mode === 'race') {
-    let nearest = Infinity;
-    for (let k = 0; k < 100; k++) {
-      const p = trackPoint(k / 100);
-      nearest = Math.min(
-        nearest,
-        Math.hypot(car.current.x - p.x, car.current.z - p.z),
-      );
+  if(car.health<=0||car.finished)return {throttle:0,steer:0,brake:1,handbrake:false};
+  const yaw=Math.atan2(car.forward.x,car.forward.z);
+  if(mode==='race'){
+    let nearest=Infinity;
+    for(let k=0;k<100;k++){const p=trackPoint(k/100);nearest=Math.min(nearest,Math.hypot(car.current.x-p.x,car.current.z-p.z));}
+    car.offTrackTime=nearest>14?car.offTrackTime+dt:0;
+    if(car.offTrackTime>7||car.rollTime>4){
+      const prev=CHECKPOINTS[(car.nextCheckpoint+23)%24],next=CHECKPOINTS[car.nextCheckpoint];
+      car.place(prev.x,prev.z,Math.atan2(next.x-prev.x,next.z-prev.z));car.offTrackTime=0;car.penalty+=5;drivers.memory.delete(car.id);
     }
-    car.offTrackTime = nearest > 14 ? car.offTrackTime + dt : 0;
-    if (car.offTrackTime > 7 || car.rollTime > 4) {
-      const prev = CHECKPOINTS[(car.nextCheckpoint + 23) % 24],
-        next = CHECKPOINTS[car.nextCheckpoint];
-      car.place(prev.x, prev.z, Math.atan2(next.x - prev.x, next.z - prev.z));
-      car.offTrackTime = 0;
-      car.penalty += 5;
-    }
-  }
-  const delta = target.sub(car.current),
-    desired = Math.atan2(delta.x, delta.z),
-    yaw = Math.atan2(car.forward.x, car.forward.z),
-    angle = wrap(desired - yaw);
-  let steer = clamp(angle * 1.65, -1, 1),
-    throttle = mode === 'race' ? clamp(1 - Math.abs(angle) * 0.3, 0.4, 1) : 0.8;
-  let brake =
-    Math.abs(car.speed) > (mode === 'race' ? 27 : 17) && Math.abs(angle) > 0.8
-      ? 0.5
-      : 0;
-  if (mode === 'race') {
-    const desiredSpeed = clamp(17 - Math.abs(angle) * 9, 5, 17);
-    throttle = clamp((desiredSpeed - car.speed) * 0.4, 0, 1);
-    brake = clamp((car.speed - desiredSpeed) / 4, 0, 1);
-  }
-  if (Math.abs(car.speed) < 1.2 && elapsed > 2) car.stuck += dt;
-  else car.stuck = 0;
-  if (car.stuck > 1.8) {
-    car.reverse = 1.5 + car.id * 0.08;
-    car.stuck = 0;
-  }
-  if (car.reverse > 0) {
-    car.reverse -= dt;
-    throttle = -0.65;
-    steer = -steer;
-    brake = 0;
-  }
-  if (car.rollTime > 5 && car.id !== 0) {
-    car.place(car.current.x, car.current.z, yaw);
-    car.health = Math.max(1, car.health - 7);
-    car.penalty += 5;
-  }
-  // Avoid stationary wrecks on the racing line without suppressing derby contact.
-  if (mode !== 'derby')
-    for (const other of cars) {
-      if (other === car) continue;
-      const d = other.current.clone().sub(car.current);
-      if (d.length() < 9 && d.dot(car.forward) > 0 && other.health === 0)
-        steer = clamp(steer + (d.dot(car.right) > 0 ? -1 : 1) * 0.7, -1, 1);
-    }
-  return { throttle, steer, brake, handbrake: false };
+  }else if(car.rollTime>5){car.place(car.current.x,car.current.z,yaw);car.health=Math.max(1,car.health-7);car.penalty+=5;drivers.memory.delete(car.id);}
+  return drivers.update(car,cars,mode,dt,()=>{
+    const ray=(angle:number)=>{
+      const dir={x:Math.sin(yaw+angle),y:0,z:Math.cos(yaw+angle)};
+      const start={x:car.current.x+dir.x*2.5,y:Math.max(car.current.y,landscapeHeight(car.current.x,car.current.z)+.55),z:car.current.z+dir.z*2.5};
+      const hit=physics.castRay(new R.Ray(start,dir),24,true,undefined,undefined,undefined,car.body,c=>!cars.some(v=>v.collider.handle===c.handle||v.roof.handle===c.handle));
+      return hit?hit.timeOfImpact:24;
+    };
+    return {front:ray(0),left:ray(-.55),right:ray(.55),rear:ray(Math.PI)};
+  });
 }
 function rankRace() {
   return [...cars].sort((a, b) =>
@@ -668,6 +625,7 @@ function rankRace() {
   );
 }
 function finish(title: string) {
+  if(demo){if(state==='result')return;resultTitle=title;state='result';demoRestart=8;cars.forEach(c=>c.render(1));updateHud();return;}
   resultTitle = title;
   state = 'result';
   sound.pause(true);
@@ -719,7 +677,7 @@ function step(dt: number) {
   if (state !== 'playing') return;
   elapsed += dt;
   for (const c of cars) {
-    c.input = c.id === 0 && !autopilot ? input() : ai(c, dt);
+    c.input = c.id === 0 && !autopilot && !demo ? input() : ai(c, dt);
     c.preStep(dt);
   }
   physics.step(events);
@@ -763,7 +721,7 @@ function step(dt: number) {
   });
   for (const c of cars) {
     if (Math.hypot(c.current.x, c.current.z) > 255 || c.current.y < -8) {
-      if (c.id === 0) recover();
+      if (c.id === 0 && !demo) recover();
       else c.place(0, 0, 0);
     }
     if (mode === 'race' && !c.finished) {
@@ -783,26 +741,28 @@ function step(dt: number) {
           if (c.lap > 3) {
             c.finished = true;
             c.finishTime = elapsed + c.penalty;
-            if (c.id === 0) finish('FINISH LINE');
+            if (c.id === 0 && !demo) finish('FINISH LINE');
           }
         }
       }
     }
   }
-  if (mode === 'race' && cars[0].health <= 0) finish('RETIRED · DAMAGE');
+  if (!demo && mode === 'race' && cars[0].health <= 0) finish('RETIRED · DAMAGE');
   if (mode === 'derby') {
     const alive = cars.filter((c) => c.health > 0);
-    if (cars[0].health <= 0) finish('WRECKED OUT');
+    if (!demo && cars[0].health <= 0) finish('WRECKED OUT');
     else if (alive.length <= 1) finish('LAST CAR STANDING');
     else if (elapsed >= 300) finish('TIME’S UP');
   }
+  if(demo&&mode==='race'&&(cars.every(c=>c.finished||c.health<=0)||elapsed>=600))finish('RACE COMPLETE');
   fx.update(dt);
 }
 function updateCamera(dt: number) {
-  const p = cars[0];
+  const p = demo?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
   if (!p) return;
   quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
   quarry.sun.target.position.copy(p.root.position);
+  if(demo){cameraImpactOffset.set(0,0,0);if(state!=='paused')director.update(cars,camera,orbit,dt,mode==='race');return;}
   if (state === 'inspect' || state === 'wrecked' || state === 'paused' && resumeState === 'wrecked') {
     cameraImpactOffset.set(0,0,0);
     orbit.update();
@@ -888,9 +848,10 @@ function frame(now: number) {
     text('wreck-count', String(Math.ceil(wreckHold)));
     if (wreckHold === 0) { createCars(true); menu(); }
   }
+  if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){state='loading';void start(true);}}
   updateCamera(dt);
   for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();}
-  const effectsActive=['playing','countdown','wrecked'].includes(state);
+  const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   quarry.update(camera);
@@ -941,8 +902,10 @@ addEventListener('keydown', (e) => {
   }
   if (e.code === 'KeyF') fullScreen();
   if (e.code === 'KeyM') sound.mute();
-  if (e.code === 'KeyC') hood = !hood;
-  if (e.code === 'KeyR' && state === 'playing') recover();
+  if (demo&&e.code==='Space'){e.preventDefault();state==='paused'?resume():pause();return;}
+  if(demo&&(e.code==='BracketLeft'||e.code==='BracketRight'))director.cycleCar(cars,e.code==='BracketLeft'?-1:1);
+  if (e.code === 'KeyC') {if(demo)director.cycleView();else hood = !hood;}
+  if (!demo && e.code === 'KeyR' && state === 'playing') recover();
   if (!online?.active && e.code === 'KeyT' && mode === 'playground' && state === 'playing') {
     traffic = !traffic;
     start();
@@ -963,10 +926,10 @@ addEventListener('keydown', (e) => {
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => {
   keys.clear();online?.network.clearInput();
-  if (['playing', 'countdown', 'wrecked'].includes(state)) pause();
+  if ((['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && ['playing', 'countdown', 'wrecked'].includes(state)) pause();
+  if (document.hidden && (['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
 addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
@@ -976,7 +939,7 @@ addEventListener('resize', () => {
 });
 canvas.addEventListener('webglcontextlost', (e) => {
   e.preventDefault();
-  if (['playing', 'countdown', 'wrecked'].includes(state)) pause();
+  if ((['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
   toast('Graphics context lost. Reload to restore.', 20);
 });
 canvas.addEventListener('webglcontextrestored', () => {
@@ -1071,6 +1034,18 @@ async function boot() {
     get impactState() { const p=cars[0];return p?{offset:{...p.impactResponse.offset},velocity:{...p.impactResponse.velocity},roll:p.impactResponse.roll,pitch:p.impactResponse.pitch,effects:{...p.impactEffects}}:null; },
     get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
     get fireState() { return vehicleFire?.stats; },
+    seedFireTest:(seed:number)=>{
+      vehicleFire?.dispose();let randomState=seed>>>0;
+      vehicleFire=new VehicleFire(scene,(p,n,t,f)=>fx.emit(p,n,t,f),()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;return randomState/4294967296;});
+      vehicleFire.setQuality(settings.quality);
+    },
+    simulateFire:(seconds:number)=>{
+      for(let i=0;i<Math.min(60,Math.max(0,seconds))*60;i++){
+        vehicleFire?.update(cars,1/60,camera);
+        if(vehicleFire?.bursts.length){sound.thermal(vehicleFire.audio,vehicleFire.bursts);return true;}
+      }
+      return false;
+    },
     get fireAudio() { return [...sound.loops].map(([id,loops])=>({id,layers:[...loops].filter(([name])=>name.startsWith('fire-')).map(([name,l])=>({name,level:l.gain.gain.value,position:[l.pan.positionX.value,l.pan.positionY.value,l.pan.positionZ.value]}))})); },
     get stats() {
       const times = [...frames].sort((a, b) => a - b);
@@ -1097,8 +1072,13 @@ async function boot() {
     },
     start: async (m: Mode) => {
       mode = m;
-      await start();
+      await start(false);
     },
+    startDemo:async(m:Mode='derby')=>{mode=m==='race'?'race':'derby';await start(true);},
+    get demo(){return {active:demo,view:director.view,shot:director.activeView,followed:director.followed,manual:director.manual,restart:demoRestart};},
+    get aiState(){return [...drivers.memory].map(([id,m])=>({id,...m}));},
+    demoCamera:(view:DemoCamera)=>director.select(view),
+    followCar:(id:number)=>director.follow(id),
     autopilot: (v: boolean) => {
       autopilot = v;
     },

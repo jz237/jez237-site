@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 const out=process.env.QUARRY_FIRE_STRESS_OUTPUT;assert.ok(out);await fs.mkdir(out,{recursive:true});assert.equal(await fs.access(out+'/report.json').then(()=>true,()=>false),false);
 const report={errors:[],samples:[],protocol:'120 real-time seconds, 1440p Ultra, eight stationary burning vehicles in view with live physics. Every car receives 20-point front, side and rear contacts before ignition. Player remains critically damaged; seven wrecks stay physical. Thermal reset/reignite at 40 and 80 seconds preserves the damaged geometry and soot. Separate effects stress case, not normal driving FPS.'};let browser;
 try{
- browser=await chromium.launch({channel:'chrome',headless:true,args:['--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required']});const page=await browser.newPage({viewport:{width:2560,height:1440}});
+ browser=await chromium.launch({channel:'chrome',headless:true,args:['--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows']});const page=await browser.newPage({viewport:{width:2560,height:1440}});
  page.on('pageerror',e=>report.errors.push(e.message));page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
  await page.goto('http://127.0.0.1:8795/');await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:120000});
  report.bundle=await page.locator('script[type="module"][src^="./assets/index-"]').getAttribute('src');report.sha256=createHash('sha256').update(await(await page.request.get(new URL(report.bundle,page.url()).href)).body()).digest('hex');

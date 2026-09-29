@@ -12,15 +12,18 @@ import {restoreFireBytes} from './fire-invariants';
 import {restoreWreckFinishBytes} from './wreck-finish-invariants';
 import {Effects} from '../src/effects';
 import type R from '@dimforge/rapier3d-compat';
-test('damage causes progressive fire; only a catastrophic final blow bursts once per repair',()=>{
- const s=new VehicleThermalState();s.advance(40,1);assert.ok(s.smoke>0);assert.equal(s.heat,0);
- s.advance(14,2);assert.ok(s.heat>.4);assert.equal(s.exploded,false);
- assert.equal(s.advance(0,1/60),true);assert.equal(s.exploded,true);
- for(let i=0;i<300;i++)assert.equal(s.advance(0,1/60),false);
- s.advance(100,1/60);assert.equal(s.heat,0);assert.equal(s.smoke,0);assert.equal(s.exploded,false);
- s.advance(8,1/60);assert.equal(s.advance(0,1/60),false,'minor last hit does not create a fuel burst');
- s.reset(8);assert.equal(s.advance(0,1/60,25),true,'large final blow bursts even with very little health remaining');
- const frozen=JSON.stringify(s);s.advance(0,0);s.advance(0,NaN);assert.equal(JSON.stringify(s),frozen);
+test('only a rare subset of critically damaged cars bursts after sustained heat, once per repair',()=>{
+ let total=0;
+ for(let seed=0;seed<512;seed++){
+  const state=new VehicleThermalState(100,seed/512);let bursts=0;
+  assert.equal(state.advance(0,1/60,100),false,'final blows do not automatically explode');
+  for(let i=0;i<2400;i++)if(state.advance(0,1/60))bursts++;
+  assert.ok(bursts<=1);total+=bursts;
+  const frozen=JSON.stringify(state);state.advance(0,0);state.advance(0,NaN);assert.equal(JSON.stringify(state),frozen);
+  state.advance(100,1/60);assert.equal(state.exploded,false);assert.equal(state.criticalTime,0);assert.equal(state.heat,0);
+ }
+ assert.ok(total>30&&total<75,`expected roughly 10%, got ${total}/512`);
+ const warm=new VehicleThermalState(100,.123);for(let i=0;i<3600;i++)assert.equal(warm.advance(16,1/60),false,'moderate fire cannot explode');
 });
 test('thermal progression agrees across 30,60,144Hz',()=>{
  const run=(hz:number)=>{const s=new VehicleThermalState();for(let i=0;i<hz*2;i++)s.advance(12,1/hz);return s;};
@@ -33,11 +36,11 @@ test('actual renderer keeps bounded world-space plumes at rotated engine bays an
  cars.forEach((c,i)=>{c.root.position.set((i%4-1.5)*3,1,Math.floor(i/4)*5);if(i===1)c.root.rotation.z=Math.PI;});
  fire.update(cars,1/60,camera);cars.forEach(c=>c.health=0);
  assert.ok(fire.mesh.material.uniforms.sunView.value.distanceTo(DAYLIGHT_DIRECTION.clone().transformDirection(camera.matrixWorldInverse))<1e-12,'smoke illumination follows the same HDRI sun as the quarry');
- fire.update(cars,1/60,camera);assert.equal(fire.bursts.length,8);
- const rolled=cars[1],expected=new T.Vector3(0,.22,DEFINITIONS[rolled.kind].halfLength*.54).applyQuaternion(rolled.root.quaternion).add(rolled.root.position);
+ fire.update(cars,1/60,camera);assert.equal(fire.bursts.length,0);
+ const rolled=cars[1],emitter=fire.emitters.get(1)!,local=emitter.profile.sites.reduce((a,b)=>a.base>b.base?a:b),expected=new T.Vector3(local.x,local.y,local.z).applyQuaternion(rolled.root.quaternion).add(rolled.root.position);
  assert.ok(fire.emitters.get(1)!.origin.distanceTo(expected)<1e-8);
  for(let i=0;i<900;i++)fire.update(cars,1/60,camera);
- assert.ok(fire.stats.active>150&&fire.stats.active<=640);assert.equal(fire.stats.lights,2);assert.equal(fire.bursts.length,0);assert.ok(sparks>30);
+ assert.ok(fire.stats.active>150&&fire.stats.active<=640);assert.equal(fire.stats.lights,2);assert.ok(fire.bursts.length<=1);assert.ok(sparks>30);
  assert.ok(fire.particles.some(p=>p.life>0&&p.kind===0&&p.age>3.5),'long smoke lifetime survives an eight-car fire without early pool eviction');
  assert.ok(fire.particles.some(p=>p.life>0&&p.kind===0&&p.p.y>3),'smoke rises even from overturned car');
  const paused=JSON.stringify(fire.stats);fire.update(cars,0,camera);assert.equal(JSON.stringify(fire.stats),paused);

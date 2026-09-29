@@ -10,11 +10,12 @@ import {loadCars} from '../src/assets';
 import {Vehicle} from '../src/vehicle';
 import {WreckFinish} from '../src/wreck-finish';
 import {restoreWreckFinishBytes} from './wreck-finish-invariants';
+import {restoreDemoBytes} from './demo-invariants';
 
 test('the preceding public release is recoverable without relaxing any frozen hash',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const revision=JSON.parse(read('source/wreck-finish-revision.json').toString());
- for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restoreWreckFinishBytes(p,read(p))),e.before,p);}
+ for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreDemoBytes(p,read(p))),e.after,p);assert.equal(hash(restoreWreckFinishBytes(p,read(p))),e.before,p);}
 });
 
 test('soot persists after cooling, pauses exactly, is per-car and agrees across frame rates',()=>{
