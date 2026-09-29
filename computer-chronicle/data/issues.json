@@ -5,6 +5,406 @@
   "issues": [
     {
       "visualProfile": {
+        "tone": "Autumn 1984 home-computer newsprint",
+        "motifs": [
+          "Commodore Plus/4 keyboard and software",
+          "game boxes and arcade conversions",
+          "diskettes",
+          "thermal printer"
+        ],
+        "layout": "Dense period weekly with brick-red and blue rules, boxed charts and halftone art"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "October 15-21, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Wide Plus/4 banner with prominent adjacent game-box halftone for Archon II, Skyfox, Spy Hunter and Tapper",
+        "secondaryRail": "Home-game notices, prices, music, movies and world bulletin",
+        "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-09-29",
+      "historicDate": "1984-10-15",
+      "displayDate": "Week of October 15-21, 1984",
+      "edition": "Issue 116 - Weekly 1984 Computer & Culture Chronicle",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-10-15.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for October 15-21, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Commodore is selling an instant office, while Electronic Arts and Sega give the home-computer game shelf fresh reasons to linger.",
+      "morningLine": "A $300 computer with software in ROM meets $40 strategy games and arcade favorites on disk.",
+      "lead": {
+        "headline": "Commodore Readies the Plus/4 for the Holiday Shelf",
+        "dek": "A $300 “productivity machine” promises an office in ROM, but the C64’s immense game library will not follow it.",
+        "body": [
+          "Commodore’s Plus/4 is moving toward the holiday counter with an unusual pitch for a home computer: useful software is already inside. An October COMPUTE! hands-on report lists the machine at $300 with 64K of RAM and four integrated applications collectively called 3-Plus-1. The magazine’s reporting predates this week, so an exact October 15 launch is not established.",
+          "The package, developed by International Tri Micro, puts a word processor, spreadsheet, file manager and business-graphics program in ROM. BASIC 3.5 offers more than 75 commands; the machine can show 320-by-200 high-resolution graphics and 16 colors in eight luminance levels. Commodore calls it “The Productivity Machine,” hoping the buyer will value a ready-made work desk.",
+          "But this is no Commodore 64 with office programs added. The Plus/4 lacks the C64’s sprites and SID sound chip and runs practically none of its predecessor’s software. That divides the shop window: a Plus/4 buyer gains integrated work tools but gives up the thickening C64 game shelf that is drawing players to home computers.",
+          "The companion Commodore 16, with 16K of memory at a planned $100, is meant to take the VIC-20’s entry-level place. Commodore also planned roughly 30 Plus/4 programs at introduction. Whether a new software line can grow quickly enough is the question this autumn, as Electronic Arts and Sega make the older machines look lively."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-month"
+      },
+      "stories": [
+        {
+          "headline": "Archon II and Skyfox broaden Electronic Arts’ games line",
+          "body": [
+            "Electronic Arts is widening the computer-game counter with Archon II: ADEPT and Skyfox, both listed by October COMPUTE! at a suggested $40. These are same-month product notices, not evidence of an exact-week release.",
+            "Archon II brings chesslike strategy into contests over energy points, mixing spellcasting with action encounters on Atari 48K and Commodore 64 machines. Skyfox takes a different course: an Apple II disk game with training missions and 15 combat scenarios. Together they show how varied the home-computer game can be beside a cartridge console."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Spy Hunter and Tapper arrive on home computers",
+          "body": [
+            "Sega’s computer editions of Spy Hunter and Tapper carry two arcade names onto disk and cartridge for Commodore 64, IBM PC and PCjr, Atari and Apple II families, according to October COMPUTE!. Each has a suggested $39.95 price.",
+            "Spy Hunter keeps its weapon-equipped driving chase; Tapper brings four bar screens and a bonus round. The broad platform list matters: publishers are treating the keyboard household as an arcade audience. The October notice does not pin either adaptation to a launch on this particular day."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "A color printer for the home desk at $239",
+          "body": [
+            "Okidata’s Okimate 10 promises full-color printing for Commodore and Atari home computers at an advertised $239. The October COMPUTE! product report says this thermal-transfer printer can put more than 40 shades onto ordinary paper or acetate.",
+            "At a specified 60 characters per second, it is hardly a pressroom machine. But its color output brings school projects, charts and home graphics a step closer to the modest computer desk. The advertised figure is a period list price, not a verified shop transaction this week."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "IBM tries a second act for the PCjr",
+          "body": [
+            "IBM’s repaired PCjr receives another look in October COMPUTE!: a typewriter-style keyboard replaces the original design, and existing owners are offered a free replacement. These changes were announced in July, not this week.",
+            "Snap-on 128K modules list for $325 apiece and can take the machine to 512K with three modules. The enhanced PCjr lists at $999, although the magazine saw a local $699 ComputerLand offer in early August. IBM also points to serious applications, including a planned Lotus 1-2-3 cartridge; its availability this week is not confirmed."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "period"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Commodore Plus/4",
+          "summary": "64K, BASIC 3.5, 128 hues, no sprites; $300 announced price",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "Commodore 16",
+          "summary": "16K, $100 companion model",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "Okimate 10",
+          "summary": "Color thermal-transfer printer, $239",
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "IBM PCjr memory expansion",
+          "summary": "128K snap-on module, $325; announced July 31",
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "period"
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "3-Plus-1",
+          "detail": "Plus/4 built-in word processor, spreadsheet, file manager, business graphics"
+        },
+        {
+          "name": "Lotus 1-2-3 PCjr cartridge",
+          "detail": "Announced for fourth quarter 1984; not confirmed available this week"
+        },
+        {
+          "name": "Archon II: ADEPT",
+          "detail": "EA Atari 48K/C64 strategy-action sequel, $40 suggested"
+        },
+        {
+          "name": "Skyfox",
+          "detail": "EA Apple II disk game, 15 scenarios, $40 suggested"
+        },
+        {
+          "name": "Spy Hunter and Tapper",
+          "detail": "Sega home conversions, $39.95 each"
+        },
+        {
+          "name": "Dragonriders of Pern",
+          "detail": "Epyx Anne McCaffrey adaptation; negotiation and Thread-combat phases, $39.95"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Archon II: ADEPT",
+            "Skyfox",
+            "Spy Hunter",
+            "Tapper",
+            "Dragonriders of Pern"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "I Just Called to Say I Love You — Stevie Wonder",
+            "Caribbean Queen — Billy Ocean",
+            "Hard Habit to Break — Chicago",
+            "Lucky Star — Madonna",
+            "Let's Go Crazy — Prince & The Revolution"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Teachers",
+            "Places in the Heart",
+            "Thief of Hearts",
+            "The Little Drummer Girl",
+            "All of Me"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore Plus/4",
+          "price": "$300 suggested",
+          "note": "October period price; not a verified same-week sale.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 16",
+          "price": "$100 suggested",
+          "note": "October period price; not a verified same-week sale.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Archon II: ADEPT / Skyfox",
+          "price": "$40 suggested",
+          "note": "October period price; not a verified same-week sale.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Spy Hunter / Tapper",
+          "price": "$39.95 suggested",
+          "note": "October period price; not a verified same-week sale.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Okimate 10",
+          "price": "$239 suggested",
+          "note": "October period price; not a verified same-week sale.",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "October Compute! surveys PCjr course correction",
+          "summary": "The keyboard, memory and application changes were July announcements receiving October analysis.",
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "I Just Called to Say I Love You",
+          "artist": "Stevie Wonder",
+          "chartDate": "1984-10-20",
+          "sourceUrls": [
+            "https://www.musicchartsarchive.com/singles-chart/1984-10-20"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Caribbean Queen",
+          "artist": "Billy Ocean",
+          "chartDate": "1984-10-20",
+          "sourceUrls": [
+            "https://www.musicchartsarchive.com/singles-chart/1984-10-20"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Hard Habit to Break",
+          "artist": "Chicago",
+          "chartDate": "1984-10-20",
+          "sourceUrls": [
+            "https://www.musicchartsarchive.com/singles-chart/1984-10-20"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Lucky Star",
+          "artist": "Madonna",
+          "chartDate": "1984-10-20",
+          "sourceUrls": [
+            "https://www.musicchartsarchive.com/singles-chart/1984-10-20"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Let's Go Crazy",
+          "artist": "Prince & The Revolution",
+          "chartDate": "1984-10-20",
+          "sourceUrls": [
+            "https://www.musicchartsarchive.com/singles-chart/1984-10-20"
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "An Office in the ROM",
+        "summary": "The Plus/4 arrives with 3-Plus-1 word processing, spreadsheet, file-management and graphics tools built in.",
+        "tagline": "A new pitch for the home-computer counter."
+      },
+      "market": {
+        "headline": "The Holiday Shelf Splits",
+        "summary": "Commodore’s $300 Plus/4 emphasizes built-in office tools while $40 games for established Atari, Commodore and Apple systems fill October product notices.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "confidence": "same-month"
+      },
+      "worldAnchor": {
+        "headline": "Ethiopian drought and famine intensify",
+        "summary": "UPI reported October 20 from Nairobi that deaths had begun amid a severe Ethiopian drought and examined the politics of food aid.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "The modem desk reaches small-computer owners",
+        "summary": "An October 1984 Timex/Sinclair periodical item describes Oscar Sensabaugh getting a 2050 modem and trying multiple bulletin boards, including Zebra BBS; archive summary only, so no further operational or price claims.",
+        "posts": [
+          {
+            "topic": "BBS dialing as a home-computer hobby",
+            "platform": "Timex/Sinclair",
+            "text": "Oscar Sensabaugh describes trying multiple BBSes with a 2050 modem; Zebra BBS is named in the archive summary."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "The Plus/4’s instant office has a 99-line ceiling",
+        "summary": "The built-in 3-Plus-1 word processor starts from ROM, yet Compute! reported a 99-line text limit.",
+        "detail": "The same review described horizontal scrolling to emulate a 77-column view, leaving a long sentence offscreen on the 40-column display."
+      },
+      "accuracyLedger": {
+        "items": [
+          "October COMPUTE! product coverage is same-month reporting, not an exact October 15 launch record.",
+          "IBM PCjr changes were announced July 31; the $699 discount was a local early-August observation.",
+          "The music chart is dated October 20 and the domestic movie weekend October 19–21.",
+          "The world bulletin is dated October 20."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Compute! October 1984: Commodore Prepares To Roll Out The Plus/4",
+          "url": "https://www.atarimagazines.com/compute/issue53/018_1_Commodore_Prepares_To_Roll_Out_The_Plus_4.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute! October 1984: Strategy Action Games",
+          "url": "https://www.atarimagazines.com/compute/issue53/083_2_NEWS_PRODUCTS_Strategy_Action_Games.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute! October 1984: New Arcade Games",
+          "url": "https://www.atarimagazines.com/compute/issue53/083_4_NEWS_PRODUCTS_New_Arcade_Games.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute! October 1984: IBM’s New & Improved PCjr",
+          "url": "https://www.atarimagazines.com/compute/issue53/020_1_IBMs_New_Improved_PCjr.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute! October 1984: Color Printer for Commodore and Atari",
+          "url": "https://www.atarimagazines.com/compute/issue53/081_1_NEWS_PRODUCTS_Color_Printer_For_Commodore_And_Atari.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Compute! October 1984: Dragonriders of Pern review",
+          "url": "https://www.atarimagazines.com/compute/issue53/036_1_REVIEWS_Dragonriders_Of_Pern_For_Commodore_64_And_Atari.php",
+          "date": "1984-10"
+        },
+        {
+          "title": "Timex/Sinclair archive: Computin in the Country",
+          "url": "https://www.timexsinclair.com/article/computin-in-the-country-2/",
+          "date": "1984-10"
+        },
+        {
+          "title": "Music Charts Archive: Singles Chart October 20, 1984",
+          "url": "https://www.musicchartsarchive.com/singles-chart/1984-10-20",
+          "date": "1984-10-20"
+        },
+        {
+          "title": "Box Office Mojo: Domestic Weekend 42",
+          "url": "https://www.boxofficemojo.com/weekend/1984W42/",
+          "date": "1984-10-19/21"
+        },
+        {
+          "title": "UPI: Politics and food aid a fatal mixture in Ethiopia",
+          "url": "https://www.upi.com/Archives/1984/10/20/Politics-and-food-aid-a-fatal-mixture-in-Ethiopia/2487467092800/",
+          "date": "1984-10-20"
+        },
+        {
+          "title": "CSDb: Blue Max release record",
+          "url": "https://csdb.dk/release/?id=237598",
+          "date": "1984-10-16 (catalog date)"
+        },
+        {
+          "title": "CSDb: Gilligan’s Gold release record",
+          "url": "https://csdb.dk/release/?id=116491",
+          "date": "1984-10-20 (catalog date)"
+        }
+      ]
+    },
+    {
+      "visualProfile": {
         "tone": "Autumn 1984 computer-game newsprint",
         "motifs": [
           "Apple II and Commodore game boxes",

@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-29",
+      "historicDate": "1984-10-15",
+      "displayDate": "Week of October 15-21, 1984",
+      "edition": "Issue 116 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A $300 computer with software in ROM meets $40 strategy games and arcade favorites on disk.",
+      "leadHeadline": "Commodore Readies the Plus/4 for the Holiday Shelf",
+      "storyHeadlines": [
+        "Archon II and Skyfox broaden Electronic Arts’ games line",
+        "Spy Hunter and Tapper arrive on home computers",
+        "A color printer for the home desk at $239",
+        "IBM tries a second act for the PCjr"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-15.png",
+      "thumb": "media/thumbs/1984-10-15.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-28",
       "historicDate": "1984-10-08",
       "displayDate": "Week of October 8-14, 1984",
