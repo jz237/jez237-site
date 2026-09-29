@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://jez237.com/demos/</loc><lastmod>2026-09-11</lastmod></url>
+  <url><loc>https://jez237.com/demos/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://jez237.com/demos/v8-engine/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://jez237.com/demos/model-s-studio/</loc><lastmod>2026-09-13</lastmod></url>
+  <url><loc>https://jez237.com/demos/anatomy-studio/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://jez237.com/demos/open-sea/</loc><lastmod>2026-09-29</lastmod></url>
   <url>
     <loc>https://jez237.com/</loc>
     <lastmod>2026-07-05</lastmod>
@@ -104,7 +107,12 @@
   </url>
   <url>
     <loc>https://jez237.com/how-ai-works/</loc>
-    <lastmod>2026-07-02</lastmod>
+    <lastmod>2026-09-28</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jez237.com/how-ai-works/training-alignment</loc>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
@@ -112,6 +120,8 @@
     <lastmod>2026-07-04</lastmod>
     <priority>0.7</priority>
   </url>
+  <url><loc>https://jez237.com/multimedia/</loc><lastmod>2026-09-26</lastmod><priority>0.7</priority></url>
+  <url><loc>https://jez237.com/multimedia/port-richmond-title-loop/</loc><lastmod>2026-09-26</lastmod><priority>0.6</priority></url>
   <url>
     <loc>https://jez237.com/ai-sounds/</loc>
     <lastmod>2026-07-05</lastmod>
