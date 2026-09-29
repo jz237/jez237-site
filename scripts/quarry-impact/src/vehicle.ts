@@ -57,6 +57,8 @@ export class Vehicle {
   finishTime = 0;
   penalty = 0;
   lastHit = -100;
+  lastDamage = 0;
+  impactSerial = 0;
   lastFx = 0;
   rollTime = 0;
   offTrackTime = 0;
@@ -166,6 +168,8 @@ export class Vehicle {
     this.health = 100;
     this.damageLeft = this.damageRight = 0;
     this.lastHit = -100;
+    this.lastDamage = 0;
+    this.impactSerial = 0;
     this.roof.setEnabled(true);
     this.collider.setHalfExtents({
       x: DEFINITIONS[this.kind].halfWidth - 0.06,
@@ -309,11 +313,6 @@ export class Vehicle {
           else this.fx.emit(p, 2, 0, 1);
         }
       }
-      if (this.health < 42) {
-        const p = this.current.clone().addScaledVector(this.forward, 1.45);
-        p.y += 0.05;
-        this.fx.emit(p, 1, 2, 0.3);
-      }
     }
   }
   render(alpha: number) {
@@ -335,6 +334,8 @@ export class Vehicle {
     if (damage < 0.1 || this.health <= 0) return;
     this.health = Math.max(0, this.health - damage);
     this.lastHit = time;
+    this.lastDamage = damage;
+    this.impactSerial++;
     if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
     const local = this.root.worldToLocal(point.clone());

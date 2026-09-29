@@ -2,6 +2,7 @@ import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
 import * as T from 'three';
+import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
 export class Sound {
   ctx?: AudioContext;
@@ -15,6 +16,7 @@ export class Sound {
   muted = false;
   ready = false;
   activeVoices = 0;
+  private activeShots = new Set<AudioBufferSourceNode>();
   lastShot = new Map<string, number>();
   levels = { engine: 0.72, effects: 0.8, ambience: 0.45 };
   history = new Map<
@@ -88,7 +90,7 @@ export class Sound {
         const loop = this.loop(car.kind + '-' + name, this.engineBus!);
         if (loop) loops.set(name, loop);
       }
-      for (const name of ['tires', 'gravel', 'scrape']) {
+      for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
         const loop = this.loop(name, this.fxBus!);
         if (loop) loops.set(name, loop);
       }
@@ -96,6 +98,7 @@ export class Sound {
     }
   }
   clearCars() {
+    for (const source of this.activeShots) { try { source.stop(); } catch {} }
     for (const loops of this.loops.values())
       for (const l of loops.values()) {
         l.source.stop();
@@ -105,6 +108,21 @@ export class Sound {
       }
     this.loops.clear();
     this.history.clear();
+    this.lastShot.clear();
+  }
+  thermal(sources:ThermalAudio[],bursts:ThermalAudio[]) {
+    if(!this.ready)return;
+    const now=this.ctx!.currentTime;
+    for(const e of sources)for(const name of ['fire-roar','fire-crackle']){
+      const loop=this.loops.get(e.id)?.get(name);if(!loop)continue;
+      loop.pan.positionX.value=e.position.x;loop.pan.positionY.value=e.position.y;loop.pan.positionZ.value=e.position.z;
+      loop.gain.gain.setTargetAtTime(e.heat*(name==='fire-roar'?.21:.16),now,.1);
+      loop.source.playbackRate.setTargetAtTime(.91+(e.id%4)*.037+e.heat*.08,now,.2);
+    }
+    for(const e of bursts){
+      this.shot('vehicle-burst',e.position,.86,{rate:.96,delay:0,duration:3.2});
+      this.shot('debris',e.position,.2,{rate:.84,delay:.17,duration:1.7});
+    }
   }
   impact(damage:number,p:T.Vector3,glass=false,debris=false) {
     for(const layer of impactSoundLayers(damage,glass,debris))this.shot(layer.id,p,layer.volume,layer);
@@ -132,8 +150,10 @@ export class Sound {
     pan.positionZ.value = p.z;
     source.connect(gain).connect(pan).connect(this.fxBus!);
     this.activeVoices++;
+    this.activeShots.add(source);
     source.onended = () => {
       this.activeVoices--;
+      this.activeShots.delete(source);
       source.disconnect();
       gain.disconnect();
       pan.disconnect();
@@ -146,7 +166,7 @@ export class Sound {
       source.start(at);source.stop(at+duration);
     }else source.start();
   }
-  update(cars: Vehicle[], camera: T.Camera, dt: number) {
+  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false) {
     if (!this.ready) return;
     const c = this.ctx!,
       listener = c.listener;
@@ -179,7 +199,7 @@ export class Sound {
       const grounded = car.remoteGrounded ?? [0, 1, 2, 3].some((i) =>
         car.controller.wheelIsInContact(i),
       );
-      if (prior) {
+      if (prior && !wreckInspection) {
         if (car.gear !== prior.gear && Math.abs(car.speed) > 3) {
           this.shot(car.kind + '-shift', car.current, 0.18);
           this.shot(car.kind + '-exhaust', car.current, 0.12);
@@ -208,6 +228,7 @@ export class Sound {
       const rpm = car.rpm,
         level = car === cars[0] ? 0.38 : 0.22;
       for (const [name, l] of loops) {
+        if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
         l.pan.positionY.value = car.current.y;
         l.pan.positionZ.value = car.current.z;
@@ -242,6 +263,7 @@ export class Sound {
           v = car.slip > 4 && car.health < 80 ? 0.035 : 0;
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
+        if(wreckInspection)v=0;
         l.gain.gain.setTargetAtTime(v, c.currentTime, 0.08);
       }
     }

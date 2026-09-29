@@ -1,12 +1,14 @@
 # Quarry Impact
 
-A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 35 locally bundled ElevenLabs sound effects.
+A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 38 locally bundled ElevenLabs sound effects.
+
+Damaged cars now develop engine-bay smoke, turbulent flames, rising embers and a short fuel burst after a severe final impact. Sorted volume effects include smoke illumination and nearby fire lighting. Fire roar, crackling and explosive bursts are positional ElevenLabs recordings; ordinary impacts retain metal, glass and loose-part layers. Vehicle bodies stay frozen during the five-second wreck inspection while fire and sound continue. Repair clears the effects; pause and mute are respected. See `source/vehicle-fire.md` for implementation, audio provenance and limits.
 
 The latest pass focuses on wrecks: refined panel topology, shared deformation for bodywork, glass and internal structure, connected bumper/hood/mirror attachments, and filtered impact scratches. Wrecking out of a solo derby or race holds the scene for five seconds with an orbit camera, then returns to the menu. The timer pauses on focus loss. The remaining quarry banks have shallow rock relief, foreground conifer cards have been replaced with existing branch geometry, and four more route sections have gravel and grass verge patches. See `source/wreck-geometry/README.md` and `VALIDATION.md`. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
 
 ## Play
 
-[Play Quarry Impact](https://jez237.com/games/2026-09-27/quarry-impact/) in a desktop browser. It is listed under **Unfinished** on the [games page](https://jez237.com/games/).
+[Play Quarry Impact on GitHub](https://jz237.github.io/jez237-site/games/2026-09-27/quarry-impact/) in a desktop browser. The [jez237 version](https://jez237.com/games/2026-09-27/quarry-impact/) is listed under **Unfinished** on the [games page](https://jez237.com/games/); its latest update is pending restored Cloudflare sign-in.
 
 Double-click **Play-Quarry-Impact.cmd**, or run `node serve.mjs` and open **http://127.0.0.1:8795/**. The launcher starts a hidden local server. Node.js is required; the prepared game does not require an npm install. The server binds only to this computer.
 
@@ -73,7 +75,7 @@ Rapier handles fixed-step rigid-body physics and raycast wheel suspension. Steer
 
 ## Audio
 
-All 35 clips were generated through the user's existing ElevenLabs account, with overage billing disabled. Generation used **1,274 included credits** and made no additional purchases. The initial/final quota records, original exports, prompts, model settings, hashes and processing commands are retained.
+All 38 clips were generated through the user's existing ElevenLabs account, with overage billing disabled. The original 35 used **1,274 included credits**; the three added fire/burst effects used **170 included credits**, with no additional purchases. Original exports, prompts, model settings, hashes and processing commands are retained; private quota records are excluded from publication.
 
 Each car has idle, low-, medium-, and high-RPM loops, engine-load and damaged-engine loops, shifts, and exhaust transients. The shared library supplies tire, gravel, skid, suspension, crash, scraping, glass, debris, and forest/quarry sounds. Web Audio crossfades layers, spatializes cars and impacts, applies restrained Doppler, and limits simultaneous effects through a compressed master bus. Generation is strictly offline; the game contains no API key and makes no ElevenLabs calls.
 

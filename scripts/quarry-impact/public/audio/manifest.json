@@ -488,5 +488,50 @@
     },
     "sha256": "1c05006405283f39937ad1006dc62139770208ad353758a7ecc8200d4f1fc737",
     "processing": "loudnorm=I=-23:TP=-3:LRA=7,afade=t=in:d=0.015,afade=t=out:st=11.96:d=0.04"
+  },
+  {
+    "id": "fire-roar",
+    "file": "fire-roar.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Continuous close recording of a small intense automotive engine compartment fire. Steady turbulent flame whoosh and low airy combustion roar, fluctuating naturally. No explosion, no engine running, no siren, no wind. Seamless sustained isolated effect. No music or speech.",
+      "duration_seconds": 6,
+      "loop": true,
+      "prompt_influence": 0.55,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "3dceac81a76ac17ece52abf5c63b1941da8c0a6d320be6c51c91218dd323195a",
+    "runtimeSha256": "da2e1094e659d95e16cfef866b3e9823b6de891325b7ad88146e895409d31a86",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "fire-crackle",
+    "file": "fire-crackle.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Continuous close recording of burning automotive rubber and plastic in a small engine bay fire. Irregular tiny dry crackles, sharp intermittent snaps and sizzling, restrained low flame sound. No explosion, no wood logs, no voices, no siren. Seamless sustained isolated effect. No music or speech.",
+      "duration_seconds": 6,
+      "loop": true,
+      "prompt_influence": 0.55,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "6ee180593f4e54700ffbf011354fb5533d674a38e3e030f1300c14879fba10df",
+    "runtimeSha256": "d19a539a3c230523f84beb1b8fd0de9ee945cc4241db8e7c8120479581b9a141",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "vehicle-burst",
+    "file": "vehicle-burst.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "One short realistic burst of igniting fuel vapor from a badly crashed car: immediate sharp low percussive thump, fast breathy fire whoosh, brief scattered metal rattles decaying outdoors. Tight dry near-field recording. No cinematic bass drone, no music, no voices, no long reverb. No music or speech.",
+      "duration_seconds": 3.5,
+      "loop": false,
+      "prompt_influence": 0.55,
+      "model_id": "eleven_text_to_sound_v2"
+    },
+    "sha256": "b7efb2236addb2e580e12ab92548cc8ac71cff7343558bac71a47ce736cbf126",
+    "runtimeSha256": "47020b591368cfe3c2640988d2ddb744f013583dedf20afdf2cc18b019c5ed0c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

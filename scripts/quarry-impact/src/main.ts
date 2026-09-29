@@ -16,6 +16,7 @@ import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
 import { Effects } from './effects';
+import { VehicleFire } from './vehicle-fire';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
 import { OnlineUI } from './online-ui';
@@ -49,6 +50,7 @@ const settings = {
 };
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
+let vehicleFire:VehicleFire | undefined;
 sound.levels = {
   engine: settings.engine,
   effects: settings.effects,
@@ -217,6 +219,7 @@ function receiveOnline() {
 }
 function createCars(attract = false) {
   sound.clearCars();
+  vehicleFire?.reset();
   for (const c of cars) c.dispose();
   cars = [];
   fx.reset();
@@ -461,7 +464,7 @@ function resume() {
   state = resumeState as typeof state;
   if(online?.active && ['playing','countdown'].includes(state))hud();
   if (resumeState === 'menu') menu();
-  sound.pause(resumeState === 'wrecked');
+  sound.pause(false);
   if (resumeState === 'wrecked') orbit.enabled = true;
   lastFrame = performance.now();
 }
@@ -485,6 +488,7 @@ function applyQuality() {
     quarry.sun.shadow.needsUpdate = true;
   }
   staticShadows?.setQuality(settings.quality);
+  vehicleFire?.setQuality(settings.quality);
   ao.enabled = settings.quality !== 'medium';
   reflections.enabled = settings.quality !== 'medium';
   reflections.interval = settings.quality === 'ultra' ? 3 : 6;
@@ -681,6 +685,7 @@ function finish(title: string) {
   persist();
   if (!online?.active && cars[0].health <= 0) {
     state = 'wrecked'; wreckHold = 5;
+    sound.pause(false);
     keys.clear(); testInput = null; accumulator = 0;
     for (const car of cars) { car.input = {throttle:0,steer:0,brake:1,handbrake:false}; car.render(1); }
     const player = cars[0];
@@ -867,7 +872,6 @@ function frame(now: number) {
     if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.setInput({throttle:0,steer:0,brake:1,handbrake:false});
     const s=online.network.sample();if(s){online.apply(s,dt);quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
     accumulator+=dt;let n=0;while(accumulator>=1/60 && n++<4){physics.step();fx.update(1/60);accumulator-=1/60;}
-    sound.update(cars,camera,dt);
     const net=document.getElementById('network-status');if(net)net.textContent=online.network.connected?`ROOM ${online.network.room} · ${online.network.latency} MS`:online.network.reconnecting?'RECONNECTING · CONTROLS CLEARED':`${online.network.disconnectReason} · ESC TO LEAVE`;
   } else if (['playing', 'countdown'].includes(state)) {
     accumulator += dt;
@@ -877,14 +881,17 @@ function frame(now: number) {
       accumulator -= 1 / 60;
     }
     for (const c of cars) c.render(state === 'wrecked' ? 1 : accumulator / (1 / 60));
-    sound.update(cars, camera, dt);
   }
   if (state === 'wrecked') {
+    fx.update(dt);
     wreckHold = Math.max(0, wreckHold - dt);
     text('wreck-count', String(Math.ceil(wreckHold)));
     if (wreckHold === 0) { createCars(true); menu(); }
   }
   updateCamera(dt);
+  const effectsActive=['playing','countdown','wrecked'].includes(state);
+  vehicleFire?.update(cars,effectsActive?dt:0,camera);
+  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   quarry.update(camera);
   if(mode==='race'&&cars[0]) {
     const p=CHECKPOINTS[cars[0].nextCheckpoint],ahead=CHECKPOINTS[(cars[0].nextCheckpoint+1)%24];
@@ -997,6 +1004,8 @@ async function boot() {
   physics.timestep = 1 / 60;
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
+  vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
+  vehicleFire.setQuality(settings.quality);
   quarry = new Quarry(scene, physics);
   online=new OnlineView(scene,physics,fx,sound,()=>cars,next=>{cars=next;});
   onlineUI=new OnlineUI(ui,online.network,{connect:connectOnline,leave:leaveOnline});
@@ -1060,6 +1069,8 @@ async function boot() {
     },
     get impactState() { const p=cars[0];return p?{offset:{...p.impactResponse.offset},velocity:{...p.impactResponse.velocity},roll:p.impactResponse.roll,pitch:p.impactResponse.pitch,effects:{...p.impactEffects}}:null; },
     get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
+    get fireState() { return vehicleFire?.stats; },
+    get fireAudio() { return [...sound.loops].map(([id,loops])=>({id,layers:[...loops].filter(([name])=>name.startsWith('fire-')).map(([name,l])=>({name,level:l.gain.gain.value,position:[l.pan.positionX.value,l.pan.positionY.value,l.pan.positionZ.value]}))})); },
     get stats() {
       const times = [...frames].sort((a, b) => a - b);
       return {
@@ -1078,6 +1089,7 @@ async function boot() {
         debris: fx.debris.length,
         voices: sound.activeVoices,
         loops: sound.loops.size,
+        thermal: vehicleFire?.stats,
         state,
         benchmarkSamples,
       };

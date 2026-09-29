@@ -274,6 +274,12 @@ try{
       assert.ok(report.ridgeBefore.shader.programs.some(p=>p.generation===0&&p.linked&&p.draws>0&&p.fragmentSurface&&p.uniforms.includes('quarryStaticMap')),'Actual atlas fragment-surface shadow receiver must render before context loss');
     }
     await page.evaluate(neutral=>{__quarry.resume();__quarry.setInput(neutral);__quarry.autopilot(false);},neutral);
+    if(process.env.QUARRY_SHADOW_FIRE==='1'){
+      await page.evaluate(()=>__quarry.setHealth(0,12));await frames(180);
+      for(const quality of ['medium','high','ultra']){await page.evaluate(q=>__quarry.setQuality(q),quality);await frames(60);}
+      report.fireBefore=await page.evaluate(()=>__quarry.fireState);assert.ok(report.fireBefore.active>10);
+      await page.screenshot({path:path.join(output,'fire-before-context-loss.png')});
+    }
     const before=await sample('before-context-loss');
     report.contextRecovery=await page.evaluate(()=>{
       const canvas=document.querySelector('#game'),gl=canvas.getContext('webgl2'),extension=gl.getExtension('WEBGL_lose_context');
@@ -292,6 +298,11 @@ try{
       await frames();const recovered=await sample('context-restored-warmed');
       assert.equal(recovered.stats.staticShadows.captures,before.stats.staticShadows.captures+1,'context restoration invalidates exactly one static capture');
       assert.equal(recovered.contextLost,false);assert.equal(report.contextRecovery.stateAtRestore,'paused');
+      if(process.env.QUARRY_SHADOW_FIRE==='1'){
+        report.fireAfter=await page.evaluate(()=>__quarry.fireState);assert.ok(report.fireAfter.active>10);assert.ok(report.fireAfter.lights>0);
+        await page.screenshot({path:path.join(output,'fire-after-context-restore.png')});
+        mark('active volume smoke/fire survives quality changes and actual context restoration');
+      }
       await frames();const stable=await sample('context-restored-stable');assertCached(recovered,stable,'restored context');assertResourcesStable(recovered,stable,'restored context');
       if(northBackdrop){
         await page.evaluate(view=>{__quarry.captureCamera(view.position,view.target);document.querySelector('#ui').style.visibility='hidden';},backdropView);

@@ -24,7 +24,7 @@ try{
   assert.ok(report.samples.some(s=>Math.hypot(...Object.values(s.impact.offset))>.001),'real impact reaches rendered spring');
   assert.ok(report.samples.every(s=>s.stats.voices<=18&&s.stats.particles<=1800&&s.stats.debris<=36));
   report.audio=await page.evaluate(()=>({peak:__audioMeter.peak,clipped:__audioMeter.clipped,readings:__audioMeter.readings,...__quarry.audioState}));
-  assert.ok(report.audio.peak>0);assert.equal(report.audio.clipped,0,'sampled post-compressor waveform must stay below full scale');assert.equal(report.audio.buffers,35);
+  assert.ok(report.audio.peak>0);assert.equal(report.audio.clipped,0,'sampled post-compressor waveform must stay below full scale');assert.equal(report.audio.buffers,38);
   await page.evaluate(()=>__quarry.pause());await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>__quarry.audioState.state),'suspended');
   await page.evaluate(()=>{__quarry.resume();__quarry.mute();});await page.waitForTimeout(250);
   report.mute=await page.evaluate(()=>({...__quarry.audioState,peak:__audioMeter.latest}));assert.equal(report.mute.master,0);assert.equal(report.mute.muted,true);assert.ok(report.mute.peak<.0001);

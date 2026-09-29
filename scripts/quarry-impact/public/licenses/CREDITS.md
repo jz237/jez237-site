@@ -102,7 +102,9 @@ The western road-verge dressing in `src/scenery-west-verge.ts` uses original ben
 
 The wreck-topology refinement, shared deformation field, five-second inspection view, shallow bank relief and additional verge placement are original Quarry Impact code. Foreground forest replacements reuse the already credited Poly Haven fir geometry and materials. This revision introduces no new third-party assets, generated sounds or purchases.
 
-All runtime sound effects: **ElevenLabs**, generated September 27, 2026 from original Quarry Impact prompts using the user's account. They are provided under the applicable ElevenLabs account terms, not represented as CC0. No Wreckfest audio was used. File-level prompts, settings, hashes and post-processing are in `public/audio/manifest.json`; original MP3s and quota records are in `source/audio/`.
+All 38 runtime sound effects: **ElevenLabs**, generated September 27–28, 2026 from original Quarry Impact prompts using the user's account. They are provided under the applicable ElevenLabs account terms, not represented as CC0. No Wreckfest audio was used. File-level prompts, settings, hashes and post-processing are in `public/audio/manifest.json`; original MP3s are in `source/audio/`. Private quota records are excluded from publication.
+
+The vehicle-fire update adds three dedicated recordings: sustained flame roar, irregular burning-material crackle and a short fuel-vapor burst. These used 170 included credits with overages disabled and no additional spending. Fire and smoke volume shading, local noise, buoyancy and emission placement are original game code; no third-party VFX image or video was used. See `source/vehicle-fire.md` and `tools/fire-audio.py`.
 
 ## Software and typography
 
