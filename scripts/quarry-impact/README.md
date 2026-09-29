@@ -10,6 +10,8 @@ Damaged cars develop smoke, turbulent flames and rising embers from several dama
 
 The preceding geometry pass added refined panel topology, shared deformation for bodywork, glass and internal structure, connected bumper/hood/mirror attachments, and filtered impact scratches. Wrecking out of a solo derby or race holds the scene for five seconds with an orbit camera, then returns to the menu. The timer pauses on focus loss. The remaining quarry banks have shallow rock relief, foreground conifer cards have been replaced with existing branch geometry, and four more route sections have gravel and grass verge patches. See `source/wreck-geometry/README.md` and `VALIDATION.md`. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
 
+Loading now uses concurrent model downloads, lossless shared-texture model packing, shader warm-up and audio prefetching. Static scenery and impact deformation avoid redundant CPU work. Original geometry and image quality are preserved. See `source/performance.md` and the measured results in `VALIDATION.md`.
+
 ## Play
 
 [Play Quarry Impact](https://jez237.com/games/2026-09-27/quarry-impact/) in a desktop browser, or use the [GitHub mirror](https://jz237.github.io/jez237-site/games/2026-09-27/quarry-impact/). It is listed under **Unfinished** on the [games page](https://jez237.com/games/).

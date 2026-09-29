@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { forestRuntimeAssetPlan, observeForestRequests, verifyForestRequests } from './forest-runtime-assets.mjs';
 import { circuitRuntimeAssetPlan } from './circuit-runtime-assets.mjs';
 import { geologyRuntimeAssetPlan } from './geology-runtime-assets.mjs';
+import { modelTransport } from './model-transport.mjs';
 
 const phase=process.env.QUARRY_SHADOW_PHASE;
 assert.ok(phase,'Set QUARRY_SHADOW_PHASE to a new evidence name');
@@ -120,7 +121,8 @@ try{
   });
   page.on('response',response=>{if(response.status()>=400)report.errors.push({type:'http',status:response.status(),url:response.url()});});
   page.on('requestfailed',request=>report.failedRequests.push({url:request.url(),error:request.failure()?.errorText}));
-  const assetResponses=assetPaths.map(asset=>{
+  const transportPaths=await Promise.all(assetPaths.map(async asset=>(await modelTransport(asset))?.file??asset));
+  const assetResponses=transportPaths.map(asset=>{
     const promise=page.waitForResponse(response=>response.url()===new URL(asset,url).href,{timeout:120000});
     promise.catch(()=>{});return{asset,promise};
   });

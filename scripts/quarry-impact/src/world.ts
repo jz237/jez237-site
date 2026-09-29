@@ -1,4 +1,5 @@
 import {loadWorkyard, workyardFences} from './scenery-workyard';
+import { freezeSceneryTransforms } from './render-work';
 import { fractureBankGeometry } from './scenery-bank-relief';
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, overlapsQuarryWestWall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
@@ -6,7 +7,7 @@ import { DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE } from './static-shadows';
 import { northForestGround } from './scenery-north-floor';
 import { northForestRock } from './scenery-north-crest';
 import R from '@dimforge/rapier3d-compat';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from './model-loader';
 import { pbr, texture, url } from './assets';
 import { terrainHeight, trackPoint } from './rules';
 import { forestScenery, updateForestView } from './scenery-vegetation';
@@ -448,9 +449,12 @@ export class Quarry {
   }
   fences() { workyardFences(this.scenery); }
   async trees() {
-    this.workyardLODs = await loadWorkyard(this.scenery, this.derbyWalls);
-    await this.scannedRocks();
-    await forestScenery(this.scenery, rand);
+    [this.workyardLODs] = await Promise.all([
+      loadWorkyard(this.scenery, this.derbyWalls),
+      this.scannedRocks(),
+      forestScenery(this.scenery, rand),
+    ]);
+    freezeSceneryTransforms(this.scenery);
   }
 
   async scannedRocks() {
@@ -485,17 +489,20 @@ export class Quarry {
       variant++;
     });
     if (!scannedMaterial) throw new Error('Scanned quarry rock material is missing');
-    this.cutLODs = await loadQuarryCut(this.scenery, this.rockMaterial, scannedMaterial);
-    this.roadsideLODs = await loadQuarryRoadside(this.scenery, {
+    [this.cutLODs, this.roadsideLODs, this.extensionLODs, this.headwallLODs,
+      this.eastBayLODs, this.westWallLODs, this.roadApproachLODs] = await Promise.all([
+    loadQuarryCut(this.scenery, this.rockMaterial, scannedMaterial),
+    loadQuarryRoadside(this.scenery, {
       ground: quarryRoadsideGround(), rock: this.rockMaterial, scannedRock: scannedMaterial,
-    });
-    this.extensionLODs = await loadQuarryExtension(this.scenery, this.rockMaterial, scannedMaterial);
-    this.headwallLODs = await loadQuarryHeadwall(this.scenery, this.rockMaterial, scannedMaterial);
-    this.eastBayLODs = await loadQuarryEastBay(this.scenery, this.rockMaterial, scannedMaterial);
-    this.westWallLODs = await loadQuarryWestWall(this.scenery, this.rockMaterial, scannedMaterial);
-    this.roadApproachLODs = await loadQuarryRoadApproach(this.scenery, {
+    }),
+    loadQuarryExtension(this.scenery, this.rockMaterial, scannedMaterial),
+    loadQuarryHeadwall(this.scenery, this.rockMaterial, scannedMaterial),
+    loadQuarryEastBay(this.scenery, this.rockMaterial, scannedMaterial),
+    loadQuarryWestWall(this.scenery, this.rockMaterial, scannedMaterial),
+    loadQuarryRoadApproach(this.scenery, {
       lane: quarryRoadSurface('aggregate'), skirt: quarryRoadSurface('ground'), scannedRock: scannedMaterial,
-    });
+    }),
+    ]);
   }
   setMode(mode: string) {
     const derby = mode === 'derby';

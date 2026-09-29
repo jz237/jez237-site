@@ -24,12 +24,30 @@ export class Sound {
     { throttle: number; slip: number; grounded: boolean; gear: number }
   >();
   listenerPrevious = new T.Vector3();
+  private files?: Promise<{id:string; data:ArrayBuffer}[]>;
+  private initializing?: Promise<void>;
+  /** Fetch bundled clips while lighting warms up. Audio playback still starts
+   * only after the user's gesture, using the real output context's sample rate. */
+  preload() {
+    if (this.ready) return Promise.resolve([] as {id:string;data:ArrayBuffer}[]);
+    return this.files ??= (async()=>{
+      const response=await fetch(url('audio/manifest.json'));
+      if(!response.ok)throw new Error('Audio manifest unavailable');
+      const list:{id:string;file:string}[]=await response.json();
+      const files:{id:string;data:ArrayBuffer}[]=new Array(list.length);let next=0;
+      await Promise.all(Array.from({length:4},async()=>{
+        while(next<list.length){const index=next++,entry=list[index];
+          const clip=await fetch(url('audio/'+entry.file));
+          if(!clip.ok)throw new Error('Audio clip unavailable: '+entry.id);
+          files[index]={id:entry.id,data:await clip.arrayBuffer()};
+        }
+      }));
+      return files;
+    })().catch(error=>{this.files=undefined;throw error;});
+  }
   async init() {
-    if (this.ctx) {
-      await this.ctx.resume();
-      return;
-    }
-    this.ctx = new AudioContext();
+    if (!this.ctx) {
+    this.ctx = new AudioContext({latencyHint:'interactive'});
     const c = this.ctx;
     this.master = c.createGain();
     this.master.gain.value = 0.75;
@@ -44,18 +62,17 @@ export class Sound {
     for (const b of [this.engineBus, this.fxBus, this.ambientBus])
       b.connect(this.master);
     this.setLevels();
-    const list = await fetch(url('audio/manifest.json')).then((r) => r.json());
-    await Promise.all(
-      list.map(async (a: { id: string; file: string }) => {
-        const data = await fetch(url('audio/' + a.file)).then((r) =>
-          r.arrayBuffer(),
-        );
-        this.buffers.set(a.id, await c.decodeAudioData(data));
-      }),
-    );
-    this.ready = true;
-    this.ambient = this.loop('ambience', this.ambientBus);
-    if (this.ambient) this.ambient.gain.gain.value = 0.45;
+    }
+    await this.ctx.resume();
+    if(this.ready)return;
+    await (this.initializing ??= (async()=>{
+      const files=await this.preload();
+      await Promise.all(files.map(async file=>this.buffers.set(file.id,await this.ctx!.decodeAudioData(file.data))));
+      files.length=0;this.files=undefined;
+      this.ready=true;
+      this.ambient=this.loop('ambience',this.ambientBus!);
+      if(this.ambient)this.ambient.gain.gain.value=.45;
+    })().catch(error=>{this.initializing=undefined;this.files=undefined;throw error;}));
   }
   setLevels() {
     if (this.engineBus) this.engineBus.gain.value = this.levels.engine;

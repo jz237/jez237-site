@@ -1,0 +1,31 @@
+import {chromium} from '@playwright/test';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+
+const out=process.env.QUARRY_PERF_OUTPUT;assert.ok(out);await fs.mkdir(out,{recursive:true});
+assert.equal(await fs.access(out+'/report.json').then(()=>true,()=>false),false);
+const url=process.env.QUARRY_QA_URL||'http://127.0.0.1:8795/';
+const seconds=Number(process.env.QUARRY_PERF_SECONDS||60);
+const report={url,seconds,viewport:[2560,1440],quality:'ultra',errors:[],samples:[],protocol:'Fresh Chrome context, unthrottled local delivery, 1440p Ultra. Cold navigation to menu plus first two rendered frames; first event start to countdown. Seeded autonomous derby at a fixed chase camera, then an eight-fire stress scene. Real-time frame capture; no physics acceleration during measured intervals.'};
+let browser;
+const summary=frames=>{const sorted=[...frames].sort((a,b)=>a-b),mean=frames.reduce((a,b)=>a+b,0)/frames.length;return {frames:frames.length,meanMs:mean,fps:1000/mean,p95:sorted[Math.floor(sorted.length*.95)],p99:sorted[Math.floor(sorted.length*.99)],over33ms:frames.filter(v=>v>33.4).length,over50ms:frames.filter(v=>v>50).length};};
+try{
+ browser=await chromium.launch({channel:'chrome',headless:true,args:['--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows']});
+ const page=await browser.newPage({viewport:{width:2560,height:1440}}),cdp=await page.context().newCDPSession(page);
+ await page.addInitScript(()=>{let seed=917;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)|0;return(seed>>>0)/4294967296;};localStorage.setItem('quarry-impact-v1',JSON.stringify({quality:'ultra'}));window.__perf={longTasks:[],keys:[],stages:[]};new PerformanceObserver(list=>{for(const e of list.getEntries())__perf.longTasks.push({start:e.startTime,duration:e.duration});}).observe({type:'longtask',buffered:true});addEventListener('keydown',e=>{if(e.code==='KeyC'||e.code==='KeyW'){const start=performance.now(),stamp=e.timeStamp;requestAnimationFrame(()=>__perf.keys.push({key:e.code,dispatchMs:start-stamp,nextFrameMs:performance.now()-start}));}},true);});
+ page.on('pageerror',e=>report.errors.push(e.message));page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
+ await cdp.send('Profiler.enable');await cdp.send('Profiler.setSamplingInterval',{interval:2000});await cdp.send('Profiler.start');
+ await page.goto(url);await page.waitForFunction(()=>window.__quarry?.state==='menu',null,{timeout:180000});
+ report.cold=await page.evaluate(async()=>{const ready=performance.now();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return {readyMs:ready,firstFramesMs:performance.now(),longTasks:__perf.longTasks,paint:performance.getEntriesByType('paint').map(p=>({name:p.name,start:p.startTime})),resources:performance.getEntriesByType('resource').map(r=>({name:r.name.split('/').slice(-2).join('/'),start:r.startTime,duration:r.duration,transfer:r.transferSize,bytes:r.encodedBodySize})),stats:__quarry.stats};});
+ const loadProfile=await cdp.send('Profiler.stop');await fs.writeFile(out+'/load.cpuprofile',JSON.stringify(loadProfile.profile));
+ report.bundle=await page.locator('script[type="module"][src^="./assets/index-"]').getAttribute('src');report.sha256=createHash('sha256').update(await(await page.request.get(new URL(report.bundle,page.url()).href)).body()).digest('hex');console.log(JSON.stringify({phase:'loaded',readyMs:report.cold.readyMs,firstFramesMs:report.cold.firstFramesMs}));
+ const start=performance.now();await page.click('#watch-demo');await page.waitForFunction(()=>__quarry.state==='countdown',null,{timeout:60000});report.startEventMs=performance.now()-start;await page.waitForFunction(()=>__quarry.state==='playing');await page.selectOption('#demo-camera','chase');await page.selectOption('#demo-car','0');await page.waitForTimeout(5000);
+ const capture=async name=>{await page.evaluate(()=>__quarry.benchmark());const begin=performance.now();const samples=[];for(let i=0;i<Math.ceil(seconds/5);i++){await page.waitForTimeout(5000);samples.push(await page.evaluate(()=>({stats:__quarry.stats,heap:performance.memory?.usedJSHeapSize})));if(i%4===3)console.log(JSON.stringify({phase:name,seconds:Math.round((performance.now()-begin)/1000)}));}const result=await page.evaluate(()=>__quarry.endBenchmark());const timing=summary(result.frames);assert.ok(timing.frames>seconds*15);assert.ok(samples.at(-1).stats.elapsed-samples[0].stats.elapsed>seconds*.5,'simulation must advance');await page.screenshot({path:out+'/'+name+'.png'});return {seconds:(performance.now()-begin)/1000,timing,samples,frames:result.frames};};
+ report.derby=await capture('derby');
+ await cdp.send('Profiler.start');await page.waitForTimeout(10000);const frameProfile=await cdp.send('Profiler.stop');await fs.writeFile(out+'/frames.cpuprofile',JSON.stringify(frameProfile.profile));
+ for(let i=0;i<8;i++){await page.keyboard.press('KeyC');await page.waitForTimeout(150);}report.keys=await page.evaluate(()=>__perf.keys);
+ await page.evaluate(async()=>{await __quarry.start('race');__quarry.simulate(4);__quarry.setInput({throttle:0,steer:0,brake:1,handbrake:false});for(let i=0;i<8;i++){__quarry.teleport(i,i===0?0:((i-1)%3-1)*4,i===0?-29:-20+Math.floor((i-1)/3)*5,0);for(const side of ['front','left','rear'])__quarry.damage(i,20,side);__quarry.setHealth(i,i===0?8:0);}});await page.waitForTimeout(6500);report.fire=await capture('fire');
+ await page.keyboard.press('Escape');await page.click('#resume');await page.evaluate(()=>__quarry.menu());await page.click('#watch-demo');await page.waitForFunction(()=>__quarry.state==='playing');await page.click('#demo-exit');await page.waitForFunction(()=>__quarry.state==='menu');assert.deepEqual(report.errors,[]);report.passed=true;
+}catch(e){report.passed=false;report.failure=String(e);process.exitCode=1;}
+finally{await browser?.close();report.browserClosed=true;await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify({passed:report.passed,failure:report.failure,cold:report.cold?.firstFramesMs,start:report.startEventMs,derby:report.derby?.timing,fire:report.fire?.timing}));}

@@ -55,6 +55,7 @@ const sound = new Sound();
 let vehicleFire:VehicleFire | undefined;
 const drivers=new DrivingBrain(),director=new DemoDirector();
 let demo=false,demoRestart=0;
+let preparingEvent=false,preparationInterrupted=false;
 sound.levels = {
   engine: settings.engine,
   effects: settings.effects,
@@ -287,11 +288,10 @@ async function start(watch=demo) {
   demo=watch;demoRestart=0;director.reset();keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost)online.network.start(mode);return;}
-  const btn = document.querySelector<HTMLButtonElement>('#start');
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = 'PREPARING AUDIO…';
-  }
+  if(preparingEvent)return;
+  preparingEvent=true;preparationInterrupted=false;
+  state='loading';
+  loading(watch?'PREPARING DEMO':'PREPARING EVENT');
   try {
     await sound.init();
   } catch (e) {
@@ -299,6 +299,8 @@ async function start(watch=demo) {
     toast('Sound unavailable — check local assets', 8);
   }
   createCars();
+  for(const car of cars)staticShadows?.bindReceivers(car.root);
+  await warmPrograms();
   elapsed = 0;
   countdown = mode === 'playground' ? 0 : 3.5;
   accumulator = 0;
@@ -309,6 +311,8 @@ async function start(watch=demo) {
   camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
   hud();
   sound.pause(false);
+  preparingEvent=false;
+  if(preparationInterrupted||document.hidden)pause();
 }
 function hud() {
   ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="270" height="220"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
@@ -926,9 +930,11 @@ addEventListener('keydown', (e) => {
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => {
   keys.clear();online?.network.clearInput();
+  if(preparingEvent)preparationInterrupted=true;
   if ((['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
 document.addEventListener('visibilitychange', () => {
+  if(document.hidden&&preparingEvent){preparationInterrupted=true;keys.clear();}
   if (document.hidden && (['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
 addEventListener('resize', () => {
@@ -993,6 +999,11 @@ async function boot() {
   createCars(true);
   staticShadows.bindReceivers(scene);
   applyQuality();
+  loading('WARMING LIGHTING AND REFLECTIONS');
+  void sound.preload().catch(()=>{}); // A failed prefetch is retried on Start.
+  // Queue programs together instead of waiting for each shader during the first
+  // visible frame. Match the composer's offscreen output to avoid extra variants.
+  await warmPrograms(true);
   menu();
   if(new URL(location.href).searchParams.has('room'))onlineUI.show();
   (window as any).__quarry = {
@@ -1177,6 +1188,15 @@ async function boot() {
       return resultTitle;
     },
   };
+}
+async function warmPrograms(includeStatic=false) {
+  const previousTarget=renderer.getRenderTarget();
+  renderer.setRenderTarget(composer.readBuffer);
+  try {
+    const pending=[renderer.compileAsync(scene,camera)];
+    if(includeStatic&&staticShadows)pending.push(renderer.compileAsync(staticShadows.casterScene,staticShadows.camera));
+    await Promise.all(pending);
+  } finally { renderer.setRenderTarget(previousTarget); }
 }
 requestAnimationFrame(frame);
 boot().catch((e) => {

@@ -6,7 +6,7 @@ import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from 
 import * as T from 'three';
 import { dressWestVerge } from './scenery-west-verge';
 import { bankForestCards, addBankForest, dressBankVerges } from './scenery-bank-relief';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from './model-loader';
 import { url } from './assets';
 import { trackPoint } from './rules';
 import { replacesNorthBackdropCard, updateNorthRidgeView } from './scenery-north-ridge';
@@ -38,8 +38,9 @@ type Cell = {
     backdrop: boolean;
     levels: Map<number, Map<T.Mesh, TreeBatch>>;
 };
-async function scannedForest(parent: T.Group, file: string, large: boolean) {
-    const gltf = await new GLTFLoader().loadAsync(url(file));
+async function scannedForest(parent: T.Group, file: string, large: boolean,
+    prepared?: Awaited<ReturnType<GLTFLoader['loadAsync']>>) {
+    const gltf = prepared ?? await new GLTFLoader().loadAsync(url(file));
     gltf.scene.updateMatrixWorld(true);
     const cells = new Map<string, Cell>(), geometries = new Map<T.Mesh, T.BufferGeometry>();
     const northSaplings: NorthSaplingPart[] = [];
@@ -267,9 +268,12 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         parent.add(trees);
     }
     const northMedium: NorthSaplingPart[] = [];
-    for (const variant of ['a', 'b', 'c'])
-        northMedium.push(...await scannedForest(parent, 'models/fir-medium-' + variant + '.glb', true));
-    const northSaplings = await scannedForest(parent, 'models/fir-saplings-lod.glb', false);
+    const forestFiles = ['a', 'b', 'c'].map(variant => 'models/fir-medium-' + variant + '.glb');
+    forestFiles.push('models/fir-saplings-lod.glb');
+    const loadedForest = await Promise.all(forestFiles.map(file => new GLTFLoader().loadAsync(url(file))));
+    for (let i = 0; i < 3; i++)
+        northMedium.push(...await scannedForest(parent, forestFiles[i], true, loadedForest[i]));
+    const northSaplings = await scannedForest(parent, forestFiles[3], false, loadedForest[3]);
     addBankForest(parent,branchCards,northMedium);
     const p: number[] = [], colors: number[] = [], idx: number[] = [];
     const addBlade = (x: number, z: number, h: number, a: number, brown: boolean,

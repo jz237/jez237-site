@@ -1,0 +1,288 @@
+{
+  "date": "2026-09-29",
+  "comparisonRelease": "be2a80254199583fa3718a011935eb02023bf1f6",
+  "runtime": {
+    "file": "./assets/index-Cgu5z9OM.js",
+    "sha256": "50052d9776e22f184de46236f4b8f7755a6bc0626d1196910a91a6df6026634f",
+    "bytes": 9708924
+  },
+  "protocol": {
+    "loading": "Three alternating fresh Chrome launches per build, 1440p Ultra, no CPU profiler during load. First event timing includes first rendered countdown. Unthrottled local delivery, not an internet speed prediction.",
+    "frames": "Fresh Chrome context, unthrottled local delivery, 1440p Ultra. Cold navigation to menu plus first two rendered frames; first event start to countdown. Seeded autonomous derby at a fixed chase camera, then an eight-fire stress scene. Real-time frame capture; no physics acceleration during measured intervals.",
+    "limits": "Local desktop Chrome; whole-frame timings. One 60-second frame capture per condition. No internet multiplayer test, hardware input-to-photon test or new ten-minute memory test."
+  },
+  "loading": {
+    "before": {
+      "menuMs": [
+        13328.09999999404,
+        13146.90000000596,
+        13311.100000023842
+      ],
+      "eventMs": [
+        3054.0985,
+        2753.8759999999966,
+        2832.824299999993
+      ],
+      "menuMedianMs": 13311.100000023842,
+      "eventMedianMs": 2832.824299999993,
+      "coldEncodedResourceBytes": [
+        314080530,
+        314080530,
+        314080530
+      ]
+    },
+    "after": {
+      "menuMs": [
+        5746.800000011921,
+        5600.9000000059605,
+        5965.699999988079
+      ],
+      "eventMs": [
+        1011.6667999999991,
+        1026.4846999999936,
+        1004.3876000000018
+      ],
+      "menuMedianMs": 5746.800000011921,
+      "eventMedianMs": 1011.6667999999991,
+      "coldEncodedResourceBytes": [
+        263354475,
+        263354475,
+        263354475
+      ]
+    }
+  },
+  "frames": {
+    "before": {
+      "derby": {
+        "durationSeconds": 60.837919500000005,
+        "timing": {
+          "frames": 3469,
+          "meanMs": 17.403170942634766,
+          "fps": 57.460792823115504,
+          "p95": 16.80000000000291,
+          "p99": 50,
+          "over33ms": 42,
+          "over50ms": 30
+        },
+        "resources": {
+          "geometry": {
+            "min": 849,
+            "max": 855
+          },
+          "textures": {
+            "min": 145,
+            "max": 145
+          }
+        },
+        "sampledJsHeapBytes": {
+          "min": 758212734,
+          "max": 881753597,
+          "first": 758212734,
+          "last": 870062873
+        }
+      },
+      "fire": {
+        "durationSeconds": 60.792106300000015,
+        "timing": {
+          "frames": 3610,
+          "meanMs": 16.668033240997232,
+          "fps": 59.99508073576238,
+          "p95": 16.80000000000291,
+          "p99": 16.89999999999418,
+          "over33ms": 0,
+          "over50ms": 0
+        },
+        "resources": {
+          "geometry": {
+            "min": 852,
+            "max": 852
+          },
+          "textures": {
+            "min": 145,
+            "max": 145
+          }
+        },
+        "sampledJsHeapBytes": {
+          "min": 950155483,
+          "max": 1047667455,
+          "first": 950155483,
+          "last": 1047667455
+        }
+      }
+    },
+    "after": {
+      "derby": {
+        "durationSeconds": 60.847665199999994,
+        "timing": {
+          "frames": 3479,
+          "meanMs": 17.367576889910893,
+          "fps": 57.57855608406238,
+          "p95": 16.80000000000291,
+          "p99": 49.900000000001455,
+          "over33ms": 43,
+          "over50ms": 23
+        },
+        "resources": {
+          "geometry": {
+            "min": 850,
+            "max": 855
+          },
+          "textures": {
+            "min": 145,
+            "max": 145
+          }
+        },
+        "sampledJsHeapBytes": {
+          "min": 767235204,
+          "max": 869573303,
+          "first": 776087172,
+          "last": 867833291
+        }
+      },
+      "fire": {
+        "durationSeconds": 60.88526949999999,
+        "timing": {
+          "frames": 3605,
+          "meanMs": 16.695728155339804,
+          "fps": 59.895560750380895,
+          "p95": 16.80000000000291,
+          "p99": 16.90000000000873,
+          "over33ms": 1,
+          "over50ms": 0
+        },
+        "resources": {
+          "geometry": {
+            "min": 852,
+            "max": 852
+          },
+          "textures": {
+            "min": 145,
+            "max": 145
+          }
+        },
+        "sampledJsHeapBytes": {
+          "min": 941240953,
+          "max": 1052538553,
+          "first": 941240953,
+          "last": 1052538553
+        }
+      }
+    }
+  },
+  "regression": {
+    "soloTests": {
+      "passed": 164,
+      "failed": 0
+    },
+    "gameplay": {
+      "passed": true,
+      "checks": null,
+      "errors": []
+    },
+    "demo": {
+      "passed": true,
+      "checks": [
+        "all eight cars drive autonomously",
+        "all seven views, car selection and mouse orbit work",
+        "pause and focus loss freeze demo and fire",
+        "camera and follow controls retain handlers after pause and blur",
+        "car zero wrecking does not end spectator event",
+        "demo repeats automatically without changing player bests",
+        "race demo advances every AI through checkpoints",
+        "exit restores normal player mode"
+      ],
+      "errors": []
+    },
+    "loadingLifecycle": {
+      "passed": true,
+      "checks": [
+        "Focus loss during event preparation pauses the ready event; resume and demo controls work",
+        "Missing packed downloads fall back to original models and start with all 38 sounds"
+      ],
+      "errors": []
+    },
+    "graphics": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "stationary reflections reuse static depth",
+          "passed": true,
+          "reflectionCycles": 10
+        },
+        {
+          "name": "moving car does not invalidate fixed depth",
+          "passed": true,
+          "metres": 18.803274393081665
+        },
+        {
+          "name": "all three replacement car receivers render without rebuilding scenery depth",
+          "passed": true
+        },
+        {
+          "name": "AI derby, racing, playground and repeated restarts retain cached scenery depth",
+          "passed": true
+        },
+        {
+          "name": "Ultra/High/Medium/repeated-quality transitions allocate and capture only when needed",
+          "passed": true
+        },
+        {
+          "name": "six actual atlas assets load and fragment-surface static-shadow receiver renders again after real context restoration",
+          "passed": true
+        },
+        {
+          "name": "actual context loss/restoration pauses, recaptures once and resumes",
+          "passed": true
+        },
+        {
+          "name": "actual circuit surface shaders fit the texture limit and render before and after context restoration",
+          "passed": true
+        },
+        {
+          "name": "actual geology photographs load and the shader fits the sampler limit and draws before and after context restoration",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "contextRecovery": {
+        "supported": true,
+        "lostEventObserved": true,
+        "restoredEventObserved": true,
+        "lostAfterMs": 59.5,
+        "restoredAfterMs": 461.09999999403954,
+        "stateAtRestore": "paused"
+      }
+    },
+    "fireAudio": {
+      "passed": true,
+      "checks": [
+        "intact car has no fire or smoke",
+        "progressive smoke, flame and positional fire audio",
+        "seeded rare critically damaged car bursts after sustained heat",
+        "inspection freezes visual effects",
+        "burn scars persist after cooling",
+        "repair clears fire particles and sound",
+        "all three car types render fire with front, rear and side damage-weighted sources",
+        "eight-car effects and voice budgets",
+        "pause and mute silence fire",
+        "menu reset clears emitters"
+      ],
+      "errors": [],
+      "audio": {
+        "peak": 0.27237358689308167,
+        "clipped": 0,
+        "readings": 1568,
+        "state": "running",
+        "muted": true,
+        "master": 0,
+        "voices": 0,
+        "buffers": 38,
+        "levels": {
+          "engine": 0.72,
+          "effects": 0.8,
+          "ambience": 0.45
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,35 @@
+# Loading and frame pacing — September 29, 2026
+
+Final application **index-Cgu5z9OM.js**, **9,708,924 bytes**, SHA-256 **50052d9776e22f184de46236f4b8f7755a6bc0626d1196910a91a6df6026634f**. Concurrent asset loading, asynchronous shader warm-up, prefetched local audio, lossless shared-texture model transport, frozen static transforms and conservative impact bounds reduce startup and redundant client work. Geometry, image bytes, driving/damage behavior and all 23 deployed Worker inputs remain unchanged. Implementation and reproduction: `source/performance.md`; machine-readable final results: `source/performance-results.json`.
+
+Three alternating fresh Chrome launches per build at **2560 × 1440 Ultra**, with local unthrottled delivery, compare this build with be2a8025:
+
+| Measurement | Before | After |
+|---|---:|---:|
+| Median navigation to rendered menu | 13.311 s | 5.747 s |
+| Median first event startup to countdown | 2.833 s | 1.012 s |
+| Cold encoded resource bytes | 314.081 MB | 263.354 MB |
+| Moving derby average, one-minute sample | 57.461 FPS | 57.579 FPS |
+| Derby p99 frame time | 50.0 ms | 49.9 ms |
+| Derby frames above 50 ms | 30 | 23 |
+| Eight damaged burning cars, one-minute sample | 59.995 FPS | 59.896 FPS |
+
+Menu startup improves by about **57%**, event startup by **64%** and download size by **16%**. The after build also prefetches all 38 audio files before Start; the before build loads audio on Start. No CPU profiler runs during the repeated cold-load measurements. These local measurements are not a prediction of internet download time. Engine output latency uses the interactive AudioContext hint; hardware input-to-photon latency and multiplayer ping were not measured.
+
+Sustained FPS is effectively unchanged in this final short capture; the reduction in frames above 50 ms is an observed run result, not a statistically established guarantee. The final derby covers **60.848 seconds**, 3,479 frames, mean **17.368 ms**, p95 **16.8 ms**, p99 **49.9 ms**. The eight-fire case covers **60.885 seconds**, 3,605 frames, mean **16.696 ms**, p95 **16.8 ms**, p99 **16.9 ms**. No locked 60 FPS claim. The earlier packed candidate's 58.616 FPS result is not attributed to this final runtime.
+
+Derby geometry counts range **850–855**, with **145 textures**; sampled JS heap ranges **767.2–869.6 MB** and ends at **867.8 MB**. The fire case holds **852 geometries / 145 textures**, with heap **941.2–1052.5 MB**. Short captures and unreclaimed transient allocations do not establish a memory leak or long-term stability. No new ten-minute benchmark was run. All timing captures ran without another QA browser, build or exporter from this work.
+
+- **164/164 selected solo tests**, TypeScript and production build pass. Five added tests verify preserved prior-release hashes, frozen static transforms with working LODs/dynamic siblings, exact old/new deformed vertex arrays through repeated/transformed/repaired impacts, concurrent audio initialization, and all **21** packed GLBs' retained geometry and image hashes. No weaker replacement for earlier frozen hashes was introduced.
+- All-mode browser gameplay, the eight spectator checks, all eight race AI completing 72 checkpoints, loading/focus-loss lifecycle and missing-packed-file fallback pass. A trial that globally removed DecompressionStream exposed the pre-existing terrain-mask browser requirement; the final fallback test specifically verifies missing packed models using the original GLBs. This is not full legacy-browser support.
+- Graphics QA passes **9 checks and 12 quality transitions**, including real application asset checks, photographic geology and circuit shader samplers, atlas receivers and actual WebGL loss/restoration in **461 ms**. No shader, browser or failed-asset errors. Matched forest views and final derby/fire screenshots were inspected at 1440p.
+- Fire/audio QA passes **10 checks**, including varied front/rear/side emitters on all three cars, rare delayed bursts, soot/repair, eight-car budgets, pause, mute and menu reset. All **38 original ElevenLabs buffers** load; sampled peak **0.2724**, zero clipped samples across **1,568 readings**. No new ElevenLabs generation or service requests and no spending.
+- Internet multiplayer testing remains excluded; the backend is not redeployed. Overall photorealistic fidelity and a locked 60 FPS target remain unfinished.
+
+Private evidence: `outputs/performance-pass/` (`loading-final`, `baseline`, `final-run`, `solo-final.log`, `gameplay`, `demo`, `lifecycle-final`, `shadows/final`, `fire`). The first final-run attempt was blocked by local process permissions; the fresh final-run directory contains the successful capture. Existing detailed historical results below are preserved.
+
+---
+
 # Pause control repair - September 29, 2026
 
 The initial published demo check exposed a pause/resume regression: appending the settings overlay with `innerHTML +=` recreated the HUD and discarded its event handlers. Pause now inserts only the new overlay and preserves the existing controls.

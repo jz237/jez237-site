@@ -1,5 +1,5 @@
 import * as T from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from './model-loader';
 import { url } from './assets';
 
 export interface RoadsideMaterials {
