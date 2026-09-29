@@ -1,0 +1,118 @@
+{
+  "sourceCommit": "96ec78d70cea6c9ac23f85a299f0dcffed721b80",
+  "testedBuildHash": "8eee3ccd049b154e88980b1f5bf0c032dcc9571e77e94b46b0710b8013c0332f",
+  "publishedAt": "2026-09-29T02:50:04.492355+00:00",
+  "status": "Hidden Reef and GitHub published; jez237 deployment awaiting renewed account login",
+  "hiddenReef": {
+    "deploymentSourceCommit": "96ec78d70cea6c9ac23f85a299f0dcffed721b80",
+    "preview": "https://4b37a7de.hidden-reef.pages.dev",
+    "previewVerification": {
+      "base": "https://4b37a7de.hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T02:43:05.023Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-DPpNs5tW.js",
+        "filtration/./assets/index-vl4A24zB.css",
+        "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DPpNs5tW.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-vl4A24zB.css": "public, max-age=31536000, immutable"
+      }
+    },
+    "production": "https://hidden-reef.pages.dev/showroom/filtration/",
+    "deployment": "https://360c277d.hidden-reef.pages.dev",
+    "verification": {
+      "base": "https://hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T02:45:43.589Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-DPpNs5tW.js",
+        "filtration/./assets/index-vl4A24zB.css",
+        "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DPpNs5tW.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-vl4A24zB.css": "public, max-age=31536000, immutable"
+      }
+    }
+  },
+  "jez237": {
+    "status": "Blocked before preview upload; previous production retained",
+    "blocker": "Cloudflare API authentication error 10000 / invalid access token 9109; refresh returned 400. Desktop Chrome is signed in to the Hidden Reef account, not the jez237 account. User asked to switch to jrbaud@gmail.com.",
+    "previousPublication": {
+      "deploymentSourceCommit": "92d692fc303ac927ca66e258d4f1a91e6739e180",
+      "preview": "https://5645ed58.jez237-site.pages.dev",
+      "deployment": "https://4a05e491.jez237-site.pages.dev",
+      "production": "https://jez237.com/demos/reef-filtration/",
+      "workflow": "scripts/deploy_jez237_pages.mjs; full site plus Functions, preview/current-main/production checks passed",
+      "verification": {
+        "base": "https://jez237.com/prototypes/hidden-reef",
+        "checkedAt": "2026-09-29T02:11:22.511Z",
+        "assets": [
+          "reef/./assets/index-Di90eq1i.js",
+          "reef/./assets/index-DBjqBxyQ.css",
+          "filtration/./assets/index-CbHBNrY6.js",
+          "filtration/./assets/index-vl4A24zB.css",
+          "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+          "learn/filtoclear/index.html",
+          "learn/filtoclear/model.js"
+        ],
+        "checks": {
+          "exactActiveAssetsAndStoreImages": true,
+          "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
+          "fullRockAssetAndPondExhibitPreserved": true,
+          "reefToolbarLessonAndReturnNavigation": true,
+          "mobileNavigation": true
+        },
+        "errors": [],
+        "cacheHeaders": {
+          "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+          "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+          "filtration/./assets/index-CbHBNrY6.js": "public, max-age=14400, must-revalidate",
+          "filtration/./assets/index-vl4A24zB.css": "public, max-age=14400, must-revalidate"
+        }
+      },
+      "standaloneDemo": {
+        "base": "https://jez237.com/demos/reef-filtration/",
+        "checkedAt": "2026-09-29T02:12:31.233Z",
+        "exactAssets": [
+          "./assets/index-CbHBNrY6.js",
+          "./assets/index-vl4A24zB.css",
+          "assets/rock-layers.bin-D_ajDSSg.gz"
+        ],
+        "passed": true
+      }
+    }
+  },
+  "visualReview": "roller-review.md",
+  "previousPublication": "publication-system.json",
+  "limitations": [
+    "Richer roller materials add draw calls and some frame-rate cost; measured ranges are in roller-review.md. Low-end hardware was not tested.",
+    "Microscopic fibers and wet reflections remain simpler than the reference; photographic parity is not claimed."
+  ]
+}
