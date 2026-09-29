@@ -1,0 +1,31 @@
+{
+  "previousRelease": "448c0c2b3bdc96b3ea0deed92d22a6f0a5025916",
+  "scope": "Visual panel compression, clean cut strips, hinged parts, persistent chips and soot, damage-directed wreck camera. Worker inputs unchanged.",
+  "files": {
+    "src/assets.ts": {
+      "before": "2d9a068c72f0ab655acf2d43d1b1c1edc2db5ccb4c4495fcbacdff7b4b27ca9f",
+      "after": "43db6db7615efe078477f5181d7c932dcf2f4da3a5014e2481e384af36ac1ad6",
+      "snapshot": "tests/fixtures/wreck-finish-before-assets.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "94f93d6d10153100474deca599cd227dd4a0bb8821b7c19d6aed4b01e8d8f4c8",
+      "after": "c4d358c884025b0bef0481f6d56a484e3b068dc95172aa649e27c37b1daca3b1",
+      "snapshot": "tests/fixtures/wreck-finish-before-main.ts.gz"
+    },
+    "src/vehicle-fire.ts": {
+      "before": "27476efbe03d5f46aa3bf1495231ed93f1a300c64145e3d2417032c786e6fec2",
+      "after": "54cca336937ddfe9ee116791f4f6e13d9878222704cd9bd767a165f8b22ce361",
+      "snapshot": "tests/fixtures/wreck-finish-before-vehicle-fire.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "4b6bd646bdaa3565dce9ed27de7cc82b0f19a443b8abd0651fa4fdc82a7b87f5",
+      "after": "c8b7591f86e6e6179231c1863d9177a12bebab8db456a1d59ad56e2e0114547e",
+      "snapshot": "tests/fixtures/wreck-finish-before-vehicle.ts.gz"
+    },
+    "src/wreck-geometry.ts": {
+      "before": "32a63290bf1c6094972dc1db360fb0073a079a7f163dfe8d1b4ea72ea7e61987",
+      "after": "21ea019e98d3c792cf0a9fd0a75100623224846d81ddc9bc0a600c3c098b2a13",
+      "snapshot": "tests/fixtures/wreck-finish-before-wreck-geometry.ts.gz"
+    }
+  }
+}
