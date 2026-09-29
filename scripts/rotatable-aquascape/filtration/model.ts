@@ -1,21 +1,21 @@
 import * as T from 'three';
+import {materials,roundedBox,vessel,enrich,rockMaterial,bubbleMap,fibers} from './Realism.ts';
+import {loadRock} from './LoadRock.ts';
 import {describe,type System} from './content.ts';
 export type Part={id:string;system:System;group:T.Group;base:T.Vector3;offset:T.Vector3;label:T.Vector3};
 type XYZ=[number,number,number];
 const V=(p:XYZ)=>new T.Vector3(...p);
 export function makeFiltration(){
  const root=new T.Group(),groups:Record<string,T.Group>={},parts:Part[]=[],animators:((time:number,dt:number,clog:number)=>void)[]=[],paths:{system:System;curve:T.Curve<T.Vector3>;color:number;speed:number;points:T.Points;count:number}[]=[];
- const mat=(color:number,roughness=.4,metalness=.12)=>new T.MeshStandardMaterial({color,roughness,metalness});
- const white=mat(0xd8e8e9,.32),dark=mat(0x102d39,.42),teal=mat(0x24a997,.3,.38),metal=mat(0x819eab,.23,.75),rubber=mat(0x14222c,.87),gold=mat(0xb57637,.75),cream=mat(0xf6edcc,.9);
- const glass=new T.MeshPhysicalMaterial({color:0x8cced9,transparent:true,opacity:.16,roughness:.13,metalness:.05,side:T.DoubleSide,depthWrite:false});
- const shell=new T.MeshPhysicalMaterial({color:0xc1eff4,transparent:true,opacity:.2,roughness:.13,metalness:.04,side:T.DoubleSide,depthWrite:false});
- const water=new T.MeshBasicMaterial({color:0x2aadc9,transparent:true,opacity:.08,depthWrite:false,side:T.DoubleSide});
- const boxG=new T.BoxGeometry(1,1,1),sphereG=new T.SphereGeometry(1,16,12);
+ const mat=(color:number,roughness=.4,metalness=0)=>new T.MeshStandardMaterial({color,roughness,metalness});
+ const palette=materials(),{white,dark,teal,metal,rubber,gold,cream,glass,shell}=palette;
+ const water=new T.MeshBasicMaterial({color:0x2aadc9,transparent:true,opacity:.025,depthWrite:false,side:T.DoubleSide});
+ const sphereG=new T.SphereGeometry(1,16,12);
  function mesh(g:T.BufferGeometry,m:T.Material,parent:T.Object3D,pos:XYZ=[0,0,0],scale?:XYZ){const o=new T.Mesh(g,m);o.position.set(...pos);if(scale)o.scale.set(...scale);parent.add(o);return o;}
- const box=(p:T.Object3D,pos:XYZ,size:XYZ,m:T.Material=white)=>mesh(boxG,m,p,pos,size);
- const cylinder=(p:T.Object3D,pos:XYZ,r:number,h:number,m:T.Material=white,r2=r,open=false)=>mesh(new T.CylinderGeometry(r2,r,h,48,1,open),m,p,pos);
+ const box=(p:T.Object3D,pos:XYZ,size:XYZ,m:T.Material=white)=>mesh(roundedBox(...size),m,p,pos);
+ const cylinder=(p:T.Object3D,pos:XYZ,r:number,h:number,m:T.Material=white,r2=r,open=false)=>mesh(open&&m===shell?vessel(r,r2,h):new T.CylinderGeometry(r2,r,h,64,1,open),m,p,pos);
  const sphere=(p:T.Object3D,pos:XYZ,size:XYZ,m:T.Material)=>mesh(sphereG,m,p,pos,size);
- function pipe(p:T.Object3D,ps:XYZ[],r=.09,m:T.Material=teal){return mesh(new T.TubeGeometry(new T.CatmullRomCurve3(ps.map(V),false,'centripetal'),Math.max(20,ps.length*10),r,10,false),m,p);}
+ function pipe(p:T.Object3D,ps:XYZ[],r=.09,m:T.Material=teal){return mesh(new T.TubeGeometry(new T.CatmullRomCurve3(ps.map(V),false,'centripetal'),Math.max(20,ps.length*10),r,16,false),m,p);}
  function ring(p:T.Object3D,pos:XYZ,r:number,t=.04,m:T.Material=teal){const a=mesh(new T.TorusGeometry(r,t,10,48),m,p,pos);a.rotation.x=Math.PI/2;return a;}
  function annulus(p:T.Object3D,y:number,outer:number,inner:number,thickness:number,m:T.Material){const shape=new T.Shape();shape.absarc(0,0,outer,0,Math.PI*2,false);const hole=new T.Path();hole.absarc(0,0,inner,0,Math.PI*2,true);shape.holes.push(hole);const g=new T.ExtrudeGeometry(shape,{depth:thickness,bevelEnabled:false,curveSegments:48}),a=mesh(g,m,p,[0,y,0]);a.rotation.x=-Math.PI/2;return a;}
  function assembly(system:System,pos:XYZ){const g=new T.Group();g.position.set(...pos);root.add(g);groups[system]=g;return g;}
@@ -37,7 +37,7 @@ export function makeFiltration(){
  pipe(overflow,[[0,3.3,0],[0,3,0],[-.25,2.85,0],[-.25,2.15,0]],.12);for(const y of [2.6,2.95])cylinder(overflow,[-.25,y,0],.18,.13,white);
  const emergency=part('system','emergency','Emergency drain','BACKUP ROUTE','A second drain is an independent route to the sump. It is shown dry during normal circulation.','Never block a safety drain or rely on this illustration for plumbing dimensions.',[-5.5,0,-1.25],[-1,1,-.5]);pipe(emergency,[[0,3.95,0],[.05,3.6,0],[.05,.8,0],[.3,.5,0]],.08,white);
  const returnPipe=part('system','return-pipe','Return riser & outlet','PRESSURIZED RETURN','Water from the return pump rises to an outlet in the display. The loop completes the circuit above the sump.','The return does not replace circulation pumps within the reef.', [4.65,0,-.1],[1.2,.5,-.7]);pipe(returnPipe,[[0,.82,0],[.35,1.1,0],[.35,3.9,0],[-.15,4.12,0],[-.8,4.12,0]],.1);for(const y of [1.65,2.5])cylinder(returnPipe,[.35,y,0],.17,.15,white);
- const waterLevel=box(groups.system,[-1.82,.67,0],[8.2,1.08,3.5],water);box(groups.system,[4.5,.53,0],[2.75,.81,3.5],water);
+ const waterLevel=box(groups.system,[-1.82,.67,0],[8.2,1.08,3.5],water),returnWaterLevel=box(groups.system,[4.5,.53,0],[2.75,.81,3.5],water);
  flow('system',[[-4.75,3.5,-.7],[-4.75,2.3,-.7],[-4.2,1.5,0],[-4.1,.5,0],[-2.5,.7,1.22],[1.8,.8,1.22],[2.3,1.33,1.22],[2.6,.3,1.22],[2.97,.28,1.22],[3.28,1.3,1.22],[3.85,.65,.9],[4.5,.55,.3],[5,.9,-.1],[5,3.9,-.1],[4.25,4.12,-.1]],0x65dfff,90,.055);
  // Mechanical roller: rolls transverse to the incoming stream, continuous U-shaped strip.
  assembly('roller',[-3.95,0,0]);
@@ -45,8 +45,8 @@ export function makeFiltration(){
  box(rb,[0,0,0],[2.1,.16,2.1],dark);for(const x of [-.95,.95]){box(rb,[x,1.1,0],[.1,2.2,1.7],white);for(const z of [-.65,.65])cylinder(rb,[x,0,z],.1,.24,rubber);}
  const cradle=part('roller','cradle','Perforated filter cradle','WATER SUPPORT','A grid supports the fleece against water pressure while leaving openings for filtered water. It lifts clear of the chassis in the exploded view.','The grid supports the strip; its openings alone are too large for fine filtration.',[0,.87,0],[0,.1,2.15]);
  for(const z of [-.64,.64]){const g=new T.Group();g.position.set(0,.07,z);cradle.add(g);grille(g,1.7,.95,0);}for(let x=-.8;x<=.82;x+=.15)box(cradle,[x,-.42,0],[.03,.035,1.3],dark);
- const texCanvas=document.createElement('canvas');texCanvas.width=256;texCanvas.height=256;const ctx=texCanvas.getContext('2d')!;ctx.fillStyle='#e0d9bb';ctx.fillRect(0,0,256,256);let seed=4;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};for(let i=0;i<3600;i++){ctx.fillStyle=`rgba(95,76,42,${.04+random()*.12})`;ctx.fillRect(random()*256,random()*256,.5+random()*1.4,1+random()*7);}const fleeceTexture=new T.CanvasTexture(texCanvas);fleeceTexture.wrapS=fleeceTexture.wrapT=T.RepeatWrapping;fleeceTexture.colorSpace=T.SRGBColorSpace;
- const fleeceMat=new T.MeshStandardMaterial({map:fleeceTexture,color:0xffffee,roughness:1,side:T.DoubleSide});
+ const texCanvas=document.createElement('canvas');texCanvas.width=256;texCanvas.height=256;const ctx=texCanvas.getContext('2d')!;ctx.fillStyle='#e0d9bb';ctx.fillRect(0,0,256,256);let seed=4;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};for(let i=0;i<3600;i++){ctx.fillStyle=`rgba(95,76,42,${.04+random()*.12})`;ctx.fillRect(random()*256,random()*256,.5+random()*1.4,1+random()*7);}const fleeceTexture=new T.CanvasTexture(texCanvas);fleeceTexture.wrapS=fleeceTexture.wrapT=T.RepeatWrapping;fleeceTexture.colorSpace=T.SRGBColorSpace;fleeceTexture.image=fibers.image;fleeceTexture.needsUpdate=true;
+ const fleeceMat=new T.MeshStandardMaterial({map:fleeceTexture,bumpMap:fibers,bumpScale:.015,color:0xffffee,roughness:1,side:T.DoubleSide});
  const fleece=part('roller','fleece','Continuous fleece strip','MECHANICAL BARRIER','The cloth follows a U around the cradle. Water passes through it; particles remain on the fibers until the motor pulls that section onto the waste roll.','This demonstration enlarges the texture and debris to show the separation.',[0,0,0],[0,0,-2.3]);
  const stripPoints=[new T.Vector3(0,2.42,-.78),new T.Vector3(0,.64,-.69),new T.Vector3(0,.42,0),new T.Vector3(0,.64,.69),new T.Vector3(0,2.42,.78)];const stripCurve=new T.CatmullRomCurve3(stripPoints);const stripG=new T.BufferGeometry(),sp:number[]=[],uv:number[]=[],si:number[]=[];
  for(let i=0;i<=80;i++){const v=stripCurve.getPoint(i/80);for(const x of [-.82,.82]){sp.push(x,v.y,v.z);uv.push(x<0?0:1,i/80*2);}if(i<80){const a=i*2;si.push(a,a+1,a+2,a+1,a+3,a+2);}}stripG.setAttribute('position',new T.Float32BufferAttribute(sp,3));stripG.setAttribute('uv',new T.Float32BufferAttribute(uv,2));stripG.setIndex(si);stripG.computeVertexNormals();mesh(stripG,fleeceMat,fleece);
@@ -76,8 +76,8 @@ export function makeFiltration(){
  flow('skimmer',[[1.13,2.72,0],[1.14,2.08,0],[1.17,1,.38],[0,.85,.98],[0,.57,.98],[0,.57,.45]],0xf3ffff,28,.15);
  flow('skimmer',[[0,.6,1.2],[0,.58,.75],[0,.65,0],[0,1,0],[.65,1.2,0],[.9,.65,-.2],[1.5,.58,-.2]],0x65dfff,34,.12);
  flow('skimmer',[[0,2.45,0],[0,2.8,0],[0,3.2,0],[.27,3.22,0],[.43,2.91,0],[.6,2.86,0]],0xeeb47a,28,.13);
- const bubbles=new T.BufferGeometry(),bubbleCount=260,bb=new Float32Array(bubbleCount*3);bubbles.setAttribute('position',new T.BufferAttribute(bb,3));const bubbleCloud=new T.Points(bubbles,new T.PointsMaterial({color:0xecffff,size:.038,transparent:true,opacity:.66,depthWrite:false}));groups.skimmer.add(bubbleCloud);
- animators.push(time=>{for(let i=0;i<bubbleCount;i++){const f=(i/bubbleCount+time*(.1+(i%7)*.004))%1,y=1+f*2.2,r=(.76*(1-f)+.06)*Math.sqrt(((i*37)%263)/263),a=i*2.4+time*.4;bb[i*3]=Math.cos(a)*r;bb[i*3+1]=y;bb[i*3+2]=Math.sin(a)*r;}bubbles.attributes.position.needsUpdate=true;});
+ const bubbles=new T.BufferGeometry(),bubbleCount=7500,bb=new Float32Array(bubbleCount*3);bubbles.setAttribute('position',new T.BufferAttribute(bb,3));const bubbleCloud=new T.Points(bubbles,new T.PointsMaterial({color:0xecffff,map:bubbleMap,size:.044,transparent:true,opacity:.72,depthWrite:false,alphaTest:.02}));bubbleCloud.renderOrder=8;groups.skimmer.add(bubbleCloud);
+ animators.push(time=>{for(let i=0;i<bubbleCount;i++){const f=(i/bubbleCount+time*(.1+(i%7)*.004))%1,y=1+f*2.2,r=(.76*(1-f)+.06)*Math.sqrt(((i*37)%7517)/7517),a=i*2.4+time*.4;bb[i*3]=Math.cos(a)*r;bb[i*3+1]=y;bb[i*3+2]=Math.sin(a)*r;}bubbles.attributes.position.needsUpdate=true;});
  // Return pump with independently separated rotor/shaft/seal/volute/strainer.
  assembly('return',[4.48,.08,.1]);
  const feet=part('return','pump-base','Pump cradle & rubber feet','VIBRATION CONTROL','The cradle holds the pump horizontally. Four rubber pads soften contact with the sump floor.','Keeping the intake clear matters more than the illustrative orientation shown here.',[0,.12,0],[0,-.5,0]);box(feet,[0,0,0],[1.25,.12,1.65],teal);for(const x of [-.45,.45])for(const z of [-.6,.6])cylinder(feet,[x,-.08,z],.1,.12,rubber);
@@ -90,22 +90,20 @@ export function makeFiltration(){
  flow('return',[[0,.55,1.25],[0,.58,.8],[0,.58,.42],[.31,.76,.52],[.25,1.15,.4],[.25,1.4,-.1]],0x65dfff,36,.16);
  // Enlarged rock section: porous cross-section slabs with colonies and colored microbial symbols.
  assembly('biology',[0,0,0]);groups.biology.visible=false;
- const rockMat=mat(0x8d8179,.99),crusts=[mat(0xa77da5,.88),mat(0xb17069,.87),mat(0x568f87,.85)];
+ const rockMat=rockMaterial();
  for(let layer=0;layer<3;layer++){
-  const p=part('biology','rock-'+layer,['Outer living surface','Porous rock interior','Connected pore habitat'][layer],'BIOLOGICAL HABITAT',layer===0?'Coralline-like crusts grow across the exposed rock. Microbial films occupy wet surfaces alongside the visible life.':'An enlarged section shows connected openings and irregular surfaces. Real rock is not a stack of removable layers.','The cut layers and colored microbes are an explanatory enlargement, not a biological scale model.',[0,1.65,(layer-1)*.64],[0,layer*.2,(layer-1)*2]);
-  // A perforated irregular slab, with true holes rather than dark painted dots.
-  const shape=new T.Shape();for(let i=0;i<=64;i++){const a=i/64*Math.PI*2,r=1.6+.14*Math.sin(a*5)+.08*Math.cos(a*9);const x=Math.cos(a)*r,y=Math.sin(a)*r*.78;i?shape.lineTo(x,y):shape.moveTo(x,y);}
-  for(let x=-1.2;x<1.21;x+=.4)for(let y=-.8;y<.81;y+=.39)if(x*x+y*y<1.75){const hole=new T.Path(),r=.08+random()*.06;hole.absarc(x+(random()-.5)*.13,y+(random()-.5)*.1,r,0,Math.PI*2,true);shape.holes.push(hole);}
-  const geo=new T.ExtrudeGeometry(shape,{depth:.52,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.05,bevelThickness:.06,curveSegments:10});mesh(geo,rockMat,p,[0,0,-.26]);
-  for(let i=0;i<100;i++){const a=random()*Math.PI*2,r=Math.sqrt(random())*1.35,x=Math.cos(a)*r,y=Math.sin(a)*r*.75;sphere(p,[x,y,.33],[.035+random()*.09,.02+random()*.07,.025+random()*.055],crusts[i%3]);}
+  const p=part('biology','rock-'+layer,['Outer living surface','Porous rock interior','Connected pore habitat'][layer],'BIOLOGICAL HABITAT',layer===0?'Coralline-like crusts grow over a rugged carbonate skeleton. Small cavities and exposed surfaces provide habitat for biofilms.':'This cutaway reveals irregular connected cavities inside a continuous piece of live rock. The cut planes are added for teaching; real rock is not a stack of cartridges.','Rock shape and surface growth are illustrative. Colored microbial markers remain deliberately enlarged.',[0,1.65,(layer-1)*.64],[0,layer*.2,(layer-1)*2]);
+
  }
+ let biologyReady=false,rockPromise:Promise<void>|null=null;const loadBiology=()=>rockPromise??(rockPromise=loadRock().then(geometries=>{for(let i=0;i<3;i++){const p=parts.find(p=>p.id==='rock-'+i)!;const o=mesh(geometries[i],rockMat,p.group);o.castShadow=o.receiveShadow=true;}biologyReady=true;}));
  for(const [id,title,x,col,explanation] of [['ammonia','Ammonia oxidizers',-1,0xeba654,'Symbolic amber colonies represent microorganisms involved in ammonia oxidation. Their size is enormously exaggerated so the habitat can be inspected.'],['nitrite','Nitrite oxidizers',1,0x79ccbd,'Symbolic teal colonies represent microorganisms that oxidize nitrite toward nitrate. Many organisms share the wet rock habitat.']] as [string,string,number,number,string][]){const p=part('biology',id,title,'ENLARGED MICROBIAL SYMBOLS',explanation,'Colors identify the teaching groups; they are not diagnostic colors of real bacteria.',[x,1.7,1.1],[x*.45,.4,2]);const m=mat(col,.6);for(let i=0;i<18;i++){const a=i*2.4,r=.12+random()*.35;const cell=sphere(p,[Math.cos(a)*r,Math.sin(a)*r*.8,random()*.12],[.035,.085,.035],m);cell.rotation.z=random()*Math.PI;}}
  flow('biology',[[-2.3,1.7,1.6],[-1,1.7,1.6],[0,1.9,1.6],[1,1.7,1.6],[2.3,1.7,1.6]],0xeeb47a,20,.13);
+ const realism=enrich(parts,groups,palette);
  const connectorMaterial=new T.LineDashedMaterial({color:0x6c9da7,dashSize:.07,gapSize:.07,transparent:true,opacity:.35});
  const lines=parts.map(p=>{const g=new T.BufferGeometry().setFromPoints([p.base,p.base]);const l=new T.Line(g,connectorMaterial);l.computeLineDistances();groups[p.system].add(l);return l;});
  let current:System='system',explode=0,isolated:string|null=null,showFlow=true;
  function setView(v:System){current=v;isolated=null;for(const [key,g] of Object.entries(groups))g.visible=v==='system'?key!=='biology':key===v;setExplosion(explode);}
  function setExplosion(t:number){explode=t;for(let i=0;i<parts.length;i++){const p=parts[i];p.group.position.copy(p.base).addScaledVector(p.offset,t);const positions=lines[i].geometry.attributes.position as T.BufferAttribute;positions.setXYZ(0,p.base.x,p.base.y,p.base.z);positions.setXYZ(1,p.group.position.x,p.group.position.y,p.group.position.z);positions.needsUpdate=true;lines[i].computeLineDistances();lines[i].visible=t>.01&&!isolated;}waterLevel.visible=t<.04;dirtyWater.visible=t<.04;updateVisibility();}
- function updateVisibility(){for(const p of parts)p.group.visible=!isolated||p.id===isolated;for(const path of paths)path.points.visible=showFlow&&!isolated&&explode<.04;bubbleCloud.visible=showFlow&&!isolated&&explode<.04;waterLevel.visible=explode<.04&&!isolated;dirtyWater.visible=explode<.04&&!isolated;}
- return {root,parts,groups,paths,setView,setExplosion,setFlow:(v:boolean)=>{showFlow=v;updateVisibility();},isolate:(id:string|null)=>{isolated=id;setExplosion(explode);},update:(time:number,dt:number,clog:number)=>{for(const f of animators)f(time,dt,clog);for(const p of paths){if(!p.points.visible||!groups[p.system].visible)continue;const a=p.points.geometry.attributes.position as T.BufferAttribute;for(let i=0;i<p.count;i++){const v=p.curve.getPoint((i/p.count+time*p.speed)%1);a.setXYZ(i,v.x,v.y,v.z);}a.needsUpdate=true;}},snapshot:()=>({current,explode,isolated,flow:showFlow,parts:parts.length,rollerAngle:rollers[0].rotation.x,rotorAngle:imp.rotation.z,bubble:bb.slice(0,3)})};
+ function updateVisibility(){for(const p of parts)p.group.visible=!isolated||p.id===isolated;for(const path of paths)path.points.visible=showFlow&&!isolated&&explode<.04;bubbleCloud.visible=showFlow&&!isolated&&explode<.04;waterLevel.visible=returnWaterLevel.visible=explode<.04&&!isolated;realism.visibility(explode<.04&&!isolated);dirtyWater.visible=explode<.04&&!isolated;}
+ return {root,parts,groups,paths,loadBiology,isReady:()=>current!=='biology'||biologyReady,setView,setExplosion,setFlow:(v:boolean)=>{showFlow=v;updateVisibility();},isolate:(id:string|null)=>{isolated=id;setExplosion(explode);},update:(time:number,dt:number,clog:number)=>{for(const f of animators)f(time,dt,clog);realism.update(time);for(const p of paths){if(!p.points.visible||!groups[p.system].visible)continue;const a=p.points.geometry.attributes.position as T.BufferAttribute;for(let i=0;i<p.count;i++){const v=p.curve.getPoint((i/p.count+time*p.speed)%1);a.setXYZ(i,v.x,v.y,v.z);}a.needsUpdate=true;}},snapshot:()=>({current,explode,isolated,flow:showFlow,parts:parts.length,rollerAngle:rollers[0].rotation.x,rotorAngle:imp.rotation.z,bubble:bb.slice(0,3)})};
 }

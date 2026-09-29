@@ -1,12 +1,13 @@
 {
-  "checkedAt": "2026-09-28T23:49:55.823Z",
-  "scope": "Separate educational animated exploded filtration studio, reef toolbar and Water & flow links",
+  "checkedAt": "2026-09-29T00:42:36.594Z",
+  "scope": "Filtration geometry, materials, lighting and lazy full-detail rock; aquarium source unchanged",
   "files": [
-    "assets/index-Dg1eXeoJ.js",
+    "assets/index-ClUxO3zw.js",
     "assets/index-vl4A24zB.css",
+    "assets/rock-layers.bin-j1o763Al.gz",
     "index.html"
   ],
-  "buildHash": "4c40a13a3da8b0b26d928ba186e77341507fd19808a82224f32183bec75f51e4",
+  "buildHash": "662fc706474fdd3d6faa0d39cd83271e18cb8558ed4b6b0f9b8fd5fc9937e65a",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
   "checks": {
     "typescriptBuild": true,
@@ -33,90 +34,143 @@
       {
         "system": "system",
         "parts": 37,
-        "triangles": 46878,
-        "calls": 319
+        "triangles": 626276,
+        "calls": 334
       },
       {
         "system": "roller",
         "parts": 8,
-        "triangles": 5050,
-        "calls": 97
+        "triangles": 90542,
+        "calls": 67
       },
       {
         "system": "skimmer",
         "parts": 11,
-        "triangles": 28286,
-        "calls": 122
+        "triangles": 201536,
+        "calls": 121
       },
       {
         "system": "biology",
         "parts": 5,
-        "triangles": 143250,
-        "calls": 346
+        "triangles": 734590,
+        "calls": 20
       },
       {
         "system": "return",
         "parts": 7,
-        "triangles": 9758,
-        "calls": 51
+        "triangles": 123166,
+        "calls": 42
       }
     ],
     "errors": [],
     "idleFrames": 0,
-    "checkedAt": "2026-09-28T23:44:24.629Z"
+    "checkedAt": "2026-09-29T00:37:52.647Z"
   },
   "performance": {
-    "baseline": "9923eca5e",
-    "method": "Serial local Chrome, full reef detail, 1440x1080, seeded scene. 2.5 s warmup, 6 s sample. Not a low-end hardware claim.",
-    "results": [
+    "baseline": "0c2eced36",
+    "method": "Serial local Chrome 1440x1080 DPR1; 1s scene warmup then 4s RAF and browser-task sample. This is not a low-end hardware claim.",
+    "runs": [
       {
-        "mode": "prior-reef",
-        "readyMs": 7278,
-        "taskSeconds": 2.4088639999999995,
-        "fps": 60.15162875935731,
-        "triangles": 18764012,
-        "fish": 21
+        "mode": "before",
+        "readyMs": 1318,
+        "scenes": [
+          {
+            "system": "system",
+            "fps": 59.99400060011879,
+            "taskSeconds": 0.5853299999999999,
+            "triangles": 46914,
+            "calls": 300
+          },
+          {
+            "system": "roller",
+            "fps": 59.68136642869593,
+            "taskSeconds": 0.30169099999999993,
+            "triangles": 5062,
+            "calls": 94
+          },
+          {
+            "system": "skimmer",
+            "fps": 60.07278528368168,
+            "taskSeconds": 0.3530739999999999,
+            "triangles": 28286,
+            "calls": 118
+          },
+          {
+            "system": "biology",
+            "fps": 60.222899695406284,
+            "taskSeconds": 0.37742200000000015,
+            "triangles": 143250,
+            "calls": 343
+          },
+          {
+            "system": "return",
+            "fps": 60.132741154927125,
+            "taskSeconds": 0.24929299999999976,
+            "triangles": 9758,
+            "calls": 46
+          }
+        ]
       },
       {
-        "mode": "current-reef",
-        "readyMs": 7647,
-        "taskSeconds": 2.640638000000001,
-        "fps": 60.08555117246447,
-        "triangles": 18764012,
-        "fish": 21
-      },
-      {
-        "mode": "filtration",
-        "readyMs": 1098,
-        "taskSeconds": 0.7062199999999998,
-        "fps": 60.014629604941206,
-        "triangles": 46914,
-        "parts": 42
+        "mode": "after",
+        "readyMs": 3023,
+        "scenes": [
+          {
+            "system": "system",
+            "fps": 60.053325359447804,
+            "taskSeconds": 0.6756040000000003,
+            "triangles": 422160,
+            "calls": 230
+          },
+          {
+            "system": "roller",
+            "fps": 60.191313469546564,
+            "taskSeconds": 0.33441900000000047,
+            "triangles": 45570,
+            "calls": 34
+          },
+          {
+            "system": "skimmer",
+            "fps": 60.09675327922754,
+            "taskSeconds": 0.4422959999999998,
+            "triangles": 135892,
+            "calls": 82
+          },
+          {
+            "system": "biology",
+            "fps": 60.20334240990147,
+            "taskSeconds": 0.2589800000000002,
+            "triangles": 367294,
+            "calls": 9
+          },
+          {
+            "system": "return",
+            "fps": 60.11624136323557,
+            "taskSeconds": 0.3162150000000006,
+            "triangles": 61582,
+            "calls": 19
+          }
+        ]
       }
-    ]
+    ],
+    "errors": []
   },
   "visualReview": {
-    "views": [
-      "desktop-system",
-      "roller-exploded",
-      "skimmer-exploded",
-      "return-exploded",
-      "biology-exploded",
-      "mobile-skimmer-exploded",
-      "roller-cycle-rising",
-      "roller-cycle-clear",
-      "skimmer-motion-0",
-      "skimmer-motion-3"
-    ],
     "findings": [
-      "All five assemblies inspected assembled, exploded, labeled and isolated, including desktop front/top/oblique and phone controls.",
-      "Reviewed actual roller time sequence: upstream water rises behind translucent fleece; the indexed spools advance briefly, water falls and spools stop.",
-      "Reviewed skimmer time sequence: bubbles rise inside the tapered body; amber foam enters the annular collection cup; water leaves separately below.",
-      "Legible mobile layout, reduced-motion behavior and no horizontal overflow.",
-      "Original generic educational geometry with explanatory scale/motion limits, not manufacturer CAD or a claim of photographic realism."
+      "Reviewed all five generated appearance references against both old and new rendered views. The revised meshes remain freely rotatable and explodable; no photograph substitutes for the model.",
+      "Whole sump: clearer panes with thickness and edge seams, physical unions, subtly disturbed water and grounded shadows. Water still lacks the reference's full turbulent reflections and wet surface complexity.",
+      "Fleece roller: shaped support plates, recessed bolts, seams, cable, fiber detail and wound roll ends. Cloth microfibers and accumulated debris remain less rich than the generated close-up.",
+      "Protein skimmer: cylindrical base section, flanges, hose/union hardware, physical acrylic, dense rising bubbles and neck foam. Glass refraction, condensation and foam still fall short of the reference.",
+      "Living rock: replaced smooth slab/bead construction with one porous irregular solid cut into three sections, with mineral flecks and coralline variation. The generated reference has more varied encrusting organisms and smaller cavities.",
+      "Return pump: open rotor cavity, ribbed rounded motor, curved impeller, seals, recessed fasteners and open intake slots. Mechanical surfaces are substantially more legible, though not a photographic match.",
+      "Desktop front, top, oblique, assembled, separated and isolated views inspected. Phone controls remain legible and contained.",
+      "Actual roller sequence reviewed: rising water, brief roll advance and motor stop. Actual skimmer sequence reviewed: dense bubble cloud changes continuously and neck foam rises. Pause freezes motion.",
+      "All 42 components remain selectable. Reduced-motion and paused idle checks pass; no console/runtime errors. Tests establish behavior, not photographic realism."
     ],
-    "rawEvidence": ".qa-results/filtration/",
-    "consoleErrors": 0
+    "evidence": "filtration/qa/realism-evidence/",
+    "references": "filtration/qa/references/",
+    "method": "Built-in GPT Image; five independent subjects. Exact prompts in reference-prompts.json.",
+    "photographicParity": false
   },
-  "deploymentStatus": "Tested locally; publication is a separate step."
+  "deploymentStatus": "Validated locally; publication recorded separately."
 }

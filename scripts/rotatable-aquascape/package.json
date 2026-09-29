@@ -18,7 +18,8 @@
     "build:reef": "tsc --noEmit -p reef/tsconfig.json && vite build --config reef/vite.config.ts && node ../publish_reef_assets.mjs",
     "check:reef": "node reef/qa/check.mjs",
     "build:filtration": "tsc --noEmit -p filtration/tsconfig.json && vite build --config filtration/vite.config.ts && node ../publish_filtration_assets.mjs",
-    "check:filtration": "node filtration/qa/browser.mjs"
+    "check:filtration": "node filtration/qa/browser.mjs",
+    "bake:filtration-rock": "node filtration/qa/bake-rock.mjs"
   },
   "dependencies": {
     "meshoptimizer": "1.1.1",

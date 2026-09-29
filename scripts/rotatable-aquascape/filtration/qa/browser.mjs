@@ -9,7 +9,7 @@ try{
  await page.goto(remote||'http://127.0.0.1:5247/');await page.waitForFunction(()=>window.filtrationQA?.snapshot().ready);await page.waitForTimeout(500);await shot('desktop-system');
  assert.equal((await snap()).parts,42);report.checks.completeParts=true;
  for(const system of ['system','roller','skimmer','biology','return']){
-  await page.locator(`[data-system="${system}"]`).click();await page.waitForTimeout(250);await shot(system+'-assembled');
+  await page.locator(`[data-system="${system}"]`).click();await page.waitForFunction(()=>window.filtrationQA.snapshot().ready);await page.waitForTimeout(250);await shot(system+'-assembled');
   await page.locator('#explode-button').click();await page.waitForFunction(()=>window.filtrationQA.snapshot().explode>.995);await shot(system+'-exploded');
   const a=await snap();report.views.push({system,parts:await page.locator('#parts option').count()-1,triangles:a.triangles,calls:a.calls});
   await page.locator('#labels-toggle').click();await shot(system+'-labels');await page.locator('#labels-toggle').click();
