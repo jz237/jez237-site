@@ -8,7 +8,7 @@ The latest pass focuses on wrecks: refined panel topology, shared deformation fo
 
 ## Play
 
-[Play Quarry Impact on GitHub](https://jz237.github.io/jez237-site/games/2026-09-27/quarry-impact/) in a desktop browser. The [jez237 version](https://jez237.com/games/2026-09-27/quarry-impact/) is listed under **Unfinished** on the [games page](https://jez237.com/games/); its latest update is pending restored Cloudflare sign-in.
+[Play Quarry Impact](https://jez237.com/games/2026-09-27/quarry-impact/) in a desktop browser, or use the [GitHub mirror](https://jz237.github.io/jez237-site/games/2026-09-27/quarry-impact/). It is listed under **Unfinished** on the [games page](https://jez237.com/games/).
 
 Double-click **Play-Quarry-Impact.cmd**, or run `node serve.mjs` and open **http://127.0.0.1:8795/**. The launcher starts a hidden local server. Node.js is required; the prepared game does not require an npm install. The server binds only to this computer.
 
