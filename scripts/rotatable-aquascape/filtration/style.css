@@ -3,3 +3,18 @@
 @media(max-width:1000px){.workspace{grid-template-columns:minmax(0,1fr) 290px}aside{padding:20px 16px}.systems button{padding:13px 10px;gap:7px}.systems button span{font-size:12px}.stage{height:770px}.intro>p{font-size:12px}.transport{padding:16px}.transport-buttons button{font-size:11px;padding:9px}.field-guide{grid-template-columns:1fr}.flow-diagram{gap:12px}}
 @media(max-width:740px){header{padding:16px;flex-wrap:wrap}.brand{font-size:10px}.brand span{margin-left:4px}.back{font-size:11px}main{padding:0 14px}.intro{padding:22px 0;display:block}.intro .eyebrow{font-size:8px;letter-spacing:.12em}.intro>p{margin:14px 0 0;font-size:12px}.systems{display:flex;overflow:auto;margin:0 -1px 12px;padding-bottom:5px}.systems button{flex:0 0 auto;min-height:48px;padding:10px}.systems button span{font-size:12px}.workspace{display:block}.stage{position:relative;top:auto;height:580px}#viewport{inset:39px 0 216px}.scene-head{left:15px;right:15px}#part-count{font-size:8px}#labels{inset:39px 0 216px}.scene-head .eyebrow{font-size:8px}.view-tools{left:14px;bottom:221px}.view-tools button{font-size:10px;padding:6px 9px;min-height:38px}.gesture{left:15px;font-size:9px;bottom:192px}.transport{padding:14px}.transport h2{font-size:21px}.transport-buttons{gap:5px}.transport-buttons button{font-size:10px;min-height:42px}.transport-buttons .primary{flex:1}.transport-title .eyebrow{font-size:9px}aside{border-left:0;border-top:1px solid var(--line);padding:24px}aside h2{font-size:29px}.field-guide{padding:34px 6px;gap:12px}.field-guide h2{font-size:28px}.flow-diagram{grid-template-columns:1fr;gap:8px}.flow-diagram li{border-top:0;border-left:2px solid #487278;padding:8px 0 8px 16px}.flow-diagram li strong{margin:0}.reference-grid{grid-template-columns:1fr;gap:0}.reference-grid article{padding:12px 0}.references{padding:15px 6px 26px}footer{letter-spacing:.05em;font-size:9px;gap:12px}.part-label{font-size:9px;max-width:120px;white-space:normal}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Keep the biology explanation in the model area, including on phones. */
+.stage[data-scene=biology]{height:930px}
+.stage[data-scene=biology] #viewport,.stage[data-scene=biology] #labels{top:190px}
+.biology-key{position:absolute;top:52px;left:22px;right:22px;padding:11px 14px;border:1px solid #3d595f;border-radius:8px;background:#10262e;color:#c5d7dd;z-index:2}
+.biology-key p{font-size:12px;line-height:1.45;margin:7px 0 0}
+.biology-key .biology-key-title{font-size:12px;font-weight:600;color:#e2efec;margin:0 0 8px}
+.microbe-steps{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.microbe-steps>div{padding-left:10px;border-left:3px solid}
+.microbe-steps span,.microbe-steps strong{display:block;font-size:12px;line-height:1.5}
+.microbe-steps .ammonia-key{color:#f3c57e;border-color:#eba654}
+.microbe-steps .nitrite-key{color:#a4e6da;border-color:#79ccbd}
+@media(min-width:1550px){.stage[data-scene=biology]{height:980px}}
+@media(min-width:741px) and (max-width:1000px){.stage[data-scene=biology]{height:920px}.biology-key p{font-size:11px}}
+@media(max-width:740px){.stage[data-scene=biology]{height:750px}.stage[data-scene=biology] #viewport,.stage[data-scene=biology] #labels{top:209px}.biology-key{top:47px;left:14px;right:14px;padding:10px}.biology-key p,.biology-key .biology-key-title,.microbe-steps span,.microbe-steps strong{font-size:11px}.microbe-steps{gap:10px}}
