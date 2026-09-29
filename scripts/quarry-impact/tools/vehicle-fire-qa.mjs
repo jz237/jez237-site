@@ -20,7 +20,10 @@ try{
  async function start(){await page.evaluate(async()=>{await __quarry.start('playground');__quarry.autopilot(false);__quarry.simulate(4);__quarry.teleport(0,0,-20,0);__quarry.setInput({throttle:0,steer:0,brake:1,handbrake:false});});await page.waitForTimeout(180);}
  async function camera(){await page.evaluate(()=>__quarry.captureCamera([-4,2.7,-14.5],[0,1.9,-19]));await page.waitForTimeout(200);}
  await start();assert.equal((await sample()).fire.active,0);report.checks.push('intact car has no fire or smoke');
- await page.evaluate(()=>__quarry.damage(0,65,'front'));await page.waitForTimeout(2600);await camera();await capture('coolant-smoke');
+ await page.evaluate(()=>__quarry.damage(0,65,'front'));await page.waitForTimeout(2600);
+ // First-use shader/asset work can delay visual steps on a cold live load.
+ // Wait for the same required smoke count before freezing the inspection view.
+ await page.waitForFunction(()=>__quarry.fireState.active>5,null,{timeout:15000});await camera();await capture('coolant-smoke');
  const smoke=await sample();assert.ok(smoke.fire.active>5);assert.equal(smoke.fire.emitters[0].heat,0);
  await start();await page.evaluate(()=>__quarry.damage(0,86,'front'));await page.waitForTimeout(3800);await camera();await capture('engine-bay-fire');
  const fire=await sample();assert.ok(fire.fire.emitters[0].heat>.35);assert.ok(fire.fire.lights>0);assert.ok(fire.layers[0].layers.every(l=>l.level>.03));
