@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {studioEnvironment} from './SurfaceDetail.ts';
 import {makeFiltration,type Part} from './model.ts';
 import {systems,descriptions,type System} from './content.ts';
 import './style.css';
@@ -17,7 +17,7 @@ let onScreen=true;
 let renderer:T.WebGLRenderer|undefined,controls:OrbitControls|undefined;
 const scene=new T.Scene(),camera=new T.PerspectiveCamera(36,1,.05,100);
 scene.add(model.root);scene.add(new T.HemisphereLight(0xf6f6ed,0x303640,.5));
-const key=new T.DirectionalLight(0xfff8e9,2.3);key.position.set(-4,9,8);key.castShadow=true;key.shadow.mapSize.set(512,512);key.shadow.radius=8;key.shadow.blurSamples=16;key.shadow.normalBias=.015;key.shadow.bias=-.0003;scene.add(key);scene.add(key.target);const rim=new T.DirectionalLight(0xd7e6fa,1.35);rim.position.set(4,5,-5);scene.add(rim);
+const key=new T.DirectionalLight(0xfff8e9,2.3);key.position.set(-4,9,8);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.radius=16;key.shadow.blurSamples=16;key.shadow.normalBias=.015;key.shadow.bias=-.0003;scene.add(key);scene.add(key.target);const rim=new T.DirectionalLight(0xd7e6fa,1.35);rim.position.set(4,5,-5);scene.add(rim);
 const ground=new T.Mesh(new T.PlaneGeometry(2000,2000),new T.MeshStandardMaterial({color:0x11151a,roughness:.82,metalness:.08}));ground.rotation.x=-Math.PI/2;ground.position.y=-.3;ground.receiveShadow=true;scene.add(ground);
 const grid=new T.GridHelper(26,26,0x456471,0x456471);grid.position.y=-.54;(grid.material as T.Material).transparent=true;(grid.material as T.Material).opacity=.035;scene.add(grid);
 const selection=new T.Box3Helper(new T.Box3(),0xa6ffe3);selection.visible=false;scene.add(selection);
@@ -85,7 +85,7 @@ document.addEventListener('visibilitychange',changed);
 const initialHash=location.hash.slice(1);changeSystem(initialHash in systems?initialHash as System:'system');setPaused(reduced.matches);
 try{
  renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setClearColor(0x07151e,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;viewport.append(renderer.domElement);
- const env=new RoomEnvironment(),pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(env,.04).texture;scene.environmentIntensity=.35;env.dispose();pmrem.dispose();
+ const env=studioEnvironment(),pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(env,.02).texture;scene.environmentIntensity=.75;env.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});pmrem.dispose();
  controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.09;controls.maxPolarAngle=Math.PI*.49;controls.minDistance=1.4;controls.maxDistance=70;controls.addEventListener('change',changed);
  const resize=()=>{const w=viewport.clientWidth,h=viewport.clientHeight;renderer!.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();fit();};new ResizeObserver(resize).observe(viewport);resize();
  const ray=new T.Raycaster(),mouse=new T.Vector2();let down:{x:number;y:number}|null=null;

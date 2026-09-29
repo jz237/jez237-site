@@ -2,6 +2,7 @@ import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import type {Part} from './model.ts';
+import {addSurfaceDetail} from './SurfaceDetail.ts';
 
 // Generated product references guide appearance. Dimensions and assembly remain teaching models.
 const TAU=Math.PI*2;
@@ -19,8 +20,8 @@ export function materials(){
  const teal=new T.MeshPhysicalMaterial({color:0x366f72,roughness:.28,metalness:.22,clearcoat:.3});
  const metal=new T.MeshStandardMaterial({color:0xa4aaa9,roughness:.26,metalness:.94,bumpMap:grain,bumpScale:.001});
  const rubber=new T.MeshStandardMaterial({color:0x17191b,roughness:.88,metalness:0,bumpMap:grain,bumpScale:.007});
- const shell=new T.MeshPhysicalMaterial({color:0xf4faf8,roughness:.055,metalness:0,transmission:.9,thickness:.045,ior:1.49,transparent:true,opacity:.2,depthWrite:false,side:T.FrontSide,clearcoat:.45,clearcoatRoughness:.06,bumpMap:wetness,bumpScale:.0008});
- const glass=shell.clone();glass.color.set(0xebf8f5);glass.opacity=.14;glass.thickness=.055;glass.ior=1.52;glass.roughness=.05;
+ const shell=new T.MeshPhysicalMaterial({color:0xf4faf8,roughness:.055,metalness:0,transmission:.97,thickness:.045,ior:1.49,transparent:true,opacity:1,depthWrite:false,side:T.FrontSide,clearcoat:.45,clearcoatRoughness:.06,bumpMap:wetness,bumpScale:.0008});
+ const glass=shell.clone();glass.color.set(0xebf8f5);glass.opacity=.78;glass.thickness=.055;glass.ior=1.52;glass.roughness=.05;
  return {white,dark,teal,metal,rubber,shell,glass,cream:new T.MeshStandardMaterial({color:0xe8e0c8,roughness:.54}),gold:new T.MeshStandardMaterial({color:0x715b35,roughness:.81})};
 }
 type Mats=ReturnType<typeof materials>;
@@ -35,7 +36,7 @@ function bolt(p:T.Object3D,xyz:XYZ,m:Mats,axis='y',r=.037){const g=new T.Group()
 function annulus(p:T.Object3D,xyz:XYZ,r:number,inner:number,h:number,m:T.Material){return add(p,vessel(r,r,h,r-inner),m,xyz);}
 function union(p:T.Object3D,xyz:XYZ,r:number,m:Mats){const g=new T.Group();g.position.set(...xyz);p.add(g);annulus(g,[0,0,0],r,r*.68,.21,m.white);for(let i=0;i<16;i++){const a=i/16*TAU;const rib=box(g,[Math.cos(a)*r,0,Math.sin(a)*r],[.035,.16,.035],m.white);rib.rotation.y=-a;}for(const y of [-.12,.12])torus(g,[0,y,0],r*.78,.016,m.rubber);return g;}
 function mergeStatic(group:T.Group){group.updateMatrixWorld(true);const byMat=new Map<T.Material,T.Mesh[]>();for(const child of [...group.children])if(child instanceof T.Mesh&&!Array.isArray(child.material)){const list=byMat.get(child.material)||[];list.push(child);byMat.set(child.material,list);}for(const [material,meshes] of byMat){if(meshes.length<3)continue;const gs=meshes.map(m=>{m.updateMatrix();const g=m.geometry.clone().applyMatrix4(m.matrix);return g.index?g.toNonIndexed():g;});const merged=mergeGeometries(gs,false);if(merged){for(const m of meshes)group.remove(m);add(group,merged,material);}for(const g of gs)g.dispose();}}
-function batchPart(group:T.Group){group.updateWorldMatrix(true,true);const inverse=group.matrixWorld.clone().invert(),byMat=new Map<T.Material,T.Mesh[]>();group.traverse(o=>{if(o instanceof T.Mesh&&!Array.isArray(o.material)){const list=byMat.get(o.material)||[];list.push(o);byMat.set(o.material,list);}});for(const [material,meshes] of byMat){if(meshes.length<2)continue;const gs=meshes.map(m=>{const g=m.geometry.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,m.matrixWorld));return g.index?g.toNonIndexed():g;});const merged=mergeGeometries(gs,false);if(merged){for(const m of meshes)m.removeFromParent();add(group,merged,material);}for(const g of gs)g.dispose();}}
+function batchPart(group:T.Group){group.updateWorldMatrix(true,true);const inverse=group.matrixWorld.clone().invert(),byMat=new Map<T.Material,T.Mesh[]>();group.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&!Array.isArray(o.material)){const list=byMat.get(o.material)||[];list.push(o);byMat.set(o.material,list);}});for(const [material,meshes] of byMat){if(meshes.length<2)continue;const gs=meshes.map(m=>{const g=m.geometry.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,m.matrixWorld));return g.index?g.toNonIndexed():g;});const merged=mergeGeometries(gs,false);if(merged){for(const m of meshes)m.removeFromParent();add(group,merged,material);}for(const g of gs)g.dispose();}}
 export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  const get=(id:string)=>parts.find(p=>p.id===id)!.group;
  const detail=(id:string)=>{const g=new T.Group();get(id).add(g);return g;};
@@ -71,15 +72,31 @@ export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  const imp=get('pump-rotor').children[0] as T.Group;imp.clear();const magnet=cyl(imp,[0,0,-.21],.15,.48,m.dark);magnet.rotation.x=Math.PI/2;for(const z of [-.46,.01]){const b=cyl(imp,[0,0,z],.16,.035,m.cream);b.rotation.x=Math.PI/2;}const disc=cyl(imp,[0,0,.11],.4,.055,m.dark);disc.rotation.x=Math.PI/2;
  for(let i=0;i<7;i++){const shape=new T.Shape();shape.moveTo(.085,-.01);shape.bezierCurveTo(.22,-.045,.35,-.1,.38,-.2);shape.lineTo(.405,-.18);shape.bezierCurveTo(.36,-.08,.25,-.01,.085,.025);shape.closePath();const v=add(imp,new T.ExtrudeGeometry(shape,{depth:.12,bevelEnabled:true,bevelSize:.007,bevelThickness:.007,bevelSegments:2,steps:1,curveSegments:14}),m.dark,[0,0,.135]);v.rotation.z=i/7*TAU;}mergeStatic(imp);
  const volute=get('volute');volute.clear();const shell=annulus(volute,[0,0,0],.53,.45,.34,m.dark);shell.rotation.x=Math.PI/2;const face=annulus(volute,[0,0,.18],.53,.23,.06,m.dark);face.rotation.x=Math.PI/2;torus(volute,[0,0,.22],.45,.015,m.rubber,'z');tube(volute,[[.25,.3,0],[.28,.57,0],[.28,.72,-.12]],.14,m.dark);union(volute,[.28,.75,-.12],.18,m);for(let i=0;i<6;i++){const a=i/6*TAU;bolt(volute,[Math.cos(a)*.49,Math.sin(a)*.49,.23],m,'z',.022);}mergeStatic(volute);
- const screen=get('strainer');screen.clear();for(const z of [-.1,0,.1])torus(screen,[0,0,z],.44-z*.12,.023,m.dark,'z');for(let i=0;i<26;i++){const a=i/26*TAU;tube(screen,[[Math.cos(a)*.44,Math.sin(a)*.44,-.1],[Math.cos(a)*.43,Math.sin(a)*.43,.14],[Math.cos(a)*.29,Math.sin(a)*.29,.27],[Math.cos(a)*.04,Math.sin(a)*.04,.29]],.013,m.dark);}mergeStatic(screen);
+ // A molded intake cage with genuine slots, longitudinal side rails and rounded front slats.
+ const screen=get('strainer');screen.clear();
+ for(const z of [-.10,.12])torus(screen,[0,0,z],.444,.026,m.dark,'z');
+ for(let i=0;i<20;i++){const a=i/20*TAU;const rail=box(screen,[Math.cos(a)*.437,Math.sin(a)*.437,.018],[.029,.041,.23],m.dark);rail.rotation.z=a;}
+ for(let y=-.385;y<=.4;y+=.064){const half=Math.sqrt(.427*.427-y*y);const points:XYZ[]=[];for(let j=0;j<=16;j++){const x=-half+2*half*j/16;points.push([x,y,.13+.15*Math.sqrt(Math.max(0,1-(x*x+y*y)/(.444*.444)))]);}tube(screen,points,.018,m.dark);}
+ for(const x of [-.17,.17])box(screen,[x,0,.217],[.035,.77,.04],m.dark);
+ torus(screen,[0,0,-.13],.455,.018,m.teal,'z');
+ for(const a of [.25,2.35,4.45])bolt(screen,[Math.cos(a)*.412,Math.sin(a)*.412,.153],m,'z',.019);
+ mergeStatic(screen);
  // Water surfaces carry a fine normal disturbance rather than a flat blue volume.
  const ripple=texture((c,n)=>{const data=c.createImageData(n,n);for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4,u=x/n*TAU,v=y/n*TAU;data.data[i]=128+20*Math.cos(u*7+Math.sin(v*4));data.data[i+1]=128+20*Math.cos(v*9+Math.sin(u*3));data.data[i+2]=250;data.data[i+3]=255;}c.putImageData(data,0,0);},256);
- const waterMat=new T.MeshPhysicalMaterial({color:0xa8c1bb,roughness:.085,metalness:.1,transparent:true,opacity:.18,depthWrite:false,normalMap:ripple,normalScale:new T.Vector2(.25,.25),side:T.DoubleSide});
- const surfaces:T.Mesh[]=[];for(const [x,y,w] of [[-1.82,1.21,8.2],[4.5,.935,2.75]]){const surface=add(groups.system,new T.PlaneGeometry(w,3.5),waterMat,[x,y,0]);surface.rotation.x=-Math.PI/2;surfaces.push(surface);}
- const foam=new T.BufferGeometry(),count=1600,fp=new Float32Array(count*3),random=rng(88);for(let i=0;i<count;i++){const a=random()*TAU,r=Math.sqrt(random())*.28;fp[i*3]=Math.cos(a)*r;fp[i*3+1]=2.55+random()*.58;fp[i*3+2]=Math.sin(a)*r;}foam.setAttribute('position',new T.BufferAttribute(fp,3));const cloud=new T.Points(foam,new T.PointsMaterial({color:0xc1a77a,map:bubbleMap,size:.032,transparent:true,opacity:.6,depthWrite:false,alphaTest:.02}));groups.skimmer.add(cloud);
+ const waterMat=new T.MeshPhysicalMaterial({color:0xa8c1bb,roughness:.11,metalness:.15,envMapIntensity:1.8,transparent:true,opacity:.37,depthWrite:false,normalMap:ripple,normalScale:new T.Vector2(.7,.7),side:T.DoubleSide});
+ const waterClock={value:0};waterMat.onBeforeCompile=shader=>{shader.uniforms.flowTime=waterClock;shader.vertexShader='uniform float flowTime;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.z += .007*sin(position.x*12.0+flowTime*1.3)*sin(position.y*17.0-flowTime*1.9)+.004*sin(position.x*27.0+position.y*21.0+flowTime*2.1);');};
+ const surfaces:T.Mesh[]=[];for(const [x,y,w] of [[-1.82,1.229,8.2],[2.78,1.229,.89],[4.55,.935,2.69]]){const surface=add(groups.system,new T.PlaneGeometry(w,3.5,Math.ceil(w*12),40),waterMat,[x,y,0]);surface.rotation.x=-Math.PI/2;surfaces.push(surface);}
+ // Short falling sheet over the final baffle and rippled lower-chamber landing. Hidden while separated.
+ const falls=new T.BufferGeometry(),vertices:number[]=[],uvs:number[]=[],indices:number[]=[];
+ for(let i=0;i<=18;i++){const t=i/18,x=3.26+.18*t,y=1.229-.294*t*t;for(let j=0;j<=32;j++){vertices.push(x,y,-1.73+3.46*j/32);uvs.push(t,j/32*5);if(i<18&&j<32){const a=i*33+j;indices.push(a,a+33,a+1,a+1,a+33,a+34);}}}
+ falls.setAttribute('position',new T.Float32BufferAttribute(vertices,3));falls.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));falls.setIndex(indices);falls.computeVertexNormals();surfaces.push(add(groups.system,falls,waterMat));
+ const meniscus=new T.MeshPhysicalMaterial({color:0xc4d7ce,roughness:.08,transparent:true,opacity:.45,depthWrite:false});
+ for(const z of [-1.75,1.75]){for(const [l,r,y] of [[-5.91,3.23,1.229],[3.44,5.9,.935]])surfaces.push(tube(groups.system,[[l,y,z],[r,y,z]],.009,meniscus));}
+ const foam=new T.BufferGeometry(),count=3200,fp=new Float32Array(count*3),random=rng(88);for(let i=0;i<count;i++){const a=random()*TAU,r=Math.sqrt(random())*.28;fp[i*3]=Math.cos(a)*r;fp[i*3+1]=2.55+random()*.58;fp[i*3+2]=Math.sin(a)*r;}foam.setAttribute('position',new T.BufferAttribute(fp,3));const cloud=new T.Points(foam,new T.PointsMaterial({color:0xc1a77a,map:bubbleMap,size:.041,transparent:true,opacity:.7,depthWrite:false,alphaTest:.02}));groups.skimmer.add(cloud);
+ const fine=addSurfaceDetail(parts,groups,m);
  for(const p of parts){if(p.id==='sensor')continue;if(!['clean-roll','waste-roll','pump-rotor','needle-wheel'].includes(p.id))batchPart(p.group);else{for(const c of p.group.children)if(c instanceof T.Group)batchPart(c);}}
  rootShadows();function rootShadows(){for(const g of Object.values(groups))g.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.Material;o.castShadow=!material.transparent;o.receiveShadow=!material.transparent;}});}
- return {visibility:(visible:boolean)=>{for(const s of surfaces)s.visible=visible;cloud.visible=visible;},update:(time:number)=>{ripple.offset.set(time*.008,time*.004);for(let i=0;i<count;i++)fp[i*3+1]=2.56+((i*.618/count+time*.047)%1)*.6;foam.attributes.position.needsUpdate=true;}};
+ return {visibility:(visible:boolean)=>{for(const s of surfaces)s.visible=visible;cloud.visible=visible;fine.visibility(visible);},update:(time:number)=>{fine.update(time);waterClock.value=time;ripple.offset.set(time*.008,time*.004);for(let i=0;i<count;i++)fp[i*3+1]=2.56+((i*.618/count+time*.047)%1)*.6;foam.attributes.position.needsUpdate=true;}};
 }
 
 export function rockMaterial(){
