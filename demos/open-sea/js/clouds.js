@@ -324,7 +324,10 @@ export class Clouds {
   }
 
   resize(w, h) {
-    this.w = Math.max(2, w >> 1); this.h = Math.max(2, h >> 1);
+    const cw = Math.max(2, w >> 1), ch = Math.max(2, h >> 1);
+    if (this.rt && cw === this.w && ch === this.h) return;
+    if (this.rt) { gl.deleteTexture(this.rt.tex); gl.deleteFramebuffer(this.fRT.fbo); }
+    this.w = cw; this.h = ch;
     this.rt = tex2D(this.w, this.h, { fmt: 'rgba16f', filter: 'linear', wrap: 'clamp' });
     this.fRT = makeFBO([this.rt]);
   }

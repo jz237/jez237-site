@@ -403,6 +403,7 @@ export class Yacht {
   resizeRefl(w, h) {
     const rw = Math.max(64, w >> 1), rh = Math.max(64, h >> 1);
     if (this.reflTex && this.reflTex.w === rw && this.reflTex.h === rh) return;
+    if (this.reflTex) { gl.deleteTexture(this.reflTex.tex); gl.deleteTexture(this.reflDepth.tex); gl.deleteFramebuffer(this.reflFbo.fbo); }
     this.reflTex = tex2D(rw, rh, { fmt: 'rgba16f', filter: 'linear', mips: true });
     this.reflDepth = depthTex(rw, rh);
     this.reflFbo = makeFBO([this.reflTex], this.reflDepth);

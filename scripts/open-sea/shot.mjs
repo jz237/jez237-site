@@ -3,7 +3,12 @@
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 let chromium;
-try { ({ chromium } = require('playwright')); } catch { ({ chromium } = createRequire('/opt/node22/lib/node_modules/')('playwright')); }
+try { ({ chromium } = require('playwright')); } catch {
+  try { ({ chromium } = createRequire('/opt/node22/lib/node_modules/')('playwright')); } catch {
+    console.error('Playwright is not installed. Run: cd scripts/open-sea && npm install && npx playwright install chromium');
+    process.exit(1);
+  }
+}
 import { writeFileSync } from 'node:fs';
 const [out, query = '', warm = '6', frames = '3', size = '960x540'] = process.argv.slice(2);
 const [W, H] = size.split('x').map(Number);

@@ -132,6 +132,11 @@ export class Post {
 
   resize(w, h) {
     if (w === this.w && h === this.h) return;
+    if (this.color) {
+      for (const t of [this.color, this.depth, this.colorCopy, this.depthCopy]) gl.deleteTexture(t.tex);
+      for (const f of [this.fbo, this.fboCopy]) gl.deleteFramebuffer(f.fbo);
+      for (const l of [...this.down, ...this.up]) { gl.deleteTexture(l.t.tex); gl.deleteFramebuffer(l.f.fbo); }
+    }
     this.w = w; this.h = h;
     this.color = tex2D(w, h, { fmt: 'rgba16f', filter: 'linear', mips: true });
     this.depth = depthTex(w, h);
