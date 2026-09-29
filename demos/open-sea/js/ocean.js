@@ -1,6 +1,6 @@
 // GPU FFT ocean (Tessendorf) with JONSWAP wind sea + swell, five spectral cascades,
 // choppy displacement, LEAN second moments for roughness, Lagrangian persistent foam.
-import { gl, caps, Program, FS_VERT, tex2D, texArray, makeFBO, bindFBO, drawFS, generateMips } from './gl.js';
+import { gl, caps, Program, FS_VERT, tex2D, texArray, makeFBO, bindFBO, drawFS, generateMips, AsyncReadback } from './gl.js';
 import { mulberry32, gaussian, clamp, lerp, smoothstep } from './math.js';
 
 export const G = 9.81;
@@ -48,28 +48,43 @@ function jonswapScale(hs, tp, gamma) {
   return { A: target / m, wp };
 }
 
-// Mean-square slope carried by the resolved part of the spectrum (k <= kMax), used to top
-// up roughness with a Cox-Munk style unresolved term.
-export function resolvedMss(p, kMax) {
+// Mean-square slope carried by a wavenumber band of the (wind sea + swell) spectrum.
+export function bandMss(p, kLo, kHi) {
   let mss = 0;
   const parts = [
-    { ...jonswapScale(p.hs, p.tp, p.gamma) },
-    { ...jonswapScale(p.swellHs, p.swellTp, p.swellGamma) },
+    { ...jonswapScale(p.hs, p.tp, p.gamma), gam: p.gamma },
+    { ...jonswapScale(p.swellHs, p.swellTp, p.swellGamma), gam: p.swellGamma },
   ];
-  const n = 3000, k0 = 0.002, lr = Math.log(kMax / k0);
+  const n = 2400, k0 = Math.max(kLo, 1e-4), lr = Math.log(kHi / k0);
+  if (!(kHi > k0)) return 0;
   for (let i = 0; i < n; i++) {
     const k = k0 * Math.exp(lr * (i + 0.5) / n), dk = k * lr / n;
     const w = Math.sqrt(G * k), dwdk = G / (2 * w);
     for (const P of parts) {
       const sigma = w <= P.wp ? 0.07 : 0.09;
-      const gam = P === parts[0] ? p.gamma : p.swellGamma;
       const r = Math.exp(-((w - P.wp) ** 2) / (2 * sigma * sigma * P.wp * P.wp));
-      const S = P.A * Math.pow(w, -5) * Math.exp(-1.25 * Math.pow(P.wp / w, 4)) * Math.pow(gam, r);
-      mss += S * dwdk * k * k * dk; // integral of k^2 S(w) dw over angle-integrated spectrum
+      const S = P.A * Math.pow(w, -5) * Math.exp(-1.25 * Math.pow(P.wp / w, 4)) * Math.pow(P.gam, r);
+      mss += S * dwdk * k * k * dk;
     }
   }
   return mss;
 }
+export const resolvedMss = (p, kMax) => bandMss(p, 2e-3, kMax);
+
+// inverse normal CDF (Acklam-style rational approximation, adequate for foam thresholds)
+function probit(pv) {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  pv = Math.min(1 - 1e-9, Math.max(1e-9, pv));
+  if (pv < 0.02425) { const q = Math.sqrt(-2 * Math.log(pv)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  if (pv > 1 - 0.02425) { const q = Math.sqrt(-2 * Math.log(1 - pv)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  const q = pv - 0.5, r = q * q;
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+// Whitecap fraction of the surface for a 10 m wind (Monahan-like, nudged up for visual readability)
+export const whitecapFraction = U => Math.min(0.5, 9e-6 * Math.pow(Math.max(U, 0), 3.4));
 
 const COMMON = `
 const float PI = 3.14159265359;
@@ -206,7 +221,7 @@ void main() {
   oSlope = vec4(sx, sz, sx * sx, sz * sz);
   float src = 1.0 - smoothstep(uFoamP.y, uFoamP.x, J);
   float prev = texelFetch(uFoamPrev, ivec3(p, uLayer), 0).x;
-  oFoam = vec4(max(prev * uFoamP.z, src * uFoamP.w), 0.0, 0.0, 1.0);
+  oFoam = vec4(max(prev * uFoamP.z, src * uFoamP.w), src * uFoamP.w, 0.0, 1.0);
 }`;
 
 export const CASCADE_DEFS = [
@@ -273,6 +288,14 @@ export class OceanSim {
       bindFBO(f); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
     }
     this.mss = 0;
+    // foam servo: mean foam per cascade is read back from the top mip level and steered towards the target whitecap cover
+    this.topLevel = this.bits;
+    this.topFbos = [0, 1].map(par => this.defs.map((_, i) => makeFBO([{ tex: this.foam[par], layer: i, level: this.topLevel }])));
+    this.readers = this.defs.map(() => new AsyncReadback(4));
+    this.foamDz = this.defs.map(() => 0);
+    this.foamMean = this.defs.map(() => 0);
+    this.updates = 0;
+    this._calI = 0;
   }
 
   setSea(s, windDir) {
@@ -310,6 +333,49 @@ export class OceanSim {
       drawFS();
     });
     this.mss = resolvedMss(c, this.kMax);
+    // per-cascade foam thresholds from linear theory: compression J-1 ~ N(0, chop*sqrt(mss_band))
+    const W = whitecapFraction(c.U);
+    const weights = [0, 0.5, 0.36, 0.14, 0];
+    this.foamSig = this.defs.map(d => Math.sqrt(bandMss(c, d.kLo, d.kHi)) * c.chop);
+    this.foamTarget = this.defs.map((d, i) => (d.foam && W > 2e-4 ? Math.min(0.6, 1.1 * W * (weights[i] || 0)) : 0));
+    this._foamCfg();
+  }
+
+  _foamCfg() {
+    this.foamCfg = this.defs.map((d, i) => {
+      const t = this.foamTarget[i];
+      if (t <= 0) return { on: 0, jHi: 0, jLo: 0 };
+      const sig = this.foamSig[i];
+      const z = probit(1 - Math.min(0.45, t * 0.4)) + this.foamDz[i];
+      const j0 = 1 - sig * z;
+      return { on: 1, jHi: j0 + 0.30 * sig, jLo: j0 - 0.45 * sig };
+    });
+  }
+
+  // Steer each cascade's breaking threshold so its mean foam matches the target whitecap fraction.
+  _servo() {
+    if (this.freezeServo) return;
+    let changed = false;
+    this.readers.forEach((r, i) => {
+      if (r.poll()) {
+        const m = r.data[1];           // G = fraction of the surface currently breaking
+        this.foamMean[i] = m;
+        if (this.servoLog) this.servoLog.push([this.updates, i, m, this.foamTarget[i], this.foamDz[i]]);
+        const t = -Math.log(1 - Math.min(0.9, this.foamTarget[i])) / [14, 14, 22, 90, 14][i];   // mean foam -> breaking fraction
+        if (this.foamTarget[i] > 0) {
+          const err = Math.log((Math.max(m, 1e-6)) / t);
+          this.foamDz[i] = Math.min(4, Math.max(-2.5, this.foamDz[i] + Math.max(-0.7, Math.min(0.7, 0.45 * err))));
+          changed = true;
+        }
+      }
+    });
+    if (changed) this._foamCfg();
+    if (this.updates % 3 === 0) {
+      for (let k = 0; k < this.count; k++) {
+        const i = (this._calI + k) % this.count;
+        if (this.foamTarget[i] > 0 && !this.readers[i].busy) { this.readers[i].request(this.topFbos[this.foamIdx][i], 0, 0, 1, 1); this._calI = i + 1; break; }
+      }
+    }
   }
 
   // Advance the simulation state (analytic in time so any dt is safe).
@@ -321,9 +387,6 @@ export class OceanSim {
     const tf = ((this.time % TLOOP) + TLOOP) % TLOOP / TLOOP;
     const prevFoam = this.foam[this.foamIdx], nextIdx = 1 - this.foamIdx;
     const decay = Math.exp(-dt / this.foamTau);
-    // foam onset: rougher seas break at lower compression
-    const wind = smoothstep(2, 24, c.U);
-    const jHi = lerp(0.55, 0.9, wind), jLo = lerp(0.05, 0.35, wind);
     this.defs.forEach((d, i) => {
       this.progEvolve.use().t('uH0', 0, this.h0).i('uLayer', i).i('uN', N).f('uL', d.L).f('uTimeFrac', tf).i('uTest', this._test || 0);
       bindFBO(this.fboA); drawFS();
@@ -335,14 +398,16 @@ export class OceanSim {
         [src, dst] = [dst, src]; [sa, sb] = [sb, sa];
       }
       // after an even number of passes the result lives in A
-      const gain = d.foam ? 1 : 0;
+      const fc = this.foamCfg ? this.foamCfg[i] : { on: 0, jHi: 0, jLo: 0 };
       this.progAsm.use().t('uIn0', 0, sa[0]).t('uIn1', 1, sa[1]).t('uFoamPrev', 2, prevFoam)
-        .i('uLayer', i).f('uChop', c.chop * (i === 0 ? 0.75 : i === 1 ? 1.0 : i === 2 ? 1.1 : 1.2))
-        .v4('uFoamP', jHi, jLo, decay, gain);
+        .i('uLayer', i).f('uChop', c.chop)
+        .v4('uFoamP', fc.jHi, fc.jLo, decay, fc.on);
       bindFBO(this.asmFbos[nextIdx][i]); drawFS();
     });
     this.foamIdx = nextIdx;
     generateMips(this.disp); generateMips(this.slope); generateMips(this.foam[this.foamIdx]);
+    this.updates++;
+    this._servo();
   }
 
   get foamTex() { return this.foam[this.foamIdx]; }
