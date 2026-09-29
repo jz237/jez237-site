@@ -66,6 +66,10 @@ demo adapts its render resolution to hold a playable frame rate (`AUTO`), or fix
 * All the development stills were rendered with a **software renderer** (headless Chromium on SwiftShader, seconds per
   frame). The demo has not been run on a real GPU by its author, so real-time frame rate is unverified. The resolution
   governor (`AUTO`) exists to hold a playable rate but has only been exercised through the harness.
+* Realism, honestly: after three review rounds two independent reviewers rated the final 12 stills between 2 and 7 out of 10
+  (means about 3.7 and 4.3; the sunset, glitter and open-water frames scored highest). The water surface and light are the
+  strongest parts. The yacht, the foam in storms, the clouds and the underwater scene are the weakest; none of the stills
+  should be expected to pass as a photograph. `scripts/open-sea/review-set.mjs` regenerates the stills.
 * The water is a height field with choppy displacement: waves steepen and fold, but they cannot overturn or throw
   spray. Whitecaps are a shading effect on the simulated foam field, not particles; there is no airborne spray.
 * Clouds are a single ray-marched layer. There are no cirrus or multi-layer skies and the layer is not lit by
