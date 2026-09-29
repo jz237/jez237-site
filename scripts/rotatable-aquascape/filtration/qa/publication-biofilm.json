@@ -1,0 +1,125 @@
+{
+  "sourceCommit": "240336bb5d8bc96b3c9265194bfd49463aed8846",
+  "testedBuildHash": "70908129f367260b13af0e545c6df0b302995542243c1109b814c51b574d7b60",
+  "publishedAt": "2026-09-29T07:11:56.849278+00:00",
+  "status": "Hidden Reef and GitHub published; jez237 still awaits renewed account login",
+  "hiddenReef": {
+    "deploymentSourceCommit": "240336bb5d8bc96b3c9265194bfd49463aed8846",
+    "preview": "https://e0d24482.hidden-reef.pages.dev",
+    "previewVerification": {
+      "base": "https://e0d24482.hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T07:08:50.344Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-WuP2YQ5N.js",
+        "filtration/./assets/index-DJwE7OIz.css",
+        "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "visibleBiofilmDiagram": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileBiofilmDiagram": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-WuP2YQ5N.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DJwE7OIz.css": "public, max-age=31536000, immutable"
+      }
+    },
+    "production": "https://hidden-reef.pages.dev/showroom/filtration/",
+    "deployment": "https://9836baae.hidden-reef.pages.dev",
+    "verification": {
+      "base": "https://hidden-reef.pages.dev",
+      "checkedAt": "2026-09-29T07:10:28.392Z",
+      "assets": [
+        "reef/./assets/index-Di90eq1i.js",
+        "reef/./assets/index-DBjqBxyQ.css",
+        "filtration/./assets/index-WuP2YQ5N.js",
+        "filtration/./assets/index-DJwE7OIz.css",
+        "showroom/filtration/assets/rock-layers.bin-B60TwGSm.gz",
+        "learn/filtoclear/index.html",
+        "learn/filtoclear/model.js"
+      ],
+      "checks": {
+        "exactActiveAssetsAndStoreImages": true,
+        "fullRockAssetAndPondExhibitPreserved": true,
+        "visibleBiofilmDiagram": true,
+        "reefToolbarLessonAndReturnNavigation": true,
+        "mobileBiofilmDiagram": true,
+        "mobileNavigation": true
+      },
+      "errors": [],
+      "cacheHeaders": {
+        "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+        "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-WuP2YQ5N.js": "public, max-age=31536000, immutable",
+        "filtration/./assets/index-DJwE7OIz.css": "public, max-age=31536000, immutable"
+      }
+    }
+  },
+  "jez237": {
+    "status": "Blocked before preview upload; previous production retained",
+    "blocker": "Cloudflare API authentication error 10000 / invalid access token 9109; refresh returned 400. Desktop Chrome is signed in to the Hidden Reef account, not the jez237 account. User asked to switch to jrbaud@gmail.com.",
+    "previousPublication": {
+      "deploymentSourceCommit": "92d692fc303ac927ca66e258d4f1a91e6739e180",
+      "preview": "https://5645ed58.jez237-site.pages.dev",
+      "deployment": "https://4a05e491.jez237-site.pages.dev",
+      "production": "https://jez237.com/demos/reef-filtration/",
+      "workflow": "scripts/deploy_jez237_pages.mjs; full site plus Functions, preview/current-main/production checks passed",
+      "verification": {
+        "base": "https://jez237.com/prototypes/hidden-reef",
+        "checkedAt": "2026-09-29T02:11:22.511Z",
+        "assets": [
+          "reef/./assets/index-Di90eq1i.js",
+          "reef/./assets/index-DBjqBxyQ.css",
+          "filtration/./assets/index-CbHBNrY6.js",
+          "filtration/./assets/index-vl4A24zB.css",
+          "showroom/filtration/assets/rock-layers.bin-D_ajDSSg.gz",
+          "learn/filtoclear/index.html",
+          "learn/filtoclear/model.js"
+        ],
+        "checks": {
+          "exactActiveAssetsAndStoreImages": true,
+          "pondHtmlMatchesApartFromEstablishedEdgeScripts": true,
+          "fullRockAssetAndPondExhibitPreserved": true,
+          "reefToolbarLessonAndReturnNavigation": true,
+          "mobileNavigation": true
+        },
+        "errors": [],
+        "cacheHeaders": {
+          "reef/./assets/index-Di90eq1i.js": "public, max-age=31536000, immutable",
+          "reef/./assets/index-DBjqBxyQ.css": "public, max-age=31536000, immutable",
+          "filtration/./assets/index-CbHBNrY6.js": "public, max-age=14400, must-revalidate",
+          "filtration/./assets/index-vl4A24zB.css": "public, max-age=14400, must-revalidate"
+        }
+      },
+      "standaloneDemo": {
+        "base": "https://jez237.com/demos/reef-filtration/",
+        "checkedAt": "2026-09-29T02:12:31.233Z",
+        "exactAssets": [
+          "./assets/index-CbHBNrY6.js",
+          "./assets/index-vl4A24zB.css",
+          "assets/rock-layers.bin-D_ajDSSg.gz"
+        ],
+        "passed": true
+      }
+    },
+    "lastLoginCheck": "2026-09-29T03:58:56.904Z",
+    "latestLoginResult": "Wrangler whoami failed to refresh auth token: 400 Bad Request; Not logged in. No jez237 upload attempted."
+  },
+  "visualReview": "biofilm-review.md",
+  "previousPublication": "publication-biology-key.json",
+  "limitations": [
+    "The magnified biofilm, N marker, colors and timing are conceptual; this is not a balanced chemical-reaction or rate simulation.",
+    "No slow-hardware performance claim. Rock detail remains unchanged; removed symbolic geometry reduces scene rendering counts.",
+    "The jez237 production copy remains on the previous authenticated release."
+  ]
+}
