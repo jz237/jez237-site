@@ -25,11 +25,11 @@ export function buildFilter({textures=true}={}){
  const root=new THREE.Group(),parts=new Map(),pickables=[],fronts=[],foam=[],plates=[];
  const tex=textures?noiseTexture():null,porous=textures?noiseTexture(true):null;
  const mat=(color,roughness=.45,metalness=.0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
- const plastic=new THREE.MeshPhysicalMaterial({color:0x26343a,roughness:.42,metalness:.04,clearcoat:.24,clearcoatRoughness:.3,bumpMap:tex,bumpScale:.007});
- const dark=mat(0x111d24,.45),blue=mat(0x187aaf,.33),steel=mat(0x89989b,.28,.82),rubber=mat(0x244956,.85),blackRubber=mat(0x142226,.95),foamBlue=mat(0x197fc6,.97),foamRed=mat(0xae435c,.98),foamPurple=mat(0x7954a8,.98);
+ const plastic=new THREE.MeshPhysicalMaterial({color:0x171d20,roughness:.46,metalness:.03,clearcoat:.17,clearcoatRoughness:.38,bumpMap:tex,bumpScale:.004});
+ const dark=mat(0x101719,.48),blue=mat(0x136da3,.30),steel=mat(0x89989b,.28,.82),coatedSteel=mat(0x141b1f,.31,.56),rubber=mat(0x244956,.85),blackRubber=mat(0x142226,.95),foamBlue=mat(0x197fc6,.97),foamRed=mat(0xae435c,.98),foamPurple=mat(0x7954a8,.98);
  for(const m of [foamBlue,foamRed,foamPurple]){m.map=porous;m.bumpMap=porous;m.bumpScale=.035;}
  const glass=new THREE.MeshPhysicalMaterial({color:0xc1e6e9,roughness:.08,metalness:.05,transparent:true,opacity:.29,side:THREE.DoubleSide,depthWrite:false});
- const clearPlastic=new THREE.MeshPhysicalMaterial({color:0xa8bcc0,roughness:.19,transparent:true,opacity:.72,metalness:.06,depthWrite:false});
+ const clearPlastic=new THREE.MeshPhysicalMaterial({color:0xc8dde0,roughness:.12,transparent:true,opacity:.38,metalness:.05,side:THREE.DoubleSide,depthWrite:false});
  const lampMat=mat(0xcedbe3,.18,.12),gold=mat(0xc6aa73,.36,.65);
  function part(id,position,offset,delay=0){const data=PARTS.find(p=>p.id===id);if(!data)throw Error(id);const g=new THREE.Group();g.name=id;g.position.set(...position);root.add(g);const p={...data,object:g,base:v(...position),offset,delay,meshes:[]};parts.set(id,p);return p;}
  function mesh(p,g,m,pos=[0,0,0],rotation){const o=new THREE.Mesh(g,m.clone());o.position.set(...pos);if(rotation)o.rotation.set(...rotation);o.castShadow=!o.material.transparent;o.receiveShadow=true;o.userData.part=p.id;o.userData.baseMaterial={color:o.material.color.clone(),opacity:o.material.opacity,transparent:o.material.transparent,depthWrite:o.material.depthWrite};p.object.add(o);p.meshes.push(o);pickables.push(o);return o;}
@@ -41,14 +41,36 @@ export function buildFilter({textures=true}={}){
  const vessel=part('vessel',[0,0,0],[-2.55,0,0]);
  const profile=[[0,.01],[.68,.01],[.72,.07],[.75,.17],[.85,2.20],[.90,2.30],[.9,2.40],[.83,2.40],[.80,2.27],[.70,.20],[0,.20]].map(a=>new THREE.Vector2(...a));
  mesh(vessel,new THREE.LatheGeometry(profile,96,Math.PI/3,Math.PI*4/3),plastic);fronts.push(mesh(vessel,new THREE.LatheGeometry(profile,48,-Math.PI/3,Math.PI*2/3),plastic));
- torus(vessel,.873,.023,dark,[0,2.22,0]);torus(vessel,.722,.019,dark,[0,.13,0]);
+ // Narrow molded ribs are merged into two meshes so the front still cuts away.
+ for(const front of [false,true]){
+  const vertices=[];
+  const point=(a,y,r)=>[Math.sin(a)*r,y,Math.cos(a)*r];
+  const triangle=(a,b,c)=>vertices.push(...a,...b,...c);
+  for(let sector=0;sector<4;sector++)for(let i=0;i<28;i++){
+   const a=sector*Math.PI/2+.40-.48+i*.0356;if((Math.cos(a)>.5)!==front)continue;
+   const y0=.20,y1=2.04,w=.0050,low=.75+(y0-.17)*.10/2.03+.0006,high=.75+(y1-.17)*.10/2.03+.0006;
+   const l0=point(a-w,y0,low),c0=point(a,y0,low+.0045),r0=point(a+w,y0,low);
+   const l1=point(a-w,y1,high),c1=point(a,y1,high+.0045),r1=point(a+w,y1,high);
+   triangle(l0,c1,l1);triangle(l0,c0,c1);triangle(c0,r1,c1);triangle(c0,r0,r1);
+  }
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));g.computeVertexNormals();
+  const ribs=mesh(vessel,g,plastic);ribs.name='molded-barrel-ribs';if(front)fronts.push(ribs);
+ }
+ torus(vessel,.852,.012,plastic,[0,2.08,0]);torus(vessel,.873,.023,dark,[0,2.22,0]);torus(vessel,.722,.019,dark,[0,.13,0]);torus(vessel,.708,.011,plastic,[0,.055,0]);
  for(let i=0;i<48;i++){const a=i/48*TAU;const rib=rod(vessel,[Math.sin(a)*.856,2.18,Math.cos(a)*.856],[Math.sin(a)*.862,2.27,Math.cos(a)*.862],.012,dark);if(Math.cos(a)>.5)fronts.push(rib);}
  const seal=part('seal',[0,2.39,0],[-2.55,1.45,0],.1);torus(seal,.852,.025,blue);
- const clamp=part('clamp',[0,2.42,0],[-2.55,2.1,0],.04);hollow(clamp,.917,.085,steel);mesh(clamp,roundBox(.18,.11,.12,.02),dark,[.86,0,.24]);rod(clamp,[.88,.0,.32],[.92,.01,.12],.02,steel);
+ const clamp=part('clamp',[0,2.42,0],[-2.55,2.1,0],.04);hollow(clamp,.917,.115,coatedSteel,[0,0,0],.027);
+ torus(clamp,.919,.008,coatedSteel,[0,.055,0]);torus(clamp,.919,.008,coatedSteel,[0,-.055,0]);
+ mesh(clamp,roundBox(.11,.14,.27,.025),coatedSteel,[.905,0,.10]);
+ mesh(clamp,roundBox(.07,.08,.23,.018),dark,[.97,.04,.08]);
+ rod(clamp,[.945,-.035,-.05],[.945,.068,-.05],.016,steel);
+ rod(clamp,[.98,.06,-.02],[.98,.06,.20],.011,steel);rod(clamp,[.98,.06,.20],[.925,.06,.25],.011,steel);
+ for(const z of [-.03,.19]){const pin=cyl(clamp,.023,.018,steel,[.977,.012,z]);pin.rotation.z=Math.PI/2;}
+
  const lid=part('lid',[0,2.43,0],[0,3.10,0],.05);
  const dome=[[0,.25],[.24,.27],[.65,.17],[.83,.12],[.90,.025],[.90,-.02],[.77,-.02],[.72,.025],[0,.04]].map(a=>new THREE.Vector2(...a));mesh(lid,new THREE.LatheGeometry(dome,96),plastic);
- mesh(lid,roundBox(.68,.22,1.08,.09),plastic,[-.15,.24,-.04]);cyl(lid,.185,.19,plastic,[.43,.22,-.06]);
- for(let i=0;i<12;i++){const a=i/12*TAU;cyl(lid,.022,.018,steel,[Math.cos(a)*.80,.105,Math.sin(a)*.80]);}
+ mesh(lid,roundBox(.68,.26,1.08,.09),plastic,[-.15,.24,-.04]);cyl(lid,.185,.19,plastic,[.43,.22,-.06]);torus(lid,.882,.011,dark,[0,.019,0]);
+ for(let i=0;i<6;i++){const a=i/6*TAU;cyl(lid,.017,.012,dark,[Math.cos(a)*.80,.105,Math.sin(a)*.80]);}
  const ringRows=[['foam-purple',.46,foamPurple,.18],['foam-blue',.96,foamBlue,.22],['foam-red',1.46,foamRed,.26],['foam-top',1.96,foamBlue,.30]];
  for(const [id,y,m,delay] of ringRows){const p=part(id,[0,y,0],[0,.5+(y-.46)*.93,0],delay);mesh(p,ringShape(.70,.293,.42,true,true),m);foam.push(p);}
  [['spacer-purple',.71],['spacer-blue',1.21],['spacer-red',1.71],['spacer-top',2.21]].forEach(([id,y])=>{const p=part(id,[0,y,0],[0,.50+(y-.46)*.93,0],.23);disc(p);plates.push(p);for(let i=0;i<2;i++){const a=i*Math.PI+.3;rod(p,[.66*Math.cos(a),0,.66*Math.sin(a)],[.66*Math.cos(a),.31,.66*Math.sin(a)],.013,dark);}});
@@ -59,12 +81,22 @@ export function buildFilter({textures=true}={}){
  for(let i=0;i<24;i++){const a=i/24*TAU;rod(meshTube,[.281*Math.cos(a),-1.04,.281*Math.sin(a)],[.281*Math.cos(a),1.05,.281*Math.sin(a)],.009,dark);}
  const handle=part('handle',[0,0,-.39],[-1.8,3.1,-1.2],.08);
  rod(handle,[-.56,.23,0],[-.56,2.80,0],.025,steel);rod(handle,[.56,.23,0],[.56,2.80,0],.025,steel);
- const gripCurve=new THREE.CatmullRomCurve3([v(-.56,2.78,0),v(-.55,3.03,0),v(-.42,3.08,0),v(.42,3.08,0),v(.55,3.03,0),v(.56,2.78,0)]);
- mesh(handle,new THREE.TubeGeometry(gripCurve,40,.048,12,false),blue);
- for(let i=0;i<12;i++)mesh(handle,new THREE.BoxGeometry(.008,.016,.084),dark,[-.20+i*.036,3.097,0]);
- const head=part('uv-head',[-.14,2.89,.06],[2.48,3.10,.05],.1);mesh(head,roundBox(.57,.30,1.00,.12),plastic);mesh(head,roundBox(.19,.075,.025,.015),blue,[0,-.065,.51]);
- for(let i=0;i<10;i++)mesh(head,roundBox(.012,.022,.65,.005),dark,[-.20+i*.044,.161,0]);
- mesh(head,roundBox(.23,.021,.13,.005),dark,[0,.163,-.25]);
+ // The real cleaning handle lies low around the back of the UVC cover.
+ mesh(handle,roundBox(1.18,.07,.12,.025),blue,[0,2.80,-.38]);
+ for(const x of [-.56,.56]){mesh(handle,roundBox(.11,.07,.44,.025),blue,[x,2.80,-.16]);cyl(handle,.053,.06,blue,[x,2.77,0]);cyl(handle,.029,.012,steel,[x,2.813,0]);}
+ for(let i=0;i<16;i++)mesh(handle,new THREE.BoxGeometry(.009,.004,.083),dark,[-.26+i*.035,2.844,-.38]);
+ const head=part('uv-head',[-.14,2.89,.06],[2.48,3.10,.05],.1);mesh(head,roundBox(.63,.31,1.04,.115),plastic);
+ mesh(head,roundBox(.26,.14,.014,.025),dark,[0,-.055,.535]);
+ mesh(head,roundBox(.21,.045,.020,.012),blue,[0,-.099,.545]);
+ for(const x of [-.11,.11])mesh(head,roundBox(.027,.09,.020,.008),blue,[x,-.073,.544]);
+ for(let i=0;i<10;i++){
+  const x=-.235+i*.052;const groove=new THREE.CatmullRomCurve3([v(x,.166,-.31),v(x,.167,.32),v(x,.163,.47),v(x,.13,.534),v(x,.07,.539)]);
+  mesh(head,new THREE.TubeGeometry(groove,24,.008,5,false),dark);
+ }
+ mesh(head,roundBox(.34,.014,.20,.025),dark,[0,.168,-.385]);
+ mesh(head,roundBox(.29,.004,.15,.015),plastic,[0,.179,-.385]);
+ for(const x of [-.286,.286]){mesh(head,new THREE.BoxGeometry(.006,.006,.87),dark,[x,-.09,0]);mesh(head,roundBox(.008,.036,.10,.015),dark,[x*1.13,.025,.24]);}
+ const cableGland=cyl(head,.034,.055,blackRubber,[0,-.07,-.56]);cableGland.rotation.x=Math.PI/2;
  const lamp=part('lamp',[0,1.5,0],[4.1,3.1,.15],.18);
  rod(lamp,[-.055,-.75,0],[-.055,.75,0],.032,lampMat);rod(lamp,[.055,-.75,0],[.055,.75,0],.032,lampMat);rod(lamp,[-.055,-.75,0],[.055,-.75,0],.032,lampMat);mesh(lamp,roundBox(.20,.13,.10,.02),dark,[0,.80,0]);for(let i=0;i<4;i++)rod(lamp,[-.05+i*.032,.865,0],[-.05+i*.032,.915,0],.007,gold);
  const quartz=part('quartz',[0,1.5,0],[3.18,.73,.72],.19);hollow(quartz,.141,1.76,glass);cyl(quartz,.136,.026,glass,[0,-.89,0]);torus(quartz,.152,.015,steel,[0,.88,0]);
@@ -78,9 +110,17 @@ export function buildFilter({textures=true}={}){
  const valve=part('valve',[.43,2.80,-.06],[-1.3,2.70,1.65],.13);cyl(valve,.16,.20,blue);mesh(valve,roundBox(.055,.21,.26,.025),blue,[0,.14,0]);
  const ports=[['inlet',[-.58,2.54,.48],[-.60,0,.8],[-2.30,2.10,1.55],plastic],['outlet',[.39,2.54,.65],[.18,0,.98],[1.0,2.75,2.15],clearPlastic],['waste',[.82,2.54,.08],[1,0,.05],[2.25,2.60,1.65],clearPlastic]];
  const portsData={};
- for(const [id,at,dir,offset,material] of ports){const p=part(id,at,offset,.13);const d=v(...dir).normalize(),q=new THREE.Quaternion().setFromUnitVectors(v(0,1,0),d);hollow(p,.117,.40,material,[0,0,0],.025);p.meshes.forEach(m=>m.quaternion.copy(q));
-  for(let j=0;j<7;j++){const o=torus(p,.124-j*.001,.009,material);o.quaternion.setFromUnitVectors(v(0,0,1),d);o.position.copy(d).multiplyScalar(-.15+j*.050);}
-  const n=part(id+'-nut',v(...at).addScaledVector(d,-.17).toArray(),offset.map((val,j)=>val+(j===0?-.18:j===2?.25:0)),.11);hollow(n,.158,.12,dark);n.meshes.forEach(m=>m.quaternion.copy(q));for(let j=0;j<24;j++){const a=j/24*TAU,o=mesh(n,new THREE.BoxGeometry(.018,.018,.10),plastic);o.position.set(Math.cos(a)*.157,Math.sin(a)*.157,0);o.rotation.z=a;o.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(v(0,0,1),d));}
+ for(const [id,at,dir,offset,material] of ports){
+  const p=part(id,at,offset,.13),d=v(...dir).normalize(),q=new THREE.Quaternion().setFromUnitVectors(v(0,1,0),d);
+  const socketCenter=v(...at).addScaledVector(d,-.30).sub(lid.base);const socket=cyl(lid,.185,.21,plastic,socketCenter.toArray());socket.quaternion.copy(q);
+  // Axial Y section: union shoulder, large hose step, small hose step, inner bore.
+  const section=[[.127,-.205],[.133,-.19],[.133,-.10],[.123,-.095],[.123,.055],[.111,.068],[.111,.208],[.104,.220],[.083,.220],[.083,-.205],[.127,-.205]].map(a=>new THREE.Vector2(...a));
+  mesh(p,new THREE.LatheGeometry(section,64),material).quaternion.copy(q);
+  for(let j=0;j<9;j++){const y=-.155+j*.041,r=y<.055?.128:.116;const o=torus(p,r,.0048,material);o.quaternion.setFromUnitVectors(v(0,0,1),d);o.position.copy(d).multiplyScalar(y);}
+  const n=part(id+'-nut',v(...at).addScaledVector(d,-.20).toArray(),offset.map((val,j)=>val+(j===0?-.18:j===2?.25:0)),.11);
+  hollow(n,.170,.135,dark,[0,0,0],.027);n.meshes.forEach(m=>m.quaternion.copy(q));
+  for(let j=0;j<14;j++){const a=j/14*TAU,o=mesh(n,roundBox(.036,.019,.105,.006),plastic);o.position.set(Math.cos(a)*.17,Math.sin(a)*.17,0);o.rotation.z=a;o.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(v(0,0,1),d));}
+  const gasket=torus(n,.147,.010,blackRubber);gasket.quaternion.setFromUnitVectors(v(0,0,1),d);gasket.position.copy(d).multiplyScalar(-.072);
   portsData[id]={at:v(...at),dir:d};
  }
  const cap=part('waste-cap',[1.115,2.54,.095],[3.1,2.6,1.65],.10);cyl(cap,.13,.08,dark);cap.meshes.forEach(m=>m.rotation.z=-Math.PI/2);for(let j=0;j<20;j++){const a=j/20*TAU;rod(cap,[-.04,.133*Math.sin(a),.133*Math.cos(a)],[.04,.133*Math.sin(a),.133*Math.cos(a)],.007,plastic);}
