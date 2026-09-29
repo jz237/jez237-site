@@ -115,6 +115,115 @@
     }
   },
   {
+    "id": "2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu",
+    "title": "Factual infographic: Salt Marsh — Roots, Mud, and Carbon",
+    "tests": "NOAA National Ocean Service, USGS, and NOAA NCCOS pages fetched 2026-09-29; no salt-marsh topic in full 96-entry factual archive. No unsupported numerical rates or permanence claims.; archive_slot=2026-09-29T16:20; concept=salt-marsh-tidal-sediment-roots-carbon-storage; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
+    "prompt": "Create the FINISHED artwork directly: a museum-quality, richly illustrated scientific infographic on a single opaque portrait canvas, not a photo of a poster, wall display, table, specimen tray, or interface. Subject: HOW A SALT MARSH BUILDS HEIGHT AND STORES CARBON. Make the dominant hero a precise, beautiful vertical cutaway through a tidal salt marsh, occupying the broad center of the image: an incoming shallow tidal sheet over dense but non-species-specific marsh grasses; finely stratified mineral silt and dark organic soil; an intricate, visibly living and dead root network descending into water-saturated mud; subtle suspended particles settling from flood water; a narrow oxygenated skin over deeper oxygen-poor strata. The section should feel physically credible, with glancing estuary light on ripples, delicate grass blades and seed heads, translucent amber water, granular silt, interleaved tan roots and old dark fragments, and an exact clear boundary between above-water landscape and belowground process. Natural teal, saltwater blue, olive, tan, charcoal and restrained coral accent colors; crisp ink-and-gouache scientific illustration with luminous depth, not glossy 3-D marketing art.\n\nSurround the hero with EIGHT substantive, clearly numbered illustrated teaching panels, arranged in a disciplined editorial grid with ample white/cream breathing room and large readable type: (1) ATMOSPHERIC CO2 TO PLANT: carbon dioxide entering leaves via photosynthesis, carbon allocated to shoots and roots; show a simple arrow pathway. (2) FLOOD TIDE DELIVERS SILT: a close-up of suspended mineral grains arriving with tidal water and settling among stems at the marsh surface. (3) ROOTS ADD VOLUME: an enlarged soil cutaway showing newer root growth interlaced with older root remains and the resulting belowground material accumulation. (4) ORGANIC BURIAL: a sequential three-frame strip from dead leaf/root material to incorporation into mud to deeper burial; do not imply all material survives. (5) WATER LIMITS OXYGEN: a microscopic diagram comparing a thin oxygenated surface to deeper water-saturated, oxygen-poor pores, with a short label that oxygen diffuses slowly through water. (6) SLOWER DECAY, NOT ZERO DECAY: two small side-by-side decomposition pathways; some carbon remains in soil while some returns to air through respiration. (7) TWO CARBON INPUT ROUTES: distinguish local marsh-plant material from organic matter carried in from elsewhere; no numbers and no assertion that one route always dominates. (8) ELEVATION AND RISING WATER: a schematic side-profile of root material plus trapped flood-tide sediment raising the marsh surface, alongside a rising-water reference line; label that keeping pace depends on conditions, not a guarantee. Include at least THREE unmistakable explanatory close-up diagrams: individual sediment grains caught among stems, a magnified water-filled soil pore with sparse oxygen, and a root/organic fragment layer showing deposition and burial. Use fine precise leader lines from every panel into the hero; let arrows distinguish carbon flow, sediment movement, and elevation gain using three consistent color codes and a compact legend. Include legible, concise headings and short callouts only; no tiny paragraphs, statistics, unsupported species labels, bibliography, URLs, logos, watermark, or decorative filler. Keep every depicted causal arrow faithful to the panel wording and preserve a high visual-information density without sacrificing readability. This is an actual educational plate, not a proposal, prompt card or mockup.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu.webp",
+    "color": "#9a9687",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "salt-marsh-tidal-sediment-roots-carbon-storage",
+      "imageSha256": "7c4f3f7e1b6bb0568b0e9a6d1a04365e04591ee108ccc6b0608442822f3c02f3",
+      "imageDHash": "cce3b3e8e8a13094"
+    },
+    "factualInfographic": {
+      "topic": "How salt-marsh vegetation, tidal sediment, and oxygen-poor soil build marsh elevation and store carbon",
+      "description": "An illustrated cross-section of salt-marsh carbon pathways and surface elevation gain through flood-tide sediment deposition and root accumulation.",
+      "sourceNote": "Verified plant carbon uptake, root and sediment contributions to elevation, oxygen-poor soil and slow decay, and variable carbon sources against NOAA National Ocean Service https://oceanservice.noaa.gov/ecosystems/coastal-blue-carbon/ ; U.S. Geological Survey https://www.usgs.gov/publications/carbon-sources-sediments-a-restoring-vs-historically-unaltered-salt-marsh ; NOAA NCCOS https://coastalscience.noaa.gov/project/salt-marsh-ecology-era-sea-level-rise/ . No quantitative rates are claimed.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T20:20:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA National Ocean Service",
+            "title": "Coastal Blue Carbon",
+            "sourceType": "government-agency",
+            "url": "https://oceanservice.noaa.gov/ecosystems/coastal-blue-carbon/"
+          },
+          {
+            "id": "S2",
+            "publisher": "U.S. Geological Survey",
+            "title": "Carbon sources in the sediments of a restoring vs. historically unaltered salt marsh",
+            "sourceType": "government-agency",
+            "url": "https://www.usgs.gov/publications/carbon-sources-sediments-a-restoring-vs-historically-unaltered-salt-marsh"
+          },
+          {
+            "id": "S3",
+            "publisher": "NOAA National Centers for Coastal Ocean Science",
+            "title": "Salt Marsh Ecology in an Era of Sea Level Rise",
+            "sourceType": "government-agency",
+            "url": "https://coastalscience.noaa.gov/project/salt-marsh-ecology-era-sea-level-rise/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Salt marsh vegetation takes up atmospheric carbon dioxide through photosynthesis and uses carbon to grow leaves, stems, and roots.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Flood tides carry sediment into a marsh, where some is trapped and added to the marsh surface.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Root growth and accumulated root material add belowground material that can raise marsh surface elevation.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Dead leaves and roots can become incorporated and buried in salt-marsh soil.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Water-saturated wetland soil is largely oxygen-poor because oxygen diffuses slowly through water.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Organic material decomposes more slowly in oxygen-poor soil, allowing some carbon to remain stored underground for long periods.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Some captured carbon returns to air through plant or microbial respiration; not all carbon is permanently retained.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Salt-marsh sediment carbon may come both from marsh plants and from organic material transported in from elsewhere; a USGS comparison found source mixtures differed between a restoring and reference marsh.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Marsh persistence amid rising sea level depends on surface elevation gain, including root-material accumulation and flood-tide sediment deposition; ability to keep pace varies with conditions.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-29-factual-infographic-factual-infographic-kelp-forest-buoyant",
     "title": "Factual infographic: Kelp Forest — Buoyant Blades in Moving Water",
     "tests": "; archive_slot=2026-09-29T08:20; concept=giant-kelp-pneumatocyst-buoyancy-layered-forest-habitat; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
