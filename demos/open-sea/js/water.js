@@ -226,7 +226,7 @@ void main() {
   }
   float nv = max(dot(n, V), 0.02);
   vec3 R = reflect(-V, n);
-  float below = smoothstep(-0.30, 0.0, R.y);
+  float below = mix(smoothstep(-0.30, 0.0, R.y), 1.0, smoothstep(600.0, 3500.0, dist));
   R.y = max(R.y, 0.005); R = normalize(R);
 
   float shadow = cloudShadowAt(rel.xz);
@@ -246,13 +246,21 @@ void main() {
     refl = F * (Lsky * mix(0.35, 1.0, below) * (1.0 - rc.a) + rc.rgb);
   }
   float alpha2 = 2.0 * sigma2;
-  vec3 spec = glitter(n, V, uSunDir, sunE, alpha2) + glitter(n, V, uMoonDir, moonE, alpha2);
+  // The slope variance below the mesh/texture resolution is drawn as individual facets: each footprint-sized cell of
+  // water gets its own random tilt, so the mean lobe is unchanged but a still frame shows discrete sparkles.
+  float jv = 0.5 * uMssRes * mix(gk, 1.0, 0.5) * 0.85;
+  vec2 cid = floor(gx / max(0.03, dist * 0.0011));
+  vec2 hh = hash22(cid + 17.0);
+  vec2 gj = sqrt(-2.0 * log(max(hh.x, 1e-3))) * vec2(cos(6.2831853 * hh.y), sin(6.2831853 * hh.y));
+  vec3 nj = normalize(vec3(-(S.x + gj.x * sqrt(jv)), 1.0, -(S.y + gj.y * sqrt(jv))));
+  float alphaJ = max(2.0 * (sigma2 - jv), 4.4e-5);
+  vec3 spec = glitter(nj, V, uSunDir, sunE, alphaJ) + glitter(nj, V, uMoonDir, moonE, alphaJ);
 
   // ---- water body: light scattered up out of the sea --------------------------------------
   float worldY = rel.y + uCamAbs.y;
   float crest = clamp(worldY / max(uHs * 0.9, 0.15) * 0.5 + 0.35, 0.0, 1.0);
   float ndl = max(dot(n, uSunDir), 0.0), ndm = max(dot(n, uMoonDir), 0.0);
-  vec3 Ed = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.55 + 0.45 * n.y);
+  vec3 Ed = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.55 + 0.45 * n.y) + flashE(n);
   vec3 Rw = vec3(0.006, 0.036, 0.058);
   vec3 body = Rw * Ed / PI * (1.0 - F);
   // light transmitted through thin crests towards the viewer
@@ -318,20 +326,19 @@ void main() {
     float netK = 1.0 - smoothstep(0.10, 0.80, t);
     t -= (1.0 - lz) * 0.30 * netK;
     float cov = smoothstep(0.0, 0.05 + 0.10 * smoothstep(0.15, 1.2, pm), t);   // distant patches get soft, broken edges instead of crisp confetti
-    float thick = smoothstep(0.0, 0.75, t);
+    float thick = smoothstep(0.0, 1.15, t);
     // far away, patches are smaller than a pixel: keep their average whiteness as a soft haze instead of speckle
     float farK = smoothstep(0.9, 4.5, pm);
     cov = mix(cov, clamp(D * 0.9 * (0.55 + 0.9 * vnoise(q * 0.13 + 3.0)), 0.0, 1.0), farK);
     thick = mix(thick, D, farK);
     vec3 Efoam = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.6 + 0.4 * n.y);
     Efoam = mix(vec3(luma(Efoam)), Efoam, 0.6) * 1.18;   // foam scatters light many times: whiter than the light that reaches it
-    float bubble = clamp(0.86 + 0.55 * nfine, 0.55, 1.0);
-    float alb = mix(0.30, 0.97, pow(thick, 0.7)) * bubble;
-    vec3 foamCol = vec3(alb, alb * 0.996, alb * 0.99) * Efoam / PI * clamp(0.92 + 0.35 * nz, 0.7, 1.15);
+    float bubble = clamp(0.86 + 0.55 * nfine, 0.6, 1.0);
+    // bubbles are always white; what changes with thickness is how much of the water still shows through
+    vec3 foamCol = vec3(0.94, 0.94, 0.93) * bubble * (Efoam + flashE(n)) / PI * clamp(0.92 + 0.35 * nz, 0.7, 1.15);
     // bright bubble highlights facing the sun
     foamCol += sunE * max(nfine, 0.0) * 0.10 * pow(sat(dot(n, uSunDir)), 2.0) * thick;
-    // thin foam is see-through: water colour and reflection show between the bubbles
-    foamCol = mix(refl + body * 0.8 + foamCol * 0.5, foamCol, smoothstep(0.1, 0.7, thick));
+    cov *= mix(mix(0.32, 1.0, pow(thick, 0.7)), 1.0, farK);
     col = mix(col, foamCol, cov);
   }
   col += spec * (1.0 - clamp(D * 1.6, 0.0, 0.9));
@@ -340,7 +347,7 @@ void main() {
   vec3 hd = normalize(vec3(-V.x, 0.0, -V.z));
   vec3 Lh = horizonColor(hd);
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001; // per metre at sea level
-  vec3 T = exp(-ext * dist);
+  vec3 T = exp(-ext * dist * (1.0 + 2.2 * smoothstep(1200.0, 6000.0, dist)));   // the last kilometres melt into the horizon glow
   col = col * T + Lh * (1.0 - T);
   o = vec4(col, 1.0);
 }`;

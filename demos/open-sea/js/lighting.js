@@ -15,6 +15,10 @@ vec3 lightSun() { return texelFetch(uLightTex, ivec2(0, 0), 0).rgb; }
 vec3 lightMoon() { return texelFetch(uLightTex, ivec2(1, 0), 0).rgb; }
 vec3 lightSky() { return texelFetch(uLightTex, ivec2(2, 0), 0).rgb; }   // irradiance on a horizontal plane
 vec3 lightGround() { return texelFetch(uLightTex, ivec2(3, 0), 0).rgb; } // radiance bounced up from the sea
+vec3 flashE(vec3 n) {   // irradiance from a nearby lightning stroke, relative to the ambient sky level
+  if (uFlashLight.w <= 0.0) return vec3(0.0);
+  return vec3(0.78, 0.86, 1.0) * uFlashLight.w * luma(lightSky()) * (0.35 + 0.65 * max(dot(n, uFlashLight.xyz), 0.0));
+}
 float cloudShadowAt(vec2 relXZ) {
   vec2 q = (uCamAbs.xz + relXZ - uShadowInfo.xy) / (2.0 * uShadowInfo.z) + 0.5;
   float edge = smoothstep(0.80, 0.98, max(abs(q.x - 0.5), abs(q.y - 0.5)) * 2.0);

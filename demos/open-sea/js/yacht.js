@@ -166,9 +166,10 @@ void main() {
   }
   // ambient: diffuse sky/ground plus glossy reflection of the environment
   vec3 amb = ambientFor(N);
+  amb = mix(vec3(luma(amb)), amb, 0.55);   // white paint under a blue sky reads white to a camera that has white-balanced the scene
   float ao = mat == ${MAT.HULL} ? mix(0.6, 1.0, smoothstep(-0.4, 0.3, p.y)) : 1.0;
   if (mat == ${MAT.SAIL}) amb *= 1.0 + trans * 1.5;
-  col += dif * amb * ao;
+  col += dif * (amb + flashE(N) / PI) * ao;
   vec3 R = reflect(-V, N);
   vec3 envR = envRadiance(vec3(R.x, max(R.y, 0.02), R.z), clamp(rough * 6.0, 0.0, 6.0));
   float below = smoothstep(-0.25, 0.1, R.y);
@@ -190,6 +191,7 @@ void main() {
     vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI * exp(-KD * zd);
     col = mix(col, uwl, sub);
   }
+  if (mat != ${MAT.SAIL} && metal < 0.5) col *= vec3(1.05, 1.0, 0.955);
   // aerial perspective
   float dist = length(vRel);
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001;
