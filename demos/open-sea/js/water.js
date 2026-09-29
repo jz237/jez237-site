@@ -287,7 +287,7 @@ void main() {
         float z1 = 2.0 * uNear * uFar / (uFar + uNear - (2.0 * d1 - 1.0) * (uFar - uNear));
         if (z1 < zw) ruv = suv;
         vec3 sc = texture(uScene, ruv).rgb;
-        vec3 Tw = exp(-CATT * thick);
+        vec3 Tw = exp(-CATT * thick * 3.0);
         body = body * (1.0 - Tw) + sc * Tw * (1.0 - F) * exp(-KD * thick * 1.4);
       }
     }
