@@ -1,0 +1,154 @@
+{
+  "verifiedAt": "2026-09-30T15:15:04.225Z",
+  "publishedCommit": "62644b41ae064a12561816198ad45ac6e9ca0279",
+  "hiddenReefDeployment": "https://81248786.hidden-reef.pages.dev",
+  "jez237Deployment": "https://2fc4a391.jez237-site.pages.dev",
+  "checks": {
+    "unit": "7 passed",
+    "localSlowLoading": "passed: 1.5s initial delay, 32KB per 150ms; CPU 4x; reduced motion and Data Saver",
+    "browserLimit": "Simulated slower processing and loading; not tested on user older computer",
+    "jez237GuardedDeployment": "passed preview and production checks, including Philadelphia, storefront images, and pond links"
+  },
+  "hiddenReef": {
+    "base": "https://hidden-reef.pages.dev/",
+    "slowVideoResponses": false,
+    "cpuThrottle": 4,
+    "cases": {
+      "normal": {
+        "initial": [
+          {
+            "time": 1.425515,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 39
+          },
+          {
+            "time": 1.429079,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 39
+          }
+        ],
+        "changedPixels": 104520,
+        "returned": [
+          {
+            "time": 6.059271,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 151
+          },
+          {
+            "time": 6.06297,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 151
+          }
+        ],
+        "phone": [
+          {
+            "time": 7.636025,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 188
+          },
+          {
+            "time": 6.267246,
+            "paused": true,
+            "ready": 4,
+            "visible": true,
+            "frames": 151
+          }
+        ]
+      }
+    }
+  },
+  "jez237": {
+    "base": "https://jez237.com/prototypes/hidden-reef/",
+    "slowVideoResponses": false,
+    "cpuThrottle": 4,
+    "cases": {
+      "normal": {
+        "initial": [
+          {
+            "time": 1.364704,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 37
+          },
+          {
+            "time": 1.364133,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 37
+          }
+        ],
+        "changedPixels": 103738,
+        "returned": [
+          {
+            "time": 5.939483,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 147
+          },
+          {
+            "time": 5.938337,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 147
+          }
+        ],
+        "phone": [
+          {
+            "time": 7.453199,
+            "paused": false,
+            "ready": 4,
+            "visible": true,
+            "frames": 183
+          },
+          {
+            "time": 6.099329,
+            "paused": true,
+            "ready": 4,
+            "visible": true,
+            "frames": 148
+          }
+        ]
+      }
+    }
+  },
+  "liveAssets": [
+    {
+      "base": "https://hidden-reef.pages.dev/",
+      "htmlStatus": 200,
+      "jsStatus": 200,
+      "version": "20260930-autoplay",
+      "sourceMatches": true,
+      "sha256": "671afb67689167675163c2ffe8ea0d1a2ff0634ca73b231a03408ab9af2c5144"
+    },
+    {
+      "base": "https://jez237.com/prototypes/hidden-reef/",
+      "htmlStatus": 200,
+      "jsStatus": 200,
+      "version": "20260930-autoplay",
+      "sourceMatches": true,
+      "sha256": "671afb67689167675163c2ffe8ea0d1a2ff0634ca73b231a03408ab9af2c5144"
+    },
+    {
+      "base": "https://jez237.com/prototypes/hidden-reef-header-preview/",
+      "htmlStatus": 200,
+      "jsStatus": 200,
+      "version": "20260930-autoplay",
+      "sourceMatches": true,
+      "sha256": "671afb67689167675163c2ffe8ea0d1a2ff0634ca73b231a03408ab9af2c5144"
+    }
+  ]
+}
