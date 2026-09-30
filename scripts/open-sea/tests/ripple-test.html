@@ -1,0 +1,35 @@
+<!doctype html><meta charset="utf-8"><title>ripple stability</title>
+<canvas id="c" width="64" height="64"></canvas>
+<script type="module">
+import { initGL, gl, readF32 } from '/demos/open-sea/js/gl.js';
+import { Ripples, RIPPLE_STEP } from '/demos/open-sea/js/ripples.js';
+function stats(r) {
+  const N = r.N, d = readF32(r.curF, 0, 0, N, N);
+  let mx = 0, mv = 0, e = 0, nan = 0, n = N * N;
+  for (let i = 0; i < n; i++) { const h = d[i * 4], v = d[i * 4 + 1]; if (!Number.isFinite(h) || !Number.isFinite(v)) { nan++; continue; } mx = Math.max(mx, Math.abs(h)); mv = Math.max(mv, Math.abs(v)); e += h * h; }
+  return { maxH_mm: +(mx * 1000).toFixed(3), maxV: +mv.toFixed(4), rmsH_mm: +(Math.sqrt(e / n) * 1000).toFixed(4), nan };
+}
+window.run = (pattern, wallSeconds, res, rain, extra) => {
+  initGL(document.getElementById('c'));
+  const r = new Ripples(res);
+  r.rain = rain;
+  if (extra === 'src') r.sources = [[16, 16, 0.6, 0.35]];
+  let t = 0, seed = 1234567; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  let frames = 0;
+  while (t < wallSeconds) {
+    let dt;
+    if (pattern === 'steady') dt = 1 / 60;
+    else if (pattern === 'alt') dt = frames % 2 ? 0.001 : 0.2;
+    else if (pattern === 'random') dt = -Math.log(1 - rnd()) * 0.03;
+    else if (pattern === 'hitch') dt = frames % 90 === 89 ? 4.0 : 1 / 60;
+    else if (pattern === 'tiny') dt = 0.0001;
+    else if (pattern === 'huge') dt = 30;
+    t += dt; frames++;
+    r.update(dt);
+    if (frames % 40 === 0) gl.finish();
+  }
+  gl.finish();
+  return { pattern, frames, steps: r.stats.steps, droppedSteps: r.stats.dropped, simSeconds: +(r.stats.steps * RIPPLE_STEP).toFixed(2), ...stats(r) };
+};
+window.ready = true;
+</script>

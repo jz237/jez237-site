@@ -1,0 +1,9 @@
+{
+  "name": "open-sea-tools",
+  "private": true,
+  "description": "Screenshot and review harness for the Open Sea demo (headless Chromium with SwiftShader).",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
