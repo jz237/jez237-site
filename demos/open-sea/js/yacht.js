@@ -589,11 +589,15 @@ export class Yacht {
     gl.clearColor(0, 0, 0, 0); gl.clearDepth(1); gl.depthMask(true);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     this.draw({...ctx,w:this.reflTex.w,h:this.reflTex.h},VPm,ctx.camAbs,true);
+    ctx.wildlife?.draw({...ctx,w:this.reflTex.w,h:this.reflTex.h},VPm,ctx.camAbs,true);
+    this.draw({...ctx,w:this.reflTex.w,h:this.reflTex.h},VPm,ctx.camAbs,true,true);
     gl.bindTexture(gl.TEXTURE_2D, this.reflTex.tex); gl.generateMipmap(gl.TEXTURE_2D);
   }
 
-  draw(ctx, VP, camAbs, mirror = false) {
-    this.materials.updateInstrument(Math.atan2(this.axes.bow[0],-this.axes.bow[2]),this.speed,ctx.time||0);
+  drawRig(ctx, VP, camAbs) { this.draw(ctx, VP, camAbs, false, true); }
+
+  draw(ctx, VP, camAbs, mirror = false, rigOnly = false) {
+    if(!rigOnly)this.materials.updateInstrument(Math.atan2(this.axes.bow[0],-this.axes.bow[2]),this.speed,ctx.time||0);
     const rel = new Float64Array(this.M); rel[12] = this.x - camAbs[0]; rel[13] = this.y - ctx.cam.y; rel[14] = this.z - camAbs[2];
     const Mf = Float32Array.from(rel);
     const sunL = this.toLocalDir(ctx.sk.sunDir), moonL = this.toLocalDir(ctx.sk.moonDir);
@@ -615,8 +619,10 @@ export class Yacht {
         .f('uUnderCam', ctx.under ? 1 : 0).f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
+    gl.depthMask(true);
     let p = this.progHull.use();
     setCommon(p);
+    if(!rigOnly){
     gl.bindVertexArray(this.hull.vao); gl.drawElements(gl.TRIANGLES, this.hull.count, gl.UNSIGNED_INT, 0);
     gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
     p = this.progSail.use();
@@ -628,6 +634,12 @@ export class Yacht {
       gl.bindVertexArray(cloth.vao);gl.drawElements(gl.TRIANGLES,cloth.count,gl.UNSIGNED_INT,0);
       if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
     }
+    }
+    // Antialiased ropes do not write depth. In the main view they must be
+    // composited after the ocean, which otherwise overwrites them. Reflection
+    // targets composite it after the opaque yacht and wildlife as well.
+    if(!rigOnly){gl.disable(gl.BLEND);return;}
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
     // Fine tubes blend over the completed hull and cloth; no depth writes means
     // fractional coverage cannot punch opaque sky-coloured holes into sails.
     p=this.progHull.use();setCommon(p);gl.depthMask(false);

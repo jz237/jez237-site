@@ -17,6 +17,7 @@ import { Ripples, RIPPLE_SIZE } from './ripples.js';
 import { Rain, Lightning } from './weather.js';
 import { Fx } from './fx.js';
 import { Fish } from './fish.js';
+import { Wildlife } from './wildlife.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
 import { watchRelease } from './release.js';
@@ -44,6 +45,7 @@ class App {
     this.lightning = new Lightning();
     this.fx = new Fx();
     this.fish = new Fish();
+    this.wildlife = new Wildlife();
     this.yachtOn = !params.has('noyacht');
     this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
     // everything the panel controls; the simulation eases towards it
@@ -147,6 +149,7 @@ class App {
       this.trail.update(dt, this.yacht, this.time, this.sim.cur.U);
     }
     if (this.probe.fresh) {
+      this.wildlife.feed(this.probe);
       this.surfaceAtCam = this.probe.get(5)[0];
       const c = this.cam.y - this.surfaceAtCam;
       if (this.under && c > 0.06) this.under = false;
@@ -154,7 +157,8 @@ class App {
     }
     this.probe.fresh = false;
     this.fish.update(this.time, [this.yacht.x, 0, this.yacht.z], !this.under);
-    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z]]);
+    this.wildlife.update(dt,this.yacht,{windDir:S.windDir,U:this.sim.cur.U});
+    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints()]);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     R.rain = S.rain;
@@ -209,6 +213,7 @@ class App {
     const sunWv = [eta * I[0], -Math.sqrt(Math.max(k2, 0)), eta * I[2]];    // Snell refraction into the sea
     if (under) this.fx.updateCaustics(this.sim, sunWv, cam);
 
+    this.wildlife.updateSurface(ctx);
     bindFBO(this.post.fbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST); gl.depthMask(true);
     gl.clearColor(0, 0, 0, 1);
@@ -217,16 +222,19 @@ class App {
     if (!under) this.sky.draw(sk, cam.y, invVP, starRotation(S.tod), this.time, C.rt);
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     if (this.yachtOn) this.yacht.draw(ctx, VPf, camAbs);
+    this.wildlife.draw(ctx,VPf,camAbs);
     this.fish.draw(ctx, VPf, camAbs);
 
     const reflOn = this.yachtOn && !under;
-    if (reflOn) { this.yacht.drawReflection(ctx, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
+    if (reflOn) { this.yacht.drawReflection({...ctx,wildlife:this.wildlife}, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
     this.post.copyScene();
     const wind = [Math.cos(S.windDir), Math.sin(S.windDir)];
     const mS = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
+      p.v4v('uWhaleRings',this.wildlife.rings(cam));
+      p.v4v('uWhaleContacts',this.wildlife.contacts(cam));
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
       p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
@@ -240,6 +248,8 @@ class App {
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
         .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', !under ? 1 : 0);
     });
+    if(this.yachtOn)this.yacht.drawRig(ctx,VPf,camAbs);
+    this.wildlife.drawSpray({...ctx,windDir:S.windDir},VPf);
 
     // composite (rain veil / underwater medium)
     const needFx = under || S.rain > 0.01;

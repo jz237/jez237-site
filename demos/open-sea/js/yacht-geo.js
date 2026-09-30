@@ -8,7 +8,7 @@ export const waterlineHalfBeam=x=>halfBeam(x)*.91;
 let geometry;
 export async function loadYachtGeometry(){
  const root=new URL('../assets/',import.meta.url);
- const [mr,br]=await Promise.all([fetch(new URL('schooner.json?v=sailview-20260930',root)),fetch(new URL('schooner.bin.gz?v=sailview-20260930',root))]);
+ const [mr,br]=await Promise.all([fetch(new URL('schooner.json?v=wildlife-20260930',root)),fetch(new URL('schooner.bin.gz?v=wildlife-20260930',root))]);
  if(!mr.ok||!br.ok)throw new Error('The schooner model could not be loaded. Refresh to try again.');
  const metadata=await mr.json();
  if(metadata.version!==2||metadata.vertexStride!==44||metadata.masts!==3)throw new Error('Unsupported schooner asset.');
