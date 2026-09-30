@@ -41,7 +41,7 @@ def grid(name,fn,nu,nv,mat,group='hull',flip=False):
    a=j*(nu+1)+i;f=(a,a+1,a+nu+2,a+nu+1);faces.append(tuple(reversed(f)) if flip else f)
  uv=[(i/nu,j/nv) for j in range(nv+1) for i in range(nu+1)]
  return mesh(name,verts,faces,mat,True,uv,group)
-def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
+def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull',cloth_uv=None):
  if name.endswith('mast collar') or name in ['Winch base','Helm pedestal','Compass binnacle','Tender davit']:
   deck_nav['obstacles'].append({'type':'circle','x':a[0],'z':a[1],'radius':max(r,r1 or r),'name':name})
  a,b=Vector(a),Vector(b);d=(b-a).normalized();up=Vector((1,0,0)) if abs(d.z)>.9 else Vector((0,0,1));s=d.cross(up).normalized();t=d.cross(s);r1=r if r1 is None else r1
@@ -51,6 +51,9 @@ def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
  faces=[(k,(k+1)%n,(k+1)%n+n,k+n) for k in range(n)];faces.extend([tuple(reversed(range(n))),tuple(range(n,n*2))])
  if group=='hull' and r<.065:group='rig'
  ob=mesh(name,verts,faces,mat,True,group=group);ob['tube_radius']=r
+ if cloth_uv:
+  layer=ob.data.uv_layers.new(name='Cloth attachment coordinates')
+  for loop in ob.data.loops:layer.data[loop.index].uv=cloth_uv[loop.vertex_index//n]
  if mat in ['ROPE','WOOD']:
   layer=ob.data.uv_layers.new(name='Surface coordinates');length=(b-a).length/(.12 if mat=='ROPE' else 2);cross_scale=1 if mat=='ROPE' else math.tau*r/.16
   for face in ob.data.polygons:
@@ -235,18 +238,25 @@ for S in sail_specs:
   T,H,C=S['tack'],S['head'],S['clew'];lx=T[0]+(H[0]-T[0])*v;ly=T[1]+(H[1]-T[1])*v
   ex=C[0]+(H[0]-C[0])*v-S['roach']*math.sin(math.pi*v);ey=C[1]+(H[1]-C[1])*v
   camber=S['draft']*math.sin(math.pi*u**.85)*(1-v)**.6
+  if S['boom']:
+   rise=clamp(v/.10,0,1);camber*=rise*rise*(3-2*rise)
   return (lx+(ex-lx)*u,camber,ly+(ey-ly)*u)
  grid('Ivory '+g,cloth,48,64,'SAIL',g)
  for v in [.22,.42,.62,.80]:
-  a=cloth(.60,v);b=cloth(.99,v);tube('Sail batten',a,b,.017,'SAIL',n=5,group=g)
+  for k in range(16):
+   ua=.60+.39*k/16;ub=.60+.39*(k+1)/16
+   tube('Sail batten',cloth(ua,v),cloth(ub,v),.017,'SAIL',n=5,group=g,cloth_uv=((ua,v),(ub,v)))
  for edge in ['luff','leech','foot']:
   for k in range(32):
    a=k/32;b=(k+1)/32
    p=cloth(0,a) if edge=='luff' else cloth(1,a) if edge=='leech' else cloth(a,0)
    q=cloth(0,b) if edge=='luff' else cloth(1,b) if edge=='leech' else cloth(b,0)
-   tube('Sewn sail edge',p,q,.018,'SAIL',n=5,group=g)
+   ua=(0,a) if edge=='luff' else (1,a) if edge=='leech' else (a,0)
+   ub=(0,b) if edge=='luff' else (1,b) if edge=='leech' else (b,0)
+   tube('Sewn sail edge',p,q,.018,'SAIL',n=5,group=g,cloth_uv=(ua,ub))
  for uv in [(0,0),(1,0),(.01,.985)]:
-  p=cloth(*uv);torus('Sail corner cringle',p,.075,.019,'STEEL','y',16,6,g)
+  p=cloth(*uv);ring=torus('Sail corner cringle',p,.075,.019,'STEEL','y',16,6,g)
+  for tc in ring.data.uv_layers.active.data:tc.uv=uv
 
 # Working gear: sizeable winches, cleats, deck hatches, seating and dual helms.
 for x in [-19,-16.8,-5.4,-1,7,17]:
@@ -442,10 +452,6 @@ for group,objects in groups.items():
     loop=me.loops[li];p=ev.matrix_world@me.vertices[loop.vertex_index].co;n=ev.matrix_world.to_3x3()@normals[li].vector
     if n.length_squared<1e-12:n=face_normal.copy()
     n.normalize();tc=uv.data[li].uv if uv else (p.x*.1,p.y*.1)
-    if group.startswith('sail-') and not ob.name.startswith('Ivory '):
-     S=sail_specs[int(group.split('-')[1])];T,H,C=S['tack'],S['head'],S['clew'];sv=clamp((p.z-T[1])/(H[1]-T[1]),0,1)
-     lx=T[0]+(H[0]-T[0])*sv;ex=C[0]+(H[0]-C[0])*sv-S['roach']*math.sin(math.pi*sv)
-     tc=(clamp((p.x-lx)/(ex-lx),0,1) if abs(ex-lx)>.001 else 0,sv)
     ao=1. if group.startswith(('sail-','boom-')) else ambient_visibility(p,n)
     key=tuple(round(v,6) for v in (p.x,p.z,p.y,n.x,n.z,n.y,tc[0],tc[1],matcode,ob.get('tube_radius',0),ao))
     vi=lookup.get(key)

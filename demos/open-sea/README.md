@@ -1,6 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 4.4 MB compressed mesh; the browser has no framework dependency or build step.
+A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 4.5 MB compressed mesh; the browser has no framework dependency or build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -85,7 +85,7 @@ WebGL 2 with `EXT_color_buffer_float` is required. Without it the page shows an 
 
 ## Large schooner asset
 
-`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 21 material classes, and animates each sail about its actual luff axis. Mesh export includes 208,646 vertices and 292,142 triangles, plus eight animated mainsheet and headsail sheet tubes. Format v2 uses a 44-byte vertex with position, normal, UV, material, tube radius and ambient visibility.
+`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 21 material classes, and animates each sail about its actual luff axis. Mesh export includes 211,646 vertices and 296,942 triangles, plus eight animated mainsheet and headsail sheet tubes. Format v2 uses a 44-byte vertex with position, normal, UV, material, tube radius and ambient visibility.
 
 The tour and boat/dive cameras, buoyancy probes, sailing speed and wake have been resized for the larger vessel. Fine metal highlights include derivative-based normal filtering to reduce distant sparkle. The monochrome fullscreen button remains visible with the control panel folded, and reflects fullscreen state in its label and accessibility attributes.
 
@@ -127,3 +127,13 @@ New fittings include knurled winch drums, sheet blocks with sheaves and axles, e
 Nine short-range geometry rays bake ambient visibility into static vertices. This darkens indirect light around contact points; direct sun, moon and lightning retain their separate lighting. Deforming sails and booms are excluded from the bake to avoid stationary marks on moving cloth. This is contact shading, not a full dynamic yacht shadow map. Cabins remain closed and the model remains a procedural interpretation rather than a reconstruction from naval plans.
 
 `node scripts/open-sea/schooner-asset-test.mjs` validates finite vertices, unit normals, material/AO ranges, deforming-group AO, buffer layout and every index. Degenerate triangles are excluded on export and invalid corner normals fall back to geometric face normals. Navigation tests now cover 39 obstacles and a continuous 430-step helm-to-bow route, including the new compass and blocks. Fourteen GPU views cover fittings, ropes, sailcloth, day, night, storm, whole yacht and portrait views; HDR pixels are finite with no browser or WebGL errors. Walking, camera anchoring through hitches, simultaneous touch movement/look, reboarding and fullscreen also pass. These portrait checks use a desktop NVIDIA GPU and do not establish performance or visual parity on a physical phone.
+
+## Wind-driven sail motion
+
+The five sails have traveling fabric waves, slower billowing and gust modulation. Flutter grows from a slight calm movement to visible leech motion in a breeze, with faster, reduced-amplitude movement under storm reefing. Each sail has independent phase and rate. The luff, tack and clew stay fixed; mainsail feet stay against their booms, while headsails have free feet between their corners.
+
+Travel and ripple phases advance independently modulo 2π in the yacht's bounded 60 Hz step. Wind changes adjust phase velocity and smoothly change amplitude, avoiding an age-dependent jump from multiplying the new wind speed by elapsed time. Reflections use the same pose and phases, and cloth normals follow the deformed geometry. This is a bounded procedural cloth animation, not an aeroelastic cloth solver.
+
+Sewn edges and 16-segment battens use exact cloth coordinates. Each corner ring shares one corner coordinate across all its vertices, preserving its rigid shape while staying attached. The main-foot camber tapers to zero at the boom.
+
+The browser fixture `scripts/open-sea/tests/sail-motion-test.js` captures the actual production vertex shader with transform feedback. Across all exported vertices of five sails at four wind speeds, it records zero fixed-vertex drift, less than 4 μm of numerical ring distortion, and a maximum measured flutter offset of 0.51 m. Wind changes at 5,000 seconds remain continuous (maximum measured 60 Hz movement 6.6 cm). Long/uneven frame intervals remain bounded. Day, calm, storm, night and portrait captures have finite HDR pixels and no WebGL/browser errors. Physical-phone animation performance remains unverified.

@@ -4,23 +4,25 @@ import { m4, clamp, lerp, smoothstep } from './math.js';
 import { buildYacht, buildRigging, DIM, SAILS, MAT, sheer, waterlineHalfBeam } from './yacht-geo.js';
 import { bindLighting } from './lighting.js';
 import { YachtMaterials } from './yacht-materials.js';
+import { sailWind, advanceSailPhases, SAIL_MOTION_GLSL } from './sail-motion.js';
 import './glsl.js';
 
-const YACHT_VS = `
+export const YACHT_VS = `
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNrm;
 layout(location = 2) in vec4 aAttr;
 layout(location = 3) in float aAO;
 uniform mat4 uVP, uModel;
-uniform vec4 uSail;    // angle, pivot x, flutter, time
+uniform vec4 uSail;    // angle, pivot x, flutter metres, time
 uniform vec3 uSailAxis;
-uniform vec4 uSailShape; // foot y, head y, reef, headsail flag
+uniform vec4 uSailShape; // foot y, head y, reef, cloth type (-1 boom, 0 main, 1 headsail)
 out vec3 vLocal;
 out vec3 vLocalN;
 out vec3 vN;
 out vec3 vRel;
 out vec4 vAttr;
 out float vAO;
+${SAIL_MOTION_GLSL}
 void main() {
   vec3 p = aPos, n = aNrm;
 #ifdef SAIL
@@ -36,9 +38,9 @@ void main() {
     p.y = yF + (p.y - yF) * (1.0 - 0.42 * reef);
     p.x = uSail.y + (p.x - uSail.y) * (1.0 - 0.18 * reef * v);
   }
-  float isSail = step(abs(aAttr.z - ${MAT.SAIL}.0), 0.5);
+  float isSail = step(-.5,uSailShape.w);
   float a = a0 * (1.0 + 0.30 * v * isSail);
-  float dz = sgn * p.z + uSail.z * sin(uSail.w * 9.0 + p.x * 2.3 + p.y * 1.7) * 0.10 * (0.2 + 0.8 * u) * (0.5 + 0.5 * sin(uSail.w * 2.1 + p.y));
+  float dz = sgn * p.z + clothFlutter(vec2(u,v),uSail.w,uSail.z,uSailShape.w);
   vec3 axis = normalize(uSailAxis), origin = vec3(uSail.y, yF, 0.0);
   p.z = dz; vec3 q = p - origin;
   p = origin + q*cos(a) + cross(axis,q)*sin(a) + axis*dot(axis,q)*(1.0-cos(a));
@@ -381,7 +383,8 @@ export class Yacht {
     this.y = 0;
     this.acc = 0;
     this.t = 0;
-    this.sailAng = -0.35; this.reef = 0; this.flutter = 0;
+    this.sailAng = -0.35; this.reef = 0; this.flutter = .018; this.flutterRate = 3.4;
+    this.flutterPhases=new Float64Array(this.sails.length*2);
     this.targets = { h: 0, p: 0, r: 0 };
     this.wobble = 0;
     this.M = m4.ident();
@@ -420,8 +423,8 @@ export class Yacht {
     this.reef = smoothstep(11, 19, U);
     const heel = Math.min(0.18, 0.0016 * U * U * (1 - 0.5 * this.reef));
     this.heelTarget = -heel * this.tack;                  // leeward is opposite the wind side
-    const slack = 1 - smoothstep(0.8, 3.5, U);
-    this.flutter = slack;
+    const motion=sailWind(U,this.reef);
+    this.flutterTarget=motion.amplitude;this.flutterRateTarget=motion.rate;
     this.sailAngTarget = -this.tack * clamp(lerp(0.16, 0.42, smoothstep(0.4, 4.5, U)) + 0.10 * smoothstep(9, 16, U), 0.14, 0.62);
   }
 
@@ -439,6 +442,9 @@ export class Yacht {
       this.psi += dpsi * (1 - Math.exp(-h / 4.0));
       this.speed += (this.speedTarget - this.speed) * (1 - Math.exp(-h / 3.0));
       this.sailAng += (this.sailAngTarget - this.sailAng) * (1 - Math.exp(-h / 1.5));
+      this.flutter+=(this.flutterTarget-this.flutter)*(1-Math.exp(-h/.7));
+      this.flutterRate+=(this.flutterRateTarget-this.flutterRate)*(1-Math.exp(-h/1.0));
+      advanceSailPhases(this.flutterPhases,this.flutterRate,h);
       this.x += Math.cos(this.psi) * this.speed * h; this.z += Math.sin(this.psi) * this.speed * h;
 
       const pb = this.probeH;
@@ -565,9 +571,9 @@ export class Yacht {
     const time = ctx.time || 0;
     for(const [sailIndex,{S,cloth,boom}] of this.sails.entries()){
       const reef=this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale,dx=(S.head[0]-S.tack[0])*(S.boom?1-.18*reef:1),dy=(S.head[1]-S.tack[1])*(S.boom?1-.42*reef:1);
-      p.i('uCurrentSail',sailIndex).v3('uSailAxis',dx,dy,0).v4('uSail',angle,S.tack[0],this.flutter*.6,time+S.phase).v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
+      p.i('uCurrentSail',sailIndex).v3('uSailAxis',dx,dy,0).v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[sailIndex*2],this.flutterPhases[sailIndex*2+1],S.phase).v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
       gl.bindVertexArray(cloth.vao);gl.drawElements(gl.TRIANGLES,cloth.count,gl.UNSIGNED_INT,0);
-      if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,0);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
+      if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
     }
     // Fine tubes blend over the completed hull and cloth; no depth writes means
     // fractional coverage cannot punch opaque sky-coloured holes into sails.
