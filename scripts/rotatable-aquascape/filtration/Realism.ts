@@ -6,6 +6,7 @@ import {addSurfaceDetail} from './SurfaceDetail.ts';
 import {detailSump} from './SumpDetail.ts';
 import {detailRoller} from './RollerDetail.ts';
 import {detailSkimmer} from './SkimmerDetail.ts';
+import {detailReturn} from './ReturnDetail.ts';
 
 // Generated product references guide appearance. Dimensions and assembly remain teaching models.
 const TAU=Math.PI*2;
@@ -57,28 +58,14 @@ export function enrich(parts:Part[],groups:Record<string,T.Group>,m:Mats){
  const neck=detail('neck');union(neck,[0,-.3,0],.385,m);
  const lid=get('cup-lid');(lid.children[0] as T.Mesh).material=m.white;const ld=detail('cup-lid');annulus(ld,[0,.05,0],.78,.75,.01,m.rubber);for(let i=0;i<8;i++){const a=i/8*TAU;bolt(ld,[Math.cos(a)*.7,.063,Math.sin(a)*.7],m,'y',.019);}
  const out=detail('skimmer-outlet');union(out,[.32,.52,0],.2,m);for(let i=0;i<10;i++){const a=i/10*TAU;box(out,[.32+Math.cos(a)*.17,.81,Math.sin(a)*.17],[.024,.14,.024],m.dark);}
- const pump=get('pump-motor');pump.clear();const rear=annulus(pump,[0,0,-.16],.46,.185,.8,m.dark);rear.rotation.x=Math.PI/2;const cap=cyl(pump,[0,0,-.565],.46,.025,m.dark);cap.rotation.x=Math.PI/2;box(pump,[0,.38,-.18],[.71,.22,.68],m.dark);const lip=annulus(pump,[0,0,.265],.49,.3,.07,m.dark);lip.rotation.x=Math.PI/2;
- for(let i=0;i<18;i++){const a=i/18*TAU;const rib=box(pump,[Math.cos(a)*.459,Math.sin(a)*.459,-.17],[.034,.055,.68],m.dark);rib.rotation.z=a-Math.PI/2;}for(let i=0;i<8;i++){const a=i/8*TAU;bolt(pump,[Math.cos(a)*.43,Math.sin(a)*.43,.31],m,'z',.032);}
- tube(pump,[[-.32,.25,-.54],[-.51,.3,-.68],[-.57,.16,-.96]],.037,m.rubber);mergeStatic(pump);
- const imp=get('pump-rotor').children[0] as T.Group;imp.clear();const magnet=cyl(imp,[0,0,-.21],.15,.48,m.dark);magnet.rotation.x=Math.PI/2;for(const z of [-.46,.01]){const b=cyl(imp,[0,0,z],.16,.035,m.cream);b.rotation.x=Math.PI/2;}const disc=cyl(imp,[0,0,.11],.4,.055,m.dark);disc.rotation.x=Math.PI/2;
- for(let i=0;i<7;i++){const shape=new T.Shape();shape.moveTo(.085,-.01);shape.bezierCurveTo(.22,-.045,.35,-.1,.38,-.2);shape.lineTo(.405,-.18);shape.bezierCurveTo(.36,-.08,.25,-.01,.085,.025);shape.closePath();const v=add(imp,new T.ExtrudeGeometry(shape,{depth:.12,bevelEnabled:true,bevelSize:.007,bevelThickness:.007,bevelSegments:2,steps:1,curveSegments:14}),m.dark,[0,0,.135]);v.rotation.z=i/7*TAU;}mergeStatic(imp);
- const volute=get('volute');volute.clear();const shell=annulus(volute,[0,0,0],.53,.45,.34,m.dark);shell.rotation.x=Math.PI/2;const face=annulus(volute,[0,0,.18],.53,.23,.06,m.dark);face.rotation.x=Math.PI/2;torus(volute,[0,0,.22],.45,.015,m.rubber,'z');tube(volute,[[.25,.3,0],[.28,.57,0],[.28,.72,-.12]],.14,m.dark);union(volute,[.28,.75,-.12],.18,m);for(let i=0;i<6;i++){const a=i/6*TAU;bolt(volute,[Math.cos(a)*.49,Math.sin(a)*.49,.23],m,'z',.022);}mergeStatic(volute);
- // A molded intake cage with genuine slots, longitudinal side rails and rounded front slats.
- const screen=get('strainer');screen.clear();
- for(const z of [-.10,.12])torus(screen,[0,0,z],.444,.026,m.dark,'z');
- for(let i=0;i<20;i++){const a=i/20*TAU;const rail=box(screen,[Math.cos(a)*.437,Math.sin(a)*.437,.018],[.029,.041,.23],m.dark);rail.rotation.z=a;}
- for(let y=-.385;y<=.4;y+=.064){const half=Math.sqrt(.427*.427-y*y);const points:XYZ[]=[];for(let j=0;j<=16;j++){const x=-half+2*half*j/16;points.push([x,y,.13+.15*Math.sqrt(Math.max(0,1-(x*x+y*y)/(.444*.444)))]);}tube(screen,points,.018,m.dark);}
- for(const x of [-.17,.17])box(screen,[x,0,.217],[.035,.77,.04],m.dark);
- torus(screen,[0,0,-.13],.455,.018,m.teal,'z');
- for(const a of [.25,2.35,4.45])bolt(screen,[Math.cos(a)*.412,Math.sin(a)*.412,.153],m,'z',.019);
- mergeStatic(screen);
  const fine=addSurfaceDetail(parts,groups,m);
  const sump=detailSump(parts,groups,m);
  const roller=detailRoller(parts,groups,m);
  const skimmer=detailSkimmer(parts,groups,m);
+ const pumpDetail=detailReturn(parts,groups);
  for(const p of parts){if(!['clean-roll','waste-roll','pump-rotor','needle-wheel'].includes(p.id))batchPart(p.group);else{for(const c of p.group.children)if(c instanceof T.Group)batchPart(c);}}
  rootShadows();function rootShadows(){for(const g of Object.values(groups))g.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.Material;o.castShadow=!material.transparent;o.receiveShadow=!material.transparent;}});}
- return {visibility:(visible:boolean)=>{fine.visibility(visible);sump.visibility(visible);roller.visibility(visible);skimmer.visibility(visible);},update:(time:number)=>{fine.update(time);sump.update(time);roller.update(time);skimmer.update(time);}};
+ return {pumpDetail,visibility:(visible:boolean)=>{fine.visibility(visible);sump.visibility(visible);roller.visibility(visible);skimmer.visibility(visible);pumpDetail.visibility(visible);},update:(time:number)=>{fine.update(time);sump.update(time);roller.update(time);skimmer.update(time);pumpDetail.update(time);}};
 }
 
 export function rockMaterial(){
