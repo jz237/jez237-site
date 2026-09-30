@@ -1,0 +1,109 @@
+{
+  "base": "http://127.0.0.1:5260/prototypes/hidden-reef/",
+  "slowVideoResponses": true,
+  "cpuThrottle": 4,
+  "cases": {
+    "normal": {
+      "initial": [
+        {
+          "time": 1.349299,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 37
+        },
+        {
+          "time": 1.372442,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 38
+        }
+      ],
+      "changedPixels": 104502,
+      "returned": [
+        {
+          "time": 5.983127,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 150
+        },
+        {
+          "time": 6.021763,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 150
+        }
+      ],
+      "phone": [
+        {
+          "time": 7.548647,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 187
+        },
+        {
+          "time": 6.219275,
+          "paused": true,
+          "ready": 4,
+          "visible": true,
+          "frames": 151
+        }
+      ]
+    },
+    "older-observer-fallback": {
+      "initial": [
+        {
+          "time": 1.374604,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 37
+        },
+        {
+          "time": 1.386669,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 37
+        }
+      ],
+      "changedPixels": 104277,
+      "returned": [
+        {
+          "time": 6.126197,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 152
+        },
+        {
+          "time": 6.138499,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 152
+        }
+      ],
+      "phone": [
+        {
+          "time": 7.787787,
+          "paused": false,
+          "ready": 4,
+          "visible": true,
+          "frames": 191
+        },
+        {
+          "time": 6.451061,
+          "paused": true,
+          "ready": 4,
+          "visible": true,
+          "frames": 158
+        }
+      ]
+    }
+  }
+}
