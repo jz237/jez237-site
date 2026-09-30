@@ -19,6 +19,9 @@ import { Fx } from './fx.js';
 import { Fish } from './fish.js';
 import { Wildlife } from './wildlife.js';
 import { Whirlpool } from './whirlpool.js';
+import { bindHullWater } from './hull-water.js';
+import { HullContact } from './hull-contact.js';
+import { HullSpray } from './hull-spray.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
 import { watchRelease } from './release.js';
@@ -48,6 +51,8 @@ class App {
     this.fish = new Fish();
     this.wildlife = new Wildlife();
     this.whirlpool = new Whirlpool();
+    this.hullContact = new HullContact();
+    this.hullSpray = new HullSpray();
     this.yachtOn = !params.has('noyacht');
     this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
     // everything the panel controls; the simulation eases towards it
@@ -165,6 +170,7 @@ class App {
       this.trail.update(dt, this.yacht, this.time, this.sim.cur.U,this.whirlpool);
     }
     if (this.probe.fresh) {
+      if(this.yachtOn)this.hullSpray.motion.feed(this.probe,this.yacht,this.time,this.whirlpool);
       this.wildlife.feed(this.probe);
       this.surfaceFFT = this.probe.get(5)[0]-(this.probe.vortexHeights?.[5]||0);
     }
@@ -175,7 +181,8 @@ class App {
     this.probe.fresh = false;
     this.fish.update(this.time,[this.yacht.x,this.whirlpool.sample(this.yacht.x,this.yacht.z).height,this.yacht.z],!this.under,this.whirlpool);
     this.wildlife.update(dt,this.yacht,{windDir:S.windDir,U:this.sim.cur.U});
-    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints()],this.whirlpool);
+    this.hullSpray.motion.update(dt,wv.map(v=>v*this.sim.cur.U),this.whirlpool);
+    if(this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints(),...this.hullSpray.motion.points(this.yacht)],this.whirlpool))this.hullSpray.motion.noteProbe(this.yacht,this.time);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     R.rain = S.rain;
@@ -231,6 +238,7 @@ class App {
     if (under) this.fx.updateCaustics(this.sim, sunWv, cam);
 
     this.wildlife.updateSurface(ctx);
+    if(this.yachtOn){this.hullContact.update(ctx,this.yacht,dt);ctx.hullWet=this.hullContact.cur;}
     bindFBO(this.post.fbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST); gl.depthMask(true);
     gl.clearColor(0, 0, 0, 1);
@@ -251,11 +259,14 @@ class App {
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
       this.whirlpool.bind(p,cam);
+      bindHullWater(p,this.yacht,cam,this.yachtOn);
+      p.m4('uInvVP',invVP);
+      p.f('uHullWetOn',this.yachtOn?1:0);if(this.yachtOn)p.t('uHullWet',6,this.hullContact.cur);
       p.v4v('uWhaleRings',this.wildlife.rings(cam));
       p.v4v('uWhaleContacts',this.wildlife.contacts(cam));
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
-      p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
+      p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw), Math.sin(Y.psi + Y.yaw));
       p.v4('uWakeB', Y.speed, 0.20 * Math.pow(Y.speed / 6, 2), this.yachtOn ? 1 : 0, 0);
       p.t('uTrail', 14, this.trail.cur);
       const Sm = TRAIL_SIZE, mod = v => v - Math.floor(v / Sm) * Sm;
@@ -268,6 +279,7 @@ class App {
     },this.whirlpool);
     if(this.yachtOn)this.yacht.drawRig(ctx,VPf,camAbs);
     this.wildlife.drawSpray({...ctx,windDir:S.windDir},VPf);
+    if(this.yachtOn)this.hullSpray.draw(ctx,VPf);
 
     // composite (rain veil / underwater medium)
     const needFx = under || S.rain > 0.01;

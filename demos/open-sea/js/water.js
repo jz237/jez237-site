@@ -1,9 +1,11 @@
 // Ocean surface: camera-centred geometry clipmap displaced by the FFT cascades, shaded per pixel.
 import { gl, Program, defineChunk } from './gl.js';
 import { WHIRLPOOL_GLSL, VORTEX_PATCH } from './whirlpool.js';
+import { HULL_WATER_GLSL } from './hull-water.js';
 import './fx.js';
 import './glsl.js';
 defineChunk('whirlpool',WHIRLPOOL_GLSL);
+defineChunk('hull-water',HULL_WATER_GLSL);
 
 export const CLIP_M = 48;          // half-extent in cells per level
 export const CLIP_LEVELS = 14;
@@ -14,6 +16,7 @@ const WATER_VS = `
 #include <wake>
 #include <water.uv>
 #include <whirlpool>
+#include <hull-water>
 layout(location = 0) in vec2 aGrid;
 uniform mat4 uVP;
 uniform vec2 uCenterRel;   // level centre relative to the camera (xz)
@@ -28,6 +31,7 @@ out vec3 vRel;
 out vec2 vG;
 out float vJ;
 out vec2 vD;
+out float vHullRunup;
 vec4 waveDisplacement(vec2 g,float spacing,float morph){
   vec4 D=vec4(0.0);
   for(int i=0;i<5;i++){
@@ -107,6 +111,7 @@ void main() {
     rel.y+=sin(d*2.1)*exp(-d*d*.08)*uWhaleRings[i].w*.065;
   }
   rel.y+=whirlSurface(rel.xz).x;
+  vHullRunup=hullRunup(rel);rel.y+=vHullRunup;
   float r2 = dot(rel.xz, rel.xz);
   rel.y -= r2 / (2.0 * 6371000.0);
   vRel = rel; vG = g; vJ = J; vD = D.xz;
@@ -165,11 +170,17 @@ const WATER_FS = `
 #include <water.uv>
 #include <foam>
 #include <whirlpool>
+#include <hull-water>
 in vec3 vRel;
 in vec2 vG;
 in float vJ;
 in vec2 vD;
+in float vHullRunup;
 uniform sampler2DArray uSlope;
+uniform sampler2DArray uDisp;
+uniform vec2 uCenterRel;
+uniform sampler2D uHullWet;
+uniform float uHullWetOn;
 uniform sampler2DArray uFoam;
 uniform float uMssRes, uMeanSlope, uTime, uHs, uGlowE;
 uniform vec3 uRw, uSSS;    // water body colour and the colour of light transmitted through thin crests
@@ -188,9 +199,24 @@ uniform vec2 uRes;
 uniform vec3 uFwdV;
 uniform float uNear, uFar, uRippleAmt, uRippleTexel, uHasScene, uCamDepth;
 uniform vec3 uTrailInfo;   // origin x, origin z (camera position modulo map), map size
+uniform mat4 uVP,uInvVP;
 layout(location = 0) out vec4 o;
 
 vec3 Rw_foamUnder(vec3 Ed0) { return vec3(0.35, 0.55, 0.65) * Ed0 * 0.6; }
+float sceneSubDepth(vec3 scene){
+  if(uHullWetOn>.5&&length(scene-uHullCenter.xyz)<33.0){
+    vec3 p=hullLocal(scene);
+    if(abs(p.x)<24.0&&abs(p.z)<5.0){float h=textureLod(uHullWet,p.xz/vec2(48,10)+.5,0.0).r;return (h-p.y)*max(.25,uHullUp.y-dot(whirlSurface(scene.xz).yz,uHullUp.xz));}
+  }
+  vec2 gp=scene.xz-uCenterRel,dd=vec2(0);float h=0.0;
+  for(int it=0;it<4;it++){
+    vec2 g=gp-dd;h=0.0;dd=vec2(0);
+    for(int i=0;i<5;i++){if(i>=uCascades)break;vec4 d=textureLod(uDisp,vec3(cascUV(i,g),float(i)),0.0);dd+=toWorld(d.xz,i);h+=d.y;}
+  }
+  h+=whirlSurface(scene.xz).x+kelvinWake(scene.xz,16).x;
+  h+=hullRunup(vec3(scene.x,h-uCamY,scene.z));
+  return h-uCamY-scene.y;
+}
 float fresnelRough(float nv, float sigma2) {
   float s = sqrt(max(sigma2, 0.0));
   float F0 = 0.02;
@@ -215,6 +241,10 @@ vec3 glitter(vec3 n, vec3 V, vec3 Ld, vec3 E, float alpha2) {
 
 void main() {
   vec3 rel = vRel;
+  bool hullNearby=uHullCenter.w>.5&&length(rel-uHullCenter.xyz)<31.0;
+  vec3 boatPoint=hullNearby?hullLocal(rel):vec3(1000.0);
+  float hullGap=hullNearby?hullSolidGap3(boatPoint):1000.0;
+  bool hullClip=hullNearby&&hullGap<-.015;
   // The polar patch resolves the funnel independently of camera distance.
   // A 40 m depth-tested overlap covers projection differences between the
   // two triangulations. Matching sampled values alone cannot close a seam.
@@ -270,6 +300,9 @@ void main() {
   S*=mix(1.0,.48,smoothstep(.2,1.2,length(vortexSurface.yz)));
   S+=vortexSurface.yz;
   vec3 n = normalize(vec3(-S.x, 1.0, -S.y));
+  vec3 geometricNormal=cross(dFdx(rel),dFdy(rel));
+  geometricNormal=normalize(geometricNormal*(geometricNormal.y<0.0?-1.0:1.0)+vec3(0,.000001,0));
+  if(vHullRunup>.000001)n=normalize(mix(n,geometricNormal,smoothstep(.01,.12,vHullRunup)*.8));
   if (uUnder > 0.5) n = -n;
   if (uUnder > 0.5) {
     // seen from below: Snell's window onto the sky, total internal reflection outside it
@@ -304,8 +337,8 @@ void main() {
     float Db = 0.0;
     for (int i = 1; i < 4; i++) { if (i >= uCascades) break; Db = max(Db, texture(uFoam, vec3(cascUV(i, vG), float(i))).x); }
     colU = mix(colU, colU + Rw_foamUnder(Ed0) , smoothstep(0.35, 0.9, Db) * 0.6);
-    if(vortexClip)discard;
-    o = uDbg==99?vec4(1.0):vec4(colU, 1.0);
+    if(vortexClip||hullClip)discard;
+    o = uDbg==99?vec4(1.0):uDbg==98?vec4(boatPoint,1.0):vec4(colU, 1.0);
     return;
   }
   float nv = clamp(dot(n, V), 0.02, 1.0);
@@ -389,13 +422,27 @@ void main() {
       float zs = 2.0 * uNear * uFar / (uFar + uNear - (2.0 * d0 - 1.0) * (uFar - uNear));
       float thick = (zs - zw) / max(dot(-V, uFwdV), 0.1);
       if (thick > 0.0 && thick < 40.0) {
-        vec2 ruv = suv + S * 0.05 * clamp(thick, 0.0, 2.5) / max(zw * 0.06, 1.0);
-        float d1 = texture(uSceneDepth, ruv).r;
-        float z1 = 2.0 * uNear * uFar / (uFar + uNear - (2.0 * d1 - 1.0) * (uFar - uNear));
-        if (z1 < zw) ruv = suv;
-        vec3 sc = texture(uScene, ruv).rgb;
-        vec3 Tw = exp(-CATT * thick * 3.0);
-        body = body * (1.0 - Tw) + sc * Tw * (1.0 - F) * exp(-KD * thick * 1.4);
+        // Trace a short refracted segment. A shifted sample is usable only
+        // when it still hits submerged geometry beyond this water surface.
+        vec3 transmitted=refract(-V,n,1.0/1.333);
+        vec4 projected=uVP*vec4(rel+transmitted*min(thick,6.0),1.0);
+        vec2 ruv=mix(suv,projected.xy/max(projected.w,.001)*.5+.5,smoothstep(.02,.35,thick));
+        bool valid=all(greaterThanEqual(ruv,vec2(0)))&&all(lessThanEqual(ruv,vec2(1)));
+        float d1=valid?texture(uSceneDepth,ruv).r:1.0;
+        float z1=2.0*uNear*uFar/(uFar+uNear-(2.0*d1-1.0)*(uFar-uNear));
+        vec4 ray4=uInvVP*vec4(ruv*2.0-1.0,1.0,1.0);vec3 ray=normalize(ray4.xyz);
+        vec3 scenePoint=ray*(z1/max(dot(ray,uFwdV),.01));
+        float subDepth=valid&&d1<.99999&&z1>zw+.005?sceneSubDepth(scenePoint):-1.0;
+        valid=valid&&d1<.99999&&z1>zw+.005&&subDepth>.02;
+        if(!valid){
+          ruv=suv;scenePoint=-V*(zs/max(dot(-V,uFwdV),.01));subDepth=sceneSubDepth(scenePoint);valid=subDepth>.02;
+        }
+        if(valid){
+          thick=clamp(length(scenePoint-rel),0.0,40.0);
+          vec3 sc=texture(uScene,ruv).rgb,Tw=exp(-CATT*thick);
+          vec3 transmission=body*(1.0-Tw)+sc*Tw*(1.0-F);
+          body=mix(body,transmission,smoothstep(.02,.12,subDepth));
+        }
       }
     }
   }
@@ -410,6 +457,16 @@ void main() {
   }
   float wnd = smoothstep(3.0, 18.0, uWindSpeed);
   D = max(D, min(trail, 1.2) * 0.86 * (1.0 - 0.35 * wnd));
+  // Narrow, broken contact foam follows the full moving hull, including
+  // pitch, heel and the curved section at this actual water height.
+  float contactFoam=0.0;
+  if(hullNearby){
+    float edge=smoothstep(-.025,.035,hullGap)*smoothstep(.62,.06,hullGap);
+    float motion=clamp(uHullSpeed*.095+length(S)*.18,0.0,1.0);
+    float broken=smoothstep(.26,.72,vnoise(boatPoint.xz*vec2(2.2,4.0)+vec2(-uTime*.7,0)));
+    contactFoam=edge*motion*(.4+.6*smoothstep(-15.0,19.0,boatPoint.x))*broken;
+    D=max(D,contactFoam*.95);fresh=max(fresh,contactFoam);
+  }
   // Foam has a finite lifetime. Two staggered generations fade at birth and
   // death, so differential rotation cannot wind old foam into endless rings.
   float vr=max(vortexR,1.0),funnelFoam=0.0;
@@ -520,8 +577,8 @@ void main() {
   // Sky visibility falls down the deep funnel, as it does in a narrow valley.
   col*=1.0-.52*uWhirlpool.w*smoothstep(135.0,10.0,vr);
   col = col * T + Lh * (1.0 - T);
-  if(vortexClip)discard;
-  o = uDbg==99?vec4(1.0):vec4(col, 1.0);
+  if(vortexClip||hullClip)discard;
+  o = uDbg==99?vec4(1.0):uDbg==98?vec4(boatPoint,1.0):uDbg==97?vec4(vec3(contactFoam),1.0):vec4(col, 1.0);
 }`;
 
 export class Water {
