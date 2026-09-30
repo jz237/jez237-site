@@ -18,9 +18,15 @@ function horizontal(H, dec) {
   return { el, az, dir: [Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)] };
 }
 
-export function skyState(hours) {
+// `sunOverride` = { alt, az } in degrees (az from north, clockwise) replaces the computed sun position;
+// the moon and the stars still follow `hours`.
+export function skyState(hours, sunOverride = null) {
   const H = (hours - 12) * 15 * RAD;
-  const sun = horizontal(H, SUN_DEC);
+  let sun = horizontal(H, SUN_DEC);
+  if (sunOverride) {
+    const el = clamp(sunOverride.alt, -60, 90) * RAD, az = sunOverride.az * RAD;
+    sun = { el, az, dir: [Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)] };
+  }
   const moon = horizontal(H - ELONG, MOON_DEC);
   const sunAlt = sun.el / RAD, moonAlt = moon.el / RAD;
 
@@ -42,6 +48,7 @@ export function skyState(hours) {
   const lg = Math.log10(level);
   const key = lerp(0.028, 0.19, smoothstep(-5.6, -2.0, lg));
   return {
+    sunAz: ((sun.az / RAD) % 360 + 360) % 360,
     sunDir: sun.dir, moonDir: moon.dir, sunAlt, moonAlt, pre, level, key, MOON_E, dayLevel, moonLevel,
     sunCol: [pre, pre, pre * 0.995],
     moonCol: [pre * MOON_E * 0.86, pre * MOON_E * 0.93, pre * MOON_E * 1.0],

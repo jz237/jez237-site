@@ -65,6 +65,15 @@ export class Rig {
     if (this.onChange) this.onChange(m);
   }
 
+  // Cut to the next shot of the tour (from any mode).
+  nextShot() {
+    if (this.mode !== 'tour') this.setMode('tour');
+    const T = this.t % TOUR_LENGTH;
+    const next = TOUR.find(k => k[0] > T + 2) || TOUR[0];
+    this.t = next[0];
+    this._init = false; this._init2 = false;      // snap to the new pose instead of gliding
+  }
+
   takeOver() { if (this.mode === 'tour') this.setMode('fly'); this.lastInput = performance.now(); }
 
   bind(dom) {
@@ -160,7 +169,7 @@ export class Rig {
       const kk = this._init2 ? 1 - Math.exp(-dt * 4) : 1;
       let dyaw = Math.atan2(Math.sin(yaw - cam.yaw), Math.cos(yaw - cam.yaw));
       cam.yaw += dyaw * kk; cam.pitch += (pitch - cam.pitch) * kk;
-      cam.fov += (fov * DEG - cam.fov) * (1 - Math.exp(-dt * 2));
+      cam.fov += (fov * DEG * (app.fovK || 1) - cam.fov) * (1 - Math.exp(-dt * 2));
       this._init2 = true;
       // a breath of handheld drift
       const tt = app.time;
@@ -192,7 +201,7 @@ export class Rig {
         const dx = tx - cam.x, dz = tz - cam.z, dy = (y.y - 1.0) - cam.y;
         cam.yaw = Math.atan2(dx, -dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
       }
-      cam.fov += (54 * DEG - cam.fov) * (1 - Math.exp(-dt * 3));
+      cam.fov += (54 * DEG * (app.fovK || 1) - cam.fov) * (1 - Math.exp(-dt * 3));
     } else {
       // free flight
       const f = [Math.sin(cam.yaw) * Math.cos(cam.pitch), Math.sin(cam.pitch), -Math.cos(cam.yaw) * Math.cos(cam.pitch)];
@@ -215,7 +224,7 @@ export class Rig {
       for (let i = 0; i < 3; i++) this.vel[i] += (target[i] - this.vel[i]) * k;
       cam.x += this.vel[0] * dt; cam.y += this.vel[1] * dt; cam.z += this.vel[2] * dt;
       cam.y = clamp(cam.y, -150, 6000);
-      cam.fov += (54 * DEG - cam.fov) * (1 - Math.exp(-dt * 3));
+      cam.fov += (54 * DEG * (app.fovK || 1) - cam.fov) * (1 - Math.exp(-dt * 3));
     }
   }
 }
