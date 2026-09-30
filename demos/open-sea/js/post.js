@@ -91,28 +91,9 @@ vec3 agx(vec3 color) {
   return clamp(color, 0.0, 1.0);
 }
 vec3 srgb(vec3 c) { return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
-// Resolve subpixel wave edges, rigging and fins before the display transform.
-vec3 antialiasHDR(vec2 uv) {
-  vec2 px = 1.0 / uRes;
-  vec3 c = texture(uHdr, uv).rgb;
-  float m = sqrt(max(luma(c), 0.0));
-  float nw = sqrt(max(luma(texture(uHdr, uv + px * vec2(-1, 1)).rgb), 0.0));
-  float ne = sqrt(max(luma(texture(uHdr, uv + px * vec2(1, 1)).rgb), 0.0));
-  float sw = sqrt(max(luma(texture(uHdr, uv + px * vec2(-1, -1)).rgb), 0.0));
-  float se = sqrt(max(luma(texture(uHdr, uv + px * vec2(1, -1)).rgb), 0.0));
-  float lo = min(m, min(min(nw, ne), min(sw, se)));
-  float hi = max(m, max(max(nw, ne), max(sw, se)));
-  if (hi - lo < max(0.008, hi * 0.10)) return c;
-  vec2 dir = vec2(-(nw + ne - sw - se), nw + sw - ne - se);
-  float reduce = max((nw + ne + sw + se) * 0.03125, 0.0001);
-  dir = clamp(dir / (min(abs(dir.x), abs(dir.y)) + reduce), -6.0, 6.0) * px;
-  vec3 a = 0.5 * (texture(uHdr, uv - dir / 6.0).rgb + texture(uHdr, uv + dir / 6.0).rgb);
-  vec3 b = a * 0.5 + 0.25 * (texture(uHdr, uv - dir * 0.5).rgb + texture(uHdr, uv + dir * 0.5).rgb);
-  float lb = sqrt(max(luma(b), 0.0));
-  return lb < lo || lb > hi ? a : b;
-}
 void main() {
-  vec3 hdr = antialiasHDR(vUv);
+  vec3 hdr = texture(uHdr,vUv).rgb;
+  hdr=mix(hdr,vec3(0.0),isnan(hdr));hdr=clamp(hdr,vec3(0.0),vec3(60000.0));
   vec3 bloom = texture(uBloom, vUv).rgb;
   float E = texture(uExpo, vec2(0.5)).r * uEVBias;
   vec3 c = (hdr + bloom * uBloomAmt) * E;
@@ -137,12 +118,44 @@ void main() {
   o = vec4(s, 1.0);
 }`;
 
+// Edge resolve samples the bounded display buffer, never raw sun radiance.
+const AA_FS = `
+#include <common>
+in vec2 vUv;
+uniform sampler2D uDisplay;
+uniform vec2 uRes;
+out vec4 o;
+// Resolve subpixel wave edges, rigging and fins after exposure and tone mapping.
+vec3 antialiasDisplay(vec2 uv) {
+  vec2 px = 1.0 / uRes;
+  vec3 c = textureLod(uDisplay, uv, 0.0).rgb;
+  float m = sqrt(max(luma(c), 0.0));
+  float nw = sqrt(max(luma(textureLod(uDisplay, uv + px * vec2(-1, 1), 0.0).rgb), 0.0));
+  float ne = sqrt(max(luma(textureLod(uDisplay, uv + px * vec2(1, 1), 0.0).rgb), 0.0));
+  float sw = sqrt(max(luma(textureLod(uDisplay, uv + px * vec2(-1, -1), 0.0).rgb), 0.0));
+  float se = sqrt(max(luma(textureLod(uDisplay, uv + px * vec2(1, -1), 0.0).rgb), 0.0));
+  float lo = min(m, min(min(nw, ne), min(sw, se)));
+  float hi = max(m, max(max(nw, ne), max(sw, se)));
+  if (hi - lo < max(0.008, hi * 0.10)) return c;
+  vec2 dir = vec2(-(nw + ne - sw - se), nw + sw - ne - se);
+  float reduce = max((nw + ne + sw + se) * 0.03125, 0.0001);
+  dir = clamp(dir / (min(abs(dir.x), abs(dir.y)) + reduce), -4.0, 4.0) * px;
+  vec3 a = 0.5 * (textureLod(uDisplay, uv - dir / 6.0, 0.0).rgb + textureLod(uDisplay, uv + dir / 6.0, 0.0).rgb);
+  vec3 b = a * 0.5 + 0.25 * (textureLod(uDisplay, uv - dir * 0.5, 0.0).rgb + textureLod(uDisplay, uv + dir * 0.5, 0.0).rgb);
+  float lb = sqrt(max(luma(b), 0.0));
+  return lb < lo || lb > hi ? a : b;
+}
+
+void main(){o=vec4(antialiasDisplay(vUv),1.0);}
+`;
+
 export class Post {
   constructor() {
     this.pDown = new Program('bloom.down', FS_VERT, DOWN_FS);
     this.pUp = new Program('bloom.up', FS_VERT, UP_FS);
     this.pExpo = new Program('expo', FS_VERT, EXPO_FS);
     this.pTone = new Program('tone', FS_VERT, TONE_FS);
+    this.pAA = new Program('display.resolve', FS_VERT, AA_FS);
     this.expo = [tex2D(1, 1, { fmt: 'rgba32f', filter: 'nearest' }), tex2D(1, 1, { fmt: 'rgba32f', filter: 'nearest' })];
     this.expoFbo = this.expo.map(t => makeFBO([t]));
     this.expoIdx = 0;
@@ -153,14 +166,16 @@ export class Post {
   resize(w, h) {
     if (w === this.w && h === this.h) return;
     if (this.color) {
-      for (const t of [this.color, this.depth, this.colorCopy, this.depthCopy]) gl.deleteTexture(t.tex);
-      for (const f of [this.fbo, this.fboCopy]) gl.deleteFramebuffer(f.fbo);
+      for (const t of [this.color, this.depth, this.colorCopy, this.depthCopy, this.display]) gl.deleteTexture(t.tex);
+      for (const f of [this.fbo, this.fboCopy, this.displayFbo]) gl.deleteFramebuffer(f.fbo);
       for (const l of [...this.down, ...this.up]) { gl.deleteTexture(l.t.tex); gl.deleteFramebuffer(l.f.fbo); }
     }
     this.w = w; this.h = h;
     this.color = tex2D(w, h, { fmt: 'rgba16f', filter: 'linear', mips: true });
     this.depth = depthTex(w, h);
     this.fbo = makeFBO([this.color], this.depth);
+    this.display=tex2D(w,h,{fmt:'rgba8',filter:'linear'});
+    this.displayFbo=makeFBO([this.display]);
     // copies for refraction reads
     this.colorCopy = tex2D(w, h, { fmt: 'rgba16f', filter: 'linear' });
     this.depthCopy = depthTex(w, h);
@@ -220,11 +235,13 @@ export class Post {
   }
 
   tonemap(w, h, time, opts = {}) {
-    bindFBO(null, w, h);
+    bindFBO(this.displayFbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     this.pTone.use().t('uHdr', 0, this.color).t('uBloom', 1, this.up[0].t).t('uExpo', 2, this.expo[this.expoIdx])
       .f('uBloomAmt', opts.bloom ?? 0.02).f('uTime', time).f('uGrain', opts.grain ?? 0.5).f('uVignette', opts.vignette ?? 0.28)
       .f('uEVBias', opts.ev ?? 1).f('uFlash', 0).f('uNight', opts.night ?? 0).v2('uRes', w, h);
     drawFS();
+    bindFBO(null,w,h);
+    this.pAA.use().t('uDisplay',0,this.display).v2('uRes',w,h);drawFS();
   }
 }

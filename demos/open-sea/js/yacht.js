@@ -100,16 +100,22 @@ float waterHeightAt(vec2 relXZ) {
 float ggx(float nh, float a2) { float d = nh * nh * (a2 - 1.0) + 1.0; return a2 / (PI * d * d); }
 
 void main() {
-  if (uRefl > 0.5 && vRel.y + uCamY < uMirrorY - 0.04) discard;   // only what stands above the water is mirrored
   vec3 N = normalize(vN);
   if (!gl_FrontFacing) N = -N;
   vec3 V = normalize(-vRel);
   int mat = int(vAttr.z + 0.5);
-  // Fragment derivatives give the actual cambered, twisted sail surface normal.
-  if (mat == ${MAT.SAIL}) {
-    vec3 face = normalize(cross(dFdx(vRel), dFdy(vRel)));
-    N = dot(face, N) < 0.0 ? -face : face;
-  }
+  // Evaluate footprints before material branches or reflection clipping. Mobile
+  // drivers cannot supply reliable derivatives in divergent fragment flow.
+  vec3 face = cross(dFdx(vRel), dFdy(vRel));
+  float faceSq = dot(face, face);
+  face = faceSq > 1e-20 ? face * inversesqrt(max(faceSq, 1e-20)) : N;
+  vec3 clothN = dot(face, N) < 0.0 ? -face : face;
+  N = mat == ${MAT.SAIL} ? clothN : N;
+  vec2 clothWidth = fwidth(vAttr.xy);
+  float deckWidth = fwidth(vLocal.z);
+  vec3 ndx=dFdx(N), ndy=dFdy(N);
+  float normalVariance=max(dot(ndx,ndx),dot(ndy,ndy));
+  if (uRefl > 0.5 && vRel.y + uCamY < uMirrorY - 0.04) discard;   // only what stands above the water is mirrored
   vec3 albedo = vec3(0.8); float rough = 0.4, metal = 0.0, trans = 0.0, f0 = 0.04;
   vec3 p = vLocal;
   if (mat == ${MAT.HULL}) {
@@ -124,7 +130,7 @@ void main() {
     albedo = vec3(0.80,0.77,0.67);rough=.32;
   } else if (mat == ${MAT.TEAK}) {
     float edge=min(fract(p.z/.16),1.0-fract(p.z/.16));
-    float plank=smoothstep(.010,.028+fwidth(p.z)/.16,edge);
+    float plank=smoothstep(.010,.028+deckWidth/.16,edge);
     float grain = vnoise(vec2(p.x * 4.0, p.z * 60.0));
     albedo = vec3(.40,.23,.105) * mix(0.75, 1.15, grain) * mix(.22,1.0,plank);
     rough = 0.55;
@@ -139,17 +145,14 @@ void main() {
   else if (mat == ${MAT.SAIL}) {
     albedo = vec3(0.92, 0.90, 0.84); rough = 0.85; trans = 0.45;
     float seamDist = min(fract(vAttr.y * 14.0), 1.0 - fract(vAttr.y * 14.0));
-    float seam = (1.0 - smoothstep(0.012, 0.024 + fwidth(vAttr.y) * 14.0, seamDist)) * 0.12;
-    float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(fwidth(vAttr.x) * 900.0, fwidth(vAttr.y) * 1200.0));
+    float seam = (1.0 - smoothstep(0.012, 0.024 + clothWidth.y * 14.0, seamDist)) * 0.12;
+    float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(clothWidth.x * 900.0, clothWidth.y * 1200.0));
     float wv = 0.985 + 0.015 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0) * weaveFilter;
     albedo *= wv * (1.0 - seam);
-    float batten = smoothstep(0.004, 0.0, abs(fract(vAttr.y * 5.0 + 0.1) - 0.5) - 0.495 + 0.001) * step(0.55, vAttr.x) * 0.0;
   }
 
   // Integrate unresolved normal variation on small metal tubes. Their highlights
   // become a broad sheen at distance rather than isolated saturated pixels.
-  vec3 ndx=dFdx(N), ndy=dFdy(N);
-  float normalVariance=max(dot(ndx,ndx),dot(ndy,ndy));
   rough=clamp(sqrt(rough*rough+0.30*normalVariance),rough,0.85);
 
   // wet splash zone near the waterline
@@ -169,9 +172,9 @@ void main() {
     vec3 E = (l == 0 ? sunE * ss : moonE * sm) * shd;
     float nl = dot(N, Ld);
     float tr = mat == ${MAT.SAIL} ? trans * max(-nl, 0.0) : 0.0;
-    nl = max(nl, 0.0);
+    nl = clamp(nl, 0.0, 1.0);
     vec3 H = normalize(V + Ld);
-    float nh = max(dot(N, H), 0.0), vh = max(dot(V, H), 0.0), nv = max(dot(N, V), 1e-3);
+    float nh = clamp(dot(N, H), 0.0, 1.0), vh = clamp(dot(V, H), 0.0, 1.0), nv = clamp(dot(N, V), 1e-3, 1.0);
     vec3 F = F0 + (1.0 - F0) * pow(1.0 - vh, 5.0);
     float k = (rough + 1.0) * (rough + 1.0) / 8.0;
     float G = (nl / (nl * (1.0 - k) + k)) * (nv / (nv * (1.0 - k) + k));
@@ -189,7 +192,7 @@ void main() {
   vec3 envR = envRadiance(vec3(R.x, max(R.y, 0.02), R.z), clamp(rough * 6.0, 0.0, 6.0));
   float below = smoothstep(-0.25, 0.1, R.y);
   envR = mix(lightGround(), envR, below);
-  vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - max(dot(N, V), 0.0), 5.0);
+  vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 5.0);
   col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : mix(0.4, 1.0, metal));   // painted surfaces: the sky/sea fill is a weak sheen, not a second light
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky

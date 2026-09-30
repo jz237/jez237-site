@@ -1,0 +1,61 @@
+<!doctype html><meta charset="utf-8"><title>Ocean rendering portability regression</title>
+<canvas id="c" width="256" height="128"></canvas><pre id="result">Running…</pre>
+<script type="module">
+import {initGL,gl,caps,Program,FS_VERT,tex2D,makeFBO,bindFBO,drawFS,readF32} from '/demos/open-sea/js/gl.js';
+import {Post} from '/demos/open-sea/js/post.js';
+import {OceanSim} from '/demos/open-sea/js/ocean.js';
+import {Ripples} from '/demos/open-sea/js/ripples.js';
+initGL(document.getElementById('c'),{preserve:true});
+const checks=[];
+function check(name,ok,details){checks.push({name,ok,...details});}
+function fieldStats(data){let nonfinite=0,max=0;for(const v of data){if(!Number.isFinite(v))nonfinite++;else max=Math.max(max,Math.abs(v));}return {nonfinite,max};}
+window.run=()=>{
+  // Descending fades and collapsed ranges used by calm/disabled cascades.
+  const rt=tex2D(3,1,{fmt:'rgba32f',filter:'nearest'}),f=makeFBO([rt]);
+  const ramp=new Program('test.ramps',FS_VERT,`out vec4 o;void main(){float x=(gl_FragCoord.x-.5)/2.;o=vec4(smoothstep(1.,0.,x),smoothstep(.5,.5,x),smoothstep(0.,1.,x),1.);}`);
+  bindFBO(f);ramp.use();drawFS();const values=Array.from(readF32(f,0,0,3,1));
+  check('descending and collapsed GPU fades',values.every(Number.isFinite)&&Math.abs(values[0]-1)<1e-6&&Math.abs(values[4]-.5)<1e-6&&Math.abs(values[8])<1e-6&&values[1]===0&&values[5]===1&&values[9]===1,{values});
+
+  // Isolated HDR glints must not turn into long saturated streaks during AA.
+  const post=new Post();post.resize(256,128);
+  const exposure=new Float32Array([1,1,0,1]);
+  gl.bindTexture(gl.TEXTURE_2D,post.expo[post.expoIdx].tex);gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,1,1,gl.RGBA,gl.FLOAT,exposure);
+  const source=new Float32Array(256*128*4);
+  for(let y=0;y<128;y++)for(let x=0;x<256;x++){
+    const i=(y*256+x)*4;const hot=x%24===12&&y%24===12;
+    source[i]=source[i+1]=source[i+2]=hot?60000:.02;source[i+3]=1;
+  }
+  gl.bindTexture(gl.TEXTURE_2D,post.color.tex);gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,256,128,gl.RGBA,gl.FLOAT,source);
+  post.tonemap(256,128,0,{bloom:0,grain:0,vignette:0,night:0});
+  const pixels=new Uint8Array(256*128*4);gl.readPixels(0,0,256,128,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+  let bright=0,farBright=0,longest=0;
+  for(let y=0;y<128;y++){let run=0;for(let x=0;x<256;x++){
+    const i=(y*256+x)*4,isBright=Math.min(pixels[i],pixels[i+1],pixels[i+2])>224;
+    if(isBright){bright++;run++;const dx=Math.abs(x%24-12),dy=Math.abs(y%24-12);if(dx>1||dy>1)farBright++;}else run=0;
+    longest=Math.max(longest,run);
+  }}
+  for(let x=0;x<256;x++){let run=0;for(let y=0;y<128;y++){const i=(y*256+x)*4;run=Math.min(pixels[i],pixels[i+1],pixels[i+2])>224?run+1:0;longest=Math.max(longest,run);}}
+  check('isolated sun glints stay local after display resolve',farBright===0&&longest<=3&&bright<=110,{inputGlints:55,bright,farBright,longest});
+
+  const sim=new OceanSim({N:32,cascades:5});sim.setSea(0);sim.cur={...sim.target};sim.freezeServo=true;
+  for(let i=0;i<12;i++)sim.update(1/60);
+  let nonfinite=0,peak=0;
+  for(let layer=0;layer<sim.count;layer++){
+    const ff=makeFBO([{tex:sim.foamTex,layer}]),d=readF32(ff,0,0,sim.N,sim.N);
+    for(let i=0;i<d.length;i+=4){if(!Number.isFinite(d[i])||!Number.isFinite(d[i+1]))nonfinite++;else peak=Math.max(peak,Math.abs(d[i]),Math.abs(d[i+1]));}
+    gl.deleteFramebuffer(ff.fbo);
+  }
+  check('glassy sea produces finite zero foam in every cascade',nonfinite===0&&peak===0,{nonfinite,peak,cascades:sim.count});
+
+  const ripples=new Ripples(128);ripples.rain=1;ripples.sources=[[16,16,.6,.35]];
+  const intervals=[1/240,1/60,1/30,.18,.004,.5,1/120,.02];
+  for(let i=0;i<360;i++)ripples.update(intervals[i%intervals.length]);
+  const rippleData=readF32(ripples.curF,0,0,ripples.N,ripples.N),ripple=fieldStats(rippleData);
+  let maxHeight=0,maxVelocity=0;for(let i=0;i<rippleData.length;i+=4){maxHeight=Math.max(maxHeight,Math.abs(rippleData[i]));maxVelocity=Math.max(maxVelocity,Math.abs(rippleData[i+1]));}
+  check('rain and hull ripples remain finite through hitches',ripple.nonfinite===0&&maxHeight<.03&&maxVelocity<=3.00001,{nonfinite:ripple.nonfinite,maxHeight,maxVelocity,steps:ripples.stats.steps,droppedSteps:ripples.stats.dropped});
+  const error=gl.getError();check('WebGL error state',error===gl.NO_ERROR,{error});
+  const result={renderer:caps.renderer,scope:'GPU regression; a desktop run does not validate a physical phone.',passed:checks.every(c=>c.ok),checks};
+  document.getElementById('result').textContent=JSON.stringify(result,null,2);window.result=result;return result;
+};
+window.ready=true;
+</script>
