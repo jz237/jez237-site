@@ -1,5 +1,127 @@
 [
   {
+    "id": "2026-09-29-factual-infographic-factual-infographic-trachelophorus-gira",
+    "title": "Factual infographic: Trachelophorus giraffa — The Rolled Leaf Nursery",
+    "tests": "Full 96-entry factual archive scanned: no Trachelophorus/giraffe weevil prior topic; sources fetched 2026-09-30 UTC; visual sequence limited to claims in evidence.; archive_slot=2026-09-29T20:20; concept=trachelophorus-giraffa-female-egg-leaf-roll-nursery; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, sophisticated, richly illustrated DIRECT-CANVAS scientific infographic in a tall portrait composition, not a photographed poster, specimen tray, field kit, workbench, museum case, or room. Title legibly: “GIRAFFE WEEVIL: A LEAF-ROLLED NURSERY”; subtitle “Trachelophorus giraffa • Madagascar”. One enormous naturalistic macro hero of an adult FEMALE giraffe weevil working on a living green leaf dominates the upper central canvas: correct beetle segmentation and exactly six jointed legs, black head/body/neck and knobby antennae, vivid red-orange hardened wing covers with believable specular texture, leaf veins, fine surface hairs, humid forest light, shallow photographic depth of field. The insect and leaf occupy most of the image, with callout leader lines to the real mechanism. Do not exaggerate the female’s neck to the male length. Build EIGHT substantive, clearly separated supporting information panels around the hero, with concise large readable labels and substantial biology illustrations, not text-heavy filler: (1) “WHO IS IT?” precise inset whole-beetle dorsal and lateral profiles labeling head, neck, six legs and red wing covers, plus Attelabidae / beetle identity; (2) “TWO NECKS” large side-by-side whole-adult male and female profiles, male clearly longer-necked, relative comparison only, no unsupported exact measurements; (3) “A LEAF IS CHOSEN” close-up of the female on a broad host-tree leaf, showing leaf edge and veins at credible beetle-to-leaf scale; (4) “ONE EGG” magnified cutaway showing a single egg on the leaf before rolling, not a cluster; (5) “ROLL THE LEAF” three-frame mechanism sequence of the female folding and rolling that same leaf into a narrow tube around the egg, with small directional arrows; (6) “THE PACKET FALLS” detached rolled-leaf tube moving from twig toward forest-floor leaf litter, with a clean causal arrow; (7) “FIRST FOOD” cross-section close-up of larva inside the leaf packet feeding on leaf tissue after hatching; (8) “FOREST CONTEXT” small ecological vignette with Madagascar silhouette, forest tree canopy, leaf and floor positions, labeling the range as Madagascar forests. Include at least FOUR large explanatory biological close-ups: female head/neck/antennae, male-versus-female neck profile, single egg and leaf-roll cutaway, larva inside cut packet. Visual information layers must include dominant specimen hero, numbered process sequence, comparative anatomy, detailed macro texture windows, a cutaway, habitat context and a compact label hierarchy. Set the diagram panels in an elegant integrated deep charcoal/forest-green field with warm ivory lettering and restrained amber/carmine callouts; realistic photomacro illustration blended with precise scientific drafting. Prioritize generous legible typography, crisp arrows, accurate six-legged anatomy and source-bounded assertions. No bibliography, URLs, fake statistics, invented behavior, humanlike expressions, monstrous scale, logos, watermarks or extra insects mistaken for this species. This is the artwork itself, edge-to-edge opaque image.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-trachelophorus-gira.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-trachelophorus-gira.webp",
+    "color": "#4a4c2a",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "trachelophorus-giraffa-female-egg-leaf-roll-nursery",
+      "imageSha256": "8410897ab35bbf9f5e069df0f1fc22df5a29ef228b5334e2971d356cf15ed7f5",
+      "imageDHash": "77594dc1e1edbb33"
+    },
+    "factualInfographic": {
+      "topic": "How female Trachelophorus giraffa roll a leaf around a single egg and provision the larva, alongside the species’ sexually dimorphic neck",
+      "description": "A source-verified macro-biology plate of the Madagascar giraffe weevil, emphasizing female egg provisioning within a rolled leaf and the male/female neck difference.",
+      "sourceNote": "San Francisco Zoo & Gardens https://www.sfzoo.org/giraffe-weevil/; Royal Ontario Museum https://artsandculture.google.com/asset/giraffe-weevil-trachelophorus-giraffa/4AFbWehsCNBllA?hl=en; Wildlife Madagascar https://www.wildlifemadagascar.org/animals/madagascar-giraffe-necked-weevil/. Verified taxonomy, Madagascar forest habitat, adult morphology, sexual neck difference, and the single-egg rolled-leaf provisioning sequence; no uncertain exact measurements or purpose claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-30T00:22:17.254445+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "San Francisco Zoo & Gardens",
+            "title": "Giraffe weevil",
+            "sourceType": "museum",
+            "url": "https://www.sfzoo.org/giraffe-weevil/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Royal Ontario Museum",
+            "title": "Giraffe Weevil, Trachelophorus giraffa (museum specimen record)",
+            "sourceType": "museum",
+            "url": "https://artsandculture.google.com/asset/giraffe-weevil-trachelophorus-giraffa/4AFbWehsCNBllA?hl=en"
+          },
+          {
+            "id": "S3",
+            "publisher": "Wildlife Madagascar",
+            "title": "Madagascar Giraffe-necked Weevil",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.wildlifemadagascar.org/animals/madagascar-giraffe-necked-weevil/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The accepted common and scientific names are giraffe weevil and Trachelophorus giraffa; this is an insect beetle in the leaf-rolling weevil family Attelabidae.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The species is endemic to forest in Madagascar and lives on trees, feeding on leaves.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The adult has a black head, neck, body, six legs and antennae, with red-orange hardened wing covers on its back.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Males have substantially longer necks than females; the zoo reports approximately two to three times as long.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The long male neck likely aids competition, but the graphic does not claim a single proven purpose.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A female rolls a leaf into a tube around one egg.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The female separates the completed leaf packet from the tree, and it falls to the forest floor.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The rolled leaf provides food for the newly hatched larva in its first days.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The female and male are small beetles relative to the broad leaf they occupy; illustrations are magnified, not life-size.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The life-cycle sequence shown is adult female, one egg within a rolled leaf, larva feeding in the packet.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-29-factual-infographic-factual-infographic-sea-butterfly-a-she",
     "title": "Factual infographic: Sea Butterfly — A Shell in Changing Seawater",
     "tests": "; archive_slot=2026-09-29T00:20; concept=limacina-helicina-aragonite-shell-dissolution-seawater; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
@@ -108,6 +230,115 @@
             "claim": "Coastal upwelling can bring carbon-dioxide-rich, low-saturation water toward the surface in the northeastern Pacific.",
             "sourceIds": [
               "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu",
+    "title": "Factual infographic: Salt Marsh — Roots, Mud, and Carbon",
+    "tests": "NOAA National Ocean Service, USGS, and NOAA NCCOS pages fetched 2026-09-29; no salt-marsh topic in full 96-entry factual archive. No unsupported numerical rates or permanence claims.; archive_slot=2026-09-29T16:20; concept=salt-marsh-tidal-sediment-roots-carbon-storage; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: factual-infographic",
+    "prompt": "Create the FINISHED artwork directly: a museum-quality, richly illustrated scientific infographic on a single opaque portrait canvas, not a photo of a poster, wall display, table, specimen tray, or interface. Subject: HOW A SALT MARSH BUILDS HEIGHT AND STORES CARBON. Make the dominant hero a precise, beautiful vertical cutaway through a tidal salt marsh, occupying the broad center of the image: an incoming shallow tidal sheet over dense but non-species-specific marsh grasses; finely stratified mineral silt and dark organic soil; an intricate, visibly living and dead root network descending into water-saturated mud; subtle suspended particles settling from flood water; a narrow oxygenated skin over deeper oxygen-poor strata. The section should feel physically credible, with glancing estuary light on ripples, delicate grass blades and seed heads, translucent amber water, granular silt, interleaved tan roots and old dark fragments, and an exact clear boundary between above-water landscape and belowground process. Natural teal, saltwater blue, olive, tan, charcoal and restrained coral accent colors; crisp ink-and-gouache scientific illustration with luminous depth, not glossy 3-D marketing art.\n\nSurround the hero with EIGHT substantive, clearly numbered illustrated teaching panels, arranged in a disciplined editorial grid with ample white/cream breathing room and large readable type: (1) ATMOSPHERIC CO2 TO PLANT: carbon dioxide entering leaves via photosynthesis, carbon allocated to shoots and roots; show a simple arrow pathway. (2) FLOOD TIDE DELIVERS SILT: a close-up of suspended mineral grains arriving with tidal water and settling among stems at the marsh surface. (3) ROOTS ADD VOLUME: an enlarged soil cutaway showing newer root growth interlaced with older root remains and the resulting belowground material accumulation. (4) ORGANIC BURIAL: a sequential three-frame strip from dead leaf/root material to incorporation into mud to deeper burial; do not imply all material survives. (5) WATER LIMITS OXYGEN: a microscopic diagram comparing a thin oxygenated surface to deeper water-saturated, oxygen-poor pores, with a short label that oxygen diffuses slowly through water. (6) SLOWER DECAY, NOT ZERO DECAY: two small side-by-side decomposition pathways; some carbon remains in soil while some returns to air through respiration. (7) TWO CARBON INPUT ROUTES: distinguish local marsh-plant material from organic matter carried in from elsewhere; no numbers and no assertion that one route always dominates. (8) ELEVATION AND RISING WATER: a schematic side-profile of root material plus trapped flood-tide sediment raising the marsh surface, alongside a rising-water reference line; label that keeping pace depends on conditions, not a guarantee. Include at least THREE unmistakable explanatory close-up diagrams: individual sediment grains caught among stems, a magnified water-filled soil pore with sparse oxygen, and a root/organic fragment layer showing deposition and burial. Use fine precise leader lines from every panel into the hero; let arrows distinguish carbon flow, sediment movement, and elevation gain using three consistent color codes and a compact legend. Include legible, concise headings and short callouts only; no tiny paragraphs, statistics, unsupported species labels, bibliography, URLs, logos, watermark, or decorative filler. Keep every depicted causal arrow faithful to the panel wording and preserve a high visual-information density without sacrificing readability. This is an actual educational plate, not a proposal, prompt card or mockup.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-salt-marsh-roots-mu.webp",
+    "color": "#9a9687",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "salt-marsh-tidal-sediment-roots-carbon-storage",
+      "imageSha256": "7c4f3f7e1b6bb0568b0e9a6d1a04365e04591ee108ccc6b0608442822f3c02f3",
+      "imageDHash": "cce3b3e8e8a13094"
+    },
+    "factualInfographic": {
+      "topic": "How salt-marsh vegetation, tidal sediment, and oxygen-poor soil build marsh elevation and store carbon",
+      "description": "An illustrated cross-section of salt-marsh carbon pathways and surface elevation gain through flood-tide sediment deposition and root accumulation.",
+      "sourceNote": "Verified plant carbon uptake, root and sediment contributions to elevation, oxygen-poor soil and slow decay, and variable carbon sources against NOAA National Ocean Service https://oceanservice.noaa.gov/ecosystems/coastal-blue-carbon/ ; U.S. Geological Survey https://www.usgs.gov/publications/carbon-sources-sediments-a-restoring-vs-historically-unaltered-salt-marsh ; NOAA NCCOS https://coastalscience.noaa.gov/project/salt-marsh-ecology-era-sea-level-rise/ . No quantitative rates are claimed.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T20:20:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA National Ocean Service",
+            "title": "Coastal Blue Carbon",
+            "sourceType": "government-agency",
+            "url": "https://oceanservice.noaa.gov/ecosystems/coastal-blue-carbon/"
+          },
+          {
+            "id": "S2",
+            "publisher": "U.S. Geological Survey",
+            "title": "Carbon sources in the sediments of a restoring vs. historically unaltered salt marsh",
+            "sourceType": "government-agency",
+            "url": "https://www.usgs.gov/publications/carbon-sources-sediments-a-restoring-vs-historically-unaltered-salt-marsh"
+          },
+          {
+            "id": "S3",
+            "publisher": "NOAA National Centers for Coastal Ocean Science",
+            "title": "Salt Marsh Ecology in an Era of Sea Level Rise",
+            "sourceType": "government-agency",
+            "url": "https://coastalscience.noaa.gov/project/salt-marsh-ecology-era-sea-level-rise/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Salt marsh vegetation takes up atmospheric carbon dioxide through photosynthesis and uses carbon to grow leaves, stems, and roots.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Flood tides carry sediment into a marsh, where some is trapped and added to the marsh surface.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Root growth and accumulated root material add belowground material that can raise marsh surface elevation.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Dead leaves and roots can become incorporated and buried in salt-marsh soil.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Water-saturated wetland soil is largely oxygen-poor because oxygen diffuses slowly through water.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Organic material decomposes more slowly in oxygen-poor soil, allowing some carbon to remain stored underground for long periods.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Some captured carbon returns to air through plant or microbial respiration; not all carbon is permanently retained.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Salt-marsh sediment carbon may come both from marsh plants and from organic material transported in from elsewhere; a USGS comparison found source mixtures differed between a restoring and reference marsh.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Marsh persistence amid rising sea level depends on surface elevation gain, including root-material accumulation and flood-tide sediment deposition; ability to keep pace varies with conditions.",
+            "sourceIds": [
+              "S3"
             ]
           }
         ]
@@ -237,6 +468,124 @@
             "claim": "Detached kelp fronds can become food for grazers and decomposers in the forest food web.",
             "sourceIds": [
               "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus",
+    "title": "Factual infographic: Hymenopus coronatus — A Flower on a Leaf",
+    "tests": "Sources fetched 2026-09-29; juvenile-on-leaf emphasis follows field observations; no unsupported numerical size or universal prey claim.; archive_slot=2026-09-29T12:20; concept=orchid-mantis-juvenile-flowerlike-leaf-bee-ambush; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the FINISHED direct-canvas scientific infographic, not a photographed poster, specimen tray, workbook, museum case, or mockup. Portrait-oriented museum-quality biological plate, richly illustrated and highly legible. Subject: a real juvenile female orchid mantis, Hymenopus coronatus (Mantodea: Hymenopodidae), a predatory insect from tropical Southeast Asia. Main headline exactly “ORCHID MANTIS: A FLOWER ON A LEAF”; subhead “Hymenopus coronatus | juvenile female | flowerlike predator”. The dominant central hero, taking over half the visual area, is an enormous naturalistic macro rendering of one juvenile perched directly on a broad green living leaf in a humid Southeast Asian forest understory. Correct insect anatomy: distinct head, thorax, abdomen, six legs total, enlarged folded raptorial front legs, two pairs of walking legs bearing pale broad petal-like femoral lobes, white-to-blush-pink body and upward-curved juvenile abdomen. Do not add extra limbs, petals growing from the body, or an actual orchid blossom behind it. Show leaf veins, dew, soft broken canopy light, fine cuticle texture, articulated joints, realistic compound eyes and mouthparts; restrained cinematic macro depth of field but every essential structure clearly readable. An approaching oriental honeybee may appear in a small separate behavior inset, not falsely posed as pollinating the mantis.\n\nSurround the hero with SEVEN substantial distinct scientific panels, integrated into the same flat direct canvas with crisp leader lines and spacious readable type, not seven tiny boxes: (1) enlarged femoral-lobe close-up, dorsal and profile views, labeling “petal-like femoral lobes” and “mid- and hind-legs”; show their bilateral form, not extra floral organs. (2) enlarged head and folded raptorial-foreleg close-up, labeling “eyes”, “mouthparts”, and “grasping forelegs”; preserve the six-leg count across the organism. (3) enlarged white/pink cuticle and curved juvenile abdomen close-up, labeling “broad abdomen” and “juvenile upward bend”. (4) a clear visible-light / ultraviolet-sensitive comparison of the same juvenile against foliage, with simple white/pink versus UV-absorbing silhouette and the concise label “flowerlike signal contrasts with leaf background”; do not imply that humans directly see UV. (5) three-step mechanism sequence with large accurate mini-scenes: “perch on leaf → visiting bee approaches → raptorial forelegs seize prey”; label it an observed predator–prey encounter, never nectar reward. (6) qualitative juvenile-versus-adult female comparison, showing a leaf-perched curved-abdomen juvenile beside a winged adult female with less-upturned abdomen; no invented durations or measurements. (7) habitat and scale context: layered tropical Southeast Asian understory leaves and a bee-sized context silhouette; use “Southeast Asian tropical forest” and “insect-sized ambush predator”, without invented numerical range or dimensions. Put three or more scientific explanatory macro windows unmistakably large enough to inspect, and give all seven panels meaningful visual content. Fine ivory hairlines, dark forest-green typography, muted blush and botanical greens, pale matte background field, professional editorial hierarchy, precise but not tiny labels; microscopy-grade texture and believable lighting. No bibliography, URL, watermark, decorative pseudo-data, invented statistics, exact size bars, taxonomic errors, or unsupported claims. The biology, not paragraphs, occupies most of the canvas.",
+    "image": "images/2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus.jpg",
+    "thumb": "thumbs/2026-09-29-factual-infographic-factual-infographic-hymenopus-coronatus.webp",
+    "color": "#a3a189",
+    "date": "2026-09-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "orchid-mantis-juvenile-flowerlike-leaf-bee-ambush",
+      "imageSha256": "345d16fb0333579cddab0fa4c502de8dbbe3b9365a10fa8c78a7838379193e05",
+      "imageDHash": "1b6818c26ed35b9b"
+    },
+    "factualInfographic": {
+      "topic": "How juvenile orchid mantises (Hymenopus coronatus) use flowerlike morphology and visual signals to attract and capture visiting insects from foliage",
+      "description": "Juvenile female orchid mantis morphology and visual predatory deception on foliage, including documented bee approach and capture.",
+      "sourceNote": "Verified morphology, UV-associated visual signal, leaf-perching juveniles and observed bee approach/capture from Nature Communications https://www.nature.com/articles/s41467-023-40355-1 ; Macquarie University https://researchers.mq.edu.au/en/publications/coloration-and-morphology-of-the-orchid-mantis-ihymenopus-coronat/ ; Zoological Science https://bioone.org/journals/zoological-science/volume-31/issue-12/zs140126/Double-Trick-Visual-and-Chemical-Mimicry-by-the-Juvenile-Orchid/10.2108/zs140126.full .",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-29T16:21:59.128691+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Nature Communications",
+            "title": "Evolutionary genomics of camouflage innovation in the orchid mantis",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41467-023-40355-1"
+          },
+          {
+            "id": "S2",
+            "publisher": "Macquarie University",
+            "title": "Coloration and morphology of the orchid mantis Hymenopus coronatus (Mantodea: Hymenopodidae)",
+            "sourceType": "university",
+            "url": "https://researchers.mq.edu.au/en/publications/coloration-and-morphology-of-the-orchid-mantis-ihymenopus-coronat/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Zoological Science",
+            "title": "“Double-Trick” Visual and Chemical Mimicry by the Juvenile Orchid Mantis Hymenopus coronatus used in Predation of the Oriental Honeybee Apis cerana",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://bioone.org/journals/zoological-science/volume-31/issue-12/zs140126/Double-Trick-Visual-and-Chemical-Mimicry-by-the-Juvenile-Orchid/10.2108/zs140126.full"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hymenopus coronatus is an orchid mantis (Mantodea: Hymenopodidae), a predatory insect with six legs and raptorial forelegs.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The species is reported from tropical Southeast Asian habitats including Thailand, Malaysia and Indonesia; observed juvenile mantises rested or hunted on leaves.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The white and pink orchid mantis has broad abdomen and petal-like lobes on the mid- and hind-leg femora, producing a generalized flowerlike silhouette rather than copying one particular orchid species.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The petal-like femoral lobes have bilaterally symmetric shape patterns in juvenile and adult females.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Orchid mantis body white primarily absorbs ultraviolet light; visual comparison found low color contrast among body parts and can make the insect resemble UV-absorbing flowers to hymenopteran observers.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "In field observations, a juvenile mantis on foliage contrasted with nearby leaves in ultraviolet-sensitive imaging.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Field observations found juvenile females on leaves and adult females in some cases on flowers; juveniles bend the abdomen upward while adult wings constrain that posture.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Oriental honeybees were observed approaching juvenile female mantises as though to land on a flower; juveniles captured visiting bees with their predatory forelegs.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The depicted sequence is approach to flowerlike visual signal, hover near juvenile mantis, then foreleg capture; this is observed behavior, not nectar exchange or pollination by the mantis.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Juvenile and adult female forms differ in wing development and posture; a small stage comparison is qualitative and not a timed life-cycle chart.",
+            "sourceIds": [
+              "S3"
             ]
           }
         ]
