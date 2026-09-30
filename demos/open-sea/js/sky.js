@@ -1,6 +1,9 @@
 // Atmosphere LUTs and the sky background pass (sun, moon, stars, clouds composite).
 import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS } from './gl.js';
 import './glsl.js';
+import { waterParams } from './water-types.js';
+
+const DEFAULT_WATER_PARAMS = waterParams();
 
 const TRANS_FS = `
 #include <common>
@@ -235,6 +238,8 @@ export class Sky {
   setLightUniforms(p, s, camAlt) {
     p.v3('uSunDir', s.sunDir).v3('uSunCol', s.sunCol).v3('uMoonDir', s.moonDir).v3('uMoonCol', s.moonCol)
       .v3('uAirglow', s.airglow).f('uCamAlt', camAlt).f('uHaze', s.haze).f('uOvercast', s.overcast || 0);
+    const w = s.water || DEFAULT_WATER_PARAMS;
+    p.v3v('uCATT', w.catt).v3v('uKD', w.kd).v3v('uRRS', w.rrs).v3v('uRw', w.rw).v3v('uSSS', w.sss);
   }
 
   updateLUT(s, camAlt) {
