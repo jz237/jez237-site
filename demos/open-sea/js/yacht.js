@@ -405,7 +405,7 @@ void main() {
   o=vec4(col,alpha);
 }`;
 
-// A small, critically-damped follower for heave/pitch/roll
+// A damped follower for heave/pitch/roll.
 class Spring {
   constructor(w, z) { this.w = w; this.z = z; this.x = 0; this.v = 0; }
   step(target, dt) {
@@ -448,7 +448,9 @@ export class Yacht {
     // pose
     this.x = 0; this.z = 0; this.psi = 0; this.speed = 2.5;
     this.current=new HullCurrent();
-    this.heave=new Spring(1.8,.75);this.pitchS=new Spring(1.25,.76);this.rollS=new Spring(1.05,.75);
+    // A little more vertical restoring force, with enough damping to retain
+    // the weight of the schooner as an approaching swell lifts it.
+    this.heave=new Spring(2.1,.82);this.pitchS=new Spring(1.25,.76);this.rollS=new Spring(1.05,.75);
     this.yawS = new Spring(0.9, 0.7);
     this.heaveV = 0; this.pitch = 0; this.roll = 0; this.yaw = 0;
     this.y = 0;
@@ -556,7 +558,8 @@ export class Yacht {
       // The large-scale pressure surface is the moving buoyancy datum; only
       // the short FFT waves excite the heave spring. This prevents artificial
       // submersion when a 150 m funnel is filled during switch-off.
-      this.y = this.heave.step(waveMean-.10,h)+(mean-waveMean);
+      // Modest afloat trim: 35 cm more freeboard than the former setting.
+      this.y = this.heave.step(waveMean+.25,h)+(mean-waveMean);
       this.pitch = this.pitchS.step(pitchT, h);
       this.roll = clamp(this.rollS.step(this.heelTarget+rollT+this.current.heel,h),-1.35,1.35);
       this.yaw = this.yawS.step(0.012 * Math.sin(this.t * 0.31) + 0.25 * rollT * Math.sign(this.tack), h);
