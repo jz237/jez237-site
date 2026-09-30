@@ -31,7 +31,7 @@ use these instructions before writing code or snippets.
   general-purpose `snapshots` album for everything else. Every album
   renders from a `manifest.json` in its folder — add photos to the
   manifest, never to the album HTML. See `photos/README.md`.
-- `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
+- `/experiments/image-gen-2-benchmark/` - daily AI Images prompts and
   generated image gallery.
 - `/experiments/image-gen-2-benchmark/worlds.html` - fictional-world
   image archive views.
@@ -454,7 +454,7 @@ node computer-chronicle/validate-issue-data.mjs
 
 ## Image prompt gallery
 
-The Daily GPT Image 2 prompt gallery lives at
+The Daily AI Images prompt gallery lives at
 `/experiments/image-gen-2-benchmark/`.
 
 Important files:

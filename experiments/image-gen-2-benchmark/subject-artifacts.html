@@ -292,7 +292,6 @@
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
               ${subject.description ? `<p class="desc">${escapeHtml(subject.description)}</p>` : ''}
-              ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
               <details>
                 <summary>Show prompt</summary>
                 <pre>${escapeHtml(item.prompt)}</pre>
