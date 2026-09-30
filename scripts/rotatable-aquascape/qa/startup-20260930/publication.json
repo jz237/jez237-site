@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-09-30T14:54:38.401Z",
+  "report": [
+    {
+      "site": "hidden-reef",
+      "kind": "freshwater",
+      "url": "https://hidden-reef.pages.dev/showroom/aquarium/",
+      "assets": [
+        "assets/index-NtsgbNM-.js",
+        "assets/index-S7kWbGqY.css"
+      ],
+      "changedPixels": 193906,
+      "autoplay": true
+    },
+    {
+      "site": "hidden-reef",
+      "kind": "reef",
+      "url": "https://hidden-reef.pages.dev/showroom/reef/",
+      "assets": [
+        "assets/index-D568PLNu.js",
+        "assets/index-DBjqBxyQ.css"
+      ],
+      "changedPixels": 97222,
+      "autoplay": true
+    },
+    {
+      "site": "jez237",
+      "kind": "freshwater",
+      "url": "https://jez237.com/demos/rotatable-aquascape/",
+      "assets": [
+        "assets/index-NtsgbNM-.js",
+        "assets/index-S7kWbGqY.css"
+      ],
+      "changedPixels": 194551,
+      "autoplay": true
+    },
+    {
+      "site": "jez237",
+      "kind": "reef",
+      "url": "https://jez237.com/demos/reef-aquarium/",
+      "assets": [
+        "assets/index-D568PLNu.js",
+        "assets/index-DBjqBxyQ.css"
+      ],
+      "changedPixels": 101076,
+      "autoplay": true
+    }
+  ],
+  "sourceCommit": "f6d81d827c633ccc04aeb01dada9944bb77b2b74",
+  "hiddenReefDeployment": "https://d9cbbd97.hidden-reef.pages.dev",
+  "jez237Deployment": "https://99e7d00e.jez237-site.pages.dev",
+  "freshwaterAllChunksAndModelBytesVerified": true,
+  "jez237FunctionsImagesPondChecks": true,
+  "headerShortcutAbsentOnBothSites": true
+}
