@@ -80,7 +80,7 @@ uniform vec3 uCamAbs;   // absolute camera position
 uniform vec4 uFlash;    // xyz position relative to camera (m), w pre-exposed intensity
 
 float heightGrad(float h, float type) {
-  float cu = smoothstep(0.0, 0.09, h) * smoothstep(1.0, 0.5, h);
+  float cu = smoothstep(0.0, 0.09, h) * smoothstep(1.0, 0.74, h);
   float st = smoothstep(0.0, 0.14, h) * smoothstep(0.62, 0.30, h);
   return mix(cu, st, type);
 }
@@ -97,10 +97,14 @@ float cloudDensity(vec3 p, float detailAmt) {
   float pres = cloudPresence(p.xz);
   if (pres <= 0.0) return 0.0;
   vec2 xz = p.xz + uCloudB.zw;
-  vec4 s = texture(uShape, vec3(xz.x, p.y * 1.15, xz.y) / 5600.0);
+  // Broad humid regions contain several separate billows with a shared base.
+  vec4 s = texture(uShape, vec3(xz.x, p.y * 1.45, xz.y) / 3900.0);
   float fbmL = dot(s.gba, vec3(0.625, 0.25, 0.125));
   float base = remap(s.r, -(1.0 - fbmL), 1.0, 0.0, 1.0);
-  base *= heightGrad(h, uCloudA.y);
+  float billowTop = 0.38 + 0.68 * texture(uShape, vec3(xz.x, uCloudA.z * 1.45, xz.y) / 3900.0).r;
+  float shapedH = h / mix(billowTop, 0.7, uCloudA.y);
+  base *= heightGrad(shapedH, uCloudA.y);
+  base = remap(base, 0.22, 0.92, 0.0, 1.0);
   base = remap(base, 1.0 - pres, 1.0, 0.0, 1.0) * pres;
   if (base > 0.0 && detailAmt > 0.0) {
     vec3 dn = texture(uDetail, vec3(xz.x, p.y * 1.3, xz.y) / 950.0).rgb;
@@ -109,7 +113,7 @@ float cloudDensity(vec3 p, float detailAmt) {
     // a second, finer erosion octave gives the tops their cauliflower edge and the bases their ragged rims
     vec3 dn2 = texture(uDetail, vec3(xz.x, p.y * 1.7, xz.y) / 280.0 + 0.37).rgb;
     float hi2 = mix(dot(dn2, vec3(0.625, 0.25, 0.125)), 1.0 - dot(dn2, vec3(0.625, 0.25, 0.125)), sat(h * 6.0));
-    base = remap(base, (hi * 0.5 + hi2 * 0.22) * detailAmt, 1.0, 0.0, 1.0);
+    base = remap(base, (hi * 0.40 + hi2 * 0.16) * detailAmt, 1.0, 0.0, 1.0);
   }
   return sat(base) * mix(1.0, 0.8, uCloudA.y);
 }
@@ -127,11 +131,10 @@ vec3 lightAtCloud(vec3 ld, vec3 lc, float alt, float dip) {
 vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
   vec3 ro = uCamAbs;
   float yb = uCloudA.z, yt = uCloudA.w;
-  if (rd.y < 0.0004 || uCloudA.x < 0.004) return vec4(0.0, 0.0, 0.0, 1.0);
-  float tN, tF;
-  if (ro.y < yb) { tN = (yb - ro.y) / rd.y; tF = (yt - ro.y) / rd.y; }
-  else if (ro.y < yt) { tN = 0.0; tF = (yt - ro.y) / rd.y; }
-  else return vec4(0.0, 0.0, 0.0, 1.0);
+  if (abs(rd.y) < 0.0004 || uCloudA.x < 0.004) return vec4(0.0, 0.0, 0.0, 1.0);
+  float a = (yb - ro.y) / rd.y, b = (yt - ro.y) / rd.y;
+  float tN = max(0.0, min(a, b)), tF = max(a, b);
+  if (tF <= tN) return vec4(0.0, 0.0, 0.0, 1.0);
   const float MAXD = 165000.0;
   if (tN > MAXD) return vec4(0.0, 0.0, 0.0, 1.0);
   tF = min(min(tF, tN + 34000.0), MAXD);
@@ -163,7 +166,9 @@ vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
   int emptyRun = 0;
   for (int i = 0; i < 220; i++) {
     if (i >= steps || t >= tF) break;
-    float dtF = clamp(36.0 + t * 0.0045 * (64.0 / float(steps)), 36.0, 260.0);
+    // Cover the complete slab within the sample budget; a fixed short stride
+    // used to stop midway and draw a visibly sliced cloud shelf.
+    float dtF = clamp(max(len / float(steps) * 1.3, 24.0 + t * 0.002), 24.0, 520.0);
     float dt = fine ? dtF : dtF * 4.0;
     vec3 p = ro + rd * (t + 0.5 * dt);
     if (!fine) {
@@ -213,6 +218,9 @@ vec4 marchClouds(vec3 rd, float jitter, int steps, float detailAmt) {
   // fade the far rim of the layer into the haze
   float fade = smoothstep(MAXD * 0.45, MAXD, tN);
   L *= 1.0 - fade; T = mix(T, 1.0, fade);
+  // Tiny isolated ray hits otherwise flash as bright pinpoints in clear sky.
+  float resolved = smoothstep(0.006, 0.035, 1.0 - T);
+  L *= resolved; T = mix(1.0, T, resolved);
   return vec4(L, T);
 }
 `);
@@ -339,7 +347,7 @@ export class Clouds {
     const type = Math.min(1, Math.max(0, (c - 0.62) / 0.3));
     const base = 1650 - 850 * type - 350 * storm;
     const thick = 1500 - 700 * type + 1500 * storm;
-    this.p = { cover, type, base, top: base + thick, dark: Math.min(1, Math.max(0, 0.15 * type + storm * 0.95 + 0.0)), density: 0.05 };
+    this.p = { cover, type, base, top: base + thick, dark: Math.min(1, Math.max(0, 0.15 * type + storm * 0.95)), density: 0.008 + storm * 0.006 };
   }
 
   advance(dt, windVec) {

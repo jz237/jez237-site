@@ -41,10 +41,17 @@ void main() {
   vec2 d = (cb.xy / cb.w - ca.xy / ca.w) * uViewport;
   vec2 dir = length(d) > 1e-3 ? normalize(d) : vec2(0.0, 1.0);
   vec2 perp = vec2(-dir.y, dir.x);
-  float w = 1.35;
+  float w = 0.65;
   c.xy += perp * side * w * 0.5 / uViewport * c.w * 2.0;
+  // A shutter cannot produce metre-long foreground needles.
+  float maxLen = 70.0 * (0.7 + 0.4 * sz);
+  if (length(d) > maxLen) {
+    cb.xy = (ca.xy / ca.w + (cb.xy / cb.w - ca.xy / ca.w) * maxLen / length(d)) * cb.w;
+    c = mix(ca, cb, t);
+    c.xy += perp * side * w * 0.5 / uViewport * c.w * 2.0;
+  }
   float dist = length(rel);
-  vAlpha = uIntensity * 0.75 * (0.35 + h.y * 0.5) * (0.6 + 0.6 * sz) * (1.0 - t * 0.9) / (1.0 + dist / 16.0) * smoothstep(0.3, 1.5, dist);
+  vAlpha = uIntensity * 0.30 * (0.35 + h.y * 0.5) * (0.6 + 0.6 * sz) * (1.0 - t * 0.9) / (1.0 + dist / 16.0) * smoothstep(1.0, 4.0, dist);
   vRel = rel;
   gl_Position = c;
 }`;
@@ -76,7 +83,7 @@ export class Rain {
     bindLighting(p, ctx);
     const cam = ctx.cam;
     p.m4('uVP', VP).v3('uCamAbs', cam.x, cam.y, cam.z).v3('uWindV', windVel[0], -9.0 - 0.0, windVel[1])
-      .f('uTime', ctx.time).f('uRadius', 26).f('uHeight', 34).f('uShutter', 0.028).f('uIntensity', intensity)
+      .f('uTime', ctx.time).f('uRadius', 26).f('uHeight', 34).f('uShutter', 0.016).f('uIntensity', intensity)
       .f('uCount', Math.floor(this.count * (0.25 + 0.75 * intensity))).v2('uViewport', ctx.w, ctx.h);
     gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.enable(gl.DEPTH_TEST); gl.depthMask(false);
@@ -109,9 +116,9 @@ void main() {
   vec2 perp = vec2(-dir.y, dir.x);
   vec4 c = mix(ca, cb, t);
   float wpx = aW * uViewport.y * 0.5 / max(c.w, 0.1) * 1.4;
-  float px = max(wpx, 2.2);
+  float px = max(wpx, 0.75);
   c.xy += perp * side * px * 0.5 / uViewport * c.w * 2.0;
-  vAlpha = clamp(wpx / px, 0.12, 1.0);
+  vAlpha = clamp(wpx / px, 0.0, 1.0);
   gl_Position = c;
 }`;
 const BOLT_FS = `
@@ -145,10 +152,11 @@ export class Lightning {
     const top = 1350 + r() * 350;
     const x0 = cam.x + Math.sin(az) * dist, z0 = cam.z - Math.cos(az) * dist;
     const segs = [];
-    const jag = (a, b, disp, depth, w) => {
-      if (depth === 0) { segs.push(a[0], a[1], a[2], b[0], b[1], b[2], w); return; }
+    const jag = (a, b, disp, depth, w, endW = w) => {
+      if (depth === 0) { segs.push(a[0], a[1], a[2], b[0], b[1], b[2], (w + endW) * 0.5); return; }
       const m = [(a[0] + b[0]) / 2 + (r() - 0.5) * disp, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2 + (r() - 0.5) * disp];
-      jag(a, m, disp * 0.56, depth - 1, w); jag(m, b, disp * 0.56, depth - 1, w);
+      const midW = (w + endW) * 0.5;
+      jag(a, m, disp * 0.56, depth - 1, w, midW); jag(m, b, disp * 0.56, depth - 1, midW, endW);
     };
     const start = [x0, top, z0], end = [x0 + (r() - 0.5) * 500, 0, z0 + (r() - 0.5) * 500];
     // main channel in a few jagged pieces so that branches can leave from it
@@ -166,8 +174,8 @@ export class Lightning {
       const i = 1 + Math.floor(r() * (pts.length - 3));
       const s = pts[i], ang = r() * Math.PI * 2, len = 250 + r() * 700;
       const e = [s[0] + Math.cos(ang) * len * 0.8, Math.max(60, s[1] - len * (0.5 + r() * 0.7)), s[2] + Math.sin(ang) * len * 0.8];
-      jag(s, e, 120, 4, 2.4);
-      if (r() < 0.5) { const m = [(s[0] + e[0]) / 2, (s[1] + e[1]) / 2, (s[2] + e[2]) / 2]; jag(m, [m[0] + (r() - 0.5) * 500, Math.max(0, m[1] - 350), m[2] + (r() - 0.5) * 500], 90, 3, 1.4); }
+      jag(s, e, 120, 4, 2.4, 0.12);
+      if (r() < 0.5) { const m = [(s[0] + e[0]) / 2, (s[1] + e[1]) / 2, (s[2] + e[2]) / 2]; jag(m, [m[0] + (r() - 0.5) * 500, Math.max(0, m[1] - 350), m[2] + (r() - 0.5) * 500], 90, 3, 1.4, 0.08); }
     }
     this.segs = new Float32Array(segs);
     this.nSeg = Math.min(4096, segs.length / 7);
@@ -230,7 +238,11 @@ export class Lightning {
     gl.bindVertexArray(this.vao);
     p.f('uMirror', 0).f('uCamY', cam.y); gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, this.nSeg);
     // faint mirror image on the sea
-    p.f('uMirror', 1).f('uCamY', cam.y).v3('uColor', I * 0.05, I * 0.06, I * 0.08); gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, this.nSeg);
+    if (ctx.sim && ctx.sim.cur.U < 5.0) {
+      const mirror = 0.0012 * Math.exp(-ctx.sim.cur.U * 0.5);
+      p.f('uMirror', 1).f('uCamY', cam.y).v3('uColor', I * mirror * 0.78, I * mirror * 0.88, I * mirror);
+      gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, this.nSeg);
+    }
     gl.disable(gl.BLEND);
   }
 }
