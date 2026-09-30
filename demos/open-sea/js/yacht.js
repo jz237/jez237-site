@@ -99,6 +99,11 @@ void main() {
   if (!gl_FrontFacing) N = -N;
   vec3 V = normalize(-vRel);
   int mat = int(vAttr.z + 0.5);
+  // Fragment derivatives give the actual cambered, twisted sail surface normal.
+  if (mat == ${MAT.SAIL}) {
+    vec3 face = normalize(cross(dFdx(vRel), dFdy(vRel)));
+    N = dot(face, N) < 0.0 ? -face : face;
+  }
   vec3 albedo = vec3(0.8); float rough = 0.4, metal = 0.0, trans = 0.0, f0 = 0.04;
   vec3 p = vLocal;
   if (mat == ${MAT.HULL}) {
@@ -132,8 +137,10 @@ void main() {
   else if (mat == ${MAT.TRIM}) { albedo = vec3(0.05, 0.05, 0.055); rough = 0.4; }
   else if (mat == ${MAT.SAIL}) {
     albedo = vec3(0.92, 0.90, 0.84); rough = 0.85; trans = 0.45;
-    float seam = smoothstep(0.012, 0.0, abs(fract(vAttr.y * 14.0) - 0.5) - 0.485 + 0.003) * 0.18;
-    float wv = 0.94 + 0.06 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0);
+    float seamDist = min(fract(vAttr.y * 14.0), 1.0 - fract(vAttr.y * 14.0));
+    float seam = (1.0 - smoothstep(0.012, 0.024 + fwidth(vAttr.y) * 14.0, seamDist)) * 0.12;
+    float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(fwidth(vAttr.x) * 900.0, fwidth(vAttr.y) * 1200.0));
+    float wv = 0.985 + 0.015 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0) * weaveFilter;
     albedo *= wv * (1.0 - seam);
     float batten = smoothstep(0.004, 0.0, abs(fract(vAttr.y * 5.0 + 0.1) - 0.5) - 0.495 + 0.001) * step(0.55, vAttr.x) * 0.0;
   }
@@ -162,13 +169,14 @@ void main() {
     float k = (rough + 1.0) * (rough + 1.0) / 8.0;
     float G = (nl / (nl * (1.0 - k) + k)) * (nv / (nv * (1.0 - k) + k));
     vec3 spec = ggx(nh, a2) * F * G / max(4.0 * nl * nv, 1e-3);
-    col += E * (dif / PI * (nl + tr * 1.2) + spec * nl);
+    vec3 cloth = dif * vec3(1.06, 1.02, 0.96);
+    col += E * ((dif * nl + cloth * tr * 1.35) / PI + spec * nl);
   }
   // ambient: diffuse sky/ground plus glossy reflection of the environment
   vec3 amb = ambientFor(N);
   amb = mix(vec3(luma(amb)), amb, 0.55);   // white paint under a blue sky reads white to a camera that has white-balanced the scene
   float ao = mat == ${MAT.HULL} ? mix(0.6, 1.0, smoothstep(-0.4, 0.3, p.y)) : 1.0;
-  if (mat == ${MAT.SAIL}) amb *= 1.0 + trans * 1.5;
+  if (mat == ${MAT.SAIL}) amb *= 0.84;
   col += dif * (amb + flashE(N) / PI) * ao;
   vec3 R = reflect(-V, N);
   vec3 envR = envRadiance(vec3(R.x, max(R.y, 0.02), R.z), clamp(rough * 6.0, 0.0, 6.0));
@@ -188,7 +196,7 @@ void main() {
     float cg = causticGainRel(vRel, zd, sunWv, 0.3);
     // downwelling light is ~20x stronger than upwelling: undersides are dark silhouettes, tops and flanks catch the beams
     float eN = 0.04 + 0.17 * (1.0 - abs(N.y)) + 0.80 * max(N.y, 0.0);
-    vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI * exp(-KD * zd);
+    vec3 uwl = albedo * (Ed0 * eN + beamV * max(dot(N, -sunWv), 0.0) * cg * 0.9) / PI * (uUnderCam > 0.5 ? vec3(1.0) : exp(-KD * zd));
     col = mix(col, uwl, sub);
   }
   if (mat != ${MAT.SAIL} && metal < 0.5) col *= vec3(1.05, 1.0, 0.955);

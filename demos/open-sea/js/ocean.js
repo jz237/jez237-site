@@ -272,7 +272,7 @@ export class OceanSim {
     this.cur = { ...this.target };
     this.windDir = 0.55;
     this.dirty = true;
-    this.foamTau = 9;
+    this.foamTau = 5.5;
     this.foamRes = N;
 
     // programs
@@ -299,8 +299,8 @@ export class OceanSim {
     // outputs
     const mips = { mips: true, filter: 'linear', wrap: 'repeat', aniso: 8 };
     this.disp = texArray(N, N, this.count, { fmt: 'rgba16f', ...mips, aniso: 1 });
-    this.slope = texArray(N, N, this.count, { fmt: 'rgba16f', ...mips });
-    this.foam = [0, 1].map(() => texArray(N, N, this.count, { fmt: 'rgba16f', ...mips }));
+    this.slope = texArray(N, N, this.count, { fmt: 'rgba16f', ...mips, aniso: 1 });
+    this.foam = [0, 1].map(() => texArray(N, N, this.count, { fmt: 'rgba16f', ...mips, aniso: 1 }));
     this.foamIdx = 0;
     this.asmFbos = [0, 1].map(par => this.defs.map((_, i) => makeFBO([
       { tex: this.disp, layer: i }, { tex: this.slope, layer: i }, { tex: this.foam[par], layer: i },

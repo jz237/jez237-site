@@ -229,10 +229,10 @@
     "id": "011",
     "title": "Open Sea",
     "category": "3D · Real-time ocean",
-    "description": "A real-time WebGL 2 ocean driven by a spectral wave simulation. Sail a yacht from glassy calm to a full storm, through sunset, moonlight, rain and lightning, then drop under the surface for light shafts and fish. Nothing is loaded: every wave, cloud and sail is generated on the GPU. Created with Sonnet 5.5 Extra.",
+    "description": "A real-time WebGL 2 ocean with five spectral wave cascades. Follow a sailing yacht from glassy calm into a storm, through sunset, moonlight, rain and lightning, then dive into clear blue water with sun shafts and independently swimming fish. A slow cinematic tour hands over to free flight.",
     "url": "open-sea/",
     "image": "assets/open-sea.jpg",
-    "imageAlt": "A small sailing yacht on a rough blue sea with white foam crests under a broken sky",
+    "imageAlt": "A sailing yacht reflected in a simulated blue ocean beneath broken clouds",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/open-sea",
     "features": [
       "Sea states from glassy calm to storm",
@@ -245,6 +245,6 @@
       "WebGL 2 · no image or model files",
       "Slow cinematic tour, then free flight"
     ],
-    "note": "WebGL 2 · Best on a desktop GPU · Any key or drag switches from the tour to free flight"
+    "note": "WebGL 2 · Best on a desktop GPU · Drag or use movement keys to take over · H hides the controls"
   }
 ]

@@ -52,7 +52,7 @@ export function initUI(app, rig) {
     sliders.push(s);
     return wrap;
   };
-  const section = (title, ...nodes) => { const s = el('section', 'sec'); s.appendChild(el('h3', null, title)); s.append(...nodes); return s; };
+  const section = (title, ...nodes) => { const s = el('details', 'sec'); s.open = title === 'Camera'; s.appendChild(el('summary', null, title)); const content = el('div', 'section-content'); content.append(...nodes); s.appendChild(content); return s; };
 
   // ---- camera ----------------------------------------------------------------------------------------------------
   const cam = chipRow(Object.keys(MODES), n => rig.setMode(MODES[n]));

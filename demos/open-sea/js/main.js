@@ -127,7 +127,7 @@ class App {
     }
     S.windDir = this.goal.windDir;
     S.storm = clamp(0.62 * S.rain + 0.38 * (S.lightning > 0 ? 1 : 0) + 0.18 * smoothstep(6.5, 9, seaFromWind(this.goal.wind)), 0, 1);
-    S.haze = 6 + 22 * S.rain + 8 * S.storm;       // marine air is far hazier than the clear-air default
+    S.haze = 2.6 + 18 * S.rain + 7 * S.storm;
     const wv = [Math.cos(S.windDir), Math.sin(S.windDir)];
     const G0 = this.goal;
     this.sim.setParams({ wind: G0.wind, swell: G0.swell, chop: G0.chop, hScale: G0.hScale, foam: G0.foam }, S.windDir);
@@ -149,7 +149,7 @@ class App {
       else if (!this.under && c < -0.04) this.under = true;
     }
     this.probe.fresh = false;
-    this.fish.update(this.time, [this.yacht.x, 0, this.yacht.z]);
+    this.fish.update(this.time, [this.yacht.x, 0, this.yacht.z], !this.under);
     this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z]]);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
@@ -213,7 +213,7 @@ class App {
     if (!under) this.sky.draw(sk, cam.y, invVP, starRotation(S.tod), this.time, C.rt);
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     if (this.yachtOn) this.yacht.draw(ctx, VPf, camAbs);
-    if (this.yachtOn) this.fish.draw(ctx, VPf, camAbs);
+    this.fish.draw(ctx, VPf, camAbs);
 
     const reflOn = this.yachtOn && !under;
     if (reflOn) { this.yacht.drawReflection(ctx, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
@@ -234,7 +234,7 @@ class App {
         .f('uRippleAmt', 1.0);
       p.t('uReflTex', 18, this.yacht.reflTex).f('uReflOn', reflOn ? 1 : 0);
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
-        .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', this.yachtOn && !under ? 1 : 0);
+        .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', !under ? 1 : 0);
     });
 
     // composite (rain veil / underwater medium)
@@ -292,7 +292,7 @@ window.__sea = {
   },
   shot(dt = 0.016) {
     app.step(dt);
-    if (app.ycam) app.placeRelativeToYacht(app.ycam);
+    if (app.ycam && !app.lookBody) app.placeRelativeToYacht(app.ycam);
     // honour the camera immediately for the underwater test (probe latency)
     if (app.forceBolt) { const L = app.lightning; L._bolt(app.cam, app.cam.yaw + app.forceBolt); L.t = 0.032; L.flash = 0.7; app.forceBolt = 0; }
     app.post.first = true;
