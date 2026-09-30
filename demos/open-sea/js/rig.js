@@ -171,7 +171,7 @@ export class Rig {
       const [fx, fz, h, lx, lz, lh, fov] = this.tourPose();
       const c = Math.cos(y.psi), sn = Math.sin(y.psi);
       const wx = y.x + c * fx - sn * fz, wz = y.z + sn * fx + c * fz;
-      const surf = app.surfaceAtCam || 0;
+      const surf=app.whirlpool.amount>.001?(app.surfaceFFT||0)+app.whirlpool.sample(wx,wz).height:app.surfaceAtCam||0;
       // stay above the local wave crests; underwater keys track the surface
       let wy = h >= 1.2 ? Math.max(h + 0.0, surf + 0.9) : surf + h;
       if (h >= 0.6 && h < 1.2) wy = Math.max(surf + h, surf + 0.75);
@@ -206,6 +206,7 @@ export class Rig {
         const wy = Math.max(ty + Math.sin(o.el) * o.dist, surf + 0.8);
         const k = 1 - Math.exp(-dt * 8);
         cam.x += (tx + Math.cos(a) * horiz - cam.x) * k; cam.z += (tz + Math.sin(a) * horiz - cam.z) * k; cam.y += (wy - cam.y) * k;
+        if(app.whirlpool.amount>.001)cam.y=Math.max(cam.y,(app.surfaceFFT||0)+app.whirlpool.sample(cam.x,cam.z).height+.8);
         const dx = tx - cam.x, dz = tz - cam.z, dy = ty - cam.y;
         cam.yaw = Math.atan2(dx, -dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
       } else {
@@ -215,6 +216,7 @@ export class Rig {
         const wy = Math.min(ty + Math.sin(o.el) * o.dist, surf - 1.2);
         const k = 1 - Math.exp(-dt * 6);
         cam.x += (tx + Math.cos(a) * horiz - cam.x) * k; cam.z += (tz + Math.sin(a) * horiz - cam.z) * k; cam.y += (wy - cam.y) * k;
+        if(app.whirlpool.amount>.001)cam.y=Math.min(cam.y,(app.surfaceFFT||0)+app.whirlpool.sample(cam.x,cam.z).height-1.2);
         const dx = tx - cam.x, dz = tz - cam.z, dy = (y.y + o.depth + 0.9) - cam.y;
         cam.yaw = Math.atan2(dx, -dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
       }

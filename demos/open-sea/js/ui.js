@@ -77,6 +77,8 @@ export function initUI(app, rig) {
     Object.assign(G, seaPreset(SEA[n]), { hScale: 1, foam: 1 });
     manual.swell = manual.chop = manual.cloudWind = false;
   });
+  const whirlpool=chipRow(['Whirlpool off','Whirlpool on'],n=>app.setWhirlpool(n==='Whirlpool on'));
+  const vortexView=chipRow(['View whirlpool'],()=>app.focusWhirlpool());
   const onWind = v => {
     G.wind = v;
     const d = windDefaults(v);
@@ -104,6 +106,7 @@ export function initUI(app, rig) {
     section('Camera', cam.row, stations.row, shot.row),
     section('Sea',
       sea.row,
+      whirlpool.row,vortexView.row,
       slider('Wind', 0.3, 35, 0.1, () => G.wind, onWind, v => `${v.toFixed(1)} m/s`),
       slider('Swell', 0, 8, 0.1, () => G.swell, v => { G.swell = v; manual.swell = true; }, v => `${v.toFixed(1)} m`),
       slider('Direction', 0, 360, 1, () => ((G.windDir / DEG) % 360 + 360) % 360, v => { G.windDir = v * DEG; }, v => `${Math.round(v)}°`),
@@ -143,6 +146,8 @@ export function initUI(app, rig) {
     if(!walking&&walkingPointer!==null)stopWalking();
     for (const s of sliders) s.refresh();
     for (const [n, b] of cam.map) b.classList.toggle('on', MODES[n] === rig.mode);
+    for(const [n,b] of whirlpool.map){const on=(n==='Whirlpool on')===G.whirlpool;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));}
+    for(const b of vortexView.map.values())b.disabled=!G.whirlpool&&app.whirlpool.amount<.01;
     for (const [n, b] of sea.map) {
       const p = seaPreset(SEA[n]);
       b.classList.toggle('on', near(G.wind, p.wind, 0.3) && near(G.swell, p.swell, 0.1) && near(G.chop, p.chop, 0.04) && near(G.hScale, 1, 0.02) && near(G.foam, 1, 0.02));

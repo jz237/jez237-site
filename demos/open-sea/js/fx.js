@@ -100,6 +100,8 @@ uniform vec3 uFwd;
 uniform float uNear, uFar;
 uniform vec3 uCam;            // absolute camera position, y = height above mean sea level
 uniform float uUnder, uSurfY;
+#include <whirlpool>
+uniform float uVortexDatum;
 uniform float uRain, uTime, uCloudBase, uFlash;
 out vec4 o;
 vec3 uSunW, uBeamCol, uEd0;
@@ -133,7 +135,7 @@ void main() {
       float ta = dmax * fa * fa, tb = dmax * fb * fb;
       float t = 0.5 * (ta + tb), dt = tb - ta;
       vec3 p = uCam + dir * t;
-      float z = max(uSurfY - p.y, 0.0);
+      float z = max(uSurfY-uVortexDatum+whirlSurface(p.xz-uCam.xz).x-p.y,0.0);
       vec3 Ts = exp(-CATT * dt);
       Lp += T * RRS * uEd0 * exp(-KD * z) * aniso * (1.0 - Ts);
       vec3 beam = uBeamCol * exp(-CATT * z / max(-uSunW.y, 0.25));
@@ -142,7 +144,7 @@ void main() {
     }
     if (dist < 1e4) {
       vec3 ph_ = uCam + dir * dist;
-      float zo = max(uSurfY - ph_.y, 0.0);
+      float zo=max(uSurfY-uVortexDatum+whirlSurface(ph_.xz-uCam.xz).x-ph_.y,0.0);
       col = scene * exp(-KD * zo);
     } else col = vec3(0.0);
     // remaining transmittance for the part of the path beyond dmax
@@ -200,6 +202,7 @@ export class Fx {
   composite(post, ctx, o) {
     const p = this.prog.use();
     bindLighting(p, ctx);
+    ctx.whirlpool.bind(p,ctx.cam);p.f('uVortexDatum',ctx.whirlpool.sample(ctx.cam.x,ctx.cam.z).height);
     p.t('uScene', 4, post.colorCopy).t('uDepth', 5, post.depthCopy);
     this.bindCaustic(p, ctx.cam);
     p.m4('uInvVP', o.invVP).v3('uFwd', o.fwd[0], o.fwd[1], o.fwd[2]).f('uNear', o.near).f('uFar', o.far)
