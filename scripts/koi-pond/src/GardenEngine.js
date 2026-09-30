@@ -6226,7 +6226,7 @@ function setupControls() {
     if (e.code !== 'KeyM') startAudio();
     if (e.code === 'KeyF' || e.code === 'KeyC') toggleCameraMode();
     if (e.code === 'KeyP') setHold(!P.holdCamera);
-    if (e.code === 'KeyO') setFreeze(!P.freezeScene);
+    if (e.code === 'KeyO' && !e.repeat) setFreeze(!P.freezeScene);
     if (e.code === 'KeyV' || (e.code === 'Escape' && P.cleanView)) setClean(!P.cleanView);
     if (e.code === 'KeyE') startFeeding();
     if (e.code === 'KeyT') cycleWeather();
@@ -6294,9 +6294,15 @@ function setHold(v, auto = false) {
   if (!v && P.cameraMode === 'Cinematic') PATH.blend = 0;
   if (GUI_CTRL.hold) GUI_CTRL.hold.updateDisplay();
 }
-function setFreeze(v) {
-  P.freezeScene = v; $('tb-freeze').setAttribute('aria-pressed', String(v)); setBtnLabel('tb-freeze', v ? 'Time frozen' : 'Freeze time');
-  toast(v ? 'Time frozen · O to resume' : 'Time resumed');
+function setFreeze(v, {announce = true} = {}) {
+  P.freezeScene = Boolean(v);
+  const action = P.freezeScene ? 'Resume pond' : 'Pause pond', button = $('tb-freeze');
+  button.setAttribute('aria-pressed', String(P.freezeScene));
+  button.setAttribute('aria-label', action); button.title = action + ' · fish, water and foliage (O)';
+  setBtnLabel('tb-freeze', action);
+  $('pond-paused').hidden = !P.freezeScene;
+  document.body.dataset.pondMotion = P.freezeScene ? 'paused' : 'running';
+  if (announce) toast(P.freezeScene ? 'Pond paused · Resume pond or O to swim again' : 'Pond resumed · koi are swimming');
   if (GUI_CTRL.freeze) GUI_CTRL.freeze.updateDisplay();
 }
 // toolbar buttons carry an icon + a label span; only the label changes
@@ -7296,6 +7302,7 @@ function feedingShot(nx, nz) {
   return { pos, look: new THREE.Vector3(sh.x - sh.nx * 1.15, WATER_Y - 0.1, sh.z - sh.nz * 1.15), drop: new THREE.Vector3(sh.x - sh.nx * 0.6, WATER_Y, sh.z - sh.nz * 0.6) };
 }
 function startFeeding() {
+  if (P.freezeScene) setFreeze(false);
   if (!FEED.pelletMesh || FEED.active || STROKE.active) return;
   // Aim at visible water; fall back to a known open part of the basin.
   const direction = camera.getWorldDirection(new THREE.Vector3());
@@ -7910,7 +7917,7 @@ function buildGUI() {
   fC.add(P, 'pathSpeed', 0.2, 3, 0.01).name('Path speed');
   fC.add(P, 'stayAbove').name('Stay above water');
   GUI_CTRL.hold = fC.add(P, 'holdCamera').name('Hold shot (P)').onChange((v) => setHold(v));
-  GUI_CTRL.freeze = fC.add(P, 'freezeScene').name('Freeze time (O)').onChange((v) => setFreeze(v));
+  GUI_CTRL.freeze = fK.add(P, 'freezeScene').name('Pause pond (O)').onChange((v) => setFreeze(v));
   fC.add({ clean: () => setClean(true) }, 'clean').name('Clean view for screenshots (V)');
   fC.add(P, 'volume', 0, 1, 0.01).name('Volume');
   GUI_CTRL.audio = fC.add(P, 'audio').name('Sound').onChange((v) => setMuted(!v));
@@ -8109,6 +8116,9 @@ function installHiddenReef() {
   $('scene-settings').onclick=()=>{ const d=document.querySelector('.dg.ac'); const show=d.style.display==='none';d.style.display=show?'':'none';$('scene-settings').setAttribute('aria-expanded',String(show));if(show)GUI_CTRL.gui.open();};
   document.querySelector('.dg.ac').style.display='none';
   goToView('Garden', true);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) setFreeze(true);
+  // A still Garden camera is independent of pond motion. Start the living scene
+  // on every device; reduced-motion CSS still disables UI transitions.
+  setFreeze(false, {announce:false});
+  $('pond-resume').onclick = () => setFreeze(false);
 }
 init();

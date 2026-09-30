@@ -72,3 +72,16 @@ test('pause freezes fish physiology and position; feeding retains gradual uprigh
  }
  assert.ok(s.KOI.fish.some(f=>f.memory),'fish remember a found feeding place');
 });
+
+test('every koi resumes position, body wave and independent fin motion after pausing',()=>{
+ const s=simulator();s.updateFish(1/60,0);
+ const before=s.KOI.fish.map(f=>({p:f.p.clone(),phase:f.phase,pecL:f.pecL,pecR:f.pecR}));
+ for(let i=0;i<300;i++)s.updateFish(0,0);
+ for(const [i,f]of s.KOI.fish.entries()){assert.equal(f.p.distanceTo(before[i].p),0);assert.equal(f.phase,before[i].phase);}
+ for(let i=0;i<600;i++)s.updateFish(1/60,i/60);
+ for(const [i,f]of s.KOI.fish.entries()){
+  assert.ok(f.p.distanceTo(before[i].p)>.02,'each koi swims again');
+  assert.ok(f.phase>before[i].phase,'body wave resumes');
+  assert.ok(f.pecL>before[i].pecL&&f.pecR>before[i].pecR,'both side fins resume');
+ }
+});
