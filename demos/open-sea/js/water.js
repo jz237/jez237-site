@@ -18,6 +18,7 @@ uniform float uSpacing, uCamY;
 uniform sampler2DArray uDisp;
 uniform float uGridN;      // texture size N
 uniform vec4 uWake;        // reserved
+uniform vec4 uWhaleRings[2]; // camera-relative centre, radius, bounded strength
 out vec3 vRel;
 out vec2 vG;
 out float vJ;
@@ -46,6 +47,11 @@ void main() {
   // same term count on every level (a per-level count made the rings disagree, leaving cracks at their seams); fades with distance
   float wfade = 1.0 - smoothstep(120.0, 300.0, length(rel.xz));
   if (wfade > 0.0) rel.y += kelvinWake(rel.xz, 16).x * wfade;
+  for(int i=0;i<2;i++){
+    if(uWhaleRings[i].w<=.001)continue;
+    float r=length(rel.xz-uWhaleRings[i].xy),d=r-uWhaleRings[i].z;
+    rel.y+=sin(d*2.1)*exp(-d*d*.08)*uWhaleRings[i].w*.065;
+  }
   float r2 = dot(rel.xz, rel.xz);
   rel.y -= r2 / (2.0 * 6371000.0);
   vRel = rel; vG = g; vJ = J; vD = D.xz;
@@ -113,6 +119,8 @@ uniform float uMssRes, uMeanSlope, uTime, uHs, uGlowE;
 uniform vec3 uRw, uSSS;    // water body colour and the colour of light transmitted through thin crests
 uniform vec2 uWind;        // wind direction (unit)
 uniform float uWindSpeed;
+uniform vec4 uWhaleRings[2];
+uniform vec4 uWhaleContacts[2];
 uniform float uUnder;
 uniform int uDbg;
 uniform sampler2D uTrail, uRipple, uScene, uSceneDepth, uReflTex;
@@ -332,6 +340,24 @@ void main() {
   }
   float wnd = smoothstep(3.0, 18.0, uWindSpeed);
   D = max(D, min(trail, 1.2) * 0.86 * (1.0 - 0.35 * wnd));
+  // Broken, thin surface lace left by a dive. Its bounded analytic clock is
+  // independent of the rain/hull ripple solver and cannot inject large impulses.
+  for(int i=0;i<2;i++){
+    vec2 q=rel.xz-uWhaleRings[i].xy;
+    if(uWhaleRings[i].w>.001){
+      float d=length(q)-uWhaleRings[i].z;
+      float ragged=.35+.65*vnoise(q*.45+float(i)*17.0);
+      D=max(D,exp(-d*d*.28)*uWhaleRings[i].w*ragged);
+    }
+    if(uWhaleContacts[i].w<=.001)continue;
+    vec2 qc=rel.xz-uWhaleContacts[i].xy;
+    float a=uWhaleContacts[i].z;
+    vec2 local=vec2(dot(qc,vec2(cos(a),sin(a))),dot(qc,vec2(-sin(a),cos(a))));
+    float edge=length(local/vec2(6.6,1.6));
+    float contactDistance=(edge-1.0)*4.0;
+    float contact=exp(-contactDistance*contactDistance);
+    D=max(D,contact*uWhaleContacts[i].w*.48*(.35+.65*vnoise(qc*.8)));
+  }
   vec3 col = refl + body;
   // Footprints must be evaluated by every fragment, including water without foam.
   vec4 c1 = uCasc[1];
