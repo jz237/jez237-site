@@ -21,6 +21,7 @@ export async function testSailMotion(base='../../../demos/open-sea/'){
    for(let i=0;i<g.vertexCount;i++){const u=data[i*11+6],v=data[i*11+7];if(u===0||v===1||u===1&&v===0||S.boom&&v===0)pins.push(i);if(data[i*11+8]===7){const key=[u.toFixed(3),v.toFixed(3)].join(',');if(!rings.has(key))rings.set(key,[]);rings.get(key).push(i);}}
    assert(pins.length>100,`${S.id}: missing fixed vertices`);assert(rings.size===3&&rings.has('0.000,0.000')&&rings.has('1.000,0.000')&&rings.has('0.010,0.985'),`${S.id}: cringles need exact constant corner UVs`);
    gl.bindBuffer(gl.ARRAY_BUFFER,input);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);gl.bindBuffer(gl.TRANSFORM_FEEDBACK_BUFFER,output);gl.bufferData(gl.TRANSFORM_FEEDBACK_BUFFER,g.vertexCount*12,gl.DYNAMIC_READ);
+   gl.uniform4f(gl.getUniformLocation(program,'uSailCloth'),S.clew[0],S.clew[1],S.draft,S.roach);
    const phases=new Float64Array(metadata.sails.length*2);
    const capture=(time,amplitude)=>{gl.uniform3f(gl.getUniformLocation(program,'uSailWind'),phases[index*2],phases[index*2+1],S.phase);gl.uniform4f(gl.getUniformLocation(program,'uSail'),-.42*S.angleScale,S.tack[0],amplitude,time);gl.beginTransformFeedback(gl.POINTS);gl.drawArrays(gl.POINTS,0,g.vertexCount);gl.endTransformFeedback();const p=new Float32Array(g.vertexCount*3);gl.getBufferSubData(gl.TRANSFORM_FEEDBACK_BUFFER,0,p);return p;};
    for(const U of [.3,5,14,30]){

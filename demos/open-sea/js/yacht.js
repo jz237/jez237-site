@@ -16,6 +16,7 @@ uniform mat4 uVP, uModel;
 uniform vec4 uSail;    // angle, pivot x, flutter metres, time
 uniform vec3 uSailAxis;
 uniform vec4 uSailShape; // foot y, head y, reef, cloth type (-1 boom, 0 main, 1 headsail)
+uniform vec4 uSailCloth; // rest clew x/y, draft, roach
 out vec3 vLocal;
 out vec3 vLocalN;
 out vec3 vN;
@@ -23,12 +24,11 @@ out vec3 vRel;
 out vec4 vAttr;
 out float vAO;
 ${SAIL_MOTION_GLSL}
-void main() {
-  vec3 p = aPos, n = aNrm;
 #ifdef SAIL
+vec3 sailPoint(vec3 p,vec2 uv){
   float a0 = uSail.x;
   float sgn = clamp(a0 * 10.0, -1.0, 1.0);
-  float v = aAttr.y, u = aAttr.x;
+  float v = uv.y, u = uv.x;
   float reef = uSailShape.z;
   float yF = uSailShape.x, yH = uSailShape.y;
   if(uSailShape.w>.5){
@@ -44,7 +44,39 @@ void main() {
   vec3 axis = normalize(uSailAxis), origin = vec3(uSail.y, yF, 0.0);
   p.z = dz; vec3 q = p - origin;
   p = origin + q*cos(a) + cross(axis,q)*sin(a) + axis*dot(axis,q)*(1.0-cos(a));
-  n.z *= sgn; n = n*cos(a) + cross(axis,n)*sin(a) + axis*dot(axis,n)*(1.0-cos(a));
+  return p;
+}
+vec3 restCloth(vec2 uv){
+  float u=uv.x,v=uv.y,reef=uSailShape.z;
+  bool main=uSailShape.w<.5;
+  vec3 tack=vec3(uSail.y,uSailShape.x,0.0);
+  vec3 head=tack+vec3(uSailAxis.x/(main?1.0-.18*reef:1.0),uSailAxis.y/(main?1.0-.42*reef:1.0),0.0);
+  vec3 luff=mix(tack,head,v),leech=mix(vec3(uSailCloth.xy,0.0),head,v);
+  leech.x-=uSailCloth.w*sin(3.141592653589793*v);
+  vec3 p=mix(luff,leech,u);
+  p.z=uSailCloth.z*sin(3.141592653589793*pow(u,.85))*pow(1.0-v,.6);
+  float rise=clamp(v/.10,0.0,1.0);if(main)p.z*=rise*rise*(3.0-2.0*rise);
+  return p;
+}
+vec3 smoothClothNormal(vec2 uv,vec3 fallback){
+  uv=clamp(uv,vec2(.0005),vec2(.9995));
+  vec2 du=vec2(.0005,0.0),dv=vec2(0.0,.0005);
+  vec3 pu=sailPoint(restCloth(uv+du),uv+du)-sailPoint(restCloth(uv-du),uv-du);
+  vec3 pv=sailPoint(restCloth(uv+dv),uv+dv)-sailPoint(restCloth(uv-dv),uv-dv);
+  vec3 n=cross(pu,pv);float nn=dot(n,n);
+  n=nn>1e-20?n*inversesqrt(max(nn,1e-20)):fallback;
+  return dot(n,fallback)<0.0?-n:n;
+}
+#endif
+void main() {
+  vec3 p = aPos, n = aNrm;
+#ifdef SAIL
+  vec3 axis=normalize(uSailAxis);float a=uSail.x*(1.0+.30*aAttr.y*step(-.5,uSailShape.w));
+  n.z*=clamp(uSail.x*10.0,-1.0,1.0);n=n*cos(a)+cross(axis,n)*sin(a)+axis*dot(axis,n)*(1.0-cos(a));
+  p=sailPoint(p,aAttr.xy);
+  // Smooth the actual deformed surface, not its long tessellation triangles.
+  // Sewn tubes and rigid corner hardware retain their own material normals.
+  if(aAttr.z==${MAT.SAIL}.0&&aAttr.w==0.0)n=smoothClothNormal(aAttr.xy,n);
 #endif
   vec4 w = uModel * vec4(p, 1.0);
   vRel = w.xyz;
@@ -76,7 +108,7 @@ in vec4 vAttr;
 in float vAO;
 uniform vec3 uSunLocal, uMoonLocal;
 uniform vec3 uSailTri[15];
-uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam, uPixelScale;
+uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam, uPixelScale, uRigLines;
 uniform int uCurrentSail;
 layout(location = 0) out vec4 o;
 
@@ -123,7 +155,7 @@ void main() {
   float faceSq = dot(face, face);
   face = faceSq > 1e-20 ? face * inversesqrt(max(faceSq, 1e-20)) : N;
   vec3 clothN = dot(face, N) < 0.0 ? -face : face;
-  N = mat == ${MAT.SAIL} ? clothN : N;
+  N = mat == ${MAT.SAIL} && vAttr.w > 0.0 ? clothN : N;
   vec2 clothWidth = fwidth(vAttr.xy);
   vec3 localN=abs(normalize(vLocalN));
   vec2 metric=localN.y>=max(localN.x,localN.z)?vLocal.xz:localN.z>=localN.x?vLocal.xy:vLocal.zy;
@@ -287,6 +319,7 @@ void main() {
   // pixel. Blend the filtered material over the actual scene behind the rig.
   float coverage=1.0;
   if(vAttr.w>0.0&&vAttr.w<.065)coverage=clamp(2.0*vAttr.w*uPixelScale/max(dist,1.0),.08,1.0);
+  coverage*=1.0-uRigLines*smoothstep(8.0,16.0,dist);
   o = vec4(col, coverage);
 }`;
 
@@ -294,9 +327,12 @@ const RIG_VS = `
 layout(location = 0) in vec3 aA;
 layout(location = 1) in vec3 aB;
 layout(location = 2) in float aW;
+layout(location = 3) in float aMat;
 uniform mat4 uVP, uModel;
 uniform vec2 uViewport;
-out float vAlpha;
+uniform float uPixelScale;
+flat out vec4 vLine;
+flat out float vDiameterScale, vMaterial;
 out vec3 vRel;
 void main() {
   int id = gl_VertexID;
@@ -304,16 +340,22 @@ void main() {
   float side = float((id & 1) * 2 - 1);
   vec4 wa = uModel * vec4(aA, 1.0), wb = uModel * vec4(aB, 1.0);
   vec4 ca = uVP * wa, cb = uVP * wb;
-  if (ca.w < 0.05 || cb.w < 0.05) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vAlpha = 0.0; vRel = vec3(0.0); return; }
+  if(ca.w<.11&&cb.w<.11){gl_Position=vec4(2.0,2.0,2.0,1.0);vLine=vec4(0.0);vDiameterScale=0.0;vMaterial=aMat;vRel=vec3(0.0);return;}
+  // Clip crossing lines rather than dropping their visible distant portion
+  // when the deck camera passes one endpoint.
+  if(ca.w<.11){wa=mix(wa,wb,(.11-ca.w)/(cb.w-ca.w));ca=uVP*wa;}
+  if(cb.w<.11){wb=mix(wb,wa,(.11-cb.w)/(ca.w-cb.w));cb=uVP*wb;}
   vec2 na = ca.xy / ca.w, nb = cb.xy / cb.w;
   vec2 d = (nb - na) * uViewport;
   vec2 dir = length(d) > 1e-4 ? normalize(d) : vec2(1.0, 0.0);
   vec2 perp = vec2(-dir.y, dir.x);
   vec4 c = mix(ca, cb, t);
-  float wpx = aW * uViewport.y * 0.5 / max(c.w, 0.1) * 1.4;   // projected width in pixels (approx)
-  float px = max(wpx, 1.15);
-  c.xy += perp * side * px * 0.5 / uViewport * c.w * 2.0;
-  vAlpha = clamp(0.30 + 0.70 * wpx / px, 0.0, 1.0);
+  // A padded analytic strip covers every pixel along the line. Its integrated
+  // opacity equals the projected tube width, avoiding gaps from subpixel triangles.
+  float diameter=2.0*aW*uPixelScale/max(c.w,.1);
+  float width=max(diameter,1.0)+2.0;
+  c.xy+=perp*side*width/uViewport*c.w;
+  vLine=vec4(na,nb);vDiameterScale=2.0*aW*uPixelScale;vMaterial=aMat;
   vRel = mix(wa.xyz, wb.xyz, t);
   gl_Position = c;
 }`;
@@ -322,17 +364,28 @@ const RIG_FS = `
 #include <atmo>
 #include <atmo.sample>
 #include <lighting>
-in float vAlpha;
+flat in vec4 vLine;
+flat in float vDiameterScale, vMaterial;
 in vec3 vRel;
+uniform float uRefl,uCamY,uMirrorY;
+uniform vec2 uViewport;
 layout(location = 0) out vec4 o;
 void main() {
-  if (vAlpha <= 0.0) discard;
-  vec3 col = vec3(0.32, 0.33, 0.35) * (lightSky() / PI * 0.8 + lightSun() * 0.28 * cloudShadowAt(vRel.xz));
+  vec2 a=(vLine.xy*.5+.5)*uViewport,b=(vLine.zw*.5+.5)*uViewport;
+  vec2 d=b-a,q=gl_FragCoord.xy-a;
+  float distanceToLine=abs(d.x*q.y-d.y*q.x)/max(length(d),.0001);
+  float diameter=vDiameterScale*gl_FragCoord.w,coverageRadius=max(diameter,1.0)*.5;
+  float alpha=(1.0-smoothstep(coverageRadius-.5,coverageRadius+.5,distanceToLine))*min(diameter,1.0);
+  if(uRefl>.5&&vRel.y+uCamY<uMirrorY-.04)discard;
+  if(alpha<=0.0)discard;
+  vec3 base=vMaterial==${MAT.ROPE}.0?vec3(.32,.29,.23):vec3(.27,.28,.29);
+  vec3 col=base*(lightSky()/PI+lightSun()*.22*cloudShadowAt(vRel.xz));
   float dist = length(vRel);
+  alpha*=smoothstep(8.0,16.0,dist);if(alpha<=0.0)discard;
   vec3 ext = (RAY_S + (MIE_S + MIE_A) * uHaze) * 0.001;
   vec3 T = exp(-ext * dist);
   col = col * T + skyRadiance(normalize(vec3(vRel.x, 0.02, vRel.z) * vec3(1.0, 0.0, 1.0) + vec3(0.0, 0.02, 0.0))) * (1.0 - T);
-  o = vec4(col, vAlpha * 0.9);
+  o=vec4(col,alpha);
 }`;
 
 // A small, critically-damped follower for heave/pitch/roll
@@ -367,11 +420,11 @@ export class Yacht {
     this.progSail = new Program('yacht.sail', YACHT_VS, YACHT_FS, 'SAIL');
     this.progRig = new Program('yacht.rig', RIG_VS, RIG_FS);
     const lines = buildRigging();
-    this.nLines = lines.length / 7;
+    this.nLines = lines.length / 8;
     this.rigVao = gl.createVertexArray(); gl.bindVertexArray(this.rigVao);
     const rb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, rb); gl.bufferData(gl.ARRAY_BUFFER, lines, gl.STATIC_DRAW);
-    for (const [loc, size, off] of [[0, 3, 0], [1, 3, 12], [2, 1, 24]]) {
-      gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 28, off); gl.vertexAttribDivisor(loc, 1);
+    for (const [loc, size, off] of [[0, 3, 0], [1, 3, 12], [2, 1, 24], [3,1,28]]) {
+      gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 32, off); gl.vertexAttribDivisor(loc, 1);
     }
     gl.bindVertexArray(null);
 
@@ -535,7 +588,7 @@ export class Yacht {
     bindFBO(this.reflFbo);
     gl.clearColor(0, 0, 0, 0); gl.clearDepth(1); gl.depthMask(true);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    this.draw(ctx, VPm, ctx.camAbs, true);
+    this.draw({...ctx,w:this.reflTex.w,h:this.reflTex.h},VPm,ctx.camAbs,true);
     gl.bindTexture(gl.TEXTURE_2D, this.reflTex.tex); gl.generateMipmap(gl.TEXTURE_2D);
   }
 
@@ -558,7 +611,7 @@ export class Yacht {
         if (sim.count > 1) p.v2('uNoiseOrg', scale[5] * cx + scale[6] * cz, -scale[6] * cx + scale[5] * cz);
       }
       p.v3v('uSailTri',sailTris).f('uWet', 1)
-        .i('uCurrentSail',-1).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
+        .i('uCurrentSail',-1).f('uRigLines',0).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
         .f('uUnderCam', ctx.under ? 1 : 0).f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
@@ -571,18 +624,19 @@ export class Yacht {
     const time = ctx.time || 0;
     for(const [sailIndex,{S,cloth,boom}] of this.sails.entries()){
       const reef=this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale,dx=(S.head[0]-S.tack[0])*(S.boom?1-.18*reef:1),dy=(S.head[1]-S.tack[1])*(S.boom?1-.42*reef:1);
-      p.i('uCurrentSail',sailIndex).v3('uSailAxis',dx,dy,0).v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[sailIndex*2],this.flutterPhases[sailIndex*2+1],S.phase).v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
+      p.i('uCurrentSail',sailIndex).v3('uSailAxis',dx,dy,0).v4('uSailCloth',S.clew[0],S.clew[1],S.draft,S.roach).v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[sailIndex*2],this.flutterPhases[sailIndex*2+1],S.phase).v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
       gl.bindVertexArray(cloth.vao);gl.drawElements(gl.TRIANGLES,cloth.count,gl.UNSIGNED_INT,0);
       if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
     }
     // Fine tubes blend over the completed hull and cloth; no depth writes means
     // fractional coverage cannot punch opaque sky-coloured holes into sails.
     p=this.progHull.use();setCommon(p);gl.depthMask(false);
-    gl.bindVertexArray(this.rigMesh.vao);gl.drawElements(gl.TRIANGLES,this.rigMesh.count,gl.UNSIGNED_INT,0);
+    p.f('uRigLines',1);gl.bindVertexArray(this.rigMesh.vao);gl.drawElements(gl.TRIANGLES,this.rigMesh.count,gl.UNSIGNED_INT,0);p.f('uRigLines',0);
     gl.bindVertexArray(this.sheets.vao);gl.drawElements(gl.TRIANGLES,this.sheets.count,gl.UNSIGNED_INT,0);
     // rigging
     p = this.progRig.use();
-    p.m4('uVP', VP).m4('uModel', Mf).v2('uViewport', ctx.w, ctx.h);
+    p.m4('uVP', VP).m4('uModel', Mf).v2('uViewport', ctx.w, ctx.h).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
+      .f('uRefl',mirror?1:0).f('uCamY',ctx.cam.y).f('uMirrorY',this.y);
     bindLighting(p, ctx);
     gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
     gl.bindVertexArray(this.rigVao);

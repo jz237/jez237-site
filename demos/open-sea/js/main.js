@@ -19,6 +19,7 @@ import { Fx } from './fx.js';
 import { Fish } from './fish.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
+import { watchRelease } from './release.js';
 
 const params = new URLSearchParams(location.search);
 if (params.has('shot')) document.body.classList.add('shot');
@@ -344,6 +345,7 @@ if (params.has('shot')) {
   app.rig = rig;
   if (caps.software) app.res = 0.5;
   const ui = initUI(app, rig);
+  watchRelease();
   if (params.get('mode')) rig.setMode(params.get('mode'));
   let last = performance.now();
   const loop = (now) => {
