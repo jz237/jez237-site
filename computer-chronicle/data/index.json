@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-30",
+      "historicDate": "1984-10-22",
+      "displayDate": "Week of October 22-28, 1984",
+      "edition": "Issue 117 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Ghostbusters heads for the C64; Commodore pitches an office in ROM, and local bulletin boards connect the neighborhood.",
+      "leadHeadline": "Ghostbusters Haunts the Commodore 64",
+      "storyHeadlines": [
+        "Commodore Puts a $300 Office in the Plus/4",
+        "The Neighborhood Bulletin Board Takes Shape",
+        "BYTE Measures the IBM PC/AT’s 6 MHz Pace"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-22.png",
+      "thumb": "media/thumbs/1984-10-22.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-29",
       "historicDate": "1984-10-15",
       "displayDate": "Week of October 15-21, 1984",

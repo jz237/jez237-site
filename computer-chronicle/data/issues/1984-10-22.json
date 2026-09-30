@@ -1,0 +1,355 @@
+{
+  "visualProfile": {
+    "tone": "October 1984 games-and-home-computing newsprint",
+    "motifs": [
+      "Ghostbusters Commodore 64 disk and game box",
+      "Commodore Plus/4 keyboard",
+      "IBM PC/AT",
+      "modem and bulletin board"
+    ],
+    "layout": "Dense period weekly; game art above the fold, red and blue rules, halftone blocks"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "October 22-28, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Wide Ghostbusters game banner and period Commodore 64 halftone; Plus/4 and PC/AT in secondary columns",
+    "secondaryRail": "Games shelf, charts, modem note, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-09-30",
+  "historicDate": "1984-10-22",
+  "displayDate": "Week of October 22-28, 1984",
+  "edition": "Issue 117 - Weekly 1984 Computer & Culture Chronicle",
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-10-22.png",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for October 22-28, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A movie phenomenon reaches the Commodore 64 while the home-computer counter weighs a new $300 machine against established game libraries.",
+  "morningLine": "Ghostbusters heads for the C64; Commodore pitches an office in ROM, and local bulletin boards connect the neighborhood.",
+  "lead": {
+    "headline": "Ghostbusters Haunts the Commodore 64",
+    "dek": "Activision turns the summer film sensation into an October home-computer game, giving the game shelf this week’s biggest name.",
+    "body": [
+      "Ghostbusters is crossing from the movie theater to the Commodore 64. Release listings place Activision’s North American C64 edition on Friday, October 26; a separate catalog confirms an October 1984 C64 release. The precise Friday date rests on the release listing rather than a contemporary day-of-sale advertisement, but the game plainly belongs on this October shelf.",
+      "The license has unusual recognition for a computer game. The film was still in domestic theaters during this weekend, appearing on the October 26–28 box-office chart, while its title now appears on a home-computer game. For C64 owners, that puts one of the year’s most recognizable screen names within reach of the disk drive.",
+      "This is a game-led week even as hardware makers court the same shoppers. Commodore is readying the Plus/4, a $300 machine with 64K and productivity software built in, yet the already-established Commodore 64 has the game catalog that makes a new film adaptation a retail event. The two products point to different answers to the same question: what will families actually do with a computer at home?",
+      "Exact store availability and a retail price for Ghostbusters are not established by the sources in hand. The release record supports the arrival of the C64 edition, while the broader October story is the competition for living-room attention among software, games and new hardware."
+    ],
+    "sourceRefs": [
+      0,
+      1,
+      6
+    ],
+    "confidence": "same-week"
+  },
+  "stories": [
+    {
+      "headline": "Commodore Puts a $300 Office in the Plus/4",
+      "body": [
+        "Commodore’s Plus/4 is moving toward buyers with a different home-computer promise: productivity software built into the machine. An October COMPUTE! hands-on report describes a 64K computer priced at about $300, positioning it as a ready-made working tool rather than merely an empty platform awaiting programs.",
+        "That price places the Plus/4 squarely in the family-computer aisle, but the software-in-ROM approach is its sharper distinction. Buyers comparing machines this autumn will weigh the convenience of built-in applications against the deep third-party catalogs of established systems, including the C64 now receiving Ghostbusters.",
+        "The magazine’s account is an October rollout report, not evidence of a fresh October 22 announcement. It does, however, show Commodore trying to broaden the household computer pitch from play and programming to everyday office tasks."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The Neighborhood Bulletin Board Takes Shape",
+      "body": [
+        "A modem and a local phone call can turn a home computer into a gathering place. Kathy Yakal’s period reporting for COMPUTE! describes boards run by enthusiasts, offering messages, public-domain files, games and communities built around particular machines. Chicago sysop John Semenek recalled finding one local board roughly two years earlier and at least 20 by the reporting period.",
+        "Stan and Susie Subeck’s Atari-oriented Valley Girl BBS gives the culture a playful face, with themed menus and online adventure games and trivia. This is not a national network in miniature so much as a collection of local rooms, each shaped by its operator and callers.",
+        "Keeping a board alive is no small hobby expense. A survey cited in the article put typical startup costs above $3,000 and continuing costs near $50 a month, before counting the sysop’s time. The November issue dating makes this period context, not a claim that these boards began operating this week."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "period"
+    },
+    {
+      "headline": "BYTE Measures the IBM PC/AT’s 6 MHz Pace",
+      "body": [
+        "The IBM PC/AT remains a prominent subject for the business-computer press. BYTE’s October coverage examines the machine and its 6 MHz Intel 80286 processor, a step in the IBM-compatible performance race.",
+        "The PC/AT was introduced in August, so this is a contemporary magazine assessment rather than a new October launch. Its presence beside inexpensive home machines shows how wide the computer market has become: a family comparing software shelves and an office comparing processor power are reading very different specifications."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Ghostbusters — Commodore 64",
+      "summary": "Activision film adaptation listed for North American release October 26; independently cataloged for October 1984",
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "title": "Commodore Plus/4",
+      "summary": "64K computer with built-in productivity software; approximately $300 in October reporting",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "IBM PC/AT",
+      "summary": "October BYTE coverage of IBM’s 6 MHz 80286 machine; originally introduced in August",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Valley Girl BBS",
+      "summary": "Chicago-area Atari bulletin board with themed menus and games in period reporting",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "period"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Ghostbusters",
+      "detail": "Activision’s Commodore 64 game, listed for October 1984 release"
+    },
+    {
+      "name": "Plus/4 built-in productivity software",
+      "detail": "Bundled applications described in October COMPUTE! coverage"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "Ghostbusters — Commodore 64"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "I Just Called to Say I Love You — Stevie Wonder",
+        "Caribbean Queen — Billy Ocean",
+        "Hard Habit to Break — Chicago",
+        "Purple Rain — Prince & The Revolution",
+        "Lucky Star — Madonna"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "The Terminator",
+        "Terror in the Aisles",
+        "Body Double",
+        "Places in the Heart",
+        "Thief of Hearts"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore Plus/4",
+      "price": "about $300",
+      "note": "October period price; not a verified sale this week.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "BBS operation",
+      "price": "over $3,000 startup; about $50 monthly",
+      "note": "Survey estimate cited in period reporting; operating cost, not a retail product price.",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Ghostbusters remains on the movie chart",
+      "summary": "The film appears on the domestic weekend chart as the C64 game reaches October release listings.",
+      "sourceRefs": [
+        6,
+        0
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "Chip makers rebound",
+      "summary": "TIME’s October 22 issue reports improving fortunes for U.S. semiconductor makers.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "I Just Called to Say I Love You",
+      "artist": "Stevie Wonder",
+      "chartDate": "1984-10-27",
+      "sourceUrls": [
+        "https://musicchartsarchive.com/singles-chart/1984-10-27"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Caribbean Queen",
+      "artist": "Billy Ocean",
+      "chartDate": "1984-10-27",
+      "sourceUrls": [
+        "https://musicchartsarchive.com/singles-chart/1984-10-27"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Hard Habit to Break",
+      "artist": "Chicago",
+      "chartDate": "1984-10-27",
+      "sourceUrls": [
+        "https://musicchartsarchive.com/singles-chart/1984-10-27"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Purple Rain",
+      "artist": "Prince & The Revolution",
+      "chartDate": "1984-10-27",
+      "sourceUrls": [
+        "https://musicchartsarchive.com/singles-chart/1984-10-27"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Lucky Star",
+      "artist": "Madonna",
+      "chartDate": "1984-10-27",
+      "sourceUrls": [
+        "https://musicchartsarchive.com/singles-chart/1984-10-27"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "The Computer with an Office Inside",
+    "summary": "Commodore’s Plus/4 offers 64K and built-in productivity applications at about $300 in October reporting.",
+    "tagline": "A new sort of home-computer proposition."
+  },
+  "market": {
+    "headline": "Games and Work Divide the Computer Counter",
+    "summary": "Ghostbusters makes the C64 game library the week’s draw while Commodore promotes the Plus/4’s built-in applications and IBM’s PC/AT draws business-magazine attention.",
+    "sourceRefs": [
+      0,
+      1,
+      2,
+      4
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Reagan and Mondale return to the campaign trail",
+    "summary": "After their second debate, President Reagan and Walter Mondale resumed campaigning; an October 22 UPI report recorded their contrasting assessments of the encounter.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "BBS operators build a grassroots electronic community",
+    "summary": "Kathy Yakal’s period feature documents local user-group boards, public-domain file libraries, online games, and the substantial cost in money and time of running a board. November issue dating means this is period context, not a claim of an October 22 event.",
+    "posts": [
+      {
+        "topic": "Valley Girl BBS",
+        "platform": "Atari BBS",
+        "text": "Stan and Susie Subeck offer online adventure games and trivia through a Valspeak-themed Chicago-area board."
+      },
+      {
+        "topic": "sysop economics",
+        "platform": "home BBS",
+        "text": "Survey cited by COMPUTE! estimates more than $3,000 to get a board online and about $50 monthly to maintain it."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "On this BBS, deleting a message means to “bag” it",
+    "summary": "A Chicago-area Atari bulletin board styled its commands in Valley Girl slang.",
+    "detail": "The Subecks’ Valley Girl BBS called exiting “de-val”; its 13-year-old co-helper inspired the theme, according to Kathy Yakal."
+  },
+  "accuracyLedger": {
+    "items": [
+      "The October 26 Ghostbusters C64 date is from a release listing; MobyGames independently confirms October 1984, not the exact day.",
+      "Plus/4 and PC/AT details come from October magazine coverage; the PC/AT was introduced earlier.",
+      "The BBS feature is in a November issue and is treated as period context.",
+      "Music ranks use the October 27 chart; movies use the October 26–28 domestic weekend."
+    ]
+  },
+  "sources": [
+    {
+      "title": "ghost",
+      "url": "https://gameranks.gg/releases/1984/october-26",
+      "date": "1984-10-26"
+    },
+    {
+      "title": "moby",
+      "url": "https://www.mobygames.com/game/2619/ghostbusters/",
+      "date": "1984-10"
+    },
+    {
+      "title": "plus",
+      "url": "https://www.atarimagazines.com/compute/issue53/018_1_Commodore_Prepares_To_Roll_Out_The_Plus_4.php",
+      "date": "1984-10"
+    },
+    {
+      "title": "bbs",
+      "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "byte",
+      "url": "https://docslib.org/doc/9446676/the-ibm-pc-at-october-1984-byte-magazine",
+      "date": "1984-10"
+    },
+    {
+      "title": "chart",
+      "url": "https://musicchartsarchive.com/singles-chart/1984-10-27",
+      "date": "1984-10-27"
+    },
+    {
+      "title": "film",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/10/26",
+      "date": "1984-10-26/28"
+    },
+    {
+      "title": "reagan",
+      "url": "https://www.upi.com/Archives/1984/10/22/President-Reagan-said-today-he-felt-good-about-his/8809467265600/",
+      "date": "1984-10-22"
+    },
+    {
+      "title": "time",
+      "url": "https://time.com/archive/6884433/raking-in-the-chips/",
+      "date": "1984-10-22"
+    },
+    {
+      "title": "piracy",
+      "url": "https://mastertronic.co.uk/press-coverage-computer-and-video-games-october-1984-a-readers-view-on-piracy/",
+      "date": "1984-10"
+    }
+  ]
+}
