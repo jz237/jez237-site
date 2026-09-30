@@ -33,7 +33,6 @@
 
   function card(item) {
     const source = imageUrl(item.image);
-    const description = item.tests || '';
     return `<article class="collection-card">
       <div class="collection-image${sizeClass(item.size)}">
         <img src="${escapeHtml(source)}" alt="${escapeHtml(item.title)}" loading="lazy">
@@ -41,7 +40,6 @@
       <div class="collection-content">
         <div class="collection-kicker">${escapeHtml(item.date)} · ${escapeHtml(label)}</div>
         <h2>${escapeHtml(item.title)}</h2>
-        ${description ? `<p class="collection-description">${escapeHtml(description)}</p>` : ''}
         <details><summary>Show prompt</summary><pre>${escapeHtml(item.prompt)}</pre></details>
       </div>
     </article>`;
