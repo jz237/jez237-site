@@ -40,7 +40,7 @@
       label: 'AI + Media',
       tone: 'media',
       items: [
-        ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
+        ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'AI Images'],
         ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
         ['computer-chronicle', 'computer-chronicle/', 'chronicle', 'Computer Chronicle'],
         ['ai-sounds', 'ai-sounds/', 'aiSounds', 'AI Generated Sounds'],

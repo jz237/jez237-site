@@ -224,7 +224,6 @@
               <h3>${escapeHtml(item.title)}</h3>
               ${creature.description ? `<p class="desc">${escapeHtml(creature.description)}</p>` : ''}
               ${creature.template ? `<p class="template"><strong>Template:</strong> ${escapeHtml(creature.template)}</p>` : ''}
-              ${item.tests ? `<p class="tests"><strong>Checks:</strong> ${escapeHtml(item.tests)}</p>` : ''}
               <details>
                 <summary>Show prompt</summary>
                 <pre>${escapeHtml(item.prompt)}</pre>
