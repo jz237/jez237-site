@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-09-29T07:36:23.925Z",
-  "scope": "Four animated process cutaways for the whole sump, fleece roller, protein skimmer and return pump, connected to their real 3D components",
+  "checkedAt": "2026-09-30T16:17:23.140Z",
+  "scope": "Detailed wet-rotor return pump, working section cutaway, inspection-speed control, six component lessons and qualitative head-pressure comparison",
   "files": [
-    "assets/index-D36Tr1Hs.js",
-    "assets/index-kaNpkfKs.css",
+    "assets/index-BVkrN8Bl.css",
+    "assets/index-CrdYWGGf.js",
     "assets/rock-layers.bin-B60TwGSm.gz",
     "index.html"
   ],
-  "buildHash": "33550200db0932df6b72b044e62a82116160edda06a363361b8d056d18fe99e7",
+  "buildHash": "77ccf0bb2c62bff6db334a34027ff13b56b59213a5ea142441042892d0dc17f1",
   "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
   "checks": {
     "typescriptBuild": true,
@@ -16,7 +16,61 @@
     "synchronizedAssets": true,
     "processAnimation": true,
     "biofilmRegression": true,
-    "preservedModelDetail": true
+    "preservedModelDetail": true,
+    "returnCutaway": true,
+    "performance": true
+  },
+  "pump": {
+    "mode": "after",
+    "base": "local",
+    "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+    "performance": [
+      {
+        "system": "system",
+        "fps": 60.11291929591498,
+        "calls": 373,
+        "triangles": 1078762
+      },
+      {
+        "system": "return",
+        "fps": 60.092961487383796,
+        "calls": 32,
+        "triangles": 87442
+      }
+    ],
+    "checks": {
+      "inspectionSpeed": true,
+      "pauseIdle": true,
+      "reset": true,
+      "headExamples": true,
+      "mobile": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T16:11:30.802Z"
+  },
+  "before": {
+    "mode": "before",
+    "base": "local",
+    "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+    "performance": [
+      {
+        "system": "system",
+        "fps": 60.092961487383796,
+        "calls": 359,
+        "triangles": 1049822
+      },
+      {
+        "system": "return",
+        "fps": 60.0132625994695,
+        "calls": 25,
+        "triangles": 72972
+      }
+    ],
+    "checks": {
+      "mobile": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T15:51:47.534Z"
   },
   "browser": {
     "checks": {
@@ -36,8 +90,8 @@
       {
         "system": "system",
         "parts": 37,
-        "triangles": 1408682,
-        "calls": 490
+        "triangles": 1452092,
+        "calls": 511
       },
       {
         "system": "roller",
@@ -60,13 +114,13 @@
       {
         "system": "return",
         "parts": 7,
-        "triangles": 145946,
-        "calls": 54
+        "triangles": 174886,
+        "calls": 68
       }
     ],
     "errors": [],
     "idleFrames": 0,
-    "checkedAt": "2026-09-29T07:32:46.839Z"
+    "checkedAt": "2026-09-30T16:12:05.969Z"
   },
   "diagram": {
     "checks": {
@@ -79,7 +133,7 @@
       "narrow-phone": true
     },
     "errors": [],
-    "checkedAt": "2026-09-29T07:34:21.783Z"
+    "checkedAt": "2026-09-30T16:13:37.998Z"
   },
   "biofilm": {
     "checks": {
@@ -89,21 +143,24 @@
       "narrow-phone": true
     },
     "errors": [],
-    "checkedAt": "2026-09-29T07:34:52.686Z"
+    "checkedAt": "2026-09-30T16:14:37.301Z"
   },
   "visualReview": {
-    "evidence": "filtration/qa/process-guides-evidence/",
+    "evidence": "filtration/qa/return-pump-evidence/",
     "findings": [
-      "All four guides use four numbered steps, a shape/color legend, explicit water/air/waste routes and explanations that follow the selected stage.",
-      "Whole-system route shows gravity down, mechanical capture, local skimmer processing and pumped return. Main sump water visibly continues past the skimmer.",
-      "Roller debris stays on the actual curved cloth path and travels toward the used roll only during the brief motor advance. The water level rises to the sensor and then falls.",
-      "Skimmer distinguishes organics at bubble boundaries, rising foam and waste export from the separate lower water outlet.",
-      "Pump cutaway follows the center inlet, rotating curved blades, volute and outlet.",
-      "Inspected desktop, 390px and 320px layouts and rendered animation sequences. The original model controls remain together above each guide.",
-      "Find this part in 3D selects the correct real component; local/global pause, replay, manual steps, offscreen suspension, system switching and reduced-motion initial state pass."
+      "Compared the existing GPT Image return-pump appearance reference with actual front, top, oblique, exploded, individual-component and phone renders. Original procedural geometry; no new generated image downloads.",
+      "Added fine mottled polymer grain, ceramic shaft/collars, rubber pads and O-ring, recessed fasteners, helical fitting threads, hollow channels, mounting rails and molded housing seams.",
+      "Corrected motor position so the magnetic rotor now sits inside the rotor well, while the outlet remains seated in the whole-system riser.",
+      "Section surfaces clarify the removed half; the intact outlet shows the destination of the small round water tracers. Inspected actual rotating-vane frame sequences.",
+      "Desktop and 390/320px controls and information remain usable. Inspection speed slows rotor motion continuously. Global pause freezes the rotor and settled scene stops rendering.",
+      "Retained all 40 selectable assemblies. Roller, skimmer and live-rock geometry/assets remain unchanged."
     ]
   },
-  "performanceNote": "No slow-hardware claim or new FPS baseline. Every assembly retains identical part, triangle and draw-call counts. Packed rock bytes remain unchanged. Added compressed JS is about 6.6 kB and CSS about 0.8 kB. Guides use inline SVG without extra image downloads or WebGL contexts, run only on request, sleep offscreen and stop after one cycle.",
-  "previousApprovedBuild": "approved-biofilm-build.json",
-  "deploymentStatus": "Local validation complete; publication recorded separately."
+  "limitations": [
+    "Generic wet-rotor teaching reconstruction, not manufacturer CAD. Fixed-shaft geometry and seven vanes are illustrative.",
+    "Qualitative, unitless pump/system curves do not size a pump or predict flow. Inspection speed changes animation only.",
+    "Local comparison stays near 60 FPS; it does not establish performance on older hardware.",
+    "Section caps simplify the internal shape; this is not a CFD or hydraulic continuity simulation."
+  ],
+  "deploymentStatus": "Local validation complete; production verification recorded separately."
 }

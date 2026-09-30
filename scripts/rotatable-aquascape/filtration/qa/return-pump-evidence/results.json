@@ -1,0 +1,127 @@
+{
+  "pump": {
+    "mode": "after",
+    "base": "local",
+    "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+    "performance": [
+      {
+        "system": "system",
+        "fps": 60.11291929591498,
+        "calls": 373,
+        "triangles": 1078762
+      },
+      {
+        "system": "return",
+        "fps": 60.092961487383796,
+        "calls": 32,
+        "triangles": 87442
+      }
+    ],
+    "checks": {
+      "inspectionSpeed": true,
+      "pauseIdle": true,
+      "reset": true,
+      "headExamples": true,
+      "mobile": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T16:11:30.802Z"
+  },
+  "before": {
+    "mode": "before",
+    "base": "local",
+    "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+    "performance": [
+      {
+        "system": "system",
+        "fps": 60.092961487383796,
+        "calls": 359,
+        "triangles": 1049822
+      },
+      {
+        "system": "return",
+        "fps": 60.0132625994695,
+        "calls": 25,
+        "triangles": 72972
+      }
+    ],
+    "checks": {
+      "mobile": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T15:51:47.534Z"
+  },
+  "browser": {
+    "checks": {
+      "completeParts": true,
+      "allAssembliesExplodeInspectIsolate": true,
+      "sensorTriggeredAdvanceThenStop": true,
+      "bubbleMotion": true,
+      "pause": true,
+      "pointerSelection": true,
+      "assemblySequence": true,
+      "reset": true,
+      "pausedIdle": true,
+      "mobileReducedMotion": true,
+      "noRuntimeErrors": true
+    },
+    "views": [
+      {
+        "system": "system",
+        "parts": 37,
+        "triangles": 1452092,
+        "calls": 511
+      },
+      {
+        "system": "roller",
+        "parts": 8,
+        "triangles": 415738,
+        "calls": 132
+      },
+      {
+        "system": "skimmer",
+        "parts": 11,
+        "triangles": 651510,
+        "calls": 166
+      },
+      {
+        "system": "biology",
+        "parts": 3,
+        "triangles": 1846866,
+        "calls": 59
+      },
+      {
+        "system": "return",
+        "parts": 7,
+        "triangles": 174886,
+        "calls": 68
+      }
+    ],
+    "errors": [],
+    "idleFrames": 0,
+    "checkedAt": "2026-09-30T16:12:05.969Z"
+  },
+  "diagram": {
+    "checks": {
+      "systemMotionPauseVisibility": true,
+      "rollerMotionPauseVisibility": true,
+      "skimmerMotionPauseVisibility": true,
+      "returnMotionPauseVisibility": true,
+      "desktop": true,
+      "phone": true,
+      "narrow-phone": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T16:13:37.998Z"
+  },
+  "biofilm": {
+    "checks": {
+      "finiteAnimationPauseAndVisibility": true,
+      "desktop": true,
+      "phone": true,
+      "narrow-phone": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-30T16:14:37.301Z"
+  }
+}

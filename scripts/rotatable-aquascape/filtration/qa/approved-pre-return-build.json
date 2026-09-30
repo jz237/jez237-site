@@ -1,0 +1,109 @@
+{
+  "checkedAt": "2026-09-29T07:36:23.925Z",
+  "scope": "Four animated process cutaways for the whole sump, fleece roller, protein skimmer and return pump, connected to their real 3D components",
+  "files": [
+    "assets/index-D36Tr1Hs.js",
+    "assets/index-kaNpkfKs.css",
+    "assets/rock-layers.bin-B60TwGSm.gz",
+    "index.html"
+  ],
+  "buildHash": "33550200db0932df6b72b044e62a82116160edda06a363361b8d056d18fe99e7",
+  "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
+  "checks": {
+    "typescriptBuild": true,
+    "browser": true,
+    "visual": true,
+    "synchronizedAssets": true,
+    "processAnimation": true,
+    "biofilmRegression": true,
+    "preservedModelDetail": true
+  },
+  "browser": {
+    "checks": {
+      "completeParts": true,
+      "allAssembliesExplodeInspectIsolate": true,
+      "sensorTriggeredAdvanceThenStop": true,
+      "bubbleMotion": true,
+      "pause": true,
+      "pointerSelection": true,
+      "assemblySequence": true,
+      "reset": true,
+      "pausedIdle": true,
+      "mobileReducedMotion": true,
+      "noRuntimeErrors": true
+    },
+    "views": [
+      {
+        "system": "system",
+        "parts": 37,
+        "triangles": 1408682,
+        "calls": 490
+      },
+      {
+        "system": "roller",
+        "parts": 8,
+        "triangles": 415738,
+        "calls": 132
+      },
+      {
+        "system": "skimmer",
+        "parts": 11,
+        "triangles": 651510,
+        "calls": 166
+      },
+      {
+        "system": "biology",
+        "parts": 3,
+        "triangles": 1846866,
+        "calls": 59
+      },
+      {
+        "system": "return",
+        "parts": 7,
+        "triangles": 145946,
+        "calls": 54
+      }
+    ],
+    "errors": [],
+    "idleFrames": 0,
+    "checkedAt": "2026-09-29T07:32:46.839Z"
+  },
+  "diagram": {
+    "checks": {
+      "systemMotionPauseVisibility": true,
+      "rollerMotionPauseVisibility": true,
+      "skimmerMotionPauseVisibility": true,
+      "returnMotionPauseVisibility": true,
+      "desktop": true,
+      "phone": true,
+      "narrow-phone": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-29T07:34:21.783Z"
+  },
+  "biofilm": {
+    "checks": {
+      "finiteAnimationPauseAndVisibility": true,
+      "desktop": true,
+      "phone": true,
+      "narrow-phone": true
+    },
+    "errors": [],
+    "checkedAt": "2026-09-29T07:34:52.686Z"
+  },
+  "visualReview": {
+    "evidence": "filtration/qa/process-guides-evidence/",
+    "findings": [
+      "All four guides use four numbered steps, a shape/color legend, explicit water/air/waste routes and explanations that follow the selected stage.",
+      "Whole-system route shows gravity down, mechanical capture, local skimmer processing and pumped return. Main sump water visibly continues past the skimmer.",
+      "Roller debris stays on the actual curved cloth path and travels toward the used roll only during the brief motor advance. The water level rises to the sensor and then falls.",
+      "Skimmer distinguishes organics at bubble boundaries, rising foam and waste export from the separate lower water outlet.",
+      "Pump cutaway follows the center inlet, rotating curved blades, volute and outlet.",
+      "Inspected desktop, 390px and 320px layouts and rendered animation sequences. The original model controls remain together above each guide.",
+      "Find this part in 3D selects the correct real component; local/global pause, replay, manual steps, offscreen suspension, system switching and reduced-motion initial state pass."
+    ]
+  },
+  "performanceNote": "No slow-hardware claim or new FPS baseline. Every assembly retains identical part, triangle and draw-call counts. Packed rock bytes remain unchanged. Added compressed JS is about 6.6 kB and CSS about 0.8 kB. Guides use inline SVG without extra image downloads or WebGL contexts, run only on request, sleep offscreen and stop after one cycle.",
+  "previousApprovedBuild": "approved-biofilm-build.json",
+  "deploymentStatus": "Local validation complete; publication recorded separately."
+}
