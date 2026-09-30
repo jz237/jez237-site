@@ -6,7 +6,9 @@ import { bindLighting } from './lighting.js';
 import { YachtMaterials } from './yacht-materials.js';
 import { sailWind, advanceSailPhases, SAIL_MOTION_GLSL } from './sail-motion.js';
 import { HullCurrent } from './whirlpool.js';
+import { HULL_WATER_GLSL,bindHullWater } from './hull-water.js';
 import './glsl.js';
+defineChunk('hull-water',HULL_WATER_GLSL);
 
 export const YACHT_VS = `
 layout(location = 0) in vec3 aPos;
@@ -97,9 +99,13 @@ const YACHT_FS = `
 #include <underwater>
 #include <water.uv>
 #include <whirlpool>
+#include <wake>
+#include <hull-water>
 uniform sampler2DArray uDisp;
 uniform sampler2DArray uSurfaceAtlas, uDetailAtlas;
 uniform sampler2D uInstruments, uCompass;
+uniform sampler2D uHullWet;
+uniform float uHullWetOn;
 uniform mat4 uModel;
 uniform vec2 uYachtCen;    // centre of the cascade frame relative to the camera (xz)
 in vec3 vLocal;
@@ -133,7 +139,7 @@ float sailShadow(vec3 p, vec3 l) {
 float waterHeightAt(vec2 relXZ) {
   vec2 gp = relXZ - uYachtCen, dd = vec2(0.0);
   float h = 0.0;
-  for (int it = 0; it < 2; it++) {
+  for (int it = 0; it < 4; it++) {
     vec2 g = gp - dd;
     h = 0.0; dd = vec2(0.0);
     for (int i = 0; i < 5; i++) {
@@ -143,7 +149,8 @@ float waterHeightAt(vec2 relXZ) {
       h += d.y;
     }
   }
-  return h+whirlSurface(relXZ).x;
+  h+=whirlSurface(relXZ).x+kelvinWake(relXZ,16).x;
+  return h+hullRunup(vec3(relXZ.x,h-uCamY,relXZ.y));
 }
 float ggx(float nh, float a2) { float d = nh * nh * (a2 - 1.0) + 1.0; return a2 / (PI * d * d); }
 
@@ -240,9 +247,18 @@ void main() {
   // become a broad sheen at distance rather than isolated saturated pixels.
   rough=clamp(sqrt(rough*rough+0.30*normalVariance),rough,0.85);
 
-  // wet splash zone near the waterline
-  float wet = smoothstep(0.32, 0.0, p.y) * step(0.0, p.y) * uWet;
-  albedo *= 1.0 - 0.28 * wet;
+  // Wet paint and wood follow the actual wave contact, not a fixed stripe
+  // in boat coordinates. Canvas and high fittings do not turn into water.
+  float wy=vRel.y+uCamY,datum=whirlSurface(vRel.xz).x;
+  float crestLimit=datum+uCrestLimit;
+  vec2 wetUV=p.xz/vec2(48.0,10.0)+.5;
+  bool contactMapped=uHullWetOn>.5&&abs(p.x)<24.0&&abs(p.z)<5.0;
+  vec2 contact=contactMapped?textureLod(uHullWet,wetUV,0.0).rg:vec2(-7.0);
+  float waterMetric=max(.25,uHullUp.y-dot(whirlSurface(vRel.xz).yz,uHullUp.xz));
+  float hw=wy>crestLimit?-1e3:contactMapped?wy+(contact.r-p.y)*waterMetric:waterHeightAt(vRel.xz);
+  float wet=smoothstep(.42,.015,wy-hw)*uWet;
+  if(contactMapped)wet=max(wet,smoothstep(.18,.015,p.y-contact.g));
+  if(mat==${MAT.HULL}||wood||paint){albedo*=1.0-.18*wet;rough=mix(rough,max(.14,rough*.55),wet);}
 
   vec3 sunE = lightSun(), moonE = lightMoon();
   float shd = cloudShadowAt(vRel.xz);
@@ -297,10 +313,6 @@ void main() {
   }
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky
-  float wy = vRel.y + uCamY;
-  float datum=whirlSurface(vRel.xz).x;
-  float crestLimit=uWhirlpool.w>.001?datum+uCrestLimit:uMirrorY+2.5;
-  float hw = wy>crestLimit?-1e3:waterHeightAt(vRel.xz);
   float sub = smoothstep(hw + 0.02, hw - 0.10, wy);
   if (sub > 0.0) {
     vec3 sunWv, beamV, Ed0;
@@ -652,6 +664,10 @@ export class Yacht {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
       ctx.whirlpool.bind(p,ctx.cam);
+      bindHullWater(p,this,ctx.cam);
+      p.f('uHullWetOn',ctx.hullWet?1:0);if(ctx.hullWet)p.t('uHullWet',5,ctx.hullWet);
+      p.v4('uWakeA',this.x-ctx.cam.x,this.z-ctx.cam.z,Math.cos(this.psi+this.yaw),Math.sin(this.psi+this.yaw))
+        .v4('uWakeB',this.speed,.20*Math.pow(this.speed/6,2),1,0);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
       p.t('uSurfaceAtlas',7,this.materials.color).t('uDetailAtlas',9,this.materials.detail).t('uInstruments',10,this.materials.instrument).t('uCompass',4,this.materials.compass);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
