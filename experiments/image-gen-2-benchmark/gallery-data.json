@@ -17807,5 +17807,30 @@
       "description": "Layered hand-pulled reductive monotype with rolled ink gradients, wiped highlights, ghost pulls, brayer tracks, soft pressure variations, and deckled paper tooth.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-09-30-random-image-style-ballpoint-pen-the-glasshouse-night-shift",
+    "title": "Ballpoint Pen: The Glasshouse Night-Shift Leak Hunt",
+    "tests": "Single practical investigation in a deep glasshouse interior; distinct from earlier monotype carousel recovery in medium, setting, composition, and incident.; archive_slot=2026-09-30T09:20; concept=glasshouse-roof-leak-night-inspection; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished, richly observed BALLPOINT PEN DRAWING, not a photograph, mockup, infographic, comic, or prompt card. A night-shift maintenance worker has come to investigate a single leaking pane in a vast Victorian botanical glasshouse during a cold rain. View from inside at plant-bench height in a deep three-quarter perspective: dark rows of broad leaves and seed trays lead the eye toward the worker on a narrow ladder, holding a small inspection lamp against one high roof pane. Their other hand catches a drip in a metal cup; a subtle chain of droplets, wet iron muntins, and a newly forming puddle beneath identifies the fault. Through all the other intact panes, rain streaks and reversed silhouettes are merely reflections; at the cracked putty seam the exterior rain crosses unmistakably into the interior. Give the image a clear visual investigation: converging pen marks, interrupted reflection lines, and one pale, almost uninked shaft of lamp light isolate the faulty seam without arrows, labels, text, symbols, or diagram panels. Compose a quiet, slightly tense moment of practical discovery, not a disaster or generic noir scene. Entirely drawn with layered blue, black, and occasional red ballpoint ink on warm ivory drawing paper. Vary pen pressure and density: fine contour lines for glass, tight crosshatching for wet iron and shadows, loose looping scribbles for foliage, sparse stipples for condensation, glossy pools suggested by reserved paper white. Keep the characteristic tiny skips, ink deposits, and hand-drawn hatching of a real ballpoint; do not simulate charcoal, printmaking, digital vector, or a photographic render. Restrained palette of indigo, midnight blue, rust-red ink and paper cream, with lamp warmth conveyed by the untouched paper. Precise architecture, believable water path and human proportions, strong readable silhouette, delicate near-field plant detail, generous depth, no logos, watermark, border, or lettering.",
+    "image": "images/2026-09-30-random-image-style-ballpoint-pen-the-glasshouse-night-shift.jpg",
+    "thumb": "thumbs/2026-09-30-random-image-style-ballpoint-pen-the-glasshouse-night-shift.webp",
+    "color": "#433d43",
+    "date": "2026-09-30",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "glasshouse-roof-leak-night-inspection",
+      "imageSha256": "1523896d07c1f15dff0be85ed63f8f62e7be4828e5d2fba32486b8c8e3259f6b",
+      "imageDHash": "6664213333335a4e",
+      "styleFamily": "ballpoint-pen"
+    },
+    "randomRenderingStyle": {
+      "medium": "ballpoint pen drawing",
+      "description": "Layered blue, black, and red ballpoint ink, pressure-modulated crosshatching, sparse condensation stipple, and reserved warm paper for light.",
+      "template": ""
+    }
   }
 ]
