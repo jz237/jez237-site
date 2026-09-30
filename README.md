@@ -4,7 +4,7 @@ Starter website project with an AI news feed.
 
 ## Structure
 
-- `demos/` — [Website Demos](https://jez237.com/demos/), including the [V8 Engine Laboratory](https://jez237.com/demos/v8-engine/).
+- `demos/` — [Website Demos](https://jez237.com/demos/), including the [V8 Engine Laboratory](https://jez237.com/demos/v8-engine/) and [Open Sea](https://jez237.com/demos/open-sea/), a real-time WebGL 2 ocean (source in `demos/open-sea/`).
 - `scripts/v8-engine/` — complete React / Three.js V8 source and reproducible static build; see its README.
 
 - `index.html` — landing page

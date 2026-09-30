@@ -1,0 +1,47 @@
+<!doctype html><meta charset="utf-8"><title>ocean test</title>
+<canvas id="c" width="64" height="64"></canvas>
+<script type="module">
+import { initGL, gl, readF32 } from '/demos/open-sea/js/gl.js';
+import { OceanSim, seaParams } from '/demos/open-sea/js/ocean.js';
+window.run = async (sea, opts = {}) => {
+  initGL(document.getElementById('c'));
+  const o = new OceanSim({ N: 256, cascades: 5 });
+  o.setSea(sea, 0.0); // wind toward +x
+  o.cur = { ...o.target }; o.dirty = true;
+  o._test = opts.test ? 1 : 0;
+  o.update(0.001);
+  const stats = [];
+  const read = (i) => { const f = o.asmFbos[o.foamIdx][i]; return readF32(f, 0, 0, o.N, o.N); };
+  for (let i = 0; i < o.count; i++) {
+    const d = read(i);
+    let s = 0, s2 = 0, n = o.N * o.N, sd = 0, jmin = 9;
+    for (let k = 0; k < n; k++) { const h = d[k * 4 + 1]; s += h; s2 += h * h; sd += d[k*4]**2; jmin = Math.min(jmin, d[k*4+3]); }
+    stats.push({ i, L: o.defs[i].L, kLo: +o.defs[i].kLo.toFixed(4), kHi: +o.defs[i].kHi.toFixed(3), mean: s / n, std: Math.sqrt(s2 / n - (s / n) ** 2), dispStd: Math.sqrt(sd/n), jmin });
+  }
+  let tot = 0; stats.forEach(s => tot += s.std ** 2);
+  const p = seaParams(sea);
+  const out = { sea, hsTarget: p.hs, hsMeasured: 4 * Math.sqrt(tot), stats, mss: o.mss, U: p.U };
+  // Imag-part check: with uTest=1 Dx field is zeroed, so output .y (imag of packed complex) must vanish if FFT+Hermitian symmetry are right.
+  if (opts.test) {
+    const d = read(0); let mx = 0, mh = 0;
+    for (let k = 0; k < o.N * o.N; k++) { mx = Math.max(mx, Math.abs(d[k * 4])); mh = Math.max(mh, Math.abs(d[k*4+1])); }
+    out.maxDispWhenDxZeroed = mx; out.maxH = mh;
+  }
+  // Propagation direction: correlate height along x at t and t+dt using cascade 1 (500 m tile)
+  if (opts.dir) {
+    const c = 1, N = o.N;
+    const grab = () => { const d = read(c); const a = new Float32Array(N * N); for (let k = 0; k < N * N; k++) a[k] = d[k * 4 + 1]; return a; };
+    o.update(0.0); const a0 = grab(); const dt = opts.dir; o.update(dt); const a1 = grab();
+    // rotation of cascade 1 in world: local frame; find shift in local +x / +z that best matches
+    const best = { sx: 0, sz: 0, c: -1 };
+    for (let sz = -3; sz <= 3; sz++) for (let sx = -3; sx <= 3; sx++) {
+      let cc = 0;
+      for (let y = 0; y < N; y += 2) for (let x = 0; x < N; x += 2) cc += a0[y * N + x] * a1[((y + sz + N) % N) * N + ((x + sx + N) % N)];
+      if (cc > best.c) { best.c = cc; best.sx = sx; best.sz = sz; }
+    }
+    out.shift = best; out.texel = o.defs[c].L / N; out.rot = o.defs[c].rot;
+  }
+  return out;
+};
+window.ready = true;
+</script>
