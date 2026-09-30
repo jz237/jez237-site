@@ -11,24 +11,21 @@ function cr(p0, p1, p2, p3, t) {
 
 // Keyframes in the yacht frame: [time, fx (forward), fz (starboard), h (m above surface; <0 underwater), lookFx, lookFz, lookH, fovDeg]
 const TOUR = [
-  [0, 78, 34, 2.3, 4, 0, 3.6, 34],
-  [10, 46, 26, 2.4, 3, 0, 3.4, 38],
-  [22, 24, 19, 2.8, 1, 0, 3.6, 42],
-  [34, 12, 30, 5.5, 0, 0, 4.5, 44],
-  [46, -20, 30, 9.0, -1, 0, 4.5, 46],
-  [58, -36, 6, 12.0, 2, 0, 3.5, 46],
-  [68, -21, -7, 5.4, 3, 0, 3.4, 44],
-  [78, -6, -8.5, 1.5, 4, 0, 3.6, 46],
-  [86, 8, -7.5, 1.5, 2, 0, 2.0, 50],
-  [94, 9, -7, -0.8, 1, 0, 0.0, 54],
-  [102, 6, -7.5, -4.6, 0, 0, -3.5, 58],
-  [111, -3, -5.5, -5.6, -3, 0, -4.5, 60],
-  [119, -9, 3, -3.6, -3, 0, 1.0, 60],
-  [126, -13, 8, -0.2, -3, 0, 3.0, 58],
-  [133, -20, 16, 6.5, 0, 0, 4.0, 52],
-  [148, 10, 48, 20.0, 0, 0, 3.0, 46],
-  [162, 78, 34, 8.0, 4, 0, 3.4, 38],
-  [172, 78, 34, 2.3, 4, 0, 3.6, 34],
+ [0,65,-100,12,0,0,17,42],
+ [14,45,-88,15,0,0,17,44],
+ [28,0,-88,20,0,0,16,46],
+ [42,-45,-82,23,-2,0,16,48],
+ [56,-80,-50,28,-2,0,15,48],
+ [70,-75,28,17,-6,0,13,50],
+ [82,-46,16,8,-12,0,7,54],
+ [94,-15,15,4,-5,0,4,58],
+ [102,8,15,-3,2,0,-1,60],
+ [112,6,18,-8,0,0,-4,62],
+ [124,-10,20,-7,-4,0,-3,62],
+ [135,-35,45,9,-2,0,12,56],
+ [148,30,93,31,0,0,17,48],
+ [162,110,85,12,0,0,17,44],
+ [172,132,82,6,0,0,17,42],
 ];
 export const TOUR_LENGTH = TOUR[TOUR.length - 1][0];
 
@@ -40,8 +37,8 @@ export class Rig {
     this.keys = new Set();
     this.vel = [0, 0, 0];
     this.speed = 10;
-    this.orbit = { az: 2.4, el: 0.28, dist: 26 };
-    this.dive = { az: 0.6, el: 0.12, dist: 9, depth: -5 };
+    this.orbit = { az: 2.4, el: 0.28, dist: 95 };
+    this.dive = { az: 0.6, el: 0.12, dist: 28, depth: -7 };
     this.drag = null;
     this.touches = new Map();
     this.onChange = null;
@@ -57,10 +54,10 @@ export class Rig {
     if (m === 'fly') { this.vel = [0, 0, 0]; }
     if (m === 'boat') {
       const dx = cam.x - y.x, dz = cam.z - y.z, d = Math.hypot(dx, dz);
-      this.orbit.az = Math.atan2(dz, dx) - y.psi; this.orbit.dist = clamp(Math.hypot(d, cam.y - 2), 8, 80); this.orbit.el = clamp(Math.atan2(cam.y - 2, d), 0.05, 1.3);
-      if (this.orbit.dist > 60) this.orbit.dist = 26;
+      this.orbit.az = Math.atan2(dz, dx) - y.psi; this.orbit.dist = clamp(Math.hypot(d,cam.y-13),35,240); this.orbit.el = clamp(Math.atan2(cam.y - 2, d), 0.05, 1.3);
+      if (this.orbit.dist > 150) this.orbit.dist = 95;
     }
-    if (m === 'dive') { this.dive.az = 0.6; this.dive.el = 0.12; this.dive.dist = 9; this.dive.depth = -5; }
+    if (m === 'dive') { this.dive.az = 0.6; this.dive.el = 0.12; this.dive.dist = 28; this.dive.depth = -7; }
     if (m === 'tour') { this.t = 0; this._init = false; this._init2 = false; }
     if (this.onChange) this.onChange(m);
   }
@@ -186,7 +183,7 @@ export class Rig {
       const surf = app.surfaceAtCam || 0;
       if (this.mode === 'boat') {
         const horiz = Math.cos(o.el) * o.dist;
-        const tx = y.x + Math.cos(y.psi) * 0.4, tz = y.z + Math.sin(y.psi) * 0.4, ty = y.y + 3.5;
+        const tx = y.x + Math.cos(y.psi) * 0.4, tz = y.z + Math.sin(y.psi) * 0.4, ty = y.y + 13.0;
         const wy = Math.max(ty + Math.sin(o.el) * o.dist, surf + 0.8);
         const k = 1 - Math.exp(-dt * 8);
         cam.x += (tx + Math.cos(a) * horiz - cam.x) * k; cam.z += (tz + Math.sin(a) * horiz - cam.z) * k; cam.y += (wy - cam.y) * k;

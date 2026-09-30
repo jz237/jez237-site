@@ -141,6 +141,12 @@ export function initUI(app, rig) {
   sync();
   setInterval(sync, 300);
 
+  // Fullscreen is visible independently of the folded controls.
+  const full=document.getElementById('fullscreen');
+  const syncFull=()=>{const on=!!(document.fullscreenElement||document.webkitFullscreenElement);full.textContent=on?'⛶ Exit fullscreen':'⛶ Fullscreen';full.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen');full.setAttribute('aria-pressed',String(on));};
+  const toggleFull=async()=>{try{if(document.fullscreenElement||document.webkitFullscreenElement){await(document.exitFullscreen?.()??document.webkitExitFullscreen?.());}else{const target=document.documentElement;if(target.requestFullscreen)await target.requestFullscreen();else if(target.webkitRequestFullscreen)target.webkitRequestFullscreen();else throw Error('Fullscreen unavailable');}}catch{hint.textContent='Fullscreen is unavailable in this browser.';hint.style.opacity=1;}syncFull();};
+  full.addEventListener('click',toggleFull);document.addEventListener('fullscreenchange',syncFull);document.addEventListener('webkitfullscreenchange',syncFull);syncFull();
+
   // ---- keyboard --------------------------------------------------------------------------------------------------
   addEventListener('keydown', e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) && e.key !== 'h') return;
@@ -148,7 +154,7 @@ export function initUI(app, rig) {
     if (k === 'h') { hud.classList.toggle('hidden'); fold.classList.toggle('gone'); document.body.classList.toggle('hide-hud'); hint.style.opacity = 0; }
     else if (k === 'p') app.requestPhoto();
     else if (k === 'n') rig.nextShot();
-    else if (k === 'f') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+    else if (k === 'f') toggleFull();
     else if (k >= '1' && k <= '4') rig.setMode(['tour', 'fly', 'boat', 'dive'][+k - 1]);
   });
 
