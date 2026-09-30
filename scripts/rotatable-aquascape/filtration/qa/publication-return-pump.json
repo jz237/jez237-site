@@ -1,0 +1,150 @@
+{
+  "verifiedAt": "2026-09-30T16:27:21.178Z",
+  "publishedCommit": "e08920c43b0fe3ced72c107bfdbe5cfcb62d06b0",
+  "hiddenReef": {
+    "deployment": "https://9dd4ae7e.hidden-reef.pages.dev",
+    "preview": "https://81032213.hidden-reef.pages.dev",
+    "live": "https://hidden-reef.pages.dev/showroom/filtration/#return",
+    "browser": {
+      "mode": "hidden-live",
+      "base": "https://hidden-reef.pages.dev/showroom/filtration/",
+      "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+      "performance": [
+        {
+          "system": "system",
+          "fps": 60.0132625994695,
+          "calls": 373,
+          "triangles": 1078762
+        },
+        {
+          "system": "return",
+          "fps": 59.94005994005994,
+          "calls": 32,
+          "triangles": 87442
+        }
+      ],
+      "checks": {
+        "inspectionSpeed": true,
+        "pauseIdle": true,
+        "reset": true,
+        "headExamples": true,
+        "mobile": true
+      },
+      "errors": [],
+      "checkedAt": "2026-09-30T16:23:18.262Z"
+    }
+  },
+  "jez237": {
+    "deployment": "https://393774e5.jez237-site.pages.dev",
+    "workflow": "scripts/deploy_jez237_pages.mjs: current-main, full-site, compiled Pages Functions, preview checks, main recheck, production checks",
+    "browser": {
+      "mode": "jez-live",
+      "base": "https://jez237.com/prototypes/hidden-reef/showroom/filtration/",
+      "method": "Serial Chrome 1440x1120 DPR1, actual rendered frame count over 3 seconds after warmup. No older-hardware claim.",
+      "performance": [
+        {
+          "system": "system",
+          "fps": 59.87634233647901,
+          "calls": 373,
+          "triangles": 1078762
+        },
+        {
+          "system": "return",
+          "fps": 59.587217043941415,
+          "calls": 32,
+          "triangles": 87442
+        }
+      ],
+      "checks": {
+        "inspectionSpeed": true,
+        "pauseIdle": true,
+        "reset": true,
+        "headExamples": true,
+        "mobile": true
+      },
+      "errors": [],
+      "checkedAt": "2026-09-30T16:25:39.509Z"
+    },
+    "collateralChecks": [
+      "Philadelphia CSP/services",
+      "Hidden Reef image permissions",
+      "Pond filter links"
+    ]
+  },
+  "liveAssets": [
+    {
+      "base": "https://hidden-reef.pages.dev/showroom/filtration/",
+      "htmlStatus": 200,
+      "assets": [
+        {
+          "file": "assets/index-CrdYWGGf.js",
+          "status": 200,
+          "sha256": "c3b21422a769e0d72aef596619dd893df046644cd7cf0e2215456d63fc7afad0"
+        },
+        {
+          "file": "assets/index-BVkrN8Bl.css",
+          "status": 200,
+          "sha256": "084fc53d4f92786be2db25e5d56a25fe00257d54664d2edfd8ab8366cf859893"
+        }
+      ],
+      "controlsPresent": true
+    },
+    {
+      "base": "https://jez237.com/prototypes/hidden-reef/showroom/filtration/",
+      "htmlStatus": 200,
+      "assets": [
+        {
+          "file": "assets/index-CrdYWGGf.js",
+          "status": 200,
+          "sha256": "c3b21422a769e0d72aef596619dd893df046644cd7cf0e2215456d63fc7afad0"
+        },
+        {
+          "file": "assets/index-BVkrN8Bl.css",
+          "status": 200,
+          "sha256": "084fc53d4f92786be2db25e5d56a25fe00257d54664d2edfd8ab8366cf859893"
+        }
+      ],
+      "controlsPresent": true
+    },
+    {
+      "base": "https://jez237.com/prototypes/hidden-reef-header-preview/showroom/filtration/",
+      "htmlStatus": 200,
+      "assets": [
+        {
+          "file": "assets/index-CrdYWGGf.js",
+          "status": 200,
+          "sha256": "c3b21422a769e0d72aef596619dd893df046644cd7cf0e2215456d63fc7afad0"
+        },
+        {
+          "file": "assets/index-BVkrN8Bl.css",
+          "status": 200,
+          "sha256": "084fc53d4f92786be2db25e5d56a25fe00257d54664d2edfd8ab8366cf859893"
+        }
+      ],
+      "controlsPresent": true
+    },
+    {
+      "base": "https://jez237.com/demos/reef-filtration/",
+      "htmlStatus": 200,
+      "assets": [
+        {
+          "file": "assets/index-CrdYWGGf.js",
+          "status": 200,
+          "sha256": "c3b21422a769e0d72aef596619dd893df046644cd7cf0e2215456d63fc7afad0"
+        },
+        {
+          "file": "assets/index-BVkrN8Bl.css",
+          "status": 200,
+          "sha256": "084fc53d4f92786be2db25e5d56a25fe00257d54664d2edfd8ab8366cf859893"
+        }
+      ],
+      "controlsPresent": true
+    }
+  ],
+  "visualEvidence": "return-pump-evidence/",
+  "limitations": [
+    "Generic original teaching reconstruction, not manufacturer CAD.",
+    "Head-pressure curves are qualitative and unitless; inspection speed does not predict flow.",
+    "Near-60 FPS samples are from local Chrome, not an older computer."
+  ]
+}
