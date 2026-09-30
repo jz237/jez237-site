@@ -1,6 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 3.2 MB compressed mesh; the browser has no framework dependency or build step.
+A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 4.4 MB compressed mesh; the browser has no framework dependency or build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -85,7 +85,7 @@ WebGL 2 with `EXT_color_buffer_float` is required. Without it the page shows an 
 
 ## Large schooner asset
 
-`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 17 material classes, and animates each sail about its actual luff axis. Mesh export includes 174,519 vertices and 243,104 triangles, plus eight animated mainsheet and headsail sheet tubes.
+`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 21 material classes, and animates each sail about its actual luff axis. Mesh export includes 208,646 vertices and 292,142 triangles, plus eight animated mainsheet and headsail sheet tubes. Format v2 uses a 44-byte vertex with position, normal, UV, material, tube radius and ambient visibility.
 
 The tour and boat/dive cameras, buoyancy probes, sailing speed and wake have been resized for the larger vessel. Fine metal highlights include derivative-based normal filtering to reduce distant sparkle. The monochrome fullscreen button remains visible with the control panel folded, and reflects fullscreen state in its label and accessibility attributes.
 
@@ -117,3 +117,13 @@ The passenger is anchored in yacht coordinates, including heave, pitch, roll and
 Four 512-square mipmapped surface/detail layers add teak grain, caulking, staggered plank ends, varnished wood, sail/cushion weave and brushed metal. Added fittings include rope coils, belaying gear, canvas cushions, hatch hardware, rescue buoys, ventilation grilles, lettering and supported helm instruments. The powered displays update heading from the actual bow axis and speed from sailing motion, with a readable night backlight. The chart is a schematic, not navigational data. Fine tubes retain the phone-safe coverage and derivative filtering.
 
 Validation: scripts/open-sea/deck-navigation-test.mjs checks connected stations, a 426-step continuous helm-to-bow route, boundary/cabin collision and passenger height through uneven frame times. GPU browser checks cover ten day/night/storm/portrait viewpoints, keyboard movement, drag look, taking off/reboarding, fullscreen and simultaneous phone walking/look touch events. Physical-phone GPU validation of this addition remains unverified. An outside reviewer prompted fixes to obstructed passages, mirrored lettering, wheel caulking, night display brightness and floating fittings. Broader lighting/contact-shadow and cabin-interior limitations remain.
+
+## Second yacht surface pass
+
+Seven 512-square mipmapped color/detail layers now cover irregular teak grain and pores, woven cloth, brushed metal, varnished wood, braided rope with a tracer strand, painted surfaces and rubber. Explicit unshifted texture gradients preserve continuous caulking across per-plank grain offsets. The sail shader adds filtered twin stitch rows and corner reinforcement. Rope tubes and animated sheets have continuous length/circumference UVs; the wooden rail is a single smooth surface per side.
+
+New fittings include knurled winch drums, sheet blocks with sheaves and axles, embedded wheel fasteners, recessed bezel screws, raised companionway wood panels and low-intensity warm exterior lights. An inclined brass-rimmed compass is readable from the helm; its rose follows actual yacht heading. Port/starboard lenses have restrained night emission.
+
+Nine short-range geometry rays bake ambient visibility into static vertices. This darkens indirect light around contact points; direct sun, moon and lightning retain their separate lighting. Deforming sails and booms are excluded from the bake to avoid stationary marks on moving cloth. This is contact shading, not a full dynamic yacht shadow map. Cabins remain closed and the model remains a procedural interpretation rather than a reconstruction from naval plans.
+
+`node scripts/open-sea/schooner-asset-test.mjs` validates finite vertices, unit normals, material/AO ranges, deforming-group AO, buffer layout and every index. Degenerate triangles are excluded on export and invalid corner normals fall back to geometric face normals. Navigation tests now cover 39 obstacles and a continuous 430-step helm-to-bow route, including the new compass and blocks. Fourteen GPU views cover fittings, ropes, sailcloth, day, night, storm, whole yacht and portrait views; HDR pixels are finite with no browser or WebGL errors. Walking, camera anchoring through hitches, simultaneous touch movement/look, reboarding and fullscreen also pass. These portrait checks use a desktop NVIDIA GPU and do not establish performance or visual parity on a physical phone.

@@ -10,6 +10,7 @@ const YACHT_VS = `
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aNrm;
 layout(location = 2) in vec4 aAttr;
+layout(location = 3) in float aAO;
 uniform mat4 uVP, uModel;
 uniform vec4 uSail;    // angle, pivot x, flutter, time
 uniform vec3 uSailAxis;
@@ -19,6 +20,7 @@ out vec3 vLocalN;
 out vec3 vN;
 out vec3 vRel;
 out vec4 vAttr;
+out float vAO;
 void main() {
   vec3 p = aPos, n = aNrm;
 #ifdef SAIL
@@ -48,6 +50,7 @@ void main() {
   vLocal = p;
   vLocalN = n;
   vAttr = aAttr;
+  vAO = aAO;
   gl_Position = uVP * w;
 }`;
 
@@ -60,13 +63,15 @@ const YACHT_FS = `
 #include <water.uv>
 uniform sampler2DArray uDisp;
 uniform sampler2DArray uSurfaceAtlas, uDetailAtlas;
-uniform sampler2D uInstruments;
+uniform sampler2D uInstruments, uCompass;
+uniform mat4 uModel;
 uniform vec2 uYachtCen;    // centre of the cascade frame relative to the camera (xz)
 in vec3 vLocal;
 in vec3 vLocalN;
 in vec3 vN;
 in vec3 vRel;
 in vec4 vAttr;
+in float vAO;
 uniform vec3 uSunLocal, uMoonLocal;
 uniform vec3 uSailTri[15];
 uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam, uPixelScale;
@@ -122,33 +127,42 @@ void main() {
   vec2 metric=localN.y>=max(localN.x,localN.z)?vLocal.xz:localN.z>=localN.x?vLocal.xy:vLocal.zy;
   bool wood=mat==${MAT.TEAK}||mat==${MAT.WOOD};
   bool fabric=mat==${MAT.SAIL}||mat==${MAT.CANVAS};
-  vec2 uv=wood?metric/vec2(2.0,.16):mat==${MAT.SAIL}?vAttr.xy*vec2(120.0,350.0):fabric?metric/.08:metric/.5;
+  bool rope=mat==${MAT.ROPE},paint=mat==${MAT.HULL}||mat==${MAT.CABIN};
+  vec2 uv=wood?(mat==${MAT.WOOD}&&vAttr.w>0.0?vAttr.xy:metric/vec2(2.0,.16)):rope?vAttr.xy:mat==${MAT.SAIL}?vAttr.xy*vec2(120.0,350.0):fabric?metric/.08:paint?metric/.25:metric/.5;
+  // Per-plank offsets change the grain, not the texture footprint. Differencing
+  // those offsets at a seam would select coarse mips and break the caulk line.
+  vec2 duX=dFdx(uv),duY=dFdy(uv);
   uv.x+=mat==${MAT.TEAK}?hash11(floor(metric.y/.16))*.93:0.0;
-  float layer=mat==${MAT.WOOD}?3.0:wood?0.0:fabric?1.0:2.0;
-  vec3 texColor=pow(texture(uSurfaceAtlas,vec3(uv,layer)).rgb,vec3(2.2));
-  vec3 detail=texture(uDetailAtlas,vec3(uv,layer)).rgb;
+  float layer=mat==${MAT.WOOD}?3.0:wood?0.0:fabric?1.0:rope?4.0:paint?5.0:mat==${MAT.RUBBER}?6.0:2.0;
+  vec3 texColor=pow(textureGrad(uSurfaceAtlas,vec3(uv,layer),duX,duY).rgb,vec3(2.2));
+  vec3 detail=textureGrad(uDetailAtlas,vec3(uv,layer),duX,duY).rgb;
   float plankId=floor(metric.y/.16),jointCoord=metric.x/2.8+hash11(plankId+7.0);
   float jointDist=min(fract(jointCoord),1.0-fract(jointCoord));
   float jointWidth=max(fwidth(metric.x/2.8),.0005);
   float joint=(1.0-smoothstep(.0012,.0012+jointWidth,jointDist))*min(1.0,.0024/jointWidth);
   vec3 screen=pow(texture(uInstruments,vAttr.xy).rgb,vec3(2.2));
+  vec3 compass=pow(texture(uCompass,vAttr.xy).rgb,vec3(2.2));
+  float panelPhase=fract(vAttr.y*14.0),panelDist=min(panelPhase,1.0-panelPhase);
+  float sewRow=1.0-smoothstep(.0015,.0015+max(clothWidth.y*14.0,.001),abs(panelDist-.030));
+  float stitchFilter=1.0-smoothstep(.18,.65,clothWidth.x*1400.0);
+  float stitches=sewRow*(.5+.5*sin(vAttr.x*1400.0*TAU))*stitchFilter;
+  float reinforcement=max(smoothstep(.14,.02,length(vAttr.xy*vec2(1.0,3.0))),max(smoothstep(.14,.02,length((vAttr.xy-vec2(1.0,0.0))*vec2(1.0,3.0))),smoothstep(.93,.995,vAttr.y)));
   // Cotangent frame from actual UVs and geometry. Evaluate every derivative
   // before material flow, including on phone GPUs and the reflection pass.
   vec3 dpX=dFdx(vRel),dpY=dFdy(vRel);
-  vec2 duX=dFdx(uv),duY=dFdy(uv);
   vec3 px=cross(dpY,N),py=cross(N,dpX);
   vec3 tangent=px*duX.x+py*duY.x,bitangent=px*duX.y+py*duY.y;
   float frameScale=inversesqrt(max(max(dot(tangent,tangent),dot(bitangent,bitangent)),1e-20));
   vec2 bump=detail.rg*2.0-1.0;
   vec3 bumped=normalize(tangent*frameScale*bump.x+bitangent*frameScale*bump.y+N*sqrt(max(1.0-dot(bump,bump),.001)));
-  N=(wood||fabric||mat==${MAT.ALU}||mat==${MAT.STEEL})?bumped:N;
+  N=(wood||fabric||rope||paint||mat==${MAT.RUBBER}||mat==${MAT.ALU}||mat==${MAT.STEEL})?bumped:N;
   vec3 ndx=dFdx(N), ndy=dFdy(N);
   float normalVariance=max(dot(ndx,ndx),dot(ndy,ndy));
   if (uRefl > 0.5 && vRel.y + uCamY < uMirrorY - 0.04) discard;   // only what stands above the water is mirrored
   vec3 albedo = vec3(0.8); float rough = 0.4, metal = 0.0, trans = 0.0, f0 = 0.04;
   vec3 p = vLocal;
   if (mat == ${MAT.HULL}) {
-    albedo=vec3(0.017,0.036,0.057);rough=0.25;
+    albedo=vec3(0.017,0.036,0.057)*texColor;rough=detail.b-.035;
     if(p.y < -0.12){albedo=vec3(0.025,0.041,0.051);rough=.52;}
     albedo*=.97+.06*vnoise(p.xz*vec2(.8,14.0));
   } else if (mat == ${MAT.DECK}) {
@@ -156,7 +170,7 @@ void main() {
     float gr = 0.9 + 0.1 * vnoise(p.xz * 40.0);
     albedo *= gr;
   } else if (mat == ${MAT.CABIN}) {
-    albedo = vec3(0.80,0.77,0.67);rough=.32;
+    albedo = vec3(0.80,0.77,0.67)*texColor;rough=detail.b+.02;
   } else if (mat == ${MAT.TEAK}||mat==${MAT.WOOD}) {
     albedo=texColor*(mat==${MAT.WOOD}?vec3(.65,.56,.45):vec3(1.0));
     rough=mat==${MAT.WOOD}?.24:detail.b;
@@ -165,20 +179,24 @@ void main() {
   else if (mat == ${MAT.STEEL}) { albedo = texColor; metal = 0.95; rough = max(.27,detail.b); }
   else if (mat == ${MAT.KEEL}) {albedo=vec3(.025,.042,.055);rough=.6;}
   else if (mat == ${MAT.GLASS}) {albedo=vec3(.008,.020,.028);rough=.09;f0=.08;}
-  else if (mat == ${MAT.ROPE}) {albedo=vec3(.43,.40,.31);rough=.84;}
+  else if (mat == ${MAT.ROPE}) {albedo=texColor;rough=detail.b;}
   else if (mat == ${MAT.BRASS}) {albedo=vec3(.52,.34,.12);metal=.86;rough=.29;}
-  else if (mat == ${MAT.RUBBER}) {albedo=vec3(.42,.44,.42);rough=.76;}
+  else if (mat == ${MAT.RUBBER}) {albedo=texColor;rough=detail.b;}
   else if (mat == ${MAT.TRIM}) { albedo = vec3(0.05, 0.05, 0.055); rough = 0.4; }
   else if (mat == ${MAT.CANVAS}) {albedo=texColor*.78;rough=detail.b;}
   else if (mat == ${MAT.SAFETY}) {albedo=vec3(.75,.12,.018);rough=.67;}
   else if (mat == ${MAT.SCREEN}) {albedo=vec3(.002,.004,.005);rough=.32;}
+  else if (mat == ${MAT.COMPASS}) {albedo=compass;rough=.18;f0=.065;}
+  else if (mat == ${MAT.LAMP}) {albedo=vec3(.85,.63,.32);rough=.3;}
+  else if (mat == ${MAT.PORTLIGHT}) {albedo=vec3(.50,.01,.005);rough=.26;}
+  else if (mat == ${MAT.STARBOARDLIGHT}) {albedo=vec3(.008,.34,.05);rough=.26;}
   else if (mat == ${MAT.SAIL}) {
     albedo = texColor; rough = 0.85; trans = 0.45;
     float seamDist = min(fract(vAttr.y * 14.0), 1.0 - fract(vAttr.y * 14.0));
     float seam = (1.0 - smoothstep(0.012, 0.024 + clothWidth.y * 14.0, seamDist)) * 0.12;
     float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(clothWidth.x * 900.0, clothWidth.y * 1200.0));
     float wv = 0.985 + 0.015 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0) * weaveFilter;
-    albedo *= wv * (1.0 - seam);
+    albedo *= wv * (1.0-seam-.07*stitches) * (1.0-.055*reinforcement);
   }
 
   // Integrate unresolved normal variation on small metal tubes. Their highlights
@@ -215,9 +233,9 @@ void main() {
   // ambient: diffuse sky/ground plus glossy reflection of the environment
   vec3 amb = ambientFor(N);
   amb = mix(vec3(luma(amb)), amb, 0.55);   // white paint under a blue sky reads white to a camera that has white-balanced the scene
-  float ao = mat == ${MAT.HULL} ? mix(0.6, 1.0, smoothstep(-0.4, 0.3, p.y)) : 1.0;
+  float ao=clamp(vAO,.4,1.0)*(mat==${MAT.HULL}?mix(.6,1.0,smoothstep(-.4,.3,p.y)):1.0);
   if (mat == ${MAT.SAIL}) amb *= 0.84;
-  col += dif * (amb + flashE(N) / PI) * ao;
+  col += dif * amb * ao + dif * flashE(N) / PI;
   vec3 R = reflect(-V, N);
   vec3 envR = envRadiance(vec3(R.x, max(R.y, 0.02), R.z), clamp(rough * 6.0, 0.0, 6.0));
   float below = smoothstep(-0.25, 0.1, R.y);
@@ -225,6 +243,21 @@ void main() {
   vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 5.0);
   col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : mix(0.4, 1.0, metal));   // painted surfaces: the sky/sea fill is a weak sheen, not a second light
   if(mat==${MAT.SCREEN})col=col*.1+screen*max(luma(lightSun())*.65,.12);
+  float lampNight=1.0-smoothstep(.01,.20,luma(lightSun()));
+  if(mat==${MAT.LAMP})col+=vec3(1.0,.60,.26)*.08*lampNight;
+  if(mat==${MAT.PORTLIGHT})col+=vec3(1.0,.025,.012)*.14*lampNight;
+  if(mat==${MAT.STARBOARDLIGHT})col+=vec3(.02,.80,.15)*.14*lampNight;
+  // The small aft-facing companionway lights also put a warm pool on nearby
+  // deck and hardware. Their positions remain in the moving yacht frame.
+  if(lampNight>.001){
+    for(int i=0;i<3;i++){
+      vec3 lamp=i==0?vec3(-15.505,4.732,0.0):i==1?vec3(-.455,3.663,0.0):vec3(10.045,3.759,0.0);
+      vec3 delta=lamp-p;float d2=dot(delta,delta),d=sqrt(max(d2,.001));
+      vec3 L=mat3(uModel)*(delta/d);
+      float facing=max(delta.x/d,0.0),range=smoothstep(4.0,3.0,d);
+      col+=dif*vec3(1.0,.58,.27)*(.065*lampNight*range*facing*max(dot(N,L),0.0)/(PI*(d2+.07)));
+    }
+  }
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky
   float wy = vRel.y + uCamY;
@@ -316,16 +349,17 @@ export class Yacht {
     const mk = (m) => {
       const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
       const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, m.verts, gl.STATIC_DRAW);
-      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 40, 0);
-      gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 40, 12);
-      gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 40, 24);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 44, 0);
+      gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 44, 12);
+      gl.enableVertexAttribArray(2); gl.vertexAttribPointer(2, 4, gl.FLOAT, false, 44, 24);
+      gl.enableVertexAttribArray(3); gl.vertexAttribPointer(3, 1, gl.FLOAT, false, 44, 40);
       const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, m.idx, gl.STATIC_DRAW);
       return { vao, vb, count: m.idx.length };
     };
     this.hull=mk(g.hull);this.rigMesh=mk(g.rig);this.sails=g.sails.map(({S,mesh,boom})=>({S,cloth:mk(mesh),boom:boom?mk(boom):null}));this.metadata=g.metadata;
     this.materials=new YachtMaterials();
-    this.sheetVerts=new Float32Array(8*16*10);const sheetIdx=[];
-    for(let j=0;j<8;j++)for(let k=0;k<8;k++){const b=j*16;sheetIdx.push(b+k,b+(k+1)%8,b+8+k,b+(k+1)%8,b+8+(k+1)%8,b+8+k);}
+    this.sheetVerts=new Float32Array(8*18*11);const sheetIdx=[];
+    for(let j=0;j<8;j++)for(let k=0;k<8;k++){const b=j*18;sheetIdx.push(b+k,b+k+1,b+9+k,b+k+1,b+9+k+1,b+9+k);}
     this.sheets=mk({verts:this.sheetVerts,idx:new Uint32Array(sheetIdx)});
     this.progHull = new Program('yacht.hull', YACHT_VS, YACHT_FS);
     this.progSail = new Program('yacht.sail', YACHT_VS, YACHT_FS, 'SAIL');
@@ -427,7 +461,7 @@ export class Yacht {
       const D=B.map((v,k)=>v-A[k]),l=Math.hypot(...D);for(let k=0;k<3;k++)D[k]/=l;
       const U=[D[2],0,-D[0]],ul=Math.hypot(...U);for(let k=0;k<3;k++)U[k]/=ul;
       const V=[D[1]*U[2],D[2]*U[0]-D[0]*U[2],-D[1]*U[0]];
-      for(const P of [A,B])for(let k=0;k<8;k++){const t=k*Math.PI/4,N=U.map((v,j)=>v*Math.cos(t)+V[j]*Math.sin(t));this.sheetVerts.set([...P.map((v,j)=>v+.036*N[j]),...N,0,0,MAT.ROPE,.036],off);off+=10;}
+      for(const[end,P]of [A,B].entries())for(let k=0;k<=8;k++){const t=k*Math.PI/4,N=U.map((v,j)=>v*Math.cos(t)+V[j]*Math.sin(t));this.sheetVerts.set([...P.map((v,j)=>v+.036*N[j]),...N,end*l/.12,k/8,MAT.ROPE,.036,1],off);off+=11;}
     };
     for(const {S} of this.sails){if(!S.boom)continue;const foot=S.tack[0]-S.clew[0],a=this.sailAng*S.angleScale,c=Math.cos(a),sn=Math.sin(a);
       for(const side of [-1,1]){
@@ -509,7 +543,7 @@ export class Yacht {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
-      p.t('uSurfaceAtlas',7,this.materials.color).t('uDetailAtlas',9,this.materials.detail).t('uInstruments',10,this.materials.instrument);
+      p.t('uSurfaceAtlas',7,this.materials.color).t('uDetailAtlas',9,this.materials.detail).t('uInstruments',10,this.materials.instrument).t('uCompass',4,this.materials.compass);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
       if (ctx.sim) {
         const sim = ctx.sim, cx = this.x, cz = this.z;

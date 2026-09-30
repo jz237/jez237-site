@@ -5,15 +5,16 @@ Concept geometry, not certified naval architecture. No external assets required.
 """
 import bpy, math, json, struct, sys, os, array, gzip
 from mathutils import Vector
+from mathutils.bvhtree import BVHTree
 
 args=sys.argv[sys.argv.index('--')+1:]
 repo, outputs=args[0:2]
 asset=os.path.join(repo,'demos','open-sea','assets');os.makedirs(asset,exist_ok=True)
 os.makedirs(outputs,exist_ok=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
-MAT={'HULL':0,'DECK':1,'CABIN':2,'GLASS':3,'TEAK':4,'ALU':5,'SAIL':6,'STEEL':7,'ROPE':8,'KEEL':9,'TRIM':10,'BRASS':11,'RUBBER':12,'SCREEN':13,'CANVAS':14,'WOOD':15,'SAFETY':16}
+MAT={'HULL':0,'DECK':1,'CABIN':2,'GLASS':3,'TEAK':4,'ALU':5,'SAIL':6,'STEEL':7,'ROPE':8,'KEEL':9,'TRIM':10,'BRASS':11,'RUBBER':12,'SCREEN':13,'CANVAS':14,'WOOD':15,'SAFETY':16,'COMPASS':17,'LAMP':18,'PORTLIGHT':19,'STARBOARDLIGHT':20}
 palette={'HULL':((.018,.045,.075,1),.25,0),'DECK':((.55,.31,.135,1),.6,0),'CABIN':((.86,.82,.71,1),.32,0),'GLASS':((.012,.026,.036,1),.1,.25),'TEAK':((.38,.21,.09,1),.55,0),'ALU':((.53,.57,.61,1),.3,.9),'SAIL':((.86,.83,.72,1),.82,0),'STEEL':((.7,.73,.76,1),.22,1),'ROPE':((.52,.48,.37,1),.85,0),'KEEL':((.025,.042,.055,1),.6,0),'TRIM':((.018,.022,.026,1),.45,0),'BRASS':((.5,.32,.10,1),.27,.8),'RUBBER':((.45,.47,.44,1),.7,0)}
-palette.update({'SCREEN':((.02,.09,.12,1),.3,0),'CANVAS':((.69,.65,.54,1),.85,0),'WOOD':((.23,.10,.035,1),.24,0),'SAFETY':((.85,.12,.02,1),.67,0)})
+palette.update({'SCREEN':((.02,.09,.12,1),.3,0),'CANVAS':((.69,.65,.54,1),.85,0),'WOOD':((.23,.10,.035,1),.24,0),'SAFETY':((.85,.12,.02,1),.67,0),'COMPASS':((.8,.78,.68,1),.2,0),'LAMP':((1,.72,.38,1),.24,0),'PORTLIGHT':((.5,.018,.012,1),.24,0),'STARBOARDLIGHT':((.012,.35,.08,1),.24,0)})
 materials={}
 for name,(col,rough,metal) in palette.items():
  m=bpy.data.materials.new(name);m.use_nodes=True;m.diffuse_color=col
@@ -41,7 +42,7 @@ def grid(name,fn,nu,nv,mat,group='hull',flip=False):
  uv=[(i/nu,j/nv) for j in range(nv+1) for i in range(nu+1)]
  return mesh(name,verts,faces,mat,True,uv,group)
 def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
- if name.endswith('mast collar') or name in ['Winch base','Helm pedestal','Tender davit']:
+ if name.endswith('mast collar') or name in ['Winch base','Helm pedestal','Compass binnacle','Tender davit']:
   deck_nav['obstacles'].append({'type':'circle','x':a[0],'z':a[1],'radius':max(r,r1 or r),'name':name})
  a,b=Vector(a),Vector(b);d=(b-a).normalized();up=Vector((1,0,0)) if abs(d.z)>.9 else Vector((0,0,1));s=d.cross(up).normalized();t=d.cross(s);r1=r if r1 is None else r1
  verts=[]
@@ -49,9 +50,16 @@ def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
   for k in range(n):verts.append(p+rad*(math.cos(k*math.tau/n)*s+math.sin(k*math.tau/n)*t))
  faces=[(k,(k+1)%n,(k+1)%n+n,k+n) for k in range(n)];faces.extend([tuple(reversed(range(n))),tuple(range(n,n*2))])
  if group=='hull' and r<.065:group='rig'
- ob=mesh(name,verts,faces,mat,True,group=group);ob['tube_radius']=r;return ob
+ ob=mesh(name,verts,faces,mat,True,group=group);ob['tube_radius']=r
+ if mat in ['ROPE','WOOD']:
+  layer=ob.data.uv_layers.new(name='Surface coordinates');length=(b-a).length/(.12 if mat=='ROPE' else 2);cross_scale=1 if mat=='ROPE' else math.tau*r/.16
+  for face in ob.data.polygons:
+   for li in face.loop_indices:
+    vi=ob.data.loops[li].vertex_index;angle=vi%n
+    layer.data[li].uv=(length*(vi//n),cross_scale*(n if face.index==n-1 and angle==0 else angle)/n)
+ return ob
 def box(name,c,d,mat='CABIN',bevel=.04,group='hull'):
- if name.startswith('Teak coaming ') or name in ['Cockpit seat','Cockpit coaming','Helm instrument','Windlass foundation']:
+ if name.startswith('Teak coaming ') or name in ['Cockpit seat','Cockpit coaming','Helm instrument','Windlass foundation','Sheet block foot']:
   deck_nav['obstacles'].append({'type':'box','x':c[0],'z':c[1],'halfX':d[0]/2,'halfZ':d[1]/2,'name':name})
  if name in ['Deck hatch glazing','Companionway threshold']:
   deck_nav['surfaces'].append({'x':c[0],'z':c[1],'halfX':d[0]/2+.07,'halfZ':d[1]/2+.07,'height':c[2]+d[2]/2})
@@ -70,7 +78,13 @@ def torus(name,c,major,minor,mat='STEEL',axis='z',nu=24,nv=6,group='hull',stretc
   if axis=='y':p=(p[0],p[2],p[1])
   elif axis=='x':p=(p[2],p[0],p[1])
   return tuple(c[k]+p[k] for k in range(3))
- return grid(name,fn,nu,nv,mat,group)
+ ob=grid(name,fn,nu,nv,mat,group)
+ if mat in ['ROPE','WOOD']:
+  for tc in ob.data.uv_layers.active.data:
+   tc.uv.x*=math.tau*major*(1+stretch)/2/(.12 if mat=='ROPE' else 2)
+   if mat=='WOOD':tc.uv.y*=math.tau*minor/.16
+  if mat=='WOOD':ob['tube_radius']=minor
+ return ob
 def clamp(v,a,b):return max(a,min(b,v))
 def beam(x):
  if x>=-2:return 4.65*max(.0,1-((x+2)/25.5)**2.1)**.7
@@ -84,12 +98,18 @@ def hull(x,v,side):
  return (bow_rake(x,v),side*y,z)
 for side in [-1,1]:grid('Navy hull '+str(side),lambda u,v:hull(-23.5+47*u,v,side),160,40,'HULL',flip=side==1)
 grid('Rounded transom',lambda u,v:(-23.5,hull(-23.5,v,1)[1]*(2*u-1),hull(-23.5,v,1)[2]),28,32,'HULL',flip=True)
-grid('Teak working deck',lambda u,v:(-23.5+47*u,(v*2-1)*beam(-23.5+47*u)*.995,sheer(-23.5+47*u)+.055*(1-(v*2-1)**2)),160,40,'TEAK')
+grid('Teak working deck',lambda u,v:(-23.5+47*u,(v*2-1)*beam(-23.5+47*u)*.995,sheer(-23.5+47*u)+.055*(1-(v*2-1)**2)),320,80,'TEAK')
 for side in [-1,1]:
  for k in range(100):
   x=-23.3+k*.464;x1=x+.464
-  for height,rad,mat in [(0,.085,'TEAK'),(-.34,.028,'BRASS'),(.96,.024,'STEEL'),(.48,.012,'STEEL')]:
+  for height,rad,mat in [(-.34,.028,'BRASS'),(.96,.024,'STEEL'),(.48,.012,'STEEL')]:
    tube('Continuous rail', (x,side*beam(x)*.987,sheer(x)+height),(x1,side*beam(x1)*.987,sheer(x1)+height),rad,mat,n=6)
+ def caprail(u,v,side=side):
+  x=-23.3+46.4*u;center=Vector((x,side*beam(x)*.987,sheer(x)));e=.002
+  tangent=Vector((2*e,side*.987*(beam(x+e)-beam(x-e)),sheer(x+e)-sheer(x-e))).normalized();a=tangent.cross(Vector((0,0,1))).normalized();b=tangent.cross(a)
+  return center+.085*(a*math.cos(v*math.tau)+b*math.sin(v*math.tau))
+ rail=grid('Continuous varnished caprail',caprail,200,12,'WOOD');rail['tube_radius']=.085
+ for tc in rail.data.uv_layers.active.data:tc.uv.x*=46.4/2;tc.uv.y*=math.tau*.085/.16
  for k in range(38):
   x=-22.8+k*1.19;b=beam(x)*.985;h=sheer(x)
   tube('Stanchion',(x,side*b,h),(x,side*b,h+.99),.025,n=8)
@@ -145,11 +165,17 @@ for hi,(x,length,width,height) in enumerate(houses):
  # Companionway at aft bulkhead.
  box('Companionway surround',(x-length*.5-.03,0,base+.66),(.1,.91,1.3),'TEAK',.04)
  box('Companionway door',(x-length*.5-.09,0,base+.66),(.045,.77,1.18),'TRIM',.03)
+ box('Companionway inset wood',(x-length*.5-.116,0,base+.66),(.010,.69,1.08),'WOOD',.008)
+ for k in [-1,1]:box('Door raised stile',(x-length*.5-.13,k*.25,base+.66),(.018,.045,.92),'WOOD',.012)
  box('Companionway threshold',(x-length*.5-.30,0,sheer(x-length*.5-.30)+.08),(.40,.98,.12),'TEAK',.025)
  for side in [-1,1]:
   yy=side*.32;xx=x-length*.5-.12
   tube('Door handle',(xx,yy,base+.69),(xx,yy,base+.87),.021,'BRASS',n=8)
   for zz in [base+.29,base+1.02]:box('Door hinge',(xx,side*.39,zz),(.04,.07,.13),'STEEL',.012)
+ # Small sealed exterior lamp, seated on the aft bulkhead.
+ lx=x-length*.5-.055;lz=base+height-.15
+ box('Companionway light bezel',(lx,0,lz),(.08,.33,.13),'STEEL',.025)
+ box('Warm deck lamp',(lx-.05,0,lz),(.023,.25,.075),'LAMP',.012)
 
 # Mast positions mirror the image's ascending heights from bow to stern.
 mast_specs=[('Main',-12.7,36.5,9.8),('Middle',1.7,29.8,11.0),('Fore',14.0,23.8,8.6)]
@@ -229,6 +255,8 @@ for x in [-19,-16.8,-5.4,-1,7,17]:
   tube('Winch base',(x,y,z+.02),(x,y,z+.16),.26,'STEEL',n=18)
   tube('Winch drum',(x,y,z+.16),(x,y,z+.59),.19,'STEEL',.23,20)
   for k in range(4):torus('Sheet wraps',(x,y,z+.25+k*.055),.21,.024,'ROPE',nu=20,nv=6)
+  for k in range(24):
+   a=k*math.tau/24;tube('Winch drum grip',(x+.202*math.cos(a),y+.202*math.sin(a),z+.18),(x+.222*math.cos(a),y+.222*math.sin(a),z+.55),.004,'STEEL',n=5)
   tube('Winch handle',(x,y,z+.62),(x+.34,y,z+.62),.025,'STEEL',n=8)
   tube('Winch grip',(x+.34,y,z+.62),(x+.34,y,z+.75),.035,'TRIM',n=8)
 for x in [-21,-17,-5,6,18,22]:
@@ -255,15 +283,28 @@ for side in [-1,1]:
  tube('Wheel hub',(c[0]-.07,c[1],c[2]),(c[0]+.07,c[1],c[2]),.075,'BRASS',n=16)
  for k in range(8):
   a=k*math.tau/8;tube('Wheel spoke',c,(c[0],c[1]+.50*math.cos(a),c[2]+.50*math.sin(a)),.014,n=6)
+  ellipsoid('Wheel rim fastening',(c[0]-.032,c[1]+.52*math.cos(a),c[2]+.52*math.sin(a)),(.010,.017,.017),'BRASS',10,6)
  box('Helm instrument',(-16.63,side*1.75,z+1.94),(.18,.81,.61),'TRIM',.04)
  sx=-16.725;cy=side*1.75;cz=z+1.94
  tube('Chartplotter mounting arm',(-16.8,cy,z+.95),(-16.63,cy,z+1.75),.045,'STEEL',n=12)
- tube('Compass mounting bracket',(-16.8,cy,z+.96),(-16.45,cy,z+1.14),.04,'STEEL',n=12)
+ ccy=side*1.10
+ tube('Compass mounting bracket',(-16.8,cy,z+.96),(-16.66,ccy,z+1.14),.04,'STEEL',n=12)
  mesh('Chartplotter screen',[(sx,cy-.35,cz-.25),(sx,cy+.35,cz-.25),(sx,cy+.35,cz+.25),(sx,cy-.35,cz+.25)],[(0,3,2,1)],'SCREEN',False,[(0,1),(1,1),(1,0),(0,0)])
  for k in range(3):ellipsoid('Instrument keys',(sx-.005,cy-.23+k*.23,cz-.286),(.012,.024,.014),'CABIN',10,6)
- tube('Compass binnacle',(-16.45,cy,z+1.12),(-16.45,cy,z+1.60),.13,'STEEL',n=18)
- torus('Compass brass rim',(-16.45,cy,z+1.64),.145,.018,'BRASS',nu=24,nv=6)
- ellipsoid('Compass glass',(-16.45,cy,z+1.64),(.13,.13,.05),'GLASS',24,8)
+ for dy in [-.37,.37]:
+  for dz in [-.27,.27]:
+   ellipsoid('Instrument bezel screw',(sx-.003,cy+dy,cz+dz),(.007,.014,.014),'STEEL',10,6)
+   box('Screw drive recess',(sx-.011,cy+dy,cz+dz),(.0015,.018,.003),'TRIM',.001)
+ tube('Compass binnacle',(-16.66,ccy,z+1.12),(-16.66,ccy,z+1.36),.13,'STEEL',n=18)
+ cc=Vector((-16.66,ccy,z+1.46));cf=Vector((.7071068,0,.7071068));cs=Vector((0,1,0));cn=Vector((-.7071068,0,.7071068))
+ def compass_rim(u,v):
+  a=u*math.tau;b=v*math.tau;rad=cf*math.cos(a)+cs*math.sin(a)
+  return cc+rad*(.145+.018*math.cos(b))+cn*(.018*math.sin(b))
+ grid('Compass brass rim',compass_rim,36,8,'BRASS')
+ r=.13;verts=[cc];uv=[(.5,.5)]
+ for k in range(49):
+  a=k*math.tau/48;verts.append(cc+r*(cf*math.cos(a)+cs*math.sin(a)));uv.append((.5+.5*math.sin(a),.5-.5*math.cos(a)))
+ mesh('Compass rose under lens',verts,[(0,k+1,k+2) for k in range(48)],'COMPASS',False,uv)
 
 # Substantial twin anchor windlass with chain links and articulated flukes.
 for side in [-1,1]:
@@ -306,9 +347,20 @@ tube('Radar mounting pedestal',(-13.8,0,roof_h),(-13.8,0,roof_h+.4),.14,'CABIN',
 ellipsoid('Radar dome',(-13.8,0,roof_h+.72),(.65,.65,.45),'CABIN',24,16)
 for side in [-1,1]:tube('Antenna',(-12,side*2.2,5.0),(-12,side*2.2,7.4),.024,'STEEL',n=8)
 
+# Actual sheaves and cheek plates at the animated sheet anchors.
+for S in sail_specs:
+ if not S['boom']:continue
+ x=S['tack'][0]-(S['tack'][0]-S['clew'][0])*.6
+ for side in [-1,1]:
+  yy=side*2.9;zz=deck_height(x,yy)
+  box('Sheet block foot',(x,yy,zz+.025),(.34,.25,.05),'STEEL',.018)
+  for yoff in [-.075,.075]:box('Sheet block cheek',(x,yy+yoff,zz+.14),(.28,.033,.22),'STEEL',.035)
+  torus('Sheet block sheave',(x,yy,zz+.14),.082,.018,'BRASS','y',24,8)
+  tube('Block axle',(x,yy-.096,zz+.14),(x,yy+.096,zz+.14),.027,'STEEL',n=12)
+
 # Detail visible from a passenger's eye: working lines, belaying gear, rescue
 # equipment and fasteners. Fine pieces share the existing filtered rig batch.
-for x in [-18.8,-5.2,6.3,17.8]:
+for x in [-20.2,-4.4,6.3,17.8]:
  for side in [-1,1]:
   yy=side*min(3.65,beam(x)*.76);zz=deck_height(x,yy)+.014
   for k in range(5):torus('Coiled running line',(x,yy,zz),.12+k*.032,.014,'ROPE',nu=32,nv=6,stretch=1.35)
@@ -333,7 +385,7 @@ for side in [-1,1]:
  for xx in [-15.0,9.8]:
   cy=side*beam(xx)*.93;cz=sheer(xx)+.08
   box('Navigation light base',(xx,cy,cz),(.22,.13,.11),'TRIM',.025)
-  box('Navigation light lens',(xx,cy+side*.035,cz+.065),(.13,.08,.06),'GLASS',.02)
+  box('Navigation light lens',(xx,cy+side*.035,cz+.065),(.13,.08,.06),'PORTLIGHT' if side<0 else 'STARBOARDLIGHT',.02)
 for x,length,width,height in houses:
  base=sheer(x)+.10
  for side in [-1,1]:
@@ -350,37 +402,66 @@ def lettering(text,loc,size,normal,mat='BRASS'):
  ob=bpy.data.objects.new(text,data);bpy.context.collection.objects.link(ob);ob.location=loc;ob.rotation_euler=Vector(normal).to_track_quat('Z','Y').to_euler();data.materials.append(materials[mat])
  bpy.context.view_layer.objects.active=ob;ob.select_set(True);bpy.ops.object.convert(target='MESH');ob.select_set(False);groups['hull'].append(ob)
 lettering('OPEN SEA',(-23.53,0,2.04),.32,(1,0,0))
-lettering('OPEN SEA',(-15.505,0,4.73),.12,(1,0,0))
+lettering('OPEN SEA',(-15.505,0,4.45),.12,(1,0,0))
 
 # Export a compact indexed buffer, preserving Blender's evaluated bevel normals.
-deps=bpy.context.evaluated_depsgraph_get();vertex_data=array.array('f');index_data=array.array('I');manifest={'version':1,'length':52,'hullLength':47,'beam':9.3,'deckHeight':2.6,'draft':6.65,'crewConcept':[20,30],'masts':3,'sails':sail_specs,'groups':{},'deck':deck_nav}
+bpy.context.view_layer.update();deps=bpy.context.evaluated_depsgraph_get()
+# Short-range, geometry-based ambient visibility. Only indirect light uses this
+# value in the browser. Deforming sails never receive or cast this static bake.
+bvh_verts=[];bvh_faces=[]
+for group in ['hull','rig']:
+ for ob in groups[group]:
+  if ob.get('browser_skip') or ob.data.materials[0].name in ['GLASS','SCREEN','COMPASS','LAMP','PORTLIGHT','STARBOARDLIGHT']:continue
+  ev=ob.evaluated_get(deps);me=ev.to_mesh();me.calc_loop_triangles();offset=len(bvh_verts)
+  bvh_verts.extend(ev.matrix_world@v.co for v in me.vertices);bvh_faces.extend(tuple(offset+i for i in tri.vertices) for tri in me.loop_triangles);ev.to_mesh_clear()
+bvh=BVHTree.FromPolygons(bvh_verts,bvh_faces,all_triangles=True);ao_cache={}
+def ambient_visibility(p,n):
+ key=tuple(round(v,4) for v in (*p,*n));cached=ao_cache.get(key)
+ if cached is not None:return cached
+ axis=Vector((1,0,0)) if abs(n.z)>.9 else Vector((0,0,1));t=n.cross(axis).normalized();b=n.cross(t)
+ rays=[(n,1.)]+[(n*.5+(t*math.cos(i*math.tau/8)+b*math.sin(i*math.tau/8))*.8660254,.5) for i in range(8)]
+ blocked=0.;weight=0.;origin=p+n*.008
+ for direction,w in rays:
+  hit=bvh.ray_cast(origin,direction,.70);weight+=w
+  if hit[0] is not None:blocked+=w*(1-hit[3]/.70)**2
+ ao=round(clamp(1-.78*blocked/weight,.40,1.),5);ao_cache[key]=ao;return ao
+print('BAKING_CONTACT_VISIBILITY',len(bvh_faces),'triangles',flush=True)
+vertex_data=array.array('f');index_data=array.array('I');manifest={'version':2,'vertexStride':44,'length':52,'hullLength':47,'beam':9.3,'deckHeight':2.6,'draft':6.65,'crewConcept':[20,30],'masts':3,'sails':sail_specs,'groups':{},'deck':deck_nav,'ambientVisibility':{'rays':9,'distance':.7,'staticSails':False}}
 for group,objects in groups.items():
  verts=array.array('f');idx=array.array('I');lookup={}
  for ob in objects:
   if ob.get('browser_skip'):continue
   ev=ob.evaluated_get(deps);me=ev.to_mesh();me.calc_loop_triangles();uv=me.uv_layers.active;normals=me.corner_normals;matcode=MAT[ob.data.materials[0].name]
   for tri in me.loop_triangles:
+   face_positions=[ev.matrix_world@me.vertices[vi].co for vi in tri.vertices]
+   face_normal=(face_positions[1]-face_positions[0]).cross(face_positions[2]-face_positions[0])
+   if face_normal.length_squared<1e-16:continue
+   face_normal.normalize()
    corners=[]
    for li in tri.loops:
-    loop=me.loops[li];p=ev.matrix_world@me.vertices[loop.vertex_index].co;n=ev.matrix_world.to_3x3()@normals[li].vector;n.normalize();tc=uv.data[li].uv if uv else (p.x*.1,p.y*.1)
+    loop=me.loops[li];p=ev.matrix_world@me.vertices[loop.vertex_index].co;n=ev.matrix_world.to_3x3()@normals[li].vector
+    if n.length_squared<1e-12:n=face_normal.copy()
+    n.normalize();tc=uv.data[li].uv if uv else (p.x*.1,p.y*.1)
     if group.startswith('sail-') and not ob.name.startswith('Ivory '):
      S=sail_specs[int(group.split('-')[1])];T,H,C=S['tack'],S['head'],S['clew'];sv=clamp((p.z-T[1])/(H[1]-T[1]),0,1)
      lx=T[0]+(H[0]-T[0])*sv;ex=C[0]+(H[0]-C[0])*sv-S['roach']*math.sin(math.pi*sv)
      tc=(clamp((p.x-lx)/(ex-lx),0,1) if abs(ex-lx)>.001 else 0,sv)
-    key=tuple(round(v,6) for v in (p.x,p.z,p.y,n.x,n.z,n.y,tc[0],tc[1],matcode,ob.get('tube_radius',0)))
+    ao=1. if group.startswith(('sail-','boom-')) else ambient_visibility(p,n)
+    key=tuple(round(v,6) for v in (p.x,p.z,p.y,n.x,n.z,n.y,tc[0],tc[1],matcode,ob.get('tube_radius',0),ao))
     vi=lookup.get(key)
-    if vi is None:vi=len(verts)//10;lookup[key]=vi;verts.extend(key)
+    if vi is None:vi=len(verts)//11;lookup[key]=vi;verts.extend(key)
     corners.append(vi)
    idx.extend((corners[0],corners[2],corners[1]))
   ev.to_mesh_clear()
- entry={'vertexOffset':len(vertex_data)*4,'vertexCount':len(verts)//10,'indexOffset':0,'indexCount':len(idx)}
+ entry={'vertexOffset':len(vertex_data)*4,'vertexCount':len(verts)//11,'indexOffset':0,'indexCount':len(idx)}
  vertex_data.extend(verts);manifest['groups'][group]=entry;names[group+'_indices']=idx
+ print('EXPORTED_GROUP',group,'vertices',entry['vertexCount'],flush=True)
 vbytes=vertex_data.tobytes()
 for group in groups:
  entry=manifest['groups'][group];entry['indexOffset']=len(vbytes)+len(index_data)*4;index_data.extend(names[group+'_indices'])
 with open(os.path.join(asset,'schooner.bin.gz'),'wb') as f:f.write(gzip.compress(vbytes+index_data.tobytes(),compresslevel=9,mtime=0))
 with open(os.path.join(asset,'schooner.json'),'w') as f:json.dump(manifest,f,separators=(',',':'))
-print('BROWSER_ASSET',json.dumps({'bytes':len(vbytes)+len(index_data)*4,'vertices':len(vertex_data)//10,'triangles':len(index_data)//3,'objects':sum(map(len,groups.values()))}),flush=True)
+print('BROWSER_ASSET',json.dumps({'bytes':len(vbytes)+len(index_data)*4,'vertices':len(vertex_data)//11,'triangles':len(index_data)//3,'objects':sum(map(len,groups.values())),'aoSamples':len(ao_cache)}),flush=True)
 
 # Save complete editable source, with a composed studio camera and Cycles materials.
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=48;scene.cycles.use_denoising=True
