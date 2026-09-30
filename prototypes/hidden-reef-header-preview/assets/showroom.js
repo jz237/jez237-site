@@ -11,7 +11,7 @@
   const send = (type, value) => {
     if (ready && frame) frame.contentWindow.postMessage({channel:'hidden-reef-showroom', type, value}, location.origin);
   };
-  function visibility() { send('visibility', visible && !document.hidden && !document.body.classList.contains('cart-open') && !document.body.classList.contains('link-modal-open')); }
+  function visibility() { const rect=mount.getBoundingClientRect();visible=rect.width>0&&rect.height>0&&rect.bottom>0&&rect.top<innerHeight&&rect.right>0&&rect.left<innerWidth;send('visibility', visible && !document.hidden && !document.body.classList.contains('cart-open') && !document.body.classList.contains('link-modal-open')); }
   function launch(action) {
     pending = action || pending;
     if (frame) { if (ready && pending) { send(pending.type,pending.value); pending=null; } return; }
@@ -73,6 +73,7 @@
   });
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;visibility();},{threshold:0}).observe(mount);
   document.addEventListener('visibilitychange',visibility);
+  window.addEventListener('pageshow',visibility);
   new MutationObserver(visibility).observe(document.body,{attributes:true,attributeFilter:['class']});
   function showHabitat(){
     document.body.dataset.selectedHabitat=habitat;
