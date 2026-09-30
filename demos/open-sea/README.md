@@ -10,7 +10,7 @@ Open `index.html` from any static server. It needs WebGL 2 with float render tar
 
 | Layer | Method |
 | --- | --- |
-| Waves | Tessendorf FFT ocean, five spectral cascades (2.4 km down to 4.7 m tiles, 256²), JONSWAP wind sea plus a swell, choppy horizontal displacement, capillary dispersion. Sea state 0-9 sets significant wave height (1 cm to 14 m) and wind (0.3 to 29 m/s). |
+| Waves | Tessendorf FFT ocean, five spectral cascades (2.4 km down to 4.7 m tiles, 256²), JONSWAP wind sea plus a swell, choppy horizontal displacement, capillary dispersion. The wind (0.3 to 35 m/s) sets the sea state and significant wave height (1 cm to 14 m); swell, direction, choppiness, wave height and foam can then be adjusted independently. |
 | Roughness | Per-cascade slope moments are mip-mapped (LEAN-style), so distant water turns into glitter roughness instead of shimmering; an unresolved-ripple term tops it up to the Cox-Munk slope variance. |
 | Whitecaps | Foam is generated where the surface folds over itself (Jacobian < threshold), stored per Lagrangian surface particle so it rides the waves, and decays exponentially. It is drawn by thresholding that field against fractal noise (ragged, multi-scale edges) plus a cell-wall lace that only carves holes where the foam is thin, so fresh foam is a dense white sheet and old foam breaks into a net instead of a cotton-ball blob. Total coverage is servoed to a Monahan-style whitecap fraction by an asynchronous GPU read-back. |
 | Sky | Hillaire-style atmosphere (transmittance, multiple-scattering and sky-view LUTs) with sun **and** moon as light sources, ozone twilight, stars and a Milky Way. |
@@ -38,7 +38,13 @@ The classic failure is a splash-ripple solver that scales its step with the fram
 
 ## Controls
 
-Panel (top left): camera mode, presets, sea state, time of day, cloud cover, rain, lightning, quality.
+The panel (top left, `×` closes it) has five sections:
+
+* **Camera**: Tour, Free fly, Boat, Dive, and *Next shot* (cuts to the next shot of the tour).
+* **Sea**: Glassy to Storm presets, then wind, swell, direction, choppiness, wave height and foam sliders.
+* **Sky**: time presets (Sunrise to Night) with sun height and bearing sliders, weather presets (Clear to Storm, Rain and Storm add rain; Storm adds lightning) with cloud cover and cloud wind.
+* **Water**: seven water types (Open ocean, Tropical, Coastal green, Arctic, Deep ocean, Lagoon, Shallows) that change the surface colour and the underwater light; clarity scales how far light travels; night glow lights breaking water and the wake with bioluminescence after dark.
+* **Image & sound**: procedural sound (surf, wind, rain, thunder, muffled under water), Auto/Low/Medium/High resolution, exposure, glow (bloom) and field of view.
 
 * **Tour** starts automatically and loops. Any key press, drag or scroll hands control to free flight.
 * **Fly**: drag to look, `W A S D` move, `Q`/`E` down/up, `Shift` fast, `Ctrl` slow, wheel changes speed. On touch:
@@ -57,7 +63,8 @@ node scripts/open-sea/review-set.mjs out-dir 1280x720 30      # the standard set
 ```
 
 URL parameters (with `shot=1` the page is driven by the harness instead of `requestAnimationFrame`):
-`t` hour of day, `sea` 0-9, `cloud`, `rain`, `light` (0/1), `wind` radians, `cam=x,y,z,yaw,pitch`,
+`t` hour of day, `sea` 0-9 (sets wind, swell and choppiness together), `cloud`, `rain`, `light` (0/1), `wind` direction in radians,
+`water` (a water type name), `sunh`/`suna` sun height and bearing in degrees, `glow`, `clarity`, `ev`, `bloom`, `fov`, `hs` (wave height multiplier), `foam`, `swell`, `chop`, `cloudwind`, `cam=x,y,z,yaw,pitch`,
 `ycam=distance,height,azimuthDeg[,lookHeight]` (camera relative to the yacht), `noyacht`, `under=1`, `q=low|high`.
 
 Headless Chromium on a machine without a GPU uses SwiftShader; expect seconds per frame there. On a real GPU the
@@ -77,5 +84,5 @@ demo adapts its render resolution to hold a playable frame rate (`AUTO`), or fix
 * Clouds are a single ray-marched layer. There are no cirrus or multi-layer skies and the layer is not lit by
   neighbouring clouds beyond the multiple-scattering approximation.
 * The yacht is a procedural low-poly sloop (flat-shaded hull panels, no fittings beyond rails, mast and rigging).
-* There is no sound.
+* Sound is synthesised (noise filtered into surf, wind, rain and thunder); it is a sketch of an ocean soundscape, not recordings, and it has only been checked for starting without errors, not by ear.
 * It needs WebGL 2 with `EXT_color_buffer_float`; without it the page shows a message instead of the scene.

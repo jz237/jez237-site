@@ -6,45 +6,48 @@
 <title>Open Sea — real-time ocean</title>
 <meta name="description" content="A real-time WebGL2 ocean: FFT wave simulation from glassy calm to storm, physically based sky, volumetric clouds, rain, lightning, a sailing yacht and an underwater view.">
 <style>
-  :root { color-scheme: dark; --ink: #e6e6e6; --dim: #9a9a9a; --line: rgba(255,255,255,.16); --panel: rgba(9,9,9,.58); }
+  :root { color-scheme: dark; --ink: #f3f5f8; --dim: rgba(255,255,255,.62); --line: rgba(255,255,255,.24); --panel: rgba(22,26,33,.84); }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
   canvas#sea { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
   canvas#sea:active { cursor: grabbing; }
-  #hud { position: fixed; left: 10px; top: 10px; width: 236px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
-         -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); font: 10.5px/1.25 ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-         letter-spacing: .05em; user-select: none; -webkit-user-select: none; z-index: 5; transition: opacity .25s; }
+  #hud { position: fixed; left: 14px; top: 14px; width: min(320px, calc(100vw - 28px)); max-height: calc(100vh - 28px); max-height: calc(100dvh - 28px); overflow-y: auto; overscroll-behavior: contain;
+         color: var(--ink); background: linear-gradient(180deg, rgba(40,45,55,.86), rgba(20,23,29,.9)); border: 1px solid rgba(255,255,255,.10); border-radius: 16px;
+         -webkit-backdrop-filter: blur(18px) saturate(1.1); backdrop-filter: blur(18px) saturate(1.1); box-shadow: 0 12px 44px rgba(0,0,0,.42);
+         font: 500 13px/1.2 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif; user-select: none; -webkit-user-select: none; z-index: 5;
+         transition: opacity .25s; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; }
   #hud.hidden { opacity: 0; pointer-events: none; }
-  #hud .bar { display: flex; align-items: center; gap: 8px; padding: 7px 8px 6px 10px; }
-  #hud .bar b { font-weight: 600; letter-spacing: .14em; }
-  #hud .bar span { color: var(--dim); flex: 1; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #hud button { font: inherit; letter-spacing: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 3px; padding: 3px 0; cursor: pointer; }
-  #hud button:hover { border-color: rgba(255,255,255,.5); }
-  #hud button.on { background: #ececec; color: #0a0a0a; border-color: #ececec; }
-  #hud .bar button { width: 20px; height: 18px; padding: 0; line-height: 14px; }
-  #hud #body { padding: 0 8px 8px; display: grid; gap: 6px; }
-  #hud.folded #body { display: none; }
-  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
-  .seg button { font-size: 9.5px; }
-  .row { display: grid; grid-template-columns: 44px 1fr 34px; align-items: center; gap: 6px; color: var(--dim); }
-  .row output { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .row.tog { grid-template-columns: 1fr 1fr 1fr; gap: 3px; }
-  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 14px; margin: 0; background: transparent; cursor: pointer; --v: 50%; }
-  input[type=range]::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(90deg, #f0f0f0 var(--v), rgba(255,255,255,.22) var(--v)); border-radius: 1px; }
-  input[type=range]::-moz-range-track { height: 2px; background: rgba(255,255,255,.22); }
-  input[type=range]::-moz-range-progress { height: 2px; background: #f0f0f0; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: #f5f5f5; border: 0; box-shadow: 0 0 0 3px rgba(0,0,0,.35); }
-  input[type=range]::-moz-range-thumb { width: 10px; height: 10px; border-radius: 50%; background: #f5f5f5; border: 0; }
-  input[type=range]:focus-visible { outline: 1px solid rgba(255,255,255,.6); outline-offset: 2px; }
-  #hud button:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+  #hud.folded { display: none; }
+  #hud .sec { padding: 14px 16px 8px; border-top: 1px solid rgba(255,255,255,.08); }
+  #hud .sec:first-child { border-top: 0; padding-top: 16px; }
+  #hud .sec:last-child { padding-bottom: 14px; }
+  #hud h3 { margin: 0 0 10px; font: 600 10.5px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 9px; }
+  .chip { font: inherit; color: var(--ink); background: rgba(255,255,255,.07); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; cursor: pointer; transition: background .12s, color .12s, border-color .12s; }
+  .chip:hover { border-color: rgba(255,255,255,.55); }
+  .chip.on { background: #f4f5f7; color: #12151a; border-color: #f4f5f7; }
+  .srow { display: grid; grid-template-columns: 90px 1fr 62px; align-items: center; gap: 8px; height: 30px; color: rgba(255,255,255,.9); }
+  .srow output { text-align: right; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; margin: 0; background: transparent; cursor: pointer; --v: 50%; }
+  input[type=range]::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(90deg, rgba(255,255,255,.78) var(--v), rgba(255,255,255,.26) var(--v)); border-radius: 2px; }
+  input[type=range]::-moz-range-track { height: 3px; background: rgba(255,255,255,.26); border-radius: 2px; }
+  input[type=range]::-moz-range-progress { height: 3px; background: rgba(255,255,255,.78); border-radius: 2px; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; margin-top: -7px; border-radius: 50%; background: #f7f8fa; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.15); }
+  input[type=range]::-moz-range-thumb { width: 17px; height: 17px; border-radius: 50%; background: #f7f8fa; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+  input[type=range]:focus-visible { outline: 1px solid rgba(255,255,255,.6); outline-offset: 2px; border-radius: 4px; }
+  .chip:focus-visible, .foldbtn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+  .foldbtn { position: fixed; top: 14px; left: min(342px, calc(100vw - 48px)); width: 30px; height: 30px; padding: 0; border-radius: 50%; z-index: 6; font: 500 16px/1 system-ui, sans-serif; color: var(--ink);
+             background: var(--panel); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); cursor: pointer; transition: opacity .25s; }
+  .foldbtn.closed { left: 14px; }
+  .foldbtn.gone { opacity: 0; pointer-events: none; }
   #hint { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); color: #d8d8d8; font: 10.5px/1.3 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .08em;
           text-shadow: 0 1px 4px rgba(0,0,0,.8); pointer-events: none; transition: opacity 1.2s; white-space: nowrap; z-index: 4; }
   #fail { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #ddd; font: 14px/1.5 system-ui, sans-serif; padding: 24px; }
-  .back { position: fixed; right: 10px; top: 10px; z-index: 5; color: var(--ink); text-decoration: none; font: 10.5px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .1em;
-          background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: opacity .25s; }
+  .back { position: fixed; right: 10px; top: 10px; z-index: 5; color: var(--ink); text-decoration: none; font: 500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .04em;
+          background: var(--panel); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 8px 12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: opacity .25s; }
   body.hide-hud .back { opacity: 0; pointer-events: none; }
-  @media (max-width: 560px) { #hud { width: 212px; } #hint { display: none; } }
-  body.shot #hud, body.shot .back, body.shot #hint { display: none; }
+  @media (max-width: 640px) { #hint { display: none; } .back { top: auto; bottom: 12px; right: 12px; } }
+  body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
 </style>
 </head>
 <body>

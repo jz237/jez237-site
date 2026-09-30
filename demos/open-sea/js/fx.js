@@ -20,9 +20,10 @@ float causticGainRel(vec3 rel, float z, vec3 sunW, float dtBlur) {
   vec2 g = textureLod(uCaustic, uv, lod).rg;
   return z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
 }
-const vec3 CATT = vec3(0.41, 0.100, 0.046);     // beam attenuation c = a + b   (1/m)
-const vec3 KD   = vec3(0.34, 0.078, 0.030);     // diffuse attenuation
-const vec3 RRS  = vec3(0.0045, 0.0200, 0.0330); // remote-sensing reflectance of clear blue water (1/sr)
+uniform vec3 uCATT, uKD, uRRS;                  // set from the chosen water type and clarity (see water-types.js)
+#define CATT uCATT                              // beam attenuation c = a + b   (1/m)
+#define KD   uKD                                // diffuse attenuation
+#define RRS  uRRS                               // remote-sensing reflectance (1/sr)
 // Light entering the sea at the camera: refracted beam direction, beam irradiance and total downwelling irradiance.
 void underwaterLight(out vec3 sunW, out vec3 beam, out vec3 Ed0) {
   float sh = cloudShadowAt(vec2(0.0));

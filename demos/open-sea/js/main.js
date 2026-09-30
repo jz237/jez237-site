@@ -1,6 +1,8 @@
 import { initGL, gl, caps, bindFBO } from './gl.js';
 import { m4, v3, clamp, lerp, smoothstep } from './math.js';
-import { OceanSim } from './ocean.js';
+import { OceanSim, seaParams, seaFromWind, seaPreset } from './ocean.js';
+import { waterParams } from './water-types.js';
+import { Sound } from './sound.js';
 import { Sky } from './sky.js';
 import { Water } from './water.js';
 import { Post } from './post.js';
@@ -41,8 +43,16 @@ class App {
     this.fx = new Fx();
     this.fish = new Fish();
     this.yachtOn = !params.has('noyacht');
-    this.state = { tod: 16.5, sea: 4, windDir: 0.55, cloud: 0.35, rain: 0, lightning: 0, haze: 1, storm: 0 };
-    this.goal = { tod: 16.5, sea: 4, cloud: 0.35, rain: 0, lightning: 0 };
+    this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
+    // everything the panel controls; the simulation eases towards it
+    this.goal = {
+      tod: 16.5, sunManual: false, sunH: 20, sunAz: 240,
+      windDir: 0.55, ...seaPreset(4.6), hScale: 1, foam: 1,
+      cloud: 0.25, rain: 0, lightning: 0,
+      water: 'Open ocean', clarity: 0.94, glow: 1.5,
+      ev: 0, bloom: 0.02, fov: 50,
+    };
+    this.sound = new Sound();
     this.instant = { tod: false };
     this.easeOn = true;
     this.qualityMode = 'AUTO';
@@ -89,6 +99,8 @@ class App {
     return [Math.sin(c.yaw) * cp, Math.sin(c.pitch), -Math.cos(c.yaw) * cp];
   }
 
+  sunOverride() { const G = this.goal; return G.sunManual ? { alt: G.sunH, az: G.sunAz } : null; }
+
   // Test/tour helper: place the camera relative to the yacht and look at it.
   placeRelativeToYacht([dist, height, azDeg, lookH = 2.2]) {
     const y = this.yacht, az = azDeg * Math.PI / 180;
@@ -104,21 +116,25 @@ class App {
     this.time += dt;
     if (this.ycam) this.placeRelativeToYacht(this.ycam);
     if (this.lookBody) {     // test helper: aim at the sun or moon
-      const sk = skyState(this.state.tod), d = this.lookBody[0] === 'sun' ? sk.sunDir : sk.moonDir;
+      const sk = skyState(this.state.tod, this.sunOverride()), d = this.lookBody[0] === 'sun' ? sk.sunDir : sk.moonDir;
       this.cam.yaw = Math.atan2(d[0], -d[2]) + (this.lookBody[2] || 0); this.cam.pitch = Math.asin(d[1]) + (this.lookBody[1] || 0);
     }
     if (this.easeOn) {
       const G = this.goal, ez = (a, b, r) => a + clamp(b - a, -r * dt, r * dt);
       let dtod = ((G.tod - S.tod + 36) % 24) - 12;
       S.tod = (S.tod + clamp(dtod, -3.5 * dt, 3.5 * dt) + 24) % 24;
-      S.sea = G.sea; S.cloud = ez(S.cloud, G.cloud, 0.28); S.rain = ez(S.rain, G.rain, 0.22); S.lightning = G.lightning;
+      S.cloud = ez(S.cloud, G.cloud, 0.28); S.rain = ez(S.rain, G.rain, 0.22); S.lightning = G.lightning;
     }
-    S.storm = clamp(0.62 * S.rain + 0.38 * (S.lightning > 0 ? 1 : 0) + 0.18 * smoothstep(6.5, 9, S.sea), 0, 1);
+    S.windDir = this.goal.windDir;
+    S.storm = clamp(0.62 * S.rain + 0.38 * (S.lightning > 0 ? 1 : 0) + 0.18 * smoothstep(6.5, 9, seaFromWind(this.goal.wind)), 0, 1);
     S.haze = 6 + 22 * S.rain + 8 * S.storm;       // marine air is far hazier than the clear-air default
     const wv = [Math.cos(S.windDir), Math.sin(S.windDir)];
-    this.sim.setSea(S.sea, S.windDir);
+    const G0 = this.goal;
+    this.sim.setParams({ wind: G0.wind, swell: G0.swell, chop: G0.chop, hScale: G0.hScale, foam: G0.foam }, S.windDir);
     this.sim.update(dt);
-    const cw = 6 + 0.55 * this.sim.cur.U;
+    if (this.rig && this.rig.mode === 'fly') this.cam.fov = G0.fov * Math.PI / 180;
+    this.fovK = G0.fov / 50;
+    const cw = G0.cloudWind;
     this.clouds.advance(dt, [wv[0] * cw, wv[1] * cw]);
     this.probe.poll();
     if (this.yachtOn) {
@@ -151,7 +167,9 @@ class App {
 
   render(dt) {
     const S = this.state, cam = this.cam;
-    const sk = skyState(S.tod);
+    const G = this.goal;
+    const sk = skyState(S.tod, this.sunOverride());
+    sk.water = waterParams(G.water, G.clarity);
     sk.haze = S.haze;
     sk.overcast = Math.min(1, Math.max(0, (S.cloud - 0.5) / 0.4));
     this.sk = sk;
@@ -205,7 +223,7 @@ class App {
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
-      p.f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
+      p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
       p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
       p.v4('uWakeB', Y.speed, 0.11 * Math.pow(Y.speed / 3, 2), this.yachtOn ? 1 : 0, 0);
@@ -243,7 +261,7 @@ class App {
     const keyScale = under ? 0.55 : 1;
     this.post.exposure(dt, sk.key * keyScale, this.frame === 0);
     this.post.bloom();
-    this.post.tonemap(this.w, this.h, this.time, { night: 1 - smoothstep(0.03, 0.17, sk.key), ev: 1 - 0.42 * S.storm });
+    this.post.tonemap(this.w, this.h, this.time, { night: 1 - smoothstep(0.03, 0.17, sk.key), ev: Math.pow(2, G.ev) * (1 - 0.42 * S.storm), bloom: G.bloom });
     if (this.photoReq) {
       this.photoReq = false;
       canvas.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `open-sea-${Date.now()}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png');
@@ -293,10 +311,17 @@ window.__sea = {
 };
 const applyURL = () => {
   const s = {};
-  for (const [k, key] of [['t', 'tod'], ['sea', 'sea'], ['cloud', 'cloud'], ['rain', 'rain'], ['wind', 'windDir'], ['light', 'lightning']]) {
+  for (const [k, key] of [['t', 'tod'], ['cloud', 'cloud'], ['rain', 'rain'], ['wind', 'windDir'], ['light', 'lightning']]) {
     if (params.has(k)) s[key] = parseFloat(params.get(k));
   }
   Object.assign(app.state, s); Object.assign(app.goal, s);
+  if (params.has('sea')) Object.assign(app.goal, seaPreset(parseFloat(params.get('sea'))));   // classic 0-9 sea state
+  if (params.has('water')) app.goal.water = params.get('water');
+  for (const [k, key] of [['glow', 'glow'], ['clarity', 'clarity'], ['ev', 'ev'], ['bloom', 'bloom'], ['fov', 'fov'], ['hs', 'hScale'], ['foam', 'foam'], ['swell', 'swell'], ['chop', 'chop'], ['cloudwind', 'cloudWind']]) {
+    if (params.has(k)) app.goal[key] = parseFloat(params.get(k));
+  }
+  if (params.has('fov') && !params.has('cam')) app.cam.fov = app.goal.fov * Math.PI / 180;
+  if (params.has('sunh')) { app.goal.sunManual = true; app.goal.sunH = parseFloat(params.get('sunh')); app.goal.sunAz = parseFloat(params.get('suna') || '240'); }
   if (params.has('ycam')) app.ycam = params.get('ycam').split(',').map(Number);
   if (params.has('cam')) {
     const [x, y, z, yaw, pitch, fov] = params.get('cam').split(',').map(Number);
@@ -325,6 +350,7 @@ if (params.has('shot')) {
     rig.update(dt);
     app.step(dt);
     app.render(dt);
+    app.sound.update(app);
     app.govern(raw * 1000);
     requestAnimationFrame(loop);
   };

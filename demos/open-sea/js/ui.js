@@ -1,86 +1,160 @@
-// Compact monochrome control panel.
+// Control panel: camera, sea, sky, water, image and sound. Dark glass, white chips, thin sliders.
 import { clamp } from './math.js';
+import { seaPreset, windDefaults } from './ocean.js';
+import { skyState } from './astro.js';
+import { WATER_TYPES } from './water-types.js';
 
-const PRESETS = {
-  GLASS: { sea: 0.15, cloud: 0.10, rain: 0, lightning: 0, tod: 7.6 },
-  CALM: { sea: 1.8, cloud: 0.25, rain: 0, lightning: 0, tod: 10.4 },
-  FRESH: { sea: 4.2, cloud: 0.42, rain: 0, lightning: 0, tod: 15.4 },
-  ROUGH: { sea: 6.4, cloud: 0.78, rain: 0.18, lightning: 0, tod: 17.0 },
-  STORM: { sea: 8.7, cloud: 1.0, rain: 0.85, lightning: 1, tod: 18.2 },
+const DEG = Math.PI / 180;
+
+// Sea presets are whole sea states (classic 0-9 scale) expressed as the panel's own controls.
+const SEA = { Glassy: 0.15, Calm: 1.8, Breeze: 3.3, Fresh: 4.6, Rough: 6.4, Storm: 8.7 };
+const TIMES = { Sunrise: 5.8, Morning: 8.4, Noon: 12.2, Golden: 16.9, Sunset: 18.25, Dusk: 18.9, Night: 1.5 };
+const WEATHER = {
+  Clear: { cloud: 0.04, rain: 0, lightning: 0 },
+  Fair: { cloud: 0.25, rain: 0, lightning: 0 },
+  Cloudy: { cloud: 0.6, rain: 0, lightning: 0 },
+  Overcast: { cloud: 0.95, rain: 0, lightning: 0 },
+  Rain: { cloud: 0.95, rain: 0.6, lightning: 0 },
+  Storm: { cloud: 1, rain: 0.9, lightning: 1 },
 };
-const TIMES = { DAWN: 5.9, NOON: 12.2, DUSK: 18.5, NIGHT: 23.4 };
-const fmtTime = h => { const t = ((h % 24) + 24) % 24; const hh = Math.floor(t), mm = Math.floor((t - hh) * 60); return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`; };
+const QUALITY = { Auto: 'AUTO', Low: 'LOW', Medium: 'MED', High: 'HIGH' };
+const MODES = { Tour: 'tour', 'Free fly': 'fly', Boat: 'boat', Dive: 'dive' };
 
 export function initUI(app, rig) {
   const hud = document.getElementById('hud');
   const hint = document.getElementById('hint');
   const G = app.goal;
-  hud.innerHTML = `
-    <div class="bar"><b>OPEN SEA</b><span id="readout"></span><button id="fold" title="Fold panel (H hides everything)" aria-label="Fold panel">–</button></div>
-    <div id="body">
-      <div class="seg" id="modes" role="group" aria-label="Camera">${['TOUR', 'FLY', 'BOAT', 'DIVE'].map(m => `<button data-m="${m.toLowerCase()}">${m}</button>`).join('')}</div>
-      <div class="seg" id="presets" role="group" aria-label="Presets">${Object.keys(PRESETS).map(p => `<button data-p="${p}">${p}</button>`).join('')}</div>
-      <label class="row">SEA<input id="seaState" type="range" min="0" max="9" step="0.05" aria-label="Sea state"><output id="seaO"></output></label>
-      <label class="row">TIME<input id="tod" type="range" min="0" max="24" step="0.05" aria-label="Time of day"><output id="todO"></output></label>
-      <div class="seg" id="times" role="group" aria-label="Time presets">${Object.keys(TIMES).map(p => `<button data-t="${p}">${p}</button>`).join('')}</div>
-      <label class="row">CLOUD<input id="cloud" type="range" min="0" max="1" step="0.01" aria-label="Cloud cover"><output id="cloudO"></output></label>
-      <label class="row">RAIN<input id="rain" type="range" min="0" max="1" step="0.01" aria-label="Rain"><output id="rainO"></output></label>
-      <div class="row tog"><button id="light" aria-pressed="false">LIGHTNING</button><button id="quality">AUTO</button><button id="photo" title="Save a PNG (P)">PHOTO</button></div>
-    </div>`;
-  const $ = id => document.getElementById(id);
-  const paint = el => { const min = +el.min, max = +el.max; el.style.setProperty('--v', `${((+el.value - min) / (max - min)) * 100}%`); };
-  const sliders = { sea: $('seaState'), tod: $('tod'), cloud: $('cloud'), rain: $('rain') };
-  const outs = { sea: v => (+v).toFixed(1), tod: fmtTime, cloud: v => Math.round(v * 100) + '%', rain: v => Math.round(v * 100) + '%' };
-  for (const [k, el] of Object.entries(sliders)) {
-    el.value = G[k];
-    el.addEventListener('input', () => { G[k] = +el.value; app.instant[k] = k === 'tod'; paint(el); $(k + 'O').textContent = outs[k](el.value); });
-  }
-  $('light').addEventListener('click', () => { G.lightning = G.lightning > 0 ? 0 : 1; });
-  const qs = ['AUTO', 'LOW', 'MED', 'HIGH'];
-  $('quality').addEventListener('click', () => { app.setQuality(qs[(qs.indexOf(app.qualityMode) + 1) % qs.length]); });
-  $('photo').addEventListener('click', () => app.requestPhoto());
-  $('fold').addEventListener('click', () => { hud.classList.toggle('folded'); $('fold').textContent = hud.classList.contains('folded') ? '+' : '–'; });
-  $('modes').addEventListener('click', e => { const b = e.target.closest('button'); if (b) rig.setMode(b.dataset.m); });
-  $('presets').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    Object.assign(G, PRESETS[b.dataset.p]); app.instant.tod = false;
-    sync();
+  const manual = { swell: false, chop: false, cloudWind: false };   // sliders the user has taken over from the wind
+
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const chipRow = (items, onPick) => {
+    const row = el('div', 'chips'); const map = new Map();
+    for (const name of items) {
+      const b = el('button', 'chip', name); b.type = 'button';
+      b.addEventListener('click', () => { onPick(name); sync(); });
+      row.appendChild(b); map.set(name, b);
+    }
+    return { row, map };
+  };
+  const sliders = [];
+  const slider = (label, min, max, step, get, set, fmt) => {
+    const wrap = el('label', 'srow');
+    const name = el('span', null, label);
+    const input = el('input'); input.type = 'range'; input.min = min; input.max = max; input.step = step; input.setAttribute('aria-label', label);
+    const out = el('output');
+    wrap.append(name, input, out);
+    let dragging = false;
+    input.addEventListener('pointerdown', () => { dragging = true; });
+    addEventListener('pointerup', () => { dragging = false; });
+    input.addEventListener('input', () => { set(+input.value); paint(); sync(); });
+    const paint = () => { const v = ((+input.value - min) / (max - min)) * 100; input.style.setProperty('--v', `${clamp(v, 0, 100)}%`); out.textContent = fmt(+input.value); };
+    const s = { wrap, refresh() { if (!dragging && document.activeElement !== input) input.value = get(); paint(); } };
+    sliders.push(s);
+    return wrap;
+  };
+  const section = (title, ...nodes) => { const s = el('section', 'sec'); s.appendChild(el('h3', null, title)); s.append(...nodes); return s; };
+
+  // ---- camera ----------------------------------------------------------------------------------------------------
+  const cam = chipRow(Object.keys(MODES), n => rig.setMode(MODES[n]));
+  const shot = chipRow(['Next shot'], () => rig.nextShot());
+
+  // ---- sea -------------------------------------------------------------------------------------------------------
+  const sea = chipRow(Object.keys(SEA), n => {
+    Object.assign(G, seaPreset(SEA[n]), { hScale: 1, foam: 1 });
+    manual.swell = manual.chop = manual.cloudWind = false;
   });
-  $('times').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { G.tod = TIMES[b.dataset.t]; app.instant.tod = false; sync(); } });
-  rig.onChange = () => sync();
-  if (innerWidth < 560) { hud.classList.add('folded'); $('fold').textContent = '+'; }
+  const onWind = v => {
+    G.wind = v;
+    const d = windDefaults(v);
+    if (!manual.swell) G.swell = d.swell;
+    if (!manual.chop) G.chop = d.chop;
+    if (!manual.cloudWind) G.cloudWind = 6 + 0.55 * v;
+  };
 
+  // ---- sky -------------------------------------------------------------------------------------------------------
+  const times = chipRow(Object.keys(TIMES), n => { G.sunManual = false; G.tod = TIMES[n]; });
+  const sunNow = () => skyState(app.state.tod);
+  const takeSun = () => { if (!G.sunManual) { const s = sunNow(); G.sunManual = true; G.sunH = s.sunAlt; G.sunAz = s.sunAz; } };
+  const weather = chipRow(Object.keys(WEATHER), n => Object.assign(G, WEATHER[n]));
+
+  // ---- water -----------------------------------------------------------------------------------------------------
+  const water = chipRow(Object.keys(WATER_TYPES), n => { G.water = n; });
+
+  // ---- image & sound ---------------------------------------------------------------------------------------------
+  const sound = chipRow(['Sound off', 'Sound on'], n => { app.sound.setOn(n === 'Sound on'); });
+  const photo = chipRow(['Photo'], () => app.requestPhoto());
+  const quality = chipRow(Object.keys(QUALITY), n => app.setQuality(QUALITY[n]));
+
+  const fmtSigned = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+  hud.replaceChildren(
+    section('Camera', cam.row, shot.row),
+    section('Sea',
+      sea.row,
+      slider('Wind', 0.3, 35, 0.1, () => G.wind, onWind, v => `${v.toFixed(1)} m/s`),
+      slider('Swell', 0, 8, 0.1, () => G.swell, v => { G.swell = v; manual.swell = true; }, v => `${v.toFixed(1)} m`),
+      slider('Direction', 0, 360, 1, () => ((G.windDir / DEG) % 360 + 360) % 360, v => { G.windDir = v * DEG; }, v => `${Math.round(v)}°`),
+      slider('Choppiness', 0, 2, 0.05, () => G.chop, v => { G.chop = v; manual.chop = true; }, v => v.toFixed(2)),
+      slider('Wave height', 0.2, 3, 0.05, () => G.hScale, v => { G.hScale = v; }, v => `×${v.toFixed(2)}`),
+      slider('Foam', 0, 3, 0.05, () => G.foam, v => { G.foam = v; }, v => v.toFixed(2))),
+    section('Sky',
+      times.row,
+      slider('Sun height', -45, 90, 1, () => (G.sunManual ? G.sunH : sunNow().sunAlt), v => { takeSun(); G.sunH = v; }, v => `${Math.round(v)}°`),
+      slider('Sun bearing', 0, 360, 1, () => (G.sunManual ? G.sunAz : sunNow().sunAz), v => { takeSun(); G.sunAz = v; }, v => `${Math.round(v)}°`),
+      weather.row,
+      slider('Cloud cover', 0, 1, 0.01, () => G.cloud, v => { G.cloud = v; }, v => `${Math.round(v * 100)}%`),
+      slider('Cloud wind', 0, 40, 0.5, () => G.cloudWind, v => { G.cloudWind = v; manual.cloudWind = true; }, v => `${v.toFixed(0)} m/s`)),
+    section('Water',
+      water.row,
+      slider('Night glow', 0, 3, 0.1, () => G.glow, v => { G.glow = v; }, v => v.toFixed(1)),
+      slider('Clarity', 0, 1, 0.01, () => G.clarity, v => { G.clarity = v; }, v => `${Math.round(v * 100)}%`)),
+    section('Image & sound',
+      sound.row, quality.row, photo.row,
+      slider('Exposure', -3, 3, 0.1, () => G.ev, v => { G.ev = v; }, fmtSigned),
+      slider('Glow', 0, 0.4, 0.01, () => G.bloom, v => { G.bloom = v; }, v => v.toFixed(2)),
+      slider('Field of view', 30, 90, 1, () => G.fov, v => { G.fov = v; }, v => `${Math.round(v)}°`)),
+  );
+
+  // fold button sits outside the panel so the panel can be a plain scrolling column
+  const fold = el('button', 'foldbtn', '×'); fold.type = 'button'; fold.title = 'Hide / show controls (H hides everything)'; fold.setAttribute('aria-label', 'Hide or show controls');
+  document.body.appendChild(fold);
+  fold.addEventListener('click', () => { hud.classList.toggle('folded'); fold.textContent = hud.classList.contains('folded') ? '☰' : '×'; fold.classList.toggle('closed', hud.classList.contains('folded')); });
+  if (innerWidth < 640) { hud.classList.add('folded'); fold.textContent = '☰'; fold.classList.add('closed'); }
+
+  // ---- state -> widgets ------------------------------------------------------------------------------------------
+  const near = (a, b, t) => Math.abs(a - b) <= t;
   function sync() {
-    for (const [k, el] of Object.entries(sliders)) { el.value = G[k]; paint(el); $(k + 'O').textContent = outs[k](G[k]); }
-    $('light').classList.toggle('on', G.lightning > 0); $('light').setAttribute('aria-pressed', G.lightning > 0);
-    $('quality').textContent = app.qualityMode;
-    for (const b of $('modes').children) b.classList.toggle('on', b.dataset.m === rig.mode);
-    let best = null, bd = 1e9;
-    for (const [n, p] of Object.entries(PRESETS)) { const d = Math.abs(p.sea - G.sea) + Math.abs(p.cloud - G.cloud) + Math.abs(p.rain - G.rain); if (d < bd) { bd = d; best = n; } }
-    for (const b of $('presets').children) b.classList.toggle('on', b.dataset.p === best && bd < 0.35);
+    for (const s of sliders) s.refresh();
+    for (const [n, b] of cam.map) b.classList.toggle('on', MODES[n] === rig.mode);
+    for (const [n, b] of sea.map) {
+      const p = seaPreset(SEA[n]);
+      b.classList.toggle('on', near(G.wind, p.wind, 0.3) && near(G.swell, p.swell, 0.1) && near(G.chop, p.chop, 0.04) && near(G.hScale, 1, 0.02) && near(G.foam, 1, 0.02));
+    }
+    let bestT = null, bd = 0.7;
+    if (!G.sunManual) for (const [n, h] of Object.entries(TIMES)) { const d = Math.abs(((G.tod - h + 36) % 24) - 12); if (d < bd) { bd = d; bestT = n; } }
+    for (const [n, b] of times.map) b.classList.toggle('on', n === bestT);
+    for (const [n, b] of weather.map) { const w = WEATHER[n]; b.classList.toggle('on', near(G.cloud, w.cloud, 0.03) && near(G.rain, w.rain, 0.03) && (G.lightning > 0) === (w.lightning > 0)); }
+    for (const [n, b] of water.map) b.classList.toggle('on', n === G.water);
+    for (const [n, b] of sound.map) b.classList.toggle('on', (n === 'Sound on') === app.sound.on);
+    for (const [n, b] of quality.map) b.classList.toggle('on', QUALITY[n] === app.qualityMode);
   }
+  rig.onChange = () => sync();
   sync();
+  setInterval(sync, 300);
 
-  // live readout: significant wave height and wind
-  setInterval(() => {
-    const s = app.sim.cur;
-    $('readout').textContent = `Hs ${s.hs < 10 ? s.hs.toFixed(1) : Math.round(s.hs)} m · ${Math.round(s.U)} m/s`;
-    if (!app.goalDirty) return;
-  }, 500);
-
-  // keyboard shortcuts
+  // ---- keyboard --------------------------------------------------------------------------------------------------
   addEventListener('keydown', e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) && e.key !== 'h') return;
     const k = e.key.toLowerCase();
-    if (k === 'h') { hud.classList.toggle('hidden'); document.body.classList.toggle('hide-hud'); hint.style.opacity = 0; }
+    if (k === 'h') { hud.classList.toggle('hidden'); fold.classList.toggle('gone'); document.body.classList.toggle('hide-hud'); hint.style.opacity = 0; }
     else if (k === 'p') app.requestPhoto();
+    else if (k === 'n') rig.nextShot();
     else if (k === 'f') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
     else if (k >= '1' && k <= '4') rig.setMode(['tour', 'fly', 'boat', 'dive'][+k - 1]);
   });
 
   const setHint = (text) => { hint.textContent = text; hint.style.opacity = 1; clearTimeout(setHint.t); setHint.t = setTimeout(() => { hint.style.opacity = 0; }, 9000); };
   const hintFor = m => ({
-    tour: 'Slow tour · drag or press any key to fly',
+    tour: 'Slow tour · drag or press any key to fly · N cuts to the next shot',
     fly: 'Drag to look · W A S D move · Q E down / up · Shift fast · wheel speed · H hides the panel',
     boat: 'Drag to orbit the yacht · wheel zooms',
     dive: 'Drag to look around underwater · wheel zooms',
