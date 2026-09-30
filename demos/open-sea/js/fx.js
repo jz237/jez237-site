@@ -18,7 +18,9 @@ float causticGainRel(vec3 rel, float z, vec3 sunW, float dtBlur) {
   vec2 uv = fract((uCausticInfo.xy + q) / uCausticInfo.z);
   float lod = clamp(log2(max(dtBlur * 0.6, 0.047) / 0.047), 0.0, 6.0);
   vec2 g = textureLod(uCaustic, uv, lod).rg;
-  return z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
+  float gain = z < 2.2 ? mix(1.0, g.x, z / 2.2) : (z < 7.0 ? mix(g.x, g.y, (z - 2.2) / 4.8) : mix(g.y, 1.0, smoothstep(7.0, 45.0, z)));
+  // Keep the beam's mean, with stronger focusing contrast close to the surface.
+  return max(0.0, 1.0 + (gain - 1.0) * (1.0 + 0.9 * exp(-z / 18.0)));
 }
 uniform vec3 uCATT, uKD, uRRS;                  // set from the chosen water type and clarity (see water-types.js)
 #define CATT uCATT                              // beam attenuation c = a + b   (1/m)
@@ -52,9 +54,9 @@ uniform float uSize;
 out vec4 o;
 vec2 slopeAt(vec2 g) {
   vec2 S = vec2(0.0);
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 4; i++) {
     if (i >= uCascades) break;
-    vec4 s = textureLod(uSlope, vec3(cascUV(i, g), float(i)), 0.0);
+    vec4 s = textureLod(uSlope, vec3(cascUV(i, g), float(i)), max(0.0, log2(0.35 / (uCasc[i].w / float(textureSize(uSlope, 0).x)))));
     S += toWorld(s.xy, i);
   }
   return S;
@@ -98,10 +100,12 @@ uniform vec3 uFwd;
 uniform float uNear, uFar;
 uniform vec3 uCam;            // absolute camera position, y = height above mean sea level
 uniform float uUnder, uSurfY;
+#include <whirlpool>
+uniform float uVortexDatum;
 uniform float uRain, uTime, uCloudBase, uFlash;
 out vec4 o;
 vec3 uSunW, uBeamCol, uEd0;
-const float BSC = 0.085;                        // scattering coefficient (1/m)
+const float BSC = 0.045;                        // scattering coefficient (1/m)
 
 float hg(float c, float g) { float g2 = g * g; return (1.0 - g2) / (4.0 * PI * pow(1.0 + g2 - 2.0 * g * c, 1.5)); }
 float causticGain(vec3 p, float z, float dt) { return causticGainRel(p - uCam, z, uSunW, dt); }
@@ -125,13 +129,13 @@ void main() {
     float cosS = -dot(uSunW, dir);
     float ph = 0.85 * hg(cosS, 0.89) + 0.02;
     // the underwater light field is far brighter looking up than down
-    float aniso = mix(0.45, 2.4, smoothstep(-1.0, 0.25, dir.y)) * (1.0 + 0.6 * smoothstep(0.25, 1.0, dir.y));
+    float aniso = mix(0.32, 1.8, smoothstep(-1.0, 0.25, dir.y)) * (1.0 + 0.6 * smoothstep(0.25, 1.0, dir.y));
     for (int i = 0; i < N; i++) {
       float fa = (float(i) + jit * 0.0) / float(N), fb = (float(i) + 1.0) / float(N);
       float ta = dmax * fa * fa, tb = dmax * fb * fb;
       float t = 0.5 * (ta + tb), dt = tb - ta;
       vec3 p = uCam + dir * t;
-      float z = max(uSurfY - p.y, 0.0);
+      float z = max(uSurfY-uVortexDatum+whirlSurface(p.xz-uCam.xz).x-p.y,0.0);
       vec3 Ts = exp(-CATT * dt);
       Lp += T * RRS * uEd0 * exp(-KD * z) * aniso * (1.0 - Ts);
       vec3 beam = uBeamCol * exp(-CATT * z / max(-uSunW.y, 0.25));
@@ -140,7 +144,7 @@ void main() {
     }
     if (dist < 1e4) {
       vec3 ph_ = uCam + dir * dist;
-      float zo = max(uSurfY - ph_.y, 0.0);
+      float zo=max(uSurfY-uVortexDatum+whirlSurface(ph_.xz-uCam.xz).x-ph_.y,0.0);
       col = scene * exp(-KD * zo);
     } else col = vec3(0.0);
     // remaining transmittance for the part of the path beyond dmax
@@ -198,6 +202,7 @@ export class Fx {
   composite(post, ctx, o) {
     const p = this.prog.use();
     bindLighting(p, ctx);
+    ctx.whirlpool.bind(p,ctx.cam);p.f('uVortexDatum',ctx.whirlpool.sample(ctx.cam.x,ctx.cam.z).height);
     p.t('uScene', 4, post.colorCopy).t('uDepth', 5, post.depthCopy);
     this.bindCaustic(p, ctx.cam);
     p.m4('uInvVP', o.invVP).v3('uFwd', o.fwd[0], o.fwd[1], o.fwd[2]).f('uNear', o.near).f('uFar', o.far)

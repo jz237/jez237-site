@@ -18,7 +18,7 @@ const WEATHER = {
   Storm: { cloud: 1, rain: 0.9, lightning: 1 },
 };
 const QUALITY = { Auto: 'AUTO', Low: 'LOW', Medium: 'MED', High: 'HIGH' };
-const MODES = { Tour: 'tour', 'Free fly': 'fly', Boat: 'boat', Dive: 'dive' };
+const MODES = { Tour: 'tour', 'Free fly': 'fly', Boat: 'boat', Dive: 'dive', 'Walk deck':'deck' };
 
 export function initUI(app, rig) {
   const hud = document.getElementById('hud');
@@ -52,17 +52,33 @@ export function initUI(app, rig) {
     sliders.push(s);
     return wrap;
   };
-  const section = (title, ...nodes) => { const s = el('section', 'sec'); s.appendChild(el('h3', null, title)); s.append(...nodes); return s; };
+  const section = (title, ...nodes) => { const s = el('details', 'sec'); s.open = title === 'Camera'; s.appendChild(el('summary', null, title)); const content = el('div', 'section-content'); content.append(...nodes); s.appendChild(content); return s; };
 
   // ---- camera ----------------------------------------------------------------------------------------------------
   const cam = chipRow(Object.keys(MODES), n => rig.setMode(MODES[n]));
   const shot = chipRow(['Next shot'], () => rig.nextShot());
+  const stations=chipRow(['Helm','Bow','Stern'],n=>{rig.setMode('deck');rig.deck.station(n);rig.syncDeckCamera();});
+  stations.row.id='deck-stations';
+  const board=document.getElementById('board'),pad=document.getElementById('walk-pad'),knob=pad.firstElementChild;
+  board.addEventListener('click',()=>rig.setMode(rig.mode==='deck'?'fly':'deck'));
+  let walkingPointer=null;
+  const stopWalking=()=>{walkingPointer=null;rig.deck.stick=[0,0];knob.style.transform='translate(0,0)';};
+  const steer=e=>{
+    const r=pad.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)/(r.width*.36),y=(e.clientY-r.top-r.height/2)/(r.height*.36),d=Math.max(1,Math.hypot(x,y));
+    rig.deck.stick=[x/d,y/d];knob.style.transform=`translate(${x/d*25}px,${y/d*25}px)`;
+  };
+  pad.addEventListener('pointerdown',e=>{if(walkingPointer!==null)return;walkingPointer=e.pointerId;pad.setPointerCapture(e.pointerId);steer(e);e.preventDefault();});
+  pad.addEventListener('pointermove',e=>{if(e.pointerId===walkingPointer)steer(e);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])pad.addEventListener(event,e=>{if(e.pointerId===walkingPointer)stopWalking();});
+  addEventListener('blur',stopWalking);
 
   // ---- sea -------------------------------------------------------------------------------------------------------
   const sea = chipRow(Object.keys(SEA), n => {
     Object.assign(G, seaPreset(SEA[n]), { hScale: 1, foam: 1 });
     manual.swell = manual.chop = manual.cloudWind = false;
   });
+  const whirlpool=chipRow(['Whirlpool off','Whirlpool on'],n=>app.setWhirlpool(n==='Whirlpool on'));
+  const vortexView=chipRow(['View whirlpool'],()=>app.focusWhirlpool());
   const onWind = v => {
     G.wind = v;
     const d = windDefaults(v);
@@ -87,9 +103,10 @@ export function initUI(app, rig) {
 
   const fmtSigned = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
   hud.replaceChildren(
-    section('Camera', cam.row, shot.row),
+    section('Camera', cam.row, stations.row, shot.row),
     section('Sea',
       sea.row,
+      whirlpool.row,vortexView.row,
       slider('Wind', 0.3, 35, 0.1, () => G.wind, onWind, v => `${v.toFixed(1)} m/s`),
       slider('Swell', 0, 8, 0.1, () => G.swell, v => { G.swell = v; manual.swell = true; }, v => `${v.toFixed(1)} m`),
       slider('Direction', 0, 360, 1, () => ((G.windDir / DEG) % 360 + 360) % 360, v => { G.windDir = v * DEG; }, v => `${Math.round(v)}°`),
@@ -123,8 +140,14 @@ export function initUI(app, rig) {
   // ---- state -> widgets ------------------------------------------------------------------------------------------
   const near = (a, b, t) => Math.abs(a - b) <= t;
   function sync() {
+    const walking=rig.mode==='deck';document.body.classList.toggle('on-deck',walking);
+    board.textContent=walking?'Take off':'Land';board.setAttribute('aria-label',walking?'Take off into free flight':'Land on the yacht and walk on deck');board.setAttribute('aria-pressed',String(walking));
+    stations.row.hidden=!walking;
+    if(!walking&&walkingPointer!==null)stopWalking();
     for (const s of sliders) s.refresh();
     for (const [n, b] of cam.map) b.classList.toggle('on', MODES[n] === rig.mode);
+    for(const [n,b] of whirlpool.map){const on=(n==='Whirlpool on')===G.whirlpool;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));}
+    for(const b of vortexView.map.values())b.disabled=!G.whirlpool&&app.whirlpool.amount<.01;
     for (const [n, b] of sea.map) {
       const p = seaPreset(SEA[n]);
       b.classList.toggle('on', near(G.wind, p.wind, 0.3) && near(G.swell, p.swell, 0.1) && near(G.chop, p.chop, 0.04) && near(G.hScale, 1, 0.02) && near(G.foam, 1, 0.02));
@@ -141,6 +164,12 @@ export function initUI(app, rig) {
   sync();
   setInterval(sync, 300);
 
+  // Fullscreen is visible independently of the folded controls.
+  const full=document.getElementById('fullscreen');
+  const syncFull=()=>{const on=!!(document.fullscreenElement||document.webkitFullscreenElement);full.textContent=on?'⛶ Exit fullscreen':'⛶ Fullscreen';full.setAttribute('aria-label',on?'Exit fullscreen':'Enter fullscreen');full.setAttribute('aria-pressed',String(on));};
+  const toggleFull=async()=>{try{if(document.fullscreenElement||document.webkitFullscreenElement){await(document.exitFullscreen?.()??document.webkitExitFullscreen?.());}else{const target=document.documentElement;if(target.requestFullscreen)await target.requestFullscreen();else if(target.webkitRequestFullscreen)target.webkitRequestFullscreen();else throw Error('Fullscreen unavailable');}}catch{hint.textContent='Fullscreen is unavailable in this browser.';hint.style.opacity=1;}syncFull();};
+  full.addEventListener('click',toggleFull);document.addEventListener('fullscreenchange',syncFull);document.addEventListener('webkitfullscreenchange',syncFull);syncFull();
+
   // ---- keyboard --------------------------------------------------------------------------------------------------
   addEventListener('keydown', e => {
     if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName) && e.key !== 'h') return;
@@ -148,8 +177,9 @@ export function initUI(app, rig) {
     if (k === 'h') { hud.classList.toggle('hidden'); fold.classList.toggle('gone'); document.body.classList.toggle('hide-hud'); hint.style.opacity = 0; }
     else if (k === 'p') app.requestPhoto();
     else if (k === 'n') rig.nextShot();
-    else if (k === 'f') { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
-    else if (k >= '1' && k <= '4') rig.setMode(['tour', 'fly', 'boat', 'dive'][+k - 1]);
+    else if (k === 'f') toggleFull();
+    else if(k==='l'&&!e.repeat)rig.setMode(rig.mode==='deck'?'fly':'deck');
+    else if (k >= '1' && k <= '5') rig.setMode(['tour', 'fly', 'boat', 'dive','deck'][+k - 1]);
   });
 
   const setHint = (text) => { hint.textContent = text; hint.style.opacity = 1; clearTimeout(setHint.t); setHint.t = setTimeout(() => { hint.style.opacity = 0; }, 9000); };
@@ -158,6 +188,7 @@ export function initUI(app, rig) {
     fly: 'Drag to look · W A S D move · Q E down / up · Shift fast · wheel speed · H hides the panel',
     boat: 'Drag to orbit the yacht · wheel zooms',
     dive: 'Drag to look around underwater · wheel zooms',
+    deck: matchMedia('(pointer: coarse)').matches?'Left pad walks · drag the scene to look · Take off returns to flight':'Drag to look · W A S D walk · Shift brisk pace · L takes off · Helm / Bow / Stern jump to a viewpoint',
   })[m];
   setHint(hintFor(rig.mode));
   const prev = rig.onChange;
