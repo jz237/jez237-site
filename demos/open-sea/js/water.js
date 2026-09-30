@@ -109,7 +109,8 @@ in float vJ;
 in vec2 vD;
 uniform sampler2DArray uSlope;
 uniform sampler2DArray uFoam;
-uniform float uMssRes, uTime, uHs;
+uniform float uMssRes, uTime, uHs, uGlowE;
+uniform vec3 uRw, uSSS;    // water body colour and the colour of light transmitted through thin crests
 uniform vec2 uWind;        // wind direction (unit)
 uniform float uWindSpeed;
 uniform float uUnder;
@@ -267,12 +268,11 @@ void main() {
   float crest = clamp(worldY / max(uHs * 0.9, 0.15) * 0.5 + 0.35, 0.0, 1.0);
   float ndl = max(dot(n, uSunDir), 0.0), ndm = max(dot(n, uMoonDir), 0.0);
   vec3 Ed = sunE * (0.25 * max(uSunDir.y, 0.0) + 0.75 * ndl) + moonE * (0.25 * max(uMoonDir.y, 0.0) + 0.75 * ndm) + skyE * (0.55 + 0.45 * n.y) + flashE(n);
-  vec3 Rw = vec3(0.006, 0.036, 0.058);
-  vec3 body = Rw * Ed / PI * (1.0 - F);
+  vec3 body = uRw * Ed / PI * (1.0 - F);
   // light transmitted through thin crests towards the viewer
   vec3 Lt = normalize(uSunDir + n * 0.35);
   float sss = pow(sat(dot(V, -Lt)), 3.0) * crest * crest * sat(uSunDir.y * 2.0);
-  body += vec3(0.020, 0.150, 0.115) * sunE * sss * 0.09;
+  body += uSSS * sunE * sss * 0.09;
   body *= mix(0.72, 1.0, crest);
   if (uHasScene > 0.5) {
     vec2 suv = gl_FragCoord.xy / uRes;
@@ -348,6 +348,12 @@ void main() {
     col = mix(col, foamCol, cov);
   }
   col += spec * (1.0 - clamp(D * 1.6, 0.0, 0.9));
+  if (uGlowE > 0.0) {
+    // night glow: bioluminescent plankton lit up by breaking water and by the hull's wake
+    float steep = smoothstep(0.10, 0.50, length(S));
+    float pat = 1.4 * D + 0.8 * min(trail, 1.2) + 0.10 * steep * (0.5 + 0.5 * vnoise(gx * 0.7 + uTime * 0.35));
+    col += vec3(0.05, 0.40, 0.60) * uGlowE * pat;
+  }
 
   // aerial perspective toward the horizon colour in this azimuth
   vec3 hd = normalize(vec3(-V.x, 0.0, -V.z));

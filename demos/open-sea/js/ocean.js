@@ -29,8 +29,31 @@ export function seaParams(s) {
     swellHs, swellTp, swellGamma: 6, swellSpread: 40,
     swellOffset: 0.6,
     chop: lerp(0.55, 1.05, smoothstep(1.5, 8, s)),
+    foamScale: 1,
   };
 }
+
+// Inverse of the table: the sea state that a given 10 m wind builds.
+export function seaFromWind(U) {
+  U = Math.max(U, TABLE[0].U);
+  for (let i = 0; i < TABLE.length - 1; i++) if (U <= TABLE[i + 1].U) return i + (U - TABLE[i].U) / (TABLE[i + 1].U - TABLE[i].U);
+  return 9;
+}
+
+// Independent controls -> spectrum parameters. `swell` and `chop` default to what the wind would build.
+// o = { wind (m/s), swell (m), chop, hScale (wave height multiplier), foam (whitecap multiplier) }
+export function seaParamsFrom(o) {
+  const b = seaParams(seaFromWind(o.wind));
+  b.U = o.wind;
+  b.hs *= o.hScale ?? 1;
+  if (o.swell != null) b.swellHs = o.swell;
+  if (o.chop != null) b.chop = o.chop;
+  b.foamScale = o.foam ?? 1;
+  return b;
+}
+// A whole sea state expressed as the panel's independent controls.
+export const seaPreset = s => { const p = seaParams(s); return { wind: p.U, swell: p.swellHs, chop: p.chop, cloudWind: 6 + 0.55 * p.U }; };
+export const windDefaults = U => { const p = seaParams(seaFromWind(U)); return { swell: p.swellHs, chop: p.chop }; };
 
 // JONSWAP scale A so that integral S(w) dw = (Hs/4)^2
 function jonswapScale(hs, tp, gamma) {
@@ -303,12 +326,17 @@ export class OceanSim {
     if (windDir !== undefined) this.windDir = windDir;
   }
 
+  setParams(o, windDir) {
+    this.target = seaParamsFrom(o);
+    if (windDir !== undefined) this.windDir = windDir;
+  }
+
   // Ease current parameters towards the target so the sea builds and eases rather than jumps.
   _ease(dt) {
     const t = this.target, c = this.cur;
     let changed = false;
     const k = 1 - Math.exp(-dt / 2.5);
-    for (const key of ['s', 'hs', 'U', 'tp', 'gamma', 'spread', 'swellHs', 'swellTp', 'swellGamma', 'swellSpread', 'swellOffset', 'chop']) {
+    for (const key of ['s', 'hs', 'U', 'tp', 'gamma', 'spread', 'swellHs', 'swellTp', 'swellGamma', 'swellSpread', 'swellOffset', 'chop', 'foamScale']) {
       const nv = Math.abs(t[key] - c[key]) < 1e-5 ? t[key] : c[key] + (t[key] - c[key]) * k;
       if (nv !== c[key]) changed = true;
       c[key] = nv;
@@ -334,7 +362,7 @@ export class OceanSim {
     });
     this.mss = resolvedMss(c, this.kMax);
     // per-cascade foam thresholds from linear theory: compression J-1 ~ N(0, chop*sqrt(mss_band))
-    const W = whitecapFraction(c.U);
+    const W = whitecapFraction(c.U) * (c.foamScale ?? 1);
     const weights = [0, 0.5, 0.36, 0.14, 0];
     this.foamSig = this.defs.map(d => Math.sqrt(bandMss(c, d.kLo, d.kHi)) * c.chop);
     this.foamTarget = this.defs.map((d, i) => (d.foam && W > 2e-4 ? Math.min(0.6, 1.1 * W * (weights[i] || 0)) : 0));
