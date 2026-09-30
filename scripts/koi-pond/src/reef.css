@@ -38,3 +38,13 @@ body.clean #reef-brand,body.clean #learn-nav,body.clean #view-nav,body.clean #pa
 #learn-nav .filter-link{border-color:#ddae6880;background:#394934e8;color:#ffe0a6}
 @media(max-width:850px){#learn-nav{top:73px}}
 @media(max-width:530px){#learn-nav{right:15px;display:grid;grid-template-columns:1fr 1fr}#learn-nav button,#learn-nav a{min-width:0;min-height:34px;padding:9px 10px}}
+
+/* The scene pause is always named, including on small screens. */
+#toolbar #tb-freeze .lbl{display:inline;white-space:nowrap}
+#tb-freeze .resume-icon,#tb-freeze[aria-pressed="true"] .pause-icon{display:none}
+#tb-freeze[aria-pressed="true"] .resume-icon{display:block}
+#pond-paused{position:fixed;z-index:8;left:50%;bottom:82px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:10px 12px 10px 17px;max-width:calc(100vw - 24px);color:#fff2d6;background:#203a2af2;border:1px solid #e0ba7b90;font:12px system-ui;white-space:nowrap}
+#pond-resume{border:0;border-radius:7px;padding:10px 13px;background:#e3bb7e;color:#213023;font-weight:600}
+body.clean #pond-paused{display:none!important}
+@media(max-width:850px){#pond-paused{bottom:124px}}
+@media(max-width:530px){#toolbar button{padding:0 7px;gap:5px}#toolbar #tb-freeze{font-size:10px}#toolbar #feedbtn{padding:0 8px;font-size:10px}}
