@@ -40,17 +40,17 @@ test('Garden starts at its final pose and remains stationary through actual free
 
 test('actual feeding works without a hand, does not move camera, pauses, floats food, and cleans up',()=>{
   const c=context();vm.runInContext(`
-    const P={fishCount:0,cameraMode:'Manual',holdCamera:true},CTRL={},PATH={},STROKE={active:false},KOI={fish:[]};
+    const P={fishCount:0,cameraMode:'Manual',holdCamera:true,freezeScene:true},CTRL={},PATH={},STROKE={active:false},KOI={fish:[]};
     const camera=new THREE.PerspectiveCamera();camera.position.set(4.9,9.4,11.7);camera.lookAt(-.3,0,-1.5);
     const WATER_Y=0,FEED={hand:null,pelletMesh:{count:0,instanceMatrix:{},setMatrixAt(){}},point:new THREE.Vector3(),pellets:[],excite:0};
     const _hp=new THREE.Vector3(),_hq=new THREE.Quaternion(),_hm=new THREE.Matrix4(),_sk=new THREE.Vector3();
     const button={disabled:false},$=()=>button,rand=()=>.43,rr=(a,b)=>a+(b-a)*rand(),lerp=(a,b,t)=>a+(b-a)*t,sdf=()=>-2;
-    function toast(){} function addDrop(){} function spawnSplash(){} function updateSplashes(){} function waterHeightAt(){return 0;}
+    function toast(){} function setFreeze(value){P.freezeScene=value;} function addDrop(){} function spawnSplash(){} function updateSplashes(){} function waterHeightAt(){return 0;}
   `+between('function startFeeding()','/* ------------------------------------------------------------------ 13f.')+between('function endFeeding()','/* ------------------------------------------------------------------ 13d.')+`
     globalThis.sim={FEED,P,camera,button,startFeeding,updateFeeding};
   `,c);
   const {sim:s}=c,before=JSON.stringify([s.camera.position,s.camera.quaternion]);
-  s.startFeeding();assert.equal(s.FEED.active,true);assert.equal(s.FEED.hand,null);assert.equal(s.FEED.shot,null);
+  s.startFeeding();assert.equal(s.P.freezeScene,false);assert.equal(s.FEED.active,true);assert.equal(s.FEED.hand,null);assert.equal(s.FEED.shot,null);
   for(let i=1;i<=180;i++)s.updateFeeding(1/60,i/60);
   assert.equal(s.FEED.emitted,42);assert.equal(s.FEED.pelletMesh.count,42);assert.ok(s.FEED.pellets.every(p=>p.fl));
   const paused=JSON.stringify(s.FEED);s.updateFeeding(0,99);assert.equal(JSON.stringify(s.FEED),paused);
@@ -67,4 +67,30 @@ test('all actual fish have distinct names and care search reaches useful topics'
   assert.ok(matchingTopics('ammonia','Water').includes('cycle'));
   assert.ok(matchingTopics('quarantine','Health').includes('quarantine'));
   assert.equal(matchingTopics('gobbledygook').length,0);
+});
+
+test('startup always opens an animated Garden, including with reduced motion enabled',()=>{
+ for(const reduced of [false,true]){
+  const c=context();vm.runInContext(`
+   const elements=new Map(),messages=[];
+   function $(id){if(!elements.has(id))elements.set(id,{hidden:false,style:{display:'none'},attributes:{},label:{textContent:''},setAttribute(k,v){this.attributes[k]=v;},querySelector(){return this.label;}});return elements.get(id);}
+   const document={body:{dataset:{}},querySelectorAll(){return [];},querySelector(){return $('gui');}};
+   const P={freezeScene:true},GUI_CTRL={},TWEEN={},FOLLOW={},FEED={};
+   const matchMedia=()=>({matches:${reduced}});
+   function toast(value){messages.push(value);} function installGuide(){return {close(){}};}
+   function setHold(){} function startFeeding(){} function onCameraMode(){}
+   let initialView;function goToView(name,instant){initialView={name,instant};}
+  `+between('function setFreeze(', '// sound:')+between('function installHiddenReef()', '\ninit();')+`
+   installHiddenReef();globalThis.result={P,document,elements,messages,initialView,setFreeze};
+  `,c);
+  const r=c.result;
+  assert.equal(r.P.freezeScene,false);assert.equal(r.document.body.dataset.pondMotion,'running');
+  assert.equal(r.initialView.name,'Garden');assert.equal(r.initialView.instant,true);
+  assert.equal(r.elements.get('pond-paused').hidden,true);assert.equal(r.messages.length,0,'startup does not announce an unwanted pause');
+  r.setFreeze(true);assert.equal(r.elements.get('pond-paused').hidden,false);
+  assert.equal(r.elements.get('tb-freeze').attributes['aria-label'],'Resume pond');
+  r.elements.get('pond-resume').onclick();assert.equal(r.P.freezeScene,false);
+  assert.equal(r.elements.get('pond-paused').hidden,true);
+  assert.equal(r.elements.get('tb-freeze').attributes['aria-label'],'Pause pond');
+ }
 });

@@ -11,7 +11,7 @@
     <div><dt><kbd>C</kbd></dt><dd>Camera mode</dd></div>
     <div><dt><kbd>E</kbd></dt><dd>Feed the koi</dd></div>
     <div><dt><kbd>P</kbd></dt><dd>Hold shot</dd></div>
-    <div><dt><kbd>O</kbd></dt><dd>Freeze time</dd></div>
+    <div><dt><kbd>O</kbd></dt><dd>Pause / resume pond</dd></div>
     <div><dt><kbd>K</kbd></dt><dd>Follow a koi</dd></div>
     <div><dt><kbd>V</kbd></dt><dd>Clean view</dd></div>
     <div><dt><kbd>T</kbd></dt><dd>Weather</dd></div>
@@ -25,10 +25,11 @@
 <div id="toast" class="glass"></div>
 <div id="cleanhint" class="glass">Clean view · press V or Esc to bring the controls back</div>
 <div id="caption" aria-live="polite"></div>
+<div id="pond-paused" class="glass" role="status" hidden><span>Pond paused</span><button id="pond-resume" type="button">Resume pond <span aria-hidden="true">▶</span></button></div>
 <div id="toolbar" class="glass" role="toolbar" aria-label="Scene controls">
   <button id="tb-cam" class="sec" type="button" title="Switch between cinematic and manual camera (C)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5h10v9h-10z"/><path d="M13.5 10.5l6-3v9l-6-3"/></svg><span class="lbl">Manual camera</span></button>
   <button id="tb-hold" class="sec" type="button" aria-pressed="false" title="Hold the current shot (P)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="11" width="13" height="9" rx="2.2"/><path d="M8.5 11V8.2a3.5 3.5 0 0 1 7 0V11"/></svg><span class="lbl">Hold shot</span></button>
-  <button id="tb-freeze" class="sec" type="button" aria-pressed="false" title="Freeze time (O)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M10 9v6M14 9v6"/></svg><span class="lbl">Freeze time</span></button>
+  <button id="tb-freeze" class="sec" type="button" aria-pressed="false" aria-label="Pause pond" title="Pause pond · fish, water and foliage (O)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path class="pause-icon" d="M10 9v6M14 9v6"/><path class="resume-icon" d="m10 8 6 4-6 4z"/></svg><span class="lbl">Pause pond</span></button>
   <button id="tb-clean" class="sec" type="button" title="Hide all overlays for screenshots (V, Esc to exit)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg><span class="lbl">Clean view</span></button>
   <button id="tb-weather" class="sec" type="button" title="Change the weather / season (T)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8.5" r="3"/><path d="M8.5 2.5v1.2M2.5 8.5h1.2M4.3 4.3l.9.9M12.7 4.3l-.9.9"/><path d="M8.5 19.5h9a3.5 3.5 0 0 0 .2-7 5 5 0 0 0-9.4 1.3 2.9 2.9 0 0 0 .2 5.7z"/></svg><span class="lbl">Sunny</span></button>
   <button id="tb-sound" class="sec" type="button" aria-pressed="false" title="Mute / unmute (M)" aria-label="Mute"><svg viewBox="0 0 24 24" aria-hidden="true" class="ic-on"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.2 6.5a7.6 7.6 0 0 1 0 11"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" class="ic-off"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span class="lbl">Sound</span></button>

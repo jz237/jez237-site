@@ -19,6 +19,7 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 ## Current experience
 
 - Opens immediately in a stationary Garden view; fish, water and foliage remain alive. The moving tour is optional.
+- A labeled Pause pond / Resume pond control and a persistent paused notice make motion easy to restore. Feeding resumes a paused pond. Holding the O shortcut does not repeatedly toggle the state.
 - Wheel and trackpad scrolling over the scene zoom in/out in all camera modes.
 - Every one of the twenty fish has a unique name, with its variety retained in the guide and follow-camera label.
 - Feeding drops food directly onto visible water without a hand, arm or forced camera move.
@@ -33,7 +34,7 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 - Added Hidden Reef branding, garden / water / underwater view buttons, a fish guide matching all 20 displayed individuals, and a separate interactive water-chemistry lesson.
 - Pinned the koi's head during the traveling body wave; grew lateral flex toward the tail; preserved separately animated paired fins, tail membranes, breathing and eyes.
 - Reduced maximum turning rate and acceleration, feeding rush speed, pitch and roll. Fish vary depth continuously and choose new preferred depths, alternate bursts with glides and inspection pauses, retain loose social spacing, and track local hunger, energy and a fading feeding-location memory.
-- Corrected freeze behavior and final floor/surface bounds after crowding. Muted audio by default, kept technical settings out of the opening view, and added a reduced-motion initial state.
+- Corrected freeze behavior and final floor/surface bounds after crowding. Muted audio by default, kept technical settings out of the opening view, and kept the initial Garden camera stationary. Pond motion now starts on every device, including when reduced motion is enabled; interface transitions still honor reduced motion.
 
 The chemistry model uses mg/L as nitrogen, with explicit nitrogen mass balance and user-supplied pH. Its readings are illustrative, separate from the visual scene, and are not a stocking or treatment prescription. Care sources and model limits are available in the guide. History retains the last 97 hourly or control-change records. Comparison experiments clone the current sample and never advance or overwrite the visitor's experiment; pH remains a selected input rather than a solved buffer equilibrium.
 
