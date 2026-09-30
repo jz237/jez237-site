@@ -3,6 +3,7 @@ import { gl, Program, defineChunk, tex2D, depthTex, makeFBO, bindFBO } from './g
 import { m4, clamp, lerp, smoothstep } from './math.js';
 import { buildYacht, buildRigging, DIM, SAILS, MAT, sheer, waterlineHalfBeam } from './yacht-geo.js';
 import { bindLighting } from './lighting.js';
+import { YachtMaterials } from './yacht-materials.js';
 import './glsl.js';
 
 const YACHT_VS = `
@@ -14,6 +15,7 @@ uniform vec4 uSail;    // angle, pivot x, flutter, time
 uniform vec3 uSailAxis;
 uniform vec4 uSailShape; // foot y, head y, reef, headsail flag
 out vec3 vLocal;
+out vec3 vLocalN;
 out vec3 vN;
 out vec3 vRel;
 out vec4 vAttr;
@@ -44,6 +46,7 @@ void main() {
   vRel = w.xyz;
   vN = mat3(uModel) * n;
   vLocal = p;
+  vLocalN = n;
   vAttr = aAttr;
   gl_Position = uVP * w;
 }`;
@@ -56,8 +59,11 @@ const YACHT_FS = `
 #include <underwater>
 #include <water.uv>
 uniform sampler2DArray uDisp;
+uniform sampler2DArray uSurfaceAtlas, uDetailAtlas;
+uniform sampler2D uInstruments;
 uniform vec2 uYachtCen;    // centre of the cascade frame relative to the camera (xz)
 in vec3 vLocal;
+in vec3 vLocalN;
 in vec3 vN;
 in vec3 vRel;
 in vec4 vAttr;
@@ -112,7 +118,30 @@ void main() {
   vec3 clothN = dot(face, N) < 0.0 ? -face : face;
   N = mat == ${MAT.SAIL} ? clothN : N;
   vec2 clothWidth = fwidth(vAttr.xy);
-  float deckWidth = fwidth(vLocal.z);
+  vec3 localN=abs(normalize(vLocalN));
+  vec2 metric=localN.y>=max(localN.x,localN.z)?vLocal.xz:localN.z>=localN.x?vLocal.xy:vLocal.zy;
+  bool wood=mat==${MAT.TEAK}||mat==${MAT.WOOD};
+  bool fabric=mat==${MAT.SAIL}||mat==${MAT.CANVAS};
+  vec2 uv=wood?metric/vec2(2.0,.16):mat==${MAT.SAIL}?vAttr.xy*vec2(120.0,350.0):fabric?metric/.08:metric/.5;
+  uv.x+=mat==${MAT.TEAK}?hash11(floor(metric.y/.16))*.93:0.0;
+  float layer=mat==${MAT.WOOD}?3.0:wood?0.0:fabric?1.0:2.0;
+  vec3 texColor=pow(texture(uSurfaceAtlas,vec3(uv,layer)).rgb,vec3(2.2));
+  vec3 detail=texture(uDetailAtlas,vec3(uv,layer)).rgb;
+  float plankId=floor(metric.y/.16),jointCoord=metric.x/2.8+hash11(plankId+7.0);
+  float jointDist=min(fract(jointCoord),1.0-fract(jointCoord));
+  float jointWidth=max(fwidth(metric.x/2.8),.0005);
+  float joint=(1.0-smoothstep(.0012,.0012+jointWidth,jointDist))*min(1.0,.0024/jointWidth);
+  vec3 screen=pow(texture(uInstruments,vAttr.xy).rgb,vec3(2.2));
+  // Cotangent frame from actual UVs and geometry. Evaluate every derivative
+  // before material flow, including on phone GPUs and the reflection pass.
+  vec3 dpX=dFdx(vRel),dpY=dFdy(vRel);
+  vec2 duX=dFdx(uv),duY=dFdy(uv);
+  vec3 px=cross(dpY,N),py=cross(N,dpX);
+  vec3 tangent=px*duX.x+py*duY.x,bitangent=px*duX.y+py*duY.y;
+  float frameScale=inversesqrt(max(max(dot(tangent,tangent),dot(bitangent,bitangent)),1e-20));
+  vec2 bump=detail.rg*2.0-1.0;
+  vec3 bumped=normalize(tangent*frameScale*bump.x+bitangent*frameScale*bump.y+N*sqrt(max(1.0-dot(bump,bump),.001)));
+  N=(wood||fabric||mat==${MAT.ALU}||mat==${MAT.STEEL})?bumped:N;
   vec3 ndx=dFdx(N), ndy=dFdy(N);
   float normalVariance=max(dot(ndx,ndx),dot(ndy,ndy));
   if (uRefl > 0.5 && vRel.y + uCamY < uMirrorY - 0.04) discard;   // only what stands above the water is mirrored
@@ -128,22 +157,23 @@ void main() {
     albedo *= gr;
   } else if (mat == ${MAT.CABIN}) {
     albedo = vec3(0.80,0.77,0.67);rough=.32;
-  } else if (mat == ${MAT.TEAK}) {
-    float edge=min(fract(p.z/.16),1.0-fract(p.z/.16));
-    float plank=smoothstep(.010,.028+deckWidth/.16,edge);
-    float grain = vnoise(vec2(p.x * 4.0, p.z * 60.0));
-    albedo = vec3(.40,.23,.105) * mix(0.75, 1.15, grain) * mix(.22,1.0,plank);
-    rough = 0.55;
-  } else if (mat == ${MAT.ALU}) { albedo = vec3(0.62, 0.65, 0.68); metal = 0.9; rough = 0.42; }
-  else if (mat == ${MAT.STEEL}) { albedo = vec3(0.57, 0.60, 0.64); metal = 0.95; rough = 0.44; }
+  } else if (mat == ${MAT.TEAK}||mat==${MAT.WOOD}) {
+    albedo=texColor*(mat==${MAT.WOOD}?vec3(.65,.56,.45):vec3(1.0));
+    rough=mat==${MAT.WOOD}?.24:detail.b;
+    if(mat==${MAT.TEAK}){albedo*=mix(.93,1.07,hash11(plankId+37.0))*mix(1.0,.15,joint);rough=clamp(rough+.055*(hash11(plankId+11.0)-.5),.38,.88);}
+  } else if (mat == ${MAT.ALU}) { albedo = texColor*.88; metal = 0.9; rough = max(.30,detail.b); }
+  else if (mat == ${MAT.STEEL}) { albedo = texColor; metal = 0.95; rough = max(.27,detail.b); }
   else if (mat == ${MAT.KEEL}) {albedo=vec3(.025,.042,.055);rough=.6;}
   else if (mat == ${MAT.GLASS}) {albedo=vec3(.008,.020,.028);rough=.09;f0=.08;}
   else if (mat == ${MAT.ROPE}) {albedo=vec3(.43,.40,.31);rough=.84;}
   else if (mat == ${MAT.BRASS}) {albedo=vec3(.52,.34,.12);metal=.86;rough=.29;}
   else if (mat == ${MAT.RUBBER}) {albedo=vec3(.42,.44,.42);rough=.76;}
   else if (mat == ${MAT.TRIM}) { albedo = vec3(0.05, 0.05, 0.055); rough = 0.4; }
+  else if (mat == ${MAT.CANVAS}) {albedo=texColor*.78;rough=detail.b;}
+  else if (mat == ${MAT.SAFETY}) {albedo=vec3(.75,.12,.018);rough=.67;}
+  else if (mat == ${MAT.SCREEN}) {albedo=vec3(.002,.004,.005);rough=.32;}
   else if (mat == ${MAT.SAIL}) {
-    albedo = vec3(0.92, 0.90, 0.84); rough = 0.85; trans = 0.45;
+    albedo = texColor; rough = 0.85; trans = 0.45;
     float seamDist = min(fract(vAttr.y * 14.0), 1.0 - fract(vAttr.y * 14.0));
     float seam = (1.0 - smoothstep(0.012, 0.024 + clothWidth.y * 14.0, seamDist)) * 0.12;
     float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(clothWidth.x * 900.0, clothWidth.y * 1200.0));
@@ -194,6 +224,7 @@ void main() {
   envR = mix(lightGround(), envR, below);
   vec3 Fe = F0 + (max(vec3(1.0 - rough), F0) - F0) * pow(1.0 - clamp(dot(N, V), 0.0, 1.0), 5.0);
   col += envR * Fe * ao * (mat == ${MAT.SAIL} ? 0.0 : mix(0.4, 1.0, metal));   // painted surfaces: the sky/sea fill is a weak sheen, not a second light
+  if(mat==${MAT.SCREEN})col=col*.1+screen*max(luma(lightSun())*.65,.12);
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky
   float wy = vRel.y + uCamY;
@@ -292,6 +323,7 @@ export class Yacht {
       return { vao, vb, count: m.idx.length };
     };
     this.hull=mk(g.hull);this.rigMesh=mk(g.rig);this.sails=g.sails.map(({S,mesh,boom})=>({S,cloth:mk(mesh),boom:boom?mk(boom):null}));this.metadata=g.metadata;
+    this.materials=new YachtMaterials();
     this.sheetVerts=new Float32Array(8*16*10);const sheetIdx=[];
     for(let j=0;j<8;j++)for(let k=0;k<8;k++){const b=j*16;sheetIdx.push(b+k,b+(k+1)%8,b+8+k,b+(k+1)%8,b+8+(k+1)%8,b+8+k);}
     this.sheets=mk({verts:this.sheetVerts,idx:new Uint32Array(sheetIdx)});
@@ -323,6 +355,7 @@ export class Yacht {
     this.tack = 1;
     this.probeH = [0, 0, 0, 0, 0];
     this.lastSlope = [0, 0];
+    this._matrix();
   }
 
   // Points sampled each frame (world xz): centre, bow, stern, starboard, port
@@ -428,6 +461,8 @@ export class Yacht {
     const { bow, up, sb } = this.axes;
     return [d[0] * bow[0] + d[1] * bow[1] + d[2] * bow[2], d[0] * up[0] + d[1] * up[1] + d[2] * up[2], d[0] * sb[0] + d[1] * sb[1] + d[2] * sb[2]];
   }
+  toLocalPoint(p){return this.toLocalDir([p[0]-this.x,p[1]-this.y,p[2]-this.z]);}
+  toWorldDir(d){const{bow,up,sb}=this.axes;return [0,1,2].map(k=>bow[k]*d[0]+up[k]*d[1]+sb[k]*d[2]);}
 
   _sailTri(S,ang,reef){
     const T=S.tack,H=S.head,main=!!S.boom;
@@ -465,6 +500,7 @@ export class Yacht {
   }
 
   draw(ctx, VP, camAbs, mirror = false) {
+    this.materials.updateInstrument(Math.atan2(this.axes.bow[0],-this.axes.bow[2]),this.speed,ctx.time||0);
     const rel = new Float64Array(this.M); rel[12] = this.x - camAbs[0]; rel[13] = this.y - ctx.cam.y; rel[14] = this.z - camAbs[2];
     const Mf = Float32Array.from(rel);
     const sunL = this.toLocalDir(ctx.sk.sunDir), moonL = this.toLocalDir(ctx.sk.moonDir);
@@ -473,6 +509,7 @@ export class Yacht {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
+      p.t('uSurfaceAtlas',7,this.materials.color).t('uDetailAtlas',9,this.materials.detail).t('uInstruments',10,this.materials.instrument);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
       if (ctx.sim) {
         const sim = ctx.sim, cx = this.x, cz = this.z;

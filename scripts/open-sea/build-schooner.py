@@ -11,8 +11,9 @@ repo, outputs=args[0:2]
 asset=os.path.join(repo,'demos','open-sea','assets');os.makedirs(asset,exist_ok=True)
 os.makedirs(outputs,exist_ok=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
-MAT={'HULL':0,'DECK':1,'CABIN':2,'GLASS':3,'TEAK':4,'ALU':5,'SAIL':6,'STEEL':7,'ROPE':8,'KEEL':9,'TRIM':10,'BRASS':11,'RUBBER':12}
+MAT={'HULL':0,'DECK':1,'CABIN':2,'GLASS':3,'TEAK':4,'ALU':5,'SAIL':6,'STEEL':7,'ROPE':8,'KEEL':9,'TRIM':10,'BRASS':11,'RUBBER':12,'SCREEN':13,'CANVAS':14,'WOOD':15,'SAFETY':16}
 palette={'HULL':((.018,.045,.075,1),.25,0),'DECK':((.55,.31,.135,1),.6,0),'CABIN':((.86,.82,.71,1),.32,0),'GLASS':((.012,.026,.036,1),.1,.25),'TEAK':((.38,.21,.09,1),.55,0),'ALU':((.53,.57,.61,1),.3,.9),'SAIL':((.86,.83,.72,1),.82,0),'STEEL':((.7,.73,.76,1),.22,1),'ROPE':((.52,.48,.37,1),.85,0),'KEEL':((.025,.042,.055,1),.6,0),'TRIM':((.018,.022,.026,1),.45,0),'BRASS':((.5,.32,.10,1),.27,.8),'RUBBER':((.45,.47,.44,1),.7,0)}
+palette.update({'SCREEN':((.02,.09,.12,1),.3,0),'CANVAS':((.69,.65,.54,1),.85,0),'WOOD':((.23,.10,.035,1),.24,0),'SAFETY':((.85,.12,.02,1),.67,0)})
 materials={}
 for name,(col,rough,metal) in palette.items():
  m=bpy.data.materials.new(name);m.use_nodes=True;m.diffuse_color=col
@@ -23,7 +24,7 @@ for name,(col,rough,metal) in palette.items():
   m.node_tree.links.new(n.outputs['Fac'],bump.inputs['Height']);m.node_tree.links.new(bump.outputs['Normal'],p.inputs['Normal'])
  materials[name]=m
 
-groups={'hull':[],'rig':[]};names={};rig=[]
+groups={'hull':[],'rig':[]};names={};rig=[];deck_nav={'obstacles':[],'surfaces':[]}
 def mesh(name,verts,faces,mat,smooth=True,uv=None,group='hull'):
  me=bpy.data.meshes.new(name);me.from_pydata(verts,[],faces);me.materials.append(materials[mat]);me.update()
  ob=bpy.data.objects.new(name,me);bpy.context.collection.objects.link(ob);groups.setdefault(group,[]).append(ob);names[name]=ob
@@ -40,6 +41,8 @@ def grid(name,fn,nu,nv,mat,group='hull',flip=False):
  uv=[(i/nu,j/nv) for j in range(nv+1) for i in range(nu+1)]
  return mesh(name,verts,faces,mat,True,uv,group)
 def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
+ if name.endswith('mast collar') or name in ['Winch base','Helm pedestal','Tender davit']:
+  deck_nav['obstacles'].append({'type':'circle','x':a[0],'z':a[1],'radius':max(r,r1 or r),'name':name})
  a,b=Vector(a),Vector(b);d=(b-a).normalized();up=Vector((1,0,0)) if abs(d.z)>.9 else Vector((0,0,1));s=d.cross(up).normalized();t=d.cross(s);r1=r if r1 is None else r1
  verts=[]
  for p,rad in [(a,r),(b,r1)]:
@@ -48,6 +51,10 @@ def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull'):
  if group=='hull' and r<.065:group='rig'
  ob=mesh(name,verts,faces,mat,True,group=group);ob['tube_radius']=r;return ob
 def box(name,c,d,mat='CABIN',bevel=.04,group='hull'):
+ if name.startswith('Teak coaming ') or name in ['Cockpit seat','Cockpit coaming','Helm instrument','Windlass foundation']:
+  deck_nav['obstacles'].append({'type':'box','x':c[0],'z':c[1],'halfX':d[0]/2,'halfZ':d[1]/2,'name':name})
+ if name in ['Deck hatch glazing','Companionway threshold']:
+  deck_nav['surfaces'].append({'x':c[0],'z':c[1],'halfX':d[0]/2+.07,'halfZ':d[1]/2+.07,'height':c[2]+d[2]/2})
  x,y,z=c;a,b,h=[v/2 for v in d];verts=[(x+i*a,y+j*b,z+k*h) for k in (-1,1) for j in (-1,1) for i in (-1,1)]
  faces=[(0,2,3,1),(4,5,7,6),(0,1,5,4),(2,6,7,3),(0,4,6,2),(1,3,7,5)]
  ob=mesh(name,verts,faces,mat,False,group=group)
@@ -69,6 +76,7 @@ def beam(x):
  if x>=-2:return 4.65*max(.0,1-((x+2)/25.5)**2.1)**.7
  return 4.65*(1-.40*((-2-x)/21.5)**2.4)
 def sheer(x):return 2.6+(.0018 if x>0 else .0007)*x*x
+def deck_height(x,y):return sheer(x)+.055*(1-(y/(beam(x)*.995))**2)
 def bottom(x):return -3.15*max(.05,1-(x/25.5)**2)**.5
 def bow_rake(x,v):return x-2.7*max(0,min(1,(x-18.5)/5))**3*(1-v)
 def hull(x,v,side):
@@ -137,7 +145,11 @@ for hi,(x,length,width,height) in enumerate(houses):
  # Companionway at aft bulkhead.
  box('Companionway surround',(x-length*.5-.03,0,base+.66),(.1,.91,1.3),'TEAK',.04)
  box('Companionway door',(x-length*.5-.09,0,base+.66),(.045,.77,1.18),'TRIM',.03)
- for k in range(4):box('Companionway tread',(x-length*.5-.4-k*.23,0,base-.04-k*.14),(.26,.98,.10),'TEAK',.03)
+ box('Companionway threshold',(x-length*.5-.30,0,sheer(x-length*.5-.30)+.08),(.40,.98,.12),'TEAK',.025)
+ for side in [-1,1]:
+  yy=side*.32;xx=x-length*.5-.12
+  tube('Door handle',(xx,yy,base+.69),(xx,yy,base+.87),.021,'BRASS',n=8)
+  for zz in [base+.29,base+1.02]:box('Door hinge',(xx,side*.39,zz),(.04,.07,.13),'STEEL',.012)
 
 # Mast positions mirror the image's ascending heights from bow to stern.
 mast_specs=[('Main',-12.7,36.5,9.8),('Middle',1.7,29.8,11.0),('Fore',14.0,23.8,8.6)]
@@ -211,7 +223,7 @@ for S in sail_specs:
   p=cloth(*uv);torus('Sail corner cringle',p,.075,.019,'STEEL','y',16,6,g)
 
 # Working gear: sizeable winches, cleats, deck hatches, seating and dual helms.
-for x in [-19,-15,-6,-1,7,17]:
+for x in [-19,-16.8,-5.4,-1,7,17]:
  for side in [-1,1]:
   y=side*min(3.8,beam(x)*.80);z=sheer(x)
   tube('Winch base',(x,y,z+.02),(x,y,z+.16),.26,'STEEL',n=18)
@@ -228,15 +240,30 @@ for x in [-21,-17,-5,6,18,22]:
 for x in [-18.4,-4.2,8.2,18.7]:
  for y in [-1.25,1.25]:
   z=sheer(x);box('Deck hatch rim',(x,y,z+.08),(1.30,.90,.14),'STEEL',.06);box('Deck hatch glazing',(x,y,z+.16),(1.16,.76,.035),'GLASS',.05)
+  for xx in [x-.36,x+.36]:
+   box('Hatch hinge',(xx,y-.45,z+.16),(.19,.08,.07),'STEEL',.015)
+   tube('Hatch latch',(xx-.065,y+.34,z+.19),(xx+.065,y+.34,z+.19),.018,'STEEL',n=8)
 for side in [-1,1]:
  z=sheer(-18);y=side*2.2
  box('Cockpit seat',(-18,y,z+.51),(3.1,.72,.17),'TEAK',.08)
+ for k in range(3):
+  xx=-19+k*1.0;box('Canvas cockpit cushion',(xx,y,z+.66),(.94,.65,.18),'CANVAS',.085)
+  for end in [-1,1]:tube('Cushion piping',(xx+end*.43,y-.28,z+.70),(xx+end*.43,y+.28,z+.70),.009,'ROPE',n=6)
  box('Cockpit coaming',(-18,side*2.62,z+.82),(3.4,.14,.86),'CABIN',.06)
- tube('Helm pedestal',(-16.8,side*1.75,z),(-16.8,side*1.75,z+1.0),.12,'CABIN',n=14)
- c=(-16.98,side*1.75,z+1.18);torus('Helm wheel',c,.52,.027,'STEEL','x',32,8)
+ tube('Helm pedestal',(-16.8,side*1.75,z),(-16.8,side*1.75,z+1.22),.12,'CABIN',n=14)
+ c=(-16.98,side*1.75,z+1.18);torus('Helm wheel',c,.52,.033,'WOOD','x',48,8)
+ tube('Wheel hub',(c[0]-.07,c[1],c[2]),(c[0]+.07,c[1],c[2]),.075,'BRASS',n=16)
  for k in range(8):
   a=k*math.tau/8;tube('Wheel spoke',c,(c[0],c[1]+.50*math.cos(a),c[2]+.50*math.sin(a)),.014,n=6)
- box('Helm instrument',(-16.75,side*1.75,z+1.30),(.15,.47,.35),'TRIM',.04)
+ box('Helm instrument',(-16.63,side*1.75,z+1.94),(.18,.81,.61),'TRIM',.04)
+ sx=-16.725;cy=side*1.75;cz=z+1.94
+ tube('Chartplotter mounting arm',(-16.8,cy,z+.95),(-16.63,cy,z+1.75),.045,'STEEL',n=12)
+ tube('Compass mounting bracket',(-16.8,cy,z+.96),(-16.45,cy,z+1.14),.04,'STEEL',n=12)
+ mesh('Chartplotter screen',[(sx,cy-.35,cz-.25),(sx,cy+.35,cz-.25),(sx,cy+.35,cz+.25),(sx,cy-.35,cz+.25)],[(0,3,2,1)],'SCREEN',False,[(0,1),(1,1),(1,0),(0,0)])
+ for k in range(3):ellipsoid('Instrument keys',(sx-.005,cy-.23+k*.23,cz-.286),(.012,.024,.014),'CABIN',10,6)
+ tube('Compass binnacle',(-16.45,cy,z+1.12),(-16.45,cy,z+1.60),.13,'STEEL',n=18)
+ torus('Compass brass rim',(-16.45,cy,z+1.64),.145,.018,'BRASS',nu=24,nv=6)
+ ellipsoid('Compass glass',(-16.45,cy,z+1.64),(.13,.13,.05),'GLASS',24,8)
 
 # Substantial twin anchor windlass with chain links and articulated flukes.
 for side in [-1,1]:
@@ -263,17 +290,70 @@ for side in [-1,1]:
 box('Tender floor',(-20.5,0,z-.12),(3.8,1.40,.12),'TRIM',.09)
 for x in [-21.3,-20.3,-19.3]:box('Tender bench',(x,0,z+.12),(.35,1.65,.12),'TEAK',.04)
 box('Tender outboard',(-22.4,0,z+.15),(.42,.35,.60),'TRIM',.12)
-for x in [-8,-5]:
- for side in [-1,1]:ellipsoid('Liferaft canister',(x,side*3.65,sheer(x)+.32),(.65,.30,.27),'CABIN',20,12)
+deck_nav['obstacles'].append({'type':'box','x':-20.5,'z':0,'halfX':2.25,'halfZ':1.26,'name':'Suspended tender'})
+for x in [-9.8,-7.8]:
+ for side in [-1,1]:
+  yy=side*2.25;zz=sheer(-10.8)+2.53
+  box('Liferaft cradle',(x,yy,zz-.14),(1.42,.68,.12),'STEEL',.04)
+  ellipsoid('Liferaft canister',(x,yy,zz+.15),(.65,.30,.27),'CABIN',20,12)
+  for xx in [x-.36,x+.36]:torus('Raft securing strap',(xx,yy,zz+.15),.30,.022,'TRIM','x',20,6,stretch=.9)
 for side in [-1,1]:
- z=sheer(-10.8)+2.7
+ z=sheer(-10.8)+2.33
  tube('Ventilation cowl',(-9,side*1.3,z),(-9,side*1.3,z+.5),.16,'CABIN',n=16)
  ellipsoid('Cowl cap',(-8.85,side*1.3,z+.50),(.32,.20,.18),'CABIN',20,12)
-ellipsoid('Radar dome',(-13.8,0,sheer(-13.8)+3.3),(.65,.65,.45),'CABIN',24,16)
+roof_h=sheer(-10.8)+2.33
+tube('Radar mounting pedestal',(-13.8,0,roof_h),(-13.8,0,roof_h+.4),.14,'CABIN',n=16)
+ellipsoid('Radar dome',(-13.8,0,roof_h+.72),(.65,.65,.45),'CABIN',24,16)
 for side in [-1,1]:tube('Antenna',(-12,side*2.2,5.0),(-12,side*2.2,7.4),.024,'STEEL',n=8)
 
+# Detail visible from a passenger's eye: working lines, belaying gear, rescue
+# equipment and fasteners. Fine pieces share the existing filtered rig batch.
+for x in [-18.8,-5.2,6.3,17.8]:
+ for side in [-1,1]:
+  yy=side*min(3.65,beam(x)*.76);zz=deck_height(x,yy)+.014
+  for k in range(5):torus('Coiled running line',(x,yy,zz),.12+k*.032,.014,'ROPE',nu=32,nv=6,stretch=1.35)
+  tube('Coil tail',(x+.31,yy,zz),(x+.62,yy+side*.14,deck_height(x+.62,yy+side*.14)+.016),.016,'ROPE',n=8)
+  for xx in [x-.35,x+.35]:
+   ellipsoid('Deck fastening',(xx,yy,deck_height(xx,yy)+.004),(.026,.026,.006),'STEEL',10,5)
+for x in [-12.7,1.7,14]:
+ yy=min(3.45,beam(x)*.73);zz=sheer(x)
+ for side in [-1,1]:
+  box('Belaying rail',(x,side*yy,zz+.31),(1.15,.18,.10),'WOOD',.025)
+  for k in range(5):
+   xx=x-.43+k*.21;tube('Belaying pin',(xx,side*yy,zz+.15),(xx,side*yy,zz+.53),.022,'BRASS',n=8)
+  for xx in [x-.40,x+.40]:tube('Belaying rail support',(xx,side*yy,zz),(xx,side*yy,zz+.29),.031,'STEEL',n=8)
+for side in [-1,1]:
+ x=-18.9;yy=side*beam(x)*.984;zz=sheer(x)+.56
+ torus('Rescue lifebuoy',(x,yy,zz),.30,.087,'SAFETY','y',36,10)
+ for k in range(4):
+  a=k*math.pi/2;cx=x+.30*math.cos(a);cz=zz+.30*math.sin(a)
+  ellipsoid('Buoy reflective patch',(cx,yy-side*.067,cz),(.072,.023,.072),'CANVAS',12,6)
+ torus('Rescue line',(x,yy,zz),.43,.014,'ROPE','y',40,6)
+ for end in [-1,1]:tube('Buoy mount',(x+end*.25,yy,zz-.26),(x+end*.25,yy,zz+.26),.012,'STEEL',n=6)
+ for xx in [-15.0,9.8]:
+  cy=side*beam(xx)*.93;cz=sheer(xx)+.08
+  box('Navigation light base',(xx,cy,cz),(.22,.13,.11),'TRIM',.025)
+  box('Navigation light lens',(xx,cy+side*.035,cz+.065),(.13,.08,.06),'GLASS',.02)
+for x,length,width,height in houses:
+ base=sheer(x)+.10
+ for side in [-1,1]:
+  for k in range(8):
+   xx=x-length*.43+k*length*.86/7;yy=side*(width/2+.026)
+   ellipsoid('Window frame fastener',(xx,yy,base+.22),(.014,.007,.014),'STEEL',8,5)
+  # Narrow louvred vents and an aft exterior light.
+  xx=x+length*.30;yy=side*(width/2+.023)
+  box('Cabin ventilation grille',(xx,yy,base+.25),(.46,.026,.22),'TRIM',.01)
+  for k in range(5):tube('Vent louvre',(xx-.20,yy+side*.018,base+.17+k*.04),(xx+.20,yy+side*.018,base+.17+k*.04),.008,'STEEL',n=5)
+
+def lettering(text,loc,size,normal,mat='BRASS'):
+ data=bpy.data.curves.new(text,'FONT');data.body=text;data.align_x='CENTER';data.size=size;data.extrude=.0015;data.bevel_depth=.0008;data.resolution_u=3
+ ob=bpy.data.objects.new(text,data);bpy.context.collection.objects.link(ob);ob.location=loc;ob.rotation_euler=Vector(normal).to_track_quat('Z','Y').to_euler();data.materials.append(materials[mat])
+ bpy.context.view_layer.objects.active=ob;ob.select_set(True);bpy.ops.object.convert(target='MESH');ob.select_set(False);groups['hull'].append(ob)
+lettering('OPEN SEA',(-23.53,0,2.04),.32,(1,0,0))
+lettering('OPEN SEA',(-15.505,0,4.73),.12,(1,0,0))
+
 # Export a compact indexed buffer, preserving Blender's evaluated bevel normals.
-deps=bpy.context.evaluated_depsgraph_get();vertex_data=array.array('f');index_data=array.array('I');manifest={'version':1,'length':52,'hullLength':47,'beam':9.3,'deckHeight':2.6,'draft':6.65,'crewConcept':[20,30],'masts':3,'sails':sail_specs,'groups':{}}
+deps=bpy.context.evaluated_depsgraph_get();vertex_data=array.array('f');index_data=array.array('I');manifest={'version':1,'length':52,'hullLength':47,'beam':9.3,'deckHeight':2.6,'draft':6.65,'crewConcept':[20,30],'masts':3,'sails':sail_specs,'groups':{},'deck':deck_nav}
 for group,objects in groups.items():
  verts=array.array('f');idx=array.array('I');lookup={}
  for ob in objects:

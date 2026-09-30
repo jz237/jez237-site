@@ -96,6 +96,7 @@ class App {
   requestPhoto() { this.photoReq = true; }
 
   camForward() {
+    if(this.cam.forward)return this.cam.forward;
     const c = this.cam, cp = Math.cos(c.pitch);
     return [Math.sin(c.yaw) * cp, Math.sin(c.pitch), -Math.cos(c.yaw) * cp];
   }
@@ -141,6 +142,7 @@ class App {
     if (this.yachtOn) {
       this.yacht.feed(this.probe);
       this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs });
+      this.rig?.syncDeckCamera();
       this.trail.update(dt, this.yacht, this.time, this.sim.cur.U);
     }
     if (this.probe.fresh) {
@@ -177,7 +179,7 @@ class App {
     const aspect = this.w / this.h;
     const P = m4.perspective(cam.fov, aspect, NEAR, FAR);
     const fwd = this.camForward();
-    const R = m4.viewRot(fwd);
+    const R = m4.viewRot(fwd,cam.up||[0,1,0]);
     const VP = m4.mul(P, R);
     const invVP = m4.f32(m4.invert(VP));
     const VPf = m4.f32(VP);

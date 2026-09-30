@@ -1,6 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 2.9 MB compressed mesh; the browser has no framework dependency or build step.
+A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 3.2 MB compressed mesh; the browser has no framework dependency or build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -39,7 +39,7 @@ The classic failure is a splash-ripple solver that scales its step with the fram
 
 The panel (top left, `×` closes it) has five sections:
 
-* **Camera**: Tour, Free fly, Boat, Dive, and *Next shot* (cuts to the next shot of the tour).
+* **Camera**: Tour, Free fly, Boat, Dive, Walk deck, and *Next shot* (cuts to the next shot of the tour). Deck mode adds Helm, Bow and Stern viewpoints.
 * **Sea**: Glassy to Storm presets, then wind, swell, direction, choppiness, wave height and foam sliders.
 * **Sky**: time presets (Sunrise to Night) with sun height and bearing sliders, weather presets (Clear to Storm, Rain and Storm add rain; Storm adds lightning) with cloud cover and cloud wind.
 * **Water**: seven water types (Open ocean, Tropical, Coastal green, Arctic, Deep ocean, Lagoon, Shallows) that change the surface colour and the underwater light; clarity scales how far light travels; night glow lights breaking water and the wake with bioluminescence after dark.
@@ -85,7 +85,7 @@ WebGL 2 with `EXT_color_buffer_float` is required. Without it the page shows an 
 
 ## Large schooner asset
 
-`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 13 material classes, and animates each sail about its actual luff axis. Mesh export includes 140,661 vertices and 199,876 triangles, plus eight animated mainsheet and headsail sheet tubes.
+`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 17 material classes, and animates each sail about its actual luff axis. Mesh export includes 174,519 vertices and 243,104 triangles, plus eight animated mainsheet and headsail sheet tubes.
 
 The tour and boat/dive cameras, buoyancy probes, sailing speed and wake have been resized for the larger vessel. Fine metal highlights include derivative-based normal filtering to reduce distant sparkle. The monochrome fullscreen button remains visible with the control panel folded, and reflects fullscreen state in its label and accessibility attributes.
 
@@ -106,3 +106,14 @@ Portrait tour overview cameras pull back around their targets to fit the larger 
 `scripts/open-sea/tests/phone-rendering.html` checks GPU fades, isolated HDR glints, zero calm foam and hitching rain/hull ripples. It passes with NVIDIA/ANGLE D3D11 and ANGLE SwiftShader/Vulkan. For 55 isolated glints, the old pass produced 275 saturated display pixels and the revised pass produced 53. Matched portrait captures used a 390 × 844 CSS viewport, DPR 2, and a 0.45 render scale (351 × 760 backing pixels). Daylight, low-sun glare, night, storm and underwater scenes had finite HDR pixels and no browser or WebGL errors. The outside reviewer found the repair suitable to ship; very fine rigging remains visibly limited at low resolution.
 
 The catastrophic phone appearance could not be reproduced on the desktop GPU. These corrections address concrete portability and filtering defects, but confirmation on the affected physical phone is still required. They do not establish photographic realism or mobile frame-rate parity.
+
+
+## Yacht detail and deck walking
+
+Land (or L / 5) boards the yacht. W A S D walk, drag looks around, Shift walks briskly and the wheel changes walking speed. Phones have a left walking pad while a second finger can drag the scene to look. Take off (L) returns to flight. Helm, Bow and Stern buttons are available in the camera panel. Boarding near the yacht uses the nearest safe deck position; distant boarding starts at the helm.
+
+The passenger is anchored in yacht coordinates, including heave, pitch, roll and heading. Geometry-generated obstacles keep the camera inside the railing and outside cabins, masts, benches, winches and the tender. Movement is subdivided to prevent tunnelling during uneven frames. Low hatch tops and thresholds contribute to floor height. Cabins remain closed; this is an exterior deck walk.
+
+Four 512-square mipmapped surface/detail layers add teak grain, caulking, staggered plank ends, varnished wood, sail/cushion weave and brushed metal. Added fittings include rope coils, belaying gear, canvas cushions, hatch hardware, rescue buoys, ventilation grilles, lettering and supported helm instruments. The powered displays update heading from the actual bow axis and speed from sailing motion, with a readable night backlight. The chart is a schematic, not navigational data. Fine tubes retain the phone-safe coverage and derivative filtering.
+
+Validation: scripts/open-sea/deck-navigation-test.mjs checks connected stations, a 426-step continuous helm-to-bow route, boundary/cabin collision and passenger height through uneven frame times. GPU browser checks cover ten day/night/storm/portrait viewpoints, keyboard movement, drag look, taking off/reboarding, fullscreen and simultaneous phone walking/look touch events. Physical-phone GPU validation of this addition remains unverified. An outside reviewer prompted fixes to obstructed passages, mirrored lettering, wheel caulking, night display brightness and floating fittings. Broader lighting/contact-shadow and cabin-interior limitations remain.

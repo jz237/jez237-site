@@ -1,5 +1,6 @@
 // Camera control: slow cinematic tour (yacht-relative keyframes), then free flight, boat orbit and dive orbit.
 import { clamp, lerp, smoothstep } from './math.js';
+import { DeckWalker } from './deck.js';
 
 const DEG = Math.PI / 180;
 
@@ -44,13 +45,16 @@ export class Rig {
     this.onChange = null;
     this.lastInput = 0;
     this.shake = 0;
+    this.deck = new DeckWalker(app.yacht);
     this.bind(dom);
   }
 
   setMode(m, keepPose = true) {
     if (m === this.mode) return;
     const cam = this.app.cam, y = this.app.yacht;
+    if(this.mode==='deck'){delete cam.forward;delete cam.up;this.deck.stick=[0,0];}
     this.mode = m;
+    if(m==='deck'){this.app.yachtOn=true;this.deck.board(cam);this.syncDeckCamera();this.pinch=this.rise=0;}
     if (m === 'fly') { this.vel = [0, 0, 0]; }
     if (m === 'boat') {
       const dx = cam.x - y.x, dz = cam.z - y.z, d = Math.hypot(dx, dz);
@@ -84,7 +88,7 @@ export class Rig {
       }
     });
     addEventListener('keyup', e => this.keys.delete(e.key.toLowerCase()));
-    addEventListener('blur', () => this.keys.clear());
+    addEventListener('blur', () => {this.keys.clear();this.deck.stick=[0,0];});
     dom.addEventListener('pointerdown', e => {
       dom.setPointerCapture && dom.setPointerCapture(e.pointerId);
       this.touches.set(e.pointerId, { x: e.clientX, y: e.clientY, px: e.clientX, py: e.clientY });
@@ -97,6 +101,7 @@ export class Rig {
       const dx = e.clientX - t.x, dy = e.clientY - t.y;
       t.x = e.clientX; t.y = e.clientY;
       if (this.touches.size >= 2) {
+        if(this.mode==='deck')return;
         // two fingers: pinch = move, vertical drag = altitude
         const pts = [...this.touches.values()];
         const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y), d0 = Math.hypot(pts[0].px - pts[1].px, pts[0].py - pts[1].py);
@@ -114,6 +119,7 @@ export class Rig {
       if (this.mode === 'tour') this.takeOver();
       const f = Math.exp(e.deltaY * 0.0012);
       if (this.mode === 'boat') this.orbit.dist = clamp(this.orbit.dist * f, 5, 220);
+      else if(this.mode==='deck')this.deck.walkSpeed=clamp(this.deck.walkSpeed/f,1,3);
       else if (this.mode === 'dive') this.dive.dist = clamp(this.dive.dist * f, 2.5, 60);
       else this.speed = clamp(this.speed / f, 1.5, 600);
       if (this.onSpeed) this.onSpeed(this.speed);
@@ -123,7 +129,8 @@ export class Rig {
 
   look(dx, dy) {
     const s = 0.0032;
-    if (this.mode === 'boat') { this.orbit.az -= dx * s * 1.2; this.orbit.el = clamp(this.orbit.el + dy * s, 0.02, 1.45); }
+    if(this.mode==='deck'){this.deck.yaw+=dx*s;this.deck.pitch=clamp(this.deck.pitch-dy*s,-1.45,1.45);this.syncDeckCamera();}
+    else if (this.mode === 'boat') { this.orbit.az -= dx * s * 1.2; this.orbit.el = clamp(this.orbit.el + dy * s, 0.02, 1.45); }
     else if (this.mode === 'dive') { this.dive.az -= dx * s * 1.2; this.dive.el = clamp(this.dive.el - dy * s, -1.2, 1.3); }
     else {
       const c = this.app.cam;
@@ -150,10 +157,15 @@ export class Rig {
     return out;
   }
 
+  syncDeckCamera(){if(this.mode==='deck')this.deck.syncCamera(this.app.cam);}
+
   update(dt) {
     const app = this.app, cam = app.cam, y = app.yacht;
     const K = this.keys;
-    if (this.mode === 'tour') {
+    if(this.mode==='deck'){
+      this.deck.update(dt,K);this.syncDeckCamera();
+      cam.fov+=(66*DEG*(app.fovK||1)-cam.fov)*(1-Math.exp(-dt*3));
+    } else if (this.mode === 'tour') {
       this.t += dt * (K.has('shift') ? 3 : 1);
       if (this.t >= TOUR_LENGTH) { this.setMode('fly'); return; }
       const [fx, fz, h, lx, lz, lh, fov] = this.tourPose();
