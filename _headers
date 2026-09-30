@@ -39,9 +39,9 @@
 
 # Ocean modules are versioned together; always revalidate their entry page.
 /demos/open-sea/
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-store
 /demos/open-sea/index.html
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: no-store
 /demos/open-sea/js/*
   Cache-Control: public, max-age=0, must-revalidate
 

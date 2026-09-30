@@ -51,6 +51,7 @@ def tube(name,a,b,r,mat='STEEL',r1=None,n=10,group='hull',cloth_uv=None):
  faces=[(k,(k+1)%n,(k+1)%n+n,k+n) for k in range(n)];faces.extend([tuple(reversed(range(n))),tuple(range(n,n*2))])
  if group=='hull' and r<.065:group='rig'
  ob=mesh(name,verts,faces,mat,True,group=group);ob['tube_radius']=r
+ if group=='rig':ob['rig_line']=[*a,*b,max(r,r1),MAT[mat]]
  if cloth_uv:
   layer=ob.data.uv_layers.new(name='Cloth attachment coordinates')
   for loop in ob.data.loops:layer.data[loop.index].uv=cloth_uv[loop.vertex_index//n]
@@ -437,6 +438,10 @@ def ambient_visibility(p,n):
  ao=round(clamp(1-.78*blocked/weight,.40,1.),5);ao_cache[key]=ao;return ao
 print('BAKING_CONTACT_VISIBILITY',len(bvh_faces),'triangles',flush=True)
 vertex_data=array.array('f');index_data=array.array('I');manifest={'version':2,'vertexStride':44,'length':52,'hullLength':47,'beam':9.3,'deckHeight':2.6,'draft':6.65,'crewConcept':[20,30],'masts':3,'sails':sail_specs,'groups':{},'deck':deck_nav,'ambientVisibility':{'rays':9,'distance':.7,'staticSails':False}}
+manifest['rigLines']=[]
+for ob in groups['rig']:
+ if not ob.get('browser_skip') and ob.get('rig_line'):
+  a=ob['rig_line'];manifest['rigLines'].append([a[0],a[2],a[1],a[3],a[5],a[4],a[6],a[7]])
 for group,objects in groups.items():
  verts=array.array('f');idx=array.array('I');lookup={}
  for ob in objects:

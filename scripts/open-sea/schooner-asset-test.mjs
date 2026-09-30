@@ -6,6 +6,13 @@ const asset=new URL('../../demos/open-sea/assets/',import.meta.url);
 const metadata=JSON.parse(fs.readFileSync(new URL('schooner.json',asset)));
 const compressed=fs.readFileSync(new URL('schooner.bin.gz',asset)),buffer=zlib.gunzipSync(compressed);
 assert.equal(metadata.version,2);assert.equal(metadata.vertexStride,44);
+assert.ok(metadata.rigLines.length>1000,'Distant rigging needs continuous centerlines');
+for(const line of metadata.rigLines){
+ assert.equal(line.length,8);assert.ok(line.every(Number.isFinite));
+ assert.ok(line[6]>0&&line[6]<.065,'Only fine static rigging enters the line pass');
+ assert.ok(Math.hypot(line[3]-line[0],line[4]-line[1],line[5]-line[2])>.001,'Finite rigging endpoints');
+ assert.ok(Number.isInteger(line[7])&&line[7]>=0&&line[7]<=20);
+}
 let vertices=0,triangles=0,occluded=0,minimumAO=1;
 const regions=[];
 for(const [name,g] of Object.entries(metadata.groups)){

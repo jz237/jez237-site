@@ -12,11 +12,11 @@ function cr(p0, p1, p2, p3, t) {
 
 // Keyframes in the yacht frame: [time, fx (forward), fz (starboard), h (m above surface; <0 underwater), lookFx, lookFz, lookH, fovDeg]
 const TOUR = [
- [0,65,-100,12,0,0,17,42],
- [14,45,-88,15,0,0,17,44],
- [28,0,-88,20,0,0,16,46],
- [42,-45,-82,23,-2,0,16,48],
- [56,-80,-50,28,-2,0,15,48],
+ [0,45,-80,12,0,0,17,42],
+ [14,12,-65,15,0,0,17,44],
+ [28,-12,-70,20,0,0,16,46],
+ [42,-40,-80,23,-2,0,16,48],
+ [56,-80,-18,28,-2,0,15,48],
  [70,-75,28,17,-6,0,13,50],
  [82,-46,16,8,-12,0,7,54],
  [94,-15,15,4,-5,0,4,58],
@@ -148,10 +148,10 @@ export class Rig {
     const out = [];
     for (let j = 1; j < 8; j++) out.push(cr(k0[j], k1[j], k2[j], k3[j], s));
     // The vertical FOV gives a much narrower horizontal view on a phone. Pull
-    // overview cameras back around their target so the 52 m hull fits; smoothly
+    // overview cameras back around their target so the full jib and bowsprit fit; smoothly
     // remove this offset for the intentional deck close-ups and submerged shots.
     const aspect = this.app.w / this.app.h;
-    const scale = 1 + Math.max(0, 0.9 / Math.max(aspect, 0.3) - 1) * smoothstep(7, 13, out[5]);
+    const scale = 1 + Math.max(0, 1.04 / Math.max(aspect, 0.3) - 1) * smoothstep(7, 13, out[5]);
     out[0] = out[3] + (out[0] - out[3]) * scale;
     out[1] = out[4] + (out[1] - out[4]) * scale;
     return out;

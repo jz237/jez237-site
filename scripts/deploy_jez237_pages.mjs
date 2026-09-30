@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { checkPhillyLive } from './check_philly_live.mjs';
 import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
 import { checkPondFilterLinks } from './check_pond_filter_links.mjs';
+import { checkOceanSnapshot, checkOpenSeaLive } from './check_open_sea_live.mjs';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -37,6 +38,7 @@ for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
   }
 }
 const wranglerPackage = createRequire(import.meta.url).resolve('wrangler/package.json');
+checkOceanSnapshot(repo,stage);
 const wrangler = resolve(dirname(wranglerPackage),
   JSON.parse(readFileSync(wranglerPackage, 'utf8')).bin.wrangler);
 const env = { ...process.env, CF_PAGES_BRANCH: 'main',
@@ -57,6 +59,7 @@ async function verifyRelease(url) {
       await checkPhillyLive(url, fetch, { requireAircraft });
       await checkHiddenReefImages(url);
       await checkPondFilterLinks(url);
+      await checkOpenSeaLive(url,repo);
       return;
     }
     catch (error) {
