@@ -9,7 +9,7 @@ import './style.css';
 import {reefDrawOrderReady,optimizeReefDrawOrder} from './ReefDrawOrder.ts';
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {installRoomLighting} from '../lib/RoomLighting.ts';
 import {AquariumWater} from '../lib/AquariumWater.ts';
 import {buildAquariumGlass} from '../lib/AquariumGlass.ts';
 import {ReefReflections} from './ReefReflections.ts';
@@ -34,7 +34,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=T.ACES
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;renderer.shadowMap.autoUpdate=false;
 container.appendChild(renderer.domElement);const camera=new T.PerspectiveCamera(31,1,.1,120);camera.position.set(0,3.25,17.7);
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2.67,0);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=7;controls.maxDistance=30;controls.minPolarAngle=.52;controls.maxPolarAngle=1.69;controls.maxAzimuthAngle=1.75;controls.minAzimuthAngle=-1.75;controls.enablePan=false;
-const env=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=env.fromScene(room,.04).texture;scene.environmentIntensity=.24;room.dispose();env.dispose();
+installRoomLighting(renderer,scene,.04);scene.environmentIntensity=.24;
 const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.34);scene.add(ambient);
 const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;key.shadow.radius=4.5;key.shadow.intensity=.82;scene.add(key,key.target);
 const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
@@ -80,8 +80,8 @@ for(let i=0;i<9;i++){
  const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:i*2.399}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(0.,.9,v.y)*.065*pulse*daylight;gl_FragColor=vec4(.23,.47,.92,a);}' });
  const mesh=new T.Mesh(geo,mat);mesh.position.set(-4.2+i,3.06,-1.92);mesh.rotation.z=-.17;shaftGroup.add(mesh);
 }
-const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;let suspended=false,raf=0,idleFrames=6;
-function requestFrame(){if(ready&&!raf&&!suspended&&!document.hidden)raf=requestAnimationFrame(animate);}
+const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;let suspended=false,contextLost=false,raf=0,idleFrames=6;
+function requestFrame(){if(ready&&!raf&&!suspended&&!contextLost&&!document.hidden)raf=requestAnimationFrame(animate);}
 function wake(){idleFrames=6;requestFrame();}
 const tourCamera=new ReefTourCamera(camera.position,controls.target);
 function cancelTourCamera(){tourCamera.cancel();controls.enableDamping=true;}
@@ -107,7 +107,10 @@ const showroom=installReefShowroom({visibility:visible=>{suspended=!visible;last
 }});
 document.addEventListener('visibilitychange',()=>{last=performance.now();sampleMs.length=0;wake();});
 controls.addEventListener('change',wake);
-renderer.domElement.addEventListener('webglcontextrestored',()=>{frame=0;scheduler.invalidate();});
+function resumeEntry(){paused=false;if(parent===window)suspended=false;last=performance.now();sampleMs.length=0;document.querySelector('#pause')!.textContent='Pause';document.querySelector('#pause')!.setAttribute('aria-pressed','false');cancelAnimationFrame(raf);raf=0;wake();}
+window.addEventListener('pageshow',event=>{if(event.persisted)resumeEntry();});
+renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;cancelAnimationFrame(raf);raf=0;});
+renderer.domElement.addEventListener('webglcontextrestored',()=>{contextLost=false;frame=0;last=performance.now();scheduler.invalidate();wake();});
 const $=<E extends HTMLElement>(selector:string)=>document.querySelector<E>(selector)!;
 const resize=()=>{const {width,height}=container.getBoundingClientRect();renderer.setSize(width,height);camera.aspect=width/height;
  // Frame tank itself, rather than header/footer already outside this canvas.
@@ -159,8 +162,11 @@ function animate(now:number){raf=0;const elapsed=now-last;last=now;if(document.h
  // their broad sand penumbras follow them every frame in one instanced draw.
  if(frame===0){
   for(const inhabitant of fish.fish)inhabitant.group.visible=false;
-  renderer.shadowMap.needsUpdate=true;renderer.shadowMap.render([key],scene,camera);
-  for(const inhabitant of fish.fish)inhabitant.group.visible=true;
+  // Let a normal render initialize Three's light/render state before the shadow
+  // pass. Calling shadowMap.render directly breaks after a context restoration.
+  renderer.shadowMap.needsUpdate=true;
+  try{lighting.render(renderer,null,false);}
+  finally{for(const inhabitant of fish.fish)inhabitant.group.visible=true;}
  }
  const ids=reflections.visible(camera).map(o=>o.uuid),selected=scheduler.select(ids,camera,String(revision),true,adaptive.level>1?2:1);renderer.shadowMap.needsUpdate=false;reflections.prepare(renderer,scene,camera,selected);scheduler.complete(selected);triangles=lighting.render(renderer,null);frame++;
  idleFrames--;
@@ -171,4 +177,4 @@ function animate(now:number){raf=0;const elapsed=now-last;last=now;if(document.h
 }
 // Release diagnostics. Close-up inspection changes only the camera, not scene detail.
 Object.assign(window,{reefQA:{snapshot:()=>({...fish.snapshot(),cleaners:cleaners.snapshot(),tourCamera:{moving:tourCamera.active,position:camera.position.toArray(),target:controls.target.toArray()},time,paused,suspended,renderFrames:frame,ready,triangles,drawOrderStats,pickingStats,fishPassStats,effects:effectProfiles[adaptive.level].name,fps:1000/(sampleMs.reduce((a,b)=>a+b,0)/sampleMs.length),drawCalls:renderer.info.render.calls,shadows:fishShadows.snapshot(),anemoneTentacles:reef.anemone.tentacles,hosts:reef.anemone.behavior.hosts.map(h=>({x:h.center.x,y:h.center.y,z:h.center.z,scale:h.scale})),rearGlass:{visible:back.visible,width:back.getRenderTarget().width,height:back.getRenderTarget().height},anemoneBehavior:reef.anemone.behavior.snapshot(),anemoneBackdropStats:reef.anemoneBackdropStats,rockLifeStats:reef.rockLifeStats,microLifeStats:reef.microLifeStats,footStats:reef.footStats,canopyStats:reef.canopyStats,polypStats:reef.polypStats,buttressStats:reef.buttressStats,rockStats:reef.rockStats,crustStats:reef.crustStats,flankStats:reef.flankStats,infillStats:reef.infillStats,optics:{time:reefClock.value,daylight:reefDaylight.value},anatomy:fish.anatomySnapshot()}),feed:feedReef,anemoneContactStudy:()=>{const b=reef.anemone.behavior,s=b.hosts[0].strands[40],p=b.tipAt(0,s,time,new T.Vector3());fish.foods.push({position:p,alive:true,age:0});},respirationStudy:(species='tang',phase=0,isolate=false)=>{if(isolate){const subject=fish.fish.find(f=>f.species===species)!;for(const f of fish.fish)f.group.visible=f===subject;reef.group.visible=false;fishShadows.mesh.visible=false;subject.position.set(0,3,1);subject.group.position.copy(subject.position);subject.yaw=subject.pitch=0;subject.group.rotation.set(0,0,0);cameraGoal=null;controls.minDistance=.5;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(0,.08,1.8));controls.update();scheduler.invalidate();}paused=true;$('#pause').textContent='Resume';$('#pause').setAttribute('aria-pressed','true');fish.respirationStudy(species as Parameters<typeof fish.respirationStudy>[0],phase);},inspectFish:(species='clown')=>{const subject=fish.fish.find(f=>f.species===species)!;cameraGoal=null;controls.minDistance=.55;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(Math.sin(subject.yaw)*1.6,.19,Math.cos(subject.yaw)*1.6));controls.update();scheduler.invalidate();},inspectAnemones:()=>{cameraGoal=null;controls.minDistance=2;controls.target.set(3.05,1.56,.82);camera.position.set(3.15,2.45,4.8);controls.update();scheduler.invalidate();},inspectOutcrops:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.92,.48,1.56);camera.position.set(2.92,1.65,3.5);controls.update();scheduler.invalidate();},inspectPolyps:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.18,.88,1.63);camera.position.set(2.18,1.8,3.4);controls.update();scheduler.invalidate();},inspectWater:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,4.6,0);camera.position.set(7,9,10);controls.update();scheduler.invalidate();},inspectSand:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,.2,1);camera.position.set(.1,2.9,4.8);controls.update();scheduler.invalidate();},inspectRear:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(-.45,1.2,-1.6);camera.position.set(-.35,2.6,3.4);controls.update();scheduler.invalidate();},inspectFlanks:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-3.02,2.68,-.1);camera.position.set(-2.7,3.25,2.1);controls.update();scheduler.invalidate();},inspectPlates:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-2.9,1.94,.48);camera.position.set(-2.9,1.62,3.35);controls.update();scheduler.invalidate();},inspectCorals:()=>{cameraGoal=null;controls.minDistance=3;controls.target.set(-2.85,2.6,-.1);camera.position.set(-2.85,3.45,4.9);controls.update();scheduler.invalidate();}}});
-Promise.all([reef.assetsReady,lighting.prepare(renderer)]).then(()=>{ready=true;$('#loading').remove();last=performance.now();learning.ready();showroom.ready();wake();}).catch(e=>{$('#loading').textContent='The reef could not start. Please reload with WebGL enabled.';console.error(e);});
+Promise.all([reef.assetsReady,lighting.prepare(renderer)]).then(()=>{ready=true;$('#loading').remove();last=performance.now();learning.ready();showroom.ready();resumeEntry();}).catch(e=>{$('#loading').textContent='The reef could not start. Please reload with WebGL enabled.';console.error(e);});

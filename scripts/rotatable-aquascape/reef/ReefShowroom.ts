@@ -13,10 +13,11 @@ export function installReefShowroom(actions:{visibility:(visible:boolean)=>void;
   nav.innerHTML='<a href="../aquarium/?showroom=hidden-reef" target="_top">&#8592; Freshwater aquarium</a><a href="../../" target="_top">Hidden Reef home</a>';
   document.querySelector('.intro')!.textContent='Explore the coral reef';
   addEventListener('message',event=>{
-   if(event.origin!==location.origin||event.source!==parent||event.data?.channel!=='hidden-reef-showroom')return;
+   if(parent===window||event.origin!==location.origin||event.source!==parent||event.data?.channel!=='hidden-reef-showroom')return;
    if(event.data.type==='visibility'&&typeof event.data.value==='boolean')actions.visibility(event.data.value);
    if(event.data.type==='explore'&&typeof event.data.value==='string')actions.explore(event.data.value);
   });
  }
+ window.addEventListener('pageshow',()=>send({type:'ready'}));
  return {ready:()=>send({type:'ready'}),context:(name:string)=>send({type:'context',kind:'reef',name})};
 }

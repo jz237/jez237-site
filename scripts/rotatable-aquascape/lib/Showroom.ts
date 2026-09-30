@@ -13,7 +13,7 @@ export function installShowroom(aquarium:Aquarium){
  const send=(data:object)=>{if(parent!==window)parent.postMessage({channel:'hidden-reef-aquarium',...data},location.origin);};
  document.addEventListener('aquascape-context',event=>send({type:'context',...(event as CustomEvent).detail}));
  addEventListener('message',event=>{
-  if(event.origin!==location.origin||event.source!==parent||event.data?.channel!=='hidden-reef-showroom')return;
+  if(parent===window||event.origin!==location.origin||event.source!==parent||event.data?.channel!=='hidden-reef-showroom')return;
   const {type,value}=event.data;
   if(type==='visibility'&&typeof value==='boolean'){aquarium.suspended=!value;return;}
   if(type==='cutaway'){aquarium.onFilterRequest();return;}
@@ -31,6 +31,7 @@ export function installShowroom(aquarium:Aquarium){
    if(value==='plants')aquarium.identifyPlant('sword');
   }
  });
+ window.addEventListener('pageshow',()=>send({type:'ready'}));
  send({type:'ready'});
  if(new URLSearchParams(location.search).has('poster')){
   const style=document.createElement('style');style.textContent='main > :not(#scene){display:none!important}';document.head.append(style);aquarium.view('front');
