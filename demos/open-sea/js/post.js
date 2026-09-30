@@ -91,8 +91,28 @@ vec3 agx(vec3 color) {
   return clamp(color, 0.0, 1.0);
 }
 vec3 srgb(vec3 c) { return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
+// Resolve subpixel wave edges, rigging and fins before the display transform.
+vec3 antialiasHDR(vec2 uv) {
+  vec2 px = 1.0 / uRes;
+  vec3 c = texture(uHdr, uv).rgb;
+  float m = sqrt(max(luma(c), 0.0));
+  float nw = sqrt(max(luma(texture(uHdr, uv + px * vec2(-1, 1)).rgb), 0.0));
+  float ne = sqrt(max(luma(texture(uHdr, uv + px * vec2(1, 1)).rgb), 0.0));
+  float sw = sqrt(max(luma(texture(uHdr, uv + px * vec2(-1, -1)).rgb), 0.0));
+  float se = sqrt(max(luma(texture(uHdr, uv + px * vec2(1, -1)).rgb), 0.0));
+  float lo = min(m, min(min(nw, ne), min(sw, se)));
+  float hi = max(m, max(max(nw, ne), max(sw, se)));
+  if (hi - lo < max(0.008, hi * 0.10)) return c;
+  vec2 dir = vec2(-(nw + ne - sw - se), nw + sw - ne - se);
+  float reduce = max((nw + ne + sw + se) * 0.03125, 0.0001);
+  dir = clamp(dir / (min(abs(dir.x), abs(dir.y)) + reduce), -6.0, 6.0) * px;
+  vec3 a = 0.5 * (texture(uHdr, uv - dir / 6.0).rgb + texture(uHdr, uv + dir / 6.0).rgb);
+  vec3 b = a * 0.5 + 0.25 * (texture(uHdr, uv - dir * 0.5).rgb + texture(uHdr, uv + dir * 0.5).rgb);
+  float lb = sqrt(max(luma(b), 0.0));
+  return lb < lo || lb > hi ? a : b;
+}
 void main() {
-  vec3 hdr = texture(uHdr, vUv).rgb;
+  vec3 hdr = antialiasHDR(vUv);
   vec3 bloom = texture(uBloom, vUv).rgb;
   float E = texture(uExpo, vec2(0.5)).r * uEVBias;
   vec3 c = (hdr + bloom * uBloomAmt) * E;

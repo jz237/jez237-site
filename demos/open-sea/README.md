@@ -1,7 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Everything (waves, sky, clouds, yacht, fish) is generated on the
-GPU at load time; there are no image or model assets and no build step.
+A real-time, dependency-free WebGL 2 ocean. Geometry and textures are generated in code; waves and lighting run on the GPU, and fish perception runs on the CPU. There are no image or model assets and no build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -46,7 +45,7 @@ The panel (top left, `×` closes it) has five sections:
 * **Water**: seven water types (Open ocean, Tropical, Coastal green, Arctic, Deep ocean, Lagoon, Shallows) that change the surface colour and the underwater light; clarity scales how far light travels; night glow lights breaking water and the wake with bioluminescence after dark.
 * **Image & sound**: procedural sound (surf, wind, rain, thunder, muffled under water), Auto/Low/Medium/High resolution, exposure, glow (bloom) and field of view.
 
-* **Tour** starts automatically and loops. Any key press, drag or scroll hands control to free flight.
+* **Tour** starts automatically, lasts 172 seconds, and hands over to free flight. Movement keys, drag or scroll take over immediately.
 * **Fly**: drag to look, `W A S D` move, `Q`/`E` down/up, `Shift` fast, `Ctrl` slow, wheel changes speed. On touch:
   drag to look, pinch to move, two-finger vertical drag for altitude. Fly straight through the surface to go underwater.
 * **Boat** orbits the yacht, **Dive** orbits it from below.
@@ -70,19 +69,16 @@ URL parameters (with `shot=1` the page is driven by the harness instead of `requ
 Headless Chromium on a machine without a GPU uses SwiftShader; expect seconds per frame there. On a real GPU the
 demo adapts its render resolution to hold a playable frame rate (`AUTO`), or fix it with the quality button.
 
-## Status and known limits
+## September 29 refinement and verification
 
-* All the development stills were rendered with a **software renderer** (headless Chromium on SwiftShader, seconds per
-  frame). The demo has not been run on a real GPU by its author, so real-time frame rate is unverified. The resolution
-  governor (`AUTO`) exists to hold a playable rate but has only been exercised through the harness.
-* Realism, honestly: after three review rounds two independent reviewers rated the final 12 stills between 2 and 7 out of 10
-  (means about 3.7 and 4.3; the sunset, glitter and open-water frames scored highest). The water surface and light are the
-  strongest parts. The yacht, the foam in storms, the clouds and the underwater scene are the weakest; none of the stills
-  should be expected to pass as a photograph. `scripts/open-sea/review-set.mjs` regenerates the stills.
-* The water is a height field with choppy displacement: waves steepen and fold, but they cannot overturn or throw
-  spray. Whitecaps are a shading effect on the simulated foam field, not particles; there is no airborne spray.
-* Clouds are a single ray-marched layer. There are no cirrus or multi-layer skies and the layer is not lit by
-  neighbouring clouds beyond the multiple-scattering approximation.
-* The yacht is a procedural low-poly sloop (flat-shaded hull panels, no fittings beyond rails, mast and rigging).
-* Sound is synthesised (noise filtered into surf, wind, rain and thunder); it is a sketch of an ocean soundscape, not recordings, and it has only been checked for starting without errors, not by ear.
-* It needs WebGL 2 with `EXT_color_buffer_float`; without it the page shows a message instead of the scene.
+Rendered and inspected on an NVIDIA RTX 5090 through Edge/WebGL 2 at 1440 x 900, including daylight, glassy calm, sunset, moonlight, storm, a submerged school and an upward sun view. The scene compiled and ran without browser errors. Keyboard takeover, Dive, the automatic end-of-tour handoff, and a 390-pixel mobile layout were exercised.
+
+Distant reflections now integrate subpixel slope moments and reflected radiance; the display pass resolves fine wave, rigging and fin edges. Aged foam is less opaque, cloud tops vary, rain has shorter softer streaks, and sail normals follow the deformed cloth. Underwater scattering is lower, caustic focusing excludes unresolved capillary waves, and submerged hull lighting uses one depth-attenuation convention.
+
+Fish have persistent local perception, neighbor alignment/cohesion/spacing, energy and food memory, cruise/burst/glide/inspection states, bounded upright turns, a traveling body wave with a steady head, and separate fin oscillators. A 120-second test exercised every state, recorded no nonfinite values, a maximum pitch of 10.4 degrees, mean school alignment of 0.895, and median vertical exploration of 2.83 m. The passing habitat is populated while above the water; fish remain in world space while submerged.
+
+A GPU ripple stress run alternated 1/240, 1/60, 1/30, 0.18, 0.004, 0.5, 1/120 and 0.02-second frame intervals under full rain and a hull disturbance. Across 1,140 fixed steps, heights stayed below 14 mm, velocity below 0.43 m/s, and there were no NaNs or WebGL errors. Excess catch-up steps were discarded as designed.
+
+An independent critical reviewer found a substantial improvement and rated the calmer stills around 6-7/10, but **did not judge them reliably photographic**. The remaining larger limitations are the procedural yacht/fish geometry, a single volumetric cloud layer, cellular foam close up, and a height-field wave model that cannot overturn breakers or throw airborne spray. Distinct underwater shafts are subtler than the broad sun glow. Procedural surf, wind, rain and thunder sound is available, but its realism has not been assessed by ear. Real GPU frame rate depends on resolution and the scene; AUTO adjusts resolution. These limits are documented rather than disguised as photographic success.
+
+WebGL 2 with `EXT_color_buffer_float` is required. Without it the page shows an explanation.

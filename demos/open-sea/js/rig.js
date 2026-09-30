@@ -61,7 +61,7 @@ export class Rig {
       if (this.orbit.dist > 60) this.orbit.dist = 26;
     }
     if (m === 'dive') { this.dive.az = 0.6; this.dive.el = 0.12; this.dive.dist = 9; this.dive.depth = -5; }
-    if (m === 'tour') this.t = this.t % TOUR_LENGTH;
+    if (m === 'tour') { this.t = 0; this._init = false; this._init2 = false; }
     if (this.onChange) this.onChange(m);
   }
 
@@ -135,7 +135,7 @@ export class Rig {
   }
 
   tourPose() {
-    const T = this.t % TOUR_LENGTH;
+    const T = Math.min(this.t, TOUR_LENGTH - 0.0001);
     let i = 0;
     while (i < TOUR.length - 2 && TOUR[i + 1][0] <= T) i++;
     const k0 = TOUR[Math.max(0, i - 1)], k1 = TOUR[i], k2 = TOUR[i + 1], k3 = TOUR[Math.min(TOUR.length - 1, i + 2)];
@@ -151,6 +151,7 @@ export class Rig {
     const K = this.keys;
     if (this.mode === 'tour') {
       this.t += dt * (K.has('shift') ? 3 : 1);
+      if (this.t >= TOUR_LENGTH) { this.setMode('fly'); return; }
       const [fx, fz, h, lx, lz, lh, fov] = this.tourPose();
       const c = Math.cos(y.psi), sn = Math.sin(y.psi);
       const wx = y.x + c * fx - sn * fz, wz = y.z + sn * fx + c * fz;
@@ -193,12 +194,12 @@ export class Rig {
         cam.yaw = Math.atan2(dx, -dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
       } else {
         // dive: orbit a point under the hull, camera stays below the surface
-        const tx = y.x, tz = y.z, ty = y.y + o.depth + 3.5;
+        const tx = y.x, tz = y.z, ty = y.y + o.depth;
         const horiz = Math.cos(o.el) * o.dist;
         const wy = Math.min(ty + Math.sin(o.el) * o.dist, surf - 1.2);
         const k = 1 - Math.exp(-dt * 6);
         cam.x += (tx + Math.cos(a) * horiz - cam.x) * k; cam.z += (tz + Math.sin(a) * horiz - cam.z) * k; cam.y += (wy - cam.y) * k;
-        const dx = tx - cam.x, dz = tz - cam.z, dy = (y.y - 1.0) - cam.y;
+        const dx = tx - cam.x, dz = tz - cam.z, dy = (y.y + o.depth + 0.9) - cam.y;
         cam.yaw = Math.atan2(dx, -dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
       }
       cam.fov += (54 * DEG * (app.fovK || 1) - cam.fov) * (1 - Math.exp(-dt * 3));

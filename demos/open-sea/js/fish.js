@@ -1,6 +1,7 @@
 // Fish schools (instanced procedural fish with a swimming-wave vertex shader) and drifting marine snow.
 import { gl, Program } from './gl.js';
 import { mulberry32, clamp } from './math.js';
+import { FishBehavior } from './fish-behavior.js';
 import { bindLighting } from './lighting.js';
 import './glsl.js';
 import './fx.js';
@@ -8,9 +9,9 @@ import './fx.js';
 // ---- mesh: unit-length fish, nose at +x, tail at -x, y up, z to the side ---------------------------------------
 function buildFishMesh() {
   const V = [], I = [];
-  const NS = 14, NR = 10;
+  const NS = 24, NR = 14;
   const prof = t => { // t: 0 tail base .. 1 nose  -> [halfHeight, halfWidth]
-    const body = Math.pow(Math.sin(Math.min(1, t * 1.05) * Math.PI * 0.94 + 0.10), 0.75);
+    const body = Math.pow(Math.max(.008, Math.sin(t * Math.PI)), 0.85);
     return [0.135 * body * (0.35 + 0.65 * Math.min(1, t * 2.2)), 0.085 * body];
   };
   for (let i = 0; i <= NS; i++) {
@@ -20,9 +21,11 @@ function buildFishMesh() {
       const a = j / NR * Math.PI * 2;
       const y = Math.sin(a) * hh - 0.0, z = Math.cos(a) * hw;
       // normal of an ellipse in the section plane
-      const n = [0, Math.sin(a) / Math.max(hh, 1e-3), Math.cos(a) / Math.max(hw, 1e-3)];
-      const l = Math.hypot(n[1], n[2]) || 1;
-      V.push(x, y, z, 0.15 * (i / NS) , n[1] / l, n[2] / l, t, j / NR);   // pos, dummy, normal.yz, u, v
+      const before=prof(Math.max(0,t-.005)),after=prof(Math.min(1,t+.005));
+      const dh=(after[0]-before[0])/.0084,dw=(after[1]-before[1])/.0084;
+      const n = [-(Math.sin(a)**2*dh/Math.max(hh,.003)+Math.cos(a)**2*dw/Math.max(hw,.003)), Math.sin(a)/Math.max(hh,.003), Math.cos(a)/Math.max(hw,.003)];
+      const l = Math.hypot(...n) || 1;
+      V.push(x, y, z, n[0]/l, n[1]/l, n[2]/l, t, 0);
     }
   }
   const stride = 8;
@@ -31,26 +34,26 @@ function buildFishMesh() {
     const a = i * (NR + 1) + j, b = a + 1, c = a + NR + 1, d = c + 1;
     idx.push(a, c, b, b, c, d);
   }
-  const addTri = (a, b, c, n, u = 0.5) => {
+  const addTri = (a, b, c, n, u = 0.5, kind = 1) => {
     const base = V.length / stride;
-    for (const p of [a, b, c]) V.push(p[0], p[1], p[2], 1, n[1], n[2], u, 0.5);
+    for (const p of [a, b, c]) V.push(p[0], p[1], p[2], n[0], n[1], n[2], u, kind);
     idx.push(base, base + 1, base + 2, base, base + 2, base + 1);
   };
   // tail fin (forked), dorsal fin, pectoral fins
   addTri([-0.30, 0.0, 0.0], [-0.52, 0.16, 0.0], [-0.44, 0.0, 0.0], [0, 0, 1], 0.0);
   addTri([-0.30, 0.0, 0.0], [-0.44, 0.0, 0.0], [-0.52, -0.16, 0.0], [0, 0, 1], 0.0);
-  addTri([0.02, 0.115, 0.0], [-0.14, 0.115, 0.0], [-0.10, 0.20, 0.0], [0, 0, 1], 0.3);
-  addTri([0.20, -0.09, 0.02], [0.08, -0.09, 0.02], [0.08, -0.15, 0.10], [0, 0.3, 1], 0.6);
-  addTri([0.20, -0.09, -0.02], [0.08, -0.09, -0.02], [0.08, -0.15, -0.10], [0, 0.3, -1], 0.6);
+  addTri([0.02, 0.115, 0.0], [-0.14, 0.115, 0.0], [-0.10, 0.20, 0.0], [0, 0, 1], 0.3, 2);
+  addTri([0.20, -0.09, 0.02], [0.08, -0.09, 0.02], [0.08, -0.15, 0.14], [0, 0.3, 1], 0.6, 3);
+  addTri([0.20, -0.09, -0.02], [0.08, -0.09, -0.02], [0.08, -0.15, -0.14], [0, 0.3, -1], 0.6, 3);
   return { verts: new Float32Array(V), idx: new Uint16Array(idx), stride };
 }
 
 const FISH_VS = `
-layout(location = 0) in vec4 aPos;       // xyz local, w unused
-layout(location = 1) in vec4 aNU;        // normal.y, normal.z (as flags), u, v  (x = fin flag)
+layout(location = 0) in vec4 aPos;       // xyz local, normal.x
+layout(location = 1) in vec4 aNU;        // normal.y, normal.z, longitudinal u, fin kind
 layout(location = 2) in vec4 iPosScale;  // world pos (camera relative) xyz, scale
 layout(location = 3) in vec4 iDirPhase;  // forward xyz, phase
-layout(location = 4) in vec4 iColor;     // species, tint, speed, unused
+layout(location = 4) in vec4 iColor;     // species, tint, speed, independent fin phase
 uniform mat4 uVP;
 uniform float uTime;
 out vec3 vN;
@@ -63,15 +66,26 @@ void main() {
   vec3 r = normalize(cross(f, up));
   vec3 u = cross(r, f);
   vec3 p = aPos.xyz;
-  float body = clamp(0.5 - p.x, 0.0, 1.2);
-  float wag = 0.10 * body * body * sin(uTime * (4.0 + iColor.z * 6.0) + iDirPhase.w - p.x * 7.0);
+  float body = clamp((0.28 - p.x) / 0.8, 0.0, 1.2);
+  float phase = iDirPhase.w - p.x * 9.0;
+  float amplitude = 0.07 + 0.055 * clamp(iColor.z, 0.0, 1.5);
+  float wag = amplitude * body * body * sin(phase);
   p.z += wag;
-  // slight bend of the whole body in the direction of the tail beat
-  vec3 nrm = vec3(0.0, aNU.x, aNU.y);
+  // Pectoral and dorsal fins have their own varying oscillators.
+  float fin = aNU.w;
+  if (fin > 2.5) {
+    float reach = clamp((abs(aPos.z) - 0.025) / 0.115, 0.0, 1.0);
+    p.y += reach * 0.045 * sin(iColor.w + sign(aPos.z) * 0.7);
+    p.x += reach * 0.015 * cos(iColor.w);
+  } else if (fin > 1.5) p.z += max(aPos.y - .11, 0.0) * .2 * sin(iColor.w * .7);
+  else if (fin > .5) p.z += abs(aPos.y) * .10 * sin(iColor.w * 1.1);
+  vec3 nrm = vec3(aPos.w, aNU.x, aNU.y);
+  float derivative = amplitude * (-2.5 * body * sin(phase) - 9.0 * body * body * cos(phase));
+  nrm.x -= derivative * nrm.z;
   vec3 wp = iPosScale.xyz + (f * p.x + u * p.y + r * p.z) * iPosScale.w;
   vN = mat3(f, u, r) * nrm;
   vRel = wp;
-  vLocal = vec4(aPos.xyz, aNU.z);
+  vLocal = vec4(aPos.xyz, fin);
   vCol = iColor;
   gl_Position = uVP * vec4(wp, 1.0);
 }`;
@@ -105,11 +119,19 @@ void main() {
   alb = mix(alb, vec3(0.9, 0.75, 0.3), smoothstep(0.012, 0.0, abs(yl - 0.01)) * step(sp, 1.5) * step(sp, 0.5 + 1.0) * 0.25);
   float eye = smoothstep(0.03, 0.02, length(vLocal.xy - vec2(0.36, 0.035))) * step(0.0, N.z * 0.0 + 1.0);
   alb = mix(alb, vec3(0.01), eye * 0.8);
+  // Small scale variation only appears when a scale occupies several pixels.
+  float scaleFootprint = max(length(dFdx(vLocal.xy)), length(dFdy(vLocal.xy))) * 180.0;
+  float scales = sin(vLocal.x * 180.0 + sin(vLocal.y * 210.0) * 0.6);
+  alb *= 1.0 + scales * 0.035 * (1.0 - smoothstep(0.2, 0.9, scaleFootprint));
+  float eyeGlint = smoothstep(0.009, 0.003, length(vLocal.xy - vec2(0.362, 0.043))) * eye;
+  alb = mix(alb, vec3(0.48), eyeGlint * 0.65);
   // fins are darker
-  if (vLocal.w < 0.05) alb = mix(alb, vec3(0.05, 0.08, 0.10), 0.7);
+  if (vLocal.w > 0.5) alb = mix(alb, vec3(0.14, 0.18, 0.20), 0.58);
   vec3 dl = Ed0 / PI * (0.55 + 0.45 * clamp(N.y, -1.0, 1.0)) + beam * max(dot(N, -sunW), 0.0) * 0.5 / PI;
-  float fres = pow(1.0 - abs(dot(N, V)), 3.0);
-  vec3 col = alb * dl + Ed0 * fres * 0.35 * (0.3 + 0.7 * (1.0 - g));   // silver sheen
+  float fres = pow(1.0 - abs(dot(N, V)), 5.0);
+  vec3 H = normalize(V - sunW);
+  float specular = pow(max(dot(N, H), 0.0), 64.0);
+  vec3 col = alb * dl + Ed0 * fres * 0.08 * (0.3 + 0.7 * (1.0 - g)) + beam * specular * 0.16;   // silver sheen
   o = vec4(col, 1.0);
 }`;
 
@@ -161,7 +183,7 @@ export class Fish {
     this.prog = new Program('fish', FISH_VS, FISH_FS);
     this.vao = gl.createVertexArray(); gl.bindVertexArray(this.vao);
     const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, m.verts, gl.STATIC_DRAW);
-    // per-vertex: 8 floats = pos(3) dummy(1) | flag,ny,nz? -> we packed [x,y,z,dummy, ny, nz, u, v]
+    // Per-vertex: xyz, normal.x, normal.y, normal.z, longitudinal u, fin kind.
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 32, 0);
     gl.enableVertexAttribArray(1); gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 32, 16);
     this.ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, m.idx, gl.STATIC_DRAW);
@@ -174,40 +196,22 @@ export class Fish {
 
     const rng = mulberry32(777);
     this.fish = [];
-    const mk = (n, species, len, gen) => { for (let i = 0; i < n; i++) this.fish.push({ sp: species, len: len * (0.85 + 0.3 * rng()), seed: rng() * 1000, r: rng(), r2: rng(), r3: rng(), gen }); };
-    mk(260, 0, 0.21, 'ball'); mk(46, 1, 0.55, 'ring'); mk(6, 2, 1.4, 'roam');
+    const mk = (n, species, len) => { for (let i = 0; i < n; i++) this.fish.push({ sp: species, len: len * (0.85 + 0.3 * rng()), seed: rng() * 1000, r: rng(), r2: rng(), r3: rng() }); };
+    mk(260, 0, 0.21); mk(46, 1, 0.55); mk(6, 2, 1.4);
+    this.behavior = new FishBehavior(this.fish);
     this.snow = new Program('snow', SNOW_VS, SNOW_FS);
     this.nFish = this.fish.length;
   }
 
-  // position of fish i at time t (yacht-relative centre, world axes)
-  _pos(f, t, c) {
-    const s = f.seed;
-    if (f.gen === 'ball') {
-      // tight rotating bait ball around a slowly wandering centre
-      const cx = c[0] + 4.5 * Math.sin(t * 0.05) - 1.0, cz = c[2] + 3.5 * Math.cos(t * 0.043 + 1.0) - 3.0, cy = -5.2 + 1.0 * Math.sin(t * 0.09);
-      const rad = 0.6 + 1.9 * Math.pow(f.r, 0.6) * (1 + 0.15 * Math.sin(t * 0.7 + s));
-      const th = t * (0.55 + 0.35 * f.r2) + f.r3 * 6.283, ph = f.r2 * 3.1416 + 0.4 * Math.sin(t * 0.3 + s);
-      return [cx + rad * Math.sin(ph) * Math.cos(th), cy + rad * 0.75 * Math.cos(ph), cz + rad * Math.sin(ph) * Math.sin(th)];
-    }
-    if (f.gen === 'ring') {
-      const th = t * (0.22 + 0.04 * f.r2) + f.r3 * 6.283, rad = 9 + 3.5 * f.r + 1.2 * Math.sin(t * 0.3 + s);
-      return [c[0] + rad * Math.cos(th), -4.2 - 3.5 * f.r2 + 0.5 * Math.sin(t * 0.5 + s), c[2] + rad * Math.sin(th)];
-    }
-    const th = t * 0.09 * (1 + f.r) + s, rad = 16 + 9 * f.r2;
-    return [c[0] + rad * Math.cos(th) * 1.2, -9 - 6 * f.r + 1.5 * Math.sin(t * 0.2 + s), c[2] + rad * Math.sin(th * 1.3)];
-  }
-
-  update(t, center) {
-    const c = center;
+  update(t, center, recenter = false) {
+    this.behavior.update(t, center, recenter);
     let n = 0;
     for (const f of this.fish) {
-      const p = this._pos(f, t, c), q = this._pos(f, t + 0.06, c);
-      const d = [q[0] - p[0], q[1] - p[1], q[2] - p[2]], dl = Math.hypot(d[0], d[1], d[2]) || 1;
+      const p = f.p, d = f.heading;
       const o = n * 12;
       this.inst[o] = p[0]; this.inst[o + 1] = p[1]; this.inst[o + 2] = p[2]; this.inst[o + 3] = f.len;
-      this.inst[o + 4] = d[0] / dl; this.inst[o + 5] = d[1] / dl; this.inst[o + 6] = d[2] / dl; this.inst[o + 7] = f.seed;
-      this.inst[o + 8] = f.sp; this.inst[o + 9] = f.r; this.inst[o + 10] = dl / 0.06 / (f.len * 3.0) * 0.4; this.inst[o + 11] = 0;
+      this.inst[o + 4] = d[0]; this.inst[o + 5] = d[1]; this.inst[o + 6] = d[2]; this.inst[o + 7] = f.phase;
+      this.inst[o + 8] = f.sp; this.inst[o + 9] = f.r; this.inst[o + 10] = f.speed / Math.max(f.len * 4.0, .2); this.inst[o + 11] = f.finPhase;
       n++;
     }
     this.n = n;
@@ -236,7 +240,7 @@ export class Fish {
     if (intensity <= 0) return;
     const p = this.snow.use();
     bindLighting(p, ctx);
-    p.m4('uVP', VP).v3('uCamAbs', ctx.cam.x, ctx.cam.y, ctx.cam.z).f('uTime', ctx.time).f('uSize', 26).f('uCount', 2600 * intensity).f('uUseSun', ctx.useSun ? 1 : 0);
+    p.m4('uVP', VP).v3('uCamAbs', ctx.cam.x, ctx.cam.y, ctx.cam.z).f('uTime', ctx.time).f('uSize', 12).f('uCount', 900 * intensity).f('uUseSun', ctx.useSun ? 1 : 0);
     gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE); gl.enable(gl.DEPTH_TEST); gl.depthMask(false);
     gl.bindVertexArray(gl.emptyVAO || (gl.emptyVAO = gl.createVertexArray()));
     gl.drawArrays(gl.POINTS, 0, 2600);

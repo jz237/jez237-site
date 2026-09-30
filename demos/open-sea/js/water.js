@@ -109,7 +109,7 @@ in float vJ;
 in vec2 vD;
 uniform sampler2DArray uSlope;
 uniform sampler2DArray uFoam;
-uniform float uMssRes, uTime, uHs, uGlowE;
+uniform float uMssRes, uMeanSlope, uTime, uHs, uGlowE;
 uniform vec3 uRw, uSSS;    // water body colour and the colour of light transmitted through thin crests
 uniform vec2 uWind;        // wind direction (unit)
 uniform float uWindSpeed;
@@ -160,7 +160,13 @@ void main() {
   for (int i = 0; i < 5; i++) {
     if (i >= uCascades) break;
     if (uDbg == i + 1) continue;
-    vec4 s = texture(uSlope, vec3(cascUV(i, vG), float(i)));
+    // At grazing angles the footprint is long in only one direction. Isotropic
+    // texture derivatives otherwise preserve unresolved cross-wave detail as
+    // black/white screen-door noise. LEAN moments keep its energy in roughness.
+    vec2 suv = cascUV(i, vG);
+    float footprint = max(length(dFdx(suv)), length(dFdy(suv))) * float(textureSize(uSlope, 0).x);
+    float slopeLod = max(0.0, log2(max(footprint, 1.0)) + 1.15);
+    vec4 s = textureLod(uSlope, vec3(suv, float(i)), slopeLod);
     float w = i >= 2 ? gk : 1.0;
     S += toWorld(s.xy, i) * w;
     varSum += (max(s.z - s.x * s.x, 0.0) + max(s.w - s.y * s.y, 0.0)) * w * w;
@@ -187,7 +193,7 @@ void main() {
     if (m > 0.0) trail = texture(uTrail, fract((uTrailInfo.xy + rel.xz) / uTrailInfo.z)).r * m;
   }
   float sigma2 = 0.5 * varSum + 0.5 * uMssRes * mix(gk, 1.0, 0.5);
-  S *= 1.0 - 0.7 * smoothstep(900.0, 6000.0, dist);   // mean tilt of far facets is unresolved: leave it to the roughness
+  S *= 1.0 - 0.94 * smoothstep(450.0, 4200.0, dist);
   vec3 n = normalize(vec3(-S.x, 1.0, -S.y));
   if (uUnder > 0.5) n = -n;
   if (uUnder > 0.5) {
@@ -226,6 +232,12 @@ void main() {
     return;
   }
   float nv = max(dot(n, V), 0.02);
+  // The apparent horizon contains many wave faces per pixel. Blend its
+  // Fresnel/reflection evaluation toward the integrated horizontal surface.
+  float grazingFilter = smoothstep(0.18, 0.035, V.y) * smoothstep(25.0, 150.0, dist);
+  n = normalize(mix(n, vec3(0.0, 1.0, 0.0), grazingFilter));
+  sigma2 = mix(sigma2, 0.5 * (uMeanSlope + uMssRes), grazingFilter);
+  nv = max(dot(n, V), 0.02);
   vec3 R = reflect(-V, n);
   float below = mix(smoothstep(-0.30, 0.0, R.y), 1.0, smoothstep(600.0, 3500.0, dist));
   R.y = max(R.y, 0.005); R = normalize(R);
@@ -236,6 +248,16 @@ void main() {
   float lodR = clamp(log2(1.0 + sqrt(sigma2) * 40.0) * 1.2, 0.0, 6.0);
   vec3 Lsky = envRadiance(R, lodR);
   float F = fresnelRough(nv, sigma2);
+  // Integrate reflected radiance as well as slopes: the reflected horizon is a
+  // nonlinear boundary, so averaging the normal alone preserves aliasing.
+  float reflectionFootprint = max(length(dFdx(gx)), length(dFdy(gx)));
+  float integrate = smoothstep(0.04, 0.28, reflectionFootprint) * smoothstep(0.3, 0.06, V.y);
+  float meanSigma = 0.5 * (uMeanSlope + uMssRes);
+  vec3 meanR = normalize(vec3(-V.x, max(V.y, 0.045), -V.z));
+  float meanLod = clamp(log2(1.0 + sqrt(meanSigma) * 40.0) * 1.2 + 1.0, 0.0, 6.0);
+  Lsky = mix(Lsky, envRadiance(meanR, meanLod), integrate);
+  F = mix(F, fresnelRough(max(V.y, 0.02), meanSigma), integrate);
+  below = mix(below, 1.0, integrate);
   F = mix(F, 1.0, 0.4 * (1.0 - smoothstep(0.03, 0.22, nv)));   // shadowing/multiple bounces keep even rough water reflective at grazing
   vec3 refl = F * Lsky * mix(0.35, 1.0, below);
   if (uReflOn > 0.5) {
@@ -254,10 +276,11 @@ void main() {
   float fpm = max(length(dFdx(gx)), length(dFdy(gx)));             // ground footprint of a pixel (m)
   float jk = 1.0 - smoothstep(0.12, 0.9, fpm);                     // far away a pixel holds thousands of facets: use the smooth statistical lobe
   jv *= jk;
-  vec2 cid = floor(gx / max(0.03, fpm * 0.8));
-  vec2 hh = hash22(cid + 17.0);
-  vec2 gj = sqrt(-2.0 * log(max(hh.x, 1e-3))) * vec2(cos(6.2831853 * hh.y), sin(6.2831853 * hh.y));
-  vec3 nj = normalize(vec3(-(S.x + gj.x * sqrt(jv)), 1.0, -(S.y + gj.y * sqrt(jv))));
+  // World-anchored continuous subpixel ripples, never a pixel-sized random
+  // normal. The statistical lobe integrates unresolved facets at distance.
+  vec2 gj = vec2(vnoise(gx * 18.0 + uWind * uTime * 0.8), vnoise(gx * 19.3 + 17.0 - uWind * uTime * 0.6)) * 3.0 - 1.5;
+  vec2 glitterSlope = S * (1.0 - grazingFilter);
+  vec3 nj = normalize(vec3(-(glitterSlope.x + gj.x * sqrt(jv)), 1.0, -(glitterSlope.y + gj.y * sqrt(jv))));
   float alphaJ = max(2.0 * (sigma2 - jv), 4.4e-5);
   // a glint needs the sun disc itself: thin cloud gives diffuse light, not a mirror image
   float discVis = smoothstep(0.55, 0.92, shadow);
@@ -294,18 +317,19 @@ void main() {
   }
 
   // ---- foam -------------------------------------------------------------------------------
-  float D = 0.0;
+  float D = 0.0, fresh = 0.0;
   for (int i = 1; i < 4; i++) {
     if (i >= uCascades) break;
-    float f = texture(uFoam, vec3(cascUV(i, vG), float(i))).x;
+    vec2 foam = texture(uFoam, vec3(cascUV(i, vG), float(i))).xy;
+    float f = foam.x; fresh = max(fresh, foam.y);
     D = max(D, i == 3 ? f * 0.85 : f);
   }
   float wnd = smoothstep(3.0, 18.0, uWindSpeed);
-  D = max(D, min(trail, 1.2) * 0.72 * (1.0 - 0.5 * wnd));
+  D = max(D, min(trail, 1.2) * 0.86 * (1.0 - 0.35 * wnd));
   vec3 col = refl + body;
   if (D > 0.012) {
     vec4 c1 = uCasc[1];
-    vec2 gF = vG + 0.6 * vD;   // part of the choppy displacement: the pattern rides with the water without being squeezed to hair on steep fronts
+    vec2 gF = vG + 0.15 * vD;   // part of the choppy displacement: the pattern rides with the water without being squeezed to hair on steep fronts
     vec2 x0 = uNoiseOrg + vec2(c1.y * gF.x + c1.z * gF.y, -c1.z * gF.x + c1.y * gF.y);   // absolute lagrangian metres, cascade-1 frame
     vec2 wl = vec2(c1.y * uWind.x + c1.z * uWind.y, -c1.z * uWind.x + c1.y * uWind.y);
     // foam is dragged into streaks along the wind; wake foam streams along the wake
@@ -313,12 +337,12 @@ void main() {
     float tw = clamp(trail / max(D, 0.02), 0.0, 1.0);
     vec2 dir = normalize(mix(wl, wk, tw * tw) + 1e-4);
     vec2 perp = vec2(-dir.y, dir.x);
-    float stretch = 1.2 + 1.0 * wnd + 1.4 * tw;
+    float stretch = 1.3 + 0.8 * wnd + 1.4 * tw;
     vec2 base = vec2(dot(x0, dir) / stretch, dot(x0, perp));
     vec2 pxm = vec2(length(dFdx(base)), length(dFdy(base)));
     float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
     vec2 warp = vec2(vnoise(base * 0.55 + 3.0), vnoise(base * 0.55 + 9.0)) - 0.5;
-    vec2 q = base + warp * 2.2;
+    vec2 q = base + warp * 0.65;
     // fractal patchiness: every octave that is coarser than a pixel is kept, finer ones fade to their mean
     float nz = (vnoise(q * 0.30 + 13.0) - 0.5) * 1.00 * (1.0 - smoothstep(0.30, 0.9, pm * 0.30))
              + (vnoise(q * 0.85 + 5.0) - 0.5) * 0.85 * (1.0 - smoothstep(0.30, 0.9, pm * 0.85))
@@ -326,12 +350,12 @@ void main() {
              + (vnoise(q * 6.5 + 3.0) - 0.5) * 0.50 * (1.0 - smoothstep(0.30, 0.9, pm * 6.5));
     float nfine = (vnoise(q * 17.0 + 11.0) - 0.5) * (1.0 - smoothstep(0.30, 0.9, pm * 17.0))
                 + (vnoise(q * 44.0 + 7.0) - 0.5) * 0.7 * (1.0 - smoothstep(0.30, 0.9, pm * 44.0));
-    float t = (D - 0.40) * 1.5 + nz + nfine * 0.35;   // sparse and ragged where the foam is old, a dense sheet where it is fresh
+    float t = (D - 0.32) * 1.2 + nz * 0.50 + nfine * 0.28;
     // thin foam is a net of bubble walls with the dark water showing through the holes; dense foam has only a few
     float lz = lace(q * 7.0 + 3.0, pm * 7.0);
     float netK = 1.0 - smoothstep(0.10, 0.80, t);
     t -= (1.0 - lz) * 0.30 * netK;
-    float cov = smoothstep(0.0, 0.05 + 0.10 * smoothstep(0.15, 1.2, pm), t);   // distant patches get soft, broken edges instead of crisp confetti
+    float cov = smoothstep(-0.04, 0.15 + 0.13 * smoothstep(0.15, 1.2, pm), t);
     float thick = smoothstep(0.0, 1.15, t);
     // far away, patches are smaller than a pixel: keep their average whiteness as a soft haze instead of speckle
     float farK = smoothstep(0.9, 4.5, pm);
@@ -344,7 +368,8 @@ void main() {
     vec3 foamCol = vec3(0.94, 0.94, 0.93) * bubble * (Efoam + flashE(n)) / PI * clamp(0.92 + 0.35 * nz, 0.7, 1.15);
     // bright bubble highlights facing the sun
     foamCol += sunE * max(nfine, 0.0) * 0.10 * pow(sat(dot(n, uSunDir)), 2.0) * thick;
-    cov *= mix(mix(0.32, 1.0, pow(thick, 0.7)), 1.0, farK);
+    cov *= mix(mix(0.10, 0.78, pow(thick, 0.55)), 0.48, farK);
+    cov *= mix(0.34, 1.0, max(smoothstep(0.08, 0.7, fresh), tw * 0.8));
     col = mix(col, foamCol, cov);
   }
   col += spec * (1.0 - clamp(D * 1.6, 0.0, 0.9));
@@ -404,7 +429,7 @@ export class Water {
     gl.bindVertexArray(this.vao);
     p.m4('uVP', vp).f('uCamY', cam.y).i('uCascades', sim.count).f('uGridN', sim.N);
     p.t('uDisp', 8, sim.disp).t('uSlope', 9, sim.slope).t('uFoam', 10, sim.foamTex);
-    p.f('uHs', sim.cur.hs).f('uMssRes', Math.max(0.0006, (0.003 + 0.00512 * sim.cur.U) * Math.min(1, Math.max(0, (sim.cur.U - 0.2) / 2.8)) - sim.mss * 0.85));
+    p.f('uHs', sim.cur.hs).f('uMeanSlope', sim.mss).f('uMssRes', Math.max(0.0006, (0.003 + 0.00512 * sim.cur.U) * Math.min(1, Math.max(0, (sim.cur.U - 0.2) / 2.8)) - sim.mss * 0.85));
     if (setExtra) setExtra(p);
     let prev = null;
     for (let l = 0; l < CLIP_LEVELS; l++) {
