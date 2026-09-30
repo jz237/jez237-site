@@ -149,7 +149,7 @@
     <div class="hero-scrim" aria-hidden="true"></div>
     <h1>Factual Infographics</h1>
     <div class="ornament" aria-hidden="true">✦</div>
-    <p class="lede">Non-fiction GPT Image 2 infographic experiments from the daily archive, kept separate from fictional worlds and style tests.</p>
+    <p class="lede">Non-fiction AI Images infographic experiments from the daily archive, kept separate from fictional worlds and style tests.</p>
     <div class="hero-controls" aria-label="Page controls">
       <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
     </div>
@@ -238,8 +238,7 @@
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
               ${factual.description ? `<p class="desc">${escapeHtml(factual.description)}</p>` : ''}
-              ${item.tests ? `<p class="tests"><strong>Checks:</strong> ${escapeHtml(item.tests)}</p>` : ''}
-              ${factual.sourceNote ? `<p class="source"><strong>Source note:</strong> ${escapeHtml(factual.sourceNote)}</p>` : ''}
+              ${factual.sourceNote ? `<details class="source"><summary>Source notes</summary><p>${escapeHtml(factual.sourceNote)}</p></details>` : ''}
               <details>
                 <summary>Show prompt</summary>
                 <pre>${escapeHtml(item.prompt)}</pre>
@@ -307,7 +306,7 @@
         .catch((err) => { listRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
     })();
   </script>
-  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="../../assets/nav.js?v=ai-images-20260930" defer></script>
   <script src="museum-theme.js?v=3" defer></script>
 </body>
 </html>

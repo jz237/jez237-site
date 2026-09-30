@@ -227,7 +227,6 @@
               <h3>${escapeHtml(item.title)}</h3>
               ${hybrid.description ? `<p class="desc">${escapeHtml(hybrid.description)}</p>` : ''}
               ${hybrid.continuity ? `<p class="continuity">${escapeHtml(hybrid.continuity)}</p>` : ''}
-              ${item.tests ? `<p class="tests"><strong>Checks:</strong> ${escapeHtml(item.tests)}</p>` : ''}
               <details>
                 <summary>Show prompt</summary>
                 <pre>${escapeHtml(item.prompt)}</pre>
@@ -294,7 +293,7 @@
         .catch((err) => { listRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
     })();
   </script>
-  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="../../assets/nav.js?v=ai-images-20260930" defer></script>
   <script src="museum-theme.js?v=3" defer></script>
 </body>
 </html>
