@@ -48,13 +48,26 @@
   .back { position: fixed; right: 10px; top: 10px; z-index: 5; color: var(--ink); text-decoration: none; font: 500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .04em;
           background: var(--panel); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 8px 12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: opacity .25s; }
   body.hide-hud .back { opacity: 0; pointer-events: none; }
-  @media (max-width: 640px) { #hint { display: none; } .back { top: auto; bottom: 12px; right: 12px; } }
+  @media (max-width: 640px) { #hint { display: none; } }
+  @media (max-width: 720px) { .back { top: auto; bottom: 12px; right: 12px; } }
   #fullscreen { position:fixed;right:112px;top:10px;z-index:6;padding:8px 11px;color:var(--ink);background:var(--panel);border:1px solid rgba(255,255,255,.18);border-radius:10px;font:500 12px system-ui,sans-serif;cursor:pointer; }
   #fullscreen:focus-visible {outline:2px solid #fff;outline-offset:2px;}
   #fullscreen:hover {background:rgba(60,65,72,.9);}
+  #board{position:fixed;right:244px;top:10px;z-index:6;padding:8px 13px;color:var(--ink);background:var(--panel);border:1px solid rgba(255,255,255,.18);border-radius:10px;font:500 12px system-ui,sans-serif;cursor:pointer;}
+  #board:focus-visible,#walk-pad:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+  #board:hover{background:rgba(60,65,72,.9);}
+  #walk-pad{display:none;position:fixed;left:16px;bottom:76px;width:84px;height:84px;border:1px solid rgba(255,255,255,.36);border-radius:50%;z-index:6;background:rgba(22,26,33,.42);touch-action:none;align-items:center;justify-content:center;}
+  #walk-pad span{width:32px;height:32px;border:1px solid rgba(255,255,255,.55);border-radius:50%;background:rgba(255,255,255,.16);pointer-events:none;}
+  #walk-pad::after{content:'WALK';position:absolute;top:90px;color:#ddd;font:9px ui-monospace,monospace;letter-spacing:.16em;text-shadow:0 1px 3px #000;}
+  [hidden]{display:none!important;}
+  body.hide-hud #board,body.hide-hud #walk-pad{opacity:0;pointer-events:none;}
+  @media(pointer:coarse){body.on-deck #walk-pad{display:flex;}}
   body.hide-hud #fullscreen {opacity:0;pointer-events:none;}
   #loading {position:fixed;inset:0;display:grid;place-items:center;color:#ccc;font:12px system-ui,sans-serif;letter-spacing:.12em;pointer-events:none;}
-  @media(max-width:640px){#fullscreen{left:12px;right:auto;top:auto;bottom:12px;}}
+  @media(max-width:720px){#fullscreen{left:12px;right:auto;top:auto;bottom:12px;}}
+  @media(max-width:720px){#board{left:50%;right:auto;top:auto;bottom:12px;transform:translateX(-50%);}}
+  @media(max-width:640px){body.on-deck #hint{display:block;top:16px;bottom:auto;max-width:230px;white-space:normal;text-align:center;}}
+  body.shot #board,body.shot #walk-pad{display:none;}
   body.shot #fullscreen,body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
 </style>
 </head>
@@ -62,11 +75,13 @@
 <canvas id="sea" tabindex="0" aria-label="Real-time ocean simulation"></canvas>
 <div id="loading" role="status">LOADING OCEAN</div>
 <button id="fullscreen" type="button" aria-label="Enter fullscreen" aria-pressed="false">⛶ Fullscreen</button>
+<button id="board" type="button" aria-label="Land on the yacht and walk on deck" aria-pressed="false">Land</button>
+<div id="walk-pad" role="group" aria-label="Walk on deck: drag this pad to move"><span></span></div>
 <div id="hud" role="group" aria-label="Ocean controls"></div>
 <a class="back" href="../">◂ DEMOS</a>
 <div id="hint"></div>
 <div id="fail"><div><b>WebGL 2 with float render targets is required.</b><br>Try a recent desktop browser with hardware acceleration enabled.</div></div>
-<script type="importmap">{"imports":{"./js/astro.js":"./js/astro.js?v=phone-20260930b","./js/clouds.js":"./js/clouds.js?v=phone-20260930b","./js/fish-behavior.js":"./js/fish-behavior.js?v=phone-20260930b","./js/fish.js":"./js/fish.js?v=phone-20260930b","./js/fx.js":"./js/fx.js?v=phone-20260930b","./js/gl.js":"./js/gl.js?v=phone-20260930b","./js/glsl.js":"./js/glsl.js?v=phone-20260930b","./js/lighting.js":"./js/lighting.js?v=phone-20260930b","./js/main.js":"./js/main.js?v=phone-20260930b","./js/math.js":"./js/math.js?v=phone-20260930b","./js/ocean.js":"./js/ocean.js?v=phone-20260930b","./js/post.js":"./js/post.js?v=phone-20260930b","./js/probe.js":"./js/probe.js?v=phone-20260930b","./js/rig.js":"./js/rig.js?v=phone-20260930b","./js/ripples.js":"./js/ripples.js?v=phone-20260930b","./js/sky.js":"./js/sky.js?v=phone-20260930b","./js/sound.js":"./js/sound.js?v=phone-20260930b","./js/ui.js":"./js/ui.js?v=phone-20260930b","./js/wake.js":"./js/wake.js?v=phone-20260930b","./js/water-types.js":"./js/water-types.js?v=phone-20260930b","./js/water.js":"./js/water.js?v=phone-20260930b","./js/weather.js":"./js/weather.js?v=phone-20260930b","./js/yacht-geo.js":"./js/yacht-geo.js?v=phone-20260930b","./js/yacht.js":"./js/yacht.js?v=phone-20260930b"}}</script>
-<script type="module" src="js/main.js?v=phone-20260930b"></script>
+<script type="importmap">{"imports":{"./js/astro.js":"./js/astro.js?v=deck-20260930","./js/clouds.js":"./js/clouds.js?v=deck-20260930","./js/fish-behavior.js":"./js/fish-behavior.js?v=deck-20260930","./js/fish.js":"./js/fish.js?v=deck-20260930","./js/fx.js":"./js/fx.js?v=deck-20260930","./js/gl.js":"./js/gl.js?v=deck-20260930","./js/glsl.js":"./js/glsl.js?v=deck-20260930","./js/lighting.js":"./js/lighting.js?v=deck-20260930","./js/main.js":"./js/main.js?v=deck-20260930","./js/math.js":"./js/math.js?v=deck-20260930","./js/ocean.js":"./js/ocean.js?v=deck-20260930","./js/post.js":"./js/post.js?v=deck-20260930","./js/probe.js":"./js/probe.js?v=deck-20260930","./js/rig.js":"./js/rig.js?v=deck-20260930","./js/ripples.js":"./js/ripples.js?v=deck-20260930","./js/sky.js":"./js/sky.js?v=deck-20260930","./js/sound.js":"./js/sound.js?v=deck-20260930","./js/ui.js":"./js/ui.js?v=deck-20260930","./js/wake.js":"./js/wake.js?v=deck-20260930","./js/water-types.js":"./js/water-types.js?v=deck-20260930","./js/water.js":"./js/water.js?v=deck-20260930","./js/weather.js":"./js/weather.js?v=deck-20260930","./js/yacht-geo.js":"./js/yacht-geo.js?v=deck-20260930","./js/yacht.js":"./js/yacht.js?v=deck-20260930","./js/deck.js":"./js/deck.js?v=deck-20260930","./js/yacht-materials.js":"./js/yacht-materials.js?v=deck-20260930"}}</script>
+<script type="module" src="js/main.js?v=deck-20260930"></script>
 </body>
 </html>

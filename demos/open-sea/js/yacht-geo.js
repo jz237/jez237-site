@@ -1,5 +1,5 @@
 // Blender-built 52 m schooner. +x bow, +y up, +z starboard.
-export const MAT={HULL:0,DECK:1,CABIN:2,GLASS:3,TEAK:4,ALU:5,SAIL:6,STEEL:7,ROPE:8,KEEL:9,TRIM:10,BRASS:11,RUBBER:12};
+export const MAT={HULL:0,DECK:1,CABIN:2,GLASS:3,TEAK:4,ALU:5,SAIL:6,STEEL:7,ROPE:8,KEEL:9,TRIM:10,BRASS:11,RUBBER:12,SCREEN:13,CANVAS:14,WOOD:15,SAFETY:16};
 export const DIM={LOA:52,HULL_LEN:47,BEAM:9.3,DECK_H:2.6,DRAFT:6.65,MAST_X:-12.7,MAST_H:36.5};
 export const SAILS=[];
 export const sheer=x=>2.6+(x>0?.0018:.0007)*x*x;
@@ -8,7 +8,7 @@ export const waterlineHalfBeam=x=>halfBeam(x)*.91;
 let geometry;
 export async function loadYachtGeometry(){
  const root=new URL('../assets/',import.meta.url);
- const [mr,br]=await Promise.all([fetch(new URL('schooner.json',root)),fetch(new URL('schooner.bin.gz',root))]);
+ const [mr,br]=await Promise.all([fetch(new URL('schooner.json?v=deck-20260930',root)),fetch(new URL('schooner.bin.gz?v=deck-20260930',root))]);
  if(!mr.ok||!br.ok)throw new Error('The schooner model could not be loaded. Refresh to try again.');
  const metadata=await mr.json();
  if(metadata.version!==1||metadata.masts!==3)throw new Error('Unsupported schooner asset.');

@@ -18,7 +18,7 @@ const WEATHER = {
   Storm: { cloud: 1, rain: 0.9, lightning: 1 },
 };
 const QUALITY = { Auto: 'AUTO', Low: 'LOW', Medium: 'MED', High: 'HIGH' };
-const MODES = { Tour: 'tour', 'Free fly': 'fly', Boat: 'boat', Dive: 'dive' };
+const MODES = { Tour: 'tour', 'Free fly': 'fly', Boat: 'boat', Dive: 'dive', 'Walk deck':'deck' };
 
 export function initUI(app, rig) {
   const hud = document.getElementById('hud');
@@ -57,6 +57,20 @@ export function initUI(app, rig) {
   // ---- camera ----------------------------------------------------------------------------------------------------
   const cam = chipRow(Object.keys(MODES), n => rig.setMode(MODES[n]));
   const shot = chipRow(['Next shot'], () => rig.nextShot());
+  const stations=chipRow(['Helm','Bow','Stern'],n=>{rig.setMode('deck');rig.deck.station(n);rig.syncDeckCamera();});
+  stations.row.id='deck-stations';
+  const board=document.getElementById('board'),pad=document.getElementById('walk-pad'),knob=pad.firstElementChild;
+  board.addEventListener('click',()=>rig.setMode(rig.mode==='deck'?'fly':'deck'));
+  let walkingPointer=null;
+  const stopWalking=()=>{walkingPointer=null;rig.deck.stick=[0,0];knob.style.transform='translate(0,0)';};
+  const steer=e=>{
+    const r=pad.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)/(r.width*.36),y=(e.clientY-r.top-r.height/2)/(r.height*.36),d=Math.max(1,Math.hypot(x,y));
+    rig.deck.stick=[x/d,y/d];knob.style.transform=`translate(${x/d*25}px,${y/d*25}px)`;
+  };
+  pad.addEventListener('pointerdown',e=>{if(walkingPointer!==null)return;walkingPointer=e.pointerId;pad.setPointerCapture(e.pointerId);steer(e);e.preventDefault();});
+  pad.addEventListener('pointermove',e=>{if(e.pointerId===walkingPointer)steer(e);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])pad.addEventListener(event,e=>{if(e.pointerId===walkingPointer)stopWalking();});
+  addEventListener('blur',stopWalking);
 
   // ---- sea -------------------------------------------------------------------------------------------------------
   const sea = chipRow(Object.keys(SEA), n => {
@@ -87,7 +101,7 @@ export function initUI(app, rig) {
 
   const fmtSigned = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
   hud.replaceChildren(
-    section('Camera', cam.row, shot.row),
+    section('Camera', cam.row, stations.row, shot.row),
     section('Sea',
       sea.row,
       slider('Wind', 0.3, 35, 0.1, () => G.wind, onWind, v => `${v.toFixed(1)} m/s`),
@@ -123,6 +137,10 @@ export function initUI(app, rig) {
   // ---- state -> widgets ------------------------------------------------------------------------------------------
   const near = (a, b, t) => Math.abs(a - b) <= t;
   function sync() {
+    const walking=rig.mode==='deck';document.body.classList.toggle('on-deck',walking);
+    board.textContent=walking?'Take off':'Land';board.setAttribute('aria-label',walking?'Take off into free flight':'Land on the yacht and walk on deck');board.setAttribute('aria-pressed',String(walking));
+    stations.row.hidden=!walking;
+    if(!walking&&walkingPointer!==null)stopWalking();
     for (const s of sliders) s.refresh();
     for (const [n, b] of cam.map) b.classList.toggle('on', MODES[n] === rig.mode);
     for (const [n, b] of sea.map) {
@@ -155,7 +173,8 @@ export function initUI(app, rig) {
     else if (k === 'p') app.requestPhoto();
     else if (k === 'n') rig.nextShot();
     else if (k === 'f') toggleFull();
-    else if (k >= '1' && k <= '4') rig.setMode(['tour', 'fly', 'boat', 'dive'][+k - 1]);
+    else if(k==='l'&&!e.repeat)rig.setMode(rig.mode==='deck'?'fly':'deck');
+    else if (k >= '1' && k <= '5') rig.setMode(['tour', 'fly', 'boat', 'dive','deck'][+k - 1]);
   });
 
   const setHint = (text) => { hint.textContent = text; hint.style.opacity = 1; clearTimeout(setHint.t); setHint.t = setTimeout(() => { hint.style.opacity = 0; }, 9000); };
@@ -164,6 +183,7 @@ export function initUI(app, rig) {
     fly: 'Drag to look · W A S D move · Q E down / up · Shift fast · wheel speed · H hides the panel',
     boat: 'Drag to orbit the yacht · wheel zooms',
     dive: 'Drag to look around underwater · wheel zooms',
+    deck: matchMedia('(pointer: coarse)').matches?'Left pad walks · drag the scene to look · Take off returns to flight':'Drag to look · W A S D walk · Shift brisk pace · L takes off · Helm / Bow / Stern jump to a viewpoint',
   })[m];
   setHint(hintFor(rig.mode));
   const prev = rig.onChange;
