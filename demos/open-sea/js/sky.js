@@ -162,12 +162,14 @@ void main() {
   float px = length(fwidth(d));
 
   // sun
-  float cs = dot(d, uSunDir);
   const float SUN_R = 0.004675;
   vec3 sunE = sunIrradiance(0.0);
-  float cosR = cos(SUN_R);
-  float edge = smoothstep(cosR - 1.5 * px * SUN_R, cosR + 1.5 * px * SUN_R, cs);
-  float rr = clamp(acos(min(cs, 1.0)) / SUN_R, 0.0, 1.0);
+  // Chord distance avoids subtracting almost-equal dot products near 1.0.
+  // Cosine thresholds can round to identical edges on phone shader hardware.
+  float chord = length(d-uSunDir), radius=2.0*sin(SUN_R*.5);
+  float discWidth=max(1.0e-6,px*1.2);
+  float edge = 1.0-smoothstep(radius-discWidth,radius+discWidth,chord);
+  float rr = clamp(chord/radius, 0.0, 1.0);
   float limb = 0.4 + 0.6 * sqrt(max(1.0 - rr * rr, 0.0));
   L += min(sunE / (PI * SUN_R * SUN_R) * limb, vec3(60000.0)) * edge * step(0.0, d.y + 0.004);
 
