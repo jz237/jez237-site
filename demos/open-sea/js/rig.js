@@ -140,6 +140,13 @@ export class Rig {
     const s = u * u * (3 - 2 * u) * 0.35 + u * 0.65;       // gentle ease between keys
     const out = [];
     for (let j = 1; j < 8; j++) out.push(cr(k0[j], k1[j], k2[j], k3[j], s));
+    // The vertical FOV gives a much narrower horizontal view on a phone. Pull
+    // overview cameras back around their target so the 52 m hull fits; smoothly
+    // remove this offset for the intentional deck close-ups and submerged shots.
+    const aspect = this.app.w / this.app.h;
+    const scale = 1 + Math.max(0, 0.9 / Math.max(aspect, 0.3) - 1) * smoothstep(7, 13, out[5]);
+    out[0] = out[3] + (out[0] - out[3]) * scale;
+    out[1] = out[4] + (out[1] - out[4]) * scale;
     return out;
   }
 
