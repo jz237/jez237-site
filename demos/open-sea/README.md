@@ -101,6 +101,8 @@ Shader fades now use a deterministic Hermite ramp for ascending, descending and 
 
 Edge smoothing now operates on the bounded display buffer after exposure and tone mapping, rather than mixing raw HDR sun radiance into neighboring pixels. The entry page versions the complete module graph together, and ocean HTML/JavaScript revalidate after releases.
 
+Portrait tour overview cameras pull back around their targets to fit the larger hull in the narrower horizontal field of view. The offset fades away for deliberate deck close-ups and underwater shots; landscape framing and free-flight controls retain their existing behavior.
+
 `scripts/open-sea/tests/phone-rendering.html` checks GPU fades, isolated HDR glints, zero calm foam and hitching rain/hull ripples. It passes with NVIDIA/ANGLE D3D11 and ANGLE SwiftShader/Vulkan. For 55 isolated glints, the old pass produced 275 saturated display pixels and the revised pass produced 53. Matched portrait captures used a 390 × 844 CSS viewport, DPR 2, and a 0.45 render scale (351 × 760 backing pixels). Daylight, low-sun glare, night, storm and underwater scenes had finite HDR pixels and no browser or WebGL errors. The outside reviewer found the repair suitable to ship; very fine rigging remains visibly limited at low resolution.
 
 The catastrophic phone appearance could not be reproduced on the desktop GPU. These corrections address concrete portability and filtering defects, but confirmation on the affected physical phone is still required. They do not establish photographic realism or mobile frame-rate parity.
