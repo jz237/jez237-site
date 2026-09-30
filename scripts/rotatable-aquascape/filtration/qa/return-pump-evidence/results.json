@@ -1,25 +1,4 @@
 {
-  "checkedAt": "2026-09-30T16:17:23.140Z",
-  "scope": "Detailed wet-rotor return pump, working section cutaway, inspection-speed control, six component lessons and qualitative head-pressure comparison",
-  "files": [
-    "assets/index-BVkrN8Bl.css",
-    "assets/index-CrdYWGGf.js",
-    "assets/rock-layers.bin-B60TwGSm.gz",
-    "index.html"
-  ],
-  "buildHash": "77ccf0bb2c62bff6db334a34027ff13b56b59213a5ea142441042892d0dc17f1",
-  "hashMethod": "SHA256 of sorted relative UTF-8 filenames followed by build bytes; CRLF normalized to LF in HTML/JS/CSS",
-  "checks": {
-    "typescriptBuild": true,
-    "browser": true,
-    "visual": true,
-    "synchronizedAssets": true,
-    "processAnimation": true,
-    "biofilmRegression": true,
-    "preservedModelDetail": true,
-    "returnCutaway": true,
-    "performance": true
-  },
   "pump": {
     "mode": "after",
     "base": "local",
@@ -144,23 +123,5 @@
     },
     "errors": [],
     "checkedAt": "2026-09-30T16:14:37.301Z"
-  },
-  "visualReview": {
-    "evidence": "filtration/qa/return-pump-evidence/",
-    "findings": [
-      "Compared the existing GPT Image return-pump appearance reference with actual front, top, oblique, exploded, individual-component and phone renders. Original procedural geometry; no new generated image downloads.",
-      "Added fine mottled polymer grain, ceramic shaft/collars, rubber pads and O-ring, recessed fasteners, helical fitting threads, hollow channels, mounting rails and molded housing seams.",
-      "Corrected motor position so the magnetic rotor now sits inside the rotor well, while the outlet remains seated in the whole-system riser.",
-      "Section surfaces clarify the removed half; the intact outlet shows the destination of the small round water tracers. Inspected actual rotating-vane frame sequences.",
-      "Desktop and 390/320px controls and information remain usable. Inspection speed slows rotor motion continuously. Global pause freezes the rotor and settled scene stops rendering.",
-      "Retained all 40 selectable assemblies. Roller, skimmer and live-rock geometry/assets remain unchanged."
-    ]
-  },
-  "limitations": [
-    "Generic wet-rotor teaching reconstruction, not manufacturer CAD. Fixed-shaft geometry and seven vanes are illustrative.",
-    "Qualitative, unitless pump/system curves do not size a pump or predict flow. Inspection speed changes animation only.",
-    "Local comparison stays near 60 FPS; it does not establish performance on older hardware.",
-    "Section caps simplify the internal shape; this is not a CFD or hydraulic continuity simulation."
-  ],
-  "deploymentStatus": "Local validation complete; production verification recorded separately."
+  }
 }

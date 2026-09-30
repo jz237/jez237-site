@@ -15,13 +15,6 @@ function lettering(text:string,sub:string){const t=canvas((c,n)=>{c.fillStyle='#
 export function addSurfaceDetail(parts:Part[],groups:Record<string,T.Group>,m:Palette){
  const get=(id:string)=>parts.find(p=>p.id===id)!.group;
  const detail=(id:string)=>{const g=new T.Group();get(id).add(g);return g;};
- const pd=detail('pump-motor');const label=mesh(pd,new T.PlaneGeometry(.38,.24),lettering('RETURN','WET ROTOR'),[.01,.504,-.19]);label.rotation.x=-Math.PI/2;
- // Mold seam, strain relief, shaft seats and mounting slots stay inspectable after separation.
- ring(pd,[0,0,-.52],.463,.008,m.rubber,'z');for(let i=0;i<7;i++)ring(pd,[-.49,.285,-.65-i*.025],.048-i*.002,.006,m.rubber,'z');
- const pedestal=get('pump-base');pedestal.clear();for(const x of [-.44,.44]){mesh(pedestal,new T.BoxGeometry(.14,.085,1.36),m.dark,[x,0,0]);for(const z of [-.52,.52]){mesh(pedestal,new T.CylinderGeometry(.13,.145,.13,32),m.rubber,[x,-.08,z]);band(pedestal,[x,.035,z],.08,.02,m.metal,.043);}}
- for(const z of [-.36,.36])mesh(pedestal,new T.BoxGeometry(1.02,.07,.13),m.dark,[0,.01,z]);
- const shaft=detail('shaft');for(const z of [-.41,.41]){const b=band(shaft,[0,0,z],.06,.023,m.white,.028);b.rotation.x=Math.PI/2;}
- const discharge=detail('volute');band(discharge,[.28,.96,-.12],.127,.24,m.dark,.097);for(let i=0;i<9;i++)ring(discharge,[.28,.88+i*.020,-.12],.13,.007,m.dark);
  const sump=detail('sump');for(const z of [-1.73,1.73])mesh(sump,new T.BoxGeometry(11.7,.012,.03),m.rubber,[0,.12,z]);
  const rp=detail('return-pipe');band(rp,[.35,1.8,0],.165,.27,m.white,.097);mesh(rp,new T.BoxGeometry(.41,.055,.10),m.dark,[.35,1.995,0]);mesh(rp,new T.CylinderGeometry(.04,.04,.12,24),m.metal,[.35,1.91,0]);
  const waterParts:T.Object3D[]=[];
