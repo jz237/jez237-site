@@ -35,7 +35,7 @@ import {aquariumFieldOfView,orbitToward} from './CameraFraming';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {installRoomLighting} from './RoomLighting';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
 import {createTetraMaterials} from './TetraMaterials';
@@ -159,6 +159,8 @@ export class Aquarium{
  private staggerCaptures=new URLSearchParams(location.search).get('captures')!=='full'&&new URLSearchParams(location.search).get('renderer')!=='previous';
  private refraction:SceneRefraction|null=null;
  private frame=0;
+ private started=false;
+ private contextLost=false;
  private diagnosticTime=0;private diagnosticFrames=0;
  private frameSamples:number[][]=[];
  private resizeObserver:ResizeObserver;
@@ -184,9 +186,7 @@ export class Aquarium{
   // blue-gray almost to black when a display-space swatch is used directly.
   this.scene.background=new URLSearchParams(location.search).get('showroom')==='hidden-reef'?new T.Color(.008,.029,.095):new T.Color(.0087,.0147,.0173);
   this.scene.fog=new T.FogExp2(this.scene.background,.008);
-  const pmrem=new T.PMREMGenerator(this.renderer),environment=new RoomEnvironment();
-  this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.10;
-  environment.dispose();pmrem.dispose();
+  installRoomLighting(this.renderer,this.scene,.035);this.scene.environmentIntensity=.10;
   this.controls=new OrbitControls(this.camera,this.renderer.domElement);
   this.controls.target.set(0,2.75,0);
   this.controls.enableDamping=true;this.controls.dampingFactor=.07;this.controls.enablePan=false;
@@ -256,10 +256,23 @@ export class Aquarium{
    if(!new URLSearchParams(location.search).has('originalTransforms'))reuseUnchangedTransforms(this.scene);
    if(this.perfReadout)this.installFrameBenchmark();
    loadTiming.finish();
-   this.frame=requestAnimationFrame(this.animate);
+   this.started=true;this.resumeEntry();
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();this.captureCadence.reset();this.effects.reset();if(document.hidden)this.frameBenchmark?.cancel();});
+  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();this.captureCadence.reset();this.effects.reset();if(document.hidden)this.frameBenchmark?.cancel();else this.restartFrames();});
+  window.addEventListener('pageshow',event=>{if(event.persisted)this.resumeEntry();});
+  this.renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();this.contextLost=true;cancelAnimationFrame(this.frame);this.frame=0;});
+  this.renderer.domElement.addEventListener('webglcontextrestored',()=>{this.contextLost=false;this.renderer.shadowMap.needsUpdate=true;this.captureScheduler.invalidate();this.restartFrames();});
+ }
+ /** A new visit or browser Back/Forward restore always opens a living tank. */
+ resumeEntry(){
+  this.paused=false;if(parent===window)this.suspended=false;
+  const pause=document.querySelector<HTMLButtonElement>('#pause');if(pause){pause.textContent='Pause';pause.setAttribute('aria-pressed','false');}
+  this.restartFrames();
+ }
+ private restartFrames(){
+  this.last=0;if(!this.started||this.contextLost)return;
+  cancelAnimationFrame(this.frame);this.frame=requestAnimationFrame(this.animate);
  }
  setEffectsMode(mode:string){
   this.frameBenchmark?.cancel();this.autoEffects=mode!=='full';this.effects.level=0;this.effects.reset();
@@ -511,6 +524,7 @@ export class Aquarium{
   Object.assign(s,fishCoordinates(p));
  }
  private animate=(now:number)=>{
+  this.frame=0;if(this.contextLost)return;
   this.frame=requestAnimationFrame(this.animate);
   if(document.hidden||this.suspended||this.filterOpen){this.frameBenchmark?.cancel();this.effects.reset();this.last=0;return;}
   this.frameBenchmark?.tick(now);

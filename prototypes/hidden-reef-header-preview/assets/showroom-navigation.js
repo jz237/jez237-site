@@ -43,8 +43,6 @@
     nav.insertBefore(compactBrand, nav.firstChild);
     nav.insertBefore(menu, compactBrand.nextSibling);
     nav.appendChild(actions);
-    const showroom=document.createElement('a');showroom.href=showroomUrl.href;showroom.className='showroom-nav';showroom.textContent='3D Aquarium';showroom.setAttribute('aria-label','Explore the Living Showroom 3D aquarium');actions.prepend(showroom);
-    const mobileShowroom=document.createElement('a');mobileShowroom.href=showroomUrl.href;mobileShowroom.className='showroom-mobile-entry';mobileShowroom.textContent='Enter the 3D Aquarium ↗';nav.append(mobileShowroom);
     const fresh=new URLSearchParams(location.search).get('cat')==='freshwater';
     if(fresh||/\/learn\/(?:index.html)?$/.test(location.pathname)){const invite=document.createElement('a');invite.className='showroom-category-invite';invite.href=showroomUrl.href;invite.innerHTML='<strong>Step inside the Living Showroom ↗</strong>Explore a planted tank in 3D, meet its inhabitants and plan your own aquarium.';nav.after(invite);}
 
