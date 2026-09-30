@@ -41,6 +41,18 @@ precision highp int;
 precision highp sampler2D;
 precision highp sampler3D;
 precision highp sampler2DArray;
+// GLSL smoothstep is undefined for descending or equal edges. The ocean uses
+// descending fades deliberately; keep their Hermite interpolation portable.
+float smoothRange(float a,float b,float x){
+  if(a==b)return step(a,x);
+  float t=clamp((x-a)/(b-a),0.0,1.0);return t*t*(3.0-2.0*t);
+}
+vec2 smoothRange(float a,float b,vec2 x){return vec2(smoothRange(a,b,x.x),smoothRange(a,b,x.y));}
+vec3 smoothRange(float a,float b,vec3 x){return vec3(smoothRange(a,b,x.x),smoothRange(a,b,x.y),smoothRange(a,b,x.z));}
+vec4 smoothRange(float a,float b,vec4 x){return vec4(smoothRange(a,b,x.x),smoothRange(a,b,x.y),smoothRange(a,b,x.z),smoothRange(a,b,x.w));}
+vec2 smoothRange(vec2 a,vec2 b,vec2 x){return vec2(smoothRange(a.x,b.x,x.x),smoothRange(a.y,b.y,x.y));}
+vec3 smoothRange(vec3 a,vec3 b,vec3 x){return vec3(smoothRange(a.x,b.x,x.x),smoothRange(a.y,b.y,x.y),smoothRange(a.z,b.z,x.z));}
+vec4 smoothRange(vec4 a,vec4 b,vec4 x){return vec4(smoothRange(a.x,b.x,x.x),smoothRange(a.y,b.y,x.y),smoothRange(a.z,b.z,x.z),smoothRange(a.w,b.w,x.w));}
 `;
 
 function numbered(src, log) {
@@ -67,8 +79,9 @@ export class Program {
   constructor(name, vs, fs, defines = '') {
     this.name = name;
     const d = defines ? defines.split('|').map(s => `#define ${s}\n`).join('') : '';
-    const v = HEADER + d + resolveIncludes(vs);
-    const f = HEADER + d + resolveIncludes(fs);
+    const portable = src => resolveIncludes(src).replace(/\bsmoothstep\s*\(/g, 'smoothRange(');
+    const v = HEADER + d + portable(vs);
+    const f = HEADER + d + portable(fs);
     const p = gl.createProgram();
     gl.attachShader(p, compile(gl.VERTEX_SHADER, v, name));
     gl.attachShader(p, compile(gl.FRAGMENT_SHADER, f, name));

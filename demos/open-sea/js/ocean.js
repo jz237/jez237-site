@@ -242,7 +242,8 @@ void main() {
   float J = jxx * jzz - jxz * jxz;
   oDisp = vec4(-uChop * Dx, h, -uChop * Dz, J - 1.0);
   oSlope = vec4(sx, sz, sx * sx, sz * sz);
-  float src = 1.0 - smoothstep(uFoamP.y, uFoamP.x, J);
+  float src = 0.0;
+  if(uFoamP.w>0.0 && uFoamP.x>uFoamP.y)src=1.0-smoothstep(uFoamP.y,uFoamP.x,J);
   float prev = texelFetch(uFoamPrev, ivec3(p, uLayer), 0).x;
   oFoam = vec4(max(prev * uFoamP.z, src * uFoamP.w), src * uFoamP.w, 0.0, 1.0);
 }`;

@@ -92,3 +92,15 @@ The tour and boat/dive cameras, buoyancy probes, sailing speed and wake have bee
 This is a detailed interpretation of an artistic concept, with exterior fittings and underwater geometry. It is not an exact reconstruction from naval plans: interiors, crew models, structural certification and a validated 20–30-person capacity are not included. Browser shading is designed for real-time performance and differs from the Cycles studio render.
 
 The final replacement was exercised in daylight, close deck views, a reefed storm and below the hull, with no browser errors. Fullscreen entry/exit through the button and F shortcut, a 390-pixel mobile layout, Dive and the tour handoff passed. LOW quality sustained approximately 60 fps on the tested RTX 5090; other devices and higher settings can differ. An outside reviewer identified self-shadow bands and detached running rigging; own-sail proxy shadows are excluded, headsail furling preserves the forestay, and mainsheets update with their booms. Thin static rigging is blended after opaque surfaces without depth writes.
+
+## September 30 phone rendering repair
+
+A physical-phone screenshot exposed severe white dashes, banded horizon glare and broken-looking rigging that the desktop checks had missed. The previous narrow-viewport test verified layout on an RTX 5090; it did **not** validate a phone GPU.
+
+Shader fades now use a deterministic Hermite ramp for ascending, descending and collapsed ranges. Disabled foam cascades skip threshold evaluation altogether. Sail normals, cloth/deck footprints and foam footprints are calculated outside varying branches; the refracted sun footprint is calculated before the Snell-window branch. Sun discs use chord distance instead of thresholds extremely close to one, and Fresnel power bases are bounded against floating-point rounding. Sun-glitter roughness includes the pixel's normal variation.
+
+Edge smoothing now operates on the bounded display buffer after exposure and tone mapping, rather than mixing raw HDR sun radiance into neighboring pixels. The entry page versions the complete module graph together, and ocean HTML/JavaScript revalidate after releases.
+
+`scripts/open-sea/tests/phone-rendering.html` checks GPU fades, isolated HDR glints, zero calm foam and hitching rain/hull ripples. It passes with NVIDIA/ANGLE D3D11 and ANGLE SwiftShader/Vulkan. For 55 isolated glints, the old pass produced 275 saturated display pixels and the revised pass produced 53. Matched portrait captures used a 390 × 844 CSS viewport, DPR 2, and a 0.45 render scale (351 × 760 backing pixels). Daylight, low-sun glare, night, storm and underwater scenes had finite HDR pixels and no browser or WebGL errors. The outside reviewer found the repair suitable to ship; very fine rigging remains visibly limited at low resolution.
+
+The catastrophic phone appearance could not be reproduced on the desktop GPU. These corrections address concrete portability and filtering defects, but confirmation on the affected physical phone is still required. They do not establish photographic realism or mobile frame-rate parity.

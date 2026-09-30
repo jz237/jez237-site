@@ -126,21 +126,22 @@ layout(location = 0) out vec4 o;
 
 vec3 Rw_foamUnder(vec3 Ed0) { return vec3(0.35, 0.55, 0.65) * Ed0 * 0.6; }
 float fresnelRough(float nv, float sigma2) {
-  float s = sqrt(sigma2);
+  float s = sqrt(max(sigma2, 0.0));
   float F0 = 0.02;
-  float k = pow(1.0 - nv, 5.0 * exp(-2.69 * s)) / (1.0 + 22.7 * pow(s, 1.5));
+  float k = pow(1.0 - clamp(nv, 0.0, 1.0), 5.0 * exp(-2.69 * s)) / (1.0 + 22.7 * pow(s, 1.5));
   return F0 + (1.0 - F0) * clamp(k, 0.0, 1.0);
 }
 
 // Gaussian-slope (Beckmann) sun/moon glitter
 vec3 glitter(vec3 n, vec3 V, vec3 Ld, vec3 E, float alpha2) {
   vec3 H = normalize(V + Ld);
-  float nh = max(dot(n, H), 1e-4), nl = dot(n, Ld), nv = max(dot(n, V), 1e-3);
+  float nh = clamp(dot(n, H), 1e-4, 1.0), nl = clamp(dot(n, Ld), -1.0, 1.0), nv = clamp(dot(n, V), 1e-3, 1.0);
   if (nl <= 0.0 || Ld.y <= -0.02) return vec3(0.0);
   float a2 = max(alpha2, 4.4e-5);
-  float t2 = (1.0 - nh * nh) / (nh * nh);
+  vec3 tangent=cross(n,H);
+  float t2 = dot(tangent,tangent) / (nh * nh);
   float D = exp(-t2 / a2) / (PI * a2 * nh * nh * nh * nh);
-  float vh = max(dot(V, H), 0.0);
+  float vh = clamp(dot(V, H), 0.0, 1.0);
   float F = 0.02 + 0.98 * pow(1.0 - vh, 5.0);
   float G = 1.0 / (1.0 + 0.5 * (sqrt(1.0 + a2 * (1.0 / (nv * nv) - 1.0)) - 1.0) + 0.5 * (sqrt(1.0 + a2 * (1.0 / (nl * nl) - 1.0)) - 1.0));
   return E * (D * F * G / (4.0 * nv)) * step(0.0, Ld.y + 0.02);
@@ -205,19 +206,20 @@ void main() {
     vec3 Lunder = RRS * Ed0 * exp(-KD * max(uCamDepth, 0.2));   // medium radiance at the camera's depth: no seam at the horizon
     float cosI = max(dot(-I, Nd), 1e-3);
     vec3 rf = refract(I, Nd, 1.333);
+    vec3 rfd = normalize(vec3(rf.x, max(rf.y, 0.004), rf.z));
+    float refractedFootprint = length(fwidth(rfd));
     vec3 colU = Lunder;
     if (dot(rf, rf) > 0.0) {
       float cosT = max(dot(rf, -Nd), 1e-3);
       float rs = (1.333 * cosI - cosT) / (1.333 * cosI + cosT), rp = (cosI - 1.333 * cosT) / (cosI + 1.333 * cosT);
       float Fr = 0.5 * (rs * rs + rp * rp);
-      vec3 rfd = normalize(vec3(rf.x, max(rf.y, 0.004), rf.z));
       float shd = cloudShadowAt(rel.xz);
       vec3 Lw = envRadiance(rfd, clamp(log2(1.0 + sqrt(sigma2) * 30.0), 0.0, 5.0));
       // the sun seen through the wavy surface
-      float cs = dot(rfd, uSunDir);
       const float SR = 0.004675;
-      float px = length(fwidth(rfd));
-      float disc = smoothstep(cos(SR) - 1.5 * px * SR, cos(SR) + 1.5 * px * SR, cs);
+      float radius = 2.0 * sin(SR * 0.5);
+      float discWidth = max(1e-6, 1.5 * refractedFootprint);
+      float disc = 1.0 - smoothstep(radius - discWidth, radius + discWidth, length(rfd - uSunDir));
       Lw += min(lightSun() * shd / (PI * SR * SR), vec3(60000.0)) * disc * step(0.0, uSunDir.y);
       // near the critical angle the window edge is softened by the surface roughness
       float sinT = 1.333 * sqrt(max(1.0 - cosI * cosI, 0.0));
@@ -231,13 +233,13 @@ void main() {
     o = vec4(colU, 1.0);
     return;
   }
-  float nv = max(dot(n, V), 0.02);
+  float nv = clamp(dot(n, V), 0.02, 1.0);
   // The apparent horizon contains many wave faces per pixel. Blend its
   // Fresnel/reflection evaluation toward the integrated horizontal surface.
   float grazingFilter = smoothstep(0.18, 0.035, V.y) * smoothstep(25.0, 150.0, dist);
   n = normalize(mix(n, vec3(0.0, 1.0, 0.0), grazingFilter));
   sigma2 = mix(sigma2, 0.5 * (uMeanSlope + uMssRes), grazingFilter);
-  nv = max(dot(n, V), 0.02);
+  nv = clamp(dot(n, V), 0.02, 1.0);
   vec3 R = reflect(-V, n);
   float below = mix(smoothstep(-0.30, 0.0, R.y), 1.0, smoothstep(600.0, 3500.0, dist));
   R.y = max(R.y, 0.005); R = normalize(R);
@@ -282,6 +284,10 @@ void main() {
   vec2 glitterSlope = S * (1.0 - grazingFilter);
   vec3 nj = normalize(vec3(-(glitterSlope.x + gj.x * sqrt(jv)), 1.0, -(glitterSlope.y + gj.y * sqrt(jv))));
   float alphaJ = max(2.0 * (sigma2 - jv), 4.4e-5);
+  // Integrate normal variation over the rendered pixel, particularly after
+  // adaptive resolution reduces the phone's backing buffer.
+  vec3 ndx=dFdx(nj),ndy=dFdy(nj);
+  alphaJ+=.25*(dot(ndx,ndx)+dot(ndy,ndy));
   // a glint needs the sun disc itself: thin cloud gives diffuse light, not a mirror image
   float discVis = smoothstep(0.55, 0.92, shadow);
   vec3 spec = glitter(nj, V, uSunDir, sunE * discVis, alphaJ) + glitter(nj, V, uMoonDir, moonE * discVis, alphaJ);
@@ -327,20 +333,21 @@ void main() {
   float wnd = smoothstep(3.0, 18.0, uWindSpeed);
   D = max(D, min(trail, 1.2) * 0.86 * (1.0 - 0.35 * wnd));
   vec3 col = refl + body;
+  // Footprints must be evaluated by every fragment, including water without foam.
+  vec4 c1 = uCasc[1];
+  vec2 gF = vG + 0.15 * vD;   // part of the choppy displacement: the pattern rides with the water without being squeezed to hair on steep fronts
+  vec2 x0 = uNoiseOrg + vec2(c1.y * gF.x + c1.z * gF.y, -c1.z * gF.x + c1.y * gF.y);   // absolute lagrangian metres, cascade-1 frame
+  vec2 wl = vec2(c1.y * uWind.x + c1.z * uWind.y, -c1.z * uWind.x + c1.y * uWind.y);
+  // foam is dragged into streaks along the wind; wake foam streams along the wake
+  vec2 foamWakeDir = vec2(c1.y * uWakeA.z + c1.z * uWakeA.w, -c1.z * uWakeA.z + c1.y * uWakeA.w);
+  float tw = clamp(trail / max(D, 0.02), 0.0, 1.0);
+  vec2 dir = normalize(mix(wl, foamWakeDir, tw * tw) + 1e-4);
+  vec2 perp = vec2(-dir.y, dir.x);
+  float stretch = 1.3 + 0.8 * wnd + 1.4 * tw;
+  vec2 base = vec2(dot(x0, dir) / stretch, dot(x0, perp));
+  vec2 pxm = vec2(length(dFdx(base)), length(dFdy(base)));
+  float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
   if (D > 0.012) {
-    vec4 c1 = uCasc[1];
-    vec2 gF = vG + 0.15 * vD;   // part of the choppy displacement: the pattern rides with the water without being squeezed to hair on steep fronts
-    vec2 x0 = uNoiseOrg + vec2(c1.y * gF.x + c1.z * gF.y, -c1.z * gF.x + c1.y * gF.y);   // absolute lagrangian metres, cascade-1 frame
-    vec2 wl = vec2(c1.y * uWind.x + c1.z * uWind.y, -c1.z * uWind.x + c1.y * uWind.y);
-    // foam is dragged into streaks along the wind; wake foam streams along the wake
-    vec2 wk = vec2(c1.y * uWakeA.z + c1.z * uWakeA.w, -c1.z * uWakeA.z + c1.y * uWakeA.w);
-    float tw = clamp(trail / max(D, 0.02), 0.0, 1.0);
-    vec2 dir = normalize(mix(wl, wk, tw * tw) + 1e-4);
-    vec2 perp = vec2(-dir.y, dir.x);
-    float stretch = 1.3 + 0.8 * wnd + 1.4 * tw;
-    vec2 base = vec2(dot(x0, dir) / stretch, dot(x0, perp));
-    vec2 pxm = vec2(length(dFdx(base)), length(dFdy(base)));
-    float pm = max(pxm.x, pxm.y);                                    // metres of foam-space per pixel
     vec2 warp = vec2(vnoise(base * 0.55 + 3.0), vnoise(base * 0.55 + 9.0)) - 0.5;
     vec2 q = base + warp * 0.65;
     // fractal patchiness: every octave that is coarser than a pixel is kept, finer ones fade to their mean
