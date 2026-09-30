@@ -3,11 +3,13 @@ import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS, AsyncReadback } 
 
 const MAXP = 16;
 const PROBE_FS = `
+#include <whirlpool>
 in vec2 vUv;
 uniform sampler2DArray uDisp;
 uniform int uCascades, uCount;
 uniform vec4 uCasc[5];
 uniform vec2 uUV[${MAXP * 5}];
+uniform vec2 uPoints[${MAXP}];
 out vec4 o;
 vec2 toWorld(vec2 v, int i) { vec4 c = uCasc[i]; return vec2(c.y * v.x - c.z * v.y, c.z * v.x + c.y * v.y); }
 vec3 eval(int p, vec2 g) {          // displacement (xz) and height at lagrangian offset g
@@ -28,8 +30,9 @@ void main() {
   vec2 g = vec2(0.0);
   for (int it = 0; it < 4; it++) g = -eval(p, g).xz;     // find the water particle that ends up under the point
   float e = 0.6;
-  float h = eval(p, g).y;
-  float hx = eval(p, g + vec2(e, 0.0)).y, hz = eval(p, g + vec2(0.0, e)).y;
+  float h = eval(p, g).y+whirlSurface(uPoints[p]).x;
+  float hx = eval(p, g + vec2(e, 0.0)).y+whirlSurface(uPoints[p]+vec2(e,0.0)).x;
+  float hz = eval(p, g + vec2(0.0, e)).y+whirlSurface(uPoints[p]+vec2(0.0,e)).x;
   o = vec4(h, (hx - h) / e, (hz - h) / e, 1.0);
 }`;
 
@@ -43,9 +46,10 @@ export class WaveProbe {
     this.points = [];
     this.fresh = false;
   }
-  request(sim, points) {
+  request(sim, points,whirlpool) {
     if (this.reader.busy) return false;
     this.points = points;
+    this.vortexHeights=points.map(([x,z])=>whirlpool.sample(x,z).height);
     const uv = new Float32Array(MAXP * 5 * 2);
     points.forEach((p, k) => {
       const { off } = sim.cascadeUniforms(p[0], p[1]);
@@ -54,7 +58,8 @@ export class WaveProbe {
     const { scale } = sim.cascadeUniforms(0, 0);
     bindFBO(this.fbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
-    this.prog.use().t('uDisp', 0, sim.disp).i('uCascades', sim.count).i('uCount', points.length).v4v('uCasc', scale).v2v('uUV', uv);
+    const p=this.prog.use().t('uDisp', 0, sim.disp).i('uCascades', sim.count).i('uCount', points.length).v4v('uCasc', scale).v2v('uUV', uv).v2v('uPoints',new Float32Array(points.flat()));
+    whirlpool.bind(p,{x:0,z:0});
     drawFS();
     this.reader.request(this.fbo, 0, 0, MAXP, 1);
     return true;

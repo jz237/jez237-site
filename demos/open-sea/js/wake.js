@@ -53,10 +53,11 @@ float hullDist(vec2 b) {
 const TRAIL_FS = `
 #include <common>
 #include <wake>
+#include <whirlpool>
 in vec2 vUv;
 uniform sampler2D uPrev;
 uniform vec2 uCur, uPrevPos, uFwd;     // positions modulo the map size, unit heading
-uniform float uDecay, uAdd, uSize, uTime, uSpeedK, uDiff;
+uniform float uDecay, uAdd, uSize, uTime, uSpeedK, uDiff,uDt;
 out vec4 o;
 float segDist(vec2 p, vec2 a, vec2 b) { vec2 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-6), 0.0, 1.0); return length(pa - ba * h); }
 void main() {
@@ -66,9 +67,10 @@ void main() {
   vec2 rgt = vec2(-uFwd.y, uFwd.x);
   vec2 b = vec2(dot(dq, uFwd), dot(dq, rgt));
   vec2 tx = vec2(1.0 / ${TRAIL_RES}.0);
-  float c0 = texture(uPrev, vUv).r;
-  float nb = (texture(uPrev, vUv + vec2(tx.x, 0.0) * 1.6).r + texture(uPrev, vUv - vec2(tx.x, 0.0) * 1.6).r
-            + texture(uPrev, vUv + vec2(0.0, tx.y) * 1.6).r + texture(uPrev, vUv - vec2(0.0, tx.y) * 1.6).r) * 0.25;
+  vec2 advected=fract(vUv-whirlFlow(dq)*uDt/uSize);
+  float c0 = texture(uPrev, advected).r;
+  float nb = (texture(uPrev, advected + vec2(tx.x, 0.0) * 1.6).r + texture(uPrev, advected - vec2(tx.x, 0.0) * 1.6).r
+            + texture(uPrev, advected + vec2(0.0, tx.y) * 1.6).r + texture(uPrev, advected - vec2(0.0, tx.y) * 1.6).r) * 0.25;
   float prevVal = mix(c0, nb, uDiff);              // slow lateral spreading: the wake widens and thins as it ages
   float stamp = 0.0;
   if (uSpeedK > 0.0) {
@@ -98,16 +100,17 @@ export class Trail {
     this.acc = 0;
   }
   // called with a fixed-ish step; the map only needs ~30 Hz
-  update(dt, yacht, time, U = 0) {
+  update(dt, yacht, time, U = 0,whirlpool) {
     const S = TRAIL_SIZE, m = v => v - Math.floor(v / S) * S;
     const cur = [m(yacht.x), m(yacht.z)];
     const prev = this.prev || cur;
     const speedK = Math.min(1, Math.max(0, (yacht.speed - 0.7) / 2.2));
     const fwd = [Math.cos(yacht.psi), Math.sin(yacht.psi)];
     bindFBO(this.otherF); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
-    this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uPrevPos', prev[0], prev[1]).v2('uFwd', fwd[0], fwd[1])
+    const p=this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uPrevPos', prev[0], prev[1]).v2('uFwd', fwd[0], fwd[1])
       .f('uDecay', Math.exp(-dt / (6.5 / (1 + 0.9 * Math.min(1, Math.max(0, (U - 3) / 15)))))).f('uAdd', Math.min(dt, 0.1) * 1.7).f('uDiff', 1 - Math.exp(-dt)).f('uSize', S).f('uTime', time).f('uSpeedK', speedK)
-      .v4('uWakeA', 0, 0, 1, 0).v4('uWakeB', 0, 0, 0, 0);
+      .v4('uWakeA', 0, 0, 1, 0).v4('uWakeB', 0, 0, 0, 0).f('uDt',Math.min(dt,.1));
+    whirlpool.bind(p,{x:yacht.x,z:yacht.z});
     drawFS();
     [this.cur, this.other] = [this.other, this.cur]; [this.curF, this.otherF] = [this.otherF, this.curF];
     this.prev = cur;

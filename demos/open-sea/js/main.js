@@ -18,6 +18,7 @@ import { Rain, Lightning } from './weather.js';
 import { Fx } from './fx.js';
 import { Fish } from './fish.js';
 import { Wildlife } from './wildlife.js';
+import { Whirlpool } from './whirlpool.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
 import { watchRelease } from './release.js';
@@ -46,6 +47,7 @@ class App {
     this.fx = new Fx();
     this.fish = new Fish();
     this.wildlife = new Wildlife();
+    this.whirlpool = new Whirlpool();
     this.yachtOn = !params.has('noyacht');
     this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
     // everything the panel controls; the simulation eases towards it
@@ -55,6 +57,7 @@ class App {
       cloud: 0.25, rain: 0, lightning: 0,
       water: 'Open ocean', clarity: 0.94, glow: 1.5,
       ev: 0, bloom: 0.02, fov: 50,
+      whirlpool: false,
     };
     this.sound = new Sound();
     this.instant = { tod: false };
@@ -98,6 +101,17 @@ class App {
 
   requestPhoto() { this.photoReq = true; }
 
+  setWhirlpool(on){this.goal.whirlpool=!!on;this.whirlpool.setEnabled(on,this.yacht);}
+  focusWhirlpool(){
+    if(!this.whirlpool.enabled&&this.whirlpool.amount<.01)return;
+    this.rig?.setMode('fly');delete this.cam.forward;delete this.cam.up;
+    const W=this.whirlpool,Y=this.yacht,dx=Y.x-W.x,dz=Y.z-W.z,l=Math.hypot(dx,dz)||1;
+    const aspect=this.w/this.h,back=520*Math.max(1,.9/aspect);
+    this.cam.x=W.x+dx/l*back;this.cam.z=W.z+dz/l*back;this.cam.y=230*Math.max(1,.75/aspect);
+    this.cam.yaw=Math.atan2(W.x-this.cam.x,-(W.z-this.cam.z));
+    this.cam.pitch=Math.atan2(-35-this.cam.y,back);this.cam.fov=56*Math.PI/180;this.goal.fov=56;
+  }
+
   camForward() {
     if(this.cam.forward)return this.cam.forward;
     const c = this.cam, cp = Math.cos(c.pitch);
@@ -137,6 +151,8 @@ class App {
     const G0 = this.goal;
     this.sim.setParams({ wind: G0.wind, swell: G0.swell, chop: G0.chop, hScale: G0.hScale, foam: G0.foam }, S.windDir);
     this.sim.update(dt);
+    this.whirlpool.setEnabled(this.goal.whirlpool,this.yacht);
+    this.whirlpool.update(dt);
     if (this.rig && this.rig.mode === 'fly') this.cam.fov = G0.fov * Math.PI / 180;
     this.fovK = G0.fov / 50;
     const cw = G0.cloudWind;
@@ -144,21 +160,22 @@ class App {
     this.probe.poll();
     if (this.yachtOn) {
       this.yacht.feed(this.probe);
-      this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs });
+      this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs, whirlpool:this.whirlpool });
       this.rig?.syncDeckCamera();
-      this.trail.update(dt, this.yacht, this.time, this.sim.cur.U);
+      this.trail.update(dt, this.yacht, this.time, this.sim.cur.U,this.whirlpool);
     }
     if (this.probe.fresh) {
       this.wildlife.feed(this.probe);
-      this.surfaceAtCam = this.probe.get(5)[0];
-      const c = this.cam.y - this.surfaceAtCam;
-      if (this.under && c > 0.06) this.under = false;
-      else if (!this.under && c < -0.04) this.under = true;
+      this.surfaceFFT = this.probe.get(5)[0]-(this.probe.vortexHeights?.[5]||0);
     }
+    this.surfaceAtCam=(this.surfaceFFT||0)+this.whirlpool.sample(this.cam.x,this.cam.z).height;
+    const cameraClearance=this.cam.y-this.surfaceAtCam;
+    if(this.under&&cameraClearance>.06)this.under=false;
+    else if(!this.under&&cameraClearance<-.04)this.under=true;
     this.probe.fresh = false;
-    this.fish.update(this.time, [this.yacht.x, 0, this.yacht.z], !this.under);
+    this.fish.update(this.time,[this.yacht.x,this.whirlpool.sample(this.yacht.x,this.yacht.z).height,this.yacht.z],!this.under,this.whirlpool);
     this.wildlife.update(dt,this.yacht,{windDir:S.windDir,U:this.sim.cur.U});
-    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints()]);
+    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints()],this.whirlpool);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     R.rain = S.rain;
@@ -199,9 +216,9 @@ class App {
     C.renderEnv(this.sky, sk, camAbs, this.q === 'low' ? 50 : 70, flash);
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
-    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under };
+    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under,whirlpool:this.whirlpool };
     { const fr = Math.hypot(flash[0], flash[1], flash[2]) || 1; ctx.flashLight = flash[3] > 0 ? [flash[0] / fr, flash[1] / fr, flash[2] / fr, Math.min(1.4, this.lightning.flash) * 4.0 / (1 + (fr / 350) * (fr / 350))] : [0, 1, 0, 0]; }
-    this.ctx = ctx;
+    ctx.surfaceAtCam=this.surfaceAtCam;this.ctx = ctx;
 
     // underwater beam bookkeeping for caustics
     const useSun = sk.dayLevel >= sk.moonLevel;
@@ -233,6 +250,7 @@ class App {
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
+      this.whirlpool.bind(p,cam);
       p.v4v('uWhaleRings',this.wildlife.rings(cam));
       p.v4v('uWhaleContacts',this.wildlife.contacts(cam));
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
@@ -247,7 +265,7 @@ class App {
       p.t('uReflTex', 18, this.yacht.reflTex).f('uReflOn', reflOn ? 1 : 0);
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
         .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', !under ? 1 : 0);
-    });
+    },this.whirlpool);
     if(this.yachtOn)this.yacht.drawRig(ctx,VPf,camAbs);
     this.wildlife.drawSpray({...ctx,windDir:S.windDir},VPf);
 

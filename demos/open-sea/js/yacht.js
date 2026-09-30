@@ -5,6 +5,7 @@ import { buildYacht, buildRigging, DIM, SAILS, MAT, sheer, waterlineHalfBeam } f
 import { bindLighting } from './lighting.js';
 import { YachtMaterials } from './yacht-materials.js';
 import { sailWind, advanceSailPhases, SAIL_MOTION_GLSL } from './sail-motion.js';
+import { HullCurrent } from './whirlpool.js';
 import './glsl.js';
 
 export const YACHT_VS = `
@@ -95,6 +96,7 @@ const YACHT_FS = `
 #include <lighting>
 #include <underwater>
 #include <water.uv>
+#include <whirlpool>
 uniform sampler2DArray uDisp;
 uniform sampler2DArray uSurfaceAtlas, uDetailAtlas;
 uniform sampler2D uInstruments, uCompass;
@@ -109,6 +111,7 @@ in float vAO;
 uniform vec3 uSunLocal, uMoonLocal;
 uniform vec3 uSailTri[15];
 uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam, uPixelScale, uRigLines;
+uniform float uCrestLimit;
 uniform int uCurrentSail;
 layout(location = 0) out vec4 o;
 
@@ -140,7 +143,7 @@ float waterHeightAt(vec2 relXZ) {
       h += d.y;
     }
   }
-  return h;
+  return h+whirlSurface(relXZ).x;
 }
 float ggx(float nh, float a2) { float d = nh * nh * (a2 - 1.0) + 1.0; return a2 / (PI * d * d); }
 
@@ -295,7 +298,9 @@ void main() {
 
   // parts below the waterline are lit by the light that made it through the surface, not by the sky
   float wy = vRel.y + uCamY;
-  float hw = wy > uMirrorY + 2.5 ? -1e3 : waterHeightAt(vRel.xz);
+  float datum=whirlSurface(vRel.xz).x;
+  float crestLimit=uWhirlpool.w>.001?datum+uCrestLimit:uMirrorY+2.5;
+  float hw = wy>crestLimit?-1e3:waterHeightAt(vRel.xz);
   float sub = smoothstep(hw + 0.02, hw - 0.10, wy);
   if (sub > 0.0) {
     vec3 sunWv, beamV, Ed0;
@@ -430,6 +435,7 @@ export class Yacht {
 
     // pose
     this.x = 0; this.z = 0; this.psi = 0; this.speed = 2.5;
+    this.current=new HullCurrent();
     this.heave=new Spring(1.8,.75);this.pitchS=new Spring(1.25,.76);this.rollS=new Spring(1.05,.75);
     this.yawS = new Spring(0.9, 0.7);
     this.heaveV = 0; this.pitch = 0; this.roll = 0; this.yaw = 0;
@@ -450,14 +456,16 @@ export class Yacht {
 
   // Points sampled each frame (world xz): centre, bow, stern, starboard, port
   probePoints() {
-    const c = Math.cos(this.psi), s = Math.sin(this.psi);
-    const w = (lx, lz) => [this.x + c * lx - s * lz, this.z + s * lx + c * lz];
+    if(!this.projectProbes){const c=Math.cos(this.psi),s=Math.sin(this.psi);const w=(lx,lz)=>[this.x+c*lx-s*lz,this.z+s*lx+c*lz];return [w(0,0),w(18.8,0),w(-18.8,0),w(0,4.1),w(0,-4.1)];}
+    const c=Math.cos(this.psi+this.yaw),s=Math.sin(this.psi+this.yaw),cp=Math.cos(this.pitch),sp=Math.sin(this.pitch),cr=Math.cos(this.roll),sr=Math.sin(this.roll);
+    const w=(lx,lz)=>[this.x+c*cp*lx+(-s*cr+c*sp*sr)*lz,this.z+s*cp*lx+(c*cr+s*sp*sr)*lz];
     return [w(0,0),w(18.8,0),w(-18.8,0),w(0,4.1),w(0,-4.1)];
   }
 
   feed(probe) {
     if (!probe.fresh) return;
     for (let k = 0; k < 5; k++) this.probeH[k] = probe.get(k)[0];
+    this.probeVortex=probe.vortexHeights?.slice(0,5);
     this.lastSlope = [probe.get(0)[1], probe.get(0)[2]];
   }
 
@@ -479,9 +487,24 @@ export class Yacht {
     const motion=sailWind(U,this.reef);
     this.flutterTarget=motion.amplitude;this.flutterRateTarget=motion.rate;
     this.sailAngTarget = -this.tack * clamp(lerp(0.16, 0.42, smoothstep(0.4, 4.5, U)) + 0.10 * smoothstep(9, 16, U), 0.14, 0.62);
+    if(env.whirlpool.amount>.001){
+      const ax=Math.cos(env.windDir)*U-Math.cos(this.psi)*this.speed-this.current.vx;
+      const az=Math.sin(env.windDir)*U-Math.sin(this.psi)*this.speed-this.current.vz;
+      const apparent=Math.hypot(ax,az),from=Math.atan2(-az,-ax);
+      const angle=Math.atan2(Math.sin(from-this.psi),Math.cos(from-this.psi));
+      // The vortex can turn the bow into the wind. The polar must then lose
+      // drive, rather than propel the yacht equally in every orientation.
+      this.speedTarget*=smoothstep(.55,.96,Math.abs(angle))*(.8+.2*Math.sin(Math.abs(angle)));
+      this.reef=Math.max(this.reef,smoothstep(15,26,apparent));
+      const effort=sailWind(apparent,this.reef);this.flutterTarget=effort.amplitude;this.flutterRateTarget=effort.rate;
+      const side=Math.sign(Math.sin(angle))||this.tack;
+      this.sailAngTarget=-side*clamp(.18+Math.abs(angle)*.25,.16,1.05);
+      this.heelTarget=-side*Math.min(.25,.0016*apparent*apparent*(1-.5*this.reef));
+    }
   }
 
   update(dt, env) {
+    this.projectProbes=env.whirlpool.amount>.001||Math.hypot(this.current.vx,this.current.vz)>.1;
     this.t += dt;
     this._sail(env);
     this.acc += Math.min(dt, 0.1);
@@ -492,30 +515,48 @@ export class Yacht {
       // heading and speed relax towards targets
       let dpsi = this.psiTarget - this.psi;
       dpsi = Math.atan2(Math.sin(dpsi), Math.cos(dpsi));
-      this.psi += dpsi * (1 - Math.exp(-h / 4.0));
+      const W=env.whirlpool,flow=W.sample(this.x,this.z);
+      this.current.step(h,this,W);
+      this.psi += dpsi * (1 - Math.exp(-h / 4.0))*(1-.97*flow.influence)+this.current.omega*h;
       this.speed += (this.speedTarget - this.speed) * (1 - Math.exp(-h / 3.0));
       this.sailAng += (this.sailAngTarget - this.sailAng) * (1 - Math.exp(-h / 1.5));
       this.flutter+=(this.flutterTarget-this.flutter)*(1-Math.exp(-h/.7));
       this.flutterRate+=(this.flutterRateTarget-this.flutterRate)*(1-Math.exp(-h/1.0));
       advanceSailPhases(this.flutterPhases,this.flutterRate,h);
-      this.x += Math.cos(this.psi) * this.speed * h; this.z += Math.sin(this.psi) * this.speed * h;
+      this.x += (Math.cos(this.psi)*this.speed+this.current.vx)*h;
+      this.z += (Math.sin(this.psi)*this.speed+this.current.vz)*h;
 
       const pb = this.probeH;
-      const mean = (pb[0] * 2 + pb[1] + pb[2] + pb[3] + pb[4]) / 6;
-      const pitchT = clamp(Math.atan2(pb[1] - pb[2], 37.6) * 0.72, -0.10, 0.10);
-      const rollT = clamp(-Math.atan2(pb[3] - pb[4], 8.2) * 0.28, -0.10, 0.10);
-      this.y = this.heave.step(mean - 0.10, h);
+      // Remove the old vortex sample from delayed GPU probes, then add the
+      // current analytic surface at every hull point. The funnel must never
+      // lag behind the forces during formation, descent or collapse.
+      const points=this.probePoints(),surface=points.map((p,i)=>pb[i]-(this.probeVortex?.[i]||0)+W.sample(...p).height);
+      const mean = (surface[0]*2+surface[1]+surface[2]+surface[3]+surface[4])/6;
+      const bowSpan=Math.hypot(points[1][0]-points[2][0],points[1][1]-points[2][1]);
+      const sideSpan=Math.hypot(points[3][0]-points[4][0],points[3][1]-points[4][1]);
+      const vp=Math.atan2(W.sample(...points[1]).height-W.sample(...points[2]).height,bowSpan);
+      const crossGrade=(W.sample(...points[3]).height-W.sample(...points[4]).height)/Math.max(sideSpan,.1);
+      const vr=-Math.atan(crossGrade*Math.cos(vp));
+      const wave=pb.map((v,i)=>v-(this.probeVortex?.[i]||0));
+      const pitchT=clamp(clamp(Math.atan2(wave[1]-wave[2],37.6)*.72,-.10,.10)+vp,-1.25,1.25);
+      const rollT=clamp(clamp(-Math.atan2(wave[3]-wave[4],8.2)*.28,-.10,.10)+vr,-1.25,1.25);
+      const waveMean=(wave[0]*2+wave[1]+wave[2]+wave[3]+wave[4])/6;
+      // The large-scale pressure surface is the moving buoyancy datum; only
+      // the short FFT waves excite the heave spring. This prevents artificial
+      // submersion when a 150 m funnel is filled during switch-off.
+      this.y = this.heave.step(waveMean-.10,h)+(mean-waveMean);
       this.pitch = this.pitchS.step(pitchT, h);
-      this.roll = clamp(this.rollS.step(this.heelTarget + rollT, h), -0.5, 0.5);
+      this.roll = clamp(this.rollS.step(this.heelTarget+rollT+this.current.heel,h),-1.35,1.35);
       this.yaw = this.yawS.step(0.012 * Math.sin(this.t * 0.31) + 0.25 * rollT * Math.sign(this.tack), h);
     }
-    if (steps === 6) this.acc = 0;
+    if (steps === 6 && this.acc >= h) this.acc %= h;
     this._matrix();
     this._updateSheets();
   }
 
   _updateSheets(){
     let off=0;
+    this.sheetSides??=new Map();
     const line=(A,B)=>{
       const D=B.map((v,k)=>v-A[k]),l=Math.hypot(...D);for(let k=0;k<3;k++)D[k]/=l;
       const U=[D[2],0,-D[0]],ul=Math.hypot(...U);for(let k=0;k<3;k++)U[k]/=ul;
@@ -529,7 +570,12 @@ export class Yacht {
       }
     }
     for(const {S} of this.sails){if(S.boom)continue;const A=this._sailTri(S,this.sailAng*S.angleScale,this.reef*.6)[2],x=S.id==='sail-3'?17:7;
-      line(A,[x,sheer(x)+.59,-this.tack*Math.min(3.8,waterlineHalfBeam(x)/.91*.80)]);
+      // Hand the working sheet to the new leeward winch as the actual clew
+      // crosses the centreline. A small deadband prevents side chatter.
+      let side=this.sheetSides.get(S.id)??-this.tack;
+      if(Math.abs(A[2])>.12)side=Math.sign(A[2]);
+      this.sheetSides.set(S.id,side);
+      line(A,[x,sheer(x)+.59,side*Math.min(3.8,waterlineHalfBeam(x)/.91*.80)]);
     }
     gl.bindBuffer(gl.ARRAY_BUFFER,this.sheets.vb);gl.bufferSubData(gl.ARRAY_BUFFER,0,this.sheetVerts);
   }
@@ -605,6 +651,7 @@ export class Yacht {
     const setCommon = (p) => {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
+      ctx.whirlpool.bind(p,ctx.cam);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
       p.t('uSurfaceAtlas',7,this.materials.color).t('uDetailAtlas',9,this.materials.detail).t('uInstruments',10,this.materials.instrument).t('uCompass',4,this.materials.compass);
       p.f('uUseSun', ctx.useSun ? 1 : 0).v3('uSunLocal', sunL[0], sunL[1], sunL[2]).v3('uMoonLocal', moonL[0], moonL[1], moonL[2]);
@@ -615,6 +662,7 @@ export class Yacht {
         if (sim.count > 1) p.v2('uNoiseOrg', scale[5] * cx + scale[6] * cz, -scale[6] * cx + scale[5] * cz);
       }
       p.v3v('uSailTri',sailTris).f('uWet', 1)
+        .f('uCrestLimit',Math.max(2.5,(ctx.sim?.cur.hs||0)*3))
         .i('uCurrentSail',-1).f('uRigLines',0).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
         .f('uUnderCam', ctx.under ? 1 : 0).f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };

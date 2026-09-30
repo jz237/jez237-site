@@ -163,6 +163,7 @@ const SNOW_FS = `
 #include <underwater>
 in float vA;
 in vec3 vRel;
+uniform float uLocalDepth;
 layout(location = 0) out vec4 o;
 void main() {
   vec2 d = gl_PointCoord - 0.5;
@@ -171,7 +172,7 @@ void main() {
   vec3 sunW, beam, Ed0;
   underwaterLight(sunW, beam, Ed0);
   float dist = length(vRel);
-  float zc = max(uCamAbs.y * -1.0, 0.0);
+  float zc = uLocalDepth;
   vec3 lit = (Ed0 * 0.06 + beam * 0.35) * exp(-KD * (zc + vRel.y * -1.0 * 0.0));
   vec3 col = lit * exp(-CATT * dist);
   o = vec4(col * 1.6, a * 0.9);
@@ -203,8 +204,8 @@ export class Fish {
     this.nFish = this.fish.length;
   }
 
-  update(t, center, recenter = false) {
-    this.behavior.update(t, center, recenter);
+  update(t, center, recenter = false,field=null) {
+    this.behavior.update(t, center, recenter,field);
     let n = 0;
     for (const f of this.fish) {
       const p = f.p, d = f.heading;
@@ -241,6 +242,7 @@ export class Fish {
     const p = this.snow.use();
     bindLighting(p, ctx);
     p.m4('uVP', VP).v3('uCamAbs', ctx.cam.x, ctx.cam.y, ctx.cam.z).f('uTime', ctx.time).f('uSize', 12).f('uCount', 900 * intensity).f('uUseSun', ctx.useSun ? 1 : 0);
+    p.f('uLocalDepth',Math.max(0,ctx.surfaceAtCam-ctx.cam.y));
     gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE); gl.enable(gl.DEPTH_TEST); gl.depthMask(false);
     gl.bindVertexArray(gl.emptyVAO || (gl.emptyVAO = gl.createVertexArray()));
     gl.drawArrays(gl.POINTS, 0, 2600);

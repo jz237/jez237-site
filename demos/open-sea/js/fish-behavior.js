@@ -20,10 +20,23 @@ export class FishBehavior {
   chooseTarget(f,c) {
     const r=this.rng,range=f.sp===0?8:f.sp===1?18:32;
     f.target=[c[0]+(r()-.5)*range,-2.5-r()*(f.sp===0?7:f.sp===1?11:18),c[2]+(r()-.5)*range];
+    f.targetDatum=this.field?.sample(f.target[0],f.target[2]).height||0;f.target[1]+=f.targetDatum;
     f.memoryAge=0;
   }
   advance(dt,t,c) {
     const fs=this.fish,r=this.rng;
+    if(this.field)for(const f of fs){
+      const field=this.field,flow=field.sample(f.p[0],f.p[2]);
+      const previous=f.waterDatum??0;
+      // The fluid carries the fish; swimming still has its own upright body
+      // wave, effort cycles and gentle steering in this moving habitat.
+      f.p[0]+=flow.vx*dt;f.p[2]+=flow.vz*dt;
+      f.waterDatum=field.sample(f.p[0],f.p[2]).height;f.p[1]+=f.waterDatum-previous;
+      const memoryFlow=field.sample(f.target[0],f.target[2]);
+      f.target[0]+=memoryFlow.vx*dt;f.target[2]+=memoryFlow.vz*dt;
+      const datum=field.sample(f.target[0],f.target[2]).height;
+      f.target[1]+=datum-(f.targetDatum??0);f.targetDatum=datum;
+    }
     // Snapshot perception before any fish moves: avoids update-order bias.
     const cells=new Map(),cell=3.5;
     const key=(x,y,z)=>`${x},${y},${z}`;
@@ -53,8 +66,9 @@ export class FishBehavior {
       // Individual perception: tuna cause sardines to accelerate away.
       if(f.sp===0)for(const g of fs){if(g.sp!==2)continue;const d2=dist2(f.oldP,g.oldP);if(d2<16){for(let k=0;k<3;k++)steer[k]+=(f.oldP[k]-g.oldP[k])*1.5/(d2+.2);if(f.energy>.4){f.state='burst';f.stateTime=Math.max(f.stateTime,.6);}}}
       // Surface and deep-water avoidance are gentle, with no steep dives.
-      if(f.p[1]>-2.0)steer[1]-=(-2-f.p[1])*-2;
-      if(f.p[1]<-24)steer[1]+=(-24-f.p[1]);
+      const surface=this.field?.sample(f.p[0],f.p[2]).height||0;
+      if(f.p[1]>surface-2.0)steer[1]-=(f.p[1]-(surface-2))*2;
+      if(f.p[1]<surface-24)steer[1]+=(surface-24-f.p[1]);
       const desired=norm(steer);desired[1]=clamp(desired[1],-.18,.18);
       let yaw=Math.atan2(f.heading[2],f.heading[0]),targetYaw=Math.atan2(desired[2],desired[0]);
       const delta=Math.atan2(Math.sin(targetYaw-yaw),Math.cos(targetYaw-yaw));
@@ -65,12 +79,17 @@ export class FishBehavior {
       const targetSpeed=f.cruise*pace*(.88+.12*Math.sin(t*.37+f.seed));
       f.speed+=(targetSpeed-f.speed)*(1-Math.exp(-dt*(f.state==='burst'?4:1.6)));
       for(let k=0;k<3;k++)f.p[k]+=f.heading[k]*f.speed*dt;
+      if(this.field){
+        const datum=this.field.sample(f.p[0],f.p[2]).height;
+        f.p[1]+=datum-f.waterDatum;f.waterDatum=datum;
+      }
       const beat=f.state==='glide'?1.2:f.state==='inspect'?1.5:2.8+f.speed/f.len*.52;
       f.phase=(f.phase+dt*beat*Math.PI*2)%(Math.PI*2);
       f.finPhase=(f.finPhase+dt*(1.8+f.r*1.6+f.speed*.45)*Math.PI*2)%(Math.PI*2);
     }
   }
-  update(t,c,recenter=false) {
+  update(t,c,recenter=false,field=null) {
+    this.field=field;
     // Populate the passing habitat while viewed from above. Once submerged,
     // positions stay in world space: swimming and parallax remain continuous.
     if(!this.anchor || (recenter && dist2(this.anchor,c)>12*12)) {

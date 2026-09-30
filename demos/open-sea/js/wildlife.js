@@ -91,6 +91,7 @@ void main(){
 const HEIGHT_FS=`
 #include <common>
 #include <water.uv>
+#include <whirlpool>
 uniform sampler2DArray uDisp;
 uniform float uWaterSpacing,uGridN,uMorph,uCurvature;
 layout(location=0) out float o;
@@ -103,7 +104,7 @@ void main(){
       vec4 d=textureLod(uDisp,vec3(cascUV(i,q),float(i)),lod);dd+=toWorld(d.xz,i);h+=d.y;
     }
   }
-  o=h-uCurvature;
+  o=h-uCurvature+whirlSurface(vec2(0.0)).x;
 }`;
 
 const SPRAY_VS=`
@@ -261,6 +262,7 @@ export class Wildlife {
     bindFBO(this.anchorFbo);gl.disable(gl.DEPTH_TEST);gl.disable(gl.BLEND);gl.depthMask(false);
     const p=this.heightProg.use().t('uDisp',8,ctx.sim.disp).i('uCascades',ctx.sim.count).f('uGridN',ctx.sim.N);
     for(const [i,w] of this.whales.entries()){
+      ctx.whirlpool.bind(p,{x:w.x,z:w.z});
       const {scale,off}=ctx.sim.cascadeUniforms(w.x,w.z);
       const dx=w.x-ctx.cam.x,dz=w.z-ctx.cam.z,distance=Math.max(Math.abs(dx),Math.abs(dz));
       const spacing=.2*Math.pow(2,Math.max(0,Math.ceil(Math.log2(Math.max(distance,1)/9.6))));
