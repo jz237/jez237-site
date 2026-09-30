@@ -49,11 +49,19 @@
           background: var(--panel); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 8px 12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: opacity .25s; }
   body.hide-hud .back { opacity: 0; pointer-events: none; }
   @media (max-width: 640px) { #hint { display: none; } .back { top: auto; bottom: 12px; right: 12px; } }
-  body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
+  #fullscreen { position:fixed;right:112px;top:10px;z-index:6;padding:8px 11px;color:var(--ink);background:var(--panel);border:1px solid rgba(255,255,255,.18);border-radius:10px;font:500 12px system-ui,sans-serif;cursor:pointer; }
+  #fullscreen:focus-visible {outline:2px solid #fff;outline-offset:2px;}
+  #fullscreen:hover {background:rgba(60,65,72,.9);}
+  body.hide-hud #fullscreen {opacity:0;pointer-events:none;}
+  #loading {position:fixed;inset:0;display:grid;place-items:center;color:#ccc;font:12px system-ui,sans-serif;letter-spacing:.12em;pointer-events:none;}
+  @media(max-width:640px){#fullscreen{left:12px;right:auto;top:auto;bottom:12px;}}
+  body.shot #fullscreen,body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
 </style>
 </head>
 <body>
 <canvas id="sea" tabindex="0" aria-label="Real-time ocean simulation"></canvas>
+<div id="loading" role="status">LOADING OCEAN</div>
+<button id="fullscreen" type="button" aria-label="Enter fullscreen" aria-pressed="false">⛶ Fullscreen</button>
 <div id="hud" role="group" aria-label="Ocean controls"></div>
 <a class="back" href="../">◂ DEMOS</a>
 <div id="hint"></div>

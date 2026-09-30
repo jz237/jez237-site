@@ -1,6 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Geometry and textures are generated in code; waves and lighting run on the GPU, and fish perception runs on the CPU. There are no image or model assets and no build step.
+A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 2.9 MB compressed mesh; the browser has no framework dependency or build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -15,7 +15,7 @@ Open `index.html` from any static server. It needs WebGL 2 with float render tar
 | Sky | Hillaire-style atmosphere (transmittance, multiple-scattering and sky-view LUTs) with sun **and** moon as light sources, ozone twilight, stars and a Milky Way. |
 | Clouds | Ray-marched volumetric layer (Perlin-Worley shape + Worley detail, adaptive stride, multiple-scattering approximation). A sun-projected shadow map darkens the sea; a hemi-octahedral environment map feeds reflections and ambient light. |
 | Water shading | Roughness-aware Fresnel, Gaussian-slope glitter for sun and moon, sub-surface colour, a planar mirror image of the yacht in calm water, refraction of the submerged hull, aerial perspective toward the local horizon colour. |
-| Yacht | Procedural 11.5 m sloop. Hull height/pitch/roll follow the water through asynchronous GPU wave probes; wake = analytic Kelvin pattern + persistent foam trail + hull ripples. |
+| Yacht | Blender-built 52 m three-masted schooner inspired by the generated 20–30 crew concept. Five cambered cloth sails, reefing, brass-rimmed portlights, framed deckhouse windows, teak deck, winches, anchors, tender, fine tubular rigging and a submerged keel/rudder. Hull height/pitch/roll follow asynchronous GPU wave probes; scaled Kelvin wake, persistent foam trail and hull ripples. |
 | Weather | Rain streaks, a patchy rain veil, fractal lightning with return strokes that light the clouds and the sea. |
 | Ripples | Damped 2D wave equation on a toroidal height field with a **fixed 1/120 s step** (see below). |
 | Underwater | Beer-Lambert absorption (red dies first), colour-preserving path radiance (no grey veil), caustic-modulated sun shafts, Snell's window with total internal reflection outside it, fish schools and marine snow. |
@@ -49,7 +49,7 @@ The panel (top left, `×` closes it) has five sections:
 * **Fly**: drag to look, `W A S D` move, `Q`/`E` down/up, `Shift` fast, `Ctrl` slow, wheel changes speed. On touch:
   drag to look, pinch to move, two-finger vertical drag for altitude. Fly straight through the surface to go underwater.
 * **Boat** orbits the yacht, **Dive** orbits it from below.
-* `H` hides the panel, `P` saves a PNG, `F` fullscreen, `1`-`4` switch camera mode.
+* The visible **Fullscreen** button enters or exits fullscreen; `F` does the same. `H` hides the controls, `P` saves a PNG, `1`-`4` switch camera mode.
 
 ## Development
 
@@ -57,7 +57,7 @@ The harness scripts need Playwright: `cd scripts/open-sea && npm install && npx 
 
 ```bash
 python3 -m http.server 8791            # from the repository root
-node scripts/open-sea/shot.mjs out.png "t=16.5&sea=4&cloud=0.35&ycam=30,5,60" 8 2 1280x720
+node scripts/open-sea/shot.mjs out.png "t=15.5&sea=2&cloud=0.2&ycam=63,20,-75,17" 8 2 1280x720
 node scripts/open-sea/review-set.mjs out-dir 1280x720 30      # the standard set of review stills
 ```
 
@@ -82,3 +82,13 @@ A GPU ripple stress run alternated 1/240, 1/60, 1/30, 0.18, 0.004, 0.5, 1/120 an
 An independent critical reviewer found a substantial improvement and rated the calmer stills around 6-7/10, but **did not judge them reliably photographic**. The remaining larger limitations are the procedural yacht/fish geometry, a single volumetric cloud layer, cellular foam close up, and a height-field wave model that cannot overturn breakers or throw airborne spray. Distinct underwater shafts are subtler than the broad sun glow. Procedural surf, wind, rain and thunder sound is available, but its realism has not been assessed by ear. Real GPU frame rate depends on resolution and the scene; AUTO adjusts resolution. These limits are documented rather than disguised as photographic success.
 
 WebGL 2 with `EXT_color_buffer_float` is required. Without it the page shows an explanation.
+
+## Large schooner asset
+
+`blender --background --factory-startup --python scripts/open-sea/build-schooner.py -- <absolute-repository-path> <absolute-output-directory>` regenerates the editable `schooner-52m.blend`, a studio render, and `assets/schooner.json` / `assets/schooner.bin.gz`. Blender 5.2 was used. The browser loads the mesh with `DecompressionStream`, uses 13 material classes, and animates each sail about its actual luff axis. Mesh export includes 140,661 vertices and 199,876 triangles, plus eight animated mainsheet and headsail sheet tubes.
+
+The tour and boat/dive cameras, buoyancy probes, sailing speed and wake have been resized for the larger vessel. Fine metal highlights include derivative-based normal filtering to reduce distant sparkle. The monochrome fullscreen button remains visible with the control panel folded, and reflects fullscreen state in its label and accessibility attributes.
+
+This is a detailed interpretation of an artistic concept, with exterior fittings and underwater geometry. It is not an exact reconstruction from naval plans: interiors, crew models, structural certification and a validated 20–30-person capacity are not included. Browser shading is designed for real-time performance and differs from the Cycles studio render.
+
+The final replacement was exercised in daylight, close deck views, a reefed storm and below the hull, with no browser errors. Fullscreen entry/exit through the button and F shortcut, a 390-pixel mobile layout, Dive and the tour handoff passed. LOW quality sustained approximately 60 fps on the tested RTX 5090; other devices and higher settings can differ. An outside reviewer identified self-shadow bands and detached running rigging; own-sail proxy shadows are excluded, headsail furling preserves the forestay, and mainsheets update with their booms. Thin static rigging is blended after opaque surfaces without depth writes.

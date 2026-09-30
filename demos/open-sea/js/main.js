@@ -10,6 +10,7 @@ import { Clouds } from './clouds.js';
 import { Lighting, bindLighting } from './lighting.js';
 import { skyState, starRotation } from './astro.js';
 import { Yacht } from './yacht.js';
+import { loadYachtGeometry } from './yacht-geo.js';
 import { WaveProbe } from './probe.js';
 import { Trail, TRAIL_SIZE } from './wake.js';
 import { Ripples, RIPPLE_SIZE } from './ripples.js';
@@ -159,7 +160,7 @@ class App {
       const Y = this.yacht, c = Math.cos(Y.psi), s = Math.sin(Y.psi);
       const at = (lx, lz) => [m(Y.x + c * lx - s * lz), m(Y.z + s * lx + c * lz)];
       const k = 0.5 * Math.min(1, Y.speed / 3);
-      R.sources.push([...at(5.2, 0), 0.4, k], [...at(2.5, 1.5), 0.35, k * 0.5], [...at(2.5, -1.5), 0.35, k * 0.5], [...at(-4.6, 0), 0.5, k * 0.6]);
+      R.sources.push([...at(22.2,0),.8,k],[...at(10.5,4.0),.7,k*.5],[...at(10.5,-4.0),.7,k*.5],[...at(-21.8,0),1.2,k*.6]);
     }
     R.update(dt);
     this.lightning.update(dt, S.lightning, this.cam, this.cam.yaw);
@@ -226,7 +227,7 @@ class App {
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
       p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
-      p.v4('uWakeB', Y.speed, 0.11 * Math.pow(Y.speed / 3, 2), this.yachtOn ? 1 : 0, 0);
+      p.v4('uWakeB', Y.speed, 0.20 * Math.pow(Y.speed / 6, 2), this.yachtOn ? 1 : 0, 0);
       p.t('uTrail', 14, this.trail.cur);
       const Sm = TRAIL_SIZE, mod = v => v - Math.floor(v / Sm) * Sm;
       p.v3('uTrailInfo', mod(cam.x), mod(cam.z), Sm);
@@ -271,7 +272,7 @@ class App {
 }
 
 let app;
-try { app = new App(); } catch (e) {
+try { await loadYachtGeometry(); app = new App(); document.getElementById('loading')?.remove(); } catch (e) {
   // no WebGL 2 / float render targets / shader failure: say so instead of leaving a black page
   const f = document.getElementById('fail');
   if (f) {

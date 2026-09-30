@@ -229,21 +229,21 @@
     "id": "011",
     "title": "Open Sea",
     "category": "3D · Real-time ocean",
-    "description": "A real-time WebGL 2 ocean with five spectral wave cascades. Follow a sailing yacht from glassy calm into a storm, through sunset, moonlight, rain and lightning, then dive into clear blue water with sun shafts and independently swimming fish. A slow cinematic tour hands over to free flight.",
+    "description": "A real-time WebGL 2 ocean with five spectral wave cascades and a detailed 52 m, three-masted schooner. Sail from glassy calm into a storm, through sunset, moonlight, rain and lightning, then dive into blue water with light shafts and independently swimming fish. A slow cinematic tour hands over to free flight, with a visible fullscreen control.",
     "url": "open-sea/",
     "image": "assets/open-sea.jpg",
-    "imageAlt": "A sailing yacht reflected in a simulated blue ocean beneath broken clouds",
+    "imageAlt": "A detailed navy-hulled three-masted schooner sailing across a blue simulated ocean",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/open-sea",
     "features": [
       "Sea states from glassy calm to storm",
       "Sunrise to moonlit night, clouds that shadow the water",
-      "Rain, lightning and a sailing yacht with a wake",
+      "Rain, lightning and a detailed schooner with a wake",
       "Underwater view with light shafts and fish"
     ],
     "facts": [
       "FFT ocean · 5 wave cascades",
-      "WebGL 2 · no image or model files",
-      "Slow cinematic tour, then free flight"
+      "Blender-built 52 m schooner",
+      "Cinematic tour · Free flight · Fullscreen"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Drag or use movement keys to take over · H hides the controls"
   }
