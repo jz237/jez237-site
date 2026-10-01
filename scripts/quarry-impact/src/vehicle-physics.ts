@@ -1,4 +1,4 @@
-import {isClassicKind} from './classic-vehicle-specs';
+import {isClassicKind,classicWheelHalfTrack} from './classic-vehicle-specs';
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
@@ -19,9 +19,9 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   .setMassProperties(mass,{x:0,y:-.06,z:0},{x:mass*((d.halfLength*2)**2+1.3**2)/12,y:mass*((d.halfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
   .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
- const roof=world.createCollider(api.ColliderDesc.cuboid(classic?.78:.65,classic?.29:.24,classic?(estate?1.02:.56):.65).setTranslation(0,classic?.53:kind==='coupe'?.12:.2,classic?(estate?-.81:-.32):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+ const roof=world.createCollider(api.ColliderDesc.cuboid(classic?.70:.65,classic?.22:.24,classic?(estate?1.195:.72):.65).setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(estate?-.98:-.40):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;
- for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,.375);
+ for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,.375);
   controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,.24);controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
  }
  return {body,collider,roof,controller};
@@ -38,7 +38,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  for(let i=0;i<4;i++){
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
-  controller.setWheelChassisConnectionPointCs(i,{x:(i%2?1:-1)*(def.halfWidth-.04)+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
+  controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
   controller.setWheelSuspensionRestLength(i,corner.rest+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
   controller.setWheelRadius(i,corner.radius);controller.setWheelMaxSuspensionForce(i,corner.force);controller.setWheelSideFrictionStiffness(i,corner.sideGrip);controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
   controller.setWheelEngineForce(i,force*corner.power*((kind==='coupe'||isClassicKind(kind))?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]));

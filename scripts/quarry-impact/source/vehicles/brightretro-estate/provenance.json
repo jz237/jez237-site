@@ -1,0 +1,19 @@
+{
+  "author": "BrightRetro",
+  "source": "https://opengameart.org/content/muscle-car-3d-model",
+  "license": "CC-BY-3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+  "originalArchive": "../brightretro-muscle/original.zip",
+  "modifications": [
+    "Original estate roof, glazing, pillars, cargo cabin, furnishings and roof rack",
+    "Four independently partitioned door assemblies with handles and interior panels",
+    "Original wheel pivots retained for candidate inspection; production suspension alignment pending",
+    "Original embedded texture bytes retained with OBJ to glTF UV conversion",
+    "Lowered and tapered cabin with rounded roof corners and a closed crowned roof skin",
+    "Added fixed engine, valve covers, air cleaner, radiator, firewall and chassis rails",
+    "Playable export recenters axle midpoint by 15 mm and fits 375 mm tires to the measured 2.82 m wheelbase and 1.58 m wheel-centre track"
+  ],
+  "status": "Integrated into local and VENGEANCE test-candidate wagon; not installed to original game or published",
+  "candidateSha256": "14127c94e0a52b2059121dc261849af8085f38f98250437d0404b37c7ea8bd12",
+  "playableSha256": "1d912cb7aae351d1b4cbdeb5c6a3d0b867ce7c74ceb43c4fd347291fe19039df"
+}

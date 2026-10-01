@@ -1,4 +1,3 @@
-import {buildClassicVehicle} from './classic-vehicles';
 import {CLASSIC_VEHICLES,isClassicKind} from './classic-vehicle-specs';
 import * as THREE from 'three';
 import { GLTFLoader } from './model-loader';
@@ -67,13 +66,13 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const legacyKinds: CarKind[] = ['coupe', 'sedan', 'hatch'];
-  const kinds: CarKind[] = [...legacyKinds,'muscle','wagon'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon'];
+  const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
-  const [loaded] = await Promise.all([Promise.all(legacyKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
+  const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
   for (const [index, kind] of kinds.entries()) {
     progress('Preparing ' + kind + ' bodywork');
-    const gltf = isClassicKind(kind)?{scene:buildClassicVehicle(kind)}:loaded[index];
+    const gltf = loaded[index];
     alignWreckSeams(gltf.scene);
     // Keep the window seals with the moving door instead of batching them
     // into a fixed material group across the whole car.
@@ -143,10 +142,10 @@ export function cloneCar(kind: CarKind, color: number) {
     if (old.name.startsWith('Interior')) m.roughness = Math.max(.7, m.roughness);
     if (o.name.startsWith('glass_')) {
       m.transmission = 0;
-      m.color.setHex(0x476166);
+      m.color.setHex(isClassicKind(kind)?0x293b43:0x476166);
       m.metalness = 0.15;
       m.transparent = true;
-      m.opacity = 0.28;
+      m.opacity = isClassicKind(kind) ? .55 : .28;
       m.side = THREE.FrontSide;
       m.depthWrite = false;
       m.roughness = 0.055;

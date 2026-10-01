@@ -1,0 +1,10 @@
+{
+  "baseline": "0309548bc3f0c7f105d1b9fe1ac4abd9976dfb31",
+  "files": {
+    "src/demo-director.ts": {
+      "snapshot": "src-demo-director.ts.gz",
+      "before": "249d70713baad06d1332b26f0633b235511485307038e711934ebf272457952e",
+      "after": "e66a21fa1936ce15d4c1a1e1cc03358742e2c6ffe21e6a7231667b0e9b59019a"
+    }
+  }
+}

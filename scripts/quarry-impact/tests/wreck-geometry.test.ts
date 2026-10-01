@@ -41,7 +41,7 @@ test('skin and window use the same metre-scale deformation across different mesh
 });
 
 test('actual three-car wrecks bend skin, structure and screens, repair exactly and replay identically',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|wheel-machining)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){const world=new R.World({x:0,y:-9.81,z:0}),car=new Vehicle(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);car.place(0,0,0);
   const meshes=[...car.panels,...car.glass],capture=()=>meshes.map(p=>({p:new Float32Array(p.geometry.attributes.position.array),n:new Float32Array(p.geometry.attributes.normal.array),visible:p.visible}));const intact=capture();

@@ -1,0 +1,19 @@
+{
+  "author": "BrightRetro",
+  "title": "Muscle Car 3D Model",
+  "source": "https://opengameart.org/content/muscle-car-3d-model",
+  "download": "https://opengameart.org/sites/default/files/MuscleCar.zip",
+  "license": "CC-BY-3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+  "archiveSha256": "5833f9d6caa93e810c9d79672b2cc25df8b02f8cc467a969ff46eaeb9ce8731c",
+  "modifications": [
+    "OBJ line records removed; polygon records preserved",
+    "BMP textures converted losslessly to PNG",
+    "Runtime importer smooths normals, rotates to +Z forward and partitions body triangles into damage panels",
+    "Original body diffuse texture retained in source set but replaced by recolorable paint in preview",
+    "Embedded glTF texture V coordinates converted from OBJ convention; PNG pixels preserved",
+    "Body retains original proportions; axle midpoint recentered by 15 mm, tires fitted to 375 mm radius",
+    "Door trim and bumpers separated for damage; interior door cards, chassis rails, radiator and engine structure added"
+  ],
+  "status": "Integrated into local and VENGEANCE test-candidate muscle template; not published"
+}
