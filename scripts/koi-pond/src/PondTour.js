@@ -1,6 +1,6 @@
-// Pond-only camera tour: every composition targets water or koi in the open basin.
+// Pond camera tour: water, koi, and one portrait each of the pond turtle and frog.
 // Camera motion follows the living fish without steering their simulation.
-export function makePondTour({THREE, getFish, sdf, depth, getObstacles = () => [], waterY = 0}) {
+export function makePondTour({THREE, getFish, sdf, depth, getObstacles = () => [], getTurtle = () => null, getFrog = () => null, getAspect = () => 1.5, waterY = 0}) {
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const mix = (a, b, u) => a.clone().lerp(b, u);
   const center = V(0, waterY - .35, 1.2);
@@ -54,7 +54,7 @@ export function makePondTour({THREE, getFish, sdf, depth, getObstacles = () => [
     const under = mode === 'side' || mode === 'follow';
     let fish, subject = center.clone(), heading = 0, first = true;
     return {
-      cap, T, under, skip: () => !getFish().length,
+      cap, T, under, kind: 'koi', skip: () => !getFish().length,
       start() {
         fish = chooseFish(fish); first = true;
         if (fish) { subject.copy(fish.p); heading = fish.heading; }
@@ -81,15 +81,47 @@ export function makePondTour({THREE, getFish, sdf, depth, getObstacles = () => [
     };
   }
 
+  // Animal portraits follow their current animation pose. Winter-hidden animals
+  // are skipped; the camera never interrupts basking, swimming or frog jumps.
+  function portrait(cap, T, getAnimal, kind) {
+    let subject = center.clone(), heading = 0, first = true;
+    const frog = kind === 'frog';
+    return {
+      cap, T, kind, skip: () => !getAnimal(),
+      start() {
+        const animal = getAnimal(); first = true;
+        if (animal) { subject.copy(animal.p); heading = animal.heading; }
+      },
+      frame(u, dt = 1 / 60) {
+        const animal = getAnimal();
+        if (animal) {
+          const k = first ? 1 : 1 - Math.exp(-Math.min(.1, dt) * 3);
+          subject.lerp(animal.p, k);
+          heading += Math.atan2(Math.sin(animal.heading - heading), Math.cos(animal.heading - heading)) * k;
+        }
+        first = false;
+        const a = heading + (frog ? -.35 : 1.9) + .5 * u;
+        // Preserve room for the whole animal when the horizontal field is narrow.
+        const framing = Math.max(1, .85 / Math.max(.3, getAspect()));
+        const radius = (frog ? .34 - .06 * u : .65 - .1 * u) * framing;
+        const height = (frog ? .18 - .03 * u : .38 - .08 * u) * framing;
+        const pos = V(subject.x + Math.cos(a) * radius, Math.max(waterY + (frog ? .14 : .35), subject.y + height), subject.z - Math.sin(a) * radius);
+        return {pos, look: subject.clone().add(V(0, .035, 0))};
+      }
+    };
+  }
+
   return [
     fixed('Across the koi pond', 12, [2.6, 5.4, 6], [-1.4, 4.8, 5.7], [0, -.35, 1.4]),
     tracking('Koi from above', 12, 'overhead', 1.7, .7),
     fixed('At the water’s edge', 10, [2.7, .55, 3.7], [1.8, .45, 1.6], [-.3, -.32, 1.3], [-.45, -.4, .3]),
     tracking('A closer look at the koi', 12, 'portrait', 2.3, .55),
+    portrait('Yellow-bellied slider', 10, getTurtle, 'turtle'),
     fixed('The pond from the opposite bank', 11, [-2.5, 2.4, 0], [-1.4, 2.7, -1.6], [.3, -.35, 2.5]),
     fixed('Beneath the surface', 12, [1.2, -.48, 3.2], [-.8, -.65, 1.5], [-.4, -.5, 1.2], [.5, -.6, .2], true),
     tracking('Swimming alongside the koi', 14, 'side', Math.PI / 2, .3),
     fixed('Water lilies and passing koi', 10, [.35, 1.9, 3.7], [-.1, 1.5, 2.6], [-1.5, -.12, 1.6]),
+    portrait('Pond frog', 9, getFrog, 'frog'),
     tracking('Following the koi underwater', 14, 'follow', Math.PI, .25),
     fixed('Patterns beneath the ripples', 12, [-.9, 4.6, 2.5], [1.1, 4.1, 2], [0, -.4, 1.3]),
     fixed('A quiet pond perspective', 12, [1.4, 2.3, 4.5], [2.3, 3.8, 5.3], [-.2, -.3, 1])
