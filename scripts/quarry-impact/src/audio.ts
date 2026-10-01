@@ -1,3 +1,4 @@
+import {classicEngineVoice} from './classic-vehicle-specs';
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
@@ -104,8 +105,8 @@ export class Sound {
     for (const car of cars) {
       const loops = new Map<string, Loop>();
       for (const name of ['idle', 'low', 'mid', 'high', 'load', 'damaged']) {
-        const loop = this.loop(car.kind + '-' + name, this.engineBus!);
-        if (loop) loops.set(name, loop);
+        const loop = this.loop(classicEngineVoice(car.kind).bank + '-' + name, this.engineBus!);
+        if (loop) {loop.source.playbackRate.value=classicEngineVoice(car.kind).pitch;loops.set(name, loop);}
       }
       for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
         const loop = this.loop(name, this.fxBus!);
@@ -218,11 +219,11 @@ export class Sound {
       );
       if (prior && !wreckInspection) {
         if (car.gear !== prior.gear && Math.abs(car.speed) > 3) {
-          this.shot(car.kind + '-shift', car.current, 0.18);
-          this.shot(car.kind + '-exhaust', car.current, 0.12);
+          this.shot(classicEngineVoice(car.kind).bank + '-shift', car.current, 0.18);
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.12);
         }
         if (prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
-          this.shot(car.kind + '-exhaust', car.current, 0.14);
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
         if (car.slip > 3 && prior.slip <= 3)
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
@@ -260,7 +261,7 @@ export class Sound {
           v = Math.max(0, 1 - Math.abs(rpm - centers[name]) / 2100) * level;
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
-            Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler)),
+            Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
             c.currentTime,
             0.13,
           );

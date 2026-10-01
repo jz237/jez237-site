@@ -6,8 +6,8 @@ Status: **in progress; parity has not been achieved**. The original objective re
 ## Evidence baseline (October 1, 2026)
 
 Vengeance source: `D:/Projects/hidden reef header/quarry-impact`.
-Latest published frontend: `17d89af8586bfd4dec8cd3f20c06901eafa959ef` (October 1).
-The saved replay library is installed on VENGEANCE and published after 303 frontend tests, 76 live asset hash checks, browser verification, and full-site deployment checks.
+Latest published frontend: `b7c61a500f1b85db36be92b06d4ce4365300dc98` (October 1), game bundle `assets/index-CL4u9ViM.js`.
+The online-event-capable client is installed on VENGEANCE and published after 315 frontend tests, 76 live asset hash checks, browser gameplay verification, and full-site deployment checks.
 The existing live multiplayer Worker remains the earlier eight-player version: deployment of the tested new backend is blocked by missing Free-account login permissions.
 The working project is untracked inside a different parent repository; do not commit unrelated parent changes.
 A source snapshot and baseline Git commit are in the Linux working copy for reproducible diffs.
@@ -36,7 +36,7 @@ Every row requires functional gameplay evidence, persistence where applicable, r
 | Waypoint / free-order / random modes | Solo and authoritative online ordered/free/random events, server-seeded order, persistent progress, world/minimap targets, shortest-road AI; online installed | Backend publication, distinct waypoint courses and extended balance |
 | Opposing-direction racing | Alternating24-car opposing grids, separate checkpoint routes, AI and individual scoring | Online support, new head-on layouts and full-scene endurance/balance |
 | Track variety | One quarry, forward/reverse circuit, one arena | Multiple distinct locations and circuit/oval/figure-eight/intersection/rallycross/jump/arena layouts, reverse routes, coherent collisions and navigation |
-| Vehicle variety | Three modern cars | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
+| Vehicle variety | Three modern cars plus two original classics validated in the release candidate | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
 | Garage paint and saved designs | Installed body/trim colors; local 32-layer editor with five surfaces, shapes/text/weathering, transforms, groups and setup/replay persistence | Freehand/image tools, cosmetic dents; online replication implemented/tested but backend publication blocked |
 | Performance upgrades / metrics | Installed solo engine/tires/armor; local pending authoritative online setups and stock-performance rules | Measured stats, further component upgrades, visible fitted parts and performance classes |
 | Tuning / presets / sharing | Installed five tuning axes, eight presets per car, setup exchange; local pending online/lobby application | Simulated stats, remote/full-scene verification and leaderboard tune sharing |
@@ -123,3 +123,11 @@ Named browser-local recordings, search, import/export, playback and confirmed de
 The multiplayer authority now supports configurable lap counts, reverse/opposing circuit routes, ordered/free/random waypoint rounds, and timed score derbies with automatic repair and respawn. Rules, waypoint progress, server-selected random seeds, score and respawn deadlines survive room restoration and cups. Clients render server progress; hosts select rules in lobby/rematch screens. Unsupported clients cannot join custom-rule events. See ONLINE_EVENTS_VALIDATION.md for installation and validation status. This does not complete overall Wreckfest 2 parity.
 
 Online event validation: 315 frontend tests, 34 backend tests, six browser checks, five full-field AI runs, actual game waypoint/reconnect and timed score-result rendering, both typechecks/build and Worker dry run passed. Installed build: `assets/index-CL4u9ViM.js`. Public release remains the replay-library build until a supporting Worker can be published.
+
+## Current priority: new vehicles and demo mode
+
+The user explicitly redirected effort to new vehicles and demo mode. Ironfield track work is saved in Git stash `Ironfield course work paused to prioritize vehicles and demo`; it is not installed or published. Its first course tests pass, but the later two-lap AI completion gate fails and the scene preview is unverified. Resume only after the vehicle/demo priority is handled.
+
+The current local and VENGEANCE candidate adds separate demo options for field size, mixed versus selected-car lineups, laps and derby duration, opening camera, repeat/alternate/stop sequencing, a next-event control and HUD hiding. Automatic following now chooses active cars with fixed camera views. The complete VENGEANCE suite now passes 326 tests and the production candidate build passes. Release installation and publication are being prepared.
+
+Two original procedural workshop models, Bramble V8 and Millhaven Estate, have distinct proportions, wheelbases, cabin glazing, interiors, wheel openings and named damage panels. Both render in the development showroom and pass geometry checks. Both are now integrated into solo and demo lineups, the garage, setup exchange and compressed replay playback. They use distinct rear-wheel-drive handling, mass, gearing, suspension, roof colliders and damage anchors. Tests cover actual Rapier acceleration/braking, production mesh batching and wheel alignment, deformation/repair and backward replay seeks. Their V8 sound reuses an existing bank at distinct pitches. Browser checks confirm the estate garage and live six-car derby. They remain first-pass models requiring visual and sound refinement; online integration and broader vehicle parity remain open.

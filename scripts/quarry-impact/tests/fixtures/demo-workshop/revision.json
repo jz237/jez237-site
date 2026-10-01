@@ -1,0 +1,20 @@
+{
+  "baseline": "f01e92e7191adfa459538038963a51f63ab8c757",
+  "files": {
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "6d863aa7d27f32b35d112400f71f20efb7d12a0f81a5d9826d8b983b1a8d4c8d",
+      "after": "7a1609d043077bf8daf46f5d0be7d07d0aced265d5fd0ce7a113bf8c32086b32"
+    },
+    "src/style.css": {
+      "snapshot": "src-style.css.gz",
+      "before": "57ebac5717247711015ca695cfd2a28531640bf87520d5da7e5c476c1695f407",
+      "after": "a382855cc131d891147ad971fb64b3073bf56f0b4d97ffa24e05caaaae07908f"
+    },
+    "src/demo-director.ts": {
+      "snapshot": "src-demo-director.ts.gz",
+      "before": "3da911fdea5d2c4883950fc33045e1a2be3d410104990c4dd40bb274c553eed0",
+      "after": "249d70713baad06d1332b26f0633b235511485307038e711934ebf272457952e"
+    }
+  }
+}

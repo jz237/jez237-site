@@ -1,7 +1,7 @@
 import {vehicleSpecification} from './vehicle-physics';
 export {axleDrive} from './vehicle-physics';
 import {normalizeLivery,normalizeGroups,type LiveryLayer,type LiveryGroup} from './livery';
-import { DEFINITIONS, type CarKind } from './rules';
+import { DEFINITIONS, CAR_KINDS, type CarKind } from './rules';
 
 export type Tune = { gearing: number; suspension: number; differential: number; brakeBias: number; steering: number };
 export type Setup = { paint: number; trim: number; engine: number; tires: number; armor: number; tune: Tune; livery:LiveryLayer[] };
@@ -9,7 +9,7 @@ export type Preset = { name: string; setup: Setup };
 export type GarageCar = { setup: Setup; presets: Preset[]; groups:LiveryGroup[] };
 export type Garage = { version: 1; cars: Record<CarKind, GarageCar> };
 export const GARAGE_KEY = 'quarry-impact-garage-v1';
-export const KINDS: CarKind[] = ['coupe', 'sedan', 'hatch'];
+export const KINDS: CarKind[] = CAR_KINDS;
 export const TUNE_FIELDS: { key: keyof Tune; label: string; low: string; high: string; help: string }[] = [
   { key: 'gearing', label: 'Final drive', low: 'Top speed', high: 'Acceleration', help: 'Short gearing increases wheel torque and shifts sooner; long gearing raises the speed ceiling.' },
   { key: 'suspension', label: 'Suspension', low: 'Soft', high: 'Firm', help: 'Changes spring stiffness, damping and ride height. Soft absorbs uneven ground; firm limits body movement.' },

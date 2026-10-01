@@ -1,6 +1,7 @@
+import {CLASSIC_VEHICLES} from './classic-vehicle-specs';
 import { circuitSurfaceAt } from './circuit-grip';
 export type Mode = 'derby' | 'playground' | 'race';
-export type CarKind = 'coupe' | 'sedan' | 'hatch';
+export type CarKind = 'coupe' | 'sedan' | 'hatch' | 'muscle' | 'wagon';
 export const clamp = (n: number, a: number, b: number) =>
   Math.max(a, Math.min(b, n));
 export const wrap = (v: number) => Math.atan2(Math.sin(v), Math.cos(v));
@@ -35,7 +36,10 @@ export const DEFINITIONS = {
     wheelbase: 2.46,
     color: 0xafa044,
   },
+  ...CLASSIC_VEHICLES,
 };
+export const CAR_KINDS=Object.keys(DEFINITIONS)as CarKind[];
+export const isCarKind=(value:unknown):value is CarKind=>typeof value==='string'&&Object.hasOwn(DEFINITIONS,value);
 export function damageFromImpulse(impulse: number) {
   return clamp((impulse - 1700) / 930, 0, 28);
 }

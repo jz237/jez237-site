@@ -656,3 +656,7 @@ kbd {
 #online-event-rules {border:1px solid #7c806b;margin:18px 0;padding:16px;min-width:0;}
 #online-event-rules legend {color:#e6d29d;font-size:12px;letter-spacing:.12em;padding:0 8px;}
 #online-event-rules input {width:100%;box-sizing:border-box;}
+
+#demo-setup label{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0}#demo-setup input,#demo-setup select{max-width:240px;padding:8px;background:#25332e;color:#eee8d8;border:1px solid #819083}#demo-setup input{width:90px}.demo-clean>.hud{visibility:hidden}.demo-clean>.hud::after{content:"H to show controls";visibility:visible;position:fixed;bottom:18px;left:22px;color:#fff9;font-size:11px}.demo-clean>.overlay{visibility:visible}
+
+.car-picker{flex-wrap:wrap;max-width:600px}
