@@ -17,6 +17,7 @@ const WATER_VS = `
 #include <water.uv>
 #include <whirlpool>
 #include <hull-water>
+#include <deck-wash>
 layout(location = 0) in vec2 aGrid;
 uniform mat4 uVP;
 uniform vec2 uCenterRel;   // level centre relative to the camera (xz)
@@ -171,6 +172,7 @@ const WATER_FS = `
 #include <foam>
 #include <whirlpool>
 #include <hull-water>
+#include <deck-wash>
 in vec3 vRel;
 in vec2 vG;
 in float vJ;
@@ -181,6 +183,7 @@ uniform sampler2DArray uDisp;
 uniform vec2 uCenterRel;
 uniform sampler2D uHullWet;
 uniform float uHullWetOn;
+uniform float uDeckWashOn;
 uniform sampler2DArray uFoam;
 uniform float uMssRes, uMeanSlope, uTime, uHs, uGlowE;
 uniform vec3 uRw, uSSS;    // water body colour and the colour of light transmitted through thin crests
@@ -245,6 +248,11 @@ void main() {
   vec3 boatPoint=hullNearby?hullLocal(rel):vec3(1000.0);
   float hullGap=hullNearby?hullSolidGap3(boatPoint):1000.0;
   bool hullClip=hullNearby&&hullGap<-.015;
+  // Overtopping water becomes a shallow layer that drains on the deck. A
+  // genuinely submerged deck still uses the ocean surface above that layer.
+  bool deckClip=uDeckWashOn>.5&&hullNearby&&deckFootprint(boatPoint.xz)
+    &&boatPoint.y>=deckFloor(boatPoint.xz)-.015&&boatPoint.y<deckFloor(boatPoint.xz)+.8;
+  hullClip=hullClip||deckClip;
   // The polar patch resolves the funnel independently of camera distance.
   // A 40 m depth-tested overlap covers projection differences between the
   // two triangulations. Matching sampled values alone cannot close a seam.
@@ -355,7 +363,8 @@ void main() {
   R.y = max(R.y, 0.005); R = normalize(R);
 
   float shadow = cloudShadowAt(rel.xz);
-  vec3 sunE = lightSun() * shadow, moonE = lightMoon() * shadow;
+  float yachtSun=yachtShadowWorld(rel,n,true),yachtMoon=yachtShadowWorld(rel,n,false);
+  vec3 sunE=lightSun()*shadow*yachtSun,moonE=lightMoon()*shadow*yachtMoon;
   vec3 skyE = lightSky();
   float lodR = clamp(log2(1.0 + sqrt(sigma2) * 40.0) * 1.2, 0.0, 6.0);
   vec3 Lsky = envRadiance(R, lodR);
@@ -578,7 +587,7 @@ void main() {
   col*=1.0-.52*uWhirlpool.w*smoothstep(135.0,10.0,vr);
   col = col * T + Lh * (1.0 - T);
   if(vortexClip||hullClip)discard;
-  o = uDbg==99?vec4(1.0):uDbg==98?vec4(boatPoint,1.0):uDbg==97?vec4(vec3(contactFoam),1.0):vec4(col, 1.0);
+  o = uDbg==99?vec4(1.0):uDbg==98?vec4(boatPoint,1.0):uDbg==97?vec4(vec3(contactFoam),1.0):uDbg==96?vec4(vec3(min(yachtSun,yachtMoon)),1.0):vec4(col, 1.0);
 }`;
 
 export class Water {

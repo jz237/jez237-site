@@ -8,6 +8,41 @@ uniform vec3 uCamAbs;
 uniform vec3 uShadowInfo;   // centre x, centre z, extent
 uniform float uShadowAvg;
 uniform vec4 uFlashLight;   // xyz direction to flash, w pre-exposed irradiance
+uniform sampler2D uYachtShadow,uYachtShadowOpacity,uYachtShadowOpaque;
+uniform mat4 uYachtShadowMatrix;
+uniform vec4 uYachtShadowInfo; // enabled, dominant light is sun, texel size, depth range
+uniform vec3 uYachtShadowCenter,uYachtShadowBow,uYachtShadowUp,uYachtShadowSide;
+float yachtShadowLocal(vec3 p,vec3 normal,bool sun){
+  if(uYachtShadowInfo.x<.5||sun!=(uYachtShadowInfo.y>.5))return 1.0;
+  vec3 q=(uYachtShadowMatrix*vec4(p,1)).xyz*.5+.5;
+  if(any(lessThan(q.xy,vec2(0)))||any(greaterThan(q.xy,vec2(1))))return 1.0;
+  vec3 light=sun?uSunDir:uMoonDir;
+  vec3 localLight=vec3(dot(light,uYachtShadowBow),dot(light,uYachtShadowUp),dot(light,uYachtShadowSide));
+  float bias=(.018+.055*(1.0-abs(dot(normal,localLight))))/uYachtShadowInfo.w;
+  float centre=texture(uYachtShadowOpaque,q.xy).r;
+  float separation=max(0.0,(q.z-centre)*uYachtShadowInfo.w);
+  bool phoneFilter=uYachtShadowInfo.z>.0008;
+  float radius=clamp((phoneFilter?1.0:.65)+separation*.045,phoneFilter?1.0:.65,2.4);
+  vec2 fraction=fract(q.xy/uYachtShadowInfo.z-.5);
+  float sum=0.0;
+  for(int y=0;y<3;y++)for(int x=0;x<3;x++){
+    if(phoneFilter&&(x==2||y==2))continue;
+    vec2 offset=phoneFilter?vec2(x,y)-fraction:vec2(x-1,y-1);
+    vec2 uv=q.xy+offset*uYachtShadowInfo.z*radius;
+    float depth=texture(uYachtShadow,uv).r;
+    float opacity=texture(uYachtShadowOpacity,uv).r;
+    float solid=texture(uYachtShadowOpaque,uv).r;
+    float weight=phoneFilter?(x==0?1.0-fraction.x:fraction.x)*(y==0?1.0-fraction.y:fraction.y):1.0/9.0;
+    sum+=weight*(q.z-bias<=solid?1.0:0.0)*(q.z-bias<=depth?1.0:1.0-opacity);
+  }
+  return sum;
+}
+float yachtShadowWorld(vec3 rel,vec3 normal,bool sun){
+  vec3 d=rel-uYachtShadowCenter;
+  vec3 p=vec3(dot(d,uYachtShadowBow),dot(d,uYachtShadowUp),dot(d,uYachtShadowSide));
+  vec3 n=vec3(dot(normal,uYachtShadowBow),dot(normal,uYachtShadowUp),dot(normal,uYachtShadowSide));
+  return yachtShadowLocal(p,n,sun);
+}
 vec3 envRadiance(vec3 d, float lod) { return textureLod(uEnv, dirToHemiOct(d), lod).rgb; }
 // Colour of the air at the horizon in a given azimuth, including whatever cloud deck lies there (env map), for aerial perspective.
 vec3 horizonColor(vec3 dirH) { return envRadiance(normalize(vec3(dirH.x, 0.03, dirH.z)), 1.2); }
@@ -97,4 +132,15 @@ export function bindLighting(p, ctx) {
   p.v3('uCamAbs', camAbs[0], camAbs[1], camAbs[2]).v3('uShadowInfo', clouds.shadowCenter[0], clouds.shadowCenter[1], clouds.shadowExtent);
   p.f('uShadowAvg', 1 - 0.55 * clouds.p.cover);
   p.v4('uFlashLight', ctx.flashLight || [0, 1, 0, 0]);
+  const shadow=ctx.yachtShadow,yacht=ctx.yacht;
+  // Even disabled samplers have a valid binding; shader validation must never
+  // alias a sampler2DArray with the default unit-zero sampler2D.
+  p.t('uYachtShadow',2,shadow?.depth||light.tex);
+  p.t('uYachtShadowOpacity',19,shadow?.color||light.tex);
+  p.t('uYachtShadowOpaque',20,shadow?.opaque||light.tex);
+  p.v4('uYachtShadowInfo',shadow?.on&&yacht?1:0,shadow?.sun?1:0,1/(shadow?.size||1),shadow?.depthRange||1);
+  if(shadow?.on&&yacht){
+    p.m4('uYachtShadowMatrix',shadow.matrix).v3('uYachtShadowCenter',yacht.x-ctx.cam.x,yacht.y-ctx.cam.y,yacht.z-ctx.cam.z)
+      .v3('uYachtShadowBow',yacht.axes.bow).v3('uYachtShadowUp',yacht.axes.up).v3('uYachtShadowSide',yacht.axes.sb);
+  }
 }

@@ -22,6 +22,10 @@ import { Whirlpool } from './whirlpool.js';
 import { bindHullWater } from './hull-water.js';
 import { HullContact } from './hull-contact.js';
 import { HullSpray } from './hull-spray.js';
+import { DeckWash } from './deck-wash.js';
+import { YachtShadow } from './yacht-shadow.js';
+import { mobileProfile,backingSize } from './mobile.js';
+import { deviceCheck } from './device-check.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
 import { watchRelease } from './release.js';
@@ -34,7 +38,8 @@ const NEAR = 0.1, FAR = 400000;
 class App {
   constructor() {
     initGL(canvas, { preserve: params.has('shot') });
-    this.q = params.get('q') || (caps.software ? 'low' : 'high');
+    this.mobile=mobileProfile();
+    this.q = params.get('q') || (caps.software||this.mobile ? 'low' : 'high');
     this.sim = new OceanSim({ N: this.q === 'low' ? 128 : 256, cascades: this.q === 'low' ? 4 : 5 });
     this.sky = new Sky();
     this.water = new Water();
@@ -53,6 +58,8 @@ class App {
     this.whirlpool = new Whirlpool();
     this.hullContact = new HullContact();
     this.hullSpray = new HullSpray();
+    this.deckWash=new DeckWash(this.yacht.metadata);
+    this.yachtShadow=new YachtShadow(this.mobile||this.q==='low'?1024:2048);
     this.yachtOn = !params.has('noyacht');
     this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
     // everything the panel controls; the simulation eases towards it
@@ -74,14 +81,13 @@ class App {
     this.frame = 0;
     this.under = false;
     this.surfaceAtCam = 0;
-    this.res = parseFloat(params.get('res') || '1');
+    this.res = Math.max(.45,Math.min(1,parseFloat(params.get('res') || (this.mobile?'.75':'1'))||1));
     this.resize();
     addEventListener('resize', () => this.resize());
   }
 
   resize() {
-    const dpr = Math.min(devicePixelRatio || 1, 2) * this.res;
-    const w = Math.max(64, Math.round(canvas.clientWidth * dpr)), h = Math.max(64, Math.round(canvas.clientHeight * dpr));
+    const [w,h]=backingSize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio||1,this.res,this.mobile);
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     this.w = w; this.h = h;
     this.post.resize(w, h);
@@ -223,7 +229,7 @@ class App {
     C.renderEnv(this.sky, sk, camAbs, this.q === 'low' ? 50 : 70, flash);
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
-    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under,whirlpool:this.whirlpool };
+    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under,whirlpool:this.whirlpool,rain:S.rain };
     { const fr = Math.hypot(flash[0], flash[1], flash[2]) || 1; ctx.flashLight = flash[3] > 0 ? [flash[0] / fr, flash[1] / fr, flash[2] / fr, Math.min(1.4, this.lightning.flash) * 4.0 / (1 + (fr / 350) * (fr / 350))] : [0, 1, 0, 0]; }
     ctx.surfaceAtCam=this.surfaceAtCam;this.ctx = ctx;
 
@@ -238,7 +244,11 @@ class App {
     if (under) this.fx.updateCaustics(this.sim, sunWv, cam);
 
     this.wildlife.updateSurface(ctx);
-    if(this.yachtOn){this.hullContact.update(ctx,this.yacht,dt);ctx.hullWet=this.hullContact.cur;}
+    if(this.yachtOn){
+      this.hullContact.update(ctx,this.yacht,dt);ctx.hullWet=this.hullContact.cur;
+      this.deckWash.update(ctx,this.yacht,dt);ctx.deckWash=this.deckWash;
+      this.yachtShadow.update(ctx,this.yacht);ctx.yachtShadow=this.yachtShadow;ctx.yacht=this.yacht;
+    }
     bindFBO(this.post.fbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST); gl.depthMask(true);
     gl.clearColor(0, 0, 0, 1);
@@ -262,6 +272,7 @@ class App {
       bindHullWater(p,this.yacht,cam,this.yachtOn);
       p.m4('uInvVP',invVP);
       p.f('uHullWetOn',this.yachtOn?1:0);if(this.yachtOn)p.t('uHullWet',6,this.hullContact.cur);
+      p.f('uDeckWashOn',this.yachtOn?1:0);
       p.v4v('uWhaleRings',this.wildlife.rings(cam));
       p.v4v('uWhaleContacts',this.wildlife.contacts(cam));
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
@@ -277,7 +288,7 @@ class App {
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
         .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', !under ? 1 : 0);
     },this.whirlpool);
-    if(this.yachtOn)this.yacht.drawRig(ctx,VPf,camAbs);
+    if(this.yachtOn){this.deckWash.draw(ctx,this.yacht,VPf,this.post.colorCopy);this.yacht.drawRig(ctx,VPf,camAbs);}
     this.wildlife.drawSpray({...ctx,windDir:S.windDir},VPf);
     if(this.yachtOn)this.hullSpray.draw(ctx,VPf);
 
@@ -386,8 +397,10 @@ if (params.has('shot')) {
   if (caps.software) app.res = 0.5;
   const ui = initUI(app, rig);
   watchRelease();
+  const check=params.has('devicecheck')?deviceCheck(app,canvas,caps):null;
   if (params.get('mode')) rig.setMode(params.get('mode'));
   let last = performance.now();
+  document.addEventListener('visibilitychange',()=>{last=performance.now();app.perf.ema=16;});
   const loop = (now) => {
     const raw = (now - last) / 1000; last = now;
     const dt = clamp(raw, 0.001, 0.1);
@@ -397,6 +410,7 @@ if (params.has('shot')) {
     app.render(dt);
     app.sound.update(app);
     app.govern(raw * 1000);
+    check?.frame(raw*1000);
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
