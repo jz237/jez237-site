@@ -2,6 +2,28 @@
   "version": 1,
   "method": "Lossless extraction/deduplication of image bytes; unchanged buffer-view bytes; gzip level 9. Original GLBs retained.",
   "models": {
+    "arena-escarpment.glb": {
+      "source": "models/arena-escarpment.glb",
+      "sourceBytes": 6269932,
+      "sourceSha256": "4594754e8eba3482cd9b96fb1767e0b3f041b253791026c5618dd1a1bf0a98b4",
+      "file": "models/packed/arena-escarpment-53a69d6ae5d5.glb.gz",
+      "bytes": 3708175,
+      "sha256": "53a69d6ae5d5dc48785e945ffbb9720a3a6d8aad7d52fc29861a2c22ce84a3b8",
+      "expandedBytes": 6269932,
+      "images": [],
+      "retainedBufferViews": 180
+    },
+    "arena-industrial.glb": {
+      "source": "models/arena-industrial.glb",
+      "sourceBytes": 571460,
+      "sourceSha256": "12aaff36490880c064c9d7eb1363e4a5ea9d0ba8f3922bfb77303995379a76f7",
+      "file": "models/packed/arena-industrial-eaedc1c59198.glb.gz",
+      "bytes": 102410,
+      "sha256": "eaedc1c5919890c79f18d7cd77fd92103e070271ed73c367a4a29e1fa3da0021",
+      "expandedBytes": 571460,
+      "images": [],
+      "retainedBufferViews": 48
+    },
     "coupe.glb": {
       "source": "models/coupe.glb",
       "sourceBytes": 11355504,
@@ -570,6 +592,17 @@
       "expandedBytes": 244084,
       "images": [],
       "retainedBufferViews": 8
+    },
+    "wheel-machining.glb": {
+      "source": "models/wheel-machining.glb",
+      "sourceBytes": 31892,
+      "sourceSha256": "40e0f7bda3471249329a18bf8753121c2aa9e42921d503fafaea029b93ae0eac",
+      "file": "models/packed/wheel-machining-9897079bcb65.glb.gz",
+      "bytes": 9582,
+      "sha256": "9897079bcb656b6d9eb9e1552c630b68ca5823e88b648ccbcb7ab7dbdf5d267a",
+      "expandedBytes": 31892,
+      "images": [],
+      "retainedBufferViews": 4
     }
   },
   "textures": {

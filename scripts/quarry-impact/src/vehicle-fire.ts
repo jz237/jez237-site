@@ -4,6 +4,7 @@ import { VehicleThermalState } from './vehicle-thermal-state';
 import {fireProfile} from './vehicle-fire-profile';
 import {fireNoise} from './fire-noise';
 import {bakedVehicleFX,prepareBakedVehicleFX} from './baked-vehicle-fx';
+import {DAYLIGHT_DIRECTION} from './static-shadows';
 
 type Puff = {p:T.Vector3;v:T.Vector3;anchor:T.Vector3;site:number;age:number;life:number;size:number;seed:number;kind:number;owner:number;strength:number;depth:number;heat:number;aspect:number;soot:number};
 type Emitter = {car:Vehicle;state:VehicleThermalState;origin:T.Vector3;smoke:number;flame:number;embers:number;impactSerial:number;profile:ReturnType<typeof fireProfile>;sites:{position:T.Vector3;weight:number;name:string}[]};
@@ -192,7 +193,7 @@ export class VehicleFire {
   private prepare(camera:T.Camera){
     camera.updateMatrixWorld();this.visible.length=0;
     // Same calibrated HDRI sun as static-shadows.ts, guarded by the renderer test.
-    this.mesh.material.uniforms.sunView.value.set(.17808175630589612,.7416666663831829,-.6466973357352447).normalize().transformDirection(camera.matrixWorldInverse);
+    this.mesh.material.uniforms.sunView.value.copy(DAYLIGHT_DIRECTION).transformDirection(camera.matrixWorldInverse);
     const view=camera.matrixWorldInverse.elements;
     for(const p of this.particles){if(p.life<=0)continue;p.depth=-(view[2]*p.p.x+view[6]*p.p.y+view[10]*p.p.z+view[14]);if(p.depth<-.5||p.depth>190)continue;this.visible.push(p);}
     this.visible.sort((a,b)=>b.depth-a.depth);

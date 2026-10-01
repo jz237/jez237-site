@@ -1,0 +1,9 @@
+{
+  "method": "Original Blender machined hub lip, cap, washers and hexagonal lug nuts. Existing licensed car shapes and destruction topology unchanged. One shared mesh per wheel, at most four draws per car.",
+  "license": "CC0 original authoring",
+  "script": "tools/author-wheel-machining.py",
+  "assetSha256": "40e0f7bda3471249329a18bf8753121c2aa9e42921d503fafaea029b93ae0eac",
+  "blendSha256": "24ddf2404d79102b14c69483d8e4843c1ecbbbf87862d533afa7723ee5990a04",
+  "vertices": 408,
+  "triangles": 748
+}

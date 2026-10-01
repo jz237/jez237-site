@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {finishVehiclePresentation} from './vehicle-presentation';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -7,7 +8,7 @@ export class VehicleSurface {
   readonly phase:{value:number};
   distance=0;
   constructor(root:T.Group,id:number){
-    this.phase={value:id*.731};
+    this.phase={value:id*.731};finishVehiclePresentation(root);
     const seen=new Set<T.Material>();
     root.traverse(o=>{
       if(!(o instanceof T.Mesh)||!o.userData.wreckRest)return;

@@ -1,0 +1,123 @@
+{
+  "method": "Original Blender authored upper face fracture relief and correctly oriented, ray-seated spalled plates over protected quarry derivatives; existing roads, talus and collision files untouched. No downloaded assets.",
+  "license": "Original relief CC0; source asset licenses retained in CREDITS.md",
+  "generator": "tools/author-arena-escarpment.py",
+  "sourceHashes": {
+    "quarry-cut": "a5af7b9f507242426c812930db9b6233691bb6b9c2b203f38076d9317c82b4dd",
+    "quarry-headwall": "cb6546a065f654ad0d1cdf8066d7617aa7ffe6f40cc2b2542fa617710d25a0c3",
+    "quarry-east-bay": "7ddc48a1bd066e8f9f576c6bff30ed42a89c2b5d1ebaf49e92c84ca4bd85a1c5",
+    "quarry-west-wall": "85e73a44b6caf465960ddbb785fe6afb5c2980cf142ec8c712e50bfa8b130399",
+    "quarry-extension": "674803ec9f8c42868ba9bfe0fcf441a159be933a1bf58eaab56affdf63048a33"
+  },
+  "maxInwardReliefMeters": 0.72,
+  "plateSeating": "Radial BVH ray hits on the copied rock envelope; upper decoration only",
+  "meshes": [
+    {
+      "mesh": "ArenaRock_0_near",
+      "vertices": 3315,
+      "triangles": 6362,
+      "fractureVertices": 124,
+      "fractureFaces": 73
+    },
+    {
+      "mesh": "ArenaRock_2_near",
+      "vertices": 3279,
+      "triangles": 6285,
+      "fractureVertices": 130,
+      "fractureFaces": 77
+    },
+    {
+      "mesh": "ArenaRock_4_near",
+      "vertices": 3274,
+      "triangles": 6277,
+      "fractureVertices": 130,
+      "fractureFaces": 76
+    },
+    {
+      "mesh": "ArenaRock_6_near",
+      "vertices": 3446,
+      "triangles": 6385,
+      "fractureVertices": 428,
+      "fractureFaces": 254
+    },
+    {
+      "mesh": "ArenaRock_8_near",
+      "vertices": 3231,
+      "triangles": 5963,
+      "fractureVertices": 448,
+      "fractureFaces": 264
+    },
+    {
+      "mesh": "ArenaRock_10_near",
+      "vertices": 3443,
+      "triangles": 6416,
+      "fractureVertices": 388,
+      "fractureFaces": 229
+    },
+    {
+      "mesh": "ArenaRock_12_near",
+      "vertices": 3015,
+      "triangles": 5530,
+      "fractureVertices": 452,
+      "fractureFaces": 267
+    },
+    {
+      "mesh": "ArenaRock_14_near",
+      "vertices": 2646,
+      "triangles": 4933,
+      "fractureVertices": 260,
+      "fractureFaces": 153
+    },
+    {
+      "mesh": "ArenaRock_16_near",
+      "vertices": 2854,
+      "triangles": 5236,
+      "fractureVertices": 426,
+      "fractureFaces": 251
+    },
+    {
+      "mesh": "ArenaRock_18_near",
+      "vertices": 4052,
+      "triangles": 7707,
+      "fractureVertices": 220,
+      "fractureFaces": 132
+    },
+    {
+      "mesh": "ArenaRock_20_near",
+      "vertices": 4613,
+      "triangles": 8563,
+      "fractureVertices": 592,
+      "fractureFaces": 351
+    },
+    {
+      "mesh": "ArenaRock_22_near",
+      "vertices": 4492,
+      "triangles": 8466,
+      "fractureVertices": 392,
+      "fractureFaces": 231
+    },
+    {
+      "mesh": "ArenaRock_24_near",
+      "vertices": 10933,
+      "triangles": 21363,
+      "fractureVertices": 256,
+      "fractureFaces": 151
+    },
+    {
+      "mesh": "ArenaRock_26_near",
+      "vertices": 10751,
+      "triangles": 20991,
+      "fractureVertices": 272,
+      "fractureFaces": 160
+    },
+    {
+      "mesh": "ArenaRock_28_near",
+      "vertices": 11079,
+      "triangles": 21556,
+      "fractureVertices": 402,
+      "fractureFaces": 237
+    }
+  ],
+  "assetSha256": "4594754e8eba3482cd9b96fb1767e0b3f041b253791026c5618dd1a1bf0a98b4",
+  "blendSha256": "02cb5eb3ea213e048c6bbbabfa93000d95e020cd9f8a2d5060ef98de4f0a0a88"
+}

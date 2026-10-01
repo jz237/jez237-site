@@ -230,6 +230,11 @@ try{
 
   await page.evaluate(neutral=>{const q=window.__quarry;q.autopilot(false);q.setInput(neutral);q.captureCamera([0,3.7,-28],[0,.85,-16]);},neutral);
   await frames();
+  // A first visit to a quality level may upload its distinct rock LOD buffers.
+  // Warm all variants before measuring whether repeated transitions leak them.
+  for(const quality of ['medium','high','ultra']){
+    await page.evaluate(quality=>__quarry.setQuality(quality),quality);await frames();
+  }
   const qualitySizes={ultra:4096,high:2048,medium:0};
   for(const quality of ['ultra','high','high','medium','medium','high','ultra','ultra','high','medium','high','ultra']){
     const before=await sample(`before-quality-${quality}`);

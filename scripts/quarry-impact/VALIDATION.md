@@ -1,4 +1,75 @@
-# Structural realism - September 30, 2026
+# Reference arena visual overhaul - September 30, 2026
+
+Final runtime **index-qLmReEI-.js**, **9,758,106 bytes**, SHA-256
+**8e7ebde9bafa0aa987b14318de08b333f7489dde9697ad466b52cbdc66b0f9a4**.
+The actual game gains fifteen authored Blender near/far rock sections, angular
+spalled faces, photographic ground layers and rubber wear, coherent warm sunlight
+and HDR reflections, industrial masts/service dressing, forty-two crest conifers,
+wheel machining, refined material responses, an upright close chase view and
+compact instruments. Original car bodies, quarry collision data, 38 ElevenLabs
+clips and all 23 deployed Worker inputs remain unchanged. Editable Blender
+scenes, exact hashes, source licenses and frozen prior-source fixtures are retained.
+See `source/reference-overhaul.md` and `source/reference-overhaul-results.json`.
+
+**184/184 solo tests**, TypeScript and the production build pass. Eight iterations
+of real 2560 x 1440 game captures compare the same quarry/car composition with the
+private user reference. Final views cover intact cars, heavy damage and an
+eight-car pileup. Eleven final car/contact views cover all three profiles,
+localized transfer paint, physical corner damage, folding, wet trails and exact
+repair. All three modes complete, including 72 racing checkpoints, results,
+inspection, pause and repeated restarts. All eight AI complete 72 checkpoints;
+the seven spectator views, car selection, orbit, focus loss and automatic demo
+repetition pass. No internet multiplayer connection/test or backend redeploy occurs.
+
+Graphics passes seven checks, twelve quality transitions and actual WebGL
+recovery in **423 ms**. First-use rock LOD buffers are warmed before checking
+repeated quality transitions; subsequent geometry counts stay at 749 and texture
+counts at 160 (154 with Medium's reduced effects). Hidden replaced rock skins
+also stop casting into the static depth map. Fire/audio passes ten checks, with
+38 local buffers, localized finite-fuel ignition, delayed rare bursts, inspection,
+repair, pause and mute. Peak **0.27443**, zero clipped readings across **2,937**
+audio samples. The same final bundle is verified by every final browser report.
+
+Measured on **NVIDIA GeForce RTX 5090 / Chrome ANGLE D3D11**, **2560 x 1440 / Ultra**:
+
+| Measurement | Result |
+|---|---:|
+| Fresh local navigation to rendered menu, one sample | 7.136 s |
+| First event startup to countdown | 1.202 s |
+| Active derby, 60-second capture | 58.316 FPS / 17.148 ms mean |
+| Active derby p95 / p99 | 16.8 / 33.3 ms |
+| Eight-fire stress, 60-second capture | 59.995 FPS / 16.668 ms mean |
+| Eight-fire stress p95 / p99 | 16.8 / 16.9 ms |
+| Mixed driving/inspection session, 611.05 s / 35,925 frames | 58.956 FPS / 16.962 ms mean |
+| Mixed session p95 / p99 | 16.8 / 16.9 ms |
+| Mixed session frames over 33.34 ms | 137 |
+
+The sustained session records 123 samples and 17 event/inspection transitions.
+Geometry rises from 910 to a bounded maximum of 940; textures from 160 to 163,
+then both settle after the first circuit visit. JavaScript heap varies with
+garbage collection from **596 to 946 MiB**, finishing at **861 MiB**; the final
+two-minute window again falls to 600 MiB. No continuing GPU resource growth or
+browser error is observed. This is measured frame spacing, including simulation,
+browser scheduling and event changes, rather than isolated GPU time or a locked
+60 FPS guarantee. Local loading is not a prediction of internet download time.
+
+The original ten-minute report is preserved with its failed legacy inspection
+assertion: the old western-wall target landed 26.49 degrees from the new chase
+axis, just outside its 26-degree half-FOV. The fixture now steps back eight
+metres. Its actual vehicle settles on four wheels without object contact, and a
+targeted real-camera retest passes eight samples across both western views on
+the **same unchanged runtime**, with a maximum target angle of 24.85 degrees.
+The result record preserves the original failure and successful targeted retest;
+it does not relabel or overwrite the original measurement report.
+
+Original coarse rock collision proxies and hybrid car deformation remain. This
+pass moves the browser game toward the supplied art direction; AAA reference
+parity and full structural soft bodies remain unfinished. No purchase or new
+ElevenLabs generation was used. The user reference is not bundled.
+
+---
+
+# Previous structural realism release - September 30, 2026
 
 Final application **index-DJIo0yxR.js**, **9,741,436 bytes**, SHA-256 **d32a5906efa5384f49e74b6ea0c270b1f7abd1219c7c01502baebf837f79a587**. All three cars have resistant rail/cage response, rigid engine movement, physical corner damage, loaded tire contact patches, distinct material responses and persistent silt/wetness/paint transfer. Ground evidence uses 2,048 reusable slots. Fire and smoke use two shared 64-frame Blender Mantaflow atlases; source and asset hashes, calibration and CC0 provenance are retained. The atlases add **4,975,916 download bytes / 32 MiB shared RGBA texture storage**. See `source/structural-realism.md` and `source/structural-realism-results.json`.
 

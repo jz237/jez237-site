@@ -569,3 +569,26 @@ kbd {
 .wreck-note{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);display:grid;gap:9px;min-width:320px;padding:20px 28px;text-align:center;background:#121a1bdd;border:1px solid #d9c48655;pointer-events:none;box-shadow:0 10px 35px #0005}
 .wreck-note strong{font-size:26px;letter-spacing:.09em;color:#e4c799}
 .wreck-note span{font-size:11px;letter-spacing:.09em;color:#ccd0cb}
+
+/* Compact arena instruments: clear scene silhouettes and readable telemetry. */
+.hud{padding:24px 28px;background:linear-gradient(0deg,#10171928,transparent 16%);color:#ebece4}
+.hud-top>div:first-child{background:#182220bd;border:1px solid #b7bcaa48;padding:12px 18px;box-shadow:0 2px 8px #0003;min-width:250px}
+.hud-top .eyebrow{font-size:8px;color:#bcc5b6;letter-spacing:1.8px}
+.hud-title{font-size:14px;letter-spacing:1.5px;margin-top:6px}
+.event-stats{gap:22px;text-shadow:0 1px 4px #0008}
+.event-stats strong{font-size:27px;font-style:italic;font-weight:700;margin-top:4px}
+.event-stats span{font-size:8px;letter-spacing:1.1px;color:#d1d6cc}
+.event-stats #pause{padding:9px 14px;align-self:flex-start;background:#17201ecc}
+.instruments{position:absolute;width:clamp(190px,15vw,320px);height:auto;bottom:40px;left:10px;pointer-events:none}
+.status{left:42px;bottom:24px;width:clamp(160px,12vw,245px)}
+.status-row{font-size:9px;color:#ebeee2;letter-spacing:.5px}
+.condition{height:3px;margin-top:5px;background:#b8c0ae40}
+.subsystems{font-size:7px;margin-top:5px;letter-spacing:.1px;color:#c0caba}
+.speed{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden}
+.minimap{width:clamp(180px,15vw,310px);height:auto;top:auto;bottom:22px;right:16px;background:transparent;border:none;padding:0}
+.controls{font-size:8px;bottom:24px;color:#d1d7c6aa;text-shadow:0 1px 3px #0009}
+.demo-toolbar{top:24px;left:330px;gap:8px;background:#182220d9;border:1px solid #b7bcaa48;padding:8px 12px;align-items:end}
+.demo-toolbar label{font-size:8px;letter-spacing:1px;color:#c2cdbd}
+.demo-toolbar select{padding:7px 8px;font-size:10px;min-width:110px}
+.demo-toolbar .small-button{padding:8px 10px;font-size:9px}
+@media(max-width:1100px){.hud{padding:16px}.hud-top>div:first-child{min-width:180px;padding:10px 12px}.hud-title{font-size:11px}.demo-toolbar{top:90px;left:16px;padding:6px 8px}.controls{bottom:12px;font-size:7px}.status{bottom:20px;left:31px}.instruments{bottom:38px}.event-stats{gap:12px}}

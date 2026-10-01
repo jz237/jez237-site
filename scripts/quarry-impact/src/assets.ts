@@ -9,6 +9,7 @@ import { prepareWreckGeometry } from './wreck-geometry';
 import { wreckTopology } from './wreck-topology';
 import { alignWreckSeams } from './wreck-seams';
 import {constructionRole,type ConstructionRole} from './vehicle-construction';
+import {prepareWheelPresentation,attachWheelPresentation} from './wheel-presentation';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -66,7 +67,7 @@ export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
   const kinds: CarKind[] = ['coupe', 'sedan', 'hatch'];
   // Start independent transfers together; preserve template processing order.
-  const loaded = await Promise.all(kinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb'))));
+  const [loaded] = await Promise.all([Promise.all(kinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
   for (const [index, kind] of kinds.entries()) {
     progress('Preparing ' + kind + ' bodywork');
     const gltf = loaded[index];
@@ -93,6 +94,7 @@ export async function loadCars(progress: (s: string) => void) {
 }
 export function cloneCar(kind: CarKind, color: number) {
   const root = templates.get(kind)!.clone(true);
+  attachWheelPresentation(root);
   const materials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
@@ -193,12 +195,12 @@ export async function environment(
   const hdr = await new HDRLoader().loadAsync(url('assets/sky.hdr'));
   hdr.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = hdr;
-  scene.backgroundRotation.y = 1.9;
-  scene.environmentRotation.y = 1.9;
+  scene.backgroundRotation.y = 1.1;
+  scene.environmentRotation.y = 1.1;
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromEquirectangular(hdr);
   scene.environment = target.texture;
-  scene.environmentIntensity = 0.6;
+  scene.environmentIntensity = 0.54;
   pmrem.dispose();
   return target;
 }

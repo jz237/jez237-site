@@ -1,0 +1,62 @@
+[
+  {
+    "mesh": "ArenaRock_0_near",
+    "source": "CutRock_1_near"
+  },
+  {
+    "mesh": "ArenaRock_2_near",
+    "source": "CutRock_0_near"
+  },
+  {
+    "mesh": "ArenaRock_4_near",
+    "source": "CutRock_2_near"
+  },
+  {
+    "mesh": "ArenaRock_6_near",
+    "source": "HeadwallRock_0_near"
+  },
+  {
+    "mesh": "ArenaRock_8_near",
+    "source": "HeadwallRock_2_near"
+  },
+  {
+    "mesh": "ArenaRock_10_near",
+    "source": "HeadwallRock_1_near"
+  },
+  {
+    "mesh": "ArenaRock_12_near",
+    "source": "EastBayRock_2_near"
+  },
+  {
+    "mesh": "ArenaRock_14_near",
+    "source": "EastBayRock_0_near"
+  },
+  {
+    "mesh": "ArenaRock_16_near",
+    "source": "EastBayRock_1_near"
+  },
+  {
+    "mesh": "ArenaRock_18_near",
+    "source": "WestWallRock_2_near"
+  },
+  {
+    "mesh": "ArenaRock_20_near",
+    "source": "WestWallRock_0_near"
+  },
+  {
+    "mesh": "ArenaRock_22_near",
+    "source": "WestWallRock_1_near"
+  },
+  {
+    "mesh": "ArenaRock_24_near",
+    "source": "ExtensionRock_1_near"
+  },
+  {
+    "mesh": "ArenaRock_26_near",
+    "source": "ExtensionRock_2_near"
+  },
+  {
+    "mesh": "ArenaRock_28_near",
+    "source": "ExtensionRock_0_near"
+  }
+]

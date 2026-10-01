@@ -16,7 +16,8 @@ const hash = (file: string) => createHash('sha256').update(fs.readFileSync(file)
 export function prepareWestWallStops() {
   const trunks = quarryColliderLayout().filter(c => c.shape === 'cylinder' && c.id.startsWith('tree-'));
   const stops = [
-    { id: 'west-wall-close', x: -108, z: 62, targetCenter: [-150, 17, 78] },
+    // Step back from the old pose so the upper face fits the grounded chase FOV.
+    { id: 'west-wall-close', x: -100, z: 59, targetCenter: [-150, 17, 78] },
     { id: 'west-wall-oblique', x: -81, z: 78, targetCenter: [-135, 15, 109] },
   ].map(spec => {
     const ground = backdropGroundHeight(spec.x, spec.z);
