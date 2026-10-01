@@ -8382,5 +8382,136 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-01-factual-infographic-factual-infographic-iron-deficiency-ane",
+    "title": "Factual infographic: Iron-Deficiency Anemia — Oxygen Delivery Under Strain",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\", \"panel_count\": 8, \"closeup_diagrams\": \"red-cell comparison; blood-loss paths; intestinal absorption; laboratory distinction\", \"evidence_scope\": \"Claim-level reputable sources; no subjective review outside Monday\"}; archive_slot=2026-10-01T05:20; concept=iron-deficiency-anemia-hemoglobin-oxygen-delivery; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished museum-quality medical educational infographic directly on the image canvas, not a photographed poster, room, desk, screen, or prop mockup. Portrait-oriented composition with one dominant integrated anatomical hero and EIGHT substantial supporting panels. Title: “IRON-DEFICIENCY ANEMIA”; subtitle: “Oxygen delivery under strain”. Sophisticated ivory, deep oxblood, muted teal, and warm copper palette, finely rendered medical illustration, soft volumetric lighting on translucent anatomical structures, precise leader lines, disciplined large readable typography, generous separation between panels, and compact plain-language labels. Dense information with excellent hierarchy, not a sparse school poster. No logos, URLs, bibliography, invented statistics, drug doses, lab thresholds, or universal cure claims.\nHERO occupying the central vertical spine: a diverse adult shown as an anatomically plausible translucent upper torso with lungs and heart, and an enlarged continuous blood-vessel cutaway carrying red blood cells toward a stylized tissue destination. Show red biconcave cells with tangible soft membranes and a linked microscopic magnification of hemoglobin/oxygen carriage, schematic rather than invented molecular structure. Label “Hemoglobin carries oxygen” and “Less hemoglobin → reduced oxygen carriage”. Do not imply iron itself is inhaled, that all organs fail, or that oxygen saturation must be low. Place an explicitly labeled schematic arrow connecting iron availability, healthy red-cell production, and oxygen carriage; no unsupported bone-marrow cellular details.\nArrange eight numbered panels in two flanking columns around the integrated hero, with distinct visual mechanisms and concise exact labels:\n1. “Inside the blood”: large side-by-side magnified red-cell comparison, typical red cells versus “Often smaller, with paler centers”; clearly mark “Schematic comparison—not a diagnosis”. Use equal field scale, dimensional biconcave shapes and a blood-smear texture inset. Pale centers describe hemoglobin reduction, not empty holes. This is explanatory close-up one.\n2. “Where iron is lost”: a two-path diagram with dignified non-graphic heavy-menstrual-bleeding icon and gastrointestinal cutaway inset; labels “Heavy menstrual bleeding”, “GI bleeding”, “Blood loss removes iron”. Small arrow ends at reduced iron stores; avoid a single assumed cause for everyone. Explanatory cutaway two.\n3. “Intake and absorption”: food-to-gut schematic with legumes and fortified cereal, an intestinal-wall close-up labeled “Absorption can be impaired”, and two separate contextual labels “Celiac disease” / “Stomach or intestinal surgery”. A thinner intake arrow labeled “Low iron intake can contribute”. Do not imply all anemia is due to diet or draw celiac disease as bleeding. Explanatory close-up three.\n4. “Symptoms vary”: three varied adult vignettes with quiet concrete body language and symptom callouts “Fatigue”, “Dizziness”, “Shortness of breath”, “Cold hands and feet”. Clearly display “Mild or moderate cases may have no symptoms”. Avoid representing skin pallor as a universal complexion change.\n5. “Tests tell different stories”: an illustrated sample tube and two separate instrument-style result cards, not invented numeric readouts. “CBC: hemoglobin + cell size”; “Ferritin: iron stores”; third short label “Iron studies + history guide evaluation”. A clear comparison bracket states “Iron deficiency can occur WITHOUT anemia”; no red/green self-diagnosis gauge or fixed thresholds. Show a clinician reviewing history rather than a consumer diagnosing from one symptom.\n6. “Replace iron—and find the cause”: a clinician-directed branching care diagram with an oral-iron tablet icon labeled “Oral iron is common”, a supervised infusion icon labeled “IV iron in selected cases”, and an upstream cause-search loop labeled “Treat blood loss or absorption problems”. Beneath oral iron write “Upset stomach or constipation can occur”. Under IV path “For poor absorption, intolerance, or severe deficiency”. Use no drug brand, dose, or treatment guarantee. Important smaller callout: “Transfusion: selected severe cases; does not fully correct iron deficiency”.\n7. “Support iron intake”: beautifully specific miniature food illustrations—beans with distinct curved seed coats, tofu cubes, a modest lean-meat serving, fortified cereal flakes and dark leafy greens—with a separate sliced-orange illustration. Labels “Iron-rich foods” and “Vitamin C supports absorption”. Footer “Diet supports care; treatment depends on the cause”. No claim that food alone cures established anemia.\n8. “Why follow-up matters”: three small distinct contextual drawings—heart silhouette, pregnant adult silhouette, child with caregiver—labeled “Possible heart problems”, “Pregnancy complications”, “Developmental delays in children”. Heading emphasizes “Untreated anemia can have consequences”, not inevitable harm; connect with a thin follow-up arrow to “Clinical evaluation + cause-specific care”.\nOverall minimum visible information layers: integrated anatomical hero, red-cell comparison, blood-loss cause/effect branches, intestinal absorption cutaway, diverse symptom context, laboratory distinction, treatment decision diagram, and food-support vignette. At least three explanatory magnified diagrams are prominent, substantive and readable. All arrows and labels must express only the described supported relationships. Keep text short enough to read, rich illustrated surface detail without clutter, and fully fill the designed infographic canvas. Bottom footer in readable type: “General education—not a diagnosis. Discuss symptoms and iron supplements with a clinician.”",
+    "image": "images/2026-10-01-factual-infographic-factual-infographic-iron-deficiency-ane.jpg",
+    "thumb": "thumbs/2026-10-01-factual-infographic-factual-infographic-iron-deficiency-ane.webp",
+    "color": "#c0a6a1",
+    "date": "2026-10-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "iron-deficiency-anemia-hemoglobin-oxygen-delivery",
+      "imageSha256": "b0d1034b7588a8c9d8338fef55bfe0fc94c863adbdf8e382ae5266052bb51de8",
+      "imageDHash": "f530b23132b6370f"
+    },
+    "factualInfographic": {
+      "topic": "How iron-deficiency anemia limits hemoglobin and oxygen delivery, and how its causes, symptoms, evaluation, and management are distinguished",
+      "description": "Eight-panel anatomical plate explaining iron-deficiency anemia, blood-cell morphology, sources of iron loss, intake and absorption, variable symptoms, CBC versus ferritin, cause-specific care, nutrition support, and possible untreated complications.",
+      "sourceNote": "NHLBI: https://www.nhlbi.nih.gov/health/anemia/iron-deficiency-anemia ; American Society of Hematology: https://www.hematology.org/education/patients/anemia/iron-deficiency . Verified oxygen carriage, red-cell morphology, causes, symptoms, test distinctions, clinician-guided management, food support, and possible complications; no dosing or numerical thresholds.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-01T09:22:14.955575+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Anemia — Iron-Deficiency Anemia",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/anemia/iron-deficiency-anemia"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Society of Hematology",
+            "title": "Iron-Deficiency Anemia",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.hematology.org/education/patients/anemia/iron-deficiency"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Iron deficiency can impair production of healthy red blood cells; low hemoglobin in anemia reduces oxygen carriage from lungs to other organs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Iron-deficiency anemia can show small red blood cells with pale centers on a blood smear; low mean cellular volume is a common laboratory finding.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blood loss removes iron; heavy menstrual bleeding and gastrointestinal bleeding are causes requiring evaluation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Low intake of iron-containing foods can contribute; celiac disease and stomach or intestinal surgery can impair iron absorption.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mild or moderate iron-deficiency anemia may have no symptoms; more serious disease can cause fatigue, dizziness, pale skin, cold hands and feet, shortness of breath, or chest pain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Evaluation includes medical and diet history, a complete blood count with hemoglobin and cell size, ferritin, and other iron studies; further testing depends on suspected cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Low ferritin indicates reduced iron stores; iron deficiency can occur without anemia, so hemoglobin alone does not establish iron-store status.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment depends on cause and severity; clinician-guided oral iron is common, and intravenous iron may be used for poor absorption, intolerance, severe deficiency, or chronic blood loss.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Oral iron may cause upset stomach or constipation; significant symptoms should be discussed with the treating clinician.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Iron replacement must be paired with finding and treating the underlying cause; transfusion is reserved for selected severe cases and does not completely correct iron deficiency.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Beans, tofu, lean red meat, fortified cereals, and dark leafy greens provide iron; vitamin-C-rich foods such as oranges can support absorption.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Treating blood loss or absorption problems may help prevent iron-deficiency anemia; diet supports iron intake but is not a universal substitute for treatment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Untreated iron-deficiency anemia may lead to heart problems, pregnancy complications, or developmental delays in children.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
