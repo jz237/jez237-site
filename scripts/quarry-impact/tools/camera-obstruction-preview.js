@@ -1,0 +1,16 @@
+import * as T from 'three';import R from '@dimforge/rapier3d-compat';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {DemoDirector} from '/src/demo-director.ts';import {cameraObstruction,clearCameraView} from '/src/demo-camera-visibility.ts';
+await R.init();const scene=new T.Scene();scene.background=new T.Color(0x7b9198);const renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;document.body.append(renderer.domElement);
+const pmrem=new T.PMREMGenerator(renderer),environment=new RoomEnvironment();scene.environment=pmrem.fromScene(environment,.04).texture;environment.dispose();pmrem.dispose();
+const light=new T.DirectionalLight(0xffe8cc,3);light.position.set(5,12,4);scene.add(light,new T.HemisphereLight(0xd6ecff,0x465047,1.5));
+const floor=new T.Mesh(new T.PlaneGeometry(100,100),new T.MeshStandardMaterial({color:0x89918b,roughness:.9}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+const world=new R.World({x:0,y:0,z:0}),body=world.createRigidBody(R.RigidBodyDesc.fixed().setTranslation(0,.85,0));world.createCollider(R.ColliderDesc.cuboid(.854,.25,2.32),body);
+const wallCollider=world.createCollider(R.ColliderDesc.cuboid(5,3,.5).setTranslation(0,3,-5));world.step();
+const wall=new T.Mesh(new T.BoxGeometry(10,6,1),new T.MeshStandardMaterial({color:0x5f6665,roughness:.94}));wall.position.set(0,3,-5);scene.add(wall);
+const model=(await new GLTFLoader().loadAsync('/models/wagon.glb')).scene;model.position.y=-.8200195;const root=new T.Group();root.position.set(0,.85,0);root.add(model);scene.add(root);
+const car={id:0,kind:'wagon',root,current:root.position,speed:0,health:100,finished:false,body};
+const outline=[];for(const x of [-.914,.914])for(const y of [-.4,.7])for(const z of [-2.44,2.44])outline.push(new T.Vector3(x,y,z).add(root.position));
+const camera=new T.PerspectiveCamera(52,innerWidth/innerHeight,.1,200),orbit={target:new T.Vector3(),update(){}},probe=(a,b)=>cameraObstruction(world,a,b,body);let enabled=false,director;
+function reset(){director=new DemoDirector(undefined,enabled?(a,b)=>probe(a,b):undefined);director.select('chase');director.follow(0);director.update([car],camera,orbit,1/60,false);const clear=clearCameraView(root.position.clone().add(new T.Vector3(0,.35,0)),camera.position,probe,outline);document.getElementById('status').textContent=(enabled?'Avoidance ON':'Avoidance OFF')+' · '+(clear?'Clear view of the estate':'Wall blocks the estate');}
+document.getElementById('blocked').onclick=()=>{enabled=false;reset();};document.getElementById('avoid').onclick=()=>{enabled=true;reset();};document.getElementById('wall').onclick=()=>{wall.visible=!wall.visible;wallCollider.setEnabled(wall.visible);world.step();document.getElementById('wall').textContent=wall.visible?'Remove wall':'Restore wall';reset();};
+function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);reset();}addEventListener('resize',resize);resize();function frame(){requestAnimationFrame(frame);renderer.render(scene,camera);}frame();

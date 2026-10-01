@@ -4,11 +4,12 @@ import type {Vehicle} from './vehicle';
 import {landscapeHeight} from './quarry-layout';
 import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 import {DEFINITIONS} from './rules';
+import {clearCameraView,unobstructedDemoPosition} from './demo-camera-visibility';
 export const DEMO_CAMERAS={director:'Auto director',overview:'Overhead overview',drone:'Follow drone',chase:'Chase camera',hood:'Hood camera',trackside:'Trackside',orbit:'Free orbit'};
 export type DemoCamera=keyof typeof DEMO_CAMERAS;
 const clamp=T.MathUtils.clamp;
 export class DemoDirector {
-  constructor(private arena:ArenaLayout=LEGACY_ARENA){}
+  constructor(private arena:ArenaLayout=LEGACY_ARENA,private obstruction?:(from:T.Vector3,to:T.Vector3,car:Vehicle)=>number|null){}
   view:DemoCamera='director';
   activeView:DemoCamera='drone';
   followed=0;
@@ -18,6 +19,7 @@ export class DemoDirector {
   private shotIndex=0;
   private snap=true;
   private anchor=new T.Vector3();
+  private avoidanceOffset:T.Vector3|null=null;
   private lastTarget=new T.Vector3();
   private lastPosition=new T.Vector3();
   private aim=new T.Vector3();
@@ -25,7 +27,7 @@ export class DemoDirector {
   private health=new Map<number,number>();
   private recentDamage=new Map<number,number>();
   private shots:DemoCamera[]=['drone','trackside','chase'];
-  reset(){this.cut=0;this.shotAge=0;this.shotIndex=0;this.snap=true;this.followed=0;this.manual=false;this.health.clear();this.recentDamage.clear();}
+  reset(){this.cut=0;this.shotAge=0;this.shotIndex=0;this.snap=true;this.followed=0;this.manual=false;this.health.clear();this.recentDamage.clear();this.avoidanceOffset=null;}
   select(view:DemoCamera){if(!Object.hasOwn(DEMO_CAMERAS,view))return;this.view=view;this.snap=true;this.cut=0;}
   follow(id:number){this.followed=id;this.manual=true;this.snap=true;this.cut=0;}
   cycleCar(cars:Vehicle[],direction=1){if(!cars.length)return;const i=Math.max(0,cars.findIndex(c=>c.id===this.followed));this.follow(cars[(i+direction+cars.length)%cars.length].id);}
@@ -65,6 +67,8 @@ export class DemoDirector {
       orbit.target.copy(target);orbit.update();this.lastTarget.copy(target);this.lastPosition.copy(position);this.snap=false;return;
     }
     orbit.enabled=false;
+    const definition=DEFINITIONS[car.kind],subjectPoints:T.Vector3[]=[];
+    if(this.obstruction)for(const x of [-(definition?.halfWidth??1),definition?.halfWidth??1])for(const y of [-.4,.7])for(const z of [-(definition?.halfLength??2.6),definition?.halfLength??2.6])subjectPoints.push(new T.Vector3(x,y,z).applyQuaternion(car.root.quaternion).add(position));
     const neighbour=active.filter(c=>c!==car&&c.root.position.distanceTo(position)<14).sort((a,b)=>a.root.position.distanceToSquared(position)-b.root.position.distanceToSquared(position))[0];
     if(this.activeView==='overview'){
       desired.set(race?0:this.arena.x,race?255:this.arena.radius*2.2,race?-35:this.arena.z-.1);target.set(race?0:this.arena.x,0,race?0:this.arena.z);fov=race?56:57;
@@ -89,6 +93,15 @@ export class DemoDirector {
       for(let i=2;i<=10;i++){const t=i/10,x=T.MathUtils.lerp(target.x,desired.x,t),z=T.MathUtils.lerp(target.z,desired.z,t);desired.y=Math.max(desired.y,target.y+(landscapeHeight(x,z)+.65-target.y)/t);}
     }
     desired.y=Math.max(desired.y,landscapeHeight(desired.x,desired.z)+.65);
+    if(this.snap)this.avoidanceOffset=null;
+    if(this.obstruction&&this.activeView!=='hood'&&this.activeView!=='overview'){
+      const focus=position.clone().add(new T.Vector3(0,.35,0)),probe=(a:T.Vector3,b:T.Vector3)=>this.obstruction!(a,b,car);
+      if(!clearCameraView(focus,desired,probe,subjectPoints)){
+        const held=this.avoidanceOffset?focus.clone().add(this.avoidanceOffset):null;
+        desired.copy(held&&clearCameraView(focus,held,probe,subjectPoints)?held:unobstructedDemoPosition(focus,desired,probe,landscapeHeight,subjectPoints));
+        this.avoidanceOffset=desired.clone().sub(focus);target.copy(focus);
+      }else this.avoidanceOffset=null;
+    }
     if(this.snap||this.activeView==='hood'){camera.position.copy(desired);this.aim.copy(target);}
     else{
       // Translate the rig with its subject before smoothing its relative motion.
@@ -99,6 +112,21 @@ export class DemoDirector {
     camera.position.y=Math.max(camera.position.y,landscapeHeight(camera.position.x,camera.position.z)+.65);
     camera.lookAt(this.aim);camera.fov=fov;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
     if(this.activeView==='chase'||this.activeView==='drone')this.fitSubjects(camera,[car,...(this.activeView==='drone'&&neighbour?[neighbour]:[])]);
+    if(this.obstruction&&this.activeView!=='hood'){
+      const focus=position.clone().add(new T.Vector3(0,.35,0)),probe=(a:T.Vector3,b:T.Vector3)=>this.obstruction!(a,b,car);
+      if(!clearCameraView(focus,camera.position,probe,subjectPoints)){
+        // An obstructed shot cuts to the next clear angle; interpolating through
+        // the obstacle would briefly put the camera inside its geometry.
+        camera.position.copy(unobstructedDemoPosition(focus,camera.position,probe,landscapeHeight,subjectPoints));
+        this.aim.copy(focus);camera.lookAt(this.aim);camera.updateMatrixWorld(true);
+        if(this.activeView==='chase'||this.activeView==='drone')this.fitSubjects(camera,[car]);
+        if(!clearCameraView(focus,camera.position,probe,subjectPoints)){
+          camera.position.copy(unobstructedDemoPosition(focus,camera.position,probe,landscapeHeight,subjectPoints));camera.lookAt(this.aim);camera.updateMatrixWorld(true);
+        }
+        this.avoidanceOffset=camera.position.clone().sub(focus);
+        if(this.activeView==='trackside')this.anchor.copy(camera.position);
+      }
+    }
     orbit.target.copy(this.aim);this.lastTarget.copy(target);this.lastPosition.copy(position);this.snap=false;
   }
   private fitSubjects(camera:T.PerspectiveCamera,cars:Vehicle[]){

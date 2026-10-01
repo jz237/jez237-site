@@ -1,10 +1,12 @@
 import * as T from 'three';
+import {addClassicPanelBackings} from './classic-panel-backings';
+import {addClassicBayClosures,addMuscleEngineBay} from './classic-engine-bay';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 
 export const MUSCLE_TEXTURES = {Rim:'Alloy_01',Tyre:'Tyre_Tile',Interior:'Interior',FrontLights:'Headlight',RearLights:'RearLight',Grille:'Grille',Badge:'Badge',License:'License',Underside:'Underside'} as const;
 type Vertex={p:T.Vector3;n:T.Vector3;uv:T.Vector2};
-const planes:[number,number][]=[[0,-.72],[0,.72],[1,1.23],[2,-1.68],[2,-.82],[2,.72]];
+const planes:[number,number][]=[[0,-.72],[0,.72],[1,.84],[1,1.23],[2,-1.68],[2,-.82],[2,.72]];
 
 // Clip entire triangles, interpolating all attributes. Classifying only their
 // centres leaves long triangles spanning two independently moving assemblies.
@@ -24,7 +26,7 @@ function cut(polygon:Vertex[],axis:number,at:number,sign:number):Vertex[]{
 function panelAt(p:T.Vector3){
   const side=p.x<0?'L':'R';
   if(p.y>1.23)return 'BodyRoof';
-  if(p.z>.72)return Math.abs(p.x)<.72?'hood':'FrontFender'+side;
+  if(p.z>.72)return Math.abs(p.x)<.72?(p.y>.84?'hood':'FrontValance'):'FrontFender'+side;
   if(p.z<-.82)return p.z< -1.68&&Math.abs(p.x)<.72?'BodyTrunk':'RearQuarter'+side;
   return Math.abs(p.x)>.72?'BodyDoor'+side:'BodyCabin';
 }
@@ -116,10 +118,9 @@ export function buildPlayableMuscleAsset(obj:string,textures:Partial<Record<keyo
   const box=(name:string,size:[number,number,number],position:[number,number,number],material:T.Material)=>{
     const g=new T.BoxGeometry(...size).toNonIndexed(),mesh=new T.Mesh(g,material);mesh.name=name;mesh.position.set(...position);root.add(mesh);return mesh;
   };
-  box('Structure engine block',[.63,.26,.70],[0,.58,1.34],steel);
-  box('Structure engine cover',[.56,.07,.60],[0,.74,1.34],steel);
-  box('Structure radiator',[1.1,.32,.08],[0,.59,2.05],steel);
-  for(const x of [-.55,.55])box('Structure chassis rail '+x,[.10,.10,3.7],[x,.34,0],steel);
+  addMuscleEngineBay(root,steel);
+  addClassicBayClosures(root);
   for(const side of [-1,1])box('panel_BodyDoor'+(side<0?'L':'R')+'Interior',[.035,.31,1.28],[side*.77,.75,-.065],vinyl);
+  addClassicPanelBackings(root);
   root.updateMatrixWorld(true);return root;
 }
