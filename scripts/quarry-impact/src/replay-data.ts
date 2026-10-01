@@ -1,5 +1,5 @@
 import {normalizeSetup,type Setup} from './garage';
-import type {CarKind,Mode} from './rules';
+import {isCarKind,type CarKind,type Mode} from './rules';
 export const REPLAY_STRIDE=56,REPLAY_HZ=20,REPLAY_MAX_SECONDS=1800,REPLAY_MAX_BYTES=192*1024*1024;
 export type VisualEvent={kind:'hit'|'repair'|'jump';pose:number[];point?:number[];direction?:number[];damage?:number;health?:number;paint?:number};
 export type ReplayEvent=VisualEvent&{time:number;car:number};
@@ -49,7 +49,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
   const length=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(4,true);if(length>32*1024*1024||length+8>bytes.length)return fail();
   let h:any;try{h=JSON.parse(new TextDecoder().decode(bytes.subarray(8,8+length)));}catch{return fail();}
   const m=h?.meta;if(m?.version!==1||!['race','derby','playground'].includes(m.mode)||typeof m.reverse!=='boolean'||!Array.isArray(m.cars)||m.cars.length<1||m.cars.length>24||!Number.isInteger(m.props)||m.props<0||m.props>256)return fail();
-  const ids=new Set<number>();const cars:ReplayCar[]=m.cars.map((c:any)=>{if(!Number.isInteger(c.id)||c.id<0||c.id>1000||ids.has(c.id)||!['coupe','hatch','sedan'].includes(c.kind))return fail();ids.add(c.id);return{id:c.id,kind:c.kind,setup:normalizeSetup(c.setup,c.kind)};});
+  const ids=new Set<number>();const cars:ReplayCar[]=m.cars.map((c:any)=>{if(!Number.isInteger(c.id)||c.id<0||c.id>1000||ids.has(c.id)||!isCarKind(c.kind))return fail();ids.add(c.id);return{id:c.id,kind:c.kind,setup:normalizeSetup(c.setup,c.kind)};});
   if(!Array.isArray(h.times)||h.times.length<1||h.times.length>REPLAY_HZ*REPLAY_MAX_SECONDS+2)return fail();
   let prior=-1;for(const t of h.times){if(typeof t!=='number'||!Number.isFinite(t)||t<0||t>REPLAY_MAX_SECONDS||t<=prior)return fail();prior=t;}
   const stride=cars.length*REPLAY_STRIDE+m.props*7,expected=stride*h.times.length*4;if(expected>REPLAY_MAX_BYTES||8+length+expected!==bytes.length)return fail();

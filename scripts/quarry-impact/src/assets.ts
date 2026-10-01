@@ -1,3 +1,5 @@
+import {buildClassicVehicle} from './classic-vehicles';
+import {CLASSIC_VEHICLES,isClassicKind} from './classic-vehicle-specs';
 import * as THREE from 'three';
 import { GLTFLoader } from './model-loader';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -65,12 +67,13 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const kinds: CarKind[] = ['coupe', 'sedan', 'hatch'];
+  const legacyKinds: CarKind[] = ['coupe', 'sedan', 'hatch'];
+  const kinds: CarKind[] = [...legacyKinds,'muscle','wagon'];
   // Start independent transfers together; preserve template processing order.
-  const [loaded] = await Promise.all([Promise.all(kinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
+  const [loaded] = await Promise.all([Promise.all(legacyKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
   for (const [index, kind] of kinds.entries()) {
     progress('Preparing ' + kind + ' bodywork');
-    const gltf = loaded[index];
+    const gltf = isClassicKind(kind)?{scene:buildClassicVehicle(kind)}:loaded[index];
     alignWreckSeams(gltf.scene);
     // Keep the window seals with the moving door instead of batching them
     // into a fixed material group across the whole car.
@@ -94,7 +97,7 @@ export async function loadCars(progress: (s: string) => void) {
 }
 export function cloneCar(kind: CarKind, color: number) {
   const root = templates.get(kind)!.clone(true);
-  attachWheelPresentation(root);
+  if(!isClassicKind(kind))attachWheelPresentation(root);
   const materials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
@@ -155,7 +158,7 @@ export function cloneCar(kind: CarKind, color: number) {
   });
   prepareWreckGeometry(root);
   if (kind === 'coupe') configureCoupe(root);
-  root.position.y = -(kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);
+  root.position.y = -(isClassicKind(kind)?CLASSIC_VEHICLES[kind].modelOffset:kind === 'coupe' ? 1 : kind === 'sedan' ? 1.04 : 1.05);
   return root;
 }
 export const textures = new Map<string, THREE.Texture>();

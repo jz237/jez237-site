@@ -25,14 +25,15 @@ export class DemoDirector {
   update(cars:Vehicle[],camera:T.PerspectiveCamera,orbit:OrbitControls,dt:number,race:boolean){
     if(!cars.length)return;
     this.age+=dt;this.cut-=dt;
-    if(this.view==='director'&&this.cut<=0){
+    if(this.cut<=0){
       if(!this.manual){
         const candidates=cars.filter(c=>c.health>0&&!c.finished);
         candidates.sort((a,b)=>this.interest(b,cars)-this.interest(a,cars));
         this.followed=(candidates[0]??cars[0]).id;
       }
-      this.activeView=this.shots[Math.floor(this.age/9)%this.shots.length];this.cut=9;this.snap=true;
-    }else if(this.view!=='director')this.activeView=this.view;
+      if(this.view==='director')this.activeView=this.shots[Math.floor(this.age/9)%this.shots.length];this.cut=9;this.snap=true;
+    }
+    if(this.view!=='director')this.activeView=this.view;
     const car=cars.find(c=>c.id===this.followed)??cars[0],target=car.root.position.clone().add(new T.Vector3(0,.35,0));
     const f=new T.Vector3(0,0,1).applyQuaternion(car.root.quaternion);f.y=0;f.normalize();
     const right=new T.Vector3(f.z,0,-f.x),desired=target.clone();let fov=52;

@@ -1,3 +1,4 @@
+import {isClassicKind,classicWheelAnchors} from './classic-vehicle-specs';
 import anchors from './vehicle-damage-anchors.json';
 import type {CarKind} from './rules';
 import {bodyworkDentDamage} from './bodywork-response';
@@ -17,7 +18,7 @@ export function damageWheels(damage:ArrayLike<number>&{[n:number]:number},shift:
 }
 /** Stored impacts are body-local; authored wheel anchors are model-local. */
 export function applyComponentImpact(state:ComponentDamage,kind:CarKind,point:DamageVector,direction:DamageVector,damage:number){
-  const model=anchors[kind],length=Math.hypot(direction.x,direction.y,direction.z)||1;
+  const model=isClassicKind(kind)?classicWheelAnchors(kind):anchors[kind],length=Math.hypot(direction.x,direction.y,direction.z)||1;
   damageWheels(state.wheelDamage,state.wheelShift,model.wheels,{x:point.x,y:point.y+model.modelOffset,z:point.z},
     {x:direction.x/length,y:direction.y/length,z:direction.z/length},bodyworkDentDamage(damage));
 }
