@@ -23,6 +23,7 @@ function scene(){
 test('every tour composition targets the pond and offers varied safe above/below-water angles',()=>{
   const {shots,sdf,depth,obstacles}=scene(),above=[],below=[];
   for(const sh of shots){
+    if(sh.skip?.())continue;
     sh.start?.();
     for(let i=0;i<=100;i++){
       const {pos,look}=sh.frame(i/100,1/60);
@@ -43,7 +44,7 @@ test('every tour composition targets the pond and offers varied safe above/below
   assert.ok(above.some(p=>p.x<-1)&&above.some(p=>p.x>1),'opposite viewing directions');
 });
 test('koi close-ups follow moving fish smoothly, alternate individuals and handle no fish',()=>{
-  const {shots,fish,sdf,depth}=scene(),tracking=shots.filter(sh=>sh.start);
+  const {shots,fish,sdf,depth}=scene(),tracking=shots.filter(sh=>sh.kind==='koi');
   for(const sh of tracking){
     const selected=new Set();
     for(let pass=0;pass<3;pass++){
@@ -73,7 +74,7 @@ test('actual tour playback loops, skips underwater for ice/above-only, and resum
   vm.runInContext(`
     const P={fishCount:2,pathSpeed:1,stayAbove:false,tourSeasons:false},WATER_Y=0;
     const KOI={fish:[{p:new THREE.Vector3(0,-.4,1),heading:0,size:.7},{p:new THREE.Vector3(1,-.5,2),heading:1,size:.6}]};
-    const WORLD={obstacles:[]},SH={uIce:{value:0}},camera=new THREE.PerspectiveCamera(),caption={textContent:'',style:{}};
+    const TURTLE={root:null},FROG={root:null},WORLD={obstacles:[]},SH={uIce:{value:0}},camera=new THREE.PerspectiveCamera(),caption={textContent:'',style:{}};
     const document={getElementById:()=>caption};function ground(){return .2;}function cycleWeather(){}
 
   `+between('const MOVIE =','function updateCinematic')+`
@@ -101,10 +102,75 @@ test('Take a tour restores the pond film and restarts its camera after settings 
     const P={movie:false},GUI_CTRL={movie:{updateDisplay(){}}},TWEEN={},FOLLOW={},FEED={},MOVIE={i:5,t:9,started:{}};
     const camera=new THREE.PerspectiveCamera(14);let opened=0,held=0;
     function installGuide(){return {close(){opened++;}};}function setHold(){held++;}function startFeeding(){}
-    function onCameraMode(){}function goToView(){}function setFreeze(){}
-  `+between('function installHiddenReef()','\ninit();')+`
+    function onCameraMode(){}function goToView(){}function setFreeze(){}function updateMovie(){}
+  `+between('function startPondTour(', 'function updateMovie')+between('function installHiddenReef()','\ninit();')+`
     installHiddenReef();button.onclick();globalThis.result={P,MOVIE,TWEEN,camera,opened,held};`,c);
   const r=c.result;assert.equal(r.P.movie,true);assert.equal(r.P.cameraMode,'Cinematic');
   assert.equal(r.MOVIE.i,0);assert.equal(r.MOVIE.t,0);assert.equal(r.MOVIE.started,null);
   assert.equal(r.camera.fov,52);assert.equal(r.TWEEN.t,1);assert.equal(r.opened,1);assert.equal(r.held,1);
+});
+
+test('one turtle and one frog portrait follow their animation poses and skip hidden animals',()=>{
+  const g=basin();
+  let turtle={p:new g.THREE.Vector3(1.45,.15,1.75),heading:.4};
+  let frog={p:new g.THREE.Vector3(-1.05,.015,3.85),heading:1};
+  const shots=makePondTour({...g,getFish:()=>[],getTurtle:()=>turtle,getFrog:()=>frog});
+  for(const kind of ['turtle','frog']){
+    const selected=shots.filter(sh=>sh.kind===kind);assert.equal(selected.length,1);
+    const sh=selected[0],animal=kind==='turtle'?turtle:frog;
+    assert.equal(sh.skip(),false);sh.start();const first=sh.frame(.5);
+    assert.ok(first.look.distanceTo(animal.p)<.04,'portrait centers the current animal');
+    assert.ok(first.pos.distanceTo(first.look)>.2,'portrait leaves space for the body');
+    const phone=makePondTour({...g,getFish:()=>[],getTurtle:()=>turtle,getFrog:()=>frog,getAspect:()=>.42}).find(s=>s.kind===kind);
+    phone.start();const phoneFrame=phone.frame(.5);
+    assert.ok(phoneFrame.pos.distanceTo(phoneFrame.look)>first.pos.distanceTo(first.look)*1.9,'narrow screens leave more room for the animal');
+    animal.p.x+=.25;animal.p.z+=.12;
+    let last;
+    for(let i=1;i<=180;i++){
+      last=sh.frame(.5,1/60);
+      assert.ok(last.pos.y>=.14,'portrait stays above the water');
+      assert.ok([...last.pos.toArray(),...last.look.toArray()].every(Number.isFinite));
+    }
+    assert.ok(last.look.distanceTo(animal.p)<.04,'camera follows a moving animal');
+    assert.ok(last.pos.distanceTo(first.pos)>.27,'camera follows the subject position, independent of its orbit');
+    animal.heading+=.3;const turned=sh.frame(.5,.1);
+    assert.ok(turned.pos.distanceTo(last.pos)>.01,'portrait turns gradually with its subject');
+    if(kind==='turtle')turtle=null;else frog=null;
+    assert.equal(sh.skip(),true,'hidden winter animals get no empty close-up');
+  }
+});
+
+test('actual default startup opens an unpaused moving tour, with Garden still available',()=>{
+  for(const reduced of [false,true]){
+    const {c,THREE,sdf,depth}=basin();Object.assign(c,{makePondTour,THREE,sdf,pondDepth:depth});
+    vm.runInContext(`
+      const P={fishCount:2,pathSpeed:1,cameraMode:'Manual',freezeScene:true},WATER_Y=0;
+      const KOI={fish:[{p:new THREE.Vector3(0,-.4,1),heading:0,size:.7},{p:new THREE.Vector3(1,-.5,2),heading:1,size:.6}]};
+      const WORLD={obstacles:[]},TURTLE={root:null},FROG={root:null},SH={uIce:{value:0}};
+      const camera=new THREE.PerspectiveCamera(14),TWEEN={t:0},PATH={blend:1},GUI_CTRL={},CTRL={},FOLLOW={},FEED={};
+      const elements=new Map(),messages=[],buttons=['Garden','Pond','Underwater','Tour'].map(view=>({dataset:{view},attributes:{},setAttribute(k,v){this.attributes[k]=v;}}));
+      function $(id){if(!elements.has(id))elements.set(id,{hidden:false,style:{},attributes:{},label:{textContent:''},setAttribute(k,v){this.attributes[k]=v;},querySelector(){return this.label;}});return elements.get(id);}
+      const document={body:{dataset:{}},getElementById:$,querySelectorAll:()=>buttons,querySelector:()=>({style:{display:'none'}})};
+      const matchMedia=()=>({matches:${reduced}});
+      function toast(value){messages.push(value);}function ground(){return .2;}function cycleWeather(){}
+      function installGuide(){return {close(){}};}function setHold(){}function startFeeding(){}
+      function goToView(name){P.cameraMode='Manual';}
+    `+between('function setFreeze(', '// sound:')+
+      between('function onCameraMode(', '/* ------------------------------------------------------------------ 13b.')+
+      between('const MOVIE =','function updateCinematic')+
+      between('function installHiddenReef()','\ninit();')+`
+      installHiddenReef();const initial=camera.position.clone();
+      for(let i=0;i<120;i++)updateMovie(1/60,i/60);
+      globalThis.result={P,TWEEN,initial,camera,buttons,messages,MOVIE,document};
+    `,c);
+    const r=c.result;
+    assert.equal(r.P.freezeScene,false);assert.equal(r.document.body.dataset.pondMotion,'running');
+    assert.equal(r.P.movie,true);assert.equal(r.P.cameraMode,'Cinematic');assert.equal(r.TWEEN.t,1);
+    assert.equal(r.buttons.find(b=>b.dataset.view==='Tour').attributes['aria-pressed'],'true');
+    assert.deepEqual(Array.from(r.initial.toArray()),[2.6,5.4,6]);
+    assert.ok(r.camera.position.distanceTo(r.initial)>.2,'camera moves automatically after startup');
+    assert.equal(r.messages.length,0,'no startup toast or pause');
+    assert.equal(r.MOVIE.shots.filter(s=>s.kind==='turtle').length,1);
+    assert.equal(r.MOVIE.shots.filter(s=>s.kind==='frog').length,1);
+  }
 });
