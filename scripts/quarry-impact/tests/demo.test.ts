@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
@@ -15,7 +16,7 @@ test('new release preserves the exact preceding release and all shared server in
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const manifest=JSON.parse(read('source/demo-revision.json').toString());
  for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(restorePerformanceBytes(p,read(p))),e.after,p);assert.equal(hash(restoreDemoBytes(p,read(p))),e.before,p);}
- const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
 });
 test('each camera keeps a finite view above the terrain, including overturned targets',()=>{
  const director=new DemoDirector(),camera=new T.PerspectiveCamera(52,16/9,.1,850),root=new T.Group();

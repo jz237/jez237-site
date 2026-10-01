@@ -1,0 +1,31 @@
+{
+  "baseline": "afe7661",
+  "purpose": "Layered vehicle liveries, reusable groups and paint shader integration",
+  "files": {
+    "src/main.ts": {
+      "before": "55bd17774b52374c24bfe00e9ddd0ca9e58adb150fc56f688778d469702e9e9d",
+      "after": "5c583a6bfb1acb380a83c6202d3b79b052f80ec255da77bffa133407f382a13d",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/garage.ts": {
+      "before": "5fd48b1f62dc353bbc4605e3dc0840aaa550335e7b6bd87a7b008f6037def19b",
+      "after": "6ef99aa4bfffe04d5b1143e3f383b8d1af790c5e6598069a05fcbfe70cec1cfe",
+      "snapshot": "src-garage.ts.gz"
+    },
+    "src/garage-ui.ts": {
+      "before": "d860f617ea49b6505387f055ca2d33dcc404df9825b742a7c6eec29eb0c9b35a",
+      "after": "563171ad291ab2efdb7847d42fc98e1f04e96e31f0e3450803fe34e5e0d2d953",
+      "snapshot": "src-garage-ui.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "05429b8be03dea110bfeecb7740f2491c4859c401fdd08b28418f35d9ffb87d5",
+      "after": "91c09da9c834760c103e4a748ed56f835bedb3028274386eb13c69c13865b709",
+      "snapshot": "src-vehicle.ts.gz"
+    },
+    "src/style.css": {
+      "before": "97c45e4f7c9e4729d169c96489956030002e797e374f249b670bd5f2ebf6b04d",
+      "after": "5a84354c61ca5d68f20b7dc274cf54adf314dccb74b285fe1ca5a238289f5ecf",
+      "snapshot": "src-style.css.gz"
+    }
+  }
+}

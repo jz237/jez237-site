@@ -157,3 +157,7 @@ New photographic materials, all **CC0 1.0** from Poly Haven:
 - [Concrete Layers 02](https://polyhaven.com/a/concrete_layers_02), **Rob Tuytel**, 2 m scale.
 
 The nine original 2k JPEGs are bundled locally with their source URLs, official checksums and local hashes in `public/assets/workyard/manifest.json`; source metadata is retained in `source/workyard/`. Existing cladding maps are reused. The crash sound refinement reuses the existing ElevenLabs recordings; this update generated no additional audio and incurred no asset purchases.
+
+## Multiplayer transport compression
+
+fflate 0.8.3 by Arjun Barrett is used under the MIT license. The complete notice is bundled in `public/licenses/fflate.txt`.

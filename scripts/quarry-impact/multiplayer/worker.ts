@@ -1,9 +1,11 @@
+import {LIVERY_MESSAGE_LIMIT} from '../src/online-livery';
+import {readSavedRoom,roomStorageEntries} from './room-storage';
 import { DurableObject } from 'cloudflare:workers';
 // prepare-rapier.mjs imports the browser's pinned Rapier with a precompiled WASM.Module.
 // @ts-ignore generated module has the same public API as rapier3d-compat
 import R from './.generated/rapier-worker.mjs';
 import { Room, type Peer, type SavedRoom } from './room';
-import { PROTOCOL, parseClientMessage, validRoom, STEP } from './protocol';
+import { PROTOCOL, parseClientMessage, validRoom, STEP, MAX_PLAYERS } from './protocol';
 import { AdmissionLedger, EMPTY_ROOM_MS, JOIN_TIMEOUT_MS, roomDeadline, type AdmissionState, type Lease } from './admission';
 
 /** Only connection admission passes through this small global ledger, never physics or input. */
@@ -66,7 +68,7 @@ export class QuarryRoom extends DurableObject<Env> {
         for (const ws of ctx.getWebSockets()) ws.close(4000, 'Room expired');
         await ctx.storage.deleteAll(); this.meta = undefined; return;
       }
-      const saved = await ctx.storage.get<SavedRoom>('room');
+      const saved = await readSavedRoom(ctx.storage);
       if (saved) { R.init(); this.room = new Room(this.meta.code, R); this.room.restore(saved); }
       for (const ws of ctx.getWebSockets()) {
         const attachment = ws.deserializeAttachment() as Attachment;
@@ -74,8 +76,8 @@ export class QuarryRoom extends DurableObject<Env> {
         if (attachment.id === undefined) continue; // Pending hello stays lightweight through hibernation.
         const previous = saved?.sessions.find(s => s.member.id === attachment.id);
         if (!this.room || !previous) { ws.close(1012, 'Room unavailable'); continue; }
-        const peer: Peer = { send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
-        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token }));
+        const peer: Peer = { sendBinary:message=>ws.send(message),sendEncoded:message=>ws.send(message),send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
+        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token,maxPlayers:24,wire:previous.wire }));
         if (id !== null) this.peers.set(ws, { peer, id });
       }
       if (this.room?.activeCount) this.meta.emptySince = undefined;
@@ -121,8 +123,8 @@ export class QuarryRoom extends DurableObject<Env> {
     if (this.hasExpired()) await this.expire('Room expired');
     if (this.meta && this.meta.lease.id !== lease.id) return new Response('Room generation mismatch', { status: 409 });
     if (!this.meta) { this.closing = false; this.meta = { code, lease, emptySince: Date.now(), activityVersion: lease.activityVersion ?? 0 }; await this.ctx.storage.put('metadata', this.meta); }
-    // Permit a token reconnect to replace an old peer even when all eight player slots are occupied.
-    if (this.ctx.getWebSockets().filter(ws => ws.readyState === WebSocket.OPEN).length >= 16) return new Response('Too many pending connections', { status: 429 });
+    // Permit a token reconnect to replace an old peer even when all player slots are occupied.
+    if (this.ctx.getWebSockets().filter(ws => ws.readyState === WebSocket.OPEN).length >= MAX_PLAYERS+8) return new Response('Too many pending connections', { status: 429 });
     const pair = new WebSocketPair(), client = pair[0], ws = pair[1];
     this.ctx.acceptWebSocket(ws);
     ws.serializeAttachment({ joined: Date.now(), generation: lease.id } satisfies Attachment);
@@ -133,7 +135,8 @@ export class QuarryRoom extends DurableObject<Env> {
     await this.prepared;
     if (this.closing || !this.meta) { ws.close(4000, 'Room expired'); return; }
     if (this.hasExpired()) { await this.expire('Room expired'); return; }
-    if (typeof data !== 'string' || data.length > 1024 || new TextEncoder().encode(data).byteLength > 1024) { ws.close(1009, 'Message exceeds 1 KiB'); return; }
+    if(typeof data!=='string'||data.length>LIVERY_MESSAGE_LIMIT||new TextEncoder().encode(data).byteLength>LIVERY_MESSAGE_LIMIT){ws.close(1009,'Message exceeds 32 KiB');return;}
+    if(new TextEncoder().encode(data).byteLength>1024&&(!this.peers.has(ws)||parseClientMessage(data)?.type!=='livery')){ws.close(1009,'Message exceeds 1 KiB');return;}
     let session = this.peers.get(ws);
     if (!session) {
       const attachment = ws.deserializeAttachment() as Attachment;
@@ -145,9 +148,9 @@ export class QuarryRoom extends DurableObject<Env> {
         if (!await this.gate().activate(meta.code, meta.lease.id, ++meta.activityVersion)) { await this.expire('Room reservation expired'); return; }
         if (this.closing || this.meta?.lease.id !== meta.lease.id || this.hasExpired() || ws.readyState !== WebSocket.OPEN) { ws.close(4000, 'Room expired'); return; }
       }
-      // The heavy terrain and eight-car world is allocated only after a validated hello and admission.
+      // The heavy terrain and car world is allocated only after a validated hello and admission.
       if (!this.room) { R.init(); this.room = new Room(meta.code, R); }
-      const peer: Peer = { send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
+      const peer: Peer = { sendBinary:message=>ws.send(message),sendEncoded:message=>ws.send(message),send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
       const id = this.room.connect(peer, data); if (id === null) return;
       session = { peer, id }; this.peers.set(ws, session);
       ws.serializeAttachment({ ...attachment, id } satisfies Attachment);
@@ -156,7 +159,11 @@ export class QuarryRoom extends DurableObject<Env> {
       // Commit the established active state with a newer version; stale idle RPCs cannot shorten it.
       if (!await this.gate().activate(meta.code, meta.lease.id, ++meta.activityVersion)) { await this.expire('Room reservation expired'); return; }
       await this.persist(); await this.scheduleAlarm();
-    } else this.room?.receive(session.id, session.peer, data);
+    } else {
+      const changed=this.room?.receive(session.id, session.peer, data);
+      // Persist quiet result-screen votes/round changes before this object hibernates.
+      if(changed)await this.persist();
+    }
     this.startLoop();
   }
   private startLoop() {
@@ -181,7 +188,7 @@ export class QuarryRoom extends DurableObject<Env> {
         do {
           this.saveRequested = false;
           if (!this.room || !this.meta || this.closing) break;
-          await this.ctx.storage.put({ room: this.room.save(), metadata: this.meta });
+          await this.ctx.storage.put({ ...roomStorageEntries(this.room.save()), metadata: this.meta });
         } while (this.saveRequested);
       })().finally(() => { this.flushInFlight = undefined; if (this.saveRequested) return this.persist(); });
     }

@@ -1,0 +1,30 @@
+{
+  "baseline": "1d25181",
+  "files": {
+    "src/wreck-attachments.ts": {
+      "before": "d28ab67d73d0b3ee046858eda352feb03e86df9df69090bfc800bf8121b61703",
+      "after": "3dd1022d8f56cc9d5a899d2e375e5af18aaccb49eb713709aaf23cacfa236dd7",
+      "snapshot": "src-wreck-attachments.ts.gz"
+    },
+    "src/online-view.ts": {
+      "before": "2447c3bd48c05e66ce354e28f716fb5587bc395bec749d2ddfc66f0631f24314",
+      "after": "1ebd362d570fe9e54457b0be171db81d58e231190c841640834db545c909cbaf",
+      "snapshot": "src-online-view.ts.gz"
+    },
+    "src/network-validation.ts": {
+      "before": "96618258705b1cd52ba554a2488c5abb97d7256eea7686e29bd3f033f455b226",
+      "after": "e03e812dc3562ffb8d822916216ddb8a186e7ba2387cb360503d6c660a6ec9c2",
+      "snapshot": "src-network-validation.ts.gz"
+    },
+    "multiplayer/simulation.ts": {
+      "before": "75b409618a06b35b9cf2800f14bff9dd4ef917827195b905185327552f77ae4b",
+      "after": "66fa024e27e952bd37b84dbb19ff618e85b29d17d68a6e91a32bf7224f4d4446",
+      "snapshot": "multiplayer-simulation.ts.gz"
+    },
+    "multiplayer/protocol.ts": {
+      "before": "3e809b7ed6ac8eb6c56d6b5ea9a9759541fe113f41c434df8412866db5f6ab5c",
+      "after": "2271dedab0def741f48fe142f8aa2be51bd9b9990ba8ffcbc5d4bd49f040e7d3",
+      "snapshot": "multiplayer-protocol.ts.gz"
+    }
+  }
+}

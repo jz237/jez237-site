@@ -1,0 +1,31 @@
+{
+  "baseline": "4cdd05a",
+  "purpose": "Custom solo events, 24-car grids, reverse racing and score derby",
+  "files": {
+    "src/main.ts": {
+      "before": "2c13895e61c094a078c05e147ea878ef6236400ab89d2387a843026b21efe55c",
+      "after": "eca7d2f604a1731c5110f6cdd8b80a020f9d38801e5294fcd2c0ed04735cae69",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/style.css": {
+      "before": "98eaffca524974f20411c5b7fd4694fa82e63946282297f5fbb840f656892db0",
+      "after": "3301f4eb2a675a621fd0fc0cd317935c7304b9c3f2b97834bbf1ba56a69ce743",
+      "snapshot": "src-style.css.gz"
+    },
+    "src/driving-brain.ts": {
+      "before": "63847aeaadc01cff2a280241d34c789690efd8e509a419b76e7f4ec4f3869e01",
+      "after": "3d6cda8230c754716fec715c26342f1765bf6193c7cceef9180eee38f6d04d78",
+      "snapshot": "src-driving-brain.ts.gz"
+    },
+    "src/session-telemetry.ts": {
+      "before": "d0471708aec40716ce1e250e84fde3cd670af1cea547c35edf29abd701731295",
+      "after": "c0f5fc466d440242e2558e5274ba8c01a393d3d52d832f40d603b3fc7f2296d8",
+      "snapshot": "src-session-telemetry.ts.gz"
+    },
+    "src/progression.ts": {
+      "before": "dde63ed3649f89ef39c668f6649b12379c49d7d1015172bb61c908996f3c249d",
+      "after": "9077b704442256a153ea66fac84585fcce22a813fb4374a710940bf9c32e3c27",
+      "snapshot": "src-progression.ts.gz"
+    }
+  }
+}

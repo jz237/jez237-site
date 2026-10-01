@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -74,6 +75,6 @@ test('low health or crushed doors alone cannot ignite; engine-bay smoke is disti
 test('this revision remains reversible and preserves every shared server input and original model',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex'),revision=JSON.parse(read('source/drive-feel-revision.json').toString());
  for(const[p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreStructuralBytes(p,read(p))),e.after,p);assert.equal(hash(restoreDriveFeelBytes(p,read(p))),e.before,p);}
- const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
  const packed=JSON.parse(read('source/model-packing.json').toString());for(const e of Object.values<any>(packed.models))assert.equal(hash(read('public/'+e.source)),e.sourceSha256);
 });

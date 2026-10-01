@@ -1,3 +1,4 @@
+import {damageWheels} from './component-damage';
 import * as T from 'three';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
 type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number};
@@ -42,15 +43,11 @@ export class WreckAttachments {
       const threshold=a.name.startsWith('door')?18:a.name==='hood'?12:10;
       a.loose=T.MathUtils.clamp((a.damage-threshold)/38,0,1);
     }
-    for(let i=0;i<4;i++){
-      const w=this.wheelRest[i],distance=Math.hypot(point.x-w.x,(point.y-w.y)*.6,point.z-w.z);
-      const hit=damage*Math.max(0,1-distance/1.45);
-      this.wheelDamage[i]=Math.min(1,this.wheelDamage[i]+hit/30);
-      const shift=this.wheelShift[i].addScaledVector(direction,hit*.011);
-      shift.x=T.MathUtils.clamp(shift.x,-.18,.18);shift.y=0;shift.z=T.MathUtils.clamp(shift.z,-.24,.24);
-    }
+    damageWheels(this.wheelDamage,this.wheelShift,this.wheelRest,point,direction,damage);
     this.pose(0,0);
   }
+  get poseTime(){return this.time;}
+  poseAt(time:number,speed:number){this.time=Math.max(0,time);this.pose(0,speed);}
   pose(dt:number,speed:number){
     this.time+=Math.max(0,dt);
     if(dt>0){this.wheelTravel+=speed*dt/.375;this.wheelSpeed=Math.abs(speed);}

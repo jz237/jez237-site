@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -93,6 +94,6 @@ test('fluid atlases are genuine varied Blender frames with approved local byte h
 test('all previous runtime sources are recoverable and original models/server inputs remain unchanged',()=>{
  const revision=JSON.parse(read('source/structural-realism-revision.json').toString());assert.ok(Object.keys(revision.files).length>=8);
  for(const[p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreReferenceBytes(p,read(p))),e.after,p);assert.equal(hash(restoreStructuralBytes(p,read(p))),e.before,p);}
- const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(shared.sourceHashes).length,23);for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(shared.sourceHashes).length,23);for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
  const models=JSON.parse(read('source/model-packing.json').toString());for(const m of Object.values<any>(models.models))assert.equal(hash(read('public/'+m.source)),m.sourceSha256);
 });

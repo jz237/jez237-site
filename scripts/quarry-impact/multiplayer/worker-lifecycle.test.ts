@@ -10,7 +10,7 @@ const source = await build({ entryPoints: ['worker.ts'], absWorkingDir: import.m
   b.onLoad({ filter: /.*/, namespace: 'host-test' }, args => ({ contents: args.path === 'cloudflare:workers'
     ? 'export class DurableObject { constructor(ctx,env){this.ctx=ctx;this.env=env;} }'
     : args.path === './room'
-      ? `export class Room { static allocations=0; constructor(){Room.allocations++;globalThis.__quarryAllocations=(globalThis.__quarryAllocations??0)+1;this.activeCount=0;this.members=[];this.sim={phase:'lobby'};} connect(){const id=this.members.length;this.members.push({id,connected:true});this.activeCount++;return id;} disconnect(id){if(this.members[id]?.connected){this.members[id].connected=false;this.activeCount--;}} dispose(){} save(){return {sessions:this.members.map(member=>({member:{...member},token:'test-'+member.id,seq:0})),updated:Date.now()};} restore(saved){this.members=saved.sessions.map(s=>({...s.member,connected:false}));this.activeCount=0;} receive(){} }`
+      ? `export class Room { static allocations=0; constructor(){Room.allocations++;globalThis.__quarryAllocations=(globalThis.__quarryAllocations??0)+1;this.activeCount=0;this.members=[];this.mutations=0;this.sim={phase:'lobby'};} connect(){const id=this.members.length;this.members.push({id,connected:true});this.activeCount++;return id;} disconnect(id){if(this.members[id]?.connected){this.members[id].connected=false;this.activeCount--;}} dispose(){} save(){return {mutations:this.mutations,sessions:this.members.map(member=>({member:{...member},token:'test-'+member.id,seq:0})),updated:Date.now()};} restore(saved){this.members=saved.sessions.map(s=>({...s.member,connected:false}));this.activeCount=0;} receive(id,peer,raw){if(JSON.parse(raw).type==='vote'){this.mutations++;return true;}} }`
       : 'export default { init(){} };', loader: 'js' }));
 } }] });
 const { QuarryRoom } = await import('data:text/javascript;base64,' + Buffer.from(source.outputFiles[0].text).toString('base64'));
@@ -59,6 +59,10 @@ test('actual Worker allocates only after hello, rejects silent sockets, and sock
     now = 20_000; const active = setup('BCDEFG'); const player = await active.join();
     await active.room.webSocketMessage(player, JSON.stringify({ type: 'hello', protocol: 1, name: 'TEST', kind: 'coupe' }));
     assert.equal((globalThis as any).__quarryAllocations, 1);
+    await active.room.webSocketMessage(player, JSON.stringify({type:'vote',mode:'race'}));
+    assert.equal((active.data.get('room') as any).mutations,1,'accepted idle votes must be durable before handler completion');
+    await active.room.webSocketMessage(player, JSON.stringify({type:'ping',sent:0}));
+    assert.equal((active.data.get('room') as any).mutations,1);
     now += JOIN_TIMEOUT_MS; await active.runAlarm();
     const hard = 20_000 + ROOM_LIFETIME_MS; assert.equal(active.getAlarm(), hard);
     const another = await active.join(); assert.equal(active.getAlarm(), now + JOIN_TIMEOUT_MS);

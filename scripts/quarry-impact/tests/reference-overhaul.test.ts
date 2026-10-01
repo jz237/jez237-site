@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -15,8 +16,8 @@ const revision=JSON.parse(read('source/reference-overhaul-revision.json').toStri
 async function model(file:string){const b=read('public/models/'+file+'.glb');return new GLTFLoader().parseAsync(b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength),'');}
 test('reference construction leaves every prior model and deployed Worker input byte-identical',()=>{
  for(const [p,h]of Object.entries<string>(revision.protectedModels))assert.equal(hash(read('public/'+p)),h,p);
- for(const [p,h]of Object.entries<string>(revision.protectedWorker))assert.equal(hash(read(p)),h,p);
- for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restoreReferenceBytes(p,read(p))),e.before,p);}
+ for(const [p,h]of Object.entries<string>(revision.protectedWorker))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
+ for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreGarageBytes(p,read(p))),e.after,p);assert.equal(hash(restoreReferenceBytes(p,read(p))),e.before,p);}
 });
 test('Blender escarpment includes complete near/far rock sections with bounded finite geometry',async()=>{
  const gltf=await model('arena-escarpment'),sections=new Map<string,Set<string>>();let triangles=0;

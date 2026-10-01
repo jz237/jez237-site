@@ -1,3 +1,6 @@
+import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
+import {LiveryPaint} from './livery-paint';
+import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -20,6 +23,7 @@ import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {VehicleSurface} from './vehicle-surface';
+import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type Input = {
   throttle: number;
   steer: number;
@@ -27,6 +31,8 @@ export type Input = {
   handbrake: boolean;
 };
 export class Vehicle {
+  onVisualEvent?: (event:VisualEvent)=>void;
+  private visualPose(){return [...this.current.toArray(),...this.currentQ.toArray()];}
   body: R.RigidBody;
   collider: R.Collider;
   roof: R.Collider;
@@ -37,6 +43,7 @@ export class Vehicle {
   readonly wreckParts: WreckAttachments;
   readonly tireContacts:TireContact[];
   readonly paintColor:T.Color;
+  readonly livery:LiveryPaint;
   readonly surfaceFinish:VehicleSurface;
   private wetWheels=[false,false,false,false];
   private groundedWheels=[false,false,false,false];
@@ -57,7 +64,7 @@ export class Vehicle {
   input: Input = { throttle: 0, steer: 0, brake: 0, handbrake: false };
   slip = 0;
   remoteGrounded?: boolean;
-  surface = 'gravel';
+  surface:'asphalt'|'gravel' = 'gravel';
   damageLeft = 0;
   damageRight = 0;
   readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
@@ -88,6 +95,8 @@ export class Vehicle {
   right = new T.Vector3();
   wheelSpin = 0;
   aiPhase: number;
+  readonly setup: Setup;
+  readonly specification: ReturnType<typeof setupPhysics>;
   constructor(
     public id: number,
     public kind: CarKind,
@@ -95,65 +104,19 @@ export class Vehicle {
     public scene: T.Scene,
     public world: R.World,
     public fx: Effects,
+    setup?: Setup,
   ) {
-    const def = DEFINITIONS[kind];
+    this.setup = normalizeSetup(setup ?? stockSetup(kind), kind);
+    this.specification = setupPhysics(kind, this.setup);
+    const def = {...DEFINITIONS[kind], mass:this.specification.mass};
     this.aiPhase = id * 1.79;
     this.model = cloneCar(kind, color);
     this.paintColor=new T.Color(color);
     this.root.add(this.model);
     scene.add(this.root);
-    this.body = world.createRigidBody(
-      R.RigidBodyDesc.dynamic()
-        .setLinearDamping(0.06)
-        .setAngularDamping(0.85)
-        .setCcdEnabled(true)
-        .setCanSleep(true),
-    );
-    this.collider = world.createCollider(
-      R.ColliderDesc.cuboid(def.halfWidth - 0.06, 0.25, def.halfLength - 0.12)
-        .setMassProperties(def.mass,{x:0,y:-.06,z:0},{x:def.mass*((def.halfLength*2)**2+1.3**2)/12,y:def.mass*((def.halfLength*2)**2+(def.halfWidth*2)**2)/12,z:def.mass*((def.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
-        .setFriction(0.45)
-        .setRestitution(0.035)
-        .setActiveEvents(R.ActiveEvents.CONTACT_FORCE_EVENTS)
-        .setContactForceEventThreshold(15000),
-      this.body,
-    );
-    this.roof = world.createCollider(
-      R.ColliderDesc.cuboid(0.65, 0.24, 0.65)
-        .setTranslation(0, kind === 'coupe' ? .12 : .2, -0.1)
-        .setMass(0)
-        .setFriction(0.5)
-        .setActiveEvents(R.ActiveEvents.CONTACT_FORCE_EVENTS)
-        .setContactForceEventThreshold(15000),
-      this.body,
-    );
-    this.controller = world.createVehicleController(this.body);
-    this.controller.indexUpAxis = 1;
-    this.controller.setIndexForwardAxis = 2;
-    for (const [name, x, z] of [
-      ['FL', -1, 1],
-      ['FR', 1, 1],
-      ['RL', -1, -1],
-      ['RR', 1, -1],
-    ] as [string, number, number][]) {
-      const i = this.controller.numWheels();
-      const wheel = this.model.getObjectByName('wheel_' + name)!;
-      this.wheels.push(wheel);
-      this.controller.addWheel(
-        { x: x * (def.halfWidth - 0.04), y: -0.12, z: (z * def.wheelbase) / 2 },
-        { x: 0, y: -1, z: 0 },
-        { x: -1, y: 0, z: 0 },
-        0.36,
-        0.375,
-      );
-      this.controller.setWheelSuspensionStiffness(i, 30);
-      this.controller.setWheelSuspensionCompression(i, 4.4);
-      this.controller.setWheelSuspensionRelaxation(i, 5.4);
-      this.controller.setWheelMaxSuspensionTravel(i, 0.24);
-      this.controller.setWheelMaxSuspensionForce(i, 13000);
-      this.controller.setWheelFrictionSlip(i, 2.1);
-      this.controller.setWheelSideFrictionStiffness(i, 1.1);
-    }
+    const physical=createVehiclePhysics(R,world,kind,def.mass);
+    this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
+    for(const name of ['FL','FR','RL','RR'])this.wheels.push(this.model.getObjectByName('wheel_'+name)!);
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
         if (o.name.startsWith('panel_')) this.panels.push(o);
@@ -166,6 +129,17 @@ export class Vehicle {
     this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth);
     this.tireContacts=this.wheels.map(w=>new TireContact(w));
     this.surfaceFinish=new VehicleSurface(this.model,id);
+    this.livery=new LiveryPaint(this.model);this.livery.set(this.setup.livery);
+    if(setup)this.setPaint(this.setup.paint,this.setup.trim);
+  }
+  setPaint(paint: number, trim: number) {
+    this.paintColor.setHex(paint);
+    this.model.traverse(o=>{
+      if(!(o instanceof T.Mesh))return;
+      for(const m of Array.isArray(o.material)?o.material:[o.material]) {
+        if(m instanceof T.MeshStandardMaterial && m.name.startsWith('paint'))m.color.setHex(m.name.includes('Paint 2')?trim:paint);
+      }
+    });
   }
   place(x: number, z: number, yaw: number, repair = false) {
     const p = { x, y: landscapeHeight(x, z) + 0.89, z };
@@ -182,9 +156,11 @@ export class Vehicle {
     this.root.quaternion.copy(q);
     this.rollTime = 0;
     this.stuck = 0;
+    this.onVisualEvent?.({kind:'jump',pose:this.visualPose()});
     if (repair) this.repair();
   }
   repair() {
+    this.onVisualEvent?.({kind:'repair',pose:this.visualPose()});
     this.wreckFinish.reset();
     this.wreckParts.reset();
     this.surfaceFinish.reset();
@@ -252,86 +228,8 @@ export class Vehicle {
     this.slip = Math.abs(lateral);
     this.surface = surfaceAt(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
-    const alive = this.health > 0;
-    const steerTarget =
-      (alive ? this.input.steer : 0) *
-        (0.55 / (1 + Math.abs(this.speed) * 0.016)) +
-      (this.damageRight - this.damageLeft) * 0.0007;
-    this.steering = T.MathUtils.damp(this.steering, steerTarget, 8, dt);
-    const def = DEFINITIONS[this.kind];
-    const force = alive
-      ? this.input.throttle *
-        def.force *
-        (0.45 + (0.55 * this.health) / 100) *
-        clamp(1 - Math.max(0, Math.abs(this.speed) - 43) / 10, 0, 1)
-      : 0;
-    for (let i = 0; i < 4; i++) {
-      const damaged=this.wreckParts.wheelDamage[i],corner=wheelResponse(damaged,i%2?1:-1,this.speed),shift=this.wreckParts.wheelShift[i];
-      this.controller.setWheelSteering(i,(i<2?this.steering:0)+corner.toe);
-      this.controller.setWheelChassisConnectionPointCs(i,{x:(i%2?1:-1)*(def.halfWidth-.04)+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
-      this.controller.setWheelSuspensionRestLength(i,corner.rest);
-      this.controller.setWheelRadius(i,corner.radius);
-      this.controller.setWheelMaxSuspensionForce(i,corner.force);
-      this.controller.setWheelSideFrictionStiffness(i,corner.sideGrip);
-      this.controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
-      this.controller.setWheelEngineForce(
-        i,
-        force*corner.power*(this.kind === 'coupe' ? (i > 1 ? 0.5 : 0) : 0.25),
-      );
-      this.controller.setWheelBrake(
-        i,
-        !alive
-          ? 18
-          : this.input.brake * 90 + (this.input.handbrake && i > 1 ? 100 : 0)+corner.drag,
-      );
-      this.controller.setWheelFrictionSlip(
-        i,
-        (this.surface === 'asphalt' ? 3.2 : 2.4) *
-          (this.input.handbrake && i > 1 ? 0.6 : 1)*corner.grip,
-      );
-      this.controller.setWheelSuspensionStiffness(
-        i,
-        corner.stiffness,
-      );
-    }
-    this.controller.updateVehicle(
-      dt,
-      undefined,
-      undefined,
-      (c) => c.parent()?.handle !== this.body.handle,
-    );
-    // Gentle yaw damping avoids the perpetual spins of arcade steering while retaining slides.
-    const up = new T.Vector3(0, 1, 0).applyQuaternion(this.previousQ);
-    if (up.y > 0.5) {
-      const av = this.body.angvel();
-      this.body.applyTorqueImpulse(
-        {
-          x: -av.x * def.mass * 0.07 * dt,
-          y:
-            (clamp(
-              (this.speed / def.wheelbase) * Math.tan(this.steering) * 0.72,
-              -1.7,
-              1.7,
-            ) -
-              av.y) *
-            def.mass *
-            2.6 *
-            dt,
-          z: -av.z * def.mass * 0.07 * dt,
-        },
-        true,
-      );
-    }
-    this.oldGear = this.gear;
-    this.gear =
-      this.speed < -0.5
-        ? 0
-        : clamp(1 + Math.floor(Math.max(0, this.speed) / 9), 1, 5);
-    this.rpm = alive
-      ? 850 +
-        ((Math.abs(this.speed) % 9) / 9) * 4600 +
-        Math.abs(this.input.throttle) * 700
-      : 0;
+    this.oldGear=this.gear;
+    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift);
   }
   postStep(dt: number, time: number) {
     this.current.copy(this.body.translation());
@@ -394,13 +292,15 @@ export class Vehicle {
       w.rotation.set(0,(i<2?this.steering:0)+corner.toe,0);
       w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
       const coating=this.surfaceFinish.coating.value;
-      this.tireContacts[i].update(this.controller,i,DEFINITIONS[this.kind].mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z);
+      this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z);
     }
   }
   private wreckPartsWidth(){return DEFINITIONS[this.kind].halfWidth*.62;}
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
+    damage *= this.specification.damageScale;
     this.impactEffects = {glass:false,debris:false};
     if (damage < 0.1 || this.health <= 0) return;
+    if(this.onVisualEvent){const inverse=this.root.quaternion.clone().invert();this.onVisualEvent({kind:'hit',pose:[...this.root.position.toArray(),...this.root.quaternion.toArray()],point:point.clone().sub(this.root.position).applyQuaternion(inverse).toArray(),direction:direction.clone().applyQuaternion(inverse).toArray(),damage:damage/this.specification.damageScale,health:this.health,...(otherPaint?{paint:otherPaint.getHex()}:{})});}
     this.health = Math.max(0, this.health - damage);
     this.lastHit = time;
     this.lastDamage = damage;
@@ -475,6 +375,7 @@ export class Vehicle {
     }
   }
   dispose() {
+    this.livery.dispose();
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);
     this.root.removeFromParent();
