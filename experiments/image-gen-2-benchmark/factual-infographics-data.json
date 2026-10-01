@@ -8220,5 +8220,167 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-01-factual-infographic-factual-infographic-gallstones-when-bil",
+    "title": "Factual infographic: Gallstones — When Bile Flow Is Blocked",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\", \"evidence_scope\": \"Claim-level sources; no subjective review outside Monday\", \"panel_count\": 8, \"closeup_diagrams\": \"stone types, silent/blocked ducts, complications, post-removal bile flow\"}; archive_slot=2026-10-01T02:20; concept=gallstones-obstruct-biliary-duct-flow; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished museum-quality medical educational infographic directly on the canvas, not a photographed poster, screen, book, room or mockup. Portrait-oriented information architecture with exceptionally readable concise English typography, generous hierarchy, immaculate leader lines, and dense, purposeful anatomical illustration. Title: “GALLSTONES” and subtitle “When bile flow is blocked”. Refined warm ivory field, deep navy headings, bile-gold flow arrows, restrained teal normal-path accents, and vermilion reserved for obstruction and warning signs. No logos, watermark, citations, URLs or invented statistics.\n\nDominant central hero: large anatomically credible oblique anterior cutaway of liver, pear-shaped gallbladder tucked beneath its right lobe, cystic duct joining the extrahepatic biliary tree, common bile duct descending toward the duodenum beside the pancreatic duct, pancreas within the C-shaped duodenal sweep. Render liver's fine lobular surface, gallbladder translucent layered wall, glistening bile, and small faceted pebble-like stones with believable tissue shading and controlled clinical lighting. Do not make every duct blocked. Label liver, gallbladder, cystic duct, common bile duct, pancreas and duodenum with precise non-crossing leaders. Use gold arrows to show bile from liver, storage in gallbladder, and delivery to duodenum. A small torso locator correctly highlights the person's upper-right abdomen, not the viewer's right. The hero and supporting mechanisms fill the canvas as a sophisticated integrated educational plate.\n\nArrange EIGHT distinct substantial supporting panels around the hero in a clear reading order, each with its own detailed explanatory illustration and only the short labels specified below. At least four enlarged explanatory cutaways/diagrams are essential, not decorative icons:\n1. “Bile: made, stored, released”. Three linked mini-anatomy stages: liver produces bile; gallbladder stores it; eating signals release into the duodenum. Show a patent route, not a blockage. Labels “Liver makes bile”, “Gallbladder stores bile”, “Released with food”.\n2. “How stones form”. Enlarged bile reservoir with a conceptual, explicitly labeled “Schematic” sequence from altered bile to clustered stone material, not an invented microscopic crystal morphology. Two polished specimen close-ups: “Cholesterol stone: yellow-green” and “Pigment stone: dark bilirubin”. Concise causes “Bile composition changes” and “Incomplete emptying”; small qualifying line “Why bile changes is not fully understood”. Do not imply all stones form by the same chemistry.\n3. “Silent versus blocked”. Matched enlarged cross-sectional gallbladder-and-duct diagrams: stones resting in the gallbladder with open flow versus one stone lodged at an outlet with a stopped-flow symbol and upstream bile buildup. Labels “Most stones cause no symptoms”, “Duct blockage can cause pain”, “Pain may ease when the stone moves”. No automatic progression arrow from the silent diagram to disease.\n4. “What an attack feels like”. Respectful adult torso and abdominal map marking upper-right and middle abdominal pain, paired with a small meal/time vignette. Labels “Severe, constant abdominal pain”, “May last several hours”, “Nausea or vomiting”, “Often after a heavy meal”. No claimed mandatory meal trigger, no exaggerated agony or gore.\n5. “Possible complications”. Three anatomically accurate separate close-ups illustrating inflamed gallbladder wall, bile-duct infection, and pancreatic inflammation associated with a stone near the shared outlet. Use conditional arrows, not an inevitable cascade. Labels “Gallbladder inflammation”, “Bile-duct infection”, “Gallstone pancreatitis”; heading note “Persistent blockage can cause complications”.\n6. “Risk and clinical assessment”. Balanced two-column panel: family-history tree, older adult, and rapid-weight-loss arrow with labels “Older age”, “Family history”, “Obesity”, “Rapid weight loss”, “More common in women”; adjacent realistic ultrasound probe contacting abdomen with a small schematic gallbladder scan and blood-test tube labeled “Ultrasound + blood tests”. Footer “Risk factors are not a diagnosis; other conditions can cause similar pain”. Avoid stigmatizing body caricatures, numerical thresholds, or diagnostic certainty.\n7. “Treatment depends on symptoms”. Three readable clinical branches: “Silent gallbladder stones: usually no treatment”; “Symptomatic stones: gallbladder removal is common”; “Common bile duct stone: ERCP may clear the duct”. Detailed laparoscopic procedure vignette kept non-gory and simplified endoscope route mouth–stomach–duodenum for ERCP; do not show a scope entering the gallbladder. A fourth compact before/after flow diagram labels “After removal: bile flows liver → duodenum”. Clearly show ERCP clearing duct stones, not preventing all future stones. No medication doses, universal promises or personalized recommendations.\n8. “Reduce risk • Recognize urgent signs”. Divide into calm prevention illustrations of fiber-rich foods and regular activity, label “Healthy weight and gradual weight loss can help”, and “No guarantee of prevention”. A distinct high-contrast urgent strip with medically meaningful small diagrams and short text: “Seek urgent care: sudden severe pain; prolonged pain; fever or chills; yellow eyes or skin; back pain with vomiting”. Secondary small line “Dark urine or pale stools can accompany complications”. Make warning signs readable and proportionate, not sensational.\n\nFooter: “General education • Clinical assessment matters”. This is a precise evidence-informed anatomy and care infographic, not a treatment prescription. Preserve detailed materials, explanatory structure and clear spatial relationships while making every word comfortably readable. No filler panels or tiny paragraphs. No additional medical claims beyond those specified.",
+    "image": "images/2026-10-01-factual-infographic-factual-infographic-gallstones-when-bil.jpg",
+    "thumb": "thumbs/2026-10-01-factual-infographic-factual-infographic-gallstones-when-bil.webp",
+    "color": "#cabeb3",
+    "date": "2026-10-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "gallstones-obstruct-biliary-duct-flow",
+      "imageSha256": "5ed87f7d0f791dcabb8edf55230476deceb3496c8068dce6472b1fc6597f9593",
+      "imageDHash": "6c5472b35b4d96da"
+    },
+    "factualInfographic": {
+      "topic": "How gallstones form in the gallbladder, obstruct bile flow, cause symptoms, and are evaluated and managed",
+      "description": "Detailed biliary anatomy and eight panels explaining stone formation, blockage, clinical features, risk, assessment, management and warning signs.",
+      "sourceNote": "NIDDK definition, causes and treatment; NHS clinical guidance. Verified anatomy, conditional mechanisms, symptoms, evaluation, management and safety: https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/definition-facts ; https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/symptoms-causes ; https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/treatment ; https://www.nhs.uk/conditions/gallstones/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-01T06:22:15.442955+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK",
+            "title": "Definition & Facts for Gallstones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/definition-facts"
+          },
+          {
+            "id": "S2",
+            "publisher": "NIDDK",
+            "title": "Symptoms & Causes of Gallstones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/symptoms-causes"
+          },
+          {
+            "id": "S3",
+            "publisher": "NIDDK",
+            "title": "Treatment for Gallstones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/treatment"
+          },
+          {
+            "id": "S4",
+            "publisher": "NHS",
+            "title": "Gallstones",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/gallstones/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The pear-shaped gallbladder lies below the liver in the upper right abdomen and stores bile produced by the liver.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Bile passes through hepatic, cystic and common bile ducts into the duodenum; the pancreas also delivers digestive juices to the duodenum.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Eating signals the gallbladder to release stored bile into the duodenum to mix with food.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gallstones are hard pebble-like material formed in the gallbladder; cholesterol stones are typically yellow-green and pigment stones are dark and made of bilirubin.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Stones may form when bile has too much cholesterol or bilirubin, insufficient bile salts, or the gallbladder empties incompletely or too infrequently; the reasons for bile changes are not fully understood.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most gallstones are silent and do not cause symptoms; asymptomatic gallbladder stones usually need no treatment.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "A stone obstructing a bile duct can cause bile buildup and biliary colic; attacks often stop when the stone moves and the blockage ends.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pain can be severe and constant, in the upper right or middle abdomen, last several hours, and accompany nausea or vomiting; attacks often follow heavy meals.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Persistent blockage can lead to gallbladder inflammation, bile-duct infection, or gallstone pancreatitis; these are possible complications, not inevitable outcomes.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Risk is higher with older age, family history, obesity, rapid weight loss, and in women; risk factors do not establish an individual diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Evaluation of suspected gallstones can include ultrasound and blood tests; similar symptoms may have other causes requiring clinical assessment.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "The main treatment for symptomatic gallstones is gallbladder removal, often laparoscopic; ERCP may clear a stone in the common bile duct. Treatment depends on clinical circumstances.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "After gallbladder removal, bile flows from the liver through the ducts directly into the duodenum rather than being stored in a gallbladder.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Healthy eating with fiber, regular physical activity, maintaining a healthy weight and avoiding rapid weight loss can help reduce gallstone risk; they do not guarantee prevention or dissolve existing stones.",
+            "sourceIds": [
+              "S1",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical care for sudden severe abdominal pain, pain lasting several hours, fever or chills, jaundice, or pain spreading to the back with vomiting; dark urine and pale stools may accompany complications.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
