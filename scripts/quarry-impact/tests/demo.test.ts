@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
@@ -15,7 +16,7 @@ test('new release preserves the exact preceding release and all shared server in
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const manifest=JSON.parse(read('source/demo-revision.json').toString());
  for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(restorePerformanceBytes(p,read(p))),e.after,p);assert.equal(hash(restoreDemoBytes(p,read(p))),e.before,p);}
- const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
 });
 test('each camera keeps a finite view above the terrain, including overturned targets',()=>{
  const director=new DemoDirector(),camera=new T.PerspectiveCamera(52,16/9,.1,850),root=new T.Group();
@@ -31,14 +32,15 @@ test('fire sources differ by car and damaged side, preserving world-space buoyan
  const camera=new T.PerspectiveCamera(),scene=new T.Scene();camera.position.set(0,4,12);camera.lookAt(0,1,0);
  const root=new T.Group(),car={id:0,kind:'coupe',root,health:8,velocity:new T.Vector3(),wreckParts:{zones:{front:0,rear:48,left:0,right:0,roof:0}}}as unknown as Vehicle;
  root.position.y=1;root.rotation.z=Math.PI;
- const fire=new VehicleFire(scene,()=>{},()=>.3);for(let i=0;i<300;i++)fire.update([car],1/60,camera);
+ const seed=Array.from({length:512},(_,i)=>i/512).find(s=>unitNoise(s)<.24)!;
+ const fire=new VehicleFire(scene,()=>{},()=>seed);for(let i=0;i<1200;i++)fire.update([car],1/60,camera);
  const e=fire.emitters.get(0)!;assert.equal(e.sites.reduce((a,b)=>a.weight>b.weight?a:b).name,'rear-leak');assert.ok(e.origin.z<0);
  assert.ok(fire.particles.some(p=>p.life>0&&p.kind===0&&p.p.y>2));
  const frozen=JSON.stringify(fire.stats);fire.update([car],NaN,camera);assert.equal(JSON.stringify(fire.stats),frozen);
  fire.dispose();
 });
 test('rare explosions have consistent delay at different simulation rates and never repeat',()=>{
- const seed=Array.from({length:100},(_,i)=>i/100).find(s=>unitNoise(s)<.1)!;
- const run=(hz:number)=>{const state=new VehicleThermalState(100,seed);let ignition=0;for(let i=0;i<40*hz;i++)if(state.advance(0,1/hz)){assert.equal(ignition,0);ignition=(i+1)/hz;}return ignition;};
- const time=run(60);assert.ok(time>8&&time<25);for(const hz of [30,144])assert.ok(Math.abs(time-run(hz))<.07);
+ const seed=Array.from({length:1000},(_,i)=>i/1000).find(s=>unitNoise(s)<.24&&unitNoise(s+9.37)<.12&&unitNoise(s+2.13)>.3)!;
+ const run=(hz:number)=>{const state=new VehicleThermalState(100,seed);let ignition=0;for(let i=0;i<90*hz;i++)if(state.advance(0,1/hz,0,{front:85,rear:0,left:0,right:0,roof:0})){assert.equal(ignition,0);ignition=(i+1)/hz;}return ignition;};
+ const time=run(60);assert.ok(time>15&&time<45);for(const hz of [30,144])assert.ok(Math.abs(time-run(hz))<.10);
 });

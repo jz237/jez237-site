@@ -1,0 +1,50 @@
+{
+  "baseline": "4d6ad3d + unchanged downloaded multiplayer source",
+  "files": {
+    "src/main.ts": {
+      "before": "7ffff442f1fe16897b98ccff258a91a21e5d53cda119fdc37a467947addb2d5f",
+      "snapshot": "src-main.ts.gz",
+      "after": "95c9961d0808403d8ba22db795e5f86a6486914785bde003b738c450fdf0ada9"
+    },
+    "src/network.ts": {
+      "before": "6b65eef3162818694c18b9dc1215e62d1ea54a6f57618b8268616ec0b23832d5",
+      "snapshot": "src-network.ts.gz",
+      "after": "b5f0fa4164d3e3513626eb3b7ec1473cc4382dcb4a01a32b12e1bc1ab2f46764"
+    },
+    "src/network-validation.ts": {
+      "before": "4f589fe6220d557e054a77ae8f2cf6af7948d585bb709d0beeb75364b8c8026b",
+      "snapshot": "src-network-validation.ts.gz",
+      "after": "96618258705b1cd52ba554a2488c5abb97d7256eea7686e29bd3f033f455b226"
+    },
+    "src/online-ui.ts": {
+      "before": "c16965339ff9bf3a1d00106a26c7f7ab3fc1d4ea62d98bd530e8ae37f1e894e6",
+      "snapshot": "src-online-ui.ts.gz",
+      "after": "d2c5e9ebcc09e7acf33d7d77bbf900b9e3ba813c74ab3d95399b8a54025d520b"
+    },
+    "src/style.css": {
+      "before": "c6052d259383ecfe26f82cdf868a9e2c306e44be90352ae409120a71db6295be",
+      "snapshot": "src-style.css.gz",
+      "after": "32d7beb20074e06134ca1563264f9929e9e546c36fa5f8862282e08e639d2898"
+    },
+    "multiplayer/room.ts": {
+      "before": "53f7cfc9749aa8394fa29e89cad5fc62ed9e909a288c2adff9968aee6d952c16",
+      "snapshot": "multiplayer-room.ts.gz",
+      "after": "6112fff69089d3bb718adc585b46be17f331d02d8b750fe54d2d34555f265f21"
+    },
+    "multiplayer/protocol.ts": {
+      "before": "715af86b7320e71f0e2297d2f10b2ce518a8e8bf8a56ef554195711e754ee5fa",
+      "snapshot": "multiplayer-protocol.ts.gz",
+      "after": "3e809b7ed6ac8eb6c56d6b5ea9a9759541fe113f41c434df8412866db5f6ab5c"
+    },
+    "multiplayer/worker.ts": {
+      "before": "45eae2daae3e68d27771b5d3901bdf9619e9fa3be4ffbb2e8af24c299b821896",
+      "snapshot": "multiplayer-worker.ts.gz",
+      "after": "c7a8dc8fbb105c6e3a851df0ade1db11e06f71c459a0cb5812d9d3c6939445c0"
+    },
+    "multiplayer/worker-lifecycle.test.ts": {
+      "before": "1e2db6f59fdc26ea76f4fa07cf0b8ec3b891510dfb7f8dca5f6b2bf1f5e071d0",
+      "snapshot": "multiplayer-worker-lifecycle.test.ts.gz",
+      "after": "e12571538f26717a49765fd8f633c2c8a33f554d9f241b0939e0d0b78e62a099"
+    }
+  }
+}

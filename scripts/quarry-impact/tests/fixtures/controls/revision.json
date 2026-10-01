@@ -1,0 +1,16 @@
+{
+  "baseline": "64074af",
+  "purpose": "Remappable driving controls, gamepad calibration and steering limit assist",
+  "files": {
+    "src/main.ts": {
+      "before": "5c583a6bfb1acb380a83c6202d3b79b052f80ec255da77bffa133407f382a13d",
+      "after": "7ffff442f1fe16897b98ccff258a91a21e5d53cda119fdc37a467947addb2d5f",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/style.css": {
+      "before": "5a84354c61ca5d68f20b7dc274cf54adf314dccb74b285fe1ca5a238289f5ecf",
+      "after": "c6052d259383ecfe26f82cdf868a9e2c306e44be90352ae409120a71db6295be",
+      "snapshot": "src-style.css.gz"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "baseline": "7678782",
+  "files": {
+    "multiplayer/protocol.ts": {
+      "before": "8bb21f034111b141d1727c26123c24e2def781a1b4c28a264b9d4fe2ea27499a",
+      "after": "38e40c2e15d03ea02e7decaac52f6156fed1175ad63da26dfe5c915b35bb3718",
+      "snapshot": "multiplayer-protocol.ts.gz"
+    },
+    "multiplayer/room.ts": {
+      "before": "64bdc209bd892026313ee9a9bc988dfb6490886d9f20d5a7a5b62c5652fa1d3d",
+      "after": "154b0ca3d5a381c75856474df85bd1a2c261eedcf0bb4937f44d6cafedb0b01d",
+      "snapshot": "multiplayer-room.ts.gz"
+    },
+    "multiplayer/simulation.ts": {
+      "before": "db4f5a656ebe2dc00ee47b7696671cfb0916cc6ed816aebb0cddfe04dbbe7454",
+      "after": "2d2f7621853c6e30df0e2fb314d4f1c3315865fc8aa73094bac2dfa142a8f29d",
+      "snapshot": "multiplayer-simulation.ts.gz"
+    },
+    "src/network.ts": {
+      "before": "395b22de15e3b1f94f1eadcd1553e84adb41e33e827aa4364c19a44a0b05b722",
+      "after": "c8796da7e1d115b9fc368cb5d12e747d54c5e81be5104f03d7c7012d6ff5d197",
+      "snapshot": "src-network.ts.gz"
+    },
+    "src/network-validation.ts": {
+      "before": "33c048ee9665c715fbc233574a6af934debcaf24916d0ef89d9398fda0b2a4af",
+      "after": "af2f37c09ad842b407c98d3df2993915847383d46d58ca670b5f018386cda59d",
+      "snapshot": "src-network-validation.ts.gz"
+    },
+    "src/online-view.ts": {
+      "before": "1ebd362d570fe9e54457b0be171db81d58e231190c841640834db545c909cbaf",
+      "after": "725b93bee008272392c6504158385d5033fe98c6a645fc055f8bdf5d326fe032",
+      "snapshot": "src-online-view.ts.gz"
+    },
+    "src/online-ui.ts": {
+      "before": "491abaf99beb2e24a12ad3ea50219fd7f7bcf391b468e6b418f6a816bbe65c83",
+      "after": "c4d5b6bdc8336a1439b40dac61e74a2c2bc7adae175f384f5777fa042e289afe",
+      "snapshot": "src-online-ui.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "afb0888392347c0d616b80046b2d84632af9ceda2e7b8312aca865116b2959d6",
+      "after": "832f9019cf05c045441296ee61516e42d7fca89cc66b0a42a2616bb3699b7f7e",
+      "snapshot": "src-main.ts.gz"
+    },
+    "tests/network.test.ts": {
+      "before": "bbc1464ee2bf6b7be5f652b92cf59f0d886222d16d4c94a6756548bf858998ba",
+      "after": "aa32f85e67c11d3e08d43128eac608bbb160cfa6c6c44a27ac440ed74fd9f1dc",
+      "snapshot": "tests-network.test.ts.gz"
+    }
+  }
+}

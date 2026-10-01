@@ -38,7 +38,7 @@ function harness(t:TestContext){
     static OPEN=1;
     readyState=0;
     onopen?:()=>void;
-    onmessage?:(event:{data:string})=>void;
+    onmessage?:(event:{data:string|ArrayBuffer})=>void;
     onclose?:(event:{code:number;reason:string})=>void;
     onerror?:()=>void;
     sent:any[]=[];
@@ -49,6 +49,7 @@ function harness(t:TestContext){
     close(code:number,reason:string){this.clientClose={code,reason};this.readyState=2;}
     open(){this.readyState=1;this.onopen?.();}
     message(message:unknown){this.onmessage?.({data:JSON.stringify(message)});}
+    binary(message:ArrayBuffer){this.onmessage?.({data:message});}
     serverClose(code:number,reason:string){this.readyState=3;this.onclose?.({code,reason});}
   }
   const values=new Map<string,string>();
@@ -143,3 +144,44 @@ for(const [code,reason]of [[1008,'Invalid message'],[4000,'Room expired'],[4001,
     assert.equal(h.network.disconnectReason,reason);assert.equal(h.timers.tasks.size,0);
     h.timers.advance(20_000);assert.equal(h.sockets.length,1);
   });
+
+test('cup extensions are advertised, old-server starts stay compatible, and malformed standings are rejected',t=>{
+ const h=harness(t),socket=h.connect();h.welcome(socket);h.network.start('race',3);assert.deepEqual(socket.sent.at(-1),{type:'start',mode:'race'});
+ const extended=state();extended.cupSupport=true;socket.message(extended);h.network.start('derby',3);assert.deepEqual(socket.sent.at(-1),{type:'start',mode:'derby',rounds:3});h.network.vote('race');assert.deepEqual(socket.sent.at(-1),{type:'vote',mode:'race'});h.network.nextRound();assert.deepEqual(socket.sent.at(-1),{type:'next'});
+ socket.message({...extended,cup:{version:1,rounds:999,entries:[]}});assert.equal(h.network.connected,false);assert.equal(socket.clientClose?.code,1008);
+});
+
+import {encodeSnapshotWire} from '../src/snapshot-wire';
+test('binary welcome and updates preserve sequencing, damage deduplication and reconnect to a JSON server',t=>{
+ const h=harness(t),socket=h.connect();assert.equal(socket.sent[0].wire,'qiw1');assert.equal((socket as any).binaryType,'arraybuffer');
+ socket.binary(encodeSnapshotWire({type:'welcome',protocol:1,room:h.network.room,id:1,token:'binary-seat',snapshot:state(600,[hit(87,590)])}));
+ assert.equal(h.network.connected,true);assert.equal(h.network.id,1);assert.deepEqual(h.network.drainDamage().map(d=>d.id),[87]);
+ const next=state(603,[hit(87,590),hit(88,602)]);socket.binary(encodeSnapshotWire(next));assert.deepEqual(h.network.snapshot,JSON.parse(JSON.stringify(next)));assert.deepEqual(h.network.drainDamage().map(d=>d.id),[88]);
+ socket.serverClose(1012,'Restart');h.timers.advance(500);const retry=h.sockets.at(-1)!;retry.open();assert.equal(retry.sent[0].token,'binary-seat');h.welcome(retry);assert.equal(h.network.connected,true);
+});
+test('invalid binary payload closes the connection with the existing version error',t=>{
+ const h=harness(t),socket=h.connect();h.welcome(socket);socket.binary(new ArrayBuffer(14));assert.equal(h.network.connected,false);assert.equal(socket.clientClose?.code,1008);
+});
+
+import {stockOnlineSetup} from '../src/online-setup';
+test('setup requests remain bounded, honor server capability and send selected paint/tuning',t=>{
+ const h=harness(t),socket=h.connect();h.welcome(socket);const loadout={kind:'hatch' as const,setup:{...stockOnlineSetup('hatch'),engine:3,paint:0x123456}};
+ const count=socket.sent.length;h.network.setLoadout(loadout);h.network.setSetupRule('stock');assert.equal(socket.sent.length,count,'legacy server receives no unsupported mutations');
+ const modern=state();modern.setupSupport=true;modern.setupRule='open';socket.message(modern);h.network.setLoadout(loadout);assert.deepEqual(socket.sent.at(-1),{type:'setup',...loadout});h.network.setSetupRule('stock');assert.deepEqual(socket.sent.at(-1),{type:'setup-rule',rule:'stock'});
+});
+
+import {newLayer} from '../src/livery-data';
+test('livery welcome/upload respects capability and keeps pending server artwork on reconnect',t=>{
+ const h=harness(t),socket=h.connect(),s=state();s.liverySupport=true;s.liveryRevision=0;s.setupSupport=true;s.members[0].loadout={kind:'coupe',setup:stockOnlineSetup('coupe')};
+ const frame={revision:0,cars:s.cars.map(c=>({id:c.id,kind:c.kind,layers:[]}))};socket.message({type:'welcome',protocol:1,room:h.network.room,id:1,token:'paint-seat',snapshot:s,liveries:frame,pendingLivery:{kind:'coupe',layers:[newLayer('star')]}});assert.deepEqual(h.network.liveries,frame);
+ const before=socket.sent.length;h.network.setLoadout({kind:'coupe',setup:stockOnlineSetup('coupe'),livery:[newLayer('number')]});assert.equal(socket.sent.length,before+2);assert.equal(socket.sent.at(-1).type,'livery');assert.equal(socket.sent.at(-1).layers[0].shape,'number');
+ const active={...frame,revision:1,cars:frame.cars.map(c=>({...c,layers:c.id===1?[newLayer('number')]:[]}))};socket.message({type:'liveries',frame:active});assert.deepEqual(h.network.liveries,active);socket.message({type:'liveries',frame});assert.deepEqual(h.network.liveries,active,'late older artwork must not replace current revision');
+ socket.message({type:'liveries',frame:{...active,cars:[]}});assert.equal(socket.clientClose?.code,1008);
+});
+test('new connections upload saved artwork once and reconnects retain the server pending design',t=>{
+ const h=harness(t),design=Array.from({length:32},()=>newLayer('star'));
+ h.network.connect({endpoint:'ws://127.0.0.1:8789',room:'ABCDEF',name:'PAINTER',kind:'coupe',livery:design});const socket=h.sockets.at(-1)!;socket.open();assert.equal(socket.sent[0].layers,undefined);assert.ok(JSON.stringify(socket.sent[0]).length<1024);
+ const s=state();s.liverySupport=true;s.liveryRevision=0;s.members[0].loadout={kind:'coupe',setup:stockOnlineSetup('coupe')};const liveries={revision:0,cars:s.cars.map(c=>({id:c.id,kind:c.kind,layers:[]}))};
+ socket.message({type:'welcome',protocol:1,room:'ABCDEF',id:1,token:'artist',snapshot:s,liveries});assert.equal(socket.sent.at(-1).type,'livery');assert.equal(socket.sent.at(-1).layers.length,32);
+ socket.serverClose(1012,'Restart');h.timers.advance(500);const next=h.sockets.at(-1)!;next.open();const before=next.sent.length;next.message({type:'welcome',protocol:1,room:'ABCDEF',id:1,token:'artist',snapshot:s,liveries,pendingLivery:{kind:'coupe',layers:[newLayer('number')]}});assert.equal(next.sent.length,before,'stale local artwork must not overwrite the accepted next-event design');
+});

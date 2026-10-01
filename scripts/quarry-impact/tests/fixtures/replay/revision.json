@@ -1,0 +1,26 @@
+{
+  "baseline": "6419bf7",
+  "purpose": "Replay recording, independent playback, file exchange and photo mode",
+  "files": {
+    "src/main.ts": {
+      "before": "eca7d2f604a1731c5110f6cdd8b80a020f9d38801e5294fcd2c0ed04735cae69",
+      "after": "733f42cf19a0b9ce3f2da3aacac4b357963e7a7df7213fdac283b24a04f61d7c",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/style.css": {
+      "before": "3301f4eb2a675a621fd0fc0cd317935c7304b9c3f2b97834bbf1ba56a69ce743",
+      "after": "b0ce1e71e0005da243dc9720a1faa812bbec694466d886b3dc98320fd7e34df2",
+      "snapshot": "src-style.css.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "dca9e16e86ff8a13f4dc9ee2159d738371f24363f5f2259a9428829f04944edc",
+      "after": "05429b8be03dea110bfeecb7740f2491c4859c401fdd08b28418f35d9ffb87d5",
+      "snapshot": "src-vehicle.ts.gz"
+    },
+    "src/wreck-attachments.ts": {
+      "before": "3c72039f8c26ae3e5552dfd00cf9b883e0f2351186ea17af7b7489302e3ffedd",
+      "after": "d28ab67d73d0b3ee046858eda352feb03e86df9df69090bfc800bf8121b61703",
+      "snapshot": "src-wreck-attachments.ts.gz"
+    }
+  }
+}

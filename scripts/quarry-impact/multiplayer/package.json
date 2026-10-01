@@ -6,11 +6,13 @@
     "dev": "wrangler dev --config wrangler.jsonc --local --port 8789 --ip 127.0.0.1",
     "check": "tsc -p tsconfig.json",
     "types": "wrangler types --config wrangler.jsonc worker-configuration.d.ts",
-    "test": "node --import tsx --test room.test.ts admission.test.ts worker-lifecycle.test.ts",
+    "test": "node --import tsx --test *.test.ts",
     "test:live": "node live-smoke.mjs",
     "test:admission": "node live-admission.mjs",
     "deploy:dry": "wrangler deploy --config wrangler.jsonc --dry-run",
     "deploy": "wrangler deploy --config wrangler.jsonc"
   },
-  "devDependencies": { "wrangler": "4.142.0" }
+  "devDependencies": {
+    "wrangler": "4.142.0"
+  }
 }

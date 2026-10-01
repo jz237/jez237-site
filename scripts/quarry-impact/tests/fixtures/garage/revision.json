@@ -1,0 +1,21 @@
+{
+  "baseline": "529c847e8a03812491ff8de1f64b85f22f8166a8",
+  "purpose": "Garage, physical tuning and saved setups",
+  "files": {
+    "src/main.ts": {
+      "before": "6b0e5a6792516cc0abdbf571e0ff4e23b48bfc992a458222d09ff709ca9ad1cf",
+      "after": "ccdad51d7a3a4ca84d60e48bf962741e09b83b12fd647f0255f19245b4119b1b",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "c2a9c6f91869c7eaacb53f1472b766fc78cff6ada5c05d0e2b29dd7ae7538dbf",
+      "after": "dca9e16e86ff8a13f4dc9ee2159d738371f24363f5f2259a9428829f04944edc",
+      "snapshot": "src-vehicle.ts.gz"
+    },
+    "src/style.css": {
+      "before": "a50cb44231e32b8436f123e64c63a06c8fe32e86546b82e9a8a94a5ff40bee65",
+      "after": "976e2923177b5036d031be7d4800e005597822e788d10e45bdcf8f8b9f995418",
+      "snapshot": "src-style.css.gz"
+    }
+  }
+}

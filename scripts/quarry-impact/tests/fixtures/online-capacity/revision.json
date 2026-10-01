@@ -1,0 +1,65 @@
+{
+  "baseline": "cd4e608 + unchanged downloaded multiplayer/package.json",
+  "files": {
+    "multiplayer/protocol.ts": {
+      "before": "2271dedab0def741f48fe142f8aa2be51bd9b9990ba8ffcbc5d4bd49f040e7d3",
+      "snapshot": "multiplayer-protocol.ts.gz",
+      "after": "f8635ed848eb7726e8871b957a597e6786ae1f6460cdc214542e56adc0820228"
+    },
+    "multiplayer/simulation.ts": {
+      "before": "66fa024e27e952bd37b84dbb19ff618e85b29d17d68a6e91a32bf7224f4d4446",
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "after": "db4f5a656ebe2dc00ee47b7696671cfb0916cc6ed816aebb0cddfe04dbbe7454"
+    },
+    "multiplayer/room.ts": {
+      "before": "6112fff69089d3bb718adc585b46be17f331d02d8b750fe54d2d34555f265f21",
+      "snapshot": "multiplayer-room.ts.gz",
+      "after": "efce996470942f6c31a1d318895888d4d0d6f5614c5d8aa573a5d854377465b8"
+    },
+    "multiplayer/cup.ts": {
+      "before": "00dac82fce700c957aefcbb0b0cd1b3a765239c00d154ae6157cd29be3add405",
+      "snapshot": "multiplayer-cup.ts.gz",
+      "after": "fe682fe139fe723d4cfef9c43a7bf2d47d4c41474fe3c284ec8ac2cbd4610813"
+    },
+    "multiplayer/worker.ts": {
+      "before": "c7a8dc8fbb105c6e3a851df0ade1db11e06f71c459a0cb5812d9d3c6939445c0",
+      "snapshot": "multiplayer-worker.ts.gz",
+      "after": "eb04bf693d5293d3820202571ebaa0f7f9240ec9b6186fdcebeb0d827a891adb"
+    },
+    "src/network.ts": {
+      "before": "b5f0fa4164d3e3513626eb3b7ec1473cc4382dcb4a01a32b12e1bc1ab2f46764",
+      "snapshot": "src-network.ts.gz",
+      "after": "2828e6e34edefed18f0c89995d98acb204c8618ff7bc8b83b5212c887bc3af3e"
+    },
+    "src/network-validation.ts": {
+      "before": "e03e812dc3562ffb8d822916216ddb8a186e7ba2387cb360503d6c660a6ec9c2",
+      "snapshot": "src-network-validation.ts.gz",
+      "after": "33c048ee9665c715fbc233574a6af934debcaf24916d0ef89d9398fda0b2a4af"
+    },
+    "src/online-ui.ts": {
+      "before": "d2c5e9ebcc09e7acf33d7d77bbf900b9e3ba813c74ab3d95399b8a54025d520b",
+      "snapshot": "src-online-ui.ts.gz",
+      "after": "491abaf99beb2e24a12ad3ea50219fd7f7bcf391b468e6b418f6a816bbe65c83"
+    },
+    "src/cup-ui.ts": {
+      "before": "48249f643d81abf78547dbc771733383648e8320ca2168c9369becaad08c142a",
+      "snapshot": "src-cup-ui.ts.gz",
+      "after": "25b3c8def2763f9efd736172ef82d21300a8260b150594a8703cffad513acf4b"
+    },
+    "src/main.ts": {
+      "before": "95c9961d0808403d8ba22db795e5f86a6486914785bde003b738c450fdf0ada9",
+      "snapshot": "src-main.ts.gz",
+      "after": "afb0888392347c0d616b80046b2d84632af9ceda2e7b8312aca865116b2959d6"
+    },
+    "src/style.css": {
+      "before": "32d7beb20074e06134ca1563264f9929e9e546c36fa5f8862282e08e639d2898",
+      "snapshot": "src-style.css.gz",
+      "after": "bad1b90a623d0cb5a970e2f87796fe2859bed611ff3a264370374ab0a7a0fc59"
+    },
+    "multiplayer/package.json": {
+      "before": "6ebf7fd33eeb02b968fefa1a8537b5b3ed5f7024121bfcee64c3a8d6bfb6093c",
+      "snapshot": "multiplayer-package.json.gz",
+      "after": "1919425cceb8a2e0a202d430f8ddf75abcf2d2f9910146d947f01188e9bc8f3f"
+    }
+  }
+}
