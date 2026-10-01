@@ -22,7 +22,9 @@ float yachtShadowLocal(vec3 p,vec3 normal,bool sun){
   float centre=texture(uYachtShadowOpaque,q.xy).r;
   float separation=max(0.0,(q.z-centre)*uYachtShadowInfo.w);
   bool phoneFilter=uYachtShadowInfo.z>.0008;
-  float radius=clamp((phoneFilter?1.0:.65)+separation*.045,phoneFilter?1.0:.65,2.4);
+  // Four weighted taps must remain at the four texel centres. Expanding their
+  // offsets makes nearest fetches jump while their weights are still nonzero.
+  float radius=phoneFilter?1.0:clamp(.65+separation*.045,.65,2.4);
   vec2 fraction=fract(q.xy/uYachtShadowInfo.z-.5);
   float sum=0.0;
   for(int y=0;y<3;y++)for(int x=0;x<3;x++){
