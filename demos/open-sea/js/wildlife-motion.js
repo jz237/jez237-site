@@ -23,7 +23,8 @@ export class WildlifeMotion {
       // Broad elliptical circuits with unequal periods, not a rotating flock.
       let ox=Math.cos(a)*g.radius+Math.sin(a*.67+g.offset)*18;
       let oz=Math.sin(a)*g.radius*.8+Math.cos(a*.81+g.offset)*17;
-      const clear=Math.max(1,40/Math.max(Math.hypot(ox,oz),.01));ox*=clear;oz*=clear;
+      const clearance=40*(yacht.profile?.cameraScale||1);
+      const clear=Math.max(1,clearance/Math.max(Math.hypot(ox,oz),.01));ox*=clear;oz*=clear;
       const p=world(ox,oz),h=g.altitude+Math.sin(this.t*.17+g.offset)*3.2;
       const vx=-Math.sin(a)*g.radius*g.speed+Math.cos(a*.67+g.offset)*18*g.speed*.67;
       const vz=Math.cos(a)*g.radius*.8*g.speed-Math.sin(a*.81+g.offset)*17*g.speed*.81;

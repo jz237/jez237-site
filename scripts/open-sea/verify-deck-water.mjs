@@ -2,11 +2,11 @@
 // Usage: CHROME_CHANNEL=msedge PLAYWRIGHT_MODULE=/path/to/playwright node scripts/open-sea/verify-deck-water.mjs http://localhost:8833/after/
 import {createRequire} from 'node:module';import assert from 'node:assert/strict';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const url=new URL(process.argv[2]||'http://localhost:8833/after/');url.searchParams.set('shot','1');url.searchParams.set('t','15');url.searchParams.set('sea','4.6');url.searchParams.set('res','.6');
+const url=new URL(process.argv[2]||'http://localhost:8833/after/');if(!url.searchParams.has('ship'))url.searchParams.set('ship','schooner');url.searchParams.set('shot','1');url.searchParams.set('t','15');url.searchParams.set('sea','4.6');url.searchParams.set('res','.6');
 const browser=await chromium.launch({channel:process.env.CHROME_CHANNEL||undefined,headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
 const report={};
 try{
- const p=await browser.newPage({viewport:{width:1000,height:760}}),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(url.href);await p.waitForFunction(()=>window.__seaReady);
+ const p=await browser.newPage({viewport:{width:1000,height:760}}),errors=[];p.on('pageerror',e=>{errors.push(e.message);console.log(e.message);});await p.goto(url.href);await p.waitForFunction(()=>window.__seaReady);
  report.fluid=await p.evaluate(async()=>{
   const a=__sea.app,{gl,readF32}=await import('./js/gl.js'),{DeckWash}=await import('./js/deck-wash.js');
   const W=128,H=32,area=(48/W)*(10/H),Y=a.yacht;
@@ -47,13 +47,13 @@ try{
   const fs=`#include <common>\n#include <atmo>\n#include <atmo.sample>\n#include <lighting>\n#include <deck-wash>\nin vec2 vUv;uniform float uMode;out vec4 o;
     void main(){vec2 p=(vUv-.5)*vec2(52,16);vec3 deck=vec3(p.x,deckFloor(p),p.y);float s=yachtShadowLocal(deck,vec3(0,1,0),true);o=vec4(s,s,s,1);}`;
   const prog=new Program('shadow.receiver.check',FS_VERT,fs),cases=[];
-  const clear=tex2D(1,1,{fmt:'rgba8',filter:'nearest',data:new Uint8Array(4)});
+  const clear=tex2D(1,1,{fmt:'rgba32f',filter:'nearest',data:new Float32Array([1,0,-1,0]),dataType:gl.FLOAT});
   for(const alt of [65,28,5]){
    Object.assign(a.goal,{sunManual:true,sunH:alt,sunAz:90-a.yacht.psi*180/Math.PI+65});a.render(.016);
    bindFBO(f);gl.disable(gl.DEPTH_TEST);gl.disable(gl.BLEND);bindLighting(prog.use(),a.ctx);drawFS();
    const pixels=readF32(f,0,0,256,96);let dark=0,light=0,min=1,max=0;
    for(let i=0;i<pixels.length;i+=4){min=Math.min(min,pixels[i]);max=Math.max(max,pixels[i]);if(pixels[i]<.8)dark++;if(pixels[i]>.99)light++;}
-   bindFBO(f);bindLighting(prog.use(),a.ctx);prog.t('uYachtShadowOpacity',19,clear);drawFS();
+   bindFBO(f);bindLighting(prog.use(),a.ctx);prog.t('uYachtShadow',2,clear).t('uYachtShadowOpacity',19,clear);drawFS();
    const opaqueOnly=readF32(f,0,0,256,96);let brightened=0,addedShadow=0;
    for(let i=0;i<pixels.length;i+=4){if(pixels[i]>opaqueOnly[i]+1e-6)brightened++;if(pixels[i]<opaqueOnly[i]-.02)addedShadow++;}
    cases.push({alt,dark,light,min,max,brightened,addedShadow,finite:pixels.every(Number.isFinite),error:gl.getError()});

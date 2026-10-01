@@ -20,7 +20,7 @@ export function deviceCheck(app,canvas,caps){
       viewport:[innerWidth,innerHeight,devicePixelRatio],backing:[app.w,app.h],quality:app.q,mobileTier:app.mobile,
       fft:[app.sim.N,app.sim.count],shadow:app.yachtShadow.size,seconds:+elapsed.toFixed(2),frames:frames.length,
       fps:+(frames.length*1000/Math.max(elapsed*1000,1)).toFixed(1),frameMedian:+percent(.5).toFixed(1),frameP95:+percent(.95).toFixed(1),
-      mode:app.rig?.mode,seaWind:app.goal.wind,rain:app.state.rain,whirlpool:app.whirlpool.enabled,contextLosses:losses,hidden,errors:errors.slice(0,6)};
+      ship:app.vessel.id,mass:app.vessel.mass,mode:app.rig?.mode,seaWind:app.goal.wind,rain:app.state.rain,whirlpool:app.whirlpool.enabled,contextLosses:losses,hidden,errors:errors.slice(0,6)};
   };
   start.onclick=()=>{frames=[];elapsed=0;lastSecond=-1;running=true;result=null;start.disabled=true;copy.hidden=true;status.textContent='Running… keep this page visible.';};
   copy.onclick=async()=>{

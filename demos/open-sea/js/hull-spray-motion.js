@@ -1,10 +1,11 @@
+import {SX,SY,SZ,imperial} from './vessels.js';
 // Sparse impact droplets, with world-space inertia, air drag and gravity.
 // They never inject energy into the ocean/rain ripple solver.
 import {hullSection} from './hull-water.js';
 export class HullSprayMotion{
  constructor(){this.particles=[];this.carry=Array(8).fill(0);this.previous=Array(8).fill(null);this.seed=28173;this.emitted=0;}
  rand(){this.seed=(Math.imul(this.seed,1664525)+1013904223)|0;return(this.seed>>>0)/4294967296;}
- points(yacht){return [22,18,6,-10].flatMap(x=>[-1,1].map(side=>yacht.toWorld([x,0,side*hullSection(x,0).width]).filter((_,i)=>i!==1)));}
+ points(yacht){return [22,18,6,-10].flatMap(q=>[-1,1].map(side=>{const x=q*SX;return yacht.toWorld([x,0,side*hullSection(x,0).width]).filter((_,i)=>i!==1);}));}
  noteProbe(yacht,time){this.snapshot={time,center:[yacht.x,yacht.y,yacht.z],axes:Object.fromEntries(Object.entries(yacht.axes).map(([k,v])=>[k,[...v]]))};}
  feed(probe,yacht,time,field){
   if(!this.snapshot)return;const snap=this.snapshot;
@@ -15,8 +16,8 @@ export class HullSprayMotion{
    this.previous[i]={height:local[1],time:snap.time};
    if(!prev||elapsed<=0||elapsed>.25){this.carry[i]=0;continue;}
    const rise=Math.max(0,Math.min(6,(local[1]-prev.height)/elapsed));
-   const bow=Math.max(0,Math.min(1,(local[0]-8)/14)),energy=Math.min(3.5,rise*.65+bow*yacht.speed*yacht.speed*.035);
-   if(local[1]<-.65||local[1]>5.5||energy<.18){this.carry[i]=0;continue;}
+   const bow=Math.max(0,Math.min(1,(local[0]/SX-8)/14)),energy=Math.min(3.5,rise*.65+bow*yacht.speed*yacht.speed*.035);
+   if(local[1]<-.65||local[1]>5.5*SY||energy<.18){this.carry[i]=0;continue;}
    this.carry[i]+=Math.min(elapsed,.1)*energy*16;
    const count=Math.min(8,Math.floor(this.carry[i]));this.carry[i]-=count;
    const side=i%2?1:-1,section=hullSection(local[0],local[1]);

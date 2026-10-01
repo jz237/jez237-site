@@ -1,3 +1,5 @@
+import {vessel,imperial,SX,SZ} from './vessels.js';
+import {installShipChoice} from './ship-choice.js';
 import { initGL, gl, caps, bindFBO } from './gl.js';
 import { m4, v3, clamp, lerp, smoothstep } from './math.js';
 import { OceanSim, seaParams, seaFromWind, seaPreset } from './ocean.js';
@@ -47,7 +49,7 @@ class App {
     this.clouds = new Clouds();
     this.light = new Lighting();
     this.probe = new WaveProbe();
-    this.yacht = new Yacht();
+    this.yacht = new Yacht();this.vessel=vessel;
     this.trail = new Trail();
     this.ripples = new Ripples(this.q === 'low' ? 512 : 1024);
     this.rain = new Rain();
@@ -188,7 +190,7 @@ class App {
     this.fish.update(this.time,[this.yacht.x,this.whirlpool.sample(this.yacht.x,this.yacht.z).height,this.yacht.z],!this.under,this.whirlpool);
     this.wildlife.update(dt,this.yacht,{windDir:S.windDir,U:this.sim.cur.U});
     this.hullSpray.motion.update(dt,wv.map(v=>v*this.sim.cur.U),this.whirlpool);
-    if(this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints(),...this.hullSpray.motion.points(this.yacht)],this.whirlpool))this.hullSpray.motion.noteProbe(this.yacht,this.time);
+    if(this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints(),...this.hullSpray.motion.points(this.yacht),...this.yacht.extraProbePoints()],this.whirlpool))this.hullSpray.motion.noteProbe(this.yacht,this.time);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     R.rain = S.rain;
@@ -197,7 +199,7 @@ class App {
       const Y = this.yacht, c = Math.cos(Y.psi), s = Math.sin(Y.psi);
       const at = (lx, lz) => [m(Y.x + c * lx - s * lz), m(Y.z + s * lx + c * lz)];
       const k = 0.5 * Math.min(1, Y.speed / 3);
-      R.sources.push([...at(22.2,0),.8,k],[...at(10.5,4.0),.7,k*.5],[...at(10.5,-4.0),.7,k*.5],[...at(-21.8,0),1.2,k*.6]);
+      R.sources.push([...at(22.2*SX,0),.8,k],[...at(10.5*SX,4.0*SZ),.7,k*.5],[...at(10.5*SX,-4.0*SZ),.7,k*.5],[...at(-21.8*SX,0),1.2,k*.6]);
     }
     R.update(dt);
     this.lightning.update(dt, S.lightning, this.cam, this.cam.yaw);
@@ -326,7 +328,7 @@ class App {
 }
 
 let app;
-try { await loadYachtGeometry(); app = new App(); document.getElementById('loading')?.remove(); } catch (e) {
+try { await loadYachtGeometry(); app = new App(); installShipChoice(vessel.id); document.getElementById('loading')?.remove(); } catch (e) {
   // no WebGL 2 / float render targets / shader failure: say so instead of leaving a black page
   const f = document.getElementById('fail');
   if (f) {
