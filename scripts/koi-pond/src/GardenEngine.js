@@ -4,6 +4,7 @@ import {spineGLSL, spineOffset, advanceNeeds, depthTarget, limitAttitude} from '
 import {installGuide} from './Guide.js';
 import {varieties} from './KoiCatalog.js';
 import {fovFromWheel} from './PondCamera.js';
+import {makePondTour} from './PondTour.js';
 const THREE=window.THREE, dat=window.dat;
 
 /* global THREE, dat */
@@ -43,7 +44,7 @@ const P = {
   cameraMode: 'Manual',
   holdCamera: false,       // hold the current shot (no camera motion at all)
   freezeScene: false,      // stop time: fish, water, wind, everything
-  stayAbove: true,         // cinematic path skips the underwater dive unless enabled
+  stayAbove: false,        // the pond tour includes above-water and underwater koi views
   cleanView: false,        // screenshot mode: hides every overlay
   pathSpeed: 1.0,
   audio: false,             // starts on the first click / key press (browser autoplay rules)
@@ -6374,45 +6375,21 @@ PATH.above = {
   T: 100,
 };
 const _pp = new THREE.Vector3(), _pl = new THREE.Vector3(), _pm = new THREE.Matrix4(), _pq = new THREE.Quaternion();
-// A directed tour, cut like a short film: an aerial establishing crane over the whole garden, down into the bamboo
-// grove, along the fence, under the wisteria, past the weeping cherry to the waterfall, the lotus, low over the koi,
-// the turtle's rock, the flower beds, the bonsai, up into the cherry blossom, a close look at the frog, an optional
-// dive, and an aerial pull-back. Cuts dip through black; letterbox bars and a lower-third caption name each place.
+// Pond and fish compositions only. Each loop selects different living koi for the close-ups.
 const MOVIE = { shots: [], i: 0, t: 0, fade: 0 };
 function buildMovie() {
-  const V = (x, y, z) => new THREE.Vector3(x, y, z), L = (a, b, u) => a.clone().lerp(b, u);
-  const orbit = (c, r, h, a0, a1) => (u) => { const a = lerp(a0, a1, u); return V(c.x + Math.cos(a) * r, h, c.z + Math.sin(a) * r); };
-  const B = () => WORLD.botany || {};
-  const frogP = () => { const p = new THREE.Vector3(); if (FROG.root) FROG.root.getWorldPosition(p); return p; };
-  MOVIE.shots = [
-    // 1 — the garden from above
-    { cap: 'Stillwater · The Hidden Reef', T: 22, pos: (u) => V(lerp(4.9,-3.2,u),lerp(10.0,7.2,u),lerp(11.7,10.2,u)), look: () => V(-.3,0,-1.5) },
-    // 2 — the pond and its water
-    { cap: 'The koi pond', T: 11, pos: (u) => L(V(-0.35, 0.62, 5.4), V(0.15, 0.36, 3.3), u), look: (u) => L(V(0.2, 0.5, -3.6), V(0.0, 0.2, -3.2), u) },
-    { cap: 'Koi', T: 11, start: () => { const fs = KOI.fish.slice(0, Math.min(P.fishCount, KOI.fish.length)); MOVIE.koi = fs.reduce((b, f) => (f.p.y > b.p.y && sdf(f.p.x, f.p.z) < -0.8 ? f : b), fs[0]); },
-      pos: (u) => { const f = MOVIE.koi || KOI.fish[0], a = f.heading + 2.4 + u * 0.6; return V(f.p.x + Math.cos(a) * 0.8, WATER_Y + lerp(0.6, 0.38, u), f.p.z - Math.sin(a) * 0.8); }, look: () => (MOVIE.koi || KOI.fish[0]).p.clone() },
-    { cap: 'Sacred lotus (hasu)', T: 10, pos: orbit(V(-2.62, 0, -0.15), 0.95, 0.62, 0.35, 1.3), look: () => V(-2.62, 0.5, -0.1) },
-    // 3 — bamboo and sakura
-    { cap: 'Bamboo grove — Phyllostachys', T: 12, pos: (u) => V(lerp(-5.9, -6.4, u), lerp(8.5, 1.5, Math.pow(u, 0.85)), lerp(-10.2, -11.4, u)), look: (u) => V(-9.4, lerp(7.0, 2.6, u), lerp(-10.8, -11.6, u)) },
-    { cap: 'Weeping cherry (shidare-zakura)', T: 10, pos: (u) => L(V(-4.6, 1.15, -3.3), V(-5.3, 1.3, -2.5), u), look: (u) => L(V(-6.9, 2.3, -1.0), V(-6.9, 1.8, -1.0), u) },
-    { cap: 'Cherry blossom', T: 11, pos: (u) => L(V(8.4, 0.9, 4.4), V(7.7, 1.15, 3.3), u), look: (u) => L(V(5.0, 1.9, 2.6), V(4.6, 1.6, 2.1), u) },
-    // 4 — the pond's creatures, then below the surface
-    { cap: 'Pond frog', T: 10, pos: (u) => { const p = frogP(), a = FROG.baseYaw + lerp(-0.4, 0.5, u); return V(p.x + Math.cos(a) * lerp(0.42, 0.24, u), p.y + lerp(0.14, 0.07, u), p.z - Math.sin(a) * lerp(0.42, 0.24, u)); }, look: () => frogP().add(V(0, 0.03, 0)), skip: () => !FROG.root || !WORLD.frogPad.mesh.visible },
-    { cap: 'Yellow-bellied slider', T: 9, pos: (u) => { const T0 = TURTLE.pos, a = TURTLE.yaw + 1.9 + u * 0.4, r = lerp(0.8, 0.5, u); return V(T0.x + Math.cos(a) * r, Math.max(WATER_Y + 0.35, T0.y + lerp(0.4, 0.22, u)), T0.z - Math.sin(a) * r); }, look: () => V(TURTLE.pos.x, TURTLE.pos.y + 0.04, TURTLE.pos.z), skip: () => !TURTLE.root || TURTLE.off },
-    { cap: 'Beneath the surface', T: 13, under: true, pos: (u) => L(V(0.6, 0.35, 2.0), V(0.2, -0.5, 0.7), smoothstep(0, 0.45, u)).add(V(-u * 0.6, 0, -u * 0.8 * smoothstep(0.45, 1, u))), look: (u) => L(V(0.0, -0.3, 0.6), V(-0.6, -0.55, -1.4), u), skip: () => SH.uIce.value > 0.5 },
-    // 5 — and back to the pond
-    { cap: '', T: 11, pos: (u) => L(V(0.1, 0.4, 3.6), V(-0.3, 0.6, 5.6), u), look: (u) => L(V(0.1, 0.25, -3.2), V(0.2, 0.5, -3.6), u) },
-  ];
+  MOVIE.shots = makePondTour({THREE, getFish: () => KOI.fish.slice(0, Math.min(P.fishCount, KOI.fish.length)),
+    sdf, depth: pondDepth, getObstacles: () => WORLD.obstacles || [], waterY: WATER_Y});
 }
 function updateMovie(dt, t) {
   if (!MOVIE.shots.length) buildMovie();
   let sh = MOVIE.shots[MOVIE.i];
   let guard = 0;
-  while (sh.skip && sh.skip() && guard++ < MOVIE.shots.length) { MOVIE.i = (MOVIE.i + 1) % MOVIE.shots.length; MOVIE.t = 0; sh = MOVIE.shots[MOVIE.i]; }
+  while (((sh.skip && sh.skip()) || (sh.under && (P.stayAbove || SH.uIce.value > .5))) && guard++ < MOVIE.shots.length) { MOVIE.i = (MOVIE.i + 1) % MOVIE.shots.length; MOVIE.t = 0; sh = MOVIE.shots[MOVIE.i]; }
   if (MOVIE.started !== sh) { MOVIE.started = sh; if (sh.start) sh.start(); }
   MOVIE.t += dt * P.pathSpeed;
   const u = clamp(MOVIE.t / sh.T, 0, 1), e = lerp(u, u * u * (3 - 2 * u), 0.55);
-  const p = sh.pos(e), l = sh.look(e);
+  const {pos: p, look: l} = sh.frame(e, dt);
   p.x += Math.sin(t * 0.37) * 0.01; p.y += Math.sin(t * 0.53) * 0.007;          // faint hand-held drift
   if (!sh.under) {                                                              // never inside the ground or the water
     const sd = sdf(p.x, p.z), floor = sd < 0 ? WATER_Y + 0.12 : ground(p.x, p.z) + 0.3;
@@ -7907,7 +7884,7 @@ function buildGUI() {
   fL.add(P, 'fStop', 1.4, 16, 0.1).name('Aperture (f-stop)');
   fL.add(P, 'dofStrength', 0, 2, 0.01).name('Max bokeh size');
   const fC = gui.addFolder('Camera');
-  fC.add(P, 'movie').name('Cinematic = film tour');
+  GUI_CTRL.movie = fC.add(P, 'movie').name('Cinematic = pond tour');
   fC.add(P, 'letterbox').name('Letterbox bars');
   fC.add(P, 'tourSeasons').name('Change season each loop');
   GUI_CTRL.cam = fC.add(P, 'cameraMode', ['Cinematic', 'Manual', 'Follow koi', 'Follow turtle']).name('Mode').onChange(onCameraMode);
@@ -8110,7 +8087,12 @@ function installHiddenReef() {
   });
   document.querySelectorAll('[data-view]').forEach(b => b.onclick=()=>{
     learn.close(); setHold(false); FEED.shot=null;
-    if (b.dataset.view==='Tour') { TWEEN.t=1; P.cameraMode='Cinematic'; MOVIE.i=0; MOVIE.t=1; onCameraMode(); }
+    if (b.dataset.view==='Tour') {
+      TWEEN.t=1; P.movie=true; P.cameraMode='Cinematic'; MOVIE.i=0; MOVIE.t=0; MOVIE.started=null;
+      camera.fov=52; camera.updateProjectionMatrix();
+      if (GUI_CTRL.movie) GUI_CTRL.movie.updateDisplay();
+      onCameraMode();
+    }
     else { goToView(b.dataset.view); }
   });
   $('scene-settings').onclick=()=>{ const d=document.querySelector('.dg.ac'); const show=d.style.display==='none';d.style.display=show?'':'none';$('scene-settings').setAttribute('aria-expanded',String(show));if(show)GUI_CTRL.gui.open();};

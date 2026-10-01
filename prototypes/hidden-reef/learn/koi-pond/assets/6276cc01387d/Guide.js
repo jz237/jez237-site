@@ -1,0 +1,20 @@
+import {waterMarkup,bindWaterLab} from './WaterLab.js';
+import {careMarkup,bindCare} from './KoiCare.js';
+import {varieties} from './KoiCatalog.js';
+import {PondChemistry} from './PondChemistry.js';
+const sources=`<details><summary>Sources & model notes</summary><p class="fine">Adapted from Sourany Phomhome’s MIT-licensed Koi Pond Garden, with a wider pond, Hidden Reef learning tools and revised fish behavior. Movement rhythms and chemistry scenarios are illustrative. The scene is not a volume-based stocking plan.</p><ul><li><a href="https://www.usgs.gov/labs/fish-health-program/science/koi-cyprinus-carpio-koi-fhp" target="_blank" rel="noopener">USGS · carp anatomy and ornamental koi</a></li><li><a href="https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-coldwater-fish/how-to-look-after-pond-fish/" target="_blank" rel="noopener">OATA · pond fish care and water quality</a></li><li><a href="https://ask.ifas.ufl.edu/publication/FA002" target="_blank" rel="noopener">UF/IFAS · dissolved oxygen</a></li><li><a href="https://edis.ifas.ufl.edu/publication/FA031" target="_blank" rel="noopener">UF/IFAS · ammonia, pH and temperature</a></li><li><a href="https://nwkg.org/koi-identification/" target="_blank" rel="noopener">ZNA Northwest · koi varieties</a></li><li><a href="./LICENSES.txt" target="_blank" rel="noopener">Source & library licenses</a></li></ul></details>`;
+export function installGuide(actions){
+ const panel=document.querySelector('#panel'),body=document.querySelector('#panel-body'),app=document.querySelector('#app'),lab=new PondChemistry();let mode='koi',selected=0,opener;
+ const close=()=>{if(panel.hidden)return;panel.hidden=true;app.classList.remove('panel-open');opener?.focus();};document.querySelector('#close-panel').onclick=close;
+ const show=(next,fish)=>{mode=next;if(fish!==undefined)selected=fish;if(panel.hidden)opener=document.activeElement;panel.hidden=false;app.classList.add('panel-open');render();panel.scrollTop=0;body.querySelector('h2').focus({preventScroll:true});};
+ document.querySelectorAll('[data-panel]').forEach(b=>b.onclick=()=>{opener=b;show(b.dataset.panel);});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+ function render(){
+  panel.classList.toggle('water-panel',mode==='water');
+  if(mode==='koi'){const v=varieties[selected];body.innerHTML=`<p class="eyebrow">MEET THE INHABITANTS</p><h2 id="panel-title" tabindex="-1">A closer look.</h2><label for="koi-variety">Choose a koi</label><select id="koi-variety">${varieties.map((v,i)=>`<option value="${i}" ${i===selected?'selected':''}>${v.nickname} · ${v.name}</option>`).join('')}</select><div class="fish-swatch"></div><h3 class="koi-name">${v.nickname}</h3><p class="koi-variety">${v.name}</p><p>${v.note}</p><div class="fact-grid"><div class="fact"><small>COLOR PALETTE</small><strong>${v.colors}</strong></div><div class="fact"><small>COMMON CHARACTER</small><strong>Curious forager</strong></div></div><button class="primary" id="inspect-koi">Watch this koi ↗</button><h3>Made for moving water</h3><p>A steady head leads a traveling wave through the rear body and tail. The paired fins steer and brake. Look for small eyes, thick lips, two pairs of barbels, a long dorsal fin and overlapping scales.</p><p>Koi explore at different depths, pause to investigate and gather for food. These fish have separate swim rhythms and loose social spacing.</p><button id="koi-care">Explore the koi care guide →</button><h3>Room to grow</h3><p>Koi become large, long-lived fish. Choose pond size, filtration and stocking for their adult needs, and maintain stable, tested water.</p>${sources}`;
+   body.querySelector('#koi-variety').onchange=e=>{selected=Number(e.target.value);render();actions.inspect(selected);};body.querySelector('#koi-care').onclick=()=>show('pond');body.querySelector('#inspect-koi').onclick=()=>{actions.inspect(selected);close();};
+  }else if(mode==='water'){body.innerHTML=waterMarkup();bindWaterLab(body,lab);
+  }else { body.innerHTML=careMarkup()+sources; bindCare(body,{water:()=>show('water'),feed:()=>{actions.feed();close();}}); }
+ }
+ return {show,close,lab};
+}
