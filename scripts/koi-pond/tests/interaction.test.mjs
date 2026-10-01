@@ -69,7 +69,7 @@ test('all actual fish have distinct names and care search reaches useful topics'
   assert.equal(matchingTopics('gobbledygook').length,0);
 });
 
-test('startup always opens an animated Garden, including with reduced motion enabled',()=>{
+test('startup always opens the animated tour, including with reduced motion enabled',()=>{
  for(const reduced of [false,true]){
   const c=context();vm.runInContext(`
    const elements=new Map(),messages=[];
@@ -79,13 +79,13 @@ test('startup always opens an animated Garden, including with reduced motion ena
    const matchMedia=()=>({matches:${reduced}});
    function toast(value){messages.push(value);} function installGuide(){return {close(){}};}
    function setHold(){} function startFeeding(){} function onCameraMode(){}
-   let initialView;function goToView(name,instant){initialView={name,instant};}
+   let initialView;function goToView(name,instant){initialView={name,instant};} function startPondTour(options){initialView={name:'Tour',announce:options.announce};P.cameraMode='Cinematic';}
   `+between('function setFreeze(', '// sound:')+between('function installHiddenReef()', '\ninit();')+`
    installHiddenReef();globalThis.result={P,document,elements,messages,initialView,setFreeze};
   `,c);
   const r=c.result;
   assert.equal(r.P.freezeScene,false);assert.equal(r.document.body.dataset.pondMotion,'running');
-  assert.equal(r.initialView.name,'Garden');assert.equal(r.initialView.instant,true);
+  assert.equal(r.initialView.name,'Tour');assert.equal(r.initialView.announce,false);assert.equal(r.P.cameraMode,'Cinematic');
   assert.equal(r.elements.get('pond-paused').hidden,true);assert.equal(r.messages.length,0,'startup does not announce an unwanted pause');
   r.setFreeze(true);assert.equal(r.elements.get('pond-paused').hidden,false);
   assert.equal(r.elements.get('tb-freeze').attributes['aria-label'],'Resume pond');

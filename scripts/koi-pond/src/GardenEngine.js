@@ -6340,14 +6340,14 @@ function updateFreeCamera(dt) {
   if (k.KeyQ || k.PageDown) camera.position.y -= sp * 0.7;          // descend (dives when over the pond)
   if (k.Space || k.KeyR || k.PageUp) camera.position.y += sp * 0.7;
 }
-function onCameraMode() {
+function onCameraMode({announce = true} = {}) {
   if (P.cameraMode === 'Manual') {
     const e = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ'); CTRL.yaw = e.y; CTRL.pitch = e.x;
   } else PATH.blend = 0;
   if (GUI_CTRL.cam) GUI_CTRL.cam.updateDisplay();
   setBtnLabel('tb-cam', P.cameraMode === 'Cinematic' ? 'Manual camera' : 'Cinematic camera');
   if (P.cameraMode !== 'Manual') document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view==='Tour' && P.cameraMode==='Cinematic')));
-  toast(P.cameraMode === 'Manual' ? 'Manual camera: drag to look · WASD move · Q down · Space up · Shift faster · wheel zoom' : P.cameraMode === 'Follow koi' ? `Following ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].nickname} · ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].name} (K for next)` : P.cameraMode === 'Follow turtle' ? 'Following the turtle' : 'Cinematic camera');
+  if (announce) toast(P.cameraMode === 'Manual' ? 'Manual camera: drag to look · WASD move · Q down · Space up · Shift faster · wheel zoom' : P.cameraMode === 'Follow koi' ? `Following ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].nickname} · ${varieties[FOLLOW.idx % Math.max(1, Math.min(P.fishCount, KOI.fish.length))].name} (K for next)` : P.cameraMode === 'Follow turtle' ? 'Following the turtle' : 'Cinematic camera');
 }
 
 /* ------------------------------------------------------------------ 13b. CINEMATIC PATH, DIVE EFFECTS & AUDIO */
@@ -6375,11 +6375,20 @@ PATH.above = {
   T: 100,
 };
 const _pp = new THREE.Vector3(), _pl = new THREE.Vector3(), _pm = new THREE.Matrix4(), _pq = new THREE.Quaternion();
-// Pond and fish compositions only. Each loop selects different living koi for the close-ups.
+// Pond, koi, turtle and frog compositions. Each loop selects different living koi for the close-ups.
 const MOVIE = { shots: [], i: 0, t: 0, fade: 0 };
 function buildMovie() {
   MOVIE.shots = makePondTour({THREE, getFish: () => KOI.fish.slice(0, Math.min(P.fishCount, KOI.fish.length)),
-    sdf, depth: pondDepth, getObstacles: () => WORLD.obstacles || [], waterY: WATER_Y});
+    sdf, depth: pondDepth, getObstacles: () => WORLD.obstacles || [], getAspect: () => camera.aspect, waterY: WATER_Y,
+    getTurtle: () => TURTLE.root && !TURTLE.off ? {p: TURTLE.pos.clone(), heading: TURTLE.yaw} : null,
+    getFrog: () => FROG.root && WORLD.frogPad?.mesh?.visible ? {p: FROG.root.getWorldPosition(new THREE.Vector3()), heading: FROG.baseYaw} : null});
+}
+function startPondTour({announce = true} = {}) {
+  TWEEN.t=1; P.movie=true; P.cameraMode='Cinematic'; MOVIE.i=0; MOVIE.t=0; MOVIE.started=null;
+  camera.fov=52; camera.updateProjectionMatrix();
+  if (GUI_CTRL.movie) GUI_CTRL.movie.updateDisplay();
+  onCameraMode({announce});
+  updateMovie(0, 0); // establish the first pond composition before the loader disappears
 }
 function updateMovie(dt, t) {
   if (!MOVIE.shots.length) buildMovie();
@@ -8087,20 +8096,15 @@ function installHiddenReef() {
   });
   document.querySelectorAll('[data-view]').forEach(b => b.onclick=()=>{
     learn.close(); setHold(false); FEED.shot=null;
-    if (b.dataset.view==='Tour') {
-      TWEEN.t=1; P.movie=true; P.cameraMode='Cinematic'; MOVIE.i=0; MOVIE.t=0; MOVIE.started=null;
-      camera.fov=52; camera.updateProjectionMatrix();
-      if (GUI_CTRL.movie) GUI_CTRL.movie.updateDisplay();
-      onCameraMode();
-    }
+    if (b.dataset.view==='Tour') { startPondTour(); }
     else { goToView(b.dataset.view); }
   });
   $('scene-settings').onclick=()=>{ const d=document.querySelector('.dg.ac'); const show=d.style.display==='none';d.style.display=show?'':'none';$('scene-settings').setAttribute('aria-expanded',String(show));if(show)GUI_CTRL.gui.open();};
   document.querySelector('.dg.ac').style.display='none';
-  goToView('Garden', true);
-  // A still Garden camera is independent of pond motion. Start the living scene
-  // on every device; reduced-motion CSS still disables UI transitions.
+  // The pond tour and living scene start on every device. Reduced-motion CSS
+  // still disables interface transitions; Garden remains a stationary view.
   setFreeze(false, {announce:false});
+  startPondTour({announce:false});
   $('pond-resume').onclick = () => setFreeze(false);
 }
 init();
