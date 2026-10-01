@@ -1,7 +1,7 @@
 import {existsSync,readFileSync,readdirSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
-const textFile=/\.(html|js|json|css)$/;
+const textFile=/\.(html|js|json|css|md)$/;
 const normalized=(data,path)=>textFile.test(path)?Buffer.from(data.toString('utf8').replaceAll('\r\n','\n')):data;
 const digest=data=>createHash('sha256').update(data).digest('hex');
 export function oceanFiles(repo){
