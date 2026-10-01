@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 01 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 29-November 4, 1984 — Ghostbusters leads Activision’s million-dollar holiday comeback bid</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-10-29</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-29</guid>
+      <pubDate>Thu, 01 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Activision plans more than $1 million in holiday advertising as computer software takes a larger place in its business. Activision is putting Ghostbusters at the center of a holiday comeback bid. In the November 3 Billboard, Faye Zuckerman reports an advertising budget exceeding $1 million for the selling season. President James Levy says shipments are picking up after a slow summer, with David Crane’s newly shipped Ghostbusters and Designer’s Pencil carrying the company’s hopes for fresh hits. Also this week: The bulletin board becomes a neighborhood without borders · Shopping by modem: CompuServe’s Electronic Mall is open all night · Commodore’s Plus/4 trades game features for built-in office tools.</description>
+    </item>
     <item>
       <title>Week of October 22-28, 1984 — Ghostbusters Haunts the Commodore 64</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-10-22</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-18</guid>
       <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
       <description>Robert Scheifler announces the X Window System, separating graphical programs from the screens that display them. Robert Scheifler at MIT&apos;s Project Athena announced the X Window System on June 19, giving the laboratory&apos;s networked workstations a new way to draw and manage graphical displays. The first implementation was written for a VAX VS100, but its central idea reaches beyond a single machine. Also this week: VisiCorp Tries to Re-enter the Business-Software Race · Apple IIc Packs the Apple II into 7.5 Pounds · Stolen Password Exposes the Fragility of Online Credit Files.</description>
-    </item>
-    <item>
-      <title>Week of June 11-17, 1984 — Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-06-11</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-11</guid>
-      <pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Los Angeles authorities confiscate MOG-UR’s HBBS equipment after telephone access codes appear among user messages. Los Angeles police have seized the computer equipment behind MOG-UR’s HBBS, thrusting a three-year-old hobbyist bulletin board into an unfamiliar legal contest over responsibility for messages left by users. Pacific Telephone security investigators alerted police after finding a telephone credit-card code and two Sprint access numbers among posts on the system. Also this week: Fido Wants to Travel: Hobbyist Boards Begin to Form a Network · Novelists Move from Type to Bytes at Summer CES · Morrow&apos;s Pivot Puts a PC-Compatible Computer on a Shoulder Strap · Apple IIc Interest Runs Ahead of Complete Systems.</description>
     </item>
   </channel>
 </rss>

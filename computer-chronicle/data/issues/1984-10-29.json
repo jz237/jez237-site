@@ -1,0 +1,472 @@
+{
+  "visualProfile": {
+    "tone": "October 1984 games-and-home-computing newsprint",
+    "motifs": [
+      "Ghostbusters game box and home-computer disks",
+      "Atari bulletin board terminal",
+      "telephone modem",
+      "Commodore Plus/4"
+    ],
+    "layout": "Dense period weekly; game art above the fold, red and blue rules, halftone blocks"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "October 29-November 4, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Wide Ghostbusters game banner and period Commodore 64 halftone; Plus/4 and PC/AT in secondary columns",
+    "secondaryRail": "Games shelf, charts, modem note, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-10-01",
+  "historicDate": "1984-10-29",
+  "displayDate": "Week of October 29-November 4, 1984",
+  "edition": "Issue 118 - Weekly 1984 Computer & Culture Chronicle",
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-10-29.png",
+    "alt": "GPT Image 2 Computer Chronicle newspaper for October 29-November 4, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The weekly record of games, home computers and digital culture.",
+  "morningLine": "Ghostbusters takes the holiday spotlight; the modem opens a door to games, neighbors and shopping.",
+  "lead": {
+    "headline": "Ghostbusters leads Activision’s million-dollar holiday comeback bid",
+    "dek": "Activision plans more than $1 million in holiday advertising as computer software takes a larger place in its business.",
+    "body": [
+      "Activision is putting Ghostbusters at the center of a holiday comeback bid. In the November 3 Billboard, Faye Zuckerman reports an advertising budget exceeding $1 million for the selling season. President James Levy says shipments are picking up after a slow summer, with David Crane’s newly shipped Ghostbusters and Designer’s Pencil carrying the company’s hopes for fresh hits.",
+      "The planned push reaches beyond the software counter. Radio contests, television spots and a major print campaign are in the works. These are the company’s announced plans, not a tally of advertising already aired. A familiar movie name gives the game a ready-made calling card, but Activision still has to persuade households to buy software.",
+      "The recovery has a difficult starting point. The fiscal quarter ending June 30 brought a $3.6 million loss on $6.2 million in sales, figures recalled in this week’s report rather than new weekly earnings. Levy describes declining video-game orders alongside an increasingly apparent computer-software business.",
+      "That shift is also a change of identity. Levy expects the old video-game-company image to fade in about six months and insists that Activision is in the business for the long term. Ghostbusters is thus more than a seasonal attraction: it is a prominent test of the cartridge pioneer’s move toward the home-computer shelf."
+    ],
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "same-week"
+  },
+  "stories": [
+    {
+      "headline": "The bulletin board becomes a neighborhood without borders",
+      "body": [
+        "November’s COMPUTE! finds a growing neighborhood behind the telephone jack. Home-operated bulletin boards carry messages, public-domain software, classified advertisements and technical help. Most accept only one caller at a time, so the busy signal remains as familiar as the welcome screen.",
+        "Chicago programmer John Semenek recalls finding only one local Atari board and now reports at least 20 in the metropolitan area. Stan and Susie Subeck’s Valley Girl BBS adds adventure games and trivia to the conversation, with the children helping maintain the family system.",
+        "The volunteer labor is substantial. A survey by Plumb editor Ric Manning puts average setup expense above $3,000, another $50 in monthly running costs and maintenance or data entry at up to 50 hours a month. Kent Fillmore’s Apple II-based Draco-Net points toward a larger ambition: a proposed franchise in every area code, not yet a completed national network."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Shopping by modem: CompuServe’s Electronic Mall is open all night",
+      "body": [
+        "The home computer is becoming a catalog counter. Selby Bateman’s November COMPUTE! report puts CompuServe above 130,000 subscribers and its Electronic Mall above 80 merchants. WaldenBooks, American Express, Commodore, McGraw-Hill, Microsoft and American Airlines are among the named participants.",
+        "The Mall keeps its doors open around the clock, with product descriptions, merchant-query mailboxes, shipping information and order forms. It is a text-heavy proposition for ordinary home computers, contrasting with graphical videotex systems that call for special equipment.",
+        "Price and equipment still separate the services. Viewtron requires a $600 AT&T Sceptre terminal. Chicago’s Keyfax is reported at $10–$15 a month plus a $40 software package, with home shopping still forthcoming. The shopping trip may avoid the street, but it does not avoid the telephone connection or the bill."
+      ],
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Commodore’s Plus/4 trades game features for built-in office tools",
+      "body": [
+        "Commodore’s Plus/4 offers a different bargain from the game-oriented 64. October’s COMPUTE! report describes a $300, 64K machine with four applications in ROM: word processing, spreadsheet work, file management and business graphics. International Tri Micro developed the integrated 3-Plus-1 package.",
+        "BASIC 3.5 supplies more than 75 commands, and bank switching leaves roughly 60K available to BASIC. Graphics reach 320 by 200 with 128 hues, but hardware sprites are absent and two tone generators replace the C64’s more flexible SID sound system.",
+        "The trade-offs matter at the counter. Most VIC-20 and C64 software does not run unchanged; cassette and joystick connectors differ, although the 1541 drive and serial printers remain usable. The built-in word processor stops at 99 lines. This is an October preview for fall buyers, not confirmation of a launch during this week."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "period"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Ghostbusters",
+      "summary": "Newly shipped title by David Crane is central to Activision’s holiday campaign; exact release day and price not established here.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "title": "Archon II: ADEPT",
+      "summary": "October COMPUTE! reports Electronic Arts introduction: strategy plus action, spells and energy-point capture, human or computer opponent; Atari requires 48K, also Commodore 64; suggested retail $40. Not a verified release this week.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Skyfox",
+      "summary": "Electronic Arts Apple II-family disk game: single-player aircraft-and-tank combat defending Federation asteroid bases, training and 15 scenarios; suggested retail $40. October report.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Dragonriders of Pern",
+      "summary": "Shay Addams’s October review emphasizes diplomacy and alliances alongside Thread-fighting action. Epyx: disk C64/Atari, cassette C64; $39.95. Period review, not a new weekly release.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "KoalaPad for PCjr",
+      "summary": "November review requires PCjr with 128K, disk drive, DOS 2.1 and color display. Roughly 6×8-inch pad, 4-inch-square sensitive surface and 5½-foot cord to joystick port. KoalaPainter uses 160×200 with 16 colors; reviewer questions failure to use higher resolution. No price verified.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Commodore Plus/4",
+      "summary": "64K productivity-oriented machine, built-in 3-Plus-1, BASIC 3.5 and 128 hues; incompatible with most C64 software. Preliminary October report, not exact-week launch.",
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Tel-A-Modem 212A",
+      "summary": "Code-A-Phone combines telephone and modem with two lines for simultaneous voice/data use. November modem survey; no verified model price.",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Designer’s Pencil",
+      "detail": "Activision hopes this newly shipped title will join Ghostbusters as a holiday hit; source does not establish specs or price.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "name": "WizType",
+      "detail": "Sierra typing tutor using Wizard of Id characters, game/drill/practice modes and custom lessons. Atari version reviewed; Atari, C64 or Apple II-family with at least 32K and disk drive; $34.95.",
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "name": "OmniWriter & OmniSpell",
+      "detail": "Human Engineered Software C64 package: 30,000-word spelling checker, 34,000-character files and linked printing; reviewer finds manual page-break handling troublesome. $59.95; requires disk drive and compatible printer.",
+      "sourceRefs": [
+        9
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games — editorial shelf, not a sales chart",
+      "items": [
+        "Ghostbusters",
+        "Archon II: ADEPT",
+        "Skyfox",
+        "Dragonriders of Pern"
+      ]
+    },
+    {
+      "label": "Top 5 Music — Billboard Top Rock Tracks, November 3",
+      "items": [
+        "I Can’t Hold Back — Survivor",
+        "Blue Jean — David Bowie",
+        "Pride (In the Name of Love) — U2",
+        "Teacher Teacher — 38 Special",
+        "Understanding — Bob Seger & the Silver Bullet Band"
+      ]
+    },
+    {
+      "label": "Top 5 Movies — November 2–4 domestic weekend",
+      "items": [
+        "The Terminator",
+        "Places in the Heart",
+        "Body Double",
+        "Terror in the Aisles",
+        "A Soldier’s Story"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "WizType: $34.95",
+      "price": "$34.95",
+      "note": "Listed review price, US dollars; not a store sale.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "OmniWriter & OmniSpell: $59.95",
+      "price": "$59.95",
+      "note": "Listed package review price, US dollars.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "Archon II and Skyfox: $40 each",
+      "price": "$40",
+      "note": "Electronic Arts suggested retail in October news item.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Dragonriders of Pern: $39.95",
+      "price": "$39.95",
+      "note": "Epyx price in October review.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Modem entry prices reach about $49",
+      "price": "about $49 entry level",
+      "note": "November survey gives a range of roughly $49 to $1,000 or more; predicted year-end 1200-bps prices of $300–$500 are forecasts, not confirmed selling prices.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Viewtron terminal: $600",
+      "price": "$600",
+      "note": "AT&T Sceptre subscriber hardware cost, not a general-purpose computer.",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Broderbund and Wico plan a joint holiday bonus",
+      "summary": "November 3 Billboard reports a December 1–January 31 promotion tied to purchasing a Broderbund game and Wico command joystick; giveaway details beyond the article are not established.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "PCjr artists get pressure-pad painting",
+      "summary": "KoalaPainter offers icon menus, fill, mirror, zoom and an Oops undo function; November review supplies contemporary usability observations.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-11-03",
+      "rank": 1,
+      "artist": "Survivor",
+      "title": "I Can’t Hold Back",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf"
+      ],
+      "sourcePage": 22
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-11-03",
+      "rank": 2,
+      "artist": "David Bowie",
+      "title": "Blue Jean",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf"
+      ],
+      "sourcePage": 22
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-11-03",
+      "rank": 3,
+      "artist": "U2",
+      "title": "Pride (In the Name of Love)",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf"
+      ],
+      "sourcePage": 22
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-11-03",
+      "rank": 4,
+      "artist": "38 Special",
+      "title": "Teacher Teacher",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf"
+      ],
+      "sourcePage": 22
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-11-03",
+      "rank": 5,
+      "artist": "Bob Seger & the Silver Bullet Band",
+      "title": "Understanding",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf"
+      ],
+      "sourcePage": 22
+    }
+  ],
+  "periodAd": {
+    "headline": "An Office Inside the Keyboard",
+    "summary": "Commodore’s Plus/4 pairs 64K with built-in 3-Plus-1 productivity tools; October reporting lists $300.",
+    "tagline": "Four built-in tools, one fall buying decision.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "Activision bets on the computer shelf",
+    "summary": "Levy reports video-game orders diminishing and computer-software orders becoming more apparent. More than $1 million in planned holiday advertising backs the shift; June-quarter losses remain the backdrop.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Indira Gandhi assassinated in New Delhi",
+    "summary": "India’s prime minister was shot and killed in New Delhi on October 31. An emergency cabinet meeting and heightened security followed.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "bbsNote": {
+    "headline": "Atari adventures move onto the bulletin board",
+    "summary": "November COMPUTE! documents live community systems, online games and falling modem prices. These are magazine-month observations, not dated posts or claims of a launch during the target week.",
+    "confidence": "same-month",
+    "posts": [
+      {
+        "topic": "Online games",
+        "platform": "Valley Girl BBS / Atari",
+        "text": "Reported by Kathy Yakal: Stan and Susie Subeck offer adventure games and a trivia quiz to callers."
+      },
+      {
+        "topic": "Community networks",
+        "platform": "Draco-Net / Apple II",
+        "text": "Kent Fillmore operates a home board and proposes a national franchise network with space for local user-group boards; the network remains a proposal."
+      },
+      {
+        "topic": "300 versus 1200 bps",
+        "platform": "Home modems / local BBS systems",
+        "text": "Sharon Darling reports 300-bps models remain economical for local conversation while 1200-bps transfers reduce paid connection time; terminal software often costs extra."
+      },
+      {
+        "topic": "Sysop economics",
+        "platform": "Plumb survey / independent BBS systems",
+        "text": "Ric Manning’s survey, cited in COMPUTE!, reports average setup over $3,000, another $50 monthly and maintenance up to 50 hours monthly."
+      }
+    ],
+    "sourceRefs": [
+      4,
+      5
+    ]
+  },
+  "curiosity": {
+    "headline": "A Chicago Atari board speaks Valley Girl",
+    "summary": "The Subeck family turns Southern California slang into a BBS interface.",
+    "detail": "November COMPUTE! reports that Valley Girl BBS calls deleting a message “bag” and exiting “de-val.” A 13-year-old daughter’s Valspeak inspired the theme; the children also help maintain the system. These are period menu descriptions, not newly collected messages.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "November cover dates do not establish publication or product-release days. October material is contextual and marked period because the week spans two months.",
+      "Billboard rock ranks come from the November 3 primary scan, p.22; do not substitute Tunecaster’s differing independent rock chart.",
+      "No confirmed consumer-electronics launch beyond computing was established; gadgetCandidates omitted. No landmark computing event established; milestone omitted.",
+      "No working phone-phreak codes, cracking instructions, BBS phone numbers or credentials included.",
+      "Games shelf is editorial selection, not ranked sales; only four named games supported by this dossier."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Billboard, November 3, 1984: Top Rock Tracks p.22; Faye Zuckerman home-computer column p.31",
+      "url": "https://worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-11-03.pdf",
+      "date": "1984-11-03"
+    },
+    {
+      "title": "COMPUTE!: Commodore Prepares To Roll Out The Plus/4",
+      "url": "https://www.atarimagazines.com/compute/issue53/018_1_Commodore_Prepares_To_Roll_Out_The_Plus_4.php",
+      "date": "1984-10"
+    },
+    {
+      "title": "COMPUTE!: Strategy, Action Games",
+      "url": "https://www.atarimagazines.com/compute/issue53/083_2_NEWS_PRODUCTS_Strategy_Action_Games.php",
+      "date": "1984-10"
+    },
+    {
+      "title": "COMPUTE!: Dragonriders Of Pern For Commodore 64 And Atari",
+      "url": "https://www.atarimagazines.com/compute/issue53/036_1_REVIEWS_Dragonriders_Of_Pern_For_Commodore_64_And_Atari.php",
+      "date": "1984-10"
+    },
+    {
+      "title": "COMPUTE!: The Bulletin Boarding Of America — Kathy Yakal",
+      "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE!: Understanding Modems — Sharon Darling",
+      "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE!: On-Line Shopping — Selby Bateman",
+      "url": "https://www.atarimagazines.com/compute/issue54/104_1_ON-LINE_SHOPPING_Todays_Computer_Catalogs.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE!: WizType — James V. Trunzo",
+      "url": "https://www.atarimagazines.com/compute/issue54/147_3_REVIEWS_WizType.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE!: KoalaPad For PCjr — Lee Noel",
+      "url": "https://www.atarimagazines.com/compute/issue54/140_1_REVIEWS_KoalaPad_For_PCjr.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE!: OmniWriter & OmniSpell — Joseph R. Sutton",
+      "url": "https://www.atarimagazines.com/compute/issue54/144_2_REVIEWS_OmniWriter_OmniSpell.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "BBC On This Day: Indian prime minister shot dead (historical event date)",
+      "url": "https://news.bbc.co.uk/onthisday/hi/dates/stories/october/31/newsid_2464000/2464423.stm",
+      "date": "1984-10-31"
+    },
+    {
+      "title": "Box Office Mojo: Domestic weekend November 2–4, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W44/",
+      "date": "1984-11-04"
+    }
+  ]
+}
