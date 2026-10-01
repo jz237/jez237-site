@@ -1,0 +1,104 @@
+{
+  "previousRelease": "c25fd2358edfbdbdda4e77a696e20d9be79fedd4",
+  "method": "Reference-led visual construction, authored Blender quarry planes/infrastructure/wheel detail, photographic ground, coherent HDR/key rotation and HUD. Original collision, car and audio files retained.",
+  "files": {
+    "src/assets.ts": {
+      "before": "0e6e2565bf57ee748ca99341f37b0cfd8111212de32638829c1e454d7c3809e0",
+      "after": "4dde43fec94f4628cb03bc13d9af0aa9ae1b0d2045404940117b7cec9a6282a3",
+      "snapshot": "tests/fixtures/reference-before-assets.ts.gz"
+    },
+    "src/effects.ts": {
+      "before": "71f68c3e96481dc9658b8ed5ee65817c0c5e5b61ba1ffd9b39dfbf9373597cd6",
+      "after": "c37f02b9e088abc686646b80c885ee61db6139c839edbe428ddbdd2f8b9adda1",
+      "snapshot": "tests/fixtures/reference-before-effects.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "74f486e70357247e868beb822fc1cc79acdf80c9ec405108b97b468ca57eb660",
+      "after": "6b0e5a6792516cc0abdbf571e0ff4e23b48bfc992a458222d09ff709ca9ad1cf",
+      "snapshot": "tests/fixtures/reference-before-main.ts.gz"
+    },
+    "src/packed-models.json": {
+      "before": "8db9e26b33900e2c38f01ec6dccbea8513925787b60da6818671e2da3a95d4e6",
+      "after": "32a78299f451572a2a24db5ea7ff2cda3355f8cb2c02704014ba4ddf358e3e34",
+      "snapshot": "tests/fixtures/reference-before-packed-models.json.gz"
+    },
+    "src/scenery-vegetation.ts": {
+      "before": "c0325f61bccea1a6fb18a53d4e5eea59cfcba36809c5b81fdd9516c436e936ac",
+      "after": "9be4b439efe1e22f96f1dff91afb6b3225bd462b9b5e8c5ca5983290cbd5e3cb",
+      "snapshot": "tests/fixtures/reference-before-scenery-vegetation.ts.gz"
+    },
+    "src/static-shadows.ts": {
+      "before": "8602c692a92eb0f3bbf74aaa3d7d9bf28835eb88af72bc13781f1b013fba0601",
+      "after": "2ecc30bd721305428b549516188c8365d6f90f14f2d00d0d44d39833c2d4b169",
+      "snapshot": "tests/fixtures/reference-before-static-shadows.ts.gz"
+    },
+    "src/style.css": {
+      "before": "1bb12e1141eb68fdac39a9e595b01af537a536262fa376047bf853111695281b",
+      "after": "a50cb44231e32b8436f123e64c63a06c8fe32e86546b82e9a8a94a5ff40bee65",
+      "snapshot": "tests/fixtures/reference-before-style.css.gz"
+    },
+    "src/vehicle-fire.ts": {
+      "before": "1133ce8a0ea4fd56b20caffa560f28715e8f559a30a8a52a282245ee01730c39",
+      "after": "f4e541e5360abec8695a28c6b91cf1f29d80221faacd5f4e28a33d3d0bcd2f75",
+      "snapshot": "tests/fixtures/reference-before-vehicle-fire.ts.gz"
+    },
+    "src/vehicle-surface.ts": {
+      "before": "389b894c1992eee27246fc670afa9026070a15a24c387d99f86c58884ee45e59",
+      "after": "9a2ecc2f523d5829a6ee55bd00600fc52679e424f810c3bb2460253d78eea427",
+      "snapshot": "tests/fixtures/reference-before-vehicle-surface.ts.gz"
+    },
+    "src/world.ts": {
+      "before": "2ccd610d8d944830a3cebb82bc5dc84a5a6e81a3649c4328708aa85cfed4cd09",
+      "after": "4d1b1f3093549caede7cd6e1ea14e92da27363da1d51d11c69d24f4df1f5cc9c",
+      "snapshot": "tests/fixtures/reference-before-world.ts.gz"
+    }
+  },
+  "protectedModels": {
+    "models/coupe.glb": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea",
+    "models/fir-medium-a.glb": "638aea52e2e1da1a476616a186342206ce608fdc21ad0f7b0804890f3799186d",
+    "models/fir-medium-b.glb": "9291b31eb96caa2b81ffd734c9460653b4b47d8ea817a47a91342d8b24d20d03",
+    "models/fir-medium-c.glb": "bd61e04351aad10b78d765cdb45bdebdcc2cacf3b8613d20d0861225ba603e8d",
+    "models/fir-saplings-lod.glb": "9bf314948e5866112974aee906741d877d975232f782eae95343f8604726d515",
+    "models/hatch.glb": "7a3c5661c3a8285facd4c1dac8e39238f18a92b69acbb776c7073118bbc7210c",
+    "models/pine3d.glb": "37c678546de6a69af6b4a4a9782d4236461f9989fce44fc72b7e3869f99203d5",
+    "models/quarry-cut.glb": "a5af7b9f507242426c812930db9b6233691bb6b9c2b203f38076d9317c82b4dd",
+    "models/quarry-east-bay.glb": "7ddc48a1bd066e8f9f576c6bff30ed42a89c2b5d1ebaf49e92c84ca4bd85a1c5",
+    "models/quarry-extension.glb": "674803ec9f8c42868ba9bfe0fcf441a159be933a1bf58eaab56affdf63048a33",
+    "models/quarry-headwall.glb": "cb6546a065f654ad0d1cdf8066d7617aa7ffe6f40cc2b2542fa617710d25a0c3",
+    "models/quarry-north-fir-0.glb": "c38cccc0fd17e5215aebe8f821dc17629c0a7e62a87b6a53a5c3cee37ad82ef3",
+    "models/quarry-north-fir-1.glb": "33a1e2a44959837b90e7f755feb17324840bf1510bbfafdfdd37b8bb71a4cbcb",
+    "models/quarry-north-fir-2.glb": "aaee2b603eedbf2d55b1d98742de1d204d187202b70186292467f34cb12f7ecd",
+    "models/quarry-road-approach.glb": "4640593e812aefce4cac24d126db482d4ad701f0e74ff9aa4615c5a1c306f1df",
+    "models/quarry-roadside.glb": "da7e3be52bf0d91ab1ce196d56c622fe1ee3d7de55923f9418f16a0b3587f1cc",
+    "models/quarry-west-wall.glb": "85e73a44b6caf465960ddbb785fe6afb5c2980cf142ec8c712e50bfa8b130399",
+    "models/quarry-workyard.glb": "df98a724dedf3b64c05a7a3043a5e6d18a0eb3acd132051956a58a429ad0eb61",
+    "models/rocks-lod.glb": "9ff6999370677ea8fb1ef524b8caf601e041016afd146ee9f3c675e8775c80e7",
+    "models/sedan.glb": "e5b197c08da6ce5696a62ffb76917a321168cd8f3ddf80630a6ff0e12c100e5c",
+    "models/spruce3d.glb": "26f516877e2697486449e22583e9a21e1ec2f2de51118c5335a8756e81de467f"
+  },
+  "protectedWorker": {
+    "multiplayer/.generated/rapier-worker.mjs": "1cffca7a027f5404a4fafa7895e6bd4bd44b58120d391680957de6e9acfc8435",
+    "src/rules.ts": "021b839acb1adf64d82ddf5443b57d28c96c3ef3ab7e54ddc65ab67cac818ec0",
+    "src/quarry-rock-hulls.json": "684d509b54c477f79e0fc01205c1424ae2c15596d0ab010b74e94105e439d613",
+    "src/quarry-scree.json": "c2d2eb13354aa19a656b96ea30473a39b6b1920246eea7b06168fee65de70881",
+    "src/quarry-cut-collision.json": "68ae33add9a963344d2d62d3642d0dbabf3e18a7b53057e0701e20b9d9c440d2",
+    "src/quarry-roadside-data.json": "f1015e204191e5adc0e239cfa00f999873d754df10b0a0b0c50a78f64c09a048",
+    "src/quarry-backdrop-trees.json": "8cb669bb79882da6ad6c239b4143c3497c8511de4bf62dba3cf7f16744f76755",
+    "src/quarry-extension-collision.json": "ceaa20fc0b050438eafd956ab2f6389679c51c9972c9b6157d5a1c3b997a5065",
+    "src/quarry-surface-sampler.ts": "d19316361592b4254a3743ef06deb803271f835c637663ec68e892e8c5f16925",
+    "src/quarry-layout.ts": "16538c9ab6ce803d79048914a618974790b18afd3f2bad043619f64fd9888601",
+    "multiplayer/protocol.ts": "715af86b7320e71f0e2297d2f10b2ce518a8e8bf8a56ef554195711e754ee5fa",
+    "multiplayer/simulation.ts": "3c0c5f7c93e9ddadb46c99af69a0bb98fdbdf86e777a90200cd77c37268bb841",
+    "multiplayer/room.ts": "53f7cfc9749aa8394fa29e89cad5fc62ed9e909a288c2adff9968aee6d952c16",
+    "multiplayer/admission.ts": "fe129cb53115c4607be99a9648426825b13b8d2daeed60adee5b6b5a9694d825",
+    "multiplayer/worker.ts": "45eae2daae3e68d27771b5d3901bdf9619e9fa3be4ffbb2e8af24c299b821896",
+    "multiplayer/wrangler.jsonc": "6b96407b0abc87896c3a08d07690817d16a8b903a2a825f7c9978a3d18e794d9",
+    "src/quarry-headwall-collision.json": "d1fab66ff5e587c2f7a64a1b53e30445439be334c1f6b103337034d0834af889",
+    "src/quarry-north-forest.json": "c7fc8beef7927bf9a1df0ce8e53a2565ac00d0c84236ad0eb2a2e36403142bdf",
+    "src/quarry-north-backdrop.json": "3d750b6e328bc9b5f80c79e61cfaec85d6559aecc2b81271956c95fbb187bff6",
+    "src/quarry-east-bay-collision.json": "4dcdb16dd06c5e0fea1009f0cb6ddd0ae2c3ee4b0529810b449dffce093b686f",
+    "src/circuit-grip.ts": "26abc82e9edb19accf3be25ef917a4361f8e430aaf6980b61de8f1cf1a131b9f",
+    "src/circuit-grip-profile.json": "03892c6db43ceaadadfeff2751a61308591a20a59282462f15a718c624c59a81",
+    "src/quarry-west-wall-collision.json": "a0d6505b04dfe3d8f91155de3b55e7b11c044283f6468c7c4dfedf92a8f00273"
+  }
+}

@@ -1,3 +1,139 @@
+# Reference arena visual overhaul - September 30, 2026
+
+Final runtime **index-qLmReEI-.js**, **9,758,106 bytes**, SHA-256
+**8e7ebde9bafa0aa987b14318de08b333f7489dde9697ad466b52cbdc66b0f9a4**.
+The actual game gains fifteen authored Blender near/far rock sections, angular
+spalled faces, photographic ground layers and rubber wear, coherent warm sunlight
+and HDR reflections, industrial masts/service dressing, forty-two crest conifers,
+wheel machining, refined material responses, an upright close chase view and
+compact instruments. Original car bodies, quarry collision data, 38 ElevenLabs
+clips and all 23 deployed Worker inputs remain unchanged. Editable Blender
+scenes, exact hashes, source licenses and frozen prior-source fixtures are retained.
+See `source/reference-overhaul.md` and `source/reference-overhaul-results.json`.
+
+**184/184 solo tests**, TypeScript and the production build pass. Eight iterations
+of real 2560 x 1440 game captures compare the same quarry/car composition with the
+private user reference. Final views cover intact cars, heavy damage and an
+eight-car pileup. Eleven final car/contact views cover all three profiles,
+localized transfer paint, physical corner damage, folding, wet trails and exact
+repair. All three modes complete, including 72 racing checkpoints, results,
+inspection, pause and repeated restarts. All eight AI complete 72 checkpoints;
+the seven spectator views, car selection, orbit, focus loss and automatic demo
+repetition pass. No internet multiplayer connection/test or backend redeploy occurs.
+
+Graphics passes seven checks, twelve quality transitions and actual WebGL
+recovery in **423 ms**. First-use rock LOD buffers are warmed before checking
+repeated quality transitions; subsequent geometry counts stay at 749 and texture
+counts at 160 (154 with Medium's reduced effects). Hidden replaced rock skins
+also stop casting into the static depth map. Fire/audio passes ten checks, with
+38 local buffers, localized finite-fuel ignition, delayed rare bursts, inspection,
+repair, pause and mute. Peak **0.27443**, zero clipped readings across **2,937**
+audio samples. The same final bundle is verified by every final browser report.
+
+Measured on **NVIDIA GeForce RTX 5090 / Chrome ANGLE D3D11**, **2560 x 1440 / Ultra**:
+
+| Measurement | Result |
+|---|---:|
+| Fresh local navigation to rendered menu, one sample | 7.136 s |
+| First event startup to countdown | 1.202 s |
+| Active derby, 60-second capture | 58.316 FPS / 17.148 ms mean |
+| Active derby p95 / p99 | 16.8 / 33.3 ms |
+| Eight-fire stress, 60-second capture | 59.995 FPS / 16.668 ms mean |
+| Eight-fire stress p95 / p99 | 16.8 / 16.9 ms |
+| Mixed driving/inspection session, 611.05 s / 35,925 frames | 58.956 FPS / 16.962 ms mean |
+| Mixed session p95 / p99 | 16.8 / 16.9 ms |
+| Mixed session frames over 33.34 ms | 137 |
+
+The sustained session records 123 samples and 17 event/inspection transitions.
+Geometry rises from 910 to a bounded maximum of 940; textures from 160 to 163,
+then both settle after the first circuit visit. JavaScript heap varies with
+garbage collection from **596 to 946 MiB**, finishing at **861 MiB**; the final
+two-minute window again falls to 600 MiB. No continuing GPU resource growth or
+browser error is observed. This is measured frame spacing, including simulation,
+browser scheduling and event changes, rather than isolated GPU time or a locked
+60 FPS guarantee. Local loading is not a prediction of internet download time.
+
+The original ten-minute report is preserved with its failed legacy inspection
+assertion: the old western-wall target landed 26.49 degrees from the new chase
+axis, just outside its 26-degree half-FOV. The fixture now steps back eight
+metres. Its actual vehicle settles on four wheels without object contact, and a
+targeted real-camera retest passes eight samples across both western views on
+the **same unchanged runtime**, with a maximum target angle of 24.85 degrees.
+The result record preserves the original failure and successful targeted retest;
+it does not relabel or overwrite the original measurement report.
+
+Original coarse rock collision proxies and hybrid car deformation remain. This
+pass moves the browser game toward the supplied art direction; AAA reference
+parity and full structural soft bodies remain unfinished. No purchase or new
+ElevenLabs generation was used. The user reference is not bundled.
+
+---
+
+# Previous structural realism release - September 30, 2026
+
+Final application **index-DJIo0yxR.js**, **9,741,436 bytes**, SHA-256 **d32a5906efa5384f49e74b6ea0c270b1f7abd1219c7c01502baebf837f79a587**. All three cars have resistant rail/cage response, rigid engine movement, physical corner damage, loaded tire contact patches, distinct material responses and persistent silt/wetness/paint transfer. Ground evidence uses 2,048 reusable slots. Fire and smoke use two shared 64-frame Blender Mantaflow atlases; source and asset hashes, calibration and CC0 provenance are retained. The atlases add **4,975,916 download bytes / 32 MiB shared RGBA texture storage**. See `source/structural-realism.md` and `source/structural-realism-results.json`.
+
+**179/179 solo tests**, TypeScript and production build pass. Final 1440p browser views inspect all three cars intact, with corner/paint damage and heavy structural damage. Actual grounded puddle crossings leave wet tires, wet bodywork and fading trails. Inspection freezes deposition; repair restores corners and coatings, and event reset clears evidence. Both fluid textures load once across event restarts. Atlas pixel audit confirms 64 unique frames per texture; interpolated loop-boundary error is below 1% of the raw end/start error. Gameplay checks complete all modes, braking, 72 player checkpoints, results, inspection and repeated restarts.
+
+Final graphics checks pass **9 checks / 12 quality transitions** and actual WebGL recovery in **413 ms**. Fire/audio passes **10 checks**, with 38 local ElevenLabs buffers, all three cars, rare delayed bursts, pause/mute, repair and eight-car budgets. Sampled audio peak **0.2815**, **zero clipped readings** across **2,873 readings**. The earlier candidate's demo passes eight checks and all eight AI complete 72 race checkpoints; its separate hash is retained. The final paint/deposition/bounds corrections are covered by final source, graphics, contact and gameplay checks.
+
+Exact final runtime, fresh local Chrome, **2560 x 1440 / Ultra**:
+
+| Measurement | Result |
+|---|---:|
+| Cold navigation to rendered menu, one sample | 5.888 s |
+| First event startup to countdown | 1.129 s |
+| Moving eight-car derby, 60.61 s | 58.864 FPS / 16.988 ms mean |
+| Derby p95 / p99 | 16.8 / 16.9 ms |
+| Derby frames over 33.4 / 50 ms | 17 / 6 |
+| Eight-fire stress, 60.70 s | 59.978 FPS / 16.673 ms mean |
+| Fire p95 / p99 | 16.8 / 16.8 ms |
+| Fire frames over 33.4 / 50 ms | 0 / 0 |
+
+No profiler runs during either frame interval, and this work runs no other QA browser, build, exporter or CPU test concurrently. The eight-fire fixture deliberately seeds ignition and extends fuel; ordinary fire frequency remains rare. These are local measurements, not a repeated loading comparison or an internet/hardware latency measurement. No locked60 claim.
+
+Derby geometry count: **[900, 901]**; textures: **[144, 147]**; sampled heap: **[743.5, 857.2] MB**, ending **855.4 MB**. Fire geometry: **[910, 910]**; textures: **[147, 147]**; heap: **[827.5, 940.0] MB**, ending **940.0 MB**. Short resource samples do not establish long-term memory stability; no new ten-minute capture.
+
+Historical source snapshots and every original model/photographic image byte remain protected. **23 shared deployed Worker inputs** are unchanged; new physical corner consequences are on the solo path. No backend deployment, internet multiplayer test, new audio generation, gameplay ElevenLabs call or additional spending. Collision shapes remain simplified; fluid textures are billboards rendered from an offline simulation. Full structural soft bodies, physical blast impulses and Wreckfest 2 visual fidelity remain unfinished.
+
+Evidence: `outputs/structural-realism/solo-frozen.log`, `build-final.log`, `structure-frozen/`, `gameplay-frozen/`, `shadows/frozen/`, `fire-frozen/`, `demo-final/`, `atlas-audit.json` and `performance-final/`. Earlier trial renders/candidates preserve their separate outputs and hashes. Records below describe their own prior releases.
+
+---
+
+# Water, fire and vehicle weight — September 30, 2026
+
+Final application **index-CNk1oed3.js**, **9,723,921 bytes**, SHA-256 **a81c6fc511376966942ce6ce2bb259662e6c6d73940eb68bff97e478371b37e7**. Tire-driven water spray and clipped ripples, a larger solo derby, more resistant bodywork and rarer damage-dependent thermal effects address the latest play feedback. Implementation: `source/drive-feel.md`; machine-readable results: `source/drive-feel-results.json`.
+
+- The solo derby grows from **92 to 128 metres** in diameter, adding **93.6% area**, with 96 physical barriers, matching fences, gravel, AI bounds, spawn positions, minimap and overhead view. The offset arena avoids existing buildings and machinery. Mode changes restore the playground/race perimeter and ramps. Online authority retains its existing 92-metre layout.
+- Each grounded wheel splashes the actual irregular puddle it crosses. Spray strength follows speed and water depth; expanding ripples clip to the shoreline. Dry, stationary and airborne contacts emit nothing. Pools cap at **768 drops / 48 ripples** and pause during inspection. Wet contact suppresses dry gravel dust.
+- Cars retain their authored **1,480 / 1,650 / 1,290 kg** masses. More realistic roll inertia, lower restitution, modest center-of-mass and angular-damping changes reduce bouncing. Impact damage uses contact-normal closing speed, so low-speed pushing does not repeatedly drain health. Smaller early dents and slower attachment wear let cars withstand several substantial blows; repeated heavy strikes still deform panels, break glazing and release parts. Impact sound remains driven by physical impulse.
+- Only critically damaged engine/fuel regions qualify for one **24% ignition assessment**, followed by a **3–11-second delay** and **30–70 seconds of finite fuel**. Doors, roofs and low health alone cannot ignite. **12% of ignited episodes** are eligible for one further-delayed burst, additionally requiring sustained heat and health at or below 6%. Cooler engine damage may emit pale steam. Varied localized flame tongues and coherent drifting smoke replace the earlier multi-source, speckled appearance. Bursts remain cosmetic; full structural soft-body simulation and Wreckfest 2 fidelity remain unfinished.
+
+**172/172 selected solo tests**, TypeScript and production build pass on the final source. The eight added tests cover actual wet contact, bounded/fixed-step effects, arena switching and layout, bodywork response, fire eligibility/distribution, finite fuel, coherent noise and reset. Original asset and historical source checksum chains remain intact. Final browser QA completes driving/braking, all modes, 72 player race checkpoints, repair/inspection, derby outcomes and repeated restarts. Seven final water/thermal checks pass at 1440p, with two splash speeds, front and rear fire sources, a seeded delayed burst and repair. All 38 original ElevenLabs recordings are retained. No service calls or spending.
+
+Graphics QA passes **9 checks / 12 quality transitions** and real WebGL context restoration in **425 ms**, without shader/browser/asset errors. It also verifies that mode changes do not unnecessarily recapture static scenery shadows. Final fire/audio QA passes **10 checks**, including all three cars, positional playback, eight-car budgets, pause, mute, repair and menu reset. Sampled peak **0.2926**, **zero clipped readings** across **2,877 readings**. The preceding candidate's eight demo checks and all eight AI reaching all 72 race checkpoints also pass; that report preserves its own bundle/hash and is not represented as a fresh measurement of the final shadow-cache adjustment.
+
+Fresh isolated Chrome at **2560 × 1440 Ultra**, unthrottled local delivery, on the exact final runtime:
+
+| Measurement | Result |
+|---|---:|
+| Cold navigation to rendered menu, one sample | 6.137 s |
+| First event startup to countdown | 0.972 s |
+| Moving eight-car derby, 60.897 s | 57.057 FPS / 17.526 ms mean |
+| Derby p95 / p99 | 16.8 / 50.0 ms |
+| Derby frames above 33.4 / 50 ms | 46 / 25 |
+| Eight-burning-car stress, 60.807 s | 59.713 FPS / 16.747 ms mean |
+| Fire p95 / p99 | 16.8 / 17.0 ms |
+| Fire frames above 33.4 / 50 ms | 6 / 0 |
+
+The stress fixture deliberately seeds eight eligible fires and extends their fuel; ordinary derby fire frequency is substantially lower. No profiler runs during either measured frame interval, and no other QA browser, build, exporter or CPU test from this work runs concurrently. This single fresh-load sample is not a repeated loading comparison with the prior release. No internet-loading, hardware-latency or locked-60 claim.
+
+Derby geometry counts range **848–849**, textures **144–145**, sampled JS heap **685.4–805.0 MB**, ending at **802.9 MB**. Fire geometry **858–858**, textures **145–145**, heap **864.9–957.5 MB**, ending at **957.5 MB**. Short captures and transient allocations do not establish a leak or long-term memory stability. No new ten-minute capture was run.
+
+All **23 shared deployed Worker inputs** remain byte-identical. No backend deployment or internet multiplayer test. Evidence: `outputs/drive-feel/solo-tests-publish.log`, `build-publish.log`, `gameplay-publish/`, `visual-publish/`, `graphics-final/final/`, `audio-fire-final/`, `demo-final/`, and `performance-publish-final/`. Earlier candidate captures retain their own hashes; the first final performance launch failed on local process permissions and contains no measurement. Historical release records below remain applicable to their own builds.
+
+---
+
 # Loading and frame pacing — September 29, 2026
 
 Final application **index-Cgu5z9OM.js**, **9,708,924 bytes**, SHA-256 **50052d9776e22f184de46236f4b8f7755a6bc0626d1196910a91a6df6026634f**. Concurrent asset loading, asynchronous shader warm-up, prefetched local audio, lossless shared-texture model transport, frozen static transforms and conservative impact bounds reduce startup and redundant client work. Geometry, image bytes, driving/damage behavior and all 23 deployed Worker inputs remain unchanged. Implementation and reproduction: `source/performance.md`; machine-readable final results: `source/performance-results.json`.

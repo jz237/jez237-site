@@ -10,6 +10,7 @@ import { GLTFLoader } from './model-loader';
 import { url } from './assets';
 import { trackPoint } from './rules';
 import { replacesNorthBackdropCard, updateNorthRidgeView } from './scenery-north-ridge';
+import {referenceCrestPlants} from './scenery-reference-vegetation';
 const forestLODs: T.LOD[] = [];
 const forestMaterials = new Map<string, T.MeshStandardMaterial>();
 export function updateForestView(camera: T.Camera) {
@@ -275,6 +276,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         northMedium.push(...await scannedForest(parent, forestFiles[i], true, loadedForest[i]));
     const northSaplings = await scannedForest(parent, forestFiles[3], false, loadedForest[3]);
     addBankForest(parent,branchCards,northMedium);
+    const crest=new T.Group();crest.name='Reference quarry crest conifers';parent.add(crest);addBankForest(crest,referenceCrestPlants(),northMedium);
     const p: number[] = [], colors: number[] = [], idx: number[] = [];
     const addBlade = (x: number, z: number, h: number, a: number, brown: boolean,
         ground = landscapeHeight(x, z), suppressed = false, shade = .7 + random() * .35, width = 1) => {

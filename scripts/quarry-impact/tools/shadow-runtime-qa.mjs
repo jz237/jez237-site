@@ -230,6 +230,11 @@ try{
 
   await page.evaluate(neutral=>{const q=window.__quarry;q.autopilot(false);q.setInput(neutral);q.captureCamera([0,3.7,-28],[0,.85,-16]);},neutral);
   await frames();
+  // A first visit to a quality level may upload its distinct rock LOD buffers.
+  // Warm all variants before measuring whether repeated transitions leak them.
+  for(const quality of ['medium','high','ultra']){
+    await page.evaluate(quality=>__quarry.setQuality(quality),quality);await frames();
+  }
   const qualitySizes={ultra:4096,high:2048,medium:0};
   for(const quality of ['ultra','high','high','medium','medium','high','ultra','ultra','high','medium','high','ultra']){
     const before=await sample(`before-quality-${quality}`);
@@ -277,7 +282,7 @@ try{
     }
     await page.evaluate(neutral=>{__quarry.resume();__quarry.setInput(neutral);__quarry.autopilot(false);},neutral);
     if(process.env.QUARRY_SHADOW_FIRE==='1'){
-      await page.evaluate(()=>__quarry.setHealth(0,12));await frames(180);
+      await page.evaluate(()=>{__quarry.seedFireTest(24);__quarry.damage(0,86,'front');__quarry.simulateFire(14);});await frames(180);
       for(const quality of ['medium','high','ultra']){await page.evaluate(q=>__quarry.setQuality(q),quality);await frames(60);}
       report.fireBefore=await page.evaluate(()=>__quarry.fireState);assert.ok(report.fireBefore.active>10);
       await page.screenshot({path:path.join(output,'fire-before-context-loss.png')});

@@ -1,5 +1,10 @@
 import {loadWorkyard, workyardFences} from './scenery-workyard';
+import {ReferenceArena} from './scenery-reference-arena';
+import {referenceArenaFloor} from './scenery-reference-floor';
+import {QUARRY_DAYLIGHT} from './quarry-art-direction';
 import { freezeSceneryTransforms } from './render-work';
+import {DERBY_ARENA,LEGACY_ARENA,DerbyArenaPhysics,expandedArenaFloor,arenaBarrier} from './derby-arena';
+import type {Puddle} from './puddle-splashes';
 import { fractureBankGeometry } from './scenery-bank-relief';
 import { createQuarryPhysics, terrainGeometry, BARRELS, RAMPS, RAMP_POINTS, RAMP_INDICES, rockPlacements, SCREE_POSITIONS, SCREE_UVS, screePlacements, overlapsQuarryRoadside, overlapsQuarryHeadwall, overlapsQuarryEastBay, overlapsQuarryWestWall, WORKS_OFFSET } from './quarry-layout';
 import * as T from 'three';
@@ -85,6 +90,14 @@ function puddleGeometry(radius: number, variations: number[], wet: boolean) {
 }
 export class Quarry {
   derbyWalls: T.Group = new T.Group();
+  legacyDerbyWalls = new T.Group();
+  expandedFences = new T.Group();
+  legacyFences = new T.Group();
+  puddles:Puddle[]=[];
+  readonly arenaPhysics:DerbyArenaPhysics;
+  private originalArena:T.Mesh;
+  private largerArena:T.Mesh;
+  private ramps:T.Mesh[]=[];
   derbyColliders: R.Collider[] = [];
   props: { mesh: T.Mesh; body: R.RigidBody; start: T.Vector3 }[] = [];
   scenery = new T.Group();
@@ -100,17 +113,20 @@ export class Quarry {
   private eastBayLODs: T.LOD[] = [];
   private westWallLODs: T.LOD[] = [];
   private roadApproachLODs: T.LOD[] = [];
+  readonly referenceArena:ReferenceArena;
   private rockMaterial: T.MeshStandardMaterial;
   constructor(
     public scene: T.Scene,
     public physics: R.World,
   ) {
     this.collisionPhysics=createQuarryPhysics(R,physics,false);
-    this.derbyColliders=this.collisionPhysics.walls;
-    scene.add(this.scenery, this.derbyWalls, this.checkpoint);
-    scene.fog = new T.FogExp2(0xa5b1bb, 0.0011);
-    scene.add(new T.HemisphereLight(0xc1d5e7, 0x7c6a47, 0.8));
-    this.sun = new T.DirectionalLight(0xfff1dc, 2.65);
+    this.arenaPhysics=new DerbyArenaPhysics(physics,this.collisionPhysics.walls,this.collisionPhysics.statics);
+    this.derbyColliders=this.arenaPhysics.walls;
+    scene.add(this.scenery, this.derbyWalls,this.legacyDerbyWalls, this.checkpoint);
+    this.referenceArena=new ReferenceArena(this.scenery);
+    scene.fog = new T.FogExp2(0xb3bdc9, QUARRY_DAYLIGHT.fog);
+    scene.add(new T.HemisphereLight(QUARRY_DAYLIGHT.skyColor, QUARRY_DAYLIGHT.groundColor, QUARRY_DAYLIGHT.ambient));
+    this.sun = new T.DirectionalLight(QUARRY_DAYLIGHT.sunColor, QUARRY_DAYLIGHT.sun);
     this.sun.position.copy(DAYLIGHT_DIRECTION).multiplyScalar(DAYLIGHT_DISTANCE);
     this.sun.castShadow = true;
     Object.assign(this.sun.shadow.camera, {
@@ -157,6 +173,9 @@ export class Quarry {
     arena.position.y = 0.018;
     arena.receiveShadow = true;
     scene.add(arena);
+    this.originalArena=arena;
+    this.largerArena=new T.Mesh(expandedArenaFloor(),referenceArenaFloor({x:DERBY_ARENA.x,z:DERBY_ARENA.z,radius:DERBY_ARENA.radius-.55}));
+    this.largerArena.name='expanded-derby-floor';this.largerArena.receiveShadow=true;this.largerArena.visible=false;scene.add(this.largerArena);
     // Exposed faces share their actual irregular geometry with the physics wall.
     const baseCliffGeo = quarryCliffs();
     const cliffGeo = fractureBankGeometry(baseCliffGeo);baseCliffGeo.dispose();
@@ -212,6 +231,11 @@ export class Quarry {
     // Concrete arena barriers with hazard stripes and openable access for other modes.
     const concrete = pbr('rock', 1, { color: 0x9b9b8f });
     const stripe = this.hazardMaterial();
+    // Keep the old online barrier separately; solo uses the larger perimeter.
+    for(let i=0;i<DERBY_ARENA.segments;i++){
+      const p=arenaBarrier(i),wall=this.box(new T.Vector3(p.x,p.y+.58,p.z),new T.Vector3(4.22,1.16,.75),concrete,this.derbyWalls);
+      wall.rotation.y=p.yaw;
+    }
     for (let i = 0; i < 66; i++) {
       const a = (i / 66) * Math.PI * 2;
       const x = Math.sin(a) * 46,
@@ -220,7 +244,7 @@ export class Quarry {
         new T.Vector3(x, 0.58, z),
         new T.Vector3(4.22, 1.16, 0.75),
         concrete,
-        this.derbyWalls,
+        this.legacyDerbyWalls,
       );
       wall.rotation.y = a;
       const label = new T.Mesh(new T.PlaneGeometry(3.8, 0.23), stripe);
@@ -230,7 +254,7 @@ export class Quarry {
         z - Math.cos(a) * 0.386,
       );
       label.rotation.y = a + Math.PI;
-      this.derbyWalls.add(label);
+      this.legacyDerbyWalls.add(label);
     }
     // Scanned-texture scree at the foot of the walls.
     const stoneGeo=new T.BufferGeometry();
@@ -304,7 +328,7 @@ export class Quarry {
     ring.position.y = 4.8;
     this.checkpoint.add(ring);
     this.checkpoint.visible = false;
-    batchScenery(this.scenery, new Set(this.props.map(p => p.mesh)));
+    batchScenery(this.scenery, new Set([...this.props.map(p => p.mesh),...this.modeScenery]));
   }
   box(
     p: T.Vector3,
@@ -402,6 +426,7 @@ export class Quarry {
       m.castShadow = true;
       m.receiveShadow = true;
       this.scenery.add(m);
+      this.ramps.push(m);
     }
     const barrelMat = new T.MeshStandardMaterial({
       color: 0x95633f,
@@ -419,14 +444,15 @@ export class Quarry {
       this.props.push({ mesh, body, start: new T.Vector3(x, y, z) });
     }
     const water = softShoreMaterial(new T.MeshPhysicalMaterial({
-      color: 0x56625e,
+      color: 0x858d87,
       metalness: 0.05,
       roughness: 0.045,
       clearcoat: 1,
       clearcoatRoughness: .055,
       ior: 1.33,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.77,
+      envMapIntensity: 1.3,
       depthWrite: false,
     }));
     const wetSoil = softShoreMaterial(new T.MeshStandardMaterial({ color:0x514d40,roughness:.48,transparent:true,opacity:.4,depthWrite:false }));
@@ -441,19 +467,27 @@ export class Quarry {
       p.rotation.x = -Math.PI / 2;
       p.position.set(Math.sin(a) * r, 0.025, Math.cos(a) * r);
       p.scale.y = 0.45 + rand() * 0.6;
+      this.puddles.push({id:i,x:p.position.x,z:p.position.z,level:p.position.y,radius,aspect:p.scale.y,phases:[variations[0],variations[7],variations[14],variations[21]]});
       this.scenery.add(p);
       const wet = new T.Mesh(puddleGeometry(radius, variations, true), wetSoil);
       wet.rotation.copy(p.rotation);wet.position.copy(p.position);wet.position.y=.022;
       wet.scale.set(1,p.scale.y,1);this.scenery.add(wet);
     }
   }
-  fences() { workyardFences(this.scenery); }
+  fences() {
+    this.scenery.add(this.expandedFences,this.legacyFences);
+    workyardFences(this.legacyFences);
+    workyardFences(this.expandedFences,{x:DERBY_ARENA.x,z:DERBY_ARENA.z,radius:DERBY_ARENA.fenceRadius});
+    this.expandedFences.visible=false;
+  }
   async trees() {
+    const reference=this.referenceArena.prepare();
     [this.workyardLODs] = await Promise.all([
-      loadWorkyard(this.scenery, this.derbyWalls),
+      loadWorkyard(this.scenery, this.legacyDerbyWalls,this.derbyWalls),
       this.scannedRocks(),
       forestScenery(this.scenery, rand),
     ]);
+    await reference;await this.referenceArena.load();
     freezeSceneryTransforms(this.scenery);
   }
 
@@ -504,14 +538,23 @@ export class Quarry {
     }),
     ]);
   }
-  setMode(mode: string) {
+  setMode(mode: string,online=false) {
     const derby = mode === 'derby';
-    this.derbyWalls.visible = derby;
-    this.derbyColliders.forEach((c) => c.setEnabled(derby));
+    const changed=this.arenaPhysics.setMode(derby,online),expanded=this.arenaPhysics.expanded;
+    this.derbyWalls.visible=expanded;this.legacyDerbyWalls.visible=derby&&online;
+    this.expandedFences.visible=expanded;this.legacyFences.visible=!expanded;
+    this.largerArena.visible=expanded;this.originalArena.visible=!expanded;
+    this.ramps.forEach(m=>m.visible=!expanded);
+    for(let i=0;i<RAMPS.length;i++)this.collisionPhysics.statics.get('ramp-'+i)!.setEnabled(!expanded);
     this.checkpoint.visible = mode === 'race';
+    this.referenceArena.setMode(derby,online);
+    return changed;
   }
+  get arenaLayout(){return this.arenaPhysics.expanded?DERBY_ARENA:LEGACY_ARENA;}
+  get modeScenery(){return[this.derbyWalls,this.legacyDerbyWalls,this.expandedFences,this.legacyFences,this.referenceArena.event,...this.ramps];}
   update(camera?: T.Camera) {
     if(camera) {
+      this.referenceArena.update(camera);
       updateForestView(camera);
       for (const lod of this.workyardLODs) lod.update(camera);
       for (const lod of this.cutLODs) lod.update(camera);
