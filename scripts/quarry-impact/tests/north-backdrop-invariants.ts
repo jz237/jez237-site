@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {bankForestCards} from '../src/scenery-bank-relief';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {restoreReferenceBytes} from './reference-invariants';
 import {assertEastBayEvolution,stripEastBayLayout} from './quarry-east-bay-invariants';
 import type {ColliderSpec} from '../src/quarry-layout';
 export const northBackdropBefore=JSON.parse(readFileSync(new URL('./fixtures/north-backdrop-before.json',import.meta.url),'utf8'));
@@ -64,7 +65,7 @@ export function restoreNorthBackdropCards(current:any[]){
 }
 
 export function assertNorthBackdropShadowSource(){
-  const file=new URL('../src/static-shadows.ts',import.meta.url);let text=readFileSync(file,'utf8');const nl=text.includes('\r\n')?'\r\n':'\n';
+  const file=new URL('../src/static-shadows.ts',import.meta.url);let text=restoreReferenceBytes('src/static-shadows.ts',readFileSync(file)).toString();const nl=text.includes('\r\n')?'\r\n':'\n';
   const replace=(from:string[],to:string[])=>{const token=from.join(nl);assert.equal(text.split(token).length,2,'only the exact approved shadow hook may evolve');text=text.replace(token,to.join(nl));};
   replace(['#ifdef QUARRY_STATIC_FRAGMENT_SURFACE','uniform mat4 quarryStaticMatrix;','uniform float quarryStaticNormalBias;','#endif'],[]);
   // Removing a whole line block leaves one newline; remove it alongside the

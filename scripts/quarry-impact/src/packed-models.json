@@ -1,4 +1,6 @@
 {
+  "arena-escarpment.glb": "arena-escarpment-53a69d6ae5d5.glb.gz",
+  "arena-industrial.glb": "arena-industrial-eaedc1c59198.glb.gz",
   "coupe.glb": "coupe-ed68fa748f25.glb.gz",
   "fir-medium-a.glb": "fir-medium-a-28598c386bc1.glb.gz",
   "fir-medium-b.glb": "fir-medium-b-30f135666227.glb.gz",
@@ -19,5 +21,6 @@
   "quarry-workyard.glb": "quarry-workyard-e0edd4dd151b.glb.gz",
   "rocks-lod.glb": "rocks-lod-eeef594aa9dc.glb.gz",
   "sedan.glb": "sedan-2d8ed205b029.glb.gz",
-  "spruce3d.glb": "spruce3d-48783bc099c2.glb.gz"
+  "spruce3d.glb": "spruce3d-48783bc099c2.glb.gz",
+  "wheel-machining.glb": "wheel-machining-9897079bcb65.glb.gz"
 }

@@ -1,0 +1,272 @@
+{
+  "previousRelease": "c25fd2358edfbdbdda4e77a696e20d9be79fedd4",
+  "bundle": "assets/index-qLmReEI-.js",
+  "bytes": 9758106,
+  "sha256": "8e7ebde9bafa0aa987b14318de08b333f7489dde9697ad466b52cbdc66b0f9a4",
+  "soloTests": {
+    "tests": 184,
+    "pass": 184,
+    "fail": 0
+  },
+  "referenceViews": [
+    "matched-chase",
+    "playable-composition",
+    "arena-wide",
+    "heavy-wreck",
+    "eight-car-pileup"
+  ],
+  "arenaConstruction": {
+    "composition": {
+      "distance": 8.6,
+      "height": 2.8,
+      "lookAhead": 5.1,
+      "lookHeight": -0.34,
+      "fov": 52,
+      "speedDistance": 0.025
+    },
+    "scenery": {
+      "rockSections": 15,
+      "replacedSurfaces": 15,
+      "lamps": 8,
+      "banners": 13,
+      "props": 7
+    }
+  },
+  "carChecks": [
+    "all three cars: intact material/contact-patch view, localized transferred paint, physical damaged corners, structure folding and complete repair",
+    "real grounded puddle crossing leaves retained tire water, wet bodywork and fading wet trails; inspection freezes deposition",
+    "shared 64-frame Mantaflow atlases load once across cars and restarts, fire keeps localized ignition rules, event reset clears effects and evidence"
+  ],
+  "gameplayChecks": [
+    "derby results, elimination, winner and restart",
+    "playground damage, complete repair, inspection and pause",
+    "racing braking, 72 checkpoints and results"
+  ],
+  "graphics": {
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "checks": [
+      {
+        "name": "stationary reflections reuse static depth",
+        "passed": true,
+        "reflectionCycles": 10
+      },
+      {
+        "name": "moving car does not invalidate fixed depth",
+        "passed": true,
+        "metres": 18.802658557891846
+      },
+      {
+        "name": "all three replacement car receivers render without rebuilding scenery depth",
+        "passed": true
+      },
+      {
+        "name": "AI derby, racing, playground and repeated restarts retain cached scenery depth",
+        "passed": true
+      },
+      {
+        "name": "Ultra/High/Medium/repeated-quality transitions allocate and capture only when needed",
+        "passed": true
+      },
+      {
+        "name": "actual context loss/restoration pauses, recaptures once and resumes",
+        "passed": true
+      },
+      {
+        "name": "actual geology photographs load and the shader fits the sampler limit and draws before and after context restoration",
+        "passed": true
+      }
+    ],
+    "qualityTransitions": 12,
+    "contextRecovery": {
+      "supported": true,
+      "lostEventObserved": true,
+      "restoredEventObserved": true,
+      "lostAfterMs": 53.799999952316284,
+      "restoredAfterMs": 422.89999997615814,
+      "stateAtRestore": "paused"
+    },
+    "stationaryResources": {
+      "textures": 160,
+      "geometry": 749
+    }
+  },
+  "fireAudio": {
+    "checks": [
+      "intact car has no fire or smoke",
+      "progressive smoke, flame and positional fire audio",
+      "seeded rare critically damaged car bursts after sustained heat",
+      "inspection freezes visual effects",
+      "burn scars persist after cooling",
+      "repair clears fire particles and sound",
+      "all three car types render fire with actual engine or rear fuel damage",
+      "eight-car effects and voice budgets",
+      "pause and mute silence fire",
+      "menu reset clears emitters"
+    ],
+    "audio": {
+      "peak": 0.2744288146495819,
+      "clipped": 0,
+      "readings": 2937,
+      "state": "running",
+      "muted": true,
+      "master": 0,
+      "voices": 0,
+      "buffers": 38,
+      "levels": {
+        "engine": 0.72,
+        "effects": 0.8,
+        "ambience": 0.45
+      }
+    }
+  },
+  "demo": {
+    "checks": [
+      "all eight cars drive autonomously",
+      "all seven views, car selection and mouse orbit work",
+      "pause and focus loss freeze demo and fire",
+      "camera and follow controls retain handlers after pause and blur",
+      "car zero wrecking does not end spectator event",
+      "demo repeats automatically without changing player bests",
+      "race demo advances every AI through checkpoints",
+      "exit restores normal player mode"
+    ],
+    "raceCheckpoints": [
+      72,
+      72,
+      72,
+      72,
+      72,
+      72,
+      72,
+      72
+    ]
+  },
+  "performance": {
+    "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [
+      2560,
+      1440
+    ],
+    "quality": "ultra",
+    "protocol": "Fresh Chrome context, unthrottled local delivery, 1440p Ultra. Cold navigation to menu plus first two rendered frames; first event start to countdown. Seeded autonomous derby at a fixed chase camera, then an eight-fire stress scene. Real-time frame capture; no physics acceleration during measured intervals.",
+    "coldMenuMs": 7135.5,
+    "startEventMs": 1202.4441000000006,
+    "derby": {
+      "frames": 3509,
+      "meanMs": 17.14781989170704,
+      "fps": 58.31645108913326,
+      "p95": 16.80000000000291,
+      "p99": 33.299999999995634,
+      "over33ms": 33,
+      "over50ms": 19
+    },
+    "eightFireStress": {
+      "frames": 3615,
+      "meanMs": 16.66807745504841,
+      "fps": 59.99492159169928,
+      "p95": 16.80000000000291,
+      "p99": 16.89999999999418,
+      "over33ms": 0,
+      "over50ms": 0
+    },
+    "keyboardSamples": [
+      {
+        "key": "KeyC",
+        "dispatchMs": 4.800000011920929,
+        "nextFrameMs": 6.5
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 2.800000011920929,
+        "nextFrameMs": 27.19999998807907
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 6.699999988079071,
+        "nextFrameMs": 15.600000023841858
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 0.09999996423721313,
+        "nextFrameMs": 16.100000023841858
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 9.5,
+        "nextFrameMs": 27.600000023841858
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 11.899999976158142,
+        "nextFrameMs": 9.5
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 1.4000000357627869,
+        "nextFrameMs": 17.69999998807907
+      },
+      {
+        "key": "KeyC",
+        "dispatchMs": 0.19999998807907104,
+        "nextFrameMs": 11.800000011920929
+      }
+    ]
+  },
+  "sustained": {
+    "seconds": 611.05249,
+    "viewport": [
+      2560,
+      1440
+    ],
+    "quality": "ultra",
+    "protocol": "Eight cars for610s:97s derby,122s race,172s middle block including nine18s placed inspections in a normal race event,122s race,97s derby. The inspection player is braked off track, so event completion cannot interrupt coverage. All physics and AI remain live; no time acceleration. Changed protocol, not an identical historical timing comparison.",
+    "timing": {
+      "frames": 35925,
+      "meanMs": 16.961731384829505,
+      "fps": 58.956245521869036,
+      "p50": 16.699999999982538,
+      "p95": 16.80000000000291,
+      "p99": 16.900000000023283,
+      "over33ms": 137
+    },
+    "memory": {
+      "geometry": {
+        "min": 910,
+        "max": 940,
+        "first": 910,
+        "last": 940
+      },
+      "textures": {
+        "min": 160,
+        "max": 163,
+        "first": 160,
+        "last": 163
+      },
+      "heap": {
+        "min": 625149495,
+        "max": 991733994,
+        "first": 726109559,
+        "last": 903193817
+      }
+    },
+    "events": 17,
+    "samples": 123,
+    "errors": [],
+    "originalReportPassed": false,
+    "originalInspectionFailure": "AssertionError [ERR_ASSERTION]: west-wall-close must retain the wall target inside the ordinary chase view",
+    "correctedFixtureRetest": {
+      "passed": true,
+      "sameRuntimeSha256": "8e7ebde9bafa0aa987b14318de08b333f7489dde9697ad466b52cbdc66b0f9a4",
+      "samples": 8,
+      "maximumAngleDegrees": 24.848236600383853
+    }
+  },
+  "limits": [
+    "Fresh local Chrome loading sample; internet loading varies.",
+    "Frame intervals include simulation, rendering, browser scheduling and event transitions; not isolated GPU time or a locked 60 FPS claim.",
+    "Original coarse quarry collision proxies and hybrid vehicle deformation retained; AAA reference parity is unfinished.",
+    "Existing 38 ElevenLabs clips reused; no new generation or spending.",
+    "No internet multiplayer test or backend redeploy."
+  ],
+  "privateEvidenceRoot": "outputs/reference-overhaul"
+}

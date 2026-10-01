@@ -1,0 +1,9 @@
+{
+  "method": "Original fabricated floodlights, conduits, cast mast bases, LED optics, electrical cabinet and tension rails authored in Blender 5.2",
+  "license": "CC0 original authoring; runtime concrete photograph retained from Poly Haven concrete_layers_02",
+  "script": "tools/author-arena-industrial.py",
+  "assetSha256": "12aaff36490880c064c9d7eb1363e4a5ea9d0ba8f3922bfb77303995379a76f7",
+  "blendSha256": "1cb3b6b158a4dea3d223d25476e167170c66aba22788c098ef01cb321ee8910c",
+  "assetBytes": 571460,
+  "meshCount": 12
+}

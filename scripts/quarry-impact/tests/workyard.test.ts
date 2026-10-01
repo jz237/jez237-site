@@ -38,7 +38,12 @@ test('real workyard loader places all assets, LODs and arena barriers; surface d
 });
 test('current constructor preserves terrain, roads, arena, water, colliders and scenery random sequence',async()=>{
   const current=await captureArenaFloor(),previous=await captureArenaFloor({historicalWorkyard:true});
-  assert.deepEqual(current.arena,previous.arena);assert.deepEqual(current.puddles,previous.puddles);assert.deepEqual(current.colliders,previous.colliders);assert.deepEqual(current.random,previous.random);
+  assert.deepEqual(current.arena,previous.arena);
+  // The subsequent reference pass intentionally changes water albedo/opacity.
+  // Retain this milestone's full physical/shoreline audit, including buffers,
+  // matrices, render order and both water/wet-ring geometry.
+  const geometryOnly=({materials:_materials,...rest}:any)=>rest;
+  assert.deepEqual(current.puddles.map(geometryOnly),previous.puddles.map(geometryOnly));assert.deepEqual(current.colliders,previous.colliders);assert.deepEqual(current.random,previous.random);
   const protectedMeshes=previous.objects.filter(o=>o.materials.some((m:any)=>/^(authored-asphalt-circuit|north-woodland-floor)/.test(m.name)||/^north-woodland-floor/.test(m.shader?.programKey)));
   assert.ok(protectedMeshes.length>=3);for(const mesh of protectedMeshes)assert.deepEqual(current.objects.find(o=>o.geometry.attributes.position.sha256===mesh.geometry.attributes.position.sha256),mesh);
   assert.ok(current.objects.some(o=>o.name.startsWith('workyard-fence')));assert.equal(current.colliders.length,quarryColliderLayout().length);

@@ -12,6 +12,10 @@ import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
 import { prepareArenaFloor } from './scenery-arena-material';
+import {prepareReferenceFloor} from './scenery-reference-floor';
+import {CHASE_VIEW,chaseComposition,QUARRY_DAYLIGHT} from './quarry-art-direction';
+import {drawInstruments} from './instruments';
+import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
@@ -119,7 +123,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = T.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = false;
 renderer.toneMapping = T.ACESFilmicToneMapping;
-renderer.toneMappingExposure = .96;
+renderer.toneMappingExposure = QUARRY_DAYLIGHT.exposure;
 renderer.outputColorSpace = T.SRGBColorSpace;
 renderer.info.autoReset = false;
 const scene = new T.Scene();
@@ -325,8 +329,9 @@ async function start(watch=demo) {
   if(preparationInterrupted||document.hidden)pause();
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="270" height="220"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">8 / 8</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>WASD</kbd> DRIVE <kbd>SPACE</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
+  const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(demo)demoHud();
   if(online?.active)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="network-status" id="network-status"></div>');
 }
@@ -357,6 +362,7 @@ function updateHud() {
   hb.style.width = player.health + '%';
   hb.style.background = player.health < 30 ? '#dd7a55' : '#d9c486';
   text('speed', Math.round(Math.abs(player.speed) * 3.6).toString());
+  const instruments=document.querySelector<HTMLCanvasElement>('#instruments');if(instruments)drawInstruments(instruments,player.speed,player.rpm,player.gear,player.health);
   text(
     'gear',
     `GEAR ${player.gear === 0 ? 'R' : player.gear}  /  ${Math.round(player.rpm)} RPM`,
@@ -410,39 +416,8 @@ function updateHud() {
   drawMap();
 }
 function drawMap() {
-  const c = document.querySelector<HTMLCanvasElement>('#map');
-  if (!c) return;
-  const x = c.getContext('2d')!;
-  x.clearRect(0, 0, 270, 220);
-  const arena=quarry.arenaLayout,scale=mode==='derby'?92/arena.radius:.85,cx=mode==='derby'?arena.x:0,cz=mode==='derby'?arena.z:0;
-  const ox = 135,
-    oz = 110;
-  x.strokeStyle = '#d0c49288';
-  x.lineWidth = 2;
-  x.beginPath();
-  if (mode === 'derby')
-    x.ellipse(ox, oz, arena.radius * scale, arena.radius * scale, 0, 0, Math.PI * 2);
-  else
-    for (let i = 0; i <= 100; i++) {
-      const p = trackPoint(i / 100);
-      i
-        ? x.lineTo(ox + p.x * scale, oz - p.z * scale)
-        : x.moveTo(ox + p.x * scale, oz - p.z * scale);
-    }
-  x.stroke();
-  for (const car of cars) {
-    x.fillStyle =
-      (demo?car.id===director.followed:isPlayer(car)) ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
-    x.beginPath();
-    x.arc(
-      ox + (car.current.x-cx) * scale,
-      oz - (car.current.z-cz) * scale,
-      (demo?car.id===director.followed:isPlayer(car)) ? 5 : 3,
-      0,
-      Math.PI * 2,
-    );
-    x.fill();
-  }
+  const canvas=document.querySelector<HTMLCanvasElement>('#map');
+  if(canvas)drawQuarryMap(canvas,cars,quarry.arenaLayout,mode,demo?director.followed:0);
 }
 function formatTime(t: number) {
   return `${Math.floor(t / 60)
@@ -527,6 +502,7 @@ function applyQuality() {
   staticShadows?.setQuality(settings.quality);
   vehicleFire?.setQuality(settings.quality);
   puddleSplashes?.setQuality(settings.quality);
+  quarry?.referenceArena.setQuality(settings.quality);
   ao.enabled = settings.quality !== 'medium';
   reflections.enabled = settings.quality !== 'medium';
   reflections.interval = settings.quality === 'ultra' ? 3 : 6;
@@ -803,18 +779,12 @@ function updateCamera(dt: number) {
         .clone()
         .addScaledVector(f, 1.35)
         .add(new T.Vector3(0, 0.58, 0))
-    : target
-        .clone()
-        .addScaledVector(f, -7.4 - Math.abs(p.speed) * 0.04)
-        .add(new T.Vector3(0, 2.65, 0));
+    : chaseComposition(target,f,p.speed).position;
   const cameraGround = Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity);
   desired.y = Math.max(desired.y, cameraGround + 0.65);
   camera.position.sub(cameraImpactOffset);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
-  const look = target
-    .clone()
-    .addScaledVector(f, hood ? 22 : 4)
-    .add(new T.Vector3(0, 0.5, 0));
+  const look = hood ? target.clone().addScaledVector(f,22).add(new T.Vector3(0,.5,0)) : chaseComposition(target,f,p.speed).target;
   camera.lookAt(look);
   const response = p.impactResponse.step(state === 'playing' ? dt : 0);
   cameraImpactOffset.copy(response.offset).multiplyScalar(hood ? .65 : 1);
@@ -823,7 +793,7 @@ function updateCamera(dt: number) {
   camera.rotateX(response.pitch);
   camera.fov = T.MathUtils.damp(
     camera.fov,
-    hood ? 66 : 52 + Math.min(8, Math.abs(p.speed) * 0.2),
+    hood ? 66 : CHASE_VIEW.fov + Math.min(5, Math.abs(p.speed) * 0.12),
     3,
     dt,
   );
@@ -1004,6 +974,7 @@ async function boot() {
     quarry.trees(),
     onlineUI.configure(),
     VehicleFire.loadBaked(),
+    prepareReferenceFloor(),
   ]);
   environmentTarget = prepared[1];
   vehicleFire.useBaked();
@@ -1064,6 +1035,7 @@ async function boot() {
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
     get puddles(){return quarry.puddles;},
     get arenaState(){return{...quarry.arenaLayout,expanded:quarry.arenaPhysics.expanded,enabledWalls:quarry.arenaPhysics.walls.filter(c=>c.isEnabled()).length};},
+    get artDirection(){return{composition:CHASE_VIEW,scenery:quarry.referenceArena.stats};},
     seedFireTest:(seed:number)=>{
       vehicleFire?.dispose();let randomState=seed>>>0;
       vehicleFire=new VehicleFire(scene,(p,n,t,f)=>fx.emit(p,n,t,f),()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;return randomState/4294967296;});

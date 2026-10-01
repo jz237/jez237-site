@@ -4,10 +4,10 @@ import * as T from 'three';
 // beyond it, including occluders outside the moving map. Both attenuate the SAME
 // sun using min(near, static), rather than adding a second light or multiplying
 // two partially filtered shadows. Geometry and collision data are never changed.
-// Bright-tail centroid of the bundled HDR after its existing 1.9-radian yaw.
+// Bright-tail centroid of the bundled HDR after the arena's 1.1-radian yaw.
 // Matching the key to this solar disk keeps shadows, reflections and sky coherent
 // without tilting the photographed horizon. tools/daylight-qa.mjs reproduces it.
-export const DAYLIGHT_DIRECTION = new T.Vector3(.17808175630589612, .7416666663831829, -.6466973357352447).normalize();
+export const DAYLIGHT_DIRECTION = new T.Vector3(.17808175630589612, .7416666663831829, -.6466973357352447).applyAxisAngle(new T.Vector3(0,1,0),-.8).normalize();
 export const DAYLIGHT_DISTANCE = Math.hypot(70, 65, 45);
 
 export function staticCasterScene(source: T.Object3D, excluded: ReadonlySet<T.Object3D>) {

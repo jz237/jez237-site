@@ -45,7 +45,7 @@ test('front intake is an actual opening; the surrounding fascia still intercepts
 
 async function actualCar(){
   const original=GLTFLoader.prototype.loadAsync;
-  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch)\.glb$/.exec(String(url))![1]);
+  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|wheel-machining)\.glb$/.exec(String(url))![1]);
   try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
   await R.init();const world=new R.World({x:0,y:-9.81,z:0});
   const car=new Vehicle(0,'coupe',0xb32618,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);

@@ -1,5 +1,25 @@
 # Credits and asset provenance
 
+## Reference arena overhaul
+
+Original Quarry Impact fabrication and geology additions are released as CC0 1.0:
+`arena-industrial.glb`, `wheel-machining.glb`, and the added fracture relief/bedding
+planes in `arena-escarpment.glb`. They are authored locally with Blender 5.2.1 LTS.
+Editable scenes, scripts, original input hashes and output hashes are retained in
+`source/models/*-manifest.json`. The underlying original quarry derivative meshes
+and their source licenses remain as recorded below. No source quarry/car GLB is
+overwritten. Wheel machining is an original separate addition to the attributed
+Car Concept derivatives. New fictional signage and HUD typography are original
+game authoring, with the already bundled licensed font unchanged.
+
+The arena reuses Poly Haven CC0 photographic `circuit_asphalt`, `gravel`, `scree`
+and quarry geology maps, plus the existing workyard concrete photograph. Their
+source URLs, licenses and original file checksums remain in the retained asset
+manifests. New crest conifers reuse the existing attributed scanned branch
+geometry and material maps. All 38 bundled ElevenLabs clips are retained. The
+user-provided art-direction screenshot is not distributed or used as a texture.
+No purchases or sound generation were made for this pass.
+
 ## Fluid effects
 
 The fire and smoke atlases are original Quarry Impact procedural authoring, released under CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/. They are rendered from a Blender 5.2.1 LTS Mantaflow fuel/gas simulation, then assembled into animated texture atlases. Authoring and packing scripts, the editable Blender scene, render-frame checksums, adjustments and final asset hashes are recorded in `source/fx/manifest.json` and `source/structural-realism.md`. Blender itself is an authoring tool and is not bundled into gameplay. No downloaded third-party fire footage or paid service is used.
