@@ -1,0 +1,201 @@
+{
+  "date": "2026-09-30",
+  "runtime": {
+    "file": "assets/index-DJIo0yxR.js",
+    "bytes": 9741436,
+    "sha256": "d32a5906efa5384f49e74b6ea0c270b1f7abd1219c7c01502baebf837f79a587"
+  },
+  "previousRelease": "29cd3e9c14715261363cbb6497bf865341ee1f60",
+  "scope": [
+    "Resistant rails and a solid mounted engine",
+    "Physical corner damage and load/contact tire geometry",
+    "Distinct material responses",
+    "Persistent silt/wetness, transferred paint and bounded ground evidence",
+    "Blender Mantaflow-baked shared fire and smoke atlases"
+  ],
+  "validation": {
+    "soloTests": {
+      "tests": 179,
+      "pass": 179,
+      "fail": 0,
+      "cancelled": 0
+    },
+    "typescriptAndBuild": "passed",
+    "allModeGameplay": {
+      "passed": true,
+      "sha256": "d32a5906efa5384f49e74b6ea0c270b1f7abd1219c7c01502baebf837f79a587"
+    },
+    "visualContact": {
+      "passed": true,
+      "checks": [
+        "all three cars: intact material/contact-patch view, localized transferred paint, physical damaged corners, structure folding and complete repair",
+        "real grounded puddle crossing leaves retained tire water, wet bodywork and fading wet trails; inspection freezes deposition",
+        "shared 64-frame Mantaflow atlases load once across cars and restarts, fire keeps localized ignition rules, event reset clears effects and evidence"
+      ],
+      "atlasRequests": 2
+    },
+    "graphics": {
+      "passed": true,
+      "checks": 9,
+      "qualityTransitions": 12,
+      "contextRestorationMs": 413.2999999523163
+    },
+    "audio": {
+      "checks": [
+        "intact car has no fire or smoke",
+        "progressive smoke, flame and positional fire audio",
+        "seeded rare critically damaged car bursts after sustained heat",
+        "inspection freezes visual effects",
+        "burn scars persist after cooling",
+        "repair clears fire particles and sound",
+        "all three car types render fire with actual engine or rear fuel damage",
+        "eight-car effects and voice budgets",
+        "pause and mute silence fire",
+        "menu reset clears emitters"
+      ],
+      "peak": 0.2815031111240387,
+      "clipped": 0,
+      "readings": 2873,
+      "state": "running",
+      "muted": true,
+      "master": 0,
+      "voices": 0,
+      "buffers": 38,
+      "levels": {
+        "engine": 0.72,
+        "effects": 0.8,
+        "ambience": 0.45
+      }
+    },
+    "demo": {
+      "passed": true,
+      "checks": [
+        "all eight cars drive autonomously",
+        "all seven views, car selection and mouse orbit work",
+        "pause and focus loss freeze demo and fire",
+        "camera and follow controls retain handlers after pause and blur",
+        "car zero wrecking does not end spectator event",
+        "demo repeats automatically without changing player bests",
+        "race demo advances every AI through checkpoints",
+        "exit restores normal player mode"
+      ],
+      "allEightFinish72Checkpoints": true,
+      "runtimeSha256": "7c688c0ff2b97a538bedd250acd01fcc94397a5cf69f2fa4ae381cc382cd79fd",
+      "note": "Earlier candidate before final paint-layer placement, grounded dirt gating and repaired-bound restoration. Its exact bundle/hash is retained; final gameplay and graphics separately verify mode changes and reset."
+    },
+    "atlases": {
+      "producer": "Blender 5.2.1 LTS",
+      "resolution": 112,
+      "files": [
+        {
+          "file": "assets/fx/vehicle-fire-baked.png",
+          "bytes": 3108601,
+          "sha256": "eb99827dcb7f82a44aa5f82c3ad0c999b2098bde233204a566b5edc80b5e2592",
+          "frames": 64
+        },
+        {
+          "file": "assets/fx/vehicle-smoke-baked.png",
+          "bytes": 1867315,
+          "sha256": "3c00467027e60ed3db1cf0c7005b1e1881c2228c3ab1df02f42597c6cf6fad99",
+          "frames": 64
+        }
+      ],
+      "pixelAudit": {
+        "fire": {
+          "rawSeamMse": 0.002467944516625967,
+          "blendedBoundaryMse": 9.017779258446072e-08,
+          "adjacentFrameMseMean": 0.001100806271087845,
+          "coveredPixels": [
+            12154,
+            16409
+          ]
+        },
+        "smoke": {
+          "rawSeamMse": 0.004182924580821529,
+          "blendedBoundaryMse": 2.0664990707417825e-09,
+          "adjacentFrameMseMean": 2.54097766366044e-05,
+          "coveredPixels": [
+            18425,
+            36847
+          ]
+        }
+      }
+    }
+  },
+  "performance": {
+    "protocol": "Fresh Chrome context, unthrottled local delivery, 1440p Ultra. Cold navigation to menu plus first two rendered frames; first event start to countdown. Seeded autonomous derby at a fixed chase camera, then an eight-fire stress scene. Real-time frame capture; no physics acceleration during measured intervals.",
+    "viewport": [
+      2560,
+      1440
+    ],
+    "quality": "ultra",
+    "coldMenuMs": 5888.5,
+    "firstEventMs": 1128.9751000000006,
+    "cases": {
+      "derby": {
+        "seconds": 60.61256999999999,
+        "frames": 3538,
+        "meanMs": 16.988355002826456,
+        "fps": 58.863851140008784,
+        "p95": 16.80000000000291,
+        "p99": 16.900000000001455,
+        "over33ms": 17,
+        "over50ms": 6,
+        "geometryRange": [
+          900,
+          901
+        ],
+        "textureRange": [
+          144,
+          147
+        ],
+        "heapRangeBytes": [
+          743541119,
+          857190616
+        ],
+        "lastHeapBytes": 855411424
+      },
+      "fire": {
+        "seconds": 60.69663129999999,
+        "frames": 3608,
+        "meanMs": 16.672671840354763,
+        "fps": 59.97838916133324,
+        "p95": 16.80000000000291,
+        "p99": 16.800000000017462,
+        "over33ms": 0,
+        "over50ms": 0,
+        "geometryRange": [
+          910,
+          910
+        ],
+        "textureRange": [
+          147,
+          147
+        ],
+        "heapRangeBytes": [
+          827464580,
+          939957008
+        ],
+        "lastHeapBytes": 939957008
+      }
+    },
+    "limits": [
+      "One new local cold-load sample; no repeated before/after load comparison.",
+      "No other QA browser, build, exporter or CPU test from this work ran during frame captures.",
+      "Stress fixture explicitly seeds eight fires and extends fuel, unlike normal ignition frequency.",
+      "No new ten-minute memory capture, internet latency measurement, locked-60-FPS claim or Wreckfest 2 parity claim."
+    ]
+  },
+  "delivery": {
+    "additionalSpending": false,
+    "elevenLabsNewGeneration": false,
+    "localElevenLabsFiles": 38,
+    "browserElevenLabsRequests": false,
+    "originalModelAndImageBytesPreserved": true,
+    "unchangedSharedWorkerInputs": 23,
+    "backendDeployment": false,
+    "internetMultiplayerTest": false,
+    "newCornerPhysics": "solo path",
+    "catalog": "Unfinished"
+  }
+}
