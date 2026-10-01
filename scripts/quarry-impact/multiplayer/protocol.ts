@@ -1,3 +1,4 @@
+import {validOnlineEventRules,copyOnlineEventRules,type OnlineEventRules,type OnlineEventState} from '../src/online-events';
 import {LIVERY_MESSAGE_LIMIT,validOnlineLivery,copyOnlineLivery,type LiveryFrame,type SelectedLivery} from '../src/online-livery';
 import {validOnlineSetup,copyOnlineSetup,type OnlineSetup,type OnlineLoadout,type SetupRule} from '../src/online-setup';
 import type {OnlineCapacity} from '../src/online-capacity';
@@ -37,15 +38,16 @@ export type Snapshot = {
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
   capacity?:OnlineCapacity;
+  eventSupport?:true; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
 export type ClientMessage =
-  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; wire?:'qiw1'; setup?:OnlineSetup }
+  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; eventRules?:1; wire?:'qiw1'; setup?:OnlineSetup }
   | { type:'livery'; kind:CarKind; layers:import('../src/livery-data').LiveryLayer[] }
   | { type:'setup'; kind:CarKind; setup:OnlineSetup }
   | { type:'setup-rule'; rule:SetupRule }
   | { type: 'input'; seq: number; controls: Controls }
-  | { type: 'start'; mode: Mode; rounds?:number }
+  | { type: 'start'; mode: Mode; rounds?:number; rules?:OnlineEventRules }
   | { type: 'vote'; mode:CupMode }
   | { type: 'next' }
   | { type: 'recover' }
@@ -68,11 +70,12 @@ export function parseClientMessage(raw: string): ClientMessage | null {
   if (d.type === 'hello' && d.protocol === PROTOCOL && typeof d.name === 'string' &&
       ['coupe', 'sedan', 'hatch'].includes(String(d.kind)) &&
       (d.setup===undefined||validOnlineSetup(d.setup))&&
+      (d.eventRules===undefined||d.eventRules===1)&&
       (d.maxPlayers===undefined||d.maxPlayers===24)&&(d.wire===undefined||d.wire==='qiw1')&&
       (d.token === undefined || typeof d.token === 'string' && d.token.length <= 64)) {
     return { type: 'hello', protocol: PROTOCOL,
       name: d.name.replace(/[^\p{L}\p{N} _-]/gu, '').trim().slice(0, 18) || 'DRIVER',
-      kind: d.kind as CarKind, token: d.token as string | undefined,...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
+      kind: d.kind as CarKind, token: d.token as string | undefined,...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
   }
   if(d.type==='setup'&&['coupe','sedan','hatch'].includes(String(d.kind))&&validOnlineSetup(d.setup))return{type:'setup',kind:d.kind as CarKind,setup:copyOnlineSetup(d.setup)};
   if(d.type==='setup-rule'&&['open','stock'].includes(String(d.rule)))return{type:'setup-rule',rule:d.rule as SetupRule};
@@ -85,8 +88,9 @@ export function parseClientMessage(raw: string): ClientMessage | null {
       brake: Math.max(0, Math.min(1, c.brake)), handbrake: c.handbrake } };
   }
   if (d.type === 'start' && ['derby', 'race', 'playground'].includes(String(d.mode))) {
+    if(d.rules!==undefined&&!validOnlineEventRules(d.rules))return null;
     if(d.rounds!==undefined&&(!Number.isInteger(d.rounds)||Number(d.rounds)<1||Number(d.rounds)>9||d.mode==='playground'&&Number(d.rounds)>1))return null;
-    return {type:'start',mode:d.mode as Mode,...(d.rounds===undefined?{}:{rounds:Number(d.rounds)})};
+    return {type:'start',mode:d.mode as Mode,...(d.rules===undefined?{}:{rules:copyOnlineEventRules(d.rules as OnlineEventRules)}),...(d.rounds===undefined?{}:{rounds:Number(d.rounds)})};
   }
   if(d.type==='vote'&&['race','derby'].includes(String(d.mode)))return {type:'vote',mode:d.mode as CupMode};
   if(d.type==='next')return {type:'next'};

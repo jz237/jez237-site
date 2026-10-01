@@ -196,3 +196,7 @@ Local development update: online rooms now accept server-validated saved tuning 
 ## Saved replay library
 
 From the replay studio, name a recording and choose **Save to library**. **Replay library** on the main menu lists recordings after reload, with search, playback, rename, `.qir` import/export and confirmed deletion. Up to50 recordings and256MiB of compressed files are retained; excess saves fail without removing previous recordings. The library is specific to this browser and site address. Export `.qir` copies to keep recordings when browser data is cleared. Unsupported/blocked storage and quota failures show a message, and file export remains available.
+
+## Online event rules
+
+On supporting servers, the host chooses laps/waypoint rounds, forward/reverse/opposing circuits, ordered/free/random waypoints, survival or score derby, and a 60–1200 second derby time limit. Score derby awards actual damage plus 100 points per knockout and respawns wrecked cars after four seconds when a clear slot is available. Cup rounds retain the chosen race and derby rules. Reconnects preserve progress. Older servers keep their existing rules. See ONLINE_EVENTS_VALIDATION.md for release status.

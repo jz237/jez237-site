@@ -1,3 +1,4 @@
+import {validOnlineEventState} from './online-events';
 import {validOnlineSetup,validOnlineLoadout} from './online-setup';
 import {validCapacity} from './online-capacity';
 import {validComponents} from './component-damage';
@@ -12,7 +13,7 @@ export function validOnlineSnapshot(s:Snapshot):boolean {
   const input=(v:any)=>v&&['throttle','steer','brake'].every(k=>finite(v[k]))&&typeof v.handbrake==='boolean';
   const dent=(v:any)=>v&&Number.isSafeInteger(v.id)&&Number.isSafeInteger(v.repair)&&finite(v.damage)&&vector(v.localPoint)&&vector(v.localDirection);
   const capacity=s?.capacity??8;
-  if(!s||!validCapacity(capacity)||(s.liverySupport!==undefined&&s.liverySupport!==true)||(s.liveryRevision!==undefined&&(!s.liverySupport||!Number.isSafeInteger(s.liveryRevision)||s.liveryRevision<0))||(s.setupSupport!==undefined&&s.setupSupport!==true)||(s.setupRule!==undefined&&(!s.setupSupport||!['open','stock'].includes(s.setupRule)))||(s.cupSupport!==undefined&&s.cupSupport!==true)||(s.cup!==undefined&&(!validCup(s.cup)||s.cup.participants.length!==capacity||!s.cupSupport))||!Number.isSafeInteger(s.tick)||!finite(s.elapsed)||!finite(s.countdown)||
+  if(!s||(s.eventSupport!==undefined&&s.eventSupport!==true)||(s.event!==undefined&&(!s.eventSupport||!validOnlineEventState(s.event,s.mode,capacity)))||!validCapacity(capacity)||(s.liverySupport!==undefined&&s.liverySupport!==true)||(s.liveryRevision!==undefined&&(!s.liverySupport||!Number.isSafeInteger(s.liveryRevision)||s.liveryRevision<0))||(s.setupSupport!==undefined&&s.setupSupport!==true)||(s.setupRule!==undefined&&(!s.setupSupport||!['open','stock'].includes(s.setupRule)))||(s.cupSupport!==undefined&&s.cupSupport!==true)||(s.cup!==undefined&&(!validCup(s.cup)||s.cup.participants.length!==capacity||!s.cupSupport))||!Number.isSafeInteger(s.tick)||!finite(s.elapsed)||!finite(s.countdown)||
     !['derby','race','playground'].includes(s.mode)||!['lobby','countdown','playing','result'].includes(s.phase)||
     !Array.isArray(s.cars)||s.cars.length!==capacity||new Set(s.cars.map(c=>c.id)).size!==capacity||
     !Array.isArray(s.props)||s.props.length>128||!Array.isArray(s.damage)||!Array.isArray(s.members)||s.members.length>capacity||!Array.isArray(s.ranking)||!s.ack||typeof s.ack!=='object')return false;

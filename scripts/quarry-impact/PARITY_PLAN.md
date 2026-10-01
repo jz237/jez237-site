@@ -6,8 +6,8 @@ Status: **in progress; parity has not been achieved**. The original objective re
 ## Evidence baseline (October 1, 2026)
 
 Vengeance source: `D:/Projects/hidden reef header/quarry-impact`.
-Latest published frontend: `feb427fa565aec9704b0950a54c1099a123a4ac3` (October 1).
-VENGEANCE source and build include the saved replay library (installed October 1 after303 frontend tests and build passed). The public frontend remains `feb427fa` without the library.
+Latest published frontend: `17d89af8586bfd4dec8cd3f20c06901eafa959ef` (October 1).
+The saved replay library is installed on VENGEANCE and published after 303 frontend tests, 76 live asset hash checks, browser verification, and full-site deployment checks.
 The existing live multiplayer Worker remains the earlier eight-player version: deployment of the tested new backend is blocked by missing Free-account login permissions.
 The working project is untracked inside a different parent repository; do not commit unrelated parent changes.
 A source snapshot and baseline Git commit are in the Linux working copy for reproducible diffs.
@@ -32,8 +32,8 @@ Every row requires functional gameplay evidence, persistence where applicable, r
 | Physical vehicle damage and handling | Rapier chassis, damage zones, displaced wheels, deforming panels, detached parts, component fire; local authoritative corner damage | Structural chassis deformation/collision evolution; component failures, stalls, armor integration; comparable crash outcomes and driving fidelity |
 | 24-car solo fields | Selectable 2–24 cars, non-overlapping grids, tail-grid checkpoint accounting, dynamic HUD, complete-field AI fixture | Sustained full-scene benchmark on VENGEANCE and extended race/derby balancing |
 | 24-player online plus bots | Local pending: negotiated24-seat rooms, AI fill, grids, cups, reconnect/restoration;30-second24-client WebSocket fixture passes | Sustained WAN/Cloudflare load/cost, full-scene rendering, prediction and backend deployment; binary transport already reduces fixture traffic by about82% |
-| Race and derby variants | 1–20 lap forward/reverse circuit; survival and score derby, 1–20 minute derby limits, four-second respawns | Timed races, richer damage/vehicle/class restrictions and further variants |
-| Waypoint / free-order / random modes | Solo ordered/free/random station events, per-car scoring, world/minimap targets and shortest-road AI | Multiplayer synchronization (including reference random mode), distinct waypoint courses and extended balance |
+| Race and derby variants | Solo and authoritative online 1–20 lap forward/reverse/opposing circuit; survival/score derby, 1–20 minute limits, delayed clear-slot respawns; online installed but backend publication blocked | Timed races, richer damage/vehicle/class restrictions and further variants |
+| Waypoint / free-order / random modes | Solo and authoritative online ordered/free/random events, server-seeded order, persistent progress, world/minimap targets, shortest-road AI; online installed | Backend publication, distinct waypoint courses and extended balance |
 | Opposing-direction racing | Alternating24-car opposing grids, separate checkpoint routes, AI and individual scoring | Online support, new head-on layouts and full-scene endurance/balance |
 | Track variety | One quarry, forward/reverse circuit, one arena | Multiple distinct locations and circuit/oval/figure-eight/intersection/rallycross/jump/arena layouts, reverse routes, coherent collisions and navigation |
 | Vehicle variety | Three modern cars | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
@@ -117,3 +117,9 @@ Saved performance tuning, upgrades and paint now travel through bounded server v
 ## Replay library in development
 
 Named browser-local recordings, search, import/export, playback and confirmed deletion are implemented with atomic IndexedDB storage. A50-recording/256MiB bound refuses excess saves without deleting existing recordings. Actual browser checks cover fresh connections, duplicate saves, concurrent limits, invalid imports, export/import, deletion and aborted-write rollback. A real eight-car,29.5-second recording survived reload and played from the library. Full VENGEANCE candidate suite:303 frontend tests and build pass. Installed on VENGEANCE with a source/build backup; not yet published. Online recordings and the rest of the parity matrix remain open.
+
+## Online event variants — installed, backend publication blocked
+
+The multiplayer authority now supports configurable lap counts, reverse/opposing circuit routes, ordered/free/random waypoint rounds, and timed score derbies with automatic repair and respawn. Rules, waypoint progress, server-selected random seeds, score and respawn deadlines survive room restoration and cups. Clients render server progress; hosts select rules in lobby/rematch screens. Unsupported clients cannot join custom-rule events. See ONLINE_EVENTS_VALIDATION.md for installation and validation status. This does not complete overall Wreckfest 2 parity.
+
+Online event validation: 315 frontend tests, 34 backend tests, six browser checks, five full-field AI runs, actual game waypoint/reconnect and timed score-result rendering, both typechecks/build and Worker dry run passed. Installed build: `assets/index-CL4u9ViM.js`. Public release remains the replay-library build until a supporting Worker can be published.
