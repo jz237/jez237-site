@@ -101,10 +101,13 @@ const YACHT_FS = `
 #include <whirlpool>
 #include <wake>
 #include <hull-water>
+#include <deck-wash>
 uniform sampler2DArray uDisp;
 uniform sampler2DArray uSurfaceAtlas, uDetailAtlas;
 uniform sampler2D uInstruments, uCompass;
 uniform sampler2D uHullWet;
+uniform sampler2D uDeckWash;
+uniform float uDeckWashOn;
 uniform float uHullWetOn;
 uniform mat4 uModel;
 uniform vec2 uYachtCen;    // centre of the cascade frame relative to the camera (xz)
@@ -258,12 +261,17 @@ void main() {
   float hw=wy>crestLimit?-1e3:contactMapped?wy+(contact.r-p.y)*waterMetric:waterHeightAt(vRel.xz);
   float wet=smoothstep(.42,.015,wy-hw)*uWet;
   if(contactMapped)wet=max(wet,smoothstep(.18,.015,p.y-contact.g));
+  if(uDeckWashOn>.5&&deckFootprint(p.xz)&&p.y>=deckFloor(p.xz)-.03&&contact.r<deckFloor(p.xz)+.8){
+    vec4 wash=washSample(uDeckWash,wetUV);
+    hw=wy+(deckFloor(p.xz)+wash.r-p.y)*waterMetric;
+    if(wood&&vLocalN.y>.7&&p.y<deckFloor(p.xz)+.22)wet=max(wet,wash.w);
+  }
   if(mat==${MAT.HULL}||wood||paint){albedo*=1.0-.18*wet;rough=mix(rough,max(.14,rough*.55),wet);}
 
   vec3 sunE = lightSun(), moonE = lightMoon();
   float shd = cloudShadowAt(vRel.xz);
-  float ss = sailShadow(p, uSunLocal);
-  float sm = sailShadow(p, uMoonLocal);
+  float ss=uYachtShadowInfo.x>.5&&uYachtShadowInfo.y>.5?yachtShadowLocal(p,normalize(vLocalN),true):sailShadow(p,uSunLocal);
+  float sm=uYachtShadowInfo.x>.5&&uYachtShadowInfo.y<.5?yachtShadowLocal(p,normalize(vLocalN),false):sailShadow(p,uMoonLocal);
   vec3 col = vec3(0.0);
   vec3 F0 = mix(vec3(f0), albedo, metal);
   vec3 dif = albedo * (1.0 - metal);
@@ -429,6 +437,17 @@ export class Yacht {
       return { vao, vb, count: m.idx.length };
     };
     this.hull=mk(g.hull);this.rigMesh=mk(g.rig);this.sails=g.sails.map(({S,mesh,boom})=>({S,cloth:mk(mesh),boom:boom?mk(boom):null}));this.metadata=g.metadata;
+    const shadowParts=(source,mesh)=>{
+      const indices=[[],[]];
+      for(let i=0;i<source.idx.length;i+=3){const radius=source.verts[source.idx[i]*11+9];indices[radius>0&&radius<.065?1:0].push(source.idx[i],source.idx[i+1],source.idx[i+2]);}
+      return indices.map(list=>{
+        const vao=gl.createVertexArray();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,mesh.vb);
+        for(const [loc,n,offset] of [[0,3,0],[1,3,12],[2,4,24],[3,1,40]]){gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,n,gl.FLOAT,false,44,offset);}
+        const ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint32Array(list),gl.STATIC_DRAW);
+        return {vao,count:list.length};
+      });
+    };
+    this.shadowHull=shadowParts(g.hull,this.hull);this.shadowRig=shadowParts(g.rig,this.rigMesh);
     this.materials=new YachtMaterials();
     this.sheetVerts=new Float32Array(8*18*11);const sheetIdx=[];
     for(let j=0;j<8;j++)for(let k=0;k<8;k++){const b=j*18;sheetIdx.push(b+k,b+k+1,b+9+k,b+k+1,b+9+k+1,b+9+k);}
@@ -657,6 +676,26 @@ export class Yacht {
 
   drawRig(ctx, VP, camAbs) { this.draw(ctx, VP, camAbs, false, true); }
 
+  // The visible pass and depth caster share this exact deformation setup.
+  bindCloth(p,S,index,time){
+    const reef=this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale;
+    const dx=(S.head[0]-S.tack[0])*(S.boom?1-.18*reef:1),dy=(S.head[1]-S.tack[1])*(S.boom?1-.42*reef:1);
+    p.i('uCurrentSail',index).v3('uSailAxis',dx,dy,0).v4('uSailCloth',S.clew[0],S.clew[1],S.draft,S.roach)
+      .v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[index*2],this.flutterPhases[index*2+1],S.phase)
+      .v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
+  }
+
+  drawShadow(VP,solid,cloth,time,opaque){
+    const identity=m4.ident(),draw=mesh=>{gl.bindVertexArray(mesh.vao);gl.drawElements(gl.TRIANGLES,mesh.count,gl.UNSIGNED_INT,0);};
+    solid.use().m4('uVP',VP).m4('uModel',identity);
+    const part=opaque?0:1;draw(this.shadowHull[part]);draw(this.shadowRig[part]);if(!opaque)draw(this.sheets);
+    cloth.use().m4('uVP',VP).m4('uModel',identity);
+    for(const [index,{S,cloth:mesh,boom}] of this.sails.entries()){
+      this.bindCloth(cloth,S,index,time);if(!opaque)draw(mesh);
+      if(boom&&opaque){cloth.f('uOpacity',1).v3('uSailAxis',0,1,0).v4('uSail',this.sailAng*S.angleScale,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);draw(boom);cloth.f('uOpacity',.62);}
+    }
+  }
+
   draw(ctx, VP, camAbs, mirror = false, rigOnly = false) {
     if(!rigOnly)this.materials.updateInstrument(Math.atan2(this.axes.bow[0],-this.axes.bow[2]),this.speed,ctx.time||0);
     const rel = new Float64Array(this.M); rel[12] = this.x - camAbs[0]; rel[13] = this.y - ctx.cam.y; rel[14] = this.z - camAbs[2];
@@ -669,6 +708,7 @@ export class Yacht {
       ctx.whirlpool.bind(p,ctx.cam);
       bindHullWater(p,this,ctx.cam);
       p.f('uHullWetOn',ctx.hullWet?1:0);if(ctx.hullWet)p.t('uHullWet',5,ctx.hullWet);
+      p.f('uDeckWashOn',ctx.deckWash?1:0).t('uDeckWash',3,ctx.deckWash?.cur||ctx.light.tex);
       p.v4('uWakeA',this.x-ctx.cam.x,this.z-ctx.cam.z,Math.cos(this.psi+this.yaw),Math.sin(this.psi+this.yaw))
         .v4('uWakeB',this.speed,.20*Math.pow(this.speed/6,2),1,0);
       if (ctx.fx) ctx.fx.bindCaustic(p, ctx.cam);
@@ -696,8 +736,8 @@ export class Yacht {
     setCommon(p);
     const time = ctx.time || 0;
     for(const [sailIndex,{S,cloth,boom}] of this.sails.entries()){
-      const reef=this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale,dx=(S.head[0]-S.tack[0])*(S.boom?1-.18*reef:1),dy=(S.head[1]-S.tack[1])*(S.boom?1-.42*reef:1);
-      p.i('uCurrentSail',sailIndex).v3('uSailAxis',dx,dy,0).v4('uSailCloth',S.clew[0],S.clew[1],S.draft,S.roach).v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[sailIndex*2],this.flutterPhases[sailIndex*2+1],S.phase).v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
+      const angle=this.sailAng*S.angleScale;
+      this.bindCloth(p,S,sailIndex,time);
       gl.bindVertexArray(cloth.vao);gl.drawElements(gl.TRIANGLES,cloth.count,gl.UNSIGNED_INT,0);
       if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
     }
