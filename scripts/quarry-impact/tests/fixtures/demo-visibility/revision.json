@@ -1,0 +1,15 @@
+{
+  "baseline": "84fb13aedc93ecb48de38c132fbc5a06f2bcbff4",
+  "files": {
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "f2bec5c729b45a30134fdef05981c3fcee92dc8d132f4af94ce35e3f4ada90b7",
+      "after": "7c687fc467cd9d61a45447d2fc52af306fd406f55bbb752c96393136feb85212"
+    },
+    "src/demo-director.ts": {
+      "snapshot": "src-demo-director.ts.gz",
+      "before": "e66a21fa1936ce15d4c1a1e1cc03358742e2c6ffe21e6a7231667b0e9b59019a",
+      "after": "3d05120a5de9f6cdd9b733d5deb0e49e50760c5ceb5cabf58fce5d1255fd43eb"
+    }
+  }
+}
