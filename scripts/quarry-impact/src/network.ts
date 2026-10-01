@@ -1,3 +1,4 @@
+import {copyOnlineEventRules,type OnlineEventRules} from './online-events';
 import {validLiveryFrame,validSelectedLivery,copyOnlineLivery,type LiveryFrame,type OnlineSelection} from './online-livery';
 import type {LiveryLayer} from './livery-data';
 import {copyOnlineSetup,type OnlineSetup,type SetupRule} from './online-setup';
@@ -43,7 +44,7 @@ export class QuarryNetwork extends EventTarget {
   private open(){
     if(this.closed||!this.options)return;const opt=this.options,u=new URL(opt.endpoint);u.pathname=u.pathname.replace(/\/$/,'')+'/rooms/'+this.room;
     const ws=this.socket=new WebSocket(u);ws.binaryType='arraybuffer';
-    ws.onopen=()=>{if(ws!==this.socket)return;let token:string|undefined;try{token=sessionStorage.getItem('quarry-room-'+this.room)??undefined;}catch{}this.send({type:'hello',protocol:PROTOCOL,name:opt.name,kind:opt.kind,token,maxPlayers:24,wire:SNAPSHOT_WIRE,...(opt.setup?{setup:copyOnlineSetup(opt.setup)}:{})});};
+    ws.onopen=()=>{if(ws!==this.socket)return;let token:string|undefined;try{token=sessionStorage.getItem('quarry-room-'+this.room)??undefined;}catch{}this.send({type:'hello',protocol:PROTOCOL,name:opt.name,kind:opt.kind,token,maxPlayers:24,eventRules:1,wire:SNAPSHOT_WIRE,...(opt.setup?{setup:copyOnlineSetup(opt.setup)}:{})});};
     ws.onmessage=e=>{if(ws!==this.socket)return;let m:ServerMessage;try{m=(typeof e.data==='string'?JSON.parse(e.data):decodeSnapshotWire(e.data)) as ServerMessage;if(!m||typeof m!=='object')throw new Error('Invalid message');}catch{this.rejectSnapshot();return;}
       if(m.type==='welcome'){if(m.protocol!==PROTOCOL||!validOnlineSnapshot(m.snapshot)||(m.liveries!==undefined&&(!validLiveryFrame(m.liveries,m.snapshot.cars.length)||m.liveries.revision!==m.snapshot.liveryRevision))||(m.pendingLivery!==undefined&&!validSelectedLivery(m.pendingLivery))){this.rejectSnapshot();return;}this.liveries=m.liveries;this.id=m.id;this.seq=(m.snapshot.ack[m.id]??-1)+1;try{sessionStorage.setItem('quarry-room-'+this.room,m.token);}catch{}this.eventId=0;this.pendingDamage=[];this.previous=undefined;this.snapshot=undefined;this.connected=true;this.retry=0;this.accept(m.snapshot);this.dispatchEvent(new Event('connected'));if(m.snapshot.liverySupport&&!m.pendingLivery&&opt.kind===m.snapshot.members.find(v=>v.id===m.id)?.loadout?.kind&&opt.livery)this.sendLivery(opt.kind,opt.livery);}
       else if(m.type==='liveries'){if(!this.snapshot||!validLiveryFrame(m.frame,this.snapshot.cars.length)){this.rejectSnapshot();return;}if(m.frame.revision>=(this.liveries?.revision??-1)){this.liveries=m.frame;this.dispatchEvent(new Event('liveries'));}}
@@ -79,7 +80,7 @@ export class QuarryNetwork extends EventTarget {
   setLoadout(loadout:OnlineSelection){if(this.snapshot?.setupSupport){this.send({type:'setup',kind:loadout.kind,setup:copyOnlineSetup(loadout.setup)});if(this.snapshot.liverySupport)this.sendLivery(loadout.kind,loadout.livery??[]);}}
   private sendLivery(kind:CarKind,layers:readonly LiveryLayer[]){this.send({type:'livery',kind,layers:copyOnlineLivery(layers)});}
   setSetupRule(rule:SetupRule){if(this.snapshot?.setupSupport)this.send({type:'setup-rule',rule});}
-  start(mode:Mode,rounds=1){this.send({type:'start',mode,...(this.snapshot?.cupSupport?{rounds}:{})});}
+  start(mode:Mode,rounds=1,rules?:OnlineEventRules){rules??=this.snapshot?.event?.rules;this.send({type:'start',mode,...(this.snapshot?.eventSupport&&rules?{rules:copyOnlineEventRules(rules)}:{}),...(this.snapshot?.cupSupport?{rounds}:{})});}
   vote(mode:'race'|'derby'){if(this.snapshot?.cupSupport)this.send({type:'vote',mode});}
   nextRound(){if(this.snapshot?.cupSupport)this.send({type:'next'});}
   recover(){this.send({type:'recover'});}

@@ -652,3 +652,7 @@ kbd {
 .replay-library button:hover{background:#506247}.replay-library input,.studio-photo input:not([type]){padding:10px;background:#101b17;color:#eee9d8;border:1px solid #75846b88}
 .replay-library label{font-size:11px;display:flex;flex-direction:column;gap:8px}.replay-library .library-confirm button{margin:4px 8px 0 0}
 @media(max-width:600px){.replay-library{padding:22px}.replay-library h2{font-size:33px}.library-toolbar label{flex-basis:100%}}
+
+#online-event-rules {border:1px solid #7c806b;margin:18px 0;padding:16px;min-width:0;}
+#online-event-rules legend {color:#e6d29d;font-size:12px;letter-spacing:.12em;padding:0 8px;}
+#online-event-rules input {width:100%;box-sizing:border-box;}

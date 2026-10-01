@@ -1,3 +1,4 @@
+import {restoreOnlineProgress,onlineEventLabel} from './online-events';
 import type {OnlineSelection} from './online-livery';
 import {copyOnlineSetup} from './online-setup';
 import {frameGarage} from './garage-camera';
@@ -89,19 +90,20 @@ const combat=new CombatScoreboard();
 const eventFrameTimes:number[]=[];
 const customEvent=()=>!activeChallenge&&!online?.active;
 let waypointRace:WaypointRace|null=null,waypointMarkers:WaypointMarkers|undefined;
-const raceFormat=()=>customEvent()?eventOptions.race:'laps';
-const raceDirection=(id=0)=>directionForCar(customEvent()&&raceFormat()==='laps'?eventOptions.direction:'forward',id);
+const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undefined;
+const raceFormat=()=>onlineRules()?.race??(customEvent()?eventOptions.race:'laps');
+const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
 const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??circuitRoute(raceDirection(id));
-const scoreDerby=()=>mode==='derby'&&customEvent()&&eventOptions.derby==='score';
-const derbyRanking=()=>eventDerbyOrder(cars,scoreDerby(),combat);
-const eventDuration=()=>activeChallenge?.limit??(online?.active?300:eventOptions.duration);
+const scoreDerby=()=>mode==='derby'&&(online?.active?onlineRules()?.derby==='score':customEvent()&&eventOptions.derby==='score');
+const derbyRanking=()=>online?.active?online.network.snapshot!.ranking.map(id=>cars.find(c=>c.id===id)!):eventDerbyOrder(cars,scoreDerby(),combat);
+const eventDuration=()=>activeChallenge?.limit??(online?.active?onlineRules()?.duration??300:eventOptions.duration);
 function openEventSetup(){eventSetupOpen=true;keys.clear();showEventSetup(ui,eventOptions,()=>{eventSetupOpen=false;menu();},()=>{try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventOptions));return true;}catch{return false;}});}
 let profile=readProfile();
 try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
 let telemetry:SessionTelemetry|null=null,runId='',runSettled=true,lastAward:Award|null=null;
-const raceLaps=()=>online?.active?3:activeChallenge?.laps??eventOptions.laps;
+const raceLaps=()=>online?.active?onlineRules()?.laps??3:activeChallenge?.laps??eventOptions.laps;
 function bankRun(completed:boolean){
   if(!telemetry||runSettled||demo||online?.active)return;
   runSettled=true;
@@ -342,6 +344,8 @@ async function connectOnline(endpoint:string,room:string,name:string,loadout?:On
 function receiveOnline() {
   const s=online.network.snapshot;if(!online.active||!s)return;
   online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed):null;
+  if(s.event)restoreOnlineProgress(s.event,waypointRace,combat);else combat.reset();
   const changed=onlinePhase!==s.phase;onlinePhase=s.phase;
   if(s.phase==='lobby') {
     state='lobby';orbit.enabled=false;onlineUI.lobby(s,changed);return;
@@ -452,6 +456,7 @@ function hud() {
   if(demo)demoHud();
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent='SCORE DERBY';
   if(mode==='race'&&customEvent())ui.querySelector('.hud-title')!.textContent=waypointRace?RACE_NAMES[eventOptions.race].toUpperCase():`QUARRY CIRCUIT · ${eventOptions.direction.toUpperCase()}`;
+  if(onlineRules())ui.querySelector('.hud-title')!.textContent=onlineEventLabel(mode,onlineRules()!).toUpperCase();
   if(waypointRace)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="waypoint-status"></div>');
   if(settings.performance)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="performance-readout" id="performance-readout"></div>');
   if(activeChallenge){ui.querySelector('.hud-title')!.textContent=activeChallenge.title.toUpperCase();ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live"><strong id="challenge-score"></strong><span id="challenge-target"></span></div>');}
@@ -544,7 +549,7 @@ function updateHud() {
 }
 function drawMap() {
   const canvas=document.querySelector<HTMLCanvasElement>('#map');
-  if(canvas)drawQuarryMap(canvas,cars,quarry.arenaLayout,mode,demo?director.followed:0,waypointRace?waypointRace.available(demo?director.followed:0).map(i=>WAYPOINTS[i]):[]);
+  if(canvas)drawQuarryMap(canvas,cars,quarry.arenaLayout,mode,demo?director.followed:online?.active?online.network.id:0,waypointRace?waypointRace.available(demo?director.followed:online?.active?online.network.id:0).map(i=>WAYPOINTS[i]):[]);
 }
 function formatTime(t: number) {
   return `${Math.floor(t / 60)
@@ -982,7 +987,7 @@ function frame(now: number) {
   if(!studio&&state==='playing')captureReplay();
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   quarry.update(camera);
-  waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state));
+  waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state));
   if(waypointRace)quarry.checkpoint.visible=false;
   if(!studio&&!waypointRace&&mode==='race'&&cars[0]) {
     const followed=demo?cars.find(c=>c.id===director.followed)??cars[0]:cars[0],p=raceRoute(followed.id)[followed.nextCheckpoint],ahead=raceRoute(followed.id)[(followed.nextCheckpoint+1)%24];

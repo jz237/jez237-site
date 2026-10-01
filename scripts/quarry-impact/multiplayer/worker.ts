@@ -77,7 +77,7 @@ export class QuarryRoom extends DurableObject<Env> {
         const previous = saved?.sessions.find(s => s.member.id === attachment.id);
         if (!this.room || !previous) { ws.close(1012, 'Room unavailable'); continue; }
         const peer: Peer = { sendBinary:message=>ws.send(message),sendEncoded:message=>ws.send(message),send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
-        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token,maxPlayers:24,wire:previous.wire }));
+        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token,maxPlayers:24,eventRules:previous.eventRules,wire:previous.wire }));
         if (id !== null) this.peers.set(ws, { peer, id });
       }
       if (this.room?.activeCount) this.meta.emptySince = undefined;
