@@ -1,0 +1,20 @@
+{
+  "baseline": "a16fcf5048650af1076ef7dcd8b5aaa3b354cc86",
+  "files": {
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "14b352eacf5dfb3c67bddaa967e928ce70ab9afb752bb602ee5f9b6b4cbf3393",
+      "after": "5eea7f447aa6938312ea2d57bfa9686f7f62d43a19b1678a094d91535adb229b"
+    },
+    "src/classic-vehicle-specs.ts": {
+      "snapshot": "src-classic-vehicle-specs.ts.gz",
+      "before": "5b60b5bcc7e01f063fdebbf37866757730760088d2fa4c5396729fff0b47486b",
+      "after": "7e73dbb20c3bbf3479c2a656927b5d81e05f7cc47ba8726ba460ede7ecd86687"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "5daea5ea999201cbef332d4c855794bf7ec61f72aef300f5704717cf58ee7e9f",
+      "after": "cf42ca52c7124d9705c872d4bcf648e76185a8bfec0d7c749e6d3f5fc4546c31"
+    }
+  }
+}
