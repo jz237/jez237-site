@@ -1,0 +1,193 @@
+{
+  "date": "2026-09-30",
+  "runtime": {
+    "file": "assets/index-CNk1oed3.js",
+    "bytes": 9723921,
+    "sha256": "a81c6fc511376966942ce6ce2bb259662e6c6d73940eb68bff97e478371b37e7"
+  },
+  "features": {
+    "soloArenaDiameterMetres": 128,
+    "previousArenaDiameterMetres": 92,
+    "soloArenaAreaIncreasePercent": 93.5727788279773,
+    "physicalBarrierCount": 96,
+    "puddleCount": 12,
+    "waterEffectCaps": {
+      "drops": 768,
+      "ripples": 48
+    },
+    "carMassesKg": {
+      "coupe": 1480,
+      "sedan": 1650,
+      "hatch": 1290
+    },
+    "ignitionProbabilityPerQualifyingEpisode": 0.24,
+    "ignitionHealthCeiling": 18,
+    "requiredDamage": {
+      "front": 30,
+      "rear": 36
+    },
+    "ignitionDelaySeconds": [
+      3,
+      11
+    ],
+    "fuelSeconds": [
+      30,
+      70
+    ],
+    "explosionEligibilityPerIgnitedEpisode": 0.12,
+    "explosionHealthCeiling": 6,
+    "explosionDelaySeconds": [
+      12,
+      27
+    ]
+  },
+  "validation": {
+    "soloTests": {
+      "tests": 172,
+      "pass": 172,
+      "fail": 0,
+      "cancelled": 0
+    },
+    "typescriptAndProductionBuild": "passed",
+    "allModeGameplay": {
+      "passed": true,
+      "evidence": "outputs/drive-feel/gameplay-publish/browser-qa.json"
+    },
+    "waterAndThermal": {
+      "passed": true,
+      "checks": [
+        "expanded 128m derby, eight moving cars, matching barriers and overhead camera",
+        "actual wet tire contacts create speed-dependent spray and ripples; inspection pauses them",
+        "a critically crushed door does not ignite",
+        "delayed localized flames, buoyant smoke, persistent soot and a seeded rare fuel burst",
+        "repair clears thermal effects and scars",
+        "rear fuel damage moves the burning source away from the engine",
+        "pause, mute and menu reset"
+      ],
+      "evidence": "outputs/drive-feel/visual-publish/report.json"
+    },
+    "graphics": {
+      "passed": true,
+      "checks": 9,
+      "qualityTransitions": 12,
+      "contextRestorationMs": 425
+    },
+    "fireAudio": {
+      "passed": true,
+      "checks": [
+        "intact car has no fire or smoke",
+        "progressive smoke, flame and positional fire audio",
+        "seeded rare critically damaged car bursts after sustained heat",
+        "inspection freezes visual effects",
+        "burn scars persist after cooling",
+        "repair clears fire particles and sound",
+        "all three car types render fire with actual engine or rear fuel damage",
+        "eight-car effects and voice budgets",
+        "pause and mute silence fire",
+        "menu reset clears emitters"
+      ],
+      "buffers": 38,
+      "peak": 0.2925848066806793,
+      "clippedReadings": 0,
+      "sampleReadings": 2877
+    },
+    "demo": {
+      "passed": true,
+      "checks": [
+        "all eight cars drive autonomously",
+        "all seven views, car selection and mouse orbit work",
+        "pause and focus loss freeze demo and fire",
+        "camera and follow controls retain handlers after pause and blur",
+        "car zero wrecking does not end spectator event",
+        "demo repeats automatically without changing player bests",
+        "race demo advances every AI through checkpoints",
+        "exit restores normal player mode"
+      ],
+      "allEightCarsComplete72Checkpoints": true,
+      "bundle": "./assets/index-UpxpQILY.js",
+      "sha256": "24682284a48e5168367f663031c9ad0c7f0cd9ac50e40fa872d6662d2a06464d",
+      "note": "Captured before the final redundant static-shadow invalidation removal. Final graphics QA separately verifies repeated mode changes and AI events."
+    },
+    "historicalSourceAndAssetProvenance": "passed; no earlier frozen hashes replaced"
+  },
+  "performance": {
+    "protocol": "Fresh Chrome context, unthrottled local delivery, 1440p Ultra. Cold navigation to menu plus first two rendered frames; first event start to countdown. Seeded autonomous derby at a fixed chase camera, then an eight-fire stress scene. Real-time frame capture; no physics acceleration during measured intervals.",
+    "viewport": [
+      2560,
+      1440
+    ],
+    "quality": "ultra",
+    "runtimeSha256": "a81c6fc511376966942ce6ce2bb259662e6c6d73940eb68bff97e478371b37e7",
+    "coldMenuMs": 6137,
+    "firstEventMs": 972.4614000000001,
+    "cases": {
+      "derby": {
+        "seconds": 60.89736870000001,
+        "frames": 3437,
+        "meanMs": 17.52641838812918,
+        "fps": 57.0567230482932,
+        "p95": 16.80000000000291,
+        "p99": 50,
+        "over33ms": 46,
+        "over50ms": 25,
+        "geometryRange": [
+          848,
+          849
+        ],
+        "textureRange": [
+          144,
+          145
+        ],
+        "jsHeapBytesRange": [
+          685365495,
+          805008524
+        ],
+        "lastJsHeapBytes": 802942928
+      },
+      "fire": {
+        "seconds": 60.8066817,
+        "frames": 3594,
+        "meanMs": 16.746883695047305,
+        "fps": 59.71260195087748,
+        "p95": 16.80000000000291,
+        "p99": 17,
+        "over33ms": 6,
+        "over50ms": 0,
+        "geometryRange": [
+          858,
+          858
+        ],
+        "textureRange": [
+          145,
+          145
+        ],
+        "jsHeapBytesRange": [
+          864873521,
+          957518877
+        ],
+        "lastJsHeapBytes": 957518877
+      }
+    },
+    "evidence": "outputs/drive-feel/performance-publish-final/report.json",
+    "limits": [
+      "Single fresh-load sample, not a repeated before/after loading comparison.",
+      "No other QA browser, build, exporter or CPU test during measured intervals.",
+      "Eight-fire stress explicitly seeds eligible fires and extends their fuel; it is not natural gameplay frequency.",
+      "No new ten-minute memory benchmark or hardware latency measurement.",
+      "Short heap samples do not establish a leak or long-term stability.",
+      "No locked-60-FPS or Wreckfest 2 fidelity claim."
+    ]
+  },
+  "delivery": {
+    "additionalSpending": false,
+    "newAudioGeneration": false,
+    "elevenLabsBrowserRequests": false,
+    "retainedLocalElevenLabsFiles": 38,
+    "retainedPhotographicModelAndImageBytes": true,
+    "sharedDeployedWorkerInputsUnchanged": 23,
+    "multiplayerWorkerDeployment": false,
+    "internetMultiplayerTesting": false,
+    "onlineArenaRemains92Metres": true,
+    "catalogSection": "Unfinished"
+  }
+}

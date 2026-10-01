@@ -1,0 +1,56 @@
+{
+  "previousRelease": "be2372490e55bcc72933a9d217bd7ccdbc9c6000",
+  "scope": "Tire water spray, terrain-following expanded solo derby, stronger bodywork and inertia, rare location-dependent fires. Original photographic assets and deployed multiplayer authority preserved.",
+  "files": {
+    "src/demo-director.ts": {
+      "before": "e027be1217601646a49fe8c6e458e6119409fefaa914af43aed1eac20923030c",
+      "after": "3da911fdea5d2c4883950fc33045e1a2be3d410104990c4dd40bb274c553eed0",
+      "snapshot": "tests/fixtures/drive-feel-before-src-demo-director.ts.gz"
+    },
+    "src/driving-brain.ts": {
+      "before": "e625de9d97078589c4751e318c9193af7fbb2184d929718978d8fb66ad7d31b3",
+      "after": "63847aeaadc01cff2a280241d34c789690efd8e509a419b76e7f4ec4f3869e01",
+      "snapshot": "tests/fixtures/drive-feel-before-src-driving-brain.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "9d1c9b3a18bd0cdd6f597441279ea286f1653a9a6fb1fe61894d06097f1e5373",
+      "after": "bc0a57f6653763dd2983c53c96f905689da16b8f9a0013144435dbb88ffd4b05",
+      "snapshot": "tests/fixtures/drive-feel-before-src-main.ts.gz"
+    },
+    "src/scenery-arena-material.ts": {
+      "before": "4078cedddf03a8de4c7202fbd4f7467de43bb16651d226069f01204f4096babe",
+      "after": "77b117d14180126d51128eed8069fd662d6929f03d345e427dfc3ea027367f34",
+      "snapshot": "tests/fixtures/drive-feel-before-src-scenery-arena-material.ts.gz"
+    },
+    "src/scenery-workyard.ts": {
+      "before": "3c5e3bff5a156aaab0eae081ca508842ef730735035fa139f7eb157585a4ebe5",
+      "after": "d84654f3628682b581a474a1405368e0733336792cd0d23837eb29c30f0a69c6",
+      "snapshot": "tests/fixtures/drive-feel-before-src-scenery-workyard.ts.gz"
+    },
+    "src/vehicle-fire-profile.ts": {
+      "before": "2a36cd5f46adc28f5762e520cd23be0e1f7807ea1cee2c34929242a02f8d428a",
+      "after": "f435b4d8c7e4960e81ecdf1a27e9abcb20e3cf73cd508eccf8aa0715e2c12fe0",
+      "snapshot": "tests/fixtures/drive-feel-before-src-vehicle-fire-profile.ts.gz"
+    },
+    "src/vehicle-fire.ts": {
+      "before": "dd80ea2f4ebc039088b2f261bc1b70ad2c049073942bb953c9af0b267c64f836",
+      "after": "e81ce39efbecb9f39e18e800f2e179f9392fd70ce37623a006dbbca064029fec",
+      "snapshot": "tests/fixtures/drive-feel-before-src-vehicle-fire.ts.gz"
+    },
+    "src/vehicle-thermal-state.ts": {
+      "before": "d410cb0cf17ad32faaff4dc87c314bcbccc20f1f6975fe70c15a696fd63e9033",
+      "after": "347b84df93e3d88a8540b9bd0f719dfd9d043cf4742036975e370f83abc06ad2",
+      "snapshot": "tests/fixtures/drive-feel-before-src-vehicle-thermal-state.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "c8b7591f86e6e6179231c1863d9177a12bebab8db456a1d59ad56e2e0114547e",
+      "after": "75af6d118393f2d75add6d893fc6678519e1b2db0073f017abd16d6bb2137a37",
+      "snapshot": "tests/fixtures/drive-feel-before-src-vehicle.ts.gz"
+    },
+    "src/world.ts": {
+      "before": "b6aa8a430dc0793078b6cf931cfd29772d6c7a174da7b9a8f3156b059ffbcfca",
+      "after": "2ccd610d8d944830a3cebb82bc5dc84a5a6e81a3649c4328708aa85cfed4cd09",
+      "snapshot": "tests/fixtures/drive-feel-before-src-world.ts.gz"
+    }
+  }
+}
