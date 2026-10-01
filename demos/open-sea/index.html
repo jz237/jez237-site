@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Open Sea — real-time ocean</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23091520'/%3E%3Cpath d='M8 37 Q20 22 32 37 T56 37 M8 47 Q20 32 32 47 T56 47' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
 <meta name="description" content="A real-time WebGL2 ocean: FFT wave simulation from glassy calm to storm, physically based sky, volumetric clouds, rain, lightning, a sailing yacht and an underwater view.">
 <style>
   :root { color-scheme: dark; --ink: #f3f5f8; --dim: rgba(255,255,255,.62); --line: rgba(255,255,255,.24); --panel: rgba(22,26,33,.84); }
@@ -21,7 +22,8 @@
   #hud .sec { padding: 14px 16px 8px; border-top: 1px solid rgba(255,255,255,.08); }
   #hud .sec:first-child { border-top: 0; padding-top: 16px; }
   #hud .sec:last-child { padding-bottom: 14px; }
-  #hud h3 { margin: 0 0 10px; font: 600 10.5px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
+  #hud .section-content { padding-top: 2px; }
+  #hud summary { cursor: pointer; list-style-position: inside; margin: 0 0 10px; font: 600 10.5px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 9px; }
   .chip { font: inherit; color: var(--ink); background: rgba(255,255,255,.07); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; cursor: pointer; transition: background .12s, color .12s, border-color .12s; }
   .chip:hover { border-color: rgba(255,255,255,.55); }
@@ -35,7 +37,7 @@
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; margin-top: -7px; border-radius: 50%; background: #f7f8fa; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.15); }
   input[type=range]::-moz-range-thumb { width: 17px; height: 17px; border-radius: 50%; background: #f7f8fa; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
   input[type=range]:focus-visible { outline: 1px solid rgba(255,255,255,.6); outline-offset: 2px; border-radius: 4px; }
-  .chip:focus-visible, .foldbtn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+  .chip:focus-visible, .foldbtn:focus-visible, #hud summary:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
   .foldbtn { position: fixed; top: 14px; left: min(342px, calc(100vw - 48px)); width: 30px; height: 30px; padding: 0; border-radius: 50%; z-index: 6; font: 500 16px/1 system-ui, sans-serif; color: var(--ink);
              background: var(--panel); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); cursor: pointer; transition: opacity .25s; }
   .foldbtn.closed { left: 14px; }
@@ -46,16 +48,46 @@
   .back { position: fixed; right: 10px; top: 10px; z-index: 5; color: var(--ink); text-decoration: none; font: 500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif; letter-spacing: .04em;
           background: var(--panel); border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: 8px 12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: opacity .25s; }
   body.hide-hud .back { opacity: 0; pointer-events: none; }
-  @media (max-width: 640px) { #hint { display: none; } .back { top: auto; bottom: 12px; right: 12px; } }
-  body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
+  @media (max-width: 640px) { #hint { display: none; } }
+  @media (max-width: 720px) { .back { top: auto; bottom: 12px; right: 12px; } }
+  #fullscreen { position:fixed;right:112px;top:10px;z-index:6;padding:8px 11px;color:var(--ink);background:var(--panel);border:1px solid rgba(255,255,255,.18);border-radius:10px;font:500 12px system-ui,sans-serif;cursor:pointer; }
+  #fullscreen:focus-visible {outline:2px solid #fff;outline-offset:2px;}
+  #fullscreen:hover {background:rgba(60,65,72,.9);}
+  #board{position:fixed;right:244px;top:10px;z-index:6;padding:8px 13px;color:var(--ink);background:var(--panel);border:1px solid rgba(255,255,255,.18);border-radius:10px;font:500 12px system-ui,sans-serif;cursor:pointer;}
+  #board:focus-visible,#walk-pad:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+  #board:hover{background:rgba(60,65,72,.9);}
+  #walk-pad{display:none;position:fixed;left:16px;bottom:76px;width:84px;height:84px;border:1px solid rgba(255,255,255,.36);border-radius:50%;z-index:6;background:rgba(22,26,33,.42);touch-action:none;align-items:center;justify-content:center;}
+  #walk-pad span{width:32px;height:32px;border:1px solid rgba(255,255,255,.55);border-radius:50%;background:rgba(255,255,255,.16);pointer-events:none;}
+  #walk-pad::after{content:'WALK';position:absolute;top:90px;color:#ddd;font:9px ui-monospace,monospace;letter-spacing:.16em;text-shadow:0 1px 3px #000;}
+  [hidden]{display:none!important;}
+  body.hide-hud #board,body.hide-hud #walk-pad{opacity:0;pointer-events:none;}
+  @media(pointer:coarse){body.on-deck #walk-pad{display:flex;}}
+  body.hide-hud #fullscreen {opacity:0;pointer-events:none;}
+  #loading {position:fixed;inset:0;display:grid;place-items:center;color:#ccc;font:12px system-ui,sans-serif;letter-spacing:.12em;pointer-events:none;}
+  @media(max-width:720px){#fullscreen{left:12px;right:auto;top:auto;bottom:12px;}}
+  @media(max-width:720px){#board{left:50%;right:auto;top:auto;bottom:12px;transform:translateX(-50%);}}
+  @media(max-width:640px){body.on-deck #hint{display:block;top:16px;bottom:auto;max-width:230px;white-space:normal;text-align:center;}}
+  body.shot #board,body.shot #walk-pad{display:none;}
+  body.shot #fullscreen,body.shot #hud, body.shot .foldbtn, body.shot .back, body.shot #hint { display: none; }
+
+#ship-choice{box-sizing:border-box;width:min(640px,94vw);max-height:94dvh;overflow:auto;border:1px solid #686b70;border-radius:14px;background:#14171beF;color:#eee;padding:26px;box-shadow:0 20px 100px #0008;font:14px system-ui}
+#ship-choice::backdrop{background:#141820e8}#ship-choice h1{font-size:24px;font-weight:500;margin:8px 0 22px}#ship-choice small{font-size:10px;letter-spacing:.2em;color:#aaa}
+.ship-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ship-option{padding:0 0 14px;background:#22262a;border:1px solid #4b5056;border-radius:9px;color:#aaa;overflow:hidden;text-align:left;cursor:pointer}.ship-option[aria-pressed=true]{border-color:#eee;background:#32363a;color:#fff}.ship-option img{width:100%;height:150px;object-fit:contain;background:#b5bec4}.ship-option strong,.ship-option span{display:block;padding:0 12px}.ship-option strong{font-size:16px;margin:13px 0 7px}.ship-option span{font-size:11px;line-height:1.5}#ship-choice p{color:#aaa;font-size:12px;margin:20px 0}.ship-start{width:100%;padding:12px;background:#ddd;color:#16191d;border:0;border-radius:7px;font:14px system-ui;cursor:pointer}#change-ship{position:fixed;right:320px;top:12px;z-index:5;border:1px solid #596069;border-radius:9px;background:#151a20dd;color:#eee;padding:10px 14px;font:12px system-ui;cursor:pointer}body.shot #change-ship{display:none}@media(max-width:600px){#ship-choice{padding:18px}.ship-option img{height:112px}.ship-option strong{font-size:14px}.ship-option span{font-size:10px}#change-ship{top:16px;right:16px;font-size:13px}}
 </style>
+<meta name="ocean-release" content="imperial-star-20260930">
+<style>#ocean-update{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);z-index:10;color:#eee;background:rgba(20,24,30,.92);border:1px solid #777;border-radius:9px;padding:9px 14px;font:12px system-ui;cursor:pointer}body.shot #ocean-update{display:none}</style>
 </head>
 <body>
 <canvas id="sea" tabindex="0" aria-label="Real-time ocean simulation"></canvas>
+<div id="loading" role="status">LOADING OCEAN</div>
+<button id="fullscreen" type="button" aria-label="Enter fullscreen" aria-pressed="false">&#x26F6; Fullscreen</button>
+<button id="board" type="button" aria-label="Land on the yacht and walk on deck" aria-pressed="false">Land</button>
+<div id="walk-pad" role="group" aria-label="Walk on deck: drag this pad to move"><span></span></div>
 <div id="hud" role="group" aria-label="Ocean controls"></div>
-<a class="back" href="../">◂ DEMOS</a>
+<a class="back" href="../">&#9666; DEMOS</a>
 <div id="hint"></div>
 <div id="fail"><div><b>WebGL 2 with float render targets is required.</b><br>Try a recent desktop browser with hardware acceleration enabled.</div></div>
-<script type="module" src="js/main.js"></script>
+<script type="importmap">{"imports":{"./js/boot.js":"./js/boot.js?v=imperial-star-20260930","./js/vessels.js":"./js/vessels.js?v=imperial-star-20260930","./js/ship-choice.js":"./js/ship-choice.js?v=imperial-star-20260930","./js/ship-physics.js":"./js/ship-physics.js?v=imperial-star-20260930","./js/astro.js":"./js/astro.js?v=imperial-star-20260930","./js/clouds.js":"./js/clouds.js?v=imperial-star-20260930","./js/fish-behavior.js":"./js/fish-behavior.js?v=imperial-star-20260930","./js/fish.js":"./js/fish.js?v=imperial-star-20260930","./js/fx.js":"./js/fx.js?v=imperial-star-20260930","./js/gl.js":"./js/gl.js?v=imperial-star-20260930","./js/glsl.js":"./js/glsl.js?v=imperial-star-20260930","./js/lighting.js":"./js/lighting.js?v=imperial-star-20260930","./js/main.js":"./js/main.js?v=imperial-star-20260930","./js/math.js":"./js/math.js?v=imperial-star-20260930","./js/ocean.js":"./js/ocean.js?v=imperial-star-20260930","./js/post.js":"./js/post.js?v=imperial-star-20260930","./js/probe.js":"./js/probe.js?v=imperial-star-20260930","./js/rig.js":"./js/rig.js?v=imperial-star-20260930","./js/ripples.js":"./js/ripples.js?v=imperial-star-20260930","./js/sky.js":"./js/sky.js?v=imperial-star-20260930","./js/sound.js":"./js/sound.js?v=imperial-star-20260930","./js/ui.js":"./js/ui.js?v=imperial-star-20260930","./js/wake.js":"./js/wake.js?v=imperial-star-20260930","./js/water-types.js":"./js/water-types.js?v=imperial-star-20260930","./js/water.js":"./js/water.js?v=imperial-star-20260930","./js/weather.js":"./js/weather.js?v=imperial-star-20260930","./js/yacht-geo.js":"./js/yacht-geo.js?v=imperial-star-20260930","./js/yacht.js":"./js/yacht.js?v=imperial-star-20260930","./js/deck.js":"./js/deck.js?v=imperial-star-20260930","./js/yacht-materials.js":"./js/yacht-materials.js?v=imperial-star-20260930","./js/sail-motion.js":"./js/sail-motion.js?v=imperial-star-20260930","./js/release.js":"./js/release.js?v=imperial-star-20260930","./js/wildlife-motion.js":"./js/wildlife-motion.js?v=imperial-star-20260930","./js/wildlife.js":"./js/wildlife.js?v=imperial-star-20260930","./js/whirlpool.js":"./js/whirlpool.js?v=imperial-star-20260930","./js/hull-contact.js":"./js/hull-contact.js?v=imperial-star-20260930","./js/hull-water.js":"./js/hull-water.js?v=imperial-star-20260930","./js/hull-spray-motion.js":"./js/hull-spray-motion.js?v=imperial-star-20260930","./js/hull-spray.js":"./js/hull-spray.js?v=imperial-star-20260930","./js/deck-wash.js":"./js/deck-wash.js?v=imperial-star-20260930","./js/yacht-shadow.js":"./js/yacht-shadow.js?v=imperial-star-20260930","./js/mobile.js":"./js/mobile.js?v=imperial-star-20260930","./js/device-check.js":"./js/device-check.js?v=imperial-star-20260930"}}</script>
+<script type="module" src="js/boot.js?v=imperial-star-20260930"></script>
 </body>
 </html>

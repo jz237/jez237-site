@@ -1,8 +1,10 @@
+import {glslFloat as F} from './vessels.js';
+import {SX,SZ,imperial} from './vessels.js';
 // Yacht wake: analytic Kelvin wave pattern (used by the water shaders) and a persistent foam trail map.
 import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS, defineChunk } from './gl.js';
 import './glsl.js';
 
-export const TRAIL_SIZE = 128;   // metres covered by the (toroidal) trail map
+export const TRAIL_SIZE = 256;   // metres covered by the (toroidal) trail map
 export const TRAIL_RES = 1024;
 
 defineChunk('wake', `
@@ -17,9 +19,9 @@ vec3 kelvinWake(vec2 pw, int terms) {
   vec2 fwd = uWakeA.zw, rgt = vec2(-fwd.y, fwd.x);
   float bx = dot(d, fwd), bz = dot(d, rgt);
   float V = max(uWakeB.x, 0.4);
-  if (bx > 14.0 || bx < -300.0 || abs(bz) > 40.0 + 0.62 * (-bx)) return vec3(0.0);
+  if (bx > ${F(32*SX)} || bx < -300.0 || abs(bz) > 40.0 + 0.62 * (-bx)) return vec3(0.0);
   float r = length(vec2(bx, bz));
-  float env = smoothstep(11.0, -4.0, bx) / sqrt(1.0 + r / 20.0) * smoothstep(300.0, 200.0, -bx);
+  float env = smoothstep(${F(26*SX)}, ${F(-18*SX)}, bx) / sqrt(1.0 + r / 20.0) * smoothstep(300.0, 200.0, -bx);
   float h = 0.0, hx = 0.0, hz = 0.0, ws = 0.0;
   for (int j = 0; j < NW; j++) {
     if (j >= terms) break;
@@ -36,52 +38,39 @@ vec3 kelvinWake(vec2 pw, int terms) {
   vec2 g = (hx * fwd + hz * rgt) * sc;
   return vec3(h * sc, g);
 }
-float hullW(float x) {
-  float B = 1.9 * 0.84, x0 = -0.5;
-  if (x >= x0) { float t = clamp((x - x0) / 6.25, 0.0, 1.0); return B * pow(max(0.0, 1.0 - pow(t, 2.1)), 0.72) * 0.94; }
-  float t = clamp((x0 - x) / 5.25, 0.0, 1.0);
-  return B * (1.0 - 0.30 * pow(t, 2.3));
-}
-// distance to the hull waterline outline in the boat frame (x forward, z starboard)
-float hullDist(vec2 b) {
-  float dx = abs(b.x + 0.0) - 5.7;
-  float dz = abs(b.y) - hullW(b.x);
-  return length(max(vec2(dx, dz), 0.0)) + min(max(dx, dz), 0.0);
-}
 `);
 
 const TRAIL_FS = `
 #include <common>
 #include <wake>
+#include <whirlpool>
 in vec2 vUv;
 uniform sampler2D uPrev;
-uniform vec2 uCur, uPrevPos, uFwd;     // positions modulo the map size, unit heading
-uniform float uDecay, uAdd, uSize, uTime, uSpeedK, uDiff;
+uniform vec2 uCur, uStern, uPrevStern; // positions modulo the map, actual projected stern
+uniform float uDecay, uAdd, uSize, uTime, uSpeedK, uDiff,uDt;
 out vec4 o;
 float segDist(vec2 p, vec2 a, vec2 b) { vec2 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-6), 0.0, 1.0); return length(pa - ba * h); }
 void main() {
   vec2 q = vUv * uSize;
   vec2 dq = q - uCur; dq -= uSize * floor(dq / uSize + 0.5);
-  vec2 dpv = uPrevPos - uCur; dpv -= uSize * floor(dpv / uSize + 0.5);
-  vec2 rgt = vec2(-uFwd.y, uFwd.x);
-  vec2 b = vec2(dot(dq, uFwd), dot(dq, rgt));
+  vec2 sA = uPrevStern - uCur; sA -= uSize * floor(sA / uSize + 0.5);
+  vec2 sB = uStern - uCur; sB -= uSize * floor(sB / uSize + 0.5);
   vec2 tx = vec2(1.0 / ${TRAIL_RES}.0);
-  float c0 = texture(uPrev, vUv).r;
-  float nb = (texture(uPrev, vUv + vec2(tx.x, 0.0) * 1.6).r + texture(uPrev, vUv - vec2(tx.x, 0.0) * 1.6).r
-            + texture(uPrev, vUv + vec2(0.0, tx.y) * 1.6).r + texture(uPrev, vUv - vec2(0.0, tx.y) * 1.6).r) * 0.25;
+  vec2 advected=fract(vUv-whirlFlow(dq)*uDt/uSize);
+  float c0 = texture(uPrev, advected).r;
+  float nb = (texture(uPrev, advected + vec2(tx.x, 0.0) * 1.6).r + texture(uPrev, advected - vec2(tx.x, 0.0) * 1.6).r
+            + texture(uPrev, advected + vec2(0.0, tx.y) * 1.6).r + texture(uPrev, advected - vec2(0.0, tx.y) * 1.6).r) * 0.25;
   float prevVal = mix(c0, nb, uDiff);              // slow lateral spreading: the wake widens and thins as it ages
   float stamp = 0.0;
   if (uSpeedK > 0.0) {
-    // foam along the hull sides, strongest at the bow
-    float hd = hullDist(b);
-    float ring = smoothstep(0.55, 0.05, abs(hd - 0.10)) * (0.30 + 0.70 * smoothstep(-2.0, 5.0, b.x));
+    // Side contact is shaded at the actual 3D hull/water intersection. Only
+    // the stern leaves persistent foam here; a flat ring cannot
+    // follow a heeling hull and floats away from its moving waterline.
     // turbulent wake swept behind the stern
-    vec2 sA = dpv - uFwd * 4.7, sB = -uFwd * 4.7;
     float ds = segDist(dq, sA, sB);
-    float sw = smoothstep(0.85, 0.12, ds);
-    float bowSplash = smoothstep(1.6, 0.0, length(b - vec2(5.4, 0.0))) * 1.3;
+    float sw = smoothstep(${F(2.5*SZ)},${F(.35*SZ)},ds);
     float n = 0.35 + 1.1 * vnoise(q * 2.3 + uTime * 0.5) * (0.5 + 0.8 * vnoise(q * 0.7 - uTime * 0.2));
-    stamp = (ring * 0.42 + sw * 1.15 + bowSplash) * n * uSpeedK;
+    stamp = sw * 0.75 * n * uSpeedK;
   }
   o = vec4(clamp(prevVal * uDecay + stamp * uAdd, 0.0, 1.3), 0.0, 0.0, 1.0);
 }`;
@@ -98,18 +87,18 @@ export class Trail {
     this.acc = 0;
   }
   // called with a fixed-ish step; the map only needs ~30 Hz
-  update(dt, yacht, time, U = 0) {
+  update(dt, yacht, time, U = 0,whirlpool) {
     const S = TRAIL_SIZE, m = v => v - Math.floor(v / S) * S;
     const cur = [m(yacht.x), m(yacht.z)];
-    const prev = this.prev || cur;
+    const sternPoint=yacht.toWorld([-22.2*SX,0,0]),stern=[m(sternPoint[0]),m(sternPoint[2])],prev=this.prev||stern;
     const speedK = Math.min(1, Math.max(0, (yacht.speed - 0.7) / 2.2));
-    const fwd = [Math.cos(yacht.psi), Math.sin(yacht.psi)];
     bindFBO(this.otherF); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
-    this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uPrevPos', prev[0], prev[1]).v2('uFwd', fwd[0], fwd[1])
-      .f('uDecay', Math.exp(-dt / (6.5 / (1 + 0.9 * Math.min(1, Math.max(0, (U - 3) / 15)))))).f('uAdd', Math.min(dt, 0.1) * 3.2).f('uDiff', 1 - Math.exp(-dt * 1.4)).f('uSize', S).f('uTime', time).f('uSpeedK', speedK)
-      .v4('uWakeA', 0, 0, 1, 0).v4('uWakeB', 0, 0, 0, 0);
+    const p=this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uStern',stern[0],stern[1]).v2('uPrevStern',prev[0],prev[1])
+      .f('uDecay', Math.exp(-dt / (6.5 / (1 + 0.9 * Math.min(1, Math.max(0, (U - 3) / 15)))))).f('uAdd', Math.min(dt, 0.1) * 1.7).f('uDiff', 1 - Math.exp(-dt)).f('uSize', S).f('uTime', time).f('uSpeedK', speedK)
+      .v4('uWakeA', 0, 0, 1, 0).v4('uWakeB', 0, 0, 0, 0).f('uDt',Math.min(dt,.1));
+    whirlpool.bind(p,{x:yacht.x,z:yacht.z});
     drawFS();
     [this.cur, this.other] = [this.other, this.cur]; [this.curF, this.otherF] = [this.otherF, this.curF];
-    this.prev = cur;
+    this.prev = stern;
   }
 }

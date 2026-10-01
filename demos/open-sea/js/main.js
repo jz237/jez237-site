@@ -1,3 +1,5 @@
+import {vessel,imperial,SX,SZ} from './vessels.js';
+import {installShipChoice} from './ship-choice.js';
 import { initGL, gl, caps, bindFBO } from './gl.js';
 import { m4, v3, clamp, lerp, smoothstep } from './math.js';
 import { OceanSim, seaParams, seaFromWind, seaPreset } from './ocean.js';
@@ -10,14 +12,25 @@ import { Clouds } from './clouds.js';
 import { Lighting, bindLighting } from './lighting.js';
 import { skyState, starRotation } from './astro.js';
 import { Yacht } from './yacht.js';
+import { loadYachtGeometry } from './yacht-geo.js';
 import { WaveProbe } from './probe.js';
 import { Trail, TRAIL_SIZE } from './wake.js';
 import { Ripples, RIPPLE_SIZE } from './ripples.js';
 import { Rain, Lightning } from './weather.js';
 import { Fx } from './fx.js';
 import { Fish } from './fish.js';
+import { Wildlife } from './wildlife.js';
+import { Whirlpool } from './whirlpool.js';
+import { bindHullWater } from './hull-water.js';
+import { HullContact } from './hull-contact.js';
+import { HullSpray } from './hull-spray.js';
+import { DeckWash } from './deck-wash.js';
+import { YachtShadow } from './yacht-shadow.js';
+import { mobileProfile,backingSize } from './mobile.js';
+import { deviceCheck } from './device-check.js';
 import { Rig } from './rig.js';
 import { initUI } from './ui.js';
+import { watchRelease } from './release.js';
 
 const params = new URLSearchParams(location.search);
 if (params.has('shot')) document.body.classList.add('shot');
@@ -27,7 +40,8 @@ const NEAR = 0.1, FAR = 400000;
 class App {
   constructor() {
     initGL(canvas, { preserve: params.has('shot') });
-    this.q = params.get('q') || (caps.software ? 'low' : 'high');
+    this.mobile=mobileProfile();
+    this.q = params.get('q') || (caps.software||this.mobile ? 'low' : 'high');
     this.sim = new OceanSim({ N: this.q === 'low' ? 128 : 256, cascades: this.q === 'low' ? 4 : 5 });
     this.sky = new Sky();
     this.water = new Water();
@@ -35,13 +49,19 @@ class App {
     this.clouds = new Clouds();
     this.light = new Lighting();
     this.probe = new WaveProbe();
-    this.yacht = new Yacht();
+    this.yacht = new Yacht();this.vessel=vessel;
     this.trail = new Trail();
     this.ripples = new Ripples(this.q === 'low' ? 512 : 1024);
     this.rain = new Rain();
     this.lightning = new Lightning();
     this.fx = new Fx();
     this.fish = new Fish();
+    this.wildlife = new Wildlife();
+    this.whirlpool = new Whirlpool();
+    this.hullContact = new HullContact();
+    this.hullSpray = new HullSpray();
+    this.deckWash=new DeckWash(this.yacht.metadata);
+    this.yachtShadow=new YachtShadow(this.mobile||this.q==='low'?1024:2048);
     this.yachtOn = !params.has('noyacht');
     this.state = { tod: 16.5, windDir: 0.55, cloud: 0.25, rain: 0, lightning: 0, haze: 1, storm: 0 };
     // everything the panel controls; the simulation eases towards it
@@ -51,6 +71,7 @@ class App {
       cloud: 0.25, rain: 0, lightning: 0,
       water: 'Open ocean', clarity: 0.94, glow: 1.5,
       ev: 0, bloom: 0.02, fov: 50,
+      whirlpool: false,
     };
     this.sound = new Sound();
     this.instant = { tod: false };
@@ -62,14 +83,13 @@ class App {
     this.frame = 0;
     this.under = false;
     this.surfaceAtCam = 0;
-    this.res = parseFloat(params.get('res') || '1');
+    this.res = Math.max(.45,Math.min(1,parseFloat(params.get('res') || (this.mobile?'.75':'1'))||1));
     this.resize();
     addEventListener('resize', () => this.resize());
   }
 
   resize() {
-    const dpr = Math.min(devicePixelRatio || 1, 2) * this.res;
-    const w = Math.max(64, Math.round(canvas.clientWidth * dpr)), h = Math.max(64, Math.round(canvas.clientHeight * dpr));
+    const [w,h]=backingSize(canvas.clientWidth,canvas.clientHeight,devicePixelRatio||1,this.res,this.mobile);
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     this.w = w; this.h = h;
     this.post.resize(w, h);
@@ -94,7 +114,19 @@ class App {
 
   requestPhoto() { this.photoReq = true; }
 
+  setWhirlpool(on){this.goal.whirlpool=!!on;this.whirlpool.setEnabled(on,this.yacht);}
+  focusWhirlpool(){
+    if(!this.whirlpool.enabled&&this.whirlpool.amount<.01)return;
+    this.rig?.setMode('fly');delete this.cam.forward;delete this.cam.up;
+    const W=this.whirlpool,Y=this.yacht,dx=Y.x-W.x,dz=Y.z-W.z,l=Math.hypot(dx,dz)||1;
+    const aspect=this.w/this.h,back=520*Math.max(1,.9/aspect);
+    this.cam.x=W.x+dx/l*back;this.cam.z=W.z+dz/l*back;this.cam.y=230*Math.max(1,.75/aspect);
+    this.cam.yaw=Math.atan2(W.x-this.cam.x,-(W.z-this.cam.z));
+    this.cam.pitch=Math.atan2(-35-this.cam.y,back);this.cam.fov=56*Math.PI/180;this.goal.fov=56;
+  }
+
   camForward() {
+    if(this.cam.forward)return this.cam.forward;
     const c = this.cam, cp = Math.cos(c.pitch);
     return [Math.sin(c.yaw) * cp, Math.sin(c.pitch), -Math.cos(c.yaw) * cp];
   }
@@ -127,11 +159,13 @@ class App {
     }
     S.windDir = this.goal.windDir;
     S.storm = clamp(0.62 * S.rain + 0.38 * (S.lightning > 0 ? 1 : 0) + 0.18 * smoothstep(6.5, 9, seaFromWind(this.goal.wind)), 0, 1);
-    S.haze = 6 + 22 * S.rain + 8 * S.storm;       // marine air is far hazier than the clear-air default
+    S.haze = 2.6 + 18 * S.rain + 7 * S.storm;
     const wv = [Math.cos(S.windDir), Math.sin(S.windDir)];
     const G0 = this.goal;
     this.sim.setParams({ wind: G0.wind, swell: G0.swell, chop: G0.chop, hScale: G0.hScale, foam: G0.foam }, S.windDir);
     this.sim.update(dt);
+    this.whirlpool.setEnabled(this.goal.whirlpool,this.yacht);
+    this.whirlpool.update(dt);
     if (this.rig && this.rig.mode === 'fly') this.cam.fov = G0.fov * Math.PI / 180;
     this.fovK = G0.fov / 50;
     const cw = G0.cloudWind;
@@ -139,18 +173,24 @@ class App {
     this.probe.poll();
     if (this.yachtOn) {
       this.yacht.feed(this.probe);
-      this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs });
-      this.trail.update(dt, this.yacht, this.time, this.sim.cur.U);
+      this.yacht.update(dt, { U: this.sim.cur.U, windDir: S.windDir, hs: this.sim.cur.hs, whirlpool:this.whirlpool });
+      this.rig?.syncDeckCamera();
+      this.trail.update(dt, this.yacht, this.time, this.sim.cur.U,this.whirlpool);
     }
     if (this.probe.fresh) {
-      this.surfaceAtCam = this.probe.get(5)[0];
-      const c = this.cam.y - this.surfaceAtCam;
-      if (this.under && c > 0.06) this.under = false;
-      else if (!this.under && c < -0.04) this.under = true;
+      if(this.yachtOn)this.hullSpray.motion.feed(this.probe,this.yacht,this.time,this.whirlpool);
+      this.wildlife.feed(this.probe);
+      this.surfaceFFT = this.probe.get(5)[0]-(this.probe.vortexHeights?.[5]||0);
     }
+    this.surfaceAtCam=(this.surfaceFFT||0)+this.whirlpool.sample(this.cam.x,this.cam.z).height;
+    const cameraClearance=this.cam.y-this.surfaceAtCam;
+    if(this.under&&cameraClearance>.06)this.under=false;
+    else if(!this.under&&cameraClearance<-.04)this.under=true;
     this.probe.fresh = false;
-    this.fish.update(this.time, [this.yacht.x, 0, this.yacht.z]);
-    this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z]]);
+    this.fish.update(this.time,[this.yacht.x,this.whirlpool.sample(this.yacht.x,this.yacht.z).height,this.yacht.z],!this.under,this.whirlpool);
+    this.wildlife.update(dt,this.yacht,{windDir:S.windDir,U:this.sim.cur.U});
+    this.hullSpray.motion.update(dt,wv.map(v=>v*this.sim.cur.U),this.whirlpool);
+    if(this.probe.request(this.sim, [...this.yacht.probePoints(), [this.cam.x, this.cam.z],...this.wildlife.probePoints(),...this.hullSpray.motion.points(this.yacht),...this.yacht.extraProbePoints()],this.whirlpool))this.hullSpray.motion.noteProbe(this.yacht,this.time);
     // ripples: rain everywhere, disturbances from the hull
     const R = this.ripples, m = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     R.rain = S.rain;
@@ -159,7 +199,7 @@ class App {
       const Y = this.yacht, c = Math.cos(Y.psi), s = Math.sin(Y.psi);
       const at = (lx, lz) => [m(Y.x + c * lx - s * lz), m(Y.z + s * lx + c * lz)];
       const k = 0.5 * Math.min(1, Y.speed / 3);
-      R.sources.push([...at(5.2, 0), 0.4, k], [...at(2.5, 1.5), 0.35, k * 0.5], [...at(2.5, -1.5), 0.35, k * 0.5], [...at(-4.6, 0), 0.5, k * 0.6]);
+      R.sources.push([...at(22.2*SX,0),.8,k],[...at(10.5*SX,4.0*SZ),.7,k*.5],[...at(10.5*SX,-4.0*SZ),.7,k*.5],[...at(-21.8*SX,0),1.2,k*.6]);
     }
     R.update(dt);
     this.lightning.update(dt, S.lightning, this.cam, this.cam.yaw);
@@ -176,7 +216,7 @@ class App {
     const aspect = this.w / this.h;
     const P = m4.perspective(cam.fov, aspect, NEAR, FAR);
     const fwd = this.camForward();
-    const R = m4.viewRot(fwd);
+    const R = m4.viewRot(fwd,cam.up||[0,1,0]);
     const VP = m4.mul(P, R);
     const invVP = m4.f32(m4.invert(VP));
     const VPf = m4.f32(VP);
@@ -191,9 +231,9 @@ class App {
     C.renderEnv(this.sky, sk, camAbs, this.q === 'low' ? 50 : 70, flash);
     if (!under) C.renderView(this.sky, sk, camAbs, invVP, this.frame, this.q === 'low' ? 90 : 140, flash);
     this.light.update(this.sky, sk, camAbs[1], C.env);
-    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under };
+    const ctx = { sky: this.sky, clouds: C, light: this.light, sk, camAbs, cam, time: this.time, w: this.w, h: this.h, useSun: sk.dayLevel >= sk.moonLevel, fx: this.fx, sim: this.sim, under,whirlpool:this.whirlpool,rain:S.rain };
     { const fr = Math.hypot(flash[0], flash[1], flash[2]) || 1; ctx.flashLight = flash[3] > 0 ? [flash[0] / fr, flash[1] / fr, flash[2] / fr, Math.min(1.4, this.lightning.flash) * 4.0 / (1 + (fr / 350) * (fr / 350))] : [0, 1, 0, 0]; }
-    this.ctx = ctx;
+    ctx.surfaceAtCam=this.surfaceAtCam;this.ctx = ctx;
 
     // underwater beam bookkeeping for caustics
     const useSun = sk.dayLevel >= sk.moonLevel;
@@ -205,6 +245,12 @@ class App {
     const sunWv = [eta * I[0], -Math.sqrt(Math.max(k2, 0)), eta * I[2]];    // Snell refraction into the sea
     if (under) this.fx.updateCaustics(this.sim, sunWv, cam);
 
+    this.wildlife.updateSurface(ctx);
+    if(this.yachtOn){
+      this.hullContact.update(ctx,this.yacht,dt);ctx.hullWet=this.hullContact.cur;
+      this.deckWash.update(ctx,this.yacht,dt);ctx.deckWash=this.deckWash;
+      this.yachtShadow.update(ctx,this.yacht);ctx.yachtShadow=this.yachtShadow;ctx.yacht=this.yacht;
+    }
     bindFBO(this.post.fbo);
     gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST); gl.depthMask(true);
     gl.clearColor(0, 0, 0, 1);
@@ -213,20 +259,28 @@ class App {
     if (!under) this.sky.draw(sk, cam.y, invVP, starRotation(S.tod), this.time, C.rt);
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     if (this.yachtOn) this.yacht.draw(ctx, VPf, camAbs);
-    if (this.yachtOn) this.fish.draw(ctx, VPf, camAbs);
+    this.wildlife.draw(ctx,VPf,camAbs);
+    this.fish.draw(ctx, VPf, camAbs);
 
     const reflOn = this.yachtOn && !under;
-    if (reflOn) { this.yacht.drawReflection(ctx, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
+    if (reflOn) { this.yacht.drawReflection({...ctx,wildlife:this.wildlife}, VPf); bindFBO(this.post.fbo); gl.viewport(0, 0, this.w, this.h); gl.enable(gl.DEPTH_TEST); }
     this.post.copyScene();
     const wind = [Math.cos(S.windDir), Math.sin(S.windDir)];
     const mS = v => v - Math.floor(v / RIPPLE_SIZE) * RIPPLE_SIZE;
     gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
     this.water.draw(cam, this.sim, VPf, p => {
       bindLighting(p, ctx);
+      this.whirlpool.bind(p,cam);
+      bindHullWater(p,this.yacht,cam,this.yachtOn);
+      p.m4('uInvVP',invVP);
+      p.f('uHullWetOn',this.yachtOn?1:0);if(this.yachtOn)p.t('uHullWet',6,this.hullContact.cur);
+      p.f('uDeckWashOn',this.yachtOn?1:0);
+      p.v4v('uWhaleRings',this.wildlife.rings(cam));
+      p.v4v('uWhaleContacts',this.wildlife.contacts(cam));
       p.f('uGlowE', G.glow * (1 - smoothstep(0.03, 0.17, sk.key)) * sk.pre * 4e-7).f('uTime', this.time).v2('uWind', wind[0], wind[1]).f('uWindSpeed', this.sim.cur.U).f('uUseSun', useSun ? 1 : 0).i('uDbg', this.dbg || 0).f('uUnder', under ? 1 : 0);
       const Y = this.yacht;
-      p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw * 0.5), Math.sin(Y.psi + Y.yaw * 0.5));
-      p.v4('uWakeB', Y.speed, 0.11 * Math.pow(Y.speed / 3, 2), this.yachtOn ? 1 : 0, 0);
+      p.v4('uWakeA', Y.x - cam.x, Y.z - cam.z, Math.cos(Y.psi + Y.yaw), Math.sin(Y.psi + Y.yaw));
+      p.v4('uWakeB', Y.speed, 0.20 * Math.pow(Y.speed / 6, 2), this.yachtOn ? 1 : 0, 0);
       p.t('uTrail', 14, this.trail.cur);
       const Sm = TRAIL_SIZE, mod = v => v - Math.floor(v / Sm) * Sm;
       p.v3('uTrailInfo', mod(cam.x), mod(cam.z), Sm);
@@ -234,8 +288,11 @@ class App {
         .f('uRippleAmt', 1.0);
       p.t('uReflTex', 18, this.yacht.reflTex).f('uReflOn', reflOn ? 1 : 0);
       p.t('uScene', 15, this.post.colorCopy).t('uSceneDepth', 16, this.post.depthCopy)
-        .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', this.yachtOn && !under ? 1 : 0);
-    });
+        .f('uCamDepth', Math.max(0, this.surfaceAtCam - cam.y)).v2('uRes', this.w, this.h).v3('uFwdV', fwd[0], fwd[1], fwd[2]).f('uNear', NEAR).f('uFar', FAR).f('uHasScene', !under ? 1 : 0);
+    },this.whirlpool);
+    if(this.yachtOn){this.deckWash.draw(ctx,this.yacht,VPf,this.post.colorCopy);this.yacht.drawRig(ctx,VPf,camAbs);}
+    this.wildlife.drawSpray({...ctx,windDir:S.windDir},VPf);
+    if(this.yachtOn)this.hullSpray.draw(ctx,VPf);
 
     // composite (rain veil / underwater medium)
     const needFx = under || S.rain > 0.01;
@@ -271,7 +328,7 @@ class App {
 }
 
 let app;
-try { app = new App(); } catch (e) {
+try { await loadYachtGeometry(); app = new App(); installShipChoice(vessel.id); document.getElementById('loading')?.remove(); } catch (e) {
   // no WebGL 2 / float render targets / shader failure: say so instead of leaving a black page
   const f = document.getElementById('fail');
   if (f) {
@@ -292,7 +349,7 @@ window.__sea = {
   },
   shot(dt = 0.016) {
     app.step(dt);
-    if (app.ycam) app.placeRelativeToYacht(app.ycam);
+    if (app.ycam && !app.lookBody) app.placeRelativeToYacht(app.ycam);
     // honour the camera immediately for the underwater test (probe latency)
     if (app.forceBolt) { const L = app.lightning; L._bolt(app.cam, app.cam.yaw + app.forceBolt); L.t = 0.032; L.flash = 0.7; app.forceBolt = 0; }
     app.post.first = true;
@@ -341,8 +398,11 @@ if (params.has('shot')) {
   app.rig = rig;
   if (caps.software) app.res = 0.5;
   const ui = initUI(app, rig);
+  watchRelease();
+  const check=params.has('devicecheck')?deviceCheck(app,canvas,caps):null;
   if (params.get('mode')) rig.setMode(params.get('mode'));
   let last = performance.now();
+  document.addEventListener('visibilitychange',()=>{last=performance.now();app.perf.ema=16;});
   const loop = (now) => {
     const raw = (now - last) / 1000; last = now;
     const dt = clamp(raw, 0.001, 0.1);
@@ -352,6 +412,7 @@ if (params.has('shot')) {
     app.render(dt);
     app.sound.update(app);
     app.govern(raw * 1000);
+    check?.frame(raw*1000);
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
