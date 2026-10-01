@@ -1,16 +1,49 @@
 # Quarry Impact
 
+Event Rules supports 2-24 solo cars, 1-20 laps, reverse racing, and timed score derby with respawns. Finished AI keeps circulating to clear the finish line. Settings includes a rolling performance display. See `EVENTS_VALIDATION.md` for scope and evidence.
+
+Driver Profile & Challenges adds three progression disciplines and 30 solo challenges with medal targets, fixed stock cars, live scoring and saved records. See `PROGRESSION_VALIDATION.md` for verification and remaining limits.
+
 A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 38 locally bundled ElevenLabs sound effects.
+
+The reference arena overhaul adds an upright grounded chase view, photographic
+worn arena layers, coherent sunlight/reflections, fifteen Blender fracture
+sections, event floodlights/service infrastructure, forty-two crest conifers,
+machined wheel details and compact circular instruments. Existing damage,
+controls, modes, splash/fire and ElevenLabs audio stay integrated. See
+`source/reference-overhaul.md` and `VALIDATION.md` for the measured release and
+scope; the game remains under Unfinished.
+
+The structural realism pass makes reinforced rails resist crushing and keeps engine parts solid while body panels fold. Damaged wheels now affect physical alignment, suspension, grip and drag. Distinct paint, glass, metal, rubber and plastic materials gain persistent silt, wetness and localized transferred paint; wet tires and hanging parts leave fading tracks and scrapes. Shared animated fire/smoke textures come from an offline Blender Mantaflow bake. These changes apply to all three cars. See `source/structural-realism.md` for production records, validation and the remaining limits.
+
+An earlier pass adds tire-driven puddle spray and ripples, a **128-metre solo derby arena** with almost twice the old area, and stronger bodywork with less bounce. Cars retain their original 1,290–1,650 kg masses; realistic body inertia and impact-speed gating make crashes feel more substantial and stop low-speed shoving from steadily crushing a car. See `source/drive-feel.md`.
 
 Choose **Watch Demo** for autonomous derby or circuit events with seven spectator views: automatic director, overhead, following drone, chase, hood, trackside and free orbit. Pick a car to follow, or let the director choose; events repeat automatically. The new solo AI commits to intercepts, slows for corners, avoids obstacles and backs away from prolonged shoving matches. See `source/demo-ai-fire.md`.
 
 The preceding wreck pass adds tighter compression folds, cleaner panel-cut edges, raised and twisted hoods, hanging bumpers, sprung doors with their window seals, and locally displaced wheels. Paint chips expose primer and metal; engine-bay soot persists after cooling and clears on repair. The five-second solo wreck camera starts on the side with the most damage. See `source/wreck-finish.md` for the implementation and its limits.
 
-Damaged cars develop smoke, turbulent flames and rising embers from several damage-weighted locations. Plume size, rhythm, density and source positions vary between cars. Roughly 10% of critical damage episodes can produce one delayed fuel explosion after sustained burning; a final collision no longer automatically explodes. Sorted volume effects include smoke illumination and nearby fire lighting. Fire roar, crackling and explosive bursts are positional ElevenLabs recordings; ordinary impacts retain metal, glass and loose-part layers. Vehicle bodies stay frozen during the five-second wreck inspection while fire and sound continue. Repair clears the effects; pause and mute are respected. See `source/vehicle-fire.md` for implementation, audio provenance and limits.
+Severe engine or fuel-system damage can cause a delayed fire; low health and crushed doors alone do not. About 24% of qualifying critical damage episodes can ignite after a varied delay, with a further 12% chance of a single fuel burst during sustained critical burning. Flames remain rooted to the moving damaged vehicle, while smoother smoke billows rise and drift away. Fires have finite fuel and burn down. Coolant steam is lighter than burning-fuel smoke. Existing positional ElevenLabs fire, crackle, explosion, metal and glass recordings remain bundled locally. Vehicle bodies stay frozen during the five-second wreck inspection while fire and sound continue; repair, pause and mute are respected. The earlier fire documentation is historical; `source/drive-feel.md` describes the current behavior.
 
 The preceding geometry pass added refined panel topology, shared deformation for bodywork, glass and internal structure, connected bumper/hood/mirror attachments, and filtered impact scratches. Wrecking out of a solo derby or race holds the scene for five seconds with an orbit camera, then returns to the menu. The timer pauses on focus loss. The remaining quarry banks have shallow rock relief, foreground conifer cards have been replaced with existing branch geometry, and four more route sections have gravel and grass verge patches. See `source/wreck-geometry/README.md` and `VALIDATION.md`. This remains an unfinished browser game; the scenery and collision model do not yet match a production game such as Wreckfest 2.
 
 Loading now uses concurrent model downloads, lossless shared-texture model packing, shader warm-up and audio prefetching. Static scenery and impact deformation avoid redundant CPU work. Original geometry and image quality are preserved. See `source/performance.md` and the measured results in `VALIDATION.md`.
+
+## Garage and tuning (local parity work, October 1, 2026)
+
+Open **Garage & Tuning** from the main menu to customize the selected car.
+Body/trim paint, engine packages, tire compounds, chassis reinforcement and five
+chassis settings are saved independently for each car. Engine, armor, tires and
+tuning change the live solo vehicle physics, including mass and inertia, wheel
+force, gearing, springs/damping, ride height, brakes, grip and impact protection.
+Armor trades additional protection for extra weight.
+
+Save up to eight named presets per car. **Share a setup** exports/imports validated
+text data; select the matching car before importing. **Apply & Return** stores the
+setup in this browser; Close or Escape discards unsaved changes. Repair retains
+installed upgrades. Online events and spectator AI currently retain server/stock
+specifications. Metrics describe physics parameters, not measured lap/top-speed
+claims. Full Wreckfest 2 PC feature parity is **not yet achieved**; remaining work
+is tracked in `PARITY_PLAN.md`.
 
 ## Play
 
@@ -20,7 +53,7 @@ Double-click **Play-Quarry-Impact.cmd**, or run `node serve.mjs` and open **http
 
 Choose a car and mode, then enter the event:
 
-- **Demolition derby:** eight cars; last functioning car wins. At five minutes, remaining condition wins, with damage inflicted breaking ties. Disabled cars remain physical obstacles.
+- **Demolition derby:** eight cars in the enlarged solo arena; last functioning car wins. At five minutes, remaining condition wins, with damage inflicted breaking ties. Disabled cars remain physical obstacles.
 - **Destruction playground:** free driving, crash ramps, movable barrels, optional AI traffic, repair, and an orbit camera for examining damage.
 - **Watch Demo:** derby or circuit with all eight cars driven by AI. Use the camera and car selectors, C to cycle cameras, [ / ] to switch cars, Space to pause. Free orbit supports dragging and zooming. No player best results are recorded.
 - **Quarry circuit:** three laps on a mixed asphalt/gravel route. Ordered checkpoints prevent shortcuts; recovery costs five seconds. A destroyed car retires from the race.
@@ -48,7 +81,7 @@ Standard gamepad: left stick steers, right trigger accelerates, left trigger bra
 
 Choose **Play Online**, leave the room code empty and press **Connect**. Copy the invitation link and send it to the other players. Rooms hold eight cars, with AI in unused places. The host starts events and rematches; disconnected players can rejoin their seat. Car physics and scoring run on the server. The latest driving improvements apply to solo and demo events; online rooms retain the existing server AI.
 
-The bundled `public/multiplayer.json` connects to the deployed service at `wss://quarry-impact-online.quarry-impact-free.workers.dev`. Hosting uses the verified dedicated Cloudflare Free account, with four simultaneous rooms and daily service limits. Reaching a Free limit may temporarily prevent online play; no paid plan or overage spending is authorized. Solo modes remain available. See `multiplayer/README.md` for local setup, limits and deployment details.
+The bundled `public/multiplayer.json` connects to the deployed service at `wss://quarry-impact-online.quarry-impact-free.workers.dev`. Hosting uses the verified dedicated Cloudflare Free account, with four simultaneous rooms and daily service limits. Reaching a Free limit may temporarily prevent online play; no paid plan or overage spending is authorized. Solo modes remain available. Online rooms retain the deployed 92-metre arena and server handling. See `multiplayer/README.md` for local setup, limits and deployment details.
 
 ## Rendering and damage
 
@@ -133,3 +166,37 @@ See `CREDITS.md` for asset licensing and `VALIDATION.md` for verification and me
 ## Recovery checkpoint
 
 The September 28 recovery checkpoint preserved the interrupted western wall work. That wall is now exported and integrated: three sections of fractured extraction faces, a collapsed rubble channel and grounded toe closure share their collision surface with online play. The original recovery snapshots remain preserved in [source/recovery/west-wall/README.md](source/recovery/west-wall/README.md); see [the completed asset record](source/models/quarry-west-wall.md) for current details.
+
+## Solo replay and photo studio
+
+Pause an event or demo for **WATCH REPLAY** and **PHOTO MODE**; press **P** during solo play for a quick photo pause. Replay offers seeking, frame steps, slow/fast playback and four camera modes. Photo settings include FOV, exposure, roll, crop and PNG export without controls. Save `.qir` files and open them from the main menu. The most recent recording stays in memory until a new event or reload.
+
+Recording is bounded to30minutes/192MiB and50,000visual events. Online, transient effects and replay audio are not yet recorded. See REPLAY_VALIDATION.md for tested behavior and remaining limitations.
+
+## Opposing and waypoint races
+
+Open **Event Rules** for Circuit laps, Waypoint tour, Free-order waypoints or Random waypoints. Circuit direction includes **Opposing directions**, splitting the field into two groups. Waypoint rounds require five numbered stations followed by FINISH; world beacons, minimap markers and a station-status panel show the current objectives. The formats support 2-24 solo cars with AI. Challenges retain fixed rules and online uses its existing event set. See ROUTES_VALIDATION.md for evidence and limits.
+
+## Layered liveries (local update pending installation)
+
+The garage Livery Workshop edits up to 32 layers across five body surfaces. Add shapes, lettering, sprays or weathering; drag selected layers or use position fields, transform groups, mirror, reorder, hide, duplicate and undo. Apply & Return saves the design and up to eight named decal groups. Setup presets and share data include the active design. See LIVERY_VALIDATION.md for validation, transfer status and limits.
+
+Local pending update: Settings now supports remappable driving keys, calibrated gamepad input and an optional steering limit at speed. Arrow keys agree with A/D. See CONTROLS_VALIDATION.md; installation on VENGEANCE remains pending transfer authorization.
+
+Local development update: multiplayer cups add cumulative points, next-event voting and persistent room standings. Not deployed. The subsequent shared-physics update resolves the three backend room failures; see CUP_VALIDATION.md and PHYSICS_SYNC_VALIDATION.md for current evidence and remaining fixture gaps.
+
+Local development update: authoritative collisions now damage individual wheels using the solo calculations. Corner condition survives reconnect/save restoration and clears on playground repair; the online renderer follows this state. See ONLINE_DAMAGE_VALIDATION.md for84 passing targeted checks, missing historical fixtures and deployment limitations.
+
+Local development update: new supported online rooms now hold24drivers, including full-field cups and reconnect/restoration; legacy rooms retain8seats. The lobby displays actual capacity. See ONLINE_CAPACITY_VALIDATION.md for loopback evidence and the unresolved bandwidth/deployment limits.
+
+Local development update: supported online clients now receive lossless compressed binary snapshots. The 24-client loopback run used81% fewer bytes than equivalent JSON messages; legacy JSON clients remain supported. See ONLINE_WIRE_VALIDATION.md for exact measurements, checks and remaining hosting/installation limits.
+
+Local development update: online rooms now accept server-validated saved tuning and paint. Choose a car/setup before joining or between events; hosts can enforce stock performance while retaining paint. Mid-event takeovers keep the active car intact. See ONLINE_SETUP_VALIDATION.md for93passing targeted checks, browser/load evidence and installation limits. Online layered decals remain separate work.
+
+## Saved replay library
+
+From the replay studio, name a recording and choose **Save to library**. **Replay library** on the main menu lists recordings after reload, with search, playback, rename, `.qir` import/export and confirmed deletion. Up to50 recordings and256MiB of compressed files are retained; excess saves fail without removing previous recordings. The library is specific to this browser and site address. Export `.qir` copies to keep recordings when browser data is cleared. Unsupported/blocked storage and quota failures show a message, and file export remains available.
+
+## Online event rules
+
+On supporting servers, the host chooses laps/waypoint rounds, forward/reverse/opposing circuits, ordered/free/random waypoints, survival or score derby, and a 60–1200 second derby time limit. Score derby awards actual damage plus 100 points per knockout and respawns wrecked cars after four seconds when a clear slot is available. Cup rounds retain the chosen race and derby rules. Reconnects preserve progress. Older servers keep their existing rules. See ONLINE_EVENTS_VALIDATION.md for release status.

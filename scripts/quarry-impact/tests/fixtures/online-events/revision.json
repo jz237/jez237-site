@@ -1,0 +1,50 @@
+{
+  "baseline": "8828307e5dd1e8424fc089915b480a027288ab3f",
+  "files": {
+    "multiplayer/protocol.ts": {
+      "snapshot": "multiplayer-protocol.ts.gz",
+      "before": "147a47cba852842c9a688ac9487e5baa07766766e3379be55db2fcf38730b7e9",
+      "after": "b27e477844b5cf9b3fd916f5a6cb84cf5296bb5b8c458c8577214300960ff834"
+    },
+    "multiplayer/simulation.ts": {
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "before": "2d2f7621853c6e30df0e2fb314d4f1c3315865fc8aa73094bac2dfa142a8f29d",
+      "after": "c26d01b02d61bbcbca1c808e86868db765e8bfee46d1df065d1ee84ef6830179"
+    },
+    "multiplayer/room.ts": {
+      "snapshot": "multiplayer-room.ts.gz",
+      "before": "cc41c9b087e05c145c8f70caca5fe16fc76ee17097d3563686932db7a4ed2756",
+      "after": "4e32272a4c2aaaa34ec8e90067acfa45b6c705438b67979944fab8b6470d356d"
+    },
+    "src/network.ts": {
+      "snapshot": "src-network.ts.gz",
+      "before": "bfcda3d5c8bbf7a46b337784d55dd16dff5a1e1dee49e90de431795d2076e023",
+      "after": "9d6ed4d1b23e2c4db7f7bd1695c73c1d95d90947a382a15ead20634c52946a39"
+    },
+    "src/network-validation.ts": {
+      "snapshot": "src-network-validation.ts.gz",
+      "before": "adfc2b264fca70e476408193464698e4b06000f7e2d8b66cc8b86a1925188f99",
+      "after": "b603871b7b7c607dc8187d313d6a13db010123b472f840b4d0b4c4b28093412e"
+    },
+    "src/online-ui.ts": {
+      "snapshot": "src-online-ui.ts.gz",
+      "before": "90910b0d7e260d037ea680c2da4b446ed3942a04fbec928d187d85545985ba49",
+      "after": "1dc4e497725e354e88d95cff6283c02af98e610438f6bcb75004e69db6723aa0"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "bf20f2cd8dfb70b684a52ab8fae95ed21c50835655ec48e1a1097e38961064dd",
+      "after": "6d863aa7d27f32b35d112400f71f20efb7d12a0f81a5d9826d8b983b1a8d4c8d"
+    },
+    "multiplayer/worker.ts": {
+      "snapshot": "multiplayer-worker.ts.gz",
+      "before": "10acfaf7b2db111f79f9f4636e39252d1d9a7905a40a50c5d671c4f4d950b41a",
+      "after": "d5ae5c38681aa3946d3cd4aeb810a6d3c52539fdc1d1c8bcb7c11945380ec43a"
+    },
+    "src/style.css": {
+      "snapshot": "src-style.css.gz",
+      "before": "50ea4dd6dea1a9b7da14f662b85e323db422ab8c4757400272c1c79fef6d8bb4",
+      "after": "57ebac5717247711015ca695cfd2a28531640bf87520d5da7e5c476c1695f407"
+    }
+  }
+}
