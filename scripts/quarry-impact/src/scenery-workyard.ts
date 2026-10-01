@@ -3,6 +3,7 @@ import {GLTFLoader} from './model-loader';
 import {url,texture} from './assets';
 import {landscapeHeight} from './quarry-layout';
 import {dressWorkyardGround} from './scenery-workyard-ground';
+import {DERBY_ARENA,arenaBarrier} from './derby-arena';
 
 export const WORKYARD_PLACEMENTS=[
   ...Array.from({length:5},(_,i)=>({id:'container-'+i,asset:'container',p:[-63+i*7,0,59],yaw:0})),
@@ -11,7 +12,7 @@ export const WORKYARD_PLACEMENTS=[
   {id:'workshop',asset:'workshop',p:[-54,0,-39],yaw:0},
   ...Array.from({length:3},(_,i)=>({id:'silo-'+i,asset:'silo',p:[-74+i*8,0,-50],yaw:0})),
 ];
-export async function loadWorkyard(parent:T.Group,barriers:T.Group) {
+export async function loadWorkyard(parent:T.Group,barriers:T.Group,expandedBarriers?:T.Group) {
   const [model,maps]=await Promise.all([
     new GLTFLoader().loadAsync(url('models/quarry-workyard.glb')),
     Promise.all(['container_side','rusty_painted_metal','concrete_layers_02'].flatMap(id=>['diff','normal','arm'].map(async kind=>{
@@ -76,16 +77,23 @@ diffuseColor.rgb=diffuse*(vec3(.14)+sampledDiffuseColor.rgb*1.35);
     for(let i=0;i<66;i++){const a=i/66*Math.PI*2;d.position.set(Math.sin(a)*46,0,Math.cos(a)*46);d.rotation.set(0,a,0);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);}mesh.computeBoundingSphere();barriers.add(mesh);
   }
   const ground=dressWorkyardGround(parent);
+  if(expandedBarriers){
+    for(const old of [...expandedBarriers.children]){expandedBarriers.remove(old);if(old instanceof T.Mesh)old.geometry.dispose();}
+    for(const part of parts.get('barrier-0')??[]){
+      const mesh=new T.InstancedMesh(part.geometry,part.material,DERBY_ARENA.segments);mesh.name='workyard-expanded-arena-'+(part.material as T.Material).name;mesh.castShadow=true;mesh.receiveShadow=true;
+      for(let i=0;i<DERBY_ARENA.segments;i++){const p=arenaBarrier(i);d.position.set(p.x,p.y,p.z);d.rotation.set(0,p.yaw,0);d.scale.set(1,1,1);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);}mesh.computeBoundingSphere();expandedBarriers.add(mesh);
+    }
+  }
   parent.userData.workyard={placements:WORKYARD_PLACEMENTS.length,materials:materials.size,ground};
   return lods;
 }
 
-export function workyardFences(parent:T.Group){
+export function workyardFences(parent:T.Group,layout?:{x:number;z:number;radius:number}){
   // Fine wire is analytically antialiased; tubular posts/caps and tension rails
   // provide the silhouette. This avoids unstable subpixel mesh wires at speed.
   const material=new T.MeshStandardMaterial({name:'Galvanized quarry chain link',color:0x727d78,metalness:.65,roughness:.62,side:T.DoubleSide,transparent:true,depthWrite:false,alphaTest:.05});
   material.onBeforeCompile=s=>{
-    s.vertexShader='varying vec2 vFence;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvFence=uv*vec2(3.142,3.25);');
+    s.vertexShader='varying vec2 vFence;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\nvFence=uv*vec2(${layout?(3.142*layout.radius/50).toFixed(6):'3.142'},3.25);`);
     s.fragmentShader='varying vec2 vFence;\n'+s.fragmentShader;
     s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
 vec2 wire=vec2(vFence.x+vFence.y,vFence.x-vFence.y)/.145;
@@ -93,17 +101,18 @@ vec2 edge=abs(fract(wire+.5)-.5);
 vec2 aa=max(fwidth(wire),vec2(.0001));
 vec2 coverage=1.-smoothstep(vec2(.014)-aa,vec2(.014)+aa,edge);
 diffuseColor.a*=max(coverage.x,coverage.y)*.80;`);
-  };material.customProgramCacheKey=()=> 'yard-chain-link-filtered-1';
+  };material.customProgramCacheKey=()=> 'yard-chain-link-filtered-1'+(layout?'-'+layout.radius:'');
   const count=93,postMaterial=new T.MeshStandardMaterial({name:'Galvanized fence fittings',color:0x72786e,roughness:.57,metalness:.62});
   const posts=new T.InstancedMesh(new T.CylinderGeometry(.037,.037,4,10),postMaterial,count);
   const caps=new T.InstancedMesh(new T.SphereGeometry(.048,8,5),postMaterial,count);
   const panels=new T.InstancedMesh(new T.PlaneGeometry(1,3.25),material,count),rails=new T.InstancedMesh(new T.CylinderGeometry(.013,.013,1,6),postMaterial,count*2),d=new T.Object3D();let k=0;
   for(let i=0;i<100;i++){
     if(i>22&&i<30)continue;const a=i/100*Math.PI*2,b=(i+1)/100*Math.PI*2;
-    const x=Math.sin(a)*50,z=Math.cos(a)*50,bx=Math.sin(b)*50,bz=Math.cos(b)*50,length=Math.hypot(bx-x,bz-z),yaw=Math.atan2(bx-x,bz-z);
-    d.position.set(x,2,z);d.scale.set(1,1,1);d.quaternion.identity();d.updateMatrix();posts.setMatrixAt(k,d.matrix);d.position.y=4.01;d.updateMatrix();caps.setMatrixAt(k,d.matrix);
-    d.position.set((x+bx)/2,2,(z+bz)/2);d.rotation.set(0,yaw+Math.PI/2,0);d.scale.set(length,1,1);d.updateMatrix();panels.setMatrixAt(k,d.matrix);
-    for(let j=0;j<2;j++){d.position.y=j?3.3:1.5;d.scale.set(1,length,1);d.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(bx-x,0,bz-z).normalize());d.updateMatrix();rails.setMatrixAt(k*2+j,d.matrix);}k++;
+    const r=layout?.radius??50,cx=layout?.x??0,cz=layout?.z??0;
+    const x=cx+Math.sin(a)*r,z=cz+Math.cos(a)*r,bx=cx+Math.sin(b)*r,bz=cz+Math.cos(b)*r,length=Math.hypot(bx-x,bz-z),yaw=Math.atan2(bx-x,bz-z),ground=layout?landscapeHeight(x,z):0,mid=layout?landscapeHeight((x+bx)/2,(z+bz)/2):0;
+    d.position.set(x,ground+2,z);d.scale.set(1,1,1);d.quaternion.identity();d.updateMatrix();posts.setMatrixAt(k,d.matrix);d.position.y=ground+4.01;d.updateMatrix();caps.setMatrixAt(k,d.matrix);
+    d.position.set((x+bx)/2,mid+2,(z+bz)/2);d.rotation.set(0,yaw+Math.PI/2,0);d.scale.set(length,1,1);d.updateMatrix();panels.setMatrixAt(k,d.matrix);
+    for(let j=0;j<2;j++){d.position.y=mid+(j?3.3:1.5);d.scale.set(1,length,1);d.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(bx-x,0,bz-z).normalize());d.updateMatrix();rails.setMatrixAt(k*2+j,d.matrix);}k++;
   }
   for(const mesh of [posts,caps,panels,rails]){mesh.name='workyard-fence-'+mesh.material.name;mesh.receiveShadow=true;mesh.castShadow=mesh!==panels;mesh.computeBoundingSphere();parent.add(mesh);}
 }

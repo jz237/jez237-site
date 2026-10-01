@@ -16,7 +16,7 @@ export async function prepareArenaFloor() {
 }
 
 /** The arena alone uses the authored deposits. Roads retain quarryAggregate. */
-export function quarryArenaSurface() {
+export function quarryArenaSurface(layout?:{x:number;z:number;radius:number}) {
   const material = quarryGround();
   material.name = 'authored-arena-floor';
   const compileBase = material.onBeforeCompile;
@@ -137,7 +137,14 @@ if(arenaCoarse>.001) {
 normal=normalize(mix(normal,arenaN,arenaCoverage));
 #endif
 #include <clearcoat_normal_fragment_begin>`);
+    if(layout){
+      const center=`vec2(${layout.x.toFixed(6)},${layout.z.toFixed(6)})`,radius=layout.radius.toFixed(6);
+      shader.fragmentShader=shader.fragmentShader
+        .replace('vec4 arenaPaint=texture2D(arenaMask,(arenaWorld+48.0)/96.0);',`vec2 depositWorld=(arenaWorld-${center})*45.0/${radius};\nvec4 arenaPaint=texture2D(arenaMask,(depositWorld+48.0)/96.0);`)
+        .replace('float arenaCoverage=arenaReady*(1.0-smoothstep(40.0,45.0,length(arenaWorld)));',`float arenaCoverage=arenaReady*(1.0-smoothstep(${(layout.radius-2).toFixed(6)},${radius},length(arenaWorld-${center})));`)
+        .replace('float arenaWet=arenaPaint.a;','float arenaWet=texture2D(arenaMask,(arenaWorld+48.0)/96.0).a;');
+    }
   };
-  material.customProgramCacheKey = () => 'authored-arena-floor-v3';
+  material.customProgramCacheKey = () => layout?'expanded-gravel-arena-v1':'authored-arena-floor-v3';
   return material;
 }

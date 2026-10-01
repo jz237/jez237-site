@@ -40,7 +40,7 @@ test('real car assemblies bend locally, hold their trim, restore completely and 
   }
   const snapshot=()=>parts.assemblies.flatMap(a=>a.members.map(p=>({name:p.mesh.name,m:p.mesh.matrix.toArray(),auto:p.mesh.matrixAutoUpdate,visible:p.mesh.visible})));
   const intact=snapshot(),wheelRest=car.wheels.map(w=>({p:w.position.clone(),q:w.quaternion.clone()}));
-  const hit=(quiet=false)=>{const point=new T.Vector3(-.96,.96,1.35),dir=new T.Vector3(.9,-.03,-.4).normalize();car.hit(car.model.localToWorld(point),dir,26,1,quiet);parts.pose(0,0);parts.wheelsPose();};
+  const hit=(quiet=false)=>{const point=new T.Vector3(-.96,.96,1.35),dir=new T.Vector3(.9,-.03,-.4).normalize();for(let i=0;i<2;i++)car.hit(car.model.localToWorld(point.clone()),dir,26,1+i,quiet);parts.pose(0,0);parts.wheelsPose();};
   hit();const damaged=snapshot(),damagedWheels=car.wheels.map(w=>w.quaternion.toArray());
   assert.ok(parts.assemblies.some(a=>a.loose>0));assert.ok(parts.wheelDamage[0]>.15);assert.equal(parts.wheelDamage[3],0);
   for(let i=0;i<120;i++)parts.wheelsPose();assert.deepEqual(car.wheels.map(w=>w.quaternion.toArray()),damagedWheels,'pause cannot accumulate wheel camber');

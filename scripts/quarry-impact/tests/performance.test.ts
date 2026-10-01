@@ -9,13 +9,14 @@ import {freezeSceneryTransforms} from '../src/render-work';
 import {dentGeometry,prepareWreckGeometry,repairWreckGeometry} from '../src/wreck-geometry';
 import * as coupe from '../src/coupe-realism';
 import {restorePerformanceBytes} from './performance-invariants';
+import {restoreDriveFeelBytes} from './drive-feel-invariants';
 import {Sound} from '../src/audio';
 import {gunzipSync} from 'node:zlib';
 
 test('the optimization preserves every preceding source snapshot',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const manifest=JSON.parse(read('source/performance-revision.json').toString());
- for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restorePerformanceBytes(p,read(p))),e.before,p);}
+ for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(restoreDriveFeelBytes(p,read(p))),e.after,p);assert.equal(hash(restorePerformanceBytes(p,read(p))),e.before,p);}
 });
 
 test('static transform reuse keeps world poses and LOD visibility while dynamic siblings move',()=>{

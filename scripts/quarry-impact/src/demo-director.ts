@@ -2,9 +2,11 @@ import * as T from 'three';
 import type {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import type {Vehicle} from './vehicle';
 import {landscapeHeight} from './quarry-layout';
+import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 export const DEMO_CAMERAS={director:'Auto director',overview:'Overhead overview',drone:'Follow drone',chase:'Chase camera',hood:'Hood camera',trackside:'Trackside',orbit:'Free orbit'};
 export type DemoCamera=keyof typeof DEMO_CAMERAS;
 export class DemoDirector {
+  constructor(private arena:ArenaLayout=LEGACY_ARENA){}
   view:DemoCamera='director';
   activeView:DemoCamera='drone';
   followed=0;
@@ -42,7 +44,7 @@ export class DemoDirector {
       orbit.target.copy(target);orbit.update();this.lastTarget.copy(target);this.snap=false;return;
     }
     orbit.enabled=false;
-    if(this.activeView==='overview'){desired.set(0,race?255:103,race?-35:-.1);target.set(0,0,0);fov=race?56:57;}
+    if(this.activeView==='overview'){desired.set(race?0:this.arena.x,race?255:this.arena.radius*2.2,race?-35:this.arena.z-.1);target.set(race?0:this.arena.x,0,race?0:this.arena.z);fov=race?56:57;}
     else if(this.activeView==='drone'){desired.addScaledVector(f,-13).addScaledVector(right,5);desired.y+=25;fov=48;}
     else if(this.activeView==='chase'){desired.addScaledVector(f,-8);desired.y+=2.6;target.addScaledVector(f,3);}
     else if(this.activeView==='hood'){desired.addScaledVector(f,1.3);desired.y+=.34;target.addScaledVector(f,24);target.y+=.4;fov=67;}

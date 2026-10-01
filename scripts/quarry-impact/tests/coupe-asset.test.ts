@@ -121,11 +121,12 @@ test('actual loaded coupe rear panels deform locally, detach reproducibly, and r
     assert.ok(drawMeshes<=realismBefore.runtime.meshes+14,'optics, wheel detail and the two moving window seals stay within14 additional draws');
     const original=capture(car),rear=car.panels.find(p=>p.name==='panel_bumper_rear001')!,front=car.panels.find(p=>p.name==='panel_bumper_front')!;
     assert.ok(rear&&front);const bounds=new T.Box3().setFromObject(rear),point=bounds.getCenter(new T.Vector3());point.z=bounds.min.z+.015;
-    const local=car.root.worldToLocal(point.clone()),dents:Dent[]=[12,11,9,24].map((damage,i)=>({id:i+1,repair:0,damage,localPoint:{x:local.x+(i-1)*.14,y:local.y,z:local.z},localDirection:{x:0,y:0,z:1}}));
+    const local=car.root.worldToLocal(point.clone()),dents:Dent[]=[12,11,9,24,22].map((damage,i)=>({id:i+1,repair:0,damage,localPoint:{x:local.x+Math.min(2,i-1)*.14,y:local.y,z:local.z},localDirection:{x:0,y:0,z:1}}));
     dents.slice(0,3).forEach((dent,i)=>applyDent(car,dent,false,i+1));
     assert.equal(rear.visible,true,'moderate repeated blows crumple the attached bumper before releasing it');
-    applyDent(car,dents[3],false,4);const damaged=capture(car),health=car.health;
-    assert.equal(health,44);assert.ok(calls.emit>0&&calls.detach>0);assert.equal(rear.visible,false,'a further heavy impact releases the crumpled bumper');
+    applyDent(car,dents[3],false,4);assert.equal(rear.visible,true,'stronger mounts survive the first heavy blow');
+    applyDent(car,dents[4],false,5);const damaged=capture(car),health=car.health;
+    assert.equal(health,22);assert.ok(calls.emit>0&&calls.detach>0,JSON.stringify({calls,damage:rear.userData.damage,assembly:rear.userData.detachAssembly}));assert.equal(rear.visible,false,'repeated heavy impacts release the crumpled bumper');
     const changed=damaged.find(p=>p.name===rear.name)!;assert.notDeepEqual(changed.positions,original.find(p=>p.name===rear.name)!.positions);
     assert.deepEqual(front.geometry.getAttribute('position').array,original.find(p=>p.name===front.name)!.positions,'rear impact must not alter the distant front bumper');
     let duplicateVertices=0;

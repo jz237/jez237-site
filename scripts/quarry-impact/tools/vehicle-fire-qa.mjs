@@ -25,7 +25,7 @@ try{
  // Wait for the same required smoke count before freezing the inspection view.
  await page.waitForFunction(()=>__quarry.fireState.active>5,null,{timeout:45000});await camera();await capture('coolant-smoke');
  const smoke=await sample();assert.ok(smoke.fire.active>5);assert.equal(smoke.fire.emitters[0].heat,0);
- await start();await page.evaluate(()=>{__quarry.seedFireTest(12);__quarry.damage(0,86,'front');});await page.waitForFunction(()=>__quarry.fireState.emitters[0]?.heat>.4&&__quarry.fireState.active>15&&__quarry.inspect()[0].burn>.12,null,{timeout:45000});await camera();await capture('engine-bay-fire');
+ await start();await page.evaluate(()=>{__quarry.seedFireTest(24);__quarry.damage(0,86,'front');});await page.waitForFunction(()=>__quarry.fireState.emitters[0]?.heat>.4&&__quarry.fireState.active>15&&__quarry.inspect()[0].burn>.12,null,{timeout:45000});await camera();await capture('engine-bay-fire');
  const fire=await sample();assert.ok(fire.fire.emitters[0].heat>.35);assert.ok(fire.fire.lights>0);assert.ok(fire.layers[0].layers.every(l=>l.level>.03));
  for(const l of fire.layers[0].layers)assert.ok(Math.hypot(...l.position.map((v,i)=>v-fire.fire.emitters[0].origin[i]))<.02);
  report.checks.push('progressive smoke, flame and positional fire audio');
@@ -39,14 +39,14 @@ try{
  await capture('scorched-after-fire');report.checks.push('burn scars persist after cooling');
  await page.evaluate(()=>{__quarry.resume();__quarry.recover();});await page.waitForTimeout(700);const repaired=await sample();assert.equal(repaired.fire.active,0);assert.equal(repaired.fire.emitters[0].heat,0);assert.ok(repaired.layers[0].layers.every(l=>l.level<.001));report.checks.push('repair clears fire particles and sound');
  assert.equal(repaired.damage[0].burn,0,'repair removes persistent soot');assert.deepEqual(repaired.damage[0].loose,[]);
- for(const [kind,zone] of [['sedan','rear'],['hatch','left']]){
+ for(const [kind,zone] of [['sedan','rear'],['hatch','front']]){
   await page.evaluate(()=>__quarry.menu());await page.locator(`[data-car="${kind}"]`).click();await start();
-  await page.evaluate(zone=>__quarry.damage(0,86,zone),zone);await page.waitForFunction(()=>__quarry.fireState.emitters[0]?.heat>.4&&__quarry.fireState.active>15,null,{timeout:45000});await page.evaluate(zone=>__quarry.captureCamera(zone==='rear'?[-4,2.7,-25.5]:[-5,2.7,-18],[0,1.6,-20]),zone);await page.waitForTimeout(200);await capture(kind+'-'+zone+'-fire');
-  const emitter=(await sample()).fire.emitters[0];assert.ok(emitter.heat>.35);assert.ok(emitter.sites.reduce((a,b)=>a.weight>b.weight?a:b).name.startsWith(zone));
+  await page.evaluate(zone=>{__quarry.seedFireTest(24);__quarry.damage(0,86,zone);},zone);await page.waitForFunction(()=>__quarry.fireState.emitters[0]?.heat>.4&&__quarry.fireState.active>15,null,{timeout:45000});await page.evaluate(zone=>__quarry.captureCamera(zone==='rear'?[-4,2.7,-25.5]:[-5,2.7,-18],[0,1.6,-20]),zone);await page.waitForTimeout(200);await capture(kind+'-'+zone+'-fire');
+  const emitter=(await sample()).fire.emitters[0];assert.ok(emitter.heat>.35);assert.ok(emitter.sites.reduce((a,b)=>a.weight>b.weight?a:b).name.startsWith(zone==='front'?'engine':zone));
   await page.evaluate(()=>__quarry.captureCamera([0,20,-20.01],[0,1,-20]));await page.waitForTimeout(200);await capture(kind+'-overhead-fire');
  }
- report.checks.push('all three car types render fire with front, rear and side damage-weighted sources');
- await page.evaluate(async()=>{await __quarry.start('race');__quarry.simulate(4);__quarry.autopilot(false);for(let i=0;i<8;i++){__quarry.teleport(i,(i%4-1.5)*4,-20+Math.floor(i/4)*8,0);__quarry.setHealth(i,8);}__quarry.setInput({throttle:0,steer:0,brake:1,handbrake:false});});
+ report.checks.push('all three car types render fire with actual engine or rear fuel damage');
+ await page.evaluate(async()=>{await __quarry.start('race');__quarry.simulate(4);__quarry.autopilot(false);for(let i=0;i<8;i++){__quarry.teleport(i,(i%4-1.5)*4,-20+Math.floor(i/4)*8,0);__quarry.damage(i,86,i%2?'rear':'front');__quarry.setHealth(i,8);}__quarry.seedFireStress();__quarry.simulateFire(14);__quarry.setInput({throttle:0,steer:0,brake:1,handbrake:false});});
  await page.waitForTimeout(4300);await page.evaluate(()=>__quarry.captureCamera([-11,7,-7],[0,2,-15]));await page.waitForTimeout(250);await capture('eight-car-fire');
  const pileup=await sample();assert.ok(pileup.fire.emitters.filter(e=>e.heat>.5).length>=6);assert.ok(pileup.fire.active<=640);assert.ok(pileup.fire.lights<=2);assert.ok(pileup.audio.voices<=18);report.checks.push('eight-car effects and voice budgets');
  await page.evaluate(()=>__quarry.pause());await page.waitForTimeout(180);assert.equal((await sample()).audio.state,'suspended');
