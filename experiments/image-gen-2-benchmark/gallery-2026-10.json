@@ -310,5 +310,145 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-01-factual-infographic-factual-infographic-cataract-light-thro",
+    "title": "Factual infographic: Cataract — Light Through a Clouded Lens",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\", \"panel_count\": 8, \"closeup_diagrams\": \"clear/clouded lens; protein clumping; pupil/retina exam; IOL replacement; urgent visual fields\", \"evidence_scope\": \"Claim-level reputable sources; no subjective review outside Monday\"}; archive_slot=2026-10-01T14:20; concept=cataract-clouded-lens-vision-evaluation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, museum-quality medical educational infographic directly on the image canvas, not a photographed poster, room, tabletop, mockup or prompt card. Title: \"CATARACT\" with subtitle \"Light through a clouded lens\". Use a portrait-oriented editorial information architecture with a dominant richly rendered anatomical eye cutaway occupying the upper-central third and eight substantial, clearly numbered supporting panels, arranged in a balanced surrounding grid with generous gutters. Opaque warm ivory ground, deep midnight-blue type, teal anatomical leaders, restrained amber for clouding and brick-red only for the urgent warning panel. Sophisticated medical illustration: translucent curved cornea, textured iris, anatomically placed natural lens just behind the pupil, smooth vitreous space, thin retinal lining and posterior optic nerve. Label only Cornea, Iris, Pupil, Lens, Retina, Optic nerve using precise uncluttered leader lines. Incoming light runs from the front toward the retina; the opaque clouding is located inside the natural lens, not on the cornea. Include a clearly labeled schematic comparison inset: \"Clear lens / Clouded lens\", showing a transparent biconvex lens beside one with internal haze; conceptual light paths communicate reduced image clarity without implying complete blindness. Small note \"Diagrams simplified; not to scale\".\n\nPanel 1 — \"Why the lens clouds\": a three-stage magnified conceptual protein inset, labeled \"Lens proteins → breakdown and clumping → cloudy areas\". Do not invent molecular structures; use abstract clustered protein-like forms, clearly schematic. Copy: \"Most age-related cataracts develop gradually. Speed varies.\" This is one explanatory close-up.\nPanel 2 — \"What vision may feel like\": matching small illustrative views of a colorful flower, reading text and distant headlights, with a clean view and a softly hazy, faded-color example plus a halo example. Labels \"Blur or haze\", \"Faded colors\", \"Glare / halos\", \"Harder night vision\", \"Ghosted images\". Caption \"Illustrative examples; symptoms vary. Other eye conditions can cause similar changes.\" Use high contrast for the explanatory labels; only the simulated views are blurry.\nPanel 3 — \"Who is at greater risk?\": seven distinct small visual symbols with readable labels \"Older age\", \"Smoking\", \"Diabetes\", \"Sun exposure\", \"Steroid use\", \"Family history\", \"Eye injury\". Heading-level qualifier \"Risk factors—not a diagnosis\". No inevitability claims, numerical prevalence or instruction to stop prescribed medicines.\nPanel 4 — \"How it is checked\": a three-step horizontal sequence, \"Vision test\", \"Slit-lamp exam\", \"Dilated eye exam\". Show a miniature letter chart, a clinician viewing the anterior eye with a slit lamp, and a pupil-expansion/retinal-view schematic, the latter an explanatory close-up. Copy \"Checks vision, the lens and other eye structures.\" Patient and clinician are adults of different skin tones, anatomically plausible, each simple and legible rather than stock-photo decor.\nPanel 5 — \"Help before surgery\": three practical vignettes, updated glasses, a bright reading lamp, and a magnifier with a book. Copy \"May improve daily function when symptoms are mild.\" Emphasized distinction \"These aids do not remove a cataract.\" Fine material detail on lens rims, lamp and paper stays subordinate to labels.\nPanel 6 — \"What surgery changes\": large explanatory three-frame lens-location cutaway sequence: \"Cloudy natural lens\" → \"Cloudy lens removed\" → \"Artificial lens (IOL) placed\". Show a small clear IOL optic with supporting haptics in the proper lens region, no grotesque surgery or invented procedural instrument technique. This is a third substantial close-up/cutaway. Copy \"Only surgery removes a cataract.\" Second line \"Consider when daily activities are affected; discuss benefits and risks.\" Do not promise perfect vision or that everyone needs immediate surgery.\nPanel 7 — \"Protect your eyes\": UV-protective sunglasses with a brimmed hat, protective eyewear and a no-smoking symbol, arranged as a precise care strip. Copy \"Reduce avoidable eye risks—not guaranteed prevention.\" Add an eye-pair miniature with \"One or both eyes; does not spread between eyes\".\nPanel 8 — \"Sudden changes? Get urgent care\": distinct, readable brick-red band with three visual field miniatures labeled \"New floaters\", \"Flashes\", \"Curtain / shadow\". Copy \"These can signal retinal detachment—not gradual cataract change. Contact an eye doctor or emergency room immediately.\" Do not portray these as routine cataract symptoms. This is a fourth explanatory visual comparison.\n\nUse highly detailed but clinically credible materials, layered transparent tissues, restrained specular highlights, subtle iris fibers, readable enlarged lens textures and scientifically clear optical connections. Every numbered panel explains a different substantive question. No filler text, statistics, doses, brands, URLs, bibliography or watermarks. Typography must have a large title, substantial panel headings and short readable sentences, not tiny paragraphs. Keep all factual content exactly within the claims above. Footer: \"General education—not a diagnosis. Discuss vision changes with an eye-care professional.\" Render the complete integrated infographic; it is not a design guide.",
+    "image": "images/2026-10-01-factual-infographic-factual-infographic-cataract-light-thro.jpg",
+    "thumb": "thumbs/2026-10-01-factual-infographic-factual-infographic-cataract-light-thro.webp",
+    "color": "#cbc6c3",
+    "date": "2026-10-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cataract-clouded-lens-vision-evaluation",
+      "imageSha256": "a74e37ea4571eef42f7d363ffc1a41509feef37f5297d7a4ff412fae2a41371a",
+      "imageDHash": "7132323612d51d3d"
+    },
+    "factualInfographic": {
+      "topic": "How cataracts cloud the natural lens, alter vision, and are evaluated and managed",
+      "description": "Source-backed medical infographic explaining cataract anatomy, symptoms, risk factors, diagnosis, early functional aids, surgery and separate retinal-detachment warnings.",
+      "sourceNote": "National Eye Institute: https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts; American Academy of Ophthalmology: https://www.aao.org/eye-health/diseases/what-are-cataracts; National Eye Institute retinal-detachment warnings: https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment. Verified claim-level anatomy, clinical symptoms, evaluation, management, prevention limits and urgent warning scope.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-01T18:22:08.040783+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Eye Institute",
+            "title": "Cataracts",
+            "sourceType": "government-agency",
+            "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Ophthalmology",
+            "title": "What Are Cataracts?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.aao.org/eye-health/diseases/what-are-cataracts"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Eye Institute",
+            "title": "Retinal Detachment",
+            "sourceType": "government-agency",
+            "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A cataract is clouding of the natural lens; the normally clear lens bends incoming light to help vision.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The cornea, iris and lens are front-of-eye structures; the pupil is widened by dilation, and the retina and optic nerve are examined at the back of the eye.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The retina is the light-sensitive tissue layer at the back of the eye.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Age-related changes cause lens proteins to break down and clump, creating cloudy areas; most age-related cataracts develop gradually, at variable rates.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cataracts can affect one or both eyes but do not spread between eyes.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cloudy or blurry vision, faded or yellowish colors, glare or halos, difficulty seeing at night and ghosted or double images in the affected eye can occur; symptoms can also reflect other eye problems.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Older age, smoking, diabetes, sun exposure, steroid use, family history and previous eye injury are cataract risk factors; these do not establish an individual diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation includes visual acuity or refraction, slit-lamp examination of front-of-eye structures, and a dilated examination to check the eye including retina and optic nerve.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "For mild symptoms, updated glasses, brighter reading light and magnification can help function but do not remove the cataract.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Only surgery removes a cataract; the cloudy natural lens is removed and replaced by an artificial intraocular lens (IOL).",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Surgery is considered when cataracts interfere with everyday activities; immediate surgery is not always needed, and benefits and risks should be discussed with an ophthalmologist.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "UV-protective sunglasses and a brimmed hat, stopping smoking and protective eyewear can help reduce avoidable eye risks; these measures do not guarantee cataract prevention.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden new floaters, flashes, or a curtain or shadow across vision can signal retinal detachment rather than gradual cataract change; seek an eye doctor or emergency room immediately.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
