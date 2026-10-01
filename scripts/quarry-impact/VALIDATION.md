@@ -1,3 +1,34 @@
+# Structural realism - September 30, 2026
+
+Final application **index-DJIo0yxR.js**, **9,741,436 bytes**, SHA-256 **d32a5906efa5384f49e74b6ea0c270b1f7abd1219c7c01502baebf837f79a587**. All three cars have resistant rail/cage response, rigid engine movement, physical corner damage, loaded tire contact patches, distinct material responses and persistent silt/wetness/paint transfer. Ground evidence uses 2,048 reusable slots. Fire and smoke use two shared 64-frame Blender Mantaflow atlases; source and asset hashes, calibration and CC0 provenance are retained. The atlases add **4,975,916 download bytes / 32 MiB shared RGBA texture storage**. See `source/structural-realism.md` and `source/structural-realism-results.json`.
+
+**179/179 solo tests**, TypeScript and production build pass. Final 1440p browser views inspect all three cars intact, with corner/paint damage and heavy structural damage. Actual grounded puddle crossings leave wet tires, wet bodywork and fading trails. Inspection freezes deposition; repair restores corners and coatings, and event reset clears evidence. Both fluid textures load once across event restarts. Atlas pixel audit confirms 64 unique frames per texture; interpolated loop-boundary error is below 1% of the raw end/start error. Gameplay checks complete all modes, braking, 72 player checkpoints, results, inspection and repeated restarts.
+
+Final graphics checks pass **9 checks / 12 quality transitions** and actual WebGL recovery in **413 ms**. Fire/audio passes **10 checks**, with 38 local ElevenLabs buffers, all three cars, rare delayed bursts, pause/mute, repair and eight-car budgets. Sampled audio peak **0.2815**, **zero clipped readings** across **2,873 readings**. The earlier candidate's demo passes eight checks and all eight AI complete 72 race checkpoints; its separate hash is retained. The final paint/deposition/bounds corrections are covered by final source, graphics, contact and gameplay checks.
+
+Exact final runtime, fresh local Chrome, **2560 x 1440 / Ultra**:
+
+| Measurement | Result |
+|---|---:|
+| Cold navigation to rendered menu, one sample | 5.888 s |
+| First event startup to countdown | 1.129 s |
+| Moving eight-car derby, 60.61 s | 58.864 FPS / 16.988 ms mean |
+| Derby p95 / p99 | 16.8 / 16.9 ms |
+| Derby frames over 33.4 / 50 ms | 17 / 6 |
+| Eight-fire stress, 60.70 s | 59.978 FPS / 16.673 ms mean |
+| Fire p95 / p99 | 16.8 / 16.8 ms |
+| Fire frames over 33.4 / 50 ms | 0 / 0 |
+
+No profiler runs during either frame interval, and this work runs no other QA browser, build, exporter or CPU test concurrently. The eight-fire fixture deliberately seeds ignition and extends fuel; ordinary fire frequency remains rare. These are local measurements, not a repeated loading comparison or an internet/hardware latency measurement. No locked60 claim.
+
+Derby geometry count: **[900, 901]**; textures: **[144, 147]**; sampled heap: **[743.5, 857.2] MB**, ending **855.4 MB**. Fire geometry: **[910, 910]**; textures: **[147, 147]**; heap: **[827.5, 940.0] MB**, ending **940.0 MB**. Short resource samples do not establish long-term memory stability; no new ten-minute capture.
+
+Historical source snapshots and every original model/photographic image byte remain protected. **23 shared deployed Worker inputs** are unchanged; new physical corner consequences are on the solo path. No backend deployment, internet multiplayer test, new audio generation, gameplay ElevenLabs call or additional spending. Collision shapes remain simplified; fluid textures are billboards rendered from an offline simulation. Full structural soft bodies, physical blast impulses and Wreckfest 2 visual fidelity remain unfinished.
+
+Evidence: `outputs/structural-realism/solo-frozen.log`, `build-final.log`, `structure-frozen/`, `gameplay-frozen/`, `shadows/frozen/`, `fire-frozen/`, `demo-final/`, `atlas-audit.json` and `performance-final/`. Earlier trial renders/candidates preserve their separate outputs and hashes. Records below describe their own prior releases.
+
+---
+
 # Water, fire and vehicle weight — September 30, 2026
 
 Final application **index-CNk1oed3.js**, **9,723,921 bytes**, SHA-256 **a81c6fc511376966942ce6ce2bb259662e6c6d73940eb68bff97e478371b37e7**. Tire-driven water spray and clipped ripples, a larger solo derby, more resistant bodywork and rarer damage-dependent thermal effects address the latest play feedback. Implementation: `source/drive-feel.md`; machine-readable results: `source/drive-feel-results.json`.

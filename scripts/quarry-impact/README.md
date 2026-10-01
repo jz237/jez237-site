@@ -2,6 +2,8 @@
 
 A standalone 3D browser demolition game set in Blackridge Quarry, with three vehicle profiles, a shared damage system, and 38 locally bundled ElevenLabs sound effects.
 
+The structural realism pass makes reinforced rails resist crushing and keeps engine parts solid while body panels fold. Damaged wheels now affect physical alignment, suspension, grip and drag. Distinct paint, glass, metal, rubber and plastic materials gain persistent silt, wetness and localized transferred paint; wet tires and hanging parts leave fading tracks and scrapes. Shared animated fire/smoke textures come from an offline Blender Mantaflow bake. These changes apply to all three cars. See `source/structural-realism.md` for production records, validation and the remaining limits.
+
 The latest pass adds tire-driven puddle spray and ripples, a **128-metre solo derby arena** with almost twice the old area, and stronger bodywork with less bounce. Cars retain their original 1,290–1,650 kg masses; realistic body inertia and impact-speed gating make crashes feel more substantial and stop low-speed shoving from steadily crushing a car. See `source/drive-feel.md`.
 
 Choose **Watch Demo** for autonomous derby or circuit events with seven spectator views: automatic director, overhead, following drone, chase, hood, trackside and free orbit. Pick a car to follow, or let the director choose; events repeat automatically. The new solo AI commits to intercepts, slows for corners, avoids obstacles and backs away from prolonged shoving matches. See `source/demo-ai-fire.md`.

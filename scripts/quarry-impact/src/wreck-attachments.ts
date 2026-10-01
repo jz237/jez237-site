@@ -9,6 +9,8 @@ export class WreckAttachments {
   readonly wheelShift=Array.from({length:4},()=>new T.Vector3());
   readonly zones={front:0,rear:0,left:0,right:0,roof:0};
   private time=0;
+  private wheelTravel=0;
+  private wheelSpeed=0;
   private wheelRest:T.Vector3[];
   private wheelBase:T.Quaternion[];
   private wheelApplied:T.Quaternion[];
@@ -51,6 +53,7 @@ export class WreckAttachments {
   }
   pose(dt:number,speed:number){
     this.time+=Math.max(0,dt);
+    if(dt>0){this.wheelTravel+=speed*dt/.375;this.wheelSpeed=Math.abs(speed);}
     for(const a of this.assemblies){
       if(a.loose===0)continue;
       const flutter=Math.sin(this.time*7.1+a.side)*Math.min(.025,Math.abs(speed)*.0013)*a.loose;
@@ -74,7 +77,8 @@ export class WreckAttachments {
       const w=this.wheels[i],d=this.wheelDamage[i],side=i%2?1:-1;
       w.position.x=this.wheelRest[i].x+this.wheelShift[i].x;w.position.z=this.wheelRest[i].z+this.wheelShift[i].z;
       if(!w.quaternion.equals(this.wheelApplied[i]))this.wheelBase[i].copy(w.quaternion);
-      w.quaternion.copy(this.wheelBase[i]).premultiply(this.wheelRotation.setFromEuler(this.wheelEuler.set(0,side*d*.13,-side*d*.28)));
+      const wobble=Math.sin(this.wheelTravel+side+i*1.7)*d*d*.022*Math.min(1,this.wheelSpeed/2);
+      w.quaternion.copy(this.wheelBase[i]).premultiply(this.wheelRotation.setFromEuler(this.wheelEuler.set(0,wobble,-side*d*.22)));
       this.wheelApplied[i].copy(w.quaternion);
     }
   }
@@ -86,7 +90,7 @@ export class WreckAttachments {
     return offset;
   }
   reset(){
-    this.time=0;this.wheelDamage.fill(0);this.wheelShift.forEach(v=>v.set(0,0,0));
+    this.time=this.wheelTravel=this.wheelSpeed=0;this.wheelDamage.fill(0);this.wheelShift.forEach(v=>v.set(0,0,0));
     for(const key of Object.keys(this.zones)as (keyof typeof this.zones)[])this.zones[key]=0;
     for(const a of this.assemblies){a.damage=a.loose=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
     this.wheels.forEach((w,i)=>{w.position.x=this.wheelRest[i].x;w.position.z=this.wheelRest[i].z;w.quaternion.copy(this.wheelBase[i]);this.wheelApplied[i].copy(w.quaternion);});

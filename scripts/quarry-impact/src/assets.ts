@@ -8,6 +8,7 @@ import { configureCoupe } from './coupe-realism';
 import { prepareWreckGeometry } from './wreck-geometry';
 import { wreckTopology } from './wreck-topology';
 import { alignWreckSeams } from './wreck-seams';
+import {constructionRole,type ConstructionRole} from './vehicle-construction';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -15,7 +16,7 @@ export const templates = new Map<CarKind, THREE.Group>();
 function batch(group: THREE.Object3D, root: boolean) {
   group.updateMatrixWorld(true);
   const inv = group.matrixWorld.clone().invert();
-  const batches = new Map<THREE.Material, THREE.BufferGeometry[]>();
+  const batches = new Map<string, {material:THREE.Material;role:ConstructionRole;geometries:THREE.BufferGeometry[]}>();
   const remove: THREE.Object3D[] = [];
   group.traverse((o) => {
     if (
@@ -35,12 +36,13 @@ function batch(group: THREE.Object3D, root: boolean) {
     if (!geo.attributes.uv1 && geo.attributes.uv)
       geo.setAttribute('uv1', geo.attributes.uv.clone());
     const m = o.material as THREE.Material;
-    if (!batches.has(m)) batches.set(m, []);
-    batches.get(m)!.push(geo);
+    const role=root?constructionRole(o.name):'skin',key=m.uuid+':'+role;
+    if(!batches.has(key))batches.set(key,{material:m,role,geometries:[]});
+    batches.get(key)!.geometries.push(geo);
     remove.push(o);
   });
   for (const o of remove) o.removeFromParent();
-  for (const [m, geos] of batches) {
+  for (const {material:m,role,geometries:geos} of batches.values()) {
     const g = mergeGeometries(geos);
     if (g) {
       const mesh = new THREE.Mesh(g, m);
@@ -48,7 +50,8 @@ function batch(group: THREE.Object3D, root: boolean) {
       // render into the shadow map. Outer panels and tires supply the silhouette.
       mesh.castShadow = !root && m.name.startsWith('Tire');
       mesh.receiveShadow = true;
-      mesh.name = 'detail_' + m.name;
+      mesh.name = 'detail_' + (role==='skin'?'':role+'_') + m.name;
+      mesh.userData.constructionRole=role;
       group.add(mesh);
     }
     for (const g of geos) g.dispose();

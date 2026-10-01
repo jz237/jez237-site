@@ -12,6 +12,7 @@ import {PuddleSplashes,puddleDepth,type Puddle} from '../src/puddle-splashes';
 import {VehicleThermalState} from '../src/vehicle-thermal-state';
 import type {Vehicle} from '../src/vehicle';
 import {restoreDriveFeelBytes} from './drive-feel-invariants';
+import {restoreStructuralBytes} from './structural-realism-invariants';
 import {quarryArenaSurface} from '../src/scenery-arena-material';
 await R.init();
 const water:Puddle={id:0,x:0,z:0,level:.025,radius:4,aspect:.6,phases:[.1,.2,.3,.4]};
@@ -72,7 +73,7 @@ test('low health or crushed doors alone cannot ignite; engine-bay smoke is disti
 });
 test('this revision remains reversible and preserves every shared server input and original model',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex'),revision=JSON.parse(read('source/drive-feel-revision.json').toString());
- for(const[p,e]of Object.entries<any>(revision.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restoreDriveFeelBytes(p,read(p))),e.before,p);}
+ for(const[p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreStructuralBytes(p,read(p))),e.after,p);assert.equal(hash(restoreDriveFeelBytes(p,read(p))),e.before,p);}
  const shared=JSON.parse(read('source/coupe-realism-physics.json').toString());for(const[p,h]of Object.entries(shared.sourceHashes))assert.equal(hash(read(p)),h,p);
  const packed=JSON.parse(read('source/model-packing.json').toString());for(const e of Object.values<any>(packed.models))assert.equal(hash(read('public/'+e.source)),e.sourceSha256);
 });

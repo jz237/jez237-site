@@ -18,6 +18,8 @@ import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
+import {wheelResponse,TireContact} from './wheel-mechanics';
+import {VehicleSurface} from './vehicle-surface';
 export type Input = {
   throttle: number;
   steer: number;
@@ -33,6 +35,12 @@ export class Vehicle {
   model: T.Group;
   readonly wreckFinish: WreckFinish;
   readonly wreckParts: WreckAttachments;
+  readonly tireContacts:TireContact[];
+  readonly paintColor:T.Color;
+  readonly surfaceFinish:VehicleSurface;
+  private wetWheels=[false,false,false,false];
+  private groundedWheels=[false,false,false,false];
+  scraping=0;
   wheels: T.Object3D[] = [];
   panels: T.Mesh[] = [];
   readonly impactResponse = new ImpactResponse();
@@ -91,6 +99,7 @@ export class Vehicle {
     const def = DEFINITIONS[kind];
     this.aiPhase = id * 1.79;
     this.model = cloneCar(kind, color);
+    this.paintColor=new T.Color(color);
     this.root.add(this.model);
     scene.add(this.root);
     this.body = world.createRigidBody(
@@ -155,6 +164,8 @@ export class Vehicle {
     });
     this.wreckFinish = new WreckFinish(this.model,def.halfLength);
     this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth);
+    this.tireContacts=this.wheels.map(w=>new TireContact(w));
+    this.surfaceFinish=new VehicleSurface(this.model,id);
   }
   place(x: number, z: number, yaw: number, repair = false) {
     const p = { x, y: landscapeHeight(x, z) + 0.89, z };
@@ -176,6 +187,7 @@ export class Vehicle {
   repair() {
     this.wreckFinish.reset();
     this.wreckParts.reset();
+    this.surfaceFinish.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
@@ -183,7 +195,16 @@ export class Vehicle {
     for(const zone of Object.keys(this.damageZones)as (keyof typeof this.damageZones)[])this.damageZones[zone]=0;
     this.lastHit = -100;
     this.lastDamage = 0;
+    this.scraping=0;
     this.impactSerial = 0;
+    for(let i=0;i<4;i++){
+      const d=DEFINITIONS[this.kind];
+      this.controller.setWheelChassisConnectionPointCs(i,{x:(i%2?1:-1)*(d.halfWidth-.04),y:-.12,z:(i<2?1:-1)*d.wheelbase/2});
+      this.controller.setWheelSuspensionRestLength(i,.36);this.controller.setWheelRadius(i,.375);
+      this.controller.setWheelMaxSuspensionForce(i,13000);this.controller.setWheelSuspensionStiffness(i,30);
+      this.controller.setWheelSideFrictionStiffness(i,1.1);this.controller.setWheelAxleCs(i,{x:-1,y:0,z:0});
+      this.controller.setWheelSteering(i,0);this.controller.setWheelBrake(i,0);
+    }
     this.roof.setEnabled(true);
     this.collider.setHalfExtents({
       x: DEFINITIONS[this.kind].halfWidth - 0.06,
@@ -201,10 +222,12 @@ export class Vehicle {
         (p.geometry.attributes.normal.array as Float32Array).set(p.userData.originalNormals);
         p.geometry.attributes.normal.needsUpdate = true;
       } else p.geometry.computeVertexNormals();
-      p.geometry.computeBoundingSphere();
+      p.geometry.computeBoundingBox();p.geometry.computeBoundingSphere();
       const wear = p.geometry.attributes.impactWear;
       if (wear) { (wear.array as Float32Array).fill(0); wear.needsUpdate = true; }
       repairCoupePanel(p);
+      p.userData.engineShift?.set(0,0,0);
+      if(p.geometry.attributes.transferPaint){(p.geometry.attributes.transferPaint.array as Float32Array).fill(0);p.geometry.attributes.transferPaint.needsUpdate=true;}
       p.geometry.deleteAttribute('color');
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
@@ -243,25 +266,32 @@ export class Vehicle {
         clamp(1 - Math.max(0, Math.abs(this.speed) - 43) / 10, 0, 1)
       : 0;
     for (let i = 0; i < 4; i++) {
-      this.controller.setWheelSteering(i, i < 2 ? this.steering : 0);
+      const damaged=this.wreckParts.wheelDamage[i],corner=wheelResponse(damaged,i%2?1:-1,this.speed),shift=this.wreckParts.wheelShift[i];
+      this.controller.setWheelSteering(i,(i<2?this.steering:0)+corner.toe);
+      this.controller.setWheelChassisConnectionPointCs(i,{x:(i%2?1:-1)*(def.halfWidth-.04)+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
+      this.controller.setWheelSuspensionRestLength(i,corner.rest);
+      this.controller.setWheelRadius(i,corner.radius);
+      this.controller.setWheelMaxSuspensionForce(i,corner.force);
+      this.controller.setWheelSideFrictionStiffness(i,corner.sideGrip);
+      this.controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
       this.controller.setWheelEngineForce(
         i,
-        force * (this.kind === 'coupe' ? (i > 1 ? 0.5 : 0) : 0.25),
+        force*corner.power*(this.kind === 'coupe' ? (i > 1 ? 0.5 : 0) : 0.25),
       );
       this.controller.setWheelBrake(
         i,
         !alive
           ? 18
-          : this.input.brake * 90 + (this.input.handbrake && i > 1 ? 100 : 0),
+          : this.input.brake * 90 + (this.input.handbrake && i > 1 ? 100 : 0)+corner.drag,
       );
       this.controller.setWheelFrictionSlip(
         i,
         (this.surface === 'asphalt' ? 3.2 : 2.4) *
-          (this.input.handbrake && i > 1 ? 0.6 : 1),
+          (this.input.handbrake && i > 1 ? 0.6 : 1)*corner.grip,
       );
       this.controller.setWheelSuspensionStiffness(
         i,
-        30 - (i % 2 ? this.damageRight : this.damageLeft) * 0.06,
+        corner.stiffness,
       );
     }
     this.controller.updateVehicle(
@@ -310,13 +340,22 @@ export class Vehicle {
     this.rollTime = up.y < 0.2 ? this.rollTime + dt : 0;
     this.root.position.copy(this.current);
     this.root.quaternion.copy(this.currentQ);
+    for(let i=0;i<4;i++){
+      const point=this.controller.wheelContactPoint(i);
+      this.groundedWheels[i]=this.controller.wheelIsInContact(i);
+      this.wetWheels[i]=!!point&&this.groundedWheels[i]&&this.waters.some(w=>puddleDepth(w,point.x,point.y,point.z)>0);
+    }
+    this.surfaceFinish.advance(dt,this.speed,this.surface==='gravel',this.wetWheels,this.groundedWheels);
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
+      this.scraping=0;
       for (let i = 0; i < 4; i++) {
         const point = this.controller.wheelContactPoint(i);
         if (!point || !this.controller.wheelIsInContact(i)) continue;
         const p = new T.Vector3().copy(point);
-        if(this.waters.some(w=>puddleDepth(w,p.x,p.y,p.z)>0))continue;
+        const wet=this.surfaceFinish.water[i],yaw=Math.atan2(this.forward.x,this.forward.z);
+        if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-landscapeHeight(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
+        if(this.wetWheels[i])continue;
         if (Math.abs(this.speed) > 3 && this.surface === 'gravel')
           this.fx.emit(p, 1, 0, Math.abs(this.speed) * 0.04);
         if (this.slip > 2 || this.input.handbrake) {
@@ -327,7 +366,18 @@ export class Vehicle {
               Math.max(0.2, Math.abs(this.speed) * 0.09),
             );
           else this.fx.emit(p, 2, 0, 1);
+          if(this.surface==='gravel')this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,Math.min(.65,this.slip*.06),1);
         }
+      }
+      if(this.wreckParts.assemblies.some(a=>a.name.includes('bumper')&&a.loose>.55))this.model.updateWorldMatrix(true,true);
+      for(const a of this.wreckParts.assemblies){
+        if(!a.name.includes('bumper')||a.loose<.55||!a.members.some(m=>m.mesh.visible))continue;
+        const p=a.bounds.getCenter(new T.Vector3());p.y=a.bounds.min.y-a.loose*.19;p.x+=a.side*this.wreckPartsWidth();p.applyMatrix4(this.model.matrixWorld);
+        const ground=landscapeHeight(p.x,p.z);
+        if(p.y>ground+.07||Math.abs(this.speed)<1)continue;
+        this.scraping=Math.min(1,a.loose*Math.abs(this.speed)/12);p.y=ground;
+        this.fx.evidence?.add(p,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.08,this.scraping,2);
+        if(this.scraping>.25)this.fx.emit(p,1,1,.8);
       }
     }
   }
@@ -340,12 +390,15 @@ export class Vehicle {
       if (!w) continue;
       w.position.y =
         -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? 0.36);
-      const sideDamage = i % 2 ? this.damageRight : this.damageLeft;
-      w.rotation.set(0, i < 2 ? this.steering : 0, (i % 2 ? -1 : 1) * Math.min(.19, sideDamage * .002));
+      const corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed);
+      w.rotation.set(0,(i<2?this.steering:0)+corner.toe,0);
       w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
+      const coating=this.surfaceFinish.coating.value;
+      this.tireContacts[i].update(this.controller,i,DEFINITIONS[this.kind].mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z);
     }
   }
-  hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false) {
+  private wreckPartsWidth(){return DEFINITIONS[this.kind].halfWidth*.62;}
+  hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
     this.impactEffects = {glass:false,debris:false};
     if (damage < 0.1 || this.health <= 0) return;
     this.health = Math.max(0, this.health - damage);
@@ -367,6 +420,7 @@ export class Vehicle {
       if (!panel.visible) continue;
       const maximum = dentGeometry(panel, contact, impactDirection, dentDamage);
       panel.userData.damage = (panel.userData.damage || 0) + dentDamage * maximum;
+      if(maximum>0)this.surfaceFinish.transfer(panel,contact,damage,otherPaint);
       const assembly = panel.userData.detachAssembly as string | null;
       if (assembly) {
         if (!assemblies.has(assembly)) assemblies.set(assembly, { panels: [], damage: 0, weight: 0 });

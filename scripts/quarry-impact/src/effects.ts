@@ -1,6 +1,7 @@
 import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
+import {GroundEvidence} from './ground-evidence';
 type Particle = {
   p: T.Vector3;
   v: T.Vector3;
@@ -22,10 +23,12 @@ export class Effects {
   debris: { mesh: T.Mesh; body: R.RigidBody; age: number }[] = [];
   marks: T.InstancedMesh;
   markCursor = 0;
+  readonly evidence:GroundEvidence;
   constructor(
     public scene: T.Scene,
     public world: R.World,
   ) {
+    this.evidence=new GroundEvidence(scene);
     const count = 1800;
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
@@ -208,6 +211,7 @@ void main(){
     this.debris.splice(i, 1);
   }
   update(dt: number) {
+    this.evidence.advance(dt);
     (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
@@ -233,6 +237,7 @@ void main(){
     }
   }
   reset() {
+    this.evidence.reset();
     for (const p of this.particles) p.life = 0;
     // Menu frames do not advance this pool. Clear the uploaded attributes too,
     // otherwise the final sparks can remain visible over the new attract car.

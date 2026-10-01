@@ -1,5 +1,9 @@
 # Credits and asset provenance
 
+## Fluid effects
+
+The fire and smoke atlases are original Quarry Impact procedural authoring, released under CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/. They are rendered from a Blender 5.2.1 LTS Mantaflow fuel/gas simulation, then assembled into animated texture atlases. Authoring and packing scripts, the editable Blender scene, render-frame checksums, adjustments and final asset hashes are recorded in `source/fx/manifest.json` and `source/structural-realism.md`. Blender itself is an authoring tool and is not bundled into gameplay. No downloaded third-party fire footage or paid service is used.
+
 ## Cars
 
 The released car models derive from **Car Concept**, model and textures by **Eric Chadwick**, copyright **2024 Darmstadt Graphics Group GmbH**, distributed through the Khronos glTF Sample Assets repository under **Creative Commons Attribution 4.0 International**.
