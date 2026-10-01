@@ -20,3 +20,12 @@ test('old yacht shader is rejected even with the current entry',async()=>{
 test('old yacht mesh is rejected even with the current modules',async()=>{
  await assert.rejects(checkOpenSeaLive('https://example.test/',repo,mock((p,b)=>p.endsWith('.bin.gz')?b.subarray(0,b.length-1):b)),/asset differs/);
 });
+
+
+test('Markdown line endings can differ without changing the release',async()=>{
+ for(const ending of ['\n','\r\n'])await checkOpenSeaLive('https://example.test/',repo,mock((p,b)=>p.endsWith('.md')?Buffer.from(b.toString().replaceAll('\r\n','\n').replaceAll('\n',ending)):b));
+});
+
+test('changed Markdown content is still rejected',async()=>{
+ await assert.rejects(checkOpenSeaLive('https://example.test/',repo,mock((p,b)=>p.endsWith('/README.md')?Buffer.from(b.toString().replaceAll('\r\n','\n')+'\nStale release.'):b)),/asset differs.*README\.md/);
+});
