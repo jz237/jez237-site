@@ -1,0 +1,20 @@
+{
+  "baseline": "63c13a2e5b8afd0d5abb930a2ecabc09d19d3a80",
+  "files": {
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "340e6b103e77f012b6d23d1e52cdaedd61df1ea96dc144d786f17a17cd0aff56",
+      "after": "bf20f2cd8dfb70b684a52ab8fae95ed21c50835655ec48e1a1097e38961064dd"
+    },
+    "src/replay-studio.ts": {
+      "snapshot": "src-replay-studio.ts.gz",
+      "before": "e226b10d287b6b487a7d1e6d5e4483fbd8457a67c56c678093af7162e06f5640",
+      "after": "ffe23f0860978896f79c4da7ea7fa3c84849a047177cd1ce27552281796e2801"
+    },
+    "src/style.css": {
+      "snapshot": "src-style.css.gz",
+      "before": "bad1b90a623d0cb5a970e2f87796fe2859bed611ff3a264370374ab0a7a0fc59",
+      "after": "50ea4dd6dea1a9b7da14f662b85e323db422ab8c4757400272c1c79fef6d8bb4"
+    }
+  }
+}
