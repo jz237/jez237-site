@@ -1,0 +1,81 @@
+#panel.water-panel{width:min(670px,calc(100vw - 40px));padding:24px}
+#panel .water-intro{margin:0 0 15px;color:#597064}
+#panel .water-dashboard{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:15px 0}
+#panel .water-stat{background:#e4eadd;border:1px solid #d5decb;padding:11px 10px;border-radius:7px;min-width:0}
+#panel .water-stat small{display:block;font-size:9px;color:#5a705f;margin-bottom:7px}
+#panel .water-stat strong{display:block;font:23px/1.2 Georgia;color:#214e3c;overflow-wrap:anywhere}
+#panel .water-stat em{display:block;font:9px/1.4 system-ui;margin:4px 0;color:#4d665b}
+#panel .water-stat span{display:block;font:9px/1.5 system-ui;color:#687a6d;margin-top:5px}
+#panel .water-controls{padding:13px;border:1px solid #cbd7c3;border-radius:9px;background:#fffdf674}
+#panel #water-settings{border:0;margin:0;padding:0}#panel #water-settings summary{font-size:11px;font-weight:600;color:#3e5f48;padding:2px 0;cursor:pointer}
+#panel #water-settings summary span{display:block;font:10px/1.6 system-ui;color:#6d7f6f;margin:4px 0 0 13px}
+#panel #water-settings[open] summary{margin-bottom:15px}
+#panel #water-inspector{border:0;margin:6px 0;padding:5px 0}#panel #water-inspector summary{font-size:11px;margin:0 0 7px}
+#panel .water-sliders{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+#panel .water-sliders label{display:flex;justify-content:space-between;gap:6px;align-items:center;margin:0 0 5px;font-size:11px}
+#panel .water-sliders output{color:#315c43;font-variant-numeric:tabular-nums;white-space:nowrap}
+#panel .water-sliders input{display:block;width:100%;accent-color:#3f7255;margin:5px 0 10px}
+#panel .water-actions{display:flex;flex-wrap:wrap;gap:6px}
+#panel .water-actions button{padding:8px 10px;font-size:10px;white-space:nowrap}
+#panel .water-actions button[aria-pressed="true"]{background:#d9e7cc;border-color:#aabe9d}
+#panel .water-time{align-items:center;margin-top:9px;padding-top:9px;border-top:1px solid #dae2d3}
+#water-hour{font:14px Georgia;color:#31563e;margin-right:auto}
+#panel .water-model-note{font-size:10px;margin:10px 0;color:#737d6c}
+#panel .water-tabs{display:flex;gap:4px;padding:4px;background:#dde4d5;border-radius:8px;margin:13px 0}
+#panel .water-tabs button{flex:1;padding:9px 6px;white-space:nowrap;border:0;background:transparent;color:#526b59;font-size:11px}
+#panel .water-tabs button[aria-selected="true"]{background:#fffef7;color:#214e39;box-shadow:0 1px 5px #2b47211a}
+#panel #water-results:focus-visible{outline:2px solid #668257;outline-offset:3px}
+#water-inspector{padding:8px 0 10px}#panel #water-inspector label{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px;margin:0 0 6px;font-size:10px}
+#water-sample-hour{color:#526b59;font-size:10px}#water-sample{width:100%;accent-color:#55764e;display:block;margin:5px 0}
+#water-sample-values{font:10px/1.6 system-ui;color:#597166;font-variant-numeric:tabular-nums}
+#panel .water-insight{background:#e6ebdf;border-left:3px solid #729373;padding:12px 14px;border-radius:4px;margin:10px 0 16px}
+#panel .water-insight strong{font-size:11px;color:#2c513e}#panel .water-insight p{font-size:11px;margin:5px 0 0;line-height:1.65}
+#panel .water-empty{padding:11px 14px;border:1px dashed #b9c9ac;border-radius:6px;font-size:11px}
+#panel .water-figure{margin:16px 0 9px;background:#fffef8;border:1px solid #ccd9c7;border-radius:9px;padding:15px 12px 12px;overflow:hidden}
+#panel .water-figure figcaption{padding:0 5px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;justify-content:space-between}
+#panel .water-figure figcaption strong{font:17px/1.4 Georgia;color:#2c503c}
+#panel .water-figure figcaption span{font:10px/1.4 system-ui;color:#6c7d70}
+#panel .water-chart{display:block;width:100%;height:auto;overflow:visible;margin:3px 0}
+#panel .water-chart text{font:11px system-ui;fill:#627369;font-variant-numeric:tabular-nums}
+#panel .water-chart .reference-label{font-size:10px;fill:#926c42;paint-order:stroke;stroke:#fffef8;stroke-width:3px}
+#panel .water-legend{display:flex;flex-wrap:wrap;gap:7px 15px;padding:6px 5px 0}
+#panel .water-legend span{display:flex;align-items:center;gap:6px;font:10px/1.5 system-ui;color:#55705e}
+#panel .water-legend b{font-weight:600;font-variant-numeric:tabular-nums;color:#294b37}
+#panel .water-legend i{width:18px;border-top:2px solid var(--line);height:0;display:inline-block}
+#panel .chart-note{font-size:11px;line-height:1.65;margin:8px 3px 20px;color:#63796b}
+#panel .chart-note a{font-size:10px;white-space:normal}
+#panel .water-detail{margin:18px 0;padding-top:13px;border-top:1px solid #c7d4c0}
+#panel .water-detail>summary{font-weight:600;font-size:12px;padding:4px 0}
+#panel .water-detail p{font-size:11px}
+#panel .ammonia-share{height:16px;border-radius:5px;overflow:hidden;background:#d1dfc4;margin-top:13px}
+#panel .ammonia-share span{display:block;height:100%;background:#b46832}
+#panel .share-label{display:flex;justify-content:space-between;font-size:10px;color:#68735d;margin:5px 0 12px}
+#panel .water-equation{border:1px solid #d0d9c5;background:#edeedf;border-radius:8px;text-align:center;padding:15px}
+#panel .water-equation small{display:block;font-size:9px;letter-spacing:.1em;color:#737e65}
+#panel .water-equation b{display:block;font:21px/1.6 Georgia;color:#48613d;overflow-wrap:anywhere}
+#panel .water-equation span{font-size:10px;color:#718069}
+#panel .water-choice{display:flex;gap:7px;margin:14px 0}#panel .water-choice button{flex:1;font-size:11px;padding:10px}
+#panel .water-choice button[aria-pressed="true"]{background:#345e46;color:#fff}
+#panel .comparison-numbers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#panel .comparison-numbers>div{padding:15px;background:#e4ebdd;border-radius:7px}
+#panel .comparison-numbers>div+div{background:#f0e4d4}
+#panel .comparison-numbers small{display:block;font-size:9px;color:#6a7968}
+#panel .comparison-numbers strong{font:29px/1.6 Georgia;display:block;color:#34533c}
+#panel .comparison-numbers span{font-size:10px;color:#6b7a6c}
+#panel .water-lesson{margin:21px 0}#panel .water-lesson p{font-size:12px}
+#panel .water-lesson a{font-size:10px}
+#panel .nitrogen-steps{display:flex;gap:8px;align-items:center;background:#e4e9da;padding:14px 10px;border-radius:7px;margin:12px 0}
+#panel .nitrogen-steps>div{flex:1;min-width:0}#panel .nitrogen-steps b{display:block;font-size:9px;color:#8c936e;margin:0 0 5px}
+#panel .nitrogen-steps strong{font:15px/1.5 Georgia;color:#476239;display:block}
+#panel .nitrogen-steps span{font-size:9px;line-height:1.5;color:#788367;display:block}
+#panel .nitrogen-steps i{font-style:normal;color:#899677}
+#panel .dilution-bars>div{display:grid;grid-template-columns:75px 1fr 55px;gap:9px;align-items:center;margin:12px 0;font-size:10px;color:#577152}
+#panel .dilution-bars i{display:block;height:13px;background:#e0e7d6;border-radius:3px;overflow:hidden}
+#panel .dilution-bars b{display:block;height:100%;background:#73946b}#panel .dilution-bars strong{text-align:right;font-weight:500}
+#panel .water-table-wrap{max-width:100%;overflow:auto;border:1px solid #d1dbca;border-radius:6px;margin:10px 0}
+#panel .water-table-wrap table{border-collapse:collapse;min-width:550px;width:100%;font:10px/1.5 system-ui;font-variant-numeric:tabular-nums}
+#panel .water-table-wrap th,#panel .water-table-wrap td{padding:8px;border-bottom:1px solid #d9e0d2;text-align:left;white-space:nowrap}
+#panel .water-table-wrap th{background:#e4eadd;color:#3a5e47;font-weight:600}
+#panel .water-table-wrap caption{text-align:left;padding:10px;color:#5a7260}
+#panel .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:700px){#panel.water-panel{padding:20px;width:auto;left:12px;right:12px}#panel .water-dashboard{grid-template-columns:1fr 1fr}#panel .water-stat{padding:10px}#panel .water-stat strong{font-size:22px}#panel .water-stat em{display:inline;margin-left:5px}#panel .water-stat span{font-size:9px}#panel .water-sliders{gap:11px}#panel .water-sliders label{font-size:10px;flex-wrap:wrap}#panel .water-actions button{padding:8px;font-size:10px}#panel .water-figure{padding:12px 7px}#panel .water-chart text{font-size:15px}#panel .water-chart .reference-label{font-size:13px}#panel .water-figure figcaption strong{font-size:16px}}
