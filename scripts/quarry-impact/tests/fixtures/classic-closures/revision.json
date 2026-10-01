@@ -1,0 +1,20 @@
+{
+  "baseline": "544eac62b515ecfe1b1682de9fafa344bc0575eb",
+  "files": {
+    "src/muscle-asset.ts": {
+      "snapshot": "src-muscle-asset.ts.gz",
+      "before": "7582e8501c3b3b55576f1de05e529b62f7b9ed6111d3e4a00a1f9a737dcc185e",
+      "after": "a6de9793ae559ffcaa964c78e692f3feaa8ee7ad20dea86ff2c7f5237a25e780"
+    },
+    "src/estate-asset.ts": {
+      "snapshot": "src-estate-asset.ts.gz",
+      "before": "bdfaecc5518e4eaa44133aa5fb37c6c8ce76b900761521fc0dafb03b3481301c",
+      "after": "8d3ab0c8710a296e5cf6aaf0d2050a4c96bfcc11f18a0ecb80e5c14e3697a02f"
+    },
+    "src/vehicle-construction.ts": {
+      "snapshot": "src-vehicle-construction.ts.gz",
+      "before": "3d799b03c04c87edcf257225e19fdae38fe7b9e2c43f119391e2c92b0cbd418b",
+      "after": "ca21c637a348799b50ff407470f4816e67f8933efa7e10dde0b37a765d53a1c4"
+    }
+  }
+}

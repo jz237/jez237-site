@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {addClassicPanelBackings} from './classic-panel-backings';
+import {addClassicBayClosures} from './classic-engine-bay';
 import {buildMuscleAsset,MUSCLE_TEXTURES} from './muscle-asset';
 import {partitionSurface,type SurfacePlane} from './surface-partition';
 import {stampedPanel} from './classic-panel';
@@ -18,7 +20,7 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
   let serial=0;
   const mesh=(name:string,g:T.BufferGeometry,m:T.Material)=>{const geometry=g.index?g.toNonIndexed():g;if(geometry!==g)g.dispose();const o=new T.Mesh(geometry,m);o.name=name;o.castShadow=o.receiveShadow=true;root.add(o);return o;};
   const box=(name:string,size:[number,number,number],at:[number,number,number],m:T.Material)=>{const o=mesh(name,new T.BoxGeometry(...size).toNonIndexed(),m);o.position.set(...at);return o;};
-  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72]];
+  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.84],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72]];
   for(const child of [...donor.children]){
     if(child.name.startsWith('wheel_')){root.add(child);continue;}
     if(!(child instanceof T.Mesh))continue;
@@ -34,7 +36,7 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
       if(!interior&&Math.abs(p.x)>.72&&p.z<.72&&p.z> -1.40){
         return 'panel_BodyDoor'+(p.z<-.38?'Rear':'')+side+(body?'':'Trim');
       }
-      if(body)return p.z>.72?(Math.abs(p.x)<.72?'panel_hood':'panel_FrontFender'+side):'panel_RearQuarter'+side;
+      if(body)return p.z>.72?(Math.abs(p.x)<.72?(p.y>.84?'panel_hood':'panel_FrontValance'):'panel_FrontFender'+side):'panel_RearQuarter'+side;
       return child.name;
     }))mesh(part.name+'_'+serial++,part.geometry,body?paint:mat);
     child.geometry.dispose();
@@ -132,6 +134,8 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
     g.computeVertexNormals();child.geometry=toCreasedNormals(g,Math.PI/3);
     if(child.geometry!==g)g.dispose();child.geometry.computeBoundingBox();child.geometry.computeBoundingSphere();
   }
+  addClassicBayClosures(root);
+  addClassicPanelBackings(root);
   root.updateMatrixWorld(true);return root;
 }
 

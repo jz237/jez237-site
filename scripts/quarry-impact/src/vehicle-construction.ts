@@ -4,7 +4,7 @@ export type ConstructionRole='skin'|'engine'|'rail'|'radiator';
 /** Keep a few mechanical batches separate, rather than hundreds of draw calls. */
 export function constructionRole(name:string):ConstructionRole{
   name=name.replace(/[_-]+/g,' ');
-  if(/Structure engine (block|sump|cover)|Structure intake runner/i.test(name))return 'engine';
+  if(/Structure engine (block|sump|cover|valve cover|casting rib|air cleaner)|Structure (valve cover|air cleaner|intake runner)/i.test(name))return 'engine';
   if(/Structure .*rail|Structure .*beam|Structure .*crash mount|Structure strut brace/i.test(name))return 'rail';
   if(/Structure radiator|Structure .*radiator support/i.test(name))return 'radiator';
   return 'skin';

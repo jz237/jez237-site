@@ -34,6 +34,7 @@ import {structuralDamage,impactAudioSeverity} from './bodywork-response';
 import {VehicleThermalState} from './vehicle-thermal-state';
 import {unitNoise} from './vehicle-fire-profile';
 import {DrivingBrain} from './driving-brain';
+import {cameraObstruction} from './demo-camera-visibility';
 import {DemoDirector, DEMO_CAMERAS, type DemoCamera} from './demo-director';
 import { Sound } from './audio';
 import { OnlineView } from './online-view';
@@ -169,7 +170,7 @@ const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
 let vehicleFire:VehicleFire | undefined;
 let puddleSplashes:PuddleSplashes|undefined;
-const drivers=new DrivingBrain(DERBY_ARENA),director=new DemoDirector(DERBY_ARENA);
+const drivers=new DrivingBrain(DERBY_ARENA),director=new DemoDirector(DERBY_ARENA,(from,to,car)=>cameraObstruction(physics,from,to,car.body));
 let demo=false,demoRestart=0,demoHudHidden=false;
 let demoOptions=readDemoOptions();try{demoOptions=readDemoOptions(localStorage.getItem(DEMO_KEY));}catch{}
 let preparingEvent=false,preparationInterrupted=false;
