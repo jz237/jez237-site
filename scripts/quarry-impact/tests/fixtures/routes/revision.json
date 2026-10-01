@@ -1,0 +1,36 @@
+{
+  "baseline": "2eb2cbb",
+  "purpose": "Opposing-direction circuits and ordered, free-order and random waypoint events",
+  "files": {
+    "src/main.ts": {
+      "before": "733f42cf19a0b9ce3f2da3aacac4b357963e7a7df7213fdac283b24a04f61d7c",
+      "after": "55bd17774b52374c24bfe00e9ddd0ca9e58adb150fc56f688778d469702e9e9d",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/event-rules.ts": {
+      "before": "6dba8ce9f2aac8af52ff483cb6b58ed988b1d0a6f6fff94f7d5a057931caff18",
+      "after": "8c3021189de5061c211176d4a3f4676b92496ab10af1c85cf31f1b4023b6f13a",
+      "snapshot": "src-event-rules.ts.gz"
+    },
+    "src/event-ui.ts": {
+      "before": "9528b8912caded2dfec5414f9590773db020a0bb5edc53f1713080e51d28b92f",
+      "after": "9d8dce31aa6ad0ae2e8a282ccfc9d7d5ba198b293d5a395596395d0932f4d1f9",
+      "snapshot": "src-event-ui.ts.gz"
+    },
+    "src/driving-brain.ts": {
+      "before": "3d6cda8230c754716fec715c26342f1765bf6193c7cceef9180eee38f6d04d78",
+      "after": "2dcbf476abdaeb9afbe1872c938bee6b5a5e09681989728e5bb36fbdbedf8e98",
+      "snapshot": "src-driving-brain.ts.gz"
+    },
+    "src/quarry-minimap.ts": {
+      "before": "71f4557a1aaccff6791ea3355a1106d484317b724f5b54c1479d2323350e29d8",
+      "after": "a2384651c48012a2247643c8650b672889e23e3cf85c5648b02b33b3d7a32dd5",
+      "snapshot": "src-quarry-minimap.ts.gz"
+    },
+    "src/style.css": {
+      "before": "b0ce1e71e0005da243dc9720a1faa812bbec694466d886b3dc98320fd7e34df2",
+      "after": "97c45e4f7c9e4729d169c96489956030002e797e374f249b670bd5f2ebf6b04d",
+      "snapshot": "src-style.css.gz"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -20,7 +21,7 @@ test('previous release sources are recoverable and all 23 shared simulation inpu
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const revision=JSON.parse(read('source/wreck-revision.json').toString());
  for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreFireBytes(p,read(p))),e.after,p);assert.equal(hash(restoreWreckBytes(p,read(p))),e.before,p);}
- const physics=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(physics.sourceHashes).length,23);for(const [p,h]of Object.entries(physics.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const physics=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(physics.sourceHashes).length,23);for(const [p,h]of Object.entries(physics.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
 });
 
 test('adaptive panel edges are short, conforming and preserve the intact surface',()=>{

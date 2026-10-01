@@ -15,8 +15,8 @@ export class DrivingBrain {
   constructor(private arena:ArenaLayout=LEGACY_ARENA){}
   readonly memory=new Map<number,Memory>();
   reset(){this.memory.clear();}
-  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance):Input {
-    if(car.health<=0||car.finished)return {...stop};
+  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS):Input {
+    if(car.health<=0||(car.finished&&mode!=='race'))return {...stop};
     let m=this.memory.get(car.id);
     if(!m){m={target:-1,commit:0,stalled:0,reverse:0,escape:0,escapeSteer:0,attempts:0,steer:0,lane:(car.id%3-1)*1.7,phase:'approach',scan:0,clear:{front:30,left:30,right:30,rear:30}};this.memory.set(car.id,m);}
     m.commit-=dt;m.scan-=dt;
@@ -47,7 +47,7 @@ export class DrivingBrain {
     }else{
       let prev:{x:number;z:number},next:{x:number;z:number},after:{x:number;z:number};
       if(mode==='race'){
-        prev=CHECKPOINTS[(car.nextCheckpoint+23)%24];next=CHECKPOINTS[car.nextCheckpoint];after=CHECKPOINTS[(car.nextCheckpoint+1)%24];
+        prev=checkpoints[(car.nextCheckpoint+checkpoints.length-1)%checkpoints.length];next=checkpoints[car.nextCheckpoint];after=checkpoints[(car.nextCheckpoint+1)%checkpoints.length];
       }else{
         let best=Infinity,index=0;
         route.forEach((p,i)=>{const d=Math.hypot(p.x-car.current.x,p.z-car.current.z);if(d<best){best=d;index=i;}});

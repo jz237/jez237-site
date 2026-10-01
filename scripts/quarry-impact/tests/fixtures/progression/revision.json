@@ -1,0 +1,16 @@
+{
+  "baseline": "b8bd891",
+  "purpose": "Driver progression and thirty fixed-setup challenges",
+  "files": {
+    "src/main.ts": {
+      "before": "ccdad51d7a3a4ca84d60e48bf962741e09b83b12fd647f0255f19245b4119b1b",
+      "after": "2c13895e61c094a078c05e147ea878ef6236400ab89d2387a843026b21efe55c",
+      "snapshot": "src-main.ts.gz"
+    },
+    "src/style.css": {
+      "before": "976e2923177b5036d031be7d4800e005597822e788d10e45bdcf8f8b9f995418",
+      "after": "98eaffca524974f20411c5b7fd4694fa82e63946282297f5fbb840f656892db0",
+      "snapshot": "src-style.css.gz"
+    }
+  }
+}

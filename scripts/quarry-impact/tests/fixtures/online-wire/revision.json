@@ -1,0 +1,45 @@
+{
+  "baseline": "eabbe92",
+  "files": {
+    "multiplayer/protocol.ts": {
+      "before": "f8635ed848eb7726e8871b957a597e6786ae1f6460cdc214542e56adc0820228",
+      "snapshot": "multiplayer-protocol.ts.gz",
+      "after": "8bb21f034111b141d1727c26123c24e2def781a1b4c28a264b9d4fe2ea27499a"
+    },
+    "multiplayer/room.ts": {
+      "before": "efce996470942f6c31a1d318895888d4d0d6f5614c5d8aa573a5d854377465b8",
+      "snapshot": "multiplayer-room.ts.gz",
+      "after": "64bdc209bd892026313ee9a9bc988dfb6490886d9f20d5a7a5b62c5652fa1d3d"
+    },
+    "multiplayer/worker.ts": {
+      "before": "eb04bf693d5293d3820202571ebaa0f7f9240ec9b6186fdcebeb0d827a891adb",
+      "snapshot": "multiplayer-worker.ts.gz",
+      "after": "d1e6e205fd6bbb6aa34f052c6ec92dff194eef4420775c0d9e692511a2cb2896"
+    },
+    "src/network.ts": {
+      "before": "2828e6e34edefed18f0c89995d98acb204c8618ff7bc8b83b5212c887bc3af3e",
+      "snapshot": "src-network.ts.gz",
+      "after": "395b22de15e3b1f94f1eadcd1553e84adb41e33e827aa4364c19a44a0b05b722"
+    },
+    "package.json": {
+      "before": "642fe7029456cf761255f5d016f841521d1889fe888101fbfe0dc78146e5d8c8",
+      "snapshot": "package.json.gz",
+      "after": "2b2d305ada8c8846ec8a75c4343424add11ddbb3a70ef3a369dac9aedaf6f5e9"
+    },
+    "package-lock.json": {
+      "before": "c6c9b6a26140862e132a2aae471475dda09d055938508bb2c3eff4fb40870ffa",
+      "snapshot": "package-lock.json.gz",
+      "after": "101522e58f46c2ecc82ad4391d6ed8fe2df11ff96c39816c2dfbc0bb55543949"
+    },
+    "tests/network.test.ts": {
+      "before": "44f51bb756769084a5f647031db39ae227d70d3b11a38a19b4803b3edabfcb22",
+      "after": "bbc1464ee2bf6b7be5f652b92cf59f0d886222d16d4c94a6756548bf858998ba",
+      "snapshot": "tests-network.test.ts.gz"
+    },
+    "CREDITS.md": {
+      "before": "7aa6478d372f07412a6ef911cc0b31cba651f209362c88a8bb8d014905c0d2bb",
+      "after": "2ace1d0c7c7d6de6e95a76b6a095fac1738831efc369a40ceb5b44c2dcab8d75",
+      "snapshot": "CREDITS.md.gz"
+    }
+  }
+}

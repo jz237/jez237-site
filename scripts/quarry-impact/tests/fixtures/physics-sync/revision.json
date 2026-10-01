@@ -1,0 +1,30 @@
+{
+  "baseline": "ea41380 + unchanged downloaded simulation/room tests",
+  "files": {
+    "src/vehicle.ts": {
+      "before": "91c09da9c834760c103e4a748ed56f835bedb3028274386eb13c69c13865b709",
+      "snapshot": "src-vehicle.ts.gz",
+      "after": "2565bfea0c8c2ac645abb26a7bbd460ca2c8de722a668ab1d09d6e246a36ce94"
+    },
+    "src/wheel-mechanics.ts": {
+      "before": "995e795855efe3c3968cfc20918b5cb8141b76335cdcbc1d48663b79d52f6021",
+      "snapshot": "src-wheel-mechanics.ts.gz",
+      "after": "09d7c7aad53fa3617c56383a140c5d41c1486531325735b3a6faf431e7b3f71b"
+    },
+    "multiplayer/simulation.ts": {
+      "before": "3c0c5f7c93e9ddadb46c99af69a0bb98fdbdf86e777a90200cd77c37268bb841",
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "after": "75b409618a06b35b9cf2800f14bff9dd4ef917827195b905185327552f77ae4b"
+    },
+    "multiplayer/room.test.ts": {
+      "before": "d4bea69e0f7c662586aca0264840ca03371abe25caaf56530c7ccc922e698b06",
+      "snapshot": "multiplayer-room.test.ts.gz",
+      "after": "42ab46ef36d9c85583541dbb01102ce58c2389274611f0491e7e5f49c56d7efb"
+    },
+    "src/garage.ts": {
+      "before": "6ef99aa4bfffe04d5b1143e3f383b8d1af790c5e6598069a05fcbfe70cec1cfe",
+      "snapshot": "src-garage.ts.gz",
+      "after": "cb2539888a9ec43a4ccf62e7c4a6d927ca75b8257a564bfa1e9452dca321b2cf"
+    }
+  }
+}

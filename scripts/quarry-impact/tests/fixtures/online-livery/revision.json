@@ -1,0 +1,55 @@
+{
+  "baseline": "9c9a928",
+  "files": {
+    "src/livery.ts": {
+      "before": "621c15d1f75f17c89012128292e2946778775f1541e138a6ea2680e7e3e1e8be",
+      "after": "5d177236634c964ee4e6b9521477edb1678cea5c8be7bc6b399f5d6ce836a21f",
+      "snapshot": "src-livery.ts.gz"
+    },
+    "multiplayer/protocol.ts": {
+      "before": "38e40c2e15d03ea02e7decaac52f6156fed1175ad63da26dfe5c915b35bb3718",
+      "after": "147a47cba852842c9a688ac9487e5baa07766766e3379be55db2fcf38730b7e9",
+      "snapshot": "multiplayer-protocol.ts.gz"
+    },
+    "multiplayer/room.ts": {
+      "before": "154b0ca3d5a381c75856474df85bd1a2c261eedcf0bb4937f44d6cafedb0b01d",
+      "after": "cc41c9b087e05c145c8f70caca5fe16fc76ee17097d3563686932db7a4ed2756",
+      "snapshot": "multiplayer-room.ts.gz"
+    },
+    "multiplayer/worker.ts": {
+      "before": "d1e6e205fd6bbb6aa34f052c6ec92dff194eef4420775c0d9e692511a2cb2896",
+      "after": "10acfaf7b2db111f79f9f4636e39252d1d9a7905a40a50c5d671c4f4d950b41a",
+      "snapshot": "multiplayer-worker.ts.gz"
+    },
+    "src/network.ts": {
+      "before": "c8796da7e1d115b9fc368cb5d12e747d54c5e81be5104f03d7c7012d6ff5d197",
+      "after": "bfcda3d5c8bbf7a46b337784d55dd16dff5a1e1dee49e90de431795d2076e023",
+      "snapshot": "src-network.ts.gz"
+    },
+    "src/network-validation.ts": {
+      "before": "af2f37c09ad842b407c98d3df2993915847383d46d58ca670b5f018386cda59d",
+      "after": "adfc2b264fca70e476408193464698e4b06000f7e2d8b66cc8b86a1925188f99",
+      "snapshot": "src-network-validation.ts.gz"
+    },
+    "src/online-view.ts": {
+      "before": "725b93bee008272392c6504158385d5033fe98c6a645fc055f8bdf5d326fe032",
+      "after": "f4e4b7792eda0bdc529d86b2e3333027f49a95a12574c37b7157acbe6bd407d9",
+      "snapshot": "src-online-view.ts.gz"
+    },
+    "src/online-ui.ts": {
+      "before": "c4d5b6bdc8336a1439b40dac61e74a2c2bc7adae175f384f5777fa042e289afe",
+      "after": "90910b0d7e260d037ea680c2da4b446ed3942a04fbec928d187d85545985ba49",
+      "snapshot": "src-online-ui.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "832f9019cf05c045441296ee61516e42d7fca89cc66b0a42a2616bb3699b7f7e",
+      "after": "340e6b103e77f012b6d23d1e52cdaedd61df1ea96dc144d786f17a17cd0aff56",
+      "snapshot": "src-main.ts.gz"
+    },
+    "tests/network.test.ts": {
+      "before": "aa32f85e67c11d3e08d43128eac608bbb160cfa6c6c44a27ac440ed74fd9f1dc",
+      "after": "22514e8af6a4bdd3034eb8240fc8ff5e64858f8ec2e02eb314b525777f95f095",
+      "snapshot": "tests-network.test.ts.gz"
+    }
+  }
+}
