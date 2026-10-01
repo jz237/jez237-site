@@ -1,0 +1,55 @@
+{
+  "baseline": "98df564455183c657cf3ea20be667ca0c0b4cdbf",
+  "files": {
+    "src/rules.ts": {
+      "snapshot": "src-rules.ts.gz",
+      "before": "021b839acb1adf64d82ddf5443b57d28c96c3ef3ab7e54ddc65ab67cac818ec0",
+      "after": "cf17065ad6a3a7481da480c0fcc765cd6851ea817a11e16da0d863f9cd7c88c1"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "4dde43fec94f4628cb03bc13d9af0aa9ae1b0d2045404940117b7cec9a6282a3",
+      "after": "724f127ad492e86454d27d59e5f071b194e43227cc8a1f36d2d52102f13fcc29"
+    },
+    "src/garage.ts": {
+      "snapshot": "src-garage.ts.gz",
+      "before": "cb2539888a9ec43a4ccf62e7c4a6d927ca75b8257a564bfa1e9452dca321b2cf",
+      "after": "679b843d706268f477a1c88e635d592226125b7b4475e1b5a62692df7c8c4e0a"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "7a1609d043077bf8daf46f5d0be7d07d0aced265d5fd0ce7a113bf8c32086b32",
+      "after": "f2bec5c729b45a30134fdef05981c3fcee92dc8d132f4af94ce35e3f4ada90b7"
+    },
+    "src/style.css": {
+      "snapshot": "src-style.css.gz",
+      "before": "a382855cc131d891147ad971fb64b3073bf56f0b4d97ffa24e05caaaae07908f",
+      "after": "d058b91244a24bd111266e4da34680d88f6307b25d9916bc18f2533f0bc4d805"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "f7ce98344345222f886c1f51b10f9cf5b28ab2101dcd87310e8f2a0431feffa1",
+      "after": "f80187797bc12e8bbc1fbed3a4661515269b414a85b8e9ded4bbb6624c01d876"
+    },
+    "src/component-damage.ts": {
+      "snapshot": "src-component-damage.ts.gz",
+      "before": "23a1e5d73efd190fd4cc4d8fe9e1086438f306ceafc2aaf8265419a278b3d3b1",
+      "after": "f6fca303e215c795c10545b3b05feff29e94de5e8c5624d722139d8c50607719"
+    },
+    "src/replay-data.ts": {
+      "snapshot": "src-replay-data.ts.gz",
+      "before": "38b2fb35c62664a81a25db95ce946f797d5d892448babdd005c2476b2e9c4a44",
+      "after": "d18e5e93efb63bab69383bd5af9096047d609cabfef5446cc2d04b3978a04716"
+    },
+    "src/audio.ts": {
+      "snapshot": "src-audio.ts.gz",
+      "before": "25037103d0626bfc160d7f9278ef4ecce29912118a7b3113bce4577d9d20f3df",
+      "after": "7fc78f63b1f589b2c5145f14ec95b7a241df23aaaa38315024d62eed36a9d55b"
+    },
+    "src/classic-vehicles.ts": {
+      "snapshot": "src-classic-vehicles.ts.gz",
+      "before": "1d7b30878919ace2c0039bbe71f97fbe1347f3324507267c16fd5aa2c632ebf3",
+      "after": "82e52822ae4591874285e3994e1e14b474d3fef4aa43da54fe29e624f85336fd"
+    }
+  }
+}
