@@ -1,0 +1,8 @@
+Muscle Car 3D Model by BrightRetro
+https://opengameart.org/content/muscle-car-3d-model
+Licensed under Creative Commons Attribution 3.0 Unported
+https://creativecommons.org/licenses/by/3.0/
+
+Modified for Quarry Impact: format conversion, shading, orientation and damage-panel preparation. BrightRetro does not endorse this game. Original author credit must remain with redistributed models.
+
+The estate-candidate model is also derived from this asset, with a new cargo roof, glazing, pillars, four-door partitioning and cabin furnishings created for Quarry Impact.

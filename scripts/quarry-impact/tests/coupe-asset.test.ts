@@ -89,7 +89,7 @@ async function productionTemplates(){
   if(!prepared)prepared=(async()=>{
     const original=GLTFLoader.prototype.loadAsync;
     GLTFLoader.prototype.loadAsync=async url=>{
-      const match=/\/(coupe|sedan|hatch|wheel-machining)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
+      const match=/\/(coupe|sedan|hatch|muscle|wagon|wheel-machining)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
     };
     try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
     await R.init();

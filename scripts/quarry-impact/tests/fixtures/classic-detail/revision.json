@@ -1,0 +1,30 @@
+{
+  "baseline": "abdadc4",
+  "files": {
+    "src/classic-vehicles.ts": {
+      "snapshot": "src-classic-vehicles.ts.gz",
+      "before": "82e52822ae4591874285e3994e1e14b474d3fef4aa43da54fe29e624f85336fd",
+      "after": "610706a0c31e247937af3b26680830433e5c297c9288321eee10b9fa95613332"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "f80187797bc12e8bbc1fbed3a4661515269b414a85b8e9ded4bbb6624c01d876",
+      "after": "1337dadf442c3bba188f99a97e37324dc30f482cc611ea08fe67604950405f1d"
+    },
+    "src/wreck-attachments.ts": {
+      "snapshot": "src-wreck-attachments.ts.gz",
+      "before": "3dd1022d8f56cc9d5a899d2e375e5af18aaccb49eb713709aaf23cacfa236dd7",
+      "after": "09e8012b1fe7ae7b9dd4c67b56eb77a40e2701617663ec2d7435f8993132a44c"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "724f127ad492e86454d27d59e5f071b194e43227cc8a1f36d2d52102f13fcc29",
+      "after": "ba3f6ea7681b7a16b849e519a841a9a7faac1ed4b81b6e23d90cd80d7e2facfe"
+    },
+    "src/vehicle.ts": {
+      "snapshot": "src-vehicle.ts.gz",
+      "before": "2565bfea0c8c2ac645abb26a7bbd460ca2c8de722a668ab1d09d6e246a36ce94",
+      "after": "7497e707ddfb6628aa933d26662452f52a52d99ee1a1af0630dce90e40667887"
+    }
+  }
+}

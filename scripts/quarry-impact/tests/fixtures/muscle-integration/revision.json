@@ -1,0 +1,30 @@
+{
+  "baseline": "67a345dce0109f2346ecdf4dcfd9d232f6d562c3",
+  "files": {
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "ba3f6ea7681b7a16b849e519a841a9a7faac1ed4b81b6e23d90cd80d7e2facfe",
+      "after": "14b352eacf5dfb3c67bddaa967e928ce70ab9afb752bb602ee5f9b6b4cbf3393"
+    },
+    "src/classic-vehicle-specs.ts": {
+      "snapshot": "src-classic-vehicle-specs.ts.gz",
+      "before": "388ead7badc8ea2ac69dcac182a85941aeff4cd7e1f1f6f23bbb6f79aae80b3d",
+      "after": "5b60b5bcc7e01f063fdebbf37866757730760088d2fa4c5396729fff0b47486b"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "1337dadf442c3bba188f99a97e37324dc30f482cc611ea08fe67604950405f1d",
+      "after": "5daea5ea999201cbef332d4c855794bf7ec61f72aef300f5704717cf58ee7e9f"
+    },
+    "src/vehicle.ts": {
+      "snapshot": "src-vehicle.ts.gz",
+      "before": "7497e707ddfb6628aa933d26662452f52a52d99ee1a1af0630dce90e40667887",
+      "after": "9efb53cc498619253611a229a9bbc408fae89096ac54da53545883bab155bc21"
+    },
+    "src/muscle-asset.ts": {
+      "snapshot": "src-muscle-asset.ts.gz",
+      "before": "1a42fa84d7abb04704e173824261b6e37f90c8aed8b605b2e6e29fad3df23600",
+      "after": "7582e8501c3b3b55576f1de05e529b62f7b9ed6111d3e4a00a1f9a737dcc185e"
+    }
+  }
+}

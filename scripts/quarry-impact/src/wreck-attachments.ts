@@ -23,9 +23,10 @@ export class WreckAttachments {
     root.traverse(o=>{
       if(!(o instanceof T.Mesh)||!o.userData.wreckRest)return;
       const name=o.name.toLowerCase();
-      const door=/bodydoor[lr]/.test(name)&&!name.includes('mirror');
+      const rearDoor=/bodydoorrear[lr]/.test(name);
+      const door=(rearDoor||/bodydoor[lr]/.test(name))&&!name.includes('mirror');
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
-      const group=door?(bounds.getCenter(new T.Vector3()).x<0?'door-left':'door-right'):o.userData.detachAssembly;
+      const group=door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:o.userData.detachAssembly;
       if(!group||group.startsWith('mirror'))return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);
@@ -58,7 +59,7 @@ export class WreckAttachments {
       if(a.name==='hood'){
         pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42+flutter;euler.z=a.side*a.loose*.045;
       }else if(a.name.startsWith('door')){
-        const side=a.name==='door-left'?-1:1;
+        const side=a.name.endsWith('left')?-1:1;
         pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*a.loose*.075;euler.x=-a.loose*.025;
       }else{
         pivot.x=-a.side*this.width*.82;pivot.y=a.bounds.max.y-.07;

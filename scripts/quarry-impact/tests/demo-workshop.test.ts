@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as T from 'three';
-import {readDemoOptions,DEFAULT_DEMO,demoCarKind,nextDemoMode} from '../src/demo-session';import {DemoDirector} from '../src/demo-director';import {buildClassicVehicle,CLASSIC_VEHICLES} from '../src/classic-vehicles';import {verifyDemoWorkshopRevision} from './demo-workshop-invariants';
+import {readDemoOptions,DEFAULT_DEMO,demoCarKind,nextDemoMode} from '../src/demo-session';import {DemoDirector} from '../src/demo-director';import {CLASSIC_VEHICLES,classicWheelAnchors} from '../src/classic-vehicle-specs';import {loadCarWithoutImages} from '../tools/car-asset-audit';import {verifyDemoWorkshopRevision} from './demo-workshop-invariants';
 test('demo preferences are bounded, persisted and independent of solo event settings',()=>{
  assert.deepEqual(readDemoOptions('invalid'),DEFAULT_DEMO);assert.deepEqual(readDemoOptions('{}'),DEFAULT_DEMO);
  const raw={version:1,field:24,lineup:'selected',loop:'stop',camera:'trackside',laps:20,duration:30};assert.deepEqual(readDemoOptions(JSON.stringify(raw)),raw);
@@ -14,14 +14,22 @@ test('automatic following chooses active cars even with a fixed camera, and manu
  const d=new DemoDirector(),camera=new T.PerspectiveCamera(),orbit={target:new T.Vector3(),update(){}};
  d.select('chase');d.update([a,b]as any,camera,orbit as any,1/60,false);assert.equal(d.followed,1);assert.equal(d.activeView,'chase');d.follow(0);d.update([a,b]as any,camera,orbit as any,10,false);assert.equal(d.followed,0);
 });
-test('classic models have distinct silhouettes, four correctly spaced wheels, cabins and individually named damage panels',()=>{
- const dimensions:number[]=[];
- for(const kind of ['muscle','wagon']as const){const d=CLASSIC_VEHICLES[kind],car=buildClassicVehicle(kind),bounds=new T.Box3().setFromObject(car),panels:T.Mesh[]=[],glass:T.Mesh[]=[];dimensions.push(bounds.max.z-bounds.min.z);
- for(const [i,name]of ['FL','FR','RL','RR'].entries()){const w=car.getObjectByName('wheel_'+name)!;assert.ok(w);assert.equal(w.position.z,(i<2?1:-1)*d.wheelbase/2);assert.equal(w.position.x,(i%2?1:-1)*(d.halfWidth-.04));}
- car.traverse(o=>{if(o instanceof T.Mesh){if(o.name.startsWith('panel_'))panels.push(o);if(o.name.startsWith('glass_'))glass.push(o);const p=o.geometry.getAttribute('position');assert.ok(Array.from(p.array).every(Number.isFinite));}});
- assert.ok(panels.length>=30);assert.ok(glass.length>=6);assert.ok(car.getObjectByName('Structure engine block'));assert.ok(car.getObjectByName('panel_hood'));assert.ok(car.getObjectByName('panel_BodyDoorL'));
- assert.ok(bounds.max.y>1.8&&bounds.max.y<2.2);assert.ok(bounds.min.y>.1);
- for(const z of [-d.wheelbase/2,d.wheelbase/2]){const ray=new T.Raycaster(new T.Vector3(-2,.9,z),new T.Vector3(1,0,0),0,1.3);assert.equal(ray.intersectObjects(panels,false).length,0,'Wheel openings must remain clear');}
- }assert.ok(dimensions[1]-dimensions[0]>.4);
+test('playable classics have distinct cabins, four aligned wheels and independently named damage panels',async()=>{
+ const roofLengths:number[]=[];
+ for(const kind of ['muscle','wagon']as const){
+  const d=CLASSIC_VEHICLES[kind],car=(await loadCarWithoutImages(kind)).scene,panels:T.Mesh[]=[],roof=new T.Box3(),anchors=classicWheelAnchors(kind);
+  for(const [i,name]of ['FL','FR','RL','RR'].entries())assert.deepEqual(car.getObjectByName('wheel_'+name)!.position.toArray(),Object.values(anchors.wheels[i]));
+  let vertices=0,glazing=0;car.traverse(o=>{if(!(o instanceof T.Mesh))return;
+   const p=o.geometry.getAttribute('position'),n=o.geometry.getAttribute('normal');vertices+=p.count;
+   assert.equal(n.count,p.count);assert.ok(Array.from(p.array).every(Number.isFinite));assert.ok(Array.from(n.array).every(Number.isFinite));
+   if(o.name.startsWith('panel_'))panels.push(o);if(o.name.startsWith('glass_'))glazing++;
+   if(o.name.startsWith('panel_BodyRoof'))for(let i=0;i<p.count;i++){const point=new T.Vector3().fromBufferAttribute(p,i).applyMatrix4(o.matrixWorld);if(point.y>1.3)roof.expandByPoint(point);}
+  });
+  assert.ok(vertices<65000,'Raw fleet geometry stays within the replacement model budget');assert.ok(panels.length>20);assert.ok(glazing>=6);
+  assert.ok(car.getObjectByName('Structure_engine_block'));assert.ok(panels.some(p=>p.name.startsWith('panel_hood')));assert.ok(panels.some(p=>p.name.startsWith('panel_BodyDoorL')));
+  for(const z of [-d.wheelbase/2,d.wheelbase/2])assert.equal(new T.Raycaster(new T.Vector3(-2,.55,z),new T.Vector3(1,0,0),0,1.3).intersectObjects(panels,false).length,0,'Wheel openings remain clear');
+  roofLengths.push(roof.max.z-roof.min.z);
+ }
+ assert.ok(roofLengths[1]>roofLengths[0]+.8,'Estate has a longer cargo roof than the muscle coupe');
 });
 test('preceding demo and gameplay source is recoverable byte for byte',()=>verifyDemoWorkshopRevision());

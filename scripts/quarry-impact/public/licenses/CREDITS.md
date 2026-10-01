@@ -157,3 +157,17 @@ New photographic materials, all **CC0 1.0** from Poly Haven:
 - [Concrete Layers 02](https://polyhaven.com/a/concrete_layers_02), **Rob Tuytel**, 2 m scale.
 
 The nine original 2k JPEGs are bundled locally with their source URLs, official checksums and local hashes in `public/assets/workyard/manifest.json`; source metadata is retained in `source/workyard/`. Existing cladding maps are reused. The crash sound refinement reuses the existing ElevenLabs recordings; this update generated no additional audio and incurred no asset purchases.
+
+## Bramble V8 replacement model
+
+Muscle Car 3D Model by **BrightRetro**, released under **CC-BY 3.0**.
+Source: https://opengameart.org/content/muscle-car-3d-model
+License: https://creativecommons.org/licenses/by/3.0/
+
+Adapted for Quarry Impact: geometry format conversion, shading and recolorable
+paint, separate damage panels and wheel pivots, tire sizing and inner structure.
+BrightRetro does not endorse this game. Original archive and provenance are
+preserved under source/vehicles/brightretro-muscle.
+
+The estate development candidate also uses this attributed base, with a new
+cargo cabin, roof, glazing, pillars and four separate door assemblies.

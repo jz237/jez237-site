@@ -1,3 +1,4 @@
+import {isClassicKind,classicWheelHalfTrack} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
@@ -175,7 +176,7 @@ export class Vehicle {
     this.impactSerial = 0;
     for(let i=0;i<4;i++){
       const d=DEFINITIONS[this.kind];
-      this.controller.setWheelChassisConnectionPointCs(i,{x:(i%2?1:-1)*(d.halfWidth-.04),y:-.12,z:(i<2?1:-1)*d.wheelbase/2});
+      this.controller.setWheelChassisConnectionPointCs(i,{x:isClassicKind(this.kind)?(i%2?1:-1)*classicWheelHalfTrack(this.kind):(i%2?1:-1)*(d.halfWidth-.04),y:-.12,z:(i<2?1:-1)*d.wheelbase/2});
       this.controller.setWheelSuspensionRestLength(i,.36);this.controller.setWheelRadius(i,.375);
       this.controller.setWheelMaxSuspensionForce(i,13000);this.controller.setWheelSuspensionStiffness(i,30);
       this.controller.setWheelSideFrictionStiffness(i,1.1);this.controller.setWheelAxleCs(i,{x:-1,y:0,z:0});
@@ -212,7 +213,7 @@ export class Vehicle {
       repairWreckGeometry(g);
       g.visible = true;
       g.userData.damage = 0;
-      (g.material as T.MeshStandardMaterial).opacity = this.kind === 'coupe' ? .24 : .28;
+      (g.material as T.MeshStandardMaterial).opacity = isClassicKind(this.kind) ? .55 : this.kind === 'coupe' ? .24 : .28;
       const state = (g.material as T.Material).userData.glassState as GlassState | undefined;
       if (state) state.damage.value = 0;
     }
