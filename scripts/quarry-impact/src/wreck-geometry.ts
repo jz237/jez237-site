@@ -1,5 +1,6 @@
 import * as T from 'three';
 import { finishCoupeDent } from './coupe-realism';
+import {constructionResponse,type ConstructionRole} from './vehicle-construction';
 const impactBounds = new T.Box3();
 
 /** Every skin, seal, window and inner panel is bent in metres in the same
@@ -31,6 +32,7 @@ export function prepareWreckGeometry(root: T.Group) {
     object.geometry.setAttribute('wreckPosition', rest.clone());
     object.geometry.setAttribute('restPosition',new T.BufferAttribute(new Float32Array(object.userData.original),3));
     object.geometry.setAttribute('impactAxis',new T.BufferAttribute(new Float32Array(rest.count*3),3));
+    object.geometry.setAttribute('transferPaint',new T.BufferAttribute(new Float32Array(rest.count*4),4));
     const bounds = new T.Box3().setFromBufferAttribute(rest);
     const name = object.name.toLowerCase();
     object.userData.detachAssembly = name.includes('mirror') ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'mirror-left' : 'mirror-right')
@@ -49,6 +51,7 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
   // the impact sphere. Bounds follow previous dents and arbitrary export axes.
   if (!g.boundingBox) g.computeBoundingBox();
   if (impactBounds.copy(g.boundingBox!).applyMatrix4(toModel).distanceToPoint(contact) >= radius) return 0;
+  if(mesh.userData.constructionRole==='engine')return dentEngine(mesh,contact,direction,damage,radius);
   const wear = g.attributes.impactWear;
   const tangent = new T.Vector3(0, 1, 0).cross(direction);
   if (tangent.lengthSq() < .001) tangent.set(1, 0, 0);
@@ -64,6 +67,7 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
     // aperture together. Roof strikes still crush the roof; a door strike
     // cannot pull the roof edge through the occupant compartment.
     const roof = T.MathUtils.smoothstep(orig.y, 1.1, 1.5) * (1 - Math.abs(direction.y));
+    const construction=constructionResponse(orig.x,orig.y,orig.z,direction.y,mesh.userData.constructionRole as ConstructionRole);
     let accumulated = 0;
     // Advect in small bounded increments through the current dent. Reapplying
     // a full offset to rest vertices folds triangles through one another on
@@ -75,7 +79,7 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
       // Compression approaches the displacement budget smoothly. A hard cap
       // left flat plateaus and sawtooth boundaries after repeated contacts.
       const used=current.distanceToSquared(orig)/.81;
-      const strength=weight*Math.min(.78,damage*.041)*(1-roof*.64)*Math.max(0,1-used)/8;
+      const strength=weight*Math.min(.78,damage*.041)*(1-roof*.64)*construction.strength*Math.max(0,1-used)/8;
       const across=offset.dot(tangent)/radius,along=offset.dot(vertical)/radius;
       const depth=offset.dot(direction);
       // Alternating folds follow the compressed length of the sheet, rather
@@ -84,14 +88,14 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
       const phase=depth*12.5+across*1.8;
       const fold=Math.sin(phase)*(.55+.45*Math.sin(phase*.5+.7));
       const span=Math.max(0,1-(along+.1)**2);
-      const buckle=fold*span*Math.min(1,damage/15);
+      const buckle=fold*span*Math.min(1,damage/15)*construction.fold;
       current.addScaledVector(direction,strength);
       current.addScaledVector(vertical,-buckle*strength*.37);
       current.addScaledVector(tangent,-across*strength*.12*span);
       accumulated+=strength;maximum=Math.max(maximum,weight);
     }
     offset.copy(current).sub(orig);
-    if (offset.lengthSq() > .81) current.copy(orig).add(offset.setLength(.9));
+    if (offset.lengthSq() > construction.budget**2) current.copy(orig).add(offset.setLength(construction.budget));
     current.applyMatrix4(fromModel);
     position.setXYZ(i, current.x, current.y, current.z);
     if (wear) wear.setXY(i, Math.min(1, wear.getX(i) + accumulated * 2.8), Math.min(1, wear.getY(i) + accumulated * 1.7));
@@ -106,6 +110,19 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
   return maximum;
 }
 
+/** A solid engine shifts on its mounts while retaining its internal shape. */
+function dentEngine(mesh:T.Mesh,contact:T.Vector3,direction:T.Vector3,damage:number,radius:number){
+  const g=mesh.geometry,rest=mesh.userData.wreckRest as T.BufferAttribute;
+  const bounds=new T.Box3().setFromBufferAttribute(rest),distance=bounds.distanceToPoint(contact);
+  if(distance>=radius)return 0;
+  const weight=Math.pow(1-distance/radius,1.4);
+  const shift:T.Vector3=mesh.userData.engineShift??(mesh.userData.engineShift=new T.Vector3());
+  shift.addScaledVector(direction,damage*weight*.0023);if(shift.length()>.16)shift.setLength(.16);
+  const p=new T.Vector3(),from=mesh.userData.wreckFromModel as T.Matrix4;
+  for(let i=0;i<rest.count;i++){p.fromBufferAttribute(rest,i).add(shift).applyMatrix4(from);g.attributes.position.setXYZ(i,p.x,p.y,p.z);}
+  g.attributes.position.needsUpdate=true;g.computeBoundingBox();g.computeBoundingSphere();return weight;
+}
+
 export function repairWreckGeometry(mesh: T.Mesh) {
   const g = mesh.geometry;
   (g.attributes.position.array as Float32Array).set(mesh.userData.original);
@@ -114,5 +131,7 @@ export function repairWreckGeometry(mesh: T.Mesh) {
   g.attributes.normal.needsUpdate = true;
   if (g.attributes.impactWear) { (g.attributes.impactWear.array as Float32Array).fill(0); g.attributes.impactWear.needsUpdate = true; }
   if (g.attributes.impactAxis) { (g.attributes.impactAxis.array as Float32Array).fill(0); g.attributes.impactAxis.needsUpdate = true; }
+  if(g.attributes.transferPaint){(g.attributes.transferPaint.array as Float32Array).fill(0);g.attributes.transferPaint.needsUpdate=true;}
+  mesh.userData.engineShift?.set(0,0,0);
   g.computeBoundingBox(); g.computeBoundingSphere();
 }

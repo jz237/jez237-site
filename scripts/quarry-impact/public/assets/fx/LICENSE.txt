@@ -1,0 +1,4 @@
+CC0 1.0 Universal
+Original Quarry Impact Mantaflow simulation and rendered fire/smoke atlases.
+https://creativecommons.org/publicdomain/zero/1.0/
+Authoring: tools/bake-vehicle-fluids.py and source/fx/vehicle-fluids.blend.

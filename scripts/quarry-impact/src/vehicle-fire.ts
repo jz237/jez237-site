@@ -3,6 +3,7 @@ import type { Vehicle } from './vehicle';
 import { VehicleThermalState } from './vehicle-thermal-state';
 import {fireProfile} from './vehicle-fire-profile';
 import {fireNoise} from './fire-noise';
+import {bakedVehicleFX,prepareBakedVehicleFX} from './baked-vehicle-fx';
 
 type Puff = {p:T.Vector3;v:T.Vector3;anchor:T.Vector3;site:number;age:number;life:number;size:number;seed:number;kind:number;owner:number;strength:number;depth:number;heat:number;aspect:number;soot:number};
 type Emitter = {car:Vehicle;state:VehicleThermalState;origin:T.Vector3;smoke:number;flame:number;embers:number;impactSerial:number;profile:ReturnType<typeof fireProfile>;sites:{position:T.Vector3;weight:number;name:string}[]};
@@ -11,6 +12,7 @@ export type ThermalAudio = {id:number;position:T.Vector3;heat:number;burst:numbe
 /** Bounded, sorted volumetric billboards. Each fragment integrates a turbulent
  * density field through the puff instead of drawing a flat opaque texture. */
 export class VehicleFire {
+  static loadBaked=prepareBakedVehicleFX;
   readonly capacity = 640;
   readonly emitters = new Map<number,Emitter>();
   readonly particles:Puff[] = [];
@@ -28,6 +30,7 @@ export class VehicleFire {
   private details = new Float32Array(this.capacity*4);
   private visible:Puff[]=[];
   private noise:T.Data3DTexture;
+  private fallbackAtlas=new T.DataTexture(new Uint8Array([0,0,0,0]),1,1);
   constructor(private scene:T.Scene, private spark:(p:T.Vector3,count:number,type:number,force:number)=>void,private random=()=>Math.random()) {
     let seed=917; const noiseRandom=()=>{seed=(Math.imul(seed,1664525)+1013904223)|0;return(seed>>>0)/4294967296;};
     const voxels=fireNoise();
@@ -37,8 +40,9 @@ export class VehicleFire {
     g.setAttribute('offset',new T.InstancedBufferAttribute(this.offsets,3).setUsage(T.DynamicDrawUsage));
     g.setAttribute('puff',new T.InstancedBufferAttribute(this.data,4).setUsage(T.DynamicDrawUsage));
     g.setAttribute('detail',new T.InstancedBufferAttribute(this.details,4).setUsage(T.DynamicDrawUsage));g.instanceCount=0;
+    this.fallbackAtlas.needsUpdate=true;const baked=bakedVehicleFX();
     const material=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,
-      uniforms:{volume:{value:this.noise},clock:{value:0},steps:{value:9},sunView:{value:new T.Vector3()},fogColor:{value:new T.Color(0xa5b1bb)}},
+      uniforms:{volume:{value:this.noise},bakedFire:{value:baked?.fire??this.fallbackAtlas},bakedSmoke:{value:baked?.smoke??this.fallbackAtlas},useBaked:{value:baked?1:0},clock:{value:0},steps:{value:9},sunView:{value:new T.Vector3()},fogColor:{value:new T.Color(0xa5b1bb)}},
       vertexShader:`attribute vec3 offset;attribute vec4 puff;attribute vec4 detail;
         varying vec2 vUv;varying vec4 vPuff;varying vec4 vDetail;varying float vDepth;
         void main(){vUv=uv*2.-1.;vPuff=puff;vDetail=detail;
@@ -47,11 +51,32 @@ export class VehicleFire {
           vec2 across=vec2(up.y,-up.x);float stretch=puff.z<.5?1.:puff.z<1.5?1.+rise*1.55:1.;
           mv.xy+=(across*position.x*detail.z+up*position.y*stretch)*puff.x;gl_Position=projectionMatrix*mv;}`,
       fragmentShader:`precision highp sampler3D;
-        uniform sampler3D volume;uniform float clock;uniform int steps;uniform vec3 fogColor;uniform vec3 sunView;
+        uniform sampler3D volume;uniform sampler2D bakedFire;uniform sampler2D bakedSmoke;uniform float useBaked;uniform float clock;uniform int steps;uniform vec3 fogColor;uniform vec3 sunView;
         varying vec2 vUv;varying vec4 vPuff;varying vec4 vDetail;varying float vDepth;
         float turbulence(vec3 p){return texture(volume,p*.041).r*.58+texture(volume,p*.096+17.).r*.29+texture(volume,p*.193-9.).r*.13;}
-        void main(){float rr=dot(vUv,vUv);if(rr>=1.)discard;
+        vec4 bakedFrame(float frame,float kind){
+          float index=mod(floor(frame),64.);vec2 tile=vec2(mod(index,8.),7.-floor(index/8.));
+          vec2 uv=(vUv*.5+.5)*(.984375)+.0078125;uv=(tile+uv)/8.;
+          return kind<.5?texture2D(bakedSmoke,uv):texture2D(bakedFire,uv);
+        }
+        vec4 bakedBlend(float frame,float kind){return mix(bakedFrame(frame,kind),bakedFrame(frame+1.,kind),fract(frame));}
+        void main(){float rr=dot(vUv,vUv);
           float kind=vPuff.z,age=vPuff.y,seed=vDetail.x,fade=vPuff.w;
+          if(useBaked>.5&&kind<1.5){
+            float frame=mod(clock*(kind<.5?14.:24.)+seed*5.31,56.)+8.;
+            vec4 baked=bakedBlend(frame,kind);
+            if(frame>56.)baked=mix(baked,bakedBlend(frame-56.,kind),smoothstep(56.,64.,frame));
+            vec3 color=baked.rgb;float alpha=baked.a*fade;
+            if(kind<.5){
+              float soot=smoothstep(.03,.55,vDetail.y)*vDetail.w;
+              color=mix(vec3(.56,.59,.60)*( .5+baked.r*3.),baked.rgb*2.5+vec3(.009),soot);
+              alpha*=.72;
+            }else{color*=1.8;alpha*=.88;}
+            if(alpha<.003)discard;
+            float fog=1.-exp(-.0011*.0011*vDepth*vDepth);color=mix(color,fogColor,fog);
+            gl_FragColor=vec4(color,alpha*smoothstep(.15,.75,vDepth));
+          }else{
+          if(rr>=1.)discard;
           int samples=max(4,steps-(kind<.5?2:3));
           float span=sqrt(1.-rr),stepSize=2.*span/float(samples),alpha=0.;vec3 color=vec3(0.);
           for(int i=0;i<9;i++){if(i>=samples)break;
@@ -88,6 +113,7 @@ export class VehicleFire {
           if(alpha<.003)discard;
           float fog=1.-exp(-.0011*.0011*vDepth*vDepth);color=mix(color/alpha,fogColor,fog);
           gl_FragColor=vec4(color,alpha*smoothstep(.15,.75,vDepth));
+          }
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`});
@@ -96,6 +122,7 @@ export class VehicleFire {
     for(let i=0;i<2;i++){const light=new T.PointLight(0xff7a24,0,10,2);light.name='vehicle-fire-light-'+i;scene.add(light);this.lights.push(light);}
   }
   setQuality(quality:string){this.quality=quality;this.mesh.material.uniforms.steps.value=quality==='ultra'?9:quality==='high'?7:5;}
+  useBaked(){const baked=bakedVehicleFX();if(baked){const u=this.mesh.material.uniforms;u.bakedFire.value=baked.fire;u.bakedSmoke.value=baked.smoke;u.useBaked.value=1;}}
   private spawn(e:Emitter,kind:number,burst=false){
     let p=this.particles[this.cursor++%this.capacity];
     // Short flames expire before smoke. Reuse free slots before evicting a live
@@ -183,7 +210,7 @@ export class VehicleFire {
     const nearest=[...this.emitters.values()].filter(e=>e.state.heat>.02).sort((a,b)=>a.origin.distanceToSquared(camera.position)-b.origin.distanceToSquared(camera.position));
     this.lights.forEach((light,i)=>{const e=nearest[i];light.intensity=0;if(!e)return;light.position.copy(e.origin).add(new T.Vector3(0,.35,0));light.intensity=(e.state.heat*(8+2*Math.sin(this.time*17+e.profile.pulse))+e.state.burst*75);});
   }
-  get stats(){return{active:this.particles.filter(p=>p.life>0).length,visible:this.visible.length,capacity:this.capacity,emitters:[...this.emitters].map(([id,e])=>({id,health:e.state.health,heat:e.state.heat,smoke:e.state.smoke,exploded:e.state.exploded,criticalTime:e.state.criticalTime,origin:e.origin.toArray(),sites:e.sites.map(s=>({name:s.name,weight:s.weight,position:s.position.toArray()}))})),lights:this.lights.filter(l=>l.intensity>0).length};}
+  get stats(){return{baked:!!bakedVehicleFX(),atlasPixels:2048,atlasFrames:64,active:this.particles.filter(p=>p.life>0).length,visible:this.visible.length,capacity:this.capacity,emitters:[...this.emitters].map(([id,e])=>({id,health:e.state.health,heat:e.state.heat,smoke:e.state.smoke,exploded:e.state.exploded,criticalTime:e.state.criticalTime,origin:e.origin.toArray(),sites:e.sites.map(s=>({name:s.name,weight:s.weight,position:s.position.toArray()}))})),lights:this.lights.filter(l=>l.intensity>0).length};}
   reset(){for(const p of this.particles)p.life=0;this.emitters.clear();this.audio.length=this.bursts.length=0;this.visible.length=0;this.cursor=0;this.accumulator=0;this.mesh.geometry.instanceCount=0;this.mesh.visible=false;this.lights.forEach(l=>l.intensity=0);}
-  dispose(){this.reset();this.mesh.removeFromParent();this.mesh.geometry.dispose();this.mesh.material.dispose();this.noise.dispose();for(const l of this.lights)l.removeFromParent();}
+  dispose(){this.reset();this.mesh.removeFromParent();this.mesh.geometry.dispose();this.mesh.material.dispose();this.noise.dispose();this.fallbackAtlas.dispose();for(const l of this.lights)l.removeFromParent();}
 }

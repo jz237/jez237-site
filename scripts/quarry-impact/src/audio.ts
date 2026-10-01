@@ -277,7 +277,7 @@ export class Sound {
               ? Math.min(0.22, Math.abs(car.speed) * 0.008)
               : 0;
         else if (name === 'scrape')
-          v = car.slip > 4 && car.health < 80 ? 0.035 : 0;
+          v=Math.max(car.slip>4&&car.health<80?.035:0,Math.min(.13,(car.scraping??0)*.12));
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
         if(wreckInspection)v=0;

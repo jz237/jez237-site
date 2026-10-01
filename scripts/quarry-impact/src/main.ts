@@ -722,11 +722,11 @@ function step(dt: number) {
     if(closing<.65||impulse<1500)return;
     lastImpact.set(key,elapsed);collisions++;
     if (a) {
-      a.hit(point, vb.clone().sub(va).normalize(), damage, elapsed);
+      a.hit(point,vb.clone().sub(va).normalize(),damage,elapsed,false,b?.paintColor);
       if (b) b.inflicted += damage;
     }
     if (b) {
-      b.hit(point, va.clone().sub(vb).normalize(), damage, elapsed);
+      b.hit(point,va.clone().sub(vb).normalize(),damage,elapsed,false,a?.paintColor);
       if (a) a.inflicted += damage;
     }
     sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
@@ -1003,8 +1003,10 @@ async function boot() {
     prepareCircuitSurface(),
     quarry.trees(),
     onlineUI.configure(),
+    VehicleFire.loadBaked(),
   ]);
   environmentTarget = prepared[1];
+  vehicleFire.useBaked();
   setQuarryMode();
   staticShadows = new StaticQuarryShadows(scene, new Set<T.Object3D>([
     ...quarry.modeScenery, quarry.checkpoint, ...quarry.props.map(prop => prop.mesh),
@@ -1059,6 +1061,7 @@ async function boot() {
     get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
     get fireState() { return vehicleFire?.stats; },
     get splashState(){return puddleSplashes?.stats;},
+    get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
     get puddles(){return quarry.puddles;},
     get arenaState(){return{...quarry.arenaLayout,expanded:quarry.arenaPhysics.expanded,enabledWalls:quarry.arenaPhysics.walls.filter(c=>c.isEnabled()).length};},
     seedFireTest:(seed:number)=>{
@@ -1149,7 +1152,7 @@ async function boot() {
     setTime: (v: number) => {
       elapsed = v;
     },
-    damage: (id: number, amount: number, side = 'front') => {
+    damage: (id: number, amount: number, side = 'front',paint?:number) => {
       const c = cars[id],
         d = new T.Vector3(
           side === 'left' ? -1 : side === 'right' ? 1 : 0,
@@ -1161,6 +1164,7 @@ async function boot() {
         d.clone().negate().normalize(),
         amount,
         elapsed,
+        false,paint===undefined?undefined:new T.Color(paint),
       );
     },
     teleport: (id: number, x: number, z: number, yaw = 0) =>

@@ -1,0 +1,46 @@
+{
+  "previousRelease": "29cd3e9c14715261363cbb6497bf865341ee1f60",
+  "method": "Runtime construction/material/corner-physics and persistent evidence pass; original models and Worker unchanged. Shared Blender fluid atlases.",
+  "files": {
+    "src/assets.ts": {
+      "before": "c71ee86b74145a33846ba0bf6204863385964319bb1c07ff0f4054aad7c1076b",
+      "after": "0e6e2565bf57ee748ca99341f37b0cfd8111212de32638829c1e454d7c3809e0",
+      "snapshot": "tests/fixtures/structural-realism-before-assets.ts.gz"
+    },
+    "src/audio.ts": {
+      "before": "4da7b292bc5b7cb692e171b736019994a0619809778bb482ed29b771b7d78631",
+      "after": "25037103d0626bfc160d7f9278ef4ecce29912118a7b3113bce4577d9d20f3df",
+      "snapshot": "tests/fixtures/structural-realism-before-audio.ts.gz"
+    },
+    "src/effects.ts": {
+      "before": "268467b5e4a672966547511645596adc848a367607d102350a324d6737dc8cbc",
+      "after": "71f68c3e96481dc9658b8ed5ee65817c0c5e5b61ba1ffd9b39dfbf9373597cd6",
+      "snapshot": "tests/fixtures/structural-realism-before-effects.ts.gz"
+    },
+    "src/main.ts": {
+      "before": "bc0a57f6653763dd2983c53c96f905689da16b8f9a0013144435dbb88ffd4b05",
+      "after": "74f486e70357247e868beb822fc1cc79acdf80c9ec405108b97b468ca57eb660",
+      "snapshot": "tests/fixtures/structural-realism-before-main.ts.gz"
+    },
+    "src/vehicle-fire.ts": {
+      "before": "e81ce39efbecb9f39e18e800f2e179f9392fd70ce37623a006dbbca064029fec",
+      "after": "1133ce8a0ea4fd56b20caffa560f28715e8f559a30a8a52a282245ee01730c39",
+      "snapshot": "tests/fixtures/structural-realism-before-vehicle-fire.ts.gz"
+    },
+    "src/vehicle.ts": {
+      "before": "75af6d118393f2d75add6d893fc6678519e1b2db0073f017abd16d6bb2137a37",
+      "after": "c2a9c6f91869c7eaacb53f1472b766fc78cff6ada5c05d0e2b29dd7ae7538dbf",
+      "snapshot": "tests/fixtures/structural-realism-before-vehicle.ts.gz"
+    },
+    "src/wreck-attachments.ts": {
+      "before": "341a63ba3ab739c8f7c02a674133c5c32128515e4be49ef3bea1f78bf7cc94b1",
+      "after": "3c72039f8c26ae3e5552dfd00cf9b883e0f2351186ea17af7b7489302e3ffedd",
+      "snapshot": "tests/fixtures/structural-realism-before-wreck-attachments.ts.gz"
+    },
+    "src/wreck-geometry.ts": {
+      "before": "4e6432f6967c0564b50dfbe08538e36b8bd3434cab47aef001fb7937df63f740",
+      "after": "91f16f97b931aa5e659b7e1d2bb1493274763cc1064d8f826702f8164179c237",
+      "snapshot": "tests/fixtures/structural-realism-before-wreck-geometry.ts.gz"
+    }
+  }
+}
