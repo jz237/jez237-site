@@ -20,6 +20,7 @@ python -m http.server 8797 --bind 127.0.0.1 --directory dist
 
 - Opens immediately in a stationary Garden view; fish, water and foliage remain alive. The moving tour is optional.
 - A labeled Pause pond / Resume pond control and a persistent paused notice make motion easy to restore. Feeding resumes a paused pond. Holding the O shortcut does not repeatedly toggle the state.
+- The optional tour stays with the pond: eleven pond and koi compositions cover overhead, water-level, opposite-bank and underwater angles. Smooth close-ups follow different koi on successive shots and loops; camera positions stay clear of the submerged banks and gravel floor. Land plants have no dedicated tour shots. The advanced Stay above water setting and winter ice skip submerged shots.
 - Wheel and trackpad scrolling over the scene zoom in/out in all camera modes.
 - Every one of the twenty fish has a unique name, with its variety retained in the guide and follow-camera label.
 - Feeding drops food directly onto visible water without a hand, arm or forced camera move.
