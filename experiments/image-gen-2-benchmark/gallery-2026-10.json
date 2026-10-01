@@ -450,5 +450,173 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-01-factual-infographic-factual-infographic-atopic-eczema-a-dis",
+    "title": "Factual infographic: Atopic Eczema — A Disrupted Skin Barrier",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\", \"panel_count\": 8, \"closeup_diagrams\": \"skin barrier comparison; itch-scratch loop; skin-tone textures; body maps; moisturizer mechanism\", \"evidence_scope\": \"Claim-level NIAMS/NHS evidence; no subjective review outside Monday\", \"recovery\": \"User-authorized non-graphic schematic revision after one definitive moderation rejection; exact model, auto settings, research, eight-panel scope and normal guards preserved.\"}; archive_slot=2026-10-01T17:20; concept=atopic-dermatitis-skin-barrier-itch-inflammation-care; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, non-graphic medical education infographic directly on the canvas, not a photographed poster or mockup. Title: \"ATOPIC ECZEMA\". Subtitle: \"A disrupted skin barrier\". A substantial portrait educational plate with one dominant, highly detailed anatomical DIAGRAM and EIGHT distinct illustrated supporting panels. Use explanatory schematic artwork throughout, not patient photographs, realistic diseased-skin textures, distressed people or clinical procedure imagery. Keep medical labels truthful and explicit. Cream background, deep navy type, teal water arrows, coral inflammation symbols, violet itch-loop arrows. Dimensional scientific-model lighting, precise rounded cell shapes, generous gutters, aligned leader lines and a numbered reading path. Large readable labels; concise information, no tiny paragraphs, decorative filler, logos, URLs, statistics or doses. Automatic size and quality, opaque background.\n\nHERO in the upper central field: a detailed, stylized scientific model of the skin barrier, like a carefully constructed educational anatomical diagram. Show two adjacent miniature cross-section blocks, each with an outer layer of overlapping flattened cells above simplified underlying skin layers. Left: closely packed surface cells and small teal water droplets retained below. Right: less orderly outer-layer spacing, with additional teal arrows upward representing moisture loss, and small coral signals below representing local immune inflammation. All tissue is represented by smooth, clean geometric shapes. A separate small, gently shaded elbow outline identifies the body context without depicting any skin damage. Caption \"Simplified skin-barrier illustration — not to scale\". Callouts \"Protective outer layer\", \"More moisture escapes\", \"Dry, irritated skin\", \"Immune inflammation\". Explain \"Barrier changes, immune activity and the environment interact.\" Badge \"Not contagious\". Use a magnifier linking the elbow outline to the cross-section, fine layer outlines, and a clear arrow legend. The diagram must not imply an opening through the whole skin or a single universal genetic cause.\n\nArrange EIGHT numbered supporting panels in a well-spaced, two-column grid around and below the hero. Each explains something distinct. Include at least four explanatory diagrams or close-ups overall.\n\n1. \"BARRIER & ITCH\". A close-up of the orderly versus less orderly outer-layer cells, beside a four-step circular arrow diagram: \"Inflammation → itch → scratching → further irritation\". Show abstract symbols only, not a hand scratching skin. Small text \"Scratching can increase infection risk\". Do not imply every itchy patch is infected.\n\n2. \"HOW SYMPTOMS VARY\". Three softly shaded, abstract skin-tone swatches, light, medium and dark, with restrained symbolic color patches rather than realistic symptom textures. Labels \"Itchy\", \"Dry or cracked\", \"Scaly or thickened\". Explain \"Color varies with skin tone\" and \"May look red, purple, grey, lighter or darker\". Do not imply each skin tone has one fixed symptom color. Keep comparison windows equal in size and visual importance.\n\n3. \"WHERE & WHEN\". Small neutral human-outline diagrams with clean location markers and no bodily detail. Text \"Babies: often face\", \"Children/adults: often folds and hands\", \"Can occur elsewhere\". Use a simple head outline for facial location and separate elbow, knee and hand outlines for the other markers, not portraits of affected patients. An undulating schematic timeline reads \"Flares ↔ improvement\"; a moon-and-pillow icon reads \"Itch may disrupt sleep\". No numerical axis.\n\n4. \"WHY FLARES VARY\". Detailed everyday object icons: unscented-care versus fragrance symbol, detergent bottle, wool-fabric weave, warm-air lines, and a stress-cloud symbol. Caption \"Personal triggers differ\". A three-part diagram reads \"Genes + immune system + environment\". A small family-tree icon reads \"Family history raises likelihood\" with \"eczema, asthma or hay fever\" beneath. Show association, not a claim that allergies alone cause eczema.\n\n5. \"HOW IT IS ASSESSED\". A stylized clinician and a fully clothed adult consulting at a small abstract desk; beside them, a magnifying-glass icon over an undamaged elbow outline and a history-card diagram. Labels \"Skin examination\", \"Symptoms & sleep\", \"Family and trigger history\". Note \"Tests may help rule out other causes\". No self-diagnosis scoring or promise of one definitive test.\n\n6. \"EVERYDAY BARRIER CARE\". Three-step illustrated sequence using a basin, folded towel and neutral pump bottle: \"Lukewarm water + gentle cleanser\" → \"Pat gently\" → \"Moisturize damp skin\". An explanatory micro-diagram shows a smooth moisturizer layer above the same geometric skin model and fewer upward water arrows; label \"Moisturizers help retain water\". Add \"Avoid personal irritants • Keep cool • Short nails\" and \"Do not change diet without clinical advice\". No brands or home-treatment recipes.\n\n7. \"TREAT THE INFLAMMATION\". A clinician-guided options diagram with a plain cream tube and light-therapy equipment symbol, without depicting treatment on a person. Main labels \"Topical corticosteroids reduce inflammation\", \"Other clinician-selected options\", \"Choice depends on age, severity and response\", \"Control symptoms; no current cure\". These are educational options, not directions to start treatment. A fabric-and-fire-safety symbol accompanies \"Emollient residue on fabrics: keep away from flames\". No doses or blanket treatment advice.\n\n8. \"WHEN TO GET HELP\". Calm amber information panel using a phone, medical cross and thermometer icons. Warning signs are TEXT ONLY; do not illustrate symptoms here. Readable lines \"Urgent medical advice: painful warm swelling, pus, sudden worsening, new blisters, fever or feeling unwell\" and \"May signal infection, including eczema herpeticum\". Separate routine-care line \"Seek care if symptoms persist or treatment is not helping\". Ordinary dry skin alone is not presented as an emergency. No antibiotic instructions.\n\nReadable footer: \"General education • Individual care needs clinical assessment\". Produce a sophisticated and richly illustrated science-museum educational plate with crisp typography, clean diagrammatic anatomy, clear causal arrows and substantive content. Preserve every numbered panel and its distinct purpose; favor legibility and medical accuracy over decorative density. No unsupported claims.",
+    "image": "images/2026-10-01-factual-infographic-factual-infographic-atopic-eczema-a-dis.jpg",
+    "thumb": "thumbs/2026-10-01-factual-infographic-factual-infographic-atopic-eczema-a-dis.webp",
+    "color": "#dfd9d7",
+    "date": "2026-10-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "atopic-dermatitis-skin-barrier-itch-inflammation-care",
+      "imageSha256": "397173549672cadc7afa969db64c17a53e04355b7c83d6e2886e06bfba8a354c",
+      "imageDHash": "292c3c9f389b9918"
+    },
+    "factualInfographic": {
+      "topic": "How atopic dermatitis disrupts the skin barrier, drives itch and inflammation, and is evaluated and managed",
+      "description": "Source-backed clinical infographic on atopic dermatitis, barrier dysfunction, variable symptoms, assessment, management and infection warning signs.",
+      "sourceNote": "NIAMS overview https://www.niams.nih.gov/health-topics/atopic-dermatitis ; NHS https://www.nhs.uk/conditions/atopic-eczema/ ; NIAMS care https://www.niams.nih.gov/health-topics/atopic-dermatitis/diagnosis-treatment-and-steps-to-take . Verified barrier/itch mechanism, symptoms, care and warning signs; no prevalence estimates or doses.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-01T21:22:02.371435+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIAMS, National Institutes of Health",
+            "title": "Atopic Dermatitis: Overview, Symptoms and Causes",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/atopic-dermatitis"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Atopic eczema",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/atopic-eczema/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NIAMS, National Institutes of Health",
+            "title": "Atopic Dermatitis: Diagnosis, Treatment, and Steps to Take",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/atopic-dermatitis/diagnosis-treatment-and-steps-to-take"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atopic dermatitis is a chronic inflammatory skin disease, often starting in childhood but possible at any age; it is not contagious.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Barrier changes allow moisture to escape and expose the skin immune system to the environment; genes, immune activity and environmental factors contribute, and there is no single known cause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Skin has a protective outer layer; a schematic intact-versus-disrupted surface comparison illustrates moisture retention versus increased water loss, not a literal hole through the whole skin.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Inflammation can trigger itch; scratching causes further skin damage and inflammation and increases bacterial infection risk.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Symptoms include intense itching, dryness, cracking, scaling and thickened skin; scratches may bleed or weep clear fluid.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Eczema appearance varies with skin tone: it can appear red, purple, grey or lighter or darker than surrounding skin; inflammation may leave color changes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Common sites include elbow and knee bends and hands; babies often have facial eczema. Distribution varies by age and can occur elsewhere.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms fluctuate between flares and improvement; itch can disturb sleep.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Family history of eczema, asthma or hay fever is associated with increased likelihood, not proof of one cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Soap, detergents, fragrances, rough fabrics, heat and stress may worsen symptoms; triggers vary by person.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Diagnosis involves clinical skin examination and medical, family and trigger history; clinicians may use tests to rule out other causes.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Regular moisturizing, including immediately after bathing, helps retain water and supports the skin barrier; gentle unscented or non-soap cleansing and lukewarm water can help.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoid personal irritants, keep cool and keep nails short to reduce scratching damage; do not change diet unless advised by a clinician.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Topical corticosteroids reduce inflammation; other topical treatments, phototherapy or systemic medicines may be considered by clinicians depending on severity, age and response, not as universal treatments.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Treatment can control symptoms but there is currently no cure; seek care for symptoms or treatments that are not helping.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Painful warm swollen skin, pus, sudden worsening or spreading, fever or feeling unwell, and new blisters or leaking/crusting can signal infection or eczema herpeticum and warrant urgent medical advice.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Emollients transferred onto clothing, bedding or dressings can make fabrics catch fire more easily; avoid smoking and naked flames.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
