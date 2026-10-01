@@ -56,6 +56,7 @@ import {showEventSetup} from './event-ui';
 import {ReplayRecorder,readReplayFile,type ReplayDocument} from './replay-data';
 import {ReplayScene,captureReplayFrame} from './replay-scene';
 import {ReplayStudio} from './replay-studio';
+import {showReplayLibrary} from './replay-library-ui';
 import {WaypointRace,WAYPOINTS} from './waypoint-race';
 import {WaypointMarkers} from './waypoint-markers';
 import {directionForCar,RACE_NAMES} from './event-rules';
@@ -113,6 +114,7 @@ function openProfile(){
   showDriverProfile(ui,profile,{close:()=>{profileOpen=false;menu();},start:challenge=>{profileOpen=false;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);}},profileStorageWarning);
 }
 let recorder:ReplayRecorder|null=null,lastReplay:ReplayDocument|null=null,replayEpochs:number[]=[];
+let closeReplayLibrary:(()=>void)|null=null;
 let studio:ReplayStudio|null=null,studioRestore:(()=>void)|null=null;
 function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,quarry.props,replayEpochs),force);}
 function archiveReplay(){
@@ -126,7 +128,7 @@ function beginReplay(){
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
 function closeStudio(){const restore=studioRestore;studio=null;studioRestore=null;restore?.();}
-function openStudio(photo=false,document?:ReplayDocument){
+function openStudio(photo=false,document?:ReplayDocument,savedName?:string){
   if(studio||online?.active||preparingEvent)return;
   captureReplay(true);const doc=photo?null:document??recorder?.document()??lastReplay;
   if(!photo&&(!doc||doc.frames.length<2))return;
@@ -144,8 +146,8 @@ function openStudio(photo=false,document?:ReplayDocument){
     cars=view!.cars;mode=doc.meta.mode;quarry.setMode(mode,false);view!.props.forEach(p=>staticShadows?.bindReceivers(p));
   }
   hide(quarry.checkpoint);
-  studioRestore=()=>{view?.dispose();cars=oldCars;mode=returnMode;hidden.forEach(([o,v])=>o.visible=v);setQuarryMode();ui.replaceChildren(...oldNodes);state=returnState;camera.position.copy(savedCamera.p);camera.quaternion.copy(savedCamera.q);camera.fov=savedCamera.fov;camera.updateProjectionMatrix();renderer.toneMappingExposure=savedCamera.exposure;orbit.target.copy(savedCamera.target);orbit.enabled=savedCamera.enabled;orbit.enablePan=savedCamera.pan;orbit.maxDistance=savedCamera.max;orbit.minDistance=savedCamera.min;lastFrame=performance.now();accumulator=0;sound.pause(!['playing','countdown','menu'].includes(returnState));};
-  studio=new ReplayStudio(ui,cars,doc,time=>view?.seek(time),closeStudio,savedCamera.exposure);
+  studioRestore=()=>{view?.dispose();cars=oldCars;mode=returnMode;hidden.forEach(([o,v])=>o.visible=v);setQuarryMode();ui.replaceChildren(...oldNodes);if(closeReplayLibrary)ui.querySelector<HTMLInputElement>('#library-search')?.focus();state=returnState;camera.position.copy(savedCamera.p);camera.quaternion.copy(savedCamera.q);camera.fov=savedCamera.fov;camera.updateProjectionMatrix();renderer.toneMappingExposure=savedCamera.exposure;orbit.target.copy(savedCamera.target);orbit.enabled=savedCamera.enabled;orbit.enablePan=savedCamera.pan;orbit.maxDistance=savedCamera.max;orbit.minDistance=savedCamera.min;lastFrame=performance.now();accumulator=0;sound.pause(!['playing','countdown','menu'].includes(returnState));};
+  studio=new ReplayStudio(ui,cars,doc,time=>view?.seek(time),closeStudio,savedCamera.exposure,savedName);
 }
 function studioButtons(container:Element|null){
   if(!container||online?.active)return;
@@ -154,6 +156,7 @@ function studioButtons(container:Element|null){
 }
 function replayMenu(){
   const footer=ui.querySelector('.footer>div');if(!footer)return;
+  const library=document.createElement('button');library.id='replay-library-open';library.textContent='REPLAY LIBRARY';library.onclick=()=>{if(closeReplayLibrary)return;keys.clear();closeReplayLibrary=showReplayLibrary(ui,(doc,name)=>{openStudio(false,doc,name);lastReplay=doc;watch.disabled=false;},()=>{closeReplayLibrary=null;library.focus();});};footer.prepend(library);
   const watch=document.createElement('button');watch.id='replay-last';watch.textContent='LAST REPLAY';watch.disabled=!lastReplay;watch.onclick=()=>openStudio();footer.prepend(watch);
   const load=document.createElement('button');load.id='replay-open';load.textContent='OPEN REPLAY';footer.prepend(load);
   load.onclick=()=>{const input=document.createElement('input');input.type='file';input.accept='.qir';input.hidden=true;input.id='replay-file';ui.append(input);input.oncancel=()=>input.remove();input.onchange=async()=>{const file=input.files?.[0];if(!file)return;load.disabled=true;load.textContent='OPENING…';try{const doc=await readReplayFile(file);openStudio(false,doc);lastReplay=doc;watch.disabled=false;}catch(error){let note=ui.querySelector('#replay-message');if(!note){note=document.createElement('p');note.id='replay-message';note.className='last-award';ui.querySelector('.intro')?.append(note);}note.textContent=error instanceof Error?error.message:'Replay could not be opened.';}finally{load.disabled=false;load.textContent='OPEN REPLAY';input.remove();}};input.click();};
@@ -1014,8 +1017,9 @@ function frame(now: number) {
   }
 }
 addEventListener('keydown', (e) => {
-  if(studio){if(e.code==='Escape'){e.preventDefault();closeStudio();}else if(e.code==='KeyH'){e.preventDefault();studio.toggleHud();}else if(e.code==='Space'&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.togglePlay();}else if((e.code==='ArrowLeft'||e.code==='ArrowRight')&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.seek(studio.time+(e.code==='ArrowLeft'?-1:1)*(e.shiftKey?1:.05));}return;}
+  if(studio){if(e.code==='Escape'){e.preventDefault();closeStudio();}else if(e.code==='KeyH'&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.toggleHud();}else if(e.code==='Space'&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.togglePlay();}else if((e.code==='ArrowLeft'||e.code==='ArrowRight')&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.seek(studio.time+(e.code==='ArrowLeft'?-1:1)*(e.shiftKey?1:.05));}return;}
   if(e.code==='KeyP'&&['playing','countdown'].includes(state)&&!online?.active){e.preventDefault();pause();openStudio(true);return;}
+  if(closeReplayLibrary){if(e.code==='Escape'){e.preventDefault();closeReplayLibrary();}return;}
   if(eventSetupOpen){if(e.code==='Escape'){eventSetupOpen=false;menu();}return;}
   if(profileOpen){if(e.code==='Escape'){profileOpen=false;menu();}return;}
   if(garageOpen){if(e.code==='Escape'){garageOpen=false;createCars(true);menu();}return;}

@@ -1,3 +1,4 @@
+import {restoreReplayLibraryBytes} from './replay-library-invariants';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
@@ -6,12 +7,13 @@ const read=(path:string)=>readFileSync(new URL('./fixtures/online-livery/'+path,
 const hash=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
 const revision=JSON.parse(read('revision.json').toString());
 export function restoreOnlineLiveryBytes(file:string,bytes:Buffer){
+  bytes=restoreReplayLibraryBytes(file,bytes);
   const entry=revision.files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
   const before=gunzipSync(read(entry.snapshot));assert.equal(hash(before),entry.before,file);return before;
 }
 export function verifyOnlineLiveryRevision(){
   for(const [path,entry]of Object.entries<any>(revision.files)){
-    const bytes=readFileSync(new URL('../'+path,import.meta.url));assert.equal(hash(bytes),entry.after,path+': unrecorded online livery change');
+    const bytes=restoreReplayLibraryBytes(path,readFileSync(new URL('../'+path,import.meta.url)));assert.equal(hash(bytes),entry.after,path+': unrecorded online livery change');
     assert.equal(hash(restoreOnlineLiveryBytes(path,bytes)),entry.before,path+': preceding source restored');
   }
 }

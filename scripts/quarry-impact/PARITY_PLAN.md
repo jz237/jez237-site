@@ -6,7 +6,9 @@ Status: **in progress; parity has not been achieved**. The original objective re
 ## Evidence baseline (October 1, 2026)
 
 Vengeance source: `D:/Projects/hidden reef header/quarry-impact`.
-Latest recorded baseline release: `529c847e8a03812491ff8de1f64b85f22f8166a8`.
+Latest published frontend: `feb427fa565aec9704b0950a54c1099a123a4ac3` (October 1).
+VENGEANCE source and build include the saved replay library (installed October 1 after303 frontend tests and build passed). The public frontend remains `feb427fa` without the library.
+The existing live multiplayer Worker remains the earlier eight-player version: deployment of the tested new backend is blocked by missing Free-account login permissions.
 The working project is untracked inside a different parent repository; do not commit unrelated parent changes.
 A source snapshot and baseline Git commit are in the Linux working copy for reproducible diffs.
 No third-party Wreckfest code, names, artwork or audio is used for implementation.
@@ -17,6 +19,10 @@ Authoritative reference sources inspected:
 - https://thqnordic.com/news/hot-summer-hot-update-wreckfest-2-update-8-adds-player-progression-minimap-and-tons-of-new-content
 - https://wreckfest2.thqnordic.com/ — includes announced career and split-screen; do not silently equate announcements with releases.
 
+## Current release status
+
+The October 1 deployment supersedes earlier “transfer approval pending” and “not installed” milestone notes below: the user explicitly authorized transfer/deployment, all prior source changes were installed on VENGEANCE with backup, and the frontend was published. 300 frontend tests, 33 backend tests, both builds/type checks and Worker dry run passed. The full-site wrapper passed preview and live checks; 76 live game assets matched the tested build. Multiplayer publication alone is blocked by Cloudflare account access, with the old eight-player service verified compatible. Earlier milestone notes are historical records, not current approval requirements.
+
 ## Completion matrix
 
 Every row requires functional gameplay evidence, persistence where applicable, regression coverage and performance measurement. A UI control or isolated unit test is insufficient evidence of feature parity. Original content should provide comparable variety and gameplay functions without reproducing proprietary assets.
@@ -25,22 +31,22 @@ Every row requires functional gameplay evidence, persistence where applicable, r
 |---|---|---|
 | Physical vehicle damage and handling | Rapier chassis, damage zones, displaced wheels, deforming panels, detached parts, component fire; local authoritative corner damage | Structural chassis deformation/collision evolution; component failures, stalls, armor integration; comparable crash outcomes and driving fidelity |
 | 24-car solo fields | Selectable 2–24 cars, non-overlapping grids, tail-grid checkpoint accounting, dynamic HUD, complete-field AI fixture | Sustained full-scene benchmark on VENGEANCE and extended race/derby balancing |
-| 24-player online plus bots | Local pending: negotiated24-seat rooms, AI fill, grids, cups, reconnect/restoration;30-second24-client WebSocket fixture passes | Bandwidth reduction, sustained WAN/Cloudflare load/cost, full-scene rendering, prediction, install/deployment |
+| 24-player online plus bots | Local pending: negotiated24-seat rooms, AI fill, grids, cups, reconnect/restoration;30-second24-client WebSocket fixture passes | Sustained WAN/Cloudflare load/cost, full-scene rendering, prediction and backend deployment; binary transport already reduces fixture traffic by about82% |
 | Race and derby variants | 1–20 lap forward/reverse circuit; survival and score derby, 1–20 minute derby limits, four-second respawns | Timed races, richer damage/vehicle/class restrictions and further variants |
 | Waypoint / free-order / random modes | Solo ordered/free/random station events, per-car scoring, world/minimap targets and shortest-road AI | Multiplayer synchronization (including reference random mode), distinct waypoint courses and extended balance |
 | Opposing-direction racing | Alternating24-car opposing grids, separate checkpoint routes, AI and individual scoring | Online support, new head-on layouts and full-scene endurance/balance |
 | Track variety | One quarry, forward/reverse circuit, one arena | Multiple distinct locations and circuit/oval/figure-eight/intersection/rallycross/jump/arena layouts, reverse routes, coherent collisions and navigation |
 | Vehicle variety | Three modern cars | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
-| Garage paint and saved designs | Installed body/trim colors; local 32-layer editor with five surfaces, shapes/text/weathering, transforms, groups and setup/replay persistence | VENGEANCE transfer approval, full-scene validation/install, freehand/image tools, cosmetic dents and online replication |
+| Garage paint and saved designs | Installed body/trim colors; local 32-layer editor with five surfaces, shapes/text/weathering, transforms, groups and setup/replay persistence | Freehand/image tools, cosmetic dents; online replication implemented/tested but backend publication blocked |
 | Performance upgrades / metrics | Installed solo engine/tires/armor; local pending authoritative online setups and stock-performance rules | Measured stats, further component upgrades, visible fitted parts and performance classes |
 | Tuning / presets / sharing | Installed five tuning axes, eight presets per car, setup exchange; local pending online/lobby application | Simulated stats, remote/full-scene verification and leaderboard tune sharing |
 | Player progression | Installed Racer/Wrecker/Showman XP and levels, versioned saves, duplicate-safe settlement | Result/reload verified; badges, broader rewards and platform persistence |
 | Challenges | Installed 30 fixed-stock challenges across racing, demolition and stunts, bronze/silver/gold records | Timed damage and survival verified; all-challenge difficulty/attainability playtest; wider track and vehicle content |
 | Multiplayer cups / voting | Local pending: 3/5/9-round cups, cumulative standings, mode votes, host migration and persistence | Full-scene/Cloudflare verification, round/course variety and install/deployment |
 | Multiplayer discovery | Manual room code and invites | Discovery, sorting, favorites, room info, restrictions, reporting; secure server validation |
-| Replay and photo mode | Solo timeline, seek/transport, four cameras, damage/repair reconstruction, compressed replay exchange and clean cropped PNGs | Online recording, transient effects/audio, depth of field/video/high-resolution capture, replay library and sustained long-recording performance |
+| Replay and photo mode | Solo timeline, seek/transport, four cameras, damage/repair reconstruction, compressed replay exchange and clean cropped PNGs | Online recording, transient effects/audio, depth of field/video/high-resolution capture, library installation/full-scene proof and sustained long-recording performance |
 | Leaderboards | Local best only | Per-track/class leaderboards, validated results, tune sharing and abuse controls |
-| Input/accessibility | Local pending: driving-key rebinding, gamepad mapping/calibration, optional speed steering limit | Physical-controller/full-scene validation, broader assists, difficulty choices, rumble, wheel/FFB, camera options and menu navigation |
+| Input/accessibility | Installed: driving-key rebinding, gamepad mapping/calibration, optional speed steering limit | Physical-controller/full-scene validation, broader assists, difficulty choices, rumble, wheel/FFB, camera options and menu navigation |
 | Graphics/scalability | Three quality levels, AO/reflections/static shadows | Sustained frame pacing with expanded content, upscaling equivalents, multi-monitor/native capability assessment |
 | Audio | Bundled 38 clips, positional vehicles/effects | Vehicle-specific fidelity, camera-aware sound, tire/surface/engine-component response and mix validation |
 | Dirt / wear / minimap | Existing surface coating and minimap | Regression across new cars/tracks and online variants |
@@ -107,3 +113,7 @@ Optional binary snapshots preserve exact numeric values and complete histories w
 ## Local online garage setup milestone
 
 Saved performance tuning, upgrades and paint now travel through bounded server validation and apply at event boundaries. Hosts can enforce factory performance; pending choices survive mid-event joins, reconnects, cups and Worker restoration. Tuned/armored real-model collisions match solo behavior, and online dent rendering applies armor once. Browser join/change/rule/reconnect flows and a24-customized-client load run pass;93distinct targeted checks and both builds pass. Online layered decals, hosting/full-scene proof and the full parity matrix remain open. See ONLINE_SETUP_VALIDATION.md. No remote installation or overall parity claim.
+
+## Replay library in development
+
+Named browser-local recordings, search, import/export, playback and confirmed deletion are implemented with atomic IndexedDB storage. A50-recording/256MiB bound refuses excess saves without deleting existing recordings. Actual browser checks cover fresh connections, duplicate saves, concurrent limits, invalid imports, export/import, deletion and aborted-write rollback. A real eight-car,29.5-second recording survived reload and played from the library. Full VENGEANCE candidate suite:303 frontend tests and build pass. Installed on VENGEANCE with a source/build backup; not yet published. Online recordings and the rest of the parity matrix remain open.

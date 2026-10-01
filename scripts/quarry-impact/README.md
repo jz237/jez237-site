@@ -192,3 +192,7 @@ Local development update: new supported online rooms now hold24drivers, includin
 Local development update: supported online clients now receive lossless compressed binary snapshots. The 24-client loopback run used81% fewer bytes than equivalent JSON messages; legacy JSON clients remain supported. See ONLINE_WIRE_VALIDATION.md for exact measurements, checks and remaining hosting/installation limits.
 
 Local development update: online rooms now accept server-validated saved tuning and paint. Choose a car/setup before joining or between events; hosts can enforce stock performance while retaining paint. Mid-event takeovers keep the active car intact. See ONLINE_SETUP_VALIDATION.md for93passing targeted checks, browser/load evidence and installation limits. Online layered decals remain separate work.
+
+## Saved replay library
+
+From the replay studio, name a recording and choose **Save to library**. **Replay library** on the main menu lists recordings after reload, with search, playback, rename, `.qir` import/export and confirmed deletion. Up to50 recordings and256MiB of compressed files are retained; excess saves fail without removing previous recordings. The library is specific to this browser and site address. Export `.qir` copies to keep recordings when browser data is cleared. Unsupported/blocked storage and quota failures show a message, and file export remains available.
