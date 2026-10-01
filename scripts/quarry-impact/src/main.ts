@@ -17,6 +17,11 @@ import { Quarry } from './world';
 import { Vehicle, type Input } from './vehicle';
 import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
+import {PuddleSplashes} from './puddle-splashes';
+import {DERBY_ARENA} from './derby-arena';
+import {structuralDamage,impactAudioSeverity} from './bodywork-response';
+import {VehicleThermalState} from './vehicle-thermal-state';
+import {unitNoise} from './vehicle-fire-profile';
 import {DrivingBrain} from './driving-brain';
 import {DemoDirector, DEMO_CAMERAS, type DemoCamera} from './demo-director';
 import { Sound } from './audio';
@@ -29,7 +34,6 @@ import {
   wrap,
   trackPoint,
   CHECKPOINTS,
-  damageFromImpulse,
   derbyOrder,
   advanceCheckpoint,
   terrainHeight,
@@ -53,7 +57,8 @@ const settings = {
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
 let vehicleFire:VehicleFire | undefined;
-const drivers=new DrivingBrain(),director=new DemoDirector();
+let puddleSplashes:PuddleSplashes|undefined;
+const drivers=new DrivingBrain(DERBY_ARENA),director=new DemoDirector(DERBY_ARENA);
 let demo=false,demoRestart=0;
 let preparingEvent=false,preparationInterrupted=false;
 sound.levels = {
@@ -162,6 +167,7 @@ const persist = () => {
 function loading(message: string) {
   ui.innerHTML = `<div class="menu"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1></div><div class="loading"><div class="eyebrow">${message}</div><div></div></div></div>`;
 }
+function setQuarryMode(){quarry.setMode(mode,!!online?.active);}
 function menu() {
   demo=false;demoRestart=0;director.reset();orbit.maxDistance=22;orbit.enablePan=true;
   if (online?.active) online.disconnect();
@@ -170,7 +176,7 @@ function menu() {
   keys.clear(); testInput = null;
   orbit.enabled = false;
   sound.pause(false);
-  quarry.setMode(mode);
+  setQuarryMode();
   ui.innerHTML = `<div class="menu"><div class="topbar"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="location">WOODLAND COUNTY &nbsp; / &nbsp; <b>17:42</b> &nbsp; / &nbsp; DRY TRACK</div></div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1><p>Precision machines. Unforgiving ground.<br>Take the long way home — if it still runs.</p><div class="car-picker">${(Object.keys(DEFINITIONS) as CarKind[]).map((k) => `<button data-car="${k}" class="${k === kind ? 'active' : ''}">${DEFINITIONS[k].name}</button>`).join('')}</div><div class="spec">${DEFINITIONS[kind].subtitle.toUpperCase()}</div></div><div class="menu-bottom">${(Object.keys(modes) as Mode[]).map((m, i) => `<button class="mode-card ${m === mode ? 'active' : ''}" data-mode="${m}"><span class="number">0${i + 1} / ${m === 'derby' ? 'SURVIVAL' : m === 'race' ? 'COMPETITION' : 'EXPLORATION'}</span><strong>${modes[m].label}</strong><small>${modes[m].description}</small></button>`).join('')}<button class="primary" id="start">${modes[mode].button}<span>↗</span></button></div><div class="footer"><span>THREE MACHINES &nbsp; · &nbsp; ONE QUARRY &nbsp; · &nbsp; NO PRISTINE FINISHES</span><div><a href="./licenses/CREDITS.md" target="_blank" rel="noopener">CREDITS</a><button id="settings">SETTINGS</button><button id="fullscreen">FULLSCREEN ↗</button></div></div></div>`;
   ui.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(
     (b) =>
@@ -215,7 +221,7 @@ function receiveOnline() {
   if(s.phase==='lobby') {
     state='lobby';orbit.enabled=false;onlineUI.lobby(s,changed);return;
   }
-  kind=cars[0].kind;quarry.setMode(mode);
+  kind=cars[0].kind;setQuarryMode();
   if(changed) {
     if(s.phase==='result') {
       finish(s.ranking[0]===online.network.id?'EVENT WINNER':mode==='race'?'RACE COMPLETE':'DERBY COMPLETE');
@@ -231,6 +237,7 @@ function createCars(attract = false) {
   drivers.reset();
   sound.clearCars();
   vehicleFire?.reset();
+  puddleSplashes?.reset();
   for (const c of cars) c.dispose();
   cars = [];
   fx.reset();
@@ -252,13 +259,15 @@ function createCars(attract = false) {
     const type =
       i === 0 ? kind : (['coupe', 'sedan', 'hatch'] as CarKind[])[i % 3];
     const car = new Vehicle(i, type, colors[i], scene, physics, fx);
+    car.waters=quarry.puddles;
+    if(mode==='derby'&&!online?.active)car.arenaSurface=DERBY_ARENA;
     cars.push(car);
     if (attract) car.place(0, -13, 0.65);
     else if (mode === 'derby') {
       const a = (i / 8) * Math.PI * 2;
       car.place(
-        Math.sin(a) * 29,
-        -Math.cos(a) * 29,
+        DERBY_ARENA.x+Math.sin(a)*DERBY_ARENA.spawnRadius,
+        DERBY_ARENA.z-Math.cos(a)*DERBY_ARENA.spawnRadius,
         Math.atan2(-Math.sin(a), Math.cos(a)),
       );
     } else if (mode === 'race') {
@@ -298,6 +307,7 @@ async function start(watch=demo) {
     console.warn('Audio loading failed', e);
     toast('Sound unavailable — check local assets', 8);
   }
+  setQuarryMode();
   createCars();
   for(const car of cars)staticShadows?.bindReceivers(car.root);
   await warmPrograms();
@@ -306,7 +316,7 @@ async function start(watch=demo) {
   accumulator = 0;
   state = countdown ? 'countdown' : 'playing';
   orbit.enabled = false;
-  quarry.setMode(mode);
+  setQuarryMode();
   cameraImpactOffset.set(0,0,0);
   camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
   hud();
@@ -404,14 +414,14 @@ function drawMap() {
   if (!c) return;
   const x = c.getContext('2d')!;
   x.clearRect(0, 0, 270, 220);
-  const scale = mode === 'derby' ? 2 : 0.85;
+  const arena=quarry.arenaLayout,scale=mode==='derby'?92/arena.radius:.85,cx=mode==='derby'?arena.x:0,cz=mode==='derby'?arena.z:0;
   const ox = 135,
     oz = 110;
   x.strokeStyle = '#d0c49288';
   x.lineWidth = 2;
   x.beginPath();
   if (mode === 'derby')
-    x.ellipse(ox, oz, 46 * scale, 46 * scale, 0, 0, Math.PI * 2);
+    x.ellipse(ox, oz, arena.radius * scale, arena.radius * scale, 0, 0, Math.PI * 2);
   else
     for (let i = 0; i <= 100; i++) {
       const p = trackPoint(i / 100);
@@ -425,8 +435,8 @@ function drawMap() {
       (demo?car.id===director.followed:isPlayer(car)) ? '#f6dc98' : car.health <= 0 ? '#5d6458' : '#c0cabb';
     x.beginPath();
     x.arc(
-      ox + car.current.x * scale,
-      oz - car.current.z * scale,
+      ox + (car.current.x-cx) * scale,
+      oz - (car.current.z-cz) * scale,
       (demo?car.id===director.followed:isPlayer(car)) ? 5 : 3,
       0,
       Math.PI * 2,
@@ -516,6 +526,7 @@ function applyQuality() {
   }
   staticShadows?.setQuality(settings.quality);
   vehicleFire?.setQuality(settings.quality);
+  puddleSplashes?.setQuality(settings.quality);
   ao.enabled = settings.quality !== 'medium';
   reflections.enabled = settings.quality !== 'medium';
   reflections.interval = settings.quality === 'ultra' ? 3 : 6;
@@ -547,11 +558,11 @@ function recover() {
   } else {
     if (p.health === 0) return;
     p.health = Math.max(1, p.health - 8);
-    const dist = Math.hypot(p.current.x, p.current.z);
+    const arena=quarry.arenaLayout,dx=p.current.x-arena.x,dz=p.current.z-arena.z,dist=Math.hypot(dx,dz),limit=arena.radius-8;
     p.place(
-      p.current.x * (dist > 38 ? 38 / dist : 1),
-      p.current.z * (dist > 38 ? 38 / dist : 1),
-      Math.atan2(-p.current.x, -p.current.z),
+      arena.x+dx*(dist>limit?limit/dist:1),
+      arena.z+dz*(dist>limit?limit/dist:1),
+      Math.atan2(-dx,-dz),
     );
     toast('RECOVERED · CONDITION −8%');
   }
@@ -691,26 +702,25 @@ function step(dt: number) {
       h2 = e.collider2();
     const key = Math.min(h1, h2) + ':' + Math.max(h1, h2);
     if (elapsed - (lastImpact.get(key) ?? -100) < 0.28) return;
-    const damage =
-      damageFromImpulse(e.totalForceMagnitude() * dt) *
-      (mode === 'race' ? 0.45 : 1);
-    if (damage < 0.3) return;
     const a = cars.find(
         (c) => c.collider.handle === h1 || c.roof.handle === h1,
       ),
       b = cars.find((c) => c.collider.handle === h2 || c.roof.handle === h2);
     if (!a && !b) return;
-    lastImpact.set(key, elapsed);
-    collisions++;
     const point = new T.Vector3().copy((a ?? b)!.current);
+    const normal=new T.Vector3();
     const co1 = physics.getCollider(h1),
       co2 = physics.getCollider(h2);
     if (co1 && co2)
       physics.contactPair(co1, co2, (m) => {
-        if (m.numSolverContacts() > 0) point.copy(m.solverContactPoint(0));
+        if (m.numSolverContacts() > 0){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}
       });
     const va = a?.velocity ?? new T.Vector3(),
       vb = b?.velocity ?? new T.Vector3();
+    const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*dt;
+    const damage=structuralDamage(impulse,closing)*(mode==='race'?.45:1);
+    if(closing<.65||impulse<1500)return;
+    lastImpact.set(key,elapsed);collisions++;
     if (a) {
       a.hit(point, vb.clone().sub(va).normalize(), damage, elapsed);
       if (b) b.inflicted += damage;
@@ -719,7 +729,7 @@ function step(dt: number) {
       b.hit(point, va.clone().sub(vb).normalize(), damage, elapsed);
       if (a) a.inflicted += damage;
     }
-    sound.impact(damage, point, !!(a?.impactEffects.glass || b?.impactEffects.glass), !!(a?.impactEffects.debris || b?.impactEffects.debris));
+    sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
     if (a?.id === 0 || b?.id === 0)
       toast(damage > 12 ? 'HEAVY IMPACT' : 'CONTACT', 0.8);
   });
@@ -857,6 +867,7 @@ function frame(now: number) {
   for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   vehicleFire?.update(cars,effectsActive?dt:0,camera);
+  puddleSplashes?.update(cars,quarry.puddles,effectsActive?dt:0,state==='playing');
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   quarry.update(camera);
   if(mode==='race'&&cars[0]) {
@@ -976,6 +987,7 @@ async function boot() {
   fx = new Effects(scene, physics);
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
   vehicleFire.setQuality(settings.quality);
+  puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(settings.quality);
   quarry = new Quarry(scene, physics);
   online=new OnlineView(scene,physics,fx,sound,()=>cars,next=>{cars=next;});
   onlineUI=new OnlineUI(ui,online.network,{connect:connectOnline,leave:leaveOnline});
@@ -993,8 +1005,9 @@ async function boot() {
     onlineUI.configure(),
   ]);
   environmentTarget = prepared[1];
+  setQuarryMode();
   staticShadows = new StaticQuarryShadows(scene, new Set<T.Object3D>([
-    quarry.derbyWalls, quarry.checkpoint, ...quarry.props.map(prop => prop.mesh),
+    ...quarry.modeScenery, quarry.checkpoint, ...quarry.props.map(prop => prop.mesh),
   ]));
   createCars(true);
   staticShadows.bindReceivers(scene);
@@ -1045,11 +1058,24 @@ async function boot() {
     get impactState() { const p=cars[0];return p?{offset:{...p.impactResponse.offset},velocity:{...p.impactResponse.velocity},roll:p.impactResponse.roll,pitch:p.impactResponse.pitch,effects:{...p.impactEffects}}:null; },
     get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
     get fireState() { return vehicleFire?.stats; },
+    get splashState(){return puddleSplashes?.stats;},
+    get puddles(){return quarry.puddles;},
+    get arenaState(){return{...quarry.arenaLayout,expanded:quarry.arenaPhysics.expanded,enabledWalls:quarry.arenaPhysics.walls.filter(c=>c.isEnabled()).length};},
     seedFireTest:(seed:number)=>{
       vehicleFire?.dispose();let randomState=seed>>>0;
       vehicleFire=new VehicleFire(scene,(p,n,t,f)=>fx.emit(p,n,t,f),()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;return randomState/4294967296;});
       vehicleFire.setQuality(settings.quality);
     },
+    seedFireStress:()=>{
+      // Explicit QA fixture for the maximum effects budget; unused by gameplay.
+      vehicleFire?.update(cars,0,camera);
+      const seeds=Array.from({length:8192},(_,i)=>i/8192).filter(s=>unitNoise(s)<.24&&unitNoise(s+9.37)>=.12&&unitNoise(s+2.13)>.3);
+      if(vehicleFire)for(const [id,e]of vehicleFire.emitters){
+        e.state=new VehicleThermalState(e.car.health,seeds[id%seeds.length]);e.state.advance(e.car.health,1/60,0,e.car.damageZones);
+        Object.assign(e.state,{fuelTime:600}); // Hold the maximum load during QA only.
+      }
+    },
+    simulateSplashes:(seconds:number)=>{for(let i=0;i<Math.min(2,seconds)*60;i++)puddleSplashes?.update(cars,quarry.puddles,1/60,true);},
     simulateFire:(seconds:number)=>{
       for(let i=0;i<Math.min(60,Math.max(0,seconds))*60;i++){
         vehicleFire?.update(cars,1/60,camera);

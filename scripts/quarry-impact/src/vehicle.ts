@@ -16,6 +16,8 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
+import {bodyworkDentDamage} from './bodywork-response';
+import {puddleDepth,type Puddle} from './puddle-splashes';
 export type Input = {
   throttle: number;
   steer: number;
@@ -50,6 +52,9 @@ export class Vehicle {
   surface = 'gravel';
   damageLeft = 0;
   damageRight = 0;
+  readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
+  arenaSurface?:{x:number;z:number;radius:number};
+  waters:Puddle[]=[];
   stuck = 0;
   reverse = 0;
   target = 0;
@@ -91,15 +96,15 @@ export class Vehicle {
     this.body = world.createRigidBody(
       R.RigidBodyDesc.dynamic()
         .setLinearDamping(0.06)
-        .setAngularDamping(0.65)
+        .setAngularDamping(0.85)
         .setCcdEnabled(true)
         .setCanSleep(true),
     );
     this.collider = world.createCollider(
       R.ColliderDesc.cuboid(def.halfWidth - 0.06, 0.25, def.halfLength - 0.12)
-        .setMass(def.mass)
+        .setMassProperties(def.mass,{x:0,y:-.06,z:0},{x:def.mass*((def.halfLength*2)**2+1.3**2)/12,y:def.mass*((def.halfLength*2)**2+(def.halfWidth*2)**2)/12,z:def.mass*((def.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
         .setFriction(0.45)
-        .setRestitution(0.12)
+        .setRestitution(0.035)
         .setActiveEvents(R.ActiveEvents.CONTACT_FORCE_EVENTS)
         .setContactForceEventThreshold(15000),
       this.body,
@@ -175,6 +180,7 @@ export class Vehicle {
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
     this.damageLeft = this.damageRight = 0;
+    for(const zone of Object.keys(this.damageZones)as (keyof typeof this.damageZones)[])this.damageZones[zone]=0;
     this.lastHit = -100;
     this.lastDamage = 0;
     this.impactSerial = 0;
@@ -222,6 +228,7 @@ export class Vehicle {
     const lateral = this.velocity.dot(this.right);
     this.slip = Math.abs(lateral);
     this.surface = surfaceAt(this.previous.x, this.previous.z);
+    if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     const alive = this.health > 0;
     const steerTarget =
       (alive ? this.input.steer : 0) *
@@ -309,6 +316,7 @@ export class Vehicle {
         const point = this.controller.wheelContactPoint(i);
         if (!point || !this.controller.wheelIsInContact(i)) continue;
         const p = new T.Vector3().copy(point);
+        if(this.waters.some(w=>puddleDepth(w,p.x,p.y,p.z)>0))continue;
         if (Math.abs(this.speed) > 3 && this.surface === 'gravel')
           this.fx.emit(p, 1, 0, Math.abs(this.speed) * 0.04);
         if (this.slip > 2 || this.input.handbrake) {
@@ -350,12 +358,15 @@ export class Vehicle {
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());
+    const zone=contact.y>1.35?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
+    this.damageZones[zone]+=damage;
+    const dentDamage=bodyworkDentDamage(damage);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
     const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();
     for (const panel of this.panels) {
       if (!panel.visible) continue;
-      const maximum = dentGeometry(panel, contact, impactDirection, damage);
-      panel.userData.damage = (panel.userData.damage || 0) + damage * maximum;
+      const maximum = dentGeometry(panel, contact, impactDirection, dentDamage);
+      panel.userData.damage = (panel.userData.damage || 0) + dentDamage * maximum;
       const assembly = panel.userData.detachAssembly as string | null;
       if (assembly) {
         if (!assemblies.has(assembly)) assemblies.set(assembly, { panels: [], damage: 0, weight: 0 });
@@ -368,7 +379,7 @@ export class Vehicle {
     // Finish deforming every member before releasing any of them. Grilles,
     // mirror inserts and bonnet vents cannot remain suspended over a wreck.
     for (const [name, group] of assemblies) {
-      const threshold = name === 'hood' ? 42 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32;
+      const threshold = name === 'hood' ? 48 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32;
       if (group.damage <= threshold || damage <= 7 || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
@@ -378,7 +389,7 @@ export class Vehicle {
     }
     for (const glass of this.glass) {
       if (!glass.visible) continue;
-      dentGeometry(glass, contact, impactDirection, damage);
+      dentGeometry(glass, contact, impactDirection, dentDamage);
       const bounds = new T.Box3().setFromObject(glass);
       const distance = bounds.distanceToPoint(point);
       if (distance < 1.25 && damage > 3) {
@@ -398,7 +409,7 @@ export class Vehicle {
         if (!quiet) this.fx.emit(bounds.getCenter(new T.Vector3()), Math.ceil(damage * .55), 3, 1.7);
       }
     }
-    this.wreckParts.hit(contact,impactDirection,damage);
+    this.wreckParts.hit(contact,impactDirection,dentDamage);
     const def = DEFINITIONS[this.kind];
     this.collider.setHalfExtents({
       x: def.halfWidth - 0.06 - (100 - this.health) * 0.0008,

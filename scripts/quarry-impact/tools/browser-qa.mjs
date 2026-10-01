@@ -66,7 +66,8 @@ try {
     return damaged;
   });
   assert.equal(report.damage.health, 28);
-  assert.ok(report.damage.detached > 0);
+  assert.equal(report.damage.detached,0,'distributed moderate contacts bend the stronger bodywork without instantly shedding its bumpers');
+  assert.ok(report.damage.wheelDamage.some(v=>v>0),'mechanical damage remains localized to struck corners');
   await page.evaluate(() =>
     window.__quarry.captureCamera([5, 2.6, -13], [0, 0.9, -20]),
   );

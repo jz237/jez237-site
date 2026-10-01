@@ -24,7 +24,7 @@ test('impact bends nearby sheet metal, leaves distant panels intact, and repair 
   const before = new Float32Array(front.geometry.attributes.position.array);
   car.hit(new T.Vector3(0,car.current.y,2),new T.Vector3(0,0,-1),12,1);
   assert.equal(car.health,88);
-  assert.ok(front.geometry.attributes.position.getZ(100)<before[100*3+2]);
+  assert.ok(Array.from(front.geometry.attributes.position.array).some((v,i)=>i%3===2&&v<before[i]-.01),'contact region bends while the smaller early dent leaves its outer edge alone');
   assert.deepEqual(Array.from(rear.geometry.attributes.position.array),Array.from(rear.userData.original));
   assert.ok(Array.from(front.geometry.attributes.impactWear.array).some(v=>v>0));
   const dented = Array.from(front.geometry.attributes.position.array);

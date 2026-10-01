@@ -1,5 +1,6 @@
 import {CHECKPOINTS, clamp, trackPoint, wrap, type Mode} from './rules';
 import type {Input} from './vehicle';
+import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 
 type Point = {x:number;y:number;z:number};
 export type DriverCar = {id:number;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
@@ -11,6 +12,7 @@ const distance=(a:Point,b:Point)=>Math.hypot(a.x-b.x,a.z-b.z);
 
 /** Solo driving decisions. Vehicle simulation and the online authority stay separate. */
 export class DrivingBrain {
+  constructor(private arena:ArenaLayout=LEGACY_ARENA){}
   readonly memory=new Map<number,Memory>();
   reset(){this.memory.clear();}
   update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance):Input {
@@ -38,10 +40,10 @@ export class DrivingBrain {
       if(!attack)return {...stop};
       const d=distance(car.current,attack.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85);
       tx=attack.current.x+attack.velocity.x*lead;tz=attack.current.z+attack.velocity.z*lead;
-      const radius=Math.hypot(tx,tz);if(radius>38){tx*=38/radius;tz*=38/radius;}
+      const {x:cx,z:cz,radius:limit}=this.arena,radius=Math.hypot(tx-cx,tz-cz);if(radius>limit-8){tx=cx+(tx-cx)*(limit-8)/radius;tz=cz+(tz-cz)*(limit-8)/radius;}
       m.phase='intercept';
       // Re-enter before the wall, rather than steering along it at full throttle.
-      if(Math.hypot(car.current.x,car.current.z)>39){tx=0;tz=0;desiredSpeed=11;m.phase='re-enter';}
+      if(Math.hypot(car.current.x-cx,car.current.z-cz)>limit-7){tx=cx;tz=cz;desiredSpeed=11;m.phase='re-enter';}
     }else{
       let prev:{x:number;z:number},next:{x:number;z:number},after:{x:number;z:number};
       if(mode==='race'){

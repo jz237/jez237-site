@@ -1,3 +1,37 @@
+# Water, fire and vehicle weight — September 30, 2026
+
+Final application **index-CNk1oed3.js**, **9,723,921 bytes**, SHA-256 **a81c6fc511376966942ce6ce2bb259662e6c6d73940eb68bff97e478371b37e7**. Tire-driven water spray and clipped ripples, a larger solo derby, more resistant bodywork and rarer damage-dependent thermal effects address the latest play feedback. Implementation: `source/drive-feel.md`; machine-readable results: `source/drive-feel-results.json`.
+
+- The solo derby grows from **92 to 128 metres** in diameter, adding **93.6% area**, with 96 physical barriers, matching fences, gravel, AI bounds, spawn positions, minimap and overhead view. The offset arena avoids existing buildings and machinery. Mode changes restore the playground/race perimeter and ramps. Online authority retains its existing 92-metre layout.
+- Each grounded wheel splashes the actual irregular puddle it crosses. Spray strength follows speed and water depth; expanding ripples clip to the shoreline. Dry, stationary and airborne contacts emit nothing. Pools cap at **768 drops / 48 ripples** and pause during inspection. Wet contact suppresses dry gravel dust.
+- Cars retain their authored **1,480 / 1,650 / 1,290 kg** masses. More realistic roll inertia, lower restitution, modest center-of-mass and angular-damping changes reduce bouncing. Impact damage uses contact-normal closing speed, so low-speed pushing does not repeatedly drain health. Smaller early dents and slower attachment wear let cars withstand several substantial blows; repeated heavy strikes still deform panels, break glazing and release parts. Impact sound remains driven by physical impulse.
+- Only critically damaged engine/fuel regions qualify for one **24% ignition assessment**, followed by a **3–11-second delay** and **30–70 seconds of finite fuel**. Doors, roofs and low health alone cannot ignite. **12% of ignited episodes** are eligible for one further-delayed burst, additionally requiring sustained heat and health at or below 6%. Cooler engine damage may emit pale steam. Varied localized flame tongues and coherent drifting smoke replace the earlier multi-source, speckled appearance. Bursts remain cosmetic; full structural soft-body simulation and Wreckfest 2 fidelity remain unfinished.
+
+**172/172 selected solo tests**, TypeScript and production build pass on the final source. The eight added tests cover actual wet contact, bounded/fixed-step effects, arena switching and layout, bodywork response, fire eligibility/distribution, finite fuel, coherent noise and reset. Original asset and historical source checksum chains remain intact. Final browser QA completes driving/braking, all modes, 72 player race checkpoints, repair/inspection, derby outcomes and repeated restarts. Seven final water/thermal checks pass at 1440p, with two splash speeds, front and rear fire sources, a seeded delayed burst and repair. All 38 original ElevenLabs recordings are retained. No service calls or spending.
+
+Graphics QA passes **9 checks / 12 quality transitions** and real WebGL context restoration in **425 ms**, without shader/browser/asset errors. It also verifies that mode changes do not unnecessarily recapture static scenery shadows. Final fire/audio QA passes **10 checks**, including all three cars, positional playback, eight-car budgets, pause, mute, repair and menu reset. Sampled peak **0.2926**, **zero clipped readings** across **2,877 readings**. The preceding candidate's eight demo checks and all eight AI reaching all 72 race checkpoints also pass; that report preserves its own bundle/hash and is not represented as a fresh measurement of the final shadow-cache adjustment.
+
+Fresh isolated Chrome at **2560 × 1440 Ultra**, unthrottled local delivery, on the exact final runtime:
+
+| Measurement | Result |
+|---|---:|
+| Cold navigation to rendered menu, one sample | 6.137 s |
+| First event startup to countdown | 0.972 s |
+| Moving eight-car derby, 60.897 s | 57.057 FPS / 17.526 ms mean |
+| Derby p95 / p99 | 16.8 / 50.0 ms |
+| Derby frames above 33.4 / 50 ms | 46 / 25 |
+| Eight-burning-car stress, 60.807 s | 59.713 FPS / 16.747 ms mean |
+| Fire p95 / p99 | 16.8 / 17.0 ms |
+| Fire frames above 33.4 / 50 ms | 6 / 0 |
+
+The stress fixture deliberately seeds eight eligible fires and extends their fuel; ordinary derby fire frequency is substantially lower. No profiler runs during either measured frame interval, and no other QA browser, build, exporter or CPU test from this work runs concurrently. This single fresh-load sample is not a repeated loading comparison with the prior release. No internet-loading, hardware-latency or locked-60 claim.
+
+Derby geometry counts range **848–849**, textures **144–145**, sampled JS heap **685.4–805.0 MB**, ending at **802.9 MB**. Fire geometry **858–858**, textures **145–145**, heap **864.9–957.5 MB**, ending at **957.5 MB**. Short captures and transient allocations do not establish a leak or long-term memory stability. No new ten-minute capture was run.
+
+All **23 shared deployed Worker inputs** remain byte-identical. No backend deployment or internet multiplayer test. Evidence: `outputs/drive-feel/solo-tests-publish.log`, `build-publish.log`, `gameplay-publish/`, `visual-publish/`, `graphics-final/final/`, `audio-fire-final/`, `demo-final/`, and `performance-publish-final/`. Earlier candidate captures retain their own hashes; the first final performance launch failed on local process permissions and contains no measurement. Historical release records below remain applicable to their own builds.
+
+---
+
 # Loading and frame pacing — September 29, 2026
 
 Final application **index-Cgu5z9OM.js**, **9,708,924 bytes**, SHA-256 **50052d9776e22f184de46236f4b8f7755a6bc0626d1196910a91a6df6026634f**. Concurrent asset loading, asynchronous shader warm-up, prefetched local audio, lossless shared-texture model transport, frozen static transforms and conservative impact bounds reduce startup and redundant client work. Geometry, image bytes, driving/damage behavior and all 23 deployed Worker inputs remain unchanged. Implementation and reproduction: `source/performance.md`; machine-readable final results: `source/performance-results.json`.
