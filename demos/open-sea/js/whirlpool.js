@@ -1,6 +1,6 @@
 // An idealised, finite-core draining vortex. SI units throughout. The free
-// surface follows centrifugal pressure balance, dh/dr = v_theta²/(g*r).
-// This is a reduced fluid model, not a Navier–Stokes solver for a whole sea.
+// surface follows centrifugal pressure balance, dh/dr = v_thetaÂ²/(g*r).
+// This is a reduced fluid model, not a Navierâ€“Stokes solver for a whole sea.
 const G=9.81,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export const VORTEX_CORE=62,VORTEX_DEPTH=150,VORTEX_PATCH=620;
 const taper=r=>{const t=clamp((r-520)/480,0,1);return [1-t*t*(3-2*t),t>0&&t<1?-6*t*(1-t)/480:0];};
@@ -46,15 +46,16 @@ export class Whirlpool {
 export class HullCurrent {
   constructor(){this.vx=0;this.vz=0;this.omega=0;this.heel=0;this.acceleration=0;}
   step(dt,boat,field){
-    const mass=320000,inertia=mass*(47*47+8.2*8.2)/12;
+    const P=boat.profile||{mass:320000,hullLength:47,beam:9.3,scale:[1,1,1]},mass=P.mass,inertia=mass*(P.hullLength**2+(.88*P.beam)**2)/12;
+    const [sx,sy,sz]=P.scale,dragScale=P.hullLength/47*sy;
     const c=Math.cos(boat.psi),s=Math.sin(boat.psi);
     let fx=0,fz=0,torque=0,lateral=0;
     for(const [lx,lz] of [[0,0],[18.8,0],[-18.8,0],[0,4.1],[0,-4.1]]){
-      const rx=c*lx-s*lz,rz=s*lx+c*lz;
+      const rx=c*lx*sx-s*lz*sz,rz=s*lx*sx+c*lz*sz;
       const u=field.sample(boat.x+rx,boat.z+rz);
       const dx=u.vx-this.vx+this.omega*rz,dz=u.vz-this.vz-this.omega*rx;
       const along=dx*c+dz*s,across=-dx*s+dz*c;
-      const fa=(600+210*Math.abs(along))*along,fs=(1800+1300*Math.abs(across))*across;
+      const fa=dragScale*(600+210*Math.abs(along))*along,fs=dragScale*(1800+1300*Math.abs(across))*across;
       const x=c*fa-s*fs,z=s*fa+c*fs;
       fx+=x;fz+=z;torque+=rx*z-rz*x;lateral+=fs;
     }

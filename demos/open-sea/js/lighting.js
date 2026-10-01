@@ -9,12 +9,18 @@ uniform vec3 uShadowInfo;   // centre x, centre z, extent
 uniform float uShadowAvg;
 uniform vec4 uFlashLight;   // xyz direction to flash, w pre-exposed irradiance
 uniform sampler2D uYachtShadow,uYachtShadowOpacity,uYachtShadowOpaque;
+uniform float uYachtReceiverId;
 uniform mat4 uYachtShadowMatrix;
 uniform vec4 uYachtShadowInfo; // enabled, dominant light is sun, texel size, depth range
 uniform vec3 uYachtShadowCenter,uYachtShadowBow,uYachtShadowUp,uYachtShadowSide;
 float yachtShadowLocal(vec3 p,vec3 normal,bool sun){
   if(uYachtShadowInfo.x<.5||sun!=(uYachtShadowInfo.y>.5))return 1.0;
   vec3 q=(uYachtShadowMatrix*vec4(p,1)).xyz*.5+.5;
+  // Compare each PCF tap at its depth on the receiver plane. A fixed bias
+  // alone creates dark contour bands across broad, gently curved square sails.
+  vec2 qx=dFdx(q.xy),qy=dFdy(q.xy);float zx=dFdx(q.z),zy=dFdy(q.z);
+  float determinant=qx.x*qy.y-qx.y*qy.x;
+  vec2 depthGradient=abs(determinant)>1e-14?vec2(zx*qy.y-zy*qx.y,zy*qx.x-zx*qy.x)/determinant:vec2(0);
   if(any(lessThan(q.xy,vec2(0)))||any(greaterThan(q.xy,vec2(1))))return 1.0;
   vec3 light=sun?uSunDir:uMoonDir;
   vec3 localLight=vec3(dot(light,uYachtShadowBow),dot(light,uYachtShadowUp),dot(light,uYachtShadowSide));
@@ -24,18 +30,34 @@ float yachtShadowLocal(vec3 p,vec3 normal,bool sun){
   bool phoneFilter=uYachtShadowInfo.z>.0008;
   // Four weighted taps must remain at the four texel centres. Expanding their
   // offsets makes nearest fetches jump while their weights are still nonzero.
-  float radius=phoneFilter?1.0:clamp(.65+separation*.045,.65,2.4);
+  float radius=phoneFilter?1.0:clamp(1.4+separation*.045,1.4,3.5);
   vec2 fraction=fract(q.xy/uYachtShadowInfo.z-.5);
   float sum=0.0;
   for(int y=0;y<3;y++)for(int x=0;x<3;x++){
     if(phoneFilter&&(x==2||y==2))continue;
     vec2 offset=phoneFilter?vec2(x,y)-fraction:vec2(x-1,y-1);
     vec2 uv=q.xy+offset*uYachtShadowInfo.z*radius;
-    float depth=texture(uYachtShadow,uv).r;
-    float opacity=texture(uYachtShadowOpacity,uv).r;
-    float solid=texture(uYachtShadowOpaque,uv).r;
     float weight=phoneFilter?(x==0?1.0-fraction.x:fraction.x)*(y==0?1.0-fraction.y:fraction.y):1.0/9.0;
-    sum+=weight*(q.z-bias<=solid?1.0:0.0)*(q.z-bias<=depth?1.0:1.0-opacity);
+    vec2 cell=uv/uYachtShadowInfo.z-.5,base=floor(cell),blend=fract(cell);
+    // Filter comparison results, never depths or integer caster identities.
+    // Bilinear PCF removes contour steps on broad translucent sail shadows.
+    for(int sy=0;sy<2;sy++)for(int sx=0;sx<2;sx++){
+    if(phoneFilter&&(sx==1||sy==1))continue;
+    vec2 sampleUV=phoneFilter?(floor(uv/uYachtShadowInfo.z)+.5)*uYachtShadowInfo.z:(base+vec2(sx,sy)+.5)*uYachtShadowInfo.z;
+    float subWeight=phoneFilter?1.0:(sx==0?1.0-blend.x:blend.x)*(sy==0?1.0-blend.y:blend.y);
+    vec4 first=texture(uYachtShadow,sampleUV),second=texture(uYachtShadowOpacity,sampleUV);
+    float solid=texture(uYachtShadowOpaque,sampleUV).r;
+    float reference=q.z+clamp(dot(sampleUV-q.xy,depthGradient),-.7/uYachtShadowInfo.w,.7/uYachtShadowInfo.w)-bias;
+    float transmission=1.0;
+    // An infinitesimally thin sheet cannot shadow itself merely because its
+    // curved receiver falls in a neighbouring texel. Other sails still cast.
+    if(reference>first.r&&first.b!=uYachtReceiverId)transmission*=1.0-first.g;
+    if(reference>second.r&&second.b!=uYachtReceiverId)transmission*=1.0-second.g;
+    // Canvas is also illuminated by light scattered through neighbouring
+    // sheets. Keep that broad fill rather than making cloth opaque in shadow.
+    if(uYachtReceiverId>0.0)transmission=mix(.72,1.0,transmission);
+    sum+=weight*subWeight*(reference<=solid?1.0:0.0)*transmission;
+    }
   }
   return sum;
 }
@@ -137,10 +159,11 @@ export function bindLighting(p, ctx) {
   const shadow=ctx.yachtShadow,yacht=ctx.yacht;
   // Even disabled samplers have a valid binding; shader validation must never
   // alias a sampler2DArray with the default unit-zero sampler2D.
-  p.t('uYachtShadow',2,shadow?.depth||light.tex);
-  p.t('uYachtShadowOpacity',19,shadow?.color||light.tex);
+  p.t('uYachtShadow',2,shadow?.color||light.tex);
+  p.t('uYachtShadowOpacity',19,shadow?.secondColor||light.tex);
   p.t('uYachtShadowOpaque',20,shadow?.opaque||light.tex);
   p.v4('uYachtShadowInfo',shadow?.on&&yacht?1:0,shadow?.sun?1:0,1/(shadow?.size||1),shadow?.depthRange||1);
+  p.f('uYachtReceiverId',-1);
   if(shadow?.on&&yacht){
     p.m4('uYachtShadowMatrix',shadow.matrix).v3('uYachtShadowCenter',yacht.x-ctx.cam.x,yacht.y-ctx.cam.y,yacht.z-ctx.cam.z)
       .v3('uYachtShadowBow',yacht.axes.bow).v3('uYachtShadowUp',yacht.axes.up).v3('uYachtShadowSide',yacht.axes.sb);

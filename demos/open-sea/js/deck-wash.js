@@ -1,3 +1,5 @@
+import {glslFloat as F} from './vessels.js';
+import {DOMAIN,SX,SY,SZ,deckHeight,imperial} from './vessels.js';
 // Conservative, well-balanced shallow water on the moving schooner's deck.
 // Hydrostatic reconstruction preserves resting puddles on its sheer/camber.
 // Fixed CFL-safe steps keep a slow frame from launching the water into the sky.
@@ -6,9 +8,9 @@ import {sheer,halfBeam} from './yacht-geo.js';
 import {bindLighting} from './lighting.js';
 
 export const DECK_WASH_GLSL=`
-float deckBeam(float x){return x>=-2.0?4.65*pow(max(0.0,1.0-pow(max(0.0,(x+2.0)/25.5),2.1)),.7):4.65*(1.0-.4*pow(clamp((-2.0-x)/21.5,0.0,1.0),2.4));}
-float deckFloor(vec2 p){float b=max(deckBeam(p.x)*.995,.1);return 2.6+(p.x>0.0?.0018:.0007)*p.x*p.x+.055*(1.0-p.y*p.y/(b*b));}
-bool deckFootprint(vec2 p){return abs(p.x)<23.35&&abs(p.y)<deckBeam(p.x)*.992;}
+float deckBeam(float x){x/=${F(SX)};return ${F(SZ)}*(x>=-2.0?4.65*pow(max(0.0,1.0-pow(max(0.0,(x+2.0)/25.5),2.1)),.7):4.65*(1.0-.4*pow(clamp((-2.0-x)/21.5,0.0,1.0),2.4)));}
+float deckFloor(vec2 p){float b=max(deckBeam(p.x)*.995,.1),x=p.x/${F(SX)};return ${F(SY)}*(2.6+(x>0.0?.0018:.0007)*x*x+.055*(1.0-p.y*p.y/(b*b)))${imperial?'+3.0*(1.0-smoothstep(-35.0,-29.0,p.x))':''};}
+bool deckFootprint(vec2 p){return abs(p.x)<${F(23.35*SX)}&&abs(p.y)<deckBeam(p.x)*.992;}
 vec4 washSample(sampler2D source,vec2 uv){
  vec2 pixel=clamp(uv*vec2(128,32)-.5,vec2(0),vec2(127,31));
  ivec2 p=ivec2(floor(pixel)),b=min(p+1,ivec2(127,31));vec2 f=fract(pixel);
@@ -17,7 +19,7 @@ vec4 washSample(sampler2D source,vec2 uv){
 }
 `;
 defineChunk('deck-wash',DECK_WASH_GLSL);
-const W=128,H=32,DX=48/W,DZ=10/H,STEP=1/120;
+const W=128,H=32,DX=DOMAIN[0]/W,DZ=DOMAIN[1]/H,STEP=1/120;
 
 const SOLVER=`
 in vec2 vUv;
@@ -25,7 +27,7 @@ uniform sampler2D uState,uTerrain,uSea;
 uniform vec2 uGravity;
 uniform float uG,uDt,uRain,uSeaOn;
 out vec4 o;
-const vec2 cell=vec2(${DX},${DZ});
+const vec2 cell=vec2(${F(DX)},${F(DZ)});
 const ivec2 size=ivec2(${W},${H});
 vec4 ground(ivec2 p){return texelFetch(uTerrain,clamp(p,ivec2(0),size-1),0);}
 vec4 state(ivec2 p){return texelFetch(uState,clamp(p,ivec2(0),size-1),0);}
@@ -82,7 +84,7 @@ uniform sampler2D uState,uTerrain;
 uniform mat4 uModel,uVP;
 out vec3 vRel,vLocal;
 void main(){
- vec2 uv=aPos/vec2(48,10)+.5;
+ vec2 uv=aPos/vec2(${F(DOMAIN[0])},${F(DOMAIN[1])})+.5;
  vec4 q=washSample(uState,uv),g=washSample(uTerrain,uv);
  float floorY=max(deckFloor(aPos),g.r);
  vLocal=vec3(aPos.x,floorY+q.x+.003,aPos.y);
@@ -101,11 +103,11 @@ uniform float uTime;
 in vec3 vRel,vLocal;
 out vec4 o;
 void main(){
- vec2 uv=vLocal.xz/vec2(48,10)+.5;
+ vec2 uv=vLocal.xz/vec2(${F(DOMAIN[0])},${F(DOMAIN[1])})+.5;
  vec4 q=washSample(uState,uv),g=texture(uTerrain,uv);
  vec2 tx=vec2(1.0/${W}.0,0),tz=vec2(0,1.0/${H}.0);
- float hx=(washSample(uState,uv+tx).r-washSample(uState,uv-tx).r)/(2.0*${DX});
- float hz=(washSample(uState,uv+tz).r-washSample(uState,uv-tz).r)/(2.0*${DZ});
+ float hx=(washSample(uState,uv+tx).r-washSample(uState,uv-tx).r)/(2.0*${F(DX)});
+ float hz=(washSample(uState,uv+tz).r-washSample(uState,uv-tz).r)/(2.0*${F(DZ)});
  vec3 surface=cross(dFdx(vRel),dFdy(vRel));
  vec3 baseN=normalize(mat3(uModel)*vec3(0,1,0));
  float normalSq=dot(surface,surface);
@@ -136,9 +138,9 @@ export class DeckWash {
     this.N=[W,H];this.acc=0;this.steps=0;this.inlet=true;
     const data=new Float32Array(W*H*4),obstacles=metadata.deck?.obstacles||[],surfaces=metadata.deck?.surfaces||[];
     for(let j=0;j<H;j++)for(let i=0;i<W;i++){
-      const x=(i+.5)*DX-24,z=(j+.5)*DZ-5,b=halfBeam(x)*.992;
-      const inside=Math.abs(x)<23.35&&Math.abs(z)<b;
-      let bed=sheer(x)+.055*(1-(z/Math.max(b,.1))**2),solid=false;
+      const x=(i+.5)*DX-DOMAIN[0]/2,z=(j+.5)*DZ-DOMAIN[1]/2,b=halfBeam(x)*.992;
+      const inside=Math.abs(x)<23.35*SX&&Math.abs(z)<b;
+      let bed=deckHeight(x,z),solid=false;
       for(const a of surfaces)if(Math.abs(x-a.x)<=a.halfX&&Math.abs(z-a.z)<=a.halfZ)bed=Math.max(bed,a.height);
       for(const a of obstacles){
         // The suspended tender does not block water on the deck underneath.
@@ -157,7 +159,7 @@ export class DeckWash {
     this.solver=new Program('deck.wash.solver',FS_VERT,SOLVER);
     this.prog=new Program('deck.wash.surface',VS,FS);
     const verts=[],idx=[];
-    for(let j=0;j<=H*2;j++)for(let i=0;i<=W*2;i++)verts.push(i*DX/2-24,j*DZ/2-5);
+    for(let j=0;j<=H*2;j++)for(let i=0;i<=W*2;i++)verts.push(i*DX/2-DOMAIN[0]/2,j*DZ/2-DOMAIN[1]/2);
     const stride=W*2+1;
     for(let j=0;j<H*2;j++)for(let i=0;i<W*2;i++){const k=j*stride+i;idx.push(k,k+stride,k+1,k+1,k+stride,k+stride+1);}
     this.vao=gl.createVertexArray();gl.bindVertexArray(this.vao);

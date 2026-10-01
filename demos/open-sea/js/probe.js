@@ -1,7 +1,9 @@
 // Samples the ocean surface at a handful of world points on the GPU and reads the results back asynchronously.
 import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS, AsyncReadback } from './gl.js';
 
-const MAXP = 16;
+// The original sixteen slots retain their meaning (boat/camera/whales/spray).
+// Larger hulls append a distributed waterplane grid after those slots.
+const MAXP = 32;
 const PROBE_FS = `
 #include <whirlpool>
 in vec2 vUv;
@@ -47,6 +49,7 @@ export class WaveProbe {
     this.fresh = false;
   }
   request(sim, points,whirlpool) {
+    if(points.length>MAXP)throw new Error('Wave probe budget exceeded');
     if (this.reader.busy) return false;
     this.points = points;
     this.vortexHeights=points.map(([x,z])=>whirlpool.sample(x,z).height);

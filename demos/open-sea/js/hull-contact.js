@@ -1,3 +1,5 @@
+import {glslFloat as F} from './vessels.js';
+import {DOMAIN,SY} from './vessels.js';
 // Recent wetting stays in the solid boat frame. Its thin water film drains
 // over time instead of disappearing as soon as a crest recedes.
 import {gl,Program,FS_VERT,tex2D,makeFBO,bindFBO,drawFS} from './gl.js';
@@ -24,17 +26,17 @@ float surface(vec2 p){
  return h+hullRunup(vec3(p.x,h,p.y));
 }
 void main(){
- vec2 local=(vUv-.5)*vec2(48.0,10.0);
+ vec2 local=(vUv-.5)*vec2(${F(DOMAIN[0])},${F(DOMAIN[1])});
  vec3 base=uHullBow*local.x+uHullSide*local.y;
  float y=0.0;
  for(int it=0;it<4;it++){
   vec3 p=base+uHullUp*y;float error=p.y+uHullCenter.y-surface(p.xz);
   float derivative=uHullUp.y-dot(whirlSurface(p.xz).yz,uHullUp.xz);
-  y=clamp(y-error/max(.25,derivative),-7.0,7.0);
+  y=clamp(y-error/max(.25,derivative),-${F(7*SY)},${F(7*SY)});
  }
  vec4 previous=texture(uPrevious,vUv);
  float wet=uFirst>.5?y:max(y,y+(previous.g-y)*exp(-uDt/5.0));
- o=vec4(y,clamp(wet,-7.0,7.0),0,1);
+ o=vec4(y,clamp(wet,-${F(7*SY)},${F(7*SY)}),0,1);
 }`;
 export class HullContact{
  constructor(){

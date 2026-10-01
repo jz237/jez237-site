@@ -25,7 +25,8 @@ export async function checkOpenSeaLive(base,repo,fetcher=fetch){
   return Buffer.from(await r.arrayBuffer());
  };
  const html=(await request(entry)).toString();
- if(imports(html)!==imports(expected)||!html.includes(`src="js/main.js?v=${version}"`))throw Error('Live ocean entry is an older or mixed release.');
+ const moduleEntry=s=>s.match(/<script type="module" src="([^"]+)"/s)?.[1];
+ if(imports(html)!==imports(expected)||moduleEntry(html)!==moduleEntry(expected))throw Error('Live ocean entry is an older or mixed release.');
  for(const path of oceanFiles(repo).filter(p=>p!==entry&&p!=='demos/index.html')){
   const actual=await request(path),local=readFileSync(resolve(repo,path));
   if(digest(normalized(actual,path))!==digest(normalized(local,path)))throw Error(`Live ocean asset differs from the tested release: ${path}`);

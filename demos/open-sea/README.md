@@ -1,6 +1,6 @@
 # Open Sea
 
-A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. The detailed 52 m schooner is built in Blender and loaded from a 4.5 MB compressed mesh; the browser has no framework dependency or build step.
+A real-time, dependency-free WebGL 2 ocean. Waves, lighting and procedural textures run on the GPU, and fish perception runs on the CPU. Choose a detailed 52 m schooner or the 122 m Imperial Star at startup. Both ships are built in Blender; the browser has no framework dependency or build step.
 
 Open `index.html` from any static server. It needs WebGL 2 with float render targets
 (`EXT_color_buffer_float`), which every current desktop browser and recent phones provide.
@@ -49,6 +49,7 @@ The panel (top left, `×` closes it) has five sections:
 * **Fly**: drag to look, `W A S D` move, `Q`/`E` down/up, `Shift` fast, `Ctrl` slow, wheel changes speed. On touch:
   drag to look, pinch to move, two-finger vertical drag for altitude. Fly straight through the surface to go underwater.
 * **Boat** orbits the yacht, **Dive** orbits it from below.
+* **Ship** opens the selector again. Choosing the other vessel reloads its model and handling profile. Direct links accept `ship=schooner` or `ship=imperial`.
 * The visible **Fullscreen** button enters or exits fullscreen; `F` does the same. `H` hides the controls, `P` saves a PNG, `1`-`4` switch camera mode.
 
 ## Development
@@ -64,7 +65,7 @@ node scripts/open-sea/review-set.mjs out-dir 1280x720 30      # the standard set
 URL parameters (with `shot=1` the page is driven by the harness instead of `requestAnimationFrame`):
 `t` hour of day, `sea` 0-9 (sets wind, swell and choppiness together), `cloud`, `rain`, `light` (0/1), `wind` direction in radians,
 `water` (a water type name), `sunh`/`suna` sun height and bearing in degrees, `glow`, `clarity`, `ev`, `bloom`, `fov`, `hs` (wave height multiplier), `foam`, `swell`, `chop`, `cloudwind`, `cam=x,y,z,yaw,pitch`,
-`ycam=distance,height,azimuthDeg[,lookHeight]` (camera relative to the yacht), `noyacht`, `under=1`, `q=low|high`.
+`ycam=distance,height,azimuthDeg[,lookHeight]` (camera relative to the yacht), `ship=schooner|imperial`, `noyacht`, `under=1`, `q=low|high`.
 
 Headless Chromium on a machine without a GPU uses SwiftShader; expect seconds per frame there. On a real GPU the
 demo adapts its render resolution to hold a playable frame rate (`AUTO`), or fix it with the quality button.
@@ -183,3 +184,21 @@ Verification includes close bow sequences, onboard storm, glassy, moonlit, under
 The schooner now sits about 35 cm higher in calm water. Its vertical restoring frequency rises from 1.8 to 2.1 rad/s with damping ratio 0.82, helping it lift sooner with an arriving swell and reducing overshoot. Pitch, roll and whirlpool currents retain their previous response. This adjusts the existing reduced wave-following model; hull loading and hydrostatic displacement are not recalculated.
 
 Six matched before/after views cover calm, breeze, rough sea, storm, whirlpool and portrait. A production yacht-update fixture lifts 0.64 m in the first half-second after a 2 m surface rise, versus 0.53 m previously, with peak overshoot reduced from 5.2 to 1.8 cm. It returns to its floating trim, equivalent uneven frame subdivisions match, and long finite frame hitches remain bounded.
+
+## Imperial Star and ship selection
+
+The September 30 `imperial-star-20260930` release adds a separately authored five-masted tall ship inspired by the supplied Imperial Star artwork. Its overall length is 122 m including the bowsprit, hull length 105 m, beam 18.5 m, and simulated mass 5,800 tonnes. Four square-rigged masts carry twenty square sails; a spanker and three jibs bring the independently animated cloth groups to twenty-four. Reefing raises and gathers the square-sail feet while preserving the yard pins and working sheet attachments. Animated normals and shadow casters use the same deformation.
+
+The exterior includes raised quarterdeck and stern galleries, gold scrollwork and lettering, lanterns, a carved figurehead interpretation, forty guns, two supported launches, gratings, belaying pins and coils, capstans, wheel and a heading compass. The deck is walkable from stern to bow, with geometry-derived collisions around fittings. Black timber planks, copper paint, irregular wood grain and weathering, panel stitching and reinforcement, woven canvas, braided rope and mottled metal have different colour, relief and roughness responses. Texture gradients and mipmaps filter the fine detail at distance. The editable model can be reproduced with:
+
+```bash
+blender --background --factory-startup --python scripts/open-sea/build-imperial-star.py -- <absolute-repository-path> <absolute-output-directory>
+```
+
+This writes `imperial-star-122m.blend`, a studio render, and the browser JSON/compressed mesh. The browser loads roughly half a million vertices and an approximately 9 MB gzip asset. Thin static rigging also uses continuous analytic strips for visibility and fractional orthographic shadow coverage. Two peeled depth/opacity/caster-ID layers handle sail and rig overlap, with a separate opaque depth map. Cloth excludes its own sheet's shadow and receives scattered-light fill; comparison filtering softens shadows. Two overlapping static ropes still share one caster group, so shadow accumulation is an approximation.
+
+The large hull's equilibrium is calculated from a clipped-volume curve of the actual exported hull triangles in 1,025 kg/m³ seawater. At the selected mass it displaces 5,658.54 m³ and sits about 0.89 m above its authoring datum, giving approximately 6.61 m calm draft rather than the artwork's nominal 7.5 m. Waterplane stiffness, hull inertia, specified metacentric height and estimated added mass set slower heave/pitch/roll springs. Fourteen additional GPU wave stations fit a centred weighted plane, keeping short wave variation filtered rather than bypassing the springs. The slow vortex pressure surface supplies the large-scale datum. Wind drive, heading changes and distributed current drag use the selected vessel's dimensions and mass. Wake, contact, spray, exclusion volume, deck wash and cameras use its physical size; the original schooner retains its established restoring frequencies and damping.
+
+This is a reduced real-time seakeeping and cloth model, not CFD, certified naval hydrostatics or structural simulation. The reference pictures are artistic concepts. Capacity is a concept specification: crew characters, accessible cabin interiors, rig operation, flooding and damage are not implemented. The small carved figurehead, wire-like ornament, simplified carriages and repeated procedural materials remain visible artistic limitations under close inspection. It is not reliably photographic.
+
+Verification includes 22 release/behaviour/geometry/physics/navigation tests; production GPU transform-feedback checks across all twenty-four sail groups under full/partial reefing and both trim directions; layered shadow and subpixel rig-coverage fixtures; rain/whirlpool/deck/ripple hitch stress; and desktop/portrait captures of daylight, storm, moonlight, underwater, hull details and deck stations. Desktop rendering was finite, without WebGL/browser errors, and a live RAF check sustained about 60 fps on the tested RTX 5090. The independent reviewer prompted attachment, shadow filtering, launch support, gun opening, compass and Dive corrections. Portrait checks use that desktop GPU. The previous physical Galaxy S25 Ultra report measured 44.6 fps for the schooner release; it does not validate Imperial Star's phone rendering or performance.

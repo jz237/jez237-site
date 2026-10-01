@@ -1,3 +1,6 @@
+import {glslFloat as F} from './vessels.js';
+import {vessel,SX,SY,SZ,DOMAIN,imperial,deckHeight} from './vessels.js';
+import {shipHydrostatics,fitWavePlane,Spring} from './ship-physics.js';
 // The sailing yacht: rendering (hull, sails, rigging), sailing physics and wave-following dynamics.
 import { gl, Program, defineChunk, tex2D, depthTex, makeFBO, bindFBO } from './gl.js';
 import { m4, clamp, lerp, smoothstep } from './math.js';
@@ -19,6 +22,7 @@ uniform mat4 uVP, uModel;
 uniform vec4 uSail;    // angle, pivot x, flutter metres, time
 uniform vec3 uSailAxis;
 uniform vec4 uSailShape; // foot y, head y, reef, cloth type (-1 boom, 0 main, 1 headsail)
+uniform vec4 uSquare; // lower/upper width, height, draft
 uniform vec4 uSailCloth; // rest clew x/y, draft, roach
 out vec3 vLocal;
 out vec3 vLocalN;
@@ -28,7 +32,21 @@ out vec4 vAttr;
 out float vAO;
 ${SAIL_MOTION_GLSL}
 #ifdef SAIL
+vec3 squareRest(vec2 uv,float reef){
+  float height=uSquare.z*(1.0-.65*reef),width=mix(uSquare.x*(1.0-.1*reef),uSquare.y,uv.y);
+  return vec3(uSail.y+uSquare.w*(1.0-.6*reef)*sin(3.141592653589793*uv.x)*sin(3.141592653589793*uv.y),uSailShape.y-height*(1.0-uv.y)+1.05*(1.0-.65*reef)*sin(3.141592653589793*uv.x)*pow(1.0-uv.y,4.0),(uv.x-.5)*width);
+}
 vec3 sailPoint(vec3 p,vec2 uv){
+  if(abs(uSailShape.w)>1.5){
+    if(uSailShape.w>0.0){
+      p+=squareRest(uv,uSailShape.z)-squareRest(uv,0.0);
+      float span=sin(3.141592653589793*clamp(uv.x,0.0,1.0));
+      float pinned=(1.0-uv.y)*span;
+      p.x+=uSail.z*(1.0-.6*uSailShape.z)*pinned*(.65*sin(uv.x*13.0-uv.y*5.0-uSailWind.x+uSailWind.z)+.2*sin(uv.x*25.0-uSailWind.y));
+    }
+    vec3 q=p-vec3(uSail.y,0,0);float a=uSail.x;
+    return vec3(uSail.y,0,0)+vec3(q.x*cos(a)+q.z*sin(a),q.y,-q.x*sin(a)+q.z*cos(a));
+  }
   float a0 = uSail.x;
   float sgn = clamp(a0 * 10.0, -1.0, 1.0);
   float v = uv.y, u = uv.x;
@@ -51,6 +69,9 @@ vec3 sailPoint(vec3 p,vec2 uv){
 }
 vec3 restCloth(vec2 uv){
   float u=uv.x,v=uv.y,reef=uSailShape.z;
+  if(uSailShape.w>1.5){
+    return squareRest(uv,0.0);
+  }
   bool main=uSailShape.w<.5;
   vec3 tack=vec3(uSail.y,uSailShape.x,0.0);
   vec3 head=tack+vec3(uSailAxis.x/(main?1.0-.18*reef:1.0),uSailAxis.y/(main?1.0-.42*reef:1.0),0.0);
@@ -77,6 +98,7 @@ void main() {
   vec3 axis=normalize(uSailAxis);float a=uSail.x*(1.0+.30*aAttr.y*step(-.5,uSailShape.w));
   n.z*=clamp(uSail.x*10.0,-1.0,1.0);n=n*cos(a)+cross(axis,n)*sin(a)+axis*dot(axis,n)*(1.0-cos(a));
   p=sailPoint(p,aAttr.xy);
+  if(abs(uSailShape.w)>1.5){float a=uSail.x;n=vec3(aNrm.x*cos(a)+aNrm.z*sin(a),aNrm.y,-aNrm.x*sin(a)+aNrm.z*cos(a));}
   // Smooth the actual deformed surface, not its long tessellation triangles.
   // Sewn tubes and rigid corner hardware retain their own material normals.
   if(aAttr.z==${MAT.SAIL}.0&&aAttr.w==0.0)n=smoothClothNormal(aAttr.xy,n);
@@ -122,6 +144,7 @@ uniform vec3 uSailTri[15];
 uniform float uWet, uRefl, uCamY, uMirrorY, uUnderCam, uPixelScale, uRigLines;
 uniform float uCrestLimit;
 uniform int uCurrentSail;
+uniform float uClothSquare;
 layout(location = 0) out vec4 o;
 
 float tri(vec3 p, vec3 l, vec3 a, vec3 b, vec3 c) {
@@ -189,10 +212,11 @@ void main() {
   float joint=(1.0-smoothstep(.0012,.0012+jointWidth,jointDist))*min(1.0,.0024/jointWidth);
   vec3 screen=pow(texture(uInstruments,vAttr.xy).rgb,vec3(2.2));
   vec3 compass=pow(texture(uCompass,vAttr.xy).rgb,vec3(2.2));
-  float panelPhase=fract(vAttr.y*14.0),panelDist=min(panelPhase,1.0-panelPhase);
-  float sewRow=1.0-smoothstep(.0015,.0015+max(clothWidth.y*14.0,.001),abs(panelDist-.030));
-  float stitchFilter=1.0-smoothstep(.18,.65,clothWidth.x*1400.0);
-  float stitches=sewRow*(.5+.5*sin(vAttr.x*1400.0*TAU))*stitchFilter;
+  float panelAxis=mix(vAttr.y,vAttr.x,uClothSquare),panelWidth=mix(clothWidth.y,clothWidth.x,uClothSquare),along=mix(vAttr.x,vAttr.y,uClothSquare),alongWidth=mix(clothWidth.x,clothWidth.y,uClothSquare);
+  float panelPhase=fract(panelAxis*14.0),panelDist=min(panelPhase,1.0-panelPhase);
+  float sewRow=1.0-smoothstep(.0015,.0015+max(panelWidth*14.0,.001),abs(panelDist-.030));
+  float stitchFilter=1.0-smoothstep(.18,.65,alongWidth*1400.0);
+  float stitches=sewRow*(.5+.5*sin(along*1400.0*TAU))*stitchFilter;
   float reinforcement=max(smoothstep(.14,.02,length(vAttr.xy*vec2(1.0,3.0))),max(smoothstep(.14,.02,length((vAttr.xy-vec2(1.0,0.0))*vec2(1.0,3.0))),smoothstep(.93,.995,vAttr.y)));
   // Cotangent frame from actual UVs and geometry. Evaluate every derivative
   // before material flow, including on phone GPUs and the reflection pass.
@@ -209,8 +233,9 @@ void main() {
   vec3 albedo = vec3(0.8); float rough = 0.4, metal = 0.0, trans = 0.0, f0 = 0.04;
   vec3 p = vLocal;
   if (mat == ${MAT.HULL}) {
-    albedo=vec3(0.017,0.036,0.057)*texColor;rough=detail.b-.035;
-    if(p.y < -0.12){albedo=vec3(0.025,0.041,0.051);rough=.52;}
+    albedo=${imperial?'vec3(.020,.021,.022)':'vec3(.017,.036,.057)'}*texColor;rough=detail.b-.035;
+    ${imperial?`float seam=min(fract(p.y/.38),1.0-fract(p.y/.38));float fw=max(fwidth(p.y/.38),.002);albedo*=1.0-.38*(1.0-smoothstep(.005,.005+fw,seam));`:''}
+    if(p.y < -0.12){albedo=${imperial?'vec3(.145,.044,.021)':'vec3(.025,.041,.051)'};rough=.52;}
     albedo*=.97+.06*vnoise(p.xz*vec2(.8,14.0));
   } else if (mat == ${MAT.DECK}) {
     albedo = vec3(0.70, 0.71, 0.70); rough = 0.6;
@@ -222,12 +247,16 @@ void main() {
     albedo=texColor*(mat==${MAT.WOOD}?vec3(.65,.56,.45):vec3(1.0));
     rough=mat==${MAT.WOOD}?.24:detail.b;
     if(mat==${MAT.TEAK}){albedo*=mix(.93,1.07,hash11(plankId+37.0))*mix(1.0,.15,joint);rough=clamp(rough+.055*(hash11(plankId+11.0)-.5),.38,.88);}
+    ${imperial?`float age=vnoise(vec2(metric.x*.16,metric.y*1.8)),salt=vnoise(metric*.45);
+    albedo*=mix(vec3(.79,.80,.79),vec3(1.04,1.0,.96),age);
+    rough=clamp((mat==${MAT.WOOD}?.39:rough)+.13*(salt-.5),.32,.83);
+    float crossWear=vnoise(uv*vec2(3.0,.3));albedo*=.90+.12*crossWear;`:''}
   } else if (mat == ${MAT.ALU}) { albedo = texColor*.88; metal = 0.9; rough = max(.30,detail.b); }
   else if (mat == ${MAT.STEEL}) { albedo = texColor; metal = 0.95; rough = max(.27,detail.b); }
   else if (mat == ${MAT.KEEL}) {albedo=vec3(.025,.042,.055);rough=.6;}
   else if (mat == ${MAT.GLASS}) {albedo=vec3(.008,.020,.028);rough=.09;f0=.08;}
   else if (mat == ${MAT.ROPE}) {albedo=texColor;rough=detail.b;}
-  else if (mat == ${MAT.BRASS}) {albedo=vec3(.52,.34,.12);metal=.86;rough=.29;}
+  else if (mat == ${MAT.BRASS}) {albedo=vec3(.52,.34,.12);metal=.86;rough=.29;${imperial?`float oxidation=vnoise((p.xz+p.y*.73)*5.0),wear=vnoise((p.xz+p.y*.73)*37.0);albedo=mix(albedo,vec3(.20,.21,.12),.24*oxidation);rough=.28+.17*oxidation+.04*wear;`:''}}
   else if (mat == ${MAT.RUBBER}) {albedo=texColor;rough=detail.b;}
   else if (mat == ${MAT.TRIM}) { albedo = vec3(0.05, 0.05, 0.055); rough = 0.4; }
   else if (mat == ${MAT.CANVAS}) {albedo=texColor*.78;rough=detail.b;}
@@ -239,11 +268,14 @@ void main() {
   else if (mat == ${MAT.STARBOARDLIGHT}) {albedo=vec3(.008,.34,.05);rough=.26;}
   else if (mat == ${MAT.SAIL}) {
     albedo = texColor; rough = 0.85; trans = 0.45;
-    float seamDist = min(fract(vAttr.y * 14.0), 1.0 - fract(vAttr.y * 14.0));
-    float seam = (1.0 - smoothstep(0.012, 0.024 + clothWidth.y * 14.0, seamDist)) * 0.12;
+    float seamDist = min(fract(panelAxis * 14.0), 1.0 - fract(panelAxis * 14.0));
+    float seam = (1.0 - smoothstep(0.012, 0.024 + panelWidth * 14.0, seamDist)) * 0.12;
     float weaveFilter = 1.0 - smoothstep(0.3, 1.0, max(clothWidth.x * 900.0, clothWidth.y * 1200.0));
     float wv = 0.985 + 0.015 * sin(vAttr.x * 900.0) * sin(vAttr.y * 1200.0) * weaveFilter;
     albedo *= wv * (1.0-seam-.07*stitches) * (1.0-.055*reinforcement);
+    ${imperial?`float panelAge=hash11(floor(panelAxis*14.0)+17.0),weather=vnoise(vAttr.xy*vec2(7.0,11.0));
+    albedo*=mix(vec3(.90,.85,.75),vec3(1.0,.98,.91),.4+.4*panelAge+.2*weather);
+    albedo*=1.0-.06*(1.0-smoothstep(0.0,.17,vAttr.y))*weather;`:''}
   }
 
   // Integrate unresolved normal variation on small metal tubes. Their highlights
@@ -254,8 +286,8 @@ void main() {
   // in boat coordinates. Canvas and high fittings do not turn into water.
   float wy=vRel.y+uCamY,datum=whirlSurface(vRel.xz).x;
   float crestLimit=datum+uCrestLimit;
-  vec2 wetUV=p.xz/vec2(48.0,10.0)+.5;
-  bool contactMapped=uHullWetOn>.5&&abs(p.x)<24.0&&abs(p.z)<5.0;
+  vec2 wetUV=p.xz/vec2(${F(DOMAIN[0])},${F(DOMAIN[1])})+.5;
+  bool contactMapped=uHullWetOn>.5&&abs(p.x)<${F(DOMAIN[0]/2)}&&abs(p.z)<${F(DOMAIN[1]/2)};
   vec2 contact=contactMapped?textureLod(uHullWet,wetUV,0.0).rg:vec2(-7.0);
   float waterMetric=max(.25,uHullUp.y-dot(whirlSurface(vRel.xz).yz,uHullUp.xz));
   float hw=wy>crestLimit?-1e3:contactMapped?wy+(contact.r-p.y)*waterMetric:waterHeightAt(vRel.xz);
@@ -348,7 +380,7 @@ void main() {
   o = vec4(col, coverage);
 }`;
 
-const RIG_VS = `
+export const RIG_VS = `
 layout(location = 0) in vec3 aA;
 layout(location = 1) in vec3 aB;
 layout(location = 2) in float aW;
@@ -413,16 +445,6 @@ void main() {
   o=vec4(col,alpha);
 }`;
 
-// A damped follower for heave/pitch/roll.
-class Spring {
-  constructor(w, z) { this.w = w; this.z = z; this.x = 0; this.v = 0; }
-  step(target, dt) {
-    const a = -this.w * this.w * (this.x - target) - 2 * this.z * this.w * this.v;
-    this.v += a * dt; this.x += this.v * dt;
-    return this.x;
-  }
-}
-
 export class Yacht {
   constructor() {
     const g = buildYacht();
@@ -449,8 +471,8 @@ export class Yacht {
     };
     this.shadowHull=shadowParts(g.hull,this.hull);this.shadowRig=shadowParts(g.rig,this.rigMesh);
     this.materials=new YachtMaterials();
-    this.sheetVerts=new Float32Array(8*18*11);const sheetIdx=[];
-    for(let j=0;j<8;j++)for(let k=0;k<8;k++){const b=j*18;sheetIdx.push(b+k,b+k+1,b+9+k,b+k+1,b+9+k+1,b+9+k);}
+    this.sheetCount=this.sails.reduce((n,{S})=>n+(S.square||S.boom?2:1),0);this.sheetVerts=new Float32Array(this.sheetCount*18*11);const sheetIdx=[];
+    for(let j=0;j<this.sheetCount;j++)for(let k=0;k<8;k++){const b=j*18;sheetIdx.push(b+k,b+k+1,b+9+k,b+k+1,b+9+k+1,b+9+k);}
     this.sheets=mk({verts:this.sheetVerts,idx:new Uint32Array(sheetIdx)});
     this.progHull = new Program('yacht.hull', YACHT_VS, YACHT_FS);
     this.progSail = new Program('yacht.sail', YACHT_VS, YACHT_FS, 'SAIL');
@@ -466,10 +488,10 @@ export class Yacht {
 
     // pose
     this.x = 0; this.z = 0; this.psi = 0; this.speed = 2.5;
-    this.current=new HullCurrent();
+    this.profile=vessel;this.hydro=shipHydrostatics(vessel,g.metadata.hydro);this.current=new HullCurrent();
     // A little more vertical restoring force, with enough damping to retain
     // the weight of the schooner as an approaching swell lifts it.
-    this.heave=new Spring(2.1,.82);this.pitchS=new Spring(1.25,.76);this.rollS=new Spring(1.05,.75);
+    this.heave=new Spring(imperial?this.hydro.heave:2.1,.82);this.pitchS=new Spring(imperial?this.hydro.pitch:1.25,imperial?.80:.76);this.rollS=new Spring(imperial?this.hydro.roll:1.05,imperial?.68:.75);
     this.yawS = new Spring(0.9, 0.7);
     this.heaveV = 0; this.pitch = 0; this.roll = 0; this.yaw = 0;
     this.y = 0;
@@ -489,10 +511,10 @@ export class Yacht {
 
   // Points sampled each frame (world xz): centre, bow, stern, starboard, port
   probePoints() {
-    if(!this.projectProbes){const c=Math.cos(this.psi),s=Math.sin(this.psi);const w=(lx,lz)=>[this.x+c*lx-s*lz,this.z+s*lx+c*lz];return [w(0,0),w(18.8,0),w(-18.8,0),w(0,4.1),w(0,-4.1)];}
+    if(!this.projectProbes){const c=Math.cos(this.psi),s=Math.sin(this.psi);const w=(lx,lz)=>[this.x+c*lx-s*lz,this.z+s*lx+c*lz];return [w(0,0),w(18.8*SX,0),w(-18.8*SX,0),w(0,4.1*SZ),w(0,-4.1*SZ)];}
     const c=Math.cos(this.psi+this.yaw),s=Math.sin(this.psi+this.yaw),cp=Math.cos(this.pitch),sp=Math.sin(this.pitch),cr=Math.cos(this.roll),sr=Math.sin(this.roll);
     const w=(lx,lz)=>[this.x+c*cp*lx+(-s*cr+c*sp*sr)*lz,this.z+s*cp*lx+(c*cr+s*sp*sr)*lz];
-    return [w(0,0),w(18.8,0),w(-18.8,0),w(0,4.1),w(0,-4.1)];
+    return [w(0,0),w(18.8*SX,0),w(-18.8*SX,0),w(0,4.1*SZ),w(0,-4.1*SZ)];
   }
 
   feed(probe) {
@@ -500,23 +522,27 @@ export class Yacht {
     for (let k = 0; k < 5; k++) this.probeH[k] = probe.get(k)[0];
     this.probeVortex=probe.vortexHeights?.slice(0,5);
     this.lastSlope = [probe.get(0)[1], probe.get(0)[2]];
+    if(imperial)this.extraWave=this.extraStations().map((_,i)=>probe.get(i+16)[0]-(probe.vortexHeights?.[i+16]||0));
   }
+
+  extraStations(){return imperial?[[-42,0],[-28,0],[-14,0],[14,0],[28,0],[42,0],[-30,4],[-30,-4],[-15,6],[-15,-6],[15,6],[15,-6],[30,4],[30,-4]]:[];}
+  extraProbePoints(){return this.extraStations().map(([x,z])=>{const p=this.toWorld([x,0,z]);return[p[0],p[2]];});}
 
   // Sailing: heading from the wind, speed from a simple polar, sail trim and heel.
   _sail(env) {
     const U = env.U, windFrom = env.windDir + Math.PI;
-    const twa = 62 * Math.PI / 180;                       // close reach on starboard tack
+    const twa = (imperial?115:62) * Math.PI / 180;                       // close reach on starboard tack
     let psi = windFrom - twa * this.tack;
     this.psiTarget = psi;
     const uk = U * 1.944;
     let vk = 0.83 * Math.pow(uk, 0.86);
-    vk = Math.min(13.0, vk);
+    vk = Math.min(imperial?16.5:13.0, vk*(imperial?1.12:1));
     vk *= 1 - 0.6 * smoothstep(17, 27, U);                // shortened sail and slower in a gale
     vk *= 1 - 0.05 * Math.min(6, env.hs);                 // pounding
     this.speedTarget = Math.max(0.35, vk * 0.5144);
     this.reef = smoothstep(11, 19, U);
     const heel = Math.min(0.18, 0.0016 * U * U * (1 - 0.5 * this.reef));
-    this.heelTarget = -heel * this.tack;                  // leeward is opposite the wind side
+    this.heelTarget = -heel * this.tack*(imperial?.42:1);                  // leeward is opposite the wind side
     const motion=sailWind(U,this.reef);
     this.flutterTarget=motion.amplitude;this.flutterRateTarget=motion.rate;
     this.sailAngTarget = -this.tack * clamp(lerp(0.16, 0.42, smoothstep(0.4, 4.5, U)) + 0.10 * smoothstep(9, 16, U), 0.14, 0.62);
@@ -550,8 +576,8 @@ export class Yacht {
       dpsi = Math.atan2(Math.sin(dpsi), Math.cos(dpsi));
       const W=env.whirlpool,flow=W.sample(this.x,this.z);
       this.current.step(h,this,W);
-      this.psi += dpsi * (1 - Math.exp(-h / 4.0))*(1-.97*flow.influence)+this.current.omega*h;
-      this.speed += (this.speedTarget - this.speed) * (1 - Math.exp(-h / 3.0));
+      this.psi += dpsi * (1 - Math.exp(-h / (imperial?24:4)))*(1-.97*flow.influence)+this.current.omega*h;
+      this.speed += (this.speedTarget - this.speed) * (1 - Math.exp(-h / (imperial?28:3)));
       this.sailAng += (this.sailAngTarget - this.sailAng) * (1 - Math.exp(-h / 1.5));
       this.flutter+=(this.flutterTarget-this.flutter)*(1-Math.exp(-h/.7));
       this.flutterRate+=(this.flutterRateTarget-this.flutterRate)*(1-Math.exp(-h/1.0));
@@ -571,14 +597,23 @@ export class Yacht {
       const crossGrade=(W.sample(...points[3]).height-W.sample(...points[4]).height)/Math.max(sideSpan,.1);
       const vr=-Math.atan(crossGrade*Math.cos(vp));
       const wave=pb.map((v,i)=>v-(this.probeVortex?.[i]||0));
-      const pitchT=clamp(clamp(Math.atan2(wave[1]-wave[2],37.6)*.72,-.10,.10)+vp,-1.25,1.25);
-      const rollT=clamp(clamp(-Math.atan2(wave[3]-wave[4],8.2)*.28,-.10,.10)+vr,-1.25,1.25);
-      const waveMean=(wave[0]*2+wave[1]+wave[2]+wave[3]+wave[4])/6;
+      let pitchWave=Math.atan2(wave[1]-wave[2],37.6*SX)*.72,rollWave=-Math.atan2(wave[3]-wave[4],8.2*SZ)*.28;
+      let waveMean=(wave[0]*2+wave[1]+wave[2]+wave[3]+wave[4])/6;
+      let macroDatum=mean-waveMean;
+      if(imperial&&this.extraWave){
+        const plane=fitWavePlane(this.extraStations(),this.extraWave,waterlineHalfBeam);
+        const locations=this.extraProbePoints();
+        waveMean=plane.mean;
+        macroDatum=fitWavePlane(this.extraStations(),locations.map(p=>W.sample(...p).height),waterlineHalfBeam).mean;
+        pitchWave=Math.atan(plane.pitchSlope)*.70;rollWave=-Math.atan(plane.rollSlope)*.23;
+      }
+      const pitchT=clamp(clamp(pitchWave,-.10,.10)+vp,-1.25,1.25);
+      const rollT=clamp(clamp(rollWave,-.10,.10)+vr,-1.25,1.25);
       // The large-scale pressure surface is the moving buoyancy datum; only
       // the short FFT waves excite the heave spring. This prevents artificial
       // submersion when a 150 m funnel is filled during switch-off.
       // Modest afloat trim: 35 cm more freeboard than the former setting.
-      this.y = this.heave.step(waveMean+.25,h)+(mean-waveMean);
+      this.y = this.heave.step(waveMean+(imperial?this.hydro.trim:.25),h)+macroDatum;
       this.pitch = this.pitchS.step(pitchT, h);
       this.roll = clamp(this.rollS.step(this.heelTarget+rollT+this.current.heel,h),-1.35,1.35);
       this.yaw = this.yawS.step(0.012 * Math.sin(this.t * 0.31) + 0.25 * rollT * Math.sign(this.tack), h);
@@ -597,19 +632,26 @@ export class Yacht {
       const V=[D[1]*U[2],D[2]*U[0]-D[0]*U[2],-D[1]*U[0]];
       for(const[end,P]of [A,B].entries())for(let k=0;k<=8;k++){const t=k*Math.PI/4,N=U.map((v,j)=>v*Math.cos(t)+V[j]*Math.sin(t));this.sheetVerts.set([...P.map((v,j)=>v+.036*N[j]),...N,end*l/.12,k/8,MAT.ROPE,.036,1],off);off+=11;}
     };
-    for(const {S} of this.sails){if(!S.boom)continue;const foot=S.tack[0]-S.clew[0],a=this.sailAng*S.angleScale,c=Math.cos(a),sn=Math.sin(a);
+    for(const {S} of this.sails){if(!S.boom||S.square)continue;const foot=S.tack[0]-S.clew[0],a=this.sailAng*S.angleScale,c=Math.cos(a),sn=Math.sin(a);
       for(const side of [-1,1]){
         const qx=-foot*.8,qz=side*.1,anchorX=S.tack[0]-foot*.6,A=[S.tack[0]+qx*c+qz*sn,S.tack[1]-.15,-qx*sn+qz*c],B=[anchorX,sheer(anchorX)+.18,side*2.9];
         line(A,B);
       }
     }
-    for(const {S} of this.sails){if(S.boom)continue;const A=this._sailTri(S,this.sailAng*S.angleScale,this.reef*.6)[2],x=S.id==='sail-3'?17:7;
+    for(const {S} of this.sails){if(S.boom||S.square)continue;const A=this._sailTri(S,this.sailAng*S.angleScale,this.reef*.6)[2],x=imperial?Math.min(45,S.clew[0]):S.id==='sail-3'?17:7;
       // Hand the working sheet to the new leeward winch as the actual clew
       // crosses the centreline. A small deadband prevents side chatter.
       let side=this.sheetSides.get(S.id)??-this.tack;
       if(Math.abs(A[2])>.12)side=Math.sign(A[2]);
       this.sheetSides.set(S.id,side);
       line(A,[x,sheer(x)+.59,side*Math.min(3.8,waterlineHalfBeam(x)/.91*.80)]);
+    }
+    for(const {S} of this.sails){if(!S.square)continue;
+      const a=this.sailAng*S.angleScale,c=Math.cos(a),sn=Math.sin(a);
+      for(const side of [-1,1]){
+        const z=side*S.widthBottom*.5*(1-.1*this.reef),foot=S.head[1]-(S.head[1]-S.tack[1])*(1-.65*this.reef),A=[S.tack[0]+z*sn,foot,z*c];
+        line(A,[S.tack[0]-2,deckHeight(S.tack[0]-2,side*4)+.9,side*Math.min(6.8,waterlineHalfBeam(S.tack[0]-2)*.8)]);
+      }
     }
     gl.bindBuffer(gl.ARRAY_BUFFER,this.sheets.vb);gl.bufferSubData(gl.ARRAY_BUFFER,0,this.sheetVerts);
   }
@@ -678,21 +720,26 @@ export class Yacht {
 
   // The visible pass and depth caster share this exact deformation setup.
   bindCloth(p,S,index,time){
-    const reef=this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale;
+    p.f('uClothSquare',S.square?1:0).f('uYachtReceiverId',index+1);
+    const reef=S.square?0:this.reef*(S.boom?1:.6),angle=this.sailAng*S.angleScale;
+    if(S.square){p.i('uCurrentSail',index).v3('uSailAxis',0,1,0).v4('uSquare',S.widthBottom,S.widthTop,S.head[1]-S.tack[1],S.draft).v4('uSailCloth',S.clew[0],S.clew[1],S.draft,0).v4('uSail',angle,S.tack[0],this.flutter*.75,time).v3('uSailWind',this.flutterPhases[index*2],this.flutterPhases[index*2+1],S.phase).v4('uSailShape',S.tack[1],S.head[1],this.reef,2);return;}
+
     const dx=(S.head[0]-S.tack[0])*(S.boom?1-.18*reef:1),dy=(S.head[1]-S.tack[1])*(S.boom?1-.42*reef:1);
     p.i('uCurrentSail',index).v3('uSailAxis',dx,dy,0).v4('uSailCloth',S.clew[0],S.clew[1],S.draft,S.roach)
       .v4('uSail',angle,S.tack[0],this.flutter,time).v3('uSailWind',this.flutterPhases[index*2],this.flutterPhases[index*2+1],S.phase)
       .v4('uSailShape',S.tack[1],S.head[1],reef,S.boom?0:1);
   }
 
-  drawShadow(VP,solid,cloth,time,opaque){
+  drawShadow(VP,solid,cloth,time,opaque,rig){
+    solid.use().i('uCurrentSail',-1);
     const identity=m4.ident(),draw=mesh=>{gl.bindVertexArray(mesh.vao);gl.drawElements(gl.TRIANGLES,mesh.count,gl.UNSIGNED_INT,0);};
     solid.use().m4('uVP',VP).m4('uModel',identity);
     const part=opaque?0:1;draw(this.shadowHull[part]);draw(this.shadowRig[part]);if(!opaque)draw(this.sheets);
+    if(!opaque&&rig){rig.use().m4('uVP',VP).m4('uModel',identity);gl.bindVertexArray(this.rigVao);gl.drawArraysInstanced(gl.TRIANGLE_STRIP,0,4,this.nLines);}
     cloth.use().m4('uVP',VP).m4('uModel',identity);
     for(const [index,{S,cloth:mesh,boom}] of this.sails.entries()){
       this.bindCloth(cloth,S,index,time);if(!opaque)draw(mesh);
-      if(boom&&opaque){cloth.f('uOpacity',1).v3('uSailAxis',0,1,0).v4('uSail',this.sailAng*S.angleScale,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);draw(boom);cloth.f('uOpacity',.62);}
+      if(boom&&opaque){cloth.f('uOpacity',1).v3('uSailAxis',0,1,0).v4('uSail',this.sailAng*S.angleScale,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,S.square?-2:-1);draw(boom);cloth.f('uOpacity',.62);}
     }
   }
 
@@ -701,7 +748,7 @@ export class Yacht {
     const rel = new Float64Array(this.M); rel[12] = this.x - camAbs[0]; rel[13] = this.y - ctx.cam.y; rel[14] = this.z - camAbs[2];
     const Mf = Float32Array.from(rel);
     const sunL = this.toLocalDir(ctx.sk.sunDir), moonL = this.toLocalDir(ctx.sk.moonDir);
-    const sailTris=new Float32Array(SAILS.flatMap(S=>this._sailTri(S,this.sailAng*S.angleScale,this.reef*(S.boom?1:.6)).flat()));
+    const sailTris=new Float32Array(SAILS.slice(0,5).flatMap(S=>this._sailTri(S,this.sailAng*S.angleScale,this.reef*(S.boom?1:.6)).flat()));
     const setCommon = (p) => {
       p.m4('uVP', VP).m4('uModel', Mf);
       bindLighting(p, ctx);
@@ -722,7 +769,7 @@ export class Yacht {
       }
       p.v3v('uSailTri',sailTris).f('uWet', 1)
         .f('uCrestLimit',Math.max(2.5,(ctx.sim?.cur.hs||0)*3))
-        .i('uCurrentSail',-1).f('uRigLines',0).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
+        .i('uCurrentSail',-1).f('uClothSquare',0).f('uRigLines',0).f('uPixelScale',ctx.h/(2*Math.tan(ctx.cam.fov*.5)))
         .f('uUnderCam', ctx.under ? 1 : 0).f('uRefl', mirror ? 1 : 0).f('uCamY', ctx.cam.y).f('uMirrorY', this.y);
     };
     gl.disable(gl.BLEND); gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS); gl.disable(gl.CULL_FACE);
@@ -739,7 +786,7 @@ export class Yacht {
       const angle=this.sailAng*S.angleScale;
       this.bindCloth(p,S,sailIndex,time);
       gl.bindVertexArray(cloth.vao);gl.drawElements(gl.TRIANGLES,cloth.count,gl.UNSIGNED_INT,0);
-      if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
+      if(boom){p.v3('uSailAxis',0,1,0).v4('uSail',angle,S.tack[0],0,time).v4('uSailShape',S.tack[1],S.head[1],0,S.square?-2:-1);gl.bindVertexArray(boom.vao);gl.drawElements(gl.TRIANGLES,boom.count,gl.UNSIGNED_INT,0);}
     }
     }
     // Antialiased ropes do not write depth. In the main view they must be

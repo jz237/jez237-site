@@ -1,3 +1,4 @@
+import {vessel,SX,SY,SZ,imperial} from './vessels.js';
 // Camera control: slow cinematic tour (yacht-relative keyframes), then free flight, boat orbit and dive orbit.
 import { clamp, lerp, smoothstep } from './math.js';
 import { DeckWalker } from './deck.js';
@@ -37,9 +38,9 @@ export class Rig {
     this.t = 0;
     this.keys = new Set();
     this.vel = [0, 0, 0];
-    this.speed = 10;
-    this.orbit = { az: 2.4, el: 0.28, dist: 95 };
-    this.dive = { az: 0.6, el: 0.12, dist: 28, depth: -7 };
+    this.speed = 10*vessel.cameraScale;
+    this.orbit = { az: 2.4, el: 0.28, dist: 95*vessel.cameraScale };
+    this.dive = { az: 0.6, el: 0.12, dist: imperial?35:28, depth: -7*vessel.cameraScale };
     this.drag = null;
     this.touches = new Map();
     this.onChange = null;
@@ -58,10 +59,10 @@ export class Rig {
     if (m === 'fly') { this.vel = [0, 0, 0]; }
     if (m === 'boat') {
       const dx = cam.x - y.x, dz = cam.z - y.z, d = Math.hypot(dx, dz);
-      this.orbit.az = Math.atan2(dz, dx) - y.psi; this.orbit.dist = clamp(Math.hypot(d,cam.y-13),35,240); this.orbit.el = clamp(Math.atan2(cam.y - 2, d), 0.05, 1.3);
-      if (this.orbit.dist > 150) this.orbit.dist = 95;
+      this.orbit.az = Math.atan2(dz, dx) - y.psi; this.orbit.dist = clamp(Math.hypot(d,cam.y-13),35*vessel.cameraScale,240*vessel.cameraScale); this.orbit.el = clamp(Math.atan2(cam.y - 2, d), 0.05, 1.3);
+      if (this.orbit.dist > 150*vessel.cameraScale) this.orbit.dist = 95*vessel.cameraScale;
     }
-    if (m === 'dive') { this.dive.az = 0.6; this.dive.el = 0.12; this.dive.dist = 28; this.dive.depth = -7; }
+    if (m === 'dive') { this.dive.az = 0.6; this.dive.el = 0.12; this.dive.dist = imperial?35:28; this.dive.depth = -7*vessel.cameraScale; }
     if (m === 'tour') { this.t = 0; this._init = false; this._init2 = false; }
     if (this.onChange) this.onChange(m);
   }
@@ -118,9 +119,9 @@ export class Rig {
       e.preventDefault();
       if (this.mode === 'tour') this.takeOver();
       const f = Math.exp(e.deltaY * 0.0012);
-      if (this.mode === 'boat') this.orbit.dist = clamp(this.orbit.dist * f, 5, 220);
+      if (this.mode === 'boat') this.orbit.dist = clamp(this.orbit.dist * f, 5, 220*vessel.cameraScale);
       else if(this.mode==='deck')this.deck.walkSpeed=clamp(this.deck.walkSpeed/f,1,3);
-      else if (this.mode === 'dive') this.dive.dist = clamp(this.dive.dist * f, 2.5, 60);
+      else if (this.mode === 'dive') this.dive.dist = clamp(this.dive.dist * f, 2.5, 60*vessel.cameraScale);
       else this.speed = clamp(this.speed / f, 1.5, 600);
       if (this.onSpeed) this.onSpeed(this.speed);
     }, { passive: false });
@@ -147,6 +148,7 @@ export class Rig {
     const s = u * u * (3 - 2 * u) * 0.35 + u * 0.65;       // gentle ease between keys
     const out = [];
     for (let j = 1; j < 8; j++) out.push(cr(k0[j], k1[j], k2[j], k3[j], s));
+    if(imperial){for(const j of [0,1,3,4])out[j]*=vessel.cameraScale;out[1]*=-1;out[4]*=-1;out[2]*=1.65;out[5]*=1.65;}
     // The vertical FOV gives a much narrower horizontal view on a phone. Pull
     // overview cameras back around their target so the full jib and bowsprit fit; smoothly
     // remove this offset for the intentional deck close-ups and submerged shots.
@@ -196,13 +198,14 @@ export class Rig {
       if (K.has('a') || K.has('arrowleft')) o.az += dt * 0.9;
       if (K.has('d') || K.has('arrowright')) o.az -= dt * 0.9;
       if (K.has('w') || K.has('arrowup')) o.dist = Math.max(this.mode === 'boat' ? 5 : 2.5, o.dist * Math.exp(-dt * 0.9));
-      if (K.has('s') || K.has('arrowdown')) o.dist = Math.min(this.mode === 'boat' ? 220 : 60, o.dist * Math.exp(dt * 0.9));
-      if (this.pinch) { o.dist = clamp(o.dist * Math.exp(-this.pinch * 0.05), 3, 220); this.pinch = 0; }
+      const maxOrbit=(this.mode==='boat'?220:60)*vessel.cameraScale;
+      if (K.has('s') || K.has('arrowdown')) o.dist = Math.min(maxOrbit, o.dist * Math.exp(dt * 0.9));
+      if (this.pinch) { o.dist = clamp(o.dist * Math.exp(-this.pinch * 0.05), 3, maxOrbit); this.pinch = 0; }
       const a = y.psi + o.az;
       const surf = app.surfaceAtCam || 0;
       if (this.mode === 'boat') {
         const horiz = Math.cos(o.el) * o.dist;
-        const tx = y.x + Math.cos(y.psi) * 0.4, tz = y.z + Math.sin(y.psi) * 0.4, ty = y.y + 13.0;
+        const tx = y.x + Math.cos(y.psi) * 0.4, tz = y.z + Math.sin(y.psi) * 0.4, ty = y.y + 13.0*(imperial?1.85:1);
         const wy = Math.max(ty + Math.sin(o.el) * o.dist, surf + 0.8);
         const k = 1 - Math.exp(-dt * 8);
         cam.x += (tx + Math.cos(a) * horiz - cam.x) * k; cam.z += (tz + Math.sin(a) * horiz - cam.z) * k; cam.y += (wy - cam.y) * k;

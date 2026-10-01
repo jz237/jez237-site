@@ -1,3 +1,5 @@
+import {glslFloat as F} from './vessels.js';
+import {DOMAIN,SX,SY,SZ} from './vessels.js';
 // Ocean surface: camera-centred geometry clipmap displaced by the FFT cascades, shaded per pixel.
 import { gl, Program, defineChunk } from './gl.js';
 import { WHIRLPOOL_GLSL, VORTEX_PATCH } from './whirlpool.js';
@@ -209,7 +211,7 @@ vec3 Rw_foamUnder(vec3 Ed0) { return vec3(0.35, 0.55, 0.65) * Ed0 * 0.6; }
 float sceneSubDepth(vec3 scene){
   if(uHullWetOn>.5&&length(scene-uHullCenter.xyz)<33.0){
     vec3 p=hullLocal(scene);
-    if(abs(p.x)<24.0&&abs(p.z)<5.0){float h=textureLod(uHullWet,p.xz/vec2(48,10)+.5,0.0).r;return (h-p.y)*max(.25,uHullUp.y-dot(whirlSurface(scene.xz).yz,uHullUp.xz));}
+    if(abs(p.x)<${F(DOMAIN[0]/2)}&&abs(p.z)<${F(DOMAIN[1]/2)}){float h=textureLod(uHullWet,p.xz/vec2(${F(DOMAIN[0])},${F(DOMAIN[1])})+.5,0.0).r;return (h-p.y)*max(.25,uHullUp.y-dot(whirlSurface(scene.xz).yz,uHullUp.xz));}
   }
   vec2 gp=scene.xz-uCenterRel,dd=vec2(0);float h=0.0;
   for(int it=0;it<4;it++){
@@ -244,7 +246,7 @@ vec3 glitter(vec3 n, vec3 V, vec3 Ld, vec3 E, float alpha2) {
 
 void main() {
   vec3 rel = vRel;
-  bool hullNearby=uHullCenter.w>.5&&length(rel-uHullCenter.xyz)<31.0;
+  bool hullNearby=uHullCenter.w>.5&&length(rel-uHullCenter.xyz)<${F(31*Math.max(SX,SY,SZ))};
   vec3 boatPoint=hullNearby?hullLocal(rel):vec3(1000.0);
   float hullGap=hullNearby?hullSolidGap3(boatPoint):1000.0;
   bool hullClip=hullNearby&&hullGap<-.015;

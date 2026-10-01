@@ -1,5 +1,6 @@
 // Small mipmapped PBR textures, generated once without downloads or paid assets.
 import {gl,texArray,tex2D,generateMips} from './gl.js';
+import {imperial} from './vessels.js';
 const N=512,TAU=Math.PI*2;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function noise(u,v,nx,ny,seed=0){
@@ -22,9 +23,9 @@ export class YachtMaterials {
           const fine=noise(u,v+bend,7,193,31),growth=noise(u,v+bend,3,47,9),pores=noise(u,v,47,211,8);
           const grain=.65*(fine-.5)+.35*(growth-.5);
           const seam=layer===0&&Math.min(v,1-v)<.013?1:0;
-          const tone=.96+.28*grain+.07*(pores-.5)+.07*(noise(u,v,2,7,23)-.5);
+          const tone=.96+(imperial?.34:.28)*grain+.07*(pores-.5)+(imperial?.14:.07)*(noise(u,v,2,7,23)-.5);
           rgb=seam?[30,29,26]:[169*tone,127*tone,79*tone];
-          heights[i]=seam?-.0007:.00016*grain+.000015*(pores-.5);
+          heights[i]=seam?-.0007:(imperial?.00024:.00016)*grain+.000015*(pores-.5);
           rough[i]=seam?.88:clamp(.55+.18*grain+.08*(pores-.5),.38,.73);
         }else if(layer===1){
           const warp=Math.sin(u*TAU*64),weft=Math.sin(v*TAU*64);

@@ -1,3 +1,4 @@
+import {SX,SZ,deckHeight,deckStations} from './vessels.js';
 // A passenger walks in ship coordinates; movement never depends on sea drift.
 import {sheer,halfBeam} from './yacht-geo.js';
 import {clamp} from './math.js';
@@ -6,7 +7,7 @@ export const EYE_HEIGHT=1.67,PERSON_RADIUS=.24;
 export class DeckNavigator {
   constructor(metadata){this.obstacles=metadata.deck?.obstacles||[];this.surfaces=metadata.deck?.surfaces||[];}
   canStand(x,z){
-    if(x< -23.0||x>22.2||Math.abs(z)>halfBeam(x)*.985-PERSON_RADIUS)return false;
+    if(x< -23.0*SX||x>22.2*SX||Math.abs(z)>halfBeam(x)*.985-PERSON_RADIUS)return false;
     for(const o of this.obstacles){
       if(o.type==='circle'){if(Math.hypot(x-o.x,z-o.z)<o.radius+PERSON_RADIUS)return false;}
       else {
@@ -17,17 +18,17 @@ export class DeckNavigator {
     return true;
   }
   height(x,z){
-    let h=sheer(x)+.055*(1-(z/(halfBeam(x)*.995))**2);
+    let h=deckHeight(x,z);
     for(const s of this.surfaces)if(Math.abs(x-s.x)<=s.halfX&&Math.abs(z-s.z)<=s.halfZ)h=Math.max(h,s.height);
     return h;
   }
   nearest(x,z){
-    x=clamp(x,-22.8,22);z=clamp(z,-4.1,4.1);if(this.canStand(x,z))return [x,z];
+    x=clamp(x,-22.8*SX,22*SX);z=clamp(z,-4.1*SZ,4.1*SZ);if(this.canStand(x,z))return [x,z];
     let best=null,score=Infinity;
-    for(let xx=-22.8;xx<=22;xx+=.16)for(let zz=-4.2;zz<=4.2;zz+=.16){
+    for(let xx=-22.8*SX;xx<=22*SX;xx+=.16)for(let zz=-4.2*SZ;zz<=4.2*SZ;zz+=.16){
       const d=(xx-x)**2+(zz-z)**2;if(d<score&&this.canStand(xx,zz)){best=[xx,zz];score=d;}
     }
-    return best||[-17.7,0];
+    return best||[deckStations.Helm[0],deckStations.Helm[1]];
   }
   move(position,dx,dz){
     const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.06));
@@ -41,15 +42,15 @@ export class DeckNavigator {
 }
 
 export class DeckWalker {
-  constructor(yacht){this.yacht=yacht;this.nav=new DeckNavigator(yacht.metadata);this.position=[-17.7,0];this.yaw=0;this.pitch=-.05;this.stick=[0,0];this.walkSpeed=1.5;this.distance=0;this.bob=0;}
+  constructor(yacht){this.yacht=yacht;this.nav=new DeckNavigator(yacht.metadata);this.position=[deckStations.Helm[0],deckStations.Helm[1]];this.yaw=0;this.pitch=-.05;this.stick=[0,0];this.walkSpeed=1.5;this.distance=0;this.bob=0;}
   board(cam){
     const local=this.yacht.toLocalPoint([cam.x,cam.y,cam.z]);
-    const close=Math.hypot(local[0],local[2])<70;
-    this.position=this.nav.nearest(...(close?[local[0],local[2]]:[-17.7,0]));
+    const close=Math.hypot(local[0],local[2])<70*SX;
+    this.position=this.nav.nearest(...(close?[local[0],local[2]]:[deckStations.Helm[0],deckStations.Helm[1]]));
     this.yaw=0;this.pitch=-.04;this.stick=[0,0];this.bob=0;
   }
   station(name){
-    const locations={Helm:[-17.7,0,0,-.10],Bow:[18.0,0,0,-.03],Stern:[-22.6,2.8,Math.PI,-.05]};
+    const locations=deckStations;
     const [x,z,yaw,pitch]=locations[name]||locations.Helm;
     this.position=this.nav.nearest(x,z);this.yaw=yaw;this.pitch=pitch;this.bob=0;
   }

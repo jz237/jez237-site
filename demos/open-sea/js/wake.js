@@ -1,3 +1,5 @@
+import {glslFloat as F} from './vessels.js';
+import {SX,SZ,imperial} from './vessels.js';
 // Yacht wake: analytic Kelvin wave pattern (used by the water shaders) and a persistent foam trail map.
 import { gl, Program, FS_VERT, tex2D, makeFBO, bindFBO, drawFS, defineChunk } from './gl.js';
 import './glsl.js';
@@ -17,9 +19,9 @@ vec3 kelvinWake(vec2 pw, int terms) {
   vec2 fwd = uWakeA.zw, rgt = vec2(-fwd.y, fwd.x);
   float bx = dot(d, fwd), bz = dot(d, rgt);
   float V = max(uWakeB.x, 0.4);
-  if (bx > 32.0 || bx < -300.0 || abs(bz) > 40.0 + 0.62 * (-bx)) return vec3(0.0);
+  if (bx > ${F(32*SX)} || bx < -300.0 || abs(bz) > 40.0 + 0.62 * (-bx)) return vec3(0.0);
   float r = length(vec2(bx, bz));
-  float env = smoothstep(26.0, -18.0, bx) / sqrt(1.0 + r / 20.0) * smoothstep(300.0, 200.0, -bx);
+  float env = smoothstep(${F(26*SX)}, ${F(-18*SX)}, bx) / sqrt(1.0 + r / 20.0) * smoothstep(300.0, 200.0, -bx);
   float h = 0.0, hx = 0.0, hz = 0.0, ws = 0.0;
   for (int j = 0; j < NW; j++) {
     if (j >= terms) break;
@@ -66,7 +68,7 @@ void main() {
     // follow a heeling hull and floats away from its moving waterline.
     // turbulent wake swept behind the stern
     float ds = segDist(dq, sA, sB);
-    float sw = smoothstep(2.5,.35,ds);
+    float sw = smoothstep(${F(2.5*SZ)},${F(.35*SZ)},ds);
     float n = 0.35 + 1.1 * vnoise(q * 2.3 + uTime * 0.5) * (0.5 + 0.8 * vnoise(q * 0.7 - uTime * 0.2));
     stamp = sw * 0.75 * n * uSpeedK;
   }
@@ -88,7 +90,7 @@ export class Trail {
   update(dt, yacht, time, U = 0,whirlpool) {
     const S = TRAIL_SIZE, m = v => v - Math.floor(v / S) * S;
     const cur = [m(yacht.x), m(yacht.z)];
-    const sternPoint=yacht.toWorld([-22.2,0,0]),stern=[m(sternPoint[0]),m(sternPoint[2])],prev=this.prev||stern;
+    const sternPoint=yacht.toWorld([-22.2*SX,0,0]),stern=[m(sternPoint[0]),m(sternPoint[2])],prev=this.prev||stern;
     const speedK = Math.min(1, Math.max(0, (yacht.speed - 0.7) / 2.2));
     bindFBO(this.otherF); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
     const p=this.prog.use().t('uPrev', 0, this.cur).v2('uCur', cur[0], cur[1]).v2('uStern',stern[0],stern[1]).v2('uPrevStern',prev[0],prev[1])
