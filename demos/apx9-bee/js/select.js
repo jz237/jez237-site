@@ -1,8 +1,7 @@
 // Selection, hover, isolate and x-ray state. Drives the post-pass flags, per-part visibility and the focus dimming.
 import * as THREE from 'three';
 
-const _box = new THREE.Box3();
-const _sph = new THREE.Sphere();
+const _cloud = [];
 
 export class Selection {
   constructor({ bee, post, rig, invalidate }) {
@@ -106,10 +105,9 @@ export class Selection {
     const parts = [];
     for (const p of this.selected) for (const q of p.walk()) parts.push(q);
     if (!parts.length) return false;
-    this.bee.worldBounds(_box, parts);
-    if (_box.isEmpty()) return false;
-    _box.getBoundingSphere(_sph);
-    this.rig.frame(_sph, { ms, margin, quat, band });
+    this.bee.worldCorners(parts, _cloud);
+    if (!_cloud.length) return false;
+    this.rig.frameCorners(_cloud, { ms, margin: 1 + (margin - 1) * 0.55, quat, band });
     this.invalidate();
     return true;
   }

@@ -292,7 +292,7 @@ export class Bee {
   mirror(src, o = {}) {
     const parent = o.parent ?? src.parent ?? this.rootPart;
     const id = o.id ?? src.localId.replace(/-r$/, '-l').replace(/_r$/, '_l').replace(/Right/, 'Left');
-    const dst = new Part(this, id, parent === this.rootPart ? null : parent, {
+    const dst = new Part(this, id, parent, {
       name: o.name ?? (o.rename ?? defaultRename)(src.name),
       group: o.group ?? src.group, info: o.info ?? (o.rename ?? defaultRename)(src.info), specs: src.specs, bullets: src.bullets,
       tag: src.tag, selectable: src.selectable, anchor: src.anchor ? [src.anchor.x, src.anchor.y, src.anchor.z] : null,
@@ -570,6 +570,31 @@ export class Bee {
         out.union(Bee.meshBox(m, _b));
       }
     }
+    return out;
+  }
+
+  /** Oriented-box corner points of the visible geometry (tight camera fits); `out` is reused. */
+  worldCorners(parts = this.parts, out = []) {
+    let n = 0;
+    const put = (x, y, z) => { (out[n] ||= new THREE.Vector3()).set(x, y, z); n++; };
+    for (const p of parts) {
+      for (const m of p.meshes) {
+        if (!m.visible || m.userData.fur || m.userData.noPick || m.layers.isEnabled(6)) continue;
+        if (m.isInstancedMesh) {
+          Bee.meshBox(m, _b);
+          for (let i = 0; i < 8; i++) put(i & 1 ? _b.max.x : _b.min.x, i & 2 ? _b.max.y : _b.min.y, i & 4 ? _b.max.z : _b.min.z);
+          continue;
+        }
+        const g = m.geometry;
+        if (!g.boundingBox) g.computeBoundingBox();
+        const lo = g.boundingBox.min, hi = g.boundingBox.max;
+        for (let i = 0; i < 8; i++) {
+          _v.set(i & 1 ? hi.x : lo.x, i & 2 ? hi.y : lo.y, i & 4 ? hi.z : lo.z).applyMatrix4(m.matrixWorld);
+          put(_v.x, _v.y, _v.z);
+        }
+      }
+    }
+    out.length = n;
     return out;
   }
 

@@ -105,9 +105,9 @@ export function createPost({ stage, Q, picker }) {
   composer.addPass(ao);
 
   const pf = (k, d) => { const v = parseFloat(Q.params.get(k)); return Number.isFinite(v) ? v : d; };
-  const bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), pf('bs', 0.3), 0.55, pf('bt', 1.2));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), pf('bs', 0.16), 0.5, pf('bt', 1.55));
   // Softbox reflections on polished metal reach 15+ HDR units; cap the energy fed to the blur so only glints, not halos, bloom.
-  bloom.highPassUniforms.uCap = { value: pf('bc', 2.0) };
+  bloom.highPassUniforms.uCap = { value: pf('bc', 1.7) };
   bloom.highPassUniforms.uKnee = { value: 0.7 };
   bloom.materialHighPassFilter.fragmentShader = `
     uniform sampler2D tDiffuse; uniform vec3 defaultColor; uniform float defaultOpacity;
