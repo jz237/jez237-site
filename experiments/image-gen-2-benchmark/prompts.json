@@ -18496,5 +18496,24 @@
       "imageSha256": "0fa1e16e777d2a5d3d270e8c329334add7f70472d53b49a6272f14124bc766ce",
       "imageDHash": "91d98bcf672be860"
     }
+  },
+  {
+    "id": "2026-10-02-intense-phobia-situation-acrophobia-outside-the-wind-turbin",
+    "title": "Acrophobia: Outside the Wind-Turbine Nacelle",
+    "tests": "{\"pre_generation_fear_impact\": \"Dominant close feared circumstance, obstructed relief, and credible pressure cues; no non-Monday visual review.\"}; archive_slot=2026-10-02T05:20; concept=wind-turbine-ladder-downward-abyss; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1086x1448\", \"backendReportedSize\": \"1086x1448\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1086x1448\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create one finished fully photorealistic documentary / first-person photograph of an intense Acrophobia situation. The camera points almost vertically down between two galvanized ladder rails from roughly 90 metres above a gravel turbine pad. A scuffed work boot occupies the bottom edge on a wet narrow steel rung; the nearest glove grips the left rail. A taut fall-arrest connector runs to the proper vertical safety rail without obscuring the drop. The cylindrical white mast races downward through the centre, tapering dramatically toward a tiny maintenance vehicle. The ladder and mast dominate; distant ground is a compressed depth cue, never a scenic horizon. Grey overcast dawn, dull wet metal, realistic optics, no spectacular storm. The exposed foreground rung, immediate empty air and dizzying continuous mast-to-ground perspective must make the viewer feel physically on the ladder. The feared circumstance must dominate most of the frame and be immediately frightening without any caption. Compose deliberate near, middle and far spatial layers with coherent gravity, scale, anatomy and ordinary camera optics. Fine material detail, credible exposure, natural or practical light only; no decorative cinematic haze, beauty grading, fantasy, CGI look, gore, active injury, coercion, monsters, labels, text overlays, logos or watermarks. Do not present an illustration, contact sheet, infographic, screen or prompt card. Output a single opaque image.",
+    "image": "images/2026-10-02-intense-phobia-situation-acrophobia-outside-the-wind-turbin.jpg",
+    "thumb": "thumbs/2026-10-02-intense-phobia-situation-acrophobia-outside-the-wind-turbin.webp",
+    "color": "#7d7c79",
+    "date": "2026-10-02",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "wind-turbine-ladder-downward-abyss",
+      "imageSha256": "821f881817bb10878c4a47ff685a68f87642e3fea721ae24aef9a16dac8f82fa",
+      "imageDHash": "38399b0e0f0e1391"
+    }
   }
 ]
