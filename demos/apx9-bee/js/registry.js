@@ -295,6 +295,7 @@ export class Bee {
     const dst = new Part(this, id, parent === this.rootPart ? null : parent, {
       name: o.name ?? (o.rename ?? defaultRename)(src.name),
       group: o.group ?? src.group, info: o.info ?? (o.rename ?? defaultRename)(src.info), specs: src.specs, bullets: src.bullets,
+      tag: src.tag, selectable: src.selectable, anchor: src.anchor ? [src.anchor.x, src.anchor.y, src.anchor.z] : null,
       pos: [src.restPos.x, src.restPos.y, -src.restPos.z],
     });
     dst.restPos.set(src.restPos.x, src.restPos.y, -src.restPos.z);
@@ -452,16 +453,15 @@ export class Bee {
     const x = p.ex;
     p.offsetLocal.set(0, 0, 0);
     p.rotExtra.identity();
-    if (!x.dir || !x.dist) return;
+    p.exRot = x.rot ? x.rot.clone() : null;
     if (p.mirrorOf && !p.mirrorRoot) { p.offsetLocal.copy(p.mirrorOf.offsetLocal); p.rotExtra.copy(p.mirrorOf.rotExtra); p.exRot = p.mirrorOf.exRot; return; }
+    if (!x.dir || !x.dist) return;
     const dirBee = x.dir.clone();
     if (x.space === 'local' || p.parent === this.rootPart || !p.parent) p.offsetLocal.copy(dirBee).multiplyScalar(x.dist);
     else {
       const inv = new THREE.Matrix4().extractRotation(p.parent.node.matrixWorld).invert();
       p.offsetLocal.copy(dirBee).applyMatrix4(inv).multiplyScalar(x.dist);
     }
-    if (p.mirrorRoot) { /* direction was already mirrored in mirror() when copied from the source */ }
-    p.exRot = x.rot ? x.rot.clone() : null;
   }
 
   /** Re-derive offsets after the layout changed at runtime. */
