@@ -2,6 +2,7 @@ import * as T from 'three';
 import {formedVehiclePanel,stampedVehiclePanel,panelSamples} from './formed-vehicle-panel';
 import {classicWindowFrame} from './classic-window-frame';
 import {buildCompactAsset} from './compact-asset';
+import {VAN_BODYWORK,vanBodySideX,vanRearFaceZ,vanRearPortalHalfWidth,vanRearCornerPoint,vanRoofPoint,vanRoofColumns,vanRoofRows,vanRearCornerRows,vanRearHeaderColumns,vanRearHeaderRows} from './van-bodywork';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 
 /** Original short-nose commercial van. All cargo panels and barn-door skins
@@ -15,26 +16,26 @@ export function buildVanAsset(){
  const box=(name:string,x:number,y:number,z:number,w:number,h:number,l:number,m:T.Material)=>{const o=add(name,new T.BoxGeometry(w,h,l),m);o.position.set(x,y,z);return o;};
  const panel=(name:string,nx:number,ny:number,map:(u:number,t:number)=>T.Vector3,n:T.Vector3,m:T.Material=paint,thickness=.018)=>add(name,formedVehiclePanel(panelSamples(Math.max(4,Math.round(nx/2))),panelSamples(Math.max(2,Math.round(ny/2))),map,n,thickness),m);
  const bar=(name:string,a:T.Vector3,b:T.Vector3,r:number,m:T.Material)=>{const o=add(name,new T.CylinderGeometry(r,r,a.distanceTo(b),8),m);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(v(0,1,0),b.clone().sub(a).normalize());return o;};
- const sideX=(y:number)=>.933-.062*((y-.85)/.58)**2+.050*Math.exp(-(((y-.85)/.13)**2));
  const upperX=(y:number)=>mix(.886,.795,T.MathUtils.clamp((y-1.10)/.775,0,1))+.008*Math.sin(T.MathUtils.clamp((y-1.10)/.775,0,1)*Math.PI);
- const bodyX=(y:number)=>(y>1.10?upperX(y):mix(Math.min(.939,sideX(y)),.886,T.MathUtils.smoothstep(y,1.03,1.10)))+.004*Math.exp(-(((y-1.055)/.025)**2));
+ const bodyX=vanBodySideX;
  const archY=(z:number)=>{const d=Math.min(Math.abs(z-1.35),Math.abs(z+1.35));return d<.414?Math.max(.43,.3400195+Math.sqrt(.414**2-d**2)):.43;};
  // Every high side row stays at one body-line height, even over an arch.
  // A rounded inset is pressed into the cargo wall instead of overlaid on it.
  const bodyRows=[0,.25,.5,.75,1];
  const bodyHeights=[0,.81,.94,1.04,1.10];
  const sideHeight=(z:number,t:number)=>{let i=0;while(i<bodyRows.length-2&&t>bodyRows[i+1])i++;return mix(i===0?archY(z):bodyHeights[i],bodyHeights[i+1],(t-bodyRows[i])/(bodyRows[i+1]-bodyRows[i]));};
- const cargoColumns=[-2.20,-2.03,-1.99,-1.95,-1.91,-1.80,-1.65,-1.50,-1.35,-1.20,-1.05,-.90,-.75,-.64,-.54,-.50,-.46,-.40,-.27].map(z=>(z+2.20)/1.93);
+ const cargoRear=VAN_BODYWORK.rearSideZ,cargoLength=-.27-cargoRear;
+ const cargoColumns=[cargoRear,-2.03,-1.99,-1.95,-1.91,-1.80,-1.65,-1.50,-1.35,-1.20,-1.05,-.90,-.75,-.64,-.54,-.50,-.46,-.40,-.27].map(z=>(z-cargoRear)/cargoLength);
  const screenTop=1.795,screenFront=.705,screenWidth=upperX(screenTop);
  const noseZ=(x:number)=>2.18+.040*(1-(x/.881)**2);
- const rearZ=(x:number)=>-2.20-.022*(1-(x/.891)**2);
+ const rearZ=vanRearFaceZ;
  const window=(name:string,corners:T.Vector3[],side:number)=>{const f=classicWindowFrame(corners,side);add('panel_'+name+'Frame',f.frame,paint);add('panel_'+name+'Seal',f.seal,rubber);add('panel_'+name+'Trim',f.trim,trim);add('glass_'+name,f.glass,glass).castShadow=false;};
  for(const side of [-1,1]){
   const suffix=side<0?'L':'R';
   panel('panel_FrontWingVan'+suffix,26,8,(u,t)=>{const z=mix(1.05,2.18,u),y=mix(archY(z),1.10-.055*u,t),x=side*mix(bodyX(y),.88,T.MathUtils.smoothstep(z,1.99,2.18));return v(x,y,z);},v(side,0,0));
   panel('panel_BodyDoor'+suffix+'VanSkin',24,10,(u,t)=>{const z=mix(-.27,1.05,u),y=mix(archY(z),1.10,t);return v(side*bodyX(y),y,z);},v(side,0,0));
-  add('panel_CargoSideVan'+suffix,formedVehiclePanel(cargoColumns,bodyRows,(u,t)=>{const z=mix(-2.20,-.27,u),y=sideHeight(z,t);return v(side*bodyX(y),y,z);},v(side,0,0)),paint);
-  add('panel_CargoBlankVan'+suffix,stampedVehiclePanel((u,t)=>{const y=mix(1.10,1.875,t);return v(side*bodyX(y),y,mix(-2.20,-.27,u));},v(side,0,0),1.93,.775,.07,.009),paint);
+  add('panel_CargoSideVan'+suffix,formedVehiclePanel(cargoColumns,bodyRows,(u,t)=>{const z=mix(cargoRear,-.27,u),y=sideHeight(z,t);return v(side*bodyX(y),y,z);},v(side,0,0)),paint);
+  add('panel_CargoBlankVan'+suffix,stampedVehiclePanel((u,t)=>{const y=mix(1.10,1.875,t);return v(side*bodyX(y),y,mix(cargoRear,-.27,u));},v(side,0,0),cargoLength,.775,.07,.009),paint);
   for(const z of [-1.35,1.35]){
    const path=Array.from({length:25},(_,i)=>{const a=mix(.16,Math.PI-.16,i/24),y=.3400195+Math.sin(a)*.416,Z=z+Math.cos(a)*.416;return v(side*(bodyX(y)+.004),y,Z);});
    add('panel_ArchLipVan'+suffix+(z>0?'Front':'Rear'),new T.TubeGeometry(new T.CatmullRomCurve3(path),20,.008,5,false),paint);
@@ -59,8 +60,8 @@ export function buildVanAsset(){
  panel('panel_hoodVan',18,20,(u,t)=>{const x=(u*2-1)*.795,z=mix(1.05,noseZ(x),t);return v(x,1.128-.055*t+.027*(1-(x/.795)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
  window('FrontVan',[v(-.886,1.10,1.05),v(.886,1.10,1.05),v(screenWidth,screenTop,screenFront),v(-screenWidth,screenTop,screenFront)],1);
  panel('panel_CabHeaderVan',16,4,(u,t)=>{const y=mix(screenTop,1.875,t),x=(u*2-1)*upperX(y);return v(x,y+.009*Math.sin(t*Math.PI)*(1-(u*2-1)**2),mix(screenFront,.665,t));},v(0,.4,1).normalize());
- panel('panel_RoofVan',12,16,(u,t)=>{const x=(u*2-1)*.795,z=mix(-2.20,.665,t);return v(x,1.875+.058*(1-(x/.795)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
- for(const side of [-1,1])bar('panel_RoofGutterVan'+side,v(side*.805,1.864,-2.18),v(side*.805,1.864,.65),.010,trim);
+ add('panel_RoofVan',formedVehiclePanel(vanRoofColumns,vanRoofRows,vanRoofPoint,v(0,1,0)),paint);
+ for(const side of [-1,1])bar('panel_RoofGutterVan'+side,v(side*.805,1.864,cargoRear),v(side*.805,1.864,.65),.010,trim);
  panel('panel_FrontValanceVan',28,10,(u,t)=>{const x=(u*2-1)*.88;const roll=T.MathUtils.clamp((.88-Math.abs(x))/.085,0,1);return v(x,mix(.445,1.045+.028*Math.sin(roll*Math.PI/2),t),noseZ(x));},v(0,0,1));
  panel('panel_hoodVanRolledEdge',20,4,(u,t)=>{const x=(u*2-1)*.795,z=noseZ(x);return v(x,1.075+.002-.027*(1-Math.cos(t*Math.PI/2)),z-.018+.024*Math.sin(t*Math.PI/2));},v(0,.7,1).normalize());
  for(const front of [true,false]){
@@ -75,14 +76,27 @@ export function buildVanAsset(){
   const x=side*.623,corners=[v(x-.168,.748,2.225),v(x+.168,.748,2.225),v(x+.168,.949,2.225),v(x-.168,.949,2.225)],f=classicWindowFrame(corners,1);
   add('panel_HeadlightVanBezel'+side,f.frame,trim);add('panel_HeadlightVanSeal'+side,f.seal,rubber);add('panel_HeadlightVanLens'+side,f.glass,lamp);
   box('panel_IndicatorVan'+side,x,.632,2.225,.255,.071,.021,amber);
-  box('panel_RearQuarterVanLampBezel'+side,side*.854,.906,-2.211,.113,.353,.037,trim);
-  box('panel_RearQuarterVanIndicator'+side,side*.854,1.002,-2.237,.092,.117,.018,amber);
-  box('panel_RearQuarterVanBrake'+side,side*.854,.860,-2.237,.092,.141,.018,brake);
-  box('panel_RearQuarterVanReverse'+side,side*.854,.755,-2.237,.092,.047,.018,lamp);
-  // Fixed corner returns close the body outside the independently hinged doors.
-  panel('panel_RearCornerVan'+side,4,16,(u,t)=>{const y=mix(.43,1.875,t),outer=bodyX(y),x=side*mix(.78,outer,u);return v(x,y,mix(rearZ(x),-2.20,u));},v(side,0,-1).normalize());
+  // The lamp housing follows the fixed quarter's rear-facing tangent; it no
+  // longer projects beyond the narrowing upper body as a floating flat box.
+  const lampX=.835,lampY=.881,rx=bodyX(lampY)-VAN_BODYWORK.rearDoorEdge;
+  const a=Math.asin((lampX-VAN_BODYWORK.rearDoorEdge)/rx),lampSurface=vanRearCornerPoint(side,a/(Math.PI/2),lampY);
+  const lampAngle=-side*Math.atan((cargoRear-rearZ(VAN_BODYWORK.rearDoorEdge))/rx*Math.tan(a));
+  const rearLamp=(name:string,y:number,w:number,h:number,depth:number,outset:number,m:T.Material)=>{
+   const o=box(name,side*lampX,y,lampSurface.z-outset,w,h,depth,m);o.rotation.y=lampAngle;return o;
+  };
+  rearLamp('panel_RearQuarterVanLampBezel'+side,lampY,.100,.306,.047,.017,trim);
+  rearLamp('panel_RearQuarterVanIndicator'+side,.980,.080,.105,.018,.049,amber);
+  rearLamp('panel_RearQuarterVanBrake'+side,.851,.080,.135,.018,.049,brake);
+  rearLamp('panel_RearQuarterVanReverse'+side,.752,.080,.043,.018,.049,lamp);
+  // A true quarter-ellipse connects the straight wall to the rear aperture.
+  // Above the door the shoulder turns inward to meet the rounded roof plan.
+  add('panel_RearCornerVan'+side,formedVehiclePanel(panelSamples(6),vanRearCornerRows.map(y=>(y-.43)/1.445),(u,t)=>vanRearCornerPoint(side,u,mix(.43,1.875,t)),v(side,0,-1).normalize()),paint);
+  add('panel_CargoDoorSurroundVanReturn'+side,formedVehiclePanel([0,1],[0,1],(u,t)=>v(side*VAN_BODYWORK.rearDoorEdge,mix(.48,1.807,t),rearZ(VAN_BODYWORK.rearDoorEdge)+u*.064),v(-side,0,0),.014),paint);
+  box('panel_CargoDoorSurroundVanSeal'+side,side*.782,1.1435,rearZ(.782)+.012,.010,1.327,.013,rubber);
  }
- panel('panel_CargoDoorSurroundVanTop',24,3,(u,t)=>{const x=(u*2-1)*.795,y=mix(1.797,1.875,t);return v(x,y,mix(rearZ(x),-2.20,t));},v(0,0,-1));
+ add('panel_CargoDoorSurroundVanTop',formedVehiclePanel(vanRearHeaderColumns,vanRearHeaderRows,(u,t)=>{const y=mix(1.807,1.875,t),x=(u*2-1)*vanRearPortalHalfWidth(y);return v(x,y,rearZ(x));},v(0,0,-1)),paint);
+ add('panel_CargoDoorSurroundVanTopReturn',formedVehiclePanel(vanRearHeaderColumns,[0,1],(u,t)=>{const x=(u*2-1)*VAN_BODYWORK.rearDoorEdge;return v(x,1.807,rearZ(x)+t*.064);},v(0,-1,0),.014),paint);
+ add('panel_CargoDoorSurroundVanTopSeal',formedVehiclePanel(vanRearHeaderColumns,[0,1],(u,t)=>{const x=(u*2-1)*.781;return v(x,mix(1.7985,1.8085,t),rearZ(x)+.009);},v(0,0,-1),.013),rubber);
  panel('panel_CargoDoorSurroundVanBottom',24,3,(u,t)=>{const x=(u*2-1)*.78;return v(x,mix(.43,.486,t),rearZ(x));},v(0,0,-1));
  for(const side of [-1,1]){
   const suffix=side<0?'L':'R';
