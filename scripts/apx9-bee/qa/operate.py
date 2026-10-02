@@ -14,7 +14,7 @@ async def main():
    assert good,name
    checks+=1;print('PASS',name,flush=True)
   await page.goto(url+'?qa&acc=0&q=low')
-  await page.wait_for_function('window.__apx?.operations',timeout=120000)
+  await page.get_by_role('button',name='◉  Power on / Operate',exact=True).wait_for(timeout=120000)
   await page.get_by_role('button',name='◉  Power on / Operate',exact=True).click()
   await check('power opens from visible control',await page.locator('.operate-panel').is_visible())
   await page.evaluate('__apx.operations.state.boot=8')
