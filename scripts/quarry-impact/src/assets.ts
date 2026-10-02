@@ -100,7 +100,7 @@ export function cloneCar(kind: CarKind, color: number) {
   const materials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
-    o.castShadow = o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) || o.name.includes('Tire');
+    o.castShadow = o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) && !(kind==='marten'&&/WaistTrim|Shutline|Flutes/.test(o.name)) || o.name.includes('Tire');
     o.receiveShadow = true;
     const old = o.material as THREE.MeshStandardMaterial;
     // One paint material per color per car; wear is carried by each panel's
@@ -115,10 +115,10 @@ export function cloneCar(kind: CarKind, color: number) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : (kind==='van'||kind==='tern')?.12:.48;
-      m.roughness = trim ? .38 : (kind==='van'||kind==='tern')?.36:.24;
+      m.metalness = trim ? .18 : (kind==='van'||kind==='tern'||kind==='marten')?.12:.48;
+      m.roughness = trim ? .38 : (kind==='van'||kind==='tern'||kind==='marten')?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='van'||kind==='tern')?.85:1; m.clearcoatRoughness = (kind==='van'||kind==='tern')?.18:.12; }
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='van'||kind==='tern'||kind==='marten')?.85:1; m.clearcoatRoughness = (kind==='van'||kind==='tern'||kind==='marten')?.18:.12; }
       finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {
@@ -131,8 +131,8 @@ export function cloneCar(kind: CarKind, color: number) {
       o.userData.damage = 0;
     }
     if (old.name.includes('Headlight')) {
-      m.emissive.setHex(0xe2f1ff);
-      m.emissiveIntensity = 3;
+      m.emissive.setHex(kind==='marten'?0xffead2:0xe2f1ff);
+      m.emissiveIntensity = kind==='marten'?.35:3;
     }
     if (old.name.includes('Brakelight')) {
       m.emissive.setHex(0xff1105);

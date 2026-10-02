@@ -1,0 +1,55 @@
+{
+  "baseline": "5693e4a",
+  "files": {
+    "src/vehicle-surface.ts": {
+      "snapshot": "src-vehicle-surface.ts.gz",
+      "before": "9a2ecc2f523d5829a6ee55bd00600fc52679e424f810c3bb2460253d78eea427",
+      "after": "848dd52e03e1a6ccbc5f8b005e16b598da71bf9384dae4aa0ac6cc35863fb5ca"
+    },
+    "src/marten-asset.ts": {
+      "snapshot": "src-marten-asset.ts.gz",
+      "before": "0442e3d10a67ed540dc2617c64a57ec065e60b07ede52e43f99cd9da65273c56",
+      "after": "28d48f945daddfd9f80a70714b3063568fe33f69893bdf45ff7679c1ab22c248"
+    },
+    "src/marten-bodywork.ts": {
+      "snapshot": "src-marten-bodywork.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "3171ba82de23faf44db122a0989eb08bce841987627dc7fd6db9de9d529c8f7c"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "aa835869763be29bcdc8f8435c5e368f9e0b703e94cb9a7fed3e3f69d62ad4cd",
+      "after": "82ef615990b8d9d8377c19d10920f045ffbe70fc5a2c624de273809e4787e802"
+    },
+    "public/models/marten.glb": {
+      "snapshot": "public-models-marten.glb.gz",
+      "before": "d65c14bcbbc169195b4f43ad8ca5e0db344a153544e43dfebbc7921c3c948af6",
+      "after": "ad65eb003512134410299511c110124a967a9f27c9d1ba6ee1cad5c3364a17a6"
+    },
+    "public/models/marten-candidate.glb": {
+      "snapshot": "public-models-marten-candidate.glb.gz",
+      "before": "d65c14bcbbc169195b4f43ad8ca5e0db344a153544e43dfebbc7921c3c948af6",
+      "after": "ad65eb003512134410299511c110124a967a9f27c9d1ba6ee1cad5c3364a17a6"
+    },
+    "tools/marten-asset-preview.js": {
+      "snapshot": "tools-marten-asset-preview.js.gz",
+      "before": "f9f9570b2d737dade5d8ea30d383d52ab62047dddfdfbbe28d3c97b08fea28a4",
+      "after": "9321705ca79c155b5a1bb3f5aae5cb6ae62aca338460a1cd699501bf9515a918"
+    },
+    "marten-asset-preview.html": {
+      "snapshot": "marten-asset-preview.html.gz",
+      "before": "c30d23a0869e56088c429374bd10fe66a6feb9adf6debf7575125ebdc1bb33b4",
+      "after": "6a872078ced6abb1522570d62fc919ec4eaf24850dc41285b123174d42e59b16"
+    },
+    "tests/marten-invariants.ts": {
+      "snapshot": "tests-marten-invariants.ts.gz",
+      "before": "6005b689e4b17d5aa33b00dfe540fd947c0307d04a1b978f23bcae62df60f9f2",
+      "after": "58b9a43d07012c5a0d70e192fe3863233ca5296df9d686653358c48e0c07027f"
+    },
+    "tests/marten-bodywork.test.ts": {
+      "snapshot": "tests-marten-bodywork.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "2a70336169c7e06f85d13e0ce3fd4ba16a575aa30cc99a2eff4939f651b00a9a"
+    }
+  }
+}
