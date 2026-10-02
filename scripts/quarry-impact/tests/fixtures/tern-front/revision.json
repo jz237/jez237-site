@@ -1,0 +1,35 @@
+{
+  "baseline": "7310200",
+  "files": {
+    "src/tern-asset.ts": {
+      "snapshot": "src-tern-asset.ts.gz",
+      "before": "527a4f27ba52ba91da9d8c23817e6eb7aaa769fae5f0d26177b4e22b7c2dd854",
+      "after": "4d5a0cc26c9fa4adb0de58a5279740eafe32acf16949f517d9adfa566a5c9271"
+    },
+    "src/tern-front-refinement.ts": {
+      "snapshot": "src-tern-front-refinement.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "9d30dc9a7e51301367da6e4126a5c39e040c6b4337b1e9fdfcbb0bb46019e9e9"
+    },
+    "public/models/tern.glb": {
+      "snapshot": "public-models-tern.glb.gz",
+      "before": "6ed395dd9d154a13f263f18cbb25537488fbdfef80a17fffdfaca7d58e60f235",
+      "after": "2f8ea634ba874dfdb840dd151cfcca3f9eb0868d9008c3f1b3120535beaaff04"
+    },
+    "public/models/tern-candidate.glb": {
+      "snapshot": "public-models-tern-candidate.glb.gz",
+      "before": "6ed395dd9d154a13f263f18cbb25537488fbdfef80a17fffdfaca7d58e60f235",
+      "after": "2f8ea634ba874dfdb840dd151cfcca3f9eb0868d9008c3f1b3120535beaaff04"
+    },
+    "tests/tern-invariants.ts": {
+      "snapshot": "tests-tern-invariants.ts.gz",
+      "before": "56dfde0f2ddff131772026c4e1abe37973e2b3512831a4279f7026b15b0264d4",
+      "after": "6037cedd3926a61d09f73a40bed755e1c1deca97ca67c6eba0252d598c700d20"
+    },
+    "tests/tern-front.test.ts": {
+      "snapshot": "tests-tern-front.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "1da851b25f3ace7e8416bb1371e2692b9a75e1d6da0b1cdc89af67d10b2e7629"
+    }
+  }
+}
