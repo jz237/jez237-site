@@ -3,6 +3,7 @@ import {addClassicPanelBackings} from './classic-panel-backings';
 import {addClassicBayClosures} from './classic-engine-bay';
 import {buildMuscleAsset,MUSCLE_TEXTURES} from './muscle-asset';
 import {partitionSurface,type SurfacePlane} from './surface-partition';
+import {classicWindowFrame} from './classic-window-frame';
 import {stampedPanel} from './classic-panel';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -73,31 +74,33 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
   roofGeometry.computeVertexNormals();
   const roof=mesh('panel_BodyRoof',roofGeometry,paint);roof.position.set(0,1.49,-.965);
   const pane=(name:string,corners:T.Vector3[],material:T.Material,side=1,bow=.012)=>{
-    const positions:number[]=[],uv:number[]=[],indices:number[]=[],n=8;
+    const positions:number[]=[],uv:number[]=[],indices:number[]=[],n=corners[0].distanceTo(corners[1])>=corners[0].distanceTo(corners[3])?8:1,rows=n===8?1:8;
     const normal=corners[1].clone().sub(corners[0]).cross(corners[3].clone().sub(corners[0])).normalize().multiplyScalar(side);
-    for(let y=0;y<=n;y++)for(let x=0;x<=n;x++){const u=x/n,v=y/n,p=corners[0].clone().lerp(corners[1],u).lerp(corners[3].clone().lerp(corners[2],u),v).addScaledVector(normal,bow*Math.sin(u*Math.PI)*Math.sin(v*Math.PI));positions.push(...p.toArray());uv.push(u,v);}
-    for(let y=0;y<n;y++)for(let x=0;x<n;x++){const a=y*(n+1)+x;indices.push(...(side>0?[a,a+1,a+n+2,a,a+n+2,a+n+1]:[a,a+n+2,a+1,a,a+n+1,a+n+2]));}
+    for(let y=0;y<=rows;y++)for(let x=0;x<=n;x++){const u=x/n,v=y/rows,p=corners[0].clone().lerp(corners[1],u).lerp(corners[3].clone().lerp(corners[2],u),v).addScaledVector(normal,bow*Math.sin(u*Math.PI)*Math.sin(v*Math.PI));positions.push(...p.toArray());uv.push(u,v);}
+    for(let y=0;y<rows;y++)for(let x=0;x<n;x++){const a=y*(n+1)+x;indices.push(...(side>0?[a,a+1,a+n+2,a,a+n+2,a+n+1]:[a,a+n+2,a+1,a,a+n+1,a+n+2]));}
     const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();const flat=g.toNonIndexed();g.dispose();return mesh(name,flat,material);
   };
   const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
-  pane('glass_Windshield',[V(-.78,1.04,.78),V(.78,1.04,.78),V(.68,1.46,.24),V(-.68,1.46,.24)],glass);
-  pane('glass_Rear',[V(-.68,1.45,-2.12),V(.68,1.45,-2.12),V(.80,1.04,-2.35),V(-.80,1.04,-2.35)],glass);
+  const window=(name:string,corners:T.Vector3[],side=1)=>{
+    const parts=classicWindowFrame(corners,side);
+    mesh('glass_'+name,parts.glass,glass);mesh('panel_'+name+'WindowFrame',parts.frame,paint);
+    mesh('panel_'+name+'WindowSeal',parts.seal,rubber);mesh('panel_'+name+'WindowTrim',parts.trim,chrome);
+  };
+  window('Windshield',[V(-.78,1.035,.78),V(.78,1.035,.78),V(.69,1.475,.24),V(-.69,1.475,.24)]);
+  window('Rear',[V(-.69,1.475,-2.12),V(.69,1.475,-2.12),V(.80,1.025,-2.35),V(-.80,1.025,-2.35)]);
   const bar=(name:string,a:T.Vector3,b:T.Vector3,r:number,material:T.Material)=>{const g=new T.CylinderGeometry(r,r,a.distanceTo(b),8).toNonIndexed(),o=mesh(name,g,material);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(V(0,1,0),b.clone().sub(a).normalize());return o;};
   for(const side of [-1,1]){
     const suffix=side<0?'L':'R',x=side*.835,upper=side*.72;
     const lower=(z:number)=>side*(.835-.055*T.MathUtils.smoothstep(Math.abs(z),1.40,2.40));
     const pillar=(name:string,bottom:number,top:number,width:number)=>pane(name,[V(lower(bottom),1.01,bottom+width/2),V(upper,1.495,top+width/2),V(upper,1.495,top-width/2),V(lower(bottom),1.01,bottom-width/2)],paint,-side,.004);
     pillar('panel_APillar'+suffix,.79,.25,.06);pillar('panel_BPillar'+suffix,-.38,-.38,.06);pillar('panel_CPillar'+suffix,-1.40,-1.40,.07);pillar('panel_DPillar'+suffix,-2.35,-2.12,.12);
-    pane('glass_BodyDoor'+suffix,[V(x,1.045,.73),V(upper,1.44,.20),V(upper,1.44,-.34),V(x,1.045,-.34)],glass,-side);
-    pane('glass_BodyDoorRear'+suffix,[V(x,1.045,-.425),V(upper,1.44,-.425),V(upper,1.44,-1.35),V(x,1.045,-1.35)],glass,-side);
-    pane('glass_Cargo'+suffix,[V(lower(-1.46),1.045,-1.46),V(upper,1.44,-1.46),V(upper,1.44,-2.05),V(lower(-2.27),1.045,-2.27)],glass,-side);
+    window('BodyDoor'+suffix,[V(x,1.025,.75),V(upper,1.48,.225),V(upper,1.48,-.35),V(x,1.025,-.35)],-side);
+    window('BodyDoorRear'+suffix,[V(x,1.025,-.415),V(upper,1.48,-.415),V(upper,1.48,-1.36),V(x,1.025,-1.36)],-side);
+    window('Cargo'+suffix,[V(lower(-1.45),1.025,-1.45),V(upper,1.48,-1.45),V(upper,1.48,-2.055),V(lower(-2.29),1.025,-2.29)],-side);
     bar('panel_RoofGutter'+suffix,V(upper,1.485,.24),V(upper,1.485,-2.12),.009,chrome);
-    for(const [name,a,b]of [['BodyDoor',.74,-.35],['BodyDoorRear',-.42,-1.36],['Cargo',-1.45,-2.30]]as const){bar('panel_'+name+suffix+'Seal',V(lower(a),1.035,a),V(lower(b),1.035,b),.012,rubber);bar('panel_'+name+suffix+'Belt',V(lower(a)+side*.007,1.023,a),V(lower(b)+side*.007,1.023,b),.006,chrome);}
     for(const [name,a,b]of [['BodyDoor',.74,-.35],['BodyDoorRear',-.42,-1.36],['RearQuarter',-1.45,-2.35]]as const){
       pane('panel_'+name+suffix+'Shoulder',[V(lower(a)+side*.025,.965,a),V(lower(a),1.035,a),V(lower(b),1.035,b),V(lower(b)+side*.025,.965,b)],paint,-side,.004);
     }
-    bar('panel_WindshieldFrame'+suffix,V(side*.78,1.04,.78),V(side*.68,1.46,.24),.023,paint);
-    bar('panel_RearFrame'+suffix,V(side*.80,1.04,-2.35),V(side*.68,1.45,-2.12),.026,paint);
     const mirror=mesh('panel_BodyDoor'+suffix+'Mirror',new RoundedBoxGeometry(.14,.09,.18,2,.022),paint);mirror.position.set(side*.91,1.10,.61);
     for(const [label,z]of [['BodyDoor',-.25],['BodyDoorRear',-1.25]]as const){box('panel_'+label+suffix+'Handle',[.038,.028,.14],[side*.866,.925,z],chrome);box('panel_'+label+suffix+'Interior',[.035,.31,.77],[side*.74,.80,z+.31],vinyl);}
     for(const z of [-1.83,-.16])box('panel_RackFoot'+suffix+z,[.045,.065,.09],[side*.58,1.565,z],rubber);
@@ -109,10 +112,6 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
   const seat=box('Interior Estate rear seat back',[1.48,.46,.10],[0,.91,-1.15],vinyl);seat.rotation.x=-.10;
   box('panel_TailgateUpper',[1.59,.10,.045],[0,.99,-2.35],paint);
   box('panel_TailgateInner',[1.53,.40,.055],[0,.79,-2.32],vinyl);
-  bar('panel_WindshieldLowerFrame',V(-.78,1.035,.78),V(.78,1.035,.78),.019,rubber);
-  bar('panel_WindshieldUpperFrame',V(-.69,1.47,.24),V(.69,1.47,.24),.014,paint);
-  bar('panel_RearUpperFrame',V(-.69,1.47,-2.12),V(.69,1.47,-2.12),.018,paint);
-  bar('panel_RearLowerFrame',V(-.80,1.035,-2.35),V(.80,1.035,-2.35),.018,paint);
   // Keep all new cabin details on one swept profile. A raised belt, lower roof
   // and narrower ends give the estate a continuous shoulder-to-roof silhouette.
   // Bake in world coordinates so individual damage assemblies retain their names.
