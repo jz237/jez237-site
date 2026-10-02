@@ -2,6 +2,7 @@ import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {buildMuscleAsset,MUSCLE_TEXTURES} from './muscle-asset';
 import {partitionSurface} from './surface-partition';
+import {addUtilityCabPressing,utilityStampedPanel} from './utility-coachwork';
 import {addClassicPanelBackings} from './classic-panel-backings';
 import {addClassicBayClosures,addMuscleEngineBay} from './classic-engine-bay';
 
@@ -38,6 +39,10 @@ export function buildUtilityAsset(obj:string,textures:Partial<Record<keyof typeo
   if(child.name.startsWith('wheel_')){child.position.z=rear(child.position.z);child.scale.set(1,.375/.3400195,.375/.3400195);root.add(child);continue;}
   if(!(child instanceof T.Mesh))continue;
   const material=child.material as T.Material,isPaint=material.name.startsWith('paint');
+  // The donor's raised wraparound bumper crosses the utility tail lamps.
+  // Keep its low exhaust hardware, but author a beam below the new tailgate.
+  child.geometry.computeBoundingBox();
+  if(child.name.startsWith('panel_bumper_rear')&&material.name==='Chrome'&&child.geometry.boundingBox!.max.y>.6){child.geometry.dispose();continue;}
   if(/^glass_(Rear|Quarter)/.test(child.name)){child.geometry.dispose();continue;}
   const interior=material.name.startsWith('Interior');
   for(const part of partitionSurface(child.geometry,[[2,-.82],[2,-.85],[2,-.89],[2,-.92],[2,-.95],[2,-1.84],[2,-2.05],[2,-2.25],[1,1.01],[0,-.70],[0,.70],[1,.60]],p=>{
@@ -64,10 +69,7 @@ export function buildUtilityAsset(obj:string,textures:Partial<Record<keyof typeo
  const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
  // Closed rear cabin, with a shallow rake and a separate central rear window.
  const cab=(x:number,y:number)=>V(x,y,-.91+(y-1.01)*.20);
- pane('panel_CabRearLower',[cab(.735,1.01),cab(-.735,1.01),cab(-.70,1.15),cab(.70,1.15)],paint);
- pane('panel_CabRearUpper',[cab(.655,1.34),cab(-.655,1.34),cab(-.62,1.45),cab(.62,1.45)],paint);
  for(const s of [-1,1]){
-  const corners=[cab(s*.50,1.15),cab(s*.70,1.15),cab(s*.655,1.34),cab(s*.50,1.34)]as[T.Vector3,T.Vector3,T.Vector3,T.Vector3];if(s>0)corners.reverse();pane('panel_CabRearPillar'+s,corners,paint);
   box('panel_CabLowerClosure'+s,[.045,.43,.13],[s*.722,.805,-.855],paint);
   // Join the cut donor roof to the raked rear wall with actual side returns.
   // Without these, the cabin has daylight seams at its lower rear corners.
@@ -77,9 +79,8 @@ export function buildUtilityAsset(obj:string,textures:Partial<Record<keyof typeo
    if(s<0)corners.reverse();pane('panel_CabRearReturn'+s+'_'+i,corners,paint);
   }
  }
- pane('glass_Rear',[cab(.50,1.15),cab(-.50,1.15),cab(-.50,1.34),cab(.50,1.34)],glass);
  box('Interior Utility cabin back',[1.40,.48,.06],[0,.81,-.845],vinyl);
- box('panel_BedHeadwall',[1.39,.43,.06],[0,.805,-.95],paint);
+ const headwall=mesh('panel_BedHeadwall',utilityStampedPanel(1.39,.43,.016),paint);headwall.position.set(0,.805,-.983);
  box('panel_BedFloor',[1.40,.055,1.97],[0,.605,-1.96],bed);
  for(let i=0;i<11;i++){const rib=mesh('panel_BedFloorRib'+i,new RoundedBoxGeometry(.036,.014,1.90,2,.006),bed);rib.position.set(-.60+i*.12,.641,-1.96);}
  for(const side of [-1,1]){
@@ -91,14 +92,16 @@ export function buildUtilityAsset(obj:string,textures:Partial<Record<keyof typeo
  }
  box('panel_TailgateInner',[1.38,.35,.065],[0,.815,-2.97],paint);
  const cap=mesh('panel_TailgateTop',new RoundedBoxGeometry(1.49,.055,.09,3,.02),paint);cap.position.set(0,1.012,-2.98);
- box('panel_TailgateHandle',[.22,.045,.025],[0,.86,-3.018],chrome);
+ const tailgate=mesh('panel_TailgateOuter',utilityStampedPanel(1.38,.335,.013),paint);tailgate.position.set(0,.813,-3.031);
+ const handle=mesh('panel_TailgateHandle',new RoundedBoxGeometry(.20,.037,.020,2,.007),chrome);handle.position.set(0,.927,-3.046);
  const lamp=new T.MeshStandardMaterial({name:'Classic Brakelight',color:0x8d1510,emissive:0xcc1b12,emissiveIntensity:.35,roughness:.3,metalness:.15});
  const seal=new T.MeshStandardMaterial({name:'Utility Window Seal',color:0x151b18,roughness:.8});
+ addUtilityCabPressing(root,paint,glass,seal);
+ const bumper=mesh('panel_bumper_rear_UtilityBeam',new RoundedBoxGeometry(1.74,.125,.16,4,.037),chrome);bumper.position.set(0,.582,-2.995);
+ const rubStrip=mesh('panel_bumper_rear_UtilityRubStrip',new RoundedBoxGeometry(1.52,.029,.012,2,.006),seal);rubStrip.position.set(0,.587,-3.076);
  for(const side of [-1,1]){
   const housing=mesh('panel_TailLampHousing'+side,new RoundedBoxGeometry(.105,.26,.028,3,.016),chrome);housing.position.set(side*.775,.815,-3.025);
   const lens=mesh('panel_TailLampLens'+side,new RoundedBoxGeometry(.075,.222,.020,3,.01),lamp);lens.position.set(side*.775,.815,-3.045);
-  for(const y of [1.15,1.34]){const frame=mesh('panel_RearWindowSeal'+side+y,new RoundedBoxGeometry(.52,.020,.014,2,.006),seal);frame.position.copy(cab(side*.26,y));frame.position.z-=.006;}
-  const upright=mesh('panel_RearWindowSealSide'+side,new RoundedBoxGeometry(.020,.205,.014,2,.006),seal);upright.position.copy(cab(side*.5,1.245));upright.position.z-=.006;upright.rotation.x=Math.atan(.20);
  }
 
  addMuscleEngineBay(root,steel);addClassicBayClosures(root);addClassicPanelBackings(root);

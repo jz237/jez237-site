@@ -59,3 +59,32 @@ test('longer cargo body preserves rear wheel-arch shape and closes the raked cab
   const hit=ray.intersectObject(car,true)[0];assert.ok(hit);assert.match(hit.object.name,/^panel_CabRearReturn/);
  }
 });
+
+test('pressed cab retains a closed rounded window rebate with outward-facing glazing and repairable steel',()=>{
+ const car=buildUtilityAsset(obj);car.updateMatrixWorld(true);
+ const glass=car.getObjectByName('glass_Rear')as T.Mesh;
+ (glass.material as T.Material).side=T.FrontSide;
+ const ray=(x:number,y:number)=>new T.Raycaster(new T.Vector3(x,y,-2),new T.Vector3(0,0,1)).intersectObject(car,true)[0];
+ for(const x of [-.45,0,.45])for(const y of [1.16,1.23,1.30])assert.equal(ray(x,y)?.object,glass,'Glazing must face the cargo bed in production');
+ // The old square window corner is now steel/rubber; no rectangular cutout
+ // or daylight gap is hidden by double-sided preview materials.
+ assert.match(ray(.55,1.345)?.object.name??'',/^panel_(CabRearUpper|RearWindowSeal)/);
+ for(let x=-.56;x<=.56;x+=.04)for(let y=1.09;y<=1.38;y+=.02){const hit=ray(x,y);assert.ok(hit);assert.match(hit.object.name,/^(panel_(CabRearUpper|RearWindowSeal)|glass_Rear)$/);}
+ const panel=car.getObjectByName('panel_CabRearUpper')as T.Mesh;
+ const normals=panel.geometry.attributes.normal,normalDirections=new Set(Array.from({length:normals.count},(_,i)=>[normals.getX(i),normals.getY(i),normals.getZ(i)].map(n=>n.toFixed(2)).join(',')));
+ assert.ok(normalDirections.size>20,'The cab should carry a formed rebate, not coplanar patches');
+ prepareWreckGeometry(car);const before=Array.from(panel.geometry.attributes.position.array);
+ assert.ok(dentGeometry(panel,new T.Vector3(.5,1.3,-.74),new T.Vector3(0,0,1),28)>0);assert.notDeepEqual(Array.from(panel.geometry.attributes.position.array),before);repairWreckGeometry(panel);assert.deepEqual(Array.from(panel.geometry.attributes.position.array),before);
+});
+
+test('utility rear bumper clears both tail lamps and stays inside the tested chassis envelope',async()=>{
+ const car=(await loadCarWithoutImages('utility')).scene;car.updateMatrixWorld(true);
+ const bumper=car.getObjectByName('panel_bumper_rear_UtilityBeam')!;assert.ok(bumper);
+ const bounds=new T.Box3().setFromObject(bumper),whole=new T.Box3().setFromObject(car);
+ assert.ok(bounds.max.y<.66);assert.ok(whole.min.z>=-3&&whole.max.z<=3&&whole.min.x>=-.914&&whole.max.x<=.914);
+ for(const side of [-1,1])for(const y of [.73,.81,.90]){
+  const hit=new T.Raycaster(new T.Vector3(side*.775,y,-4),new T.Vector3(0,0,1)).intersectObject(car,true)[0];assert.ok(hit);assert.match(hit.object.name,/^panel_TailLampLens/);
+ }
+ prepareWreckGeometry(car);const parts=new WreckAttachments(car,['FL','FR','RL','RR'].map(n=>car.getObjectByName('wheel_'+n)!),.914);
+ assert.ok(parts.assemblies.find(a=>a.name==='rear-bumper')?.members.some(p=>p.mesh===bumper),'The new bumper must remain detachable');
+});
