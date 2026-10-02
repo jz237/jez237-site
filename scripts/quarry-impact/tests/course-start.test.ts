@@ -25,7 +25,7 @@ function harness(faults:Faults={}){
  const meta={version:1 as const,tyreModel:1 as const,mode:'race' as const,reverse:false,cars:[{id:0,kind:'tern' as const,setup:stockSetup('tern')}],props:2,created:'2026-10-02T17:00:00Z'};
  const frame=(carCount:number,props:number)=>{const values=new Float32Array(carCount*80+props*7);for(let i=0;i<carCount;i++){const o=i*80;values[o+6]=1;values[o+14]=100;for(let j=0;j<4;j++){values[o+15+j*8+6]=1;values[o+56+j*6+1]=1;}}for(let i=0;i<props;i++)values[carCount*80+i*7+6]=1;return values;};
  const recorder=new ReplayRecorder(meta);recorder.capture(0,()=>frame(1,2),true);recorder.capture(1,()=>frame(1,2),true);
- const previous=recorder.document(),context:any={T,Error,Date,structuredClone,ReplayRecorder,console:{error:(...values:unknown[])=>logs.push({type:'error',values}),warn:(...values:unknown[])=>logs.push({type:'warn',values})},
+ const previous=recorder.document(),context:any={T,activeTimeTrial:null,Error,Date,structuredClone,ReplayRecorder,console:{error:(...values:unknown[])=>logs.push({type:'error',values}),warn:(...values:unknown[])=>logs.push({type:'warn',values})},
   preparingEvent:false,preparationInterrupted:false,state:'paused',mode:'race',demo:false,demoRestart:0,demoOptions:{camera:'director'},keys:new Set(['KeyW']),testInput:{throttle:1},wreckHold:2,
   telemetry:{old:true},activeChallenge:{id:'prior'},runSettled:false,lastAward:{old:true},runId:'previous',eventFrameTimes:[16],elapsed:2,countdown:0,accumulator:.01,
   recorder,lastReplay:null,replayEpochs:[0],studio:null,online:{active:false},cars:[car()],activeVenue:quarry,

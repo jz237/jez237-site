@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreTimeTrialPlayabilityBytes,verifyTimeTrialPlayabilityRevision} from './time-trial-playability-invariants';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
@@ -106,6 +107,7 @@ const knownBefore:Record<string,string>={
   "src/event-rules.ts": "edf4c2fe60d77cd63edd2865a59b54f03513eed9df548cd55af221fa27646282"
 };
 export function normalizeCinderbankSource(file:string,bytes:Buffer):Buffer{
+ bytes=restoreTimeTrialPlayabilityBytes(file,bytes);
  const changes=reviewedSourceChanges[file];assert.ok(changes,'No reviewed Cinderbank source normalization for '+file);
  let text=bytes.toString();
  for(const [before,after]of changes){assert.equal(text.split(after).length-1,1,file+' reviewed change');text=text.replace(after,before);}
@@ -117,17 +119,19 @@ export function readCinderbankPrevious(file:string):Buffer{
  const before=gunzipSync(read(entry.snapshot));assert.equal(hash(before),entry.before,file);return before;
 }
 export function restoreCinderbankPlayabilityBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreTimeTrialPlayabilityBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readCinderbankPrevious(file);
 }
 export function verifyCinderbankPlayabilityRevision():void{
+ verifyTimeTrialPlayabilityRevision();
  const manifest=revision();assert.equal(manifest.baseline,'7232dbab3323bfe517c8ccaf1a44ae4f9b7d7a7e');
  assert.equal(Object.keys(manifest.files).length,21,'Reviewed source/test/history scope');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreTimeTrialPlayabilityBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreCinderbankPlayabilityBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' stays unchanged during Cinderbank playability');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreTimeTrialPlayabilityBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' stays unchanged during Cinderbank playability');
  const fixtures=Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/'));
  assert.equal(manifest.previousFixtureCount,767);assert.equal(fixtures.length,767,'All earlier fixture files remain protected');
  for(const [file,expected]of Object.entries(knownBefore))assert.equal(hash(readCinderbankPrevious(file)),expected,file);
