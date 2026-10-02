@@ -217,7 +217,13 @@ function check(name, ok, info) {
         await sleep(700);
         hovered = await ev(() => window.__apx.selection.hovered?.id || null);
       }
-      check('hover highlights a part', !!hovered, { hovered, tpos, stats: await ev(() => ({ fps: window.__apx.stats?.fps, })) });
+      check('hover highlights a part', !!hovered, {
+        hovered, tpos,
+        diag: await ev((x, y) => {
+          const a = window.__apx, e = document.elementFromPoint(x, y);
+          return { fps: a.state.fps, frames: a.state.frames, hoverEvt: !!a.state.hoverEvt, drag: !!a.rig.drag, el: e ? e.tagName + '.' + (e.className?.baseVal ?? e.className) : null, iso: a.selection.isolate, sel: a.selection.selected.length, tween: !!a.state.tween, ready: a.state.ready };
+        }, tpos.x, tpos.y),
+      });
       check('hover shows the tooltip', await $('.tip.on'));
       await page.mouse.click(tpos.x, tpos.y);
       await sleep(500);

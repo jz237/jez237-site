@@ -80,7 +80,12 @@ async function boot() {
   }
 
   let layout = {};
-  try { layout = (await import('./layout.js')).LAYOUT || {}; } catch { /* no overrides yet */ }
+  try {
+    const lm = await import('./layout.js');
+    layout = lm.LAYOUT || {};
+    const sg = parseFloat(P.get('sg'));
+    bee.subGain = Number.isFinite(sg) ? sg : (lm.SUB_GAIN ?? 1);
+  } catch { /* no overrides yet */ }
   progress(0.82, 'Mating parts');
   await nextFrame();
   const tF = performance.now();
