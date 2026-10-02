@@ -1,0 +1,21 @@
+{
+  "baseline": "f0c516969daa755197338bf85dac274dee4cd478",
+  "files": {
+    "src/estate-asset.ts": {
+      "snapshot": "src-estate-asset.ts.gz",
+      "before": "4deef0bff722809d248aaf58258383e135c249ececce74415800419d02c09518",
+      "after": "b1ad7511895ea8f03b18c2e2c58b0da524af41919a41418c5192382c45606a3e"
+    },
+    "src/estate-rear.ts": {
+      "snapshot": "src-estate-rear.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "0123cb3b894482f560d6d524c5a582ef729502850a7d7140000673a79e5d5d61",
+      "introduced": true
+    },
+    "src/wreck-attachments.ts": {
+      "snapshot": "src-wreck-attachments.ts.gz",
+      "before": "09e8012b1fe7ae7b9dd4c67b56eb77a40e2701617663ec2d7435f8993132a44c",
+      "after": "5a646447a3b179296a5de3669814b3178f96aca36f0c92b2c697b05ca2a7309f"
+    }
+  }
+}
