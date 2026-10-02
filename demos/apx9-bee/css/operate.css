@@ -32,3 +32,18 @@
 @media(prefers-reduced-motion:reduce) { .operate-launch { transition:none; } }
 /* The repair picker opens above the operating card and closes after selection. */
 .operating .directory { z-index:11; }
+.sensor-hud { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:7; overflow:hidden; }
+.sensor-hud rect { fill:none; stroke:#9effdf; stroke-width:1; }
+.sensor-hud path { fill:none; stroke:#82cdbc; stroke-width:.8; opacity:.7; }
+.sensor-hud text { fill:#b8eee2; font:9px var(--mono); letter-spacing:.06em; paint-order:stroke; stroke:#07161d; stroke-width:3px; }
+.sensor-legend { display:flex; gap:6px; align-items:center; font:8px var(--mono); margin:14px 0; }
+.sensor-legend i { height:8px; flex:1; border-radius:8px; background:linear-gradient(90deg,#183954,#afeeee); }
+[data-sensor="thermal"] .sensor-legend i { background:linear-gradient(90deg,#173b8a,#75398b,#e44756,#ffad32,#ffecab); }
+[data-sensor="uv"] .sensor-legend i { background:linear-gradient(90deg,#071e45,#6868dc,#24c9d5,#c5ffce); }
+[data-sensor="normal"] .sensor-legend { display:none; }
+.op-body > button { margin-top:9px; margin-right:5px; }
+
+.sensor-view .brand-title { color:#e4f3f0; }
+.sensor-view .brand-sub { color:#9ab9bb; }
+.sensor-angle { display:block; margin-top:12px; color:#425055; font:11px var(--mono); }
+.sensor-hud[hidden] { display:none; }
