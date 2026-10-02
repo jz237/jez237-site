@@ -3,9 +3,10 @@
 // the blueprint sheet: head assembly forward along +X, abdomen / stabilizer / stinger back along -X around the power core,
 // thorax armor lifted straight up over the flight machinery, wings out and up, pollination module and the six legs fanning below.
 // delay/span place each assembly on the shared 0..1 timeline (sub-assemblies and fine parts follow on their own LEVEL timing).
+const SCALE = 0.78;
 const T = (v, delay = 0, span = 0.45, rot) => {
-  const dist = Math.hypot(v[0], v[1], v[2]);
-  return { dir: dist > 0 ? [v[0] / dist, v[1] / dist, v[2] / dist] : null, dist, delay, span, space: 'bee', ...(rot ? { rot } : {}) };
+  const dist = Math.hypot(v[0], v[1], v[2]) * SCALE;
+  return { dir: dist > 0 ? [v[0] / (dist / SCALE), v[1] / (dist / SCALE), v[2] / (dist / SCALE)] : null, dist, delay, span, space: 'bee', ...(rot ? { rot } : {}) };
 };
 
 export const LAYOUT = {

@@ -163,6 +163,7 @@ async function boot() {
   function applyExplode(v) {
     state.explode = v;
     bee.setExplode(v);
+    stage.floor.material.opacity = 0.34 - 0.2 * v * v * (3 - 2 * v);
     invalidate(true);
     app?.onExplode?.(v);
   }
