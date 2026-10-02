@@ -4,7 +4,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import * as
 import{loadCarWithoutImages}from'../tools/car-asset-audit';import{loadCars,templates}from'../src/assets';import{Vehicle}from'../src/vehicle';import{CAR_KINDS,DEFINITIONS}from'../src/rules';import{classicWheelAnchors,classicEngineVoice}from'../src/classic-vehicle-specs';
 import{createVehiclePhysics,stepVehiclePhysics,vehicleSpecification}from'../src/vehicle-physics';import{readGarage,stockSetup,exportSetup,importSetup}from'../src/garage';import{demoCarKind}from'../src/demo-session';import{ReplayRecorder,replayFile,readReplayFile}from'../src/replay-data';import{captureReplayFrame,ReplayScene}from'../src/replay-scene';
 import{verifyUtilityIntegrationRevision}from'./utility-integration-invariants';
-await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}}as any;
 const state=()=>({health:100,damageLeft:0,damageRight:0,steering:0,speed:0,slip:0,surface:'asphalt' as const,gear:1,rpm:850,input:{throttle:1,steer:0,brake:0,handbrake:false}});
 const shape=(car:Vehicle)=>car.panels.map(p=>Array.from(p.geometry.attributes.position.array));
