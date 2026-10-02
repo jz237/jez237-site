@@ -1,0 +1,40 @@
+{
+  "baseline": "b3af968",
+  "files": {
+    "src/van-asset.ts": {
+      "snapshot": "src-van-asset.ts.gz",
+      "before": "3d61f62c2b037bc083a309bb4531745217c8bb83108c8324564315602fd0ad77",
+      "after": "036165b348c1f0b6e8dabc5dc8bb15040a3033d4c18d25a1072bd0efaf5b858e"
+    },
+    "src/van-bodywork.ts": {
+      "snapshot": "src-van-bodywork.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "00ef663e7d0bed5d1cd954a10fb9d5461b1be3a8282055968bd8651bf53495e3"
+    },
+    "public/models/van.glb": {
+      "snapshot": "public-models-van.glb.gz",
+      "before": "0287f857736e91675ba4f5c2094e1ce4bd93be82163110d28fa0a76d1462817e",
+      "after": "c290b9d0d9c4648dda0cc4a23b12d2e80a518473fe556f1b9b044df3c01310cc"
+    },
+    "public/models/van-candidate.glb": {
+      "snapshot": "public-models-van-candidate.glb.gz",
+      "before": "0287f857736e91675ba4f5c2094e1ce4bd93be82163110d28fa0a76d1462817e",
+      "after": "c290b9d0d9c4648dda0cc4a23b12d2e80a518473fe556f1b9b044df3c01310cc"
+    },
+    "tests/demo-quality-invariants.ts": {
+      "snapshot": "tests-demo-quality-invariants.ts.gz",
+      "before": "31c686b02365408b6ee18fb8d85cad3ca495b7f48b926d727f7cce43a758312c",
+      "after": "ef3656bf1a7c78e24a46c09db5827512072912eedb615f67c77a3610ef53b606"
+    },
+    "tests/armor-integration.test.ts": {
+      "snapshot": "tests-armor-integration.test.ts.gz",
+      "before": "508258fbe78f5ffc2958a708479255b6cffe29ded8df90062d3876d51577183c",
+      "after": "bea92ea39872abcb1506d97f957f1b51ea26c8782db03d3873ff951d6e208407"
+    },
+    "tests/van-coachwork.test.ts": {
+      "snapshot": "tests-van-coachwork.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "0ec8809918e96d78ab6635550cf911ec59ca81daf3039ef0dd27f9829e4a7cfc"
+    }
+  }
+}
