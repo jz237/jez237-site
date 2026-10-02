@@ -4,6 +4,14 @@ import {loadCars} from '../src/assets';import {Vehicle} from '../src/vehicle';im
 const obj=readFileSync(new URL('../public/models/brightretro-muscle/FireGTO.obj',import.meta.url),'utf8');
 const authored=(name:string)=>/^panel_(?:TailgateEstate|RearQuarterEstate|RearValanceEstate|bumper_rearEstate)/.test(name);
 const key=(p:T.Vector3)=>p.toArray().map(n=>n.toFixed(6)).join(',');
+test('the rolled hatch shoulder closes the full lower window joint, including both rear corners',()=>{
+ const root=buildEstateAsset(obj),hatch=root.getObjectByName('panel_TailgateEstateStamping')as T.Mesh;root.updateMatrixWorld(true);const p=hatch.geometry.attributes.position,edge:T.Vector3[]=[];
+ for(let i=0;i<p.count;i++){const v=new T.Vector3().fromBufferAttribute(p,i).applyMatrix4(hatch.matrixWorld);if(v.y>1.02&&Math.abs(v.z+2.35)<1e-6)edge.push(v);}
+ assert.ok(edge.some(v=>v.x<-.799)&&edge.some(v=>v.x>.799),'The hatch must reach both window corners in the same rear plane');
+ for(const x of [-.77,-.65,-.4,0,.4,.65,.77])for(const y of [1.018,1.024,1.030,1.040]){
+  const hit=new T.Raycaster(new T.Vector3(x,y,-3),new T.Vector3(0,0,1)).intersectObject(root,true)[0];assert.ok(hit);assert.match(hit.object.name,/^(panel_Tailgate|glass_Tailgate)/,'The window joint must not expose cargo furnishings');assert.ok(hit.point.z< -2.31,'The rear skin must close at the window plane');
+ }
+});
 test('estate rear closes the hatch, corner returns and bumper without a protruding cargo floor',()=>{
  const root=buildEstateAsset(obj),hatch=root.getObjectByName('panel_TailgateEstateStamping')as T.Mesh;root.updateMatrixWorld(true);
  const p=hatch.geometry.attributes.position,edges=new Map<string,number>();
