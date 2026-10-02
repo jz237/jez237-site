@@ -1,3 +1,4 @@
+import {vehicleChassisHalfExtents} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
@@ -183,11 +184,7 @@ export class Vehicle {
       this.controller.setWheelSteering(i,0);this.controller.setWheelBrake(i,0);
     }
     this.roof.setEnabled(true);
-    this.collider.setHalfExtents({
-      x: DEFINITIONS[this.kind].halfWidth - 0.06,
-      y: 0.25,
-      z: DEFINITIONS[this.kind].halfLength - 0.12,
-    });
+    this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind));
     for (const p of this.panels) {
       p.visible = true;
       p.userData.damage = 0;
@@ -365,12 +362,7 @@ export class Vehicle {
       }
     }
     this.wreckParts.hit(contact,impactDirection,dentDamage);
-    const def = DEFINITIONS[this.kind];
-    this.collider.setHalfExtents({
-      x: def.halfWidth - 0.06 - (100 - this.health) * 0.0008,
-      y: 0.25,
-      z: def.halfLength - 0.12 - (100 - this.health) * 0.0015,
-    });
+    this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind,this.health));
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
     }

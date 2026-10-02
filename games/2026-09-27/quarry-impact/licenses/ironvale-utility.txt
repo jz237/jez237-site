@@ -1,0 +1,17 @@
+IRONVALE UTILITY — ORIGINAL COUPE-UTILITY CONVERSION
+
+Donor body, interior, wheels and textures:
+Muscle Car 3D Model by BrightRetro (Richard Hill-Whittall)
+https://opengameart.org/content/muscle-car-3d-model
+Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+
+The original author release and texture provenance are preserved under
+source/vehicles/brightretro-muscle and public/models/brightretro-muscle.
+
+Changes for Quarry Impact: original shortened cabin with rear glazing,
+lengthened rear quarters and wheelbase, open ribbed cargo bed, wheelhouses,
+tailgate and rear lights, inner hood/door skins, engine bay, separated damage
+panels, model-space normalization and deterministic glTF export.
+
+This model is an adaptation and is not endorsed by the original artist.

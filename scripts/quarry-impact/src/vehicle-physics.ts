@@ -11,15 +11,28 @@ export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
 }
 const dot=(a:Vec,b:Vec)=>a.x*b.x+a.y*b.y+a.z*b.z;
+/** Keep the utility floor shallow through damage and repair. */
+export function vehicleChassisHalfExtents(kind:CarKind,health=100){
+ const d=DEFINITIONS[kind],loss=100-health,utility=kind==='utility';
+ return{x:(utility?.70:d.halfWidth-.06)-loss*.0008,y:utility?.065:.25,z:(utility?2.69:d.halfLength-.12)-loss*.0015};
+}
 /** Shared physical construction for the rendered vehicle and headless authority. */
 export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mass:number){
- const d=DEFINITIONS[kind];
+ const d=DEFINITIONS[kind],utility=kind==='utility',massHalfLength=utility?2.745:d.halfLength;
  const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setLinearDamping(.06).setAngularDamping(.85).setCcdEnabled(true).setCanSleep(true));
- const collider=world.createCollider(api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12)
-  .setMassProperties(mass,{x:0,y:-.06,z:0},{x:mass*((d.halfLength*2)**2+1.3**2)/12,y:mass*((d.halfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
+ const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
+  .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:{x:0,y:-.06,z:0},{x:mass*((massHalfLength*2)**2+1.3**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
   .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
- const roof=world.createCollider(api.ColliderDesc.cuboid(classic?.70:.65,classic?.22:.24,classic?(estate?1.195:.72):.65).setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(estate?-.98:-.40):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+ const roof=world.createCollider(api.ColliderDesc.cuboid(classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:.72):.65).setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:-.40):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+ // Compound utility shell leaves the cargo opening empty above its floor.
+ // All pieces share the chassis body, so suspension rays exclude them together.
+ if(utility){
+  const part=(x:number,y:number,z:number,hx:number,hy:number,hz:number)=>world.createCollider(api.ColliderDesc.cuboid(hx,hy,hz).setTranslation(x,y,z).setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  part(0,-.03,.92,.854,.24,1.57);
+  for(const side of [-1,1]){part(side*.785,0,-1.83,.09,.21,1.14);part(side*.60,-.10,-1.525,.145,.08,.38);}
+  part(0,0,-2.92,.77,.21,.05);
+ }
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;
  for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,.375);
   controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,.24);controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
@@ -44,7 +57,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   controller.setWheelEngineForce(i,force*corner.power*((kind==='coupe'||isClassicKind(kind))?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]));
   controller.setWheelBrake(i,!alive?18:state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake)+(state.input.handbrake&&i>1?100:0)+corner.drag);
   controller.setWheelFrictionSlip(i,(state.surface==='asphalt'?3.2:2.4)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
-  controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring);
+  controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }
  if(spec.differential>0&&alive&&Math.abs(state.input.throttle)>.1&&Math.abs(state.speed)>2)body.applyTorqueImpulse({x:0,y:-body.angvel().y*spec.mass*.16*spec.differential*Math.abs(state.input.throttle)*dt,z:0},true);
  controller.updateVehicle(dt,undefined,undefined,c=>c.parent()?.handle!==body.handle);
@@ -60,8 +73,8 @@ export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engi
   const ratio = 1 + s.tune.gearing * .22;
   return {mass: d.mass + s.armor * 95 + s.engine * 12,
     force: d.force * (1 + s.engine * .12) * ratio,
-    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:9) / ratio,
-    spring: (kind==='wagon'?.84:kind==='muscle'?.93:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:1)*(1 + s.tune.suspension * .18),
+    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:9) / ratio,
+    spring: (kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:1)*(1 + s.tune.suspension * .18),
     rideHeight: -s.tune.suspension * .035, grip: 1 + s.tires * .06,
     steering: 1 + s.tune.steering * .25,
     frontBrake: 1 + s.tune.brakeBias * .36, rearBrake: 1 - s.tune.brakeBias * .36,

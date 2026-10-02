@@ -5,7 +5,7 @@ import {mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {CLASSIC_VEHICLES,type ClassicKind} from './classic-vehicle-specs';
 export {CLASSIC_VEHICLES,type ClassicKind} from './classic-vehicle-specs';
-export function buildClassicVehicle(kind:ClassicKind){
+export function buildClassicVehicle(kind:Exclude<ClassicKind,'utility'>){
  const d=CLASSIC_VEHICLES[kind],wagon=kind==='wagon',root=new T.Group();root.name=d.name;root.userData.classicVehicle=kind;
  const paint=new T.MeshPhysicalMaterial({name:'paint Classic Body',color:d.color,metalness:.45,roughness:.32,clearcoat:.7,clearcoatRoughness:.2});
  const trim=new T.MeshStandardMaterial({name:'paint Paint 2 Classic Trim',color:0x282b29,metalness:.15,roughness:.66});
