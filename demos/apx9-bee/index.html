@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>APX-9 Autonomous Pollination Unit — Exploded View · Jez237</title>
+<meta name="description" content="An interactive 3D exploded view of the APX-9, a biomimetic pollination robot: every shell, actuator, sensor, wing vein and leg joint modelled as its own selectable part.">
+<meta name="theme-color" content="#e9e8e2">
+<link rel="canonical" href="https://jez237.com/demos/apx9-bee/">
+<link rel="icon" href="../../assets/brand.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="APX-9 Autonomous Pollination Unit — Exploded View">
+<meta property="og:description" content="Take apart a mechanical bumblebee: explode it, orbit it, and inspect every component.">
+<meta property="og:url" content="https://jez237.com/demos/apx9-bee/">
+<meta property="og:image" content="https://jez237.com/demos/assets/apx9-bee.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="css/main.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body class="loading">
+<a class="skip" href="#stage">Skip to the 3D model</a>
+
+<div id="app">
+  <div id="stage" role="application" aria-label="Interactive 3D exploded view of the APX-9 robotic bee. Drag to rotate, scroll to zoom, click a part to identify it."></div>
+  <svg id="leaders" aria-hidden="true"></svg>
+  <div id="labels"></div>
+  <div id="ui"></div>
+</div>
+
+<div id="loader" role="status" aria-live="polite">
+  <div class="loader-card">
+    <div class="loader-mark">APX<span>-</span>9</div>
+    <div class="loader-sub">Autonomous Pollination Unit</div>
+    <div class="loader-track"><i id="loader-bar"></i></div>
+    <div class="loader-msg" id="loader-msg">Preparing studio</div>
+  </div>
+</div>
+
+<div id="fatal" hidden>
+  <div class="fatal-card">
+    <h2>The 3D view could not start</h2>
+    <p class="fatal-msg"></p>
+    <p>Try a current desktop or mobile browser with hardware acceleration enabled.</p>
+    <a class="fatal-back" href="/demos/">Back to the workbench</a>
+    <pre class="fatal-detail"></pre>
+  </div>
+</div>
+
+<noscript><div class="noscript">This exhibit needs JavaScript and WebGL 2. <a href="/demos/">Back to the workbench</a></div></noscript>
+<pre id="stats" hidden></pre>
+<script type="module" src="js/main.js?v=427db4aafefb"></script>
+</body>
+</html>
