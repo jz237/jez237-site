@@ -130,6 +130,36 @@ test('a ship refresh keeps collapsed details hidden and restore uses the latest 
   assert.match(card.textContent,/9 knots/);layer.dispose();
 });
 
+test('PECO remains opt-in, aborts hidden/disabled requests, and clears failed reports', async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});const {doc,nodes}=mapDOM(t),pending=[];
+  t.mock.method(globalThis,'fetch',(url,{signal})=>new Promise(resolve=>pending.push({url,signal,resolve})));
+  const layer=createMapLayers(THREE,{scene:new THREE.Scene(),stage:new Element(),projection,
+    sampleElevation:()=>5,photographic:{},landmarks:{landmarks:[]},motion:{flyTo(){}},getPose:()=>pose});
+  assert.equal(pending.length,0);
+  const toggle=nodes.get('outagesToggle');toggle.checked=true;toggle.onchange();
+  assert.equal(pending[0].url,'peco-outages');
+  toggle.checked=false;toggle.onchange();assert.equal(pending[0].signal.aborted,true);
+  pending[0].resolve(Response.json({outages:[]}));await settle();
+  assert.equal(nodes.get('outagesOptions').hidden,true);
+  toggle.checked=true;toggle.onchange();doc.hidden=true;doc.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(pending[1].signal.aborted,true);t.mock.timers.tick(600000);assert.equal(pending.length,2);
+  doc.hidden=false;doc.dispatchEvent(new Event('visibilitychange'));assert.equal(pending.length,3);
+  const report={updatedAt:new Date().toISOString(),serviceTotals:{outages:1,customers:12},outages:[{
+    id:'outage-1',name:'Test outage',lon:-75.16,lat:39.95,customersLabel:'12',outages:1}]};
+  pending[2].resolve(Response.json(report));await settle();
+  nodes.get('outageSelect').onchange({target:{value:'outage-1'}});
+  const card=doc.body.children[0];assert.match(card.textContent,/Customers affected12/);
+  card.hidden=true;card.dispatchEvent(new Event('map-window-collapse'));
+  t.mock.timers.tick(300000);pending[3].resolve(Response.json(report));await settle();
+  assert.equal(card.hidden,true,'Polling must not reopen a collapsed card');
+  card.hidden=false;card.dispatchEvent(new Event('map-window-restore'));
+  assert.match(card.textContent,/PECO updated/);
+  t.mock.timers.tick(300000);pending[4].resolve(new Response('',{status:503}));await settle();
+  assert.match(nodes.get('outagesStatus').textContent,/does not mean power is restored/);
+  assert.equal(nodes.get('outageSelect').children.length,1);assert.equal(card.hidden,true);
+  layer.dispose();t.mock.timers.tick(600000);assert.equal(pending.length,5);
+});
+
 test('Philadelphia policy permits its actual analytics connections without allowing arbitrary hosts', async()=>{
   const response=await policy({next:async()=>new Response('map')});
   const connect=response.headers.get('Content-Security-Policy').split(';').find(v=>v.trim().startsWith('connect-src'));

@@ -31,6 +31,7 @@ export async function checkPhillyLive(base, fetcher = fetch, { requireAircraft =
     ['detail-imagery', 'GET', 400, 'Invalid detail imagery request'],
     ['street-detail', 'GET', 400, 'Invalid neighborhood'],
     ['aircraft', 'POST', 405, 'Method not allowed'],
+    ['peco-outages', 'POST', 405, 'Method not allowed'],
   ]) {
     const response = await request(path, method);
     if (response.status !== status || !(await response.text()).includes(text)) {

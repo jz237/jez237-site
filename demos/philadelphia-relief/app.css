@@ -1666,6 +1666,7 @@ body.cinema .photo-credits { bottom: 8px; }
   height: 29px; border-radius: 50%; border: 1px solid #c9ffed; background: #204953eb; color: #9cead8;
   font-size: 20px; cursor: pointer; box-shadow: 0 2px 9px #071e3650; }
 .extra-map-pin.ship { font-size: 12px; background: #275c6ded; color: #d2faff; }
+.extra-map-pin.outage { background: #9a3e15; color: #fff3d7; border-color: #ffbf79; font-size: 22px; }
 .extra-map-pin.landmark { color: #ffe2a7; background: #5a4931e8; border-color: #efc688; font-size: 12px; }
 .extra-map-pin.stale { opacity: .55; }
 .extra-map-pin.cluster { width: auto; min-width: 44px; height: 44px; padding: 0 10px;
