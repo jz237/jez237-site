@@ -46,12 +46,13 @@ function buildChamber(pm) {
   ghostMesh(ch, tube(1.22, 1.28, x0 + .14, 1.0, 0, { segments: 64 }), C.chamberGlass);
 
   // brass auger: core tube, helical flight and six struts tying them together
+  const auger=ch.part('auger',{name:'Pollen Transport Auger',info:'Rotating helical conveyor on the brush drive shaft.'});
   const xa = x0 + 0.26, xb = 1.0, L = 2.2, xs = (xa + xb) / 2 - 0.1, turns = 6;
-  ch.add(tube(0.15, 0.24, xa, xb, 0.01, { segments: 28 }), M.brass);
-  ch.add(axisTo(spring({ radius: 0.62, wire: 0.06, turns, length: L, perTurn: S(16, 10), radial: 6 }), 'x'), M.brass, tr(xs));
+  auger.add(tube(0.15, 0.24, xa, xb, 0.01, { segments: 28 }), M.brass);
+  auger.add(axisTo(spring({ radius: 0.62, wire: 0.06, turns, length: L, perTurn: S(16, 10), radial: 6 }), 'x'), M.brass, tr(xs));
   const strut = new THREE.BoxGeometry(0.045, 0.40, 0.045);
   for (const t of [0.04, 0.2, 0.4, 0.6, 0.8, 0.96]) {
-    ch.add(strut, M.brass, atTheta(xs - L / 2 + t * L, 0.43, 180 - t * turns * 360));
+    auger.add(strut, M.brass, atTheta(xs - L / 2 + t * L, 0.43, 180 - t * turns * 360));
   }
 
   buildLoad(ch);

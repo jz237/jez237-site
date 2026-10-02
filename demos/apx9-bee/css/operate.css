@@ -103,3 +103,8 @@
 .operate-panel[data-mode="repair"] > :not(.op-body) { flex-shrink:0; }
 .operate-panel[data-mode="repair"] .op-body { overflow-y:auto; min-height:0; }
 .operate-panel[data-mode="repair"] footer { background:#fafaf7; }
+
+.xray-mechanisms:not([hidden]) { display:flex; flex-direction:column; overflow:hidden; }
+.xray-content { overflow-y:auto; min-height:0; }
+.xray-mechanisms footer { flex-shrink:0; padding-top:10px; margin-top:8px; border-top:1px solid #24343b20; }
+@media(max-width:759px) { .xray-content > p { font-size:11px; line-height:1.5; } .xray-mechanisms footer { padding-top:7px; margin-top:5px; } }

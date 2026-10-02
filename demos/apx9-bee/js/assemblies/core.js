@@ -9,7 +9,7 @@
 import { ex } from '../kit.js';
 import { buildShaft, buildCaps, buildRings, buildBearings, buildFins, buildBoard } from './core-power.js';
 import { buildCell, buildCoil, buildLeds, buildTerminals } from './core-cell.js';
-import { buildPollen } from './core-pollen.js';
+import { buildPollen } from './core-pollen.js?v=8d1930e2df49';
 
 export async function build(ctx) {
   const { bee } = ctx;

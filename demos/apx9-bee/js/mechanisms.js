@@ -5,8 +5,9 @@ import { VIEWS, anglesQuat } from './rig.js';
 import { LAY, LINK, linkPose, CAM } from './assemblies/flight-motor-lay.js';
 
 export function initMechanisms(app) {
-  const {bee,selection,rig,stage}=app,poses=new Map(),x=new T.Vector3(1,0,0),y=new T.Vector3(0,1,0);
+  const {bee,selection,rig,stage}=app,poses=new Map(),x=new T.Vector3(1,0,0),y=new T.Vector3(0,1,0),z=new T.Vector3(0,0,1);
   const state={active:false,paused:matchMedia('(prefers-reduced-motion: reduce)').matches,clock:0,speed:1,focus:null};
+  const focusViews=new Map();
   let macro=false,savedLabels=null,savedExplode=0;
   const initial=linkPose(), motor='flight-motor/';
   const button=(text,fn)=>h('button',{type:'button',onclick:fn},text);
@@ -16,16 +17,17 @@ export function initMechanisms(app) {
   const speed=h('input',{type:'range',min:25,max:200,value:100,'aria-label':'Mechanism playback speed'});speed.addEventListener('input',()=>{state.speed=+speed.value/100;});
   function gearboxView(){bee.root.updateMatrixWorld(true);return bee.get('wing-mount-r').node.getWorldQuaternion(new T.Quaternion()).multiply(new T.Quaternion().setFromAxisAngle(y,Math.PI*.42));}
   function focus(id,view){
-    state.focus=id;const previous=app.getExplode();app.setExplode(0,0);
+    focusViews.set(id,view);state.focus=id;const previous=app.getExplode();app.setExplode(0,0);
     selection.select(bee.get(id));selection.setIsolate(true);macro=true;app.ui.inspector.el.hidden=true;const points=[];bee.worldCorners([...bee.get(id).walk()],points);
     rig.frameCorners(points,{ms:1200,quat:view,margin:1.35,band:app.fitBand()});app.state.framed=true;app.setExplode(previous,0);app.setExplode(0,1200);app.invalidate();
   }
   const card=h('section',{class:'xray-mechanisms panel','aria-label':'Working internal mechanisms',hidden:true},
     h('span',{class:'op-eyebrow'},'APX-9 / LIVE CUTAWAY'),h('h2',null,'Inside the mechanism.'),
-    h('p',null,'Meshing reduction gears turn the crank. Its connecting rod drives the slider; four orbiting planet gears reduce the wing servo drive.'),
-    h('div',{class:'op-choices'},button('Flight drive',()=>focus('flight-motor',anglesQuat(12,-64))),button('Wing gearbox',()=>focus('wing-mount-r/servo-gearbox',gearboxView())),button('Whole unit',()=>{macro=false;state.focus=null;selection.setIsolate(false);selection.clear();app.frameAll({ms:1200,quat:VIEWS.hero(),margin:1.2});})),
+    h('p',null,'Explore coordinated optical irises, sensor gimbals, six linked coolant pistons, helical pollen transport, flight gearing and a telescoping probe.'),
+    h('div',{class:'op-choices'},button('Flight drive',()=>focus('flight-motor',anglesQuat(12,-64))),button('Wing gearbox',()=>focus('wing-mount-r/servo-gearbox',gearboxView())),button('Optical head',()=>focus('head-frame/optical-drive-r',anglesQuat(0,-8))),button('Cooling pumps',()=>focus('power-core/coolant-bank',anglesQuat(8,-12))),button('Pollen drive',()=>focus('pollination-module',anglesQuat(28,-22))),button('Sampling jaws',()=>focus('mandibles',anglesQuat(25,-10))),button('Tail probe',()=>focus('stinger',anglesQuat(-10,-8))),button('Whole unit',()=>{macro=false;state.focus=null;selection.setIsolate(false);selection.clear();app.frameAll({ms:1200,quat:VIEWS.hero(),margin:1.2});})),
     h('label',null,'Shell opacity',opacity),h('label',null,'Slow-motion speed',speed),pause,
     h('small',null,'Illustrative slow-motion mechanics. Gear ratios and slider-crank motion follow the modeled geometry; this is not a flight simulation.'));
+  const content=h('div',{class:'xray-content'});while(card.firstChild)content.append(card.firstChild);pause.remove();card.append(content,h('footer',null,pause));
   document.getElementById('ui').append(card);
   const oldFit=app.fitBand;
   app.fitBand=()=>{if(card.hidden)return oldFit?.();const W=stage.size.x,H=stage.size.y;if(W<760){const top=card.getBoundingClientRect().top;return {w:W-20,h:Math.max(100,top-105),cx:0,cy:(105+top)/2-H/2};}return {w:W-380,h:H-170,cx:160,cy:5};};
@@ -37,7 +39,7 @@ export function initMechanisms(app) {
     p.node.quaternion.multiply(new T.Quaternion().setFromAxisAngle(axis,angle));p.node.position.add(old.sub(v.applyQuaternion(p.node.quaternion)));
   }
   function move(id,dx,dz=0){const p=save(bee.get(id));if(p){p.node.position.x+=dx;p.node.position.z+=dz;}}
-  function pose(){
+  function pose(expanded=true){
     const drive=state.clock*2.0,compound=-drive*10/16,crank=drive*100/256;
     rotate(motor+'gear-train/pinion',y,drive,[LAY.g1,0,0]);
     rotate(motor+'gear-train/compound-gear',y,compound,[LAY.g2,0,0]);
@@ -61,12 +63,35 @@ export function initMechanisms(app) {
         p.node.position.add(delta.applyQuaternion(p.node.quaternion));p.node.quaternion.multiply(spin);
       }
     }
+    if(expanded){
+      const t=state.clock;
+      for(const side of ['r','l']){
+        const b=`head-frame/optical-drive-${side}/yaw-ring`,sgn=side==='r'?1:-1;
+        rotate(b,y,Math.sin(t*.8)*.13);rotate(b+'/pitch-ring',x,Math.sin(t*.65+.5)*.12);
+        const lens=save(bee.get(b+'/pitch-ring/focus-carriage'));if(lens)lens.node.translateZ(Math.sin(t*1.2)*.09);
+        for(let i=0;i<6;i++)rotate(b+'/pitch-ring/iris-'+i,z,(.5+.5*Math.sin(t*.9))*.68);
+        rotate('head-frame/cooling-'+side+'/rotor',z,t*3.2*sgn);
+        rotate('mandibles/jaw-'+side,z,Math.sin(t*1.1)*.10,[12.05,-2.1,sgn*.85]);
+      }
+      for(let i=0;i<6;i++){
+        const b='power-core/coolant-bank/pump-'+i,a=t*2.2+i*Math.PI/3,cy=.22*Math.cos(a),cz=.22*Math.sin(a),sy=cy+Math.sqrt(.72*.72-cz*cz);
+        rotate(b+'/eccentric',x,a);rotate(b+'/conrod',x,Math.atan2(-cz,sy-cy));
+        const rod=save(bee.get(b+'/conrod'));if(rod){rod.node.position.y+=(cy+sy)/2-.58;rod.node.position.z+=cz/2;}
+        const piston=save(bee.get(b+'/piston'));if(piston)piston.node.position.y+=sy-.94;
+      }
+      for(const side of ['r','l'])rotate('power-core/coolant-bank/radiator-'+side+'/rotor',z,t*2.6);
+      for(const id of ['collection-chamber/auger','distribution-vanes','drive-motor/motor-shaft','pollen-brush'])rotate('pollination-module/'+id,x,t*1.7);
+      const extension=(1-Math.cos(t*.8))*.5;
+      for(let i=1;i<=7;i++){const p=save(bee.get('stinger/sheath/seg-'+i));if(p)p.node.translateY(extension*i*.045);}
+      for(const [id,d]of [['needle',.48],['sampling-tube',.22],['joint-3',.30]]){const p=save(bee.get('stinger/'+id));if(p)p.node.translateY(extension*d);}
+    }
+    state.articulatedParts=poses.size;
     bee.root.updateMatrixWorld(true);app.picker.valid=false;app.state.shadowDirty=true;
   }
   const oldTick=app.tick;
   app.tick=(dt,now)=>{
     restore();const prior=oldTick?.(dt,now),on=selection.xray;
-    if(app.operations.state.mode==='repair'){card.hidden=true;state.active=false;macro=false;state.focus=null;savedLabels=null;const t=app.operations.state.repairT;if(t>=24&&t<30){const clock=state.clock;state.clock=t-24;pose();state.clock=clock;}return prior;}
+    if(app.operations.state.mode==='repair'){card.hidden=true;state.active=false;macro=false;state.focus=null;savedLabels=null;const t=app.operations.state.repairT;if(t>=24&&t<30){const clock=state.clock;state.clock=t-24;pose(false);state.clock=clock;}return prior;}
     const was=state.active;state.active=on;
     const touring=app.ui.state.tour>=0;
     card.hidden=!on||touring;
@@ -78,6 +103,6 @@ export function initMechanisms(app) {
     bee.setExplode(app.getExplode(),true);pose();
     return moving||prior;
   };
-  window.addEventListener('resize',()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!state.active||app.ui.state.tour>=0)return;if(state.focus)focus(state.focus,state.focus.includes('servo-gearbox')?gearboxView():anglesQuat(12,-64));else app.frameAll({ms:350,quat:rig.quat,margin:1.2});})));
+  window.addEventListener('resize',()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!state.active||app.ui.state.tour>=0)return;if(state.focus)focus(state.focus,focusViews.get(state.focus)||anglesQuat(12,-64));else app.frameAll({ms:350,quat:rig.quat,margin:1.2});})));
   app.mechanisms={state,focus,restore,gearboxView};
 }
