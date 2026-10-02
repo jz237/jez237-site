@@ -230,7 +230,7 @@ kbd { display: inline-block; min-width: 22px; padding: 3px 6px; border: 1px soli
 }
 @media (max-width: 680px) {
   :root { --hud-gap: 10px; }
-  .dock { flex-wrap: wrap; justify-content: center; row-gap: 2px; width: calc(100vw - 16px); padding: 6px 6px 5px; }
+  .dock { flex-wrap: wrap; justify-content: center; row-gap: 2px; column-gap: 22px; width: calc(100vw - 16px); padding: 6px 6px 5px; }
   .dock-explode { width: 100%; border-right: 0; border-bottom: 1px solid var(--edge); padding: 0 4px 3px; }
   .dock-slider { flex: 1; width: auto; }
   .dock-group + .dock-group { padding-left: 0; border-left: 0; }
@@ -243,12 +243,18 @@ kbd { display: inline-block; min-width: 22px; padding: 3px 6px; border: 1px soli
   .brand-sub { letter-spacing: 0.16em; }
   .hud-top { padding: 3px; gap: 2px; }
   .hud-top .icon-btn { width: 34px; height: 34px; }
-  .inspector, .directory, .specs { left: 8px; right: 8px; width: auto; top: auto; bottom: calc(112px + var(--safe-b)); max-height: 46vh; }
+  .inspector, .directory, .specs { left: 8px; right: 8px; width: auto; top: auto; bottom: calc(var(--dock-h, 112px) + 20px + var(--safe-b)); max-height: 46vh; }
   .inspector { transform: translateY(14px); }
   .directory { max-height: 52vh; }
   .specs { max-height: 52vh; }
-  .tour { bottom: calc(112px + var(--safe-b)); }
-  .detail { left: 8px; right: 8px; width: auto; bottom: calc(112px + var(--safe-b)); }
+  .tour { bottom: calc(var(--dock-h, 112px) + 20px + var(--safe-b)); }
+  .detail { left: 8px; right: 8px; width: auto; bottom: calc(var(--dock-h, 112px) + 20px + var(--safe-b)); }
+  .toast { top: auto; bottom: calc(var(--dock-h, 112px) + 24px + var(--safe-b)); transform: translate(-50%, 8px); }
+  .toast.on { transform: translate(-50%, 0); }
+  .dock-explode { order: 0; }
+  .dock-group:nth-child(2) { order: 1; }
+  .dock-group:nth-child(4) { order: 2; }
+  .dock-group.group-views { order: 3; width: 100%; justify-content: center; }
   .callout { padding: 6px 8px 7px; }
   .callout-title { font-size: 9.5px; letter-spacing: 0.06em; }
   .callout-list li { font-size: 10.5px; }
