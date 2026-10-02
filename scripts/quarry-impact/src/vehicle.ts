@@ -1,5 +1,6 @@
 import {BuggySuspension} from './buggy-suspension';
 import {applyComponentImpact} from './component-damage';
+import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
 import {vehicleChassisHalfExtents,vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
@@ -48,6 +49,13 @@ export class Vehicle {
   readonly wreckFinish: WreckFinish;
   readonly wreckParts: WreckAttachments;
   readonly tireContacts:TireContact[];
+  /** Replays and network views supply wheel poses without stepping a controller. */
+  syncTyres(){
+    this.tireContacts.forEach((contact,i)=>{
+      const damage=this.tyreDamage?.[i];
+      contact.setCondition(damage===undefined?undefined:{failure:tyreFailure(damage),radius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),damage,vehicleFlatTyreRadius(this.kind)).radius,baseRadius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),0,vehicleFlatTyreRadius(this.kind)).radius});
+    });
+  }
   readonly paintColor:T.Color;
   readonly livery:LiveryPaint;
   readonly surfaceFinish:VehicleSurface;
@@ -63,6 +71,8 @@ export class Vehicle {
   health = 100;
   /** Undefined only for an older online authority without component condition. */
   engineDamage:number|undefined = 0;
+  /** Missing on legacy snapshots/replays: do not infer flats from bent wheels. */
+  tyreDamage:number[]|undefined = [0,0,0,0];
   inflicted = 0;
   speed = 0;
   rpm = 850;
@@ -136,7 +146,7 @@ export class Vehicle {
     this.wreckFinish = new WreckFinish(this.model,def.halfLength,kind==='marten'?new T.Vector3(0,.84,-1.56):kind==='buggy'?new T.Vector3(0,.67,-1.4):undefined);
     this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth,vehicleWheelRadius(kind));
     if(kind==='buggy')this.suspension=new BuggySuspension(this.model);
-    this.tireContacts=this.wheels.map(w=>new TireContact(w));
+    this.tireContacts=this.wheels.map(w=>new TireContact(w,kind,vehicleWheelRadius(kind)));
     this.surfaceFinish=new VehicleSurface(this.model,id);
     this.livery=new LiveryPaint(this.model);this.livery.set(this.setup.livery);
     if(setup)this.setPaint(this.setup.paint,this.setup.trim);
@@ -178,6 +188,8 @@ export class Vehicle {
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
     this.engineDamage = 0;
+    this.tyreDamage = [0,0,0,0];
+    this.tireContacts.forEach(contact=>contact.reset());
     this.damageLeft = this.damageRight = 0;
     for(const zone of Object.keys(this.damageZones)as (keyof typeof this.damageZones)[])this.damageZones[zone]=0;
     this.lastHit = -100;
@@ -236,7 +248,7 @@ export class Vehicle {
     this.surface = surfaceAt(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     this.oldGear=this.gear;
-    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage);
+    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage);
   }
   postStep(dt: number, time: number) {
     this.current.copy(this.body.translation());
@@ -295,11 +307,11 @@ export class Vehicle {
       if (!w) continue;
       w.position.y =
         -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
-      const corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed);
+      const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
       w.rotation.set(0,(i<2?this.steering:0)+corner.toe,0);
       w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
       const coating=this.surfaceFinish.coating.value;
-      this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z);
+      this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z,tyre===undefined?undefined:{failure:tyreFailure(tyre),radius:corner.radius,baseRadius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),0,vehicleFlatTyreRadius(this.kind)).radius});
     }
     this.syncSuspension();
   }
@@ -320,7 +332,7 @@ export class Vehicle {
     // The rendered pose also supports replay hits while its body is disabled.
     const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
-    const components={engineDamage:this.engineDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
+    const components={engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
@@ -379,6 +391,7 @@ export class Vehicle {
     }
     this.wreckParts.hit(contact,impactDirection,dentDamage);
     this.engineDamage=components.engineDamage;
+    this.tyreDamage=components.tyreDamage;
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
     this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind,this.health));
@@ -388,6 +401,7 @@ export class Vehicle {
   }
   dispose() {
     this.livery.dispose();
+    this.tireContacts.forEach(contact=>contact.dispose());
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);
     this.root.removeFromParent();

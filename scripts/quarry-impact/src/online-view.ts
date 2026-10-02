@@ -85,6 +85,7 @@ export class OnlineView {
       // Legacy rooms report only general health; do not invent authoritative
       // engine condition from incomplete visual hit packets.
       c.engineDamage=at.components?.engineDamage;
+      c.tyreDamage=at.components?.tyreDamage?.slice();
       c.input=at.input; c.surface=at.surface;
       c.slip=at.slip;
       c.remoteGrounded=at.wheels.some(w=>w.contact);
@@ -100,6 +101,13 @@ export class OnlineView {
         w.rotateX(-(at.wheels[i]?.rotation??0));
       });
       c.syncSuspension();
+      c.syncTyres();
+      c.tireContacts.forEach((contact,i)=>{
+        const wheel=at.wheels[i],patch=wheel?.patch;
+        contact.active.value=patch&&wheel.contact?1:0;contact.load.value=patch?.load??0;
+        if(patch)contact.plane.value.fromArray(patch.plane);
+        contact.dirt.value=i%2?c.surfaceFinish.coating.value.w:c.surfaceFinish.coating.value.z;
+      });
     }
     this.lastFx+=dt;
     if(this.lastFx>.07) {

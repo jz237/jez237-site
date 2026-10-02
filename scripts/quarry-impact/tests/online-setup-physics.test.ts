@@ -10,7 +10,7 @@ import {Vehicle} from '../src/vehicle';
 import {Simulation} from '../multiplayer/simulation';
 import {STEP,type Snapshot} from '../multiplayer/protocol';
 import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
-import {vehicleContact} from '../src/vehicle-contact';
+import {vehicleContact,vehicleContactManifold} from '../src/vehicle-contact';
 import {OnlineView} from '../src/online-view';
 await R.init();
 const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
@@ -20,15 +20,16 @@ const humans=new Set([0,1,2,3,4,5,6,7]);
 const envelope=(s:Simulation):Snapshot=>({...s.snapshot(true),members:[],ack:{}});
 const near=(a:number,b:number,epsilon=1e-7)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
 function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:number,judge:ImpactAdjudicator,race=false){
- const contacts:(ImpactContact&{a?:Vehicle;b?:Vehicle;point:T.Vector3;relative:T.Vector3})[]=[];
+ const contacts:(ImpactContact&{a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;relative:T.Vector3})[]=[];
  queue.drainContactForceEvents(e=>{
   const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(world,cars,h1,h2);if((!a&&!b)||!judge.needsContact(key,time))return;
-  const point=(a??b)!.current.clone(),normal=new T.Vector3();world.contactPair(world.getCollider(h1),world.getCollider(h2),m=>{if(m.numSolverContacts()){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}});
+  const manifold=vehicleContactManifold(world,h1,h2),normal=new T.Vector3().copy(manifold?.normal??{x:0,y:0,z:0});
+  const point1=new T.Vector3().copy(manifold?.point1??(a??b)!.current),point2=new T.Vector3().copy(manifold?.point2??(b??a)!.current);
   const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3(),relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*STEP;
-  contacts.push({a,b,key,point,relative,closing,impulse,damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
+  contacts.push({a,b,key,point1,point2,relative,closing,impulse,damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
  });
- for(const {contact:{a,b,point,relative},damage} of judge.adjudicate(contacts,time,race?.45:1)){
-  for(const [car,other,direction]of [[a,b,relative],[b,a,relative.clone().negate()]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
+ for(const {contact:{a,b,point1,point2,relative},damage} of judge.adjudicate(contacts,time,race?.45:1)){
+  for(const [car,other,direction,point]of [[a,b,relative,point1],[b,a,relative.clone().negate(),point2]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
  }
 }
 
@@ -41,7 +42,7 @@ test('online tuned and armored collisions match independent solo damage and subs
   try{
    for(let tick=1;tick<=150;tick++){
     for(const c of cars){c.input={throttle:tick>80?.45:0,steer:tick>100?.15:0,brake:0,handbrake:false};authority.setInput(c.id,c.input);c.preStep(STEP);}terrain.world.step(queue);cars.forEach(c=>c.postStep(STEP,tick*STEP));browserContacts(terrain.world,queue,cars,tick*STEP,seen,mode==='race');authority.step(humans);
-    cars.forEach((c,i)=>{const a=authority.cars[i].state;near(c.health,a.health,.001);near(c.inflicted,a.inflicted,.001);assert.ok(c.current.distanceTo(new T.Vector3().copy(a.p))<.002,`${kind} ${mode} position tick ${tick}`);c.wreckParts.wheelDamage.forEach((d,j)=>near(d,a.components!.wheelDamage[j],.0001));c.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,a.components!.wheelShift[j].x,.0001);near(v.z,a.components!.wheelShift[j].z,.0001);});});
+    cars.forEach((c,i)=>{const a=authority.cars[i].state;near(c.health,a.health,.001);near(c.inflicted,a.inflicted,.001);assert.ok(c.current.distanceTo(new T.Vector3().copy(a.p))<.002,`${kind} ${mode} position tick ${tick}`);c.wreckParts.wheelDamage.forEach((d,j)=>near(d,a.components!.wheelDamage[j],.0001));c.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,a.components!.wheelShift[j].x,.0001);near(v.z,a.components!.wheelShift[j].z,.0001);});c.tyreDamage!.forEach((d,j)=>near(d,a.components!.tyreDamage![j],.0001));});
    }
    assert.ok(authority.damage.length>=2);assert.ok(authority.cars.slice(0,2).every(c=>c.state.health<99));assert.ok(authority.cars.slice(0,2).some(c=>c.state.components!.wheelDamage.some(d=>d>.01)));
   }finally{cars.forEach(c=>c.dispose());queue.free();authority.dispose();terrain.dispose();}

@@ -6,7 +6,7 @@ import {raceGridSlot,lapProgress,circuitRoute,directionForCar,checkRoute,stepSco
 import {applyComponentImpact,freshComponents,validComponents} from '../src/component-damage';
 import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
 import {accumulateEngineDamage} from '../src/engine-condition';
-import {vehicleContact} from '../src/vehicle-contact';
+import {vehicleContact,vehicleContactManifold} from '../src/vehicle-contact';
 import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,vehicleSuspensionRestLength,type VehicleSpecification} from '../src/vehicle-physics';
 import {createQuarryPhysics,landscapeHeight} from '../src/quarry-layout';
 import type Rapier from '@dimforge/rapier3d-compat';
@@ -68,8 +68,16 @@ export class Simulation {
   }
   private readBody(c: Car) {
     c.state.p = {...c.body.translation()}; c.state.q = {...c.body.rotation()}; c.state.v = {...c.body.linvel()}; c.state.av = {...c.body.angvel()};
-    c.state.wheels = Array.from({length:4},(_,i)=>({suspension:c.controller.wheelSuspensionLength(i)??vehicleSuspensionRestLength(c.state.kind),rotation:c.controller.wheelRotation(i)??0,contact:c.controller.wheelIsInContact(i)}));
+    c.state.wheels = Array.from({length:4},(_,i)=>{
+      const contact=c.controller.wheelIsInContact(i),normal=c.controller.wheelContactNormal(i),point=c.controller.wheelContactPoint(i);
+      const patch=c.state.components?.tyreDamage!==undefined&&contact&&normal&&point?{
+        plane:[normal.x,normal.y,normal.z,-(normal.x*point.x+normal.y*point.y+normal.z*point.z)-.001],
+        load:this.wheelPatchLoad(c,i),
+      }:undefined;
+      return {suspension:c.controller.wheelSuspensionLength(i)??vehicleSuspensionRestLength(c.state.kind),rotation:c.controller.wheelRotation(i)??0,contact,...(patch?{patch}:{})};
+    });
   }
+  private wheelPatchLoad(c:Car,i:number){return clamp((c.controller.wheelSuspensionForce(i)??0)/(c.specification.mass*9.81/4),0,2)+(c.state.components?.wheelDamage[i]??0)*.5;}
   start() { this.phase = 'countdown'; this.countdown = 3; }
   setInput(id: number, input: Controls) { this.cars[id].state.input = {...input}; }
   recover(id: number) {
@@ -119,7 +127,7 @@ export class Simulation {
   }
   private drive(c:Car) {
     const s=c.state;s.surface=surfaceAt(s.p.x,s.p.z);
-    const up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift,s.components?.engineDamage);
+    const up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift,s.components?.engineDamage,s.components?.tyreDamage);
     c.roll=up<.2?c.roll+STEP:0;
   }
   step(humans: Set<number>) {
@@ -131,21 +139,21 @@ export class Simulation {
     const impactVelocities=this.cars.map(c=>({...c.state.v}));
     this.world.step(this.queue);
     for(const c of this.cars)this.readBody(c);
-    const contacts:(ImpactContact&{a?:Car;b?:Car;point:Vec3})[]=[];
+    const contacts:(ImpactContact&{a?:Car;b?:Car;point1:Vec3;point2:Vec3})[]=[];
     this.queue.drainContactForceEvents(e=>{
       const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(this.world,this.cars,h1,h2);
       if((!a&&!b)||!this.impacts.needsContact(key,this.elapsed))return;
-      let point={...(a??b)!.state.p},normal={x:0,y:0,z:0};
-      this.world.contactPair(this.world.getCollider(h1),this.world.getCollider(h2),m=>{if(m.numSolverContacts()>0){point={...m.solverContactPoint(0)};normal={...m.normal()};}});
+      const manifold=vehicleContactManifold(this.world,h1,h2),normal=manifold?.normal??{x:0,y:0,z:0};
+      const point1=manifold?.point1??{...(a??b)!.state.p},point2=manifold?.point2??{...(b??a)!.state.p};
       const va=a?impactVelocities[a.state.id]:{x:0,y:0,z:0},vb=b?impactVelocities[b.state.id]:{x:0,y:0,z:0};
       const relative={x:vb.x-va.x,y:vb.y-va.y,z:vb.z-va.z},impulse=e.totalForceMagnitude()*STEP;
       const closing=dot(normal,normal)>.5?Math.abs(dot(relative,normal)):Math.hypot(relative.x,relative.y,relative.z);
-      contacts.push({a,b,key,point,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
+      contacts.push({a,b,key,point1,point2,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
     });
-    for(const {contact:{a,b,point},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
+    for(const {contact:{a,b,point1,point2},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
       if(damage===0)continue;
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
-        const s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=dir(other?impactVelocities[other.state.id]:{x:0,y:0,z:0},impactVelocities[s.id]);
+        const point=car===a?point1:point2,s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=dir(other?impactVelocities[other.state.id]:{x:0,y:0,z:0},impactVelocities[s.id]);
         if(received<.1)continue;
         const before=s.health;s.health=Math.max(0,s.health-received);if(other){other.state.inflicted+=actual;if(this.event?.score)this.event.combat.hit(other.state.id,s.id,before,s.health,this.elapsed);}
         const local=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
@@ -153,6 +161,9 @@ export class Simulation {
         const localDirection=rotate(direction,{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
         const event={id:++this.damageId,tick:this.tick,car:s.id,point,direction,localPoint:local,localDirection,repair:s.repair,damage:received};
         applyComponentImpact(s.components??=freshComponents(),s.kind,local,localDirection,received);
+        // Contacts were sampled before damage. Keep their visual load coherent
+        // with this snapshot's newly updated mechanical corner condition.
+        s.wheels.forEach((wheel,i)=>{if(wheel.patch)wheel.patch.load=this.wheelPatchLoad(car,i);});
         this.damageShape(car);this.damage.push(event);
         (s.dents??=[]).push({id:event.id,localPoint:local,localDirection,damage:received,repair:s.repair});
         // Preserve the existing wire bound; full mechanical condition is replicated
@@ -206,6 +217,9 @@ export class Simulation {
       const completeEngineHistory=engineHistory.reduce((sum,hit)=>sum+hit.damage,0)+1e-6>=100-c.state.health;
       if(!validComponents(car.components)){
         c.state.components=freshComponents();
+        // Legacy saves never recorded tyre-specific trauma. Retained body hits
+        // cannot establish which model produced the saved driving state.
+        c.state.components.tyreDamage=undefined;
         for(const hit of engineHistory)applyComponentImpact(c.state.components,c.state.kind,hit.localPoint,hit.localDirection,hit.damage);
         if(!completeEngineHistory)c.state.components.engineDamage=undefined;
       }else if(car.components!.engineDamage===undefined){

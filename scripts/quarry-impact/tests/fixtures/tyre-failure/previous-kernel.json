@@ -1,0 +1,14 @@
+{
+  "revision": "2e641fea22272631c1dad949f8a14f5814c95b20",
+  "bundleSHA256": "7ce5a8b1c754c414f76387a078c8759dccc4807e88e608c16c557e82497453f5",
+  "sources": {
+    "./src/vehicle-physics.ts": "545396d5a346873a11c3fdfe9afaa1f6fe896c98c8f911a9f4f58a775511558e",
+    "src/circuit-grip-profile.json": "03892c6db43ceaadadfeff2751a61308591a20a59282462f15a718c624c59a81",
+    "src/circuit-grip.ts": "26abc82e9edb19accf3be25ef917a4361f8e430aaf6980b61de8f1cf1a131b9f",
+    "src/classic-vehicle-specs.ts": "134431ca70006f4d86cb35c069a2e308ac844cf710e70eff33fd820e634c620c",
+    "src/engine-condition.ts": "6b1724246b2daf01b6e4ce7accdc117f34f2678b332ebcc23fdd2e54d814e39c",
+    "src/rules.ts": "55b7f6b64380f475adb27a77e39b249db0b4b1c3bfad0e56f08c4e3bd2d0c9e7",
+    "src/vehicle-armor-spec.ts": "a46eece9b7b058680372b6781e06b958e92dd70f2050cd730c67d002a7eec29d",
+    "src/wheel-physics.ts": "54727eabf07dcaef37f3e6319e6fdbbafd2609552a9c1945a662d5f90f19e0bf"
+  }
+}

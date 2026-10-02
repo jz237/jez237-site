@@ -1,4 +1,4 @@
-import{vehicleContact}from'../src/vehicle-contact';
+import{vehicleContact,vehicleContactManifold}from'../src/vehicle-contact';
 import{structuralDamage}from'../src/bodywork-response';
 import test from 'node:test';import assert from 'node:assert/strict';import * as T from 'three';import R from '@dimforge/rapier3d-compat';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import{loadCarWithoutImages}from'../tools/car-asset-audit';import{loadCars,templates}from'../src/assets';import{Vehicle}from'../src/vehicle';import{CAR_KINDS,DEFINITIONS}from'../src/rules';import{classicWheelAnchors,classicEngineVoice}from'../src/classic-vehicle-specs';
@@ -66,7 +66,7 @@ test('real contacts on the utility front shell reach damage adjudication and sha
    const now=tick/60;if(now-(seen.get(contact.key)??-100)<.28)return;
    const impulse=e.totalForceMagnitude()/60;if(impulse<1500)return;
    const damage=structuralDamage(impulse,Math.abs(velocity.z));if(damage<.1)return;seen.set(contact.key,now);hits++;
-   let point=new T.Vector3(0,0,4.9);world.contactPair(world.getCollider(h1),world.getCollider(h2),m=>{if(m.numSolverContacts())point.copy(m.solverContactPoint(0));});car.hit(point,new T.Vector3(0,0,-1),damage,now,true);
+   const manifold=vehicleContactManifold(world,h1,h2),point=new T.Vector3().copy((contact.a===car?manifold?.point1:manifold?.point2)??{x:0,y:0,z:4.9});car.hit(point,new T.Vector3(0,0,-1),damage,now,true);
   });
  }
  assert.ok(shellContacts>0,'The collision must actually hit the added front shell');assert.ok(hits>0&&car.health<100,'A shell collision must damage the utility');
