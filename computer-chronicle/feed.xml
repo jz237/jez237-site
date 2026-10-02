@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 02 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 5-11, 1984 — Tandy brings a $1,199 IBM-compatible into Radio Shack</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-11-05</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-05</guid>
+      <pubDate>Fri, 02 Oct 2026 12:00:00 GMT</pubDate>
+      <description>The Tandy 1000 combines PC-compatible work with color, sound and bundled DeskMate applications. Radio Shack has a new contender for the home and small-office desk this week. The Tandy 1000 enters the IBM-compatible contest at an advertised $1,199 for the original 128K machine with a 360K floppy drive. A monitor is extra: the headline price is not a complete color-display system. Also this week: The bulletin board becomes a neighborhood without boundaries · Shopping from the keyboard enters the living room · KoalaPad gives the PCjr a drawing surface · WizType turns typing practice into a cartoon duel.</description>
+    </item>
     <item>
       <title>Week of October 29-November 4, 1984 — Ghostbusters leads Activision’s million-dollar holiday comeback bid</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-10-29</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-25</guid>
       <pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate>
       <description>The post-divestiture telephone giant puts an 8 MHz 8086 machine into the crowded IBM-compatible business market. AT&amp;T Information Systems entered the personal-computer market in New York on Tuesday, June 26, placing one of America&apos;s largest technology names directly in the path of IBM and the multiplying compatible makers. Its PC 6300 is an AT&amp;T-branded version of Olivetti&apos;s M24, built to run software written for the IBM PC. Also this week: Printer Buyers Face a Maze from Dot Matrix to Laser · VisiCorp Tries to Regain Its Business-Software Footing · Timex/Sinclair Owners Build a Lifeline on CompuServe.</description>
-    </item>
-    <item>
-      <title>Week of June 18-24, 1984 — MIT&apos;s Project Athena Opens a New Window</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-06-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-18</guid>
-      <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Robert Scheifler announces the X Window System, separating graphical programs from the screens that display them. Robert Scheifler at MIT&apos;s Project Athena announced the X Window System on June 19, giving the laboratory&apos;s networked workstations a new way to draw and manage graphical displays. The first implementation was written for a VAX VS100, but its central idea reaches beyond a single machine. Also this week: VisiCorp Tries to Re-enter the Business-Software Race · Apple IIc Packs the Apple II into 7.5 Pounds · Stolen Password Exposes the Fragility of Online Credit Files.</description>
     </item>
   </channel>
 </rss>

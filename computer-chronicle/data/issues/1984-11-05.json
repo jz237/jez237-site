@@ -1,0 +1,506 @@
+{
+  "visualProfile": {
+    "tone": "November 1984 home-computing newsprint",
+    "motifs": [
+      "original Tandy 1000 and CRT",
+      "floppy disks",
+      "telephone modem",
+      "KoalaPad drawing tablet"
+    ],
+    "layout": "Dense period weekly, warm paper, red and blue rules, halftone blocks"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "November 5-11, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Tandy 1000 hardware and $1,199 headline above the fold; gaming shelf and PCjr drawing in secondary panels",
+    "secondaryRail": "Games shelf, charts, modem note, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "editorNote": "The weekly record of games, home computers and digital culture.",
+  "currentDate": "2026-10-02",
+  "historicDate": "1984-11-05",
+  "displayDate": "Week of November 5-11, 1984",
+  "edition": "Issue 119 - Weekly 1984 Computer & Culture Chronicle",
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-11-05.png",
+    "alt": "GPT Image 2 Computer Chronicle newspaper for November 5-11, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "morningLine": "Radio Shack enters the compatible contest; home computers draw, dial and shop.",
+  "lead": {
+    "headline": "Tandy brings a $1,199 IBM-compatible into Radio Shack",
+    "dek": "The Tandy 1000 combines PC-compatible work with color, sound and bundled DeskMate applications.",
+    "body": [
+      "Radio Shack has a new contender for the home and small-office desk this week. The Tandy 1000 enters the IBM-compatible contest at an advertised $1,199 for the original 128K machine with a 360K floppy drive. A monitor is extra: the headline price is not a complete color-display system.",
+      "The attraction is not simply a lower-priced business box. Built-in monochrome and color graphics support, PCjr-compatible color capabilities and three-voice sound give the machine a foothold in home entertainment as well as office work. Connection to a television calls for an optional RF modulator. Buyers should distinguish these included capabilities from the accessories needed to use them.",
+      "DeskMate comes with the computer. Its TEXT, WORKSHEET, FILER, TELECOM, CALENDAR and MAIL applications offer a ready starting point for letters, figures, records and communication. The telephone side still needs a modem; Radio Shack advertises a 300-baud modem board at $179.95 rather than including one in the base package.",
+      "Tandy also advertises a 256K, color-monitor configuration at $2,048.90 and compares it with an IBM PC configuration costing more than $3,100. That is the manufacturer’s own comparison, not an independent equivalence test. Expansion toward 640K and an advertised $299.95 memory board make the upgrade budget another part of the buying decision."
+    ],
+    "sourceRefs": [
+      9,
+      10,
+      11
+    ],
+    "confidence": "same-week"
+  },
+  "stories": [
+    {
+      "headline": "The bulletin board becomes a neighborhood without boundaries",
+      "body": [
+        "November’s COMPUTE! describes a neighborhood reached through the telephone line. Hobby bulletin boards carry messages, technical advice, classified advertisements and public-domain software. Most serve one caller at a time, putting a busy signal between the newcomer and the conversation.",
+        "Chicago programmer John Semenek recalls finding only one local Atari board when he began looking; the report now counts at least 20. Stan and Susie Subeck’s Valley Girl BBS adds adventure games and a trivia quiz to its Atari-based service. Games on a modem line are already part of the local scene, even when only one player can call at a time.",
+        "The unpaid work is considerable. A survey by Plumb editor Ric Manning puts average setup above $3,000, another $50 in monthly expense and chores at up to 50 hours a month. Kent Fillmore’s Apple II-based Draco-Net suggests a larger ambition through a proposed franchise network. The proposal is not yet a completed nationwide service."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Shopping from the keyboard enters the living room",
+      "body": [
+        "The home computer is acquiring a shopping counter. Selby Bateman’s November COMPUTE! survey describes CompuServe’s Electronic Mall, Comp-U-Store, Chemical Bank Pronto and Chicago Keyfax as parts of the growing online-service landscape.",
+        "CompuServe’s Mall stays open 24 hours a day, supplying product descriptions, shipping information, order forms and a mailbox for merchant questions. The practical test is whether finding and comparing goods through a terminal is worth the time and connection cost. Analyst Gary Arlen cautions that it is not as easy as flipping through catalog pages.",
+        "Viewtron in Miami offers another approach, using a dedicated $600 AT&T Sceptre terminal rather than an ordinary home computer. American People/Link is meanwhile scheduled for December, with mail, party-line communication, bulletin boards and games among its plans. A promised service should not be confused with one already taking calls."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "KoalaPad gives the PCjr a drawing surface",
+      "body": [
+        "PCjr owners can put a drawing surface beside the keyboard. Lee Noel’s November COMPUTE! review examines the KoalaPad and KoalaPainter package, requiring a 128K PCjr, disk drive, DOS 2.1 and color display. The tablet connects through a joystick port.",
+        "The roughly six-by-eight-inch unit contains a pressure-sensitive drawing area about four inches square. Icon menus, eight brush styles, zoom, straight-line tools and mirrored drawing provide a broad set of ways to build a picture. KoalaPainter works at 160 by 200 pixels with 16 colors; halftone mixtures suggest additional shades without adding hardware colors.",
+        "Noel questions the low-resolution choice when PCjr can also offer 320 by 200 with 16 colors. Koala cites memory conservation and clarity on televisions and composite monitors. Another limitation is hardcopy: the package has no built-in printing, leaving saved disks, photographs or videotape as the documented ways to preserve the artwork."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "WizType turns typing practice into a cartoon duel",
+      "body": [
+        "Sierra’s WizType makes typing practice a contest with the Wizard of Id. James V. Trunzo’s November COMPUTE! review covers the Atari version and lists Apple II-family and Commodore 64 editions as well. At least 32K and a disk drive are required; the review price is $34.95.",
+        "Correct typing lets the Wizard subdue the spirit, while mistakes allow it to become a fire-breathing dragon. Game, Drill, Practice, Words, Own Lesson and Paragraphs modes give the cartoon contest a more conventional teaching foundation. Drill speeds range from 10 to 60 words per minute.",
+        "The Paragraphs menu includes eight literary works, with selections from Hamlet, A Tale of Two Cities, the Gettysburg Address and Mother Goose. Custom lessons let the typist supply other material. This is a November review of an available program, not evidence of a release during this particular week."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "WizType",
+      "summary": "Sierra typing tutor with animated Wizard of Id game mode; Atari reviewed, C64 and Apple II-family also listed; $34.95.",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Reflection",
+      "summary": "Sean Puckett’s published reversi game supports one-player computer opposition or two players. November article provides Atari, C64, unexpanded VIC-20, TI-99/4A, Apple, IBM PC, PCjr and Color Computer versions; do not treat it as a commercial launch.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Dr. J and Larry Bird Go One on One",
+      "summary": "1984 Tandy brochure lists the basketball program at $34.95; period availability, not a new November release.",
+      "sourceRefs": [
+        9
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Cutthroats",
+      "summary": "Tandy brochure lists Infocom-style diving adventure at $39.95; verify platform availability separately before describing a specific shipment date.",
+      "sourceRefs": [
+        9
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Skyfox",
+      "summary": "Electronic Arts Apple II-family flying-combat game, 15 scenarios; October product report lists $40 suggested retail. Period shelf selection, not a new November release.",
+      "sourceRefs": [
+        15
+      ],
+      "confidence": "period"
+    },
+    {
+      "title": "Tandy 1000",
+      "summary": "Original 128K, 360K floppy IBM-compatible with PCjr-class color and sound; avoid later-model specifications.",
+      "sourceRefs": [
+        9,
+        11
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "title": "KoalaPad for PCjr",
+      "summary": "Pressure-sensitive tablet and KoalaPainter; 128K PCjr required, 160×200 graphics.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Commodore Plus/4 and C64 are not ROM-swappable upgrades",
+      "summary": "November COMPUTE! answers Ken Climer: ROMs physically/electrically fit but their software is incompatible with C64 memory, graphics, sound and I/O mapping.",
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "DeskMate",
+      "detail": "Bundled with original Tandy 1000; TEXT, WORKSHEET, FILER, TELECOM, CALENDAR and MAIL. Hardware modem required for telephone communication.",
+      "sourceRefs": [
+        9
+      ],
+      "confidence": "period"
+    },
+    {
+      "name": "OmniWriter & OmniSpell",
+      "detail": "Joseph R. Sutton’s C64 review lists HES package at $59.95. Mail merge accepts standard Commodore sequential files; spell checker includes user dictionary and word lists. Reviewer objects to manual page breaks and absent RS-232 printer support.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "I Can't Hold Back",
+      "artist": "Survivor",
+      "chart": "Billboard Top Rock Tracks (archive labelled Mainstream Rock Airplay)",
+      "chartDate": "1984-11-10",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Pride (In the Name of Love)",
+      "artist": "U2",
+      "chart": "Billboard Top Rock Tracks (archive labelled Mainstream Rock Airplay)",
+      "chartDate": "1984-11-10",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Blue Jean",
+      "artist": "David Bowie",
+      "chart": "Billboard Top Rock Tracks (archive labelled Mainstream Rock Airplay)",
+      "chartDate": "1984-11-10",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Teacher Teacher",
+      "artist": "Thirty Eight Special",
+      "chart": "Billboard Top Rock Tracks (archive labelled Mainstream Rock Airplay)",
+      "chartDate": "1984-11-10",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Had A Dream",
+      "artist": "Roger Hodgson",
+      "chart": "Billboard Top Rock Tracks (archive labelled Mainstream Rock Airplay)",
+      "chartDate": "1984-11-10",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/"
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf, not a sales chart",
+      "items": [
+        "WizType",
+        "Reflection",
+        "Dr. J and Larry Bird Go One on One",
+        "Cutthroats",
+        "Skyfox"
+      ]
+    },
+    {
+      "label": "Top 5 Music — Billboard Top Rock Tracks, November 10",
+      "items": [
+        "I Can't Hold Back — Survivor",
+        "Pride (In the Name of Love) — U2",
+        "Blue Jean — David Bowie",
+        "Teacher Teacher — Thirty Eight Special",
+        "Had A Dream — Roger Hodgson"
+      ]
+    },
+    {
+      "label": "Top 5 Movies — November 9–11 domestic weekend",
+      "items": [
+        "Oh God, You Devil!",
+        "The Terminator",
+        "No Small Affair",
+        "Places in the Heart",
+        "A Soldier’s Story"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Tandy 1000 base price",
+      "price": "$1,199.00",
+      "note": "$1,199; monitor not included in this configuration.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "Tandy 300-baud modem board",
+      "price": "$179.95",
+      "note": "$179.95, catalogue number 25-1003.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "WizType",
+      "price": "$34.95",
+      "note": "$34.95 review-list price.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "OmniWriter & OmniSpell",
+      "price": "$59.95",
+      "note": "$59.95 review-list price.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "AT&T Sceptre for Viewtron",
+      "price": "$600.00",
+      "note": "$600 dedicated terminal, reported in November online-shopping feature.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Modem market range",
+      "price": "about $49–$1,000 or more",
+      "note": "Sharon Darling reports approximately $49 to $1,000 or more. Jerry Hussong predicts $300–$500 for 1200-bps modems by year-end; prediction is not an observed street price.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "New horror arrivals",
+      "summary": "A Nightmare on Elm Street and Silent Night, Deadly Night are new entries in the November 9 weekend chart; no retrospective franchise-success claims.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "headline": "300 versus 1200 bps",
+      "summary": "November modem guide explains roughly 30 versus 120 characters per second; faster transfer can reduce long-distance and hourly-service bills.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A DeskMate in Every Tandy 1000",
+    "summary": "Radio Shack advertises TEXT, WORKSHEET, FILER, TELECOM, CALENDAR and MAIL with the computer. Modem and monitor are extra.",
+    "tagline": "A new compatible for work and play.",
+    "sourceRefs": [
+      9,
+      10,
+      11
+    ]
+  },
+  "market": {
+    "headline": "The compatible price contest reaches Radio Shack",
+    "summary": "Tandy’s advertised $1,199 base system brings the IBM-compatible buying decision to the home-computer counter. Compare complete configurations: displays, memory and modem hardware change the final bill.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      9,
+      10,
+      11
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Reagan wins re-election",
+    "summary": "In the November 6 election, Ronald Reagan and George Bush carry 49 states; Walter Mondale and Geraldine Ferraro win Minnesota and the District of Columbia.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      14
+    ]
+  },
+  "bbsNote": {
+    "headline": "Atari games and local communities move onto BBS lines",
+    "summary": "November COMPUTE! reports local boards, operator costs and 300/1200-bps choices; these desk notes summarize contemporary reporting.",
+    "posts": [
+      {
+        "topic": "On-line games",
+        "platform": "Valley Girl BBS / Atari",
+        "text": "Stan and Susie Subeck offer adventure games and a trivia quiz; single-user connections and disk capacity constrain service."
+      },
+      {
+        "topic": "Sysop economics",
+        "platform": "Hobby BBSs / Plumb survey",
+        "text": "Reported average setup exceeds $3,000, with $50 monthly expense and as much as 50 hours of maintenance."
+      },
+      {
+        "topic": "Affordable connections",
+        "platform": "300-bps versus 1200-bps modems",
+        "text": "Jerry Hussong argues that local social boards still justify 300 bps; 1200 bps makes greater economic sense for large transfers and toll calls."
+      },
+      {
+        "topic": "Shopping and banking",
+        "platform": "CompuServe / Pronto / Viewtron",
+        "text": "Commercial services offer shopping or banking; richer Viewtron graphics require a dedicated $600 Sceptre terminal."
+      }
+    ],
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "curiosity": {
+    "headline": "A Valley Girl bulletin board says “de-val” instead of goodbye",
+    "summary": "The Subeck family’s Atari board translates computer commands into Valley Girl jargon.",
+    "detail": "Kathy Yakal reports that their 13-year-old daughter’s speech inspired the theme: users “bag” messages rather than delete them and “de-val” rather than exit. It is also an educational project for their 12- and 13-year-old children, who help maintain the board. This is a same-month feature, not a launch dated to this week.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Tandy announcement is supported at same-week precision; exact day is not asserted without primary wire text.",
+      "Magazine features are November cover-dated, not exact-week launches.",
+      "Games shelf is editorial selection, not a sales ranking; Skyfox is an October-context item.",
+      "Manufacturer prices exclude accessories unless explicitly stated; comparison is attributed advertising.",
+      "No verified gadget launch or named underground crew established; those optional desks are omitted."
+    ]
+  },
+  "sources": [
+    {
+      "title": "bbs",
+      "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "modem",
+      "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "shop",
+      "url": "https://www.atarimagazines.com/compute/issue54/104_1_ON-LINE_SHOPPING_Todays_Computer_Catalogs.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "koala",
+      "url": "https://www.atarimagazines.com/compute/issue54/140_1_REVIEWS_KoalaPad_For_PCjr.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "omni",
+      "url": "https://www.atarimagazines.com/compute/issue54/144_2_REVIEWS_OmniWriter_OmniSpell.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "wiz",
+      "url": "https://www.atarimagazines.com/compute/issue54/147_3_REVIEWS_WizType.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "reflection",
+      "url": "https://www.atarimagazines.com/compute/issue54/117_1_Reflection.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "plus",
+      "url": "https://www.atarimagazines.com/compute/issue54/97_1_READERS_FEEDBACK_Commodore_Plus_64.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "piracy",
+      "url": "https://www.atarimagazines.com/creative/v10n11/236_Piracy_and_software_prote.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "brochure",
+      "url": "https://docslib.org/doc/7797392/tandy-1000-1984-pdf",
+      "date": "1984 (brochure)"
+    },
+    {
+      "title": "launch",
+      "url": "https://videogamenewsroomtimemachine.libsyn.com/website/november-1984",
+      "date": "Retrospective reference; November 1984 event coverage"
+    },
+    {
+      "title": "tandy",
+      "url": "https://en.wikipedia.org/wiki/Tandy_1000",
+      "date": "Retrospective reference; November 1984 event coverage"
+    },
+    {
+      "title": "chart",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-10/",
+      "date": "1984-11-10"
+    },
+    {
+      "title": "movies",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/11/09",
+      "date": "1984-11-09"
+    },
+    {
+      "title": "election",
+      "url": "https://www.archives.gov/electoral-college/1984",
+      "date": "1984-11-06 (event; final results retrospectively documented)"
+    },
+    {
+      "title": "Skyfox",
+      "url": "https://www.atarimagazines.com/compute/issue53/083_2_NEWS_PRODUCTS_Strategy_Action_Games.php",
+      "date": "1984-11"
+    }
+  ]
+}

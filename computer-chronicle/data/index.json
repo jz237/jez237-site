@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-02",
+      "historicDate": "1984-11-05",
+      "displayDate": "Week of November 5-11, 1984",
+      "edition": "Issue 119 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Radio Shack enters the compatible contest; home computers draw, dial and shop.",
+      "leadHeadline": "Tandy brings a $1,199 IBM-compatible into Radio Shack",
+      "storyHeadlines": [
+        "The bulletin board becomes a neighborhood without boundaries",
+        "Shopping from the keyboard enters the living room",
+        "KoalaPad gives the PCjr a drawing surface",
+        "WizType turns typing practice into a cartoon duel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-05.png",
+      "thumb": "media/thumbs/1984-11-05.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-01",
       "historicDate": "1984-10-29",
       "displayDate": "Week of October 29-November 4, 1984",
