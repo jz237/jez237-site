@@ -11,8 +11,11 @@ document.getElementById('name').textContent='Tern 1400 · three-door hatch';docu
 document.getElementById('front').onclick=()=>{camera.position.set(5,2.8,6);controls.target.set(0,.9,0);};
 document.getElementById('rear').onclick=()=>{camera.position.set(-5,2.8,-6);controls.target.set(0,.9,0);};
 document.getElementById('doors').onclick=()=>{parts.reset();for(const side of [-1,1])parts.hit(new T.Vector3(side*.80,.85,.12),new T.Vector3(-side,0,0),60);parts.pose(.3,0);};
-document.getElementById('restore').onclick=()=>{parts.reset();for(const member of parts.assemblies.find(a=>a.name==='hood').members)member.mesh.visible=true;};
+const cutaway=[];
+document.getElementById('restore').onclick=()=>{parts.reset();for(const mesh of cutaway)mesh.visible=true;cutaway.length=0;for(const member of parts.assemblies.find(a=>a.name==='hood').members)member.mesh.visible=true;};
 document.getElementById('engine').onclick=()=>{for(const member of parts.assemblies.find(a=>a.name==='hood').members)member.mesh.visible=false;camera.position.set(3,3.4,5);controls.target.set(0,.8,1.25);};
 function resize(){camera.aspect=innerWidth/innerHeight;camera.fov=38;const fit=Math.max(1,1.25/camera.aspect);camera.fov=2*Math.atan(Math.tan(38*Math.PI/360)*fit)*180/Math.PI;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}addEventListener('resize',resize);resize();function frame(){requestAnimationFrame(frame);controls.update();renderer.render(scene,camera);}frame();
 
 document.getElementById('cargo').onclick=()=>{parts.reset();parts.hit(new T.Vector3(0,.8,-1.84),new T.Vector3(0,0,1),60);parts.pose(.3,0);camera.position.set(-5,2.8,-6);controls.target.set(0,.9,0);};
+
+document.getElementById('cabin').onclick=()=>{parts.reset();car.traverse(o=>{if(o instanceof T.Mesh&&(/panel_RoofTern|glass_|QuarterHeader|FrontHeader|TailgateTernHeader/.test(o.name))){o.visible=false;cutaway.push(o);}});controls.minDistance=1.2;camera.position.set(-3.5,3,-2.5);controls.target.set(0,.8,.05);};
