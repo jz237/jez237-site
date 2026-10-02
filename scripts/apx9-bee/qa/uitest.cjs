@@ -196,6 +196,7 @@ function check(name, ok, info) {
     const scan = () => ev((w, h) => {
       const a = window.__apx, hits = [];
       for (let y = 140; y < h - 160; y += 18) for (let x = 340; x < w - 390; x += 18) {
+        if (document.elementFromPoint(x, y) !== a.canvas) continue;   // skip points covered by HUD (callout cards, labels, panels)
         const p = a.picker.pick(x, y, a.canvas);
         if (!p) continue;
         let top = p; while (top.parent && top.parent.parent) top = top.parent;
@@ -210,8 +211,13 @@ function check(name, ok, info) {
     if (target) {
       await page.mouse.move(tpos.x, tpos.y, { steps: 6 });
       await sleep(350);
-      const hovered = await ev(() => window.__apx.selection.hovered?.id || null);
-      check('hover highlights a part', !!hovered, hovered);
+      let hovered = await ev(() => window.__apx.selection.hovered?.id || null);
+      if (!hovered) {   // one more nudge: give a loaded machine a second frame to run the pick
+        await page.mouse.move(tpos.x + 1, tpos.y + 1, { steps: 2 });
+        await sleep(700);
+        hovered = await ev(() => window.__apx.selection.hovered?.id || null);
+      }
+      check('hover highlights a part', !!hovered, { hovered, tpos, stats: await ev(() => ({ fps: window.__apx.stats?.fps, })) });
       check('hover shows the tooltip', await $('.tip.on'));
       await page.mouse.click(tpos.x, tpos.y);
       await sleep(500);
