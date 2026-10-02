@@ -52,3 +52,18 @@ These drive the page through `window.__apx` in headless Chrome (Puppeteer) and n
 - `node scripts/apx9-bee/qa/side.cjs <reference.png> <render.png> <out.png>` makes a reference-versus-render composite for visual comparison.
 
 Useful URL parameters for debugging: `?explode=0..1`, `?view=side|top|front|rear|under|left|hero|hero2`, `?sel=<part id>`, `?stats`, `?q=high|medium|low`, `?dpr=`, `?ao=0`, `?bloom=0`, `?acc=<samples>` (0 disables idle refinement), `?only=<assembly>`, `?labels=0|1`, `?ui=0`.
+
+## Field Lab / operating modes · 2026-10-02
+
+The **Power on / Operate** button opens six non-destructive exhibit modes:
+
+- Power: staged optical startup, antenna scanning, leg calibration, wing unfolding and hover; pause/resume or restart.
+- Systems: animated energy, sensor-signal and pollen paths between real part anchors. Paths follow the existing explosion slider.
+- Mission: a five-stage, 24-second flower visit, with playback, scrubbing and direct stage selection.
+- Vision: a flower-focused sensor camera with visible, illustrative UV nectar guides and false-colour thermal contrast. These are explicitly simulated, not measured or biological-vision claims.
+- Repair: diagnose the right wing mount, remove the cover, select the assembly in the model or searchable directory, fit a spare and reassemble for a flight check.
+- Scale: a 24.26 mm US quarter proxy and millimetre ruler, in the same coordinate units as the 28 mm body / 52 mm wingspan. This is relative scale, not physical screen calibration.
+
+`js/operate.js` owns the additive scene objects and reversible poses; `css/operate.css` owns the operating card. Leaving a mode restores the original inspection view. Motion stops with the explicit Pause button, hidden tabs stop updating via the main renderer, and reduced-motion preferences start operating animation paused. Mission stages remain manually accessible.
+
+Serve the repository root on port 8768, then run `python3 scripts/apx9-bee/qa/operate.py` (Playwright Python and GPU-capable Chrome). `APX9_URL` overrides the test destination, and `CHROME` overrides the browser executable. This exercises all modes, repair through the directory, viewport changes, reduced motion and restoration. It writes its inspection screenshots to `/tmp`, not the public site.

@@ -8,6 +8,7 @@ import { Picker } from './picking.js';
 import { createPost } from './post.js';
 import { Selection } from './select.js';
 import { createAccum } from './accum.js';
+import { initOperations } from './operate.js';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;
@@ -130,6 +131,7 @@ async function boot() {
   }
 
   function updateBounds(follow = true) {
+    if (['mission', 'sensors', 'scale'].includes(app?.operations?.state.mode)) follow = false;
     state.boundsDirty = false;
     bee.worldBounds(box);
     if (box.isEmpty()) return;
@@ -441,6 +443,7 @@ async function boot() {
   try {
     const ui = await uiLoad;
     app.ui = (await ui.initUI(app)) || null;
+    await initOperations(app);
   } catch (err) {
     console.error('[apx9] ui failed', err);
     report.push({ name: 'ui', ok: false, error: String(err?.message || err) });
@@ -461,7 +464,7 @@ async function boot() {
 
   if (wantIntro) {
     rig.sweep(1, 9000, 350);   // one full turn while the bee comes apart, easing back onto the hero view so the refined frame settles there
-    setTimeout(() => { if (!state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
+    setTimeout(() => { if ((!app.operations || app.operations.state.mode === 'inspect') && !state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
   }
   console.info('[apx9] ready', stats());
 }
