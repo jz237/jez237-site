@@ -255,11 +255,11 @@ export function peelNormal({ size = 512, strength = 0.9, seed = 21 } = {}) {
 export function backdrop({ w = 1024, h = 1024, hex = true } = {}) {
   return canvasTex(w, h, (ctx) => {
     const g = ctx.createRadialGradient(w * 0.5, h * 0.42, h * 0.05, w * 0.5, h * 0.5, h * 0.78);
-    g.addColorStop(0, '#fbfbf9'); g.addColorStop(0.55, '#eeeeea'); g.addColorStop(1, '#cfd0cb');
+    g.addColorStop(0, '#ffffff'); g.addColorStop(0.55, '#f9faf7'); g.addColorStop(1, '#e8ebe5');
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
     if (hex) {
-      const r = 38, dx = r * Math.sqrt(3), dy = r * 1.5;
-      ctx.strokeStyle = 'rgba(120,120,110,0.07)'; ctx.lineWidth = 1;
+      const r = 28, dx = r * Math.sqrt(3), dy = r * 1.5;
+      ctx.strokeStyle = 'rgba(120,120,110,0.045)'; ctx.lineWidth = 1;
       for (let row = -1; row < h / dy + 1; row++) for (let col = -1; col < w / dx + 1; col++) {
         const cx = col * dx + (row % 2 ? dx / 2 : 0), cy = row * dy;
         ctx.beginPath();

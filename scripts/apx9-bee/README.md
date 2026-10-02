@@ -6,11 +6,17 @@ The exhibit itself lives in `demos/apx9-bee/` and has **no build step**: plain E
 
 ## What it is
 
-- Every visible component is its own named, selectable part, built from original procedural geometry and canvas textures; nothing is downloaded except the code.
+- 573 selectable parts and assembly groups, including 502 named components with geometry, built from original procedural meshes and canvas textures. Fasteners and lens facets are batched within their parent component for performance; no external model or texture service is required.
 - Physically based materials (clear-coat, sheen, iridescence, anisotropy) lit by a procedural studio environment, with ambient occlusion, bloom, tone mapping and a shadow-catcher floor.
 - Idle refinement: once the view has been still for a moment the page re-renders the same frame with a sub-pixel camera shift, the key light moved across a small disc (soft area-light shadows) and a rotated AO noise phase, and averages the frames in HDR (16-32 samples). Any interaction snaps straight back to the single plain frame; outline and focus changes only redraw the final pass.
 - A choreographed, reversible explode: each assembly moves on its own timeline, sub-assemblies and fine parts follow, and the camera follows the parts' bounds.
 - Orbit, pan, pinch and zoom; click or tap to identify a part; double-click to frame it; isolate, x-ray, searchable parts directory, specification sheet, guided tour, preset views, snapshot and fullscreen. Reduced-motion preferences disable the animated transitions.
+
+## Completed reference-detail pass · 2026-10-02
+
+The completed build includes the full head sensor chassis and sampling jaws, four thorax bulkheads with six supported hip sockets, an abdomen payload cage with cooling circuits, and the geared flight-drive mechanism. The fur mantle, narrow dorsal service plates, compact wing collars, swept wing pose and dark compound-eye facets were refined against both supplied images.
+
+High quality builds 2,874,932 triangles and 1,232 meshes. Quality tiers, adaptive render resolution, motion-time AO reduction and idle multisample refinement keep geometry detail separate from rendering cost. These are measured scene counts, not a promise of equal performance on every GPU.
 
 ## Layout
 
@@ -40,7 +46,7 @@ scripts/apx9-bee/qa/    headless QA tools (below)
 
 These drive the page through `window.__apx` in headless Chrome (Puppeteer) and need a GPU-capable Chrome; the defaults assume ANGLE/Vulkan on Linux.
 
-- `node scripts/apx9-bee/qa/shot.cjs --shots shots.json --out out/prefix` renders camera / explode / selection states to PNG and prints per-assembly build reports and console errors. Each snap runs the idle refinement to completion before the screenshot (`"settle": false` in a snap skips it). `--trace` adds stack traces, `--eval` returns JSON from the page.
+- `node scripts/apx9-bee/qa/shot.cjs --shots shots.json --out out/prefix` renders camera / explode / selection states to PNG and prints per-assembly build reports and console errors. Use `--q band=1` when reviewing the actual HUD-aware framing; the default QA camera ignores the HUD for geometry inspection. Each snap runs the idle refinement to completion before the screenshot (`"settle": false` in a snap skips it). `--trace` adds stack traces, `--eval` returns JSON from the page.
 - `node scripts/apx9-bee/qa/uitest.cjs` exercises the UI with real mouse and keyboard events (picking, directory, tour, mobile dock) and prints a pass/fail list.
 - `node scripts/apx9-bee/qa/audit.cjs <assembly|all>` builds one assembly (or the whole bee) and checks ids, names, info text, materials and triangle / mesh budgets.
 - `node scripts/apx9-bee/qa/side.cjs <reference.png> <render.png> <out.png>` makes a reference-versus-render composite for visual comparison.

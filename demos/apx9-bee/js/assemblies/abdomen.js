@@ -6,6 +6,7 @@
 // abdomen-shell   abdomen-shell.js (cap, hatches, displays, ribs, clamps) + abdomen-bands.js (four fur bands, underbelly, vent)
 // abdomen-frame   abdomen-frame.js (rings, rails, bulkheads, shaft, bolts) + abdomen-bay.js (payload bay, climate unit, hoses)
 // petiole-joint   abdomen-petiole.js (ball, socket ring, servos, bellows, cable bundle)
+import { buildFrame } from './abdomen-frame.js';
 import { K, ex } from '../kit.js';
 import { buildPetiole } from './abdomen-petiole.js';
 import { buildShell } from './abdomen-shell.js';
@@ -40,5 +41,5 @@ export async function build(ctx) {
   buildBelt(shell);
   buildBands(shell);
   buildBelly(shell);
-  void frame;
+  buildFrame(frame);
 }

@@ -17,7 +17,7 @@ export const bracketOuter = (az) => {
   return flangeRho(az) + 0.34 * smooth(0, 0.5, t);
 };
 /** Radius that plates / fur must stay clear of at azimuth az. */
-export const collarClear = (az) => Math.max(flangeRho(az) + 0.12, bracketOuter(az) + 0.08);
+export const collarClear = (az) => Math.max(flangeRho(az) + 0.12, bracketOuter(az) + 0.08) * 0.65;
 /** The collar's tallest surface (rim top) along the span axis. */
 export const RIM_S = 0.62;
 
@@ -42,7 +42,7 @@ export function buildCollars(W) {
   const col = armor.part('wing-collar-r', {
     name: 'Wing Collar Right', group: 'thorax-armor', tag: 'shell',
     info: 'Chrome aperture collar around the right wing root: bore for the flight motor, knurled bezel, stepped flange and bayonet lugs.',
-    specs: { Material: 'Polished chrome-moly steel, knurled bezel', Aperture: 'R 2.4 mm', Mass: '0.06 g' },
+    specs: { Material: 'Polished chrome-moly steel, knurled bezel', Aperture: 'R 1.56 mm', Mass: '0.06 g' },
     explode: ex([-1.8, 5.0, 3.9], 'mid'),            // along the wing axis (outward and up)
   });
   const A = wingAxisFrame(0);
@@ -118,6 +118,11 @@ export function buildCollars(W) {
     if (!sf) continue;
     rim.add(fx.rivetM, M.chrome, placeUp(sf.p.clone().addScaledVector(sf.n, 0.43 * smooth(0, 0.5, k) + 0.12), sf.n, 0, 1));
   }
+  // Keep the circular wing-root fitting proportional to the compound eye.
+  // Scale radial dimensions in its own frame while preserving the hinge axis.
+  const basis = wingAxisFrame(0);
+  const compact = basis.clone().multiply(new THREE.Matrix4().makeScale(.65,1,.65)).multiply(basis.clone().invert());
+  for(const part of [col,rim]) for(const list of part.queue.values()) for(const geo of list) geo.applyMatrix4(compact);
   mirrors.push(col, rim);
   return { col, rim };
 }
