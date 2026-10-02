@@ -113,6 +113,13 @@ export const K = {
 /** Outward normal of every hip mount plate (right side; mirror z for the left). The hip servos rotate about it. */
 export const HIP_N = V3(0, -0.9, 0.44).normalize();
 
+// The abdomen shell ends at a = split; the tail module (stabilizer ring + stinger) takes over from there. Both are
+// modelled in the abdomen-local frame (container matrix K.abdomen.frame), cross-section at distance a:
+//   local point = (-a, R(a) cos(phi), R(a) * aspect * sin(phi))
+K.abdomen.split = 9.0;
+K.abdomen.rSplit = abdomenR(9.0);
+K.abdomen.tipLocal = K.abdomen.stingerTip.clone().applyMatrix4(abdomenFrame.clone().invert());   // stinger tip, abdomen-local
+
 K.neck = { c: V3(7.4, 0.2, 0), r: 2.0 };                  // head <-> thorax joint, axis along X
 K.petiole = { c: abdomenOrigin.clone(), r: 2.2 };         // thorax <-> abdomen joint, axis along the abdomen X (tilted 9 deg)
 
