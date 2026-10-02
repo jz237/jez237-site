@@ -60,7 +60,7 @@ import {
 import { GARAGE_KEY, readGarage, type Setup } from './garage';
 import { showGarage } from './garage-ui';
 import { SessionTelemetry } from './session-telemetry';
-import { CHALLENGES, challengeValue, formatChallengeValue, type Challenge } from './challenges';
+import { CHALLENGES, challengeValue, formatChallengeValue, challengeVenueName, type Challenge, type Discipline } from './challenges';
 import { PROFILE_KEY, readProfile, settleRun, type Award } from './progression';
 import { showDriverProfile, awardText, MEDALS } from './profile-ui';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
@@ -135,9 +135,9 @@ function bankRun(completed:boolean){
   lastAward=settleRun(profile,runId,run,activeChallenge);
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}catch{profileStorageWarning='Progress is available for this session, but browser storage could not save it.';}
 }
-function openProfile(){
+function openProfile(initialDiscipline:Discipline='racing'){
   profileOpen=true;keys.clear();
-  showDriverProfile(ui,profile,{close:()=>{profileOpen=false;menu();},start:challenge=>{profileOpen=false;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);}},profileStorageWarning);
+  showDriverProfile(ui,profile,{close:()=>{profileOpen=false;menu();},start:challenge=>{profileOpen=false;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);}},profileStorageWarning,initialDiscipline);
 }
 function saveClubCup(){
   if(!clubCup)return false;
@@ -346,7 +346,7 @@ let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
 type VenueContext={course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];dispose?:()=>void};
 let quarryVenue:VenueContext,activeVenue:VenueContext,ironfieldVenue:VenueContext|undefined;
 let quarryMode:Mode='derby';
-const preferredCourse=():CourseId=>clubRound()?.course??(mode==='race'&&!activeChallenge&&!online?.active&&raceFormat()==='laps'?resolveCourseId(demo?demoOptions.course:eventOptions.course):'quarry-v1');
+const preferredCourse=():CourseId=>clubRound()?.course??(mode==='race'&&!online?.active&&raceFormat()==='laps'?resolveCourseId(activeChallenge?activeChallenge.course:demo?demoOptions.course:eventOptions.course):'quarry-v1');
 const raceLabel=(id:CourseId)=>id==='quarry-v1'?'QUARRY CIRCUIT':COURSE_NAMES[id].toUpperCase();
 const eventLabel=()=>mode==='race'?raceLabel(activeVenue.course.id):modes[mode].label;
 function ensureVenue(id:CourseId):VenueContext{
@@ -439,7 +439,7 @@ function menu() {
   document.querySelector<HTMLButtonElement>('#start')!.onclick = () => start(false);
   replayMenu();
   const garageButton=document.createElement('button');garageButton.id='garage';garageButton.className='small-button';garageButton.textContent='GARAGE & TUNING';garageButton.onclick=openGarage;ui.querySelector('.intro')!.append(garageButton);
-  const profileButton=document.createElement('button');profileButton.id='driver-profile';profileButton.className='small-button';profileButton.textContent='DRIVER PROFILE & CHALLENGES';profileButton.onclick=openProfile;ui.querySelector('.intro')!.append(profileButton);
+  const profileButton=document.createElement('button');profileButton.id='driver-profile';profileButton.className='small-button';profileButton.textContent='DRIVER PROFILE & CHALLENGES';profileButton.onclick=()=>openProfile();ui.querySelector('.intro')!.append(profileButton);
   const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CLUB CUP · FINAL STANDINGS':clubCup?'CONTINUE CLUB CUP':'CLUB CUP · THREE EVENTS';cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
   if(lastAward?.qualified){const note=document.createElement('p');note.className='last-award';note.textContent=awardText(lastAward);ui.querySelector('.intro')!.append(note);}
   const eventButton=document.createElement('button');eventButton.id='event-setup';eventButton.className='small-button';eventButton.textContent=`EVENT RULES · ${eventOptions.field} CARS`;eventButton.onclick=openEventSetup;ui.querySelector('.intro')!.append(eventButton);
@@ -907,10 +907,10 @@ function finish(title: string) {
   if(activeChallenge&&telemetry){
     const medal=lastAward?.medal??0;
     const detail=activeChallenge.mode==='race'&&!cars[0].finished?'Race not finished':formatChallengeValue(activeChallenge,challengeValue(activeChallenge,telemetry.stats));
-    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${activeChallenge.title.toUpperCase()} / CHALLENGE</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p><p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">CHALLENGE BOARD</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
+    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${challengeVenueName(activeChallenge)} / ${activeChallenge.title.toUpperCase()} / CHALLENGE</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p><p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">CHALLENGE BOARD</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
     studioButtons(ui.querySelector('.challenge-result'));
     ui.querySelector<HTMLButtonElement>('#challenge-retry')!.onclick=()=>{void start(false);};
-    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{createCars(true);menu();openProfile();};
+    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{const discipline=activeChallenge!.discipline;createCars(true);menu();openProfile(discipline);};
     ui.querySelector<HTMLButtonElement>('#challenge-menu')!.onclick=()=>{createCars(true);menu();};
     return;
   }
