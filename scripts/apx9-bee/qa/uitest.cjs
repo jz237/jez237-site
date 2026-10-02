@@ -77,6 +77,21 @@ function check(name, ok, info) {
     check('ui initialised', await ev(() => !!window.__apx.ui));
     await page.mouse.move(W / 2, 40);
 
+    /* ---------- data integrity: every id the HUD refers to must exist in the model ---------- */
+    const integrity = await ev(async () => {
+      const { TOUR, DETAILS, GROUPS } = await import('/js/data.js');
+      const bee = window.__apx.bee;
+      const miss = [];
+      for (const s of TOUR) if (s.id && !bee.get(s.id)) miss.push(`tour:${s.id}`);
+      for (const d of Object.values(DETAILS)) {
+        if (!bee.get(d.root)) miss.push(`detail-root:${d.root}`);
+        for (const it of d.items) if (!bee.get(`${d.root}/${it.child}`)) miss.push(`detail:${d.key}/${it.child}`);
+      }
+      for (const [k, g] of Object.entries(GROUPS)) if (!g.anchors.some((a) => bee.get(a))) miss.push(`group:${k}`);
+      return { miss, steps: TOUR.length, parts: bee.tops.length };
+    });
+    check('every tour step, detail item and callout anchor resolves to a part', integrity.miss.length === 0, integrity.miss.length ? integrity.miss : { steps: integrity.steps, assemblies: integrity.parts });
+
     /* ---------- keyboard ---------- */
     await press('2', 300);
     check('key 2 -> side view button active', await ev(() => document.querySelector('.view-btn.on')?.dataset.view === 'side'));
@@ -117,6 +132,21 @@ function check(name, ok, info) {
     await press('Escape', 400);
     check('Esc ends the tour', !(await $('.tour')));
 
+    // walk every step: each one must select its own part (or clear the selection) and the last "Next" must finish the tour
+    const tourIds = await ev(async () => (await import('/js/data.js')).TOUR.map((s) => s.id));
+    await press('t', 500);
+    const tourBad = [];
+    for (let i = 0; i < tourIds.length; i++) {
+      const got = await ev(() => ({ step: document.querySelector('.tour-step')?.textContent, sel: window.__apx.selection.selected.map((p) => p.id) }));
+      const want = tourIds[i];
+      const okSel = want ? got.sel.length === 1 && got.sel[0] === want : got.sel.length === 0;
+      if (got.step !== `Step ${i + 1} of ${tourIds.length}` || !okSel) tourBad.push({ i, want, got });
+      await press('ArrowRight', 220);
+    }
+    check('the guided tour walks all steps and selects each step part', tourBad.length === 0, tourBad.slice(0, 3));
+    check('Next on the last step finishes the tour', !(await $('.tour')));
+    await ev(() => window.__apx.setExplode(0, 0));
+
     /* ---------- explode ---------- */
     await ev(() => window.__apx.setExplode(0, 0));
     await press(' ', 2800);
@@ -137,6 +167,27 @@ function check(name, ok, info) {
     await press('c', 300);
     check('key c stops auto-cycle', await ev(() => document.querySelector('.play')?.getAttribute('aria-pressed') === 'false'));
     await ev(() => window.__apx.setExplode(0, 0));
+
+    /* ---------- detail views (wing structure, leg mechanism) ---------- */
+    for (const key of ['wing', 'leg']) {
+      const root = await ev(async (k) => (await import('/js/data.js')).DETAILS[k].root, key);
+      await ev((k) => window.__apx.ui.openDetail(k), key);
+      await sleep(900);
+      check(`${key} detail card opens`, (await $('.detail')) && (await ev(() => window.__apx.ui.state.detail)) === key);
+      check(`${key} detail card has no unresolved rows`, (await ev(() => document.querySelectorAll('.detail button.missing').length)) === 0);
+      check(`${key} detail card selects its root part`, (await ev(() => window.__apx.selection.primary?.id)) === root, root);
+      const rowsN = await ev(() => document.querySelectorAll('.detail li button').length);
+      await page.click('.detail li:nth-child(2) button');
+      await sleep(700);
+      const picked = await ev(() => window.__apx.selection.primary?.id || '');
+      check(`${key} detail row selects its sub-part`, picked.startsWith(`${root}/`), { rows: rowsN, picked });
+      await shot(`detail-${key}`);
+      await press('Escape', 300);
+      check(`Esc closes the ${key} detail card`, !(await $('.detail')) && (await ev(() => window.__apx.ui.state.detail)) === null);
+      await ev(() => window.__apx.selection.clear());
+    }
+    await ev(() => window.__apx.setExplode(0, 0));
+    await press('r', 1500);
 
     /* ---------- pointer ---------- */
     const parts = await ev(() => window.__apx.bee.tops.map((p) => p.id));
