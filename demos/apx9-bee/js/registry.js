@@ -271,6 +271,7 @@ export class Bee {
     this.layout = {};
     this.finalized = false;
     this.guideOpacity = 1;
+    this.subGain = 1;       // scales the travel of every nested (non top-level) part: tightens or loosens the exploded cloud
   }
 
   _register(p) {
@@ -457,10 +458,11 @@ export class Bee {
     if (p.mirrorOf && !p.mirrorRoot) { p.offsetLocal.copy(p.mirrorOf.offsetLocal); p.rotExtra.copy(p.mirrorOf.rotExtra); p.exRot = p.mirrorOf.exRot; return; }
     if (!x.dir || !x.dist) return;
     const dirBee = x.dir.clone();
-    if (x.space === 'local' || p.parent === this.rootPart || !p.parent) p.offsetLocal.copy(dirBee).multiplyScalar(x.dist);
+    if (p.parent === this.rootPart || !p.parent) p.offsetLocal.copy(dirBee).multiplyScalar(x.dist);
+    else if (x.space === 'local') p.offsetLocal.copy(dirBee).multiplyScalar(x.dist * this.subGain);
     else {
       const inv = new THREE.Matrix4().extractRotation(p.parent.node.matrixWorld).invert();
-      p.offsetLocal.copy(dirBee).applyMatrix4(inv).multiplyScalar(x.dist);
+      p.offsetLocal.copy(dirBee).applyMatrix4(inv).multiplyScalar(x.dist * this.subGain);
     }
   }
 

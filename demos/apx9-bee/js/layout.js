@@ -3,7 +3,8 @@
 // the blueprint sheet: head assembly forward along +X, abdomen / stabilizer / stinger back along -X around the power core,
 // thorax armor lifted straight up over the flight machinery, wings out and up, pollination module and the six legs fanning below.
 // delay/span place each assembly on the shared 0..1 timeline (sub-assemblies and fine parts follow on their own LEVEL timing).
-const SCALE = 0.78;
+const SCALE = parseFloat(new URLSearchParams(globalThis.location?.search).get('sc')) || 0.55;
+export const SUB_GAIN = 0.6;
 const T = (v, delay = 0, span = 0.45, rot) => {
   const dist = Math.hypot(v[0], v[1], v[2]) * SCALE;
   return { dir: dist > 0 ? [v[0] / (dist / SCALE), v[1] / (dist / SCALE), v[2] / (dist / SCALE)] : null, dist, delay, span, space: 'bee', ...(rot ? { rot } : {}) };
@@ -11,9 +12,9 @@ const T = (v, delay = 0, span = 0.45, rot) => {
 
 export const LAYOUT = {
   // head -------------------------------------------------------------------------------------------------------------
-  'neck-joint': T([4.5, -0.3, 0], 0.00),
+  'neck-joint': T([8.5, -0.3, 0], 0.00),
   'head-frame': T([9.5, 0.2, 0], 0.02),
-  'neural-processor': T([6.5, 11, 0], 0.04),
+  'neural-processor': T([4.7, 12, 0], 0.04),
   'head-shell': T([17, 2.5, 0], 0.00),
   'mandibles': T([9.5, -9.5, 0], 0.04),
   'eye-r': T([6.5, 2.5, 13], 0.02),
@@ -28,7 +29,7 @@ export const LAYOUT = {
   'wing-r': T([-7, 8, 33], 0.10, 0.5),
 
   // abdomen / tail ---------------------------------------------------------------------------------------------------
-  'petiole-joint': T([-5, 0, 0], 0.00),
+  'petiole-joint': T([-9.5, 0, 0], 0.00),
   'abdomen-frame': T([-12.5, -0.6, 0], 0.03),
   'abdomen-shell': T([-21, -2, 0], 0.00),
   'stabilizer': T([-31, -3, 0], 0.06),
