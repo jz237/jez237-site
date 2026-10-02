@@ -19,7 +19,7 @@ import {ReplayScene,captureReplayFrame} from '../src/replay-scene';
 import {verifyVanFinishRevision} from './van-finish-invariants';
 
 await R.init();const original=GLTFLoader.prototype.loadAsync;
-GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
+GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any;
 const key=(p:T.Vector3)=>p.toArray().map(x=>x.toFixed(6)).join(',');
@@ -42,7 +42,7 @@ test('the original hatchback export has closed skins, finite normals and clear w
 });
 
 test('the ninth vehicle preserves saved cars and participates in tuning and mixed/selected demos',()=>{
- assert.equal(CAR_KINDS.length,10);assert.ok(isCarKind('tern'));assert.ok(templates.has('tern'));
+ assert.equal(CAR_KINDS.length,11);assert.ok(isCarKind('tern'));assert.ok(templates.has('tern'));
  const old=stockSetup('van');old.engine=2;const saved=readGarage(JSON.stringify({version:1,cars:{van:{setup:old}}}));assert.deepEqual(saved.cars.van.setup,old);assert.deepEqual(saved.cars.tern.setup,stockSetup('tern'));
  const setup=stockSetup('tern');setup.tune.differential=.7;setup.armor=1;assert.deepEqual(importSetup(exportSetup('tern',setup),'tern'),setup);assert.throws(()=>importSetup(exportSetup('tern',setup),'compact'));
  assert.equal(demoCarKind(23,'tern','selected'),'tern');assert.deepEqual(new Set(Array.from({length:24},(_,i)=>demoCarKind(i,'tern','mixed'))),new Set(CAR_KINDS));assert.deepEqual(classicEngineVoice('tern'),{bank:'hatch',pitch:1.04});

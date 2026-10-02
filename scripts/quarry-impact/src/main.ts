@@ -986,7 +986,7 @@ function frame(now: number) {
   }
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateCamera(dt);
-  if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();}
+  if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,quarry.puddles,effectsActive?dt:0,state==='playing');

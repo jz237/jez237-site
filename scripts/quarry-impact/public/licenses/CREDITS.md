@@ -178,9 +178,11 @@ Original coupe-utility conversion for Quarry Impact, derived from BrightRetro's
 Muscle Car 3D Model under CC-BY 3.0. Attribution and modification details:
 [ironvale-utility.txt](ironvale-utility.txt).
 
-### Original small and commercial vehicles
+### Original small, commercial and special vehicles
 
-The [Rook 1100](ROOK-1100.md), [Rillford Carrier](RILLFORD-CARRIER.md), and
-[Tern 1400](TERN-1400.md), and [Marten 1600](MARTEN-1600.md) use original Quarry Impact bodywork, interiors and
-mechanical artwork. Their wheel tooling is shared. Existing bundled engine audio
+The [Rook 1100](ROOK-1100.md), [Rillford Carrier](RILLFORD-CARRIER.md),
+[Tern 1400](TERN-1400.md), [Marten 1600](MARTEN-1600.md), and
+[Ravine 1800](RAVINE-1800.md) use original Quarry Impact bodywork, interiors and
+mechanical artwork. The road cars share wheel tooling; the Ravine uses original
+off-road wheels. Existing bundled engine audio
 is reused; model-specific provenance and beta limitations are in those notes.

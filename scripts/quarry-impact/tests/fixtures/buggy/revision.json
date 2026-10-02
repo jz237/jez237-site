@@ -1,0 +1,270 @@
+{
+  "baseline": "5983019",
+  "files": {
+    "buggy-asset-preview.html": {
+      "snapshot": "buggy-asset-preview.html.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "ccd29cac249510f34081477362f473a85e68a92a6cbb255b74c28e5780321bb8"
+    },
+    "multiplayer/simulation.ts": {
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "before": "ecf5696f53b57949a7bb4ff41d03e61ad80376e6dad97edb732d62a4051cc3b1",
+      "after": "52fbac0fa03155421dc69f88a9ba8dd1b8a50dee68aca9f2d984ed367f0df4c5"
+    },
+    "public/licenses/CREDITS.md": {
+      "snapshot": "public-licenses-CREDITS.md.gz",
+      "before": "6a1ec94c21ba3bd21902cd1cc85e93273797b8a0874800703704ae6d7e9eb13e",
+      "after": "d4956a3598257fbf0301d26a2561fb8776015ecf8e58c0104d51e9d143348d6a"
+    },
+    "public/licenses/RAVINE-1800.md": {
+      "snapshot": "public-licenses-RAVINE-1800.md.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "3d6cee0cfcbe5b052488cac2aa0ce55bad9e8deefa8b865f2c26e93dad93eb1a"
+    },
+    "public/models/buggy-candidate.glb": {
+      "snapshot": "public-models-buggy-candidate.glb.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "6ca99cb7cc7aaf305ecbe3cb7c71b20b9d10628c59aaaa1035d3cb39b84876e5"
+    },
+    "public/models/buggy.glb": {
+      "snapshot": "public-models-buggy.glb.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "6ca99cb7cc7aaf305ecbe3cb7c71b20b9d10628c59aaaa1035d3cb39b84876e5"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "82ef615990b8d9d8377c19d10920f045ffbe70fc5a2c624de273809e4787e802",
+      "after": "4cc5f64dd7dec23bbba7fb98c974c3ad0070d19bb41a81e76d7a6eb16bf763f7"
+    },
+    "src/buggy-asset.ts": {
+      "snapshot": "src-buggy-asset.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "285e8a3a09b48389a10973728225536e217bff524969e3dbc942656eb72357fb"
+    },
+    "src/buggy-geometry.ts": {
+      "snapshot": "src-buggy-geometry.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "349fcc74fd3822c6a6140f747f01cbcfc389e5e3614b58de323054d0b53ae3f8"
+    },
+    "src/buggy-suspension.ts": {
+      "snapshot": "src-buggy-suspension.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "fb2132131b9bbcc66f7869e73d3caa5336b0752065ba9d385cb379b81262887d"
+    },
+    "src/classic-vehicle-specs.ts": {
+      "snapshot": "src-classic-vehicle-specs.ts.gz",
+      "before": "009f5d8a9e8de2a3514c6bec63c75a74288e1ddfca33fe20a2e5ece15c673dae",
+      "after": "134431ca70006f4d86cb35c069a2e308ac844cf710e70eff33fd820e634c620c"
+    },
+    "src/engine-condition.ts": {
+      "snapshot": "src-engine-condition.ts.gz",
+      "before": "b8a65e271aa9617c4776617a623c8161a05fe0281470b24ecb5670a7898911cd",
+      "after": "6b1724246b2daf01b6e4ce7accdc117f34f2678b332ebcc23fdd2e54d814e39c"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "aab67b7892fd7ac0ebdbc81d0a9f35c4c7ce830c12fd2676b4c76ff4e922ba6c",
+      "after": "f0ff5f4d7738897a1ab821b9e4705312a67aa7942957afc55fbe980de8f4609a"
+    },
+    "src/online-view.ts": {
+      "snapshot": "src-online-view.ts.gz",
+      "before": "76c60be88ff1a4f91c720e33e94056b421713e0192151fcd86058dc6240c5cff",
+      "after": "45981f944b9f6100e567d2b9c56d0414568e19b6d40c03ce94d22387d161a05b"
+    },
+    "src/replay-scene.ts": {
+      "snapshot": "src-replay-scene.ts.gz",
+      "before": "29efbf70ba445ef0a9eae93d681c8ca82a73bd35aaec21b3fcfa5e98c8ef5998",
+      "after": "7c3249ef25abc3768b4bfe7253f12ab7de42da321bd95387f8e306af1f100ac5"
+    },
+    "src/rules.ts": {
+      "snapshot": "src-rules.ts.gz",
+      "before": "a406bb2a976a8bb9dc4bea8bdf7336486d67f80cdfbcf6e1f9f668eb9c532f55",
+      "after": "55b7f6b64380f475adb27a77e39b249db0b4b1c3bfad0e56f08c4e3bd2d0c9e7"
+    },
+    "src/vehicle-contact.ts": {
+      "snapshot": "src-vehicle-contact.ts.gz",
+      "before": "9efbe32f25321791b1ceb5affaa5a6028bd0faf9ca9aa84f2230ed150cc00df2",
+      "after": "536c266e41397e25ee085320375942642c481eccc37467141e5d96dce3355d92"
+    },
+    "src/vehicle-fire-profile.ts": {
+      "snapshot": "src-vehicle-fire-profile.ts.gz",
+      "before": "ebff3bb952c715cfa19a91257eccf5659ac23675796523aabfe5cbf88c7adeea",
+      "after": "8dd1a46f30dda6f87926881dc61c569ca12db7e834c9d9e1d6d44007c4dfa984"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "fde8eaa5f9747483e2e9a1c8497d2682d2efb98b5e71e81a8df95cdf7fdcd824",
+      "after": "58ee20311579894a1d4fb95230863ce3f9e1c4f161819621e7051dd884d7002f"
+    },
+    "src/vehicle-surface.ts": {
+      "snapshot": "src-vehicle-surface.ts.gz",
+      "before": "992896b02d8fb4bc85f182a15ec46fcee54c4eca5b98b64f4f78f08f7a73b589",
+      "after": "29c199ed68dfcb0381c31cf7396b4b1812375117fb732783b4b9da9e2e4a4d88"
+    },
+    "src/vehicle.ts": {
+      "snapshot": "src-vehicle.ts.gz",
+      "before": "cc7eb2ae86374a0edb83a097a29a42972a0a16a8e8f46c7e9e8c89696e036429",
+      "after": "672f5795a229767b5c3d7c3a6ef63d8f3aa75af792dc84f4db4e9ebd0f87ce9d"
+    },
+    "tests/buggy-asset.test.ts": {
+      "snapshot": "tests-buggy-asset.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "34a2e27efab672d36568846e4f8891824fadb4cdfd2229580ee4399eb1b9647c"
+    },
+    "tests/buggy-integration.test.ts": {
+      "snapshot": "tests-buggy-integration.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "c4c7d38bfd356da607ddb2cd442afcf0436dba437c9c3c12544fab5385afa674"
+    },
+    "tests/buggy-physics.test.ts": {
+      "snapshot": "tests-buggy-physics.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "60a3f0f7a24ff58f6f383da80a4f1a1859fc942a3033292e0cd286aaced3d021"
+    },
+    "tests/classic-roster.test.ts": {
+      "snapshot": "tests-classic-roster.test.ts.gz",
+      "before": "aa2123c00eea23227bc605ba71389a8c51427c2918d988453abb9c378985c3b2",
+      "after": "856bbfbcf4dce8f04d485bdc588dffcfb8e1ea24fd028aab48f55f62609e7ce6"
+    },
+    "tests/compact.test.ts": {
+      "snapshot": "tests-compact.test.ts.gz",
+      "before": "bc245e3bce8a3e73d4e09aa9f6e0a1fc03a7aae6749bd242ce2721af40486184",
+      "after": "ea2378b2ce57048d0b70dde2c5864948cfb39afc5ef84111d8c9eb333d9b9fa2"
+    },
+    "tests/coupe-asset.test.ts": {
+      "snapshot": "tests-coupe-asset.test.ts.gz",
+      "before": "7c7feba33d888fd1d4572feee918a466cf912f8f41f6fc4323203353b163601a",
+      "after": "3360c9f87a64efacd0e096499a348d2fe20733f0f100ad91dc70e5035a9b24d8"
+    },
+    "tests/coupe-realism.test.ts": {
+      "snapshot": "tests-coupe-realism.test.ts.gz",
+      "before": "209c0a00b383e189deae9eb1d7ada0afbefdeeb48219ff8235ddedaffb1f4a84",
+      "after": "f5ba4c580aad83e729b2cf23efc75deec4ca435eb229c48b9ad42f625ed68042"
+    },
+    "tests/demo-workshop.test.ts": {
+      "snapshot": "tests-demo-workshop.test.ts.gz",
+      "before": "07e29f6d8e7b47c17da00afb35d26b2046b38b4527d10b7e1f8cb8eaf1d04997",
+      "after": "9e71650b8270aef73d3c230c999d82d7f51802dd9aae2a36405983072c0be768"
+    },
+    "tests/engine-integration.test.ts": {
+      "snapshot": "tests-engine-integration.test.ts.gz",
+      "before": "5b4c731d8e899209f5cd454a0b9a54525fd7e45cd71f6271e04895550b2fe656",
+      "after": "6b0ac61669aaa8173a75a9120b7b1081e1f8692c13959d171afcf4e6aee33f89"
+    },
+    "tests/engine-physics.test.ts": {
+      "snapshot": "tests-engine-physics.test.ts.gz",
+      "before": "e1ffee815a8a580dd4858d46e3912ec1efc88cfda4f139a84aca37134bbf11a2",
+      "after": "28e277b62be2faeddb3a28ad9dd652b50759d059821675aa77a06fcbd8f13f36"
+    },
+    "tests/estate-rear.test.ts": {
+      "snapshot": "tests-estate-rear.test.ts.gz",
+      "before": "71eec7c68e4b5860d52e30b01c3c9fad2a54bff314c01143285ff12ba4f4da0d",
+      "after": "b4d72dcd0d1e61d238cbf5bf038b7205cf28f45c4e56c26593b99f744acc565a"
+    },
+    "tests/livery-assets.test.ts": {
+      "snapshot": "tests-livery-assets.test.ts.gz",
+      "before": "058ab1cfcad97cb474b1067a5199095b19bac97eecb5ca4d8e029a1e6da4e444",
+      "after": "b11ffc320c02ed9abef22ad5111f32d262493552184724dc0bc3190b01939e5b"
+    },
+    "tests/marten-bodywork.test.ts": {
+      "snapshot": "tests-marten-bodywork.test.ts.gz",
+      "before": "c38ca5c123aa7cde8362cf0f2da2b946dfe4d1bb3ed335e16e32dacf81824898",
+      "after": "d54f95e4deeed561a97d5d0530c6e67d64870ea041d1916551a8b987fbd7c44a"
+    },
+    "tests/marten.test.ts": {
+      "snapshot": "tests-marten.test.ts.gz",
+      "before": "fe86d897161b4777b9d21f78230a6952076d0d4b695c849c0da86a95f2ad598d",
+      "after": "85bf7c6020f0421ed8b65c9c384b715c9d7f40b9b952e6736078492004038749"
+    },
+    "tests/online-damage.test.ts": {
+      "snapshot": "tests-online-damage.test.ts.gz",
+      "before": "4d235316903f76fa702057db3651ca88f23b6cf1a448ced223b84efb46f53795",
+      "after": "0e862b4c2e82a8e2a1632751252e3a7ff1f894c9ba8f2696c52411c8dab7cff8"
+    },
+    "tests/online-livery-render.test.ts": {
+      "snapshot": "tests-online-livery-render.test.ts.gz",
+      "before": "c8fdbecbbe4f019f7b8a7b2f509e4ae236b1343db5c6899ffaecf5235bee8e50",
+      "after": "d07142d52cf790856bbbe40dcc3e598b5b8ce538fd497c9ab1186b997c8c8d96"
+    },
+    "tests/online-setup-physics.test.ts": {
+      "snapshot": "tests-online-setup-physics.test.ts.gz",
+      "before": "3704a95cfa4b49df85b50659fca3adba4dbfce7f1906e8979dd9db62a253b8db",
+      "after": "25afbcf949600012b89b5335d7ee504d9b02e552e6a41022220b4a9b850a87c5"
+    },
+    "tests/replay-assets.test.ts": {
+      "snapshot": "tests-replay-assets.test.ts.gz",
+      "before": "370d259b670f8859bd3abbbcb7e1ac036e10f60c426a8229a93f0e98c041aaa6",
+      "after": "985560f8d15c0383d3633e274c53a7e73a992228e60c4b65a5dfe42ebe1deb64"
+    },
+    "tests/structural-realism.test.ts": {
+      "snapshot": "tests-structural-realism.test.ts.gz",
+      "before": "ac5a85087d67e58465451103bd90a4975d0a8f5202d62df22a65ea81c40310fd",
+      "after": "7ccc9f5c15c0ebf2402ea18cc8fef58d28764994855ba4be8e22f495651e7e12"
+    },
+    "tests/tern-cabin.test.ts": {
+      "snapshot": "tests-tern-cabin.test.ts.gz",
+      "before": "ebbd71e8bc5e82afe95d4526e4c66eb6ba0ee95cf6c9a6a89c4d74a9686d3373",
+      "after": "300d0757e5be711159324e1b43508d195583fbc0d879bdd65d809a6699155995"
+    },
+    "tests/tern-front.test.ts": {
+      "snapshot": "tests-tern-front.test.ts.gz",
+      "before": "609e2bc84eb1b91617a8e37b747a150af29341ca84096df6623ac32014769edc",
+      "after": "9814b2497500a0e6b1128b670fe3eb2d32196225b76ba067d6c5c9ce38e4d26e"
+    },
+    "tests/tern.test.ts": {
+      "snapshot": "tests-tern.test.ts.gz",
+      "before": "3b7ca8aecfac724e65c1386c747022ce8f6c27e7523907364bfc29ebb4d331b4",
+      "after": "ab8fcafaadb81ffc84435095d2e798e757434de253fbc229928eed327acaaedd"
+    },
+    "tests/utility-integration.test.ts": {
+      "snapshot": "tests-utility-integration.test.ts.gz",
+      "before": "80432b30a4d90e8e5a2302b5b3413b5fe6d207192eaf4452359b87fb8732a17b",
+      "after": "24bbda65757c4a8b6c43287baa84dd184cf0007a6005ed04f21bcaac5b849480"
+    },
+    "tests/van-finish.test.ts": {
+      "snapshot": "tests-van-finish.test.ts.gz",
+      "before": "212da3bdbe5ad9b891d0e3f0ee4338dc3061c6592723c839269954bb65985097",
+      "after": "4c38c78081459c6cfd79b3f27d6a44b5ccacbdf8b4f79ec933ac8cc4eee6bf55"
+    },
+    "tests/van.test.ts": {
+      "snapshot": "tests-van.test.ts.gz",
+      "before": "6de655eaaa5daa6b4c4ee7ee81d6147fe209856b8e88f003a5258b404b821cf7",
+      "after": "b8fa8b49305a085a4a58708341065b0bd035e2b5ad0103f565c8f59bc3924988"
+    },
+    "tests/vehicle-condition-invariants.ts": {
+      "snapshot": "tests-vehicle-condition-invariants.ts.gz",
+      "before": "188e7848bce3f65ce9c31cb9967fb15558a7959970260d66c854e05764e16380",
+      "after": "051806c1ba8c1056bafc3d3b7e44a34a316aa6c2002d551e37f1a866856cb629"
+    },
+    "tests/wreck-finish.test.ts": {
+      "snapshot": "tests-wreck-finish.test.ts.gz",
+      "before": "6d4ebd473d2cc70ecbd0a32c75b9aa05adc3265671968742c9b21dd0a77f7140",
+      "after": "07a3c088a6277c91a41f54975b51d8593c20cfe763a6af37d7616d7ee4455f65"
+    },
+    "tests/wreck-geometry.test.ts": {
+      "snapshot": "tests-wreck-geometry.test.ts.gz",
+      "before": "5d304e98e882e25a173191c3a7f32141e8ec88ff2308523cc5c2d9809bb4232c",
+      "after": "9855edbfdadd6f45175cfa6c22717734291412e901e825bf943a314565c2362f"
+    },
+    "tools/buggy-asset-preview.js": {
+      "snapshot": "tools-buggy-asset-preview.js.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "11843ba5fe99ef42398a8a0a7a4768785c57bfdc7e6c7131de03d9107aa4bd24"
+    },
+    "tools/build-buggy.ts": {
+      "snapshot": "tools-build-buggy.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "5309a903459939beb226fa76e0e6cb5032fd7df9c39c0d08eeef4c428be8cfba"
+    },
+    "tools/car-asset-audit.ts": {
+      "snapshot": "tools-car-asset-audit.ts.gz",
+      "before": "7c63a0a319daae40f5d3ecea51cebc75a0387ab5ac245d72d64182428566fa72",
+      "after": "b3ef2c429ebc5994a195dfc8cbcddf18782feac1b4acaaadb3c79024782a0579"
+    },
+    "tools/check-marten-release.mjs": {
+      "snapshot": "tools-check-marten-release.mjs.gz",
+      "before": "bb06dc38c21326c371ec118884abec8563e9f050a5960e1d6496600ba83ee8ec",
+      "after": "6296de4d2867d1fb9adec4fa4b0e7db079891148e36ea01be173a202d4bd4632"
+    }
+  }
+}

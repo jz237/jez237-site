@@ -22,7 +22,7 @@ import {VehicleThermalState} from '../src/vehicle-thermal-state';
 import {VehicleFire} from '../src/vehicle-fire';
 
 await R.init();const original=GLTFLoader.prototype.loadAsync;
-GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
+GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any;
 const key=(p:T.Vector3)=>p.toArray().map(x=>x.toFixed(6)).join(',');
@@ -45,7 +45,7 @@ test('the original rear-engine coupe export has closed skins, finite normals and
 });
 
 test('the tenth vehicle preserves saved cars and participates in tuning and mixed/selected demos',()=>{
- assert.equal(CAR_KINDS.length,10);assert.ok(isCarKind('marten'));assert.ok(templates.has('marten'));
+ assert.equal(CAR_KINDS.length,11);assert.ok(isCarKind('marten'));assert.ok(templates.has('marten'));
  const old=stockSetup('van');old.engine=2;const saved=readGarage(JSON.stringify({version:1,cars:{van:{setup:old}}}));assert.deepEqual(saved.cars.van.setup,old);assert.deepEqual(saved.cars.marten.setup,stockSetup('marten'));
  const setup=stockSetup('marten');setup.tune.differential=.7;setup.armor=1;assert.deepEqual(importSetup(exportSetup('marten',setup),'marten'),setup);assert.throws(()=>importSetup(exportSetup('marten',setup),'compact'));
  assert.equal(demoCarKind(23,'marten','selected'),'marten');assert.deepEqual(new Set(Array.from({length:24},(_,i)=>demoCarKind(i,'marten','mixed'))),new Set(CAR_KINDS));assert.deepEqual(classicEngineVoice('marten'),{bank:'hatch',pitch:.94});

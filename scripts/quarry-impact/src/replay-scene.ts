@@ -36,6 +36,7 @@ export class ReplayScene {
       c.forward.set(0,0,1).applyQuaternion(c.currentQ);c.right.set(1,0,0).applyQuaternion(c.currentQ);
       c.surfaceFinish.coating.value.set(mix(47),mix(48),mix(49),mix(50));c.wreckFinish.soot.value=mix(51);c.wreckParts.poseAt(mix(55),c.speed);
       c.wheels.forEach((w,j)=>{const k=15+j*8;w.position.set(mix(k),mix(k+1),mix(k+2));w.quaternion.fromArray(av,o+k+3).slerp(q.fromArray(bv,o+k+3),t).multiply(spin.setFromAxisAngle(axis,-mix(k+7)));});
+      c.syncSuspension();
       for(const material of c.brakeLights)material.emissiveIntensity=av[o+53]?3.5:.8;
     });
     this.props.forEach((p,i)=>{const o=this.cars.length*REPLAY_STRIDE+i*7;p.position.fromArray(av,o).lerp(new T.Vector3().fromArray(bv,o),alpha);p.quaternion.fromArray(av,o+3).slerp(q.fromArray(bv,o+3),alpha);});this.time=time;

@@ -17,7 +17,7 @@ import type {Snapshot} from '../multiplayer/protocol';
 await R.init();
 const load=GLTFLoader.prototype.loadAsync;
 try{
-  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
+  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
   await loadCars(()=>{});
 }finally{GLTFLoader.prototype.loadAsync=load;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}} as any;

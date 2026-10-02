@@ -1,3 +1,4 @@
+import {vehicleSuspensionRestLength} from './vehicle-physics';
 import {sameOnlineSetup} from './online-setup';
 import {wheelResponse} from './wheel-physics';
 import * as T from 'three';
@@ -93,11 +94,12 @@ export class OnlineView {
         c.wreckParts.wheelShift.forEach((v,i)=>v.copy(at.components!.wheelShift[i]));
       }
       c.wheels.forEach((w,i)=>{
-        w.position.y=-c.model.position.y-.12-(at.wheels[i]?.suspension??.36);
+        w.position.y=-c.model.position.y-.12-(at.wheels[i]?.suspension??vehicleSuspensionRestLength(c.kind));
         const corner=wheelResponse(c.wreckParts.wheelDamage[i],i%2?1:-1,at.speed);
         w.rotation.set(0,(i<2?at.steering:0)+corner.toe,0);
         w.rotateX(-(at.wheels[i]?.rotation??0));
       });
+      c.syncSuspension();
     }
     this.lastFx+=dt;
     if(this.lastFx>.07) {

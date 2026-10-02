@@ -27,7 +27,7 @@ test('soot persists after cooling, pauses exactly, is per-car and agrees across 
 });
 
 test('real car assemblies bend locally, hold their trim, restore completely and replay quietly',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){
   const world=new R.World({x:0,y:-9.81,z:0}),car=new Vehicle(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);car.place(0,0,0);

@@ -14,7 +14,7 @@ export class VehicleSurface {
       if(!(o instanceof T.Mesh)||!o.userData.wreckRest)return;
       const m=o.material as T.MeshPhysicalMaterial;if(seen.has(m))return;seen.add(m);
       const painted=m.name.startsWith('paint'),glass=o.name.startsWith('glass_'),plastic=/Paint 2|hoses|Interior|Panel Sides/.test(m.name);
-      if(painted){const enamel=/^paint_(Marten|Tern|Carrier)$/.test(m.name);m.metalness=plastic?.06:enamel?.12:.23;m.roughness=plastic?.4:enamel?.36:.26;m.clearcoat=plastic?.3:enamel?.85:.96;m.clearcoatRoughness=enamel?.18:.13;m.normalScale.setScalar(.025);m.envMapIntensity=.88;}
+      if(painted){const enamel=/^paint_(Marten|Tern|Carrier|Ravine)$/.test(m.name);m.metalness=plastic?.06:enamel?.12:.23;m.roughness=plastic?.4:enamel?.36:.26;m.clearcoat=plastic?.3:enamel?.85:.96;m.clearcoatRoughness=enamel?.18:.13;m.normalScale.setScalar(.025);m.envMapIntensity=.88;}
       if(glass){m.metalness=.025;m.ior=1.52;m.roughness=.052;m.envMapIntensity=.95;}
       if(m.name.includes('galvanized steel')){m.metalness=.85;m.roughness=.46;}
       if(m.name.includes('cast alloy')){m.metalness=.72;m.roughness=.53;}

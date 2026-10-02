@@ -1,5 +1,6 @@
+import {BuggySuspension} from './buggy-suspension';
 import {accumulateEngineDamage} from './engine-condition';
-import {vehicleChassisHalfExtents} from './vehicle-physics';
+import {vehicleChassisHalfExtents,vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
@@ -34,6 +35,8 @@ export type Input = {
   handbrake: boolean;
 };
 export class Vehicle {
+  readonly suspension?:BuggySuspension;
+  syncSuspension(){this.suspension?.update();}
   onVisualEvent?: (event:VisualEvent)=>void;
   private visualPose(){return [...this.current.toArray(),...this.currentQ.toArray()];}
   body: R.RigidBody;
@@ -130,8 +133,9 @@ export class Vehicle {
         if (mat.name.includes('Brakelight')) this.brakeLights.add(mat);
       }
     });
-    this.wreckFinish = new WreckFinish(this.model,def.halfLength,kind==='marten'?new T.Vector3(0,.84,-1.56):undefined);
+    this.wreckFinish = new WreckFinish(this.model,def.halfLength,kind==='marten'?new T.Vector3(0,.84,-1.56):kind==='buggy'?new T.Vector3(0,.67,-1.4):undefined);
     this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth,vehicleWheelRadius(kind));
+    if(kind==='buggy')this.suspension=new BuggySuspension(this.model);
     this.tireContacts=this.wheels.map(w=>new TireContact(w));
     this.surfaceFinish=new VehicleSurface(this.model,id);
     this.livery=new LiveryPaint(this.model);this.livery.set(this.setup.livery);
@@ -168,6 +172,7 @@ export class Vehicle {
     this.onVisualEvent?.({kind:'repair',pose:this.visualPose()});
     this.wreckFinish.reset();
     this.wreckParts.reset();
+    this.suspension?.reset();
     this.surfaceFinish.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
@@ -182,7 +187,7 @@ export class Vehicle {
     for(let i=0;i<4;i++){
       const d=DEFINITIONS[this.kind];
       this.controller.setWheelChassisConnectionPointCs(i,{x:isClassicKind(this.kind)?(i%2?1:-1)*classicWheelHalfTrack(this.kind):(i%2?1:-1)*(d.halfWidth-.04),y:-.12,z:(i<2?1:-1)*d.wheelbase/2});
-      this.controller.setWheelSuspensionRestLength(i,.36);this.controller.setWheelRadius(i,vehicleWheelRadius(this.kind));
+      this.controller.setWheelSuspensionRestLength(i,vehicleSuspensionRestLength(this.kind));this.controller.setWheelMaxSuspensionTravel(i,vehicleSuspensionTravel(this.kind));this.controller.setWheelRadius(i,vehicleWheelRadius(this.kind));
       this.controller.setWheelMaxSuspensionForce(i,13000);this.controller.setWheelSuspensionStiffness(i,30);
       this.controller.setWheelSideFrictionStiffness(i,1.1);this.controller.setWheelAxleCs(i,{x:-1,y:0,z:0});
       this.controller.setWheelSteering(i,0);this.controller.setWheelBrake(i,0);
@@ -289,13 +294,14 @@ export class Vehicle {
       const w = this.wheels[i];
       if (!w) continue;
       w.position.y =
-        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? 0.36);
+        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
       const corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed);
       w.rotation.set(0,(i<2?this.steering:0)+corner.toe,0);
       w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
       const coating=this.surfaceFinish.coating.value;
       this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z);
     }
+    this.syncSuspension();
   }
   private wreckPartsWidth(){return DEFINITIONS[this.kind].halfWidth*.62;}
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
