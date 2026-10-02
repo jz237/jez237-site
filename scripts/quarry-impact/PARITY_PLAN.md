@@ -6,8 +6,8 @@ Status: **in progress; parity has not been achieved**. The original objective re
 ## Evidence baseline (October 1, 2026)
 
 Vengeance source: `D:/Projects/hidden reef header/quarry-impact`.
-Latest published frontend: `b7c61a500f1b85db36be92b06d4ce4365300dc98` (October 1), game bundle `assets/index-CL4u9ViM.js`.
-The online-event-capable client is installed on VENGEANCE and published after 315 frontend tests, 76 live asset hash checks, browser gameplay verification, and full-site deployment checks.
+Latest published frontend: website `3a54aada5bc07cde2f4cdba130a960cf4c8b6d4e` (October 1), game source `8274a04c14db842ab1b479999e52669aceeef63c`, bundle `assets/index-B7p_nu69.js`.
+The online-event-capable client is installed on VENGEANCE and published after 362 frontend and 34 backend tests, 79 live asset hash checks, browser gameplay verification, and full-site deployment checks.
 The existing live multiplayer Worker remains the earlier eight-player version: deployment of the tested new backend is blocked by missing Free-account login permissions.
 The working project is untracked inside a different parent repository; do not commit unrelated parent changes.
 A source snapshot and baseline Git commit are in the Linux working copy for reproducible diffs.
@@ -21,7 +21,7 @@ Authoritative reference sources inspected:
 
 ## Current release status
 
-The October 1 deployment supersedes earlier “transfer approval pending” and “not installed” milestone notes below: the user explicitly authorized transfer/deployment, all prior source changes were installed on VENGEANCE with backup, and the frontend was published. 300 frontend tests, 33 backend tests, both builds/type checks and Worker dry run passed. The full-site wrapper passed preview and live checks; 76 live game assets matched the tested build. Multiplayer publication alone is blocked by Cloudflare account access, with the old eight-player service verified compatible. Earlier milestone notes are historical records, not current approval requirements.
+The current bodywork/demo release is installed on VENGEANCE and published. All 30 changed source files and 234 installed runtime files match the validated candidate; the previous installed build is backed up. The full-site wrapper passed preview and live service checks, and 79 public game assets match the tested build. The user has explicitly authorized transfer and deployment. Multiplayer publication alone remains blocked by access to the existing Worker account; the old eight-player service remains unchanged. Earlier candidate-only and approval-pending milestone notes below are historical records. Full parity has not been achieved.
 
 ## Completion matrix
 
@@ -36,7 +36,7 @@ Every row requires functional gameplay evidence, persistence where applicable, r
 | Waypoint / free-order / random modes | Solo and authoritative online ordered/free/random events, server-seeded order, persistent progress, world/minimap targets, shortest-road AI; online installed | Backend publication, distinct waypoint courses and extended balance |
 | Opposing-direction racing | Alternating24-car opposing grids, separate checkpoint routes, AI and individual scoring | Online support, new head-on layouts and full-scene endurance/balance |
 | Track variety | One quarry, forward/reverse circuit, one arena | Multiple distinct locations and circuit/oval/figure-eight/intersection/rallycross/jump/arena layouts, reverse routes, coherent collisions and navigation |
-| Vehicle variety | Three modern cars plus two original classics validated in the release candidate | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
+| Vehicle variety | Three modern cars plus two attributed classic conversions installed and published | Comparable range to 21 listed reference vehicles: different eras, sizes, drivetrains, bodies and special vehicles; authored models, handling, damage and sound |
 | Garage paint and saved designs | Installed body/trim colors; local 32-layer editor with five surfaces, shapes/text/weathering, transforms, groups and setup/replay persistence | Freehand/image tools, cosmetic dents; online replication implemented/tested but backend publication blocked |
 | Performance upgrades / metrics | Installed solo engine/tires/armor; local pending authoritative online setups and stock-performance rules | Measured stats, further component upgrades, visible fitted parts and performance classes |
 | Tuning / presets / sharing | Installed five tuning axes, eight presets per car, setup exchange; local pending online/lobby application | Simulated stats, remote/full-scene verification and leaderboard tune sharing |
@@ -188,3 +188,19 @@ The muscle and estate now separate the lower front valance from the hood, so a l
 Nine new tests cover shell area and T-junctions, exported hood separation/hinges, inner door deformation/repair, wheelhouse sightlines/tire clearance and construction roles. All 26 focused vehicle checks pass, including existing real driving and compressed replay/backwards seek checks. VENGEANCE passes 362 frontend and 34 backend tests plus build and typechecks (assets/index-B7p_nu69.js). The estate raw asset remains within its existing 65,000-vertex ceiling at 64,983. Production templates contain 93 meshes/37,445 triangles/21 materials for the muscle and 169 meshes/74,106 triangles/22 materials for the estate; these counts are not an FPS benchmark.
 
 The production-renderer workshop verifies intact cars, opened hood/door interiors, repeated front impacts and an estate side impact with no console errors. The open-panel controls are inspection poses, not new gameplay controls. Severe crashes still expose coarse internal forms and require further chassis, trim and deformation work; vehicle art and full feature parity remain unfinished. The candidate includes the preceding collider-aware demo camera fix. Original-install/public promotion is pending at this source commit.
+
+## Bodywork and camera visibility — installed and published
+
+Game source 8274a04c14db842ab1b479999e52669aceeef63c is installed and published as website commit 3a54aada5bc07cde2f4cdba130a960cf4c8b6d4e, bundle assets/index-B7p_nu69.js. This supersedes the pending-promotion wording above and includes the preceding collider-aware demo visibility work. The website preserved upstream changes through e8b4b1a6. Backup: D:/Projects/hidden reef header/quarry-backup-before-bodywork-refresh-20261001. All 30 changed source files and 234 installed runtime files matched the candidate.
+
+Preview initially retried while Pages services propagated, then all mandatory preview and production checks passed. Public verification matched 79 game assets, including both playable classic GLBs, and five neighboring routes. Browser checks confirmed the eight-car public demo, manual muscle follow and collision damage without console errors. Local full-game validation also completed the mixed-field race with the estate followed. Tests remain 362 frontend and 34 backend passing. Neither the multiplayer Worker nor the full parity status changed.
+
+This final publication note is a local documentation follow-up. The next source transfer baseline for the installed game, VENGEANCE candidate and website game source is 8274a04, not this later documentation-only commit. Further vehicle art, severe-crash internals/trim, sustained full-field performance, broader vehicle/track variety and the remainder of the completion matrix remain open.
+
+## Utility artwork prototype — local only
+
+An original coupe-utility conversion now derives from the already attributed BrightRetro muscle donor. Its shortened cabin, separate rear glass, open ribbed bed, inner wheelhouses, tailgate and rear lamps are built reproducibly by tools/build-utility-glb.ts. The measured wheelbase is 3.05 m and all four tires retain their circular 375 mm radius. The rear-quarter mapping adds length outside the wheel opening, preserving the donor arch profile. Side returns close the gap between the cut cabin and its raked rear wall. Hood/door inner skins and fixed engine detail are retained.
+
+Six focused checks pass for body and wheel geometry, open cargo space, lamp/glass visibility, damage/repair and complete door/hood assemblies, exported GLB fidelity, unstretched rear arches and cabin closure sightlines. TypeScript passes. Front/rear and door inspection in the browser found no rendering errors. The preview remains explicitly marked as a candidate. Overall art finish, cabin transitions, severe damage, physics/collider integration and demo/replay validation remain unfinished. This vehicle is not in the playable roster, has not been installed on VENGEANCE and has not been published. It does not increase the published five-car count. Do not describe these vehicles as final artwork or full Wreckfest 2 visual parity.
+
+The installed, VENGEANCE-candidate and website game-source transfer baseline remains 8274a04. Vehicle appearance and demo quality continue to take priority over resuming the saved track work.

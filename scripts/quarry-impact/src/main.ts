@@ -1,3 +1,4 @@
+import {vehicleContact} from './vehicle-contact';
 import {CAR_KINDS} from './rules';
 import {DEMO_KEY,readDemoOptions,showDemoSetup,nextDemoMode,demoCarKind} from './demo-session';
 import {restoreOnlineProgress,onlineEventLabel} from './online-events';
@@ -708,7 +709,7 @@ function ai(car: Vehicle, dt: number): Input {
     const ray=(angle:number)=>{
       const dir={x:Math.sin(yaw+angle),y:0,z:Math.cos(yaw+angle)};
       const start={x:car.current.x+dir.x*2.5,y:Math.max(car.current.y,landscapeHeight(car.current.x,car.current.z)+.55),z:car.current.z+dir.z*2.5};
-      const hit=physics.castRay(new R.Ray(start,dir),24,true,undefined,undefined,undefined,car.body,c=>!cars.some(v=>v.collider.handle===c.handle||v.roof.handle===c.handle));
+      const hit=physics.castRay(new R.Ray(start,dir),24,true,undefined,undefined,undefined,car.body,c=>!cars.some(v=>v.body.handle===c.parent()?.handle));
       return hit?hit.timeOfImpact:24;
     };
     return {front:ray(0),left:ray(-.55),right:ray(.55),rear:ray(Math.PI)};
@@ -817,12 +818,8 @@ function step(dt: number) {
   events.drainContactForceEvents((e) => {
     const h1 = e.collider1(),
       h2 = e.collider2();
-    const key = Math.min(h1, h2) + ':' + Math.max(h1, h2);
+    const {a,b,key}=vehicleContact(physics,cars,h1,h2);
     if (elapsed - (lastImpact.get(key) ?? -100) < 0.28) return;
-    const a = cars.find(
-        (c) => c.collider.handle === h1 || c.roof.handle === h1,
-      ),
-      b = cars.find((c) => c.collider.handle === h2 || c.roof.handle === h2);
     if (!a && !b) return;
     const point = new T.Vector3().copy((a ?? b)!.current);
     const normal=new T.Vector3();

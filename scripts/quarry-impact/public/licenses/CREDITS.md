@@ -171,3 +171,9 @@ preserved under source/vehicles/brightretro-muscle.
 
 The estate development candidate also uses this attributed base, with a new
 cargo cabin, roof, glazing, pillars and four separate door assemblies.
+
+### Ironvale Utility
+
+Original coupe-utility conversion for Quarry Impact, derived from BrightRetro's
+Muscle Car 3D Model under CC-BY 3.0. Attribution and modification details:
+[ironvale-utility.txt](ironvale-utility.txt).

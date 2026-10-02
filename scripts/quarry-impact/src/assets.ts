@@ -66,7 +66,7 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility'];
   const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
   const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
