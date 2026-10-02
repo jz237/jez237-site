@@ -179,10 +179,23 @@ function check(name, ok, info) {
       check('key ] steps to the next part', sel2.length === 1 && sel2[0] !== sel[0], sel2);
       await press('[', 400);
       check('key [ steps back', (await ev(() => window.__apx.selection.primary?.id)) === sel[0]);
-      await page.mouse.click(W - 260, H - 200);
-      await sleep(300);
-      await page.mouse.click(32, H - 160);
-      await sleep(300);
+      // a point that is neither a part nor covered by HUD (callout cards, dock, panels); reset the view first, a framed close-up can fill the canvas
+      await press('r', 1500);
+      const empty = await ev((w, h) => {
+        const a = window.__apx;
+        let onCanvas = 0, free = 0; const covers = {};
+        for (let y = 120; y < h - 140; y += 20) for (let x = 20; x < w - 20; x += 20) {
+          const el = document.elementFromPoint(x, y);
+          if (el !== a.canvas) { const k = el ? el.tagName + '.' + String(el.className && el.className.baseVal !== undefined ? el.className.baseVal : el.className) : 'null'; covers[k] = (covers[k] || 0) + 1; continue; }
+          onCanvas++;
+          if (a.picker.pick(x, y, a.canvas)) continue;
+          free++;
+          return { x, y };
+        }
+        return { x: 0, y: 0, none: true, onCanvas, free, covers, sel: a.selection.selected.length, iso: a.selection.isolate };
+      }, W, H);
+      check('empty canvas point found', !!empty && !empty.none, empty);
+      if (empty && !empty.none) { await page.mouse.click(empty.x, empty.y); await sleep(300); }
       check('clicking empty space clears the selection', (await ev(() => window.__apx.selection.selected.length)) === 0);
       check('inspector closes with the selection', !(await $('.inspector.is-open')));
 

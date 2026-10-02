@@ -1,10 +1,52 @@
-// Post chain: MSAA HDR scene -> GTAO ambient occlusion -> bloom -> final (tone map, focus dimming, selection outline, vignette, dither).
+// Post chain: MSAA HDR scene -> GTAO ambient occlusion -> bloom -> (idle refinement average) -> final (tone map, focus dimming,
+// selection outline, vignette, dither).
 import * as THREE from 'three';
 import { EffectComposer } from '../vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from '../vendor/postprocessing/GTAOPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
+import { Pass, FullScreenQuad } from '../vendor/postprocessing/Pass.js';
+
+/** Running HDR average: each enabled frame is blended into one persistent target with weight 1/(n+1) via constant-alpha blending. */
+class AccumPass extends Pass {
+  constructor(w, h) {
+    super();
+    this.needsSwap = false;
+    this.enabled = false;
+    this.hasData = false;
+    this.weight = 1;
+    this.rt = new THREE.WebGLRenderTarget(w, h, { type: THREE.HalfFloatType, depthBuffer: false, stencilBuffer: false, samples: 0 });
+    this.material = new THREE.ShaderMaterial({
+      uniforms: { tDiffuse: { value: null }, uMax: { value: 16 } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      // clamp single-sample specular fireflies before they enter the average
+      fragmentShader: `uniform sampler2D tDiffuse; uniform float uMax; varying vec2 vUv;
+        void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+          gl_FragColor = vec4(c * min(1.0, uMax / max(l, 1e-4)), 1.0); }`,
+      blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
+      blendSrc: THREE.ConstantAlphaFactor, blendDst: THREE.OneMinusConstantAlphaFactor,
+      depthTest: false, depthWrite: false,
+    });
+    this.quad = new FullScreenQuad(this.material);
+  }
+
+  setSize(w, h) {
+    this.rt.setSize(w, h);
+    this.hasData = false;
+  }
+
+  render(renderer, writeBuffer, readBuffer) {
+    this.material.uniforms.tDiffuse.value = readBuffer.texture;
+    this.material.blendAlpha = this.weight;
+    const autoClear = renderer.autoClear;
+    renderer.autoClear = false;
+    renderer.setRenderTarget(this.rt);
+    this.quad.render(renderer);
+    renderer.autoClear = autoClear;
+    this.hasData = true;
+  }
+}
 
 const FINAL_FRAG = /* glsl */ `
 uniform sampler2D tDiffuse;
@@ -94,6 +136,18 @@ export function createPost({ stage, Q, picker }) {
   ao.blendIntensity = 1.0;
   ao.updateGtaoMaterial({ radius: 3.2, distanceExponent: 1.4, thickness: 1.6, scale: 1.15, samples: 16, distanceFallOff: 1.0, screenSpaceRadius: false });
   ao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 5, rings: 2, samples: 16 });
+  // let the idle refinement rotate the AO noise tile each frame so the average decorrelates the per-pixel pattern
+  {
+    const gm = ao.gtaoMaterial;
+    const fs = gm.fragmentShader
+      .replace('uniform sampler2D tNoise;', 'uniform sampler2D tNoise;\nuniform vec2 uNoiseShift;')
+      .replace('vec2 noiseUv = vUv * resolution / noiseResolution;', 'vec2 noiseUv = (vUv * resolution + uNoiseShift) / noiseResolution;');
+    if (fs !== gm.fragmentShader && fs.includes('uNoiseShift') && fs.includes('+ uNoiseShift')) {
+      gm.fragmentShader = fs;
+      gm.uniforms.uNoiseShift = { value: new THREE.Vector2() };
+      gm.needsUpdate = true;
+    } else console.warn('[apx9] GTAO noise-phase patch did not apply');
+  }
   const aoRender = ao.render.bind(ao);
   ao.render = (...args) => {
     const m = camera.layers.mask;
@@ -122,6 +176,10 @@ export function createPost({ stage, Q, picker }) {
   bloom.enabled = Q.bloom;
   composer.addPass(bloom);
 
+  const accumSupported = hdr && Q.accum > 1;
+  const accumPass = new AccumPass(size.x, size.y);
+  composer.addPass(accumPass);
+
   const flags = new Uint8Array(1024);
   const flagsTex = new THREE.DataTexture(flags, 1024, 1, THREE.RedFormat, THREE.UnsignedByteType);
   flagsTex.minFilter = flagsTex.magFilter = THREE.NearestFilter;
@@ -149,11 +207,16 @@ export function createPost({ stage, Q, picker }) {
     depthTest: false, depthWrite: false,
   });
   const finalPass = new ShaderPass(finalMat, 'tDiffuse');
+  finalPass.renderToScreen = true;
+  const finalRender = finalPass.render.bind(finalPass);
+  // while a refinement average exists the final pass reads that instead of the single-frame scene target
+  finalPass.render = (renderer, writeBuffer, readBuffer, ...rest) => finalRender(renderer, writeBuffer, accumPass.hasData ? accumPass.rt : readBuffer, ...rest);
   composer.addPass(finalPass);
 
   const U = finalMat.uniforms;
   const post = {
-    composer, ao, bloom, finalPass, uniforms: U, flags, flagsTex, passes: { renderPass, ao, bloom, finalPass },
+    composer, ao, bloom, finalPass, uniforms: U, flags, flagsTex, accumSupported,
+    passes: { renderPass, ao, bloom, accum: accumPass, finalPass },
     resize(w, h, dpr) {
       composer.setPixelRatio(dpr);
       composer.setSize(w, h);
@@ -169,14 +232,27 @@ export function createPost({ stage, Q, picker }) {
       for (const i of hover) flags[i + 1] |= 2;
       flagsTex.needsUpdate = true;
     },
-    render({ id = false, focus = 0, time = 0 } = {}) {
+    /** Full chain. accumWeight > 0 blends this frame into the refinement average (1 starts a new average). */
+    render({ id = false, idFresh = false, focus = 0, time = 0, accumWeight = 0 } = {}) {
       if (id) picker.renderFull();
-      U.uHasId.value = id ? 1 : 0;
+      else if (!idFresh) picker.valid = false;
+      accumPass.enabled = accumSupported && accumWeight > 0;
+      if (accumPass.enabled) accumPass.weight = accumWeight;
+      else accumPass.hasData = false;
+      U.uHasId.value = id || idFresh ? 1 : 0;
       U.uFocus.value = focus;
       U.uTime.value = (time % 97) * 13.7;
       composer.readBuffer = composer.renderTarget2;
       composer.writeBuffer = composer.renderTarget1;
       composer.render(0.016);
+    },
+    /** Final pass only (outline, focus dimming) over the scene already rendered; no scene work. */
+    renderOverlay({ id = false, focus = 0, time = 0 } = {}) {
+      if (id && !picker.valid) picker.renderFull();
+      U.uHasId.value = id ? 1 : 0;
+      U.uFocus.value = focus;
+      U.uTime.value = (time % 97) * 13.7;
+      finalPass.render(renderer, null, composer.renderTarget2);
     },
   };
   return post;
