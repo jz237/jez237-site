@@ -1,0 +1,16 @@
+{
+  "baseline": "7b2c8d25698e5cad6e3ba90198e41637cc1c641b",
+  "files": {
+    "src/estate-asset.ts": {
+      "snapshot": "src-estate-asset.ts.gz",
+      "before": "882d0fec23d1989b8c11bedd0a0962388f60006b1564a195cf87be92ea6e06c8",
+      "after": "4deef0bff722809d248aaf58258383e135c249ececce74415800419d02c09518"
+    },
+    "src/estate-front.ts": {
+      "snapshot": "src-estate-front.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "bef423ae0dd57d06eff0df53ce27c8a9e0da309d61e193f07110ac75dadc5e14",
+      "introduced": true
+    }
+  }
+}
