@@ -5,19 +5,25 @@ import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import R from '@dimforge/rapier3d-compat';
 import * as current from '../src/vehicle-physics';
-import {kinds,trajectory,wheelParameters,trial,motionProbe} from './tyre-failure-scenarios';
+import {kinds,trajectory,wheelParameters,trial,motionProbe,type PhysicsAPI} from './tyre-failure-scenarios';
+import {withHistoricalHandbrakePolicy} from './historical-handbrake-policy';
 
 const manifest=JSON.parse(readFileSync(new URL('./fixtures/tyre-failure/previous-kernel.json',import.meta.url),'utf8'));
 const bytes=gunzipSync(readFileSync(new URL('./fixtures/tyre-failure/previous-kernel.mjs.gz',import.meta.url)));
 assert.equal(manifest.revision,'2e641fea22272631c1dad949f8a14f5814c95b20');
 assert.equal(createHash('sha256').update(bytes).digest('hex'),manifest.bundleSHA256,'The independent baseline bundles every local dependency from the preceding revision');
 const previous=await import('data:text/javascript;base64,'+bytes.toString('base64'));
+// Keep the frozen bundle/hash intact, applying only the reviewed current rear
+// handbrake policy to its powered-handbrake trajectory phases.
+const previousWithHandbrake:PhysicsAPI={...previous,stepVehiclePhysics(...args:Parameters<typeof current.stepVehiclePhysics>){
+ return withHistoricalHandbrakePolicy(args[1],args[2],args[4].input.handbrake,()=>previous.stepVehiclePhysics(...args));
+}};
 await R.init();
 
-test('all eleven cars preserve exact intact and subthreshold trajectories except the explicit modern rim correction',t=>{
+test('all eleven cars preserve exact intact and subthreshold trajectories under current handbrake policy except the explicit modern rim correction',t=>{
  const exceptions=new Set<string>();
  for(const kind of kinds)for(const tuned of [false,true])for(const damaged of [false,true]){
-  const before=trajectory(previous,kind,tuned,damaged);
+  const before=trajectory(previousWithHandbrake,kind,tuned,damaged);
   assert.ok(before.finite);
   for(const tyreDamage of [[0,0,0,0],[.64,.64,.64,.64]]){
    const after=trajectory(current,kind,tuned,damaged,tyreDamage);
@@ -35,12 +41,12 @@ test('all eleven cars preserve exact intact and subthreshold trajectories except
   }
  }
  assert.deepEqual([...exceptions].sort(),['hatch/false','hatch/true','sedan/false','sedan/true']);
- t.diagnostic('44 frozen traces:40 scenarios remain exact with present zero/subthreshold tyre state;4 sedan/hatch damaged stock/tuned scenarios receive the explicit rim-clearance correction. Both tyreDamage0 and.64 were checked.');
+ t.diagnostic('Frozen kernel with only the documented rear handbrake engine-command adapter;44 traces:40 scenarios remain exact with present zero/subthreshold tyre state;4 sedan/hatch damaged stock/tuned scenarios receive the explicit rim-clearance correction. Both tyreDamage0 and.64 were checked.');
 });
 
-test('missing tyre condition preserves severe legacy wheel trauma for every drivetrain and setup',()=>{
+test('missing tyre condition preserves severe legacy wheel trauma under current handbrake policy for every drivetrain and setup',()=>{
  for(const kind of kinds)for(const tuned of [false,true]){
-  const oldDamage=[1,.92,.85,.7],before=trajectory(previous,kind,tuned,true,undefined,oldDamage),after=trajectory(current,kind,tuned,true,undefined,oldDamage);
+  const oldDamage=[1,.92,.85,.7],before=trajectory(previousWithHandbrake,kind,tuned,true,undefined,oldDamage),after=trajectory(current,kind,tuned,true,undefined,oldDamage);
   assert.equal(after.sha256,before.sha256,`${kind} tuned=${tuned}: old severely damaged corners retain their previous response`);
   assert.deepEqual(after.bodyProperties,before.bodyProperties);assert.ok(after.finite);
  }
