@@ -47,11 +47,14 @@ function stockSignature(car:Vehicle){
 // buggy-batching.test.ts; its prior signature remains in the demo-quality layer.
 // The van entry includes the formed roof and rear portal, independently checked
 // against its preceding GLB in van-coachwork.test.ts; the old hash is frozen there.
+// The Ravine wheel-only refinement now has independent non-wheel byte and
+// physical-envelope proof in buggy-wheel-quality.test.ts. Its preceding
+// signature remains immutable in the buggy-wheel revision layer.
 const publishedStock:Record<CarKind,string>={
   coupe:'b2ee8118b23e343e7934b04a85992d9f2a38f8c6b4577bc6d0f70eb09af59175',sedan:'322d0fc9ee6a098f60fbc3886d2886faca426295c34e6effbc72d38891077be8',hatch:'dea844bd8751c9decfccab0584808e4e10cfb1cc6ab4fddfda5de53a6b813ef9',
   muscle:'4bf4637244629f3ab1dbbd085725c9c0a54a53fcdc851f5d7a632ca4468a19b5',wagon:'1bb157c02ac02e372eab78e20deaf06a586267a4d1b6a462204f310b18f50418',utility:'dd7fcf76b50f90e05402512998e144506b5fa88a275bab88ef05df92ce9f05e2',
   compact:'9f1bdaa56a8fcced6283aee8ca0fdc53166781caec3fbca00efa5da54ac1943e',van:'1d91a2bbd759f9ef530b6062bce2d8b78bae3452dace25037666f8984afaac1d',tern:'b70740825080bdbad4370f6d721e3cdd53e3b688d7eee5fb2f6ab71e7b11311e',
-  marten:'47c7f70f57bab55eaa74df133073606a622b328a88fab95f94b4fe44f0dff42f',buggy:'fb985d8a72b143392bdc72c20236f930c0ca227bb9f4de5a6619babae7fcaf81',
+  marten:'47c7f70f57bab55eaa74df133073606a622b328a88fab95f94b4fe44f0dff42f',buggy:'c3fd14b9a430932b3a54f040cd7c9e1a79e8a77ffd857af488cc3313ed4054c3',
 };
 const shape=(car:Vehicle)=>panels(car).map(p=>({name:p.name,visible:p.visible,position:arrayHash(p.geometry.attributes.position.array),normal:arrayHash(p.geometry.attributes.normal.array),wear:arrayHash(p.geometry.attributes.impactWear.array),transfer:arrayHash(p.geometry.attributes.transferPaint.array)}));
 function pose(car:Vehicle,x=2,y=3,z=4,yaw=.6){
