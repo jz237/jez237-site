@@ -162,10 +162,18 @@ async function boot() {
     state.tween = { from: state.explode, to: v, t: -delay / 1000, dur: ms / 1000 };
     invalidate();
   }
+  const lookDir = new THREE.Vector3();
+  /** Floor shadow strength: weaker the more exploded the bee is, and weaker still when looking straight down, where it only smears. */
+  function updateFloor() {
+    camera.getWorldDirection(lookDir);
+    const k = clamp((-lookDir.y - 0.8) / 0.19, 0, 1);
+    stage.floor.material.opacity = (state.floorOpacity ?? 0.34) * (1 - 0.65 * k * k * (3 - 2 * k));
+  }
   function applyExplode(v) {
     state.explode = v;
     bee.setExplode(v);
-    stage.floor.material.opacity = 0.34 - 0.2 * v * v * (3 - 2 * v);
+    state.floorOpacity = 0.34 - 0.2 * v * v * (3 - 2 * v);
+    updateFloor();
     invalidate(true);
     app?.onExplode?.(v);
   }
@@ -275,6 +283,7 @@ async function boot() {
   let idleAt = 0;
   function draw(now) {
     if (accum.reset()) state.shadowDirty = true;
+    updateFloor();
     selection.sync();
     if (state.boundsDirty) updateBounds(true);
     if (state.shadowDirty) { renderer.shadowMap.needsUpdate = true; state.shadowDirty = false; }
