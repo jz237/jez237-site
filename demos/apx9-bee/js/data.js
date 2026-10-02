@@ -145,7 +145,7 @@ export const DETAILS = {
     items: [
       { label: 'Nano-vein frame', child: 'vein-frame' },
       { label: 'Smart membrane (self-healing)', child: 'membrane' },
-      { label: 'Micro-actuator', child: 'micro-actuator' },
+      { label: 'Micro-actuator', child: 'micro-actuator-1' },
       { label: 'Flex joint', child: 'flex-joint' },
     ],
   },
