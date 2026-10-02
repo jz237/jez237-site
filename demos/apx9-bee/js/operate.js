@@ -3,6 +3,7 @@ import * as T from 'three';
 import { h, loadCSS } from './dom.js';
 import { VIEWS } from './rig.js';
 import { createSystems, SYSTEMS } from './systems.js?v=1e77876d0b9b';
+import { createRepair, REPAIR_DURATION } from './repair.js?v=1c37e19c2cc8';
 import { createFlower } from './flower.js?v=14d0816081bf';
 
 const clamp = T.MathUtils.clamp;
@@ -17,7 +18,7 @@ const NOTES = [
 ];
 
 export async function initOperations(app) {
-  await loadCSS('css/operate.css?v=4348c0f12557');
+  await loadCSS('css/operate.css?v=bc398602b78b');
   const { bee, stage, rig, selection } = app;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const op = { mode: 'inspect', power: false, clock: 0, boot: 0, mission: 0, playing: false, sensor: 'normal', flow: 'energy', repair: 0, paused: false, macro: false, autoMission: false, sensorAngle: 0 };
@@ -54,6 +55,7 @@ export async function initOperations(app) {
   const ruler = mesh(new T.PlaneGeometry(51.2, 12.8), new T.MeshBasicMaterial({ map: new T.CanvasTexture(canvas), transparent: true, side: T.DoubleSide }), scaleArt);
   ruler.rotation.x = -Math.PI / 2; ruler.position.set(4, -10, 24);
 
+  const repair = createRepair(app,art);
   const systems = createSystems(app,art), flowLayer = systems.group;
   function anchor(id) { const p=bee.get(id);return p.node.localToWorld(p.centerLocal.clone()); }
   function updateFlows() { systems.update(op.flow,op.clock); }
@@ -91,7 +93,7 @@ export async function initOperations(app) {
       t.text.textContent=op.sensor==='thermal' ? ['WARM CENTRE · MODEL','COOLING PETAL · MODEL','COOL STEM · MODEL'][i] : t.label;
     });
   }
-  let slider = null, missionText = null, playButton = null, repairButton = null, savedLabels = true, savedExplode = 0;
+  let slider = null, missionText = null, playButton = null, savedLabels = true, savedExplode = 0;
   const oldFit = app.fitBand;
   app.fitBand = () => {
     if (op.mode === 'inspect') return oldFit?.();
@@ -103,6 +105,7 @@ export async function initOperations(app) {
     if (op.mode === 'inspect') return;
     const dock = document.querySelector('.dock')?.getBoundingClientRect();
     panel.style.bottom = stage.size.x < 760 ? `${Math.max(98, stage.size.y - (dock?.top ?? stage.size.y - 98) + 10)}px` : '';
+    if(op.mode==='repair'){repair.frame();return;}
     const extra = ['mission', 'sensors', 'scale'].includes(op.mode);
     if (extra) {
       const corners = [];
@@ -122,19 +125,19 @@ export async function initOperations(app) {
   function enter(mode) {
     const first = op.mode === 'inspect';
     if (first && mode !== 'inspect') { savedLabels = app.ui.state.labelsOn; savedExplode = app.getExplode(); }
-    systems.activate(false);
+    systems.activate(false);app.mechanisms?.restore();repair.activate(false);
     restorePose(); op.autoMission = false; op.mode = mode; op.playing = false; op.paused = reduced.matches; pause.textContent = op.paused ? 'Resume motion' : 'Pause motion';
     rig.autoRotate = false; rig.sweepAnim = null; rig.tween = null; stage.camera.clearViewOffset();
-    sensorHud.toggleAttribute('hidden', mode !== 'sensors'); document.body.classList.toggle('sensor-view',mode === 'sensors' || mode === 'systems'); sensorHud.style.display = mode === 'sensors' ? '' : 'none';
+    sensorHud.toggleAttribute('hidden', mode !== 'sensors'); document.body.classList.toggle('sensor-view',mode === 'sensors' || mode === 'systems' || mode === 'repair'); sensorHud.style.display = mode === 'sensors' ? '' : 'none';
     if (stage.scene.background !== sensorBackground) studioBackground = stage.scene.background;
-    stage.scene.background = ['sensors','systems'].includes(mode) ? sensorBackground : studioBackground;
-    stage.floor.visible = !['sensors','systems'].includes(mode);
+    stage.scene.background = ['sensors','systems','repair'].includes(mode) ? sensorBackground : studioBackground;
+    stage.floor.visible = !['sensors','systems','repair'].includes(mode);
     selection.setIsolate(false); selection.clear(); selection.setXray(false); bee.root.visible = true;
     app.ui.endTour(); app.ui.closeDetail(); app.ui.toggleDirectory(false); app.ui.toggleSpecs(false);
     app.onInteract?.();
     flower.visible = mode === 'mission' || mode === 'sensors'; pollen.visible = mode === 'mission'; scaleArt.visible = mode === 'scale'; flowLayer.visible = mode === 'systems'; lamp.visible = mode === 'power';
     panel.hidden = mode === 'inspect'; launch.hidden = !panel.hidden; document.body.classList.toggle('operating', !panel.hidden);
-    body.replaceChildren(); slider = missionText = playButton = repairButton = null;
+    panel.dataset.mode=mode;body.replaceChildren(); slider = missionText = playButton = null;
     Object.entries(tabButtons).forEach(([k, b]) => b.setAttribute('aria-pressed', String(mode === k)));
     if (mode === 'inspect') { op.power = false; if (app.ui.state.labelsOn !== savedLabels) app.ui.setLabels(savedLabels); app.setExplode(savedExplode, 0); app.resetView(500); launch.focus(); return; }
     if (app.ui.state.labelsOn) app.ui.setLabels(false); app.setExplode(mode === 'systems' ? .45 : 0, 0); setSensor('normal');
@@ -178,28 +181,13 @@ export async function initOperations(app) {
         h('small',null,'Illustrative UV and relative thermal model; colours are not measured temperatures or literal bee vision.'));setSensor('normal');
 
     } else if (mode === 'repair') {
-      op.repair = 0; status.textContent = 'FAULT R-07 • right wing response below threshold.';
-      body.append(h('p', null, 'Run the diagnostic, remove the thorax cover, then locate the right wing mount in the model or parts directory. Fit the spare and run a flight check.'), repairButton = btn('Run diagnostic', advanceRepair), h('small', null, 'Repair is reversible. Changing modes restores every original part.'));
+      op.repairT=0;op.repair=0;repair.activate(true);repair.build(body,status,op,()=>enter('repair'));repair.update(0);
     } else {
       status.textContent = '28 mm body · 52 mm wingspan · 24.26 mm US quarter.';
       body.append(h('p', null, 'The quarter and ruler share the model’s millimetre units. Orbit around them to see just how small the mechanism would be.'), h('small', null, 'Relative comparison only. On-screen size depends on your display and zoom.'));
     }
     requestAnimationFrame(frameExhibit); app.invalidate(true);
   }
-  function advanceRepair() {
-    if (op.repair === 0) { op.repair = 1; status.textContent = 'Fault isolated: right wing mount. Remove the thorax cover to access it.'; selection.select(bee.get('thorax-armor')); repairButton.textContent = 'Remove thorax cover'; }
-    else if (op.repair === 1) { op.repair = 2; app.setExplode(.55, reduced.matches ? 0 : 1100); selection.clear(); status.textContent = 'Select the right wing mount. Use the model or open the parts directory.'; repairButton.textContent = 'Open parts directory'; }
-    else if (op.repair === 2) app.ui.toggleDirectory(true);
-    else if (op.repair === 3) { op.repair = 4; op.repairT = 0; status.textContent = 'Spare actuator fitted. Reassemble and check both wings.'; repairButton.textContent = 'Reassemble & test'; selection.clear(); }
-    else if (op.repair === 4) { op.repair = 5; app.setExplode(0, 0); op.boot = 7; op.power = true; status.textContent = 'PASS • both wings respond. Unit ready for pollination.'; repairButton.textContent = 'Try again'; }
-    else enter('repair');
-    app.invalidate(true);
-  }
-  selection.on(kind => {
-    if (kind !== 'select' || op.mode !== 'repair' || op.repair !== 2 || !selection.primary) return;
-    if (/^wing-mount-r(?:\/|$)/.test(selection.primary.id)) { op.repair = 3; status.textContent = 'Correct assembly. Replace its oscillation actuator.'; repairButton.textContent = 'Fit spare actuator'; app.ui.toggleDirectory(false); }
-    else status.textContent = 'That is not the faulted assembly. Find Right Wing Mount & Actuator.';
-  });
   function poseMission() {
     const t = op.mission, step = Math.min(4, Math.floor(t * 5));
     const x = t < .2 ? 15 * smooth(t / .2) : t < .4 ? 15 : t < .6 ? 15 + 12 * smooth((t - .4) / .2) : t < .8 ? 27 : 27 - 33 * smooth((t - .8) / .2);
@@ -219,12 +207,12 @@ export async function initOperations(app) {
     const old = oldTick?.(dt, now);
     if (op.mode === 'inspect') return old;
     // Undo only our pose before applying a fresh explosion transform and pose.
-    restorePose(); bee.setExplode(app.getExplode(), true);
+    repair.restore();restorePose(); bee.setExplode(app.getExplode(), true);
     const moving = !op.paused;
     if (moving) { op.clock += dt; if (op.mode === 'power') op.boot += dt; }
     if (op.mode === 'power' && op.autoMission && op.boot >= 8 && moving) { enter('mission'); op.paused=false; op.playing=true; pause.textContent='Pause motion'; }
     if (op.mode === 'mission') { if (op.playing && moving) op.mission = Math.min(1, op.mission + dt / 32); if (op.mission >= 1) { op.playing = false; playButton.textContent = 'Replay mission'; } poseMission(); }
-    const powered = op.mode === 'power' || op.mode === 'mission' || (op.mode === 'repair' && op.repair === 5);
+    const powered = op.mode === 'power' || op.mode === 'mission';
     if (powered && app.getExplode() < .03) {
       const awake = op.mode === 'power' ? op.boot : 8;
       if (op.mode === 'power') {
@@ -238,7 +226,7 @@ export async function initOperations(app) {
         if (p.id.startsWith('leg-') && awake > 2.8) rotate(p, zAxis, Math.sin(op.clock * 2 + p.index) * .045);
       });
     }
-    if (op.mode === 'repair' && op.repair === 4) { if (moving) op.repairT += dt; const mount = bee.get('wing-mount-r'); if (mount) mount.node.position.z += Math.sin(Math.min(1, op.repairT / 1.4) * Math.PI) * 6; }
+    if(op.mode==='repair'){if(stage.scene.background!==sensorBackground){studioBackground=stage.scene.background;stage.scene.background=sensorBackground;}if(moving)op.repairT=Math.min(REPAIR_DURATION,op.repairT+dt);repair.update(op.repairT);op.repair=repair.state.step;}
     bee.root.updateMatrixWorld(true); app.picker.valid = false;
     if (op.mode === 'systems') { if(stage.scene.background!==sensorBackground){studioBackground=stage.scene.background;stage.scene.background=sensorBackground;} updateFlows(); }
     if (op.mode === 'power') { lamp.position.copy(anchor('eye-r')); lamp.position.x += 1.6; lamp.material.opacity = .12 + Math.sin(op.clock * 2) * .04; }
@@ -256,9 +244,9 @@ export async function initOperations(app) {
         stage.camera.near=.1;stage.camera.far=1000;stage.camera.updateProjectionMatrix();updateSensorHud();
       }
     }
-    if (['mission', 'sensors', 'scale'].includes(op.mode)) { stage.camera.near = .1; stage.camera.far = 1000; stage.camera.updateProjectionMatrix(); }
+    if (['mission', 'sensors', 'scale','repair'].includes(op.mode)) { stage.camera.near = .1; stage.camera.far = 1000; stage.camera.updateProjectionMatrix(); }
     app.state.shadowDirty ||= powered;
-    return (moving && !['scale', 'repair', 'sensors'].includes(op.mode)) || (moving && op.mode === 'repair' && (op.repair === 5 || op.repair === 4 && op.repairT < 1.4)) || old;
+    return (moving && !['scale', 'repair', 'sensors'].includes(op.mode)) || (moving && op.mode === 'repair' && op.repairT < REPAIR_DURATION) || old;
   };
   window.addEventListener('resize', () => { requestAnimationFrame(()=>requestAnimationFrame(()=>{if(op.mode!=='inspect')frameExhibit();})); });
   panel.addEventListener('keydown', e => { if (e.key === 'Escape') { enter('inspect'); e.stopPropagation(); } });
@@ -269,5 +257,5 @@ export async function initOperations(app) {
   window.addEventListener('keydown', e => { if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.closest('.operate-panel')) return; if (op.mode !== 'inspect' && ['r', 'R', 'Escape', 't', 'T', 'x', 'X'].includes(e.key)) enter('inspect'); }, true);
   reduced.addEventListener('change', () => { if (reduced.matches) { op.paused = true; op.playing = false; pause.textContent = 'Resume motion'; } });
   flower.visible = pollen.visible = flowLayer.visible = scaleArt.visible = lamp.visible = false;
-  app.operations = { enter, state: op, setSensor, advanceRepair, flower, systems };
+  app.operations = { enter, state: op, setSensor, flower, systems, repair };
 }

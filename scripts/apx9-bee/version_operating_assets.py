@@ -19,6 +19,7 @@ def update(path, pattern, replacement):
 update('js/operate.js', r"css/operate\.css(?:\?v=[^']+)?", f"css/operate.css?v={version('css/operate.css')}")
 update('js/operate.js', r"\./flower\.js(?:\?v=[^']+)?", f"./flower.js?v={version('js/flower.js')}")
 update('js/operate.js', r"\./systems\.js(?:\?v=[^']+)?", f"./systems.js?v={version('js/systems.js')}")
+update('js/operate.js', r"\./repair\.js(?:\?v=[^']+)?", f"./repair.js?v={version('js/repair.js')}")
 # Version dependencies before their importing modules, ending at the HTML entry.
 for path, ref, source in [
     ('js/assemblies/flight.js', './flight-servo.js', 'js/assemblies/flight-servo.js'),

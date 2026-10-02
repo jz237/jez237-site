@@ -66,6 +66,7 @@ export function initMechanisms(app) {
   const oldTick=app.tick;
   app.tick=(dt,now)=>{
     restore();const prior=oldTick?.(dt,now),on=selection.xray;
+    if(app.operations.state.mode==='repair'){card.hidden=true;state.active=false;macro=false;state.focus=null;savedLabels=null;const t=app.operations.state.repairT;if(t>=24&&t<30){const clock=state.clock;state.clock=t-24;pose();state.clock=clock;}return prior;}
     const was=state.active;state.active=on;
     const touring=app.ui.state.tour>=0;
     card.hidden=!on||touring;
