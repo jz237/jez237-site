@@ -13,7 +13,8 @@ import {Vehicle} from '../src/vehicle';
 import {Simulation} from '../multiplayer/simulation';
 import {Room} from '../multiplayer/room';
 import {NEUTRAL,STEP,type Snapshot} from '../multiplayer/protocol';
-import {structuralDamage} from '../src/bodywork-response';
+import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
+import {vehicleContact} from '../src/vehicle-contact';
 import {freshComponents,applyComponentImpact,damageWheels,validComponents} from '../src/component-damage';
 import anchors from '../src/vehicle-damage-anchors.json';
 import {validOnlineSnapshot} from '../src/network-validation';
@@ -49,21 +50,62 @@ test('authoritative corner anchors match real production models and retain froze
 
 // Independent browser collision adjudication follows the solo contact pipeline.
 // It does not call the authoritative server's damage handler.
-function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:number,seen:Map<string,number>,race=false){
+function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:number,judge:ImpactAdjudicator,race=false){
+ const contacts:(ImpactContact&{a?:Vehicle;b?:Vehicle;point:T.Vector3;relative:T.Vector3})[]=[];
  queue.drainContactForceEvents(e=>{
-  const h1=e.collider1(),h2=e.collider2(),key=Math.min(h1,h2)+':'+Math.max(h1,h2);if(time-(seen.get(key)??-100)<.28)return;
-  const a=cars.find(c=>c.collider.handle===h1||c.roof.handle===h1),b=cars.find(c=>c.collider.handle===h2||c.roof.handle===h2);if(!a&&!b)return;
+  const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(world,cars,h1,h2);if((!a&&!b)||!judge.needsContact(key,time))return;
   const point=(a??b)!.current.clone(),normal=new T.Vector3();world.contactPair(world.getCollider(h1),world.getCollider(h2),m=>{if(m.numSolverContacts()){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}});
   const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3(),relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*STEP;
-  if(closing<.65||impulse<1500)return;seen.set(key,time);const damage=structuralDamage(impulse,closing)*(race?.45:1);
-  for(const [car,other,direction]of [[a,b,relative],[b,a,relative.clone().negate()]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
+  contacts.push({a,b,key,point,relative,closing,impulse,damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
  });
+ const decisions=judge.adjudicate(contacts,time,race?.45:1);
+ for(const {contact:{a,b,point,relative},damage} of decisions){
+  for(const [car,other,direction]of [[a,b,relative],[b,a,relative.clone().negate()]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
+ }
+ return decisions;
 }
+
+test('rendered Tern/Hatch and authority agree when a harmless bumper tap precedes the real crash',()=>{
+ for(const kind of ['tern','hatch']as const){
+  const authority=new Simulation(R,'playground',[kind,'buggy']),terrain=new Simulation(R,'playground'),queue=new R.EventQueue(true),scene=new T.Scene();
+  const cars=[kind,'buggy' as const].map((k,i)=>new Vehicle(i,k,0xffffff,scene,terrain.world,fx)),judge=new ImpactAdjudicator();
+  authority.phase='playing';authority.world.gravity=terrain.world.gravity={x:0,y:0,z:0};
+  authority.cars.slice(2).forEach(c=>c.body.setEnabled(false));terrain.cars.forEach(c=>c.body.setEnabled(false));
+  cars.forEach((car,i)=>{
+   const p={x:0,y:10,z:i?6.17:0},q={x:0,y:i?1:0,z:0,w:i?0:1},v={x:0,y:0,z:i?-20:20};
+   car.body.setTranslation(p,true);car.body.setRotation(q,true);car.body.setLinvel(v,true);car.postStep(STEP,0);car.impactEffects={glass:true,debris:true};
+   const a=authority.cars[i];a.body.setTranslation(p,true);a.body.setRotation(q,true);a.body.setLinvel(v,true);Object.assign(a.state,{p,q,v,av:{x:0,y:0,z:0}});
+  });
+  const observed:{time:number;damage:number;feedback:boolean}[]=[];
+  try{
+   for(let tick=1;tick<=15;tick++){
+    for(const car of cars){car.input={...NEUTRAL};car.preStep(STEP);authority.setInput(car.id,car.input);}
+    terrain.world.step(queue);cars.forEach(c=>c.postStep(STEP,tick*STEP));
+    for(const decision of browserContacts(terrain.world,queue,cars,tick*STEP,judge)){
+     observed.push({time:tick*STEP,damage:decision.damage,feedback:decision.feedback});
+     if(decision.feedback&&decision.damage===0)assert.ok(cars.every(c=>!c.impactEffects.glass&&!c.impactEffects.debris),'feedback-only contact clears stale visual flags');
+    }
+    authority.step(humans);
+    cars.forEach((car,i)=>{
+     const state=authority.cars[i].state;near(car.health,state.health,.001);near(car.inflicted,state.inflicted,.001);
+     assert.ok(car.current.distanceTo(new T.Vector3().copy(state.p))<.002,`${kind} position tick ${tick}`);
+     car.wreckParts.wheelDamage.forEach((d,j)=>near(d,state.components!.wheelDamage[j],.0001));
+     car.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,state.components!.wheelShift[j].x,.0001);near(v.z,state.components!.wheelShift[j].z,.0001);});
+     near(car.engineDamage!,state.components!.engineDamage!,.0001);
+    });
+   }
+   const tap=observed.find(e=>e.feedback&&e.damage===0)!,crash=observed.find(e=>e.damage>3)!;
+   assert.ok(tap&&crash,kind+' fixture contains harmless feedback then structural damage');assert.ok(crash.time>tap.time&&crash.time-tap.time<.28);assert.equal(crash.feedback,false);
+   assert.equal(observed.filter(e=>e.damage>0).length,1,'compound rails produce one damage decision');assert.equal(authority.damage.length,2);
+   assert.ok(cars.every(c=>c.health<97));
+  }finally{cars.forEach(c=>c.dispose());queue.free();authority.dispose();terrain.dispose();}
+ }
+});
 
 test('real collisions and subsequent damaged-wheel driving match solo across all cars and race damage scaling',()=>{
  for(const kind of ['coupe','sedan','hatch']as const)for(const mode of ['playground','race']as const){
   const authority=new Simulation(R,mode,Array(8).fill(kind)),terrain=new Simulation(R,mode),queue=new R.EventQueue(true),scene=new T.Scene(),cars=[0,1].map(i=>new Vehicle(i,kind,0xffffff,scene,terrain.world,fx));
-  authority.cars.slice(2).forEach(c=>c.body.setEnabled(false));terrain.cars.forEach(c=>c.body.setEnabled(false));authority.phase='playing';const seen=new Map<string,number>();
+  authority.cars.slice(2).forEach(c=>c.body.setEnabled(false));terrain.cars.forEach(c=>c.body.setEnabled(false));authority.phase='playing';const seen=new ImpactAdjudicator();
   cars.forEach((c,i)=>{c.place(i*.65,(i?1:-1)*4,i?Math.PI:0);c.body.setLinvel({x:0,y:0,z:i?-22:22},true);const a=authority.cars[i];a.body.setTranslation(c.body.translation(),true);a.body.setRotation(c.body.rotation(),true);a.body.setLinvel(c.body.linvel(),true);Object.assign(a.state,{p:{...c.body.translation()},q:{...c.body.rotation()},v:{...c.body.linvel()}});});
   try{
    for(let tick=1;tick<=150;tick++){

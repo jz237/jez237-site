@@ -4,7 +4,7 @@ import {validOnlineSetup,copyOnlineSetup,sameOnlineSetup,type OnlineSetup} from 
 import {LEGACY_ONLINE_PLAYERS,validCapacity,type OnlineCapacity} from '../src/online-capacity';
 import {raceGridSlot,lapProgress,circuitRoute,directionForCar,checkRoute,stepScoreRespawns} from '../src/event-rules';
 import {applyComponentImpact,freshComponents,validComponents} from '../src/component-damage';
-import {structuralDamage} from '../src/bodywork-response';
+import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
 import {accumulateEngineDamage} from '../src/engine-condition';
 import {vehicleContact} from '../src/vehicle-contact';
 import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,vehicleSuspensionRestLength,type VehicleSpecification} from '../src/vehicle-physics';
@@ -38,7 +38,7 @@ export class Simulation {
   phase: Snapshot['phase'] = 'lobby';
   damage: DamageEvent[] = [];
   private damageId = 0;
-  private impacts = new Map<string, number>();
+  private impacts = new ImpactAdjudicator();
   constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0) {
     if(rules)this.event=new OnlineEvent(mode,rules,seed);
     if(setups.some(s=>s!==undefined&&!validOnlineSetup(s)))throw new Error('Invalid vehicle setup');
@@ -131,19 +131,19 @@ export class Simulation {
     const impactVelocities=this.cars.map(c=>({...c.state.v}));
     this.world.step(this.queue);
     for(const c of this.cars)this.readBody(c);
+    const contacts:(ImpactContact&{a?:Car;b?:Car;point:Vec3})[]=[];
     this.queue.drainContactForceEvents(e=>{
       const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(this.world,this.cars,h1,h2);
-      if(this.elapsed-(this.impacts.get(key)??-100)<.28)return;
-      if(!a&&!b)return;
+      if((!a&&!b)||!this.impacts.needsContact(key,this.elapsed))return;
       let point={...(a??b)!.state.p},normal={x:0,y:0,z:0};
       this.world.contactPair(this.world.getCollider(h1),this.world.getCollider(h2),m=>{if(m.numSolverContacts()>0){point={...m.solverContactPoint(0)};normal={...m.normal()};}});
       const va=a?impactVelocities[a.state.id]:{x:0,y:0,z:0},vb=b?impactVelocities[b.state.id]:{x:0,y:0,z:0};
       const relative={x:vb.x-va.x,y:vb.y-va.y,z:vb.z-va.z},impulse=e.totalForceMagnitude()*STEP;
       const closing=dot(normal,normal)>.5?Math.abs(dot(relative,normal)):Math.hypot(relative.x,relative.y,relative.z);
-      if(closing<.65||impulse<1500)return;
-      this.impacts.set(key,this.elapsed);
-      const damage=structuralDamage(impulse,closing)*(this.mode==='race'?.45:1);
-      if(damage<.1)return;
+      contacts.push({a,b,key,point,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
+    });
+    for(const {contact:{a,b,point},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
+      if(damage===0)continue;
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
         const s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=dir(other?impactVelocities[other.state.id]:{x:0,y:0,z:0},impactVelocities[s.id]);
         if(received<.1)continue;
@@ -159,7 +159,7 @@ export class Simulation {
         // separately, even when a long sequence of small visual impacts is truncated.
         s.dents=s.dents.slice(-334);
       }
-    });
+    }
     // Repeat a bounded event history in snapshots to survive late packets/reconnects.
     this.damage=this.damage.filter(d=>this.tick-d.tick<600).slice(-128);
     if(this.event?.score)stepScoreRespawns(this.event.combat,this.cars.map(c=>({id:c.state.id,health:c.state.health,current:c.state.p,place:(x:number,z:number,yaw:number)=>{
@@ -192,6 +192,7 @@ export class Simulation {
   }
   snapshot(includeDamage=false): Omit<Snapshot,'members'|'ack'> {return {type:'snapshot',...(this.event?{event:this.event.snapshot(this.capacity)}:{}),capacity:this.capacity,tick:this.tick,elapsed:this.elapsed,countdown:this.countdown,mode:this.mode,phase:this.phase,props:this.props.map(p=>({id:p.id,p:{...p.body.translation()},q:{...p.body.rotation()},v:{...p.body.linvel()},av:{...p.body.angvel()}})),cars:this.cars.map(c=>structuredClone({...c.state,dents:includeDamage?c.state.dents:undefined})),damage:structuredClone(this.damage),ranking:this.ranking()};}
   restore(s:Snapshot) {
+    this.impacts.clear();
     if(s.event){this.event=new OnlineEvent(s.mode,s.event.rules,s.event.seed);this.event.restore(s.event,this.capacity);}else this.event=undefined;
     this.tick=s.tick;this.elapsed=s.elapsed;this.countdown=s.countdown;this.phase=s.phase;this.damage=structuredClone(s.damage);
     this.damageId=Math.max(0,...s.damage.map(d=>d.id),...s.cars.flatMap(c=>(c.dents??[]).map(d=>d.id)));

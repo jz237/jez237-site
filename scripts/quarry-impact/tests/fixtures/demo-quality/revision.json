@@ -1,0 +1,55 @@
+{
+  "baseline": "bcdb9f4",
+  "files": {
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "6085323bbfed9e818c21e948184d2c2a4e5ebf8d45d3375580077e3f6818169f",
+      "after": "3101fbc2f38b948cfd7a277d1c0fd9e6ffe6092be63f2a0d9d30711284229466"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "a2ac02d36606e0ebe2e4fdb6ac7c8f0d10a729bf0d08feabe302fb2c81a919f3",
+      "after": "dd13704f3f2121f710d19b3d74f9ff7c5e386dbeb612f195e263e98c80ce6c9b"
+    },
+    "multiplayer/simulation.ts": {
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "before": "62e39b9bf10eb62ade5b1bbc8dae05ef924a53d17c70721f6b7d2650a344150a",
+      "after": "c6974bf87698d5a7d6e205a6a8f64288cc6e80c479f5cd59c56d70fc08d47c8f"
+    },
+    "src/impact-adjudication.ts": {
+      "snapshot": "src-impact-adjudication.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "18ef8d0a1c13a2ec7d430216aba51a0d3c95ae10885287258f0b3348ebcf3d77"
+    },
+    "tests/impact-adjudication.test.ts": {
+      "snapshot": "tests-impact-adjudication.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "9b3cdb71e163a352f8c2b1cc4210ca01fe99d2799e22943f7cd0957169640fba"
+    },
+    "tests/buggy-batching.test.ts": {
+      "snapshot": "tests-buggy-batching.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "f8019b7e1dcd98caafbf8e44815838ca549ac856ddba0f8913a23c315d7c9ed9"
+    },
+    "tests/armor-invariants.ts": {
+      "snapshot": "tests-armor-invariants.ts.gz",
+      "before": "85f96394fcdec26e69a7d3fd6c26c0bc17848ee5be9f64503b3d644c9ee9c3ee",
+      "after": "185fae0895d77cd26c48b73a194fac011bb3774d3033eeaeb5d3f3a7775f9f97"
+    },
+    "tests/armor-integration.test.ts": {
+      "snapshot": "tests-armor-integration.test.ts.gz",
+      "before": "0aa399fdcd4adbd2d4459e9bd1e6e8064dae1425595e310582ed1c4f87c153c4",
+      "after": "508258fbe78f5ffc2958a708479255b6cffe29ded8df90062d3876d51577183c"
+    },
+    "tests/online-damage.test.ts": {
+      "snapshot": "tests-online-damage.test.ts.gz",
+      "before": "0e862b4c2e82a8e2a1632751252e3a7ff1f894c9ba8f2696c52411c8dab7cff8",
+      "after": "d6f2b13ca2fbbe20f2eb61fa9a031e6cbef34d53625d9a5a797023a9769037a3"
+    },
+    "tests/online-setup-physics.test.ts": {
+      "snapshot": "tests-online-setup-physics.test.ts.gz",
+      "before": "ad43e156943265ca0e76c5370ee37f261bfc150545cb6fec2feeec833bc37815",
+      "after": "f70829ad3a57b7f3985230d31baafd20d045e2a8eff9d751304ff2f8239e883f"
+    }
+  }
+}
