@@ -6,9 +6,9 @@ import {CHALLENGES,challengeMedal,challengeValue,lowerIsBetter} from '../src/cha
 import {readProfile,settleRun,levelFor} from '../src/progression.ts';
 
 function lapRun():RunStats{return {...emptyRun(),seconds:64,distance:700,checkpoints:24,finished:true,completed:true,rank:1};}
-test('thirty authored challenges have unique identities, valid timing, ordered medal targets and every discipline',()=>{
-  assert.equal(CHALLENGES.length,30);assert.equal(new Set(CHALLENGES.map(c=>c.id)).size,30);
-  for(const family of ['racing','impact','stunts'])assert.equal(CHALLENGES.filter(c=>c.discipline===family).length,10);
+test('thirty-eight authored challenges have unique identities, valid timing, ordered medal targets and every discipline',()=>{
+  assert.equal(CHALLENGES.length,38);assert.equal(new Set(CHALLENGES.map(c=>c.id)).size,38);
+  for(const [family,count] of Object.entries({racing:14,impact:12,stunts:12}))assert.equal(CHALLENGES.filter(c=>c.discipline===family).length,count);
   for(const c of CHALLENGES){
     assert.ok(c.limit>=30&&c.limit<=360);assert.ok(c.description.length>25);
     assert.ok(c.medals.every(Number.isFinite));

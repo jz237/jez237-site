@@ -1,8 +1,9 @@
 import type {CarKind,Mode} from './rules';
 import type {RunStats} from './session-telemetry';
+import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 export type Discipline='racing'|'impact'|'stunts';
 export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
-export type Challenge={id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean};
+export type Challenge={id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId};
 const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
 const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
 export const CHALLENGES:readonly Challenge[]=[
@@ -36,7 +37,18 @@ export const CHALLENGES:readonly Challenge[]=[
   event('air-coupe','Flight school','coupe','airtime',120,[.6,1.5,3],'Use the playground ramps and land jumps. Tiny bumps and unfinished falls do not count.'),
   event('air-hatch','Light air','hatch','airtime',120,[.6,1.5,3],'Accumulate landed airtime in the hatch.'),
   event('all-rounder','Quarry all-rounder','coupe','combo',120,[100,240,400],'Combine drift distance and landed jumps: one point per drift metre, 60 per airborne second.'),
+  event('bramble-roam','V8 ground tour','muscle','distance',60,[250,500,750],'Cover ground in the stock Bramble for one minute. Keep it moving; airborne travel does not count.'),
+  {...race('millhaven-haul','Estate endurance','wagon',2,[190,125,95],35),course:'ironfield-figure-eight-v1'},
+  event('utility-impact','Utility work','utility','damage',60,[25,45,60],'Deliver actual opponent damage in a one-minute stock Utility derby. Keep room for another run-up.'),
+  {...race('rook-ironfield','Small circuit, big heart','compact',1,[100,65,47]),course:'ironfield-figure-eight-v1'},
+  event('carrier-survival','Keep the load moving','van','condition',45,[20,40,60],'Survive 45 seconds in the stock Carrier with condition remaining. Deal at least 15 damage to qualify.'),
+  {...race('tern-ironfield','Tern at the crossing','tern',1,[95,62,45]),course:'ironfield-figure-eight-v1'},
+  race('marten-home','Rear-engine return','marten',1,[100,65,43],60),
+  event('ravine-flight','Ravine flight school','buggy','airtime',120,[.5,.7,.8],'Find a quarry ramp and land the stock Ravine. Only significant jumps with a living landing count.'),
 ];
+/** Only circuit challenges select another venue; the arena and ramps stay at Quarry. */
+export const challengeCourse=(c:Challenge):CourseId=>c.mode==='race'?resolveCourseId(c.course):'quarry-v1';
+export const challengeVenueName=(c:Challenge)=>COURSE_NAMES[challengeCourse(c)];
 export function challengeValue(c:Challenge,r:RunStats){
   switch(c.metric){case'time':return r.seconds;case'position':return r.rank;case'damage':return r.damage;case'knockouts':return r.knockouts;case'condition':return r.health;case'drift':return r.drift;case'distance':return r.distance;case'speed':return r.maxSpeed*3.6;case'airtime':return r.airtime;case'combo':return r.drift+r.airtime*60;}
 }
