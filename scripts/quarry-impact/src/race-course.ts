@@ -4,10 +4,13 @@ import {CHECKPOINTS,trackPoint,surfaceAt} from './rules';
 import {landscapeHeight} from './quarry-layout';
 import {circuitRoute,raceGridSlot,type EventOptions,type RoutePoint} from './event-rules';
 import {IRONFIELD} from './ironfield-course';
+import {CINDERBANK} from './cinderbank-course';
 
 export type CourseDirection=EventOptions['direction'];
 export type RaceCourse={
  readonly id:CourseId;readonly name:string;readonly length:number;readonly halfWidth:number;
+ /** Wide circuits include their usable shoulders; legacy courses keep 12m. */
+ readonly checkpointRadius?:number;
  readonly checkpoints:readonly RoutePoint[];readonly samples:readonly RoutePoint[];
  point(t:number):RoutePoint;height(x:number,z:number):number;distance(x:number,z:number):number;
  surface(x:number,z:number):'asphalt'|'gravel';outside(x:number,y:number,z:number):boolean;
@@ -25,13 +28,17 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>id==='ironfield-figure-eight-v1'?IRONFIELD:QUARRY_COURSE;
-const ironfieldReverse=[IRONFIELD.checkpoints[0],...IRONFIELD.checkpoints.slice(1).reverse()];
+const COURSES:Record<CourseId,RaceCourse>={'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK};
+export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
+const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{
  if(course.id==='quarry-v1')return circuitRoute(direction);
- return direction==='reverse'?ironfieldReverse:IRONFIELD.checkpoints;
+ if(direction!=='reverse')return course.checkpoints;
+ let route=reverseRoutes.get(course);
+ if(!route){route=[course.checkpoints[0],...course.checkpoints.slice(1).reverse()];reverseRoutes.set(course,route);}
+ return route;
 }
-/** Keep every old Quarry grid value exact. Ironfield is arc-length sampled. */
+/** Keep every old Quarry grid value exact. Other circuits are arc-length sampled. */
 export function courseGridSlot(course:RaceCourse,index:number,direction:CourseDirection):RoutePoint&{yaw:number;next:number;passed:number}{
  if(course.id==='quarry-v1')return raceGridSlot(index,direction);
  if(direction==='opposing')return courseGridSlot(course,Math.floor(index/2)*2,index%2?'reverse':'forward');

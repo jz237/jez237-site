@@ -2,6 +2,7 @@
 export const COURSE_NAMES={
  'quarry-v1':'Blackridge Quarry',
  'ironfield-figure-eight-v1':'Ironfield Raceway',
+ 'cinderbank-oval-v1':'Cinderbank Speedway',
 } as const;
 export type CourseId=keyof typeof COURSE_NAMES;
 export const isCourseId=(value:unknown):value is CourseId=>typeof value==='string'&&Object.hasOwn(COURSE_NAMES,value);

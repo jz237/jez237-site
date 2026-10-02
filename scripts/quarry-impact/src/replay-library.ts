@@ -4,7 +4,7 @@ import type {Mode} from './rules';
 export const LIBRARY_LIMIT=50,LIBRARY_BYTES=256*1024*1024;
 export type ReplayEntry={id:string;name:string;created:string;saved:number;duration:number;mode:Mode;cars:number;bytes:number;limited:boolean;courseId?:CourseId};
 export const replayName=(name:string)=>name.replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,80)||'Untitled replay';
-export const defaultReplayName=(doc:ReplayDocument)=>`${doc.meta.courseId==='ironfield-figure-eight-v1'?COURSE_NAMES[doc.meta.courseId]+' · ':''}${doc.meta.mode==='race'?'Race':doc.meta.mode==='derby'?'Derby':'Playground'} · ${doc.meta.created.slice(0,19).replace('T',' ')}`;
+export const defaultReplayName=(doc:ReplayDocument)=>`${doc.meta.courseId&&doc.meta.courseId!=='quarry-v1'?COURSE_NAMES[doc.meta.courseId]+' · ':''}${doc.meta.mode==='race'?'Race':doc.meta.mode==='derby'?'Derby':'Playground'} · ${doc.meta.created.slice(0,19).replace('T',' ')}`;
 const storageError=(error:unknown)=>new Error(error instanceof DOMException&&error.name==='QuotaExceededError'?'Browser storage is full. Export or delete a saved replay, then try again.':error instanceof Error?error.message:'Replay storage is unavailable. Export a .qir file instead.');
 /** Metadata and compressed recordings commit together. Serialized write transactions
  * enforce the limits across tabs; existing recordings are never silently evicted. */

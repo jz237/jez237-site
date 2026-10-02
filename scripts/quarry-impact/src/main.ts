@@ -1,6 +1,7 @@
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 import {getRaceCourse,courseRoute,courseGridSlot,courseRecoverySlot,type RaceCourse} from './race-course';
 import {createIronfieldWorld} from './ironfield-world';
+import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
@@ -344,21 +345,22 @@ orbit.maxPolarAngle = Math.PI * 0.48;
 orbit.enableDamping = true;
 let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
 type VenueContext={course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];dispose?:()=>void};
-let quarryVenue:VenueContext,activeVenue:VenueContext,ironfieldVenue:VenueContext|undefined;
+let quarryVenue:VenueContext,activeVenue:VenueContext;
+const raceVenues:Partial<Record<Exclude<CourseId,'quarry-v1'>,VenueContext>>={};
 let quarryMode:Mode='derby';
 const preferredCourse=():CourseId=>clubRound()?.course??(mode==='race'&&!online?.active&&raceFormat()==='laps'?resolveCourseId(activeChallenge?activeChallenge.course:demo?demoOptions.course:eventOptions.course):'quarry-v1');
 const raceLabel=(id:CourseId)=>id==='quarry-v1'?'QUARRY CIRCUIT':COURSE_NAMES[id].toUpperCase();
 const eventLabel=()=>mode==='race'?raceLabel(activeVenue.course.id):modes[mode].label;
 function ensureVenue(id:CourseId):VenueContext{
   if(id==='quarry-v1')return quarryVenue;
-  if(ironfieldVenue)return ironfieldVenue;
+  const cached=raceVenues[id];if(cached)return cached;
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
-  let artwork:ReturnType<typeof createIronfieldWorld>|undefined;
+  let artwork:{root:T.Group;dispose():void}|undefined;
   try{
-    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=createIronfieldWorld();
-    const checkpoint=quarry.checkpoint.clone(true);checkpoint.name='ironfield_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-    ironfieldVenue={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
-    return ironfieldVenue;
+    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
+    const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
+    const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
+    raceVenues[id]=venue;return venue;
   }catch(error){artwork?.dispose();world.free();throw error;}
 }
 function refreshVenueLighting(){
@@ -420,7 +422,7 @@ function menu() {
   orbit.enabled = false;
   sound.pause(false);
   setQuarryMode();
-  ui.innerHTML = `<div class="menu"><div class="topbar"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="location">WOODLAND COUNTY &nbsp; / &nbsp; <b>17:42</b> &nbsp; / &nbsp; DRY TRACK</div></div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1><p>Precision machines. Unforgiving ground.<br>Take the long way home — if it still runs.</p><div class="car-picker">${(Object.keys(DEFINITIONS) as CarKind[]).map((k) => `<button data-car="${k}" class="${k === kind ? 'active' : ''}">${DEFINITIONS[k].name}</button>`).join('')}</div><div class="spec">${DEFINITIONS[kind].subtitle.toUpperCase()}</div></div><div class="menu-bottom">${(Object.keys(modes) as Mode[]).map((m, i) => `<button class="mode-card ${m === mode ? 'active' : ''}" data-mode="${m}"><span class="number">0${i + 1} / ${m === 'derby' ? 'SURVIVAL' : m === 'race' ? 'COMPETITION' : 'EXPLORATION'}</span><strong>${m==='race'?raceLabel(eventOptions.race==='laps'?resolveCourseId(eventOptions.course):'quarry-v1'):modes[m].label}</strong><small>${m==='race'?`${RACE_NAMES[eventOptions.race]} · ${eventOptions.laps} ${eventOptions.race==='laps'?(eventOptions.laps===1?'lap':'laps')+' · '+eventOptions.direction:eventOptions.laps===1?'round':'rounds'} · ${eventOptions.field} cars`:m==='derby'?`${eventOptions.derby==='score'?'Score derby · respawns':'Last car standing'} · ${eventOptions.field} cars`:modes[m].description}</small></button>`).join('')}<button class="primary" id="start">${modes[mode].button}<span>↗</span></button></div><div class="footer"><span>${CAR_KINDS.length} MACHINES &nbsp; · &nbsp; TWO VENUES &nbsp; · &nbsp; NO PRISTINE FINISHES</span><div><a href="./licenses/CREDITS.md" target="_blank" rel="noopener">CREDITS</a><button id="settings">SETTINGS</button><button id="fullscreen">FULLSCREEN ↗</button></div></div></div>`;
+  ui.innerHTML = `<div class="menu"><div class="topbar"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="location">WOODLAND COUNTY &nbsp; / &nbsp; <b>17:42</b> &nbsp; / &nbsp; DRY TRACK</div></div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1><p>Precision machines. Unforgiving ground.<br>Take the long way home — if it still runs.</p><div class="car-picker">${(Object.keys(DEFINITIONS) as CarKind[]).map((k) => `<button data-car="${k}" class="${k === kind ? 'active' : ''}">${DEFINITIONS[k].name}</button>`).join('')}</div><div class="spec">${DEFINITIONS[kind].subtitle.toUpperCase()}</div></div><div class="menu-bottom">${(Object.keys(modes) as Mode[]).map((m, i) => `<button class="mode-card ${m === mode ? 'active' : ''}" data-mode="${m}"><span class="number">0${i + 1} / ${m === 'derby' ? 'SURVIVAL' : m === 'race' ? 'COMPETITION' : 'EXPLORATION'}</span><strong>${m==='race'?raceLabel(eventOptions.race==='laps'?resolveCourseId(eventOptions.course):'quarry-v1'):modes[m].label}</strong><small>${m==='race'?`${RACE_NAMES[eventOptions.race]} · ${eventOptions.laps} ${eventOptions.race==='laps'?(eventOptions.laps===1?'lap':'laps')+' · '+eventOptions.direction:eventOptions.laps===1?'round':'rounds'} · ${eventOptions.field} cars`:m==='derby'?`${eventOptions.derby==='score'?'Score derby · respawns':'Last car standing'} · ${eventOptions.field} cars`:modes[m].description}</small></button>`).join('')}<button class="primary" id="start">${modes[mode].button}<span>↗</span></button></div><div class="footer"><span>${CAR_KINDS.length} MACHINES &nbsp; · &nbsp; ${Object.keys(COURSE_NAMES).length} VENUES &nbsp; · &nbsp; NO PRISTINE FINISHES</span><div><a href="./licenses/CREDITS.md" target="_blank" rel="noopener">CREDITS</a><button id="settings">SETTINGS</button><button id="fullscreen">FULLSCREEN ↗</button></div></div></div>`;
   ui.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(
     (b) =>
       (b.onclick = () => {
@@ -602,7 +604,7 @@ async function start(watch=demo) {
   }
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':'IRONFIELD RACEWAY' : 'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : 'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent='SCORE DERBY';
@@ -1022,6 +1024,7 @@ function step(dt: number) {
         c.current.z,
         c.nextCheckpoint,
         c.checkpointDistance,
+        activeVenue.course.checkpointRadius,
       );
       c.checkpointDistance = check.distance;
       if (check.passed) {
@@ -1401,7 +1404,7 @@ async function boot() {
   if(new URL(location.href).searchParams.has('room'))onlineUI.show();
   (window as any).__quarry = {
     get clubState(){return {cup:clubCup,activeRound:activeClubRound,retired:clubRetired,playerStopped:clubPlayerStopped,firstFinish:clubFirstFinish,recordedStats:clubRunStats,warning:clubWarning};},
-    get courseState(){return{id:activeVenue.course.id,quarryVisible:quarryVenue.root.visible,ironfieldVisible:ironfieldVenue?.root.visible??false,bodies:physics.bodies.len(),colliders:physics.colliders.len(),quarryBodies:quarryVenue.physics.bodies.len(),ironfieldBodies:ironfieldVenue?.physics.bodies.len()??0};},
+    get courseState(){return{id:activeVenue.course.id,quarryVisible:quarryVenue.root.visible,ironfieldVisible:raceVenues['ironfield-figure-eight-v1']?.root.visible??false,cinderbankVisible:raceVenues['cinderbank-oval-v1']?.root.visible??false,bodies:physics.bodies.len(),colliders:physics.colliders.len(),quarryBodies:quarryVenue.physics.bodies.len(),ironfieldBodies:raceVenues['ironfield-figure-eight-v1']?.physics.bodies.len()??0,cinderbankBodies:raceVenues['cinderbank-oval-v1']?.physics.bodies.len()??0};},
     get eventRules(){return{...eventOptions,score:scoreDerby(),field:cars.length,combat:Array.from(combat.records)};},
     get progression(){return{profile,run:telemetry?.stats,challenge:activeChallenge?.id,settled:runSettled,lastAward};},
     get garageSetup() { return {kind, saved:garage.cars[kind], active:cars[0]?.specification}; },

@@ -18,7 +18,7 @@ const state=():PhysicsState=>({health:100,damageLeft:0,damageRight:0,steering:0,
 const directions:CourseDirection[]=['forward','reverse','opposing'];
 
 test('persistent course identities are bounded and old or invalid settings retain Quarry',()=>{
- assert.deepEqual(Object.keys(COURSE_NAMES),['quarry-v1','ironfield-figure-eight-v1']);
+ assert.deepEqual(Object.keys(COURSE_NAMES),['quarry-v1','ironfield-figure-eight-v1','cinderbank-oval-v1']);
  for(const value of [undefined,null,0,{},[],true,'','ironfield','../../track','toString','constructor']){assert.equal(isCourseId(value),false);assert.equal(resolveCourseId(value),'quarry-v1');}
  assert.equal(resolveCourseId('ironfield-figure-eight-v1'),IRONFIELD.id);assert.equal(getRaceCourse('quarry-v1'),QUARRY_COURSE);assert.equal(getRaceCourse(IRONFIELD.id),IRONFIELD);
 });

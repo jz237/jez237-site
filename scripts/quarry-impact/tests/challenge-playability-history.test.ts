@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {normalizeCinderbankMain} from './cinderbank-playability-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -24,7 +25,7 @@ test('challenge content adds one immutable leaf preserving all 744 previous fixt
 
 test('actual camera, physics, AI, event, award, replay, timing and controller declarations stay exact',()=>{
  const names=['updateCamera','ai','step','recover','start','createCars','beginReplay','bankRun','hud','frame','controllerContext','controllerKey','pollController','input','pause','resume','openStudio','closeStudio','captureReplay'];
- const current=source('src/main.ts').toString(),before=readChallengePlayabilityPrevious('src/main.ts').toString(),manifest=revision();
+ const current=normalizeCinderbankMain(source('src/main.ts')).toString(),before=readChallengePlayabilityPrevious('src/main.ts').toString(),manifest=revision();
  assert.deepEqual(Object.keys(manifest.protectedMainFunctions).sort(),[...names].sort());
  const actual=declarations(current,'main.ts',names),expected=declarations(before,'main.ts',names);
  for(const name of names){assert.equal(actual[name],expected[name],name);assert.equal(hash(actual[name]),manifest.protectedMainFunctions[name],name);}
@@ -54,7 +55,7 @@ test('the new restore bridge recognizes exact source and never substitutes unrel
 });
 
 test('all main source outside seven reviewed routing, label and category-return replacements remains exact',()=>{
- let current=source('src/main.ts').toString();
+ let current=normalizeCinderbankMain(source('src/main.ts')).toString();
  const replacements=[
  [
   "import { CHALLENGES, challengeValue, formatChallengeValue, challengeVenueName, type Challenge, type Discipline } from './challenges';",

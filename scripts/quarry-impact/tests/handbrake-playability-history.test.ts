@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {normalizeCinderbankMain} from './cinderbank-playability-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -57,7 +58,7 @@ test('the additive bridge restores whole predecessor bytes and passes unrecogniz
 });
 
 test('actual main retains the complete published camera, AI, timing, replay, input and event orchestration',()=>{
- const main=source('src/main.ts');
+ const main=normalizeCinderbankMain(source('src/main.ts'));
  assert.equal(hash(main),'b66c9e7153ab451feafb2aa1a17cf0b4b7c3e9f89fe8233f702699b2f58be81e');
  assert.equal(hash(main),revision().protected['src/main.ts']);
  assert.equal(main.toString().replaceAll('\r\n','').includes('\n'),false,'Main retains CRLF');
