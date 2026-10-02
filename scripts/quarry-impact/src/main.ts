@@ -33,7 +33,8 @@ import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
 import {PuddleSplashes} from './puddle-splashes';
 import {DERBY_ARENA} from './derby-arena';
-import {structuralDamage,impactAudioSeverity} from './bodywork-response';
+import {impactAudioSeverity} from './bodywork-response';
+import {ImpactAdjudicator,type ImpactContact} from './impact-adjudication';
 import {VehicleThermalState} from './vehicle-thermal-state';
 import {unitNoise} from './vehicle-fire-profile';
 import {DrivingBrain} from './driving-brain';
@@ -222,7 +223,7 @@ const benchmarkSamples: {
   heap: number;
 }[] = [];
 let collisions = 0;
-let lastImpact = new Map<string, number>();
+const impactAdjudicator = new ImpactAdjudicator();
 let keys = new Set<string>();
 let testInput: Input | null = null;
 const renderer = new T.WebGLRenderer({
@@ -379,7 +380,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   cars = [];
   fx.reset();
   quarry.resetProps();
-  lastImpact.clear();
+  impactAdjudicator.clear();
   collisions = 0;
   const count = attract ? 1 : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
   const colors = [
@@ -817,42 +818,40 @@ function step(dt: number) {
   }
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
+  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;va:T.Vector3;vb:T.Vector3})[]=[];
   events.drainContactForceEvents((e) => {
-    const h1 = e.collider1(),
-      h2 = e.collider2();
-    const {a,b,key}=vehicleContact(physics,cars,h1,h2);
-    if (elapsed - (lastImpact.get(key) ?? -100) < 0.28) return;
-    if (!a && !b) return;
-    const point = new T.Vector3().copy((a ?? b)!.current);
-    const normal=new T.Vector3();
-    const co1 = physics.getCollider(h1),
-      co2 = physics.getCollider(h2);
-    if (co1 && co2)
-      physics.contactPair(co1, co2, (m) => {
-        if (m.numSolverContacts() > 0){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}
-      });
-    const va = a?.velocity ?? new T.Vector3(),
-      vb = b?.velocity ?? new T.Vector3();
-    const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*dt;
-    const damage=structuralDamage(impulse,closing)*(mode==='race'?.45:1);
-    if(closing<.65||impulse<1500)return;
-    lastImpact.set(key,elapsed);collisions++;
-    if (a) {
+    const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
+    if((!a&&!b)||!impactAdjudicator.needsContact(key,elapsed))return;
+    const point=new T.Vector3().copy((a??b)!.current),normal=new T.Vector3();
+    const co1=physics.getCollider(h1),co2=physics.getCollider(h2);
+    if(co1&&co2)physics.contactPair(co1,co2,m=>{
+      if(m.numSolverContacts()>0){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}
+    });
+    const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3();
+    const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
+    contacts.push({key,point,va,vb,a,b,closing,impulse:e.totalForceMagnitude()*dt,
+      damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
+  });
+  for(const {contact:{a,b,point,va,vb,impulse},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,mode==='race'?.45:1)){
+    // A feedback-only contact still clears stale glass/debris flags in hit().
+    if(a){
       const before=a.health;
       a.hit(point,vb.clone().sub(va).normalize(),damage,elapsed,false,b?.paintColor);
-      if (b){b.inflicted += before-a.health;combat.hit(b.id,a.id,before,a.health,elapsed);}
+      if(b){b.inflicted+=before-a.health;combat.hit(b.id,a.id,before,a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
     }
-    if (b) {
+    if(b){
       const before=b.health;
       b.hit(point,va.clone().sub(vb).normalize(),damage,elapsed,false,a?.paintColor);
-      if (a){a.inflicted += before-b.health;combat.hit(a.id,b.id,before,b.health,elapsed);}
+      if(a){a.inflicted+=before-b.health;combat.hit(a.id,b.id,before,b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
     }
-    sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
-    if (a?.id === 0 || b?.id === 0)
-      toast(damage > 12 ? 'HEAVY IMPACT' : 'CONTACT', 0.8);
-  });
+    if(feedback){
+      collisions++;
+      sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
+      if(a?.id===0||b?.id===0)toast(damage>12?'HEAVY IMPACT':'CONTACT',.8);
+    }
+  }
   if(scoreDerby())stepScoreRespawns(combat,cars,elapsed,eventDuration(),DERBY_ARENA,id=>{drivers.memory.delete(id);telemetry?.resetOpponent(id);if(id===0)telemetry?.recover();});
   if(telemetry){const p=cars[0];telemetry.sample(dt,{speed:p.speed,lateral:p.velocity.dot(p.right),grounded:[0,1,2,3].filter(i=>p.controller.wheelIsInContact(i)).length,height:p.current.y-landscapeHeight(p.current.x,p.current.z)-.89,health:p.health,checkpoints:p.passed});telemetry.stats.rank=mode==='playground'?0:(mode==='derby'?derbyRanking():rankRace()).indexOf(cars[0])+1;}
   for (const c of cars) {

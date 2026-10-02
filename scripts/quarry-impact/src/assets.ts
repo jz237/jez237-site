@@ -66,6 +66,44 @@ function batch(group: THREE.Object3D, root: boolean) {
       if (w) batch(w, false);
     }
 }
+
+/** Batch fixed children inside one animated assembly, never across its moving
+ * parent. Unique materials retain their original meshes and semantic names. */
+function batchRigidChildren(group: THREE.Object3D) {
+  const batches = new Map<string, THREE.Mesh[]>();
+  for (const child of group.children) {
+    if (!(child instanceof THREE.Mesh) || child.children.length ||
+        Array.isArray(child.material) || child.morphTargetInfluences?.length ||
+        child.geometry.groups.length || child.geometry.drawRange.start !== 0 ||
+        child.geometry.drawRange.count !== Infinity) continue;
+    const key = [child.material.uuid, child.visible, child.castShadow,
+      child.receiveShadow, child.renderOrder, child.layers.mask, child.frustumCulled].join(':');
+    const meshes = batches.get(key) ?? [];
+    meshes.push(child); batches.set(key, meshes);
+  }
+  for (const meshes of batches.values()) {
+    if (meshes.length < 2) continue;
+    const geometries = meshes.map(mesh => {
+      mesh.updateMatrix();
+      return mesh.geometry.clone().applyMatrix4(mesh.matrix);
+    });
+    const geometry = mergeGeometries(geometries);
+    geometries.forEach(g => g.dispose());
+    if (!geometry) continue;
+    const combined = meshes[0].clone(false);
+    combined.name = 'rigid_' + group.name + '_' + (combined.material as THREE.Material).name;
+    combined.geometry = geometry;
+    combined.position.set(0, 0, 0);
+    combined.quaternion.identity();
+    combined.scale.set(1, 1, 1);
+    combined.updateMatrix();
+    group.add(combined);
+    meshes.forEach(mesh => mesh.removeFromParent());
+    // Imported buffers/materials may be shared by other meshes. The new buffer
+    // belongs to the cached template, just like the other suspension geometry.
+  }
+}
+
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
   const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy'];
@@ -80,6 +118,10 @@ export async function loadCars(progress: (s: string) => void) {
     // into a fixed material group across the whole car.
     gltf.scene.traverse(o=>{if(o.name.startsWith('seal_BodyDoor'))o.name='panel_'+o.name;});
     batch(gltf.scene, true);
+    if (kind === 'buggy') for (const corner of ['FL', 'FR', 'RL', 'RR']) {
+      const shock = gltf.scene.getObjectByName('suspension_' + corner + '_shock');
+      if (shock) batchRigidChildren(shock);
+    }
     // Shared refined templates are built once. Cars clone their deformable
     // buffers; no remeshing, loading or asynchronous work occurs during a hit.
     gltf.scene.traverse(o => {
