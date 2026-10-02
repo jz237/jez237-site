@@ -19,7 +19,7 @@ const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url));
 const hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
 let loaded=false;
 async function car(kind:'coupe'|'sedan'|'hatch'='coupe'){
- if(!loaded){const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});loaded=true;}finally{GLTFLoader.prototype.loadAsync=original;}}
+ if(!loaded){const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});loaded=true;}finally{GLTFLoader.prototype.loadAsync=original;}}
  const world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(1000,.1,1000).setTranslation(0,-.1,0));
  const c=new Vehicle(0,kind,0x1247cc,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);c.place(0,0,0);return{c,world,close(){c.dispose();world.free();}};
 }

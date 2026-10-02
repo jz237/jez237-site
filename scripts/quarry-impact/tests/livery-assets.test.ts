@@ -11,7 +11,7 @@ import {newLayer} from '../src/livery';
 import {ReplayRecorder,decodeReplay,encodeReplay} from '../src/replay-data';
 import {captureReplayFrame,ReplayScene} from '../src/replay-scene';
 test('all actual cars retain livery coordinates through damage, repair and replay without shared-material pollution',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){const setup=stockSetup(kind);setup.livery=[newLayer('number','right'),newLayer('checker','top')];const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0}),fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}} as any;
  const car=new Vehicle(0,kind,setup.paint,scene,world,fx,setup),stock=new Vehicle(1,kind,0xffffff,scene,world,fx);car.place(0,0,0);car.render(1);
  const panels=car.panels.filter(m=>m.geometry.hasAttribute('liveryNormal'));assert.ok(panels.length>2,kind);assert.ok(stock.panels.every(m=>!m.geometry.hasAttribute('liveryNormal')),'stock cars allocate no artwork attributes');

@@ -4,8 +4,8 @@ import * as T from 'three';
 export class WreckFinish {
   readonly soot = {value:0};
   readonly bay: {value:T.Vector3};
-  constructor(root:T.Group, halfLength:number) {
-    this.bay={value:new T.Vector3(0,1.0,halfLength*.55)};
+  constructor(root:T.Group, halfLength:number,engineBay?:T.Vector3) {
+    this.bay={value:engineBay?.clone()??new T.Vector3(0,1.0,halfLength*.55)};
     const seen=new Set<T.Material>();
     root.traverse(o=>{
       if(!(o instanceof T.Mesh)||!o.name.startsWith('panel_'))return;

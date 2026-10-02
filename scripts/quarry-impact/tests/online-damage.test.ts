@@ -20,7 +20,7 @@ import {validOnlineSnapshot} from '../src/network-validation';
 import {OnlineView} from '../src/online-view';
 import {verifyOnlineDamageRevision} from './online-damage-invariants';
 await R.init();
-const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);
+const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}} as any;
 const humans=new Set([0,1,2,3,4,5,6,7]);

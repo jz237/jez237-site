@@ -1,0 +1,23 @@
+import * as T from 'three';import {OrbitControls} from 'three/addons/controls/OrbitControls.js';import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const scene=new T.Scene();scene.background=new T.Color(0x263940);scene.fog=new T.Fog(0x263940,18,45);const renderer=new T.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;document.body.append(renderer.domElement);
+const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;room.dispose();pmrem.dispose();
+const camera=new T.PerspectiveCamera(38,innerWidth/innerHeight,.05,100);camera.position.set(5,2.8,6);const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,.9,0);controls.enableDamping=true;controls.minDistance=3;controls.maxDistance=14;controls.maxPolarAngle=Math.PI*.47;
+const floor=new T.Mesh(new T.PlaneGeometry(100,100),new T.MeshStandardMaterial({color:0x354344,roughness:.8}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);const key=new T.DirectionalLight(0xffe7ca,4);key.position.set(4,7,6);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=6;key.shadow.camera.bottom=-6;key.shadow.normalBias=.025;scene.add(key);scene.add(new T.HemisphereLight(0xd4e6ee,0x45493b,1.4));
+const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
+const {prepareWreckGeometry}=await import('/src/wreck-geometry.ts');const {WreckAttachments}=await import('/src/wreck-attachments.ts');
+const car=(await new GLTFLoader().loadAsync('/models/marten-candidate.glb')).scene;scene.add(car);prepareWreckGeometry(car);const parts=new WreckAttachments(car,['FL','FR','RL','RR'].map(n=>car.getObjectByName('wheel_'+n)),.80,.32);
+car.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=o.receiveShadow=true;}});
+document.getElementById('name').textContent='Marten 1600 · rear-engine coupe';document.getElementById('spec').textContent='Original 1960s coupe • 2.28 m wheelbase • Air-cooled rear engine • Rear-wheel drive • Beta artwork';
+document.getElementById('front').onclick=()=>{camera.position.set(5,2.8,6);controls.target.set(0,.9,0);};
+document.getElementById('rear').onclick=()=>{camera.position.set(-5,2.8,-6);controls.target.set(0,.9,0);};
+document.getElementById('doors').onclick=()=>{parts.reset();for(const side of [-1,1])parts.hit(new T.Vector3(side*.80,.85,.12),new T.Vector3(-side,0,0),60);parts.pose(.3,0);};
+const cutaway=[];
+document.getElementById('restore').onclick=()=>{parts.reset();for(const mesh of cutaway)mesh.visible=true;cutaway.length=0;for(const member of parts.assemblies.find(a=>a.name==='engine-lid').members)member.mesh.visible=true;};
+document.getElementById('engine').onclick=()=>{for(const member of parts.assemblies.find(a=>a.name==='engine-lid').members)member.mesh.visible=false;camera.position.set(-3,3.4,-5);controls.target.set(0,.8,-1.5);};
+function resize(){camera.aspect=innerWidth/innerHeight;camera.fov=38;const fit=Math.max(1,1.25/camera.aspect);camera.fov=2*Math.atan(Math.tan(38*Math.PI/360)*fit)*180/Math.PI;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}addEventListener('resize',resize);resize();function frame(){requestAnimationFrame(frame);controls.update();renderer.render(scene,camera);}frame();
+
+document.getElementById('cargo').onclick=()=>{parts.reset();parts.hit(new T.Vector3(0,.8,-1.84),new T.Vector3(0,0,1),60);parts.pose(.3,0);camera.position.set(-5,2.8,-6);controls.target.set(0,.9,0);};
+
+document.getElementById('cabin').onclick=()=>{parts.reset();car.traverse(o=>{if(o instanceof T.Mesh&&(/panel_RoofMarten|glass_|QuarterHeader|FrontHeader|RearHeader/.test(o.name))){o.visible=false;cutaway.push(o);}});controls.minDistance=1.2;camera.position.set(-3.5,3,-2.5);controls.target.set(0,.8,.05);};
+
+document.getElementById('luggage').onclick=()=>{for(const member of parts.assemblies.find(a=>a.name==='hood').members){member.mesh.visible=false;cutaway.push(member.mesh);}camera.position.set(3,3.4,5);controls.target.set(0,.8,1.25);};

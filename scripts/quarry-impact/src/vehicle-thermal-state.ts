@@ -9,11 +9,11 @@ export class VehicleThermalState {
   private episode=0;private eligible=false;private assessed=false;private explosive=false;
   private delay=5;private burstDelay=18;private fuelTime=40;
   constructor(health=100,private seed=Math.random()){this.health=health;}
-  advance(health:number,dt:number,_impactDamage=Math.max(0,this.health-health),zones:DamageZones=noDamage){
+  advance(health:number,dt:number,_impactDamage=Math.max(0,this.health-health),zones:DamageZones=noDamage,engineZone:'front'|'rear'='front',waterCooled=true){
     if(!(dt>0)||!Number.isFinite(dt))return false;
     health=Math.max(0,Math.min(100,Number.isFinite(health)?health:this.health));
     if(health>this.health+1)this.reset(health);
-    const severe=health<=18&&(zones.front>=30||zones.rear>=36),n=(offset:number)=>unitNoise(this.seed+this.episode*1.173+offset);
+    const severe=health<=18&&(zones[engineZone]>=30||zones[engineZone==='front'?'rear':'front']>=36),n=(offset:number)=>unitNoise(this.seed+this.episode*1.173+offset);
     if(severe&&!this.assessed){this.assessed=true;this.eligible=n(0)<FIRE_CHANCE;this.explosive=n(9.37)<EXPLOSION_CHANCE;this.delay=3+n(4.71)*8;this.burstDelay=12+n(7.28)*15;this.fuelTime=30+n(12.19)*40;}
     if(this.eligible&&severe&&!this.burning){this.ignitionTime+=dt;if(this.ignitionTime+1e-9>=this.delay)this.burning=true;}
     if(this.burning)this.burnTime+=dt;
@@ -22,7 +22,7 @@ export class VehicleThermalState {
     if(this.burning&&this.heat>.65&&health<=6&&fuel>.5)this.criticalTime+=dt;
     const burst=this.explosive&&!this.exploded&&this.criticalTime+1e-9>=this.burstDelay;
     if(burst){this.exploded=true;this.burst=1;}else this.burst=Math.max(0,this.burst-dt*1.65);
-    const coolant=zones.front>=12&&health<60?Math.min(.32,(60-health)/120):0,sootTarget=fuel>0?this.heat:0;
+    const coolant=waterCooled&&zones[engineZone]>=12&&health<60?Math.min(.32,(60-health)/120):0,sootTarget=fuel>0?this.heat:0;
     this.soot+=(sootTarget-this.soot)*(1-Math.exp(-dt*.6));
     const smokeTarget=Math.max(coolant,this.soot*(.65+n(3.18)*.35));this.smoke+=(smokeTarget-this.smoke)*(1-Math.exp(-dt*.85));
     this.health=health;this.age+=dt;return burst;

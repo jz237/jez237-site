@@ -181,6 +181,6 @@ Muscle Car 3D Model under CC-BY 3.0. Attribution and modification details:
 ### Original small and commercial vehicles
 
 The [Rook 1100](ROOK-1100.md), [Rillford Carrier](RILLFORD-CARRIER.md), and
-[Tern 1400](TERN-1400.md) use original Quarry Impact bodywork, interiors and
+[Tern 1400](TERN-1400.md), and [Marten 1600](MARTEN-1600.md) use original Quarry Impact bodywork, interiors and
 mechanical artwork. Their wheel tooling is shared. Existing bundled engine audio
 is reused; model-specific provenance and beta limitations are in those notes.
