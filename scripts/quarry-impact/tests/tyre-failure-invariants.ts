@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreBuggyWheelBytes,verifyBuggyWheelRevision} from './buggy-wheel-invariants';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
@@ -10,11 +11,13 @@ export function readTyreFailurePrevious(file:string):Buffer{
  const before=gunzipSync(read(entry.snapshot));assert.equal(hash(before),entry.before,file);return before;
 }
 export function restoreTyreFailureBytes(file:string,bytes:Buffer){
+ bytes=restoreBuggyWheelBytes(file,bytes);
  const entry=revision.files[file];if(!entry||hash(bytes)!==entry.after)return bytes;return readTyreFailurePrevious(file);
 }
 export function verifyTyreFailureRevision(){
+ verifyBuggyWheelRevision();
  for(const [file,entry]of Object.entries<any>(revision.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBuggyWheelBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTyreFailureBytes(file,bytes)),entry.before,file);
  }
 }

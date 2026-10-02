@@ -1,7 +1,7 @@
 import * as T from 'three';
-import {mergeGeometries,toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
-import {buggyTube,buggyLoft,buggyTread} from './buggy-geometry';
+import {buggyTube,buggyLoft} from './buggy-geometry';
+import {addBuggyWheels} from './buggy-wheels';
 import {buggyHub,buggyLinks,buggyShock,type BuggyCorner} from './buggy-suspension';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 
@@ -15,7 +15,7 @@ export function buildBuggyAsset(){
  const frame=mat('Structure Ravine powdercoat',0x28312e,.54,.42),steel=mat('Structure Ravine steel',0x484e4b,.54,.73),alloy=mat('Ravine cast alloy',0x9da6a3,.42,.78),bright=mat('Ravine machined alloy',0xc4c7bf,.26,.85);
  const rubber=mat('Ravine rubber',0x151b19,.91),tire=mat('Tire Ravine all terrain',0x292c27,.95),cloth=mat('Interior Ravine charcoal fabric',0x272c27,.98),vinyl=mat('Interior Ravine shell',0x181f1d,.73),harness=mat('Interior Ravine harness',0xba662f,.96);
  const lamp=mat('Ravine Headlight',0xaab5ab,.20,.12),brake=mat('Ravine Brakelight',0x9b251b,.29,.10),amber=mat('Ravine Indicator',0xc37e28,.28,.10),exhaust=mat('Structure Ravine exhaust',0x5c5140,.49,.70);
- const add=(name:string,g:T.BufferGeometry,m:T.Material,parent:T.Object3D=root)=>{if(name.startsWith('Wheel_Ravine_Barrel_')){const old=g;g=toCreasedNormals(g,Math.PI/3);old.dispose();}if(g.index){const old=g;g=g.toNonIndexed();old.dispose();}const o=new T.Mesh(g,m);o.name=name;o.castShadow=o.receiveShadow=true;parent.add(o);return o;};
+ const add=(name:string,g:T.BufferGeometry,m:T.Material,parent:T.Object3D=root)=>{if(g.index){const old=g;g=g.toNonIndexed();old.dispose();}const o=new T.Mesh(g,m);o.name=name;o.castShadow=o.receiveShadow=true;parent.add(o);return o;};
  const box=(name:string,p:T.Vector3,size:T.Vector3,m:T.Material,parent:T.Object3D=root)=>{const o=add(name,new T.BoxGeometry(size.x,size.y,size.z),m,parent);o.position.copy(p);return o;};
  const tube=(name:string,points:T.Vector3[],r:number,m:T.Material=frame,segments=12,sides=8,loop=false)=>add(name,buggyTube(points,r,segments,sides,loop),m);
  const bar=(name:string,a:T.Vector3,b:T.Vector3,r:number,m:T.Material=frame,parent:T.Object3D=root,sides=8)=>{const o=add(name,new T.CylinderGeometry(r,r,a.distanceTo(b),sides),m,parent);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(v(0,1,0),b.clone().sub(a).normalize());return o;};
@@ -129,23 +129,7 @@ export function buildBuggyAsset(){
  cylinder('Structure engine silencer Ravine',v(0,.43,-1.62),.064,.59,exhaust,'x',16);
  tube('Structure Ravine exhaust outlet',[v(.25,.43,-1.62),v(.38,.44,-1.67),v(.47,.49,-1.72)],.026,steel,9,10);
 
- // Four original open wheels with cylindrical crown lugs. The outer tread
- // radius and full shoulder width match the physics contract exactly.
- for(const [i,name]of ['FL','FR','RL','RR'].entries()){
-  const side=i%2?1:-1,wheel=new T.Group();wheel.name='wheel_'+name;wheel.position.set(side*.85,.40,(i<2?1:-1)*1.20);root.add(wheel);
-  const profile=[[.198,-.120],[.265,-.141],[.326,-.145],[.353,-.126],[.361,-.086],[.361,.086],[.353,.126],[.326,.145],[.265,.141],[.198,.120],[.198,-.120]].map(([r,x])=>new T.Vector2(r,x));
-  const body=add('Tire_Ravine_'+name,new T.LatheGeometry(profile,24),tire,wheel);body.rotation.z=Math.PI/2;
-  const lugs:T.BufferGeometry[]=[];for(let j=0;j<20;j++)for(const row of [-1,0,1])lugs.push(buggyTread(row*.092,row===0?.073:.082,j*Math.PI/10+(row===0?.055:row*.023),row===0?.070:.086));
-  add('Tire_Ravine_Tread_'+name,mergeGeometries(lugs)!,tire,wheel);lugs.forEach(g=>g.dispose());
-  const barrel=add('Wheel_Ravine_Barrel_'+name,new T.LatheGeometry([[.176,-.115],[.207,-.110],[.208,-.086],[.185,-.086],[.185,.086],[.208,.086],[.207,.110],[.176,.115],[.176,-.115]].map(([r,x])=>new T.Vector2(r,x)),20),alloy,wheel);barrel.rotation.z=Math.PI/2;
-  cylinder('Wheel_Ravine_BrakeDisc_'+name,v(-side*.06,0,0),.156,.018,steel,'x',20,wheel);
-  cylinder('Wheel_Ravine_Hub_'+name,v(side*.116,0,0),.059,.061,bright,'x',16,wheel);
-  for(let j=0;j<6;j++){
-   const a=j*Math.PI/3,spoke=add('Wheel_Ravine_Spoke_'+name+j,buggyLoft([{w:.032,h:.127,r:.010,z:-.013},{w:.039,h:.137,r:.011,z:.013}],1),alloy,wheel);
-   // Loft normal points across the axle, broad sides bridge hub to rim.
-   spoke.rotation.set(a,Math.PI/2,0);spoke.position.set(side*.113,Math.cos(a)*.126,Math.sin(a)*.126);
-   cylinder('Wheel_Ravine_Lug_'+name+j,v(side*.153,Math.cos(a)*.043,Math.sin(a)*.043),.0075,.015,steel,'x',6,wheel);
-  }
- }
+ // Detailed original wheels preserve the same hardpoints and four materials.
+ addBuggyWheels(root,{tire,alloy,bright,steel});
  root.updateMatrixWorld(true);return root;
 }

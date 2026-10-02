@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -11,6 +10,7 @@ import {Vehicle} from '../src/vehicle';
 import {stockSetup,type Setup} from '../src/garage';
 import {ReplayRecorder,replayFile,readReplayFile} from '../src/replay-data';
 import {ReplayScene,captureReplayFrame} from '../src/replay-scene';
+import {readBuggyWheelPrevious} from './buggy-wheel-invariants';
 
 await R.init();
 const originalLoad=GLTFLoader.prototype.loadAsync;
@@ -18,9 +18,9 @@ try{
   GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
   await loadCars(()=>{});
 }finally{GLTFLoader.prototype.loadAsync=originalLoad;}
-const publishedBytes=readFileSync(new URL('../public/models/buggy.glb',import.meta.url));
+const publishedBytes=readBuggyWheelPrevious('public/models/buggy.glb');
 assert.equal(createHash('sha256').update(publishedBytes).digest('hex'),'6ca99cb7cc7aaf305ecbe3cb7c71b20b9d10628c59aaaa1035d3cb39b84876e5','The independent reference is the unchanged published Ravine GLB');
-const published=(await loadCarWithoutImages('buggy')).scene;
+const published=(await new GLTFLoader().parseAsync(Uint8Array.from(publishedBytes).buffer,'')).scene;
 const prepared=templates.get('buggy')!,corners=['FL','FR','RL','RR'] as const;
 const zero={x:0,y:0,z:0};
 const fx={emit(){},mark(){},detach(mesh:T.Mesh){mesh.visible=false;},reset(){}} as any;
@@ -105,7 +105,9 @@ test('prepared Ravine shocks preserve published triangles, finishes and moving p
     try{
       const before=counts(reference.model),after=counts(actual.model);
       assert.equal(before.meshes,armor?120:112);assert.equal(after.meshes,before.meshes-8);assert.equal(after.triangles,before.triangles);assert.equal(after.casters,before.casters);
-      assert.deepEqual(after,{meshes:armor?112:104,triangles:armor?37914:35130,casters:armor?43:39});
+      // Reviewed wheel artwork adds 6,304 triangles, with no new batches or
+      // casters. The independent published shock reference remains unchanged.
+      assert.deepEqual(after,{meshes:armor?112:104,triangles:armor?44218:41434,casters:armor?43:39});
       for(const corner of corners){assert.equal(actual.model.getObjectByName('suspension_'+corner+'_shock')!.children.length,3);assert.ok(actual.model.getObjectByName('Ravine_spring_'+corner));assert.ok(actual.model.getObjectByName('Ravine_shock_shaft_'+corner));}
       const poses=[{travel:[0,0,0,0],steer:0,camber:0,spin:0},{travel:[.32,0,0,0],steer:.7,camber:.12,spin:2.3},{travel:[-.32,.32,.32,-.32],steer:-.7,camber:-.1,spin:5.1},{travel:[-.32,-.32,-.32,-.32],steer:.3,camber:.05,spin:Math.PI}];
       for(const p of poses){
