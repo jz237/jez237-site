@@ -75,11 +75,15 @@ import {showReplayLibrary} from './replay-library-ui';
 import {WaypointRace,WAYPOINTS} from './waypoint-race';
 import {WaypointMarkers} from './waypoint-markers';
 import {directionForCar,RACE_NAMES} from './event-rules';
-import {CONTROLS_KEY,readControls,drivingInput,keyLabel} from './driving-controls';
+import {CONTROLS_KEY,readControls,drivingInput,keyLabel,selectedPad} from './driving-controls';
+import {ControllerInput} from './controller-input';
+import {ControllerNavigation,type NavigationContext} from './controller-navigation';
 import {mountDrivingControls} from './driving-controls-ui';
 import './style.css';
 const ui = document.querySelector<HTMLDivElement>('#ui')!;
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
+const controllerInput=new ControllerInput(),controllerNavigation=new ControllerNavigation();
+const controllerHelp=document.createElement('div');controllerHelp.className='controller-help';controllerHelp.hidden=true;document.body.append(controllerHelp);
 const saveKey = 'quarry-impact-v1';
 let saved: any = {};
 try {
@@ -838,7 +842,8 @@ function recover() {
 }
 function input(): Input {
   if (testInput) return testInput;
-  return drivingInput(drivingControls,keys,navigator.getGamepads?.()??[],cars[0]?.speed??0);
+  const pads=Array.from(navigator.getGamepads?.()??[],pad=>pad?controllerInput.drivingPad(pad):null);
+  return drivingInput(drivingControls,keys,pads,cars[0]?.speed??0);
 }
 function ai(car: Vehicle, dt: number): Input {
   if(car.health<=0||(car.finished&&mode!=='race'))return {throttle:0,steer:0,brake:1,handbrake:false};
@@ -1099,12 +1104,94 @@ function updateCamera(dt: number) {
   );
   camera.updateProjectionMatrix();
 }
+/** Screen ownership is explicit: a pad never activates controls underneath a modal. */
+function controllerContext():NavigationContext|null {
+  if(preparingEvent)return null;
+  const screen=(key:string,selector:string,initial:string,back?:()=>void):NavigationContext|null=>{
+    const root=ui.querySelector<HTMLElement>(selector);return root?{key,root,initial,back}:null;
+  };
+  const click=(selector:string)=>()=>ui.querySelector<HTMLButtonElement>(selector)?.click();
+  if(studio)return screen(studio.hidden?'studio-hidden':'studio','.studio',studio.hidden?'#studio-reveal':studio.doc?'#studio-play':'#studio-camera',()=>{if(studio?.hidden)studio.toggleHud();else closeStudio();});
+  if(closeReplayLibrary){
+    const library=ui.querySelector<HTMLElement>('#replay-library');
+    if(library?.getAttribute('aria-busy')==='true')return null;
+    const confirmation=library?.querySelector<HTMLElement>('.library-confirm:not([hidden])');
+    if(confirmation)return {key:'library-confirm',root:confirmation,initial:'[data-action="cancel"]',back:()=>confirmation.querySelector<HTMLButtonElement>('[data-action="cancel"]')?.click()};
+    return screen('library','#replay-library','#library-close',()=>closeReplayLibrary?.());
+  }
+  if(ui.querySelector('#demo-setup'))return screen('demo-setup','#demo-setup','#demo-course',click('#demo-cancel'));
+  if(state==='paused')return screen('pause','#overlay','#resume',resume);
+  if(ui.querySelector('#online-dialog'))return screen('online-connect','#online-dialog','#cancel-online',click('#cancel-online'));
+  if(clubOpen){
+    const confirmation=ui.querySelector<HTMLElement>('#club-restart-confirmation');
+    if(confirmation&&!confirmation.hidden)return {key:'club-confirm',root:confirmation,initial:'#club-cancel-restart',back:click('#club-cancel-restart')};
+    return screen('club','.club-board',ui.querySelector('#club-start')?'#club-start':'#club-create',closeClubCup);
+  }
+  if(eventSetupOpen)return screen('event-setup','.event-setup','#event-field',click('#event-close'));
+  if(profileOpen)return screen('profile','.profile-board','[data-filter="racing"]',click('#profile-close'));
+  if(garageOpen)return screen('garage','.garage-screen','#garage-engine',click('#garage-close'));
+  if(state==='result'&&!demo)return screen('result','.overlay',activeChallenge?'#challenge-retry':'#again',click(activeChallenge?'#challenge-menu':'#back'));
+  if(state==='lobby')return screen('lobby','.online-dialog','#start-online',click('#leave-online'));
+  if(state==='menu')return screen('menu','.menu','#start');
+  if(demo&&!demoHudHidden&&['playing','countdown','result'].includes(state))return screen('demo','.hud','#demo-camera',()=>pause());
+  if(state==='loading'&&!preparingEvent)return screen('reload','.menu','#event-reload');
+  return null;
+}
+function controllerKey(context:NavigationContext|null):string {
+  if(context)return context.key;
+  if(preparingEvent||state==='loading')return 'loading';
+  if(closeReplayLibrary)return 'library-busy';
+  if(['playing','countdown'].includes(state))return demo?'demo-hidden':'driving';
+  return state;
+}
+function pollController(now:number){
+  const pad=selectedPad(drivingControls,navigator.getGamepads?.()??[]);
+  let context=controllerContext(),key=controllerKey(context);
+  const sample=controllerInput.update(pad,now,key,drivingControls.triggerDeadzone);
+  // Offline events stop on a lost active controller. Reconnection never resumes them automatically.
+  if(sample.disconnected&&!online?.active&&(['playing','countdown','wrecked'].includes(state)||demo&&state==='result')){
+    pause();toast('CONTROLLER DISCONNECTED · RECONNECT OR USE KEYBOARD',5);
+    context=controllerContext();key=controllerKey(context);controllerInput.update(pad,now,key,drivingControls.triggerDeadzone);
+  }
+  controllerNavigation.sync(context);
+  if(!preparingEvent&&key!=='library-busy')for(const command of sample.commands){
+    if(controllerKey(controllerContext())!==key)break;
+    if(command==='start'){
+      if(!demo&&['playing','countdown'].includes(state)&&[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(9))continue;
+      if(state==='paused'||state==='inspect')resume();
+      else if(studio){if(studio.hidden)studio.toggleHud();else studio.togglePlay();}
+      else if(['playing','countdown','wrecked'].includes(state)||demo&&state==='result')pause();
+    }else if(command==='camera'||command==='recover'){
+      // Preserve custom driving maps: a button assigned to a pedal/handbrake keeps that meaning.
+      const button=command==='camera'?2:3,assigned=[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(button);
+      if(!assigned&&!studio&&['playing','countdown'].includes(state)){
+        if(command==='camera'){if(demo)director.cycleView();else hood=!hood;}
+        else if(!demo&&state==='playing')recover();
+      }
+    }else if(context)controllerNavigation.handle(command);
+    else if(demo&&demoHudHidden&&['playing','countdown','result'].includes(state)){
+      demoHudHidden=false;ui.classList.remove('demo-clean');
+    }else if(command==='back'&&state==='inspect')resume();
+    else if(command==='back'&&['playing','countdown'].includes(state)&&![drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(1))pause();
+  }
+  // Activation can synchronously change screens before the physics loop runs.
+  // Consume the held press now, including triggers and A, until it is released.
+  context=controllerContext();controllerInput.update(pad,now,controllerKey(context),drivingControls.triggerDeadzone);controllerNavigation.sync(context);
+  const hideHelp=!pad||preparingEvent||state==='loading'||controllerKey(context)==='library-busy'||demo&&demoHudHidden||!!studio?.hidden;
+  if(controllerHelp.hidden!==hideHelp)controllerHelp.hidden=hideHelp;
+  const assigned=(button:number)=>[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(button);
+  const hint=context?'D-PAD / STICK navigate · ← → adjust · A select · B back'+(state==='paused'?' · START resume':studio?' · START play / pause':demo?' · START pause':''):state==='inspect'?'B / START return to driving':'DRIVING: saved controls'+(!assigned(2)?' · X camera':'')+(!assigned(3)?' · Y recover':'')+(!assigned(9)?' · START pause':!assigned(1)?' · B pause':' · ESC pause');
+  const message=hint+(['playing','countdown'].includes(state)&&sound.ctx?.state==='suspended'?' · CLICK / KEY for sound':'');
+  if(controllerHelp.textContent!==message)controllerHelp.textContent=message;
+}
 function frame(now: number) {
   requestAnimationFrame(frame);
   const raw = (now - lastFrame) / 1000;
   if(state==='playing'&&Number.isFinite(raw)&&raw>0){eventFrameTimes.push(raw*1000);if(eventFrameTimes.length>300)eventFrameTimes.shift();}
   const dt = Math.min(0.05, raw);
   lastFrame = now;
+  // A controller Resume updates lastFrame; measure this frame before that callback.
+  pollController(now);
   clock += dt;
   if (!physics || state === 'loading') return;
   // Include long stalls in the sustained benchmark, including event restarts.
@@ -1177,7 +1264,9 @@ function frame(now: number) {
     });
   }
 }
+addEventListener('pointerdown',e=>{if(e.isTrusted)sound.unlock();});
 addEventListener('keydown', (e) => {
+  if(e.isTrusted)sound.unlock();
   if(studio){if(e.code==='Escape'){e.preventDefault();closeStudio();}else if(e.code==='KeyH'&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.toggleHud();}else if(e.code==='Space'&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.togglePlay();}else if((e.code==='ArrowLeft'||e.code==='ArrowRight')&&!(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement)){e.preventDefault();studio.seek(studio.time+(e.code==='ArrowLeft'?-1:1)*(e.shiftKey?1:.05));}return;}
   if(e.code==='KeyP'&&['playing','countdown'].includes(state)&&!online?.active){e.preventDefault();pause();openStudio(true);return;}
   if(closeReplayLibrary){if(e.code==='Escape'){e.preventDefault();closeReplayLibrary();}return;}
