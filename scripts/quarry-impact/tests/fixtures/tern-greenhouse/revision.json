@@ -1,0 +1,109 @@
+{
+  "baseline": "fe8dbaef1fe1e7495835eda14fd4f61470198f60",
+  "files": {
+    "src/tern-greenhouse.ts": {
+      "snapshot": "src-tern-greenhouse.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "9401774361b1376c1c6eb670fdb716188d2708034498676c3126462d8a83cfc2"
+    },
+    "src/tern-asset.ts": {
+      "snapshot": "src-tern-asset.ts.gz",
+      "before": "6d2105497c3f735bc697bf802ae878edb1ca8de4af1673831cb2af362349d320",
+      "after": "4f19007edbf6a1620ddb0238bdc514c1121298b29f607928a341889010d78cce"
+    },
+    "public/models/tern.glb": {
+      "snapshot": "public-models-tern.glb.gz",
+      "before": "4d0b777656191c76aa0b76ac62163dcd353045ac7bac229cdfc24c2e19081e5a",
+      "after": "8ffed185ca086f75d46b5c8d7ebc05d5b65e3434c548efacb41c507485d94177"
+    },
+    "public/models/tern-candidate.glb": {
+      "snapshot": "public-models-tern-candidate.glb.gz",
+      "before": "4d0b777656191c76aa0b76ac62163dcd353045ac7bac229cdfc24c2e19081e5a",
+      "after": "8ffed185ca086f75d46b5c8d7ebc05d5b65e3434c548efacb41c507485d94177"
+    },
+    "tests/tern-greenhouse.test.ts": {
+      "snapshot": "tests-tern-greenhouse.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "652e1d4d8aa93a5f5c963b217ab588819cf2c26ff93d93f1d2e2a1a50ff53f7e"
+    },
+    "tests/tern-greenhouse-invariants.ts": {
+      "snapshot": "tests-tern-greenhouse-invariants.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "beb56439ec0172da76bc836917569d91b7806b89436f71752214616f6bdc8f74"
+    },
+    "tests/classic-wheel-quality.test.ts": {
+      "snapshot": "tests-classic-wheel-quality.test.ts.gz",
+      "before": "2375890cda019c367f60f4bba27420166f44dd581c03f831e2a1c6be66dd690b",
+      "after": "8e96d5425221e446b3eef203643e0bc567dfb697ba32d50a456246795fc8e039"
+    },
+    "tests/classic-wheel-invariants.ts": {
+      "snapshot": "tests-classic-wheel-invariants.ts.gz",
+      "before": "9c1eac6de7dd93cd73fb7204e1130776a1f49d60a82ca4500e93d1ef273f60b2",
+      "after": "6a8d10a4c93e2cff3ffa9d5d1bbdf5ab01b392da023b88695ff84f24c864c312"
+    },
+    "tests/armor-integration.test.ts": {
+      "snapshot": "tests-armor-integration.test.ts.gz",
+      "before": "bc9181f46fbc150166d81469203714ebc12ac3ebc804dcc89a2af9700b848e03",
+      "after": "ab23026a42c90483729da37bad9738af54e8786d877013bad3775b7be1671d29"
+    },
+    "tests/tern.test.ts": {
+      "snapshot": "tests-tern.test.ts.gz",
+      "before": "cc5cbcded8a3fa58e03bc9885f51037eda31580a220a68de3b10f50260d8dea0",
+      "after": "dae8819bf11d2c790471a6fa8cd5ad731310d6bfd4eb3f5be12394a8e9ca75cb"
+    },
+    "tools/record-tern-greenhouse-revision.py": {
+      "snapshot": "tools-record-tern-greenhouse-revision.py.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "c7b2cb1b29c06251827519fd9b8b82c047a096c9285ee7740e0aeeaa991e2b7d"
+    }
+  },
+  "protected": {
+    "src/tern-front-refinement.ts": "9d30dc9a7e51301367da6e4126a5c39e040c6b4337b1e9fdfcbb0bb46019e9e9",
+    "src/tern-cabin.ts": "2770eb6452da0e01eb472e49f9ee0b49094d721d814558b4105eddf1c6c733fd",
+    "tools/build-tern.ts": "27cc1165b49ee06dba207137ba620795b1b28476abd8f0e4b803d58a698df1c1",
+    "src/road-wheels.ts": "6ebe4feadd1c032172fd7f435b51068fada2b3ef44cedc8fda9df29e853dfb35",
+    "src/marten-asset.ts": "ad661b87a5b464309dfb86bd5b0718a62944a4740051647f1ed02a9ba3016c4e",
+    "src/marten-bodywork.ts": "3171ba82de23faf44db122a0989eb08bce841987627dc7fd6db9de9d529c8f7c",
+    "src/marten-greenhouse.ts": "603a3c749194a5be43f2360999763a2e9f32babd3807cd03ee55a57bb03271d8",
+    "public/models/marten.glb": "5a31202fa007a82c2a4eb133fd20eb0d0a1971bd5ad948eab3406fbf7df3ebdd",
+    "public/models/marten-candidate.glb": "5a31202fa007a82c2a4eb133fd20eb0d0a1971bd5ad948eab3406fbf7df3ebdd",
+    "src/formed-vehicle-panel.ts": "32fe3e7c8c3a40bf99bd29c2e68e908561e7391cb6a8ad2a43de80e1646fdf54",
+    "src/classic-window-frame.ts": "2acb316971c9db111fb3979a03108a93e46072edcc1123dc10de4a99c1fd887e",
+    "src/wreck-geometry.ts": "91f16f97b931aa5e659b7e1d2bb1493274763cc1064d8f826702f8164179c237",
+    "src/wreck-attachments.ts": "ce3878ba73def8113a8bcc998b99066b78b96c478661aa31eabd637c1d804c07",
+    "src/wreck-topology.ts": "9d501cb497cee2db600d2f4cd30c2e1df1f9ea52edcd649b0172514aba0c423a",
+    "src/livery-paint.ts": "5e65f83cba9986f77e8b45ee1840ebf5e0b250e331553a9c73946b9f7ac7f365",
+    "src/vehicle-surface.ts": "29c199ed68dfcb0381c31cf7396b4b1812375117fb732783b4b9da9e2e4a4d88",
+    "src/compact-asset.ts": "32f012a2b3c8064008dc89bb10d58b904eaae919d54b5b4bc7da7c8e090362d1",
+    "public/models/compact.glb": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e",
+    "public/models/compact-candidate.glb": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e",
+    "src/van-asset.ts": "036165b348c1f0b6e8dabc5dc8bb15040a3033d4c18d25a1072bd0efaf5b858e",
+    "public/models/van.glb": "c290b9d0d9c4648dda0cc4a23b12d2e80a518473fe556f1b9b044df3c01310cc",
+    "public/models/van-candidate.glb": "c290b9d0d9c4648dda0cc4a23b12d2e80a518473fe556f1b9b044df3c01310cc",
+    "src/buggy-wheels.ts": "4bf7e1371499ed337d9d7fc0e7812144c1f807f2742df3c92dbdc88610dace7c",
+    "src/buggy-asset.ts": "b9c48e98051164f97350d29ef0d01ab39a13ad609cad8215c211ad5bebfe8529",
+    "public/models/buggy.glb": "467d35dee44cd40b5358be520b062c808e4a13d1e5491d66606f309135106e76",
+    "public/models/buggy-candidate.glb": "467d35dee44cd40b5358be520b062c808e4a13d1e5491d66606f309135106e76",
+    "src/vehicle-physics.ts": "f4ff63df9c4aafc755b4e71809637c0efccca9e0185bf56ef894b970b67713a4",
+    "src/wheel-physics.ts": "e581836191711300aa85c07f70a0851a96348d47ac9b9849a2c3c6f9e5f12fcd",
+    "src/tyre-condition.ts": "532825ac3899e72faf11374a2490e6ff1416d4b0383f40fd590091d8268a36d3",
+    "src/component-damage.ts": "f6b0534465c87875dcb9cbd2ffb3257d0eacb717c38e5628386a8167b217c1b3",
+    "src/vehicle-contact.ts": "1142c83a2711b4da2e6d39e432cbf3c306e1a5aa43f3b7156ee8f924d4e40f06",
+    "src/classic-vehicle-specs.ts": "134431ca70006f4d86cb35c069a2e308ac844cf710e70eff33fd820e634c620c",
+    "src/vehicle-armor-spec.ts": "a46eece9b7b058680372b6781e06b958e92dd70f2050cd730c67d002a7eec29d",
+    "src/rules.ts": "55b7f6b64380f475adb27a77e39b249db0b4b1c3bfad0e56f08c4e3bd2d0c9e7",
+    "multiplayer/simulation.ts": "9ccfc0e38c3dcda855222189871bdadb6d6cd097a24ccf975a4a2b630731ecd4",
+    "src/replay-data.ts": "a57bb93bb5e2dda62b2c17daa74c6e314df4fe76b8a0c698f26f3224719635da",
+    "src/replay-scene.ts": "5bf5132a6e09b007c5800d2992447c429ec2d1d41185b3ca94cc348abb0c77a9",
+    "src/wheel-mechanics.ts": "501b533b0d46a20d8574ed79aa8724809bd482cb73f781136d87d4561a599707",
+    "src/tyre-visual.ts": "acebd036360172c11cbe0cf5a78b9b88ac6fd1d7d3aa4093b4143bfd6cebbd23",
+    "src/buggy-suspension.ts": "fb2132131b9bbcc66f7869e73d3caa5336b0752065ba9d385cb379b81262887d",
+    "src/demo-director.ts": "e56e4967084adfe4fb1115bbdbc63cc645fe661f0617300f70c1b2d5c17528d3",
+    "src/demo-camera-visibility.ts": "cee769e055ab367a4b09527378bf8c1f83b21a5d50451a48332774d6b9ac2c60",
+    "src/main.ts": "794feb9189afe2e2788027c9f6fcea03b329a11456f5f6917cffe416921ebd88",
+    "src/vehicle.ts": "c20c5c4fc2452de78a03c0c101408f8daa0377db4c8113c552462785f74e7ce3",
+    "src/assets.ts": "3101fbc2f38b948cfd7a277d1c0fd9e6ffe6092be63f2a0d9d30711284229466",
+    "package.json": "2b2d305ada8c8846ec8a75c4343424add11ddbb3a70ef3a369dac9aedaf6f5e9",
+    "package-lock.json": "101522e58f46c2ecc82ad4391d6ed8fe2df11ff96c39816c2dfbc0bb55543949"
+  }
+}

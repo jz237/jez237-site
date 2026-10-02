@@ -5,6 +5,7 @@ import {refineTernFront} from './tern-front-refinement';
 import {classicWindowFrame} from './classic-window-frame';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
 import {addRoadWheels} from './road-wheels';
+import {refineTernGreenhouse} from './tern-greenhouse';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 
 /** Original three-door hatchback: short overhangs, wedge bonnet, raked hatch,
@@ -129,5 +130,5 @@ export function buildTernAsset(){
  for(let i=0;i<18;i++)box('Structure radiator fin Tern '+i,-.346+i*.041,.692,1.668,.005,.261,.007,rubber);
  box('Structure Tern battery',-.431,.64,1.413,.19,.154,.231,rubber);
  bar('Structure Tern exhaust',v(-.32,.281,.59),v(-.32,.281,-1.825),.024,steel);
- addRoadWheels(root,'tern');refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});refineTernCabin(root,{cloth,vinyl,rubber,steel,alloy});root.updateMatrixWorld(true);return root;
+ refineTernGreenhouse(root);addRoadWheels(root,'tern');refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});refineTernCabin(root,{cloth,vinyl,rubber,steel,alloy});root.updateMatrixWorld(true);return root;
 }
