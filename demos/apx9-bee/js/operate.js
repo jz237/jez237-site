@@ -2,6 +2,7 @@
 import * as T from 'three';
 import { h, loadCSS } from './dom.js';
 import { VIEWS } from './rig.js';
+import { createFlower } from './flower.js?v=14d0816081bf';
 
 const clamp = T.MathUtils.clamp;
 const smooth = (x) => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
@@ -15,10 +16,10 @@ const NOTES = [
 ];
 
 export async function initOperations(app) {
-  await loadCSS('css/operate.css?v=9fec3ea30c0f');
+  await loadCSS('css/operate.css?v=fb67cdf0591c');
   const { bee, stage, rig, selection } = app;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const op = { mode: 'inspect', power: false, clock: 0, boot: 0, mission: 0, playing: false, sensor: 'normal', flow: 'energy', repair: 0, paused: false };
+  const op = { mode: 'inspect', power: false, clock: 0, boot: 0, mission: 0, playing: false, sensor: 'normal', flow: 'energy', repair: 0, paused: false, macro: false, autoMission: false, sensorAngle: 0 };
   const art = new T.Group(); art.name = 'operating-exhibit'; stage.scene.add(art);
   const mat = (color, metalness = 0) => new T.MeshStandardMaterial({ color, roughness: .45, metalness });
   const mesh = (geo, material, parent = art) => { const m = new T.Mesh(geo, material); m.layers.set(4); parent.add(m); return m; };
@@ -29,18 +30,8 @@ export async function initOperations(app) {
   function rotate(p, axis, angle) { if (!p) return; poses.set(p, p.node.quaternion.clone()); p.node.rotateOnAxis(axis, angle); }
   const yAxis = new T.Vector3(0, 1, 0), zAxis = new T.Vector3(0, 0, 1);
 
-  // A stylized flower, modelled at the same millimetre scale as the bee.
-  const flower = new T.Group(); flower.position.set(32, -10, 0); art.add(flower);
-  const petals = mat(0xcf78a3), heart = mat(0xe6aa30), leaf = mat(0x558d68);
-  for (let i = 0; i < 10; i++) {
-    const a = i * Math.PI / 5;
-    const p = mesh(sphere, petals, flower); p.position.set(Math.cos(a) * 7, 0, Math.sin(a) * 7); p.scale.set(6, .65, 2.8); p.rotation.y = -a;
-    const guide = mesh(new T.ConeGeometry(.4, 5, 8), new T.MeshBasicMaterial({ color: 0x79ffff }), flower);
-    guide.position.set(Math.cos(a) * 6, .65, Math.sin(a) * 6); guide.rotation.z = Math.PI / 2; guide.rotation.y = -a; guide.visible = false; guide.userData.uv = true;
-  }
-  const center = mesh(sphere, heart, flower); center.scale.set(3.4, 1.1, 3.4);
-  const stem = mesh(new T.CylinderGeometry(.6, .85, 16, 12), leaf, flower); stem.position.y = -8;
-  const blade = mesh(sphere, leaf, flower); blade.position.set(-3, -8, 0); blade.scale.set(5, .3, 1.7); blade.rotation.z = -.4;
+  const botanical = createFlower(), flower = botanical.root;
+  flower.position.set(32, -10, 0); art.add(flower);
   const scan = mesh(new T.TorusGeometry(10, .08, 6, 64), new T.MeshBasicMaterial({ color: 0x20c6b5, transparent: true, opacity: .7 }), flower); scan.rotation.x = Math.PI / 2; scan.position.y = 1.4;
   const pollen = new T.Group(); art.add(pollen);
   const pollenMat = new T.MeshBasicMaterial({ color: 0xffc33c });
@@ -100,7 +91,26 @@ export async function initOperations(app) {
   const panel = h('section', { class: 'operate-panel panel', hidden: true, 'aria-label': 'Operate APX-9' },
     h('div', { class: 'op-heading' }, h('span', { class: 'op-eyebrow' }, 'APX-9 / FIELD LAB'), btn('×', () => enter('inspect'), { 'aria-label': 'Close operating panel' })), title, tabs, status, body,
     h('footer', null, pause, btn('Back to inspection', () => enter('inspect'))));
-  document.getElementById('ui').append(launch, panel);
+  const sensorHud = h('svg:svg', {class:'sensor-hud', 'aria-hidden':'true', hidden:true});
+  const targets = [[0,1.8,0,'POLLEN / DISC FLORETS'],[8,-.5,0,'PETAL / NECTAR GUIDE'],[-.7,-13,1,'STEM / SUPPORT TISSUE']].map(([x,y,z,label])=>{
+    const rect=h('svg:rect',{width:30,height:30,rx:3}), line=h('svg:path'),text=h('svg:text',null,label);
+    const group=h('svg:g',null,rect,line,text);sensorHud.append(group);return {point:new T.Vector3(x+32,y-10,z),rect,line,text,group,label};
+  });
+  document.getElementById('ui').append(launch, panel, sensorHud);
+  let studioBackground=stage.scene.background;
+  const sensorBackground=new T.Color(0x08141c);
+  function updateSensorHud() {
+    const W=stage.size.x,H=stage.size.y,band=app.fitBand();sensorHud.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    const top=H/2+band.cy-band.h/2,bottom=top+band.h;
+    targets.forEach((t,i)=>{
+      const p=t.point.clone().project(stage.camera),x=(p.x+1)*W/2,y=(1-p.y)*H/2;
+      const show=x>15&&x<W-15&&y>top+15&&y<bottom-20&&Math.abs(p.z)<1&&(!op.macro||i===0);
+      t.group.style.display=show?'':'none';
+      const endX=clamp(x+(i===1?-100:55),W<760?20:370,W-155),endY=clamp(y+(i===0?-45:35),top+25,bottom-15);
+      t.rect.setAttribute('x',x-15);t.rect.setAttribute('y',y-15);t.line.setAttribute('d',`M ${x} ${y} L ${endX} ${endY} h 110`);t.text.setAttribute('x',endX);t.text.setAttribute('y',endY-7);
+      t.text.textContent=op.sensor==='thermal' ? ['WARM CENTRE · MODEL','COOLING PETAL · MODEL','COOL STEM · MODEL'][i] : t.label;
+    });
+  }
   let slider = null, missionText = null, playButton = null, repairButton = null, savedLabels = true, savedExplode = 0;
   const oldFit = app.fitBand;
   app.fitBand = () => {
@@ -123,19 +133,21 @@ export async function initOperations(app) {
   function setSensor(value) {
     const changed = op.sensor !== value;
     op.sensor = value;
-    petals.color.setHex(value === 'uv' ? 0x382782 : value === 'thermal' ? 0xcc293e : 0xcf78a3);
-    heart.color.setHex(value === 'uv' ? 0x9dffff : value === 'thermal' ? 0xffec70 : 0xe6aa30);
-    leaf.color.setHex(value === 'thermal' ? 0x334e9e : 0x558d68);
-    flower.children.forEach(m => { if (m.userData.uv) m.visible = value === 'uv'; });
+    botanical.setSensor(value);
+    panel.dataset.sensor = value;
     document.querySelectorAll('[data-sensor]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sensor === value)));
-    if (op.mode === 'sensors') status.textContent = value === 'normal' ? 'Visible light • the flower as we see it.' : value === 'uv' ? 'Simulated UV • bright nectar guides lead toward the centre.' : 'Simulated thermal • illustrative temperature contrast, not measured data.';
+    if (op.mode === 'sensors') status.textContent = value === 'normal' ? 'Visible light • inspect petal veins, anther crowns and individual pollen grains.' : value === 'uv' ? 'Simulated UV • cyan maps nectar-guide contrast; the disc is the landing target.' : 'Simulated thermal • warm centre, cooler petal edges and foliage. Relative model, not measured temperatures.';
     if (changed) app.invalidate();
   }
   function enter(mode) {
     const first = op.mode === 'inspect';
     if (first && mode !== 'inspect') { savedLabels = app.ui.state.labelsOn; savedExplode = app.getExplode(); }
-    restorePose(); op.mode = mode; op.playing = false; op.paused = reduced.matches; pause.textContent = op.paused ? 'Resume motion' : 'Pause motion';
+    restorePose(); op.autoMission = false; op.mode = mode; op.playing = false; op.paused = reduced.matches; pause.textContent = op.paused ? 'Resume motion' : 'Pause motion';
     rig.autoRotate = false; rig.sweepAnim = null; rig.tween = null; stage.camera.clearViewOffset();
+    sensorHud.toggleAttribute('hidden', mode !== 'sensors'); document.body.classList.toggle('sensor-view',mode === 'sensors'); sensorHud.style.display = mode === 'sensors' ? '' : 'none';
+    if (stage.scene.background !== sensorBackground) studioBackground = stage.scene.background;
+    stage.scene.background = mode === 'sensors' ? sensorBackground : studioBackground;
+    stage.floor.visible = mode !== 'sensors';
     selection.setIsolate(false); selection.clear(); selection.setXray(false); bee.root.visible = true;
     app.ui.endTour(); app.ui.closeDetail(); app.ui.toggleDirectory(false); app.ui.toggleSpecs(false);
     app.onInteract?.();
@@ -147,8 +159,11 @@ export async function initOperations(app) {
     if (app.ui.state.labelsOn) app.ui.setLabels(false); app.setExplode(mode === 'systems' ? .65 : 0, 0); setSensor('normal');
     title.textContent = { power: 'A machine with a heartbeat.', systems: 'Follow the invisible work.', mission: 'One flower. Five small steps.', sensors: 'A different kind of sight.', repair: 'Bring the right wing back.', scale: 'Smaller than you think.' }[mode];
     if (mode === 'power') {
-      op.power = true; op.boot = 0;
-      body.append(h('p', null, 'Eyes, antennae, legs, then wings. Watch each system wake before the unit lifts into a hover.'), btn('Restart power sequence', () => { op.boot = 0; op.paused = false; pause.textContent = 'Pause motion'; }), h('small', null, 'Wing movement is slowed for inspection. This is a speculative robot, not a flight-physics simulation.'));
+      op.power = true; op.boot = 0; op.autoMission = true;
+      body.append(h('p', null, 'One continuous field mission: wake the sensors, deploy the wings, approach the flower, scan, land, gather pollen and depart.'),
+        btn('Restart power sequence', () => enter('power')), btn('Start pollination mission', () => enter('mission')),
+        h('small', null, 'Startup flows into the full mission automatically. Pause at any time. Reduced motion waits for your input; wingbeats are slowed for inspection.'));
+
     } else if (mode === 'systems') {
       status.textContent = 'Live schematic • paths track the parts as you explode the model.';
       const row = h('div', { class: 'op-choices' });
@@ -160,10 +175,16 @@ export async function initOperations(app) {
       slider.addEventListener('input', () => { op.mission = +slider.value / 1000; op.playing = false; playButton.textContent = 'Play mission'; poseMission(); app.invalidate(); });
       playButton = btn(op.playing ? 'Pause mission' : 'Play mission', () => { if (op.mission >= 1) op.mission = 0; op.playing = !op.playing; op.paused = false; pause.textContent = 'Pause motion'; playButton.textContent = op.playing ? 'Pause mission' : 'Play mission'; });
       const row = h('div', { class: 'op-steps' }); STEPS.forEach((s, i) => row.append(btn(s, () => { op.mission = (i + .3) / 5; op.playing = false; playButton.textContent = 'Play mission'; poseMission(); app.invalidate(); })));
-      body.append(slider, row, missionText, playButton); poseMission();
+      body.append(slider, row, missionText, playButton, btn('Replay full sequence', () => enter('power'))); poseMission();
     } else if (mode === 'sensors') {
       const row = h('div', { class: 'op-choices' }); ['normal', 'uv', 'thermal'].forEach(key => row.append(btn({ normal: 'Visible', uv: 'UV', thermal: 'Thermal' }[key], () => setSensor(key), { 'data-sensor': key, 'aria-pressed': String(key === 'normal') })));
-      body.append(row, h('p', null, 'Look toward the flower from the optical sensor. Compare the same landing target across three illustrated sensing modes.'), h('small', null, 'False-colour educational views, not biological vision or calibrated measurements.')); setSensor('normal');
+      const macro=btn(op.macro?'Show whole flower':'Inspect pollen close-up',()=>{op.macro=!op.macro;macro.textContent=op.macro?'Show whole flower':'Inspect pollen close-up';app.invalidate();});
+      const legend=h('div',{class:'sensor-legend'},h('span',null,'LOW RESPONSE'),h('i'),h('span',null,'HIGH RESPONSE'));
+      const angle=h('input',{type:'range',min:-180,max:180,value:op.sensorAngle,'aria-label':'Sensor viewing angle'});
+      angle.addEventListener('input',()=>{op.sensorAngle=+angle.value;app.invalidate();});
+      body.append(row,macro,h('label', {class:'sensor-angle'}, 'Rotate specimen',angle),legend,h('p',null,'Inspect the anther crowns and pollen up close, or rotate the flower to explore each spectral channel.'),
+        h('small',null,'Illustrative UV and relative thermal model; colours are not measured temperatures or literal bee vision.'));setSensor('normal');
+
     } else if (mode === 'repair') {
       op.repair = 0; status.textContent = 'FAULT R-07 • right wing response below threshold.';
       body.append(h('p', null, 'Run the diagnostic, remove the thorax cover, then locate the right wing mount in the model or parts directory. Fit the spare and run a flight check.'), repairButton = btn('Run diagnostic', advanceRepair), h('small', null, 'Repair is reversible. Changing modes restores every original part.'));
@@ -189,11 +210,11 @@ export async function initOperations(app) {
   });
   function poseMission() {
     const t = op.mission, step = Math.min(4, Math.floor(t * 5));
-    const x = t < .2 ? -20 + 35 * smooth(t / .2) : t < .4 ? 15 : t < .6 ? 15 + 12 * smooth((t - .4) / .2) : t < .8 ? 27 : 27 - 47 * smooth((t - .8) / .2);
-    const y = t < .4 ? 10 : t < .6 ? 10 * (1 - smooth((t - .4) / .2)) : t < .8 ? 0 : 14 * smooth((t - .8) / .2);
+    const x = t < .2 ? 15 * smooth(t / .2) : t < .4 ? 15 : t < .6 ? 15 + 12 * smooth((t - .4) / .2) : t < .8 ? 27 : 27 - 33 * smooth((t - .8) / .2);
+    const y = t < .2 ? 3.5 + 6.5 * smooth(t / .2) : t < .4 ? 10 : t < .6 ? 10 * (1 - smooth((t - .4) / .2)) : t < .8 ? 0 : 14 * smooth((t - .8) / .2);
     bee.root.position.set(x, y, 0);
     if (slider) { slider.value = String(Math.round(t * 1000)); slider.setAttribute('aria-valuetext', STEPS[step]); }
-    status.textContent = `${step + 1} / 5 — ${STEPS[step]}`; if (missionText) missionText.textContent = NOTES[step];
+    status.textContent = t >= 1 ? 'Mission complete • pollen collected; unit returning to standby.' : `${step + 1} / 5 — ${STEPS[step]}`; if (missionText) missionText.textContent = NOTES[step];
     setSensor(step === 1 ? 'uv' : 'normal');
     pollen.visible = step === 3;
     grains.forEach((g, i) => { const f = (op.clock * .45 + i / grains.length) % 1; g.position.set(32 - f * 1.4 + Math.sin(i * 7) * (1 - f) * 2, -9 + f * 4.2, Math.cos(i * 5) * (1 - f) * 2); });
@@ -207,7 +228,8 @@ export async function initOperations(app) {
     restorePose(); bee.setExplode(app.getExplode(), true);
     const moving = !op.paused;
     if (moving) { op.clock += dt; if (op.mode === 'power') op.boot += dt; }
-    if (op.mode === 'mission') { if (op.playing && moving) op.mission = Math.min(1, op.mission + dt / 24); if (op.mission >= 1) { op.playing = false; playButton.textContent = 'Replay mission'; } poseMission(); }
+    if (op.mode === 'power' && op.autoMission && op.boot >= 8 && moving) { enter('mission'); op.paused=false; op.playing=true; pause.textContent='Pause motion'; }
+    if (op.mode === 'mission') { if (op.playing && moving) op.mission = Math.min(1, op.mission + dt / 32); if (op.mission >= 1) { op.playing = false; playButton.textContent = 'Replay mission'; } poseMission(); }
     const powered = op.mode === 'power' || op.mode === 'mission' || (op.mode === 'repair' && op.repair === 5);
     if (powered && app.getExplode() < .03) {
       const awake = op.mode === 'power' ? op.boot : 8;
@@ -226,10 +248,23 @@ export async function initOperations(app) {
     bee.root.updateMatrixWorld(true); app.picker.valid = false;
     if (op.mode === 'systems') updateFlows();
     if (op.mode === 'power') { lamp.position.copy(anchor('eye-r')); lamp.position.x += 1.6; lamp.material.opacity = .12 + Math.sin(op.clock * 2) * .04; }
-    if (flower.visible) { scan.scale.setScalar(1 + Math.sin(op.clock * 2) * .08); if (op.mode === 'sensors') { bee.root.visible = false; const W = stage.size.x, H = stage.size.y; const distance = W < 760 ? Math.max(1.7, H / W * 1.25) : 1; stage.camera.position.set(32 - 40 * distance, -10 + 24 * distance, 24 * distance); stage.camera.lookAt(32, -10, 0); stage.camera.setViewOffset(W, H, W < 760 ? 0 : -160, W < 760 ? H * .21 : 0, W, H); stage.camera.updateMatrixWorld(); } }
+    if (flower.visible) {
+      scan.scale.setScalar(1 + Math.sin(op.clock * 2) * .08);
+      if (op.mode === 'sensors') {
+        bee.root.visible = false;scan.visible = false;
+        if (stage.scene.background !== sensorBackground) {studioBackground=stage.scene.background;stage.scene.background=sensorBackground;}
+        const W=stage.size.x,H=stage.size.y,band=app.fitBand();
+        const focus=new T.Vector3(32,op.macro?-8.2:-12,0),direction=new T.Vector3(-.62,.92,.70).normalize().applyAxisAngle(yAxis,T.MathUtils.degToRad(op.sensorAngle));
+        const radius=op.macro?5.5:19, usable=Math.min(band.h,band.w)/H;
+        const distance=radius/(Math.tan(T.MathUtils.degToRad(stage.camera.fov/2))*Math.max(.12,usable));
+        stage.camera.position.copy(focus).addScaledVector(direction,distance);
+        stage.camera.lookAt(focus);stage.camera.setViewOffset(W,H,-band.cx,-band.cy,W,H);stage.camera.updateMatrixWorld();
+        stage.camera.near=.1;stage.camera.far=1000;stage.camera.updateProjectionMatrix();updateSensorHud();
+      }
+    }
     if (['mission', 'sensors', 'scale'].includes(op.mode)) { stage.camera.near = .1; stage.camera.far = 1000; stage.camera.updateProjectionMatrix(); }
     app.state.shadowDirty ||= powered;
-    return (moving && !['scale', 'repair'].includes(op.mode)) || (moving && op.mode === 'repair' && (op.repair === 5 || op.repair === 4 && op.repairT < 1.4)) || old;
+    return (moving && !['scale', 'repair', 'sensors'].includes(op.mode)) || (moving && op.mode === 'repair' && (op.repair === 5 || op.repair === 4 && op.repairT < 1.4)) || old;
   };
   window.addEventListener('resize', () => { if (op.mode !== 'inspect') frameExhibit(); });
   panel.addEventListener('keydown', e => { if (e.key === 'Escape') { enter('inspect'); e.stopPropagation(); } });
@@ -240,5 +275,5 @@ export async function initOperations(app) {
   window.addEventListener('keydown', e => { if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.closest('.operate-panel')) return; if (op.mode !== 'inspect' && ['r', 'R', 'Escape', 't', 'T'].includes(e.key)) enter('inspect'); }, true);
   reduced.addEventListener('change', () => { if (reduced.matches) { op.paused = true; op.playing = false; pause.textContent = 'Resume motion'; } });
   flower.visible = pollen.visible = flowLayer.visible = scaleArt.visible = lamp.visible = false;
-  app.operations = { enter, state: op, setSensor, advanceRepair };
+  app.operations = { enter, state: op, setSensor, advanceRepair, flower };
 }

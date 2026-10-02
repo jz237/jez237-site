@@ -8,7 +8,7 @@ import { Picker } from './picking.js';
 import { createPost } from './post.js';
 import { Selection } from './select.js';
 import { createAccum } from './accum.js';
-import { initOperations } from './operate.js?v=27fad88d200e';
+import { initOperations } from './operate.js?v=d5f47e275e42';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;

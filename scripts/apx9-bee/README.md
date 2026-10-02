@@ -57,9 +57,9 @@ Useful URL parameters for debugging: `?explode=0..1`, `?view=side|top|front|rear
 
 The **Power on / Operate** button opens six non-destructive exhibit modes:
 
-- Power: staged optical startup, antenna scanning, leg calibration, wing unfolding and hover; pause/resume or restart.
+- Power: eight-second optical startup, antenna scanning, leg calibration, wing unfolding and hover, then automatically runs the full pollination mission; pause/resume or restart. Reduced motion initially waits for input.
 - Systems: animated energy, sensor-signal and pollen paths between real part anchors. Paths follow the existing explosion slider.
-- Mission: a five-stage, 24-second flower visit, with playback, scrubbing and direct stage selection.
+- Mission: a five-stage, 32-second flower visit, with playback, scrubbing and direct stage selection.
 - Vision: a flower-focused sensor camera with visible, illustrative UV nectar guides and false-colour thermal contrast. These are explicitly simulated, not measured or biological-vision claims.
 - Repair: diagnose the right wing mount, remove the cover, select the assembly in the model or searchable directory, fit a spare and reassemble for a flight check.
 - Scale: a 24.26 mm US quarter proxy and millimetre ruler, in the same coordinate units as the 28 mm body / 52 mm wingspan. This is relative scale, not physical screen calibration.
@@ -67,3 +67,9 @@ The **Power on / Operate** button opens six non-destructive exhibit modes:
 `js/operate.js` owns the additive scene objects and reversible poses; `css/operate.css` owns the operating card. Leaving a mode restores the original inspection view. Motion stops with the explicit Pause button, hidden tabs stop updating via the main renderer, and reduced-motion preferences start operating animation paused. Mission stages remain manually accessible.
 
 Serve the repository root on port 8768, then run `python3 scripts/apx9-bee/qa/operate.py` (Playwright Python and GPU-capable Chrome). `APX9_URL` overrides the test destination, and `CHROME` overrides the browser executable. This exercises all modes, repair through the directory, viewport changes, reduced motion and restoration. It writes its inspection screenshots to `/tmp`, not the public site.
+
+### Detailed flower and spectral inspection
+
+`js/flower.js` builds 48 curved, veined petals, 420 golden-angle disc florets, 2,400 pollen grains, serrated leaves, a curved hairy stem and dew. Repeated fine structures use instanced meshes. Deterministic generated texture maps encode surface ridges, pigment, UV guide contrast and a synthetic relative thermal field; they are not captured scientific data. Vision offers whole-flower and pollen macro framing, specimen rotation, tracked feature callouts and channel legends. Leaving Vision restores the studio background and shadow floor.
+
+Before publishing changes to the operating modules, run `python3 scripts/apx9-bee/version_operating_assets.py` to refresh the CSS → flower → operating module → entry-module URL hashes. The custom domain can extend source cache lifetimes despite origin revalidation headers: unique asset URLs are required for already-cached browsers.
