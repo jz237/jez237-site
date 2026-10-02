@@ -1,0 +1,105 @@
+{
+  "baseline": "69a9673",
+  "files": {
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "4cc5f64dd7dec23bbba7fb98c974c3ad0070d19bb41a81e76d7a6eb16bf763f7",
+      "after": "6085323bbfed9e818c21e948184d2c2a4e5ebf8d45d3375580077e3f6818169f"
+    },
+    "src/demo-session.ts": {
+      "snapshot": "src-demo-session.ts.gz",
+      "before": "feb60e5947292149f9f0bcd77dace1e8772f5d3aa98211f42f5111eb2418fcac",
+      "after": "23c26a3c6a44cd77f237344bcc7f4be79d83847c0d77a2ea34e47080467d6a22"
+    },
+    "src/garage-ui.ts": {
+      "snapshot": "src-garage-ui.ts.gz",
+      "before": "563171ad291ab2efdb7847d42fc98e1f04e96e31f0e3450803fe34e5e0d2d953",
+      "after": "7313e889b3dc07ffab05c132f9b49ed7ad05ad1b63cff03fa263a0f540925d2a"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "f0ff5f4d7738897a1ab821b9e4705312a67aa7942957afc55fbe980de8f4609a",
+      "after": "a2ac02d36606e0ebe2e4fdb6ac7c8f0d10a729bf0d08feabe302fb2c81a919f3"
+    },
+    "src/vehicle.ts": {
+      "snapshot": "src-vehicle.ts.gz",
+      "before": "672f5795a229767b5c3d7c3a6ef63d8f3aa75af792dc84f4db4e9ebd0f87ce9d",
+      "after": "2910bf71ebc3544cad071edf25246a8de92c4666b713d44e428cf446f2183301"
+    },
+    "src/vehicle-armor.ts": {
+      "snapshot": "src-vehicle-armor.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "906b0ba87fab595c312a700b223f27fa8f095a4d56c4ce515156cacd11cc18cb"
+    },
+    "src/vehicle-armor-spec.ts": {
+      "snapshot": "src-vehicle-armor-spec.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "a46eece9b7b058680372b6781e06b958e92dd70f2050cd730c67d002a7eec29d"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "58ee20311579894a1d4fb95230863ce3f9e1c4f161819621e7051dd884d7002f",
+      "after": "545396d5a346873a11c3fdfe9afaa1f6fe896c98c8f911a9f4f58a775511558e"
+    },
+    "src/vehicle-contact.ts": {
+      "snapshot": "src-vehicle-contact.ts.gz",
+      "before": "536c266e41397e25ee085320375942642c481eccc37467141e5d96dce3355d92",
+      "after": "c6bb0da305659b29dd5cb57b86d56943267fa0e81a87967537acfe289da6ecac"
+    },
+    "multiplayer/simulation.ts": {
+      "snapshot": "multiplayer-simulation.ts.gz",
+      "before": "52fbac0fa03155421dc69f88a9ba8dd1b8a50dee68aca9f2d984ed367f0df4c5",
+      "after": "62e39b9bf10eb62ade5b1bbc8dae05ef924a53d17c70721f6b7d2650a344150a"
+    },
+    "tests/buggy-invariants.ts": {
+      "snapshot": "tests-buggy-invariants.ts.gz",
+      "before": "c284fe0e1bbc9ec1278d574f1fca776a515f9ee4a4faeb950d8ae8e9fd0a0bc8",
+      "after": "6e58f6e102e0b1787968d00e809dc73dbfa3dff653d963d4592b7168c93548f2"
+    },
+    "tests/demo-workshop.test.ts": {
+      "snapshot": "tests-demo-workshop.test.ts.gz",
+      "before": "9e71650b8270aef73d3c230c999d82d7f51802dd9aae2a36405983072c0be768",
+      "after": "9e20df707372ba5977df06795c5edda1bafe85f139247801d5b17d0d1b3cad3a"
+    },
+    "tests/armor-asset.test.ts": {
+      "snapshot": "tests-armor-asset.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "e07306c33c9ffd021fe57520f0122fd165c3c2019520faaa373278243df2e502"
+    },
+    "tests/armor-integration.test.ts": {
+      "snapshot": "tests-armor-integration.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "0aa399fdcd4adbd2d4459e9bd1e6e8064dae1425595e310582ed1c4f87c153c4"
+    },
+    "tests/armor-physics.test.ts": {
+      "snapshot": "tests-armor-physics.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "ab6643b1e2fdac1706bdeea77aa18d9656c2a6bd94605cf293aa6a0a5c878457"
+    },
+    "tests/armor-demo.test.ts": {
+      "snapshot": "tests-armor-demo.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "14979e6a5f6c69adddc15a7ff985d913f90b8dcfb4fe3018f27ae635356b66b8"
+    },
+    "armor-preview.html": {
+      "snapshot": "armor-preview.html.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "4d85442533329d8a75e2fa6ae058949f4ad6802358a87390b5d94a8d94516d51"
+    },
+    "tools/armor-preview.ts": {
+      "snapshot": "tools-armor-preview.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "fad3b56e429cd65a40e09b71bf34aaadf0620af715da01bbbd722840aa845dcb"
+    },
+    "public/licenses/CREDITS.md": {
+      "snapshot": "public-licenses-CREDITS.md.gz",
+      "before": "d4956a3598257fbf0301d26a2561fb8776015ecf8e58c0104d51e9d143348d6a",
+      "after": "3eb057f653cbba8ab7757dc668d26717fa86a8af2354d49ca27c82f3c5b33036"
+    },
+    "tests/online-setup-physics.test.ts": {
+      "snapshot": "tests-online-setup-physics.test.ts.gz",
+      "before": "25afbcf949600012b89b5335d7ee504d9b02e552e6a41022220b4a9b850a87c5",
+      "after": "ad43e156943265ca0e76c5370ee37f261bfc150545cb6fec2feeec833bc37815"
+    }
+  }
+}

@@ -3,6 +3,7 @@ import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
 import {enginePowerFactor} from './engine-condition';
+import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spec';
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
@@ -21,7 +22,7 @@ export function vehicleChassisHalfExtents(kind:CarKind,health=100){
  return{x:(utility?.70:d.halfWidth-.06)-loss*.0008,y:utility?.065:.25,z:(utility?2.69:d.halfLength-.12)-loss*.0015};
 }
 /** Shared physical construction for the rendered vehicle and headless authority. */
-export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mass:number){
+export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mass:number,armor=0){
  const d=DEFINITIONS[kind],utility=kind==='utility',buggy=kind==='buggy',massHalfLength=utility?2.745:d.halfLength,massHeight=kind==='van'?1.9:1.3;
  const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setLinearDamping(.06).setAngularDamping(.85).setCcdEnabled(true).setCanSleep(true));
  const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):buggy?api.ColliderDesc.cuboid(.55,.013,.725).setTranslation(0,-.54,-.115):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
@@ -88,6 +89,16 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   }
   const nose=Float32Array.from(skin);
   finish(api.ColliderDesc.convexHull(nose)!);
+ }
+ // Each fitted reinforcement assembly gets a shallow contact envelope from its
+ // visible beam/pad surfaces. Separate regions keep the cockpit and bed open.
+ // The chassis already carries armor mass; these envelopes must not add it again.
+ if(armor>0){
+  const layout=vehicleArmorLayout(kind,armor);
+  for(const {points} of vehicleArmorCollisionHulls(layout)){
+   const vertices=Float32Array.from(points.flatMap(p=>[p.x,p.y-layout.modelOffset,p.z]));
+   world.createCollider(api.ColliderDesc.convexHull(vertices)!.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  }
  }
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;
  for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},vehicleSuspensionRestLength(kind),vehicleWheelRadius(kind));

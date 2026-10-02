@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import * as
 import {readDemoOptions,DEFAULT_DEMO,demoCarKind,nextDemoMode} from '../src/demo-session';import {DemoDirector} from '../src/demo-director';import {CLASSIC_VEHICLES,classicWheelAnchors} from '../src/classic-vehicle-specs';import {loadCarWithoutImages} from '../tools/car-asset-audit';import {verifyDemoWorkshopRevision} from './demo-workshop-invariants';
 test('demo preferences are bounded, persisted and independent of solo event settings',()=>{
  assert.deepEqual(readDemoOptions('invalid'),DEFAULT_DEMO);assert.deepEqual(readDemoOptions('{}'),DEFAULT_DEMO);
- const raw={version:1,field:24,lineup:'selected',loop:'stop',camera:'trackside',laps:20,duration:30};assert.deepEqual(readDemoOptions(JSON.stringify(raw)),raw);
+ const raw={version:1,field:24,lineup:'selected',setups:'stock',loop:'stop',camera:'trackside',laps:20,duration:30};assert.deepEqual(readDemoOptions(JSON.stringify(raw)),raw);
  const bad=readDemoOptions(JSON.stringify({...raw,field:500,laps:-10,duration:1,camera:'__proto__',lineup:'invalid',loop:'invalid'}));assert.equal(bad.field,24);assert.equal(bad.laps,1);assert.equal(bad.duration,30);assert.equal(bad.camera,'director');assert.equal(bad.lineup,'mixed');assert.equal(bad.loop,'alternate');
 });
 test('demo event sequencing and all-selected fields do not silently change the chosen vehicle',()=>{

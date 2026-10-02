@@ -2,7 +2,7 @@ import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact} from './vehicle-contact';
 import {CAR_KINDS} from './rules';
-import {DEMO_KEY,readDemoOptions,showDemoSetup,nextDemoMode,demoCarKind} from './demo-session';
+import {DEMO_KEY,readDemoOptions,showDemoSetup,nextDemoMode,demoCarKind,demoVehicleSetup} from './demo-session';
 import {restoreOnlineProgress,onlineEventLabel} from './online-events';
 import type {OnlineSelection} from './online-livery';
 import {copyOnlineSetup} from './online-setup';
@@ -288,7 +288,7 @@ function setQuarryMode(){quarry.setMode(mode,!!online?.active);}
 function openGarage() {
   garageOpen=true;garageFace='right';keys.clear();
   showGarage(ui,kind,garage.cars[kind],{
-    preview:(setup:Setup)=>{cars[0]?.setPaint(setup.paint,setup.trim);cars[0]?.livery.set(setup.livery);},
+    preview:(setup:Setup)=>{if(cars[0]?.setup.armor!==setup.armor)createCars(true,setup);cars[0]?.setPaint(setup.paint,setup.trim);cars[0]?.livery.set(setup.livery);},
     view:face=>{garageFace=face;},
     save:car=>{garage.cars[kind]=car;try{localStorage.setItem(GARAGE_KEY,JSON.stringify(garage));return true;}catch{return false;}},
     close:()=>{garageOpen=false;createCars(true);menu();},
@@ -369,7 +369,7 @@ function receiveOnline() {
     onlineUI.results(s);
   }
 }
-function createCars(attract = false) {
+function createCars(attract = false, previewSetup?:Setup) {
   archiveReplay();bankRun(false);
   drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),Math.floor(Math.random()*0xffffffff)):null;
   sound.clearCars();
@@ -395,7 +395,7 @@ function createCars(attract = false) {
   for (let i = 0; i < count; i++) {
     const type =
       demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:CAR_KINDS[i%CAR_KINDS.length];
-    const setup=i===0 && (attract || !demo) && !activeChallenge ? garage.cars[type].setup : undefined;
+    const setup=demo&&!attract?demoVehicleSetup(type,demoOptions,garage):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup);
     car.waters=quarry.puddles;
     if(mode==='derby'&&!online?.active)car.arenaSurface=DERBY_ARENA;

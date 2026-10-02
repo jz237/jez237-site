@@ -52,7 +52,7 @@ export class Simulation {
   }
   private buildTerrain() {this.props=createQuarryPhysics(this.R,this.world,this.mode==='derby').props;}
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
-    const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller}=createVehiclePhysics(this.R,this.world,kind,specification.mass);
+    const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
     const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
     return {kind,specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
   }
