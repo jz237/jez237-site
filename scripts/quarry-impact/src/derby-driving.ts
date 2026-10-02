@@ -1,4 +1,4 @@
-import {clamp,wrap} from './rules';
+import {clamp,wrap,DEFINITIONS} from './rules';
 import type {ArenaLayout} from './derby-arena';
 import type {DriverCar,DriverMemory} from './driving-brain';
 import type {Input} from './vehicle';
@@ -9,14 +9,16 @@ const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z
 /** Conservative swept-car clearance. Cars and wrecks matter when backing out,
  * even though the scenery probes deliberately exclude vehicle colliders. */
 export function derbyTrafficClearance(car:DriverCar,cars:DriverCar[],x:number,z:number){
- let clear=30;
+ const footprint=(c:DriverCar)=>c.kind?{length:DEFINITIONS[c.kind].halfLength+.15,width:DEFINITIONS[c.kind].halfWidth+.10}:{length:2.8,width:1};
+ const self=footprint(car);let clear=30;
  for(const other of cars){
   if(other.id===car.id)continue;
   const dx=other.current.x-car.current.x,dz=other.current.z-car.current.z;
   const ahead=dx*x+dz*z,side=Math.abs(dx*z-dz*x);
-  const halfAlong=Math.abs(other.forward.x*x+other.forward.z*z)*2.8+Math.abs(other.right.x*x+other.right.z*z);
-  const halfAcross=Math.abs(other.forward.x*z-other.forward.z*x)*2.8+Math.abs(other.right.x*z-other.right.z*x);
-  if(ahead>0&&side<halfAcross+1.15)clear=Math.min(clear,Math.max(0,ahead-halfAlong-2.8));
+  const shape=footprint(other);
+  const halfAlong=Math.abs(other.forward.x*x+other.forward.z*z)*shape.length+Math.abs(other.right.x*x+other.right.z*z)*shape.width;
+  const halfAcross=Math.abs(other.forward.x*z-other.forward.z*x)*shape.length+Math.abs(other.right.x*z-other.right.z*x)*shape.width;
+  if(ahead>0&&side<halfAcross+self.width+.15)clear=Math.min(clear,Math.max(0,ahead-halfAlong-self.length));
  }
  return clear;
 }

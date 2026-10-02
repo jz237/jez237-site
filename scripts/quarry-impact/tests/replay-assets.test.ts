@@ -14,7 +14,7 @@ function same(actual:ReturnType<typeof shape>,expected:ReturnType<typeof shape>)
   assert.equal(actual.length,expected.length);for(let i=0;i<actual.length;i++){assert.equal(actual[i].visible,expected[i].visible,'detached assembly visibility');for(const key of ['p','n']as const){assert.equal(actual[i][key].length,expected[i][key].length);for(let j=0;j<actual[i][key].length;j++)assert.ok(Math.abs(actual[i][key][j]-expected[i][key][j])<2e-5,`mesh ${i} ${key}[${j}] differs`);}}
 }
 test('recorded actual-car dents, detachments and repairs survive file exchange and repeated backward seeks',async()=>{
-  await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|wheel-machining)\.glb$/.exec(String(url))![1]);
+  await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|wheel-machining)\.glb$/.exec(String(url))![1]);
   try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
   for(const kind of ['coupe','sedan','hatch']as const){
     const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0}),setup=stockSetup(kind),car=new Vehicle(0,kind,setup.paint,scene,world,{emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any,setup);car.place(10,5,.7);car.render(1);
