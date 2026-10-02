@@ -14,7 +14,7 @@ import {Simulation} from '../multiplayer/simulation';
 import {Room} from '../multiplayer/room';
 import {NEUTRAL,STEP,type Snapshot} from '../multiplayer/protocol';
 import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
-import {vehicleContact} from '../src/vehicle-contact';
+import {vehicleContact,vehicleContactManifold} from '../src/vehicle-contact';
 import {freshComponents,applyComponentImpact,damageWheels,validComponents} from '../src/component-damage';
 import anchors from '../src/vehicle-damage-anchors.json';
 import {validOnlineSnapshot} from '../src/network-validation';
@@ -51,16 +51,17 @@ test('authoritative corner anchors match real production models and retain froze
 // Independent browser collision adjudication follows the solo contact pipeline.
 // It does not call the authoritative server's damage handler.
 function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:number,judge:ImpactAdjudicator,race=false){
- const contacts:(ImpactContact&{a?:Vehicle;b?:Vehicle;point:T.Vector3;relative:T.Vector3})[]=[];
+ const contacts:(ImpactContact&{a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;relative:T.Vector3})[]=[];
  queue.drainContactForceEvents(e=>{
   const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(world,cars,h1,h2);if((!a&&!b)||!judge.needsContact(key,time))return;
-  const point=(a??b)!.current.clone(),normal=new T.Vector3();world.contactPair(world.getCollider(h1),world.getCollider(h2),m=>{if(m.numSolverContacts()){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}});
+  const manifold=vehicleContactManifold(world,h1,h2),normal=new T.Vector3().copy(manifold?.normal??{x:0,y:0,z:0});
+  const point1=new T.Vector3().copy(manifold?.point1??(a??b)!.current),point2=new T.Vector3().copy(manifold?.point2??(b??a)!.current);
   const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3(),relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*STEP;
-  contacts.push({a,b,key,point,relative,closing,impulse,damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
+  contacts.push({a,b,key,point1,point2,relative,closing,impulse,damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
  });
  const decisions=judge.adjudicate(contacts,time,race?.45:1);
- for(const {contact:{a,b,point,relative},damage} of decisions){
-  for(const [car,other,direction]of [[a,b,relative],[b,a,relative.clone().negate()]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
+ for(const {contact:{a,b,point1,point2,relative},damage} of decisions){
+  for(const [car,other,direction,point]of [[a,b,relative,point1],[b,a,relative.clone().negate(),point2]]as const)if(car){const health=car.health;car.hit(point,direction.clone().normalize(),damage,time,true);if(other)other.inflicted+=health-car.health;}
  }
  return decisions;
 }
@@ -91,7 +92,7 @@ test('rendered Tern/Hatch and authority agree when a harmless bumper tap precede
      assert.ok(car.current.distanceTo(new T.Vector3().copy(state.p))<.002,`${kind} position tick ${tick}`);
      car.wreckParts.wheelDamage.forEach((d,j)=>near(d,state.components!.wheelDamage[j],.0001));
      car.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,state.components!.wheelShift[j].x,.0001);near(v.z,state.components!.wheelShift[j].z,.0001);});
-     near(car.engineDamage!,state.components!.engineDamage!,.0001);
+     near(car.engineDamage!,state.components!.engineDamage!,.0001);car.tyreDamage!.forEach((d,j)=>near(d,state.components!.tyreDamage![j],.0001));
     });
    }
    const tap=observed.find(e=>e.feedback&&e.damage===0)!,crash=observed.find(e=>e.damage>3)!;
@@ -110,7 +111,7 @@ test('real collisions and subsequent damaged-wheel driving match solo across all
   try{
    for(let tick=1;tick<=150;tick++){
     for(const c of cars){c.input={throttle:tick>80?.45:0,steer:tick>100?.15:0,brake:0,handbrake:false};authority.setInput(c.id,c.input);c.preStep(STEP);}terrain.world.step(queue);cars.forEach(c=>c.postStep(STEP,tick*STEP));browserContacts(terrain.world,queue,cars,tick*STEP,seen,mode==='race');authority.step(humans);
-    cars.forEach((c,i)=>{const a=authority.cars[i].state;near(c.health,a.health,.001);near(c.inflicted,a.inflicted,.001);assert.ok(c.current.distanceTo(new T.Vector3().copy(a.p))<.002,`${kind} ${mode} position tick ${tick}`);c.wreckParts.wheelDamage.forEach((d,j)=>near(d,a.components!.wheelDamage[j],.0001));c.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,a.components!.wheelShift[j].x,.0001);near(v.z,a.components!.wheelShift[j].z,.0001);});});
+    cars.forEach((c,i)=>{const a=authority.cars[i].state;near(c.health,a.health,.001);near(c.inflicted,a.inflicted,.001);assert.ok(c.current.distanceTo(new T.Vector3().copy(a.p))<.002,`${kind} ${mode} position tick ${tick}`);c.wreckParts.wheelDamage.forEach((d,j)=>near(d,a.components!.wheelDamage[j],.0001));c.wreckParts.wheelShift.forEach((v,j)=>{near(v.x,a.components!.wheelShift[j].x,.0001);near(v.z,a.components!.wheelShift[j].z,.0001);});c.tyreDamage!.forEach((d,j)=>near(d,a.components!.tyreDamage![j],.0001));});
    }
    assert.ok(authority.damage.length>=2);assert.ok(authority.cars.slice(0,2).every(c=>c.state.health<99));assert.ok(authority.cars.slice(0,2).some(c=>c.state.components!.wheelDamage.some(d=>d>.01)));
   }finally{cars.forEach(c=>c.dispose());queue.free();authority.dispose();terrain.dispose();}
@@ -137,7 +138,7 @@ test('corner condition survives room persistence and old snapshots migrate from 
  const saved=room.save(),restored=new Room('ABCDEF',R),legacy=new Room('ABCDEF',R);
  try{
   restored.restore(saved);assert.deepEqual(restored.sim.cars[0].state.components,c.state.components);
-  const old=structuredClone(saved);old.snapshot.cars.forEach(c=>delete c.components);legacy.restore(old);assert.deepEqual(legacy.sim.cars[0].state.components,c.state.components);
+  const old=structuredClone(saved);old.snapshot.cars.forEach(c=>delete c.components);legacy.restore(old);const legacyExpected=structuredClone(c.state.components!);legacyExpected.tyreDamage=undefined;assert.deepEqual(legacy.sim.cars[0].state.components,legacyExpected,'old dents restore existing suspension/engine state but never infer new tyre trauma');
   for(const s of [restored.sim,legacy.sim]){s.step(humans);assert.ok(s.cars[0].controller.wheelSuspensionStiffness(0)!<30);assert.equal(s.recover(0),true);assert.deepEqual(s.cars[0].state.components,freshComponents());assert.deepEqual(s.snapshot(true).cars[0].dents,[]);s.step(humans);assert.equal(s.cars[0].controller.wheelSuspensionStiffness(0),30);}
   const race=new Simulation(R,'race');try{race.phase='playing';race.cars[0].state.components=structuredClone(c.state.components);const condition=structuredClone(race.cars[0].state.components);assert.equal(race.recover(0),true);assert.deepEqual(race.cars[0].state.components,condition);assert.equal(race.cars[0].state.penalty,5);}finally{race.dispose();}
   saved.snapshot.cars[0].components!.wheelDamage[0]=0;assert.notEqual(c.state.components!.wheelDamage[0],0,'persistence does not alias live arrays');

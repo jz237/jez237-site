@@ -2,6 +2,7 @@ import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
+import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
 import {enginePowerFactor} from './engine-condition';
 import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spec';
 type Vec={x:number;y:number;z:number};
@@ -13,6 +14,30 @@ export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
 }
 const dot=(a:Vec,b:Vec)=>a.x*b.x+a.y*b.y+a.z*b.z;
+/** Inverse mass seen by an impulse at this point, including rotation. */
+function contactInverseMass(body:R.RigidBody,point:Vec,direction:Vec){
+ if(!body.isDynamic())return 0;
+ const center=body.worldCom(),rx=point.x-center.x,ry=point.y-center.y,rz=point.z-center.z;
+ const x=ry*direction.z-rz*direction.y,y=rz*direction.x-rx*direction.z,z=rx*direction.y-ry*direction.x;
+ const m=body.effectiveWorldInvInertia(),linear=body.effectiveInvMass();
+ return direction.x*direction.x*linear.x+direction.y*direction.y*linear.y+direction.z*direction.z*linear.z+
+  x*(m.m11*x+m.m12*y+m.m13*z)+y*(m.m21*x+m.m22*y+m.m23*z)+z*(m.m31*x+m.m32*y+m.m33*z);
+}
+function applyTyreRollingResistance(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,index:number,failure:number,forward:Vec,right:Vec,dt:number){
+ if(failure===0||!controller.wheelIsInContact(index))return;
+ const point=controller.wheelContactPoint(index),normal=controller.wheelContactNormal(index);if(!point||!normal)return;
+ const steer=controller.wheelSteering(index)??0,c=Math.cos(steer),s=Math.sin(steer),direction={x:forward.x*c+right.x*s,y:forward.y*c+right.y*s,z:forward.z*c+right.z*s};
+ const normalPart=dot(direction,normal);direction.x-=normal.x*normalPart;direction.y-=normal.y*normalPart;direction.z-=normal.z*normalPart;
+ const length=Math.hypot(direction.x,direction.y,direction.z);if(length<1e-8)return;direction.x/=length;direction.y/=length;direction.z/=length;
+ const ground=controller.wheelGroundObject(index)?.parent(),velocity=body.velocityAtPoint(point),groundVelocity=ground?.velocityAtPoint(point)??{x:0,y:0,z:0};
+ const speed=dot({x:velocity.x-groundVelocity.x,y:velocity.y-groundVelocity.y,z:velocity.z-groundVelocity.z},direction);
+ const inverseMass=contactInverseMass(body,point,direction)+(ground?contactInverseMass(ground,point,direction):0);if(inverseMass<=0)return;
+ const load=Math.min(controller.wheelMaxSuspensionForce(index)??0,Math.max(0,controller.wheelSuspensionForce(index)??0));
+ const magnitude=-Math.sign(speed)*Math.min(failure*.45*load*dt,Math.abs(speed)/inverseMass);
+ const impulse={x:direction.x*magnitude,y:direction.y*magnitude,z:direction.z*magnitude};
+ body.applyImpulseAtPoint(impulse,point,true);
+ if(ground?.isDynamic())ground.applyImpulseAtPoint({x:-impulse.x,y:-impulse.y,z:-impulse.z},point,true);
+}
 export const vehicleSuspensionRestLength=(kind:CarKind)=>kind==='buggy'?.44:.36;
 export const vehicleSuspensionTravel=(kind:CarKind)=>kind==='buggy'?.32:.24;
 /** Keep open cargo/cockpit floors shallow through damage and repair. */
@@ -108,7 +133,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
-export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number){
+export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  state.speed=dot(velocity,forward);state.slip=Math.abs(dot(velocity,right));
  const target=(alive?state.input.steer:0)*(.55*spec.steering/(1+Math.abs(state.speed)*.016))+(state.damageRight-state.damageLeft)*.0007;
@@ -116,7 +141,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const force=alive?state.input.throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
-  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind)),shift=wheelShift[i];
+  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind)),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
   controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
   controller.setWheelSuspensionRestLength(i,(kind==='buggy'?corner.rest*(.44/.36):corner.rest)+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
@@ -128,7 +153,15 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  }
  if(spec.differential>0&&alive&&Math.abs(state.input.throttle)>.1&&Math.abs(state.speed)>2)body.applyTorqueImpulse({x:0,y:-body.angvel().y*spec.mass*.16*spec.differential*Math.abs(state.input.throttle)*dt,z:0},true);
  controller.updateVehicle(dt,undefined,undefined,c=>c.parent()?.handle!==body.handle);
- if(up.y>.5){const av=body.angvel();body.applyTorqueImpulse({x:-av.x*spec.mass*.07*dt,y:(clamp(state.speed/def.wheelbase*Math.tan(state.steering)*.72,-1.7,1.7)-av.y)*spec.mass*2.6*dt,z:-av.z*spec.mass*.07*dt},true);}
+ // Rapier ignores wheelBrake while engineForce is nonzero. Apply tyre rolling
+ // loss to the actual contact on both driven and free wheels, capped at the
+ // impulse that cancels their relative ground speed so it cannot propel a car.
+ if(tyreDamage)for(let i=0;i<4;i++)applyTyreRollingResistance(body,controller,i,tyreFailure(tyreDamage[i]),forward,right,dt);
+ if(up.y>.5){const av=body.angvel(),frontFailure=(tyreFailure(tyreDamage?.[0])+tyreFailure(tyreDamage?.[1]))/2,rearFailure=(tyreFailure(tyreDamage?.[2])+tyreFailure(tyreDamage?.[3]))/2;
+  // A flat front tyre cannot receive the intact steering assist; rear failures
+  // also leave more of the actual contact-induced yaw instead of cancelling it.
+  const turnGrip=1-.7*frontFailure,yawAssist=1-.65*Math.max(frontFailure,rearFailure);
+  body.applyTorqueImpulse({x:-av.x*spec.mass*.07*dt,y:(clamp(state.speed/def.wheelbase*Math.tan(state.steering)*.72*turnGrip,-1.7,1.7)-av.y)*spec.mass*2.6*dt*yawAssist,z:-av.z*spec.mass*.07*dt},true);}
  state.gear=state.speed<-.5?0:clamp(1+Math.floor(Math.max(0,state.speed)/spec.gearStep),1,5);
  state.rpm=alive?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700:0;
  return up.y;

@@ -12,6 +12,7 @@ export function validOnlineSnapshot(s:Snapshot):boolean {
   const quaternion=(v:any)=>vector(v)&&finite(v.w)&&Math.hypot(v.x,v.y,v.z,v.w)>.5;
   const input=(v:any)=>v&&['throttle','steer','brake'].every(k=>finite(v[k]))&&typeof v.handbrake==='boolean';
   const dent=(v:any)=>v&&Number.isSafeInteger(v.id)&&Number.isSafeInteger(v.repair)&&finite(v.damage)&&vector(v.localPoint)&&vector(v.localDirection);
+  const patch=(v:any)=>v&&Array.isArray(v.plane)&&v.plane.length===4&&v.plane.every((n:unknown)=>finite(n)&&Math.abs(n)<1e7)&&Math.abs(Math.hypot(...v.plane.slice(0,3))-1)<.001&&finite(v.load)&&v.load>=0&&v.load<=2.5;
   const capacity=s?.capacity??8;
   if(!s||(s.eventSupport!==undefined&&s.eventSupport!==true)||(s.event!==undefined&&(!s.eventSupport||!validOnlineEventState(s.event,s.mode,capacity)))||!validCapacity(capacity)||(s.liverySupport!==undefined&&s.liverySupport!==true)||(s.liveryRevision!==undefined&&(!s.liverySupport||!Number.isSafeInteger(s.liveryRevision)||s.liveryRevision<0))||(s.setupSupport!==undefined&&s.setupSupport!==true)||(s.setupRule!==undefined&&(!s.setupSupport||!['open','stock'].includes(s.setupRule)))||(s.cupSupport!==undefined&&s.cupSupport!==true)||(s.cup!==undefined&&(!validCup(s.cup)||s.cup.participants.length!==capacity||!s.cupSupport))||!Number.isSafeInteger(s.tick)||!finite(s.elapsed)||!finite(s.countdown)||
     !['derby','race','playground'].includes(s.mode)||!['lobby','countdown','playing','result'].includes(s.phase)||
@@ -22,7 +23,7 @@ export function validOnlineSnapshot(s:Snapshot):boolean {
     ['health','inflicted','damageLeft','damageRight','steering','speed','rpm','gear','passed','nextCheckpoint','lap','finishTime','penalty','repair','slip'].every(k=>finite((c as any)[k]))&&
     (c.components===undefined||validComponents(c.components))&&(c.setup===undefined||validOnlineSetup(c.setup))&&
     c.nextCheckpoint>=0&&c.nextCheckpoint<24&&['asphalt','gravel'].includes(c.surface)&&input(c.input)&&
-    Array.isArray(c.wheels)&&c.wheels.length<=4&&c.wheels.every(w=>finite(w.suspension)&&finite(w.rotation))&&
+    Array.isArray(c.wheels)&&c.wheels.length<=4&&c.wheels.every(w=>finite(w.suspension)&&finite(w.rotation)&&(w.patch===undefined||typeof w.contact==='boolean'&&patch(w.patch)))&&
     (c.dents===undefined||Array.isArray(c.dents)&&c.dents.length<=334&&c.dents.every(dent)))&&
     s.props.every(p=>p&&Number.isInteger(p.id)&&vector(p.p)&&quaternion(p.q)&&vector(p.v)&&vector(p.av))&&
     s.damage.every(d=>dent(d)&&Number.isInteger(d.car)&&d.car>=0&&d.car<capacity&&finite(d.tick))&&

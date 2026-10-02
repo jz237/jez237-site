@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreTyreFailureBytes,verifyTyreFailureRevision} from './tyre-failure-invariants';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
@@ -6,5 +7,5 @@ const read=(path:string)=>readFileSync(new URL('./fixtures/demo-recovery/'+path,
 const hash=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
 const revision=JSON.parse(read('revision.json').toString());
 export function readDemoRecoveryPrevious(file:string):Buffer{const entry=revision.files[file];assert.ok(entry,'No demo-recovery baseline for '+file);const before=gunzipSync(read(entry.snapshot));assert.equal(hash(before),entry.before,file);return before;}
-export function restoreDemoRecoveryBytes(file:string,bytes:Buffer){const entry=revision.files[file];if(!entry||hash(bytes)!==entry.after)return bytes;return readDemoRecoveryPrevious(file);}
-export function verifyDemoRecoveryRevision(){for(const [file,entry]of Object.entries<any>(revision.files)){const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);assert.equal(hash(restoreDemoRecoveryBytes(file,bytes)),entry.before,file);}}
+export function restoreDemoRecoveryBytes(file:string,bytes:Buffer){bytes=restoreTyreFailureBytes(file,bytes);const entry=revision.files[file];if(!entry||hash(bytes)!==entry.after)return bytes;return readDemoRecoveryPrevious(file);}
+export function verifyDemoRecoveryRevision(){verifyTyreFailureRevision();for(const [file,entry]of Object.entries<any>(revision.files)){const bytes=restoreTyreFailureBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);assert.equal(hash(restoreDemoRecoveryBytes(file,bytes)),entry.before,file);}}

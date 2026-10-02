@@ -22,7 +22,7 @@ export type CarState = {
   id: number; kind: CarKind; setup?:OnlineSetup; p: Vec3; q: Quat; v: Vec3; av: Vec3;
   health: number; inflicted: number; damageLeft: number; damageRight: number;
   steering: number; speed: number; rpm: number; gear: number;
-  wheels: { suspension: number; rotation: number; contact: boolean }[];
+  wheels: { suspension: number; rotation: number; contact: boolean;patch?:{plane:number[];load:number} }[];
   input: Controls; passed: number; nextCheckpoint: number; lap: number;
   finished: boolean; finishTime: number; penalty: number; repair: number;
   surface: 'asphalt' | 'gravel'; slip: number;

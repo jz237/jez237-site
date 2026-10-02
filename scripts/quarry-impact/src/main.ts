@@ -1,6 +1,7 @@
+import {tyreWarning} from './tyre-feedback';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
-import {vehicleContact} from './vehicle-contact';
+import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
 import {CAR_KINDS} from './rules';
 import {DEMO_KEY,readDemoOptions,showDemoSetup,nextDemoMode,demoCarKind,demoVehicleSetup} from './demo-session';
 import {restoreOnlineProgress,onlineEventLabel} from './online-events';
@@ -125,14 +126,14 @@ function openProfile(){
 let recorder:ReplayRecorder|null=null,lastReplay:ReplayDocument|null=null,replayEpochs:number[]=[];
 let closeReplayLibrary:(()=>void)|null=null;
 let studio:ReplayStudio|null=null,studioRestore:(()=>void)|null=null;
-function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,quarry.props,replayEpochs),force);}
+function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,quarry.props,replayEpochs,1),force);}
 function archiveReplay(){
   if(!recorder)return;captureReplay(true);if(recorder.frames.length>1)lastReplay=recorder.document();
   for(const car of cars)car.onVisualEvent=undefined;recorder=null;
 }
 function beginReplay(){
   lastReplay=null;replayEpochs=cars.map(()=>0);
-  recorder=new ReplayRecorder({version:1,mode,reverse:mode==='race'&&customEvent()&&eventOptions.direction==='reverse',cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:quarry.props.length,created:new Date().toISOString()});
+  recorder=new ReplayRecorder({version:1,tyreModel:1,mode,reverse:mode==='race'&&customEvent()&&eventOptions.direction==='reverse',cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:quarry.props.length,created:new Date().toISOString()});
   cars.forEach((car,i)=>car.onVisualEvent=e=>{if(e.kind==='jump'||e.kind==='repair')replayEpochs[i]++;recorder?.event(i,elapsed,e);});
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
@@ -459,7 +460,7 @@ async function start(watch=demo) {
   if(preparationInterrupted||document.hidden)pause();
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? 'CIRCUIT 01' : 'QUARRY FLOOR'}</div><div class="hud-title">${modes[mode].label}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent='SCORE DERBY';
@@ -509,6 +510,7 @@ function updateHud() {
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
   text('surface', player.surface.toUpperCase());
   text('engine-status', engineStatus(player.health,player.engineDamage));
+  text('tyre-status', tyreWarning(player.tyreDamage));
   text(
     'steer-status',
     Math.abs(player.damageLeft - player.damageRight) > 16
@@ -818,31 +820,30 @@ function step(dt: number) {
   }
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
-  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;va:T.Vector3;vb:T.Vector3})[]=[];
+  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3})[]=[];
   events.drainContactForceEvents((e) => {
     const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
     if((!a&&!b)||!impactAdjudicator.needsContact(key,elapsed))return;
     const point=new T.Vector3().copy((a??b)!.current),normal=new T.Vector3();
-    const co1=physics.getCollider(h1),co2=physics.getCollider(h2);
-    if(co1&&co2)physics.contactPair(co1,co2,m=>{
-      if(m.numSolverContacts()>0){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}
-    });
+    const manifold=vehicleContactManifold(physics,h1,h2);
+    if(manifold){point.copy(manifold.point);normal.copy(manifold.normal);}
+    const point1=new T.Vector3().copy(manifold?.point1??point),point2=new T.Vector3().copy(manifold?.point2??point);
     const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3();
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
-    contacts.push({key,point,va,vb,a,b,closing,impulse:e.totalForceMagnitude()*dt,
+    contacts.push({key,point,point1,point2,va,vb,a,b,closing,impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
-  for(const {contact:{a,b,point,va,vb,impulse},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,mode==='race'?.45:1)){
+  for(const {contact:{a,b,point,point1,point2,va,vb,impulse},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,mode==='race'?.45:1)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     if(a){
       const before=a.health;
-      a.hit(point,vb.clone().sub(va).normalize(),damage,elapsed,false,b?.paintColor);
+      a.hit(point1,vb.clone().sub(va).normalize(),damage,elapsed,false,b?.paintColor);
       if(b){b.inflicted+=before-a.health;combat.hit(b.id,a.id,before,a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
     }
     if(b){
       const before=b.health;
-      b.hit(point,va.clone().sub(vb).normalize(),damage,elapsed,false,a?.paintColor);
+      b.hit(point2,va.clone().sub(vb).normalize(),damage,elapsed,false,a?.paintColor);
       if(a){a.inflicted+=before-b.health;combat.hit(a.id,b.id,before,b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
     }
