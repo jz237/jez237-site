@@ -158,6 +158,6 @@
 
 # APX-9 source URLs are stable: revalidate code/styles on return visits.
 /demos/apx9-bee/js/*
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /demos/apx9-bee/css/*
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
