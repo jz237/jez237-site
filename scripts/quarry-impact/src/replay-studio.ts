@@ -4,13 +4,14 @@ import type {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import type {Vehicle} from './vehicle';
 import {DEFINITIONS} from './rules';
 import {landscapeHeight} from './quarry-layout';
-import {replayFile,type ReplayDocument} from './replay-data';
+import {replayFile,replayCourseId,type ReplayDocument} from './replay-data';
 export function downloadBlob(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 const clock=(n:number)=>`${Math.floor(n/60).toString().padStart(2,'0')}:${(n%60).toFixed(2).padStart(5,'0')}`;
 export class ReplayStudio {
   time=0;playing=false;speed=1;follow=0;view='orbit';fov=52;exposure=1;roll=0;aspect=0;hidden=false;capturePending=false;
   readonly duration:number;private snap=true;private lastTarget=new T.Vector3();private uiAge=0;
-  constructor(private ui:HTMLElement,readonly cars:Vehicle[],readonly doc:ReplayDocument|null,private seekScene:(time:number)=>void,private exit:()=>void,initialExposure=1,private savedName?:string){
+  constructor(private ui:HTMLElement,readonly cars:Vehicle[],readonly doc:ReplayDocument|null,private seekScene:(time:number)=>void,private exit:()=>void,initialExposure=1,private savedName?:string,private groundHeight:(x:number,z:number)=>number=landscapeHeight){
+    if(doc)replayCourseId(doc.meta);
     this.exposure=initialExposure;this.duration=doc?.frames.at(-1)?.time??0;this.time=this.duration;this.render();this.seekScene(this.time);
   }
   private render(){
@@ -46,7 +47,7 @@ export class ReplayStudio {
       orbit.enabled=false;
       if(this.view==='overview'){camera.position.copy(target).add(new T.Vector3(0,120,.1));camera.lookAt(target);}
       else if(this.view==='hood'){camera.position.copy(target).addScaledVector(f,1.3);camera.position.y+=.35;camera.lookAt(target.clone().addScaledVector(f,25));}
-      else {camera.position.copy(target).addScaledVector(f,-8);camera.position.y=Math.max(target.y+2.6,landscapeHeight(camera.position.x,camera.position.z)+.65);camera.lookAt(target.clone().addScaledVector(f,3));}
+      else {camera.position.copy(target).addScaledVector(f,-8);camera.position.y=Math.max(target.y+2.6,this.groundHeight(camera.position.x,camera.position.z)+.65);camera.lookAt(target.clone().addScaledVector(f,3));}
     }
     this.lastTarget.copy(target);this.snap=false;camera.fov=this.fov;camera.rotateZ(T.MathUtils.degToRad(this.roll));camera.updateProjectionMatrix();renderer.toneMappingExposure=this.exposure;
   }

@@ -205,6 +205,29 @@ export class StaticQuarryShadows {
     this.uniforms.quarryStaticEnabled.value = 0;
   }
 
+  /** Change venues while retaining receiver hooks and their uniform objects.
+   * Recreating this owner would stack shader patches on reused car materials. */
+  replaceCasters(source: T.Object3D, excluded: ReadonlySet<T.Object3D>) {
+    const next = staticCasterScene(source, excluded);
+    const bounds = new T.Box3().setFromObject(next.scene);
+    if (bounds.isEmpty()) {
+      for (const material of next.materials) material.dispose();
+      throw new Error('The static shadow scene has no casters');
+    }
+    const camera = fitStaticShadowCamera(bounds);
+    for (const material of this.depthMaterials) material.dispose();
+    for (const mesh of this.casterScene.children) if (mesh instanceof T.InstancedMesh) mesh.dispose();
+    this.casterScene.clear();
+    this.casterScene.add(...next.scene.children.slice());
+    this.depthMaterials = next.materials;
+    this.bounds.copy(bounds); this.camera.copy(camera);
+    this.uniforms.quarryStaticMatrix.value.set(.5, 0, 0, .5, 0, .5, 0, .5, 0, 0, .5, .5, 0, 0, 0, 1)
+      .multiply(this.camera.projectionMatrix).multiply(this.camera.matrixWorldInverse);
+    if (this.size) this.uniforms.quarryStaticNormalBias.value = .65 * Math.max(
+      this.camera.right - this.camera.left, this.camera.top - this.camera.bottom) / this.size;
+    this.invalidate();
+  }
+
   prepare(renderer: T.WebGLRenderer) {
     this.uniforms.quarryStaticEnabled.value = this.enabled && this.target && !this.dirty ? 1 : 0;
     if (!this.enabled || !this.target || !this.dirty) return;

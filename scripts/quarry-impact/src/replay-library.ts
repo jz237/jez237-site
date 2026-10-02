@@ -1,9 +1,10 @@
-import {readReplayFile,replayFile,type ReplayDocument} from './replay-data';
+import {readReplayFile,replayFile,replayCourseId,type ReplayDocument} from './replay-data';
+import {COURSE_NAMES,type CourseId} from './course-id';
 import type {Mode} from './rules';
 export const LIBRARY_LIMIT=50,LIBRARY_BYTES=256*1024*1024;
-export type ReplayEntry={id:string;name:string;created:string;saved:number;duration:number;mode:Mode;cars:number;bytes:number;limited:boolean};
+export type ReplayEntry={id:string;name:string;created:string;saved:number;duration:number;mode:Mode;cars:number;bytes:number;limited:boolean;courseId?:CourseId};
 export const replayName=(name:string)=>name.replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,80)||'Untitled replay';
-export const defaultReplayName=(doc:ReplayDocument)=>`${doc.meta.mode==='race'?'Race':doc.meta.mode==='derby'?'Derby':'Playground'} · ${doc.meta.created.slice(0,19).replace('T',' ')}`;
+export const defaultReplayName=(doc:ReplayDocument)=>`${doc.meta.courseId==='ironfield-figure-eight-v1'?COURSE_NAMES[doc.meta.courseId]+' · ':''}${doc.meta.mode==='race'?'Race':doc.meta.mode==='derby'?'Derby':'Playground'} · ${doc.meta.created.slice(0,19).replace('T',' ')}`;
 const storageError=(error:unknown)=>new Error(error instanceof DOMException&&error.name==='QuotaExceededError'?'Browser storage is full. Export or delete a saved replay, then try again.':error instanceof Error?error.message:'Replay storage is unavailable. Export a .qir file instead.');
 /** Metadata and compressed recordings commit together. Serialized write transactions
  * enforce the limits across tabs; existing recordings are never silently evicted. */
@@ -27,10 +28,11 @@ export class ReplayLibrary {
  }
  async list():Promise<ReplayEntry[]>{return this.transaction('readonly',(tx,set)=>{const q=tx.objectStore('entries').getAll();q.onsuccess=()=>set((q.result as ReplayEntry[]).sort((a,b)=>b.saved-a.saved||a.id.localeCompare(b.id)));});}
  async save(doc:ReplayDocument,name=defaultReplayName(doc)):Promise<ReplayEntry>{
+  replayCourseId(doc.meta);
   if(doc.frames.length<2)throw Error('Record at least two frames before saving a replay.');
   const blob=await replayFile(doc);if(blob.size>64*1024*1024)throw Error('This recording exceeds the 64 MB replay-file limit.');
   const id=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer())),n=>n.toString(16).padStart(2,'0')).join('');
-  const entry:ReplayEntry={id,name:replayName(name),created:doc.meta.created,saved:Date.now(),duration:doc.frames.at(-1)!.time,mode:doc.meta.mode,cars:doc.meta.cars.length,bytes:blob.size,limited:doc.limited};
+  const entry:ReplayEntry={id,name:replayName(name),created:doc.meta.created,saved:Date.now(),duration:doc.frames.at(-1)!.time,mode:doc.meta.mode,cars:doc.meta.cars.length,bytes:blob.size,limited:doc.limited,...(doc.meta.courseId===undefined?{}:{courseId:doc.meta.courseId})};
   return this.transaction('readwrite',(tx,set,fail)=>{const store=tx.objectStore('entries'),q=store.getAll();q.onsuccess=()=>{
    const others=(q.result as ReplayEntry[]).filter(e=>e.id!==id);
    if(others.length>=this.limit||others.reduce((n,e)=>n+e.bytes,0)+entry.bytes>this.byteLimit){fail(new Error('Replay library is full. Export or delete a recording before saving another.'));return;}

@@ -9,7 +9,7 @@ export const DEMO_CAMERAS={director:'Auto director',overview:'Overhead overview'
 export type DemoCamera=keyof typeof DEMO_CAMERAS;
 const clamp=T.MathUtils.clamp;
 export class DemoDirector {
-  constructor(private arena:ArenaLayout=LEGACY_ARENA,private obstruction?:(from:T.Vector3,to:T.Vector3,car:Vehicle)=>number|null){}
+  constructor(private arena:ArenaLayout=LEGACY_ARENA,private obstruction?:(from:T.Vector3,to:T.Vector3,car:Vehicle)=>number|null,private groundHeight:(x:number,z:number)=>number=landscapeHeight){}
   view:DemoCamera='director';
   activeView:DemoCamera='drone';
   followed=0;
@@ -112,21 +112,21 @@ export class DemoDirector {
       desired.addScaledVector(f,1.3);desired.y+=.44;target.addScaledVector(f,24);target.y+=.5;fov=67;
     }else{
       if(this.snap||this.anchor.distanceTo(target)>70){
-        this.anchor.copy(target).addScaledVector(right,12).addScaledVector(this.heading,clamp(Math.abs(car.speed)*.6,10,20));this.anchor.y=landscapeHeight(this.anchor.x,this.anchor.z)+2.5;
+        this.anchor.copy(target).addScaledVector(right,12).addScaledVector(this.heading,clamp(Math.abs(car.speed)*.6,10,20));this.anchor.y=this.groundHeight(this.anchor.x,this.anchor.z)+2.5;
       }
       desired.copy(this.anchor);fov=clamp(62-desired.distanceTo(target)*.7,30,54);
     }
     if(this.activeView!=='hood'&&this.activeView!=='overview'){
       // Clear terrain along the whole sight line, not just under the camera.
-      for(let i=2;i<=10;i++){const t=i/10,x=T.MathUtils.lerp(target.x,desired.x,t),z=T.MathUtils.lerp(target.z,desired.z,t);desired.y=Math.max(desired.y,target.y+(landscapeHeight(x,z)+.65-target.y)/t);}
+      for(let i=2;i<=10;i++){const t=i/10,x=T.MathUtils.lerp(target.x,desired.x,t),z=T.MathUtils.lerp(target.z,desired.z,t);desired.y=Math.max(desired.y,target.y+(this.groundHeight(x,z)+.65-target.y)/t);}
     }
-    desired.y=Math.max(desired.y,landscapeHeight(desired.x,desired.z)+.65);
+    desired.y=Math.max(desired.y,this.groundHeight(desired.x,desired.z)+.65);
     if(this.snap)this.avoidanceOffset=null;
     if(this.obstruction&&this.activeView!=='hood'&&this.activeView!=='overview'){
       const focus=position.clone().add(new T.Vector3(0,.35,0)),probe=(a:T.Vector3,b:T.Vector3)=>this.obstruction!(a,b,car);
       if(!clearCameraView(focus,desired,probe,subjectPoints)){
         const held=this.avoidanceOffset?focus.clone().add(this.avoidanceOffset):null;
-        desired.copy(held&&clearCameraView(focus,held,probe,subjectPoints)?held:unobstructedDemoPosition(focus,desired,probe,landscapeHeight,subjectPoints));
+        desired.copy(held&&clearCameraView(focus,held,probe,subjectPoints)?held:unobstructedDemoPosition(focus,desired,probe,this.groundHeight,subjectPoints));
         this.avoidanceOffset=desired.clone().sub(focus);target.copy(focus);
       }else this.avoidanceOffset=null;
     }
@@ -146,7 +146,7 @@ export class DemoDirector {
         camera.position.copy(this.aim).add(new T.Vector3().setFromSpherical(from));
       }else camera.position.lerp(desired,1-Math.exp(-motionDt*5));
     }
-    camera.position.y=Math.max(camera.position.y,landscapeHeight(camera.position.x,camera.position.z)+.65);
+    camera.position.y=Math.max(camera.position.y,this.groundHeight(camera.position.x,camera.position.z)+.65);
     let aligned=true;
     if(this.activeView==='hood'||this.activeView==='overview')camera.lookAt(this.aim);
     else{

@@ -1,11 +1,12 @@
+import {isCourseId,type CourseId} from './course-id';
 import {CHECKPOINTS,trackPoint,clamp,derbyOrder} from './rules';
 import type {ArenaLayout} from './derby-arena';
-export type EventOptions={version:1;field:number;laps:number;direction:'forward'|'reverse'|'opposing';race:'laps'|'ordered'|'free'|'random';derby:'survival'|'score';duration:number};
+export type EventOptions={version:1;course?:CourseId;field:number;laps:number;direction:'forward'|'reverse'|'opposing';race:'laps'|'ordered'|'free'|'random';derby:'survival'|'score';duration:number};
 export const EVENT_KEY='quarry-impact-events-v1';
 export const DEFAULT_EVENT:EventOptions={version:1,field:8,laps:3,direction:'forward',race:'laps',derby:'survival',duration:300};
 const integer=(value:unknown,fallback:number,min:number,max:number)=>typeof value==='number'&&Number.isFinite(value)?Math.round(clamp(value,min,max)):fallback;
 export function readEventOptions(json?:string|null):EventOptions{
-  try{const v=JSON.parse(json??'{}');if(!v||v.version!==1)return {...DEFAULT_EVENT};return {version:1,field:integer(v.field,8,2,24),laps:integer(v.laps,3,1,20),direction:v.direction==='opposing'?'opposing':v.direction==='reverse'?'reverse':'forward',race:['ordered','free','random'].includes(v.race)?v.race:'laps',derby:v.derby==='score'?'score':'survival',duration:integer(v.duration,300,60,1200)};}catch{return {...DEFAULT_EVENT};}
+  try{const v=JSON.parse(json??'{}');if(!v||v.version!==1)return {...DEFAULT_EVENT};return {version:1,...(isCourseId(v.course)?{course:v.course}:{}),field:integer(v.field,8,2,24),laps:integer(v.laps,3,1,20),direction:v.direction==='opposing'?'opposing':v.direction==='reverse'?'reverse':'forward',race:['ordered','free','random'].includes(v.race)?v.race:'laps',derby:v.derby==='score'?'score':'survival',duration:integer(v.duration,300,60,1200)};}catch{return {...DEFAULT_EVENT};}
 }
 export type RoutePoint={x:number;z:number};
 const reverse=[CHECKPOINTS[0],...CHECKPOINTS.slice(1).reverse()];
