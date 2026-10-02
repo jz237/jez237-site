@@ -27,7 +27,7 @@ test('soot persists after cooling, pauses exactly, is per-car and agrees across 
 });
 
 test('real car assemblies bend locally, hold their trim, restore completely and replay quietly',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){
   const world=new R.World({x:0,y:-9.81,z:0}),car=new Vehicle(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);car.place(0,0,0);
@@ -40,7 +40,7 @@ test('real car assemblies bend locally, hold their trim, restore completely and 
   }
   const snapshot=()=>parts.assemblies.flatMap(a=>a.members.map(p=>({name:p.mesh.name,m:p.mesh.matrix.toArray(),auto:p.mesh.matrixAutoUpdate,visible:p.mesh.visible})));
   const intact=snapshot(),wheelRest=car.wheels.map(w=>({p:w.position.clone(),q:w.quaternion.clone()}));
-  const hit=(quiet=false)=>{const point=new T.Vector3(-.96,.96,1.35),dir=new T.Vector3(.9,-.03,-.4).normalize();car.hit(car.model.localToWorld(point),dir,26,1,quiet);parts.pose(0,0);parts.wheelsPose();};
+  const hit=(quiet=false)=>{const point=new T.Vector3(-.96,.96,1.35),dir=new T.Vector3(.9,-.03,-.4).normalize();for(let i=0;i<2;i++)car.hit(car.model.localToWorld(point.clone()),dir,26,1+i,quiet);parts.pose(0,0);parts.wheelsPose();};
   hit();const damaged=snapshot(),damagedWheels=car.wheels.map(w=>w.quaternion.toArray());
   assert.ok(parts.assemblies.some(a=>a.loose>0));assert.ok(parts.wheelDamage[0]>.15);assert.equal(parts.wheelDamage[3],0);
   for(let i=0;i<120;i++)parts.wheelsPose();assert.deepEqual(car.wheels.map(w=>w.quaternion.toArray()),damagedWheels,'pause cannot accumulate wheel camber');

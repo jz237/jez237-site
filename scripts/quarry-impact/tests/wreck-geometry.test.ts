@@ -1,3 +1,4 @@
+import {restoreGarageBytes} from './garage-invariants';
 import test from 'node:test';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -20,7 +21,7 @@ test('previous release sources are recoverable and all 23 shared simulation inpu
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const revision=JSON.parse(read('source/wreck-revision.json').toString());
  for(const [p,e]of Object.entries<any>(revision.files)){assert.equal(hash(restoreFireBytes(p,read(p))),e.after,p);assert.equal(hash(restoreWreckBytes(p,read(p))),e.before,p);}
- const physics=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(physics.sourceHashes).length,23);for(const [p,h]of Object.entries(physics.sourceHashes))assert.equal(hash(read(p)),h,p);
+ const physics=JSON.parse(read('source/coupe-realism-physics.json').toString());assert.equal(Object.keys(physics.sourceHashes).length,23);for(const [p,h]of Object.entries(physics.sourceHashes))assert.equal(hash(restoreGarageBytes(p,read(p))),h,p);
 });
 
 test('adaptive panel edges are short, conforming and preserve the intact surface',()=>{
@@ -40,7 +41,7 @@ test('skin and window use the same metre-scale deformation across different mesh
 });
 
 test('actual three-car wrecks bend skin, structure and screens, repair exactly and replay identically',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){const world=new R.World({x:0,y:-9.81,z:0}),car=new Vehicle(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);car.place(0,0,0);
   const meshes=[...car.panels,...car.glass],capture=()=>meshes.map(p=>({p:new Float32Array(p.geometry.attributes.position.array),n:new Float32Array(p.geometry.attributes.normal.array),visible:p.visible}));const intact=capture();

@@ -89,7 +89,7 @@ async function productionTemplates(){
   if(!prepared)prepared=(async()=>{
     const original=GLTFLoader.prototype.loadAsync;
     GLTFLoader.prototype.loadAsync=async url=>{
-      const match=/\/(coupe|sedan|hatch)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
+      const match=/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
     };
     try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
     await R.init();
@@ -118,14 +118,18 @@ test('actual loaded coupe rear panels deform locally, detach reproducibly, and r
     assert.equal(car.panels.filter(p=>p.name.startsWith('panel_seal_')).length,2,'two original window seals remain with the hinged doors');
     assert.equal(car.glass.length,5);assert.equal(car.wheels.length,4);assert.ok(car.brakeLights.size>0,'real rear lamps remain connected to the brake material');
     let drawMeshes=0;templates.get('coupe')!.traverse(o=>{if(o instanceof T.Mesh)drawMeshes++;});
-    assert.ok(drawMeshes<=realismBefore.runtime.meshes+14,'optics, wheel detail and the two moving window seals stay within14 additional draws');
+    const mechanical=new Map<T.Material,number>();templates.get('coupe')!.children.forEach(o=>{if(o instanceof T.Mesh&&o.userData.constructionRole)mechanical.set(o.material as T.Material,(mechanical.get(o.material as T.Material)??0)+1);});
+    const structuralDraws=[...mechanical.values()].reduce((sum,count)=>sum+Math.max(0,count-1),0);
+    assert.ok(structuralDraws<=8,'solid engines, rails and radiators use at most eight additional batches');
+    assert.ok(drawMeshes-structuralDraws<=realismBefore.runtime.meshes+14,'optics, wheel detail and moving window seals retain their original fourteen-draw budget');
     const original=capture(car),rear=car.panels.find(p=>p.name==='panel_bumper_rear001')!,front=car.panels.find(p=>p.name==='panel_bumper_front')!;
     assert.ok(rear&&front);const bounds=new T.Box3().setFromObject(rear),point=bounds.getCenter(new T.Vector3());point.z=bounds.min.z+.015;
-    const local=car.root.worldToLocal(point.clone()),dents:Dent[]=[12,11,9,24].map((damage,i)=>({id:i+1,repair:0,damage,localPoint:{x:local.x+(i-1)*.14,y:local.y,z:local.z},localDirection:{x:0,y:0,z:1}}));
+    const local=car.root.worldToLocal(point.clone()),dents:Dent[]=[12,11,9,24,22].map((damage,i)=>({id:i+1,repair:0,damage,localPoint:{x:local.x+Math.min(2,i-1)*.14,y:local.y,z:local.z},localDirection:{x:0,y:0,z:1}}));
     dents.slice(0,3).forEach((dent,i)=>applyDent(car,dent,false,i+1));
     assert.equal(rear.visible,true,'moderate repeated blows crumple the attached bumper before releasing it');
-    applyDent(car,dents[3],false,4);const damaged=capture(car),health=car.health;
-    assert.equal(health,44);assert.ok(calls.emit>0&&calls.detach>0);assert.equal(rear.visible,false,'a further heavy impact releases the crumpled bumper');
+    applyDent(car,dents[3],false,4);assert.equal(rear.visible,true,'stronger mounts survive the first heavy blow');
+    applyDent(car,dents[4],false,5);const damaged=capture(car),health=car.health;
+    assert.equal(health,22);assert.ok(calls.emit>0&&calls.detach>0,JSON.stringify({calls,damage:rear.userData.damage,assembly:rear.userData.detachAssembly}));assert.equal(rear.visible,false,'repeated heavy impacts release the crumpled bumper');
     const changed=damaged.find(p=>p.name===rear.name)!;assert.notDeepEqual(changed.positions,original.find(p=>p.name===rear.name)!.positions);
     assert.deepEqual(front.geometry.getAttribute('position').array,original.find(p=>p.name===front.name)!.positions,'rear impact must not alter the distant front bumper');
     let duplicateVertices=0;
