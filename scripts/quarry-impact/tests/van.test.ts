@@ -20,7 +20,7 @@ import {verifyCompactRevision} from './compact-invariants';
 
 await R.init();
 const original=GLTFLoader.prototype.loadAsync;
-GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|wheel-machining)\.glb$/.exec(String(url))![1]);
+GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any;
 const key=(p:T.Vector3)=>p.toArray().map(x=>x.toFixed(6)).join(',');
@@ -46,7 +46,7 @@ test('the original van export is deterministic, closed and finite within the sha
 });
 
 test('the eighth vehicle preserves old garage saves and participates in tuning and mixed demos',()=>{
- assert.equal(CAR_KINDS.length,8);assert.ok(isCarKind('van'));assert.ok(templates.has('van'));
+ assert.equal(CAR_KINDS.length,9);assert.ok(isCarKind('van'));assert.ok(templates.has('van'));
  const old=stockSetup('compact');old.engine=2;const saved=readGarage(JSON.stringify({version:1,cars:{compact:{setup:old}}}));
  assert.deepEqual(saved.cars.compact.setup,old);assert.deepEqual(saved.cars.van.setup,stockSetup('van'));
  const setup=stockSetup('van');setup.armor=2;setup.tune.differential=.5;

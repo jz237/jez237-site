@@ -66,7 +66,7 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern'];
   const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
   const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
@@ -115,10 +115,10 @@ export function cloneCar(kind: CarKind, color: number) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : kind==='van'?.12:.48;
-      m.roughness = trim ? .38 : kind==='van'?.36:.24;
+      m.metalness = trim ? .18 : (kind==='van'||kind==='tern')?.12:.48;
+      m.roughness = trim ? .38 : (kind==='van'||kind==='tern')?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : kind==='van'?.85:1; m.clearcoatRoughness = kind==='van'?.18:.12; }
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='van'||kind==='tern')?.85:1; m.clearcoatRoughness = (kind==='van'||kind==='tern')?.18:.12; }
       finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {

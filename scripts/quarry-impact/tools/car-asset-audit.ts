@@ -65,7 +65,7 @@ export function currentPhysicsInvariants(){
 }
 export async function productionCarStats(kind:string){
   const {loadCars,templates}=await import('../src/assets');const previous=new Map(templates),original=GLTFLoader.prototype.loadAsync;
-  GLTFLoader.prototype.loadAsync=async url=>{const match=/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|wheel-machining)\.glb$/.exec(String(url));if(!match)throw new Error(`Unexpected car URL ${url}`);return loadCarWithoutImages(match[1]);};
+  GLTFLoader.prototype.loadAsync=async url=>{const match=/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url));if(!match)throw new Error(`Unexpected car URL ${url}`);return loadCarWithoutImages(match[1]);};
   try{
     await loadCars(()=>{});const scene=templates.get(kind as 'coupe')!,materials=new Set<T.Material>();let meshes=0,triangles=0;
     scene.traverse(o=>{if(o instanceof T.Mesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;for(const material of Array.isArray(o.material)?o.material:[o.material])materials.add(material);}});
