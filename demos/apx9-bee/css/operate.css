@@ -1,0 +1,34 @@
+.operate-launch { position:absolute; top:18px; left:50%; transform:translateX(-50%); padding:12px 19px; border:1px solid #a56500; border-radius:30px; background:#ffbd40; color:#262015; font:700 12px var(--mono); box-shadow:0 5px 22px #b77e2630; cursor:pointer; z-index:8 }
+.operate-launch:hover { background:#ffce6b; }
+.operate-panel { position:absolute; left:18px; top:190px; width:306px; max-height:calc(100dvh - 295px); overflow:auto; padding:18px; z-index:9; background:rgba(250,250,247,.96); }
+.op-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.op-eyebrow { font:10px var(--mono); letter-spacing:.14em; color:#667274; }
+.operate-panel h2 { font-size:25px; line-height:1.08; letter-spacing:-.04em; margin:13px 0 18px; }
+.operate-panel button { border:1px solid #24343b30; background:#fff9; padding:9px 10px; border-radius:7px; font:600 11px var(--sans); cursor:pointer; min-height:35px; }
+.operate-panel button:hover { background:#fff; border-color:#876832; }
+.operate-panel button[aria-pressed="true"] { background:#233638; color:#fff; }
+.op-heading button { padding:0; width:30px; font-size:23px; }
+.op-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+.op-status { border-left:3px solid #d99a26; padding:9px 0 9px 11px; font:600 12px/1.6 var(--mono); color:#355354; margin:16px 0; }
+.op-body p { font:13px/1.65 var(--sans); color:#425055; }
+.op-body small { display:block; font:10px/1.6 var(--mono); color:#667174; margin:13px 0; }
+.op-choices { display:flex; flex-wrap:wrap; gap:5px; }
+.op-steps { display:flex; flex-wrap:wrap; gap:4px; margin-top:9px; }
+.op-steps button { font-size:10px; padding:5px 7px; }
+.op-body input[type="range"] { width:100%; accent-color:#b57812; min-height:30px; }
+.operate-panel footer { display:flex; gap:6px; border-top:1px solid #24343b20; padding-top:13px; margin-top:16px; }
+.operating .brand-tag { visibility:hidden; }
+@media(max-width:759px) {
+ .operate-launch { top:106px; left:auto; right:12px; transform:none; font-size:10px; padding:9px 12px; }
+ .operate-panel { left:10px; right:10px; width:auto; top:auto; bottom:calc(98px + env(safe-area-inset-bottom,0px)); max-height:40dvh; padding:12px; }
+ .operate-panel h2 { font-size:20px; margin:6px 0 10px; }
+ .op-tabs { grid-template-columns:repeat(6,1fr); gap:3px; }
+ .op-tabs button { font-size:10px; padding:6px 3px; }
+ .op-status { margin:9px 0; padding:5px 0 5px 9px; }
+ .op-body p { margin:8px 0; font-size:12px; }
+ .operate-panel footer { margin-top:9px; padding-top:9px; }
+ .operating .brand-sub { max-width:190px; }
+}
+@media(prefers-reduced-motion:reduce) { .operate-launch { transition:none; } }
+/* The repair picker opens above the operating card and closes after selection. */
+.operating .directory { z-index:11; }
