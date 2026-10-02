@@ -1,9 +1,10 @@
 import * as T from 'three';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {refineTernCabin} from './tern-cabin';
 import {refineTernFront} from './tern-front-refinement';
 import {classicWindowFrame} from './classic-window-frame';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
-import {buildCompactAsset} from './compact-asset';
+import {addRoadWheels} from './road-wheels';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 
 /** Original three-door hatchback: short overhangs, wedge bonnet, raked hatch,
@@ -35,7 +36,11 @@ export function buildTernAsset(){
    },v(side,0,0)),paint);
    panel('panel_'+name+s+'TernMoulding',16,1,(u,t)=>{const z=mix(a,b,u),y=mix(.753,.795,t);return v(side*(sideX(y,z)+.006),y,z);},v(side,0,0),rubber,.01);
   }
-  panel('panel_SillTern'+s,8,2,(u,t)=>{const z=mix(-1.77,1.77,u);return v(side*mix(sideX(.37,z),.714,t),mix(.369,.317,t),z);},v(side,-.5,0));
+  // The rocker and lower overhangs stop at the wheel openings. A continuous
+  // sill crosses the wheel face when the suspension settles or steering turns.
+  const sillStrips=[[-1.77,-1.18-.367],[-1.18+.367,1.18-.367],[1.18+.367,1.77]].map(([a,b])=>
+   formedVehiclePanel(panelSamples(b-a>1?8:2),panelSamples(2),(u,t)=>{const z=mix(a,b,u);return v(side*mix(sideX(.37,z),.714,t),mix(.369,.317,t),z);},v(side,-.5,0)));
+  add('panel_SillTern'+s,mergeGeometries(sillStrips),paint);for(const strip of sillStrips)strip.dispose();
   for(const z of [-1.18,1.18]){
    const points=Array.from({length:25},(_,i)=>{const a=mix(.12,Math.PI-.12,i/24),y=.3400195+Math.sin(a)*.370,Z=z+Math.cos(a)*.370;return v(side*(sideX(y,Z)+.003),y,Z);});
    add('panel_ArchLipTern'+s+z,new T.TubeGeometry(new T.CatmullRomCurve3(points),16,.008,4,false),rubber);
@@ -124,8 +129,5 @@ export function buildTernAsset(){
  for(let i=0;i<18;i++)box('Structure radiator fin Tern '+i,-.346+i*.041,.692,1.668,.005,.261,.007,rubber);
  box('Structure Tern battery',-.431,.64,1.413,.19,.154,.231,rubber);
  bar('Structure Tern exhaust',v(-.32,.281,.59),v(-.32,.281,-1.825),.024,steel);
- const source=buildCompactAsset();for(const [i,name]of ['FL','FR','RL','RR'].entries()){
-  const wheel=source.getObjectByName('wheel_'+name)!;wheel.removeFromParent();wheel.position.set((i%2?1:-1)*.690,.3400195,(i<2?1:-1)*1.18);root.add(wheel);
- }
- source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});refineTernCabin(root,{cloth,vinyl,rubber,steel,alloy});root.updateMatrixWorld(true);return root;
+ addRoadWheels(root,'tern');refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});refineTernCabin(root,{cloth,vinyl,rubber,steel,alloy});root.updateMatrixWorld(true);return root;
 }

@@ -2,7 +2,7 @@ import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {classicWindowFrame} from './classic-window-frame';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
-import {buildCompactAsset} from './compact-asset';
+import {addRoadWheels} from './road-wheels';
 import {refineTernCabin} from './tern-cabin';
 import {martenBodyWidth,martenNoseZ,martenBonnetLip,martenFrontWingZ,martenFrontPressing} from './marten-bodywork';
 import {martenWindscreen,martenWindscreenBow,martenRoofSurface,martenFrontHeaderSurface,martenPillar} from './marten-greenhouse';
@@ -38,7 +38,10 @@ export function buildMartenAsset(){
   for(const [name,a,b]of [['FrontWing',.62,1.96],['BodyDoor',-.57,.62],['RearWing',-1.96,-.57]] as const){
    add('panel_'+name+s+'Marten',formedVehiclePanel(panelSamples(name==='BodyDoor'?8:name==='RearWing'?12:16),[0,.14,.46,.75,1],(u,t)=>{const z=mix(a,b,u),y=mix(arch(z),belt(z),t),x=side*sideX(y,z);return v(x,y,martenFrontWingZ(x,z));},v(side,0,0)),paint);
   }
-  panel('panel_SillMarten'+s,8,1,(u,t)=>{const z=mix(-1.90,1.90,u);const x=side*(sideX(.375,z)-.033*t);return v(x,mix(.374,.327,t),martenFrontWingZ(x,z));},v(side,-.4,0));
+  // Keep three closed lower-body strips, with genuine gaps at both arches.
+  const sillStrips=[[-1.90,-1.14-.368],[-1.14+.368,1.14-.368],[1.14+.368,1.90]].map(([a,b])=>
+   formedVehiclePanel(panelSamples(b-a>1?8:2),panelSamples(1),(u,t)=>{const z=mix(a,b,u),x=side*(sideX(.375,z)-.033*t);return v(x,mix(.374,.327,t),martenFrontWingZ(x,z));},v(side,-.4,0)));
+  add('panel_SillMarten'+s,mergeGeometries(sillStrips),paint);for(const strip of sillStrips)strip.dispose();
   for(const z of [-1.14,1.14]){
    const points=Array.from({length:21},(_,i)=>{const a=mix(.11,Math.PI-.11,i/20),y=.3400195+Math.sin(a)*.369,Z=z+Math.cos(a)*.369;return v(side*(sideX(y,Z)+.003),y,Z);});
    add('panel_ArchLipMarten'+s+z,new T.TubeGeometry(new T.CatmullRomCurve3(points),20,.006,4,false),paint);
@@ -139,6 +142,6 @@ export function buildMartenAsset(){
  box('Structure Marten transaxle',0,.474,-1.229,.217,.174,.25,alloy);
  cylinder('Structure Marten silencer',0,.342,-1.898,.058,.68,steel,'x',10);
  cylinder('Structure Marten exhaust tip',-.33,.336,-1.991,.022,.18,alloy,'z',10);
- const source=buildCompactAsset();for(const [i,name]of ['FL','FR','RL','RR'].entries()){const wheel=source.getObjectByName('wheel_'+name)!;wheel.removeFromParent();wheel.position.set((i%2?1:-1)*.665,.3400195,(i<2?1:-1)*1.14);root.add(wheel);}source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});
+ addRoadWheels(root,'marten');
  root.updateMatrixWorld(true);return root;
 }
