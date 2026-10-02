@@ -186,3 +186,10 @@ The [Rook 1100](ROOK-1100.md), [Rillford Carrier](RILLFORD-CARRIER.md),
 mechanical artwork. The road cars share wheel tooling; the Ravine uses original
 off-road wheels. Existing bundled engine audio
 is reused; model-specific provenance and beta limitations are in those notes.
+
+### Fitted reinforcement
+
+The optional impact beams, sill rails, bracing, mounting pads and fasteners are
+original procedural Quarry Impact geometry. They use vehicle-specific mounting
+layouts shared with the collision simulation. The underlying vehicle credits
+and licenses above continue to apply.

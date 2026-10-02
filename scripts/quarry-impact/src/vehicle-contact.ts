@@ -6,8 +6,8 @@ export function vehicleContact<T extends ContactVehicle>(world:R.World,cars:read
  const parent1=world.getCollider(h1)?.parent()?.handle,parent2=world.getCollider(h2)?.parent()?.handle;
  const a=parent1===undefined?undefined:cars.find(c=>c.body.handle===parent1),b=parent2===undefined?undefined:cars.find(c=>c.body.handle===parent2);
  // Preserve the established two-collider contact cadence for existing cars.
- // Open cargo shells and roll cages can have several simultaneous contacts.
- const compound=a?.kind==='utility'||b?.kind==='utility'||a?.kind==='buggy'||b?.kind==='buggy';
+ // Open cargo shells, roll cages and fitted armor can contact several pieces.
+ const compound=(a?.body.numColliders()??0)>2||(b?.body.numColliders()??0)>2;
  const k1=compound&&a?a.collider.handle:h1,k2=compound&&b?b.collider.handle:h2;
  return{a,b,key:Math.min(k1,k2)+':'+Math.max(k1,k2)};
 }

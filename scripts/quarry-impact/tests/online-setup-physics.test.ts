@@ -10,6 +10,7 @@ import {Vehicle} from '../src/vehicle';
 import {Simulation} from '../multiplayer/simulation';
 import {STEP,type Snapshot} from '../multiplayer/protocol';
 import {structuralDamage} from '../src/bodywork-response';
+import {vehicleContact} from '../src/vehicle-contact';
 import {OnlineView} from '../src/online-view';
 await R.init();
 const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
@@ -20,8 +21,8 @@ const envelope=(s:Simulation):Snapshot=>({...s.snapshot(true),members:[],ack:{}}
 const near=(a:number,b:number,epsilon=1e-7)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
 function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:number,seen:Map<string,number>,race=false){
  queue.drainContactForceEvents(e=>{
-  const h1=e.collider1(),h2=e.collider2(),key=Math.min(h1,h2)+':'+Math.max(h1,h2);if(time-(seen.get(key)??-100)<.28)return;
-  const a=cars.find(c=>c.collider.handle===h1||c.roof.handle===h1),b=cars.find(c=>c.collider.handle===h2||c.roof.handle===h2);if(!a&&!b)return;
+  const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(world,cars,h1,h2);if(time-(seen.get(key)??-100)<.28)return;
+  if(!a&&!b)return;
   const point=(a??b)!.current.clone(),normal=new T.Vector3();world.contactPair(world.getCollider(h1),world.getCollider(h2),m=>{if(m.numSolverContacts()){point.copy(m.solverContactPoint(0));normal.copy(m.normal());}});
   const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3(),relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length(),impulse=e.totalForceMagnitude()*STEP;
   if(closing<.65||impulse<1500)return;seen.set(key,time);const damage=structuralDamage(impulse,closing)*(race?.45:1);

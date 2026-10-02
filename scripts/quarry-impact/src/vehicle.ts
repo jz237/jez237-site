@@ -1,8 +1,8 @@
 import {BuggySuspension} from './buggy-suspension';
-import {accumulateEngineDamage} from './engine-condition';
+import {applyComponentImpact} from './component-damage';
 import {vehicleChassisHalfExtents,vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
-import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
+import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -118,11 +118,11 @@ export class Vehicle {
     this.specification = setupPhysics(kind, this.setup);
     const def = {...DEFINITIONS[kind], mass:this.specification.mass};
     this.aiPhase = id * 1.79;
-    this.model = cloneCar(kind, color);
+    this.model = cloneCar(kind, color, this.setup.armor);
     this.paintColor=new T.Color(color);
     this.root.add(this.model);
     scene.add(this.root);
-    const physical=createVehiclePhysics(R,world,kind,def.mass);
+    const physical=createVehiclePhysics(R,world,kind,def.mass,this.setup.armor);
     this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
     for(const name of ['FL','FR','RL','RR'])this.wheels.push(this.model.getObjectByName('wheel_'+name)!);
     this.model.traverse((o) => {
@@ -315,8 +315,13 @@ export class Vehicle {
     this.impactSerial++;
     if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
-    const local = this.root.worldToLocal(point.clone());
-    this.engineDamage=accumulateEngineDamage(this.engineDamage??0,this.kind,local,damage);
+    // Use the same quaternion arithmetic as the authority for mechanical damage.
+    // Matrix inversion differences can accumulate into different wheel forces.
+    // The rendered pose also supports replay hits while its body is disabled.
+    const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
+    const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
+    const components={engineDamage:this.engineDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
+    applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());
@@ -373,6 +378,9 @@ export class Vehicle {
       }
     }
     this.wreckParts.hit(contact,impactDirection,dentDamage);
+    this.engineDamage=components.engineDamage;
+    this.wreckParts.wheelDamage.set(components.wheelDamage);
+    components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
     this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind,this.health));
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);

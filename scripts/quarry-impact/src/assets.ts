@@ -1,3 +1,4 @@
+import {attachVehicleArmor} from './vehicle-armor';
 import {CLASSIC_VEHICLES,isClassicKind} from './classic-vehicle-specs';
 import * as THREE from 'three';
 import { GLTFLoader } from './model-loader';
@@ -96,13 +97,14 @@ export async function loadCars(progress: (s: string) => void) {
   }
 }
 function hasNamedParent(object:THREE.Object3D,prefix:string){for(let p:THREE.Object3D|null=object;p;p=p.parent)if(p.name.startsWith(prefix))return true;return false;}
-export function cloneCar(kind: CarKind, color: number) {
+export function cloneCar(kind: CarKind, color: number, armor = 0) {
   const root = templates.get(kind)!.clone(true);
+  attachVehicleArmor(root,kind,armor);
   if(!isClassicKind(kind))attachWheelPresentation(root);
   const bodyMaterials = new Map<THREE.Material, THREE.Material>(),hardwareMaterials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
-    o.castShadow = o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) && !(kind==='marten'&&/WaistTrim|Shutline|Flutes/.test(o.name)) || o.name.includes('Tire');
+    o.castShadow = (o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) && !(kind==='marten'&&/WaistTrim|Shutline|Flutes/.test(o.name)) || o.name.includes('Tire')) && !/^panel_Reinforcement_.*_fasteners$/.test(o.name);
     o.receiveShadow = true;
     const old = o.material as THREE.MeshStandardMaterial;
     // Moving links and buggy wheel hardware have no body-space wear attributes;
