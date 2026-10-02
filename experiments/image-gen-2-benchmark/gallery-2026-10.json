@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-10-02-intense-phobia-situation-agoraphobia-compressed-at-the-stat",
+    "title": "Agoraphobia: Compressed at the Station Barrier",
+    "tests": "{\"pre_generation_fear_impact\": \"Feared circumstance dominates frame through close intrusion, restricted movement, blocked sightlines or enclosing darkness; physically plausible staged situation. No non-Monday visual review.\"}; archive_slot=2026-10-02T11:20; concept=station-crowd-barrier-body-level; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1448x1086\", \"backendReportedSize\": \"1448x1086\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1448x1086\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a finished fully photorealistic body-level documentary photograph from within a dense stationary commuter queue at an urban station ticket barrier. Frame at the chest height of someone physically embedded in the crowd, with ordinary 40mm optics and compressed, obstructed sightlines. Close coat-covered shoulders fill both side edges within centimetres of the lens; a scuffed canvas commuter bag crosses the bottom foreground and presses into the camera's space. A person's back occupies much of the central frame less than half a metre away. Beyond it, a narrow fragmented view shows more heads and shoulders continuing into an ordinary low-ceilinged concourse and a partly visible closed barrier. Diverse adult commuters in plausible everyday clothing stand in natural uneven poses; realistic anatomy, no duplicated faces, theatrical panic, screaming or aggression. Fluorescent station lighting gives honest cool-neutral illumination, revealing cloth weave, creased coats, hair and ordinary skin texture. No readable signage. There is no open aisle or scenic establishing area; the framing makes movement and retreat feel obstructed without showing active injury or coercion. The image's pressure comes from overwhelming nearby bodies, unavoidable foreground obstruction, blocked sightlines and crowd repetition extending beyond every edge. Realistic documentary exposure, mild sensor grain, no stylized horror lighting, fantasy, gore, text overlays, logos, watermarks or CGI.",
+    "image": "images/2026-10-02-intense-phobia-situation-agoraphobia-compressed-at-the-stat.jpg",
+    "thumb": "thumbs/2026-10-02-intense-phobia-situation-agoraphobia-compressed-at-the-stat.webp",
+    "color": "#3f3c3b",
+    "date": "2026-10-02",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "station-crowd-barrier-body-level",
+      "imageSha256": "9cbb02a6c563c0b7a33f6baafe987f48c7f4f79b69a6f07ff24cea44ffe5e9d0",
+      "imageDHash": "33b38c0d4f833b4b"
+    }
+  },
+  {
     "id": "2026-10-02-intense-phobia-situation-acrophobia-outside-the-wind-turbin",
     "title": "Acrophobia: Outside the Wind-Turbine Nacelle",
     "tests": "{\"pre_generation_fear_impact\": \"Dominant close feared circumstance, obstructed relief, and credible pressure cues; no non-Monday visual review.\"}; archive_slot=2026-10-02T05:20; concept=wind-turbine-ladder-downward-abyss; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1086x1448\", \"backendReportedSize\": \"1086x1448\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1086x1448\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
