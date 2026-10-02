@@ -61,12 +61,12 @@ The **Power on / Operate** button opens six non-destructive exhibit modes:
 - Systems: animated energy, sensor-signal and pollen paths between real part anchors. Paths follow the existing explosion slider.
 - Mission: a five-stage, 32-second flower visit, with playback, scrubbing and direct stage selection.
 - Vision: a flower-focused sensor camera with visible, illustrative UV nectar guides and false-colour thermal contrast. These are explicitly simulated, not measured or biological-vision claims.
-- Repair: diagnose the right wing mount, remove the cover, select the assembly in the model or searchable directory, fit a spare and reassemble for a flight check.
+- Repair: an automatic 44-second service sequence diagnoses a stalled wing, lifts the thorax cover, extracts the failed actuator, installs a separate modeled spare, calibrates the exposed planetary gears, reassembles and test-flies. Pause/resume, replay and scrubbing require no Next clicks.
 - Scale: a 24.26 mm US quarter proxy and millimetre ruler, in the same coordinate units as the 28 mm body / 52 mm wingspan. This is relative scale, not physical screen calibration.
 
 `js/operate.js` owns the additive scene objects and reversible poses; `css/operate.css` owns the operating card. Leaving a mode restores the original inspection view. Motion stops with the explicit Pause button, hidden tabs stop updating via the main renderer, and reduced-motion preferences start operating animation paused. Mission stages remain manually accessible.
 
-Serve the repository root on port 8768, then run `python3 scripts/apx9-bee/qa/operate.py` (Playwright Python and GPU-capable Chrome). `APX9_URL` overrides the test destination, and `CHROME` overrides the browser executable. This exercises all modes, repair through the directory, viewport changes, reduced motion and restoration. It writes its inspection screenshots to `/tmp`, not the public site.
+Serve the repository root on port 8768, then run `python3 scripts/apx9-bee/qa/operate.py` (Playwright Python and GPU-capable Chrome). `APX9_URL` overrides the test destination, and `CHROME` overrides the browser executable. This exercises all modes, automatic repair playback, viewport changes, reduced motion and restoration. It writes its inspection screenshots to `/tmp`, not the public site.
 
 ### Detailed flower and spectral inspection
 
@@ -83,3 +83,9 @@ X-ray shells now exposes the existing reduction gear train, cam/follower, slider
 The guided tour automatically plays 17 stops, including two internal cutaways, with long camera and explosion transitions. Pause/Resume (or Space) freezes the camera, explosion and mechanisms together. Manual orbit pauses the tour. Arrow keys optionally navigate; no Next click is required. Reduced-motion preferences start playback paused.
 
 Additional browser checks: `qa/systems.py` covers routes, restoration and mobile framing; `qa/mechanisms.py` covers moving gears/linkages, pause, mobile cutaways, mode transitions and all 17 autoplay stops in real time. Both accept `APX9_URL`; their default local port is 8771.
+
+### Animated service bay
+
+`js/repair.js` owns temporary service poses, a separate replacement servo instance, guide rails, diagnostic target markers and illustrative response traces. Extraction and installation use the existing detailed oscillator geometry, while calibration uses the existing moving gear model. A macro camera follows the service assembly, then returns to the full bee for reassembly and a short lift/settle test. Original transforms, visibility and material identities are restored on exit; scrubbing backward also restores the faulted state. Pause freezes camera movement as well as the service timeline. Playback controls remain outside the scrollable panel body on mobile. Reduced-motion preferences start the sequence paused.
+
+`python3 scripts/apx9-bee/qa/repair.py` exercises real-time completion, extraction/insertion, calibration pause, exact restoration, mobile controls and reduced-motion playback. Default local server port: 8772; `APX9_URL` selects a deployed release.

@@ -8,8 +8,8 @@ import { Picker } from './picking.js';
 import { createPost } from './post.js';
 import { Selection } from './select.js?v=f421fbf902f8';
 import { createAccum } from './accum.js';
-import { initMechanisms } from './mechanisms.js?v=dabdb6a8e212';
-import { initOperations } from './operate.js?v=6e6d0086cdc7';
+import { initMechanisms } from './mechanisms.js?v=e51567803d8e';
+import { initOperations } from './operate.js?v=fbf10b922cf6';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;
@@ -132,7 +132,7 @@ async function boot() {
   }
 
   function updateBounds(follow = true) {
-    if (['mission', 'sensors', 'scale'].includes(app?.operations?.state.mode) || app?.ui?.state.tour>=0 || app?.mechanisms?.state.focus) follow = false;
+    if (['mission', 'sensors', 'scale', 'repair'].includes(app?.operations?.state.mode) || app?.ui?.state.tour>=0 || app?.mechanisms?.state.focus) follow = false;
     state.boundsDirty = false;
     bee.worldBounds(box);
     if (box.isEmpty()) return;
@@ -331,7 +331,7 @@ async function boot() {
     if (document.hidden || !state.ready) return;
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    const motionDt=app?.ui?.state.tour>=0&&app.ui.state.tourPaused?0:dt;
+    const motionDt=(app?.ui?.state.tour>=0&&app.ui.state.tourPaused)||(app?.operations?.state.mode==='repair'&&app.operations.state.paused)?0:dt;
     let need = state.dirty;
     state.dirty = false;
     let overlay = state.overlay;
