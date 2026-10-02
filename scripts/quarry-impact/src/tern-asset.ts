@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {refineTernCabin} from './tern-cabin';
 import {refineTernFront} from './tern-front-refinement';
 import {classicWindowFrame} from './classic-window-frame';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
@@ -34,10 +35,10 @@ export function buildTernAsset(){
    },v(side,0,0)),paint);
    panel('panel_'+name+s+'TernMoulding',16,1,(u,t)=>{const z=mix(a,b,u),y=mix(.753,.795,t);return v(side*(sideX(y,z)+.006),y,z);},v(side,0,0),rubber,.01);
   }
-  panel('panel_SillTern'+s,18,2,(u,t)=>{const z=mix(-1.77,1.77,u);return v(side*mix(sideX(.37,z),.714,t),mix(.369,.317,t),z);},v(side,-.5,0));
+  panel('panel_SillTern'+s,8,2,(u,t)=>{const z=mix(-1.77,1.77,u);return v(side*mix(sideX(.37,z),.714,t),mix(.369,.317,t),z);},v(side,-.5,0));
   for(const z of [-1.18,1.18]){
    const points=Array.from({length:25},(_,i)=>{const a=mix(.12,Math.PI-.12,i/24),y=.3400195+Math.sin(a)*.370,Z=z+Math.cos(a)*.370;return v(side*(sideX(y,Z)+.003),y,Z);});
-   add('panel_ArchLipTern'+s+z,new T.TubeGeometry(new T.CatmullRomCurve3(points),24,.008,5,false),rubber);
+   add('panel_ArchLipTern'+s+z,new T.TubeGeometry(new T.CatmullRomCurve3(points),16,.008,4,false),rubber);
    panel('Structure Tern wheelhouse '+s+z,14,2,(u,t)=>{const a=u*Math.PI;return v(side*mix(.60,.771,t),.3400195+Math.sin(a)*.366,z+Math.cos(a)*.366);},v(0,1,0),steel,.012);
   }
   panel('panel_FrontShoulderTern'+s,13,2,(u,t)=>{const z=mix(.62,1.81,u),y=belt(z);return v(side*mix(sideX(y,z),.704,t),y+.015*Math.sin(t*Math.PI/2),u===1?endZ(side*mix(sideX(y,z),.704,t),true):z);},v(side,1,0).normalize());
@@ -64,7 +65,7 @@ export function buildTernAsset(){
  window('TailgateTernRear',[v(.737,1.02,-1.76),v(-.737,1.02,-1.76),v(-.631,1.43,-1.04),v(.631,1.43,-1.04)],1);
  panel('panel_TailgateTernHeader',10,1,(u,t)=>v((u*2-1)*mix(.631,.639,t),mix(1.43,1.478,t),mix(-1.04,-1.02,t)),v(0,.5,-1).normalize());
  panel('panel_TailgateTernSkin',16,6,(u,t)=>{const y=mix(.564,1.02,t),x=(u*2-1)*mix(.663,.737,T.MathUtils.smoothstep(y,.94,1.02));return v(x,y,mix(endZ(x,false),-1.76,t)-.008*Math.sin(t*Math.PI));},v(0,0,-1));
- panel('panel_TailgateTernInner',13,3,(u,t)=>v((u*2-1)*.641,mix(.59,1.00,t),mix(-1.791,-1.73,t)),v(0,0,1),vinyl,.012);
+ panel('panel_TailgateTernInner',5,2,(u,t)=>v((u*2-1)*.641,mix(.59,1.00,t),mix(-1.791,-1.73,t)),v(0,0,1),vinyl,.012);
  box('panel_TailgateTernHandle',0,.937,-1.803,.224,.04,.025,rubber);
  box('panel_TailgateTernPlateRecess',0,.767,-1.833,.402,.119,.022,rubber);
  box('panel_TailgateTernPlate',0,.767,-1.848,.355,.087,.01,alloy);
@@ -126,5 +127,5 @@ export function buildTernAsset(){
  const source=buildCompactAsset();for(const [i,name]of ['FL','FR','RL','RR'].entries()){
   const wheel=source.getObjectByName('wheel_'+name)!;wheel.removeFromParent();wheel.position.set((i%2?1:-1)*.690,.3400195,(i<2?1:-1)*1.18);root.add(wheel);
  }
- source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});root.updateMatrixWorld(true);return root;
+ source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});refineTernCabin(root,{cloth,vinyl,rubber,steel,alloy});root.updateMatrixWorld(true);return root;
 }

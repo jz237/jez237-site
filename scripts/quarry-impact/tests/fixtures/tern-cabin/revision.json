@@ -1,0 +1,45 @@
+{
+  "baseline": "81a51ea",
+  "files": {
+    "src/tern-asset.ts": {
+      "snapshot": "src-tern-asset.ts.gz",
+      "before": "4d5a0cc26c9fa4adb0de58a5279740eafe32acf16949f517d9adfa566a5c9271",
+      "after": "a93b4d1c61159b85cea1f81c213145d35be205821a2b4f7e0605d4f51c2095a2"
+    },
+    "src/tern-cabin.ts": {
+      "snapshot": "src-tern-cabin.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "2770eb6452da0e01eb472e49f9ee0b49094d721d814558b4105eddf1c6c733fd"
+    },
+    "public/models/tern.glb": {
+      "snapshot": "public-models-tern.glb.gz",
+      "before": "2f8ea634ba874dfdb840dd151cfcca3f9eb0868d9008c3f1b3120535beaaff04",
+      "after": "4a62b42a8d15969bb77a45f929fa0e346cef7b87bc0d761fe3c46bbde7d972a4"
+    },
+    "public/models/tern-candidate.glb": {
+      "snapshot": "public-models-tern-candidate.glb.gz",
+      "before": "2f8ea634ba874dfdb840dd151cfcca3f9eb0868d9008c3f1b3120535beaaff04",
+      "after": "4a62b42a8d15969bb77a45f929fa0e346cef7b87bc0d761fe3c46bbde7d972a4"
+    },
+    "tools/tern-asset-preview.js": {
+      "snapshot": "tools-tern-asset-preview.js.gz",
+      "before": "c8470414bfae5837020b1ae595e0d89e0619da4d02fedb22a2e92d9ee60a0558",
+      "after": "09f2a23095d883ff0eead7897e375889a1a26985e3253d9201b6feba647b2edd"
+    },
+    "tern-asset-preview.html": {
+      "snapshot": "tern-asset-preview.html.gz",
+      "before": "8e93fb5cf4e85ddd4a213ca680577487669f377bd21ea5541c4c30aac9872608",
+      "after": "009d05416ad123984f2420932097e73659e82e06069f768a8a302710e2506c3a"
+    },
+    "tests/tern-front-invariants.ts": {
+      "snapshot": "tests-tern-front-invariants.ts.gz",
+      "before": "66e1b54094a04af8ffbdccce7602958c38a5783a028678dd87d1b4f8ff48eed1",
+      "after": "427511c18b352d54a79af7cbab508e67544e9f7fe0a6b74020892d01e2058f7c"
+    },
+    "tests/tern-cabin.test.ts": {
+      "snapshot": "tests-tern-cabin.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "740ef2171a46d866cd9bc4cfea670e88a79542e056d3c68b84fbd1d44b76a897"
+    }
+  }
+}
