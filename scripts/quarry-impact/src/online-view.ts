@@ -81,6 +81,9 @@ export class OnlineView {
       for(const key of ['health','inflicted','damageLeft','damageRight','steering','speed','rpm','gear','passed','nextCheckpoint','lap','finished','finishTime','penalty'] as const) {
         (c as any)[key]=at[key];
       }
+      // Legacy rooms report only general health; do not invent authoritative
+      // engine condition from incomplete visual hit packets.
+      c.engineDamage=at.components?.engineDamage;
       c.input=at.input; c.surface=at.surface;
       c.slip=at.slip;
       c.remoteGrounded=at.wheels.some(w=>w.contact);

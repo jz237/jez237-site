@@ -5,14 +5,16 @@ import {LEGACY_ONLINE_PLAYERS,validCapacity,type OnlineCapacity} from '../src/on
 import {raceGridSlot,lapProgress,circuitRoute,directionForCar,checkRoute,stepScoreRespawns} from '../src/event-rules';
 import {applyComponentImpact,freshComponents,validComponents} from '../src/component-damage';
 import {structuralDamage} from '../src/bodywork-response';
-import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,type VehicleSpecification} from '../src/vehicle-physics';
+import {accumulateEngineDamage} from '../src/engine-condition';
+import {vehicleContact} from '../src/vehicle-contact';
+import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,type VehicleSpecification} from '../src/vehicle-physics';
 import {createQuarryPhysics,landscapeHeight} from '../src/quarry-layout';
 import type Rapier from '@dimforge/rapier3d-compat';
 import { DEFINITIONS, CHECKPOINTS, clamp, wrap, surfaceAt, trackPoint, terrainHeight, derbyOrder, advanceCheckpoint, type CarKind, type Mode } from '../src/rules';
 import { STEP, NEUTRAL, type Controls, type Vec3, type Quat, type CarState, type DamageEvent, type Snapshot } from './protocol';
 
 type RapierAPI = typeof Rapier;
-type Car = { specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
+type Car = { kind:CarKind; specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
 const ONLINE_ARENA={x:0,z:0,radius:46,segments:66,spawnRadius:32,fenceRadius:50};
 const AI_TRACK=Array.from({length:100},(_,i)=>trackPoint(i/100));
 const quat = (yaw: number) => ({ x: 0, y: Math.sin(yaw / 2), z: 0, w: Math.cos(yaw / 2) });
@@ -52,7 +54,7 @@ export class Simulation {
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
     const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller}=createVehiclePhysics(this.R,this.world,kind,specification.mass);
     const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
-    return {specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
+    return {kind,specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
   }
   private place(c: Car, x: number, z: number, yaw: number) {
     c.body.setTranslation({x,y:landscapeHeight(x,z)+.89,z},true); c.body.setRotation(quat(yaw),true);
@@ -85,7 +87,7 @@ export class Simulation {
     this.damageShape(c); return true;
   }
   private route(id:number){return circuitRoute(directionForCar(this.event?.rules.race==='laps'?this.event.rules.direction:'forward',id));}
-  private damageShape(c: Car) { const d=DEFINITIONS[c.state.kind],loss=100-c.state.health; c.collider.setHalfExtents({x:d.halfWidth-.06-loss*.0008,y:.25,z:d.halfLength-.12-loss*.0015}); }
+  private damageShape(c: Car) { c.collider.setHalfExtents(vehicleChassisHalfExtents(c.state.kind,c.state.health)); }
   ai(c: Car): Controls {
     const s=c.state;
     if (s.health<=0) return {...NEUTRAL};
@@ -117,7 +119,7 @@ export class Simulation {
   }
   private drive(c:Car) {
     const s=c.state;s.surface=surfaceAt(s.p.x,s.p.z);
-    const up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift);
+    const up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift,s.components?.engineDamage);
     c.roll=up<.2?c.roll+STEP:0;
   }
   step(humans: Set<number>) {
@@ -130,9 +132,9 @@ export class Simulation {
     this.world.step(this.queue);
     for(const c of this.cars)this.readBody(c);
     this.queue.drainContactForceEvents(e=>{
-      const h1=e.collider1(),h2=e.collider2(),key=Math.min(h1,h2)+':'+Math.max(h1,h2);
+      const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(this.world,this.cars,h1,h2);
       if(this.elapsed-(this.impacts.get(key)??-100)<.28)return;
-      const a=this.cars.find(c=>c.collider.handle===h1||c.roof.handle===h1),b=this.cars.find(c=>c.collider.handle===h2||c.roof.handle===h2);if(!a&&!b)return;
+      if(!a&&!b)return;
       let point={...(a??b)!.state.p},normal={x:0,y:0,z:0};
       this.world.contactPair(this.world.getCollider(h1),this.world.getCollider(h2),m=>{if(m.numSolverContacts()>0){point={...m.solverContactPoint(0)};normal={...m.normal()};}});
       const va=a?impactVelocities[a.state.id]:{x:0,y:0,z:0},vb=b?impactVelocities[b.state.id]:{x:0,y:0,z:0};
@@ -196,9 +198,20 @@ export class Simulation {
     for(const car of s.cars){if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
       if(c.state.kind!==car.kind||!sameOnlineSetup(c.state.setup,car.setup,car.kind)){this.world.removeVehicleController(c.controller);this.world.removeRigidBody(c.body);c=this.cars[car.id]=this.createCar(car.id,car.kind,car.setup);}
       c.state={...c.state,...structuredClone(car),surface:car.surface??surfaceAt(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL};
+      const engineHistory=(c.state.dents??[]).filter(hit=>hit.repair===c.state.repair);
+      // A bounded legacy history may have lost older hits. Only infer the new
+      // component when those retained hits account for all structural health
+      // loss; otherwise retain legacy power until a real repair establishes it.
+      const completeEngineHistory=engineHistory.reduce((sum,hit)=>sum+hit.damage,0)+1e-6>=100-c.state.health;
       if(!validComponents(car.components)){
         c.state.components=freshComponents();
-        for(const hit of c.state.dents??[])if(hit.repair===c.state.repair)applyComponentImpact(c.state.components,c.state.kind,hit.localPoint,hit.localDirection,hit.damage);
+        for(const hit of engineHistory)applyComponentImpact(c.state.components,c.state.kind,hit.localPoint,hit.localDirection,hit.damage);
+        if(!completeEngineHistory)c.state.components.engineDamage=undefined;
+      }else if(car.components!.engineDamage===undefined){
+        // Keep authoritative wheels even when their older visual hits were lost.
+        let engineDamage=0;
+        for(const hit of engineHistory)engineDamage=accumulateEngineDamage(engineDamage,c.state.kind,hit.localPoint,hit.damage);
+        c.state.components!.engineDamage=completeEngineHistory?engineDamage:undefined;
       }
       c.body.setTranslation(car.p,true);c.body.setRotation(car.q,true);c.body.setLinvel(car.v,true);c.body.setAngvel(car.av,true);this.damageShape(c);}
     for(const p of s.props??[]){const prop=this.props[p.id];if(!prop)continue;prop.body.setTranslation(p.p,true);prop.body.setRotation(p.q,true);prop.body.setLinvel(p.v,true);prop.body.setAngvel(p.av,true);}

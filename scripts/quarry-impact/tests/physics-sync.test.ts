@@ -19,10 +19,13 @@ const compiled=await transform(before.replace(/from '([^']+)'/g,(_all,path)=>`fr
 const {Vehicle:PriorVehicle}=await import('data:text/javascript;base64,'+Buffer.from(compiled.code).toString('base64'));
 for(const kind of ['coupe','sedan','hatch']as const){const d=DEFINITIONS[kind],model=new T.Group();for(const [name,x,z]of [['FL',-1,1],['FR',1,1],['RL',-1,-1],['RR',1,-1]]as const){const wheel=new T.Group();wheel.name='wheel_'+name;wheel.position.set(x*(d.halfWidth-.04),.5,z*d.wheelbase/2);model.add(wheel);}templates.set(kind,model);}
 function rig(Constructor:typeof Vehicle,kind:CarKind,setup:Setup){const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;world.createCollider(R.ColliderDesc.cuboid(500,.5,500).setTranslation(0,-.5,0));const car=new Constructor(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(){}} as any,setup);car.place(0,0,0);return{world,car,dispose(){car.dispose();world.free();}};}
-test('shared physics preserves frozen solo behavior for all cars, tunes, damaged wheels and variable steps',()=>{
+test('shared physics preserves legacy health-based solo behavior for all cars, tunes, damaged wheels and variable steps',()=>{
  for(const kind of ['coupe','sedan','hatch']as const)for(const tuned of [false,true]){
   const setup=stockSetup(kind);if(tuned){setup.engine=2;setup.tires=3;setup.armor=1;Object.assign(setup.tune,{gearing:.65,suspension:-.4,steering:.3,brakeBias:-.5,differential:.7});}
   const old=rig(PriorVehicle,kind,setup),fresh=rig(Vehicle,kind,setup);
+  // The frozen fixture injects total health without any engine contact data.
+  // Keep its legacy condition mode explicit; real engine impacts are tested separately.
+  fresh.car.engineDamage=undefined;
   try{for(let i=0;i<900;i++){
    const dt=i%2?1/120:1/60,input={throttle:i<120?0:i<500?1:i<700?-.6:.4,steer:i>=200&&i<380?.2:i>=740?-.25:0,brake:i>=500&&i<550?1:0,handbrake:i>=420&&i<450};
    for(const r of [old,fresh]){if(i===600){r.car.health=72;r.car.damageLeft=12;r.car.wreckParts.wheelDamage[0]=.65;r.car.wreckParts.wheelShift[0].set(.07,0,-.1);}r.world.timestep=dt;r.car.input=input;r.car.preStep(dt);r.world.step();r.car.postStep(dt,i/60);}

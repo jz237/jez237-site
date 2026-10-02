@@ -1,3 +1,4 @@
+import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact} from './vehicle-contact';
 import {CAR_KINDS} from './rules';
@@ -506,7 +507,7 @@ function updateHud() {
   document.getElementById('rpm-bar')!.style.width =
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
   text('surface', player.surface.toUpperCase());
-  text('engine-status', player.health < 40 ? 'ENGINE DAMAGED' : 'ENGINE OK');
+  text('engine-status', engineStatus(player.health,player.engineDamage));
   text(
     'steer-status',
     Math.abs(player.damageLeft - player.damageRight) > 16

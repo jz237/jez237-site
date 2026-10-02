@@ -2,6 +2,7 @@ import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
+import {enginePowerFactor} from './engine-condition';
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
@@ -53,12 +54,12 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
-export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted){
+export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  state.speed=dot(velocity,forward);state.slip=Math.abs(dot(velocity,right));
  const target=(alive?state.input.steer:0)*(.55*spec.steering/(1+Math.abs(state.speed)*.016))+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
- const force=alive?state.input.throttle*spec.force*(.45+.55*state.health/100)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ const force=alive?state.input.throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind)),shift=wheelShift[i];
