@@ -5,6 +5,7 @@ import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
 import {buildCompactAsset} from './compact-asset';
 import {refineTernCabin} from './tern-cabin';
 import {martenBodyWidth,martenNoseZ,martenBonnetLip,martenFrontWingZ,martenFrontPressing} from './marten-bodywork';
+import {martenWindscreen,martenWindscreenBow,martenRoofSurface,martenFrontHeaderSurface,martenPillar} from './marten-greenhouse';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 
 /** Original compact rear-engine coupe. Closed curved pressings surround a
@@ -31,11 +32,11 @@ export function buildMartenAsset(){
  const belt=(z:number)=>z>.62?mix(1.025,.815,(z-.62)/1.34):z< -1.30?mix(1.025,.815,(-z-1.30)/.66):1.025;
  const endZ=(x:number,sign:number)=>sign>0?martenNoseZ(x):-(1.96+.052*(1-(x/.72)**2));
  const arch=(z:number)=>{const dz=Math.min(Math.abs(z-1.14),Math.abs(z+1.14));return dz<.368?Math.max(.375,.3400195+Math.sqrt(.368**2-dz**2)):.375;};
- const window=(name:string,corners:T.Vector3[],side:number)=>{const f=classicWindowFrame(corners,side);add('panel_'+name+'Frame',f.frame,paint);add('panel_'+name+'Seal',f.seal,rubber);add('panel_'+name+'Trim',f.trim,chrome);add('glass_'+name,f.glass,glass).castShadow=false;};
+ const window=(name:string,corners:T.Vector3[],side:number)=>{const f=name==='FrontMarten'?martenWindscreen():classicWindowFrame(corners,side);add('panel_'+name+'Frame',f.frame,paint);add('panel_'+name+'Seal',f.seal,rubber);add('panel_'+name+'Trim',f.trim,chrome);add('glass_'+name,f.glass,glass).castShadow=false;};
  for(const side of [-1,1]){
   const s=side<0?'L':'R';
   for(const [name,a,b]of [['FrontWing',.62,1.96],['BodyDoor',-.57,.62],['RearWing',-1.96,-.57]] as const){
-   add('panel_'+name+s+'Marten',formedVehiclePanel(panelSamples(name==='BodyDoor'?10:name==='RearWing'?14:18),[0,.14,.46,.75,1],(u,t)=>{const z=mix(a,b,u),y=mix(arch(z),belt(z),t),x=side*sideX(y,z);return v(x,y,martenFrontWingZ(x,z));},v(side,0,0)),paint);
+   add('panel_'+name+s+'Marten',formedVehiclePanel(panelSamples(name==='BodyDoor'?8:name==='RearWing'?12:16),[0,.14,.46,.75,1],(u,t)=>{const z=mix(a,b,u),y=mix(arch(z),belt(z),t),x=side*sideX(y,z);return v(x,y,martenFrontWingZ(x,z));},v(side,0,0)),paint);
   }
   panel('panel_SillMarten'+s,8,1,(u,t)=>{const z=mix(-1.90,1.90,u);const x=side*(sideX(.375,z)-.033*t);return v(x,mix(.374,.327,t),martenFrontWingZ(x,z));},v(side,-.4,0));
   for(const z of [-1.14,1.14]){
@@ -44,14 +45,14 @@ export function buildMartenAsset(){
    panel('Structure Marten wheelhouse '+s+z,8,1,(u,t)=>{const a=u*Math.PI;return v(side*mix(.59,.748,t),.3400195+Math.sin(a)*.365,z+Math.cos(a)*.365);},v(0,1,0),steel,.012);
   }
   for(const [name,a,b]of [['FrontShoulder',.62,1.96],['RearShoulder',-1.96,-1.30]] as const){
-   panel('panel_'+name+'Marten'+s,b===1.96?14:10,b===1.96?3:2,(u,t)=>{const z=mix(a,b,u),y=belt(z),x=side*mix(sideX(y,z),.652,t);return v(x,y+.02*Math.sin(t*Math.PI/2),b===1.96?martenFrontWingZ(x,z):u===0&&a===-1.96?endZ(x,-1):z);},v(side,.7,0).normalize());
+   panel('panel_'+name+'Marten'+s,b===1.96?14:10,b===1.96?3:2,(u,t)=>{const z=mix(a,b,u),y=belt(z),x=side*mix(sideX(y,z),.652,t);return v(x,y+.02*Math.sin(t*Math.PI/2),b===1.96?martenFrontWingZ(x,z)+(1-u)**2*martenWindscreenBow(x):u===0&&a===-1.96?endZ(x,-1):z);},v(side,.7,0).normalize());
   }
   window('BodyDoor'+s+'Marten',[v(side*.741,1.025,.62),v(side*.741,1.025,-.57),v(side*.596,1.443,-.57),v(side*.596,1.443,.14)],side);
   window('QuarterMarten'+s,[v(side*.741,1.025,-.59),v(side*.741,1.025,-1.30),v(side*.596,1.443,-.78),v(side*.596,1.443,-.59)],side);
   panel('panel_BodyDoor'+s+'MartenHeader',9,1,(u,t)=>v(side*mix(.596,.608,t),mix(1.443,1.478,t),mix(-.57,mix(.14,.11,t),u)),v(side,0,0));
   panel('panel_QuarterHeaderMarten'+s,6,1,(u,t)=>v(side*mix(.596,.608,t),mix(1.443,1.478,t),mix(-.78,-.59,u)),v(side,0,0));
-  bar('panel_ApillarMarten'+s,v(side*.741,1.025,.62),v(side*.596,1.443,.14),.018,paint);
-  bar('panel_BpillarMarten'+s,v(side*.741,1.025,-.58),v(side*.608,1.478,-.58),.018,paint);
+  add('panel_ApillarMarten'+s,martenPillar(side,true),paint);
+  add('panel_BpillarMarten'+s,martenPillar(side,false),paint);
   panel('panel_CpillarMarten'+s,3,8,(u,t)=>v(side*mix(.741,.608,t),mix(1.025,1.478,t),mix(-1.30,-.78,t)+u*.065),v(side,0,-.3).normalize());
   box('panel_BodyDoor'+s+'MartenHandleRecess',side*.758,.911,-.431,.022,.062,.175,rubber);
   box('panel_BodyDoor'+s+'MartenHandle',side*.775,.92,-.431,.025,.019,.124,chrome);
@@ -70,7 +71,7 @@ export function buildMartenAsset(){
   bar('panel_BodyDoor'+s+'MartenMirrorStem',v(side*.754,1.055,.39),v(side*.821,1.093,.39),.009,chrome,6);
   const mirror=add('panel_BodyDoor'+s+'MartenMirror',new T.SphereGeometry(.059,12,6),chrome);mirror.position.set(side*.831,1.104,.39);mirror.scale.set(.5,.73,1);
  }
- panel('panel_hoodMarten',16,7,(u,t)=>{const x=(u*2-1)*.652;return v(x,mix(1.045,martenBonnetLip(x),t)+.052*(1-(x/.652)**2)*Math.sin(t*Math.PI),martenFrontWingZ(x,mix(.62,1.96,t)));},v(0,1,0));
+ panel('panel_hoodMarten',16,7,(u,t)=>{const x=(u*2-1)*.652;return v(x,mix(1.045,martenBonnetLip(x),t)+.052*(1-(x/.652)**2)*Math.sin(t*Math.PI),martenFrontWingZ(x,mix(.62,1.96,t))+(1-t)**2*martenWindscreenBow(x));},v(0,1,0));
  panel('panel_EngineLidMarten',10,6,(u,t)=>{const x=(u*2-1)*.652;return v(x,mix(.835,1.045,t)+.029*(1-(x/.652)**2)*Math.sin(t*Math.PI),mix(endZ(x,-1),-1.30,t));},v(0,1,0));
  for(const side of [-1,1])for(let i=0;i<7;i++){
   const z=-1.825+i*.056,t=(z+2.012)/.712,y=mix(.835,1.045,t)+.029*(1-(.26/.652)**2)*Math.sin(t*Math.PI);
@@ -79,8 +80,9 @@ export function buildMartenAsset(){
  box('panel_EngineLidMartenHandle',0,.906,-1.828,.12,.02,.031,chrome);
  window('FrontMarten',[v(-.741,1.025,.62),v(.741,1.025,.62),v(.596,1.443,.14),v(-.596,1.443,.14)],1);
  window('RearMarten',[v(.741,1.025,-1.30),v(-.741,1.025,-1.30),v(-.596,1.443,-.78),v(.596,1.443,-.78)],1);
- panel('panel_RoofMarten',6,6,(u,t)=>{const x=(u*2-1)*.608;return v(x,1.478+.050*(1-(x/.608)**2)*Math.sin(t*Math.PI),mix(-.78,.11,t));},v(0,1,0));
- for(const rear of [false,true])panel('panel_'+(rear?'Rear':'Front')+'HeaderMarten',10,1,(u,t)=>v((u*2-1)*mix(.596,.608,t),mix(1.443,1.478,t),rear?-.78:mix(.14,.11,t)),v(0,1,rear?-1:1).normalize());
+ panel('panel_RoofMarten',6,5,martenRoofSurface,v(0,1,0));
+ panel('panel_FrontHeaderMarten',6,4,martenFrontHeaderSurface,v(0,1,1).normalize());
+ panel('panel_RearHeaderMarten',10,1,(u,t)=>v((u*2-1)*mix(.596,.608,t),mix(1.443,1.478,t),-.78),v(0,1,-1).normalize());
  add('panel_FrontValanceMarten',martenFrontPressing(),paint);
  panel('panel_RearValanceMarten',10,3,(u,t)=>{const y=mix(.365,.835,t),x=(u*2-1)*(sideX(Math.min(y,.815),-1.96)+.004);return v(x,y,endZ(x,-1));},v(0,0,-1));
  const fitLamp=(g:T.LatheGeometry,x:number)=>{g.rotateX(Math.PI/2);const p=g.attributes.position;for(let i=0;i<p.count;i++)p.setZ(i,p.getZ(i)+endZ(p.getX(i)+x,1)-endZ(x,1));g.computeVertexNormals();return g;};

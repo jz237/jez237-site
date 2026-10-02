@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as T from 'three';import R from '@dimforge/rapier3d-compat';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {buildMartenAsset} from '../src/marten-asset';import {martenBodyWidth,martenNoseZ,martenBonnetLip,martenFrontWingZ} from '../src/marten-bodywork';
+import {buildMartenAsset} from '../src/marten-asset';import {martenWindscreenBow} from '../src/marten-greenhouse';import {martenBodyWidth,martenNoseZ,martenBonnetLip,martenFrontWingZ} from '../src/marten-bodywork';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';import {loadCars} from '../src/assets';import {Vehicle} from '../src/vehicle';import {stockSetup} from '../src/garage';
 import {ReplayRecorder,replayFile,readReplayFile} from '../src/replay-data';import {ReplayScene,captureReplayFrame} from '../src/replay-scene';import {verifyMartenRevision} from './marten-invariants';
 await R.init();const original=GLTFLoader.prototype.loadAsync;try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
@@ -20,7 +20,7 @@ test('bonnet and wing returns meet the curved nose without open corners or expos
  for(const side of [-1,1]){
   const shoulder=mesh('panel_FrontShoulderMarten'+(side<0?'L':'R'));
   for(let j=0;j<=12;j++){const t=j/12,x=side*T.MathUtils.lerp(martenBodyWidth(.815,1.96),.652,t),point=v(x,.815+.02*Math.sin(t*Math.PI/2),martenNoseZ(x));assert.ok(distance(point,nose)<.0015,`Folded shoulder return ${t}`);}
-  for(let i=0;i<=28;i++){const t=i/28,z=T.MathUtils.lerp(.62,1.96,t),point=v(side*.652,T.MathUtils.lerp(1.045,.835,t),martenFrontWingZ(side*.652,z));assert.ok(distance(point,hood)<.005,'Bonnet side');assert.ok(distance(point,shoulder)<.005,'Shoulder side');}
+  for(let i=0;i<=28;i++){const t=i/28,z=T.MathUtils.lerp(.62,1.96,t),point=v(side*.652,T.MathUtils.lerp(1.045,.835,t),martenFrontWingZ(side*.652,z)+(1-t)**2*martenWindscreenBow(side*.652));assert.ok(distance(point,hood)<.005,'Bonnet side');assert.ok(distance(point,shoulder)<.005,'Shoulder side');}
   for(const y of [.375,.4366,.5774,.705,.815]){const x=side*martenBodyWidth(y,1.96);assert.ok(distance(v(x,y,martenNoseZ(x)),nose)<.005,'Nose-to-wing corner return');}
  }
  const floor=new T.Box3().setFromObject(mesh('Structure Marten floor'));assert.ok(floor.max.x<martenBodyWidth(.375,floor.max.z)-.01);

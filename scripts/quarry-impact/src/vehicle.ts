@@ -1,3 +1,4 @@
+import {accumulateEngineDamage} from './engine-condition';
 import {vehicleChassisHalfExtents} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
@@ -57,6 +58,8 @@ export class Vehicle {
   glass: T.Mesh[] = [];
   brakeLights = new Set<T.MeshStandardMaterial>();
   health = 100;
+  /** Undefined only for an older online authority without component condition. */
+  engineDamage:number|undefined = 0;
   inflicted = 0;
   speed = 0;
   rpm = 850;
@@ -169,6 +172,7 @@ export class Vehicle {
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
+    this.engineDamage = 0;
     this.damageLeft = this.damageRight = 0;
     for(const zone of Object.keys(this.damageZones)as (keyof typeof this.damageZones)[])this.damageZones[zone]=0;
     this.lastHit = -100;
@@ -227,7 +231,7 @@ export class Vehicle {
     this.surface = surfaceAt(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     this.oldGear=this.gear;
-    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift);
+    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage);
   }
   postStep(dt: number, time: number) {
     this.current.copy(this.body.translation());
@@ -306,6 +310,7 @@ export class Vehicle {
     if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
     const local = this.root.worldToLocal(point.clone());
+    this.engineDamage=accumulateEngineDamage(this.engineDamage??0,this.kind,local,damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());

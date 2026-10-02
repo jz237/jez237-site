@@ -1,3 +1,4 @@
+import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice} from './classic-vehicle-specs';
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
@@ -267,7 +268,7 @@ export class Sound {
           );
         } else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
         else if (name === 'damaged')
-          v = Math.max(0, (40 - car.health) / 40) * 0.18;
+          v = engineDamageLevel(car.health,car.engineDamage) * 0.18;
         else if (name === 'tires')
           v =
             Math.min(0.35, car.slip * 0.06) *
