@@ -1,0 +1,10 @@
+{
+  "baseline": "11c7af6b71e531400b23442e61cbfd216f2d71ed",
+  "files": {
+    "src/estate-asset.ts": {
+      "snapshot": "src-estate-asset.ts.gz",
+      "before": "8d3ab0c8710a296e5cf6aaf0d2050a4c96bfcc11f18a0ecb80e5c14e3697a02f",
+      "after": "882d0fec23d1989b8c11bedd0a0962388f60006b1564a195cf87be92ea6e06c8"
+    }
+  }
+}
