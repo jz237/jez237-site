@@ -32,7 +32,7 @@ function harness(state='menu'){
  const ui=new Node(),calls:Record<string,number>={},navigation:{context:NavigationContext|null;handled:string[]}={context:null,handled:[]};
  let pads:readonly(Pad|null)[]=[pad()],time=0;
  const count=(name:string)=>calls[name]=(calls[name]??0)+1;
- const c:any={state,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
+ const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
   sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
   controllerNavigation:{sync(context:NavigationContext|null){navigation.context=context;},handle(command:string){navigation.handled.push(command);const context=navigation.context;if(command==='back')context?.back?.();else if(command==='accept'&&context?.initial)(context.root as unknown as Node).querySelector(context.initial)?.click();}},
   pause(){count('pause');c.resumeState=c.state;c.state='paused';const overlay=ui.add('#overlay');overlay.add('#resume').onclick=()=>c.resume();},

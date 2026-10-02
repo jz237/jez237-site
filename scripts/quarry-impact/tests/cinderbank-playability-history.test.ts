@@ -1,11 +1,13 @@
 import test from 'node:test';
+import {restoreTimeTrialPlayabilityBytes} from './time-trial-playability-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import ts from 'typescript';
 import {normalizeCinderbankSource,readCinderbankPrevious,restoreCinderbankPlayabilityBytes,verifyCinderbankPlayabilityRevision} from './cinderbank-playability-invariants';
 import {restoreHandbrakePlayabilityBytes,readHandbrakePrevious} from './handbrake-playability-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+// The successor restores exact published source before these historical assertions.
+const source=(file:string)=>restoreTimeTrialPlayabilityBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 const hash=(bytes:Uint8Array|string)=>createHash('sha256').update(bytes).digest('hex');
 const revision=()=>JSON.parse(readFileSync(new URL('./fixtures/cinderbank-playability/revision.json',import.meta.url)).toString());
 function declarations(text:string,names:readonly string[]):Record<string,string>{
