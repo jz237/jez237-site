@@ -7,6 +7,7 @@ import { Rig, VIEWS, anglesQuat } from './rig.js';
 import { Picker } from './picking.js';
 import { createPost } from './post.js';
 import { Selection } from './select.js';
+import { createAccum } from './accum.js';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;
@@ -50,6 +51,7 @@ async function boot() {
   const rig = new Rig(camera, canvas, { minDist: 6, maxDist: 360 });
   const picker = new Picker(renderer, scene, camera);
   const post = createPost({ stage, Q, picker });
+  const accum = createAccum({ stage, post, Q });
 
   /* ------------------------------------------------------------ assemble the bee */
   const bee = new kit.Bee();
@@ -86,12 +88,12 @@ async function boot() {
   scene.add(bee.root);
   report.push({ name: 'finalize', ok: true, ms: Math.round(performance.now() - tF) });
   picker.setBee(bee);
-  const selection = new Selection({ bee, post, rig, invalidate: () => invalidate() });
+  const selection = new Selection({ bee, post, rig, invalidate: () => invalidate(), overlay: () => { state.overlay = true; } });
 
   /* ------------------------------------------------------------ state */
   const state = {
-    explode: 0, tween: null, dirty: true, shadowDirty: true, boundsDirty: true, framed: false,
-    frames: 0, ready: false, hoverEvt: null, lastPick: 0, fps: 0,
+    explode: 0, tween: null, dirty: true, overlay: false, shadowDirty: true, boundsDirty: true, framed: false,
+    frames: 0, ready: false, hoverEvt: null, lastPick: 0, fps: 0, drawTime: 0,
   };
   const box = new THREE.Box3();
   const sph = new THREE.Sphere();
@@ -258,16 +260,37 @@ async function boot() {
   /* ------------------------------------------------------------ frame loop */
   let last = performance.now();
   let fpsT = last, fpsN = 0;
+  const IDLE_MS = 140;                // stillness before the refinement average starts
+  let idleAt = 0;
   function draw(now) {
+    if (accum.reset()) state.shadowDirty = true;
     selection.sync();
     if (state.boundsDirty) updateBounds(true);
     if (state.shadowDirty) { renderer.shadowMap.needsUpdate = true; state.shadowDirty = false; }
     renderer.info.reset();
-    post.render({ id: selection.needsId, focus: selection.focus, time: now / 1000 });
+    state.drawTime = now / 1000;
+    post.render({ id: selection.needsId, focus: selection.focus, time: state.drawTime });
     state.frames++;
     fpsN++;
     if (now - fpsT > 1000) { state.fps = Math.round((fpsN * 1000) / (now - fpsT)); fpsN = 0; fpsT = now; }
     app?.afterRender?.(now);
+  }
+
+  /** One more sample of the idle refinement average (sub-pixel camera shift, light on a disc, AO noise phase). */
+  function refine() {
+    selection.sync();
+    if (selection.needsId && !picker.valid) picker.renderFull();   // before the camera is jittered
+    renderer.info.reset();
+    const w = accum.begin();
+    post.render({ id: false, idFresh: selection.needsId, focus: selection.focus, time: state.drawTime, accumWeight: w });
+    accum.end();
+    state.frames++;
+  }
+
+  /** Outline / focus changes only: re-run the final pass over the scene already rendered. */
+  function drawOverlay() {
+    selection.sync();
+    post.renderOverlay({ id: selection.needsId, focus: selection.focus, time: state.drawTime });
   }
 
   function frame(now) {
@@ -277,6 +300,8 @@ async function boot() {
     last = now;
     let need = state.dirty;
     state.dirty = false;
+    let overlay = state.overlay;
+    state.overlay = false;
     if (state.tween) {
       const tw = state.tween;
       tw.t += dt;
@@ -289,7 +314,7 @@ async function boot() {
     }
     if (rig.update(dt)) need = true;
     if (rig.autoRotate) need = true;
-    if (selection.update(dt)) need = true;
+    if (selection.update(dt)) overlay = true;
     if (state.hoverEvt && now - state.lastPick > 55 && !rig.drag) {
       const e = state.hoverEvt;
       state.hoverEvt = null;
@@ -299,14 +324,16 @@ async function boot() {
       app?.onHover?.(part, e);
     }
     if (app?.tick?.(dt, now)) need = true;
-    if (need) draw(now);
+    if (need) { idleAt = now; draw(now); }
+    else if (accum.pending && now - idleAt >= IDLE_MS) refine();
+    else if (overlay) drawOverlay();
   }
 
   /* ------------------------------------------------------------ public handle */
   app = {
     THREE, kit, Q, bee, stage, rig, picker, post, selection, state, report, canvas,
     invalidate, setExplode, getExplode: () => state.explode, frameAll, resetView, setView, frameSelection, resize: doResize,
-    ui: null,
+    ui: null, accum,
   };
 
   const stats = () => ({
@@ -353,11 +380,14 @@ async function boot() {
     invalidate();
     await tick2();
     draw(performance.now());
+    if (o.settle !== false) app.settle();
     await tick2();
     return stats();
   };
   app.stats = stats;
   app.draw = () => draw(performance.now());
+  /** Finish the idle refinement now (deterministic QA frames). */
+  app.settle = () => { for (let g = 0; accum.pending && g < 512; g++) refine(); };
   window.__apx = app;
 
   /* ------------------------------------------------------------ first frame */

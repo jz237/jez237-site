@@ -4,11 +4,12 @@ import * as THREE from 'three';
 const _cloud = [];
 
 export class Selection {
-  constructor({ bee, post, rig, invalidate }) {
+  constructor({ bee, post, rig, invalidate, overlay }) {
     this.bee = bee;
     this.post = post;
     this.rig = rig;
     this.invalidate = invalidate;
+    this.overlay = overlay || invalidate;   // outline / dimming changes need only the final pass
     this.selected = [];
     this.hovered = null;
     this.isolate = false;
@@ -52,7 +53,7 @@ export class Selection {
     if (part === this.hovered) return;
     this.hovered = part;
     this.dirtyFlags = true;
-    this.invalidate();
+    this.overlay();
     this._emit('hover');
   }
 
@@ -74,7 +75,7 @@ export class Selection {
   _changed(skipEmit = false) {
     this.dirtyFlags = true;
     if (this.isolate) this._applyVisibility();
-    this.invalidate();
+    this.overlay();
     if (!skipEmit) this._emit('select');
     else this._emit('mode');
   }
