@@ -523,11 +523,12 @@ export async function initUI(app) {
     if (state.tween || rig.drag || rig.tween || rig.autoRotate || ui.autoCycle || ui.tour >= 0) {
       if (fps < 26 && now > gov.cooldown) {
         gov.low++;
-        if (gov.low >= 2 && Q.dpr > 0.8) {
-          Q.dpr = Math.max(0.8, Q.dpr * 0.8);
+        if (gov.low >= 2) {
           gov.low = 0;
           gov.cooldown = now + 2500;
-          app.resize();
+          // first drop ambient occlusion while the camera moves (about 45% of a frame), then resolution
+          if (Q.ao && !app.post.lite) { app.post.lite = true; app.invalidate(); }
+          else if (Q.dpr > 0.8) { Q.dpr = Math.max(0.8, Q.dpr * 0.8); app.resize(); }
         }
       } else gov.low = 0;
     }
