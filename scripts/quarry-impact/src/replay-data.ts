@@ -1,10 +1,19 @@
 import {normalizeSetup,type Setup} from './garage';
 import {isCarKind,type CarKind,type Mode} from './rules';
+import {isCourseId,resolveCourseId,type CourseId} from './course-id';
 export const REPLAY_STRIDE=56,REPLAY_HZ=20,REPLAY_MAX_SECONDS=1800,REPLAY_MAX_BYTES=192*1024*1024;
 export type VisualEvent={kind:'hit'|'repair'|'jump';pose:number[];point?:number[];direction?:number[];damage?:number;health?:number;paint?:number};
 export type ReplayEvent=VisualEvent&{time:number;car:number};
 export type ReplayCar={id:number;kind:CarKind;setup:Setup};
-export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];props:number;created:string;tyreModel?:1};
+export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];props:number;created:string;tyreModel?:1;courseId?:CourseId};
+/** Resolve without adding a property to historical metadata or accepting a
+ * saved-preference fallback for an explicitly unsupported recording. */
+export function replayCourseId(meta:Pick<ReplayMeta,'mode'|'courseId'>):CourseId{
+  if(meta.courseId!==undefined&&!isCourseId(meta.courseId))throw Error('This replay uses an unsupported course.');
+  const id=resolveCourseId(meta.courseId);
+  if(id==='ironfield-figure-eight-v1'&&meta.mode!=='race')throw Error('Ironfield replays support circuit races only.');
+  return id;
+}
 /** QIR1 legacy poses retain 56 floats. Model 1 also records four contact
  * planes, loads and contact flags so replayed flat patches match live tyres. */
 export const replayCarStride=(meta:Pick<ReplayMeta,'tyreModel'>)=>REPLAY_STRIDE+(meta.tyreModel===1?24:0);
@@ -13,7 +22,7 @@ export type ReplayDocument={meta:ReplayMeta;frames:ReplayFrame[];events:ReplayEv
 export class ReplayRecorder {
   readonly frames:ReplayFrame[]=[];readonly events:ReplayEvent[]=[];limited=false;
   readonly stride:number;
-  constructor(readonly meta:ReplayMeta){this.stride=meta.cars.length*replayCarStride(meta)+meta.props*7;}
+  constructor(readonly meta:ReplayMeta){replayCourseId(meta);this.stride=meta.cars.length*replayCarStride(meta)+meta.props*7;}
   capture(time:number,values:()=>Float32Array,force=false){
     if(this.limited||!Number.isFinite(time)||time<0)return;
     const last=this.frames.at(-1);if(last&&(time<=last.time||!force&&time-last.time<1/REPLAY_HZ-1e-6))return;
@@ -52,6 +61,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
   const length=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(4,true);if(length>32*1024*1024||length+8>bytes.length)return fail();
   let h:any;try{h=JSON.parse(new TextDecoder().decode(bytes.subarray(8,8+length)));}catch{return fail();}
   const m=h?.meta;if(m?.version!==1||!['race','derby','playground'].includes(m.mode)||typeof m.reverse!=='boolean'||!Array.isArray(m.cars)||m.cars.length<1||m.cars.length>24||!Number.isInteger(m.props)||m.props<0||m.props>256||m.tyreModel!==undefined&&m.tyreModel!==1)return fail();
+  replayCourseId(m);
   const ids=new Set<number>();const cars:ReplayCar[]=m.cars.map((c:any)=>{if(!Number.isInteger(c.id)||c.id<0||c.id>1000||ids.has(c.id)||!isCarKind(c.kind))return fail();ids.add(c.id);return{id:c.id,kind:c.kind,setup:normalizeSetup(c.setup,c.kind)};});
   if(!Array.isArray(h.times)||h.times.length<1||h.times.length>REPLAY_HZ*REPLAY_MAX_SECONDS+2)return fail();
   let prior=-1;for(const t of h.times){if(typeof t!=='number'||!Number.isFinite(t)||t<0||t>REPLAY_MAX_SECONDS||t<=prior)return fail();prior=t;}
@@ -79,7 +89,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
     }
     for(let i=0;i<m.props;i++)if(!validQuaternion(f.values,cars.length*carStride+i*7+3))return fail();
   }
-  return {meta:{version:1,mode:m.mode,reverse:m.reverse,cars,props:m.props,created:typeof m.created==='string'?m.created.slice(0,40):'',...(m.tyreModel===1?{tyreModel:1 as const}:{})},frames,events,limited:h.limited===true};
+  return {meta:{version:1,mode:m.mode,reverse:m.reverse,cars,props:m.props,created:typeof m.created==='string'?m.created.slice(0,40):'',...(m.tyreModel===1?{tyreModel:1 as const}:{}),...(m.courseId===undefined?{}:{courseId:m.courseId})},frames,events,limited:h.limited===true};
 }
 export async function readReplayFile(file:File):Promise<ReplayDocument>{
   if(file.size>64*1024*1024)throw Error('Replay file exceeds the 64 MB compressed limit.');

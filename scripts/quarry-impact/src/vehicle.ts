@@ -14,7 +14,6 @@ import {
   DEFINITIONS,
   clamp,
   surfaceAt,
-  terrainHeight,
   type CarKind,
 } from './rules';
 import { Effects } from './effects';
@@ -29,6 +28,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
+export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>'asphalt'|'gravel'};
 export type Input = {
   throttle: number;
   steer: number;
@@ -123,6 +123,7 @@ export class Vehicle {
     public world: R.World,
     public fx: Effects,
     setup?: Setup,
+    readonly ground:VehicleGround = {height:landscapeHeight,surface:surfaceAt},
   ) {
     this.setup = normalizeSetup(setup ?? stockSetup(kind), kind);
     this.specification = setupPhysics(kind, this.setup);
@@ -161,7 +162,7 @@ export class Vehicle {
     });
   }
   place(x: number, z: number, yaw: number, repair = false) {
-    const p = { x, y: landscapeHeight(x, z) + 0.89, z };
+    const p = { x, y: this.ground.height(x, z) + 0.89, z };
     const q = new T.Quaternion().setFromAxisAngle(new T.Vector3(0, 1, 0), yaw);
     this.body.setTranslation(p, true);
     this.body.setRotation(q, true);
@@ -245,7 +246,7 @@ export class Vehicle {
     this.speed = this.velocity.dot(this.forward);
     const lateral = this.velocity.dot(this.right);
     this.slip = Math.abs(lateral);
-    this.surface = surfaceAt(this.previous.x, this.previous.z);
+    this.surface = this.ground.surface(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     this.oldGear=this.gear;
     stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage);
@@ -271,7 +272,7 @@ export class Vehicle {
         if (!point || !this.controller.wheelIsInContact(i)) continue;
         const p = new T.Vector3().copy(point);
         const wet=this.surfaceFinish.water[i],yaw=Math.atan2(this.forward.x,this.forward.z);
-        if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-landscapeHeight(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
+        if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
         if(this.wetWheels[i])continue;
         if (Math.abs(this.speed) > 3 && this.surface === 'gravel')
           this.fx.emit(p, 1, 0, Math.abs(this.speed) * 0.04);
@@ -290,7 +291,7 @@ export class Vehicle {
       for(const a of this.wreckParts.assemblies){
         if(!a.name.includes('bumper')||a.loose<.55||!a.members.some(m=>m.mesh.visible))continue;
         const p=a.bounds.getCenter(new T.Vector3());p.y=a.bounds.min.y-a.loose*.19;p.x+=a.side*this.wreckPartsWidth();p.applyMatrix4(this.model.matrixWorld);
-        const ground=landscapeHeight(p.x,p.z);
+        const ground=this.ground.height(p.x,p.z);
         if(p.y>ground+.07||Math.abs(this.speed)<1)continue;
         this.scraping=Math.min(1,a.loose*Math.abs(this.speed)/12);p.y=ground;
         this.fx.evidence?.add(p,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.08,this.scraping,2);

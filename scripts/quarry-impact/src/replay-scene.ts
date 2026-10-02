@@ -1,8 +1,8 @@
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
-import {Vehicle} from './vehicle';
+import {Vehicle,type VehicleGround} from './vehicle';
 import type {Effects} from './effects';
-import {REPLAY_STRIDE,replayCarStride,replayBracket,type ReplayDocument} from './replay-data';
+import {REPLAY_STRIDE,replayCarStride,replayBracket,replayCourseId,type ReplayDocument} from './replay-data';
 export type ReplayProp={mesh:T.Mesh;body:R.RigidBody};
 const axis=new T.Vector3(1,0,0),spin=new T.Quaternion(),base=new T.Quaternion(),q=new T.Quaternion();
 export function captureReplayFrame(cars:readonly Vehicle[],props:readonly ReplayProp[],epochs:readonly number[],tyreModel?:1){
@@ -17,10 +17,15 @@ export function captureReplayFrame(cars:readonly Vehicle[],props:readonly Replay
 /** Replay copies are never stepped by physics. The live vehicles are retained intact. */
 export class ReplayScene {
   readonly cars:Vehicle[]=[];readonly props:T.Mesh[]=[];private eventIndex=0;private time=-1;
-  constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[]){
+  constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[],ground?:VehicleGround){
+    replayCourseId(doc.meta);
+    if(sourceProps.length!==doc.meta.props)throw Error('This replay requires the recorded course prop set.');
+    for(const prop of sourceProps)if(!prop?.mesh)throw Error('This replay requires the recorded course prop set.');
     const silent={emit(){},mark(){},detach(){}} as unknown as Effects;
-    for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup);car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.body.setEnabled(false);this.cars.push(car);}
-    for(let i=0;i<doc.meta.props;i++){const original=sourceProps[i]?.mesh;if(!original)continue;const mesh=original.clone();scene.add(mesh);this.props.push(mesh);}
+    try{
+      for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup,ground);this.cars.push(car);car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.body.setEnabled(false);}
+      for(const original of sourceProps){const mesh=original.mesh.clone();this.props.push(mesh);scene.add(mesh);}
+    }catch(error){this.dispose();throw error;}
   }
   seek(time:number){
     if(time<this.time){for(const c of this.cars){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;}

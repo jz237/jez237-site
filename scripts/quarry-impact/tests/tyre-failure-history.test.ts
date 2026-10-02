@@ -5,12 +5,15 @@ import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {readTyreFailurePrevious,verifyTyreFailureRevision} from './tyre-failure-invariants';
 import {restoreDemoRecoveryBytes,verifyDemoRecoveryRevision} from './demo-recovery-invariants';
+import {restoreIronfieldBytes} from './ironfield-invariants';
 
 test('tyre release preserves the published camera source and all preceding guarded input bytes',()=>{
  verifyTyreFailureRevision();verifyDemoRecoveryRevision();
  // This layer must sit after the camera fix rather than accidentally restore
  // the pre-comfort director alongside the old physics reference.
- const camera=readFileSync(new URL('../src/demo-director.ts',import.meta.url));
+ // Remove only the later venue sampler; the published comfort camera hash
+ // remains unchanged and still guards every orientation/recovery decision.
+ const camera=restoreIronfieldBytes('src/demo-director.ts',readFileSync(new URL('../src/demo-director.ts',import.meta.url)));
  const cameraRevision=JSON.parse(readFileSync(new URL('./fixtures/demo-recovery/revision.json',import.meta.url),'utf8'));
  assert.equal(createHash('sha256').update(camera).digest('hex'),cameraRevision.files['src/demo-director.ts'].after);
  const previousBridge=readTyreFailurePrevious('tests/demo-recovery-invariants.ts');

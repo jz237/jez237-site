@@ -28,6 +28,7 @@ export class Effects {
   constructor(
     public scene: T.Scene,
     public world: R.World,
+    public groundHeight:(x:number,z:number)=>number = landscapeHeight,
   ) {
     this.evidence=new GroundEvidence(scene);
     const count = 1800;
@@ -143,7 +144,7 @@ void main(){
     for(let j=start;j<this.cursor;j++){
       const p=this.particles[j%this.particles.length];p.v.addScaledVector(direction,1.4);p.max=p.life=Math.min(p.life,.36);
     }
-    const ground=landscapeHeight(point.x,point.z),at=point.clone();
+    const ground=this.groundHeight(point.x,point.z),at=point.clone();
     if(point.y-ground<1.8)at.y=ground+.10;
     const dustStart=this.cursor;
     this.emit(at,Math.min(22,Math.ceil(damage*.58)),0,1.35);
