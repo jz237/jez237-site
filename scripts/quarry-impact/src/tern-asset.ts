@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {refineTernFront} from './tern-front-refinement';
 import {classicWindowFrame} from './classic-window-frame';
 import {formedVehiclePanel,panelSamples} from './formed-vehicle-panel';
 import {buildCompactAsset} from './compact-asset';
@@ -56,10 +57,10 @@ export function buildTernAsset(){
   box('panel_BodyDoor'+s+'TernMirrorStem',side*.793,1.049,.477,.082,.026,.042,rubber);
   for(const z of [-.697,.617])bar('panel_BodyDoor'+s+'TernShutline'+z,v(side*sideX(.405,z),.405,z),v(side*sideX(1.01,z),1.01,z),.0016,rubber);
  }
- panel('panel_hoodTern',12,11,(u,t)=>{const x=(u*2-1)*.704,z=mix(.62,endZ(x,true),t);return v(x,mix(1.035,.950,t)+.021*(1-(x/.704)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
+ panel('panel_hoodTern',10,9,(u,t)=>{const x=(u*2-1)*.704,z=mix(.62,endZ(x,true),t);return v(x,mix(1.035,.950,t)+.021*(1-(x/.704)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
  window('FrontTern',[v(-.769,1.02,.62),v(.769,1.02,.62),v(.631,1.43,.12),v(-.631,1.43,.12)],1);
  panel('panel_FrontHeaderTern',10,1,(u,t)=>v((u*2-1)*mix(.631,.639,t),mix(1.43,1.478,t),mix(.12,.094,t)),v(0,.5,1).normalize());
- panel('panel_RoofTern',10,10,(u,t)=>{const x=(u*2-1)*.639;return v(x,1.478+.038*(1-(x/.639)**2)*Math.sin(t*Math.PI),mix(-1.02,.094,t));},v(0,1,0));
+ panel('panel_RoofTern',8,8,(u,t)=>{const x=(u*2-1)*.639;return v(x,1.478+.038*(1-(x/.639)**2)*Math.sin(t*Math.PI),mix(-1.02,.094,t));},v(0,1,0));
  window('TailgateTernRear',[v(.737,1.02,-1.76),v(-.737,1.02,-1.76),v(-.631,1.43,-1.04),v(.631,1.43,-1.04)],1);
  panel('panel_TailgateTernHeader',10,1,(u,t)=>v((u*2-1)*mix(.631,.639,t),mix(1.43,1.478,t),mix(-1.04,-1.02,t)),v(0,.5,-1).normalize());
  panel('panel_TailgateTernSkin',16,6,(u,t)=>{const y=mix(.564,1.02,t),x=(u*2-1)*mix(.663,.737,T.MathUtils.smoothstep(y,.94,1.02));return v(x,y,mix(endZ(x,false),-1.76,t)-.008*Math.sin(t*Math.PI));},v(0,0,-1));
@@ -125,5 +126,5 @@ export function buildTernAsset(){
  const source=buildCompactAsset();for(const [i,name]of ['FL','FR','RL','RR'].entries()){
   const wheel=source.getObjectByName('wheel_'+name)!;wheel.removeFromParent();wheel.position.set((i%2?1:-1)*.690,.3400195,(i<2?1:-1)*1.18);root.add(wheel);
  }
- source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});root.updateMatrixWorld(true);return root;
+ source.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();});refineTernFront(root,{paint,rubber,trim,steel,alloy,lamp,amber});root.updateMatrixWorld(true);return root;
 }
