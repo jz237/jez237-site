@@ -18534,5 +18534,24 @@
       "imageSha256": "9cbb02a6c563c0b7a33f6baafe987f48c7f4f79b69a6f07ff24cea44ffe5e9d0",
       "imageDHash": "33b38c0d4f833b4b"
     }
+  },
+  {
+    "id": "2026-10-02-intense-phobia-situation-submechanophobia-beside-the-submer",
+    "title": "Submechanophobia: Beside the Submerged Propeller",
+    "tests": "{\"pre_generation_fear_impact\": \"Feared circumstance dominates frame with close intrusion, obstructed relief and credible scale or constriction. Fictional staged scene, no clinical claims; no non-Monday visual review.\"}; archive_slot=2026-10-02T17:20; concept=submerged-ship-propeller-diver-proximity; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1448x1086\", \"backendReportedSize\": \"1448x1086\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1448x1086\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Fully photorealistic documentary underwater photograph, first-person diver camera immediately beside the enormous stationary bronze propeller of a ship in a flooded maintenance dock. The curved blade is within an arm's length and intrudes from the left across most of the frame, its thick rounded edge, scratched bronze, dark fouling and mineral streaks sharply visible; another blade rises out of the crop. The massive black steel hull curves overhead, blocking the surface and enclosing the upper frame. A short section of propeller shaft and hub recedes into turbid green water at the right, convincingly establishing real ship machinery at overwhelming human-relative scale. At the bottom edge a single anatomically correct gloved diver hand and a modest dive-light beam provide scale without becoming the subject. Below the blade there is no visible bottom, only a steep fall into blue-green darkness; suspended silt limits visibility to a few metres. The camera is squeezed between the blade's looming edge and the hull, with no spacious vista or clear escape corridor. Coherent underwater optics from a compact wide-angle dive camera, slight particulate backscatter, natural attenuated daylight plus one practical torch, readable bronze detail in the foreground and genuinely dark depth beyond. Propeller fully stopped and machinery shut down; no rotating blades, implausible suction, injury or entanglement. Make the submerged industrial object dominate the photograph, painfully close and huge, neither a scenic diving excursion nor glossy cinema. Correct scale, materials and perspective, restrained natural colors, no creatures, gore, text, logos, borders or watermark.",
+    "image": "images/2026-10-02-intense-phobia-situation-submechanophobia-beside-the-submer.jpg",
+    "thumb": "thumbs/2026-10-02-intense-phobia-situation-submechanophobia-beside-the-submer.webp",
+    "color": "#2f3d37",
+    "date": "2026-10-02",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "submerged-ship-propeller-diver-proximity",
+      "imageSha256": "d50b1723593bc121d5c9cbbc9e4fdab6e55824b877ea2fb9e79890778ae1561f",
+      "imageDHash": "fefefff77bbb3dde"
+    }
   }
 ]
