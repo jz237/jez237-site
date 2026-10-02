@@ -235,6 +235,7 @@ export function createPost({ stage, Q, picker }) {
   const U = finalMat.uniforms;
   const post = {
     composer, ao, bloom, finalPass, uniforms: U, flags, flagsTex, accumSupported,
+    lite: Q.params.get('lite') === '1',           // set by the fps governor: skip ambient occlusion while the camera moves
     passes: { renderPass, ao, bloom, accum: accumPass, finalPass },
     resize(w, h, dpr) {
       composer.setPixelRatio(dpr);
@@ -255,6 +256,7 @@ export function createPost({ stage, Q, picker }) {
     render({ id = false, idFresh = false, focus = 0, time = 0, accumWeight = 0 } = {}) {
       if (id) picker.renderFull();
       else if (!idFresh) picker.valid = false;
+      ao.enabled = Q.ao && !(post.lite && accumWeight <= 0);
       accumPass.enabled = accumSupported && accumWeight > 0;
       if (accumPass.enabled) accumPass.weight = accumWeight;
       else accumPass.hasData = false;

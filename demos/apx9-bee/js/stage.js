@@ -96,7 +96,21 @@ export function createStage(container, Q) {
   scene.add(rim, rim.target);
 
   // ---- shadow catcher
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), new THREE.ShadowMaterial({ color: 0x1b1d22, opacity: 0.34 }));
+  const floorMat = new THREE.ShadowMaterial({ color: 0x1b1d22, opacity: 0.34 });
+  // Shadows of far-flung exploded parts fall a long way from the bee: fade the catcher out radially so they dissolve instead of showing as hard blotches.
+  const fade = { c: new THREE.Vector2(), r: new THREE.Vector2(52, 100) };
+  floorMat.onBeforeCompile = (sh) => {
+    sh.uniforms.uFadeC = { value: fade.c };
+    sh.uniforms.uFadeR = { value: fade.r };
+    sh.vertexShader = sh.vertexShader
+      .replace('void main() {', 'varying vec2 vFloorXZ;\nvoid main() {')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n\tvFloorXZ = (modelMatrix * vec4(position, 1.0)).xz;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('void main() {', 'uniform vec2 uFadeC; uniform vec2 uFadeR; varying vec2 vFloorXZ;\nvoid main() {')
+      .replace('opacity * ( 1.0 - getShadowMask() )', 'opacity * ( 1.0 - smoothstep( uFadeR.x, uFadeR.y, length( vFloorXZ - uFadeC ) ) ) * ( 1.0 - getShadowMask() )');
+  };
+  floorMat.customProgramCacheKey = () => 'apx-floor-fade-v1';
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), floorMat);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   floor.layers.disableAll();
@@ -109,7 +123,7 @@ export function createStage(container, Q) {
   const shadowFit = { r: -1, cx: 1e9, cy: 1e9, cz: 1e9 };
 
   const stage = {
-    renderer, scene, camera, key, fill, rim, floor, keyDir, sphere,
+    renderer, scene, camera, key, fill, rim, floor, keyDir, sphere, fade,
     size: new THREE.Vector2(1, 1), dpr: 1,
     /** Resize canvas to the container; returns [w, h, dpr] in device pixels. */
     resize() {
@@ -144,6 +158,7 @@ export function createStage(container, Q) {
       const targetY = box.min.y - 2.6;
       floor.position.y = snap ? targetY : floor.position.y + (targetY - floor.position.y) * 0.25;
       floor.position.x = c.x; floor.position.z = c.z;
+      fade.c.set(c.x, c.z);
     },
   };
   return stage;
