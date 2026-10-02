@@ -1,0 +1,25 @@
+{
+  "baseline": "2e641fea22272631c1dad949f8a14f5814c95b20",
+  "files": {
+    "src/demo-director.ts": {
+      "snapshot": "src-demo-director.ts.gz",
+      "before": "f2b8957b132f5defcc52fab4c6f463c43b1a484fddf6ebe0e93021f2011e720d",
+      "after": "e56e4967084adfe4fb1115bbdbc63cc645fe661f0617300f70c1b2d5c17528d3"
+    },
+    "tests/van-coachwork-invariants.ts": {
+      "snapshot": "tests-van-coachwork-invariants.ts.gz",
+      "before": "b9b3e8e2bf756c05c2f71df0b9d6a090655bd664e2263010adce30c318b1fb17",
+      "after": "eb7e1898d0d77df08d59bbaaeaf4eb775467c159e906ce493881790ae6fe4400"
+    },
+    "tests/demo-recovery.test.ts": {
+      "snapshot": "tests-demo-recovery.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "0322bee91ea5830ad7250b5f7eb80d2f74c25ea2e2a62354c2f1a64f72d1279a"
+    },
+    "tests/demo-recovery-history.test.ts": {
+      "snapshot": "tests-demo-recovery-history.test.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "5ac714f79ba13eb50828ab51dc43bb1057484205dc1696a3997fc40de1949581"
+    }
+  }
+}
