@@ -1,0 +1,25 @@
+{
+  "baseline": "06ae8728a1dd5c9c2f9327f3f274114603f7d6c0",
+  "files": {
+    "src/demo-director.ts": {
+      "snapshot": "src-demo-director.ts.gz",
+      "before": "3d05120a5de9f6cdd9b733d5deb0e49e50760c5ceb5cabf58fce5d1255fd43eb",
+      "after": "f2b8957b132f5defcc52fab4c6f463c43b1a484fddf6ebe0e93021f2011e720d"
+    },
+    "src/demo-camera-visibility.ts": {
+      "snapshot": "src-demo-camera-visibility.ts.gz",
+      "before": "9ba4e2ddc5bcb1a55679dcaabf3d94f3c40ce2ad76b7c05ad584f473dce9c939",
+      "after": "cee769e055ab367a4b09527378bf8c1f83b21a5d50451a48332774d6b9ac2c60"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "c76b241a4d0051b07b4477ee263c910a1fbebdc06aa8b213e398be214bd6c7f3",
+      "after": "0066ade445ff06e331456bf391c60d8a26d3a67b86bd5a20bb962083e4826635"
+    },
+    "tests/demo-presentation.test.ts": {
+      "snapshot": "tests-demo-presentation.test.ts.gz",
+      "before": "b07f1130d9ec594d3c4cc32e37ed8e06f57f5859372cc78701ed7ba957fe3fda",
+      "after": "d2c07258b78785f72bf86f0f4e859aebf66f0ceb2a210b72fafd8ffe260a72a0"
+    }
+  }
+}
