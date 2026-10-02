@@ -430,6 +430,7 @@ async function boot() {
   if (wantIntro) {
     rig.autoRotate = true;
     rig.autoSpeed = 0.18;
+    rig.autoUntil = performance.now() + 7500;   // turn while the intro explodes, then ease to a stop so the refined frame can settle
     setTimeout(() => { if (!state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
   }
   console.info('[apx9] ready', stats());

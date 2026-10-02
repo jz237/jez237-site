@@ -38,6 +38,7 @@ export class Rig {
     this.spin = new THREE.Vector3();          // camera-space angular velocity (axis * rad/s)
     this.autoRotate = false;
     this.autoSpeed = 0.22;                    // rad/s about world Y
+    this.autoUntil = 0;                       // performance.now() time at which auto-rotate has eased to a stop (0 = never)
     this.radius = 30;                         // scene bounding radius for near/far
     this.center = new THREE.Vector3();
     this.tween = null;
@@ -174,9 +175,16 @@ export class Rig {
         moved = true;
       } else if (sp > 0) this.spin.set(0, 0, 0);
       if (this.autoRotate && performance.now() - this.lastMove > 1200) {
-        this._q.setFromAxisAngle(AX.y, this.autoSpeed * dt);
-        this.quat.premultiply(this._q);
-        moved = true;
+        let k = 1;
+        if (this.autoUntil) {
+          const left = this.autoUntil - performance.now();
+          if (left <= 0) { this.autoRotate = false; this.autoUntil = 0; k = 0; } else k = Math.min(1, left / 1800);
+        }
+        if (k > 0) {
+          this._q.setFromAxisAngle(AX.y, this.autoSpeed * k * dt);
+          this.quat.premultiply(this._q);
+          moved = true;
+        }
       }
     }
     this.quat.normalize();
