@@ -182,6 +182,17 @@ async function boot() {
     invalidate();
   }
 
+  /** Scripted-camera follow: keeps an exact fit of the whole bee for the current orientation while the intro turns. */
+  function followFit(dt) {
+    bee.worldCorners(undefined, scratch);
+    if (!scratch.length) return;
+    const f = rig.fitPoints(scratch, { margin: tight(1.14), quat: rig.quat, band: app?.fitBand?.() || null });
+    const k = 1 - Math.exp(-6 * dt);
+    rig.target.lerp(f.target, k);
+    rig.dist = Math.exp(Math.log(rig.dist) + (Math.log(f.dist) - Math.log(rig.dist)) * k);
+    rig.apply();
+  }
+
   function resetView(ms = 900) {
     selection.clear();
     state.framed = false;
@@ -313,6 +324,7 @@ async function boot() {
       need = true;
     }
     if (rig.update(dt)) need = true;
+    if (rig.sweepAnim && !state.framed) followFit(dt);
     if (rig.autoRotate) need = true;
     if (selection.update(dt)) overlay = true;
     if (state.hoverEvt && now - state.lastPick > 55 && !rig.drag) {
@@ -429,9 +441,7 @@ async function boot() {
   if (selId && bee.get(selId)) { selection.select(bee.get(selId)); frameSelection(0); }
 
   if (wantIntro) {
-    rig.autoRotate = true;
-    rig.autoSpeed = 0.18;
-    rig.autoUntil = performance.now() + 7500;   // turn while the intro explodes, then ease to a stop so the refined frame can settle
+    rig.sweep(1, 9000, 350);   // one full turn while the bee comes apart, easing back onto the hero view so the refined frame settles there
     setTimeout(() => { if (!state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
   }
   console.info('[apx9] ready', stats());

@@ -39,6 +39,7 @@ export class Rig {
     this.autoRotate = false;
     this.autoSpeed = 0.22;                    // rad/s about world Y
     this.autoUntil = 0;                       // performance.now() time at which auto-rotate has eased to a stop (0 = never)
+    this.sweepAnim = null;                    // eased whole turns about world Y that end on the starting orientation (intro reveal)
     this.radius = 30;                         // scene bounding radius for near/far
     this.center = new THREE.Vector3();
     this.tween = null;
@@ -144,8 +145,11 @@ export class Rig {
     this.goTo({ quat: q }, ms);
   }
 
+  sweep(turns = 1, ms = 9000, delayMs = 0) { this.sweepAnim = { t: -delayMs / 1000, dur: ms / 1000, turns, prev: 0 }; }
+
   goTo({ quat, target, dist }, ms = 800) {
     this.spin.set(0, 0, 0);
+    this.sweepAnim = null;
     const to = { quat: quat ? quat.clone() : this.quat.clone(), target: target ? target.clone() : this.target.clone(), dist: dist ?? this.dist };
     if (ms <= 0) { this.setState(to); this.changeCb?.(); return; }
     this.tween = { t: 0, dur: ms / 1000, from: this.getState(), to };
@@ -186,6 +190,19 @@ export class Rig {
           moved = true;
         }
       }
+      const sw = this.sweepAnim;
+      if (sw) {
+        sw.t += dt;
+        if (sw.t > 0) {
+          const u = Math.min(1, sw.t / sw.dur);
+          const a = sw.turns * Math.PI * 2 * (0.5 - 0.5 * Math.cos(Math.PI * u));
+          this._q.setFromAxisAngle(AX.y, a - sw.prev);
+          this.quat.premultiply(this._q);
+          sw.prev = a;
+          moved = true;
+          if (u >= 1) this.sweepAnim = null;
+        }
+      }
     }
     this.quat.normalize();
     this.apply();
@@ -217,7 +234,7 @@ export class Rig {
     el.addEventListener('dblclick', (e) => this.dblCb?.(e.offsetX, e.offsetY, e));
   }
 
-  touched() { this.lastMove = performance.now(); this.interactCb?.(); }
+  touched() { this.lastMove = performance.now(); this.sweepAnim = null; this.interactCb?.(); }
 
   onDown(e) {
     if (!this.enabled) return;
