@@ -6,7 +6,7 @@ import { K, ex, M, box, THREE } from '../kit.js';
 import { makeFasteners } from './flight-util.js';
 import { buildBearings, buildRetainingRing, buildSpacers } from './flight-bearings.js';
 import { buildShaft, buildShaftPin, buildShaftNut, buildHinge, buildClampPlates, buildBoltCircles } from './flight-mount.js';
-import { buildGearbox, buildSensor, buildServo } from './flight-servo.js';
+import { buildGearbox, buildSensor, buildServo } from './flight-servo.js?v=763f6f391edb';
 import { buildDamper, buildLever, buildHarness } from './flight-damper.js';
 
 export async function build(ctx) {

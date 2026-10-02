@@ -58,7 +58,7 @@ export function buildGearbox(mount, F) {
   });
   const pg = plateX(gearPts(10, 0.24, 0.15, { phase: 18 * D2R }), gear[1] - gear[0], { bevel: 0.009, bevelSegments: 1, steps: 1, creaseDeg: 45, holes: [circlePts(0.05, 12)] });
   pg.translate(gear[0], 0, 0);
-  for (const a of PLANET_ANG) pl.add(pg, M.brass, [0, ...yz(orbit, a)]);
+  PLANET_ANG.forEach((a,i)=>{const planet=pl.part(`planet-${i}`,{name:`Planet Gear ${i+1}`,info:'Individually rotating brass planet on the carrier pin.'});planet.add(pg,M.brass,[0,...yz(orbit,a)]);});
 
   // ring gear (grounded) with four gold retaining bolts
   const rg = cont.part('ring-gear', {

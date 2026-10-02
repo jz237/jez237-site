@@ -6,9 +6,10 @@ import { createStage } from './stage.js';
 import { Rig, VIEWS, anglesQuat } from './rig.js';
 import { Picker } from './picking.js';
 import { createPost } from './post.js';
-import { Selection } from './select.js';
+import { Selection } from './select.js?v=f421fbf902f8';
 import { createAccum } from './accum.js';
-import { initOperations } from './operate.js?v=d5f47e275e42';
+import { initMechanisms } from './mechanisms.js?v=dabdb6a8e212';
+import { initOperations } from './operate.js?v=6e6d0086cdc7';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;
@@ -43,9 +44,9 @@ async function boot() {
   const only = (P.get('only') || '').split(',').map((s) => s.trim()).filter(Boolean);
   const names = only.length ? ASSEMBLIES.filter((n) => only.includes(n)) : ASSEMBLIES;
   // Start every module download at once so the import graph is not discovered one assembly at a time; building stays sequential.
-  const loads = names.map((n) => import(`./assemblies/${n}.js`));
+  const loads = names.map((n) => n==='flight'?import('./assemblies/flight.js?v=f0c495539af7'):import(`./assemblies/${n}.js`));
   const layoutLoad = import('./layout.js');
-  const uiLoad = import(`./${P.get('uimod') || 'ui'}.js`);
+  const uiLoad = P.get('uimod') ? import(`./${P.get('uimod')}.js`) : import('./ui.js?v=90a3508e1ed1');
   for (const p of [...loads, layoutLoad, uiLoad]) p.catch(() => {});
   progress(0.04, 'Preparing studio');
 
@@ -131,7 +132,7 @@ async function boot() {
   }
 
   function updateBounds(follow = true) {
-    if (['mission', 'sensors', 'scale'].includes(app?.operations?.state.mode)) follow = false;
+    if (['mission', 'sensors', 'scale'].includes(app?.operations?.state.mode) || app?.ui?.state.tour>=0 || app?.mechanisms?.state.focus) follow = false;
     state.boundsDirty = false;
     bee.worldBounds(box);
     if (box.isEmpty()) return;
@@ -330,13 +331,14 @@ async function boot() {
     if (document.hidden || !state.ready) return;
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
+    const motionDt=app?.ui?.state.tour>=0&&app.ui.state.tourPaused?0:dt;
     let need = state.dirty;
     state.dirty = false;
     let overlay = state.overlay;
     state.overlay = false;
     if (state.tween) {
       const tw = state.tween;
-      tw.t += dt;
+      tw.t += motionDt;
       if (tw.t >= 0) {
         const k = Math.min(1, tw.t / tw.dur);
         applyExplode(tw.from + (tw.to - tw.from) * ease(k));
@@ -344,7 +346,7 @@ async function boot() {
       }
       need = true;
     }
-    if (rig.update(dt)) need = true;
+    if (rig.update(motionDt)) need = true;
     if (rig.sweepAnim && !state.framed) followFit(dt);
     if (rig.autoRotate) need = true;
     if (selection.update(dt)) overlay = true;
@@ -444,6 +446,7 @@ async function boot() {
     const ui = await uiLoad;
     app.ui = (await ui.initUI(app)) || null;
     await initOperations(app);
+    initMechanisms(app);
   } catch (err) {
     console.error('[apx9] ui failed', err);
     report.push({ name: 'ui', ok: false, error: String(err?.message || err) });
@@ -464,7 +467,7 @@ async function boot() {
 
   if (wantIntro) {
     rig.sweep(1, 9000, 350);   // one full turn while the bee comes apart, easing back onto the hero view so the refined frame settles there
-    setTimeout(() => { if ((!app.operations || app.operations.state.mode === 'inspect') && !state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
+    setTimeout(() => { if ((!app.operations || app.operations.state.mode === 'inspect') && !selection.xray && app.ui?.state.tour<0 && !state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
   }
   console.info('[apx9] ready', stats());
 }

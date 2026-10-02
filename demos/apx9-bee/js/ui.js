@@ -1,9 +1,9 @@
 // APX-9 HUD controller: header, tools, dock, blueprint callouts, inspector, directory, specs, detail views, guided tour.
 import { h, icon, button, clamp, loadCSS } from './dom.js';
-import { TITLE, SUBTITLE, TAGLINES, GROUPS, DETAILS, VIEW_BUTTONS, TOUR } from './data.js';
+import { TITLE, SUBTITLE, TAGLINES, GROUPS, DETAILS, VIEW_BUTTONS, TOUR } from './data.js?v=0659bab579c2';
 import { Inspector, Directory } from './inspector.js';
 import { Callouts } from './callouts.js';
-import { createSpecs, createHelp, createDetail, createTour } from './panels.js';
+import { createSpecs, createHelp, createDetail, createTour } from './panels.js?v=cd6634a744fa';
 import { VIEWS } from './rig.js';
 
 const VIEW_KEYS = ['hero', 'side', 'top', 'front', 'rear', 'under'];
@@ -23,7 +23,7 @@ export async function initUI(app) {
   const params = Q.params;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const qa = params.has('qa');
-  const ui = { autoCycle: false, tour: -1, detail: null, labelsOn: !isSmall() && params.get('labels') !== '0', pinned: false };
+  const ui = { autoCycle: false, tour: -1, tourPaused: false, tourTime: 0, detail: null, labelsOn: !isSmall() && params.get('labels') !== '0', pinned: false };
   if (params.get('labels') === '1') ui.labelsOn = true;
 
   /* ------------------------------------------------------------------ header */
@@ -115,7 +115,7 @@ export async function initUI(app) {
     onItemHover: (part) => { selection.setHover(part || null); app.invalidate(); },
     onItemPick: (part) => selectPart(part, { frame: true }),
   });
-  const tourCard = createTour({ onPrev: () => tourGo(ui.tour - 1), onNext: () => tourGo(ui.tour + 1), onExit: () => endTour() });
+  const tourCard = createTour({ onPrev: () => tourGo(ui.tour - 1), onNext: () => tourGo(ui.tour + 1), onExit: () => endTour(), onPause: () => pauseTour(!ui.tourPaused) });
   root.append(head, top, dock, specs.el, detail.el, tourCard.el, tip, toastEl);
   document.body.append(help.el);
 
@@ -245,6 +245,7 @@ export async function initUI(app) {
     refresh();
   }
   function setXray(on) {
+    if(on){stopCycle();rig.sweepAnim=null;rig.tween=null;}
     selection.setXray(on);
     btnXray.classList.toggle('on', selection.xray);
     btnXray.setAttribute('aria-pressed', String(selection.xray));
@@ -360,12 +361,16 @@ export async function initUI(app) {
   }
 
   /* ------------------------------------------------------------------ guided tour */
+  let tourXray=false;
+  const TOUR_SECONDS=8;
+  function pauseTour(on) {ui.tourPaused=on;tourCard.setPaused(on);app.invalidate();}
   function startTour() {
-    stopCycle();
+    stopCycle();rig.sweepAnim=null;rig.spin.set(0,0,0);
     closeDetail(true);
     toggleSpecs(false);
     toggleDirectory(false);
     selection.clear();
+    tourXray=selection.xray;ui.tourPaused=reduced;ui.tourTime=0;tourCard.setPaused(ui.tourPaused);
     ui.tour = 0;
     btnTour.classList.add('on');
     btnTour.setAttribute('aria-pressed', 'true');
@@ -375,26 +380,28 @@ export async function initUI(app) {
   function tourGo(i) {
     if (i < 0) return;
     if (i >= TOUR.length) { endTour(); return; }
-    ui.tour = i;
+    ui.tour = i;ui.tourTime=0;
     const s = TOUR[i];
     tourCard.set(i, TOUR);
     rig.autoRotate = false;
-    app.setExplode(s.explode, i === 0 ? 900 : 1700);
+    selection.setIsolate(false);selection.setXray(!!s.xray);
+    const currentExplode=app.getExplode();app.setExplode(s.explode,0);
     const part = s.id ? bee.get(s.id) : null;
     if (part) {
-      selection.select(part);
-      app.frameSelection(1400, 1.7, (VIEWS[s.view] || VIEWS.hero)());
+      selection.select(part);if(s.isolate)selection.setIsolate(true);
+      app.frameSelection(7500, 1.7, s.id?.endsWith('servo-gearbox') ? app.mechanisms.gearboxView() : (VIEWS[s.view] || VIEWS.hero)());
     } else {
       selection.clear();
-      app.setView(s.view, 1400);
+      app.setView(s.view, 7500);
       markViews(s.view);
     }
+    app.setExplode(currentExplode,0);app.setExplode(s.explode,7500);
     refresh();
     relayout();
   }
   function endTour() {
     if (ui.tour < 0) return;
-    ui.tour = -1;
+    ui.tour = -1;ui.tourPaused=false;ui.tourTime=0;selection.setIsolate(false);selection.setXray(tourXray);
     tourCard.hide();
     btnTour.classList.remove('on');
     btnTour.setAttribute('aria-pressed', 'false');
@@ -486,6 +493,7 @@ export async function initUI(app) {
     callouts.moving = true;
   };
   app.onInteract = () => {
+    if(ui.tour>=0)pauseTour(true);
     if (ui.autoCycle) stopCycle();
     btnRotate.classList.remove('on');
     btnRotate.setAttribute('aria-pressed', 'false');
@@ -504,6 +512,7 @@ export async function initUI(app) {
   app.afterRender = () => { fpsGovernor(); };
   app.tick = (dt, now) => {
     let again = false;
+    if(ui.tour>=0&&!ui.tourPaused){ui.tourTime+=dt;if(ui.tourTime>=TOUR_SECONDS)tourGo(ui.tour+1);again=true;}
     if (callouts.active && callouts.update(dt)) again = true;
     else if (callouts.active && callouts.moving) again = true;
     return again;
@@ -551,6 +560,7 @@ export async function initUI(app) {
     const n = VIEW_KEYS[+k - 1];
     if (n && +k >= 1 && +k <= 6) { e.preventDefault(); e.stopPropagation(); setView(n); return; }
     if (ui.tour >= 0) {
+      if(k===' '){e.preventDefault();e.stopPropagation();pauseTour(!ui.tourPaused);return;}
       if (k === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); tourGo(ui.tour + 1); return; }
       if (k === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); tourGo(ui.tour - 1); return; }
       if (k === 'Escape') { e.preventDefault(); e.stopPropagation(); endTour(); return; }
@@ -617,6 +627,7 @@ export async function initUI(app) {
     toggleDirectory,
     startTour,
     endTour,
+    pauseTour,
     openDetail,
     closeDetail,
     callouts,

@@ -108,19 +108,20 @@ export function createDetail({ onClose, onItemHover, onItemPick }) {
 }
 
 /* ------------------------------------------------------------------ guided tour card */
-export function createTour({ onPrev, onNext, onExit }) {
+export function createTour({ onPrev, onNext, onExit, onPause }) {
   const step = h('span', { class: 'tour-step' });
   const title = h('h2');
   const text = h('p');
   const dots = h('div', { class: 'tour-dots', 'aria-hidden': 'true' });
   const prev = button('', 'prev', { class: 'icon-btn', 'aria-label': 'Previous step', title: 'Previous (Left arrow)', onclick: onPrev });
-  const nextLbl = h('span', { class: 'lbl' }, 'Next');
-  const next = h('button', { type: 'button', class: 'chip on', title: 'Next (Right arrow)', onclick: onNext }, nextLbl, icon('next'));
+  const nextLbl = h('span', { class: 'lbl' }, 'Pause tour');
+  const next = h('button', { type: 'button', class: 'chip on', title: 'Pause or resume (Space)', onclick: onPause }, nextLbl);
   const el = h('section', { class: 'panel tour', 'aria-label': 'Guided tour', 'aria-live': 'polite', hidden: true },
     h('div', { class: 'tour-top' }, step, button('', 'close', { class: 'icon-btn', 'aria-label': 'End the tour', title: 'End tour (Esc)', onclick: onExit })),
     title, text, h('div', { class: 'tour-bar' }, prev, dots, next));
   return {
     el,
+    setPaused(paused) { nextLbl.textContent=paused?'Resume tour':'Pause tour'; },
     get open() { return !el.hidden; },
     show() { el.hidden = false; },
     hide() { el.hidden = true; },
@@ -133,7 +134,7 @@ export function createTour({ onPrev, onNext, onExit }) {
       [...dots.children].forEach((d, k) => { d.className = k < i ? 'done' : k === i ? 'now' : ''; });
       prev.disabled = i === 0;
       prev.style.opacity = i === 0 ? '0.35' : '';
-      nextLbl.textContent = i === steps.length - 1 ? 'Finish' : 'Next';
+
     },
   };
 }

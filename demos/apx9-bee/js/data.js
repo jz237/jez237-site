@@ -179,6 +179,8 @@ export const TOUR = [
   { id: 'antenna-r', explode: 1, view: 'hero', title: 'Antenna modules', text: 'Chemical sensors, airflow analysis, flower scent detection and tactile sensing.' },
   { id: 'thorax-armor', explode: 1, view: 'hero', title: 'Thorax armor', text: 'Fuzzy biomimetic covering over an impact-resistant composite shell with environmental sensors.' },
   { id: 'wing-mount-r', explode: 1, view: 'hero', title: 'Wing mount & flight actuators', text: 'High-torque oscillation servos, wing angle control and vibration dampers.' },
+  { id: 'flight-motor', explode: 0, xray: true, isolate: true, view: 'top', title: 'Inside the flight drive', text: 'Watch the 10-tooth pinion drive a compound reduction, a rotating crank and a reciprocating output rod. Motion is slowed so the mechanism can be followed.' },
+  { id: 'wing-mount-r/servo-gearbox', explode: 0, xray: true, isolate: true, view: 'hero', title: 'Working planetary gearbox', text: 'Four brass planets spin on their pins while orbiting the sun gear. The fixed ring produces a 4:1 reduction at the wing output carrier.' },
   { id: 'wing-r', explode: 1, view: 'hero', title: 'Wing assembly', text: 'Carbon composite nano-vein frame with a smart, self-healing membrane and micro-actuators.' },
   { id: 'power-core', explode: 1, view: 'side', title: 'Central power core', text: 'High-density micro-battery, power management, wireless charging coil and a thermal cooling system.' },
   { id: 'pollination-module', explode: 1, view: 'side', title: 'Pollination module', text: 'Pollen collection, gentle distribution and real-time pollen analysis with bio-compatible materials.' },

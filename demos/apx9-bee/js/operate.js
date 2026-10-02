@@ -2,6 +2,7 @@
 import * as T from 'three';
 import { h, loadCSS } from './dom.js';
 import { VIEWS } from './rig.js';
+import { createSystems, SYSTEMS } from './systems.js?v=1e77876d0b9b';
 import { createFlower } from './flower.js?v=14d0816081bf';
 
 const clamp = T.MathUtils.clamp;
@@ -16,7 +17,7 @@ const NOTES = [
 ];
 
 export async function initOperations(app) {
-  await loadCSS('css/operate.css?v=fb67cdf0591c');
+  await loadCSS('css/operate.css?v=4348c0f12557');
   const { bee, stage, rig, selection } = app;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const op = { mode: 'inspect', power: false, clock: 0, boot: 0, mission: 0, playing: false, sensor: 'normal', flow: 'energy', repair: 0, paused: false, macro: false, autoMission: false, sensorAngle: 0 };
@@ -53,30 +54,9 @@ export async function initOperations(app) {
   const ruler = mesh(new T.PlaneGeometry(51.2, 12.8), new T.MeshBasicMaterial({ map: new T.CanvasTexture(canvas), transparent: true, side: T.DoubleSide }), scaleArt);
   ruler.rotation.x = -Math.PI / 2; ruler.position.set(4, -10, 24);
 
-  // Curves follow actual part anchors, including the exploded state.
-  const flowLayer = new T.Group(); art.add(flowLayer);
-  const paths = Array.from({ length: 3 }, () => {
-    const positions = new Float32Array(33 * 3), geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(positions, 3));
-    const line = new T.Line(geo, new T.LineBasicMaterial({ color: 0x159bda, transparent: true, opacity: .65, depthTest: false })); line.layers.set(4); line.renderOrder = 12; flowLayer.add(line);
-    const dots = Array.from({ length: 5 }, () => { const d = mesh(new T.SphereGeometry(.25, 8, 6), new T.MeshBasicMaterial({ color: 0x7eeeff, depthTest: false }), flowLayer); d.renderOrder = 13; return d; });
-    return { line, dots, positions };
-  });
-  const links = {
-    energy: [['power-core', 'wing-mount-r'], ['power-core', 'wing-mount-l'], ['power-core', 'pollination-module']],
-    signals: [['eye-r', 'neural-processor'], ['antenna-r', 'neural-processor'], ['neural-processor', 'wing-mount-r']],
-    pollen: [['leg-rear-r', 'pollination-module'], ['leg-rear-l', 'pollination-module'], ['pollination-module', 'abdomen-shell']],
-  };
-  const colors = { energy: 0x159bda, signals: 0x9164df, pollen: 0xe9a416 };
-  function anchor(id) { const p = bee.get(id); return p ? p.node.localToWorld(p.centerLocal.clone()) : new T.Vector3(); }
-  function updateFlows() {
-    links[op.flow].forEach(([from, to], i) => {
-      const a = anchor(from), b = anchor(to), mid = a.clone().lerp(b, .5); mid.y += 6;
-      const curve = new T.QuadraticBezierCurve3(a, mid, b), path = paths[i];
-      for (let k = 0; k <= 32; k++) curve.getPoint(k / 32).toArray(path.positions, k * 3);
-      path.line.geometry.attributes.position.needsUpdate = true; path.line.geometry.computeBoundingSphere(); path.line.material.color.setHex(colors[op.flow]);
-      path.dots.forEach((d, k) => { d.position.copy(curve.getPoint((op.clock * .25 + k / 5) % 1)); d.material.color.setHex(colors[op.flow]); });
-    });
-  }
+  const systems = createSystems(app,art), flowLayer = systems.group;
+  function anchor(id) { const p=bee.get(id);return p.node.localToWorld(p.centerLocal.clone()); }
+  function updateFlows() { systems.update(op.flow,op.clock); }
 
   const btn = (text, fn, attrs = {}) => h('button', { type: 'button', onclick: fn, ...attrs }, text);
   const launch = btn('◉  Power on / Operate', () => enter('power'), { class: 'operate-launch' });
@@ -142,12 +122,13 @@ export async function initOperations(app) {
   function enter(mode) {
     const first = op.mode === 'inspect';
     if (first && mode !== 'inspect') { savedLabels = app.ui.state.labelsOn; savedExplode = app.getExplode(); }
+    systems.activate(false);
     restorePose(); op.autoMission = false; op.mode = mode; op.playing = false; op.paused = reduced.matches; pause.textContent = op.paused ? 'Resume motion' : 'Pause motion';
     rig.autoRotate = false; rig.sweepAnim = null; rig.tween = null; stage.camera.clearViewOffset();
-    sensorHud.toggleAttribute('hidden', mode !== 'sensors'); document.body.classList.toggle('sensor-view',mode === 'sensors'); sensorHud.style.display = mode === 'sensors' ? '' : 'none';
+    sensorHud.toggleAttribute('hidden', mode !== 'sensors'); document.body.classList.toggle('sensor-view',mode === 'sensors' || mode === 'systems'); sensorHud.style.display = mode === 'sensors' ? '' : 'none';
     if (stage.scene.background !== sensorBackground) studioBackground = stage.scene.background;
-    stage.scene.background = mode === 'sensors' ? sensorBackground : studioBackground;
-    stage.floor.visible = mode !== 'sensors';
+    stage.scene.background = ['sensors','systems'].includes(mode) ? sensorBackground : studioBackground;
+    stage.floor.visible = !['sensors','systems'].includes(mode);
     selection.setIsolate(false); selection.clear(); selection.setXray(false); bee.root.visible = true;
     app.ui.endTour(); app.ui.closeDetail(); app.ui.toggleDirectory(false); app.ui.toggleSpecs(false);
     app.onInteract?.();
@@ -156,7 +137,7 @@ export async function initOperations(app) {
     body.replaceChildren(); slider = missionText = playButton = repairButton = null;
     Object.entries(tabButtons).forEach(([k, b]) => b.setAttribute('aria-pressed', String(mode === k)));
     if (mode === 'inspect') { op.power = false; if (app.ui.state.labelsOn !== savedLabels) app.ui.setLabels(savedLabels); app.setExplode(savedExplode, 0); app.resetView(500); launch.focus(); return; }
-    if (app.ui.state.labelsOn) app.ui.setLabels(false); app.setExplode(mode === 'systems' ? .65 : 0, 0); setSensor('normal');
+    if (app.ui.state.labelsOn) app.ui.setLabels(false); app.setExplode(mode === 'systems' ? .45 : 0, 0); setSensor('normal');
     title.textContent = { power: 'A machine with a heartbeat.', systems: 'Follow the invisible work.', mission: 'One flower. Five small steps.', sensors: 'A different kind of sight.', repair: 'Bring the right wing back.', scale: 'Smaller than you think.' }[mode];
     if (mode === 'power') {
       op.power = true; op.boot = 0; op.autoMission = true;
@@ -165,10 +146,21 @@ export async function initOperations(app) {
         h('small', null, 'Startup flows into the full mission automatically. Pause at any time. Reduced motion waits for your input; wingbeats are slowed for inspection.'));
 
     } else if (mode === 'systems') {
-      status.textContent = 'Live schematic • paths track the parts as you explode the model.';
-      const row = h('div', { class: 'op-choices' });
-      for (const [key, label] of Object.entries({ energy: 'Energy', signals: 'Sensor signals', pollen: 'Pollen' })) row.append(btn(label, () => { op.flow = key; row.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === label))); updateFlows(); app.invalidate(); }, { 'aria-pressed': String(op.flow === key) }));
-      body.append(row, h('p', null, 'Blue: battery → actuators. Violet: sensors → processor → flight control. Gold: brushes → collection module → storage.'), h('small', null, 'Use the original Assembled / Exploded slider below. Paths are explanatory, not physical wiring.'));
+      const row=h('div',{class:'op-choices system-channels'}),routeList=h('div',{class:'system-routes'}),note=h('p',{class:'system-note'});
+      const all=btn('Show all routes',()=>{systems.setFocus(-1);routeList.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));app.invalidate();});
+      const context=btn(systems.state.context?'Restore natural materials':'Highlight system components',()=>{systems.setContext(!systems.state.context);context.textContent=systems.state.context?'Restore natural materials':'Highlight system components';});
+      function channel(key) {
+        op.flow=key;updateFlows();systems.activate(true);
+        const cfg=SYSTEMS[key];panel.style.setProperty('--system-color','#'+cfg.color.toString(16));status.textContent=cfg.title;note.textContent=cfg.note;
+        row.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.flow===key)));
+        routeList.replaceChildren();
+        cfg.links.forEach(([from,to],i)=>routeList.append(btn('',()=>{systems.setFocus(i);routeList.querySelectorAll('button').forEach((b,k)=>b.setAttribute('aria-pressed',String(k===i)));}, {'aria-label':`Follow ${cfg.labels[from]} to ${cfg.labels[to]}`},)));
+        [...routeList.children].forEach((button,i)=>{const [from,to]=cfg.links[i];button.append(h('span',{class:'route-number'},String(i+1).padStart(2,'0')),h('span',null,cfg.labels[from],h('b',null,' → '),cfg.labels[to]));});
+        app.invalidate();
+      }
+      for(const [key,label]of Object.entries({energy:'Energy',signals:'Sensor signals',pollen:'Pollen'}))row.append(btn(label,()=>channel(key),{'data-flow':key}));
+      body.append(row,note,routeList,h('div',{class:'system-actions'},all,context),h('small',null,'Arrows show direction. Choose a route to follow it; orbit or explode the bee to trace the connections. Explanatory paths, not measured telemetry or literal wiring.'));
+      channel(op.flow);
     } else if (mode === 'mission') {
       op.mission = 0; op.playing = !reduced.matches;
       missionText = h('p'); slider = h('input', { type: 'range', min: 0, max: 1000, value: 0, 'aria-label': 'Pollination mission progress' });
@@ -220,6 +212,8 @@ export async function initOperations(app) {
     grains.forEach((g, i) => { const f = (op.clock * .45 + i / grains.length) % 1; g.position.set(32 - f * 1.4 + Math.sin(i * 7) * (1 - f) * 2, -9 + f * 4.2, Math.cos(i * 5) * (1 - f) * 2); });
     scan.visible = step === 1;
   }
+  const rawXray=selection.setXray.bind(selection);
+  selection.setXray=(on)=>{if(on&&op.mode==='systems')enter('inspect');return rawXray(on);};
   const oldTick = app.tick;
   app.tick = (dt, now) => {
     const old = oldTick?.(dt, now);
@@ -246,7 +240,7 @@ export async function initOperations(app) {
     }
     if (op.mode === 'repair' && op.repair === 4) { if (moving) op.repairT += dt; const mount = bee.get('wing-mount-r'); if (mount) mount.node.position.z += Math.sin(Math.min(1, op.repairT / 1.4) * Math.PI) * 6; }
     bee.root.updateMatrixWorld(true); app.picker.valid = false;
-    if (op.mode === 'systems') updateFlows();
+    if (op.mode === 'systems') { if(stage.scene.background!==sensorBackground){studioBackground=stage.scene.background;stage.scene.background=sensorBackground;} updateFlows(); }
     if (op.mode === 'power') { lamp.position.copy(anchor('eye-r')); lamp.position.x += 1.6; lamp.material.opacity = .12 + Math.sin(op.clock * 2) * .04; }
     if (flower.visible) {
       scan.scale.setScalar(1 + Math.sin(op.clock * 2) * .08);
@@ -266,14 +260,14 @@ export async function initOperations(app) {
     app.state.shadowDirty ||= powered;
     return (moving && !['scale', 'repair', 'sensors'].includes(op.mode)) || (moving && op.mode === 'repair' && (op.repair === 5 || op.repair === 4 && op.repairT < 1.4)) || old;
   };
-  window.addEventListener('resize', () => { if (op.mode !== 'inspect') frameExhibit(); });
+  window.addEventListener('resize', () => { requestAnimationFrame(()=>requestAnimationFrame(()=>{if(op.mode!=='inspect')frameExhibit();})); });
   panel.addEventListener('keydown', e => { if (e.key === 'Escape') { enter('inspect'); e.stopPropagation(); } });
   // Existing inspection controls are an explicit exit, except explode in Systems.
-  document.querySelector('.dock')?.addEventListener('pointerdown', () => { if (op.mode !== 'inspect' && op.mode !== 'systems') enter('inspect'); }, true);
-  document.querySelector('.dock')?.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && op.mode !== 'inspect' && op.mode !== 'systems') enter('inspect'); }, true);
+  document.querySelector('.dock')?.addEventListener('pointerdown', e => { if (op.mode !== 'inspect' && (op.mode !== 'systems' || e.target.closest('[aria-label="X-ray shells"]'))) enter('inspect'); }, true);
+  document.querySelector('.dock')?.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && op.mode !== 'inspect' && (op.mode !== 'systems' || e.target.closest('[aria-label="X-ray shells"]'))) enter('inspect'); }, true);
   document.querySelector('.hud-top')?.addEventListener('click', e => { if (op.mode !== 'inspect' && !e.target.closest('[aria-label="Parts directory"], [aria-label="Controls"]')) enter('inspect'); }, true);
-  window.addEventListener('keydown', e => { if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.closest('.operate-panel')) return; if (op.mode !== 'inspect' && ['r', 'R', 'Escape', 't', 'T'].includes(e.key)) enter('inspect'); }, true);
+  window.addEventListener('keydown', e => { if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.closest('.operate-panel')) return; if (op.mode !== 'inspect' && ['r', 'R', 'Escape', 't', 'T', 'x', 'X'].includes(e.key)) enter('inspect'); }, true);
   reduced.addEventListener('change', () => { if (reduced.matches) { op.paused = true; op.playing = false; pause.textContent = 'Resume motion'; } });
   flower.visible = pollen.visible = flowLayer.visible = scaleArt.visible = lamp.visible = false;
-  app.operations = { enter, state: op, setSensor, advanceRepair, flower };
+  app.operations = { enter, state: op, setSensor, advanceRepair, flower, systems };
 }
