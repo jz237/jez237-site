@@ -246,5 +246,27 @@
       "Cinematic tour · Free flight · Fullscreen"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Drag or use movement keys to take over · H hides the controls"
+  },
+  {
+    "id": "012",
+    "title": "APX-9 · Pollination Engineering",
+    "category": "3D · Biomimetic robotics",
+    "description": "A small machine. A brighter tomorrow. Explore a mechanical bumblebee with 129 named components: layered gold armor, compound optics, veined membrane wings, six articulated legs and an illuminated energy cartridge.",
+    "url": "apx9-bee/",
+    "image": "assets/apx9-bee.jpg",
+    "imageAlt": "Actual APX-9 exhibit showing gold and black robotic bee, articulated legs and translucent veined wings",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/apx9-bee",
+    "features": [
+      "Animated exploded assembly",
+      "129 selectable components",
+      "Orbit, zoom & focus",
+      "Searchable component directory"
+    ],
+    "facts": [
+      "6 articulated legs",
+      "4 membrane wings",
+      "129 named components"
+    ],
+    "note": "WebGL 2 · Desktop & touch · Original concept reconstruction · Preview captured from the running exhibit"
   }
 ]
