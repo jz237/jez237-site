@@ -6,7 +6,7 @@ The exhibit itself lives in `demos/apx9-bee/` and has **no build step**: plain E
 
 ## What it is
 
-- 573 selectable parts and assembly groups, including 502 named components with geometry, built from original procedural meshes and canvas textures. Fasteners and lens facets are batched within their parent component for performance; no external model or texture service is required.
+- 581 selectable parts and assembly groups, including 508 named components with geometry, built from original procedural meshes and canvas textures. Fasteners and lens facets are batched within their parent component for performance; no external model or texture service is required.
 - Physically based materials (clear-coat, sheen, iridescence, anisotropy) lit by a procedural studio environment, with ambient occlusion, bloom, tone mapping and a shadow-catcher floor.
 - Idle refinement: once the view has been still for a moment the page re-renders the same frame with a sub-pixel camera shift, the key light moved across a small disc (soft area-light shadows) and a rotated AO noise phase, and averages the frames in HDR (16-32 samples). Any interaction snaps straight back to the single plain frame; outline and focus changes only redraw the final pass.
 - A choreographed, reversible explode: each assembly moves on its own timeline, sub-assemblies and fine parts follow, and the camera follows the parts' bounds.
@@ -72,4 +72,14 @@ Serve the repository root on port 8768, then run `python3 scripts/apx9-bee/qa/op
 
 `js/flower.js` builds 48 curved, veined petals, 420 golden-angle disc florets, 2,400 pollen grains, serrated leaves, a curved hairy stem and dew. Repeated fine structures use instanced meshes. Deterministic generated texture maps encode surface ridges, pigment, UV guide contrast and a synthetic relative thermal field; they are not captured scientific data. Vision offers whole-flower and pollen macro framing, specimen rotation, tracked feature callouts and channel legends. Leaving Vision restores the studio background and shadow floor.
 
-Before publishing changes to the operating modules, run `python3 scripts/apx9-bee/version_operating_assets.py` to refresh the CSS → flower → operating module → entry-module URL hashes. The custom domain can extend source cache lifetimes despite origin revalidation headers: unique asset URLs are required for already-cached browsers.
+Before publishing changes to the operating modules, run `python3 scripts/apx9-bee/version_operating_assets.py` to refresh the dependency-first CSS, flower, Systems, flight parts, X-ray mechanics, tour UI and entry-module URL hashes. The custom domain can extend source cache lifetimes despite origin revalidation headers: unique asset URLs are required for already-cached browsers.
+
+### Systems, live cutaway and continuous tour
+
+Systems uses component highlighting, anchored glowing conduits, directional arrows and moving energy pulses, signal packets or pollen grains. Select a route to follow one circuit; restore natural materials independently. Every material change is reversible on exit.
+
+X-ray shells now exposes the existing reduction gear train, cam/follower, slider-crank linkage and both four-planet wing gearboxes in motion. Flight drive and Wing gearbox buttons isolate assembled closeups; Whole unit returns to the full model. Shell opacity, playback speed and Pause/Resume mechanisms are adjustable. This is illustrative slow-motion kinematics, not an engineering performance simulation.
+
+The guided tour automatically plays 17 stops, including two internal cutaways, with long camera and explosion transitions. Pause/Resume (or Space) freezes the camera, explosion and mechanisms together. Manual orbit pauses the tour. Arrow keys optionally navigate; no Next click is required. Reduced-motion preferences start playback paused.
+
+Additional browser checks: `qa/systems.py` covers routes, restoration and mobile framing; `qa/mechanisms.py` covers moving gears/linkages, pause, mobile cutaways, mode transitions and all 17 autoplay stops in real time. Both accept `APX9_URL`; their default local port is 8771.

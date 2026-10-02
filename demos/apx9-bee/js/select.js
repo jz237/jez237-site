@@ -17,7 +17,7 @@ export class Selection {
     this.focus = 0;
     this.listeners = new Set();
     this.ghosts = new Map();
-    this.shellParts = bee.parts.filter((p) => p.tag === 'shell');
+    this.shellParts = bee.parts.filter((p) => p.tag === 'shell' || /^flight-motor\/(housing|arch-strap|drive-motor\/can)(\/|$)/.test(p.id) || /wing-mount-[rl]\/(oscillation-servo\/servo-can|servo-gearbox\/carrier-(front|rear))/.test(p.id));
     this.furMeshes = [];
     for (const p of bee.parts) for (const m of p.meshes) if (m.userData.fur) this.furMeshes.push({ m, p });
     this.dirtyFlags = true;
@@ -131,7 +131,7 @@ export class Selection {
     if (!g) {
       g = new THREE.MeshPhysicalMaterial({
         color: mat.color ? mat.color.clone().lerp(new THREE.Color(0xdfe9f4), 0.45) : 0xdfe9f4,
-        transparent: true, opacity: 0.17, depthWrite: false, roughness: 0.28, metalness: 0.0,
+        transparent: true, opacity: 0.09, depthWrite: false, roughness: 0.28, metalness: 0.0,
         clearcoat: 1.0, clearcoatRoughness: 0.12, side: THREE.DoubleSide, envMapIntensity: 0.9,
       });
       g.userData.noShadow = true;
