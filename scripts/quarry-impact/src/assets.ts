@@ -115,10 +115,10 @@ export function cloneCar(kind: CarKind, color: number) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : 0.48;
-      m.roughness = trim ? .38 : 0.24;
+      m.metalness = trim ? .18 : kind==='van'?.12:.48;
+      m.roughness = trim ? .38 : kind==='van'?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : 1; m.clearcoatRoughness = 0.12; }
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : kind==='van'?.85:1; m.clearcoatRoughness = kind==='van'?.18:.12; }
       finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {

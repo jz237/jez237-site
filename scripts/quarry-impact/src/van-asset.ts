@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {closedVehiclePressing} from './vehicle-pressing';
+import {formedVehiclePanel,stampedVehiclePanel,panelSamples} from './formed-vehicle-panel';
 import {classicWindowFrame} from './classic-window-frame';
 import {buildCompactAsset} from './compact-asset';
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
@@ -9,16 +9,23 @@ const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),mix=T.MathUtils.lerp;
 export function buildVanAsset(){
  const root=new T.Group();root.name='RillfordCarrier';
  const material=(name:string,color:number,roughness:number,metalness=0)=>new T.MeshPhysicalMaterial({name,color,roughness,metalness});
- const paint=material('paint_Carrier',0xc3b28c,.29,.40);paint.clearcoat=1;paint.clearcoatRoughness=.16;
+ const paint=material('paint_Carrier',0xc3b28c,.36,.12);paint.clearcoat=.85;paint.clearcoatRoughness=.18;
  const steel=material('Structure Carrier Steel',0x353d3e,.69,.55),trim=material('Carrier Satin Brightwork',0xa4aaa7,.36,.73),rubber=material('Carrier Rubber',0x202626,.86),vinyl=material('Interior Carrier Vinyl',0x38443c,.9),wood=material('Interior Carrier Cargo Floor',0x62533f,.95),glass=material('Carrier Glass',0x334f56,.07,.1),lamp=material('Carrier Headlight',0xe1dfc9,.22,.18),brake=material('Carrier Brakelight',0x942818,.25,.1),amber=material('Carrier Indicator',0xc98220,.26,.12);glass.transparent=true;glass.opacity=.55;glass.depthWrite=false;
  const add=(name:string,g:T.BufferGeometry,m:T.Material)=>{if(g.index)g=g.toNonIndexed();const o=new T.Mesh(g,m);o.name=name;o.castShadow=o.receiveShadow=true;root.add(o);return o;};
  const box=(name:string,x:number,y:number,z:number,w:number,h:number,l:number,m:T.Material)=>{const o=add(name,new T.BoxGeometry(w,h,l),m);o.position.set(x,y,z);return o;};
- const panel=(name:string,nx:number,ny:number,map:(u:number,t:number)=>T.Vector3,n:T.Vector3,m:T.Material=paint,thickness=.018)=>add(name,closedVehiclePressing(nx,ny,map,n,thickness),m);
+ const panel=(name:string,nx:number,ny:number,map:(u:number,t:number)=>T.Vector3,n:T.Vector3,m:T.Material=paint,thickness=.018)=>add(name,formedVehiclePanel(panelSamples(Math.max(4,Math.round(nx/2))),panelSamples(Math.max(2,Math.round(ny/2))),map,n,thickness),m);
  const bar=(name:string,a:T.Vector3,b:T.Vector3,r:number,m:T.Material)=>{const o=add(name,new T.CylinderGeometry(r,r,a.distanceTo(b),8),m);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(v(0,1,0),b.clone().sub(a).normalize());return o;};
  const sideX=(y:number)=>.933-.062*((y-.85)/.58)**2+.050*Math.exp(-(((y-.85)/.13)**2));
  const upperX=(y:number)=>mix(.886,.795,T.MathUtils.clamp((y-1.10)/.775,0,1))+.008*Math.sin(T.MathUtils.clamp((y-1.10)/.775,0,1)*Math.PI);
  const bodyX=(y:number)=>(y>1.10?upperX(y):mix(Math.min(.939,sideX(y)),.886,T.MathUtils.smoothstep(y,1.03,1.10)))+.004*Math.exp(-(((y-1.055)/.025)**2));
  const archY=(z:number)=>{const d=Math.min(Math.abs(z-1.35),Math.abs(z+1.35));return d<.414?Math.max(.43,.3400195+Math.sqrt(.414**2-d**2)):.43;};
+ // Every high side row stays at one body-line height, even over an arch.
+ // A rounded inset is pressed into the cargo wall instead of overlaid on it.
+ const bodyRows=[0,.25,.5,.75,1];
+ const bodyHeights=[0,.81,.94,1.04,1.10];
+ const sideHeight=(z:number,t:number)=>{let i=0;while(i<bodyRows.length-2&&t>bodyRows[i+1])i++;return mix(i===0?archY(z):bodyHeights[i],bodyHeights[i+1],(t-bodyRows[i])/(bodyRows[i+1]-bodyRows[i]));};
+ const cargoColumns=[-2.20,-2.03,-1.99,-1.95,-1.91,-1.80,-1.65,-1.50,-1.35,-1.20,-1.05,-.90,-.75,-.64,-.54,-.50,-.46,-.40,-.27].map(z=>(z+2.20)/1.93);
+ const screenTop=1.795,screenFront=.705,screenWidth=upperX(screenTop);
  const noseZ=(x:number)=>2.18+.040*(1-(x/.881)**2);
  const rearZ=(x:number)=>-2.20-.022*(1-(x/.891)**2);
  const window=(name:string,corners:T.Vector3[],side:number)=>{const f=classicWindowFrame(corners,side);add('panel_'+name+'Frame',f.frame,paint);add('panel_'+name+'Seal',f.seal,rubber);add('panel_'+name+'Trim',f.trim,trim);add('glass_'+name,f.glass,glass).castShadow=false;};
@@ -26,7 +33,8 @@ export function buildVanAsset(){
   const suffix=side<0?'L':'R';
   panel('panel_FrontWingVan'+suffix,26,8,(u,t)=>{const z=mix(1.05,2.18,u),y=mix(archY(z),1.10-.055*u,t),x=side*mix(bodyX(y),.88,T.MathUtils.smoothstep(z,1.99,2.18));return v(x,y,z);},v(side,0,0));
   panel('panel_BodyDoor'+suffix+'VanSkin',24,10,(u,t)=>{const z=mix(-.27,1.05,u),y=mix(archY(z),1.10,t);return v(side*bodyX(y),y,z);},v(side,0,0));
-  panel('panel_CargoSideVan'+suffix,32,16,(u,t)=>{const z=mix(-2.20,-.27,u),y=mix(archY(z),1.875,t),x=side*bodyX(y);return v(x,y,z);},v(side,0,0));
+  add('panel_CargoSideVan'+suffix,formedVehiclePanel(cargoColumns,bodyRows,(u,t)=>{const z=mix(-2.20,-.27,u),y=sideHeight(z,t);return v(side*bodyX(y),y,z);},v(side,0,0)),paint);
+  add('panel_CargoBlankVan'+suffix,stampedVehiclePanel((u,t)=>{const y=mix(1.10,1.875,t);return v(side*bodyX(y),y,mix(-2.20,-.27,u));},v(side,0,0),1.93,.775,.07,.009),paint);
   for(const z of [-1.35,1.35]){
    const path=Array.from({length:25},(_,i)=>{const a=mix(.16,Math.PI-.16,i/24),y=.3400195+Math.sin(a)*.416,Z=z+Math.cos(a)*.416;return v(side*(bodyX(y)+.004),y,Z);});
    add('panel_ArchLipVan'+suffix+(z>0?'Front':'Rear'),new T.TubeGeometry(new T.CatmullRomCurve3(path),20,.008,5,false),paint);
@@ -34,8 +42,9 @@ export function buildVanAsset(){
   }
   panel('panel_SillVan'+suffix,36,3,(u,t)=>{const z=mix(-2.13,2.13,u);return v(side*mix(.887,.848,t),mix(.431,.355,t),z);},v(side,-.2,0));
   panel('panel_HoodShoulderVan'+suffix,24,6,(u,t)=>{const z=mix(1.05,2.18,u),x=side*mix(mix(bodyX(1.10-.055*u),.88,T.MathUtils.smoothstep(z,1.99,2.18)),.795,t);return v(x,1.10-.055*u+.028*Math.sin(t*Math.PI/2),u===1?noseZ(x):z);},v(side,1,0).normalize());
-  window('BodyDoor'+suffix+'Van',[v(side*.886,1.10,1.05),v(side*.886,1.10,-.27),v(side*.795,1.875,-.27),v(side*.795,1.875,.665)],side);
-  bar('panel_BodyDoor'+suffix+'VanApost',v(side*.886,1.10,1.05),v(side*.795,1.875,.665),.019,paint);
+  window('BodyDoor'+suffix+'Van',[v(side*.886,1.10,1.05),v(side*.886,1.10,-.27),v(side*screenWidth,screenTop,-.27),v(side*screenWidth,screenTop,screenFront)],side);
+  bar('panel_BodyDoor'+suffix+'VanApost',v(side*.886,1.10,1.05),v(side*screenWidth,screenTop,screenFront),.019,paint);
+  panel('panel_BodyDoor'+suffix+'VanHeader',12,4,(u,t)=>{const y=mix(screenTop,1.875,t);return v(side*upperX(y),y,mix(-.27,mix(screenFront,.665,t),u));},v(side,0,0));
   bar('panel_CabRearPostVan'+suffix,v(side*.886,1.10,-.27),v(side*.795,1.875,-.27),.026,paint);
   box('panel_BodyDoor'+suffix+'VanHandle',side*.944,1.012,-.11,.036,.043,.17,trim);
   panel('panel_BodyDoor'+suffix+'VanInnerCard',16,8,(u,t)=>v(side*.869,mix(.52,1.07,t),mix(-.23,1.00,u)),v(-side,0,0),vinyl,.022);
@@ -48,8 +57,9 @@ export function buildVanAsset(){
   }
  }
  panel('panel_hoodVan',18,20,(u,t)=>{const x=(u*2-1)*.795,z=mix(1.05,noseZ(x),t);return v(x,1.128-.055*t+.027*(1-(x/.795)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
- window('FrontVan',[v(-.886,1.10,1.05),v(.886,1.10,1.05),v(.795,1.875,.665),v(-.795,1.875,.665)],1);
- panel('panel_RoofVan',24,30,(u,t)=>{const x=(u*2-1)*.795,z=mix(-2.20,.665,t);return v(x,1.875+.058*(1-(x/.795)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
+ window('FrontVan',[v(-.886,1.10,1.05),v(.886,1.10,1.05),v(screenWidth,screenTop,screenFront),v(-screenWidth,screenTop,screenFront)],1);
+ panel('panel_CabHeaderVan',16,4,(u,t)=>{const y=mix(screenTop,1.875,t),x=(u*2-1)*upperX(y);return v(x,y+.009*Math.sin(t*Math.PI)*(1-(u*2-1)**2),mix(screenFront,.665,t));},v(0,.4,1).normalize());
+ panel('panel_RoofVan',12,16,(u,t)=>{const x=(u*2-1)*.795,z=mix(-2.20,.665,t);return v(x,1.875+.058*(1-(x/.795)**2)*Math.sin(t*Math.PI),z);},v(0,1,0));
  for(const side of [-1,1])bar('panel_RoofGutterVan'+side,v(side*.805,1.864,-2.18),v(side*.805,1.864,.65),.010,trim);
  panel('panel_FrontValanceVan',28,10,(u,t)=>{const x=(u*2-1)*.88;const roll=T.MathUtils.clamp((.88-Math.abs(x))/.085,0,1);return v(x,mix(.445,1.045+.028*Math.sin(roll*Math.PI/2),t),noseZ(x));},v(0,0,1));
  panel('panel_hoodVanRolledEdge',20,4,(u,t)=>{const x=(u*2-1)*.795,z=noseZ(x);return v(x,1.075+.002-.027*(1-Math.cos(t*Math.PI/2)),z-.018+.024*Math.sin(t*Math.PI/2));},v(0,.7,1).normalize());
@@ -76,7 +86,7 @@ export function buildVanAsset(){
  panel('panel_CargoDoorSurroundVanBottom',24,3,(u,t)=>{const x=(u*2-1)*.78;return v(x,mix(.43,.486,t),rearZ(x));},v(0,0,-1));
  for(const side of [-1,1]){
   const suffix=side<0?'L':'R';
-  panel('panel_CargoDoorVan'+suffix+'Stamping',12,20,(u,t)=>{const x=side*mix(.009,.78,u),y=mix(.48,1.80,t),crown=.008*Math.sin(u*Math.PI)*Math.sin(t*Math.PI);return v(x,y,rearZ(x)-crown);},v(0,0,-1));
+  add('panel_CargoDoorVan'+suffix+'Stamping',stampedVehiclePanel((u,t)=>{const x=side*mix(.009,.78,u),y=mix(.48,1.80,t),crown=.005*Math.sin(u*Math.PI)*Math.sin(t*Math.PI);return v(x,y,rearZ(x)-crown);},v(0,0,-1),.771,1.32,.065,.008),paint);
   panel('panel_CargoDoorVan'+suffix+'InnerSkin',10,16,(u,t)=>{const x=side*mix(.025,.75,u),y=mix(.51,1.775,t);return v(x,y,rearZ(x)+.038);},v(0,0,1),steel,.012);
   box('panel_CargoDoorVan'+suffix+'Handle',side*.086,1.05,-2.244,.084,.042,.027,trim);
   for(const y of [.682,1.574])bar('panel_CargoDoorVan'+suffix+'Hinge'+y,v(side*.776,y-.049,-2.234),v(side*.776,y+.049,-2.234),.018,trim);
