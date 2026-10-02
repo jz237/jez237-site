@@ -5,6 +5,7 @@ import {buildMuscleAsset,MUSCLE_TEXTURES} from './muscle-asset';
 import {partitionSurface,type SurfacePlane} from './surface-partition';
 import {classicWindowFrame} from './classic-window-frame';
 import {addEstateFront} from './estate-front';
+import {addEstateRear} from './estate-rear';
 import {stampedPanel} from './classic-panel';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -22,16 +23,17 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
   let serial=0;
   const mesh=(name:string,g:T.BufferGeometry,m:T.Material)=>{const geometry=g.index?g.toNonIndexed():g;if(geometry!==g)g.dispose();const o=new T.Mesh(geometry,m);o.name=name;o.castShadow=o.receiveShadow=true;root.add(o);return o;};
   const box=(name:string,size:[number,number,number],at:[number,number,number],m:T.Material)=>{const o=mesh(name,new T.BoxGeometry(...size).toNonIndexed(),m);o.position.set(...at);return o;};
-  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.84],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72],[2,2.05]];
+  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.84],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-2.18],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72],[2,2.05]];
   for(const child of [...donor.children]){
     if(child.name.startsWith('wheel_')){root.add(child);continue;}
     if(!(child instanceof T.Mesh))continue;
     const mat=child.material as T.Material,body=mat.name.startsWith('paint'),window=child.name.startsWith('glass_');
-    if(window||['Grille','Classic Headlight','Badge'].includes(mat.name)||child.name.startsWith('panel_bumper_front')||child.name.startsWith('panel_hood')){child.geometry.dispose();continue;}
+    if(window||['Grille','Classic Headlight','Classic Brakelight','Badge'].includes(mat.name)||child.name.startsWith('panel_bumper_front')||child.name.startsWith('panel_bumper_rear')||child.name.startsWith('panel_hood')){child.geometry.dispose();continue;}
     const interior=mat.name.startsWith('Interior')||mat.name==='Underside';
     for(const part of partitionSurface(child.geometry,planes,p=>{
       if(!interior&&p.z<.72&&p.y>1.03)return null;
       if(!interior&&p.z>2.05)return null;
+      if(!interior&&p.z< -2.18)return null;
       if(body&&p.z>.72&&Math.abs(p.x)<.72&&p.y>.84)return null;
       if(interior&&(p.y>1.30||p.y>1.10&&(Math.abs(p.x)>.65||p.z<-.60)))return null;
       if(['Chrome','BlackPlastic'].includes(mat.name)&&Math.abs(p.x)>.80&&p.y>.82&&p.z>-.82&&p.z<.72)return null;
@@ -91,7 +93,7 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
     mesh('panel_'+name+'WindowSeal',parts.seal,rubber);mesh('panel_'+name+'WindowTrim',parts.trim,chrome);
   };
   window('Windshield',[V(-.78,1.035,.78),V(.78,1.035,.78),V(.69,1.475,.24),V(-.69,1.475,.24)]);
-  window('Rear',[V(-.69,1.475,-2.12),V(.69,1.475,-2.12),V(.80,1.025,-2.35),V(-.80,1.025,-2.35)]);
+  window('TailgateRear',[V(-.69,1.475,-2.12),V(.69,1.475,-2.12),V(.80,1.025,-2.35),V(-.80,1.025,-2.35)]);
   const bar=(name:string,a:T.Vector3,b:T.Vector3,r:number,material:T.Material)=>{const g=new T.CylinderGeometry(r,r,a.distanceTo(b),8).toNonIndexed(),o=mesh(name,g,material);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(V(0,1,0),b.clone().sub(a).normalize());return o;};
   for(const side of [-1,1]){
     const suffix=side<0?'L':'R',x=side*.835,upper=side*.72;
@@ -111,11 +113,10 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
     bar('panel_RoofRack'+suffix,V(side*.58,1.61,-1.92),V(side*.58,1.61,-.08),.014,chrome);
   }
   for(const z of [-1.81,-.18])box('panel_RackCrossbar'+z,[1.19,.024,.04],[0,1.61,z],chrome);
-  box('Interior Estate cargo floor',[1.57,.06,1.15],[0,.66,-1.77],vinyl);
+  box('Interior Estate cargo floor',[1.57,.06,1.00],[0,.66,-1.71],vinyl);
   box('Interior Estate rear bench',[1.48,.15,.47],[0,.70,-.92],vinyl);
   const seat=box('Interior Estate rear seat back',[1.48,.46,.10],[0,.91,-1.15],vinyl);seat.rotation.x=-.10;
-  box('panel_TailgateUpper',[1.59,.10,.045],[0,.99,-2.35],paint);
-  box('panel_TailgateInner',[1.53,.40,.055],[0,.79,-2.32],vinyl);
+  addEstateRear(root,paint,chrome,rubber);
   // Keep all new cabin details on one swept profile. A raised belt, lower roof
   // and narrower ends give the estate a continuous shoulder-to-roof silhouette.
   // Bake in world coordinates so individual damage assemblies retain their names.
