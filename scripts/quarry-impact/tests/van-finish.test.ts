@@ -47,7 +47,7 @@ test('new stamped skins are closed, outward facing and joined to the adjoining b
 
 test('the rendered van keeps its work-vehicle paint and new cab headers follow door damage and repair',async()=>{
  await R.init();const original=GLTFLoader.prototype.loadAsync;
- GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);
+ GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  const root=cloneCar('van',0x486552),m=(root.getObjectByName('panel_CargoBlankVanL')as T.Mesh).material as T.MeshPhysicalMaterial;
  assert.equal(m.color.getHex(),0x486552);assert.equal(m.metalness,.12);assert.equal(m.roughness,.36);assert.equal(m.clearcoat,.85);assert.equal(m.clearcoatRoughness,.18);

@@ -1,3 +1,4 @@
+import {isRearEngineKind} from './classic-vehicle-specs';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import type {DamageVector} from './component-damage';
 
@@ -6,7 +7,7 @@ import type {DamageVector} from './component-damage';
 export function accumulateEngineDamage(current:number,kind:CarKind,point:DamageVector,damage:number){
  const before=clamp(Number.isFinite(current)?current:0,0,1);
  if(!Number.isFinite(damage)||damage<=1.8||![point.x,point.y,point.z].every(Number.isFinite))return before;
- const d=DEFINITIONS[kind],bayZ=point.z*(kind==='marten'?-1:1);
+ const d=DEFINITIONS[kind],bayZ=point.z*(isRearEngineKind(kind)?-1:1);
  // The cabin and opposite luggage/cargo compartment do not injure the engine.
  // A blow reaches the whole engine bay through the surrounding front/rear steel.
  const longitudinal=clamp((bayZ-d.wheelbase*.20)/(.48*d.halfLength-d.wheelbase*.20),0,1);

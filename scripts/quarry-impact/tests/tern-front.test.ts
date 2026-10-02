@@ -10,7 +10,7 @@ import {loadCars} from '../src/assets';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {Vehicle} from '../src/vehicle';
 await R.init();const originalLoad=GLTFLoader.prototype.loadAsync;
-try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=originalLoad;}
+try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=originalLoad;}
 
 const root=buildTernAsset();root.updateMatrixWorld(true);
 const mesh=(name:string)=>root.getObjectByName(name) as T.Mesh;

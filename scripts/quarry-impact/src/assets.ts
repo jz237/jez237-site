@@ -23,13 +23,14 @@ function batch(group: THREE.Object3D, root: boolean) {
   group.traverse((o) => {
     if (
       !(o instanceof THREE.Mesh) ||
+      o.name.startsWith('suspension_') ||
       o.name.startsWith('panel_') ||
       o.name.startsWith('glass_')
     )
       return;
     let p = o.parent;
     while (p && p !== group) {
-      if (p.name.startsWith('wheel_')) return;
+      if (p.name.startsWith('wheel_') || p.name.startsWith('suspension_')) return;
       p = p.parent;
     }
     const geo = o.geometry.clone();
@@ -66,7 +67,7 @@ function batch(group: THREE.Object3D, root: boolean) {
 }
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy'];
   const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
   const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
@@ -81,10 +82,10 @@ export async function loadCars(progress: (s: string) => void) {
     // Shared refined templates are built once. Cars clone their deformable
     // buffers; no remeshing, loading or asynchronous work occurs during a hit.
     gltf.scene.traverse(o => {
-      if (!(o instanceof THREE.Mesh)) return;
+      if (!(o instanceof THREE.Mesh) || o.name.startsWith('suspension_')) return;
       let parent = o.parent;
       while (parent && parent !== gltf.scene) {
-        if (parent.name.startsWith('wheel_')) return;
+        if (parent.name.startsWith('wheel_') || parent.name.startsWith('suspension_')) return;
         parent = parent.parent;
       }
       const old = o.geometry;
@@ -94,15 +95,19 @@ export async function loadCars(progress: (s: string) => void) {
     templates.set(kind, gltf.scene);
   }
 }
+function hasNamedParent(object:THREE.Object3D,prefix:string){for(let p:THREE.Object3D|null=object;p;p=p.parent)if(p.name.startsWith(prefix))return true;return false;}
 export function cloneCar(kind: CarKind, color: number) {
   const root = templates.get(kind)!.clone(true);
   if(!isClassicKind(kind))attachWheelPresentation(root);
-  const materials = new Map<THREE.Material, THREE.Material>();
+  const bodyMaterials = new Map<THREE.Material, THREE.Material>(),hardwareMaterials = new Map<THREE.Material, THREE.Material>();
   root.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
     o.castShadow = o.name.startsWith('panel_') && !/Handle|Mirror|Interior|Topgrill/i.test(o.name) && !(kind==='marten'&&/WaistTrim|Shutline|Flutes/.test(o.name)) || o.name.includes('Tire');
     o.receiveShadow = true;
     const old = o.material as THREE.MeshStandardMaterial;
+    // Moving links and buggy wheel hardware have no body-space wear attributes;
+    // keep their shaders separate from chassis batches using the same metal.
+    const animated=hasNamedParent(o,'suspension_')||(kind==='buggy'&&hasNamedParent(o,'wheel_')),materials=animated?hardwareMaterials:bodyMaterials;
     // One paint material per color per car; wear is carried by each panel's
     // vertex attribute. Window material instances keep independent crack states.
     const glass = o.name.startsWith('glass_');
@@ -115,11 +120,11 @@ export function cloneCar(kind: CarKind, color: number) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : (kind==='van'||kind==='tern'||kind==='marten')?.12:.48;
-      m.roughness = trim ? .38 : (kind==='van'||kind==='tern'||kind==='marten')?.36:.24;
+      m.metalness = trim ? .18 : (kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.12:.48;
+      m.roughness = trim ? .38 : (kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='van'||kind==='tern'||kind==='marten')?.85:1; m.clearcoatRoughness = (kind==='van'||kind==='tern'||kind==='marten')?.18:.12; }
-      finishPaint(m, kind !== 'coupe');
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.85:1; m.clearcoatRoughness = (kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.18:.12; }
+      if(!animated)finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {
       o.geometry = o.geometry.clone();
@@ -131,8 +136,8 @@ export function cloneCar(kind: CarKind, color: number) {
       o.userData.damage = 0;
     }
     if (old.name.includes('Headlight')) {
-      m.emissive.setHex(kind==='marten'?0xffead2:0xe2f1ff);
-      m.emissiveIntensity = kind==='marten'?.35:3;
+      m.emissive.setHex((kind==='marten'||kind==='buggy')?0xffead2:0xe2f1ff);
+      m.emissiveIntensity = (kind==='marten'||kind==='buggy')?.35:3;
     }
     if (old.name.includes('Brakelight')) {
       m.emissive.setHex(0xff1105);

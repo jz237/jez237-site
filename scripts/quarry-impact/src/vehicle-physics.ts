@@ -12,17 +12,20 @@ export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
 }
 const dot=(a:Vec,b:Vec)=>a.x*b.x+a.y*b.y+a.z*b.z;
-/** Keep the utility floor shallow through damage and repair. */
+export const vehicleSuspensionRestLength=(kind:CarKind)=>kind==='buggy'?.44:.36;
+export const vehicleSuspensionTravel=(kind:CarKind)=>kind==='buggy'?.32:.24;
+/** Keep open cargo/cockpit floors shallow through damage and repair. */
 export function vehicleChassisHalfExtents(kind:CarKind,health=100){
  const d=DEFINITIONS[kind],loss=100-health,utility=kind==='utility';
+ if(kind==='buggy')return{x:.55-loss*.00035,y:.013,z:.725-loss*.00055};
  return{x:(utility?.70:d.halfWidth-.06)-loss*.0008,y:utility?.065:.25,z:(utility?2.69:d.halfLength-.12)-loss*.0015};
 }
 /** Shared physical construction for the rendered vehicle and headless authority. */
 export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mass:number){
- const d=DEFINITIONS[kind],utility=kind==='utility',massHalfLength=utility?2.745:d.halfLength,massHeight=kind==='van'?1.9:1.3;
+ const d=DEFINITIONS[kind],utility=kind==='utility',buggy=kind==='buggy',massHalfLength=utility?2.745:d.halfLength,massHeight=kind==='van'?1.9:1.3;
  const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setLinearDamping(.06).setAngularDamping(.85).setCcdEnabled(true).setCanSleep(true));
- const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
-  .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:{x:0,y:kind==='van'?.15:-.06,z:kind==='tern'?.16:kind==='marten'?-.22:0},{x:mass*((massHalfLength*2)**2+massHeight**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+massHeight**2)/12},{x:0,y:0,z:0,w:1})
+ const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):buggy?api.ColliderDesc.cuboid(.55,.013,.725).setTranslation(0,-.54,-.115):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
+  .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:buggy?{x:0,y:.46,z:-.085}:{x:0,y:kind==='van'?.15:-.06,z:kind==='tern'?.16:kind==='marten'?-.22:0},{x:mass*((massHalfLength*2)**2+massHeight**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+massHeight**2)/12},{x:0,y:0,z:0,w:1})
   .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
  // A van's windscreen slopes into the taller cargo shell. Its collision
@@ -34,7 +37,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  ].flatMap(([x,y,z])=>[x,y-.8200195,z]));
  const ternUpper=Float32Array.from([[-.76,1.015,.62],[.76,1.015,.62],[-.632,1.478,.094],[.632,1.478,.094],[-.632,1.478,-1.02],[.632,1.478,-1.02],[-.734,1.015,-1.76],[.734,1.015,-1.76]].flatMap(([x,y,z])=>[x,y-.8200195,z]));
  const martenUpper=Float32Array.from([[-.740,1.023,.62],[.740,1.023,.62],[-.597,1.478,.11],[.597,1.478,.11],[-.597,1.478,-.78],[.597,1.478,-.78],[-.740,1.023,-1.30],[.740,1.023,-1.30]].flatMap(([x,y,z])=>[x,y-.8200195,z]));
- const roofDesc=kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
+ const roofDesc=buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
   api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65)
    .setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1);
  const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
@@ -46,9 +49,49 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   for(const side of [-1,1]){part(side*.785,0,-1.83,.09,.21,1.14);part(side*.60,-.10,-1.525,.145,.08,.38);}
   part(0,0,-2.92,.77,.21,.05);
  }
+ // A buggy has tube collision along the authored cage, not a filled cabin.
+ // Coordinates below are model-local, then moved to the shared chassis datum.
+ if(buggy){
+  const finish=(desc:R.ColliderDesc)=>world.createCollider(desc.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  const bar=(a:Vec,b:Vec,radius=.026)=>{
+   const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,length=Math.hypot(dx,dy,dz),ny=dy/length;
+   const scale=Math.sqrt(2*(1+ny)),rotation=scale<1e-8?{x:1,y:0,z:0,w:0}:{x:dz/length/scale,y:0,z:-dx/length/scale,w:scale/2};
+   finish(api.ColliderDesc.capsule(length/2,radius).setRotation(rotation).setTranslation((a.x+b.x)/2,(a.y+b.y)/2-.96,(a.z+b.z)/2));
+  };
+  const v=(x:number,y:number,z:number)=>({x,y,z});
+  for(const side of [-1,1]){
+   bar(v(side*.59,.40,-1.48),v(side*.59,.40,1.37));
+   bar(v(side*.64,.43,-.73),v(side*.64,.43,.52));
+   bar(v(side*.64,.84,-.73),v(side*.64,.69,.52));
+   bar(v(side*.64,.44,-.72),v(side*.63,1.42,-.65));
+   bar(v(side*.63,1.42,-.65),v(side*.59,1.60,-.63));
+   bar(v(side*.59,1.60,-.63),v(side*.35,1.694,-.63));
+   bar(v(side*.63,.65,.52),v(side*.61,1.39,.23));
+   bar(v(side*.61,1.39,.23),v(side*.57,1.52,.17));
+   bar(v(side*.57,1.52,.17),v(side*.34,1.612,.17));
+   bar(v(side*.57,1.52,.17),v(side*.58,1.62,-.19));
+   bar(v(side*.58,1.62,-.19),v(side*.59,1.60,-.63));
+   bar(v(side*.59,1.60,-.63),v(side*.48,.52,-1.54));
+   bar(v(side*.59,.40,1.39),v(side*.55,.48,1.67),.030);
+   bar(v(side*.55,.48,1.67),v(side*.30,.491,1.752),.030);
+   bar(v(side*.48,.43,-1.55),v(side*.48,.56,-1.71),.029);
+   bar(v(side*.48,.56,-1.71),v(0,.58,-1.76),.029);
+  }
+  bar(v(-.34,1.612,.17),v(.34,1.612,.17));
+  bar(v(-.30,.491,1.752),v(.30,.491,1.752),.030);
+  finish(api.ColliderDesc.cuboid(.51,.29,.33).setTranslation(0,.69-.96,-1.27));
+  finish(api.ColliderDesc.cuboid(.57,.285,.018).setTranslation(0,.705-.96,-.86));
+  const skin:number[]=[];
+  for(const t of [0,.25,.5,.75,1]){const width=.61-.22*t+.050*Math.sin(t*Math.PI);
+   for(const u of [-1,-.75,-.5,0,.5,.75,1])skin.push(u*width,.91-.345*t+.040*Math.sin(t*Math.PI)-.095*u**4-.008-.96,.53+.94*t+.055*(1-u*u)*t**5);
+   for(const side of [-1,1])skin.push(side*(width-.025),.61-.18*t-.96,.53+.94*t);
+  }
+  const nose=Float32Array.from(skin);
+  finish(api.ColliderDesc.convexHull(nose)!);
+ }
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;
- for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,vehicleWheelRadius(kind));
-  controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,.24);controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
+ for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},vehicleSuspensionRestLength(kind),vehicleWheelRadius(kind));
+  controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,vehicleSuspensionTravel(kind));controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
  }
  return {body,collider,roof,controller};
 }
@@ -65,7 +108,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind)),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
   controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
-  controller.setWheelSuspensionRestLength(i,corner.rest+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
+  controller.setWheelSuspensionRestLength(i,(kind==='buggy'?corner.rest*(.44/.36):corner.rest)+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
   controller.setWheelRadius(i,corner.radius);controller.setWheelMaxSuspensionForce(i,corner.force);controller.setWheelSideFrictionStiffness(i,corner.sideGrip);controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
   controller.setWheelEngineForce(i,force*corner.power*(kind==='tern'?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind))?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]));
   controller.setWheelBrake(i,!alive?18:state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake)+(state.input.handbrake&&i>1?100:0)+corner.drag);
@@ -86,8 +129,8 @@ export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engi
   const ratio = 1 + s.tune.gearing * .22;
   return {mass: d.mass + s.armor * 95 + s.engine * 12,
     force: d.force * (1 + s.engine * .12) * ratio,
-    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:9) / ratio,
-    spring: (kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:1)*(1 + s.tune.suspension * .18),
+    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
+    spring: (kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
     rideHeight: -s.tune.suspension * .035, grip: 1 + s.tires * .06,
     steering: 1 + s.tune.steering * .25,
     frontBrake: 1 + s.tune.brakeBias * .36, rearBrake: 1 - s.tune.brakeBias * .36,

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import R from '@dimforge/rapier3d-compat';
+import {isRearEngineKind} from '../src/classic-vehicle-specs';
 import {CAR_KINDS,DEFINITIONS,type CarKind} from '../src/rules';
 import {accumulateEngineDamage,enginePowerFactor,engineDamageLevel,engineStatus} from '../src/engine-condition';
 import {applyComponentImpact,freshComponents,validComponents} from '../src/component-damage';
@@ -14,7 +15,7 @@ await R.init();
 const humans=new Set(Array.from({length:24},(_,i)=>i));
 const close=(a:number,b:number,epsilon=1e-6)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
 const snapshot=(s:Simulation):Snapshot=>({...s.snapshot(true),members:[],ack:{}});
-const enginePoint=(kind:CarKind)=>({x:0,y:0,z:(kind==='marten'?-1:1)*DEFINITIONS[kind].halfLength*.8});
+const enginePoint=(kind:CarKind)=>({x:0,y:0,z:(isRearEngineKind(kind)?-1:1)*DEFINITIONS[kind].halfLength*.8});
 
 test('mechanical hits follow every authored engine compartment rather than total body health',()=>{
  for(const kind of CAR_KINDS){
@@ -64,7 +65,7 @@ function acceleration(kind:CarKind,engineDamage:number|undefined){
   return {speed:state.speed,distance:rig.body.translation().z,force:Array.from({length:4},(_,i)=>rig.controller.wheelEngineForce(i)!).reduce((a,b)=>a+b,0)};
  }finally{world.removeVehicleController(rig.controller);world.free();}
 }
-test('real Rapier acceleration distinguishes engine hits from equal-health luggage damage on all ten vehicles',()=>{
+test('real Rapier acceleration distinguishes engine hits from equal-health luggage damage on every available vehicle',()=>{
  for(const kind of CAR_KINDS){
   const p=enginePoint(kind),damaged=accumulateEngineDamage(0,kind,p,40),luggage=accumulateEngineDamage(0,kind,{...p,z:-p.z},40);
   // Hold wheel condition and total structural health equal to isolate powertrain loss.
@@ -121,7 +122,7 @@ test('server real front and rear collisions injure opposite powertrains in the M
   try{
    for(let i=0;i<35;i++)sim.step(humans);
    const c=sim.cars[0];assert.ok(c.state.health<99,`${kind} ${side} physically struck wall`);
-   const correct=(kind==='marten'?-1:1)===side;
+   const correct=(isRearEngineKind(kind)?-1:1)===side;
    assert.ok(correct?c.state.components!.engineDamage!>.1:c.state.components!.engineDamage===0,`${kind} ${side}: engine ${c.state.components!.engineDamage}`);
   }finally{sim.dispose();}
  }

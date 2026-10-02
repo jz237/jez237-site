@@ -7,7 +7,7 @@ import {applyComponentImpact,freshComponents,validComponents} from '../src/compo
 import {structuralDamage} from '../src/bodywork-response';
 import {accumulateEngineDamage} from '../src/engine-condition';
 import {vehicleContact} from '../src/vehicle-contact';
-import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,type VehicleSpecification} from '../src/vehicle-physics';
+import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,vehicleSuspensionRestLength,type VehicleSpecification} from '../src/vehicle-physics';
 import {createQuarryPhysics,landscapeHeight} from '../src/quarry-layout';
 import type Rapier from '@dimforge/rapier3d-compat';
 import { DEFINITIONS, CHECKPOINTS, clamp, wrap, surfaceAt, trackPoint, terrainHeight, derbyOrder, advanceCheckpoint, type CarKind, type Mode } from '../src/rules';
@@ -68,7 +68,7 @@ export class Simulation {
   }
   private readBody(c: Car) {
     c.state.p = {...c.body.translation()}; c.state.q = {...c.body.rotation()}; c.state.v = {...c.body.linvel()}; c.state.av = {...c.body.angvel()};
-    c.state.wheels = Array.from({length:4},(_,i)=>({suspension:c.controller.wheelSuspensionLength(i)??.36,rotation:c.controller.wheelRotation(i)??0,contact:c.controller.wheelIsInContact(i)}));
+    c.state.wheels = Array.from({length:4},(_,i)=>({suspension:c.controller.wheelSuspensionLength(i)??vehicleSuspensionRestLength(c.state.kind),rotation:c.controller.wheelRotation(i)??0,contact:c.controller.wheelIsInContact(i)}));
   }
   start() { this.phase = 'countdown'; this.countdown = 3; }
   setInput(id: number, input: Controls) { this.cars[id].state.input = {...input}; }
