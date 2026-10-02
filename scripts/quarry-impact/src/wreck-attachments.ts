@@ -17,7 +17,7 @@ export class WreckAttachments {
   private wheelApplied:T.Quaternion[];
   private wheelRotation=new T.Quaternion();
   private wheelEuler=new T.Euler();
-  constructor(root:T.Group,private wheels:T.Object3D[],private width:number){
+  constructor(root:T.Group,private wheels:T.Object3D[],private width:number,private wheelRadius=.375){
     this.wheelRest=wheels.map(w=>w.position.clone());this.wheelBase=wheels.map(w=>w.quaternion.clone());this.wheelApplied=wheels.map(w=>w.quaternion.clone());
     root.updateWorldMatrix(true,true);const inverse=root.matrixWorld.clone().invert(),map=new Map<string,Assembly>();
     root.traverse(o=>{
@@ -51,7 +51,7 @@ export class WreckAttachments {
   poseAt(time:number,speed:number){this.time=Math.max(0,time);this.pose(0,speed);}
   pose(dt:number,speed:number){
     this.time+=Math.max(0,dt);
-    if(dt>0){this.wheelTravel+=speed*dt/.375;this.wheelSpeed=Math.abs(speed);}
+    if(dt>0){this.wheelTravel+=speed*dt/this.wheelRadius;this.wheelSpeed=Math.abs(speed);}
     for(const a of this.assemblies){
       if(a.loose===0)continue;
       const flutter=Math.sin(this.time*7.1+a.side)*Math.min(.025,Math.abs(speed)*.0013)*a.loose;

@@ -1,10 +1,10 @@
 import {driveDerby,type DerbyManeuver} from './derby-driving';
-import {CHECKPOINTS, clamp, trackPoint, wrap, type Mode} from './rules';
+import {CHECKPOINTS, clamp, trackPoint, wrap, type Mode, type CarKind} from './rules';
 import type {Input} from './vehicle';
 import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 
 type Point = {x:number;y:number;z:number};
-export type DriverCar = {id:number;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
+export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
 export type Clearance = {front:number;left:number;right:number;rear:number};
 export type DriverMemory = {derby?:DerbyManeuver;target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
 const stop:Input={throttle:0,steer:0,brake:1,handbrake:false};

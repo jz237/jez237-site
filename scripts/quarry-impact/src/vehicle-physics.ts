@@ -1,4 +1,4 @@
-import {isClassicKind,classicWheelHalfTrack} from './classic-vehicle-specs';
+import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
@@ -24,7 +24,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:{x:0,y:-.06,z:0},{x:mass*((massHalfLength*2)**2+1.3**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+1.3**2)/12},{x:0,y:0,z:0,w:1})
   .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
- const roof=world.createCollider(api.ColliderDesc.cuboid(classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:.72):.65).setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:-.40):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+ const roof=world.createCollider(api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65).setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1).setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
  // Compound utility shell leaves the cargo opening empty above its floor.
  // All pieces share the chassis body, so suspension rays exclude them together.
  if(utility){
@@ -34,7 +34,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   part(0,0,-2.92,.77,.21,.05);
  }
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;
- for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,.375);
+ for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},.36,vehicleWheelRadius(kind));
   controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,.24);controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
  }
  return {body,collider,roof,controller};
@@ -49,7 +49,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const force=alive?state.input.throttle*spec.force*(.45+.55*state.health/100)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
-  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed),shift=wheelShift[i];
+  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind)),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
   controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
   controller.setWheelSuspensionRestLength(i,corner.rest+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
@@ -73,8 +73,8 @@ export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engi
   const ratio = 1 + s.tune.gearing * .22;
   return {mass: d.mass + s.armor * 95 + s.engine * 12,
     force: d.force * (1 + s.engine * .12) * ratio,
-    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:9) / ratio,
-    spring: (kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:1)*(1 + s.tune.suspension * .18),
+    speedLimit: ((kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:53) + s.engine * 1.4) / ratio, gearStep: (kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:9) / ratio,
+    spring: (kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:1)*(1 + s.tune.suspension * .35), damping: (kind==='wagon'?.92:1)*(1 + s.tune.suspension * .18),
     rideHeight: -s.tune.suspension * .035, grip: 1 + s.tires * .06,
     steering: 1 + s.tune.steering * .25,
     frontBrake: 1 + s.tune.brakeBias * .36, rearBrake: 1 - s.tune.brakeBias * .36,

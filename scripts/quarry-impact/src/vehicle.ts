@@ -1,5 +1,5 @@
 import {vehicleChassisHalfExtents} from './vehicle-physics';
-import {isClassicKind,classicWheelHalfTrack} from './classic-vehicle-specs';
+import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
@@ -128,7 +128,7 @@ export class Vehicle {
       }
     });
     this.wreckFinish = new WreckFinish(this.model,def.halfLength);
-    this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth);
+    this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth,vehicleWheelRadius(kind));
     this.tireContacts=this.wheels.map(w=>new TireContact(w));
     this.surfaceFinish=new VehicleSurface(this.model,id);
     this.livery=new LiveryPaint(this.model);this.livery.set(this.setup.livery);
@@ -178,7 +178,7 @@ export class Vehicle {
     for(let i=0;i<4;i++){
       const d=DEFINITIONS[this.kind];
       this.controller.setWheelChassisConnectionPointCs(i,{x:isClassicKind(this.kind)?(i%2?1:-1)*classicWheelHalfTrack(this.kind):(i%2?1:-1)*(d.halfWidth-.04),y:-.12,z:(i<2?1:-1)*d.wheelbase/2});
-      this.controller.setWheelSuspensionRestLength(i,.36);this.controller.setWheelRadius(i,.375);
+      this.controller.setWheelSuspensionRestLength(i,.36);this.controller.setWheelRadius(i,vehicleWheelRadius(this.kind));
       this.controller.setWheelMaxSuspensionForce(i,13000);this.controller.setWheelSuspensionStiffness(i,30);
       this.controller.setWheelSideFrictionStiffness(i,1.1);this.controller.setWheelAxleCs(i,{x:-1,y:0,z:0});
       this.controller.setWheelSteering(i,0);this.controller.setWheelBrake(i,0);

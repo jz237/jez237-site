@@ -1,0 +1,190 @@
+{
+  "baseline": "f2cb3aa4916df434ca01b2a978b627adca16904e",
+  "files": {
+    "compact-asset-preview.html": {
+      "snapshot": "compact-asset-preview.html.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "5979f0166a09c96950180984575eedb406d04f12667a24535cc8c1e6caa66297"
+    },
+    "public/licenses/ROOK-1100.md": {
+      "snapshot": "public-licenses-ROOK-1100.md.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "5873162a2bbf274f9d6f61f313301422a8c6ee9ee4d248647453a656ad1eeb0e"
+    },
+    "public/models/compact-candidate.glb": {
+      "snapshot": "public-models-compact-candidate.glb.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e"
+    },
+    "public/models/compact.glb": {
+      "snapshot": "public-models-compact.glb.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "de5aa4c0e586fd94d2ba781d19ec47b800b61a377408e4fd7485d7dcd8405c7b",
+      "after": "5d10e874796d66b8a394456514ff41ca8dcafba8c1f957a6c5a02a997e55c8e7"
+    },
+    "src/classic-showroom.ts": {
+      "snapshot": "src-classic-showroom.ts.gz",
+      "before": "0f3beae3831ecee1051caaf5a470f71693b7ad639670fa5201c6f530368afd0b",
+      "after": "7f3f9afe8e822ec587f97d25f0107e96ba9193d9915f745729e4e75dfa42640a"
+    },
+    "src/classic-vehicle-specs.ts": {
+      "snapshot": "src-classic-vehicle-specs.ts.gz",
+      "before": "667477f799094ecf740d16f720910e964697aa8f37b7ecf07fea11ab9cd4c3a5",
+      "after": "c76f2f8d9046c7438e30d1a222a6ac26c1806406746f04e98aadad101a21ccf8"
+    },
+    "src/classic-vehicles.ts": {
+      "snapshot": "src-classic-vehicles.ts.gz",
+      "before": "62bf28009aa9d8b0e4c77a50a669dc5b50c8696405f1c2f0a3c5d396076826cd",
+      "after": "ba60db24b31eed8cd7f131a2fbeed3ee52c66d606f4a7b0506637fc795a465bd"
+    },
+    "src/compact-asset.ts": {
+      "snapshot": "src-compact-asset.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "40a37656854f25b12d5a7794cf3b2de6772f57215c5d704f8f1d8d1dbef3a794"
+    },
+    "src/derby-driving.ts": {
+      "snapshot": "src-derby-driving.ts.gz",
+      "before": "64892a7903ab3d7069f266d15de8a9bd1183a37389c7c49c9dfe4ae13dd1232f",
+      "after": "f59e20a83049108be4d9a790e63b4c91fab9e1ff545041a92a73107cef6eaa24"
+    },
+    "src/driving-brain.ts": {
+      "snapshot": "src-driving-brain.ts.gz",
+      "before": "64114f3829cd1a62ae9a6501d32bb892b026baa5b90f1dac82c914996f3ef9ce",
+      "after": "0a6e68734d7fc1c58756e1db68072e51572168bbcf18d5a62732289ac6a2fc80"
+    },
+    "src/driving-probe.ts": {
+      "snapshot": "src-driving-probe.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "549e32193676ca462b6e152183a0ec977602152288826ef0dffe85e4a4d6644e"
+    },
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "0066ade445ff06e331456bf391c60d8a26d3a67b86bd5a20bb962083e4826635",
+      "after": "a10a5cfeb3d0261778c438fc29bd2f44adc5852bf6354a24f05a2cb0f82295e1"
+    },
+    "src/rules.ts": {
+      "snapshot": "src-rules.ts.gz",
+      "before": "57e77d1881a1d808007a03e3eec3e0544103b5dd1ff062e07068d3099c068189",
+      "after": "b9f4f7653bf14b7b37404964292edf2aacb8022ee562edfba28969aaadb8faf8"
+    },
+    "src/vehicle-physics.ts": {
+      "snapshot": "src-vehicle-physics.ts.gz",
+      "before": "ab88f4903dc46bfe753849fd6aa34887b5dea255cda08ad8fd39c248703af569",
+      "after": "971d8e07d017ca5528cf66c8267f823629ac5808f8b24612ed313ea514f1ed34"
+    },
+    "src/vehicle.ts": {
+      "snapshot": "src-vehicle.ts.gz",
+      "before": "b16bee335b9ac9d56616f0b8f13b0ca8f65860c698056793c2efc3ce0014b8de",
+      "after": "074d8e659ebbfe4a8d9b2ccc35b26afa601f3615d755e0ff2d7d7a8b312e7689"
+    },
+    "src/wheel-physics.ts": {
+      "snapshot": "src-wheel-physics.ts.gz",
+      "before": "a0f000cae4bc40aca4d9433e0fdde85d6480644bc6bd77081e8846568699b9cb",
+      "after": "54727eabf07dcaef37f3e6319e6fdbbafd2609552a9c1945a662d5f90f19e0bf"
+    },
+    "src/wreck-attachments.ts": {
+      "snapshot": "src-wreck-attachments.ts.gz",
+      "before": "5a646447a3b179296a5de3669814b3178f96aca36f0c92b2c697b05ca2a7309f",
+      "after": "30dd73d9cf7219e55f6a64b444c5bccca93885013810994a79bdd4ddd02e1a44"
+    },
+    "tests/classic-roster.test.ts": {
+      "snapshot": "tests-classic-roster.test.ts.gz",
+      "before": "3a89f0b81a7cea0b81442e284615e4db774bb89d0219fb339af2a51b2d316112",
+      "after": "fba4776668784164a6ff80950aca654a5ef1147844614cc533c39460bce41fda"
+    },
+    "tests/coupe-asset.test.ts": {
+      "snapshot": "tests-coupe-asset.test.ts.gz",
+      "before": "824adbfdfc1350ba9bbdc238b118e44f7a1c8ab9ada1a3fafd55a944a828e30a",
+      "after": "d183dd4bce8db2ed227bd38308d57d63821eca57d2d26df4cb53f8fb65f853e0"
+    },
+    "tests/coupe-realism.test.ts": {
+      "snapshot": "tests-coupe-realism.test.ts.gz",
+      "before": "896d6cbe9fd80ccc8b61bf2d30c59ac8b2f882ba8acd0001566572980f4cbc84",
+      "after": "b1593f0887c5bcaa38dddcd53db9fa62d71bbd54de054d0e211a52f1343567c6"
+    },
+    "tests/demo-workshop.test.ts": {
+      "snapshot": "tests-demo-workshop.test.ts.gz",
+      "before": "1cb47ac511b265c9d32f9c500778e3e7eb431e3e443a7d1bd8fbe3a80fefc11c",
+      "after": "53fd8ad2446659dc70ec8e7c7e96c695ede591c9abc43575a5cd3bdc0c22f0b1"
+    },
+    "tests/derby-driving-fixture.ts": {
+      "snapshot": "tests-derby-driving-fixture.ts.gz",
+      "before": "8c78349ca5cacd33a85719ffce3609d624163561a860d77e950f2b95fe4a5249",
+      "after": "15cf457811280a5fb8d1adf4bf0b6d8d6d0e4df2492fded1a97b6bd7bfee949f"
+    },
+    "tests/estate-rear-joint-invariants.ts": {
+      "snapshot": "tests-estate-rear-joint-invariants.ts.gz",
+      "before": "fd4c4687a74b391649b65d972bc43bdf601b902ebc046ba41cf50d932ed5ff3d",
+      "after": "3c386828b0c6b1a0a6b6a9c17ce45efa3940784f1fa8010bccc0c81177474dfa"
+    },
+    "tests/estate-rear.test.ts": {
+      "snapshot": "tests-estate-rear.test.ts.gz",
+      "before": "d9188a8b9fb648e7ffece61b6d10b23ac45693bf62a9ebeb37859b1295ed93f4",
+      "after": "ee41aee626d62c23803b95e02c975eb6e3ca4e580a2f8d4f753460fcc1f3361f"
+    },
+    "tests/livery-assets.test.ts": {
+      "snapshot": "tests-livery-assets.test.ts.gz",
+      "before": "f0f6990f70e379b6b4bf42d65335c9e61fe2523473b49d4234b776541a95c932",
+      "after": "8b34ef772d52714d6f40b49d803baba9faba0dfc1e0855208ed407d1d6efd9c4"
+    },
+    "tests/online-damage.test.ts": {
+      "snapshot": "tests-online-damage.test.ts.gz",
+      "before": "fd1f2b9dcf02f6f7df905b5490ce825447b7044820a51005426924f722a02303",
+      "after": "d450e5df773dcaa9a6151cac858835726c5f6a641bbd61f30d9bc8aabac3cf0e"
+    },
+    "tests/online-livery-render.test.ts": {
+      "snapshot": "tests-online-livery-render.test.ts.gz",
+      "before": "a6a8c9be8aaf200034cc0b1f09319040933640a75dcf18df56ba80aede752500",
+      "after": "f4fb79bf0931270f17ddd89ae7cad167b96c8fe4e2f99710ec43d48956bc492d"
+    },
+    "tests/online-setup-physics.test.ts": {
+      "snapshot": "tests-online-setup-physics.test.ts.gz",
+      "before": "cbfd15824f14dbf68fd4b3c7a570d8f52f3d1176765a00fd39b6df3edf69a336",
+      "after": "9a5e29339a3e1b145392734cf7f02006655f1c84200c1ed0dda65d5d5005c810"
+    },
+    "tests/replay-assets.test.ts": {
+      "snapshot": "tests-replay-assets.test.ts.gz",
+      "before": "e43ea6a300b692ae84e156f4745779a76d590047e5181786ff667bec49da7570",
+      "after": "468a2a59e9c28e41214651042f29cc36a0d3300baa5b2d7f046ba2df0d6c4c92"
+    },
+    "tests/structural-realism.test.ts": {
+      "snapshot": "tests-structural-realism.test.ts.gz",
+      "before": "adb68f52290987065c7f38779a39641b3273c49af1980d9b6df9dcd59438d60e",
+      "after": "259a6ae93d30ff7747841d2855e467c506351a372b1b20d2b11a06e6c6b0a6a3"
+    },
+    "tests/utility-integration.test.ts": {
+      "snapshot": "tests-utility-integration.test.ts.gz",
+      "before": "03a3efc4542e70a700f117dfe7bb8483808abb2768e35680f43beef8fc03e034",
+      "after": "ba154f0d2b68b7244bfdfeaef84a6a27b2af2673b5546b36ca7278282f40a932"
+    },
+    "tests/wreck-finish.test.ts": {
+      "snapshot": "tests-wreck-finish.test.ts.gz",
+      "before": "d7d6939da744de0028353eb5771df2b98c0d06f32043b4faeb0c874871a6fb7f",
+      "after": "70a8aebc55ae0740634562cb5078aab3e8b90c15c634499d2bff33e2099e2436"
+    },
+    "tests/wreck-geometry.test.ts": {
+      "snapshot": "tests-wreck-geometry.test.ts.gz",
+      "before": "ac75243d3e773a13e7f35bac283685905791a88ae72a97f4d3dbce6718e5883d",
+      "after": "3b346b9a6f9d9c1da9027f8490fc8f0aad6ba2b45c8a2539a176449907e194a8"
+    },
+    "tools/build-compact.ts": {
+      "snapshot": "tools-build-compact.ts.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "eed3117a2c921aea36b34cc9e5ff7a280f140b62baa13fb991b19669ad30a5a7"
+    },
+    "tools/car-asset-audit.ts": {
+      "snapshot": "tools-car-asset-audit.ts.gz",
+      "before": "d132102eb605cf1be919e1af97ec7a5cc249fb5d2a4e0ac671589185652dcdd4",
+      "after": "99a04d526d1249118c68e12186e1f5b60cefee11a4b3426c284d4825fbb7851b"
+    },
+    "tools/compact-asset-preview.js": {
+      "snapshot": "tools-compact-asset-preview.js.gz",
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "09b2e2588192da1f084e591af14f54da3cc24fcc78757089de434c7c5682d112"
+    }
+  }
+}

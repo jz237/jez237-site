@@ -1,3 +1,4 @@
+import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact} from './vehicle-contact';
 import {CAR_KINDS} from './rules';
 import {DEMO_KEY,readDemoOptions,showDemoSetup,nextDemoMode,demoCarKind} from './demo-session';
@@ -708,9 +709,9 @@ function ai(car: Vehicle, dt: number): Input {
   return drivers.update(car,cars,mode,dt,()=>{
     const ray=(angle:number)=>{
       const dir={x:Math.sin(yaw+angle),y:0,z:Math.cos(yaw+angle)};
-      const start={x:car.current.x+dir.x*2.5,y:Math.max(car.current.y,landscapeHeight(car.current.x,car.current.z)+.55),z:car.current.z+dir.z*2.5};
+      const start={x:car.current.x,y:Math.max(car.current.y,landscapeHeight(car.current.x,car.current.z)+.55),z:car.current.z};
       const hit=physics.castRay(new R.Ray(start,dir),24,true,undefined,undefined,undefined,car.body,c=>!cars.some(v=>v.body.handle===c.parent()?.handle));
-      return hit?hit.timeOfImpact:24;
+      return hit?drivingObstacleClearance(car,angle,hit.timeOfImpact):24;
     };
     return {front:ray(0),left:ray(-.55),right:ray(.55),rear:ray(Math.PI)};
   },raceRoute(car.id));
