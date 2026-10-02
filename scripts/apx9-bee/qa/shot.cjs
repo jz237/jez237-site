@@ -6,7 +6,8 @@
 //
 // Options
 //   --q <query>     extra URL query (the script always adds qa=1)       default ""
-//   --shots <json|file>   array of { name, snap, w?, h?, eval? }       (or use --snap for a single shot)
+//   --shots <json|file>   array of { name, snap, pre?, wait?, w?, h?, eval? }   (pre: JS run before the snap; wait: ms before the screenshot; eval: JS run after it)
+//                         (or use --snap for a single shot)
 //   --snap <json>   snap options: explode, view|yaw/pitch/roll, sel, hover, xray, isolate, fit, fitSel, margin, dist, target
 //   --out <path>    PNG path (single shot) or prefix (multiple shots)   default ./apx9-shot
 //   --w --h --dpr   viewport                                            default 1400 x 900 @ 1
@@ -94,7 +95,9 @@ function serve() {
         const s = shots[i];
         if (s.w || s.h) { await page.setViewport({ width: s.w || W, height: s.h || H, deviceScaleFactor: s.dpr || DPR }); await new Promise((r) => setTimeout(r, 250)); }
         const t0 = Date.now();
+        if (s.pre) await page.evaluate(s.pre);
         const stats = await page.evaluate((o) => window.__apx.snap(o), s.snap || {});
+        if (s.wait) await new Promise((r) => setTimeout(r, s.wait));
         const file = single ? (out.endsWith('.png') ? out : out + '.png') : `${out}-${s.name || i}.png`;
         fs.mkdirSync(path.dirname(path.resolve(file)), { recursive: true });
         await page.screenshot({ path: file });

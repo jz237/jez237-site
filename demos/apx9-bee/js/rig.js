@@ -70,9 +70,20 @@ export class Rig {
     return (r * margin) / Math.sin(Math.min(vf, hf) / 2);
   }
 
-  frame(sphere, { ms = 0, margin = 1.12, quat = null, minAspect = 0 } = {}) {
-    const d = THREE.MathUtils.clamp(this.fitDistance(sphere.radius, margin), this.minDist, this.maxDist);
-    this.goTo({ target: sphere.center.clone(), dist: d, quat: quat ?? this.quat.clone() }, ms);
+  /** band: usable CSS-pixel rectangle {w, h, cx, cy} (cx/cy = its centre relative to the viewport centre), keeps the subject clear of HUD panels. */
+  frame(sphere, { ms = 0, margin = 1.12, quat = null, band = null } = {}) {
+    const q = quat ?? this.quat.clone();
+    const target = sphere.center.clone();
+    let d;
+    if (band) {
+      const H = Math.max(1, this.dom.clientHeight);
+      const th = Math.tan((this.camera.fov * D2R) / 2);
+      d = THREE.MathUtils.clamp((sphere.radius * margin * H) / (th * Math.max(60, Math.min(band.w, band.h))), this.minDist, this.maxDist);
+      const wpp = (2 * d * th) / H;
+      const right = new THREE.Vector3(1, 0, 0).applyQuaternion(q), up = new THREE.Vector3(0, 1, 0).applyQuaternion(q);
+      target.addScaledVector(right, -band.cx * wpp).addScaledVector(up, band.cy * wpp);
+    } else d = THREE.MathUtils.clamp(this.fitDistance(sphere.radius, margin), this.minDist, this.maxDist);
+    this.goTo({ target, dist: d, quat: q }, ms);
   }
 
   view(name, ms = 900) {
@@ -136,7 +147,6 @@ export class Rig {
   /* ---------------------------------------------------------------- input */
   bind() {
     const el = this.dom;
-    const d = this.drag;
     el.addEventListener('contextmenu', (e) => e.preventDefault());
     el.addEventListener('pointerdown', (e) => this.onDown(e));
     el.addEventListener('pointermove', (e) => this.onMove(e));

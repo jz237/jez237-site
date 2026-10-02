@@ -135,7 +135,7 @@ async function boot() {
         const k = sph.radius / prev.r;
         if (Number.isFinite(k) && Math.abs(k - 1) > 1e-4) {
           rig.dist = clamp(rig.dist * k, rig.minDist, rig.maxDist);
-          rig.target.add(sph.center).sub(prev.c);
+          rig.target.sub(prev.c).multiplyScalar(k).add(sph.center);
         }
         prev.sc = null;
       }
@@ -158,10 +158,15 @@ async function boot() {
     app?.onExplode?.(v);
   }
 
+  const fitOpts = (margin) => {
+    const band = app?.fitBand?.() || null;
+    return band ? { margin, band } : { margin };
+  };
+
   function frameAll({ ms = 0, quat = null, margin = 1.14 } = {}) {
     bee.worldBounds(box);
     box.getBoundingSphere(sph);
-    rig.frame(sph, { ms, margin, quat });
+    rig.frame(sph, { ms, quat, ...fitOpts(margin) });
     state.framed = false;
     invalidate();
   }
@@ -173,21 +178,17 @@ async function boot() {
   }
 
   function setView(name, ms = 900) {
-    state.framed = false;
     const quat = (VIEWS[name] || VIEWS.hero)();
-    if (state.framed && selection.selected.length) {
-      state.framed = true;
-      rig.goTo({ quat }, ms);
-    } else {
-      bee.worldBounds(box);
-      box.getBoundingSphere(sph);
-      rig.frame(sph, { ms, margin: 1.14, quat });
+    if (state.framed && selection.selected.length && selection.frame(ms, 1.55, quat, app?.fitBand?.() || null)) {
+      prev.sc = null;
+      invalidate();
+      return;
     }
-    invalidate();
+    frameAll({ ms, quat });
   }
 
-  function frameSelection(ms = 800, margin = 1.55) {
-    if (selection.frame(ms, margin)) { state.framed = true; prev.sc = null; return true; }
+  function frameSelection(ms = 800, margin = 1.55, quat = null) {
+    if (selection.frame(ms, margin, quat, app?.fitBand?.() || null)) { state.framed = true; prev.sc = null; return true; }
     return false;
   }
 
@@ -227,6 +228,7 @@ async function boot() {
   window.addEventListener('keydown', (e) => {
     if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === ' ' && e.target?.closest?.('button, a, summary, [role="button"]')) return;
     switch (e.key) {
       case 'Escape': selection.clear(); break;
       case ' ': e.preventDefault(); setExplode(state.explode > 0.5 ? 0 : 1, 2200); break;
@@ -294,7 +296,7 @@ async function boot() {
   /* ------------------------------------------------------------ public handle */
   app = {
     THREE, kit, Q, bee, stage, rig, picker, post, selection, state, report, canvas,
-    invalidate, setExplode, getExplode: () => state.explode, frameAll, resetView, setView, frameSelection,
+    invalidate, setExplode, getExplode: () => state.explode, frameAll, resetView, setView, frameSelection, resize: doResize,
     ui: null,
   };
 
@@ -326,12 +328,12 @@ async function boot() {
         for (const p of selection.selected) for (const q of p.walk()) parts.push(q);
         bee.worldBounds(box, parts);
         box.getBoundingSphere(sph);
-        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.5, quat: quat ?? rig.quat.clone() });
+        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.5, quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
         state.framed = true;
       } else {
         bee.worldBounds(box);
         box.getBoundingSphere(sph);
-        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.14, quat: quat ?? rig.quat.clone() });
+        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.14, quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
       }
     } else if (quat) { rig.quat.copy(quat); rig.apply(); }
     if (o.dist) { rig.dist = o.dist; rig.apply(); }
