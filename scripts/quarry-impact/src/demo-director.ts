@@ -24,11 +24,15 @@ export class DemoDirector {
   private avoidanceOffset:T.Vector3|null=null;
   private lastTarget=new T.Vector3();
   private lastPosition=new T.Vector3();
+  private lastSubject=new T.Vector3();
+  private lastSubjectId=-1;
   private aim=new T.Vector3();
+  private lookYaw=0;
+  private lookPitch=0;
   private heading=new T.Vector3(0,0,1);
   private health=new Map<number,number>();
   private recentDamage=new Map<number,number>();
-  reset(){this.cut=0;this.shotAge=0;this.lostAge=0;this.subjectOffset.set(0,0,0);this.initialized=false;this.snap=true;this.followed=0;this.manual=false;this.health.clear();this.recentDamage.clear();this.avoidanceOffset=null;}
+  reset(){this.cut=0;this.shotAge=0;this.lostAge=0;this.subjectOffset.set(0,0,0);this.lastSubjectId=-1;this.initialized=false;this.snap=true;this.followed=0;this.manual=false;this.health.clear();this.recentDamage.clear();this.avoidanceOffset=null;}
   select(view:DemoCamera){if(!Object.hasOwn(DEMO_CAMERAS,view))return;this.view=view;this.snap=true;this.cut=0;}
   follow(id:number){this.followed=id;this.manual=true;this.snap=true;this.cut=0;}
   cycleCar(cars:Vehicle[],direction=1){if(!cars.length)return;const i=Math.max(0,cars.findIndex(c=>c.id===this.followed));this.follow(cars[(i+direction+cars.length)%cars.length].id);}
@@ -61,7 +65,17 @@ export class DemoDirector {
     }
     if(this.view!=='director')this.activeView=this.view;
     const car=cars.find(c=>c.id===this.followed)??cars[0];
-    this.subjectOffset.multiplyScalar(Math.exp(-dt*.85));
+    // Recovery and respawn can move the same car by an entire track section.
+    // Treat that discontinuity like a subject handoff, without moving the rig
+    // while its look target is still at the previous location.
+    const motionDt=Math.min(dt,.05);
+    if(this.initialized&&!this.snap&&car.id===this.lastSubjectId&&
+      car.root.position.distanceTo(this.lastSubject)>Math.max(4,Math.abs(car.speed)*motionDt*3+1)){
+      this.subjectOffset.copy(this.lastPosition).sub(car.root.position);
+      this.avoidanceOffset=null;
+    }
+    this.lastSubject.copy(car.root.position);this.lastSubjectId=car.id;
+    this.subjectOffset.multiplyScalar(Math.exp(-motionDt*.85));
     const position=car.root.position.clone().add(this.subjectOffset),target=position.clone().add(new T.Vector3(0,.25,0));
     const f=new T.Vector3(0,0,1).applyQuaternion(car.root.quaternion);f.y=0;
     if(f.lengthSq()<.001)f.copy(this.heading);else f.normalize();
@@ -69,7 +83,7 @@ export class DemoDirector {
     else if(this.activeView==='chase'){
       const yaw=Math.atan2(this.heading.x,this.heading.z),goal=Math.atan2(f.x,f.z);
       const turn=Math.atan2(Math.sin(goal-yaw),Math.cos(goal-yaw));
-      const step=clamp(turn*(1-Math.exp(-dt*1.5)),-dt*Math.PI/6,dt*Math.PI/6);
+      const step=clamp(turn*(1-Math.exp(-motionDt*1.5)),-motionDt*Math.PI/6,motionDt*Math.PI/6);
       this.heading.set(Math.sin(yaw+step),0,Math.cos(yaw+step));
     }
     if(this.heading.lengthSq()<.001)this.heading.copy(f);else this.heading.normalize();
@@ -79,7 +93,7 @@ export class DemoDirector {
       orbit.enabled=true;
       if(this.snap){camera.position.copy(target).add(new T.Vector3(7,4,8));camera.fov=52;camera.updateProjectionMatrix();}
       else camera.position.add(target.clone().sub(this.lastTarget));
-      orbit.target.copy(target);orbit.update();this.lastTarget.copy(target);this.lastPosition.copy(position);this.snap=false;this.initialized=true;this.initialized=true;return;
+      orbit.target.copy(target);orbit.update();this.lastTarget.copy(target);this.lastPosition.copy(position);this.snap=false;this.initialized=true;return;
     }
     orbit.enabled=false;
     const definition=DEFINITIONS[car.kind],subjectPoints:T.Vector3[]=[];
@@ -99,7 +113,6 @@ export class DemoDirector {
     }else{
       if(this.snap||this.anchor.distanceTo(target)>70){
         this.anchor.copy(target).addScaledVector(right,12).addScaledVector(this.heading,clamp(Math.abs(car.speed)*.6,10,20));this.anchor.y=landscapeHeight(this.anchor.x,this.anchor.z)+2.5;
-        this.snap=true;
       }
       desired.copy(this.anchor);fov=clamp(62-desired.distanceTo(target)*.7,30,54);
     }
@@ -122,11 +135,36 @@ export class DemoDirector {
       // Translate the rig with its subject before smoothing its relative motion.
       // This avoids a speed-dependent lag that pushed the car out of the frame.
       if(this.activeView==='drone'||this.activeView==='chase')camera.position.add(position.clone().sub(this.lastPosition));
-      camera.position.lerp(desired,1-Math.exp(-dt*5));this.aim.lerp(target,1-Math.exp(-dt*10));
+      this.aim.lerp(target,1-Math.exp(-motionDt*10));
+      if(this.activeView==='drone'||this.activeView==='chase'){
+        // Travel around the subject when visibility requires the other side.
+        // A straight chord passes through the overhead lookAt singularity.
+        const from=new T.Spherical().setFromVector3(camera.position.clone().sub(this.aim)),to=new T.Spherical().setFromVector3(desired.clone().sub(this.aim));
+        const yaw=Math.atan2(Math.sin(to.theta-from.theta),Math.cos(to.theta-from.theta)),pitch=to.phi-from.phi;
+        const blend=Math.min(1-Math.exp(-motionDt*5),motionDt*Math.PI/6/Math.max(1e-9,Math.abs(yaw)+Math.abs(pitch)));
+        from.theta+=yaw*blend;from.phi+=pitch*blend;from.radius=T.MathUtils.lerp(from.radius,to.radius,1-Math.exp(-motionDt*5));
+        camera.position.copy(this.aim).add(new T.Vector3().setFromSpherical(from));
+      }else camera.position.lerp(desired,1-Math.exp(-motionDt*5));
     }
     camera.position.y=Math.max(camera.position.y,landscapeHeight(camera.position.x,camera.position.z)+.65);
-    camera.lookAt(this.aim);camera.fov=fov;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
-    if(this.subjectOffset.lengthSq()<.25&&(this.activeView==='chase'||this.activeView==='drone'))this.fitSubjects(camera,[car,...(this.activeView==='drone'&&neighbour?[neighbour]:[])]);
+    let aligned=true;
+    if(this.activeView==='hood'||this.activeView==='overview')camera.lookAt(this.aim);
+    else{
+      const direction=this.aim.clone().sub(camera.position),horizontal=Math.hypot(direction.x,direction.z);
+      // Retain azimuth close to vertical. Evolving yaw and pitch separately
+      // keeps the horizon level; quaternion slerp can bank between two views.
+      const yaw=horizontal>Math.max(.05,Math.abs(direction.y)*.03)?Math.atan2(-direction.x,-direction.z):this.lookYaw;
+      const pitch=clamp(Math.atan2(direction.y,horizontal),-Math.PI/2+.01,Math.PI/2-.01);
+      const dy=Math.atan2(Math.sin(yaw-this.lookYaw),Math.cos(yaw-this.lookYaw)),dp=pitch-this.lookPitch;
+      const blend=this.snap?1:Math.min(1,motionDt*Math.PI/6/Math.max(1e-9,Math.abs(dy)+Math.abs(dp)));
+      this.lookYaw+=dy*blend;this.lookPitch+=dp*blend;
+      camera.quaternion.setFromEuler(new T.Euler(this.lookPitch,this.lookYaw,0,'YXZ'));
+      aligned=(Math.abs(dy)+Math.abs(dp))*(1-blend)<.01;
+    }
+    camera.fov=fov;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
+    // During a deliberate slow turn, zooming cannot fix an off-axis subject.
+    // Repeated framing attempts would otherwise multiply the distance away.
+    if(aligned&&this.subjectOffset.lengthSq()<.25&&(this.activeView==='chase'||this.activeView==='drone'))this.fitSubjects(camera,[car,...(this.activeView==='drone'&&neighbour?[neighbour]:[])]);
     // The obstruction resolver supplies a clear destination before smoothing.
     // A temporary sight-line obstruction must not trigger a second, hard cut.
     orbit.target.copy(this.aim);this.lastTarget.copy(target);this.lastPosition.copy(position);this.snap=false;this.initialized=true;
