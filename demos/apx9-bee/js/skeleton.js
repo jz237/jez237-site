@@ -110,6 +110,35 @@ export const K = {
   pollination: { c: V3(3.6, -4.9, 0), r: 1.9, len: 6.0 }, // barrel under the thorax, brush toward the front
 };
 
+/** Outward normal of every hip mount plate (right side; mirror z for the left). The hip servos rotate about it. */
+export const HIP_N = V3(0, -0.9, 0.44).normalize();
+
+K.neck = { c: V3(7.4, 0.2, 0), r: 2.0 };                  // head <-> thorax joint, axis along X
+K.petiole = { c: abdomenOrigin.clone(), r: 2.2 };         // thorax <-> abdomen joint, axis along the abdomen X (tilted 9 deg)
+
+/**
+ * Closed curve (right side, bee space) where the right compound-eye ellipsoid emerges from the head-shell
+ * ellipsoid: the orbital rim frame follows it. n points, counter-clockwise seen from +Z. Mirror z for the left eye.
+ */
+export function eyeContour(n = 96) {
+  const e = K.head.eyeR, h = K.head;
+  const f = (p) => ((p.x - h.c.x) / h.r.x) ** 2 + ((p.y - h.c.y) / h.r.y) ** 2 + ((p.z - h.c.z) / h.r.z) ** 2 - 1;
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const th = (i / n) * Math.PI * 2, dx = Math.cos(th), dy = Math.sin(th);
+    const at = (phi) => V3(e.c.x + e.r.x * Math.sin(phi) * dx, e.c.y + e.r.y * Math.sin(phi) * dy, e.c.z + e.r.z * Math.cos(phi));
+    let lo = 0, hi = Math.PI;
+    const steps = 240;
+    for (let k = 1; k <= steps; k++) {
+      const phi = (k / steps) * Math.PI;
+      if (f(at(phi)) < 0) { hi = phi; lo = ((k - 1) / steps) * Math.PI; break; }
+    }
+    for (let it = 0; it < 28; it++) { const mid = (lo + hi) / 2; if (f(at(mid)) < 0) hi = mid; else lo = mid; }
+    out.push(at((lo + hi) / 2));
+  }
+  return out;
+}
+
 /** Bee-space point on the thorax armour ellipsoid in the direction d (from the thorax centre). */
 export function thoraxPoint(d, k = 1) {
   const c = K.thorax.c, r = K.thorax.r;
