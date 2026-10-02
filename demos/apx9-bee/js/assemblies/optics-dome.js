@@ -7,16 +7,16 @@ import { eyeFrame, ellN, TAU, clamp, lerp, smooth01, fixWinding } from './optics
 
 /* ------------------------------------------------------------------ materials (module level, never mutate shared ones) */
 export const domeLens = new THREE.MeshPhysicalMaterial({
-  name: 'eye facet lens', color: 0xffffff, vertexColors: true, metalness: 0.8, roughness: 0.14,
-  clearcoat: 1, clearcoatRoughness: 0.025,
+  name: 'eye facet lens', color: 0xffffff, vertexColors: true, metalness: 0.8, roughness: 0.17,
+  clearcoat: 1, clearcoatRoughness: 0.05,
 });
 export const domeRidge = new THREE.MeshStandardMaterial({ name: 'eye facet ridge', color: 0xffffff, vertexColors: true, metalness: 1, roughness: 0.28 });
 // the gold walls in the lower half glow a little (warm bounce from the yellow shell) so they do not turn olive
 domeRidge.onBeforeCompile = (sh) => {
   sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
-    totalEmissiveRadiance += vColor.rgb * 0.2;`);
+    totalEmissiveRadiance += vColor.rgb * 0.04;`);
 };
-domeRidge.customProgramCacheKey = () => 'apx9-optics-ridge-1';
+domeRidge.customProgramCacheKey = () => 'apx9-optics-ridge-2';
 export const domeLiner = new THREE.MeshStandardMaterial({ name: 'eye liner', color: 0x040406, metalness: 0.3, roughness: 0.55 });
 
 /* ------------------------------------------------------------------ lattice */
@@ -112,7 +112,7 @@ export function buildDome({ freq = 13, gap = 0.09, lensK = 0.13, margin = 0.05, 
   const rp = [], rn = [], rc = [], ri = [];
   const tmp = V3(), tN = V3(), rv = V3(), rhat = V3(), t1 = V3(), t2 = V3();
   // neutral black glass; the lower half picks up warm amber glints (reflections of the yellow shell), a few pale glitter cells
-  const darkCol = [0.016, 0.017, 0.021], amberCol = [0.46, 0.20, 0.02], paleCol = [0.15, 0.155, 0.17];
+  const darkCol = [0.016, 0.017, 0.021], amberCol = [0.13, 0.08, 0.025], paleCol = [0.15, 0.155, 0.17];
   const mixCol = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
 
   for (const cell of cells) {
@@ -128,11 +128,11 @@ export function buildDome({ freq = 13, gap = 0.09, lensK = 0.13, margin = 0.05, 
     const glint = rnd() < g * 0.36;
     const tAmb = glint ? rnd.range(0.45, 1.1) : rnd.range(0, 0.08) + g * 0.05;
     let col = mixCol(darkCol, amberCol, Math.min(tAmb, 1) ** 1.3);
-    if (glint && rnd() < 0.2) col = mixCol(col, [0.9, 0.58, 0.07], 0.6);
+    if (glint && rnd() < 0.2) col = mixCol(col, [0.3, 0.22, 0.12], 0.35);
     if (rnd() < 0.05) col = mixCol(col, paleCol, 0.65);
     col = col.map((x) => x * rnd.range(0.75, 1.25));
     const ridgeT = smooth01(up * 1.25);
-    const rcol = mixCol([0.95, 0.60, 0.11], [0.07, 0.07, 0.08], ridgeT).map((x) => x * rnd.range(0.8, 1.1));
+    const rcol = mixCol([0.26, 0.21, 0.13], [0.04, 0.05, 0.065], ridgeT).map((x) => x * rnd.range(0.8, 1.1));
     const gp = gap * (1 + 1.0 * g);                       // wider gold walls toward the bottom of the eye
     // frame tangents at the centre
     t1.crossVectors(N0, Math.abs(N0.x) < 0.9 ? V3(1, 0, 0) : V3(0, 1, 0)).normalize();

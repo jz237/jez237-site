@@ -71,7 +71,7 @@ export function createStage(container, Q) {
   pmrem.dispose();
 
   // ---- backdrop
-  const bgTex = backdrop({ w: 1024, h: 1024 });
+  let bgTex = backdrop({ w: 1024, h: 1024 });
   scene.background = bgTex;
   scene.backgroundIntensity = 1.0;
   scene.backgroundBlurriness = 0;
@@ -135,6 +135,14 @@ export function createStage(container, Q) {
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      if (stage.size.x !== w || stage.size.y !== h) {
+        // Draw at the viewport aspect ratio: hexagons must stay hexagonal on phones.
+        const k = Math.min(1, 1536 / Math.max(w, h));
+        const next = backdrop({ w: Math.round(w * k), h: Math.round(h * k) });
+        scene.background = next;
+        bgTex.dispose();
+        bgTex = next;
+      }
       stage.size.set(w, h);
       stage.dpr = dpr;
       return [w, h, dpr];

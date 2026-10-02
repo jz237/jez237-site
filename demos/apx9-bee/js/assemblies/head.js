@@ -11,6 +11,7 @@
 //
 // Helper modules: head-sdf (2-D signed-distance fields + tracing), head-util (ellipsoid frames, cuts, fasteners),
 // head-layout (plate partition), head-plates (armour panel builders), head-sensor, head-shell, ...
+import { buildHeadFrame, buildMandibles } from './head-frame.js';
 import { buildShell } from './head-shell.js';
 import { buildNeural } from './head-neural.js';
 import { buildNeck } from './head-neck.js';
@@ -41,4 +42,6 @@ export async function build(ctx) {
     explode: ex([4, -2, 0], 'top'),
   });
   buildNeck(ctx, neck);
+  buildHeadFrame(ctx);
+  buildMandibles(ctx);
 }

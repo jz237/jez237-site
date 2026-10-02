@@ -1,6 +1,6 @@
 // APX-9 thorax assembly (CONTRACT 13.3): thorax-armor (group thorax-armor) + thorax-chassis (group chassis).
 //
-// INVENTORY (work in progress; see work/thorax/NOTES.md)
+// Completed inventory: armor, fur mantle, internal structural cage and six hip sockets.
 //  thorax-armor : dorsal-cap (+vent), cap-segment-1..3, side-plate-r/l, text-plate, sensor-pod-r/l, wing-collar-r/l,
 //                 aperture-rim-r/l, fur-dome-front, fur-dome-rear, black-band-r/l
 //  thorax-chassis: ring-frames, rails, bearing-collar-stack, injector-pegs, front-collar, rear-collar,
@@ -13,6 +13,7 @@ import { makeShared } from './thorax-common.js';
 import { buildCollars } from './thorax-collars.js';
 import { buildCap } from './thorax-armor.js';
 import { buildFlank } from './thorax-plates.js';
+import { buildChassis } from './thorax-chassis.js';
 import { buildFur } from './thorax-fur.js';
 
 export async function build(ctx) {
@@ -37,6 +38,7 @@ export async function build(ctx) {
   buildCap(W);
   buildFlank(W);
   buildFur(W);
+  buildChassis(W);
 
   for (const p of W.mirrors) bee.mirror(p);          // left-hand twins last (descendants are cloned at finalize)
 }

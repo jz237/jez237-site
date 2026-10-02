@@ -120,11 +120,19 @@ export function buildCap(W) {
     }
   }
 
+  // A narrow segmented service spine lets the golden mantle crest above the wing roots.
+  // Compress the plate and all of its fasteners together, preserving the mating seams.
+  const narrow = new THREE.Matrix4().makeScale(1, 1, 0.72);
+  narrow.setPosition(0, -0.22, 0);
+  for (const root of Object.values(parts)) for (const p of root.walk()) {
+    for (const batch of p.queue.values()) for (const geo of batch) geo.applyMatrix4(narrow);
+  }
+
   // keep-out region for the fur (plate coordinates of the dorsal frame)
   W.keep.both.push((p) => {
     const [x, y] = D.toPlate(p);
     if (y < -4.3 || y > 3.0) return false;
-    return Math.abs(x) < spineHW(y) + 0.25;
+    return Math.abs(x) < spineHW(y) * 0.72 + 0.12;
   });
   void TC; void TR; void smooth; void pip; void T; void decalPatch; void cyl; void THREE; void mirrors;
   return parts;

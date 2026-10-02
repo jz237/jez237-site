@@ -12,9 +12,9 @@ export const DEBUG = {};
 const TAU = Math.PI * 2;
 const NT = 150, NP = 300;                 // developed grid: theta (0..pi about +X) x phi (0..2pi, 0 = dorsal, 90 = right)
 const A = TR.x, B = TR.y;                 // spheroid about the X axis (TR.y == TR.z)
-export const FUR_X0 = 0.15, FUR_X1 = 5.85;  // rear / front limits (end collar faces)
+export const FUR_X0 = -0.6, FUR_X1 = 6.6;  // rear / front limits (end collar faces)
 export const FUR_Y0 = BELLY - 0.12;       // lowest fur root
-const DENS_CARD = 330, DENS_STRAND = 70;  // cards / guard strands per mm^2 at Q.fur = 1
+const DENS_CARD = 390, DENS_STRAND = 110;  // cards / guard strands per mm^2 at Q.fur = 1
 const ROOT_K = 0.985;                     // roots sit a little under the armour surface
 
 const cellP = (th, ph, k, out) => out.set(TC.x + A * k * Math.cos(th), TC.y + B * k * Math.sin(th) * Math.cos(ph), B * k * Math.sin(th) * Math.sin(ph));
@@ -37,7 +37,7 @@ function makeGrid(W) {
       for (const side of [1, -1]) {
         if (apS(p, side) < -1.5) continue;
         const c = hubCoords(p, side);
-        if (c.rho < 2.42) bore = true;
+        if (c.rho < 1.57) bore = true;
         if (c.rho < collarClear(c.az)) { h = true; break; }
       }
       skin[id] = bore ? 0 : 1;
@@ -185,14 +185,14 @@ function sampleStrands(W, G, kind) {
     } else {
       const mix = clamp(vnoise(pr.x * 1.7 + 3.1, pr.y * 1.7, pr.z * 1.7) * 0.8 + hD * 0.4 + r() * 0.15);
       c = [lerp(GOLD_A[0], GOLD_B[0], mix), lerp(GOLD_A[1], GOLD_B[1], mix), lerp(GOLD_A[2], GOLD_B[2], mix)];
-      const clump = smooth(0.55, 0.8, nz2) * 0.85 + b * 0.5;
+      const clump = smooth(0.67, 0.92, nz2) * 0.25 + b * 0.22;
       if (hE < clump) { tip = 0.65 + r() * 0.35; tipCol = [BLK[0] * 1.6, BLK[1] * 1.6, BLK[2] * 1.6]; }
       else if (hC > 0.62) { tip = 0.5 + r() * 0.4; tipCol = GOLD_P; }
     }
     // shape: puffy and upright in the open, laid flat against the blockers
     const open = smooth(0.1, 0.95, dh);
-    const lift = (card ? lerp(0.26, 0.8, open) : lerp(0.42, 1.12, open)) * (0.86 + 0.28 * hB) + (r() - 0.5) * 0.2;
-    const lenK = (black ? 0.84 : 1.04) * (card ? 1.15 : 1) * (0.5 + 0.62 * smooth(0.0, 1.1, dh)) * (0.82 + 0.36 * hC) * (0.9 + 0.2 * r());
+    const lift = (card ? lerp(0.45, 1.0, open) : lerp(0.6, 1.2, open)) * (0.86 + 0.28 * hB) + (r() - 0.5) * 0.2;
+    const lenK = (black ? 1.05 : 1.4) * (card ? 1.15 : 1) * (0.5 + 0.62 * smooth(0.0, 1.1, dh)) * (0.82 + 0.36 * hC) * (0.9 + 0.2 * r());
     recs.push({
       p: p.clone(), n: n.clone(), t: t.clone(), c, len: lenK, lift, tip, tipCol, spin: r() * 6.283, x: pr.x, z: pr.z, black,
       wid: card ? 0.22 + 0.14 * r() : (black ? 1.05 : 1) * (0.8 + 0.4 * r()),

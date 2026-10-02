@@ -43,8 +43,8 @@ const abdomenR = profile([[0, 2.2], [0.8, 3.6], [2.2, 4.7], [4.4, 5.0], [6.6, 4.
 /* ------------------------------------------------------------------ wings */
 // Wing local frame: x = span (root -> tip), y = toward the leading edge, z = upper-surface normal.
 // The origin is the wing hinge. Right wing is built; the left wing is its mirror image.
-const wingRoot = V3(2.4, 4.1, 2.5);
-const wingSpan = V3(-0.66, 0.50, 0.56).normalize();
+const wingRoot = V3(2.4, 3.9, 2.5);
+const wingSpan = V3(-0.72, 0.32, 0.62).normalize();
 const wingLead = (() => {
   const f = V3(1, 0, 0);
   f.addScaledVector(wingSpan, -f.dot(wingSpan)).normalize();

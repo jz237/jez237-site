@@ -30,7 +30,7 @@ export const M = {
   carbon: phys({ name: 'carbon twill', color: C('#ffffff'), map: carbonMap, bumpMap: carbonMap, bumpScale: 0.6, roughness: 0.34, clearcoat: 1, clearcoatRoughness: 0.06, metalness: 0.15 }),
 
   // ---- metals
-  chrome: std({ name: 'chrome', color: C('#eef1f4'), metalness: 1, roughness: 0.05 }),
+  chrome: std({ name: 'chrome', color: C('#eef1f4'), metalness: 1, roughness: 0.14 }),
   steel: std({ name: 'polished steel', color: C('#cfd3d9'), metalness: 1, roughness: 0.2 }),
   brushed: phys({ name: 'brushed steel', color: C('#c4c8ce'), metalness: 1, roughness: 1, roughnessMap: brushRough, anisotropy: 0.7, anisotropyRotation: 0 }),
   brushedV: phys({ name: 'brushed steel (v)', color: C('#c4c8ce'), metalness: 1, roughness: 1, roughnessMap: brushRoughV, anisotropy: 0.7, anisotropyRotation: Math.PI / 2 }),
