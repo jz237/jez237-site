@@ -37,12 +37,13 @@ test('outage points retain approximate geography, masking, missing estimates and
 
 test('public PECO feed treats only tile 404s as empty and never presents a partial download as complete', async t => {
   let failure = false, calls = 0;
-  t.mock.method(globalThis, 'fetch', async url => {
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    assert.equal(options.redirect, 'manual', 'workerd does not support redirect:error; reject 3xx explicitly');
     calls++;
     if (url.includes('currentState')) return Response.json(state);
     if (url.includes('summary-1')) return Response.json(summary());
     if (url.endsWith('/0320101022.json')) return Response.json({ file_data: [row()] });
-    return new Response('', { status: failure ? 503 : 404 });
+    return new Response('', { status: failure ? 302 : 404 });
   });
   const result = await readOutages();
   assert.equal(calls, 18); assert.equal(result.outages.length, 1);

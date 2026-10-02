@@ -44,3 +44,15 @@ test('full aircraft check accepts a fresh empty region without requiring fabrica
     ? Promise.resolve(Response.json({ aircraft: [], timestamp: Date.now() })) : mock()(url, options);
   await checkPhillyLive('https://example.test', fetcher, { requireAircraft: true });
 });
+
+for (const failure of ['offline', 'stale', 'malformed', 'none']) {
+  test(`PECO release check handles ${failure} snapshots`, async () => {
+    const fetcher = (url, options) => url.pathname.endsWith('/peco-outages') && options.method === 'GET'
+      ? Promise.resolve(failure === 'malformed' ? new Response('<html>offline</html>')
+        : Response.json({ outages: [], serviceTotals: { outages: 0, customers: 0 },
+          updatedAt: new Date(Date.now() - (failure === 'stale' ? 3600000 : 0)).toISOString() },
+        { status: failure === 'offline' ? 503 : 200 })) : mock()(url, options);
+    if (failure === 'none') await checkPhillyLive('https://example.test', fetcher, { requireOutages: true });
+    else await assert.rejects(checkPhillyLive('https://example.test', fetcher, { requireOutages: true }), /PECO/);
+  });
+}
