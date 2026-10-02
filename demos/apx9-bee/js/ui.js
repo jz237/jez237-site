@@ -578,7 +578,10 @@ export async function initUI(app) {
 
   /* ------------------------------------------------------------------ resize + labels policy */
   let lastSmall = isSmall();
-  const syncHead = () => root.style.setProperty('--dir-top', `${Math.round(head.getBoundingClientRect().bottom + 10)}px`);
+  const syncHead = () => {
+    root.style.setProperty('--dir-top', `${Math.round(head.getBoundingClientRect().bottom + 10)}px`);
+    root.style.setProperty('--dock-h', `${Math.round(dock.getBoundingClientRect().height)}px`);
+  };
   syncHead();
   const ro = new ResizeObserver(() => {
     syncHead();
@@ -592,6 +595,7 @@ export async function initUI(app) {
   });
   ro.observe(root);
   ro.observe(head);
+  ro.observe(dock);
 
   btnLabels.classList.toggle('on', ui.labelsOn);
   btnLabels.setAttribute('aria-pressed', String(ui.labelsOn));
