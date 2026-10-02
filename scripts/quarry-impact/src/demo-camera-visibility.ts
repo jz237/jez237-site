@@ -4,10 +4,10 @@ export type CameraObstruction=(from:T.Vector3,to:T.Vector3)=>number|null;
 
 /** Query the same enabled solids used by the event, excluding the subject and
  * sensors. The returned distance supports a near-side fallback in tight spaces. */
-export function cameraObstruction(world:R.World,from:T.Vector3,to:T.Vector3,subject?:R.RigidBody):number|null{
+export function cameraObstruction(world:R.World,from:T.Vector3,to:T.Vector3,subject?:R.RigidBody,sceneryOnly=false):number|null{
   const direction=to.clone().sub(from),length=direction.length();if(length<.001)return null;
   direction.divideScalar(length);
-  const hit=world.castRay(new R.Ray(from,direction),length,true,R.QueryFilterFlags.EXCLUDE_SENSORS,undefined,undefined,subject);
+  const hit=world.castRay(new R.Ray(from,direction),length,true,R.QueryFilterFlags.EXCLUDE_SENSORS|(sceneryOnly?R.QueryFilterFlags.EXCLUDE_DYNAMIC|R.QueryFilterFlags.EXCLUDE_KINEMATIC:0),undefined,undefined,subject);
   return hit&&hit.timeOfImpact<length-.025?hit.timeOfImpact:null;
 }
 
