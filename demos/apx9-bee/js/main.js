@@ -48,7 +48,7 @@ async function boot() {
   renderer.shadowMap.autoUpdate = false;
   const canvas = renderer.domElement;
 
-  const rig = new Rig(camera, canvas, { minDist: 6, maxDist: 360 });
+  const rig = new Rig(camera, canvas, { minDist: 6, maxDist: 780 });
   const picker = new Picker(renderer, scene, camera);
   const post = createPost({ stage, Q, picker });
   const accum = createAccum({ stage, post, Q });
@@ -381,6 +381,7 @@ async function boot() {
     await tick2();
     draw(performance.now());
     if (o.settle !== false) app.settle();
+    for (let i = 0; i < 3; i++) app.tick?.(1, performance.now());   // callout cards jump to their final slots instead of gliding
     await tick2();
     return stats();
   };
