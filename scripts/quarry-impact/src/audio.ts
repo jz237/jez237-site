@@ -28,6 +28,7 @@ export class Sound {
   listenerPrevious = new T.Vector3();
   private files?: Promise<{id:string; data:ArrayBuffer}[]>;
   private initializing?: Promise<void>;
+  private paused = false;
   /** Fetch bundled clips while lighting warms up. Audio playback still starts
    * only after the user's gesture, using the real output context's sample rate. */
   preload() {
@@ -65,7 +66,9 @@ export class Sound {
       b.connect(this.master);
     this.setLevels();
     }
-    await this.ctx.resume();
+    // Browser activation may leave resume pending indefinitely. Asset readiness
+    // must not wait for permission to play when Start came from a polled pad.
+    this.unlock();
     if(this.ready)return;
     await (this.initializing ??= (async()=>{
       const files=await this.preload();
@@ -75,6 +78,15 @@ export class Sound {
       this.ambient=this.loop('ambience',this.ambientBus!);
       if(this.ambient)this.ambient.gain.gain.value=.45;
     })().catch(error=>{this.initializing=undefined;this.files=undefined;throw error;}));
+  }
+  /** Call synchronously from a real pointer/key gesture to retry audio activation. */
+  unlock() {
+    const ctx=this.ctx;
+    if(!ctx||this.paused||ctx.state==='running'||ctx.state==='closed')return;
+    void ctx.resume().then(()=>{
+      // A request made before Pause may only resolve on a later user gesture.
+      if(this.paused&&this.ctx===ctx)return this.pause(true);
+    }).catch(()=>{});
   }
   setLevels() {
     if (this.engineBus) this.engineBus.gain.value = this.levels.engine;
@@ -288,9 +300,14 @@ export class Sound {
     }
   }
   async pause(value: boolean) {
+    this.paused=value;
     if (!this.ctx) return;
-    if (value) await this.ctx.suspend();
-    else await this.ctx.resume();
+    if (value) {
+      await this.ctx.suspend().catch(()=>{});
+      // Resume may have been requested while this suspension was in flight.
+      if(!this.paused)this.unlock();
+    }
+    else this.unlock();
   }
   mute() {
     this.muted = !this.muted;
