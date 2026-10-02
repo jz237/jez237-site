@@ -31,4 +31,7 @@ or map library is introduced.
 
 This public web feed has no guaranteed API stability. The official PECO link
 remains available when it changes or becomes unavailable. `check_philly_live`
-checks the new Function route on every guarded release.
+checks the new Function route on every guarded release. Use `--require-outages`
+when releasing PECO changes to require a successful, current GET response on
+both preview and production. Upstream requests use `redirect: 'manual'` and
+reject 3xx statuses: workerd rejects the browser/Node `redirect: 'error'` option.

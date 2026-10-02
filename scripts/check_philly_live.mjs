@@ -2,7 +2,8 @@ import { pathToFileURL } from 'node:url';
 
 // Invalid requests exercise routing without downloading imagery or contacting
 // aircraft providers. Missing Functions otherwise look like a healthy HTML site.
-export async function checkPhillyLive(base, fetcher = fetch, { requireAircraft = false } = {}) {
+export async function checkPhillyLive(base, fetcher = fetch,
+  { requireAircraft = false, requireOutages = false } = {}) {
   const root = new URL('/demos/philadelphia-relief/', base);
   const request = async (path, method = 'GET') => {
     const url = new URL(path, root);
@@ -38,6 +39,16 @@ export async function checkPhillyLive(base, fetcher = fetch, { requireAircraft =
       throw new Error(`Philadelphia deployment blocked: ${path} Function is missing or incorrect (HTTP ${response.status}).`);
     }
   }
+  if (requireOutages) {
+    const response = await request('peco-outages');
+    let data;
+    try { data = await response.json(); } catch { /* reject non-JSON deployments */ }
+    if (!response.ok || !Array.isArray(data?.outages) || !data.serviceTotals
+      || !Number.isFinite(Date.parse(data.updatedAt)) || Date.now() - Date.parse(data.updatedAt) > 1800000) {
+      throw new Error(`Philadelphia PECO check failed: no current outage snapshot (HTTP ${response.status}).`);
+    }
+    console.log(`PECO outage data verified: ${data.outages.length} regional locations / groups.`);
+  }
   if (requireAircraft) {
     const response = await request('aircraft');
     let data;
@@ -53,5 +64,6 @@ export async function checkPhillyLive(base, fetcher = fetch, { requireAircraft =
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await checkPhillyLive(process.argv[2] || 'https://jez237.com', fetch,
-    { requireAircraft: process.argv.includes('--require-aircraft') });
+    { requireAircraft: process.argv.includes('--require-aircraft'),
+      requireOutages: process.argv.includes('--require-outages') });
 }

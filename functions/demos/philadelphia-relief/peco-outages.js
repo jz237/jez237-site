@@ -64,7 +64,7 @@ export function compactOutage(row, tile) {
 }
 
 async function json(url, signal, empty404 = false) {
-  const response = await fetch(url, { signal, redirect: 'error', headers: { Accept: 'application/json' },
+  const response = await fetch(url, { signal, redirect: 'manual', headers: { Accept: 'application/json' },
     cf: { cacheTtl: url === STATE ? 120 : 600, cacheEverything: true } });
   if (empty404 && response.status === 404) { await response.body?.cancel(); return { file_data: [] }; }
   if (!response.ok || !response.body) { await response.body?.cancel(); throw new Error('PECO unavailable'); }

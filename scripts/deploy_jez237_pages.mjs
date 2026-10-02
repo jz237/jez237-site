@@ -14,6 +14,7 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const stage = resolve(process.argv[2] || '.');
 const prepareOnly = process.argv.includes('--prepare-only');
 const requireAircraft = process.argv.includes('--require-aircraft');
+const requireOutages = process.argv.includes('--require-outages');
 const rel = relative(repo, stage);
 if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
   throw new Error('Use a separate, disposable public upload directory outside the repository.');
@@ -56,7 +57,7 @@ async function verifyRelease(url) {
   // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
   for (let attempt = 0; attempt < 6; attempt++) {
     try {
-      await checkPhillyLive(url, fetch, { requireAircraft });
+      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages });
       await checkHiddenReefImages(url);
       await checkPondFilterLinks(url);
       await checkOpenSeaLive(url,repo);
