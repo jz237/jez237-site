@@ -44,11 +44,11 @@ const abdomenR = profile([[0, 2.2], [0.8, 3.6], [2.2, 4.7], [4.4, 5.0], [6.6, 4.
 // Wing local frame: x = span (root -> tip), y = toward the leading edge, z = upper-surface normal.
 // The origin is the wing hinge. Right wing is built; the left wing is its mirror image.
 const wingRoot = V3(2.4, 4.1, 2.5);
-const wingSpan = V3(-0.30, 0.76, 0.58).normalize();
+const wingSpan = V3(-0.66, 0.50, 0.56).normalize();
 const wingLead = (() => {
   const f = V3(1, 0, 0);
   f.addScaledVector(wingSpan, -f.dot(wingSpan)).normalize();
-  return f;
+  return f.applyAxisAngle(wingSpan, 15 * D2R);   // roll about the span so more of the membrane faces the hero camera
 })();
 const wingNormal = new THREE.Vector3().crossVectors(wingSpan, wingLead).normalize();
 const wingFrameR = new THREE.Matrix4().makeBasis(wingSpan, wingLead, wingNormal).setPosition(wingRoot);
