@@ -19,16 +19,17 @@ test('chase framing remains stable at speed and through heading changes without 
  }
  assert.ok(maxStep<3,'Following should not snap when its periodic selection timer expires');
 });
-test('automatic direction shows recent impacts after a minimum hold and respects manual follow',()=>{
+test('automatic direction holds its subject through impacts and respects manual follow',()=>{
  const a=car(0),b=car(1,20),d=new DemoDirector(),{camera,orbit}=rig();d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0);
- for(let i=0;i<60;i++)d.update([a,b],camera,orbit,1/60,false);b.health=70;d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0,'No rapid impact cut');
- for(let i=0;i<150;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,1,'Fresh impact should draw attention');
- d.follow(0);b.health=30;for(let i=0;i<700;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0);
+ for(let i=0;i<60;i++)d.update([a,b],camera,orbit,1/60,false);b.health=70;
+ for(let i=0;i<600;i++)d.update([a,b],camera,orbit,1/60,false);
+ assert.equal(d.followed,0,'Impacts must not cause automatic cuts');
+ d.follow(0);b.health=30;for(let i=0;i<1400;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0);
 });
-test('automatic shots stay close, skip finished cars and never choose an overhead shot on a fixed cycle',()=>{
+test('automatic viewing keeps a steady drone composition and eventually leaves finished cars',()=>{
  const a=car(0),b=car(1,5),d=new DemoDirector(),{camera,orbit}=rig(),shots=new Set<string>();
- for(let i=0;i<2000;i++){if(i===100)a.finished=true;d.update([a,b],camera,orbit,1/60,true);shots.add(d.activeView);if(i>100)assert.equal(d.followed,1);}
- assert.deepEqual([...shots].sort(),['chase','drone','trackside']);
+ for(let i=0;i<2000;i++){if(i===100)a.finished=true;d.update([a,b],camera,orbit,1/60,true);shots.add(d.activeView);if(i>600)assert.equal(d.followed,1);}
+ assert.deepEqual([...shots],['drone']);
 });
 test('cameras stay finite and above actual quarry terrain with rolled and vertical targets',()=>{
  for(const [x,z]of [[0,0],[80,0],[105,40],[-115,-20]])for(const rotation of [Math.PI/2,Math.PI])for(const view of ['drone','chase','trackside','hood']as DemoCamera[]){
@@ -41,9 +42,10 @@ test('empty fields, invalid time and inherited property names leave the director
 });
 test('demo camera source retains the preceding release in the revision chain',()=>verifyDemoPresentationRevision());
 
-test('a newly wrecked car gets a short impact shot before attention returns to running cars',()=>{
+test('a newly wrecked subject stays on screen before a gradual return to running cars',()=>{
  const a=car(0),b=car(1,20),d=new DemoDirector(),{camera,orbit}=rig();
  for(let i=0;i<200;i++)d.update([a,b],camera,orbit,1/60,false);
- b.health=0;d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,1,'Do not cut away from a car at the instant it wrecks');
- for(let i=0;i<300;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0,'A static wreck must not monopolize the demo');
+ a.health=0;d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0);
+ for(let i=0;i<240;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,0);
+ for(let i=0;i<720;i++)d.update([a,b],camera,orbit,1/60,false);assert.equal(d.followed,1);
 });
