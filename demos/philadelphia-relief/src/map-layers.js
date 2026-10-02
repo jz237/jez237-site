@@ -24,7 +24,8 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   let disposed = false, selected, cardRequest, lastUpdate = 0, press;
   let frames = [], frameIndex = 0, playing = false, animation, radarBusy = false;
   let radarRevision = 0, frameRevision = 0;
-  const jobs = new Map(), rows = { ship: [], gauge: [] };
+  const jobs = new Map(), rows = { ship: [], gauge: [], outage: [] };
+  let outageSnapshot;
   function status(type, text) { $(`${type}Status`).textContent = text; }
   const surfaces = createMapSurfaces(THREE, { scene, projection, sampleElevation, status });
   const points = createMapPoints(THREE, { scene, stage, projection, sampleElevation, photographic,
@@ -32,6 +33,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     onSelect: (type, data) => {
       if (type === 'ship') showShip(data);
       else if (type === 'gauge') void showGauge(data);
+      else if (type === 'outage') showOutage(data);
       else { close(); onLandmark(data.name); }
     } });
   function close() {
@@ -47,7 +49,8 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     head.append(titles, x); card.append(head);
   }
   function showCluster(type, members) {
-    open('nearby on the map', `${members.length} ${type}s`, 'cluster');
+    open('nearby on the map', type === 'outage' ? `${members.length} outage locations / groups`
+      : `${members.length} ${type}s`, 'cluster');
     card.append(el('p', 'Choose a name to see its details and move closer.', 'map-data-note'));
     const list = el('div', '', 'map-cluster-list');
     for (const row of [...members].sort((a, b) => a.name.localeCompare(b.name))) {
@@ -57,7 +60,8 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
         if (!current) {
           button.disabled = true; button.textContent = `${row.name} · no longer in feed`; return;
         }
-        if (type === 'ship') showShip(current); else void showGauge(current);
+        if (type === 'ship') showShip(current);
+        else if (type === 'outage') showOutage(current); else void showGauge(current);
         motion.flyTo({ ...current, camDist: type === 'ship' ? 4500 : 6500 }, { label: current.name });
       };
       list.append(button);
@@ -126,7 +130,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     } } finally { clearTimeout(timeout); }
   }
   function populate(type, list) {
-    const select = $(type === 'ship' ? 'shipSelect' : 'gaugeSelect'), previous = select.value;
+    const select = $(`${type}Select`), previous = select.value;
     select.replaceChildren(el('option', `Choose a ${type}…`)); select.firstChild.value = '';
     for (const row of [...list].sort((a, b) => a.name.localeCompare(b.name))) {
       const option = el('option', row.name); option.value = row.id; select.append(option);
@@ -147,9 +151,18 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
         const doc = await fetchDoc(url, controller.signal);
         if (disposed || jobs.get(name) !== job || ticket !== job.revision) return;
         accept(doc);
-      } catch { if (jobs.get(name) === job && ticket === job.revision) status(name,
-        name === 'ships' ? 'Ship relay unavailable · computer must be running. Retrying in 30 seconds.'
-          : 'Source unavailable · last readings may be old. Retrying shortly.'); }
+      } catch { if (jobs.get(name) === job && ticket === job.revision) {
+        if (name === 'outages') {
+          rows.outage = []; points.set('outage', []); populate('outage', []);
+          if (selected?.type === 'PECO power outage') close();
+        }
+        status(name, name === 'ships'
+          ? 'Ship relay unavailable · computer must be running. Retrying in 30 seconds.'
+          : name === 'outages' ? 'PECO data unavailable · outage markers cleared. '
+            + 'This does not mean power is restored. '
+            + 'Retry with Refresh enabled live layers, or open PECO below.'
+            : 'Source unavailable · last readings may be old. Retrying shortly.');
+      } }
       finally {
         clearTimeout(timeout);
         if (!disposed && !document.hidden && jobs.get(name) === job && ticket === job.revision) {
@@ -184,6 +197,46 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     startJob('gauges', 'river-gauges', 300000, doc => {
       rows.gauge = doc.gauges || []; points.set('gauge', rows.gauge); populate('gauge', rows.gauge);
       status('gauges', `${rows.gauge.length} gauges · NOAA / NWS · updated ${ageLabel(doc.checkedAt)}`);
+    });
+  }
+  function showOutage(row) {
+    open('PECO power outage', row.grouped ? `${row.outages} nearby outages` : 'Reported outage', row.id);
+    facts([['Customers affected', row.customersLabel], ['Outages', String(row.outages)],
+      ['Crew status', row.crew], ['Cause', row.cause],
+      ['Estimated restoration', row.restoration ? ageLabel(row.restoration)
+        + (Date.parse(row.restoration) < Date.now() ? ' · estimate has passed' : '') : 'Not yet provided'],
+      ['PECO updated', ageLabel(outageSnapshot?.updatedAt)]]);
+    card.append(el('p', 'Approximate public outage location, not an affected property boundary. '
+      + (row.grouped ? 'PECO groups these outages; details may differ between incidents. ' : '')
+      + 'Restoration estimates can change.', 'map-data-note'));
+    card.append(link('Open PECO’s official outage map ↗',
+      'https://www.peco.com/outages/experiencing-an-outage/outage-map'));
+    const zoom = el('button', 'Zoom to outage area', 'map-data-action'); zoom.type = 'button';
+    zoom.onclick = () => motion.flyTo({ ...row, camDist: 6500 }, { label: 'PECO outage area' });
+    card.append(zoom);
+  }
+  function outageChanged() {
+    const on = $('outagesToggle').checked; $('outagesOptions').hidden = !on; points.enable('outage', on);
+    if (selected?.type === 'PECO power outage') close();
+    if (!on) { cancelJob('outages'); rows.outage = []; points.set('outage', []); return; }
+    status('outages', 'Loading PECO’s public outage reports…');
+    startJob('outages', 'peco-outages', 300000, doc => {
+      if (!Array.isArray(doc.outages) || !doc.serviceTotals || !Number.isFinite(Date.parse(doc.updatedAt))) {
+        throw new Error('Invalid outage feed');
+      }
+      outageSnapshot = doc; rows.outage = doc.outages; points.set('outage', rows.outage);
+      populate('outage', rows.outage);
+      const delayed = Date.now() - Date.parse(doc.updatedAt) > 1800000;
+      const locations = rows.outage.length ? `${rows.outage.length} outage locations / groups in this region`
+        : 'No outage locations reported in this region';
+      status('outages', `${delayed ? 'Delayed report · ' : ''}${locations}`
+        + ` · ${doc.serviceTotals.outages.toLocaleString()} outages / `
+        + `${doc.serviceTotals.customers.toLocaleString()} customers across PECO’s entire service area`
+        + ` · PECO updated ${ageLabel(doc.updatedAt)}`);
+      if (selected?.type === 'PECO power outage') {
+        const row = rows.outage.find(r => r.id === selected.id);
+        if (!row) close(); else if (!card.hidden) showOutage(row);
+      }
     });
   }
   async function radarFrame(index) {
@@ -335,12 +388,19 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   };
   const escape = e => { if (e.key === 'Escape') close(); };
   const restore = () => {
+    if (selected?.type === 'PECO power outage') {
+      const row = rows.outage.find(r => r.id === selected.id);
+      if (row) showOutage(row); else close(); return;
+    }
     if (selected?.type !== 'ship') return;
     const ship = rows.ship.find(s => s.id === selected.id);
     if (ship) showShip(ship); else close();
   };
   card.addEventListener('map-window-restore', restore);
   $('shipsToggle').onchange = shipChanged; $('gaugesToggle').onchange = gaugeChanged;
+  $('outagesToggle').onchange = outageChanged;
+  $('outageSelect').onchange = e => { const row = rows.outage.find(r => r.id === e.target.value);
+    if (row) { showOutage(row); motion.flyTo({ ...row, camDist: 8500 }, { label: 'PECO outage area' }); } };
   $('radarToggle').onchange = radarChanged; $('archiveYear').onchange = archiveChanged;
   $('propertyToggle').onchange = propertyChanged;
   $('shipSelect').onchange = e => { const row = rows.ship.find(r => r.id === e.target.value);
@@ -356,12 +416,14 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     camPitch: 10 }, { label: 'Center City historical aerial survey' });
   $('propertyCenter').onclick = () => { const pose = getPose(); void inspect(pose.lon, pose.lat); };
   $('refreshMapLayers').onclick = () => {
+    if ($('outagesToggle').checked) outageChanged();
     if ($('shipsToggle').checked) shipChanged(); if ($('gaugesToggle').checked) gaugeChanged();
     if ($('radarToggle').checked) radarChanged();
   };
   stage.addEventListener('pointerdown', down); stage.addEventListener('pointerup', up);
   document.addEventListener('visibilitychange', visibility); document.addEventListener('keydown', escape);
   if ($('shipsToggle').checked) shipChanged();
+  if ($('outagesToggle').checked) outageChanged();
   if ($('gaugesToggle').checked) gaugeChanged();
   if ($('radarToggle').checked) radarChanged();
   if ($('propertyToggle').checked) propertyChanged();

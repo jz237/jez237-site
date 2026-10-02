@@ -22,11 +22,11 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="load/style-2647010bd702.css" />
+<link rel="stylesheet" href="load/style-49a2eea61d53.css" />
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
 <link rel="preload" as="fetch" href="data/terrain.json" crossorigin />
 <link rel="preload" as="image" href="data/imagery.webp?v=aligned2" />
-<link rel="modulepreload" href="load/app-ARTCCSUF.js" />
+<link rel="modulepreload" href="load/app-E7NXE2SF.js" />
 <link rel="modulepreload" href="load/chunk-NSE4GZ3K.js" />
 <link rel="modulepreload" href="load/chunk-WOT6VMZA.js" />
 </head>
@@ -301,7 +301,18 @@
     </div>
   </div>
   <details id="moreMapLayers" class="more-map-layers">
-    <summary>More map layers <span>Water · weather · history</span></summary>
+    <summary>More map layers <span>Power outages · water · weather · history</span></summary>
+    <div class="extra-layer">
+      <label><input id="outagesToggle" type="checkbox"> PECO power outages</label>
+      <div id="outagesOptions" hidden>
+        <p id="outagesStatus" role="status"></p>
+        <select id="outageSelect" aria-label="Find a PECO outage"><option value="">Choose an outage…</option></select>
+        <small>Orange ϟ markers · approximate locations and groups, not affected-property boundaries.
+          PECO updates about every 10 minutes; this layer checks every 5 minutes while visible.
+          Covers PECO reports within this map, not other electric utilities.</small>
+        <a href="https://www.peco.com/outages/experiencing-an-outage/outage-map" target="_blank" rel="noopener noreferrer">PECO official outage map ↗</a>
+      </div>
+    </div>
     <div class="extra-layer">
       <label><input id="bathymetryToggle" type="checkbox"> Reveal the riverbed</label>
       <div id="bathymetryOptions" hidden>
@@ -823,7 +834,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="load/app-ARTCCSUF.js"></script>
+<script type="module" src="load/app-E7NXE2SF.js"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

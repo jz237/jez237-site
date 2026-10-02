@@ -49,6 +49,7 @@ const SECRET_PATTERNS = [
  * About panel are fine; anything the code would *fetch* is not.
  */
 const ALLOWED_LINK_HOSTS = [
+  'www.peco.com',
   'www.nauticalcharts.noaa.gov',
   'adsb.fi',
   'github.com',

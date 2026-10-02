@@ -13,6 +13,7 @@ const mock = (missing = '') => async url => {
     'detail-imagery': [400, 'Invalid detail imagery request'],
     'street-detail': [400, '{"error":"Invalid neighborhood"}'],
     aircraft: [405, 'Method not allowed'],
+    'peco-outages': [405, 'Method not allowed'],
   }[path];
   return new Response(body, { status });
 };
@@ -22,7 +23,7 @@ test('accepts complete Functions deployment', async () => {
 test('rejects static-only deployment despite successful page response', async () => {
   await assert.rejects(checkPhillyLive('https://example.test', mock('policy')), /Cesium/);
 });
-for (const route of ['detail-imagery', 'street-detail', 'aircraft']) {
+for (const route of ['detail-imagery', 'street-detail', 'aircraft', 'peco-outages']) {
   test(`rejects missing ${route} even with working Cesium policy`, async () => {
     await assert.rejects(checkPhillyLive('https://example.test', mock(route)), /Function/);
   });
