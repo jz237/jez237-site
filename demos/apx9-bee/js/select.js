@@ -102,14 +102,14 @@ export class Selection {
     return true;
   }
 
-  frame(ms = 800, margin = 1.55) {
+  frame(ms = 800, margin = 1.55, quat = null, band = null) {
     const parts = [];
     for (const p of this.selected) for (const q of p.walk()) parts.push(q);
     if (!parts.length) return false;
     this.bee.worldBounds(_box, parts);
     if (_box.isEmpty()) return false;
     _box.getBoundingSphere(_sph);
-    this.rig.frame(_sph, { ms, margin });
+    this.rig.frame(_sph, { ms, margin, quat, band });
     this.invalidate();
     return true;
   }
