@@ -6,7 +6,7 @@ The exhibit itself lives in `demos/apx9-bee/` and has **no build step**: plain E
 
 ## What it is
 
-- 581 selectable parts and assembly groups, including 508 named components with geometry, built from original procedural meshes and canvas textures. Fasteners and lens facets are batched within their parent component for performance; no external model or texture service is required.
+- 643 selectable parts and assembly groups, built from original procedural meshes and canvas textures. Fasteners and lens facets are batched within their parent component for performance; no external model or texture service is required.
 - Physically based materials (clear-coat, sheen, iridescence, anisotropy) lit by a procedural studio environment, with ambient occlusion, bloom, tone mapping and a shadow-catcher floor.
 - Idle refinement: once the view has been still for a moment the page re-renders the same frame with a sub-pixel camera shift, the key light moved across a small disc (soft area-light shadows) and a rotated AO noise phase, and averages the frames in HDR (16-32 samples). Any interaction snaps straight back to the single plain frame; outline and focus changes only redraw the final pass.
 - A choreographed, reversible explode: each assembly moves on its own timeline, sub-assemblies and fine parts follow, and the camera follows the parts' bounds.
@@ -16,7 +16,7 @@ The exhibit itself lives in `demos/apx9-bee/` and has **no build step**: plain E
 
 The completed build includes the full head sensor chassis and sampling jaws, four thorax bulkheads with six supported hip sockets, an abdomen payload cage with cooling circuits, and the geared flight-drive mechanism. The fur mantle, narrow dorsal service plates, compact wing collars, swept wing pose and dark compound-eye facets were refined against both supplied images.
 
-High quality builds 2,874,932 triangles and 1,232 meshes. Quality tiers, adaptive render resolution, motion-time AO reduction and idle multisample refinement keep geometry detail separate from rendering cost. These are measured scene counts, not a promise of equal performance on every GPU.
+The original reference-detail pass measured 2,874,932 triangles and 1,232 meshes at high quality, before the later live-internal additions. Quality tiers, adaptive render resolution, motion-time AO reduction and idle multisample refinement keep geometry detail separate from rendering cost. These are measured scene counts, not a promise of equal performance on every GPU.
 
 ## Layout
 
@@ -89,3 +89,11 @@ Additional browser checks: `qa/systems.py` covers routes, restoration and mobile
 `js/repair.js` owns temporary service poses, a separate replacement servo instance, guide rails, diagnostic target markers and illustrative response traces. Extraction and installation use the existing detailed oscillator geometry, while calibration uses the existing moving gear model. A macro camera follows the service assembly, then returns to the full bee for reassembly and a short lift/settle test. Original transforms, visibility and material identities are restored on exit; scrubbing backward also restores the faulted state. Pause freezes camera movement as well as the service timeline. Playback controls remain outside the scrollable panel body on mobile. Reduced-motion preferences start the sequence paused.
 
 `python3 scripts/apx9-bee/qa/repair.py` exercises real-time completion, extraction/insertion, calibration pause, exact restoration, mobile controls and reduced-motion playback. Default local server port: 8772; `APX9_URL` selects a deployed release.
+
+### Expanded X-ray internals
+
+The cutaway now animates 81 distinct component groups (25 flight-drive groups plus 56 additional groups). `assemblies/live-internals.js` adds two articulated optical iris/focus modules, four seven-blade cooling impellers and a six-cylinder pump bank with phased eccentric cranks, constant-length connecting rods and reciprocating pistons. Existing pollen geometry gains a separately articulated helical auger; its motor shaft, distribution rotor and brush turn together. Sampling jaws articulate and the rear probe sheath, tip and needle telescope. Stationary supports and electronics do not spin.
+
+Optical head, Cooling pumps, Pollen drive, Sampling jaws and Tail probe closeups join the flight views. All motion uses the shared speed/pause clock, is reversible on exit, and remains separate from Repair's existing flight-gear calibration. The X-ray pause control remains pinned outside the scrollable controls on mobile.
+
+`qa/internals.py` verifies all 81 pose changes, global pause, speed, crank-to-rod and rod-to-piston attachment, five new closeups, mobile fit and exact material/pose restoration. Default local port is 8773; `APX9_URL` can target production.

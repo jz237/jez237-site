@@ -6,10 +6,11 @@ import { createStage } from './stage.js';
 import { Rig, VIEWS, anglesQuat } from './rig.js';
 import { Picker } from './picking.js';
 import { createPost } from './post.js';
-import { Selection } from './select.js?v=f421fbf902f8';
+import { Selection } from './select.js?v=0f963318f6e0';
 import { createAccum } from './accum.js';
-import { initMechanisms } from './mechanisms.js?v=e51567803d8e';
-import { initOperations } from './operate.js?v=fbf10b922cf6';
+import { build as buildLiveInternals } from './assemblies/live-internals.js?v=d6a37068200d';
+import { initMechanisms } from './mechanisms.js?v=e0bfebc30b57';
+import { initOperations } from './operate.js?v=03600a149f62';
 
 const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
 const P = Q.params;
@@ -44,7 +45,7 @@ async function boot() {
   const only = (P.get('only') || '').split(',').map((s) => s.trim()).filter(Boolean);
   const names = only.length ? ASSEMBLIES.filter((n) => only.includes(n)) : ASSEMBLIES;
   // Start every module download at once so the import graph is not discovered one assembly at a time; building stays sequential.
-  const loads = names.map((n) => n==='flight'?import('./assemblies/flight.js?v=f0c495539af7'):import(`./assemblies/${n}.js`));
+  const loads = names.map((n) => n==='core'?import('./assemblies/core.js?v=672e9f17a7f9'):n==='flight'?import('./assemblies/flight.js?v=f0c495539af7'):import(`./assemblies/${n}.js`));
   const layoutLoad = import('./layout.js');
   const uiLoad = P.get('uimod') ? import(`./${P.get('uimod')}.js`) : import('./ui.js?v=90a3508e1ed1');
   for (const p of [...loads, layoutLoad, uiLoad]) p.catch(() => {});
@@ -80,6 +81,7 @@ async function boot() {
       report.push({ name, ok: false, ms: Math.round(performance.now() - t0), error: String(err?.message || err) });
     }
   }
+  buildLiveInternals(ctx);
   const demoName = P.get('demo');
   if (demoName) {
     try { await (await import(`./assemblies/${demoName}.js`)).build(ctx); report.push({ name: demoName, ok: true }); }

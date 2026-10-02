@@ -17,7 +17,7 @@ export class Selection {
     this.focus = 0;
     this.listeners = new Set();
     this.ghosts = new Map();
-    this.shellParts = bee.parts.filter((p) => p.tag === 'shell' || /^flight-motor\/(housing|arch-strap|drive-motor\/can)(\/|$)/.test(p.id) || /wing-mount-[rl]\/(oscillation-servo\/servo-can|servo-gearbox\/carrier-(front|rear))/.test(p.id));
+    this.shellParts = bee.parts.filter((p) => p.tag === 'shell' || /^pollination-module\/(band-[abc]|chrome-ring|black-ribbed-ring|collection-chamber|drive-motor\/motor-(can|end-bell))$/.test(p.id) || /^flight-motor\/(housing|arch-strap|drive-motor\/can)(\/|$)/.test(p.id) || /wing-mount-[rl]\/(oscillation-servo\/servo-can|servo-gearbox\/carrier-(front|rear))/.test(p.id));
     this.furMeshes = [];
     for (const p of bee.parts) for (const m of p.meshes) if (m.userData.fur) this.furMeshes.push({ m, p });
     this.dirtyFlags = true;

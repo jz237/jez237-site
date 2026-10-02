@@ -3,7 +3,7 @@
 // The interior (chamber, vanes, motor, sensor, block frame, arms, pegs, hoses) lives in core-pollen-b.js.
 import { THREE, M, ex, V3, S, D2R, rng, surf, decalPatch, T, armorPanel, rectPts, slotHoles, plate, cyl, sphere } from '../kit.js';
 import { C, PL, drumR, lathe, latheOpen, lathePart, tube, aroundX, atTheta, bolt, boltRing, boltBand, instanced } from './core-util.js';
-import { buildInterior } from './core-pollen-b.js';
+import { buildInterior } from './core-pollen-b.js?v=fbebb9cf6772';
 
 const X = (d, lvl = 'mid') => ex([d, 0, 0], lvl);
 /** Surface wrapper: plate x runs around the drum, plate y along the axis (right-handed, so artwork is not mirrored). */

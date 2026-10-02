@@ -18,7 +18,7 @@ const NOTES = [
 ];
 
 export async function initOperations(app) {
-  await loadCSS('css/operate.css?v=bc398602b78b');
+  await loadCSS('css/operate.css?v=7c6004d93ef1');
   const { bee, stage, rig, selection } = app;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const op = { mode: 'inspect', power: false, clock: 0, boot: 0, mission: 0, playing: false, sensor: 'normal', flow: 'energy', repair: 0, paused: false, macro: false, autoMission: false, sensorAngle: 0 };

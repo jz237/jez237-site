@@ -22,6 +22,10 @@ update('js/operate.js', r"\./systems\.js(?:\?v=[^']+)?", f"./systems.js?v={versi
 update('js/operate.js', r"\./repair\.js(?:\?v=[^']+)?", f"./repair.js?v={version('js/repair.js')}")
 # Version dependencies before their importing modules, ending at the HTML entry.
 for path, ref, source in [
+    ('js/assemblies/core-pollen.js', './core-pollen-b.js', 'js/assemblies/core-pollen-b.js'),
+    ('js/assemblies/core.js', './core-pollen.js', 'js/assemblies/core-pollen.js'),
+    ('js/main.js', './assemblies/core.js', 'js/assemblies/core.js'),
+    ('js/main.js', './assemblies/live-internals.js', 'js/assemblies/live-internals.js'),
     ('js/assemblies/flight.js', './flight-servo.js', 'js/assemblies/flight-servo.js'),
     ('js/ui.js', './data.js', 'js/data.js'),
     ('js/ui.js', './panels.js', 'js/panels.js'),
