@@ -253,6 +253,7 @@ export async function initUI(app) {
   }
   function setRotate(on) {
     rig.autoRotate = on;
+    rig.autoUntil = 0;
     rig.lastMove = performance.now() - 5000;
     btnRotate.classList.toggle('on', on);
     btnRotate.setAttribute('aria-pressed', String(on));
@@ -344,6 +345,7 @@ export async function initUI(app) {
       cycleT = setTimeout(hi, CYCLE_MS + CYCLE_HOLD * 0.6);
     };
     rig.autoRotate = true;
+    rig.autoUntil = 0;
     rig.autoSpeed = 0.2;
     btnRotate.classList.add('on');
     btnRotate.setAttribute('aria-pressed', 'true');

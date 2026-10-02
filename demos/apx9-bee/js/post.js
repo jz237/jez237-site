@@ -8,6 +8,9 @@ import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 import { Pass, FullScreenQuad } from '../vendor/postprocessing/Pass.js';
 
+// Bit test rather than isnan(): it survives fast-math shader compilers. Half-float NaN / Inf widen to exponent 0xFF in fp32.
+const NON_FINITE_GLSL = `bool nonFinite(vec3 c) { return any(equal(floatBitsToUint(c) & uvec3(0x7f800000u), uvec3(0x7f800000u))); }`;
+
 /** Running HDR average: each enabled frame is blended into one persistent target with weight 1/(n+1) via constant-alpha blending. */
 class AccumPass extends Pass {
   constructor(w, h) {
@@ -21,8 +24,20 @@ class AccumPass extends Pass {
       uniforms: { tDiffuse: { value: null }, uMax: { value: 16 } },
       vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
       // clamp single-sample specular fireflies before they enter the average
-      fragmentShader: `uniform sampler2D tDiffuse; uniform float uMax; varying vec2 vUv;
-        void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      // a NaN / Inf pixel would poison the running average for good, so it is replaced by the mean of its finite neighbours
+      fragmentShader: `${NON_FINITE_GLSL}
+        uniform sampler2D tDiffuse; uniform float uMax; varying vec2 vUv;
+        void main(){
+          vec3 c = texture2D(tDiffuse, vUv).rgb;
+          if (nonFinite(c)) {
+            vec2 px = 1.0 / vec2(textureSize(tDiffuse, 0));
+            vec3 t0 = texture2D(tDiffuse, vUv + vec2(px.x, 0.0)).rgb, t1 = texture2D(tDiffuse, vUv - vec2(px.x, 0.0)).rgb;
+            vec3 t2 = texture2D(tDiffuse, vUv + vec2(0.0, px.y)).rgb, t3 = texture2D(tDiffuse, vUv - vec2(0.0, px.y)).rgb;
+            float g0 = nonFinite(t0) ? 0.0 : 1.0, g1 = nonFinite(t1) ? 0.0 : 1.0, g2 = nonFinite(t2) ? 0.0 : 1.0, g3 = nonFinite(t3) ? 0.0 : 1.0;
+            float n = g0 + g1 + g2 + g3;
+            c = n > 0.0 ? (t0 * g0 + t1 * g1 + t2 * g2 + t3 * g3) / n : vec3(0.0);
+          }
+          float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
           gl_FragColor = vec4(c * min(1.0, uMax / max(l, 1e-4)), 1.0); }`,
       blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
       blendSrc: THREE.ConstantAlphaFactor, blendDst: THREE.OneMinusConstantAlphaFactor,
@@ -38,6 +53,8 @@ class AccumPass extends Pass {
 
   render(renderer, writeBuffer, readBuffer) {
     this.material.uniforms.tDiffuse.value = readBuffer.texture;
+    // the first sample overwrites outright: src*1 + dst*0 would still carry a stale NaN, since NaN * 0 is NaN
+    this.material.blending = this.weight >= 1 ? THREE.NoBlending : THREE.CustomBlending;
     this.material.blendAlpha = this.weight;
     const autoClear = renderer.autoClear;
     renderer.autoClear = false;
@@ -163,11 +180,13 @@ export function createPost({ stage, Q, picker }) {
   // Softbox reflections on polished metal reach 15+ HDR units; cap the energy fed to the blur so only glints, not halos, bloom.
   bloom.highPassUniforms.uCap = { value: pf('bc', 1.7) };
   bloom.highPassUniforms.uKnee = { value: 0.7 };
-  bloom.materialHighPassFilter.fragmentShader = `
+  // A NaN / Inf scene pixel must not enter the blur chain: it would smear over most of the frame.
+  bloom.materialHighPassFilter.fragmentShader = `${NON_FINITE_GLSL}
     uniform sampler2D tDiffuse; uniform vec3 defaultColor; uniform float defaultOpacity;
     uniform float luminosityThreshold; uniform float uCap; uniform float uKnee; varying vec2 vUv;
     void main(){
       vec4 t = texture2D(tDiffuse, vUv);
+      if (nonFinite(t.rgb)) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
       float v = max(luminance(t.rgb), 1e-4);
       float k = smoothstep(luminosityThreshold, luminosityThreshold + uKnee, v);
       gl_FragColor = vec4(t.rgb * (min(v, uCap) / v) * k, 1.0);
