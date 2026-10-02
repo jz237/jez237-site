@@ -8,7 +8,7 @@ import { Picker } from './picking.js';
 import { createPost } from './post.js';
 import { Selection } from './select.js?v=0f963318f6e0';
 import { createAccum } from './accum.js';
-import { build as buildLiveInternals } from './assemblies/live-internals.js?v=d6a37068200d';
+import { build as buildLiveInternals } from './assemblies/live-internals.js?v=303920b20c70';
 import { initMechanisms } from './mechanisms.js?v=e0bfebc30b57';
 import { initOperations } from './operate.js?v=03600a149f62';
 
