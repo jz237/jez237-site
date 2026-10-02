@@ -8,6 +8,7 @@ export * from './skeleton.js';
 export { M4, Part, Bee, smoother } from './registry.js';
 export { makeFur, ellipsoidSampler } from './fur.js';
 export { LEVEL, ex } from './explode.js';
+export { decalPatch } from './decals.js';
 export { Q } from './quality.js';
 import * as T from './textures.js';
 export { T };
