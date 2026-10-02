@@ -4,10 +4,10 @@ import * as T from 'three';
 // beyond it, including occluders outside the moving map. Both attenuate the SAME
 // sun using min(near, static), rather than adding a second light or multiplying
 // two partially filtered shadows. Geometry and collision data are never changed.
-// Bright-tail centroid of the bundled HDR after its existing 1.9-radian yaw.
+// Bright-tail centroid of the bundled HDR after the arena's 1.1-radian yaw.
 // Matching the key to this solar disk keeps shadows, reflections and sky coherent
 // without tilting the photographed horizon. tools/daylight-qa.mjs reproduces it.
-export const DAYLIGHT_DIRECTION = new T.Vector3(.17808175630589612, .7416666663831829, -.6466973357352447).normalize();
+export const DAYLIGHT_DIRECTION = new T.Vector3(.17808175630589612, .7416666663831829, -.6466973357352447).applyAxisAngle(new T.Vector3(0,1,0),-.8).normalize();
 export const DAYLIGHT_DISTANCE = Math.hypot(70, 65, 45);
 
 export function staticCasterScene(source: T.Object3D, excluded: ReadonlySet<T.Object3D>) {
@@ -203,6 +203,29 @@ export class StaticQuarryShadows {
   invalidate() {
     this.dirty = true;
     this.uniforms.quarryStaticEnabled.value = 0;
+  }
+
+  /** Change venues while retaining receiver hooks and their uniform objects.
+   * Recreating this owner would stack shader patches on reused car materials. */
+  replaceCasters(source: T.Object3D, excluded: ReadonlySet<T.Object3D>) {
+    const next = staticCasterScene(source, excluded);
+    const bounds = new T.Box3().setFromObject(next.scene);
+    if (bounds.isEmpty()) {
+      for (const material of next.materials) material.dispose();
+      throw new Error('The static shadow scene has no casters');
+    }
+    const camera = fitStaticShadowCamera(bounds);
+    for (const material of this.depthMaterials) material.dispose();
+    for (const mesh of this.casterScene.children) if (mesh instanceof T.InstancedMesh) mesh.dispose();
+    this.casterScene.clear();
+    this.casterScene.add(...next.scene.children.slice());
+    this.depthMaterials = next.materials;
+    this.bounds.copy(bounds); this.camera.copy(camera);
+    this.uniforms.quarryStaticMatrix.value.set(.5, 0, 0, .5, 0, .5, 0, .5, 0, 0, .5, .5, 0, 0, 0, 1)
+      .multiply(this.camera.projectionMatrix).multiply(this.camera.matrixWorldInverse);
+    if (this.size) this.uniforms.quarryStaticNormalBias.value = .65 * Math.max(
+      this.camera.right - this.camera.left, this.camera.top - this.camera.bottom) / this.size;
+    this.invalidate();
   }
 
   prepare(renderer: T.WebGLRenderer) {
