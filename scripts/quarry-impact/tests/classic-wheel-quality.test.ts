@@ -26,14 +26,25 @@ const previousBytes=Object.fromEntries(kinds.map(kind=>{
  assert.equal(hash(bytes),previousHashes[kind],kind+' reference is the actual GLB published before this wheel revision');return[kind,bytes];
 })) as Record<Kind,Buffer>;
 const previousModel=(kind:Kind)=>new GLTFLoader().parseAsync(Uint8Array.from(previousBytes[kind]).buffer,'');
+// This historical wheel-release proof keeps its accepted body baseline. The
+// successor greenhouse test exercises the current Tern and independently
+// requires its entire wheel assembly to remain byte-exact to this release.
+function wheelReleaseBytes(kind:Kind,candidate=false){
+ const name=kind+(candidate?'-candidate':'');
+ const bytes=kind==='tern'?gunzipSync(readFileSync(new URL('./fixtures/tern-greenhouse/public-models-'+name+'.glb.gz',import.meta.url))):readFileSync(new URL('../public/models/'+name+'.glb',import.meta.url));
+ if(kind==='tern')assert.equal(hash(bytes),'4d0b777656191c76aa0b76ac62163dcd353045ac7bac229cdfc24c2e19081e5a','Actual accepted Tern wheel release at git5d824c9');
+ return bytes;
+}
+const wheelReleaseModel=(kind:Kind)=>new GLTFLoader().parseAsync(Uint8Array.from(wheelReleaseBytes(kind)).buffer,'');
+
 const published={} as Record<Kind,T.Group>,current={} as Record<Kind,T.Group>,previousPrepared={} as Record<Kind,T.Group>,currentPrepared={} as Record<Kind,T.Group>;
-for(const kind of kinds){published[kind]=(await previousModel(kind)).scene;current[kind]=(await loadCarWithoutImages(kind)).scene;}
+for(const kind of kinds){published[kind]=(await previousModel(kind)).scene;current[kind]=(await wheelReleaseModel(kind)).scene;}
 await R.init();
 const originalLoad=GLTFLoader.prototype.loadAsync;
 try{
  GLTFLoader.prototype.loadAsync=async url=>{const name=/\/([^/]+)\.glb$/.exec(String(url))![1];return kinds.includes(name as Kind)?previousModel(name as Kind):loadCarWithoutImages(name);};
  await loadCars(()=>{});for(const kind of kinds)previousPrepared[kind]=templates.get(kind)!;
- GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
+ GLTFLoader.prototype.loadAsync=async url=>{const name=/\/([^/]+)\.glb$/.exec(String(url))![1];return kinds.includes(name as Kind)?wheelReleaseModel(name as Kind):loadCarWithoutImages(name);};
  await loadCars(()=>{});for(const kind of kinds)currentPrepared[kind]=templates.get(kind)!;
 }finally{GLTFLoader.prototype.loadAsync=originalLoad;}
 const corners=['FL','FR','RL','RR'] as const,zero={x:0,y:0,z:0},dt=1/60;
@@ -108,7 +119,7 @@ test('Tern and Marten preserve all published body bytes except the four explicit
  for(const kind of kinds){
   const before=published[kind],after=current[kind];assert.deepEqual(nonWheelState(after),nonWheelState(before),kind+' only wheel descendants and exact named sill buffers may change');
   for(const corner of corners){const a=before.getObjectByName('wheel_'+corner)!,b=after.getObjectByName('wheel_'+corner)!;assert.notEqual(geometryHash(a),geometryHash(b),kind+' receives new wheel geometry');assert.deepEqual(b.position.toArray(),a.position.toArray());assert.deepEqual(b.quaternion.toArray(),a.quaternion.toArray());assert.deepEqual(b.scale.toArray(),a.scale.toArray());}
-  const bytes=readFileSync(new URL('../public/models/'+kind+'.glb',import.meta.url));assert.deepEqual(bytes,readFileSync(new URL('../public/models/'+kind+'-candidate.glb',import.meta.url)));
+  const bytes=wheelReleaseBytes(kind);assert.deepEqual(bytes,wheelReleaseBytes(kind,true));
   const oldCounts=counts(before),newCounts=counts(after),oldWheel=counts(before.getObjectByName('wheel_FL')!),newWheel=counts(after.getObjectByName('wheel_FL')!);
   const sillDelta=Array.from(revisedSills).reduce((sum,name)=>{const a=before.getObjectByName(name),b=after.getObjectByName(name);return sum+(a&&b?counts(b).vertices-counts(a).vertices:0);},0);
   assert.equal(newCounts.vertices-oldCounts.vertices,4*(newWheel.vertices-oldWheel.vertices)+sillDelta);
