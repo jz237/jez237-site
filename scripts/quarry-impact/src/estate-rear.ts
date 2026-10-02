@@ -41,10 +41,12 @@ function bezel(w:number,h:number,map:MapPoint,materialDepth=.009){
 export function addEstateRear(root:T.Group,paint:T.Material,chrome:T.Material,rubber:T.Material){
  const add=(name:string,g:T.BufferGeometry,m:T.Material)=>{const o=new T.Mesh(g,m);o.name=name;o.castShadow=o.receiveShadow=true;root.add(o);return o;};
  const hatchMap:MapPoint=(x,y,d)=>{
-  const width=.66+.135*T.MathUtils.smoothstep(y,.975,1.025),px=x*width/.66;
+  const shoulder=T.MathUtils.smoothstep(y,.975,1.025),width=.66+.14*shoulder,px=x*width/.66;
   const press=.013*Math.sin(Math.PI*T.MathUtils.clamp((y-.57)/.455,0,1))*(1-(x/.66)**2);
   const recess=.009*(1-T.MathUtils.smoothstep(Math.abs(x),.18,.25))*T.MathUtils.smoothstep(y,.64,.70)*(1-T.MathUtils.smoothstep(y,.80,.84));
-  return new T.Vector3(px,y,rear(px)-press+recess-d);
+  // The window's lower edge is straight. Roll the crowned lower hatch into
+  // that exact plane so its corners cannot leave a gap below the glazing.
+  return new T.Vector3(px,y,T.MathUtils.lerp(rear(px)-press+recess,-2.35,shoulder)-d);
  };
  add('panel_TailgateEstateStamping',section([-.66,-.40,-.25,-.18,0,.18,.25,.40,.66],[.57,.64,.70,.80,.84,.975,1.025],hatchMap,.027),paint);
  const seam:T.BufferGeometry[]=[];

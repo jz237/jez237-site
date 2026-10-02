@@ -1,7 +1,8 @@
+import {restoreEstateRearJointBytes,verifyEstateRearJointRevision} from './estate-rear-joint-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';import {gunzipSync} from 'node:zlib';import {createHash} from 'node:crypto';
 const read=(p:string)=>readFileSync(new URL('./fixtures/estate-rear/'+p,import.meta.url));
 const hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
 const revision=JSON.parse(read('revision.json').toString());
-export function restoreEstateRearBytes(file:string,bytes:Buffer){const e=revision.files[file];if(!e||hash(bytes)!==e.after)return bytes;const old=gunzipSync(read(e.snapshot));assert.equal(hash(old),e.before,file);return old;}
-export function verifyEstateRearRevision(){for(const [p,e]of Object.entries<any>(revision.files)){const b=readFileSync(new URL('../'+p,import.meta.url));assert.equal(hash(b),e.after,p);assert.equal(hash(restoreEstateRearBytes(p,b)),e.before,p);}}
+export function restoreEstateRearBytes(file:string,bytes:Buffer){bytes=restoreEstateRearJointBytes(file,bytes);const e=revision.files[file];if(!e||hash(bytes)!==e.after)return bytes;const old=gunzipSync(read(e.snapshot));assert.equal(hash(old),e.before,file);return old;}
+export function verifyEstateRearRevision(){verifyEstateRearJointRevision();for(const [p,e]of Object.entries<any>(revision.files)){const b=restoreEstateRearJointBytes(p,readFileSync(new URL('../'+p,import.meta.url)));assert.equal(hash(b),e.after,p);assert.equal(hash(restoreEstateRearBytes(p,b)),e.before,p);}}

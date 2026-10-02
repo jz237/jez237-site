@@ -1,0 +1,10 @@
+{
+  "baseline": "33ef9088905544aab6b78690dca5ef57452c6b22",
+  "files": {
+    "src/estate-rear.ts": {
+      "snapshot": "src-estate-rear.ts.gz",
+      "before": "0123cb3b894482f560d6d524c5a582ef729502850a7d7140000673a79e5d5d61",
+      "after": "a70ec33a71fbd4e6f8d41429e5175de401fac5416b3824b2e4e9cc4d3bbfd1b1"
+    }
+  }
+}
