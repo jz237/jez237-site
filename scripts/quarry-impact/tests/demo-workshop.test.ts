@@ -7,7 +7,7 @@ test('demo preferences are bounded, persisted and independent of solo event sett
 });
 test('demo event sequencing and all-selected fields do not silently change the chosen vehicle',()=>{
  assert.equal(nextDemoMode('derby','alternate'),'race');assert.equal(nextDemoMode('race','alternate'),'derby');assert.equal(nextDemoMode('race','repeat'),'race');assert.equal(nextDemoMode('derby','stop'),null);
- for(let id=0;id<24;id++)assert.equal(demoCarKind(id,'hatch','selected'),'hatch');assert.equal(demoCarKind(0,'hatch','mixed'),'hatch');assert.equal(new Set(Array.from({length:24},(_,id)=>demoCarKind(id,'coupe','mixed'))).size,9);
+ for(let id=0;id<24;id++)assert.equal(demoCarKind(id,'hatch','selected'),'hatch');assert.equal(demoCarKind(0,'hatch','mixed'),'hatch');assert.equal(new Set(Array.from({length:24},(_,id)=>demoCarKind(id,'coupe','mixed'))).size,10);
 });
 test('automatic following chooses active cars even with a fixed camera, and manual follow remains authoritative',()=>{
  const a={id:0,root:new T.Group(),current:new T.Vector3(),speed:0,health:0,finished:false},b={id:1,root:new T.Group(),current:new T.Vector3(5,0,0),speed:15,health:100,finished:false};b.root.position.copy(b.current);

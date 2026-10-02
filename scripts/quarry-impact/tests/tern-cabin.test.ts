@@ -13,7 +13,7 @@ import {ReplayScene,captureReplayFrame} from '../src/replay-scene';
 import {verifyTernFrontRevision} from './tern-front-invariants';
 
 await R.init();const original=GLTFLoader.prototype.loadAsync;
-try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const root=buildTernAsset(),mesh=(name:string)=>root.getObjectByName(name) as T.Mesh;
 const bounds=(name:string)=>new T.Box3().setFromObject(mesh(name));
 const v=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);

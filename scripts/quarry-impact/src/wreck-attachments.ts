@@ -27,7 +27,7 @@ export class WreckAttachments {
       const door=(rearDoor||/bodydoor[lr]/.test(name))&&!name.includes('mirror');
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
       const cargo=/^panel_cargodoorvan[lr]/.test(name);
-      const group=cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern)|glass_tailgate(?:rear$|tern))/.test(name)?'tailgate':o.userData.detachAssembly;
+      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern)|glass_tailgate(?:rear$|tern))/.test(name)?'tailgate':o.userData.detachAssembly;
       if(!group||group.startsWith('mirror'))return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);
@@ -62,6 +62,8 @@ export class WreckAttachments {
       }else if(a.name.startsWith('cargo-')){
         const side=a.name.endsWith('left')?-1:1;
         pivot.set(side<0?a.bounds.min.x:a.bounds.max.x,pivot.y,a.bounds.max.z);euler.y=-side*a.loose*.45+flutter;
+      }else if(a.name==='engine-lid'){
+        pivot.set(0,a.bounds.max.y-.02,a.bounds.max.z-.03);euler.x=a.loose*.48+flutter;
       }else if(a.name==='tailgate'){
         pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=a.loose*.38+flutter;euler.z=a.side*a.loose*.018;
       }else if(a.name.startsWith('door')){

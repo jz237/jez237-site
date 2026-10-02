@@ -1209,7 +1209,7 @@ async function boot() {
       vehicleFire?.update(cars,0,camera);
       const seeds=Array.from({length:8192},(_,i)=>i/8192).filter(s=>unitNoise(s)<.24&&unitNoise(s+9.37)>=.12&&unitNoise(s+2.13)>.3);
       if(vehicleFire)for(const [id,e]of vehicleFire.emitters){
-        e.state=new VehicleThermalState(e.car.health,seeds[id%seeds.length]);e.state.advance(e.car.health,1/60,0,e.car.damageZones);
+        e.state=new VehicleThermalState(e.car.health,seeds[id%seeds.length]);e.state.advance(e.car.health,1/60,0,e.car.damageZones,e.profile.engineZone,e.profile.waterCooled);
         Object.assign(e.state,{fuelTime:600}); // Hold the maximum load during QA only.
       }
     },

@@ -127,7 +127,7 @@ export class Vehicle {
         if (mat.name.includes('Brakelight')) this.brakeLights.add(mat);
       }
     });
-    this.wreckFinish = new WreckFinish(this.model,def.halfLength);
+    this.wreckFinish = new WreckFinish(this.model,def.halfLength,kind==='marten'?new T.Vector3(0,.84,-1.56):undefined);
     this.wreckParts = new WreckAttachments(this.model,this.wheels,def.halfWidth,vehicleWheelRadius(kind));
     this.tireContacts=this.wheels.map(w=>new TireContact(w));
     this.surfaceFinish=new VehicleSurface(this.model,id);
