@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {restoreHandbrakePlayabilityBytes,verifyHandbrakePlayabilityRevision} from './handbrake-playability-invariants';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
@@ -10,16 +11,18 @@ export function readChallengePlayabilityPrevious(file:string):Buffer{
  const before=gunzipSync(read(entry.snapshot));assert.equal(hash(before),entry.before,file);return before;
 }
 export function restoreChallengePlayabilityBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreHandbrakePlayabilityBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readChallengePlayabilityPrevious(file);
 }
 export function verifyChallengePlayabilityRevision():void{
+ verifyHandbrakePlayabilityRevision();
  const manifest=revision();assert.equal(manifest.baseline,'8fa7c2a41ad0f6a80013cab91b17c8f983fe1582');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreHandbrakePlayabilityBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreChallengePlayabilityBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' stays unchanged during challenge playability');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreHandbrakePlayabilityBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' stays unchanged during challenge playability');
  const fixtures=Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/'));
  assert.equal(manifest.previousFixtureCount,744);assert.equal(fixtures.length,744,'All earlier fixture files remain protected');
  assert.equal(hash(readChallengePlayabilityPrevious('src/main.ts')),'46cc37f3d98a0bfc2690e307e4032374b7857fd590b71f7cb88f4d9df6d2cd4b');

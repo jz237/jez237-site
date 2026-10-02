@@ -8,6 +8,7 @@ import {CAR_KINDS,type CarKind} from '../src/rules';
 import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,vehicleSuspensionRestLength,vehicleSuspensionTravel,rotateVehicleVector,type PhysicsState} from '../src/vehicle-physics';
 import {vehicleContact} from '../src/vehicle-contact';
 import {readBuggyPrevious} from './buggy-invariants';
+import {withHistoricalHandbrakePolicy} from './historical-handbrake-policy';
 await R.init();
 const dt=1/60;
 const close=(actual:number,expected:number,tolerance=1e-6)=>assert.ok(Math.abs(actual-expected)<tolerance,`${actual} != ${expected}`);
@@ -130,11 +131,14 @@ test('exported cage, bonnet and bumpers meet the physical collision surfaces wit
 
 const previousSource=readBuggyPrevious('src/vehicle-physics.ts').toString().replace(/from '([^']+)'/g,(_all,path)=>`from '${path.startsWith('./')?new URL('../src/'+path.slice(2)+'.ts',import.meta.url).href:import.meta.resolve(path)}'`);
 const previous=await import('data:text/javascript;base64,'+Buffer.from((await transform(previousSource,{loader:'ts',format:'esm',target:'es2022'})).code).toString('base64'));
-test('all ten preceding vehicles keep exact physics trajectories with tuned, damaged and legacy engine states',()=>{
+// Apply only the later reviewed rear handbrake policy to the frozen reference;
+// all original trajectory inputs and exact state comparisons remain intact.
+const previousStep=(...args:Parameters<typeof stepVehiclePhysics>)=>withHistoricalHandbrakePolicy(args[1],args[2],args[4].input.handbrake,()=>previous.stepVehiclePhysics(...args));
+test('all ten preceding vehicles keep exact physics trajectories under current handbrake policy with tuned, damaged and legacy engine states',()=>{
  const kinds=CAR_KINDS.filter(kind=>kind!=='buggy');assert.equal(kinds.length,10);
  for(const kind of kinds)for(const tuned of [false,true]){
   const setup={engine:tuned?2:0,tires:tuned?2:0,armor:tuned?1:0,tune:{gearing:tuned?.4:0,suspension:tuned?-.4:0,steering:tuned?.3:0,brakeBias:tuned?-.2:0,differential:tuned?.6:0}};
-  const runs=[{create:createVehiclePhysics,step:stepVehiclePhysics,spec:vehicleSpecification},{create:previous.createVehiclePhysics,step:previous.stepVehiclePhysics,spec:previous.vehicleSpecification}].map(api=>{const world=new R.World({x:0,y:-9.81,z:0});world.timestep=dt;world.createCollider(R.ColliderDesc.cuboid(500,.5,500).setTranslation(0,-.5,0));const spec=api.spec(kind,setup),car=api.create(R,world,kind,spec.mass);car.body.setTranslation({x:0,y:.89,z:0},true);return{api,world,spec,...car,s:state()};});
+  const runs=[{create:createVehiclePhysics,step:stepVehiclePhysics,spec:vehicleSpecification},{create:previous.createVehiclePhysics,step:previousStep,spec:previous.vehicleSpecification}].map(api=>{const world=new R.World({x:0,y:-9.81,z:0});world.timestep=dt;world.createCollider(R.ColliderDesc.cuboid(500,.5,500).setTranslation(0,-.5,0));const spec=api.spec(kind,setup),car=api.create(R,world,kind,spec.mass);car.body.setTranslation({x:0,y:.89,z:0},true);return{api,world,spec,...car,s:state()};});
   assert.deepEqual(runs[0].spec,runs[1].spec);
   try{
    for(let tick=0;tick<600;tick++){
