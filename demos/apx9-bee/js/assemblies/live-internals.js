@@ -18,7 +18,7 @@ export function build(ctx){
    const g=part(head,'optical-drive-'+id,'Optical iris and focus gimbal',{pos:[10.9,.9,side*2.1],rot:[0,side<0?180:0,0],explode:ex([0,0,side*1.5],'mid')});
    const shell=part(g,'barrel','Optical barrel',{tag:'shell'});shell.add(cyl(.95,.48,{axis:'z',rIn:.8,segments:48}),M.gunmetal);
    for(let i=0;i<12;i++){const a=i*Math.PI/6;shell.add(cyl(.04,.065,{axis:'z',segments:8}),M.gold,[Math.cos(a)*.88,Math.sin(a)*.88,.28]);}
-   const yaw=part(g,'yaw-ring','Optical yaw cradle');yaw.add(ring(.80,.05),M.chrome);yaw.add(cyl(.07,1.76,{axis:'y',segments:12}),M.steel);
+   const yaw=part(g,'yaw-ring','Optical yaw cradle');yaw.add(ring(.80,.05),M.chrome);for(const s of [-1,1])yaw.add(cyl(.07,.20,{axis:'y',segments:12}),M.steel,[0,s*.80,0]);
    const pitch=part(yaw,'pitch-ring','Optical pitch cradle');pitch.add(ring(.70,.04),M.brass);
    const lens=part(pitch,'focus-carriage','Axial focusing lens');lens.add(cyl(.38,.10,{axis:'z',segments:40}),M.glass,[0,0,-.1]);lens.add(ring(.40,.035),M.chrome,[0,0,-.1]);
    const foil=new T.Shape();foil.moveTo(0,0);foil.quadraticCurveTo(.35,-.20,.74,.08);foil.lineTo(.42,.22);foil.quadraticCurveTo(.15,.24,0,.08);foil.closePath();
