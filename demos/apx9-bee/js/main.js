@@ -1,0 +1,399 @@
+// APX-9 exploded view: boots the stage, builds the bee from its assemblies, runs the camera / picking / post chain.
+import * as THREE from 'three';
+import { Q } from './quality.js';
+import * as kit from './kit.js';
+import { createStage } from './stage.js';
+import { Rig, VIEWS, anglesQuat } from './rig.js';
+import { Picker } from './picking.js';
+import { createPost } from './post.js';
+import { Selection } from './select.js';
+
+const ASSEMBLIES = ['head', 'optics', 'thorax', 'flight', 'wings', 'abdomen', 'tail', 'core', 'legs'];
+const P = Q.params;
+const QA = P.has('qa');
+const $ = (s) => document.querySelector(s);
+const clamp = THREE.MathUtils.clamp;
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const loaderBar = $('#loader-bar');
+const loaderMsg = $('#loader-msg');
+function progress(f, msg) {
+  if (loaderBar) loaderBar.style.transform = `scaleX(${clamp(f, 0, 1)})`;
+  if (msg && loaderMsg) loaderMsg.textContent = msg;
+}
+
+function fatal(err, hint) {
+  console.error('[apx9]', err);
+  document.body.classList.remove('loading');
+  document.body.classList.add('failed');
+  const box = $('#fatal');
+  if (box) {
+    box.querySelector('.fatal-msg').textContent = hint || 'The 3D view could not start on this device.';
+    box.querySelector('.fatal-detail').textContent = String(err?.stack || err || '');
+  }
+}
+
+async function boot() {
+  kit.detail.seg = Q.seg;
+  kit.detail.tess = Q.tess;
+  progress(0.04, 'Preparing studio');
+
+  const container = $('#stage');
+  let stage;
+  try { stage = createStage(container, Q); } catch (e) { return fatal(e, 'WebGL 2 is required to display the APX-9 model.'); }
+  const { renderer, scene, camera } = stage;
+  renderer.shadowMap.autoUpdate = false;
+  const canvas = renderer.domElement;
+
+  const rig = new Rig(camera, canvas, { minDist: 6, maxDist: 360 });
+  const picker = new Picker(renderer, scene, camera);
+  const post = createPost({ stage, Q, picker });
+
+  /* ------------------------------------------------------------ assemble the bee */
+  const bee = new kit.Bee();
+  const ctx = { bee, Q, shared: {}, ...kit };
+  const only = (P.get('only') || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const names = only.length ? ASSEMBLIES.filter((n) => only.includes(n)) : ASSEMBLIES;
+  const report = [];
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i];
+    progress(0.08 + (0.7 * i) / names.length, `Machining ${name}`);
+    await nextFrame();
+    const t0 = performance.now();
+    try {
+      const mod = await import(`./assemblies/${name}.js`);
+      await mod.build(ctx);
+      report.push({ name, ok: true, ms: Math.round(performance.now() - t0) });
+    } catch (err) {
+      console.error(`[apx9] assembly "${name}" failed`, err);
+      report.push({ name, ok: false, ms: Math.round(performance.now() - t0), error: String(err?.message || err) });
+    }
+  }
+  const demoName = P.get('demo');
+  if (demoName) {
+    try { await (await import(`./assemblies/${demoName}.js`)).build(ctx); report.push({ name: demoName, ok: true }); }
+    catch (err) { console.error('[apx9] demo failed', err); report.push({ name: demoName, ok: false, error: String(err?.message || err) }); }
+  }
+
+  let layout = {};
+  try { layout = (await import('./layout.js')).LAYOUT || {}; } catch { /* no overrides yet */ }
+  progress(0.82, 'Mating parts');
+  await nextFrame();
+  const tF = performance.now();
+  bee.finalize(layout);
+  scene.add(bee.root);
+  report.push({ name: 'finalize', ok: true, ms: Math.round(performance.now() - tF) });
+  picker.setBee(bee);
+  const selection = new Selection({ bee, post, rig, invalidate: () => invalidate() });
+
+  /* ------------------------------------------------------------ state */
+  const state = {
+    explode: 0, tween: null, dirty: true, shadowDirty: true, boundsDirty: true, framed: false,
+    frames: 0, ready: false, hoverEvt: null, lastPick: 0, fps: 0,
+  };
+  const box = new THREE.Box3();
+  const sph = new THREE.Sphere();
+  const prev = { c: new THREE.Vector3(), r: 1, valid: false, sc: null };
+  const bbox = new THREE.Box3();
+  const _c1 = new THREE.Vector3();
+  let app = null;
+
+  function invalidate(shadow = false) {
+    state.dirty = true;
+    if (shadow) { state.shadowDirty = true; state.boundsDirty = true; }
+  }
+
+  function subjectParts() {
+    if (state.framed && selection.selected.length) {
+      const out = [];
+      for (const p of selection.selected) for (const q of p.walk()) out.push(q);
+      return out;
+    }
+    return null;
+  }
+
+  function updateBounds(follow = true) {
+    state.boundsDirty = false;
+    bee.worldBounds(box);
+    if (box.isEmpty()) return;
+    box.getBoundingSphere(sph);
+    rig.radius = sph.radius;
+    rig.center.copy(sph.center);
+    stage.fitShadow(box, !prev.valid);
+    if (follow && prev.valid) {
+      const sub = subjectParts();
+      if (sub) {
+        bee.worldBounds(bbox, sub);
+        if (!bbox.isEmpty()) {
+          bbox.getCenter(_c1);
+          if (prev.sc) rig.target.add(_c1).sub(prev.sc);
+          prev.sc = prev.sc ? prev.sc.copy(_c1) : _c1.clone();
+        }
+      } else {
+        const k = sph.radius / prev.r;
+        if (Number.isFinite(k) && Math.abs(k - 1) > 1e-4) {
+          rig.dist = clamp(rig.dist * k, rig.minDist, rig.maxDist);
+          rig.target.add(sph.center).sub(prev.c);
+        }
+        prev.sc = null;
+      }
+    }
+    prev.c.copy(sph.center);
+    prev.r = sph.radius;
+    prev.valid = true;
+  }
+
+  function setExplode(v, ms = 0, delay = 0) {
+    v = clamp(v, 0, 1);
+    if (ms <= 0) { state.tween = null; applyExplode(v); return; }
+    state.tween = { from: state.explode, to: v, t: -delay / 1000, dur: ms / 1000 };
+    invalidate();
+  }
+  function applyExplode(v) {
+    state.explode = v;
+    bee.setExplode(v);
+    invalidate(true);
+    app?.onExplode?.(v);
+  }
+
+  function frameAll({ ms = 0, quat = null, margin = 1.14 } = {}) {
+    bee.worldBounds(box);
+    box.getBoundingSphere(sph);
+    rig.frame(sph, { ms, margin, quat });
+    state.framed = false;
+    invalidate();
+  }
+
+  function resetView(ms = 900) {
+    selection.clear();
+    state.framed = false;
+    frameAll({ ms, quat: VIEWS.hero() });
+  }
+
+  function setView(name, ms = 900) {
+    state.framed = false;
+    const quat = (VIEWS[name] || VIEWS.hero)();
+    if (state.framed && selection.selected.length) {
+      state.framed = true;
+      rig.goTo({ quat }, ms);
+    } else {
+      bee.worldBounds(box);
+      box.getBoundingSphere(sph);
+      rig.frame(sph, { ms, margin: 1.14, quat });
+    }
+    invalidate();
+  }
+
+  function frameSelection(ms = 800, margin = 1.55) {
+    if (selection.frame(ms, margin)) { state.framed = true; prev.sc = null; return true; }
+    return false;
+  }
+
+  /* ------------------------------------------------------------ resize + interaction */
+  const doResize = () => {
+    const [w, h, dpr] = stage.resize();
+    post.resize(w, h, dpr);
+    invalidate();
+  };
+  doResize();
+  new ResizeObserver(doResize).observe(container);
+
+  rig.changeCb = () => invalidate();
+  rig.interactCb = () => { rig.autoRotate = false; app?.onInteract?.(); invalidate(); };
+  rig.hoverCb = (x, y, e) => {
+    if (x == null) { state.hoverEvt = null; selection.setHover(null); app?.onHover?.(null); return; }
+    state.hoverEvt = e;
+  };
+  rig.tapCb = (x, y, e) => {
+    const part = picker.pick(e.clientX, e.clientY, canvas);
+    if (part) selection.select(part, { toggle: e.shiftKey || e.ctrlKey || e.metaKey });
+    else selection.clear();
+    if (!part) state.framed = false;
+    app?.onTap?.(part, e);
+  };
+  rig.dblCb = (x, y, e) => {
+    const part = picker.pick(e.clientX, e.clientY, canvas);
+    if (part) { selection.select(part); frameSelection(); } else resetView();
+  };
+
+  selection.onVisibility = () => invalidate(true);
+  selection.on((kind) => {
+    if (kind === 'select' && !selection.selected.length) state.framed = false;
+    app?.onSelect?.(kind, selection);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'Escape': selection.clear(); break;
+      case ' ': e.preventDefault(); setExplode(state.explode > 0.5 ? 0 : 1, 2200); break;
+      case 'ArrowLeft': rig.nudge(-0.08, 0); break;
+      case 'ArrowRight': rig.nudge(0.08, 0); break;
+      case 'ArrowUp': rig.nudge(0, -0.08); break;
+      case 'ArrowDown': rig.nudge(0, 0.08); break;
+      case '+': case '=': rig.zoomBy(0.8); break;
+      case '-': case '_': rig.zoomBy(1.25); break;
+      case 'r': case 'R': resetView(); break;
+      case 'f': case 'F': frameSelection(); break;
+      default: return;
+    }
+    invalidate();
+  });
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); fatal('WebGL context lost', 'The graphics context was lost. Reload the page to continue.'); });
+
+  /* ------------------------------------------------------------ frame loop */
+  let last = performance.now();
+  let fpsT = last, fpsN = 0;
+  function draw(now) {
+    selection.sync();
+    if (state.boundsDirty) updateBounds(true);
+    if (state.shadowDirty) { renderer.shadowMap.needsUpdate = true; state.shadowDirty = false; }
+    renderer.info.reset();
+    post.render({ id: selection.needsId, focus: selection.focus, time: now / 1000 });
+    state.frames++;
+    fpsN++;
+    if (now - fpsT > 1000) { state.fps = Math.round((fpsN * 1000) / (now - fpsT)); fpsN = 0; fpsT = now; }
+    app?.afterRender?.(now);
+  }
+
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (document.hidden || !state.ready) return;
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    let need = state.dirty;
+    state.dirty = false;
+    if (state.tween) {
+      const tw = state.tween;
+      tw.t += dt;
+      if (tw.t >= 0) {
+        const k = Math.min(1, tw.t / tw.dur);
+        applyExplode(tw.from + (tw.to - tw.from) * ease(k));
+        if (k >= 1) state.tween = null;
+      }
+      need = true;
+    }
+    if (rig.update(dt)) need = true;
+    if (rig.autoRotate) need = true;
+    if (selection.update(dt)) need = true;
+    if (state.hoverEvt && now - state.lastPick > 55 && !rig.drag) {
+      const e = state.hoverEvt;
+      state.hoverEvt = null;
+      state.lastPick = now;
+      const part = picker.pick(e.clientX, e.clientY, canvas);
+      selection.setHover(part);
+      app?.onHover?.(part, e);
+    }
+    if (app?.tick?.(dt, now)) need = true;
+    if (need) draw(now);
+  }
+
+  /* ------------------------------------------------------------ public handle */
+  app = {
+    THREE, kit, Q, bee, stage, rig, picker, post, selection, state, report, canvas,
+    invalidate, setExplode, getExplode: () => state.explode, frameAll, resetView, setView, frameSelection,
+    ui: null,
+  };
+
+  const stats = () => ({
+    ...bee.stats(), calls: renderer.info.render.calls, triangles: renderer.info.render.triangles,
+    fps: state.fps, dpr: stage.dpr, tier: Q.tier, report,
+  });
+
+  const tick2 = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  /** Deterministic state setter + render for QA screenshots. */
+  app.snap = async (o = {}) => {
+    if (o.xray != null) selection.setXray(!!o.xray);
+    if (o.isolate != null) selection.setIsolate(!!o.isolate);
+    if (o.explode != null) { state.tween = null; applyExplode(o.explode); }
+    updateBounds(false);
+    if (o.sel !== undefined) {
+      const ids = [].concat(o.sel || []);
+      selection.selected = ids.map((id) => bee.get(id)).filter(Boolean);
+      selection.dirtyFlags = true;
+      if (!ids.length) state.framed = false;
+      selection._applyVisibility?.();
+      app.ui?.refresh?.();
+    }
+    if (o.hover !== undefined) selection.setHover(o.hover ? bee.get(o.hover) : null);
+    const quat = o.view ? (VIEWS[o.view] || VIEWS.hero)() : o.yaw != null ? anglesQuat(o.yaw, o.pitch ?? 0, o.roll ?? 0) : null;
+    if (o.fit !== false) {
+      if (o.fitSel && selection.selected.length) {
+        const parts = [];
+        for (const p of selection.selected) for (const q of p.walk()) parts.push(q);
+        bee.worldBounds(box, parts);
+        box.getBoundingSphere(sph);
+        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.5, quat: quat ?? rig.quat.clone() });
+        state.framed = true;
+      } else {
+        bee.worldBounds(box);
+        box.getBoundingSphere(sph);
+        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.14, quat: quat ?? rig.quat.clone() });
+      }
+    } else if (quat) { rig.quat.copy(quat); rig.apply(); }
+    if (o.dist) { rig.dist = o.dist; rig.apply(); }
+    if (o.target) { rig.target.set(...o.target); rig.apply(); }
+    prev.valid = false;
+    updateBounds(false);
+    prev.sc = null;
+    rig.autoRotate = false;
+    state.shadowDirty = true;
+    invalidate();
+    await tick2();
+    draw(performance.now());
+    await tick2();
+    return stats();
+  };
+  app.stats = stats;
+  app.draw = () => draw(performance.now());
+  window.__apx = app;
+
+  /* ------------------------------------------------------------ first frame */
+  progress(0.9, 'Lighting');
+  await nextFrame();
+  updateBounds(false);
+  prev.valid = true;
+  const exParam = parseFloat(P.get('explode'));
+  const startQuat = P.get('view') ? (VIEWS[P.get('view')] || VIEWS.hero)() : VIEWS.hero();
+  frameAll({ ms: 0, quat: startQuat });
+  rig.saveHome();
+  const wantIntro = !QA && !reducedMotion && !Number.isFinite(exParam);
+  if (Number.isFinite(exParam)) applyExplode(clamp(exParam, 0, 1));
+  else if (reducedMotion || QA) applyExplode(0.7);
+  state.ready = true;
+  state.dirty = true;
+  requestAnimationFrame(frame);
+
+  try {
+    const ui = await import(`./${P.get('uimod') || 'ui'}.js`);
+    app.ui = (await ui.initUI(app)) || null;
+  } catch (err) {
+    console.error('[apx9] ui failed', err);
+    report.push({ name: 'ui', ok: false, error: String(err?.message || err) });
+  }
+
+  progress(1, 'Ready');
+  draw(performance.now());
+  await nextFrame();
+  document.body.classList.remove('loading');
+  document.body.classList.add('ready');
+  if (QA) document.body.classList.add('qa');
+  if (P.get('ui') === '0') document.body.classList.add('no-ui');
+  if (P.has('stats')) { const el = $('#stats'); if (el) { el.hidden = false; setInterval(() => (el.textContent = JSON.stringify(stats(), null, 1)), 800); } }
+
+  const hashId = decodeURIComponent((location.hash.match(/^#p=(.+)$/) || [])[1] || '');
+  const selId = P.get('sel') || hashId;
+  if (selId && bee.get(selId)) { selection.select(bee.get(selId)); frameSelection(0); }
+
+  if (wantIntro) {
+    rig.autoRotate = true;
+    rig.autoSpeed = 0.18;
+    setTimeout(() => { if (!state.tween && state.explode < 0.01) setExplode(0.72, 3600); }, 650);
+  }
+  console.info('[apx9] ready', stats());
+}
+
+boot().catch((e) => fatal(e));
