@@ -155,3 +155,9 @@
 
 /prototypes/hidden-reef-header-preview/showroom/reef/assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+# APX-9 source URLs are stable: revalidate code/styles on return visits.
+/demos/apx9-bee/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+/demos/apx9-bee/css/*
+  Cache-Control: public, max-age=0, must-revalidate
