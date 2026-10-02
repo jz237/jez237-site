@@ -106,10 +106,12 @@ export function createMapPoints(THREE, { scene, stage, projection, sampleElevati
             else onSelect(g.type, g.members[0].data); };
         }
         entry.cluster = cluster;
-        const symbol = type === 'ship' ? '▲' : type === 'gauge' ? '≈' : '◆';
-        const text = members.length > 1 ? `${symbol} ${members.length}` : symbol;
+        const symbol = type === 'ship' ? '▲' : type === 'gauge' ? '≈' : type === 'outage' ? 'ϟ' : '◆';
+        const total = type === 'outage' ? members.reduce((n, p) => n + p.data.outages, 0) : members.length;
+        entry.pin.classList.toggle('cluster', total > 1);
+        const text = total > 1 ? `${symbol} ${total}` : symbol;
         if (entry.pin.textContent !== text) entry.pin.textContent = text;
-        const label = members.length > 1 ? `${members.length} ${type}s · show list`
+        const label = members.length > 1 ? `${total} ${type}s · show list`
           : `${type}: ${members[0].data.name}`;
         entry.pin.setAttribute('aria-label', label); entry.pin.title = label;
         entry.pin.classList.toggle('stale', type === 'ship'
