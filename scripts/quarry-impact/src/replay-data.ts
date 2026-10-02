@@ -11,7 +11,7 @@ export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];pro
 export function replayCourseId(meta:Pick<ReplayMeta,'mode'|'courseId'>):CourseId{
   if(meta.courseId!==undefined&&!isCourseId(meta.courseId))throw Error('This replay uses an unsupported course.');
   const id=resolveCourseId(meta.courseId);
-  if(id==='ironfield-figure-eight-v1'&&meta.mode!=='race')throw Error('Ironfield replays support circuit races only.');
+  if(id!=='quarry-v1'&&meta.mode!=='race')throw Error('This course supports circuit races only.');
   return id;
 }
 /** QIR1 legacy poses retain 56 floats. Model 1 also records four contact

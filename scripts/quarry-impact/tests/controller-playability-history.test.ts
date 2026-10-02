@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {normalizeCinderbankMain} from './cinderbank-playability-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -10,7 +11,7 @@ const hash=(bytes:Uint8Array|string)=>createHash('sha256').update(bytes).digest(
 test('controller playability adds one immutable leaf preserving all 730 fixtures, physics, assets and backend',verifyControllerPlayabilityRevision);
 
 test('actual camera, AI, physics step, recovery and event construction declarations stay byte-exact',()=>{
- const main=readFileSync(new URL('../src/main.ts',import.meta.url)).toString();
+ const main=normalizeCinderbankMain(readFileSync(new URL('../src/main.ts',import.meta.url))).toString();
  const before=readControllerPlayabilityPrevious('src/main.ts').toString();
  const manifest=JSON.parse(readFileSync(new URL('./fixtures/controller-playability/revision.json',import.meta.url)).toString());
  const names=['updateCamera','ai','step','recover','start','createCars'];

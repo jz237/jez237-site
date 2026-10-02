@@ -19,7 +19,7 @@ test('eight appended stock events cover each missing vehicle and both actual rac
  assert.deepEqual([...new Set(CHALLENGES.map(c=>c.car))].sort(),[...CAR_KINDS].sort());
  const originalCars=new Set(CHALLENGES.slice(0,30).map(c=>c.car)),added=CHALLENGES.slice(30);
  assert.deepEqual(added.map(c=>c.car).sort(),CAR_KINDS.filter(kind=>!originalCars.has(kind)).sort());
- assert.deepEqual([...new Set(added.filter(c=>c.mode==='race').map(challengeCourse))].sort(),Object.keys(COURSE_NAMES).sort());
+ assert.deepEqual([...new Set(added.filter(c=>c.mode==='race').map(challengeCourse))].sort(),['quarry-v1','ironfield-figure-eight-v1'].sort());
  for(const c of CHALLENGES){
   if(c.mode==='race')assert.equal(getRaceCourse(challengeCourse(c)).checkpoints.length,24,'Existing medal gate count is valid on '+c.id);
   else assert.equal(challengeCourse(c),'quarry-v1','Arena and ramp events stay at Quarry');

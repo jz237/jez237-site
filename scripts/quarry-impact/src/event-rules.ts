@@ -26,9 +26,9 @@ export function derbyGridSlot(index:number,count:number,arena:ArenaLayout){
   const a=index/count*Math.PI*2;
   return {x:arena.x+Math.sin(a)*arena.spawnRadius,z:arena.z-Math.cos(a)*arena.spawnRadius,yaw:Math.atan2(-Math.sin(a),Math.cos(a))};
 }
-export function checkRoute(route:readonly RoutePoint[],x:number,z:number,next:number,lastDistance:number){
+export function checkRoute(route:readonly RoutePoint[],x:number,z:number,next:number,lastDistance:number,radius=12){
   const p=route[next],distance=Math.hypot(x-p.x,z-p.z);
-  return {passed:distance<12&&distance<lastDistance,distance};
+  return {passed:distance<radius&&distance<lastDistance,distance};
 }
 export function lapProgress(passed:number,laps:number){return {lap:Math.max(1,Math.floor(passed/24)+1),finished:passed>=laps*24};}
 export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number};
