@@ -228,7 +228,7 @@ export async function initOperations(app) {
     if (op.mode === 'power') { lamp.position.copy(anchor('eye-r')); lamp.position.x += 1.6; lamp.material.opacity = .12 + Math.sin(op.clock * 2) * .04; }
     if (flower.visible) { scan.scale.setScalar(1 + Math.sin(op.clock * 2) * .08); if (op.mode === 'sensors') { bee.root.visible = false; const W = stage.size.x, H = stage.size.y; const distance = W < 760 ? Math.max(1.7, H / W * 1.25) : 1; stage.camera.position.set(32 - 40 * distance, -10 + 24 * distance, 24 * distance); stage.camera.lookAt(32, -10, 0); stage.camera.setViewOffset(W, H, W < 760 ? 0 : -160, W < 760 ? H * .21 : 0, W, H); stage.camera.updateMatrixWorld(); } }
     if (['mission', 'sensors', 'scale'].includes(op.mode)) { stage.camera.near = .1; stage.camera.far = 1000; stage.camera.updateProjectionMatrix(); }
-    app.state.shadowDirty = powered;
+    app.state.shadowDirty ||= powered;
     return (moving && !['scale', 'repair'].includes(op.mode)) || (moving && op.mode === 'repair' && (op.repair === 5 || op.repair === 4 && op.repairT < 1.4)) || old;
   };
   window.addEventListener('resize', () => { if (op.mode !== 'inspect') frameExhibit(); });
