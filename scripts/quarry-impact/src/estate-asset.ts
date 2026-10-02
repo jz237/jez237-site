@@ -4,6 +4,7 @@ import {addClassicBayClosures} from './classic-engine-bay';
 import {buildMuscleAsset,MUSCLE_TEXTURES} from './muscle-asset';
 import {partitionSurface,type SurfacePlane} from './surface-partition';
 import {classicWindowFrame} from './classic-window-frame';
+import {addEstateFront} from './estate-front';
 import {stampedPanel} from './classic-panel';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -21,15 +22,17 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
   let serial=0;
   const mesh=(name:string,g:T.BufferGeometry,m:T.Material)=>{const geometry=g.index?g.toNonIndexed():g;if(geometry!==g)g.dispose();const o=new T.Mesh(geometry,m);o.name=name;o.castShadow=o.receiveShadow=true;root.add(o);return o;};
   const box=(name:string,size:[number,number,number],at:[number,number,number],m:T.Material)=>{const o=mesh(name,new T.BoxGeometry(...size).toNonIndexed(),m);o.position.set(...at);return o;};
-  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.84],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72]];
+  const planes:SurfacePlane[]=[[0,-.80],[0,.80],[0,-.72],[0,-.65],[0,.65],[0,.72],[1,.82],[1,.84],[1,.98],[1,1.03],[1,1.10],[1,1.30],[2,-1.40],[2,-.82],[2,-.60],[2,-.38],[2,.72],[2,2.05]];
   for(const child of [...donor.children]){
     if(child.name.startsWith('wheel_')){root.add(child);continue;}
     if(!(child instanceof T.Mesh))continue;
     const mat=child.material as T.Material,body=mat.name.startsWith('paint'),window=child.name.startsWith('glass_');
-    if(window){child.geometry.dispose();continue;}
+    if(window||['Grille','Classic Headlight','Badge'].includes(mat.name)||child.name.startsWith('panel_bumper_front')||child.name.startsWith('panel_hood')){child.geometry.dispose();continue;}
     const interior=mat.name.startsWith('Interior')||mat.name==='Underside';
     for(const part of partitionSurface(child.geometry,planes,p=>{
       if(!interior&&p.z<.72&&p.y>1.03)return null;
+      if(!interior&&p.z>2.05)return null;
+      if(body&&p.z>.72&&Math.abs(p.x)<.72&&p.y>.84)return null;
       if(interior&&(p.y>1.30||p.y>1.10&&(Math.abs(p.x)>.65||p.z<-.60)))return null;
       if(['Chrome','BlackPlastic'].includes(mat.name)&&Math.abs(p.x)>.80&&p.y>.82&&p.z>-.82&&p.z<.72)return null;
       if(body&&p.z<-.38&&Math.abs(p.x)<.72&&p.y>.98)return null;
@@ -42,6 +45,7 @@ export function buildEstateAsset(obj:string,textures:Partial<Record<keyof typeof
     }))mesh(part.name+'_'+serial++,part.geometry,body?paint:mat);
     child.geometry.dispose();
   }
+  addEstateFront(root,paint,chrome,rubber);
   // Fixed inner structure remains visible when the hood or bumper folds away.
   // It sits below the source skin and does not travel with detachable panels.
   const steel=new T.MeshStandardMaterial({name:'Estate Chassis Steel',color:0x292f2e,roughness:.68,metalness:.62});

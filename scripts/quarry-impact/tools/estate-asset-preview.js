@@ -7,7 +7,7 @@ const {GLTFLoader}=await import('three/addons/loaders/GLTFLoader.js');
 const {prepareWreckGeometry}=await import('/src/wreck-geometry.ts');const {WreckAttachments}=await import('/src/wreck-attachments.ts');
 const car=(await new GLTFLoader().loadAsync('/models/estate-candidate.glb')).scene;scene.add(car);prepareWreckGeometry(car);const parts=new WreckAttachments(car,['FL','FR','RL','RR'].map(n=>car.getObjectByName('wheel_'+n)),.914);
 car.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=o.receiveShadow=true;}});
-document.getElementById('name').textContent='Estate · body conversion';document.getElementById('spec').textContent='BrightRetro body • original estate conversion • Recessed framed glazing • Four complete doors • Beta artwork';
+document.getElementById('name').textContent='Estate · body conversion';document.getElementById('spec').textContent='BrightRetro body • original estate conversion • Original estate nose • Smooth crowned hood • Recessed twin lamps • Four complete doors • Beta artwork';
 document.getElementById('front').onclick=()=>{camera.position.set(6,3.3,7);controls.target.set(0,1,0);};
 document.getElementById('rear').onclick=()=>{camera.position.set(-6,3.3,-7);controls.target.set(0,1,0);};
 document.getElementById('doors').onclick=()=>{parts.reset();for(const side of [-1,1])parts.hit(new T.Vector3(side*.86,.77,-1.15),new T.Vector3(-side,0,0),60);parts.pose(.3,0);};
