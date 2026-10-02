@@ -1,1 +1,0 @@
-{"name":"apx9-bee","private":true,"type":"module","scripts":{"build":"vite build --base=/demos/apx9-bee/ --outDir ../../demos/apx9-bee"},"dependencies":{"three":"0.185.1","vite":"8.2.2"},"devDependencies":{"playwright":"1.58.2"}}
