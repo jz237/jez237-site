@@ -204,11 +204,22 @@ function check(name, ok, info) {
       }
       return hits;
     }, W, H);
+    // On a loaded machine the reset-view tween can still be easing here; scan only once camera and explode have stopped moving.
+    {
+      let last = '', same = 0;
+      for (let i = 0; i < 50 && same < 3; i++) {
+        const s = await ev(() => window.__apx.stage.camera.matrixWorld.elements.map((n) => n.toFixed(4)).join(',') + '|' + window.__apx.state.explode.toFixed(4));
+        same = s === last ? same + 1 : 0;
+        last = s;
+        await sleep(200);
+      }
+    }
     let hits = await scan();
     check('picker finds parts on screen', hits.length > 10, hits.length);
     const target = hits.length ? hits[Math.floor(hits.length / 2)].id : null;
     const tpos = hits.length ? hits[Math.floor(hits.length / 2)] : null;
     if (target) {
+      await ev(() => { const c = window.__apx.canvas; window.__pm = 0; window.__pl = 0; c.addEventListener('pointermove', () => window.__pm++); c.addEventListener('pointerleave', () => window.__pl++); });
       await page.mouse.move(tpos.x, tpos.y, { steps: 6 });
       await sleep(350);
       let hovered = await ev(() => window.__apx.selection.hovered?.id || null);
@@ -221,7 +232,8 @@ function check(name, ok, info) {
         hovered, tpos,
         diag: await ev((x, y) => {
           const a = window.__apx, e = document.elementFromPoint(x, y);
-          return { fps: a.state.fps, frames: a.state.frames, hoverEvt: !!a.state.hoverEvt, drag: !!a.rig.drag, el: e ? e.tagName + '.' + (e.className?.baseVal ?? e.className) : null, iso: a.selection.isolate, sel: a.selection.selected.length, tween: !!a.state.tween, ready: a.state.ready };
+          const d = a.picker.pick(x, y, a.canvas), d2 = a.picker.pick(x + 1, y + 1, a.canvas);
+          return { fps: a.state.fps, frames: a.state.frames, hoverEvt: !!a.state.hoverEvt, drag: !!a.rig.drag, el: e ? e.tagName + '.' + (e.className?.baseVal ?? e.className) : null, iso: a.selection.isolate, sel: a.selection.selected.length, tween: !!a.state.tween, ready: a.state.ready, pm: window.__pm, pl: window.__pl, direct: d ? d.id : null, direct2: d2 ? d2.id : null, lastPick: Math.round(a.state.lastPick), now: Math.round(performance.now()), viewOffset: !!a.stage.camera.view?.enabled };
         }, tpos.x, tpos.y),
       });
       check('hover shows the tooltip', await $('.tip.on'));

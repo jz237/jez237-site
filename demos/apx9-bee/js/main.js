@@ -39,6 +39,13 @@ function fatal(err, hint) {
 async function boot() {
   kit.detail.seg = Q.seg;
   kit.detail.tess = Q.tess;
+  const only = (P.get('only') || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const names = only.length ? ASSEMBLIES.filter((n) => only.includes(n)) : ASSEMBLIES;
+  // Start every module download at once so the import graph is not discovered one assembly at a time; building stays sequential.
+  const loads = names.map((n) => import(`./assemblies/${n}.js`));
+  const layoutLoad = import('./layout.js');
+  const uiLoad = import(`./${P.get('uimod') || 'ui'}.js`);
+  for (const p of [...loads, layoutLoad, uiLoad]) p.catch(() => {});
   progress(0.04, 'Preparing studio');
 
   const container = $('#stage');
@@ -56,8 +63,6 @@ async function boot() {
   /* ------------------------------------------------------------ assemble the bee */
   const bee = new kit.Bee();
   const ctx = { bee, Q, shared: {}, ...kit };
-  const only = (P.get('only') || '').split(',').map((s) => s.trim()).filter(Boolean);
-  const names = only.length ? ASSEMBLIES.filter((n) => only.includes(n)) : ASSEMBLIES;
   const report = [];
   for (let i = 0; i < names.length; i++) {
     const name = names[i];
@@ -65,7 +70,7 @@ async function boot() {
     await nextFrame();
     const t0 = performance.now();
     try {
-      const mod = await import(`./assemblies/${name}.js`);
+      const mod = await loads[i];
       await mod.build(ctx);
       report.push({ name, ok: true, ms: Math.round(performance.now() - t0) });
     } catch (err) {
@@ -81,7 +86,7 @@ async function boot() {
 
   let layout = {};
   try {
-    const lm = await import('./layout.js');
+    const lm = await layoutLoad;
     layout = lm.LAYOUT || {};
     const sg = parseFloat(P.get('sg'));
     bee.subGain = Number.isFinite(sg) ? sg : (lm.SUB_GAIN ?? 1);
@@ -434,7 +439,7 @@ async function boot() {
   requestAnimationFrame(frame);
 
   try {
-    const ui = await import(`./${P.get('uimod') || 'ui'}.js`);
+    const ui = await uiLoad;
     app.ui = (await ui.initUI(app)) || null;
   } catch (err) {
     console.error('[apx9] ui failed', err);
