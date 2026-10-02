@@ -16,6 +16,7 @@
 //   --hash <h>      location hash (e.g. "#p=thorax")
 //   --timeout <ms>  boot timeout                                        default 180000
 //   --keep          leave the console output unfiltered
+//   --trace         append a JS stack to every console.error / console.warn
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
@@ -74,6 +75,14 @@ function serve() {
   let code = 0;
   try {
     const page = await browser.newPage();
+    if (args.trace) {
+      await page.evaluateOnNewDocument(() => {
+        for (const k of ['error', 'warn']) {
+          const f = console[k].bind(console);
+          console[k] = (...a) => f(...a, '\n' + new Error().stack.split('\n').slice(2, 9).join('\n'));
+        }
+      });
+    }
     page.on('console', (m) => {
       const t = m.type();
       const txt = m.text();

@@ -98,6 +98,9 @@ async function boot() {
   const prev = { c: new THREE.Vector3(), r: 1, valid: false, sc: null };
   const bbox = new THREE.Box3();
   const _c1 = new THREE.Vector3();
+  let cloudA = [], cloudB = [];                 // world corner clouds (previous / current bounds update) for the tight-fit follow
+  const scratch = [];
+  const tight = (m) => 1 + (m - 1) * 0.55;      // sphere-style margin -> margin for the tight perspective fit
   let app = null;
 
   function invalidate(shadow = false) {
@@ -122,6 +125,7 @@ async function boot() {
     rig.radius = sph.radius;
     rig.center.copy(sph.center);
     stage.fitShadow(box, !prev.valid);
+    bee.worldCorners(undefined, cloudB);
     if (follow && prev.valid) {
       const sub = subjectParts();
       if (sub) {
@@ -132,14 +136,19 @@ async function boot() {
           prev.sc = prev.sc ? prev.sc.copy(_c1) : _c1.clone();
         }
       } else {
-        const k = sph.radius / prev.r;
-        if (Number.isFinite(k) && Math.abs(k - 1) > 1e-4) {
-          rig.dist = clamp(rig.dist * k, rig.minDist, rig.maxDist);
-          rig.target.sub(prev.c).multiplyScalar(k).add(sph.center);
+        if (cloudA.length && cloudB.length) {
+          const o = { quat: rig.quat, band: app?.fitBand?.() || null, margin: 1.08 };
+          const a = rig.fitPoints(cloudA, o), b = rig.fitPoints(cloudB, o);
+          const k = b.dist / a.dist;
+          if (Number.isFinite(k)) {
+            rig.dist = clamp(rig.dist * k, rig.minDist, rig.maxDist);
+            rig.target.sub(a.target).multiplyScalar(k).add(b.target);
+          }
         }
         prev.sc = null;
       }
     }
+    [cloudA, cloudB] = [cloudB, cloudA];
     prev.c.copy(sph.center);
     prev.r = sph.radius;
     prev.valid = true;
@@ -164,9 +173,8 @@ async function boot() {
   };
 
   function frameAll({ ms = 0, quat = null, margin = 1.14 } = {}) {
-    bee.worldBounds(box);
-    box.getBoundingSphere(sph);
-    rig.frame(sph, { ms, quat, ...fitOpts(margin) });
+    bee.worldCorners(undefined, scratch);
+    if (scratch.length) rig.frameCorners(scratch, { ms, quat, margin: tight(margin), band: app?.fitBand?.() || null });
     state.framed = false;
     invalidate();
   }
@@ -326,14 +334,12 @@ async function boot() {
       if (o.fitSel && selection.selected.length) {
         const parts = [];
         for (const p of selection.selected) for (const q of p.walk()) parts.push(q);
-        bee.worldBounds(box, parts);
-        box.getBoundingSphere(sph);
-        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.5, quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
+        bee.worldCorners(parts, scratch);
+        rig.frameCorners(scratch, { ms: 0, margin: tight(o.margin ?? 1.5), quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
         state.framed = true;
       } else {
-        bee.worldBounds(box);
-        box.getBoundingSphere(sph);
-        rig.frame(sph, { ms: 0, margin: o.margin ?? 1.14, quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
+        bee.worldCorners(undefined, scratch);
+        rig.frameCorners(scratch, { ms: 0, margin: tight(o.margin ?? 1.14), quat: quat ?? rig.quat.clone(), band: app.fitBand?.() || null });
       }
     } else if (quat) { rig.quat.copy(quat); rig.apply(); }
     if (o.dist) { rig.dist = o.dist; rig.apply(); }

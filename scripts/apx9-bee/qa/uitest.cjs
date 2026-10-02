@@ -141,20 +141,21 @@ function check(name, ok, info) {
     /* ---------- pointer ---------- */
     const parts = await ev(() => window.__apx.bee.tops.map((p) => p.id));
     check('bee has top-level parts', parts.length > 0, parts.slice(0, 12));
-    const screenOf = (id) => ev((pid) => {
-      const a = window.__apx, p = a.bee.get(pid);
-      if (!p) return null;
-      const v = new a.THREE.Vector3();
-      p.worldCenter(v).project(a.stage.camera);
-      const r = a.canvas.getBoundingClientRect();
-      return { x: r.left + (v.x * 0.5 + 0.5) * r.width, y: r.top + (-v.y * 0.5 + 0.5) * r.height };
-    }, id);
-    let target = null, tpos = null;
-    for (const id of parts) {
-      const pos = await screenOf(id);
-      if (pos && pos.x > 330 && pos.x < W - 380 && pos.y > 120 && pos.y < H - 150) { target = id; tpos = pos; break; }
-    }
-    check('found a clickable part on screen', !!target, target);
+    // Grid-scan the picker for clickable points, grouped by top-level ancestor.
+    const scan = () => ev((w, h) => {
+      const a = window.__apx, hits = [];
+      for (let y = 140; y < h - 160; y += 18) for (let x = 340; x < w - 390; x += 18) {
+        const p = a.picker.pick(x, y, a.canvas);
+        if (!p) continue;
+        let top = p; while (top.parent && top.parent.parent) top = top.parent;
+        hits.push({ x, y, id: p.id, top: top.id });
+      }
+      return hits;
+    }, W, H);
+    let hits = await scan();
+    check('picker finds parts on screen', hits.length > 10, hits.length);
+    const target = hits.length ? hits[Math.floor(hits.length / 2)].id : null;
+    const tpos = hits.length ? hits[Math.floor(hits.length / 2)] : null;
     if (target) {
       await page.mouse.move(tpos.x, tpos.y, { steps: 6 });
       await sleep(350);
@@ -185,18 +186,29 @@ function check(name, ok, info) {
       check('clicking empty space clears the selection', (await ev(() => window.__apx.selection.selected.length)) === 0);
       check('inspector closes with the selection', !(await $('.inspector.is-open')));
 
-      await page.mouse.click(tpos.x, tpos.y);
-      await sleep(300);
-      await page.keyboard.down('Shift');
-      let second = null;
-      for (const id of parts) {
-        if (id === target) continue;
-        const pos = await screenOf(id);
-        if (pos && pos.x > 330 && pos.x < W - 380 && pos.y > 120 && pos.y < H - 150 && Math.hypot(pos.x - tpos.x, pos.y - tpos.y) > 30) { second = pos; break; }
+      await press('r', 1400);
+      hits = await scan();
+      const a1 = hits[0];
+      const a2 = a1 && hits.find((h) => h.top !== a1.top && Math.hypot(h.x - a1.x, h.y - a1.y) > 30);
+      check('two different assemblies are pickable', !!(a1 && a2), a1 && a2 ? [a1.id, a2.id] : hits.length);
+      if (a1 && a2) {
+        await page.mouse.click(a1.x, a1.y);
+        await sleep(300);
+        await page.keyboard.down('Shift');
+        await page.mouse.click(a2.x, a2.y);
+        await sleep(300);
+        await page.keyboard.up('Shift');
+        const both = await ev(() => window.__apx.selection.selected.map((p) => p.id));
+        check('shift-click adds to the selection', both.length === 2, both);
+        await page.keyboard.down('Shift');
+        await page.mouse.click(a2.x, a2.y);
+        await sleep(300);
+        await page.keyboard.up('Shift');
+        check('shift-click on a selected part removes it', (await ev(() => window.__apx.selection.selected.length)) === 1);
+        await page.mouse.click(a1.x, a1.y, { count: 2 });
+        await sleep(1100);
+        check('double-click frames the part', await ev(() => window.__apx.state.framed === true));
       }
-      if (second) { await page.mouse.click(second.x, second.y); await sleep(300); }
-      await page.keyboard.up('Shift');
-      if (second) check('shift-click adds to the selection', (await ev(() => window.__apx.selection.selected.length)) >= 2, await ev(() => window.__apx.selection.selected.map((p) => p.id)));
       await press('Escape', 300);
       check('Esc clears the selection', (await ev(() => window.__apx.selection.selected.length)) === 0);
     }
