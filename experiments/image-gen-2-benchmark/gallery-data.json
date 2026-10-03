@@ -18742,5 +18742,131 @@
       "imageSha256": "d72e934d80610a4c33840b7e3b1d64514c889b252c0e7eb99609482333e8bfde",
       "imageDHash": "d6763d0c1c024000"
     }
+  },
+  {
+    "id": "2026-10-03-factual-infographic-factual-infographic-dentophobia-waiting",
+    "title": "Factual infographic: Dentophobia — Waiting Beside the Dental Chair",
+    "tests": "factual_subtype: phobia-infographic; phobia: Dentophobia; eight substantive supporting panels; four explanatory details; ADA, NHS and peer-reviewed sources fetched; no subjective review; approved direct Images subscription route with auto size/quality and opaque output; archive_slot=2026-10-03T12:08; concept=dentophobia-waiting-dental-chair-supported-care; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artwork directly: a substantial museum-quality educational infographic about DENTOPHOBIA, intense fear of dental care. Portrait-oriented composition when supported; automatic output size and quality, opaque background. No photographed poster, surrounding desk, device screen, page curl, mockup or exhibition frame. A sophisticated direct-canvas illustrated plate with realistic cinematic hero rendering, precise editorial diagrams, ample readable lettering, eight substantive supporting panels and four explanatory close-ups. Render all typography as intentional integrated infographic text, never tiny paragraphs. No logos, citations, URLs, statistics, diagnosis quiz, gore, monsters, threatening clinician, forced exposure or promise of painless treatment.\n\nTitle in a strong high-contrast hierarchy: “DENTOPHOBIA”. Subtitle: “When dental care sets off the alarm”. Small introductory deck: “Intense dental fear can disrupt care. Everyday nerves are not automatically a phobia.” Warm ivory canvas, petrol-blue panel headers, restrained amber fear callouts, teal support callouts, charcoal text; fine leader lines and clearly numbered modules. A large fear-provoking but humane hero occupies roughly the central upper half, integrated with surrounding panels rather than a room serving as a poster mockup. Show an adult with medium-brown skin waiting beside a real dental chair, tense shoulders, fingers clasped around a soft stress ball, worried eyes directed toward the reclining seat. A calm clinician sits at the same eye level, listening, hands relaxed, not looming. Include a focused pool of cool light from an overhead dental lamp, stitched charcoal vinyl chair padding, brushed metal instrument arm, coiled suction tubing, glass reflections, disposable barrier film and a small clean instrument tray with mirror and blunt-appearing handle details, all credible and restrained. Nothing is inside the person's mouth. The scene conveys anticipation and vulnerability without exaggerating actual danger. Use shallow visual depth and lifelike tactile detail in the hero, but keep labels flat, crisp and readable. Small leader lines identify “Chair position”, “Unfamiliar instruments”, and “Fear of pain or losing control” as possible triggers, not universal reactions.\n\nArrange eight well-separated illustrated panels in a coherent reading path around and below the hero. Each panel must have a specific visual mechanism and brief exact labels:\n1 — “Before the appointment”: a three-frame micro-sequence of appointment reminder, worried anticipation, and hesitation at the clinic doorway. Caption “Anxiety can begin before the visit.” Distinguish ordinary worry from “Persistent fear that interferes with care”. Do not claim a diagnostic threshold.\n2 — “Sensory triggers”: four detailed small visual windows: reflective dental mirror and tool silhouettes; a dental handpiece with modest abstract sound-wave marks; clinical scent represented by an unobtrusive nose icon; a reclined chair profile. Labels “Sights”, “Sounds / vibration”, “Smells”, “Reclining”. Caption “Triggers differ from person to person.” Sound marks are diagram symbols, not physical energy beams.\n3 — “Uncertainty adds fear”: a thought diagram linking “What will happen?” to a conversation bubble “Ask for an explanation”. Two contrasting miniature appointment scenes, one unclear, one clinician calmly explaining a mirror before examination. Do not depict a literal brain switch or invent neural anatomy.\n4 — “Body alarm”: large explanatory torso-and-hand silhouette with restrained warm callouts for “Noticeable heartbeat”, “Trembling”, “Sweaty palms”, “Tense muscles”, and “Dizziness or nausea”. Magnified hand close-up shows tiny palm moisture highlights and tense fingers; a simple symbolic pulse line has no numbers and is not a diagnostic ECG. Caption “Possible symptoms — not everyone has all of them.” No organ damage claim.\n5 — “Avoidance can feed the cycle”: a prominent four-node circular cause-and-effect diagram, “Fear” → “Delay care” → “Dental problems may grow” → “Later care feels harder” → back to “Fear”. Use icons for worried face, postponed calendar, subtle nongraphic tooth-care concern, and appointment doorway. Underline “A possible cycle, not an inevitable outcome”. Do not show severe decay, graphic pathology or shame.\n6 — “Perceived threat ≠ a full risk assessment”: two balanced columns, “Feared: pain / loss of control” and “Discuss: pain plan / questions / pauses”. Caption “Pain concerns deserve attention.” Small close-up of a patient's raised hand and the clinician stopping, with clear separated hands, label “Agree a pause signal”. Adjacent short note “Tell the dentist if treatment hurts.” Never imply every procedure is risk-free or that a patient's pain is imaginary.\n7 — “Build a supported visit”: a three-step illustrated process “Tell the team” → “Ask what comes next” → “Agree breaks”. Show varied adult patients in the small panels, including an older light-skinned person with glasses and a younger dark-skinned person, all treated respectfully. A second detail strip illustrates headphones, stress ball and relaxed shoulders with labels “Sound distraction”, “Occupy the hands”, “Slow breathing / relax tension”. These are coping options, not cures or mandatory instructions.\n8 — “Help for persistent fear”: clinician-and-therapist collaborative care vignette, with small conversation cards labeled “CBT” and “Guided, gradual approaches”. Caption “Tailored professional support can help.” Footer “If fear affects your life or prevents care, speak with a dentist or mental-health professional.” Do not depict self-directed procedural practice, needles, restraints, medication doses or an exposure ladder as instructions.\n\nThe four key explanatory details must be visually substantial: sensory-trigger instrument macro, bodily-alarm hand macro, avoidance-loop diagram, and raised-hand pause close-up. Preserve the distinct mechanisms and humane tone. Rich material detail, credible anatomy, controlled cool clinical light contrasted with warm supportive accents, beautifully composed educational density. Maintain an unmistakable typographic hierarchy and adequate blank gutters; illustrations and short callouts do the explaining, with no filler text or repeated paragraphs. All factual content is restricted to the statements above; no invented prevalence, causal neuroscience, cure guarantee or added medical claims.",
+    "image": "images/2026-10-03-factual-infographic-factual-infographic-dentophobia-waiting.jpg",
+    "thumb": "thumbs/2026-10-03-factual-infographic-factual-infographic-dentophobia-waiting.webp",
+    "color": "#9c9f9d",
+    "date": "2026-10-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "dentophobia-waiting-dental-chair-supported-care",
+      "imageSha256": "9f87002a0d96c8ac88831ccdbb1ef62addef0b7c5de10de37ad2af838d143df2",
+      "imageDHash": "313464dfcd849818"
+    },
+    "factualInfographic": {
+      "topic": "Dentophobia: intense dental fear, anticipatory anxiety, sensory triggers, body alarm, avoidance, and evidence-based support",
+      "description": "Source-backed educational dentophobia plate distinguishing fear, sensory triggers, variable physical symptoms, care avoidance, realistic pain concerns and tailored support.",
+      "sourceNote": "American Dental Association: https://www.mouthhealthy.org/all-topics-a-z/anxiety ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; Clinical, Cosmetic and Investigational Dentistry review: https://pmc.ncbi.nlm.nih.gov/articles/PMC4790493/ . Verified anticipatory dental fear, sensory triggers, symptoms, possible avoidance cycle, communication and tailored professional support.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-03T16:10:45.563866+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Dental Association",
+            "title": "Anxiety",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.mouthhealthy.org/all-topics-a-z/anxiety"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Clinical, Cosmetic and Investigational Dentistry",
+            "title": "Strategies to manage patients with dental anxiety and dental phobia: literature review",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4790493/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Dental anxiety can occur before a visit; severe persistent dental fear can lead to avoidance. Ordinary nervousness does not itself establish a phobia.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Dental fear can be associated with feared pain, previous difficult experiences, unfamiliar procedures, or a perceived lack of control.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The sights of dental instruments, drilling sounds and vibrations, clinical smells, and the reclined dental-chair position can trigger anxiety for some people.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Uncertainty about what will happen can contribute to anxiety; asking questions about the procedure can help reduce fear of the unknown.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Possible anxiety responses include a noticeable heartbeat, trembling, dizziness, chest tightness, feeling sick, muscle tension and sweaty palms; symptoms vary.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoiding dental care can increase the risk of dental problems and make later visits more difficult, reinforcing fear; this is a possible cycle, not an inevitable outcome.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Fear can concern perceived danger; pain concerns should not be dismissed. Patients should discuss pain management and tell the dentist if pain occurs even with local anesthetic.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Tell the dental team about anxiety and previous experiences; ask what will happen and agree on a raised-hand signal to pause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Headphones for bothersome drilling sounds, a handheld stress ball, slow breathing and relaxing tense muscles can help manage dental anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT and professionally guided exposure-based approaches can help with dental phobia; management should be tailored to the person and clinical situation.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help when phobia symptoms affect life; a dentist and mental-health professional may work together on care.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
