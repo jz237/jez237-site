@@ -18591,5 +18591,137 @@
       "imageSha256": "84304c5c4bbbdabb1594e4ec866c7af9bd26eb5844b3f857cef3599fa51a0e77",
       "imageDHash": "01030303c4894386"
     }
+  },
+  {
+    "id": "2026-10-03-factual-infographic-factual-infographic-arachnophobia-the-s",
+    "title": "Factual infographic: Arachnophobia — The Spider at the Curtain Fold",
+    "tests": "factual_subtype: phobia-infographic; phobia: Arachnophobia; eight supporting panels; four explanatory details; sources fetched; no subjective review; requested auto size/quality opaque direct subscription route; archive_slot=2026-10-03T04:08; concept=arachnophobia-curtain-spider-anticipation-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished direct-canvas museum-quality educational infographic, not a photograph of a poster, book, screen or framed page. Portrait-oriented composition at the automatic output size. Title: “ARACHNOPHOBIA”. Subtitle: “When spider fear takes over”. This is an intense but humane and scientifically careful illustrated plate, not horror fantasy. Give it layered realistic surface detail, cinematic yet credible natural lighting, exceptionally readable typography, eight substantive supporting panels and four explanatory detail diagrams. No bibliography, URL, logo or watermark on the image. Do not invent numerical statistics, brain circuitry, danger rankings, venom claims or promises of cure.\n\nDOMINANT HERO, upper central half: an intimate low-angle view into a sunlit domestic window alcove, a small ordinarily proportioned spider visible at the edge of a folded linen curtain. Fine woven linen fibers, stitched hem, worn painted window trim, dusty grazing light, an out-of-focus courtyard beyond glass, warm skin textures. A middle-aged Black woman in everyday clothes stands back from the alcove with a tense shoulder, slightly raised open hand and visibly hesitant posture; keep her dignified and anatomically believable, not screaming theatrically. The real spider is small relative to the hem and window frame, with eight slender legs, never enlarged into a monster. It remains separate from the person, never bites, lunges or approaches her face. Maintain a visible safe physical separation. Use a thin clean leader line to the object caption “Observed: a spider”; another to the person's thought inset “Anticipated: ‘What if it comes closer?’”. These are an illustrative scenario, not universal behavior or a diagnosis. A softly tinted thought inset may crop the curtain detail, clearly labeled “WORRY”, not a second giant spider. The actual spider and her imagined threat must not be confused. No claim that every spider is harmless.\n\nInformation architecture: deep indigo header, ivory panel fields, restrained copper alarm accents, calm teal care accents. Integrated fine linework, generous gutters, large short headings, concise legible text, consistent leader lines and arrows. Supporting panels surround and continue below the hero in a clear reading order; each panel has an actual illustration or diagram and distinct explanatory content, not eight boxes of filler. Use the following eight headings and concise exact labels:\n\n1. “WHAT IT IS” — spider vignette linked to an ordinary daily doorway scene. Text: “Intense fear of spiders. Fear can exceed the actual danger.” Distinguish this educational definition from diagnosing the pictured woman.\n2. “TRIGGERS & ANTICIPATION” — three small sequential illustrations: real curtain encounter, spider photograph, thought bubble before entering the room. Labels: “Seeing a spider”, “Pictures can be difficult”, “Thinking about it may trigger anxiety”. State “Experiences vary”.\n3. “UNCERTAINTY” — explanatory close-up #1, side-by-side the real curtain edge and a dotted outline in a thought bubble labeled “What might happen?”. Text: “Worry about the next encounter can feel intense.” Keep the dotted silhouette clearly imagined, no neurological or predator-motion claims.\n4. “BODY ALARM” — explanatory diagram #2: a humane semi-transparent torso and head silhouette with four precise leaders, not a fake medical scan. Labels “Palpitations”, “Chest tightness”, “Trembling”, “Dizziness or nausea”. Footnote: “Symptoms differ between people.” No invented causal wiring or arrows from brain structures.\n5. “AVOIDANCE PATTERN” — explanatory diagram #3: a circular sequence of illustrated room threshold, person stepping back, closed room door, next threshold. Labels “Encounter or thought” → “Intense anxiety” → “Avoid the object” → “Next encounter”. Caption: “Avoidance can narrow daily activities.” This illustrates recurring features; do not claim an exact learning mechanism or say anxiety must increase. No promises that simply forcing contact fixes it.\n6. “FEAR ≠ A RISK ASSESSMENT” — explanatory comparison #4, two adjacent columns, left a warm alarm-colored human silhouette “Strong alarm”, right a neutral unembellished curtain crop “Assess the actual situation”. Text: “Fear may be out of proportion to danger.” Never label spiders universally safe, include species-specific danger claims, or suggest handling an unknown animal.\n7. “HELP THAT BUILDS OPTIONS” — clinician and adult client seated in a welcoming office, a second small schematic of progressively spaced cards labeled “Agreed steps”. Text: “CBT can help. Exposure therapy is an effective CBT approach. Gradual plans differ for each person.” Do not show someone touching a spider or coercing another person into exposure. Illustrate an agreed treatment plan, not a do-it-yourself exposure challenge or fixed protocol.\n8. “SUPPORT, NOT PRESSURE” — breathing illustration and trusted conversation vignette. Text: “Breathing exercises may help. Talk with someone you trust. Seek professional help when fear affects daily life.” Small label “Triggering images may be distressing.” End with “Educational information — not a diagnosis.”\n\nMaintain lush tactile detail in the hero, precision in diagrams, credible adult faces and hands, elegant scientific editorial finish, strong hierarchy and high local contrast. Keep all labels readable with short lines and ample negative space within the substantial panels. Avoid repeated paragraphs, illegible decorative microtext, gore, monsters, threatening giant shadows, forced exposure, unsupported spider biology and false reassurance. All substantive claims are limited to the provided text. Output the actual finished illustration with opaque background.",
+    "image": "images/2026-10-03-factual-infographic-factual-infographic-arachnophobia-the-s.jpg",
+    "thumb": "thumbs/2026-10-03-factual-infographic-factual-infographic-arachnophobia-the-s.webp",
+    "color": "#a09b95",
+    "date": "2026-10-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "arachnophobia-curtain-spider-anticipation-avoidance",
+      "imageSha256": "210c44595b89158c1b6b26cfb03ef12c96b974c2124b0f0b3c9a8a5a4abe62dc",
+      "imageDHash": "3b1998b2b2aca60b"
+    },
+    "factualInfographic": {
+      "topic": "Arachnophobia: fear of spiders, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "Source-backed educational infographic distinguishing arachnophobia, anticipation and physical symptoms from actual danger, with avoidance and evidence-based professional support.",
+      "sourceNote": "Verified definition, triggers, symptoms, avoidance and support against NIMH https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; NHS https://www.nhs.uk/mental-health/conditions/phobias/ ; NHS inform https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/ . Scene illustrative; no unsupported spider danger or neuroanatomy claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-03T08:10:43.426013+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform (NHS Scotland)",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Arachnophobia is fear of spiders, a type of specific phobia.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobic fear can be intense and out of proportion to actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seeing the feared object can cause immediate anxiety; anticipation and even thinking about it can also cause anxiety.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Some people with arachnophobia avoid touching a spider; some cannot look at a spider picture.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Physical symptoms can include palpitations, chest tightness, trembling, dizziness and nausea; experiences vary.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may actively avoid feared objects and organise life around avoidance, limiting daily activities.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "A repeated encounter can provoke anxiety again; avoidance and intense anxiety are common features, not proof of actual danger.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "It is not always clear why a phobia develops; frightening experiences and learned fear can be involved.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT is an effective treatment; exposure therapy is a CBT method particularly effective for phobias.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Exposure treatment can involve gradually becoming exposed to the feared object; plans differ and a specialist can help.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Breathing exercises and talking to a trusted person may help manage symptoms, and triggering images may be distressing.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek a primary care or qualified mental health professional when symptoms interfere with life.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
