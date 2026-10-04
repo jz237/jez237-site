@@ -57,6 +57,144 @@
     }
   },
   {
+    "id": "2026-10-04-factual-infographic-factual-infographic-aquaphobia-at-the-q",
+    "title": "Factual infographic: Aquaphobia — At the Quiet Pool Edge",
+    "tests": "factual_subtype=phobia-infographic; phobia=Aquaphobia; eight substantive panels and four explanatory diagrams; source-backed illustration; no subjective non-Monday review; request high quality, auto size, opaque via approved subscription route.; archive_slot=2026-10-04T18:20; concept=aquaphobia-dry-pool-edge-water-alarm-safety; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, sophisticated museum-quality direct-canvas educational infographic, not a photographed poster, page, screen, or room containing a chart. Portrait-oriented composition when compatible with automatic sizing. Title: “AQUAPHOBIA” with subtitle “When water feels overwhelming”. Richly detailed realist editorial illustration integrated with crisp explanatory graphics, sea-glass teal, deep indigo, warm ivory, restrained amber alarm accents, highly legible typography and short carefully spaced labels. No logos, bibliography, URLs, watermark, gore, monsters, or invented statistics.\n\nDOMINANT HERO: upper-middle area, an immersive oblique pool-edge scene, seen low from dry nonslip tiles. A middle-aged woman with brown skin, stocky build, textured dark hair tied back, soft cotton shirt and rolled trousers stands entirely on dry land, several steps from the pool lip. Tense shoulders, hands gripping her folded towel, gaze drawn to the quiet water. Portray concern with dignity, not caricature. Enamel lane divider fittings, finely textured ceramic tiles, worn stainless handrail, soft caustic reflections, transparent turquoise water and submerged tile grid, distorted reflections of high windows, believable natural lighting. No person in distress in the water, no implied emergency, no therapeutic water entry. Thin leader lines connect hero details to explanatory panels. Small readable hero label: “Illustrative scene — not a diagnosis”.\n\nBuild EIGHT distinct substantive supporting panels with generous readable headings and one or two short sentences each, arranged as an intentional educational plate around and below the hero. At least FOUR explanatory close-ups/diagrams and five information layers: scene/context hero, body-response diagram, sensory close-up, encounter sequence, danger comparison, life-jacket detail, and help vignette. Do not repeat filler text.\n1 — “What is aquaphobia?” Illustrated water silhouette and human profile; label “Intense fear of water or drowning.” Secondary label “Phobia: fear out of proportion to the actual danger of a situation.” Never imply every cautious swimmer has a phobia.\n2 — “Triggers can vary” Three distinct small illustrations: seeing the pool from dry land; thought bubble showing water; a conceptual face/body immersion icon clearly separated from real-life actions. Labels “Water nearby”, “Anticipating water”, “Thought of immersion”. Caption “Experiences differ.” Do not prescribe exposure.\n3 — “Sensory uncertainty” A detailed water-surface close-up with distorted submerged tile lines, a small top/bottom locator sketch, and dry-side handrail detail. Show concern thought labels “How deep?”, “Where is the surface?”, “Where is solid support?” Caption “Illustrative concerns — unfamiliar cues are not a safety assessment.” No invented brain structures or causal neurology.\n4 — “Body alarm” Anatomically restrained torso outline with precise leader lines to heart/chest, hands, head and stomach. Labels “Noticeable heartbeat”, “Chest tightness”, “Trembling”, “Dizziness”, “Nausea”; caption “Symptoms vary from person to person.” Include a small worried-face inset; no heartbeat measurement or fabricated probability.\n5 — “Anticipation & avoidance” Clearly readable left-to-right three-vignette sequence: thinking of water, anxious poolside pause, choosing to stay away. Labels “Anticipate”, “Feel anxious”, “Avoid”. A fine dotted return arrow labeled “Another encounter” illustrates recurring encounters, not a proven brain mechanism or universal feedback diagnosis. Caption “Fear can interfere with activities and learning to swim.” Do not present avoidance as moral failure.\n6 — “Fear is not a risk assessment” Balanced comparison diagram. One side depicts the quiet pool hero with amber worry cloud and label “Alarm may exceed the situation’s danger.” Other side is a realistic small natural-water cross-section with current arrows, rocks, vegetation, limited underwater visibility, and surface waves. Label “Real hazards still matter.” Never label any water completely safe or imply anxiety alone causes drowning.\n7 — “Keep water safety separate” Detailed close-up of a properly fastened life jacket with realistic woven straps and buckle beside a small swimming-buddy/lifeguard vignette and a toy inflatable ring crossed out only as a safety-device symbol. Labels “Swim with a buddy”, “Choose lifeguarded sites when possible”, “Life jacket ≠ inflatable toy”. Caption “Lessons can reduce risk; precautions still matter.” Show no water-entry instruction, breath-holding, or unsupervised child.\n8 — “Evidence-based help” Warm, dignified dry-land consultation vignette with an adult healthcare professional, plus a small person talking to a trusted friend. Labels “CBT can help”, “Exposure therapy is an effective CBT method”, “Discuss next steps with a professional”. Secondary label “If fear affects daily life, seek support.” Small dry-land breathing icon labeled “Breathing exercises may help symptoms”. No prescribed exposure steps, no forced submersion, no promises of cure.\n\nBottom readable safety line: “Educational illustration, not a diagnosis or treatment plan. Anxiety support does not replace water safety.” Maintain fear-specific textured realism and carefully layered explanatory detail, with clear visual hierarchy and generous contrast. Use only the claims above; no extra prevalence, timelines, rankings, neurotransmitters, or unsupported causal arrows.",
+    "image": "images/2026-10-04-factual-infographic-factual-infographic-aquaphobia-at-the-q.jpg",
+    "thumb": "thumbs/2026-10-04-factual-infographic-factual-infographic-aquaphobia-at-the-q.webp",
+    "color": "#95a6a6",
+    "date": "2026-10-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "aquaphobia-dry-pool-edge-water-alarm-safety",
+      "imageSha256": "d34c7c669f59fa34d7a6b0a80783f57dc00ad496460e72562cb207f368a93201",
+      "imageDHash": "8d91391a4a397226"
+    },
+    "factualInfographic": {
+      "topic": "Aquaphobia: intense fear of water, anticipatory anxiety, body alarm, avoidance, realistic water safety, and evidence-based support",
+      "description": "Source-backed educational plate distinguishing intense fear of water from genuine aquatic hazards, with variable symptoms and evidence-based support.",
+      "sourceNote": "Read NIMH, NHS, CDC, and Frontiers in Education on 2026-10-04; verified specific-phobia definition, variable alarm symptoms, illustrative water concerns, avoidance, water-safety precautions, and treatment/support. Sources: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; https://www.nhs.uk/mental-health/conditions/phobias/ ; https://www.cdc.gov/drowning/prevention/index.html ; https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2022.898071/full",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-04T22:21:49.003568+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Preventing Drowning",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/drowning/prevention/index.html"
+          },
+          {
+            "id": "S4",
+            "publisher": "Frontiers in Education",
+            "title": "Reducing fear of water and aquaphobia through 360 degree video use?",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2022.898071/full"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Aquaphobia is intense fear of water or drowning; specific phobia involves fear out of proportion to the actual danger in a particular situation.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Water exposure, thoughts of water, and reluctance to enter water or immerse the face or body can accompany fear of water; individual experiences vary.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Unfamiliar aquatic perceptive cues can accompany anxiety; a small exploratory study described concerns about depth, locating the surface, and finding solid support. These are illustrative concerns, not universal symptoms or a safety assessment.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe worry, noticeable heartbeat, chest tightness, trembling, nausea, and dizziness; not everyone has every symptom.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anticipation or encountering a feared situation can bring intense anxiety and active avoidance; phobias may interfere with daily life. The sequence illustrates repeated encounters and avoidance, not a universal causal diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear of water can interfere with learning to swim and can persist into adulthood.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Natural water may have currents, waves, hidden rocks or vegetation, and limited visibility; genuine hazards should not be dismissed as anxiety.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Swimming lessons can reduce drowning risk; swimming with a buddy and choosing lifeguarded sites when possible remain important precautions.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Life jackets reduce drowning risk while boating and can help weaker swimmers around natural water and pools; inflatable or foam toys are not safety devices.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is an established treatment for phobias, and exposure therapy is a particularly effective CBT method; healthcare professionals can help determine next steps. No water-entry treatment protocol is provided.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Talk to a healthcare professional if symptoms affect life. Breathing exercises and talking to someone trusted can help manage symptoms; anxiety management does not replace water safety.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The hero and dry-land help vignettes are illustrative, not a diagnosis or instruction to enter water.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-03-ocean-exploration-ocean-exploration-ice-ceiling-the-upward-",
     "title": "Ocean exploration: Ice Ceiling — The Upward-Looking Survey Sled",
     "tests": "Read NSIDC sea-ice science and BAS under-ice AUV research; fictional craft explicitly labeled; no divers, no visible sonar beams; factual sources retained in ocean-sources.json; no subjective review outside Monday.; archive_slot=2026-10-03T08:08; concept=autonomous-survey-sled-mapping-sea-ice-keel; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
