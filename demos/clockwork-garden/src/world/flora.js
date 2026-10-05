@@ -18,6 +18,21 @@ const STEM_K = [0.011, 0.006, 1.25, 0];
 const STEM_WASH = 0.03;
 const ORB_K = [0.016, 0.01, 1.6, 0];
 
+// a flower's petals: [cos, sin] of half each petal's heading (π/2 − φ) and its
+// offset from the head, as the Euler in update() used them
+function petalFrame(f, n) {
+  const a = new Float64Array(n * 4);
+  for (let i = 0; i < n; i++) {
+    const phi = f.yaw + (i / n) * TAU;
+    const y = (Math.PI / 2 - phi) / 2;
+    a[i * 4] = Math.cos(y);
+    a[i * 4 + 1] = Math.sin(y);
+    a[i * 4 + 2] = Math.cos(phi) * 1.2 * f.scale;
+    a[i * 4 + 3] = Math.sin(phi) * 1.2 * f.scale;
+  }
+  return a;
+}
+
 export class Flora {
   constructor(mat, quality) {
     this.group = new THREE.Group();
@@ -412,7 +427,6 @@ export class Flora {
 
   update(t, ctx) {
     const q = this._q || (this._q = new THREE.Quaternion());
-    const e = new THREE.Euler();
     const s = new THREE.Vector3();
     const p = new THREE.Vector3();
     const ang = this._ang || (this._ang = new THREE.Vector3());
@@ -444,13 +458,17 @@ export class Flora {
         calyx.setMatrixAt(fi, this.m4);
         const k = live ? live.open(f, t) : smoother(clamp((t - wave0 - f.delay) / 1.8));
         const sway = Math.sin(t * 0.9 + f.sway) * 0.02 - (gust(f.base.x, f.base.z, t) - 0.3) * 0.035;
-        for (let i = 0; i < ty.petals; i++) {
-          const phi = f.yaw + (i / ty.petals) * TAU;
-          // (wide open stops just below horizontal: petals never sweep down into the leaves)
-          e.set(Math.min(1.75, lerp(ty.closed, ty.open, k) + sway), Math.PI / 2 - phi, 0, 'YXZ');
-          q.setFromEuler(e);
-          p.set(Math.cos(phi) * 1.2 * f.scale, 0, Math.sin(phi) * 1.2 * f.scale).add(f.topNow);
-          s.setScalar(f.scale);
+        // (wide open stops just below horizontal: petals never sweep down into the leaves)
+        const tilt = Math.min(1.75, lerp(ty.closed, ty.open, k) + sway) / 2;
+        const cx = Math.cos(tilt), sx = Math.sin(tilt);
+        // each petal's fixed heading round the head (the Euler YXZ (tilt, π/2 − φ, 0)
+        // as three composes it, its fixed half computed once)
+        const pet = f._pet || (f._pet = petalFrame(f, ty.petals));
+        s.setScalar(f.scale);
+        for (let i = 0, j = 0; i < ty.petals; i++, j += 4) {
+          const cy = pet[j], sy = pet[j + 1];
+          q.set(sx * cy, cx * sy, -(sx * sy), cx * cy);
+          p.set(pet[j + 2], 0, pet[j + 3]).add(f.topNow);
           this.m4.compose(p, q, s);
           petals.setMatrixAt(idx++, this.m4);
         }

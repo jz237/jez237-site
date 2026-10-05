@@ -69,10 +69,20 @@ export class ChaseCam {
     const want = pivot.clone().addScaledVector(dir, -dist).add(V(0, 0.9 * this.zoom, 0));
     const safe = this.bounds.sweep(pivot, want, 0.75);
     this.bounds.pushOut(safe, 0.6);
-    if (!this.ready) { this.pos.copy(safe); this.ready = true; }
-    // pull in fast (never through a solid), ease back out slowly
-    const pullIn = safe.distanceTo(pivot) < this.pos.distanceTo(pivot);
-    this.pos.lerp(safe, damp(pullIn ? 22 : 7, dt));
+    // the spring arm: its length shortens quickly but smoothly when something
+    // comes between camera and bee, holds a moment (so a run of stems doesn't
+    // pump it in and out), then eases back out; the camera trails its ideal
+    // spot for momentum and is never further out than the arm
+    const L = (this.armWant = safe.distanceTo(pivot));
+    if (!this.ready) { this.pos.copy(safe); this.arm = L; this.hold = 0; this.ready = true; }
+    const blocked = L < want.distanceTo(pivot) - 0.05;
+    if (blocked && L < this.arm) { this.arm += (L - this.arm) * damp(reduced ? 9 : 13, dt); this.hold = 0.4; }
+    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm += (L - this.arm) * damp(2.5, dt);
+    const off = want.clone().sub(pivot);
+    const ideal = pivot.clone().addScaledVector(off, Math.min(1, this.arm / Math.max(off.length(), 1e-4)));
+    this.pos.lerp(ideal, damp(7, dt));
+    off.subVectors(this.pos, pivot);
+    if (off.length() > this.arm) this.pos.copy(pivot).addScaledVector(off, this.arm / off.length());
     this.target.copy(pivot).addScaledVector(dir, 4.0);
     const fovT = 52 + (reduced ? 0 : clamp((sp - 20) / 44, 0, 1) * 12 * actor.boostK + clamp(sp / 30, 0, 1) * 2);
     this.fov += (fovT - this.fov) * damp(3, dt);
@@ -186,12 +196,22 @@ export class FollowCam {
       tgt = bee.clone().addScaledVector(actor.vel, this.shot === 'macro' ? 0 : 0.18).add(V(0, 0.5, 0));
       fov = f.fov; ap = f.ap;
     }
-    const safe = this.bounds.sweep(bee.clone().add(V(0, 0.8, 0)), want, 0.9);
+    const from = bee.clone().add(V(0, 0.8, 0));
+    const safe = this.bounds.sweep(from, want, 0.9);
     this.bounds.pushOut(safe, 0.7);
-    if (!this.ready) { this.pos.copy(safe); this.target.copy(tgt); this.ready = true; }
+    // the same spring arm as the chase camera: in smoothly when something comes
+    // between, a pause, then back out to the framing at the camera's pace
+    const L = safe.distanceTo(from);
+    if (!this.ready) { this.pos.copy(safe); this.target.copy(tgt); this.arm = L; this.hold = 0; this.ready = true; }
     const rate = (reduced ? 0.9 : 1.6) * (this.user.idle < 0.3 ? 4 : 1);
-    const pullIn = safe.distanceTo(bee) < this.pos.distanceTo(bee) - 0.5;
-    this.pos.lerp(safe, damp(pullIn ? 9 : rate, dt));
+    const blocked = L < want.distanceTo(from) - 0.05;
+    if (blocked && L < this.arm) { this.arm += (L - this.arm) * damp(reduced ? 6 : 9, dt); this.hold = 0.5; }
+    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm += (L - this.arm) * damp(rate, dt);
+    const off = want.clone().sub(from);
+    const ideal = from.clone().addScaledVector(off, Math.min(1, this.arm / Math.max(off.length(), 1e-4)));
+    this.pos.lerp(ideal, damp(rate, dt));
+    off.subVectors(this.pos, from);
+    if (off.length() > this.arm) this.pos.copy(from).addScaledVector(off, this.arm / off.length());
     this.target.lerp(tgt, damp(reduced ? 3 : 5, dt));
     this.fov += (fov - this.fov) * damp(1.5, dt);
     this.aperture += (ap - this.aperture) * damp(1.5, dt);

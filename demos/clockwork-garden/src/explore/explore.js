@@ -18,6 +18,7 @@ import { applyPose } from '../direction/camera.js';
 import { SUN_DIR } from '../world/atmosphere.js';
 import { WashTrail, setWash, setCamera, setTime as setWindTime } from '../world/wind.js';
 import { L } from '../world/layout.js';
+import { MATRICES } from '../core/fastmatrix.js';
 import { clamp, lerp, smooth } from '../core/ease.js';
 
 // Interactive modes (fly / follow / photo). The garden is held in its fully
@@ -148,12 +149,14 @@ export class Explore {
     this.mode = mode;
     if (!this.active) {
       this.active = true;
+      MATRICES.skipHidden = true;
       this.group.visible = true;
       const C = this.world.creatures;
       // hide the film's cast; APX-9 stays (the explore controller drives it)
       for (const c of C.group.children) c.visible = c === C.hero.group;
       C.hero.group.visible = true;
       this.world.setFarShadows(false);
+      this.cull.begin();
       // remember the practical lights' film settings
       const Lg = this.world.lighting;
       this._lightSave = ['pulse', 'skep', 'spark', 'fill'].map((k) => [k, Lg[k].color.clone(), Lg[k].distance, Lg[k].decay]);
@@ -194,6 +197,7 @@ export class Explore {
   exit() {
     if (!this.active) return;
     this.active = false;
+    MATRICES.skipHidden = false;
     this.photo = false;
     this.group.visible = false;
     this.interactions.uninstall();
@@ -202,6 +206,7 @@ export class Explore {
     const Lg = this.world.lighting;
     Lg.beam.shadow.autoUpdate = true;
     Lg.beam.shadow.needsUpdate = true;
+    Lg.sun.shadow.autoUpdate = true;
     for (const [k, c, d, dc] of this._lightSave || []) { Lg[k].color.copy(c); Lg[k].distance = d; Lg[k].decay = dc; Lg[k].intensity = 0; }
     this.pipeline.scenePass.material.uniforms.uSteps.value = this.quality.dofSteps;
     this.world.atmosphere.shaftUniforms.uInside.value = 0;
@@ -240,6 +245,18 @@ export class Explore {
     FADE.uSwapK.value = 1;
     this.upgrade.replace();
     if (this.scenery.endDomes) this.scenery.endDomes.visible = false;
+  }
+
+  // the frame governor's main-thread levels (render/governor.js): 1 redraws
+  // the key light's shadow map every other frame (its matrix is kept with the
+  // map, so still shadows stay exact; swaying ones move at half rate), 2 also
+  // culls small details and creature parts a little sooner, 3 sooner still
+  setPerfLevel(level) {
+    this.perfLevel = level;
+    this.cull.pixels = [3, 3, 5, 8][level];
+    this.cull.shadowPixels = [5, 5, 10, 16][level];
+    this.cull.partPixels = [1.1, 1.1, 2, 3][level];
+    if (level < 1) this.world.lighting.sun.shadow.autoUpdate = true;
   }
 
   togglePhoto(on = !this.photo) {
@@ -377,8 +394,8 @@ export class Explore {
     // the camera pushes the foliage aside (and nothing comes inside the lens)
     setCamera(this.camera.position, 5.5, 1.5, this.debugView || this.photo ? null : a.pos);
     this.nearfield.update(this.camera);
-    this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y);
-    this.frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+    this.frustum.setFromProjectionMatrix((this._projView || (this._projView = new THREE.Matrix4())).multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+    this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y, this.debugView || this.photo ? null : this.frustum);
     if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);
     // light: shadows round what we're looking at, practicals
     const fwd = this.camera.getWorldDirection(V());
@@ -394,6 +411,11 @@ export class Explore {
     this.growth.petals.material.emissiveIntensity = 0.08 + 0.5 * phases.blooms;
     this.night.post(dt, this.camera, { pos: a.pos, vel: a.vel, speed: a.speed, boost: a.boostK || 0 }, this.pixelRatio, ctx);
     const look = { ...this.tod.look(), time: t, sunDir: SUN_DIR, fade: 0 };
+    if (this.perfLevel >= 1 && !this.photo) {
+      const sh = this.world.lighting.sun.shadow;
+      sh.autoUpdate = false;
+      sh.needsUpdate = (this._shadowFrame = (this._shadowFrame || 0) + 1) % 2 === 0;
+    } else this.world.lighting.sun.shadow.autoUpdate = true;
     this.pipeline.render({ camera: this.camera, focus: v.focus, aperture: this.quality.dof ? v.aperture : 0 }, null, 0, look);
     // audio follows the bee
     if (this.audio?.enabled) {

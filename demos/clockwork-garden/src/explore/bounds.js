@@ -242,12 +242,23 @@ export class Bounds {
     const n = V();
     this._near(from, radius + 2, (c) => { if (this._sdf(c, from, n) < radius) skip.add(c); });
     const p = V();
-    let last = 0;
+    let last = 0, hit = -1;
     for (let s = Math.min(1.5, len); s <= len + 1e-6; s += step) {
       p.copy(from).addScaledVector(dir, s);
-      if (this.clearance(p, null, skip) < radius) break;
+      if (this.clearance(p, null, skip) < radius) { hit = s; break; }
       last = s;
     }
+    // refine the stop between the last clear sample and the blocked one, so
+    // the arm's length changes smoothly as things move instead of in steps
+    if (hit > 0 && last > 0) {
+      let lo = last, hi = hit;
+      for (let i = 0; i < 5; i++) {
+        const m = (lo + hi) / 2;
+        p.copy(from).addScaledVector(dir, m);
+        if (this.clearance(p, null, skip) < radius) hi = m; else lo = m;
+      }
+      last = lo;
+    } else if (hit < 0) last = len; // clear all the way (the last step may fall short of the end)
     return from.clone().addScaledVector(dir, Math.max(Math.min(1.5, len), last));
   }
 
