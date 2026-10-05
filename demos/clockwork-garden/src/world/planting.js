@@ -88,15 +88,35 @@ export function resolvePlanting(w) {
 
   // ---- 1. blooms out of iron, urns, palm crowns, lamps and the fountain ----------------
   const flowers = fl.flowers;
-  const bad = (f, base) => flowerPoints(f, base).some(([p, m]) => solidDist(p, w) < m);
+  // (two exact shortcuts, same answers: a flower whose stem and cup can't come
+  // within a solid's reach skips the per-point test, and the spacing test
+  // looks only at flowers in nearby grid cells)
+  const solids2D = [
+    ...COLUMNS.map(([x, z]) => [x, z, 9.5]),
+    ...(w.foliage.palmSpots || []).map((pl) => [pl.x, pl.z, Math.max(9.6, 22) * pl.sc + 3]),
+    ...w.garden.lamps.map((c) => [c.position.x, c.position.z, 6.5]),
+    [FOUNTAIN[0], FOUNTAIN[1], FOUNTAIN[2]],
+  ];
+  const nearSolid = (f, base) => {
+    const reach = Math.hypot(f.dir.x, f.dir.z) * f.top.distanceTo(f.base) + 0.8 * bloomRadius(f) + Math.max(1.2, 0.5 * f.scale + 0.6) + 0.01;
+    return solids2D.some(([x, z, r]) => Math.hypot(base.x - x, base.z - z) <= reach + r);
+  };
+  const bad = (f, base) => nearSolid(f, base) && flowerPoints(f, base).some(([p, m]) => solidDist(p, w) < m);
+  const FG = 32, fgrid = new Map();
+  const fkey = (x, z) => Math.floor(x / FG) * 4096 + Math.floor(z / FG);
+  for (const f of flowers) { const k = fkey(f.base.x, f.base.z); if (!fgrid.has(k)) fgrid.set(k, []); fgrid.get(k).push(f); }
+  const Rmax = Math.max(...flowers.map(bloomRadius));
   const clearOfOthers = (f, base) => {
     const R = bloomRadius(f), top = f.top.y;
-    for (const o of flowers) {
-      if (o === f) continue;
-      const d = Math.hypot(o.base.x - base.x, o.base.z - base.z);
-      if (d < 11) return false;
-      const Ro = bloomRadius(o);
-      if (Math.abs(o.top.y - top) < 0.45 * (R + Ro) && d < 0.9 * (R + Ro)) return false;
+    const Q = Math.max(11, 0.9 * (R + Rmax)) + 0.01;
+    for (let i = Math.floor((base.x - Q) / FG); i <= Math.floor((base.x + Q) / FG); i++) for (let j = Math.floor((base.z - Q) / FG); j <= Math.floor((base.z + Q) / FG); j++) {
+      for (const o of fgrid.get(i * 4096 + j) || []) {
+        if (o === f) continue;
+        const d = Math.hypot(o.base.x - base.x, o.base.z - base.z);
+        if (d < 11) return false;
+        const Ro = bloomRadius(o);
+        if (Math.abs(o.top.y - top) < 0.45 * (R + Ro) && d < 0.9 * (R + Ro)) return false;
+      }
     }
     return true;
   };
@@ -113,8 +133,10 @@ export function resolvePlanting(w) {
     }
     if (!found) { stats.flowersStuck++; continue; }
     const d = found.clone().sub(f.base);
+    const k0 = fkey(f.base.x, f.base.z);
     f.base.add(d);
     f.top.add(d);
+    { const l = fgrid.get(k0); l.splice(l.indexOf(f), 1); const k1 = fkey(f.base.x, f.base.z); if (!fgrid.has(k1)) fgrid.set(k1, []); fgrid.get(k1).push(f); }
     f.moved = d;
     stats.flowersMoved++;
   }
@@ -136,6 +158,7 @@ export function resolvePlanting(w) {
   const ell = (b) => ({ cx: b.x, cy: b.y0 + b.h * 0.42, cz: b.z, rx: b.r * 0.92 + 1.2, ry: b.h * 0.5 + 0.8 });
   // inside test against a (slightly grown) mass ellipsoid
   const inside = (E, p, m = 0) => Math.hypot((p.x - E.cx) / (E.rx + m), (p.y - E.cy) / (E.ry + m), (p.z - E.cz) / (E.rx + m)) < 1;
+  const P1 = V(); // (scratch: the same arithmetic without an allocation per test point)
   const massOk = (b) => {
     const E = ell(b);
     if (!inBed(b.x, b.z, -8) && !b.wall) return false;
@@ -148,21 +171,19 @@ export function resolvePlanting(w) {
     for (const st of stemsNear(b.x, b.z, E.rx + 20)) {
       if (Math.hypot(st.a.x - b.x, st.a.z - b.z) > E.rx + st.R + 2) continue;
       for (let k = 0; k <= 1.0001; k += 0.08) {
-        const p = st.a.clone().lerp(st.b, k);
-        if (inside(E, p, st.r)) return false;
+        if (inside(E, P1.copy(st.a).lerp(st.b, k), st.r)) return false;
       }
       const top = st.b;
       for (let i = 0; i < 8; i++) {
         const a = (i / 8) * Math.PI * 2;
-        if (inside(E, V(top.x + Math.cos(a) * 0.8 * st.R, top.y + 0.1 * st.R, top.z + Math.sin(a) * 0.8 * st.R), 0.5)) return false;
+        if (inside(E, P1.set(top.x + Math.cos(a) * 0.8 * st.R, top.y + 0.1 * st.R, top.z + Math.sin(a) * 0.8 * st.R), 0.5)) return false;
       }
       if (inside(E, top, st.R * 0.45)) return false;
     }
     // fixed solids round its waist and crown
     for (let i = 0; i < 10; i++) {
       const a = (i / 10) * Math.PI * 2;
-      const p = V(b.x + Math.cos(a) * E.rx, E.cy, b.z + Math.sin(a) * E.rx);
-      if (solidDist(p, w, { palms: false }) < 0.5) return false;
+      if (solidDist(P1.set(b.x + Math.cos(a) * E.rx, E.cy, b.z + Math.sin(a) * E.rx), w, { palms: false }) < 0.5) return false;
     }
     if (solidDist(V(b.x, E.cy + E.ry, b.z), w, { palms: false }) < 0.5) return false;
     // under a palm's fronds a mass must stay below the crown

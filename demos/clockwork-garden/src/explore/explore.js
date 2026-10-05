@@ -160,8 +160,10 @@ export class Explore {
       // remember the practical lights' film settings
       const Lg = this.world.lighting;
       this._lightSave = ['pulse', 'skep', 'spark', 'fill'].map((k) => [k, Lg[k].color.clone(), Lg[k].distance, Lg[k].decay]);
-      // the film's sculpting beam: no shadow pass while exploring
+      // the film's sculpting beam: no shadow pass while exploring (but its map
+      // must exist: materials sample it, and the film may not have run yet)
       this.world.lighting.beam.shadow.autoUpdate = false;
+      if (!this.world.lighting.beam.shadow.map) this.world.lighting.beam.shadow.needsUpdate = true;
       this.interactions.install();
       this.upgrade.apply(true);
       this.pipeline.scenePass.material.uniforms.uSteps.value = this.quality.tier === 'high' ? 36 : Math.min(30, this.quality.dofSteps);
@@ -213,6 +215,7 @@ export class Explore {
     this.world.atmosphere.shaftUniforms.uNear.value.set(25, 190);
     this.night.exit();
     setPushers([]);
+    this.world.flora.view = null;
     setLightField(false);
     if (this.swapFade) this._finishSwap();
     // the film re-derives creature visibility and every world state from t
@@ -376,6 +379,7 @@ export class Explore {
     setWash((age, out) => this.trail.at(clock - age, out), a.pos, 1.9);
     this.interactions.pre(this.clock, dt, ctx, [body]);
     this.night.pre(ctx, phases, this.clock);
+    this.world.flora.view = this.debugView || this.photo ? null : { camera: this.camera, frustum: this.frustum };
     this.world.update(t, ctx);
     this.world.lighting.baseSun = this.world.lighting.sun.intensity;
     this.growth.update(this.clock, body);
@@ -416,7 +420,7 @@ export class Explore {
     GLOW.uGlassGlow.value.set(1.0, 0.62, 0.32, 0.02 + 0.14 * phases.blooms);
     this.growth.petals.material.emissiveIntensity = 0.08 + 0.5 * phases.blooms;
     this.night.post(dt, this.camera, { pos: a.pos, vel: a.vel, speed: a.speed, boost: a.boostK || 0 }, this.pixelRatio, ctx);
-    const look = { ...this.tod.look(), time: t, sunDir: SUN_DIR, fade: 0 };
+    const look = { ...this.tod.look(), time: t, sunDir: SUN_DIR, fade: this.mode !== 'fly' && !this.photo ? this.follow.fade : 0 };
     if (this.perfLevel >= 1 && !this.photo) {
       const sh = this.world.lighting.sun.shadow;
       sh.autoUpdate = false;

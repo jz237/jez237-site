@@ -434,9 +434,20 @@ export class Flora {
     const d = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), qs = new THREE.Quaternion();
     const wave0 = B.bloomWave[0];
     const live = this.live; // interactive modes: per-flower openness / glow
+    // (interactive modes: flowers out of view, with a margin, keep last
+    // frame's pose; distant ones re-pose every other frame. The film poses all.)
+    const view = live ? this.view : null;
+    const frame = (this._frame = (this._frame || 0) + 1);
+    const sph = this._sph || (this._sph = new THREE.Sphere());
     for (const { ty, petals, stems, calyx } of this.inst) {
       let idx = 0;
       ty.list.forEach((f, fi) => {
+        if (view) {
+          sph.center.copy(f.base).lerp(f.top, 0.5);
+          sph.radius = f.top.distanceTo(f.base) * 0.5 + ty.len * f.scale * 1.4 + 4;
+          const d = sph.center.distanceTo(view.camera.position);
+          if (!view.frustum.intersectsSphere(sph) || (d > 220 && (fi + frame) % 2)) { idx += ty.petals; return; }
+        }
         // heavy brass stems barely move: the head rides a slow lean with the
         // gusts, and a passing bee's wash nudges it aside
         const h = f.top.y - f.base.y;

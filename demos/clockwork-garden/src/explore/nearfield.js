@@ -49,6 +49,47 @@ for (const x of [-118, 168]) for (let i = 0; i < 8; i++) { const z = 150 - i * 1
 const shaftR = (y) => (y < 10.5 ? 8 : 4 - 0.8 * (y / (L.house.wall + 40)));
 const SHRINK = { iron: 0.8, lantern: 0.8, chain: 0.4, lamp: 0.9, urn: 0.95, orb: 0.95, arch: 0.36, fountain: 0.97, armillary: 0.9, skep: 0.95, escapement: 0.9, crown: 0.9, lily: 0.85, blossom: 0.85, reed: 0.85, tree: 0.85, pod: 0.9, 'hero-stem': 0.85, 'hero-cup': 0.9, 'hero-petal': 0.9, bellstem: 0.8, palm: 1.0 };
 
+// ---- the pre-built planting (tools/bake.mjs) ---------------------------------------------
+// The planting is deterministic, so it can be grown once ahead of time and
+// shipped (assets/nearfield-<tier>.bin.gz, ~1.6 MB): on a phone the growing
+// took over a minute of background work; loaded it takes a moment. It is used
+// only when it was baked from exactly these sources: the bake's key is built
+// from the import map's content hashes of every module that shapes the world
+// or the planting (tools/cachebust.mjs stamps them). Anything else, or a
+// failed download, and the planting is grown here as before.
+const BAKE_INPUTS = [/^\.\/src\/(world|geometry|core|creatures|materials)\//, /^\.\/src\/explore\/(nearfield|bounds|growth|bells|scenery|upgrade)\.js$/];
+export function bakeKey() {
+  let map = {};
+  try { map = JSON.parse(document.querySelector('script[type=importmap]')?.textContent || '{}').imports || {}; } catch (e) { return null; }
+  const parts = Object.keys(map).filter((k) => BAKE_INPUTS.some((re) => re.test(k))).sort().map((k) => k + '@' + (map[k].split('?v=')[1] || ''));
+  if (!parts.length || parts.some((p) => p.endsWith('@'))) return null;
+  let h = 0x811c9dc5; // FNV-1a
+  const str = parts.join('|');
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, '0') + '-' + parts.length;
+}
+const KINDS = ['leaf', 'stem', 'rosette', 'ear', 'fern', 'palm', 'arch', 'mass', 'cover', 'ivy'];
+const F16 = (() => { // half → float table
+  const t = new Float32Array(65536);
+  for (let h = 0; h < 65536; h++) {
+    const s = h & 0x8000 ? -1 : 1, e = (h >> 10) & 31, m = h & 1023;
+    t[h] = e === 0 ? s * m * 2 ** -24 : e === 31 ? (m ? NaN : s * Infinity) : s * (1 + m / 1024) * 2 ** (e - 15);
+  }
+  return t;
+})();
+const toF16 = (() => { // float → half, round to nearest
+  const f = new Float32Array(1), u = new Uint32Array(f.buffer);
+  return (x) => {
+    f[0] = x;
+    const b = u[0], s = (b >>> 16) & 0x8000, e = ((b >>> 23) & 255) - 112, m = b & 0x7fffff;
+    if (e <= 0) return s; // (no subnormals needed here)
+    if (e >= 31) return s | 0x7c00;
+    let h = s | (e << 10) | (m >> 13);
+    if (m & 0x1000) h++; // round
+    return h;
+  };
+})();
+
 // ---- exact placement test: geometry/intersect.js ---------------------------------------
 class PartHash {
   constructor(cell = 8) { this.cell = cell; this.map = new Map(); this.stamp = 0; }
@@ -115,8 +156,109 @@ export class NearField {
     this.onReady = null;
     this.stats.ms = 0;
     this._materials();
+    this._bake = null;
+    if (!sync && !NearField.noBake) this._loadBake(quality);
     this._gen = this._steps(world, scenery, quality);
     if (sync) this.finish();
+  }
+
+  _loadBake(quality) {
+    const key = bakeKey();
+    if (!key || typeof DecompressionStream === 'undefined') return;
+    const tier = quality.tier === 'low' ? 'low' : 'high';
+    const bake = (this._bake = { state: 'loading' });
+    const t0 = performance.now();
+    fetch(`assets/nearfield-${tier}.bin.gz?k=${key}`)
+      .then((r) => { if (!r.ok) throw new Error('no bake'); return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer(); })
+      .then((buf) => {
+        const head = this._bakeHeader(buf);
+        if (head.key !== key || head.tier !== tier) throw new Error('stale bake');
+        bake.buf = buf; bake.head = head; bake.state = 'ok';
+        this.stats.bakeMs = Math.round(performance.now() - t0);
+      })
+      .catch((e) => { bake.state = 'fail'; bake.why = e.message; });
+  }
+
+  _bakeHeader(buf) {
+    const dv = new DataView(buf);
+    if (dv.getUint32(0, true) !== 0x464e4743) throw new Error('not a bake'); // 'CGNF'
+    const len = dv.getUint32(8, true);
+    const head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 12, len)));
+    head.offset = (12 + len + 3) & ~3;
+    return head;
+  }
+
+  // the planting from a bake (false if it doesn't fit this world)
+  _fromBake(buf, head, world) {
+    const n = head.n;
+    if (head.nm !== this.masses.length) return false;
+    let o = head.offset;
+    const take = (Type, count) => { const a = new Type(buf, o, count); o += count * Type.BYTES_PER_ELEMENT; o = (o + 3) & ~3; return a; };
+    const pos = take(Float32Array, n * 3), rot = take(Uint16Array, n * 9), spec = take(Uint16Array, n * 13), col = take(Uint16Array, n * 3), flags = take(Uint8Array, n);
+    const fr = take(Float32Array, head.nf * 16), pf = take(Float32Array, head.np * 19), cores = take(Float32Array, head.nm * 3);
+    this.leaves = new Array(n);
+    for (let i = 0; i < n; i++) {
+      const r9 = i * 9, s13 = i * 13;
+      const m = [F16[rot[r9]], F16[rot[r9 + 1]], F16[rot[r9 + 2]], 0, F16[rot[r9 + 3]], F16[rot[r9 + 4]], F16[rot[r9 + 5]], 0, F16[rot[r9 + 6]], F16[rot[r9 + 7]], F16[rot[r9 + 8]], 0, pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2], 1];
+      const sp = (k) => F16[spec[s13 + k]];
+      this.leaves[i] = { m, col: new THREE.Color(F16[col[i * 3]], F16[col[i * 3 + 1]], F16[col[i * 3 + 2]]), a: [sp(0), sp(1), sp(2), sp(3)], b: [sp(4), sp(5), sp(6), sp(7)], swing: sp(12), ivy: !!(flags[i] & 1), kind: KINDS[flags[i] >> 1] || 'leaf', id: i + 1, s3: [sp(8), sp(9), sp(10), sp(11)] };
+    }
+    this.fronds = [];
+    for (let i = 0; i < head.nf; i++) this.fronds.push(new THREE.Matrix4().fromArray(fr, i * 16));
+    this.palmFronds = [];
+    for (let i = 0; i < head.np; i++) this.palmFronds.push({ m: new THREE.Matrix4().fromArray(pf, i * 19), col: new THREE.Color(pf[i * 19 + 16], pf[i * 19 + 17], pf[i * 19 + 18]) });
+    this.fernSource = world.flora.fernMesh;
+    if (world.foliage.palmFronds) this.palmSource = world.foliage.frondMesh;
+    // the dark cores inside the masses
+    const core = new THREE.IcosahedronGeometry(1, 2);
+    this.cores = new THREE.InstancedMesh(core, this.coreMat, this.masses.length);
+    const c = new THREE.Color(), m4 = new THREE.Matrix4();
+    this.masses.forEach((M, i) => {
+      m4.compose(V(M.cx, M.cy, M.cz), new THREE.Quaternion(), V(M.rx * 0.78, M.ry * 0.78, M.rx * 0.78));
+      this.cores.setMatrixAt(i, m4);
+      this.cores.setColorAt(i, c.setRGB(cores[i * 3], cores[i * 3 + 1], cores[i * 3 + 2]));
+    });
+    this.cores.castShadow = false;
+    this.cores.receiveShadow = true;
+    this.cores.computeBoundingSphere();
+    this.group.add(this.cores);
+    this.baked = true;
+    return true;
+  }
+
+  // the bake (tools/bake.mjs): the grown planting as one buffer
+  serializeBake(tier) {
+    const L = this.leaves, n = L.length;
+    const kinds = new Set(L.map((l) => l.kind));
+    for (const k of kinds) if (!KINDS.includes(k)) throw new Error('unknown leaf kind ' + k);
+    const head = { key: bakeKey(), tier, n, nf: this.fronds.length, np: this.palmFronds.length, nm: this.masses.length };
+    const hb = new TextEncoder().encode(JSON.stringify(head));
+    const sections = [];
+    const pos = new Float32Array(n * 3), rot = new Uint16Array(n * 9), spec = new Uint16Array(n * 13), col = new Uint16Array(n * 3), flags = new Uint8Array(n);
+    L.forEach((l, i) => {
+      pos[i * 3] = l.m[12]; pos[i * 3 + 1] = l.m[13]; pos[i * 3 + 2] = l.m[14];
+      [0, 1, 2, 4, 5, 6, 8, 9, 10].forEach((k, j) => (rot[i * 9 + j] = toF16(l.m[k])));
+      [...l.a, ...l.b, ...l.s3, l.swing].forEach((v, j) => (spec[i * 13 + j] = toF16(v)));
+      col[i * 3] = toF16(l.col.r); col[i * 3 + 1] = toF16(l.col.g); col[i * 3 + 2] = toF16(l.col.b);
+      flags[i] = (l.ivy ? 1 : 0) | (KINDS.indexOf(l.kind) << 1);
+    });
+    const fr = new Float32Array(this.fronds.length * 16);
+    this.fronds.forEach((m, i) => fr.set(m.elements, i * 16));
+    const pf = new Float32Array(this.palmFronds.length * 19);
+    this.palmFronds.forEach((f, i) => { pf.set(f.m.elements, i * 19); pf[i * 19 + 16] = f.col.r; pf[i * 19 + 17] = f.col.g; pf[i * 19 + 18] = f.col.b; });
+    const cores = new Float32Array(this.masses.length * 3);
+    const c = new THREE.Color();
+    for (let i = 0; i < this.masses.length; i++) { this.cores.getColorAt(i, c); cores[i * 3] = c.r; cores[i * 3 + 1] = c.g; cores[i * 3 + 2] = c.b; }
+    sections.push(pos, rot, spec, col, flags, fr, pf, cores);
+    const pad = (x) => (x + 3) & ~3;
+    let size = pad(12 + hb.length);
+    for (const a of sections) size = pad(size + a.byteLength);
+    const out = new Uint8Array(size), dv = new DataView(out.buffer);
+    dv.setUint32(0, 0x464e4743, true); dv.setUint32(4, 1, true); dv.setUint32(8, hb.length, true);
+    out.set(hb, 12);
+    let o = pad(12 + hb.length);
+    for (const a of sections) { out.set(new Uint8Array(a.buffer, a.byteOffset, a.byteLength), o); o = pad(o + a.byteLength); }
+    return out;
   }
 
   // the planting is grown a few milliseconds a frame (always in the same
@@ -134,6 +276,24 @@ export class NearField {
     this._solids(world, scenery);
     (this.stats.phases ??= {}).solids = Math.round(performance.now() - t0);
     yield;
+    // the pre-built planting, if it is on its way (a few seconds at most)
+    if (this._bake) {
+      const tw = performance.now();
+      while (this._bake.state === 'loading' && performance.now() - tw < 15000) { this.waiting = true; yield; }
+      this.waiting = false;
+      const b = this._bake;
+      if (b.state === 'ok' && this._fromBake(b.buf, b.head, world)) {
+        this._bake = { state: 'used' };
+        this.stats.source = 'bake';
+        yield* phase('build', this._build(quality));
+        this.stats.placed = this.leaves.length;
+        this.ready = true;
+        this.onReady?.(this);
+        return;
+      }
+      this.stats.source = 'grown (' + (b.why || b.state) + ')';
+      this._bake = null;
+    }
     yield* phase('palms', this._palms(world));
     yield* phase('stems', this._plants(world, 'stem'));
     yield* phase('ears', this._ears(world));
@@ -150,6 +310,8 @@ export class NearField {
   }
   step(ms = 4) {
     if (this.ready) return true;
+    // (waiting for the pre-built planting: one look a frame, no spinning)
+    if (this.waiting && this._bake?.state === 'loading') return false;
     const t0 = performance.now();
     let t = t0;
     while (t - t0 < ms) {
@@ -165,7 +327,12 @@ export class NearField {
     this.stats.longestSlice = Math.max(this.stats.longestSlice || 0, dt);
     return this.ready;
   }
-  finish() { while (!this.ready) this.step(1000); }
+  // (all at once, for the review tools: grown here, never waiting on a download)
+  finish() {
+    if (this._bake && this._bake.state !== 'used') this._bake = { state: 'skip', why: 'finished synchronously' };
+    this.waiting = false;
+    while (!this.ready) this.step(1000);
+  }
 
   // ---- solids -----------------------------------------------------------------------
   _solids(world, scenery) {
@@ -980,6 +1147,7 @@ export class NearField {
     const p0 = a.clone().addScaledVector(d, skipA), len = L - skipA - skipB;
     const p1 = p0.clone().addScaledVector(d, len);
     const box = [Math.min(p0.x, p1.x), Math.min(p0.y, p1.y), Math.min(p0.z, p1.z), Math.max(p0.x, p1.x), Math.max(p0.y, p1.y), Math.max(p0.z, p1.z)];
+    this._ensureParts(box);
     const st = ++this.hash.stamp;
     const e1 = V(), e2 = V(), h = V(), sv = V(), q = V(), A = V(), B = V(), C = V();
     let hit = false;
@@ -1020,6 +1188,41 @@ export class NearField {
       }
     });
     return hit;
+  }
+
+  // a baked planting has no part hash: build it where it is first needed
+  // (leaves by their origin in 32-unit columns, padded by the longest leaf)
+  // (prepareParts() fills it column by column in spare time after loading)
+  _leafGrid() {
+    if (this._lgrid) return;
+    const C = 32;
+    this._lgrid = new Map();
+    this._hashed = new Set();
+    this.leaves.forEach((l, i) => { const k = Math.floor(l.m[12] / C) * 4096 + Math.floor(l.m[14] / C); let a = this._lgrid.get(k); if (!a) this._lgrid.set(k, (a = [])); a.push(i); });
+    this._todo = [...this._lgrid.keys()];
+  }
+  _hashColumn(k) {
+    if (this._hashed.has(k)) return;
+    this._hashed.add(k);
+    const m4 = this._m4 || (this._m4 = new THREE.Matrix4());
+    for (const idx of this._lgrid.get(k) || []) {
+      const l = this.leaves[idx];
+      this.hash.add(this._part(m4.fromArray(l.m), this._local(l.a, l.b)));
+    }
+  }
+  _ensureParts(box) {
+    if (!this.baked) return;
+    this._leafGrid();
+    const C = 32, pad = 24;
+    for (let i = Math.floor((box[0] - pad) / C); i <= Math.floor((box[3] + pad) / C); i++) for (let j = Math.floor((box[2] - pad) / C); j <= Math.floor((box[5] + pad) / C); j++) this._hashColumn(i * 4096 + j);
+  }
+  // the part hash of a baked planting, a few columns per call (true when done)
+  prepareParts(ms = 1) {
+    if (!this.baked || !this.ready) return true;
+    this._leafGrid();
+    const t0 = performance.now();
+    while (this._todo.length && performance.now() - t0 < ms) this._hashColumn(this._todo.pop());
+    return !this._todo.length;
   }
 
   // every leaf and frond as world triangles (tools/overlapcheck.mjs)

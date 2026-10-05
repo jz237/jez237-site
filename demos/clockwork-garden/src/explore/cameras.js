@@ -12,11 +12,13 @@ import { groundHeight } from './bounds.js';
 //   FollowCam  cinematic auto-camera for follow mode: picks framings from
 //              what APX-9 is doing (tracking beside it and craning up out of
 //              the beds when it weaves low, wider shots over the canopy, low
-//              angles up at the lanterns by night), cuts between framings
-//              that differ a lot and glides between close ones, cuts away
-//              to the garden's wildlife for a few seconds every 12–24 s
-//              (with a caption), keeps out of flower heads, can be orbited
-//              and zoomed by the viewer and drifts back to its framing.
+//              angles up at the lanterns by night); every move is on
+//              critically damped springs (velocity never jumps), framings
+//              blend round the bee in angle, distance and height, and every
+//              12–24 s it flies along a raised curve to a creature nearby
+//              for a few seconds (with a caption) and back (a soft dip to
+//              black only where no clear path exists); keeps out of flower
+//              heads, can be orbited and zoomed and drifts back to its framing.
 //   PhotoCam   free camera for photo mode.
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
@@ -134,6 +136,24 @@ const CUTS = {
   songbird: { d: 3.4, el: 0.08, fov: 32, ap: 4, hold: [4, 5], orbit: 0.03, caption: () => 'The songbird sings on its copper bough' },
 };
 
+// critically damped spring (as Unity's SmoothDamp): follows a moving target
+// with continuous velocity, so moves ease in and out instead of snapping
+function spring(cur, target, st, smoothTime, dt) {
+  const omega = 2 / Math.max(1e-3, smoothTime), x = omega * dt;
+  const e = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+  const change = cur - target;
+  const temp = (st.v + omega * change) * dt;
+  st.v = (st.v - omega * temp) * e;
+  return target + (change + temp) * e;
+}
+function spring3(cur, target, vel, smoothTime, dt) {
+  const st = { v: 0 };
+  for (const k of ['x', 'y', 'z']) { st.v = vel[k]; cur[k] = spring(cur[k], target[k], st, smoothTime, dt); vel[k] = st.v; }
+  return cur;
+}
+const smoother = (k) => k * k * k * (k * (k * 6 - 15) + 10);
+const bez = (a, c, b, k, out = V()) => out.copy(a).multiplyScalar((1 - k) * (1 - k)).addScaledVector(c, 2 * (1 - k) * k).addScaledVector(b, k * k);
+
 export class FollowCam {
   constructor(bounds) {
     this.bounds = bounds;
@@ -149,10 +169,18 @@ export class FollowCam {
     this.ready = false;
     this.headingS = 0;
     this.rng = 1;
+    // the framing, eased: angle round the bee, distance, height, lens, aperture
+    this.par = { a: 0.55, d: 10, h: 2.6, fov: 44, ap: 2 };
+    this.parV = { a: { v: 0 }, d: { v: 0 }, h: { v: 0 }, fov: { v: 0 }, ap: { v: 0 } };
+    this.off = V(); // camera offset from the bee, eased
+    this.offV = V();
+    this.tgtV = V();
+    this.blend = 0.9; // how long a change of framing takes to settle (s, spring time)
     this.cut = null; // a cutaway to a creature (see CUTS)
     this.nextCut = 9;
     this.recentKinds = [];
     this.cuts = 0;
+    this.fade = 0; // dip to black (only when a cutaway can't fly there)
   }
 
   _rand() { this.rng = (this.rng * 16807) % 2147483647; return this.rng / 2147483647; }
@@ -161,7 +189,8 @@ export class FollowCam {
     this.ready = false;
     this.headingS = actor.yaw;
     this.user = { yaw: 0, pitch: 0, zoom: 1, idle: 99 };
-    this._endCut(false);
+    this.cut = null;
+    this.fade = 0;
   }
 
   _pick(menu) {
@@ -177,7 +206,7 @@ export class FollowCam {
     let next = this.shot;
     if (s === 'landed' || s === 'landing') next = 'macro';
     else if (s === 'docking' || s === 'walk-in' || s === 'inside' || s === 'walk-out') next = 'skep';
-    else if (this.shotT > 6 + this._rand() * 5 || this.shot === 'macro' || this.shot === 'skep') {
+    else if (this.shotT > 7 + this._rand() * 5 || this.shot === 'macro' || this.shot === 'skep') {
       const low = ctx.weaving || actor.pos.y - groundHeight(actor.pos.x, actor.pos.z) < 22;
       const menu = { ...(actor.speed > 32 ? MENUS.fast : low ? MENUS.low : MENUS.high) };
       const night = ctx.night ?? 0;
@@ -186,14 +215,14 @@ export class FollowCam {
       if (ctx.reduced) { delete menu.crane; delete menu.track; }
       delete menu[this.shot];
       next = this._pick(menu);
-      const prevSide = this.side;
-      this.side = this._rand() < 0.5 ? -1 : 1;
-      // a big change of framing is a cut, as in the film; a small one glides
+      // keep to the same side of the bee unless the new framing is close to
+      // the old one, so the camera arcs a little rather than swinging across
       const a = FRAMINGS[this.shot] || FRAMINGS.chase, b = FRAMINGS[next];
-      const jump = Math.abs(a.a * prevSide - b.a * this.side) > 0.9 || Math.max(a.d, b.d) / Math.min(a.d, b.d) > 1.8 || Math.abs(a.h - b.h) > 6;
-      if (jump && !ctx.reduced && this.shot !== 'macro' && this.shot !== 'skep') this.ready = false;
+      if (Math.abs(a.a - b.a) < 0.7 && this._rand() < 0.4) this.side = -this.side;
+      // a bigger change of framing takes longer to settle
+      this.blend = 0.7 + Math.min(0.9, Math.abs(a.a - b.a) * 0.35 + Math.abs(Math.log(b.d / a.d)) * 0.5 + Math.abs(a.h - b.h) * 0.03);
     }
-    if (next !== this.shot) { this.shot = next; this.shotT = 0; }
+    if (next !== this.shot) { this.shot = next; this.shotT = 0; if (next === 'macro' || next === 'skep') this.blend = 1.1; }
   }
 
   // ---- cutaways ------------------------------------------------------------------
@@ -204,16 +233,20 @@ export class FollowCam {
     if (this.nextCut > 0 || !amb || ctx.reduced || this.user.idle < 4) return;
     // only while APX-9 is crossing the house, with time to spare before it
     // arrives (never on its landings or at the skep)
-    if (actor.state !== 'fly' || (ctx.goalDist ?? 0) < 30 + Math.max(actor.speed, 12) * 6.5) return;
-    const cands = amb.features(actor.pos, 120);
+    if (actor.state !== 'fly' || (ctx.goalDist ?? 0) < 30 + Math.max(actor.speed, 12) * 8) return;
+    const cands = amb.features(actor.pos, 100);
     cands.sort((p, q) => this._score(q, actor) - this._score(p, actor));
     for (const c of cands.slice(0, 4)) {
       const plan = this._frame(c, amb, ctx.nearfield);
       if (!plan) continue;
       const spec = CUTS[c.kind];
       const hold = spec.hold[0] + this._rand() * (spec.hold[1] - spec.hold[0]);
-      this.cut = { ...plan, c, spec, t: 0, hold, blocked: 0, caption: spec.caption(c.obj) };
-      amb.hold(c.obj, hold + 0.5);
+      const dest = c.pos.clone().add(plan.off);
+      // fly there along a raised curve if it is clear; otherwise a soft dip
+      const route = this._route(this.pos, dest);
+      const travel = route ? this._travel(this.pos, dest, this.target, c.pos) : 0.8;
+      this.cut = { ...plan, c, spec, t: 0, hold, blocked: 0, caption: spec.caption(c.obj), phase: 'in', k: 0, travel, lift: route?.lift ?? 0, dip: !route, from: this.pos.clone(), fromT: this.target.clone(), fromFov: this.fov, fromAp: this.aperture };
+      amb.hold(c.obj, hold + travel * 2 + 1);
       this.recentKinds.push(c.kind);
       if (this.recentKinds.length > 3) this.recentKinds.shift();
       this.cuts++;
@@ -222,10 +255,36 @@ export class FollowCam {
     this.nextCut = 3; // nothing to show just now: look again shortly
   }
 
+  // how long a flight takes: by the distance, and long enough that the
+  // look never turns faster than ~110°/s
+  _travel(a, b, ta, tb) {
+    const da = ta.clone().sub(a).normalize(), db = tb.clone().sub(b).normalize();
+    const turn = Math.acos(clamp(da.dot(db), -1, 1));
+    return clamp(Math.max(a.distanceTo(b) / 34, (turn / 1.9) * 1.875), 1.4, 4.0);
+  }
+
+  // a raised curve from a to b clear of solids: { lift } or null
+  _route(a, b) {
+    const d = a.distanceTo(b);
+    if (d > 240) return null;
+    const p = V(), c = V();
+    // (an arc that clears the leaves: its middle at least ~20 over the soil)
+    const mid = a.clone().lerp(b, 0.5);
+    const over = Math.max(0, 2 * (groundHeight(mid.x, mid.z) + 20 - mid.y));
+    for (const lift of [Math.max(over, Math.min(60, 0.22 * d + 3)), Math.max(over, Math.min(110, 0.45 * d + 6))]) {
+      c.copy(a).lerp(b, 0.5).y += lift;
+      let ok = true;
+      // (the ends sit close to stems and leaves by design: only the open stretch counts)
+      for (let i = 2; i < 15 && ok; i++) { bez(a, c, b, i / 16, p); if (this.bounds.clearance(p) < 0.5) ok = false; }
+      if (ok) return { lift };
+    }
+    return null;
+  }
+
   _score(c, actor) {
     const variety = this.recentKinds.includes(c.kind) ? -2 : 0;
     const interest = { forager: 2.2, crawler: 2.0, butterfly: 2.2, hummingbird: 2.6, dragonfly: 1.2, songbird: 1.6 }[c.kind] || 1;
-    return interest + variety - c.pos.distanceTo(actor.pos) / 80 + this._rand() * 0.6;
+    return interest + variety - c.pos.distanceTo(actor.pos) / 70 + this._rand() * 0.6;
   }
 
   // a camera spot round the creature with a clear line to it, or null
@@ -255,51 +314,76 @@ export class FollowCam {
     return null;
   }
 
-  _cutUpdate(dt, actor, ctx) {
+  // the cutaway: fly in (or dip), hold with a slow orbit, fly back to `normal`
+  _cutView(dt, actor, ctx, normal) {
     const cut = this.cut;
     cut.t += dt;
-    // back to APX-9 for its landings and the skep, or when the time is up
     const s = actor.state;
-    if (cut.t > cut.hold) { this._endCut(true, 'done'); return null; }
-    if (s === 'landing' || s === 'docking' || (ctx.goalDist ?? 99) < 25) { this._endCut(true, 'apx9'); return null; }
+    // back to APX-9 for its landings and the skep, when the time is up, or when the viewer takes over
+    if (cut.phase === 'hold' && (cut.t > cut.hold || s === 'landing' || s === 'docking' || (ctx.goalDist ?? 99) < 25 || this.user.idle < 0.2)) {
+      cut.phase = 'out'; cut.k = 0; cut.from = this.pos.clone(); cut.fromT = this.target.clone(); cut.fromFov = this.fov; cut.fromAp = this.aperture;
+      if (this.user.idle < 0.2) cut.travel = 0.8;
+      else { const r = this._route(this.pos, normal.pos); cut.dip = !r; cut.dipOut = !r; cut.lift = r?.lift ?? 0; cut.travel = r ? this._travel(this.pos, normal.pos, this.target, normal.target) : 0.8; }
+    }
+    if (cut.phase === 'in' && (s === 'landing' || s === 'docking')) { this.cut = null; this.nextCut = 12; return null; }
     const subj = cut.c.pos.clone();
-    const k = cut.t / cut.hold;
-    // a slow orbit and a gentle push in
-    const off = cut.off.clone().applyAxisAngle(UP, cut.spec.orbit * cut.t * (cut.off.x >= 0 ? 1 : -1)).multiplyScalar(1 - 0.08 * smooth(k));
-    let want = subj.clone().add(off);
+    // the hold framing: a slow orbit and a gentle push in
+    const hk = cut.phase === 'hold' ? cut.t / cut.hold : 0;
+    const orb = cut.spec.orbit * (cut.phase === 'hold' ? cut.t : 0) * (cut.off.x >= 0 ? 1 : -1);
+    let off = cut.off.clone().applyAxisAngle(UP, orb).multiplyScalar(1 - 0.08 * smooth(hk));
     // the orbit has brought something between: hold the last clear spot
-    // (relative to the subject); leave only if even that stays blocked
-    // (leaves checked a few times a second)
     cut.leafT = (cut.leafT ?? 0) - dt;
     const leaves = (p) => { if (cut.leafT > 0) return true; cut.leafT = 0.25; return !(ctx.nearfield?.sightBlocked(p, subj, 3, 1.2 * cut.c.size) || ctx.ambient?.petalsBlock(p, subj, 0.6 * cut.c.size)); };
     const clear = (p) => this.bounds.sweep(subj, p, 0.3).distanceTo(subj) > p.distanceTo(subj) * 0.9 && (!ctx.ambient || ctx.ambient.clearOfHeads(p, subj)) && leaves(p);
-    if (clear(want)) { cut.blocked = 0; cut.good = want.clone().sub(subj); }
-    else {
-      want = subj.clone().add(cut.good || cut.off);
-      if (!clear(want) && (cut.blocked += dt) > 0.8) { this._endCut(true, 'blocked'); return null; }
+    if (cut.phase === 'hold') {
+      if (clear(subj.clone().add(off))) { cut.blocked = 0; cut.good = off.clone(); }
+      else { off = cut.good || cut.off; if ((cut.blocked += dt) > 0.8) { cut.t = cut.hold + 1; } }
     }
-    if (cut.t === dt) { this.pos.copy(want); this.target.copy(subj); this.fov = cut.spec.fov; this.aperture = cut.spec.ap; }
-    this.pos.lerp(want, damp(8, dt));
-    this.target.lerp(subj.add(V(0, 0.15 * cut.c.size, 0)), damp(10, dt));
-    this.fov += (cut.spec.fov - this.fov) * damp(3, dt);
-    this.aperture += (cut.spec.ap - this.aperture) * damp(3, dt);
+    const camHold = subj.clone().add(off);
+    const tgtHold = subj.clone().add(V(0, 0.15 * cut.c.size, 0));
+    const spec = cut.spec;
+    let pos, tgt, fov, ap;
+    if (cut.phase === 'hold') {
+      pos = camHold; tgt = tgtHold; fov = spec.fov; ap = spec.ap;
+      this.pos.lerp(pos, damp(6, dt));
+      this.target.lerp(tgt, damp(8, dt));
+      this.fov = fov; this.aperture = ap;
+      this.fade = Math.max(0, this.fade - dt / 0.45);
+    } else {
+      cut.k = Math.min(1, cut.k + dt / cut.travel);
+      const into = cut.phase === 'in';
+      const toPos = into ? camHold : normal.pos, toTgt = into ? tgtHold : normal.target;
+      if (cut.dip) {
+        // fade down, move while dark, fade up
+        this.fade = cut.k < 0.5 ? smooth(cut.k * 2) : 1 - smooth((cut.k - 0.5) * 2);
+        const there = cut.k >= 0.5;
+        this.pos.copy(there ? toPos : cut.from);
+        this.target.copy(there ? toTgt : cut.fromT);
+        this.fov = there ? (into ? spec.fov : normal.fov) : cut.fromFov;
+        this.aperture = there ? (into ? spec.ap : normal.aperture) : cut.fromAp;
+      } else {
+        const k = smoother(cut.k);
+        const c = cut.from.clone().lerp(toPos, 0.5);
+        c.y += cut.lift;
+        bez(cut.from, c, toPos, k, this.pos);
+        // the look turns with the move, over all of it
+        this.target.copy(cut.fromT).lerp(toTgt, k);
+        this.fov = lerp(cut.fromFov, into ? spec.fov : normal.fov, k);
+        this.aperture = lerp(cut.fromAp, into ? spec.ap : normal.aperture, k);
+      }
+      if (cut.k >= 1) {
+        if (into) { cut.phase = 'hold'; cut.t = 0; }
+        else { this.cut = null; this.nextCut = 14 + this._rand() * 12; this.fade = 0; return null; }
+      }
+    }
     return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: this.pos.distanceTo(this.target), aperture: this.aperture };
   }
 
-  _endCut(back = true, why = 'viewer') {
-    if (!this.cut) return;
-    this.cut.ended = why;
-    this.cut = null;
-    this.nextCut = 12 + this._rand() * 12;
-    if (back) { this.ready = false; this.shotT = 99; } // cut straight back to APX-9, in a fresh framing
-  }
-
-  // the creature the camera is showing (for the leaves' sightline and the status line)
-  get subject() { return this.cut ? this.cut.c.pos : null; }
-  get caption() { return this.cut ? this.cut.caption : null; }
+  // the creature the camera is showing (for the leaves' sightline, the shadows and the status line)
+  get subject() { return this.cut && this.cut.phase !== 'out' && (this.cut.phase === 'hold' || this.cut.k > 0.5) ? this.cut.c.pos : null; }
+  get caption() { return this.cut && this.cut.phase === 'hold' ? this.cut.caption : null; }
 
   update(dt, actor, input, ctx) {
-    const reduced = ctx.reduced;
     // viewer orbit / zoom, drifting back to the framing when left alone
     if (input) {
       const moved = Math.abs(input.orbit.dx) + Math.abs(input.orbit.dy) > 0.5 || Math.abs(input.zoom - 1) > 1e-3;
@@ -307,10 +391,24 @@ export class FollowCam {
       this.user.pitch = clamp(this.user.pitch + input.orbit.dy * 0.004, -0.9, 1.0);
       this.user.zoom = clamp(this.user.zoom / input.zoom, 0.35, 4);
       this.user.idle = moved ? 0 : this.user.idle + dt;
-      if (moved) this._endCut(false);
     }
-    if (this.cut) { const v = this._cutUpdate(dt, actor, ctx); if (v) return v; }
+    // APX-9's framing always runs (in a cutaway it is where the camera returns to)
+    const normal = this._normal(dt, actor, ctx);
+    if (this.cut) { const v = this._cutView(dt, actor, ctx, normal); if (v) return v; }
     else this._maybeCut(dt, actor, ctx);
+    this.fade = Math.max(0, this.fade - dt / 0.45);
+    this.pos.copy(normal.pos);
+    this.target.copy(normal.target);
+    this.fov = normal.fov;
+    this.aperture = normal.aperture;
+    return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: this.pos.distanceTo(actor.pos), aperture: this.aperture };
+  }
+
+  // APX-9's own framing, eased: the framing's angle, distance and height
+  // glide on springs, the camera holds that offset from the bee, and the
+  // spring arm keeps it out of solids
+  _normal(dt, actor, ctx) {
+    const reduced = ctx.reduced;
     this.shotT += dt;
     this.choose(actor, ctx);
     if (this.user.idle > 3.2) {
@@ -319,24 +417,37 @@ export class FollowCam {
       this.user.pitch *= 1 - k;
       this.user.zoom += (1 - this.user.zoom) * k;
     }
-    // smoothed heading so framings don't whip round with every correction
-    const hv = Math.hypot(actor.vel.x, actor.vel.z);
-    const head = hv > 3 ? Math.atan2(actor.vel.x, actor.vel.z) : actor.yaw;
-    this.headingS += wrap(head - this.headingS) * damp(reduced ? 0.8 : 1.4, dt);
-    if (!this.ready) this.headingS = head;
-    const bee = actor.pos;
-    let want, tgt, fov, ap;
+    // the heading framings are set against: the way it travels, blending into
+    // the way it faces as it slows (no switch between the two), on a spring so
+    // framings never whip round with every correction
+    const head = Math.atan2(actor.vel.x + Math.sin(actor.yaw) * 3, actor.vel.z + Math.cos(actor.yaw) * 3);
+    if (!this.ready) { this.headingS = head; this.headV = { v: 0 }; }
+    // (a wide framing swings the camera through a big arc: it turns more slowly)
+    const reach = Math.hypot(this.par.d, this.par.h);
+    this.headingS = spring(this.headingS, this.headingS + wrap(head - this.headingS), this.headV, (reduced ? 1.2 : 0.75) + Math.max(0, reach - 10) * 0.03, dt);
+    // APX-9's position with its jolts filtered out (collision nudges, the
+    // landing settle): a smoothed velocity carries the anchor, which is drawn
+    // gently back to the bee, so there is no lag at a steady speed
+    if (!this.ready) { (this.anchor ||= V()).copy(actor.pos); (this.aVel ||= V()).copy(actor.vel); this.aVelV = V(); }
+    spring3(this.aVel, actor.vel, this.aVelV, reduced ? 0.45 : 0.28, dt);
+    this.anchor.addScaledVector(this.aVel, dt).lerp(actor.pos, damp(3.5, dt));
+    const bee = this.anchor;
+    const P = this.par, PV = this.parV;
+    const st = (reduced ? 1.5 : 1) * this.blend * (this.user.idle < 0.3 ? 0.25 : 1);
+    let wantOff, tgt;
     if (this.shot === 'skep') {
       const s = ctx.skep;
-      want = s.board.clone().addScaledVector(s.out, 15).addScaledVector(s.side, 7 * this.side).add(V(0, 5.5, 0));
+      const want = s.board.clone().addScaledVector(s.out, 15).addScaledVector(s.side, 7 * this.side).add(V(0, 5.5, 0));
       tgt = s.board.clone().lerp(bee, 0.5).add(V(0, 1.6, 0));
-      fov = 38; ap = 3;
       const ur = this.user;
       if (ur.yaw || ur.pitch || ur.zoom !== 1) {
         const off = want.clone().sub(tgt).multiplyScalar(ur.zoom).applyAxisAngle(UP, ur.yaw);
         off.y += ur.pitch * off.length() * 0.6;
-        want = tgt.clone().add(off);
+        want.copy(tgt).add(off);
       }
+      wantOff = want.sub(bee);
+      P.fov = spring(P.fov, 38, PV.fov, st, dt);
+      P.ap = spring(P.ap, 3, PV.ap, st, dt);
     } else {
       let f = FRAMINGS[this.shot];
       if (this.shot === 'macro') {
@@ -348,45 +459,57 @@ export class FollowCam {
         f = { ...f, d: d * Math.cos(el), h: d * Math.sin(el) };
       }
       if (f.orbit) this.orbitA += dt * f.orbit * (reduced ? 0.5 : 1);
-      const h = f.h1 !== undefined ? lerp(f.h, f.h1, smooth(clamp(this.shotT / f.rise))) : f.h;
-      const a = this.headingS + Math.PI + this.side * f.a + (f.orbit ? this.orbitA : 0) + this.user.yaw;
-      const d = Math.hypot(f.d, h) * this.user.zoom;
-      const el = Math.atan2(h, f.d) + this.user.pitch;
-      want = bee.clone().add(V(Math.sin(a) * Math.cos(el) * d, Math.sin(el) * d, Math.cos(a) * Math.cos(el) * d));
+      const hT = f.h1 !== undefined ? lerp(f.h, f.h1, smooth(clamp(this.shotT / f.rise))) : f.h;
+      const aT = this.side * f.a + (f.orbit ? this.orbitA : 0);
+      if (!this.ready) { P.a = aT; P.d = f.d; P.h = hT; P.fov = f.fov; P.ap = f.ap; for (const k in PV) PV[k].v = 0; }
+      P.a = spring(P.a, aT, PV.a, st, dt);
+      P.d = spring(P.d, f.d, PV.d, st, dt);
+      P.h = spring(P.h, hT, PV.h, f.h1 !== undefined ? 0.4 : st, dt);
+      P.fov = spring(P.fov, f.fov, PV.fov, st, dt);
+      P.ap = spring(P.ap, f.ap, PV.ap, st, dt);
+      const a = this.headingS + Math.PI + P.a + this.user.yaw;
+      const d = Math.hypot(P.d, P.h) * this.user.zoom;
+      const el = Math.atan2(P.h, P.d) + this.user.pitch;
+      wantOff = V(Math.sin(a) * Math.cos(el) * d, Math.sin(el) * d, Math.cos(a) * Math.cos(el) * d);
       // look a little ahead of a flying bee
-      tgt = bee.clone().addScaledVector(actor.vel, this.shot === 'macro' ? 0 : 0.18).add(V(0, 0.5, 0));
+      tgt = bee.clone().addScaledVector(this.aVel, this.shot === 'macro' ? 0 : 0.18).add(V(0, 0.5, 0));
       // (from below, aim a touch above it so the lanterns and the vault are in frame)
       if (this.shot === 'lowup') tgt.y += 2.5;
-      fov = f.fov; ap = f.ap;
     }
+    // the camera's offset from the bee eases toward the framing's
+    if (!this.ready) { this.off.copy(wantOff); this.offV.set(0, 0, 0); }
+    spring3(this.off, wantOff, this.offV, reduced ? 0.6 : 0.35, dt);
+    const want = bee.clone().add(this.off);
     const from = bee.clone().add(V(0, 0.8, 0));
     const safe = this.bounds.sweep(from, want, 0.9);
     this.bounds.pushOut(safe, 0.7);
-    // the same spring arm as the chase camera: in smoothly when something comes
-    // between, a pause, then back out to the framing at the camera's pace
+    // the spring arm: in smoothly when something comes between, a pause, then
+    // back out at the camera's pace
     const L = safe.distanceTo(from);
-    if (!this.ready) { this.pos.copy(safe); this.target.copy(tgt); this.arm = L; this.hold = 0; this.fov = fov; this.aperture = ap; this.ready = true; }
-    const rate = (reduced ? 0.9 : 1.6) * (this.user.idle < 0.3 ? 4 : 1);
-    const blocked = L < want.distanceTo(from) - 0.05;
-    if (blocked && L < this.arm) { this.arm += (L - this.arm) * damp(reduced ? 6 : 9, dt); this.hold = 0.5; }
-    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm += (L - this.arm) * damp(rate, dt);
+    const n = this._n || (this._n = { pos: V(), target: V(), fov: 44, aperture: 2 });
+    if (!this.ready) { this.arm = L; this.hold = 0; this.armV = { v: 0 }; n.target.copy(tgt); this.tgtV.set(0, 0, 0); this.ready = true; }
+    // (the skep framing is a set position looking at its door: no arm, which
+    // would flip as the bee walks in through the wall)
+    const blocked = this.shot !== 'skep' && L < want.distanceTo(from) - 0.3;
+    if (this.shot === 'skep') this.hold = 0;
+    if (blocked && L < this.arm) { this.arm = spring(this.arm, L, this.armV, reduced ? 0.3 : 0.2, dt); this.hold = 0.6; }
+    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm = spring(this.arm, L, this.armV, 0.9, dt);
     const off = want.clone().sub(from);
-    const ideal = from.clone().addScaledVector(off, Math.min(1, this.arm / Math.max(off.length(), 1e-4)));
-    this.pos.lerp(ideal, damp(rate, dt));
-    off.subVectors(this.pos, from);
-    if (off.length() > this.arm) this.pos.copy(from).addScaledVector(off, this.arm / off.length());
+    if (this.shot === 'skep') this.arm = spring(this.arm, off.length(), this.armV, 0.6, dt);
+    n.pos.copy(from).addScaledVector(off, Math.min(1, this.arm / Math.max(off.length(), 1e-4)));
+    spring3(n.target, tgt, this.tgtV, reduced ? 0.4 : 0.22, dt);
+    n.fov = P.fov;
+    n.aperture = P.ap;
     // inside a flower head, or one in the way (petals aren't solids for the
-    // arm): cut to another framing (a few tries a second at most)
+    // arm): move on to another framing, a little quicker than usual
     this.headCheck = (this.headCheck ?? 0) - dt;
-    if (ctx.ambient && this.shot !== 'macro' && this.shot !== 'skep' && this.headCheck <= 0 && this.shotT > 0.3 && !ctx.ambient.clearOfHeads(this.pos, bee, { own: false, upto: 0.75 })) {
-      this.headCheck = 0.35;
+    if (ctx.ambient && this.shot !== 'macro' && this.shot !== 'skep' && this.headCheck <= 0 && this.shotT > 0.6 && !ctx.ambient.clearOfHeads(n.pos, bee, { own: false, upto: 0.75 })) {
+      this.headCheck = 1.2;
       this.shotT = 99;
-      this.ready = false;
+      this.choose(actor, ctx);
+      this.blend = 0.45;
     }
-    this.target.lerp(tgt, damp(reduced ? 3 : 5, dt));
-    this.fov += (fov - this.fov) * damp(1.5, dt);
-    this.aperture += (ap - this.aperture) * damp(1.5, dt);
-    return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: this.pos.distanceTo(bee), aperture: this.aperture };
+    return n;
   }
 }
 
