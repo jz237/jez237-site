@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14110d">
+  <title>Mechanical Flower — Exploded View</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./styles.css?v=d195c64a0c">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/addons/",
+        "./src/assembly.js": "./src/assembly.js?v=759ef9f4d3",
+        "./src/backdrop.js": "./src/backdrop.js?v=17f263b53d",
+        "./src/explode.js": "./src/explode.js?v=5976a52539",
+        "./src/gears.js": "./src/gears.js?v=28a5480034",
+        "./src/geo.js": "./src/geo.js?v=7b3eb528be",
+        "./src/layout.js": "./src/layout.js?v=b0f5fde67d",
+        "./src/leaves.js": "./src/leaves.js?v=5d80159c4d",
+        "./src/main.js": "./src/main.js?v=3b3123b505",
+        "./src/materials.js": "./src/materials.js?v=2f771bc933",
+        "./src/mech.js": "./src/mech.js?v=af0652a31e",
+        "./src/petals.js": "./src/petals.js?v=6868de2fa0",
+        "./src/screws.js": "./src/screws.js?v=25f5f13f77",
+        "./src/spec.js": "./src/spec.js?v=600b918e6e",
+        "./src/stem.js": "./src/stem.js?v=9ce28ab205",
+        "./src/ui.js": "./src/ui.js?v=acc743a91e"
+      }
+    }
+  </script>
+  <!-- modulepreload -->
+  <link rel="modulepreload" href="./src/main.js?v=3b3123b505" />
+  <link rel="modulepreload" href="./src/ui.js?v=acc743a91e" />
+  <link rel="modulepreload" href="./src/backdrop.js?v=17f263b53d" />
+  <link rel="modulepreload" href="./src/assembly.js?v=759ef9f4d3" />
+  <link rel="modulepreload" href="./src/layout.js?v=b0f5fde67d" />
+  <link rel="modulepreload" href="./src/spec.js?v=600b918e6e" />
+  <link rel="modulepreload" href="./src/screws.js?v=25f5f13f77" />
+  <link rel="modulepreload" href="./src/stem.js?v=9ce28ab205" />
+  <link rel="modulepreload" href="./src/leaves.js?v=5d80159c4d" />
+  <link rel="modulepreload" href="./src/mech.js?v=af0652a31e" />
+  <link rel="modulepreload" href="./src/gears.js?v=28a5480034" />
+  <link rel="modulepreload" href="./src/petals.js?v=6868de2fa0" />
+  <link rel="modulepreload" href="./src/materials.js?v=2f771bc933" />
+  <link rel="modulepreload" href="./src/explode.js?v=5976a52539" />
+  <link rel="modulepreload" href="./src/geo.js?v=7b3eb528be" />
+  <link rel="modulepreload" href="./vendor/three/addons/utils/BufferGeometryUtils.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/OutputPass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/shaders/OutputShader.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/UnrealBloomPass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/shaders/LuminosityHighPassShader.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/RenderPass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/EffectComposer.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/MaskPass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/ShaderPass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/Pass.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/shaders/CopyShader.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/environments/RoomEnvironment.js" />
+  <link rel="modulepreload" href="./vendor/three/addons/controls/OrbitControls.js" />
+  <link rel="modulepreload" href="./vendor/three/build/three.module.js" />
+  <link rel="modulepreload" href="./vendor/three/build/three.core.js" />
+  <!-- /modulepreload -->
+</head>
+<body>
+  <div id="poster">
+    <canvas id="stage" aria-label="Interactive 3D exploded view of a mechanical flower" role="img"></canvas>
+    <div id="overlay"></div>
+    <div id="loading" role="status" aria-live="polite">
+      <div class="ld-ring" aria-hidden="true"></div>
+      <p class="ld-text">Winding the mechanism…</p>
+    </div>
+  </div>
+  <noscript><p class="noscript">This poster needs JavaScript and WebGL to render the 3D scene.</p></noscript>
+  <script type="module" src="./src/main.js?v=3b3123b505"></script>
+</body>
+</html>
