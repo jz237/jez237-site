@@ -162,6 +162,7 @@ export class Garden {
     pebbles.receiveShadow = true;
     pebbles.castShadow = true;
     this.group.add(moss, pebbles);
+    this.smallCasters = [moss, pebbles];
   }
 
   _buildOrbLamps() {

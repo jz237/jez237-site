@@ -176,7 +176,7 @@ export function createShots(world) {
     const side = V(-out.z, 0, out.x);
     const keys = [
       { t: 21.8, pos: ent.clone().addScaledVector(out, 24).addScaledVector(side, 9).add(V(0, 6, 0)), target: ent.clone().add(V(0, 3.0, 0)), fov: 32, aperture: 7 },
-      { t: 23.4, pos: ent.clone().addScaledVector(out, 10).addScaledVector(side, 4.5).add(V(0, 2.4, 0)), target: ent.clone().addScaledVector(out, 0.8).add(V(0, 0.8, 0)), fov: 32, aperture: 11 },
+      { t: 23.4, pos: ent.clone().addScaledVector(out, 10).addScaledVector(side, 4.5).add(V(0, 3.0, 0)), target: ent.clone().addScaledVector(out, 0.8).add(V(0, 1.5, 0)), fov: 32, aperture: 11 },
     ];
     shots.push({
       name: 'skep',

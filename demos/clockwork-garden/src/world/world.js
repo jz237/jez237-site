@@ -6,6 +6,7 @@ import { HeroFlower } from './heroFlower.js';
 import { Greenhouse } from './greenhouse.js';
 import { Garden } from './garden.js';
 import { Flora } from './flora.js';
+import { Foliage } from './foliage.js';
 import { Atmosphere } from './atmosphere.js';
 import { Lighting } from './lighting.js';
 import { Sky } from './sky.js';
@@ -29,6 +30,8 @@ export function buildWorld(scene, mat, tex, quality) {
   scene.add(w.garden.group);
   w.flora = new Flora(mat, quality);
   scene.add(w.flora.group);
+  w.foliage = new Foliage(mat, quality, w.flora);
+  scene.add(w.foliage.group);
   w.atmosphere = new Atmosphere(quality);
   scene.add(w.atmosphere.group);
 
@@ -122,9 +125,27 @@ export function buildWorld(scene, mat, tex, quality) {
     w.roots.addRoot(pts, { r0: 0.18, r1: 0.1, t0: s.t0, t1: s.t1, collars: d.length() > 12, rootlets: 3, gain: 0.8 });
   }
 
+  // ---- shadow LOD ---------------------------------------------------------
+  // Once the reveal has pulled far back, small casters (creatures, the hero
+  // flower's fine parts, moss, leaf clusters) stop casting into the sun's
+  // wide shadow map: their shadows are sub-pixel there but cost most of the
+  // shadow pass. A pure function of t, so seeking stays deterministic.
+  const smallCasters = [];
+  const collect = (root) => root.traverse((o) => { if (o.isMesh && o.castShadow) smallCasters.push(o); });
+  collect(w.flower.group);
+  for (const o of [...w.garden.smallCasters, ...w.flora.smallCasters]) if (o.castShadow) smallCasters.push(o);
+  let farShadows = null;
+  w.setFarShadows = (far) => {
+    if (far === farShadows) return;
+    farShadows = far;
+    for (const o of smallCasters) o.castShadow = !far;
+    if (w.creatures) w.creatures.group.traverse((o) => { if (o.isMesh) { o.userData.cast0 ??= o.castShadow; o.castShadow = far ? false : o.userData.cast0; } });
+  };
+
   // ---- per-frame update -------------------------------------------------
   const pulseTmp = new THREE.Vector3();
   w.update = (t, ctx) => {
+    w.setFarShadows(t > B.reveal[0] + 4.8);
     w.sky.update(t, ctx);
     w.lighting.update(t, ctx);
     w.atmosphere.update(t, ctx);
@@ -134,6 +155,7 @@ export function buildWorld(scene, mat, tex, quality) {
     w.flower.update(t, ctx);
     w.garden.update(t, ctx);
     w.flora.update(t, ctx);
+    w.foliage.update(t, ctx);
     w.skep.update(t, ctx);
     w.pods.update(t, ctx);
     w.lily.update(t, ctx);

@@ -6,6 +6,7 @@ import { addPulse } from '../materials/library.js';
 import { leafTexture, petalTextures } from '../materials/textures.js';
 import { B } from '../direction/beats.js';
 import { clamp, lerp, smoother, seg, sseg, settle, rampIntegral } from '../core/ease.js';
+import { RNG } from '../core/rng.js';
 
 // The hero flower: a porcelain-and-brass bloom whose petals are opened by a
 // visible mechanism. Drive shaft → calyx gears → lead screws → three
@@ -16,9 +17,9 @@ const TAU = Math.PI * 2;
 
 const RINGS = [
   // name, count, hinge radius, hinge y, length, width, closed, open, tipOpen, sleeve radius, phase
-  { name: 'outer', count: 8, R: 2.35, y: -0.15, len: 6.6, width: 4.3, closed: -0.16, open: 1.5, tip: 0.26, tipClosed: -0.42, sleeve: 0.95, phase: 0, cup: 1.0, curl: 0.5 },
-  { name: 'middle', count: 8, R: 1.8, y: 0.05, len: 5.6, width: 3.7, closed: -0.24, open: 1.12, tip: 0.2, tipClosed: -0.5, sleeve: 0.72, phase: TAU / 16, cup: 0.95, curl: 0.6 },
-  { name: 'inner', count: 6, R: 1.3, y: 0.22, len: 4.4, width: 3.0, closed: -0.32, open: 0.8, tip: 0.14, tipClosed: -0.58, sleeve: 0.5, phase: TAU / 12, cup: 0.85, curl: 0.75 },
+  { name: 'outer', count: 8, R: 2.35, y: -0.15, len: 6.6, width: 4.3, closed: 0.04, open: 1.5, tip: 0.26, tipClosed: -0.88, twist: 0.42, sleeve: 0.95, phase: 0, cup: 1.0, curl: 0.5 },
+  { name: 'middle', count: 8, R: 1.8, y: 0.05, len: 5.6, width: 3.7, closed: -0.06, open: 1.12, tip: 0.2, tipClosed: -0.78, twist: 0.38, sleeve: 0.72, phase: TAU / 16, cup: 0.95, curl: 0.6 },
+  { name: 'inner', count: 6, R: 1.3, y: 0.22, len: 4.4, width: 3.0, closed: -0.14, open: 0.8, tip: 0.14, tipClosed: -0.72, twist: 0.36, sleeve: 0.5, phase: TAU / 12, cup: 0.85, curl: 0.75 },
 ];
 
 const SPLIT = 0.56; // where the tip segment's hinge sits along the petal
@@ -54,6 +55,7 @@ export class HeroFlower {
 
     this._buildStem(stemTop);
     this._buildHead();
+    this._buildSheath();
     this._buildLeaves();
 
     this.group.traverse((o) => {
@@ -186,18 +188,7 @@ export class HeroFlower {
       ring.position.y = r.y - 0.05;
       head.add(ring);
     }
-    // sepals: thin brass blades curling down outside the calyx
-    for (let i = 0; i < 7; i++) {
-      const a = (i / 7) * TAU + 0.2;
-      const pts = [];
-      for (let k = 0; k <= 10; k++) {
-        const s = k / 10;
-        const r = 2.2 + s * 1.2;
-        const y = -0.6 - s * 2.6 + s * s * 0.6;
-        pts.push(new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r));
-      }
-      head.add(new THREE.Mesh(taperedTube(new THREE.CatmullRomCurve3(pts), 0.18, 0.03, 24, 6), mat.brass));
-    }
+    // (the sepals are the porcelain bud sheath, see _buildSheath)
 
     // central spindle and the three telescoping sleeves
     const spindle = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 4.4, 14), mat.steel);
@@ -254,8 +245,8 @@ export class HeroFlower {
       r.rimMat = this.rimMat.clone();
       const rimBase = this._rimGeometry(base.edge, 0.05);
       const rimTip = this._rimGeometry(tipG.edge, 0.05);
-      const keelBase = tubeThrough(base.keel, 0.045, 20, 6);
-      const keelTip = tubeThrough(tipG.keel, 0.04, 20, 6);
+      // a short stiffening rib near the hinge only (full-length keels read as cage bars)
+      const keelBase = tubeThrough(base.keel.slice(0, Math.ceil(base.keel.length * 0.45)), 0.04, 12, 6);
       for (let i = 0; i < r.count; i++) {
         const phi = r.phase + (i / r.count) * TAU;
         const holder = new THREE.Group();
@@ -263,10 +254,12 @@ export class HeroFlower {
         holder.rotation.set(0, Math.PI / 2 - phi, 0, 'YXZ');
         const hinge = new THREE.Group(); // rotates about local X
         holder.add(hinge);
+        const twist = new THREE.Group(); // pitch about the petal's own midline
+        hinge.add(twist);
         const baseMesh = new THREE.Mesh(base.geometry, this.porcelain);
-        hinge.add(baseMesh);
-        hinge.add(new THREE.Mesh(rimBase, r.rimMat));
-        hinge.add(new THREE.Mesh(keelBase, mat.brass));
+        twist.add(baseMesh);
+        twist.add(new THREE.Mesh(rimBase, r.rimMat));
+        twist.add(new THREE.Mesh(keelBase, mat.brass));
         const k1 = new THREE.Mesh(knuckle, mat.gold);
         hinge.add(k1);
         // lever arm under the hinge, pointing down and inward
@@ -276,16 +269,16 @@ export class HeroFlower {
         hinge.add(lever);
         const tipHolder = new THREE.Group();
         tipHolder.position.copy(tipPivot);
-        hinge.add(tipHolder);
+        twist.add(tipHolder);
         const tipMesh = new THREE.Mesh(tipG.geometry, this.porcelain);
         tipHolder.add(tipMesh);
         tipHolder.add(new THREE.Mesh(rimTip, r.rimMat));
-        tipHolder.add(new THREE.Mesh(keelTip, mat.brass));
-        const k2 = new THREE.Mesh(knuckleGeometry(0.06, r.width * 0.55), mat.gold);
+        const k2 = new THREE.Mesh(knuckleGeometry(0.05, r.width * 0.16), mat.gold);
+        k2.position.z = -0.09; // tip hinge sits on the inner face (no crossbar outside)
         tipHolder.add(k2);
         head.add(holder);
         const rod = new Rod(mat.steel, 0.045, 8, mat.gold).addTo(head);
-        this.petals.push({ ring: r, phi, holder, hinge, tipHolder, rod, leverLocal: new THREE.Vector3(0, -0.85, -0.36), rodLen: null, jitter: Math.sin(i * 12.9898 + r.R * 78.233) });
+        this.petals.push({ ring: r, phi, holder, hinge, twist, tipHolder, rod, leverLocal: new THREE.Vector3(0, -0.85, -0.36), rodLen: null, jitter: Math.sin(i * 12.9898 + r.R * 78.233) });
       }
     }
 
@@ -335,6 +328,120 @@ export class HeroFlower {
     this.coreLight = new THREE.PointLight('#ffae55', 0, 14, 2);
     this.coreLight.position.y = 1.1;
     head.add(this.coreLight);
+  }
+
+  // ------------------------------------------------------------------------
+  // The bud sheath: five hinged porcelain sepals close the bud into one smooth
+  // ovoid — a pierced-porcelain lantern with gilt seams, glowing from within —
+  // held shut by a finial clasp. When the clasp lets go the sepals swing down
+  // on spring-loaded knuckle hinges (with a damped settle), just ahead of the
+  // outer petals, and come to rest beneath the bloom like a calyx.
+  _buildSheath() {
+    const mat = this.mat;
+    const head = this.head;
+    const tex = sheathTextures(1024);
+    this.sheathMat = new THREE.MeshPhysicalMaterial({
+      color: '#ffffff', map: tex.map, roughness: 1, metalness: 1, roughnessMap: tex.orm, metalnessMap: tex.orm,
+      emissive: new THREE.Color('#ffa955'), emissiveMap: tex.emissive, emissiveIntensity: 0,
+      clearcoat: 1, clearcoatRoughness: 0.12, sheen: 0.3, sheenColor: new THREE.Color('#fff0dc'), side: THREE.DoubleSide,
+    });
+    this.sheathRimMat = mat.gold.clone();
+    this.sheathRimMat.emissive = new THREE.Color('#ffb048');
+    this.sheathRimMat.emissiveIntensity = 0;
+    // profile (radius, height) in head space: base on the hinge ring, ovoid, pointed apex
+    const ctrl = [[2.72, -0.38], [3.08, 0.45], [3.42, 1.55], [3.56, 2.75], [3.42, 3.95], [3.0, 5.05], [2.3, 6.0], [1.42, 6.75], [0.58, 7.22], [0.0, 7.4]];
+    const curve = new THREE.SplineCurve(ctrl.map(([r, y]) => new THREE.Vector2(r, y)));
+    const prof = curve.getSpacedPoints(44);
+    const Y = new THREE.Vector3(0, 1, 0);
+    const HR = 2.72, HY = -0.38;
+    this.sheath = [];
+    const gap = 0.012;
+    const nu = 18;
+    const NS = 5;
+    for (let i = 0; i < NS; i++) {
+      const phiM = 0.55 + (i * TAU) / NS;
+      const a0 = phiM - Math.PI / NS + gap, a1 = phiM + Math.PI / NS - gap;
+      const H = new THREE.Vector3(Math.cos(phiM) * HR, HY, Math.sin(phiM) * HR);
+      const toLocal = (p) => p.sub(H).applyAxisAngle(Y, -(Math.PI / 2 - phiM));
+      const at = (a, j) => toLocal(new THREE.Vector3(Math.cos(a) * prof[j].x, prof[j].y, Math.sin(a) * prof[j].x));
+      const pos = [], uv = [], idx = [];
+      for (let j = 0; j < prof.length; j++) {
+        for (let k = 0; k <= nu; k++) {
+          const a = a0 + ((a1 - a0) * k) / nu;
+          const p = at(a, j);
+          pos.push(p.x, p.y, p.z);
+          uv.push(k / nu, j / (prof.length - 1));
+        }
+      }
+      for (let j = 0; j < prof.length - 1; j++) {
+        for (let k = 0; k < nu; k++) {
+          const a = j * (nu + 1) + k, b = a + 1, c = a + nu + 1, d = c + 1;
+          idx.push(a, c, b, b, c, d);
+        }
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      geo.setIndex(idx);
+      geo.computeVertexNormals();
+      // make the front face the outside (normals point away from the bud axis)
+      {
+        const n = new THREE.Vector3().fromBufferAttribute(geo.attributes.normal, 10 * (nu + 1) + (nu >> 1));
+        const p = new THREE.Vector3().fromBufferAttribute(geo.attributes.position, 10 * (nu + 1) + (nu >> 1));
+        const axisLocal = toLocal(new THREE.Vector3(0, p.y + HY, 0));
+        if (n.dot(p.clone().sub(axisLocal).setY(0)) < 0) {
+          for (let q = 0; q < idx.length; q += 3) { const tmp = idx[q + 1]; idx[q + 1] = idx[q + 2]; idx[q + 2] = tmp; }
+          geo.setIndex(idx);
+          geo.computeVertexNormals();
+        }
+      }
+      const holder = new THREE.Group();
+      holder.position.copy(H);
+      holder.rotation.set(0, Math.PI / 2 - phiM, 0, 'YXZ');
+      const hinge = new THREE.Group();
+      holder.add(hinge);
+      hinge.add(new THREE.Mesh(geo, this.sheathMat));
+      // gilt seams down both edges and a gilt band round the foot
+      const edgeA = prof.map((_, j) => at(a0, j)), edgeB = prof.map((_, j) => at(a1, j));
+      const foot = [];
+      for (let k = 0; k <= nu; k++) foot.push(at(a0 + ((a1 - a0) * k) / nu, 0));
+      for (const e of [edgeA, edgeB]) hinge.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(e), 60, 0.055, 6, false), this.sheathRimMat));
+      hinge.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(foot), 40, 0.075, 6, false), this.sheathRimMat));
+      // spring-loaded knuckle hinge on the ring
+      for (const x of [-0.7, 0.7]) {
+        const k = new THREE.Mesh(knuckleGeometry(0.09, 0.42), mat.gold);
+        k.position.x = x;
+        hinge.add(k);
+        const bracket = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.42, 0.1), mat.brass);
+        bracket.position.set(x, 0.22, 0.02);
+        hinge.add(bracket);
+      }
+      const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.85, 8), mat.steel);
+      pin.rotation.z = Math.PI / 2;
+      holder.add(pin);
+      const coil = [];
+      for (let q = 0; q <= 60; q++) { const a = (q / 60) * TAU * 6; coil.push(new THREE.Vector3(-0.32 + (q / 60) * 0.64, Math.cos(a) * 0.08, Math.sin(a) * 0.08)); }
+      holder.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(coil), 120, 0.018, 4, false), mat.steelBlued));
+      if (i === 0) {
+        // the finial clasp rides on the first sepal and holds the others' tips
+        const apex = toLocal(new THREE.Vector3(0, 7.4, 0));
+        const clasp = new THREE.Group();
+        clasp.position.copy(apex);
+        const collar = new THREE.Mesh(collarGeometry(0.32, 0.22), mat.gold);
+        collar.position.y = 0.02;
+        clasp.add(collar);
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), mat.gold);
+        ball.position.y = 0.26;
+        clasp.add(ball);
+        const spike = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.55, 12), mat.gold);
+        spike.position.y = 0.62;
+        clasp.add(spike);
+        hinge.add(clasp);
+        this.clasp = clasp;
+      }
+      head.add(holder);
+      this.sheath.push({ holder, hinge, i });
+    }
   }
 
   _rimGeometry(edge, r) {
@@ -456,8 +563,10 @@ export class HeroFlower {
       const o = opens[r.name];
       const beta = lerp(r.closed, r.open, o) + budBreath + p.jitter * 0.03 * o;
       p.hinge.rotation.x = beta;
-      // tip segment unfolds slightly behind the base (follower linkage)
-      const tipO = clamp((o - 0.25) / 0.75);
+      // the spiral pitch unwinds over the first part of the travel
+      p.twist.rotation.y = r.twist * (1 - smoother(clamp(o / 0.55)));
+      // tip segment unfolds just behind the base (follower linkage)
+      const tipO = clamp((o - 0.04) / 0.7);
       p.tipHolder.rotation.x = lerp(r.tipClosed, r.tip, smoother(tipO));
     }
     this.head.updateMatrixWorld(true);
@@ -494,6 +603,22 @@ export class HeroFlower {
       const aB = meshAngle(gA, 18, 11, c.dAB);
       c.holderB.rotation.z = aB;
       c.holderC.rotation.z = meshAngle(aB, 11, 22, c.dBC);
+    }
+
+    // bud sheath: clasp lets go, the sepals swing down and settle
+    const SH = B.sheath;
+    for (const sp of this.sheath) {
+      const t0 = SH[0] + sp.i * 0.05;
+      const k = seg(t, t0, SH[1]);
+      const after = Math.max(0, t - SH[1]);
+      const wob = after > 0 ? Math.exp(-after * 4.5) * Math.sin(after * 15) * 0.07 : 0;
+      sp.hinge.rotation.x = 2.45 * smoother(k) + wob;
+    }
+    {
+      const lit = 0.06 + sseg(t, B.budGlow[0], B.budGlow[1] - 0.6) * 1.9;
+      const fade = 1 - sseg(t, SH[0] + 0.1, SH[1]) * 0.9;
+      this.sheathMat.emissiveIntensity = lit * fade;
+      this.sheathRimMat.emissiveIntensity = lit * fade * 0.05;
     }
 
     // core lamp
@@ -535,4 +660,106 @@ export class HeroFlower {
       l.hinge.rotation.x = lerp(-0.9, -0.15, wake) + Math.sin(t * 0.7 + l.s.az) * 0.015;
     }
   }
+}
+
+// Pierced-porcelain lantern texture for the bud sheath (u around a sepal, v
+// foot → apex): ivory glaze with a gilt vine and dotted borders; the emissive
+// map lets the core light glow through the thin glaze and blaze through the
+// pierced rosettes (gilding blocks it).
+function sheathTextures(size = 1024) {
+  const W = size, H = size;
+  const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
+  const col = mk(), orm = mk(), emi = mk();
+  const c = col.getContext('2d'), o = orm.getContext('2d'), e = emi.getContext('2d');
+  const rng = new RNG('sheath');
+  // canvas y runs down; texture v runs up (flipY), so draw the apex at the top
+  const g = c.createLinearGradient(0, H, 0, 0);
+  g.addColorStop(0, '#ead9bb');
+  g.addColorStop(0.3, '#f3e8d4');
+  g.addColorStop(1, '#fbf6ee');
+  c.fillStyle = g;
+  c.fillRect(0, 0, W, H);
+  for (let i = 0; i < 120; i++) {
+    c.fillStyle = `rgba(${rng.range(205, 255) | 0},${rng.range(190, 235) | 0},${rng.range(165, 210) | 0},0.04)`;
+    c.beginPath();
+    c.ellipse(rng.range(0, W), rng.range(0, H), rng.range(14, 70), rng.range(8, 30), rng.range(0, 3), 0, TAU);
+    c.fill();
+  }
+  o.fillStyle = 'rgb(255,92,0)';
+  o.fillRect(0, 0, W, H);
+  // glow through the glaze: brightest across the belly, dimmer at foot, apex and seams
+  const eg = e.createRadialGradient(W * 0.5, H * 0.52, 0, W * 0.5, H * 0.52, W * 0.62);
+  eg.addColorStop(0, '#ffffff');
+  eg.addColorStop(0.55, '#8d7a64');
+  eg.addColorStop(1, '#1c140c');
+  e.fillStyle = eg;
+  e.fillRect(0, 0, W, H);
+  // pierced rosettes in two curving columns either side of the vine
+  const rosette = (ctx, x, y, r, fill) => {
+    ctx.fillStyle = fill;
+    for (let k = 0; k < 4; k++) {
+      const a = (k / 4) * TAU + Math.PI / 4;
+      ctx.beginPath();
+      ctx.ellipse(x + Math.cos(a) * r * 0.55, y + Math.sin(a) * r * 0.55, r * 0.5, r * 0.28, a, 0, TAU);
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.22, 0, TAU);
+    ctx.fill();
+  };
+  const holes = [];
+  for (let j = 0; j < 7; j++) {
+    const v = 0.2 + j * 0.095;
+    const spread = 0.2 + 0.05 * Math.sin(Math.PI * (v - 0.1) / 0.75);
+    for (const sgn of [-1, 1]) holes.push([0.5 + sgn * spread, 1 - v, W * (0.026 + 0.012 * Math.sin(Math.PI * (v - 0.12) / 0.7))]);
+  }
+  for (const [u, v, r0] of holes) {
+    const r = r0 * 0.85;
+    rosette(c, u * W, v * H, r, '#f7e3bd');
+    rosette(e, u * W, v * H, r, '#ffffff');
+    rosette(o, u * W, v * H, r, 'rgb(255,40,0)');
+  }
+  // gilding: central vine with scroll leaves, a band at the foot, dotted borders by the seams
+  const gild = (ctx, color) => {
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = W * 0.011;
+    ctx.beginPath();
+    ctx.moveTo(W * 0.5, H * 0.95);
+    for (let k = 0; k <= 40; k++) { const v = 0.95 - k * 0.021; ctx.lineTo(W * (0.5 + Math.sin(k * 0.55) * 0.012), H * v); }
+    ctx.stroke();
+    for (let k = 0; k < 9; k++) {
+      const y = H * (0.86 - k * 0.085);
+      for (const sgn of [-1, 1]) {
+        ctx.lineWidth = W * (0.0075 - k * 0.0004);
+        ctx.beginPath();
+        ctx.moveTo(W * 0.5, y);
+        ctx.quadraticCurveTo(W * (0.5 + sgn * 0.06), y - H * 0.05, W * (0.5 + sgn * 0.085), y - H * 0.02);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(W * (0.5 + sgn * 0.085), y - H * 0.035, H * 0.014, 0, TAU);
+        ctx.stroke();
+      }
+    }
+    ctx.fillRect(0, H * 0.955, W, H * 0.03);
+    ctx.lineWidth = W * 0.005;
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.94); ctx.lineTo(W, H * 0.94);
+    ctx.stroke();
+    for (let k = 0; k < 46; k++) {
+      const y = H * (0.92 - k * 0.019);
+      for (const u of [0.035, 0.965]) { ctx.beginPath(); ctx.arc(W * u, y, W * 0.0045, 0, TAU); ctx.fill(); }
+    }
+  };
+  gild(c, '#c99a45');
+  gild(o, 'rgb(255,60,255)');
+  gild(e, '#000000');
+  const tx = (cv, srgb) => {
+    const t = new THREE.CanvasTexture(cv);
+    t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+    t.anisotropy = 4;
+    return t;
+  };
+  return { map: tx(col, true), orm: tx(orm, false), emissive: tx(emi, true) };
 }

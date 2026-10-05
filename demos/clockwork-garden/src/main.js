@@ -92,6 +92,39 @@ async function boot() {
       origin: () => new THREE.Vector3(0, 20, 0),
     };
     const name = params.get('look');
+    // ?look=bee&stage=landed|flight|walk: inspect the hero bee in a clear spot
+    // above the bloom (inside the shot's light) in a chosen pose, facing +Z
+    const stage = params.get('stage');
+    if (stage && C?.hero) {
+      const update = C.updateHero.bind(C);
+      C.updateHero = (t, ctx) => {
+        update(t, ctx);
+        const g = C.hero.group;
+        g.visible = true;
+        g.position.copy(C.land).add(new THREE.Vector3(0, 4.5, 0));
+        g.rotation.set(0, 0, 0);
+        const poses = {
+          landed: { t, flap: 0, grip: 1, fold: 0.7, pollen: 0.5 },
+          folded: { t, flap: 0, grip: 1, fold: 1, pollen: 0 },
+          flight: { t, flap: 1, grip: 0, fold: 0, pollen: 0 },
+          walk: { t, flap: 0, grip: 1, fold: 1, walk: t * 3 },
+          display: { t, flap: 0, grip: 1, fold: 0.1, pollen: 0 },
+        };
+        C.hero.setPose(poses[stage] || poses.landed);
+      };
+      // &key=1: a studio-style three-quarter key from the camera's side
+      if (params.get('key') === '1') {
+        const applyRig = director.applyRig.bind(director);
+        director.applyRig = (shot, t, cam) => {
+          applyRig(shot, t, cam);
+          const c = C.hero.group.position;
+          const f = cam.position.clone().sub(c).setY(0).normalize();
+          const sd = new THREE.Vector3(-f.z, 0, f.x);
+          world.lighting.focusShadow(c, 5);
+          world.lighting.aimBeam(c, 4, f.multiplyScalar(0.7).addScaledVector(sd, 0.8).add(new THREE.Vector3(0, 1.0, 0)).normalize(), 4.0, '#ffe2bd', 1.2);
+        };
+      }
+    }
     const yaw = parseFloat(params.get('yaw') || '0.6');
     const pitch = parseFloat(params.get('pitch') || '0.25');
     const dist = parseFloat(params.get('dist') || '8');

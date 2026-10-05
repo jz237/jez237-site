@@ -118,6 +118,7 @@ export class Flora {
         calyx.setMatrixAt(i, this.m4);
       });
       for (const m of [stems, petals, calyx]) { m.castShadow = true; m.receiveShadow = true; }
+      (this.smallCalyx ??= []).push(calyx);
       this.group.add(stems, petals, calyx);
       this.inst.push({ ty, petals });
     }
@@ -163,8 +164,10 @@ export class Flora {
       this.m4.compose(new THREE.Vector3(x, rng.range(0, 3), z), q, s);
       leafLists[li].push(this.m4.clone());
     }
+    this.smallCasters = [];
     leafLists.forEach((list, li) => {
       const im = new THREE.InstancedMesh(leaf, leafMats[li], list.length);
+      this.smallCasters.push(im);
       list.forEach((mm, i) => im.setMatrixAt(i, mm));
       im.castShadow = true;
       im.receiveShadow = true;
@@ -175,8 +178,9 @@ export class Flora {
     const frond = (() => {
       const parts = [];
       const rachis = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 6, 3), new THREE.Vector3(0, 9, 9), new THREE.Vector3(0, 8, 15)]);
-      parts.push(taperedTube(rachis, 0.25, 0.06, 20, 5));
-      const leaflet = leafGeometry({ length: 3.2, width: 0.9, fold: 0.3, arch: 0.3, segU: 5, segV: 2, thickness: 0.04 }).geometry;
+      parts.push(taperedTube(rachis, 0.25, 0.06, 10, 4));
+      // low-poly leaflets: the fronds are only ever seen at a distance
+      const leaflet = leafGeometry({ length: 3.2, width: 0.9, fold: 0.3, arch: 0.3, segU: 3, segV: 1, thickness: 0.04 }).geometry;
       for (let i = 1; i < 18; i++) {
         const k = i / 18;
         const p = rachis.getPointAt(k);
@@ -232,6 +236,7 @@ export class Flora {
     }
     this.group.add(this.orbMesh, orbStems);
 
+    this.smallCasters.push(...this.smallCalyx);
     this._buildShrubs(mat, rng, density);
     this._buildArch(mat, rng);
     this._buildFountain(mat);

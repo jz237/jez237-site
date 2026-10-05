@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Bee } from './bee.js';
+import { APX9Bee } from './apx9.js';
 import { Butterfly } from './butterfly.js';
 import { Beetle } from './beetle.js';
 import { Dragonfly } from './dragonfly.js';
@@ -118,11 +119,12 @@ export class Creatures {
     this.headW = headW;
 
     // ---- the hero pollinator -------------------------------------------
-    this.hero = add(new Bee(mat, 'bumble', { detail: 'hero' }));
+    this.hero = add(new APX9Bee(mat, { detail: 'hero', quality })); // APX-9, the resident pollinator
     const out = V(0, 0, 1).applyQuaternion(skep.group.quaternion);
-    this.beeInside = skep.group.localToWorld(V(0, 3.75, 3.6));
-    this.beeBoard = skep.group.localToWorld(V(0, 3.75, 6.2));
-    this.landLocal = V(0.0, 2.55, 1.95);
+    // APX-9 stands ~1.25 tall on its legs; the board's top is at 3.55
+    this.beeInside = skep.group.localToWorld(V(0, 4.8, 3.4));
+    this.beeBoard = skep.group.localToWorld(V(0, 4.8, 6.3));
+    this.landLocal = V(0.0, 3.2, 1.95); // standing on the anther ring
     const land = flower.head.localToWorld(this.landLocal.clone());
     this.land = land;
     const approach = land.clone().sub(headW).setY(0).normalize();
@@ -225,7 +227,7 @@ export class Creatures {
     const riseStarts = [V(-40, 20, -30), V(25, 18, -60), V(-70, 26, -110), V(60, 22, -150), V(-20, 30, -200), V(10, 24, -90), V(-90, 30, -40)];
     riseStarts.forEach((st, i) => {
       let c;
-      if (i < 2) c = add(new Bee(mat, 'bumble', { detail: 'mid' }));
+      if (i < 2) c = add(new APX9Bee(mat, { detail: 'lod', quality }));
       else c = add(new Butterfly(mat, i % 2 ? 'swallowtail' : 'monarch', { detail: 'mid' }));
       c.group.scale.setScalar(i < 2 ? 1.4 : 1.6);
       const f = castFlight(st, B.rise[0] + i * 0.45, 7.5, 150 + i * 20, 50 + i);
@@ -233,7 +235,7 @@ export class Creatures {
         c.group.visible = t > B.rise[0] - 1;
         f.at(t, c.group.position);
         const v = f.velocity(t);
-        if (c instanceof Bee) {
+        if (c instanceof APX9Bee) {
           orient(c.group, v, f.bank(t));
           c.setPose({ t: t + i, flap: 1, fold: 0 });
         } else {
