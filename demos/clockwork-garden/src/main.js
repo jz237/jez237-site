@@ -14,6 +14,7 @@ import { Controls } from './ui/controls.js';
 import { Score, renderScore, bufferToWav } from './audio/score.js';
 import { clamp, sseg } from './core/ease.js';
 import { Explore } from './explore/explore.js';
+import { NearField } from './explore/nearfield.js';
 import { Input } from './input/input.js';
 import { Hud } from './ui/hud.js';
 import { showLanding } from './ui/landing.js';
@@ -32,8 +33,10 @@ import { PerfMeter } from './ui/perfmeter.js';
 //   ?touch=1|0  force the touch interface on or off
 //   ?debug=1    frame-rate readout (fps, frame times, resolution, GPU/CPU ms)
 //   ?adapt=0    hold the resolution and detail fixed (no frame governor)
+//   ?bake=0     grow the bee-scale planting here instead of loading the pre-built one
 
 const params = new URLSearchParams(location.search);
+if (params.get('bake') === '0') NearField.noBake = true;
 const quality = detectQuality(params);
 const clean = params.get('clean') === '1';
 const capture = params.get('capture') === '1';
@@ -173,7 +176,11 @@ async function boot() {
 
   // flat glass and wings draw single-pass (identical pixels, half the draws: render/singlepass.js)
   singlePassFlatGlass(scene);
-  // warm up: compile every shader by rendering representative frames
+  // warm up: compile every shader by rendering representative frames.
+  // (Kept at boot even when the page opens on the garden: drawing everything
+  // through every pass once also readies the driver's pipeline states; without
+  // it the first half-minute of flying stalled for 100–600 ms at a time while
+  // they were built on demand. Measured 2026-10-05.)
   await step('compile');
   for (const t of [0.5, 10, 16, 24, 30, 34, 38, 45]) director.render(t);
   renderer.compile(scene, director.camA);
@@ -205,10 +212,12 @@ async function boot() {
   if (!capture) {
     await step('garden life');
     makeExplore();
-    // compile the interactive modes' shaders now, at night and by day
+    // compile the interactive modes' shaders now at the opening hour; the
+    // other end of the day compiles once the landing is up (loop below)
     const keep = explore.tod.value;
     explore.enter('follow');
-    for (const v of [keep, 0.1]) { explore.tod.value = v; explore.update(1 / 60, null); explore.render(1 / 60); }
+    explore.update(1 / 60, null);
+    explore.render(1 / 60);
     explore.tod.value = keep;
     explore.exit();
   }
@@ -426,6 +435,9 @@ async function boot() {
   setTimeout(() => explore?.compileAll(), 400);
 
   let last = performance.now();
+  let partsDone = false;
+  const readyAt = performance.now();
+  let todWarm = explore ? (explore.tod.value > 0.45 ? 0.1 : 0.86) : 0;
   const meter = params.get('debug') === '1' ? new PerfMeter(gov, () => ({ mode, planting: explore?.nearfield.ready ?? true })) : null;
   const loop = (now) => {
     requestAnimationFrame(loop);
@@ -440,7 +452,7 @@ async function boot() {
       const spare = gov.spare();
       const ms = landing ? clamp(spare, 4, 12) : mode === 'film' ? clamp(spare, 1, 2.5) : clamp(spare, 2, 10);
       explore.nearfield.step(ms);
-    }
+    } else if (explore && !partsDone) partsDone = explore.nearfield.prepareParts(clamp(gov.spare() * 0.5, 0.5, 3));
     const workStart = performance.now();
     gov.begin();
     if (mode === 'film') {
@@ -458,6 +470,17 @@ async function boot() {
         renderAt(state.t);
       }
     } else if (explore) {
+      // the other end of the day's shaders, compiled once things are showing (an
+      // unseen render, overwritten by the real frame below)
+      if (todWarm && now - readyAt > 1500 && explore.active) {
+        const v = explore.tod.value, tg = explore.tod.target;
+        explore.tod.value = todWarm;
+        explore.render(0);
+        explore.tod.value = v;
+        explore.tod.target = tg;
+        todWarm = 0;
+        gov.settle(now, 800);
+      }
       const inp = input && input.enabled ? input.frame(dt) : null;
       if (inp) handleActions(inp.actions);
       explore.update(dt, hud?.overlayOpen && inp ? { ...inp, move: { x: 0, y: 0 }, lift: 0, look: { dx: 0, dy: 0 }, boost: false } : inp);
