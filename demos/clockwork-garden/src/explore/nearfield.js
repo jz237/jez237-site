@@ -123,6 +123,7 @@ export class NearField {
   // order, so the garden is the same every time) and shown once complete
   *_steps(world, scenery, quality) {
     const phase = function* (name, gen) {
+      this._phaseName = name;
       const t = performance.now();
       let acc = 0, last = t;
       for (const _ of gen) { acc += performance.now() - last; yield; last = performance.now(); }
@@ -142,9 +143,7 @@ export class NearField {
     yield* phase('masses', this._masses(world, scenery));
     yield* phase('cover', this._cover(world));
     yield* phase('ivy', this._ivy(world));
-    const t1 = performance.now();
-    this._build(quality);
-    this.stats.phases.build = Math.round(performance.now() - t1);
+    yield* phase('build', this._build(quality));
     this.stats.placed = this.leaves.length;
     this.ready = true;
     this.onReady?.(this);
@@ -152,7 +151,15 @@ export class NearField {
   step(ms = 4) {
     if (this.ready) return true;
     const t0 = performance.now();
-    while (performance.now() - t0 < ms) if (this._gen.next().done) break;
+    let t = t0;
+    while (t - t0 < ms) {
+      const done = this._gen.next().done;
+      const now = performance.now();
+      // (the longest single step, for spotting a phase that doesn't yield often enough)
+      if (now - t > (this.stats.longestStep?.ms ?? 0)) this.stats.longestStep = { ms: Math.round((now - t) * 10) / 10, phase: this._phaseName || 'solids' };
+      t = now;
+      if (done) break;
+    }
     const dt = performance.now() - t0;
     this.stats.ms += dt;
     this.stats.longestSlice = Math.max(this.stats.longestSlice || 0, dt);
@@ -437,7 +444,9 @@ export class NearField {
       for (const y of [2, 6, 11]) if (this._blocked(V(x, groundHeight(x, z) + y, z))) return false;
       return true;
     };
-    (world.flora.ears || []).forEach((ear0, ei) => {
+    const ears = world.flora.ears || [];
+    for (let ei = 0; ei < ears.length; ei++) {
+      const ear0 = ears[ei];
       const ear = { ...ear0 };
       for (let rr = 0, ok = roomy(ear.x, ear.z); !ok && rr < 18; ) {
         rr += 3;
@@ -464,7 +473,8 @@ export class NearField {
         const col = new THREE.Color((canna ? GREENS : DEEP)[Math.floor(r.float() * (canna ? GREENS : DEEP).length)]).offsetHSL(0, r.range(-0.05, 0.05), r.range(-0.04, 0.04));
         this._fit(P, Dv, F, Lw, a, b, col, {}, { kind: 'ear', sway: [-0.9, 1, ear.yaw / TAU] }, UP, sh.loc);
       }
-    });
+      yield; // (a clump at a time)
+    }
     yield;
   }
 
@@ -856,15 +866,19 @@ export class NearField {
     this.standIns.push(cm);
   }
 
-  _build(quality) {
-    for (const m of this.standIns) this.group.remove(m);
+  // (a tile at a time, so finishing the planting never stalls a frame; the
+  // tiles join the scene together at the end)
+  *_build(quality) {
     const grids = this.grids;
     const tiles = new Map();
-    for (const l of this.leaves) {
+    for (let i = 0; i < this.leaves.length; i++) {
+      const l = this.leaves[i];
       const k = (l.ivy ? 'i' : 'p') + Math.floor(l.m[12] / TILE) + ',' + Math.floor(l.m[14] / TILE);
       if (!tiles.has(k)) tiles.set(k, { ivy: l.ivy, list: [] });
       tiles.get(k).list.push(l);
+      if (i % 4000 === 3999) yield;
     }
+    yield;
     this.tiles = [];
     const col = new THREE.Color();
     for (const t of tiles.values()) {
@@ -905,8 +919,8 @@ export class NearField {
       mesh.receiveShadow = true;
       mesh.customDepthMaterial = swayDepth(t.ivy ? 'ivy' : 'smallLeaf', t.ivy, true);
       mesh.instanceMatrix.needsUpdate = true;
-      this.group.add(mesh);
       this.tiles.push({ mesh, geo, c, rad, lod: 'lo' });
+      yield;
     }
     // re-planted ferns
     const fm = this.fernSource;
@@ -918,7 +932,7 @@ export class NearField {
     this.fernMesh.customDepthMaterial = fm.customDepthMaterial;
     this.fernMesh.userData.sway = fm.userData.sway;
     this.fernMesh.computeBoundingSphere();
-    this.group.add(this.fernMesh);
+    yield;
     // re-planted palm fronds
     if (this.palmSource) {
       const pm = this.palmSource;
@@ -930,8 +944,13 @@ export class NearField {
       this.palmMesh.customDepthMaterial = pm.customDepthMaterial;
       this.palmMesh.userData.sway = pm.userData.sway;
       this.palmMesh.computeBoundingSphere();
-      this.group.add(this.palmMesh);
     }
+    yield;
+    // everything joins the scene in the same step, as before
+    for (const m of this.standIns) this.group.remove(m);
+    for (const t of this.tiles) this.group.add(t.mesh);
+    this.group.add(this.fernMesh);
+    if (this.palmMesh) this.group.add(this.palmMesh);
   }
 
   // the explore materials (dithered) once the look upgrade exists

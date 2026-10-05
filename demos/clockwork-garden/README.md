@@ -166,6 +166,17 @@ Minimal controls fade in on mouse move / tap and hide during playback.
 The clock button toggles **gentle motion** (steadier, averaged camera). If the
 OS requests reduced motion, the film waits and offers gentle or full motion.
 
+**Smooth on any machine.** A frame governor (`src/render/governor.js`) watches
+every frame against the display's refresh, the main thread's time and (where
+the browser has a GPU timer) the GPU's. When frames start missing the refresh
+it lowers the render resolution if the GPU is the bottleneck (down to half, or
+0.7 pixels per CSS pixel), or in Fly/Follow redraws the key light's shadow map
+every other frame and culls small details sooner if the CPU is; it steps back
+up once there's headroom. On 120 Hz+ displays that can't be held at full rate
+it paces frames to an even 60. `?debug=1` shows a readout (fps, slowest
+frames, missed frames, CPU/GPU ms, resolution, detail level); `?adapt=0` turns
+the governor off.
+
 ## URL parameters
 
 | Parameter | Effect |
@@ -181,6 +192,8 @@ OS requests reduced motion, the film waits and offers gentle or full motion.
 | `?mode=film\|fly\|follow` | open a mode directly (without it, and without any film-only parameter, a landing screen asks) |
 | `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.27 dusk, 0.5 dawn, 0.86 golden hour, 1 its peak; default 0.86) |
 | `?touch=1\|0` | force the touch interface on or off |
+| `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
+| `?adapt=0` | hold resolution and detail fixed (no frame governor) |
 
 Film-only parameters (`t`, `paused`, `clean`, `capture`, `look`) open the film
 directly. Reduced motion (system setting or `?motion=reduced`) also applies to
@@ -216,6 +229,11 @@ node tools/living.mjs --shots tools/views/living.json --out review/x --sheet 1  
 node tools/living.mjs --shots tools/views/night.json --out review/x --sheet 1     # night key views (night_tod.json: the hours; night2.json: ribs, moon)
 node tools/drive.mjs --scenario tools/scenarios/night_hud.json --out review/x    # fly at midnight, cycle the hour with T, HUD and hints
 node tools/stallcheck.mjs --minutes 25                                      # fast-forwarded autopilot: stalls, give-ups, leaves brushed
+node tools/pacing.mjs [--w 2560 --h 1440] [--cpu 4] [--mobile 1]            # frame pacing as seen (vsync on): landing, fly by day/night, follow;
+                                                                            #   missed refreshes, judder, work by subsystem, the governor's state
+node tools/camjerk.mjs                                                      # camera smoothness flying low: spring-arm pops and chatter, view jerks
+node tools/cpuprofile.mjs --mode fly · node tools/allocprofile.mjs          # where the main thread's time / garbage goes, by function
+node tools/abshots.mjs --a 8765 --b <rollback port> --out review/x          # A/B stills from the same chase-camera spots
 ```
 
 (The tools expect a local static server on port 8765 and use the system
@@ -243,7 +261,8 @@ wing-wash ruffles whatever it flies past.
 ```
 index.html, styles.css         page, title card, controls styling
 src/main.js                    boot, renderer, playback loop, public API
-src/core/                      seeded RNG, easing/timeline helpers, quality tiers
+src/core/                      seeded RNG, easing/timeline helpers, quality tiers, fastmatrix.js (matrix updates that
+                               skip what hasn't moved)
 src/materials/                 procedural textures, material library, pulse shader
 src/geometry/                  gears (meshing math), parts (screws, jewels, rods), surfaces (petals, leaves),
                                leaf (the parametric enamel leaf, GLSL + CPU twin), intersect (exact part crossing)
@@ -258,9 +277,12 @@ src/creatures/                 apx9 (the resident pollinator, built from APX-9's
                                bee (honeybee, carpenter), butterfly, beetle/ladybird, dragonfly, bird rigs + choreography
 src/direction/                 beats (story timing), camera tools, shot list, director
 src/render/pipeline.js         HDR MSAA → bokeh DOF → light shafts → bloom → grade
+src/render/governor.js         frame governor (resolution / detail for a steady frame rate); singlepass.js (flat glass
+                               and wings drawn single-pass)
 src/audio/score.js             procedural score (OfflineAudioContext)
 src/ui/controls.js             playback interface (with the explore popover)
 src/ui/hud.js, landing.js      interactive-mode HUD (gauge, hints, help, menu, photo strip) and the landing screen
+src/ui/perfmeter.js            the ?debug=1 frame-rate readout
 src/input/input.js             keyboard, mouse / pointer lock, wheel, touch joystick + buttons, pinch, gamepads
 src/explore/                   the interactive modes:
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
@@ -283,7 +305,8 @@ src/audio/live.js              live synthesis for the interactive modes
 tools/                         shoot.mjs (stills), record.mjs (video), determinism.mjs, fpscheck.mjs (real-time fps +
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
                                drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
-                               flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs
+                               flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs, pacing.mjs,
+                               camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```

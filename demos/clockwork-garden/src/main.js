@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import './core/fastmatrix.js';
 import { detectQuality } from './core/quality.js';
 import { createMaterials } from './materials/library.js';
 import { bedTexture, stoneTexture, noiseTexture } from './materials/textures.js';
@@ -18,6 +19,9 @@ import { Hud } from './ui/hud.js';
 import { showLanding } from './ui/landing.js';
 import { LiveAudio } from './audio/live.js';
 import { WIND } from './world/wind.js';
+import { Governor } from './render/governor.js';
+import { singlePassFlatGlass } from './render/singlepass.js';
+import { PerfMeter } from './ui/perfmeter.js';
 
 // The Clockwork Garden – entry point.
 //   ?t=12.5     start at a timestamp        ?paused=1   start paused
@@ -26,6 +30,8 @@ import { WIND } from './world/wind.js';
 //   ?mode=film|fly|follow   open a mode directly (otherwise a landing screen asks)
 //   ?tod=0..1   time of day in the interactive modes (0 midnight, 0.5 dawn, 1 golden hour)
 //   ?touch=1|0  force the touch interface on or off
+//   ?debug=1    frame-rate readout (fps, frame times, resolution, GPU/CPU ms)
+//   ?adapt=0    hold the resolution and detail fixed (no frame governor)
 
 const params = new URLSearchParams(location.search);
 const quality = detectQuality(params);
@@ -154,8 +160,19 @@ async function boot() {
     if (explore) { explore.aspect = director.aspect; explore.pixelRatio = director.pixelRatio; }
   };
   resize();
-  window.addEventListener('resize', resize);
+  // keeps motion smooth: trades resolution (and in the interactive modes, a
+  // little detail) for a steady frame rate (render/governor.js)
+  const gov = new Governor({
+    renderer,
+    base: quality.pixelRatio,
+    enabled: !capture && !clean && params.get('adapt') !== '0',
+    onScale: (k) => { renderer.setPixelRatio(quality.pixelRatio * k); resize(); },
+    onCpu: (level) => explore?.setPerfLevel(level),
+  });
+  window.addEventListener('resize', () => { resize(); gov.settle(performance.now()); });
 
+  // flat glass and wings draw single-pass (identical pixels, half the draws: render/singlepass.js)
+  singlePassFlatGlass(scene);
   // warm up: compile every shader by rendering representative frames
   await step('compile');
   for (const t of [0.5, 10, 16, 24, 30, 34, 38, 45]) director.render(t);
@@ -175,6 +192,7 @@ async function boot() {
   const makeExplore = () => {
     if (!explore) {
       explore = new Explore({ renderer, scene, world, pipeline, quality, mat, audio, sync: capture });
+      singlePassFlatGlass(scene);
       explore.aspect = director.aspect;
       explore.pixelRatio = renderer.getPixelRatio();
       explore.reduced = reduced;
@@ -295,6 +313,7 @@ async function boot() {
       const fresh = prev === 'film' || (prev === null && !fromLanding);
       explore.enter(m);
       setTimeout(() => explore.compileAll(), 400);
+      explore.setPerfLevel(gov.cpuLevel);
       if (m === 'fly' && (prev === 'film' || fromLanding)) explore.spawnAtSkep();
       if (fresh && m === 'fly') explore.spawnAtSkep();
       input.enable(true);
@@ -304,6 +323,7 @@ async function boot() {
       if (score.enabled && !audio.enabled) audio.enable().then(() => hud.setSound(true));
     }
     setURL(m);
+    gov.settle(performance.now());
   };
   const togglePhoto = () => {
     if (!explore?.active) return;
@@ -354,6 +374,7 @@ async function boot() {
     info: () => renderer.info,
     world: capture ? world : undefined, // debugging aid in capture mode only
     wind: WIND, // the breeze (review tools set wind.freeze for the rest pose)
+    governor: gov,
     mode: () => mode,
     setMode: (m) => setMode(m),
     // review hooks for the interactive modes (state, scripted input, stills)
@@ -405,14 +426,23 @@ async function boot() {
   setTimeout(() => explore?.compileAll(), 400);
 
   let last = performance.now();
-  let lastWork = 8;
+  const meter = params.get('debug') === '1' ? new PerfMeter(gov, () => ({ mode, planting: explore?.nearfield.ready ?? true })) : null;
   const loop = (now) => {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    requestAnimationFrame(loop);
+    // on a fast display that can't be held at its full rate: every other refresh
+    if (gov.skip(now)) return;
+    const interval = now - last;
+    const dt = Math.min(0.1, interval / 1000);
     last = now;
-    // the interactive modes' bee-scale planting grows in each frame's spare
-    // time until done (more behind the landing screen)
-    if (explore && !explore.nearfield.ready) explore.nearfield.step(landing ? 12 : mode === 'film' ? 2.5 : Math.min(10, Math.max(3, 16 - lastWork)));
+    // the interactive modes' bee-scale planting grows in the frame's spare
+    // time until done (more behind the landing screen, a little during the film)
+    if (explore && !explore.nearfield.ready) {
+      const spare = gov.spare();
+      const ms = landing ? clamp(spare, 4, 12) : mode === 'film' ? clamp(spare, 1, 2.5) : clamp(spare, 2, 10);
+      explore.nearfield.step(ms);
+    }
     const workStart = performance.now();
+    gov.begin();
     if (mode === 'film') {
       if (state.playing) {
         state.t += dt;
@@ -434,8 +464,10 @@ async function boot() {
       explore.render(dt);
       hud?.update(explore.hudState());
     }
-    lastWork = performance.now() - workStart;
-    requestAnimationFrame(loop);
+    gov.end();
+    gov.cpuOn = mode !== 'film' && !!explore?.active;
+    gov.frame(now, interval, performance.now() - workStart);
+    meter?.update(now);
   };
   requestAnimationFrame(loop);
 }
