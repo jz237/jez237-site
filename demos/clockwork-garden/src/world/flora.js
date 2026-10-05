@@ -105,7 +105,7 @@ function bloomMaterial(tex, glow) {
   return new THREE.MeshPhysicalMaterial({
     color: '#ffffff', map: tex.map, roughness: 1, metalness: 1, roughnessMap: tex.orm, metalnessMap: tex.orm,
     emissive: new THREE.Color(glow), emissiveMap: tex.emissive, emissiveIntensity: 0,
-    clearcoat: 1, clearcoatRoughness: 0.12, sheen: 0.3, sheenColor: new THREE.Color('#ffe2d6'), side: THREE.DoubleSide,
+    clearcoat: 0.7, clearcoatRoughness: 0.26, sheen: 0.3, sheenColor: new THREE.Color('#ffe2d6'), side: THREE.DoubleSide,
   });
 }
 
@@ -161,7 +161,7 @@ export class Flora {
     // gilt rims, lit from the heart at night) and the copper asters. Each
     // type opens in rings: [count, how far it opens (rad from upright), petal
     // scale, hinge radius, turn]. `open` is the outer ring's, for the planting.
-    const ts = quality.tier === 'low' ? 128 : 256;
+    const ts = 256;
     const lotusMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 31, hinge: [244, 176, 150], mid: [250, 222, 206], tip: [253, 242, 234] }), '#ffcfa0');
     const tulipMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 37, hinge: [228, 120, 112], mid: [242, 178, 164], tip: [250, 214, 200] }), '#ffa888');
     const roseMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 41, hinge: [222, 132, 128], mid: [238, 176, 168], tip: [248, 212, 204] }), '#ffa898');
@@ -234,19 +234,27 @@ export class Flora {
         calyx.setMatrixAt(i, this.m4);
       });
       // the fine tiers: a mesh each, its blooms (this frame, in slot order)
+      // each petal flutters with a phase of its own (fixed: its pivot rides
+      // the bending head, so a hash of the pivot would jitter: world/wind.js)
+      const phase = new Float32Array(n * ty.petals);
+      ty.list.forEach((f, i) => { for (let p = 0; p < ty.petals; p++) phase[i * ty.petals + p] = (f.sway / TAU + p * 0.137) % 1; });
+      ty.geo.setAttribute('aPhase', new THREE.InstancedBufferAttribute(phase, 1));
       ty.fine = this.tiers.map((T, k) => {
         const mesh = new THREE.InstancedMesh(ty.fineGeo[k], ty.mat, T.max * ty.petals);
         mesh.count = 0;
         mesh.frustumCulled = false;
         mesh.castShadow = mesh.receiveShadow = true;
-        swayMesh(mesh, 'petal', { clone: true });
+        const ph = new THREE.InstancedBufferAttribute(new Float32Array(T.max * ty.petals), 1);
+        ph.setUsage(THREE.DynamicDrawUsage);
+        ty.fineGeo[k].setAttribute('aPhase', ph);
+        swayMesh(mesh, 'petal', { clone: true, phase: true });
         this.group.add(mesh);
-        return { ...T, mesh, geo: ty.fineGeo[k], near: [] };
+        return { ...T, mesh, geo: ty.fineGeo[k], near: [], phase: ph };
       });
       for (const m of [stems, petals, calyx]) { m.castShadow = m !== calyx; m.receiveShadow = true; }
       (this.smallCalyx ??= []).push(calyx);
       this.group.add(stems, petals, calyx);
-      swayMesh(petals, 'petal', { clone: true });
+      swayMesh(petals, 'petal', { clone: true, phase: true });
       this.inst.push({ ty, petals, stems, calyx, fine: ty.fine.map((x) => x.mesh) });
     }
     // every bloom's heart: gilt filaments and glowing anthers (one set for all)
@@ -574,8 +582,10 @@ export class Flora {
           // (a bloom drawn fine last frame is always re-posed: its coarse petals are hidden)
           if (!f.fine && (!view.frustum.intersectsSphere(sph) || (d > 220 && (fi + frame) % 2))) { idx += ty.petals; return; }
           f.fine = false;
-          // (ranked by the distance to its head)
-          const dh = f.top.distanceTo(view.camera.position);
+          // (ranked by the distance to its head; a bloom already drawn fine is
+          // ranked as if a fifth nearer, so the set doesn't flicker between
+          // neighbours at the edge of it)
+          const dh = f.top.distanceTo(view.camera.position) * (f.tier ? 0.8 : 1);
           if (dh < 75 && view.frustum.intersectsSphere(sph)) cand.push(dh, fi);
         }
         // heavy brass stems barely move: the head rides a slow lean with the
@@ -630,17 +640,21 @@ export class Flora {
         order.sort((a, b) => cand[a] - cand[b]);
         const src = petals.instanceMatrix.array, P = ty.petals;
         const [mid, macro] = ty.fine;
+        for (const f of ty.list) { f.tierWas = f.tier || 0; f.tier = 0; }
         for (const c of order) {
           const d = cand[c], fi = cand[c + 1], f = ty.list[fi];
-          const T = d < macro.dist && macro.near.length < macro.max ? macro : mid.near.length < mid.max ? mid : null;
+          // (the finest within 28, or within 34 if it was finest already)
+          const T = d < (f.tierWas === 2 ? 34 : macro.dist) && macro.near.length < macro.max ? macro : mid.near.length < mid.max ? mid : null;
           if (!T) break;
           f.fine = true;
+          f.tier = T === macro ? 2 : 1;
           T.mesh.instanceMatrix.array.set(src.subarray(fi * P * 16, (fi + 1) * P * 16), T.near.length * P * 16);
+          T.phase.array.set(petals.geometry.attributes.aPhase.array.subarray(fi * P, (fi + 1) * P), T.near.length * P);
           T.near.push(f);
           src.fill(0, fi * P * 16, (fi + 1) * P * 16);
         }
       }
-      for (const T of ty.fine) { T.mesh.count = T.near.length * ty.petals; T.mesh.instanceMatrix.needsUpdate = true; }
+      for (const T of ty.fine) { T.mesh.count = T.near.length * ty.petals; T.mesh.instanceMatrix.needsUpdate = true; T.phase.needsUpdate = true; }
       petals.instanceMatrix.needsUpdate = true;
       stems.instanceMatrix.needsUpdate = true;
       calyx.instanceMatrix.needsUpdate = true;

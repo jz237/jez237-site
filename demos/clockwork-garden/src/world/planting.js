@@ -50,9 +50,12 @@ function solidDist(p, w, { palms = true } = {}) {
     d = Math.min(d, Math.hypot(p.x - c.x, p.y - c.y, p.z - c.z) - 6.5, Math.hypot(p.x - c.x, p.z - c.z) - 2);
   }
   if (p.y < 14) d = Math.min(d, Math.hypot(p.x - FOUNTAIN[0], p.z - FOUNTAIN[1]) - FOUNTAIN[2]);
-  // the promenade's arch uprights (with their climbing roses) and the globe bollards
-  if (p.y < L.arches.spring + 6) for (const z of L.arches.zs) for (const x of [L.arches.x0, L.arches.x1]) d = Math.min(d, Math.hypot(p.x - x, p.z - z) - 4.6);
-  if (p.y < 26) for (const b of w.promenade?.bollards || []) d = Math.min(d, Math.hypot(p.x - b.base.x, p.z - b.base.z) - 3.2);
+  // the promenade's arch uprights (with their climbing roses) and the globe
+  // bollards, all on the curbs (only points near the path need the test)
+  if (p.x > L.pathX[0] - 30 && p.x < L.pathX[1] + 30) {
+    if (p.y < L.arches.spring + 6) for (const z of L.arches.zs) if (Math.abs(p.z - z) < d + 5) for (const x of [L.arches.x0, L.arches.x1]) d = Math.min(d, Math.hypot(p.x - x, p.z - z) - 4.6);
+    if (p.y < 26) for (const b of w.promenade?.bollards || []) if (Math.abs(p.z - b.base.z) < d + 4) d = Math.min(d, Math.hypot(p.x - b.base.x, p.z - b.base.z) - 3.2);
+  }
   return d;
 }
 
