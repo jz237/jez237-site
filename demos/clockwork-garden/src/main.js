@@ -60,6 +60,22 @@ function size() {
   return renderer.getDrawingBufferSize(new THREE.Vector2());
 }
 
+// issue every material's program for the scene as it stands now (after `prep`
+// sets its state), compiled for the scene pass's render target; resolves when
+// they are ready (or after a cap, so a slow driver never holds the page)
+// (without KHR_parallel_shader_compile the programs are still all issued
+// before the first one is waited on, so the driver can work through them)
+async function compileAll(renderer, scene, camera, pipeline, prep) {
+  prep?.();
+  const rt = renderer.getRenderTarget();
+  renderer.setRenderTarget(pipeline.scenePass.rtA);
+  let p = null;
+  if (renderer.extensions.has('KHR_parallel_shader_compile')) p = renderer.compileAsync(scene, camera).catch(() => {});
+  else renderer.compile(scene, camera);
+  renderer.setRenderTarget(rt);
+  if (p) await Promise.race([p, new Promise((r) => setTimeout(r, 12000))]);
+}
+
 async function boot() {
   const status = document.getElementById('loading');
   const step = async (msg) => {
@@ -182,8 +198,15 @@ async function boot() {
   // it the first half-minute of flying stalled for 100–600 ms at a time while
   // they were built on demand. Measured 2026-10-05.)
   await step('compile');
+  // first every shader the film draws, issued at once (the driver compiles
+  // them in parallel where it can, instead of one at a time as each is first
+  // drawn); the warm-up frames then only ready the pipeline states. (Compiled
+  // for the scene pass's own target: that decides the output variant.)
+  await compileAll(renderer, scene, director.camA, pipeline, () => director.render(0.5));
   for (const t of [0.5, 10, 16, 24, 30, 34, 38, 45]) director.render(t);
-  renderer.compile(scene, director.camA);
+  // (what the warm-up frames didn't draw, compiled for the scene pass's
+  // target too: compiled for the screen it would be a variant never used)
+  compileAll(renderer, scene, director.camA, pipeline);
 
   const title = document.getElementById('title');
   const updateTitle = (t) => {
@@ -218,16 +241,6 @@ async function boot() {
     explore.enter('follow');
     explore.update(1 / 60, null);
     explore.render(1 / 60);
-    // (and once down the promenade and among the blooms at night, so the
-    // wet path, the arches, the globes and the glowing petals are drawn here,
-    // not in the first seconds of flying)
-    const V3 = explore.actor.pos.constructor;
-    explore.tod.value = 0;
-    for (const [p, q] of [[[70, 24, -330], [70, 48, -570]], [[44, 46, -96], [14, 38, -128]]]) {
-      explore.debugView = { pos: new V3(...p), target: new V3(...q), fov: 55, aperture: 1.5 };
-      explore.render(1 / 60);
-    }
-    explore.debugView = null;
     explore.tod.value = keep;
     explore.exit();
   }
@@ -447,8 +460,23 @@ async function boot() {
   let last = performance.now();
   let partsDone = false;
   const readyAt = performance.now();
-  let todWarm = explore ? (explore.tod.value > 0.45 ? 0.1 : 0.86) : 0;
-  const meter = params.get('debug') === '1' ? new PerfMeter(gov, () => ({ mode, planting: explore?.nearfield.ready ?? true })) : null;
+  // unseen renders once the landing is up, a few frames apart (each is
+  // overwritten by the real frame): the other end of the day's shaders, and
+  // the promenade and the blooms at night (the wet path, the arches, the
+  // globes, the glowing petals), so they are ready before the first flight
+  // without holding up the page
+  const warmQueue = explore ? [
+    { tod: explore.tod.value > 0.45 ? 0.1 : 0.86 },
+    { tod: 0, view: [[70, 24, -330], [70, 48, -570]] },
+    { tod: 0, view: [[44, 46, -96], [14, 38, -128]] },
+  ] : [];
+  let warmAt = 1500;
+  let plantingAt = null; // (when the bee-scale planting was ready, for the readout)
+  const meter = params.get('debug') === '1' ? new PerfMeter(gov, () => {
+    const planting = explore?.nearfield.ready ?? true;
+    if (planting && plantingAt == null) plantingAt = performance.now();
+    return { mode, planting, readyAt, plantingAt };
+  }) : null;
   const loop = (now) => {
     requestAnimationFrame(loop);
     // on a fast display that can't be held at its full rate: every other refresh
@@ -482,13 +510,16 @@ async function boot() {
     } else if (explore) {
       // the other end of the day's shaders, compiled once things are showing (an
       // unseen render, overwritten by the real frame below)
-      if (todWarm && now - readyAt > 1500 && explore.active) {
-        const v = explore.tod.value, tg = explore.tod.target;
-        explore.tod.value = todWarm;
+      if (warmQueue.length && now - readyAt > warmAt && explore.active) {
+        const w = warmQueue.shift();
+        warmAt += 300;
+        const v = explore.tod.value, tg = explore.tod.target, dv = explore.debugView;
+        explore.tod.value = w.tod;
+        if (w.view) { const V3 = explore.actor.pos.constructor; explore.debugView = { pos: new V3(...w.view[0]), target: new V3(...w.view[1]), fov: 55, aperture: 1.5 }; }
         explore.render(0);
+        explore.debugView = dv;
         explore.tod.value = v;
         explore.tod.target = tg;
-        todWarm = 0;
         gov.settle(now, 800);
       }
       const inp = input && input.enabled ? input.frame(dt) : null;

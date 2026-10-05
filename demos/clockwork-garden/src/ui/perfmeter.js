@@ -1,7 +1,7 @@
 // ?debug=1: a small frame-rate readout in the corner, for reporting how the
 // garden runs on a particular device (fps, the slowest frames, how many missed
 // the display's refresh, main-thread and GPU time per frame, the resolution
-// the governor has settled on).
+// the governor has settled on, how long the page and the planting took to load).
 
 export class PerfMeter {
   constructor(gov, info) {
@@ -29,6 +29,7 @@ export class PerfMeter {
       `slowest 5%: ${s.p95.toFixed(1)} ms   missed: ${s.missed}/60\n` +
       `cpu ${s.cpu.toFixed(1)} ms   gpu ${s.gpu == null ? 'n/a' : s.gpu.toFixed(1) + ' ms'}\n` +
       `resolution ${(s.scale * 100).toFixed(0)}% (${c.width}×${c.height})   detail ${['full', 'shadows ½', 'shadows ½ + cull', 'shadows ½ + more cull'][s.cpuLevel]}\n` +
-      `${i.mode || 'landing'}${i.planting ? '' : '   planting…'}`;
+      `${i.mode || 'landing'}${i.planting ? '' : '   planting…'}\n` +
+      `loaded in ${(i.readyAt / 1000).toFixed(1)} s${i.plantingAt ? `, planting ${(i.plantingAt / 1000).toFixed(1)} s` : ''}`;
   }
 }

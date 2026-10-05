@@ -223,7 +223,7 @@ function thinLeaf(length, width, fold, arch, segU) {
 // the explore version of a swaying mesh's material keeps its sway
 function keepSway(o, m) {
   const sw = o.userData.sway;
-  return sw ? swayMaterial(m, sw.profile, { swing: sw.swing }) : m;
+  return sw ? swayMaterial(m, sw.profile, { swing: sw.swing, phase: sw.phase }) : m;
 }
 
 export class LookUpgrade {

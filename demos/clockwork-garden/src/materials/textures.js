@@ -551,11 +551,13 @@ export function bloomPetalTextures({ size = 256, seed = 31, hinge = [240, 170, 1
   mid2.addColorStop(1, 'rgba(0,0,0,0.55)');
   e.fillStyle = mid2;
   e.fillRect(0, 0, W, H);
-  // veins: a fan from the hinge, glowing a little brighter than the blade
-  for (let k = 0; k < 13; k++) {
-    const v = (k + 0.5) / 13;
-    const y1 = H * (0.5 + (v - 0.5) * 0.92);
-    for (const [ctx, style, wd] of [[e, 'rgba(255,242,224,0.8)', 0.013], [c, `rgba(${hinge[0] - 40},${hinge[1] - 55},${hinge[2] - 55},0.45)`, 0.008]]) {
+  // veins: a fan from the hinge, glowing a little brighter than the blade.
+  // Soft and broad, and only in the light (the glaze barely shows them): thin
+  // high-contrast lines crawl and shimmer as the petals sway, on a phone most
+  for (let k = 0; k < 11; k++) {
+    const v = (k + 0.5) / 11;
+    const y1 = H * (0.5 + (v - 0.5) * 0.9);
+    for (const [ctx, style, wd] of [[e, 'rgba(255,240,222,0.32)', 0.03], [e, 'rgba(255,244,230,0.28)', 0.014], [c, `rgba(${hinge[0] - 25},${hinge[1] - 35},${hinge[2] - 35},0.12)`, 0.022]]) {
       ctx.strokeStyle = style;
       ctx.lineWidth = W * wd;
       ctx.beginPath();
@@ -564,17 +566,20 @@ export function bloomPetalTextures({ size = 256, seed = 31, hinge = [240, 170, 1
       ctx.stroke();
     }
   }
-  // gilt: the rim just inside the edge and over the tip, the claw at the hinge
+  // gilt: a band set in from the edge and over the tip (not a sliver on the
+  // silhouette, which shimmers), the claw at the hinge; satin, not mirror
   const gild = (ctx, color) => {
     ctx.fillStyle = color;
-    ctx.fillRect(0, 0, W, H * 0.045);
-    ctx.fillRect(0, H * 0.955, W, H * 0.045);
-    ctx.fillRect(W * 0.965, 0, W * 0.035, H);
+    ctx.fillRect(0, H * 0.035, W, H * 0.06);
+    ctx.fillRect(0, H * 0.905, W, H * 0.06);
+    ctx.fillRect(W * 0.9, H * 0.035, W * 0.05, H * 0.93);
     ctx.fillRect(0, H * 0.3, W * 0.06, H * 0.4);
   };
-  gild(c, '#e2b45c');
-  gild(o, 'rgb(255,70,190)'); // gilding: roughness 0.27, metalness 0.75 (pure metal reads black against the night)
-  gild(e, '#4a3418'); // (the light catches the gilt edge, dimly)
+  gild(c, '#dcae58');
+  gild(o, 'rgb(255,120,150)'); // gilding: roughness 0.47, metalness 0.6
+  gild(e, '#5a4222'); // (the light catches the gilt band, dimly)
+  // (a soft edge to the bands, so they never step from pixel to pixel)
+  for (const ctx of [c, o, e]) { ctx.filter = 'blur(1px)'; ctx.drawImage(ctx.canvas, 0, 0); ctx.filter = 'none'; }
   return { map: toTexture(col, { srgb: true, wrap: false }), orm: toTexture(orm, { wrap: false }), emissive: toTexture(emi, { srgb: true, wrap: false }) };
 }
 

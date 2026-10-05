@@ -134,6 +134,9 @@ const HEAD = /* glsl */ `
   #ifdef CG_SWING
     attribute float aSwing;
   #endif
+  #ifdef CG_PHASE
+    attribute float aPhase;
+  #endif
   ${GUST_GLSL}
   vec3 cgWash(vec3 P) {
     vec3 acc = vec3(0.0);
@@ -194,6 +197,12 @@ const HEAD = /* glsl */ `
       // neighbours on one plant share a phase: they sway together, never through each other
       float ph = (aLeaf3.z + W.z) * 6.2832 + dot(A.xz, vec2(0.021, 0.017));
       vec4 cgK = vec4(abs(aLeaf3.x), aLeaf3.yzw); // (a negative amplitude marks a leaf rooted at the soil)
+    #elif defined( CG_PHASE )
+      // (parts whose pivot moves every frame, the blooms' petals riding their
+      // bending heads: a hash of a moving pivot would draw a new phase each
+      // frame and make them jitter, so their phase is their own, fixed)
+      float ph = (aPhase + W.z) * 6.2832;
+      vec4 cgK = vec4(1.0);
     #else
       float ph = (fract(sin(dot(A, vec3(12.9898, 78.233, 37.719))) * 43758.5453) + W.z) * 6.2832;
       vec4 cgK = vec4(1.0);
@@ -270,9 +279,10 @@ const LEAF_BEGIN = /* glsl */ `
   vec3 transformed = cgLeafPos;
 `;
 
-function patchShader(sh, profile, swing, leaf = false) {
+function patchShader(sh, profile, swing, leaf = false, phase = false) {
   Object.assign(sh.uniforms, WIND.u, PROFILES[profile].u);
   if (swing) sh.defines = { ...(sh.defines || {}), CG_SWING: '' };
+  if (phase) sh.defines = { ...(sh.defines || {}), CG_PHASE: '' };
   if (leaf) sh.defines = { ...(sh.defines || {}), CG_LEAF: '' };
   sh.vertexShader = sh.vertexShader
     .replace('#include <common>', '#include <common>\n' + (leaf ? LEAF_GLSL : '') + HEAD)
@@ -285,19 +295,19 @@ function patchShader(sh, profile, swing, leaf = false) {
 
 // Patch a material in place (chains any existing onBeforeCompile).
 const own = (m, k) => Object.prototype.hasOwnProperty.call(m, k) ? m[k] : null;
-export function swayMaterial(m, profile, { swing = false, leaf = false } = {}) {
+export function swayMaterial(m, profile, { swing = false, leaf = false, phase = false } = {}) {
   if (own(m, 'onBeforeCompile')?.sway) return m;
   const prev = own(m, 'onBeforeCompile');
   const key = own(m, 'customProgramCacheKey');
-  m.userData.sway = { profile, swing, leaf };
+  m.userData.sway = { profile, swing, leaf, phase };
   m.userData.swayOrig = { prev, key };
   const prevSrc = prev ? prev.toString() : '';
   m.onBeforeCompile = (sh, r) => {
     if (prev) prev.call(m, sh, r);
-    patchShader(sh, profile, swing, leaf);
+    patchShader(sh, profile, swing, leaf, phase);
   };
   m.onBeforeCompile.sway = profile;
-  m.customProgramCacheKey = () => (key ? key.call(m) : prevSrc) + '|sway-' + profile + (swing ? '-s' : '') + (leaf ? '-l' : '');
+  m.customProgramCacheKey = () => (key ? key.call(m) : prevSrc) + '|sway-' + profile + (swing ? '-s' : '') + (leaf ? '-l' : '') + (phase ? '-p' : '');
   return m;
 }
 
@@ -312,11 +322,11 @@ export function swayClone(m, profile, opts = {}) {
 }
 
 const depthCache = new Map();
-export function swayDepth(profile, swing = false, leaf = false) {
-  const key = profile + (swing ? '-s' : '') + (leaf ? '-l' : '');
+export function swayDepth(profile, swing = false, leaf = false, phase = false) {
+  const key = profile + (swing ? '-s' : '') + (leaf ? '-l' : '') + (phase ? '-p' : '');
   if (!depthCache.has(key)) {
     const d = new THREE.MeshDepthMaterial();
-    d.onBeforeCompile = (sh) => patchShader(sh, profile, swing, leaf);
+    d.onBeforeCompile = (sh) => patchShader(sh, profile, swing, leaf, phase);
     d.customProgramCacheKey = () => 'sway-depth-' + key;
     depthCache.set(key, d);
   }
@@ -324,11 +334,11 @@ export function swayDepth(profile, swing = false, leaf = false) {
 }
 
 // patch a mesh: its material (in place unless clone) and a matching shadow material
-export function swayMesh(mesh, profile, { swing = false, clone = false } = {}) {
+export function swayMesh(mesh, profile, { swing = false, clone = false, phase = false } = {}) {
   if (!mesh.geometry.attributes.aSwayP) addSway(mesh.geometry, { length: 1 });
-  mesh.material = clone ? swayClone(mesh.material, profile, { swing }) : swayMaterial(mesh.material, profile, { swing });
-  mesh.customDepthMaterial = swayDepth(profile, swing);
-  mesh.userData.sway = { profile, swing };
+  mesh.material = clone ? swayClone(mesh.material, profile, { swing, phase }) : swayMaterial(mesh.material, profile, { swing, phase });
+  mesh.customDepthMaterial = swayDepth(profile, swing, false, phase);
+  mesh.userData.sway = { profile, swing, phase };
   return mesh;
 }
 

@@ -196,7 +196,13 @@ export class Explore {
     if (this._compiled || !this.active) return;
     this._compiled = true;
     const r = this.renderer;
-    if (r.extensions.has('KHR_parallel_shader_compile')) r.compileAsync(this.scene, this.camera).catch(() => {});
+    if (!r.extensions.has('KHR_parallel_shader_compile')) return;
+    // (for the scene pass's own target: compiled for the screen, every
+    // program would be an output variant that is never drawn)
+    const rt = r.getRenderTarget();
+    r.setRenderTarget(this.pipeline.scenePass.rtA);
+    r.compileAsync(this.scene, this.camera).catch(() => {});
+    r.setRenderTarget(rt);
   }
 
   exit() {
