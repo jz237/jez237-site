@@ -20,7 +20,7 @@ export const ENAMEL = {
   crimson: ['#5e0620', '#b4163e', '#e03c74', '#74248a'],
   tealViolet: ['#06525a', '#10988c', '#3470c8', '#70349e'],
   leaf: ['#04401f', '#0a6e3e', '#0e7660', '#2858b0'],
-  leafBlue: ['#05452a', '#0c7050', '#1e5ca8', '#0e8870'],
+  leafBlue: ['#05452a', '#0a7a58', '#2a6ad0', '#16a090'],
 };
 
 function canvas(w, h) {
@@ -108,8 +108,13 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
     g.fillStyle = eg;
     g.fillRect(Math.min(x0, x1), 0, w * 0.2, h);
   }
+  g.globalCompositeOperation = 'saturation';
+  g.globalAlpha = 0.5;
+  g.fillStyle = '#ff0000';
+  g.fillRect(0, 0, w, h);
+  g.globalAlpha = 1;
   g.globalCompositeOperation = 'multiply';
-  g.fillStyle = '#d6d0cc';
+  g.fillStyle = '#ece6e0';
   g.fillRect(0, 0, w, h);
   g.globalCompositeOperation = 'source-over';
   const facetEdges = [];
@@ -273,18 +278,19 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
 
 export function enamelMaterial(kind, seed, opts = {}) {
   const { map, bump } = enamelTextures(kind, seed, opts);
+  const leafy = opts.veins === 'leaf';
   return new THREE.MeshPhysicalMaterial({
     map,
     bumpMap: bump,
     bumpScale: 1.6,
-    metalness: 0.08,
-    roughness: 0.42,
-    clearcoat: 0.7,
-    clearcoatRoughness: 0.06,
-    iridescence: 0.05,
-    iridescenceIOR: 1.55,
-    iridescenceThicknessRange: [180, 620],
-    envMapIntensity: 0.22,
+    metalness: 0.5,
+    roughness: 0.28,
+    clearcoat: leafy ? 0.3 : 0.5,
+    clearcoatRoughness: leafy ? 0.18 : 0.05,
+    iridescence: 0.3,
+    iridescenceIOR: 1.8,
+    iridescenceThicknessRange: [200, 760],
+    envMapIntensity: leafy ? 0.55 : 1.0,
     side: THREE.DoubleSide,
   });
 }
@@ -317,10 +323,17 @@ export function createMaterials() {
     envMapIntensity: 3.2,
     emissive: 0x000000,
   });
+  const metal = (color, rough = 0.26, env = 1.5) => new THREE.MeshPhysicalMaterial({ color, metalness: 1, roughness: rough, envMapIntensity: env, clearcoat: 0.35, clearcoatRoughness: 0.12 });
+  const copper = metal(0xd2693a);
+  const roseGold = metal(0xe6968a);
+  const anoTeal = metal(0x18b7b0, 0.22, 1.7);
+  const anoViolet = metal(0x8a4fe8, 0.22, 1.7);
+  const anoBlue = metal(0x2f6cf0, 0.22, 1.7);
+  const anoMagenta = metal(0xe0328c, 0.22, 1.7);
   const screw = new THREE.MeshPhysicalMaterial({ color: 0xe0ac44, metalness: 1, roughness: 0.28, envMapIntensity: 1.7, vertexColors: true });
-  const stemBraid = new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, metalness: 0.25, roughness: 0.34, clearcoat: 0.7, clearcoatRoughness: 0.14, envMapIntensity: 1.2 });
+  const stemBraid = new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, metalness: 0.8, roughness: 0.24, clearcoat: 0.8, clearcoatRoughness: 0.1, envMapIntensity: 1.6 });
   const core = coreMaterial();
-  return { gold, brass, brassDark, gunmetal, steel, gem, screw, stemBraid, core };
+  return { gold, brass, brassDark, gunmetal, steel, gem, screw, stemBraid, core, copper, roseGold, anoTeal, anoViolet, anoBlue, anoMagenta };
 }
 
 // Crystal core: faceted prismatic cells with a warm hot centre.

@@ -59,16 +59,23 @@ Run 1 and 2 accepted when every criterion was at least 3 and the mean at least 3
 - it35: leaned the closed petals further inward to sharpen the bud. Tips crossed and the gold rims wove into a basket; rejected and reverted (not reviewed).
 - it36: closed angles restored to the milder values, and the petal gold rims and gems are hidden while the bud is fully closed so it reads as an opaque enamel teardrop. Reviewer mean 3.22 (layout 4.0, exploded parts 3.3, enamel 3.2, assembled 3.0, mechanical detail 3.3, closed bud 2.5).
 
+- it37 to it41 (fourth run): Jez asked to keep the 4.5 gate and also make the metals more colourful, add many flashing glowing points, and remove the one gear not connected to anything. Added a sparkle system (`src/sparkle.js`: additive star glints on jewels and gilt edges, plus 360 drifting motes), multicolour metals and more saturated enamel, removed the stray gear (`leaves.js`), and replaced the squat closed bud with a dedicated lathe teardrop painted with two overlapping tiers of pointed enamel petals (`src/bud.js`); the real petals now stay hidden and scale up as the bud opens. Fixed the enamel inset going black when closed by posing a slightly open bloom for the inset render.
+- it38: reviewer mean 3.17, REJECT.
+- it40: reviewer mean 3.33, REJECT (best of run 4, above run 3's 3.22).
+- it41: reviewer mean 3.28, REJECT (layout 4.2, exploded parts 3.3, enamel 2.9, assembled 3.0, mechanical detail 2.9, closed bud 3.4).
+
 ## Outcome
 
-**no-progress (third run), target not reached.** The goal was a reviewer mean above 4.5. The best third-run mean was 3.25 (the starting state, it20); the three reviewed passes after it (it32 3.15, it34 3.15, it36 3.22) did not beat it, so the loop stopped. The published state is it36. It is below the gate: 3.22 of 5, with the closed bud the weakest criterion (2.5).
+**no-progress (fourth run), target not reached.** The goal was still a reviewer mean above 4.5. Three reviewed passes (it38 3.17, it40 3.33, it41 3.28) peaked at 3.33 and the last did not beat it, so the loop stopped. The published state is it41, which scores 3.28 of 5. That is below the gate. The closed bud improved the most (2.5 in run 3, 3.4 now); enamel (2.9) and mechanical detail (2.9) are now the weakest criteria.
 
-What it36 did gain over the second-run build, visible side by side: a fuller, more saturated assembled bloom (the extra D ring and pointed petals), a curved stem, a rainbow-faceted core, taller stamens, and leader lines that land on real parts. Scores did not rise because the reviewer holds the bloom to the photo's depth and detail.
+What run 4 added that Jez asked for: multicolour metals and more saturated enamel, a lot of flashing glowing points (jewel and rim glints plus drifting motes), and the unattached gear removed. The reviewer was told these are intentional and did not mark them down.
 
-Remaining gaps the last reviewer named, for another run (these are structural, not tuning):
+Remaining gaps the last reviewer named. They are structural, so another run needs new models rather than tuning:
 
-- Petal shape: the photo has a peony of deep, cupped petals with rolled-back edges and curling tips, fewer and larger and overlapping. Ours is still a lotus of flat almond petals. This needs a new petal model (per-petal cup, edge roll, tip curl, twist), not parameter changes; it also drives the crowded exploded fan.
-- Enamel: streaky brushed iridescence per petal, bold open scrollwork at the petal bases, gems set in bezels at tips and bases instead of scattered beads, a warm key and rim light. Leaves are washed out with a blown highlight; the blue-green leaf palette edit in `materials.js` did not apply and is still the old one.
-- Mechanics: thicker gears with hubs and compound stages, gears visible between the petal tiers in the assembled bloom, a denser ball-shaped cage with a domed cap, thick level jewelled collars (they still tilt and read as a spiral), and a stray gear floating by the left leaf to remove.
-- Core: warm orange-gold centre with rainbow facets and glow; it still reads pastel.
-- Closed bud: a squat onion with petal tips crossing and intersecting, sitting on an oversized gear plate. Wanted: a smooth, slim bud closing to a single point with the petals overlapping without intersecting.
+- Petal geometry: flat paddles on stalks instead of doubly curved, cupped petals with recurved tips, varied size and cut-out filigree rims; crossing gold ribbons on the upper assembled petals.
+- Enamel: per-petal iridescent gradient with a brushed anisotropic normal map, denser scroll filigree, and a few large bezel-set cabochons per petal instead of dozens of tiny dots. The enamel inset should be a close-up of filigree and gems.
+- Mechanical density: a stack of small meshed brass gears with spacers and jewelled hubs on the axle, a multi-ring segmented ring gear, and a wider bloom that shows gears and lattice between petals.
+- Stamen cage and core: a dense double-hoop lattice with a crowned top, bulb-tipped ruby filaments, and a warm orange-yellow core instead of pastel facets.
+- Leaves, stem and insets: hooked, studded leaf mounts, a thinner S-curved stem, a gear-train close-up for the gear inset, and shaded line-art bloom thumbnails.
+
+Third run, kept for history: no-progress at a best of 3.25, published at it36 with 3.22; its closed bud (2.5) was the weakest criterion.

@@ -10,6 +10,7 @@ import { createBackdrop } from './backdrop.js';
 import { initUI } from './ui.js';
 import { CAMERA } from './layout.js';
 import { POSTER } from './spec.js';
+import { setMoteGain } from './sparkle.js';
 import { clamp01, easeInOut } from './geo.js';
 const smooth01 = (x) => { const c = clamp01(x); return c * c * (3 - 2 * c); };
 
@@ -47,7 +48,7 @@ const composer = new EffectComposer(
   new THREE.WebGLRenderTarget(POSTER.w, POSTER.h, { type: THREE.HalfFloatType, samples: 4 }),
 );
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(POSTER.w, POSTER.h), 0.1, 0.4, 0.97);
+const bloom = new UnrealBloomPass(new THREE.Vector2(POSTER.w, POSTER.h), 0.16, 0.45, 0.92);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -149,6 +150,7 @@ function setTheme(name) {
 function applyTone(e) {
   const t = S.theme === 'studio' ? 1 : 1 - smooth01((e - 0.12) / 0.55);
   backdrop.setMix(t);
+  setMoteGain(smooth01((t - 0.3) / 0.5));
   const dark = t > 0.5 ? 'dark' : 'light';
   if (poster.dataset.tone !== dark) poster.dataset.tone = dark;
 }
@@ -188,6 +190,9 @@ function renderInsets() {
   backdrop.mesh.visible = false;
   renderer.autoClear = false;
   renderer.setScissorTest(true);
+  // the closed bud hides its petals; pose a slightly opened bloom so the enamel inset has a petal to frame
+  const reposed = S.b < 0.08;
+  if (reposed) asm.update(S.e, 0.1, S.time);
   for (const name of names) {
     const rc = rects[name];
     const keep = new Set(asm.insetKeep(name));
@@ -216,6 +221,7 @@ function renderInsets() {
   renderer.autoClear = prevAuto;
   backdrop.mesh.visible = bd;
   asm.root.children.forEach((c, i) => { c.visible = saved[i]; });
+  if (reposed) asm.update(S.e, S.b, S.time);
 }
 
 // ---- frame ----
@@ -259,6 +265,7 @@ canvas.addEventListener('dblclick', () => {
 
 // ---- capture / debug API ----
 window.__flower = {
+  root: asm.root,
   renderAt({ explode = 1, bloom = 1, time = 0, theme, view = 'poster' } = {}) {
     S.frozen = true;
     S.playing = false;

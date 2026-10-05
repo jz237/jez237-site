@@ -43,6 +43,7 @@ export class Batch {
   constructor(colored = false) {
     this.list = [];
     this.colored = colored;
+    this.glints = [];
   }
   add(geo, matrix = null, color = null) {
     const g = prepare(geo, this.colored, color);
@@ -58,7 +59,9 @@ export class Batch {
     const merged = mergeGeometries(this.list, false);
     this.list.forEach((g) => g.dispose());
     this.list = [];
-    return new THREE.Mesh(merged, material);
+    const mesh = new THREE.Mesh(merged, material);
+    if (this.glints.length) mesh.userData.glints = this.glints;
+    return mesh;
   }
 }
 
@@ -75,10 +78,17 @@ bezel.scale(1, 1, 0.8);
 const prong = new THREE.CylinderGeometry(0.1, 0.1, 0.5, 6);
 prong.rotateX(Math.PI / 2);
 
-export function addJewel(gems, golds, matrix, radius, color, { bezelOn = true, prongs = 0 } = {}) {
+const glintTint = (c) => [0.55 + c.r * 0.6, 0.55 + c.g * 0.6, 0.55 + c.b * 0.6].map((v) => Math.min(1.5, v * 1.15));
+
+export function addJewel(gems, golds, matrix, radius, color, { bezelOn = true, prongs = 0, glint = true } = {}) {
   const s = new THREE.Matrix4().makeScale(radius, radius, radius);
   const m = matrix.clone().multiply(s);
   gems.add(cabochon, m, color);
+  if (glint) {
+    const e = matrix.elements;
+    const lift = radius * 0.5;
+    gems.glints.push({ pos: [e[12] + e[8] * lift, e[13] + e[9] * lift, e[14] + e[10] * lift], color: glintTint(color), size: radius * 2.3 + 0.05, hot: 1 });
+  }
   if (bezelOn) golds.add(bezel, m);
   for (let i = 0; i < prongs; i++) {
     const a = (i / prongs) * Math.PI * 2;
