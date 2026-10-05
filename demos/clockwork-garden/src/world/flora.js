@@ -5,12 +5,18 @@ import { RNG } from '../core/rng.js';
 import { B } from '../direction/beats.js';
 import { clamp, smoother, sseg, lerp } from '../core/ease.js';
 import { L } from './layout.js';
+import { swayMesh, zeroSway, pivotParts, wholeFlex, bendAngle, washAt, gust } from './wind.js';
+import { leafDome } from './dome.js';
 
 // The far-field ecosystem: several hundred simpler mechanical plants built
 // from the same parts as the hero pieces, instanced for smooth wide shots.
 // They wake in a wave that radiates from the hero flower during the reveal.
 
 const TAU = Math.PI * 2;
+// brass stems: [gust bend, sway, sway freq, -] (radians) and the wash gain
+const STEM_K = [0.011, 0.006, 1.25, 0];
+const STEM_WASH = 0.03;
+const ORB_K = [0.016, 0.01, 1.6, 0];
 
 export class Flora {
   constructor(mat, quality) {
@@ -120,7 +126,8 @@ export class Flora {
       for (const m of [stems, petals, calyx]) { m.castShadow = true; m.receiveShadow = true; }
       (this.smallCalyx ??= []).push(calyx);
       this.group.add(stems, petals, calyx);
-      this.inst.push({ ty, petals });
+      swayMesh(petals, 'petal', { clone: true });
+      this.inst.push({ ty, petals, stems, calyx });
     }
 
     // ---- leaves: clusters at each plant base, plus large elephant-ear leaves -
@@ -136,20 +143,28 @@ export class Flora {
     const e = new THREE.Euler();
     for (const f of this.flowers) {
       const n = 4 + Math.floor(rng.float() * 4);
+      f.leaves = [];
       for (let k = 0; k < n; k++) {
         const li = Math.floor(rng.float() * leafMats.length);
-        q.setFromEuler(e.set(rng.range(0.5, 1.25), rng.range(0, TAU), 0, 'YXZ'));
-        s.setScalar(rng.range(1.6, 3.0) * f.scale);
-        this.m4.compose(new THREE.Vector3(f.base.x, rng.range(0, 6), f.base.z), q, s);
+        const pitch = rng.range(0.5, 1.25), yaw = rng.range(0, TAU);
+        q.setFromEuler(e.set(pitch, yaw, 0, 'YXZ'));
+        const sc = rng.range(1.6, 3.0) * f.scale;
+        s.setScalar(sc);
+        const y = rng.range(0, 6);
+        this.m4.compose(new THREE.Vector3(f.base.x, y, f.base.z), q, s);
+        f.leaves.push({ li, idx: leafLists[li].length, y, pitch, yaw, sc, base: true });
         leafLists[li].push(this.m4.clone());
       }
       // stem leaves partway up
       for (let k = 0; k < 2; k++) {
         const li = Math.floor(rng.float() * 2);
         const hk = rng.range(0.25, 0.6);
-        q.setFromEuler(e.set(rng.range(0.8, 1.2), rng.range(0, TAU), 0, 'YXZ'));
-        s.setScalar(rng.range(1.0, 1.7) * f.scale);
+        const pitch = rng.range(0.8, 1.2), yaw = rng.range(0, TAU);
+        q.setFromEuler(e.set(pitch, yaw, 0, 'YXZ'));
+        const sc = rng.range(1.0, 1.7) * f.scale;
+        s.setScalar(sc);
         this.m4.compose(f.base.clone().lerp(f.top, hk), q, s);
+        f.leaves.push({ li, idx: leafLists[li].length, hk, pitch, yaw, sc });
         leafLists[li].push(this.m4.clone());
       }
     }
@@ -160,18 +175,26 @@ export class Flora {
       const z = rng.range(H.z0 - 40, H.z1 + 60);
       if (Math.hypot(x, z) < 48) continue;
       const li = rng.chance(0.5) ? 0 : 3;
-      q.setFromEuler(e.set(rng.range(0.6, 1.1), rng.range(0, TAU), 0, 'YXZ'));
-      s.setScalar(rng.range(4.0, 6.5));
-      this.m4.compose(new THREE.Vector3(x, rng.range(0, 3), z), q, s);
+      const pitch = rng.range(0.6, 1.1), yaw = rng.range(0, TAU);
+      q.setFromEuler(e.set(pitch, yaw, 0, 'YXZ'));
+      const sc = rng.range(4.0, 6.5);
+      s.setScalar(sc);
+      const y = rng.range(0, 3);
+      this.m4.compose(new THREE.Vector3(x, y, z), q, s);
+      (this.ears ??= []).push({ li, idx: leafLists[li].length, x, y, z, pitch, yaw, sc });
       leafLists[li].push(this.m4.clone());
     }
     this.smallCasters = [];
+    this.leafGeo = leaf;
+    this.leafMeshes = [];
     leafLists.forEach((list, li) => {
       const im = new THREE.InstancedMesh(leaf, leafMats[li], list.length);
+      this.leafMeshes.push(im);
       this.smallCasters.push(im);
       list.forEach((mm, i) => im.setMatrixAt(i, mm));
       im.castShadow = true;
       im.receiveShadow = true;
+      swayMesh(im, 'leaf');
       this.group.add(im);
     });
 
@@ -179,7 +202,7 @@ export class Flora {
     const frond = (() => {
       const parts = [];
       const rachis = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 6, 3), new THREE.Vector3(0, 9, 9), new THREE.Vector3(0, 8, 15)]);
-      parts.push(taperedTube(rachis, 0.25, 0.06, 10, 4));
+      parts.push(zeroSway(taperedTube(rachis, 0.25, 0.06, 10, 4)));
       // low-poly leaflets: the fronds are only ever seen at a distance
       const leaflet = leafGeometry({ length: 3.2, width: 0.9, fold: 0.3, arch: 0.3, segU: 3, segV: 1, thickness: 0.04 }).geometry;
       for (let i = 1; i < 18; i++) {
@@ -196,7 +219,7 @@ export class Flora {
           parts.push(g);
         }
       }
-      return mergeGeometries(parts.map((x) => { x.deleteAttribute('uv'); return x.toNonIndexed(); }));
+      return wholeFlex(mergeGeometries(parts.map((x) => { x.deleteAttribute('uv'); return x.toNonIndexed(); })), 17, 1.5);
     })();
     const fernCount = Math.round(170 * density);
     const ferns = new THREE.InstancedMesh(frond, new THREE.MeshPhysicalMaterial({ color: '#5f7a3a', metalness: 0.75, roughness: 0.4, side: THREE.DoubleSide }), fernCount * 5);
@@ -205,17 +228,22 @@ export class Flora {
     for (let i = 0; i < fernCount; i++) {
       const sp = spots[Math.floor(rng.float() * spots.length)];
       const cx = sp.x + rng.range(-6, 6), cz = sp.z + rng.range(-6, 6);
+      const fronds = [];
       for (let k = 0; k < 5; k++) {
-        q.setFromEuler(e.set(0, rng.range(0, TAU), 0));
-        s.setScalar(rng.range(0.9, 1.6));
+        const yaw = rng.range(0, TAU);
+        q.setFromEuler(e.set(0, yaw, 0));
+        const sc = rng.range(0.9, 1.6);
+        s.setScalar(sc);
         this.m4.compose(new THREE.Vector3(cx, 0, cz), q, s);
+        fronds.push({ i: fi, yaw, sc });
         ferns.setMatrixAt(fi++, this.m4);
       }
-      (this.fernSpots ??= []).push({ x: cx, z: cz });
+      (this.fernSpots ??= []).push({ x: cx, z: cz, fronds });
     }
     ferns.count = fi;
     ferns.castShadow = true;
     ferns.receiveShadow = true;
+    swayMesh(ferns, 'fern');
     this.group.add(ferns);
 
     // ---- seed lanterns: glass orbs on stalks that light with the wave --------
@@ -226,6 +254,7 @@ export class Flora {
     orbStem.translate(0, 0.5, 0);
     this.orbMesh = new THREE.InstancedMesh(orbGeo, new THREE.MeshBasicMaterial({ color: '#ffffff' }), orbN);
     const orbStems = new THREE.InstancedMesh(orbStem, mat.copperAged, orbN);
+    this.orbStems = orbStems;
     const col = new THREE.Color();
     for (let i = 0; i < orbN; i++) {
       const sp = spots[Math.floor(rng.float() * spots.length)];
@@ -235,7 +264,7 @@ export class Flora {
       this.m4.compose(new THREE.Vector3(p.x, 0, p.z), q.identity(), s.set(1, p.y, 1));
       orbStems.setMatrixAt(i, this.m4);
       this.orbMesh.setColorAt(i, col.setRGB(0.05, 0.03, 0.01));
-      this.orbs.push({ delay: (Math.hypot(p.x, p.z) / 780) * 6.0 + rng.range(0, 0.6), ph: rng.range(0, TAU) });
+      this.orbs.push({ delay: (Math.hypot(p.x, p.z) / 780) * 6.0 + rng.range(0, 0.6), ph: rng.range(0, TAU), base: p.clone(), sc: s.x });
     }
     this.group.add(this.orbMesh, orbStems);
 
@@ -248,19 +277,7 @@ export class Flora {
   // mounded shrubs of metal leaves: mid-height mass between the blooms
   _buildShrubs(mat, rng, density) {
     const leaf = leafGeometry({ length: 4.5, width: 1.9, fold: 0.5, arch: 0.6, segU: 6, segV: 3, thickness: 0.05 }).geometry;
-    const parts = [];
-    for (let i = 0; i < 46; i++) {
-      const g = leaf.clone();
-      const u = (i + 0.5) / 46;
-      const el = Math.acos(1 - u) * 0.95; // denser at the top of the dome
-      const az = i * 2.39996;
-      g.rotateX(-0.4 + el * 0.6);
-      g.rotateY(az);
-      const r = 6 * Math.sin(el + 0.25);
-      g.translate(Math.sin(az) * r * 0.5, 6 * Math.cos(el) * 0.75 + 1, Math.cos(az) * r * 0.5);
-      parts.push(g);
-    }
-    const dome = mergeGeometries(parts);
+    const dome = leafDome(leaf, 46); // denser at the top; relaxed so no leaf cuts another
     const mats = [
       new THREE.MeshPhysicalMaterial({ color: '#6b7a36', metalness: 0.8, roughness: 0.42, side: THREE.DoubleSide, clearcoat: 0.3 }),
       new THREE.MeshPhysicalMaterial({ color: '#3a6650', metalness: 0.55, roughness: 0.48, side: THREE.DoubleSide, clearcoat: 0.3 }),
@@ -275,18 +292,24 @@ export class Flora {
       const x = sp.x + rng.range(-7, 7), z = sp.z + rng.range(-7, 7);
       if (Math.hypot(x, z) < 44) continue;
       if (x > L.pathX[0] - 6 && x < L.pathX[1] + 6) continue;
-      q.setFromEuler(e.set(0, rng.range(0, TAU), 0));
+      const yaw = rng.range(0, TAU);
+      q.setFromEuler(e.set(0, yaw, 0));
       const sc = rng.range(0.9, 2.3);
       s.set(sc * rng.range(0.9, 1.3), sc * rng.range(0.7, 1.15), sc * rng.range(0.9, 1.3));
       this.m4.compose(new THREE.Vector3(x, -1, z), q, s);
-      lists[Math.floor(rng.float() * mats.length)].push(this.m4.clone());
-      (this.shrubSpots ??= []).push({ x, z, r: 3 * s.x, h: 5.5 * s.y });
+      const li = Math.floor(rng.float() * mats.length);
+      (this.shrubSpots ??= []).push({ x, z, r: 3 * s.x, h: 5.5 * s.y, y0: -1, yaw, sx: s.x, sy: s.y, sz: s.z, li, k: lists[li].length });
+      lists[li].push(this.m4.clone());
     }
+    this.shrubMeshes = [];
+    this.shrubGeo = dome;
     lists.forEach((list, i) => {
       const im = new THREE.InstancedMesh(dome, mats[i], list.length);
+      this.shrubMeshes.push(im);
       list.forEach((m, k) => im.setMatrixAt(k, m));
       im.castShadow = true;
       im.receiveShadow = true;
+      swayMesh(im, 'dome');
       this.group.add(im);
     });
   }
@@ -341,6 +364,8 @@ export class Flora {
       leaves.setMatrixAt(i, this.m4);
     }
     roses.castShadow = leaves.castShadow = true;
+    swayMesh(roses, 'rose');
+    swayMesh(leaves, 'leaf');
     this.group.add(roses, leaves);
     this.archParts = [roses, leaves];
   }
@@ -386,29 +411,70 @@ export class Flora {
   }
 
   update(t, ctx) {
-    const q = new THREE.Quaternion();
+    const q = this._q || (this._q = new THREE.Quaternion());
     const e = new THREE.Euler();
     const s = new THREE.Vector3();
     const p = new THREE.Vector3();
+    const ang = this._ang || (this._ang = new THREE.Vector3());
+    const wv = this._wv || (this._wv = new THREE.Vector3());
+    const d = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), qs = new THREE.Quaternion();
     const wave0 = B.bloomWave[0];
     const live = this.live; // interactive modes: per-flower openness / glow
-    for (const { ty, petals } of this.inst) {
+    for (const { ty, petals, stems, calyx } of this.inst) {
       let idx = 0;
-      for (const f of ty.list) {
+      ty.list.forEach((f, fi) => {
+        // heavy brass stems barely move: the head rides a slow lean with the
+        // gusts, and a passing bee's wash nudges it aside
+        const h = f.top.y - f.base.y;
+        bendAngle(f.base.x, f.base.z, t, STEM_K, f.sway, ang);
+        washAt(f.top, wv);
+        ang.addScaledVector(wv, STEM_WASH);
+        const hold = live?.hold ? live.hold(f) : 1;
+        f.headOff ??= new THREE.Vector3();
+        f.headOff.set(ang.x * h * hold, 0, ang.z * h * hold);
+        f.topNow ??= f.top.clone();
+        f.topNow.copy(f.top).add(f.headOff);
+        d.subVectors(f.topNow, f.base);
+        qs.setFromUnitVectors(up, s.copy(d).normalize());
+        s.set(f.scale, d.length(), f.scale);
+        this.m4.compose(f.base, qs, s);
+        stems.setMatrixAt(fi, this.m4);
+        s.setScalar(1.7 * f.scale);
+        this.m4.compose(f.topNow, qs, s);
+        calyx.setMatrixAt(fi, this.m4);
         const k = live ? live.open(f, t) : smoother(clamp((t - wave0 - f.delay) / 1.8));
-        const sway = Math.sin(t * 0.9 + f.sway) * 0.02;
+        const sway = Math.sin(t * 0.9 + f.sway) * 0.02 - (gust(f.base.x, f.base.z, t) - 0.3) * 0.035;
         for (let i = 0; i < ty.petals; i++) {
           const phi = f.yaw + (i / ty.petals) * TAU;
-          e.set(lerp(ty.closed, ty.open, k) + sway, Math.PI / 2 - phi, 0, 'YXZ');
+          // (wide open stops just below horizontal: petals never sweep down into the leaves)
+          e.set(Math.min(1.75, lerp(ty.closed, ty.open, k) + sway), Math.PI / 2 - phi, 0, 'YXZ');
           q.setFromEuler(e);
-          p.set(Math.cos(phi) * 1.2 * f.scale, 0, Math.sin(phi) * 1.2 * f.scale).add(f.top);
+          p.set(Math.cos(phi) * 1.2 * f.scale, 0, Math.sin(phi) * 1.2 * f.scale).add(f.topNow);
           s.setScalar(f.scale);
           this.m4.compose(p, q, s);
           petals.setMatrixAt(idx++, this.m4);
         }
-      }
+      });
       petals.instanceMatrix.needsUpdate = true;
+      stems.instanceMatrix.needsUpdate = true;
+      calyx.instanceMatrix.needsUpdate = true;
     }
+    // seed lanterns nod on their copper stalks
+    this.orbs.forEach((o, i) => {
+      bendAngle(o.base.x, o.base.z, t, ORB_K, o.ph, ang);
+      const h = o.base.y;
+      p.set(o.base.x + ang.x * h, o.base.y, o.base.z + ang.z * h);
+      o.now ??= new THREE.Vector3();
+      o.now.copy(p);
+      this.m4.compose(p, q.identity(), s.setScalar(o.sc));
+      this.orbMesh.setMatrixAt(i, this.m4);
+      d.set(p.x - o.base.x, h, p.z - o.base.z);
+      qs.setFromUnitVectors(up, s.copy(d).normalize());
+      this.m4.compose(s.set(o.base.x, 0, o.base.z), qs, new THREE.Vector3(1, d.length(), 1));
+      this.orbStems.setMatrixAt(i, this.m4);
+    });
+    this.orbMesh.instanceMatrix.needsUpdate = true;
+    this.orbStems.instanceMatrix.needsUpdate = true;
     // seed lanterns light with the wave and keep a gentle pulse
     const col = new THREE.Color();
     this.orbs.forEach((o, i) => {

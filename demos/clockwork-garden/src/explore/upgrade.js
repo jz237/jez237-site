@@ -1,19 +1,24 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { leafGeometry } from '../geometry/shapes.js';
+import { leafGeometry, petalGeometry } from '../geometry/shapes.js';
 import { enamelLeafTextures } from '../materials/textures.js';
+import { swayMaterial, pivotParts } from '../world/wind.js';
 
 // Close-up finish for the interactive modes. The film was dressed for fixed
-// camera paths; a bee's-eye camera goes right up to the planting. While a
+// camera paths; a bee's-eye camera goes right up to the planting. While an
 // interactive mode is active, the shared foliage gets:
 //   · enamelled-metal leaves with gilt midribs, veins and margins (the
-//     per-instance greens tint only the enamel, the gilding stays gold);
-//   · folded (creased) leaves in the foliage masses instead of flat ones;
-//   · a dithered fade for leaves and petals right in front of the lens, so
-//     the camera never sits behind a wall of leaf.
+//     per-instance greens tint only the enamel, the gilding stays gold),
+//     keeping each part's sway (world/wind.js);
+//   · finer shrub roses; static instanced sets split into tiles;
+//   · once the bee-scale planting has grown (nearfield.js), the film's leaves,
+//     masses, shrubs, ferns, ivy, palm fronds and arch leaves are hidden;
+//   · a dithered fade right in front of the lens, now only a last resort.
 // Every swap is reversed on exit, so the film renders exactly as before.
 
-const FADE = { uCamFade: { value: new THREE.Vector2(2.2, 6.5) } };
+// last resort only: the camera pushes the foliage aside (world/wind.js) and
+// nothing comes within ~1.5 of the lens, so this rarely dithers anything now
+const FADE = { uCamFade: { value: new THREE.Vector2(0.55, 1.35) } };
 
 const DITHER = /* glsl */ `
   {
@@ -24,6 +29,16 @@ const DITHER = /* glsl */ `
       if (ign > fk) discard;
     }
   }`;
+
+// a clone without the sway patch (it is re-applied for the explore material)
+function fresh(m) {
+  const c = m.clone();
+  c.userData = {};
+  const orig = m.userData.swayOrig;
+  if (orig?.prev) c.onBeforeCompile = orig.prev;
+  if (orig?.key) c.customProgramCacheKey = orig.key;
+  return c;
+}
 
 function withDither(m, key) {
   const prev = m.onBeforeCompile;
@@ -39,7 +54,7 @@ function withDither(m, key) {
   return m;
 }
 
-function enamel(tex, { color = '#ffffff', mapped = true, key }) {
+export function enamel(tex, { color = '#ffffff', mapped = true, key }) {
   const m = new THREE.MeshPhysicalMaterial({
     color,
     map: mapped ? tex.map : null,
@@ -124,7 +139,18 @@ function thinLeaf(length, width, fold, arch, segU) {
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
   g.setIndex(idx);
   g.computeVertexNormals();
+  // sway: pivot at the stalk, flex and flutter toward the tip (one surface)
+  const n = pos.length / 3, W = new Float32Array(n * 4);
+  for (let i = 0; i < n; i++) { const u = uv[i * 2]; W[i * 4] = Math.pow(u, 1.4); W[i * 4 + 1] = Math.min(1, u * 1.5); }
+  g.setAttribute('aSwayP', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  g.setAttribute('aSwayW', new THREE.BufferAttribute(W, 4));
   return g;
+}
+
+// the explore version of a swaying mesh's material keeps its sway
+function keepSway(o, m) {
+  const sw = o.userData.sway;
+  return sw ? swayMaterial(m, sw.profile, { swing: sw.swing }) : m;
 }
 
 export class LookUpgrade {
@@ -134,12 +160,18 @@ export class LookUpgrade {
     this.group.name = 'upgrade-tiles';
     const tex = enamelLeafTextures(quality.tier === 'low' ? 256 : 512);
     const fo = world.foliage, fl = world.flora;
-    const leafInst = enamel(tex, { key: 'fo-leaf' });
-    const leafPlain = enamel(tex, { mapped: false, key: 'fo-plain' });
+    // one enamel material per (sway profile, mapped) so each part keeps its stiffness
+    const foMats = new Map();
+    const foMat = (o) => {
+      const mapped = !!o.geometry.attributes.uv;
+      const k = (o.userData.sway?.profile || '') + (o.userData.sway?.swing ? 's' : '') + (mapped ? '|m' : '|p');
+      if (!foMats.has(k)) foMats.set(k, keepSway(o, enamel(tex, { mapped, key: 'fo-' + k })));
+      return foMats.get(k);
+    };
     // a creased version of the foliage masses' dome (same layout as foliage.js)
     const foldLeaf = thinLeaf(7, 2.6, 0.6, 0.8, 4);
     const dome = (() => {
-      const parts = [];
+      const parts = [], pivots = [], phases = [];
       const N = 56;
       for (let i = 0; i < N; i++) {
         const g = foldLeaf.clone();
@@ -151,33 +183,61 @@ export class LookUpgrade {
         g.rotateX(-0.4 + el * 0.6);
         g.rotateY(az);
         const r = 6 * Math.sin(el + 0.25);
-        g.translate(Math.sin(az) * r * 0.5, 6 * Math.cos(el) * 0.75 + 1, Math.cos(az) * r * 0.5);
+        const pv = new THREE.Vector3(Math.sin(az) * r * 0.5, 6 * Math.cos(el) * 0.75 + 1, Math.cos(az) * r * 0.5);
+        g.translate(pv.x, pv.y, pv.z);
         parts.push(g);
+        pivots.push(pv);
+        phases.push((i * 0.618) % 1);
       }
-      return mergeGeometries(parts);
+      return pivotParts(mergeGeometries(parts), parts, pivots, phases);
     })();
+    this.domeGeo = dome;
+    const foLeaf = new Set(fo.leafMats || [fo.leafMat]);
     for (const o of fo.group.children) {
       if (!o.isMesh) continue;
-      if (o.material === fo.leafMat) {
-        this.swap(o, 'material', o.geometry.attributes.uv ? leafInst : leafPlain);
-        if (o.geometry === fo.domeGeo) this.swap(o, 'geometry', dome);
+      if (foLeaf.has(o.material)) {
+        if (o.geometry === fo.domeGeo) {
+          this.swap(o, 'geometry', dome);
+          this.swap(o, 'material', foMat({ geometry: dome, userData: o.userData }));
+        } else this.swap(o, 'material', foMat(o));
       }
     }
     // flora: stem/base leaves, shrubs, ferns, petals, the rose arch
-    const floraLeaf = new Map(fl.leafMats.map((m) => [m, enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-leaf-' + m.id })]));
-    const shrub = new Map((fl.shrubMats || []).map((m) => [m, enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-shrub-' + m.id })]));
+    const floraLeaf = new Map(fl.leafMats.map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-leaf-' + m.id }), 'leaf')]));
+    const shrub = new Map((fl.shrubMats || []).map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-shrub-' + m.id }), 'dome')]));
     const petals = new Set(fl.inst.map((x) => x.petals));
     const petalMats = new Map();
     for (const o of fl.group.children) {
       if (!o.isMesh) continue;
       if (floraLeaf.has(o.material)) this.swap(o, 'material', floraLeaf.get(o.material));
       else if (shrub.has(o.material)) this.swap(o, 'material', shrub.get(o.material));
-      else if (o === fl.fernMesh) this.swap(o, 'material', withDither(o.material.clone(), 'fern'));
+      else if (o === fl.fernMesh) this.swap(o, 'material', keepSway(o, withDither(fresh(o.material), 'fern')));
       else if (petals.has(o) || (fl.archParts || []).includes(o)) {
-        if (!petalMats.has(o.material)) petalMats.set(o.material, withDither(o.material.clone(), 'petal-' + o.material.id));
+        if (!petalMats.has(o.material)) petalMats.set(o.material, keepSway(o, withDither(fresh(o.material), 'petal-' + o.material.id)));
         this.swap(o, 'material', petalMats.get(o.material));
       }
     }
+    // the bee-scale planting (nearfield.js) replaces the film's leaves, masses,
+    // shrubs, ferns and ivy while exploring, once it has grown (replace())
+    this.replaceable = [...(fl.leafMeshes || []), fo.stemLeafMesh, fo.domeMesh, ...(fl.shrubMeshes || []), fl.fernMesh, fo.ivyMesh, fo.frondMesh, fl.archParts?.[1]].filter(Boolean);
+    this.tilesOf = new Map();
+    // the shrub roses (and the arch's) seen from a bee's distance: finer petals
+    const fineRose = (() => {
+      const parts = [];
+      const pg = petalGeometry({ length: 2.4, width: 2.6, cup: 0.9, curl: 0.4, thickness: 0.08, segU: 5, segV: 4 }).geometry;
+      for (let ring = 0; ring < 2; ring++) {
+        const n = ring ? 5 : 7;
+        for (let i = 0; i < n; i++) {
+          const g = pg.clone();
+          g.rotateX(ring ? 0.4 : 0.9);
+          g.rotateY((i / n) * Math.PI * 2 + ring * 0.4);
+          parts.push(g);
+        }
+      }
+      return mergeGeometries(parts);
+    })();
+    if (fo.roseMesh) this.swap(fo.roseMesh, 'geometry', fineRose);
+    if (fl.archParts?.[0]) this.swap(fl.archParts[0], 'geometry', fineRose);
     // the armillary's lamp: a glossy glowing orb rather than a flat disc
     this.armCore = new THREE.MeshPhysicalMaterial({ color: '#b8873e', emissive: '#ff9a3a', emissiveIntensity: 0.6, roughness: 0.18, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.04 });
     this.swap(fl.armCore, 'material', this.armCore);
@@ -187,15 +247,21 @@ export class LookUpgrade {
   // replace static instanced meshes by tiled copies (originals hidden while exploring)
   tileStatic(world, mat) {
     const fl = world.flora, fo = world.foliage;
-    const dynamic = new Set([...fl.inst.map((x) => x.petals), fl.orbMesh, fo.flames]);
+    // swaying on the CPU each frame: never frozen into tiles
+    const dynamic = new Set([...fl.inst.flatMap((x) => [x.petals, x.stems, x.calyx]), fl.orbMesh, fl.orbStems, fo.flames, fo.lanternFrames, fo.lanternGlass, fo.lanternChains]);
     const material = (o) => this.swaps.find((s) => s.obj === o && s.prop === 'material')?.explore ?? o.material;
     const geometry = (o) => this.swaps.find((s) => s.obj === o && s.prop === 'geometry')?.explore ?? o.geometry;
     for (const root of [fl.group, fo.group]) {
       for (const o of [...root.children]) {
         // only shadow casters gain from tiling (the sun's shadow map is local)
         if (!o.isInstancedMesh || dynamic.has(o) || o.count < 24 || !o.castShadow) continue;
+        this.tilesOf.set(o, []);
         const proxy = { geometry: geometry(o), count: o.count, instanceColor: o.instanceColor, getMatrixAt: (i, m) => o.getMatrixAt(i, m), getColorAt: (i, c) => o.getColorAt(i, c), castShadow: o.castShadow, receiveShadow: o.receiveShadow, renderOrder: o.renderOrder };
-        for (const t of tiles(proxy, material(o))) this.group.add(t);
+        for (const t of tiles(proxy, material(o))) {
+          if (o.customDepthMaterial) { t.customDepthMaterial = o.customDepthMaterial; t.userData.sway = o.userData.sway; }
+          this.group.add(t);
+          this.tilesOf.get(o).push(t);
+        }
         this.swap(o, 'visible', false);
       }
     }
@@ -210,7 +276,19 @@ export class LookUpgrade {
   }
 
   apply(on) {
+    this.on = on;
     for (const s of this.swaps) s.obj[s.prop] = on ? s.explore : s.film;
+  }
+
+  // the bee-scale planting is ready: hide what it replaces (the film keeps its own)
+  replace() {
+    if (this.replacedDone) return;
+    this.replacedDone = true;
+    for (const o of this.replaceable) {
+      const tl = this.tilesOf.get(o);
+      if (tl) for (const t of tl) t.visible = false;
+      else { this.swap(o, 'visible', false); if (this.on) o.visible = false; }
+    }
   }
 
   setFade(near, far) { FADE.uCamFade.value.set(near, far); }

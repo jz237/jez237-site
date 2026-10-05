@@ -7,6 +7,7 @@ import { Greenhouse } from './greenhouse.js';
 import { Garden } from './garden.js';
 import { Flora } from './flora.js';
 import { Foliage } from './foliage.js';
+import { resolvePlanting } from './planting.js';
 import { Atmosphere } from './atmosphere.js';
 import { Lighting } from './lighting.js';
 import { Sky } from './sky.js';
@@ -15,6 +16,7 @@ import { L, CROWN_FACE } from './layout.js';
 import { B } from '../direction/beats.js';
 import { RNG } from '../core/rng.js';
 import { clamp, sseg } from '../core/ease.js';
+import { setTime as setWindTime, setWash, setCamera } from './wind.js';
 
 // Assembles the garden and wires the energy network between its parts.
 
@@ -32,6 +34,9 @@ export function buildWorld(scene, mat, tex, quality) {
   scene.add(w.flora.group);
   w.foliage = new Foliage(mat, quality, w.flora);
   scene.add(w.foliage.group);
+  // nothing passes through anything: blooms, masses, seed lanterns, ferns and
+  // leaves are moved clear of each other, the iron, the glass and the soil
+  w.planting = resolvePlanting(w);
   w.atmosphere = new Atmosphere(quality);
   scene.add(w.atmosphere.group);
 
@@ -144,11 +149,20 @@ export function buildWorld(scene, mat, tex, quality) {
 
   // ---- per-frame update -------------------------------------------------
   const pulseTmp = new THREE.Vector3();
+  const heroTmp = new THREE.Vector3();
   // ctx.explore (interactive modes): the explore controller owns creatures,
   // shadow LOD and the practical lights; the world just runs its clockwork
   w.update = (t, ctx) => {
     if (ctx.explore) return updateExplore(t, ctx);
     w.setFarShadows(t > B.reveal[0] + 4.8);
+    // the breeze and APX-9's wing-wash, as functions of t (the film camera pushes nothing)
+    setWindTime(t);
+    setCamera(null);
+    if (w.creatures) {
+      const C = w.creatures;
+      const visible = t >= B.beeEmerge && t < B.beeLeave + 3.4 || t >= B.rise[0];
+      setWash((age, out) => C.heroAt(t - age, out), visible ? C.heroAt(t, heroTmp) : null, 1.9);
+    } else setWash(() => 0);
     w.sky.update(t, ctx);
     w.lighting.update(t, ctx);
     w.atmosphere.update(t, ctx);

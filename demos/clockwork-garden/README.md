@@ -23,6 +23,28 @@ bar, the menu (top left) in the interactive modes, or `C` / the
 *Take the controls* / *Autopilot* button between Follow and Fly (control
 passes over from wherever the bee is).
 
+### A living garden
+
+The whole garden moves in one breeze that comes in through the near doors:
+gusts travel down the house as bands, so you see a gust cross the beds rather
+than every leaf jiggling. Leaves, petals and ferns flutter; the heavy brass
+stems barely lean; the masses ripple; the ivy swags swing; the lanterns sway
+on their chains with a pendulum's own period. As APX-9 passes (yours, the
+autopilot's, or the film's), its wing-wash bends nearby leaves, petals and
+fronds away and they spring back past rest and settle; the cameras push the
+foliage aside too (and part it along their line of sight to the bee), so the
+lens is never inside a leaf. The breeze is a function of the film's clock in
+the film and of the garden's own clock in the interactive modes.
+
+In the interactive modes the planting is grown at APX-9's scale: smaller,
+varied enamel leaves with gilt midribs and veins, cupped and drooping on
+their stalks (rosettes, leafy stems, shingled masses over exactly the shapes
+the bee bumps into, elephant ears and canna blades, ferns, palms, ivy, ground
+cover). Nothing passes through anything: every leaf is placed only where it
+crosses no other leaf, stem, bloom, iron, glass, lantern or the soil
+(`tools/overlapcheck.mjs` counts it). It grows in the background for a few
+seconds after the page loads; until then the film's foliage stands in.
+
 ### What you can do in the garden
 
 - **Pollinate any bloom**: descend gently onto it. Blooms open wide for an
@@ -142,6 +164,7 @@ directly. Reduced motion (system setting or `?motion=reduced`) also applies to
 the interactive modes: steadier cameras without roll or speed zoom.
 
 `window.__cg.renderAt(t)` renders an exact, deterministic frame; `window.__cg.audioWav()` returns the score as WAV (base64).
+`window.__cg.wind` is the breeze (`freeze` holds the rest pose, `noWash` switches APX-9's wash off, for review).
 Review hooks for the interactive modes: `__cg.setMode(m)`, `__cg.explore()`
 (the controller), `__cg.exploreView({ pos, target, fov, tod, reachable })`
 (render the awake garden from any viewpoint), `__cg.exploreExit()`.
@@ -164,6 +187,9 @@ node tools/sweep.mjs --grid full --out review/explore/sweep               # came
 node tools/sweep.mjs --views tools/views/key.json --tod 0.05 --out ...      # fixed key views at an hour
 node tools/explorefps.mjs --q high                                          # real-time fps in fly mode at the busiest spots + follow
 node tools/filmidentity.mjs --before <port>                                 # the film is pixel-identical after exploring (and vs a rollback copy)
+node tools/overlapcheck.mjs                                                 # does anything pass through anything? (film set and bee-scale set)
+node tools/living.mjs --shots tools/views/living.json --out review/x --sheet 1   # deterministic stills and frame strips (fly, follow, views, film)
+node tools/stallcheck.mjs --minutes 25                                      # fast-forwarded autopilot: stalls, give-ups, leaves brushed
 ```
 
 (The tools expect a local static server on port 8765 and use the system
@@ -182,6 +208,10 @@ Chrome at `/usr/bin/google-chrome` with GPU WebGL.)
 | 36–40 s | **Hummingbird** sips from a glass blossom, then turns to hover beside the camera |
 | 40–58 s | **Reveal** — the songbird stretches its wings and lifts off; the camera pulls back over an overgrown glasshouse (leafy beds, foliage masses, potted palms, shrub roses, ivy up the iron columns and in festoons under the eaves) as the garden blooms in a wave, glass lanterns kindle beneath the vault and sunbeams slant through the roof; APX-9 bumblebees, honeybees, butterflies, dragonflies and birds rise through the light; title |
 
+The planting moves in a coherent breeze throughout the film (a pure function
+of `t`, so every frame still renders the same from any history), and APX-9's
+wing-wash ruffles whatever it flies past.
+
 ## Project structure
 
 ```
@@ -189,10 +219,13 @@ index.html, styles.css         page, title card, controls styling
 src/main.js                    boot, renderer, playback loop, public API
 src/core/                      seeded RNG, easing/timeline helpers, quality tiers
 src/materials/                 procedural textures, material library, pulse shader
-src/geometry/                  gears (meshing math), parts (screws, jewels, rods), surfaces (petals, leaves)
+src/geometry/                  gears (meshing math), parts (screws, jewels, rods), surfaces (petals, leaves),
+                               leaf (the parametric enamel leaf, GLSL + CPU twin), intersect (exact part crossing)
 src/world/                     escapement, root crown, roots, hero flower (+ porcelain bud sheath), props, garden,
                                flora, foliage (far-field lushness, ivy, palms, lanterns), greenhouse, sky,
-                               atmosphere (shafts, dust), lighting, environment maps
+                               atmosphere (shafts, dust), lighting, environment maps,
+                               wind (breeze, wing-wash, the vertex patch), planting (nothing through anything),
+                               dome (relaxed leaf mounds)
 src/creatures/                 apx9 (the resident pollinator, built from APX-9's blueprint in apx9Shape),
                                bee (honeybee, carpenter), butterfly, beetle/ladybird, dragonfly, bird rigs + choreography
 src/direction/                 beats (story timing), camera tools, shot list, director
@@ -213,10 +246,12 @@ src/explore/                   the interactive modes:
   ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird
   scenery.js                     near gable and doors, far doors, column tops, glazing bars, end planting, exterior
   upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade), tiling, glass; detail culling
+  nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD)
 src/audio/live.js              live synthesis for the interactive modes
 tools/                         shoot.mjs (stills), record.mjs (video), determinism.mjs, fpscheck.mjs (real-time fps +
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
-                               drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs
+                               drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
+                               flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```

@@ -131,6 +131,7 @@ export class Ambient {
       if (b.state === 'perch') {
         b.timer -= dt;
         b.pos.copy(b.target.p);
+        if (b.target.f?.headOff) b.pos.add(b.target.f.headOff); // the bloom nods in the breeze
         const open = 0.5 + 0.45 * Math.sin(t * 0.9 + b.ph);
         b.c.group.position.copy(b.pos);
         b.c.group.rotation.set(0, b.yaw, 0);

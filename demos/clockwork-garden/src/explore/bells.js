@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { leafGeometry, taperedTube } from '../geometry/shapes.js';
+import { swayMesh } from '../world/wind.js';
 import { RNG } from '../core/rng.js';
 import { clamp } from '../core/ease.js';
 import { groundHeight } from './bounds.js';
@@ -87,6 +88,7 @@ export class Bellflowers {
         this.leaves.setMatrixAt(i * 4 + k, m4);
       }
     });
+    swayMesh(this.leaves, 'leaf');
     for (const m of [this.stems, this.leaves, this.bellMesh, this.rims, this.caps, this.claps, this.peds]) {
       m.castShadow = m === this.bellMesh || m === this.stems || m === this.leaves;
       m.receiveShadow = true;

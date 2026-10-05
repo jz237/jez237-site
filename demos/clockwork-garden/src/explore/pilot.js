@@ -50,7 +50,7 @@ export class Pilot {
     };
     const w = this.world;
     for (const f of w.flora.flowers) put(f.top.x, f.top.z, f.top.y + 6 * f.scale, 6);
-    for (const b of w.foliage.bushSpots) put(b.x, b.z, b.h, b.r);
+    for (const b of w.foliage.bushSpots) if (!b.hidden) put(b.x, b.z, (b.y0 ?? -1) + b.h, b.r);
     for (const p of w.foliage.palmSpots || []) put(p.x, p.z, 30 * p.sc, 20 * p.sc);
     for (const o of w.flora.orbs) if (o.pos) put(o.pos.x, o.pos.z, o.pos.y + 2, 2);
     put(-30, 16, 92, 30); // copper tree

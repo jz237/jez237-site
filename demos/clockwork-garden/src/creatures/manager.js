@@ -307,6 +307,21 @@ export class Creatures {
     for (const c of this.cast) c.update(t, ctx);
   }
 
+  // where APX-9 is at time t in the film and how hard its wings work (for the
+  // wing-wash on the foliage): a pure function of t, like updateHero
+  heroAt(t, out) {
+    if (t < B.beeEmerge) { out.copy(this.beeInside); return 0; }
+    if (t < B.beeTakeoff) {
+      out.lerpVectors(this.beeInside, this.beeBoard, sseg(t, B.beeEmerge, B.beeEmerge + 0.9));
+      return 0.6 * sseg(t, B.beeEmerge + 1.0, B.beeTakeoff);
+    }
+    if (t < B.beeLand) { this.heroFlight.at(t, out); return 1; }
+    if (t < B.beeLeave) { out.copy(this.land); const s = t - B.beeLand; return s < 0.4 ? 1 - s / 0.4 : 0; }
+    if (t < B.rise[0]) { this.heroLeave.at(t, out); return t < B.beeLeave + 3.4 ? 1 : 0; }
+    this.heroRise.at(t, out);
+    return 1;
+  }
+
   updateHero(t, ctx) {
     const bee = this.hero;
     const g = bee.group;

@@ -57,6 +57,7 @@ export class Interactions {
     this.flowerTouch = new Float32Array(flora.flowers.length).fill(-100);
     this.flowerDist = flora.flowers.map((f) => Math.hypot(f.top.x, f.top.z));
     this.welcome = new Float32Array(flora.flowers.length);
+    this.steady = new Float32Array(flora.flowers.length); // a bloom with a bee on it holds still
     this._buildBosses(mat);
     this._buildMarker();
     this._buildSparks(quality);
@@ -105,6 +106,10 @@ export class Interactions {
         const dw = self.now - self.flowerWave[i];
         if (dw > 0 && dw < 3) k = dw < 0.22 ? lerp(k, 0.35, smooth(dw / 0.22)) : lerp(0.35, k, settle((dw - 0.22) / 1.4, 1.1, 3.2));
         return k;
+      },
+      hold(f) {
+        const i = f.landing?.index;
+        return i === undefined ? 1 : 1 - self.steady[i];
       },
       orb(o, i) {
         const s = self.orbs[i];
@@ -343,6 +348,9 @@ export class Interactions {
         if (b0.landedOn === f.landing) target = 1;
       }
       this.welcome[i] += (target - this.welcome[i]) * (1 - Math.exp(-dt * (target > this.welcome[i] ? 3 : 1.2)));
+      const f = fl[i];
+      const still = b0 && b0.landedOn === f.landing ? 1 : this._candidate === f.landing ? 0.7 : 0;
+      this.steady[i] += (still - this.steady[i]) * (1 - Math.exp(-dt * 4));
     }
     // the bloom wave front
     if (w && wt > 3.4) {
@@ -405,6 +413,7 @@ export class Interactions {
 
   // after the world update: light along the roots and up the stem while winding
   post(dt, bodies, ctx, landable) {
+    this._candidate = landable;
     const now = this.now;
     const w = this.wind;
     const wt = w ? now - w.t0 : 99;
