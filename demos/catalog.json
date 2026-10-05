@@ -268,5 +268,27 @@
       "502 detailed components"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Original concept reconstruction · Preview captured from the running exhibit"
+  },
+  {
+    "id": "013",
+    "title": "Point Lookout — North Stradbroke Island",
+    "category": "3D · Coastal landscape",
+    "description": "Take in the Queensland coast from a windswept headland. Watch rolling ocean swells, foaming breakers and sea spray beneath drifting clouds, with moving coastal vegetation and a procedural surf-and-wind soundscape.",
+    "url": "point-lookout/",
+    "image": "assets/point-lookout.jpg",
+    "imageAlt": "Actual Point Lookout demo showing blue ocean, foaming surf, a curving beach and windswept headland vegetation",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/point-lookout",
+    "features": [
+      "Animated ocean & breaking surf",
+      "Wind-driven coastal vegetation",
+      "Clouds, haze & cinematic lighting",
+      "Procedural surf & wind audio"
+    ],
+    "facts": [
+      "North Stradbroke Island",
+      "Three.js · WebGL 2",
+      "Self-hosted scene"
+    ],
+    "note": "WebGL 2 · Best on a desktop GPU · Tap or press Enter after loading · Original: claude-creative-xbmc.vercel.app"
   }
 ]
