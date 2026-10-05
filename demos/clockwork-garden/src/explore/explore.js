@@ -390,7 +390,7 @@ export class Explore {
       v = { pos: d.pos, target: d.target, fov: d.fov ?? 50, roll: 0, focus: d.pos.distanceTo(d.target), aperture: d.aperture ?? 0 };
     } else if (this.photo) v = this.photoCam.update(dtReal, input || this._noInput());
     else if (this.mode === 'fly') v = this.chase.update(dtReal, a, input, this.reduced);
-    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0 });
+    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, nearfield: this.nearfield, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0 });
     this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
     applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
     // the camera pushes the foliage aside (and nothing comes inside the lens)
