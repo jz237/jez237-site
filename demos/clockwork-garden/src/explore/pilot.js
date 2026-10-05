@@ -4,6 +4,7 @@ import { L } from '../world/layout.js';
 import { ceilingAt, groundHeight, HOUSE } from './bounds.js';
 import { SPEED } from './actor.js';
 import { LowRoutes } from './lowroutes.js';
+import { archUnderside } from '../world/promenade.js';
 
 // APX-9's day, for follow mode. A small planner that keeps it busy: leave the
 // skep, visit a few blooms (preferring ones it hasn't pollinated, with
@@ -74,6 +75,9 @@ export class Pilot {
     put(70, -250, 100, 36); // rose arch
     put(70, -560, 112, 52); // fountain + armillary
     for (const c of w.garden.lamps) put(c.position.x, c.position.z, 74, 6);
+    // the promenade: bollards, the arches' uprights (their ribs: _avoidArches)
+    for (const b of w.promenade?.bollards || []) put(b.base.x, b.base.z, b.globe.y + 4, 3);
+    for (const z of L.arches.zs) for (const x of [L.arches.x0, L.arches.x1]) put(x, z, L.arches.spring + 12, 5);
     this.canopy = { g, nx, nz };
   }
 
@@ -94,7 +98,7 @@ export class Pilot {
     return [
       { name: 'through the rose arch', pts: [V(70, 55, -205), V(70, 52, -250), V(70, 55, -295)] },
       { name: 'round the armillary', pts: [V(36, 92, -530), V(70, 100, -515), V(104, 92, -545), V(100, 80, -590), V(46, 84, -590)] },
-      { name: 'along the lanterns', pts: lantern.filter((l) => l.p.z > -420 && l.p.z < 60).sort((a, b) => b.p.z - a.p.z).slice(0, 5).map((l) => l.p.clone().add(V(9, -10, 0))) },
+      { name: 'along the lanterns', pts: lantern.filter((l) => !l.arch && l.p.z > -420 && l.p.z < 60).sort((a, b) => b.p.z - a.p.z).slice(0, 5).map((l) => l.p.clone().add(V(9, -10, 0))) },
       { name: 'up to the vault', pts: [V(40, 160, -120), V(70, 330, -180), V(100, 200, -240)] },
       { name: 'past the copper tree', pts: [V(-10, 40, 40), V(-55, 60, 30), V(-60, 45, -10)] },
     ];
@@ -124,9 +128,23 @@ export class Pilot {
       y = Math.min(y, ceilingAt(x) - 14, 210);
       const p = V(x, y, z);
       this._avoidColumns(p);
+      this._avoidArches(p);
       pts.push(p);
     }
     pts.push(to.clone().add(V(0, approachH, 0)));
+    // where a leg crosses a promenade arch, a waypoint under it (or over it)
+    const A = L.arches;
+    for (let i = pts.length - 2; i >= 1; i--) {
+      const a = pts[i], b = pts[i + 1];
+      for (const za of A.zs) {
+        if ((a.z - za) * (b.z - za) >= 0) continue;
+        const k = (za - a.z) / (b.z - a.z);
+        const q = a.clone().lerp(b, k);
+        if (q.x < A.x0 - 10 || q.x > A.x1 + 10) continue;
+        this._avoidArches(q);
+        pts.splice(i + 1, 0, q);
+      }
+    }
     return { pts, i: 1 };
   }
 
@@ -136,11 +154,26 @@ export class Pilot {
         const cz = 150 - i * 150;
         const dx = p.x - cx, dz = p.z - cz;
         const l = Math.hypot(dx, dz);
-        if (l < 14) { const k = (14 - l) / Math.max(l, 0.01); p.x += dx * k; p.z += dz * k; }
+        // (wider at the height of its bracket lantern, which leans toward the path)
+        const R = p.y > 112 && p.y < 162 ? 24 : 14;
+        if (l < R) { const k = (R - l) / Math.max(l, 0.01); p.x += dx * k; p.z += dz * k; }
       }
     }
     p.x = clamp(p.x, HOUSE.xMinLow + 8, HOUSE.xMaxLow - 8);
     p.z = clamp(p.z, HOUSE.zMin + 8, HOUSE.zMax - 8);
+  }
+
+  // under a promenade arch (clear of its lanterns) or well over it, never through the iron
+  _avoidArches(p) {
+    const A = L.arches, xc = (A.x0 + A.x1) / 2;
+    for (const za of A.zs) {
+      if (Math.abs(p.z - za) > 11 || p.x < A.x0 - 8 || p.x > A.x1 + 8) continue;
+      // the bracket lanterns hang over the path's edges
+      for (const lx of [A.x0 + 9.5, A.x1 - 9.5]) if (Math.abs(p.x - lx) < 7.5 && p.y > 42 && p.y < 78) p.x = lx + Math.sign(xc - lx) * 7.5;
+      p.x = clamp(p.x, A.x0 + 6, A.x1 - 6);
+      const under = Math.min(archUnderside(p.x) - 6, Math.abs(p.x - xc) < 9 ? 93 : Infinity);
+      if (p.y > under && p.y < A.apex + 20) p.y = p.y < (A.spring + A.apex) / 2 ? under : A.apex + 20;
+    }
   }
 
   chooseBloom(pos, interactions) {
@@ -213,6 +246,8 @@ export class Pilot {
     else if ((w.t += dt) > 2.5) {
       this._watch = null;
       this.giveUps = (this.giveUps || 0) + 1;
+      // (where: tools/stallcheck.mjs reports what it was pressed against)
+      if ((this.giveUpLog ||= []).length < 50) this.giveUpLog.push({ p: actor.pos.clone(), aim: aim.clone(), kind: g.kind, last, weave: !!r.weave });
       if (!last) r.i++;
       else if (g.kind === 'bloom') { g.landable.blocked = true; this.goal = null; this.route = null; }
       else if (g.kind === 'tour') { this.goal = g.then || null; this.route = null; }

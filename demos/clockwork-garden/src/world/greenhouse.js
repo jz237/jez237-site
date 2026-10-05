@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { L } from './layout.js';
+import { L, columnSpots, COLUMN_BRACKET_Y } from './layout.js';
 
 // The Victorian glasshouse: cast-iron barrel vault, glazed walls on a stone
 // plinth, columns with scroll brackets, and a great fan window at the far end.
@@ -216,6 +216,40 @@ export class Greenhouse {
     }
     cols.castShadow = true;
     g.add(cols, caps);
+    // gilded bands up each column, and a scroll bracket that carries a lantern toward the path
+    {
+      const bands = [], arms = [];
+      for (const y of [12, 64, 118, 190]) {
+        const b = new THREE.TorusGeometry(y < 20 ? 7.4 : 3.9, y < 20 ? 0.9 : 0.75, 6, 20);
+        b.rotateX(Math.PI / 2);
+        b.translate(0, y, 0);
+        bands.push(b);
+      }
+      const armPts = [];
+      for (let k = 0; k <= 8; k++) armPts.push(new THREE.Vector3(3.5 + k * 1.9, COLUMN_BRACKET_Y + Math.sin((k / 8) * Math.PI) * 1.2, 0));
+      arms.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(armPts), 12, 0.75, 6, false));
+      const scroll = [];
+      for (let k = 0; k <= 24; k++) {
+        const a = (k / 24) * Math.PI * 1.7, r = 8 * (1 - k / 34);
+        scroll.push(new THREE.Vector3(3.6 + r * (1 - Math.cos(a)) * 0.75 + k * 0.08, COLUMN_BRACKET_Y - Math.sin(a) * r - k * 0.2, 0));
+      }
+      arms.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(scroll), 30, 0.5, 6, false));
+      const bandG = mergeGeometries(bands.map((x) => x.toNonIndexed()));
+      const armG = mergeGeometries(arms.map((x) => x.toNonIndexed()));
+      const spots = columnSpots();
+      const bm = new THREE.InstancedMesh(bandG, mat.gold, spots.length);
+      const am = new THREE.InstancedMesh(armG, iron, spots.length);
+      const xc = (L.pathX[0] + L.pathX[1]) / 2;
+      spots.forEach(([x, z], i) => {
+        m4.makeTranslation(x, 0, z);
+        bm.setMatrixAt(i, m4);
+        // (the arm is built toward +x: turned to face the path)
+        m4.makeRotationY(x < xc ? 0 : Math.PI).setPosition(x, 0, z);
+        am.setMatrixAt(i, m4);
+      });
+      am.castShadow = true;
+      g.add(bm, am);
+    }
 
     g.traverse((o) => {
       if (o.isMesh && o.material !== mat.paneGlass) o.receiveShadow = true;

@@ -4,7 +4,7 @@ import { leafGeometry, petalGeometry, taperedTube } from '../geometry/shapes.js'
 import { RNG } from '../core/rng.js';
 import { B } from '../direction/beats.js';
 import { clamp, lerp } from '../core/ease.js';
-import { L } from './layout.js';
+import { L, archLanterns } from './layout.js';
 import { archPoint } from './greenhouse.js';
 import { swayMesh, zeroSway, pivotParts, wholeFlex, bendAngle, gust, WIND } from './wind.js';
 import { leafDome } from './dome.js';
@@ -350,7 +350,9 @@ export class Foliage {
       const x = overPath ? lerp(L.pathX[0] + 6, L.pathX[1] - 6, rng.float()) : (rng.chance(0.5) ? rng.range(H.x0 + 60, L.pathX[0] - 30) : rng.range(L.pathX[1] + 30, H.x1 - 60));
       const z = lerp(H.z0 - 30, H.z1 + 120, (i + rng.range(0, 1)) / nLan);
       if (Math.hypot(x, z) < 70) continue;
-      const y = rng.range(105, 205);
+      let y = rng.range(105, 205);
+      // (over the path, clear of the promenade's arches)
+      if (overPath && y < 165 && L.arches.zs.some((za) => Math.abs(za - z) < 14)) y = 165 + (y - 105) * 0.5;
       const sc = rng.range(1.3, 1.9);
       const p = V(x, y, z);
       const yaw = rng.range(0, TAU);
@@ -362,6 +364,18 @@ export class Foliage {
       chains.push([this.m4.clone(), col.set('#3a3a34').clone()]);
       this.lanterns.push({ p, sc, yaw, top, delay: (Math.hypot(x, z) / 780) * 6.0 + rng.range(0, 0.6), ph: rng.range(0, TAU) });
     }
+    // the promenade's lanterns (layout.js): under each arch's apex and on the
+    // brackets of its uprights, on short chains
+    archLanterns().forEach((a, k) => {
+      const sc = a.sc, p = a.p.clone();
+      const yaw = (k * 1.618) % TAU;
+      this.m4.compose(p, q.setFromEuler(e.set(0, yaw, 0)), s.setScalar(sc));
+      frames.push([this.m4.clone(), col.set('#d6ad5e').clone()]);
+      glasses.push([this.m4.clone(), col.set('#fff3dc').clone()]);
+      this.m4.compose(V(p.x, p.y + 8.4 * sc, p.z), q.identity(), s.set(1, Math.max(1, a.top - (p.y + 8.4 * sc)), 1));
+      chains.push([this.m4.clone(), col.set('#3a3a34').clone()]);
+      this.lanterns.push({ p, sc, yaw, top: a.top, delay: (Math.hypot(p.x, p.z) / 780) * 6.0 + (k % 3) * 0.12, ph: (k * 2.399) % TAU, arch: a.kind });
+    });
     this.lanternFrames = this._instanced(lanternFrame, mat.gold.clone(), frames, { cast: false, noColor: true });
     this.group.add(this.lanternFrames);
     const glassMat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: 0, roughness: 0.06, transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false, clearcoat: 1, envMapIntensity: 1.3 });

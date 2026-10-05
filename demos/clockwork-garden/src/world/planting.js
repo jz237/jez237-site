@@ -50,6 +50,9 @@ function solidDist(p, w, { palms = true } = {}) {
     d = Math.min(d, Math.hypot(p.x - c.x, p.y - c.y, p.z - c.z) - 6.5, Math.hypot(p.x - c.x, p.z - c.z) - 2);
   }
   if (p.y < 14) d = Math.min(d, Math.hypot(p.x - FOUNTAIN[0], p.z - FOUNTAIN[1]) - FOUNTAIN[2]);
+  // the promenade's arch uprights (with their climbing roses) and the globe bollards
+  if (p.y < L.arches.spring + 6) for (const z of L.arches.zs) for (const x of [L.arches.x0, L.arches.x1]) d = Math.min(d, Math.hypot(p.x - x, p.z - z) - 4.6);
+  if (p.y < 26) for (const b of w.promenade?.bollards || []) d = Math.min(d, Math.hypot(p.x - b.base.x, p.z - b.base.z) - 3.2);
   return d;
 }
 
@@ -96,6 +99,8 @@ export function resolvePlanting(w) {
     ...(w.foliage.palmSpots || []).map((pl) => [pl.x, pl.z, Math.max(9.6, 22) * pl.sc + 3]),
     ...w.garden.lamps.map((c) => [c.position.x, c.position.z, 6.5]),
     [FOUNTAIN[0], FOUNTAIN[1], FOUNTAIN[2]],
+    ...L.arches.zs.flatMap((z) => [[L.arches.x0, z, 4.6], [L.arches.x1, z, 4.6]]),
+    ...(w.promenade?.bollards || []).map((b) => [b.base.x, b.base.z, 3.2]),
   ];
   const nearSolid = (f, base) => {
     const reach = Math.hypot(f.dir.x, f.dir.z) * f.top.distanceTo(f.base) + 0.8 * bloomRadius(f) + Math.max(1.2, 0.5 * f.scale + 0.6) + 0.01;

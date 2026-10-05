@@ -7,6 +7,7 @@ import { clamp, smoother, sseg, lerp } from '../core/ease.js';
 import { L } from './layout.js';
 import { swayMesh, zeroSway, pivotParts, wholeFlex, bendAngle, washAt, gust } from './wind.js';
 import { leafDome } from './dome.js';
+import { bloomPetalTextures } from '../materials/textures.js';
 
 // The far-field ecosystem: several hundred simpler mechanical plants built
 // from the same parts as the hero pieces, instanced for smooth wide shots.
@@ -18,19 +19,94 @@ const STEM_K = [0.011, 0.006, 1.25, 0];
 const STEM_WASH = 0.03;
 const ORB_K = [0.016, 0.01, 1.6, 0];
 
-// a flower's petals: [cos, sin] of half each petal's heading (π/2 − φ) and its
-// offset from the head, as the Euler in update() used them
-function petalFrame(f, n) {
-  const a = new Float64Array(n * 4);
-  for (let i = 0; i < n; i++) {
-    const phi = f.yaw + (i / n) * TAU;
-    const y = (Math.PI / 2 - phi) / 2;
-    a[i * 4] = Math.cos(y);
-    a[i * 4 + 1] = Math.sin(y);
-    a[i * 4 + 2] = Math.cos(phi) * 1.2 * f.scale;
-    a[i * 4 + 3] = Math.sin(phi) * 1.2 * f.scale;
+// a flower's petals, ring by ring: [cos, sin] of half each petal's heading
+// (π/2 − φ) and its offset from the head, as the Euler in update() used them
+function petalFrame(f, ty) {
+  const a = new Float64Array(ty.petals * 4);
+  let i = 0;
+  for (const R of ty.rings) {
+    for (let j = 0; j < R.n; j++, i++) {
+      const phi = f.yaw + R.turn + (j / R.n) * TAU;
+      const y = (Math.PI / 2 - phi) / 2;
+      a[i * 4] = Math.cos(y);
+      a[i * 4 + 1] = Math.sin(y);
+      a[i * 4 + 2] = Math.cos(phi) * R.r * f.scale;
+      a[i * 4 + 3] = Math.sin(phi) * R.r * f.scale;
+    }
   }
   return a;
+}
+
+// the heart of a bloom: a fan of gilt filaments, each tipped with an anther
+// that glows (unit: one flower scale; up = along the stem)
+function stamenGeometry() {
+  const fil = [], bead = [];
+  const n = 9;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * TAU + (i % 2) * 0.2;
+    const r0 = 0.35, r1 = 1.5 + (i % 3) * 0.45, h = 3.3 + ((i * 7) % 5) * 0.35;
+    const c = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(Math.cos(a) * r0, 0.2, Math.sin(a) * r0),
+      new THREE.Vector3(Math.cos(a) * r0 * 1.2, h * 0.75, Math.sin(a) * r0 * 1.2),
+      new THREE.Vector3(Math.cos(a) * r1, h, Math.sin(a) * r1),
+    );
+    fil.push(new THREE.TubeGeometry(c, 4, 0.075, 3, false));
+    const b = new THREE.IcosahedronGeometry(0.27, 0);
+    b.scale(1, 1.35, 1);
+    const tip = c.getPoint(1);
+    b.translate(tip.x, tip.y + 0.15, tip.z);
+    bead.push(b);
+  }
+  const pistil = new THREE.CylinderGeometry(0.16, 0.24, 3.0, 5);
+  pistil.translate(0, 1.5, 0);
+  fil.push(pistil);
+  const cap = new THREE.OctahedronGeometry(0.38, 0);
+  cap.translate(0, 3.15, 0);
+  bead.push(cap);
+  return { filaments: mergeGeometries(fil.map(posNormal)), beads: mergeGeometries(bead.map(posNormal)) };
+}
+
+// under each bloom: five gilt sepals cupping the petals and a geared collar
+// (unit: one flower scale)
+function calyxGeometry() {
+  const parts = [];
+  const sep = petalGeometry({ length: 3.0, width: 1.5, cup: 0.35, curl: -0.25, thickness: 0.06, segU: 3, segV: 2, tip: 0.85 }).geometry;
+  for (let i = 0; i < 5; i++) {
+    const g = sep.clone();
+    g.rotateX(1.95); // outward and down beneath the petals
+    g.rotateY((i / 5) * TAU + 0.3);
+    g.translate(0, -0.2, 0);
+    parts.push(g);
+  }
+  const boss = new THREE.SphereGeometry(1.25, 8, 3, 0, TAU, Math.PI * 0.5, Math.PI * 0.5);
+  boss.translate(0, 0.1, 0);
+  parts.push(boss);
+  const ring = new THREE.CylinderGeometry(1.15, 1.15, 0.5, 10, 1, true);
+  ring.translate(0, -1.0, 0);
+  parts.push(ring);
+  for (let i = 0; i < 10; i++) {
+    const t = new THREE.BoxGeometry(0.42, 0.5, 0.4);
+    t.translate(1.3, -1.0, 0);
+    t.rotateY((i / 10) * TAU);
+    parts.push(t);
+  }
+  return mergeGeometries(parts.map(posNormal));
+}
+
+// position and normal only (parts from different builders merge)
+function posNormal(g) {
+  const h = g.index ? g.toNonIndexed() : g;
+  for (const k of Object.keys(h.attributes)) if (k !== 'position' && k !== 'normal') h.deleteAttribute(k);
+  return h;
+}
+
+// tinted, glowing porcelain with gilt rims and veins (materials/textures.js)
+function bloomMaterial(tex, glow) {
+  return new THREE.MeshPhysicalMaterial({
+    color: '#ffffff', map: tex.map, roughness: 1, metalness: 1, roughnessMap: tex.orm, metalnessMap: tex.orm,
+    emissive: new THREE.Color(glow), emissiveMap: tex.emissive, emissiveIntensity: 0,
+    clearcoat: 1, clearcoatRoughness: 0.12, sheen: 0.3, sheenColor: new THREE.Color('#ffe2d6'), side: THREE.DoubleSide,
+  });
 }
 
 export class Flora {
@@ -81,21 +157,39 @@ export class Flora {
     this.spots = spots;
 
     // ---- flower types ---------------------------------------------------------
-    const roseMat = new THREE.MeshPhysicalMaterial({ color: '#e0aaa4', roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.1, side: THREE.DoubleSide, sheen: 0.5, sheenColor: new THREE.Color('#ffd8d0') });
+    // Cupped blooms of glowing porcelain (lotus, tulip, rose: tinted glaze,
+    // gilt rims, lit from the heart at night) and the copper asters. Each
+    // type opens in rings: [count, how far it opens (rad from upright), petal
+    // scale, hinge radius, turn]. `open` is the outer ring's, for the planting.
+    const ts = quality.tier === 'low' ? 128 : 256;
+    const lotusMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 31, hinge: [244, 176, 150], mid: [250, 222, 206], tip: [253, 242, 234] }), '#ffcfa0');
+    const tulipMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 37, hinge: [228, 120, 112], mid: [242, 178, 164], tip: [250, 214, 200] }), '#ffa888');
+    const roseMat = bloomMaterial(bloomPetalTextures({ size: ts, seed: 41, hinge: [222, 132, 128], mid: [238, 176, 168], tip: [248, 212, 204] }), '#ffa898');
+    this.bloomMats = [lotusMat, tulipMat, roseMat];
+    const ring = (n, open, sc = 1, r = 1.2, turn = 0) => ({ n, open, sc, r, turn });
     const types = [
-      { name: 'tulip', petals: 6, len: 10, width: 6.6, cup: 1.4, mat: mat.brass, closed: -0.15, open: 0.62, h: [24, 46], stemMat: mat.brassAged, w: 1.0 },
-      { name: 'lily', petals: 6, len: 13, width: 5.2, cup: 1.0, mat: mat.porcelain, closed: -0.2, open: 1.2, h: [30, 66], stemMat: mat.brass, w: 1.0 },
-      { name: 'rose', petals: 9, len: 7.5, width: 7.0, cup: 1.5, mat: roseMat, closed: -0.3, open: 0.55, h: [16, 34], stemMat: mat.copperAged, w: 0.9 },
-      { name: 'copperbloom', petals: 11, len: 9, width: 3.0, cup: 0.6, mat: mat.copper, closed: -0.1, open: 1.4, h: [14, 30], stemMat: mat.copperAged, w: 0.8 },
+      { name: 'tulip', rings: [ring(6, 0.5)], len: 10, width: 6.8, cup: 1.7, tip: 0.35, mat: tulipMat, closed: -0.15, h: [24, 46], stemMat: mat.brassAged, w: 1.0, stamen: 0.9 },
+      { name: 'lily', rings: [ring(8, 0.98), ring(6, 0.42, 0.74, 0.55, 0.26)], len: 13, width: 5.8, cup: 1.4, tip: 0.62, mat: lotusMat, closed: -0.2, h: [30, 66], stemMat: mat.brass, w: 1.0, stamen: 1.15 },
+      { name: 'rose', rings: [ring(9, 0.62), ring(5, 0.22, 0.7, 0.5, 0.35)], len: 7.5, width: 7.0, cup: 1.6, tip: 0.3, mat: roseMat, closed: -0.3, h: [16, 34], stemMat: mat.copperAged, w: 0.9, stamen: 0.75 },
+      { name: 'copperbloom', rings: [ring(11, 1.1)], len: 9, width: 3.0, cup: 0.6, tip: 0.5, mat: mat.copper, closed: -0.1, h: [14, 30], stemMat: mat.copperAged, w: 0.8, stamen: 0.95 },
     ];
+    for (const ty of types) {
+      ty.open = ty.rings[0].open;
+      ty.petals = ty.rings.reduce((a, R) => a + R.n, 0);
+    }
     this.types = types;
     const stemGeo = new THREE.CylinderGeometry(0.32, 0.5, 1, 7, 1);
     stemGeo.translate(0, 0.5, 0);
-    const calyxGeo = new THREE.SphereGeometry(1, 12, 8, 0, TAU, Math.PI * 0.45, Math.PI * 0.55);
+    const calyxGeo = calyxGeometry();
     for (const ty of types) {
-      ty.geo = petalGeometry({ length: ty.len, width: ty.width, cup: ty.cup, curl: 0.45, thickness: 0.12, segU: 8, segV: 7, tip: 0.5 }).geometry;
+      // (coarse for the garden at large; the interactive modes draw the blooms
+      // nearest the camera with finer petals)
+      ty.geo = petalGeometry({ length: ty.len, width: ty.width, cup: ty.cup, curl: 0.45, thickness: 0.12, segU: 7, segV: 5, tip: ty.tip }).geometry;
+      ty.fineGeo = [[13, 9], [26, 16]].map(([u, v]) => petalGeometry({ length: ty.len, width: ty.width, cup: ty.cup, curl: 0.45, thickness: 0.12, segU: u, segV: v, tip: ty.tip }).geometry);
       ty.list = [];
     }
+    // blooms per type drawn fine (within 75 units) and finest (within 28)
+    this.tiers = quality.tier === 'low' ? [{ max: 4, dist: 75 }, { max: 2, dist: 28 }] : [{ max: 8, dist: 75 }, { max: 3, dist: 28 }];
     this.flowers = [];
     const totalW = types.reduce((a, t) => a + t.w, 0);
     for (const sp of spots) {
@@ -116,6 +210,7 @@ export class Flora {
         delay: (Math.hypot(sp.x, sp.z) / 780) * 6.0 + rng.range(-0.3, 0.3),
         sway: rng.range(0, TAU),
       };
+      f.gi = this.flowers.length;
       ty.list.push(f);
       this.flowers.push(f);
     }
@@ -134,15 +229,42 @@ export class Flora {
         s.set(f.scale, d.length(), f.scale);
         this.m4.compose(f.base, q, s);
         stems.setMatrixAt(i, this.m4);
-        s.setScalar(1.7 * f.scale);
+        s.setScalar(f.scale);
         this.m4.compose(f.top, q, s);
         calyx.setMatrixAt(i, this.m4);
       });
-      for (const m of [stems, petals, calyx]) { m.castShadow = true; m.receiveShadow = true; }
+      // the fine tiers: a mesh each, its blooms (this frame, in slot order)
+      ty.fine = this.tiers.map((T, k) => {
+        const mesh = new THREE.InstancedMesh(ty.fineGeo[k], ty.mat, T.max * ty.petals);
+        mesh.count = 0;
+        mesh.frustumCulled = false;
+        mesh.castShadow = mesh.receiveShadow = true;
+        swayMesh(mesh, 'petal', { clone: true });
+        this.group.add(mesh);
+        return { ...T, mesh, geo: ty.fineGeo[k], near: [] };
+      });
+      for (const m of [stems, petals, calyx]) { m.castShadow = m !== calyx; m.receiveShadow = true; }
       (this.smallCalyx ??= []).push(calyx);
       this.group.add(stems, petals, calyx);
       swayMesh(petals, 'petal', { clone: true });
-      this.inst.push({ ty, petals, stems, calyx });
+      this.inst.push({ ty, petals, stems, calyx, fine: ty.fine.map((x) => x.mesh) });
+    }
+    // every bloom's heart: gilt filaments and glowing anthers (one set for all)
+    {
+      const st = stamenGeometry();
+      const nF = this.flowers.length;
+      this.filaments = new THREE.InstancedMesh(st.filaments, mat.gold, nF);
+      this.anthers = new THREE.InstancedMesh(st.beads, new THREE.MeshBasicMaterial({ color: '#ffffff' }), nF);
+      const c0 = new THREE.Color(0.05, 0.03, 0.01);
+      this.flowers.forEach((f, i) => {
+        q.setFromUnitVectors(up, f.top.clone().sub(f.base).normalize());
+        this.m4.compose(f.top, q, s.setScalar(f.scale * f.ty.stamen));
+        this.filaments.setMatrixAt(i, this.m4);
+        this.anthers.setMatrixAt(i, this.m4);
+        this.anthers.setColorAt(i, c0);
+      });
+      this.filaments.receiveShadow = true;
+      this.group.add(this.filaments, this.anthers);
     }
 
     // ---- leaves: clusters at each plant base, plus large elephant-ear leaves -
@@ -283,7 +405,7 @@ export class Flora {
     }
     this.group.add(this.orbMesh, orbStems);
 
-    this.smallCasters.push(...this.smallCalyx);
+    // (the gilt calyces cast no shadow: sub-pixel in the sun's map, and many)
     this._buildShrubs(mat, rng, density);
     this._buildArch(mat, rng);
     this._buildFountain(mat);
@@ -391,7 +513,8 @@ export class Flora {
     const z = -560;
     const g = new THREE.Group();
     g.position.set(xc, 0, z);
-    const stone = new THREE.MeshStandardMaterial({ color: '#a39782', roughness: 0.8 });
+    // (dark polished stone, like the path's)
+    const stone = new THREE.MeshPhysicalMaterial({ color: '#6e675c', roughness: 0.55, clearcoat: 0.4, clearcoatRoughness: 0.25 });
     const basin = new THREE.Mesh(new THREE.CylinderGeometry(46, 50, 10, 48, 1, true), stone);
     basin.position.y = 5;
     const rim = new THREE.Mesh(new THREE.TorusGeometry(47, 2.4, 8, 64), stone);
@@ -439,14 +562,21 @@ export class Flora {
     const view = live ? this.view : null;
     const frame = (this._frame = (this._frame || 0) + 1);
     const sph = this._sph || (this._sph = new THREE.Sphere());
+    const cand = this._cand || (this._cand = []);
     for (const { ty, petals, stems, calyx } of this.inst) {
       let idx = 0;
+      cand.length = 0;
       ty.list.forEach((f, fi) => {
         if (view) {
           sph.center.copy(f.base).lerp(f.top, 0.5);
           sph.radius = f.top.distanceTo(f.base) * 0.5 + ty.len * f.scale * 1.4 + 4;
           const d = sph.center.distanceTo(view.camera.position);
-          if (!view.frustum.intersectsSphere(sph) || (d > 220 && (fi + frame) % 2)) { idx += ty.petals; return; }
+          // (a bloom drawn fine last frame is always re-posed: its coarse petals are hidden)
+          if (!f.fine && (!view.frustum.intersectsSphere(sph) || (d > 220 && (fi + frame) % 2))) { idx += ty.petals; return; }
+          f.fine = false;
+          // (ranked by the distance to its head)
+          const dh = f.top.distanceTo(view.camera.position);
+          if (dh < 75 && view.frustum.intersectsSphere(sph)) cand.push(dh, fi);
         }
         // heavy brass stems barely move: the head rides a slow lean with the
         // gusts, and a passing bee's wash nudges it aside
@@ -464,29 +594,70 @@ export class Flora {
         s.set(f.scale, d.length(), f.scale);
         this.m4.compose(f.base, qs, s);
         stems.setMatrixAt(fi, this.m4);
-        s.setScalar(1.7 * f.scale);
+        s.setScalar(f.scale);
         this.m4.compose(f.topNow, qs, s);
         calyx.setMatrixAt(fi, this.m4);
+        this.m4.compose(f.topNow, qs, s.setScalar(f.scale * ty.stamen));
+        this.filaments.setMatrixAt(f.gi, this.m4);
+        this.anthers.setMatrixAt(f.gi, this.m4);
         const k = live ? live.open(f, t) : smoother(clamp((t - wave0 - f.delay) / 1.8));
+        f.openK = k;
         const sway = Math.sin(t * 0.9 + f.sway) * 0.02 - (gust(f.base.x, f.base.z, t) - 0.3) * 0.035;
-        // (wide open stops just below horizontal: petals never sweep down into the leaves)
-        const tilt = Math.min(1.75, lerp(ty.closed, ty.open, k) + sway) / 2;
-        const cx = Math.cos(tilt), sx = Math.sin(tilt);
         // each petal's fixed heading round the head (the Euler YXZ (tilt, π/2 − φ, 0)
-        // as three composes it, its fixed half computed once)
-        const pet = f._pet || (f._pet = petalFrame(f, ty.petals));
-        s.setScalar(f.scale);
-        for (let i = 0, j = 0; i < ty.petals; i++, j += 4) {
-          const cy = pet[j], sy = pet[j + 1];
-          q.set(sx * cy, cx * sy, -(sx * sy), cx * cy);
-          p.set(pet[j + 2], 0, pet[j + 3]).add(f.topNow);
-          this.m4.compose(p, q, s);
-          petals.setMatrixAt(idx++, this.m4);
+        // as three composes it, its fixed half computed once), ring by ring
+        const pet = f._pet || (f._pet = petalFrame(f, ty));
+        let i = 0, j = 0;
+        for (const R of ty.rings) {
+          // (wide open stops just below horizontal: petals never sweep down into the leaves)
+          const tilt = Math.min(1.75, lerp(ty.closed, R.open, k) + sway) / 2;
+          const cx = Math.cos(tilt), sx = Math.sin(tilt);
+          s.setScalar(f.scale * R.sc);
+          for (let e = 0; e < R.n; e++, i++, j += 4) {
+            const cy = pet[j], sy = pet[j + 1];
+            q.set(sx * cy, cx * sy, -(sx * sy), cx * cy);
+            p.set(pet[j + 2], 0, pet[j + 3]).add(f.topNow);
+            this.m4.compose(p, q, s);
+            petals.setMatrixAt(idx++, this.m4);
+          }
         }
       });
+      // the nearest blooms: their petals move to the fine meshes (the very
+      // nearest to the finest), and the coarse ones fold to nothing
+      for (const T of ty.fine) T.near.length = 0;
+      if (view && cand.length) {
+        const order = [];
+        for (let c = 0; c < cand.length; c += 2) order.push(c);
+        order.sort((a, b) => cand[a] - cand[b]);
+        const src = petals.instanceMatrix.array, P = ty.petals;
+        const [mid, macro] = ty.fine;
+        for (const c of order) {
+          const d = cand[c], fi = cand[c + 1], f = ty.list[fi];
+          const T = d < macro.dist && macro.near.length < macro.max ? macro : mid.near.length < mid.max ? mid : null;
+          if (!T) break;
+          f.fine = true;
+          T.mesh.instanceMatrix.array.set(src.subarray(fi * P * 16, (fi + 1) * P * 16), T.near.length * P * 16);
+          T.near.push(f);
+          src.fill(0, fi * P * 16, (fi + 1) * P * 16);
+        }
+      }
+      for (const T of ty.fine) { T.mesh.count = T.near.length * ty.petals; T.mesh.instanceMatrix.needsUpdate = true; }
       petals.instanceMatrix.needsUpdate = true;
       stems.instanceMatrix.needsUpdate = true;
       calyx.instanceMatrix.needsUpdate = true;
+    }
+    this.filaments.instanceMatrix.needsUpdate = true;
+    this.anthers.instanceMatrix.needsUpdate = true;
+    // the film: the anthers and petals kindle as the bloom wave opens them
+    // (the interactive modes light them per bloom: explore/night.js)
+    if (!live) {
+      const ac = this._ac || (this._ac = new THREE.Color());
+      for (const f of this.flowers) {
+        const g = 0.05 + 1.1 * (f.openK ?? 0) * (1 - ctx.dawn * 0.5);
+        this.anthers.setColorAt(f.gi, ac.setRGB(g * 0.95, g * 0.55, g * 0.22));
+      }
+      this.anthers.instanceColor.needsUpdate = true;
+      const kw = sseg(t, wave0, wave0 + 3) * (1 - ctx.dawn * 0.7);
+      for (const m of this.bloomMats) m.emissiveIntensity = 0.12 * kw;
     }
     // seed lanterns nod on their copper stalks
     this.orbs.forEach((o, i) => {

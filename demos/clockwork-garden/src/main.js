@@ -218,6 +218,16 @@ async function boot() {
     explore.enter('follow');
     explore.update(1 / 60, null);
     explore.render(1 / 60);
+    // (and once down the promenade and among the blooms at night, so the
+    // wet path, the arches, the globes and the glowing petals are drawn here,
+    // not in the first seconds of flying)
+    const V3 = explore.actor.pos.constructor;
+    explore.tod.value = 0;
+    for (const [p, q] of [[[70, 24, -330], [70, 48, -570]], [[44, 46, -96], [14, 38, -128]]]) {
+      explore.debugView = { pos: new V3(...p), target: new V3(...q), fov: 55, aperture: 1.5 };
+      explore.render(1 / 60);
+    }
+    explore.debugView = null;
     explore.tod.value = keep;
     explore.exit();
   }

@@ -73,7 +73,12 @@ export class Garden {
 
     // ---- path ------------------------------------------------------------
     const flagGeo = new THREE.BoxGeometry(1, 1, 1);
-    const flagMat = new THREE.MeshStandardMaterial({ color: '#b3a68f', map: tex.stone, roughness: 0.8 });
+    // polished dark flagstones that hold a sheen (the interactive modes wet
+    // them at night and mirror the lamps in them: explore/wetpath.js)
+    const flagMat = new THREE.MeshPhysicalMaterial({ color: '#7d7465', map: tex.stone, roughness: 0.5, clearcoat: 0.55, clearcoatRoughness: 0.2 });
+    const curbMat = new THREE.MeshPhysicalMaterial({ color: '#958a76', map: tex.stone, roughness: 0.62, clearcoat: 0.3, clearcoatRoughness: 0.3 });
+    this.flagMat = flagMat;
+    this.curbMat = curbMat;
     const flags = [];
     const pw = L.pathX[1] - L.pathX[0];
     for (let z = H.z0 - 10; z > H.z1 + 10; z -= 26) {
@@ -100,9 +105,12 @@ export class Garden {
     });
     fl.receiveShadow = true;
     this.group.add(fl);
+    this.flagMesh = fl;
+    this.curbs = [];
     // stone curbs
     for (const x of [L.pathX[0] - 2, L.pathX[1] + 2]) {
-      const curb = new THREE.Mesh(new THREE.BoxGeometry(5, 7, H.z0 - H.z1 - 40), flagMat);
+      const curb = new THREE.Mesh(new THREE.BoxGeometry(5, 7, H.z0 - H.z1 - 40), curbMat);
+      this.curbs.push(curb);
       curb.position.set(x, 1, (H.z0 + H.z1) / 2);
       curb.receiveShadow = true;
       curb.castShadow = true;
@@ -175,13 +183,13 @@ export class Garden {
     const coreGeo = new THREE.SphereGeometry(1.6, 12, 8);
     this.lampCoreMat = new THREE.MeshBasicMaterial({ color: '#ffb257' });
     const orbMat = mat.glass;
-    const zs = [-40, -190, -340, -470];
-    for (const z of zs) {
-      for (const x of [L.pathX[0] - 7, L.pathX[1] + 7]) {
+    // (between the promenade's arches: layout.js)
+    for (const [x, z] of L.lampSpots) {
+      {
         const h = 62;
         const post = new THREE.Mesh(postGeo, mat.brassAged);
         post.scale.set(1, h, 1);
-        post.position.set(x, 0, z + (x > 60 ? 40 : 0));
+        post.position.set(x, 0, z);
         const orb = new THREE.Mesh(orbGeo, orbMat);
         orb.position.set(post.position.x, h + 5, post.position.z);
         const core = new THREE.Mesh(coreGeo, this.lampCoreMat.clone());

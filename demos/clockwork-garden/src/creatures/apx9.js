@@ -9,7 +9,7 @@ import { K, abdomenR, buildNetwork, yLE, surfaceZ, TAG, XT, mk } from './apx9Sha
 // (demos/apx9-bee), rebuilt at film scale. Same blueprint (apx9Shape.js):
 // gloss-yellow armour and dense yellow fur banded in black, hex-faceted black
 // compound eyes in riveted yellow bezels, black-and-gold antennae, smart-glass
-// wings with a gold vein lattice on a black spar, chrome flight drives, six
+// wings with a gold vein lattice (its nodes glowing) on a black spar, chrome flight drives, six
 // chunky yellow legs with chrome knee wheels and gold clamp feet, a pollen
 // drum with a golden brush under the head, pollen brushes on the hind legs and
 // a pollen gauge on the abdomen cuff.
@@ -50,6 +50,7 @@ const FINISH = {
   blueLens: ['#9fdcff', 0.2, 0.1, 1, 0.35],
   orange: ['#ff8a26', 0, 0.4, 0.3, 1.8],
   amber: ['#ffb020', 0, 0.4, 0.3, 2.2],
+  node: ['#ffcf70', 0.3, 0.3, 0.5, 0.5], // the wing lattice's glowing nodes
 };
 const finishCache = {};
 function finish(name) {
@@ -429,7 +430,8 @@ function wingParts(hero) {
   }
   if (hero) {
     const stud = new THREE.SphereGeometry(0.3 * W, 6, 4);
-    for (const v of net.verts) if (v.deg >= 3 || v.rim) kit.add(stud, 'steel', T(P(v.x, v.y, 0.05)));
+    // (each node of the lattice a small warm light, like a honeycomb strung with lamps)
+    for (const v of net.verts) if (v.deg >= 3 || v.rim) kit.add(stud, 'node', T(P(v.x, v.y, 0.05)));
     // "smart glass": a few chips and an amber status bar on the membrane
     const chip = new THREE.BoxGeometry(1.0 * W, 0.12 * W, 0.7 * W);
     for (const [x, y] of [[10.5, -3.2], [14.6, -5.6], [17.6, -2.6]]) kit.add(chip, 'gunmetal', T(P(x, y, 0.08), [0, -0.12, 0]));

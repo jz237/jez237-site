@@ -49,7 +49,25 @@ when it is ready the one dissolves into the other over about 0.6 s.
 ### A night that glows
 
 At night the garden is at its most magical: midnight teal with amber pools of
-light. Every hanging lantern, path lamp and seed lantern lights the foliage,
+light. The path is an avenue: pointed iron arches in every bay of the vault
+(gilded bands and capitals, a twin rib laddered with rings, cusps, scrolled
+ears, climbing roses), a lantern under each apex and one on a scroll bracket on
+either upright, strings of fairy lights sagging from arch to arch, opal globe
+lamps lining both curbs, lanterns on brackets on every column of the vault and
+banners hung from them. The flagstones are polished dark stone; at night dew
+lies on them in sheets and puddles and every lamp along the path is mirrored in
+them, stretched into the long streaks of light a wet floor makes (a small
+mirrored render of the path's lights, read back through a streak blur and
+Fresnel). Fly fast down the path and the globes light up one after another
+ahead of you.
+
+The blooms are glazed porcelain lit from the heart: two-ringed lotus cups,
+tulips and roses in peach, blush and rose, with gilt rims, veins that glow,
+gilt stamens tipped with glowing anthers and a geared, gilded calyx under every
+head; the copper asters keep their metal. The blooms nearest the camera are
+drawn with finer petals.
+
+Every hanging lantern, path lamp and seed lantern lights the foliage,
 blooms, path, iron and APX-9 around it (with the great bloom's core, the
 skep's doorway, the glass blossom, the seedpods, the armillary, sprouted glass
 blooms, every pollinated bloom and the firefly swarms): a light field of a
@@ -60,9 +78,10 @@ and sparks, so a night flight leaves a warmer trail. Porcelain blooms and bells
 glow from within (brighter when pollinated or when a bee comes near), the great
 bloom's core is a lantern, the glass shimmers. Clockwork fireflies drift in
 swarms over the beds and the fountain's water, blink in slow waves, brighten and
-drift aside as APX-9 goes by and scatter when it boosts through. The moon is the key light: cool,
-through the vault's iron (its ribs, purlins and columns shadow the beds, as the
-sun's do by day), with faint moon shafts, stars and the moon in the roof.
+drift aside as APX-9 goes by and scatter when it boosts through. The moon edges
+the night: cool, through the vault's iron (its ribs, purlins and columns shadow
+the beds, as the sun's do by day), with faint moon shafts, stars and the moon in
+the roof. APX-9's wing lattice glows at its nodes.
 
 ### What you can do in the garden
 
@@ -82,7 +101,7 @@ sun's do by day), with faint moon shafts, stars and the moon in the roof.
   light climbs the stem, the great bloom answers and a **bloom wave**
   ripples out across the house (petals snap shut and spring open, a golden
   curtain and sparks travel with the front, every lantern kindles).
-- **Lanterns, seed lanterns and path lamps** kindle as you pass (by day they
+- **Lanterns, seed lanterns, path lamps and the globes along the path** kindle as you pass (by day they
   light up; at night they flare up from their evening glow to full brightness).
 - **Porcelain bellflowers** (new: 18 plants, about 110 bells, tuned to D-major
   pentatonic) swing and ring when brushed.
@@ -104,8 +123,9 @@ sun's do by day), with faint moon shafts, stars and the moon in the roof.
   golden-hour finale. `T` cycles midnight → dusk → dawn → golden hour and the
   garden glides there (the lanterns kindle or go out one by one, the
   fireflies come and go); the menu's slider goes anywhere in between.
-- **Photo mode** (`P`): interface hidden, world frozen, free camera; `Enter`
-  or *Save PNG* downloads the frame.
+- **Photo mode** (`P`): interface hidden, world frozen, free camera (keeping
+  the shot's focus: the subject sharp, the rest soft); `Enter` or *Save PNG*
+  downloads the frame.
 - **Sound** (`M` or the menu): wing buzz that follows wingbeat and speed, the
   pollen drum, escapement ticks by distance, bells, ratchet and root swell
   when winding, a pad whose chord follows the hour. Off until you turn it on.
@@ -301,7 +321,9 @@ src/materials/                 procedural textures, material library, pulse shad
 src/geometry/                  gears (meshing math), parts (screws, jewels, rods), surfaces (petals, leaves),
                                leaf (the parametric enamel leaf, GLSL + CPU twin), intersect (exact part crossing)
 src/world/                     escapement, root crown, roots, hero flower (+ porcelain bud sheath), props, garden,
-                               flora, foliage (far-field lushness, ivy, palms, lanterns), greenhouse, sky,
+                               flora (glazed blooms in rings, stamens, geared calyces, fine petals near the camera),
+                               foliage (far-field lushness, ivy, palms, lanterns), greenhouse, sky,
+                               promenade (the path's arches, globe lamps, fairy lights, banners),
                                atmosphere (shafts, dust), lighting, environment maps,
                                lightfield (the interactive modes' lamp light: a clustered light list in every
                                lit material, the vault's iron as a light cookie, the hour's environment blend),
@@ -322,6 +344,7 @@ src/explore/                   the interactive modes:
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
                                  the hour glides to its target (midnight, dusk, dawn, golden hour)
+  wetpath.js                     the wet path: dew on the flagstones, the path's lights mirrored in it
   night.js · fireflies.js        the night: light-field sources, ambient kindling, haloes, glowing blooms and glass,
                                  moon shafts; clockwork fireflies
   bounds.js                      flight volume: analytic ground, walls, vault, ~4,000 collider shapes, landables

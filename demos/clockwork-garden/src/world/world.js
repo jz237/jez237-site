@@ -7,6 +7,7 @@ import { Greenhouse } from './greenhouse.js';
 import { Garden } from './garden.js';
 import { Flora } from './flora.js';
 import { Foliage } from './foliage.js';
+import { Promenade } from './promenade.js';
 import { resolvePlanting } from './planting.js';
 import { Atmosphere } from './atmosphere.js';
 import { Lighting } from './lighting.js';
@@ -30,6 +31,8 @@ export function buildWorld(scene, mat, tex, quality) {
   scene.add(w.greenhouse.group);
   w.garden = new Garden(mat, quality, tex);
   scene.add(w.garden.group);
+  w.promenade = new Promenade(mat, quality);
+  scene.add(w.promenade.group);
   w.flora = new Flora(mat, quality);
   scene.add(w.flora.group);
   w.foliage = new Foliage(mat, quality, w.flora);
@@ -171,6 +174,7 @@ export function buildWorld(scene, mat, tex, quality) {
     w.roots.update(t, ctx);
     w.flower.update(t, ctx);
     w.garden.update(t, ctx);
+    w.promenade.update(t, ctx);
     w.flora.update(t, ctx);
     w.foliage.update(t, ctx);
     w.skep.update(t, ctx);
@@ -226,6 +230,7 @@ export function buildWorld(scene, mat, tex, quality) {
     w.roots.update(t, ctx);
     w.flower.update(t, ctx);
     w.garden.update(t, ctx);
+    w.promenade.update(t, ctx);
     w.flora.update(t, ctx);
     w.foliage.update(t, ctx);
     w.skep.update(t, ctx);

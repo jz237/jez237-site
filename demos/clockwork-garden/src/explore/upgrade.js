@@ -52,9 +52,14 @@ function bloomGlow(m, color, strength, key) {
       .replace('#include <common>', '#include <common>\nuniform vec3 uBloomK; varying float vBG; varying float vPU;')
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         {
-          // lit from the heart of the bloom: brightest at the petal's foot, a
-          // translucent glow through the thin edge
-          float heart = mix(1.0, 0.3, smoothstep(0.0, 0.95, vPU));
+          // lit from the heart of the bloom: brightest at the petal's foot and
+          // along its veins (the painted porcelain's glow map; the gilding
+          // blocks it), a translucent glow through the thin edge
+          #ifdef USE_EMISSIVEMAP
+            vec3 heart = texture2D(emissiveMap, vEmissiveMapUv).rgb;
+          #else
+            vec3 heart = vec3(mix(1.0, 0.3, smoothstep(0.0, 0.95, vPU)));
+          #endif
           float ndv = abs(dot(normal, normalize(vViewPosition)));
           totalEmissiveRadiance += uBloomK * vBG * heart * (0.75 + 0.5 * pow(1.0 - ndv, 2.0));
         }`);
@@ -279,10 +284,10 @@ export class LookUpgrade {
     // flora: stem/base leaves, shrubs, ferns, petals, the rose arch
     const floraLeaf = new Map(fl.leafMats.map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-leaf-' + m.id, side: -1 }), 'leaf')]));
     const shrub = new Map((fl.shrubMats || []).map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-shrub-' + m.id, side: -1 }), 'dome')]));
-    const petals = new Set(fl.inst.map((x) => x.petals));
+    const petals = new Set(fl.inst.flatMap((x) => [x.petals, ...x.fine]));
     // how each bloom glows from within at night: porcelain and roses most, metal cups a little
-    const GLOWS = { lily: ['#ffd2a0', 0.16], rose: ['#ffb0a0', 0.12], tulip: ['#ffb060', 0.045], copperbloom: ['#ff9050', 0.04] };
-    const typeOf = new Map(fl.inst.map((x) => [x.petals, x.ty.name]));
+    const GLOWS = { lily: ['#ffcf9c', 0.55], rose: ['#ffa898', 0.45], tulip: ['#ffa284', 0.45], copperbloom: ['#ff9050', 0.05] };
+    const typeOf = new Map(fl.inst.flatMap((x) => [x.petals, ...x.fine].map((m) => [m, x.ty.name])));
     const petalMats = new Map();
     for (const o of fl.group.children) {
       if (!o.isMesh) continue;
@@ -296,7 +301,8 @@ export class LookUpgrade {
       } else if (petals.has(o) || (fl.archParts || []).includes(o)) {
         if (!petalMats.has(o.material)) {
           const side = o === fl.archParts?.[1] ? -1 : 0; // the arch's leaves are re-planted
-          let m = withDither(fresh(o.material), 'petal-' + o.material.id, side);
+          // (a bloom type's coarse and fine petals share one program)
+          let m = withDither(fresh(o.material), 'petal-' + (typeOf.get(o) || o.material.id), side);
           const gl = GLOWS[typeOf.get(o)];
           if (gl) m = bloomGlow(m, gl[0], gl[1], typeOf.get(o));
           petalMats.set(o.material, keepSway(o, m));
@@ -335,7 +341,7 @@ export class LookUpgrade {
   tileStatic(world, mat) {
     const fl = world.flora, fo = world.foliage;
     // swaying on the CPU each frame: never frozen into tiles
-    const dynamic = new Set([...fl.inst.flatMap((x) => [x.petals, x.stems, x.calyx]), fl.orbMesh, fl.orbStems, fo.flames, fo.lanternFrames, fo.lanternGlass, fo.lanternChains]);
+    const dynamic = new Set([...fl.inst.flatMap((x) => [x.petals, ...x.fine, x.stems, x.calyx]), fl.filaments, fl.anthers, fl.orbMesh, fl.orbStems, fo.flames, fo.lanternFrames, fo.lanternGlass, fo.lanternChains]);
     const material = (o) => this.swaps.find((s) => s.obj === o && s.prop === 'material')?.explore ?? o.material;
     const geometry = (o) => this.swaps.find((s) => s.obj === o && s.prop === 'geometry')?.explore ?? o.geometry;
     for (const root of [fl.group, fo.group]) {

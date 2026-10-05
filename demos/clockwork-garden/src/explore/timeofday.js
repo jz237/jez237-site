@@ -122,9 +122,10 @@ export class TimeOfDay {
     // by night the key is the moon: cool, a little stronger, so the iron's shadows read
     const sunI = L.sun.intensity * (1 + P.night * 2.6);
     L.sun.color.lerp(MOON, P.moon);
-    L.sun.intensity = lerp(sunI, lerp(3.4, 1.5, sseg(d, 0.0, 0.3)), P.moon);
+    // (a quieter moon than it was: the lamps carry the night, the moon edges it)
+    L.sun.intensity = lerp(sunI, lerp(2.1, 1.3, sseg(d, 0.0, 0.3)), P.moon);
     // a gentle teal ambient so shadows are never black (bluer and brighter at dusk)
-    L.hemi.intensity = L.baseHemi * (1.3 + P.night * 0.35);
+    L.hemi.intensity = L.baseHemi * (1.3 - P.night * 0.25);
     L.hemi.color.lerp(this._c.copy(HEMI_NIGHT).lerp(HEMI_DUSK, P.dusk), P.night);
     // dawn: a lilac sky light and a rose-gold low sun through the mist
     L.hemi.color.lerp(HEMI_DAWN, P.dawn * 0.45);
@@ -147,7 +148,7 @@ export class TimeOfDay {
     const P = this.phases(d);
     return {
       exposure: lerp(1.9, 1.02, sseg(d, 0, 1)),
-      bloom: lerp(0.38, 0.3, d) + P.night * 0.06,
+      bloom: lerp(0.38, 0.3, d) + P.night * 0.2,
       vignette: 0.5,
       // god rays: the sun by day; by night faint moon rays through the iron
       godrays: sseg(d, 0.45, 0.95) + P.moon * 0.42,

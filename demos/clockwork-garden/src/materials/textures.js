@@ -501,6 +501,153 @@ export function petalTextures({ size = 512, seed = 17, blush = [236, 196, 160] }
   return { map, orm: ormT, emissive: emT };
 }
 
+// Glowing porcelain for the garden's blooms: a tinted glaze (deepest at the
+// hinge, paling to the tip), a fan of fine veins, a gilt rim round the edge
+// and a gilt claw at the hinge. The emissive map is the light the bloom gives
+// at night, as if lit from its heart: strongest at the hinge, along the veins
+// and through the thin middle of the blade; the gilding blocks it.
+// (u along the petal from hinge to tip = x, v across it = y, as petalGeometry maps them)
+export function bloomPetalTextures({ size = 256, seed = 31, hinge = [240, 170, 150], mid = [248, 214, 200], tip = [252, 238, 228] } = {}) {
+  const W = size, H = size;
+  const rng = new RNG(seed);
+  const col = canvas(W, H), orm = canvas(W, H), emi = canvas(W, H);
+  const c = col.getContext('2d'), o = orm.getContext('2d'), e = emi.getContext('2d');
+  const rgb = (a) => `rgb(${a[0]},${a[1]},${a[2]})`;
+  const g = c.createLinearGradient(0, 0, W, 0);
+  g.addColorStop(0, rgb(hinge));
+  g.addColorStop(0.42, rgb(mid));
+  g.addColorStop(1, rgb(tip));
+  c.fillStyle = g;
+  c.fillRect(0, 0, W, H);
+  // a deeper blush toward the edges, faint glaze variation
+  const side = c.createLinearGradient(0, 0, 0, H);
+  side.addColorStop(0, `rgba(${hinge[0]},${hinge[1]},${hinge[2]},0.35)`);
+  side.addColorStop(0.25, 'rgba(0,0,0,0)');
+  side.addColorStop(0.75, 'rgba(0,0,0,0)');
+  side.addColorStop(1, `rgba(${hinge[0]},${hinge[1]},${hinge[2]},0.35)`);
+  c.fillStyle = side;
+  c.fillRect(0, 0, W, H);
+  for (let i = 0; i < 90; i++) {
+    c.fillStyle = `rgba(255,${rng.range(220, 250)},${rng.range(205, 240)},0.05)`;
+    c.beginPath();
+    c.ellipse(rng.range(0, W), rng.range(0, H), rng.range(8, 40), rng.range(4, 16), rng.range(0, 3), 0, Math.PI * 2);
+    c.fill();
+  }
+  // ORM: glaze (roughness ~0.3, not metal)
+  o.fillStyle = 'rgb(255,76,0)';
+  o.fillRect(0, 0, W, H);
+  // emissive: the heart's light, fading along the blade, a translucent middle
+  const eg = e.createLinearGradient(0, 0, W, 0);
+  eg.addColorStop(0, '#ffffff');
+  eg.addColorStop(0.35, '#b8aca0');
+  eg.addColorStop(0.8, '#5a5048');
+  eg.addColorStop(1, '#3a332e');
+  e.fillStyle = eg;
+  e.fillRect(0, 0, W, H);
+  const mid2 = e.createLinearGradient(0, 0, 0, H);
+  mid2.addColorStop(0, 'rgba(0,0,0,0.55)');
+  mid2.addColorStop(0.3, 'rgba(0,0,0,0)');
+  mid2.addColorStop(0.7, 'rgba(0,0,0,0)');
+  mid2.addColorStop(1, 'rgba(0,0,0,0.55)');
+  e.fillStyle = mid2;
+  e.fillRect(0, 0, W, H);
+  // veins: a fan from the hinge, glowing a little brighter than the blade
+  for (let k = 0; k < 13; k++) {
+    const v = (k + 0.5) / 13;
+    const y1 = H * (0.5 + (v - 0.5) * 0.92);
+    for (const [ctx, style, wd] of [[e, 'rgba(255,242,224,0.8)', 0.013], [c, `rgba(${hinge[0] - 40},${hinge[1] - 55},${hinge[2] - 55},0.45)`, 0.008]]) {
+      ctx.strokeStyle = style;
+      ctx.lineWidth = W * wd;
+      ctx.beginPath();
+      ctx.moveTo(0, H / 2 + (v - 0.5) * H * 0.12);
+      ctx.bezierCurveTo(W * 0.3, H / 2 + (v - 0.5) * H * 0.5, W * 0.6, y1, W * 0.94, y1);
+      ctx.stroke();
+    }
+  }
+  // gilt: the rim just inside the edge and over the tip, the claw at the hinge
+  const gild = (ctx, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, W, H * 0.045);
+    ctx.fillRect(0, H * 0.955, W, H * 0.045);
+    ctx.fillRect(W * 0.965, 0, W * 0.035, H);
+    ctx.fillRect(0, H * 0.3, W * 0.06, H * 0.4);
+  };
+  gild(c, '#e2b45c');
+  gild(o, 'rgb(255,70,190)'); // gilding: roughness 0.27, metalness 0.75 (pure metal reads black against the night)
+  gild(e, '#4a3418'); // (the light catches the gilt edge, dimly)
+  return { map: toTexture(col, { srgb: true, wrap: false }), orm: toTexture(orm, { wrap: false }), emissive: toTexture(emi, { srgb: true, wrap: false }) };
+}
+
+// A hanging banner of the garden: deep teal velvet, a double gilt border, the
+// clockwork bee in a geared ring, a swallow-tailed foot (alpha: cut out)
+export function bannerTexture({ w = 256, h = 640, field = '#0f3a35', gold = '#d4a24c' } = {}) {
+  const cv = canvas(w, h);
+  const c = cv.getContext('2d');
+  const tail = h * 0.86; // where the swallow tail is cut
+  c.clearRect(0, 0, w, h);
+  c.beginPath();
+  c.moveTo(0, 0); c.lineTo(w, 0); c.lineTo(w, h); c.lineTo(w / 2, tail); c.lineTo(0, h); c.closePath();
+  c.save();
+  c.clip();
+  const g = c.createLinearGradient(0, 0, w, 0);
+  g.addColorStop(0, '#0a2925'); g.addColorStop(0.5, field); g.addColorStop(1, '#0a2925');
+  c.fillStyle = g;
+  c.fillRect(0, 0, w, h);
+  // velvet nap: faint vertical streaks
+  const rng = new RNG(7);
+  for (let i = 0; i < 220; i++) { c.fillStyle = `rgba(255,255,255,${rng.range(0.01, 0.03)})`; c.fillRect(rng.range(0, w), 0, rng.range(1, 3), h); }
+  c.restore();
+  c.strokeStyle = gold;
+  c.lineJoin = 'round';
+  const border = (inset, lw) => {
+    c.lineWidth = lw;
+    c.beginPath();
+    c.moveTo(inset, inset); c.lineTo(w - inset, inset); c.lineTo(w - inset, h - inset * 2.2); c.lineTo(w / 2, tail - inset * 0.9); c.lineTo(inset, h - inset * 2.2); c.closePath();
+    c.stroke();
+  };
+  border(10, 5);
+  border(20, 2);
+  // the emblem: a geared ring round a clockwork bee
+  const cx = w / 2, cy = h * 0.4, R = w * 0.3;
+  c.lineWidth = 5;
+  c.beginPath(); c.arc(cx, cy, R, 0, Math.PI * 2); c.stroke();
+  c.fillStyle = gold;
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    c.save(); c.translate(cx + Math.cos(a) * (R + 6), cy + Math.sin(a) * (R + 6)); c.rotate(a);
+    c.fillRect(-5, -6, 10, 12); c.restore();
+  }
+  c.lineWidth = 2;
+  c.beginPath(); c.arc(cx, cy, R - 10, 0, Math.PI * 2); c.stroke();
+  // wings
+  c.globalAlpha = 0.85;
+  for (const s of [-1, 1]) {
+    c.beginPath();
+    c.ellipse(cx + s * 26, cy - 22, 30, 14, s * -0.5, 0, Math.PI * 2);
+    c.stroke();
+    c.beginPath();
+    c.ellipse(cx + s * 22, cy - 2, 20, 9, s * -0.25, 0, Math.PI * 2);
+    c.stroke();
+  }
+  c.globalAlpha = 1;
+  // body: head, thorax, a striped abdomen
+  c.beginPath(); c.arc(cx, cy - 34, 9, 0, Math.PI * 2); c.fill();
+  c.beginPath(); c.ellipse(cx, cy - 14, 13, 14, 0, 0, Math.PI * 2); c.fill();
+  c.beginPath(); c.ellipse(cx, cy + 22, 15, 26, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = field;
+  for (const y of [12, 24, 36]) c.fillRect(cx - 16, cy + y, 32, 4);
+  // antennae
+  c.lineWidth = 2.5;
+  for (const s of [-1, 1]) { c.beginPath(); c.moveTo(cx + s * 4, cy - 41); c.quadraticCurveTo(cx + s * 12, cy - 62, cx + s * 22, cy - 60); c.stroke(); }
+  // a small fleuron above and below
+  c.fillStyle = gold;
+  for (const y of [h * 0.12, h * 0.68]) {
+    c.beginPath(); c.moveTo(cx, y - 12); c.lineTo(cx + 9, y); c.lineTo(cx, y + 12); c.lineTo(cx - 9, y); c.closePath(); c.fill();
+    for (const dx of [-20, 20]) { c.beginPath(); c.arc(cx + dx, y, 4, 0, Math.PI * 2); c.fill(); }
+  }
+  return toTexture(cv, { srgb: true, wrap: false });
+}
+
 // Radial glow sprite (soft disc) for dust motes, pollen and lamp halos.
 export function glowSprite(size = 128) {
   const c = canvas(size);
