@@ -134,8 +134,8 @@ export class Hud {
     const fly = this.mode === 'fly';
     const rows = fly
       ? (t
-        ? [['Left stick', 'fly (forward, back, sideways)'], ['Drag the view', 'look and steer'], ['▲ ▼', 'climb · descend'], ['»', 'boost'], ['Settle', 'descend gently onto a bloom to land and gather pollen'], ['The skep', 'fly into the doorway to deposit pollen']]
-        : [['Mouse', 'steer (click to capture the pointer, Esc to release)'], ['W A S D · ↑ ↓', 'fly forward, back, sideways'], ['← →', 'turn'], ['Space / E · Shift / Q', 'climb · descend'], ['F or hold left mouse', 'boost'], ['Settle on a bloom', 'descend gently onto it to gather pollen'], ['The skep', 'fly into its doorway to deposit'], ['The escapement', 'touch it to wind the garden']])
+        ? [['Left stick', 'up/down: fly forward · back; left/right: turn'], ['Drag the view', 'look around and steer'], ['▲ ▼', 'climb · descend'], ['»', 'boost'], ['Settle', 'descend gently onto a bloom to land and gather pollen'], ['The skep', 'fly into the doorway to deposit pollen']]
+        : [['Mouse', 'steer (click to capture the pointer, Esc to release)'], ['W S · ↑ ↓', 'fly forward · back'], ['A D · ← →', 'turn (the camera turns with you)'], ['Space / E · Shift / Q', 'climb · descend'], ['F or hold left mouse', 'boost'], ['Settle on a bloom', 'descend gently onto it to gather pollen'], ['The skep', 'fly into its doorway to deposit'], ['The escapement', 'touch it to wind the garden']])
       : (t
         ? [['Drag', 'orbit the camera'], ['Pinch', 'zoom'], ['Take the controls', 'fly APX-9 from where it is']]
         : [['Drag', 'orbit the camera'], ['Wheel', 'zoom'], ['C', 'take the controls, from where APX-9 is']]);

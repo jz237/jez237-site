@@ -3,7 +3,9 @@ import { clamp, lerp, smooth } from '../core/ease.js';
 
 // Cameras for the interactive modes.
 //   ChaseCam   third-person flight camera: the view yaw/pitch is the pilot's
-//              look; the bee turns to fly where you look. Lags slightly
+//              look; the bee turns to fly where you look, and left/right
+//              input turns both. Left alone, the view swings round to the
+//              direction of travel. Lags slightly
 //              behind the bee for momentum, widens with speed, never sits
 //              inside a solid (a spring arm against the collision world).
 //   FollowCam  cinematic auto-camera for follow mode: picks framings from
@@ -40,6 +42,7 @@ export class ChaseCam {
     this.pitch = pitch;
     this.anchor.copy(actor.pos);
     this.ready = false;
+    this.lookIdle = 0;
   }
 
   update(dt, actor, input, reduced) {
@@ -47,8 +50,17 @@ export class ChaseCam {
       this.yaw -= input.look.dx;
       this.pitch = clamp(this.pitch - input.look.dy, -1.2, 1.15);
       this.zoom = clamp(this.zoom / input.zoom, 0.45, 3.2);
+      this.lookIdle = Math.abs(input.look.dx) + Math.abs(input.look.dy) > 1e-4 ? 0 : (this.lookIdle ?? 0) + dt;
     }
     const sp = actor.speed;
+    // when nobody is steering the view, swing it round to the way the bee is
+    // actually travelling (sliding along glass, drifting on momentum), so the
+    // camera always looks where you're going. Flying backwards doesn't flip it.
+    const hv = Math.hypot(actor.vel.x, actor.vel.z);
+    if (input && hv > 5 && this.lookIdle > 0.35 && actor.state === 'fly') {
+      const off = wrap(Math.atan2(actor.vel.x, actor.vel.z) - this.yaw);
+      if (Math.abs(off) < 1.9) this.yaw += off * damp((reduced ? 0.8 : 1.6) * clamp((hv - 5) / 12), dt);
+    }
     // the anchor trails the bee a little: speed reads as motion, not a lock-on
     this.anchor.lerp(actor.pos, damp(reduced ? 6 : 9, dt));
     const dir = lookDir(this.yaw, this.pitch, V());

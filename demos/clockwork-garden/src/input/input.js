@@ -2,7 +2,7 @@
 // steer, or drag), wheel, touch (virtual joystick, up/down/boost buttons,
 // drag-to-look, pinch) and gamepads. Produces one intent per frame.
 //
-//   move.x  strafe (-1 left … 1 right)      move.y  forward (1) / back (-1)
+//   move.x  sideways (-1 left … 1 right; turns instead while flying)   move.y  forward (1) / back (-1)
 //   lift    climb (1) / descend (-1)         turn    keyboard yaw (-1 … 1)
 //   boost   0/1                               look    { dx, dy } radians this frame
 //   orbit   { dx, dy } px drag (follow / photo)  zoom   wheel/pinch factor (>1 = closer)
@@ -240,10 +240,20 @@ export class Input {
       x: (k('right') ? 1 : 0) - (k('left') ? 1 : 0) + this.touchMove.x + (gp?.mx || 0),
       y: (k('forward') ? 1 : 0) - (k('back') ? 1 : 0) + this.touchMove.y + (gp?.my || 0),
     };
-    const l = Math.hypot(move.x, move.y);
-    if (l > 1) { move.x /= l; move.y /= l; }
-    const lift = Math.max(-1, Math.min(1, (k('up') ? 1 : 0) - (k('down') ? 1 : 0) + this.touchLift + (gp?.lift || 0)));
-    const turn = (k('turnRight') ? 1 : 0) - (k('turnLeft') ? 1 : 0);
+    const c1 = (v) => Math.max(-1, Math.min(1, v));
+    let turn = (k('turnRight') ? 1 : 0) - (k('turnLeft') ? 1 : 0);
+    // flying: left / right (A D, the joystick, the left stick) turns the bee
+    // and the camera with it, so the view always faces the way you're going.
+    // Photo mode keeps them as a sideways dolly.
+    if (this.mode === 'fly') {
+      turn = c1(turn + move.x);
+      move.x = 0;
+      move.y = c1(move.y);
+    }
+    const l = Math.hypot(move.x, move.y) + Math.abs(turn);
+    const n = Math.hypot(move.x, move.y);
+    if (n > 1) { move.x /= n; move.y /= n; }
+    const lift = c1((k('up') ? 1 : 0) - (k('down') ? 1 : 0) + this.touchLift + (gp?.lift || 0));
     const look = { dx: this.look.dx + (gp ? gp.lx * 2.6 * dt : 0) + turn * 1.9 * dt, dy: this.look.dy + (gp ? gp.ly * 1.8 * dt : 0) };
     const out = {
       move, lift, turn, look,
