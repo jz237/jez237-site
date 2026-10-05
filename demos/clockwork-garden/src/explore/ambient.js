@@ -189,6 +189,66 @@ export class Ambient {
     return all.slice(0, n);
   }
 
+  // does a petal (as posed this frame) cross the line from a to b, leaving out
+  // the last skipB? Exact: the line in each nearby petal's own space against
+  // its triangles (the head test above is only a shape; a hummingbird beside
+  // its bloom was shot straight through the bloom's petals).
+  petalsBlock(a, b, skipB = 0) {
+    const fl = this.world.flora;
+    this._instOf ||= new Map(fl.inst.map((e) => [e.ty, e]));
+    const L = a.distanceTo(b) - skipB;
+    if (L <= 0) return false;
+    const end = a.clone().lerp(b, L / a.distanceTo(b));
+    const seg = new THREE.Line3(a, end), q = V(), M = this._pm || (this._pm = new THREE.Matrix4());
+    const o = V(), e = V(), d = V(), A = V(), B = V(), C = V(), e1 = V(), e2 = V(), h = V(), sv = V(), qq = V();
+    const pad = 28;
+    for (let i = Math.floor((Math.min(a.x, end.x) - pad) / CELL); i <= Math.floor((Math.max(a.x, end.x) + pad) / CELL); i++) {
+      for (let j = Math.floor((Math.min(a.z, end.z) - pad) / CELL); j <= Math.floor((Math.max(a.z, end.z) + pad) / CELL); j++) {
+        for (const c of this.pgrid.get(i * 4096 + j) || []) {
+          const f = c.f, ty = f.ty;
+          const head = f.topNow || f.top;
+          seg.closestPointToPoint(head, true, q);
+          if (q.distanceTo(head) > ty.len * f.scale * 1.25 + 1) continue;
+          const inst = this._instOf.get(ty);
+          if (!inst) continue;
+          f._fi ??= ty.list.indexOf(f);
+          const geo = ty.geo, pos = geo.attributes.position, idx = geo.index;
+          if (!geo.boundingSphere) geo.computeBoundingSphere();
+          const bs = geo.boundingSphere;
+          for (let k = 0; k < ty.petals; k++) {
+            inst.petals.getMatrixAt(f._fi * ty.petals + k, M);
+            M.invert();
+            o.copy(a).applyMatrix4(M);
+            e.copy(end).applyMatrix4(M);
+            d.subVectors(e, o);
+            // quick reject: the line misses the petal's bounding sphere
+            const tt = Math.max(0, Math.min(1, sv.subVectors(bs.center, o).dot(d) / Math.max(d.lengthSq(), 1e-9)));
+            if (qq.copy(o).addScaledVector(d, tt).distanceTo(bs.center) > bs.radius) continue;
+            const n = idx ? idx.count : pos.count;
+            for (let t = 0; t < n; t += 3) {
+              const ia = idx ? idx.getX(t) : t, ib = idx ? idx.getX(t + 1) : t + 1, ic = idx ? idx.getX(t + 2) : t + 2;
+              A.fromBufferAttribute(pos, ia); B.fromBufferAttribute(pos, ib); C.fromBufferAttribute(pos, ic);
+              e1.subVectors(B, A); e2.subVectors(C, A);
+              h.crossVectors(d, e2);
+              const det = e1.dot(h);
+              if (Math.abs(det) < 1e-12) continue;
+              const inv = 1 / det;
+              sv.subVectors(o, A);
+              const u = inv * sv.dot(h);
+              if (u < 0 || u > 1) continue;
+              qq.crossVectors(sv, e1);
+              const v = inv * d.dot(qq);
+              if (v < 0 || u + v > 1) continue;
+              const tHit = inv * e2.dot(qq);
+              if (tHit >= 0 && tHit <= 1) return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   // keep a featured creature doing what it's doing for a while
   hold(obj, dur) { obj.holdUntil = this.t + dur; }
 

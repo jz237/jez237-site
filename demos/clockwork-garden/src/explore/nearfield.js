@@ -968,6 +968,60 @@ export class NearField {
     }
   }
 
+  // does a leaf (at rest) cross the line from a to b? The ends are left out
+  // (within skipA of a: the camera pushes leaves aside; within skipB of b:
+  // the subject's own stem leaves). For cutaway framing (cameras.js).
+  sightBlocked(a, b, skipA = 3, skipB = 2) {
+    if (!this.ready) return false;
+    const d = V().subVectors(b, a);
+    const L = d.length();
+    if (L <= skipA + skipB) return false;
+    d.multiplyScalar(1 / L);
+    const p0 = a.clone().addScaledVector(d, skipA), len = L - skipA - skipB;
+    const p1 = p0.clone().addScaledVector(d, len);
+    const box = [Math.min(p0.x, p1.x), Math.min(p0.y, p1.y), Math.min(p0.z, p1.z), Math.max(p0.x, p1.x), Math.max(p0.y, p1.y), Math.max(p0.z, p1.z)];
+    const st = ++this.hash.stamp;
+    const e1 = V(), e2 = V(), h = V(), sv = V(), q = V(), A = V(), B = V(), C = V();
+    let hit = false;
+    this.hash._cells(box, (k) => {
+      if (hit) return;
+      for (const o of this.hash.map.get(k) || []) {
+        if (o.stamp === st) continue;
+        o.stamp = st;
+        // the segment against the part's box (slabs), then its triangles
+        const bx = o.box;
+        let t0 = 0, t1 = len, out = false;
+        for (let c = 0; c < 3 && !out; c++) {
+          const o0 = p0.getComponent(c), dc = d.getComponent(c);
+          if (Math.abs(dc) < 1e-9) { if (o0 < bx[c] || o0 > bx[c + 3]) out = true; continue; }
+          let ta = (bx[c] - o0) / dc, tb = (bx[c + 3] - o0) / dc;
+          if (ta > tb) { const t = ta; ta = tb; tb = t; }
+          t0 = Math.max(t0, ta); t1 = Math.min(t1, tb);
+          if (t0 > t1) out = true;
+        }
+        if (out || !o.P || !o.T) continue;
+        const P = o.P, T = o.T;
+        for (let i = 0; i < T.length; i += 3) {
+          A.fromArray(P, T[i] * 3); B.fromArray(P, T[i + 1] * 3); C.fromArray(P, T[i + 2] * 3);
+          e1.subVectors(B, A); e2.subVectors(C, A);
+          h.crossVectors(d, e2);
+          const det = e1.dot(h);
+          if (Math.abs(det) < 1e-9) continue;
+          const f = 1 / det;
+          sv.subVectors(p0, A);
+          const u = f * sv.dot(h);
+          if (u < 0 || u > 1) continue;
+          q.crossVectors(sv, e1);
+          const v = f * d.dot(q);
+          if (v < 0 || u + v > 1) continue;
+          const t = f * e2.dot(q);
+          if (t >= 0 && t <= len) { hit = true; return; }
+        }
+      }
+    });
+    return hit;
+  }
+
   // every leaf and frond as world triangles (tools/overlapcheck.mjs)
   forEachPart(cb) {
     const m = new THREE.Matrix4();

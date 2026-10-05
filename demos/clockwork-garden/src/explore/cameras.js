@@ -208,7 +208,7 @@ export class FollowCam {
     const cands = amb.features(actor.pos, 120);
     cands.sort((p, q) => this._score(q, actor) - this._score(p, actor));
     for (const c of cands.slice(0, 4)) {
-      const plan = this._frame(c, amb);
+      const plan = this._frame(c, amb, ctx.nearfield);
       if (!plan) continue;
       const spec = CUTS[c.kind];
       const hold = spec.hold[0] + this._rand() * (spec.hold[1] - spec.hold[0]);
@@ -224,12 +224,12 @@ export class FollowCam {
 
   _score(c, actor) {
     const variety = this.recentKinds.includes(c.kind) ? -2 : 0;
-    const interest = { forager: 2.2, crawler: 2.4, butterfly: 2.2, hummingbird: 2.6, dragonfly: 1.2, songbird: 1.6 }[c.kind] || 1;
+    const interest = { forager: 2.2, crawler: 2.0, butterfly: 2.2, hummingbird: 2.6, dragonfly: 1.2, songbird: 1.6 }[c.kind] || 1;
     return interest + variety - c.pos.distanceTo(actor.pos) / 80 + this._rand() * 0.6;
   }
 
   // a camera spot round the creature with a clear line to it, or null
-  _frame(c, amb) {
+  _frame(c, amb, nf) {
     const spec = CUTS[c.kind];
     const S = c.size;
     const subj = c.pos.clone();
@@ -248,6 +248,8 @@ export class FollowCam {
       const seen = this.bounds.sweep(subj, cam, 0.35);
       if (seen.distanceTo(subj) < d * 0.94) continue;
       if (amb && !amb.clearOfHeads(cam, subj)) continue;
+      if (nf && nf.sightBlocked(cam, subj, 3, 1.2 * S)) continue;
+      if (amb && amb.petalsBlock(cam, subj, 0.6 * S)) continue;
       return { off, yaw, el, d };
     }
     return null;
@@ -267,7 +269,10 @@ export class FollowCam {
     let want = subj.clone().add(off);
     // the orbit has brought something between: hold the last clear spot
     // (relative to the subject); leave only if even that stays blocked
-    const clear = (p) => this.bounds.sweep(subj, p, 0.3).distanceTo(subj) > p.distanceTo(subj) * 0.9 && (!ctx.ambient || ctx.ambient.clearOfHeads(p, subj));
+    // (leaves checked a few times a second)
+    cut.leafT = (cut.leafT ?? 0) - dt;
+    const leaves = (p) => { if (cut.leafT > 0) return true; cut.leafT = 0.25; return !(ctx.nearfield?.sightBlocked(p, subj, 3, 1.2 * cut.c.size) || ctx.ambient?.petalsBlock(p, subj, 0.6 * cut.c.size)); };
+    const clear = (p) => this.bounds.sweep(subj, p, 0.3).distanceTo(subj) > p.distanceTo(subj) * 0.9 && (!ctx.ambient || ctx.ambient.clearOfHeads(p, subj)) && leaves(p);
     if (clear(want)) { cut.blocked = 0; cut.good = want.clone().sub(subj); }
     else {
       want = subj.clone().add(cut.good || cut.off);
