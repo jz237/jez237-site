@@ -4,7 +4,7 @@ import { createMaterials, GEM_COLORS, rng } from './materials.js';
 import { buildPetal } from './petals.js';
 import { buildLeaf } from './leaves.js';
 import { gearPart, buildFiligreeRing, buildCore, buildStamenCage, buildSpindle, washerPart } from './mech.js';
-import { buildBraid, buildCollar, stemPoint, stemTangent } from './stem.js';
+import { buildBraid, buildCollar, stemX, stemPoint, stemTangent, bentStemPoint, bentStemTangent } from './stem.js';
 import { ScrewField } from './screws.js';
 import { clamp01, lerp, smoother } from './geo.js';
 import { POSTER } from './spec.js';
@@ -13,6 +13,13 @@ import { CAMERA, RINGS, OUTER_EXPLODED, INNER_EXPLODED, STACK, SIDE_GEARS, DRIVE
 const D2R = Math.PI / 180;
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const Y_UP = V(0, 1, 0);
+const STEM_ASM_WIDTH = 0.6;
+const GEAR_LIFT = 1.3;
+const CLOSED_R = { A: 0.5, B: 0.55, I: 0.5, D: 0.5 };
+const CLOSED_S = { A: 1.3, B: 1.1, I: 1.2, D: 1.25 };
+const CLOSED_GEAR_PULL = 0.5;
+const CLOSED_WIDTH = 1.5;
+const COLLAR_ASM_Y = [-10.8, null, -15.6, null, null, -20.4];
 const eulQ = (q) => new THREE.Euler().setFromQuaternion(q, 'YXZ');
 const tangentQ = (y) => new THREE.Quaternion().slerp(new THREE.Quaternion().setFromUnitVectors(Y_UP, stemTangent(y)), 0.35);
 
@@ -56,6 +63,16 @@ const EXPLODED_SCALE = 0.82;
 const EXPLODED_SCALE_CAP = 0.92;
 const EXPLODED_WIDTH = 0.7;
 const ASSEMBLED_WIDTH = 1.22;
+const PETAL_BEND = {
+  D: (s) => 0.54 * Math.pow(s, 1.45),
+  A: (s) => 0.5 * Math.pow(s, 1.5),
+  B: (s) => 0.12 * s - 0.3 * Math.pow(s, 2),
+  I: (s) => 0.58 * Math.pow(s, 1.4),
+};
+const ASM_BACK_SCALE = 0.45;
+const ASM_FRONT_SCALE = 0.2;
+const ASM_FRONT_OPEN = 30;
+const ASM_BACK_OPEN = 26;
 const FACE_AMOUNT = 0.78;
 const FACE_LIMIT = 80 * D2R;
 function faceCameraRoll(phi, theta) {
@@ -134,9 +151,22 @@ export function buildAssembly(camera) {
   const cage = buildStamenCage(mats, {});
   root.add(cage);
 
+  // opaque inner shell that fills the gaps between closed petals; it vanishes as the bloom opens
+  const budPts = [];
+  for (let i = 0; i <= 28; i++) {
+    const t = i / 28;
+    budPts.push(new THREE.Vector2(Math.max(0.001, 1.25 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.72)), 0.8)), -1.9 + 5.4 * t));
+  }
+  const budShell = new THREE.Mesh(
+    new THREE.LatheGeometry(budPts, 48),
+    new THREE.MeshPhysicalMaterial({ color: 0x8a1458, roughness: 0.4, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.08, side: THREE.DoubleSide }),
+  );
+  root.add(budShell);
+
   // ---- petals ----
   const petals = [];
-  const addPetalRing = (entries, ringKey, prefix, seedBase) => {
+  const rndX = rng(97);
+  const addPetalRing = (entries, ringKey, prefix, seedBase, { extra = false, shift = 0 } = {}) => {
     const ring = RINGS[ringKey];
     const phiA = matchPhis(entries.map((e) => e.phi));
     entries.forEach((en, i) => {
@@ -146,11 +176,15 @@ export function buildAssembly(camera) {
         seed: seedBase + i,
         L: en.L,
         W: en.L * (cap ? 0.82 : 0.72),
-        cup: cap ? 0.78 : 0.62,
-        bend: cap ? -0.16 : -0.3,
-        lip: 0.3,
-        shoulder: 0.7,
-        gemCount: cap ? 2 : 4,
+        cup: cap ? 0.95 : 0.85,
+        bend: PETAL_BEND[ringKey],
+        lip: 0.38,
+        shoulder: 1.05,
+        power: 0.62,
+        tipPower: 1.35,
+        sweep: (i % 2 ? 1 : -1) * 0.1,
+        gemCount: cap ? 2 : 3,
+        rimRadius: 0.055,
       });
       const pivot = new THREE.Group();
       const hinge = new THREE.Group();
@@ -158,24 +192,35 @@ export function buildAssembly(camera) {
       hinge.add(body);
       body.rotation.y = -Math.PI / 2;
       root.add(pivot);
-      const pa = phiA[i] * D2R;
+      const pa = (phiA[i] + shift) * D2R;
       const px = en.phi * D2R;
       const rollExp = en.roll + faceCameraRoll(px, en.th * D2R);
+      const front = Math.max(0, Math.sin(pa));
+      const back = Math.max(0, -Math.sin(pa));
+      const asmScale = (cap ? 1.25 : 1.12) * (1 + ASM_BACK_SCALE * back - ASM_FRONT_SCALE * front);
       const part = rig.add(pivot, `${prefix}${i}`, {
-        a: { p: V(ring.r * Math.cos(pa), ring.y, ring.r * Math.sin(pa)), r: [0, -pa, 0], s: 1 },
-        x: { p: V(en.r * Math.cos(px), en.y, en.r * Math.sin(px) + en.zOff), r: [0, -px, 0], s: cap ? EXPLODED_SCALE_CAP : EXPLODED_SCALE },
-        delay: 0.02 + rnd() * 0.3,
+        a: { p: V(ring.r * Math.cos(pa), ring.y, ring.r * Math.sin(pa)), r: [0, -pa, 0], s: asmScale },
+        x: { p: V(en.r * Math.cos(px), en.y, en.r * Math.sin(px) + en.zOff), r: [0, -px, 0], s: extra ? 0.001 : cap ? EXPLODED_SCALE_CAP : EXPLODED_SCALE },
+        delay: 0.02 + (extra ? rndX : rnd)() * 0.3,
       });
-      petals.push({ part, hinge, body, ring, en, rollExp, st: (rnd() - 0.5) * 0.08, group: ringKey === 'I' ? 'inner' : 'outer' });
+      petals.push({ part, ringKey, asmScale, hinge, body, ring, en, rollExp, st: ((extra ? rndX : rnd)() - 0.5) * 0.08, group: extra ? 'extra' : ringKey === 'I' ? 'inner' : 'outer', openOff: (ASM_FRONT_OPEN + (cap ? 22 : 0)) * front - ASM_BACK_OPEN * back });
     });
   };
   addPetalRing(OUTER_EXPLODED.filter((e) => !e.cap), 'A', 'op', 100);
   addPetalRing(OUTER_EXPLODED.filter((e) => e.cap), 'B', 'oc', 200);
   addPetalRing(INNER_EXPLODED, 'I', 'ip', 300);
-  const petalTheta = (p, b, k) => {
+  const DENSE_KINDS = ['crimson', 'tealViolet', 'magentaViolet', 'greenBlue', 'violetBlue', 'tealMagenta'];
+  addPetalRing(
+    OUTER_EXPLODED.filter((e) => !e.cap).map((e, i) => ({ ...e, kind: DENSE_KINDS[i % DENSE_KINDS.length], L: e.L * 0.94, roll: 0, closedTh: 4, th: 56 })),
+    'D', 'od', 400, { extra: true, shift: 20 },
+  );
+  const petalWb = (p, b) => {
     const [w0, w1] = p.ring.win;
-    const wb = smoother(clamp01((b - (w0 + p.st)) / Math.max(0.2, w1 - w0 - 0.1)));
-    return lerp(lerp(p.ring.closed, p.ring.open, wb), lerp(p.en.closedTh, p.en.th, wb), k);
+    return smoother(clamp01((b - (w0 + p.st)) / Math.max(0.2, w1 - w0 - 0.1)));
+  };
+  const petalTheta = (p, b, k) => {
+    const wb = petalWb(p, b);
+    return lerp(lerp(p.ring.closed, p.ring.open, wb) + p.openOff * wb, lerp(p.en.closedTh, p.en.th, wb), k);
   };
 
   // ---- spindle, gear stack, washers ----
@@ -189,7 +234,7 @@ export function buildAssembly(camera) {
   const gemKeys = ['sapphire', 'rose', 'aqua', 'emerald'];
   STACK.forEach((it, i) => {
     const upper = it.y > 0;
-    const yA = upper ? -2.35 + (it.y - 1.55) * 0.04 : -3.0 + (it.y + 2.6) * 0.28;
+    const yA = (upper ? -2.35 + (it.y - 1.55) * 0.04 : -3.0 + (it.y + 2.6) * 0.28) + GEAR_LIFT;
     const sA = upper ? 0.4 : 0.62;
     let obj;
     if (it.type === 'gear') {
@@ -211,7 +256,7 @@ export function buildAssembly(camera) {
     root.add(obj);
     addSpin(obj, g.teeth, i ? 1 : -1);
     rig.add(obj, `side${i}`, {
-      a: { p: V(g.x * 1.1, -0.3, 1.5), r: [0, 0, 0], s: 0.5 },
+      a: { p: V(g.x * 1.1, -0.3 + GEAR_LIFT, 1.5), r: [0, 0, 0], s: 0.5 },
       x: { p: V(g.x, g.y, 0), r: [0, 0, 0], s: 1 },
       delay: 0.1 + rnd() * 0.2,
     });
@@ -223,8 +268,8 @@ export function buildAssembly(camera) {
     const obj = gearPart(mats, { teeth: g.teeth, R: g.R, thickness: 0.2, spokes: g.spokes, curved: 0.35, gemColor: GEM_COLORS[g.gem], seed: 60 + i, axis: 'z' });
     root.add(obj);
     addSpin(obj, g.teeth, g.dir);
-    rig.add(obj, g.id, {
-      a: { p: V(g.asm[0], g.asm[1] + 1.4, g.asm[2]), r: [0, 0, 0], s: 0.8 },
+    obj.userData.part = rig.add(obj, g.id, {
+      a: { p: V(g.asm[0], g.asm[1] + 1.4 + GEAR_LIFT, g.asm[2]), r: [0, 0, 0], s: 0.8 },
       x: { p: V(...g.exp), r: [0, 0, 0], s: 1 },
       delay: 0.05 + rnd() * 0.25,
       bow: 0.8,
@@ -238,25 +283,39 @@ export function buildAssembly(camera) {
   ringWrap.add(ring);
   root.add(ringWrap);
   rig.add(ringWrap, 'ring', {
-    a: { p: V(0, -3.0, 0), r: [0, 0, 0], s: 0.58 },
-    x: { p: V(0, -4.3, 0), r: [0, 0, 0], s: 1 },
+    a: { p: V(0, -3.0 + GEAR_LIFT, 0), r: [0, 0, 0], s: 0.58 },
+    x: { p: V(0, -4.3, 0), r: [0, 0, 0], s: 0.88 },
     delay: 0.1,
   });
 
   // ---- braided stem + collars ----
-  const braid = buildBraid(mats, {});
+  const braid = buildBraid(mats, { R: 0.86 });
   root.add(braid);
   rig.add(braid, 'braid', {
-    a: { p: V(0, STEM_LIFT, 0), r: [0, 0, 0], s: V(0.72, 1, 0.72) },
+    a: { p: V(0, STEM_LIFT, 0), r: [0, 0, 0], s: V(STEM_ASM_WIDTH, 1, STEM_ASM_WIDTH) },
     x: { p: V(0, 0, 0), r: [0, 0, 0], s: 1 },
     delay: 0.0,
   });
+  const collarWorld = (y) => {
+    const p = bentStemPoint(y);
+    p.x *= STEM_ASM_WIDTH;
+    p.z *= STEM_ASM_WIDTH;
+    p.y += STEM_LIFT;
+    return p;
+  };
   const collarObjs = COLLARS.map((c, i) => {
     const obj = buildCollar(mats, { R: c.R, h: c.h, jewels: c.jewels, pins: c.pins, seed: i + 1, serrated: c.serrated });
-    braid.add(obj);
-    const yA = -8.95 + (c.y + 8.95) * 0.9;
+    root.add(obj);
+    const yA = COLLAR_ASM_Y[i];
+    const keep = yA !== null;
+    const tan = bentStemTangent(keep ? yA : c.y);
+    tan.x *= STEM_ASM_WIDTH;
+    tan.z *= STEM_ASM_WIDTH;
+    const qA = new THREE.Quaternion().setFromUnitVectors(Y_UP, tan.normalize());
     rig.add(obj, `collar${i}`, {
-      a: { p: stemPoint(yA), r: eulQ(tangentQ(yA)), s: V(0.9, 1, 0.9) },
+      a: keep
+        ? { p: collarWorld(yA), r: eulQ(qA), s: V(0.9 * STEM_ASM_WIDTH, 1, 0.9 * STEM_ASM_WIDTH) }
+        : { p: collarWorld(c.y), r: eulQ(qA), s: 0.001 },
       x: { p: stemPoint(c.y), r: eulQ(tangentQ(c.y)), s: 1 },
       delay: 0.0,
     });
@@ -268,11 +327,15 @@ export function buildAssembly(camera) {
     const qx = new THREE.Quaternion().setFromAxisAngle(V(1, 0, 0), lf.tiltX);
     const qExp = new THREE.Quaternion().setFromAxisAngle(V(0, 0, 1), lf.rotZ).multiply(qx);
     const hub = V(...lf.hub);
-    const attach = V(...lf.clamp).sub(hub).applyQuaternion(qExp.clone().invert());
+    const clampW = V(...lf.clamp);
+    clampW.x += stemX(clampW.y);
+    const attach = clampW.sub(hub).applyQuaternion(qExp.clone().invert());
     const obj = buildLeaf(mats, { L: lf.L, W: lf.W, kind: lf.kind, seed: lf.seed, attach, bend: lf.bend, sweep: lf.sweep });
     root.add(obj);
     const qAsm = new THREE.Quaternion().setFromAxisAngle(V(0, 0, 1), lf.asmRotZ).multiply(qx);
-    const c = stemPoint(lf.asmClampY - STEM_LIFT);
+    const c = bentStemPoint(lf.asmClampY - STEM_LIFT);
+    c.x *= STEM_ASM_WIDTH;
+    c.z *= STEM_ASM_WIDTH;
     c.y += STEM_LIFT;
     c.x += lf.asmOut * 0.35;
     const leafAsmScale = 0.8;
@@ -295,11 +358,30 @@ export function buildAssembly(camera) {
     state.b = b;
     state.t = t;
     rig.update(e);
-    for (const p of petals) {
-      p.hinge.rotation.z = -petalTheta(p, b, p.part.k) * D2R;
-      p.body.rotation.y = -Math.PI / 2 + p.rollExp * p.part.k;
-      if (!p.en.cap) p.body.scale.x = lerp(ASSEMBLED_WIDTH, EXPLODED_WIDTH, p.part.k);
+    braid.userData.bend.value = 1 - clamp01(e);
+    const budPull = lerp(CLOSED_GEAR_PULL, 1, smoother(clamp01(b / 0.6)));
+    for (const g of driveObjs) {
+      g.position.x *= lerp(budPull, 1, g.userData.part.k);
+      g.position.z *= lerp(budPull, 1, g.userData.part.k);
     }
+    for (const p of petals) {
+      const wb = petalWb(p, b);
+      const kk = p.part.k;
+      const rf = lerp(lerp(CLOSED_R[p.ringKey], 1, wb), 1, kk);
+      const sf = lerp(lerp(CLOSED_S[p.ringKey] / p.asmScale, 1, wb), 1, kk);
+      p.part.obj.position.x *= rf;
+      p.part.obj.position.z *= rf;
+      p.part.obj.scale.multiplyScalar(sf);
+      p.hinge.rotation.z = -petalTheta(p, b, p.part.k) * D2R;
+      const trim = b > 0.03 || kk > 0.01;
+      if (!p.trim) p.trim = ['gold', 'gems'].map((n) => p.body.getObjectByName(n)).filter(Boolean);
+      for (const m of p.trim) m.visible = trim;
+      p.body.rotation.y = -Math.PI / 2 + p.rollExp * p.part.k;
+      p.body.scale.x = lerp(lerp(CLOSED_WIDTH, p.en.cap ? 1 : ASSEMBLED_WIDTH, wb), p.en.cap ? 1 : EXPLODED_WIDTH, p.part.k);
+    }
+    const shellK = (1 - smoother(clamp01((b - 0.05) / 0.3))) * (1 - clamp01(e * 4));
+    budShell.visible = shellK > 0.01;
+    budShell.scale.set(shellK, 1, shellK);
     const lift = 0.85 * (1 - e) * smoother(clamp01(b));
     cage.position.y = -1.1 - 0.9 * (1 - smoother(clamp01(b))) + lift;
     core.position.y = -0.15 + lift;
@@ -317,7 +399,7 @@ export function buildAssembly(camera) {
   // ---- anchors, screws, insets (computed at the poster pose: exploded, full bloom) ----
   update(1, 1, 0);
   const ownerObjs = [
-    ...petals.map((p) => p.body),
+    ...petals.filter((p) => p.group !== 'extra').map((p) => p.body),
     ...stackObjs,
     ...sideObjs,
     ...driveObjs,
@@ -329,15 +411,26 @@ export function buildAssembly(camera) {
     braid,
   ];
   const anchorOn = (owners, px, py) => {
-    const rc = pixelRay(camera, px, py);
-    let best = null;
-    withDoubleSide(root, () => {
-      for (const o of owners) {
-        const h = rc.intersectObject(o, true)[0];
-        if (h && (!best || h.distance < best.hit.distance)) best = { owner: o, hit: h };
+    const tryPx = (x, y) => {
+      const rc = pixelRay(camera, x, y);
+      let best = null;
+      withDoubleSide(root, () => {
+        for (const o of owners) {
+          const h = rc.intersectObject(o, true)[0];
+          if (h && (!best || h.distance < best.hit.distance)) best = { owner: o, hit: h };
+        }
+      });
+      return best;
+    };
+    for (let rad = 0; rad <= 160; rad += 8) {
+      const n = rad === 0 ? 1 : 16;
+      for (let k = 0; k < n; k++) {
+        const a = (k / n) * Math.PI * 2;
+        const best = tryPx(px + rad * Math.cos(a), py + rad * Math.sin(a));
+        if (best) return { owner: best.owner, point: best.hit.point.clone() };
       }
-    });
-    if (best) return { owner: best.owner, point: best.hit.point.clone() };
+    }
+    const rc = pixelRay(camera, px, py);
     let nearest = null;
     for (const o of owners) {
       const c = new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3());

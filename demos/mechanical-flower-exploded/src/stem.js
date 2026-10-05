@@ -9,19 +9,50 @@ export const STEM_TOP = -9.1;
 export const STEM_BOTTOM = -46;
 export const stemX = (y) => {
   const d = STEM_TOP - y;
-  return 0.34 * Math.sin(d * 0.26 + 0.4) - 0.12;
+  return 0.75 * Math.sin(d * 0.34 + 0.2) - 0.1;
 };
 export const stemZ = (y) => {
   const d = STEM_TOP - y;
   return 0.15 * Math.sin(d * 0.2 + 1.1);
 };
 export const stemPoint = (y) => V(stemX(y), y, stemZ(y));
+
+// Extra lateral S-bend applied only in the assembled state (vertex shader on the braid, mirrored here for collars and leaves).
+const BEND_A = 1.5;
+const BEND_K = 0.33;
+const smooth01 = (t) => t * t * (3 - 2 * t);
+export const bendX = (y) => {
+  const d = Math.max(0, STEM_TOP - y);
+  return BEND_A * Math.sin(d * BEND_K) * smooth01(Math.min(1, d / 3));
+};
+export const bentStemPoint = (y) => V(stemX(y) + bendX(y), y, stemZ(y));
+export const bentStemTangent = (y) => bentStemPoint(y + 0.05).sub(bentStemPoint(y - 0.05)).normalize();
+
+function bendMaterial(mat, uniform) {
+  const m = mat.clone();
+  m.onBeforeCompile = (shader) => {
+    shader.uniforms.uBend = uniform;
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `#include <common>\nuniform float uBend;`)
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        float bendD = max(0.0, ${STEM_TOP.toFixed(2)} - transformed.y);
+        float bendT = clamp(bendD / 3.0, 0.0, 1.0);
+        transformed.x += uBend * ${BEND_A.toFixed(3)} * sin(bendD * ${BEND_K.toFixed(3)}) * bendT * bendT * (3.0 - 2.0 * bendT);`
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', `#include <common>\nuniform float uBend;`)
+      .replace('#include <color_fragment>', `#include <color_fragment>\n diffuseColor.rgb *= mix(1.0, 0.6, uBend);`);
+  };
+  return m;
+}
 export const stemTangent = (y) => stemPoint(y - 0.05).sub(stemPoint(y + 0.05)).normalize().negate();
 
-const STRAND_COLORS = ['#8a1c26', '#1c5e3a', '#1f3f8f', '#b87333', '#2a2f3a', '#9aa3ad', '#a82a4a', '#0f6a78', '#d4a24a', '#3a2a5c'];
+const STRAND_COLORS = ['#7a2430', '#1d4a35', '#233a7a', '#a8672f', '#23262e', '#8a929c', '#8f2a45', '#145a66', '#b88a3c', '#35284f'];
 
 // Braided wire conduit: counter-rotating coloured strands over a dark core.
-export function buildBraid(mats, { R = 1.0, strands = 48, pitch = 11, y0 = STEM_TOP, y1 = STEM_BOTTOM, seed = 4 } = {}) {
+export function buildBraid(mats, { R = 1.0, strands = 60, pitch = 17, y0 = STEM_TOP, y1 = STEM_BOTTOM, seed = 4 } = {}) {
   const r = rng(seed * 7 + 2);
   const group = new THREE.Group();
   const steps = Math.round((y0 - y1) / 0.22);
@@ -30,8 +61,9 @@ export function buildBraid(mats, { R = 1.0, strands = 48, pitch = 11, y0 = STEM_
   const curve = new THREE.CatmullRomCurve3(centre, false, 'centripetal');
   const frames = curve.computeFrenetFrames(steps, false);
 
+  const bend = { value: 0 };
   const core = new THREE.TubeGeometry(curve, steps, R * 0.72, 12, false);
-  group.add(new THREE.Mesh(core, mats.gunmetal));
+  group.add(new THREE.Mesh(core, bendMaterial(mats.gunmetal, bend)));
 
   const batch = new Batch(true);
   for (let k = 0; k < strands; k++) {
@@ -50,7 +82,7 @@ export function buildBraid(mats, { R = 1.0, strands = 48, pitch = 11, y0 = STEM_
       pts.push(c.clone().addScaledVector(n, Math.cos(a) * rho).addScaledVector(b, Math.sin(a) * rho));
     }
     const cur = new THREE.CatmullRomCurve3(pts, false, 'centripetal');
-    batch.add(new THREE.TubeGeometry(cur, steps * 2, 0.062 + (k % 3 === 0 ? 0.012 : 0), 6, false), null, col);
+    batch.add(new THREE.TubeGeometry(cur, steps * 2, 0.052 + (k % 3 === 0 ? 0.012 : 0), 6, false), null, col);
   }
   // fine steel braid overlay
   const braidCol = new THREE.Color('#aeb4bf');
@@ -68,9 +100,9 @@ export function buildBraid(mats, { R = 1.0, strands = 48, pitch = 11, y0 = STEM_
     }
     batch.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, 'centripetal'), steps * 3, 0.04, 5, false), null, braidCol);
   }
-  const mesh = batch.build(mats.stemBraid);
+  const mesh = batch.build(bendMaterial(mats.stemBraid, bend));
   group.add(mesh);
-  group.userData = { R };
+  group.userData = { R, bend };
   return group;
 }
 

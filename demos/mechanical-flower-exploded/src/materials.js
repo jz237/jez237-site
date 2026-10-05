@@ -13,14 +13,14 @@ export function rng(seed) {
 
 // Enamel palettes: [base, middle, tip, accent used for iridescent mottling]
 export const ENAMEL = {
-  tealMagenta: ['#0c8a8c', '#17a898', '#c4287e', '#6c37c4'],
-  magentaViolet: ['#a3135c', '#d22c88', '#7c38ca', '#12928f'],
-  violetBlue: ['#6a37c2', '#4c64da', '#1f96c6', '#c4287e'],
-  greenBlue: ['#0a8c5e', '#0e988f', '#3c7ad6', '#b83a88'],
-  crimson: ['#901236', '#cc2858', '#ea649c', '#6c37c4'],
-  tealViolet: ['#0c8a7c', '#2c84ca', '#8c44ca', '#c4287e'],
-  leaf: ['#0a6a3a', '#10806a', '#2a5cc0', '#22a85c'],
-  leafBlue: ['#0c6c52', '#2468c0', '#3a5cd0', '#10927e'],
+  tealMagenta: ['#04484e', '#0a8a86', '#18ae9e', '#a02478'],
+  magentaViolet: ['#6e0a42', '#bc1c70', '#8c32b8', '#0a7a78'],
+  violetBlue: ['#3c1c84', '#3454c4', '#1a88bc', '#a8247a'],
+  greenBlue: ['#04502e', '#08885a', '#10a490', '#2a5eb4'],
+  crimson: ['#5e0620', '#b4163e', '#e03c74', '#74248a'],
+  tealViolet: ['#06525a', '#10988c', '#3470c8', '#70349e'],
+  leaf: ['#04401f', '#0a6e3e', '#0e7660', '#2858b0'],
+  leafBlue: ['#05452a', '#0c7050', '#1e5ca8', '#0e8870'],
 };
 
 function canvas(w, h) {
@@ -49,119 +49,70 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
   g.fillStyle = grad;
   g.fillRect(0, 0, w, h);
 
-  // iridescent mottling
-  for (let i = 0; i < 16; i++) {
-    const x = r() * w;
-    const y = r() * h;
-    const rad = (0.15 + r() * 0.35) * h;
-    const col = i % 3 === 0 ? pal[3] : i % 3 === 1 ? pal[2] : pal[1];
-    const rg = g.createRadialGradient(x, y, 0, x, y, rad);
-    rg.addColorStop(0, col);
-    rg.addColorStop(1, 'rgba(0,0,0,0)');
-    g.globalAlpha = 0.28 + r() * 0.25;
-    g.globalCompositeOperation = i % 2 ? 'soft-light' : 'overlay';
-    g.fillStyle = rg;
-    g.fillRect(0, 0, w, h);
-  }
-  g.globalCompositeOperation = 'source-over';
-  // broad colour blends: teal-to-magenta-to-violet shifts inside one petal
-  for (let i = 0; i < 7; i++) {
-    const x = r() * w;
-    const y = r() * h;
-    const rad = (0.22 + r() * 0.3) * h;
-    const col = [pal[3], pal[2], pal[1]][i % 3];
-    const rg = g.createRadialGradient(x, y, 0, x, y, rad);
-    rg.addColorStop(0, col);
-    rg.addColorStop(1, 'rgba(0,0,0,0)');
-    g.globalAlpha = 0.34 + r() * 0.2;
-    g.fillStyle = rg;
-    g.fillRect(0, 0, w, h);
-  }
-
-  // brush streaks along the length
-  for (let i = 0; i < 1400; i++) {
-    const x = r() * w;
-    const y0 = r() * h;
-    const len = 40 + r() * 260;
-    g.globalAlpha = 0.04 + r() * 0.07;
-    g.strokeStyle = r() > 0.5 ? '#ffffff' : '#000000';
-    g.lineWidth = 0.6 + r() * 1.6;
+  // smooth painted flow: wide blurred colour bands sweeping base to tip, so hue drifts across the petal like hand-fired enamel
+  g.filter = `blur(${Math.round(w * 0.045)}px)`;
+  const bands = veins === 'petal' ? 7 : 6;
+  for (let i = 0; i < bands; i++) {
+    const side = (i / (bands - 1)) * 2 - 1;
+    const x0 = w * (0.5 + side * 0.16 + (r() - 0.5) * 0.1);
+    const x1 = w * (0.5 + side * 0.52 + (r() - 0.5) * 0.2);
+    const y1 = h * (-0.12 + r() * 0.3);
     g.beginPath();
-    g.moveTo(x, y0);
-    g.lineTo(x + (r() - 0.5) * 8, y0 - len);
+    g.moveTo(x0, h * 1.06);
+    g.bezierCurveTo(x0 + (x1 - x0) * 0.1, h * 0.65, x0 + (x1 - x0) * 0.7, h * 0.4 + r() * h * 0.1, x1, y1);
+    g.lineWidth = w * (0.16 + r() * 0.2);
+    g.lineCap = 'butt';
+    g.strokeStyle = [pal[3], pal[2], pal[1], pal[0]][(i + Math.floor(r() * 2)) % 4];
+    g.globalAlpha = 0.32 + r() * 0.3;
+    g.stroke();
+  }
+  g.globalAlpha = 1;
+  // glossy lengthwise sheen on one flank
+  {
+    const sx = w * (r() > 0.5 ? 0.3 : 0.7);
+    g.beginPath();
+    g.moveTo(sx, h * 0.95);
+    g.quadraticCurveTo(sx + (r() - 0.5) * w * 0.6, h * 0.5, w * 0.5 + (r() - 0.5) * w * 0.4, h * 0.08);
+    g.lineWidth = w * 0.09;
+    g.strokeStyle = '#fff4ff';
+    g.globalAlpha = 0.09;
+    g.stroke();
+    g.globalAlpha = 1;
+  }
+  g.filter = 'none';
+
+  // fine brushed streaks, mostly tonal so they read as enamel grain rather than white noise
+  for (let i = 0; i < 1100; i++) {
+    const x0 = w * (0.5 + (r() - 0.5) * 0.4);
+    const y0 = h * (0.95 + r() * 0.05);
+    const fan = (r() - 0.5) * w * 1.1;
+    const len = h * (0.25 + r() * 0.6);
+    const y1 = y0 - len;
+    const x1 = x0 + fan * (0.4 + r() * 0.8);
+    g.globalAlpha = 0.03 + r() * 0.06;
+    const k = r();
+    g.strokeStyle = k < 0.1 ? '#ffffff' : k < 0.5 ? '#000000' : k < 0.75 ? pal[2] : pal[3];
+    g.lineWidth = 0.5 + r() * 1.3;
+    g.beginPath();
+    g.moveTo(x0 + fan * 0.05, y0);
+    g.quadraticCurveTo(x0 + fan * 0.2 + (r() - 0.5) * 8, (y0 + y1) / 2, x1, y1);
     g.stroke();
   }
   g.globalAlpha = 1;
 
-  // stained-glass facets: jittered Voronoi cells tinted from the palette, so the enamel reads as mottled iridescent glass
-  const facetEdges = [];
-  {
-    const cols = veins === 'petal' ? 7 : 6;
-    const rows = veins === 'petal' ? 11 : 14;
-    const cw = w / cols;
-    const ch = h / rows;
-    const seeds = new Map();
-    for (let j = -2; j <= rows + 1; j++) for (let i = -2; i <= cols + 1; i++) seeds.set(`${i},${j}`, [(i + 0.12 + r() * 0.76) * cw, (j + 0.12 + r() * 0.76) * ch]);
-    const clip = (poly, d, c) => {
-      const out = [];
-      for (let k = 0; k < poly.length; k++) {
-        const a = poly[k];
-        const b = poly[(k + 1) % poly.length];
-        const fa = a[0] * d[0] + a[1] * d[1] - c;
-        const fb = b[0] * d[0] + b[1] * d[1] - c;
-        if (fa <= 0) out.push(a);
-        if (fa <= 0 !== fb <= 0) {
-          const t = fa / (fa - fb);
-          out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
-        }
-      }
-      return out;
-    };
-    for (let j = 0; j < rows; j++) {
-      for (let i = 0; i < cols; i++) {
-        const s = seeds.get(`${i},${j}`);
-        const R = Math.max(cw, ch) * 4;
-        let poly = [[s[0] - R, s[1] - R], [s[0] + R, s[1] - R], [s[0] + R, s[1] + R], [s[0] - R, s[1] + R]];
-        for (let dj = -2; dj <= 2 && poly.length > 2; dj++) {
-          for (let di = -2; di <= 2; di++) {
-            if (!di && !dj) continue;
-            const n = seeds.get(`${i + di},${j + dj}`);
-            poly = clip(poly, [n[0] - s[0], n[1] - s[1]], (n[0] * n[0] + n[1] * n[1] - s[0] * s[0] - s[1] * s[1]) / 2);
-            if (poly.length < 3) break;
-          }
-        }
-        if (poly.length < 3) continue;
-        const along = 1 - s[1] / h;
-        const pick = r();
-        const col = pick < 0.2 ? pal[3] : along < 0.34 ? (pick < 0.65 ? pal[0] : pal[1]) : along < 0.68 ? (pick < 0.6 ? pal[1] : pal[2]) : pick < 0.7 ? pal[2] : pal[1];
-        g.beginPath();
-        poly.forEach((p, k) => (k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])));
-        g.closePath();
-        g.globalCompositeOperation = 'source-over';
-        g.globalAlpha = (veins === 'petal' ? 0.22 : 0.18) + r() * 0.2;
-        g.fillStyle = col;
-        g.fill();
-        if (r() < 0.22) {
-          g.globalCompositeOperation = 'screen';
-          g.globalAlpha = 0.04 + r() * 0.08;
-          g.fillStyle = [pal[3], pal[2], '#ffd9ff', '#bff6ff'][Math.floor(r() * 4)];
-          g.fill();
-        }
-        for (let k = 0; k < poly.length; k++) facetEdges.push([poly[k], poly[(k + 1) % poly.length]]);
-      }
-    }
-    g.globalCompositeOperation = 'source-over';
-    g.globalAlpha = 0.22;
-    g.strokeStyle = '#fff0c0';
-    g.lineWidth = 1;
-    for (const [a, b] of facetEdges) {
-      g.beginPath();
-      g.moveTo(a[0], a[1]);
-      g.lineTo(b[0], b[1]);
-      g.stroke();
-    }
-    g.globalAlpha = 1;
+  // cloisonne depth: darker enamel pooled against the gold border
+  for (const [x0, x1] of [[0, w * 0.2], [w, w * 0.8]]) {
+    const eg = g.createLinearGradient(x0, 0, x1, 0);
+    eg.addColorStop(0, 'rgba(8,0,18,0.5)');
+    eg.addColorStop(1, 'rgba(8,0,18,0)');
+    g.fillStyle = eg;
+    g.fillRect(Math.min(x0, x1), 0, w * 0.2, h);
   }
+  g.globalCompositeOperation = 'multiply';
+  g.fillStyle = '#d6d0cc';
+  g.fillRect(0, 0, w, h);
+  g.globalCompositeOperation = 'source-over';
+  const facetEdges = [];
 
   // darker base blush, lighter tip sheen
   const sh = g.createLinearGradient(0, h, 0, 0);
@@ -199,12 +150,12 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
   };
 
   if (veins === 'petal') {
-    addCurve(qpts(w / 2, h * 0.97, w / 2 + 6, h * 0.5, w / 2, h * 0.04), 3.4);
-    for (let i = 0; i < 5; i++) {
-      const y = h * (0.86 - i * 0.16);
+    addCurve(qpts(w / 2, h * 0.97, w / 2 + 6, h * 0.5, w / 2, h * 0.04), 2.4);
+    for (let i = 0; i < 4; i++) {
+      const y = h * (0.86 - i * 0.2);
       const reach = w * (0.42 - i * 0.02);
       for (const sgn of [-1, 1]) {
-        addCurve(qpts(w / 2, y, w / 2 + sgn * reach * 0.55, y - h * 0.04, w / 2 + sgn * reach, y - h * (0.16 + i * 0.006)), 2.0);
+        addCurve(qpts(w / 2, y, w / 2 + sgn * reach * 0.55, y - h * 0.04, w / 2 + sgn * reach, y - h * (0.16 + i * 0.006)), 1.3);
       }
     }
     for (const x of [w * 0.07, w * 0.93]) addCurve([[x, h * 0.9], [x, h * 0.08]], 2.4, 22);
@@ -219,13 +170,13 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
     }
   } else {
     // leaf: midrib and pinnate veins
-    addCurve(qpts(w / 2, h * 0.98, w / 2 + 8, h * 0.5, w / 2, h * 0.03), 5.5);
+    addCurve(qpts(w / 2, h * 0.98, w / 2 + 8, h * 0.5, w / 2, h * 0.03), 4.2);
     for (let i = 0; i < 12; i++) {
       const y = h * (0.9 - i * 0.07);
       const reach = w * (0.46 - i * 0.012);
       for (const sgn of [-1, 1]) {
-        addCurve(qpts(w / 2, y, w / 2 + sgn * reach * 0.5, y - h * 0.02, w / 2 + sgn * reach, y - h * (0.12 + i * 0.002)), 2.8);
-        addCurve(qpts(w / 2 + sgn * reach * 0.45, y - h * 0.012, w / 2 + sgn * reach * 0.62, y - h * 0.07, w / 2 + sgn * reach * 0.8, y - h * 0.13), 1.5);
+        addCurve(qpts(w / 2, y, w / 2 + sgn * reach * 0.5, y - h * 0.02, w / 2 + sgn * reach, y - h * (0.12 + i * 0.002)), 1.8);
+        addCurve(qpts(w / 2 + sgn * reach * 0.45, y - h * 0.012, w / 2 + sgn * reach * 0.62, y - h * 0.07, w / 2 + sgn * reach * 0.8, y - h * 0.13), 1.0);
       }
     }
     for (const x of [w * 0.06, w * 0.94]) addCurve([[x, h * 0.92], [x, h * 0.06]], 2.4, 20);
@@ -265,7 +216,7 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
   }
 
   // gold cell network: a share of the facet borders are inlaid in gold, like the cloisonne wires in the reference
-  const goldOdds = veins === 'petal' ? 0.34 : 0.14;
+  const goldOdds = veins === 'petal' ? 0.16 : 0.05;
   const edgeHash = (a, b) => {
     const x = Math.round((a[0] + b[0]) / 2);
     const y = Math.round((a[1] + b[1]) / 2);
@@ -326,14 +277,14 @@ export function enamelMaterial(kind, seed, opts = {}) {
     map,
     bumpMap: bump,
     bumpScale: 1.6,
-    metalness: 0.1,
-    roughness: 0.38,
-    clearcoat: 0.3,
-    clearcoatRoughness: 0.12,
-    iridescence: 0.18,
+    metalness: 0.08,
+    roughness: 0.42,
+    clearcoat: 0.7,
+    clearcoatRoughness: 0.06,
+    iridescence: 0.05,
     iridescenceIOR: 1.55,
     iridescenceThicknessRange: [180, 620],
-    envMapIntensity: 0.3,
+    envMapIntensity: 0.22,
     side: THREE.DoubleSide,
   });
 }
@@ -349,8 +300,8 @@ export const GEM_COLORS = {
 };
 
 export function createMaterials() {
-  const gold = new THREE.MeshPhysicalMaterial({ color: 0xe3b24c, metalness: 1, roughness: 0.24, envMapIntensity: 1.7, clearcoat: 0.25, clearcoatRoughness: 0.2 });
-  const brass = new THREE.MeshPhysicalMaterial({ color: 0xcf9e44, metalness: 1, roughness: 0.32, envMapIntensity: 1.6 });
+  const gold = new THREE.MeshPhysicalMaterial({ color: 0xc48a2c, metalness: 1, roughness: 0.28, envMapIntensity: 1.35, clearcoat: 0.25, clearcoatRoughness: 0.2 });
+  const brass = new THREE.MeshPhysicalMaterial({ color: 0xb88434, metalness: 1, roughness: 0.34, envMapIntensity: 1.3 });
   const brassDark = new THREE.MeshPhysicalMaterial({ color: 0x9c7230, metalness: 1, roughness: 0.46, envMapIntensity: 1.3 });
   const gunmetal = new THREE.MeshPhysicalMaterial({ color: 0x4a4f58, metalness: 1, roughness: 0.34, envMapIntensity: 1.4 });
   const steel = new THREE.MeshPhysicalMaterial({ color: 0xc9ccd2, metalness: 1, roughness: 0.28, envMapIntensity: 1.6 });
@@ -407,7 +358,9 @@ export function coreMaterial() {
         vec3 col = pow(hsv2rgb(vec3(h, 0.82, 1.0)), vec3(2.0));
         float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 1.1);
         vec3 hot = pow(vec3(1.0, 0.62, 0.16), vec3(2.0));
-        col = mix(hot*1.5, col*1.25, smoothstep(0.1, 0.8, f));
+        float fb = 0.62 + 0.75 * fract(dot(hash33(cid + 3.0), vec3(0.5, 0.3, 0.2)) * 7.0);
+        col = mix(hot*1.3, col*1.35*fb, 0.5 + 0.5*smoothstep(0.0, 0.6, f));
+        col += hot * 0.5 * pow(1.0 - f, 3.0);
         col += edge * vec3(1.0,0.78,0.45) * 0.28;
         col *= (0.7 + 0.3*uPulse);
         gl_FragColor = vec4(col, 1.0);

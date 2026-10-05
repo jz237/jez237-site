@@ -47,7 +47,7 @@ const composer = new EffectComposer(
   new THREE.WebGLRenderTarget(POSTER.w, POSTER.h, { type: THREE.HalfFloatType, samples: 4 }),
 );
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(POSTER.w, POSTER.h), 0.18, 0.45, 0.95);
+const bloom = new UnrealBloomPass(new THREE.Vector2(POSTER.w, POSTER.h), 0.1, 0.4, 0.97);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
@@ -64,7 +64,7 @@ controls.update();
 
 // ---- framing: pulled-in 3/4 view when assembled, full poster view when exploded ----
 const D2R = Math.PI / 180;
-const FRAME_ASM = { target: new THREE.Vector3(1.0, -4.6, 0), dist: 70, elev: 29 };
+const FRAME_ASM = { target: new THREE.Vector3(0.6, -3.2, 0), dist: 72, elev: 14 };
 const FRAME_EXP = { target: new THREE.Vector3(...CAMERA.target), dist: CAMERA.dist, elev: CAMERA.elevDeg };
 const frameFor = (e) => {
   const s = e * e * (3 - 2 * e);
@@ -272,6 +272,11 @@ window.__flower = {
     } else if (view === 'wide') {
       poseCamera(camera);
       controls.target.set(...CAMERA.target);
+    } else if (view && view.dist) {
+      poseCamera(camera, { target: view.target, dist: view.dist, elev: view.elev ?? 12, azim: view.azim ?? 0 });
+      controls.target.set(...view.target);
+      camera.fov = view.fov ?? CAMERA.fov;
+      camera.updateProjectionMatrix();
     } else if (view && view.pos) {
       camera.position.set(...view.pos);
       controls.target.set(...view.target);

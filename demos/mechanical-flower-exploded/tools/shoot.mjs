@@ -35,6 +35,11 @@ const SHOTS = {
   mid: { explode: 0.5, bloom: 1, time: 1.0 },
   studio: { explode: 1, bloom: 1, time: 1.0, theme: 'studio' },
   studioAssembled: { explode: 0, bloom: 1, time: 1.0, theme: 'studio' },
+  hero: { explode: 0, bloom: 1, time: 1.0, bare: true, view: { target: [0.4, -3.2, 0], dist: 72, elev: 14, azim: -8, fov: 20 } },
+  heroStudio: { explode: 0, bloom: 1, time: 1.0, theme: 'studio', bare: true, view: { target: [0.4, -3.2, 0], dist: 72, elev: 14, azim: -8, fov: 20 } },
+  bloom: { explode: 0, bloom: 1, time: 1.0, bare: true, view: { target: [0.4, 1.8, 0], dist: 62, elev: 14, azim: -8, fov: 20 } },
+  budclose: { explode: 0, bloom: 0, time: 1.0, bare: true, view: { target: [0.4, 0.8, 0], dist: 40, elev: 12, azim: -8, fov: 20 } },
+  budmid: { explode: 0, bloom: 0.35, time: 1.0, bare: true, view: { target: [0.4, 0.8, 0], dist: 46, elev: 12, azim: -8, fov: 20 } },
   angle: { explode: 1, bloom: 1, time: 1.0, view: { pos: [-45, 18, 88], target: [0.4, -5.9, 0], fov: 20 } },
 };
 const wanted = (args.shots || 'poster,assembled,closed').split(',');
@@ -62,9 +67,11 @@ try {
 console.log('boot ms', Date.now() - t0);
 await page.waitForFunction('document.getElementById("loading")?.classList.contains("done")', { timeout: 60000 });
 await new Promise((r) => setTimeout(r, 900));
+await page.addStyleTag({ content: '.bare-shot #overlay,.bare-shot .dock,.bare-shot .hint,.bare-shot #readout,.bare-shot .inset-win,.bare-shot .inset-title,.bare-shot .inset-cap{visibility:hidden !important}' });
 for (const name of wanted) {
   const spec = SHOTS[name];
   if (!spec) { console.log('unknown shot', name); continue; }
+  await page.evaluate((b) => document.documentElement.classList.toggle('bare-shot', !!b), spec.bare);
   const err = await page.evaluate((s) => { try { window.__flower.renderAt(s); return null; } catch (e) { return e.stack; } }, spec);
   if (err) { console.log('render error in', name, err.split('\n').slice(0, 6).join('\n')); continue; }
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r()))));

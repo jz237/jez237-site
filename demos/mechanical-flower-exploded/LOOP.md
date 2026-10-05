@@ -26,14 +26,14 @@ Makes a browser demo match two reference images, one fixed-state render at a tim
 5. mechanical detail: gears, braid, collars, cage, core
 6. closed-bud state plausibility
 
-Accept when every criterion is at least 3 and the mean is at least 3.8.
+Run 1 and 2 accepted when every criterion was at least 3 and the mean at least 3.8. Run 3 raised the gate to a mean strictly above 4.5 (Jez's request), judged against the full photo.
 
 ## Terminal states
 
 - **success:** reviewer accepts.
 - **blocked:** a needed input or tool is unavailable.
 - **approval-required:** the next step is destructive, external, or spends money.
-- **no-progress:** two consecutive passes without a better reviewer mean.
+- **no-progress:** two consecutive passes without a better reviewer mean (run 3 allowed about three, because each pass was a large change).
 
 ## Iteration log
 
@@ -51,14 +51,24 @@ Accept when every criterion is at least 3 and the mean is at least 3.8.
 - it17: four gems per petal (two on the bud petals). Reviewer mean 3.67, REJECT (layout 4, exploded parts 4, enamel 4, assembled 3, mechanical detail 4, closed bud 3). Gaps: milky assembled underside, petals crowd upper left, crown flat.
 - it18: exploded petals scaled to 0.82 with rims thickened 40 percent; enamel env reflection and iridescence cut for deeper tones; assembled crown raised so jewelled stamens clear the cage. Reviewer mean 3.83, ACCEPT (layout 4, exploded parts 4, enamel 4, assembled 4 (reviewer called it borderline 3.5), mechanical detail 4, closed bud 3).
 
+- it19 to it20 (third run): Jez asked for a reviewer mean above 4.5 against the full photo. The run-3 reviewer was briefed to compare directly to the photo and scored the starting state 3.25, much harsher than the 3.83 that run 2 gave it18, so run-2 and run-3 scores are not on the same scale.
+- it21 to it30: petal-ring, rim and bloom experiments (several rejected). Reviewer mean 3.08 at it30 (no gain).
+- it31: petals gain pointed tips and an S-curve sweep. A fourth, assembled-only ring of nine petals (ring D) fills the gaps in the bloom; it is scaled to nothing in the exploded view so the infographic layout is unchanged. Core shader gains rainbow-tinted facets.
+- it32: reviewer mean 3.15 (layout 4.0, exploded parts 3.2, enamel 3.1, assembled 2.8, mechanical detail 2.9, closed bud 2.9).
+- it33 to it34: stem curves into an S in the exploded state, braid made thinner and darker with more strands, leaf clamps follow the curve, taller stamens added to the cage, leader lines now land on real parts. Reviewer mean 3.15 (4.3, 3.4, 3.0, 2.7, 2.9, 2.6).
+- it35: leaned the closed petals further inward to sharpen the bud. Tips crossed and the gold rims wove into a basket; rejected and reverted (not reviewed).
+- it36: closed angles restored to the milder values, and the petal gold rims and gems are hidden while the bud is fully closed so it reads as an opaque enamel teardrop. Reviewer mean 3.22 (layout 4.0, exploded parts 3.3, enamel 3.2, assembled 3.0, mechanical detail 3.3, closed bud 2.5).
+
 ## Outcome
 
-**success (second run).** it18 scored a reviewer mean of 3.83 with every criterion at least 3, clearing the 3.8 gate. The first run had stopped at no-progress (mean 3.17 over it10 to it12); this run closed most of the gaps it named: petals fan out with air, the glowing core shows in the cage, collars are level, enamel has mottled facets and eyelets, and the closed bud is a sealed dome. It is a close match, not an exact one.
+**no-progress (third run), target not reached.** The goal was a reviewer mean above 4.5. The best third-run mean was 3.25 (the starting state, it20); the three reviewed passes after it (it32 3.15, it34 3.15, it36 3.22) did not beat it, so the loop stopped. The published state is it36. It is below the gate: 3.22 of 5, with the closed bud the weakest criterion (2.5).
 
-Remaining gaps the last reviewer named, for another run:
+What it36 did gain over the second-run build, visible side by side: a fuller, more saturated assembled bloom (the extra D ring and pointed petals), a curved stem, a rainbow-faceted core, taller stamens, and leader lines that land on real parts. Scores did not rise because the reviewer holds the bloom to the photo's depth and detail.
 
-- Petal palette skews purple, blue and pink; about a quarter of the petals should be emerald or teal, and the brushed anisotropic mottling from it13 would deepen them.
-- Assembled petals still form a fairly flat funnel with a milky underside, not the photo's broad, rolled, cupped petals; widen the inner petals, add camber and a rolled rim, and cut the underside's translucency.
-- The photo shows gears peeking between the petals; ours are hidden under the skirt.
-- The closed bud is wrapped in gold wire; build it from six to eight overlapping opaque petals with pointed tips and cut the wire density.
-- The core and gear detail insets are cropped from a single object rather than a gear cluster; the right leaf still lacks a visible mount in the assembled states.
+Remaining gaps the last reviewer named, for another run (these are structural, not tuning):
+
+- Petal shape: the photo has a peony of deep, cupped petals with rolled-back edges and curling tips, fewer and larger and overlapping. Ours is still a lotus of flat almond petals. This needs a new petal model (per-petal cup, edge roll, tip curl, twist), not parameter changes; it also drives the crowded exploded fan.
+- Enamel: streaky brushed iridescence per petal, bold open scrollwork at the petal bases, gems set in bezels at tips and bases instead of scattered beads, a warm key and rim light. Leaves are washed out with a blown highlight; the blue-green leaf palette edit in `materials.js` did not apply and is still the old one.
+- Mechanics: thicker gears with hubs and compound stages, gears visible between the petal tiers in the assembled bloom, a denser ball-shaped cage with a domed cap, thick level jewelled collars (they still tilt and read as a spiral), and a stray gear floating by the left leaf to remove.
+- Core: warm orange-gold centre with rainbow facets and glow; it still reads pastel.
+- Closed bud: a squat onion with petal tips crossing and intersecting, sitting on an oversized gear plate. Wanted: a smooth, slim bud closing to a single point with the petals overlapping without intersecting.
