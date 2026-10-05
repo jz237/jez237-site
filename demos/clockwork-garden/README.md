@@ -15,7 +15,7 @@ The landing screen (the garden is already alive behind it) offers:
 | Mode | What it is |
 |---|---|
 | **Film** | the original 58-second film, unchanged and deterministic |
-| **Fly as APX-9** | third-person flight: hover, strafe, climb, bank, boost; land on blooms, gather pollen, carry it home |
+| **Fly as APX-9** | third-person flight: hover, turn, climb, bank, boost; land on blooms, gather pollen, carry it home |
 | **Follow APX-9** | APX-9 works on its own (visits blooms, gathers, deposits at the skep, winds the garden); a cinematic camera follows it |
 
 Switch any time: the explore button (winged hexagon) in the film's control
@@ -82,8 +82,8 @@ hash in `index.html`; changed files get new URLs, unchanged ones stay cached.
 | Input | Action |
 |---|---|
 | Mouse | steer and look (click to capture the pointer; `Esc` releases). Without pointer lock, drag to look |
-| `W` `A` `S` `D` · `↑` `↓` | fly forward, back, sideways (the bee flies where you look) |
-| `←` `→` | turn |
+| `W` `S` · `↑` `↓` | fly forward · back (the bee flies where you look) |
+| `A` `D` · `←` `→` | turn; the camera turns with you and, left alone, swings round to the direction of travel |
 | `Space` / `E` · `Shift` / `Q` | climb · descend |
 | `F` or hold left mouse | boost |
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
@@ -91,11 +91,11 @@ hash in `index.html`; changed files get new URLs, unchanged ones stay cached.
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
 
-**Gamepad** (standard mapping): left stick fly, right stick look, `A` climb,
+**Gamepad** (standard mapping): left stick fly (left/right turns), right stick look, `A` climb,
 `B` or `LT` descend, `RB`/`RT` boost, `Y` autopilot, `X` photo, `Start` help,
 `Back` menu.
 
-**Touch**: joystick bottom left, ▲ ▼ and » (boost) bottom right, drag
+**Touch**: joystick bottom left (up/down flies, left/right turns), ▲ ▼ and » (boost) bottom right, drag
 anywhere else to look; the menu (top left) has time of day, sound, photo
 mode, help and the mode switch.
 
@@ -159,6 +159,7 @@ Interactive-mode tools:
 
 ```bash
 node tools/drive.mjs --scenario tools/scenarios/interact.json --out review/x   # real keyboard/mouse/touch/gamepad input + frames
+node tools/flycheck.mjs                                                        # fly mode: turning, camera vs travel, nothing between camera and bee
 node tools/sweep.mjs --grid full --out review/explore/sweep               # camera sweep: positions x heights x yaws, contact sheets
 node tools/sweep.mjs --views tools/views/key.json --tod 0.05 --out ...      # fixed key views at an hour
 node tools/explorefps.mjs --q high                                          # real-time fps in fly mode at the busiest spots + follow

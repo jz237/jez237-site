@@ -255,7 +255,7 @@ export class Bounds {
   nearestLandable(p, maxDist = 30) {
     let best = null, bd = maxDist * maxDist;
     for (const l of this.landables) {
-      if (l.enabled === false) continue;
+      if (l.enabled === false || l.blocked) continue;
       const dx = l.spot.x - p.x, dy = (l.spot.y - p.y) * 0.6, dz = l.spot.z - p.z;
       const d = dx * dx + dy * dy + dz * dz;
       if (d < bd) { bd = d; best = l; }
@@ -409,5 +409,27 @@ export class Bounds {
       this.chain(pts, 1.6, 'tree');
     }
     for (const p of w.pods.pods) this.sph(p.pos, 1.7, 'pod');
+    this._flagBlocked();
+  }
+
+  // Blooms buried in a shrub, palm, column or orb (planting added around
+  // them) can't be reached: the bee would press against the solid forever.
+  // Flag them so the autopilot never picks them and the player isn't offered
+  // them. Petal cups and bloom heads don't count (the bee lands in those).
+  _flagBlocked() {
+    const n = V();
+    const clear = (q) => {
+      let best = this._wallDist(q, n);
+      this._near(q, 8, (c) => {
+        if (c.tag === 'cup' || c.tag === 'bloom' || c.tag === 'hero-cup' || c.tag === 'hero-petal') return;
+        best = Math.min(best, this._sdf(c, q, n));
+      });
+      return best;
+    };
+    for (const l of this.landables) {
+      const above = clear(l.spot.clone().add(V(0, 4.5, 0)));
+      const at = clear(l.spot);
+      l.blocked = above < 0.6 || at < -1.0;
+    }
   }
 }

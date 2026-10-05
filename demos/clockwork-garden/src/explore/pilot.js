@@ -132,7 +132,7 @@ export class Pilot {
     let total = 0;
     const cands = [];
     for (const l of L2) {
-      if (l.enabled === false || this.recent.includes(l.id)) continue;
+      if (l.enabled === false || l.blocked || this.recent.includes(l.id)) continue;
       const d = Math.hypot(l.spot.x - pos.x, l.spot.z - pos.z);
       if (d < 8 || d > 330) continue;
       const fresh = interactions?.isPollinated?.(l) ? 0.35 : 1;
@@ -185,6 +185,21 @@ export class Pilot {
     intent.boost = cruise > SPEED.cruise * 1.5 && remaining > 60;
     intent.vel.copy(toAim).multiplyScalar(speed / Math.max(dist, 1e-3));
     if (g.kind === 'tour') this.status = `flying ${g.name}`;
+    // watchdog: if APX-9 stops closing on its aim (pinned against a solid the
+    // planner didn't know about), give up on that leg instead of hovering
+    // there forever: skip the waypoint, or abandon an unreachable bloom
+    const w = this._watch;
+    if (!w || w.route !== r || w.i !== r.i) this._watch = { route: r, i: r.i, best: dist, t: 0 };
+    else if (dist < w.best - 1) { w.best = dist; w.t = 0; }
+    else if ((w.t += dt) > 2.5) {
+      this._watch = null;
+      this.giveUps = (this.giveUps || 0) + 1;
+      if (!last) r.i++;
+      else if (g.kind === 'bloom') { g.landable.blocked = true; this.goal = null; this.route = null; }
+      else if (g.kind === 'tour') { this.goal = g.then || null; this.route = null; }
+      else { this.route = null; this.stalls = (this.stalls || 0) + 1; if (this.stalls > 2) { this.stalls = 0; this.goal = null; } }
+      return intent;
+    }
     // arrival
     if (last && dist < (g.kind === 'bloom' ? 3.5 : 6)) {
       if (g.kind === 'bloom') {

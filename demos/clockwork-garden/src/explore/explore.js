@@ -221,7 +221,8 @@ export class Explore {
   _playerIntent(input) {
     const a = this.actor;
     const c = this.chase;
-    // the bee flies where you look: thrust along the view, strafe across it
+    // the bee flies where you look: thrust along the view (left/right input
+    // arrives as turning, so move.x is only non-zero from other sources)
     const f = lookDir(c.yaw, c.pitch * 0.85, V());
     const right = V(-Math.cos(c.yaw), 0, Math.sin(c.yaw));
     const boost = input.boost && input.move.y > 0.1;

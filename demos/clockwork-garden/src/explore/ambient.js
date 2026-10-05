@@ -95,6 +95,25 @@ export class Ambient {
     const r = this.rng;
     const bp = bee.pos;
     const inView = (p) => frustum.containsPoint(p);
+    // keep the sightline to APX-9 clear: nothing on the wing may hover in the
+    // cone between the camera and the bee (chase and follow cameras look
+    // through it). `size` is the creature's half-span, so wings and tails stay
+    // clear too; anything inside is moved out sideways to the cone's edge.
+    const cam = camera.position;
+    const toBee = bp.clone().sub(cam);
+    const len2 = toBee.lengthSq();
+    const clearSight = (p, size) => {
+      if (len2 < 1) return;
+      const k = p.clone().sub(cam).dot(toBee) / len2;
+      if (k <= 0.02 || k >= 0.97) return;
+      const closest = cam.clone().addScaledVector(toBee, k);
+      const off = p.clone().sub(closest);
+      const need = 0.5 + 2.4 * k + size;
+      const dd = off.length();
+      if (dd >= need) return;
+      if (dd < 1e-3) off.set(-toBee.z, 0, toBee.x);
+      p.add(off.normalize().multiplyScalar(need - dd));
+    };
 
     // ---- butterflies ---------------------------------------------------------
     for (const b of this.butterflies) {
@@ -137,6 +156,7 @@ export class Ambient {
       b.pos.addScaledVector(b.vel, dt);
       b.pos.y += Math.sin(t * b.freq * TAU * 0.5 + b.ph) * 0.05;
       this.bounds.collide(b.pos, b.vel, 0.8, dt, { cushion: 0.8, stiffness: 25 });
+      clearSight(b.pos, 4.5);
       b.c.group.position.copy(b.pos);
       orient(b.c.group, b.vel.clone().setY(b.vel.y * 0.3), clamp(-b.vel.x * 0.02, -0.4, 0.4));
       b.c.setPose({ t: t + b.ph, open: 0.6, flap: b.state === 'scatter' ? 1 : 0.85, freq: b.state === 'scatter' ? b.freq * 1.6 : b.freq, grip: 0 });
@@ -149,25 +169,33 @@ export class Ambient {
         if (df.escort === 0 && d < 30 && bee.speed > 8 && bee.flying) { df.escort = 0.0001; this._escortStart = t; }
         if (df.escort > 0) {
           df.escort += dt;
-          if (df.escort > 14 || !bee.flying || d > 70) { df.escort = 0; df.home = df.pos.clone(); df.state = 'hover'; df.timer = 1; }
+          if (df.escort > 14 || !bee.flying || d > 70) { df.escort = 0; df.station = null; df.home = df.pos.clone(); df.state = 'hover'; df.timer = 1; }
         }
       }
       df.timer -= dt;
       if (df.escort > 0) {
-        // escort: re-aim a little beside and above the bee every beat
-        if (df.timer <= 0) {
-          const fw = bee.vel.clone().setY(0);
-          if (fw.lengthSq() < 1) fw.set(Math.sin(bee.yaw), 0, Math.cos(bee.yaw));
-          fw.normalize();
-          const side = V(-fw.z, 0, fw.x).multiplyScalar((r.chance(0.5) ? 1 : -1) * r.range(5.5, 7.5));
-          df.from.copy(df.pos);
-          df.to.copy(bp).add(side).add(V(0, r.range(1.5, 3.5), 0)).addScaledVector(fw, r.range(2, 5));
+        // escort: hold a station beside and a little ahead of the bee, kept in
+        // the bee's own frame every frame so it keeps pace at any speed (a
+        // station picked from a stale bee position fell behind it, between
+        // the bee and the camera). Every beat it darts to a new station.
+        const fw = bee.vel.clone().setY(0);
+        if (fw.lengthSq() < 1) fw.set(Math.sin(bee.yaw), 0, Math.cos(bee.yaw));
+        fw.normalize();
+        const sd = V(-fw.z, 0, fw.x);
+        if (df.timer <= 0 || !df.station) {
+          df.offFrom = df.pos.clone().sub(bp);
+          // it is twice APX-9's size (13.5 long, 11 across the wings): fly well wide
+          df.station = { side: (r.chance(0.5) ? 1 : -1) * r.range(13, 16), up: r.range(3, 5), ahead: r.range(6, 10) };
           df.dart = 0;
-          df.timer = r.range(0.25, 0.6);
+          df.dartDur = clamp(df.offFrom.length() / 40, 0.22, 0.9);
+          df.timer = r.range(0.4, 0.9);
         }
-        df.dart = Math.min(1, df.dart + dt / 0.22);
-        df.pos.lerpVectors(df.from, df.to, smooth(df.dart));
-        df.pos.addScaledVector(bee.vel, dt * df.dart);
+        const st = df.station;
+        const offTo = sd.multiplyScalar(st.side).add(V(0, st.up, 0)).addScaledVector(fw, st.ahead);
+        df.dart = Math.min(1, df.dart + dt / df.dartDur);
+        df.pos.copy(bp).add(df.offFrom.clone().lerp(offTo, smooth(df.dart)));
+        df.from.copy(df.pos);
+        df.to.copy(df.pos);
       } else {
         if (d < 6 && df.state !== 'flee') { df.state = 'flee'; df.from.copy(df.pos); df.to.copy(df.pos).add(df.pos.clone().sub(bp).setY(0).normalize().multiplyScalar(22)).add(V(0, 6, 0)); df.dart = 0; df.timer = 1.2; }
         if (df.timer <= 0) {
@@ -184,6 +212,7 @@ export class Ambient {
         if (df.state === 'dart' || df.state === 'flee') { df.dart = Math.min(1, df.dart + dt / (df.state === 'flee' ? 0.5 : 0.35)); df.pos.lerpVectors(df.from, df.to, smooth(df.dart)); }
       }
       const jitter = V(Math.sin(t * 5.1 + df.home.x) * 0.06, Math.sin(t * 6.3) * 0.05, Math.cos(t * 4.7) * 0.06);
+      clearSight(df.pos, 6.5);
       df.c.group.position.copy(df.pos).add(jitter);
       const mv = df.to.clone().sub(df.from).setY(0);
       if (mv.lengthSq() > 1) df.face.lerp(mv.normalize(), damp(6, dt));
@@ -206,7 +235,7 @@ export class Ambient {
         // hover at the bee's eye level, a few lengths off, watching it
         const off = h.pos.clone().sub(bp).setY(0);
         if (off.lengthSq() < 1) off.set(1, 0, 0);
-        off.normalize().multiplyScalar(6.5);
+        off.normalize().multiplyScalar(9);
         want = bp.clone().add(off).add(V(0, 1.2, 0));
         face = bp.clone().sub(h.pos);
         if (h.timer <= 0) { h.state = 'leave'; h.timer = 1.5; h.vel.copy(off).normalize().multiplyScalar(26).add(V(0, 10, 0)); }
@@ -233,6 +262,7 @@ export class Ambient {
       this.bounds.collide(h.pos, vel, 1.2, dt, { cushion: 1, stiffness: 30 });
       face.y *= 0.2;
       if (face.lengthSq() > 1e-4) h.face.lerp(face.normalize(), damp(5, dt));
+      if (h.state !== 'sip') clearSight(h.pos, 4.5);
       h.c.group.position.copy(h.pos);
       orient(h.c.group, h.face, clamp(-vel.x * 0.01, -0.3, 0.3), 0);
       const hover = h.state === 'sip' || h.state === 'curious';
