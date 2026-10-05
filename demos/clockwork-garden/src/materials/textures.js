@@ -514,3 +514,63 @@ export function glowSprite(size = 128) {
   ctx.fillRect(0, 0, size, size);
   return toTexture(c, { srgb: false, wrap: false });
 }
+
+// Enamelled metal leaf for close viewing (interactive modes): a grey-toned
+// enamel field (tinted per instance) that darkens toward the margin and
+// lifts along the midrib, gilt midrib, side veins and a fine gilt edge.
+// u (canvas x) runs base → tip, v (canvas y) across the blade.
+// Returns { map (sRGB), orm (G roughness, B metalness / gilt mask) }.
+export function enamelLeafTextures(size = 512, seed = 77) {
+  const W = size, H = size;
+  const col = canvas(W, H), orm = canvas(W, H);
+  const c = col.getContext('2d'), o = orm.getContext('2d');
+  const rng = new RNG(seed);
+  const n = fbmTile(W, seed + 1, 5, 4);
+  const img = c.createImageData(W, H);
+  const om = o.createImageData(W, H);
+  for (let y = 0; y < H; y++) {
+    const v = (y / (H - 1)) * 2 - 1; // across, -1 … 1
+    for (let x = 0; x < W; x++) {
+      const u = x / (W - 1);
+      const k = (y * W + x) * 4;
+      const edge = Math.abs(v);
+      const mott = n[y * W + x];
+      // lighter along the midrib and the blade's middle, darker at the margin and tip
+      let L = 0.72 + 0.22 * (1 - edge) - 0.18 * Math.pow(edge, 3) - 0.1 * u * u + (mott - 0.5) * 0.18;
+      L = Math.max(0.25, Math.min(1, L));
+      img.data[k] = 255 * L * 0.98; img.data[k + 1] = 255 * L; img.data[k + 2] = 255 * L * 0.94; img.data[k + 3] = 255;
+      om.data[k] = 255; om.data[k + 1] = 255 * (0.3 + mott * 0.15); om.data[k + 2] = 255 * 0.12; om.data[k + 3] = 255;
+    }
+  }
+  c.putImageData(img, 0, 0);
+  o.putImageData(om, 0, 0);
+  // gilt veins and margin
+  const gild = (ctx, color) => {
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineWidth = H * 0.016;
+    ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W * 0.97, H / 2); ctx.stroke();
+    for (let i = 0; i < 9; i++) {
+      const x = W * (0.07 + i * 0.1);
+      for (const s of [-1, 1]) {
+        ctx.lineWidth = H * (0.0065 - i * 0.0004);
+        ctx.beginPath();
+        ctx.moveTo(x, H / 2);
+        ctx.quadraticCurveTo(x + W * 0.07, H / 2 + s * H * 0.22, x + W * 0.17, H / 2 + s * H * 0.44);
+        ctx.stroke();
+      }
+    }
+    ctx.lineWidth = H * 0.009;
+    ctx.beginPath(); ctx.moveTo(0, 2); ctx.lineTo(W, 2); ctx.moveTo(0, H - 2); ctx.lineTo(W, H - 2); ctx.stroke();
+  };
+  gild(c, '#d8ad5a');
+  gild(o, 'rgb(255,90,255)');
+  // a little wear on the enamel
+  for (let i = 0; i < 160; i++) {
+    c.fillStyle = `rgba(255,255,255,${rng.range(0.02, 0.06)})`;
+    c.beginPath(); c.ellipse(rng.range(0, W), rng.range(0, H), rng.range(3, 14), rng.range(1, 4), rng.range(0, 3), 0, Math.PI * 2); c.fill();
+  }
+  const map = toTexture(col, { srgb: true, wrap: false });
+  const ormT = toTexture(orm, { wrap: false });
+  return { map, orm: ormT };
+}

@@ -23,6 +23,8 @@ export class Atmosphere {
       uTime: { value: 0 },
       uIntensity: { value: 0 },
       uColor: { value: new THREE.Color('#ffd49a') },
+      uInside: { value: 0 }, // interactive modes: fade a beam the camera is inside
+      uNear: { value: new THREE.Vector2(25, 190) }, // fade toward the lens (interactive modes fade more)
     };
     const shaftMat = new THREE.ShaderMaterial({
       uniforms: this.shaftUniforms,
@@ -31,9 +33,13 @@ export class Atmosphere {
       blending: THREE.AdditiveBlending,
       side: THREE.DoubleSide,
       vertexShader: `
-        varying vec3 vN; varying vec3 vV; varying float vAlong; varying vec3 vW;
+        varying vec3 vN; varying vec3 vV; varying float vAlong; varying vec3 vW; varying float vInside;
+        uniform float uInside;
         void main(){
           vec4 w = modelMatrix * vec4(position, 1.0);
+          // camera's distance from this beam's axis, in beam radii
+          vec3 camL = (inverse(modelMatrix) * vec4(cameraPosition, 1.0)).xyz;
+          vInside = mix(1.0, smoothstep(1.2, 4.5, length(camL.xz)), uInside);
           vW = w.xyz;
           vN = normalize(mat3(modelMatrix) * normal);
           vV = normalize(cameraPosition - w.xyz);
@@ -41,8 +47,8 @@ export class Atmosphere {
           gl_Position = projectionMatrix * viewMatrix * w;
         }`,
       fragmentShader: `
-        uniform float uTime, uIntensity; uniform vec3 uColor;
-        varying vec3 vN; varying vec3 vV; varying float vAlong; varying vec3 vW;
+        uniform float uTime, uIntensity; uniform vec3 uColor; uniform vec2 uNear;
+        varying vec3 vN; varying vec3 vV; varying float vAlong; varying vec3 vW; varying float vInside;
         float hash(vec3 p){ p = fract(p*0.3183099+0.1); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
         float noise(vec3 x){ vec3 i=floor(x); vec3 f=fract(x); f=f*f*(3.0-2.0*f);
           return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
@@ -54,12 +60,12 @@ export class Atmosphere {
           // fine dusty streaks running down the beam, and a fade close to the
           // lens so near beams never wash the frame into a white wedge
           float streak = 0.6 + 0.4 * noise(vec3(vW.x * 0.09 + vW.z * 0.05, vW.y * 0.006, vW.z * 0.09 - vW.x * 0.05) + vec3(0.0, uTime * 0.02, 0.0));
-          float camFade = smoothstep(25.0, 190.0, length(cameraPosition - vW));
+          float camFade = smoothstep(uNear.x, uNear.y, length(cameraPosition - vW));
           // vAlong = 1 under the glazing → 0 at the far end: strongest just below
           // the roof, dissolving into the haze well above the plants
           float ends = smoothstep(1.0, 0.93, vAlong) * smoothstep(0.3, 0.74, vAlong);
           float n = noise(vW * 0.02 + vec3(0.0, -uTime * 0.05, uTime * 0.03)) * 0.6 + 0.4;
-          float a = edge * ends * n * streak * camFade * uIntensity;
+          float a = edge * ends * n * streak * camFade * uIntensity * vInside;
           gl_FragColor = vec4(uColor * a, 1.0);
         }`,
     });

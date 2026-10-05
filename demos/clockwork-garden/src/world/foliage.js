@@ -34,6 +34,7 @@ export class Foliage {
     const tint = (c, j = 0.08) => c.offsetHSL(rng.range(-0.015, 0.015), rng.range(-j, j), rng.range(-j, j));
 
     const leafMat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: 0.7, roughness: 0.44, clearcoat: 0.3, clearcoatRoughness: 0.3, side: THREE.DoubleSide });
+    this.leafMat = leafMat;
     const leaf = leafGeometry({ length: 7, width: 2.6, fold: 0.5, arch: 0.8, segU: 5, segV: 2, thickness: 0.05 }).geometry;
     const smallLeaf = leafGeometry({ length: 5, width: 3.0, fold: 0.35, arch: 0.4, segU: 3, segV: 2, thickness: 0.04 }).geometry; // ivy
     const inBed = (x, z) => Math.hypot(x, z) > 46 && (x < L.pathX[0] - 6 || x > L.pathX[1] + 6);
@@ -79,6 +80,7 @@ export class Foliage {
       }
       return mergeGeometries(parts);
     })();
+    this.domeGeo = dome;
     const bushes = [];
     this.bushSpots = [];
     for (const f of flora.flowers) {
@@ -250,6 +252,7 @@ export class Foliage {
       const sc = rng.range(1.1, 1.7);
       this.m4.compose(V(x, 0, z), q.identity(), s.setScalar(sc));
       urns.push([this.m4.clone(), col.set(rng.chance(0.5) ? '#b8955a' : '#9c8a76').clone()]);
+      (this.palmSpots ??= []).push({ x, z, sc });
       const nf = 9 + Math.floor(rng.float() * 4);
       for (let k = 0; k < nf; k++) {
         q.setFromEuler(e.set(rng.range(-0.25, 0.35), (k / nf) * TAU + rng.range(-0.2, 0.2), rng.range(-0.1, 0.1), 'YXZ'));
@@ -346,7 +349,7 @@ export class Foliage {
     const w0 = B.bloomWave[0];
     this.lanterns.forEach((l, i) => {
       const k = clamp((t - w0 - l.delay) / 0.8);
-      const g = 0.08 + k * (3.2 + 0.25 * Math.sin(t * 7 + l.ph) + 0.15 * Math.sin(t * 13.3 + l.ph * 2));
+      const g = this.live ? this.live.lantern(l, i, t) : 0.08 + k * (3.2 + 0.25 * Math.sin(t * 7 + l.ph) + 0.15 * Math.sin(t * 13.3 + l.ph * 2));
       this.flames.setColorAt(i, col.setRGB(g, g * 0.6, g * 0.24));
     });
     this.flames.instanceColor.needsUpdate = true;

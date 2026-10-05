@@ -124,7 +124,7 @@ export class Skep {
   }
   update(t, ctx) {
     const wake = sseg(t, B.podsWake[0] + 2, B.beeEmerge);
-    const g = 0.25 + wake * 0.9;
+    const g = 0.25 + wake * 0.9 + (ctx.skepFlare || 0);
     this.doorGlow.material.color.setRGB(1.0 * g, 0.6 * g, 0.26 * g);
     this.hand.rotation.z = -t * 0.12;
   }
@@ -276,11 +276,12 @@ export class PorcelainLily {
   }
   update(t, ctx) {
     // stem dips when the butterfly lands, then sways back with damping
-    const land = B.monarchLand;
+    const land = ctx.lilyLandAt ?? B.monarchLand;
     let b = 0;
     if (t > land) {
       const s = t - land;
       b = 0.9 * (1 - Math.exp(-s * 3.5) * Math.cos(s * 6.5)) * (1 - sseg(t, B.monarch[1] - 0.6, B.monarch[1] + 0.6) * 0.0);
+      if (ctx.lilyLandAt !== undefined) b *= ctx.lilyWeight ?? 1;
     }
     b += Math.sin(t * 0.8) * 0.06;
     this.setBend(Math.round(b * 120) / 120);
@@ -345,7 +346,7 @@ export class GlassBlossom {
   }
   update(t, ctx) {
     const wake = sseg(t, B.podsWake[0] + 3, B.podsWake[1] + 3);
-    const sip = sseg(t, B.hummingbird[0] + 1.6, B.hummingbird[0] + 2.4) * (1 - sseg(t, B.hummingbird[0] + 3.4, B.hummingbird[0] + 4.0));
+    const sip = ctx.sip ?? sseg(t, B.hummingbird[0] + 1.6, B.hummingbird[0] + 2.4) * (1 - sseg(t, B.hummingbird[0] + 3.4, B.hummingbird[0] + 4.0));
     const g = 0.2 + wake * 1.4 + sip * 2 + Math.sin(t * 3.1) * 0.08 * wake;
     this.nectarMat.color.setRGB(1.0 * g, 0.72 * g, 0.36 * g);
     this.light.intensity = (wake * 1.5 + sip * 3) * ctx.lightScale;

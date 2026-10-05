@@ -537,7 +537,7 @@ export class HeroFlower {
 
   update(t, ctx) {
     // drive shaft: spins up when the barrel releases
-    const shaftAngle = rampIntegral(t, B.hubSpin[0], B.hubSpin[1], 5.5);
+    const shaftAngle = rampIntegral(ctx.crownT ?? t, B.hubSpin[0], B.hubSpin[1], 5.5);
     for (let i = 0; i < this.shaftSegs.length; i++) this.shaftSegs[i].rotation.y = shaftAngle * (i % 2 ? -1 : 1) * -1;
 
     // light climbing the vein
@@ -623,7 +623,7 @@ export class HeroFlower {
 
     // core lamp
     const coreK = sseg(t, B.core[0], B.core[1]);
-    const rs = t - B.flowerRespond;
+    const rs = t - (ctx.respondAt ?? B.flowerRespond);
     const respond = rs > 0 ? (1 - Math.exp(-rs * 4)) * Math.exp(-rs * 0.9) : 0;
     const bud = sseg(t, B.budGlow[0], B.budGlow[1]) * (1 - sseg(t, B.outer[0] + 0.5, B.middle[1]));
     const glow = 0.04 + coreK * 1.0 + respond * 0.8 + bud * 0.5;
@@ -647,7 +647,7 @@ export class HeroFlower {
     // petal rims and porcelain warm up when pollination succeeds
     // the answer ripples outward: inner rims glow first, then middle, then outer
     RINGS.forEach((r, i) => {
-      const t0 = B.flowerRespond + i * 0.28;
+      const t0 = (ctx.respondAt ?? B.flowerRespond) + i * 0.28;
       const s = t - t0;
       const pulse = s > 0 ? Math.exp(-s * 1.3) * (1 - Math.exp(-s * 5)) : 0;
       r.rimMat.emissiveIntensity = pulse * 1.1 + coreK * 0.04;

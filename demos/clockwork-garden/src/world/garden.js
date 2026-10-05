@@ -184,7 +184,7 @@ export class Garden {
         post.position.set(x, 0, z + (x > 60 ? 40 : 0));
         const orb = new THREE.Mesh(orbGeo, orbMat);
         orb.position.set(post.position.x, h + 5, post.position.z);
-        const core = new THREE.Mesh(coreGeo, this.lampCoreMat);
+        const core = new THREE.Mesh(coreGeo, this.lampCoreMat.clone());
         core.position.copy(orb.position);
         const cage = new THREE.Mesh(new THREE.TorusGeometry(5.1, 0.25, 6, 32), mat.gold);
         cage.position.copy(orb.position);
@@ -199,5 +199,10 @@ export class Garden {
   update(t, ctx) {
     const lampGlow = (1 - ctx.dawn * 0.6) * 2.4 * sseg(t, B.podsWake[0], B.podsWake[1]);
     this.lampCoreMat.color.setRGB(1.0 * lampGlow + 0.05, 0.62 * lampGlow + 0.03, 0.3 * lampGlow + 0.02);
+    // each lamp has its own material so the interactive modes can light them one by one
+    this.lamps.forEach((core, i) => {
+      if (this.live) { const g = this.live.lamp(core, i, t); core.material.color.setRGB(1.0 * g + 0.05, 0.62 * g + 0.03, 0.3 * g + 0.02); }
+      else core.material.color.copy(this.lampCoreMat.color);
+    });
   }
 }

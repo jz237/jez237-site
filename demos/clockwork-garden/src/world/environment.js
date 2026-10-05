@@ -50,17 +50,41 @@ function envScene({ top, horizon, bottom, windows, windowColor, sun, sunColor, s
   return scene;
 }
 
+const SUN_ENV = new THREE.Vector3(-0.35, 0.62, -0.6);
+const MOODS = {
+  night: { top: '#040c0f', horizon: '#173a3e', bottom: '#030605', windows: 1.3, windowColor: '#86b7b6', sun: 0.0, sunColor: '#9ec7c6' },
+  dawn: { top: '#0e2a30', horizon: '#6a5a44', bottom: '#0b0d0a', windows: 0.9, windowColor: '#d9b27a', sun: 0.6, sunColor: '#ffcf8a' },
+  gold: { top: '#3b5a5c', horizon: '#e1b577', bottom: '#1a150d', windows: 2.2, windowColor: '#ffdcaa', sun: 2.5, sunColor: '#ffd9a0' },
+};
+
 export function createEnvironments(renderer) {
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const sunDir = new THREE.Vector3(-0.35, 0.62, -0.6);
-  const moods = {
-    night: envScene({ top: '#040c0f', horizon: '#173a3e', bottom: '#030605', windows: 1.3, windowColor: '#86b7b6', sun: 0.0, sunColor: '#9ec7c6', sunDir }),
-    dawn: envScene({ top: '#0e2a30', horizon: '#6a5a44', bottom: '#0b0d0a', windows: 0.9, windowColor: '#d9b27a', sun: 0.6, sunColor: '#ffcf8a', sunDir }),
-    gold: envScene({ top: '#3b5a5c', horizon: '#e1b577', bottom: '#1a150d', windows: 2.2, windowColor: '#ffdcaa', sun: 2.5, sunColor: '#ffd9a0', sunDir }),
-  };
   const maps = {};
-  for (const [k, scene] of Object.entries(moods)) {
-    maps[k] = pmrem.fromScene(scene, 0.02).texture;
+  for (const [k, m] of Object.entries(MOODS)) {
+    maps[k] = pmrem.fromScene(envScene({ ...m, sunDir: SUN_ENV }), 0.02).texture;
+  }
+  pmrem.dispose();
+  return maps;
+}
+
+// Interactive modes: environment maps along the night → dawn → gold axis
+// (k = 0, 0.5, 1 match the film's three moods), baked once and picked by
+// the time-of-day control.
+export function createEnvironmentRamp(renderer, steps = 9) {
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const col = (a, b, k) => '#' + new THREE.Color(a).lerp(new THREE.Color(b), k).getHexString();
+  const mix = (a, b, k) => ({
+    top: col(a.top, b.top, k), horizon: col(a.horizon, b.horizon, k), bottom: col(a.bottom, b.bottom, k),
+    windows: a.windows + (b.windows - a.windows) * k, windowColor: col(a.windowColor, b.windowColor, k),
+    sun: a.sun + (b.sun - a.sun) * k, sunColor: col(a.sunColor, b.sunColor, k),
+  });
+  const maps = [];
+  for (let i = 0; i < steps; i++) {
+    const k = i / (steps - 1);
+    const m = k <= 0.5 ? mix(MOODS.night, MOODS.dawn, k * 2) : mix(MOODS.dawn, MOODS.gold, k * 2 - 1);
+    const scene = envScene({ ...m, sunDir: SUN_ENV });
+    maps.push(pmrem.fromScene(scene, 0.02).texture);
+    scene.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
   }
   pmrem.dispose();
   return maps;

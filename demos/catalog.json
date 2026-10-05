@@ -294,23 +294,23 @@
   {
     "id": "014",
     "title": "The Clockwork Garden",
-    "category": "3D · Procedural film",
-    "description": "A forgotten Victorian glasshouse wakes from a single ticking escapement. Follow the pulse through gears and copper roots as a glowing porcelain bud opens on visible levers, and APX-9, the mechanical pollinator bee, leaves its brass skep to gather luminous pollen among monarchs, beetles, hummingbirds and a songbird.",
+    "category": "3D · Explorable film",
+    "description": "A forgotten Victorian glasshouse of brass and porcelain, and APX-9, the mechanical bee that tends it. Watch the 58-second film of the garden waking, fly as APX-9 to pollinate blooms, wind the escapement and grow the garden, or follow the bee as it goes about its day.",
     "url": "clockwork-garden/",
     "image": "assets/clockwork-garden.jpg",
     "imageAlt": "Actual Clockwork Garden frame: the yellow-and-black APX-9 mechanical bee with gold-veined glass wings beside an open porcelain flower with glowing brass stamens",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/clockwork-garden",
     "features": [
-      "58-second cinematic sequence",
-      "APX-9 lives in the garden",
-      "Mechanisms visibly drive the bloom",
-      "Procedural score"
+      "58-second cinematic film",
+      "Fly as APX-9 · pollinate & grow the garden",
+      "Follow mode with orbit camera",
+      "Time of day, photo mode & procedural sound"
     ],
     "facts": [
       "No video models",
       "Three.js · WebGL 2",
-      "Every mesh & sound generated in code"
+      "Keyboard, touch & gamepad"
     ],
-    "note": "WebGL 2 · Best on a desktop GPU · Press M for sound, Space to pause, R to replay · Preview captured from the running film"
+    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Sound stays off until you turn it on · Preview captured from the running piece"
   }
 ]

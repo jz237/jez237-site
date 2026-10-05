@@ -1,0 +1,409 @@
+import * as THREE from 'three';
+import { TimeOfDay } from './timeofday.js';
+import { Bounds } from './bounds.js';
+import { BeeActor, SPEED } from './actor.js';
+import { Pilot } from './pilot.js';
+import { ChaseCam, FollowCam, PhotoCam, lookDir } from './cameras.js';
+import { Growth } from './growth.js';
+import { Bellflowers } from './bells.js';
+import { Interactions } from './interactions.js';
+import { Ambient } from './ambient.js';
+import { Scenery } from './scenery.js';
+import { LookUpgrade } from './upgrade.js';
+import { DetailCull } from './cull.js';
+import { applyPose } from '../direction/camera.js';
+import { SUN_DIR } from '../world/atmosphere.js';
+import { L } from '../world/layout.js';
+import { clamp, lerp, smooth } from '../core/ease.js';
+
+// Interactive modes (fly / follow / photo). The garden is held in its fully
+// awake state and runs on a free real-time clock that is separate from the
+// film's timeline; the explore controller owns the camera, APX-9, ambient
+// life, interactions and the lighting rig while it is active. Leaving it
+// hands everything back to the film, which re-derives its state from t.
+
+const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const WORLD_T0 = 70; // world clock offset: every film beat has played out
+const TIMES = [0.0, 0.5, 0.86]; // T cycles midnight → dawn → golden hour
+
+export class Explore {
+  constructor({ renderer, scene, world, pipeline, quality, mat, audio }) {
+    this.renderer = renderer;
+    this.scene = scene;
+    this.world = world;
+    this.pipeline = pipeline;
+    this.quality = quality;
+    this.audio = audio;
+    this.camera = new THREE.PerspectiveCamera(50, 16 / 9, 0.05, 9000);
+    this.tod = new TimeOfDay(renderer);
+    this.clock = 0;
+    this.active = false;
+    this.aspect = 16 / 9;
+    this.pixelRatio = 1;
+    this.reduced = false;
+    this.mode = 'follow';
+    this.photo = false;
+    this.group = new THREE.Group();
+    this.group.name = 'explore';
+    this.group.visible = false;
+    scene.add(this.group);
+    this.debugView = null;
+    this.focus = { center: V(0, 20, 0), radius: 60 };
+    this.frustum = new THREE.Frustum();
+    this.listeners = {};
+
+    // the flight volume and everything that lives in it
+    this.bounds = new Bounds(world);
+    const sk = world.skep;
+    const out = V(0, 0, 1).applyQuaternion(sk.group.quaternion);
+    this.skep = {
+      board: world.creatures.beeBoard.clone(),
+      inside: world.creatures.beeInside.clone(),
+      entrance: sk.entranceWorld(),
+      out,
+      side: V(-out.z, 0, out.x),
+    };
+    this.upgrade = new LookUpgrade(world, quality, mat);
+    this.group.add(this.upgrade.group);
+    this.scenery = new Scenery(mat, quality, world, this.bounds, this.upgrade);
+    this.group.add(this.scenery.group);
+    this.growth = new Growth(mat, quality, this.bounds);
+    this.group.add(this.growth.group);
+    this.growth.registerLandables(this.bounds);
+    this.bells = new Bellflowers(mat, this.bounds);
+    this.group.add(this.bells.group);
+    this.interactions = new Interactions({ world, mat, quality, bounds: this.bounds, growth: this.growth, bells: this.bells, audio, emit: (n, d) => { if (n === 'kindle' && this.stats) this.stats.lanterns++; this._emit(n, d); } });
+    this.group.add(this.interactions.group);
+    this.ambient = new Ambient({ world, mat, quality, bounds: this.bounds, audio, skep: this.skep });
+    this.group.add(this.ambient.group);
+    this.bells.onRing = (b, k) => {
+      this.audio?.bell(b.note, 0.045 * k, clamp((b.pivot.x - this.camera.position.x) * 0.02, -0.8, 0.8));
+      this.stats.bells++;
+      this._emit('bell', b);
+    };
+
+    const w = world;
+    this.cull = new DetailCull([w.flower.group, w.crown.group, w.escapement.group, w.roots.group, w.skep.group, w.pods.group, w.lily.group, w.blossom.group, w.reed.group, w.tree.group, w.garden.group, this.bells.group]);
+    for (const c of this.ambient.group.children) this.cull.addGroup(c, 3);
+    this.actor = new BeeActor({ bee: world.creatures.hero, bounds: this.bounds, skep: this.skep, events: (n, d) => this._actorEvent(n, d) });
+    this.pilot = new Pilot({ bounds: this.bounds, world, skep: this.skep });
+    this.chase = new ChaseCam(this.bounds);
+    this.follow = new FollowCam(this.bounds);
+    this.photoCam = new PhotoCam(this.bounds);
+    this.view = { pos: V(), target: V(), fov: 50, roll: 0, focus: 10, aperture: 0 };
+    this.stats = { pollinated: 0, deposits: 0, winds: 0, lanterns: 0, bells: 0 };
+    // start APX-9 on its landing board
+    this.actor.place(this.skep.board.clone(), Math.atan2(out.x, out.z), 'fly');
+    this.actor.state = 'walk-out';
+    this.actor.seq = { dur: 0.01, from: this.skep.board.clone(), to: this.skep.board.clone() };
+  }
+
+  on(name, fn) { (this.listeners[name] ||= []).push(fn); }
+  _emit(name, data) { for (const fn of this.listeners[name] || []) fn(data, this); }
+
+  _actorEvent(name, data) {
+    if (name === 'touchdown') {
+      this.interactions.touchdown(data, this.mode === 'fly' ? 'player' : 'apx9');
+      if (!this.interactions._counted?.has(data.id)) { (this.interactions._counted ||= new Set()).add(data.id); this.stats.pollinated++; }
+    }
+    if (name === 'deposit') {
+      this.interactions.deposit(data.amount, this.mode === 'fly' ? 'player' : 'apx9');
+      this.ambient.onDeposit();
+      this.stats.deposits++;
+    }
+    this._emit('actor', { name, data });
+  }
+
+  // ---- mode switching ------------------------------------------------------------------
+  enter(mode) {
+    const prev = this.mode;
+    this.mode = mode;
+    if (!this.active) {
+      this.active = true;
+      this.group.visible = true;
+      const C = this.world.creatures;
+      // hide the film's cast; APX-9 stays (the explore controller drives it)
+      for (const c of C.group.children) c.visible = c === C.hero.group;
+      C.hero.group.visible = true;
+      this.world.setFarShadows(false);
+      // remember the practical lights' film settings
+      const Lg = this.world.lighting;
+      this._lightSave = ['pulse', 'skep', 'spark', 'fill'].map((k) => [k, Lg[k].color.clone(), Lg[k].distance, Lg[k].decay]);
+      // the film's sculpting beam: no shadow pass while exploring
+      this.world.lighting.beam.shadow.autoUpdate = false;
+      this.interactions.install();
+      this.upgrade.apply(true);
+      this.pipeline.scenePass.material.uniforms.uSteps.value = this.quality.tier === 'high' ? 36 : Math.min(30, this.quality.dofSteps);
+      this.world.atmosphere.shaftUniforms.uInside.value = 1;
+      this.world.atmosphere.shaftUniforms.uNear.value.set(60, 300);
+      this.follow.reset(this.actor);
+    }
+    if (mode === 'fly' && prev !== 'fly') {
+      // take over from wherever APX-9 is, looking the way it faces
+      this.chase.reset(this.actor, this.actor.yaw, -0.12);
+      this.pilot.route = null;
+      this.pilot.goal = null;
+    }
+    if (mode === 'follow' && prev !== 'follow') {
+      this.follow.reset(this.actor);
+      this.pilot.route = null;
+      this.pilot.goal = null;
+    }
+  }
+
+  exit() {
+    if (!this.active) return;
+    this.active = false;
+    this.photo = false;
+    this.group.visible = false;
+    this.interactions.uninstall();
+    this.upgrade.apply(false);
+    this.cull.restore();
+    const Lg = this.world.lighting;
+    Lg.beam.shadow.autoUpdate = true;
+    Lg.beam.shadow.needsUpdate = true;
+    for (const [k, c, d, dc] of this._lightSave || []) { Lg[k].color.copy(c); Lg[k].distance = d; Lg[k].decay = dc; Lg[k].intensity = 0; }
+    this.pipeline.scenePass.material.uniforms.uSteps.value = this.quality.dofSteps;
+    this.world.atmosphere.shaftUniforms.uInside.value = 0;
+    this.world.atmosphere.shaftUniforms.uNear.value.set(25, 190);
+    // the film re-derives creature visibility and every world state from t
+  }
+
+  // spawn for a fresh flight: hovering just out of the skep, facing the bloom
+  spawnAtSkep() {
+    const s = this.skep;
+    const p = s.board.clone().addScaledVector(s.out, 9).add(V(0, 4, 0));
+    const head = this.world.flower.head.getWorldPosition(V());
+    const yaw = Math.atan2(head.x - p.x, head.z - p.z);
+    this.actor.place(p, yaw, 'fly');
+    this.chase.reset(this.actor, yaw, -0.08);
+  }
+
+  get worldTime() { return WORLD_T0 + this.clock; }
+
+  setTime(v) { this.tod.value = clamp(v, 0, 1); this._emit('time', this.tod.value); }
+  cycleTime() {
+    const v = this.tod.value;
+    const i = TIMES.findIndex((x) => x > v + 0.02);
+    this.setTime(i < 0 ? TIMES[0] : TIMES[i]);
+  }
+
+  togglePhoto(on = !this.photo) {
+    this.photo = on;
+    if (on) this.photoCam.from(this.view);
+    this._emit('photo', on);
+  }
+
+  // ---- per frame -------------------------------------------------------------------------------------
+  // input: a frame from Input (or null when no interaction, e.g. under the landing screen)
+  update(dt, input) {
+    dt = Math.min(dt, 1 / 20);
+    const simDt = this.photo ? 0 : dt;
+    this.clock += simDt;
+    const a = this.actor;
+    // intent
+    let intent = { vel: V(), face: null, boost: false, lift: 0 };
+    if (this.photo) {
+      // the world holds still for the photographer
+    } else if (this.mode === 'fly' && input) {
+      intent = this._playerIntent(input);
+    } else if (this.mode !== 'fly') {
+      intent = this.pilot.step(simDt, a, { isPollinated: (l) => this.interactions.isPollinated(l), wind: (s) => this.interactions.windUp(s), windBusy: () => this.interactions.windBusy() });
+    }
+    if (simDt > 0) a.step(simDt, intent);
+    a.apply(this.reduced);
+    // triggers the bee can set off by flying into things
+    if (simDt > 0) this._triggers();
+    this._dt = simDt;
+    this._input = input;
+  }
+
+  _playerIntent(input) {
+    const a = this.actor;
+    const c = this.chase;
+    // the bee flies where you look: thrust along the view, strafe across it
+    const f = lookDir(c.yaw, c.pitch * 0.85, V());
+    const right = V(-Math.cos(c.yaw), 0, Math.sin(c.yaw));
+    const boost = input.boost && input.move.y > 0.1;
+    const sp = boost ? SPEED.boost : SPEED.cruise;
+    const vel = f.multiplyScalar(input.move.y * sp).addScaledVector(right, input.move.x * sp * 0.75);
+    vel.y += input.lift * SPEED.climb;
+    if (a.state === 'landed' && a.stateT > 0.4 && (input.lift > 0.2 || Math.abs(input.move.y) > 0.3 || Math.abs(input.move.x) > 0.3)) {
+      a.takeoff();
+      if (!a.gather?.done) this._hud?.flashHint('Took off early — part of the pollen gathered', 2.5);
+    }
+    if (a.state === 'grounded' && input.lift > 0.2) vel.y = Math.max(vel.y, 8);
+    // face the view direction (bees hover and strafe without turning)
+    return { vel, face: c.yaw, boost, lift: input.lift };
+  }
+
+  _triggers() {
+    const a = this.actor;
+    if (a.busy) return;
+    const p = a.pos;
+    // the skep door
+    const door = this.skep.entrance.clone().addScaledVector(this.skep.out, 1.2);
+    const dDoor = p.distanceTo(door);
+    if (dDoor < 6.5 && a.state === 'fly') {
+      if (a.pollen > 0.05) { if (this.mode === 'fly') a.dock(); }
+      else if (this.mode === 'fly' && (this._doorHint ?? -10) < this.clock - 6) { this._doorHint = this.clock; this._emit('hint', 'The skep is waiting for pollen: visit some blooms first'); }
+    }
+    // winding: touch the escapement
+    const esc = L.escapement.clone().add(V(0, 1.2, 0));
+    if (p.distanceTo(esc) < 6.5 && (this.mode === 'fly' || this.pilot.goal?.kind === 'wind')) {
+      if (this.interactions.windUp(this.mode === 'fly' ? 'player' : 'apx9')) this.stats.winds++;
+    }
+    // settle on a bloom (fly mode: descend gently onto it)
+    if (this.mode === 'fly' && a.state === 'fly') {
+      const l = this.bounds.nearestLandable(p, 16);
+      this.candidate = null;
+      if (l) {
+        const dh = Math.hypot(l.spot.x - p.x, l.spot.z - p.z);
+        const dy = p.y - l.spot.y;
+        const near = dh < l.radius + 2.5 && dy > -1.5 && dy < 9;
+        if (near) this.candidate = l;
+        const input = this._input;
+        const descending = (input?.lift ?? 0) < -0.2 || a.vel.y < -1.5;
+        const slow = a.speed < 18;
+        if (near && slow && dh < l.radius + 0.8 && dy < 5 && (descending || (a.speed < 5 && dy < 3)) && (input?.lift ?? 0) <= 0.1) {
+          a.land(l);
+          this.candidate = null;
+        }
+      }
+    } else this.candidate = null;
+  }
+
+  // ---- render ------------------------------------------------------------------------------
+  render(dtReal = 1 / 60) {
+    const t = this.worldTime;
+    const ctx = this.tod.context(t, this.pixelRatio);
+    // light shafts thin out as the camera rises into them under the glazing
+    ctx.shaftGain = 1 - 0.8 * clamp((this.camera.position.y - 190) / 150);
+    const a = this.actor;
+    const dt = this._dt ?? 0;
+    const body = { pos: a.pos, vel: a.vel, speed: a.speed, flying: a.state === 'fly', yaw: a.yaw, landedOn: a.state === 'landed' || a.state === 'landing' ? (a.state === 'landed' ? a.lastLanding : a.seq?.landable) : null };
+    this.interactions.pre(this.clock, dt, ctx, [body]);
+    this.world.update(t, ctx);
+    this.world.lighting.baseSun = this.world.lighting.sun.intensity;
+    this.growth.update(this.clock, body);
+    this.bells.update(this.clock, dt, [body]);
+    this.interactions.post(dt, [body], ctx, this.mode === 'fly' ? this.candidate : null);
+    this.scenery.update(t, ctx, this.camera);
+    // camera
+    const input = this._input;
+    let v;
+    if (this.debugView) {
+      const d = this.debugView;
+      v = { pos: d.pos, target: d.target, fov: d.fov ?? 50, roll: 0, focus: d.pos.distanceTo(d.target), aperture: d.aperture ?? 0 };
+    } else if (this.photo) v = this.photoCam.update(dtReal, input || this._noInput());
+    else if (this.mode === 'fly') v = this.chase.update(dtReal, a, input, this.reduced);
+    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep });
+    this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
+    applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
+    this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y);
+    this.frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+    if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);
+    // light: shadows round what we're looking at, practicals
+    const fwd = this.camera.getWorldDirection(V());
+    const center = this.debugView ? v.target.clone() : a.pos.clone().lerp(this.camera.position, 0.3).addScaledVector(fwd, 14);
+    this.focus.center.copy(center);
+    this.focus.radius = this.debugView?.shadowRadius ?? (this.quality.tier === 'low' ? 55 : 70);
+    this.tod.apply(this.scene, this.world, this.focus, this.camera);
+    this._practicals(ctx);
+    const look = { ...this.tod.look(), time: t, sunDir: SUN_DIR, fade: 0 };
+    this.pipeline.render({ camera: this.camera, focus: v.focus, aperture: this.quality.dof ? v.aperture : 0 }, null, 0, look);
+    // audio follows the bee
+    if (this.audio?.enabled) {
+      const near = 1 / (1 + Math.max(0, this.camera.position.distanceTo(a.pos) - 6) / 14);
+      this.audio.frame({ flap: a.flap, speed: a.speed, boost: a.boostK, collect: a.collect || 0, near, tod: this.tod.value });
+    }
+  }
+
+  // ---- interface state --------------------------------------------------------------------------
+  hudState() {
+    const a = this.actor;
+    return {
+      pollen: a.pollen,
+      honey: this.interactions.honey,
+      arrow: this.mode === 'fly' && !this.photo && a.pollen > 0.3 && !a.busy ? this._arrow() : null,
+      photo: this.photo,
+      photoText: this.touch ? 'Photo mode · drag to look, joystick to move' : 'Photo mode · drag/WASD to frame · wheel to zoom · Enter saves · P exits',
+      hint: this.photo ? '' : this.standingHint(),
+    };
+  }
+
+  // a chevron at the screen edge pointing home to the skep when it's out of view
+  _arrow() {
+    const p = this.skep.entrance.clone().project(this.camera);
+    const behind = this.camera.getWorldDirection(V()).dot(this.skep.entrance.clone().sub(this.camera.position)) < 0;
+    if (!behind && Math.abs(p.x) < 0.92 && Math.abs(p.y) < 0.92) return null;
+    let x = p.x, y = p.y;
+    if (behind) { x = -x; y = -y; }
+    const a = Math.atan2(-y, x);
+    const w = window.innerWidth, h = window.innerHeight;
+    const k = 1 / Math.max(Math.abs(x) / 0.86, Math.abs(y) / 0.8, 1e-3);
+    return { x: (x * k * 0.5 + 0.5) * w - 14, y: (-y * k * 0.5 + 0.5) * h - 14, a };
+  }
+
+  standingHint() {
+    const a = this.actor, s = a.state, touch = this.touch;
+    if (this.mode !== 'fly') return this.pilot.status ? `APX-9 is ${this.pilot.status}` : 'APX-9 is going about its day';
+    if (s === 'landed') {
+      if (a.gather && !a.gather.done) return 'Gathering pollen…';
+      if (a.pollen > 0.97) return `Full. ${touch ? 'Press ▲' : 'Space'} to take off and carry it home to the skep`;
+      return `Gathered. ${touch ? 'Press ▲' : 'Space'} to take off`;
+    }
+    if (s === 'grounded') return `Resting on the ground. ${touch ? 'Press ▲' : 'Space'} to fly`;
+    if (s === 'docking' || s === 'walk-in' || s === 'inside') return 'Depositing pollen in the skep…';
+    if (s === 'walk-out' || s === 'takeoff') return '';
+    if (this.candidate) return `Settle on ${this.candidate.name}: ${touch ? 'press ▼ to' : 'descend gently to'} land`;
+    if (a.pollen > 0.97) return 'Your pollen baskets are full: carry them home to the skep';
+    if (a.pollen > 0.3) return 'Carry the pollen home to the skep, or gather more';
+    if (this.interactions.honey === 0 && this.stats.pollinated === 0) return 'Fly to a bloom and settle on it to gather pollen';
+    const tips = [
+      'Touch the escapement beside the great bloom to wind the garden',
+      'Brush the porcelain bellflowers to ring them',
+      'Fly through the armillary rings above the fountain',
+      'The lanterns under the vault kindle as you pass',
+      touch ? 'The menu changes the hour and takes photographs' : 'T changes the hour · P takes photographs',
+      touch ? 'Autopilot hands APX-9 back to its day' : 'C hands APX-9 back to its autopilot',
+    ];
+    return tips[Math.floor(this.clock / 9) % tips.length];
+  }
+
+  _noInput() {
+    return { move: { x: 0, y: 0 }, lift: 0, look: { dx: 0, dy: 0 }, orbit: { dx: 0, dy: 0 }, zoom: 1, boost: false, actions: [] };
+  }
+
+  _practicals(ctx) {
+    const Lg = this.world.lighting;
+    const a = this.actor;
+    // the skep glows from its doorway
+    Lg.skep.position.copy(this.skep.entrance).add(V(0, 0.5, 0)).addScaledVector(this.skep.out, 0.8);
+    Lg.skep.intensity = (3.5 + (ctx.skepFlare || 0) * 10) * (1.2 - this.tod.value * 0.4);
+    Lg.skep.distance = 26;
+    // APX-9's pollen load casts a little amber on what it lands on
+    Lg.fill.color.set('#ffb35a');
+    Lg.fill.position.copy(a.pos).add(V(0, -0.6, 0));
+    Lg.fill.intensity = a.pollen * 1.4 + (a.collect || 0) * 1.2;
+    Lg.fill.distance = 7;
+    Lg.fill.decay = 2;
+    // a lit lantern near the camera pools warm light (more at night)
+    const lit = this.interactions.lanterns;
+    let best = -1, bd = 120 * 120;
+    const cp = this.camera.position;
+    this.world.foliage.lanterns.forEach((l, i) => {
+      if (lit[i].lit < 0.5) return;
+      const d = l.p.distanceToSquared(cp);
+      if (d < bd) { bd = d; best = i; }
+    });
+    const S = Lg.spark;
+    if (best >= 0) {
+      S.position.copy(this.world.foliage.lanterns[best].p);
+      S.color.set('#ffb05a');
+      S.distance = 90;
+      S.decay = 1.2;
+      S.intensity = (60 + (1 - this.tod.value) * 140) * (0.95 + 0.05 * Math.sin(this.clock * 9));
+    } else S.intensity = 0;
+  }
+}
