@@ -294,6 +294,7 @@ async function boot() {
       }
       const fresh = prev === 'film' || (prev === null && !fromLanding);
       explore.enter(m);
+      setTimeout(() => explore.compileAll(), 400);
       if (m === 'fly' && (prev === 'film' || fromLanding)) explore.spawnAtSkep();
       if (fresh && m === 'fly') explore.spawnAtSkep();
       input.enable(true);
@@ -400,6 +401,8 @@ async function boot() {
     landing = showLanding({ reducedMotion: reduced, touch, onChoose: (m) => setMode(m, { fromLanding: true }) });
   }
   if (capture) return;
+  // the interactive modes' light-field shaders, compiled in the background
+  setTimeout(() => explore?.compileAll(), 400);
 
   let last = performance.now();
   let lastWork = 8;

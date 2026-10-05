@@ -628,12 +628,14 @@ export class HeroFlower {
     const rs = t - (ctx.respondAt ?? B.flowerRespond);
     const respond = rs > 0 ? (1 - Math.exp(-rs * 4)) * Math.exp(-rs * 0.9) : 0;
     const bud = sseg(t, B.budGlow[0], B.budGlow[1]) * (1 - sseg(t, B.outer[0] + 0.5, B.middle[1]));
-    const glow = 0.04 + coreK * 1.0 + respond * 0.8 + bud * 0.5;
+    // (ctx.heroNight: the interactive modes' night, when the core is the garden's lantern; absent in the film)
+    const hn = ctx.heroNight || 0;
+    const glow = 0.04 + coreK * 1.0 + respond * 0.8 + bud * 0.5 + hn * 0.55;
     this.coreGlass.material.emissiveIntensity = glow * 1.4;
     const fil = 0.6 + glow * 9;
     this.filament.material.color.setRGB(1.0 * fil, 0.6 * fil, 0.26 * fil);
     this.filament.rotation.y = t * 0.4;
-    this.coreLight.intensity = (coreK * 8 + respond * 6 + bud * 5) * ctx.lightScale;
+    this.coreLight.intensity = (coreK * 8 + respond * 6 + bud * 5 + hn * 7) * ctx.lightScale;
 
     // stamens rise and fan out
     const st = sseg(t, B.stamens[0], B.stamens[1]);
@@ -654,7 +656,7 @@ export class HeroFlower {
       const pulse = s > 0 ? Math.exp(-s * 1.3) * (1 - Math.exp(-s * 5)) : 0;
       r.rimMat.emissiveIntensity = pulse * 1.1 + coreK * 0.04;
     });
-    this.porcelain.emissiveIntensity = coreK * 0.2 + respond * 0.22 + bud * 0.55;
+    this.porcelain.emissiveIntensity = coreK * 0.2 + respond * 0.22 + bud * 0.55 + hn * 0.38;
 
     // leaves unfurl as the garden wakes
     const wake = sseg(t, B.podsWake[0], B.podsWake[1] + 4);

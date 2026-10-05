@@ -23,6 +23,9 @@ const TAU = Math.PI * 2;
 const PENTA = [74, 76, 78, 81, 83, 86, 88, 90, 93];
 const WAVE_SPEED = 150;
 const ARM = V((L.pathX[0] + L.pathX[1]) / 2, 86, -560);
+// lamps the evening kindles (night.js) burn at a soft, dreamy level; a passing
+// bee kindles them to full brightness (so at night too it leaves a warmer trail)
+const AMB = { lantern: 0.55, lamp: 0.6, orb: 0.65 };
 
 export class Interactions {
   constructor({ world, mat, quality, bounds, growth, bells, audio, emit }) {
@@ -50,9 +53,9 @@ export class Interactions {
     this.sipUntil = -1;
     const flora = world.flora;
     // kindle state: 0 asleep (an ember), 1 lit; plus the time of the last flare
-    this.lanterns = world.foliage.lanterns.map(() => ({ lit: 0, flare: -100 }));
-    this.orbs = flora.orbs.map(() => ({ lit: 0.0, flare: -100 }));
-    this.lamps = world.garden.lamps.map(() => ({ lit: 0, flare: -100 }));
+    this.lanterns = world.foliage.lanterns.map(() => ({ lit: 0, flare: -100, amb: 0, ignite: -100 }));
+    this.orbs = flora.orbs.map(() => ({ lit: 0.0, flare: -100, amb: 0, ignite: -100 }));
+    this.lamps = world.garden.lamps.map(() => ({ lit: 0, flare: -100, amb: 0, ignite: -100 }));
     this.flowerWave = new Float32Array(flora.flowers.length).fill(-100); // time the wave reached each bloom
     this.flowerTouch = new Float32Array(flora.flowers.length).fill(-100);
     this.flowerDist = flora.flowers.map((f) => Math.hypot(f.top.x, f.top.z));
@@ -112,9 +115,11 @@ export class Interactions {
         return i === undefined ? 1 : 1 - self.steady[i];
       },
       orb(o, i) {
+        // kindled by the passing bee (lit) or by the evening itself (amb, night.js)
         const s = self.orbs[i];
-        const fl = self.now - s.flare;
-        return 0.06 + self.night * 0.14 + s.lit * (0.9 + 0.15 * Math.sin(self.now * 2 + o.ph)) + (fl > 0 ? Math.exp(-fl * 1.5) * 1.8 : 0);
+        const fl = self.now - s.flare, ig = self.now - s.ignite;
+        const a = Math.max(s.lit, s.amb * AMB.orb);
+        return 0.06 + self.night * 0.1 + a * (0.9 + 0.15 * Math.sin(self.now * 2 + o.ph)) + (fl > 0 ? Math.exp(-fl * 1.5) * 1.8 : 0) + (ig > 0 ? Math.exp(-ig * 2.5) * 0.6 : 0);
       },
       armAngle() { return self.armA; },
       armGlow() { return 0.45 + self.night * 0.3 + self.armGlowK * 2.2; },
@@ -122,15 +127,16 @@ export class Interactions {
     w.foliage.live = {
       lantern(l, i) {
         const s = self.lanterns[i];
-        const fl = self.now - s.flare;
-        return 0.12 + self.night * 0.35 + s.lit * (3.0 + 0.25 * Math.sin(self.now * 7 + l.ph) + 0.15 * Math.sin(self.now * 13.3 + l.ph * 2)) + (fl > 0 ? Math.exp(-fl * 1.2) * 4 : 0);
+        const fl = self.now - s.flare, ig = self.now - s.ignite;
+        const a = Math.max(s.lit, s.amb * AMB.lantern);
+        return 0.12 + self.night * 0.12 + a * (3.0 + 0.25 * Math.sin(self.now * 7 + l.ph) + 0.15 * Math.sin(self.now * 13.3 + l.ph * 2)) + (fl > 0 ? Math.exp(-fl * 1.2) * 4 : 0) + (ig > 0 ? Math.exp(-ig * 2.2) * 1.4 : 0);
       },
     };
     w.garden.live = {
       lamp(core, i) {
         const s = self.lamps[i];
-        const fl = self.now - s.flare;
-        return 0.15 + s.lit * 2.2 + (fl > 0 ? Math.exp(-fl * 1.2) * 3 : 0);
+        const fl = self.now - s.flare, ig = self.now - s.ignite;
+        return 0.15 + Math.max(s.lit, s.amb * AMB.lamp) * 2.2 + (fl > 0 ? Math.exp(-fl * 1.2) * 3 : 0) + (ig > 0 ? Math.exp(-ig * 2.2) * 1.0 : 0);
       },
     };
   }
@@ -398,7 +404,11 @@ export class Interactions {
       const p = b.pos;
       this.world.foliage.lanterns.forEach((l, i) => {
         const s = this.lanterns[i];
-        if (s.lit < 1 && p.distanceToSquared(l.p) < 30 * 30) { s.lit = 1; s.flare = now; this.audio?.bell(PENTA[i % PENTA.length] + 12, 0.025, 0); this.emit('kindle', { kind: 'lantern' }); }
+        if (s.lit < 1 && p.distanceToSquared(l.p) < 30 * 30) {
+          s.lit = 1; s.flare = now;
+          this.burst((l.now || l.p).clone().add(V(0, 2 * l.sc, 0)), 26, { speed: 5, up: 1, life: 1.6, size: 0.42, spread: 2.2 * l.sc, color: [1.7, 0.95, 0.35] });
+          this.audio?.bell(PENTA[i % PENTA.length] + 12, 0.025, 0); this.emit('kindle', { kind: 'lantern' });
+        }
       });
       this.world.flora.orbs.forEach((o, i) => {
         const s = this.orbs[i];
@@ -406,7 +416,11 @@ export class Interactions {
       });
       this.world.garden.lamps.forEach((c, i) => {
         const s = this.lamps[i];
-        if (s.lit < 1 && p.distanceToSquared(c.position) < 34 * 34) { s.lit = 1; s.flare = now; this.audio?.bell(PENTA[(i * 3) % PENTA.length], 0.025); this.emit('kindle', { kind: 'lamp' }); }
+        if (s.lit < 1 && p.distanceToSquared(c.position) < 34 * 34) {
+          s.lit = 1; s.flare = now;
+          this.burst(c.position, 18, { speed: 4, up: 1.5, life: 1.4, size: 0.36, spread: 3, color: [1.6, 0.95, 0.4] });
+          this.audio?.bell(PENTA[(i * 3) % PENTA.length], 0.025); this.emit('kindle', { kind: 'lamp' });
+        }
       });
     }
   }

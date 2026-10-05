@@ -43,7 +43,26 @@ the bee bumps into, elephant ears and canna blades, ferns, palms, ivy, ground
 cover). Nothing passes through anything: every leaf is placed only where it
 crosses no other leaf, stem, bloom, iron, glass, lantern or the soil
 (`tools/overlapcheck.mjs` counts it). It grows in the background for a few
-seconds after the page loads; until then the film's foliage stands in.
+seconds after the page loads; until then the film's foliage stands in, and
+when it is ready the one dissolves into the other over about 0.6 s.
+
+### A night that glows
+
+At night the garden is at its most magical: midnight teal with amber pools of
+light. Every hanging lantern, path lamp and seed lantern lights the foliage,
+blooms, path, iron and APX-9 around it (with the great bloom's core, the
+skep's doorway, the glass blossom, the seedpods, the armillary, sprouted glass
+blooms, every pollinated bloom and the firefly swarms): a light field of a
+couple of hundred lamps computed in every material, so none of them costs a
+real light. As dusk falls the lanterns kindle themselves one by one to a soft
+evening glow; APX-9 kindles each one it passes to full brightness, with a flare
+and sparks, so a night flight leaves a warmer trail. Porcelain blooms and bells
+glow from within (brighter when pollinated or when a bee comes near), the great
+bloom's core is a lantern, the glass shimmers. Clockwork fireflies drift in
+swarms over the beds and the fountain's water, blink in slow waves, gather round
+APX-9 and scatter when it boosts through. The moon is the key light: cool,
+through the vault's iron (its ribs, purlins and columns shadow the beds, as the
+sun's do by day), with faint moon shafts, stars and the moon in the roof.
 
 ### What you can do in the garden
 
@@ -63,7 +82,8 @@ seconds after the page loads; until then the film's foliage stands in.
   light climbs the stem, the great bloom answers and a **bloom wave**
   ripples out across the house (petals snap shut and spring open, a golden
   curtain and sparks travel with the front, every lantern kindles).
-- **Lanterns, seed lanterns and path lamps** kindle as you pass.
+- **Lanterns, seed lanterns and path lamps** kindle as you pass (by day they
+  light up; at night they flare up from their evening glow to full brightness).
 - **Porcelain bellflowers** (new: 18 plants, about 110 bells, tuned to D-major
   pentatonic) swing and ring when brushed.
 - **The armillary** above the fountain spins up when you fly through its rings.
@@ -71,8 +91,11 @@ seconds after the page loads; until then the film's foliage stands in.
   dragonfly takes a liking to you and escorts you a while, hummingbirds
   stop to inspect you, the songbird watches you from its bough and flies a
   loop if you crowd it.
-- **Time of day**: one control from the film's midnight teal (moon, stars,
-  firefly-glowing blooms) through dawn to the golden-hour finale.
+- **Time of day**: one control from the film's midnight teal through dusk
+  (blue hour) and dawn (rose mist, the lanterns guttering out) to the
+  golden-hour finale. `T` cycles midnight → dusk → dawn → golden hour and the
+  garden glides there (the lanterns kindle or go out one by one, the
+  fireflies come and go); the menu's slider goes anywhere in between.
 - **Photo mode** (`P`): interface hidden, world frozen, free camera; `Enter`
   or *Save PNG* downloads the frame.
 - **Sound** (`M` or the menu): wing buzz that follows wingbeat and speed, the
@@ -109,7 +132,7 @@ hash in `index.html`; changed files get new URLs, unchanged ones stay cached.
 | `Space` / `E` · `Shift` / `Q` | climb · descend |
 | `F` or hold left mouse | boost |
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
-| `T` · `[` `]` | cycle the hour · finer |
+| `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
 
@@ -156,7 +179,7 @@ OS requests reduced motion, the film waits and offers gentle or full motion.
 | `?look=bee&yaw=0.6&pitch=0.3&dist=7&t=27` | look-dev orbit around one object (`bee`, `monarch`, `flower`, `escapement`, `songbird`, …) |
 | `&stage=landed\|folded\|flight\|walk\|display&key=1` | with `look=bee`: pose the hero bee (APX-9) in a clear spot above the bloom, facing +Z; `key=1` adds a studio-style key light from the camera side |
 | `?mode=film\|fly\|follow` | open a mode directly (without it, and without any film-only parameter, a landing screen asks) |
-| `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.5 dawn, 1 golden hour; default 0.86) |
+| `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.27 dusk, 0.5 dawn, 0.86 golden hour, 1 its peak; default 0.86) |
 | `?touch=1\|0` | force the touch interface on or off |
 
 Film-only parameters (`t`, `paused`, `clean`, `capture`, `look`) open the film
@@ -166,7 +189,8 @@ the interactive modes: steadier cameras without roll or speed zoom.
 `window.__cg.renderAt(t)` renders an exact, deterministic frame; `window.__cg.audioWav()` returns the score as WAV (base64).
 `window.__cg.wind` is the breeze (`freeze` holds the rest pose, `noWash` switches APX-9's wash off, for review).
 Review hooks for the interactive modes: `__cg.setMode(m)`, `__cg.explore()`
-(the controller), `__cg.exploreView({ pos, target, fov, tod, reachable })`
+(the controller; `.night` holds the light field, lamps and fireflies, `.lf` the
+light-field uniforms), `__cg.exploreView({ pos, target, fov, tod, reachable })`
 (render the awake garden from any viewpoint), `__cg.exploreExit()`.
 
 ## Recording a video file
@@ -189,6 +213,8 @@ node tools/explorefps.mjs --q high                                          # re
 node tools/filmidentity.mjs --before <port>                                 # the film is pixel-identical after exploring (and vs a rollback copy)
 node tools/overlapcheck.mjs                                                 # does anything pass through anything? (film set and bee-scale set)
 node tools/living.mjs --shots tools/views/living.json --out review/x --sheet 1   # deterministic stills and frame strips (fly, follow, views, film)
+node tools/living.mjs --shots tools/views/night.json --out review/x --sheet 1     # night key views (night_tod.json: the hours; night2.json: ribs, moon)
+node tools/drive.mjs --scenario tools/scenarios/night_hud.json --out review/x    # fly at midnight, cycle the hour with T, HUD and hints
 node tools/stallcheck.mjs --minutes 25                                      # fast-forwarded autopilot: stalls, give-ups, leaves brushed
 ```
 
@@ -224,6 +250,8 @@ src/geometry/                  gears (meshing math), parts (screws, jewels, rods
 src/world/                     escapement, root crown, roots, hero flower (+ porcelain bud sheath), props, garden,
                                flora, foliage (far-field lushness, ivy, palms, lanterns), greenhouse, sky,
                                atmosphere (shafts, dust), lighting, environment maps,
+                               lightfield (the interactive modes' lamp light: a clustered light list in every
+                               lit material, the vault's iron as a light cookie, the hour's environment blend),
                                wind (breeze, wing-wash, the vertex patch), planting (nothing through anything),
                                dome (relaxed leaf mounds)
 src/creatures/                 apx9 (the resident pollinator, built from APX-9's blueprint in apx9Shape),
@@ -236,7 +264,10 @@ src/ui/hud.js, landing.js      interactive-mode HUD (gauge, hints, help, menu, p
 src/input/input.js             keyboard, mouse / pointer lock, wheel, touch joystick + buttons, pinch, gamepads
 src/explore/                   the interactive modes:
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
-  timeofday.js                   one control for sky, sun/moon, ambient, environment ramp, fog, exposure
+  timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
+                                 the hour glides to its target (midnight, dusk, dawn, golden hour)
+  night.js · fireflies.js        the night: light-field sources, ambient kindling, haloes, glowing blooms and glass,
+                                 moon shafts; clockwork fireflies
   bounds.js                      flight volume: analytic ground, walls, vault, ~4,000 collider shapes, landables
   actor.js                       APX-9's flight model and sequences (land, gather, take off, dock, deposit)
   pilot.js                       autopilot for follow mode (canopy-aware routes, variety, winding, trips home)
@@ -246,7 +277,8 @@ src/explore/                   the interactive modes:
   ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird
   scenery.js                     near gable and doors, far doors, column tops, glazing bars, end planting, exterior
   upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade), tiling, glass; detail culling
-  nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD)
+  nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD,
+                                 dissolved in over the film's foliage when ready)
 src/audio/live.js              live synthesis for the interactive modes
 tools/                         shoot.mjs (stills), record.mjs (video), determinism.mjs, fpscheck.mjs (real-time fps +
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
