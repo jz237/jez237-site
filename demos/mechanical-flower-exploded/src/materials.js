@@ -336,7 +336,7 @@ export function createMaterials() {
   return { gold, brass, brassDark, gunmetal, steel, gem, screw, stemBraid, core, copper, roseGold, anoTeal, anoViolet, anoBlue, anoMagenta };
 }
 
-// Crystal core: faceted prismatic cells with a warm hot centre.
+// Crystal core: fine dichroic facets over a hot, over-bright warm centre (HDR, so bloom picks it up).
 export function coreMaterial() {
   return new THREE.ShaderMaterial({
     uniforms: { uTime: { value: 0 }, uPulse: { value: 1 } },
@@ -356,7 +356,8 @@ export function coreMaterial() {
       vec3 hash33(vec3 p){ p = vec3(dot(p,vec3(127.1,311.7,74.7)), dot(p,vec3(269.5,183.3,246.1)), dot(p,vec3(113.5,271.9,124.6))); return fract(sin(p)*43758.5453); }
       vec3 hsv2rgb(vec3 c){ vec3 p = abs(fract(c.xxx + vec3(0.0,2.0/3.0,1.0/3.0))*6.0-3.0); return c.z*mix(vec3(1.0), clamp(p-1.0,0.0,1.0), c.y); }
       void main(){
-        vec3 p = normalize(vPos) * 4.2;
+        vec3 n = normalize(vN); vec3 v = normalize(vV);
+        vec3 p = normalize(vPos) * 3.5;
         vec3 ip = floor(p); vec3 fp = fract(p);
         float d1 = 9.0, d2 = 9.0; vec3 cid = vec3(0.0);
         for(int k=-1;k<=1;k++) for(int j=-1;j<=1;j++) for(int i=-1;i<=1;i++){
@@ -366,16 +367,26 @@ export function coreMaterial() {
           float d = dot(r,r);
           if(d<d1){ d2=d1; d1=d; cid=ip+g; } else if(d<d2){ d2=d; }
         }
-        float edge = 1.0 - smoothstep(0.0, 0.07, sqrt(d2)-sqrt(d1));
-        float h = fract(dot(hash33(cid), vec3(0.37,0.41,0.22)) + uTime*0.02 + dot(normalize(vN), vec3(0.4,0.6,0.2))*0.18);
-        vec3 col = pow(hsv2rgb(vec3(h, 0.82, 1.0)), vec3(2.0));
-        float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 1.1);
-        vec3 hot = pow(vec3(1.0, 0.62, 0.16), vec3(2.0));
-        float fb = 0.62 + 0.75 * fract(dot(hash33(cid + 3.0), vec3(0.5, 0.3, 0.2)) * 7.0);
-        col = mix(hot*1.3, col*1.35*fb, 0.5 + 0.5*smoothstep(0.0, 0.6, f));
-        col += hot * 0.5 * pow(1.0 - f, 3.0);
-        col += edge * vec3(1.0,0.78,0.45) * 0.28;
-        col *= (0.7 + 0.3*uPulse);
+        float ew = sqrt(d2)-sqrt(d1);
+        float edge = 1.0 - smoothstep(0.0, 0.05, ew);
+        vec3 hc = hash33(cid);
+        vec3 nc = normalize(n + (hc - 0.5) * 1.5);
+        float ndv = clamp(dot(nc, v), 0.0, 1.0);
+        float rim = 1.0 - clamp(dot(n, v), 0.0, 1.0);
+        float centre = pow(clamp(dot(n, v), 0.0, 1.0), 2.6);
+        float hue = fract(0.04 + hc.x * 0.55 + (1.0 - ndv) * 1.1 + rim * 0.35 + uTime * 0.018);
+        vec3 dich = hsv2rgb(vec3(hue, 0.7 + 0.3 * hc.y, 1.0));
+        vec3 col = pow(dich, vec3(1.35)) * (0.5 + 0.8 * hc.z);
+        vec3 warm = vec3(1.0, 0.6, 0.14);
+        col = mix(col, warm * 0.95 + dich * 0.25, centre * 0.55);
+        col += vec3(1.0, 0.72, 0.28) * 0.35 * pow(centre, 5.0) * (0.7 + 0.3 * hc.z);
+        float lit = pow(max(dot(nc, normalize(vec3(-0.35, 0.55, 0.75))), 0.0), 10.0);
+        col += lit * vec3(1.0, 0.97, 0.9) * 0.55;
+        col *= 0.7 + 0.3 * smoothstep(0.0, 0.2, ew);
+        col += edge * vec3(1.0, 0.88, 0.62) * (0.22 + 0.25 * centre);
+        float spk = pow(max(0.0, sin(uTime * (1.2 + hc.x * 3.2) + hc.y * 40.0)), 14.0);
+        col += spk * vec3(1.0, 0.96, 0.88) * (1.0 + 1.4 * rim);
+        col *= 0.82 + 0.35 * uPulse;
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>

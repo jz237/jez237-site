@@ -154,10 +154,12 @@ export function buildAssembly(camera) {
   const addSpin = (obj, teeth, dir, phase = 0) => gearSpins.push({ spin: obj.userData.spin, teeth, dir, phase });
 
   // ---- core + stamen cage (anchored, not exploded) ----
-  const core = buildCore(mats, { R: 1.4 });
+  const core = buildCore(mats, { R: 1.9 });
   core.position.set(0, -0.15, 0);
   root.add(core);
-  const cage = buildStamenCage(mats, {});
+  const coreLight = core.userData.light;
+  root.add(coreLight);
+  const cage = buildStamenCage(mats, { baseR: 2.9, tipR: 4.2, height: 2.6 });
   root.add(cage);
 
   // smooth painted teardrop shown while fully closed; petals unfurl from it as the bloom opens
@@ -392,9 +394,12 @@ export function buildAssembly(camera) {
     for (const o of stackObjs) o.visible = shellK < 0.98;
     for (const o of sideObjs) o.visible = shellK < 0.98;
     budShell.scale.set(shellK, 1, shellK);
-    const lift = 0.85 * (1 - e) * smoother(clamp01(b));
+    const lift = 1.7 * (1 - e) * smoother(clamp01(b));
     cage.position.y = -1.1 - 0.9 * (1 - smoother(clamp01(b))) + lift;
     core.position.y = -0.15 + lift;
+    coreLight.position.copy(core.position);
+    coreLight.intensity = (core.visible ? 1 : 0) * (0.35 + 0.65 * smoother(clamp01(b))) * (1 - 0.8 * e) * (0.92 + 0.08 * Math.sin(t * 2)) * 9;
+    core.userData.halo.material.opacity = 0.4 * (0.85 + 0.15 * Math.sin(t * 2.3 + 1));
     const cs = (0.5 + 0.5 * smoother(clamp01(b))) * lerp(0.8, 1, e);
     cage.scale.set(cs, lerp(1.0, 1, e), cs);
     core.rotation.y = t * 0.12;
@@ -514,8 +519,8 @@ export function buildAssembly(camera) {
   const dgR1 = driveObjs[DRIVE_GEARS.findIndex((g) => g.id === 'dgR1')];
   const insetPose = (name) => {
     if (name === 'core') {
-      const t = core.getWorldPosition(new THREE.Vector3());
-      return { pos: t.clone().add(V(0, 0.15, 5.0)), target: t, fov: 38, up: Y_UP };
+      const t = core.getWorldPosition(new THREE.Vector3()).add(V(0, 0.1, 0));
+      return { pos: t.clone().add(V(0, 0.1, 5.5)), target: t, fov: 38, up: Y_UP };
     }
     if (name === 'gear') {
       const t = dgR1.getWorldPosition(new THREE.Vector3());

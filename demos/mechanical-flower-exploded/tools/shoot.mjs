@@ -40,6 +40,9 @@ const SHOTS = {
   bloom: { explode: 0, bloom: 1, time: 1.0, bare: true, view: { target: [0.4, 1.8, 0], dist: 62, elev: 14, azim: -8, fov: 20 } },
   budclose: { explode: 0, bloom: 0, time: 1.0, bare: true, view: { target: [0.4, 0.8, 0], dist: 40, elev: 12, azim: -8, fov: 20 } },
   budmid: { explode: 0, bloom: 0.35, time: 1.0, bare: true, view: { target: [0.4, 0.8, 0], dist: 46, elev: 12, azim: -8, fov: 20 } },
+  core: { explode: 0, bloom: 1, time: 1.0, bare: true, view: { target: [0, 1.5, 0], dist: 30, elev: 24, azim: -8, fov: 20 } },
+  coreWide: { explode: 0, bloom: 1, time: 2.2, bare: true, view: { target: [0, 1.4, 0], dist: 46, elev: 20, azim: -8, fov: 20 } },
+  coreExp: { explode: 1, bloom: 1, time: 1.0, bare: true, view: { target: [0, 0.2, 0], dist: 30, elev: 20, azim: -8, fov: 20 } },
   angle: { explode: 1, bloom: 1, time: 1.0, view: { pos: [-45, 18, 88], target: [0.4, -5.9, 0], fov: 20 } },
 };
 const wanted = (args.shots || 'poster,assembled,closed').split(',');

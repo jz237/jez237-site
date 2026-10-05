@@ -17,6 +17,43 @@ function addMesh(group, batch, mat, name) {
   return m;
 }
 
+// Faceted bulb gem (flat-shaded, like the cut stones in the close-up photo) with a glint that rides on it.
+const FACET = (() => {
+  const g = new THREE.SphereGeometry(1, 8, 5);
+  g.deleteAttribute('normal');
+  return g.toNonIndexed();
+})();
+const bulbTint = (c) => [0.6 + c.r * 0.6, 0.6 + c.g * 0.6, 0.6 + c.b * 0.6].map((v) => Math.min(1.6, v * 1.2));
+function addBulb(gems, matrix, radius, color, { glint = 2.8, hot = 1.3 } = {}) {
+  gems.add(FACET, matrix.clone().multiply(new THREE.Matrix4().makeScale(radius, radius, radius * 0.92)), color);
+  const e = matrix.elements;
+  const k = radius * 0.4;
+  gems.glints.push({ pos: [e[12] + e[8] * k, e[13] + e[9] * k, e[14] + e[10] * k], color: bulbTint(color), size: radius * glint + 0.06, hot });
+}
+
+let haloTex = null;
+function coreHalo(R) {
+  if (!haloTex) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 256;
+    const g = c.getContext('2d');
+    const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    gr.addColorStop(0, 'rgba(255,226,160,1)');
+    gr.addColorStop(0.18, 'rgba(255,190,100,0.62)');
+    gr.addColorStop(0.45, 'rgba(255,140,110,0.2)');
+    gr.addColorStop(0.75, 'rgba(190,120,255,0.06)');
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, 256, 256);
+    haloTex = new THREE.CanvasTexture(c);
+    haloTex.colorSpace = THREE.SRGBColorSpace;
+  }
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: haloTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.8 }));
+  sp.scale.setScalar(R * 4.2);
+  sp.name = 'coreHalo';
+  return sp;
+}
+
 // Spur gear on a jeweled bushing. axis 'y' lays the wheel flat (horizontal plane); 'z' faces the camera.
 export function gearPart(mats, { teeth = 24, R = 1, thickness = 0.16, spokes = 5, curved = 0, mat = null, axis = 'y', gem = true, gemColor = null, seed = 1, ringDeco = true } = {}) {
   const r = rng(seed * 17 + 3);
@@ -130,72 +167,125 @@ export function buildFiligreeRing(mats, { R = 4.95, teeth = 66, thickness = 0.2,
   return group;
 }
 
-// Crystal core sphere inside a gold latticed cage.
+// Crystal core sphere inside a gold latticed cage: fine meridian bars, a perforated equator band with jewelled gear studs, a trumpet crown with a ruby and a spire.
 export function buildCore(mats, { R = 1.25, seed = 2 } = {}) {
-  void seed;
+  const r = rng(seed * 31 + 7);
   const group = new THREE.Group();
-  const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 48, 36), mats.core);
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 48), mats.core);
   sphere.name = 'coreSphere';
+  const sg = [];
+  const sparkTints = [[1, 0.95, 0.8], [1, 0.8, 0.45], [1, 0.55, 0.85], [0.55, 0.95, 1], [1, 1, 1]];
+  for (let i = 0; i < 46; i++) {
+    const u = r() * 2 - 1;
+    const a = r() * TAU;
+    const q = Math.sqrt(1 - u * u);
+    sg.push({ pos: [Math.cos(a) * q * R * 1.02, u * R * 1.02, Math.sin(a) * q * R * 1.02], color: sparkTints[i % sparkTints.length], size: 0.28 + r() * 0.34, hot: 1.4, rate: 1.2 + r() * 3.6 });
+  }
+  sphere.userData.glints = sg;
   group.add(sphere);
+  const halo = coreHalo(R);
+  group.add(halo);
+  const light = new THREE.PointLight(0xffc27a, 0, 0, 2);
+  light.name = 'coreLight';
+
   const golds = new Batch(false);
   const gems = new Batch(true);
-  const cr = R * 1.16;
-  const meridians = 10;
+  const cr = R * 1.14;
+  const meridians = 14;
+  const PINK = [GEM_COLORS.rose, GEM_COLORS.aqua];
   for (let i = 0; i < meridians; i++) {
     const a = (i / meridians) * TAU;
     const pts = [];
-    for (let k = 0; k <= 24; k++) {
-      const phi = -Math.PI / 2 + (k / 24) * Math.PI * 0.94 + 0.02;
+    for (let k = 0; k <= 28; k++) {
+      const phi = -1.39 + (k / 28) * 2.78;
       const rr = cr * Math.cos(phi);
       pts.push(V(Math.cos(a) * rr, Math.sin(phi) * cr, Math.sin(a) * rr));
     }
-    golds.add(tubeAlong(pts, 0.032, { seg: 48, radial: 5 }));
+    golds.add(tubeAlong(pts, 0.04, { seg: 56, radial: 6 }));
   }
-  for (const lat of [-0.5, 0, 0.5]) {
-    const t = new THREE.TorusGeometry(cr * Math.cos(lat), 0.04, 6, 64);
+  for (const lat of [-1.0, -0.5, 0.5, 1.0]) {
+    const t = new THREE.TorusGeometry(cr * Math.cos(lat), 0.036, 6, 72);
     t.rotateX(Math.PI / 2);
     golds.add(t, new THREE.Matrix4().makeTranslation(0, Math.sin(lat) * cr, 0));
   }
+  // equator band: a wide strap with rolled edges and a row of rivets
+  const strap = new THREE.CylinderGeometry(cr * 1.004, cr * 1.004, 0.2, 96, 1, true);
+  golds.add(strap);
+  for (const y of [-0.1, 0.1]) {
+    const t = new THREE.TorusGeometry(cr * 1.004, 0.032, 6, 96);
+    t.rotateX(Math.PI / 2);
+    golds.add(t, new THREE.Matrix4().makeTranslation(0, y, 0));
+  }
+  for (let i = 0; i < 84; i++) {
+    const a = (i / 84) * TAU;
+    golds.add(new THREE.SphereGeometry(0.026, 6, 4), new THREE.Matrix4().makeTranslation(Math.cos(a) * cr * 1.012, 0, Math.sin(a) * cr * 1.012));
+  }
+  // tilted armillary bands
   for (const tilt of [-0.62, 0.62]) {
-    for (let b = 0; b < 3; b++) {
+    for (let b = 0; b < 2; b++) {
       const pts = [];
       for (let k = 0; k < 64; k++) {
         const a = (k / 64) * TAU;
-        pts.push(V(Math.cos(a) * cr * 1.005, 0, Math.sin(a) * cr * 1.005));
+        pts.push(V(Math.cos(a) * cr * 1.006, 0, Math.sin(a) * cr * 1.006));
       }
-      const m = new THREE.Matrix4().makeRotationY((b / 3) * Math.PI).multiply(new THREE.Matrix4().makeRotationX(tilt * (b % 2 ? 1 : -1)));
-      golds.add(tubeAlong(pts, 0.018, { closed: true, seg: 96, radial: 4 }), m);
+      const m = new THREE.Matrix4().makeRotationY((b / 2) * Math.PI + 0.4).multiply(new THREE.Matrix4().makeRotationX(tilt * (b % 2 ? 1 : -1)));
+      golds.add(tubeAlong(pts, 0.014, { closed: true, seg: 96, radial: 4 }), m);
+    }
+  }
+  // jewelled gear studs on the band, small bulbs where the bars cross the other rings
+  const studGear = gearGeometry({ teeth: 16, module: 0.042, thickness: 0.07, spokes: 0, bevel: false });
+  for (let i = 0; i < meridians; i++) {
+    const a = ((i + 0.5) / meridians) * TAU;
+    const p = V(Math.cos(a) * cr, 0, Math.sin(a) * cr);
+    const n = p.clone().normalize();
+    const col = PINK[i % 2];
+    if (i % 2 === 0) {
+      golds.add(studGear, frameMatrix(p.clone().multiplyScalar(1.01), n, Y_UP));
+      addBulb(gems, frameMatrix(p.clone().multiplyScalar(1.03), n, Y_UP), 0.16, col, { glint: 3.4, hot: 1.5 });
+    } else {
+      addJewel(gems, golds, frameMatrix(p.clone().multiplyScalar(1.012), n, Y_UP), 0.095, GEM_COLORS.rose, { prongs: 0, glint: false });
+      addBulb(gems, frameMatrix(p.clone().multiplyScalar(1.03), n, Y_UP), 0.09, GEM_COLORS.rose, { glint: 3.0, hot: 1.3 });
     }
   }
   for (let i = 0; i < meridians; i++) {
     const a = (i / meridians) * TAU;
-    for (const lat of [-0.5, 0, 0.5]) {
+    for (const lat of [-1.0, -0.5, 0.5, 1.0]) {
       const p = V(Math.cos(a) * cr * Math.cos(lat), Math.sin(lat) * cr, Math.sin(a) * cr * Math.cos(lat));
-      if (lat === 0 && i % 2 === 0) {
+      if (Math.abs(lat) === 0.5 && i % 2 === 0) {
         const n = p.clone().normalize();
-        addJewel(gems, golds, frameMatrix(p.clone().multiplyScalar(1.005), n, Y_UP), 0.1, [GEM_COLORS.ruby, GEM_COLORS.sapphire, GEM_COLORS.emerald, GEM_COLORS.aqua, GEM_COLORS.amethyst][(i / 2) % 5], { prongs: 6 });
+        golds.add(new THREE.TorusGeometry(0.1, 0.028, 6, 14), frameMatrix(p.clone().multiplyScalar(1.01), n, Y_UP));
+        addBulb(gems, frameMatrix(p.clone().multiplyScalar(1.025), n, Y_UP), 0.09, i % 4 === 0 ? GEM_COLORS.aqua : GEM_COLORS.rose, { glint: 3.0 });
       } else {
-        golds.add(new THREE.SphereGeometry(0.052, 8, 6), new THREE.Matrix4().makeTranslation(p.x, p.y, p.z));
+        golds.add(new THREE.SphereGeometry(0.04, 8, 6), new THREE.Matrix4().makeTranslation(p.x, p.y, p.z));
       }
     }
   }
-  // crown + finial on the top pole, foot with ruby below
-  const crown = new THREE.CylinderGeometry(0.16, 0.34, 0.26, 12);
-  golds.add(crown, new THREE.Matrix4().makeTranslation(0, cr + 0.1, 0));
-  const finial = new THREE.ConeGeometry(0.12, 0.3, 10);
-  golds.add(finial, new THREE.Matrix4().makeTranslation(0, cr + 0.38, 0));
-  addJewel(gems, golds, frameMatrix(V(0, cr + 0.26, 0), Y_UP), 0.15, GEM_COLORS.ruby, { prongs: 0 });
-  const foot = new THREE.CylinderGeometry(0.3, 0.14, 0.3, 12);
-  golds.add(foot, new THREE.Matrix4().makeTranslation(0, -cr - 0.1, 0));
-  addJewel(gems, golds, frameMatrix(V(0, -cr - 0.34, 0.05), V(0, -0.35, 1), V(0, 1, 0)), 0.22, GEM_COLORS.ruby, { prongs: 6 });
+  // trumpet crown on the top pole, ruby on a platform, spire above
+  const cy = cr * 0.93;
+  const crownProf = [[0.82, 0], [0.74, 0.08], [0.54, 0.3], [0.38, 0.56], [0.3, 0.78], [0.3, 0.86], [0.44, 0.9], [0.44, 0.98], [0.32, 1.02]].map(([x, y]) => new THREE.Vector2(x, y));
+  const crown = new THREE.LatheGeometry(crownProf, 48);
+  crown.computeVertexNormals();
+  golds.add(crown, new THREE.Matrix4().makeTranslation(0, cy, 0));
+  for (const [rad, y, tube] of [[0.8, 0.02, 0.04], [0.36, 0.7, 0.03], [0.44, 0.94, 0.03]]) {
+    const t = new THREE.TorusGeometry(rad, tube, 6, 40);
+    t.rotateX(Math.PI / 2);
+    golds.add(t, new THREE.Matrix4().makeTranslation(0, cy + y, 0));
+  }
+  addBulb(gems, frameMatrix(V(0, cy + 1.12, 0), Y_UP), 0.3, GEM_COLORS.rose, { glint: 3.6, hot: 1.7 });
+  golds.add(new THREE.ConeGeometry(0.05, 1.1, 8), new THREE.Matrix4().makeTranslation(0, cy + 1.62, 0));
+  golds.add(new THREE.SphereGeometry(0.07, 8, 6), new THREE.Matrix4().makeTranslation(0, cy + 2.18, 0));
+  // foot with a gem below
+  const foot = new THREE.CylinderGeometry(0.42, 0.18, 0.4, 24);
+  golds.add(foot, new THREE.Matrix4().makeTranslation(0, -cr - 0.12, 0));
+  addBulb(gems, frameMatrix(V(0, -cr - 0.46, 0.06), V(0, -0.4, 1), V(0, 1, 0)), 0.26, GEM_COLORS.aqua, { glint: 3.2 });
   addMesh(group, golds, mats.gold, 'coreCage');
   addMesh(group, gems, mats.gem, 'coreGems');
-  group.userData = { R, cageR: cr, sphere };
+  group.userData = { R, cageR: cr, sphere, halo, light };
   return group;
 }
 
 // Stamen cage: flared brass filaments with jeweled tips on a bowl-shaped base.
-export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.5, count = 30, seed = 5 } = {}) {
+export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.5, count = 26, seed = 5 } = {}) {
   const r = rng(seed * 13 + 1);
   const group = new THREE.Group();
   const golds = new Batch(false);
@@ -212,31 +302,22 @@ export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.5, 
     golds.add(tubeAlong(pts, tubeR, { seg: 24, radial: 5 }));
     const tip = pts[8];
     const dir = tip.clone().sub(pts[7]).normalize();
-    const collar = new THREE.CylinderGeometry(tipR2 * 0.9, tipR2 * 0.55, tipR2 * 2.2, 8);
+    const collar = new THREE.CylinderGeometry(tipR2 * 0.75, tipR2 * 0.4, tipR2 * 1.8, 10);
     collar.rotateX(Math.PI / 2);
-    golds.add(collar, frameMatrix(tip.clone().addScaledVector(dir, -tipR2 * 0.6), dir, Y_UP));
-    addJewel(gems, golds, frameMatrix(tip.clone().addScaledVector(dir, tipR2 * 0.55), dir, Y_UP), tipR2 * 1.05, gemCol, { bezelOn: false, prongs: 0 });
+    golds.add(collar, frameMatrix(tip.clone().addScaledVector(dir, -tipR2 * 0.4), dir, Y_UP));
+    addBulb(gems, frameMatrix(tip.clone().addScaledVector(dir, tipR2 * 0.85), dir, Y_UP), tipR2, gemCol, { glint: 3.0, hot: 1.4 });
     return pts;
   };
-  const cols = [GEM_COLORS.ruby, GEM_COLORS.rose, GEM_COLORS.ruby, GEM_COLORS.ruby, GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.ruby, GEM_COLORS.amber];
+  const cols = [GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.rose, GEM_COLORS.amethyst, GEM_COLORS.aqua, GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.ruby];
   const outerPts = [];
   for (let i = 0; i < count; i++) {
     const a = (i / count) * TAU + 0.05 * (r() - 0.5);
-    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.9 + 0.22 * r()), 0.036, 0.09, cols[i % cols.length]));
+    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.62 + 0.2 * r()), 0.05, 0.15, cols[i % cols.length]));
   }
-  for (let i = 0; i < 14; i++) {
-    const a = ((i + 0.5) / 14) * TAU;
-    addFilament(a, baseR * 0.62, tipR * 0.66, height * 0.78, 0.03, 0.075, cols[(i + 2) % cols.length]);
-  }
-  // inner crown: short, dense jewelled stamens hugging the core, like the photo
-  for (let i = 0; i < 18; i++) {
-    const a = ((i + 0.25) / 18) * TAU + 0.04 * (r() - 0.5);
-    addFilament(a, baseR * 0.86, tipR * 0.72, height * (0.5 + 0.1 * r()), 0.026, 0.07, cols[(i * 5 + 1) % cols.length]);
-  }
-  // tall jewelled stamens standing proud of the cage
-  for (let i = 0; i < 12; i++) {
-    const a = ((i + 0.5) / 12) * TAU + 0.1 * (r() - 0.5);
-    addFilament(a, baseR * 0.8, tipR * 0.5, height * (1.28 + 0.14 * r()), 0.03, 0.1, cols[(i * 3 + 2) % cols.length]);
+  // taller jewelled stamens leaning outward so they frame the crown instead of covering the core
+  for (let i = 0; i < 10; i++) {
+    const a = ((i + 0.5) / 10) * TAU + 0.1 * (r() - 0.5);
+    addFilament(a, baseR * 0.9, tipR * 0.95, height * (1.05 + 0.14 * r()), 0.045, 0.16, cols[(i * 3 + 2) % cols.length]);
   }
   // mid-filament bead nodes
   for (let i = 0; i < count; i += 2) {

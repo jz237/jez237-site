@@ -64,7 +64,15 @@ Run 1 and 2 accepted when every criterion was at least 3 and the mean at least 3
 - it40: reviewer mean 3.33, REJECT (best of run 4, above run 3's 3.22).
 - it41: reviewer mean 3.28, REJECT (layout 4.2, exploded parts 3.3, enamel 2.9, assembled 3.0, mechanical detail 2.9, closed bud 3.4).
 
+- it42 to it43 (fifth run, one focused pass): Jez sent a close-up of the crystal core in its gold cage and asked to concentrate on the centre, give it more glow and make it stand out. No score target was restated. New `buildCore` in `src/mech.js`: faceted dichroic crystal shader (`coreMaterial` in `src/materials.js`: few large facets, warm hot centre, Fresnel rainbow rim, per-facet glints), 14-meridian gold lattice with a riveted equator strap and jewelled gear studs, tilted armillary bands, a trumpet crown with a faceted ruby and spire, and a footed base. Glow comes from an additive halo sprite, a point light that follows the core and bloom, and 46 glints on the sphere. Stamens are now pink, aqua and amethyst faceted bulbs on shorter outer filaments plus ten taller outward-leaning ones so they frame the core. The core lifts 1.7 above the cage when in bloom, and the core inset is framed on the sphere. A capture bug was fixed on the way: custom `view` shots were being re-framed every frame, so earlier `bloom`, `budclose` and `budmid` shots were mis-framed.
+- it42: informational reviewer mean 3.7, centre 3.3 (core read as a pastel ball with fat beads).
+- it43: after larger crisper facets, less clipping, a tighter halo, bolder lattice bars and smaller stamen gems, reviewer mean 3.8 (layout 4.2, exploded parts 4.0, enamel 3.8, assembled 3.6, mechanical detail 3.5, closed bud 3.8), centre 3.7; glow stands out with no haze. Published.
+
+Gaps the run-5 reviewer named for the centre: the crystal still has flat stained-glass cells rather than fine prismatic facets with depth; the stamens are low-poly beads, where the photo has tall straight rods with faceted jewels in a ring above the cage rim; the lattice lacks jewelled rosette and gear nodes at the crossings and a perforated band; front petals hide the lower half of the core in the assembled view.
+
 ## Outcome
+
+**Fifth run (centre pass): published it43, reviewer mean 3.8 of 5 (centre 3.7), still below the 4.5 gate, which was not restated for this pass.** The text below describes the fourth run, kept for history; the gaps listed after it still apply, plus the centre gaps named in the it43 entry.
 
 **no-progress (fourth run), target not reached.** The goal was still a reviewer mean above 4.5. Three reviewed passes (it38 3.17, it40 3.33, it41 3.28) peaked at 3.33 and the last did not beat it, so the loop stopped. The published state is it41, which scores 3.28 of 5. That is below the gate. The closed bud improved the most (2.5 in run 3, 3.4 now); enamel (2.9) and mechanical detail (2.9) are now the weakest criteria.
 
