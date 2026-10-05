@@ -26,7 +26,7 @@
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
 <link rel="preload" as="fetch" href="data/terrain.json" crossorigin />
 <link rel="preload" as="image" href="data/imagery.webp?v=aligned2" />
-<link rel="modulepreload" href="load/app-E7NXE2SF.js" />
+<link rel="modulepreload" href="load/app-QVLGYX2F.js" />
 <link rel="modulepreload" href="load/chunk-NSE4GZ3K.js" />
 <link rel="modulepreload" href="load/chunk-WOT6VMZA.js" />
 </head>
@@ -165,7 +165,7 @@
   </header>
   <div class="regional-tabs" role="group" aria-label="Local view categories">
     <button type="button" data-local-tab="cameras" aria-pressed="true">Cameras</button>
-    <button type="button" data-local-tab="street" aria-pressed="false">Street View</button>
+    <button type="button" data-local-tab="street" aria-pressed="false">Street level</button>
     <button type="button" data-local-tab="conditions" aria-pressed="false">Weather &amp; river</button>
   </div>
   <section data-local-pane="cameras">
@@ -179,14 +179,15 @@
     <div class="street-window" aria-hidden="true"><span>AT STREET LEVEL</span><b>360°</b></div>
     <h3>Step into the place you’re exploring</h3>
     <p id="streetLocation" class="local-coordinates"></p>
-    <p class="local-intro">Open the nearest available Google Street View panorama to the center of your map.
-      These are captured photographs, not live cameras. Coverage and capture dates vary.</p>
+    <p class="local-intro">Open the City of Philadelphia’s Cyclomedia 360° imagery nearest the center of
+      your map. These are captured photographs, not live cameras. Outside the city limits, where the City
+      has no imagery, the link opens Google Street View instead.</p>
     <a id="streetCurrent" class="local-primary" target="_blank" rel="noopener noreferrer">
-      Open Street View here ↗</a>
+      Open Cyclomedia here ↗</a>
     <h3 class="local-shortcut-title">Familiar places</h3>
     <div id="streetShortcuts" class="local-actions"></div>
     <p class="local-footnote">To choose another street, close this panel, pan or search, then open it again.
-      Panoramas open in Google Maps and keep this diorama available in its tab.</p>
+      Panoramas open in a new tab and keep this diorama available in its tab.</p>
   </section>
   <section data-local-pane="conditions" hidden>
     <div class="local-refresh-row"><p id="conditionsStatus" role="status"></p>
@@ -834,7 +835,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="load/app-E7NXE2SF.js"></script>
+<script type="module" src="load/app-QVLGYX2F.js"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
