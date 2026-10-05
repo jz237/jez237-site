@@ -66,6 +66,7 @@ const DOF_FRAG = /* glsl */ `
   }
 `;
 
+const RAY_TINT = new THREE.Color('#ffd6a0');
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
 function makeTarget(w, h, samples) {
@@ -186,7 +187,7 @@ const RAYS_FRAG = /* glsl */ `
 
 const GRADE_FRAG = /* glsl */ `
   uniform sampler2D tDiffuse;
-  uniform float uExposure, uFade, uVignette, uGrain, uTime, uSat, uWarm, uShadowAmt;
+  uniform float uExposure, uFade, uVignette, uGrain, uTime, uSat, uWarm, uShadowAmt, uGrainLum;
   uniform vec3 uShadowTint, uHighTint;
   uniform vec2 uRes;
   varying vec2 vUv;
@@ -226,7 +227,7 @@ const GRADE_FRAG = /* glsl */ `
     vec3 outc = toSRGB(mapped);
     // fine animated grain, stronger in the mids
     float g = hash(uv * uRes + fract(uTime * 7.31) * 100.0) - 0.5;
-    outc += g * uGrain * (0.4 + 0.6 * (1.0 - abs(lum - 0.5)));
+    outc += g * uGrain * (0.4 + 0.6 * (1.0 - abs(min(lum, uGrainLum) - 0.5)));
     gl_FragColor = vec4(outc, 1.0);
   }
 `;
@@ -280,6 +281,7 @@ export class Pipeline {
         uSat: { value: 1.05 },
         uWarm: { value: 0 },
         uShadowAmt: { value: 0.6 },
+        uGrainLum: { value: 1e6 }, // the interactive modes cap it: glowing petals stay smooth
         uShadowTint: { value: new THREE.Color('#7fb7c0') },
         uHighTint: { value: new THREE.Color('#ffe2b5') },
         uRes: { value: new THREE.Vector2(size.x, size.y) },
@@ -314,6 +316,7 @@ export class Pipeline {
     u.uVignette.value = look.vignette ?? 0.55;
     u.uSat.value = look.saturation ?? 1.05;
     u.uShadowAmt.value = look.shadowTint ?? 0.5;
+    u.uGrainLum.value = look.grainLum ?? 1e6;
     this.bloom.strength = look.bloom ?? 0.32;
     // light shafts: project the sun into screen space for camera A
     const ru = this.rays.material.uniforms;
@@ -322,11 +325,14 @@ export class Pipeline {
       const cam = viewA.camera;
       const p = cam.position.clone().addScaledVector(look.sunDir, -1000).project(cam);
       const inFront = cam.getWorldDirection(new THREE.Vector3()).dot(look.sunDir) < 0;
-      if (inFront) {
+      // (look.rayNear: march only when the light is on or near the frame, as the moon's faint rays are)
+      if (inFront && (!look.rayNear || (Math.abs(p.x) < look.rayNear && Math.abs(p.y) < look.rayNear))) {
         ru.uSun.value.set(p.x * 0.5 + 0.5, p.y * 0.5 + 0.5);
         ru.uIntensity.value = look.godrays * 0.9;
       }
     }
+    // (the interactive modes tint the rays: cool moon rays by night)
+    ru.uTint.value.copy(look.rayTint ?? RAY_TINT);
     this.composer.render();
   }
 }

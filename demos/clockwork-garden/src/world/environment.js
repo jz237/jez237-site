@@ -67,22 +67,35 @@ export function createEnvironments(renderer) {
   return maps;
 }
 
-// Interactive modes: environment maps along the night → dawn → gold axis
-// (k = 0, 0.5, 1 match the film's three moods), baked once and picked by
-// the time-of-day control.
-export function createEnvironmentRamp(renderer, steps = 9) {
-  const pmrem = new THREE.PMREMGenerator(renderer);
+// Interactive modes: environment maps along the time-of-day axis, keyed at
+// midnight (0, the film's night), dusk (0.27, blue hour), dawn (0.5, the
+// film's dawn) and golden hour (1, the film's gold), baked once at the hours
+// in RAMP_TODS (the slider's stops are among them). The light-field patch
+// blends the two maps either side of the hour (world/lightfield.js), so the
+// hour slides without stepping.
+const DUSK = { top: '#081630', horizon: '#33365a', bottom: '#040609', windows: 1.05, windowColor: '#7d93c4', sun: 0.08, sunColor: '#ffb27a' };
+const KEYS = [[0, MOODS.night], [0.27, DUSK], [0.5, MOODS.dawn], [1, MOODS.gold]];
+export const RAMP_TODS = [0, 0.135, 0.27, 0.385, 0.5, 0.62, 0.74, 0.86, 1];
+
+export function moodAt(tod) {
   const col = (a, b, k) => '#' + new THREE.Color(a).lerp(new THREE.Color(b), k).getHexString();
   const mix = (a, b, k) => ({
     top: col(a.top, b.top, k), horizon: col(a.horizon, b.horizon, k), bottom: col(a.bottom, b.bottom, k),
     windows: a.windows + (b.windows - a.windows) * k, windowColor: col(a.windowColor, b.windowColor, k),
     sun: a.sun + (b.sun - a.sun) * k, sunColor: col(a.sunColor, b.sunColor, k),
   });
+  for (let i = 0; i < KEYS.length - 1; i++) {
+    const [ta, a] = KEYS[i], [tb, b] = KEYS[i + 1];
+    if (tod <= tb) return mix(a, b, Math.max(0, (tod - ta) / (tb - ta)));
+  }
+  return mix(MOODS.gold, MOODS.gold, 0);
+}
+
+export function createEnvironmentRamp(renderer, tods = RAMP_TODS) {
+  const pmrem = new THREE.PMREMGenerator(renderer);
   const maps = [];
-  for (let i = 0; i < steps; i++) {
-    const k = i / (steps - 1);
-    const m = k <= 0.5 ? mix(MOODS.night, MOODS.dawn, k * 2) : mix(MOODS.dawn, MOODS.gold, k * 2 - 1);
-    const scene = envScene({ ...m, sunDir: SUN_ENV });
+  for (const k of tods) {
+    const scene = envScene({ ...moodAt(k), sunDir: SUN_ENV });
     maps.push(pmrem.fromScene(scene, 0.02).texture);
     scene.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
   }

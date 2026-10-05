@@ -125,7 +125,7 @@ export class Skep {
   }
   update(t, ctx) {
     const wake = sseg(t, B.podsWake[0] + 2, B.beeEmerge);
-    const g = 0.25 + wake * 0.9 + (ctx.skepFlare || 0);
+    const g = 0.25 + wake * 0.9 + (ctx.skepFlare || 0) + (ctx.skepNight || 0) * 0.6; // (skepNight: interactive modes only)
     this.doorGlow.material.color.setRGB(1.0 * g, 0.6 * g, 0.26 * g);
     this.hand.rotation.z = -t * 0.12;
   }
@@ -178,7 +178,7 @@ export class Seedpods {
     for (const p of this.pods) {
       const k = sseg(t, p.wakeAt, p.wakeAt + 0.8);
       const flare = Math.exp(-Math.max(0, t - p.wakeAt) * 2.0) * (t > p.wakeAt ? 1 : 0);
-      const g = 0.03 + k * (0.75 + 0.2 * Math.sin(t * 2.2 + p.phase)) + flare * 1.4;
+      const g = (0.03 + k * (0.75 + 0.2 * Math.sin(t * 2.2 + p.phase)) + flare * 1.4) * (1 + (ctx.podNight || 0) * 1.6); // (podNight: interactive modes only)
       p.seedMat.color.setRGB(0.7 * g, 0.32 * g, 0.08 * g);
     }
   }
@@ -348,9 +348,10 @@ export class GlassBlossom {
   update(t, ctx) {
     const wake = sseg(t, B.podsWake[0] + 3, B.podsWake[1] + 3);
     const sip = ctx.sip ?? sseg(t, B.hummingbird[0] + 1.6, B.hummingbird[0] + 2.4) * (1 - sseg(t, B.hummingbird[0] + 3.4, B.hummingbird[0] + 4.0));
-    const g = 0.2 + wake * 1.4 + sip * 2 + Math.sin(t * 3.1) * 0.08 * wake;
+    const bn = ctx.blossomNight || 0; // (interactive modes only)
+    const g = 0.2 + wake * 1.4 + sip * 2 + Math.sin(t * 3.1) * 0.08 * wake + bn * 0.9;
     this.nectarMat.color.setRGB(1.0 * g, 0.72 * g, 0.36 * g);
-    this.light.intensity = (wake * 1.5 + sip * 3) * ctx.lightScale;
+    this.light.intensity = (wake * 1.5 + sip * 3 + bn * 2) * ctx.lightScale;
   }
 }
 

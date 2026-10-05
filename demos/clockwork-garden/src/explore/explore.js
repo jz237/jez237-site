@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TimeOfDay } from './timeofday.js';
+import { TimeOfDay, STOPS } from './timeofday.js';
 import { Bounds } from './bounds.js';
 import { BeeActor, SPEED } from './actor.js';
 import { Pilot } from './pilot.js';
@@ -9,7 +9,9 @@ import { Bellflowers } from './bells.js';
 import { Interactions } from './interactions.js';
 import { Ambient } from './ambient.js';
 import { Scenery } from './scenery.js';
-import { LookUpgrade } from './upgrade.js';
+import { LookUpgrade, FADE, GLOW } from './upgrade.js';
+import { Night } from './night.js';
+import { lightFieldAll, setLightField, LF } from '../world/lightfield.js';
 import { DetailCull } from './cull.js';
 import { NearField } from './nearfield.js';
 import { applyPose } from '../direction/camera.js';
@@ -26,7 +28,7 @@ import { clamp, lerp, smooth } from '../core/ease.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const WORLD_T0 = 70; // world clock offset: every film beat has played out
-const TIMES = [0.0, 0.5, 0.86]; // T cycles midnight → dawn → golden hour
+const TIMES = STOPS.map((s) => s.v); // T cycles midnight → dusk → dawn → golden hour
 
 export class Explore {
   constructor({ renderer, scene, world, pipeline, quality, mat, audio, sync = false }) {
@@ -78,18 +80,27 @@ export class Explore {
     // (grown a few ms a frame from boot: stepNearfield(); synchronously for capture tools)
     this.nearfield = new NearField({ world, bounds: this.bounds, quality, growth: this.growth, bells: this.bells, scenery: this.scenery });
     this.nearfield.onReady = (nf) => {
-      const fernMat = this.upgrade.swaps.find((s) => s.obj === world.flora.fernMesh && s.prop === 'material')?.explore;
-      if (fernMat) nf.setFernMaterial(fernMat);
-      const palmMat = this.upgrade.swaps.find((s) => s.obj === world.foliage.frondMesh && s.prop === 'material')?.explore;
-      if (palmMat) nf.setPalmMaterial(palmMat);
-      this.upgrade.replace();
+      if (this.upgrade.fernMatIn) nf.setFernMaterial(this.upgrade.fernMatIn);
+      if (this.upgrade.palmMatIn) nf.setPalmMaterial(this.upgrade.palmMatIn);
+      // dissolve the film's foliage into the bee-scale planting over ~0.6 s (at once if nobody is looking)
+      this.swapFade = { k: 0 };
+      if (!this.active || sync) this._finishSwap();
     };
+    FADE.uSwapK.value = 0;
     this.group.add(this.nearfield.group);
-    if (sync) this.nearfield.finish();
     this.interactions = new Interactions({ world, mat, quality, bounds: this.bounds, growth: this.growth, bells: this.bells, audio, emit: (n, d) => { if (n === 'kindle' && this.stats) this.stats.lanterns++; this._emit(n, d); } });
     this.group.add(this.interactions.group);
     this.ambient = new Ambient({ world, mat, quality, bounds: this.bounds, audio, skep: this.skep });
     this.group.add(this.ambient.group);
+    // a night that glows: the light field, kindling, haloes, glowing blooms, fireflies
+    this.night = new Night({ world, quality, mat, upgrade: this.upgrade, interactions: this.interactions, growth: this.growth, bells: this.bells, group: this.group });
+    this.upgrade.swap(world.sky.mesh, 'material', world.sky.exploreMaterial);
+    // every lit material in the house takes the light field while exploring
+    const extra = this.upgrade.swaps.filter((x) => x.prop === 'material').map((x) => x.explore);
+    extra.push(this.upgrade.fernMat, this.upgrade.fernMatIn, this.upgrade.palmMatIn, this.nearfield.matLeaf, this.nearfield.matIvy, this.nearfield.coreMat);
+    lightFieldAll([scene], extra, quality.tier === 'low' ? 4 : 8);
+    this.lf = LF; // (review hooks: __cg.explore().lf)
+    if (sync) this.nearfield.finish();
     this.bells.onRing = (b, k) => {
       this.audio?.bell(b.note, 0.045 * k, clamp((b.pivot.x - this.camera.position.x) * 0.02, -0.8, 0.8));
       this.stats.bells++;
@@ -154,6 +165,7 @@ export class Explore {
       this.world.atmosphere.shaftUniforms.uInside.value = 1;
       this.world.atmosphere.shaftUniforms.uNear.value.set(60, 300);
       this.follow.reset(this.actor);
+      setLightField(true);
     }
     if (mode === 'fly' && prev !== 'fly') {
       // take over from wherever APX-9 is, looking the way it faces
@@ -166,6 +178,17 @@ export class Explore {
       this.pilot.route = null;
       this.pilot.goal = null;
     }
+  }
+
+  // compile every material's light-field variant in the background (parallel
+  // shader compile), so flying somewhere new never hitches; main.js calls it
+  // once the page is up and an interactive mode is showing
+  // (without KHR_parallel_shader_compile a program compiles when first drawn, as before)
+  compileAll() {
+    if (this._compiled || !this.active) return;
+    this._compiled = true;
+    const r = this.renderer;
+    if (r.extensions.has('KHR_parallel_shader_compile')) r.compileAsync(this.scene, this.camera).catch(() => {});
   }
 
   exit() {
@@ -183,6 +206,9 @@ export class Explore {
     this.pipeline.scenePass.material.uniforms.uSteps.value = this.quality.dofSteps;
     this.world.atmosphere.shaftUniforms.uInside.value = 0;
     this.world.atmosphere.shaftUniforms.uNear.value.set(25, 190);
+    this.night.exit();
+    setLightField(false);
+    if (this.swapFade) this._finishSwap();
     // the film re-derives creature visibility and every world state from t
   }
 
@@ -198,11 +224,22 @@ export class Explore {
 
   get worldTime() { return WORLD_T0 + this.clock; }
 
-  setTime(v) { this.tod.value = clamp(v, 0, 1); this._emit('time', this.tod.value); }
+  // the hour glides to its new value (TimeOfDay.step); `tod.value = x` jumps
+  setTime(v) { this.tod.target = clamp(v, 0, 1); this._emit('time', this.tod.target); }
   cycleTime() {
-    const v = this.tod.value;
+    const v = this.tod.target;
     const i = TIMES.findIndex((x) => x > v + 0.02);
-    this.setTime(i < 0 ? TIMES[0] : TIMES[i]);
+    const stop = STOPS[i < 0 ? 0 : i];
+    this.setTime(stop.v);
+    this._emit('hint', stop.name);
+  }
+
+  // the bee-scale planting has dissolved in: the film's foliage it replaces goes
+  _finishSwap() {
+    this.swapFade = null;
+    FADE.uSwapK.value = 1;
+    this.upgrade.replace();
+    if (this.scenery.endDomes) this.scenery.endDomes.visible = false;
   }
 
   togglePhoto(on = !this.photo) {
@@ -301,7 +338,14 @@ export class Explore {
   // ---- render ------------------------------------------------------------------------------
   render(dtReal = 1 / 60) {
     const t = this.worldTime;
+    this.tod.step(dtReal);
+    if (this.swapFade) {
+      this.swapFade.k += dtReal / 0.6;
+      FADE.uSwapK.value = smooth(clamp(this.swapFade.k));
+      if (this.swapFade.k >= 1) this._finishSwap();
+    }
     const ctx = this.tod.context(t, this.pixelRatio);
+    const phases = this.tod.phases();
     // light shafts thin out as the camera rises into them under the glazing
     ctx.shaftGain = 1 - 0.8 * clamp((this.camera.position.y - 190) / 150);
     const a = this.actor;
@@ -312,6 +356,7 @@ export class Explore {
     const clock = this.clock;
     setWash((age, out) => this.trail.at(clock - age, out), a.pos, 1.9);
     this.interactions.pre(this.clock, dt, ctx, [body]);
+    this.night.pre(ctx, phases, this.clock);
     this.world.update(t, ctx);
     this.world.lighting.baseSun = this.world.lighting.sun.intensity;
     this.growth.update(this.clock, body);
@@ -342,6 +387,12 @@ export class Explore {
     this.focus.radius = this.debugView?.shadowRadius ?? (this.quality.tier === 'low' ? 55 : 70);
     this.tod.apply(this.scene, this.world, this.focus, this.camera);
     this._practicals(ctx);
+    // the night: the light field's sources, haloes, glows, fireflies (after the camera is placed)
+    this.camera.updateMatrixWorld();
+    GLOW.uGlowT.value = this.clock;
+    GLOW.uGlassGlow.value.set(1.0, 0.62, 0.32, 0.02 + 0.14 * phases.blooms);
+    this.growth.petals.material.emissiveIntensity = 0.08 + 0.5 * phases.blooms;
+    this.night.post(dt, this.camera, { pos: a.pos, vel: a.vel, speed: a.speed, boost: a.boostK || 0 }, this.pixelRatio, ctx);
     const look = { ...this.tod.look(), time: t, sunDir: SUN_DIR, fade: 0 };
     this.pipeline.render({ camera: this.camera, focus: v.focus, aperture: this.quality.dof ? v.aperture : 0 }, null, 0, look);
     // audio follows the bee
@@ -420,22 +471,8 @@ export class Explore {
     Lg.fill.intensity = a.pollen * 1.4 + (a.collect || 0) * 1.2;
     Lg.fill.distance = 7;
     Lg.fill.decay = 2;
-    // a lit lantern near the camera pools warm light (more at night)
-    const lit = this.interactions.lanterns;
-    let best = -1, bd = 120 * 120;
-    const cp = this.camera.position;
-    this.world.foliage.lanterns.forEach((l, i) => {
-      if (lit[i].lit < 0.5) return;
-      const d = l.p.distanceToSquared(cp);
-      if (d < bd) { bd = d; best = i; }
-    });
-    const S = Lg.spark;
-    if (best >= 0) {
-      S.position.copy(this.world.foliage.lanterns[best].p);
-      S.color.set('#ffb05a');
-      S.distance = 90;
-      S.decay = 1.2;
-      S.intensity = (60 + (1 - this.tod.value) * 140) * (0.95 + 0.05 * Math.sin(this.clock * 9));
-    } else S.intensity = 0;
+    // every lantern, lamp and glow lights the garden through the light field
+    // (night.js), so the old single nearest-lantern light is off
+    Lg.spark.intensity = 0;
   }
 }

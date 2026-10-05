@@ -74,7 +74,7 @@ export class Scenery {
     const urnGeo = new THREE.LatheGeometry([[0, 0], [5, 0], [5.5, 1], [4, 3], [4.2, 4], [7.5, 9], [8.6, 14], [9.2, 15], [8.2, 15.5]].map(([a, b]) => new THREE.Vector2(a, b)), 20);
     const um = new THREE.InstancedMesh(urnGeo, world.greenhouse.stone, urns.length);
     const frondGeo = world.flora.fernMesh.geometry;
-    const fm = new THREE.InstancedMesh(frondGeo, this.upgrade?.swaps.find((s) => s.obj === world.flora.fernMesh && s.prop === 'material')?.explore || world.flora.fernMesh.material, urns.length * 9);
+    const fm = new THREE.InstancedMesh(frondGeo, this.upgrade?.fernMat || world.flora.fernMesh.material, urns.length * 9);
     let fi = 0;
     urns.forEach(([x, z, s], i) => {
       um.setMatrixAt(i, new THREE.Matrix4().compose(V(x, -2.5, z), new THREE.Quaternion(), V(s, s, s)));
@@ -95,6 +95,7 @@ export class Scenery {
   // kind 'lawn': mown stripes and broad patches near the house.
   ext(params, kind = '') {
     const m = new THREE.MeshLambertMaterial(params);
+    m.userData.noLightField = true; // outside the glass: the lamps don't reach it
     const u = this.haze;
     m.onBeforeCompile = (sh) => {
       sh.uniforms.uHaze = u.uHaze;

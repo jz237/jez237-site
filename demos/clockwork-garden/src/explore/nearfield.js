@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { leafGrid, leafPoint, leafTriangles } from '../geometry/leaf.js';
 import { partsCross, partBox, boxHit } from '../geometry/intersect.js';
 import { swayMaterial, swayDepth } from '../world/wind.js';
-import { enamel } from './upgrade.js';
+import { enamel, withDither } from './upgrade.js';
 import { enamelLeafTextures } from '../materials/textures.js';
 import { groundHeight } from './bounds.js';
 import { bloomRadius } from '../world/planting.js';
@@ -710,12 +710,10 @@ export class NearField {
       }
       yield;
     }
-    // the film's masses are replaced in the interactive modes
-    if (scenery?.endDomes) scenery.endDomes.visible = false;
+    // (the film's end masses are hidden once the bee-scale planting has dissolved in: explore.js)
     // a dark leafy core inside each mass: gaps between the leaves read as depth, not soil
     const core = new THREE.IcosahedronGeometry(1, 2);
-    const coreMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.95, metalness: 0.2 });
-    this.cores = new THREE.InstancedMesh(core, coreMat, this.masses.length);
+    this.cores = new THREE.InstancedMesh(core, this.coreMat, this.masses.length);
     const c = new THREE.Color(), m4 = new THREE.Matrix4();
     this.masses.forEach((M, i) => {
       m4.compose(V(M.cx, M.cy, M.cz), new THREE.Quaternion(), V(M.rx * 0.78, M.ry * 0.78, M.rx * 0.78));
@@ -819,11 +817,13 @@ export class NearField {
   _materials() {
     const tex = enamelLeafTextures(this.low ? 256 : 512);
     const mk = (ivy) => {
-      const m = enamel(tex, { key: ivy ? 'nf-ivy' : 'nf-leaf' }); // (enamel() adds the near-lens fade)
+      // (enamel() adds the near-lens fade, and the dissolve in when the planting is ready)
+      const m = enamel(tex, { key: ivy ? 'nf-ivy' : 'nf-leaf', side: 1 });
       return swayMaterial(m, ivy ? 'ivy' : 'smallLeaf', { swing: ivy, leaf: true });
     };
     this.matLeaf = mk(false);
     this.matIvy = mk(true);
+    this.coreMat = withDither(new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.95, metalness: 0.2 }), 'nf-core', 1);
     const grids = { hi: leafGrid('hi'), lo: leafGrid('lo') };
     for (const g of Object.values(grids)) {
       g.boundingSphere = new THREE.Sphere(V(0, 0.42, 0), 1.2);
@@ -847,6 +847,13 @@ export class NearField {
       this.group.add(m);
       return m;
     });
+    // and one for the masses' dark cores
+    const cm = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), this.coreMat, 1);
+    cm.setMatrixAt(0, new THREE.Matrix4().makeTranslation(0, -60, 0));
+    cm.setColorAt(0, new THREE.Color('#000000'));
+    cm.frustumCulled = false;
+    this.group.add(cm);
+    this.standIns.push(cm);
   }
 
   _build(quality) {

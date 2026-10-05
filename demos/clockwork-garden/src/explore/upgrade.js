@@ -17,18 +17,80 @@ import { swayMaterial, pivotParts } from '../world/wind.js';
 // Every swap is reversed on exit, so the film renders exactly as before.
 
 // last resort only: the camera pushes the foliage aside (world/wind.js) and
-// nothing comes within ~1.5 of the lens, so this rarely dithers anything now
-const FADE = { uCamFade: { value: new THREE.Vector2(0.55, 1.35) } };
+// nothing comes within ~1.5 of the lens, so this rarely dithers anything now.
+// uSwapK cross-dissolves the film's foliage (side -1) into the bee-scale
+// planting (side +1) when it has grown: complementary dither patterns, so
+// every pixel shows one or the other, never both or neither.
+export const FADE = { uCamFade: { value: new THREE.Vector2(0.55, 1.35) }, uSwapK: { value: 0 } };
 
 const DITHER = /* glsl */ `
   {
     float camD = length(vViewPosition);
     float fk = smoothstep(uCamFade.x, uCamFade.y, camD);
-    if (fk < 0.999) {
+    float lo = 0.0;
+    if (uSwapSide > 0.5) fk *= uSwapK;
+    else if (uSwapSide < -0.5) lo = uSwapK;
+    if (fk < 0.999 || lo > 0.001) {
       float ign = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
-      if (ign > fk) discard;
+      if (ign > fk || ign < lo) discard;
     }
   }`;
+
+// Night: blooms glow softly from within (per bloom, from the instanced
+// attribute aBloomGlow that night.js fills), and garden glass shimmers.
+export const GLOW = { uGlassGlow: { value: new THREE.Vector4(0, 0, 0, 0) }, uGlowT: { value: 0 } };
+function bloomGlow(m, color, strength, key) {
+  const prev = m.onBeforeCompile;
+  const K = { value: new THREE.Color(color).multiplyScalar(strength) };
+  m.onBeforeCompile = (sh, r) => {
+    if (prev) prev(sh, r);
+    sh.uniforms.uBloomK = K;
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute float aBloomGlow; varying float vBG; varying float vPU;')
+      .replace('#include <uv_vertex>', '#include <uv_vertex>\nvBG = aBloomGlow; vPU = uv.x;');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec3 uBloomK; varying float vBG; varying float vPU;')
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        {
+          // lit from the heart of the bloom: brightest at the petal's foot, a
+          // translucent glow through the thin edge
+          float heart = mix(1.0, 0.3, smoothstep(0.0, 0.95, vPU));
+          float ndv = abs(dot(normal, normalize(vViewPosition)));
+          totalEmissiveRadiance += uBloomK * vBG * heart * (0.75 + 0.5 * pow(1.0 - ndv, 2.0));
+        }`);
+  };
+  const base = m.customProgramCacheKey?.bind(m);
+  m.customProgramCacheKey = () => (base ? base() : '') + '|bloom-' + key;
+  return m;
+}
+export function glowGlass(m) {
+  const prev = m.onBeforeCompile;
+  m.onBeforeCompile = (sh, r) => {
+    if (prev) prev(sh, r);
+    Object.assign(sh.uniforms, GLOW);
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGW;')
+      .replace('#include <project_vertex>', `#include <project_vertex>
+        #ifdef USE_INSTANCING
+          vGW = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+        #else
+          vGW = (modelMatrix * vec4(transformed, 1.0)).xyz;
+        #endif`);
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec4 uGlassGlow; uniform float uGlowT; varying vec3 vGW;')
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        if (uGlassGlow.w > 0.0) {
+          // blown glass at night: a slow iridescent shimmer along the rims
+          float ndv = abs(dot(normal, normalize(vViewPosition)));
+          float rim = pow(1.0 - ndv, 2.5);
+          float sh = 0.55 + 0.45 * sin(dot(vGW, vec3(0.9, 1.7, 0.6)) + uGlowT * 1.3) * sin(dot(vGW, vec3(-0.5, 0.8, 1.1)) * 1.7 - uGlowT * 0.9);
+          vec3 hue = mix(uGlassGlow.rgb, vec3(0.55, 0.85, 1.0) * dot(uGlassGlow.rgb, vec3(0.33)), 0.5 + 0.5 * sin(dot(vGW, vec3(0.4, 0.3, -0.5)) + uGlowT * 0.6));
+          totalEmissiveRadiance += hue * uGlassGlow.w * (rim * 1.4 * sh + 0.06);
+        }`);
+  };
+  m.customProgramCacheKey = () => 'cg-glow-glass';
+  return m;
+}
 
 // a clone without the sway patch (it is re-applied for the explore material)
 function fresh(m) {
@@ -40,13 +102,19 @@ function fresh(m) {
   return c;
 }
 
-function withDither(m, key) {
+// side: 0 always shown, -1 the film's foliage the bee-scale planting replaces
+// (dissolves out with FADE.uSwapK), +1 the bee-scale planting (dissolves in)
+function withDither(m, key, side = 0) {
   const prev = m.onBeforeCompile;
+  const S = { value: side };
+  m.userData.swapSide = S;
   m.onBeforeCompile = (sh, r) => {
     if (prev) prev(sh, r);
     sh.uniforms.uCamFade = FADE.uCamFade;
+    sh.uniforms.uSwapK = FADE.uSwapK;
+    sh.uniforms.uSwapSide = S;
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform vec2 uCamFade;')
+      .replace('#include <common>', '#include <common>\nuniform vec2 uCamFade; uniform float uSwapK, uSwapSide;')
       .replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>' + DITHER);
   };
   const base = m.customProgramCacheKey?.bind(m);
@@ -54,7 +122,7 @@ function withDither(m, key) {
   return m;
 }
 
-export function enamel(tex, { color = '#ffffff', mapped = true, key }) {
+export function enamel(tex, { color = '#ffffff', mapped = true, key, side = 0 }) {
   const m = new THREE.MeshPhysicalMaterial({
     color,
     map: mapped ? tex.map : null,
@@ -80,7 +148,7 @@ export function enamel(tex, { color = '#ffffff', mapped = true, key }) {
     };
     m.customProgramCacheKey = () => 'cg-enamel-leaf';
   }
-  return withDither(m, key);
+  return withDither(m, key, side);
 }
 
 // glass that reads as glass without three's transmission pre-pass (which
@@ -165,7 +233,7 @@ export class LookUpgrade {
     const foMat = (o) => {
       const mapped = !!o.geometry.attributes.uv;
       const k = (o.userData.sway?.profile || '') + (o.userData.sway?.swing ? 's' : '') + (mapped ? '|m' : '|p');
-      if (!foMats.has(k)) foMats.set(k, keepSway(o, enamel(tex, { mapped, key: 'fo-' + k })));
+      if (!foMats.has(k)) foMats.set(k, keepSway(o, enamel(tex, { mapped, key: 'fo-' + k, side: -1 })));
       return foMats.get(k);
     };
     // a creased version of the foliage masses' dome (same layout as foliage.js)
@@ -202,18 +270,37 @@ export class LookUpgrade {
         } else this.swap(o, 'material', foMat(o));
       }
     }
+    // the bee-scale planting's palm fronds: the same enamel, dissolving in
+    {
+      const o = fo.frondMesh, mapped = !!o.geometry.attributes.uv;
+      const k = (o.userData.sway?.profile || '') + (o.userData.sway?.swing ? 's' : '') + (mapped ? '|m' : '|p');
+      this.palmMatIn = keepSway(o, enamel(tex, { mapped, key: 'fo-' + k, side: 1 }));
+    }
     // flora: stem/base leaves, shrubs, ferns, petals, the rose arch
-    const floraLeaf = new Map(fl.leafMats.map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-leaf-' + m.id }), 'leaf')]));
-    const shrub = new Map((fl.shrubMats || []).map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-shrub-' + m.id }), 'dome')]));
+    const floraLeaf = new Map(fl.leafMats.map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-leaf-' + m.id, side: -1 }), 'leaf')]));
+    const shrub = new Map((fl.shrubMats || []).map((m) => [m, swayMaterial(enamel(tex, { color: m.color.clone().multiplyScalar(1.15), key: 'fl-shrub-' + m.id, side: -1 }), 'dome')]));
     const petals = new Set(fl.inst.map((x) => x.petals));
+    // how each bloom glows from within at night: porcelain and roses most, metal cups a little
+    const GLOWS = { lily: ['#ffd2a0', 0.16], rose: ['#ffb0a0', 0.12], tulip: ['#ffb060', 0.045], copperbloom: ['#ff9050', 0.04] };
+    const typeOf = new Map(fl.inst.map((x) => [x.petals, x.ty.name]));
     const petalMats = new Map();
     for (const o of fl.group.children) {
       if (!o.isMesh) continue;
       if (floraLeaf.has(o.material)) this.swap(o, 'material', floraLeaf.get(o.material));
       else if (shrub.has(o.material)) this.swap(o, 'material', shrub.get(o.material));
-      else if (o === fl.fernMesh) this.swap(o, 'material', keepSway(o, withDither(fresh(o.material), 'fern')));
-      else if (petals.has(o) || (fl.archParts || []).includes(o)) {
-        if (!petalMats.has(o.material)) petalMats.set(o.material, keepSway(o, withDither(fresh(o.material), 'petal-' + o.material.id)));
+      else if (o === fl.fernMesh) {
+        // the film's ferns dissolve out; the urns keep theirs; the bee-scale ferns dissolve in
+        this.swap(o, 'material', keepSway(o, withDither(fresh(o.material), 'fern', -1)));
+        this.fernMat = keepSway(o, withDither(fresh(o.material), 'fern', 0));
+        this.fernMatIn = keepSway(o, withDither(fresh(o.material), 'fern', 1));
+      } else if (petals.has(o) || (fl.archParts || []).includes(o)) {
+        if (!petalMats.has(o.material)) {
+          const side = o === fl.archParts?.[1] ? -1 : 0; // the arch's leaves are re-planted
+          let m = withDither(fresh(o.material), 'petal-' + o.material.id, side);
+          const gl = GLOWS[typeOf.get(o)];
+          if (gl) m = bloomGlow(m, gl[0], gl[1], typeOf.get(o));
+          petalMats.set(o.material, keepSway(o, m));
+        }
         this.swap(o, 'material', petalMats.get(o.material));
       }
     }
@@ -265,8 +352,10 @@ export class LookUpgrade {
         this.swap(o, 'visible', false);
       }
     }
-    // glass: no transmission pass while exploring
-    const glass = lightGlass();
+    // glass: no transmission pass while exploring (and a shimmer at night)
+    const glass = glowGlass(lightGlass());
+    glass.userData.noLightField = true; // lamps inside glass would turn it milky: it shimmers on its own
+    this.glass = glass;
     const roots = [world.pods.group, world.blossom.group, world.garden.group, world.flora.group, world.foliage.group];
     for (const r of roots) r.traverse((o) => { if (o.isMesh && o.material === mat.glass) this.swap(o, 'material', glass); });
   }
