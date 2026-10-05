@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 02 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 05 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 12-18, 1984 — Tandy 1000 brings PC compatibility home</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-11-12</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-12</guid>
+      <pubDate>Mon, 05 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Radio Shack’s November newcomer combines an 8088 with colorful graphics, three-voice sound and bundled DeskMate. Radio Shack has a new contender for the home-computer desk this November. The Tandy 1000 puts an Intel 8088 inside a machine intended to offer compatibility with most IBM PC software, while retaining the enhanced graphics and sound associated with the PCjr. It is a practical pitch to households that want work and play in the same cabinet. Also this week: A shopping mall arrives on the home-computer screen · KoalaPad gives PCjr owners a drawing surface in their laps · Copy protection must not punish the buyer.</description>
+    </item>
     <item>
       <title>Week of November 5-11, 1984 — Tandy brings a $1,199 IBM-compatible into Radio Shack</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-11-05</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-02</guid>
       <pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate>
       <description>The Commodore founder acquires Atari&apos;s home-computer and console operations, setting up a fierce new round in the personal-computer price war. Warner Communications sold Atari&apos;s loss-plagued home-computer and home-video-game operations on Monday, July 2, to a new company headed by Jack Tramiel. Warner kept the coin-operated arcade operation, while the consumer business became the foundation of a new Atari Corporation. Also this week: Apple IIc Packs a Full Apple II into 7.5 Pounds · The Hulk Leads Atari&apos;s Living Software Shelf · Byte Watches Computers and Video Converge.</description>
-    </item>
-    <item>
-      <title>Week of June 25-July 1, 1984 — AT&amp;T Enters the Personal-Computer Market with the PC 6300</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-06-25</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-25</guid>
-      <pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The post-divestiture telephone giant puts an 8 MHz 8086 machine into the crowded IBM-compatible business market. AT&amp;T Information Systems entered the personal-computer market in New York on Tuesday, June 26, placing one of America&apos;s largest technology names directly in the path of IBM and the multiplying compatible makers. Its PC 6300 is an AT&amp;T-branded version of Olivetti&apos;s M24, built to run software written for the IBM PC. Also this week: Printer Buyers Face a Maze from Dot Matrix to Laser · VisiCorp Tries to Regain Its Business-Software Footing · Timex/Sinclair Owners Build a Lifeline on CompuServe.</description>
     </item>
   </channel>
 </rss>

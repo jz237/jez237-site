@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-05",
+      "historicDate": "1984-11-12",
+      "displayDate": "Week of November 12-18, 1984",
+      "edition": "Issue 120 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "PC compatibility meets home color and sound; the modem opens a shopping mall after hours.",
+      "leadHeadline": "Tandy 1000 brings PC compatibility home",
+      "storyHeadlines": [
+        "A shopping mall arrives on the home-computer screen",
+        "KoalaPad gives PCjr owners a drawing surface in their laps",
+        "Copy protection must not punish the buyer"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-12.png",
+      "thumb": "media/thumbs/1984-11-12.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-02",
       "historicDate": "1984-11-05",
       "displayDate": "Week of November 5-11, 1984",

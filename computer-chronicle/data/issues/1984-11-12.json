@@ -1,0 +1,474 @@
+{
+  "visualProfile": {
+    "tone": "November 1984 home-computing newsprint",
+    "motifs": [
+      "original Tandy 1000 and CRT",
+      "floppy disks",
+      "telephone modem",
+      "KoalaPad drawing tablet"
+    ],
+    "layout": "Dense period weekly, warm paper, red and blue rules, halftone blocks"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "November 12-18, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Tandy 1000 home-computing lead with prominent colorful game-screen halftone; Archon II gaming shelf secondary panel",
+    "secondaryRail": "Games shelf, charts, modem note, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-10-05",
+  "historicDate": "1984-11-12",
+  "displayDate": "Week of November 12-18, 1984",
+  "edition": "Issue 120 - Weekly 1984 Computer & Culture Chronicle",
+  "editorNote": "A weekly record of home computers, games and the culture around them.",
+  "morningLine": "PC compatibility meets home color and sound; the modem opens a shopping mall after hours.",
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-11-12.png",
+    "alt": "GPT Image 2 Computer Chronicle newspaper front page for November 12-18, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "lead": {
+    "headline": "Tandy 1000 brings PC compatibility home",
+    "dek": "Radio Shack’s November newcomer combines an 8088 with colorful graphics, three-voice sound and bundled DeskMate.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      8
+    ],
+    "body": [
+      "Radio Shack has a new contender for the home-computer desk this November. The Tandy 1000 puts an Intel 8088 inside a machine intended to offer compatibility with most IBM PC software, while retaining the enhanced graphics and sound associated with the PCjr. It is a practical pitch to households that want work and play in the same cabinet.",
+      "The original configuration carries 128 KB of memory, expandable to 640 KB. Sixteen-color PCjr-compatible graphics, three-voice sound and joystick ports make the entertainment side more than an afterthought. For buyers comparing machines by their game screens as well as their word processors, those features deserve a place beside the processor specification.",
+      "DeskMate comes bundled with the machine, giving the buyer a software starting point. Radio Shack stores and Computer Centers provide the retail route. The reported introductory price is about $1,200; the cost of a complete desk depends on the display and other equipment selected.",
+      "Compatibility remains the important word, but not a promise that every IBM program or expansion card will fit. The Tandy approach offers a lower-cost PCjr alternative with a familiar software target. Its November arrival makes the home-computer comparison sheet considerably more interesting."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "A shopping mall arrives on the home-computer screen",
+      "body": [
+        "Home shopping no longer requires a paper catalog in every case. Selby Bateman’s November COMPUTE! report describes CompuServe’s Electronic Mall, open around the clock, with access to more than 80 merchants. The service’s more than 130,000 subscribers provide a substantial potential audience.",
+        "WaldenBooks, American Express, Commodore, McGraw-Hill, Microsoft and American Airlines are among the named merchants. Product descriptions, shipping information, merchant mailboxes and order forms turn a terminal session into something closer to a shopping trip.",
+        "The hardware and service arrangements still vary sharply. Chicago’s Keyfax is reported at a $10–$15 monthly base rate plus a $40 software package; Viewtron requires a $600 AT&T Sceptre terminal confined to that service. American People/Link is planning nationwide service for December, not operating it yet."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "KoalaPad gives PCjr owners a drawing surface in their laps",
+      "body": [
+        "A stylus or fingertip is enough to start drawing with KoalaPad. Lee Noel’s November COMPUTE! review follows more than a month of testing the tablet and KoalaPainter on a PCjr with 128K, a disk drive, DOS 2.1 and a color display.",
+        "The roughly six-by-eight-inch pad has two buttons and a pressure-sensitive drawing area about four inches square. It plugs into a joystick port and recognizes one contact at a time. KoalaPainter supplies two drawing screens, zoom, mirror and an Oops correction feature.",
+        "The program uses 160-by-200 resolution with 16 simultaneous colors, adding halftone patterns for more apparent shades. Noel questions the choice not to use a higher-resolution mode. There is no supplied hardcopy-printing feature: pictures can be saved to disk, videotaped or photographed from the screen."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Copy protection must not punish the buyer",
+      "body": [
+        "Mitchell Kapor takes up software piracy in November’s Creative Computing with a warning against expecting a technical cure. His comparison is retail shoplifting: control the losses, rather than assume they can be entirely eliminated.",
+        "Education, legislation, enforcement and proportionate protection all have a part in his argument. Hard-disk owners, he says, should not have to insert a specially protected floppy at the beginning of every session. Protection that obstructs the paying customer creates its own costs.",
+        "The essay discusses ADAPSO’s work on protection standards. It is a debate about policy and convenience, not a report of a particular pirate crew or arrest. As Kapor puts it, “There is no technical panacea.”"
+      ],
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Tandy 1000",
+      "summary": "8088, 128 KB expandable to 640 KB; PC compatibility with enhanced graphics and sound. November introduction; precise launch day unverified.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "KoalaPad for PCjr",
+      "summary": "Pressure-sensitive joystick-port drawing tablet bundled with KoalaPainter; 128K PCjr requirement.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Tel-A-Modem 212A",
+      "summary": "Code-A-Phone telephone with built-in modem and two phone lines for simultaneous voice and data, described in November COMPUTE!; no verified price.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Archon II: Adept",
+      "summary": "November Gazette contents advertise Selby Bateman’s Inside View feature on Free Fall Associates, creators of Archon and its sequel; Order and Chaos frame the sequel. Coverage date only, not a verified launch day.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Reflection",
+      "summary": "Sean Puckett’s type-in reversi game supports human-versus-human or human-versus-computer play. Originally Atari 24K; adaptations include C64, unexpanded VIC-20, TI-99/4A, Apple, IBM PC, PCjr and Color Computer.",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Bagdad",
+      "summary": "November Gazette publishes Bryan Files’s joystick arcade game for VIC and C64: trap genies in bottles while riding a magic carpet. Magazine availability, not commercial release.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Drol and Space Change",
+      "summary": "George Miller reviews these Commodore 64 games in the November Gazette, page 107; only review presence verified.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "OmniWriter & OmniSpell",
+      "detail": "Human Engineered Software C64 page-oriented word processor includes a 30,000-word spelling checker. Requires disk drive and supported serial-bus or user-port parallel printer; RS-232 serial printers are unsupported. Reviewer criticizes manual page breaks.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "name": "C/G Term",
+      "detail": "Robert Sims’s machine-language color/graphics terminal program appears in November Gazette, page 38, for C64 and VIC with 16K expansion. Upload/download support; disk drive and modem required. C/G BBS installment promised for next month.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "name": "DeskMate",
+      "detail": "Bundled with the original Tandy 1000.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "name": "KoalaPainter",
+      "detail": "PCjr drawing software bundled with KoalaPad; 16 colors at 160 by 200.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Mainstream Rock (historical rock radio chart)",
+      "chartDate": "1984-11-17",
+      "rank": 1,
+      "title": "Run To You",
+      "artist": "Bryan Adams",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/"
+      ]
+    },
+    {
+      "chart": "Billboard Mainstream Rock (historical rock radio chart)",
+      "chartDate": "1984-11-17",
+      "rank": 2,
+      "title": "I Can't Hold Back",
+      "artist": "Survivor",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/"
+      ]
+    },
+    {
+      "chart": "Billboard Mainstream Rock (historical rock radio chart)",
+      "chartDate": "1984-11-17",
+      "rank": 3,
+      "title": "(Pride) In The Name Of Love",
+      "artist": "U2",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/"
+      ]
+    },
+    {
+      "chart": "Billboard Mainstream Rock (historical rock radio chart)",
+      "chartDate": "1984-11-17",
+      "rank": 4,
+      "title": "Valotte",
+      "artist": "Julian Lennon",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/"
+      ]
+    },
+    {
+      "chart": "Billboard Mainstream Rock (historical rock radio chart)",
+      "chartDate": "1984-11-17",
+      "rank": 5,
+      "title": "Understanding",
+      "artist": "Bob Seger",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/"
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf, not a sales chart",
+      "items": [
+        "Archon II: Adept",
+        "Reflection",
+        "Bagdad",
+        "Drol",
+        "Space Change"
+      ]
+    },
+    {
+      "label": "Top 5 Music — Billboard rock radio, November 17",
+      "items": [
+        "Run To You — Bryan Adams",
+        "I Can't Hold Back — Survivor",
+        "(Pride) In The Name Of Love — U2",
+        "Valotte — Julian Lennon",
+        "Understanding — Bob Seger"
+      ]
+    },
+    {
+      "label": "Top 5 Movies — November 16-18 domestic weekend",
+      "items": [
+        "Missing in Action",
+        "Oh, God! You Devil",
+        "Night of the Comet",
+        "The Terminator",
+        "Just the Way You Are"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "OmniWriter & OmniSpell",
+      "price": "$59.95",
+      "note": "$59.95 publisher price printed at end of November review, not a local sale quote.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Entry-level modem range",
+      "price": "Reported range / costs",
+      "note": "Sharon Darling reports modem prices about $49 to $1,000 or more. $300–$500 for 1200 bps by year end is Jerry Hussong’s forecast, not a current guaranteed model price.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "AT&T Sceptre Viewtron terminal",
+      "price": "$600.00",
+      "note": "$600 subscriber hardware cost reported in November; service restricted to Viewtron.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "BBS operating costs",
+      "price": "Reported range / costs",
+      "note": "Ric Manning survey, as reported by Kathy Yakal, says sysops spend on average more than $3,000 to start and another $50 monthly; these are survey averages, not product prices.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "300 versus 1200 bps",
+      "summary": "November modem article describes roughly 30 versus 120 characters per second. Faster transfers may reduce time-based service and long-distance bills; many local boards still operate at 300 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Busy signals are part of BBS life",
+      "summary": "Most hobbyist boards permit only one caller at a time, unlike multi-user commercial networks; November reporting identifies 6–11 p.m. as peak use.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Writing and spelling on the Commodore 64",
+    "summary": "OmniWriter & OmniSpell combines a page-oriented word processor with a 30,000-word spelling checker. The November review lists $59.95; a disk drive and supported printer are required.",
+    "tagline": "Shelf notice — Human Engineered Software",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "market": {
+    "headline": "The home-computer counter widens its pitch",
+    "summary": "PC compatibility, graphics and sound meet in Tandy’s November newcomer; online merchants offer another way to buy software and books. Hardware choices still determine which services and accessories a household can use.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      8,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Discovery retrieves two stranded communications satellites",
+    "summary": "Discovery retrieved Palapa B2 on November 12 and Westar 6 on November 14, recovering two communications satellites stranded after booster failures. Joe Allen and Dale Gardner carried out retrieval work, with Anna Fisher operating the shuttle arm.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      11
+    ]
+  },
+  "bbsNote": {
+    "headline": "BBS culture grows beyond the user-group meeting",
+    "summary": "Kathy Yakal’s November COMPUTE! feature documents local boards, public-domain programs, online play, sysop costs and community moderation. Posts below are editorial summaries of the article, not invented historical message transcripts.",
+    "posts": [
+      {
+        "topic": "Atari online games",
+        "platform": "Valley Girl BBS, Chicago area",
+        "text": "Stan and Susie Subeck’s Atari board offers adventure games and a trivia quiz. Its menus use Valley Girl slang inspired by their daughter."
+      },
+      {
+        "topic": "User-group networks",
+        "platform": "Draco-Net, Apple II",
+        "text": "Kent Fillmore’s home Apple II board has operated for about three months; he proposes retail-linked boards with local user-group sections nationwide. The wider network is a proposal, not a completed rollout."
+      },
+      {
+        "topic": "Sysop workload",
+        "platform": "Hobbyist BBS systems surveyed by Plumb",
+        "text": "Reported averages exceed $3,000 startup cost, $50 monthly and up to 50 maintenance hours monthly; peak demand is 6–11 p.m."
+      },
+      {
+        "topic": "Copyright and conduct",
+        "platform": "Local hobbyist BBSs",
+        "text": "Yakal says most boards prohibit obscene messages and copyrighted uploads; some switch to passwords or membership fees. No pirate crew is identified."
+      }
+    ],
+    "sourceRefs": [
+      2,
+      0,
+      6
+    ]
+  },
+  "curiosity": {
+    "headline": "A Valley Girl BBS tells callers to “de-val”",
+    "summary": "A Chicago-area Atari bulletin board turns 1980s slang into its interface.",
+    "detail": "Stan and Susie Subeck’s Valley Girl BBS calls deleting a message “bag” and exiting “de-val.” A glossary accompanies menus inspired by their 13-year-old daughter’s speech; the board also offers online adventure games and trivia. Reported by Kathy Yakal in November COMPUTE!, not a launch assigned to this week.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Sony shrinks the compact-disc player",
+    "summary": "Sony’s D-50 arrives in Japan this November at ¥49,800, according to November catalog material preserved by a collector. The compact player brings CD playback to a much smaller package.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      12
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Tandy introduction is verified at November precision, not an exact day this week; roughly $1,200 is a retrospective introductory figure.",
+      "Magazine items are November coverage, not asserted weekly releases.",
+      "Games shelf is an editorial selection: Drol and Space Change review presence only is established.",
+      "Music is November 17 rock radio; movies are November 16-18 domestic weekend.",
+      "Sony price and introduction concern Japan; catalog evidence was spot-checked.",
+      "No named underground crew is established; copy protection is covered as opinion in Feature Desk."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Understanding Modems — Sharon Darling, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "On-Line Shopping — Selby Bateman, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/104_1_ON-LINE_SHOPPING_Todays_Computer_Catalogs.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "The Bulletin Boarding Of America — Kathy Yakal, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "KoalaPad For PCjr — Lee Noel, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/140_1_REVIEWS_KoalaPad_For_PCjr.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "OmniWriter & OmniSpell — Joseph R. Sutton, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/144_2_REVIEWS_OmniWriter_OmniSpell.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "Reflection — Sean Puckett, COMPUTE! 54",
+      "url": "https://www.atarimagazines.com/compute/issue54/117_1_Reflection.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "COMPUTE! Gazette November contents",
+      "url": "https://www.devili.iki.fi/library/issue/51.en.html",
+      "date": "1984-11"
+    },
+    {
+      "title": "Piracy and software protection — Mitchell Kapor, Creative Computing 10(11), p236",
+      "url": "https://www.atarimagazines.com/creative/v10n11/236_Piracy_and_software_prote.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "Tandy 1000 — retrospective reference; introduction month documented",
+      "url": "https://en.wikipedia.org/wiki/Tandy_1000",
+      "date": "retrospective; event 1984-11"
+    },
+    {
+      "title": "Billboard Mainstream Rock chart",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/",
+      "date": "1984-11-17"
+    },
+    {
+      "title": "Box Office Mojo domestic weekend 46",
+      "url": "https://www.boxofficemojo.com/weekend/1984W46/",
+      "date": "1984-11-16/1984-11-18"
+    },
+    {
+      "title": "Shuttle success doesn’t deter competition — Robert C. Cowen, Christian Science Monitor",
+      "url": "https://www.csmonitor.com/1984/1116/111608.html",
+      "date": "1984-11-16"
+    },
+    {
+      "title": "Sony D-50 collector catalog page",
+      "url": "https://www.ssplusone.com/radio-and-audio/my-sony-audio/d-50-cd-compact-player/",
+      "date": "retrospective; catalog 1984-11"
+    }
+  ]
+}
