@@ -249,7 +249,7 @@ function loop(now) {
       S.b = s.b;
     }
   }
-  drawFrame();
+  drawFrame(!S.frozen);
   if (!window.__flowerReady) {
     window.__flowerReady = true;
     window.dispatchEvent(new Event('flower:ready'));
@@ -266,6 +266,8 @@ canvas.addEventListener('dblclick', () => {
 // ---- capture / debug API ----
 window.__flower = {
   root: asm.root,
+  camera,
+  controls,
   renderAt({ explode = 1, bloom = 1, time = 0, theme, view = 'poster' } = {}) {
     S.frozen = true;
     S.playing = false;
@@ -282,6 +284,7 @@ window.__flower = {
     } else if (view && view.dist) {
       poseCamera(camera, { target: view.target, dist: view.dist, elev: view.elev ?? 12, azim: view.azim ?? 0 });
       controls.target.set(...view.target);
+      controls.minDistance = Math.min(controls.minDistance, view.dist * 0.9);
       camera.fov = view.fov ?? CAMERA.fov;
       camera.updateProjectionMatrix();
     } else if (view && view.pos) {
