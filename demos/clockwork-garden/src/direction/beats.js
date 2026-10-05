@@ -17,6 +17,7 @@ export const B = {
 
   // Act II — the bloom
   budGlow: [12.4, 14.0],
+  sheath: [13.55, 14.6], // the bud's porcelain sepals swing open
   outer: [13.8, 17.0],
   middle: [16.2, 19.2],
   inner: [18.2, 20.8],

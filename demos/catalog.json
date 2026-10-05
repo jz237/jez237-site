@@ -295,15 +295,15 @@
     "id": "014",
     "title": "The Clockwork Garden",
     "category": "3D · Procedural film",
-    "description": "A forgotten Victorian glasshouse wakes from a single ticking escapement. Follow the pulse through gears and copper roots as a porcelain bloom opens on visible levers, and a clockwork pollinator bee, monarchs, beetles, hummingbirds and a songbird come to life.",
+    "description": "A forgotten Victorian glasshouse wakes from a single ticking escapement. Follow the pulse through gears and copper roots as a glowing porcelain bud opens on visible levers, and APX-9, the mechanical pollinator bee, leaves its brass skep to gather luminous pollen among monarchs, beetles, hummingbirds and a songbird.",
     "url": "clockwork-garden/",
     "image": "assets/clockwork-garden.jpg",
-    "imageAlt": "Actual Clockwork Garden frame: an ivory porcelain flower with gold-rimmed petals and brass stamens opening in warm light",
+    "imageAlt": "Actual Clockwork Garden frame: the yellow-and-black APX-9 mechanical bee with gold-veined glass wings beside an open porcelain flower with glowing brass stamens",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/clockwork-garden",
     "features": [
       "58-second cinematic sequence",
+      "APX-9 lives in the garden",
       "Mechanisms visibly drive the bloom",
-      "Bees, butterflies, beetles & birds",
       "Procedural score"
     ],
     "facts": [

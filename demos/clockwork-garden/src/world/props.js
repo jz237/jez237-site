@@ -27,15 +27,35 @@ export class Skep {
     // stacked coils, each a torus slightly smaller than the one below
     const coils = 13;
     this.coilMeshes = [];
+    // the lowest coils are cut back round an arched doorway tall enough for
+    // APX-9 to walk out of (the gap is centred on the skep's front, +Z)
+    const DOOR = { y: 3.6, r: 2.0 };
+    const capGeo = new THREE.SphereGeometry(1, 12, 8);
     for (let i = 0; i < coils; i++) {
       const k = i / (coils - 1);
       const r = 5.2 * Math.cos(k * Math.PI * 0.47) + 0.4;
       const y = 3.5 + Math.sin(k * Math.PI * 0.5) * 8.6;
-      const torus = new THREE.Mesh(new THREE.TorusGeometry(r, 0.52 - k * 0.12, 10, 72), i % 3 === 1 ? mat.copper : mat.brass);
+      const tube = 0.52 - k * 0.12;
+      const yEval = Math.max(DOOR.y, y - tube);
+      const w = yEval - DOOR.y < DOOR.r ? Math.sqrt(DOOR.r ** 2 - (yEval - DOOR.y) ** 2) : 0;
+      const gap = w > 0 ? Math.asin(Math.min(1, (w + tube * 0.6) / r)) : 0;
+      const geo = new THREE.TorusGeometry(r, tube, 10, 72, TAU - 2 * gap);
+      geo.rotateZ(Math.PI / 2 + gap);
+      const material = i % 3 === 1 ? mat.copper : mat.brass;
+      const torus = new THREE.Mesh(geo, material);
       torus.rotation.x = Math.PI / 2;
       torus.position.y = y;
       g.add(torus);
       this.coilMeshes.push(torus);
+      if (gap > 0) {
+        // rounded ends where the coil is cut
+        for (const a of [Math.PI / 2 + gap, Math.PI / 2 - gap]) {
+          const cap = new THREE.Mesh(capGeo, material);
+          cap.scale.setScalar(tube);
+          cap.position.set(Math.cos(a) * r, y, Math.sin(a) * r);
+          g.add(cap);
+        }
+      }
     }
     // riveted brass straps binding the coils, as on a cooper's barrel
     const rivetGeo = new THREE.SphereGeometry(0.16, 8, 6);
@@ -67,18 +87,25 @@ export class Skep {
     topKnob.position.y = 12.6;
     g.add(topKnob);
     // interior glow + entrance arch (dark opening with gold frame)
-    const door = new THREE.Mesh(new THREE.CircleGeometry(1.4, 24, 0, Math.PI), new THREE.MeshBasicMaterial({ color: '#1a0c03' }));
-    door.position.set(0, 3.6, 5.45);
+    // a short arched tunnel into the hive, its back wall glowing warm
+    const tunnel = new THREE.Mesh(new THREE.CylinderGeometry(DOOR.r, DOOR.r, 3.4, 28, 1, true, -Math.PI / 2, Math.PI), mat.brassAged.clone());
+    tunnel.material.side = THREE.BackSide;
+    tunnel.material.color.set('#5a4220');
+    tunnel.rotation.x = -Math.PI / 2; // the open half faces up: an arch over the floor
+    tunnel.position.set(0, DOOR.y, 4.3);
+    g.add(tunnel);
+    const door = new THREE.Mesh(new THREE.CircleGeometry(DOOR.r, 28, 0, Math.PI), new THREE.MeshBasicMaterial({ color: '#1a0c03' }));
+    door.position.set(0, DOOR.y, 2.62);
     g.add(door);
-    this.doorGlow = new THREE.Mesh(new THREE.CircleGeometry(1.15, 24, 0, Math.PI), new THREE.MeshBasicMaterial({ color: '#ffb257' }));
-    this.doorGlow.position.set(0, 3.62, 5.4);
+    this.doorGlow = new THREE.Mesh(new THREE.CircleGeometry(DOOR.r * 0.8, 28, 0, Math.PI), new THREE.MeshBasicMaterial({ color: '#ffb257' }));
+    this.doorGlow.position.set(0, DOOR.y + 0.02, 2.66);
     g.add(this.doorGlow);
-    const arch = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.16, 8, 24, Math.PI), mat.gold);
-    arch.position.set(0, 3.6, 5.55);
+    const arch = new THREE.Mesh(new THREE.TorusGeometry(DOOR.r + 0.08, 0.17, 8, 32, Math.PI), mat.gold);
+    arch.position.set(0, DOOR.y, 6.05);
     g.add(arch);
-    // landing board
-    const board = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.2, 1.6), mat.brassAged);
-    board.position.set(0, 3.45, 6.0);
+    // landing board, running back into the tunnel as its floor
+    const board = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.2, 4.6), mat.brassAged);
+    board.position.set(0, 3.45, 4.7);
     g.add(board);
     // a small clock dial on the skep front (the hive keeps time)
     const dial = new THREE.Mesh(new THREE.CircleGeometry(1.1, 32), mat.porcelain);
@@ -97,7 +124,7 @@ export class Skep {
   }
   update(t, ctx) {
     const wake = sseg(t, B.podsWake[0] + 2, B.beeEmerge);
-    const g = 0.4 + wake * 2.2;
+    const g = 0.25 + wake * 0.9;
     this.doorGlow.material.color.setRGB(1.0 * g, 0.6 * g, 0.26 * g);
     this.hand.rotation.z = -t * 0.12;
   }

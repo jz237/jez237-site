@@ -34,7 +34,8 @@ export class Bird {
 
     // core body shell
     const core = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), humm ? mat.enamelEmerald : plateC);
-    core.scale.set(humm ? 0.62 * S : 0.56 * S, humm ? 0.66 * S : 0.6 * S, humm ? 1.15 * S : 1.25 * S);
+    // the songbird is slimmer and longer than a ball: less toy, more wren/robin
+    core.scale.set(humm ? 0.62 * S : 0.5 * S, humm ? 0.66 * S : 0.55 * S, humm ? 1.15 * S : 1.3 * S);
     this.body.add(core);
 
     // overlapping feather plates over the back and breast (instanced)
@@ -46,9 +47,10 @@ export class Bird {
         const u = row / 6; // front → back
         const v = (col / 8) * 2 - 1; // left → right over the top
         const ang = v * 1.35;
-        const z = lerp(0.75, -0.95, u) * S;
-        const rad = Math.sqrt(Math.max(0.05, 1 - (z / (1.18 * S)) ** 2));
-        const p = new THREE.Vector3(Math.sin(ang) * 0.64 * S * rad, Math.cos(ang) * 0.68 * S * rad, z);
+        const z = (humm ? lerp(0.75, -0.95, u) : lerp(0.8, -1.05, u)) * S;
+        const rad = Math.sqrt(Math.max(0.05, 1 - (z / ((humm ? 1.18 : 1.32) * S)) ** 2));
+        const rx = humm ? 0.64 : 0.55, ry = humm ? 0.68 : 0.6;
+        const p = new THREE.Vector3(Math.sin(ang) * rx * S * rad, Math.cos(ang) * ry * S * rad, z);
         const n = new THREE.Vector3(p.x / (0.62 * S), p.y / (0.66 * S), p.z / (1.15 * S)).normalize();
         back.push({ p, n, row, col });
         const pb = p.clone();
@@ -87,32 +89,36 @@ export class Bird {
 
     // head
     const head = new THREE.Group();
-    head.position.set(0, (humm ? 0.42 : 0.5) * S, (humm ? 1.0 : 1.05) * S);
+    head.position.set(0, (humm ? 0.42 : 0.47) * S, (humm ? 1.0 : 1.14) * S);
     this.body.add(head);
     this.head = head;
-    const skull = new THREE.Mesh(new THREE.SphereGeometry((humm ? 0.46 : 0.36) * S, 20, 14), humm ? plateA : plateC);
+    const skull = new THREE.Mesh(new THREE.SphereGeometry((humm ? 0.46 : 0.3) * S, 20, 14), humm ? plateA : plateC);
+    if (!humm) skull.scale.set(0.95, 0.95, 1.2); // a small, slightly long head
     head.add(skull);
-    const crest = new THREE.Mesh(new THREE.SphereGeometry((humm ? 0.47 : 0.37) * S, 20, 10, 0, TAU, 0, 1.0), humm ? plateB : mat.rosegold);
+    const crest = new THREE.Mesh(new THREE.SphereGeometry((humm ? 0.47 : 0.31) * S, 20, 10, 0, TAU, 0, 1.0), humm ? plateB : mat.rosegold);
+    if (!humm) crest.scale.set(0.95, 0.95, 1.2);
     crest.rotation.x = -0.3;
     head.add(crest);
-    const gorget = new THREE.Mesh(new THREE.SphereGeometry(0.42 * S, 16, 10, Math.PI * 0.15, Math.PI * 0.7, 1.95, 0.8), throat);
+    const gorget = new THREE.Mesh(new THREE.SphereGeometry((humm ? 0.42 : 0.33) * S, 16, 10, Math.PI * 0.15, Math.PI * 0.7, 1.95, 0.8), throat);
     gorget.position.set(0, -0.12 * S, 0.02 * S);
     head.add(gorget);
     for (const s of [-1, 1]) {
-      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.1 * S, 12, 10), mat.eye);
-      eye.position.set(s * (humm ? 0.34 : 0.27) * S, 0.08 * S, (humm ? 0.2 : 0.16) * S);
+      const er = humm ? 0.1 : 0.08;
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(er * S, 12, 10), mat.eye);
+      eye.position.set(s * (humm ? 0.34 : 0.255) * S, 0.07 * S, (humm ? 0.2 : 0.17) * S);
       head.add(eye);
-      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.11 * S, 0.025 * S, 6, 20), mat.gold);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry((er + 0.01) * S, 0.022 * S, 6, 20), mat.gold);
       rim.position.copy(eye.position);
       rim.rotation.y = s * Math.PI / 2;
       head.add(rim);
     }
-    const beakLen = humm ? 2.3 : 0.75 * S * 0.6;
-    const beak = new THREE.Mesh(new THREE.ConeGeometry(humm ? 0.06 : 0.14 * S, beakLen, 10), humm ? mat.steel : mat.gold);
+    const beakLen = humm ? 2.3 : 0.56 * S;
+    const beakBase = humm ? 0.4 * S : 0.32 * S;
+    const beak = new THREE.Mesh(new THREE.ConeGeometry(humm ? 0.06 : 0.085 * S, beakLen, 10), humm ? mat.steel : mat.gold);
     beak.rotation.x = Math.PI / 2;
-    beak.position.set(0, -0.02 * S, 0.4 * S + beakLen / 2);
+    beak.position.set(0, -0.02 * S, beakBase + beakLen / 2);
     head.add(beak);
-    this.beakTipLocal = new THREE.Vector3(0, -0.02 * S, 0.4 * S + beakLen);
+    this.beakTipLocal = new THREE.Vector3(0, -0.02 * S, beakBase + beakLen);
 
     // wings: shoulder → fan of primary feathers around a wrist pivot
     this.wings = [];
@@ -157,12 +163,12 @@ export class Bird {
     // tail fan
     this.tail = [];
     const tailPivot = new THREE.Group();
-    tailPivot.position.set(0, 0.1 * S, -1.05 * S);
+    tailPivot.position.set(0, 0.1 * S, (humm ? -1.05 : -1.15) * S);
     this.body.add(tailPivot);
     this.tailPivot = tailPivot;
     const tn = humm ? 5 : 7;
     for (let i = 0; i < tn; i++) {
-      const f = new THREE.Mesh(featherGeometry((humm ? 1.4 : 1.6) * S, (humm ? 0.4 : 0.45) * S), i % 2 ? plateB : plateC);
+      const f = new THREE.Mesh(featherGeometry((humm ? 1.4 : 1.95) * S, (humm ? 0.4 : 0.4) * S), i % 2 ? plateB : plateC);
       const h = new THREE.Group();
       f.rotation.x = -Math.PI / 2 - 0.0;
       f.rotation.z = Math.PI; // point backward

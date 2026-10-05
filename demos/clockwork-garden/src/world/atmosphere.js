@@ -9,7 +9,7 @@ import { archPoint } from './greenhouse.js';
 
 export const SUN_DIR = new THREE.Vector3(0.36, -0.62, 0.62).normalize(); // direction light travels
 
-const MAX_SHAFTS = 8;
+const MAX_SHAFTS = 14;
 
 export class Atmosphere {
   constructor(quality) {
@@ -48,17 +48,33 @@ export class Atmosphere {
           return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
                      mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z); }
         void main(){
-          float edge = pow(abs(dot(normalize(vN), normalize(vV))), 2.2);
-          float ends = smoothstep(0.0, 0.18, vAlong) * smoothstep(1.0, 0.55, vAlong);
+          // crisp-edged blades of light (light through single panes), not soft glow
+          float ndv = abs(dot(normalize(vN), normalize(vV)));
+          float edge = smoothstep(0.03, 0.5, ndv) * (0.55 + 0.45 * ndv);
+          // fine dusty streaks running down the beam, and a fade close to the
+          // lens so near beams never wash the frame into a white wedge
+          float streak = 0.6 + 0.4 * noise(vec3(vW.x * 0.09 + vW.z * 0.05, vW.y * 0.006, vW.z * 0.09 - vW.x * 0.05) + vec3(0.0, uTime * 0.02, 0.0));
+          float camFade = smoothstep(25.0, 190.0, length(cameraPosition - vW));
+          // vAlong = 1 under the glazing → 0 at the far end: strongest just below
+          // the roof, dissolving into the haze well above the plants
+          float ends = smoothstep(1.0, 0.93, vAlong) * smoothstep(0.3, 0.74, vAlong);
           float n = noise(vW * 0.02 + vec3(0.0, -uTime * 0.05, uTime * 0.03)) * 0.6 + 0.4;
-          float a = edge * ends * n * uIntensity;
+          float a = edge * ends * n * streak * camFade * uIntensity;
           gl_FragColor = vec4(uColor * a, 1.0);
         }`,
     });
     this.shafts = [];
     // shafts enter through the roof between ribs and fall across the beds
+    // blades fall through neighbouring panes in small parallel groups (panes
+    // are ~24 apart between purlins), entering the left half of the vault so
+    // they cross the reveal's view diagonally toward the camera
     const starts = [
-      [-40, -260], [20, -120], [120, -330], [-120, -60], [60, 40], [180, -180], [-80, -480], [140, -560],
+      [-150, -150], [-126, -150],
+      [-92, -330], [-68, -330], [-44, -330],
+      [-175, -470], [-151, -470],
+      [-20, -560], [4, -560],
+      [-60, -60], [30, -240], [54, -240],
+      [120, -330], [-110, -640],
     ];
     const len = 900;
     const geo = new THREE.CylinderGeometry(1, 1.25, 1, 20, 1, true);
@@ -71,8 +87,8 @@ export class Atmosphere {
       const mesh = new THREE.Mesh(geo, shaftMat);
       mesh.position.copy(top);
       mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), SUN_DIR);
-      const r = rng.range(16, 34);
-      mesh.scale.set(r, len, r * rng.range(1.5, 2.6));
+      const r = rng.range(6, 11);
+      mesh.scale.set(r, len, r * rng.range(1.2, 1.7));
       mesh.renderOrder = 5;
       this.group.add(mesh);
       this.shafts.push({ mesh, top, r });
@@ -156,7 +172,7 @@ export class Atmosphere {
     this.shaftUniforms.uTime.value = t;
     this.dustUniforms.uTime.value = t;
     const sun = ctx.sunStrength;
-    this.shaftUniforms.uIntensity.value = 0.5 * sun * ctx.shaftGain;
+    this.shaftUniforms.uIntensity.value = 0.55 * sun * ctx.shaftGain;
     this.dustUniforms.uShaftGain.value = 2.4 * sun;
     this.dustUniforms.uBase.value = 0.05 + 0.2 * ctx.dawn;
     this.dustUniforms.uPixel.value = ctx.pixelRatio;
