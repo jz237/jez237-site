@@ -972,7 +972,7 @@ export class APX9Bee {
 
   // pose: { t, flap (0..1 wing activity), grip (0 tucked → 1 standing),
   //         walk (phase or null), pitch, roll, look (head yaw), pollen, fold, freq }
-  setPose({ t = 0, flap = 0, grip = 0, walk = null, pitch = 0, roll = 0, look = 0, pollen = 0, fold = 0, freq = 23.7 }) {
+  setPose({ t = 0, flap = 0, grip = 0, walk = null, pitch = 0, roll = 0, look = 0, pollen = 0, fold = 0, freq = 23.7, collect: collect_ = null, brush = null, fan = 1 }) {
     this.pollen = pollen;
     this.body.rotation.set(pitch, 0, roll, 'YXZ');
     this.head.rotation.set(Math.sin(t * 2.3) * 0.04 - grip * 0.05, look, 0);
@@ -987,7 +987,7 @@ export class APX9Bee {
       const up = lerp(0.22, 0.13, fold) + flapA;
       w.hinge.rotation.set(0, w.s * back, w.s * up, 'YZX');
     }
-    for (const f of this.wings.fans) f.material.opacity = 0.045 * clamp((flap - 0.5) * 2);
+    for (const f of this.wings.fans) f.material.opacity = 0.045 * fan * clamp((flap - 0.5) * 2);
     // abdomen breathing
     const pump = Math.sin(t * 3.1) * 0.025;
     this.abdomen.rotation.x = pump + (1 - flap) * 0.03 - flap * 0.04;
@@ -1033,8 +1033,9 @@ export class APX9Bee {
     this.pollenMat.emissiveIntensity = 0.6 + pg * 3.2;
     this.brushMat.emissiveIntensity = pg * 0.45;
     // the brush spins while it gathers; motes stream in only while collecting
-    const collect = clamp(pg * 6) * clamp((1 - pg) * 6) * (1 - flap);
-    this.brush.rotation.z = t * (2 + collect * 14);
+    // (interactive modes pass `collect` explicitly: gathering happens at any load)
+    const collect = collect_ ?? clamp(pg * 6) * clamp((1 - pg) * 6) * (1 - flap);
+    this.brush.rotation.z = brush ?? t * (2 + collect * 14);
     if (this.moteMesh) {
       const m4 = this._m4 || (this._m4 = new THREE.Matrix4());
       const p = V(), q = new THREE.Quaternion();

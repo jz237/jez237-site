@@ -132,6 +132,7 @@ export class Flora {
       new THREE.MeshPhysicalMaterial({ color: '#2f5446', metalness: 0.5, roughness: 0.5, side: THREE.DoubleSide }),
     ];
     const leafLists = leafMats.map(() => []);
+    this.leafMats = leafMats;
     const e = new THREE.Euler();
     for (const f of this.flowers) {
       const n = 4 + Math.floor(rng.float() * 4);
@@ -199,6 +200,7 @@ export class Flora {
     })();
     const fernCount = Math.round(170 * density);
     const ferns = new THREE.InstancedMesh(frond, new THREE.MeshPhysicalMaterial({ color: '#5f7a3a', metalness: 0.75, roughness: 0.4, side: THREE.DoubleSide }), fernCount * 5);
+    this.fernMesh = ferns;
     let fi = 0;
     for (let i = 0; i < fernCount; i++) {
       const sp = spots[Math.floor(rng.float() * spots.length)];
@@ -209,6 +211,7 @@ export class Flora {
         this.m4.compose(new THREE.Vector3(cx, 0, cz), q, s);
         ferns.setMatrixAt(fi++, this.m4);
       }
+      (this.fernSpots ??= []).push({ x: cx, z: cz });
     }
     ferns.count = fi;
     ferns.castShadow = true;
@@ -264,6 +267,7 @@ export class Flora {
       new THREE.MeshPhysicalMaterial({ color: '#9b6a38', metalness: 0.9, roughness: 0.36, side: THREE.DoubleSide }),
     ];
     const lists = mats.map(() => []);
+    this.shrubMats = mats;
     const q = new THREE.Quaternion(), s = new THREE.Vector3(), e = new THREE.Euler();
     const n = Math.round(170 * density);
     for (let i = 0; i < n; i++) {
@@ -276,6 +280,7 @@ export class Flora {
       s.set(sc * rng.range(0.9, 1.3), sc * rng.range(0.7, 1.15), sc * rng.range(0.9, 1.3));
       this.m4.compose(new THREE.Vector3(x, -1, z), q, s);
       lists[Math.floor(rng.float() * mats.length)].push(this.m4.clone());
+      (this.shrubSpots ??= []).push({ x, z, r: 3 * s.x, h: 5.5 * s.y });
     }
     lists.forEach((list, i) => {
       const im = new THREE.InstancedMesh(dome, mats[i], list.length);
@@ -337,6 +342,7 @@ export class Flora {
     }
     roses.castShadow = leaves.castShadow = true;
     this.group.add(roses, leaves);
+    this.archParts = [roses, leaves];
   }
 
   // fountain with a slowly turning armillary sphere where the path ends
@@ -385,10 +391,11 @@ export class Flora {
     const s = new THREE.Vector3();
     const p = new THREE.Vector3();
     const wave0 = B.bloomWave[0];
+    const live = this.live; // interactive modes: per-flower openness / glow
     for (const { ty, petals } of this.inst) {
       let idx = 0;
       for (const f of ty.list) {
-        const k = smoother(clamp((t - wave0 - f.delay) / 1.8));
+        const k = live ? live.open(f, t) : smoother(clamp((t - wave0 - f.delay) / 1.8));
         const sway = Math.sin(t * 0.9 + f.sway) * 0.02;
         for (let i = 0; i < ty.petals; i++) {
           const phi = f.yaw + (i / ty.petals) * TAU;
@@ -407,16 +414,16 @@ export class Flora {
     this.orbs.forEach((o, i) => {
       const k = clamp((t - wave0 - o.delay) / 0.8);
       const flare = k > 0 ? Math.exp(-(t - wave0 - o.delay) * 1.5) : 0;
-      const g = 0.04 + k * (0.9 + 0.15 * Math.sin(t * 2 + o.ph)) + flare * 1.5;
+      const g = live ? live.orb(o, i, t) : 0.04 + k * (0.9 + 0.15 * Math.sin(t * 2 + o.ph)) + flare * 1.5;
       this.orbMesh.setColorAt(i, col.setRGB(g, g * 0.62, g * 0.27));
     });
     this.orbMesh.instanceColor.needsUpdate = true;
     // armillary rings turn slowly, geared 1 : 3/2 : 9/4
-    const a = t * 0.12;
+    const a = live ? live.armAngle(t) : t * 0.12;
     this.armRings[0].rotation.set(a, 0, 0.4);
     this.armRings[1].rotation.set(0, a * 1.5, 0.9);
     this.armRings[2].rotation.set(a * 2.25, 0.6, 0);
-    const cg = 0.5 + sseg(t, wave0, wave0 + 4) * 2.0;
+    const cg = live ? live.armGlow(t) : 0.5 + sseg(t, wave0, wave0 + 4) * 2.0;
     this.armCore.material.color.setRGB(cg, cg * 0.62, cg * 0.28);
   }
 }

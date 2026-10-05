@@ -144,7 +144,10 @@ export function buildWorld(scene, mat, tex, quality) {
 
   // ---- per-frame update -------------------------------------------------
   const pulseTmp = new THREE.Vector3();
+  // ctx.explore (interactive modes): the explore controller owns creatures,
+  // shadow LOD and the practical lights; the world just runs its clockwork
   w.update = (t, ctx) => {
+    if (ctx.explore) return updateExplore(t, ctx);
     w.setFarShadows(t > B.reveal[0] + 4.8);
     w.sky.update(t, ctx);
     w.lighting.update(t, ctx);
@@ -197,6 +200,24 @@ export function buildWorld(scene, mat, tex, quality) {
     w.skep.entranceWorld(pulseTmp);
     w.lighting.skep.position.copy(pulseTmp).add(new THREE.Vector3(0, 0.5, 0));
     w.lighting.skep.intensity = skepWake * 6 * ctx.lightScale;
+  };
+  // the garden fully awake on a free-running clock (t is well past the film)
+  const updateExplore = (t, ctx) => {
+    w.sky.update(t, ctx);
+    w.lighting.update(t, ctx);
+    w.atmosphere.update(t, ctx);
+    // winding the garden runs the movement and the train on faster clocks
+    w.escapement.update(ctx.escT ?? t, ctx);
+    w.crown.update(ctx.crownT ?? t, ctx);
+    w.roots.update(t, ctx);
+    w.flower.update(t, ctx);
+    w.garden.update(t, ctx);
+    w.flora.update(t, ctx);
+    w.foliage.update(t, ctx);
+    w.skep.update(t, ctx);
+    w.pods.update(t, ctx);
+    w.lily.update(t, ctx);
+    w.blossom.update(t, ctx);
   };
   return w;
 }

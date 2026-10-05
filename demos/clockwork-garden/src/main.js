@@ -12,11 +12,19 @@ import { DURATION, B } from './direction/beats.js';
 import { Controls } from './ui/controls.js';
 import { Score, renderScore, bufferToWav } from './audio/score.js';
 import { clamp, sseg } from './core/ease.js';
+import { Explore } from './explore/explore.js';
+import { Input } from './input/input.js';
+import { Hud } from './ui/hud.js';
+import { showLanding } from './ui/landing.js';
+import { LiveAudio } from './audio/live.js';
 
 // The Clockwork Garden – entry point.
 //   ?t=12.5     start at a timestamp        ?paused=1   start paused
 //   ?clean=1    recording mode (no UI)      ?quality=low|med|high
 //   ?motion=reduced  gentle-motion version  ?capture=1  frame-capture API only
+//   ?mode=film|fly|follow   open a mode directly (otherwise a landing screen asks)
+//   ?tod=0..1   time of day in the interactive modes (0 midnight, 0.5 dawn, 1 golden hour)
+//   ?touch=1|0  force the touch interface on or off
 
 const params = new URLSearchParams(location.search);
 const quality = detectQuality(params);
@@ -136,11 +144,13 @@ async function boot() {
     };
   }
 
+  let explore = null;
   const resize = () => {
     const s = size();
     pipeline.setSize(s.x, s.y);
     director.aspect = s.x / s.y;
     director.pixelRatio = renderer.getPixelRatio();
+    if (explore) { explore.aspect = director.aspect; explore.pixelRatio = director.pixelRatio; }
   };
   resize();
   window.addEventListener('resize', resize);
@@ -158,6 +168,32 @@ async function boot() {
     title.style.letterSpacing = (0.32 + (1 - k) * 0.08).toFixed(3) + 'em';
   };
 
+  // ---- interactive modes (built after the film, so the film's state is untouched) ----
+  const touch = params.get('touch') === '1' || (params.get('touch') !== '0' && (window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)));
+  const audio = new LiveAudio();
+  const makeExplore = () => {
+    if (!explore) {
+      explore = new Explore({ renderer, scene, world, pipeline, quality, mat, audio });
+      explore.aspect = director.aspect;
+      explore.pixelRatio = renderer.getPixelRatio();
+      explore.reduced = reduced;
+      explore.touch = touch;
+      const tod = parseFloat(params.get('tod'));
+      if (Number.isFinite(tod)) explore.tod.value = clamp(tod, 0, 1);
+    }
+    return explore;
+  };
+  if (!capture) {
+    await step('garden life');
+    makeExplore();
+    // compile the interactive modes' shaders now, at night and by day
+    const keep = explore.tod.value;
+    explore.enter('follow');
+    for (const v of [keep, 0.1]) { explore.tod.value = v; explore.update(1 / 60, null); explore.render(1 / 60); }
+    explore.tod.value = keep;
+    explore.exit();
+  }
+
   const state = { t: clamp(parseFloat(params.get('t') || '0') || 0, 0, DURATION), playing: !capture && params.get('paused') !== '1' };
   const score = new Score();
   const renderAt = (t) => {
@@ -168,7 +204,16 @@ async function boot() {
     controls?.sync(state);
   };
 
+  // which mode to open in: ?mode=film|fly|follow; film-only parameters imply
+  // the film; otherwise the landing screen asks
+  const filmOnly = clean || capture || params.has('t') || params.has('look') || params.get('paused') === '1';
+  let mode = ['film', 'fly', 'follow'].includes(params.get('mode')) ? params.get('mode') : filmOnly ? 'film' : null;
+  if (capture) mode = 'film';
+  let landing = null;
+
   let controls = null;
+  let hud = null;
+  let input = null;
   if (!clean && !capture) {
     controls = new Controls({
       onPlayPause: () => {
@@ -192,18 +237,108 @@ async function boot() {
       },
       onMotion: () => {
         reduced = !reduced;
+        if (explore) explore.reduced = reduced;
+        hud?.setGentle(reduced);
         return reduced;
       },
+      onMode: (m) => setMode(m),
       duration: DURATION,
       reduced: () => reduced,
     });
-    if (prefersReduced && params.get('motion') !== 'full') {
-      // respect the system preference: wait for the viewer to start
-      state.playing = false;
-      controls.showGentleNotice();
-    }
+    input = new Input(canvas, { touch });
+    hud = new Hud({
+      onMode: (m) => setMode(m),
+      onSwap: () => setMode(mode === 'fly' ? 'follow' : 'fly'),
+      onTime: (v) => explore.setTime(v),
+      onSound: async () => { const on = await audio.toggle(); return on; },
+      onPhoto: () => togglePhoto(),
+      onSave: () => savePhoto(),
+      onGentle: () => { reduced = !reduced; explore.reduced = reduced; controls.motionBtn.setAttribute('aria-pressed', String(reduced)); return reduced; },
+      onPanel: (open) => { if (open && input.locked) document.exitPointerLock?.(); },
+    });
+    hud.setTime(explore.tod.value);
+    hud.setGentle(reduced);
+    explore.on('time', (v) => hud.setTime(v));
+    wireHints(explore, hud, () => mode, touch);
   }
   document.body.classList.toggle('clean', clean || capture);
+
+  const setURL = (m) => {
+    const u = new URL(location.href);
+    u.searchParams.set('mode', m);
+    history.replaceState(null, '', u);
+  };
+  const setMode = (m, { fromLanding = false } = {}) => {
+    const prev = mode;
+    if (m === prev && !fromLanding) return;
+    mode = m;
+    if (landing) { landing = null; }
+    if (m === 'film') {
+      explore?.exit();
+      input?.enable(false);
+      hud?.show(false);
+      controls?.enable(true);
+      audio.disable();
+      document.body.classList.remove('explore', 'photo');
+      state.t = 0;
+      state.playing = true;
+      score.play(0);
+      renderAt(0);
+    } else {
+      if (prev === 'film' || prev === null) {
+        state.playing = false;
+        score.pause();
+        controls?.enable(false);
+        title.style.opacity = '0';
+      }
+      const fresh = prev === 'film' || (prev === null && !fromLanding);
+      explore.enter(m);
+      if (m === 'fly' && (prev === 'film' || fromLanding)) explore.spawnAtSkep();
+      if (fresh && m === 'fly') explore.spawnAtSkep();
+      input.enable(true);
+      input.setMode(m);
+      hud.show(true);
+      hud.setMode(m, { touch });
+      if (score.enabled && !audio.enabled) audio.enable().then(() => hud.setSound(true));
+    }
+    setURL(m);
+  };
+  const togglePhoto = () => {
+    if (!explore?.active) return;
+    explore.togglePhoto();
+    input.setMode(explore.photo ? 'photo' : mode);
+    if (explore.photo) { hud.togglePanel(false); hud.toggleHelp(false); }
+  };
+  const savePhoto = () => {
+    if (!explore?.photo) return;
+    explore.render(0);
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `clockwork-garden-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    audio.shutter();
+    hud.flash();
+    hud.flashHint('Saved a photograph', 2);
+  };
+  const handleActions = (acts) => {
+    for (const a of acts) {
+      if (a === 'help') hud.toggleHelp();
+      else if (a === 'menu') hud.togglePanel();
+      else if (a === 'sound') audio.toggle().then((on) => hud.setSound(on));
+      else if (a === 'photo') togglePhoto();
+      else if (a === 'swap' && !explore.photo) setMode(mode === 'fly' ? 'follow' : 'fly');
+      else if (a === 'timeCycle') explore.cycleTime();
+      else if (a === 'timeUp') explore.setTime(explore.tod.value + 0.05);
+      else if (a === 'timeDown') explore.setTime(explore.tod.value - 0.05);
+      else if (a === 'save') savePhoto();
+      else if (a === 'escape') { if (explore.photo) togglePhoto(); else if (hud.overlayOpen) { hud.togglePanel(false); hud.toggleHelp(false); } }
+    }
+  };
+  // touch: tapping closes the help card
+  window.addEventListener('pointerdown', (e) => { if (hud && !hud.help.hidden && !e.target.closest('.hud-help, .hud-panel, button')) hud.toggleHelp(false); });
 
   // public API for review and frame capture
   window.__cg = {
@@ -216,6 +351,23 @@ async function boot() {
     shot: () => director.current,
     info: () => renderer.info,
     world: capture ? world : undefined, // debugging aid in capture mode only
+    mode: () => mode,
+    setMode: (m) => setMode(m),
+    // review hooks for the interactive modes (state, scripted input, stills)
+    explore: () => makeExplore(),
+    exploreView: (v) => {
+      const ex = makeExplore();
+      ex.enter('fly');
+      if (v.tod !== undefined) ex.tod.value = v.tod;
+      if (v.clock !== undefined) ex.clock = v.clock;
+      ex.debugView = v.pos ? { pos: new THREE.Vector3(...v.pos), target: new THREE.Vector3(...v.target), fov: v.fov, aperture: v.aperture, shadowRadius: v.shadowRadius } : null;
+      // reachable: move the viewpoint out of solids, as the flight camera would be
+      if (ex.debugView && v.reachable) { const p = ex.debugView.pos, d = ex.debugView.target.clone().sub(p); ex.bounds.pushOut(p, 2.5); ex.debugView.target.copy(p).add(d); }
+      ex.update(v.dt ?? 0, null);
+      ex.render(v.dt ?? 0);
+      return true;
+    },
+    exploreExit: () => { explore?.exit(); return true; },
     // render the procedural score offline and return it as base64 WAV
     audioWav: async () => {
       const buf = await renderScore();
@@ -229,29 +381,71 @@ async function boot() {
 
   status?.remove();
   document.body.classList.add('ready');
-  renderAt(state.t);
+  if (mode === 'film' || capture) {
+    controls?.enable(true);
+    // respect the system preference: wait for the viewer to start
+    if (!capture && prefersReduced && params.get('motion') !== 'full') { state.playing = false; controls?.showGentleNotice(); }
+    renderAt(state.t);
+  } else if (mode) {
+    const m = mode;
+    mode = null;
+    setMode(m);
+  } else {
+    // landing: the garden is alive behind the title; APX-9 is at work
+    controls?.enable(false);
+    explore.enter('follow');
+    hud.show(false);
+    landing = showLanding({ reducedMotion: reduced, touch, onChoose: (m) => setMode(m, { fromLanding: true }) });
+  }
   if (capture) return;
 
   let last = performance.now();
   const loop = (now) => {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    if (state.playing) {
-      state.t += dt;
-      if (state.t >= DURATION) {
-        state.t = DURATION;
-        state.playing = false;
-        score.pause();
-        controls?.ended();
+    if (mode === 'film') {
+      if (state.playing) {
+        state.t += dt;
+        if (state.t >= DURATION) {
+          state.t = DURATION;
+          state.playing = false;
+          score.pause();
+          controls?.ended();
+        }
+        renderAt(state.t);
+      } else if (controls?.dirty) {
+        controls.dirty = false;
+        renderAt(state.t);
       }
-      renderAt(state.t);
-    } else if (controls?.dirty) {
-      controls.dirty = false;
-      renderAt(state.t);
+    } else if (explore) {
+      const inp = input && input.enabled ? input.frame(dt) : null;
+      if (inp) handleActions(inp.actions);
+      explore.update(dt, hud?.overlayOpen && inp ? { ...inp, move: { x: 0, y: 0 }, lift: 0, look: { dx: 0, dy: 0 }, boost: false } : inp);
+      explore.render(dt);
+      hud?.update(explore.hudState());
     }
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
+}
+
+// standing hints and one-off messages for the interactive modes
+function wireHints(explore, hud, getMode, touch) {
+  let firstLantern = true, firstBell = true;
+  const say = (t, s) => hud.flashHint(t, s);
+  explore.on('pollinate', ({ landable, first, who }) => {
+    if (who !== 'player') return;
+    say(first ? `You pollinated ${landable.name}: it answers` : `${landable.name[0].toUpperCase() + landable.name.slice(1)}: more pollen`, 3);
+  });
+  explore.on('deposit', ({ site, who, honey }) => {
+    const whoS = who === 'player' ? 'Pollen delivered' : 'APX-9 delivers its pollen';
+    say(site ? `${whoS}: glass blooms are sprouting ${site.name}` : `${whoS} (${honey})`, 5);
+  });
+  explore.on('wind', ({ source }) => say(source === 'player' ? 'You wound the garden: watch the bloom wave' : 'APX-9 winds the garden', 5));
+  explore.on('kindle', () => { if (firstLantern && getMode() === 'fly') { firstLantern = false; say('Lanterns kindle as you pass', 3); } });
+  explore.on('bell', () => { if (firstBell && getMode() === 'fly') { firstBell = false; say('The porcelain bells are tuned to the garden', 3); } });
+  explore.on('hint', (t) => say(t, 3.5));
+  explore.on('photo', (on) => { if (on) say(touch ? 'Photo mode: drag to look, joystick to move' : 'Photo mode: drag or WASD to frame, wheel to zoom, Enter to save', 4); });
 }
 
 boot().catch((e) => {
