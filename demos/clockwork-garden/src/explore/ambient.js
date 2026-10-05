@@ -12,23 +12,20 @@ import { clamp, lerp, smooth } from '../core/ease.js';
 import { L } from '../world/layout.js';
 import { groundHeight } from './bounds.js';
 
-// Ambient life for the interactive modes, on the real-time clock.
+// Ambient life for the interactive modes, on the real-time clock. Every
+// creature has its own patch of the glasshouse (spread so the patches cover
+// the whole house) and goes about its routine there; nothing seeks out or
+// follows APX-9, which simply happens by them. They only react to it:
 //   butterflies  flutter between blooms and settle; scatter when the bee rushes them
-//   dragonflies  hover and dart; one takes a liking to the bee and escorts it a while
-//   hummingbirds visit the glass blossom and the lilies; turn to inspect the bee
+//   dragonflies  hover and dart over their patch; dart off when the bee comes close
+//   hummingbirds sip from blooms (and the glass blossom, if it is in their patch);
+//                stop and turn to look when the bee passes close, then fly off
+//   foragers     honeybees and carpenter bees working the blooms: fly, settle,
+//                gather, move on; one leaves its bloom when the bee lands there
+//   crawlers     jewel beetles and ladybirds climbing flower stems (pausing as the
+//                bee passes); at the top they open their shells and fly to another stem
 //   skep bees    worker bees circle the hive; they dance after every deposit
 //   songbird     sings on its copper bough, watches the bee, flies a loop if crowded
-//   foragers     honeybees and a carpenter bee working the blooms: fly, settle, gather, move on
-//   crawlers     a jewel beetle and a ladybird climbing flower stems; at the top
-//                they open their shells and fly to another stem
-//   companions   (Follow) every so often a forager or a hummingbird travels with
-//                APX-9 for 10–18 s, flying just beyond it in the frame (never
-//                between camera and bee), then peels off and settles nearby
-// The cast lives where the camera is looking: around APX-9 (in Follow, also
-// where it is heading). Creatures that have drifted far away while out of view
-// re-settle out of view near the bee and come into the frame on their own; a
-// butterfly often visits a bloom near the one APX-9 has landed on, and a
-// hummingbird comes over to look at the bee every half minute or so.
 // Off-screen creatures keep moving but are not re-posed (their legs and wings
 // would not be seen), and every rig is compacted (creatures/compact.js).
 
@@ -70,28 +67,52 @@ export class Ambient {
       this.pgrid.get(k).push(c);
     }
 
+    // the patches: blooms spread over the house (farthest-point picks from a
+    // seeded start), one per roaming creature
+    const counts = low ? { b: 6, f: 3, c: 2, h: 2, d: 2 } : { b: 10, f: 5, c: 4, h: 3, d: 4 };
+    const homes = this._spread(counts.b + counts.f + counts.c + counts.h + counts.d);
+    let hi = 0;
+    const home = () => homes[hi++ % homes.length].clone();
     this.butterflies = [];
-    const nB = low ? 4 : 7;
-    for (let i = 0; i < nB; i++) {
+    for (let i = 0; i < counts.b; i++) {
       const sp = i % 3 === 1 ? 'swallowtail' : 'monarch';
       const c = add(new Butterfly(mat, sp, { detail: 'mid' }));
       c.group.scale.setScalar(r.range(1.2, 1.6));
-      const p = this.perches[Math.floor(r.float() * this.perches.length)];
-      this.butterflies.push({ c, pos: p.p.clone(), vel: V(), state: 'perch', timer: r.range(1, 6), target: p, ph: r.range(0, TAU), freq: r.range(2.4, 3.3), yaw: r.range(0, TAU) });
+      const b = { c, home: home(), R: 65, vel: V(), state: 'perch', timer: r.range(1, 6), ph: r.range(0, TAU), freq: r.range(2.4, 3.3), yaw: r.range(0, TAU) };
+      b.target = this._perchNear(b.home, 0, b.R) || this._flowerNear(b.home, 0, 200);
+      b.pos = b.target.p.clone();
+      this.butterflies.push(b);
     }
-    this.dragonflies = [];
-    for (let i = 0; i < (low ? 2 : 3); i++) {
-      const c = add(new Dragonfly(mat, { palette: i % 2 ? 'sapphire' : 'teal' }));
-      c.group.scale.setScalar(1.5);
-      const home = [V(70, 22, -560), V(-20, 18, 30), V(60, 16, -60)][i];
-      this.dragonflies.push({ c, pos: home.clone(), from: home.clone(), to: home.clone(), home, state: 'hover', timer: r.range(0.5, 2), dart: 0, escort: i === 1 ? 0 : -1, face: V(1, 0, 0) });
+    this.foragers = [];
+    for (let i = 0; i < counts.f; i++) {
+      const sp = i % 3 === 1 ? 'carpenter' : 'honey';
+      const c = add(new Bee(mat, sp, { detail: 'mid' }));
+      c.group.scale.setScalar(sp === 'carpenter' ? 1.55 : 1.45);
+      const fb = { c, sp, home: home(), R: 45, vel: V(), state: 'fly', timer: 0, ph: r.range(0, TAU), yaw: r.range(0, TAU) };
+      fb.target = this._perchNear(fb.home, 0, fb.R) || this._flowerNear(fb.home, 0, 200);
+      fb.pos = fb.target.p.clone().add(V(r.range(-6, 6), 6, r.range(-6, 6)));
+      this.foragers.push(fb);
+    }
+    this.crawlers = [];
+    for (let i = 0; i < counts.c; i++) {
+      const kind = i % 2 ? 'ladybird' : 'jewel';
+      const c = add(new Beetle(mat, kind));
+      c.group.scale.setScalar(kind === 'ladybird' ? 1.35 : 1.45);
+      this.crawlers.push({ c, kind, home: home(), R: 35, f: null, s: 0.25, ang: r.range(0, TAU), dir: 1, state: 'climb', timer: 0, walk: 0, open: 0, pos: V(), speed: kind === 'ladybird' ? 0.9 : 1.25 });
     }
     this.hummingbirds = [];
-    for (let i = 0; i < (low ? 1 : 2); i++) {
+    for (let i = 0; i < counts.h; i++) {
       const c = add(new Bird(mat, 'hummingbird'));
       c.group.scale.setScalar(1.4);
-      const p = V(-20 + i * 60, 30, -40 - i * 80);
-      this.hummingbirds.push({ c, pos: p, vel: V(), state: 'travel', timer: 0, target: null, face: V(0, 0, 1), spot: null });
+      const hh = home();
+      this.hummingbirds.push({ c, home: hh, R: 90, pos: hh.clone().add(V(0, 10, 0)), vel: V(), state: 'travel', timer: 0, target: null, face: V(0, 0, 1) });
+    }
+    this.dragonflies = [];
+    for (let i = 0; i < counts.d; i++) {
+      const c = add(new Dragonfly(mat, { palette: i % 2 ? 'sapphire' : 'teal' }));
+      c.group.scale.setScalar(1.5);
+      const hh = home().add(V(0, 8, 0));
+      this.dragonflies.push({ c, home: hh, R: 40, pos: hh.clone(), from: hh.clone(), to: hh.clone(), state: 'hover', timer: r.range(0.5, 2), dart: 0, face: V(1, 0, 0) });
     }
     this.workers = [];
     const sk = world.skep.group.position;
@@ -106,24 +127,24 @@ export class Ambient {
     this.songFace = V(-pt.z, 0, pt.x).normalize();
     if (this.songFace.dot(V(1, 0, 1)) < 0) this.songFace.negate();
     this.songState = { state: 'perch', timer: 0, nextSong: 3, yaw: 0, loopT: 0 };
-    // foragers working the blooms around the bee
-    this.foragers = [];
-    for (const sp of low ? ['honey', 'carpenter'] : ['honey', 'carpenter', 'honey']) {
-      const c = add(new Bee(mat, sp, { detail: 'mid' }));
-      c.group.scale.setScalar(sp === 'carpenter' ? 1.55 : 1.45);
-      this.foragers.push({ c, sp, pos: V(), vel: V(), state: 'fly', timer: 0, target: null, ph: r.range(0, TAU), yaw: r.range(0, TAU), placed: false });
-    }
-    // crawlers on the flower stems
-    this.crawlers = [];
-    for (const kind of ['jewel', 'ladybird']) {
-      const c = add(new Beetle(mat, kind));
-      c.group.scale.setScalar(kind === 'ladybird' ? 1.35 : 1.45);
-      this.crawlers.push({ c, kind, f: null, s: 0.25, ang: r.range(0, TAU), dir: 1, state: 'climb', timer: 0, walk: 0, open: 0, pos: V(), speed: kind === 'ladybird' ? 0.9 : 1.25 });
-    }
     this.group.traverse((o) => { if (o.isMesh) o.castShadow = o.castShadow && !low; });
     for (const c of this.rigs) compactRig(c);
     this.celebrate = -100;
-    this.hub = V();
+  }
+
+  // n points spread over the house: farthest-point picks among the blooms
+  _spread(n) {
+    const P = this.perches.map((c) => c.p);
+    const out = [P[Math.floor(this.rng.float() * P.length)].clone()];
+    const dmin = P.map((p) => Math.hypot(p.x - out[0].x, p.z - out[0].z));
+    while (out.length < n) {
+      let bi = 0;
+      for (let i = 1; i < P.length; i++) if (dmin[i] > dmin[bi]) bi = i;
+      const q = P[bi].clone();
+      out.push(q);
+      for (let i = 0; i < P.length; i++) dmin[i] = Math.min(dmin[i], Math.hypot(P[i].x - q.x, P[i].z - q.z));
+    }
+    return out;
   }
 
   // a bloom within a ring round `center` (horizontal distance), optionally
@@ -163,13 +184,13 @@ export class Ambient {
   // size its rough radius
   features(p, maxD) {
     const out = [];
-    const ok = (o, q) => q.distanceTo(p) < maxD && o !== this.comp?.who;
+    const ok = (o, q) => q.distanceTo(p) < maxD;
     const fwd = (g) => V(0, 0, 1).applyQuaternion(g.quaternion).setY(0);
     for (const fb of this.foragers) if (fb.state === 'sip' && fb.timer > 1.5 && ok(fb, fb.pos)) out.push({ obj: fb, kind: 'forager', pos: fb.pos, face: V(Math.sin(fb.yaw), 0, Math.cos(fb.yaw)), size: 1.15 * fb.c.group.scale.x });
     for (const cr of this.crawlers) if (cr.state === 'climb' && cr.s > 0.15 && cr.s < 0.68 && ok(cr, cr.pos)) out.push({ obj: cr, kind: 'crawler', pos: cr.pos, face: V(0, 1, 0).applyQuaternion(cr.c.group.quaternion).setY(0), size: 0.9 * cr.c.group.scale.x });
     for (const b of this.butterflies) if (b.state === 'perch' && b.timer > 1.5 && ok(b, b.pos)) out.push({ obj: b, kind: 'butterfly', pos: b.pos, face: V(Math.sin(b.yaw), 0, Math.cos(b.yaw)), size: 1.7 * b.c.group.scale.x });
     for (const h of this.hummingbirds) if (h.state === 'sip' && h.timer > 1.5 && ok(h, h.pos)) out.push({ obj: h, kind: 'hummingbird', pos: h.pos, face: h.face.clone().setY(0), size: 1.7 * h.c.group.scale.x });
-    for (const df of this.dragonflies) if (df.state === 'hover' && !(df.escort > 0) && ok(df, df.pos)) out.push({ obj: df, kind: 'dragonfly', pos: df.c.group.position, face: df.face.clone().setY(0), size: 2.7 * df.c.group.scale.x });
+    for (const df of this.dragonflies) if (df.state === 'hover' && ok(df, df.pos)) out.push({ obj: df, kind: 'dragonfly', pos: df.c.group.position, face: df.face.clone().setY(0), size: 2.7 * df.c.group.scale.x });
     if (this.songState.state === 'perch' && ok(this.song, this.song.group.position)) out.push({ obj: this.songState, kind: 'songbird', pos: this.song.group.position, face: fwd(this.song.group), size: 2.6 });
     for (const f of out) if (f.face.lengthSq() < 1e-6) f.face.set(0, 0, 1);
     return out;
@@ -284,81 +305,21 @@ export class Ambient {
     return true;
   }
 
-  // goal: where APX-9 is heading (Follow), so the cast gathers ahead of it too;
-  // follow: the cinematic camera is on (companions join the bee)
-  update(dt, bee, camera, frustum, goal = null, follow = false) {
+  update(dt, bee, camera, frustum) {
     this.t += dt;
     const t = this.t;
     const r = this.rng;
     const bp = bee.pos;
-    const inView = (p) => frustum.containsPoint(p);
-    // in view, with a margin (for re-posing, and so nothing re-settles where it could be seen)
+    // in view, with a margin (only creatures that could be seen are re-posed)
     const near = (p, m = 6) => { SPH.center.copy(p); SPH.radius = m; return frustum.intersectsSphere(SPH); };
-    const unseen = (p) => !near(p, 8);
-    // the neighbourhood in the frame: just beyond APX-9 as the camera sees it
-    // (and toward where it's heading)
-    const look = bp.clone().sub(camera.position).setY(0);
-    if (look.lengthSq() < 1e-4) look.set(Math.sin(bee.yaw), 0, Math.cos(bee.yaw));
-    const hub = this.hub.copy(bp).addScaledVector(look.normalize(), 14);
-    if (goal && goal.distanceTo(bp) < 140) hub.lerp(goal, 0.3);
-    const landed = bee.landedOn;
     const cam = camera.position;
-
-    // ---- companions ------------------------------------------------------------------
-    // a spot in the frame just beyond the bee: u, v across the frame (−1…1),
-    // depth beyond the bee along the line of sight
-    const camF = bp.clone().sub(cam);
-    const dBee = Math.max(1, camF.length());
-    camF.normalize();
-    const camR = V().crossVectors(camF, V(0, 1, 0));
-    if (camR.lengthSq() < 1e-6) camR.set(1, 0, 0);
-    camR.normalize();
-    const camU = V().crossVectors(camR, camF);
-    const tanV = Math.tan((camera.fov * Math.PI) / 360), tanH = tanV * camera.aspect;
-    const station = (u, v, depth, out = V()) => { const D = dBee + depth; return out.copy(cam).addScaledVector(camF, D).addScaledVector(camR, u * tanH * D).addScaledVector(camU, v * tanV * D); };
-    const comp = (this.comp ||= { who: null, kind: null, until: 0, next: 5, u: 0.4, v: 0.1, depth: 8 });
-    const release = () => {
-      const w = comp.who;
-      if (!w) return;
-      if (comp.kind === 'forager') {
-        // settle on a bloom near where APX-9 is (in the frame if it can)
-        const spot = landed?.spot || bp;
-        w.target = this._perchNear(spot, 6, 26, { seen: inView, hidden: busy }) || this._perchNear(hub, 6, 35) || w.target;
-        w.state = 'fly';
-      } else { w.target = null; w.state = 'travel'; if (landed) { w.cool = 0; } }
-      comp.who = null;
-      comp.next = r.range(4, 9);
-    };
+    // a bloom in a creature's own patch that nobody else is heading for
     const busy = (pp) => this.foragers.some((o) => o.target && o.target.p.distanceToSquared(pp) < 1) || this.butterflies.some((o) => o.target && o.target.p.distanceToSquared(pp) < 1);
-    if (follow) {
-      comp.next -= dt;
-      if (comp.who && (t > comp.until || landed)) release();
-      if (!comp.who && comp.next <= 0 && bee.flying && !landed) {
-        // alternate a forager and a hummingbird; take one that is out of view
-        // (it flies into the frame) or already close
-        const kind = comp.kind === 'forager' && this.hummingbirds.length ? 'hummingbird' : 'forager';
-        const pool = kind === 'forager' ? this.foragers : this.hummingbirds.filter((h) => h.state !== 'curious' && h.state !== 'leave');
-        let pick = null, pd = Infinity;
-        for (const c of pool) { const dd = c.pos.distanceTo(bp); if ((c.holdUntil ?? 0) < t && (dd < 40 || !near(c.pos)) && dd < pd) { pd = dd; pick = c; } }
-        if (pick) {
-          comp.who = pick;
-          comp.kind = kind;
-          comp.until = t + r.range(10, 18);
-          comp.u = (r.chance(0.5) ? -1 : 1) * r.range(0.3, 0.55);
-          comp.v = r.range(-0.1, 0.3);
-          comp.depth = r.range(3, 9);
-          // from far away: start just off the edge of the frame on its side
-          if (pd > 60) { station(Math.sign(comp.u) * 1.35, comp.v, comp.depth, pick.pos); pick.vel?.set(0, 0, 0); }
-          if (kind === 'forager') pick.state = 'fly';
-        } else comp.next = 2;
-      }
-    } else if (comp.who) release();
-    const compStation = () => station(comp.u + Math.sin(t * 0.5) * 0.08, comp.v + Math.sin(t * 0.7) * 0.05, comp.depth);
-    // keep the sightline to APX-9 clear: nothing on the wing may hover in the
-    // cone between the camera and the bee (chase and follow cameras look
-    // through it). `size` is the creature's half-span, so wings and tails stay
+    const inPatch = (c, rMin = 0) => this._perchNear(c.home, rMin, c.R, { hidden: busy }) || this._perchNear(c.home, 0, c.R * 1.6) || this._flowerNear(c.home, 0, c.R * 2);
+    // keep the sightline clear: nothing on the wing may hover in the cone
+    // between the camera and APX-9 (or, in a cutaway, the creature being
+    // shown). `size` is the creature's half-span, so wings and tails stay
     // clear too; anything inside is moved out sideways to the cone's edge.
-    // (in a cutaway, the line to the creature being shown)
     const toBee = (this.sightTarget || bp).clone().sub(cam);
     const len2 = toBee.lengthSq();
     const clearSight = (p, size) => {
@@ -378,9 +339,9 @@ export class Ambient {
     // (body spheres; settled creatures and APX-9 hold their place, the others give way)
     const bodies = [{ p: bp, r: 2.6, fixed: true }];
     for (const b of this.butterflies) bodies.push({ p: b.pos, r: 1.2 * b.c.group.scale.x, fixed: b.state === 'perch' });
-    for (const f of this.foragers) if (f.placed) bodies.push({ p: f.pos, r: 1.0 * f.c.group.scale.x, fixed: f.state === 'sip' });
+    for (const f of this.foragers) bodies.push({ p: f.pos, r: 1.0 * f.c.group.scale.x, fixed: f.state === 'sip' });
     for (const h of this.hummingbirds) bodies.push({ p: h.pos, r: 1.3 * h.c.group.scale.x, fixed: h.state === 'sip' });
-    for (const df of this.dragonflies) bodies.push({ p: df.pos, r: 2.2 * df.c.group.scale.x, fixed: df.escort > 0 });
+    for (const df of this.dragonflies) bodies.push({ p: df.pos, r: 2.2 * df.c.group.scale.x, fixed: false });
     for (let i = 0; i < bodies.length; i++) for (let j = i + 1; j < bodies.length; j++) {
       const A = bodies[i], Bb = bodies[j];
       if (A.fixed && Bb.fixed) continue;
@@ -395,33 +356,10 @@ export class Ambient {
       Bb.p.x -= ux * push * kb; Bb.p.y -= uy * push * kb; Bb.p.z -= uz * push * kb;
     }
 
-    // ---- butterflies ---------------------------------------------------------
-    // APX-9 has settled on a bloom: a butterfly comes to one nearby, in the
-    // frame if there is one (from out of view if none is close)
-    if (landed && landed !== this._visited) {
-      this._visited = landed;
-      const spot = landed.spot || bp;
-      const p = this._perchNear(spot, 8, 26, { seen: inView, hidden: busy });
-      let best = null, bd = 180;
-      for (const b of this.butterflies) { if (b.state === 'scatter') continue; const dd = b.pos.distanceTo(spot); if (dd < bd) { bd = dd; best = b; } }
-      if (p && best) {
-        if (bd > 45 && !near(best.pos)) {
-          const from = this._perchNear(spot, 18, 34, { hidden: near });
-          if (from) best.pos.copy(from.p).add(V(0, 5, 0));
-        }
-        best.state = 'fly';
-        best.target = p;
-        best.vel.set(0, 3, 0);
-      }
-    } else if (!landed) this._visited = null;
+    // ---- butterflies: bloom to bloom round their own patch -------------------------------
     for (const b of this.butterflies) {
       const d = b.pos.distanceTo(bp);
-      // keep the cast near the action: far, unseen butterflies re-settle near
-      // the bee, out of view, and soon fly into the frame
-      if (b.pos.distanceTo(hub) > 110 && !near(b.pos)) {
-        const p = this._perchNear(hub, 10, 50, { hidden: near });
-        if (p) { b.pos.copy(p.p); b.target = p; b.state = 'perch'; b.timer = r.range(0.5, 3.5); }
-      }
+      // a rushing bee sends them up off their bloom
       if ((d < 7 || (d < 13 && bee.speed > 6)) && b.state !== 'scatter') {
         b.state = 'scatter';
         b.timer = r.range(1.4, 2.2);
@@ -436,13 +374,13 @@ export class Ambient {
         b.c.group.position.copy(b.pos);
         b.c.group.rotation.set(0, b.yaw, 0);
         if (near(b.pos)) b.c.setPose({ t, open, flap: 0, grip: 1 });
-        if (b.timer <= 0) { b.state = 'fly'; b.target = (r.chance(0.75) ? this._perchNear(hub, 5, 40, { seen: inView }) : this._perchNear(b.pos, 9, 50)) || this._flowerNear(b.pos, 15, 90); b.vel.set(0, 4, 0); }
+        if (b.timer <= 0) { b.state = 'fly'; b.target = inPatch(b, 6); b.vel.set(0, 4, 0); }
         continue;
       }
       if (b.state === 'scatter') {
         b.timer -= dt;
         b.vel.multiplyScalar(Math.exp(-dt * 0.4));
-        if (b.timer <= 0) { b.state = 'fly'; b.target = this._perchNear(hub, 12, 50, { seen: inView }) || this._flowerNear(b.pos, 30, 110); }
+        if (b.timer <= 0) { b.state = 'fly'; b.target = inPatch(b, 10); }
       } else {
         // fluttering flight toward the next bloom: weave and bob
         const to = b.target.p.clone().sub(b.pos);
@@ -463,124 +401,58 @@ export class Ambient {
       if (near(b.pos)) b.c.setPose({ t: t + b.ph, open: 0.6, flap: b.state === 'scatter' ? 1 : 0.85, freq: b.state === 'scatter' ? b.freq * 1.6 : b.freq, grip: 0 });
     }
 
-    // ---- dragonflies ------------------------------------------------------------
+    // ---- dragonflies: hover and dart over their own patch; dart off from the bee ----------
     for (const df of this.dragonflies) {
       const d = df.pos.distanceTo(bp);
-      if (df.escort >= 0) {
-        if (df.escort === 0 && d < 30 && bee.speed > 8 && bee.flying && (df.escortCool ?? 0) < t) { df.escort = 0.0001; this._escortStart = t; }
-        if (df.escort > 0) {
-          df.escort += dt;
-          // (then a rest before it takes up escorting again)
-          if (df.escort > 14 || !bee.flying || d > 70) { df.escort = 0; df.escortCool = t + r.range(25, 45); df.station = null; df.home = df.pos.clone(); df.state = 'hover'; df.timer = 1; }
-        }
-      }
       df.timer -= dt;
-      if (df.escort > 0) {
-        // escort: hold a station beside and a little ahead of the bee, kept in
-        // the bee's own frame every frame so it keeps pace at any speed (a
-        // station picked from a stale bee position fell behind it, between
-        // the bee and the camera). Every beat it darts to a new station.
-        const fw = bee.vel.clone().setY(0);
-        if (fw.lengthSq() < 1) fw.set(Math.sin(bee.yaw), 0, Math.cos(bee.yaw));
-        fw.normalize();
-        const sd = V(-fw.z, 0, fw.x);
-        if (df.timer <= 0 || !df.station) {
-          df.offFrom = df.pos.clone().sub(bp);
-          // it is twice APX-9's size (13.5 long, 11 across the wings): fly well wide
-          df.station = { side: (r.chance(0.5) ? 1 : -1) * r.range(13, 16), up: r.range(3, 5), ahead: r.range(6, 10) };
+      if (d < 6 && df.state !== 'flee') { df.state = 'flee'; df.from.copy(df.pos); df.to.copy(df.pos).add(df.pos.clone().sub(bp).setY(0).normalize().multiplyScalar(22)).add(V(0, 6, 0)); df.dart = 0; df.timer = 1.2; }
+      if ((df.holdUntil ?? 0) > t && df.state === 'hover') df.timer = Math.max(df.timer, 0.3);
+      if (df.timer <= 0) {
+        df.state = df.state === 'hover' ? 'dart' : 'hover';
+        if (df.state === 'dart') {
+          df.from.copy(df.pos);
+          df.to.copy(df.home).add(V(r.range(-1, 1) * df.R * 0.6, r.range(-4, 8), r.range(-1, 1) * df.R * 0.6));
+          df.to.y = Math.max(df.to.y, groundHeight(df.to.x, df.to.z) + 8);
           df.dart = 0;
-          df.dartDur = clamp(df.offFrom.length() / 40, 0.22, 0.9);
-          df.timer = r.range(0.4, 0.9);
-        }
-        const st = df.station;
-        const offTo = sd.multiplyScalar(st.side).add(V(0, st.up, 0)).addScaledVector(fw, st.ahead);
-        df.dart = Math.min(1, df.dart + dt / df.dartDur);
-        df.pos.copy(bp).add(df.offFrom.clone().lerp(offTo, smooth(df.dart)));
-        df.from.copy(df.pos);
-        df.to.copy(df.pos);
-      } else {
-        if (d < 6 && df.state !== 'flee') { df.state = 'flee'; df.from.copy(df.pos); df.to.copy(df.pos).add(df.pos.clone().sub(bp).setY(0).normalize().multiplyScalar(22)).add(V(0, 6, 0)); df.dart = 0; df.timer = 1.2; }
-        // its patch is too far from the bee: an unseen dragonfly moves its patch
-        // close to the bee (and itself, out of view); a visible one darts over
-        if (df.home.distanceTo(hub) > 90 && df.state === 'hover') {
-          const p = this._perchNear(hub, 10, 40, near(df.pos) ? { seen: inView } : { hidden: near });
-          if (p) {
-            df.home = p.p.clone().add(V(0, 6, 0));
-            if (!near(df.pos)) { df.pos.copy(df.home); df.from.copy(df.home); df.to.copy(df.home); }
-          }
-        }
-        if ((df.holdUntil ?? 0) > t && df.state === 'hover') df.timer = Math.max(df.timer, 0.3);
-        if (df.timer <= 0) {
-          df.state = df.state === 'hover' ? 'dart' : 'hover';
-          if (df.state === 'dart') {
-            const anchor = df.home.distanceTo(bp) > 200 ? bp.clone().add(V(r.range(-60, 60), 0, r.range(-60, 60))) : df.home;
-            df.from.copy(df.pos);
-            df.to.copy(anchor).add(V(r.range(-18, 18), r.range(-4, 8), r.range(-18, 18)));
-            df.to.y = Math.max(df.to.y, groundHeight(df.to.x, df.to.z) + 8);
-            df.dart = 0;
-            df.timer = 0.35;
-          } else df.timer = r.range(0.6, 2.4);
-        }
-        if (df.state === 'dart' || df.state === 'flee') { df.dart = Math.min(1, df.dart + dt / (df.state === 'flee' ? 0.5 : 0.35)); df.pos.lerpVectors(df.from, df.to, smooth(df.dart)); }
+          df.timer = 0.35;
+        } else df.timer = r.range(0.6, 2.4);
       }
+      if (df.state === 'dart' || df.state === 'flee') { df.dart = Math.min(1, df.dart + dt / (df.state === 'flee' ? 0.5 : 0.35)); df.pos.lerpVectors(df.from, df.to, smooth(df.dart)); }
       const jitter = V(Math.sin(t * 5.1 + df.home.x) * 0.06, Math.sin(t * 6.3) * 0.05, Math.cos(t * 4.7) * 0.06);
       clearSight(df.pos, 6.5);
       df.c.group.position.copy(df.pos).add(jitter);
       const mv = df.to.clone().sub(df.from).setY(0);
       if (mv.lengthSq() > 1) df.face.lerp(mv.normalize(), damp(6, dt));
-      if (df.escort > 0) df.face.lerp(V(Math.sin(bee.yaw), 0, Math.cos(bee.yaw)), damp(3, dt));
       orient(df.c.group, df.face, clamp(Math.sin(t * 2) * 0.1, -0.3, 0.3));
       if (near(df.pos, 8)) df.c.setPose({ t, flap: 1, glide: 0 });
     }
 
-    // ---- hummingbirds ---------------------------------------------------------------
+    // ---- hummingbirds: from bloom to bloom round their patch (and the glass blossom) -----
     for (const h of this.hummingbirds) {
       h.timer -= dt;
-      // far and unseen: re-appear out of view near the bee
-      if (h !== comp.who && h.pos.distanceTo(hub) > 140 && !near(h.pos) && h.state !== 'curious') {
-        const p = this._perchNear(hub, 14, 45, { hidden: near });
-        if (p) { h.pos.copy(p.p).add(V(0, 8, 0)); h.target = null; h.state = 'travel'; }
-      }
-      // every half minute or so one comes over to look at the bee
-      h.nextVisit ??= 12 + r.range(0, 20);
-      h.nextVisit -= dt;
       if ((h.holdUntil ?? 0) > t && h.state === 'sip') h.timer = Math.max(h.timer, 0.3);
-      if (h.nextVisit <= 0 && h !== comp.who && (h.holdUntil ?? 0) < t && h.state !== 'curious' && h.state !== 'leave') {
-        h.nextVisit = r.range(24, 42);
-        h.cool = 0;
-        h.target = { p: bp.clone().add(V(r.range(-6, 6), 2, r.range(-6, 6))), look: bp.clone(), seek: true };
-        h.state = 'travel';
-      }
-      if (h.target?.seek) h.target.p.lerp(bp.clone().add(V(0, 2, 0)), damp(1.5, dt)); // it follows a moving bee
       const d = h.pos.distanceTo(bp);
-      if (h !== comp.who && d < 14 && h.state !== 'curious' && h.state !== 'leave' && (h.cool ?? 0) < t) {
+      // the bee passing close: it stops where it is and turns to look
+      if (d < 12 && h.state !== 'curious' && h.state !== 'leave' && (h.cool ?? 0) < t) {
         h.state = 'curious';
-        h.timer = r.range(3, 5);
-        h.cool = t + 18;
+        h.timer = r.range(2, 3.5);
+        h.cool = t + 20;
+        h.stay = h.pos.clone();
       }
       let want, face;
-      if (h === comp.who) {
-        // flying with APX-9, beyond it in the frame, looking where it's going
-        want = compStation();
-        face = bee.vel.lengthSq() > 4 ? bee.vel.clone() : bp.clone().sub(h.pos);
-      } else if (h.state === 'curious') {
-        // hover at the bee's eye level, a few lengths off, watching it
-        const off = h.pos.clone().sub(bp).setY(0);
-        if (off.lengthSq() < 1) off.set(1, 0, 0);
-        off.normalize().multiplyScalar(9);
-        want = bp.clone().add(off).add(V(0, 1.2, 0));
+      if (h.state === 'curious') {
+        want = h.stay;
         face = bp.clone().sub(h.pos);
-        if (h.timer <= 0) { h.state = 'leave'; h.timer = 1.5; h.vel.copy(off).normalize().multiplyScalar(26).add(V(0, 10, 0)); }
+        if (h.timer <= 0) { h.state = 'leave'; h.timer = 1.2; h.vel.copy(h.pos).sub(bp).setY(0).normalize().multiplyScalar(20).add(V(0, 8, 0)); }
       } else if (h.state === 'leave') {
         want = h.pos.clone().addScaledVector(h.vel, 0.3);
         face = h.vel.clone();
         if (h.timer <= 0) { h.state = 'travel'; h.target = null; }
       } else {
         if (!h.target || (h.state === 'sip' && h.timer <= 0)) {
-          const roll = r.float();
           const m = this.world.blossom.mouthWorld();
-          if (roll < 0.3 && m.distanceTo(hub) < 120) { const ax = this.world.blossom.axisWorld(); h.target = { p: m.clone().addScaledVector(ax, 3.2), look: m.clone() }; }
-          else { const p = this._perchNear(hub, 8, 45, { seen: inView }) || this._flowerNear(h.pos, 20, 140); h.target = { p: p.p.clone().add(V(2.5, 2.5, 0)), look: p.p.clone() }; }
+          if (r.float() < 0.3 && m.distanceTo(h.home) < h.R) { const ax = this.world.blossom.axisWorld(); h.target = { p: m.clone().addScaledVector(ax, 3.2), look: m.clone() }; }
+          else { const p = inPatch(h, 8); h.target = { p: p.p.clone().add(V(2.5, 2.5, 0)), look: p.p.clone() }; }
           h.state = 'travel';
         }
         const to = h.target.p.clone().sub(h.pos);
@@ -590,7 +462,7 @@ export class Ambient {
         face = h.state === 'sip' ? h.target.look.clone().sub(h.pos) : to;
       }
       const prev = h.pos.clone();
-      h.pos.lerp(want, damp(h === comp.who ? 3 : h.state === 'sip' ? 6 : h.state === 'curious' ? 2.5 : 2, dt));
+      h.pos.lerp(want, damp(h.state === 'sip' ? 6 : h.state === 'curious' ? 4 : 2, dt));
       const vel = h.pos.clone().sub(prev).multiplyScalar(1 / Math.max(dt, 1e-3));
       this.bounds.collide(h.pos, vel, 1.2, dt, { cushion: 1, stiffness: 30 });
       face.y *= 0.2;
@@ -616,39 +488,18 @@ export class Ambient {
       else w.c.setPose({ t: t + w.i * 0.37, flap: 1, freq: 24.7, fold: 0, grip: 0 });
     }
 
-    // ---- foragers: bees working the blooms near APX-9 -------------------------------------
+    // ---- foragers: bees working the blooms of their own patch ---------------------------
     for (const fb of this.foragers) {
-      if (!fb.placed || (fb !== comp.who && fb.pos.distanceTo(hub) > 100 && !near(fb.pos))) {
-        const p = this._perchNear(hub, 10, 45, { hidden: near });
-        if (p) { fb.pos.copy(p.p).add(V(0, 7, 0)); fb.vel.set(0, 0, 0); fb.target = this._perchNear(hub, 4, 35, { seen: inView, hidden: busy }) || p; fb.state = 'fly'; fb.placed = true; }
-        else if (!fb.placed) { fb.c.group.visible = false; continue; }
-      }
       fb.timer -= dt;
       let face;
-      if (fb === comp.who) {
-        // travelling with APX-9, just beyond it in the frame
-        const to = compStation().sub(fb.pos);
-        const want = to.multiplyScalar(2.2);
-        const maxS = Math.max(14, bee.speed + 10);
-        if (want.length() > maxS) want.setLength(maxS);
-        fb.vel.lerp(want, damp(3, dt));
-        fb.pos.addScaledVector(fb.vel, dt);
-        this.bounds.collide(fb.pos, fb.vel, 0.9, dt, { cushion: 0.8, stiffness: 25 });
-        const away = fb.pos.clone().sub(bp);
-        if (away.length() < 4.5) fb.pos.copy(bp).addScaledVector(away.normalize(), 4.5);
-        clearSight(fb.pos, 2.5);
-        face = fb.vel.lengthSq() > 4 ? fb.vel.clone().setY(fb.vel.y * 0.3) : bee.vel.clone().setY(0);
-      } else if (fb.state === 'sip') {
+      if (fb.state === 'sip') {
         // settled on the bloom (which nods in the breeze), gathering
         fb.pos.copy(fb.target.p);
         if (fb.target.f?.headOff) fb.pos.add(fb.target.f.headOff);
         face = V(Math.sin(fb.yaw), 0, Math.cos(fb.yaw));
         if ((fb.holdUntil ?? 0) > t) fb.timer = Math.max(fb.timer, 0.3);
-        if (fb.timer <= 0 || fb.pos.distanceTo(bp) < 4.5) {
-          fb.state = 'fly';
-          fb.target = (r.chance(0.75) ? this._perchNear(hub, 4, 35, { seen: inView, hidden: busy }) : this._perchNear(fb.pos, 7, 40, { hidden: busy })) || fb.target;
-          fb.vel.set(0, 5, 0);
-        }
+        // (APX-9 landing on its bloom moves it on)
+        if (fb.timer <= 0 || fb.pos.distanceTo(bp) < 4.5) { fb.state = 'fly'; fb.target = inPatch(fb, 5); fb.vel.set(0, 5, 0); }
       } else {
         // brisk, fairly straight flight that slows into a hover over the bloom
         const to = fb.target.p.clone().sub(fb.pos);
@@ -668,7 +519,6 @@ export class Ambient {
         face = fb.vel.clone().setY(fb.vel.y * 0.3);
         if (dist < 0.7) { fb.state = 'sip'; fb.timer = r.range(2.5, 6); fb.yaw = Math.atan2(fb.vel.x, fb.vel.z); }
       }
-      fb.c.group.visible = true;
       fb.c.group.position.copy(fb.pos);
       orient(fb.c.group, face, fb.state === 'sip' ? 0 : clamp(-fb.vel.x * 0.02, -0.4, 0.4));
       if (near(fb.pos)) {
@@ -677,7 +527,7 @@ export class Ambient {
       }
     }
 
-    // ---- crawlers: up the stems near APX-9; at the top, shells open and they fly ----------
+    // ---- crawlers: up the stems of their patch; at the top, shells open and they fly ------
     const stemPoint = (f, s, out) => out.copy(f.base).lerp(f.topNow || f.top, s);
     // the way out from a stem's axis at a heading round it
     const radial = (dir, ang) => { const h = V(Math.cos(ang), 0, Math.sin(ang)); return h.addScaledVector(dir, -dir.dot(h)).normalize(); };
@@ -687,13 +537,13 @@ export class Ambient {
       return stemPoint(f, s, out).addScaledVector(radial(dir, ang), (0.5 - 0.18 * s) * f.scale + 0.36 * cr.c.group.scale.x);
     };
     for (const cr of this.crawlers) {
-      // a stem nobody else is on (two crawlers on one stem would collide)
+      // a stem in its patch nobody else is on (two crawlers on one stem would collide)
       const taken = (pp) => this.crawlers.some((o) => o !== cr && (o.f && Math.hypot(o.f.base.x - pp.x, o.f.base.z - pp.z) < 4 || o.flight && Math.hypot(o.flight.f.base.x - pp.x, o.flight.f.base.z - pp.z) < 4));
-      const fNear = (rMin, rMax, hidden) => this._perchNear(hub, rMin, rMax, { hidden: (pp) => taken(pp) || (hidden ? hidden(pp) : false), seen: hidden ? null : inView })?.f;
-      if (!cr.f || (cr.state === 'climb' && Math.hypot(cr.f.base.x - hub.x, cr.f.base.z - hub.z) > 80 && !near(cr.pos))) {
-        const f = fNear(5, 32, near);
+      const stemIn = (rMin) => (this._perchNear(cr.home, rMin, cr.R, { hidden: taken }) || this._perchNear(cr.home, 0, cr.R * 1.6, { hidden: taken }))?.f;
+      if (!cr.f) {
+        const f = stemIn(0);
         if (f) { cr.f = f; cr.s = r.range(0.15, 0.4); cr.dir = 1; cr.state = 'climb'; cr.ang = r.range(0, TAU); cr.open = 0; }
-        else if (!cr.f) { cr.c.group.visible = false; continue; }
+        else { cr.c.group.visible = false; continue; }
       }
       const f = cr.f;
       const top = f.topNow || f.top;
@@ -723,7 +573,7 @@ export class Ambient {
         const open = clamp(cr.timer / 0.6), wings = clamp((cr.timer - 0.4) / 0.5);
         pose = { t, walk: null, open, wings, flap: wings };
         if (cr.timer > 1.0) {
-          const nf = fNear(6, 30, null) || f;
+          const nf = stemIn(6) || f;
           cr.flight = { from: cr.pos.clone(), f: nf, k: 0, dur: r.range(1.6, 2.4), lift: r.range(4, 8), ang: r.range(0, TAU) };
           cr.state = 'fly';
         }

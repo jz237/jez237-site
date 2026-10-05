@@ -59,8 +59,8 @@ evening glow; APX-9 kindles each one it passes to full brightness, with a flare
 and sparks, so a night flight leaves a warmer trail. Porcelain blooms and bells
 glow from within (brighter when pollinated or when a bee comes near), the great
 bloom's core is a lantern, the glass shimmers. Clockwork fireflies drift in
-swarms over the beds and the fountain's water, blink in slow waves, gather round
-APX-9 and scatter when it boosts through. The moon is the key light: cool,
+swarms over the beds and the fountain's water, blink in slow waves, brighten and
+drift aside as APX-9 goes by and scatter when it boosts through. The moon is the key light: cool,
 through the vault's iron (its ribs, purlins and columns shadow the beds, as the
 sun's do by day), with faint moon shafts, stars and the moon in the roof.
 
@@ -87,18 +87,18 @@ sun's do by day), with faint moon shafts, stars and the moon in the roof.
 - **Porcelain bellflowers** (new: 18 plants, about 110 bells, tuned to D-major
   pentatonic) swing and ring when brushed.
 - **The armillary** above the fountain spins up when you fly through its rings.
-- **Creatures react**: butterflies scatter from a rushing bee, a sapphire
-  dragonfly takes a liking to you and escorts you a while, hummingbirds
-  stop to inspect you, the songbird watches you from its bough and flies a
-  loop if you crowd it.
-- **Wildlife around APX-9**: honeybees and a carpenter bee forage bloom to
-  bloom, a jewel beetle and a ladybird climb the flower stems (and at the top
-  open their shells and fly to the next), butterflies visit a bloom near the
-  one APX-9 lands on, and a hummingbird comes over every half minute or so.
-  The cast stays where the camera is looking: creatures that drift far away
-  out of view re-settle, out of view, near the bee and fly in. In Follow a
-  forager or a hummingbird often travels with APX-9 for a while, just beyond
-  it in the frame.
+- **Creatures react**: butterflies scatter from a rushing bee, sapphire
+  dragonflies dart off when you come close, hummingbirds stop to look at you
+  as you pass and then fly on, the songbird watches you from its bough and
+  flies a loop if you crowd it.
+- **Wildlife going about its day**: every creature has its own patch of the
+  glasshouse (the patches are spread to cover the whole house) and keeps to
+  its routine there: honeybees and carpenter bees forage bloom to bloom,
+  jewel beetles and ladybirds climb the flower stems (and at the top open
+  their shells and fly to the next), butterflies flutter and settle,
+  hummingbirds sip, dragonflies hover and dart. Nothing seeks out or follows
+  APX-9; you happen by them, and they only react as you pass. Fireflies brighten
+  and drift aside to let you through.
 - **Time of day**: one control from the film's midnight teal through dusk
   (blue hour) and dawn (rose mist, the lanterns guttering out) to the
   golden-hour finale. `T` cycles midnight → dusk → dawn → golden hour and the
@@ -333,7 +333,7 @@ src/explore/                   the interactive modes:
   interactions.js                pollination, deposits, winding + bloom wave, kindling, armillary, sparks, pollen bosses
   growth.js · bells.js           sprouting glass blooms · porcelain bellflowers
   ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird, foragers, crawlers,
-                                 Follow companions (the cast kept round APX-9); creatures/compact.js merges each
+                                 each on its own patch of the house; creatures/compact.js merges each
                                  explore rig's rigid parts (20–40% fewer draws)
   scenery.js                     near gable and doors, far doors, column tops, glazing bars, end planting, exterior
   upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade), tiling, glass; detail culling

@@ -5,10 +5,10 @@ import { clamp, smooth } from '../core/ease.js';
 // Clockwork fireflies for the night garden: tiny brass beetles with a lamp in
 // the abdomen, drifting in loose swarms over the beds, the fountain's water,
 // the skep and the rose arch. They blink in slow waves that roll across each
-// swarm, gather a little round APX-9 (curious ones circle it and glow
-// brighter) and scatter when it boosts through. Each swarm also lights the
-// leaves under it through the light field (night.js), and the ones round
-// APX-9 light the bee.
+// swarm and keep to their swarms: APX-9 passing makes the nearest glow
+// brighter and drift aside, and a boost through scatters them. Each swarm
+// also lights the leaves under it through the light field (night.js), and the
+// ones by APX-9 light the bee.
 //
 // Drawn as one point sprite each (an HDR core and a soft halo: the bloom pass
 // does the rest); the nearest few also get a little brass body.
@@ -157,15 +157,12 @@ export class Fireflies {
             const kk = (1 - dist / 22) * 90 * boost;
             fx += d.x * kk; fy += (d.y + 0.4) * kk; fz += d.z * kk;
             f.excite = Math.min(1.5, f.excite + dt * 3);
-          } else if (f.curious && speed < 16) {
-            // gather: drift onto a loose orbit round the bee
-            f.orbA += dt * f.orbW;
-            const ox = bp.x + Math.cos(f.orbA) * f.orbit, oz = bp.z + Math.sin(f.orbA) * f.orbit, oy = bp.y + Math.sin(f.orbA * 1.7 + f.ph) * 2;
-            const pull = (1 - dist / 30) * 1.6;
-            fx += (ox - px - f.r.x) * pull; fy += (oy - py - f.r.y) * pull; fz += (oz - pz - f.r.z) * pull;
+          } else if (f.curious) {
+            // the bee going by: the curious ones brighten (they don't follow it)
             ex = 1 - dist / 30;
           }
-          if (dist < 3) { const kk = (3 - dist) * 12; fx += d.x * kk; fy += d.y * kk; fz += d.z * kk; }
+          // and every one drifts aside to let it through
+          if (dist < 7) { const kk = (7 - dist) * 6; fx += d.x * kk; fy += d.y * kk; fz += d.z * kk; }
         }
       }
       // the spring (stiffer home pull when nothing is acting)
