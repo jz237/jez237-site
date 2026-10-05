@@ -333,6 +333,6 @@
       "Three.js · WebGL 2",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop that an independent reviewer scored 3.8 out of 5 against the reference: a close match, not an exact one · Preview captured from the running demo"
+    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop; a strict independent reviewer scored it 3.2 out of 5 against the photo, short of the 4.5 target: a close match in layout and palette, not an exact one · Preview captured from the running demo"
   }
 ]

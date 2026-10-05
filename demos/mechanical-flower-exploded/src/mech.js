@@ -212,20 +212,25 @@ export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.5, 
     addJewel(gems, golds, frameMatrix(tip.clone().addScaledVector(dir, tipR2 * 0.55), dir, Y_UP), tipR2 * 1.05, gemCol, { bezelOn: false, prongs: 0 });
     return pts;
   };
-  const cols = [GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.ruby, GEM_COLORS.amethyst, GEM_COLORS.emerald, GEM_COLORS.amber];
+  const cols = [GEM_COLORS.ruby, GEM_COLORS.rose, GEM_COLORS.ruby, GEM_COLORS.ruby, GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.ruby, GEM_COLORS.amber];
   const outerPts = [];
   for (let i = 0; i < count; i++) {
     const a = (i / count) * TAU + 0.05 * (r() - 0.5);
-    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.9 + 0.22 * r()), 0.042, 0.15, cols[i % cols.length]));
+    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.9 + 0.22 * r()), 0.036, 0.09, cols[i % cols.length]));
   }
   for (let i = 0; i < 14; i++) {
     const a = ((i + 0.5) / 14) * TAU;
-    addFilament(a, baseR * 0.62, tipR * 0.66, height * 0.78, 0.036, 0.12, cols[(i + 2) % cols.length]);
+    addFilament(a, baseR * 0.62, tipR * 0.66, height * 0.78, 0.03, 0.075, cols[(i + 2) % cols.length]);
   }
   // inner crown: short, dense jewelled stamens hugging the core, like the photo
   for (let i = 0; i < 18; i++) {
     const a = ((i + 0.25) / 18) * TAU + 0.04 * (r() - 0.5);
-    addFilament(a, baseR * 0.86, tipR * 0.72, height * (0.5 + 0.1 * r()), 0.03, 0.105, cols[(i * 5 + 1) % cols.length]);
+    addFilament(a, baseR * 0.86, tipR * 0.72, height * (0.5 + 0.1 * r()), 0.026, 0.07, cols[(i * 5 + 1) % cols.length]);
+  }
+  // tall jewelled stamens standing proud of the cage
+  for (let i = 0; i < 12; i++) {
+    const a = ((i + 0.5) / 12) * TAU + 0.1 * (r() - 0.5);
+    addFilament(a, baseR * 0.8, tipR * 0.5, height * (1.28 + 0.14 * r()), 0.03, 0.1, cols[(i * 3 + 2) % cols.length]);
   }
   // mid-filament bead nodes
   for (let i = 0; i < count; i += 2) {

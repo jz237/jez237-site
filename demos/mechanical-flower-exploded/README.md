@@ -12,7 +12,7 @@ The exploded state matches the "Mechanical Flower: Exploded View" infographic (t
 
 ## How it was made
 
-An iterating loop rendered fixed states, compared them to the references, fixed the biggest gap, and was gated by an independent reviewer. The second run ended in success: the last reviewed pass (it18) scored a mean of 3.83 out of 5 against a 3.8 gate, with no criterion below 3. It is a close match, not an exact one. The loop prompt, rubric, stop rules, pass log and the gaps that remain are in [LOOP.md](LOOP.md).
+An iterating loop rendered fixed states, compared them to the references, fixed the biggest gap, and was gated by an independent reviewer. The second run ended in success (mean 3.83 against a 3.8 gate). A third run set a much harder bar, a mean above 4.5 judged against the full photo, and did not reach it: the published build scores 3.22 out of 5 under that stricter reviewer, with the petal shape and the closed bud the biggest remaining gaps. It is a close match in layout and palette, not an exact one. The loop prompt, rubric, stop rules, pass log and the gaps that remain are in [LOOP.md](LOOP.md).
 
 ## Layout
 

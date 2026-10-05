@@ -6,9 +6,10 @@ export const fromPx = (px, py, z = 0) => [(px - PX.x0) / PX.k, (PX.y0 - py) / PX
 
 // Petal rings. closed/open hinge angles in degrees (positive = tip leans outward).
 export const RINGS = {
-  A: { r: 2.3, y: -2.0, closed: -31, open: 44, win: [0.0, 0.75] },
-  B: { r: 1.0, y: -1.2, closed: -42, open: 34, win: [0.2, 1.0] },
-  I: { r: 1.4, y: -1.2, closed: -34, open: 34, win: [0.3, 1.0] },
+  A: { r: 2.3, y: -2.0, closed: -9, open: 62, win: [0.0, 0.75] },
+  B: { r: 1.0, y: -1.2, closed: -14, open: 34, win: [0.2, 1.0] },
+  I: { r: 1.4, y: -1.2, closed: -6, open: 34, win: [0.3, 1.0] },
+  D: { r: 1.85, y: -1.6, closed: -8, open: 48, win: [0.1, 0.88] },
 };
 
 // Exploded petal table: [phiDeg, r, y, openThetaDeg, rollDeg, kind, ring-size scale]
@@ -82,12 +83,12 @@ export const COLLARS = [
   { y: -19.2, R: 1.3, h: 0.78, jewels: 9, pins: 3, serrated: false },
   { y: -21.1, R: 1.38, h: 0.8, jewels: 10, pins: 3, serrated: true },
 ];
-export const STEM_LIFT = 4.0;
+export const STEM_LIFT = 6.6;
 
 // Leaves: exploded hub world position + z rotation; clamp point (world) where the petiole meets the braid.
 export const LEAVES = [
-  { id: 'leafL', L: 8.6, W: 3.4, bend: -0.62, sweep: 0.12, kind: 'leaf', seed: 3, hub: [-3.4, -12.6, 0.4], rotZ: 1.13, tiltX: -0.18, clamp: [-1.9, -17.0, 0.3], asmClampY: -9.8, asmRotZ: 1.1, asmOut: -1.15 },
-  { id: 'leafR', L: 8.3, W: 3.1, bend: -0.5, sweep: -0.08, kind: 'leafBlue', seed: 8, hub: [3.4, -14.9, 0.2], rotZ: -1.46, tiltX: -0.12, clamp: [2.1, -16.9, 0.2], asmClampY: -13.4, asmRotZ: -1.15, asmOut: 1.15 },
+  { id: 'leafL', L: 8.6, W: 3.4, bend: -0.62, sweep: 0.12, kind: 'leaf', seed: 3, hub: [-3.4, -12.6, 0.4], rotZ: 1.13, tiltX: -0.18, clamp: [-1.35, -17.0, 0.3], asmClampY: -13.2, asmRotZ: 1.1, asmOut: -1.15 },
+  { id: 'leafR', L: 8.3, W: 3.1, bend: -0.5, sweep: -0.08, kind: 'leafBlue', seed: 8, hub: [3.4, -14.9, 0.2], rotZ: -1.46, tiltX: -0.12, clamp: [1.55, -16.9, 0.2], asmClampY: -17.8, asmRotZ: -1.15, asmOut: 1.15 },
 ];
 
 // Floating screws: reference pixel positions (cap = jewel head colour or null).
