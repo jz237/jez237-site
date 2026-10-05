@@ -4,6 +4,8 @@ import { gearGeometry, pitchRadius, meshAngle } from '../geometry/gears.js';
 import { Rod, collarGeometry, knuckleGeometry, screwGeometry } from '../geometry/parts.js';
 import { addPulse } from '../materials/library.js';
 import { leafTexture, petalTextures } from '../materials/textures.js';
+import { gust, washAt } from './wind.js';
+const _wp = new THREE.Vector3(), _wv = new THREE.Vector3();
 import { B } from '../direction/beats.js';
 import { clamp, lerp, smoother, seg, sseg, settle, rampIntegral } from '../core/ease.js';
 import { RNG } from '../core/rng.js';
@@ -656,8 +658,14 @@ export class HeroFlower {
 
     // leaves unfurl as the garden wakes
     const wake = sseg(t, B.podsWake[0], B.podsWake[1] + 4);
+    // and lift and flutter a little in the breeze (and in APX-9's wash)
     for (const l of this.leaves) {
-      l.hinge.rotation.x = lerp(-0.9, -0.15, wake) + Math.sin(t * 0.7 + l.s.az) * 0.015;
+      const p = l.holder.position;
+      const g = gust(p.x, p.z, t);
+      const wsh = washAt(_wp.set(p.x + Math.sin(l.s.az) * 4, p.y, p.z + Math.cos(l.s.az) * 4), _wv).length();
+      l.hinge.rotation.x = lerp(-0.9, -0.15, wake) + Math.sin(t * 0.7 + l.s.az) * 0.015
+        + wake * (g * (0.025 + 0.03 * Math.sin(t * 2.3 + l.s.az * 3)) + Math.min(0.35, wsh * 0.3));
+      l.hinge.rotation.z = wake * g * 0.03 * Math.sin(t * 3.1 + l.s.az * 2);
     }
   }
 }

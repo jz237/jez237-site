@@ -56,15 +56,19 @@ export class Scenery {
     }
     const col = new THREE.Color();
     const GREENS = ['#7d8c40', '#5b7d4c', '#3f6a50', '#8e9c4a', '#6b7a36', '#46705a'];
-    const leafMat = this.upgrade?.swaps.find((s) => s.film === fo.leafMat && s.prop === 'material')?.explore || fo.leafMat;
-    const domeGeo = this.upgrade?.swaps.find((s) => s.film === fo.domeGeo && s.prop === 'geometry')?.explore || fo.domeGeo;
+    const leafMat = this.upgrade?.swaps.find((s) => s.obj === fo.domeMesh && s.prop === 'material')?.explore || fo.domeMat;
+    const domeGeo = this.upgrade?.domeGeo || fo.domeGeo;
     const dm = new THREE.InstancedMesh(domeGeo, leafMat, domes.length);
     domes.forEach(([x, z, s], i) => {
       dm.setMatrixAt(i, new THREE.Matrix4().compose(V(x, -1.5, z), new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), r.range(0, TAU)), V(s * r.range(0.9, 1.2), s * r.range(0.8, 1.2), s * r.range(0.9, 1.2))));
       dm.setColorAt(i, col.set(GREENS[i % GREENS.length]).offsetHSL(r.range(-0.015, 0.015), r.range(-0.08, 0.08), r.range(-0.06, 0.06)));
       this.bounds?.ell(V(x, -1.5 + 6 * s * 0.42, z), 3 * s * 0.95, 6 * s * 0.5, 'bush');
     });
+    // the interactive modes plant these masses leaf by leaf (nearfield.js)
+    this.endMasses = domes.map(([x, z, s]) => ({ x, z, y0: -1.5, r: 3 * s * 0.95 / 0.92, h: 6 * s }));
+    this.endDomes = dm;
     dm.castShadow = true; dm.receiveShadow = true; dm.computeBoundingSphere();
+    dm.customDepthMaterial = fo.domeMesh.customDepthMaterial;
     g.add(dm);
     // stone urns with a fountain of fern fronds
     const urnGeo = new THREE.LatheGeometry([[0, 0], [5, 0], [5.5, 1], [4, 3], [4.2, 4], [7.5, 9], [8.6, 14], [9.2, 15], [8.2, 15.5]].map(([a, b]) => new THREE.Vector2(a, b)), 20);
@@ -82,6 +86,7 @@ export class Scenery {
       this.bounds?.ell(V(x, 20 * s, z), 16 * s, 8 * s, 'fern');
     });
     fm.count = fi;
+    fm.customDepthMaterial = world.flora.fernMesh.customDepthMaterial;
     for (const m of [um, fm]) { m.castShadow = true; m.receiveShadow = true; m.computeBoundingSphere(); g.add(m); }
   }
 

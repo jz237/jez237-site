@@ -322,9 +322,9 @@ export class Bounds {
       f.landing = this.addLandable({ kind: 'flora', name: NAMES[f.ty.name], spot, radius: Math.max(3, 0.32 * R), cupR: R, pollen: 0.2, ref: f, index: i });
     });
     // foliage masses, shrubs and ferns
-    for (const b of w.foliage.bushSpots) this.ell(V(b.x, -1 + b.h * 0.42, b.z), b.r * 0.92, b.h * 0.5, 'bush');
-    for (const b of w.flora.shrubSpots || []) this.ell(V(b.x, -1 + b.h * 0.42, b.z), b.r * 0.92, b.h * 0.5, 'bush');
-    for (const f of w.flora.fernSpots || []) this.ell(V(f.x, 3, f.z), 8, 6, 'fern');
+    // (masses sit on the soil: world/planting.js)
+    for (const b of [...w.foliage.bushSpots, ...(w.flora.shrubSpots || [])]) if (!b.hidden) this.ell(V(b.x, (b.y0 ?? -1) + b.h * 0.42, b.z), b.r * 0.92, b.h * 0.5, 'bush');
+    for (const f of w.flora.fernSpots || []) if (!f.hidden) this.ell(V(f.x, groundHeight(f.x, f.z) + 3, f.z), 8, 6, 'fern');
     for (const p of w.foliage.palmSpots || []) {
       this.cyl(p.x, p.z, 9.4 * p.sc, -2, 15.5 * p.sc, 'urn');
       this.ell(V(p.x, 19 * p.sc, p.z), 19 * p.sc, 9 * p.sc, 'palm');
@@ -341,13 +341,10 @@ export class Bounds {
       this.sph(p, 5.6, 'lamp');
     }
     // seed lanterns (glass orbs on stalks)
-    w.flora.orbMesh.updateMatrixWorld(true);
-    const m4 = new THREE.Matrix4(), op = V(), oq = new THREE.Quaternion(), os = V();
-    for (let i = 0; i < w.flora.orbs.length; i++) {
-      w.flora.orbMesh.getMatrixAt(i, m4);
-      m4.decompose(op, oq, os);
-      this.sph(op, 1.7 * os.x + 0.2, 'orb');
-      w.flora.orbs[i].pos = op.clone();
+    // (their rest pose: the stalks nod a little in the wind)
+    for (const o of w.flora.orbs) {
+      this.sph(o.base, 1.7 * o.sc + 0.2, 'orb');
+      o.pos = o.base.clone();
     }
     // rose arch over the path
     {

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { petalGeometry, leafGeometry, taperedTube, tubeThrough } from '../geometry/shapes.js';
+import { swayMesh } from './wind.js';
 import { collarGeometry, knuckleGeometry, screwGeometry } from '../geometry/parts.js';
 import { gearGeometry } from '../geometry/gears.js';
 import { RNG } from '../core/rng.js';
@@ -469,6 +470,7 @@ export class CopperTree {
       lm.setMatrixAt(leafPts.length + i, m4);
     }
     lm.castShadow = true;
+    swayMesh(lm, 'leaf');
     this.group.add(lm);
   }
   perchWorld(k = 0.72, target = new THREE.Vector3()) {

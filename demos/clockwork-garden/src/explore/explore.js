@@ -11,8 +11,10 @@ import { Ambient } from './ambient.js';
 import { Scenery } from './scenery.js';
 import { LookUpgrade } from './upgrade.js';
 import { DetailCull } from './cull.js';
+import { NearField } from './nearfield.js';
 import { applyPose } from '../direction/camera.js';
 import { SUN_DIR } from '../world/atmosphere.js';
+import { WashTrail, setWash, setCamera, setTime as setWindTime } from '../world/wind.js';
 import { L } from '../world/layout.js';
 import { clamp, lerp, smooth } from '../core/ease.js';
 
@@ -27,7 +29,7 @@ const WORLD_T0 = 70; // world clock offset: every film beat has played out
 const TIMES = [0.0, 0.5, 0.86]; // T cycles midnight → dawn → golden hour
 
 export class Explore {
-  constructor({ renderer, scene, world, pipeline, quality, mat, audio }) {
+  constructor({ renderer, scene, world, pipeline, quality, mat, audio, sync = false }) {
     this.renderer = renderer;
     this.scene = scene;
     this.world = world;
@@ -72,6 +74,18 @@ export class Explore {
     this.growth.registerLandables(this.bounds);
     this.bells = new Bellflowers(mat, this.bounds);
     this.group.add(this.bells.group);
+    // bee-scale planting: every leaf grown again at APX-9's scale, clear of everything
+    // (grown a few ms a frame from boot: stepNearfield(); synchronously for capture tools)
+    this.nearfield = new NearField({ world, bounds: this.bounds, quality, growth: this.growth, bells: this.bells, scenery: this.scenery });
+    this.nearfield.onReady = (nf) => {
+      const fernMat = this.upgrade.swaps.find((s) => s.obj === world.flora.fernMesh && s.prop === 'material')?.explore;
+      if (fernMat) nf.setFernMaterial(fernMat);
+      const palmMat = this.upgrade.swaps.find((s) => s.obj === world.foliage.frondMesh && s.prop === 'material')?.explore;
+      if (palmMat) nf.setPalmMaterial(palmMat);
+      this.upgrade.replace();
+    };
+    this.group.add(this.nearfield.group);
+    if (sync) this.nearfield.finish();
     this.interactions = new Interactions({ world, mat, quality, bounds: this.bounds, growth: this.growth, bells: this.bells, audio, emit: (n, d) => { if (n === 'kindle' && this.stats) this.stats.lanterns++; this._emit(n, d); } });
     this.group.add(this.interactions.group);
     this.ambient = new Ambient({ world, mat, quality, bounds: this.bounds, audio, skep: this.skep });
@@ -86,6 +100,9 @@ export class Explore {
     this.cull = new DetailCull([w.flower.group, w.crown.group, w.escapement.group, w.roots.group, w.skep.group, w.pods.group, w.lily.group, w.blossom.group, w.reed.group, w.tree.group, w.garden.group, this.bells.group]);
     for (const c of this.ambient.group.children) this.cull.addGroup(c, 3);
     this.actor = new BeeActor({ bee: world.creatures.hero, bounds: this.bounds, skep: this.skep, events: (n, d) => this._actorEvent(n, d) });
+    // APX-9's recent path (explore clock) for the wing-wash on the foliage
+    this.trail = new WashTrail();
+    this.wash = { reset: () => this.trail.reset(), record: (t, a) => this.trail.record(t, a.pos, this._wing()) };
     this.pilot = new Pilot({ bounds: this.bounds, world, skep: this.skep });
     this.chase = new ChaseCam(this.bounds);
     this.follow = new FollowCam(this.bounds);
@@ -212,10 +229,17 @@ export class Explore {
     }
     if (simDt > 0) a.step(simDt, intent);
     a.apply(this.reduced);
+    if (simDt > 0) this.trail.record(this.clock, a.pos, this._wing());
     // triggers the bee can set off by flying into things
     if (simDt > 0) this._triggers();
     this._dt = simDt;
     this._input = input;
+  }
+
+  // how hard the wings are working (the wash): beating wings, a little from the body when still
+  _wing() {
+    const a = this.actor;
+    return clamp(0.25 + 0.75 * (a.flap ?? 1));
   }
 
   _playerIntent(input) {
@@ -283,6 +307,10 @@ export class Explore {
     const a = this.actor;
     const dt = this._dt ?? 0;
     const body = { pos: a.pos, vel: a.vel, speed: a.speed, flying: a.state === 'fly', yaw: a.yaw, landedOn: a.state === 'landed' || a.state === 'landing' ? (a.state === 'landed' ? a.lastLanding : a.seq?.landable) : null };
+    // the breeze runs on the explore clock; APX-9's wash follows its trail
+    setWindTime(t);
+    const clock = this.clock;
+    setWash((age, out) => this.trail.at(clock - age, out), a.pos, 1.9);
     this.interactions.pre(this.clock, dt, ctx, [body]);
     this.world.update(t, ctx);
     this.world.lighting.baseSun = this.world.lighting.sun.intensity;
@@ -301,6 +329,9 @@ export class Explore {
     else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep });
     this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
     applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
+    // the camera pushes the foliage aside (and nothing comes inside the lens)
+    setCamera(this.camera.position, 5.5, 1.5, this.debugView || this.photo ? null : a.pos);
+    this.nearfield.update(this.camera);
     this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y);
     this.frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);

@@ -17,6 +17,7 @@ import { Input } from './input/input.js';
 import { Hud } from './ui/hud.js';
 import { showLanding } from './ui/landing.js';
 import { LiveAudio } from './audio/live.js';
+import { WIND } from './world/wind.js';
 
 // The Clockwork Garden – entry point.
 //   ?t=12.5     start at a timestamp        ?paused=1   start paused
@@ -173,7 +174,7 @@ async function boot() {
   const audio = new LiveAudio();
   const makeExplore = () => {
     if (!explore) {
-      explore = new Explore({ renderer, scene, world, pipeline, quality, mat, audio });
+      explore = new Explore({ renderer, scene, world, pipeline, quality, mat, audio, sync: capture });
       explore.aspect = director.aspect;
       explore.pixelRatio = renderer.getPixelRatio();
       explore.reduced = reduced;
@@ -351,6 +352,7 @@ async function boot() {
     shot: () => director.current,
     info: () => renderer.info,
     world: capture ? world : undefined, // debugging aid in capture mode only
+    wind: WIND, // the breeze (review tools set wind.freeze for the rest pose)
     mode: () => mode,
     setMode: (m) => setMode(m),
     // review hooks for the interactive modes (state, scripted input, stills)
@@ -400,9 +402,14 @@ async function boot() {
   if (capture) return;
 
   let last = performance.now();
+  let lastWork = 8;
   const loop = (now) => {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
+    // the interactive modes' bee-scale planting grows in each frame's spare
+    // time until done (more behind the landing screen)
+    if (explore && !explore.nearfield.ready) explore.nearfield.step(landing ? 12 : mode === 'film' ? 2.5 : Math.min(10, Math.max(3, 16 - lastWork)));
+    const workStart = performance.now();
     if (mode === 'film') {
       if (state.playing) {
         state.t += dt;
@@ -424,6 +431,7 @@ async function boot() {
       explore.render(dt);
       hud?.update(explore.hudState());
     }
+    lastWork = performance.now() - workStart;
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
@@ -449,7 +457,7 @@ function wireHints(explore, hud, getMode, touch) {
 }
 
 boot().catch((e) => {
-  console.error(e);
+  console.error(e?.stack || e);
   const el = document.getElementById('loading');
   if (el) el.textContent = 'The garden could not wake: ' + e.message;
 });

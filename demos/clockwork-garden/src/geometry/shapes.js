@@ -58,6 +58,22 @@ export function plateGeometry(shape, thickness, bevel = 0.02) {
   return g;
 }
 
+// Sway attributes (see world/wind.js) for a two-sided surface grown from a
+// pivot at the origin: bend flex and flutter rise toward the tip; the back
+// face's flutter weight is negated (its normals are), so both faces move as one.
+export function swayAttrs(geo, front, uAt, flex = 1.4) {
+  const n = geo.attributes.position.count;
+  const P = new Float32Array(n * 3), W = new Float32Array(n * 4);
+  for (let i = 0; i < n; i++) {
+    const u = Math.max(0, Math.min(1, uAt(i)));
+    W[i * 4] = Math.pow(u, flex);
+    W[i * 4 + 1] = Math.min(1, u * 1.5) * (i >= front ? -1 : 1);
+  }
+  geo.setAttribute('aSwayP', new THREE.BufferAttribute(P, 3));
+  geo.setAttribute('aSwayW', new THREE.BufferAttribute(W, 4));
+  return geo;
+}
+
 // Parametric petal surface with thickness.
 // Local frame: hinge along X at the origin, petal grows along +Y,
 // +Z is the outer (convex) side. Returns { geometry, edge: Vector3[] }.
@@ -140,6 +156,7 @@ export function petalGeometry({
   geo.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3));
   geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geo.setIndex(idx);
+  swayAttrs(geo, off, (k) => (uvs[k * 2] - u0) / Math.max(1e-6, u1 - u0));
   // edge loop for the gilded rim: up the left side, over the tip, down the right
   const edge = [];
   for (let i = 0; i <= segU; i++) edge.push(front[i * cols + 0]);
@@ -205,6 +222,7 @@ export function leafGeometry({ length = 8, width = 3, fold = 0.5, arch = 0.6, wa
   geo.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3));
   geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geo.setIndex(idx);
+  swayAttrs(geo, off, (k) => uvs[k * 2]);
   const midrib = [];
   for (let i = 0; i <= segU; i++) midrib.push(pts[i * cols + (segV >> 1)]);
   const edge = [];
