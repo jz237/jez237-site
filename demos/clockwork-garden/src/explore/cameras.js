@@ -128,7 +128,7 @@ const MENUS = {
 // distance and elevation in units of the creature's own size, lens, aperture,
 // how long to hold, a slow orbit, and a caption for the status line.
 const CUTS = {
-  forager: { d: 4.6, el: 0.7, fov: 32, ap: 4.6, hold: [4, 5.5], orbit: 0.07, caption: (o) => (o.sp === 'carpenter' ? 'A carpenter bee is working a bloom nearby' : 'A honeybee is gathering pollen nearby') },
+  forager: { d: 4.6, el: 0.7, fov: 32, ap: 4.6, hold: [4, 5.5], orbit: 0.07, caption: (o) => (o.sp === 'carpenter' ? 'A carpenter bee works a bloom' : 'A honeybee gathers pollen') },
   crawler: { d: 5.6, el: 0.12, fov: 32, ap: 4.8, hold: [4.5, 6], orbit: 0.05, caption: (o) => (o.kind === 'ladybird' ? 'A ladybird climbs a flower stem' : 'A jewel beetle climbs a flower stem') },
   butterfly: { d: 4, el: 0.9, fov: 34, ap: 4, hold: [4, 5.5], orbit: 0.06, caption: (o) => (o.c.species === 'swallowtail' ? 'A swallowtail rests on a bloom' : 'A monarch opens its wings on a bloom') },
   hummingbird: { d: 3.4, el: 0.14, fov: 34, ap: 4, hold: [3.5, 4.5], orbit: 0.05, caption: () => 'A hummingbird sips from a bloom' },
@@ -234,7 +234,9 @@ export class FollowCam {
     // only while APX-9 is crossing the house, with time to spare before it
     // arrives (never on its landings or at the skep)
     if (actor.state !== 'fly' || (ctx.goalDist ?? 0) < 30 + Math.max(actor.speed, 12) * 8) return;
-    const cands = amb.features(actor.pos, 100);
+    // (the creatures keep to their own patches, so the camera goes to them:
+    // anything within a short flight)
+    const cands = amb.features(actor.pos, 160);
     cands.sort((p, q) => this._score(q, actor) - this._score(p, actor));
     for (const c of cands.slice(0, 4)) {
       const plan = this._frame(c, amb, ctx.nearfield);
@@ -284,7 +286,7 @@ export class FollowCam {
   _score(c, actor) {
     const variety = this.recentKinds.includes(c.kind) ? -2 : 0;
     const interest = { forager: 2.2, crawler: 2.0, butterfly: 2.2, hummingbird: 2.6, dragonfly: 1.2, songbird: 1.6 }[c.kind] || 1;
-    return interest + variety - c.pos.distanceTo(actor.pos) / 70 + this._rand() * 0.6;
+    return interest + variety - c.pos.distanceTo(actor.pos) / 110 + this._rand() * 0.6;
   }
 
   // a camera spot round the creature with a clear line to it, or null

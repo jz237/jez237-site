@@ -404,7 +404,7 @@ export class Explore {
     this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y, this.debugView || this.photo ? null : this.frustum);
     this.ambient.sightTarget = this.mode !== 'fly' ? this.follow.subject : null;
     if (dt > 0 || this.photo) setPushers(this.ambient.pushers(this.camera.position, 4));
-    if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum, this.mode === 'fly' || this.photo ? null : this.pilot.goal?.to, this.mode === 'follow' && !this.photo && !this.debugView);
+    if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);
     // light: shadows round what we're looking at, practicals
     const fwd = this.camera.getWorldDirection(V());
     // (in a cutaway the shadows gather round the creature being shown)
