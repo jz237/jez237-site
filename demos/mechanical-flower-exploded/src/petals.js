@@ -99,7 +99,7 @@ export function rimPoints(blade, inset = 1, n = 70, lift = 0.0, sMin = 0.0, sMax
 export const PETAL_KINDS = ['tealMagenta', 'magentaViolet', 'violetBlue', 'greenBlue', 'crimson', 'tealViolet'];
 
 // One articulated enamel petal. Origin is the hinge; +Y runs to the tip.
-export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 3.8, cup = 0.5, bend = -0.25, lip = 0.3, shoulder = 0.7, gemCount = 3, gemScale = 1, rimRadius = 0.05, fasteners = 2 } = {}) {
+export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 3.8, cup = 0.5, bend = -0.25, lip = 0.3, shoulder = 0.7, gemCount = 3, gemScale = 1, rimRadius = 0.07, fasteners = 2 } = {}) {
   const r = rng(seed * 101 + 7);
   const blade = makeBlade({ L, W, cup, bend, lip, shoulder, base: 0.14, taper: 0.1 });
   const group = new THREE.Group();
@@ -144,6 +144,42 @@ export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 
     const m = frameMatrix(f.pos.clone().addScaledVector(f.n, 0.015), f.n, f.ps);
     addJewel(gems, golds, m, sp.r, palette[Math.floor(r() * palette.length)], { prongs: sp.r > 0.15 ? 6 : 0 });
   }
+  // filigree scrolls curling off the shoulder, mirrored left/right, each ending in a seed jewel
+  const scroll = (s0, t0, size, turns, dir) => {
+    const pts = [];
+    const total = turns * TAU;
+    for (let a = 0; a <= total; a += 0.28) {
+      const k = 1 - 0.8 * (a / total);
+      const s = s0 + Math.sin(a * dir) * size * k * 0.55;
+      const t = t0 + Math.cos(a * dir) * size * k;
+      const f = blade.frame(Math.min(0.96, Math.max(0.05, s)), Math.max(-0.94, Math.min(0.94, t)));
+      pts.push(f.pos.clone().addScaledVector(f.n, 0.016));
+    }
+    return pts;
+  };
+  for (const sg of [-1, 1]) {
+    golds.add(tubeAlong(scroll(0.24, sg * 0.5, 0.2, 1.7, sg), rimRadius * 0.34, { radial: 4, seg: 40 }));
+    golds.add(tubeAlong(scroll(0.42, sg * 0.58, 0.15, 1.3, -sg), rimRadius * 0.3, { radial: 4, seg: 32 }));
+    const e = blade.frame(0.24, sg * 0.5 + sg * 0.2 * 0.2);
+    golds.add(new THREE.SphereGeometry(rimRadius * 0.55, 8, 6), new THREE.Matrix4().makeTranslation(...e.pos.clone().addScaledVector(e.n, 0.025).toArray()));
+  }
+
+  // pearled granulation along the inner inlay
+  const bead = new THREE.SphereGeometry(rimRadius * 0.5, 6, 5);
+  const inlay = rimPoints(blade, 0.8, 40, 0.02, 0.12, 0.88);
+  for (let i = 0; i < inlay.length; i += 2) golds.add(bead, new THREE.Matrix4().makeTranslation(inlay[i].x, inlay[i].y, inlay[i].z));
+
+  // small bezelled eyelet stones riding the border, alternating sides
+  const eye = [GEM_COLORS.sapphire, GEM_COLORS.aqua, GEM_COLORS.ruby, GEM_COLORS.emerald, GEM_COLORS.amethyst];
+  // (they sit on the eyelets painted into the enamel texture: s = 0.8 - 0.088k, t = +-0.924)
+  for (let k = 0; k < 8; k++) {
+    for (const sg of [-1, 1]) {
+      if ((k + (sg > 0 ? 1 : 0)) % 2) continue;
+      const f = blade.frame(0.8 - 0.088 * k, sg * 0.924);
+      addJewel(gems, golds, frameMatrix(f.pos.clone().addScaledVector(f.n, 0.012), f.n, f.ps), 0.058, eye[(k + seed) % eye.length], { prongs: 0 });
+    }
+  }
+
   // jeweled fasteners (small rivets) along the edge
   const rivet = new THREE.CylinderGeometry(0.05, 0.065, 0.1, 8);
   rivet.rotateX(Math.PI / 2);

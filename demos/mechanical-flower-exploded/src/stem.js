@@ -9,11 +9,11 @@ export const STEM_TOP = -9.1;
 export const STEM_BOTTOM = -46;
 export const stemX = (y) => {
   const d = STEM_TOP - y;
-  return 0.5 * Math.sin(d * 0.45 + 0.4) - 0.18 + 0.08 * d * 0.0;
+  return 0.34 * Math.sin(d * 0.26 + 0.4) - 0.12;
 };
 export const stemZ = (y) => {
   const d = STEM_TOP - y;
-  return 0.22 * Math.sin(d * 0.31 + 1.1);
+  return 0.15 * Math.sin(d * 0.2 + 1.1);
 };
 export const stemPoint = (y) => V(stemX(y), y, stemZ(y));
 export const stemTangent = (y) => stemPoint(y - 0.05).sub(stemPoint(y + 0.05)).normalize().negate();
@@ -21,7 +21,7 @@ export const stemTangent = (y) => stemPoint(y - 0.05).sub(stemPoint(y + 0.05)).n
 const STRAND_COLORS = ['#8a1c26', '#1c5e3a', '#1f3f8f', '#b87333', '#2a2f3a', '#9aa3ad', '#a82a4a', '#0f6a78', '#d4a24a', '#3a2a5c'];
 
 // Braided wire conduit: counter-rotating coloured strands over a dark core.
-export function buildBraid(mats, { R = 1.0, strands = 44, pitch = 6.5, y0 = STEM_TOP, y1 = STEM_BOTTOM, seed = 4 } = {}) {
+export function buildBraid(mats, { R = 1.0, strands = 48, pitch = 11, y0 = STEM_TOP, y1 = STEM_BOTTOM, seed = 4 } = {}) {
   const r = rng(seed * 7 + 2);
   const group = new THREE.Group();
   const steps = Math.round((y0 - y1) / 0.22);

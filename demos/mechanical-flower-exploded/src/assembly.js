@@ -14,7 +14,7 @@ const D2R = Math.PI / 180;
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const Y_UP = V(0, 1, 0);
 const eulQ = (q) => new THREE.Euler().setFromQuaternion(q, 'YXZ');
-const tangentQ = (y) => new THREE.Quaternion().setFromUnitVectors(Y_UP, stemTangent(y));
+const tangentQ = (y) => new THREE.Quaternion().slerp(new THREE.Quaternion().setFromUnitVectors(Y_UP, stemTangent(y)), 0.35);
 
 export function poseCamera(cam, { target = CAMERA.target, dist = CAMERA.dist, elev = CAMERA.elevDeg, azim = 0 } = {}) {
   const e = elev * D2R;
@@ -52,6 +52,10 @@ function matchPhis(phisDeg) {
 }
 
 // Exploded petals roll about their own length so the enamel face turns toward the viewer, as in the reference sheet.
+const EXPLODED_SCALE = 0.82;
+const EXPLODED_SCALE_CAP = 0.92;
+const EXPLODED_WIDTH = 0.7;
+const ASSEMBLED_WIDTH = 1.22;
 const FACE_AMOUNT = 0.78;
 const FACE_LIMIT = 80 * D2R;
 function faceCameraRoll(phi, theta) {
@@ -124,8 +128,8 @@ export function buildAssembly(camera) {
   const addSpin = (obj, teeth, dir, phase = 0) => gearSpins.push({ spin: obj.userData.spin, teeth, dir, phase });
 
   // ---- core + stamen cage (anchored, not exploded) ----
-  const core = buildCore(mats, { R: 1.25 });
-  core.position.set(0, -0.3, 0);
+  const core = buildCore(mats, { R: 1.4 });
+  core.position.set(0, -0.15, 0);
   root.add(core);
   const cage = buildStamenCage(mats, {});
   root.add(cage);
@@ -146,7 +150,7 @@ export function buildAssembly(camera) {
         bend: cap ? -0.16 : -0.3,
         lip: 0.3,
         shoulder: 0.7,
-        gemCount: cap ? 1 : 2,
+        gemCount: cap ? 2 : 4,
       });
       const pivot = new THREE.Group();
       const hinge = new THREE.Group();
@@ -159,7 +163,7 @@ export function buildAssembly(camera) {
       const rollExp = en.roll + faceCameraRoll(px, en.th * D2R);
       const part = rig.add(pivot, `${prefix}${i}`, {
         a: { p: V(ring.r * Math.cos(pa), ring.y, ring.r * Math.sin(pa)), r: [0, -pa, 0], s: 1 },
-        x: { p: V(en.r * Math.cos(px), en.y, en.r * Math.sin(px) + en.zOff), r: [0, -px, 0], s: 1 },
+        x: { p: V(en.r * Math.cos(px), en.y, en.r * Math.sin(px) + en.zOff), r: [0, -px, 0], s: cap ? EXPLODED_SCALE_CAP : EXPLODED_SCALE },
         delay: 0.02 + rnd() * 0.3,
       });
       petals.push({ part, hinge, body, ring, en, rollExp, st: (rnd() - 0.5) * 0.08, group: ringKey === 'I' ? 'inner' : 'outer' });
@@ -252,7 +256,7 @@ export function buildAssembly(camera) {
     braid.add(obj);
     const yA = -8.95 + (c.y + 8.95) * 0.9;
     rig.add(obj, `collar${i}`, {
-      a: { p: stemPoint(yA), r: eulQ(tangentQ(yA)), s: 1 },
+      a: { p: stemPoint(yA), r: eulQ(tangentQ(yA)), s: V(0.9, 1, 0.9) },
       x: { p: stemPoint(c.y), r: eulQ(tangentQ(c.y)), s: 1 },
       delay: 0.0,
     });
@@ -294,12 +298,13 @@ export function buildAssembly(camera) {
     for (const p of petals) {
       p.hinge.rotation.z = -petalTheta(p, b, p.part.k) * D2R;
       p.body.rotation.y = -Math.PI / 2 + p.rollExp * p.part.k;
+      if (!p.en.cap) p.body.scale.x = lerp(ASSEMBLED_WIDTH, EXPLODED_WIDTH, p.part.k);
     }
     const lift = 0.85 * (1 - e) * smoother(clamp01(b));
     cage.position.y = -1.1 - 0.9 * (1 - smoother(clamp01(b))) + lift;
-    core.position.y = -0.3 + lift;
-    const cs = 0.5 + 0.5 * smoother(clamp01(b));
-    cage.scale.set(cs, 1, cs);
+    core.position.y = -0.15 + lift;
+    const cs = (0.5 + 0.5 * smoother(clamp01(b))) * lerp(0.8, 1, e);
+    cage.scale.set(cs, lerp(1.0, 1, e), cs);
     core.rotation.y = t * 0.12;
     mats.core.uniforms.uTime.value = t;
     mats.core.uniforms.uPulse.value = 0.8 + 0.5 * b + 0.15 * Math.sin(t * 2);
@@ -405,7 +410,7 @@ export function buildAssembly(camera) {
   const insetPose = (name) => {
     if (name === 'core') {
       const t = core.getWorldPosition(new THREE.Vector3());
-      return { pos: t.clone().add(V(0, 0, 4.6)), target: t, fov: 38, up: Y_UP };
+      return { pos: t.clone().add(V(0, 0.15, 5.0)), target: t, fov: 38, up: Y_UP };
     }
     if (name === 'gear') {
       const t = dgR1.getWorldPosition(new THREE.Vector3());
@@ -422,7 +427,7 @@ export function buildAssembly(camera) {
     return o;
   };
   const insetKeep = (name) => {
-    if (name === 'core') return [core, cage];
+    if (name === 'core') return [core];
     if (name === 'gear') return [dgR1];
     return [topLevel(outer0.body)];
   };

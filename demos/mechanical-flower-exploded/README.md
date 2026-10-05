@@ -12,7 +12,7 @@ The exploded state matches the "Mechanical Flower: Exploded View" infographic (t
 
 ## How it was made
 
-An iterating loop rendered fixed states, compared them to the references, fixed the biggest gap, and was gated by an independent reviewer. The loop stopped on no-progress: the last three reviewed passes scored a mean of 3.17 out of 5 (gate: 3.8), so this is a close, not a perfect, match. The loop prompt, rubric, stop rules, pass log and the gaps that remain are in [LOOP.md](LOOP.md).
+An iterating loop rendered fixed states, compared them to the references, fixed the biggest gap, and was gated by an independent reviewer. The second run ended in success: the last reviewed pass (it18) scored a mean of 3.83 out of 5 against a 3.8 gate, with no criterion below 3. It is a close match, not an exact one. The loop prompt, rubric, stop rules, pass log and the gaps that remain are in [LOOP.md](LOOP.md).
 
 ## Layout
 

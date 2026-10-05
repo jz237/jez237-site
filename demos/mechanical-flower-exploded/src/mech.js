@@ -150,6 +150,29 @@ export function buildCore(mats, { R = 1.25, seed = 2 } = {}) {
     t.rotateX(Math.PI / 2);
     golds.add(t, new THREE.Matrix4().makeTranslation(0, Math.sin(lat) * cr, 0));
   }
+  for (const tilt of [-0.62, 0.62]) {
+    for (let b = 0; b < 3; b++) {
+      const pts = [];
+      for (let k = 0; k < 64; k++) {
+        const a = (k / 64) * TAU;
+        pts.push(V(Math.cos(a) * cr * 1.005, 0, Math.sin(a) * cr * 1.005));
+      }
+      const m = new THREE.Matrix4().makeRotationY((b / 3) * Math.PI).multiply(new THREE.Matrix4().makeRotationX(tilt * (b % 2 ? 1 : -1)));
+      golds.add(tubeAlong(pts, 0.018, { closed: true, seg: 96, radial: 4 }), m);
+    }
+  }
+  for (let i = 0; i < meridians; i++) {
+    const a = (i / meridians) * TAU;
+    for (const lat of [-0.5, 0, 0.5]) {
+      const p = V(Math.cos(a) * cr * Math.cos(lat), Math.sin(lat) * cr, Math.sin(a) * cr * Math.cos(lat));
+      if (lat === 0 && i % 2 === 0) {
+        const n = p.clone().normalize();
+        addJewel(gems, golds, frameMatrix(p.clone().multiplyScalar(1.005), n, Y_UP), 0.1, [GEM_COLORS.ruby, GEM_COLORS.sapphire, GEM_COLORS.emerald, GEM_COLORS.aqua, GEM_COLORS.amethyst][(i / 2) % 5], { prongs: 6 });
+      } else {
+        golds.add(new THREE.SphereGeometry(0.052, 8, 6), new THREE.Matrix4().makeTranslation(p.x, p.y, p.z));
+      }
+    }
+  }
   // crown + finial on the top pole, foot with ruby below
   const crown = new THREE.CylinderGeometry(0.16, 0.34, 0.26, 12);
   golds.add(crown, new THREE.Matrix4().makeTranslation(0, cr + 0.1, 0));
@@ -166,7 +189,7 @@ export function buildCore(mats, { R = 1.25, seed = 2 } = {}) {
 }
 
 // Stamen cage: flared brass filaments with jeweled tips on a bowl-shaped base.
-export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.9, count = 26, seed = 5 } = {}) {
+export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.5, count = 30, seed = 5 } = {}) {
   const r = rng(seed * 13 + 1);
   const group = new THREE.Group();
   const golds = new Batch(false);
@@ -193,11 +216,29 @@ export function buildStamenCage(mats, { baseR = 1.95, tipR = 3.3, height = 2.9, 
   const outerPts = [];
   for (let i = 0; i < count; i++) {
     const a = (i / count) * TAU + 0.05 * (r() - 0.5);
-    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.9 + 0.22 * r()), 0.042, 0.115, cols[i % cols.length]));
+    outerPts.push(addFilament(a, baseR * 0.97, tipR * (0.93 + 0.12 * r()), height * (0.9 + 0.22 * r()), 0.042, 0.15, cols[i % cols.length]));
   }
   for (let i = 0; i < 14; i++) {
     const a = ((i + 0.5) / 14) * TAU;
-    addFilament(a, baseR * 0.62, tipR * 0.66, height * 0.78, 0.036, 0.09, cols[(i + 2) % cols.length]);
+    addFilament(a, baseR * 0.62, tipR * 0.66, height * 0.78, 0.036, 0.12, cols[(i + 2) % cols.length]);
+  }
+  // inner crown: short, dense jewelled stamens hugging the core, like the photo
+  for (let i = 0; i < 18; i++) {
+    const a = ((i + 0.25) / 18) * TAU + 0.04 * (r() - 0.5);
+    addFilament(a, baseR * 0.86, tipR * 0.72, height * (0.5 + 0.1 * r()), 0.03, 0.105, cols[(i * 5 + 1) % cols.length]);
+  }
+  // mid-filament bead nodes
+  for (let i = 0; i < count; i += 2) {
+    const a = (i / count) * TAU;
+    const q = bowl(0.5, baseR * 0.97, tipR, height);
+    golds.add(new THREE.SphereGeometry(0.075, 8, 6), new THREE.Matrix4().makeTranslation(Math.cos(a) * q.x, q.y, Math.sin(a) * q.x));
+  }
+  // jewelled studs around the base ring
+  for (let i = 0; i < 24; i++) {
+    const a = ((i + 0.5) / 24) * TAU;
+    const q = bowl(0, baseR * 0.97, tipR, height);
+    const n = V(Math.cos(a), 0, Math.sin(a));
+    addJewel(gems, golds, frameMatrix(V(n.x * (q.x + 0.1), q.y, n.z * (q.x + 0.1)), n, Y_UP), 0.08, cols[i % cols.length], { prongs: 0 });
   }
   // bands joining the filaments
   for (const [t, tube] of [[0.0, 0.1], [0.34, 0.03], [0.62, 0.028]]) {
