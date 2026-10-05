@@ -21,6 +21,7 @@ import { LEAF_GLSL } from '../geometry/leaf.js';
 // depth materials so shadows move with the geometry); colliders stay static.
 
 const N_WASH = 10;
+const N_PUSH = 4;
 // ages (seconds) of the trail samples: dense near now, sparse later
 export const WASH_AGES = [0, 0.035, 0.075, 0.12, 0.17, 0.23, 0.3, 0.39, 0.5, 0.64];
 
@@ -39,6 +40,8 @@ export const WIND = {
     uCamT: { value: new THREE.Vector4(0, -1e5, 0, 0) }, // what it looks at (APX-9), sightline radius
     uClampA: { value: new THREE.Vector4(0, -1e5, 0, 0) }, // bee body: centre, radius
     uClampB: { value: new THREE.Vector4(0, -1e5, 0, 0) }, // lens: centre, radius
+    // the creatures nearest the camera (interactive modes): centre, body radius (0: off)
+    uPush: { value: Array.from({ length: N_PUSH }, () => new THREE.Vector4(0, -1e5, 0, 0)) },
   },
 };
 
@@ -125,6 +128,7 @@ const HEAD = /* glsl */ `
   uniform float uWindT;
   uniform vec4 uWind, uWashP, uWashB, uCamP, uCamT, uClampA, uClampB, uSwayK, uSwayK2;
   uniform vec4 uWashS[${N_WASH}];
+  uniform vec4 uPush[${N_PUSH}];
   attribute vec3 aSwayP;
   attribute vec4 aSwayW;
   #ifdef CG_SWING
@@ -156,6 +160,15 @@ const HEAD = /* glsl */ `
         float rad = uCamT.w * (1.0 - smoothstep(0.55, 0.9, k));
         float fs = 1.0 - smoothstep(rad * 0.35, rad + 1e-3, ds);
         acc += qs / max(ds, 1e-3) * (fs * 1.1);
+      }
+    }
+    // leaves lean out of the way of the creatures near the camera
+    for (int k = 0; k < ${N_PUSH}; k++) {
+      vec4 c = uPush[k];
+      if (c.w > 0.0) {
+        vec3 q = P - c.xyz;
+        float dd = length(q);
+        acc += q / max(dd, 1e-3) * ((1.0 - smoothstep(c.w * 0.6, c.w * 1.8, dd)) * 1.2);
       }
     }
     return acc;
@@ -213,6 +226,8 @@ const HEAD = /* glsl */ `
     #endif
     Q = cgClamp(Q, uClampA);
     Q = cgClamp(Q, uClampB);
+    // and never pass through them
+    for (int k = 0; k < ${N_PUSH}; k++) if (uPush[k].w > 0.0) Q = cgClamp(Q, vec4(uPush[k].xyz, uPush[k].w * 0.85));
     return Q;
   }
 `;
@@ -429,6 +444,16 @@ export function setWash(at, body = null, bodyR = 1.9) {
   } else Bd.set(0, -1e5, 0, 0);
   if (body) WIND.u.uClampA.value.set(body.x, body.y, body.z, bodyR);
   else WIND.u.uClampA.value.set(0, -1e5, 0, 0);
+}
+
+// the creatures the foliage should part round: up to N_PUSH of { pos, r } (none: off)
+export function setPushers(list = []) {
+  const U = WIND.u.uPush.value;
+  for (let k = 0; k < N_PUSH; k++) {
+    const p = list[k];
+    if (p && !WIND.noWash) U[k].set(p.pos.x, p.pos.y, p.pos.z, p.r);
+    else U[k].set(0, -1e5, 0, 0);
+  }
 }
 
 export function setCamera(pos = null, push = 4.5, clampR = 1.15, target = null, sight = 2.6) {

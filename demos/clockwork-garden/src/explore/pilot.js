@@ -3,14 +3,16 @@ import { clamp, lerp, smooth } from '../core/ease.js';
 import { L } from '../world/layout.js';
 import { ceilingAt, groundHeight, HOUSE } from './bounds.js';
 import { SPEED } from './actor.js';
+import { LowRoutes } from './lowroutes.js';
 
 // APX-9's day, for follow mode. A small planner that keeps it busy: leave the
 // skep, visit a few blooms (preferring ones it hasn't pollinated, with
 // variety in kind and distance), sometimes detour through the rose arch, past
 // the armillary or along the lanterns, sometimes wind the escapement, and
-// carry the pollen home to deposit it. Routes rise over the canopy, follow
-// its height, and descend onto the target; the collision cushion handles the
-// rest.
+// carry the pollen home to deposit it. Most trips weave low through the beds
+// between the stems (lowroutes.js) and rise up to the bloom at the end; the
+// rest rise over the canopy, follow its height, and descend onto the target.
+// The collision cushion handles the rest.
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const H = L.house;
@@ -32,6 +34,20 @@ export class Pilot {
     this.status = '';
     this._canopy();
     this.pois = this._pois();
+    this.low = new LowRoutes(bounds);
+    this.weaves = 0;
+  }
+
+  // a route through the beds to the goal, or null (then over the canopy)
+  _weave(actor, g) {
+    if (!this.low.ready || (g.kind !== 'bloom' && g.kind !== 'home')) return null;
+    const d = Math.hypot(g.to.x - actor.pos.x, g.to.z - actor.pos.z);
+    if (d < 30 || d > 280 || this._r() > 0.75) return null;
+    const pts = this.low.find(actor.pos, g.to, { phase: this._r() * 6 });
+    if (!pts) return null;
+    pts.push(g.to.clone().add(V(0, g.approachH ?? 5, 0)));
+    this.weaves++;
+    return { pts: [actor.pos.clone(), ...pts], i: 1, weave: true };
   }
 
   _r() { this.seed = (this.seed * 16807) % 2147483647; return this.seed / 2147483647; }
@@ -169,9 +185,11 @@ export class Pilot {
       this.route = null;
       return intent;
     }
+    // (the route grid builds after the bee-scale planting, never alongside it)
+    if (!this.low.ready && this.buildOK !== false) this.low.step(1.5);
     if (!this.goal) this._next(actor, interactions);
     const g = this.goal;
-    if (!this.route) this.route = this.plan(actor.pos, g.to, { approachH: g.approachH ?? 5, low: g.low });
+    if (!this.route) this.route = this._weave(actor, g) || this.plan(actor.pos, g.to, { approachH: g.approachH ?? 5, low: g.low });
     // pure pursuit along the route
     const r = this.route;
     while (r.i < r.pts.length - 1 && actor.pos.distanceTo(r.pts[r.i]) < 9) r.i++;
@@ -180,7 +198,8 @@ export class Pilot {
     const toAim = aim.clone().sub(actor.pos);
     const dist = toAim.length();
     const remaining = dist + (last ? 0 : r.pts.slice(r.i).reduce((a, p, k, arr) => a + (k ? p.distanceTo(arr[k - 1]) : 0), 0));
-    const cruise = g.speed ?? (remaining > 160 ? SPEED.boost * 0.85 : remaining > 60 ? SPEED.cruise * 1.25 : SPEED.cruise);
+    // (through the beds at an unhurried cruise: the weaving is the point)
+    const cruise = r.weave ? SPEED.cruise * 0.9 : g.speed ?? (remaining > 160 ? SPEED.boost * 0.85 : remaining > 60 ? SPEED.cruise * 1.25 : SPEED.cruise);
     const speed = Math.min(cruise, 3 + remaining * 0.9);
     intent.boost = cruise > SPEED.cruise * 1.5 && remaining > 60;
     intent.vel.copy(toAim).multiplyScalar(speed / Math.max(dist, 1e-3));

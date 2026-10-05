@@ -16,7 +16,7 @@ import { DetailCull } from './cull.js';
 import { NearField } from './nearfield.js';
 import { applyPose } from '../direction/camera.js';
 import { SUN_DIR } from '../world/atmosphere.js';
-import { WashTrail, setWash, setCamera, setTime as setWindTime } from '../world/wind.js';
+import { WashTrail, setWash, setCamera, setPushers, setTime as setWindTime } from '../world/wind.js';
 import { L } from '../world/layout.js';
 import { MATRICES } from '../core/fastmatrix.js';
 import { clamp, lerp, smooth } from '../core/ease.js';
@@ -212,6 +212,7 @@ export class Explore {
     this.world.atmosphere.shaftUniforms.uInside.value = 0;
     this.world.atmosphere.shaftUniforms.uNear.value.set(25, 190);
     this.night.exit();
+    setPushers([]);
     setLightField(false);
     if (this.swapFade) this._finishSwap();
     // the film re-derives creature visibility and every world state from t
@@ -279,6 +280,7 @@ export class Explore {
     } else if (this.mode === 'fly' && input) {
       intent = this._playerIntent(input);
     } else if (this.mode !== 'fly') {
+      this.pilot.buildOK = this.nearfield.ready;
       intent = this.pilot.step(simDt, a, { isPollinated: (l) => this.interactions.isPollinated(l), wind: (s) => this.interactions.windUp(s), windBusy: () => this.interactions.windBusy() });
     }
     if (simDt > 0) a.step(simDt, intent);
@@ -388,18 +390,22 @@ export class Explore {
       v = { pos: d.pos, target: d.target, fov: d.fov ?? 50, roll: 0, focus: d.pos.distanceTo(d.target), aperture: d.aperture ?? 0 };
     } else if (this.photo) v = this.photoCam.update(dtReal, input || this._noInput());
     else if (this.mode === 'fly') v = this.chase.update(dtReal, a, input, this.reduced);
-    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep });
+    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0 });
     this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
     applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
     // the camera pushes the foliage aside (and nothing comes inside the lens)
-    setCamera(this.camera.position, 5.5, 1.5, this.debugView || this.photo ? null : a.pos);
+    setCamera(this.camera.position, 5.5, 1.5, this.debugView || this.photo ? null : (this.mode !== 'fly' && this.follow.subject) || a.pos);
     this.nearfield.update(this.camera);
     this.frustum.setFromProjectionMatrix((this._projView || (this._projView = new THREE.Matrix4())).multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y, this.debugView || this.photo ? null : this.frustum);
+    this.ambient.sightTarget = this.mode !== 'fly' ? this.follow.subject : null;
+    if (dt > 0 || this.photo) setPushers(this.ambient.pushers(this.camera.position, 4));
     if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum, this.mode === 'fly' || this.photo ? null : this.pilot.goal?.to, this.mode === 'follow' && !this.photo && !this.debugView);
     // light: shadows round what we're looking at, practicals
     const fwd = this.camera.getWorldDirection(V());
-    const center = this.debugView ? v.target.clone() : a.pos.clone().lerp(this.camera.position, 0.3).addScaledVector(fwd, 14);
+    // (in a cutaway the shadows gather round the creature being shown)
+    const subject = (this.mode !== 'fly' && this.follow.subject) || a.pos;
+    const center = this.debugView ? v.target.clone() : subject.clone().lerp(this.camera.position, 0.3).addScaledVector(fwd, this.follow.subject && this.mode !== 'fly' ? 4 : 14);
     this.focus.center.copy(center);
     this.focus.radius = this.debugView?.shadowRadius ?? (this.quality.tier === 'low' ? 55 : 70);
     this.tod.apply(this.scene, this.world, this.focus, this.camera);
@@ -452,7 +458,7 @@ export class Explore {
 
   standingHint() {
     const a = this.actor, s = a.state, touch = this.touch;
-    if (this.mode !== 'fly') return this.pilot.status ? `APX-9 is ${this.pilot.status}` : 'APX-9 is going about its day';
+    if (this.mode !== 'fly') return this.follow.caption || (this.pilot.status ? `APX-9 is ${this.pilot.status}` : 'APX-9 is going about its day');
     if (s === 'landed') {
       if (a.gather && !a.gather.done) return 'Gathering pollen…';
       if (a.pollen > 0.97) return `Full. ${touch ? 'Press ▲' : 'Space'} to take off and carry it home to the skep`;
