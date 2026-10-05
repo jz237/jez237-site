@@ -19082,5 +19082,126 @@
       "imageSha256": "cec7a6692eb2c9be0f74bdf24a080d522749bf98b665e4931f8434285fd5c572",
       "imageDHash": "ecd2f2f2f9fa9991"
     }
+  },
+  {
+    "id": "2026-10-04-factual-infographic-factual-infographic-pyrophobia-the-cand",
+    "title": "Factual infographic: Pyrophobia — The Candle Behind Glass",
+    "tests": "factual_subtype: phobia-infographic; phobia=Pyrophobia; eight substantive panels, four explanatory diagrams; fictional hero illustration; glass is not claimed fireproof; sourced clinical framework and real fire precautions; no subjective non-Monday review; high quality requested, auto size, opaque, approved subscription route.; archive_slot=2026-10-04T22:20; concept=pyrophobia-candle-glass-partition-anticipation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, sophisticated museum-quality direct-canvas educational infographic, not a photograph of a poster, page, screen or framed display. Requested quality HIGH, automatic size, opaque background; favor a roomy portrait composition. Title: “PYROPHOBIA” and subtitle “When the fear of fire overwhelms everyday life”. Main scene and eight substantive illustrated panels are integrated into one coherent educational plate, with strong typography, precise thin leader lines, short readable text, warm flame amber against slate-blue alarm colors, muted ivory information grounds. No logo, watermark, bibliography, URLs, made-up statistics, diagnostic checklist, gore, monsters or disaster spectacle.\n\nDominant highly detailed hero visualization takes about the central third: an adult with medium-brown skin and naturally curly hair viewed three-quarter profile, tense shoulders, hand hovering near their chest, standing several steps back from a small candle flame visible THROUGH a glass room partition. Show the glass edge, subtle double reflections, fingerprints, brushed-metal mullions, a stable ceramic candle holder on a bare stone surface beyond the partition, braided wick, translucent wax rim, a tiny real flame and controlled amber reflected light. The glass is only a visual separation, NOT a fire-proof guarantee. No drapes or combustible clutter beside the candle. No claim that an active candle is safe merely because it is behind glass. Hero callout reads “The alarm can feel larger than the immediate situation”. The scene is an illustrative fear context, not a recommended exposure exercise. Contrast the small real flame with the person's concentrated attention; do not inflate the flame into an imaginary hazard. Render realistic skin, woven sleeve texture, glass optics and natural restrained expression without caricature.\n\nEight numbered substantive panels surrounding the hero with purposeful alignment and generous label space:\n1 “WHAT IT MEANS”: compact split comparison: ordinary caution around fire versus intense fear that disrupts daily life. Text “Pyrophobia: intense fear of fire” and “Fear may be out of proportion to the situation.” No universal diagnostic thresholds.\n2 “TRIGGERS & ANTICIPATION”: detailed three-vignette strip: seeing a candle flame, thinking about fire, anticipating a setting with flames. Mark these as “Examples, not everyone's triggers”. Connect a thought vignette to an anxious person with “Anticipation can bring anxiety”.\n3 “SENSORY UNCERTAINTY”: close-up of the hero's viewpoint through the glass, small flame plus reflection, followed by attention-arrow to a thought bubble “What if?”. Explain only “Worry can arrive before direct contact”. Label the reflection “Reflection, not a second flame”; treat the scene as an illustrative design, not a neurological claim.\n4 “BODY ALARM”: refined front-view translucent body silhouette, NOT a detailed neural pathway. Four readable symptom callouts with small separate close-ups: heartbeat/palpitations, chest tightness, trembling hands, dizziness or nausea. Label “Possible symptoms; experiences vary”. Use a small pulse symbol, not a diagnostic ECG or numerical readings. No invented hormone pathways.\n5 “AVOIDANCE & DAILY LIFE”: a three-stage illustrated sequence “Anticipate the trigger → Avoid the situation → Activities may become restricted”. Show an unanswered invitation and a skipped candle-lit gathering, not a person fleeing a real fire. Caption “People may avoid feared situations or endure them with intense anxiety.” Adjacent looping arrow returns from a future invitation to anticipation and is labeled “Pattern may repeat”; do NOT claim a measured learning mechanism or guaranteed reinforcement.\n6 “FEAR ≠ A SAFETY ASSESSMENT”: two-column comparison, “Body alarm” with tense hands and thought bubble versus “Actual precautions” with stable candle holder, clear space, flame and a marked boundary. Explain “Fire can cause harm. Keep real fire precautions.” Crisp plan-view safety diagram labeled “At least 12 inches from anything that burns”; put any combustible object clearly outside this marked distance. Glass separation is not listed as a safety measure.\n7 “HELP THAT CAN WORK”: supportive seated consultation between the same adult and an older clinician, with an illustrated CBT triangle of “Thinking / Reacting / Behaviour” and a modest stepped sequence of generic supported therapy icons, not instructions for approaching a real flame. Text “CBT and exposure-based therapy can help.” “Plan appropriate steps with a qualified professional.” “Do not use hazardous fire as a self-directed exercise.” No claim of instant cure or forced exposure.\n8 “SUPPORT & PRACTICAL CHOICES”: detailed battery-operated LED candle close-up showing a small battery compartment, plus flashlight and slow breathing icon. Labels “Consider flameless candles”, “Use a flashlight in a power outage”, “Breathing exercises may help”, “Talk to someone you trust”. Small candle safety footer “Extinguish lit candles when leaving the room or before bed”. Final care line “If fear affects your life, speak to a health care provider.”\n\nAt least four explanatory close-ups/diagrams: glass/reflection viewpoint, body symptom map with trembling-hand inset, plan-view candle clearance, and CBT/support sequence. At least five distinct visual information layers: immersive hero, trigger sequence, symptom map, anticipation/avoidance sequence, comparison panel, safety plan-view and evidence-based support panel. Keep all eight sections visually distinct, source-backed, readable, not cramped. Fine textures enrich illustrated objects but never compete with text. All scenes are illustrative, not claims of an actual patient. Output only the finished infographic.",
+    "image": "images/2026-10-04-factual-infographic-factual-infographic-pyrophobia-the-cand.jpg",
+    "thumb": "thumbs/2026-10-04-factual-infographic-factual-infographic-pyrophobia-the-cand.webp",
+    "color": "#8d8783",
+    "date": "2026-10-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "pyrophobia-candle-glass-partition-anticipation",
+      "imageSha256": "9409b2ba5f7ee30b15a8276db54ee11d4c0363323666aba18a832844354bbd8c",
+      "imageDHash": "2063696321610d0e"
+    },
+    "factualInfographic": {
+      "topic": "Pyrophobia: intense fear of fire, anticipatory anxiety, body alarm, avoidance, realistic fire safety, and evidence-based support",
+      "description": "Eight-panel fire-fear educational plate with a glass-partition candle hero, symptom map, anticipation and avoidance sequence, real safety comparison, CBT and support.",
+      "sourceNote": "Verified phobia framework, symptoms, CBT and support against NIMH https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders and NHS https://www.nhs.uk/mental-health/conditions/phobias/; candle precautions against USFA https://www.usfa.fema.gov/prevention/home-fires/prevent-fires/candle/. Terminology and fire-specific examples additionally read at Cleveland Clinic, recorded in the evidence supplementary terminology verification. No prevalence claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-05T02:22:21.205136+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "U.S. Fire Administration",
+            "title": "Candle Fire Safety",
+            "sourceType": "government-agency",
+            "url": "https://www.usfa.fema.gov/prevention/home-fires/prevent-fires/candle/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Specific phobias involve intense fear out of proportion to actual danger; this plate applies that framework to fear of fire.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipating a feared object or situation can cause excessive worry; encountering it can cause immediate intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People may actively avoid feared objects and situations or endure them with intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, chest tightness, trembling, dizziness and nausea.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance can restrict activities; exposure-based CBT helps people engage in activities and situations they have avoided.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT teaches different ways of thinking, behaving and reacting; exposure therapy is particularly effective for phobias.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Relaxation exercises may accompany exposure therapy; breathing exercises and talking to a trusted person may help manage symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek a primary care provider when symptoms affect life; a provider can refer to a qualified mental health professional.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Open flames are dangerous if candles tip over or are too close to combustible objects; ordinary fire precautions remain necessary.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Consider battery-operated flameless candles; lit candles need stable holders, at least 12 inches from anything that burns, and should be extinguished when leaving the room or before bed.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Use flashlights rather than candles during a power outage.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
