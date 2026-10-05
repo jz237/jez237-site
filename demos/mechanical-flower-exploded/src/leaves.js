@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { Batch, addJewel, frameMatrix, tubeAlong, TAU } from './geo.js';
 import { GEM_COLORS, enamelMaterial, rng } from './materials.js';
 import { makeBlade, rimPoints } from './petals.js';
-import { gearPart } from './mech.js';
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -80,15 +79,15 @@ export function buildLeaf(mats, { L = 10, W = 3.9, kind = 'leaf', seed = 1, atta
   const clamp = new THREE.TorusGeometry(0.42, 0.11, 8, 22);
   golds.add(clamp, frameMatrix(attach, curve.getTangent(1), V(0, 0, 1)));
 
+  const sparkRim = rimPoints(blade, 1.0, 60, 0.06);
+  for (let i = Math.floor(r() * 4); i < sparkRim.length; i += 6 + Math.floor(r() * 4)) {
+    gems.glints.push({ pos: sparkRim[i].toArray(), color: [1.0, 0.82, 0.5], size: 0.22 + r() * 0.12, hot: 1.0, rate: 2.2 + r() * 3.6 });
+  }
   const mg = golds.build(mats.gold);
   const mm = gems.build(mats.gem);
   if (mg) group.add(mg);
   if (mm) group.add(mm);
 
-  // small articulation gear under the blade
-  const gear = gearPart(mats, { teeth: 14, R: 0.62, thickness: 0.12, spokes: 0, axis: 'z', seed: seed + 5, gemColor: GEM_COLORS.emerald });
-  gear.position.copy(V(0.7, -1.9, 0.05));
-  group.add(gear);
-  group.userData = { blade, gear, hub: V(0, 0, 0.4), attach };
+  group.userData = { blade, hub: V(0, 0, 0.4), attach };
   return group;
 }

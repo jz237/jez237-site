@@ -326,13 +326,14 @@
       "28-second explode and bloom cycle",
       "Ten labelled parts, 84 floating gold screws",
       "Scrub Explode and Bloom by hand",
-      "Poster and studio looks"
+      "Poster and studio looks",
+      "Flashing jewel glints and drifting sparks"
     ],
     "facts": [
       "No image assets",
       "Three.js · WebGL 2",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop; a strict independent reviewer scored it 3.2 out of 5 against the photo, short of the 4.5 target: a close match in layout and palette, not an exact one · Preview captured from the running demo"
+    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop; a strict independent reviewer scored it 3.3 out of 5 against the photo, short of the 4.5 target: a close match in layout and palette, not an exact one · Preview captured from the running demo"
   }
 ]

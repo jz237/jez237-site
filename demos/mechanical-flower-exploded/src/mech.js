@@ -6,6 +6,7 @@ import { GEM_COLORS, rng } from './materials.js';
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const GEM_LIST = [GEM_COLORS.ruby, GEM_COLORS.sapphire, GEM_COLORS.emerald, GEM_COLORS.rose, GEM_COLORS.aqua, GEM_COLORS.amethyst, GEM_COLORS.amber];
 const Y_UP = V(0, 1, 0);
+const GEAR_METALS = ['brass', 'copper', 'anoTeal', 'roseGold', 'anoViolet', 'brass', 'anoBlue', 'anoMagenta'];
 
 function addMesh(group, batch, mat, name) {
   const m = batch.build(mat);
@@ -17,14 +18,14 @@ function addMesh(group, batch, mat, name) {
 }
 
 // Spur gear on a jeweled bushing. axis 'y' lays the wheel flat (horizontal plane); 'z' faces the camera.
-export function gearPart(mats, { teeth = 24, R = 1, thickness = 0.16, spokes = 5, curved = 0, mat = 'brass', axis = 'y', gem = true, gemColor = null, seed = 1, ringDeco = true } = {}) {
+export function gearPart(mats, { teeth = 24, R = 1, thickness = 0.16, spokes = 5, curved = 0, mat = null, axis = 'y', gem = true, gemColor = null, seed = 1, ringDeco = true } = {}) {
   const r = rng(seed * 17 + 3);
   const module = R / (teeth / 2 + 0.95);
   const geo = gearGeometry({ teeth, module, thickness, spokes, curved, bevel: true });
   const holder = new THREE.Group();
   const spin = new THREE.Group();
   holder.add(spin);
-  const body = new THREE.Mesh(geo, mats[mat]);
+  const body = new THREE.Mesh(geo, mats[mat || GEAR_METALS[Math.abs(Math.round(seed)) % GEAR_METALS.length]]);
   spin.add(body);
 
   const golds = new Batch(false);
@@ -48,6 +49,11 @@ export function gearPart(mats, { teeth = 24, R = 1, thickness = 0.16, spokes = 5
       if (s < 0) m.multiply(new THREE.Matrix4().makeRotationX(Math.PI));
       addJewel(gems, golds, m, hubR * 0.62, col, { prongs: hubR > 0.2 ? 6 : 0 });
     }
+  }
+  for (let k = 0; k < 3; k++) {
+    const a = r() * TAU;
+    const rad = pr + module * 1.05;
+    gems.glints.push({ pos: [Math.cos(a) * rad, Math.sin(a) * rad, thickness * 0.55], color: [1.0, 0.82, 0.5], size: 0.1 + R * 0.09, hot: 1.0, rate: 2.0 + r() * 3.4 });
   }
   addMesh(spin, golds, mats.gold, 'gearGold');
   addMesh(spin, gems, mats.gem, 'gearGems');

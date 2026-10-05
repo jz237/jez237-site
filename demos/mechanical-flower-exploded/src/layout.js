@@ -6,10 +6,10 @@ export const fromPx = (px, py, z = 0) => [(px - PX.x0) / PX.k, (PX.y0 - py) / PX
 
 // Petal rings. closed/open hinge angles in degrees (positive = tip leans outward).
 export const RINGS = {
-  A: { r: 2.3, y: -2.0, closed: -9, open: 62, win: [0.0, 0.75] },
-  B: { r: 1.0, y: -1.2, closed: -14, open: 34, win: [0.2, 1.0] },
+  A: { r: 2.3, y: -2.0, closed: -12, open: 62, win: [0.0, 0.75] },
+  B: { r: 1.0, y: -1.2, closed: -10, open: 34, win: [0.2, 1.0] },
   I: { r: 1.4, y: -1.2, closed: -6, open: 34, win: [0.3, 1.0] },
-  D: { r: 1.85, y: -1.6, closed: -8, open: 48, win: [0.1, 0.88] },
+  D: { r: 1.85, y: -1.6, closed: -14, open: 48, win: [0.1, 0.88] },
 };
 
 // Exploded petal table: [phiDeg, r, y, openThetaDeg, rollDeg, kind, ring-size scale]

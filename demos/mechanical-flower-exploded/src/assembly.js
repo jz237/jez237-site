@@ -8,6 +8,8 @@ import { buildBraid, buildCollar, stemX, stemPoint, stemTangent, bentStemPoint, 
 import { ScrewField } from './screws.js';
 import { clamp01, lerp, smoother } from './geo.js';
 import { POSTER } from './spec.js';
+import { addGlints, buildMotes, setSparkleTime } from './sparkle.js';
+import { buildBud } from './bud.js';
 import { CAMERA, RINGS, OUTER_EXPLODED, INNER_EXPLODED, STACK, SIDE_GEARS, DRIVE_GEARS, COLLARS, STEM_LIFT, LEAVES, SCREWS_PX, ANCHOR_PX } from './layout.js';
 
 const D2R = Math.PI / 180;
@@ -15,8 +17,8 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const Y_UP = V(0, 1, 0);
 const STEM_ASM_WIDTH = 0.6;
 const GEAR_LIFT = 1.3;
-const CLOSED_R = { A: 0.5, B: 0.55, I: 0.5, D: 0.5 };
-const CLOSED_S = { A: 1.3, B: 1.1, I: 1.2, D: 1.25 };
+const CLOSED_R = { A: 0.28, B: 0.45, I: 0.34, D: 0.3 };
+const CLOSED_S = { A: 1.55, B: 0.9, I: 0.95, D: 0.85 };
 const CLOSED_GEAR_PULL = 0.5;
 const CLOSED_WIDTH = 1.5;
 const COLLAR_ASM_Y = [-10.8, null, -15.6, null, null, -20.4];
@@ -63,11 +65,18 @@ const EXPLODED_SCALE = 0.82;
 const EXPLODED_SCALE_CAP = 0.92;
 const EXPLODED_WIDTH = 0.7;
 const ASSEMBLED_WIDTH = 1.22;
+const tipCurl = (s, k) => k * Math.pow(Math.max(0, (s - 0.58) / 0.42), 2.2);
 const PETAL_BEND = {
-  D: (s) => 0.54 * Math.pow(s, 1.45),
-  A: (s) => 0.5 * Math.pow(s, 1.5),
+  D: (s) => 0.54 * Math.pow(s, 1.45) - tipCurl(s, 0.22),
+  A: (s) => 0.5 * Math.pow(s, 1.5) - tipCurl(s, 0.3),
   B: (s) => 0.12 * s - 0.3 * Math.pow(s, 2),
-  I: (s) => 0.58 * Math.pow(s, 1.4),
+  I: (s) => 0.58 * Math.pow(s, 1.4) - tipCurl(s, 0.2),
+};
+const PETAL_SHAPE = {
+  A: { cup: 0.95, lip: 0.3, roll: 0.2, wave: 0.05, wk: 0.78 },
+  B: { cup: 1.0, lip: 0.3, roll: 0.18, wave: 0.03, wk: 0.84 },
+  I: { cup: 1.0, lip: 0.28, roll: 0.22, wave: 0.04, wk: 0.76 },
+  D: { cup: 0.95, lip: 0.3, roll: 0.18, wave: 0.05, wk: 0.76 },
 };
 const ASM_BACK_SCALE = 0.45;
 const ASM_FRONT_SCALE = 0.2;
@@ -151,16 +160,8 @@ export function buildAssembly(camera) {
   const cage = buildStamenCage(mats, {});
   root.add(cage);
 
-  // opaque inner shell that fills the gaps between closed petals; it vanishes as the bloom opens
-  const budPts = [];
-  for (let i = 0; i <= 28; i++) {
-    const t = i / 28;
-    budPts.push(new THREE.Vector2(Math.max(0.001, 1.25 * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.72)), 0.8)), -1.9 + 5.4 * t));
-  }
-  const budShell = new THREE.Mesh(
-    new THREE.LatheGeometry(budPts, 48),
-    new THREE.MeshPhysicalMaterial({ color: 0x8a1458, roughness: 0.4, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.08, side: THREE.DoubleSide }),
-  );
+  // smooth painted teardrop shown while fully closed; petals unfurl from it as the bloom opens
+  const budShell = buildBud();
   root.add(budShell);
 
   // ---- petals ----
@@ -175,10 +176,12 @@ export function buildAssembly(camera) {
         kind: en.kind,
         seed: seedBase + i,
         L: en.L,
-        W: en.L * (cap ? 0.82 : 0.72),
-        cup: cap ? 0.95 : 0.85,
+        W: en.L * PETAL_SHAPE[ringKey].wk,
+        cup: PETAL_SHAPE[ringKey].cup,
         bend: PETAL_BEND[ringKey],
-        lip: 0.38,
+        lip: PETAL_SHAPE[ringKey].lip,
+        roll: PETAL_SHAPE[ringKey].roll,
+        wave: PETAL_SHAPE[ringKey].wave,
         shoulder: 1.05,
         power: 0.62,
         tipPower: 1.35,
@@ -345,7 +348,6 @@ export function buildAssembly(camera) {
       x: { p: hub, r: eulQ(qExp), s: 1 },
       delay: 0.15,
     });
-    addSpin(obj.userData.gear, 14, 1);
     return obj;
   });
 
@@ -357,6 +359,7 @@ export function buildAssembly(camera) {
     state.e = e;
     state.b = b;
     state.t = t;
+    setSparkleTime(t);
     rig.update(e);
     braid.userData.bend.value = 1 - clamp01(e);
     const budPull = lerp(CLOSED_GEAR_PULL, 1, smoother(clamp01(b / 0.6)));
@@ -371,7 +374,9 @@ export function buildAssembly(camera) {
       const sf = lerp(lerp(CLOSED_S[p.ringKey] / p.asmScale, 1, wb), 1, kk);
       p.part.obj.position.x *= rf;
       p.part.obj.position.z *= rf;
-      p.part.obj.scale.multiplyScalar(sf);
+      const grow = Math.max(smoother(clamp01(b / 0.08)), kk);
+      p.part.obj.visible = grow > 0.01;
+      p.part.obj.scale.multiplyScalar(sf * Math.max(grow, 0.001));
       p.hinge.rotation.z = -petalTheta(p, b, p.part.k) * D2R;
       const trim = b > 0.03 || kk > 0.01;
       if (!p.trim) p.trim = ['gold', 'gems'].map((n) => p.body.getObjectByName(n)).filter(Boolean);
@@ -381,6 +386,11 @@ export function buildAssembly(camera) {
     }
     const shellK = (1 - smoother(clamp01((b - 0.05) / 0.3))) * (1 - clamp01(e * 4));
     budShell.visible = shellK > 0.01;
+    cage.visible = shellK < 0.98;
+    core.visible = shellK < 0.98;
+    spindle.visible = shellK < 0.98;
+    for (const o of stackObjs) o.visible = shellK < 0.98;
+    for (const o of sideObjs) o.visible = shellK < 0.98;
     budShell.scale.set(shellK, 1, shellK);
     const lift = 0.85 * (1 - e) * smoother(clamp01(b));
     cage.position.y = -1.1 - 0.9 * (1 - smoother(clamp01(b))) + lift;
@@ -495,6 +505,8 @@ export function buildAssembly(camera) {
   });
   screws = new ScrewField(mats, specs);
   root.add(screws.group);
+  addGlints(root);
+  root.add(buildMotes());
   update(1, 1, 0);
 
   // ---- inset camera poses ----

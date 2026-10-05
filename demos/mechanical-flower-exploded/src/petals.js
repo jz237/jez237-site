@@ -5,7 +5,7 @@ import { enamelMaterial, GEM_COLORS, rng } from './materials.js';
 // Parametric enamel blade (petals and leaves).
 // s: 0 at the base hinge to 1 at the tip. t: -1..1 across the blade.
 // Local axes: x across, y along the length, z toward the concave face.
-export function makeBlade({ L = 7, W = 3.6, cup = 0.5, bend = -0.3, lip = 0.25, base = 0.1, shoulder = 0.7, power = 0.8, tipPower = 0, taper = 0.12, twist = 0, sweep = 0, s0 = 0, nu = 34, nv = 46 } = {}) {
+export function makeBlade({ L = 7, W = 3.6, cup = 0.5, bend = -0.3, lip = 0.25, base = 0.1, shoulder = 0.7, power = 0.8, tipPower = 0, taper = 0.12, twist = 0, sweep = 0, roll = 0, wave = 0, wavePh = 0, s0 = 0, nu = 34, nv = 46 } = {}) {
   const NC = 96;
   const cy = new Float32Array(NC + 1);
   const cz = new Float32Array(NC + 1);
@@ -31,7 +31,15 @@ export function makeBlade({ L = 7, W = 3.6, cup = 0.5, bend = -0.3, lip = 0.25, 
     const w = half(s);
     const [py, pz] = CL(s);
     let x = t * w;
-    let zz = cup * t * t * w - lip * Math.pow(Math.abs(t), 5) * w * Math.min(1, s * 3);
+    const at = Math.abs(t);
+    let zz = cup * t * t * w - lip * Math.pow(at, 5) * w * Math.min(1, s * 3);
+    if (roll) {
+      const er = Math.max(0, (at - 0.68) / 0.32);
+      const k = roll * er * er * Math.min(1, s * 3);
+      zz += k * w * 0.55;
+      x -= Math.sign(t) * k * w * 0.2;
+    }
+    if (wave) zz += wave * w * Math.sin(s * 9 + wavePh + t * 1.4) * at * at * Math.min(1, s * 4);
     if (twist) {
       const a = twist * s;
       const ca = Math.cos(a);
@@ -100,9 +108,9 @@ export function rimPoints(blade, inset = 1, n = 70, lift = 0.0, sMin = 0.0, sMax
 export const PETAL_KINDS = ['tealMagenta', 'magentaViolet', 'violetBlue', 'greenBlue', 'crimson', 'tealViolet'];
 
 // One articulated enamel petal. Origin is the hinge; +Y runs to the tip.
-export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 3.8, cup = 0.5, bend = -0.25, lip = 0.3, shoulder = 0.7, power = 0.8, tipPower = 0, sweep = 0, gemCount = 3, gemScale = 1, rimRadius = 0.095, fasteners = 2 } = {}) {
+export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 3.8, cup = 0.5, bend = -0.25, lip = 0.3, shoulder = 0.7, power = 0.8, tipPower = 0, sweep = 0, roll = 0, wave = 0, gemCount = 3, gemScale = 1, rimRadius = 0.095, fasteners = 2 } = {}) {
   const r = rng(seed * 101 + 7);
-  const blade = makeBlade({ L, W, cup, bend, lip, shoulder, power, tipPower, sweep, base: 0.14, taper: 0.1 });
+  const blade = makeBlade({ L, W, cup, bend, lip, shoulder, power, tipPower, sweep, roll, wave, wavePh: seed * 1.7, base: 0.14, taper: 0.1 });
   const group = new THREE.Group();
   const enamel = new THREE.Mesh(blade.geometry, enamelMaterial(kind, seed));
   enamel.name = 'enamel';
@@ -188,6 +196,16 @@ export function buildPetal(mats, { kind = 'tealMagenta', seed = 1, L = 7.5, W = 
       const f = blade.frame(s, sg * 0.9);
       golds.add(rivet, frameMatrix(f.pos.clone().addScaledVector(f.n, 0.03), f.n, f.ps, 1));
     }
+  }
+
+  // gilt-edge sparkle points along the rim
+  const sparkRim = rimPoints(blade, 1.0, 48, 0.06);
+  for (let k = 0; k < 7; k++) {
+    const f = blade.frame(0.18 + r() * 0.74, (r() * 2 - 1) * 0.78);
+    gems.glints.push({ pos: f.pos.clone().addScaledVector(f.n, 0.08).toArray(), color: [0.9 + r() * 0.1, 0.6 + r() * 0.35, 0.8 + r() * 0.2], size: 0.13 + r() * 0.12, hot: 1.0, rate: 1.6 + r() * 4.0 });
+  }
+  for (let i = Math.floor(r() * 4); i < sparkRim.length; i += 5 + Math.floor(r() * 3)) {
+    gems.glints.push({ pos: sparkRim[i].toArray(), color: [1.0, 0.8 + r() * 0.15, 0.45 + r() * 0.3], size: 0.2 + r() * 0.14, hot: 1.0, rate: 2.2 + r() * 3.6 });
   }
 
   const goldMesh = golds.build(mats.gold);
