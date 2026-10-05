@@ -1,4 +1,6 @@
 // Public viewing destinations and observation stations for this diorama only.
+import { CITY_LIMITS } from './city-limits-data.js?v=philly-2026092121';
+
 export const REGION = { west: -75.8, east: -74.7, south: 39.7, north: 40.55 };
 export const STATIONS = [
   { id: 'KPHL', name: 'Philadelphia International Airport', lon: -75.22678, lat: 39.87327 },
@@ -56,11 +58,27 @@ export function nearestStation(pose) {
     + (s.lat - pose.lat) ** 2;
   return STATIONS.reduce((best, s) => distance(s) < distance(best) ? s : best);
 }
-export function streetViewUrl(pose) {
+export function inPhiladelphia(pose) {
+  if (!inRegion(pose)) return false;
+  let inside = false;
+  for (let i = 0, j = CITY_LIMITS.length - 1; i < CITY_LIMITS.length; j = i++) {
+    const [xi, yi] = CITY_LIMITS[i], [xj, yj] = CITY_LIMITS[j];
+    if ((yi > pose.lat) !== (yj > pose.lat)
+      && pose.lon < (xj - xi) * (pose.lat - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+// The City's Cyclomedia viewer opens the nearest recording to ?lat&lng. It has no imagery
+// beyond the city limits, so suburban and New Jersey views fall back to Google Street View.
+export function streetViewLink(pose) {
   if (!inRegion(pose)) return null;
-  const query = new URLSearchParams({ api: '1', map_action: 'pano',
-    viewpoint: `${pose.lat.toFixed(6)},${pose.lon.toFixed(6)}` });
-  return `https://www.google.com/maps/@?${query}`;
+  const lat = pose.lat.toFixed(6), lon = pose.lon.toFixed(6);
+  if (inPhiladelphia(pose)) {
+    return { provider: 'Cyclomedia',
+      url: `https://cyclomedia.phila.gov/?${new URLSearchParams({ lat, lng: lon })}` };
+  }
+  const query = new URLSearchParams({ api: '1', map_action: 'pano', viewpoint: `${lat},${lon}` });
+  return { provider: 'Google Street View', url: `https://www.google.com/maps/@?${query}` };
 }
 export function observationTime(timestamp, now = Date.now()) {
   const time = Date.parse(timestamp);

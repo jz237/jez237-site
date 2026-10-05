@@ -1,21 +1,38 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { nearestStation, streetViewUrl, observationTime, CAMERA_SOURCES } from '../src/regional-data.js';
+import { nearestStation, streetViewLink, inPhiladelphia, observationTime, CAMERA_SOURCES }
+  from '../src/regional-data.js';
 import { compactWeather, compactWater, onRequest }
   from '../../../functions/demos/philadelphia-relief/regional-conditions.js';
 
 test('local links follow the map center, encode coordinates, and reject locations outside this region', () => {
-  const url = new URL(streetViewUrl({ lat: 40.1368222, lon: -74.8827262 }));
+  const city = streetViewLink({ lat: 39.9526, lon: -75.1636 }), cityUrl = new URL(city.url);
+  assert.equal(city.provider, 'Cyclomedia'); assert.equal(cityUrl.origin, 'https://cyclomedia.phila.gov');
+  assert.equal(cityUrl.searchParams.get('lat'), '39.952600');
+  assert.equal(cityUrl.searchParams.get('lng'), '-75.163600');
+  const suburb = streetViewLink({ lat: 40.1368222, lon: -74.8827262 }), url = new URL(suburb.url);
+  assert.equal(suburb.provider, 'Google Street View');
   assert.equal(url.searchParams.get('viewpoint'), '40.136822,-74.882726');
   assert.equal(url.searchParams.get('map_action'), 'pano');
   assert.equal(url.searchParams.get('api'), '1');
   for (const pose of [{ lat: 0, lon: 0 }, { lat: NaN, lon: -75 }, { lat: 40, lon: Infinity }]) {
-    assert.equal(streetViewUrl(pose), null); assert.equal(nearestStation(pose), null);
+    assert.equal(streetViewLink(pose), null); assert.equal(nearestStation(pose), null);
   }
   assert.equal(nearestStation({ lat: 39.95, lon: -75.16 }).id, 'KPHL');
   assert.equal(nearestStation({ lat: 40.1368, lon: -74.8827 }).id, 'KPNE');
   assert.equal(nearestStation({ lat: 40.276, lon: -74.817 }).id, 'KTTN');
   for (const camera of CAMERA_SOURCES) assert.equal(new URL(camera.url).protocol, 'https:');
+});
+test('Cyclomedia links stay within the Philadelphia city limits it covers', () => {
+  for (const [lat, lon] of [[39.9526, -75.1636], [39.99592532, -75.09834015], [40.0794, -75.0287],
+    [40.0446, -75.2283], [39.8768, -75.2378], [40.0909, -74.9654]]) {
+    assert.equal(inPhiladelphia({ lat, lon }), true, `${lat}, ${lon}`);
+  }
+  // Camden, Cheltenham, Upper Darby, Bensalem, Bala Cynwyd and the Hidden Reef are outside.
+  for (const [lat, lon] of [[39.9259, -75.1196], [40.0737, -75.1199], [39.9590, -75.2600],
+    [40.1043, -74.9516], [40.0057, -75.2340], [40.1368222, -74.8827262]]) {
+    assert.equal(inPhiladelphia({ lat, lon }), false, `${lat}, ${lon}`);
+  }
 });
 test('NWS unit conversion preserves missing data instead of inventing zero readings', () => {
   const properties = { timestamp: '2026-09-20T20:30:00Z', textDescription: 'Cloudy',

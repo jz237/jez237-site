@@ -1,4 +1,4 @@
-import { CAMERA_SOURCES, STREET_PLACES, GAUGE, nearestStation, streetViewUrl, observationTime }
+import { CAMERA_SOURCES, STREET_PLACES, GAUGE, nearestStation, streetViewLink, observationTime }
   from './regional-data.js?v=philly-2026092121';
 
 const node = (tag, text, className) => {
@@ -40,7 +40,9 @@ export function wireRegionalViews({ getPose, motion }) {
     card.append(actions); cameraList.append(card);
   }
   for (const place of STREET_PLACES) {
-    dialog.querySelector('#streetShortcuts').append(link(`${place.name} ↗`, streetViewUrl(place)));
+    const view = streetViewLink(place);
+    const source = view.provider === 'Cyclomedia' ? '' : ' · Google';
+    dialog.querySelector('#streetShortcuts').append(link(`${place.name}${source} ↗`, view.url));
   }
   dialog.querySelector('#gaugeVisit').onclick = () => visit(GAUGE);
   dialog.querySelector('#gaugeSource').append(link('NOAA station 8545240 ↗',
@@ -115,9 +117,9 @@ export function wireRegionalViews({ getPose, motion }) {
   const opened = event => {
     opener = event.currentTarget; motion.pause(); pose = getPose(); station = nearestStation(pose);
     const street = dialog.querySelector('#streetCurrent');
-    const url = streetViewUrl(pose);
-    street.hidden = !url;
-    if (url) street.href = url;
+    const view = streetViewLink(pose);
+    street.hidden = !view;
+    if (view) { street.href = view.url; street.textContent = `Open ${view.provider} here ↗`; }
     dialog.querySelector('#streetLocation').textContent =
       `${pose.lat.toFixed(5)}° N, ${Math.abs(pose.lon).toFixed(5)}° W · map center when opened`;
     const forecast = dialog.querySelector('#localForecast');
