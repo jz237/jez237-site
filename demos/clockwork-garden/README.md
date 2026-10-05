@@ -154,9 +154,19 @@ mode, help and the mode switch.
 
 ### Follow
 
+APX-9 goes about its day on its own; about a third of its flying weaves low
+through the beds between the stems (over the shrubs, under the flower heads)
+and rises up to the bloom at the end. The camera tracks beside it, cranes up
+out of the beds, circles its landings and, by night, looks up past it at the
+lanterns and the vault; it cuts between very different framings, as the film
+does. Every 12–24 s it cuts away for 4–6 s to a creature nearby (a bee
+gathering, the beetle or ladybird climbing, a butterfly on a bloom, a
+hummingbird sipping, a dragonfly hovering, the songbird singing) with a
+caption, then back to APX-9 (never during a landing or at the skep).
+
 Drag to orbit, wheel or pinch to zoom; the camera drifts back to its own
-framing after a few seconds. `C` or *Take the controls* to fly from where
-APX-9 is.
+framing after a few seconds (and leaves a cutaway at once). `C` or *Take the
+controls* to fly from where APX-9 is.
 
 ### Film
 
@@ -243,6 +253,7 @@ node tools/camjerk.mjs                                                      # ca
 node tools/cpuprofile.mjs --mode fly · node tools/allocprofile.mjs          # where the main thread's time / garbage goes, by function
 node tools/abshots.mjs --a 8765 --b <rollback port> --out review/x          # A/B stills from the same chase-camera spots
 node tools/wildlife.mjs [--mobile 1]                                        # Follow: how often wildlife is on screen, by kind, and how far from APX-9
+node tools/cutaways.mjs [--secs 150] [--tod 0]                              # Follow: each cutaway (creature, length, why it ended), stills, share of time
 ```
 
 (The tools expect a local static server on port 8765 and use the system
@@ -301,8 +312,10 @@ src/explore/                   the interactive modes:
                                  moon shafts; clockwork fireflies
   bounds.js                      flight volume: analytic ground, walls, vault, ~4,000 collider shapes, landables
   actor.js                       APX-9's flight model and sequences (land, gather, take off, dock, deposit)
-  pilot.js                       autopilot for follow mode (canopy-aware routes, variety, winding, trips home)
-  cameras.js                     chase camera, cinematic follow camera, photo camera
+  pilot.js · lowroutes.js        autopilot for follow mode (low weaving routes through the beds on a layered grid,
+                                 canopy-aware routes, variety, winding, trips home)
+  cameras.js                     chase camera, cinematic follow camera (framings by context, cuts, wildlife
+                                 cutaways), photo camera
   interactions.js                pollination, deposits, winding + bloom wave, kindling, armillary, sparks, pollen bosses
   growth.js · bells.js           sprouting glass blooms · porcelain bellflowers
   ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird, foragers, crawlers,
@@ -317,7 +330,7 @@ tools/                         shoot.mjs (stills), record.mjs (video), determini
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
                                drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
                                flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs, pacing.mjs,
-                               camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs, wildlife.mjs
+                               camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs, wildlife.mjs, cutaways.mjs
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```
