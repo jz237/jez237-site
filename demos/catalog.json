@@ -312,5 +312,27 @@
       "Keyboard, touch & gamepad"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Sound stays off until you turn it on · Preview captured from the running piece"
+  },
+  {
+    "id": "015",
+    "title": "Mechanical Flower: Exploded View",
+    "category": "3D · Exploded view",
+    "description": "A jeweled-enamel clockwork flower that assembles and comes apart on a 28-second loop. Watch twelve enamel petals, the stamen cage and glowing core, the filigree gear ring, drive gears, braided stem, retention collars and leaf panels fly out to match a ten-callout engineering infographic, then close back into a blooming flower on a dark studio backdrop. Drag the Explode and Bloom sliders to scrub it by hand.",
+    "url": "mechanical-flower-exploded/",
+    "image": "assets/mechanical-flower-exploded.jpg",
+    "imageAlt": "Actual Mechanical Flower demo: on the left the exploded view with enamel petals, brass stamen cage, glowing core and gear ring floating apart on parchment; on the right the assembled flower in bloom on a dark backdrop",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/mechanical-flower-exploded",
+    "features": [
+      "28-second explode and bloom cycle",
+      "Ten labelled parts, 84 floating gold screws",
+      "Scrub Explode and Bloom by hand",
+      "Poster and studio looks"
+    ],
+    "facts": [
+      "No image assets",
+      "Three.js · WebGL 2",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop that stopped at a close, not perfect, match to the reference · Preview captured from the running demo"
   }
 ]
