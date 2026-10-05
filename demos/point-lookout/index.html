@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Point Lookout — North Stradbroke Island</title>
+  <meta name="description" content="A real-time WebGL recreation of the coastal view from Point Lookout, North Stradbroke Island, Queensland." />
+  <link rel="icon" href="data:," />
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="src/style.css" />
+  <script>
+    // Guard: if the module graph cannot load (very old browser, blocked script), say so instead
+    // of leaving the loader at 0% forever. main.js sets window.__started once it runs.
+    (function () {
+      function fail(msg) {
+        if (window.__started || window.__failed) return;
+        var root = document.getElementById('loader');
+        if (!root) return;
+        window.__failed = true;
+        root.classList.add('is-error');
+        var p = document.createElement('p');
+        p.className = 'loader-error';
+        p.textContent = msg;
+        root.appendChild(p);
+      }
+      var gl = null;
+      try { gl = document.createElement('canvas').getContext('webgl2'); } catch (e) {}
+      if (!gl) { window.addEventListener('DOMContentLoaded', function () { fail('This experience needs WebGL 2, which this browser or device does not provide.'); }); }
+      window.addEventListener('error', function (e) {
+        if (e && e.target && e.target.tagName === 'SCRIPT') fail('Failed to load a script. Please reload the page.');
+      }, true);
+      window.addEventListener('load', function () {
+        setTimeout(function () { if (!window.__started) fail('This browser is too old for this experience (Safari 16.4+, Chrome 94+ or Firefox 108+ needed).'); }, 8000);
+      });
+    })();
+  </script>
+  <!-- Native import maps: avoids blob-script probes under the host security policy. -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three.module.min.js",
+        "three/addons/": "./vendor/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="Point Lookout coastal view"></canvas>
+
+  <div id="loader">
+    <div class="loader-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="loader-bar-fill"></span></div>
+    <button class="loader-enter" type="button" aria-label="Enter" disabled></button>
+  </div>
+
+  <nav aria-label="Demo navigation" style="position:fixed;z-index:20;bottom:12px;left:12px;display:flex;gap:14px;padding:8px 12px;border-radius:8px;background:rgba(0,0,0,.45);font:12px system-ui"><a href="../" style="color:white">← Demos</a><a href="https://claude-creative-xbmc.vercel.app/" style="color:white" target="_blank" rel="noopener">Original site ↗</a></nav>
+  <noscript>This experience needs JavaScript and WebGL 2.</noscript>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

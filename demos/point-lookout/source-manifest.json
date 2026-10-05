@@ -1,0 +1,182 @@
+[
+  {
+    "path": "index.html",
+    "sha256": "fc40ec564c106a6f85bda171c07a4dbac046e31eebd4cda6153f69f3375b9920",
+    "bytes": 2621
+  },
+  {
+    "path": "src/style.css",
+    "sha256": "25854979b33b71f46ec017e192da68fe8c6a9c5b85a10d4792d9c4cf16b925de",
+    "bytes": 3099
+  },
+  {
+    "path": "vendor/es-module-shims.js",
+    "sha256": "fe620c5662f8bd9f46e4aa29ceae0a2eb52a031573c10598bf70f2e50a7b3d7c",
+    "bytes": 82102
+  },
+  {
+    "path": "src/main.js",
+    "sha256": "876211ad3fabf77f1225884bd5681390514ace601cfa219c72d553c844fd5fde",
+    "bytes": 19526
+  },
+  {
+    "path": "vendor/three.module.min.js",
+    "sha256": "787b5ff9cf29c737b9a21a7541ed0f2ca93b187e00e6ec361d1f429e5063a70c",
+    "bytes": 742322
+  },
+  {
+    "path": "src/config.js",
+    "sha256": "4ce07c47e67074acb25b2e87d33a13a05002a33a9df5c618d4f241601b14ed16",
+    "bytes": 3960
+  },
+  {
+    "path": "src/core/wind.js",
+    "sha256": "df3272eb81b22cecde5a9643800a050d288f158cb6b0c9f2457fd6f3929ec913",
+    "bytes": 5546
+  },
+  {
+    "path": "src/world/layout.js",
+    "sha256": "b237db0566ee46df2132455adc0d811a9ef226115b47e51f88d21503f0c7d61e",
+    "bytes": 23723
+  },
+  {
+    "path": "src/ui/loader.js",
+    "sha256": "a2ea106939d0b53966d091fd4f00fd83ae8d5bbad1d43ba0628bbb7e5433f63c",
+    "bytes": 2422
+  },
+  {
+    "path": "src/sky/sky.js",
+    "sha256": "3c7d87f51551c6801e4ad247602bb30ce8754df9b61d314f9d9ef02639f0b2d5",
+    "bytes": 37531
+  },
+  {
+    "path": "src/terrain/terrain.js",
+    "sha256": "7c955ac52cbd3bf9663466ae149b2937c268bff40f92e9cb97e6b5c8efbf1d38",
+    "bytes": 104402
+  },
+  {
+    "path": "src/ocean/ocean.js",
+    "sha256": "90b8c3f8e8b0e0a3c528a3445f368ad798cbb34a4faf3092205e145cd167063c",
+    "bytes": 85728
+  },
+  {
+    "path": "src/ocean/spray.js",
+    "sha256": "23118c54e311154c50d10049b12acd99339a6ff91de8ac37e3f11650ad745b93",
+    "bytes": 37211
+  },
+  {
+    "path": "src/vegetation/trees.js",
+    "sha256": "7fc74e4459d2a1bf8e9b96cf469e627d76a8178584e3b299ca0d705d0497d458",
+    "bytes": 69453
+  },
+  {
+    "path": "src/vegetation/shrubs.js",
+    "sha256": "c78f9972663c511df4cbe6ef024014e905f0afcbddea69252706a738ab7adf79",
+    "bytes": 29943
+  },
+  {
+    "path": "src/vegetation/grass.js",
+    "sha256": "a4dc5d1ec1aaad048fb27cad230c9fd24c94f90d1bb39ac66d33be64f50a379f",
+    "bytes": 75158
+  },
+  {
+    "path": "src/camera/handheld.js",
+    "sha256": "3ae73b028783ccc8621399fb96239de49f3a50855a1961f9f0687064701a9faa",
+    "bytes": 8318
+  },
+  {
+    "path": "src/post/post.js",
+    "sha256": "9674b87a9dbded90848fc733ad9b6f5c9702816a9211ddbcba852b02faea19b7",
+    "bytes": 49032
+  },
+  {
+    "path": "src/audio/audio.js",
+    "sha256": "88aceadff2958f95a5e5d4bb70884a7f3f3c0a6192c2c18742d7c28d6d22b25e",
+    "bytes": 47258
+  },
+  {
+    "path": "src/audio/offline.js",
+    "sha256": "167725c7dee9b2302a1e7bba5bdf5413d1453dfde4aec9f30e50bec0678a654a",
+    "bytes": 3976
+  },
+  {
+    "path": "src/core/rng.js",
+    "sha256": "09b1b3202665bcbe4f8ed0c79f17fd68b93b454840ab740b223cfac59a0be2cb",
+    "bytes": 1564
+  },
+  {
+    "path": "src/sky/skyModel.js",
+    "sha256": "05504c01584bf4fb9caaa3bd97b51286b26b129313513059e8dbfe295ebf0b38",
+    "bytes": 12881
+  },
+  {
+    "path": "src/sky/farShadow.js",
+    "sha256": "0fc0d5eb8fe883a8ec61b9703b292f4b0b60e3fb5bec61c9c46c5941a0069498",
+    "bytes": 6026
+  },
+  {
+    "path": "vendor/addons/utils/BufferGeometryUtils.js",
+    "sha256": "9fb63427ce6641fa14fd0baff9cc4d1b5f9c3d85fd084bf2e90e803c44ec1797",
+    "bytes": 37712
+  },
+  {
+    "path": "src/core/atmosphere.js",
+    "sha256": "c12395e054d8ffad593e6303ef6eb3b6f2c7e33955dc7650e92ef1e1b6e928c0",
+    "bytes": 9317
+  },
+  {
+    "path": "src/ocean/fft.js",
+    "sha256": "dba3d9082e4a55862631b8043e7f80a7a52471ae37b28842cef74304568ffb8d",
+    "bytes": 13266
+  },
+  {
+    "path": "src/ocean/coast.js",
+    "sha256": "bb3f8aa9c29ef53e03c7322909aa1193950dfe1a93ba7130a94542c430e8ecfb",
+    "bytes": 7635
+  },
+  {
+    "path": "src/ocean/foamtex.js",
+    "sha256": "11857a1771e5d8d8ef54cde04446e824380cfb5d8964e91603cf2a5004b761ed",
+    "bytes": 5093
+  },
+  {
+    "path": "src/ocean/surf.glsl.js",
+    "sha256": "58131fcf9043af01ea2d37978fa6e761da557ea378cd7424931083fa684d6b57",
+    "bytes": 18928
+  },
+  {
+    "path": "src/ocean/nearbreak.js",
+    "sha256": "297191e8fb5c5500908f3126fa2185853c7c70c55b0ca314d69ecf0611eaefa2",
+    "bytes": 26536
+  },
+  {
+    "path": "src/post/tonemap.js",
+    "sha256": "9d46053aa62e0cab9a24f6bfb9746e45d34953ffeb79e504e35244aa8e29f7d3",
+    "bytes": 4248
+  },
+  {
+    "path": "src/ocean/spray/texture.js",
+    "sha256": "fa8067487fac674f74076cb81ad6a6388e113afa92ce98720c48fc1e877c94a1",
+    "bytes": 4997
+  },
+  {
+    "path": "src/ocean/spray/emitters.js",
+    "sha256": "04cc7b3f67956a93f660272f869ad8e563b0679efb96bcae0f8fede82b70feea",
+    "bytes": 8711
+  },
+  {
+    "path": "src/vegetation/lib/branches.js",
+    "sha256": "7d4829aa06976873f8703116f41def4d3c694752bdbcf992d9b0d316aa2061a1",
+    "bytes": 10229
+  },
+  {
+    "path": "src/vegetation/lib/tuftAtlas.js",
+    "sha256": "f7ed0d74ce1edb8ede1681f74b980d7c1f9beecdd907e7263e71c274d5d8565d",
+    "bytes": 31484
+  },
+  {
+    "path": "src/vegetation/lib/vegWind.js",
+    "sha256": "70b96ef6e4b74da8fa77bcdcbaf2a7f9e09f7c35a8ae489770fdbfa3fab1fc18",
+    "bytes": 10944
+  }
+]
