@@ -91,6 +91,14 @@ sun's do by day), with faint moon shafts, stars and the moon in the roof.
   dragonfly takes a liking to you and escorts you a while, hummingbirds
   stop to inspect you, the songbird watches you from its bough and flies a
   loop if you crowd it.
+- **Wildlife around APX-9**: honeybees and a carpenter bee forage bloom to
+  bloom, a jewel beetle and a ladybird climb the flower stems (and at the top
+  open their shells and fly to the next), butterflies visit a bloom near the
+  one APX-9 lands on, and a hummingbird comes over every half minute or so.
+  The cast stays where the camera is looking: creatures that drift far away
+  out of view re-settle, out of view, near the bee and fly in. In Follow a
+  forager or a hummingbird often travels with APX-9 for a while, just beyond
+  it in the frame.
 - **Time of day**: one control from the film's midnight teal through dusk
   (blue hour) and dawn (rose mist, the lanterns guttering out) to the
   golden-hour finale. `T` cycles midnight → dusk → dawn → golden hour and the
@@ -234,6 +242,7 @@ node tools/pacing.mjs [--w 2560 --h 1440] [--cpu 4] [--mobile 1]            # fr
 node tools/camjerk.mjs                                                      # camera smoothness flying low: spring-arm pops and chatter, view jerks
 node tools/cpuprofile.mjs --mode fly · node tools/allocprofile.mjs          # where the main thread's time / garbage goes, by function
 node tools/abshots.mjs --a 8765 --b <rollback port> --out review/x          # A/B stills from the same chase-camera spots
+node tools/wildlife.mjs [--mobile 1]                                        # Follow: how often wildlife is on screen, by kind, and how far from APX-9
 ```
 
 (The tools expect a local static server on port 8765 and use the system
@@ -296,7 +305,9 @@ src/explore/                   the interactive modes:
   cameras.js                     chase camera, cinematic follow camera, photo camera
   interactions.js                pollination, deposits, winding + bloom wave, kindling, armillary, sparks, pollen bosses
   growth.js · bells.js           sprouting glass blooms · porcelain bellflowers
-  ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird
+  ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird, foragers, crawlers,
+                                 Follow companions (the cast kept round APX-9); creatures/compact.js merges each
+                                 explore rig's rigid parts (20–40% fewer draws)
   scenery.js                     near gable and doors, far doors, column tops, glazing bars, end planting, exterior
   upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade), tiling, glass; detail culling
   nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD,
@@ -306,7 +317,7 @@ tools/                         shoot.mjs (stills), record.mjs (video), determini
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
                                drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
                                flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs, pacing.mjs,
-                               camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs
+                               camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs, wildlife.mjs
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```

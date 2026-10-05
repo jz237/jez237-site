@@ -396,7 +396,7 @@ export class Explore {
     this.nearfield.update(this.camera);
     this.frustum.setFromProjectionMatrix((this._projView || (this._projView = new THREE.Matrix4())).multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     this.cull.update(this.camera, this.renderer.getDrawingBufferSize(this._vp || (this._vp = new THREE.Vector2())).y, this.debugView || this.photo ? null : this.frustum);
-    if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);
+    if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum, this.mode === 'fly' || this.photo ? null : this.pilot.goal?.to, this.mode === 'follow' && !this.photo && !this.debugView);
     // light: shadows round what we're looking at, practicals
     const fwd = this.camera.getWorldDirection(V());
     const center = this.debugView ? v.target.clone() : a.pos.clone().lerp(this.camera.position, 0.3).addScaledVector(fwd, 14);
