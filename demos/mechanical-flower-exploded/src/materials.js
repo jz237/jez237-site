@@ -93,6 +93,76 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
   }
   g.globalAlpha = 1;
 
+  // stained-glass facets: jittered Voronoi cells tinted from the palette, so the enamel reads as mottled iridescent glass
+  const facetEdges = [];
+  {
+    const cols = veins === 'petal' ? 7 : 6;
+    const rows = veins === 'petal' ? 11 : 14;
+    const cw = w / cols;
+    const ch = h / rows;
+    const seeds = new Map();
+    for (let j = -2; j <= rows + 1; j++) for (let i = -2; i <= cols + 1; i++) seeds.set(`${i},${j}`, [(i + 0.12 + r() * 0.76) * cw, (j + 0.12 + r() * 0.76) * ch]);
+    const clip = (poly, d, c) => {
+      const out = [];
+      for (let k = 0; k < poly.length; k++) {
+        const a = poly[k];
+        const b = poly[(k + 1) % poly.length];
+        const fa = a[0] * d[0] + a[1] * d[1] - c;
+        const fb = b[0] * d[0] + b[1] * d[1] - c;
+        if (fa <= 0) out.push(a);
+        if (fa <= 0 !== fb <= 0) {
+          const t = fa / (fa - fb);
+          out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+        }
+      }
+      return out;
+    };
+    for (let j = 0; j < rows; j++) {
+      for (let i = 0; i < cols; i++) {
+        const s = seeds.get(`${i},${j}`);
+        const R = Math.max(cw, ch) * 4;
+        let poly = [[s[0] - R, s[1] - R], [s[0] + R, s[1] - R], [s[0] + R, s[1] + R], [s[0] - R, s[1] + R]];
+        for (let dj = -2; dj <= 2 && poly.length > 2; dj++) {
+          for (let di = -2; di <= 2; di++) {
+            if (!di && !dj) continue;
+            const n = seeds.get(`${i + di},${j + dj}`);
+            poly = clip(poly, [n[0] - s[0], n[1] - s[1]], (n[0] * n[0] + n[1] * n[1] - s[0] * s[0] - s[1] * s[1]) / 2);
+            if (poly.length < 3) break;
+          }
+        }
+        if (poly.length < 3) continue;
+        const along = 1 - s[1] / h;
+        const pick = r();
+        const col = pick < 0.2 ? pal[3] : along < 0.34 ? (pick < 0.65 ? pal[0] : pal[1]) : along < 0.68 ? (pick < 0.6 ? pal[1] : pal[2]) : pick < 0.7 ? pal[2] : pal[1];
+        g.beginPath();
+        poly.forEach((p, k) => (k ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])));
+        g.closePath();
+        g.globalCompositeOperation = 'source-over';
+        g.globalAlpha = (veins === 'petal' ? 0.22 : 0.18) + r() * 0.2;
+        g.fillStyle = col;
+        g.fill();
+        if (r() < 0.22) {
+          g.globalCompositeOperation = 'screen';
+          g.globalAlpha = 0.04 + r() * 0.08;
+          g.fillStyle = [pal[3], pal[2], '#ffd9ff', '#bff6ff'][Math.floor(r() * 4)];
+          g.fill();
+        }
+        for (let k = 0; k < poly.length; k++) facetEdges.push([poly[k], poly[(k + 1) % poly.length]]);
+      }
+    }
+    g.globalCompositeOperation = 'source-over';
+    g.globalAlpha = 0.22;
+    g.strokeStyle = '#fff0c0';
+    g.lineWidth = 1;
+    for (const [a, b] of facetEdges) {
+      g.beginPath();
+      g.moveTo(a[0], a[1]);
+      g.lineTo(b[0], b[1]);
+      g.stroke();
+    }
+    g.globalAlpha = 1;
+  }
+
   // darker base blush, lighter tip sheen
   const sh = g.createLinearGradient(0, h, 0, 0);
   sh.addColorStop(0, 'rgba(0,0,0,0.30)');
@@ -194,6 +264,52 @@ export function enamelTextures(kind, seed, { w = 512, h = 1024, veins = 'petal' 
     }
   }
 
+  // gold cell network: a share of the facet borders are inlaid in gold, like the cloisonne wires in the reference
+  const goldOdds = veins === 'petal' ? 0.34 : 0.14;
+  const edgeHash = (a, b) => {
+    const x = Math.round((a[0] + b[0]) / 2);
+    const y = Math.round((a[1] + b[1]) / 2);
+    return (Math.imul(x * 73856093 ^ y * 19349663, 2654435761) >>> 0) / 4294967296;
+  };
+  const margin = 0.06 * w;
+  for (const [a, b] of facetEdges) {
+    if (edgeHash(a, b) > goldOdds) continue;
+    if (Math.min(a[0], b[0]) < margin || Math.max(a[0], b[0]) > w - margin) continue;
+    if (Math.max(a[1], b[1]) > h || Math.min(a[1], b[1]) < 0) continue;
+    stroke(g, [a, b], 1.5, gold);
+    stroke(bg, [a, b], 2.2, '#d8d8d8');
+  }
+
+  // edge eyelets: jewelled-looking gold rings spaced along both borders
+  const asp = veins === 'petal' ? 1.5 : 0.8;
+  const eyeletCols = ['#0a2e52', '#4a0f33', '#0b4a3f', '#2a1260'];
+  const ex = veins === 'petal' ? 0.962 : 0.972;
+  let ei = 0;
+  for (const x of [w * (1 - ex), w * ex]) {
+    for (let y = h * 0.2; y < h * 0.9; y += h * (veins === 'petal' ? 0.088 : 0.075)) {
+      const rx = 8.5;
+      const ry = rx * asp;
+      g.beginPath();
+      g.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+      g.fillStyle = eyeletCols[ei++ % eyeletCols.length];
+      g.fill();
+      g.lineWidth = 3.2;
+      g.strokeStyle = gold;
+      g.stroke();
+      g.beginPath();
+      g.ellipse(x - rx * 0.28, y - ry * 0.3, rx * 0.22, ry * 0.2, 0, 0, Math.PI * 2);
+      g.fillStyle = 'rgba(255,255,255,0.55)';
+      g.fill();
+      bg.beginPath();
+      bg.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+      bg.fillStyle = '#505050';
+      bg.fill();
+      bg.lineWidth = 3.6;
+      bg.strokeStyle = '#ffffff';
+      bg.stroke();
+    }
+  }
+
   const map = new THREE.CanvasTexture(c);
   map.colorSpace = THREE.SRGBColorSpace;
   map.anisotropy = 8;
@@ -210,14 +326,14 @@ export function enamelMaterial(kind, seed, opts = {}) {
     map,
     bumpMap: bump,
     bumpScale: 1.6,
-    metalness: 0.18,
-    roughness: 0.36,
+    metalness: 0.1,
+    roughness: 0.38,
     clearcoat: 0.3,
     clearcoatRoughness: 0.12,
-    iridescence: 0.3,
+    iridescence: 0.18,
     iridescenceIOR: 1.55,
     iridescenceThicknessRange: [180, 620],
-    envMapIntensity: 0.45,
+    envMapIntensity: 0.3,
     side: THREE.DoubleSide,
   });
 }
