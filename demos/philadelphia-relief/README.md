@@ -160,10 +160,15 @@ button in the phone toolbar. Camera cards open the official EarthCam, 511PA,
 embedded: EarthCam's linking rules prohibit framing, and PennDOT's streaming
 feeds require separate registration and a video-sharing agreement.
 
-Street View links use Google's documented, key-free Maps URLs and the geographic
-map center when the panel opens. Shortcuts cover City Hall, Bauder Signs and The
-Hidden Reef. Availability and capture dates belong to Google; these are not live
-views and are not a new Cesium layer.
+Street-level links follow the geographic map center when the panel opens. Inside
+the Philadelphia city limits they open the City's public Cyclomedia viewer
+(cyclomedia.phila.gov, `?lat=…&lng=…`), the 360° imagery also shown in Atlas.
+Cyclomedia has no imagery beyond the city, so suburban and New Jersey centers fall
+back to Google's documented, key-free Street View URL. The city test uses
+OpenDataPhilly's City_Limits polygon simplified to about 50 m
+(`src/city-limits-data.js`). Shortcuts cover City Hall and Bauder Signs
+(Cyclomedia) and The Hidden Reef (Google). Coverage and capture dates belong to
+each provider; these are not live views and are not a new Cesium layer.
 
 Weather & river loads only on demand. A bounded same-origin Pages Function reads
 the nearest of five NWS airport stations and NOAA's Philadelphia gauge 8545240.
@@ -174,6 +179,8 @@ and preliminary quality are labeled. The gauge value is not a flood overlay.
 
 Sources: https://www.earthcam.com/site/linktous.php,
 https://www.pa.gov/services/penndot/request-access-to-transportation-related-data-feeds,
+https://cyclomedia.phila.gov/, https://github.com/CityOfPhiladelphia/vue3-cyclomedia,
+https://opendataphilly.org/datasets/city-limits/,
 https://developers.google.com/maps/documentation/urls/get-started,
 https://www.weather.gov/documentation/services-web-api,
 https://api.tidesandcurrents.noaa.gov/api/prod/.
