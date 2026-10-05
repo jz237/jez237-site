@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { L } from '../world/layout.js';
 import { archPoint } from '../world/greenhouse.js';
+import { archPoint2, archShape } from '../world/promenade.js';
 import { noise1 } from '../core/rng.js';
 import { clamp } from '../core/ease.js';
 
@@ -322,7 +323,7 @@ export class Bounds {
     this.addLandable({ kind: 'hero', name: 'the great porcelain bloom', spot: C.land.clone(), face: fl.coreWorld().sub(C.land).setY(0).normalize(), radius: 4.5, cupR: 10, pollen: 0.4, ref: fl });
     // flora: stems, flower heads and their landing bosses
     const R0 = { tulip: 10, lily: 13, rose: 7.5, copperbloom: 9 };
-    const NAMES = { tulip: 'a brass tulip', lily: 'a porcelain lily', rose: 'a porcelain rose', copperbloom: 'a copper aster' };
+    const NAMES = { tulip: 'a blush porcelain tulip', lily: 'a porcelain lotus', rose: 'a porcelain rose', copperbloom: 'a copper aster' };
     w.flora.flowers.forEach((f, i) => {
       const R = R0[f.ty.name] * f.scale;
       this.cap(f.base, f.top.clone().addScaledVector(f.dir, -1.5), 0.7 * f.scale + 0.2, 'stem');
@@ -343,7 +344,7 @@ export class Bounds {
     // hanging lanterns and their chains
     for (const l of w.foliage.lanterns) {
       this.sph(l.p.clone().add(V(0, 0.5 * l.sc, 0)), 3.6 * l.sc, 'lantern');
-      this.cap(l.p.clone().add(V(0, 8 * l.sc, 0)), V(l.p.x, ceilingAt(l.p.x), l.p.z), 0.7, 'chain');
+      this.cap(l.p.clone().add(V(0, 8 * l.sc, 0)), V(l.p.x, l.arch ? l.top : ceilingAt(l.p.x), l.p.z), 0.7, 'chain');
     }
     // path lamps
     for (const core of w.garden.lamps) {
@@ -356,6 +357,28 @@ export class Bounds {
     for (const o of w.flora.orbs) {
       this.sph(o.base, 1.7 * o.sc + 0.2, 'orb');
       o.pos = o.base.clone();
+    }
+    // the promenade: globe bollards on the curbs, the arches over the path
+    // (uprights with their roses, the twin rib with its cusps, the brackets, the finial)
+    const pr = w.promenade;
+    if (pr) {
+      for (const b of pr.bollards) {
+        this.cap(V(b.base.x, b.base.y, b.base.z), V(b.base.x, b.globe.y - 2, b.base.z), 1.9, 'bollard');
+        this.sph(b.globe, pr.globeR + 0.6, 'bollard');
+      }
+      const S = archShape();
+      for (const z of L.arches.zs) {
+        for (const x of [S.x0, S.x1]) {
+          this.cap(V(x, 0, z), V(x, S.spring, z), 4.2, 'arch');
+          const s = Math.sign(S.xc - x);
+          this.cap(V(x, 70.5, z), V(x + s * 10, 70.5, z), 1.6, 'arch');
+          this.sph(V(x, S.spring + 1, z), 4.5, 'arch');
+        }
+        const pts = [];
+        for (let i = 0; i <= 16; i++) pts.push(archPoint2(i / 16, 3.6).setZ(z));
+        this.chain(pts, 5.6, 'arch');
+        this.sph(archPoint2(0.5, 0).add(V(0, 5, z)), 3.2, 'arch');
+      }
     }
     // rose arch over the path
     {

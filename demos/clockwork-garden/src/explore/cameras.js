@@ -533,6 +533,9 @@ export class PhotoCam {
     this.yaw = Math.atan2(d.x, d.z);
     this.pitch = Math.asin(clamp(d.y, -1, 1));
     this.fov = view.fov;
+    // (the shot's focus carries over: the subject stays sharp, the rest soft)
+    this.focus = view.focus || 10;
+    this.aperture = view.aperture ?? 1.6;
     this.vel.set(0, 0, 0);
   }
   update(dt, input) {

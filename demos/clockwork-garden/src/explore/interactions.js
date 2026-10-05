@@ -25,7 +25,7 @@ const WAVE_SPEED = 150;
 const ARM = V((L.pathX[0] + L.pathX[1]) / 2, 86, -560);
 // lamps the evening kindles (night.js) burn at a soft, dreamy level; a passing
 // bee kindles them to full brightness (so at night too it leaves a warmer trail)
-const AMB = { lantern: 0.55, lamp: 0.6, orb: 0.65 };
+const AMB = { lantern: 0.55, lamp: 0.6, orb: 0.65, bollard: 0.7 };
 
 export class Interactions {
   constructor({ world, mat, quality, bounds, growth, bells, audio, emit }) {
@@ -56,6 +56,7 @@ export class Interactions {
     this.lanterns = world.foliage.lanterns.map(() => ({ lit: 0, flare: -100, amb: 0, ignite: -100 }));
     this.orbs = flora.orbs.map(() => ({ lit: 0.0, flare: -100, amb: 0, ignite: -100 }));
     this.lamps = world.garden.lamps.map(() => ({ lit: 0, flare: -100, amb: 0, ignite: -100 }));
+    this.bollards = (world.promenade?.bollards || []).map(() => ({ lit: 0, flare: -100, amb: 0, ignite: -100 }));
     this.flowerWave = new Float32Array(flora.flowers.length).fill(-100); // time the wave reached each bloom
     this.flowerTouch = new Float32Array(flora.flowers.length).fill(-100);
     this.flowerDist = flora.flowers.map((f) => Math.hypot(f.top.x, f.top.z));
@@ -139,6 +140,16 @@ export class Interactions {
         return 0.15 + Math.max(s.lit, s.amb * AMB.lamp) * 2.2 + (fl > 0 ? Math.exp(-fl * 1.2) * 3 : 0) + (ig > 0 ? Math.exp(-ig * 2.2) * 1.0 : 0);
       },
     };
+    if (w.promenade) w.promenade.live = {
+      bollard(b, i) {
+        const s = self.bollards[i];
+        const fl = self.now - s.flare, ig = self.now - s.ignite;
+        const dw = self.now - (s.wave ?? -100);
+        return 0.1 + Math.max(s.lit, s.amb * AMB.bollard) * 2.0 * (0.97 + 0.03 * Math.sin(self.now * 1.7 + b.ph)) + (fl > 0 ? Math.exp(-fl * 1.4) * 2.4 : 0) + (ig > 0 ? Math.exp(-ig * 2.2) * 0.9 : 0) + (dw > 0 && dw < 3 ? Math.exp(-dw * 2.4) * 1.5 : 0);
+      },
+      // the fairy lights: with the lamps as the evening falls, a faint glow by day
+      bulbs() { return 0.12 + 0.88 * (self.lampsK ?? 0); },
+    };
   }
 
   uninstall() {
@@ -146,6 +157,7 @@ export class Interactions {
     w.flora.live = null;
     w.foliage.live = null;
     w.garden.live = null;
+    if (w.promenade) w.promenade.live = null;
   }
 
   // ---- pollen bosses on every far-field bloom (explore only) ------------------------
@@ -385,6 +397,7 @@ export class Interactions {
       kindle(this.lanterns, (i) => this.world.foliage.lanterns[i].p);
       kindle(this.orbs, (i) => this.world.flora.orbs[i].pos);
       kindle(this.lamps, (i) => this.world.garden.lamps[i].position);
+      kindle(this.bollards, (i) => this.world.promenade?.bollards[i].globe);
       // bells chase the front: a rising arpeggio
       const step = Math.floor(wt * 3.2);
       if (step !== w.step && wt < 9) { w.step = step; if (step >= 11) this.audio?.bell(PENTA[(step - 11) % PENTA.length] + (step > 19 ? 12 : 0), 0.03, ((step % 5) - 2) * 0.25); }
@@ -413,6 +426,28 @@ export class Interactions {
       this.world.flora.orbs.forEach((o, i) => {
         const s = this.orbs[i];
         if (s.lit < 1 && o.pos && p.distanceToSquared(o.pos) < 16 * 16) { s.lit = 1; s.flare = now; }
+      });
+      // the globes along the path: each one the bee passes flares, and the
+      // flare runs on down the avenue ahead of it, globe after globe
+      const bl = this.world.promenade?.bollards || [];
+      bl.forEach((g, i) => {
+        const s = this.bollards[i];
+        const d2 = p.distanceToSquared(g.globe);
+        if (s.lit < 1 && d2 < 22 * 22) {
+          s.lit = 1; s.flare = now;
+          this.burst(g.globe, 10, { speed: 3, up: 1.2, life: 1.2, size: 0.3, spread: 1.6, color: [1.6, 1.0, 0.5] });
+          this.audio?.bell(PENTA[(i * 2) % PENTA.length] + 12, 0.014);
+        }
+        // flying along the path past a globe sends a ripple of light on ahead
+        const v = b.vel;
+        if (v && d2 < 26 * 26 && b.speed > 7 && Math.abs(v.z) > Math.abs(v.x) * 1.5 && now - (this._waveAt ?? -10) > 3.5) {
+          this._waveAt = now;
+          const dir = Math.sign(v.z);
+          for (let k = 0; k < bl.length; k++) {
+            const ahead = (bl[k].globe.z - g.globe.z) * dir;
+            if (ahead > 4 && ahead < 320) this.bollards[k].wave = now + ahead / 170;
+          }
+        }
       });
       this.world.garden.lamps.forEach((c, i) => {
         const s = this.lamps[i];

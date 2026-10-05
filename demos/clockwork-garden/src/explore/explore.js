@@ -11,6 +11,7 @@ import { Ambient } from './ambient.js';
 import { Scenery } from './scenery.js';
 import { LookUpgrade, FADE, GLOW } from './upgrade.js';
 import { Night } from './night.js';
+import { WetPath } from './wetpath.js';
 import { lightFieldAll, setLightField, LF } from '../world/lightfield.js';
 import { DetailCull } from './cull.js';
 import { NearField } from './nearfield.js';
@@ -95,6 +96,8 @@ export class Explore {
     this.group.add(this.ambient.group);
     // a night that glows: the light field, kindling, haloes, glowing blooms, fireflies
     this.night = new Night({ world, quality, mat, upgrade: this.upgrade, interactions: this.interactions, growth: this.growth, bells: this.bells, group: this.group });
+    // the wet path that mirrors every lamp at night
+    this.wet = new WetPath({ renderer, world, upgrade: this.upgrade, night: this.night, quality });
     this.upgrade.swap(world.sky.mesh, 'material', world.sky.exploreMaterial);
     // every lit material in the house takes the light field while exploring
     const extra = this.upgrade.swaps.filter((x) => x.prop === 'material').map((x) => x.explore);
@@ -426,6 +429,8 @@ export class Explore {
       sh.autoUpdate = false;
       sh.needsUpdate = (this._shadowFrame = (this._shadowFrame || 0) + 1) % 2 === 0;
     } else this.world.lighting.sun.shadow.autoUpdate = true;
+    this.wet.set(phases);
+    this.wet.render(this.scene, this.camera, this._vp.x, this._vp.y);
     this.pipeline.render({ camera: this.camera, focus: v.focus, aperture: this.quality.dof ? v.aperture : 0 }, null, 0, look);
     // audio follows the bee
     if (this.audio?.enabled) {
@@ -480,6 +485,7 @@ export class Explore {
       'Brush the porcelain bellflowers to ring them',
       'Fly through the armillary rings above the fountain',
       'The lanterns under the vault kindle as you pass',
+      'Fly fast down the path: the globes light up ahead of you',
       touch ? 'The menu changes the hour and takes photographs' : 'T changes the hour · P takes photographs',
       touch ? 'Autopilot hands APX-9 back to its day' : 'C hands APX-9 back to its autopilot',
     ];

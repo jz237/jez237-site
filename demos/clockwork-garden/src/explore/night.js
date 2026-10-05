@@ -30,7 +30,7 @@ const FLY = new THREE.Color(0.9, 1.0, 0.45);
 const SHAFT_SUN = new THREE.Color('#ffd49a'), SHAFT_MOON = new THREE.Color('#9cc4e4');
 const DUST_SUN = new THREE.Color('#ffe2b0'), DUST_MOON = new THREE.Color('#bcd8ee');
 // light-field gains (intensity per unit of each lamp's glow)
-const G = { lantern: 6.8, lamp: 7.5, orb: 3.8 };
+const G = { lantern: 6.8, lamp: 7.5, orb: 3.8, bollard: 4.4 };
 
 export class Night {
   constructor({ world, quality, mat, upgrade, interactions, growth, bells, group }) {
@@ -47,9 +47,14 @@ export class Night {
     // ---- sources --------------------------------------------------------------------------
     const fo = world.foliage, ga = world.garden, fl = world.flora;
     // each lamp kindles at its own hour as the evening falls (and goes out at dawn)
-    this.lanterns = fo.lanterns.map((l) => ({ l, src: src(V(), 165, 80), thr: rng.range(0.45, 0.62), was: 0 }));
+    // (the promenade's lanterns hang low: smaller pools, and fewer of the field's columns to fill)
+    const LR = { apex: [105, 50], bracket: [80, 38], column: [115, 55] };
+    this.lanterns = fo.lanterns.map((l) => { const [r, c] = LR[l.arch] || [165, 80]; return { l, src: src(V(), r, c), thr: rng.range(0.45, 0.62), was: 0 }; });
     this.lamps = ga.lamps.map((c) => ({ c, src: src(c.position.clone(), 135, 34), thr: rng.range(0.47, 0.6), was: 0 }));
     this.orbs = fl.orbs.map((o) => ({ o, src: src(V(), 42, 10), thr: rng.range(0.43, 0.6), was: 0 }));
+    // the promenade's globes kindle down the avenue as the evening falls
+    const pr = world.promenade;
+    this.bollards = (pr?.bollards || []).map((b) => ({ b, src: src(b.globe.clone(), 48, 9), thr: 0.5 + 0.1 * Math.min(1, b.delay / 6) + rng.range(-0.015, 0.015), was: 0 }));
     this.hero = src(V(), 78, 14);
     this.blossom = src(V(), 34, 7);
     this.skep = src(V(), 52, 10);
@@ -77,6 +82,12 @@ export class Night {
       ty.geo.setAttribute('aBloomGlow', a);
       return a;
     });
+    // (and the fine petals of the blooms nearest the camera)
+    for (const { ty } of fl.inst) for (const T of ty.fine) {
+      T.glow = new THREE.InstancedBufferAttribute(new Float32Array(T.max * ty.petals), 1);
+      T.glow.setUsage(THREE.DynamicDrawUsage);
+      T.geo.setAttribute('aBloomGlow', T.glow);
+    }
     // the porcelain bellflowers glow from within at night too (their own material: explore only)
     if (bells?.bellMesh) {
       const m = bells.bellMesh.material.clone();
@@ -125,6 +136,7 @@ export class Night {
     fo.lanterns.forEach((l, i) => items.push({ kind: 'lantern', i, size: 26 * l.sc }));
     ga.lamps.forEach((c, i) => items.push({ kind: 'lamp', i, size: 28 }));
     fl.orbs.forEach((o, i) => items.push({ kind: 'orb', i, size: 6.5 * o.sc }));
+    (this.world.promenade?.bollards || []).forEach((b, i) => items.push({ kind: 'bollard', i, size: 15 }));
     items.push({ kind: 'hero', size: 12 }, { kind: 'skep', size: 9 }, { kind: 'arm', size: 46 }, { kind: 'blossom', size: 6 });
     this.haloItems = items;
     this.halos = new THREE.InstancedMesh(geo, m, items.length);
@@ -163,6 +175,7 @@ export class Night {
     upgrade.swap(fo.flames, 'material', flame);
     // the seed lanterns too: glowing glass bulbs rather than flat discs
     upgrade.swap(this.world.flora.orbMesh, 'material', flame);
+    if (this.world.promenade) upgrade.swap(this.world.promenade.globeMesh, 'material', flame);
     // the glass: a per-lantern glow attribute, brighter toward the panes' edges
     const g = fo.lanternGlass.geometry;
     this.glassGlow = new THREE.InstancedBufferAttribute(new Float32Array(fo.lanterns.length), 1);
@@ -201,9 +214,11 @@ export class Night {
       x.was = a;
       s.amb = a;
     });
+    ia.lampsK = P.lamps; // (the fairy lights follow the lamps: promenade.js)
     kin(this.lanterns, ia.lanterns);
     kin(this.lamps, ia.lamps);
     kin(this.orbs, ia.orbs, 0.03);
+    if (ia.bollards) kin(this.bollards, ia.bollards, 0.012);
     // the world's own glows read these (inert in the film: the film's context has none)
     ctx.heroNight = P.blooms;
     ctx.podNight = P.blooms;
@@ -249,6 +264,12 @@ export class Night {
       x.src.pos.copy(o.now || o.base);
       x.src.color.copy(ORB).multiplyScalar(Math.max(0, g - 0.08) * G.orb);
     });
+    const pr = w.promenade;
+    this.bollards.forEach((x, i) => {
+      const g = pr.live ? pr.live.bollard(x.b, i) : 0;
+      x.g = Math.max(0, g - 0.12);
+      x.src.color.copy(LAMP).multiplyScalar(x.g * G.bollard);
+    });
     // the great bloom's core is a lantern
     const head = w.flower.head.getWorldPosition(this.hero.pos);
     head.y += 1.2;
@@ -284,6 +305,7 @@ export class Night {
     }
     // blooms glow from within: per bloom, brighter pollinated, welcoming a bee, in the wave
     const base = P.blooms;
+    const ac = this._ac || (this._ac = new THREE.Color());
     fl.inst.forEach(({ ty }, k) => {
       const A = this.bloomAttr[k].array;
       let o = 0;
@@ -296,10 +318,21 @@ export class Night {
         if (dt0 > 0 && dt0 < 3) g += Math.exp(-dt0 * 1.8) * (0.3 + 1.0 * night);
         if (dw > 0 && dw < 3) g += (dw < 0.6 ? Math.sin(Math.PI * dw / 0.6) : Math.exp(-(dw - 0.6) * 1.6)) * (0.6 + base);
         g += pol * 0.15; // a pollinated bloom keeps a little warmth by day
+        f._g = g;
         for (let p = 0; p < ty.petals; p++) A[o++] = g;
+        // its anthers glow with it
+        const a = 0.04 + g * 0.95;
+        fl.anthers.setColorAt(f.gi, ac.setRGB(a * 0.95, a * 0.55, a * 0.22));
       }
       this.bloomAttr[k].needsUpdate = true;
+      for (const T of ty.fine) {
+        const AH = T.glow.array;
+        let oh = 0;
+        for (const f of T.near) for (let p = 0; p < ty.petals; p++) AH[oh++] = f._g ?? 0;
+        T.glow.needsUpdate = true;
+      }
     });
+    fl.anthers.instanceColor.needsUpdate = true;
     // porcelain bells glow like the blooms
     if (this.bellMat) this.bellMat.emissiveIntensity = 0.22 * base;
     // fireflies
@@ -313,6 +346,8 @@ export class Night {
     const nl = this.lanterns.length;
     this.lamps.forEach((x, i) => halo(x.c.position, this.haloItems[nl + i].size, LAMP, (x.src.color.r / G.lamp) * 0.05 * hk));
     this.orbs.forEach((x, i) => halo(x.src.pos, this.haloItems[nl + this.lamps.length + i].size, ORB, (x.src.color.r / G.orb) * 0.05 * hk));
+    const nb0 = nl + this.lamps.length + this.orbs.length;
+    this.bollards.forEach((x, i) => halo(x.b.globe, this.haloItems[nb0 + i].size, LAMP, x.g * 0.06 * hk));
     halo(this.hero.pos, 12, LANTERN, Math.min(2, coreG) * 0.1 * hk);
     halo(this.skep.pos, 9, LANTERN, (this.skep.color.r / 1.4) * 0.1 * hk);
     halo(this.arm.pos, 40, LAMP, (this.arm.color.r / 2.4) * 0.05 * hk);
