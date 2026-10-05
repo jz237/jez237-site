@@ -69,6 +69,12 @@ python3 -m http.server 8765
 
 Requires a WebGL2 browser (Chrome, Edge, Firefox, Safari 16+).
 
+**Before publishing, run `node tools/cachebust.mjs`.** jez237.com lets browsers
+cache `.js`/`.css` for 4 hours but revalidates `index.html` on every visit, so
+without it returning visitors get the new page running stale modules. The tool
+stamps every module (via the import map) and the stylesheet with a content
+hash in `index.html`; changed files get new URLs, unchanged ones stay cached.
+
 ## Controls
 
 ### Fly (desktop)
