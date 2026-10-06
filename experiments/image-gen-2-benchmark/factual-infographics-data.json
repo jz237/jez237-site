@@ -9844,5 +9844,119 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-06-factual-infographic-factual-infographic-coccolithophores-bu",
+    "title": "Factual infographic: Coccolithophores — Building Ocean Chalk",
+    "tests": "Two independent fetched authoritative publishers; eight substantive panels and four-plus mechanism enlargements. No numeric scales or climate-benefit claims. No non-Monday subjective review.; archive_slot=2026-10-06T16:20; concept=coccolithophore-intracellular-calcite-plate-assembly; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, very detailed museum-quality direct-canvas scientific infographic, not a poster photographed in a room, no desk, display case, paper border or mockup. Title: \"COCCOLITHOPHORES\"; subtitle: \"Building ocean chalk, one microscopic plate at a time\". Favor a spacious portrait educational plate with legible large labels, meticulously organized eight supporting panels and a dominant central specimen. Use ivory calcite, deep midnight marine blue, turquoise water and restrained amber for intracellular formation. Realistically illuminated three-dimensional biological renderings combined with elegant precise diagrams, generous gutters, numbered steps and thin leader lines; no tiny paragraph blocks, bibliography, URLs, logos or watermark. The exact factual content below is the complete allowed claim set; do not add numerical measurements, dates, plate counts, speculative functions, climate promises or unsupported taxonomy.\n\nDOMINANT HERO occupying the central upper half: a greatly enlarged illustrative Noelaerhabdaceae-type coccolithophore with overlapping oval calcite coccoliths forming a spherical coccosphere. Fine white mineral ridges, radial crystal segments, elliptical central grids, shadows between overlapping shields, tactile chalk-white surfaces in deep-blue water. Remove a small wedge of the outer covering to expose a simplified amber intracellular coccolith vesicle with one forming plate on an organic base-plate; this is explicitly a schematic cutaway, not a complete cell-anatomy claim. Do not invent organelles. Leader lines identify \"Coccosphere: overlapping plates\", \"Coccolith: calcite plate\", \"Coccolith vesicle: formation inside the cell\". Mark \"Microscopic life — strongly enlarged; diagrams not to common scale\". A few detached plates appear near the hero, never as scales on an animal. No visible tentacles, eyes or animal mouth.\n\nArrange EIGHT substantial illustrated supporting panels around and below this hero, following an intelligible reading route. Each panel has a bold short heading, one clear explanatory sentence, and a distinct informative drawing:\n1. \"A living ocean cell\" — an upper-ocean water-column vignette with sunlight entering surface water and a magnifier connecting to the enlarged single cell; label \"Single-celled marine algae\" and \"Photosynthesis builds organic carbon\". Illustrate photosynthesis qualitatively with sunlight-to-cell arrow, no invented stoichiometry.\n2. \"An internal mineral workshop\" — large explanatory cutaway close-up of a membrane-bounded coccolith vesicle within the schematic cell; one developing plate. Label \"Plates form inside the cell, generally one at a time\". Clear vesicle boundary and readable callout; no mechanical factory machinery.\n3. \"Start with a ring\" — second large explanatory close-up: exploded diagram of an organic base-plate scale beneath a protococcolith ring at its outer edge. Label \"An initial mineral ring forms around an organic base-plate\". Amber organic foundation, white forming crystal ring, schematic stages joined by arrows. Do not imply an experimentally established exact time sequence beyond ring initiation and plate formation.\n4. \"Crystal geometry\" — third large explanatory close-up: front view and side section of an oval coccolith, showing radially arranged calcite segments around a central grid and the two shields. Labels \"Radial calcite segments\", \"Central grid\", \"Distal shield\", \"Proximal shield\"; include \"Calcite · calcium carbonate · CaCO3\". Show fine segmented geometry, not a solid featureless washer. Diagram reflects the illustrated plate family, not a universal shape for every species.\n5. \"Export and overlap\" — three-stage schematic: plate inside vesicle, plate at cell surface, plate incorporated into overlapping external coccosphere. Label \"Completed plates are extruded to the cell surface\" and \"The covering is called a coccosphere\". Arrows explicitly communicate outward export, not ingestion. No invented export machinery.\n6. \"Loose plates, turquoise water\" — two connected contextual views: plates detached into seawater and a top-down turquoise bloom patch surrounded by darker ocean. Label \"Excess production, cell division and death release plates\" and \"Dense clouds of coccoliths can turn water turquoise\". Qualitative optical effect; no albedo or satellite-data claims.\n7. \"A carbonate pathway\" — vertical small ocean cross-section with loose white plate particles descending toward a sediment layer. Label \"Coccolith carbonate can contribute to seafloor sediment\". Show an illustrative pathway only; never imply all material reaches the seabed or that this automatically removes atmospheric CO2. No chalk-cliff origin claim, no guaranteed climate benefit.\n8. \"No two plates are identical\" — comparison of several clearly differing oval plate sizes and thicknesses, plus a restrained translucent 3D reconstruction silhouette. Label \"Size and mass vary — even within a single coccosphere\" and \"3D X-ray imaging reveals plate geometry\". No fabricated quantitative graph, numeric scale or proportionality formula.\n\nStrong typographic hierarchy, central hero and eight substantive scientific panels, at least four genuinely explanatory enlargements/cutaways. Texture windows for calcite crystal ridges and layered overlap are integrated into the geometry and export panels. Distinguish biological rendering from schematic mechanisms with small labels. Keep every sentence readable and concise. Use coherent scientific shapes, realistic mineral lighting, detailed ridge surfaces and clean dark-blue negative space. Full finished infographic directly fills the image canvas. Request high quality, auto size and opaque background.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-coccolithophores-bu.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-coccolithophores-bu.webp",
+    "color": "#405b68",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "coccolithophore-intracellular-calcite-plate-assembly",
+      "imageSha256": "7e68a771d71e04d939354f6cda65fa1081ca0cdac497295cea9d22c593c0b0ec",
+      "imageDHash": "cccd8d6666d5c713"
+    },
+    "factualInfographic": {
+      "topic": "How coccolithophores assemble calcite plates and contribute marine carbonate",
+      "description": "Eight-panel source-backed educational plate explaining intracellular coccolith formation, overlapping calcite architecture and marine carbonate pathways.",
+      "sourceNote": "NASA: https://science.nasa.gov/earth/earth-observatory/coccolithophores/ ; Nature Communications: https://pmc.ncbi.nlm.nih.gov/articles/PMC6375944/ . Verified unicellular ecology, intracellular plate formation, calcite geometry, extrusion, bloom appearance and sediment contribution; no numeric or net climate claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-06T20:21:38.021761+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NASA",
+            "title": "What is a Coccolithophore?",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/earth/earth-observatory/coccolithophores/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Nature Communications",
+            "title": "X-ray nanotomography of coccolithophores reveals that coccolith mass and segment number correlate with grid size",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6375944/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Coccolithophores are unicellular marine planktonic algae; photosynthesis produces organic carbon and calcification produces inorganic carbon.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coccoliths are microscopic calcium carbonate plates made of calcite, CaCO3.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coccoliths are formed inside the cell, generally one at a time, in a compartment called the coccolith vesicle.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coccolith formation begins with a protococcolith ring at the periphery of an organic base-plate scale.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Noelaerhabdaceae coccoliths have multiple calcite crystal segments radially distributed around a central grid; they have proximal and distal shields.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Completed coccoliths are extruded from the cell to form an overlapping external covering called a coccosphere.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Additional coccoliths enter surrounding seawater when cells multiply, die or produce excess plates.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Dense clouds of coccoliths can give bloom waters an opaque turquoise appearance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Coccolith carbonate contributes to seafloor sediment; do not imply all plates reach the bottom or portray a net climate benefit.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Coccolith size and mass vary among species and even within a single coccosphere; the study used three-dimensional X-ray imaging to separate plates and measure geometry.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coccolithophores inhabit the upper ocean; the plates and cells illustrated are microscopic, strongly enlarged and not shown to a common scale.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
