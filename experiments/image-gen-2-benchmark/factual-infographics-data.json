@@ -9602,5 +9602,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-06-factual-infographic-factual-infographic-tsunami-the-shoalin",
+    "title": "Factual infographic: Tsunami — The Shoaling Water Column",
+    "tests": "NOAA and University of Waikato source-backed claims; eight substantive panels and four-plus mechanism enlargements; schematic geometry, no event predictions or numeric examples; no non-Monday subjective review.; archive_slot=2026-10-06T08:20; concept=tsunami-shallow-coast-water-column-shoaling; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, richly illustrated factual science infographic directly on the image canvas, not a photograph of a poster, no room, frame, desk, museum case or prop surround. Title: “TSUNAMI — THE SHOALING WATER COLUMN”. Subtitle: “From a low ocean swell to powerful coastal flow”. A sophisticated editorial ocean-science plate, generous readable portrait-oriented composition selected naturally by auto size, opaque warm ivory ground, midnight navy typography, marine teal water, amber causal arrows, white contour accents. Request high quality. No logos, citations, URLs or watermark.\n\nDOMINANT HERO: a sweeping, meticulously illustrated ocean-to-coast sectional transect occupying the central half of the plate: abyssal blue water at left transitioning over a rising continental shelf toward a low rocky coast at right. Render translucent water with fine depth shading, a crisp seabed profile with rock and sediment textures, a dashed normal-sea-level reference, and the same long-wave sequence moving shoreward. Offshore crests broad and low, nearshore crests closer together and taller; use schematic exaggeration for readability and visibly label “Schematic — not to scale”. Do not create an enormous curling surf barrel or imply a literal solid wall of water. Subtle full-depth motion arrows show the water column involved; amber arrows above the surface show direction of wave travel, a distinct thin teal arrow key indicates water motion, so propagation and particle motion are not confused. Carefully placed leader lines identify “deep ocean”, “continental shelf”, “shallow coast”, “long wavelength”, “shorter wavelength”, and “height increases”. Keep scale qualitative, with no invented depth, height, speed or event data. All panels spacious, readable, integrated around the hero, strong numbered headings and short text, no filler.\n\nEIGHT SUPPORTING PANELS, each a distinct substantive mechanism or comparison:\n1. “A long, low wave” — elegant offshore profile close-up, bracket between two broad crests labelled “wavelength”; small vertical bracket labelled “wave height”; caption “A tsunami can be barely noticeable in deep water.”\n2. “The whole water column” — explanatory cutaway inset with subtle distributed motion arrows from surface toward seabed. Compare alongside a separate small wind-wave section with motion concentrated near the top, labels “Tsunami: full-depth motion” and “Wind waves: near-surface motion”. Draw an idealized comparison, not exaggerated particle trajectories or equal wavelengths.\n3. “Depth sets speed” — two isolated basin sections, deeper and shallower, matching wave-direction arrows whose lengths indicate faster and slower propagation. One readable formula “c ≈ √(g h)” with legend “c: wave speed • g: gravity • h: water depth”. Label “Deeper: faster” and “Shallower: slower”. No numeric example.\n4. “Wavelength shortens” — explanatory close-up wave-profile pair, with a broad offshore crest-to-crest bracket above and a shorter nearshore bracket below. Short statement “Speed decreases; frequency remains unchanged.” Second small relation “speed = frequency × wavelength”. Distinguish wavelength from wave height with the same bracket conventions as panel 1.\n5. “Shoaling raises the surface” — magnified shallow-shelf section showing successively taller surface profiles over shallower water; a clean qualitative cause-and-effect chain “Shallower water → slower wave → shorter wavelength + greater height”. Caption “Shoaling is an increase in wave amplitude.” No toothpaste analogy, no claim that one component alone creates the whole energy change, no energy pie charts.\n6. “Currents intensify” — enlarged nearshore water-section diagram showing denser current arrows toward the coast, with motion clearly indicated by the teal key and caption “Coastal flow can become powerful as water shallows.” Avoid invented speeds, force values, or structural-damage thresholds.\n7. “Not a single surf crest” — horizontal coastal strip with a broad elevated water profile continuing over low land; caption “A tsunami still has a long wavelength near shore. Inward flow can last many minutes.” Illustrate sustained flood flow, not an instantaneous splashing breaker, no people or sensational destruction.\n8. “Reading run-up” — explanatory land-profile cutaway, sea-level dashed line, inland wet edge, vertical bracket from normal sea level to maximum reached elevation labelled “Run-up: height reached inland”; separate horizontal bracket from shore to wet edge labelled “Inundation: inland extent”. Make the two geometric quantities unmistakable, with no numbers or implied prediction.\n\nInformation architecture layers: dominant coastal cutaway, numbered process sequence, full-depth-versus-surface comparison, wave-bracket close-ups, formula/cause diagram, coast context vignette and concise keyed callouts. At least four enlarged mechanism diagrams; fine scientific rendering and believable water/rock surface textures, controlled luminous underwater shading, thin precise leaders that never cross text. Readable title and panel heads, large concise labels, no microscopic paragraphs. Visually beautiful but scientifically restrained: use only the supplied qualitative claims, no historic event map, extra warning advice, species, structures, machinery or speculative processes. Prioritize coherent factual explanation over ornamental density.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-tsunami-the-shoalin.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-tsunami-the-shoalin.webp",
+    "color": "#97afb1",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "tsunami-shallow-coast-water-column-shoaling",
+      "imageSha256": "0d310989ae75224194d608e8a7e3007951284466fabd236f8738c2acbb1b5360",
+      "imageDHash": "9491253024b72118"
+    },
+    "factualInfographic": {
+      "topic": "How tsunami waves change as they approach shallow coastal water",
+      "description": "Source-backed mechanism plate on tsunami shoaling and coastal water-column change.",
+      "sourceNote": "NOAA, Tsunami Propagation: https://www.noaa.gov/jetstream/tsunamis/tsunami-propagation ; University of Waikato, Tsunami shoaling: https://www.sciencelearn.org.nz/resources/596-tsunami-shoaling . Verified scope: qualitative long-wave propagation, depth-dependent speed, shortening wavelength, shoaling, currents and inland run-up. No event-specific predictions or unsupported numerical heights.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-06T12:21:46.825938+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA",
+            "title": "Tsunami Propagation",
+            "sourceType": "government-agency",
+            "url": "https://www.noaa.gov/jetstream/tsunamis/tsunami-propagation"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Waikato — Science Learning Hub",
+            "title": "Tsunami shoaling",
+            "sourceType": "university",
+            "url": "https://www.sciencelearn.org.nz/resources/596-tsunami-shoaling"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Tsunamis propagate through the entire water depth, unlike wind waves whose motion is concentrated near the surface.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In deep ocean water, a tsunami has a long wavelength and often small surface height; it may be barely noticeable.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Tsunami propagation speed depends on water depth: deeper water permits faster propagation; shallower water slows it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "For a long wave, propagation speed c is approximated by sqrt(g h), where g is gravitational acceleration and h water depth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "As a tsunami enters shallower water, its wavelength decreases.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Wave speed equals frequency times wavelength; slowing propagation does not itself change frequency, so wavelength becomes shorter.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Shoaling is the increase in wave amplitude as a wave moves into shallow water; tsunami waves can grow much taller near the coast.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Currents intensify as tsunamis approach shallow coastal water.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Even after shoaling, tsunami wavelengths remain relatively long; water can continue flowing inland for many minutes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Run-up refers to the maximum height reached inland above normal sea level, distinct from horizontal inundation extent.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
