@@ -9712,5 +9712,137 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-06-factual-infographic-factual-infographic-giant-salmonfly-gil",
+    "title": "Factual infographic: Giant Salmonfly — Gills Beneath the Current",
+    "tests": "Eight substantive supporting panels and four biological mechanism enlargements; three independent publishers read; no fixed duration, size or thermal thresholds; enlarged specimen labeled; no non-Monday subjective review.; archive_slot=2026-10-06T12:20; concept=pteronarcys-nymph-ventral-gills-river-emergence; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the FINISHED direct-canvas factual natural-history infographic, not a photographed poster, room, museum case, desktop or mockup. Request quality high, opaque background, automatic native size; favor a spacious portrait educational plate. Title exactly “GIANT SALMONFLY”; subtitle “Pteronarcys californica • Life beneath a western river”. Elegant editorial scientific typography, slate-blue water tones, charcoal cuticle, pale ivory labels and restrained amber adult accents. One enormous naturalistic whole aquatic nymph hero occupies the central upper half, seen obliquely from below at river-cobble level so the ventral thoracic gill tufts are visible. Credible insect anatomy, six jointed legs attached to the thorax, distinct head/thorax/segmented abdomen, long antennae, wingless nymph, no monster mutations. Wet textured cuticle, delicate pale filamentous gill tufts below the thoracic segments, natural river gravel and an underwater leaf fragment, detailed but quiet water light. Scientific macro-photographic surface realism fused with precise illustrator-led explanatory overlays. Show the hero enlarged, explicitly label “Enlarged nymph • not life-size”; no invented ruler or exact body length.\n\nIntegrate EIGHT substantive supporting panels around and below the hero with generous gutters, readable short captions, precise leader lines, distinct content and consistent hierarchy. Insect imagery and biological close-ups must occupy most of the total canvas, rather than prose or maps. At least FOUR large explanatory enlargements; no microscopic invented anatomy.\n1 “GILLS UNDER THE THORAX”: a large ventral close-up of the nymph underside and leg bases, with accurate filamentous tracheal gill tufts and callout “Ventral thoracic gill tufts”. Connect this enlargement to its actual location on the hero.\n2 “OXYGEN FROM WATER”: a separate very large gill-filament enlargement with sparse conceptual arrows from surrounding water toward the tufts; label “Gill filaments support oxygen uptake”. This is a labeled external schematic, not an invented histological section; do not show human lungs, blood cells, pumps, or numerical exchange rates.\n3 “A LEAF SHREDDER”: substantial close-up of the nymph head beside a softened river leaf fragment, explaining “Nymphs feed on leaf and other organic material”. Show ordinary credible chewing contact without speculative microstructure or secretions.\n4 “COBBLES AND CURRENT”: a riverbed section vignette with the insect among cobbles, leaf material collected between stones and current arrows above; caption “Swift, well-oxygenated water • river-bottom habitat”. Wet grit, translucent water and leaf veins are rich visual context, not a second title scene.\n5 “YEARS UNDERWATER”: a three-stage nymph growth strip and molted exoskeleton cue, same species, label “Repeated molts during a multi-year aquatic stage”. No exact age, instar count, calendar dates or fixed size scale.\n6 “FROM RIVER TO AIR”: clear sequential shoreline cross-section: mature nymph approaching the bank, climbing out onto a rock, final molt, terrestrial winged adult. An adult close-up is the fourth explanatory enlargement: broad dark-veined wings, dark body, orange/red band behind the head and orange/red ventral abdomen; label those two diagnostic adult color regions. Avoid implying a pupal stage; no pupa or cocoon. Caption “Mature nymphs leave the water before the final molt”.\n7 “EGGS RETURN TO WATER”: female above the river releasing an egg cluster, then separated eggs sinking toward the river bottom, restrained causal arrows. Caption “Eggs sink to begin the next generation”. Do not invent egg ornamentation, clutch counts or incubation times.\n8 “RIVER AND SHORE FOOD WEB”: a compact illustrated branch diagram linking salmonfly to a trout in water and an insect-eating bird above shore, paired with a small western North American mountain-river habitat vignette, not a range polygon. Captions “Food for fish and birds” and “Western North American rivers”. Include the short bottom science note “Warming and low oxygen can affect nymph physiology; responses vary.” No universal lethal threshold, alarmist claim, invented conservation status or sensational ranking.\n\nClear typography readable at a glance, no tiny paragraphs, no repeated filler modules. Material textures, habitat section, whole specimen, ventral anatomy enlargement, filament mechanism, mouth/feeding macro, growth sequence, emergence sequence, wing close-up, eggs and food web create layered explanatory density. Preserve a disciplined hierarchy and open margins. No bibliography, URLs, source footnotes, logos or watermark in the image. All factual content is limited to the listed supported labels and mechanisms; do not add facts, statistics or decorative taxonomic labels. The illustration should feel like a sophisticated adult science-museum natural-history plate with unusually abundant insect imagery.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-giant-salmonfly-gil.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-giant-salmonfly-gil.webp",
+    "color": "#888b86",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "pteronarcys-nymph-ventral-gills-river-emergence",
+      "imageSha256": "ba6698f9e79a1619750aabb8357c7123d24f5ed206d4e39a57d5f2d418e443d3",
+      "imageDHash": "e4709bba92d49029"
+    },
+    "factualInfographic": {
+      "topic": "How giant salmonfly (Pteronarcys californica) aquatic nymphs use ventral tracheal gill tufts, shred river-bottom leaves, and emerge as winged adults",
+      "description": "Source-backed natural-history plate of the giant salmonfly nymph’s ventral gill tufts, shredding ecology, habitat, and aquatic-to-terrestrial life cycle.",
+      "sourceNote": "Montana Natural Heritage Program / Montana Field Guide: https://fieldguide.mt.gov/speciesDetail.aspx?elcode=IIPLE2V020; University of Montana: https://umimpact.umt.edu/en/publications/plasticity-of-salmonfly-pteronarcys-californica-respiratory-pheno/; Conservation Physiology / Oxford University Press: https://www.montana.edu/alindsey/documents/Verhille%20et%20al.%202024%20Cons%20Phys.pdf — verified identity, gill location and respiratory scope, habitat, feeding, qualitative life cycle, adult diagnostic colors and food-web role; numeric durations and physiological thresholds omitted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-06T16:21:59.873628+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Montana Natural Heritage Program / Montana Field Guide",
+            "title": "Giant Salmonfly — Pteronarcys californica",
+            "sourceType": "government-agency",
+            "url": "https://fieldguide.mt.gov/speciesDetail.aspx?elcode=IIPLE2V020"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Montana",
+            "title": "Plasticity of salmonfly (Pteronarcys californica) respiratory phenotypes in response to changes in temperature and oxygen",
+            "sourceType": "university",
+            "url": "https://umimpact.umt.edu/en/publications/plasticity-of-salmonfly-pteronarcys-californica-respiratory-pheno/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Conservation Physiology / Oxford University Press",
+            "title": "Thermal tolerance of giant salmonfly nymphs (Pteronarcys californica) varies across populations in a regulated river",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.montana.edu/alindsey/documents/Verhille%20et%20al.%202024%20Cons%20Phys.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The giant salmonfly is Pteronarcys californica, a stonefly in order Plecoptera and family Pteronarcyidae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The aquatic nymph is a large-bodied insect; the terrestrial adult is winged. Depictions are enlarged, not life-size.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Tracheal gill tufts are located ventrally on thoracic segments of the nymph, and their filaments are part of its oxygen uptake/delivery respiratory system.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nymphs live on the river bottom among cobbles in swift, well-oxygenated water.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Nymphs are shredders that feed on leaf and other large organic material collected among rocks or debris.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs in western North American rivers, including the Coast, Cascade, Rocky and Sierra Nevada mountain ranges.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Nymphs spend multiple years in water and grow through repeated molts; duration varies, so no single fixed duration is shown.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Mature nymphs crawl to shore and climb out of water before the final molt into terrestrial adults.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Adults have an orange or red band behind the head, orange/red underside of the abdomen, and broad dark-veined wings.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Females lay eggs on or above water; eggs separate and sink to the bottom to begin the next generation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Salmonflies are food for aquatic and terrestrial consumers, including trout and insect-eating birds; nymph feeding processes organic material.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Warming and low oxygen can interact to affect nymph physiology; responses vary with population and conditions, with no universal threshold depicted.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
