@@ -1,5 +1,124 @@
 [
   {
+    "id": "2026-10-06-factual-infographic-factual-infographic-aurora-from-magneto",
+    "title": "Factual infographic: Aurora — From Magnetosphere to Photon",
+    "tests": "Source-backed qualitative auroral physics; no altitude thresholds; eight substantive panels, three mechanism enlargements; no non-Monday subjective review.; archive_slot=2026-10-06T00:20; concept=aurora-magnetospheric-electrons-atmospheric-light; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1145x1374\", \"backendReportedSize\": \"1145x1374\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1145x1374\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: factual-infographic",
+    "prompt": "Create the finished museum-quality scientific infographic itself, a sophisticated portrait educational plate on a deep midnight-blue direct canvas, not a photographed poster, display case, room, desk, screen, book or prop mockup. Request quality high, automatic size, opaque output. Title: “AURORA — FROM MAGNETOSPHERE TO PHOTON”. Subheading: “Solar-wind energy • guided electrons • atmospheric light”. All factual content is limited to the following verified mechanisms. Do not add numerical heights, speeds, lifetimes, dates, wavelengths, map coordinates, predictions or unsupported labels. No bibliography, URLs, source logos, watermarks, tiny footnotes or decorative equations.\n\nDominant hero, roughly the middle third of the plate: a highly detailed oblique cutaway of Earth's curved nightside limb, a delicate blue atmospheric veil, a green auroral curtain arranged along an oval around the magnetic polar region, high diffuse red oxygen glow and localized pink-purple lower fringes. Individual fine rays, layered gauzy arcs, luminous folded edges, credible dark ocean and muted cloud textures, nuanced emission lighting and no fiery flames. Field lines are thin schematic cyan curves, clearly separated from luminous atmosphere; bright tiny electron arrows descend along them. Integrate leader lines naming “upper atmosphere”, “guided electrons”, “oxygen: green / red”, and “nitrogen: blue / pink-purple”. Label this hero “Illustrative view — not to scale”; it is a schematic reconstruction, not a live forecast. Include a small calm ground-horizon view as a contextual inset with the same delicate folded curtains, not an unrelated landscape. This inset introduces no location-specific claim.\n\nSurround the hero with EIGHT generous numbered supporting panels, carefully grouped into three readable tiers with substantial scientific pictures, concise one- or two-line explanations, clear directional flow and consistent line weights. Avoid making eight identical boxes: use elegant diagram windows and fine connectors, strong negative-space gutters, large readable sans-serif headings, ivory text and restrained amber energy arrows. Every panel must visibly teach its own mechanism:\n1 “ENERGY ENTERS”: a Sun–Earth magnetosphere diagram, solar-wind flow approaching from the Sun on the left, compressed sunward field and elongated tail to the right. Caption “Solar wind transfers energy into the magnetosphere.” Mark the tail “away from the Sun”. Label “schematic, not to scale”; no direct particle arrow running from Sun straight into auroral glow.\n2 “FIELD CONNECTION”: close-up of oppositely directed magnetic fields with arrows and a reconnection schematic. Caption “Opposing field directions favor energy transfer.” Depict field-line connectivity changing, never solid strings snapping with sparks.\n3 “ELECTRONS ACCELERATE”: enlarged magnetotail-to-polar-field-path diagram with a localized acceleration zone and separate flowing energy arrows. Caption “Electrons accelerate inside the magnetosphere.” Secondary label “Nighttime source: magnetotail”. Distinguish solar-wind energy from the electrons precipitating into the atmosphere.\n4 “COLLISION → LIGHT”: an enlarged three-stage microscopic explanatory sequence: incoming electron transfers energy to a stylized gas atom or molecule; excited state; relaxation with an emitted photon. Use simple discrete energy-level strokes rather than invented molecular structure. Labels “energy transfer”, “excitation”, “photon emitted”. No literal gas atoms colored green before they emit.\n5 “THE COLOR MAKERS”: swatches of emitted light paired with schematic gas symbols, not pigment paint: “Oxygen → green / red”; “Nitrogen → blue / pink-purple”. A small vertical atmosphere diagram shows broad overlapping emission regions, red above much of green and a localized purple-pink lower edge. Caption “Gas species and excitation set the color.” Add “Typical tendencies, not fixed layers”; no numeric scale and no suggestion every aurora contains every color.\n6 “WHY RED FAVORS THINNER AIR”: explanatory two-path close-up of an excited oxygen atom: in thin higher air it can emit a red photon; in denser lower air another collision can remove excitation first. Caption “Collisions can quench the longer-lived red-emitting state.” Labels “radiative emission” and “collision quenching”. Distinct symbols for photon and colliding particle; no false red glow filling the lower path.\n7 “OVALS, ARCS & CURLS”: top-down magnetic polar projection with an auroral oval circling rather than sitting on the magnetic pole; adjacent two-state diagram “quiet: simple arcs” versus “active: brighter waves and curls”. A qualified expansion arrow says “Greater activity can expand the oval toward lower latitudes”. No geopolitical map, universal symmetry claim or exact forecast.\n8 “EYE VERSUS CAMERA”: paired views of the same faint curtain, restrained pale visual impression for the eye and more detectable green-pink emission in the camera view. Caption “Cameras can reveal colors too faint for human night vision.” Both are illustrative, not promises; no settings, observation advice or safety claims.\n\nThe eight supporting panels and hero must be one cohesive editorial science plate with at least five concrete information layers: planetary cutaway, energy-flow process, microscopic collision strip, atmospheric color comparison, quenching cause/effect, polar geometry, morphology comparison and observer-sensor comparison. Ensure three especially legible explanatory enlargements: magnetic reconnection, collision-to-photon mechanism, and quenching. Use luminous volumetric emission rendering only for the hero and realistic sky inset; use rigorous crisp line diagrams for mechanisms. Richly layered but highly organized, no filler, repeated text or invented data. Prioritize accurate arrows, strong typography, substantive diagrams and readable short labels over decorative stars. Render only the finished educational artwork.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-aurora-from-magneto.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-aurora-from-magneto.webp",
+    "color": "#23374c",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1145x1374",
+    "dedup": {
+      "conceptKey": "aurora-magnetospheric-electrons-atmospheric-light",
+      "imageSha256": "b059f48a8893d9c5c92615110ebde97ff81934996f693d8862cdf05925aac5c0",
+      "imageDHash": "cbc98f1363681210"
+    },
+    "factualInfographic": {
+      "topic": "How auroras convert magnetospheric electron energy into oxygen and nitrogen light",
+      "description": "An eight-panel source-backed educational plate tracing magnetospheric energy transfer, electron precipitation, excitation, emission color, collision quenching and auroral geometry.",
+      "sourceNote": "NASA, Auroras: https://science.nasa.gov/sun/auroras/ ; NOAA / NWS Space Weather Prediction Center, Aurora Tutorial: https://www.spaceweather.gov/content/aurora-tutorial . Fetched and read; verified qualitative energy transfer, magnetospheric electron origins, excitation, oxygen/nitrogen light, quenching, oval morphology and camera sensitivity. Numerical altitude ranges omitted because source presentations differ.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-06T04:21:19.272771+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NASA",
+            "title": "Auroras",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/sun/auroras/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NOAA / NWS Space Weather Prediction Center",
+            "title": "Aurora Tutorial",
+            "sourceType": "government-agency",
+            "url": "https://www.spaceweather.gov/content/aurora-tutorial"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Solar wind transfers energy into Earth’s magnetosphere; solar wind pressure stretches a magnetotail away from the Sun.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Oppositely directed solar-wind and terrestrial magnetic fields favor energy transfer through magnetic reconnection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Auroral electrons are accelerated within the magnetosphere; nighttime auroral electrons can come from the magnetotail, rather than arriving directly as solar-wind electrons.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Accelerated electrons follow magnetic field lines into the upper atmosphere near magnetic poles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Collisions transfer energy from electrons to atmospheric atoms and molecules, exciting them; relaxation releases photons.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excited atomic oxygen produces green and red light; nitrogen can produce blue and pink-purple light.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Red oxygen emission is favored higher in the thinner atmosphere; green oxygen emission and pink-purple nitrogen lower borders can occur below it; these are tendencies, not rigid altitude boundaries.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The excited oxygen state producing red light is longer lived than the green-emitting state; collisions can quench red emission in denser lower air before a photon is emitted.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Auroral emissions form ovals around magnetic poles, not a single spot over the geographic pole.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Quiet displays can be simple arcs; greater geomagnetic activity can yield brighter multiple arcs, rays, waves and curls, and expand the oval toward lower latitudes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cameras can detect auroral colors too dim for human eyes; faint auroras may look pale to a person because night vision favors brightness over color.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-04-outer-space-exploration-space-exploration-miranda-fault-esc",
     "title": "Space exploration: Miranda — Fault Escarpment Beyond the Survey Mast",
     "tests": "Science-informed artist impression; not direct or processed observational imagery. Real subject: Miranda. Fictional surface station, exact terrain, viewpoint and lighting. No real landing claimed. Facts verified against NASA Science Miranda, read 2026-10-04: https://science.nasa.gov/uranus/moons/miranda/ . Geological origin not asserted; no exact cliff height, giant sky planet, atmosphere or water. Non-Monday: no subjective review or reroll.; archive_slot=2026-10-04T00:20; concept=miranda-fault-escarpment-anchored-survey-mast; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
