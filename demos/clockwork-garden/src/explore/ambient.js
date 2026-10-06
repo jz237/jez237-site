@@ -11,6 +11,7 @@ import { RNG } from '../core/rng.js';
 import { clamp, lerp, smooth } from '../core/ease.js';
 import { L } from '../world/layout.js';
 import { groundHeight } from './bounds.js';
+import { flutterInit, flutterStep } from './flutter.js';
 
 // Ambient life for the interactive modes, on the real-time clock. Every
 // creature has its own patch of the glasshouse (spread so the patches cover
@@ -78,7 +79,8 @@ export class Ambient {
       const sp = i % 3 === 1 ? 'swallowtail' : 'monarch';
       const c = add(new Butterfly(mat, sp, { detail: 'mid' }));
       c.group.scale.setScalar(r.range(1.2, 1.6));
-      const b = { c, home: home(), R: 65, vel: V(), state: 'perch', timer: r.range(1, 6), ph: r.range(0, TAU), freq: r.range(2.4, 3.3), yaw: r.range(0, TAU) };
+      const b = { c, sp, home: home(), R: 65, vel: V(), state: 'perch', timer: r.range(1, 6), ph0: r.range(0, TAU), yaw: r.range(0, TAU) };
+      flutterInit(b, r, { glider: sp === 'monarch' ? 0.7 : 0.5, cruise: [10, 14] });
       b.target = this._perchNear(b.home, 0, b.R) || this._flowerNear(b.home, 0, 200);
       b.pos = b.target.p.clone();
       this.butterflies.push(b);
@@ -236,8 +238,16 @@ export class Ambient {
           const geo = ty.geo, pos = geo.attributes.position, idx = geo.index;
           if (!geo.boundingSphere) geo.computeBoundingSphere();
           const bs = geo.boundingSphere;
+          // (a bloom near the camera is drawn by a fine tier, which holds its
+          // petals this frame; its coarse ones are folded to nothing)
+          let mesh = inst.petals, slot = f._fi;
+          if (f.fine && f.tier) {
+            const T = ty.fine[f.tier - 1], s = T ? T.near.indexOf(f) : -1;
+            if (s >= 0) { mesh = T.mesh; slot = s; }
+          }
           for (let k = 0; k < ty.petals; k++) {
-            inst.petals.getMatrixAt(f._fi * ty.petals + k, M);
+            mesh.getMatrixAt(slot * ty.petals + k, M);
+            if (M.determinant() === 0) continue;
             M.invert();
             o.copy(a).applyMatrix4(M);
             e.copy(end).applyMatrix4(M);
@@ -265,6 +275,45 @@ export class Ambient {
             }
           }
         }
+      }
+    }
+    return false;
+  }
+
+  // the highest a bloom's petals reach (as posed this frame): the camera
+  // looks into its cup from above this
+  petalTop(f) {
+    const ty = f.ty;
+    this._instOf ||= new Map(this.world.flora.inst.map((e) => [e.ty, e]));
+    const inst = this._instOf.get(ty);
+    const head = f.topNow || f.top;
+    if (!inst) return head.y + ty.len * f.scale;
+    if (!ty.geo.boundingBox) ty.geo.computeBoundingBox();
+    const bb = ty.geo.boundingBox, M = this._pm || (this._pm = new THREE.Matrix4()), c = V();
+    let mesh = inst.petals, slot = ty.list.indexOf(f);
+    if (f.fine && f.tier) {
+      const T = ty.fine[f.tier - 1], s = T ? T.near.indexOf(f) : -1;
+      if (s >= 0) { mesh = T.mesh; slot = s; }
+    }
+    let top = head.y;
+    for (let k = 0; k < ty.petals; k++) {
+      mesh.getMatrixAt(slot * ty.petals + k, M);
+      for (let j = 0; j < 8; j++) {
+        c.set(j & 1 ? bb.max.x : bb.min.x, j & 2 ? bb.max.y : bb.min.y, j & 4 ? bb.max.z : bb.min.z).applyMatrix4(M);
+        if (c.y > top) top = c.y;
+      }
+    }
+    return top;
+  }
+
+  // is p inside a flower head (other than `except`)?
+  insideHead(p, except = null) {
+    const i0 = Math.floor(p.x / CELL), j0 = Math.floor(p.z / CELL);
+    for (let i = i0 - 1; i <= i0 + 1; i++) for (let j = j0 - 1; j <= j0 + 1; j++) {
+      for (const c of this.pgrid.get(i * 4096 + j) || []) {
+        const f = c.f;
+        if (f === except) continue;
+        if ((f.topNow || f.top).distanceTo(p) < f.ty.len * f.scale + 1) return true;
       }
     }
     return false;
@@ -370,35 +419,38 @@ export class Ambient {
         if ((b.holdUntil ?? 0) > t) b.timer = Math.max(b.timer, 0.3);
         b.pos.copy(b.target.p);
         if (b.target.f?.headOff) b.pos.add(b.target.f.headOff); // the bloom nods in the breeze
-        const open = 0.5 + 0.45 * Math.sin(t * 0.9 + b.ph);
+        const open = 0.5 + 0.45 * Math.sin(t * 0.9 + b.ph0);
         b.c.group.position.copy(b.pos);
         b.c.group.rotation.set(0, b.yaw, 0);
         if (near(b.pos)) b.c.setPose({ t, open, flap: 0, grip: 1 });
         if (b.timer <= 0) { b.state = 'fly'; b.target = inPatch(b, 6); b.vel.set(0, 4, 0); }
         continue;
       }
+      // fluttering flight (flutter.js): bobbing with every beat, jinking,
+      // banking and gliding; slowing and steadying as it comes in to a bloom
+      const F = b.fl;
       if (b.state === 'scatter') {
         b.timer -= dt;
-        b.vel.multiplyScalar(Math.exp(-dt * 0.4));
+        flutterStep(b, (this._bw ||= V()).copy(b.vel).setLength(F.cruise * 1.6), dt, r, 'flee');
         if (b.timer <= 0) { b.state = 'fly'; b.target = inPatch(b, 10); }
       } else {
-        // fluttering flight toward the next bloom: weave and bob
         const to = b.target.p.clone().sub(b.pos);
         const dist = to.length();
-        const want = to.multiplyScalar(Math.min(7, 1.5 + dist * 0.6) / Math.max(dist, 1e-3));
-        if (dist > 6) want.y += 3 + Math.sin(t * 2.1 + b.ph) * 3;
-        want.x += Math.sin(t * 1.7 + b.ph) * 2.5;
-        want.z += Math.cos(t * 1.3 + b.ph) * 2.5;
-        b.vel.lerp(want, damp(2.2, dt));
-        if (dist < 0.8) { b.state = 'perch'; b.timer = r.range(4, 11); b.yaw = Math.atan2(b.vel.x, b.vel.z); }
+        const want = to.multiplyScalar(Math.min(F.cruise, 1.5 + dist * 1.1) / Math.max(dist, 1e-3));
+        if (dist > 6) want.y += 3;
+        flutterStep(b, want, dt, r, dist < 8 ? 'land' : 'fly');
+        if (dist < 0.8) { b.state = 'perch'; b.timer = r.range(4, 11); }
       }
       b.pos.addScaledVector(b.vel, dt);
-      b.pos.y += Math.sin(t * b.freq * TAU * 0.5 + b.ph) * 0.05;
       this.bounds.collide(b.pos, b.vel, 0.8, dt, { cushion: 0.8, stiffness: 25 });
       clearSight(b.pos, 4.5);
+      // (the bob is drawn, not flown: the collision and the sightline see the steady path)
+      const S = b.c.group.scale.x;
       b.c.group.position.copy(b.pos);
-      orient(b.c.group, b.vel.clone().setY(b.vel.y * 0.3), clamp(-b.vel.x * 0.02, -0.4, 0.4));
-      if (near(b.pos)) b.c.setPose({ t: t + b.ph, open: 0.6, flap: b.state === 'scatter' ? 1 : 0.85, freq: b.state === 'scatter' ? b.freq * 1.6 : b.freq, grip: 0 });
+      b.c.group.position.y += F.bob * 0.9 * S;
+      b.c.group.rotation.set(F.pitch, b.yaw, F.roll, 'YXZ');
+      // (gliding, the wings are held out: monarchs nearly flat, swallowtails in a V)
+      if (near(b.pos)) b.c.setPose({ t: b.ph / TAU, freq: 1, open: 0.6 + (1 - F.amp) * (b.sp === 'monarch' ? 0.3 : 0.12), flap: (b.state === 'scatter' ? 1 : 0.85) * F.amp, grip: 0 });
     }
 
     // ---- dragonflies: hover and dart over their own patch; dart off from the bee ----------
