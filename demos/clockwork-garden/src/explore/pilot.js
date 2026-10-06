@@ -232,7 +232,9 @@ export class Pilot {
     const dist = toAim.length();
     const remaining = dist + (last ? 0 : r.pts.slice(r.i).reduce((a, p, k, arr) => a + (k ? p.distanceTo(arr[k - 1]) : 0), 0));
     // (through the beds at an unhurried cruise: the weaving is the point)
-    const cruise = r.weave ? SPEED.cruise * 0.9 : g.speed ?? (remaining > 160 ? SPEED.boost * 0.85 : remaining > 60 ? SPEED.cruise * 1.25 : SPEED.cruise);
+    // (an unhurried pace: Follow is for watching, and a camera keeping up
+    // with a boosting bee whips the view round; no boosts)
+    const cruise = r.weave ? SPEED.cruise * 0.7 : Math.min(g.speed ?? 99, remaining > 160 ? SPEED.cruise * 1.1 : remaining > 60 ? SPEED.cruise * 0.95 : SPEED.cruise * 0.8);
     const speed = Math.min(cruise, 3 + remaining * 0.9);
     intent.boost = cruise > SPEED.cruise * 1.5 && remaining > 60;
     intent.vel.copy(toAim).multiplyScalar(speed / Math.max(dist, 1e-3));

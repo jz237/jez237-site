@@ -502,10 +502,10 @@ export function petalTextures({ size = 512, seed = 17, blush = [236, 196, 160] }
 }
 
 // Glowing porcelain for the garden's blooms: a tinted glaze (deepest at the
-// hinge, paling to the tip), a fan of fine veins, a gilt rim round the edge
-// and a gilt claw at the hinge. The emissive map is the light the bloom gives
+// hinge, paling to the tip) and a fan of soft veins (the gilding is the
+// material's: world/flora.js). The emissive map is the light the bloom gives
 // at night, as if lit from its heart: strongest at the hinge, along the veins
-// and through the thin middle of the blade; the gilding blocks it.
+// and through the thin middle of the blade.
 // (u along the petal from hinge to tip = x, v across it = y, as petalGeometry maps them)
 export function bloomPetalTextures({ size = 256, seed = 31, hinge = [240, 170, 150], mid = [248, 214, 200], tip = [252, 238, 228] } = {}) {
   const W = size, H = size;
@@ -566,20 +566,8 @@ export function bloomPetalTextures({ size = 256, seed = 31, hinge = [240, 170, 1
       ctx.stroke();
     }
   }
-  // gilt: a band set in from the edge and over the tip (not a sliver on the
-  // silhouette, which shimmers), the claw at the hinge; satin, not mirror
-  const gild = (ctx, color) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, H * 0.035, W, H * 0.06);
-    ctx.fillRect(0, H * 0.905, W, H * 0.06);
-    ctx.fillRect(W * 0.9, H * 0.035, W * 0.05, H * 0.93);
-    ctx.fillRect(0, H * 0.3, W * 0.06, H * 0.4);
-  };
-  gild(c, '#dcae58');
-  gild(o, 'rgb(255,120,150)'); // gilding: roughness 0.47, metalness 0.6
-  gild(e, '#5a4222'); // (the light catches the gilt band, dimly)
-  // (a soft edge to the bands, so they never step from pixel to pixel)
-  for (const ctx of [c, o, e]) { ctx.filter = 'blur(1px)'; ctx.drawImage(ctx.canvas, 0, 0); ctx.filter = 'none'; }
+  // (the gilt rim, tip and claw are drawn by the material itself, anti-aliased
+  // and faded where they would be thinner than a few pixels: world/flora.js)
   return { map: toTexture(col, { srgb: true, wrap: false }), orm: toTexture(orm, { wrap: false }), emissive: toTexture(emi, { srgb: true, wrap: false }) };
 }
 

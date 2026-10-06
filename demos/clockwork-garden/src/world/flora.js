@@ -100,13 +100,45 @@ function posNormal(g) {
   return h;
 }
 
-// tinted, glowing porcelain with gilt rims and veins (materials/textures.js)
+// tinted, glowing porcelain with veins (materials/textures.js) and gilding:
+// a rim set in from each edge, a band over the tip and a claw at the hinge,
+// drawn here in the petal's own coordinates (u along it, v across) with
+// anti-aliased edges, and faded out where a band would be narrower than a
+// few pixels, so the gold never crawls or sparkles as the blooms and the
+// camera move (painted into the texture, it did, on phones most)
+const GILT = /* glsl */ `
+  float cgGilt = 0.0;
+  {
+    vec2 q = vMapUv;
+    float e = min(q.y, 1.0 - q.y);
+    float fe = max(fwidth(e), 1e-5), fu = max(fwidth(q.x), 1e-5);
+    float band = smoothstep(0.03 - fe, 0.03 + fe, e) * (1.0 - smoothstep(0.095 - fe, 0.095 + fe, e));
+    band *= smoothstep(1.5, 4.0, 0.065 / fe);
+    float tip = smoothstep(0.895 - fu, 0.895 + fu, q.x) * (1.0 - smoothstep(0.955 - fu, 0.955 + fu, q.x)) * smoothstep(0.03 - fe, 0.03 + fe, e);
+    tip *= smoothstep(1.5, 4.0, 0.06 / fu);
+    float claw = (1.0 - smoothstep(0.06 - fu, 0.06 + fu, q.x)) * smoothstep(0.3 - fe, 0.3 + fe, q.y) * (1.0 - smoothstep(0.7 - fe, 0.7 + fe, q.y));
+    claw *= smoothstep(1.5, 4.0, 0.06 / fu);
+    cgGilt = max(max(band, tip), claw);
+    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.74, 0.44, 0.12), cgGilt);
+  }`;
 function bloomMaterial(tex, glow) {
-  return new THREE.MeshPhysicalMaterial({
+  const m = new THREE.MeshPhysicalMaterial({
     color: '#ffffff', map: tex.map, roughness: 1, metalness: 1, roughnessMap: tex.orm, metalnessMap: tex.orm,
     emissive: new THREE.Color(glow), emissiveMap: tex.emissive, emissiveIntensity: 0,
     clearcoat: 0.7, clearcoatRoughness: 0.26, sheen: 0.3, sheenColor: new THREE.Color('#ffe2d6'), side: THREE.DoubleSide,
   });
+  m.onBeforeCompile = (sh) => {
+    sh.defines = { ...(sh.defines || {}), CG_GILT: '' };
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <map_fragment>', '#include <map_fragment>\n' + GILT)
+      .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
+        metalnessFactor = mix(metalnessFactor, 0.35, cgGilt);
+        roughnessFactor = mix(roughnessFactor, 0.42, cgGilt);`)
+      // (the gilding is opaque metal: the heart's light shows through it only dimly)
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n  totalEmissiveRadiance *= 1.0 - 0.75 * cgGilt;');
+  };
+  m.customProgramCacheKey = () => 'cg-bloom-petal';
+  return m;
 }
 
 export class Flora {

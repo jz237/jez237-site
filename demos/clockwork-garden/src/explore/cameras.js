@@ -103,23 +103,23 @@ export class ChaseCam {
 // Follow's framings, relative to the bee's heading: side angle (rad, 0 =
 // behind), distance, height (h1/rise: the height climbs to h1 over `rise` s)
 const FRAMINGS = {
-  chase: { a: 0.55, d: 10, h: 2.6, fov: 44, ap: 2.0 },
-  profile: { a: 1.5, d: 9, h: 1.2, fov: 40, ap: 3.0 },
+  chase: { a: 0.55, d: 12, h: 3.0, fov: 44, ap: 2.0 },
+  profile: { a: 1.5, d: 11, h: 1.4, fov: 40, ap: 3.0 },
   high: { a: 0.9, d: 18, h: 11, fov: 46, ap: 1.0 },
-  lead: { a: 2.6, d: 11, h: 1.8, fov: 42, ap: 2.5 },
-  low: { a: 0.3, d: 8, h: -2.2, fov: 44, ap: 2.2 },
-  macro: { a: 1.1, d: 6.2, h: 2.6, fov: 38, ap: 4.5, orbit: 0.16 },
+  lead: { a: 2.6, d: 13, h: 2.0, fov: 42, ap: 2.5 },
+  low: { a: 0.3, d: 13, h: -2.2, fov: 46, ap: 2.2 },
+  macro: { a: 1.1, d: 6.2, h: 2.6, fov: 38, ap: 4.5, orbit: 0.08 },
   wide: { a: 0.7, d: 34, h: 16, fov: 48, ap: 0.6 },
   // level beside it and close: stems and leaves slide past between
-  track: { a: 1.62, d: 7, h: 0.4, fov: 38, ap: 3.4 },
+  track: { a: 1.62, d: 9.5, h: 0.6, fov: 38, ap: 3.4 },
   // below and behind, looking up past it (lanterns and the vault by night)
-  lowup: { a: 0.45, d: 10, h: -4.5, fov: 48, ap: 1.4 },
+  lowup: { a: 0.45, d: 13, h: -4.5, fov: 48, ap: 1.4 },
   // starts level in the beds and rises up out of them
   crane: { a: 0.75, d: 12, h: 0.5, h1: 13, rise: 6, fov: 44, ap: 1.8 },
 };
 // which framings suit what APX-9 is doing (weights; night adds the low angles)
 const MENUS = {
-  low: { track: 3, profile: 2, lead: 1.5, low: 1.5, crane: 1.5, chase: 1.5 },
+  low: { track: 0.5, profile: 2, lead: 1.2, low: 0.6, crane: 1.5, chase: 3 },
   high: { chase: 2, high: 1.5, wide: 1.2, profile: 1, lead: 1 },
   fast: { chase: 2, high: 1.5, wide: 2, profile: 1 },
 };
@@ -177,16 +177,46 @@ export class FollowCam {
     this.tgtV = V();
     this.blend = 0.9; // how long a change of framing takes to settle (s, spring time)
     this.cut = null; // a cutaway to a creature (see CUTS)
-    this.nextCut = 9;
+    this.nextCut = 12;
     this.recentKinds = [];
     this.cuts = 0;
-    this.fade = 0; // dip to black (only when a cutaway can't fly there)
+    this.fade = 0; // dip to black (only when a cutaway can't fly back)
+    this.lookN = { dir: null, w: 0, reset: true }; // APX-9's framing's eased look
+    this.lookC = { dir: null, w: 0, reset: true }; // the cutaway's
   }
 
   _rand() { this.rng = (this.rng * 16807) % 2147483647; return this.rng / 2147483647; }
 
+  // The look pans no faster than a calm camera operator would (about 34°/s,
+  // easing in and out), quicker only as the subject nears the frame's edge
+  // (the frame's narrower half-angle: in portrait the width is tight), so
+  // the bee's weaving never whips the view round. Rewrites `target` along
+  // the eased look. L: { dir, w, reset }
+  _slew(L, pos, target, fov, dt, ctx) {
+    const want = (this._lw ||= V()).subVectors(target, pos);
+    const dist = want.length() || 1e-3;
+    want.multiplyScalar(1 / dist);
+    if (!L.dir || L.reset) { L.dir = want.clone(); L.w = 0; L.reset = false; }
+    const err = L.dir.angleTo(want);
+    const hv = (fov * Math.PI) / 360, lim = Math.min(hv, Math.atan(Math.tan(hv) * (ctx.aspect || 1.78)));
+    // (inside the middle of the frame the subject may drift: no constant re-
+    // centring; past it the pan picks up, faster the nearer the edge)
+    const dz = 0.3 * lim;
+    const over = Math.max(0, err - dz) / lim;
+    const wantW = Math.min((ctx.reduced ? 0.35 : 0.5) * over / 0.3 + Math.max(0, over - 0.4) * 2.2, 2.0);
+    L.w += (wantW - L.w) * damp(3, dt);
+    if (err > 1e-4) {
+      const axis = (this._la ||= V()).crossVectors(L.dir, want);
+      if (axis.lengthSq() < 1e-10) axis.set(0, 1, 0);
+      L.dir.applyAxisAngle(axis.normalize(), Math.min(err, L.w * dt)).normalize();
+    }
+    target.copy(pos).addScaledVector(L.dir, dist);
+  }
+
   reset(actor) {
     this.ready = false;
+    this.lookN.reset = true;
+    this.lookC.reset = true;
     this.headingS = actor.yaw;
     this.user = { yaw: 0, pitch: 0, zoom: 1, idle: 99 };
     this.cut = null;
@@ -206,12 +236,12 @@ export class FollowCam {
     let next = this.shot;
     if (s === 'landed' || s === 'landing') next = 'macro';
     else if (s === 'docking' || s === 'walk-in' || s === 'inside' || s === 'walk-out') next = 'skep';
-    else if (this.shotT > 7 + this._rand() * 5 || this.shot === 'macro' || this.shot === 'skep') {
+    else if (this.shotT > 13 + this._rand() * 8 || this.shot === 'macro' || this.shot === 'skep') {
       const low = ctx.weaving || actor.pos.y - groundHeight(actor.pos.x, actor.pos.z) < 22;
       const menu = { ...(actor.speed > 32 ? MENUS.fast : low ? MENUS.low : MENUS.high) };
       const night = ctx.night ?? 0;
-      menu.lowup = (menu.lowup || 0) + 0.3 + night * 2.5;
-      if (night > 0.5) { menu.low = (menu.low || 0) + 1; menu.wide = (menu.wide || 0) * 0.5; }
+      menu.lowup = (menu.lowup || 0) + 0.1 + night * 0.5;
+      if (night > 0.5) { menu.low = (menu.low || 0) + 0.4; menu.wide = (menu.wide || 0) * 0.5; }
       if (ctx.reduced) { delete menu.crane; delete menu.track; }
       delete menu[this.shot];
       next = this._pick(menu);
@@ -220,9 +250,10 @@ export class FollowCam {
       const a = FRAMINGS[this.shot] || FRAMINGS.chase, b = FRAMINGS[next];
       if (Math.abs(a.a - b.a) < 0.7 && this._rand() < 0.4) this.side = -this.side;
       // a bigger change of framing takes longer to settle
-      this.blend = 0.7 + Math.min(0.9, Math.abs(a.a - b.a) * 0.35 + Math.abs(Math.log(b.d / a.d)) * 0.5 + Math.abs(a.h - b.h) * 0.03);
+      // (slow: a framing change is a glide, never a swing)
+      this.blend = 1.5 + Math.min(1.6, Math.abs(a.a - b.a) * 0.6 + Math.abs(Math.log(b.d / a.d)) * 0.8 + Math.abs(a.h - b.h) * 0.05);
     }
-    if (next !== this.shot) { this.shot = next; this.shotT = 0; if (next === 'macro' || next === 'skep') this.blend = 1.1; }
+    if (next !== this.shot) { this.shot = next; this.shotT = 0; if (next === 'macro' || next === 'skep') this.blend = 1.8; }
   }
 
   // ---- cutaways ------------------------------------------------------------------
@@ -236,7 +267,7 @@ export class FollowCam {
     if (actor.state !== 'fly' || (ctx.goalDist ?? 0) < 30 + Math.max(actor.speed, 12) * 8) return;
     // (the creatures keep to their own patches, so the camera goes to them:
     // anything within a short flight)
-    const cands = amb.features(actor.pos, 160);
+    const cands = amb.features(actor.pos, 140);
     cands.sort((p, q) => this._score(q, actor) - this._score(p, actor));
     for (const c of cands.slice(0, 4)) {
       const plan = this._frame(c, amb, ctx.nearfield);
@@ -244,9 +275,12 @@ export class FollowCam {
       const spec = CUTS[c.kind];
       const hold = spec.hold[0] + this._rand() * (spec.hold[1] - spec.hold[0]);
       const dest = c.pos.clone().add(plan.off);
-      // fly there along a raised curve if it is clear; otherwise a soft dip
+      // fly there along a raised curve, only if it is clear (no blink to black on the way in)
       const route = this._route(this.pos, dest);
-      const travel = route ? this._travel(this.pos, dest, this.target, c.pos) : 0.8;
+      if (!route) continue;
+      const travel = this._travel(this.pos, dest, this.target, c.pos);
+      this.lookC.dir = this.target.clone().sub(this.pos).normalize();
+      this.lookC.w = this.lookN.w;
       this.cut = { ...plan, c, spec, t: 0, hold, blocked: 0, caption: spec.caption(c.obj), phase: 'in', k: 0, travel, lift: route?.lift ?? 0, dip: !route, from: this.pos.clone(), fromT: this.target.clone(), fromFov: this.fov, fromAp: this.aperture };
       amb.hold(c.obj, hold + travel * 2 + 1);
       this.recentKinds.push(c.kind);
@@ -254,21 +288,21 @@ export class FollowCam {
       this.cuts++;
       return;
     }
-    this.nextCut = 3; // nothing to show just now: look again shortly
+    this.nextCut = 2; // nothing to show just now: look again shortly
   }
 
-  // how long a flight takes: by the distance, and long enough that the
-  // look never turns faster than ~110°/s
+  // how long a flight takes: unhurried (the eased move peaks at 1.875× its
+  // average), so the camera never passes ~30 units/s nor the look ~40°/s
   _travel(a, b, ta, tb) {
     const da = ta.clone().sub(a).normalize(), db = tb.clone().sub(b).normalize();
     const turn = Math.acos(clamp(da.dot(db), -1, 1));
-    return clamp(Math.max(a.distanceTo(b) / 34, (turn / 1.9) * 1.875), 1.4, 4.0);
+    return clamp(Math.max((a.distanceTo(b) * 1.875) / 30, (turn * 1.875) / 0.7), 2.8, 10.0);
   }
 
   // a raised curve from a to b clear of solids: { lift } or null
   _route(a, b) {
     const d = a.distanceTo(b);
-    if (d > 240) return null;
+    if (d > 160) return null; // (further: a soft dip, not a long flight)
     const p = V(), c = V();
     // (an arc that clears the leaves: its middle at least ~20 over the soil)
     const mid = a.clone().lerp(b, 0.5);
@@ -324,8 +358,8 @@ export class FollowCam {
     // back to APX-9 for its landings and the skep, when the time is up, or when the viewer takes over
     if (cut.phase === 'hold' && (cut.t > cut.hold || s === 'landing' || s === 'docking' || (ctx.goalDist ?? 99) < 25 || this.user.idle < 0.2)) {
       cut.phase = 'out'; cut.k = 0; cut.from = this.pos.clone(); cut.fromT = this.target.clone(); cut.fromFov = this.fov; cut.fromAp = this.aperture;
-      if (this.user.idle < 0.2) cut.travel = 0.8;
-      else { const r = this._route(this.pos, normal.pos); cut.dip = !r; cut.dipOut = !r; cut.lift = r?.lift ?? 0; cut.travel = r ? this._travel(this.pos, normal.pos, this.target, normal.target) : 0.8; }
+      if (this.user.idle < 0.2) cut.travel = 1.2;
+      else { const r = this._route(this.pos, normal.pos); cut.dip = !r; cut.dipOut = !r; cut.lift = r?.lift ?? 0; cut.travel = r ? this._travel(this.pos, normal.pos, this.target, normal.target) : 1.4; }
     }
     if (cut.phase === 'in' && (s === 'landing' || s === 'docking')) { this.cut = null; this.nextCut = 12; return null; }
     const subj = cut.c.pos.clone();
@@ -348,7 +382,9 @@ export class FollowCam {
     if (cut.phase === 'hold') {
       pos = camHold; tgt = tgtHold; fov = spec.fov; ap = spec.ap;
       this.pos.lerp(pos, damp(6, dt));
-      this.target.lerp(tgt, damp(8, dt));
+      (cut.tgtS ||= this.target.clone()).lerp(tgt, damp(8, dt));
+      this.target.copy(cut.tgtS);
+      this._slew(this.lookC, this.pos, this.target, this.fov, dt, ctx);
       this.fov = fov; this.aperture = ap;
       this.fade = Math.max(0, this.fade - dt / 0.45);
     } else {
@@ -368,14 +404,15 @@ export class FollowCam {
         const c = cut.from.clone().lerp(toPos, 0.5);
         c.y += cut.lift;
         bez(cut.from, c, toPos, k, this.pos);
-        // the look turns with the move, over all of it
+        // the look turns with the move, over all of it (at a calm pan)
         this.target.copy(cut.fromT).lerp(toTgt, k);
+        this._slew(this.lookC, this.pos, this.target, this.fov, dt, ctx);
         this.fov = lerp(cut.fromFov, into ? spec.fov : normal.fov, k);
         this.aperture = lerp(cut.fromAp, into ? spec.ap : normal.aperture, k);
       }
       if (cut.k >= 1) {
         if (into) { cut.phase = 'hold'; cut.t = 0; }
-        else { this.cut = null; this.nextCut = 14 + this._rand() * 12; this.fade = 0; return null; }
+        else { this.cut = null; this.nextCut = 20 + this._rand() * 12; this.fade = 0; return null; }
       }
     }
     return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: this.pos.distanceTo(this.target), aperture: this.aperture };
@@ -426,12 +463,17 @@ export class FollowCam {
     if (!this.ready) { this.headingS = head; this.headV = { v: 0 }; }
     // (a wide framing swings the camera through a big arc: it turns more slowly)
     const reach = Math.hypot(this.par.d, this.par.h);
-    this.headingS = spring(this.headingS, this.headingS + wrap(head - this.headingS), this.headV, (reduced ? 1.2 : 0.75) + Math.max(0, reach - 10) * 0.03, dt);
+    const h0 = this.headingS;
+    this.headingS = spring(this.headingS, this.headingS + wrap(head - this.headingS), this.headV, (reduced ? 2.2 : 1.6) + Math.max(0, reach - 10) * 0.04, dt);
+    // (and the camera never swings round the bee faster than ~30°/s: a sharp
+    // turn among the stems becomes an unhurried arc)
+    const maxH = (reduced ? 0.35 : 0.52) * dt;
+    if (Math.abs(this.headingS - h0) > maxH) { this.headingS = h0 + Math.sign(this.headingS - h0) * maxH; this.headV.v = Math.sign(this.headV.v) * Math.min(Math.abs(this.headV.v), maxH / Math.max(dt, 1e-4)); }
     // APX-9's position with its jolts filtered out (collision nudges, the
     // landing settle): a smoothed velocity carries the anchor, which is drawn
     // gently back to the bee, so there is no lag at a steady speed
     if (!this.ready) { (this.anchor ||= V()).copy(actor.pos); (this.aVel ||= V()).copy(actor.vel); this.aVelV = V(); }
-    spring3(this.aVel, actor.vel, this.aVelV, reduced ? 0.45 : 0.28, dt);
+    spring3(this.aVel, actor.vel, this.aVelV, reduced ? 0.6 : 0.38, dt);
     this.anchor.addScaledVector(this.aVel, dt).lerp(actor.pos, damp(3.5, dt));
     const bee = this.anchor;
     const P = this.par, PV = this.parV;
@@ -480,7 +522,7 @@ export class FollowCam {
     }
     // the camera's offset from the bee eases toward the framing's
     if (!this.ready) { this.off.copy(wantOff); this.offV.set(0, 0, 0); }
-    spring3(this.off, wantOff, this.offV, reduced ? 0.6 : 0.35, dt);
+    spring3(this.off, wantOff, this.offV, reduced ? 1.3 : 0.9, dt);
     const want = bee.clone().add(this.off);
     const from = bee.clone().add(V(0, 0.8, 0));
     const safe = this.bounds.sweep(from, want, 0.9);
@@ -489,17 +531,20 @@ export class FollowCam {
     // back out at the camera's pace
     const L = safe.distanceTo(from);
     const n = this._n || (this._n = { pos: V(), target: V(), fov: 44, aperture: 2 });
-    if (!this.ready) { this.arm = L; this.hold = 0; this.armV = { v: 0 }; n.target.copy(tgt); this.tgtV.set(0, 0, 0); this.ready = true; }
+    if (!this.ready) { this.arm = L; this.hold = 0; this.armV = { v: 0 }; (this.tgtS ||= V()).copy(tgt); this.tgtV.set(0, 0, 0); this.ready = true; }
     // (the skep framing is a set position looking at its door: no arm, which
     // would flip as the bee walks in through the wall)
     const blocked = this.shot !== 'skep' && L < want.distanceTo(from) - 0.3;
     if (this.shot === 'skep') this.hold = 0;
-    if (blocked && L < this.arm) { this.arm = spring(this.arm, L, this.armV, reduced ? 0.3 : 0.2, dt); this.hold = 0.6; }
-    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm = spring(this.arm, L, this.armV, 0.9, dt);
+    if (blocked && L < this.arm) { this.arm = spring(this.arm, L, this.armV, reduced ? 0.6 : 0.45, dt); this.hold = 1.2; }
+    else if ((this.hold -= dt) <= 0 || L < this.arm) this.arm = spring(this.arm, L, this.armV, 1.8, dt);
     const off = want.clone().sub(from);
     if (this.shot === 'skep') this.arm = spring(this.arm, off.length(), this.armV, 0.6, dt);
     n.pos.copy(from).addScaledVector(off, Math.min(1, this.arm / Math.max(off.length(), 1e-4)));
-    spring3(n.target, tgt, this.tgtV, reduced ? 0.4 : 0.22, dt);
+    // (the spring keeps its own state; the pan limit shapes only what is shown)
+    spring3(this.tgtS, tgt, this.tgtV, reduced ? 0.4 : 0.22, dt);
+    n.target.copy(this.tgtS);
+    this._slew(this.lookN, n.pos, n.target, P.fov, dt, ctx);
     n.fov = P.fov;
     n.aperture = P.ap;
     // inside a flower head, or one in the way (petals aren't solids for the
@@ -509,7 +554,7 @@ export class FollowCam {
       this.headCheck = 1.2;
       this.shotT = 99;
       this.choose(actor, ctx);
-      this.blend = 0.45;
+      this.blend = 0.9;
     }
     return n;
   }
