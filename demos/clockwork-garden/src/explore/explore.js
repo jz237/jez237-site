@@ -12,6 +12,7 @@ import { Scenery } from './scenery.js';
 import { LookUpgrade, FADE, GLOW } from './upgrade.js';
 import { Night } from './night.js';
 import { WetPath } from './wetpath.js';
+import { ButterflyCloud } from './butterflies.js';
 import { lightFieldAll, setLightField, LF } from '../world/lightfield.js';
 import { DetailCull } from './cull.js';
 import { NearField } from './nearfield.js';
@@ -96,6 +97,9 @@ export class Explore {
     this.group.add(this.ambient.group);
     // a night that glows: the light field, kindling, haloes, glowing blooms, fireflies
     this.night = new Night({ world, quality, mat, upgrade: this.upgrade, interactions: this.interactions, growth: this.growth, bells: this.bells, group: this.group });
+    // hundreds of butterflies by day
+    this.butterflies = new ButterflyCloud({ world, quality });
+    this.group.add(this.butterflies.group);
     // the wet path that mirrors every lamp at night
     this.wet = new WetPath({ renderer, world, upgrade: this.upgrade, night: this.night, quality });
     this.upgrade.swap(world.sky.mesh, 'material', world.sky.exploreMaterial);
@@ -403,7 +407,7 @@ export class Explore {
       v = { pos: d.pos, target: d.target, fov: d.fov ?? 50, roll: 0, focus: d.pos.distanceTo(d.target), aperture: d.aperture ?? 0 };
     } else if (this.photo) v = this.photoCam.update(dtReal, input || this._noInput());
     else if (this.mode === 'fly') v = this.chase.update(dtReal, a, input, this.reduced);
-    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, nearfield: this.nearfield, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0, aspect: this.aspect });
+    else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, nearfield: this.nearfield, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0, aspect: this.aspect, route: this.pilot.route, world: this.world });
     this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
     applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
     // the camera pushes the foliage aside (and nothing comes inside the lens)
@@ -414,6 +418,7 @@ export class Explore {
     this.ambient.sightTarget = this.mode !== 'fly' ? this.follow.subject : null;
     if (dt > 0 || this.photo) setPushers(this.ambient.pushers(this.camera.position, 4));
     if (dt > 0) this.ambient.update(dt, body, this.camera, this.frustum);
+    if (dt > 0) this.butterflies.update(dt, this.clock, 1 - phases.night, body, this.camera);
     // light: shadows round what we're looking at, practicals
     const fwd = this.camera.getWorldDirection(V());
     // (in a cutaway the shadows gather round the creature being shown)

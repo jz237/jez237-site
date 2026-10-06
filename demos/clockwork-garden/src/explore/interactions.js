@@ -150,6 +150,8 @@ export class Interactions {
       // the fairy lights: with the lamps as the evening falls, a faint glow by day
       bulbs() { return 0.12 + 0.88 * (self.lampsK ?? 0); },
     };
+    // the great tree's blossom glows with the evening
+    if (w.greatTree) w.greatTree.live = { blossom: () => 0.03 + 0.42 * (self.lampsK ?? 0) };
   }
 
   uninstall() {
@@ -158,6 +160,7 @@ export class Interactions {
     w.foliage.live = null;
     w.garden.live = null;
     if (w.promenade) w.promenade.live = null;
+    if (w.greatTree) w.greatTree.live = null;
   }
 
   // ---- pollen bosses on every far-field bloom (explore only) ------------------------

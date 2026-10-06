@@ -28,6 +28,13 @@ const FOUNTAIN = [(L.pathX[0] + L.pathX[1]) / 2, -560, 52];
 
 export function bloomRadius(f) { return R0[f.ty.name] * f.scale; }
 
+// distance from p to the segment ab
+function segDist(p, a, b) {
+  const abx = b.x - a.x, aby = b.y - a.y, abz = b.z - a.z;
+  const t = Math.max(0, Math.min(1, ((p.x - a.x) * abx + (p.y - a.y) * aby + (p.z - a.z) * abz) / Math.max(1e-6, abx * abx + aby * aby + abz * abz)));
+  return Math.hypot(p.x - a.x - abx * t, p.y - a.y - aby * t, p.z - a.z - abz * t);
+}
+
 // ---- fixed solids (column + ivy, urns, palm crowns, lamps, fountain) -------------------
 function solidDist(p, w, { palms = true } = {}) {
   let d = Infinity;
@@ -50,6 +57,12 @@ function solidDist(p, w, { palms = true } = {}) {
     d = Math.min(d, Math.hypot(p.x - c.x, p.y - c.y, p.z - c.z) - 6.5, Math.hypot(p.x - c.x, p.z - c.z) - 2);
   }
   if (p.y < 14) d = Math.min(d, Math.hypot(p.x - FOUNTAIN[0], p.z - FOUNTAIN[1]) - FOUNTAIN[2]);
+  // the great tree's trunk and roots
+  const gt = w.greatTree;
+  if (gt && Math.hypot(p.x - gt.trunk.x, p.z - gt.trunk.z) < 110) {
+    d = Math.min(d, Math.hypot(p.x - gt.trunk.x, p.z - gt.trunk.z) - gt.trunk.r - (p.y < 15 ? 4 : 0));
+    if (p.y < 22) for (const s of gt.segments) if (s.a.y < 25) d = Math.min(d, segDist(p, s.a, s.b) - s.r - 1);
+  }
   // the promenade's arch uprights (with their climbing roses) and the globe
   // bollards, all on the curbs (only points near the path need the test)
   if (p.x > L.pathX[0] - 30 && p.x < L.pathX[1] + 30) {
@@ -104,6 +117,7 @@ export function resolvePlanting(w) {
     [FOUNTAIN[0], FOUNTAIN[1], FOUNTAIN[2]],
     ...L.arches.zs.flatMap((z) => [[L.arches.x0, z, 4.6], [L.arches.x1, z, 4.6]]),
     ...(w.promenade?.bollards || []).map((b) => [b.base.x, b.base.z, 3.2]),
+    ...(w.greatTree ? [[w.greatTree.trunk.x, w.greatTree.trunk.z, 95]] : []),
   ];
   const nearSolid = (f, base) => {
     const reach = Math.hypot(f.dir.x, f.dir.z) * f.top.distanceTo(f.base) + 0.8 * bloomRadius(f) + Math.max(1.2, 0.5 * f.scale + 0.6) + 0.01;

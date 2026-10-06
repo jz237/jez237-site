@@ -78,6 +78,7 @@ export class Pilot {
     // the promenade: bollards, the arches' uprights (their ribs: _avoidArches)
     for (const b of w.promenade?.bollards || []) put(b.base.x, b.base.z, b.globe.y + 4, 3);
     for (const z of L.arches.zs) for (const x of [L.arches.x0, L.arches.x1]) put(x, z, L.arches.spring + 12, 5);
+    if (w.greatTree) put(w.greatTree.trunk.x, w.greatTree.trunk.z, 40, 30); // (its roots and the trunk's foot: _avoidTree keeps legs off the trunk)
     this.canopy = { g, nx, nz };
   }
 
@@ -129,6 +130,7 @@ export class Pilot {
       const p = V(x, y, z);
       this._avoidColumns(p);
       this._avoidArches(p);
+      this._avoidTree(p);
       pts.push(p);
     }
     pts.push(to.clone().add(V(0, approachH, 0)));
@@ -161,6 +163,15 @@ export class Pilot {
     }
     p.x = clamp(p.x, HOUSE.xMinLow + 8, HOUSE.xMaxLow - 8);
     p.z = clamp(p.z, HOUSE.zMin + 8, HOUSE.zMax - 8);
+  }
+
+  // round the great tree's trunk, and below its crown
+  _avoidTree(p) {
+    const gt = this.world.greatTree;
+    if (!gt) return;
+    const dx = p.x - gt.trunk.x, dz = p.z - gt.trunk.z, l = Math.hypot(dx, dz);
+    if (l < 38) { const k = (38 - l) / Math.max(l, 0.01); p.x += dx * k; p.z += dz * k; }
+    if (l < 230 && p.y > 120) p.y = 120;
   }
 
   // under a promenade arch (clear of its lanterns) or well over it, never through the iron

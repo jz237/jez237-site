@@ -48,7 +48,7 @@ export class Night {
     const fo = world.foliage, ga = world.garden, fl = world.flora;
     // each lamp kindles at its own hour as the evening falls (and goes out at dawn)
     // (the promenade's lanterns hang low: smaller pools, and fewer of the field's columns to fill)
-    const LR = { apex: [105, 50], bracket: [80, 38], column: [115, 55] };
+    const LR = { apex: [105, 50], bracket: [80, 38], column: [115, 55], tree: [95, 45] };
     this.lanterns = fo.lanterns.map((l) => { const [r, c] = LR[l.arch] || [165, 80]; return { l, src: src(V(), r, c), thr: rng.range(0.45, 0.62), was: 0 }; });
     this.lamps = ga.lamps.map((c) => ({ c, src: src(c.position.clone(), 135, 34), thr: rng.range(0.47, 0.6), was: 0 }));
     this.orbs = fl.orbs.map((o) => ({ o, src: src(V(), 42, 10), thr: rng.range(0.43, 0.6), was: 0 }));

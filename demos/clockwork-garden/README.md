@@ -16,7 +16,7 @@ The landing screen (the garden is already alive behind it) offers:
 |---|---|
 | **Film** | the original 58-second film, unchanged and deterministic |
 | **Fly as APX-9** | third-person flight: hover, turn, climb, bank, boost; land on blooms, gather pollen, carry it home |
-| **Follow APX-9** | APX-9 works on its own (visits blooms, gathers, deposits at the skep, winds the garden); a cinematic camera follows it |
+| **Follow APX-9** | APX-9 works on its own (visits blooms, gathers, deposits at the skep, winds the garden); the camera is directed like a film: composed shots joined by cuts (fly-bys set ahead on its route, wide views of the house, a crane after take-off, long-lens tracking, close-ups of its landings, cutaways to the wildlife) |
 
 Switch any time: the explore button (winged hexagon) in the film's control
 bar, the menu (top left) in the interactive modes, or `C` / the
@@ -60,6 +60,19 @@ them, stretched into the long streaks of light a wet floor makes (a small
 mirrored render of the path's lights, read back through a streak blur and
 Fresnel). Fly fast down the path and the globes light up one after another
 ahead of you.
+
+Where the path ends, past the fountain, stands the great clockwork tree: a
+trunk of bronze cords twisted together and bound in gold wire, buttress roots
+arching over the soil, limbs that spread under the whole width of the vault
+and fork again and again, brass gears turning slowly in the trunk and the
+forks, clouds of pink porcelain blossom at every twig (glowing at night) and
+dozens of lanterns hung on chains through its crown.
+
+By night thousands of clockwork fireflies drift in swarms over the beds,
+along the promenade and all through the great tree's crown; by day hundreds
+of butterflies (monarchs and enamel swallowtails in a dozen tints) live in
+companies round the blooms and the blossom, wander, settle and scatter from
+APX-9 rushing past, and go to roost as the evening falls.
 
 The blooms are glazed porcelain lit from the heart: two-ringed lotus cups,
 tulips and roses in peach, blush and rose, with gilt rims, veins that glow,
@@ -324,6 +337,7 @@ src/world/                     escapement, root crown, roots, hero flower (+ por
                                flora (glazed blooms in rings, stamens, geared calyces, fine petals near the camera),
                                foliage (far-field lushness, ivy, palms, lanterns), greenhouse, sky,
                                promenade (the path's arches, globe lamps, fairy lights, banners),
+                               greatTree (the clockwork tree at the path's end),
                                atmosphere (shafts, dust), lighting, environment maps,
                                lightfield (the interactive modes' lamp light: a clustered light list in every
                                lit material, the vault's iron as a light cookie, the hour's environment blend),
@@ -345,6 +359,7 @@ src/explore/                   the interactive modes:
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
                                  the hour glides to its target (midnight, dusk, dawn, golden hour)
   wetpath.js                     the wet path: dew on the flagstones, the path's lights mirrored in it
+  butterflies.js                 hundreds of butterflies by day (one instanced batch per wing pattern)
   night.js · fireflies.js        the night: light-field sources, ambient kindling, haloes, glowing blooms and glass,
                                  moon shafts; clockwork fireflies
   bounds.js                      flight volume: analytic ground, walls, vault, ~4,000 collider shapes, landables

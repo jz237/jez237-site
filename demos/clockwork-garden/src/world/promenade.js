@@ -83,7 +83,7 @@ export class Promenade {
   // arch or the last shot of the film are left bare
   _festoons(mat) {
     const S = archShape();
-    const spans = [[-55, -150], [-340, -435], [-435, -625], [-625, -720]];
+    const spans = [[-340, -435]];
     const wires = [], bulbs = [];
     const lines = [];
     for (const [za, zb] of spans) {
@@ -166,6 +166,7 @@ export class Promenade {
         if (A.zs.some((za) => Math.abs(za - z) < 9)) continue; // an arch's upright
         if (Math.abs(z + 250) < 12) continue; // the rose arch
         if (z < -505 && z > -615) continue; // the fountain
+        if (Math.abs(z - L.tree.z) < 88) continue; // the great tree's roots
         if (lamps.some(([lx, lz]) => Math.abs(lz - z) < 12 && Math.abs(lx - x) < 12)) continue;
         spots.push(V(x, CURB_TOP, z));
       }
