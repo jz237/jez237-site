@@ -1,0 +1,21 @@
+diff --git a/editor/App.tsx b/editor/App.tsx
+index bac7dd4..572992d 100644
+--- a/editor/App.tsx
++++ b/editor/App.tsx
+@@ -158,7 +158,7 @@ export function App() {
+         })
+         .then((draft) => {
+           if (!active || current.current) return;
+-          const next = applyPreviewPreferences(draft ?? newDocument(), preferences.current);
++          const next = applyPreviewPreferences(draft ?? structuredClone(presets.find((p) => p.document.id === 'campfire')!.document), preferences.current);
+           current.current = next;
+           setDocument(next);
+           setSelected(SIMULATION_ID);
+@@ -490,6 +490,7 @@ export function App() {
+             <div className="editor-shell">
+               <header className="editor-header">
+                 <div className="document-heading">
++                  <a className="button subtle" href="../page-2.html#experiments" aria-label="Back to Demos page 2">← Demos</a>
+                   <span className="document-name">{document.name}</span>
+                   <span className={`save-state ${status === 'Save failed' ? 'danger' : ''}`}>
+                     {status === 'Saved' && <Check size={11} />} {status}
