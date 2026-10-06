@@ -155,7 +155,9 @@ python3 -m http.server 8765
 
 Requires a WebGL2 browser (Chrome, Edge, Firefox, Safari 16+).
 
-**Before publishing, run `node tools/cachebust.mjs && node tools/bake.mjs`.**
+**Before publishing, run `node tools/cachebust.mjs && node tools/bake.mjs`** (and, if the scans
+changed, `python3 tools/scans.py --raw <downloads>` first: it writes `assets/scans/` and
+`src/materials/scanlist.js`, whose names carry content hashes).
 The bake grows the bee-scale planting for each quality tier and writes
 `assets/nearfield-{high,low}.bin.gz` (1.7 / 0.9 MB); the page loads it
 instead of growing the planting (9 s on a desktop, over a minute on a phone),
@@ -256,6 +258,7 @@ the governor off.
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
 | `?adapt=0` | hold resolution and detail fixed (no frame governor) |
 | `?bake=0` | grow the bee-scale planting in the page instead of loading the pre-built one |
+| `?scans=0` | the procedural surfaces and reflections only (no photographed scans; for comparison) |
 
 Film-only parameters (`t`, `paused`, `clean`, `capture`, `look`) open the film
 directly. Reduced motion (system setting or `?motion=reduced`) also applies to
@@ -330,7 +333,9 @@ index.html, styles.css         page, title card, controls styling
 src/main.js                    boot, renderer, playback loop, public API
 src/core/                      seeded RNG, easing/timeline helpers, quality tiers, fastmatrix.js (matrix updates that
                                skip what hasn't moved)
-src/materials/                 procedural textures, material library, pulse shader
+src/materials/                 procedural textures, material library, pulse shader, scans (the photographed
+                               surfaces and sky: loader, world-space UVs, triplanar iron) and scanlist (generated)
+assets/scans/                  the scans as small WebP maps, and their credits (made by tools/scans.py)
 src/geometry/                  gears (meshing math), parts (screws, jewels, rods), surfaces (petals, leaves),
                                leaf (the parametric enamel leaf, GLSL + CPU twin), intersect (exact part crossing)
 src/world/                     escapement, root crown, roots, hero flower (+ porcelain bud sheath), props, garden,
@@ -393,4 +398,8 @@ review/                        review frames and contact sheets from each pass (
 - Code: original work for this project. `src/creatures/apx9Shape.js` ports blueprint maths (skeleton, abdomen profile, wing planform and vein network) from Jez's APX-9 exhibit (`demos/apx9-bee`).
 - Three.js r185 (`vendor/three`): MIT — see `vendor/three/LICENSE`.
 - Cormorant Garamond (`assets/fonts`): SIL Open Font License 1.1 — see `assets/fonts/cormorant-OFL.txt`.
-- All textures, geometry and sound are generated procedurally at runtime.
+- Geometry and sound are generated procedurally at runtime, and so are all textures but the scans below.
+- The photographed scans in `assets/scans/` (path stone, bed soil, moss, the iron's wear, the aged brass's
+  scratches, and the glasshouse HDRI the reflections are built from) are CC0 (public domain), from
+  [ambientCG](https://ambientcg.com) and [Poly Haven](https://polyhaven.com); each is credited in
+  `assets/scans/CREDITS.md`. `tools/scans.py` resizes and repacks them from the downloaded originals.

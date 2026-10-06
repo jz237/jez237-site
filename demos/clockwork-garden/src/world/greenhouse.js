@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { L, columnSpots, COLUMN_BRACKET_Y } from './layout.js';
+import { scanMaps, planarUVs, tileOf } from '../materials/scans.js';
 
 // The Victorian glasshouse: cast-iron barrel vault, glazed walls on a stone
 // plinth, columns with scroll brackets, and a great fan window at the far end.
@@ -24,8 +25,14 @@ export class Greenhouse {
     const length = H.z0 - H.z1;
 
     const iron = mat.iron;
-    const stone = new THREE.MeshStandardMaterial({ color: '#8d8473', map: stoneTex, roughness: 0.85, metalness: 0 });
+    // (with the scans: the path's photographed stone, at its true scale on
+    // the plinths, whose UVs are taken from the world)
+    const scan = scanMaps('path', { fallback: stoneTex });
+    const stone = new THREE.MeshStandardMaterial({ color: '#8d8473', map: stoneTex, roughness: 0.85, metalness: 0, ...scan });
+    if (scan.map) stone.setValues({ color: '#b9b09f', roughness: 1 });
     this.stone = stone;
+    const tile = tileOf('path');
+    const worldUV = (geo, x, y, z) => (scan.map ? planarUVs(geo, new THREE.Matrix4().makeTranslation(x, y, z), tile, [x * 0.007, 0.3]) : geo);
 
     // floor
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(H.x1 - H.x0 + 40, length + 40), new THREE.MeshStandardMaterial({ color: '#4a4338', map: stoneTex, roughness: 0.9 }));
@@ -39,7 +46,7 @@ export class Greenhouse {
 
     // stone plinths along both side walls
     for (const x of [H.x0, H.x1]) {
-      const pl = new THREE.Mesh(new THREE.BoxGeometry(18, 70, length), stone);
+      const pl = new THREE.Mesh(worldUV(new THREE.BoxGeometry(18, 70, length), x, 33, (H.z0 + H.z1) / 2), stone);
       pl.position.set(x, 33, (H.z0 + H.z1) / 2);
       pl.receiveShadow = true;
       g.add(pl);

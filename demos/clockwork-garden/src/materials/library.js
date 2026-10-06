@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { brushedMetalTexture, perlageTexture, noiseTexture, petalTextures } from './textures.js';
+import { hasScan, scanTexture, scanTriplanar } from './scans.js';
 
 // The clockmaker's material palette. Every creature and plant draws from this
 // shared library so the world reads as the work of one maker.
@@ -108,6 +109,18 @@ export function createMaterials(quality) {
       envMapIntensity: 1.4,
     }),
   };
+
+  // photographed wear (materials/scans.js): the vault's painted iron gets its
+  // chips, grain and patchy sheen (projected from the world: its tubes and
+  // boxes have no UVs fit for it), the aged brass and copper their scratches
+  // (not on the low tier: six more taps on a phone's GPU, for detail its
+  // small screen would hardly show)
+  if (hi) scanTriplanar(lib.iron, 'iron', { strength: [1, 0.8, 1] });
+  if (hasScan('brass.rough')) {
+    const worn = scanTexture('brass.rough', { fallback: grime.image });
+    worn.repeat.set(3, 3);
+    for (const m of [lib.brassAged, lib.copperAged]) { m.roughnessMap = worn; m.roughness = 1; }
+  }
 
   // painted porcelain (blush, glaze and gilded filigree) for supporting blooms
   const pt = petalTextures({ size: 512, seed: 23, blush: [238, 206, 178] });
