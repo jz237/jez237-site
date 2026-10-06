@@ -359,5 +359,29 @@
       "By Pavel / Vibe Game Engine"
     ],
     "note": "WebGPU-capable desktop browser · First visit prepares lighting and may take a few minutes"
+  },
+  {
+    "id": "017",
+    "title": "Fire Pro",
+    "category": "WebGPU · Fire & smoke",
+    "description": "Shape a campfire, unleash a flamethrower or stir a fire tornado. Dan Greenheck’s real-time volumetric fire editor brings swirling flames, smoke and explosions to your browser.",
+    "url": "fire-pro/",
+    "image": "assets/fire-pro.png",
+    "imageAlt": "Campfire with bright orange flames, glowing logs and rolling smoke, supplied by the Fire Pro project",
+    "imageWidth": 1274,
+    "imageHeight": 888,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/fire-pro",
+    "features": [
+      "12 built-in effects",
+      "Live fire & smoke controls",
+      "Wind, turbulence & colliders",
+      "Save presets & export effects"
+    ],
+    "facts": [
+      "By Dan Greenheck",
+      "GPU fluid simulation",
+      "MIT licensed"
+    ],
+    "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project"
   }
 ]
