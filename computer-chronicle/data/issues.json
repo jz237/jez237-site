@@ -4,6 +4,586 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-10-06",
+      "historicDate": "1984-11-19",
+      "displayDate": "Week of November 19-25, 1984",
+      "edition": "Issue 121 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "November 1984 home-computing newsprint",
+        "motifs": [
+          "IBM-compatible desktop and CRT",
+          "telephone modem",
+          "one-meter satellite dish",
+          "Atari BBS game screen"
+        ],
+        "layout": "Dense weekly newspaper, warm paper and red/blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "November 19-25, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM-shaped PC market is the strongest weekly historical lead; prominent modem-game halftone accompanies BBS feature",
+        "secondaryRail": "Satellite dish, software, games shelves, charts and world bulletin",
+        "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+      },
+      "editorNote": "The personal-computer market meets a hard bargain, while home modems open new neighborhoods.",
+      "morningLine": "PC price pressure, satellite promises and the busy signal of a growing online world.",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-11-19.png",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for November 19-25, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "lead": {
+        "headline": "After Comdex, personal computing faces an IBM-shaped market",
+        "dek": "A record trade-show floor gives way to price cutting, compatibility battles and a crowded software business.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "The personal-computer business is taking stock after Comdex, and the mood is more restrained than the crowded aisles suggest. Reporting November 20 from Las Vegas, David F. Salisbury describes a record 1,400 exhibits at the previous week’s show, but noticeably less exuberance than a year ago. The question is no longer simply how quickly computers will sell, but which machines and publishers can survive the competition.",
+          "IBM controls about one-third of the personal-computer market, with compatible machines accounting for another 20 percent in the Monitor’s account. That leaves more than half the market aligned around the IBM standard. Apple chief executive John Sculley argues that premature standardization inhibits innovation, while AT&T’s entry adds another uncertainty to the telecommunications picture.",
+          "The outlook is not uniformly gloomy. Future Computing analyst Portia Isaacson projects 60 percent growth in business personal computers during 1984; other researchers find sales sluggish or unpredictable. Software sales are growing about 30 percent, well below the 60 to 100 percent many publishers anticipated. Around 3,000 software companies are competing, and several publishers and distributors have entered bankruptcy during the preceding six months.",
+          "Retailers face pressure from both price cuts and expanding competition. Future Computing counts 3,727 computer-selling stores, against 2,479 a year earlier. IBM’s June PC price reductions of up to 23 percent and its summer AT introduction remain important background, not new announcements this week. Surveys cited in the report suggest home buyers are moving from low-cost Commodore and Atari machines toward Apple II and PCjr systems. The market is growing, but growth alone no longer guarantees a comfortable business."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "A $795 dish promises satellite data for the personal computer",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "Satellite Broadcast Network of Chicago proposes to send data directly to personal computers by the end of the year. Its $795 package would include a one-meter dish, receiving electronics and software. A basic monthly charge is described as comparable to cable television, with additional charges for some information; no precise subscription price is established.",
+            "The attraction comes with a major limitation: reception is one-way. Subscribers cannot send messages or perform interactive searches through the satellite link. At the time of the November 20 report only weather information is available, and stock-quote negotiations are nearly concluded. The service remains a promise rather than a fully stocked information channel."
+          ]
+        },
+        {
+          "headline": "The bulletin board becomes a neighborhood without borders",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Home bulletin boards are becoming meeting places for people who may never meet in person. Kathy Yakal’s November COMPUTE! report finds messages, technical help, classified notices and public-domain software on home-operated systems. Chicago programmer John Semenek recalls finding only one local Atari board; now he counts at least 20.",
+            "Stan and Susie Subeck’s Valley Girl BBS offers adventures and a trivia quiz on Atari equipment. Their children help maintain the board, and their daughter’s Valspeak gives the menus a distinctive voice. Kent Fillmore, meanwhile, has operated Draco-Net on an Apple II at home for roughly three months and proposes a commercial franchise network, not yet an established nationwide service.",
+            "Running the neighborhood takes money and time. A survey by Plumb editor Ric Manning puts average startup expense above $3,000, monthly costs at $50 and maintenance at up to 50 hours a month. Most hobby boards admit one caller at a time, and the evening rush brings busy signals. Long-distance charges still make geography matter."
+          ]
+        },
+        {
+          "headline": "CompuServe brings more than 80 merchants into the living room",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "CompuServe’s Electronic Mall gives more than 130,000 subscribers access to more than 80 merchants, according to Selby Bateman’s November COMPUTE! report. WaldenBooks, American Express, Commodore, McGraw-Hill, Microsoft and American Airlines are among the names appearing on screen. The catalogs operate around the clock.",
+            "Descriptions, shipping information, order forms and merchant mailboxes make the terminal more useful than a mere list of prices. Other services profiled include Comp-U-Store, Pronto and Keyfax. Viewtron provides richer graphics through a $600 AT&T Sceptre terminal, but that terminal serves Viewtron alone. American People/Link is planning nationwide service for December; it is not yet a completed rollout."
+          ]
+        },
+        {
+          "headline": "VisiCalc publisher faces merger and founders' departure",
+          "confidence": "same-week",
+          "sourceRefs": [
+            9
+          ],
+          "body": [
+            "InfoWorld’s November 19 report says VisiCorp is expected to announce a merger with Palladin Software and the departure of founders Dan Fylstra and Peter Jennings from active management. The report relies on an unnamed source close to VisiCorp; company spokespeople decline comment, and the source warns that the deal is not done.",
+            "The reported negotiations follow contraction at the pioneering spreadsheet publisher. Employment has fallen to about 70, prices have been cut and the lawsuit with VisiCalc designers Software Arts has been settled. Control Data bought rights to Visi On technology in late summer and hired its development team. These developments explain the pressure, but do not establish a completed merger this week."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "KoalaPad for IBM PCjr",
+          "summary": "Lee Noel's November review requires PCjr with 128K, disk drive, DOS 2.1 and color display. Pad is roughly 6 by 8 inches with a 4-inch-square pressure-sensitive surface, two buttons and a 5½-foot cord to a joystick port. Includes KoalaPainter; stylus or finger input. No price is asserted because the accessible review extraction did not reach its price box.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Tel-A-Modem 212A",
+          "summary": "Sharon Darling profiled Code-A-Phone's telephone with built-in modem and two lines for simultaneous voice and data. No model-specific price verified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Satellite Broadcast Network receiver package",
+          "summary": "Proposed $795 package with one-meter dish, electronics and PC software; receive-only data service planned for year end.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "OmniWriter & OmniSpell",
+          "detail": "Human Engineered Software's $59.95 Commodore 64 package combines page-oriented word processing and a 30,000-word spelling checker. Requires a disk drive and compatible printer; files hold up to 34,000 characters and lines can be up to 240 characters. Joseph R. Sutton liked spell-check speed but criticized manual page breaks and suggested short/form letters as a better use.",
+          "sourceRefs": [
+            6
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "name": "WizType",
+          "detail": "Typing speeds selectable from 10 to 60 words per minute in 10-word increments; custom words/paragraphs and eight literary selections supplement the Wizard of Id game.",
+          "sourceRefs": [
+            7
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — November editorial shelf, not a sales chart",
+          "items": [
+            "Archon II: Adept",
+            "Reflection",
+            "Bagdad",
+            "Drol",
+            "Space Change"
+          ]
+        },
+        {
+          "label": "Top 5 Music — Billboard rock radio, November 24",
+          "items": [
+            "Run To You — Bryan Adams",
+            "Valotte — Julian Lennon",
+            "We Belong — Pat Benatar",
+            "The Boys Of Summer — Don Henley",
+            "I Do'Wanna Know — REO Speedwagon"
+          ]
+        },
+        {
+          "label": "Top 5 Movies — November 23-25 domestic weekend",
+          "items": [
+            "Supergirl",
+            "Missing in Action",
+            "The Terminator",
+            "Oh God, You Devil!",
+            "Night of the Comet"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Modem market range",
+          "price": "See market note",
+          "note": "COMPUTE! reported current modem prices from about $49 to $1,000 or more; cheapest models had cost about $80 in the preceding year. These are market ranges, not prices for a named model.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "1200-bps modem forecast",
+          "price": "See market note",
+          "note": "Anchor Automation's Jerry Hussong forecast $300–$500 by the end of 1984 and $250–$400 in 1985. Explicitly predictions, not actual November retail quotes.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "OmniWriter & OmniSpell",
+          "price": "$59.95",
+          "note": "Listed package price $59.95 in the November review.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "WizType",
+          "price": "$34.95",
+          "note": "Listed price $34.95 in the November review.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "AT&T Sceptre for Viewtron",
+          "price": "$600.00",
+          "note": "Reported subscriber terminal cost $600; service-specific hardware, not an all-purpose PC.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "BBS ownership",
+          "price": "See market note",
+          "note": "Ric Manning survey as quoted by Yakal: more than $3,000 average setup expense, $50 monthly running expense.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "300 versus 1200 bps",
+          "summary": "Darling reported typical home-computer modems at 300 bps (about 30 characters/second) or 1200 bps (about 120 characters/second); inexpensive 300-bps models remained sensible for local BBS conversations. Faster modems could reduce time-based service and telephone costs.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "Copyright rules at hobby boards",
+          "summary": "Yakal reported that most BBSs did not tolerate copyrighted-software uploads and that some moved to password-protected or fee-based closed systems. This is a cultural/legal observation, not evidence of a specific arrest or named warez crew.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Run To You",
+          "artist": "Bryan Adams",
+          "lastWeek": 1,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Valotte",
+          "artist": "Julian Lennon",
+          "lastWeek": 4,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "We Belong",
+          "artist": "Pat Benatar",
+          "lastWeek": 11,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "The Boys Of Summer",
+          "artist": "Don Henley",
+          "lastWeek": 8,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "I Do'Wanna Know",
+          "artist": "REO Speedwagon",
+          "lastWeek": 7,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 6,
+          "title": "Had A Dream",
+          "artist": "Roger Hodgson",
+          "lastWeek": 10,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 7,
+          "title": "Understanding",
+          "artist": "Bob Seger",
+          "lastWeek": 5,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 8,
+          "title": "I Can't Hold Back",
+          "artist": "Survivor",
+          "lastWeek": 2,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 9,
+          "title": "(Pride) In The Name Of Love",
+          "artist": "U2",
+          "lastWeek": 3,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        },
+        {
+          "rank": 10,
+          "title": "Do It Again",
+          "artist": "The Kinks",
+          "lastWeek": 29,
+          "chart": "Billboard rock chart (archive currently labels Mainstream Rock Airplay)",
+          "chartDate": "1984-11-24",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/"
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "WizType — practice meets the Wizard of Id",
+        "summary": "Sierra’s typing program combines an arcade-like game with drills and custom lessons. November review lists $34.95 for Atari, Commodore 64 and Apple II-family versions requiring at least 32K and a disk drive.",
+        "tagline": "Typing practice with a comic-strip twist",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "market": {
+        "headline": "Software growth falls short of expectations",
+        "summary": "November 20 reporting puts software-sales growth near 30 percent, against publishers’ expectations of 60–100 percent. A crowded field of about 3,000 firms faces a harder market.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Explosions devastate Mexico City LPG terminal",
+        "summary": "Fire and catastrophic explosions strike the PEMEX terminal at San Juan Ixhuatepec near Mexico City on November 19. The disaster destroys the terminal and surrounding communities suffer devastating loss.",
+        "confidence": "exact-date; event verified by retrospective official study",
+        "sourceRefs": [
+          12
+        ]
+      },
+      "bbsNote": {
+        "headline": "Local boards thrive as modem prices fall",
+        "summary": "Home-operated boards connect hobbyists as modem prices fall. Modem Desk dispatches cover November reports.",
+        "posts": [
+          {
+            "topic": "Adventure and trivia by telephone",
+            "platform": "Valley Girl BBS / Atari",
+            "text": "Stan and Susie Subeck offered online adventures and trivia; the board's Valspeak menus were inspired by their daughter."
+          },
+          {
+            "topic": "Commercial boards and user groups",
+            "platform": "Draco-Net / Apple II",
+            "text": "Kent Fillmore's home board was the first implementation of a proposed franchise network; local user-group boards could share its system."
+          },
+          {
+            "topic": "The case for a slower modem",
+            "platform": "Local BBSs / Anchor Automation interview",
+            "text": "Jerry Hussong told COMPUTE! that 300 bps was often the economical choice for talking to friends and reading local boards; 1200 bps was becoming the office norm."
+          },
+          {
+            "topic": "The cost of being sysop",
+            "platform": "Plumb survey / COMPUTE!",
+            "text": "Average setup cost exceeded $3,000; continuing expense averaged $50 monthly and maintenance could reach 50 hours a month."
+          }
+        ],
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      "curiosity": {
+        "headline": "On Valley Girl BBS, you do not exit—you de-val",
+        "summary": "A Chicago-area Atari board turned Valley Girl slang into its operating personality.",
+        "detail": "Stan and Susie Subeck's Valley Girl BBS used Valspeak command menus and a glossary: users bagged messages instead of deleting them and de-valed instead of exiting. Kathy Yakal attributed the theme to the couple's 13-year-old daughter. The same board also offered online adventures and trivia. Verified November coverage, not a claimed launch during November 19–25.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "One-meter dish brings a proposed satellite data service within PC owners' reach",
+        "summary": "SBN's $795 dish/electronics/software offer, reported November 20, is genuine exact-week satellite-receiver news, though commercial transmissions were only planned for year end. The article distinguishes it from satellite television and emphasizes one-way data reception.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "No milestone designation: substantial market consolidation and a merger report do not establish a new era-defining event within this week. No prior-issue website or worktree inspection was needed.",
+          "Underground check performed across indexed November hobbyist and mainstream coverage. A retrospective research bibliography points to November 12 BBS/free-speech stories and a November 22 hacker wire story, but their underlying text and named scene identities were not retrieved; no undergroundCandidates are invented from these pointers.",
+          "No later events imported: November 29 UK console withdrawals and Elite rights coverage fall outside this week. Monthly magazine publication dates are not launch dates.",
+          "Billboard rankings were recovered from the original chart HTML rows after readable-text extraction omitted them; do not substitute Tunecaster's different rock chart.",
+          "COMDEX report is dated November 20 but explicitly describes the previous week's show. VisiCorp report is a trade-press story dated November 19, not proof of a completed merger on that day.",
+          "Games shelf retains five sourced November selections from the preceding issue; editorial choices, not sales ranks or new releases.",
+          "World bulletin omits retrospective final casualty totals."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Computer trade: less hypey, more upscale — David F. Salisbury, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1984/1120/112051.html",
+          "date": "1984-11-20"
+        },
+        {
+          "title": "New service for personal computers offers direct link to satellite — David F. Salisbury, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1984/1120/112036.html",
+          "date": "1984-11-20"
+        },
+        {
+          "title": "The Bulletin Boarding Of America — Kathy Yakal, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "Understanding Modems — Sharon Darling, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "On-Line Shopping: Today's Computer Catalogs — Selby Bateman, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/104_1_ON-LINE_SHOPPING_Todays_Computer_Catalogs.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "KoalaPad For PCjr — Lee Noel, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/140_1_REVIEWS_KoalaPad_For_PCjr.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "OmniWriter & OmniSpell — Joseph R. Sutton, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/144_2_REVIEWS_OmniWriter_OmniSpell.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "WizType — James V. Trunzo, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/147_3_REVIEWS_WizType.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "Reflection — Sean Puckett, COMPUTE! issue 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/117_1_Reflection.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "End of Era: VisiCorp to Merge — Denise Caruso, InfoWorld; later transcription",
+          "url": "http://www.edesber.com/PDFs/InfoWorldVisiCorp11-19-1984.pdf",
+          "date": "1984-11-19"
+        },
+        {
+          "title": "Billboard Mainstream Rock Airplay chart archive",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-24/",
+          "date": "1984-11-24"
+        },
+        {
+          "title": "The Numbers: Weekend Domestic Box Office November 23, 1984",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/11/23",
+          "date": "1984-11-23/1984-11-25"
+        },
+        {
+          "title": "PEMEX LPG Terminal, Mexico City, Mexico, 19th November 1984 — UK HSE retrospective case study",
+          "url": "https://www.hse.gov.uk/comah/sragtech/casepemex84.htm",
+          "date": "Undated retrospective; event 1984-11-19"
+        },
+        {
+          "title": "Understanding Modems — Sharon Darling, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "On-Line Shopping — Selby Bateman, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/104_1_ON-LINE_SHOPPING_Todays_Computer_Catalogs.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "The Bulletin Boarding Of America — Kathy Yakal, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "KoalaPad For PCjr — Lee Noel, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/140_1_REVIEWS_KoalaPad_For_PCjr.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "OmniWriter & OmniSpell — Joseph R. Sutton, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/144_2_REVIEWS_OmniWriter_OmniSpell.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "Reflection — Sean Puckett, COMPUTE! 54",
+          "url": "https://www.atarimagazines.com/compute/issue54/117_1_Reflection.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "COMPUTE! Gazette November contents",
+          "url": "https://www.devili.iki.fi/library/issue/51.en.html",
+          "date": "1984-11"
+        },
+        {
+          "title": "Piracy and software protection — Mitchell Kapor, Creative Computing 10(11), p236",
+          "url": "https://www.atarimagazines.com/creative/v10n11/236_Piracy_and_software_prote.php",
+          "date": "1984-11"
+        },
+        {
+          "title": "Tandy 1000 — retrospective reference; introduction month documented",
+          "url": "https://en.wikipedia.org/wiki/Tandy_1000",
+          "date": "retrospective; event 1984-11"
+        },
+        {
+          "title": "Billboard Mainstream Rock chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-11-17/",
+          "date": "1984-11-17"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 46",
+          "url": "https://www.boxofficemojo.com/weekend/1984W46/",
+          "date": "1984-11-16/1984-11-18"
+        },
+        {
+          "title": "Shuttle success doesn’t deter competition — Robert C. Cowen, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1984/1116/111608.html",
+          "date": "1984-11-16"
+        },
+        {
+          "title": "Sony D-50 collector catalog page",
+          "url": "https://www.ssplusone.com/radio-and-audio/my-sony-audio/d-50-cd-compact-player/",
+          "date": "retrospective; catalog 1984-11"
+        }
+      ]
+    },
+    {
       "visualProfile": {
         "tone": "November 1984 home-computing newsprint",
         "motifs": [

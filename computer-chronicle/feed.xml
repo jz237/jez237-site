@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 05 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 19-25, 1984 — After Comdex, personal computing faces an IBM-shaped market</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-11-19</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-19</guid>
+      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
+      <description>A record trade-show floor gives way to price cutting, compatibility battles and a crowded software business. The personal-computer business is taking stock after Comdex, and the mood is more restrained than the crowded aisles suggest. Reporting November 20 from Las Vegas, David F. Salisbury describes a record 1,400 exhibits at the previous week’s show, but noticeably less exuberance than a year ago. The question is no longer simply how quickly computers will sell, but which machines and publishers can survive the competition. Also this week: A $795 dish promises satellite data for the personal computer · The bulletin board becomes a neighborhood without borders · CompuServe brings more than 80 merchants into the living room · VisiCalc publisher faces merger and founders&apos; departure.</description>
+    </item>
     <item>
       <title>Week of November 12-18, 1984 — Tandy 1000 brings PC compatibility home</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-11-12</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-09</guid>
       <pubDate>Mon, 14 Sep 2026 12:00:00 GMT</pubDate>
       <description>Days after Jack Tramiel takes control of Atari’s consumer operation, his old rivalry with Commodore shifts from price cuts and product launches to engineers, designs and the courts. The struggle for the home-computer market acquired a legal edge this week. On July 14, The New York Times reported a dispute over Commodore trade secrets, arriving only days after Warner Communications transferred Atari’s home-computer and video-game businesses to a company led by former Commodore chief Jack Tramiel. Also this week: BYTE Puts Computers and Video in the Spotlight · Sinclair Warns QL Buyers of Delivery Delays · PC Magazine Surveys a Fast-Growing IBM Ecosystem.</description>
-    </item>
-    <item>
-      <title>Week of July 2-8, 1984 — Jack Tramiel Takes Atari as Warner Retreats</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-07-02</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-02</guid>
-      <pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The Commodore founder acquires Atari&apos;s home-computer and console operations, setting up a fierce new round in the personal-computer price war. Warner Communications sold Atari&apos;s loss-plagued home-computer and home-video-game operations on Monday, July 2, to a new company headed by Jack Tramiel. Warner kept the coin-operated arcade operation, while the consumer business became the foundation of a new Atari Corporation. Also this week: Apple IIc Packs a Full Apple II into 7.5 Pounds · The Hulk Leads Atari&apos;s Living Software Shelf · Byte Watches Computers and Video Converge.</description>
     </item>
   </channel>
 </rss>

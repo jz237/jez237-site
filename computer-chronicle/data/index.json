@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-06",
+      "historicDate": "1984-11-19",
+      "displayDate": "Week of November 19-25, 1984",
+      "edition": "Issue 121 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "PC price pressure, satellite promises and the busy signal of a growing online world.",
+      "leadHeadline": "After Comdex, personal computing faces an IBM-shaped market",
+      "storyHeadlines": [
+        "A $795 dish promises satellite data for the personal computer",
+        "The bulletin board becomes a neighborhood without borders",
+        "CompuServe brings more than 80 merchants into the living room",
+        "VisiCalc publisher faces merger and founders' departure"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-19.png",
+      "thumb": "media/thumbs/1984-11-19.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-05",
       "historicDate": "1984-11-12",
       "displayDate": "Week of November 12-18, 1984",
