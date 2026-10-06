@@ -335,27 +335,5 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop; a strict independent reviewer scored it 3.8 out of 5 against the photo, short of the 4.5 target: a close match in layout and palette, not an exact one · Preview captured from the running demo"
-  },
-  {
-    "id": "016",
-    "title": "Elderwood — WebGPU Lighting Lab",
-    "category": "WebGPU · Real-time rendering",
-    "description": "Explore Vibe Game Engine’s experimental lighting toolkit: a colour-filled Cornell studio, a coastal village study and an atmospheric sky lab. Inspect baked illumination, soft shadows and cinematic controls.",
-    "url": "elderwood-webgpu/",
-    "image": "assets/elderwood-webgpu.jpg",
-    "imageAlt": "Actual Elderwood village study with sunlit terracotta roofs, shuttered buildings, stone quay and lighting controls",
-    "source": "https://github.com/jz237/web-starter-kit-webgpu-pipline",
-    "features": [
-      "Lighting studio & village study",
-      "Atmospheric sky laboratory",
-      "Orbit camera & lighting controls",
-      "Browser-saved presets & lighting"
-    ],
-    "facts": [
-      "Three.js · WebGPU",
-      "3 verified showcase scenes",
-      "By Vibe Game Engine"
-    ],
-    "note": "Desktop WebGPU required · First launch bakes lighting · Upstream beach is unavailable in this snapshot"
   }
 ]
