@@ -8,6 +8,7 @@ import { Garden } from './garden.js';
 import { Flora } from './flora.js';
 import { Foliage } from './foliage.js';
 import { Promenade } from './promenade.js';
+import { GreatTree } from './greatTree.js';
 import { resolvePlanting } from './planting.js';
 import { Atmosphere } from './atmosphere.js';
 import { Lighting } from './lighting.js';
@@ -33,9 +34,11 @@ export function buildWorld(scene, mat, tex, quality) {
   scene.add(w.garden.group);
   w.promenade = new Promenade(mat, quality);
   scene.add(w.promenade.group);
+  w.greatTree = new GreatTree(mat, quality);
+  scene.add(w.greatTree.group);
   w.flora = new Flora(mat, quality);
   scene.add(w.flora.group);
-  w.foliage = new Foliage(mat, quality, w.flora);
+  w.foliage = new Foliage(mat, quality, w.flora, w.greatTree);
   scene.add(w.foliage.group);
   // nothing passes through anything: blooms, masses, seed lanterns, ferns and
   // leaves are moved clear of each other, the iron, the glass and the soil
@@ -175,6 +178,7 @@ export function buildWorld(scene, mat, tex, quality) {
     w.flower.update(t, ctx);
     w.garden.update(t, ctx);
     w.promenade.update(t, ctx);
+    w.greatTree.update(t, ctx);
     w.flora.update(t, ctx);
     w.foliage.update(t, ctx);
     w.skep.update(t, ctx);
@@ -231,6 +235,7 @@ export function buildWorld(scene, mat, tex, quality) {
     w.flower.update(t, ctx);
     w.garden.update(t, ctx);
     w.promenade.update(t, ctx);
+    w.greatTree.update(t, ctx);
     w.flora.update(t, ctx);
     w.foliage.update(t, ctx);
     w.skep.update(t, ctx);

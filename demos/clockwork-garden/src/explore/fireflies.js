@@ -1,20 +1,27 @@
 import * as THREE from 'three';
 import { RNG } from '../core/rng.js';
 import { clamp, smooth } from '../core/ease.js';
+import { L } from '../world/layout.js';
 
 // Clockwork fireflies for the night garden: tiny brass beetles with a lamp in
-// the abdomen, drifting in loose swarms over the beds, the fountain's water,
-// the skep and the rose arch. They blink in slow waves that roll across each
-// swarm and keep to their swarms: APX-9 passing makes the nearest glow
+// the abdomen, thousands of them, drifting in loose swarms over the beds, the
+// fountain's water, the skep, the rose arch, along the promenade and all
+// through the great tree's crown. They blink in slow waves that roll across
+// each swarm and keep to their swarms: APX-9 passing makes the nearest glow
 // brighter and drift aside, and a boost through scatters them. Each swarm
 // also lights the leaves under it through the light field (night.js), and the
 // ones by APX-9 light the bee.
 //
-// Drawn as one point sprite each (an HDR core and a soft halo: the bloom pass
-// does the rest); the nearest few also get a little brass body.
+// The drift, the blinking and the reaction to the bee are worked out on the
+// GPU, per point, from fixed per-firefly parameters and a handful of
+// uniforms (the swarms' wandering centres, the bee, the clock), so their
+// number costs almost nothing on the main thread. Each is one point sprite
+// (an HDR core and a soft halo: the bloom pass does the rest); the nearest
+// few also get a little brass body.
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const TAU = Math.PI * 2;
+const MAX_SWARMS = 80;
 
 // [x, y, z, radius, height, weight]
 const SWARMS = [
@@ -27,49 +34,112 @@ const SWARMS = [
   [70, 44, -250, 12, 10, 0.7], // under the rose arch
 ];
 
+const lerpZ = (k) => L.house.z0 - 60 - k * (L.house.z0 - L.house.z1 - 140);
+function moreSwarms(rng) {
+  const out = [];
+  const H = L.house;
+  // over the beds on both sides, the length of the house
+  for (let i = 0; i < 22; i++) {
+    const left = i % 2 === 0;
+    const x = left ? rng.range(H.x0 + 30, L.pathX[0] - 18) : rng.range(L.pathX[1] + 18, H.x1 - 30);
+    const z = rng.range(H.z1 + 60, H.z0 - 40);
+    out.push([x, rng.range(16, 34), z, rng.range(13, 20), rng.range(7, 12), rng.range(0.8, 1.2)]);
+  }
+  // along the promenade, under the arches
+  for (let z = 160; z > -480; z -= 95) out.push([70, rng.range(30, 60), z + rng.range(-20, 20), 14, 10, 0.9]);
+  // all through the great tree's crown, like lights strung in it
+  const T = L.tree;
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * TAU, r = rng.range(40, 150);
+    out.push([T.x + Math.cos(a) * r * 1.3, rng.range(130, 330), T.z + Math.sin(a) * r * 0.55, rng.range(18, 28), rng.range(12, 20), 1.6]);
+  }
+  out.push([T.x, 40, T.z + 30, 26, 14, 1.2]); // round its roots
+  // and a loose scattering through the whole house, high and low
+  for (let i = 0; i < 9; i++) out.push([rng.range(H.x0 + 60, H.x1 - 60), rng.range(50, 120), lerpZ(i / 8), 75, 45, 2.2]);
+  return out;
+}
+
 export class Fireflies {
   constructor(quality) {
     this.low = quality.tier === 'low';
-    const n = this.low ? 170 : quality.tier === 'med' ? 340 : 520;
+    const n = this.low ? 1200 : quality.tier === 'med' ? 2400 : 4000;
     const rng = new RNG('fireflies');
-    const swarms = (this.low ? SWARMS.filter((_, i) => i % 3 !== 2) : SWARMS).map(([x, y, z, r, h, w]) => ({ c: V(x, y, z), r, h, w, ph: rng.range(0, TAU), glow: 0, pos: V(x, y, z), near: 0 }));
+    const list = [...SWARMS, ...moreSwarms(rng)];
+    const swarms = (this.low ? list.filter((_, i) => i % 4 !== 3) : list).slice(0, MAX_SWARMS).map(([x, y, z, r, h, w]) => ({ c: V(x, y, z), r, h, w, ph: rng.range(0, TAU), glow: 0, pos: V(x, y, z), near: 0, cnt: 0 }));
     this.swarms = swarms;
     const wsum = swarms.reduce((a, s) => a + s.w, 0);
+    // per firefly, fixed: its swarm, its place in it, its wander, its blink
+    const geo = new THREE.BufferGeometry();
+    const P = new Float32Array(n * 3), S = new Float32Array(n), F = new Float32Array(n * 4), Ph = new Float32Array(n * 4), Bl = new Float32Array(n * 4);
     this.flies = [];
     let si = 0, acc = 0;
     for (let i = 0; i < n; i++) {
       while (si < swarms.length - 1 && i >= ((acc + swarms[si].w) / wsum) * n) { acc += swarms[si].w; si++; }
       const s = swarms[si];
+      s.cnt++;
       const a = rng.range(0, TAU), rr = Math.sqrt(rng.float()) * s.r;
-      this.flies.push({
-        s, o: V(Math.cos(a) * rr, rng.range(-s.h, s.h) * 0.6, Math.sin(a) * rr),
-        f: [rng.range(0.13, 0.32), rng.range(0.1, 0.25), rng.range(0.12, 0.3)],
-        p: [rng.range(0, TAU), rng.range(0, TAU), rng.range(0, TAU)],
-        amp: rng.range(2.2, 5.5),
-        ph: rng.range(0, TAU), wv: rng.range(0.75, 1.15), flick: rng.range(0, TAU),
-        curious: rng.chance(0.55), orbit: rng.range(4.5, 8.5), orbA: rng.range(0, TAU), orbW: rng.range(0.6, 1.2) * (rng.chance(0.5) ? 1 : -1),
-        r: V(), v: V(), pos: V(), glow: 0, excite: 0,
-      });
+      const o = V(Math.cos(a) * rr, rng.range(-s.h, s.h) * 0.6, Math.sin(a) * rr);
+      const f = [rng.range(0.13, 0.32), rng.range(0.1, 0.25), rng.range(0.12, 0.3)], amp = rng.range(2.2, 5.5);
+      const p = [rng.range(0, TAU), rng.range(0, TAU), rng.range(0, TAU)];
+      const ph = rng.range(0, TAU), wv = rng.range(0.75, 1.15), flick = rng.range(0, TAU), curious = rng.chance(0.55) ? 1 : 0;
+      P.set([o.x, o.y, o.z], i * 3);
+      S[i] = si;
+      F.set([...f, amp], i * 4);
+      Ph.set([...p, ph], i * 4);
+      Bl.set([wv, flick, curious, 0], i * 4);
+      this.flies.push({ si, o, f, p, amp, ph, wv, flick, pos: V(), glow: 0 });
     }
     this.n = n;
-    // point sprites: position + glow
-    const geo = new THREE.BufferGeometry();
-    this.posA = new Float32Array(n * 3);
-    this.glowA = new Float32Array(n);
-    geo.setAttribute('position', new THREE.BufferAttribute(this.posA, 3).setUsage(THREE.DynamicDrawUsage));
-    geo.setAttribute('glow', new THREE.BufferAttribute(this.glowA, 1).setUsage(THREE.DynamicDrawUsage));
-    this.u = { uPixel: { value: 1 }, uVis: { value: 0 }, uScale: { value: 600 } };
+    geo.setAttribute('position', new THREE.BufferAttribute(P, 3));
+    geo.setAttribute('aSwarm', new THREE.BufferAttribute(S, 1));
+    geo.setAttribute('aWander', new THREE.BufferAttribute(F, 4));
+    geo.setAttribute('aPhase', new THREE.BufferAttribute(Ph, 4));
+    geo.setAttribute('aBlink', new THREE.BufferAttribute(Bl, 4));
+    geo.boundingSphere = new THREE.Sphere(V(25, 100, -300), 2000);
+    this.u = {
+      uPixel: { value: 1 }, uVis: { value: 0 }, uScale: { value: 600 }, uT: { value: 0 },
+      uSwarm: { value: Array.from({ length: MAX_SWARMS }, () => new THREE.Vector4()) },
+      uBee: { value: new THREE.Vector4(0, -1e5, 0, 0) }, // position, boost (0..1)
+      uBeeSpeed: { value: 0 },
+    };
     const mat = new THREE.ShaderMaterial({
       uniforms: this.u, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      defines: { MAX_SWARMS },
       vertexShader: /* glsl */ `
-        attribute float glow; uniform float uPixel, uVis, uScale; varying float vG; varying float vFar;
+        attribute float aSwarm; attribute vec4 aWander; attribute vec4 aPhase; attribute vec4 aBlink;
+        uniform float uPixel, uVis, uScale, uT, uBeeSpeed;
+        uniform vec4 uSwarm[MAX_SWARMS];
+        uniform vec4 uBee;
+        varying float vG; varying float vFar;
         void main(){
-          vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          float d = -mv.z;
-          vG = glow * uVis;
-          vFar = exp(-d * 0.0016);
+          vec4 s = uSwarm[int(aSwarm + 0.5)];
+          // a slow Lissajous wander about its place in the swarm
+          vec3 p = s.xyz + position + vec3(sin(uT * aWander.x + aPhase.x) * aWander.w,
+                                           sin(uT * aWander.y + aPhase.y) * aWander.w * 0.45,
+                                           cos(uT * aWander.z + aPhase.z) * aWander.w);
+          // APX-9: every one drifts aside to let it through, a boost scatters
+          // them, and the curious ones brighten as it goes by
+          vec3 d = p - uBee.xyz;
+          float dist = length(d);
+          float ex = 0.0;
+          if (dist < 30.0 && dist > 1e-3) {
+            vec3 n = d / dist;
+            if (dist < 7.0) p += n * (7.0 - dist) * 0.75;
+            if (uBee.w > 0.35 && uBeeSpeed > 14.0 && dist < 22.0) p += normalize(n + vec3(0.0, 0.4, 0.0)) * (1.0 - dist / 22.0) * 9.0 * uBee.w;
+            ex = aBlink.z * (1.0 - dist / 30.0);
+          }
+          p.y = max(p.y, 1.5);
+          // blinking in slow waves that roll across the swarm, each its own beat
+          float wave = 0.5 + 0.5 * sin(uT * 0.95 * aBlink.x - (p.x * 0.055 + p.z * 0.04) + aPhase.w * 0.35);
+          float flick = 0.75 + 0.25 * sin(uT * 7.3 + aBlink.y);
+          float g = (0.16 + 0.84 * smoothstep(0.0, 1.0, clamp((wave - 0.42) / 0.5, 0.0, 1.0))) * flick;
+          g = min(1.6, g + ex * 0.55);
+          vec4 mv = modelViewMatrix * vec4(p, 1.0);
+          float dz = -mv.z;
+          vG = g * uVis;
+          vFar = exp(-dz * 0.0016);
           // a halo about 1.8 units across at full glow, never smaller than a few pixels
-          gl_PointSize = clamp((0.55 + glow * 0.75) * uScale * uPixel / max(d, 0.5), 2.5 * uPixel, 72.0 * uPixel);
+          gl_PointSize = clamp((0.6 + g * 0.8) * uScale * uPixel / max(dz, 0.5), 3.2 * uPixel, 72.0 * uPixel);
           if (vG < 0.002) gl_PointSize = 0.0;
           gl_Position = projectionMatrix * mv;
         }`,
@@ -92,6 +162,8 @@ export class Fireflies {
     this.group.add(this.points);
     this.group.visible = false;
     this.t = 0;
+    this.beeGlow = 0;
+    this.beeC = V();
     this._d = V();
   }
 
@@ -123,99 +195,75 @@ export class Fireflies {
     if (!this.group.visible) return;
     this.t += dt;
     const t = this.t;
-    this.u.uVis.value = vis;
-    this.u.uPixel.value = pixelRatio;
-    this.u.uScale.value = this._scale(camera);
-    const bp = bee?.pos, boost = bee?.boost ?? 0, speed = bee?.speed ?? 0;
-    const d = this._d;
-    for (const s of this.swarms) {
-      // each swarm wanders slowly round its home
+    const U = this.u;
+    U.uVis.value = vis;
+    U.uPixel.value = pixelRatio;
+    U.uScale.value = this._scale(camera);
+    U.uT.value = t;
+    const bp = bee?.pos;
+    if (bp) U.uBee.value.set(bp.x, bp.y, bp.z, bee.boost ?? 0); else U.uBee.value.set(0, -1e5, 0, 0);
+    U.uBeeSpeed.value = bee?.speed ?? 0;
+    // each swarm wanders slowly round its home; its light (for the light
+    // field) follows its blink waves on average, brighter by the bee
+    let bg = 0, bx = 0, by = 0, bz = 0;
+    this.swarms.forEach((s, i) => {
       s.pos.set(s.c.x + Math.sin(t * 0.071 + s.ph) * 5, s.c.y + Math.sin(t * 0.053 + s.ph * 2) * 2, s.c.z + Math.cos(t * 0.064 + s.ph) * 5);
-      s.glow = 0;
-      s.near = 0;
-      s.cnt = 0;
-    }
-    const k = 3.2, c = 2.6;
-    const step = Math.min(dt, 1 / 30);
-    let bx = 0, by = 0, bz = 0, bg = 0;
-    for (let i = 0; i < this.n; i++) {
-      const f = this.flies[i];
-      const s = f.s;
-      // drift: a slow Lissajous wander about its place in the swarm
-      const px = s.pos.x + f.o.x + Math.sin(t * f.f[0] + f.p[0]) * f.amp;
-      const py = s.pos.y + f.o.y + Math.sin(t * f.f[1] + f.p[1]) * f.amp * 0.45;
-      const pz = s.pos.z + f.o.z + Math.cos(t * f.f[2] + f.p[2]) * f.amp;
-      // reaction to APX-9: a displacement on a damped spring
-      let fx = 0, fy = 0, fz = 0, ex = 0;
+      U.uSwarm.value[i].set(s.pos.x, s.pos.y, s.pos.z, 0);
+      let g = 0.36 + 0.12 * Math.sin(t * 0.9 + s.ph);
       if (bp) {
-        d.set(px + f.r.x - bp.x, py + f.r.y - bp.y, pz + f.r.z - bp.z);
-        const dist = d.length();
-        if (dist < 30 && dist > 1e-3) {
-          d.multiplyScalar(1 / dist);
-          if (boost > 0.35 && speed > 14 && dist < 22) {
-            // scatter: a burst away from the rushing bee
-            const kk = (1 - dist / 22) * 90 * boost;
-            fx += d.x * kk; fy += (d.y + 0.4) * kk; fz += d.z * kk;
-            f.excite = Math.min(1.5, f.excite + dt * 3);
-          } else if (f.curious) {
-            // the bee going by: the curious ones brighten (they don't follow it)
-            ex = 1 - dist / 30;
-          }
-          // and every one drifts aside to let it through
-          if (dist < 7) { const kk = (7 - dist) * 6; fx += d.x * kk; fy += d.y * kk; fz += d.z * kk; }
-        }
+        const d = s.pos.distanceTo(bp);
+        const k = clamp(1 - (d - s.r) / 30);
+        g += k * 0.25;
+        if (k > 0) { const w = k * Math.min(1, s.cnt / 40); bg += w * 12; bx += s.pos.x * w; by += s.pos.y * w; bz += s.pos.z * w; }
       }
-      // the spring (stiffer home pull when nothing is acting)
-      f.v.x += (fx - k * f.r.x - c * f.v.x) * step;
-      f.v.y += (fy - k * f.r.y - c * f.v.y) * step;
-      f.v.z += (fz - k * f.r.z - c * f.v.z) * step;
-      f.r.addScaledVector(f.v, step);
-      f.pos.set(px + f.r.x, Math.max(1.5, py + f.r.y), pz + f.r.z);
-      f.excite += (ex - f.excite) * (1 - Math.exp(-dt * 1.5));
-      // blinking in slow waves that roll across the swarm, each its own beat
-      const wave = 0.5 + 0.5 * Math.sin(t * 0.95 * f.wv - (f.pos.x * 0.055 + f.pos.z * 0.04) + f.ph * 0.35);
-      const flick = 0.75 + 0.25 * Math.sin(t * 7.3 + f.flick);
-      let g = (0.06 + 0.94 * smooth(clamp((wave - 0.42) / 0.5))) * flick;
-      g = Math.min(1.6, g + f.excite * 0.55);
-      f.glow = g;
-      const o = i * 3;
-      this.posA[o] = f.pos.x; this.posA[o + 1] = f.pos.y; this.posA[o + 2] = f.pos.z;
-      this.glowA[i] = g;
-      s.glow += g;
-      s.cnt++;
-      if (bp && f.excite > 0.2) { bx += f.pos.x * g; by += f.pos.y * g; bz += f.pos.z * g; bg += g; }
-    }
-    for (const s of this.swarms) s.glow /= Math.max(1, s.cnt);
+      s.glow = g;
+    });
     this.beeGlow = bg;
-    if (bg > 0) (this.beeC ||= V()).set(bx / bg, by / bg, bz / bg);
-    const geo = this.points.geometry;
-    geo.attributes.position.needsUpdate = true;
-    geo.attributes.glow.needsUpdate = true;
-    this._bodies(camera, vis);
+    if (bg > 0) { const w = bg / 12; this.beeC.set(bx / w, by / w, bz / w).lerp(bp, 0.6); }
+    this._bodies(camera, vis, bp);
   }
 
   // screen scale: pixels per world unit at distance 1
   _scale(camera) { return (0.5 * window.innerHeight) / Math.tan((camera.fov * Math.PI) / 360); }
 
-  _bodies(camera, vis) {
+  // where a firefly is now (the shader's wander, without the bee's push)
+  _at(f, out) {
+    const s = this.swarms[f.si].pos, t = this.t;
+    return out.set(
+      s.x + f.o.x + Math.sin(t * f.f[0] + f.p[0]) * f.amp,
+      Math.max(1.5, s.y + f.o.y + Math.sin(t * f.f[1] + f.p[1]) * f.amp * 0.45),
+      s.z + f.o.z + Math.cos(t * f.f[2] + f.p[2]) * f.amp,
+    );
+  }
+
+  _bodies(camera, vis, bp) {
     if (!this.bodies) return;
     const cp = camera.position;
     const near = [];
-    for (const f of this.flies) {
-      const d2 = f.pos.distanceToSquared(cp);
-      if (d2 < 32 * 32) near.push([d2, f]);
+    // (only the swarms by the camera can hold its nearest fireflies)
+    const close = new Set(this.swarms.map((s, i) => (s.pos.distanceTo(cp) < 40 + s.r ? i : -1)).filter((i) => i >= 0));
+    if (close.size) {
+      for (const f of this.flies) {
+        if (!close.has(f.si)) continue;
+        this._at(f, f.pos);
+        if (bp) { const d = this._d.subVectors(f.pos, bp); const l = d.length(); if (l < 7 && l > 1e-3) f.pos.addScaledVector(d, ((7 - l) * 0.75) / l); }
+        const d2 = f.pos.distanceToSquared(cp);
+        if (d2 < 32 * 32) near.push([d2, f]);
+      }
     }
     near.sort((a, b) => a[0] - b[0]);
     const m4 = this._m4 || (this._m4 = new THREE.Matrix4()), q = this._q || (this._q = new THREE.Quaternion()), one = V(1, 1, 1), col = this._c || (this._c = new THREE.Color());
     const n = Math.min(this.bodyMax, near.length);
+    const t = this.t;
     for (let i = 0; i < n; i++) {
       const f = near[i][1];
-      const a = Math.atan2(f.v.x + Math.cos(f.p[0] + this.t * f.f[0]), f.v.z + Math.sin(f.p[2] + this.t * f.f[2]));
+      const a = Math.atan2(Math.cos(f.p[0] + t * f.f[0]), Math.sin(f.p[2] + t * f.f[2]));
       q.setFromAxisAngle(_Y, a);
       m4.compose(f.pos, q, one);
       this.bodies.setMatrixAt(i, m4);
       this.lamps.setMatrixAt(i, m4);
-      const g = f.glow * vis * 3;
+      const wave = 0.5 + 0.5 * Math.sin(t * 0.95 * f.wv - (f.pos.x * 0.055 + f.pos.z * 0.04) + f.ph * 0.35);
+      const g = (0.06 + 0.94 * smooth(clamp((wave - 0.42) / 0.5))) * (0.75 + 0.25 * Math.sin(t * 7.3 + f.flick)) * vis * 3;
       this.lamps.setColorAt(i, col.setRGB(g, g, g * 0.55));
     }
     this.bodies.count = this.lamps.count = n;

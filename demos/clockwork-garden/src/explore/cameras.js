@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { clamp, lerp, smooth } from '../core/ease.js';
 import { groundHeight } from './bounds.js';
+import { L } from '../world/layout.js';
 
 // Cameras for the interactive modes.
 //   ChaseCam   third-person flight camera: the view yaw/pitch is the pilot's
@@ -114,13 +115,15 @@ const FRAMINGS = {
   track: { a: 1.62, d: 9.5, h: 0.6, fov: 38, ap: 3.4 },
   // below and behind, looking up past it (lanterns and the vault by night)
   lowup: { a: 0.45, d: 13, h: -4.5, fov: 48, ap: 1.4 },
+  // the long lens: well off to the side, the garden compressed behind it
+  tele: { a: 1.35, d: 24, h: 2.5, fov: 26, ap: 3.6 },
   // starts level in the beds and rises up out of them
   crane: { a: 0.75, d: 12, h: 0.5, h1: 13, rise: 6, fov: 44, ap: 1.8 },
 };
 // which framings suit what APX-9 is doing (weights; night adds the low angles)
 const MENUS = {
-  low: { track: 0.5, profile: 2, lead: 1.2, low: 0.6, crane: 1.5, chase: 3 },
-  high: { chase: 2, high: 1.5, wide: 1.2, profile: 1, lead: 1 },
+  low: { track: 0.5, profile: 1, lead: 1.2, low: 0.6, chase: 3, tele: 2.5 },
+  high: { chase: 2, high: 1.5, wide: 1.2, profile: 1, lead: 1, tele: 2.5 },
   fast: { chase: 2, high: 1.5, wide: 2, profile: 1 },
 };
 
@@ -130,9 +133,9 @@ const MENUS = {
 const CUTS = {
   forager: { d: 4.6, el: 0.7, fov: 32, ap: 4.6, hold: [4, 5.5], orbit: 0.07, caption: (o) => (o.sp === 'carpenter' ? 'A carpenter bee works a bloom' : 'A honeybee gathers pollen') },
   crawler: { d: 5.6, el: 0.12, fov: 32, ap: 4.8, hold: [4.5, 6], orbit: 0.05, caption: (o) => (o.kind === 'ladybird' ? 'A ladybird climbs a flower stem' : 'A jewel beetle climbs a flower stem') },
-  butterfly: { d: 4, el: 0.9, fov: 34, ap: 4, hold: [4, 5.5], orbit: 0.06, caption: (o) => (o.c.species === 'swallowtail' ? 'A swallowtail rests on a bloom' : 'A monarch opens its wings on a bloom') },
-  hummingbird: { d: 3.4, el: 0.14, fov: 34, ap: 4, hold: [3.5, 4.5], orbit: 0.05, caption: () => 'A hummingbird sips from a bloom' },
-  dragonfly: { d: 3.2, el: 0.22, fov: 34, ap: 3.5, hold: [3, 4], orbit: 0.04, caption: () => 'A dragonfly hovers over the beds' },
+  butterfly: { d: 4.6, el: 0.9, fov: 34, ap: 4, hold: [4, 5.5], orbit: 0.06, caption: (o) => (o.c.species === 'swallowtail' ? 'A swallowtail rests on a bloom' : 'A monarch opens its wings on a bloom') },
+  hummingbird: { d: 4.2, el: 0.14, fov: 34, ap: 4, hold: [3.5, 4.5], orbit: 0.05, caption: () => 'A hummingbird sips from a bloom' },
+  dragonfly: { d: 6.2, el: 0.55, fov: 34, ap: 3.5, hold: [3, 4], orbit: 0.04, caption: () => 'A dragonfly hovers over the beds' },
   songbird: { d: 3.4, el: 0.08, fov: 32, ap: 4, hold: [4, 5], orbit: 0.03, caption: () => 'The songbird sings on its copper bough' },
 };
 
@@ -183,6 +186,9 @@ export class FollowCam {
     this.fade = 0; // dip to black (only when a cutaway can't fly back)
     this.lookN = { dir: null, w: 0, reset: true }; // APX-9's framing's eased look
     this.lookC = { dir: null, w: 0, reset: true }; // the cutaway's
+    this.dir = null; // the director's current shot (see _direct)
+    this.dirLast = [];
+    this.dirCut = false;
   }
 
   _rand() { this.rng = (this.rng * 16807) % 2147483647; return this.rng / 2147483647; }
@@ -192,7 +198,7 @@ export class FollowCam {
   // (the frame's narrower half-angle: in portrait the width is tight), so
   // the bee's weaving never whips the view round. Rewrites `target` along
   // the eased look. L: { dir, w, reset }
-  _slew(L, pos, target, fov, dt, ctx) {
+  _slew(L, pos, target, fov, dt, ctx, dzK = 0.3, rateK = 1) {
     const want = (this._lw ||= V()).subVectors(target, pos);
     const dist = want.length() || 1e-3;
     want.multiplyScalar(1 / dist);
@@ -201,9 +207,9 @@ export class FollowCam {
     const hv = (fov * Math.PI) / 360, lim = Math.min(hv, Math.atan(Math.tan(hv) * (ctx.aspect || 1.78)));
     // (inside the middle of the frame the subject may drift: no constant re-
     // centring; past it the pan picks up, faster the nearer the edge)
-    const dz = 0.3 * lim;
+    const dz = dzK * lim;
     const over = Math.max(0, err - dz) / lim;
-    const wantW = Math.min((ctx.reduced ? 0.35 : 0.5) * over / 0.3 + Math.max(0, over - 0.4) * 2.2, 2.0);
+    const wantW = Math.min(((ctx.reduced ? 0.35 : 0.5) * over / 0.3 + Math.max(0, over - 0.4) * 2.2) * rateK, 2.0);
     L.w += (wantW - L.w) * damp(3, dt);
     if (err > 1e-4) {
       const axis = (this._la ||= V()).crossVectors(L.dir, want);
@@ -217,6 +223,7 @@ export class FollowCam {
     this.ready = false;
     this.lookN.reset = true;
     this.lookC.reset = true;
+    this.dir = null;
     this.headingS = actor.yaw;
     this.user = { yaw: 0, pitch: 0, zoom: 1, idle: 99 };
     this.cut = null;
@@ -278,7 +285,8 @@ export class FollowCam {
       // fly there along a raised curve, only if it is clear (no blink to black on the way in)
       const route = this._route(this.pos, dest);
       if (!route) continue;
-      const travel = this._travel(this.pos, dest, this.target, c.pos);
+      // (a cut, as a film would: no flight there)
+      const travel = 0.001;
       this.lookC.dir = this.target.clone().sub(this.pos).normalize();
       this.lookC.w = this.lookN.w;
       this.cut = { ...plan, c, spec, t: 0, hold, blocked: 0, caption: spec.caption(c.obj), phase: 'in', k: 0, travel, lift: route?.lift ?? 0, dip: !route, from: this.pos.clone(), fromT: this.target.clone(), fromFov: this.fov, fromAp: this.aperture };
@@ -359,7 +367,7 @@ export class FollowCam {
     if (cut.phase === 'hold' && (cut.t > cut.hold || s === 'landing' || s === 'docking' || (ctx.goalDist ?? 99) < 25 || this.user.idle < 0.2)) {
       cut.phase = 'out'; cut.k = 0; cut.from = this.pos.clone(); cut.fromT = this.target.clone(); cut.fromFov = this.fov; cut.fromAp = this.aperture;
       if (this.user.idle < 0.2) cut.travel = 1.2;
-      else { const r = this._route(this.pos, normal.pos); cut.dip = !r; cut.dipOut = !r; cut.lift = r?.lift ?? 0; cut.travel = r ? this._travel(this.pos, normal.pos, this.target, normal.target) : 1.4; }
+      else { cut.dip = false; cut.dipOut = false; cut.lift = 0; cut.travel = 0.001; this.dirCut = true; }
     }
     if (cut.phase === 'in' && (s === 'landing' || s === 'docking')) { this.cut = null; this.nextCut = 12; return null; }
     const subj = cut.c.pos.clone();
@@ -432,15 +440,260 @@ export class FollowCam {
       this.user.idle = moved ? 0 : this.user.idle + dt;
     }
     // APX-9's framing always runs (in a cutaway it is where the camera returns to)
-    const normal = this._normal(dt, actor, ctx);
+    let normal = this._normal(dt, actor, ctx);
     if (this.cut) { const v = this._cutView(dt, actor, ctx, normal); if (v) return v; }
     else this._maybeCut(dt, actor, ctx);
+    // the director's composed shots (while nobody is steering the view)
+    if (!ctx.reduced && this.user.idle > 2.5) {
+      const d = this._direct(dt, actor, ctx);
+      if (d) return d;
+      if (this.dirCut) { this.dirCut = false; this.ready = false; this.lookN.reset = true; normal = this._normal(0, actor, ctx); }
+    }
     this.fade = Math.max(0, this.fade - dt / 0.45);
     this.pos.copy(normal.pos);
     this.target.copy(normal.target);
     this.fov = normal.fov;
     this.aperture = normal.aperture;
     return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: this.pos.distanceTo(actor.pos), aperture: this.aperture };
+  }
+
+  // ---- the director --------------------------------------------------------------------
+  // Follow is cut together like a film: composed shots joined by cuts, not one
+  // camera forever swinging round the bee. While APX-9 crosses the house the
+  // director picks the next shot from what is coming:
+  //   flyby    a fixed camera set ahead on APX-9's route, low among the
+  //            blooms; it flies at the lens and past, the camera only pans
+  //   wide     a composed view of the house (the great tree, the promenade,
+  //            the fountain, the vault) with APX-9 small in it, held still
+  //   crane    just after a take-off: rising slowly as it flies away
+  //   track    the camera operator's framings (_normal), long lens included
+  // Landings and the skep stay with the operator's macro and skep framings;
+  // the wildlife is shown in cutaways (_maybeCut). Every shot is framed with
+  // room ahead of the bee and panned calmly (_slew); a shot is 4–9 s.
+  _direct(dt, actor, ctx) {
+    const s = actor.state;
+    let D = this.dir;
+    if (s !== 'fly') {
+      // (landings and the skep: the operator's own framings take over, on a cut)
+      if (D && D.kind !== 'track') { this.dir = null; this.dirCut = true; }
+      return null;
+    }
+    if (D) {
+      D.t += dt;
+      // (the bee hidden behind leaves, a bloom or a solid for a moment: cut away from it)
+      D.vis = (D.vis ?? 0) - dt;
+      if (D.vis <= 0) {
+        D.vis = 0.25;
+        const c = D.kind === 'track' ? this.pos : D.pos;
+        const hidden = ctx.nearfield?.sightBlocked(c, actor.pos, 1.5, 1.2) || (ctx.ambient && !ctx.ambient.clearOfHeads(c, actor.pos, { own: false })) || this.bounds.sweep(c, actor.pos, 0.15).distanceTo(actor.pos) > 2.5;
+        D.hid = hidden ? (D.hid ?? 0) + 0.25 : 0;
+      }
+      if (D.hid > (D.kind === 'track' ? 1.0 : 0.7) && D.t > 1.2) D.t = D.dur + 1;
+      if (D.t > D.dur || (D.end && D.end(actor))) { this.dirLast.unshift(D.kind); this.dirLast.length = Math.min(4, this.dirLast.length); if (D.kind !== 'track') this.dirCut = true; D = this.dir = null; }
+    }
+    if (!D) D = this.dir = this._nextShot(actor, ctx);
+    if (!D || D.kind === 'track') return null;
+    if (D.move) D.move(D, dt);
+    // framed with room ahead of the bee: aim a little ahead of it, across the frame
+    const to = (this._dt1 ||= V()).subVectors(actor.pos, D.pos);
+    const dist = to.length();
+    const lead = (this._dt2 ||= V()).copy(actor.vel);
+    lead.addScaledVector(to, -lead.dot(to) / Math.max(dist * dist, 1e-4)); // (across the view only)
+    const ll = lead.length();
+    const tgt = (this._dt3 ||= V()).copy(actor.pos);
+    if (ll > 0.5) tgt.addScaledVector(lead, (dist * 0.11) / ll);
+    this.pos.copy(D.pos);
+    this.target.copy(tgt);
+    this._slew(D.look, this.pos, this.target, D.fov, dt, ctx, D.dz ?? 0.32, D.rate ?? 1);
+    this.fov = D.fov;
+    this.aperture = D.ap;
+    return { pos: this.pos, target: this.target, fov: this.fov, roll: 0, focus: Math.max(1, dist), aperture: this.aperture };
+  }
+
+  _nextShot(actor, ctx) {
+    this._ctx = ctx;
+    const last = this.dirLast[0];
+    const opts = [];
+    const fly = this._planFlyby(actor, ctx);
+    if (fly && last !== 'flyby') opts.push([fly, 3]);
+    else if (fly) opts.push([fly, 1]);
+    const wide = last !== 'wide' && this.dirLast[1] !== 'wide' ? this._planWide(actor, ctx) : null;
+    if (wide) opts.push([wide, 1.6]);
+    const crane = (actor.stateT ?? 9) < 3 && last !== 'crane' ? this._planCrane(actor) : null;
+    if (crane) opts.push([crane, 2.5]);
+    // the operator's tracking framings, cut to fresh (a different framing from last time)
+    const track = { kind: 'track', t: 0, dur: 6.5 + this._rand() * 4 };
+    opts.push([track, last === 'track' ? 0.6 : 2]);
+    let tot = 0;
+    for (const [, w] of opts) tot += w;
+    let r = this._rand() * tot;
+    for (const [o, w] of opts) if ((r -= w) <= 0) { if (o.kind === 'track') this._freshTrack(actor, ctx); return o; }
+    return track;
+  }
+
+  // a fresh tracking framing, on whichever side of the bee has the better backdrop
+  _freshTrack(actor, ctx) {
+    // (a cut must change the picture: a new angle well round from the last,
+    // or a different size; a near-copy would read as a jump)
+    const was = this.pos.clone().sub(actor.pos).normalize(), wasD = this.pos.distanceTo(actor.pos);
+    for (let k = 0; k < 4; k++) {
+      this.shotT = 99;
+      this.choose(actor, ctx);
+      const g = FRAMINGS[this.shot];
+      if (!g || this.shot === 'macro' || this.shot === 'skep') break;
+      const a = this.headingS + Math.PI + this.side * g.a;
+      const now = V(Math.sin(a) * g.d, g.h, Math.cos(a) * g.d).normalize();
+      if (now.angleTo(was) > 0.5 || Math.abs(Math.log(g.d / Math.max(wasD, 1))) > 0.45) break;
+    }
+    const f = FRAMINGS[this.shot];
+    if (f && this.shot !== 'macro' && this.shot !== 'skep') {
+      let bestS = this.side, bsc = -1;
+      for (const sd of [1, -1]) {
+        const a = this.headingS + Math.PI + sd * f.a;
+        const c = actor.pos.clone().add(V(Math.sin(a) * f.d, f.h, Math.cos(a) * f.d));
+        const sc = this._backdrop(c, actor.pos) + (sd === this.side ? 0.1 : 0);
+        if (sc > bsc) { bsc = sc; bestS = sd; }
+      }
+      this.side = bestS;
+    }
+    this.dirCut = true;
+  }
+
+  // the route ahead of the bee: the point `ahead` units along it, and the way it goes there
+  _ahead(actor, ctx, ahead) {
+    const r = ctx.route;
+    if (!r || !r.pts || r.i >= r.pts.length) return null;
+    let prev = actor.pos, acc = 0;
+    for (let k = r.i; k < r.pts.length; k++) {
+      const p = r.pts[k];
+      const l = prev.distanceTo(p);
+      if (acc + l >= ahead) {
+        const q = prev.clone().lerp(p, (ahead - acc) / Math.max(l, 1e-4));
+        return { q, dir: p.clone().sub(prev).normalize() };
+      }
+      acc += l;
+      prev = p;
+    }
+    return acc > 25 ? { q: prev.clone(), dir: prev.clone().sub(r.pts[Math.max(0, r.pts.length - 2)]).normalize(), end: true } : null;
+  }
+
+  // what lies behind the subject seen from c: how far the view runs on past it
+  // before the house's walls (deep is good: the garden, not a wall, behind),
+  // and a bonus when a landmark (the great tree, the promenade, the fountain)
+  // is in the background
+  _backdrop(c, subj) {
+    const H = L.house;
+    const d = subj.clone().sub(c).setY(0);
+    if (d.lengthSq() < 1e-4) return 0;
+    d.normalize();
+    let t = Infinity;
+    if (d.x > 1e-4) t = Math.min(t, (H.x1 - subj.x) / d.x); else if (d.x < -1e-4) t = Math.min(t, (H.x0 - subj.x) / d.x);
+    if (d.z > 1e-4) t = Math.min(t, (H.z0 - subj.z) / d.z); else if (d.z < -1e-4) t = Math.min(t, (H.z1 - subj.z) / d.z);
+    let score = clamp(t / 300);
+    const toward = (p) => { const q = p.clone().sub(c).setY(0).normalize(); return Math.max(0, d.dot(q)); };
+    score += Math.pow(toward(V(L.tree.x, 0, L.tree.z)), 6) * 0.6;
+    score += Math.pow(toward(V(70, 0, -560)), 8) * 0.3;
+    if (Math.abs(subj.x - 70) < 40) score += Math.pow(Math.abs(d.z), 4) * 0.3; // (down the promenade)
+    return score;
+  }
+
+  // a clear view from c to the bee's way through q (no solid, flower head or leaves between)
+  _sees(c, q, ctx, r = 0.3) {
+    if (this.bounds.clearance(c) < 1.4) return false;
+    if (this.bounds.sweep(c, q, r).distanceTo(q) > 1.2) return false;
+    if (ctx.ambient && !ctx.ambient.clearOfHeads(c, q)) return false;
+    if (ctx.nearfield?.sightBlocked(c, q, 3, 1.5)) return false;
+    return true;
+  }
+
+  _planFlyby(actor, ctx) {
+    const sp = Math.max(actor.speed, 10);
+    const a = this._ahead(actor, ctx, clamp(sp * 3.2, 28, 95));
+    if (!a) return null;
+    const d = a.dir.clone().setY(0);
+    if (d.lengthSq() < 0.1) return null;
+    d.normalize();
+    const side = V(-d.z, 0, d.x);
+    // (the same side as the last shot keeps the bee's screen direction, so it
+    // weighs in; the backdrop decides: depth, a landmark, never a wall)
+    let best = null, bs = -1e9;
+    for (const sd of [this.side, -this.side]) for (const Lo of [14, 18, 11, 22]) for (const h of [1.5, 5, -1, 9]) {
+      const c = a.q.clone().addScaledVector(side, Lo * sd).addScaledVector(d, 5).add(V(0, h, 0));
+      if (c.y < groundHeight(c.x, c.z) + 2.5) continue;
+      const sc = this._backdrop(c, a.q) + (sd === this.side ? 0.15 : 0) - Math.abs(Lo - 15) * 0.01;
+      if (sc > bs + 0.02) { if (!this._sees(c, a.q, ctx) || !this._sees(c, actor.pos, ctx, 0.25)) continue; bs = sc; best = { c, sd, L: Lo }; }
+    }
+    if (best && bs > 0.25) {
+      const { c, sd } = best, L = best.L;
+      const pass = a.q.clone();
+      const look = { dir: null, w: 0, reset: true };
+      // (opening on the way it will come, so it flies into the shot)
+      look.dir = actor.pos.clone().lerp(a.q, 0.35).sub(c).normalize();
+      look.reset = false;
+      const dist0 = actor.pos.distanceTo(c);
+      this.side = sd;
+      return {
+        kind: 'flyby', t: 0, dur: Math.min(10, dist0 / sp + 4), pos: c, look, fov: L > 12 ? 40 : 46, ap: 2.4, dz: 0.3,
+        // done when it has gone by and on its way, or (cut on the action) as
+        // it sweeps past the lens faster than a calm pan could follow
+        end: (ac) => {
+          const past = V().subVectors(ac.pos, pass).dot(d) > 14;
+          const far = ac.pos.distanceTo(c) > Math.max(55, dist0 + 10);
+          const rel = V().subVectors(ac.pos, c), dd = rel.length();
+          const across = V().copy(ac.vel).addScaledVector(rel, -ac.vel.dot(rel) / Math.max(dd * dd, 1e-4)).length() / Math.max(dd, 1);
+          return past || far || across > 0.6;
+        },
+      };
+    }
+    return null;
+  }
+
+  // the composed views of the house (static, wide): the camera, and what the composition is about
+  _planWide(actor, ctx) {
+    const T = L.tree;
+    const SPOTS = [
+      { pos: V(70, 140, -170), at: V(70, 90, -560) }, // down the promenade from above the rose arch
+      { pos: V(70, 70, -515), at: V(66, 60, -120) }, // from the fountain back up the path
+      { pos: V(118, 22, -610), at: V(T.x, 210, T.z) }, // under the great tree, looking up into it
+      { pos: V(-150, 210, -220), at: V(10, 40, -260) }, // high over the left beds
+      { pos: V(235, 190, -300), at: V(110, 40, -250) }, // high over the right beds
+      { pos: V(65, 52, 120), at: V(10, 20, -40) }, // by the skep, across the great bloom's bed
+      { pos: V(-195, 130, -430), at: V(100, 70, -420) }, // across the house from the side wall
+      { pos: V(-40, 95, -640), at: V(170, 150, -720) }, // under the crown, across the house
+      { pos: V(70, 260, -350), at: V(T.x, 260, T.z) }, // high in the vault toward the tree
+    ];
+    let best = null, bs = -1e9;
+    for (const sp of SPOTS) {
+      const toB = actor.pos.clone().sub(sp.pos);
+      const db = toB.length();
+      if (db < 35 || db > 240) continue;
+      const view = sp.at.clone().sub(sp.pos).normalize();
+      const ang = view.angleTo(toB.normalize());
+      if (ang > 0.55) continue; // (the bee in the composition, not behind the camera)
+      if (!this._sees(sp.pos, actor.pos, ctx, 0.4)) continue;
+      const sc = 1 - ang - db / 400 + this._rand() * 0.3;
+      if (sc > bs) { bs = sc; best = sp; }
+    }
+    if (!best) return null;
+    // (framed on the composition, between the landmark and the bee; it pans only if the bee nears the edge)
+    const look = { dir: best.at.clone().lerp(actor.pos, 0.55).sub(best.pos).normalize(), w: 0, reset: false };
+    return { kind: 'wide', t: 0, dur: 6 + this._rand() * 2.5, pos: best.pos.clone(), look, fov: 58, ap: 0.6, dz: 0.55, rate: 0.7 };
+  }
+
+  // just after a take-off: from low beside it, rising slowly and drawing back as it flies off
+  _planCrane(actor) {
+    const v = actor.vel.clone().setY(0);
+    const d = v.lengthSq() > 1 ? v.normalize() : V(Math.sin(actor.yaw), 0, Math.cos(actor.yaw));
+    const side = V(-d.z, 0, d.x).multiplyScalar(this.side);
+    const c0 = actor.pos.clone().addScaledVector(d, -7).addScaledVector(side, 6).add(V(0, 0.5, 0));
+    const c1 = c0.clone().addScaledVector(d, -12).add(V(0, 30, 0));
+    for (let k = 0; k <= 6; k++) if (this.bounds.clearance(c0.clone().lerp(c1, k / 6)) < 1.6) return null;
+    if (!this._sees(c0, actor.pos, this._ctx, 0.2) || !this._sees(c1, actor.pos.clone().addScaledVector(d, 30), this._ctx, 0.3)) return null;
+    const look = { dir: actor.pos.clone().sub(c0).normalize(), w: 0, reset: false };
+    return {
+      kind: 'crane', t: 0, dur: 6.5, pos: c0.clone(), look, fov: 44, ap: 1.8, dz: 0.25,
+      move: (D) => D.pos.copy(c0).lerp(c1, smoother(clamp(D.t / D.dur))),
+    };
   }
 
   // APX-9's own framing, eased: the framing's angle, distance and height

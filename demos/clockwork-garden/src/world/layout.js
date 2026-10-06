@@ -18,10 +18,13 @@ export const L = {
   pathX: [44, 96],
   house: { x0: -235, x1: 285, z0: 230, z1: -820, wall: 255, ridge: 480 },
   // the promenade (promenade.js): a pointed iron arch over the path in every
-  // vault bay (the rose arch keeps its own bay, the fountain's is left open, and
-  // the bay beside the great bloom, where the film's last shot looks down the path),
+  // vault bay up to the fountain (the rose arch keeps its own bay, the fountain's
+  // is left open, and the two bays beside the great bloom, where the film's last
+  // shot looks down the path past its title; past the fountain the great tree stands),
   // its uprights on the curbs; springing at `spring`, apex at `apex`
-  arches: { zs: [135, -55, -150, -340, -435, -625, -720], x0: 42, x1: 98, spring: 96, apex: 134 },
+  arches: { zs: [135, -150, -340, -435], x0: 42, x1: 98, spring: 96, apex: 134 },
+  // the great clockwork tree where the path ends, past the fountain (greatTree.js)
+  tree: { x: 70, z: -712 },
   // the orb lamps on their tall posts, between the arches
   lampSpots: [[37, -102.5], [37, -197.5], [37, -387.5], [37, -482.5], [103, 87.5], [103, -7.5], [103, -292.5], [103, -482.5]],
 };

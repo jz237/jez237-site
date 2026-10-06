@@ -380,6 +380,12 @@ export class Bounds {
         this.sph(archPoint2(0.5, 0).add(V(0, 5, z)), 3.2, 'arch');
       }
     }
+    // the great tree: trunk, roots and limbs; its blossom clouds
+    const gt = w.greatTree;
+    if (gt) {
+      for (const s of gt.segments) this.cap(s.a, s.b, s.r, 'tree');
+      for (const c of gt.clusters) this.sph(c.c, c.r * 0.8, 'blossom');
+    }
     // rose arch over the path
     {
       const z = -250, x0 = L.pathX[0] - 6, x1 = L.pathX[1] + 6, xc = (x0 + x1) / 2, hw = (x1 - x0) / 2;

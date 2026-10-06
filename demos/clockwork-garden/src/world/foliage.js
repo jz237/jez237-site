@@ -25,7 +25,7 @@ const GREENS = ['#7d8c40', '#5b7d4c', '#3f6a50', '#8e9c4a', '#6b7a36', '#46705a'
 const BRONZE = ['#b0803f', '#a8693a', '#c19a52'];
 
 export class Foliage {
-  constructor(mat, quality, flora) {
+  constructor(mat, quality, flora, greatTree = null) {
     this.group = new THREE.Group();
     this.group.name = 'foliage';
     const rng = new RNG('foliage');
@@ -356,6 +356,8 @@ export class Foliage {
       const sc = rng.range(1.3, 1.9);
       const p = V(x, y, z);
       const yaw = rng.range(0, TAU);
+      // (none hangs through the great tree's crown: it carries its own)
+      if (greatTree && z < -560 && x > -120 && x < 250) continue;
       this.m4.compose(p, q.setFromEuler(e.set(0, yaw, 0)), s.setScalar(sc));
       frames.push([this.m4.clone(), col.set('#d6ad5e').clone()]);
       glasses.push([this.m4.clone(), col.set('#fff3dc').clone()]);
@@ -366,7 +368,9 @@ export class Foliage {
     }
     // the promenade's lanterns (layout.js): under each arch's apex and on the
     // brackets of its uprights, on short chains
-    archLanterns().forEach((a, k) => {
+    // and the great tree's, on chains from its limbs
+    const extra = [...archLanterns(), ...(greatTree?.lanternSpots || []).map((l) => ({ ...l, kind: 'tree' }))];
+    extra.forEach((a, k) => {
       const sc = a.sc, p = a.p.clone();
       const yaw = (k * 1.618) % TAU;
       this.m4.compose(p, q.setFromEuler(e.set(0, yaw, 0)), s.setScalar(sc));

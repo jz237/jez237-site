@@ -11,7 +11,7 @@ import { SUN_DIR } from './atmosphere.js';
 // material, and a light-count change recompiles every shader, so dozens of
 // lanterns can't be real lights. Instead (a clustered-forward light list in
 // world space, built on the CPU each frame):
-//   · up to 384 light sources live in a small float texture
+//   · up to 512 light sources live in a small float texture
 //     (world position, radius, colour × intensity, soft-core size);
 //   · the house floor is cut into 24-unit columns; each column lists the (up
 //     to 8, or 4 on `low`) lights whose sphere reaches it, strongest first
@@ -43,7 +43,7 @@ export const LF_CELL = 24;
 const GX0 = H.x0 - 48, GZ0 = H.z1 - 48;
 const NX = Math.ceil((H.x1 - H.x0 + 96) / LF_CELL);
 const NZ = Math.ceil((H.z0 - H.z1 + 96) / LF_CELL);
-export const LF_MAX = 384;
+export const LF_MAX = 512;
 const TOL = SUN_DIR.clone().negate(); // toward the light (sun by day, moon by night)
 const f = (x) => x.toFixed(5);
 

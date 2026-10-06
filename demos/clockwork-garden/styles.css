@@ -42,7 +42,8 @@ canvas#film { position: fixed; inset: 0; display: block; width: 100vw; height: 1
   line-height: 1.25;
   text-transform: uppercase;
   color: #2b2116;
-  text-shadow: 0 0 18px rgba(255, 236, 200, 0.85), 0 0 42px rgba(255, 220, 170, 0.55);
+  /* (a close bright halo first: the great tree's crown stands behind the title) */
+  text-shadow: 0 0 5px rgba(255, 246, 228, 0.95), 0 0 12px rgba(255, 240, 214, 0.9), 0 0 26px rgba(255, 236, 200, 0.75), 0 0 48px rgba(255, 220, 170, 0.5);
   padding-left: 0.32em; /* optically centre tracked capitals */
 }
 #title .rule {
