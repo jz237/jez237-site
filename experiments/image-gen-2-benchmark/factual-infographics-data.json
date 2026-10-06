@@ -9457,5 +9457,150 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-06-factual-infographic-factual-infographic-burying-beetle-a-nu",
+    "title": "Factual infographic: Burying Beetle — A Nursery Beneath the Soil",
+    "tests": "Source-backed eight-panel insect plate with dominant specimen and four mechanism close-ups; no numeric scale or timing; no non-Monday subjective review.; archive_slot=2026-10-06T04:20; concept=nicrophorus-carcass-nursery-parental-provisioning; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished richly illustrated museum-quality factual insect infographic directly on the image canvas, never a photographed poster, room, workbench or specimen tray. Request high quality, opaque background, automatic canvas size; favor a tall portrait educational plate with exceptionally legible typography. Title: “BURIED NURSERY”. Subtitle: “Nicrophorus vespilloides • Burying beetle”. Warm ivory ground, charcoal typography, restrained orange headings and thin copper-colored leader lines. Naturalistic macro photographic specimen rendering integrated with precise scientific cross-sections. No logos, watermark, bibliography or URLs. The insects and biological close-ups occupy most of the canvas, not text. Give one dominant whole-insect hero and EIGHT distinct substantive supporting panels, including FOUR large explanatory close-ups. Clear large panel headings, one short explanation per panel, generous spacing and specific leader lines; never tiny paragraphs.\nHERO: an enormous anatomically correct dorsal three-quarter Nicrophorus vespilloides, six black jointed legs attached to the thorax, broad glossy black pronotum, black head with mandibles, two black clubbed antennae, dark truncated elytra with two irregular transverse orange marking regions and exposed dark abdominal tip. Show fine punctures, setae, articulated tarsi, black antennal clubs, subtle satin versus gloss differences, credible soft side illumination. Render orange pattern as natural pigment, not glowing ornament. Leader lines identify “Black antennal clubs”, “Orange-marked elytra”, “Exposed abdominal tip”. Label “Adult enlarged” without an invented scale bar. No monster-sized beetle in the habitat.\nPanel 1, “A scarce resource”: a small naturalistic woodland leaf-litter vignette with a modest dead mouse and realistically tiny adult beetles relative to it. Short caption “Small vertebrate carrion becomes food for a brood.” Caption context “Woodland populations: Cambridge, England”; no world-range map, no season or population counts.\nPanel 2, “Prepare and bury”: three crisp sequence vignettes connected with thin arrows: beetles removing fur, rounded prepared carcass, beetles beside a buried ball inside a small soil chamber. Label “Remove fur → Shape a ball → Bury”. Soil layers show fine roots, crumb structure and leaf fragments. Scientific, restrained, no gore or fantasy digging machinery.\nPanel 3, “An underground nursery”: a large explanatory soil cutaway with the prepared carcass ball, a plausible adult pair and pale segmented larvae at its surface. Realistic small scale, not a huge cavern. Concise caption “Parents may care together or alone.” Depict one possible family, never mandatory lifelong pairing. Discrete exposed prepared flesh, muted brown-red, no gratuitous bloody wound.\nPanel 4, “Microbial defense”: large close-up of adult abdominal tip beside prepared carrion, a fine localized smear of exudate rather than a spraying weapon. Alongside it a schematic bounded microbial-growth comparison, labeled “Exudates inhibit microbial growth” and “Not sterile”. Show fewer schematic microbes under the inhibitory condition, not total annihilation. Caption “Social immunity helps protect the shared food resource.” No invented percentage or chemical identity beyond verified lysozyme.\nPanel 5, “Antimicrobial enzymes”: close-up explanatory schematic of a small exudate patch with stylized enzyme icons and microbial silhouettes, visibly labeled “Schematic”. Callout “Lysozyme is implicated”; caption “An antimicrobial enzyme linked to defensive exudates.” Do not invent a detailed molecular pathway, immune organ, syringe, electrical glow or universal complete protection.\nPanel 6, “Mouth-to-mouth meals”: a large detailed macro close-up of one adult's head and a larva positioned at its mouthparts during provisioning. Adult mandibles and black antennal club distinct from pale soft segmented larva, moist food contact tiny and naturalistic. Label “Regurgitated meat”; short caption “Parents provision young after hatching.” No humanlike affection, no nursing milk, no attack posture.\nPanel 7, “Larvae can self-feed”: a large macro view of pale larvae on a prepared carcass surface, tiny head capsules and credible segmented bodies. Leader line to feeding contact; caption “Young also feed directly on the prepared carcass.” Give a compact schematic life-history strip underneath: “Hatch → Feed → Disperse to pupate → Adult”. No egg location, timings, fixed brood size, detailed unsupported pupal anatomy or scale claim. Mark stages “Schematic • not to scale”.\nPanel 8, “Competition at the carcass”: close-up of two adults facing at the resource edge with mandibles visible and all visible limbs anatomically coherent. One is modestly larger; concise caption “Mandibles are used in contests; larger beetles often have an advantage.” No guaranteed winner, trophy or anthropomorphic combat. Add a restrained concluding line “Carrion is both a contested resource and a nursery.”\nKeep panels visually coherent yet distinct: whole specimen anatomy, habitat-context vignette, preparation sequence, nursery cutaway, exudate mechanism, enzyme schematic, parental feeding macro, larval feeding and life-history, contest anatomy. Insect surfaces and biological interactions are highly detailed, educational and source-constrained. Maintain exact species appearance in every adult; no orange antennal clubs, extra legs, wasp waist, inaccurate larvae with adult wings, imaginary weapons or invented biology. Labels should be short, accurate and readable at a glance.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-burying-beetle-a-nu.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-burying-beetle-a-nu.webp",
+    "color": "#ab9887",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nicrophorus-carcass-nursery-parental-provisioning",
+      "imageSha256": "3404328fa9c1abd2fc1a592eb3b6ac472fc48cf048d802f667129a0ff86b679d",
+      "imageDHash": "edec8d9242861e0e"
+    },
+    "factualInfographic": {
+      "topic": "How Nicrophorus vespilloides burying beetles prepare a buried carcass nursery, suppress microbial growth, and provision their larvae",
+      "description": "Species-specific carrion preparation, social immunity and facultative parental provisioning in a burying beetle.",
+      "sourceNote": "Verified carcass preparation, care and self-feeding (Animal Behaviour); social immunity (Cambridge); diagnostic anatomy (UK Beetle Recording specimen photograph); woodland context (Cambridge thesis); flexible care and pupation (Ecology and Evolution). https://pmc.ncbi.nlm.nih.gov/articles/PMC4678603/ https://www.repository.cam.ac.uk/items/9a4c292c-f950-4def-905d-f57c9db32f97 https://coleoptera.org.uk/index.php/species/Nicrophorus-vespilloides https://www.repository.cam.ac.uk/items/6edc4bb9-22a1-43b5-8a49-e5b9b0cae7fa https://pmc.ncbi.nlm.nih.gov/articles/PMC10249043/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-06T08:22:36.358898+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Animal Behaviour",
+            "title": "Parental effects and flight behaviour in the burying beetle, Nicrophorus vespilloides",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4678603/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Cambridge",
+            "title": "A gene associated with social immunity in the burying beetle Nicrophorus vespilloides",
+            "sourceType": "university",
+            "url": "https://www.repository.cam.ac.uk/items/9a4c292c-f950-4def-905d-f57c9db32f97"
+          },
+          {
+            "id": "S3",
+            "publisher": "UK Beetle Recording / Biological Records Centre",
+            "title": "Nicrophorus vespilloides (Herbst, 1783), taxonomy and Alan Hadley specimen photograph",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://coleoptera.org.uk/index.php/species/Nicrophorus-vespilloides"
+          },
+          {
+            "id": "S4",
+            "publisher": "University of Cambridge",
+            "title": "Evolution in a fragmented world: Phenotypic and genetic divergence amongst neighbouring populations of the burying beetle Nicrophorus vespilloides",
+            "sourceType": "university",
+            "url": "https://www.repository.cam.ac.uk/items/6edc4bb9-22a1-43b5-8a49-e5b9b0cae7fa"
+          },
+          {
+            "id": "S5",
+            "publisher": "Ecology and Evolution",
+            "title": "Brood size, food availability, and body size affects male care decisions and offspring performance",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10249043/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Nicrophorus vespilloides is a real burying beetle in the genus Nicrophorus, family Silphidae.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The adult specimen has a black head and pronotum, black clubbed antennae, six jointed legs, and orange transverse markings on dark, shortened elytra with the abdominal tip exposed; the reference photo supplies diagnostic visual anatomy.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "N. vespilloides occurs in woodland populations west of Cambridge, England; the illustrated leaf litter and soil are a representative woodland context, not a full-range map.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adults locate small vertebrate carrion, which serves as the breeding resource and food for offspring; adults use flight in locating carrion.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Parents remove fur or feathers, roll the flesh into a ball and bury the prepared carcass in an underground chamber.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Parents smear the carcass with exudates that inhibit microbial growth; this is social immunity, not complete sterilization.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Lysozymes are antimicrobial enzymes implicated in social immunity; female anal-exudate antimicrobial properties correlate with expression of a particular lysozyme gene. No specific molecular cutting reaction is illustrated.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "After hatching, larvae feed on the prepared carcass and can also receive regurgitated meat from parents; mouth-to-mouth feeding is depicted as provisioning, not attack.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Biparental and single-parent care occur in this species; the illustrated pair is one possible family arrangement, not an obligation.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Larvae disperse from the carrion for pupation and later emerge as adults; the life-history strip is schematic, not to scale and gives no fixed timing or brood size.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Carrion is a scarce resource and beetles compete over it; mandibles are used in contests, with larger individuals often advantaged, not guaranteed winners.",
+            "sourceIds": [
+              "S4",
+              "S5"
+            ]
+          },
+          {
+            "claim": "The beetles transform vertebrate carrion into food for growing offspring, an ecological carrion-use relationship; no broader quantified recycling benefit is claimed.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
