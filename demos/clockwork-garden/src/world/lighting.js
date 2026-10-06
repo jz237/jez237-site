@@ -49,6 +49,17 @@ export class Lighting {
 
   focusShadow(center, radius) {
     const s = this.sun;
+    // the shadow frame follows the subject in whole texels of the map, across
+    // the light: slid by fractions of a texel every frame, every shadow edge
+    // (and the thin petals' own) swims and shimmers as the camera moves
+    const texel = (2 * radius) / s.shadow.mapSize.x;
+    const z = this._sz || (this._sz = SUN_DIR.clone().negate().normalize());
+    const x = this._sx || (this._sx = new THREE.Vector3(0, 1, 0).cross(z).normalize());
+    const y = this._sy || (this._sy = z.clone().cross(x));
+    const snap = this._sc || (this._sc = new THREE.Vector3());
+    const cx = Math.round(center.dot(x) / texel) * texel, cy = Math.round(center.dot(y) / texel) * texel;
+    snap.copy(x).multiplyScalar(cx).addScaledVector(y, cy).addScaledVector(z, center.dot(z));
+    center = snap;
     s.target.position.copy(center);
     s.position.copy(center).addScaledVector(SUN_DIR, -radius * 3);
     const c = s.shadow.camera;
@@ -60,6 +71,9 @@ export class Lighting {
     c.far = radius * 6;
     c.updateProjectionMatrix();
     s.shadow.bias = -0.0002 - 0.0000025 * radius;
+    // (the normal offset in step with the texel: coarse maps need more, or
+    // thin parts shade themselves in stripes)
+    s.shadow.normalBias = Math.max(0.02, texel * 0.45);
   }
 
   // Aim the sculpting beam from a direction (unit vector toward the light).
