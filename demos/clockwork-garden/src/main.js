@@ -3,7 +3,9 @@ import './core/fastmatrix.js';
 import { detectQuality } from './core/quality.js';
 import { createMaterials } from './materials/library.js';
 import { bedTexture, stoneTexture, noiseTexture } from './materials/textures.js';
-import { createEnvironments } from './world/environment.js';
+import { createEnvironments, setEnvPhoto, envPhoto, rebakeEnvironments } from './world/environment.js';
+import { startScans, scansReady, scanImage, scansLive, scansTick } from './materials/scans.js';
+import { SCANS } from './materials/scanlist.js';
 import { buildWorld } from './world/world.js';
 import { Creatures } from './creatures/manager.js';
 import { createShots } from './direction/shots.js';
@@ -34,10 +36,13 @@ import { PerfMeter } from './ui/perfmeter.js';
 //   ?debug=1    frame-rate readout (fps, frame times, resolution, GPU/CPU ms)
 //   ?adapt=0    hold the resolution and detail fixed (no frame governor)
 //   ?bake=0     grow the bee-scale planting here instead of loading the pre-built one
+//   ?scans=0    the procedural surfaces and sky only (no photographed scans)
 
 const params = new URLSearchParams(location.search);
 if (params.get('bake') === '0') NearField.noBake = true;
 const quality = detectQuality(params);
+// the photographed surfaces and sky download while the garden is built
+startScans(quality);
 const clean = params.get('clean') === '1';
 const capture = params.get('capture') === '1';
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -91,6 +96,10 @@ async function boot() {
     moss: noiseTexture(51, 256, { cells: 6, octaves: 4, lo: 0.7, hi: 1.3, tint: [190, 210, 170] }),
   };
   await step('light');
+  // the photographed sky, if it has arrived (it is small); otherwise the
+  // maps are baked again when it does
+  const sky = await Promise.race([scanImage('sky'), new Promise((r) => setTimeout(() => r(null), capture ? 20000 : 500))]);
+  if (sky) setEnvPhoto(sky, SCANS.sky);
   const envs = createEnvironments(renderer);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#000000');
@@ -197,6 +206,20 @@ async function boot() {
   // through every pass once also readies the driver's pipeline states; without
   // it the first half-minute of flying stalled for 100–600 ms at a time while
   // they were built on demand. Measured 2026-10-05.)
+  // the photographed surfaces: those already here are uploaded by the
+  // warm-up frames behind the loading screen; the page never waits for the
+  // rest (they appear as they arrive), except a capture, which waits for all
+  await scansReady(capture ? Infinity : 0);
+  if (!envPhoto()) {
+    scanImage('sky').then((img) => {
+      if (!img || envPhoto()) return;
+      setEnvPhoto(img, SCANS.sky);
+      const done = [rebakeEnvironments(renderer, envs)];
+      if (explore?.tod.maps) done.push(rebakeEnvironments(renderer, explore.tod.maps));
+      // (the scene's map is set again each frame; free the old ones after)
+      setTimeout(() => done.forEach((d) => d.free()), 1000);
+    });
+  }
   await step('compile');
   // first every shader the film draws, issued at once (the driver compiles
   // them in parallel where it can, instead of one at a time as each is first
@@ -405,6 +428,8 @@ async function boot() {
     shot: () => director.current,
     info: () => renderer.info,
     world: capture ? world : undefined, // debugging aid in capture mode only
+    scene: capture ? scene : undefined, // (likewise)
+    skyPhoto: () => !!envPhoto(),
     wind: WIND, // the breeze (review tools set wind.freeze for the rest pose)
     governor: gov,
     mode: () => mode,
@@ -481,6 +506,8 @@ async function boot() {
     requestAnimationFrame(loop);
     // on a fast display that can't be held at its full rate: every other refresh
     if (gov.skip(now)) return;
+    // a photographed surface that arrived after the page was up (one a frame)
+    scansTick();
     const interval = now - last;
     const dt = Math.min(0.1, interval / 1000);
     last = now;
@@ -533,6 +560,7 @@ async function boot() {
     gov.frame(now, interval, performance.now() - workStart);
     meter?.update(now);
   };
+  scansLive(renderer);
   requestAnimationFrame(loop);
 }
 
