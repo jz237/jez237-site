@@ -335,5 +335,27 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Best on a desktop GPU · Touch supported · Built by an iterating render-and-review loop; a strict independent reviewer scored it 3.8 out of 5 against the photo, short of the 4.5 target: a close match in layout and palette, not an exact one · Preview captured from the running demo"
+  },
+  {
+    "id": "016",
+    "title": "Coastal Village · Beach Diorama",
+    "category": "WebGPU · Coastal miniature",
+    "description": "A sunlit village beside turquoise water. Explore the beach, colorful houses, stone quay and little rowboat from Pavel’s coastal rendering demo.",
+    "url": "coastal-village/",
+    "image": "assets/coastal-village.jpg",
+    "imageAlt": "Colorful coastal houses, a bell tower and a rowboat beside a turquoise-water cutaway diorama",
+    "source": "https://github.com/jz237/web-starter-kit-webgpu-pipline",
+    "features": [
+      "Drag to orbit",
+      "Scroll to zoom",
+      "Animated coastal water",
+      "Lighting controls"
+    ],
+    "facts": [
+      "One coastal scene",
+      "WebGPU rendering",
+      "By Pavel / Vibe Game Engine"
+    ],
+    "note": "WebGPU-capable desktop browser · First visit prepares lighting and may take a few minutes"
   }
 ]

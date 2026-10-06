@@ -99,7 +99,9 @@ export async function onRequest(context) {
     return notFound();
   }
 
-  if (retiredPaths.includes(url.pathname)) {
+  if (retiredPaths.includes(url.pathname)
+    || url.pathname === "/demos/elderwood-webgpu"
+    || url.pathname.startsWith("/demos/elderwood-webgpu/")) {
     return notFound();
   }
 
