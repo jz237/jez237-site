@@ -19,9 +19,12 @@ const cards = demos.map((demo, i) => {
     if (!/^[a-z0-9][a-z0-9/-]*(?:\/|\.html)$/i.test(demo.alternateUrl) || typeof demo.alternateLabel !== 'string' || !demo.alternateLabel.trim()) throw new Error(`Invalid alternate view for ${demo.title}`);
     readFileSync(new URL(demo.alternateUrl.endsWith('/') ? `${demo.alternateUrl}index.html` : demo.alternateUrl, root));
   }
+  const imageWidth = demo.imageWidth ?? 1100;
+  const imageHeight = demo.imageHeight ?? 579;
+  if (!Number.isSafeInteger(imageWidth) || imageWidth <= 0 || !Number.isSafeInteger(imageHeight) || imageHeight <= 0) throw new Error(`Invalid image dimensions for ${demo.title}`);
   const d = Object.fromEntries(Object.entries(demo).filter(([,v]) => typeof v === 'string').map(([k,v]) => [k,escape(v)]));
   return `<article class="demo-card${i % pageSize === 0 ? ' featured' : ''}">
-  <a class="preview" href="${d.url}" aria-label="Open ${d.title}"><span class="preview-label">EXPERIMENT / ${d.id}</span><img src="${d.image}" width="1100" height="579" alt="${d.imageAlt}" ${i % pageSize === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
+  <a class="preview" href="${d.url}" aria-label="Open ${d.title}"><span class="preview-label">EXPERIMENT / ${d.id}</span><img src="${d.image}" width="${imageWidth}" height="${imageHeight}" alt="${d.imageAlt}" ${i % pageSize === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
   <div class="details"><div class="card-meta"><span>${d.category}</span><span class="live"><i class="signal"></i> LIVE DEMO</span></div><h2>${d.title}</h2><p class="description">${d.description}</p>
   <ul class="features">${demo.features.map(v => `<li>${escape(v)}</li>`).join('')}</ul>
   <div class="actions"><a class="primary" href="${d.url}">Launch demo <span aria-hidden="true">→</span></a>${d.alternateUrl ? `<a href="${d.alternateUrl}">${d.alternateLabel}</a>` : ''}<a href="${d.source}">View source ↗</a></div>
