@@ -21,12 +21,30 @@ import { swayMaterial, pivotParts } from '../world/wind.js';
 // uSwapK cross-dissolves the film's foliage (side -1) into the bee-scale
 // planting (side +1) when it has grown: complementary dither patterns, so
 // every pixel shows one or the other, never both or neither.
-export const FADE = { uCamFade: { value: new THREE.Vector2(0.55, 1.35) }, uSwapK: { value: 0 } };
+// uSight opens a window through the petals and leaves in front of APX-9 while
+// it gathers on a bloom (explore.js): the camera picks a clear view down into
+// the cup, but a petal that sways or springs open into the line is thinned
+// away where it covers the bee (a cone from the lens round the bee's own
+// outline, soft at the edge) instead of hiding it. uSight: the bee in view
+// space, the window's radius there; uSightK: strength, and how far short of
+// the bee the window stops.
+export const FADE = { uCamFade: { value: new THREE.Vector2(0.55, 1.35) }, uSwapK: { value: 0 }, uSight: { value: new THREE.Vector4(0, 0, -10, 0) }, uSightK: { value: new THREE.Vector2(0, 1) } };
 
 const DITHER = /* glsl */ `
   {
     float camD = length(vViewPosition);
     float fk = smoothstep(uCamFade.x, uCamFade.y, camD);
+    if (uSightK.x > 0.001) {
+      vec3 cgP = -vViewPosition;
+      float cgL = length(uSight.xyz);
+      float cgA = dot(cgP, uSight.xyz) / cgL;
+      if (cgA > 0.0) {
+        float cgR = uSight.w * cgA / cgL;
+        float cgIn = 1.0 - smoothstep(cgR * 0.8, cgR * 1.05, length(cgP - uSight.xyz * (cgA / cgL)));
+        float cgFront = 1.0 - smoothstep(cgL - uSightK.y - 0.6, cgL - uSightK.y, cgA);
+        fk *= 1.0 - uSightK.x * cgIn * cgFront;
+      }
+    }
     float lo = 0.0;
     if (uSwapSide > 0.5) fk *= uSwapK;
     else if (uSwapSide < -0.5) lo = uSwapK;
@@ -118,8 +136,10 @@ function withDither(m, key, side = 0) {
     sh.uniforms.uCamFade = FADE.uCamFade;
     sh.uniforms.uSwapK = FADE.uSwapK;
     sh.uniforms.uSwapSide = S;
+    sh.uniforms.uSight = FADE.uSight;
+    sh.uniforms.uSightK = FADE.uSightK;
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform vec2 uCamFade; uniform float uSwapK, uSwapSide;')
+      .replace('#include <common>', '#include <common>\nuniform vec2 uCamFade, uSightK; uniform vec4 uSight; uniform float uSwapK, uSwapSide;')
       .replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>' + DITHER);
   };
   const base = m.customProgramCacheKey?.bind(m);

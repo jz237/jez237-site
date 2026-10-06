@@ -62,6 +62,20 @@ export class ChaseCam {
       this.lookIdle = Math.abs(input.look.dx) + Math.abs(input.look.dy) > 1e-4 ? 0 : (this.lookIdle ?? 0) + dt;
     }
     const sp = actor.speed;
+    // settled on a bloom (and the view left alone): tip down to look into its
+    // cup over the petals, and back to where it was after the take-off
+    const onBloom = actor.state === 'landing' || actor.state === 'landed';
+    const steering = (this.lookIdle ?? 9) < 0.3;
+    if (onBloom) {
+      if (steering) this.bloomLook = true; // (the viewer's own look wins)
+      if (!this.bloomLook) { this.prePitch ??= this.pitch; this.pitch += (Math.min(this.prePitch, -0.8) - this.pitch) * damp(reduced ? 1.5 : 2.5, dt); }
+    } else {
+      this.bloomLook = false;
+      if (this.prePitch !== undefined) {
+        if (steering) this.prePitch = undefined;
+        else { this.pitch += (this.prePitch - this.pitch) * damp(2, dt); if (Math.abs(this.pitch - this.prePitch) < 0.01) this.prePitch = undefined; }
+      }
+    }
     // when nobody is steering the view, swing it round to the way the bee is
     // actually travelling (sliding along glass, drifting on momentum), so the
     // camera always looks where you're going. Flying backwards doesn't flip it.
@@ -241,7 +255,8 @@ export class FollowCam {
   choose(actor, ctx) {
     const s = actor.state;
     let next = this.shot;
-    if (s === 'landed' || s === 'landing') next = 'macro';
+    // (the macro holds through the take-off; then the director cuts away)
+    if (s === 'landed' || s === 'landing' || (s === 'takeoff' && this.shot === 'macro')) next = 'macro';
     else if (s === 'docking' || s === 'walk-in' || s === 'inside' || s === 'walk-out') next = 'skep';
     else if (this.shotT > 13 + this._rand() * 8 || this.shot === 'macro' || this.shot === 'skep') {
       const low = ctx.weaving || actor.pos.y - groundHeight(actor.pos.x, actor.pos.z) < 22;
@@ -260,7 +275,107 @@ export class FollowCam {
       // (slow: a framing change is a glide, never a swing)
       this.blend = 1.5 + Math.min(1.6, Math.abs(a.a - b.a) * 0.6 + Math.abs(Math.log(b.d / a.d)) * 0.8 + Math.abs(a.h - b.h) * 0.05);
     }
-    if (next !== this.shot) { this.shot = next; this.shotT = 0; if (next === 'macro' || next === 'skep') this.blend = 1.8; }
+    if (next !== this.shot) {
+      if (next === 'macro') this._planMacro(actor, ctx);
+      this.shot = next; this.shotT = 0; if (next === 'macro' || next === 'skep') this.blend = 1.8;
+    }
+  }
+
+  // ---- the landing close-up -----------------------------------------------------------
+  // As APX-9 settles on a bloom the film cuts to a close-up looking down into
+  // the cup. A bloom's petals stand up round the bee (a rose's inner ring is a
+  // tight bud), so the angle is found, not assumed: from above the tallest
+  // petal tip, three-quarters on to the bee, trying steeper and further round
+  // until no petal (as posed this frame), leaf or solid is in the line. The
+  // camera then holds there with a slow push in; anything that sways into the
+  // line later is thinned away where it covers the bee (upgrade.js uSight).
+  _planMacro(actor, ctx) {
+    const l = actor.seq?.landable || actor.lastLanding;
+    this.macro = null;
+    if (!l) return;
+    const subj = l.spot.clone().add(V(0, 0.5, 0));
+    const amb = ctx.ambient;
+    let rim = subj.y + 2;
+    if (l.kind === 'flora' && amb?.petalTop) rim = Math.max(rim, amb.petalTop(l.ref));
+    const D0 = clamp((l.cupR ?? 6) * 0.85, 7.5, 12);
+    const face = l.face ? Math.atan2(l.face.x, l.face.z) : (actor.seq?.yaw1 ?? actor.yaw);
+    // (on whichever side of the bee the camera already is: the cut keeps the screen direction)
+    const cur = Math.atan2(this.pos.x - subj.x, this.pos.z - subj.z);
+    const a0 = face + (wrap(cur - face) >= 0 ? 1 : -1) * 0.95;
+    const cands = [];
+    for (const el of [1.0, 1.15, 0.85, 1.3, 0.72, 1.42]) {
+      const d = Math.max(D0, (rim + 1.4 - subj.y) / Math.sin(el));
+      if (d > D0 * 2.6) continue;
+      for (const da of [0, 0.45, -0.45, 0.9, -0.9, 1.4, -1.4, 2.0, -2.0, 2.6, -2.6, Math.PI]) {
+        cands.push({ el, a: a0 + da, d, cost: Math.abs(da) * 0.45 + Math.abs(el - 1.0) * 1.3 + (d / D0 - 1) * 0.5 });
+      }
+    }
+    cands.sort((p, q) => p.cost - q.cost);
+    const at = (c) => subj.clone().add(V(Math.sin(c.a) * Math.cos(c.el) * c.d, Math.sin(c.el) * c.d, Math.cos(c.a) * Math.cos(c.el) * c.d));
+    let pick = null, tries = 0;
+    for (const c of cands) {
+      if (++tries > 40) break;
+      const cam = at(c);
+      if (this._macroClear(cam, subj, ctx, l)) { pick = { ...c, cam }; break; }
+    }
+    // (nothing clear: straight down into the cup, the window does the rest)
+    if (!pick) { const c = { el: 1.45, a: a0, d: Math.max(D0, rim + 1.4 - subj.y) }; pick = { ...c, cam: at(c) }; }
+    this.macro = { l, subj, off: pick.cam.sub(subj), t: 0, cut: true, check: 0.5, blockedT: 0, replans: 0, el: pick.el, tries };
+  }
+
+  _macroClear(cam, subj, ctx, l) {
+    // (the solids: the sweep leaves out the cup the bee sits in)
+    if (this.bounds.sweep(subj, cam, 0.6).distanceTo(cam) > 0.5) return false;
+    const amb = ctx.ambient;
+    if (amb && (amb.petalsBlock(cam, subj, 1.0) || amb.insideHead?.(cam, l.ref))) return false;
+    if (ctx.nearfield?.sightBlocked(cam, subj, 1.5, 1.5)) return false;
+    return true;
+  }
+
+  _macroView(dt, actor, ctx, bee) {
+    const M = this.macro;
+    M.t += dt;
+    // still clear? (a bloom springing open, a stem nodding in): once, find a new angle
+    if ((M.check -= dt) <= 0) {
+      M.check = 0.5;
+      const cam = M.subj.clone().add(M.off);
+      M.blockedT = this._macroClear(cam, M.subj, ctx, M.l) ? 0 : M.blockedT + 0.5;
+      if (M.blockedT >= 1 && M.replans < 1 && actor.state === 'landed' && (actor.stateT ?? 0) < 2.5) {
+        const r = M.replans + 1;
+        this._planMacro(actor, ctx);
+        if (this.macro) this.macro.replans = r;
+        return this._macroView(0, actor, ctx, bee);
+      }
+    }
+    // a slow push in (a tenth closer over six seconds); the viewer may orbit and zoom
+    const off = (this._mo ||= V()).copy(M.off).multiplyScalar((1 - 0.1 * smooth(clamp(M.t / 6))) * this.user.zoom);
+    if (this.user.yaw) off.applyAxisAngle(UP, this.user.yaw);
+    const n = this._n || (this._n = { pos: V(), target: V(), fov: 44, aperture: 2 });
+    n.pos.copy(M.subj).add(off);
+    // (framed on the spot it is settling on, so it drops into the shot rather
+    // than the camera chasing its last arc; then on the bee as it walks)
+    const tgt = (this._mt ||= V()).copy(bee).add(V(0, 0.5, 0));
+    if (actor.state === 'landing') tgt.lerp(M.subj, 0.75);
+    const P = this.par, PV = this.parV;
+    if (M.cut || !this.ready) {
+      // a cut: everything takes the new framing at once
+      M.cut = false;
+      this.ready = true;
+      (this.tgtS ||= V()).copy(tgt); this.tgtV.set(0, 0, 0);
+      this.lookN.reset = true;
+      P.fov = 38; P.ap = 4.5; PV.fov.v = 0; PV.ap.v = 0;
+      this.armV = { v: 0 }; this.hold = 0;
+    }
+    spring3(this.tgtS, tgt, this.tgtV, ctx.reduced ? 0.4 : 0.6, dt);
+    n.target.copy(this.tgtS);
+    // (and lets it rise out of the frame as it takes off: the next shot picks it up)
+    this._slew(this.lookN, n.pos, n.target, P.fov, dt, ctx, 0.35, actor.state === 'takeoff' ? 0.2 : 0.6);
+    // (the springs carry on from here when the bee takes off)
+    this.off.copy(n.pos).sub(bee); this.offV.set(0, 0, 0);
+    this.arm = this.off.length();
+    n.fov = P.fov;
+    n.aperture = P.ap;
+    return n;
   }
 
   // ---- cutaways ------------------------------------------------------------------
@@ -730,6 +845,7 @@ export class FollowCam {
     this.anchor.addScaledVector(this.aVel, dt).lerp(actor.pos, damp(3.5, dt));
     const bee = this.anchor;
     const P = this.par, PV = this.parV;
+    if (this.shot === 'macro' && this.macro) return this._macroView(dt, actor, ctx, bee);
     const st = (reduced ? 1.5 : 1) * this.blend * (this.user.idle < 0.3 ? 0.25 : 1);
     let wantOff, tgt;
     if (this.shot === 'skep') {

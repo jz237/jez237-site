@@ -71,8 +71,12 @@ dozens of lanterns hung on chains through its crown.
 By night thousands of clockwork fireflies drift in swarms over the beds,
 along the promenade and all through the great tree's crown; by day hundreds
 of butterflies (monarchs and enamel swallowtails in a dozen tints) live in
-companies round the blooms and the blossom, wander, settle and scatter from
-APX-9 rushing past, and go to roost as the evening falls.
+companies round the blooms and the blossom, at every height from just over
+the flowers to well up under the glass. They fly as butterflies do: each
+downstroke heaves the body up and the body rocks with the wings, they jink
+and bank into their turns and glide on held-out wings between bursts of
+beats. They settle, scatter from APX-9 rushing past, and go to roost as the
+evening falls.
 
 The blooms are glazed porcelain lit from the heart: two-ringed lotus cups,
 tulips and roses in peach, blush and rose, with gilt rims, veins that glow,
@@ -199,8 +203,13 @@ mode, help and the mode switch.
 APX-9 goes about its day on its own; about a third of its flying weaves low
 through the beds between the stems (over the shrubs, under the flower heads)
 and rises up to the bloom at the end. The camera tracks beside it, cranes up
-out of the beds, circles its landings and, by night, looks up past it at the
-lanterns and the vault. Every move is eased (critically damped springs: the
+out of the beds and, by night, looks up past it at the lanterns and the
+vault. When APX-9 settles on a bloom the camera cuts to a close-up looking
+down into the cup from above the petals, at an angle it has checked against
+the petals as posed right then; any petal or leaf that still sways across
+the bee (or across a creature in a cutaway) is thinned away where it covers
+it. Flying yourself, the view tips down into the bloom when you land unless
+you are steering it. Every move is eased (critically damped springs: the
 camera's velocity never jumps), framings blend round the bee in angle,
 distance and height, and APX-9's own jolts are filtered out. Every 12–24 s
 the camera flies along a raised curve to a creature nearby (a bee gathering,
@@ -302,6 +311,8 @@ node tools/abshots.mjs --a 8765 --b <rollback port> --out review/x          # A/
 node tools/wildlife.mjs [--mobile 1]                                        # Follow: how often wildlife is on screen, by kind, and how far from APX-9
 node tools/cutaways.mjs [--secs 150] [--tod 0]                              # Follow: each cutaway (creature, length, flight or dip), stills, share of time
 node tools/followsmooth.mjs [--port <rollback>]                             # Follow camera fluidity: snaps, quick view turns, acceleration jolts
+node tools/landings.mjs [--mode fly] [--per 3] [--port <rollback>]          # lands APX-9 on every kind of bloom: how much of it the camera sees, stills
+node tools/flutter.mjs [--port <rollback>] [--secs 6]                       # the butterflies in flight: a still camera on a busy patch, a clip, flight numbers
 node tools/bootprofile.mjs [--net 4g] [--cpu 4] · node tools/bootcpu.mjs    # where the startup goes (network, boot steps, planting) / its CPU profile
 node tools/cachebust.mjs && node tools/bake.mjs && node tools/bakecheck.mjs  # stamp modules (and preload list), bake the planting, check the bake
 ```
@@ -364,7 +375,8 @@ src/explore/                   the interactive modes:
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
                                  the hour glides to its target (midnight, dusk, dawn, golden hour)
   wetpath.js                     the wet path: dew on the flagstones, the path's lights mirrored in it
-  butterflies.js                 hundreds of butterflies by day (one instanced batch per wing pattern)
+  butterflies.js · flutter.js    hundreds of butterflies by day (one instanced batch per wing pattern); butterfly
+                                 flight shared with the rigged ones (bob with each beat, jinks, banking, glides)
   night.js · fireflies.js        the night: light-field sources, ambient kindling, haloes, glowing blooms and glass,
                                  moon shafts; clockwork fireflies
   bounds.js                      flight volume: analytic ground, walls, vault, ~4,000 collider shapes, landables
@@ -372,14 +384,15 @@ src/explore/                   the interactive modes:
   pilot.js · lowroutes.js        autopilot for follow mode (low weaving routes through the beds on a layered grid,
                                  canopy-aware routes, variety, winding, trips home)
   cameras.js                     chase camera, cinematic follow camera (framings by context, cuts, wildlife
-                                 cutaways), photo camera
+                                 cutaways, the checked landing close-up), photo camera
   interactions.js                pollination, deposits, winding + bloom wave, kindling, armillary, sparks, pollen bosses
   growth.js · bells.js           sprouting glass blooms · porcelain bellflowers
   ambient.js                     butterflies, dragonflies, hummingbirds, skep bees, songbird, foragers, crawlers,
                                  each on its own patch of the house; creatures/compact.js merges each
                                  explore rig's rigid parts (20–40% fewer draws)
   scenery.js                     near gable and doors, far doors, column tops, glazing bars, end planting, exterior
-  upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade), tiling, glass; detail culling
+  upgrade.js · cull.js           close-up foliage finish (enamel leaves, near-lens fade, the window round the
+                                 subject), tiling, glass; detail culling
   nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD,
                                  dissolved in over the film's foliage when ready)
 src/audio/live.js              live synthesis for the interactive modes
@@ -388,7 +401,8 @@ tools/                         shoot.mjs (stills), record.mjs (video), determini
                                drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
                                flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs, pacing.mjs,
                                camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs, wildlife.mjs, cutaways.mjs,
-                               followsmooth.mjs, bootprofile.mjs, bootcpu.mjs, bake.mjs, bakecheck.mjs
+                               followsmooth.mjs, landings.mjs, flutter.mjs, bootprofile.mjs, bootcpu.mjs, bake.mjs,
+                               bakecheck.mjs
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```

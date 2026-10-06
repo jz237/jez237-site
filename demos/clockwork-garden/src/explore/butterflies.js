@@ -5,14 +5,17 @@ import { butterflyTexture } from '../materials/textures.js';
 import { lightFieldMaterial } from '../world/lightfield.js';
 import { groundHeight, ceilingAt } from './bounds.js';
 import { L } from '../world/layout.js';
+import { flutterInit, flutterStep } from './flutter.js';
 
 // Hundreds of butterflies by day (interactive modes): monarchs, and enamel
 // swallowtails in a dozen tints, each living round a bloom of its own, all
-// through the house and up in the great tree's blossom. They wander on
-// fluttering paths, hop from bloom to bloom, settle on one with their wings
-// slowly opening and closing, and scatter from APX-9 rushing past. As the
-// evening falls they go to roost (thin out and are gone by night, when the
-// fireflies come out).
+// through the house and up in the great tree's blossom. They fly as
+// butterflies do (flutter.js: bobbing with every beat, jinking, banking,
+// gliding), at every height from just over the blooms to well up under the
+// glass, hop from bloom to bloom, settle on one with their wings slowly
+// opening and closing, and scatter from APX-9 rushing past. As the evening
+// falls they go to roost (thin out and are gone by night, when the fireflies
+// come out).
 //
 // One instanced batch per wing pattern: a small body and two wings whose
 // flapping is worked out on the GPU from a per-butterfly phase, rate and
@@ -116,10 +119,13 @@ export class ButterflyCloud {
         const h = homes[k];
         const b = {
           B, i, home: h, pos: h.p.clone().add(V(rng.range(-15, 15), rng.range(4, 18), rng.range(-15, 15))), vel: V(), aim: V(),
-          sc: rng.range(1.0, 1.55), ph: rng.range(0, TAU), rate: rng.range(9, 13), state: 'fly', t: rng.range(0, 6), wander: rng.range(0, 100),
-          yaw: rng.range(0, TAU), open: 0.6,
+          sc: rng.range(1.0, 1.55), ph: rng.range(0, TAU), state: 'fly', t: rng.range(0, 6),
+          yaw: rng.range(0, TAU), open: 0.6, amp: 1,
         };
+        // (monarchs glide more, on flatter wings)
+        flutterInit(b, rng, { glider: B === this.batches[0] ? 0.7 : 0.5 });
         b.aim.copy(b.pos);
+        this._newAim(b, rng);
         if (B === this.batches[1]) B.mesh.setColorAt(i, col.set(TINTS[Math.floor(rng.float() * TINTS.length)]));
         this.b.push(b);
       }
@@ -127,10 +133,12 @@ export class ButterflyCloud {
     }
     this.rng = rng;
     this.visK = 0;
+    this.frame = 0;
     this._m4 = new THREE.Matrix4();
     this._q = new THREE.Quaternion();
     this._e = new THREE.Euler(0, 0, 0, 'YXZ');
     this._s = V();
+    this._s2 = V();
   }
 
   _material(map) {
@@ -143,10 +151,11 @@ export class ButterflyCloud {
         .replace('#include <uv_vertex>', '#include <uv_vertex>\nvSide = aSide;')
         .replace('#include <begin_vertex>', `#include <begin_vertex>
           if (aSide != 0.0) {
-            // the wing beats about the body's long axis (z): a quick downstroke,
-            // a softer upstroke; at rest only a slow open and close
+            // the wing beats about the body's long axis (z): up till the wings
+            // nearly meet overhead, down a little below level; at rest only a
+            // slow open and close (aFlap: phase at t=0, rate, amplitude, opening)
             float s = sin(uBT * aFlap.y + aFlap.x);
-            float beat = aFlap.z * (s > 0.0 ? s : s * 0.7);
+            float beat = aFlap.z * (s > 0.0 ? s : s * 0.8);
             float ang = (aFlap.w + beat) * aSide;
             float c = cos(ang), sn = sin(ang);
             transformed.xy = vec2(transformed.x * c - transformed.y * sn, transformed.x * sn + transformed.y * c);
@@ -154,7 +163,7 @@ export class ButterflyCloud {
         .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
           if (aSide != 0.0) {
             float s = sin(uBT * aFlap.y + aFlap.x);
-            float ang = (aFlap.w + aFlap.z * (s > 0.0 ? s : s * 0.7)) * aSide;
+            float ang = (aFlap.w + aFlap.z * (s > 0.0 ? s : s * 0.8)) * aSide;
             float c = cos(ang), sn = sin(ang);
             objectNormal.xy = vec2(objectNormal.x * c - objectNormal.y * sn, objectNormal.x * sn + objectNormal.y * c);
           }`);
@@ -186,7 +195,8 @@ export class ButterflyCloud {
     const on = this.visK > 0.02;
     this.group.visible = on;
     if (!on) return;
-    const rng = this.rng, m4 = this._m4, q = this._q, e = this._e, s = this._s;
+    this.frame = (this.frame + 1) | 0;
+    const rng = this.rng, m4 = this._m4, q = this._q, e = this._e, s = this._s, s2 = this._s2;
     const bp = bee?.pos;
     const cp = camera.position;
     for (const b of this.b) {
@@ -194,9 +204,10 @@ export class ButterflyCloud {
       // thinning out by the hour: each has its own threshold
       const out = (b.i % 17) / 17 < this.visK * 1.06;
       if (!out) { m4.makeScale(0, 0, 0); B.mesh.setMatrixAt(b.i, m4); continue; }
-      // far ones are steered at half rate
+      // far ones are steered at half rate, alternate halves on alternate
+      // frames (by a frame count: the clock's parity sticks at 30 fps)
       const far = b.pos.distanceToSquared(cp) > 260 * 260;
-      if (far && (b.i & 1) === (Math.floor(t * 60) & 1)) continue;
+      if (far && (b.i & 1) === (this.frame & 1)) continue;
       const step = far ? dt * 2 : dt;
       b.t -= step;
       // and none flutters into the lens
@@ -212,13 +223,19 @@ export class ButterflyCloud {
           b.aim.copy(b.pos).add(b.pos.clone().sub(bp).normalize().multiplyScalar(rng.range(14, 24))).add(V(0, rng.range(5, 10), 0));
         }
       }
+      const F = b.fl;
+      let rate;
       if (b.state === 'rest') {
         // settled on its bloom: wings open and close, slowly
-        if (b.t <= 0) { b.state = 'fly'; b.t = rng.range(3, 7); this._newAim(b); }
+        if (b.t <= 0) { b.state = 'fly'; b.t = rng.range(3, 7); this._newAim(b); b.vel.set(0, F.cruise * 0.5, 0); }
         b.vel.multiplyScalar(0.8);
-        b.flapRate = 1.4; b.flapAmp = 0.5; b.openT = 0.75;
+        rate = 1.4;
+        b.ph += step * rate;
+        b.amp = lerp(b.amp, 0.5, 1 - Math.exp(-step * 3));
+        b.open = lerp(b.open, 0.75, 1 - Math.exp(-step * 3));
+        F.bob = 0; F.pitch = 0; F.roll *= 0.9;
       } else {
-        if (b.t <= 0 || b.pos.distanceToSquared(b.aim) < 4) {
+        if (b.t <= 0 || b.pos.distanceToSquared(b.aim) < 9) {
           if (b.state === 'fly' && b.home.f && rng.chance(0.14)) {
             // settle on the home bloom (or a neighbour's)
             b.state = 'land';
@@ -229,42 +246,36 @@ export class ButterflyCloud {
             b.state = 'rest'; b.t = rng.range(2, 5);
           } else { b.state = 'fly'; b.t = rng.range(2.5, 6); this._newAim(b); }
         }
-        // flutter toward the aim: a wandering, bobbing path
-        const w = (b.wander += step * 1.3);
+        // flutter toward the aim (flutter.js: bobbing, jinking, banking, gliding)
         const want = s.copy(b.aim).sub(b.pos);
         const dist = want.length();
-        const sp = b.state === 'flee' ? 16 : b.state === 'land' ? Math.min(5, 1 + dist * 1.2) : 6.5;
+        const sp = b.state === 'flee' ? F.cruise * 1.8 : b.state === 'land' ? Math.min(F.cruise * 0.6, 1 + dist * 1.2) : F.cruise;
         want.multiplyScalar(sp / Math.max(dist, 1e-3));
-        want.x += Math.sin(w * 2.1) * 2.5; want.z += Math.cos(w * 1.7) * 2.5; want.y += Math.sin(w * 5.3) * 1.6;
-        b.vel.lerp(want, 1 - Math.exp(-step * 3));
-        b.flapRate = b.state === 'flee' ? 15 : 11; b.flapAmp = 0.95; b.openT = 0.15;
+        const gliding = flutterStep(b, want, step, rng, b.state === 'flee' ? 'flee' : b.state === 'land' && dist < 10 ? 'land' : 'fly');
+        rate = F.rate;
+        b.amp = 1.0 * F.amp;
+        // (wings held out in a glide: monarchs flat, swallowtails a shallow V)
+        b.open = lerp(b.open, gliding ? (B === this.batches[0] ? 0.08 : 0.26) : 0.42, 1 - Math.exp(-step * 10));
       }
       b.pos.addScaledVector(b.vel, step);
       const g = groundHeight(b.pos.x, b.pos.z) + 2;
       if (b.pos.y < g) { b.pos.y = g; b.vel.y = Math.abs(b.vel.y); }
       const c = ceilingAt(b.pos.x) - 12;
       if (b.pos.y > c) { b.pos.y = c; b.vel.y = -Math.abs(b.vel.y); }
-      // facing: along its flight (eased); at rest, as it settled
-      const hv = Math.hypot(b.vel.x, b.vel.z);
-      if (hv > 0.6) b.yaw += Math.atan2(Math.sin(Math.atan2(b.vel.x, b.vel.z) - b.yaw), Math.cos(Math.atan2(b.vel.x, b.vel.z) - b.yaw)) * (1 - Math.exp(-step * 5));
-      const pitch = b.state === 'rest' ? 0 : clamp(-b.vel.y * 0.06, -0.5, 0.5);
-      q.setFromEuler(e.set(pitch, b.yaw, Math.sin(b.wander * 3.1) * 0.15));
-      m4.compose(b.pos, q, s.setScalar(b.sc));
+      // drawn with the beat's bob (each downstroke lifts it), rocking and banking
+      q.setFromEuler(e.set(F.pitch, b.yaw, F.roll));
+      m4.compose(s.copy(b.pos).setY(b.pos.y + F.bob * 1.0 * b.sc), q, s2.setScalar(b.sc));
       B.mesh.setMatrixAt(b.i, m4);
-      // the beat, eased between flight and rest
-      b.open = lerp(b.open, b.openT, 1 - Math.exp(-step * 3));
-      b.amp = lerp(b.amp ?? b.flapAmp, b.flapAmp, 1 - Math.exp(-step * 3));
-      b.rateNow = lerp(b.rateNow ?? b.flapRate, b.flapRate, 1 - Math.exp(-step * 2));
-      // (the phase is advanced on the CPU so changing rate never jumps the wings)
-      b.ph += step * b.rateNow;
-      B.flap.setXYZW(b.i, b.ph - t * 1.0, 1.0, b.amp, b.open);
+      // (the phase lives on the CPU; the GPU carries it on at this rate between
+      // steering updates, so a far one steered every other frame still beats smoothly)
+      b.ph %= TAU;
+      B.flap.setXYZW(b.i, b.ph - ((t * rate) % TAU), rate, b.amp, b.open);
     }
     for (const B of this.batches) { B.mesh.instanceMatrix.needsUpdate = true; B.flap.needsUpdate = true; }
   }
 
   // somewhere new round home (or, now and then, the next bloom along)
-  _newAim(b) {
-    const rng = this.rng;
+  _newAim(b, rng = this.rng) {
     if (b.home.f && rng.chance(0.12)) {
       // the next bloom along: the nearest of a few picked at random
       const all = this.flora.flowers;
@@ -277,7 +288,10 @@ export class ButterflyCloud {
       if (best) b.home = { p: best.top.clone(), f: best };
     }
     const r = b.home.tree ? 18 : 24;
-    b.aim.copy(b.home.p).add(V(rng.range(-r, r), rng.range(b.home.tree ? 2 : 8, b.home.tree ? 14 : 34), rng.range(-r, r)));
+    // (at every height: mostly just over the blooms, some higher, a few well up)
+    const u = rng.float();
+    const y = b.home.tree ? rng.range(-6, 14) : u < 0.5 ? rng.range(1.5, 9) : u < 0.85 ? rng.range(9, 24) : rng.range(24, 46);
+    b.aim.copy(b.home.p).add(V(rng.range(-r, r), y, rng.range(-r, r)));
     b.aim.x = clamp(b.aim.x, L.house.x0 + 15, L.house.x1 - 15);
     b.aim.z = clamp(b.aim.z, L.house.z1 + 15, L.house.z0 - 15);
   }

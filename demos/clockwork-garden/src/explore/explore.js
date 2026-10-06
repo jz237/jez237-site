@@ -32,6 +32,9 @@ import { clamp, lerp, smooth } from '../core/ease.js';
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const WORLD_T0 = 70; // world clock offset: every film beat has played out
 const TIMES = STOPS.map((s) => s.v); // T cycles midnight → dusk → dawn → golden hour
+// the see-through window round a landed APX-9: its middle (above its feet) and radius there
+const SIGHT_UP = V(0, 0.3, 0);
+const SIGHT_R = 3.2;
 
 export class Explore {
   constructor({ renderer, scene, world, pipeline, quality, mat, audio, sync = false }) {
@@ -228,6 +231,7 @@ export class Explore {
     this.world.atmosphere.shaftUniforms.uNear.value.set(25, 190);
     this.night.exit();
     setPushers([]);
+    FADE.uSightK.value.x = 0;
     this.world.flora.view = null;
     setLightField(false);
     if (this.swapFade) this._finishSwap();
@@ -410,6 +414,27 @@ export class Explore {
     else v = this.follow.update(dtReal, a, this.mode === 'follow' ? input : null, { reduced: this.reduced, skep: this.skep, ambient: this.mode === 'follow' ? this.ambient : null, nearfield: this.nearfield, night: phases.night, weaving: !!this.pilot.route?.weave, goalDist: this.pilot.goal ? a.pos.distanceTo(this.pilot.goal.to) : 0, aspect: this.aspect, route: this.pilot.route, world: this.world });
     this.view = { pos: v.pos.clone(), target: v.target.clone(), fov: v.fov, roll: v.roll || 0, focus: v.focus, aperture: v.aperture };
     applyPose(this.camera, { pos: v.pos, target: v.target, fov: v.fov, roll: v.roll || 0 }, this.aspect, 0.05, 9000);
+    // while APX-9 settles and gathers on a bloom, petals and leaves that come
+    // between it and the lens are thinned where they cover it (upgrade.js);
+    // so are any across a creature Follow cuts away to, while it holds on it
+    const cut = this.mode !== 'fly' && !this.debugView && !this.photo && this.follow.cut?.phase === 'hold' ? this.follow.cut : null;
+    const sightOn = !this.debugView && !this.photo && (cut || ((a.state === 'landing' || a.state === 'landed' || a.state === 'takeoff') && !(this.mode !== 'fly' && this.follow.subject)));
+    const SK = FADE.uSightK.value;
+    SK.x += ((sightOn ? 1 : 0) - SK.x) * (1 - Math.exp(-dtReal * (sightOn ? 6 : 4)));
+    if (SK.x < 0.002) SK.x = 0;
+    // (fading out, the window stays where its subject last was)
+    const W = (this._sight ||= { p: new THREE.Vector3(), r: SIGHT_R, keep: 0.9 });
+    if (sightOn) {
+      if (cut) W.p.copy(cut.c.pos); else W.p.copy(a.pos).add(SIGHT_UP);
+      W.r = cut ? cut.c.size * 1.1 : SIGHT_R;
+      W.keep = cut ? cut.c.size * 0.4 : 0.9;
+    }
+    if (SK.x > 0) {
+      this.camera.updateMatrixWorld();
+      const sv = (this._sightV ||= new THREE.Vector3()).copy(W.p).applyMatrix4(this.camera.matrixWorldInverse);
+      FADE.uSight.value.set(sv.x, sv.y, sv.z, W.r);
+      SK.y = W.keep;
+    }
     // the camera pushes the foliage aside (and nothing comes inside the lens)
     setCamera(this.camera.position, 5.5, 1.5, this.debugView || this.photo ? null : (this.mode !== 'fly' && this.follow.subject) || a.pos);
     this.nearfield.update(this.camera);
