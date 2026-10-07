@@ -1,0 +1,533 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "November 1984 home-computing newsprint",
+    "motifs": [
+      "BBC Micro space-trading screen",
+      "Spectrum keyboard",
+      "LaserJet printer",
+      "Atari bulletin board"
+    ],
+    "layout": "Dense weekly newspaper, warm paper and red/blue rules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "November 26-December 2, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Gaming lead: Elite conversion agreement, with space-trading screen halftone.",
+    "secondaryRail": "Satellite dish, software, games shelves, charts and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "currentDate": "2026-10-07",
+  "historicDate": "1984-11-26",
+  "displayDate": "Week of November 26-December 2, 1984",
+  "edition": "Issue 122 - Weekly 1984 Computer & Culture Chronicle",
+  "editorNote": "A weekly record of computers, games and digital culture.",
+  "morningLine": "Elite looks toward new machines as Britain’s cartridge business contracts.",
+  "lead": {
+    "headline": "British Telecom’s Firebird wins the rights to take Elite to Z80 computers",
+    "dek": "Spectrum version promised; Amstrad conversion probable as Elite heads for Firebird’s premium line.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      11
+    ],
+    "body": [
+      "British Telecom’s Firebird has obtained the rights to convert Acornsoft’s Elite for Z80 computers. Popular Computing Weekly reports the agreement in its November 29 issue, following an auction the previous week. The price is described as a substantial sum but is not disclosed.",
+      "The option covers the Spectrum, Amstrad CPC 464, MSX and the awaited Enterprise. That breadth is not a production schedule: Jacqui Lyons of Marjacq Scripts, representing authors Ian Bell and David Braben, confirms a Spectrum version and says a CPC 464 edition is probable. No firm MSX conversion plans are reported.",
+      "Elite is destined for Firebird’s gold premium range rather than its silver budget range. The report anticipates a Spectrum edition around April or May 1985 at about £15. Those figures remain expectations; there is no Spectrum release to buy this week.",
+      "For players watching the BBC and Electron space-trading hit from other keyboards, the agreement promises a wider flight deck. The immediate news is a licence and a confirmed conversion commitment, not a finished fleet of ports."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Coleco and Parker Brothers retreat from the British games market",
+      "confidence": "same-week",
+      "sourceRefs": [
+        12,
+        11
+      ],
+      "body": [
+        "Coleco and Parker Brothers are retreating from the British games business, according to this week’s Popular Computing Weekly. Coleco’s Philip Gibbs says involvement with ColecoVision will not continue; an agency is to handle software support for existing owners.",
+        "Console stock remains in shops through Hyde Park Clothing Company. A reported inventory figure is disputed by its manager, so no firm total can be given. Ideal Toys says it intends to put less emphasis on electronics and more on Cabbage Patch Dolls and educational toys.",
+        "Parker has withdrawn its 1984–85 British product programme, though its spokesman does not necessarily regard the retreat as permanent. The period report points to falling Atari VCS prices, premium cartridge prices and Britain’s small Commodore disk market. These are UK withdrawals, not announcements that either company has closed worldwide."
+      ]
+    },
+    {
+      "headline": "LaserJet wins a 119-printer showdown as laser output reaches the PC desk",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "PC Magazine’s November 27 special issue tests 119 printers, and Alfred Poor places Hewlett-Packard’s LaserJet at the front of the field. This is a comparative review of an existing product, not a launch announcement.",
+        "The $3,495 serial-interface printer uses a Canon copier-derived laser engine, produces 300-dot-per-inch output and carries an eight-page-per-minute rating. Poor measures an 18-second wait for the first page, followed by about 7.5 seconds per page: short letters and sustained printing are different speed tests.",
+        "A replacement cartridge costs $99 and is said to last about 3,000 pages. Optional ROM cartridges add fonts. Setup earns praise, font-selection controls less so; supplied graphics screen-dump support is for the HP-150, not the IBM PC. The reviewer observes discounts below $3,000 without identifying a dealer."
+      ]
+    },
+    {
+      "headline": "Home bulletin boards become a social network—and an arcade",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "Home bulletin boards are becoming meeting places and game rooms. Kathy Yakal’s November COMPUTE! report visits Chicago-area Atari users and reports at least 20 Atari boards in the metropolitan area. John Semenek began his board for a user group.",
+        "Stan and Susie Subeck’s Valley Girl BBS supplies adventures and trivia along with Valspeak menus. On this board, delete becomes bag and exit becomes de-val. The play described is hosted board entertainment, not evidence of simultaneous multiplayer.",
+        "Running a board costs money and time. Ric Manning’s survey reports average startup spending above $3,000, around $50 in monthly expenses and maintenance that can reach 50 hours a month. Most home boards take one caller at a time; passwords, membership fees and rules against copyrighted-software uploads are increasingly part of the sysop’s job."
+      ]
+    },
+    {
+      "headline": "Borland sells a pop-up desk—and charges extra for an unprotected disk",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Borland’s Sidekick advertisement offers IBM PC-family users a small desk that pops up while another program runs. Its tools include a notepad, calculator, calendar, phone directory, auto-dialer and ASCII table.",
+        "The November 27 advertisement demonstrates a notepad over Lotus and describes capturing screen information into notes and transferring calculation results into underlying software. Auto-dialing requires a Hayes Smartmodem or compatible.",
+        "The standard advertised edition is $49.95. A non-copy-protected version costs $79.95, with $5 shipping and handling: a $30 premium for an unprotected disk. These are advertising claims and quoted prices, not independent performance-test results."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "HP LaserJet",
+      "summary": "Reviewed $3,495 serial-interface laser printer, 300 dpi and eight pages/minute; not a new launch this week.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Tel-A-Modem 212A",
+      "summary": "Code-A-Phone telephone with integrated modem and two lines permitting simultaneous voice and data, described in November modem survey; no verified price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Sinclair Spectrum portable project",
+      "summary": "November 29 PCW pp.1,5 reports confirmation of a battery-powered Spectrum-compatible portable with flat display, single microdrive, CMOS RAM and proposed £300 price. Display development means launch not expected before mid-1985; this is a proposal, not released hardware or a retrospective identification as the Z88.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        12,
+        11
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Sidekick",
+      "detail": "Borland pop-up productivity utilities, advertised $49.95 or $79.95 non-copy-protected, plus $5 shipping.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf, not a sales chart",
+      "items": [
+        "Doomdark’s Revenge",
+        "Elite (BBC/Electron; Z80 conversions planned)",
+        "Reflection",
+        "Seven Cities of Gold (adjacent December coverage)",
+        "M.U.L.E. (adjacent December coverage)"
+      ]
+    },
+    {
+      "label": "Top 5 Movies — U.S. weekend November 30-December 2",
+      "items": [
+        "Missing in Action",
+        "The Terminator",
+        "Supergirl",
+        "Oh God, You Devil!",
+        "Night of the Comet"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "HP LaserJet",
+      "price": "$3,495 list",
+      "note": "$3,495 list; $99 replacement cartridge rated for about 3,000 pages. Reviewer notes unnamed discounts below $3,000.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Diablo EPM-1",
+      "price": "$3,995 list for thermal-transfer printer in same comparative issue",
+      "note": "$3,995 list for thermal-transfer printer in same comparative issue; rated six pages/minute.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Sidekick copy-protection premium",
+      "price": "$49.95 regular versus $79.95 non-copy-protected",
+      "note": "$49.95 regular versus $79.95 non-copy-protected; $30 premium, plus $5 shipping for the order.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Modem market",
+      "price": "Sharon Darling reports current modem prices from about $49 to $1,000 or more",
+      "note": "Sharon Darling reports current modem prices from about $49 to $1,000 or more; Anchor Automation’s Jerry Hussong predicts $300–$500 for 1200 bps by year-end and $250–$400 in 1985. Forecasts are not current quoted product prices.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Doomdark’s Revenge (Spectrum)",
+      "price": "£9.95, reported in shops, PCW November 29 p.1.",
+      "note": "£9.95, reported in shops, PCW November 29 p.1.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        12
+      ]
+    },
+    {
+      "item": "QL telecom accessory modules",
+      "price": "PCW p.5 lists Q-con interface £79.95, Q-mod modem £79.95 and Q-call auto-answer £39.95. Q-mod supports V23 75/1200 baud half duplex and 1200/75 full duplex",
+      "note": "PCW p.5 lists Q-con interface £79.95, Q-mod modem £79.95 and Q-call auto-answer £39.95. Q-mod supports V23 75/1200 baud half duplex and 1200/75 full duplex; planned January launch is not current availability.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        12,
+        11
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "One caller at a time",
+      "summary": "November COMPUTE! contrasts single-user home BBSs with large multi-user commercial services such as CompuServe. Busy signals and long-distance charges shape home telecomputing.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "COMDEX’s sober mood puts pressure on the PC business",
+      "summary": "November 20 COMDEX report gives earlier-month context: record 1,400 exhibits but a restrained mood; the show is not redated into the target week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Doomdark’s Revenge",
+      "summary": "November 29 PCW p.1 says the Lords of Midnight sequel is now in shops, available so far only for Spectrum at £9.95. Morkin has been kidnapped by Shareth, Doomdark’s daughter; Luxor, Rorthron and Tarithel must rescue him. This is a dated availability report, not an exact launch-day claim.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        12
+      ]
+    },
+    {
+      "headline": "Elite conversion agreement",
+      "summary": "Firebird obtains Z80 conversion rights; Spectrum edition planned for April–May 1985 around £15. No released Spectrum port this week.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "headline": "Reflection",
+      "summary": "Sean Puckett’s November COMPUTE! p. 58 type-in reversi game supports one player against the computer or two players. Versions: Atari 24K, Commodore 64, unexpanded VIC-20, TI-99/4A 16K with regular BASIC, Apple, IBM PC with 64K/BASICA/CGA, PCjr with Cartridge BASIC, and Color Computer with Extended Color BASIC. Joystick required for Atari, C64, VIC and Color Computer.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "artist": "Bryan Adams",
+      "title": "Run to You",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 2,
+      "artist": "Don Henley",
+      "title": "The Boys of Summer",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 3,
+      "artist": "Julian Lennon",
+      "title": "Valotte",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 4,
+      "artist": "Pat Benatar",
+      "title": "We Belong",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 5,
+      "artist": "Roger Hodgson",
+      "title": "Had a Dream",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 6,
+      "artist": "The Kinks",
+      "title": "Do It Again",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 7,
+      "artist": "Bob Seger & the Silver Bullet Band",
+      "title": "Understanding",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 8,
+      "artist": "Survivor",
+      "title": "I Can’t Hold Back",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 9,
+      "artist": "REO Speedwagon",
+      "title": "I Do’ Wanna Know",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    },
+    {
+      "rank": 10,
+      "artist": "Bruce Springsteen",
+      "title": "Born in the U.S.A.",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1984-12-01",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf"
+      ],
+      "sourceLocation": "printed page 18; original national album-oriented radio airplay chart, not Tunecaster"
+    }
+  ],
+  "periodAd": {
+    "headline": "Sidekick: a desk at your fingertips",
+    "summary": "Borland pop-up productivity utilities, advertised $49.95 or $79.95 non-copy-protected, plus $5 shipping.",
+    "tagline": "Notepad, calculator, calendar and telephone directory while another program runs.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "Britain’s cartridge trade retrenches",
+    "summary": "Coleco and Parker withdraw British programmes while Firebird invests in home-computer conversions. Parker’s spokesman leaves open the possibility of a return.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      12,
+      11
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Britain and Spain agree on Gibraltar movement and talks",
+    "summary": "Britain and Spain agreed in Brussels on November 27 to reciprocal rights, free movement and talks including Gibraltar sovereignty. The agreement was not an announcement that the frontier reopened that day.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      8,
+      13
+    ]
+  },
+  "bbsNote": {
+    "headline": "300 or 1200 bps? Home callers weigh cost against speed",
+    "summary": "November COMPUTE! supplies both a modem buyer’s guide and named BBS reporting. All entries below are editorial paraphrases of published reporting, not recovered BBS messages.",
+    "posts": [
+      {
+        "topic": "Speed and bills",
+        "platform": "COMPUTE! November 1984 modem desk",
+        "text": "Sharon Darling describes common 300- and 1200-bps modems; faster transfers reduce hourly service and long-distance costs, while Jerry Hussong argues local casual BBS use can still justify 300 bps."
+      },
+      {
+        "topic": "Atari online play",
+        "platform": "Valley Girl BBS, Chicago area",
+        "text": "Kathy Yakal reports adventures and trivia hosted by Stan and Susie Subeck, alongside Valspeak menus."
+      },
+      {
+        "topic": "Sysop economics",
+        "platform": "Plumb survey, reported by COMPUTE!",
+        "text": "Ric Manning’s survey puts average initial BBS spending above $3,000 and ongoing costs around $50 monthly, with as much as 50 hours of monthly maintenance."
+      },
+      {
+        "topic": "Commercial-network proposal",
+        "platform": "Draco-Net, Apple II",
+        "text": "Kent Fillmore proposes an area-code franchise network with space for local user groups; only his home pilot is documented as operating."
+      },
+      {
+        "topic": "Proposed QL network and modular modem",
+        "platform": "Sinclair/Prism and QL Q-con/Q-mod/Q-call",
+        "text": "PCW November 29 reports very early negotiations for a QL-only network, developed by Prism, and a QL-dedicated modem due at January’s Which Computer Show. Richard Hease stresses planning, not a live service; modular prices are £79.95, £79.95 and £39.95."
+      }
+    ],
+    "sourceRefs": [
+      2,
+      3,
+      12,
+      11
+    ]
+  },
+  "curiosity": {
+    "headline": "A Valley Girl board lets you bag a message and de-val",
+    "summary": "A genuine November 1984 Atari BBS gives online computing a Valley Girl accent.",
+    "detail": "Stan and Susie Subeck took inspiration from their 13-year-old daughter’s Valspeak. Their Chicago-area Valley Girl BBS substitutes bag for delete and de-val for exit, includes a slang glossary, and offers adventure games and trivia. Kathy Yakal reports it in COMPUTE! issue 54, p. 46.",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Magazine publication dates establish reporting dates, not necessarily transaction or launch dates. Firebird auction occurred the previous week; Spectrum Elite, Sinclair portable and QL network/modem remain forecasts or plans.",
+      "December CGW remains adjacent-period context, not evidence of availability in this week. No independently established non-computer gadget breaking news or era-defining milestone: both omitted.",
+      "Byte, InfoWorld and Softalk not exhaustively inspected; expanded original Popular Computing Weekly coverage resolves the earlier exact-week gaming gap.",
+      "Existing primary-source research, Billboard transcription and film/world-news findings retained; no invented scene names or recovered BBS messages."
+    ]
+  },
+  "sources": [
+    {
+      "title": "PC Magazine volume 3 number 23",
+      "url": "https://archive.org/stream/PC-Mag-1984-11-27/PC-Mag-1984-11-27_djvu.txt",
+      "date": "1984-11-27"
+    },
+    {
+      "title": "COMPUTE! issue 54",
+      "url": "https://archive.org/stream/1984-11-compute-magazine/Compute_Issue_054_1984_Nov_djvu.txt",
+      "date": "1984-11"
+    },
+    {
+      "title": "Understanding Modems — Sharon Darling",
+      "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "The Bulletin Boarding of America — Kathy Yakal",
+      "url": "https://www.atarimagazines.com/compute/issue54/112_1_The_Bulletin_Boarding_Of_America.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "Piracy and software protection — Mitchell Kapor, Creative Computing p.236",
+      "url": "https://www.atarimagazines.com/creative/v10n11/236_Piracy_and_software_prote.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "Computer Gaming World vol.4 no.6 (contents page dated December)",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_4.6.pdf",
+      "date": "1984-12"
+    },
+    {
+      "title": "Billboard Top Rock Tracks, p.18",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-01.pdf",
+      "date": "1984-12-01"
+    },
+    {
+      "title": "The Numbers weekend domestic box office",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/11/30",
+      "date": "1984-11-30/1984-12-02"
+    },
+    {
+      "title": "Brussels Agreement published English text",
+      "url": "https://www.gibnet.com/texts/brussels.htm",
+      "date": "1984-11-27"
+    },
+    {
+      "title": "Computer trade: less hypey, more upscale — David F. Salisbury",
+      "url": "https://www.csmonitor.com/1984/1120/112051.html",
+      "date": "1984-11-20"
+    },
+    {
+      "title": "Popular Computing Weekly vol.3 no.48, November 29–December 5, pp.1,5; original scan visually checked",
+      "url": "https://archive.org/details/popular-computing-weekly-1984-11-29",
+      "date": "1984-11-29"
+    },
+    {
+      "title": "British Telecom’s Firebird wins the rights to take Elite to Z80 computers",
+      "url": "https://archive.org/details/popular-computing-weekly-1984-11-29/page/n4/mode/1up"
+    },
+    {
+      "title": "Coleco and Parker Brothers retreat from the British games market",
+      "url": "https://archive.org/details/popular-computing-weekly-1984-11-29/page/n0/mode/1up"
+    },
+    {
+      "title": "Britain and Spain agree on Gibraltar movement and talks",
+      "url": "https://api.parliament.uk/historic-hansard/commons/1984/nov/28/gibraltar"
+    }
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-11-26.png",
+    "alt": "GPT Image 2 Computer Chronicle front page for November 26-December 2, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  }
+}
