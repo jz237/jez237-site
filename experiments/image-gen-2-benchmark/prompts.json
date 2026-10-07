@@ -19823,5 +19823,131 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-06-factual-infographic-factual-infographic-chrysis-ignita-the-",
+    "title": "Factual infographic: Chrysis ignita — The Armored Curl",
+    "tests": "Three independent authoritative publishers read. Eight substantive panels, five-plus enlarged anatomical diagrams. Species-specific host uncertainty retained; developmental strip explicitly family-level. No non-Monday visual review.; archive_slot=2026-10-06T20:20; concept=chrysis-ignita-conglobulation-armored-body-curl; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the finished direct-canvas museum-quality factual entomology infographic, not a photo of a poster, not a specimen tray or room. Request high quality, size auto, opaque background. Title: “CHRYSIS IGNITA — THE ARMORED CURL”. Subheading: “A ruby-tailed cuckoo wasp • enlarged biological views”. Rich layered naturalistic macro scientific illustration, immaculate readable typographic hierarchy, spacious ivory diagram ground with deep navy headings, ruby and turquoise visual accents. One enormous three-quarter whole adult wasp dominates the upper-central canvas, anatomically correct six legs attached to the mesosoma, two segmented antennae, credible translucent folded wings with fine venation, metallic blue-violet head and mesosoma with localized green reflections, golden-red metasomal dorsal plates, coarse regular pitting, realistic tiny hairs and sharply produced terminal apical teeth. Fine warm grazing light brings out the pitted cuticle and cool diffuse fill reveals anatomy. Do not turn it into a gigantic monster. Most visual area is the wasp and its explanatory biological views, not prose. Label hero “Body length 5–10 mm; views enlarged”, with restrained leader lines to head, mesosoma, metasoma. Use a generous portrait-oriented editorial layout, eight substantive integrated supporting panels with short precise labels, diagrams and restrained gutters. No tiny paragraphs, no URLs or citations on canvas.\nPanel 1 “A hollow underside”: large anatomically coherent side-and-ventral explanatory view of the abdomen's concave venter, green-blue ventral plates; clearly schematic cutaway outline showing room for folding, not an invented internal organ. Label “Ventrally hollowed abdomen”.\nPanel 2 “Fold, tuck, shield”: three large progressively curled profile drawings, from extended to tucked head and legs to compact ball, directional arrows that describe folding only, not a quantified speed. Label “Conglobulation — defensive curling in chrysidine cuckoo wasps”; “Vulnerable parts tucked inward”. No fictional hinges, no unbreakable-force icon.\nPanel 3 “Sculptured armor”: a large cuticle macro window with coarse dense punctures and glossy interstices, metal-like sheen but biological cuticle rather than literal metal; an explanatory diagram of protective outer body surface around tucked soft parts. Label “Tough exoskeleton helps protect against host stings”; make no invulnerability claim and do not invent thickness or nanoscale color mechanism.\nPanel 4 “Blue front, ruby back”: paired dorsal and ventral anatomical macro views, blue-violet head/mesosoma with green reflections, golden-red dorsal tergites, green-blue sternites; label these actual regions and show regular T2/T3 punctation and sharply produced apical teeth with clean leader lines. All colors remain faithful, no rainbow fantasy.\nPanel 5 “The forehead clue”: a substantial frontal-head close-up with compound eyes and segmented antennae, a clean overlay tracing the shallow M-shaped/arcuate frontal carina, NOT four tooth-like bumps. Label “Frontal ridge shallowly M-shaped or arcuate”; “Colour alone cannot separate lookalikes”. No invented vision or sensing claims.\nPanel 6 “Life inside another nest”: clearly framed family-level schematic egg → larva → cocoon/pupa → adult strip integrated with a simple solitary-wasp nest-cell cross-section. Caption “Cuckoo-wasp family overview: many species develop in other wasps’ or bees’ nests”; “Feeding differs among species”. Do not depict a species-specific killing or feeding sequence for C. ignita. A readable uncertainty tag states “C. ignita: Ancistrocerus parietum is a probable host, not confirmed here”. No species-specific duration or number of offspring.\nPanel 7 “Small wasp, textured habitat”: an enlarged natural-scale context vignette of this wasp on a dead timber surface beside an old stone wall in a garden/forest-edge setting, weathered fibers and mineral grains, not an overall photographed-poster mockup. Caption “Gardens, parks, forest margins; old walls and dead wood”. Small adjacent text “Western Europe to central Asia and China” without precise map boundaries or unsupported abundance claims.\nPanel 8 “A name needs care”: a substantial diagnostic comparison diagram showing the same blue/red body silhouette beside two neutral outlined lookalike silhouettes, explicitly labeled “Lookalikes: not a colour-only identification”; short claim “Older host records may mix species”. Connect via fine dotted leader to forehead panel, not evolutionary arrows. Keep this visually biological, not a generic conservation module.\nHierarchy: title, hero, numbered short headings, legible compact explanatory captions. At least four substantial close-ups/diagrams are visually prominent: ventral folding anatomy, curling sequence, pitted cuticle, frontal ridge, dorsal/ventral comparison. All factual labels and visual causal implications are limited to these source-verified statements. Convey genuine small insect anatomy, not anthropomorphic intent. No bibliography, logos, watermark, apparatus surrounding the infographic or operational model text.",
+    "image": "images/2026-10-06-factual-infographic-factual-infographic-chrysis-ignita-the-.jpg",
+    "thumb": "thumbs/2026-10-06-factual-infographic-factual-infographic-chrysis-ignita-the-.webp",
+    "color": "#b7b1ab",
+    "date": "2026-10-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "chrysis-ignita-conglobulation-armored-body-curl",
+      "imageSha256": "fa6c616cd3dc02a51a51c7feb1318f0962a5863e09e9314682d9e10767bbe9ad",
+      "imageDHash": "e0d4b6a7525283c7"
+    },
+    "factualInfographic": {
+      "topic": "How Chrysis ignita combines sculptured metallic anatomy with the defensive body curl of chrysidine cuckoo wasps",
+      "description": "Species-focused anatomy and family-level defensive curling, with eight supporting panels, prominent biological close-ups and explicitly qualified host/development information.",
+      "sourceNote": "Norwegian Biodiversity Information Centre https://biodiversity.no/Pages/200992 — species diagnosis, size, habitat and qualified host; UC Riverside https://faculty.ucr.edu/~legneref/identify/chrysidi.htm — family-level curling and development; UC Davis https://ucanr.edu/node/100785/printable/print — tough sculptured defensive exoskeleton. Species-specific hosts remain explicitly uncertain; generic development is labeled family-level.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-07T00:21:49.226352+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Norwegian Biodiversity Information Centre",
+            "title": "Chrysis ignita",
+            "sourceType": "government-agency",
+            "url": "https://biodiversity.no/Pages/200992"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California, Riverside",
+            "title": "Chrysididae — Description, Biology and Behavior",
+            "sourceType": "university",
+            "url": "https://faculty.ucr.edu/~legneref/identify/chrysidi.htm"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of California, Davis",
+            "title": "Picture This: A 5x6-Foot Ruby-Tailed Wasp at Bohart Museum",
+            "sourceType": "university",
+            "url": "https://ucanr.edu/node/100785/printable/print"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Chrysis ignita is a cuckoo wasp; its close lookalikes complicate identification and older host records.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Chrysis ignita body length is 5–10 mm; all illustrated macro views are enlarged.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The head and mesosoma are shiny blue or violet, with green reflections on the pronotum and mesoscutellum; tergites are golden red and sternites green or blue.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The mesoscutum has punctures the same colour as the interstices; T2 and T3 have coarse regular punctation and sharply produced apical teeth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The frontal carina of Chrysis ignita is shallowly M-shaped or arcuate, not four tooth-like tubercles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs from western Europe to central Asia and China; distribution records can be confused by unrevised identifications.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Habitats include gardens, parks and forest margins; adults occur on old wooden or stone walls, dead tree trunks, poles and log piles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cuckoo wasps have a ventrally hollowed abdomen; most Chrysidinae can curl into a defensive ball (conglobulation). Females disturbed or attacked fold into a compact ball, shielding vulnerable body parts.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Chrysidid exoskeletons are heavily sculptured and very tough, providing armor against host stings; this is protection rather than invulnerability.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "At family level, cuckoo-wasp immature stages include egg, larva, cocoon/pupa and adult; many develop in solitary-wasp or bee nests, as parasitoids or consumers of host provisions. Exact feeding habits differ among species.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Ancistrocerus parietum is only a probable host of Chrysis ignita; numerous earlier host records are unreliable because of inconsistent taxonomy.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult insects depicted have six legs, antennae, head, mesosoma and metasoma; the frontal ridge, sculptured body and wings are shown as anatomical views rather than proof of identification from colour alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
