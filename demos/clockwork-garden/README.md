@@ -70,9 +70,12 @@ dozens of lanterns hung on chains through its crown.
 
 By night thousands of clockwork fireflies drift in swarms over the beds,
 along the promenade and all through the great tree's crown; by day hundreds
-of butterflies (monarchs and enamel swallowtails in a dozen tints) live in
-companies round the blooms and the blossom, at every height from just over
-the flowers to well up under the glass. They fly as butterflies do: each
+of butterflies (monarchs and enamel swallowtails in a dozen tints): some live
+in companies round a bloom and the great tree's blossom (and settle on them),
+and more than half are roamers that cruise the whole volume of the house, each at
+an altitude of its own from just over the beds to just under the glass (changing it
+now and then), drawn larger the higher they fly so they read from across the vault.
+They fly as butterflies do: each
 downstroke heaves the body up and the body rocks with the wings, they jink
 and bank into their turns and glide on held-out wings between bursts of
 beats. They settle, scatter from APX-9 rushing past, and go to roost as the
@@ -151,6 +154,28 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   succession, thunder following: the flash is a cool key light, so the vault's ribs shadow the beds
   for an instant. Flashes are soft (a short rise, a few seconds apart, never a strobe) and are left out
   when reduced motion is asked for (the thunder stays).
+
+### The world outside the glass
+
+Interactive modes only (`explore/scenery.js` builds the land and its trees; `explore/outside.js` what stands on it).
+
+- **Ground**: a real heightfield (the lawn was one triangle fan, so everything stood on a cone): flat inside the
+  brick wall, mown in stripes whose sheen turns with the way you look, and outside the wall rolling land in a patchwork
+  of fields with hedgerows, up to the hills. `groundY(x, z)` is the one height function everything is planted by.
+- **Trees**: crowns are smooth-shaded clusters of lumps in several tones, with leaf-cluster tone and bump at the scale of
+  a cluster and a leaf, a ragged silhouette (leaf clusters fray the edge and let the sky through, less with distance),
+  gust-driven lean and flutter from the garden's own breeze, a glow when the sun is behind them; green, or in patches of the
+  park turned to autumn gold, orange and russet; cedars with flat tiers; trunks with a flare and boughs. The distant woods use
+  crowns at a quarter of the polygons.
+- **Light on the land**: the clouds' shadows drift over it (the field the interior's cookie reads, so they match), gust
+  bands cross the grass, it goes darker in rain; **shadows follow the sun** (each tree's, thrown by its vertex shader with
+  no CPU work, and the glasshouse's own: a convex hull of its base and roof-line, soft-edged), and fade with a low sun;
+  **mist** lies low over the land, thickest at dawn, some at dusk and after rain.
+- **Standing in it**: at the end of the north avenue, past iron gates open in the brick wall, a brick **manor** whose windows
+  light up as the night comes (a different few, a candle's flicker in some); at the end of the south walk a domed
+  **temple**; garden **lamps** along both walks and at the gate and the manor's door, glowing at dusk (and in a storm) with halos
+  that fade near the lens; **flower borders** along the walks and round the glasshouse's foot; autumn **leaves** drifting down
+  past the glass (not on `low`; none in rain).
 
 ### What you can do in the garden
 
@@ -465,6 +490,7 @@ src/explore/                   the interactive modes:
   sunpath.js (world/)            the sun's and moon's path, in the house's frame (hour → direction)
   fountain.js · rain.js · weather.js  the living fountain (water, wake, caustic stone) · weather (rain, lightning, the
                                  sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
+  scenery.js · outside.js        the land, its trees and light · what stands on it (manor, temple, gate, lamps, borders, shadows, leaves)
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
