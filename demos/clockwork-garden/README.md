@@ -112,7 +112,10 @@ the roof. APX-9's wing lattice glows at its nodes.
   the board, walks in, the hive flares and chimes, and the next planting
   site **sprouts glass blooms** (first at the seedpods, then further out:
   twelve sites), so the garden grows over the session. Grown blooms can be
-  pollinated too. The worker bees dance round the skep after each deposit.
+  pollinated too. The worker bees dance round the skep after each deposit. The
+  HUD counts the beds grown (`3/12 beds`); the garden is **remembered between
+  visits** (see *A garden that remembers*), and the twelfth bed starts the
+  finale.
 - **Wind the garden**: touch the escapement beside the great bloom. The
   movement races, a pulse runs the copper roots, the gear train spins up,
   light climbs the stem, the great bloom answers and a **bloom wave**
@@ -135,14 +138,36 @@ the roof. APX-9's wing lattice glows at its nodes.
   hummingbirds sip, dragonflies hover and dart. Nothing seeks out or follows
   APX-9; you happen by them, and they only react as you pass. Fireflies brighten
   and drift aside to let you through.
+- **A garden that remembers** (`src/explore/save.js`, `localStorage` only, every
+  access guarded): the beds you have grown, your deliveries and the finale are
+  saved and stand grown from the first frame next visit (`grow(n)` in
+  `growth.js`). The menu's *Start over* (shown once there is something to
+  forget; asks twice) clears it and reloads. `?garden=fresh` ignores the save;
+  capture and the review tools never read or write it.
+- **The finale**: when the twelfth bed grows, the whole house answers with a bloom
+  wave (the winding's wave, source `finale`), the title card *The garden is
+  awake* rises with your tally, and the day turns once: down through dusk to the
+  lanterns' night, then a golden morning (about 50 s; choosing an hour yourself
+  ends it). It plays once per garden.
+- **A sound nudge**: sound is off until asked for, so the first time anyone
+  (you or APX-9) pollinates a bloom a small offer appears (*The garden has a
+  score. Turn sound on*). Answering it, or letting it lapse, means it is not
+  shown again.
+- **First flights**: Fly opens with a one-line controls card (W, mouse, Space and
+  Shift, H for help; the stick and ▲ ▼ on touch), then the goal hint (settle on a
+  bloom, carry the pollen home, wind the garden at the escapement).
 - **Time of day**: one control from the film's midnight teal through dusk
   (blue hour) and dawn (rose mist, the lanterns guttering out) to the
   golden-hour finale. `T` cycles midnight → dusk → dawn → golden hour and the
   garden glides there (the lanterns kindle or go out one by one, the
-  fireflies come and go); the menu's slider goes anywhere in between.
+  fireflies come and go); the menu's slider goes anywhere in between. **My clock**
+  (menu, or `?tod=live`) makes the hour follow the viewer's own clock (blue hour
+  before dawn, rose dawn, bright day, golden hour at six, a rose dusk, then the
+  lanterns' night) and keeps following it until an hour is chosen.
 - **Photo mode** (`P`): interface hidden, world frozen, free camera (keeping
   the shot's focus: the subject sharp, the rest soft); `Enter` or *Save PNG*
-  downloads the frame.
+  downloads the frame, with a small caption in the corner (the hour, beds grown,
+  the address) unless the strip's *Caption* is switched off.
 - **Sound** (`M` or the menu): wing buzz that follows wingbeat and speed, the
   pollen drum, escapement ticks by distance, bells, ratchet and root swell
   when winding, a pad whose chord follows the hour. Off until you turn it on.
@@ -159,7 +184,7 @@ python3 -m http.server 8765
 
 Requires a WebGL2 browser (Chrome, Edge, Firefox, Safari 16+).
 
-**Before publishing, run `node tools/cachebust.mjs && node tools/bake.mjs`** (and, if the scans
+**Before publishing, run `node tools/cachebust.mjs && node tools/bake.mjs && node tools/bundle.mjs`** (and, if the scans
 changed, `python3 tools/scans.py --raw <downloads>` first: it writes `assets/scans/` and
 `src/materials/scanlist.js`, whose names carry content hashes).
 The bake grows the bee-scale planting for each quality tier and writes
@@ -173,6 +198,16 @@ cache `.js`/`.css` for 4 hours but revalidates `index.html` on every visit, so
 without it returning visitors get the new page running stale modules. The tool
 stamps every module (via the import map) and the stylesheet with a content
 hash in `index.html`; changed files get new URLs, unchanged ones stay cached.
+
+`tools/bundle.mjs` then writes `dist/`, the page to publish: the same page with
+one minified, content-hashed script (`garden.<hash>.js`, about 290 KB brotli
+against 620 KB over 82 requests) instead of the module tree, plus the stylesheet
+and `assets/`; 18 requests a load instead of about 110. The source tree stays what
+you edit and test (every tool runs against it); `dist/` keeps the import map's
+`src/` stamps only so the baked planting's key still matches, and the source map
+(`garden.<hash>.js.map`, sources embedded, 5 MB, fetched only when DevTools is
+open) lets DevTools show the original files (`--no-map` leaves it out). esbuild
+is found in the project, via `$ESBUILD`, or in wrangler's own install.
 
 ## Controls
 
@@ -263,6 +298,8 @@ the governor off.
 | `&stage=landed\|folded\|flight\|walk\|display&key=1` | with `look=bee`: pose the hero bee (APX-9) in a clear spot above the bloom, facing +Z; `key=1` adds a studio-style key light from the camera side |
 | `?mode=film\|fly\|follow` | open a mode directly (without it, and without any film-only parameter, a landing screen asks) |
 | `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.27 dusk, 0.5 dawn, 0.86 golden hour, 1 its peak; default 0.86) |
+| `?tod=live` | the hour follows your own clock (the menu's *My clock* keeps that choice) |
+| `?garden=fresh` | ignore the saved garden for this visit |
 | `?touch=1\|0` | force the touch interface on or off |
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
 | `?adapt=0` | hold resolution and detail fixed (no frame governor) |
@@ -371,6 +408,7 @@ src/ui/hud.js, landing.js      interactive-mode HUD (gauge, hints, help, menu, p
 src/ui/perfmeter.js            the ?debug=1 frame-rate readout
 src/input/input.js             keyboard, mouse / pointer lock, wheel, touch joystick + buttons, pinch, gamepads
 src/explore/                   the interactive modes:
+  save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
                                  the hour glides to its target (midnight, dusk, dawn, golden hour)
@@ -402,7 +440,7 @@ tools/                         shoot.mjs (stills), record.mjs (video), determini
                                flycheck.mjs, overlapcheck.mjs, living.mjs, stallcheck.mjs, cachebust.mjs, pacing.mjs,
                                camjerk.mjs, cpuprofile.mjs, allocprofile.mjs, abshots.mjs, wildlife.mjs, cutaways.mjs,
                                followsmooth.mjs, landings.mjs, flutter.mjs, bootprofile.mjs, bootcpu.mjs, bake.mjs,
-                               bakecheck.mjs
+                               bakecheck.mjs, bundle.mjs (dist/: the single-script page to publish)
 docs/PRODUCTION_LOG.md         checklist, review log, remaining issues
 review/                        review frames and contact sheets from each pass (interactive modes: review/explore/)
 ```

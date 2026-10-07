@@ -58,9 +58,13 @@ canvas#film { position: fixed; inset: 0; display: block; width: 100vw; height: 1
 /* loading: a single ticking hairline */
 #loading {
   position: fixed; inset: 0;
-  display: grid; place-items: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
   background: #000;
   z-index: 10;
+}
+#loading .msg {
+  font-size: 17px; font-style: italic; letter-spacing: 0.08em; color: var(--ivory); opacity: 0.55;
+  min-height: 1.3em; text-align: center;
 }
 #loading .tick {
   width: 38px; height: 38px;
@@ -210,7 +214,12 @@ body.photo #touch .pad .boost { display: none; }
 }
 #hud .hud-btn svg { width: 20px; height: 20px; }
 #hud .hud-btn:hover, #hud .hud-btn:focus-visible { color: var(--gold); outline: none; border-color: var(--gold); }
-#hud .hud-title { font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.72; text-shadow: 0 1px 6px rgba(0,0,0,0.7); }
+#hud .hud-title {
+  font-size: 16px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ivory); opacity: 0.92;
+  padding: 6px 14px; border-radius: 999px; background: var(--ink); border: 1px solid rgba(217, 181, 106, 0.18);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+#hud .hud-title:empty { display: none; }
 #hud .hud-swap {
   position: absolute; right: max(14px, env(safe-area-inset-right)); top: max(12px, env(safe-area-inset-top));
   font-size: 16px; padding: 7px 16px; border-radius: 999px; background: var(--ink);
@@ -219,15 +228,16 @@ body.photo #touch .pad .boost { display: none; }
 #hud .hud-swap:hover, #hud .hud-swap:focus-visible { color: var(--gold); border-color: var(--gold); outline: none; }
 #hud .hud-bottom { position: absolute; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 9px; width: min(640px, 92vw); }
 #hud .hud-hint {
-  font-size: 19px; font-style: italic; text-align: center; min-height: 1.3em; line-height: 1.3;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.6); opacity: 0.94;
-  /* a soft shade behind the line, so it reads over a lit lantern or a glowing pod at night */
-  padding: 4px 28px; border-radius: 999px;
-  background: radial-gradient(closest-side, rgba(3, 12, 14, 0.5), rgba(3, 12, 14, 0.28) 60%, rgba(3, 12, 14, 0));
+  font-size: 20px; font-weight: 500; font-style: italic; text-align: center; min-height: 1.3em; line-height: 1.3; max-width: 100%;
+  color: #fbf4e4; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75), 0 0 10px rgba(0, 0, 0, 0.55); opacity: 0.97;
+  /* the same dark glass as the other controls, so the line reads over a lit bloom or a lantern, by day or night */
+  padding: 6px 24px; border-radius: 999px;
+  background: rgba(5, 14, 16, 0.58); border: 1px solid rgba(217, 181, 106, 0.14);
+  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
 }
-#hud .hud-hint:empty { background: none; }
+#hud .hud-hint:empty { background: none; border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }
 #hud .hud-hint.in { animation: hintIn 0.6s ease; }
-@keyframes hintIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 0.94; transform: none; } }
+@keyframes hintIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 0.97; transform: none; } }
 #hud .hud-gauge { display: flex; align-items: center; gap: 12px; padding: 6px 14px 6px 12px; border-radius: 999px; background: var(--ink); border: 1px solid rgba(217, 181, 106, 0.2); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 #hud .cells { display: flex; gap: 3px; }
 #hud .cells i {
@@ -237,7 +247,10 @@ body.photo #touch .pad .boost { display: none; }
   filter: drop-shadow(0 0 calc(var(--k) * 4px) rgba(255, 170, 60, 0.9));
 }
 #hud .honey { font-size: 15px; opacity: 0.85; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
-#hud .honey b { font-weight: 600; color: var(--gold); margin-right: 3px; }
+#hud .honey b { font-weight: 600; color: var(--gold); margin-right: 1px; }
+#hud .honey.bump b { animation: bump 0.9s ease-out; }
+#hud .honey.done { color: var(--gold); opacity: 1; }
+@keyframes bump { 0% { transform: scale(1.6); text-shadow: 0 0 12px rgba(255, 190, 90, 0.95); } 100% { transform: none; text-shadow: none; } }
 #hud .hud-arrow { position: absolute; left: 0; top: 0; width: 28px; height: 28px; color: var(--gold); opacity: 0; transition: opacity 0.4s; filter: drop-shadow(0 0 6px rgba(0,0,0,0.8)); }
 #hud .hud-arrow svg { width: 28px; height: 28px; }
 #hud .hud-panel, #hud .hud-help {
@@ -269,6 +282,41 @@ body.photo #touch .pad .boost { display: none; }
 #hud .hud-flash.go { animation: flash 0.5s ease-out; }
 @keyframes flash { 0% { opacity: 0.55; } 100% { opacity: 0; } }
 body.locked #hud .hud-swap, body.locked #hud .hud-corner { opacity: 0.55; }
+
+
+/* ---- the garden's finale, the sound nudge, small additions ------------------------ */
+#hud .hud-finale {
+  position: absolute; left: 50%; top: 24%; transform: translateX(-50%); width: min(920px, 96vw); text-align: center; padding: 34px 20px 30px;
+  pointer-events: none; opacity: 0; transition: opacity 1.6s ease;
+  /* a soft dark pool behind the card, so it reads over the brightest bloom */
+  background: radial-gradient(closest-side, rgba(3, 10, 12, 0.62), rgba(3, 10, 12, 0.34) 62%, rgba(3, 10, 12, 0));
+}
+#hud .hud-finale.on { opacity: 1; }
+#hud .hud-finale h2 {
+  margin: 0; font-weight: 400; font-size: clamp(24px, 4.6vw, 46px); letter-spacing: 0.24em; text-transform: uppercase; padding-left: 0.24em;
+  color: #fbf4e4; text-shadow: 0 0 26px rgba(255, 190, 100, 0.5), 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+#hud .hud-finale .rule { display: block; width: min(220px, 40vw); height: 1px; margin: 0.9em auto; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+#hud .hud-finale p { margin: 0; font-size: clamp(17px, 2.4vw, 22px); font-weight: 500; font-style: italic; letter-spacing: 0.04em; color: #fbf4e4; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.7); }
+#hud .hud-nudge {
+  position: absolute; left: 50%; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 92px); transform: translate(-50%, 8px);
+  width: max-content; max-width: 94vw;
+  display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 18px; border-radius: 999px;
+  background: rgba(5, 14, 16, 0.78); border: 1px solid rgba(217, 181, 106, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-size: 18px; font-style: italic; white-space: nowrap; max-width: 94vw;
+  opacity: 0; pointer-events: none; transition: opacity 0.7s ease, transform 0.7s ease;
+}
+#hud .hud-nudge.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+#hud .hud-nudge button { background: rgba(217, 181, 106, 0.2); border: 1px solid var(--gold); border-radius: 999px; padding: 5px 14px; font-size: 16px; font-style: normal; color: var(--gold); }
+#hud .hud-nudge button.quiet { background: transparent; border-color: transparent; color: var(--ivory); opacity: 0.7; padding: 5px 9px; }
+#hud .hud-nudge button:hover, #hud .hud-nudge button:focus-visible { background: rgba(217, 181, 106, 0.34); outline: none; }
+#hud .row button.warn { color: #f0b9a0; border-color: #f0b9a0; }
+body[data-input=touch] #hud .hud-nudge { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 74px); font-size: 17px; }
+/* held in portrait, the touch controls fill the lower screen: the offer sits above them */
+@media (orientation: portrait) { body[data-input=touch] #hud .hud-nudge { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 264px); } }
+@media (orientation: landscape) and (max-height: 500px) { #hud .hud-nudge { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 120px); } }
+@media (max-width: 600px) { #hud .hud-nudge { white-space: normal; justify-content: center; flex-wrap: wrap; border-radius: 22px; padding: 8px 12px; row-gap: 6px; } #hud .hud-nudge span { flex-basis: 100%; text-align: center; } }
+@media (prefers-reduced-motion: reduce) { #hud .hud-finale, #hud .hud-nudge { transition-duration: 0.01s; } #hud .honey.bump b { animation: none; } }
 
 /* ---- touch controls ---------------------------------------------------------- */
 #touch { display: none; position: fixed; inset: auto 0 0 0; height: 0; z-index: 7; pointer-events: none; }
