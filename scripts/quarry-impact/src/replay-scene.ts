@@ -17,7 +17,7 @@ export function captureReplayFrame(cars:readonly Vehicle[],props:readonly Replay
 }
 /** Replay copies are never stepped by physics. The live vehicles are retained intact. */
 export class ReplayScene {
-  readonly cars:Vehicle[]=[];readonly props:T.Mesh[]=[];private eventIndex=0;private time=-1;
+  readonly cars:Vehicle[]=[];readonly props:T.Mesh[]=[];private eventIndex=0;private time=-1;private incomplete=false;private visibility=new Map<T.Object3D,boolean>();
   constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[],ground?:VehicleGround){
     replayCourseId(doc.meta);
     if(sourceProps.length!==doc.meta.props)throw Error('This replay requires the recorded course prop set.');
@@ -28,14 +28,27 @@ export class ReplayScene {
       for(const original of sourceProps){const mesh=original.mesh.clone();this.props.push(mesh);scene.add(mesh);}
     }catch(error){this.dispose();throw error;}
   }
-  seek(time:number){return withWreckBatch(()=>this.seekNow(time));}
-  private seekNow(time:number){
-    if(time<this.time){for(const c of this.cars){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;}
+  seek(time:number){this.seekChunk(time,Infinity);}
+  /** One synchronous slice; no background work survives closing the studio.
+   * Event deformation is indivisible, so a single contact may exceed the budget. */
+  seekChunk(time:number,budgetMs=8):boolean{return withWreckBatch(()=>this.seekNow(time,budgetMs));}
+  private show(ready:boolean){
+    if(!ready){for(const o of [...this.cars.map(c=>c.root),...this.props])if(!this.visibility.has(o)){this.visibility.set(o,o.visible);o.visible=false;}}
+    else{for(const [o,visible]of this.visibility)o.visible=visible;this.visibility.clear();}
+  }
+  private seekNow(time:number,budgetMs:number){
+    const start=performance.now();
+    // Contact eligibility uses ancestor visibility; restore it during work.
+    this.show(true);
+    // A new request may reverse partway through reconstruction, before time
+    // has been committed to a completed frame.
+    if(time<this.time||(this.incomplete&&this.eventIndex>0&&this.doc.events[this.eventIndex-1].time>time)){for(const c of this.cars){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;this.time=-1;}
     while(this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];
       c.current.fromArray(e.pose);c.currentQ.fromArray(e.pose,3).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.root.updateMatrixWorld(true);
       if(e.kind==='repair'){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}
       if(e.kind==='hit'){c.health=e.health!;const point=new T.Vector3().fromArray(e.point!).applyQuaternion(c.currentQ).add(c.current),direction=new T.Vector3().fromArray(e.direction!).applyQuaternion(c.currentQ),paint=e.paint===undefined?undefined:new T.Color(e.paint);if(e.scar)c.scar(point,direction,paint);else c.hit(point,direction,e.damage!,e.time,true,paint);}
+      if(performance.now()-start>=budgetMs&&this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){this.incomplete=true;this.show(false);return false;}
     }
     const {a,b,alpha}=replayBracket(this.doc.frames,time),av=a.values,bv=b.values;
     const stride=replayCarStride(this.doc.meta);
@@ -56,7 +69,7 @@ export class ReplayScene {
       });
       for(const material of c.brakeLights)material.emissiveIntensity=av[o+53]?3.5:.8;
     });
-    this.props.forEach((p,i)=>{const o=this.cars.length*stride+i*7;p.position.fromArray(av,o).lerp(new T.Vector3().fromArray(bv,o),alpha);p.quaternion.fromArray(av,o+3).slerp(q.fromArray(bv,o+3),alpha);});this.time=time;
+    this.props.forEach((p,i)=>{const o=this.cars.length*stride+i*7;p.position.fromArray(av,o).lerp(new T.Vector3().fromArray(bv,o),alpha);p.quaternion.fromArray(av,o+3).slerp(q.fromArray(bv,o+3),alpha);});this.time=time;this.incomplete=false;this.show(true);return true;
   }
-  dispose(){this.cars.forEach(c=>c.dispose());this.props.forEach(p=>p.removeFromParent());}
+  dispose(){this.visibility.clear();this.cars.forEach(c=>c.dispose());this.props.forEach(p=>p.removeFromParent());}
 }

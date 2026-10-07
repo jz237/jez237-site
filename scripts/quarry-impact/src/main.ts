@@ -279,7 +279,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
       activateVenue(targetVenue);cars=view!.cars;mode=doc.meta.mode;setQuarryMode();view!.props.forEach(p=>staticShadows?.bindReceivers(p));
     }
     hide(activeVenue.checkpoint);studioRestore=restore;
-    studio=new ReplayStudio(ui,cars,doc,time=>view?.seek(time),closeStudio,savedCamera.exposure,savedName,activeVenue.course.height);return true;
+    studio=new ReplayStudio(ui,cars,doc,time=>view?.seekChunk(time),closeStudio,savedCamera.exposure,savedName,activeVenue.course.height);return true;
   }catch(error){studio=null;studioRestore=null;restore();throw error;}
 }
 function studioButtons(container:Element|null){
@@ -1256,7 +1256,7 @@ function frame(now: number) {
     frames.push(raw * 1000);
     if (frames.length > 600) frames.shift();
   }
-  if(studio){studio.update(dt);}
+  if(studio){studio.update(dt);if(studio.seeking)return;}
   else if(online?.active) {
     if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.setInput({throttle:0,steer:0,brake:1,handbrake:false});
     const s=online.network.sample();if(s){online.apply(s,dt);quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
