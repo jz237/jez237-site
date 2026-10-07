@@ -100,6 +100,43 @@ the night: cool, through the vault's iron (its ribs, purlins and columns shadow
 the beds, as the sun's do by day), with faint moon shafts, stars and the moon in
 the roof. APX-9's wing lattice glows at its nodes.
 
+### The look: lens, stained glass, water, weather
+
+Interactive modes only; the film's pixels are untouched (`filmidentity`, `determinism`).
+
+- **Eye adaptation** (`render/pipeline.js`, `LensPass`): an 8x8 light meter (log-average luminance
+  of each cell, scene-linear, read back without a stall, centre-weighted) eases the exposure
+  *down* when a frame is over-bright (a copper bloom lit by the low sun, a lamp filling the
+  frame): the pupil closes in about 0.6 s, opens in about 1.9 s. It never brightens, and frames
+  already in range (every ordinary flying view measures 0.5 stop or more below the threshold)
+  are untouched. Threshold, gain and floor are `autoThreshold`/`autoGain`/`autoMin` in the look.
+- **Streaks and halation** (same pass): lights above a threshold are gathered at a quarter of the
+  resolution, stretched sideways by three dilated blurs (a cool anamorphic streak) and softened
+  both ways (a warm halation), added in the grade. Strongest at night (the lanterns), fading as a
+  close-up dims the frame. Off on `low`.
+- **Stained glass** (`world/lightfield.js`): the same trace that lets the vault's iron shadow the key
+  light reads which pane of the glazing the light came through; about one pane in four is stained
+  (ruby, amber, teal, violet), so coloured pools lie among the iron's shadows, and the panes
+  themselves are stained where they are seen (the glazing's shader knows the same lattice). The
+  pools do not travel with the hour: the key light's direction is fixed, only its strength and
+  colour change.
+- **Clouds**: by day slow soft shadows drift over the house (the key light seen through a noise
+  a long way up).
+- **The fountain** (`explore/fountain.js`): the water is a PBR surface whose normal follows a small
+  height field: a slow swell, rings from drops (the armillary's drips; a downpour's when it rains),
+  and wake rings where APX-9 flies low over the basin; a faint caustic web glows in it and plays as
+  moving light on the column and the waterline. It reflects the vault and the lamps' glints.
+- **Rain** (`R`, the menu's Rain, `?rain=1`; `explore/rain.js`): builds over a few seconds. The sky
+  closes over (`sky.js`, explore variant only), the sun and its beams go behind cloud, the fog turns
+  grey, the lamps kindle by day, the butterflies roost, the stone and path go wet (the lamps mirrored
+  in them); streaks of rain fall outside the glass (a ring of thousands gathered round the camera, none
+  inside the house); drops bead and run down the panes, bending the glass's normal so the lamps and
+  lightning glint in each (no refraction: there is no transmission pass); ripples ring the fountain;
+  rain and thunder sound (with sound on). In a downpour the sky lights now and then, twice in quick
+  succession, thunder following: the flash is a cool key light, so the vault's ribs shadow the beds
+  for an instant. Flashes are soft (a short rise, a few seconds apart, never a strobe) and are left out
+  when reduced motion is asked for (the thunder stays).
+
 ### What you can do in the garden
 
 - **Pollinate any bloom**: descend gently onto it. Blooms open wide for an
@@ -222,6 +259,7 @@ is found in the project, via `$ESBUILD`, or in wrangler's own install.
 | `F` or hold left mouse | boost |
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
 | `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
+| `R` | bring the rain, or clear it |
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
 
@@ -299,6 +337,7 @@ the governor off.
 | `?mode=film\|fly\|follow` | open a mode directly (without it, and without any film-only parameter, a landing screen asks) |
 | `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.27 dusk, 0.5 dawn, 0.86 golden hour, 1 its peak; default 0.86) |
 | `?tod=live` | the hour follows your own clock (the menu's *My clock* keeps that choice) |
+| `?rain=1` | start in the rain (`R` clears it) |
 | `?garden=fresh` | ignore the saved garden for this visit |
 | `?touch=1\|0` | force the touch interface on or off |
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
@@ -399,7 +438,7 @@ src/world/                     escapement, root crown, roots, hero flower (+ por
 src/creatures/                 apx9 (the resident pollinator, built from APX-9's blueprint in apx9Shape),
                                bee (honeybee, carpenter), butterfly, beetle/ladybird, dragonfly, bird rigs + choreography
 src/direction/                 beats (story timing), camera tools, shot list, director
-src/render/pipeline.js         HDR MSAA → bokeh DOF → light shafts → bloom → grade
+src/render/pipeline.js         HDR MSAA → bokeh DOF → light shafts → bloom → lens (eye adaptation, streaks, halation) → grade
 src/render/governor.js         frame governor (resolution / detail for a steady frame rate); singlepass.js (flat glass
                                and wings drawn single-pass)
 src/audio/score.js             procedural score (OfflineAudioContext)
@@ -408,6 +447,8 @@ src/ui/hud.js, landing.js      interactive-mode HUD (gauge, hints, help, menu, p
 src/ui/perfmeter.js            the ?debug=1 frame-rate readout
 src/input/input.js             keyboard, mouse / pointer lock, wheel, touch joystick + buttons, pinch, gamepads
 src/explore/                   the interactive modes:
+  fountain.js · rain.js · weather.js  the living fountain (water, wake, caustic stone) · weather (rain, lightning, the
+                                 sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;

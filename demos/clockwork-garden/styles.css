@@ -310,6 +310,7 @@ body.locked #hud .hud-swap, body.locked #hud .hud-corner { opacity: 0.55; }
 #hud .hud-nudge button { background: rgba(217, 181, 106, 0.2); border: 1px solid var(--gold); border-radius: 999px; padding: 5px 14px; font-size: 16px; font-style: normal; color: var(--gold); }
 #hud .hud-nudge button.quiet { background: transparent; border-color: transparent; color: var(--ivory); opacity: 0.7; padding: 5px 9px; }
 #hud .hud-nudge button:hover, #hud .hud-nudge button:focus-visible { background: rgba(217, 181, 106, 0.34); outline: none; }
+#hud .row[hidden] { display: none; }
 #hud .row button.warn { color: #f0b9a0; border-color: #f0b9a0; }
 body[data-input=touch] #hud .hud-nudge { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 74px); font-size: 17px; }
 /* held in portrait, the touch controls fill the lower screen: the offer sits above them */
