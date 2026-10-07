@@ -177,6 +177,27 @@ Interactive modes only (`explore/scenery.js` builds the land and its trees; `exp
   that fade near the lens; **flower borders** along the walks and round the glasshouse's foot; autumn **leaves** drifting down
   past the glass (not on `low`; none in rain).
 
+### The reflecting pool and the birds
+
+Interactive modes only (`explore/pond.js`, `explore/birds.js`).
+
+- **The pool** lies on the west lawn, a raised oval of still water in two courses of stone, seen through the glasshouse's west
+  glass. The water **reflects what is really there**: a second, small render of the outdoors (trees, wall, hills, the sky, the
+  birds, the reeds and the ducks, nothing of the glasshouse), from the camera mirrored in the water's plane and clipped to what
+  stands above it, is read back in the water's shader through a Fresnel term and bent by its ripples, so the far bank's trunks and
+  the evening sky stand upside down in it. The pass is skipped when the pool is out of the frame, is a third of the screen's
+  width, and is absent on `low` (the sky's own reflection stands in) and under a frame-rate squeeze.
+- **The surface** is the fountain's (a slow swell, rings from drops, a downpour's when it rains, wake rings) at the pool's
+  scale: sparser drops, rings from wherever a duck has been.
+- **Life in it**: water lilies and flowers on their pads, reeds clumped along some stretches of the margin that bend and nod in the
+  breeze, eight mallards drifting about on slow loops that turn to face their way, bank into it, and now and then tip up to dabble.
+- **Birds**: every flight is an analytic path in the vertex shader (one draw call each, nothing on the CPU). **Geese** cross the
+  sky high up in V formations, gliding now and then (one flock crosses soon after you arrive; they stay home in rain);
+  **swallows** dart in loose streams over the lawns either side of the house and skim the pool, by day; a **murmuration of
+  starlings** swirls above the roof at dusk, at dawn and in the evening gold, one cloud that stretches, folds and turns with a wave
+  of density running through it. They are dark against the sky, catch the low sun on the wing's edge and through the wing when it
+  stands behind them, and thin into the haze with distance.
+
 ### What you can do in the garden
 
 - **Pollinate any bloom**: descend gently onto it. Blooms open wide for an
@@ -491,6 +512,7 @@ src/explore/                   the interactive modes:
   fountain.js · rain.js · weather.js  the living fountain (water, wake, caustic stone) · weather (rain, lightning, the
                                  sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
   scenery.js · outside.js        the land, its trees and light · what stands on it (manor, temple, gate, lamps, borders, shadows, leaves)
+  pond.js · birds.js             the reflecting pool (mirror pass, lilies, reeds, ducks) · geese, swallows and a murmuration of starlings
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
