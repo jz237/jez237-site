@@ -8,14 +8,18 @@ import ts from 'typescript';
 import {freezeSceneryTransforms} from '../src/render-work';
 import {dentGeometry,prepareWreckGeometry,repairWreckGeometry} from '../src/wreck-geometry';
 import * as coupe from '../src/coupe-realism';
+import * as normals from '../src/wreck-normals';
+import * as batch from '../src/wreck-batch';
+import * as construction from '../src/vehicle-construction';
 import {restorePerformanceBytes} from './performance-invariants';
+import {restoreDriveFeelBytes} from './drive-feel-invariants';
 import {Sound} from '../src/audio';
 import {gunzipSync} from 'node:zlib';
 
 test('the optimization preserves every preceding source snapshot',()=>{
  const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url)),hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
  const manifest=JSON.parse(read('source/performance-revision.json').toString());
- for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(read(p)),e.after,p);assert.equal(hash(restorePerformanceBytes(p,read(p))),e.before,p);}
+ for(const [p,e]of Object.entries<any>(manifest.files)){assert.equal(hash(restoreDriveFeelBytes(p,read(p))),e.after,p);assert.equal(hash(restorePerformanceBytes(p,read(p))),e.before,p);}
 });
 
 test('static transform reuse keeps world poses and LOD visibility while dynamic siblings move',()=>{
@@ -26,8 +30,10 @@ test('static transform reuse keeps world poses and LOD visibility while dynamic 
 });
 
 test('impact bounds preserve exact dent results through transformed, repeated and repaired hits',()=>{
- const source=restorePerformanceBytes('src/wreck-geometry.ts',fs.readFileSync(new URL('../src/wreck-geometry.ts',import.meta.url))).toString();
- const exports:any={};runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:(name:string)=>name==='three'?T:coupe});
+ // Compare the current construction model with its unculled counterpart;
+ // preceding algorithms remain protected by the frozen snapshot test above.
+ const source=fs.readFileSync(new URL('../src/wreck-geometry.ts',import.meta.url)).toString().replace(/if \(impactBounds\.copy\([^\n]+return 0;/,'');
+ const exports:any={};runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:(name:string)=>name==='three'?T:name.includes('construction')?construction:name.includes('wreck-normals')?normals:name.includes('wreck-batch')?batch:coupe});
  for(let variant=0;variant<3;variant++){
   const make=()=>{const root=new T.Group(),mesh=new T.Mesh(new T.BoxGeometry(1.7,1.1,.1,20,12,2),new T.MeshStandardMaterial());mesh.name='panel_test';mesh.position.set(variant-1,.8,.2);mesh.rotation.set(.2,.3*variant,.1);mesh.scale.set(1.1,.8,1.3);root.add(mesh);prepareWreckGeometry(root);return mesh;};
   const actual=make(),expected=make();const direction=new T.Vector3(.1,0,-1).normalize();
