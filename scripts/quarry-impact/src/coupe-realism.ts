@@ -119,14 +119,20 @@ export function finishCoupeDent(panel: T.Mesh, contact: T.Vector3, direction: T.
   const rest = panel.userData.original as Float32Array, authored = panel.userData.originalNormals as Float32Array;
   const p = new T.Vector3(), n = new T.Vector3(), flow = new T.Vector3(), across = new T.Vector3(), sum = new T.Vector3();
   const radius = Math.min(1.48, .65 + damage * .034);
+  // Bodywork normals are packed floats. Preserve the original arithmetic and
+  // Float32 writes while avoiding temporary vectors for every welded corner.
+  const packed=normal instanceof T.BufferAttribute&&normal.array instanceof Float32Array&&normal.itemSize===3&&!normal.normalized?normal.array:null;
   for (const group of groups) {
-    sum.set(0, 0, 0);
-    for (const i of group) {
-      n.fromBufferAttribute(normal, i).sub(p.fromArray(restGeometric, i*3)).add(p.fromArray(authored, i*3));
-      sum.add(n);
+    if(packed){
+      let x=0,y=0,z=0;
+      for(const i of group){const at=i*3;x+=(packed[at]-restGeometric[at])+authored[at];y+=(packed[at+1]-restGeometric[at+1])+authored[at+1];z+=(packed[at+2]-restGeometric[at+2])+authored[at+2];}
+      const inverse=1/(Math.sqrt(x*x+y*y+z*z)||1);x*=inverse;y*=inverse;z*=inverse;
+      for(const i of group){const at=i*3;packed[at]=x;packed[at+1]=y;packed[at+2]=z;}
+    }else{
+      sum.set(0, 0, 0);
+      for (const i of group) {n.fromBufferAttribute(normal, i).sub(p.fromArray(restGeometric, i*3)).add(p.fromArray(authored, i*3));sum.add(n);}
+      sum.normalize();for (const i of group) normal.setXYZ(i, sum.x, sum.y, sum.z);
     }
-    sum.normalize();
-    for (const i of group) normal.setXYZ(i, sum.x, sum.y, sum.z);
   }
   normal.needsUpdate = true;
   if (!axis) return;

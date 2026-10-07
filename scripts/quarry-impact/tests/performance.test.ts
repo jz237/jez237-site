@@ -8,6 +8,7 @@ import ts from 'typescript';
 import {freezeSceneryTransforms} from '../src/render-work';
 import {dentGeometry,prepareWreckGeometry,repairWreckGeometry} from '../src/wreck-geometry';
 import * as coupe from '../src/coupe-realism';
+import * as normals from '../src/wreck-normals';
 import * as construction from '../src/vehicle-construction';
 import {restorePerformanceBytes} from './performance-invariants';
 import {restoreDriveFeelBytes} from './drive-feel-invariants';
@@ -31,7 +32,7 @@ test('impact bounds preserve exact dent results through transformed, repeated an
  // Compare the current construction model with its unculled counterpart;
  // preceding algorithms remain protected by the frozen snapshot test above.
  const source=fs.readFileSync(new URL('../src/wreck-geometry.ts',import.meta.url)).toString().replace(/if \(impactBounds\.copy\([^\n]+return 0;/,'');
- const exports:any={};runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:(name:string)=>name==='three'?T:name.includes('construction')?construction:coupe});
+ const exports:any={};runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:(name:string)=>name==='three'?T:name.includes('construction')?construction:name.includes('wreck-normals')?normals:coupe});
  for(let variant=0;variant<3;variant++){
   const make=()=>{const root=new T.Group(),mesh=new T.Mesh(new T.BoxGeometry(1.7,1.1,.1,20,12,2),new T.MeshStandardMaterial());mesh.name='panel_test';mesh.position.set(variant-1,.8,.2);mesh.rotation.set(.2,.3*variant,.1);mesh.scale.set(1.1,.8,1.3);root.add(mesh);prepareWreckGeometry(root);return mesh;};
   const actual=make(),expected=make();const direction=new T.Vector3(.1,0,-1).normalize();

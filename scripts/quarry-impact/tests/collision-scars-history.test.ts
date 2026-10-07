@@ -1,9 +1,10 @@
+import {restoreLargeFieldBytes} from './large-field-performance-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import ts from 'typescript';
 import {readCollisionScarsPrevious,restoreCollisionScarsBytes,verifyCollisionScarsRevision} from './collision-scars-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreLargeFieldBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('light collision marks preserve all 807 historic fixtures and every out-of-scope source and asset',()=>{verifyCollisionScarsRevision();});
 test('the collision release leaves calm cameras, AI, controls, scoring, courses and replay orchestration exact',()=>{
  const before=ts.createSourceFile('before.ts',readCollisionScarsPrevious('src/main.ts').toString(),ts.ScriptTarget.Latest,true);

@@ -1,3 +1,4 @@
+import {computeWreckNormals,computeWreckBounds} from './wreck-normals';
 import * as T from 'three';
 import { finishCoupeDent } from './coupe-realism';
 import {constructionResponse,type ConstructionRole} from './vehicle-construction';
@@ -103,9 +104,9 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
   if (maximum) {
     position.needsUpdate = true;
     if (wear) wear.needsUpdate = true;
-    g.computeVertexNormals();
+    computeWreckNormals(g);
     finishCoupeDent(mesh, contact.clone().applyMatrix4(fromModel), direction.clone().transformDirection(fromModel), damage);
-    g.computeBoundingBox(); g.computeBoundingSphere();
+    computeWreckBounds(g);
   }
   return maximum;
 }
@@ -120,7 +121,7 @@ function dentEngine(mesh:T.Mesh,contact:T.Vector3,direction:T.Vector3,damage:num
   shift.addScaledVector(direction,damage*weight*.0023);if(shift.length()>.16)shift.setLength(.16);
   const p=new T.Vector3(),from=mesh.userData.wreckFromModel as T.Matrix4;
   for(let i=0;i<rest.count;i++){p.fromBufferAttribute(rest,i).add(shift).applyMatrix4(from);g.attributes.position.setXYZ(i,p.x,p.y,p.z);}
-  g.attributes.position.needsUpdate=true;g.computeBoundingBox();g.computeBoundingSphere();return weight;
+  g.attributes.position.needsUpdate=true;computeWreckBounds(g);return weight;
 }
 
 export function repairWreckGeometry(mesh: T.Mesh) {
@@ -133,5 +134,5 @@ export function repairWreckGeometry(mesh: T.Mesh) {
   if (g.attributes.impactAxis) { (g.attributes.impactAxis.array as Float32Array).fill(0); g.attributes.impactAxis.needsUpdate = true; }
   if(g.attributes.transferPaint){(g.attributes.transferPaint.array as Float32Array).fill(0);g.attributes.transferPaint.needsUpdate=true;}
   mesh.userData.engineShift?.set(0,0,0);
-  g.computeBoundingBox(); g.computeBoundingSphere();
+  computeWreckBounds(g);
 }
