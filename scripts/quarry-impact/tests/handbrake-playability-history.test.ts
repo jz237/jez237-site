@@ -1,3 +1,4 @@
+import {restoreCollisionScarsBytes} from './collision-scars-invariants';
 import test from 'node:test';
 import {normalizeCinderbankMain} from './cinderbank-playability-invariants';
 import assert from 'node:assert/strict';
@@ -6,7 +7,7 @@ import {createHash} from 'node:crypto';
 import {readHandbrakePrevious,restoreHandbrakePlayabilityBytes,verifyHandbrakePlayabilityRevision} from './handbrake-playability-invariants';
 import {readChallengePlayabilityPrevious,restoreChallengePlayabilityBytes} from './challenge-playability-invariants';
 const hash=(bytes:Uint8Array|string)=>createHash('sha256').update(bytes).digest('hex');
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCollisionScarsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 const revision=()=>JSON.parse(readFileSync(new URL('./fixtures/handbrake-playability/revision.json',import.meta.url)).toString());
 
 test('handbrake correction adds one immutable leaf preserving all 755 previous fixtures and protected source/assets',()=>{

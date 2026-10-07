@@ -1,3 +1,4 @@
+import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
@@ -53,7 +54,7 @@ async function physicsMainHarness(names:readonly string[],overrides:Record<strin
  const venue={course:{...getRaceCourse('quarry-v1'),...surface,outside:()=>false},props:[]},calls:{finish:string[];input:number;ai:number;recover:number;impacts:number}={finish:[],input:0,ai:0,recover:0,impacts:0};
  const context:any={T,...Cup,activeTimeTrial:null,structuredClone,activeClubRound:null,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,keys:new Set(),runSettled:false,quarry:{arenaLayout:{x:0,z:0,radius:45}},CAR_KINDS,DEFINITIONS,derbyGridSlot,directionForCar,eventDerbyOrder,checkRoute,lapProgress,stepScoreRespawns,courseRoute,courseRecoverySlot,vehicleContact,vehicleContactManifold,
   cars,physics:world,events,fx,state:'playing',elapsed:0,countdown:0,demo:false,autopilot:false,testInput:null,online:null,activeChallenge:undefined,waypointRace:null,activeVenue:venue,quarryVenue:venue,
-  eventOptions:readEventOptions(),demoOptions:{laps:2,duration:90},impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),telemetry:new SessionTelemetry(),collisions:0,
+  eventOptions:readEventOptions(),demoOptions:{laps:2,duration:90},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),telemetry:new SessionTelemetry(),collisions:0,
   drivers:{memory:new Map()},DERBY_ARENA:{x:0,z:0,radius:45},mode:'race',impactAudioSeverity:()=>0,
   toast(){},sound:{impact(){calls.impacts++;}},input(){calls.input++;return{throttle:1,steer:.25,brake:0,handbrake:false};},ai(){calls.ai++;return{throttle:.6,steer:0,brake:0,handbrake:false};},recover(){calls.recover++;},finish(title:string){calls.finish.push(title);context.state='result';},...overrides};
  const functions=mainBoundaries(names,context);return{context,functions,calls,cars,world,events,dispose(){cars.forEach(c=>c.dispose());events.free();world.free();}};
@@ -90,7 +91,7 @@ function base(overrides:Record<string,unknown>={}){
   ui,document:{createElement:node,querySelector:ui.querySelector,hidden:false},localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>{writes.push(key);storage.set(key,value);},removeItem:(key:string)=>{storage.delete(key);}},crypto:{randomUUID:()=>uuid},
   sound:{pause(){},clearCars(){},attach(){},async init(){},impact(){}},captureReplay(){calls.capture++;},studioButtons(){calls.studio++;},showClubCup(_ui:unknown,_cup:unknown,_kind:unknown,callbacks:unknown){context.board=callbacks;},
   bankRun(){},async start(){calls.start++;context.state='countdown';context.runSettled=false;return true;},createCars(){},menu(){calls.menu++;context.state='menu';context.activeClubRound=null;},archiveReplay(){},toast(){},isPlayer:(c:any)=>c.id===0,
-  updateHud(){},saved:{best:{}},persist(){throw Error('Cup leaked into ordinary records');},eventLabel:()=> 'TEST EVENT',resultTitle:'',collisions:0,impactAdjudicator:new ImpactAdjudicator(),drivers:{memory:new Map(),reset(){}},physics:{step(){calls.physics++;}},events:{clear(){},drainContactForceEvents(){}},fx:{reset(){},update(){}},vehicleFire:undefined,puddleSplashes:undefined,quarry:{resetProps(){},arenaLayout:{x:0,z:0,radius:45}},scene:new T.Scene(),traffic:true,garage:readGarage(),DERBY_ARENA:{x:0,z:0,radius:45},setQuarryMode(){},
+  updateHud(){},saved:{best:{}},persist(){throw Error('Cup leaked into ordinary records');},eventLabel:()=> 'TEST EVENT',resultTitle:'',collisions:0,collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),drivers:{memory:new Map(),reset(){}},physics:{forEachRigidBody(){},step(){calls.physics++;}},events:{clear(){},drainContactForceEvents(){}},fx:{reset(){},update(){}},vehicleFire:undefined,puddleSplashes:undefined,quarry:{resetProps(){},arenaLayout:{x:0,z:0,radius:45}},scene:new T.Scene(),traffic:true,garage:readGarage(),DERBY_ARENA:{x:0,z:0,radius:45},setQuarryMode(){},
   ensureVenue:(id:string)=>id==='quarry-v1'?quarryVenue:ironfieldVenue,activateVenue(venue:unknown){context.activeVenue=venue;},impactAudioSeverity:()=>0,
   ...overrides};
  return {context,calls,nodes,storage,writes,car};

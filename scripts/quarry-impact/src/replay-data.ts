@@ -2,7 +2,7 @@ import {normalizeSetup,type Setup} from './garage';
 import {isCarKind,type CarKind,type Mode} from './rules';
 import {isCourseId,resolveCourseId,type CourseId} from './course-id';
 export const REPLAY_STRIDE=56,REPLAY_HZ=20,REPLAY_MAX_SECONDS=1800,REPLAY_MAX_BYTES=192*1024*1024;
-export type VisualEvent={kind:'hit'|'repair'|'jump';pose:number[];point?:number[];direction?:number[];damage?:number;health?:number;paint?:number};
+export type VisualEvent={kind:'hit'|'repair'|'jump';pose:number[];point?:number[];direction?:number[];damage?:number;health?:number;paint?:number;scar?:boolean};
 export type ReplayEvent=VisualEvent&{time:number;car:number};
 export type ReplayCar={id:number;kind:CarKind;setup:Setup};
 export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];props:number;created:string;tyreModel?:1;courseId?:CourseId};
@@ -70,7 +70,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
   prior=-1;const events:ReplayEvent[]=h.events.map((e:any)=>{
     if(!e||!['hit','repair','jump'].includes(e.kind)||!Number.isInteger(e.car)||e.car<0||e.car>=cars.length||typeof e.time!=='number'||!Number.isFinite(e.time)||e.time<prior||e.time<0||e.time>REPLAY_MAX_SECONDS||(!finiteArray(e.pose,7)||!validQuaternion(e.pose,3)))return fail();prior=e.time;
     const base:ReplayEvent={kind:e.kind,car:e.car,time:e.time,pose:e.pose};
-    if(e.kind==='hit'){if(!finiteArray(e.point,3,1000)||!finiteArray(e.direction,3,2)||!Number.isFinite(e.damage)||e.damage<0||e.damage>1000||!Number.isFinite(e.health)||e.health<0||e.health>100||e.paint!==undefined&&(!Number.isInteger(e.paint)||e.paint<0||e.paint>0xffffff))return fail();return {...base,point:e.point,direction:e.direction,damage:e.damage,health:e.health,...(e.paint===undefined?{}:{paint:e.paint})};}
+    if(e.kind==='hit'){if(!finiteArray(e.point,3,1000)||!finiteArray(e.direction,3,2)||!Number.isFinite(e.damage)||e.damage<0||e.damage>1000||e.scar!==undefined&&typeof e.scar!=='boolean'||!Number.isFinite(e.health)||e.health<0||e.health>100||e.paint!==undefined&&(!Number.isInteger(e.paint)||e.paint<0||e.paint>0xffffff))return fail();return {...base,point:e.point,direction:e.direction,damage:e.damage,health:e.health,...(e.paint===undefined?{}:{paint:e.paint}),...(e.scar===undefined?{}:{scar:e.scar})};}
     return base;
   });
   const packed=bytes.slice(8+length),values=new Float32Array(packed.buffer);if(!values.every(v=>Number.isFinite(v)&&Math.abs(v)<=1e7))return fail();

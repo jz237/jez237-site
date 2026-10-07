@@ -55,8 +55,9 @@ export class OnlineView {
       const point=new T.Vector3().copy(hit.localPoint).applyQuaternion(c.currentQ).add(c.current);
       const direction=new T.Vector3().copy(hit.localDirection).applyQuaternion(c.currentQ);
       // Apply before authoritative condition so the collision which disables a car still deforms it.
-      c.hit(point,direction,hit.damage/c.specification.damageScale,s.elapsed,hit.tick<0);
-      if(this.network.connected && s.tick-hit.tick<8) {
+      if(hit.scar)c.scar(point,direction);
+      else c.hit(point,direction,hit.damage/c.specification.damageScale,s.elapsed,hit.tick<0);
+      if(!hit.scar && this.network.connected && s.tick-hit.tick<8) {
         this.sound.shot(hit.damage>15?'impact-heavy':hit.damage>5?'impact-medium':'impact-light',point,Math.min(.8,.25+hit.damage/30));
         if(hit.damage>7)this.sound.shot('glass',point,.15);
       }

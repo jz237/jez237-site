@@ -142,8 +142,8 @@ test('production authority applies the later Tern/Hatch crash and starts fresh c
     for(let tick=0;tick<15;tick++)sim.step(humans);
     const first=forces.find(e=>e.impulse>=1500)!,hard=forces.find(e=>e.time>first.time&&e.time-first.time<.28&&e.impulse>7000)!;
     assert.ok(first&&first.impulse<3232,`${kind} first physical impulse must be too small for .1 health damage`);assert.ok(hard,`${kind} fixture must include a harder later impact`);
-    assert.equal(sim.damage.length,2,`${kind} run ${run}: one damaging contact records one event per car`);
-    assert.ok(sim.damage.every(e=>e.damage>3),`${kind} run ${run}: actual authority must apply the later crash`);
+    assert.equal(sim.damage.filter(e=>!e.scar).length,2,`${kind} run ${run}: one damaging contact records one event per car`);
+    assert.ok(sim.damage.filter(e=>!e.scar).every(e=>e.damage>3),`${kind} run ${run}: actual authority must apply the later crash`);
     assert.ok(sim.cars.slice(0,2).every(c=>c.state.health<97));near(sim.cars[0].state.health,sim.cars[1].state.health);
     assert.ok(sim.damage.every(e=>e.tick*dt-first.time<.28));
    }

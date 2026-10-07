@@ -66,7 +66,7 @@ test('score derby real impacts award actual health loss and one knockout, then r
   for(const id of [0,1])assert.ok(Math.abs(board.get(id).damage-s.cars[id].state.inflicted)<1e-6);
   const dead=s.cars.find(c=>c.state.health===0)!;assert.ok(dead);const id=dead.state.id,ko=board.get(1-id).knockouts;assert.equal(s.recover(id),false);
   for(let i=0;i<270;i++)s.step(human);
-  assert.equal(board.get(1-id).knockouts,ko);assert.equal(dead.state.repair,1);assert.equal(dead.state.health,100);assert.deepEqual(dead.state.components,freshComponents());assert.equal(dead.state.dents!.length,0);assert.equal(board.get(id).respawnAt,0);assert.ok(validOnlineSnapshot(envelope(s)));
+  assert.equal(board.get(1-id).knockouts,ko);assert.equal(dead.state.repair,1);assert.equal(dead.state.health,100);assert.deepEqual(dead.state.components,freshComponents());assert.equal(dead.state.dents!.filter(d=>!d.scar).length,0);assert.ok(dead.state.dents!.every(d=>d.repair===dead.state.repair&&d.damage===0));assert.equal(board.get(id).respawnAt,0);assert.ok(validOnlineSnapshot(envelope(s)));
   s.elapsed=59.999;s.step(human);assert.equal(s.phase,'result');assert.deepEqual(s.ranking(),board.order(s.cars.map(c=>c.state)).map(c=>c.id));
  }finally{s.dispose();}
 });

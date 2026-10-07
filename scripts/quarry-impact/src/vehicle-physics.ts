@@ -52,7 +52,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setLinearDamping(.06).setAngularDamping(.85).setCcdEnabled(true).setCanSleep(true));
  const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):buggy?api.ColliderDesc.cuboid(.55,.013,.725).setTranslation(0,-.54,-.115):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
   .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:buggy?{x:0,y:.46,z:-.085}:{x:0,y:kind==='van'?.15:-.06,z:kind==='tern'?.16:kind==='marten'?-.22:0},{x:mass*((massHalfLength*2)**2+massHeight**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+massHeight**2)/12},{x:0,y:0,z:0,w:1})
-  .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
  // A van's windscreen slopes into the taller cargo shell. Its collision
  // hull follows that profile rather than putting an upright box above the nose.
@@ -66,11 +66,11 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  const roofDesc=buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
   api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65)
    .setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1);
- const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+ const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
  // Compound utility shell leaves the cargo opening empty above its floor.
  // All pieces share the chassis body, so suspension rays exclude them together.
  if(utility){
-  const part=(x:number,y:number,z:number,hx:number,hy:number,hz:number)=>world.createCollider(api.ColliderDesc.cuboid(hx,hy,hz).setTranslation(x,y,z).setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  const part=(x:number,y:number,z:number,hx:number,hy:number,hz:number)=>world.createCollider(api.ColliderDesc.cuboid(hx,hy,hz).setTranslation(x,y,z).setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
   part(0,-.03,.92,.854,.24,1.57);
   for(const side of [-1,1]){part(side*.785,0,-1.83,.09,.21,1.14);part(side*.60,-.10,-1.525,.145,.08,.38);}
   part(0,0,-2.92,.77,.21,.05);
@@ -78,7 +78,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  // A buggy has tube collision along the authored cage, not a filled cabin.
  // Coordinates below are model-local, then moved to the shared chassis datum.
  if(buggy){
-  const finish=(desc:R.ColliderDesc)=>world.createCollider(desc.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+  const finish=(desc:R.ColliderDesc)=>world.createCollider(desc.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
   const bar=(a:Vec,b:Vec,radius=.026)=>{
    const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,length=Math.hypot(dx,dy,dz),ny=dy/length;
    const scale=Math.sqrt(2*(1+ny)),rotation=scale<1e-8?{x:1,y:0,z:0,w:0}:{x:dz/length/scale,y:0,z:-dx/length/scale,w:scale/2};
@@ -122,7 +122,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   const layout=vehicleArmorLayout(kind,armor);
   for(const {points} of vehicleArmorCollisionHulls(layout)){
    const vertices=Float32Array.from(points.flatMap(p=>[p.x,p.y-layout.modelOffset,p.z]));
-   world.createCollider(api.ColliderDesc.convexHull(vertices)!.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(15000),body);
+   world.createCollider(api.ColliderDesc.convexHull(vertices)!.setMass(0).setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
   }
  }
  const controller=world.createVehicleController(body);controller.indexUpAxis=1;controller.setIndexForwardAxis=2;

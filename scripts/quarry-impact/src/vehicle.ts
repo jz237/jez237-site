@@ -1,3 +1,4 @@
+import {markCollision} from './collision-scars';
 import {BuggySuspension} from './buggy-suspension';
 import {applyComponentImpact} from './component-damage';
 import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
@@ -317,6 +318,13 @@ export class Vehicle {
     this.syncSuspension();
   }
   private wreckPartsWidth(){return DEFINITIONS[this.kind].halfWidth*.62;}
+  scar(point:T.Vector3,direction:T.Vector3,otherPaint?:T.Color){
+    this.root.updateMatrixWorld(true);
+    const contact=this.model.worldToLocal(point.clone()),axis=direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
+    if(!markCollision(this.panels,contact,axis,this.surfaceFinish,otherPaint))return false;
+    if(this.onVisualEvent){const inverse=this.root.quaternion.clone().invert();this.onVisualEvent({kind:'hit',pose:[...this.root.position.toArray(),...this.root.quaternion.toArray()],point:point.clone().sub(this.root.position).applyQuaternion(inverse).toArray(),direction:direction.clone().applyQuaternion(inverse).toArray(),damage:0,health:this.health,scar:true,...(otherPaint?{paint:otherPaint.getHex()}:{})});}
+    return true;
+  }
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
     damage *= this.specification.damageScale;
     this.impactEffects = {glass:false,debris:false};

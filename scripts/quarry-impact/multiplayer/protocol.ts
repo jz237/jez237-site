@@ -15,8 +15,8 @@ export type Controls = typeof NEUTRAL;
 export type Vec3 = { x: number; y: number; z: number };
 export type Quat = Vec3 & { w: number };
 export type Member = { id: number; name: string; kind: CarKind; connected: boolean; host: boolean; cupId?:string;loadout?:OnlineLoadout;liveryLayers?:number };
-export type DamageEvent = { id: number; tick: number; car: number; point: Vec3; direction: Vec3; localPoint: Vec3; localDirection: Vec3; repair: number; damage: number };
-export type Dent = Pick<DamageEvent,'id'|'localPoint'|'localDirection'|'damage'|'repair'>;
+export type DamageEvent = { id: number; tick: number; car: number; point: Vec3; direction: Vec3; localPoint: Vec3; localDirection: Vec3; repair: number; damage: number; scar?: boolean };
+export type Dent = Pick<DamageEvent,'id'|'localPoint'|'localDirection'|'damage'|'repair'|'scar'>;
 export type PropState = {id:number;p:Vec3;q:Quat;v:Vec3;av:Vec3};
 export type CarState = {
   id: number; kind: CarKind; setup?:OnlineSetup; p: Vec3; q: Quat; v: Vec3; av: Vec3;

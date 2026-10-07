@@ -1,3 +1,4 @@
+import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -70,7 +71,7 @@ async function fixture(kinds:readonly [CarKind,CarKind],gap:number,speed:number)
  const context:any={T,R,activeTimeTrial:null,cars,physics:world,events,fx,drivers,drivingObstacleClearance,vehicleContact,vehicleContactManifold,checkRoute,lapProgress,
   activeVenue:venue,quarryVenue:venue,raceRoute:(id:number)=>routes[id===1?0:1],raceLaps:()=>2,scoreDerby:()=>false,
   state:'playing',elapsed:0,countdown:0,online:null,demo:true,autopilot:false,testInput:null,mode:'race',telemetry:null,waypointRace:null,
-  activeClubRound:null,clubPlayerStopped:false,clubRetired:false,activeChallenge:undefined,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),collisions:0,
+  activeClubRound:null,clubPlayerStopped:false,clubRetired:false,activeChallenge:undefined,collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),collisions:0,
   impactAudioSeverity:()=>0,sound:{impact(){stats.feedback++;}},toast(){},recover(){stats.recoveries++;},finish(){assert.fail('A short passing fixture cannot finish an event');}};
  const tick=mainStep(context);
  return {cars,world,drivers,stats,settled,tick,dispose(){cars.forEach(c=>c.dispose());events.free();world.free();}};
