@@ -1,3 +1,4 @@
+import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from './collision-contact';
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 import {getRaceCourse,courseRoute,courseGridSlot,courseRecoverySlot,type RaceCourse} from './race-course';
 import {createIronfieldWorld} from './ironfield-world';
@@ -346,6 +347,7 @@ const benchmarkSamples: {
 }[] = [];
 let collisions = 0;
 const impactAdjudicator = new ImpactAdjudicator();
+const collisionScars = new CollisionScars();
 let keys = new Set<string>();
 let testInput: Input | null = null;
 const renderer = new T.WebGLRenderer({
@@ -535,7 +537,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   fx.reset();
   activateVenue(targetVenue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();setQuarryMode();
   if(activeVenue===quarryVenue)quarry.resetProps();
-  impactAdjudicator.clear();
+  impactAdjudicator.clear();collisionScars.clear();
   collisions = 0;
   const count = attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
   const colors = [
@@ -1009,21 +1011,28 @@ function step(dt: number) {
     c.input = c.id===0&&activeClubRound!==null&&clubPlayerStopped ? clubRetired||!c.finished?{throttle:0,steer:0,brake:1,handbrake:false}:ai(c,dt) : c.id === 0 && !autopilot && !demo ? input() : ai(c, dt);
     c.preStep(dt);
   }
+  const collisionMotion=captureCollisionMotion(physics);
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
-  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3})[]=[];
+  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number})[]=[];
   events.drainContactForceEvents((e) => {
     const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
-    if((!a&&!b)||!impactAdjudicator.needsContact(key,elapsed))return;
+    if(!a&&!b)return;
     const point=new T.Vector3().copy((a??b)!.current),normal=new T.Vector3();
     const manifold=vehicleContactManifold(physics,h1,h2);
     if(manifold){point.copy(manifold.point);normal.copy(manifold.normal);}
     const point1=new T.Vector3().copy(manifold?.point1??point),point2=new T.Vector3().copy(manifold?.point2??point);
     const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3();
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
-    contacts.push({key,point,point1,point2,va,vb,a,b,closing,impulse:e.totalForceMagnitude()*dt,
+    const scarDirection=new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h2,point2)).sub(new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h1,point1))),speed=scarDirection.length();
+    scarDirection.normalize();
+    contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
+  for(const {a,b,point1,point2,scarDirection} of collisionScars.adjudicate(contacts,elapsed)){
+    a?.scar(point1,scarDirection,b?.paintColor);
+    b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);
+  }
   for(const {contact:{a,b,point,point1,point2,va,vb,impulse},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,mode==='race'?.45:1)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     if(a){

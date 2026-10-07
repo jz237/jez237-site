@@ -1,3 +1,4 @@
+import {restoreCollisionScarsBytes} from './collision-scars-invariants';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -5,7 +6,7 @@ import {createHash} from 'node:crypto';
 import ts from 'typescript';
 import {readTimeTrialPrevious,restoreTimeTrialPlayabilityBytes,verifyTimeTrialPlayabilityRevision} from './time-trial-playability-invariants';
 import {readCinderbankPrevious,restoreCinderbankPlayabilityBytes} from './cinderbank-playability-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCollisionScarsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 const hash=(bytes:Uint8Array|string)=>createHash('sha256').update(bytes).digest('hex');
 const revision=()=>JSON.parse(readFileSync(new URL('./fixtures/time-trial-playability/revision.json',import.meta.url)).toString());
 function declarations(text:string,names:readonly string[]):Record<string,string>{

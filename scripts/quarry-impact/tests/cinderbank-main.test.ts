@@ -1,3 +1,4 @@
+import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -66,7 +67,7 @@ function harness(){
   waypointRace:null,WaypointRace:class{constructor(){throw Error('Waypoint constructor intentionally outside fixture');}},courseRoute,courseGridSlot,directionForCar,derbyGridSlot,DERBY_ARENA,DEFINITIONS,CAR_KINDS,demoCarKind,demoVehicleSetup,
   Vehicle:FixtureCar,cars:[],garage:readGarage(),bankRun(){log.push('bank');},drivers:{reset(){log.push('drivers reset');}},combat:{reset(){}},
   sound:{clearCars(){},attach(){},pause(value:boolean){log.push('sound '+value);}},vehicleFire:undefined,puddleSplashes:undefined,
-  fx:{world:quarryPhysics,groundHeight:quarryVenue.course.height,reset(){log.push('effects reset');},debris:[],evidence:{}},events:{clear(){log.push('events clear');}},impactAdjudicator:{clear(){log.push('impacts clear');}},collisions:19,
+  fx:{world:quarryPhysics,groundHeight:quarryVenue.course.height,reset(){log.push('effects reset');},debris:[],evidence:{}},events:{clear(){log.push('events clear');}},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:{clear(){log.push('impacts clear');}},collisions:19,
   ReplayRecorder,replayCourseId,captureReplayFrame:frame,recorder:null,lastReplay:null,replayEpochs:[],elapsed:0,studio:null,studioRestore:null,preparingEvent:false,state:'result',
   ui:{childNodes:[{tag:'original'}],replaceChildren(...nodes:unknown[]){this.childNodes=nodes as any;},querySelector(){return null;}},closeReplayLibrary:null,
   camera:new T.PerspectiveCamera(),renderer:{toneMappingExposure:1.2},orbit:{target:new T.Vector3(2,3,4),enabled:false,enablePan:false,maxDistance:22,minDistance:2.5},keys:new Set(['KeyW']),lastFrame:0,accumulator:.01,performance:{now:()=>123},

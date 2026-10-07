@@ -135,7 +135,7 @@ test('authoritative utility compound shell contacts damage the car once per body
  try{
   let shellContacts=0;
   for(let i=0;i<30;i++){sim.step(humans);for(let j=0;j<sim.cars[0].body.numColliders();j++){const collider=sim.cars[0].body.collider(j);if(collider.handle===sim.cars[0].collider.handle||collider.handle===sim.cars[0].roof.handle)continue;sim.world.contactPair(collider,wall,m=>shellContacts+=m.numContacts());}}
-  const c=sim.cars[0],hits=sim.damage.filter(d=>d.car===0);assert.ok(shellContacts>0,'must touch an additional utility shell collider');assert.ok(c.state.health<100&&hits.length>0,'shell impulses must reach server health');
+  const c=sim.cars[0],hits=sim.damage.filter(d=>d.car===0&&!d.scar);assert.ok(shellContacts>0,'must touch an additional utility shell collider');assert.ok(c.state.health<100&&hits.length>0,'shell impulses must reach server health');
   assert.ok(c.state.components!.engineDamage!>0,'shell impact reaches front engine');
   for(let i=1;i<hits.length;i++)assert.ok((hits[i].tick-hits[i-1].tick)*STEP>=.28,'one contact episode must not multiply damage');
   const other=sim.cars[1],keys=new Set<string>();
@@ -166,6 +166,6 @@ test('simultaneous physical utility shell pairs produce one damage event per car
   for(let i=0;i<30;i++)sim.step(humans);
   assert.ok(pairs.size>=2,`must generate multiple real compound contact pairs, got ${pairs.size}`);
   assert.ok(a.state.health<100&&b.state.health<100,'both sides of the crash receive damage');
-  for(const id of [0,1]){const hits=sim.damage.filter(hit=>hit.car===id);assert.ok(hits.length>0);for(let i=1;i<hits.length;i++)assert.ok((hits[i].tick-hits[i-1].tick)*STEP>=.28,'simultaneous shell pairs share one cooldown');}
+  for(const id of [0,1]){const hits=sim.damage.filter(hit=>hit.car===id&&!hit.scar);assert.ok(hits.length>0);for(let i=1;i<hits.length;i++)assert.ok((hits[i].tick-hits[i-1].tick)*STEP>=.28,'simultaneous shell pairs share one cooldown');}
  }finally{sim.dispose();}
 });

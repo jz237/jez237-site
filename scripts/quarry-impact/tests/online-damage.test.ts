@@ -97,7 +97,7 @@ test('rendered Tern/Hatch and authority agree when a harmless bumper tap precede
    }
    const tap=observed.find(e=>e.feedback&&e.damage===0)!,crash=observed.find(e=>e.damage>3)!;
    assert.ok(tap&&crash,kind+' fixture contains harmless feedback then structural damage');assert.ok(crash.time>tap.time&&crash.time-tap.time<.28);assert.equal(crash.feedback,false);
-   assert.equal(observed.filter(e=>e.damage>0).length,1,'compound rails produce one damage decision');assert.equal(authority.damage.length,2);
+   assert.equal(observed.filter(e=>e.damage>0).length,1,'compound rails produce one damage decision');assert.equal(authority.damage.filter(d=>!d.scar).length,2);
    assert.ok(cars.every(c=>c.health<97));
   }finally{cars.forEach(c=>c.dispose());queue.free();authority.dispose();terrain.dispose();}
  }
@@ -126,7 +126,7 @@ test('slow overlapping contacts do not crush cars and component values remain bo
    for(const [c,z,speed]of [[a,-1.8,.3],[b,1.8,-.3]]as const){c.body.setTranslation({x:0,y:.75,z},true);c.body.setRotation({x:0,y:0,z:0,w:1},true);c.body.setLinvel({x:0,y:0,z:speed},true);c.body.setAngvel({x:0,y:0,z:0},true);Object.assign(c.state,{p:{x:0,y:.75,z},q:{x:0,y:0,z:0,w:1},v:{x:0,y:0,z:speed}});sim.setInput(c.state.id,{throttle:0,steer:0,brake:0,handbrake:false});}
    sim.step(humans);sim.world.contactPair(a.collider,b.collider,m=>contacts+=m.numContacts());
   }
-  assert.ok(contacts>0,'the slow-contact fixture must actually touch');assert.equal(a.state.health,100);assert.equal(b.state.health,100);assert.deepEqual(a.state.components,freshComponents());assert.equal(sim.damage.length,0);
+  assert.ok(contacts>0,'the slow-contact fixture must actually touch');assert.equal(a.state.health,100);assert.equal(b.state.health,100);assert.deepEqual(a.state.components,freshComponents());assert.equal(sim.damage.filter(d=>!d.scar).length,0);assert.ok(sim.damage.some(d=>d.scar));
   const condition=freshComponents();for(let i=0;i<2000;i++)applyComponentImpact(condition,'coupe',{x:-.95,y:-.44,z:1.36},{x:1,y:0,z:-1},23);
   assert.ok(validComponents(condition));assert.equal(condition.wheelDamage[0],1);assert.equal(condition.wheelShift[0].x,.18);assert.equal(condition.wheelShift[0].z,-.24);assert.equal(condition.wheelDamage[3],0);
  }finally{sim.dispose();}

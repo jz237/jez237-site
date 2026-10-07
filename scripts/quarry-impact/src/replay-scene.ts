@@ -33,7 +33,7 @@ export class ReplayScene {
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];
       c.current.fromArray(e.pose);c.currentQ.fromArray(e.pose,3).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.root.updateMatrixWorld(true);
       if(e.kind==='repair'){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}
-      if(e.kind==='hit'){c.health=e.health!;c.hit(new T.Vector3().fromArray(e.point!).applyQuaternion(c.currentQ).add(c.current),new T.Vector3().fromArray(e.direction!).applyQuaternion(c.currentQ),e.damage!,e.time,true,e.paint===undefined?undefined:new T.Color(e.paint));}
+      if(e.kind==='hit'){c.health=e.health!;const point=new T.Vector3().fromArray(e.point!).applyQuaternion(c.currentQ).add(c.current),direction=new T.Vector3().fromArray(e.direction!).applyQuaternion(c.currentQ),paint=e.paint===undefined?undefined:new T.Color(e.paint);if(e.scar)c.scar(point,direction,paint);else c.hit(point,direction,e.damage!,e.time,true,paint);}
     }
     const {a,b,alpha}=replayBracket(this.doc.frames,time),av=a.values,bv=b.values;
     const stride=replayCarStride(this.doc.meta);

@@ -1,3 +1,4 @@
+import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 /** Production-handler plumbing fixture. No rendering, physics simulation or earned medal
  * is claimed. Production handlers run unmodified; explicit unit outcomes below
  * isolate result/award wiring. Physical attainability is separate evidence. */
@@ -86,7 +87,7 @@ function harness(faults:Faults={}){
   recorder:null,lastReplay:null,replayEpochs:[],studio:null,cars:[],scene:new T.Scene(),activeVenue:quarry,quarryVenue:quarry,waypointRace:null,
   orbit:{enabled:false,maxDistance:22,enablePan:true},camera:new T.PerspectiveCamera(),cameraImpactOffset:new T.Vector3(),staticShadows:undefined,
   director:{reset(){},select(){}},sound:{async init(){if(faults.audio)throw Error('Audio unavailable');},pause(){},clearCars(){},attach(){}},
-  drivers:{reset(){}},combat:new CombatScoreboard(),impactAdjudicator:{clear(){}},collisions:0,vehicleFire:undefined,puddleSplashes:undefined,
+  drivers:{reset(){}},combat:new CombatScoreboard(),collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:{clear(){}},collisions:0,vehicleFire:undefined,puddleSplashes:undefined,
   physics:{step(){calls.physics++;}},events:{clear(){}},fx:{reset(){}},quarry:{resetProps(){}},DERBY_ARENA:{x:0,z:0,radius:45},
   ensureVenue(id:string){venueCalls++;if(faults.venue&&(venueCalls===1||faults.recovery))throw Error('Venue unavailable');return id==='quarry-v1'?quarry:ironfield;},
   activateVenue(venue:unknown){context.activeVenue=venue;},setQuarryMode(){},archiveReplay(){calls.archive++;},captureReplay(){calls.capture++;},syncClubAwards(){},
