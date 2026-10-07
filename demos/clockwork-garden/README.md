@@ -154,6 +154,15 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   succession, thunder following: the flash is a cool key light, so the vault's ribs shadow the beds
   for an instant. Flashes are soft (a short rise, a few seconds apart, never a strobe) and are left out
   when reduced motion is asked for (the thunder stays).
+- **A rainbow after the rain**: when a downpour has cleared and the sun is low enough (the bow's top stands
+  42 degrees above the point opposite the sun, so it needs a sun below about 40 degrees: dawn and the morning
+  of the slider, or the viewer's own evening), a bow forms opposite it over a few seconds, hangs for about a minute
+  and fades: a primary with violet inside and red outside, a fainter secondary at 51 degrees with the colours
+  reversed, the sky brighter inside the first and darker between them, a dark rain cloud behind it (what makes a
+  real one stand out). It is drawn in the sky shader from the actual, travelling sun, so it is where the sun says
+  and the tall trees hide what they would hide: look away from the sun (a hint says so) and a little higher than
+  the tree line. The land steams a little while it lasts, and the birds sing again. `explore/rain.js` keeps the
+  envelope (a remembered downpour, its clearing, a slow ease in and out); `world/sky.js` draws it.
 
 ### The world outside the glass
 
