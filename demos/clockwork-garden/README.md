@@ -180,6 +180,10 @@ Interactive modes only (`explore/scenery.js` builds the land and its trees; `exp
   bands cross the grass, it goes darker in rain; **shadows follow the sun** (each tree's, thrown by its vertex shader with
   no CPU work, and the glasshouse's own: a convex hull of its base and roof-line, soft-edged), and fade with a low sun;
   **mist** lies low over the land, thickest at dawn, some at dusk and after rain.
+- **Windows in the tree belts**: the specimen trees either side of the house leave two openings so that the sky beyond the glass
+  has somewhere to open: a wide one to the east (where the afternoon sun's opposite lies: the rainbow, the evening's colour) and a
+  narrow one to the west past the pool. (The trees that would have stood there are drawn for and dropped, so every other tree keeps
+  exactly its place.)
 - **Standing in it**: at the end of the north avenue, past iron gates open in the brick wall, a brick **manor** whose windows
   light up as the night comes (a different few, a candle's flicker in some); at the end of the south walk a domed
   **temple**; garden **lamps** along both walks and at the gate and the manor's door, glowing at dusk (and in a storm) with halos
@@ -200,6 +204,20 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   scale: sparser drops, rings from wherever a duck has been.
 - **Life in it**: water lilies and flowers on their pads, reeds clumped along some stretches of the margin that bend and nod in the
   breeze, eight mallards drifting about on slow loops that turn to face their way, bank into it, and now and then tip up to dabble.
+- **Koi** swim under the surface (three to seven, by tier): orange, white-and-orange, gold and calico, each a soft fish drawn in the
+  water's own shader where it is not mirroring, displaced as the water refracts the line of sight (so they slide as you move) and
+  bent by the ripples, passing under the lily pads (which are real geometry over the water); now and then one rises to the surface
+  with a ring and a soft "bloop".
+- **APX-9's wake**: fly low over the pool and it leaves rings behind it, as over the fountain (the ducks quack at it, as before);
+  skim it close enough and the water splashes (with sound on). (The ring buffer is shared out: the ducks', the bee's, and the
+  occasional ones.)
+- **Fireflies over the pool**, after dark: a few hundred, hanging over the water, in the reeds and along the lawn's edge, each
+  drifting on its own loop and pulsing in its own time (a soft pulse every few seconds, so the swarm sparkles and never blinks
+  together). Worked out in the vertex shader (no CPU), HDR sprites that the bloom takes up; they are drawn in the pool's mirror
+  too, so each has its reflection in the black water. They go out in rain and by day.
+- **Dragonflies** by day (four: two blue emperors, two red darters; two on `low`): each hangs in the air, wings a blur, then
+  dashes to somewhere else over or beside the pool, and now and then drops to touch the water (a ring and a drop's sound) before it
+  goes; they keep clear of APX-9, glint in the sun, are reflected in the pool, and whirr when one is near (with sound on).
 - **Birds**: every flight is an analytic path in the vertex shader (one draw call each, nothing on the CPU). **Geese** cross the
   sky high up in V formations, gliding now and then (one flock crosses soon after you arrive; they stay home in rain);
   **swallows** dart in loose streams over the lawns either side of the house and skim the pool, by day; a **murmuration of
@@ -220,6 +238,8 @@ recording: every sound is synthesised, and every one is fired by something that 
   as it comes up; APX-9 passing low over one startles it into a run of quacks and a slap of water.
 - **Geese** honk as their formation crosses (a chorus from the flock's own place in the sky); **swallows** twitter as a stream darts
   by; the **starling** cloud rustles and whistles as it swirls above the roof.
+- **The pool's new life** is heard too: a koi's bloop, a dragonfly's whirr and the drop where it touches the water, and a splash
+  when APX-9 skims the surface.
 - **Songbirds** sing far off: a dawn chorus at first light, a few through the day, one or two at dusk. **Rain** makes the pool
   plink. After dusk, and in the wet, **frogs** croak at the pool; **crickets** chirp on the lawns at night, and now and then an
   **owl** calls from the woods.
@@ -541,6 +561,7 @@ src/explore/                   the interactive modes:
   scenery.js · outside.js        the land, its trees and light · what stands on it (manor, temple, gate, lamps, borders, shadows, leaves)
   pond.js · birds.js             the reflecting pool (mirror pass, lilies, reeds, ducks) · geese, swallows and a murmuration of starlings
   outdoors.js                    what it sounds like out there: wind, water, ducks, flocks, songbirds, frogs, crickets, an owl
+  nightflies.js · dragonflies.js fireflies over the pool at night (reflected in it) · dragonflies by day (dashing, hanging, dipping)
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
