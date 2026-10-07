@@ -19999,5 +19999,30 @@
       "description": "Handwoven glass seed-bead textile using brick-stitch and peyote-like interlocks, transparent water strands, copper trunk braids and stepped green foliage.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-10-07-random-image-style-sgraffito-the-staircase-returns-its-foot",
+    "title": "Sgraffito — The Staircase Returns Its Footsteps",
+    "tests": "Fictional staircase memory-return ritual; true sgraffito subtractive layer logic, sectional zigzag composition, limited mineral palette. Cyanotype candidate excluded because prior run found archive-wide medium duplication.; archive_slot=2026-10-07T17:20; concept=staircase-releases-preserved-footsteps-returning-owners; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported low\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported low. Original output retained.",
+    "prompt": "Create a finished hand-made SGRAFFITO wall mural, not a photograph of an artwork, not a screen mockup. Title concept: The Staircase Returns Its Footsteps. An old communal staircase has held every footstep taken on it; now it is quietly returning these stored steps to the people who have come back. Build the entire image as a striking architectural section, a large irregular zigzag stair rising from lower left to upper right across a flat warm chalk-white wall. Beneath each stair tread, small strata of scratched footprints are packed like growth rings. At three landings the stored footprints escape through narrow cuts in the risers, becoming distinct curved trails that move backward toward their original owners. The dominant trail is a terracotta procession that curls through generous blank plaster to meet the broad shoe of a seated older woman at the bottom landing; her real foot is still, while the very last tiny returned footprint is joining its sole. An adult wearing a loose indigo coat waits sideways at the middle landing, and a shorter child with an oversized ochre satchel kneels at the top to watch a single small footstep come home. Give each figure a different natural body silhouette and pose; keep them small in relation to the architectural zigzag. This is an affectionate impossible ritual, not a spooky haunted staircase, not an infographic.\n\nThe medium must govern every shape: authentic subtractive sgraffito, a pale lime-plaster top layer scratched away with hand tools to reveal terracotta-red underplaster, soot-charcoal beneath that, and occasional muted yellow-ochre deposits. Broad surfaces are flat and tactile with ragged hand-cut edges, tiny plaster crumbs, interrupted scratch grooves, granular lime, and tool chatter. Crosshatching is formed by actual incisions, not ink shading. Deep charcoal cuts describe the undersides of stairs; wide terracotta cuts form footprints and warm bodies; hair and clothing use sparse parallel rake marks. A few tiny islands of uncut white plaster remain inside broad scratched zones. Keep the visual logic unmistakably layered and carved, never glossy paint, photoreal stone, digital embossing, 3D rendering, collage, or generic cinematic illustration.\n\nComposition: tall sectional zigzag with strongly asymmetrical empty space, no centered portal or symmetrical tableau. The bottom returning trail is the single clear focal interaction; the smaller trails echo but do not compete. Show varied footprint wear: heel crescent, toe fan, a missing shoe-nail mark, tiny bare toes, all intentionally simplified and cut into plaster. Between stairs let thin charcoal seam lines and a few chipped edges hint at generations of repairs, without adding clutter. Lower-left broad terracotta footstep trail, middle cool charcoal architecture, upper-right small ochre child create a restrained diagonal rhythm. Lighting is represented only by the relief of cut layers, soft diffuse light, no theatrical glow. Mineral palette only: chalk white, dusty terracotta, soot charcoal, restrained ochre, a trace of faded indigo. Rich close surface detail, readable large-scale mural rhythm, quiet warmth and a wry sense that buildings remember movement. Edge-to-edge finished artwork, no frame, no wall surround, no labels, no lettering, no logos, no watermark. Generate one image with quality high, automatic native size and opaque background.",
+    "image": "images/2026-10-07-random-image-style-sgraffito-the-staircase-returns-its-foot.jpg",
+    "thumb": "thumbs/2026-10-07-random-image-style-sgraffito-the-staircase-returns-its-foot.webp",
+    "color": "#b39f8f",
+    "date": "2026-10-07",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "staircase-releases-preserved-footsteps-returning-owners",
+      "imageSha256": "e376a2c1e8bb98df4be69e327cf291d1388be8bb37ec8178098a90948afb87ea",
+      "imageDHash": "0a36b475e62e9c01",
+      "styleFamily": "sgraffito"
+    },
+    "randomRenderingStyle": {
+      "medium": "sgraffito",
+      "description": "Hand-scratched architectural sgraffito mural: chalk-lime plaster cut through to terracotta, charcoal and muted ochre strata.",
+      "template": ""
+    }
   }
 ]
