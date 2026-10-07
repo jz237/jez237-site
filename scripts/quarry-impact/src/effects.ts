@@ -1,3 +1,4 @@
+import {flushWreckNormals} from './wreck-batch';
 import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -165,6 +166,7 @@ void main(){
   detach(source: T.Mesh, velocity: T.Vector3) {
     if (this.debris.length >= 36) this.removeDebris(0);
     source.updateWorldMatrix(true, false);
+    flushWreckNormals(source);
     const geometry = source.geometry.clone();
     geometry.computeBoundingBox();
     const center = geometry.boundingBox!.getCenter(new T.Vector3());

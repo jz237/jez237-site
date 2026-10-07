@@ -1,6 +1,7 @@
+import {restoreDamageBatchingBytes} from './damage-batching-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLargeFieldPrevious,restoreLargeFieldBytes,verifyLargeFieldRevision} from './large-field-performance-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDamageBatchingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('large-field optimization preserves every prior fixture, vehicle asset, control and camera input',verifyLargeFieldRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/large-field-performance/revision.json').toString());

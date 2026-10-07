@@ -1,8 +1,10 @@
+import {queueWreckNormals,cancelWreckNormals} from './wreck-batch';
 import {computeWreckNormals,computeWreckBounds} from './wreck-normals';
 import * as T from 'three';
-import { finishCoupeDent } from './coupe-realism';
+import { finishCoupeNormals,stampCoupeImpact } from './coupe-realism';
 import {constructionResponse,type ConstructionRole} from './vehicle-construction';
 const impactBounds = new T.Box3();
+const finishNormals=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);};
 
 /** Every skin, seal, window and inner panel is bent in metres in the same
  * vehicle frame. Mesh origins and export transforms must not open seams. */
@@ -104,8 +106,8 @@ export function dentGeometry(mesh: T.Mesh, contact: T.Vector3, direction: T.Vect
   if (maximum) {
     position.needsUpdate = true;
     if (wear) wear.needsUpdate = true;
-    computeWreckNormals(g);
-    finishCoupeDent(mesh, contact.clone().applyMatrix4(fromModel), direction.clone().transformDirection(fromModel), damage);
+    queueWreckNormals(mesh,finishNormals);
+    stampCoupeImpact(mesh, contact.clone().applyMatrix4(fromModel), direction.clone().transformDirection(fromModel), damage);
     computeWreckBounds(g);
   }
   return maximum;
@@ -125,6 +127,7 @@ function dentEngine(mesh:T.Mesh,contact:T.Vector3,direction:T.Vector3,damage:num
 }
 
 export function repairWreckGeometry(mesh: T.Mesh) {
+  cancelWreckNormals(mesh);
   const g = mesh.geometry;
   (g.attributes.position.array as Float32Array).set(mesh.userData.original);
   g.attributes.position.needsUpdate = true;
