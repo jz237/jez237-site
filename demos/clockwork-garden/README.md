@@ -154,6 +154,17 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   succession, thunder following: the flash is a cool key light, so the vault's ribs shadow the beds
   for an instant. Flashes are soft (a short rise, a few seconds apart, never a strobe) and are left out
   when reduced motion is asked for (the thunder stays).
+- **Snow** (`N`, the menu's Snow, `?snow=1`; `explore/rain.js`, the other weather: never together with rain): flakes (up to 7,500
+  point sprites, one draw, worked out in the vertex shader) drift down slantwise on the garden's own wind and swirl as they fall, none
+  inside the glasshouse, sized from the target being drawn so they are in the pool's mirror too. The sky closes over pale and even
+  (not the storm's grey), the air goes white and a little thicker, the sky's light is bluer and stronger (the land throws it back up), and
+  the lamps kindle by day, as in rain. **The cover builds** over about a minute of snowfall (`WEATHER.uCover`), lingers when it stops, and
+  melts over about 80 s (faster under rain): every outdoor surface goes white by how far it faces up, judged before the crowns' bump
+  scrambles the normal (so the lawn, the roofs, the coping, the stone and the tops of every tier of the cedars and every crown carry
+  snow, broken up by a mottle, and keep the light they had). **The pool freezes**: milky blue-white ice with drifts, hard and dull,
+  the reflection and the ripples gone, the ducks and lilies away, the koi under it unseen. **The panes frost** at their edges and
+  corners in veined crystals, growing in with the cover. The birds and the insects keep indoors; the crickets and frogs go quiet; and
+  with sound on the outdoors is muffled (the glazing's low-pass closes from 7.2 kHz to 2.3 kHz) with a low, breathing hush.
 - **A rainbow after the rain**: when a downpour has cleared and the sun is low enough (the bow's top stands
   42 degrees above the point opposite the sun, so it needs a sun below about 40 degrees: dawn and the morning
   of the slider, or the viewer's own evening), a bow forms opposite it over a few seconds, hangs for about a minute
@@ -382,6 +393,7 @@ is found in the project, via `$ESBUILD`, or in wrangler's own install.
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
 | `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
 | `R` | bring the rain, or clear it |
+| `N` | let it snow, or clear it (rain and snow are never on together) |
 | `L` | APX-9's navigation lights, on or off |
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
@@ -461,6 +473,7 @@ the governor off.
 | `?tod=0…1` | time of day in the interactive modes (0 midnight, 0.27 dusk, 0.5 dawn, 0.86 golden hour, 1 its peak; default 0.86) |
 | `?tod=live` | the hour follows your own clock (the menu's *My clock* keeps that choice) |
 | `?rain=1` | start in the rain (`R` clears it) |
+| `?snow=1` | start in the snow, already lying (`N` clears it) |
 | `?garden=fresh` | ignore the saved garden for this visit |
 | `?touch=1\|0` | force the touch interface on or off |
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
