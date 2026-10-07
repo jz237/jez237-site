@@ -118,8 +118,20 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   light reads which pane of the glazing the light came through; about one pane in four is stained
   (ruby, amber, teal, violet), so coloured pools lie among the iron's shadows, and the panes
   themselves are stained where they are seen (the glazing's shader knows the same lattice). The
-  pools do not travel with the hour: the key light's direction is fixed, only its strength and
-  colour change.
+  pools travel with the sun (below), and in the morning they fall through the east wall.
+- **The sun's path** (`world/sunpath.js`): the key light moves with the hour. The sun rises in the
+  east (the right wall), climbs to the south at noon and sets in the west (the left wall); golden
+  hour keeps the old fixed sun's exact direction (14.5 h), so the garden's look there is unchanged.
+  By night the light is the moon, higher the deeper the night; the key swings from sun to moon as the
+  sun goes down (while it is dim). The mood slider is not a clock, so the sun's hour follows it
+  along the afternoon (noon at the top, golden hour, sunset), *My clock* uses the real time (the
+  morning sun is in the east), and the finale runs the day properly: down in the west, the moon, then
+  a sunrise in the east. The solar hour is eased, so a jump sweeps the sun across the sky. One shared
+  vector (`SUN_DIR`) is moved in place, so the sky's sun and moon, the volumetric beams, the sun beams'
+  screen-space rays, the shadow map's frame, the iron and stained-glass cookie (`cgToL`), the shadow
+  culling and the reflection maps (baked with the sun where the path puts it at each stop, then turned to
+  match) all follow; the film's own is restored when the interactive modes stop. A low sun is redder and
+  weaker.
 - **Clouds**: by day slow soft shadows drift over the house (the key light seen through a noise
   a long way up).
 - **The fountain** (`explore/fountain.js`): the water is a PBR surface whose normal follows a small
@@ -131,7 +143,10 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   grey, the lamps kindle by day, the butterflies roost, the stone and path go wet (the lamps mirrored
   in them); streaks of rain fall outside the glass (a ring of thousands gathered round the camera, none
   inside the house); drops bead and run down the panes, bending the glass's normal so the lamps and
-  lightning glint in each (no refraction: there is no transmission pass); ripples ring the fountain;
+  lightning glint in each, and each is a lens: it shows the view behind the pane bent by the drop's dome
+  (the last frame, kept at half the size by the lens pass while it rains and sampled with an offset that
+  grows toward the rim: an inverted, widened view with a darker meniscus; one frame old, because three's
+  transmission pass would draw the whole scene twice); ripples ring the fountain;
   rain and thunder sound (with sound on). In a downpour the sky lights now and then, twice in quick
   succession, thunder following: the flash is a cool key light, so the vault's ribs shadow the beds
   for an instant. Flashes are soft (a short rise, a few seconds apart, never a strobe) and are left out
@@ -438,7 +453,7 @@ src/world/                     escapement, root crown, roots, hero flower (+ por
 src/creatures/                 apx9 (the resident pollinator, built from APX-9's blueprint in apx9Shape),
                                bee (honeybee, carpenter), butterfly, beetle/ladybird, dragonfly, bird rigs + choreography
 src/direction/                 beats (story timing), camera tools, shot list, director
-src/render/pipeline.js         HDR MSAA → bokeh DOF → light shafts → bloom → lens (eye adaptation, streaks, halation) → grade
+src/render/pipeline.js         HDR MSAA → bokeh DOF → light shafts → bloom → lens (eye adaptation, streaks, halation, the half-size frame the raindrops refract) → grade
 src/render/governor.js         frame governor (resolution / detail for a steady frame rate); singlepass.js (flat glass
                                and wings drawn single-pass)
 src/audio/score.js             procedural score (OfflineAudioContext)
@@ -447,6 +462,7 @@ src/ui/hud.js, landing.js      interactive-mode HUD (gauge, hints, help, menu, p
 src/ui/perfmeter.js            the ?debug=1 frame-rate readout
 src/input/input.js             keyboard, mouse / pointer lock, wheel, touch joystick + buttons, pinch, gamepads
 src/explore/                   the interactive modes:
+  sunpath.js (world/)            the sun's and moon's path, in the house's frame (hour → direction)
   fountain.js · rain.js · weather.js  the living fountain (water, wake, caustic stone) · weather (rain, lightning, the
                                  sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
