@@ -1,0 +1,12 @@
+{
+  "name": "jez237-artcraft-downloads",
+  "main": "index.mjs",
+  "account_id": "ac73a259dff5a3cbeccbb78824ac0db6",
+  "compatibility_date": "2026-10-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{"pattern": "jez237.com/software-downloads/*", "zone_name": "jez237.com"}],
+  "r2_buckets": [{"binding": "INSTALLERS", "bucket_name": "jez237-site-media"}],
+  "observability": {"enabled": true, "head_sampling_rate": 0.1}
+}
