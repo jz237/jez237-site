@@ -1,3 +1,4 @@
+import {restoreLargeFieldBytes} from './large-field-performance-invariants';
 import {restoreWorkyardBytes} from './workyard-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -14,6 +15,7 @@ export const westArrayHash=(a:ArrayBufferView)=>westHash(new Uint8Array(a.buffer
 const edits=JSON.parse(read('source/west-wall-source-edits.json').toString());
 /** Reverse only declared integration edits and require the frozen full-file SHA. */
 export function stripWestSource(file:string,bytes:Buffer){
+  bytes=restoreLargeFieldBytes(file,bytes);
   if(file==='src/world.ts'||file==='src/main.ts')bytes=restoreWorkyardBytes(file,bytes);
   if(!edits[file]||!bytes.includes(Buffer.from('WestWall'))&&!bytes.includes(Buffer.from('westWall')))return bytes;
   let source=bytes.toString();

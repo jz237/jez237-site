@@ -1,3 +1,4 @@
+import {terrainContactHandle} from './terrain-collision';
 import type R from '@dimforge/rapier3d-compat';
 type ContactVehicle={kind:string;body:R.RigidBody;collider:R.Collider};
 type Vec={x:number;y:number;z:number};
@@ -28,6 +29,6 @@ export function vehicleContact<T extends ContactVehicle>(world:R.World,cars:read
  // Preserve the established two-collider contact cadence for existing cars.
  // Open cargo shells, roll cages and fitted armor can contact several pieces.
  const compound=(a?.body.numColliders()??0)>2||(b?.body.numColliders()??0)>2;
- const k1=compound&&a?a.collider.handle:h1,k2=compound&&b?b.collider.handle:h2;
+ const k1=compound&&a?a.collider.handle:terrainContactHandle(world,h1),k2=compound&&b?b.collider.handle:terrainContactHandle(world,h2);
  return{a,b,key:Math.min(k1,k2)+':'+Math.max(k1,k2)};
 }

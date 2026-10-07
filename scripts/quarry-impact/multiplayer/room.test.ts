@@ -122,16 +122,22 @@ test('actual rendered Quarry and authoritative server use identical static geome
   const server=new Simulation(R),layout=quarryColliderLayout();
   // The server instantiates this same ordered factory; car colliders are appended.
   const serverStatics:R.Collider[]=[];server.world.forEachCollider(c=>{if(!c.parent())serverStatics.push(c);});
-  assert.equal(serverStatics.length,layout.length);assert.equal(quarry.collisionPhysics.statics.size,layout.length);
-  browserWorld.step();server.world.step();assert.deepEqual(corridorObstructions(browserWorld,quarry.collisionPhysics.statics),[],'The full road center ±6m corridor must remain clear of unintended solid scenery');
-  layout.forEach((spec,i)=>{const a=quarry.collisionPhysics.statics.get(spec.id)!,b=serverStatics[i];assert.equal(a.shapeType(),b.shapeType(),spec.id);assert.deepEqual(a.translation(),b.translation(),spec.id);assert.deepEqual(a.rotation(),b.rotation(),spec.id);
+  const terrainTiles=[...quarry.collisionPhysics.statics].filter(([id])=>id==='terrain'||id.startsWith('terrain:'));
+  assert.equal(terrainTiles.length,400);assert.equal(serverStatics.length,layout.length+terrainTiles.length-1);assert.equal(quarry.collisionPhysics.statics.size,serverStatics.length);
+  const serverById=new Map([...quarry.collisionPhysics.statics.keys()].map((id,i)=>[id,serverStatics[i]]));
+  for(const [id,a]of terrainTiles){const b=serverById.get(id)!;assert.deepEqual(a.vertices(),b.vertices(),id);assert.deepEqual(a.indices(),b.indices(),id);assert.deepEqual(a.translation(),b.translation(),id);}
+  // The corridor helper excludes the original terrain ID; its partition pieces
+  // are the same road surface, not unintended scenery intruding into the lane.
+  const terrainIds=new Set(terrainTiles.map(([id])=>id));
+  browserWorld.step();server.world.step();assert.deepEqual(corridorObstructions(browserWorld,quarry.collisionPhysics.statics).filter(hit=>!terrainIds.has(hit.id)),[],'The full road center ±6m corridor must remain clear of unintended solid scenery');
+  layout.forEach((spec,i)=>{const a=quarry.collisionPhysics.statics.get(spec.id)!,b=serverById.get(spec.id)!;assert.equal(a.shapeType(),b.shapeType(),spec.id);assert.deepEqual(a.translation(),b.translation(),spec.id);assert.deepEqual(a.rotation(),b.rotation(),spec.id);
     if(spec.shape==='mesh'){assert.deepEqual(a.vertices(),b.vertices(),spec.id);assert.deepEqual(a.indices(),b.indices(),spec.id);}
     if(spec.shape==='cylinder'){assert.equal(a.radius(),Math.fround(spec.radius),spec.id);assert.equal(a.halfHeight(),Math.fround(spec.halfHeight),spec.id);assert.equal(a.radius(),b.radius(),spec.id);assert.equal(a.halfHeight(),b.halfHeight(),spec.id);}
     if(spec.shape==='hull')assert.deepEqual(a.vertices(),b.vertices(),spec.id);
   });
   for(const [trees,prefix]of [[northForest.trees,'tree-north-'],[northForest.mediumTrees,'tree-north-medium-']] as const)for(const tree of trees){
     const index=layout.findIndex(s=>s.id===prefix+tree.id);assert.ok(index>=0,'every visible new trunk is part of both authoritative worlds');
-    const a=quarry.collisionPhysics.statics.get(prefix+tree.id)!,b=serverStatics[index];
+    const a=quarry.collisionPhysics.statics.get(prefix+tree.id)!,b=serverById.get(prefix+tree.id)!;
     const ray=new R.Ray({x:tree.x-tree.trunkRadius-1,y:tree.y+Math.min(1.3,tree.trunkHeight/2),z:tree.z},{x:1,y:0,z:0});
     const clientHit=a.castRay(ray,2,false),serverHit=b.castRay(ray,2,false);assert.equal(clientHit,serverHit);assert.ok(clientHit!==null&&Math.abs(clientHit-1)<3e-5);
   }

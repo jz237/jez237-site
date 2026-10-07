@@ -1,3 +1,4 @@
+import {createQuarryPhysics} from '../src/quarry-layout';
 import {stockSetup} from '../src/garage';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -36,8 +37,11 @@ function browserContacts(world:R.World,queue:R.EventQueue,cars:Vehicle[],time:nu
 test('online tuned and armored collisions match independent solo damage and subsequent handling for every car',()=>{
  for(const kind of ['coupe','sedan','hatch']as const)for(const mode of ['playground','race']as const){
   const setups=[0,1].map(i=>({...stockSetup(kind),engine:i?1:3,armor:i?1:3,tires:2,tune:{gearing:.65,suspension:-.4,steering:.3,brakeBias:-.5,differential:.7}}));
-  const authority=new Simulation(R,mode,Array(8).fill(kind),8,setups),terrain=new Simulation(R,mode),queue=new R.EventQueue(true),scene=new T.Scene(),cars=[0,1].map(i=>new Vehicle(i,kind,0xffffff,scene,terrain.world,fx,setups[i]));
-  authority.cars.slice(2).forEach(c=>c.body.setEnabled(false));terrain.cars.forEach(c=>c.body.setEnabled(false));authority.phase='playing';const seen=new ImpactAdjudicator();
+  // Build independent solo terrain directly: leftover disabled vehicles changed
+  // collider handles/CCD traversal order without representing a real solo field.
+  const authority=new Simulation(R,mode,Array(8).fill(kind),8,setups),terrain={world:new R.World({x:0,y:-9.81,z:0}),dispose(){this.world.free();}},queue=new R.EventQueue(true),scene=new T.Scene();terrain.world.timestep=STEP;createQuarryPhysics(R,terrain.world,false);const cars=[0,1].map(i=>new Vehicle(i,kind,0xffffff,scene,terrain.world,fx,setups[i]));
+  cars.forEach((c,i)=>{assert.equal(c.body.handle,authority.cars[i].body.handle);assert.equal(c.collider.handle,authority.cars[i].collider.handle);});
+  authority.cars.slice(2).forEach(c=>c.body.setEnabled(false));authority.phase='playing';const seen=new ImpactAdjudicator();
   cars.forEach((c,i)=>{c.place(i*.65,(i?1:-1)*4,i?Math.PI:0);c.body.setLinvel({x:0,y:0,z:i?-22:22},true);const a=authority.cars[i];a.body.setTranslation(c.body.translation(),true);a.body.setRotation(c.body.rotation(),true);a.body.setLinvel(c.body.linvel(),true);Object.assign(a.state,{p:{...c.body.translation()},q:{...c.body.rotation()},v:{...c.body.linvel()}});});
   try{
    for(let tick=1;tick<=150;tick++){
