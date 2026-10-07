@@ -244,6 +244,20 @@ recording: every sound is synthesised, and every one is fired by something that 
   plink. After dusk, and in the wet, **frogs** croak at the pool; **crickets** chirp on the lawns at night, and now and then an
   **owl** calls from the woods.
 
+### APX-9's navigation lights
+
+Interactive modes only (`explore/beelights.js`; the rig is the film's too, so they are hidden outside the modes and the film is
+untouched). `L` or the menu's *Lights* switches them (kept for next time).
+
+- **As on an aircraft**: a **red** light on the port wingtip, a **green** one on the starboard, a steady **white** light at the
+  tail, and a white **strobe** on the back of the thorax that flashes twice and rests (faster on a boost).
+- **Light painting**: the wingtip lights ride the wing beat, so as the wings blur each paints its own arc in the air: a soft red
+  sector and a soft green one, fading as the wings fold.
+- **At dusk and after dark** a warm **lamp** at the front throws a soft beam ahead of the bee.
+- **They light the garden** through the light field when it is dark enough: a red and a green pool at the wingtips, the strobe's flash
+  across the beds, the lamp's warm pool where it points. By day they are small and quiet (the strobe still flashes).
+- Every light is a glow sprite (an HDR core and a halo for the bloom), sized from the target being drawn and the bee's own scale.
+
 ### What you can do in the garden
 
 - **Pollinate any bloom**: descend gently onto it. Blooms open wide for an
@@ -368,6 +382,7 @@ is found in the project, via `$ESBUILD`, or in wrangler's own install.
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
 | `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
 | `R` | bring the rain, or clear it |
+| `L` | APX-9's navigation lights, on or off |
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
 
@@ -562,6 +577,7 @@ src/explore/                   the interactive modes:
   pond.js · birds.js             the reflecting pool (mirror pass, lilies, reeds, ducks) · geese, swallows and a murmuration of starlings
   outdoors.js                    what it sounds like out there: wind, water, ducks, flocks, songbirds, frogs, crickets, an owl
   nightflies.js · dragonflies.js fireflies over the pool at night (reflected in it) · dragonflies by day (dashing, hanging, dipping)
+  beelights.js                   APX-9's navigation lights (wingtips, tail, strobe, lamp and beam, light-painted wing arcs)
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
