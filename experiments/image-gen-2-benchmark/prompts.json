@@ -19974,5 +19974,30 @@
       "description": "Heat-fused pigmented wax painting with translucent layers, incised lines, palette-knife ridges and scraped-back highlights.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-10-07-random-image-style-bead-weaving-the-orchard-redirects-rain",
+    "title": "Bead Weaving — The Orchard Redirects Rain",
+    "tests": "Fictional cooperative orchard rain-routing system; asymmetrical vertical textile. Selected after cyanotype failed archive-wide medium uniqueness; no image generated for rejected candidate.; archive_slot=2026-10-07T09:20; concept=orchard-routes-rain-woven-branch-channels; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.",
+    "prompt": "Create a finished, exceptionally intricate handwoven glass-bead artwork in which a living orchard acts as a rain-routing system. The entire image is one flat textile made of thousands of individually legible seed beads, not a photograph of an orchard with beads overlaid, not jewelry, and not a generic mosaic. An asymmetrical vertical branching composition: three fruit trees grow upward from a narrow interwoven root band near the bottom; a broad shower enters from the upper-left, is caught by cupped leaf clusters, and travels through luminous bead-built channels in the branches, crossing between trees on suspended woven gutters before emerging as a small reflective pool at the lower-right. The central tree leans to the right; the smallest tree at left receives water from a looped branch of the tallest, making the functional story readable without arrows or words. Give each tree a different fruit geometry: elongated pear shapes, small round plum clusters, and broad red-gold apples. Fruit beads are restrained small accents against layered emerald, moss, jade, bottle-green and copper leaf bands. Rain is physically part of the beadwork: long staggered strands of translucent clear and icy pale blue beads descend against a nearly black midnight-green background, terminate in shallow leaf-shaped cups, then continue in linked pale-blue zigzag bands through the canopy. Show a single deliberate spill where a channel overflows, forming a fine hanging fringe of separate clear-bead droplets, and another branch forming an elegant circular bypass around a fruit. Use credible loom and off-loom bead-weaving construction: tightly interlocked rows and brick-stitch stepped edges, peyote-stitch curves, occasional visible amber binding thread at a junction, small changes of bead orientation where pathways bend. The tree trunks are dense copper and umber bead braids; exposed roots divide into narrow woven ribbons that frame the pool. Every bead has a tiny bore, softly rounded glass surface, believable miniature specular glint and slight manufactured irregularity. Transparent beads show darker thread through their cores, opaque beads have quiet satin color, a few metallic copper beads glimmer near joints. Preserve slight relief and shadows between beads so the medium is unmistakable, while the piece remains a coherent flat woven work, not a 3D forest sculpture. Water pathways must have clear visual continuity from rainfall to canopy capture to branch routing to root-level pool. Upper-right contains quiet unpatterned dark beads for breathing room; foliage mass is strongest across the center-left; bottom pool is a small oval of concentric woven blue and silver arcs that offsets the vertical trees. The textile fills the whole image with an irregular, meticulously finished selvedge and a few short knotted thread ends at the bottom, no surrounding table, display case, room, hands, or mockup. Fine craftsmanship, rich glass texture, strong design readable at a distance, remarkable detail at close range. Mood is ingenious and tender: an orchard cooperates to share a passing shower. The scene is imaginative, not an engineering schematic or factual infographic. No text, diagrams, labels, arrows, logos, watermarks or borders beyond the textile’s own edge. High quality, automatic output size, opaque background.",
+    "image": "images/2026-10-07-random-image-style-bead-weaving-the-orchard-redirects-rain.jpg",
+    "thumb": "thumbs/2026-10-07-random-image-style-bead-weaving-the-orchard-redirects-rain.webp",
+    "color": "#424739",
+    "date": "2026-10-07",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "orchard-routes-rain-woven-branch-channels",
+      "imageSha256": "519aa249f9b21d1e10311f5334a334ef5fbfdefc6478f969023ec1738ea6dca8",
+      "imageDHash": "fa3e1cd873da83bb",
+      "styleFamily": "bead-weaving"
+    },
+    "randomRenderingStyle": {
+      "medium": "bead-weaving",
+      "description": "Handwoven glass seed-bead textile using brick-stitch and peyote-like interlocks, transparent water strands, copper trunk braids and stepped green foliage.",
+      "template": ""
+    }
   }
 ]
