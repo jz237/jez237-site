@@ -4,13 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>The Clockwork Garden</title>
-  <meta name="description" content="A short procedural film: a mechanical garden awakening inside a Victorian glasshouse." />
-  <link rel="stylesheet" href="styles.css?v=3c861e72dd" />
+  <meta name="description" content="A Victorian glasshouse of brass, porcelain and glass, rendered live in your browser. Watch the 58-second film, fly APX-9 the mechanical bee, or follow it as it tends the garden." />
+  <meta name="theme-color" content="#06141c" />
+  <link rel="canonical" href="https://jez237.com/demos/clockwork-garden/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306141c' stroke='%23d9b56a' stroke-width='1.6'/%3E%3Cpath d='M16 6v10l6 4' fill='none' stroke='%23d9b56a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="jez237.com" />
+  <meta property="og:title" content="The Clockwork Garden" />
+  <meta property="og:description" content="A Victorian glasshouse of brass and porcelain, alive in your browser. Fly APX-9, the mechanical bee, pollinate the blooms and wake the garden." />
+  <meta property="og:url" content="https://jez237.com/demos/clockwork-garden/" />
+  <meta property="og:image" content="https://jez237.com/demos/clockwork-garden/assets/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="APX-9, a brass and porcelain mechanical bee, flying down a lantern-lit avenue of glowing porcelain flowers inside a Victorian glasshouse at night." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Clockwork Garden" />
+  <meta name="twitter:description" content="A Victorian glasshouse of brass and porcelain, alive in your browser. Fly APX-9, the mechanical bee, and wake the garden." />
+  <meta name="twitter:image" content="https://jez237.com/demos/clockwork-garden/assets/og.jpg" />
+  <link rel="stylesheet" href="styles.css?v=87e1250e36" />
   <script type="importmap">
     {
       "imports": {
-        "three": "./vendor/three/build/three.module.js",
-        "three/addons/": "./vendor/three/addons/",
         "./src/audio/live.js": "./src/audio/live.js?v=67b3b46e49",
         "./src/audio/score.js": "./src/audio/score.js?v=65a5fc7f61",
         "./src/core/ease.js": "./src/core/ease.js?v=1c12c5a05a",
@@ -38,7 +52,7 @@
         "./src/explore/butterflies.js": "./src/explore/butterflies.js?v=ae7251a5ae",
         "./src/explore/cameras.js": "./src/explore/cameras.js?v=fd8a724716",
         "./src/explore/cull.js": "./src/explore/cull.js?v=9f0abc39b0",
-        "./src/explore/explore.js": "./src/explore/explore.js?v=754735cbfd",
+        "./src/explore/explore.js": "./src/explore/explore.js?v=77b025f278",
         "./src/explore/fireflies.js": "./src/explore/fireflies.js?v=dee5cee105",
         "./src/explore/flutter.js": "./src/explore/flutter.js?v=857d75a349",
         "./src/explore/growth.js": "./src/explore/growth.js?v=09968e6f02",
@@ -47,8 +61,9 @@
         "./src/explore/nearfield.js": "./src/explore/nearfield.js?v=0db922f831",
         "./src/explore/night.js": "./src/explore/night.js?v=c329b16c83",
         "./src/explore/pilot.js": "./src/explore/pilot.js?v=9172416a95",
+        "./src/explore/save.js": "./src/explore/save.js?v=52d3a597be",
         "./src/explore/scenery.js": "./src/explore/scenery.js?v=d142ef8bbe",
-        "./src/explore/timeofday.js": "./src/explore/timeofday.js?v=406c2517d8",
+        "./src/explore/timeofday.js": "./src/explore/timeofday.js?v=a950387dba",
         "./src/explore/upgrade.js": "./src/explore/upgrade.js?v=d3920f13b0",
         "./src/explore/wetpath.js": "./src/explore/wetpath.js?v=6372118801",
         "./src/geometry/gears.js": "./src/geometry/gears.js?v=28a5480034",
@@ -57,16 +72,16 @@
         "./src/geometry/parts.js": "./src/geometry/parts.js?v=7c23b182ca",
         "./src/geometry/shapes.js": "./src/geometry/shapes.js?v=91af2e6e67",
         "./src/input/input.js": "./src/input/input.js?v=ec550f43e4",
-        "./src/main.js": "./src/main.js?v=525faad5a4",
+        "./src/main.js": "./src/main.js?v=7eb60ef739",
         "./src/materials/library.js": "./src/materials/library.js?v=c0f6e6e11f",
         "./src/materials/scanlist.js": "./src/materials/scanlist.js?v=f6cfd06d9d",
-        "./src/materials/scans.js": "./src/materials/scans.js?v=03c38c897f",
+        "./src/materials/scans.js": "./src/materials/scans.js?v=204d248c0c",
         "./src/materials/textures.js": "./src/materials/textures.js?v=b3e61c8e3b",
         "./src/render/governor.js": "./src/render/governor.js?v=14156591c3",
         "./src/render/pipeline.js": "./src/render/pipeline.js?v=4fcba6ec56",
         "./src/render/singlepass.js": "./src/render/singlepass.js?v=0d1efc1113",
         "./src/ui/controls.js": "./src/ui/controls.js?v=8499f4c844",
-        "./src/ui/hud.js": "./src/ui/hud.js?v=4875e48b49",
+        "./src/ui/hud.js": "./src/ui/hud.js?v=05a1566877",
         "./src/ui/landing.js": "./src/ui/landing.js?v=d80226f6d6",
         "./src/ui/perfmeter.js": "./src/ui/perfmeter.js?v=db8de9a812",
         "./src/world/atmosphere.js": "./src/world/atmosphere.js?v=ae2242fcf3",
@@ -93,103 +108,13 @@
       }
     }
   </script>
-  <!-- modulepreload -->
-  <link rel="modulepreload" href="./src/main.js?v=525faad5a4" />
-  <link rel="modulepreload" href="./src/ui/perfmeter.js?v=db8de9a812" />
-  <link rel="modulepreload" href="./src/render/singlepass.js?v=0d1efc1113" />
-  <link rel="modulepreload" href="./src/render/governor.js?v=14156591c3" />
-  <link rel="modulepreload" href="./src/audio/live.js?v=67b3b46e49" />
-  <link rel="modulepreload" href="./src/ui/landing.js?v=d80226f6d6" />
-  <link rel="modulepreload" href="./src/ui/hud.js?v=4875e48b49" />
-  <link rel="modulepreload" href="./src/input/input.js?v=ec550f43e4" />
-  <link rel="modulepreload" href="./src/explore/explore.js?v=754735cbfd" />
-  <link rel="modulepreload" href="./src/explore/nearfield.js?v=0db922f831" />
-  <link rel="modulepreload" href="./src/explore/cull.js?v=9f0abc39b0" />
-  <link rel="modulepreload" href="./src/explore/butterflies.js?v=ae7251a5ae" />
-  <link rel="modulepreload" href="./src/explore/wetpath.js?v=6372118801" />
-  <link rel="modulepreload" href="./src/explore/night.js?v=c329b16c83" />
-  <link rel="modulepreload" href="./src/explore/fireflies.js?v=dee5cee105" />
-  <link rel="modulepreload" href="./src/explore/upgrade.js?v=d3920f13b0" />
-  <link rel="modulepreload" href="./src/explore/scenery.js?v=d142ef8bbe" />
-  <link rel="modulepreload" href="./src/explore/ambient.js?v=ae9899fc8e" />
-  <link rel="modulepreload" href="./src/explore/flutter.js?v=857d75a349" />
-  <link rel="modulepreload" href="./src/creatures/compact.js?v=8ed6841453" />
-  <link rel="modulepreload" href="./src/explore/interactions.js?v=2d8478e0dd" />
-  <link rel="modulepreload" href="./src/explore/bells.js?v=7c1dc1f6d6" />
-  <link rel="modulepreload" href="./src/explore/growth.js?v=09968e6f02" />
-  <link rel="modulepreload" href="./src/explore/cameras.js?v=fd8a724716" />
-  <link rel="modulepreload" href="./src/explore/pilot.js?v=9172416a95" />
-  <link rel="modulepreload" href="./src/explore/lowroutes.js?v=014c3fcdb2" />
-  <link rel="modulepreload" href="./src/explore/actor.js?v=b31a89d457" />
-  <link rel="modulepreload" href="./src/explore/timeofday.js?v=406c2517d8" />
-  <link rel="modulepreload" href="./src/world/lightfield.js?v=8f82154caa" />
-  <link rel="modulepreload" href="./src/audio/score.js?v=65a5fc7f61" />
-  <link rel="modulepreload" href="./src/ui/controls.js?v=8499f4c844" />
-  <link rel="modulepreload" href="./src/render/pipeline.js?v=4fcba6ec56" />
-  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/UnrealBloomPass.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/shaders/LuminosityHighPassShader.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/EffectComposer.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/MaskPass.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/ShaderPass.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/postprocessing/Pass.js" />
-  <link rel="modulepreload" href="./vendor/three/addons/shaders/CopyShader.js" />
-  <link rel="modulepreload" href="./src/direction/director.js?v=7120fe5b94" />
-  <link rel="modulepreload" href="./src/direction/shots.js?v=4d62441256" />
-  <link rel="modulepreload" href="./src/direction/camera.js?v=8557f310f9" />
-  <link rel="modulepreload" href="./src/creatures/manager.js?v=c00ceb8004" />
-  <link rel="modulepreload" href="./src/creatures/bird.js?v=43e5c36cf5" />
-  <link rel="modulepreload" href="./src/creatures/dragonfly.js?v=f9f2521275" />
-  <link rel="modulepreload" href="./src/creatures/beetle.js?v=50180e41b6" />
-  <link rel="modulepreload" href="./src/creatures/butterfly.js?v=bb8f06e226" />
-  <link rel="modulepreload" href="./src/creatures/apx9.js?v=030a04bbf5" />
-  <link rel="modulepreload" href="./src/creatures/apx9Shape.js?v=887208490f" />
-  <link rel="modulepreload" href="./src/creatures/bee.js?v=d0c30cba59" />
-  <link rel="modulepreload" href="./src/creatures/common.js?v=6e3785a4fc" />
-  <link rel="modulepreload" href="./src/world/world.js?v=9dcfb198ce" />
-  <link rel="modulepreload" href="./src/world/props.js?v=1cbf9461f2" />
-  <link rel="modulepreload" href="./src/world/sky.js?v=43afae5591" />
-  <link rel="modulepreload" href="./src/world/lighting.js?v=41f50f2741" />
-  <link rel="modulepreload" href="./src/world/atmosphere.js?v=ae2242fcf3" />
-  <link rel="modulepreload" href="./src/world/planting.js?v=93d4ed8a7d" />
-  <link rel="modulepreload" href="./src/explore/bounds.js?v=e46dda62d6" />
-  <link rel="modulepreload" href="./src/world/greatTree.js?v=0906ca636a" />
-  <link rel="modulepreload" href="./src/world/promenade.js?v=3b3044fc18" />
-  <link rel="modulepreload" href="./src/world/foliage.js?v=5423265746" />
-  <link rel="modulepreload" href="./src/world/flora.js?v=b53b0f54e8" />
-  <link rel="modulepreload" href="./src/world/dome.js?v=e5edf9e459" />
-  <link rel="modulepreload" href="./src/geometry/intersect.js?v=9b2368346a" />
-  <link rel="modulepreload" href="./src/world/garden.js?v=50c0cc3d37" />
-  <link rel="modulepreload" href="./src/world/greenhouse.js?v=a6c8afe74a" />
-  <link rel="modulepreload" href="./src/world/layout.js?v=16dd22caff" />
-  <link rel="modulepreload" href="./src/world/heroFlower.js?v=81e0c3bc95" />
-  <link rel="modulepreload" href="./src/world/wind.js?v=de6736669d" />
-  <link rel="modulepreload" href="./src/geometry/leaf.js?v=c1d64fa2c4" />
-  <link rel="modulepreload" href="./src/world/roots.js?v=1f23cfd457" />
-  <link rel="modulepreload" href="./src/world/rootCrown.js?v=9b40b3ec83" />
-  <link rel="modulepreload" href="./src/world/escapement.js?v=51e5fcc5ad" />
-  <link rel="modulepreload" href="./src/direction/beats.js?v=978af0c393" />
-  <link rel="modulepreload" href="./src/core/ease.js?v=1c12c5a05a" />
-  <link rel="modulepreload" href="./src/geometry/shapes.js?v=91af2e6e67" />
-  <link rel="modulepreload" href="./src/geometry/parts.js?v=7c23b182ca" />
-  <link rel="modulepreload" href="./vendor/three/addons/utils/BufferGeometryUtils.js" />
-  <link rel="modulepreload" href="./src/geometry/gears.js?v=28a5480034" />
-  <link rel="modulepreload" href="./src/world/environment.js?v=315ec73fac" />
-  <link rel="modulepreload" href="./src/materials/library.js?v=c0f6e6e11f" />
-  <link rel="modulepreload" href="./src/materials/scans.js?v=03c38c897f" />
-  <link rel="modulepreload" href="./src/materials/scanlist.js?v=f6cfd06d9d" />
-  <link rel="modulepreload" href="./src/materials/textures.js?v=b3e61c8e3b" />
-  <link rel="modulepreload" href="./src/core/rng.js?v=6ce6aeb932" />
-  <link rel="modulepreload" href="./src/core/quality.js?v=f7eb881e92" />
-  <link rel="modulepreload" href="./src/core/fastmatrix.js?v=8e12d0f210" />
-  <link rel="modulepreload" href="./vendor/three/build/three.module.js" />
-  <link rel="modulepreload" href="./vendor/three/build/three.core.js" />
-  <!-- /modulepreload -->
+  <link rel="modulepreload" href="./garden.U7QTCJGE.js" />
 </head>
 <body>
-  <canvas id="film" aria-label="The Clockwork Garden, an animated film"></canvas>
+  <canvas id="film" role="img" aria-label="The Clockwork Garden: a procedural film of a Victorian glasshouse and a garden you can fly through as a mechanical bee"></canvas>
   <div id="title" aria-hidden="true"><h1>The Clockwork Garden</h1><span class="rule"></span></div>
-  <div id="loading" role="status" aria-live="polite"><span class="tick"></span></div>
+  <div id="loading" role="status" aria-live="polite"><span class="tick"></span><span class="msg">winding the garden…</span></div>
   <noscript>The Clockwork Garden needs JavaScript and WebGL.</noscript>
-  <script type="module" src="./src/main.js?v=f0cad4a5c4"></script>
+  <script type="module" src="./garden.U7QTCJGE.js"></script>
 </body>
 </html>
