@@ -1,3 +1,4 @@
+import {withWreckBatch} from './wreck-batch';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from './collision-contact';
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 import {getRaceCourse,courseRoute,courseGridSlot,courseRecoverySlot,type RaceCourse} from './race-course';
@@ -1264,10 +1265,12 @@ function frame(now: number) {
   } else if (['playing', 'countdown'].includes(state)) {
     accumulator += dt;
     let n = 0;
+    withWreckBatch(()=>{
     while (accumulator >= 1 / 60 && n++ < 4) {
       step(1 / 60);
       accumulator -= 1 / 60;
     }
+    });
     for (const c of cars) c.render(state === 'wrecked' ? 1 : accumulator / (1 / 60));
   }
   if (state === 'wrecked') {

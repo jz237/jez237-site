@@ -1,3 +1,4 @@
+import {cancelWreckNormals} from './wreck-batch';
 import {markCollision} from './collision-scars';
 import {BuggySuspension} from './buggy-suspension';
 import {applyComponentImpact} from './component-damage';
@@ -209,6 +210,7 @@ export class Vehicle {
     this.roof.setEnabled(true);
     this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind));
     for (const p of this.panels) {
+      cancelWreckNormals(p);
       p.visible = true;
       p.userData.damage = 0;
       (p.geometry.attributes.position.array as Float32Array).set(
@@ -417,6 +419,7 @@ export class Vehicle {
     const materials = new Set<T.Material>();
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
+        cancelWreckNormals(o);
         if (/^(panel_|glass_)/.test(o.name)) o.geometry.dispose();
         materials.add(o.material as T.Material);
       }

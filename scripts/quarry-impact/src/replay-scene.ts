@@ -1,3 +1,4 @@
+import {withWreckBatch} from './wreck-batch';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {Vehicle,type VehicleGround} from './vehicle';
@@ -27,7 +28,8 @@ export class ReplayScene {
       for(const original of sourceProps){const mesh=original.mesh.clone();this.props.push(mesh);scene.add(mesh);}
     }catch(error){this.dispose();throw error;}
   }
-  seek(time:number){
+  seek(time:number){return withWreckBatch(()=>this.seekNow(time));}
+  private seekNow(time:number){
     if(time<this.time){for(const c of this.cars){c.repair();c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;}
     while(this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];

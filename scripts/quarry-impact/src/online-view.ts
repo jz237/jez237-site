@@ -1,3 +1,4 @@
+import {withWreckBatch} from './wreck-batch';
 import {vehicleSuspensionRestLength} from './vehicle-physics';
 import {sameOnlineSetup} from './online-setup';
 import {wheelResponse} from './wheel-physics';
@@ -25,7 +26,8 @@ export class OnlineView {
   reset() { this.repairs.clear(); this.appliedDamage.clear(); this.lastTick=-1; this.lastLiveryRevision=-1; this.initialized=false; }
   disconnect() { this.active=false; this.network.disconnect(); this.reset(); }
 
-  receive(s:Snapshot) {
+  receive(s:Snapshot){return withWreckBatch(()=>this.receiveNow(s));}
+  private receiveNow(s:Snapshot){
     const old=this.getCars();
     const rebuild=!this.initialized || s.cars.some(c=>c.dents!==undefined) || s.tick<this.lastTick || s.cars.length!==old.length ||
       s.cars.some(c=>old.find(v=>v.id===c.id)?.kind!==c.kind||!sameOnlineSetup(old.find(v=>v.id===c.id)?.setup,c.setup,c.kind));

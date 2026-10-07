@@ -113,12 +113,10 @@ function dentCache(panel: T.Mesh): DentCache {
   return panel.userData.dentCache = { restGeometric, groups: [...groups.values()] };
 }
 
-export function finishCoupeDent(panel: T.Mesh, contact: T.Vector3, direction: T.Vector3, damage: number) {
+export function finishCoupeNormals(panel: T.Mesh) {
   const { restGeometric, groups } = dentCache(panel);
-  const g = panel.geometry, normal = g.attributes.normal, axis = g.attributes.impactAxis;
-  const rest = panel.userData.original as Float32Array, authored = panel.userData.originalNormals as Float32Array;
-  const p = new T.Vector3(), n = new T.Vector3(), flow = new T.Vector3(), across = new T.Vector3(), sum = new T.Vector3();
-  const radius = Math.min(1.48, .65 + damage * .034);
+  const normal = panel.geometry.attributes.normal, authored = panel.userData.originalNormals as Float32Array;
+  const p = new T.Vector3(), n = new T.Vector3(), sum = new T.Vector3();
   // Bodywork normals are packed floats. Preserve the original arithmetic and
   // Float32 writes while avoiding temporary vectors for every welded corner.
   const packed=normal instanceof T.BufferAttribute&&normal.array instanceof Float32Array&&normal.itemSize===3&&!normal.normalized?normal.array:null;
@@ -135,6 +133,13 @@ export function finishCoupeDent(panel: T.Mesh, contact: T.Vector3, direction: T.
     }
   }
   normal.needsUpdate = true;
+}
+
+export function stampCoupeImpact(panel:T.Mesh,contact:T.Vector3,direction:T.Vector3,damage:number){
+  const normal=panel.geometry.attributes.normal,axis=panel.geometry.attributes.impactAxis;
+  const rest=panel.userData.original as Float32Array,authored=panel.userData.originalNormals as Float32Array;
+  const p=new T.Vector3(),n=new T.Vector3(),flow=new T.Vector3(),across=new T.Vector3();
+  const radius=Math.min(1.48,.65+damage*.034);
   if (!axis) return;
   for (let i = 0; i < normal.count; i++) {
     if (p.fromArray(rest, i*3).distanceTo(contact) > radius) continue;
@@ -146,6 +151,10 @@ export function finishCoupeDent(panel: T.Mesh, contact: T.Vector3, direction: T.
     axis.setXYZ(i, across.x, across.y, across.z);
   }
   axis.needsUpdate = true;
+}
+
+export function finishCoupeDent(panel:T.Mesh,contact:T.Vector3,direction:T.Vector3,damage:number){
+  finishCoupeNormals(panel);stampCoupeImpact(panel,contact,direction,damage);
 }
 
 export function repairCoupePanel(panel: T.Mesh) {
