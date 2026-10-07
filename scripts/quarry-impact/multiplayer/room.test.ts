@@ -117,30 +117,46 @@ test('actual rendered Quarry and authoritative server use identical static geome
   const browserWorld=new R.World({x:0,y:-9.81,z:0}),scene=new T.Scene();
   let quarry:Quarry;
   try{quarry=new Quarry(scene,browserWorld);}finally{(globalThis as any).document=originalDocument;}
-  quarry.setMode('derby');
+  // Compare the online layout; solo derby intentionally expands and moves the fence.
+  quarry.setMode('derby',true);
   const server=new Simulation(R),layout=quarryColliderLayout();
   // The server instantiates this same ordered factory; car colliders are appended.
   const serverStatics:R.Collider[]=[];server.world.forEachCollider(c=>{if(!c.parent())serverStatics.push(c);});
-  assert.equal(serverStatics.length,layout.length);assert.equal(quarry.collisionPhysics.statics.size,layout.length);
-  browserWorld.step();server.world.step();assert.deepEqual(corridorObstructions(browserWorld,quarry.collisionPhysics.statics),[],'The full road center ±6m corridor must remain clear of unintended solid scenery');
-  layout.forEach((spec,i)=>{const a=quarry.collisionPhysics.statics.get(spec.id)!,b=serverStatics[i];assert.equal(a.shapeType(),b.shapeType(),spec.id);assert.deepEqual(a.translation(),b.translation(),spec.id);assert.deepEqual(a.rotation(),b.rotation(),spec.id);
+  const terrainTiles=[...quarry.collisionPhysics.statics].filter(([id])=>id==='terrain'||id.startsWith('terrain:'));
+  assert.equal(terrainTiles.length,400);assert.equal(serverStatics.length,layout.length+terrainTiles.length-1);assert.equal(quarry.collisionPhysics.statics.size,serverStatics.length);
+  const serverById=new Map([...quarry.collisionPhysics.statics.keys()].map((id,i)=>[id,serverStatics[i]]));
+  for(const [id,a]of terrainTiles){const b=serverById.get(id)!;assert.deepEqual(a.vertices(),b.vertices(),id);assert.deepEqual(a.indices(),b.indices(),id);assert.deepEqual(a.translation(),b.translation(),id);}
+  // The corridor helper excludes the original terrain ID; its partition pieces
+  // are the same road surface, not unintended scenery intruding into the lane.
+  const terrainIds=new Set(terrainTiles.map(([id])=>id));
+  browserWorld.step();server.world.step();assert.deepEqual(corridorObstructions(browserWorld,quarry.collisionPhysics.statics).filter(hit=>!terrainIds.has(hit.id)),[],'The full road center ±6m corridor must remain clear of unintended solid scenery');
+  layout.forEach((spec,i)=>{const a=quarry.collisionPhysics.statics.get(spec.id)!,b=serverById.get(spec.id)!;assert.equal(a.shapeType(),b.shapeType(),spec.id);assert.deepEqual(a.translation(),b.translation(),spec.id);assert.deepEqual(a.rotation(),b.rotation(),spec.id);
     if(spec.shape==='mesh'){assert.deepEqual(a.vertices(),b.vertices(),spec.id);assert.deepEqual(a.indices(),b.indices(),spec.id);}
     if(spec.shape==='cylinder'){assert.equal(a.radius(),Math.fround(spec.radius),spec.id);assert.equal(a.halfHeight(),Math.fround(spec.halfHeight),spec.id);assert.equal(a.radius(),b.radius(),spec.id);assert.equal(a.halfHeight(),b.halfHeight(),spec.id);}
     if(spec.shape==='hull')assert.deepEqual(a.vertices(),b.vertices(),spec.id);
   });
   for(const [trees,prefix]of [[northForest.trees,'tree-north-'],[northForest.mediumTrees,'tree-north-medium-']] as const)for(const tree of trees){
     const index=layout.findIndex(s=>s.id===prefix+tree.id);assert.ok(index>=0,'every visible new trunk is part of both authoritative worlds');
-    const a=quarry.collisionPhysics.statics.get(prefix+tree.id)!,b=serverStatics[index];
+    const a=quarry.collisionPhysics.statics.get(prefix+tree.id)!,b=serverById.get(prefix+tree.id)!;
     const ray=new R.Ray({x:tree.x-tree.trunkRadius-1,y:tree.y+Math.min(1.3,tree.trunkHeight/2),z:tree.z},{x:1,y:0,z:0});
     const clientHit=a.castRay(ray,2,false),serverHit=b.castRay(ray,2,false);assert.equal(clientHit,serverHit);assert.ok(clientHit!==null&&Math.abs(clientHit-1)<3e-5);
   }
   const terrain=terrainGeometry();assert.ok(scene.children.some(o=>o instanceof T.Mesh && o.geometry.attributes.position.count===terrain.positions.length/3 && (o.geometry.attributes.position.array as Float32Array).every((n,i)=>n===terrain.positions[i])));
   const cliff=cliffGeometry();assert.ok(cliff.positions.length>50_000);
   let renderedCliff:T.Mesh|undefined;
-  scene.traverse(o=>{if(o instanceof T.Mesh && !(o instanceof T.InstancedMesh) && o.geometry.attributes.position.count===cliff.positions.length/3 && (o.geometry.attributes.position.array as Float32Array).every((n,i)=>n===cliff.positions[i]))renderedCliff=o;});
-  assert.ok(renderedCliff,'Visible cliff must retain the exact shared collision vertices');
-  assert.deepEqual(renderedCliff.geometry.index!.array,cliff.indices,'Visible cliff triangles must match the shared collider');
-  assert.deepEqual(quarry.collisionPhysics.statics.get('quarry-cliffs')!.vertices(),cliff.positions);
+  scene.traverse(o=>{if(o instanceof T.Mesh&&o.geometry.attributes.bankReference)renderedCliff=o;});
+  assert.ok(renderedCliff,'Visible cliff must retain references to its shared collision surface');
+  const collider=quarry.collisionPhysics.statics.get('quarry-cliffs')!;
+  assert.deepEqual(collider.vertices(),cliff.positions);
+  // The later bank-relief pass tessellates and offsets the render mesh by <=28cm.
+  // Check every reference vertex against the authoritative surface, plus every
+  // triangle centroid: this also catches triangles that bridge unrelated banks.
+  const rest=renderedCliff.geometry.attributes.bankReference,visible=renderedCliff.geometry.attributes.position;
+  renderedCliff.updateWorldMatrix(true,false);const matrix=renderedCliff.matrixWorld;
+  const verify=(point:T.Vector3)=>{const projected=collider.projectPoint(point,false);assert.ok(projected&&point.distanceTo(new T.Vector3().copy(projected.point))<.001,'render reference must lie on shared collision triangles');};
+  for(let i=0;i<rest.count;i++){const point=new T.Vector3().fromBufferAttribute(rest,i).applyMatrix4(matrix);verify(point);assert.ok(point.distanceTo(new T.Vector3().fromBufferAttribute(visible,i).applyMatrix4(matrix))<=.28001,'bank relief stays within its authored bound');}
+  const index=renderedCliff.geometry.index!;assert.ok(index.count>cliff.indices.length);
+  for(let i=0;i<index.count;i+=3){const center=new T.Vector3();for(let j=0;j<3;j++)center.add(new T.Vector3().fromBufferAttribute(rest,index.getX(i+j)));verify(center.multiplyScalar(1/3).applyMatrix4(matrix));}
   for(const kind of ['fir-0','fir-1','fir-2']){
     const placements=nearTrees(kind);
     assert.equal(layout.filter(s=>s.id.startsWith('tree-'+kind+'-')).length,placements.length);

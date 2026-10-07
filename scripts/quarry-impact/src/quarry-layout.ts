@@ -1,3 +1,4 @@
+import {terrainCollisionTiles,registerTerrainContacts} from './terrain-collision';
 import { terrainHeight, trackPoint, clamp } from './rules';
 import rockHulls from './quarry-rock-hulls.json';
 import screePositions from './quarry-scree.json';
@@ -166,7 +167,17 @@ export function createQuarryPhysics(R:typeof Rapier,world:Rapier.World,derby:boo
   for(const s of layout){let desc:Rapier.ColliderDesc|null;
     if(s.shape==='box')desc=R.ColliderDesc.cuboid(s.half.x,s.half.y,s.half.z);
     else if(s.shape==='cylinder')desc=R.ColliderDesc.cylinder(s.halfHeight,s.radius);
-    else if(s.shape==='mesh')desc=R.ColliderDesc.trimesh(s.data.positions,s.data.indices);
+    else if(s.shape==='mesh'){
+      if(s.id==='terrain'){
+        const colliders=terrainCollisionTiles(s.data).map((tile,index)=>{
+          const tileDesc=R.ColliderDesc.trimesh(tile.positions,tile.indices).setTranslation(s.p.x,s.p.y,s.p.z).setFriction(s.friction??.6);
+          if(s.q)tileDesc.setRotation(s.q);
+          const collider=world.createCollider(tileDesc);statics.set(index===0?s.id:s.id+':'+tile.key,collider);return collider;
+        });
+        registerTerrainContacts(world,colliders);continue;
+      }
+      desc=R.ColliderDesc.trimesh(s.data.positions,s.data.indices);
+    }
     else desc=R.ColliderDesc.convexHull(s.points);
     if(!desc)throw new Error('Invalid quarry collider '+s.id);desc.setTranslation(s.p.x,s.p.y,s.p.z).setFriction(s.friction??.6);if(s.q)desc.setRotation(s.q);
     const collider=world.createCollider(desc);statics.set(s.id,collider);if(s.derby){walls.push(collider);collider.setEnabled(derby);}
