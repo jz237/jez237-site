@@ -198,6 +198,23 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   of density running through it. They are dark against the sky, catch the low sun on the wing's edge and through the wing when it
   stands behind them, and thin into the haze with distance.
 
+### The sound of the garden
+
+Interactive modes, with sound on (`audio/live.js` has the voices, `explore/outdoors.js` decides when they happen). Nothing is a
+recording: every sound is synthesised, and every one is fired by something that is really happening.
+
+- **Outdoors is heard through the glass**: sounds are panned toward where they are, thinned and dulled with distance, dulled again by
+  the glazing, and carried by the glasshouse's reverb; a soft clip keeps a flock passing close overhead from jumping out of the mix.
+- **The wind in the trees** follows the garden's own gust field at the camera (the crowns you see lean as it swells), harder in a
+  storm; **the pool** laps at its stone and tinkles, and the reeds hiss in a gust: both pan toward the pool and swell as you near it.
+- **Ducks**: the mallards quack now and then, each from where it floats; a duck that tips up splashes as its head goes under and
+  as it comes up; APX-9 passing low over one startles it into a run of quacks and a slap of water.
+- **Geese** honk as their formation crosses (a chorus from the flock's own place in the sky); **swallows** twitter as a stream darts
+  by; the **starling** cloud rustles and whistles as it swirls above the roof.
+- **Songbirds** sing far off: a dawn chorus at first light, a few through the day, one or two at dusk. **Rain** makes the pool
+  plink. After dusk, and in the wet, **frogs** croak at the pool; **crickets** chirp on the lawns at night, and now and then an
+  **owl** calls from the woods.
+
 ### What you can do in the garden
 
 - **Pollinate any bloom**: descend gently onto it. Blooms open wide for an
@@ -268,7 +285,8 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   the address) unless the strip's *Caption* is switched off.
 - **Sound** (`M` or the menu): wing buzz that follows wingbeat and speed, the
   pollen drum, escapement ticks by distance, bells, ratchet and root swell
-  when winding, a pad whose chord follows the hour. Off until you turn it on.
+  when winding, a pad whose chord follows the hour, and the world outside the glass
+  (see *The sound of the garden*). Off until you turn it on.
 
 ## Run it
 
@@ -513,6 +531,7 @@ src/explore/                   the interactive modes:
                                  sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
   scenery.js · outside.js        the land, its trees and light · what stands on it (manor, temple, gate, lamps, borders, shadows, leaves)
   pond.js · birds.js             the reflecting pool (mirror pass, lilies, reeds, ducks) · geese, swallows and a murmuration of starlings
+  outdoors.js                    what it sounds like out there: wind, water, ducks, flocks, songbirds, frogs, crickets, an owl
   save.js                        the remembered garden (beds grown, deliveries, finale, preferences; localStorage, guarded)
   explore.js                     controller: awake world on a real-time clock, mode switching, cameras, practicals, hints
   timeofday.js                   one control for sky, sun/moon, ambient, environment ramp (blended), fog, exposure;
@@ -538,7 +557,7 @@ src/explore/                   the interactive modes:
                                  subject), tiling, glass; detail culling
   nearfield.js                   the bee-scale planting (grown in the background, collision-free, tiled, LOD,
                                  dissolved in over the film's foliage when ready)
-src/audio/live.js              live synthesis for the interactive modes
+src/audio/live.js              live synthesis for the interactive modes (the bee, bells and pad; the outdoor bus, spatial voices and beds)
 tools/                         shoot.mjs (stills), record.mjs (video), determinism.mjs, fpscheck.mjs (real-time fps +
                                per-frame draw calls), motion_check.py, uicheck.mjs, gpucheck.mjs, sheet.py,
                                drive.mjs + scenarios/ (scripted input), sweep.mjs + views/, explorefps.mjs, filmidentity.mjs,
