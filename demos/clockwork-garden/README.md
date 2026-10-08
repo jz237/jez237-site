@@ -248,6 +248,10 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   (just a rest: the water stays still beneath you, a ring spreads, the hint says "Perched on a lily pad"), or high up on the **temple statue's head**, the **copper ball on the temple's lantern** (the highest spot in the
   garden, with the whole avenue below) and the **lamp posts' caps** (about 40 of them along the walks; lit ones at dusk). Same controls as a bloom: slow down over it and descend gently; Space to take off. The perches
   count for nothing in the pollination tally, the autopilot never chooses them (it stays in the glasshouse), and the pads are gone under ice.
+- **The garden after dark is lit** (`Scenery.setPointLights`, the point-light loop in the exterior shaders of `explore/scenery.js`): the glass's light field never reached outside, so the lamps along
+  the walks lit nothing and the bee's own lamp lit no lawn. Now the seven street lamps nearest the camera cast warm pools on the gravel, the lawn, the hedges and the trunks (radius 135, falling off
+  steeply, so there is dark between them), and the bee's lamp, strobe and red and green wingtips throw theirs (a warm pool ahead, a green and a red one under the wings, the strobe's flash). On wet ground each
+  is also a glint in the puddles and a sheen on the gravel. Nothing by day (the count is 0 and the loop is skipped), and the lamps follow the dusk the glows do (`outside.duskK`, also in a storm).
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
