@@ -45,9 +45,9 @@ test('New course recordings retain all registered cars, direction and wheel data
  }
 });
 
-test('non-race and unknown New course recordings reject before opening library storage',async()=>{
+test('derby and unknown New course recordings reject before opening library storage',async()=>{
  let opened=0;const library=new ReplayLibrary({open(){opened++;throw Error('Unexpected storage mutation');}} as unknown as IDBFactory);
- for(const mode of ['derby','playground'] as const){
+ for(const mode of ['derby'] as const){
   const doc=recording();doc.meta.mode=mode;const before=structuredClone(doc);
   assert.throws(()=>new ReplayRecorder(doc.meta),/circuit races/);assert.throws(()=>decodeReplay(encodeReplay(doc)),/circuit races/);
   await assert.rejects(library.save(doc),/circuit races/);await assert.rejects(library.import(new File([await replayFile(doc)],'invalid.qir')),/circuit races/);

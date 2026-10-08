@@ -1,3 +1,4 @@
+import {restoreFreeDriveBytes} from './free-drive-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,16 @@ export function readAirfieldCareerPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAirfieldCareerBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreFreeDriveBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAirfieldCareerPrevious(file);
 }
 export function verifyAirfieldCareerRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'a8ad6f7df547ea36ed840e0baafa5943f4fb2977');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreFreeDriveBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAirfieldCareerBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the AirfieldCareer release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreFreeDriveBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the AirfieldCareer release');
  assert.equal(manifest.previousFixtureCount,1597);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1597);
 }

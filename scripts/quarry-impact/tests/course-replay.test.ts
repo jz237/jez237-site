@@ -53,10 +53,10 @@ test('explicit known courses round-trip without changing packed poses, tyre cont
  for(const mode of ['race','derby','playground'] as const){const doc=oldDoc();doc.meta.mode=mode;assert.equal(replayCourseId(doc.meta),'quarry-v1');doc.meta.courseId='quarry-v1';assert.doesNotThrow(()=>decodeReplay(encodeReplay(doc)));}
 });
 
-test('unknown and non-race Ironfield recordings reject before recorder, studio or library mutation',async()=>{
+test('unknown and derby Ironfield recordings reject before recorder, studio or library mutation',async()=>{
  const invalid:ReplayDocument[]=[];
  for(const courseId of [null,'','quarry-v2','ironfield-figure-eight-v2','__proto__','toString','../ironfield','https://example.com/world.glb',0,{},[]]){const doc=oldDoc();(doc.meta as any).courseId=courseId;invalid.push(doc);}
- for(const mode of ['derby','playground'] as const){const doc=ironfield();doc.meta.mode=mode;invalid.push(doc);}
+ for(const mode of ['derby'] as const){const doc=ironfield();doc.meta.mode=mode;invalid.push(doc);}
  let opened=0;const library=new ReplayLibrary({open(){opened++;throw Error('Must not open storage');}} as any);
  for(const doc of invalid){
   const before=structuredClone(doc),ui={innerHTML:'retained live UI'} as HTMLElement;let sought=0;
