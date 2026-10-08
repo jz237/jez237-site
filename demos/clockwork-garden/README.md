@@ -254,6 +254,10 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   layers whose cell edges fade so no seam shows) and light blade tips, in the lawn's own mean brightness, and here and there a daisy (white petals round a yellow eye, one cell in
   about two in 24-unit cells, to 420 units). Both fade with distance and as a pixel grows past a blade, leaving the colour that was there. (A `sin`-based hash lost its randomness
   on big arguments on this GPU, so the cells use a hash without `sin`.) `?grass=0` compiles the lawn without it and `?nobee=1` leaves out the bee's shadow and reflection, both for A/B tests.
+- **Puddles after rain** (`WEATHER.uWet`, `explore/rain.js`, the lawn and gravel shaders in `explore/scenery.js`): the ground wets while it rains (about 20 s) and dries over a couple of
+  minutes (faster under snow; `uWet` is 0 on a dry day, and then the shader does nothing). Wet ground darkens, and in its low places (broad noise, in blobs some tens of units across)
+  puddles stand: a pale blue-grey of sky (grey and dark under cloud, black at night) that takes more of the sky toward the horizon, with the sun's glint, and, while it is raining,
+  rings where drops fall in (a ring from each 7-unit cell now and then, seven in ten of the cells quiet). The gravel avenue, the forecourt and the lawn have them; a lawn puddle shows the grass grain through it.
 - **Fireflies over the pool**, after dark: a few hundred, hanging over the water, in the reeds and along the lawn's edge, each
   drifting on its own loop and pulsing in its own time (a soft pulse every few seconds, so the swarm sparkles and never blinks
   together). Worked out in the vertex shader (no CPU), HDR sprites that the bloom takes up; they are drawn in the pool's mirror
