@@ -147,7 +147,7 @@ test('authoritative utility compound shell contacts damage the car once per body
 test('utility cargo floor remains shallow after server damage, restore and repair',()=>{
  const sim=new Simulation(R,'playground',Array(8).fill('utility'));isolate(sim);placeForWall(sim,0);
  const c=sim.cars[0];c.body.setBodyType(R.RigidBodyType.Fixed,true);
- const assertOpen=()=>{const extents=c.collider.halfExtents();close(extents.y,.065);const expected=vehicleChassisHalfExtents('utility',c.state.health);close(extents.x,expected.x);close(extents.z,expected.z);sim.world.step();const y=c.body.translation().y,hit=c.collider.castRay(new R.Ray({x:0,y:y+3,z:-1.9},{x:0,y:-1,z:0}),5,true);close(3-hit,-.185,.00001);};
+ const assertOpen=()=>{const extents=c.collider.halfExtents();close(extents.y,.065);const expected=vehicleChassisHalfExtents('utility',c.state.components?.structure?100:c.state.health);close(extents.x,expected.x);close(extents.z,expected.z);sim.world.step();const y=c.body.translation().y,hit=c.collider.castRay(new R.Ray({x:0,y:y+3,z:-1.9},{x:0,y:-1,z:0}),5,true);close(3-hit,-.185,.00001);};
  try{
   assertOpen();c.state.health=63;const saved=snapshot(sim);sim.restore(saved);assertOpen();
   const dropped=sim.world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(0,9,-1.9)),box=sim.world.createCollider(R.ColliderDesc.cuboid(.2,.2,.2).setDensity(100),dropped);sim.world.gravity={x:0,y:-9.81,z:0};

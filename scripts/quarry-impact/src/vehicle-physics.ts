@@ -1,3 +1,4 @@
+import {VehicleStructure} from './vehicle-structure';
 import {advanceEngineRestart,starterRPM} from './engine-stall';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import type R from '@dimforge/rapier3d-compat';
@@ -130,7 +131,8 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  for(const [x,z]of [[-1,1],[1,1],[-1,-1],[1,-1]]){const i=controller.numWheels();controller.addWheel({x:classic?x*classicWheelHalfTrack(kind):x*(d.halfWidth-.04),y:-.12,z:z*d.wheelbase/2},{x:0,y:-1,z:0},{x:-1,y:0,z:0},vehicleSuspensionRestLength(kind),vehicleWheelRadius(kind));
   controller.setWheelSuspensionStiffness(i,30);controller.setWheelSuspensionCompression(i,4.4);controller.setWheelSuspensionRelaxation(i,5.4);controller.setWheelMaxSuspensionTravel(i,vehicleSuspensionTravel(kind));controller.setWheelMaxSuspensionForce(i,13000);controller.setWheelFrictionSlip(i,2.1);controller.setWheelSideFrictionStiffness(i,1.1);
  }
- return {body,collider,roof,controller};
+ const structure=new VehicleStructure(api,body,collider,health=>vehicleChassisHalfExtents(kind,health));
+ return {body,collider,roof,controller,structure};
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */

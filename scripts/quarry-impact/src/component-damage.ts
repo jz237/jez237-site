@@ -1,3 +1,4 @@
+import {freshStructure,validStructure,accumulateStructure} from './structural-damage';
 import {isClassicKind,classicWheelAnchors} from './classic-vehicle-specs';
 import anchors from './vehicle-damage-anchors.json';
 import type {CarKind} from './rules';
@@ -5,8 +6,8 @@ import {bodyworkDentDamage} from './bodywork-response';
 import {accumulateEngineDamage} from './engine-condition';
 import {accumulateTyreDamage} from './tyre-condition';
 export type DamageVector={x:number;y:number;z:number};
-export type ComponentDamage={wheelDamage:number[];wheelShift:DamageVector[];engineDamage?:number;tyreDamage?:number[]};
-export const freshComponents=():ComponentDamage=>({engineDamage:0,tyreDamage:[0,0,0,0],wheelDamage:[0,0,0,0],wheelShift:Array.from({length:4},()=>({x:0,y:0,z:0}))});
+export type ComponentDamage={wheelDamage:number[];wheelShift:DamageVector[];engineDamage?:number;tyreDamage?:number[];structure?:number[]};
+export const freshComponents=():ComponentDamage=>({structure:freshStructure(),engineDamage:0,tyreDamage:[0,0,0,0],wheelDamage:[0,0,0,0],wheelShift:Array.from({length:4},()=>({x:0,y:0,z:0}))});
 const clamp=(v:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,v));
 /** Authored model-space contact, shared with the rendered attachments. */
 export function damageWheels(damage:ArrayLike<number>&{[n:number]:number},shift:DamageVector[],rest:readonly DamageVector[],point:DamageVector,direction:DamageVector,amount:number){
@@ -20,6 +21,7 @@ export function damageWheels(damage:ArrayLike<number>&{[n:number]:number},shift:
 }
 /** Stored impacts are body-local; authored wheel anchors are model-local. */
 export function applyComponentImpact(state:ComponentDamage,kind:CarKind,point:DamageVector,direction:DamageVector,damage:number){
+  if(state.structure!==undefined)accumulateStructure(state.structure,kind,point,direction,damage);
   // Missing legacy history stays unknown until repair; a new hit cannot recover it.
   if(state.engineDamage!==undefined)state.engineDamage=accumulateEngineDamage(state.engineDamage,kind,point,damage);
   if(state.tyreDamage!==undefined)accumulateTyreDamage(state.tyreDamage,kind,point,damage);
@@ -29,7 +31,7 @@ export function applyComponentImpact(state:ComponentDamage,kind:CarKind,point:Da
 }
 export function validComponents(value:unknown):value is ComponentDamage{
   const c=value as ComponentDamage,finite=(n:unknown):n is number=>typeof n==='number'&&Number.isFinite(n);
-  return !!c&&(c.engineDamage===undefined||finite(c.engineDamage)&&c.engineDamage>=0&&c.engineDamage<=1)&&
+  return !!c&&(c.structure===undefined||validStructure(c.structure))&&(c.engineDamage===undefined||finite(c.engineDamage)&&c.engineDamage>=0&&c.engineDamage<=1)&&
     (c.tyreDamage===undefined||Array.isArray(c.tyreDamage)&&c.tyreDamage.length===4&&c.tyreDamage.every(d=>finite(d)&&d>=0&&d<=1))&&Array.isArray(c.wheelDamage)&&c.wheelDamage.length===4&&c.wheelDamage.every(d=>finite(d)&&d>=0&&d<=1)&&
     Array.isArray(c.wheelShift)&&c.wheelShift.length===4&&c.wheelShift.every(v=>v&&finite(v.x)&&Math.abs(v.x)<=.18&&v.y===0&&finite(v.z)&&Math.abs(v.z)<=.24);
 }
