@@ -1,3 +1,4 @@
+import {restoreVehicleGridBytes,verifyVehicleGridRevision} from './vehicle-grid-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,17 @@ export function readTimedRaceHarnessPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreTimedRaceHarnessBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreVehicleGridBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readTimedRaceHarnessPrevious(file);
 }
 export function verifyTimedRaceHarnessRevision(){
+ verifyVehicleGridRevision();
  const manifest=revision();assert.equal(manifest.baseline,'a69b8694e8be61f773c64545d2b1d019288dd526');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreVehicleGridBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTimedRaceHarnessBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the TimedRaceHarness release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreVehicleGridBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the TimedRaceHarness release');
  assert.equal(manifest.previousFixtureCount,1003);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1003);
 }

@@ -1,3 +1,5 @@
+import * as GridSetup from '../src/grid-setup';
+import * as Grid from '../src/grid-rules';
 import * as Timed from '../src/timed-race';
 import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from '../src/ai-difficulty';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
@@ -80,7 +82,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const venues=Object.fromEntries(Object.keys(COURSE_NAMES).map(id=>[id,{course:getRaceCourse(id as any),props:[],puddles:[]} ])),quarry=venues['quarry-v1'];
- const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},

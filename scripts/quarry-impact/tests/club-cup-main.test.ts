@@ -1,3 +1,5 @@
+import * as GridSetup from '../src/grid-setup';
+import * as Grid from '../src/grid-rules';
 import * as Timed from '../src/timed-race';
 import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from '../src/ai-difficulty';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
@@ -55,7 +57,7 @@ async function physicsMainHarness(names:readonly string[],overrides:Record<strin
  cars.forEach((car,i)=>car.place(-30+i*10,0,0));
  for(let tick=0;tick<90;tick++){cars.forEach(c=>c.preStep(1/60));world.step();cars.forEach(c=>c.postStep(1/60,0));}
  const venue={course:{...getRaceCourse('quarry-v1'),...surface,outside:()=>false},props:[]},calls:{finish:string[];input:number;ai:number;recover:number;impacts:number}={finish:[],input:0,ai:0,recover:0,impacts:0};
- const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,structuredClone,activeClubRound:null,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,keys:new Set(),runSettled:false,quarry:{arenaLayout:{x:0,z:0,radius:45}},CAR_KINDS,DEFINITIONS,derbyGridSlot,directionForCar,eventDerbyOrder,checkRoute,lapProgress,stepScoreRespawns,courseRoute,courseRecoverySlot,vehicleContact,vehicleContactManifold,
+ const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,structuredClone,activeClubRound:null,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,keys:new Set(),runSettled:false,quarry:{arenaLayout:{x:0,z:0,radius:45}},CAR_KINDS,DEFINITIONS,derbyGridSlot,directionForCar,eventDerbyOrder,checkRoute,lapProgress,stepScoreRespawns,courseRoute,courseRecoverySlot,vehicleContact,vehicleContactManifold,
   cars,physics:world,events,fx,state:'playing',elapsed:0,countdown:0,demo:false,autopilot:false,testInput:null,online:null,activeChallenge:undefined,waypointRace:null,activeVenue:venue,quarryVenue:venue,
   eventOptions:readEventOptions(),demoOptions:{laps:2,duration:90},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),telemetry:new SessionTelemetry(),collisions:0,
   drivers:{memory:new Map()},DERBY_ARENA:{x:0,z:0,radius:45},mode:'race',impactAudioSeverity:()=>0,
@@ -86,7 +88,7 @@ function base(overrides:Record<string,unknown>={}){
  const ui={innerHTML:'',classList:{remove(){}},querySelector(selector:string){if(!nodes.has(selector))nodes.set(selector,node());return nodes.get(selector);},querySelectorAll(){return[];}};
  const car=(id:number,kind:CarKind='tern')=>({id,kind,setup:stockSetup(kind),paintColor:new T.Color(0xffffff),root:new T.Group(),previous:new T.Vector3(),current:new T.Vector3(id*8,0,0),currentQ:new T.Quaternion(),health:100,passed:0,nextCheckpoint:1,checkpointDistance:Infinity,lap:1,finished:false,finishTime:0,penalty:0,inflicted:0,input:{throttle:1,steer:0,brake:0,handbrake:false},velocity:new T.Vector3(),forward:new T.Vector3(0,0,1),right:new T.Vector3(1,0,0),controller:{wheelIsInContact:()=>true},preStep(){},postStep(){},render(){calls.render++;},dispose(){},place(x:number,z:number){this.current.set(x,.89,z);}});
  const quarryVenue={course:getRaceCourse('quarry-v1'),props:[]},ironfieldVenue={course:getRaceCourse('ironfield-figure-eight-v1'),props:[]};
- const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,openTimeTrialSetup(){},COURSE_NAMES,RACE_NAMES,structuredClone,Error,Date,console,resolveCourseId,derbyGridSlot,directionForCar,eventDerbyOrder,courseRoute,courseRecoverySlot,courseGridSlot,checkRoute,lapProgress,stepScoreRespawns,stockSetup,readProfile,PROFILE_KEY,settleRun,SessionTelemetry,ReplayRecorder,CAR_KINDS,DEFINITIONS,WaypointRace,demoCarKind,demoVehicleSetup,
+ const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,openTimeTrialSetup(){},COURSE_NAMES,RACE_NAMES,structuredClone,Error,Date,console,resolveCourseId,derbyGridSlot,directionForCar,eventDerbyOrder,courseRoute,courseRecoverySlot,courseGridSlot,checkRoute,lapProgress,stepScoreRespawns,stockSetup,readProfile,PROFILE_KEY,settleRun,SessionTelemetry,ReplayRecorder,CAR_KINDS,DEFINITIONS,WaypointRace,demoCarKind,demoVehicleSetup,
   activeClubRound:null,clubWarning:'',clubOpen:false,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,
   activeChallenge:undefined,demo:false,online:null,kind:'tern',mode:'race',eventOptions:{...readEventOptions(),course:'ironfield-figure-eight-v1',field:24,laps:9,direction:'reverse',race:'random',derby:'score',duration:420},demoOptions:{field:6,laps:4,duration:30,camera:'director',loop:'stop',lineup:'mixed',build:'stock'},
   profile:readProfile(),profileStorageWarning:'',telemetry:new SessionTelemetry(),runId:'ordinary-run',runSettled:false,lastAward:null,state:'playing',elapsed:10,preparingEvent:false,keys:new Set(['KeyW']),testInput:null,cars:CAR_KINDS.map((kind,i)=>car(i,kind)),activeVenue:quarryVenue,quarryVenue,waypointRace:null,combat:new CombatScoreboard(),autopilot:false,
@@ -105,6 +107,7 @@ test('club selectors and actual creation override saved custom rules/builds, ret
  for(let index=0;index<3;index++){
   const h=base({clubCup:readyCup(index),activeClubRound:index});
   h.context.garage.cars.tern.setup={...stockSetup('tern'),engine:3,armor:3,tires:3};
+  h.context.eventOptions.lineup='selected';h.context.eventOptions.performance='matched';
   const supplied:Array<unknown>=[];
   h.context.Vehicle=class {
    id:number;kind:CarKind;setup:any;paintColor:T.Color;root=new T.Group();current=new T.Vector3();previous=new T.Vector3();waters=[];nextCheckpoint=0;passed=0;
