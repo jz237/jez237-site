@@ -35,7 +35,7 @@ test('practice recovery keeps safe airfield infield positions, avoids occupied o
  assert.deepEqual(freeDriveRecovery(course,car,[car],()=>false),{x:50,z:40,yaw:Math.PI/2});
 });
 
-test('five-car practice grids physically settle without overlap on all ten added venues',()=>{
+test('five-car practice grids physically settle without overlap on all added venues',()=>{
  for(const id of venues){
   const course=getRaceCourse(id),world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;course.buildPhysics!(R,world);
   const cars=Array.from({length:5},(_,index)=>{

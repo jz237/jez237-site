@@ -1,5 +1,6 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'alderwick-stunt-v1':'Alderwick Stunt Park',
  'millhaven-rally-v1':'Millhaven Rally Park',
  'merefield-airfield-v1':'Merefield Airfield',
  'dockside-loop-v1':'Dockside Loop',
