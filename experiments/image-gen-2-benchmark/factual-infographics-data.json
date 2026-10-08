@@ -10502,5 +10502,143 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-08-factual-infographic-factual-infographic-glaucoma-protecting",
+    "title": "Factual infographic: Glaucoma — Protecting the Optic Nerve",
+    "tests": "factual_subtype: medical-health-infographic; dominant anatomical hero; eight substantive supporting panels; five-plus explanatory diagrams; source-backed; no non-Monday subjective review; requested quality high, size auto, opaque.; archive_slot=2026-10-08T17:20; concept=glaucoma-optic-nerve-damage-aqueous-drainage-eye; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished direct-canvas medical educational infographic, not a photograph of a poster, display case, book, screen or room. Title: “GLAUCOMA” with subtitle “Protecting the optic nerve”. A sophisticated museum-quality anatomical plate for curious adults, with exceptionally detailed medical illustration, generous legible type and precise leader lines. Favor a tall balanced composition within automatic canvas sizing. Ivory background, deep navy typography, coral neural tissue, pale gold aqueous fluid, teal drainage arrows, and restrained red only for the emergency panel. No logos, watermark, URLs, bibliography or decorative tiny text. Every arrow must convey a specified supported relationship, not an invented causal claim.\n\nDOMINANT HERO: large integrated sagittal cutaway of a human eye spanning the central upper half, convincingly layered white sclera, transparent curved cornea, iris, pupil, lens, thin retina and optic nerve exiting at the rear. Precisely label “Cornea”, “Iris”, “Lens”, “Retina”, “Optic nerve”, “Aqueous fluid” and “Drainage angle”. Clearly locate aqueous fluid in the ANTERIOR part of the eye, not in the vitreous cavity. Teal arrows indicate fluid leaving the front of the eye at the drainage angle, with a magnified close-up of that angle alongside the corneal edge. Give the nerve realistic bundled fibers and richly textured tissue without gore. A second explanatory magnification compares a schematic intact nerve-fiber bundle with a reduced bundle, label “Nerve-fiber loss → blind spots”. Do not depict nerve repair or a universal pressure threshold. Hero summary: “Glaucoma damages the optic nerve. Pressure lowering helps protect remaining vision.”\n\nEIGHT SUBSTANTIAL PANELS, arranged around and below the hero, numbered 1–8 with ample gutters, distinct original diagrams and short readable labels. At least five visual information layers: central anatomical cutaway; fluid-path close-ups; mechanism comparisons; illustrative field comparison; clinical-test strip; treatment mechanism diagrams; follow-up vignette; emergency response block. Preserve all eight panels, not a sparse title and icons.\n1. “An open angle, impaired drainage”: enlarged anterior angle cross-section showing an open space between iris and cornea with reduced outward fluid arrows at the drainage tissue. Text: “Open-angle glaucoma develops gradually. Often painless; no obvious early symptoms.” No literal clogged plumbing or solid plug.\n2. “When the iris closes the angle”: paired close-up of open angle versus iris obstructing the angle. Keep cornea, iris and aqueous locations consistent with the hero. Text: “Sudden blockage can rapidly raise pressure.” Distinguish this mechanism from open-angle disease.\n3. “Pressure is not the whole diagnosis”: two qualitative mini-diagrams, one tagged “High pressure: increased risk” and one “Normal pressure: glaucoma can still occur”. Below: “Not everyone with high pressure has glaucoma.” No numeric gauges, thresholds, probabilities or pressure-only diagnosis.\n4. “Vision can change quietly”: normal illustrative everyday scene beside the same scene with schematic patchy peripheral missing areas, not only a perfect black tunnel. Caption “Later: side-vision loss and blind spots. Pattern varies.” Label clearly “Illustrative, not a diagnostic test”. No claim these pictures reproduce a patient's exact perception.\n5. “Who needs closer attention?”: tasteful small diverse adult portraits, family-tree motif and nonnumeric pressure icon. Labels “Older age”, “Family history”, “High eye pressure”. Footer “Risk factors are not a diagnosis. Ask about your exam schedule.” Do not imply every older adult gets glaucoma or blame lifestyle.\n6. “Examine more than pressure”: illustrated clinical strip with tonometry at the cornea, optic-nerve examination through a dilated pupil, a visual-field testing dome, and drainage-angle examination. Labels “Eye pressure”, “Optic nerve”, “Visual field”, “Drainage angle”; small note “Corneal thickness may also be measured.” Heading note “A complete eye exam is essential.” No invented test readings or recommended universal intervals.\n7. “Lower pressure, preserve vision”: the largest lower panel, four coherent mini-diagrams linked to the correct mechanisms. “Drops”: decreased fluid production or improved outflow. “Laser”: trabeculoplasty improves open-angle drainage; iridotomy makes a small opening in iris for angle closure, shown as two separate labeled anatomical close-ups with no surgical DIY detail. “Surgery”: schematic new drainage route or tiny drainage tube. “Follow-up”: person using prescribed drops and clinician appointment icon. Footer text “Treatment is tailored. It cannot restore vision already lost.” Short labels “Use prescribed treatment”, “Report side effects”, “Keep follow-up”, “Do not stop medicines without advice”. No dosing, promises of cure or blanket best treatment.\n8. “Sudden symptoms? Act now”: visually distinct restrained red alert block with an eye close-up and readable symptom labels “Intense eye pain”, “Red eye”, “Blurred vision”, “Nausea”. Secondary short line “Halos, headache or vomiting may occur.” Main response: “Seek urgent eye or emergency care immediately.” Connect this alert to acute angle closure, never portray gradual open-angle glaucoma as routinely painful.\n\nCarefully align anatomy across every diagram. Use fine illustrated vascular and nerve textures in the hero but simplify background enough for true label legibility. Render subtle volumetric lighting, smooth tissue gradients and sharp diagram boundaries. No statistical filler, no unseen causal leaps, no generic repeated panels. Footer: “General education • Not a diagnosis”. Deliver one complete richly detailed infographic with a clear reading path from anatomy through mechanisms, detection and care.",
+    "image": "images/2026-10-08-factual-infographic-factual-infographic-glaucoma-protecting.jpg",
+    "thumb": "thumbs/2026-10-08-factual-infographic-factual-infographic-glaucoma-protecting.webp",
+    "color": "#d2c5bf",
+    "date": "2026-10-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "glaucoma-optic-nerve-damage-aqueous-drainage-eye",
+      "imageSha256": "bdfdf05a46cd6f461d257a6ef38227d5deb4d8377685779dab5b581bf57c37e8",
+      "imageDHash": "f2b2b2aba91b52f6"
+    },
+    "factualInfographic": {
+      "topic": "Glaucoma optic nerve damage and management",
+      "description": "Detailed anatomy and clinical education distinguishing open-angle and angle-closure glaucoma, pressure and optic nerve injury, detection, management and emergency warning signs.",
+      "sourceNote": "Verified anatomy, clinical mechanisms, risk, diagnosis, treatment and urgent care with National Eye Institute https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/glaucoma and American Academy of Ophthalmology https://www.aao.org/eye-health/diseases/what-is-glaucoma",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-08T21:22:04.072007+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Eye Institute",
+            "title": "Glaucoma",
+            "sourceType": "government-agency",
+            "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/glaucoma"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Ophthalmology",
+            "title": "Understanding Glaucoma: Symptoms, Causes, Diagnosis, Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.aao.org/eye-health/diseases/what-is-glaucoma"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Glaucoma is a group of eye diseases that damage the optic nerve at the back of the eye; lost vision cannot be restored by glaucoma treatment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The optic nerve contains many nerve fibers; loss of these fibers causes blind spots.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Aqueous fluid in the front of the eye normally leaves through the drainage angle; impaired drainage can increase eye pressure.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Open-angle glaucoma develops gradually when the eye does not drain fluid well despite an open angle; it is painless and often has no obvious early symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "High eye pressure increases risk, but some people with high pressure do not develop glaucoma and some have glaucoma at normal pressure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In angle-closure glaucoma, the iris can block the drainage angle; sudden complete blockage can rapidly raise eye pressure and is an emergency.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Later glaucoma can cause peripheral vision loss and blind spots; illustrative field loss is variable, not a diagnostic simulation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Older age, a family history of glaucoma and high eye pressure are risk factors, not guarantees of disease.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis needs a comprehensive eye examination; pressure alone is insufficient. Examination includes optic nerve assessment, visual field testing and drainage angle inspection; corneal thickness may be measured.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prescription drops lower pressure by reducing aqueous production or improving outflow; treatment choice depends on the person and disease type.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Laser trabeculoplasty improves drainage in open-angle glaucoma; laser iridotomy makes a small iris opening for angle-closure glaucoma.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Glaucoma surgery can create a new drainage route or use a drainage tube; pressure reduction aims to limit further nerve damage, not restore lost vision.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Follow prescribed treatment, report side effects, attend regular follow-up and do not stop glaucoma medicines without discussing with the ophthalmologist.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden intense eye pain, red eye, blurred vision or nausea can signal angle closure; halos, headache and vomiting can occur. Seek urgent eye or emergency care immediately.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
