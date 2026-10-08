@@ -124,6 +124,8 @@ export async function loadCars(progress: (s: string) => void) {
     }
     // Shared refined templates are built once. Cars clone their deformable
     // buffers; no remeshing, loading or asynchronous work occurs during a hit.
+    // A 28cm skin grid still resolves the 70cm light-contact footprint. Avoid
+    // adding dense vertices to every opponent for sub-pixel crease detail.
     gltf.scene.traverse(o => {
       if (!(o instanceof THREE.Mesh) || o.name.startsWith('suspension_')) return;
       let parent = o.parent;
@@ -132,7 +134,7 @@ export async function loadCars(progress: (s: string) => void) {
         parent = parent.parent;
       }
       const old = o.geometry;
-      o.geometry = wreckTopology(old, o.name.startsWith('detail_') ? .23 : .14);
+      o.geometry = wreckTopology(old, o.name.startsWith('detail_') ? .46 : .28);
       old.dispose();
     });
     templates.set(kind, gltf.scene);
