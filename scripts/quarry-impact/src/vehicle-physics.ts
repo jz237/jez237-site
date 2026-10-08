@@ -151,7 +151,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind)),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
   controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
-  controller.setWheelSuspensionRestLength(i,(kind==='buggy'?corner.rest*(.44/.36):corner.rest)+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping);controller.setWheelSuspensionRelaxation(i,5.4*spec.damping);
+  controller.setWheelSuspensionRestLength(i,(kind==='buggy'?corner.rest*(.44/.36):corner.rest)+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping*(spec.compression??1));controller.setWheelSuspensionRelaxation(i,5.4*spec.damping*(spec.rebound??1));
   controller.setWheelRadius(i,corner.radius);controller.setWheelMaxSuspensionForce(i,corner.force);controller.setWheelSideFrictionStiffness(i,corner.sideGrip);controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
   // Rapier ignores wheelBrake when engine force is nonzero. Disengage only
   // the handbraked rear wheels so the brake works while front drive is retained.
@@ -175,7 +175,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  return up.y;
 }
 
-export type PhysicsTuning={engine:number;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number}};
+export type PhysicsTuning={engine:number;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number;compression?:number;rebound?:number;rideHeight?:number;brakePressure?:number}};
 export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engine:0,tires:0,armor:0,tune:{gearing:0,suspension:0,steering:0,brakeBias:0,differential:0}}) {
   const s = input, d = DEFINITIONS[kind];
   const ratio = 1 + s.tune.gearing * .22;
@@ -183,9 +183,11 @@ export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engi
     force: d.force * (1 + s.engine * .12) * ratio,
     speedLimit: ((kind==='shuttle'?31:kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + s.engine * 1.4) / ratio, gearStep: (kind==='shuttle'?5.9:kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
     spring: (kind==='shuttle'?1.15:kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='shuttle'?1.20:kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
-    rideHeight: -s.tune.suspension * .035, grip: 1 + s.tires * .06,
+    ...(s.tune.compression?{compression:1+s.tune.compression*.5}:{}),
+    ...(s.tune.rebound?{rebound:1+s.tune.rebound*.5}:{}),
+    rideHeight: s.tune.rideHeight?-s.tune.suspension * .035+s.tune.rideHeight*.06:-s.tune.suspension * .035, grip: 1 + s.tires * .06,
     steering: 1 + s.tune.steering * .25,
-    frontBrake: 1 + s.tune.brakeBias * .36, rearBrake: 1 - s.tune.brakeBias * .36,
+    frontBrake: (1 + s.tune.brakeBias * .36)*(1+(s.tune.brakePressure??0)*.5), rearBrake: (1 - s.tune.brakeBias * .36)*(1+(s.tune.brakePressure??0)*.5),
     damageScale: 1 / (1 + s.armor * .18), differential: s.tune.differential };
 }
 
