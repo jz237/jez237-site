@@ -1,3 +1,4 @@
+import {RaceRecovery,freeRecoverySlot} from '../src/race-recovery';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -67,8 +68,8 @@ async function fixture(kinds:readonly [CarKind,CarKind],gap:number,speed:number)
  // A deliberately straight, empty road isolates opposing steering from course
  // navigation. The production 24-checkpoint indexing remains in use.
  const routes=[1,-1].map(direction=>Array.from({length:24},(_,i)=>({x:0,z:direction*(i===0?-100:100*i)})));
- const drivers=new DrivingBrain(),venue={course:{...surface,distance:(x:number)=>Math.abs(x),outside:()=>false}};
- const context:any={T,R,activeTimeTrial:null,cars,physics:world,events,fx,drivers,drivingObstacleClearance,vehicleContact,vehicleContactManifold,checkRoute,lapProgress,
+ const drivers=new DrivingBrain(),venue={course:{...surface,halfWidth:12,distance:(x:number)=>Math.abs(x),outside:()=>false}};
+ const context:any={T,R,DEFINITIONS,raceRecovery:new RaceRecovery(),freeRecoverySlot,activeTimeTrial:null,cars,physics:world,events,fx,drivers,drivingObstacleClearance,vehicleContact,vehicleContactManifold,checkRoute,lapProgress,
   activeVenue:venue,quarryVenue:venue,raceRoute:(id:number)=>routes[id===1?0:1],raceLaps:()=>2,scoreDerby:()=>false,
   state:'playing',elapsed:0,countdown:0,online:null,demo:true,autopilot:false,testInput:null,mode:'race',telemetry:null,waypointRace:null,
   activeClubRound:null,clubPlayerStopped:false,clubRetired:false,activeChallenge:undefined,collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),collisions:0,

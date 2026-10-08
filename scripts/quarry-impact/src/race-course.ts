@@ -4,6 +4,7 @@ import {CHECKPOINTS,trackPoint,surfaceAt} from './rules';
 import {landscapeHeight} from './quarry-layout';
 import {circuitRoute,raceGridSlot,type EventOptions,type RoutePoint} from './event-rules';
 import {IRONFIELD} from './ironfield-course';
+import {BRACKEN} from './bracken-course';
 import {CINDERBANK} from './cinderbank-course';
 
 export type CourseDirection=EventOptions['direction'];
@@ -28,7 +29,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK};
+const COURSES:Record<CourseId,RaceCourse>={'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{
