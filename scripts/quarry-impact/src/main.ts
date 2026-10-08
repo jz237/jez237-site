@@ -1,3 +1,4 @@
+import {createCountyWorld} from './county-world';
 import {createPinecrestWorld} from './pinecrest-world';
 import {combatMotion,COMBAT_AWARDS} from './combat-feats';
 import {transmissionGearLabel} from './transmission';
@@ -520,7 +521,7 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
   let artwork:{root:T.Group;dispose():void}|undefined;
   try{
-    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
+    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='dockside-loop-v1'||id==='fairground-scramble-v1'?createCountyWorld(id):id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
     const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;

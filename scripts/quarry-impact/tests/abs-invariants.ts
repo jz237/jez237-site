@@ -11,6 +11,7 @@ export function readAbsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAbsBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreKeyboardDefaultBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAbsPrevious(file);
 }

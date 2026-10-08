@@ -11,6 +11,7 @@ export function readDrivingAssistsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreDrivingAssistsBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreRegentBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readDrivingAssistsPrevious(file);
 }
