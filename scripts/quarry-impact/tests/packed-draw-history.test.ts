@@ -1,6 +1,7 @@
+import {restoreReplayCheckpointBytes} from './replay-checkpoint-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPackedDrawPrevious,restorePackedDrawBytes,verifyPackedDrawRevision} from './packed-draw-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreReplayCheckpointBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PackedDraw preserves every prior fixture, vehicle asset, control and camera input',verifyPackedDrawRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/packed-draw/revision.json').toString());
