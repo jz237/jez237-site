@@ -1,3 +1,5 @@
+import {BRIARHILL_ARENA,buildBriarhillPhysics,briarhillGround} from './briarhill-arena';
+import {createBriarhillWorld} from './briarhill-world';
 import {createCountyWorld} from './county-world';
 import {createPinecrestWorld} from './pinecrest-world';
 import {combatMotion,COMBAT_AWARDS} from './combat-feats';
@@ -509,10 +511,11 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
     const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
     let artwork:ReturnType<typeof createHarrowWorld>|undefined;
     try{
-      buildHarrowPhysics(R,world);artwork=createHarrowWorld();
-      const course:RaceCourse={...getRaceCourse(),...harrowGround,name:ARENA_NAMES[arenaId]};
+      const briarhill=arenaId==='briarhill-bowl-v1';
+      (briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=briarhill?createBriarhillWorld():createHarrowWorld();
+      const course:RaceCourse={...getRaceCourse(),...(briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-      const venue:VenueContext={arenaId,arena:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
+      const venue:VenueContext={arenaId,arena:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
       arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }
