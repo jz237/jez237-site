@@ -1,3 +1,6 @@
+import {HARROW_ARENA,buildHarrowPhysics,harrowGround} from '../src/harrow-arena';
+import {createHarrowWorld} from '../src/harrow-world';
+import * as Arenas from '../src/arena-id';
 import * as GridSetup from '../src/grid-setup';
 import * as Grid from '../src/grid-rules';
 import * as Timed from '../src/timed-race';
@@ -60,8 +63,8 @@ function harness(){
   dispose(){this.disposed++;this.world.removeRigidBody(this.body);}
  }
  const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
- const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
-  getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
+ const context:any={...Arenas,HARROW_ARENA,buildHarrowPhysics,harrowGround,createHarrowWorld,arenaVenues:{},director:{},...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
+  getRaceCourse(id:CourseId='quarry-v1'){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
   createAshfordWorld:()=>art('ashford-autodrome-v1'),createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),createRedbankWorld:()=>art('redbank-jump-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
   quarry:{checkpoint,modeScenery:[],props:[],sun:{shadow:{needsUpdate:false}},collisionPhysics:{statics:new Map()},arenaPhysics:{walls:[]},setMode(){log.push('quarry mode');},resetProps(){log.push('reset props');}},quarryMode:'derby',
@@ -193,5 +196,20 @@ test('Ashford owns a distinct live world and actual production grid; replay rest
   assert.equal(c.activeVenue.course.id,'ashford-autodrome-v1');assert.equal(c.cars.length,24);assert.equal(h.artworks.at(-1)?.id,'ashford-autodrome-v1');
   for(const car of c.cars){const slot=courseGridSlot(getRaceCourse('ashford-autodrome-v1'),car.id,'forward');assert.equal(car.current.x,slot.x);assert.equal(car.current.z,slot.z);}
   c.beginReplay();assert.equal(c.recorder.meta.courseId,'ashford-autodrome-v1');
+ }finally{h.close();}
+});
+
+test('Harrow custom/demo worlds preserve circuit choices, ground, grid, camera bounds and recorded arena identity',()=>{
+ const h=harness();try{
+  const c=h.c;c.mode='derby';c.eventOptions.arena='harrow-bowl-v1';c.eventOptions.field=24;c.createCars();
+  const arena=c.activeVenue;assert.equal(arena.arenaId,'harrow-bowl-v1');assert.notEqual(arena.physics,c.quarryVenue.physics);assert.equal(c.cars.length,24);assert.equal(c.eventOptions.course,'cinderbank-oval-v1');
+  assert.equal(c.drivers.arena,HARROW_ARENA);assert.equal(c.director.arena,HARROW_ARENA);
+  for(const car of c.cars){const slot=derbyGridSlot(car.id,24,HARROW_ARENA);assert.equal(car.current.x,slot.x);assert.equal(car.current.z,slot.z);assert.equal(car.ground.surface(0,0),'asphalt');assert.equal(car.arenaSurface,undefined);}
+  c.beginReplay();c.elapsed=1;c.captureReplay(true);const doc=c.recorder.document();assert.equal(doc.meta.arenaId,'harrow-bowl-v1');assert.equal(doc.meta.props,0);assert.equal(doc.meta.courseId,undefined);
+  c.createCars(true);c.state='menu';const prior=c.cars;assert.equal(c.activeVenue,c.quarryVenue);assert.equal(c.director.arena,DERBY_ARENA);
+  assert.equal(c.openStudio(false,doc),true);assert.equal(c.activeVenue,arena);assert.equal(c.director.arena,HARROW_ARENA);c.closeStudio();assert.equal(c.activeVenue,c.quarryVenue);assert.equal(c.cars,prior);assert.equal(c.director.arena,DERBY_ARENA);
+  c.demo=true;c.createCars();assert.equal(c.activeVenue,c.quarryVenue,'demo has independent arena preference');c.demoOptions.arena='harrow-bowl-v1';c.createCars();assert.equal(c.activeVenue,arena);
+  c.mode='race';c.createCars();assert.equal(c.activeVenue.course.id,'cinderbank-oval-v1');assert.equal(c.activeVenue.arenaId,undefined);assert.equal(c.demoOptions.arena,'harrow-bowl-v1');
+  c.mode='derby';c.demo=false;c.activeChallenge={id:'fixture',course:'quarry-v1',mode:'derby'};c.createCars();assert.equal(c.activeVenue,c.quarryVenue,'fixed challenges keep their existing arena');
  }finally{h.close();}
 });

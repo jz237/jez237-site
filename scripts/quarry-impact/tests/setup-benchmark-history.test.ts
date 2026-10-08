@@ -1,6 +1,7 @@
+import {restoreHarrowBytes} from './harrow-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSetupBenchmarkPrevious,restoreSetupBenchmarkBytes,verifySetupBenchmarkRevision} from './setup-benchmark-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreHarrowBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SetupBenchmark preserves every prior fixture, vehicle asset, control and camera input',verifySetupBenchmarkRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/setup-benchmark/revision.json').toString());

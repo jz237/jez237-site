@@ -1,3 +1,4 @@
+import * as Arenas from '../src/arena-id';
 import * as Career from '../src/career';
 import {showCareer} from '../src/career-ui';
 import * as DamageRules from '../src/damage-rules';
@@ -82,7 +83,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const quarry={course:getRaceCourse('quarry-v1'),props:[],puddles:[]},ironfield={course:getRaceCourse('ironfield-figure-eight-v1'),props:[],puddles:[]};
- const context:any={clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...Arenas,clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},

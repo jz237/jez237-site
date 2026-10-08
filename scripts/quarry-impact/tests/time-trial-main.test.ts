@@ -1,3 +1,4 @@
+import * as Arenas from '../src/arena-id';
 import * as Ghost from '../src/trial-ghost';
 import {TrialGhostView} from '../src/trial-ghost-view';
 import * as DamageRules from '../src/damage-rules';
@@ -85,7 +86,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const venues=Object.fromEntries(Object.keys(COURSE_NAMES).map(id=>[id,{course:getRaceCourse(id as any),props:[],puddles:[]} ])),quarry=venues['quarry-v1'];
- const context:any={controllerRumble:{stop(){}},...Ghost,TrialGhostView,trialGhostLibrary:Ghost.readGhostLibrary(null),trialGhostWarning:'',trialGhostRecorder:null,trialGhostView:null,trialGhostTarget:null,trialGhostSplit:'',...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...Arenas,controllerRumble:{stop(){}},...Ghost,TrialGhostView,trialGhostLibrary:Ghost.readGhostLibrary(null),trialGhostWarning:'',trialGhostRecorder:null,trialGhostView:null,trialGhostTarget:null,trialGhostSplit:'',...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},

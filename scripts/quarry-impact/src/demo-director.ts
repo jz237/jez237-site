@@ -9,7 +9,7 @@ export const DEMO_CAMERAS={director:'Auto director',overview:'Overhead overview'
 export type DemoCamera=keyof typeof DEMO_CAMERAS;
 const clamp=T.MathUtils.clamp;
 export class DemoDirector {
-  constructor(private arena:ArenaLayout=LEGACY_ARENA,private obstruction?:(from:T.Vector3,to:T.Vector3,car:Vehicle)=>number|null,private groundHeight:(x:number,z:number)=>number=landscapeHeight){}
+  constructor(public arena:ArenaLayout=LEGACY_ARENA,private obstruction?:(from:T.Vector3,to:T.Vector3,car:Vehicle)=>number|null,private groundHeight:(x:number,z:number)=>number=landscapeHeight){}
   view:DemoCamera='director';
   activeView:DemoCamera='drone';
   followed=0;

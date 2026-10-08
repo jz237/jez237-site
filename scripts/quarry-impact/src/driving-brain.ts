@@ -29,7 +29,7 @@ function oncomingEncounter(car:DriverCar,other:DriverCar):Encounter|null{
 
 /** Solo driving decisions. Vehicle simulation and the online authority stay separate. */
 export class DrivingBrain {
-  constructor(private arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
+  constructor(public arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
   readonly memory=new Map<number,DriverMemory>();
   reset(){this.memory.clear();}
   update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS):Input {
