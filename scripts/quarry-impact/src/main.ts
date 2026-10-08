@@ -74,8 +74,9 @@ import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,check
 import {showEventSetup} from './event-ui';
 import {loadTimeTrialRecords,saveTimeTrialRecords,isTimeTrialConfig,timeTrialBest,formatTrialTime,finishTimeTrialRecord,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
 import {showTimeTrialSetup,showTimeTrialResult} from './time-trial-ui';
-import {CLUB_CUP_KEY,CLUB_ROUNDS,createClubCup,readClubCup,beginClubRound,finishClubRound,clubRoundRunId,replayCupAwards,type ClubCupState,type ClubRowInput} from './club-cup';
+import {CLUB_CUP_KEY,CLUB_ROUNDS,clubRounds,clubSeries,createClubCup,readClubCup,beginClubRound,finishClubRound,clubRoundRunId,replayCupAwards,type ClubCupState,type ClubRowInput} from './club-cup';
 import {showClubCup} from './club-cup-ui';
+import {CLUB_RECORDS_KEY,readClubRecords,recordClubFinish} from './club-records';
 import type {RunStats} from './session-telemetry';
 import {ReplayRecorder,readReplayFile,replayCourseId,type ReplayDocument} from './replay-data';
 import {ReplayScene,captureReplayFrame} from './replay-scene';
@@ -113,19 +114,21 @@ let garageFace:LiveryFace='right';
 let garageOpen=false,profileOpen=false,eventSetupOpen=false,clubOpen=false;
 let clubCup:ClubCupState|null=null,clubWarning='';
 try{const stored=localStorage.getItem(CLUB_CUP_KEY);clubCup=readClubCup(stored);if(stored&&!clubCup)clubWarning='The saved cup could not be read. You can start a new cup.';}catch{clubWarning='Cup saving is unavailable in this browser.';}
+let clubRecords=readClubRecords();
+try{clubRecords=readClubRecords(localStorage.getItem(CLUB_RECORDS_KEY));}catch{}
 let activeClubRound:number|null=null,clubRetired=false,clubPlayerStopped=false,clubFirstFinish:number|null=null;
 let clubPlayerRow:ClubRowInput|null=null,clubRunStats:RunStats|undefined;
-const clubRound=()=>activeClubRound===null?null:CLUB_ROUNDS[activeClubRound];
+const clubRound=()=>activeClubRound===null?null:clubRounds(clubCup)[activeClubRound];
 let eventOptions=readEventOptions();
 try{eventOptions=readEventOptions(localStorage.getItem(EVENT_KEY));}catch{}
 const combat=new CombatScoreboard();
 const eventFrameTimes:number[]=[];
 const customEvent=()=>activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&!online?.active;
-const aiDifficulty=()=>sessionAIDifficulty(customEvent()&&mode!=='playground',demo,eventOptions.difficulty,demoOptions.difficulty);
+const aiDifficulty=()=>activeClubRound!==null?readAIDifficulty(clubCup?.difficulty):sessionAIDifficulty(customEvent()&&mode!=='playground',demo,eventOptions.difficulty,demoOptions.difficulty);
 let waypointRace:WaypointRace|null=null,waypointMarkers:WaypointMarkers|undefined;
 const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undefined;
 const raceFormat=()=>demo?'laps':onlineRules()?.race??(customEvent()?eventOptions.race:'laps');
-const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??activeTimeTrial?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
+const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
 const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,raceDirection(id));
 const scoreDerby=()=>mode==='derby'&&(online?.active?onlineRules()?.derby==='score':customEvent()&&eventOptions.derby==='score');
 const derbyRanking=()=>online?.active?online.network.snapshot!.ranking.map(id=>cars.find(c=>c.id===id)!):eventDerbyOrder(cars,scoreDerby(),combat);
@@ -191,6 +194,11 @@ function syncClubAwards(){
   const saved=saveClubCup(),awards=replayCupAwards(profile,clubCup,saved),fresh=awards.filter(a=>!a.duplicate);
   // Even if the cup write failed, keep already-awarded receipts pinned before an ordinary run saves the profile.
   if(!saved)return;
+  if(clubCup.phase==='complete'){
+    clubRecords=recordClubFinish(clubRecords,clubCup);
+    try{localStorage.setItem(CLUB_RECORDS_KEY,JSON.stringify(clubRecords));}
+    catch{clubWarning='This cup is saved, but championship records could not be saved. Keep this completed cup until browser storage is available.';}
+  }
   if(fresh.length)lastAward=fresh.at(-1)!;
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}
   catch{profileStorageWarning='Cup results are saved. Driver XP will be recovered when profile saving is available.';}
@@ -199,10 +207,10 @@ function closeClubCup(){clubOpen=false;createCars(true);menu();}
 function openClubCup(notice=''){
   keys.clear();clubOpen=true;syncClubAwards();if(notice)clubWarning=[notice,clubWarning].filter(Boolean).join(' ');
   showClubCup(ui,clubCup,kind,{
-    create:()=>{clubCup=createClubCup(kind,crypto.randomUUID(),Date.now());saveClubCup();openClubCup();},
+    create:(series,difficulty)=>{clubCup=createClubCup(kind,crypto.randomUUID(),Date.now(),series,difficulty);saveClubCup();openClubCup();},
     start:()=>{void startClubRound();},close:closeClubCup,
     abandon:()=>{try{localStorage.removeItem(CLUB_CUP_KEY);clubCup=null;clubWarning='';}catch{clubWarning='The saved cup could not be reset. Please try again.';}openClubCup();},
-  },[clubWarning,profileStorageWarning].filter(Boolean).join(' '));
+  },[clubWarning,profileStorageWarning].filter(Boolean).join(' '),clubRecords);
   if(state==='result')studioButtons(ui.querySelector('.club-actions'));
 }
 async function startClubRound(){
@@ -210,7 +218,7 @@ async function startClubRound(){
   // Leaving/restarting an unfinished round never settles a partial attempt.
   clubCup=beginClubRound(clubCup);saveClubCup();activeClubRound=clubCup.results.length;
   clubRetired=false;clubPlayerStopped=false;clubFirstFinish=null;clubPlayerRow=null;clubRunStats=undefined;
-  clubOpen=false;activeTimeTrial=null;timeTrialOpen=false;activeChallenge=undefined;demo=false;kind=clubCup.roster[0].kind;mode=CLUB_ROUNDS[activeClubRound].mode;
+  clubOpen=false;activeTimeTrial=null;timeTrialOpen=false;activeChallenge=undefined;demo=false;kind=clubCup.roster[0].kind;mode=clubRound()!.mode;
   const index=activeClubRound,id=clubRoundRunId(clubCup,index),ok=await start(false);
   if(ok){runId=id;return true;}
   if(state==='menu')openClubCup('The round could not start. Your earlier results are retained; try the round again.');
@@ -486,7 +494,7 @@ function menu() {
   const garageButton=document.createElement('button');garageButton.id='garage';garageButton.className='small-button';garageButton.textContent='GARAGE & TUNING';garageButton.onclick=openGarage;ui.querySelector('.intro')!.append(garageButton);
   const profileButton=document.createElement('button');profileButton.id='driver-profile';profileButton.className='small-button';profileButton.textContent='DRIVER PROFILE & CHALLENGES';profileButton.onclick=()=>openProfile();ui.querySelector('.intro')!.append(profileButton);
   const trialButton=document.createElement('button');trialButton.id='time-trial';trialButton.className='small-button';trialButton.textContent='TIME TRIAL · PERSONAL BESTS';trialButton.onclick=()=>openTimeTrialSetup();ui.querySelector('.intro')!.append(trialButton);
-  const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CLUB CUP · FINAL STANDINGS':clubCup?'CONTINUE CLUB CUP':'CLUB CUP · THREE EVENTS';cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
+  const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CHAMPIONSHIPS · FINAL STANDINGS':clubCup?'CONTINUE '+clubSeries(clubCup).name.toUpperCase():'CHAMPIONSHIPS · FOUR SERIES';cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
   if(lastAward?.qualified){const note=document.createElement('p');note.className='last-award';note.textContent=awardText(lastAward);ui.querySelector('.intro')!.append(note);}
   const eventButton=document.createElement('button');eventButton.id='event-setup';eventButton.className='small-button';eventButton.textContent=`EVENT RULES · ${eventOptions.field} CARS · ${AI_DIFFICULTIES[readAIDifficulty(eventOptions.difficulty)].label.toUpperCase()}`;eventButton.onclick=openEventSetup;ui.querySelector('.intro')!.append(eventButton);
   const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';
@@ -661,7 +669,7 @@ function hud() {
   if(activeTimeTrial){ui.querySelector('.hud-title')!.textContent=`TIME TRIAL · ${activeTimeTrial.direction.toUpperCase()}`;text('event-label','PERSONAL BEST');ui.querySelector('.event-stats > div:nth-child(2) > span')!.textContent='LAP TIME';text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live" role="status"><strong id="time-trial-progress">0 / 24 GATES</strong><span id="time-trial-validity">FACTORY STOCK · ONE LAP · NO RECOVERY</span></div>');}
   if(customEvent()&&mode!=='playground')ui.querySelector('.hud-title')!.textContent+=' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI';
   if(demo)demoHud();
-  if(activeClubRound!==null){ui.querySelector('.hud-title')!.textContent=`CLUB CUP · ROUND ${activeClubRound+1} / ${CLUB_ROUNDS.length} · ${eventLabel()}`;ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="club-live" id="club-live" role="status">Factory stock · Championship points</div>');}
+  if(activeClubRound!==null){ui.querySelector('.hud-title')!.textContent=`${clubSeries(clubCup).name.toUpperCase()} · ROUND ${activeClubRound+1} / ${clubRounds(clubCup).length} · ${eventLabel()}`;ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="club-live" id="club-live" role="status">Factory stock · Championship points</div>');}
   if(online?.active)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="network-status" id="network-status"></div>');
 }
 function demoHud(){
@@ -752,7 +760,7 @@ function updateHud() {
   }
   document.getElementById('toast')!.innerHTML =
     clock < statusUntil ? `<div class="toast">${statusMessage}</div>` : '';
-  if(activeClubRound!==null){const waiting=cars.filter(c=>!c.finished&&c.health>0&&!(c.id===0&&clubRetired)).length,remaining=mode==='race'?Math.max(0,Math.ceil(Math.min(300-elapsed,clubFirstFinish===null?300:clubFirstFinish+45-elapsed))):Math.max(0,Math.ceil(eventDuration()-elapsed));text('club-live',clubPlayerStopped?`${clubRetired?'RETIRED':cars[0].finished?'FINISHED':'WRECKED'} · ${mode==='race'?waiting+' drivers still racing':'Derby still running'} · ${remaining}s maximum remaining`:'Factory stock · Championship points · '+(mode==='race'?'Field closes 45s after the first finish':'90-second survival derby'));}
+  if(activeClubRound!==null){const waiting=cars.filter(c=>!c.finished&&c.health>0&&!(c.id===0&&clubRetired)).length,remaining=mode==='race'?Math.max(0,Math.ceil(Math.min(300-elapsed,clubFirstFinish===null?300:clubFirstFinish+45-elapsed))):Math.max(0,Math.ceil(eventDuration()-elapsed));text('club-live',clubPlayerStopped?`${clubRetired?'RETIRED':cars[0].finished?'FINISHED':'WRECKED'} · ${mode==='race'?waiting+' drivers still racing':'Derby still running'} · ${remaining}s maximum remaining`:'Factory stock · '+AI_DIFFICULTIES[aiDifficulty()].label+' · Championship points · '+(mode==='race'?'Field closes 45s after the first finish':eventDuration()+'-second survival derby'));}
   drawMap();
 }
 function drawMap() {
