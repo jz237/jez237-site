@@ -256,6 +256,8 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   units high. Dressed stone (ashlar, four courses to the tile, each block its own warm grey-yellow) is laid over its outer faces on both sides, the north and south ends either side of the doors, and the corners,
   with a thin coping along the top of the outer half: all an `ext` material, so it takes the sun, haze, rain, snow (the coping is what the snow lies on) and the lamps' light. The collision now stops the bee at the
   base's outer face (it had stopped at the plinth's centre plane, nine units inside the stone).
+- **Hedges and yews, close to** (the `foliage` kind of `explore/scenery.js`, non-canopy): within about 260 units the clipped hedges, the yew cones and the flower-bed mounds have a mat of leaves in tones a unit or two across
+  (three octaves of noise, turned 37 degrees so the cells never line up with a hedge's faces: dark between, light at the tips), fading with distance and as a pixel outgrows a leaf, and not under snow.
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
