@@ -1,3 +1,4 @@
+import {REDBANK} from './redbank-course';
 import type R from '@dimforge/rapier3d-compat';
 import {COURSE_NAMES,type CourseId} from './course-id';
 import {CHECKPOINTS,trackPoint,surfaceAt} from './rules';
@@ -15,6 +16,8 @@ export type RaceCourse={
  readonly checkpoints:readonly RoutePoint[];readonly samples:readonly RoutePoint[];
  point(t:number):RoutePoint;height(x:number,z:number):number;distance(x:number,z:number):number;
  surface(x:number,z:number):'asphalt'|'gravel';outside(x:number,y:number,z:number):boolean;
+ /** Optional drivable-surface filter for horizontal steering probes, never physical collisions. */
+ isDrivingObstacle?:(collider:R.Collider)=>boolean;
  /** Quarry continues to use its existing world lifecycle. */
  buildPhysics?:(api:typeof R,world:R.World)=>number[];
 };
@@ -29,7 +32,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN};
+const COURSES:Record<CourseId,RaceCourse>={'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{

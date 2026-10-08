@@ -62,7 +62,7 @@ function harness(){
  const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
  const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
-  createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),
+  createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),createRedbankWorld:()=>art('redbank-jump-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
   quarry:{checkpoint,modeScenery:[],props:[],sun:{shadow:{needsUpdate:false}},collisionPhysics:{statics:new Map()},arenaPhysics:{walls:[]},setMode(){log.push('quarry mode');},resetProps(){log.push('reset props');}},quarryMode:'derby',
   kind:'coupe',mode:'race',demo:false,online:{active:false},onlineRules:()=>context.online.network?.snapshot?.event?.rules,
@@ -174,5 +174,15 @@ test('production grids enforce lineup and build rules for races, derbies and dem
   h.c.demo=false;h.c.mode='playground';h.c.traffic=true;h.c.createCars();assert.equal(h.c.cars.length,5);assert.equal(h.c.cars[0].setup.engine,3);assert.ok(h.c.cars.slice(1).every((c:any)=>c.setup.engine===0));
   h.c.mode='race';h.c.activeChallenge={id:'fixture',course:'quarry-v1',mode:'race'};h.c.createCars();assert.equal(h.c.cars.length,8);assert.ok(h.c.cars.every((c:any)=>c.setup.engine===0));
   h.c.activeChallenge=undefined;h.c.activeTimeTrial={kind:'tern',course:'quarry-v1',direction:'forward'};h.c.createCars();assert.equal(h.c.cars.length,1);assert.equal(h.c.cars[0].setup.engine,0);assert.equal(JSON.stringify(h.c.garage),saved);
+ }finally{h.close();}
+});
+
+
+test('Redbank owns a distinct live world and actual production grid; replay restores its course',()=>{
+ const h=harness();try{
+  const c=h.c;c.eventOptions.course='redbank-jump-v1';c.eventOptions.field=24;c.createCars();
+  assert.equal(c.activeVenue.course.id,'redbank-jump-v1');assert.equal(c.cars.length,24);assert.equal(h.artworks.at(-1)?.id,'redbank-jump-v1');
+  for(const car of c.cars){const slot=courseGridSlot(getRaceCourse('redbank-jump-v1'),car.id,'forward');assert.equal(car.current.x,slot.x);assert.equal(car.current.z,slot.z);}
+  c.beginReplay();assert.equal(c.recorder.meta.courseId,'redbank-jump-v1');
  }finally{h.close();}
 });
