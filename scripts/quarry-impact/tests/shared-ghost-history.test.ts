@@ -1,6 +1,7 @@
+import {restorePackedDrawBytes} from './packed-draw-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSharedGhostPrevious,restoreSharedGhostBytes,verifySharedGhostRevision} from './shared-ghost-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePackedDrawBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SharedGhost preserves every prior fixture, vehicle asset, control and camera input',verifySharedGhostRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/shared-ghost/revision.json').toString());
