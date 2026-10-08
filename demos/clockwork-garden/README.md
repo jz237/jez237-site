@@ -247,7 +247,8 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
 - **Somewhere to land out there** (`Explore._outdoorLandables`): fly low over the pool and settle on a **water lily** (the flowers give a little pollen, which can be carried home to the skep), on a bare **lily pad**
   (just a rest: the water stays still beneath you, a ring spreads, the hint says "Perched on a lily pad"), or high up on the **temple statue's head**, the **copper ball on the temple's lantern** (the highest spot in the
   garden, with the whole avenue below) and the **lamp posts' caps** (about 40 of them along the walks; lit ones at dusk). Same controls as a bloom: slow down over it and descend gently; Space to take off. The perches
-  count for nothing in the pollination tally, the autopilot never chooses them (it stays in the glasshouse), and the pads are gone under ice.
+  count for nothing in the pollination tally, the autopilot never chooses them (it stays in the glasshouse), and the pads are gone under ice. The **flower beds** along the walks (the coloured mounds at the foot of the hedges and round the
+  glasshouse, about six hundred of them) are landable too, and give a little pollen each: forage out there and carry it home through the doors to the skep, as with any bloom.
 - **The garden after dark is lit** (`Scenery.setPointLights`, the point-light loop in the exterior shaders of `explore/scenery.js`): the glass's light field never reached outside, so the lamps along
   the walks lit nothing and the bee's own lamp lit no lawn. Now the seven street lamps nearest the camera cast warm pools on the gravel, the lawn, the hedges and the trunks (radius 135, falling off
   steeply, so there is dark between them), and the bee's lamp, strobe and red and green wingtips throw theirs (a warm pool ahead, a green and a red one under the wings, the strobe's flash). On wet ground each
