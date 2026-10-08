@@ -1,3 +1,4 @@
+import {AI_DIFFICULTIES} from './ai-difficulty';
 import {clamp,wrap,DEFINITIONS} from './rules';
 import type {ArenaLayout} from './derby-arena';
 import type {DriverCar,DriverMemory} from './driving-brain';
@@ -39,7 +40,7 @@ function maneuver(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayou
 
 /** Derby-specific commitment and recovery. Make actual room after a low-speed
  * contact, then rebuild momentum before selecting the next attack. */
-export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout,dt:number):Input{
+export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0);
  if(!target||m.commit<=0){
@@ -63,7 +64,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
   m.attempts++;m.derby=maneuver(car,cars,m,arena,rear>1.6);m.stalled=0;
  }
- let tx=0,tz=0,desired=19;
+ let tx=0,tz=0,desired=19*difficulty.derbyPace;
  if(m.derby){
   const plan=m.derby;plan.time+=dt;plan.slow=Math.abs(car.speed)<.65?plan.slow+dt:0;
   const reached=dist(car.current,plan)<2.8,travel=Math.hypot(car.current.x-plan.startX,car.current.z-plan.startZ);
@@ -82,7 +83,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   }else{tx=run.x;tz=run.z;desired=11;m.phase='run up';}
  }
  if(!m.derby){
-  const d=dist(car.current,target.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85);
+  const d=dist(car.current,target.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85)*difficulty.interceptLead;
   tx=target.current.x+target.velocity.x*lead;tz=target.current.z+target.velocity.z*lead;m.phase='intercept';
  }
  const radius=Math.hypot(tx-arena.x,tz-arena.z),limit=arena.radius-8;

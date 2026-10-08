@@ -1,3 +1,4 @@
+import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from '../src/ai-difficulty';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -21,7 +22,7 @@ import {ReplayRecorder,replayCourseId} from '../src/replay-data';
 // and the independent course physics tests cover those).
 const source=ts.createSourceFile('main.ts',readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),ts.ScriptTarget.ES2022,true,ts.ScriptKind.TS);
 const functions=['ensureVenue','activateVenue','refreshVenueLighting','setQuarryMode','createCars','captureReplay','archiveReplay','beginReplay','openStudio','closeStudio'];
-const constants=['preferredCourse','customEvent','raceFormat','raceDirection','raceRoute','raceLaps'];
+const constants=['preferredCourse','customEvent','aiDifficulty','raceFormat','raceDirection','raceRoute','raceLaps'];
 const declarations=functions.map(name=>{
  const node=source.statements.find(s=>ts.isFunctionDeclaration(s)&&s.name?.text===name);assert.ok(node,`Production ${name} exists`);return node.getText(source);
 }).concat(constants.map(name=>{
@@ -56,7 +57,7 @@ function harness(){
   dispose(){this.disposed++;this.world.removeRigidBody(this.body);}
  }
  const frame=(cars:any[],props:any[])=>{const data=new Float32Array(cars.length*80+props.length*7);for(let i=0;i<cars.length;i++){const o=i*80;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
- const context:any={T,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
+ const context:any={T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
   createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
@@ -133,5 +134,15 @@ test('actual recording and studio handlers activate recorded Cinderbank then res
   assert.equal(c.state,'menu');assert.equal(c.physics,before.world);assert.equal(c.activeVenue,before.venue);assert.equal(c.cars,before.cars);assert.deepEqual(c.ui.childNodes,before.nodes);assert.deepEqual(c.camera.position.toArray(),[0,0,0]);assert.deepEqual(c.orbit.target.toArray(),before.target.toArray());assert.deepEqual(h.worlds.map(w=>w.bodies.len()),before.counts);assert.equal(c.studio,null);
   h.faults.studio=true;assert.throws(()=>c.openStudio(false,doc),/Replay construction failed/);assert.equal(c.state,'menu');assert.equal(c.physics,before.world);assert.equal(c.cars,before.cars);assert.deepEqual(c.ui.childNodes,before.nodes);assert.equal(c.studioRestore,null);
   assert.throws(()=>c.openStudio(false,{...doc,meta:{...doc.meta,props:1}}),/unsupported course layout/);assert.equal(c.physics,before.world);assert.equal(c.cars,before.cars);
+ }finally{h.close();}
+});
+
+test('production car creation selects independent custom/demo difficulty and resets fixed-rule and attract drivers',()=>{
+ const h=harness();try{const c=h.c;c.eventOptions.difficulty='novice';c.demoOptions.difficulty='expert';
+  c.createCars();assert.equal(c.drivers.difficulty,'novice');
+  c.demo=true;c.createCars();assert.equal(c.drivers.difficulty,'expert');
+  c.demo=false;c.activeChallenge={course:'cinderbank-oval-v1',laps:1};c.createCars();assert.equal(c.drivers.difficulty,'amateur');
+  c.activeChallenge=undefined;c.mode='playground';c.createCars();assert.equal(c.drivers.difficulty,'amateur');
+  c.mode='race';c.createCars();assert.equal(c.drivers.difficulty,'novice');c.createCars(true);assert.equal(c.drivers.difficulty,'amateur');
  }finally{h.close();}
 });
