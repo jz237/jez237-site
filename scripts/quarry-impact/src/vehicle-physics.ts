@@ -1,4 +1,4 @@
-import {limitTractionForce,type DrivingAssists} from './driving-assists';
+import {limitBrakeImpulse,limitTractionForce,type DrivingAssists} from './driving-assists';
 import {stepTransmission,type TransmissionInput,type TransmissionState} from './transmission';
 import {VehicleStructure} from './vehicle-structure';
 import {advanceEngineRestart,starterRPM} from './engine-stall';
@@ -160,7 +160,9 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   let wheelForce=state.input.handbrake&&i>1&&kind!=='tern'?0:force*corner.power*(kind==='tern'?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind))?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
   if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),state.slip,state.surface,corner.grip*spec.grip);
   controller.setWheelEngineForce(i,wheelForce);
-  controller.setWheelBrake(i,!alive?18:state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake)+(state.input.handbrake&&i>1?100:0)+corner.drag);
+  let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
+  if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),(state.surface==='asphalt'?3.2:2.4)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,state.speed,dt);
+  controller.setWheelBrake(i,!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag);
   controller.setWheelFrictionSlip(i,(state.surface==='asphalt'?3.2:2.4)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }

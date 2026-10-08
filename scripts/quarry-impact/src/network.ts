@@ -76,7 +76,7 @@ export class QuarryNetwork extends EventTarget {
       return {...c,p:{x:p.p.x+(c.p.x-p.p.x)*alpha,y:p.p.y+(c.p.y-p.p.y)*alpha,z:p.p.z+(c.p.z-p.p.z)*alpha},q};})};
   }
   drainDamage(){return this.pendingDamage.splice(0);}
-  setInput(c:Controls){this.controls={...c};if(!this.snapshot?.assistsSupport)delete this.controls.assists;else if(c.assists)this.controls.assists={...c.assists};}
+  setInput(c:Controls){this.controls={...c};if(!this.snapshot?.assistsSupport)delete this.controls.assists;else if(c.assists){this.controls.assists={...c.assists};if(!this.snapshot?.absSupport)delete this.controls.assists.abs;}}
   idleInput(){this.controls=releaseControls(this.controls);}
   clearInput(){this.idleInput();if(this.connected)this.send({type:'input',seq:this.seq++,controls:this.controls});}
   setLoadout(loadout:OnlineSelection){if(this.snapshot?.setupSupport){this.send({type:'setup',kind:loadout.kind,setup:copyOnlineSetup(loadout.setup)});if(this.snapshot.liverySupport)this.sendLivery(loadout.kind,loadout.livery??[]);}}
