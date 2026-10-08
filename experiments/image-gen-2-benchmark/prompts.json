@@ -20326,5 +20326,140 @@
       "imageSha256": "fa97b05a163e17a3180ffc4cde5792be7a27a0d718bdc5a7ca09f78f3b9cfb61",
       "imageDHash": "3a76161dbc262424"
     }
+  },
+  {
+    "id": "2026-10-08-factual-infographic-factual-infographic-shingles-a-nerve-aw",
+    "title": "Factual infographic: Shingles — A Nerve Awakens",
+    "tests": "factual_subtype: medical-health-infographic; dominant anatomical hero; eight substantial panels; nerve-cell, blister and pain close-ups; source-backed; no non-Monday subjective review; requested quality high, size auto, opaque.; archive_slot=2026-10-08T14:20; concept=shingles-reactivated-nerve-one-sided-blister-rash; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, museum-quality medical educational infographic directly on the image canvas, not a photographed poster, room, screen, desk, or mockup. Title: SHINGLES — A NERVE AWAKENS. Subtitle: From a quiet virus to a one-sided skin eruption. Richly detailed anatomical illustration with warm ivory background, midnight-blue type, muted teal nerve paths and restrained coral-red symptoms. Request high quality, automatic size, opaque output; favor a spacious portrait composition that preserves large readable text. All explanatory anatomy is schematic and not to scale. No invented statistics, bibliography, logos, URLs, watermarks or microscopic pseudo-text.\n\nDominant hero occupying the central upper half: oblique view of an older adult torso with a single localized band of clustered blisters on ONE side of the trunk, not wrapping symmetrically around both sides. Integrate an elegant transparent anatomical window tracing one peripheral nerve toward its skin territory. A magnified nerve-cell window shows the distinction between a quiet VZV reservoir and reactivation; use schematic small virus symbols, never imply measured counts or exact particle morphology. A second inset is a richly modeled skin cross-section with a raised fluid-filled blister, and a third inset compares intact-looking healed skin with an amber signal representing pain that may persist. Clearly labeled leader lines: Nerve cells / Reactivation / One-sided rash / Fluid-filled blister. Small badge: Schematic — not to scale. Credible skin texture and volume, no gore, polished scientific-rendering light and disciplined scale cues. Arrows explain the virus becoming active and traveling along a specific nerve to the skin, without implying all cases have identical anatomy or that the nerve is mechanically severed.\n\nArrange EIGHT substantial numbered panels around and below the hero in a balanced editorial grid, each with a distinct explanatory illustration and short large captions. Keep a clear reading order and generous white space; do not collapse these into icons or repeated text.\n1 QUIET VIRUS, NEW ACTIVITY: two enlarged nerve-cell diagrams linked by a transition arrow, labeled After chickenpox: VZV can remain inactive in nerve cells / Later: it may reactivate. Include short qualifier: Why it reactivates is not fully understood.\n2 WHO IS AT HIGHER RISK?: two respectful adult portraits and a clinician medication silhouette beside immune-defense schematic. Exact concise text: Risk rises with age / Weakened immunity also increases risk. Do not imply age alone inevitably causes shingles or prescribe stopping medicines.\n3 THE SKIN SEQUENCE: four large texture windows with arrows: Tingling or burning → Red rash → Fluid-filled blisters → Crusting and healing. Add: Timing varies. Keep the same one-sided area through each stage; no numbered days.\n4 PAIN BEYOND THE RASH: side-by-side small skin panels, one active rash and one healed-looking skin with highlighted underlying nerve signal. Caption: Pain may continue after the rash clears — postherpetic neuralgia (PHN). Secondary line: Older age increases the chance. A fine fabric-touch vignette illustrates that light touch may hurt, not a cause of infection.\n5 FACE OR EYE? ACT PROMPTLY: restrained close-up face diagram marking nearby eye with a warning ring, not a damaged eye photograph. Large action text: Facial blisters: seek care right away / Near or in the eye: risk of lasting damage. No suggestion that only eye cases need medical care.\n6 EARLY CARE & COMFORT: clinician consultation vignette, generic antiviral medicine package with no brand/dose, cool washcloth touching skin, loose garment. Text: Suspect shingles? Contact a clinician promptly / Early antivirals can shorten and lessen illness / Cool washcloths and loose clothing may help / Keep skin clean; do not scratch. Do not promise a cure or show self-prescribing.\n7 WHAT CAN SPREAD?: clear branch diagram: Shingles blisters → VZV exposure → Chickenpox in a susceptible person. Explicit bold contrast: You do not catch shingles from someone with shingles. Show two small supported routes, blister-fluid contact and particles from blisters, not a generic cough. Care strip: Cover rash • Wash hands • Avoid touching blisters. Secondary readable text: Avoid susceptible pregnant people, vulnerable infants and immunocompromised people until scabbed over. Show small end-state crusted blister labeled Spread ends once rash scabs over.\n8 PREVENTION: clean two-dose vaccine sequence with a nonbranded syringe and two simple check circles, no efficacy percentage. Exact copy: Shingrix: 2 doses / CDC: adults 50+; adults 19+ with weakened immunity due to disease or therapy. Caption: Helps prevent shingles and related complications. Small footer across canvas: General education — a clinician assesses symptoms and treatment.\n\nUse precise short labels and full readable words; no crowded paragraphs. At least five layers are explicitly visible: integrated anatomical hero, magnified nerve-cell process, skin cutaway, clinical skin-stage strip, active-versus-persistent-pain comparison, face/eye warning map, clinician/comfort vignette, exposure branch diagram and prevention strip. Keep the factual content exactly within the described claims. Distinct panel numbers, purposeful leader lines, carefully rendered medical textures, calm respectful patient representation and unambiguous causal diagrams matter more than decoration.",
+    "image": "images/2026-10-08-factual-infographic-factual-infographic-shingles-a-nerve-aw.jpg",
+    "thumb": "thumbs/2026-10-08-factual-infographic-factual-infographic-shingles-a-nerve-aw.webp",
+    "color": "#d3c5bf",
+    "date": "2026-10-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "shingles-reactivated-nerve-one-sided-blister-rash",
+      "imageSha256": "d07bb7c91a974ff76853afb763ae0661ff227b61e7187b18c8247381773eed0f",
+      "imageDHash": "d4c6d236a6261032"
+    },
+    "factualInfographic": {
+      "topic": "Shingles nerve and skin mechanisms",
+      "description": "Source-backed anatomy and clinical education on shingles reactivation, one-sided skin manifestations, PHN, urgent eye warning signs, care, transmission and vaccination.",
+      "sourceNote": "CDC, About Shingles: https://www.cdc.gov/shingles/about/index.html ; NIH National Institute on Aging, Shingles: https://www.nia.nih.gov/health/shingles/shingles . Verified nerve-cell persistence and reactivation, symptoms, risk, PHN, urgent facial/eye care, early antivirals, comfort measures, VZV spread and vaccination.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-08T18:21:46.641450+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About Shingles (Herpes Zoster)",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/shingles/about/index.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "NIH National Institute on Aging",
+            "title": "Shingles",
+            "sourceType": "government-agency",
+            "url": "https://www.nia.nih.gov/health/shingles/shingles"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Shingles (herpes zoster) is caused by reactivation of varicella-zoster virus, the same virus that causes chickenpox.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "After recovery from chickenpox, virus remains inactive in some nerve cells and may reactivate later; why reactivation occurs in some people is not fully understood.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Reactivated virus travels in a specific nerve, commonly producing a band of rash on one side of the trunk; the face can also be affected.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Risk increases with older age and weakened immunity, including certain diseases and immune-suppressing medicines.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Burning or tingling pain, itching or numbness may precede a red rash; fluid-filled blisters then dry and crust, followed by clearing scabs. Timing varies.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Shingles may be painful or itchy; light touch can provoke intense pain in some people.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Postherpetic neuralgia is pain that persists in the affected area after the rash has gone; older people have a greater chance of developing it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blisters on the face require prompt medical attention; blisters near or in the eye can cause lasting eye damage and blindness.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "If shingles is suspected, contact a clinician as soon as possible. Early antiviral treatment can shorten illness and reduce severity; pain relief may help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cool washcloths, loose clothing, keeping the area clean and avoiding scratching can help with comfort and skin care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A person cannot catch shingles from another person with shingles. VZV can spread from shingles blisters to susceptible people and cause chickenpox.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "VZV spread can occur by direct contact with blister fluid or breathing virus particles from blisters. Virus is not spread before blisters appear or after the rash scabs over.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cover the rash, avoid touching or scratching it, and wash hands. Avoid contact with susceptible pregnant people, premature or low-birth-weight infants and immunocompromised people until the rash scabs over.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CDC recommends two doses of recombinant zoster vaccine (Shingrix) for adults age 50 and older and adults age 19 and older with weakened immune systems due to disease or therapy, to prevent shingles and related complications.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
