@@ -234,10 +234,16 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   with a ring and a soft "bloop".
 - **Autumn leaves** from the trees come down on the water and drift across it on the breeze, from the upwind margin to the downwind
   one, turning slowly (up to 24: an instanced mesh, culled with the pool); they are gone under ice.
-- **Written for a bee that can fly out over the pool, and so dormant today**: APX-9 leaves a wake (rings, as over the fountain), the koi bolt away
-  from it and settle back over a few seconds, the ducks quack at it, and the water splashes as it skims. The bee is confined to the
-  glasshouse's flight volume (`explore/bounds.js`), and the pool lies outside the glass, so none of this can trigger yet: it is tested
-  by placing the bee over the water in a harness, not in play. (The pool's ring buffer is shared out: the ducks', the bee's, the occasional ones.)
+- **The bee can fly out** (`explore/bounds.js`, `explore.js`): the north doors stand open. Fly through them and the whole walled garden is yours: the lawns, the pool, the
+  temple, the manor's front, up to a ceiling at 1,500 units. The glasshouse is solid from outside (the plinth and its two faces, the glass above it, both gables with the
+  doorway cut in the near one, the vault from above), so the bee slides along the glass and cannot slip through; the trunks and crowns of the specimen trees, the temple's
+  steps, columns, entablature, dome and statue are solid too; the pool's floor is its water (a little under the coping's top); the garden's wall is a soft edge. Out there
+  the effects written for the pool come alive: APX-9 leaves a wake on the water (rings, as over the fountain), the koi bolt away and settle back over a few seconds, the
+  ducks quack and splash as it skims, the leaves ride the wake, and its navigation lights (green starboard, red port, the white strobe and the headlamp) show against the water.
+  (The pool's ring buffer is shared out: the ducks', the bee's, the occasional ones.) The first time it goes out a hint names where things are; the glass lowpass on the
+  garden's sounds opens as it leaves the house. Handed back to the autopilot (Follow) from outside, it flies home by itself: through the doors if it is north of the house and
+  lined up, otherwise up over the ridge first (`_homeward`), and the director resumes inside. The chase and follow cameras end in a hard stop (`cameras.js: hardStop`): never
+  past the first solid, and pushed out of one if the bee's own trailing image sits in it (a crown it skims), so the camera never ends up inside a roof or a tree.
 - **Fireflies over the pool**, after dark: a few hundred, hanging over the water, in the reeds and along the lawn's edge, each
   drifting on its own loop and pulsing in its own time (a soft pulse every few seconds, so the swarm sparkles and never blinks
   together). Worked out in the vertex shader (no CPU), HDR sprites that the bloom takes up; they are drawn in the pool's mirror
@@ -262,7 +268,7 @@ recording: every sound is synthesised, and every one is fired by something that 
 - **The wind in the trees** follows the garden's own gust field at the camera (the crowns you see lean as it swells), harder in a
   storm; **the pool** laps at its stone and tinkles, and the reeds hiss in a gust: both pan toward the pool and swell as you near it.
 - **Ducks**: the mallards quack now and then, each from where it floats; a duck that tips up splashes as its head goes under and
-  as it comes up (and would quack and splash if APX-9 flew low over one: see the pool's dormant list).
+  as it comes up (and quack and splash if APX-9 flies low over one: it can, now that it flies out of the glasshouse).
 - **Geese** honk as their formation crosses (a chorus from the flock's own place in the sky); **swallows** twitter as a stream darts
   by; the **starling** cloud rustles and whistles as it swirls above the roof.
 - **The pool's new life** is heard too: a koi's bloop and a dragonfly's whirr and the drop where it touches the water (and a
