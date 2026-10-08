@@ -1,3 +1,4 @@
+import {MEREFIELD} from './merefield-course';
 import {DOCKSIDE,FAIRGROUND} from './county-courses';
 import {PINECREST} from './pinecrest-course';
 import {ASHFORD} from './ashford-course';
@@ -16,6 +17,9 @@ export type RaceCourse={
  readonly id:CourseId;readonly name:string;readonly length:number;readonly halfWidth:number;
  /** Wide circuits include their usable shoulders; legacy courses keep 12m. */
  readonly checkpointRadius?:number;readonly mapExtent?:number;
+ /** Open venues let waypoint drivers cross the infield directly. */
+ readonly waypointStations?:readonly RoutePoint[];
+ readonly mapLines?:readonly {points:readonly RoutePoint[];width:number}[];
  readonly checkpoints:readonly RoutePoint[];readonly samples:readonly RoutePoint[];
  point(t:number):RoutePoint;height(x:number,z:number):number;distance(x:number,z:number):number;
  surface(x:number,z:number):'asphalt'|'gravel';outside(x:number,y:number,z:number):boolean;
@@ -35,7 +39,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
+const COURSES:Record<CourseId,RaceCourse>={'merefield-airfield-v1':MEREFIELD,'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{
@@ -58,4 +62,10 @@ export function courseGridSlot(course:RaceCourse,index:number,direction:CourseDi
 export function courseRecoverySlot(course:RaceCourse,next:number,direction:CourseDirection){
  const route=courseRoute(course,direction),at=route[(next+route.length-1)%route.length],to=route[next];
  return{x:at.x,z:at.z,yaw:Math.atan2(to.x-at.x,to.z-at.z)};
+}
+
+/** Open waypoint recoveries can use the infield; physical obstacles and other
+ * vehicles are still rejected by the caller's clearance query. */
+export function courseRecoveryArea(course:RaceCourse,waypoints=false){
+ return waypoints&&course.waypointStations?{halfWidth:course.halfWidth,distance:(x:number,z:number)=>course.outside(x,0,z)?Infinity:0}:course;
 }

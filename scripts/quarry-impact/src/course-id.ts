@@ -1,5 +1,6 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'merefield-airfield-v1':'Merefield Airfield',
  'dockside-loop-v1':'Dockside Loop',
  'fairground-scramble-v1':'Fairground Scramble',
  'pinecrest-ridge-v1':'Pinecrest Ridge',

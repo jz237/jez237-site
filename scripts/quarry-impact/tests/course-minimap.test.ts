@@ -61,3 +61,10 @@ test('course extent scales road, waypoint and car positions together while derby
  }
  const stock=canvasRecorder(400),extra=canvasRecorder(400);drawQuarryMap(stock.canvas,cars,arena,'derby',0);drawQuarryMap(extra.canvas,cars,arena,'derby',0,[],{point(){throw Error('derby must not sample course');},extent:145});assert.deepEqual(extra.calls,stock.calls);
 });
+
+
+test('open airfield map shows all crossing runways at their driving widths',async()=>{
+ const {MEREFIELD}=await import('../src/merefield-course'),r=canvasRecorder(400),scale=180/MEREFIELD.mapExtent;
+ drawQuarryMap(r.canvas,[],{x:0,z:0,radius:64},'race',0,[],{point:MEREFIELD.point,extent:MEREFIELD.mapExtent,halfWidth:MEREFIELD.halfWidth,lines:MEREFIELD.mapLines});
+ for(const line of MEREFIELD.mapLines){const [a,b]=line.points;assert.ok(r.paints.some(p=>p.operation==='stroke'&&p.style.lineWidth===line.width*scale&&JSON.stringify(p.path)===JSON.stringify([['moveTo',200+a.x*scale,200-a.z*scale],['lineTo',200+b.x*scale,200-b.z*scale]])));}
+});
