@@ -27,7 +27,7 @@ import {CAR_KINDS,DEFINITIONS,type CarKind} from '../src/rules';
 import {RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,CombatScoreboard} from '../src/event-rules';
 import {COURSE_NAMES,resolveCourseId} from '../src/course-id';
 import {getRaceCourse,courseRoute,courseGridSlot} from '../src/race-course';
-import {CLUB_ROUNDS} from '../src/club-cup';
+import {CLUB_ROUNDS,CLUB_SERIES} from '../src/club-cup';
 import {demoCarKind,demoVehicleSetup} from '../src/demo-session';
 import {WaypointRace} from '../src/waypoint-race';
 import {ReplayRecorder} from '../src/replay-data';
@@ -84,7 +84,7 @@ function harness(faults:Faults={}){
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const quarry={course:getRaceCourse('quarry-v1'),props:[],puddles:[]},ironfield={course:getRaceCourse('ironfield-figure-eight-v1'),props:[],puddles:[]};
  const context:any={...Arenas,clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
-  CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
+  CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,CLUB_SERIES,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
   crypto:{randomUUID:()=>`unit-run-${++serial}`},console:{warn:(...v:unknown[])=>logs.push(v),error:(...v:unknown[])=>logs.push(v)},location:{reload(){calls.reload++;}},
@@ -123,8 +123,8 @@ function harness(faults:Faults={}){
  return{context,f,calls,ui,storage,writes,construction,notices,logs,preferences,click,settle,select};
 }
 
-test('unit plumbing: all 44 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
- assert.equal(Challenges.CHALLENGES.length,44);
+test('unit plumbing: all 53 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
+ assert.equal(Challenges.CHALLENGES.length,53);
  for(const challenge of Challenges.CHALLENGES){
   const h=harness(),preferences=h.preferences();await h.select(challenge);
   assert.equal(h.context.activeChallenge,challenge);assert.equal(h.context.kind,challenge.car);assert.equal(h.context.mode,challenge.mode);
@@ -251,7 +251,7 @@ test('career storage failure leaves points unspent and unlock closed; start fail
  const broken=harness({venue:true});broken.f.openCareer();assert.equal(await broken.f.startCareerEvent('first-lap'),false);assert.equal(broken.context.state,'menu');assert.equal(broken.context.careerOpen,true);assert.equal(broken.context.activeChallenge,undefined);assert.match(broken.ui.innerHTML,/could not start/);
 });
 
-test('all 33 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
+test('all 42 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
  for(const group of Career.CAREER_GROUPS)for(const id of group.events){
   const h=harness();for(const g of Career.CAREER_GROUPS)for(const event of g.events)h.context.profile.challenges[event]={medal:3,best:1,attempts:1};h.context.profile.career={unlocked:Career.CAREER_GROUPS.filter(g=>g.cost).map(g=>g.id)};
   assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;

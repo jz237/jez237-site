@@ -13,12 +13,12 @@ test('the original thirty challenge definitions remain exactly unchanged after t
  assert.equal(createHash('sha256').update(original).digest('hex'),'027c250b727dac72ea1fe7e99d6af35ab2b166f9b76bffecc824b7c3fe0e3d86');
 });
 
-test('eight appended stock events cover each missing vehicle and both actual race courses',()=>{
- assert.equal(CHALLENGES.length,44);
- assert.equal(new Set(CHALLENGES.map(c=>c.id)).size,44);
+test('the expanded catalogue covers all vehicles and preserves the first eight added events',()=>{
+ assert.equal(CHALLENGES.length,53);
+ assert.equal(new Set(CHALLENGES.map(c=>c.id)).size,53);
  assert.deepEqual([...new Set(CHALLENGES.map(c=>c.car))].sort(),[...CAR_KINDS].sort());
  const originalCars=new Set(CHALLENGES.slice(0,30).map(c=>c.car)),added=CHALLENGES.slice(30,38);
- assert.deepEqual(added.map(c=>c.car).sort(),CAR_KINDS.filter(kind=>kind!=='shuttle'&&!originalCars.has(kind)).sort());
+ assert.deepEqual(added.map(c=>c.car).sort(),CAR_KINDS.filter(kind=>kind!=='shuttle'&&kind!=='regent'&&!originalCars.has(kind)).sort());
  assert.deepEqual([...new Set(added.filter(c=>c.mode==='race').map(challengeCourse))].sort(),['quarry-v1','ironfield-figure-eight-v1'].sort());
  for(const c of CHALLENGES){
   if(c.mode==='race')assert.equal(getRaceCourse(challengeCourse(c)).checkpoints.length,24,'Existing medal gate count is valid on '+c.id);
@@ -49,7 +49,7 @@ test('old profile records and all new challenge records survive reload without d
   const award=settleRun(profile,'catalogue-save-'+c.id,run,c);assert.equal(award.medal,3,c.id);
  }
  const saved=JSON.stringify(profile),reloaded=readProfile(saved);assert.deepEqual(reloaded,profile);
- assert.equal(Object.keys(reloaded.challenges).length,44);
+ assert.equal(Object.keys(reloaded.challenges).length,53);
  const beforeDuplicate=JSON.stringify(reloaded);
  const duplicate=settleRun(reloaded,'catalogue-save-'+CHALLENGES[37].id,emptyRun(),CHALLENGES[37]);
  assert.equal(duplicate.duplicate,true);assert.equal(JSON.stringify(reloaded),beforeDuplicate);

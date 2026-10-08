@@ -16,8 +16,10 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'county-tour',title:'County Tour',discipline:'racing',description:'A bus on the oval, a hatch on mixed surfaces, and a buggy in the dirt stadium.',cost:3,events:['shuttle-cinderbank','tern-bracken','ravine-redbank']},
  {id:'road-masters',title:'Road Masters',discipline:'racing',description:'Protect the Marten and Shuttle, then bring the Bramble through two technical laps.',cost:3,events:['marten-ashford','shuttle-ironfield','bramble-ashford']},
  {id:'ridge-runners',title:'Ridge Runners',discipline:'racing',description:'Climb Pinecrest in a coupe and buggy, then keep the Shuttle running for two laps.',cost:3,events:['coupe-pinecrest','buggy-pinecrest','shuttle-pinecrest']},
+ {id:'harbor-weekend',title:'Harbor Weekend',discipline:'racing',description:'Run the Regent and Carrier around Dockside, then take the Ravine onto Fairground dirt.',cost:3,events:['regent-dockside','carrier-dockside','buggy-fairground']},
+ {id:'airfield-timber',title:'Airfield & Timber',discipline:'racing',description:'Sprint around Merefield, protect the Regent at Millhaven, and finish a two-lap Shuttle run.',cost:3,events:['coupe-merefield','regent-millhaven','shuttle-millhaven']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
