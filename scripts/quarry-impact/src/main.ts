@@ -1,3 +1,5 @@
+import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
+import {mountSaveBackup} from './save-backup-ui';
 import {CAREER_GROUPS,careerChallenge,careerStatus,unlockCareerGroup} from './career';
 import {showCareer} from './career-ui';
 import './career.css';
@@ -105,6 +107,8 @@ const ui = document.querySelector<HTMLDivElement>('#ui')!;
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
 const controllerInput=new ControllerInput(),controllerNavigation=new ControllerNavigation();
 const controllerHelp=document.createElement('div');controllerHelp.className='controller-help';controllerHelp.hidden=true;document.body.append(controllerHelp);
+let recoveryStorage:Storage|undefined;try{recoveryStorage=localStorage;recoveryStorage.getItem(BACKUP_JOURNAL);}catch{recoveryStorage=undefined;}
+try{if(recoveryStorage)recoverSaveImport(recoveryStorage);}catch{ui.innerHTML='<div class=overlay><section class=dialog><h2>SAVE RECOVERY PAUSED</h2><p>Your previous save is retained in a recovery record. Free browser storage and retry to finish recovery before playing.</p><button id=save-recovery-retry>RETRY RECOVERY</button></section></div>';ui.querySelector<HTMLButtonElement>('#save-recovery-retry')!.onclick=()=>location.reload();throw new Error('Save recovery must complete before the game can load.');}
 const saveKey = 'quarry-impact-v1';
 let saved: any = {};
 try {
@@ -872,6 +876,7 @@ function pause(settingsOnly = false) {
       persist();
     };
   mountDrivingControls(ui.querySelector<HTMLElement>('#overlay .dialog')!,drivingControls,()=>{try{localStorage.setItem(CONTROLS_KEY,JSON.stringify(drivingControls));return true;}catch{return false;}});
+  if(resumeState==='menu'&&!online?.active)mountSaveBackup(ui.querySelector<HTMLElement>('#overlay .dialog')!);
   studioButtons(ui.querySelector('#overlay .dialog'));
   document.querySelector<HTMLButtonElement>('#resume')!.onclick = resume;
   const restart = document.querySelector<HTMLButtonElement>('#restart');
@@ -889,6 +894,7 @@ function pause(settingsOnly = false) {
     };
 }
 function resume() {
+  if(ui.querySelector('.save-backup[aria-busy="true"]'))return;
   if (state === 'inspect') {
     state = 'playing';
     orbit.enabled = false;
@@ -1281,6 +1287,8 @@ function controllerContext():NavigationContext|null {
     return screen('library','#replay-library','#library-close',()=>closeReplayLibrary?.());
   }
   if(ui.querySelector('#demo-setup'))return screen('demo-setup','#demo-setup','#demo-course',click('#demo-cancel'));
+  if(ui.querySelector('.save-backup[aria-busy="true"]'))return null;
+  if(ui.querySelector('#save-confirm:not([hidden])'))return screen('save-confirm','#save-confirm','#save-cancel',click('#save-cancel'));
   if(state==='paused')return screen('pause','#overlay','#resume',resume);
   if(ui.querySelector('#online-dialog'))return screen('online-connect','#online-dialog','#cancel-online',click('#cancel-online'));
   if(clubOpen){
