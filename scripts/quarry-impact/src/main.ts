@@ -1,3 +1,5 @@
+import {transmissionGearLabel} from './transmission';
+import {drivingButtons} from './driving-controls';
 import {AdaptiveGraphics,graphicsChoice} from './adaptive-graphics';
 import {createAshfordWorld} from './ashford-world';
 import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
@@ -757,7 +759,7 @@ async function start(watch=demo) {
   }
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase():'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div><div class="tyre-status" id="engine-restart"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase():'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div><div class="tyre-status" id="engine-restart"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${drivingControls.transmission!=='automatic'&&(!online?.active||online.network.snapshot?.transmissionSupport)?`<kbd>${keyLabel(drivingControls.keys.shiftDown[0])} / ${keyLabel(drivingControls.keys.shiftUp[0])}</kbd> SHIFT${drivingControls.transmission==='clutch'?` <kbd>${keyLabel(drivingControls.keys.clutch[0])}</kbd> CLUTCH`:''}`:''} ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent='SCORE DERBY';
@@ -804,7 +806,7 @@ function updateHud() {
   const instruments=document.querySelector<HTMLCanvasElement>('#instruments');if(instruments)drawInstruments(instruments,player.speed,player.rpm,player.gear,player.health);
   text(
     'gear',
-    `GEAR ${player.gear === 0 ? 'R' : player.gear}  /  ${Math.round(player.rpm)} RPM`,
+    `GEAR ${transmissionGearLabel(player.gear)}  /  ${Math.round(player.rpm)} RPM${player.transmission?.notice?' · SHIFT NOT ENGAGED':player.transmission?.pending!==null&&player.transmission?.pending!==undefined?' · SHIFTING':''}`,
   );
   document.getElementById('rpm-bar')!.style.width =
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
@@ -1009,7 +1011,7 @@ function recover() {
 function input(): Input {
   if (testInput) return testInput;
   const pads=Array.from(navigator.getGamepads?.()??[],pad=>pad?controllerInput.drivingPad(pad):null);
-  return drivingInput(drivingControls,keys,pads,cars[0]?.speed??0);
+  return drivingInput(drivingControls,keys,pads,cars[0]?.speed??0,!online?.active||online.network.snapshot?.transmissionSupport===true);
 }
 function ai(car: Vehicle, dt: number): Input {
   if(car.health<=0||(car.finished&&mode!=='race'))return {throttle:0,steer:0,brake:1,handbrake:false};
@@ -1358,13 +1360,13 @@ function pollController(now:number){
   if(!preparingEvent&&key!=='library-busy')for(const command of sample.commands){
     if(controllerKey(controllerContext())!==key)break;
     if(command==='start'){
-      if(!demo&&['playing','countdown'].includes(state)&&[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(9))continue;
+      if(!demo&&['playing','countdown'].includes(state)&&drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(9))continue;
       if(state==='paused'||state==='inspect')resume();
       else if(studio){if(studio.hidden)studio.toggleHud();else studio.togglePlay();}
       else if(['playing','countdown','wrecked'].includes(state)||demo&&state==='result')pause();
     }else if(command==='camera'||command==='recover'){
       // Preserve custom driving maps: a button assigned to a pedal/handbrake keeps that meaning.
-      const button=command==='camera'?2:3,assigned=[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(button);
+      const button=command==='camera'?2:3,assigned=drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(button);
       if(!assigned&&!studio&&['playing','countdown'].includes(state)){
         if(command==='camera'){if(demo)director.cycleView();else hood=!hood;}
         else if(!demo&&state==='playing')recover();
@@ -1373,14 +1375,14 @@ function pollController(now:number){
     else if(demo&&demoHudHidden&&['playing','countdown','result'].includes(state)){
       demoHudHidden=false;ui.classList.remove('demo-clean');
     }else if(command==='back'&&state==='inspect')resume();
-    else if(command==='back'&&['playing','countdown'].includes(state)&&![drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(1))pause();
+    else if(command==='back'&&['playing','countdown'].includes(state)&&!drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(1))pause();
   }
   // Activation can synchronously change screens before the physics loop runs.
   // Consume the held press now, including triggers and A, until it is released.
   context=controllerContext();controllerInput.update(pad,now,controllerKey(context),drivingControls.triggerDeadzone);controllerNavigation.sync(context);
   const hideHelp=!pad||preparingEvent||state==='loading'||controllerKey(context)==='library-busy'||demo&&demoHudHidden||!!studio?.hidden;
   if(controllerHelp.hidden!==hideHelp)controllerHelp.hidden=hideHelp;
-  const assigned=(button:number)=>[drivingControls.throttleButton,drivingControls.brakeButton,drivingControls.handbrakeButton].includes(button);
+  const assigned=(button:number)=>drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(button);
   const hint=context?'D-PAD / STICK navigate · ← → adjust · A select · B back'+(state==='paused'?' · START resume':studio?' · START play / pause':demo?' · START pause':''):state==='inspect'?'B / START return to driving':'DRIVING: saved controls'+(!assigned(2)?' · X camera':'')+(!assigned(3)?' · Y recover':'')+(!assigned(9)?' · START pause':!assigned(1)?' · B pause':' · ESC pause');
   const message=hint+(['playing','countdown'].includes(state)&&sound.ctx?.state==='suspended'?' · CLICK / KEY for sound':'');
   if(controllerHelp.textContent!==message)controllerHelp.textContent=message;
@@ -1415,7 +1417,7 @@ function frame(now: number) {
   }
   if(studio){studio.update(dt);if(studio.seeking)return;}
   else if(online?.active) {
-    if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.setInput({throttle:0,steer:0,brake:1,handbrake:false});
+    if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.idleInput();
     const s=online.network.sample();if(s){online.apply(s,dt);quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
     accumulator+=dt;let n=0;while(accumulator>=1/60 && n++<4){physics.step();fx.update(1/60);accumulator-=1/60;}
     const net=document.getElementById('network-status');if(net)net.textContent=online.network.connected?`ROOM ${online.network.room} · ${online.network.latency} MS`:online.network.reconnecting?'RECONNECTING · CONTROLS CLEARED':`${online.network.disconnectReason} · ESC TO LEAVE`;

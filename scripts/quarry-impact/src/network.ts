@@ -1,3 +1,4 @@
+import {releaseControls} from '../multiplayer/protocol';
 import {copyOnlineEventRules,type OnlineEventRules} from './online-events';
 import {validLiveryFrame,validSelectedLivery,copyOnlineLivery,type LiveryFrame,type OnlineSelection} from './online-livery';
 import type {LiveryLayer} from './livery-data';
@@ -76,7 +77,8 @@ export class QuarryNetwork extends EventTarget {
   }
   drainDamage(){return this.pendingDamage.splice(0);}
   setInput(c:Controls){this.controls={...c};}
-  clearInput(){this.controls={throttle:0,steer:0,brake:1,handbrake:false};if(this.connected)this.send({type:'input',seq:this.seq++,controls:this.controls});}
+  idleInput(){this.controls=releaseControls(this.controls);}
+  clearInput(){this.idleInput();if(this.connected)this.send({type:'input',seq:this.seq++,controls:this.controls});}
   setLoadout(loadout:OnlineSelection){if(this.snapshot?.setupSupport){this.send({type:'setup',kind:loadout.kind,setup:copyOnlineSetup(loadout.setup)});if(this.snapshot.liverySupport)this.sendLivery(loadout.kind,loadout.livery??[]);}}
   private sendLivery(kind:CarKind,layers:readonly LiveryLayer[]){this.send({type:'livery',kind,layers:copyOnlineLivery(layers)});}
   setSetupRule(rule:SetupRule){if(this.snapshot?.setupSupport)this.send({type:'setup-rule',rule});}

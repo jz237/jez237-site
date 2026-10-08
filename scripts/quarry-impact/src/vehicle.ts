@@ -1,3 +1,4 @@
+import type {TransmissionInput,TransmissionState} from './transmission';
 import {freshStructure} from './structural-damage';
 import type {VehicleStructure} from './vehicle-structure';
 import {VehicleDrawBatch} from './vehicle-draw-batch';
@@ -40,6 +41,7 @@ export type Input = {
   steer: number;
   brake: number;
   handbrake: boolean;
+  transmission?:TransmissionInput;
 };
 export class Vehicle {
   private drawBatch?:VehicleDrawBatch;
@@ -89,6 +91,7 @@ export class Vehicle {
   speed = 0;
   rpm = 850;
   gear = 1;
+  transmission?:TransmissionState;
   oldGear = 1;
   steering = 0;
   input: Input = { throttle: 0, steer: 0, brake: 0, handbrake: false };
@@ -201,6 +204,7 @@ export class Vehicle {
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
     this.engineDamage = 0;
+    this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());

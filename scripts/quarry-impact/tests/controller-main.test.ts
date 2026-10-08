@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 import ts from 'typescript';
 import {ControllerInput} from '../src/controller-input';
 import {withWreckBatch} from '../src/wreck-batch';
-import {defaultControls,drivingInput,selectedPad,type Pad} from '../src/driving-controls';
+import {defaultControls,drivingInput,drivingButtons,selectedPad,type Pad} from '../src/driving-controls';
 import type {NavigationContext} from '../src/controller-navigation';
 
 /** Run the actual main declarations. DOM rendering and scene actions are explicit
@@ -34,7 +34,7 @@ function harness(state='menu'){
  let pads:readonly(Pad|null)[]=[pad()],time=0;
  const count=(name:string)=>calls[name]=(calls[name]??0)+1;
  const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
-  sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
+  sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,drivingButtons,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
   controllerNavigation:{sync(context:NavigationContext|null){navigation.context=context;},handle(command:string){navigation.handled.push(command);const context=navigation.context;if(command==='back')context?.back?.();else if(command==='accept'&&context?.initial)(context.root as unknown as Node).querySelector(context.initial)?.click();}},
   pause(){count('pause');c.resumeState=c.state;c.state='paused';const overlay=ui.add('#overlay');overlay.add('#resume').onclick=()=>c.resume();},
   resume(){count('resume');c.state=c.resumeState;ui.children.delete('#overlay');},recover(){count('recover');},toast(){count('toast');},director:{cycleView(){count('camera');}},
@@ -130,7 +130,7 @@ test('losing an offline active pad pauses once and reconnecting cannot automatic
   h.disconnect();assert.equal(h.calls.pause,1);h.poll({9:1,7:1});assert.equal(h.c.state,'paused');neutral(h.currentInput());
   h.poll({9:1,7:1});assert.equal(h.calls.resume,undefined);h.release();h.poll({9:1,7:1});assert.equal(h.calls.resume,1);neutral(h.currentInput());
  }
- const online=harness('playing');online.c.online={active:true};online.release();online.disconnect();assert.equal(online.calls.pause,undefined);assert.equal(online.c.state,'playing');neutral(online.currentInput());
+ const online=harness('playing');online.c.online={active:true,network:{snapshot:null}};online.release();online.disconnect();assert.equal(online.calls.pause,undefined);assert.equal(online.c.state,'playing');neutral(online.currentInput());
 });
 
 test('custom X/Y driving assignments take precedence over camera and recovery shortcuts',()=>{
@@ -222,4 +222,14 @@ test('save restore confirmation owns controller Back and defaults to Cancel; bus
  const confirmation=overlay.add('#save-confirm:not([hidden])');overlay.children.set('#save-confirm',confirmation);h.button(confirmation,'#save-cancel','cancel',()=>confirmation.hidden=true);
  h.release();assert.equal(h.navigation.context?.key,'save-confirm');assert.equal(h.navigation.context?.initial,'#save-cancel');h.poll({1:1});assert.equal(h.calls.cancel,1);assert.equal(h.calls.resume,undefined);
  overlay.add('.save-backup[aria-busy="true"]');h.release();assert.equal(h.functions.controllerContext(),null);
+});
+
+
+test('manual clutch and shift buttons retain driving actions, with legacy online fallback',()=>{
+ const h=harness('playing');h.c.drivingControls.transmission='clutch';h.release();h.poll({1:1});
+ assert.equal(h.c.state,'playing');assert.equal(h.currentInput().transmission?.clutch,1);
+ h.release();h.c.drivingControls.shiftUpButton=2;h.poll({2:1});assert.equal(h.c.hood,false);assert.equal(h.currentInput().transmission?.up,true);
+ h.release();h.c.drivingControls.shiftDownButton=3;h.poll({3:1});assert.equal(h.calls.recover,undefined);assert.equal(h.currentInput().transmission?.down,true);
+ h.release();h.poll({9:1});assert.equal(h.c.state,'paused');
+ const legacy=harness('playing');legacy.c.drivingControls.transmission='clutch';legacy.c.online={active:true,network:{snapshot:{}}};legacy.release();legacy.poll({1:1});assert.equal(legacy.c.state,'paused');assert.equal(legacy.currentInput().transmission,undefined);
 });
