@@ -92,6 +92,8 @@ export class OnlineView {
       c.engineDamage=at.components?.engineDamage;
       c.engineStall=at.engineStall;
       c.tyreDamage=at.components?.tyreDamage?.slice();
+      c.structuralDamage=at.components?.structure?.slice();
+      c.structure.update(c.structuralDamage,c.health);
       c.input=at.input; c.surface=at.surface;
       c.slip=at.slip;
       c.remoteGrounded=at.wheels.some(w=>w.contact);

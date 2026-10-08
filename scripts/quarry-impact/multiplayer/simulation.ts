@@ -1,3 +1,4 @@
+import type {VehicleStructure} from '../src/vehicle-structure';
 import {stalledByImpact,validEngineStall} from '../src/engine-stall';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import {OnlineEvent,type OnlineEventRules} from '../src/online-events';
@@ -9,14 +10,14 @@ import {applyComponentImpact,freshComponents,validComponents} from '../src/compo
 import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
 import {accumulateEngineDamage} from '../src/engine-condition';
 import {vehicleContact,vehicleContactManifold} from '../src/vehicle-contact';
-import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleChassisHalfExtents,vehicleSuspensionRestLength,type VehicleSpecification} from '../src/vehicle-physics';
+import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,vehicleSuspensionRestLength,type VehicleSpecification} from '../src/vehicle-physics';
 import {createQuarryPhysics,landscapeHeight} from '../src/quarry-layout';
 import type Rapier from '@dimforge/rapier3d-compat';
 import { DEFINITIONS, CHECKPOINTS, clamp, wrap, surfaceAt, trackPoint, terrainHeight, derbyOrder, advanceCheckpoint, type CarKind, type Mode } from '../src/rules';
 import { STEP, NEUTRAL, type Controls, type Vec3, type Quat, type CarState, type DamageEvent, type Snapshot } from './protocol';
 
 type RapierAPI = typeof Rapier;
-type Car = { kind:CarKind; specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
+type Car = { structure:VehicleStructure; kind:CarKind; specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
 const ONLINE_ARENA={x:0,z:0,radius:46,segments:66,spawnRadius:32,fenceRadius:50};
 const AI_TRACK=Array.from({length:100},(_,i)=>trackPoint(i/100));
 const quat = (yaw: number) => ({ x: 0, y: Math.sin(yaw / 2), z: 0, w: Math.cos(yaw / 2) });
@@ -55,9 +56,9 @@ export class Simulation {
   }
   private buildTerrain() {this.props=createQuarryPhysics(this.R,this.world,this.mode==='derby').props;}
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
-    const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
+    const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller,structure}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
     const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,engineStall:0,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
-    return {kind,specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
+    return {structure,kind,specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
   }
   private place(c: Car, x: number, z: number, yaw: number) {
     c.body.setTranslation({x,y:landscapeHeight(x,z)+.89,z},true); c.body.setRotation(quat(yaw),true);
@@ -98,7 +99,7 @@ export class Simulation {
     this.damageShape(c); return true;
   }
   private route(id:number){return circuitRoute(directionForCar(this.event?.rules.race==='laps'?this.event.rules.direction:'forward',id));}
-  private damageShape(c: Car) { c.collider.setHalfExtents(vehicleChassisHalfExtents(c.state.kind,c.state.health)); }
+  private damageShape(c: Car) { c.structure.update(c.state.components?.structure,c.state.health); }
   ai(c: Car): Controls {
     const s=c.state;
     if (s.health<=0) return {...NEUTRAL};
@@ -237,6 +238,7 @@ export class Simulation {
         // Legacy saves never recorded tyre-specific trauma. Retained body hits
         // cannot establish which model produced the saved driving state.
         c.state.components.tyreDamage=undefined;
+        c.state.components.structure=undefined;
         for(const hit of engineHistory)applyComponentImpact(c.state.components,c.state.kind,hit.localPoint,hit.localDirection,hit.damage);
         if(!completeEngineHistory)c.state.components.engineDamage=undefined;
       }else if(car.components!.engineDamage===undefined){

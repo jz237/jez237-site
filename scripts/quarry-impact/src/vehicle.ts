@@ -1,3 +1,5 @@
+import {freshStructure} from './structural-damage';
+import type {VehicleStructure} from './vehicle-structure';
 import {VehicleDrawBatch} from './vehicle-draw-batch';
 import {stalledByImpact} from './engine-stall';
 import {cancelWreckNormals} from './wreck-batch';
@@ -5,7 +7,7 @@ import {markCollision} from './collision-scars';
 import {BuggySuspension} from './buggy-suspension';
 import {applyComponentImpact} from './component-damage';
 import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
-import {vehicleChassisHalfExtents,vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
+import {vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
@@ -47,6 +49,8 @@ export class Vehicle {
   syncSuspension(){this.suspension?.update();}
   onVisualEvent?: (event:VisualEvent)=>void;
   private visualPose(){return [...this.current.toArray(),...this.currentQ.toArray()];}
+  readonly structure:VehicleStructure;
+  structuralDamage:number[]|undefined=freshStructure();
   body: R.RigidBody;
   collider: R.Collider;
   roof: R.Collider;
@@ -142,7 +146,7 @@ export class Vehicle {
     this.root.add(this.model);
     scene.add(this.root);
     const physical=createVehiclePhysics(R,world,kind,def.mass,this.setup.armor);
-    this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
+    this.structure=physical.structure;this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
     for(const name of ['FL','FR','RL','RR'])this.wheels.push(this.model.getObjectByName('wheel_'+name)!);
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
@@ -215,7 +219,7 @@ export class Vehicle {
       this.controller.setWheelSteering(i,0);this.controller.setWheelBrake(i,0);
     }
     this.roof.setEnabled(true);
-    this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind));
+    this.structuralDamage=freshStructure();this.structure.update(this.structuralDamage);
     for (const p of this.panels) {
       cancelWreckNormals(p);
       p.visible = true;
@@ -350,7 +354,7 @@ export class Vehicle {
     // The rendered pose also supports replay hits while its body is disabled.
     const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
-    const components={engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
+    const components={structure:this.structuralDamage,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
@@ -414,7 +418,7 @@ export class Vehicle {
     this.tyreDamage=components.tyreDamage;
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
-    this.collider.setHalfExtents(vehicleChassisHalfExtents(this.kind,this.health));
+    this.structure.update(this.structuralDamage,this.health);
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
     }
