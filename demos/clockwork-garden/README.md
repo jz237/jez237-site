@@ -278,6 +278,12 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   from the governor's level 2 on any tier; the lamps' light falls from seven street lamps to four (level 2) and two (level 3), the bee's own lights staying. (The puddles and the night light cost nothing when it is dry and day.)
 - **The gate's piers, the manor's stone and the wall's copings** use the same dressed, weathered stone as the glasshouse's base: ashlar in 70-unit tiles on the gate piers (a box whose texture coordinates run in world units, `_ashlarBox`), and the weathering of the `stone` kind (broad
   staining and a fine grit) on the manor's columns, pediment, steps and terrace and on the garden wall's coping and pier caps. (The gate's piers had been flat beige slabs, a hundred and ninety units high.)
+- **A garden laid out on the lawns** (`explore/gardenscape.js`): the lawns north of the glasshouse were open grass with a few hedges; now they have walks and things to see, built from the avenue's gap in the hedges (the gap at z 550, on both sides of the avenue).
+  West: a gravel walk to a **round parterre** (a ring walk, a bed of daisies, cups and spikes in drifts of blush and violet, a **sundial** at its centre, four benches), and from it a long curving walk round to a **plaza at the pool's north end** (two benches, lamps, shrubs). East: a **pergola walk** (posts and beams
+  in cream, roses over the top in red and pink, flower beds either side) to a plaza with a **bronze bee on a plinth** (verdigris, like the temple's dome), and off it a second round parterre. Along the hedge row (z 640-676) a border of tall spikes; island beds on the lawns (ellipses, each with a clipped shrub); a **band of flowers round
+  the pool's shore** (irises, lupins and cups in blues and yellows, reflected in the water); clipped shrubs and rose bushes in groups along the hedge row and by the plazas; sixteen **lamps** along the walks that kindle at dusk with the others (their halos, bulbs and light on the land). All of it is instanced or merged: about 3,900 flowers
+  (a daisy of eight petals round a gold eye, a tulip-like cup, a spire of florets; swaying in the breeze like the reeds, in four-colour drifts from a noise field), 230 shrubs and a few merged meshes: some twenty draw calls. About one flower in eleven is a place a bee can land (a little pollen each). On the `low` tier there are under half as many
+  flowers, and the governor thins them at level 2 and again at level 3. The beds, benches, posts, shrubs, sundial and statue are solid (the bee slides round them); the flowers are not.
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
@@ -610,6 +616,7 @@ Interactive-mode tools:
 ```bash
 node tools/drive.mjs --scenario tools/scenarios/interact.json --out review/x   # real keyboard/mouse/touch/gamepad input + frames
 node tools/flycheck.mjs                                                        # fly mode: turning, camera vs travel, nothing between camera and bee
+node tools/drive.mjs --scenario tools/scenarios/outdoors.json --out review/x   # real keys: out of the doors, climb, C hands it to the autopilot, it flies home and goes about its day
 node tools/sweep.mjs --grid full --out review/explore/sweep               # camera sweep: positions x heights x yaws, contact sheets
 node tools/sweep.mjs --views tools/views/key.json --tod 0.05 --out ...      # fixed key views at an hour
 node tools/explorefps.mjs --q high                                          # real-time fps in fly mode at the busiest spots + follow
