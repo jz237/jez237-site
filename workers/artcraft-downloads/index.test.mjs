@@ -22,3 +22,10 @@ test('HEAD reads metadata only; missing and storage failure remain noindex', asy
   const missing=await worker.fetch(new Request('https://jez237.com'+path),{INSTALLERS:{get:async()=>null}});assert.equal(missing.status,404);
   const failed=await worker.fetch(new Request('https://jez237.com'+path),{INSTALLERS:{get:async()=>{throw Error('offline');}}});assert.equal(failed.status,503);assert.match(failed.headers.get('X-Robots-Tag'),/noindex/);
 });
+
+test('serves SignForge with its own path and preserves app matching', async () => {
+ const url='https://jez237.com/software-downloads/signforge/'+ 'b'.repeat(64) + '/SignForge-1.138.0-Setup-x64.exe';
+ const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
+ assert.equal((await worker.fetch(new Request(url,{method:'HEAD'}),env)).status,200);
+ assert.equal((await worker.fetch(new Request(url.replace('/signforge/','/photocraft/'),{method:'HEAD'}),env)).status,404);
+});
