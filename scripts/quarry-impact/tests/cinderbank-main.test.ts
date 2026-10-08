@@ -1,3 +1,5 @@
+import * as GridSetup from '../src/grid-setup';
+import * as Grid from '../src/grid-rules';
 import * as Timed from '../src/timed-race';
 import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from '../src/ai-difficulty';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
@@ -58,7 +60,7 @@ function harness(){
   dispose(){this.disposed++;this.world.removeRigidBody(this.body);}
  }
  const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
- const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
+ const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
   createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
@@ -156,5 +158,21 @@ test('Bracken event, demo, time trial and replay use an isolated hilly world the
   c.demoOptions.course='bracken-rallycross-v1';c.demo=true;c.createCars();assert.equal(c.activeVenue,venue);assert.equal(c.cars.length,11);
   c.demo=false;c.activeTimeTrial={kind:'tern',course:'bracken-rallycross-v1',direction:'reverse'};c.createCars();assert.equal(c.activeVenue,venue);assert.equal(c.cars.length,1);c.beginReplay();c.elapsed=1;c.captureReplay(true);const doc=c.recorder.document();assert.equal(doc.meta.courseId,'bracken-rallycross-v1');assert.equal(doc.meta.reverse,true);
   c.activeTimeTrial=null;c.createCars(true);c.state='menu';const previous=c.activeVenue;assert.equal(c.openStudio(false,doc),true);assert.equal(c.activeVenue,venue);c.closeStudio();assert.equal(c.activeVenue,previous);assert.equal(venue.root.visible,false);assert.equal(c.physics,previous.physics);assert.equal(old.physics.freed,0);
+ }finally{h.close();}
+});
+
+test('production grids enforce lineup and build rules for races, derbies and demos while excluding trials, challenges and playground',async()=>{
+ await R.init();const h=harness();
+ try{
+  h.c.garage.cars.tern.setup={...stockSetup('tern'),paint:0x123456,engine:3,tires:2,armor:1,tune:{gearing:.7,suspension:.2,steering:-.4,brakeBias:.1,differential:.5}};h.c.kind='tern';
+  const saved=JSON.stringify(h.c.garage);
+  for(const mode of ['race','derby'])for(const lineup of ['selected','drivetrain','weight'])for(const performance of ['stock','matched']){
+   Object.assign(h.c.eventOptions,{field:24,lineup,performance});h.c.mode=mode;h.c.createCars();
+   assert.equal(h.c.cars.length,24);assert.ok(h.c.cars.every((c:any)=>Grid.gridPool('tern',lineup as any).includes(c.kind)));assert.ok(h.c.cars.every((c:any)=>c.setup.engine===(performance==='stock'?0:3)));assert.equal(h.c.cars[0].setup.paint,0x123456);
+  }
+  h.c.demo=true;Object.assign(h.c.demoOptions,{field:24,lineup:'weight',setups:'matched'});h.c.createCars();assert.ok(h.c.cars.every((c:any)=>Grid.vehicleWeightClass(c.kind)==='Light'&&c.setup.engine===3));
+  h.c.demo=false;h.c.mode='playground';h.c.traffic=true;h.c.createCars();assert.equal(h.c.cars.length,5);assert.equal(h.c.cars[0].setup.engine,3);assert.ok(h.c.cars.slice(1).every((c:any)=>c.setup.engine===0));
+  h.c.mode='race';h.c.activeChallenge={id:'fixture',course:'quarry-v1',mode:'race'};h.c.createCars();assert.equal(h.c.cars.length,8);assert.ok(h.c.cars.every((c:any)=>c.setup.engine===0));
+  h.c.activeChallenge=undefined;h.c.activeTimeTrial={kind:'tern',course:'quarry-v1',direction:'forward'};h.c.createCars();assert.equal(h.c.cars.length,1);assert.equal(h.c.cars[0].setup.engine,0);assert.equal(JSON.stringify(h.c.garage),saved);
  }finally{h.close();}
 });
