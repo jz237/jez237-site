@@ -7,9 +7,9 @@ export interface DrivingControls {
  version:1; keys:Record<Action,string[]>;
  pad:number; axis:number; invert:boolean; center:number; deadzone:number; saturation:number; curve:number;
  throttleButton:number; brakeButton:number; handbrakeButton:number; triggerDeadzone:number;
- speedAssist:number;
+ speedAssist:number; rumble:number;
 }
-export function defaultControls():DrivingControls{return {version:1,keys:{throttle:['KeyW','ArrowUp'],reverse:['KeyS','ArrowDown'],left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],handbrake:['Space']},pad:-1,axis:0,invert:false,center:0,deadzone:.12,saturation:1,curve:1,throttleButton:7,brakeButton:6,handbrakeButton:0,triggerDeadzone:.05,speedAssist:0};}
+export function defaultControls():DrivingControls{return {version:1,keys:{throttle:['KeyW','ArrowUp'],reverse:['KeyS','ArrowDown'],left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],handbrake:['Space']},pad:-1,axis:0,invert:false,center:0,deadzone:.12,saturation:1,curve:1,throttleButton:7,brakeButton:6,handbrakeButton:0,triggerDeadzone:.05,speedAssist:0,rumble:.65};}
 const reserved=new Set(['KeyC','KeyR','KeyM','KeyF','KeyP','KeyI','KeyT']);
 export const allowedKey=(key:string)=>/^(Key[A-Z]|Digit[0-9]|Arrow(Up|Down|Left|Right)|Space|Shift(Left|Right))$/.test(key)&&!reserved.has(key);
 const bound=(n:unknown,min:number,max:number,fallback:number)=>typeof n==='number'&&Number.isFinite(n)?Math.max(min,Math.min(max,n)):fallback;
@@ -22,7 +22,7 @@ export function readControls(raw?:string|null):DrivingControls{
  if(valid)d.keys=keys;
  for(const k of ['pad','axis','throttleButton','brakeButton','handbrakeButton'] as const)d[k]=Math.round(bound(v[k],k==='pad'?-1:0,k==='pad'?3:k==='axis'?7:31,d[k]));
  d.invert=v.invert===true;
- d.center=bound(v.center,-.5,.5,0);d.deadzone=bound(v.deadzone,0,.45,.12);d.saturation=bound(v.saturation,.5,1,1);d.curve=bound(v.curve,.5,3,1);d.triggerDeadzone=bound(v.triggerDeadzone,0,.4,.05);d.speedAssist=bound(v.speedAssist,0,1,0);
+ d.center=bound(v.center,-.5,.5,0);d.deadzone=bound(v.deadzone,0,.45,.12);d.saturation=bound(v.saturation,.5,1,1);d.curve=bound(v.curve,.5,3,1);d.triggerDeadzone=bound(v.triggerDeadzone,0,.4,.05);d.speedAssist=bound(v.speedAssist,0,1,0);d.rumble=bound(v.rumble,0,1,.65);
  if(new Set([d.throttleButton,d.brakeButton,d.handbrakeButton]).size!==3){d.throttleButton=7;d.brakeButton=6;d.handbrakeButton=0;}
  return d;
 }

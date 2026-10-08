@@ -98,6 +98,7 @@ import {showReplayLibrary} from './replay-library-ui';
 import {WaypointRace,WAYPOINTS} from './waypoint-race';
 import {WaypointMarkers} from './waypoint-markers';
 import {directionForCar,RACE_NAMES} from './event-rules';
+import {ControllerRumble} from './controller-rumble';
 import {CONTROLS_KEY,readControls,drivingInput,keyLabel,selectedPad} from './driving-controls';
 import {ControllerInput} from './controller-input';
 import {ControllerNavigation,type NavigationContext} from './controller-navigation';
@@ -105,6 +106,7 @@ import {mountDrivingControls} from './driving-controls-ui';
 import './style.css';
 const ui = document.querySelector<HTMLDivElement>('#ui')!;
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
+const controllerRumble=new ControllerRumble();
 const controllerInput=new ControllerInput(),controllerNavigation=new ControllerNavigation();
 const controllerHelp=document.createElement('div');controllerHelp.className='controller-help';controllerHelp.hidden=true;document.body.append(controllerHelp);
 let recoveryStorage:Storage|undefined;try{recoveryStorage=localStorage;recoveryStorage.getItem(BACKUP_JOURNAL);}catch{recoveryStorage=undefined;}
@@ -850,6 +852,7 @@ function formatTime(t: number) {
     .padStart(2, '0')}`;
 }
 function pause(settingsOnly = false) {
+  controllerRumble.stop();
   if (['loading', 'paused'].includes(state)||state==='result'&&!demo) return;
   resumeState = state;
   state = 'paused';
@@ -1158,6 +1161,7 @@ function step(dt: number) {
     if(feedback){
       collisions++;
       sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
+      if(a?.id===0||b?.id===0)recordRumbleImpact(.12+impulse/22000);
       if(a?.id===0||b?.id===0)toast(damage>12?'HEAVY IMPACT':'CONTACT',.8);
     }
   }
@@ -1356,6 +1360,16 @@ function pollController(now:number){
   const message=hint+(['playing','countdown'].includes(state)&&sound.ctx?.state==='suspended'?' · CLICK / KEY for sound':'');
   if(controllerHelp.textContent!==message)controllerHelp.textContent=message;
 }
+function recordRumbleImpact(strength:number){
+  if(state==='playing'&&!demo&&!studio&&!document.hidden)controllerRumble.impact(strength);
+}
+function updateRumble(now:number){
+  const p=cars[0],active=state==='playing'&&!demo&&!studio&&!preparingEvent&&!document.hidden&&(!online?.active||online.network.connected)&&!!p&&!p.finished&&!clubPlayerStopped;
+  controllerRumble.update(selectedPad(drivingControls,navigator.getGamepads?.()??[]),now,drivingControls.rumble,active?{
+    speed:p.health>0?p.speed:0,slip:p.slip,surface:p.surface,scraping:p.scraping,
+    grounded:online?.active?!!p.remoteGrounded:[0,1,2,3].some(i=>p.controller.wheelIsInContact(i)),
+  }:null);
+}
 function frame(now: number) {
   requestAnimationFrame(frame);
   const raw = (now - lastFrame) / 1000;
@@ -1364,6 +1378,7 @@ function frame(now: number) {
   lastFrame = now;
   // A controller Resume updates lastFrame; measure this frame before that callback.
   pollController(now);
+  updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading') return;
   // Include long stalls in the sustained benchmark, including event restarts.
@@ -1487,12 +1502,15 @@ addEventListener('keydown', (e) => {
   if (state === 'playing' || state === 'countdown') keys.add(e.code);
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
+addEventListener('pagehide',()=>controllerRumble.stop());
 addEventListener('blur', () => {
+  controllerRumble.stop();
   keys.clear();online?.network.clearInput();
   if(preparingEvent)preparationInterrupted=true;
   if ((['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
 document.addEventListener('visibilitychange', () => {
+  if(document.hidden)controllerRumble.stop();
   if(document.hidden&&preparingEvent){preparationInterrupted=true;keys.clear();}
   if (document.hidden && (['playing', 'countdown', 'wrecked'].includes(state)||demo&&state==='result')) pause();
 });
@@ -1543,6 +1561,7 @@ async function boot() {
   quarryRoot.add(...quarryNodes);scene.add(quarryRoot);
   quarryVenue={course:getRaceCourse(),physics,root:quarryRoot,checkpoint:quarry.checkpoint,props:quarry.props,puddles:quarry.puddles};activeVenue=quarryVenue;
   online=new OnlineView(scene,physics,fx,sound,()=>cars,next=>{cars=next;});
+  online.onLocalImpact=damage=>recordRumbleImpact(.12+damage/30);
   onlineUI=new OnlineUI(ui,online.network,{connect:connectOnline,leave:leaveOnline,loadout:(car=kind)=>({kind:car,setup:copyOnlineSetup(garage.cars[car].setup),livery:garage.cars[car].setup.livery})});
   online.network.addEventListener('snapshot',receiveOnline);
   online.network.addEventListener('connected',()=>{const url=new URL(location.href);url.searchParams.set('room',online.network.room);history.replaceState(null,'',url);sound.pause(!['playing','countdown'].includes(state));});

@@ -14,6 +14,7 @@ import { DEFINITIONS } from './rules';
 export class OnlineView {
   readonly network = new QuarryNetwork();
   active = false;
+  onLocalImpact:(damage:number)=>void=()=>{};
   private repairs = new Map<number, number>();
   private lastTick = -1;
   private lastLiveryRevision=-1;
@@ -60,6 +61,7 @@ export class OnlineView {
       if(hit.scar)c.scar(point,direction);
       else c.hit(point,direction,hit.damage/c.specification.damageScale,s.elapsed,hit.tick<0);
       if(!hit.scar && this.network.connected && s.tick-hit.tick<8) {
+        if(hit.car===this.network.id&&hit.tick>=0&&hit.tick<=s.tick)this.onLocalImpact(hit.damage);
         this.sound.shot(hit.damage>15?'impact-heavy':hit.damage>5?'impact-medium':'impact-light',point,Math.min(.8,.25+hit.damage/30));
         if(hit.damage>7)this.sound.shot('glass',point,.15);
       }

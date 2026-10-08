@@ -29,6 +29,9 @@ function normalize(key:string,text:string):string{
  }
  if(raw.version!==1)throw Error(`Unsupported saved-data version: ${key}`);
  const value=readers[key](text);if(value===null)throw Error('The championship save is invalid.');
+ // Preserve the canonical bytes of controls exported before vibration existed.
+ // readControls supplies the default after import; old signed backups stay valid.
+ if(key===CONTROLS_KEY&&!Object.hasOwn(raw,'rumble'))delete(value as {rumble?:number}).rumble;
  return canonical(value);
 }
 function entries(value:unknown):SaveEntries{
