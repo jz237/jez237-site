@@ -27,7 +27,11 @@ export class ReplayStudio {
     this.ui.querySelector<HTMLInputElement>('#studio-grid')!.onchange=e=>this.ui.querySelector('#studio-guide')!.classList.toggle('thirds',(e.target as HTMLInputElement).checked);
     if(this.doc){this.ui.querySelector<HTMLInputElement>('#studio-library-name')!.value=this.savedName??defaultReplayName(this.doc);on('studio-library-save',()=>{void this.saveToLibrary();});on('studio-play',()=>this.togglePlay());on('studio-prev',()=>this.seek(this.time-.05));on('studio-next',()=>this.seek(this.time+.05));on('studio-save',()=>{void this.save();});
       this.ui.querySelector<HTMLSelectElement>('#studio-speed')!.onchange=e=>this.speed=+(e.target as HTMLSelectElement).value;
-      this.ui.querySelector<HTMLInputElement>('#studio-time-slider')!.oninput=e=>this.seek(+(e.target as HTMLInputElement).value);
+      this.ui.querySelector<HTMLInputElement>('#studio-time-slider')!.oninput=e=>{
+        const time=+(e.target as HTMLInputElement).value;
+        // The recording can end between the range control's 0.05-second ticks.
+        this.seek(time>this.duration-.05+1e-8?this.duration:time);
+      };
     }
     this.labels();this.guide();
   }

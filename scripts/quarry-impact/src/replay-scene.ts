@@ -1,4 +1,5 @@
 import {withWreckBatch} from './wreck-batch';
+import {ReplayCheckpointCache} from './replay-checkpoint';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {Vehicle,type VehicleGround} from './vehicle';
@@ -18,8 +19,11 @@ export function captureReplayFrame(cars:readonly Vehicle[],props:readonly Replay
 }
 /** Replay copies are never stepped by physics. The live vehicles are retained intact. */
 export class ReplayScene {
+  private checkpoints:ReplayCheckpointCache;
+  get checkpointStats(){return {count:this.checkpoints.size,bytes:this.checkpoints.bytes,limit:this.checkpoints.limit};}
   readonly cars:Vehicle[]=[];readonly props:T.Mesh[]=[];private eventIndex=0;private time=-1;private incomplete=false;private visibility=new Map<T.Object3D,boolean>();
-  constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[],ground?:VehicleGround){
+  constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[],ground?:VehicleGround,checkpointLimit?:number){
+    this.checkpoints=new ReplayCheckpointCache(checkpointLimit);
     replayCourseId(doc.meta);
     if(sourceProps.length!==doc.meta.props)throw Error('This replay requires the recorded course prop set.');
     for(const prop of sourceProps)if(!prop?.mesh)throw Error('This replay requires the recorded course prop set.');
@@ -32,7 +36,11 @@ export class ReplayScene {
   seek(time:number){this.seekChunk(time,Infinity);}
   /** One synchronous slice; no background work survives closing the studio.
    * Event deformation is indivisible, so a single contact may exceed the budget. */
-  seekChunk(time:number,budgetMs=8):boolean{return withWreckBatch(()=>this.seekNow(time,budgetMs));}
+  seekChunk(time:number,budgetMs=8):boolean{
+    const ready=withWreckBatch(()=>this.seekNow(time,budgetMs));
+    if(ready)this.checkpoints.save(this.cars,time,this.eventIndex);
+    return ready;
+  }
   private show(ready:boolean){
     if(!ready){for(const o of [...this.cars.map(c=>c.root),...this.props])if(!this.visibility.has(o)){this.visibility.set(o,o.visible);o.visible=false;}}
     else{for(const [o,visible]of this.visibility)o.visible=visible;this.visibility.clear();}
@@ -43,7 +51,10 @@ export class ReplayScene {
     this.show(true);
     // A new request may reverse partway through reconstruction, before time
     // has been committed to a completed frame.
-    if(time<this.time||(this.incomplete&&this.eventIndex>0&&this.doc.events[this.eventIndex-1].time>time)){for(const c of this.cars){c.repair();c.engineStall=this.doc.meta.engineModel===1?0:undefined;c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;this.time=-1;}
+    const reverse=time<this.time||(this.incomplete&&this.eventIndex>0&&this.doc.events[this.eventIndex-1].time>time);
+    const restored=this.checkpoints.restore(time,reverse?-1:this.eventIndex);
+    if(restored!==undefined){this.eventIndex=restored;this.time=-1;}
+    else if(reverse){for(const c of this.cars){c.repair();c.engineStall=this.doc.meta.engineModel===1?0:undefined;c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}this.eventIndex=0;this.time=-1;}
     while(this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];
       c.current.fromArray(e.pose);c.currentQ.fromArray(e.pose,3).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.root.updateMatrixWorld(true);
@@ -73,5 +84,5 @@ export class ReplayScene {
     });
     this.props.forEach((p,i)=>{const o=this.cars.length*stride+i*7;p.position.fromArray(av,o).lerp(new T.Vector3().fromArray(bv,o),alpha);p.quaternion.fromArray(av,o+3).slerp(q.fromArray(bv,o+3),alpha);});this.time=time;this.incomplete=false;this.show(true);return true;
   }
-  dispose(){this.visibility.clear();this.cars.forEach(c=>c.dispose());this.props.forEach(p=>p.removeFromParent());}
+  dispose(){this.checkpoints.clear();this.visibility.clear();this.cars.forEach(c=>c.dispose());this.props.forEach(p=>p.removeFromParent());}
 }
