@@ -8,7 +8,7 @@ import {mountSaveBackup} from './save-backup-ui';
 import {CAREER_GROUPS,awardCareerPodiums,careerChallenge,careerStatus,unlockCareerGroup} from './career';
 import {showCareer} from './career-ui';
 import './career.css';
-import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
+import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,raceTrialGhost,sharedTrialGhost,addSharedGhost,removeSharedGhost,exportTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
 import {TrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
@@ -169,13 +169,14 @@ let activeTimeTrial:Readonly<TimeTrialConfig>|null=null,timeTrialSelection:TimeT
 let timeTrialOpen=false,timeTrialInvalidReason='',timeTrialResult:TimeTrialResult|null=null;
 let trialGhostLibrary=loadGhostLibrary(),trialGhostWarning='';
 let trialGhostRecorder:TrialGhostRecorder|null=null,trialGhostView:TrialGhostView|null=null,trialGhostTarget:TrialGhost|null=null;
-let trialGhostSplit='';
+let trialGhostSplit='',trialGhostLabel='PERSONAL BEST';
 function beginTrialGhost(){
   trialGhostView?.dispose();trialGhostView=null;trialGhostRecorder=null;trialGhostTarget=null;trialGhostSplit='';
   if(!activeTimeTrial)return;
   trialGhostRecorder=new TrialGhostRecorder(activeTimeTrial);
   trialGhostRecorder.sample(0,cars[0].current,cars[0].currentQ);
-  trialGhostTarget=findTrialGhost(trialGhostLibrary,activeTimeTrial,timeTrialBest(timeTrialRecords,activeTimeTrial));
+  const rival=raceTrialGhost(trialGhostLibrary,activeTimeTrial,timeTrialBest(timeTrialRecords,activeTimeTrial));
+  trialGhostTarget=rival?.ghost??null;trialGhostLabel=rival?.label??'PERSONAL BEST';
   if(trialGhostLibrary.enabled&&trialGhostTarget)trialGhostView=new TrialGhostView(scene,cars[0].root,trialGhostTarget);
 }
 function finishTrialGhost(config:TimeTrialConfig,result:TimeTrialResult){
@@ -184,7 +185,7 @@ function finishTrialGhost(config:TimeTrialConfig,result:TimeTrialResult){
   if(result.eligible&&result.newBest){
     const saved=saveGhostLibrary(trialGhostLibrary);
     trialGhostWarning=!saved?'Ghosts are available for this session, but browser storage could not save them.':
-      recording?'Personal-best ghost saved. Race it on your next attempt.':'Personal best saved without a ghost. Ghost recording supports laps up to ten minutes.';
+      recording?'Personal-best ghost saved. Select My personal best to race it, or export it to share.':'Personal best saved without a ghost. Ghost recording supports laps up to ten minutes.';
   }
   trialGhostRecorder=null;
 }
@@ -200,7 +201,16 @@ function openTimeTrialSetup(){
   showTimeTrialSetup(ui,config,timeTrialRecords,{start:config=>{void startTimeTrial(config);},close:()=>{timeTrialOpen=false;menu();}},[timeTrialWarning,trialGhostWarning].filter(Boolean).join(' '),{
     enabled:trialGhostLibrary.enabled,
     change:enabled=>{trialGhostLibrary={...trialGhostLibrary,enabled};if(!saveGhostLibrary(trialGhostLibrary))trialGhostWarning='Ghost preference could not be saved; it applies for this session.';},
-    status:selected=>findTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected))?'Personal-best ghost ready.':'Set a new personal best to record a ghost for this selection.',
+    status:selected=>{const rival=raceTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected));return rival?`${rival.label} · ${formatTrialTime(rival.ghost.time)} · Ghost ready.`:trialGhostLibrary.target==='shared'?'Import a shared lap for this selection, or choose My personal best.':'Set a new personal best to record a ghost for this selection.';},
+    exchange:{
+      source:()=>trialGhostLibrary.target??'personal',
+      choose:source=>{if(source==='shared')trialGhostLibrary={...trialGhostLibrary,target:'shared'};else{trialGhostLibrary={...trialGhostLibrary};delete trialGhostLibrary.target;}if(!saveGhostLibrary(trialGhostLibrary))trialGhostWarning='Ghost preference applies for this session only; browser storage could not save it.';},
+      rival:selected=>sharedTrialGhost(trialGhostLibrary,selected),
+      available:selected=>!!findTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected)),
+      export:async(selected,name)=>{const ghost=findTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected));if(!ghost)throw Error('Set a personal best with a complete ghost before exporting.');return exportTrialGhost(ghost,name);},
+      use:rival=>{trialGhostLibrary=addSharedGhost(trialGhostLibrary,rival);const saved=saveGhostLibrary(trialGhostLibrary);return saved?'Shared rival saved. Your personal records are unchanged.':'Shared rival ready for this session only; browser storage could not save it.';},
+      remove:selected=>{trialGhostLibrary=removeSharedGhost(trialGhostLibrary,selected);return saveGhostLibrary(trialGhostLibrary)?'Shared rival removed.':'Shared rival removed for this session only; browser storage could not save the change.';},
+    },
   });
 }
 async function startTimeTrial(config:TimeTrialConfig){
@@ -844,7 +854,7 @@ function updateHud() {
           ? 'TRAFFIC ON'
           : 'SOLO',
   );
-  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:'FACTORY STOCK · ONE LAP · NO RECOVERY');text('time-trial-ghost',!trialGhostLibrary.enabled?'GHOST OFF':trialGhostTarget?trialGhostSplit||'RACING YOUR PERSONAL-BEST GHOST':'NO SAVED GHOST · SET A NEW PERSONAL BEST');}
+  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:'FACTORY STOCK · ONE LAP · NO RECOVERY');text('time-trial-ghost',!trialGhostLibrary.enabled?'GHOST OFF':trialGhostTarget?trialGhostSplit||`RACING ${trialGhostLabel} GHOST`:'NO SAVED GHOST · SET A NEW PERSONAL BEST');}
   document.getElementById('countdown')!.innerHTML =
     state === 'countdown'
       ? `<strong>${Math.ceil(countdown)}</strong><p>${mode === 'derby' ? 'SURVIVE THE IMPACT' : 'FIND YOUR LINE'}</p>`
@@ -1221,7 +1231,7 @@ function step(dt: number) {
         if(activeTimeTrial&&c.id===0&&!c.finished){
           trialGhostRecorder?.gate(c.passed,elapsed);
           const previous=trialGhostTarget?.gates[c.passed-1];
-          if(previous!==undefined)trialGhostSplit=`GATE ${c.passed} · ${formatTrialDelta(elapsed-previous)} VS PERSONAL BEST`;
+          if(previous!==undefined)trialGhostSplit=`GATE ${c.passed} · ${formatTrialDelta(elapsed-previous)} VS ${trialGhostLabel}`;
         }
         c.nextCheckpoint = (c.nextCheckpoint + 1) % 24;
         c.checkpointDistance = Infinity;
