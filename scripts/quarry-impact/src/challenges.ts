@@ -51,6 +51,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('marten-ashford','Rear-engine precision','marten',1,[125,80,55],40),course:'ashford-autodrome-v1'},
   {...race('shuttle-ironfield','Crossing service','shuttle',1,[110,70,50],40),course:'ironfield-figure-eight-v1'},
   {...race('bramble-ashford','V8 road endurance','muscle',2,[250,155,105],25),course:'ashford-autodrome-v1'},
+  {...race('coupe-pinecrest','Ridge ascent','coupe',1,[150,95,68]),course:'pinecrest-ridge-v1'},
+  {...race('buggy-pinecrest','Woodland runner','buggy',1,[150,95,68]),course:'pinecrest-ridge-v1'},
+  {...race('shuttle-pinecrest','Uphill service','shuttle',2,[300,195,140],25),course:'pinecrest-ridge-v1'},
 ];
 /** Only circuit challenges select another venue; the arena and ramps stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode==='race'?resolveCourseId(c.course):'quarry-v1';
