@@ -383,5 +383,29 @@
       "MIT licensed"
     ],
     "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project"
+  },
+  {
+    "id": "018",
+    "title": "Weatherglass",
+    "category": "3D · Weather terrarium",
+    "description": "A tiny living world under glass. Grab clouds and squeeze out rain, brush mist across the valley, stir the wind, and turn a sunlit spring landscape into winter.",
+    "url": "weatherglass/",
+    "image": "assets/weatherglass.jpg",
+    "imageAlt": "Actual Weatherglass scene: mountains, trees, a waterfall and a blue lake inside a brass-framed glass terrarium",
+    "imageWidth": 1440,
+    "imageHeight": 900,
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/weatherglass",
+    "features": [
+      "Grab clouds & make rain",
+      "Wind, fog & thunderstorms",
+      "Daylight & four seasons",
+      "Procedural ambient sound"
+    ],
+    "facts": [
+      "Interactive glass terrarium",
+      "Three.js · WebGL 2",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & touch controls · Preview captured from the running demo"
   }
 ]
