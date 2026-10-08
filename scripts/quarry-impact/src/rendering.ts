@@ -1,8 +1,17 @@
 import * as T from 'three';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 
-/** Half-resolution horizon-based occlusion, with foliage excluded from the
- * normal buffer: the normal override cannot reproduce alpha-cutout leaves. */
+/** Keep sampleable depth on both of the composer's independently owned targets.
+ * RenderPass fills the current read buffer before ambient shading uses it. */
+export function createSceneRenderTarget(width: number, height: number) {
+  return new T.WebGLRenderTarget(width, height, {
+    type: T.HalfFloatType,
+    depthTexture: new T.DepthTexture(width, height, T.UnsignedIntType),
+  });
+}
+
+/** Reconstruct ambient-occlusion normals from the scene's existing depth.
+ * This avoids redrawing every vehicle and the scenery into a normal buffer. */
 export class QuarryAO extends GTAOPass {
   resolutionScale = 0.65;
   constructor(scene: T.Scene, camera: T.PerspectiveCamera) {
@@ -20,16 +29,18 @@ export class QuarryAO extends GTAOPass {
   }
   override render(renderer: T.WebGLRenderer, writeBuffer: T.WebGLRenderTarget,
     readBuffer: T.WebGLRenderTarget, deltaTime: number, maskActive: boolean) {
-    const hidden: T.Object3D[] = [];
-    this.scene.traverse(o => {
-      if (!(o instanceof T.Mesh) || !o.visible) return;
-      const mats = Array.isArray(o.material) ? o.material : [o.material];
-      if (mats.some(m => m.alphaTest > 0 || m.transparent)) {
-        hidden.push(o); o.visible = false;
-      }
-    });
-    try { super.render(renderer, writeBuffer, readBuffer, deltaTime, maskActive); }
-    finally { for (const o of hidden) o.visible = true; }
+    const depth = readBuffer.depthTexture;
+    if (!depth) throw new Error('QuarryAO requires a scene depth texture');
+    const reconstructNormals = this.gtaoMaterial.defines.NORMAL_VECTOR_TYPE !== 0;
+    // The composer swaps buffers; never retain the previous frame's depth.
+    this.setGBuffer(depth);
+    if (reconstructNormals) {
+      this.gtaoMaterial.needsUpdate = true;
+      this.pdMaterial.needsUpdate = true;
+    }
+    // Three's depth-debug output otherwise still points at its unused target.
+    this.depthRenderMaterial.uniforms.tDepth.value = depth;
+    super.render(renderer, writeBuffer, readBuffer, deltaTime, maskActive);
   }
 }
 
