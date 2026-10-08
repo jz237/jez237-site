@@ -21,7 +21,7 @@ function normalize(key:string,text:string):string{
  if(!object(raw))throw Error(`Invalid saved data: ${key}`);
  if(key==='quarry-impact-v1'){
   const out:Record<string,unknown>={};
-  if(raw.quality!==undefined){if(!['ultra','high','medium'].includes(raw.quality))throw Error('Invalid graphics setting.');out.quality=raw.quality;}
+  if(raw.quality!==undefined){if(!['auto','ultra','high','medium'].includes(raw.quality))throw Error('Invalid graphics setting.');out.quality=raw.quality;}
   if(raw.performance!==undefined){if(typeof raw.performance!=='boolean')throw Error('Invalid performance setting.');out.performance=raw.performance;}
   for(const k of ['engine','effects','ambience'])if(raw[k]!==undefined){if(typeof raw[k]!=='number'||!Number.isFinite(raw[k])||raw[k]<0||raw[k]>1)throw Error('Invalid sound setting.');out[k]=raw[k];}
   if(raw.best!==undefined){if(!object(raw.best)||Object.keys(raw.best).length>10000||Object.entries(raw.best).some(([k,v])=>k.length>200||!/^[-\w:.]+$/.test(k)||typeof v!=='number'||!Number.isFinite(v)||v<0))throw Error('Invalid event records.');out.best=raw.best;}

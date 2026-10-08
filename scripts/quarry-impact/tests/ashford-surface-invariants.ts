@@ -1,3 +1,4 @@
+import {restoreAdaptiveGraphicsBytes,verifyAdaptiveGraphicsRevision} from './adaptive-graphics-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,17 @@ export function readAshfordSurfacePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAshfordSurfaceBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreAdaptiveGraphicsBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAshfordSurfacePrevious(file);
 }
 export function verifyAshfordSurfaceRevision(){
+ verifyAdaptiveGraphicsRevision();
  const manifest=revision();assert.equal(manifest.baseline,'59bc8adfc6a97394516614fb834687375daef3b8');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreAdaptiveGraphicsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAshfordSurfaceBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the AshfordSurface release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreAdaptiveGraphicsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the AshfordSurface release');
  assert.equal(manifest.previousFixtureCount,1186);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1186);
 }
