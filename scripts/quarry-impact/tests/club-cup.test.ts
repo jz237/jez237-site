@@ -12,9 +12,9 @@ const race=():ClubRowInput[]=>Array.from({length:11},(_,slot)=>({slot,status:'fi
 const derby=():ClubRowInput[]=>Array.from({length:11},(_,slot)=>({slot,status:slot<4?'survived':'wrecked',finishTime:null,health:slot<4?60-slot*10:0,progress:0,damage:100-slot*4}));
 function completedCup(){let state=create();state=finishClubRound(beginClubRound(state),race(),run(),0);state=finishClubRound(beginClubRound(state),race(),run(),1);return finishClubRound(beginClubRound(state),derby(),run(),2);}
 
-test('Club Cup selects every current car at player slot0, keeps one stable factory-stock eleven and fixed three-round schedule',()=>{
- assert.deepEqual([...CLUB_KINDS],CAR_KINDS);assert.equal(CLUB_KINDS.length,11);
- for(const kind of CAR_KINDS){const cup=createClubCup(kind,uuid,1700000000000),index=CLUB_KINDS.indexOf(kind);assert.equal(cup.roster[0].kind,kind);assert.deepEqual(cup.roster.map(r=>r.kind),[...CLUB_KINDS.slice(index),...CLUB_KINDS.slice(0,index)]);assert.deepEqual(cup.roster.map(r=>r.slot),Array.from({length:11},(_,i)=>i));assert.equal(new Set(cup.roster.map(r=>r.kind)).size,11);assert.equal(cup.phase,'ready');assert.equal(currentClubRound(cup)?.index,0);assert.deepEqual(readClubCup(JSON.stringify(cup)),cup);}
+test('Club Cup selects every original car at player slot0, keeps one stable factory-stock eleven and fixed three-round schedule',()=>{
+ assert.deepEqual([...CLUB_KINDS],CAR_KINDS.filter(k=>k!=='shuttle'));assert.equal(CLUB_KINDS.length,11);
+ for(const kind of CLUB_KINDS){const cup=createClubCup(kind,uuid,1700000000000),index=CLUB_KINDS.indexOf(kind);assert.equal(cup.roster[0].kind,kind);assert.deepEqual(cup.roster.map(r=>r.kind),[...CLUB_KINDS.slice(index),...CLUB_KINDS.slice(0,index)]);assert.deepEqual(cup.roster.map(r=>r.slot),Array.from({length:11},(_,i)=>i));assert.equal(new Set(cup.roster.map(r=>r.kind)).size,11);assert.equal(cup.phase,'ready');assert.equal(currentClubRound(cup)?.index,0);assert.deepEqual(readClubCup(JSON.stringify(cup)),cup);}
  assert.deepEqual(CLUB_ROUNDS.map(r=>[r.mode,r.course,r.laps,r.duration,r.stock]),[['race','quarry-v1',2,0,true],['race','ironfield-figure-eight-v1',2,0,true],['derby','quarry-v1',0,90,true]]);
  assert.throws(()=>createClubCup('hovercraft' as any,uuid,0));assert.throws(()=>createClubCup('tern','not-a-uuid',0));assert.throws(()=>createClubCup('tern',uuid,NaN));
 });
