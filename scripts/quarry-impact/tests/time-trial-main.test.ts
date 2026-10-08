@@ -1,3 +1,4 @@
+import * as DamageRules from '../src/damage-rules';
 import * as GridSetup from '../src/grid-setup';
 import * as Grid from '../src/grid-rules';
 import * as Timed from '../src/timed-race';
@@ -33,7 +34,7 @@ import {ReplayRecorder} from '../src/replay-data';
 const mainText=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
 const main=ts.createSourceFile('main.ts',mainText,ts.ScriptTarget.ES2022,true,ts.ScriptKind.TS);
 export const observedMainHash=createHash('sha256').update(mainText).digest('hex');
-const selectors=['clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceTimeLimit','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse','raceLabel','eventLabel'];
+const selectors=['damageRule','clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceTimeLimit','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse','raceLabel','eventLabel'];
 const names=[...selectors,'modes','openProfile','bankRun','createCars','start','beginReplay','finish','menu','recover','openTimeTrialSetup','startTimeTrial','finishTimeTrial','controllerContext','pause'];
 const declarations=names.map(name=>{
  const fn=main.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);if(fn)return fn.getText(main);
@@ -82,7 +83,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const venues=Object.fromEntries(Object.keys(COURSE_NAMES).map(id=>[id,{course:getRaceCourse(id as any),props:[],puddles:[]} ])),quarry=venues['quarry-v1'];
- const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
