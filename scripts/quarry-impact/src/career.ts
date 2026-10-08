@@ -1,3 +1,5 @@
+import type {ClubRecords} from './club-records';
+import type {ClubSeriesId} from './club-cup';
 import {CHALLENGES,type Discipline} from './challenges';
 import type {DriverProfile} from './progression';
 export type CareerGroup={id:string;title:string;discipline:Discipline;description:string;cost:number;events:readonly string[]};
@@ -12,12 +14,23 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'gravel-artists',title:'Gravel Artists',discipline:'stunts',description:'Link longer slides and carry momentum across the quarry.',cost:3,events:['long-drift','hatch-drift','distance-sedan']},
  {id:'flight-school',title:'Flight School',discipline:'stunts',description:'Land jumps in three different cars, including the open-frame Ravine.',cost:3,events:['air-coupe','air-hatch','ravine-flight']},
 ];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally'];
+export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
+ const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
+ return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
+}
+export function awardCareerPodiums(profile:DriverProfile,records:ClubRecords){
+ const podiums=normalizeCareerPodiums(profile.career?.podiums);let gained=0;
+ for(const r of records.best){if(!CAREER_SERIES.includes(r.series)||!Number.isFinite(r.points)||r.points<=0||!Number.isInteger(r.place)||r.place<1||r.place>3)continue;const medal=4-r.place,prior=podiums[r.series]??0;if(medal>prior){podiums[r.series]=medal;gained+=medal-prior;}}
+ if(gained)profile.career={unlocked:profile.career?.unlocked??[],podiums};
+ return gained;
+}
 const eventIds=new Set(CAREER_GROUPS.flatMap(g=>g.events));
 export const careerGroupFor=(id:string)=>CAREER_GROUPS.find(g=>g.events.includes(id));
-export function careerEarned(profile:Pick<DriverProfile,'challenges'>){return [...eventIds].reduce((sum,id)=>sum+Math.max(0,Math.min(3,Math.floor(profile.challenges[id]?.medal??0))),0);}
+export function careerEarned(profile:Pick<DriverProfile,'challenges'|'career'>){return Object.values(normalizeCareerPodiums(profile.career?.podiums)).reduce((a,b)=>a+b,0)+[...eventIds].reduce((sum,id)=>sum+Math.max(0,Math.min(3,Math.floor(profile.challenges[id]?.medal??0))),0);}
 /** Unlocks share the profile's atomic save. Medal points are derived, so repeated
  * callbacks, retries and old challenge results cannot mint duplicate currency. */
-export function normalizeCareerUnlocks(value:unknown,profile:Pick<DriverProfile,'challenges'>):string[]{
+export function normalizeCareerUnlocks(value:unknown,profile:Pick<DriverProfile,'challenges'|'career'>):string[]{
  let available=careerEarned(profile);const unlocked:string[]=[];
  if(Array.isArray(value))for(const id of value.slice(0,64)){
   const group=CAREER_GROUPS.find(g=>g.id===id&&g.cost>0);
@@ -35,7 +48,7 @@ export function careerStatus(profile:DriverProfile){
 export function unlockCareerGroup(profile:DriverProfile,id:string):DriverProfile|null{
  const group=CAREER_GROUPS.find(g=>g.id===id),status=careerStatus(profile);
  if(!group||status.open.includes(id)||status.available<group.cost)return null;
- return {...profile,career:{unlocked:[...normalizeCareerUnlocks(profile.career?.unlocked,profile),id]}};
+ return {...profile,career:{...profile.career,unlocked:[...normalizeCareerUnlocks(profile.career?.unlocked,profile),id]}};
 }
 export function careerChallenge(profile:DriverProfile,id:string){
  const group=careerGroupFor(id);

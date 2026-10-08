@@ -82,7 +82,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const quarry={course:getRaceCourse('quarry-v1'),props:[],puddles:[]},ironfield={course:getRaceCourse('ironfield-figure-eight-v1'),props:[],puddles:[]};
- const context:any={...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
@@ -256,4 +256,9 @@ test('all 27 career entries launch their actual declared rules and no closed or 
   assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;
   assert.equal(await h.f.startCareerEvent(id),true);const c=Challenges.CHALLENGES.find(c=>c.id===id)!;assert.equal(h.context.activeChallenge,c);assert.equal(h.context.kind,c.car);assert.equal(h.context.mode,c.mode);assert.equal(h.context.activeVenue.course.id,Challenges.challengeCourse(c));assert.equal(h.f.eventDuration(),c.limit);assert.equal(h.context.careerRun,true);assert.equal(await h.f.startCareerEvent(id),false,'double launch is refused');
  }
+});
+
+test('career imports archived championship medals once and preserves them through unlocks and failed saves',()=>{
+ const h=harness();h.context.clubRecords={version:1,best:[{series:'road-rally',difficulty:'novice',kind:'buggy',place:1,points:100,wins:4}]};h.f.openCareer('stunts');assert.equal(Career.careerStatus(h.context.profile).available,3);h.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(h.context.profile).available,0);h.f.openCareer();assert.equal(Career.careerStatus(h.context.profile).available,0);assert.match(h.ui.innerHTML,/Road &amp; Rally|Road & Rally/);assert.equal(readProfile(h.storage.get(PROFILE_KEY)).career?.podiums?.['road-rally'],3);
+ const blocked=harness({storage:true});blocked.context.clubRecords=h.context.clubRecords;blocked.f.openCareer('stunts');assert.match(blocked.ui.innerHTML,/could not be saved/);blocked.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(blocked.context.profile).available,3);assert.equal(Career.careerChallenge(blocked.context.profile,'ravine-flight'),undefined);
 });
