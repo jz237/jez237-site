@@ -252,6 +252,10 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   the walks lit nothing and the bee's own lamp lit no lawn. Now the seven street lamps nearest the camera cast warm pools on the gravel, the lawn, the hedges and the trunks (radius 135, falling off
   steeply, so there is dark between them), and the bee's lamp, strobe and red and green wingtips throw theirs (a warm pool ahead, a green and a red one under the wings, the strobe's flash). On wet ground each
   is also a glint in the puddles and a sheen on the gravel. Nothing by day (the count is 0 and the loop is skipped), and the lamps follow the dusk the glows do (`outside.duskK`, also in a storm).
+- **The glasshouse seen from the garden** (`Outside._plinthSkin`): the stone base the glass stands on is the interior's own material, a dark scanned stone that from out here read as a black wall seventy
+  units high. Dressed stone (ashlar, four courses to the tile, each block its own warm grey-yellow) is laid over its outer faces on both sides, the north and south ends either side of the doors, and the corners,
+  with a thin coping along the top of the outer half: all an `ext` material, so it takes the sun, haze, rain, snow (the coping is what the snow lies on) and the lamps' light. The collision now stops the bee at the
+  base's outer face (it had stopped at the plinth's centre plane, nine units inside the stone).
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
