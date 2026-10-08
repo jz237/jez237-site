@@ -1,8 +1,359 @@
 {
-  "generatedAt": "2026-09-30T12:00:00Z",
+  "generatedAt": "2026-10-08",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-10-08",
+      "historicDate": "1984-12-03",
+      "displayDate": "Week of December 3-9, 1984",
+      "edition": "Issue 123 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "December 1984 home-computing newsprint",
+        "motifs": [
+          "F-15 flight-simulator cockpit",
+          "Atari and Commodore keyboards",
+          "Tandy 1000",
+          "MSX cartridges"
+        ],
+        "layout": "Dense warm newspaper with red and blue section headers"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 3-9, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Gaming lead with flight-simulator screen halftone",
+        "secondaryRail": "Tandy, MSX, home control, music and cinema shelves",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "editorNote": "December magazine desks bring flight simulation, compatible computers and home control into focus.",
+      "morningLine": "A combat cockpit on the home computer; a price challenge on the PC shelf.",
+      "lead": {
+        "headline": "F-15 Strike Eagle brings combat flying to Atari and Commodore desktops",
+        "dek": "December’s gaming review puts Atari and Commodore pilots in a three-dimensional combat cockpit.",
+        "body": [
+          "MicroProse puts the home-computer pilot in a combat cockpit with F-15 Strike Eagle. The December Computer Gaming World review identifies Atari and Commodore 64 editions, each for one player, and credits Sid Meier and Grant Irani. Its arcade-and-strategy billing promises more than a simple shooting gallery.",
+          "The cockpit display presents a three-dimensional view with targets in the air and on the ground. The reviewer compares the graphics favorably with MicroProse’s Mig Alley Ace. Choosing a target and keeping the aircraft under control share the player’s attention; the flying screen is the center of the attraction.",
+          "Three settings—Arcade, Pilot and Ace—give the newcomer and practiced pilot different ways into the game. Arcade deliberately simplifies flying. That choice makes the simulation approachable without pretending that every player wants the same demands from the controls.",
+          "The scenario list ranges from Haiphong and Hanoi in 1972 to Libya in 1981, with Egypt, Syria and Iraq also represented and a hypothetical Persian Gulf 1984 mission included. These are the game’s settings, not dispatches from this week’s fighting. December’s review supplies the evidence for this gaming feature; no exact launch day or retail price is established."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Tandy 1000 challenges IBM on price and bundled software",
+          "dek": "Strongest verified personal-computing development in the December press; not a December 3 launch.",
+          "body": [
+            "Tandy’s Model 1000 receives a close examination in December’s Creative Computing. Its comparison table lists a $1,199 base machine, with the monitor extra. The package includes MS-DOS, Microsoft GW BASIC and DeskMate, bringing operating software, programming and integrated desk work together in the box.",
+            "An 8088 processor drives 128K of memory, expandable to 640K, and a 360K double-sided disk drive. RGB and NTSC video outputs, two joystick ports and three-voice sound give the machine a home-computing side alongside its office ambitions. Three expansion slots and a parallel printer interface leave room for additions.",
+            "The review’s table lists a color monitor at $549.95, a 128K upgrade at $299.95 and a second drive at $299.95. Its configured one-drive total is $2,048.90; adding the second drive brings that to $2,348.85. The attractive base figure is not the cost of every complete configuration.",
+            "Compatibility still demands care. The reviewer warns that software written for IBM monochrome video hardware will not run. Buyers should check the applications they need rather than assume that a familiar processor and DOS remove every difference. This is December review coverage, not a new announcement dated December 3."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "MSX promises common software across competing home computers",
+          "dek": "Compatibility and a prospective Japanese challenge to American home computing.",
+          "body": [
+            "COMPUTE!’s December special report asks whether MSX can make home-computer software portable across competing brands. Microsoft licenses the standard, with Kazuhiko “Kaye” Nishi identified as the driving force behind its development. Sony, Yamaha, Panasonic, Sanyo and Hitachi appear among the participating names.",
+            "The prescribed hardware includes a Z80A processor, TI 9918A video with 16 colors and 32 programmable sprites, three-channel sound, 32K ROM and 16K to 64K RAM. Compatible cartridges and peripherals are the proposition: a buyer need not abandon a software shelf merely to choose a different maker’s machine.",
+            "The report says the first Japanese machines appeared in November 1983 and estimates more than 265,000 sold by midsummer 1984. Its prospect of low-end machines around $200 or less is a forecast, not an American shop offer this week. The report also records the criticism that the 8-bit design looks old beside newer 16- and 32-bit computers."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "A Commodore can watch the house as well as run games",
+          "dek": "Concrete contemporary home-automation story.",
+          "body": [
+            "A Commodore need not spend every evening loading games. COMPUTE!’s December home-control feature describes Genesis Computer Corporation’s VIController and COMsense products for the VIC-20 and Commodore 64, connecting software with household sensors.",
+            "COMsense can monitor air or water temperature, ground moisture and humidity. The article describes flashing lights when a monitored connection is broken and suggests uses such as sprinklers and heaters. These are specific control applications, not an independently measured promise of energy savings.",
+            "The $69.95 COMclock adds a battery-powered real-time clock with its own ROM through the C-64 expansion port. The article says it can automatically reboot VIController software after a power interruption—a small accessory with an important job when the computer is minding the house."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Tandy 1000",
+          "summary": "8088, 128K expandable to 640K, 360K drive, three slots and three-voice sound; December evaluation.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "MSX",
+          "summary": "Microsoft-licensed 8-bit standard; cross-brand compatibility promoted in COMPUTE! report.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "DeskMate",
+          "detail": "Integrated software bundled with the Tandy 1000 alongside DOS and GW BASIC.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "Managing Your Money on PCjr",
+          "detail": "December IBM advertisement promotes Andrew Tobias’s Managing Your Money on cartridge; no price verified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — December editorial shelf, not a sales chart",
+          "items": [
+            "F-15 Strike Eagle",
+            "Cutthroats",
+            "The Hitchhiker’s Guide to the Galaxy",
+            "Fahrenheit 451",
+            "Rendezvous with Rama"
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "label": "Top 5 Movies — U.S. weekend December 7-9",
+          "items": [
+            "Beverly Hills Cop",
+            "2010: The Year We Make Contact",
+            "City Heat",
+            "The Terminator",
+            "Missing in Action"
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Tandy 1000 base",
+          "price": "$1,199.00",
+          "note": "US $1,199 in comparison table; monitor extra.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Tandy 300-baud modem",
+          "price": "$180.00",
+          "note": "US $180 direct-connect option; RS-232 interface listed separately at $100.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Genesis COMclock",
+          "price": "$69.95",
+          "note": "US $69.95; battery-powered real-time clock for Commodore 64.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Programming robots as a game",
+          "summary": "Creative Computing carries a Robot Odyssey I advertisement describing designing circuits and programming robots. Advertising evidence only; no exact-week launch or price verified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "Bryan Adams",
+          "title": "Run to You",
+          "chart": "Billboard Top Rock Tracks (national album-oriented radio airplay)",
+          "chartDate": "1984-12-08",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Don Henley",
+          "title": "The Boys of Summer",
+          "chart": "Billboard Top Rock Tracks (national album-oriented radio airplay)",
+          "chartDate": "1984-12-08",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Julian Lennon",
+          "title": "Valotte",
+          "chart": "Billboard Top Rock Tracks (national album-oriented radio airplay)",
+          "chartDate": "1984-12-08",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Pat Benatar",
+          "title": "We Belong",
+          "chart": "Billboard Top Rock Tracks (national album-oriented radio airplay)",
+          "chartDate": "1984-12-08",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "The Kinks",
+          "title": "Do It Again",
+          "chart": "Billboard Top Rock Tracks (national album-oriented radio airplay)",
+          "chartDate": "1984-12-08",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf"
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Managing Your Money comes to the PCjr cartridge shelf",
+        "summary": "December IBM advertising promotes Andrew Tobias’s Managing Your Money on cartridge.",
+        "tagline": "A household-finance title for the home-computer desk.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Compatibility competes with the sticker price",
+        "summary": "Tandy bundles DeskMate with its $1,199 base computer while MSX promotes common cartridges and peripherals across brands. Complete-system costs and application compatibility remain decisive shopping questions.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Toxic gas kills hundreds in Bhopal",
+        "summary": "A toxic-gas leak at Union Carbide’s pesticide plant near Bhopal early December 3 leaves hundreds dead and more than 20,000 requiring treatment, according to the date-specific BBC account. The factory is closed and a judicial inquiry ordered.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "CompuServe sells a social world of handles and 72 channels",
+        "summary": "COMPUTE! December 1984 CompuServe advertisement, immediately after printed p. 114, promotes CB Simulator with 72 channels, private talk, a National Bulletin Board, professional forums and electronic mail. These are dated advertising claims, not evidence of a particular board conversation.",
+        "posts": [
+          {
+            "topic": "CB Simulator",
+            "platform": "CompuServe",
+            "text": "Editorial paraphrase of the December advertisement: subscribers choose handles and converse on 72 channels; private one-to-one talk is also advertised. Not a recovered user post."
+          },
+          {
+            "topic": "Modem shopping",
+            "platform": "Tandy 1000",
+            "text": "December Creative Computing review lists a 300-baud direct-connect modem option at $180 and an RS-232 interface at $100; do not assume interface is included."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "curiosity": {
+        "headline": "A $69.95 clock can help restart a Commodore-controlled house",
+        "summary": "Genesis COMclock turns a C-64 clock accessory into a resilience aid for home-control software.",
+        "detail": "COMPUTE! describes battery backup, onboard ROM, expansion-port connection and automatically rebooting VIController software after power interruption. Same-month product coverage, not a December 3 announcement.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Computer features are verified December magazine coverage, not exact-week launches.",
+          "Games shelf is editorial selection from contemporary coverage, not a ranked sales chart; literary-game availability not independently established.",
+          "Cinema fifth place Missing in Action verified against the weekend table. Music uses December 8 Billboard Top Rock Tracks.",
+          "CompuServe material is advertising and editorial paraphrase, not recovered user posts. No verified gadget announcement or named underground crew event."
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 55",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_055_1984_Dec.pdf",
+          "date": "1984-12"
+        },
+        {
+          "title": "Creative Computing volume 10 number 12",
+          "url": "https://archive.org/download/Creative_Computing_1984-12/Creative_Computing_1984-12_djvu.txt",
+          "date": "1984-12"
+        },
+        {
+          "title": "Computer Gaming World volume 4 number 6",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_4.6.pdf",
+          "date": "1984-12"
+        },
+        {
+          "title": "Billboard Top Rock Tracks",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-08.pdf",
+          "date": "1984-12-08"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 49",
+          "url": "https://www.boxofficemojo.com/weekend/1984W49/",
+          "date": "1984-12-07/1984-12-09"
+        },
+        {
+          "title": "BBC On This Day: Bhopal",
+          "url": "http://news.bbc.co.uk/onthisday/hi/dates/stories/december/3/newsid_2698000/2698709.stm",
+          "date": "1984-12-03 (historical report; retrospective page)"
+        }
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-12-03.png",
+        "alt": "GPT Image 2 Computer Chronicle front page for December 3-9, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      }
+    },
     {
       "sectionChrome": {
         "primary": "brick red",
