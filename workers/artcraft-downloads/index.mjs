@@ -14,7 +14,7 @@ export default {
     const url = new URL(request.url);
     if (url.hostname !== 'jez237.com' || url.protocol !== 'https:') return error(404, 'Not found');
     if (!['GET', 'HEAD'].includes(request.method)) return error(405, 'Method not allowed');
-    const match = /^\/software-downloads\/(photocraft|vectorcraft)\/([a-f0-9]{64})\/(PhotoCraft|VectorCraft)-(\d+\.\d+\.\d+)-Setup-x64\.exe$/.exec(url.pathname);
+    const match = /^\/software-downloads\/(photocraft|vectorcraft|signforge)\/([a-f0-9]{64})\/(PhotoCraft|VectorCraft|SignForge)-(\d+\.\d+\.\d+)-Setup-x64\.exe$/.exec(url.pathname);
     if (!match || match[1] !== match[3].toLowerCase()) return error(404, 'Not found');
     try {
       const key = url.pathname.slice(1);
