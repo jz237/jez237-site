@@ -1,3 +1,4 @@
+import {restoreKeyboardDefaultBytes} from './keyboard-default-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -16,9 +17,9 @@ export function restoreAbsBytes(file:string,bytes:Buffer):Buffer{
 export function verifyAbsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'ef74d5fd6aecdec6bf483fa89c2fefcf9272bb71');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreKeyboardDefaultBytes(file,readFileSync(new URL('../'+file,import.meta.url))); assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAbsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Abs release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreKeyboardDefaultBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Abs release');
  assert.equal(manifest.previousFixtureCount,1499);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1499);
 }
