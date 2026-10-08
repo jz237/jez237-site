@@ -20178,5 +20178,134 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-08-factual-infographic-factual-infographic-deep-vein-thrombosi",
+    "title": "Factual infographic: Deep Vein Thrombosis — Flow Meets a Clot",
+    "tests": "factual_subtype: medical-health-infographic; dominant anatomical hero; eight substantive panels; five explanatory close-ups/diagrams; source-backed; no non-Monday subjective review; requested high quality, auto size, opaque; archive_slot=2026-10-08T05:20; concept=deep-vein-thrombosis-clot-restricted-venous-return; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished museum-quality medical educational infographic directly on the canvas, not a poster photographed in a room, not a screen, desk, frame or mockup. Subject: DEEP VEIN THROMBOSIS — FLOW MEETS A CLOT. A richly illustrated anatomical plate with a dominant highly detailed hero and EIGHT substantive supporting panels, precise short readable labels and fine leader lines. High quality, opaque background, automatic canvas size; favor a spacious portrait editorial layout with excellent legibility. Sophisticated warm ivory background, ink-blue anatomy, deep burgundy clot material, teal normal venous-flow arrows, restrained coral warning accents. Anatomical realism, transparent tissue layering, subtly textured muscle fibers, credible skin and vessel surfaces; surgical teaching clarity without gore. Large elegant headline, clear numbered panel hierarchy, generous gutters, no bibliography, URLs, logos, watermarks or tiny paragraphs.\nHERO occupying the central upper-middle field: adult lower leg and thigh in three-quarter anatomical cutaway. Show the skin and muscle layers opening to reveal a deep vein, with a magnified longitudinal vein window containing a dark red adherent clot narrowing the lumen. A few small teal arrows show blood returning toward the heart and diverted past the remaining opening; do not show arterial flow or imply all clots completely occlude vessels. Leaders label Deep vein, Clot, Restricted return. Small leg-to-heart orientation silhouette and a separate intact vein versus clot-narrowed vein cross-section create convincing scale relationships. Show the vein distinctly embedded within deeper tissues rather than on the skin surface. The entire plate has at least five information layers: central anatomical cutaway, clot microstructure, comparison cross-sections, causal travel sequence, symptom vignette, clinical response, prevention and long-term consequence.\nPANEL 1 — WHERE IT FORMS: clear small silhouettes highlight lower leg, thigh and pelvis, plus an arm inset. Exact short text: 'Usually leg or pelvis; can occur in an arm.' This is a location map, not a probability chart.\nPANEL 2 — INSIDE THE CLOT: explanatory microscopic-style close-up of blood cells caught among a suggestive protein network with platelets, connected to hero by a scale-jump leader. Labels 'Platelets' and 'Plasma proteins'. Text 'Clotting protects an injury. A clot inside a vein can be dangerous.' Avoid invented biochemical pathways, quantitative scales or purported microscopy photographs.\nPANEL 3 — CONDITIONS THAT RAISE RISK: four distinct compact evidence-backed vignettes: prolonged immobility, surgery or vein injury, increased estrogen, family history. Short caption 'Risk factors are not a diagnosis.' Show associations without claiming an inevitable result or blaming the patient.\nPANEL 4 — NOTICE THE LEG: a respectful clinical vignette of a darker-skinned adult leg with localized swelling beside symptom callouts 'Swelling', 'Pain or tenderness', 'Warmth', 'Redness or discoloration'. Additional conspicuous line 'DVT can have no symptoms.' Do not use a visual severity scale or suggest every symptom is diagnostic.\nPANEL 5 — WHEN A CLOT TRAVELS: a precise simplified causal diagram in its own generous area: deep leg vein → heart → lungs, with a small fragment traveling along the venous route and lodging in a pulmonary vessel. Labels 'Detached clot' and 'Pulmonary embolism'. Clearly show lung-vessel blockage, not a stroke pathway, not a clot entering the lung airways. Adjacent coral emergency box: 'Trouble breathing, chest pain, coughing blood or fainting: seek emergency medical help.' Smaller line 'PE can occur without leg symptoms.'\nPANEL 6 — EVALUATION & TREATMENT: clinician and patient vignette plus a three-step response strip. Text 'Possible DVT: seek prompt medical evaluation.' 'Diagnosis requires medical tests.' 'Anticoagulants help stop clot growth and new clots.' A small separate treatment distinction reads 'Clot-dissolving treatment or removal: selected cases only.' Do not imply anticoagulants instantly dissolve an existing clot, do not invent doses, medical-test images or universal treatment advice.\nPANEL 7 — LOWERING RISK: show walking after prolonged confinement when medically appropriate, seated heel and toe movements during long sitting, and a clinician discussing individual risk with a patient. Text 'Keep moving when able.' 'Exercise legs during long sitting.' 'Ask about prevention suited to your risk.' Small prescription/compression icons paired ONLY with 'Clinician-guided', never imply everyone should use either.\nPANEL 8 — AFTER DVT: magnified vein-valve close-up paired with an affected-leg inset. A fine causal arrow from 'Valve damage' to 'Persistent swelling or pain'. Heading 'Post-thrombotic syndrome'. Short second line 'Skin changes; ulcers in severe cases.' Do not imply that everyone develops this complication or give an unsupported percentage.\nMaintain an integrated professional atlas layout: central deep-vein hero, at least four explanatory close-ups or diagrams (vein lumen, normal/clotted cross-sections, clot microstructure, venous journey and valve consequence), eight distinct informative supporting panels, beautiful depth and material detail balanced against readable type. Educational, not personalized diagnosis. Footer in readable small type: 'General education • Symptoms need medical assessment'. Include only the specified sourced claims; no invented numbers, cures, statistics, extra mechanisms or decorative pseudo-medical text.",
+    "image": "images/2026-10-08-factual-infographic-factual-infographic-deep-vein-thrombosi.jpg",
+    "thumb": "thumbs/2026-10-08-factual-infographic-factual-infographic-deep-vein-thrombosi.webp",
+    "color": "#c7bcb9",
+    "date": "2026-10-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "deep-vein-thrombosis-clot-restricted-venous-return",
+      "imageSha256": "2828b6509d6ad5afb8f1fe0485673c4f7dd0d872202bd35399a6d8e986dcc19f",
+      "imageDHash": "a4e6b6b7363cada5"
+    },
+    "factualInfographic": {
+      "topic": "Deep vein thrombosis anatomy and evaluation",
+      "description": "Deep-vein anatomy and restricted venous return, risk associations, warning signs, pulmonary embolism, medical evaluation and management, risk reduction and post-thrombotic valve injury.",
+      "sourceNote": "CDC https://www.cdc.gov/blood-clots/about/index.html; American Society of Hematology https://www.hematology.org/education/patients/blood-clots; NHLBI https://www.nhlbi.nih.gov/health/venous-thromboembolism. Read and verified claim-level anatomy, clinical warning signs, risk factors, management and prevention; no statistics or prescription doses.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-08T09:22:03.110371+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About Venous Thromboembolism (Blood Clots)",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/blood-clots/about/index.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Society of Hematology",
+            "title": "Blood Clots",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.hematology.org/education/patients/blood-clots"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "What Is Venous Thromboembolism?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/venous-thromboembolism"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "DVT is a blood clot in a deep vein, usually in the lower leg, thigh or pelvis; it can also occur in the arm.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Veins return blood from limbs and organs to the heart; a venous clot may restrict that return and cause pain and swelling.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Platelets and plasma proteins cooperate in clot formation; dangerous clots may form inside vessels without an obvious injury or fail to dissolve naturally.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Slow flow from limited movement and injury to veins can increase DVT risk; surgery and major injury are associated with higher VTE risk.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Increased estrogen and family history can raise VTE risk; risk factors do not establish a diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "DVT symptoms can include swelling, pain or tenderness, warmth, and redness or discoloration in the affected leg or arm; DVT can occur without symptoms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Possible DVT symptoms require prompt medical evaluation; special medical tests are needed to diagnose DVT or PE.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A detached venous clot can travel through the heart to the lungs and block pulmonary blood flow, causing pulmonary embolism.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Difficulty breathing, chest pain that worsens with breathing or coughing, coughing blood, or fainting can be PE signs and require immediate medical help; PE can occur without DVT symptoms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticoagulants prevent a clot from growing or spreading and prevent new clots; clot-dissolving medicines or clot removal are used in selected situations rather than for everyone.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Movement after confinement and leg exercises during long sitting can help reduce risk; individualized preventive medicines or compression stockings should be discussed with a clinician.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Damage to vein valves after DVT can cause post-thrombotic syndrome with persistent swelling, pain, skin discoloration, or ulcers in severe cases.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
