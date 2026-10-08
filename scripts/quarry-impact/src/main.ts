@@ -1,3 +1,4 @@
+import {createAshfordWorld} from './ashford-world';
 import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
 import {mountSaveBackup} from './save-backup-ui';
 import {CAREER_GROUPS,careerChallenge,careerStatus,unlockCareerGroup} from './career';
@@ -483,7 +484,7 @@ function ensureVenue(id:CourseId):VenueContext{
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
   let artwork:{root:T.Group;dispose():void}|undefined;
   try{
-    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
+    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
     const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;

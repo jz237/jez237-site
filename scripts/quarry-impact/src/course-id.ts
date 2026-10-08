@@ -4,6 +4,7 @@ export const COURSE_NAMES={
  'ironfield-figure-eight-v1':'Ironfield Raceway',
  'cinderbank-oval-v1':'Cinderbank Speedway',
  'bracken-rallycross-v1':'Bracken Rallycross',
+ 'ashford-autodrome-v1':'Ashford Autodrome',
  'redbank-jump-v1':'Redbank Jump Circuit',
 } as const;
 export type CourseId=keyof typeof COURSE_NAMES;
