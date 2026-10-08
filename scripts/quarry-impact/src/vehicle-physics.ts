@@ -1,3 +1,4 @@
+import {advanceEngineRestart,starterRPM} from './engine-stall';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
@@ -8,7 +9,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:'asphalt'|'gravel';gear:number;rpm:number;input:{throttle:number;steer:number;brake:number;handbrake:boolean}};
+export type PhysicsState={health:number;engineStall?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:'asphalt'|'gravel';gear:number;rpm:number;input:{throttle:number;steer:number;brake:number;handbrake:boolean}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -135,10 +136,11 @@ const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
 export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
+ const running=advanceEngineRestart(state,dt);
  state.speed=dot(velocity,forward);state.slip=Math.abs(dot(velocity,right));
  const target=(alive?state.input.steer:0)*(.55*spec.steering/(1+Math.abs(state.speed)*.016))+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
- const force=alive?state.input.throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ const force=running?state.input.throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind)),shift=wheelShift[i];
@@ -153,7 +155,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   controller.setWheelFrictionSlip(i,(state.surface==='asphalt'?3.2:2.4)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }
- if(spec.differential>0&&alive&&Math.abs(state.input.throttle)>.1&&Math.abs(state.speed)>2)body.applyTorqueImpulse({x:0,y:-body.angvel().y*spec.mass*.16*spec.differential*Math.abs(state.input.throttle)*dt,z:0},true);
+ if(spec.differential>0&&running&&Math.abs(state.input.throttle)>.1&&Math.abs(state.speed)>2)body.applyTorqueImpulse({x:0,y:-body.angvel().y*spec.mass*.16*spec.differential*Math.abs(state.input.throttle)*dt,z:0},true);
  controller.updateVehicle(dt,undefined,undefined,c=>c.parent()?.handle!==body.handle);
  // Rapier ignores wheelBrake while engineForce is nonzero. Apply tyre rolling
  // loss to the actual contact on both driven and free wheels, capped at the
@@ -165,7 +167,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   const turnGrip=1-.7*frontFailure,yawAssist=1-.65*Math.max(frontFailure,rearFailure);
   body.applyTorqueImpulse({x:-av.x*spec.mass*.07*dt,y:(clamp(state.speed/def.wheelbase*Math.tan(state.steering)*.72*turnGrip,-1.7,1.7)-av.y)*spec.mass*2.6*dt*yawAssist,z:-av.z*spec.mass*.07*dt},true);}
  state.gear=state.speed<-.5?0:clamp(1+Math.floor(Math.max(0,state.speed)/spec.gearStep),1,5);
- state.rpm=alive?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700:0;
+ state.rpm=running?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700:starterRPM(state.health,state.engineStall,state.input.throttle);
  return up.y;
 }
 

@@ -14,7 +14,7 @@ import {CAR_KINDS,DEFINITIONS} from '../src/rules';
 import {DERBY_ARENA} from '../src/derby-arena';
 import {readGarage,stockSetup} from '../src/garage';
 import {demoCarKind,demoVehicleSetup} from '../src/demo-session';
-import {ReplayRecorder,replayCourseId} from '../src/replay-data';
+import {ReplayRecorder,replayCourseId,replayCarStride} from '../src/replay-data';
 
 // Actual production handlers, with graphics/audio/Vehicle construction injected.
 // Real venue builders and Rapier worlds remain in use. These assertions prove
@@ -56,7 +56,7 @@ function harness(){
   preStep(){}postStep(){}render(){}
   dispose(){this.disposed++;this.world.removeRigidBody(this.body);}
  }
- const frame=(cars:any[],props:any[])=>{const data=new Float32Array(cars.length*80+props.length*7);for(let i=0;i<cars.length;i++){const o=i*80;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
+ const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
  const context:any={T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
   createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),

@@ -1,3 +1,4 @@
+import {stalledByImpact,validEngineStall} from '../src/engine-stall';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import {OnlineEvent,type OnlineEventRules} from '../src/online-events';
 import {nearestRoad} from '../src/waypoint-race';
@@ -55,7 +56,7 @@ export class Simulation {
   private buildTerrain() {this.props=createQuarryPhysics(this.R,this.world,this.mode==='derby').props;}
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
     const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
-    const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
+    const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,engineStall:0,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
     return {kind,specification,body,collider,roof,controller,state,stuck:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
   }
   private place(c: Car, x: number, z: number, yaw: number) {
@@ -86,7 +87,7 @@ export class Simulation {
     const c = this.cars[id], s = c?.state;
     if (!s || this.phase !== 'playing' || this.elapsed-c.lastRecovery<5 || (s.health<=0 && this.mode!=='playground')) return false;
     c.lastRecovery = this.elapsed;
-    if (this.mode === 'playground') { s.health=100; s.damageLeft=s.damageRight=0; s.repair++;s.dents=[];s.components=freshComponents();this.damage=this.damage.filter(d=>d.car!==id);this.place(c,s.p.x,s.p.z,Math.atan2(s.v.x,s.v.z)); }
+    if (this.mode === 'playground') { s.health=100;s.engineStall=0; s.damageLeft=s.damageRight=0; s.repair++;s.dents=[];s.components=freshComponents();this.damage=this.damage.filter(d=>d.car!==id);this.place(c,s.p.x,s.p.z,Math.atan2(s.v.x,s.v.z)); }
     else if (this.mode === 'race') {
       const waypoints=this.event?.waypoints;
       if(waypoints){const p=nearestRoad(s.p),nav=waypoints.navigation(s.id,s.p),next=nav.route[nav.next];this.place(c,p.x,p.z,Math.atan2(next.x-p.x,next.z-p.z));waypoints.get(s.id).nav=null;}
@@ -175,6 +176,8 @@ export class Simulation {
         const localDirection=rotate(direction,{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
         const event={id:++this.damageId,tick:this.tick,car:s.id,point,direction,localPoint:local,localDirection,repair:s.repair,damage:received};
         applyComponentImpact(s.components??=freshComponents(),s.kind,local,localDirection,received);
+        s.engineStall=stalledByImpact(s.engineStall,s.health,s.components.engineDamage,received);
+        if(s.engineStall!>0||s.health<=0)s.rpm=0;
         // Contacts were sampled before damage. Keep their visual load coherent
         // with this snapshot's newly updated mechanical corner condition.
         s.wheels.forEach((wheel,i)=>{if(wheel.patch)wheel.patch.load=this.wheelPatchLoad(car,i);});
@@ -188,7 +191,7 @@ export class Simulation {
     // Repeat a bounded event history in snapshots to survive late packets/reconnects.
     this.damage=this.damage.filter(d=>this.tick-d.tick<600).slice(-128);
     if(this.event?.score)stepScoreRespawns(this.event.combat,this.cars.map(c=>({id:c.state.id,health:c.state.health,current:c.state.p,place:(x:number,z:number,yaw:number)=>{
-      const s=c.state;s.health=100;s.damageLeft=s.damageRight=0;s.repair++;s.dents=[];s.components=freshComponents();s.input={...NEUTRAL};c.reverse=0;c.lastRecovery=this.elapsed;
+      const s=c.state;s.health=100;s.engineStall=0;s.damageLeft=s.damageRight=0;s.repair++;s.dents=[];s.components=freshComponents();s.input={...NEUTRAL};c.reverse=0;c.lastRecovery=this.elapsed;
       this.damage=this.damage.filter(d=>d.car!==s.id);this.place(c,x,z,yaw);this.damageShape(c);
     }})),this.elapsed,this.event.rules.duration,ONLINE_ARENA,()=>{});
     for(const c of this.cars){const s=c.state;
@@ -223,7 +226,7 @@ export class Simulation {
     this.damageId=Math.max(0,...s.damage.map(d=>d.id),...s.cars.flatMap(c=>(c.dents??[]).map(d=>d.id)));
     for(const car of s.cars){if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
       if(c.state.kind!==car.kind||!sameOnlineSetup(c.state.setup,car.setup,car.kind)){this.world.removeVehicleController(c.controller);this.world.removeRigidBody(c.body);c=this.cars[car.id]=this.createCar(car.id,car.kind,car.setup);}
-      c.state={...c.state,...structuredClone(car),surface:car.surface??surfaceAt(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL};
+      c.state={...c.state,...structuredClone(car),surface:car.surface??surfaceAt(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
       const engineHistory=(c.state.dents??[]).filter(hit=>hit.repair===c.state.repair);
       // A bounded legacy history may have lost older hits. Only infer the new
       // component when those retained hits account for all structural health

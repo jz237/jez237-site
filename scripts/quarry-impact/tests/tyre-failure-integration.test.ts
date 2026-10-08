@@ -158,7 +158,7 @@ test('real sill strikes and subsequent tyre-damaged driving agree between render
    near(car.health,a.state.health,.0001);assert.ok(car.current.distanceTo(new T.Vector3().copy(a.state.p))<.0002,kind+' physical trajectories agree');
    car.tyreDamage!.forEach((n,i)=>near(n,a.state.components!.tyreDamage![i],1e-6));car.wreckParts.wheelDamage.forEach((n,i)=>near(n,a.state.components!.wheelDamage[i],1e-6));
    car.wreckParts.wheelShift.forEach((v,i)=>{near(v.x,a.state.components!.wheelShift[i].x,1e-6);near(v.z,a.state.components!.wheelShift[i].z,1e-6);});
-   near(car.engineDamage!,a.state.components!.engineDamage!,1e-6);
+   near(car.engineDamage!,a.state.components!.engineDamage!,1e-6);near(car.engineStall!,a.state.engineStall!,1e-6);
   };
   const frame=()=>{
    const time=authority.elapsed+STEP;car.preStep(STEP);world.step(queue);car.postStep(STEP,time);
@@ -182,7 +182,10 @@ test('real sill strikes and subsequent tyre-damaged driving agree between render
    // synthetic tyre assignment or test-only authority damage handler is used.
    for(const w of [world,authority.world]){w.gravity={x:0,y:-9.81,z:0};w.createCollider(R.ColliderDesc.cuboid(100,.5,100).setTranslation(0,8.5,0));}
    pose(car,10.1);a.body.setTranslation(car.body.translation(),true);a.body.setRotation(car.body.rotation(),true);a.body.setLinvel(zero,true);a.body.setAngvel(zero,true);Object.assign(a.state,{p:{...car.body.translation()},q:{...car.body.rotation()},v:{...zero},av:{...zero}});
-   car.input={throttle:.6,steer:.12,brake:0,handbrake:false};for(let tick=0;tick<120;tick++)frame();
+   // Hold throttle through the real stall before measuring two seconds of drive.
+   const restartFrames=Math.ceil(Math.max(car.engineStall??0,a.state.engineStall??0)/STEP)+1;
+   car.input={throttle:.6,steer:.12,brake:0,handbrake:false};for(let tick=0;tick<restartFrames+120;tick++)frame();
+   assert.equal(car.engineStall,0);assert.equal(a.state.engineStall,0);
    assert.ok(car.current.z>2,kind+' damaged-state parity fixture actually drives');near(car.controller.wheelRadius(0)!,a.controller.wheelRadius(0)!,1e-7);
   }finally{car.dispose();queue.free();authority.dispose();terrain.dispose();}
  }

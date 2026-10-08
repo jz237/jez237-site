@@ -1,3 +1,4 @@
+import {restoreEngineStallBytes} from './engine-stall-invariants';
 import test from 'node:test';
 import {normalizeCinderbankMain} from './cinderbank-playability-invariants';
 import assert from 'node:assert/strict';
@@ -40,7 +41,7 @@ test('the predecessor restoration bridge recognizes exact revisions without repl
 });
 
 test('controller audio activation leaves every mixing, clip, engine and impact member byte-exact',()=>{
- const source=readFileSync(new URL('../src/audio.ts',import.meta.url)).toString();
+ const source=restoreEngineStallBytes('src/audio.ts',readFileSync(new URL('../src/audio.ts',import.meta.url))).toString();
  const before=readControllerPlayabilityPrevious('src/audio.ts').toString();
  const manifest=JSON.parse(readFileSync(new URL('./fixtures/controller-playability/revision.json',import.meta.url)).toString());
  const members=(text:string)=>{

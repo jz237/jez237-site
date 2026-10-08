@@ -1,3 +1,4 @@
+import {validEngineStall} from './engine-stall';
 import {normalizeSetup,type Setup} from './garage';
 import {isCarKind,type CarKind,type Mode} from './rules';
 import {isCourseId,resolveCourseId,type CourseId} from './course-id';
@@ -5,7 +6,7 @@ export const REPLAY_STRIDE=56,REPLAY_HZ=20,REPLAY_MAX_SECONDS=1800,REPLAY_MAX_BY
 export type VisualEvent={kind:'hit'|'repair'|'jump';pose:number[];point?:number[];direction?:number[];damage?:number;health?:number;paint?:number;scar?:boolean};
 export type ReplayEvent=VisualEvent&{time:number;car:number};
 export type ReplayCar={id:number;kind:CarKind;setup:Setup};
-export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];props:number;created:string;tyreModel?:1;courseId?:CourseId};
+export type ReplayMeta={version:1;mode:Mode;reverse:boolean;cars:ReplayCar[];props:number;created:string;tyreModel?:1;engineModel?:1;courseId?:CourseId};
 /** Resolve without adding a property to historical metadata or accepting a
  * saved-preference fallback for an explicitly unsupported recording. */
 export function replayCourseId(meta:Pick<ReplayMeta,'mode'|'courseId'>):CourseId{
@@ -15,8 +16,9 @@ export function replayCourseId(meta:Pick<ReplayMeta,'mode'|'courseId'>):CourseId
   return id;
 }
 /** QIR1 legacy poses retain 56 floats. Model 1 also records four contact
- * planes, loads and contact flags so replayed flat patches match live tyres. */
-export const replayCarStride=(meta:Pick<ReplayMeta,'tyreModel'>)=>REPLAY_STRIDE+(meta.tyreModel===1?24:0);
+ * planes, loads and contact flags so replayed flat patches match live tyres.
+ * Engine model 1 adds one restart counter; omitted models keep old strides. */
+export const replayCarStride=(meta:Pick<ReplayMeta,'tyreModel'|'engineModel'>)=>REPLAY_STRIDE+(meta.tyreModel===1?24:0)+(meta.engineModel===1?1:0);
 export type ReplayFrame={time:number;values:Float32Array};
 export type ReplayDocument={meta:ReplayMeta;frames:ReplayFrame[];events:ReplayEvent[];limited:boolean};
 export class ReplayRecorder {
@@ -60,7 +62,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
   if(bytes.byteLength<8||bytes.byteLength>224*1024*1024||bytes.slice(0,4).join(',')!=='81,73,82,49')return fail();
   const length=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(4,true);if(length>32*1024*1024||length+8>bytes.length)return fail();
   let h:any;try{h=JSON.parse(new TextDecoder().decode(bytes.subarray(8,8+length)));}catch{return fail();}
-  const m=h?.meta;if(m?.version!==1||!['race','derby','playground'].includes(m.mode)||typeof m.reverse!=='boolean'||!Array.isArray(m.cars)||m.cars.length<1||m.cars.length>24||!Number.isInteger(m.props)||m.props<0||m.props>256||m.tyreModel!==undefined&&m.tyreModel!==1)return fail();
+  const m=h?.meta;if(m?.version!==1||!['race','derby','playground'].includes(m.mode)||typeof m.reverse!=='boolean'||!Array.isArray(m.cars)||m.cars.length<1||m.cars.length>24||!Number.isInteger(m.props)||m.props<0||m.props>256||m.tyreModel!==undefined&&m.tyreModel!==1||m.engineModel!==undefined&&m.engineModel!==1)return fail();
   replayCourseId(m);
   const ids=new Set<number>();const cars:ReplayCar[]=m.cars.map((c:any)=>{if(!Number.isInteger(c.id)||c.id<0||c.id>1000||ids.has(c.id)||!isCarKind(c.kind))return fail();ids.add(c.id);return{id:c.id,kind:c.kind,setup:normalizeSetup(c.setup,c.kind)};});
   if(!Array.isArray(h.times)||h.times.length<1||h.times.length>REPLAY_HZ*REPLAY_MAX_SECONDS+2)return fail();
@@ -77,7 +79,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
   const frames:ReplayFrame[]=h.times.map((time:number,i:number)=>({time,values:values.subarray(i*stride,(i+1)*stride)}));
   for(const f of frames){
     for(let i=0;i<cars.length;i++){
-      const o=i*carStride;if(!validQuaternion(f.values,o+3))return fail();
+      const o=i*carStride;if(m.engineModel===1&&!validEngineStall(f.values[o+carStride-1]))return fail();if(!validQuaternion(f.values,o+3))return fail();
       for(let j=0;j<4;j++){
         if(!validQuaternion(f.values,o+18+j*8))return fail();
         if(m.tyreModel===1){
@@ -89,7 +91,7 @@ export function decodeReplay(bytes:Uint8Array):ReplayDocument{
     }
     for(let i=0;i<m.props;i++)if(!validQuaternion(f.values,cars.length*carStride+i*7+3))return fail();
   }
-  return {meta:{version:1,mode:m.mode,reverse:m.reverse,cars,props:m.props,created:typeof m.created==='string'?m.created.slice(0,40):'',...(m.tyreModel===1?{tyreModel:1 as const}:{}),...(m.courseId===undefined?{}:{courseId:m.courseId})},frames,events,limited:h.limited===true};
+  return {meta:{version:1,mode:m.mode,reverse:m.reverse,cars,props:m.props,created:typeof m.created==='string'?m.created.slice(0,40):'',...(m.tyreModel===1?{tyreModel:1 as const}:{}),...(m.engineModel===1?{engineModel:1 as const}:{}),...(m.courseId===undefined?{}:{courseId:m.courseId})},frames,events,limited:h.limited===true};
 }
 export async function readReplayFile(file:File):Promise<ReplayDocument>{
   if(file.size>64*1024*1024)throw Error('Replay file exceeds the 64 MB compressed limit.');

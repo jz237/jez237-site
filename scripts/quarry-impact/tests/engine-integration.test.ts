@@ -49,7 +49,8 @@ test('rendered Marten and Tern impacts damage their actual engine bay independen
       assert.equal(cars[1].engineDamage,0,kind+' opposite end is not the engine bay');
       assert.equal(cars[2].engineDamage,0,kind+' roof impact does not invent engine damage');
       for(const [i,car] of cars.entries()){
-        const condition=car.engineDamage,wheels=Array.from(car.wreckParts.wheelDamage),damaged=stationaryForce(car);
+        // Isolate persistent component power loss after completing the separate restart.
+        car.engineStall=0;const condition=car.engineDamage,wheels=Array.from(car.wreckParts.wheelDamage),damaged=stationaryForce(car);
         // Keep health, crushed wheels and geometry identical while isolating the
         // engine contribution to torque at the actual Rapier controller.
         car.engineDamage=0;const withIntactEngine=stationaryForce(car);car.engineDamage=condition;
@@ -73,7 +74,8 @@ test('engine damage reduces actual straight-line acceleration and armor protects
       const car=new Vehicle(0,kind,setup.paint,new T.Scene(),world,fx,setup);
       try{
         pose(car);hit(car,new T.Vector3(0,0,kind==='marten'?-1.7:1.7),36);
-        conditions.push(car.engineDamage!);const expectedHealth=100-36*car.specification.damageScale;near(car.health,expectedHealth);
+        // This fixture compares persistent torque loss, not transient restart delay.
+        car.engineStall=0;conditions.push(car.engineDamage!);const expectedHealth=100-36*car.specification.damageScale;near(car.health,expectedHealth);
         if(mode==='same-wheels-intact-engine')car.engineDamage=0;
         car.input={...throttle};
         for(let i=0;i<120;i++){car.preStep(dt);world.step();car.postStep(dt,(i+1)*dt);}
@@ -126,10 +128,12 @@ test('online rendering accepts authoritative engine condition without hit packet
     const car=cars[0];assert.equal(car.engineDamage,.8);const damagedForce=stationaryForce(car);
     const repairedEngine=structuredClone(s);repairedEngine.tick++;repairedEngine.cars[0].components!.engineDamage=0;view.receive(repairedEngine);
     assert.equal(cars[0],car);assert.equal(car.engineDamage,0);near(stationaryForce(car),car.specification.force);assert.ok(damagedForce<car.specification.force*.8);
-    const legacy=structuredClone(repairedEngine);legacy.tick++;delete legacy.cars[0].components!.engineDamage;view.receive(legacy);
-    assert.equal(car.engineDamage,undefined);near(stationaryForce(car),car.specification.force*(.45+.55*.4));
+    const stalled=structuredClone(repairedEngine);stalled.tick++;stalled.cars[0].engineStall=1.5;stalled.cars[0].rpm=0;view.receive(stalled);
+    assert.equal(car.engineStall,1.5);assert.equal(stationaryForce(car),0);assert.ok(car.engineStall!<1.5,'shared client kernel cranks');
+    const legacy=structuredClone(repairedEngine);legacy.tick+=2;delete legacy.cars[0].components!.engineDamage;view.receive(legacy);
+    assert.equal(car.engineDamage,undefined);assert.equal(car.engineStall,undefined);near(stationaryForce(car),car.specification.force*(.45+.55*.4));
     const oldest=structuredClone(legacy);oldest.tick++;delete oldest.cars[0].components;view.receive(oldest);
-    assert.equal(car.engineDamage,undefined);near(stationaryForce(car),car.specification.force*(.45+.55*.4));
+    assert.equal(car.engineDamage,undefined);assert.equal(car.engineStall,undefined);near(stationaryForce(car),car.specification.force*(.45+.55*.4));
     // Legacy visual history may hit the engine; missing authority must still
     // retain the old server's drive rule rather than guessing new components.
     const legacyHistory=structuredClone(legacy);legacyHistory.tick+=2;

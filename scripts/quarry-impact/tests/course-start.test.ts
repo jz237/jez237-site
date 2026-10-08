@@ -23,8 +23,8 @@ function harness(faults:Faults={}){
  const car=()=>({id:0,kind:'tern',setup:stockSetup('tern'),paintColor:new T.Color(0xabcdef),root:new T.Group(),current:new T.Vector3(0,.89,0),onVisualEvent:undefined as unknown,
   render(){if(faults.recording)throw Error('recording pose failed');},dispose(){calls.push('dispose car');}});
  const meta={version:1 as const,tyreModel:1 as const,mode:'race' as const,reverse:false,cars:[{id:0,kind:'tern' as const,setup:stockSetup('tern')}],props:2,created:'2026-10-02T17:00:00Z'};
- const frame=(carCount:number,props:number)=>{const values=new Float32Array(carCount*80+props*7);for(let i=0;i<carCount;i++){const o=i*80;values[o+6]=1;values[o+14]=100;for(let j=0;j<4;j++){values[o+15+j*8+6]=1;values[o+56+j*6+1]=1;}}for(let i=0;i<props;i++)values[carCount*80+i*7+6]=1;return values;};
- const recorder=new ReplayRecorder(meta);recorder.capture(0,()=>frame(1,2),true);recorder.capture(1,()=>frame(1,2),true);
+ const frame=(carCount:number,props:number,tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const values=new Float32Array(carCount*stride+props*7);for(let i=0;i<carCount;i++){const o=i*stride;values[o+6]=1;values[o+14]=100;for(let j=0;j<4;j++){values[o+15+j*8+6]=1;if(tyreModel)values[o+56+j*6+1]=1;}}for(let i=0;i<props;i++)values[carCount*stride+i*7+6]=1;return values;};
+ const recorder=new ReplayRecorder(meta);recorder.capture(0,()=>frame(1,2,1),true);recorder.capture(1,()=>frame(1,2,1),true);
  const previous=recorder.document(),context:any={T,activeTimeTrial:null,Error,Date,structuredClone,ReplayRecorder,console:{error:(...values:unknown[])=>logs.push({type:'error',values}),warn:(...values:unknown[])=>logs.push({type:'warn',values})},
   preparingEvent:false,preparationInterrupted:false,state:'paused',mode:'race',demo:false,demoRestart:0,demoOptions:{camera:'director'},keys:new Set(['KeyW']),testInput:{throttle:1},wreckHold:2,
   telemetry:{old:true},activeChallenge:{id:'prior'},runSettled:false,lastAward:{old:true},runId:'previous',eventFrameTimes:[16],elapsed:2,countdown:0,accumulator:.01,
@@ -35,7 +35,7 @@ function harness(faults:Faults={}){
   staticShadows:{bindReceivers(){calls.push('bind shadows');}},async warmPrograms(){calls.push('warm programs');await Promise.resolve();if(faults.warm)throw Error('GPU compilation failed');},
   customEvent:()=>true,eventOptions:{direction:'forward'},crypto:{randomUUID:()=> 'new-run'},SessionTelemetry:class {},
   document:{hidden:false,createElement:node},location:{reload(){reloads++;}},hud(){calls.push('hud');ui.innerHTML='hud';},pause(){calls.push('pause');context.state='paused';},
-  captureReplayFrame(cars:unknown[],props:unknown[]){calls.push(`capture ${cars.length}/${props.length}`);return frame(cars.length,props.length);},
+  captureReplayFrame(cars:unknown[],props:unknown[],_epochs:number[],tyreModel?:1,engineModel?:1){calls.push(`capture ${cars.length}/${props.length}`);return frame(cars.length,props.length,tyreModel,engineModel);},
   createCars(attract=false){
    calls.push(attract?'recover Quarry':'create event');if(attract&&faults.recovery)throw Error('Quarry recovery unavailable');if(!attract&&faults.venue)throw Error('Ironfield construction failed');
    context.archiveReplay();for(const old of context.cars)old.dispose();context.cars=[car()];context.activeVenue=attract?quarry:ironfield;
@@ -54,7 +54,7 @@ function usablePrevious(h:ReturnType<typeof harness>,frames:number){
 test('lazy venue failure returns to a usable menu, preserves the previous replay and permits a successful retry',async()=>{
  const h=harness({venue:true});assert.equal(await h.start(true),false);assert.equal(h.context.preparingEvent,false);assert.equal(h.context.state,'menu');assert.equal(h.context.activeVenue.course.id,'quarry-v1');assert.equal(h.context.demo,false);assert.equal(h.context.telemetry,null);assert.equal(h.context.runSettled,true);usablePrevious(h,2);
  assert.equal(h.notes.length,1);assert.equal(h.notes[0].attributes.role,'alert');assert.match(h.notes[0].textContent,/Returned to the Quarry.*Ironfield construction failed/);assert.equal(h.calls.includes('warm programs'),false);assert.equal(h.logs.filter(l=>l.type==='error').length,1);
- h.faults.venue=false;assert.equal(await h.start(),true);assert.equal(h.context.preparingEvent,false);assert.equal(h.context.state,'countdown');assert.equal(h.context.activeVenue.course.id,'ironfield-figure-eight-v1');assert.equal(h.context.recorder.meta.courseId,'ironfield-figure-eight-v1');assert.equal(h.context.recorder.meta.props,0);assert.equal(h.context.recorder.frames.length,1);assert.equal(h.context.recorder.stride,replayCarStride({tyreModel:1}));
+ h.faults.venue=false;assert.equal(await h.start(),true);assert.equal(h.context.preparingEvent,false);assert.equal(h.context.state,'countdown');assert.equal(h.context.activeVenue.course.id,'ironfield-figure-eight-v1');assert.equal(h.context.recorder.meta.courseId,'ironfield-figure-eight-v1');assert.equal(h.context.recorder.meta.props,0);assert.equal(h.context.recorder.frames.length,1);assert.equal(h.context.recorder.stride,replayCarStride({tyreModel:1,engineModel:1}));
 });
 
 test('asynchronous shader failure retains the fully archived old run and cannot record replacement Quarry cars into it',async()=>{
