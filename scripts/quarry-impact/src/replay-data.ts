@@ -15,7 +15,7 @@ export function replayCourseId(meta:Pick<ReplayMeta,'mode'|'courseId'|'arenaId'>
   if(meta.arenaId!==undefined&&!isArenaId(meta.arenaId))throw Error('This replay uses an unsupported arena.');
   if(meta.arenaId!==undefined&&(meta.mode!=='derby'||resolveCourseId(meta.courseId)!=='quarry-v1'))throw Error('This arena supports demolition events only.');
   const id=resolveCourseId(meta.courseId);
-  if(id!=='quarry-v1'&&meta.mode!=='race')throw Error('This course supports circuit races only.');
+  if(id!=='quarry-v1'&&meta.mode!=='race'&&meta.mode!=='playground')throw Error('This course supports circuit races and free drive only.');
   return id;
 }
 /** QIR1 legacy poses retain 56 floats. Model 1 also records four contact

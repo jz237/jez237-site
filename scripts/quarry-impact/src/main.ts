@@ -1,3 +1,5 @@
+import {freeDriveSpawn,freeDriveRecovery} from './free-drive';
+import {showFreeDriveSetup} from './free-drive-ui';
 import {courseRecoveryArea} from './race-course';
 import {createMillhavenWorld} from './millhaven-world';
 import {createMerefieldWorld} from './merefield-world';
@@ -165,7 +167,7 @@ const raceFormat=()=>demo?(demoOptions.race??'laps'):onlineRules()?.race??(custo
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
 const raceTimeLimit=()=>timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
-const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,raceDirection(id));
+const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,mode==='playground'?'forward':raceDirection(id));
 const scoreDerby=()=>mode==='derby'&&(online?.active?onlineRules()?.derby==='score':demo?demoOptions.derby==='score':customEvent()&&eventOptions.derby==='score');
 const derbyRanking=()=>online?.active?online.network.snapshot!.ranking.map(id=>cars.find(c=>c.id===id)!):eventDerbyOrder(cars,scoreDerby(),combat);
 const eventDuration=()=>clubRound()?.duration??activeChallenge?.limit??(demo?demoOptions.duration:online?.active?onlineRules()?.duration??300:eventOptions.duration);
@@ -449,7 +451,7 @@ let elapsed = 0,
   lastFrame = performance.now(),
   hudTime = 0;
 let hood = false,
-  traffic = true,
+  traffic = eventOptions.playgroundTraffic??true,
   autopilot = false,
   resultTitle = '',
   statusMessage = '',
@@ -505,9 +507,9 @@ let quarryVenue:VenueContext,activeVenue:VenueContext;
 const raceVenues:Partial<Record<Exclude<CourseId,'quarry-v1'>,VenueContext>>={};
 const arenaVenues:Partial<Record<ArenaId,VenueContext>>={};
 let quarryMode:Mode='derby';
-const preferredCourse=():CourseId=>clubRound()?.course??(mode==='race'&&!online?.active?resolveCourseId(activeTimeTrial?.course??(activeChallenge?activeChallenge.course:demo?demoOptions.course:eventOptions.course)):'quarry-v1');
+const preferredCourse=():CourseId=>mode==='playground'&&customEvent()&&!demo?resolveCourseId(eventOptions.playgroundCourse):clubRound()?.course??(mode==='race'&&!online?.active?resolveCourseId(activeTimeTrial?.course??(activeChallenge?activeChallenge.course:demo?demoOptions.course:eventOptions.course)):'quarry-v1');
 const raceLabel=(id:CourseId)=>id==='quarry-v1'?'QUARRY CIRCUIT':COURSE_NAMES[id].toUpperCase();
-const eventLabel=()=>mode==='race'?raceLabel(activeVenue.course.id):mode==='derby'&&activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase()+' / DERBY':modes[mode].label;
+const eventLabel=()=>mode==='playground'&&activeVenue.course.id!=='quarry-v1'?activeVenue.course.name.toUpperCase()+' / FREE DRIVE':mode==='race'?raceLabel(activeVenue.course.id):mode==='derby'&&activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase()+' / DERBY':modes[mode].label;
 function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext{
   if(arenaId!=='quarry-arena-v1'){
     if(arenaVenues[arenaId])return arenaVenues[arenaId]!;
@@ -592,7 +594,7 @@ function menu() {
   orbit.enabled = false;
   sound.pause(false);
   setQuarryMode();
-  ui.innerHTML = `<div class="menu"><div class="topbar"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="location">WOODLAND COUNTY &nbsp; / &nbsp; <b>17:42</b> &nbsp; / &nbsp; DRY TRACK</div></div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1><p>Precision machines. Unforgiving ground.<br>Take the long way home — if it still runs.</p><div class="car-picker">${(Object.keys(DEFINITIONS) as CarKind[]).map((k) => `<button data-car="${k}" class="${k === kind ? 'active' : ''}">${DEFINITIONS[k].name}</button>`).join('')}</div><div class="spec">${DEFINITIONS[kind].subtitle.toUpperCase()}</div></div><div class="menu-bottom">${(Object.keys(modes) as Mode[]).map((m, i) => `<button class="mode-card ${m === mode ? 'active' : ''}" data-mode="${m}"><span class="number">0${i + 1} / ${m === 'derby' ? 'SURVIVAL' : m === 'race' ? 'COMPETITION' : 'EXPLORATION'}</span><strong>${m==='race'?raceLabel(resolveCourseId(eventOptions.course)):modes[m].label}</strong><small>${m==='race'?`${eventOptions.race==='laps'&&eventOptions.raceDuration?'Timed circuit · '+formatTime(eventOptions.raceDuration)+' · '+eventOptions.direction:RACE_NAMES[eventOptions.race]} · ${eventOptions.race==='laps'&&eventOptions.raceDuration?'finish current lap':eventOptions.laps} ${eventOptions.race==='laps'&&eventOptions.raceDuration?'':eventOptions.race==='laps'?(eventOptions.laps===1?'lap':'laps')+' · '+eventOptions.direction:eventOptions.laps===1?'round':'rounds'} · ${eventOptions.field} cars`:m==='derby'?`${ARENA_NAMES[resolveArenaId(eventOptions.arena)]} · ${eventOptions.derby==='score'?'Score derby · respawns':'Last car standing'} · ${eventOptions.field} cars`:modes[m].description}</small></button>`).join('')}<button class="primary" id="start">${modes[mode].button}<span>↗</span></button></div><div class="footer"><span>${CAR_KINDS.length} MACHINES &nbsp; · &nbsp; ${Object.keys(COURSE_NAMES).length} CIRCUITS &nbsp; · &nbsp; ${Object.keys(ARENA_NAMES).length} ARENAS &nbsp; · &nbsp; NO PRISTINE FINISHES</span><div><a href="./licenses/CREDITS.md" target="_blank" rel="noopener">CREDITS</a><button id="settings">SETTINGS</button><button id="fullscreen">FULLSCREEN ↗</button></div></div></div>`;
+  ui.innerHTML = `<div class="menu"><div class="topbar"><div class="brand"><i></i> BLACKRIDGE MOTOR CLUB</div><div class="location">WOODLAND COUNTY &nbsp; / &nbsp; <b>17:42</b> &nbsp; / &nbsp; DRY TRACK</div></div><div class="intro"><div class="eyebrow">FULL CONTACT / NO APOLOGIES</div><h1>QUARRY<br><span>IMPACT</span></h1><p>Precision machines. Unforgiving ground.<br>Take the long way home — if it still runs.</p><div class="car-picker">${(Object.keys(DEFINITIONS) as CarKind[]).map((k) => `<button data-car="${k}" class="${k === kind ? 'active' : ''}">${DEFINITIONS[k].name}</button>`).join('')}</div><div class="spec">${DEFINITIONS[kind].subtitle.toUpperCase()}</div></div><div class="menu-bottom">${(Object.keys(modes) as Mode[]).map((m, i) => `<button class="mode-card ${m === mode ? 'active' : ''}" data-mode="${m}"><span class="number">0${i + 1} / ${m === 'derby' ? 'SURVIVAL' : m === 'race' ? 'COMPETITION' : 'EXPLORATION'}</span><strong>${m==='race'?raceLabel(resolveCourseId(eventOptions.course)):modes[m].label}</strong><small>${m==='race'?`${eventOptions.race==='laps'&&eventOptions.raceDuration?'Timed circuit · '+formatTime(eventOptions.raceDuration)+' · '+eventOptions.direction:RACE_NAMES[eventOptions.race]} · ${eventOptions.race==='laps'&&eventOptions.raceDuration?'finish current lap':eventOptions.laps} ${eventOptions.race==='laps'&&eventOptions.raceDuration?'':eventOptions.race==='laps'?(eventOptions.laps===1?'lap':'laps')+' · '+eventOptions.direction:eventOptions.laps===1?'round':'rounds'} · ${eventOptions.field} cars`:m==='derby'?`${ARENA_NAMES[resolveArenaId(eventOptions.arena)]} · ${eventOptions.derby==='score'?'Score derby · respawns':'Last car standing'} · ${eventOptions.field} cars`:`${COURSE_NAMES[resolveCourseId(eventOptions.playgroundCourse)]} · ${traffic?'4 traffic cars':'Drive alone'} · No time limit`}</small></button>`).join('')}<button class="primary" id="start">${modes[mode].button}<span>↗</span></button></div><div class="footer"><span>${CAR_KINDS.length} MACHINES &nbsp; · &nbsp; ${Object.keys(COURSE_NAMES).length} CIRCUITS &nbsp; · &nbsp; ${Object.keys(ARENA_NAMES).length} ARENAS &nbsp; · &nbsp; NO PRISTINE FINISHES</span><div><a href="./licenses/CREDITS.md" target="_blank" rel="noopener">CREDITS</a><button id="settings">SETTINGS</button><button id="fullscreen">FULLSCREEN ↗</button></div></div></div>`;
   ui.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(
     (b) =>
       (b.onclick = () => {
@@ -616,6 +618,7 @@ function menu() {
   const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CHAMPIONSHIPS · FINAL STANDINGS':clubCup?'CONTINUE '+clubSeries(clubCup).name.toUpperCase():`CHAMPIONSHIPS · ${CLUB_SERIES.length} SERIES`;cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
   if(lastAward?.qualified){const note=document.createElement('p');note.className='last-award';note.textContent=awardText(lastAward);ui.querySelector('.intro')!.append(note);}
   const eventButton=document.createElement('button');eventButton.id='event-setup';eventButton.className='small-button';eventButton.textContent=`EVENT RULES · ${eventOptions.field} CARS · ${GRID_LINEUPS[eventOptions.lineup??'mixed'].toUpperCase()} · ${AI_DIFFICULTIES[readAIDifficulty(eventOptions.difficulty)].label.toUpperCase()}`;eventButton.onclick=openEventSetup;ui.querySelector('.intro')!.append(eventButton);
+  if(mode==='playground'){const practice=document.createElement('button');practice.id='free-drive-setup';practice.className='small-button';practice.textContent='FREE DRIVE OPTIONS';practice.onclick=()=>{eventSetupOpen=true;keys.clear();showFreeDriveSetup(ui,eventOptions,()=>{traffic=eventOptions.playgroundTraffic??true;try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventOptions));return true;}catch{return false;}},()=>{eventSetupOpen=false;menu();});};ui.querySelector('.intro')!.append(practice);}
   const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';
   watch.onclick=()=>{if(mode==='playground')mode='derby';void start(true);};
   ui.querySelector('.intro')!.append(watch);
@@ -701,7 +704,8 @@ function createCars(attract = false, previewSetup?:Setup) {
       const spawn=courseGridSlot(activeVenue.course,i,waypointRace?.startDirection()??clubRound()?.direction??activeTimeTrial?.direction??(customEvent()&&raceFormat()==='laps'?eventOptions.direction:'forward'));
       car.place(spawn.x,spawn.z,spawn.yaw);
       car.nextCheckpoint=spawn.next;car.passed=waypointRace?0:spawn.passed;
-    } else car.place(i === 0 ? 0 : 65 + i * 6, -20 + i * 6, 0);
+    } else if(activeVenue!==quarryVenue){const spawn=freeDriveSpawn(activeVenue.course,i);car.place(spawn.x,spawn.z,spawn.yaw);car.nextCheckpoint=spawn.next;}
+    else car.place(i === 0 ? 0 : 65 + i * 6, -20 + i * 6, 0);
   }
   for (let i = 0; i < 90; i++) {
     for (const c of cars) c.preStep(1 / 60);
@@ -778,7 +782,7 @@ async function start(watch=demo) {
   }
 }
 function hud() {
-  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race' ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase():'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div><div class="tyre-status" id="engine-restart"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${drivingControls.transmission!=='automatic'&&(!online?.active||online.network.snapshot?.transmissionSupport)?`<kbd>${keyLabel(drivingControls.keys.shiftDown[0])} / ${keyLabel(drivingControls.keys.shiftUp[0])}</kbd> SHIFT${drivingControls.transmission==='clutch'?` <kbd>${keyLabel(drivingControls.keys.clutch[0])}</kbd> CLUTCH`:''}`:''} ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
+  ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race'||mode==='playground'&&activeVenue!==quarryVenue ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase():'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div><div class="tyre-status" id="engine-restart"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA <kbd>R</kbd> RECOVER ${drivingControls.transmission!=='automatic'&&(!online?.active||online.network.snapshot?.transmissionSupport)?`<kbd>${keyLabel(drivingControls.keys.shiftDown[0])} / ${keyLabel(drivingControls.keys.shiftUp[0])}</kbd> SHIFT${drivingControls.transmission==='clutch'?` <kbd>${keyLabel(drivingControls.keys.clutch[0])}</kbd> CLUTCH`:''}`:''} ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent='SCORE DERBY';
@@ -1001,6 +1005,12 @@ function recover() {
   const p = cars[0];
   if (!p||raceTimeLimit()&&p.finished) return;
   if (mode === 'playground') {
+    if(activeVenue!==quarryVenue){
+      const def=DEFINITIONS[p.kind],shape=new R.Cuboid(def.halfWidth+.25,.3,def.halfLength+.25);
+      const at=freeDriveRecovery(activeVenue.course,p,cars,slot=>!!physics.intersectionWithShape({x:slot.x,y:activeVenue.course.height(slot.x,slot.z)+.9,z:slot.z},{x:0,y:Math.sin(slot.yaw/2),z:0,w:Math.cos(slot.yaw/2)},shape,undefined,undefined,undefined,p.body));
+      if(!at){toast('WAITING FOR CLEAR GROUND');return;}
+      p.place(at.x,at.z,at.yaw,true);toast('CAR REPAIRED');return;
+    }
     p.place(
       p.current.x,
       p.current.z,
@@ -1037,7 +1047,8 @@ function input(): Input {
 function ai(car: Vehicle, dt: number): Input {
   if(car.health<=0||(car.finished&&mode!=='race'))return {throttle:0,steer:0,brake:1,handbrake:false};
   const yaw=Math.atan2(car.forward.x,car.forward.z);
-  if(mode==='race'){
+  const practiceTraffic=mode==='playground'&&activeVenue!==quarryVenue;
+  if(mode==='race'||practiceTraffic){
     if(waypointRace)car.nextCheckpoint=waypointRace.navigation(car.id,car.current,car.forward).next;
     const openWaypoints=!!waypointRace&&!!activeVenue.course.waypointStations;
     const nearest=openWaypoints?0:activeVenue.course.distance(car.current.x,car.current.z);
@@ -1054,7 +1065,7 @@ function ai(car: Vehicle, dt: number): Input {
       }
     }
   }else if(car.rollTime>5){car.place(car.current.x,car.current.z,yaw);car.health=Math.max(1,car.health-7);car.penalty+=5;drivers.memory.delete(car.id);}
-  return drivers.update(car,cars,mode,dt,()=>{
+  return drivers.update(car,cars,practiceTraffic?'race':mode,dt,()=>{
     const ray=(angle:number)=>{
       const dir={x:Math.sin(yaw+angle),y:0,z:Math.cos(yaw+angle)};
       const start={x:car.current.x,y:Math.max(car.current.y,activeVenue.course.height(car.current.x,car.current.z)+.55),z:car.current.z};
@@ -1218,9 +1229,10 @@ function step(dt: number) {
     if (activeVenue.course.outside(c.current.x,c.current.y,c.current.z)) {
       if(c.id===0&&activeChallenge){finish('OUT OF BOUNDS');return;}
       if (c.id === 0 && !demo) recover();
-      else if(activeVenue!==quarryVenue&&mode==='race'){const at=courseRecoverySlot(activeVenue.course,c.nextCheckpoint,raceDirection(c.id));c.place(at.x,at.z,at.yaw);c.penalty+=5;drivers.memory.delete(c.id);}
+      else if(activeVenue!==quarryVenue&&(mode==='race'||mode==='playground')){const at=courseRecoverySlot(activeVenue.course,c.nextCheckpoint,mode==='playground'?'forward':raceDirection(c.id));c.place(at.x,at.z,at.yaw);c.penalty+=5;drivers.memory.delete(c.id);}
       else c.place(0, 0, 0);
     }
+    if(mode==='playground'&&activeVenue!==quarryVenue&&c.id!==0){const check=checkRoute(raceRoute(c.id),c.current.x,c.current.z,c.nextCheckpoint,c.checkpointDistance,activeVenue.course.checkpointRadius);c.checkpointDistance=check.distance;if(check.passed){c.nextCheckpoint=(c.nextCheckpoint+1)%24;c.checkpointDistance=Infinity;}}
     if(c.id===0&&activeClubRound!==null&&clubRetired)continue;
     if(mode==='race'&&waypointRace){
       const reached=waypointRace.sample(c.id,c.current),progress=waypointRace.get(c.id);c.passed=progress.passed;c.lap=progress.round+1;
@@ -1534,7 +1546,8 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyC') {if(demo)director.cycleView();else hood = !hood;}
   if (!demo && e.code === 'KeyR' && state === 'playing') recover();
   if (!activeChallenge && !online?.active && e.code === 'KeyT' && mode === 'playground' && state === 'playing') {
-    traffic = !traffic;
+    traffic = !traffic;eventOptions.playgroundTraffic=traffic;
+    try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventOptions));}catch{toast('TRAFFIC CHOICE APPLIES THIS SESSION');}
     start();
   }
   if (!online?.active && e.code === 'KeyI' && mode === 'playground') {
