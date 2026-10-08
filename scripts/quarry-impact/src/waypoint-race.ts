@@ -30,13 +30,26 @@ export type WaypointProgress={round:number;visited:Set<number>;passed:number;fin
 export class WaypointRace {
   readonly progress=new Map<number,WaypointProgress>();
   readonly stations:ReturnType<typeof courseWaypoints>;
-  constructor(readonly order:WaypointOrder,readonly rounds:number,readonly seed:number,readonly road:readonly RoutePoint[]=CHECKPOINTS){this.stations=courseWaypoints(road);}
-  startDirection():'forward'|'reverse'{return roadNavigation(this.road[0],this.target(0,this.road[0]),this.road).reverse?'reverse':'forward';}
+  constructor(readonly order:WaypointOrder,readonly rounds:number,readonly seed:number,readonly road:readonly RoutePoint[]=CHECKPOINTS,readonly openStations?:readonly RoutePoint[]){
+    if(openStations&&(openStations.length!==6||openStations.some(p=>!Number.isFinite(p.x)||!Number.isFinite(p.z))))throw Error('Open waypoint venues require six finite stations');
+    this.stations=courseWaypoints(road).map((p,i)=>openStations?{...p,...openStations[i]}:p);
+  }
+  startDirection():'forward'|'reverse'{if(this.openStations)return 'forward';return roadNavigation(this.road[0],this.target(0,this.road[0]),this.road).reverse?'reverse':'forward';}
   get(id:number){let p=this.progress.get(id);if(!p){p={round:0,visited:new Set(),passed:0,finished:false,target:-1,nav:null,navDistance:Infinity};this.progress.set(id,p);}return p;}
   available(id:number){const p=this.get(id);if(p.finished)return [];if(p.visited.size===5)return [0];if(this.order==='free')return this.stations.slice(1).map(p=>p.id).filter(id=>!p.visited.has(id));return [(this.order==='random'?waypointSequence(this.seed,p.round):[1,2,3,4,5])[p.visited.size]];}
-  target(id:number,position:RoutePoint,heading?:RoutePoint){const p=this.get(id),available=this.available(id);if(!available.length)return 0;if(available.includes(p.target))return p.target;return available.reduce((best,id)=>roadNavigation(position,id,this.road,heading).distance<roadNavigation(position,best,this.road,heading).distance?id:best,available[0]);}
+  target(id:number,position:RoutePoint,heading?:RoutePoint){const p=this.get(id),available=this.available(id);if(!available.length)return 0;if(available.includes(p.target))return p.target;if(this.openStations)return available.reduce((best,id)=>distance(position,this.stations[id])<distance(position,this.stations[best])?id:best,available[0]);return available.reduce((best,id)=>roadNavigation(position,id,this.road,heading).distance<roadNavigation(position,best,this.road,heading).distance?id:best,available[0]);}
   navigation(id:number,position:RoutePoint,heading?:RoutePoint){
     const p=this.get(id),target=this.target(id,position,heading);
+    if(this.openStations){
+      // Finishers clear the station by circulating on the perimeter road.
+      if(p.finished){p.nav=roadNavigation(position,0,this.road,heading);return p.nav;}
+      if(!p.nav||p.target!==target){
+        const to=this.stations[target],d=distance(position,to),ux=d>.01?(to.x-position.x)/d:heading?.x??0,uz=d>.01?(to.z-position.z)/d:heading?.z??1;
+        const origin=d>.01?{...position}:{x:to.x-ux*10,z:to.z-uz*10};
+        p.target=target;p.nav={reverse:false,next:1,route:[origin,to,{x:to.x+ux*20,z:to.z+uz*20}],distance:d};
+      }
+      p.nav.distance=distance(position,this.stations[target]);return p.nav;
+    }
     if(!p.nav||p.target!==target){p.target=target;p.nav=roadNavigation(position,target,this.road,heading);p.navDistance=Infinity;}
     const node=p.nav.route[p.nav.next],d=distance(position,node);
     if(d<10&&d<p.navDistance){p.nav.next=(p.nav.next+1)%24;p.navDistance=Infinity;}else p.navDistance=d;

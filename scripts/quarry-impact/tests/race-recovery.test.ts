@@ -1,3 +1,4 @@
+import {courseRecoveryArea} from '../src/race-course';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -45,7 +46,7 @@ function mainHarness(){
  const r=new RaceRecovery(),c:any={...car(),id:0,forward:{x:0,z:1},offTrackTime:0,rollTime:0,penalty:2,checkpointDistance:3,body:{},engineDamage:.6,engineStall:2,scars:7};
  const calls:any[]=[],memory=new Map([[0,{attempts:8}]]);
  c.place=(...args:any[])=>{calls.push(args);c.current={x:args[0],z:args[1]};};
- const context:any={RaceRecovery,freeRecoverySlot,DEFINITIONS,raceRecovery:r,mode:'race',waypointRace:null,cars:[c],activeVenue:{course},raceRoute:()=>route,drivers:{memory,update:()=>({throttle:.4})},R:{Cuboid:class{}},physics:{intersectionWithShape:()=>null}};
+ const context:any={RaceRecovery,freeRecoverySlot,courseRecoveryArea,DEFINITIONS,raceRecovery:r,mode:'race',waypointRace:null,cars:[c],activeVenue:{course},raceRoute:()=>route,drivers:{memory,update:()=>({throttle:.4})},R:{Cuboid:class{}},physics:{intersectionWithShape:()=>null}};
  runInNewContext(executable,context);return{c,r,calls,context,step(){return context.ai(c,1/60);}};
 }
 test('actual AI handler adds one penalty, clears escape state, and retains damage and checkpoint counts',()=>{
@@ -54,8 +55,8 @@ test('actual AI handler adds one penalty, clears escape state, and retains damag
 test('actual AI handler waits when physics blocks every candidate',()=>{
  const h=mainHarness();let queries=0;h.context.physics.intersectionWithShape=()=>{queries++;return {};};for(let i=0;i<2100;i++)h.step();assert.equal(h.calls.length,0);assert.ok(queries>0&&queries<70,'Blocked placement retries are bounded');assert.equal(h.c.penalty,2);
 });
-test('waypoint and derby events retain their existing recovery behavior',()=>{
- for(const mode of ['race','derby']){const h=mainHarness();h.context.mode=mode;if(mode==='race')h.context.waypointRace={navigation:()=>({next:1})};for(let i=0;i<2100;i++)h.step();assert.equal(h.calls.length,0);}
+test('legacy waypoint races use delayed recovery while derby events retain their separate recovery behavior',()=>{
+ for(const mode of ['race','derby']){const h=mainHarness();h.context.mode=mode;if(mode==='race')h.context.waypointRace={navigation:()=>({next:1})};for(let i=0;i<2100;i++)h.step();assert.equal(h.calls.length,mode==='race'?1:0);}
 });
 
 test('rollover and off-track AI recoveries choose free space and never stack on another entrant',()=>{
@@ -68,4 +69,10 @@ test('rollover and off-track AI recoveries choose free space and never stack on 
 test('blocked rollover recovery waits without moving, repairing, penalizing or erasing progress',()=>{
  const h=mainHarness();h.c.rollTime=5;h.context.physics.intersectionWithShape=()=>({});h.step();assert.equal(h.calls.length,0);assert.equal(h.c.penalty,2);assert.equal(h.c.passed,5);assert.equal(h.c.scars,7);assert.equal(h.c.health,64);assert.equal(h.context.drivers.memory.size,1);
  h.context.physics.intersectionWithShape=()=>null;h.step();assert.equal(h.calls.length,1);assert.equal(h.c.penalty,7);
+});
+
+test('open waypoint bots recover from prolonged tangles in the infield even when they have not completed four reverse attempts',()=>{
+ const h=mainHarness();h.context.activeVenue.course={...course,distance:()=>80,outside:()=>false,waypointStations:route};h.context.waypointRace={navigation:()=>({next:1})};h.context.drivers.memory.set(0,{attempts:0});
+ for(let i=0;i<1700;i++)h.step();assert.equal(h.calls.length,0,'open terrain is not treated as off-track');
+ for(let i=0;i<200;i++)h.step();assert.equal(h.calls.length,1);assert.equal(h.c.penalty,7);assert.equal(h.c.passed,5);assert.equal(h.c.health,64);assert.equal(h.c.scars,7);
 });

@@ -1,3 +1,5 @@
+import {courseRecoveryArea} from './race-course';
+import {createMerefieldWorld} from './merefield-world';
 import {BRIARHILL_ARENA,buildBriarhillPhysics,briarhillGround} from './briarhill-arena';
 import {createBriarhillWorld} from './briarhill-world';
 import {createCountyWorld} from './county-world';
@@ -524,7 +526,7 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
   let artwork:{root:T.Group;dispose():void}|undefined;
   try{
-    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='dockside-loop-v1'||id==='fairground-scramble-v1'?createCountyWorld(id):id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
+    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='merefield-airfield-v1'?createMerefieldWorld():id==='dockside-loop-v1'||id==='fairground-scramble-v1'?createCountyWorld(id):id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
     const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;
@@ -660,7 +662,7 @@ function receiveOnline() {
 function createCars(attract = false, previewSetup?:Setup) {
   const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'&&customEvent()?resolveArenaId(demo?demoOptions.arena:eventOptions.arena):'quarry-arena-v1');
   archiveReplay();bankRun(false);
-  drivers.difficulty=attract?'amateur':aiDifficulty();drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints):null;
+  drivers.difficulty=attract?'amateur':aiDifficulty();drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();
   puddleSplashes?.reset();
@@ -883,7 +885,7 @@ function updateHud() {
 }
 function drawMap() {
   const canvas=document.querySelector<HTMLCanvasElement>('#map');
-  if(canvas)drawQuarryMap(canvas,cars,activeVenue.arena??quarry.arenaLayout,mode,demo?director.followed:online?.active?online.network.id:0,waypointRace?waypointRace.available(demo?director.followed:online?.active?online.network.id:0).map(i=>waypointRace!.stations[i]):[],activeVenue.course.id==='quarry-v1'?undefined:{point:activeVenue.course.point,extent:activeVenue.course.mapExtent??145,halfWidth:activeVenue.course.halfWidth});
+  if(canvas)drawQuarryMap(canvas,cars,activeVenue.arena??quarry.arenaLayout,mode,demo?director.followed:online?.active?online.network.id:0,waypointRace?waypointRace.available(demo?director.followed:online?.active?online.network.id:0).map(i=>waypointRace!.stations[i]):[],activeVenue.course.id==='quarry-v1'?undefined:{point:activeVenue.course.point,extent:activeVenue.course.mapExtent??145,halfWidth:activeVenue.course.halfWidth,lines:activeVenue.course.mapLines});
 }
 function formatTime(t: number) {
   return `${Math.floor(t / 60)
@@ -1006,7 +1008,8 @@ function recover() {
     );
     toast('CAR REPAIRED');
   } else if (mode === 'race') {
-    const index = (p.nextCheckpoint + 23) % 24;
+    const route=raceRoute(p.id);
+    const index = (p.nextCheckpoint + route.length-1) % route.length;
     const at = raceRoute(p.id)[index],
       to = raceRoute(p.id)[p.nextCheckpoint];
     p.place(at.x, at.z, Math.atan2(to.x - at.x, to.z - at.z));
@@ -1035,12 +1038,13 @@ function ai(car: Vehicle, dt: number): Input {
   const yaw=Math.atan2(car.forward.x,car.forward.z);
   if(mode==='race'){
     if(waypointRace)car.nextCheckpoint=waypointRace.navigation(car.id,car.current,car.forward).next;
-    const nearest=activeVenue.course.distance(car.current.x,car.current.z);
+    const openWaypoints=!!waypointRace&&!!activeVenue.course.waypointStations;
+    const nearest=openWaypoints?0:activeVenue.course.distance(car.current.x,car.current.z);
     car.offTrackTime=nearest>14?car.offTrackTime+dt:0;
     const needsRecovery=car.offTrackTime>7||car.rollTime>4;
-    if(needsRecovery||raceRecovery.ready(car,dt,drivers.memory.get(car.id)?.attempts??0)){
+    if(needsRecovery||raceRecovery.ready(car,dt,openWaypoints?4:drivers.memory.get(car.id)?.attempts??0)){
       const def=DEFINITIONS[car.kind],shape=new R.Cuboid(def.halfWidth+.2,.25,def.halfLength+.2);
-      const at=freeRecoverySlot(car,cars,raceRoute(car.id),activeVenue.course,slot=>!!physics.intersectionWithShape(
+      const at=freeRecoverySlot(car,cars,raceRoute(car.id),courseRecoveryArea(activeVenue.course,!!waypointRace),slot=>!!physics.intersectionWithShape(
         {x:slot.x,y:activeVenue.course.height(slot.x,slot.z)+.8,z:slot.z},
         {x:0,y:Math.sin(slot.yaw/2),z:0,w:Math.cos(slot.yaw/2)},shape,undefined,undefined,undefined,car.body));
       if(at){
