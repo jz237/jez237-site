@@ -1,5 +1,6 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'pinecrest-ridge-v1':'Pinecrest Ridge',
  'quarry-v1':'Blackridge Quarry',
  'ironfield-figure-eight-v1':'Ironfield Raceway',
  'cinderbank-oval-v1':'Cinderbank Speedway',

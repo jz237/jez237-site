@@ -1,3 +1,4 @@
+import {PINECREST} from './pinecrest-course';
 import {ASHFORD} from './ashford-course';
 import {REDBANK} from './redbank-course';
 import type R from '@dimforge/rapier3d-compat';
@@ -13,7 +14,7 @@ export type CourseDirection=EventOptions['direction'];
 export type RaceCourse={
  readonly id:CourseId;readonly name:string;readonly length:number;readonly halfWidth:number;
  /** Wide circuits include their usable shoulders; legacy courses keep 12m. */
- readonly checkpointRadius?:number;
+ readonly checkpointRadius?:number;readonly mapExtent?:number;
  readonly checkpoints:readonly RoutePoint[];readonly samples:readonly RoutePoint[];
  point(t:number):RoutePoint;height(x:number,z:number):number;distance(x:number,z:number):number;
  surface(x:number,z:number):'asphalt'|'gravel';outside(x:number,y:number,z:number):boolean;
@@ -33,7 +34,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
+const COURSES:Record<CourseId,RaceCourse>={'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{

@@ -21,7 +21,7 @@ test('new medals require every lap, deadline and condition; recoveries and incom
   for(const patch of [{seconds:c.limit+1},{checkpoints:c.laps!*24-1},{finished:false},{completed:false},{recovered:true},...(c.minHealth?[{health:c.minHealth-1}]:[])])assert.equal(challengeMedal(c,{...run,...patch}),0,c.id+JSON.stringify(patch));
  }
 });
-test('old earned medals and purchased groups survive; both new groups unlock and save without duplicate rewards',async()=>{
+test('old earned medals and purchased groups survive; all added groups unlock and save without duplicate rewards',async()=>{
  const old=readProfile();for(const id of ['first-lap','hatch-sprint','sedan-sprint'])old.challenges[id]={medal:3,best:60,attempts:1};
  let profile=unlockCareerGroup(old,'flight-school')!;
  const original=JSON.stringify(profile);assert.equal(careerStatus(profile).available,6);
@@ -37,7 +37,7 @@ test('old earned medals and purchased groups survive; both new groups unlock and
    settleRun(profile,'county-repeat-'+id,run,c);assert.equal(careerStatus(profile).earned,before+3);
   }
  }
- assert.equal(careerStatus(profile).completed,3);assert.equal(careerStatus(profile).available,18);
+ assert.equal(careerStatus(profile).completed,4);assert.equal(careerStatus(profile).available,24);
  const save=await readSave(await exportSave({getItem:key=>key===PROFILE_KEY?JSON.stringify(profile):null}));
  assert.deepEqual(readProfile(save.entries[PROFILE_KEY]),profile);
  assert.deepEqual(profile.challenges['first-lap'],old.challenges['first-lap']);
