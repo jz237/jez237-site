@@ -1,51 +1,51 @@
-import {CHECKPOINTS, clamp, trackPoint, wrap, type Mode} from './rules';
+import {AI_DIFFICULTIES,type AIDifficulty} from './ai-difficulty';
+import {driveDerby,type DerbyManeuver} from './derby-driving';
+import {CHECKPOINTS, DEFINITIONS, clamp, trackPoint, wrap, type Mode, type CarKind} from './rules';
 import type {Input} from './vehicle';
+import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 
 type Point = {x:number;y:number;z:number};
-export type DriverCar = {id:number;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
+export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
 export type Clearance = {front:number;left:number;right:number;rear:number};
-type Memory = {target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
+export type DriverMemory = {escapeTurn?:number;pass?:{target:number;side:number};derby?:DerbyManeuver;target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
 const stop:Input={throttle:0,steer:0,brake:1,handbrake:false};
 const route=Array.from({length:128},(_,i)=>trackPoint(i/128));
-const distance=(a:Point,b:Point)=>Math.hypot(a.x-b.x,a.z-b.z);
+
+type Encounter={car:DriverCar;ahead:number;side:number;closing:number;gap:number;projectedSide:number;width:number;time:number};
+function oncomingEncounter(car:DriverCar,other:DriverCar):Encounter|null{
+  if(other.id===car.id||other.health<=0||car.forward.x*other.forward.x+car.forward.z*other.forward.z>-.5)return null;
+  const dx=other.current.x-car.current.x,dz=other.current.z-car.current.z;
+  const ahead=dx*car.forward.x+dz*car.forward.z,side=dx*car.right.x+dz*car.right.z;
+  if(ahead< -6||ahead>50||Math.abs(side)>8)return null;
+  const vx=other.velocity.x-car.velocity.x,vz=other.velocity.z-car.velocity.z;
+  const closing=-(vx*car.forward.x+vz*car.forward.z),lateral=vx*car.right.x+vz*car.right.z;
+  const self=car.kind?DEFINITIONS[car.kind]:{halfLength:2.5,halfWidth:1},body=other.kind?DEFINITIONS[other.kind]:{halfLength:2.5,halfWidth:1};
+  const length=self.halfLength+Math.abs(other.forward.x*car.forward.x+other.forward.z*car.forward.z)*body.halfLength+Math.abs(other.right.x*car.forward.x+other.right.z*car.forward.z)*body.halfWidth+.3;
+  const width=self.halfWidth+Math.abs(other.forward.x*car.right.x+other.forward.z*car.right.z)*body.halfLength+Math.abs(other.right.x*car.right.x+other.right.z*car.right.z)*body.halfWidth+.6;
+  const gap=ahead-length,time=gap/Math.max(1,closing);
+  return{car:other,ahead,side,closing,gap,time,projectedSide:side+lateral*clamp(time,0,2),width};
+}
+
 
 /** Solo driving decisions. Vehicle simulation and the online authority stay separate. */
 export class DrivingBrain {
-  readonly memory=new Map<number,Memory>();
+  constructor(public arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
+  readonly memory=new Map<number,DriverMemory>();
   reset(){this.memory.clear();}
-  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance):Input {
-    if(car.health<=0||car.finished)return {...stop};
+  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS):Input {
+    if(car.health<=0||(car.finished&&mode!=='race'))return {...stop};
     let m=this.memory.get(car.id);
     if(!m){m={target:-1,commit:0,stalled:0,reverse:0,escape:0,escapeSteer:0,attempts:0,steer:0,lane:(car.id%3-1)*1.7,phase:'approach',scan:0,clear:{front:30,left:30,right:30,rear:30}};this.memory.set(car.id,m);}
     m.commit-=dt;m.scan-=dt;
     if(m.scan<=0){m.clear=probe?.()??m.clear;m.scan=.16+(car.id%3)*.025;}
     const yaw=Math.atan2(car.forward.x,car.forward.z);
-    let tx=0,tz=0,desiredSpeed=18,attack:DriverCar|undefined;
+    let tx=0,tz=0,desiredSpeed=18;
     if(mode==='derby'){
-      attack=cars.find(c=>c.id===m!.target&&c.health>0);
-      if(!attack||m.commit<=0){
-        let best=-Infinity;
-        for(const other of cars){
-          if(other===car||other.health<=0)continue;
-          const dx=other.current.x-car.current.x,dz=other.current.z-car.current.z,d=Math.hypot(dx,dz);
-          const heading=Math.abs(wrap(Math.atan2(dx,dz)-yaw));
-          const flank=Math.abs((dx*other.right.x+dz*other.right.z)/Math.max(1,d));
-          const score=32-d*.58-heading*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0);
-          if(score>best){best=score;attack=other;}
-        }
-        m.target=attack?.id??-1;m.commit=2.2+(car.id%4)*.35;
-      }
-      if(!attack)return {...stop};
-      const d=distance(car.current,attack.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85);
-      tx=attack.current.x+attack.velocity.x*lead;tz=attack.current.z+attack.velocity.z*lead;
-      const radius=Math.hypot(tx,tz);if(radius>38){tx*=38/radius;tz*=38/radius;}
-      m.phase='intercept';
-      // Re-enter before the wall, rather than steering along it at full throttle.
-      if(Math.hypot(car.current.x,car.current.z)>39){tx=0;tz=0;desiredSpeed=11;m.phase='re-enter';}
+      return driveDerby(car,cars,m,this.arena,dt,AI_DIFFICULTIES[this.difficulty]);
     }else{
       let prev:{x:number;z:number},next:{x:number;z:number},after:{x:number;z:number};
       if(mode==='race'){
-        prev=CHECKPOINTS[(car.nextCheckpoint+23)%24];next=CHECKPOINTS[car.nextCheckpoint];after=CHECKPOINTS[(car.nextCheckpoint+1)%24];
+        prev=checkpoints[(car.nextCheckpoint+checkpoints.length-1)%checkpoints.length];next=checkpoints[car.nextCheckpoint];after=checkpoints[(car.nextCheckpoint+1)%checkpoints.length];
       }else{
         let best=Infinity,index=0;
         route.forEach((p,i)=>{const d=Math.hypot(p.x-car.current.x,p.z-car.current.z);if(d<best){best=d;index=i;}});
@@ -58,41 +58,71 @@ export class DrivingBrain {
       const turn=Math.abs(wrap(Math.atan2(after.x-next.x,after.z-next.z)-Math.atan2(sx,sz)));
       const near=Math.hypot(next.x-car.current.x,next.z-car.current.z);
       if(near<15){const blend=clamp((15-near)/15,0,.55);tx+=(after.x-next.x)*blend;tz+=(after.z-next.z)*blend;}
-      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='gravel'?.87:1);
+      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='gravel'?.87:1)*AI_DIFFICULTIES[this.difficulty].racePace;
       m.phase='racing';
     }
     let angle=wrap(Math.atan2(tx-car.current.x,tz-car.current.z)-yaw);
     let steer=clamp(angle*1.75,-1,1);
-    desiredSpeed=Math.min(desiredSpeed,clamp(23-Math.abs(angle)*12,4.5,23));
-    let avoidance=0;
+    desiredSpeed=Math.min(desiredSpeed,clamp(23*AI_DIFFICULTIES[this.difficulty].racePace-Math.abs(angle)*12,4.5,23*AI_DIFFICULTIES[this.difficulty].racePace));
+    let avoidance=0,oncomingAvoidance=0;
+    const encounters=mode==='race'?cars.map(other=>oncomingEncounter(car,other)).filter((value):value is Encounter=>value!==null):[];
+    let target=encounters.find(e=>e.car.id===m.pass?.target&&e.ahead> -5&&Math.abs(e.side)<6);
+    // Hold a side through the encounter, but let a clear opponent yield to a new threat.
+    if(!target||(Math.abs(target.side)>=target.width+.15&&Math.abs(target.projectedSide)>=target.width+.15))target=encounters.filter(e=>e.ahead>0&&e.closing>2&&e.time<2&&Math.abs(e.projectedSide)<e.width+.15).sort((a,b)=>a.time-b.time||a.car.id-b.car.id)[0]??target;
+    if(target){
+      if(!m.pass||m.pass.target!==target.car.id){
+        // Swapping drivers negates both vectors, preserving the same local passing side.
+        const x=car.forward.x-target.car.forward.x,z=car.forward.z-target.car.forward.z;
+        const side=((target.car.current.x-car.current.x)*z-(target.car.current.z-car.current.z)*x)/Math.max(.01,Math.hypot(x,z));
+        m.pass={target:target.car.id,side:Math.abs(side)>.4?-Math.sign(side):1};
+      }
+      m.pass.target=target.car.id;
+    }else m.pass=undefined;
     for(const other of cars){
-      if(other===car||other===attack)continue;
+      if(other===car)continue;
+      const encounter=encounters.find(e=>e.car.id===other.id);
+      if(encounter&&(m.pass||encounter.closing>2)&&encounter.ahead> -5){
+        if(encounter.ahead>0&&Math.abs(encounter.projectedSide)<encounter.width){
+          const range=Math.min(50,6+Math.max(0,encounter.closing)*2);
+          const strength=clamp(1-encounter.ahead/range,0,1)*clamp(1-Math.abs(encounter.side)/encounter.width,0,1);
+          oncomingAvoidance=Math.max(oncomingAvoidance,strength);
+          // Crawling keeps tyre steering effective once both opponents have slowed.
+          if(encounter.closing>0&&encounter.time<.7)desiredSpeed=Math.min(desiredSpeed,Math.max(3,encounter.gap/.7));
+          m.phase='pass oncoming';
+        }
+        continue;
+      }
       const dx=other.current.x-car.current.x,dz=other.current.z-car.current.z;
       const ahead=dx*car.forward.x+dz*car.forward.z,side=dx*car.right.x+dz*car.right.z;
       if(ahead<0||ahead>5+Math.abs(car.speed)*.8||Math.abs(side)>3.4)continue;
       const strength=(1-ahead/(6+Math.abs(car.speed)*.8))*(1-Math.abs(side)/4);
       avoidance+=(side===0?(car.id%2?1:-1):-Math.sign(side))*strength;
-      if(mode!=='derby'&&ahead<7&&Math.abs(side)<2)desiredSpeed=Math.min(desiredSpeed,Math.max(3,Math.abs(other.speed)-1));
+      if(ahead<7&&Math.abs(side)<2)desiredSpeed=Math.min(desiredSpeed,Math.max(3,Math.abs(other.speed)-1));
       m.phase=other.health<=0?'avoid wreck':'overtake';
     }
+    avoidance+=(m.pass?.side??1)*oncomingAvoidance;
     steer=clamp(steer+avoidance*1.2,-1,1);
     // Rays ignore cars (handled above), so committing to an attack isn't canceled.
     if(m.clear.front<Math.max(5,Math.abs(car.speed)*.8)){
       const side=m.clear.left>m.clear.right?-1:1;
       steer=clamp(steer+side*.85,-1,1);desiredSpeed=Math.min(desiredSpeed,Math.max(2,m.clear.front*.8));m.phase='avoid barrier';
     }
-    const stalled=Math.abs(car.speed)<.9||(mode==='derby'&&attack!==undefined&&distance(car.current,attack.current)<6&&Math.abs(car.speed)<3.2);
+    // Intentional reverse/escape travel is not a fresh blocked-forward episode.
+    const stalled=Math.abs(car.speed)<.9||(m.pass!==undefined&&car.speed<.9&&m.reverse<=0&&m.escape<=0);
     m.stalled=stalled?m.stalled+dt:Math.max(0,m.stalled-dt*2);
-    if(m.reverse<=0&&m.escape<=0&&(m.stalled>1.65||(mode==='derby'&&Math.abs(angle)>2.25&&stalled&&m.stalled>.55))){
+    if(m.reverse<=0&&m.escape<=0&&(m.stalled>1.65)){
       m.reverse=1.15+(m.attempts%3)*.35;m.attempts++;m.stalled=0;m.commit=0;
+      // When cars overlap, distant scenery must not steer the nose into the other body.
+      const contact=encounters.filter(e=>e.ahead>0&&e.gap<1&&Math.abs(e.side)<e.width).sort((a,b)=>Math.hypot(a.ahead,a.side)-Math.hypot(b.ahead,b.side)||a.car.id-b.car.id)[0];
+      m.escapeTurn=contact&&m.clear.left>2.2&&m.clear.right>2.2?(Math.abs(contact.side)>.4?Math.sign(contact.side):-(m.pass?.side??1)):undefined;
     }
     if(m.reverse>0){
       m.reverse-=dt;m.phase='reverse escape';
-      const direction=m.clear.left===m.clear.right?(m.attempts%2?1:-1):(m.clear.left>m.clear.right?1:-1);
+      const direction=m.escapeTurn??(m.clear.left===m.clear.right?(m.attempts%2?1:-1):(m.clear.left>m.clear.right?1:-1));
       if(m.clear.rear<2.2||m.reverse<=0){m.reverse=0;m.escape=.8;m.escapeSteer=-direction*.8;}
       else {m.steer=direction*.8;return {throttle:-.75,steer:m.steer,brake:0,handbrake:false};}
     }
-    if(m.escape>0){m.escape-=dt;steer=m.escapeSteer;desiredSpeed=8;m.phase='drive clear';}
+    if(m.escape>0){m.escape-=dt;steer=m.escapeSteer;desiredSpeed=8;m.phase='drive clear';if(m.escape<=0)m.escapeTurn=undefined;}
     m.steer+=clamp(steer-m.steer,-dt*4.5,dt*4.5);
     return {throttle:clamp((desiredSpeed-car.speed)*.4,0,1),steer:m.steer,brake:clamp((car.speed-desiredSpeed)/5,0,1),handbrake:false};
   }
