@@ -232,8 +232,8 @@ test('selective cup-save failure still protects old award receipts through ordin
 
 
 test('every championship grid matches its round direction, checkpoint debt and replay orientation',()=>{
- for(const series of Cup.CLUB_SERIES){
-  const initial=Cup.createClubCup('buggy',uuid,1000,series.id,'expert');
+ for(const series of Cup.CLUB_SERIES)for(const lineup of ['mixed','selected','drivetrain','weight'] as const){
+  const initial=Cup.createClubCup('buggy',uuid,1000,series.id,'expert',lineup);
   for(const round of series.rounds){
    if(round.mode!=='race')continue;
    const h=base({clubCup:initial,activeClubRound:round.index,mode:'race'}),spawns:Array<{id:number;x:number;z:number;yaw:number}>=[];
@@ -246,6 +246,7 @@ test('every championship grid matches its round direction, checkpoint debt and r
    const f=load(h,[...selectors,'createCars','beginReplay']);f.createCars();
    assert.equal(h.context.activeVenue.course.id,round.course);assert.equal(spawns.length,11);assert.equal(h.context.drivers.difficulty,'expert');
    for(const car of h.context.cars){
+    assert.equal(car.kind,initial.roster[car.id].kind);assert.equal(car.setup.engine,0);assert.equal(car.setup.tires,0);assert.equal(car.setup.armor,0);
     const expected=courseGridSlot(getRaceCourse(round.course),car.id,round.direction??'forward'),placed=spawns[car.id];
     assert.deepEqual(placed,{id:car.id,x:expected.x,z:expected.z,yaw:expected.yaw},series.id+' round '+round.index+' slot '+car.id);
     assert.equal(car.nextCheckpoint,expected.next);assert.equal(car.passed,expected.passed);assert.equal(f.raceDirection(car.id),directionForCar(round.direction??'forward',car.id));
