@@ -1,3 +1,6 @@
+import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
+import {TrialGhostView} from './trial-ghost-view';
+import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
 import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,damageRecordKey} from './damage-rules';
 import {eventGridSetup} from './grid-setup';
@@ -145,11 +148,41 @@ const initialTimeTrial=loadTimeTrialRecords();
 let timeTrialRecords=initialTimeTrial.records,timeTrialWarning=initialTimeTrial.warning;
 let activeTimeTrial:Readonly<TimeTrialConfig>|null=null,timeTrialSelection:TimeTrialConfig|undefined;
 let timeTrialOpen=false,timeTrialInvalidReason='',timeTrialResult:TimeTrialResult|null=null;
+let trialGhostLibrary=loadGhostLibrary(),trialGhostWarning='';
+let trialGhostRecorder:TrialGhostRecorder|null=null,trialGhostView:TrialGhostView|null=null,trialGhostTarget:TrialGhost|null=null;
+let trialGhostSplit='';
+function beginTrialGhost(){
+  trialGhostView?.dispose();trialGhostView=null;trialGhostRecorder=null;trialGhostTarget=null;trialGhostSplit='';
+  if(!activeTimeTrial)return;
+  trialGhostRecorder=new TrialGhostRecorder(activeTimeTrial);
+  trialGhostRecorder.sample(0,cars[0].current,cars[0].currentQ);
+  trialGhostTarget=findTrialGhost(trialGhostLibrary,activeTimeTrial,timeTrialBest(timeTrialRecords,activeTimeTrial));
+  if(trialGhostLibrary.enabled&&trialGhostTarget)trialGhostView=new TrialGhostView(scene,cars[0].root,trialGhostTarget);
+}
+function finishTrialGhost(config:TimeTrialConfig,result:TimeTrialResult){
+  const recording=trialGhostRecorder?.finish(cars[0].finishTime,cars[0].current,cars[0].currentQ)??null;
+  trialGhostLibrary=settleTrialGhost(trialGhostLibrary,config,result,recording);
+  if(result.eligible&&result.newBest){
+    const saved=saveGhostLibrary(trialGhostLibrary);
+    trialGhostWarning=!saved?'Ghosts are available for this session, but browser storage could not save them.':
+      recording?'Personal-best ghost saved. Race it on your next attempt.':'Personal best saved without a ghost. Ghost recording supports laps up to ten minutes.';
+  }
+  trialGhostRecorder=null;
+}
+function updateTrialGhost(){
+  if(!activeTimeTrial){trialGhostView?.dispose();trialGhostView=null;trialGhostRecorder=null;trialGhostTarget=null;return;}
+  trialGhostView?.update(Math.max(0,elapsed-(1-Math.min(1,accumulator/(1/60)))/60),!studio&&['countdown','playing','paused'].includes(state),cars[0].root.position);
+}
+
 function openTimeTrialSetup(){
   if(preparingEvent||online?.active)return;
   timeTrialOpen=true;keys.clear();
   const config:TimeTrialConfig={kind,course:timeTrialSelection?.course??resolveCourseId(eventOptions.course),direction:timeTrialSelection?.direction??(eventOptions.direction==='reverse'?'reverse':'forward')};
-  showTimeTrialSetup(ui,config,timeTrialRecords,{start:config=>{void startTimeTrial(config);},close:()=>{timeTrialOpen=false;menu();}},timeTrialWarning);
+  showTimeTrialSetup(ui,config,timeTrialRecords,{start:config=>{void startTimeTrial(config);},close:()=>{timeTrialOpen=false;menu();}},[timeTrialWarning,trialGhostWarning].filter(Boolean).join(' '),{
+    enabled:trialGhostLibrary.enabled,
+    change:enabled=>{trialGhostLibrary={...trialGhostLibrary,enabled};if(!saveGhostLibrary(trialGhostLibrary))trialGhostWarning='Ghost preference could not be saved; it applies for this session.';},
+    status:selected=>findTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected))?'Personal-best ghost ready.':'Set a new personal best to record a ghost for this selection.',
+  });
 }
 async function startTimeTrial(config:TimeTrialConfig){
   if(preparingEvent||online?.active||!isTimeTrialConfig(config)||!['menu','result'].includes(state))return false;
@@ -163,13 +196,14 @@ function finishTimeTrial(){
   if(run)Object.assign(run,{completed:true,finished:player.finished&&player.health>0,health:player.health,rank:0,won:false,checkpoints:player.passed});
   const outcome=finishTimeTrialRecord(timeTrialRecords,config,{run,finished:player.finished,health:player.health,passed:player.passed,finishTime:player.finished?player.finishTime:elapsed+player.penalty,demo,online:!!online?.active,synthetic:autopilot||!!testInput||!!timeTrialInvalidReason&&timeTrialInvalidReason!=='RECOVERY USED',stock:cars.length===1&&player.kind===config.kind&&activeVenue.course.id===config.course&&raceDirection()===config.direction&&JSON.stringify(player.setup)===JSON.stringify(stockSetup(player.kind))});
   timeTrialRecords=outcome.records;timeTrialResult=outcome.result;
+  finishTrialGhost(config,timeTrialResult);
   if(timeTrialResult.eligible)timeTrialWarning=saveTimeTrialRecords(timeTrialRecords)?'':'Personal bests are available for this session, but browser storage could not save them.';
   bankRun(true);keys.clear();testInput=null;
   showTimeTrialResult(ui,config,timeTrialResult,{
     retry:()=>{void start(false);},
     setup:()=>{createCars(true);menu();openTimeTrialSetup();},
     close:()=>{createCars(true);menu();},
-  },[timeTrialWarning,profileStorageWarning,awardText(lastAward)].filter(Boolean).join(' '));
+  },[timeTrialWarning,trialGhostWarning,profileStorageWarning,awardText(lastAward)].filter(Boolean).join(' '));
   const replayActions=document.createElement('div');replayActions.className='event-actions';ui.querySelector('#time-trial-result .event-panel')!.append(replayActions);studioButtons(replayActions);
   ui.querySelector<HTMLButtonElement>('#replay-mode')!.onclick=()=>openStudio(false,undefined,`${COURSE_NAMES[config.course]} · Time Trial · ${DEFINITIONS[config.kind].name} · ${config.direction}`);
 }
@@ -626,6 +660,7 @@ async function start(watch=demo) {
     for(const car of cars)staticShadows?.bindReceivers(car.root);
     await warmPrograms();
     elapsed = 0;eventFrameTimes.length=0;
+    if(activeTimeTrial)beginTrialGhost();
     countdown = mode === 'playground' ? 0 : 3.5;
     accumulator = 0;
     state = countdown ? 'countdown' : 'playing';
@@ -673,7 +708,7 @@ function hud() {
   if(waypointRace)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="waypoint-status"></div>');
   if(settings.performance)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="performance-readout" id="performance-readout"></div>');
   if(activeChallenge){ui.querySelector('.hud-title')!.textContent=activeChallenge.title.toUpperCase();ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live"><strong id="challenge-score"></strong><span id="challenge-target"></span></div>');}
-  if(activeTimeTrial){ui.querySelector('.hud-title')!.textContent=`TIME TRIAL · ${activeTimeTrial.direction.toUpperCase()}`;text('event-label','PERSONAL BEST');ui.querySelector('.event-stats > div:nth-child(2) > span')!.textContent='LAP TIME';text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live" role="status"><strong id="time-trial-progress">0 / 24 GATES</strong><span id="time-trial-validity">FACTORY STOCK · ONE LAP · NO RECOVERY</span></div>');}
+  if(activeTimeTrial){ui.querySelector('.hud-title')!.textContent=`TIME TRIAL · ${activeTimeTrial.direction.toUpperCase()}`;text('event-label','PERSONAL BEST');ui.querySelector('.event-stats > div:nth-child(2) > span')!.textContent='LAP TIME';text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live" role="status"><strong id="time-trial-progress">0 / 24 GATES</strong><span id="time-trial-validity">FACTORY STOCK · ONE LAP · NO RECOVERY</span><span id="time-trial-ghost">PERSONAL-BEST GHOST</span></div>');}
   if(customEvent()&&mode!=='playground')ui.querySelector('.hud-title')!.textContent+=' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI · '+DAMAGE_RULES[damageRule()].label.toUpperCase();
   if(demo)demoHud();
   if(activeClubRound!==null){ui.querySelector('.hud-title')!.textContent=`${clubSeries(clubCup).name.toUpperCase()} · ROUND ${activeClubRound+1} / ${clubRounds(clubCup).length} · ${eventLabel()}`;ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="club-live" id="club-live" role="status">Factory stock · Championship points</div>');}
@@ -748,7 +783,7 @@ function updateHud() {
           ? 'TRAFFIC ON'
           : 'SOLO',
   );
-  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:'FACTORY STOCK · ONE LAP · NO RECOVERY');}
+  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:'FACTORY STOCK · ONE LAP · NO RECOVERY');text('time-trial-ghost',!trialGhostLibrary.enabled?'GHOST OFF':trialGhostTarget?trialGhostSplit||'RACING YOUR PERSONAL-BEST GHOST':'NO SAVED GHOST · SET A NEW PERSONAL BEST');}
   document.getElementById('countdown')!.innerHTML =
     state === 'countdown'
       ? `<strong>${Math.ceil(countdown)}</strong><p>${mode === 'derby' ? 'SURVIVE THE IMPACT' : 'FIND YOUR LINE'}</p>`
@@ -1050,6 +1085,7 @@ function step(dt: number) {
   const collisionMotion=captureCollisionMotion(physics);
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
+  if(activeTimeTrial)trialGhostRecorder?.sample(elapsed,cars[0].current,cars[0].currentQ);
   const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number})[]=[];
   events.drainContactForceEvents((e) => {
     const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
@@ -1115,6 +1151,11 @@ function step(dt: number) {
       c.checkpointDistance = check.distance;
       if (check.passed) {
         if(!c.finished)c.passed++;
+        if(activeTimeTrial&&c.id===0&&!c.finished){
+          trialGhostRecorder?.gate(c.passed,elapsed);
+          const previous=trialGhostTarget?.gates[c.passed-1];
+          if(previous!==undefined)trialGhostSplit=`GATE ${c.passed} · ${formatTrialDelta(elapsed-previous)} VS PERSONAL BEST`;
+        }
         c.nextCheckpoint = (c.nextCheckpoint + 1) % 24;
         c.checkpointDistance = Infinity;
         if(c.finished)continue; // Keep AI rolling beyond the finish without changing its result.
@@ -1316,6 +1357,7 @@ function frame(now: number) {
     if (wreckHold === 0) { createCars(true); menu(); }
   }
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
+  updateTrialGhost();
   updateCamera(dt);
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');

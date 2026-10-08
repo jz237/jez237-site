@@ -1,3 +1,5 @@
+import * as Ghost from '../src/trial-ghost';
+import {TrialGhostView} from '../src/trial-ghost-view';
 import * as DamageRules from '../src/damage-rules';
 import * as GridSetup from '../src/grid-setup';
 import * as Grid from '../src/grid-rules';
@@ -35,7 +37,7 @@ const mainText=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
 const main=ts.createSourceFile('main.ts',mainText,ts.ScriptTarget.ES2022,true,ts.ScriptKind.TS);
 export const observedMainHash=createHash('sha256').update(mainText).digest('hex');
 const selectors=['damageRule','clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceTimeLimit','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse','raceLabel','eventLabel'];
-const names=[...selectors,'modes','openProfile','bankRun','createCars','start','beginReplay','finish','menu','recover','openTimeTrialSetup','startTimeTrial','finishTimeTrial','controllerContext','pause'];
+const names=[...selectors,'modes','openProfile','bankRun','createCars','start','beginReplay','finish','menu','recover','openTimeTrialSetup','startTimeTrial','finishTimeTrial','beginTrialGhost','finishTrialGhost','controllerContext','pause'];
 const declarations=names.map(name=>{
  const fn=main.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);if(fn)return fn.getText(main);
  for(const node of main.statements)if(ts.isVariableStatement(node)){
@@ -83,7 +85,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const venues=Object.fromEntries(Object.keys(COURSE_NAMES).map(id=>[id,{course:getRaceCourse(id as any),props:[],puddles:[]} ])),quarry=venues['quarry-v1'];
- const context:any={...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...Ghost,TrialGhostView,trialGhostLibrary:Ghost.readGhostLibrary(null),trialGhostWarning:'',trialGhostRecorder:null,trialGhostView:null,trialGhostTarget:null,trialGhostSplit:'',...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
@@ -117,6 +119,7 @@ function harness(faults:Faults={}){
  for(const kind of CAR_KINDS)context.garage.cars[kind].setup={...stockSetup(kind),engine:3,tires:3,armor:3,paint:0xab00cd,trim:0xffffff,tune:{gearing:1,suspension:-1,differential:1,brakeBias:-1,steering:1},livery:[{...newLayer('number','left'),name:'hostile-'+kind}]};
  // Same-realm function scope preserves strict plain-object validation in the actual pure/UI modules.
  // The injected storage remains explicit; no globals or production guards are changed.
+ context.saveGhostLibrary=(library:Ghost.GhostLibrary)=>Ghost.saveGhostLibrary(library,context.localStorage);
  context.saveTimeTrialRecords=(records:Trial.TimeTrialRecords)=>Trial.saveTimeTrialRecords(records,context.localStorage);
  const f=new Function('context','with(context){'+executable+'}')(context) as Record<string,(...args:any[])=>any>;
  const preferences=()=>JSON.stringify({event:context.eventOptions,garage:context.garage});
@@ -266,4 +269,17 @@ test('leaving trial restores custom-event, garage, demo and online defaults rath
  h.context.state='menu';await h.f.startTimeTrial(configurations[0]);await h.f.start(true);assert.equal(h.context.activeTimeTrial,null);assert.equal(h.context.demo,true);assert.equal(h.context.cars.length,24);assert.equal(h.context.telemetry,null);
  h.context.demo=false;h.context.online={active:true,network:{snapshot:{event:{rules:{race:'laps',direction:'reverse',laps:5,duration:99,derby:'score'}}}}};
  assert.equal(h.f.preferredCourse(),'quarry-v1');assert.equal(h.f.raceLaps(),5);assert.equal(h.f.raceDirection(),'reverse');assert.equal(h.f.eventDuration(),99);
+});
+
+test('actual Time Trial handlers save a complete PB ghost, race it on Retry and preserve it after a rejected attempt',async()=>{
+ const h=harness(),config=configurations[0];await h.select(config);
+ const p=h.context.cars[0];
+ // Explicit unit motion/gate evidence exercises settlement plumbing; physical
+ // laps and rendered ghost positions are covered by the browser acceptance.
+ for(let i=1;i<=2400;i++){const t=i/60;p.current.set(t,1,t);h.context.trialGhostRecorder.sample(t,p.current,p.currentQ);if(i%100===0)h.context.trialGhostRecorder.gate(i/100,t);}
+ outcome(h,40);const r=result(h);assert.equal(r.newBest,true);
+ const saved=h.storage.get(Ghost.TRIAL_GHOST_KEY);assert.ok(saved);const ghost=Ghost.findTrialGhost(Ghost.readGhostLibrary(saved),config,40);assert.ok(ghost);
+ await h.f.start(false);assert.equal(h.context.trialGhostTarget.time,40);assert.ok(h.context.trialGhostView);
+ assert.equal(h.context.trialGhostRecorder.gates.length,0);assert.equal(h.context.cars.length,1);
+ outcome(h,35);h.context.timeTrialInvalidReason='ASSISTED RUN';result(h);assert.equal(h.storage.get(Ghost.TRIAL_GHOST_KEY),saved);
 });
