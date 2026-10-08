@@ -1,3 +1,4 @@
+import type {DrivingAssists} from './driving-assists';
 import type {TransmissionInput,TransmissionState} from './transmission';
 import {freshStructure} from './structural-damage';
 import type {VehicleStructure} from './vehicle-structure';
@@ -41,6 +42,7 @@ export type Input = {
   steer: number;
   brake: number;
   handbrake: boolean;
+  assists?:DrivingAssists;
   transmission?:TransmissionInput;
 };
 export class Vehicle {

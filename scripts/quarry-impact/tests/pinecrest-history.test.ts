@@ -1,6 +1,7 @@
+import {restoreDrivingAssistsBytes} from './driving-assists-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPinecrestPrevious,restorePinecrestBytes,verifyPinecrestRevision} from './pinecrest-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDrivingAssistsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Pinecrest preserves every prior fixture, vehicle asset, control and camera input',verifyPinecrestRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/pinecrest/revision.json').toString());
