@@ -216,3 +216,10 @@ test('actual frame measures elapsed time before controller resume advances the w
 test('career board has its own controller navigation and Back returns through the actual close callback',()=>{
  const h=harness();h.c.careerOpen=true;const root=h.root('.career-board');h.button(root,'#career-close','closeCareer',()=>h.c.careerOpen=false);h.release();assert.equal(h.navigation.context?.key,'career');h.poll({1:1});assert.equal(h.calls.closeCareer,1);assert.equal(h.c.careerOpen,false);assert.equal(h.calls.startEvent,undefined);
 });
+
+test('save restore confirmation owns controller Back and defaults to Cancel; busy restoration masks menu controls',()=>{
+ const h=harness('paused'),overlay=h.root('#overlay');h.button(overlay,'#resume','resume');
+ const confirmation=overlay.add('#save-confirm:not([hidden])');overlay.children.set('#save-confirm',confirmation);h.button(confirmation,'#save-cancel','cancel',()=>confirmation.hidden=true);
+ h.release();assert.equal(h.navigation.context?.key,'save-confirm');assert.equal(h.navigation.context?.initial,'#save-cancel');h.poll({1:1});assert.equal(h.calls.cancel,1);assert.equal(h.calls.resume,undefined);
+ overlay.add('.save-backup[aria-busy="true"]');h.release();assert.equal(h.functions.controllerContext(),null);
+});
