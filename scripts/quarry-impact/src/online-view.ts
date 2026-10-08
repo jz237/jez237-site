@@ -91,6 +91,7 @@ export class OnlineView {
       // engine condition from incomplete visual hit packets.
       c.engineDamage=at.components?.engineDamage;
       c.engineStall=at.engineStall;
+      c.transmission=at.transmission?{...at.transmission}:undefined;
       c.tyreDamage=at.components?.tyreDamage?.slice();
       c.structuralDamage=at.components?.structure?.slice();
       c.structure.update(c.structuralDamage,c.health);

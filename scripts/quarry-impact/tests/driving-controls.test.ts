@@ -11,8 +11,8 @@ test('keyboard arrows agree with WASD, cancel opposites, brake at speed and reve
  assert.equal(drive(['KeyW','KeyS']).brake,1);assert.equal(drive(['KeyW','KeyS']).throttle,0);assert.equal(drive(['Space']).handbrake,true);
 });
 test('rebinding rejects conflicts and shortcuts and survives save/reload independently',()=>{
- const config=defaultControls();assert.equal(bindKey(config,'throttle',0,'KeyE'),null);assert.match(bindKey(config,'reverse',0,'KeyE')!,/already assigned/);assert.match(bindKey(config,'left',0,'KeyP')!,/reserved/);
- const loaded=readControls(JSON.stringify(config));assert.equal(drivingInput(loaded,new Set(['KeyW']),[],0).throttle,0);assert.equal(drivingInput(loaded,new Set(['KeyE']),[],0).throttle,1);assert.equal(drivingInput(loaded,new Set(['ArrowUp']),[],0).throttle,1);loaded.keys.throttle[0]='KeyZ';assert.equal(config.keys.throttle[0],'KeyE');
+ const config=defaultControls();assert.equal(bindKey(config,'throttle',0,'KeyL'),null);assert.match(bindKey(config,'reverse',0,'KeyL')!,/already assigned/);assert.match(bindKey(config,'left',0,'KeyP')!,/reserved/);
+ const loaded=readControls(JSON.stringify(config));assert.equal(drivingInput(loaded,new Set(['KeyW']),[],0).throttle,0);assert.equal(drivingInput(loaded,new Set(['KeyL']),[],0).throttle,1);assert.equal(drivingInput(loaded,new Set(['ArrowUp']),[],0).throttle,1);loaded.keys.throttle[0]='KeyZ';assert.equal(config.keys.throttle[0],'KeyL');
 });
 test('corrupt and hostile saves reset keys and clamp calibration, including button conflicts',()=>{
  for(const bad of ['{','null','{"version":2}',JSON.stringify({...defaultControls(),keys:{}}),JSON.stringify({...defaultControls(),keys:{...defaultControls().keys,left:['KeyW']}})])assert.deepEqual(readControls(bad),defaultControls());

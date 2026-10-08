@@ -32,6 +32,7 @@ function normalize(key:string,text:string):string{
  // Preserve the canonical bytes of controls exported before vibration existed.
  // readControls supplies the default after import; old signed backups stay valid.
  if(key===CONTROLS_KEY&&!Object.hasOwn(raw,'rumble'))delete(value as {rumble?:number}).rumble;
+ if(key===CONTROLS_KEY){const controls=value as Record<string,any>;for(const key of ['transmission','shiftUpButton','shiftDownButton','clutchButton'])if(!Object.hasOwn(raw,key))delete controls[key];for(const key of ['shiftUp','shiftDown','clutch'])if(!Object.hasOwn(raw.keys??{},key))delete controls.keys[key];}
  return canonical(value);
 }
 function entries(value:unknown):SaveEntries{

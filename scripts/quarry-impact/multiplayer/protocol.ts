@@ -1,3 +1,4 @@
+import {validTransmissionInput,type TransmissionInput,type TransmissionState} from '../src/transmission';
 import {validOnlineEventRules,copyOnlineEventRules,type OnlineEventRules,type OnlineEventState} from '../src/online-events';
 import {LIVERY_MESSAGE_LIMIT,validOnlineLivery,copyOnlineLivery,type LiveryFrame,type SelectedLivery} from '../src/online-livery';
 import {validOnlineSetup,copyOnlineSetup,type OnlineSetup,type OnlineLoadout,type SetupRule} from '../src/online-setup';
@@ -11,7 +12,8 @@ export const PROTOCOL = 1;
 export const STEP = 1 / 60;
 export const SNAPSHOT_HZ = 20;
 export const NEUTRAL = { throttle: 0, steer: 0, brake: 1, handbrake: false };
-export type Controls = typeof NEUTRAL;
+export type Controls = typeof NEUTRAL & {transmission?:TransmissionInput};
+export const releaseControls=(c:Controls):Controls=>({...NEUTRAL,...(c.transmission?{transmission:{...c.transmission,up:false,down:false}}:{})});
 export type Vec3 = { x: number; y: number; z: number };
 export type Quat = Vec3 & { w: number };
 export type Member = { id: number; name: string; kind: CarKind; connected: boolean; host: boolean; cupId?:string;loadout?:OnlineLoadout;liveryLayers?:number };
@@ -22,7 +24,7 @@ export type CarState = {
   id: number; kind: CarKind; setup?:OnlineSetup; p: Vec3; q: Quat; v: Vec3; av: Vec3;
   health: number; inflicted: number; damageLeft: number; damageRight: number;
   steering: number; speed: number; rpm: number; gear: number;
-  engineStall?:number;
+  engineStall?:number; transmission?:TransmissionState;
   wheels: { suspension: number; rotation: number; contact: boolean;patch?:{plane:number[];load:number} }[];
   input: Controls; passed: number; nextCheckpoint: number; lap: number;
   finished: boolean; finishTime: number; penalty: number; repair: number;
@@ -38,7 +40,7 @@ export type Snapshot = {
   cars: CarState[]; damage: DamageEvent[]; ranking: number[];
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
-  capacity?:OnlineCapacity;
+  capacity?:OnlineCapacity; transmissionSupport?:true;
   eventSupport?:true; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
@@ -83,10 +85,10 @@ export function parseClientMessage(raw: string): ClientMessage | null {
   if (d.type === 'input' && Number.isSafeInteger(d.seq) && Number(d.seq) >= 0 &&
       d.controls && typeof d.controls === 'object') {
     const c = d.controls as Record<string, unknown>;
-    if (!finite(c.throttle) || !finite(c.steer) || !finite(c.brake) || typeof c.handbrake !== 'boolean') return null;
+    if (!finite(c.throttle) || !finite(c.steer) || !finite(c.brake) || typeof c.handbrake !== 'boolean'||c.transmission!==undefined&&!validTransmissionInput(c.transmission)) return null;
     return { type: 'input', seq: Number(d.seq), controls: {
       throttle: Math.max(-1, Math.min(1, c.throttle)), steer: Math.max(-1, Math.min(1, c.steer)),
-      brake: Math.max(0, Math.min(1, c.brake)), handbrake: c.handbrake } };
+      brake: Math.max(0, Math.min(1, c.brake)), handbrake: c.handbrake,...(c.transmission===undefined?{}:{transmission:{...c.transmission as TransmissionInput}}) } };
   }
   if (d.type === 'start' && ['derby', 'race', 'playground'].includes(String(d.mode))) {
     if(d.rules!==undefined&&!validOnlineEventRules(d.rules))return null;
