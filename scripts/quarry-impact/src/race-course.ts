@@ -1,3 +1,4 @@
+import {MILLHAVEN} from './millhaven-course';
 import {MEREFIELD} from './merefield-course';
 import {DOCKSIDE,FAIRGROUND} from './county-courses';
 import {PINECREST} from './pinecrest-course';
@@ -39,7 +40,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'merefield-airfield-v1':MEREFIELD,'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
+const COURSES:Record<CourseId,RaceCourse>={'millhaven-rally-v1':MILLHAVEN,'merefield-airfield-v1':MEREFIELD,'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{
