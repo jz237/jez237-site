@@ -271,6 +271,8 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   dome over the statue, and at dusk it lights (a bulb, a halo, and a warm pool of light on the columns and the underside of the entablature, from the same point-light loop as the street lamps, with a bigger reach).
 - **Lily pads** (the `pad` kind; the shaders now know an instanced mesh's own centre and scale, `vOrg` and `vInstS`): veins run out from the notch, the rim is lighter, the surface has a waxy mottle (from the bee's height on the pad it
   had been a flat green disc).
+- **What a struggling device gives up** (`Explore.setPerfLevel`): the garden's close-range detail (the lawn's grain and daisies, the hedges' leaves, the bark: `uDetail` and `scenery.grassU`) is off on the `low` tier from the start and
+  from the governor's level 2 on any tier; the lamps' light falls from seven street lamps to four (level 2) and two (level 3), the bee's own lights staying. (The puddles and the night light cost nothing when it is dry and day.)
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
