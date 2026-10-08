@@ -44,14 +44,14 @@ const config:TimeTrialConfig={kind:'tern',course:'ironfield-figure-eight-v1',dir
 const result=(changes:Partial<TimeTrialResult>={}):TimeTrialResult=>({status:'finished',eligible:true,reason:'',time:31.123456,previousBest:null,best:31.123456,delta:null,newBest:true,...changes});
 function fixture(){const root=new Element();return{root,ui:root as unknown as HTMLElement,get:(id:string)=>{const node=root.querySelector('#'+id);assert.ok(node,id);return node;}};}
 
-test('setup exposes native eleven-car, four-course and two-direction controls and refreshes the exact selection PB without mutating settings',()=>{
+test('setup exposes native eleven-car, five-course and two-direction controls and refreshes the exact selection PB without mutating settings',()=>{
   const h=fixture(),records=readTimeTrialRecords(),original=Object.freeze({...config});
   records.bests[timeTrialKey(config)]=31.123456;
   records.bests[timeTrialKey({...config,direction:'reverse'})]=32.987654;
   let starts=0;
   showTimeTrialSetup(h.ui,original,records,{start(){starts++;},close(){}});
   assert.equal(h.get('time-trial-kind').tagName,'SELECT');assert.equal(h.get('time-trial-kind').options.length,11);
-  assert.equal(h.get('time-trial-course').options.length,4);assert.equal(h.get('time-trial-direction').options.length,2);
+  assert.equal(h.get('time-trial-course').options.length,5);assert.equal(h.get('time-trial-direction').options.length,2);
   assert.equal(h.get('time-trial-kind').value,'tern');assert.equal(h.get('time-trial-course').value,'ironfield-figure-eight-v1');
   assert.equal(h.get('time-trial-best').textContent,'0:31.12');
   const direction=h.get('time-trial-direction');direction.value='reverse';direction.dispatchEvent(new Event('change'));
@@ -111,4 +111,13 @@ test('setup and result present storage failures as text without claiming a durab
   showTimeTrialResult(h.ui,config,result({reason:'<script>alert(1)</script>'}),{retry(){},setup(){},close(){}},warning);
   assert.equal(h.get('time-trial-notice').textContent,warning);assert.equal(h.root.querySelector('img'),null);assert.equal(h.root.querySelector('script'),null);
   assert.equal(h.get('time-trial-reason').textContent,'<script>alert(1)</script>');assert.doesNotMatch(h.root.textContent,/successfully saved|saved permanently/i);
+});
+
+
+test('ghost control saves its preference and updates availability when category changes',()=>{
+ const h=fixture();let enabled=true;
+ showTimeTrialSetup(h.ui,config,readTimeTrialRecords(),{start(){},close(){}},'',{enabled,change:value=>{enabled=value;},status:selected=>selected.direction==='forward'?'Ghost ready':'Set a new personal best'});
+ assert.equal(h.get('time-trial-ghost-enabled').value,'on');assert.equal(h.get('time-trial-ghost-status').textContent,'Ghost ready');
+ const toggle=h.get('time-trial-ghost-enabled');toggle.value='off';toggle.dispatchEvent(new Event('change'));assert.equal(enabled,false);
+ const direction=h.get('time-trial-direction');direction.value='reverse';direction.dispatchEvent(new Event('change'));assert.equal(h.get('time-trial-ghost-status').textContent,'Set a new personal best');
 });

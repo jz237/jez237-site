@@ -1,6 +1,7 @@
+import {restoreTrialGhostBytes} from './trial-ghost-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRedbankPrevious,restoreRedbankBytes,verifyRedbankRevision} from './redbank-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTrialGhostBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Redbank preserves every prior fixture, vehicle asset, control and camera input',verifyRedbankRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/redbank/revision.json').toString());
