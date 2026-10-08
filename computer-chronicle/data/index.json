@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-08",
+      "historicDate": "1984-12-03",
+      "displayDate": "Week of December 3-9, 1984",
+      "edition": "Issue 123 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A combat cockpit on the home computer; a price challenge on the PC shelf.",
+      "leadHeadline": "F-15 Strike Eagle brings combat flying to Atari and Commodore desktops",
+      "storyHeadlines": [
+        "Tandy 1000 challenges IBM on price and bundled software",
+        "MSX promises common software across competing home computers",
+        "A Commodore can watch the house as well as run games"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-03.png",
+      "thumb": "media/thumbs/1984-12-03.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-07",
       "historicDate": "1984-11-26",
       "displayDate": "Week of November 26-December 2, 1984",

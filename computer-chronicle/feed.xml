@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 07 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 08 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 3-9, 1984 — F-15 Strike Eagle brings combat flying to Atari and Commodore desktops</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-12-03</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-03</guid>
+      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <description>December’s gaming review puts Atari and Commodore pilots in a three-dimensional combat cockpit. MicroProse puts the home-computer pilot in a combat cockpit with F-15 Strike Eagle. The December Computer Gaming World review identifies Atari and Commodore 64 editions, each for one player, and credits Sid Meier and Grant Irani. Its arcade-and-strategy billing promises more than a simple shooting gallery. Also this week: Tandy 1000 challenges IBM on price and bundled software · MSX promises common software across competing home computers · A Commodore can watch the house as well as run games.</description>
+    </item>
     <item>
       <title>Week of November 26-December 2, 1984 — British Telecom’s Firebird wins the rights to take Elite to Z80 computers</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-11-26</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-23</guid>
       <pubDate>Wed, 16 Sep 2026 12:00:00 GMT</pubDate>
       <description>A High Court undertaking pulls Microdeal&apos;s Commodore 64 game from sale and makes the young software trade confront the difference between inspiration and imitation. LONDON — Activision has forced Microdeal to withdraw Cuthbert in the Jungle after bringing High Court proceedings that alleged the Commodore 64 title copied Pitfall!, Popular Computing Weekly reported on July 26. Microdeal gave the court an undertaking that it would no longer produce the game in any form and notified suppliers that the title could no longer be sold. Also this week: Tramiel&apos;s Atari Shake-Up Reaches Britain · Apple Plans to Double Macintosh Production · A Computer Fantasy Game Becomes an Alan Dean Foster Novel.</description>
-    </item>
-    <item>
-      <title>Week of July 16-22, 1984 — FBI Seizes Home Computers in Huntsville Hacker Probe</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-07-16</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-16</guid>
-      <pubDate>Tue, 15 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Four Alabama homes yield computers and related equipment as federal investigators examine unauthorized entry into two systems. HUNTSVILLE, Ala. — Federal agents seized computers and related equipment Monday at four homes in the Huntsville area, an unusually vivid sign that the expanding world of home terminals and dial-up experimentation has begun to draw the close attention of law enforcement. Also this week: Tramiel Takes Atari Into a New, Hard-Cost Era · Imagine Software&apos;s Million-Pound Dream Bursts · Apple IIc Brings 128K and Plug-In Simplicity Home · £1.99 Games Ignite a British Software Price War.</description>
     </item>
   </channel>
 </rss>
