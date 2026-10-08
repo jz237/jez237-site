@@ -6,7 +6,7 @@ const pad=(axis=0,buttons:Record<number,number>={},index=0):Pad=>({id:'Test stan
 const drive=(keys:string[]=[],speed=0)=>drivingInput(defaultControls(),new Set(keys),[],speed);
 test('keyboard arrows agree with WASD, cancel opposites, brake at speed and reverse at rest',()=>{
  for(const pair of [['KeyW','ArrowUp'],['KeyS','ArrowDown'],['KeyA','ArrowLeft'],['KeyD','ArrowRight']])assert.deepEqual(drive([pair[0]],10),drive([pair[1]],10));
- assert.equal(drive(['KeyA']).steer,-1);assert.equal(drive(['KeyD']).steer,1);assert.equal(drive(['KeyA','KeyD']).steer,0);
+ assert.equal(drive(['KeyA']).steer,1);assert.equal(drive(['KeyD']).steer,-1);assert.equal(drive(['KeyA','KeyD']).steer,0);
  assert.deepEqual(drive(['KeyS'],10),{throttle:0,brake:1,steer:0,handbrake:false});assert.equal(drive(['KeyS']).throttle,-.6);
  assert.equal(drive(['KeyW','KeyS']).brake,1);assert.equal(drive(['KeyW','KeyS']).throttle,0);assert.equal(drive(['Space']).handbrake,true);
 });
@@ -22,13 +22,20 @@ test('axis calibration removes drift, rescales travel, curves and inverts withou
  const config=defaultControls();assert.equal(steeringAxis(.1,config),0);assert.equal(steeringAxis(-1,config),-1);assert.equal(steeringAxis(1,config),1);config.center=.1;assert.equal(steeringAxis(.1,config),0);config.center=0;config.curve=2;assert.ok(steeringAxis(.5,config)<.25);config.invert=true;assert.ok(steeringAxis(.5,config)<0);config.saturation=.5;assert.equal(steeringAxis(.5,config),-1);assert.equal(steeringAxis(NaN,config),0);
 });
 test('gamepad slots, missing axes, disconnects and button mapping have deterministic fallback',()=>{
- const config=defaultControls();config.pad=1;const pads=[pad(-1),pad(1,{7:1,0:1},1)];assert.deepEqual(drivingInput(config,new Set(),pads,20),{steer:1,throttle:1,brake:0,handbrake:true});pads[1].connected=false;assert.equal(drivingInput(config,new Set(['KeyA']),pads,0).steer,-1);pads[1].connected=true;config.axis=4;config.center=.25;assert.equal(drivingInput(config,new Set(),pads,0).steer,0);
+ const config=defaultControls();config.pad=1;const pads=[pad(-1),pad(1,{7:1,0:1},1)];assert.deepEqual(drivingInput(config,new Set(),pads,20),{steer:1,throttle:1,brake:0,handbrake:true});pads[1].connected=false;assert.equal(drivingInput(config,new Set(['KeyA']),pads,0).steer,1);pads[1].connected=true;config.axis=4;config.center=.25;assert.equal(drivingInput(config,new Set(),pads,0).steer,0);
  config.throttleButton=1;config.axis=0;assert.equal(drivingInput(config,new Set(),[pad(0,{1:1},1)],0).throttle,1);
 });
 test('pedal deadzones and mixed keyboard/gamepad preserve braking and release cleanly',()=>{
  const c=defaultControls();assert.equal(drivingInput(c,new Set(),[pad(0,{7:.03})],0).throttle,0);assert.equal(drivingInput(c,new Set(['KeyW']),[pad(0,{6:1})],0).brake,1);assert.equal(drivingInput(c,new Set(),[pad(0,{6:1})],-2).throttle,-.6);assert.deepEqual(drivingInput(c,new Set(),[],0),{throttle:0,steer:0,brake:0,handbrake:false});
 });
 test('speed steering assist is optional, symmetric and stateless across repeated network samples',()=>{
- const c=defaultControls(),keys=new Set(['KeyD']);assert.equal(drivingInput(c,keys,[],50).steer,1);c.speedAssist=1;const forward=drivingInput(c,keys,[],50);assert.ok(forward.steer<.5);assert.deepEqual(drivingInput(c,keys,[],-50),forward);assert.deepEqual(drivingInput(c,keys,[],50),forward);assert.equal(drivingInput(c,keys,[],0).steer,1);assert.equal(drivingInput(c,keys,[],1000).steer,.35);assert.equal(drivingInput(c,keys,[],NaN).steer,1);
+ const c=defaultControls(),keys=new Set(['KeyA']);assert.equal(drivingInput(c,keys,[],50).steer,1);c.speedAssist=1;const forward=drivingInput(c,keys,[],50);assert.ok(forward.steer<.5);assert.deepEqual(drivingInput(c,keys,[],-50),forward);assert.deepEqual(drivingInput(c,keys,[],50),forward);assert.equal(drivingInput(c,keys,[],0).steer,1);assert.equal(drivingInput(c,keys,[],1000).steer,.35);assert.equal(drivingInput(c,keys,[],NaN).steer,1);
 });
 test('controls revision preserves exact prior local livery bytes',verifyControlsRevision);
+
+test('new keyboard defaults invert both key pairs while saved bindings retain their meanings',()=>{
+ const fresh=readControls();assert.deepEqual(fresh.keys.left,['KeyD','ArrowRight']);assert.deepEqual(fresh.keys.right,['KeyA','ArrowLeft']);
+ const saved={...fresh,keys:{...fresh.keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
+ const restored=readControls(JSON.stringify(saved));assert.equal(drivingInput(restored,new Set(['KeyA']),[],0).steer,-1);assert.equal(drivingInput(restored,new Set(['KeyD']),[],0).steer,1);
+ assert.equal(steeringAxis(-1,fresh),-1);assert.equal(steeringAxis(1,fresh),1);
+});
