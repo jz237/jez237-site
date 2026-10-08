@@ -3,7 +3,7 @@ export {axleDrive} from './vehicle-physics';
 import {normalizeLivery,normalizeGroups,type LiveryLayer,type LiveryGroup} from './livery';
 import { DEFINITIONS, CAR_KINDS, type CarKind } from './rules';
 
-export type Tune = { gearing: number; suspension: number; differential: number; brakeBias: number; steering: number };
+export type Tune = { gearing: number; suspension: number; differential: number; brakeBias: number; steering: number; compression?:number; rebound?:number; rideHeight?:number; brakePressure?:number };
 export type Setup = { paint: number; trim: number; engine: number; tires: number; armor: number; tune: Tune; livery:LiveryLayer[] };
 export type Preset = { name: string; setup: Setup };
 export type GarageCar = { setup: Setup; presets: Preset[]; groups:LiveryGroup[] };
@@ -13,8 +13,12 @@ export const KINDS: CarKind[] = CAR_KINDS;
 export const TUNE_FIELDS: { key: keyof Tune; label: string; low: string; high: string; help: string }[] = [
   { key: 'gearing', label: 'Final drive', low: 'Top speed', high: 'Acceleration', help: 'Short gearing increases wheel torque and shifts sooner; long gearing raises the speed ceiling.' },
   { key: 'suspension', label: 'Suspension', low: 'Soft', high: 'Firm', help: 'Changes spring stiffness, damping and ride height. Soft absorbs uneven ground; firm limits body movement.' },
+  { key: 'compression', label: 'Compression damping', low: 'Soft', high: 'Firm', help: 'Adjusts damper resistance as a wheel moves upward. Softer settings absorb bumps; firm settings resist rapid compression. Added to the suspension preset.' },
+  { key: 'rebound', label: 'Rebound damping', low: 'Soft', high: 'Firm', help: 'Adjusts damper resistance as a wheel extends. Firmer settings calm bouncing, but excessive resistance slows wheel contact recovery. Added to the suspension preset.' },
+  { key: 'rideHeight', label: 'Ride height', low: 'Lower', high: 'Higher', help: 'Adjusts suspension rest length by up to 6 cm from the suspension preset. More clearance helps over rough ground; a taller chassis rolls more readily.' },
   { key: 'differential', label: 'Differential', low: 'Open', high: 'Locked', help: 'More lock maintains drive when one wheel unloads, with more resistance to turning under power.' },
   { key: 'brakeBias', label: 'Brake balance', low: 'Rear', high: 'Front', help: 'Moves braking force between axles. Rear bias makes the car easier to rotate under braking.' },
+  { key: 'brakePressure', label: 'Brake pressure', low: 'Gentle', high: 'Strong', help: 'Adjusts foot-brake force from 50% to 150%. Stopping distance depends on chassis response and tire grip; stronger is not always better. Use the setup comparison to check it. Handbrake force is unchanged.' },
   { key: 'steering', label: 'Steering range', low: 'Gentle', high: 'Sharp', help: 'Changes maximum steering angle; sharper steering needs smaller inputs at speed.' },
 ];
 const object = (v: unknown): Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v) ? v as Record<string, unknown> : {};
@@ -27,7 +31,9 @@ export function normalizeSetup(value: unknown, kind: CarKind): Setup {
   const raw = object(value), stock = stockSetup(kind), tune = object(raw.tune);
   return { livery:normalizeLivery(raw.livery), paint: Math.round(number(raw.paint, stock.paint, 0, 0xffffff)), trim: Math.round(number(raw.trim, stock.trim, 0, 0xffffff)),
     engine: Math.round(number(raw.engine, 0, 0, 3)), tires: Math.round(number(raw.tires, 0, 0, 3)), armor: Math.round(number(raw.armor, 0, 0, 3)),
-    tune: Object.fromEntries(TUNE_FIELDS.map(({key}) => [key, number(tune[key], 0, -1, 1)])) as Tune };
+    // Omit neutral additions so old signed backups and stock setup identities
+    // keep exactly their established shape. A nonzero adjustment is persisted.
+    tune: Object.fromEntries(TUNE_FIELDS.map(({key}) => [key, number(tune[key], 0, -1, 1)]).filter(([key,value])=>!['compression','rebound','rideHeight','brakePressure'].includes(key as string)||value!==0)) as Tune };
 }
 export function readGarage(value?: string | null): Garage {
   let raw: Record<string, unknown> = {};

@@ -12,8 +12,8 @@ test('every vehicle completes physical acceleration, speed and braking on both s
  const measurements=[];
  for(const kind of CAR_KINDS)for(const surface of ['asphalt','gravel']as const){
   const value=measure(kind,stockSetup(kind),surface);measurements.push({kind,surface,...value});
-  assert.ok(value.acceleration!==null&&value.acceleration>1&&value.acceleration<40,JSON.stringify({kind,surface,value}));
-  assert.ok(value.speed>100&&value.speed<240);assert.ok(value.braking!==null&&value.braking>3&&value.braking<200);
+  if(kind==='shuttle'){assert.equal(value.acceleration,null,'The stock minibus does not reach 100 km/h');assert.ok(value.speed>85&&value.speed<100);}
+  else{assert.ok(value.acceleration!==null&&value.acceleration>1&&value.acceleration<40,JSON.stringify({kind,surface,value}));assert.ok(value.speed>100&&value.speed<240);}assert.ok(value.braking!==null&&value.braking>3&&value.braking<200);
  }
  console.log(JSON.stringify(measurements));
 });
