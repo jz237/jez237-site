@@ -24,7 +24,7 @@ export function readControls(raw?:string|null):DrivingControls{
   if(entries===undefined&&['shiftUp','shiftDown','clutch'].includes(action)){const fallback=[...d.keys[action],'KeyZ','KeyX','KeyV','KeyB','KeyN','KeyL','KeyJ','KeyK','ShiftRight'].find(k=>!seen.has(k));entries=[fallback];}
  if(!Array.isArray(entries)||entries.length<1||entries.length>2){valid=false;break;}keys[action]=[];for(const key of entries){if(typeof key!=='string'||!allowedKey(key)||seen.has(key)){valid=false;break;}seen.add(key);keys[action].push(key);}}
  if(valid)d.keys=keys;
- if(validDrivingAssists(v.assists)&&(v.assists.traction!==DEFAULT_ASSISTS.traction||v.assists.stability!==DEFAULT_ASSISTS.stability))d.assists={...v.assists};
+ if(validDrivingAssists(v.assists)&&(v.assists.traction!==DEFAULT_ASSISTS.traction||v.assists.stability!==DEFAULT_ASSISTS.stability||(v.assists.abs??0)!==0))d.assists={...v.assists};
  if(v.transmission==='manual'||v.transmission==='clutch')d.transmission=v.transmission;
  for(const k of ['pad','axis','throttleButton','brakeButton','handbrakeButton','shiftUpButton','shiftDownButton','clutchButton'] as const)d[k]=Math.round(bound(v[k],k==='pad'?-1:0,k==='pad'?3:k==='axis'?7:31,d[k]));
  d.invert=v.invert===true;

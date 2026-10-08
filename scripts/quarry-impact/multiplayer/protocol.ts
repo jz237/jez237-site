@@ -41,7 +41,7 @@ export type Snapshot = {
   cars: CarState[]; damage: DamageEvent[]; ranking: number[];
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
-  capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true;
+  capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
   eventSupport?:true; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
