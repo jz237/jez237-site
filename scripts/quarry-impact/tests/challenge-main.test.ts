@@ -1,3 +1,5 @@
+import * as Career from '../src/career';
+import {showCareer} from '../src/career-ui';
 import * as DamageRules from '../src/damage-rules';
 import * as GridSetup from '../src/grid-setup';
 import * as Grid from '../src/grid-rules';
@@ -33,7 +35,7 @@ const mainText=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
 const main=ts.createSourceFile('main.ts',mainText,ts.ScriptTarget.ES2022,true,ts.ScriptKind.TS);
 export const observedMainHash=createHash('sha256').update(mainText).digest('hex');
 const selectors=['damageRule','clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceTimeLimit','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse','raceLabel','eventLabel'];
-const names=[...selectors,'modes','openProfile','bankRun','createCars','start','beginReplay','finish','menu','recover'];
+const names=[...selectors,'modes','openCareer','careerGroupForId','startCareerEvent','openProfile','bankRun','createCars','start','beginReplay','finish','menu','recover'];
 const declarations=names.map(name=>{
  const fn=main.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text===name);if(fn)return fn.getText(main);
  for(const node of main.statements)if(ts.isVariableStatement(node)){
@@ -50,6 +52,7 @@ const plain=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
  * layout, focus, accessibility or native form-behavior test. */
 class UINode {
  id='';className='';textContent='';dataset:Record<string,string>={};children:UINode[]=[];
+ focus(){}
  onclick:undefined|(()=>unknown);hidden=false;style={};attributes=new Map<string,string>();
  classList={remove(){},add(){}};
  private html='';
@@ -62,13 +65,13 @@ class UINode {
   }
  }
  get innerHTML(){return this.html;}
- setAttribute(name:string,value:string){this.attributes.set(name,value);if(name==='id')this.id=value;if(name==='class')this.className=value;if(name.startsWith('data-'))this.dataset[name.slice(5)]=value;}
+ setAttribute(name:string,value:string){this.attributes.set(name,value);if(name==='id')this.id=value;if(name==='class')this.className=value;if(name.startsWith('data-'))this.dataset[name.slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=value;}
  append(node:UINode){this.children.push(node);}prepend(node:UINode){this.children.unshift(node);}
  matches(selector:string){
   if(selector.startsWith('#'))return this.id===selector.slice(1);
   if(selector.startsWith('.'))return this.className.split(/\s+/).includes(selector.slice(1));
   const data=/^\[data-([\w-]+)(?:="([^"]*)")?\]$/.exec(selector);
-  return !!data&&data[1] in this.dataset&&(data[2]===undefined||this.dataset[data[1]]===data[2]);
+  return !!data&&this.attributes.has('data-'+data[1])&&(data[2]===undefined||this.attributes.get('data-'+data[1])===data[2]);
  }
  querySelectorAll(selector:string):UINode[]{return this.children.flatMap(node=>[...(node.matches(selector)?[node]:[]),...node.querySelectorAll(selector)]);}
  querySelector(selector:string):UINode|null{return this.querySelectorAll(selector==='.footer > div'?'.footer':selector)[0]??null;}
@@ -79,7 +82,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const quarry={course:getRaceCourse('quarry-v1'),props:[],puddles:[]},ironfield={course:getRaceCourse('ironfield-figure-eight-v1'),props:[],puddles:[]};
- const context:any={...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
@@ -232,3 +235,25 @@ test('extension unit plumbing: result-to-board retains discipline and displays t
  }
 });
 
+
+test('career production flow earns points, opens another discipline, returns to career after results and preserves stock rules',async()=>{
+ const h=harness(),preferences=h.preferences();h.f.openCareer();assert.equal(h.context.careerOpen,true);
+ assert.equal(await h.f.startCareerEvent('ravine-flight'),false,'locked group cannot launch');
+ await h.f.startCareerEvent('first-lap');assert.equal(h.context.careerRun,true);assert.equal(h.context.careerOpen,false);assert.equal(h.context.activeChallenge.id,'first-lap');assert.equal(h.context.cars.length,8);assert.ok(h.context.cars.every((c:any)=>JSON.stringify(c.setup)===JSON.stringify(stockSetup(c.kind))));
+ unitRaceOutcome(h);h.f.finish('CAREER RACE');assert.equal(Career.careerStatus(h.context.profile).available,3);assert.match(h.ui.innerHTML,/CAREER BOARD/);h.click('#challenge-board');assert.equal(h.context.careerOpen,true);assert.equal(h.context.careerRun,false);
+ h.click('[data-career-filter="stunts"]');h.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(h.context.profile).available,0);assert.equal(Career.careerStatus(readProfile(h.storage.get(PROFILE_KEY))).open.includes('flight-school'),true);
+ await h.f.startCareerEvent('ravine-flight');assert.equal(h.context.activeChallenge.id,'ravine-flight');assert.equal(h.context.mode,'playground');assert.equal(h.context.cars.length,1);assert.equal(h.preferences(),preferences);
+ h.f.menu();h.f.openProfile();assert.equal(h.context.careerRun,false);assert.equal(h.context.profileOpen,true);
+});
+test('career storage failure leaves points unspent and unlock closed; start failure preserves progress and returns to career',async()=>{
+ const h=harness({storage:true});h.context.profile.challenges['first-lap']={medal:3,best:64,attempts:1};h.f.openCareer('stunts');h.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(h.context.profile).available,3);assert.equal(Career.careerChallenge(h.context.profile,'ravine-flight'),undefined);assert.match(h.ui.innerHTML,/points have not been spent/);
+ const broken=harness({venue:true});broken.f.openCareer();assert.equal(await broken.f.startCareerEvent('first-lap'),false);assert.equal(broken.context.state,'menu');assert.equal(broken.context.careerOpen,true);assert.equal(broken.context.activeChallenge,undefined);assert.match(broken.ui.innerHTML,/could not start/);
+});
+
+test('all 27 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
+ for(const group of Career.CAREER_GROUPS)for(const id of group.events){
+  const h=harness();for(const g of Career.CAREER_GROUPS)for(const event of g.events)h.context.profile.challenges[event]={medal:3,best:1,attempts:1};h.context.profile.career={unlocked:Career.CAREER_GROUPS.filter(g=>g.cost).map(g=>g.id)};
+  assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;
+  assert.equal(await h.f.startCareerEvent(id),true);const c=Challenges.CHALLENGES.find(c=>c.id===id)!;assert.equal(h.context.activeChallenge,c);assert.equal(h.context.kind,c.car);assert.equal(h.context.mode,c.mode);assert.equal(h.context.activeVenue.course.id,Challenges.challengeCourse(c));assert.equal(h.f.eventDuration(),c.limit);assert.equal(h.context.careerRun,true);assert.equal(await h.f.startCareerEvent(id),false,'double launch is refused');
+ }
+});

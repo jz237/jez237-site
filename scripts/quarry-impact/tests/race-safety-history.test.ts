@@ -1,6 +1,7 @@
+import {restoreCareerBytes} from './career-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRaceSafetyPrevious,restoreRaceSafetyBytes,verifyRaceSafetyRevision} from './race-safety-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCareerBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RaceSafety preserves every prior fixture, vehicle asset, control and camera input',verifyRaceSafetyRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/race-safety/revision.json').toString());

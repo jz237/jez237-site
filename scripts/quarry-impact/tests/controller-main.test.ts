@@ -33,7 +33,7 @@ function harness(state='menu'){
  const ui=new Node(),calls:Record<string,number>={},navigation:{context:NavigationContext|null;handled:string[]}={context:null,handled:[]};
  let pads:readonly(Pad|null)[]=[pad()],time=0;
  const count=(name:string)=>calls[name]=(calls[name]??0)+1;
- const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
+ const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
   sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
   controllerNavigation:{sync(context:NavigationContext|null){navigation.context=context;},handle(command:string){navigation.handled.push(command);const context=navigation.context;if(command==='back')context?.back?.();else if(command==='accept'&&context?.initial)(context.root as unknown as Node).querySelector(context.initial)?.click();}},
   pause(){count('pause');c.resumeState=c.state;c.state='paused';const overlay=ui.add('#overlay');overlay.add('#resume').onclick=()=>c.resume();},
@@ -180,7 +180,7 @@ function frameBoundary(h:ReturnType<typeof harness>){
  const code=ts.transpileModule(resume.getText(main)+'\nfunction frame('+frame.parameters.map(p=>p.getText(main)).join(',')+'){'+prefix+'}\nglobalThis.frameBoundary=frame;',{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  let currentPad=pad(),wallTime=80;
  const order:string[]=[],cameraDt:number[]=[],renderAlpha:number[]=[],physicsInputs:Array<ReturnType<typeof drivingInput>>=[];
- Object.assign(h.c,{withWreckBatch,lastFrame:80,clock:4,elapsed:0,accumulator:0,frames:[],eventFrameTimes:[],capturedFrames:null,physics:{},orbit:{enabled:false},
+ Object.assign(h.c,{updateTrialGhost(){},withWreckBatch,lastFrame:80,clock:4,elapsed:0,accumulator:0,frames:[],eventFrameTimes:[],capturedFrames:null,physics:{},orbit:{enabled:false},
   navigator:{getGamepads:()=>[currentPad]},performance:{now:()=>wallTime},requestAnimationFrame(){order.push('raf');},
   document:{getElementById:(id:string)=>id==='overlay'?{remove(){h.ui.children.delete('#overlay');order.push('remove-overlay');}}:null},
   hud(){order.push('hud');},step(dt:number){order.push('physics');physicsInputs.push(h.functions.input());h.c.elapsed+=dt;},updateCamera(dt:number){order.push('camera');cameraDt.push(dt);},
@@ -211,4 +211,8 @@ test('actual frame measures elapsed time before controller resume advances the w
  timing.run(100,{7:1});assert.equal(timing.physicsInputs[0].throttle,1);assert.equal(driving.c.elapsed,1/60);
  timing.run(120,{9:1,7:1});assert.equal(driving.c.state,'paused');assert.equal(timing.physicsInputs.length,1,'Start is handled before another physics step can run');
  assert.deepEqual(timing.cameraDt,[.02,.02]);assert.ok(Math.abs(driving.c.clock-4.04)<1e-12);
+});
+
+test('career board has its own controller navigation and Back returns through the actual close callback',()=>{
+ const h=harness();h.c.careerOpen=true;const root=h.root('.career-board');h.button(root,'#career-close','closeCareer',()=>h.c.careerOpen=false);h.release();assert.equal(h.navigation.context?.key,'career');h.poll({1:1});assert.equal(h.calls.closeCareer,1);assert.equal(h.c.careerOpen,false);assert.equal(h.calls.startEvent,undefined);
 });

@@ -1,17 +1,20 @@
+import {normalizeCareerUnlocks} from './career';
 import { CHALLENGES, challengeMedal, challengeValue, lowerIsBetter, type Challenge, type Discipline } from './challenges';
 import type {RunStats} from './session-telemetry';
 export const PROFILE_KEY='quarry-impact-driver-v1';
 export type ChallengeRecord={medal:number;best:number|null;attempts:number};
-export type DriverProfile={version:1;xp:Record<Discipline,number>;events:number;wins:number;distance:number;damage:number;knockouts:number;challenges:Record<string,ChallengeRecord>;settled:string[]};
+export type DriverProfile={version:1;career?:{unlocked:string[]};xp:Record<Discipline,number>;events:number;wins:number;distance:number;damage:number;knockouts:number;challenges:Record<string,ChallengeRecord>;settled:string[]};
 export type Award={xp:Record<Discipline,number>;medal:number;improved:boolean;duplicate:boolean;qualified:boolean};
 const num=(v:unknown,max=1e9)=>typeof v==='number'&&Number.isFinite(v)?Math.max(0,Math.min(max,v)):0;
 const obj=(v:unknown):Record<string,any>=>v&&typeof v==='object'&&!Array.isArray(v)?v as any:{};
 export function readProfile(json?:string|null):DriverProfile {
   let raw:Record<string,any>={};try{const p=obj(JSON.parse(json??'{}'));if(p.version===1)raw=p;}catch{}
   const xp=obj(raw.xp),records=obj(raw.challenges);
-  return {version:1,xp:{racing:Math.floor(num(xp.racing)),impact:Math.floor(num(xp.impact)),stunts:Math.floor(num(xp.stunts))},events:Math.floor(num(raw.events)),wins:Math.floor(Math.min(num(raw.wins),num(raw.events))),distance:num(raw.distance),damage:num(raw.damage),knockouts:Math.floor(num(raw.knockouts)),
+  const profile:DriverProfile={version:1,xp:{racing:Math.floor(num(xp.racing)),impact:Math.floor(num(xp.impact)),stunts:Math.floor(num(xp.stunts))},events:Math.floor(num(raw.events)),wins:Math.floor(Math.min(num(raw.wins),num(raw.events))),distance:num(raw.distance),damage:num(raw.damage),knockouts:Math.floor(num(raw.knockouts)),
     challenges:Object.fromEntries(CHALLENGES.flatMap(c=>{const r=obj(records[c.id]);return Object.keys(r).length?[[c.id,{medal:Math.floor(num(r.medal,3)),best:typeof r.best==='number'&&Number.isFinite(r.best)&&r.best>=0?r.best:null,attempts:Math.floor(num(r.attempts))}]]:[];})),
     settled:Array.isArray(raw.settled)?raw.settled.filter((id:unknown)=>typeof id==='string'&&id.length<100).slice(-256):[]};
+  if(raw.career!==undefined)profile.career={unlocked:normalizeCareerUnlocks(obj(raw.career).unlocked,profile)};
+  return profile;
 }
 export function levelFor(xp:number){
   const level=Math.floor((Math.sqrt(1+8*num(xp)/150)-1)/2)+1;

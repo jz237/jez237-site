@@ -1,3 +1,4 @@
+import {restoreCareerBytes,verifyCareerRevision} from './career-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,17 @@ export function readRaceSafetyPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreRaceSafetyBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreCareerBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readRaceSafetyPrevious(file);
 }
 export function verifyRaceSafetyRevision(){
+ verifyCareerRevision();
  const manifest=revision();assert.equal(manifest.baseline,'b78b25386611301034d94e87b99c670c5e4eae7d');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreCareerBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreRaceSafetyBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the RaceSafety release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreCareerBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the RaceSafety release');
  assert.equal(manifest.previousFixtureCount,1086);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1086);
 }
