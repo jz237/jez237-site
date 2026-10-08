@@ -1,6 +1,7 @@
+import {restoreChampionshipFieldsBytes} from './championship-fields-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTrialGhostPrevious,restoreTrialGhostBytes,verifyTrialGhostRevision} from './trial-ghost-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreChampionshipFieldsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TrialGhost preserves every prior fixture, vehicle asset, control and camera input',verifyTrialGhostRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/trial-ghost/revision.json').toString());
