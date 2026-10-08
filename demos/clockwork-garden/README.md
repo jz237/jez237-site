@@ -282,6 +282,7 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
   reflection does that) and inside the house (the real shadows do).
+- **The pool without its mirror** (the `low` tier, or once the frame governor has dropped the mirror pass): a sky is laid on the water by hand (the haze at the horizon, blue by day, dark by night, stronger at a grazing angle, bent by the ripples), so it reads as water and not as a black hole.
 - **The bee in the water**: its rig, with its lights' glows, is drawn into the pool's mirror pass while the bee can fly (`Pond.mirrorBee`, 49 meshes; they cost nothing unless the bee is in
   the mirror camera's frustum), so a bee skimming the pool, seen from the side or low, has its reflection with the red and green lights and the headlamp beam in the water.
 - **Grass and daisies** (the lawn shader in `explore/scenery.js`): within about 190 units of the camera the lawn has grain (noise drawn out along a direction picked per cell, two
