@@ -33,7 +33,7 @@ function harness(faults:Faults={}){
   bankRun(){calls.push('bank run');},loading(){calls.push('loading');ui.innerHTML='loading';},toast(){calls.push('audio notice');},setQuarryMode(){calls.push('venue mode');},
   sound:{async init(){calls.push('audio');if(faults.audio)throw Error('audio unavailable');},pause(value:boolean){calls.push('sound '+value);}},
   staticShadows:{bindReceivers(){calls.push('bind shadows');}},async warmPrograms(){calls.push('warm programs');await Promise.resolve();if(faults.warm)throw Error('GPU compilation failed');},
-  customEvent:()=>true,eventOptions:{direction:'forward'},crypto:{randomUUID:()=> 'new-run'},SessionTelemetry:class {},
+  clubRound:()=>null,customEvent:()=>true,eventOptions:{direction:'forward'},crypto:{randomUUID:()=> 'new-run'},SessionTelemetry:class {},
   document:{hidden:false,createElement:node},location:{reload(){reloads++;}},hud(){calls.push('hud');ui.innerHTML='hud';},pause(){calls.push('pause');context.state='paused';},
   captureReplayFrame(cars:unknown[],props:unknown[],_epochs:number[],tyreModel?:1,engineModel?:1){calls.push(`capture ${cars.length}/${props.length}`);return frame(cars.length,props.length,tyreModel,engineModel);},
   createCars(attract=false){

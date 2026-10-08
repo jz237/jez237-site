@@ -1,3 +1,4 @@
+import * as Timed from '../src/timed-race';
 import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from '../src/ai-difficulty';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import assert from 'node:assert/strict';
@@ -54,7 +55,7 @@ async function physicsMainHarness(names:readonly string[],overrides:Record<strin
  cars.forEach((car,i)=>car.place(-30+i*10,0,0));
  for(let tick=0;tick<90;tick++){cars.forEach(c=>c.preStep(1/60));world.step();cars.forEach(c=>c.postStep(1/60,0));}
  const venue={course:{...getRaceCourse('quarry-v1'),...surface,outside:()=>false},props:[]},calls:{finish:string[];input:number;ai:number;recover:number;impacts:number}={finish:[],input:0,ai:0,recover:0,impacts:0};
- const context:any={T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,structuredClone,activeClubRound:null,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,keys:new Set(),runSettled:false,quarry:{arenaLayout:{x:0,z:0,radius:45}},CAR_KINDS,DEFINITIONS,derbyGridSlot,directionForCar,eventDerbyOrder,checkRoute,lapProgress,stepScoreRespawns,courseRoute,courseRecoverySlot,vehicleContact,vehicleContactManifold,
+ const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,structuredClone,activeClubRound:null,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,keys:new Set(),runSettled:false,quarry:{arenaLayout:{x:0,z:0,radius:45}},CAR_KINDS,DEFINITIONS,derbyGridSlot,directionForCar,eventDerbyOrder,checkRoute,lapProgress,stepScoreRespawns,courseRoute,courseRecoverySlot,vehicleContact,vehicleContactManifold,
   cars,physics:world,events,fx,state:'playing',elapsed:0,countdown:0,demo:false,autopilot:false,testInput:null,online:null,activeChallenge:undefined,waypointRace:null,activeVenue:venue,quarryVenue:venue,
   eventOptions:readEventOptions(),demoOptions:{laps:2,duration:90},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),telemetry:new SessionTelemetry(),collisions:0,
   drivers:{memory:new Map()},DERBY_ARENA:{x:0,z:0,radius:45},mode:'race',impactAudioSeverity:()=>0,
@@ -70,7 +71,7 @@ import {ReplayRecorder} from '../src/replay-data';
 import {readProfile,PROFILE_KEY,settleRun} from '../src/progression';
 import {demoCarKind,demoVehicleSetup} from '../src/demo-session';
 import {WaypointRace} from '../src/waypoint-race';
-const selectors=['clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse'] as const;
+const selectors=['clubRound','customEvent','aiDifficulty','onlineRules','raceFormat','raceTimeLimit','raceDirection','raceRoute','scoreDerby','derbyRanking','eventDuration','raceLaps','preferredCourse'] as const;
 const clubNames=['saveClubCup','syncClubAwards','bankRun','openClubCup','closeClubCup','startClubRound','clubRow','freezeClubPlayer','finishClubEvent'] as const;
 const uuid='08f09f83-cd9e-4db9-972e-3d99bd654578';
 const plain=<T>(v:T):T=>JSON.parse(JSON.stringify(v));
@@ -85,7 +86,7 @@ function base(overrides:Record<string,unknown>={}){
  const ui={innerHTML:'',classList:{remove(){}},querySelector(selector:string){if(!nodes.has(selector))nodes.set(selector,node());return nodes.get(selector);},querySelectorAll(){return[];}};
  const car=(id:number,kind:CarKind='tern')=>({id,kind,setup:stockSetup(kind),paintColor:new T.Color(0xffffff),root:new T.Group(),previous:new T.Vector3(),current:new T.Vector3(id*8,0,0),currentQ:new T.Quaternion(),health:100,passed:0,nextCheckpoint:1,checkpointDistance:Infinity,lap:1,finished:false,finishTime:0,penalty:0,inflicted:0,input:{throttle:1,steer:0,brake:0,handbrake:false},velocity:new T.Vector3(),forward:new T.Vector3(0,0,1),right:new T.Vector3(1,0,0),controller:{wheelIsInContact:()=>true},preStep(){},postStep(){},render(){calls.render++;},dispose(){},place(x:number,z:number){this.current.set(x,.89,z);}});
  const quarryVenue={course:getRaceCourse('quarry-v1'),props:[]},ironfieldVenue={course:getRaceCourse('ironfield-figure-eight-v1'),props:[]};
- const context:any={T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,openTimeTrialSetup(){},COURSE_NAMES,RACE_NAMES,structuredClone,Error,Date,console,resolveCourseId,derbyGridSlot,directionForCar,eventDerbyOrder,courseRoute,courseRecoverySlot,courseGridSlot,checkRoute,lapProgress,stepScoreRespawns,stockSetup,readProfile,PROFILE_KEY,settleRun,SessionTelemetry,ReplayRecorder,CAR_KINDS,DEFINITIONS,WaypointRace,demoCarKind,demoVehicleSetup,
+ const context:any={...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,openTimeTrialSetup(){},COURSE_NAMES,RACE_NAMES,structuredClone,Error,Date,console,resolveCourseId,derbyGridSlot,directionForCar,eventDerbyOrder,courseRoute,courseRecoverySlot,courseGridSlot,checkRoute,lapProgress,stepScoreRespawns,stockSetup,readProfile,PROFILE_KEY,settleRun,SessionTelemetry,ReplayRecorder,CAR_KINDS,DEFINITIONS,WaypointRace,demoCarKind,demoVehicleSetup,
   activeClubRound:null,clubWarning:'',clubOpen:false,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,
   activeChallenge:undefined,demo:false,online:null,kind:'tern',mode:'race',eventOptions:{...readEventOptions(),course:'ironfield-figure-eight-v1',field:24,laps:9,direction:'reverse',race:'random',derby:'score',duration:420},demoOptions:{field:6,laps:4,duration:30,camera:'director',loop:'stop',lineup:'mixed',build:'stock'},
   profile:readProfile(),profileStorageWarning:'',telemetry:new SessionTelemetry(),runId:'ordinary-run',runSettled:false,lastAward:null,state:'playing',elapsed:10,preparingEvent:false,keys:new Set(['KeyW']),testInput:null,cars:CAR_KINDS.map((kind,i)=>car(i,kind)),activeVenue:quarryVenue,quarryVenue,waypointRace:null,combat:new CombatScoreboard(),autopilot:false,
@@ -248,4 +249,39 @@ test('every championship grid matches its round direction, checkpoint debt and r
    f.beginReplay();assert.equal(h.context.recorder.meta.reverse,round.direction==='reverse');
   }
  }
+});
+
+test('timed races use actual gate crossing on all courses and directions, wait for the field and close honest DNFs',()=>{
+ for(const course of Object.keys(COURSE_NAMES))for(const direction of ['forward','reverse','opposing']){
+  const h=base({eventOptions:{...readEventOptions(),course,direction,raceDuration:60,laps:1},elapsed:59,telemetry:null});
+  h.context.activeVenue={course:{...getRaceCourse(course as any),outside:()=>false},props:[]};h.context.quarryVenue=h.context.activeVenue;
+  h.context.input=()=>({throttle:0,steer:0,brake:0,handbrake:false});h.context.ai=h.context.input;
+  h.context.finish=()=>{h.context.state='result';};
+  const f=load(h,[...selectors,'rankRace','step']),player=h.context.cars[0],gate=courseRoute(h.context.activeVenue.course,'forward')[0];
+  Object.assign(player,{passed:23,nextCheckpoint:0,penalty:5});player.current.set(gate.x,0,gate.z);f.step(1/60);
+  assert.equal(player.passed,24);assert.equal(player.finished,false,'Lap limit ignored before timed expiry');
+  Object.assign(player,{passed:47,nextCheckpoint:0,checkpointDistance:Infinity});h.context.elapsed=61;f.step(1/60);
+  assert.equal(player.finished,true);assert.equal(player.passed,48);assert.equal(player.finishTime,66+1/60);assert.equal(h.context.state,'playing');
+  const frozen=player.finishTime;h.context.elapsed=179;f.step(1/60);assert.equal(h.context.state,'playing');h.context.elapsed=180;f.step(1/60);
+  assert.equal(h.context.state,'result');assert.equal(player.finishTime,frozen);assert.equal(player.passed,48);assert.ok(h.context.cars.slice(1).every((c:any)=>!c.finished&&c.finishTime===0));
+ }
+});
+
+test('timed result records have their own category and retry/replay remain connected',()=>{
+ const h=base({eventOptions:{...readEventOptions(),raceDuration:60},elapsed:82,telemetry:null,persist(){},formatTime:(n:number)=>n.toFixed(2),awardText:()=>''});
+ h.context.cars.forEach((c:any,i:number)=>Object.assign(c,{finished:true,passed:48,finishTime:80+i}));
+ h.context.drivers.difficulty='amateur';const f=load(h,[...selectors,'rankRace','finish']);f.finish('TIMED RACE COMPLETE');
+ assert.equal(h.context.state,'result');assert.match(h.context.ui.innerHTML,/2 LAPS/);assert.match(h.context.ui.innerHTML,/incl. penalties/);assert.equal(h.calls.studio,1);
+ assert.deepEqual(Object.keys(h.context.saved.best),['timed-race:quarry-v1:forward:60:11']);
+ h.nodes.get('#again')!.onclick!();assert.equal(h.calls.start,1);assert.equal(h.context.state,'countdown');
+});
+
+
+test('a timed DNF never awards a race win and a wreck cannot coast into a classified finish',()=>{
+ const h=base({eventOptions:{...readEventOptions(),raceDuration:60},elapsed:180,persist(){},formatTime:(n:number)=>String(n),awardText:()=>''});
+ h.context.drivers.difficulty='amateur';h.context.cars[0].passed=23;h.context.cars.slice(1).forEach((c:any)=>c.passed=0);
+ const f=load(h,[...selectors,'rankRace','finish']);f.finish('TIMED RACE COMPLETE');
+ assert.equal(h.context.telemetry.stats.won,false);assert.equal(h.context.telemetry.stats.finished,false);assert.deepEqual(Object.keys(h.context.saved.best),[]);assert.match(h.context.ui.innerHTML,/DNF/);
+ const b=stepFixture(0);b.context.activeClubRound=null;b.context.clubCup=null;b.context.eventOptions={...readEventOptions(),raceDuration:60};b.context.demo=true;b.context.demoOptions.raceDuration=60;b.context.elapsed=61;
+ const c=b.context.cars[1],gate=courseRoute(b.context.activeVenue.course,'forward')[0];Object.assign(c,{health:0,passed:23,nextCheckpoint:0,checkpointDistance:Infinity});c.current.set(gate.x,0,gate.z);b.f.step(1/60);assert.equal(c.finished,false);assert.equal(c.finishTime,0);
 });
