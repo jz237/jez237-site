@@ -15,13 +15,18 @@ export function markCollision(panels:readonly T.Mesh[],contact:T.Vector3,directi
  // Center the small field on reachable bodywork. A collider witness may lie
  // outside the skin or in an open cockpit; a barely overlapping field can
  // otherwise change vertices by an invisible fraction of a millimetre.
- let at:T.Vector3|undefined,best=Infinity;const vertex=new T.Vector3();
+ let at:T.Vector3|undefined,best=Infinity,bestOrder=Infinity;const vertex=new T.Vector3();
  const bounds=new T.Box3();
- for(const panel of eligible){
+ // Search the nearest panel bounds first, retaining original panel/vertex
+ // order for equal-distance witnesses so every resulting mark stays exact.
+ const candidates=eligible.map((panel,order)=>{
   if(!panel.geometry.boundingBox)panel.geometry.computeBoundingBox();
-  if(bounds.copy(panel.geometry.boundingBox!).applyMatrix4(panel.userData.wreckToModel).distanceToPoint(contact)**2>best)continue;
+  return{panel,order,distance:bounds.copy(panel.geometry.boundingBox!).applyMatrix4(panel.userData.wreckToModel).distanceToPoint(contact)**2};
+ }).sort((a,b)=>a.distance-b.distance||a.order-b.order);
+ for(const {panel,order,distance:lowerBound}of candidates){
+  if(lowerBound>best)break;
   const position=panel.geometry.attributes.position,toModel=panel.userData.wreckToModel as T.Matrix4;
-  for(let i=0;i<position.count;i++){vertex.fromBufferAttribute(position,i).applyMatrix4(toModel);const distance=vertex.distanceToSquared(contact);if(distance<best){best=distance;at=vertex.clone();}}
+  for(let i=0;i<position.count;i++){vertex.fromBufferAttribute(position,i).applyMatrix4(toModel);const distance=vertex.distanceToSquared(contact);if(distance<best||distance===best&&order<bestOrder){best=distance;bestOrder=order;at=vertex.clone();}}
  }
  if(!at)return false;
  let marked=false;
