@@ -87,11 +87,12 @@ export const BRACKEN_SOLIDS: readonly BrackenSolid[] = (() => { const result: Br
         result.push({ id: 'bracken_barrier_' + i + '_' + side, x, y: height(x, z) + .65, z, half: [.32, .85, (Math.hypot(b.x - a.x, b.z - a.z) + .12) / 2], yaw: Math.atan2(b.x - a.x, b.z - a.z), material: i % 8 < 4 ? 'concrete' : 'stripe' });
     } for (const side of [-1, 1])
     result.push({ id: 'bracken_finish_' + side, x: 0, y: 3.6, z: -82 + 18 * side, half: [.22, 3.6, .22], yaw: 0, material: 'steel' }); result.push({ id: 'bracken_bridge', x: 0, y: 7.3, z: -82, half: [.3, .3, 18.22], yaw: 0, material: 'steel' }); return result; })();
-export const BRACKEN = { id: 'bracken-rallycross-v1' as const, name: 'Bracken Rallycross', length, halfWidth: 12, checkpointRadius: 16, point, samples, checkpoints: Array.from({ length: 24 }, (_, i) => point(i / 24)), height, distance: (x: number, z: number) => nearest(x, z).distance,
+export const BRACKEN = { isDrivingObstacle:(collider:R.Collider)=>(collider.parent()?.userData as {courseSurface?:string}|undefined)?.courseSurface!=='bracken-rallycross-v1', id: 'bracken-rallycross-v1' as const, name: 'Bracken Rallycross', length, halfWidth: 12, checkpointRadius: 16, point, samples, checkpoints: Array.from({ length: 24 }, (_, i) => point(i / 24)), height, distance: (x: number, z: number) => nearest(x, z).distance,
     surface(x: number, z: number): 'asphalt' | 'gravel' { return brackenGroundSample(x, z).asphalt ? 'asphalt' : 'gravel'; },
     outside: (x: number, y: number, z: number) => Math.abs(x) > 172 || Math.abs(z) > 132 || y < -8,
     buildPhysics(api: typeof R, world: R.World): number[] { const owned: number[] = []; try {
         const ground = world.createRigidBody(api.RigidBodyDesc.fixed());
+        ground.userData={courseSurface:'bracken-rallycross-v1'};
         owned.push(ground.handle);
         const tiles: R.Collider[] = [];
         for (let z = 0; z < rows - 1; z += 16)

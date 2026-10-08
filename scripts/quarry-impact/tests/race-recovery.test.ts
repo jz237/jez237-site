@@ -57,3 +57,15 @@ test('actual AI handler waits when physics blocks every candidate',()=>{
 test('waypoint and derby events retain their existing recovery behavior',()=>{
  for(const mode of ['race','derby']){const h=mainHarness();h.context.mode=mode;if(mode==='race')h.context.waypointRace={navigation:()=>({next:1})};for(let i=0;i<2100;i++)h.step();assert.equal(h.calls.length,0);}
 });
+
+test('rollover and off-track AI recoveries choose free space and never stack on another entrant',()=>{
+ for(const reason of ['roll','offTrack']){
+  const h=mainHarness(),parked={...car(),id:1,current:{x:0,z:0},health:0,finished:true};h.context.cars.push(parked);
+  if(reason==='roll')h.c.rollTime=5;else{h.c.current={x:30,z:50};h.c.offTrackTime=8;}
+  h.step();assert.equal(h.calls.length,1);const [x,z]=h.calls[0];assert.ok(Math.hypot(x,z)>6);assert.ok(z<=0);assert.equal(h.c.penalty,7);assert.equal(h.c.passed,5);assert.equal(h.c.health,64);assert.equal(h.c.scars,7);assert.equal(h.c.checkpointDistance,Infinity);
+ }
+});
+test('blocked rollover recovery waits without moving, repairing, penalizing or erasing progress',()=>{
+ const h=mainHarness();h.c.rollTime=5;h.context.physics.intersectionWithShape=()=>({});h.step();assert.equal(h.calls.length,0);assert.equal(h.c.penalty,2);assert.equal(h.c.passed,5);assert.equal(h.c.scars,7);assert.equal(h.c.health,64);assert.equal(h.context.drivers.memory.size,1);
+ h.context.physics.intersectionWithShape=()=>null;h.step();assert.equal(h.calls.length,1);assert.equal(h.c.penalty,7);
+});
