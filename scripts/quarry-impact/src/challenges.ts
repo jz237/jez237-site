@@ -54,6 +54,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('coupe-pinecrest','Ridge ascent','coupe',1,[150,95,68]),course:'pinecrest-ridge-v1'},
   {...race('buggy-pinecrest','Woodland runner','buggy',1,[150,95,68]),course:'pinecrest-ridge-v1'},
   {...race('shuttle-pinecrest','Uphill service','shuttle',2,[300,195,140],25),course:'pinecrest-ridge-v1'},
+  {...race('regent-dockside','Dockside heavyweight','regent',1,[160,100,70]),course:'dockside-loop-v1'},
+  {...race('carrier-dockside','Harbor double shift','van',2,[300,195,135],25),course:'dockside-loop-v1'},
+  {...race('buggy-fairground','Fairground flyer','buggy',1,[150,95,65]),course:'fairground-scramble-v1'},
+  {...race('coupe-merefield','Runway perimeter','coupe',1,[130,85,60]),course:'merefield-airfield-v1'},
+  {...race('regent-millhaven','Timber heavyweight','regent',1,[160,100,65],35),course:'millhaven-rally-v1'},
+  {...race('shuttle-millhaven','Mill shuttle endurance','shuttle',2,[320,200,135],25),course:'millhaven-rally-v1'},
 ];
 /** Only circuit challenges select another venue; the arena and ramps stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode==='race'?resolveCourseId(c.course):'quarry-v1';
