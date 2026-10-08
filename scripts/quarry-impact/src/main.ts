@@ -305,7 +305,7 @@ function openClubCup(notice='',selection?:ClubSeriesId){
   if(selection&&clubCup&&clubCup.phase!=='complete'&&clubSeries(clubCup).id!==selection)notice='Your saved '+clubSeries(clubCup).name+' is in progress. Finish or restart it before choosing another series.';
   keys.clear();clubOpen=true;syncClubAwards();if(notice)clubWarning=[notice,clubWarning].filter(Boolean).join(' ');
   showClubCup(ui,selection&&clubCup?.phase==='complete'?null:clubCup,kind,{
-    create:(series,difficulty,lineup)=>{clubCup=createClubCup(kind,crypto.randomUUID(),Date.now(),series,difficulty,lineup);saveClubCup();openClubCup();},
+    create:(series,difficulty,lineup,field)=>{clubCup=createClubCup(kind,crypto.randomUUID(),Date.now(),series,difficulty,lineup,field);saveClubCup();openClubCup();},
     start:()=>{void startClubRound();},close:closeClubCup,career:()=>{closeClubCup();openCareer();},
     abandon:()=>{try{localStorage.removeItem(CLUB_CUP_KEY);clubCup=null;clubWarning='';}catch{clubWarning='The saved cup could not be reset. Please try again.';}openClubCup();},
   },[clubWarning,profileStorageWarning].filter(Boolean).join(' '),clubRecords,selection);
