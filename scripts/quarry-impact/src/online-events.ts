@@ -1,3 +1,5 @@
+import {validCombatFeats,type CombatFeatState,COMBAT_AWARDS} from './combat-feats';
+import type {CombatRecord as ScoreRecord} from './event-rules';
 import {CombatScoreboard,DEFAULT_EVENT,RACE_NAMES,type EventOptions} from './event-rules';
 import {WaypointRace,waypointSequence,type WaypointOrder} from './waypoint-race';
 import type {Mode} from './rules';
@@ -5,8 +7,8 @@ import type {Mode} from './rules';
 export type OnlineEventRules=Omit<EventOptions,'field'>;
 export const DEFAULT_ONLINE_EVENT:OnlineEventRules=(({field,...rules})=>rules)(DEFAULT_EVENT);
 export type WaypointRecord={id:number;round:number;visited:number[];passed:number;finished:boolean};
-export type CombatRecord={id:number;damage:number;knockouts:number;deaths:number;respawnAt:number};
-export type OnlineEventState={rules:OnlineEventRules;seed:number;waypoints?:WaypointRecord[];combat?:CombatRecord[]};
+export type CombatRecord=ScoreRecord&{id:number};
+export type OnlineEventState={rules:OnlineEventRules;seed:number;waypoints?:WaypointRecord[];combat?:CombatRecord[];feats?:CombatFeatState};
 const integer=(v:unknown,min:number,max:number):v is number=>typeof v==='number'&&Number.isInteger(v)&&v>=min&&v<=max;
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 /** Network rules are rejected rather than silently clamped to a different event. */
@@ -27,12 +29,13 @@ export function validOnlineEventState(v:unknown,mode:Mode,count:number):v is Onl
     }))return false;
   }else if(v.waypoints!==undefined)return false;
   if(mode==='derby'&&rules.derby==='score'){
-    if(!rows(v.combat)||!v.combat.every(p=>typeof p.damage==='number'&&Number.isFinite(p.damage)&&p.damage>=0&&p.damage<=1e9&&integer(p.knockouts,0,1e6)&&integer(p.deaths,0,1e6)&&typeof p.respawnAt==='number'&&Number.isFinite(p.respawnAt)&&p.respawnAt>=0&&p.respawnAt<=rules.duration+5))return false;
-  }else if(v.combat!==undefined)return false;
+    if(!rows(v.combat)||!v.combat.every(p=>typeof p.damage==='number'&&Number.isFinite(p.damage)&&p.damage>=0&&p.damage<=1e9&&integer(p.knockouts,0,1e6)&&integer(p.deaths,0,1e6)&&typeof p.respawnAt==='number'&&Number.isFinite(p.respawnAt)&&p.respawnAt>=0&&p.respawnAt<=rules.duration+5&&validBonus(p,rules.duration)))return false;
+    if(v.feats!==undefined&&!validCombatFeats(v.feats,count,rules.duration))return false;
+  }else if(v.combat!==undefined||v.feats!==undefined)return false;
   return true;
 }
 export function restoreOnlineProgress(state:OnlineEventState,waypoints:WaypointRace|null,combat:CombatScoreboard){
-  combat.reset();for(const {id,...r}of state.combat??[])combat.records.set(id,{...r});
+  combat.reset();for(const {id,...r}of state.combat??[])combat.records.set(id,{...r,...(r.impacts?{impacts:[...r.impacts] as [number,number,number]}:{}),...(r.award?{award:{...r.award}}:{})});combat.feats.restore(state.feats);
   if(waypoints){waypoints.progress.clear();for(const r of state.waypoints??[])Object.assign(waypoints.get(r.id),{round:r.round,visited:new Set(r.visited),passed:r.passed,finished:r.finished});}
 }
 export class OnlineEvent {
@@ -46,7 +49,16 @@ export class OnlineEvent {
   get score(){return this.mode==='derby'&&this.rules.derby==='score';}
   snapshot(count:number):OnlineEventState{return{rules:copyOnlineEventRules(this.rules),seed:this.seed,
     ...(this.waypoints?{waypoints:Array.from({length:count},(_,id)=>{const p=this.waypoints!.get(id);return{id,round:p.round,visited:[...p.visited],passed:p.passed,finished:p.finished};})}:{}),
-    ...(this.score?{combat:Array.from({length:count},(_,id)=>({id,...this.combat.get(id)}))}:{})};}
+    ...(this.score?{combat:Array.from({length:count},(_,id)=>({id,...structuredClone(this.combat.get(id))})),feats:this.combat.feats.snapshot()}:{})};}
   restore(state:OnlineEventState,count:number){if(!validOnlineEventState(state,this.mode,count)||!(Object.keys(this.rules)as (keyof OnlineEventRules)[]).every(k=>state.rules[k]===this.rules[k])||state.seed!==this.seed)throw Error('Invalid saved event');restoreOnlineProgress(state,this.waypoints,this.combat);}
 }
 export function onlineEventLabel(mode:Mode,rules:OnlineEventRules){return mode==='race'?`${RACE_NAMES[rules.race]} · ${rules.laps} ${rules.race==='laps'?'laps · '+rules.direction:'rounds'}`:mode==='derby'?`${rules.derby==='score'?'Score derby · respawns':'Survival derby'} · ${rules.duration/60} min`:'Destruction playground';}
+
+function validBonus(p:Record<string,unknown>,duration:number){
+ if(p.bonus===undefined&&p.spins===undefined&&p.impacts===undefined&&p.award===undefined)return true;
+ if(!integer(p.bonus,0,1e9)||(p.spins!==undefined&&!integer(p.spins,0,1e6))||(p.impacts!==undefined&&(!Array.isArray(p.impacts)||p.impacts.length!==3||!p.impacts.every(n=>integer(n,0,1e6)))))return false;
+ const hits=(p.impacts??[0,0,0])as number[];
+ if(p.bonus!==hits[0]*10+hits[1]*25+hits[2]*50+Number(p.spins??0)*75)return false;
+ const a=p.award as Record<string,unknown>|undefined;
+ return a===undefined||!!a&&Object.hasOwn(COMBAT_AWARDS,String(a.kind))&&a.points===COMBAT_AWARDS[a.kind as keyof typeof COMBAT_AWARDS].points&&typeof a.time==='number'&&Number.isFinite(a.time)&&a.time>=0&&a.time<=duration+1;
+}

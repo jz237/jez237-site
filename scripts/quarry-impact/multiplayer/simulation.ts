@@ -1,3 +1,4 @@
+import {combatMotion} from '../src/combat-feats';
 import {validTransmissionState} from '../src/transmission';
 import type {VehicleStructure} from '../src/vehicle-structure';
 import {stalledByImpact,validEngineStall} from '../src/engine-stall';
@@ -88,7 +89,7 @@ export class Simulation {
   recover(id: number) {
     const c = this.cars[id], s = c?.state;
     if (!s || this.phase !== 'playing' || this.elapsed-c.lastRecovery<5 || (s.health<=0 && this.mode!=='playground')) return false;
-    c.lastRecovery = this.elapsed;
+    c.lastRecovery = this.elapsed;this.event?.combat.feats.remove(id);
     if (this.mode === 'playground') { s.health=100;s.engineStall=0;s.transmission=undefined;s.gear=1; s.damageLeft=s.damageRight=0; s.repair++;s.dents=[];s.components=freshComponents();this.damage=this.damage.filter(d=>d.car!==id);this.place(c,s.p.x,s.p.z,Math.atan2(s.v.x,s.v.z)); }
     else if (this.mode === 'race') {
       const waypoints=this.event?.waypoints;
@@ -141,6 +142,8 @@ export class Simulation {
     if(this.phase==='countdown'){this.countdown-=STEP;if(this.countdown<=0)this.phase='playing';return;}
     this.elapsed+=STEP;
     for(const c of this.cars){if(!humans.has(c.state.id))c.state.input=this.ai(c);this.drive(c);}
+    const scoreMotion=this.event?.score?this.cars.map(c=>combatMotion(c.state.id,c.state.p,c.state.q,c.state.v,c.body.angvel().y,c.state.health,[0,1,2,3].filter(i=>c.controller.wheelIsInContact(i)).length)):[];
+    if(this.event?.score)this.event.combat.sample(scoreMotion,this.elapsed);
     const impactVelocities=this.cars.map(c=>({...c.state.v}));
     const collisionMotion=captureCollisionMotion(this.world);
     this.world.step(this.queue);
@@ -172,7 +175,7 @@ export class Simulation {
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
         const point=car===a?point1:point2,s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=dir(other?impactVelocities[other.state.id]:{x:0,y:0,z:0},impactVelocities[s.id]);
         if(received<.1)continue;
-        const before=s.health;s.health=Math.max(0,s.health-received);if(other){other.state.inflicted+=actual;if(this.event?.score)this.event.combat.hit(other.state.id,s.id,before,s.health,this.elapsed);}
+        const before=s.health;s.health=Math.max(0,s.health-received);if(other){other.state.inflicted+=actual;if(this.event?.score){this.event.combat.hit(other.state.id,s.id,before,s.health,this.elapsed);this.event.combat.contact(scoreMotion[other.state.id],scoreMotion[s.id],actual,this.elapsed);}}
         const local=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
         if(local.x<0)s.damageLeft+=received;else s.damageRight+=received;
         const localDirection=rotate(direction,{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});

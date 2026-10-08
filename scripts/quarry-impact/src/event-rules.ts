@@ -1,3 +1,4 @@
+import {CombatFeats,type CombatMotion,type CombatAward} from './combat-feats';
 import {ARENA_NAMES,isArenaId,resolveArenaId,type ArenaId} from './arena-id';
 import {isDamageRule,type DamageRule} from './damage-rules';
 import {isGridLineup,isGridPerformance,type GridLineup,type GridPerformance} from './grid-rules';
@@ -35,11 +36,15 @@ export function checkRoute(route:readonly RoutePoint[],x:number,z:number,next:nu
   return {passed:distance<radius&&distance<lastDistance,distance};
 }
 export function lapProgress(passed:number,laps:number){return {lap:Math.max(1,Math.floor(passed/24)+1),finished:passed>=laps*24};}
-export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number};
+export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number;bonus?:number;spins?:number;impacts?:[number,number,number];award?:CombatAward};
 /** Collision damage uses actual health loss; a disabled opponent pays out once per life. */
 export class CombatScoreboard {
   readonly records=new Map<number,CombatRecord>();
-  reset(){this.records.clear();}
+  readonly feats=new CombatFeats();
+  award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='spin')r.spins=(r.spins??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
+  contact(attacker:CombatMotion,victim:CombatMotion,damage:number,time:number){const award=this.feats.contact(attacker,victim,damage,time);if(award)this.award(attacker.id,award);}
+  sample(cars:readonly CombatMotion[],time:number){for(const {id,award}of this.feats.sample(cars,time))this.award(id,award);}
+  reset(){this.records.clear();this.feats.reset();}
   get(id:number){let r=this.records.get(id);if(!r){r={damage:0,knockouts:0,deaths:0,respawnAt:0};this.records.set(id,r);}return r;}
   hit(attacker:number,victim:number,before:number,after:number,time:number){
     if(attacker===victim||before<=0||![before,after,time].every(Number.isFinite))return;
@@ -48,8 +53,8 @@ export class CombatScoreboard {
     if(after<=0){this.get(attacker).knockouts++;this.disable(victim,time);}
   }
   disable(id:number,time:number){const r=this.get(id);if(r.respawnAt<=0){r.deaths++;r.respawnAt=time+4;}}
-  respawn(id:number){this.get(id).respawnAt=0;}
-  points(id:number){const r=this.get(id);return Math.floor(r.damage)+r.knockouts*100;}
+  respawn(id:number){this.get(id).respawnAt=0;this.feats.remove(id);}
+  points(id:number){const r=this.get(id);return Math.floor(r.damage)+r.knockouts*100+(r.bonus??0);}
   order<T extends {id:number;health:number;inflicted:number}>(cars:T[]){return [...cars].sort((a,b)=>this.points(b.id)-this.points(a.id)||this.get(b.id).knockouts-this.get(a.id).knockouts||b.health-a.health||a.id-b.id);}
 }
 export function eventDerbyOrder<T extends {id:number;health:number;inflicted:number}>(cars:T[],score:boolean,board:CombatScoreboard){return score?board.order(cars):derbyOrder(cars);}
