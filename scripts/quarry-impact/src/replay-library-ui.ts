@@ -1,3 +1,4 @@
+import {ARENA_NAMES,resolveArenaId} from './arena-id';
 import {replayLibrary,LIBRARY_LIMIT,LIBRARY_BYTES,type ReplayEntry,type ReplayLibrary} from './replay-library';
 import type {ReplayDocument} from './replay-data';
 import {downloadBlob} from './replay-studio';
@@ -12,7 +13,7 @@ export function showReplayLibrary(ui:HTMLElement,watch:(doc:ReplayDocument,name:
  const action=async(fn:()=>Promise<void>)=>{if(busy)return;busy=true;overlay.setAttribute('aria-busy','true');overlay.querySelectorAll<HTMLButtonElement>('button').forEach(b=>b.disabled=true);try{await fn();}catch(error){message(error instanceof Error?error.message:'The replay could not be opened.');}finally{busy=false;overlay.removeAttribute('aria-busy');overlay.querySelectorAll<HTMLButtonElement>('button').forEach(b=>b.disabled=false);if(overlay.isConnected&&!overlay.contains(document.activeElement))search.focus();}};
  const refresh=async()=>{entries=await library.list();if(!overlay.isConnected)return;overlay.querySelector('#library-usage')!.textContent=`${entries.length} / ${LIBRARY_LIMIT} recordings · ${(entries.reduce((n,e)=>n+e.bytes,0)/1024/1024).toFixed(1)} / ${LIBRARY_BYTES/1024/1024} MB`;render();};
  function render(){
-  const courseName=(e:ReplayEntry)=>COURSE_NAMES[resolveCourseId(e.courseId)];
+  const courseName=(e:ReplayEntry)=>e.arenaId?ARENA_NAMES[resolveArenaId(e.arenaId)]:COURSE_NAMES[resolveCourseId(e.courseId)];
   const term=search.value.trim().toLowerCase(),found=entries.filter(e=>(e.name+' '+e.mode+' '+courseName(e)).toLowerCase().includes(term));
   list.innerHTML=found.length?found.map(e=>`<article class="library-entry" data-id="${escape(e.id)}"><label>Recording name<input class="library-name" maxlength="80" value="${escape(e.name)}"></label><p>${escape(courseName(e))} · ${escape(e.mode)} · ${e.cars} cars · ${clock(e.duration)} · ${(e.bytes/1024/1024).toFixed(2)} MB${e.limited?' · recording limit reached':''}<br>${escape(e.created.slice(0,19).replace('T',' '))}</p><div class="library-actions"><button data-action="watch">WATCH</button><button data-action="rename">RENAME</button><button data-action="export">EXPORT .qir</button><button data-action="delete">DELETE</button></div><div class="library-confirm" hidden><p>Delete this saved replay from this browser? Export a copy first if you want to keep it.</p><button data-action="confirm">DELETE RECORDING</button><button data-action="cancel">KEEP RECORDING</button></div></article>`).join(''):`<p>${entries.length?'No recordings match your search.':'No saved recordings yet. Save a solo recording from the replay studio or import a .qir file.'}</p>`;
   list.querySelectorAll<HTMLButtonElement>('button').forEach(button=>button.onclick=()=>{
