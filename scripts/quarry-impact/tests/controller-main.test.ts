@@ -180,7 +180,7 @@ function frameBoundary(h:ReturnType<typeof harness>){
  const code=ts.transpileModule(resume.getText(main)+'\nfunction frame('+frame.parameters.map(p=>p.getText(main)).join(',')+'){'+prefix+'}\nglobalThis.frameBoundary=frame;',{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  let currentPad=pad(),wallTime=80;
  const order:string[]=[],cameraDt:number[]=[],renderAlpha:number[]=[],physicsInputs:Array<ReturnType<typeof drivingInput>>=[];
- Object.assign(h.c,{updateRumble(){order.push('rumble');},updateTrialGhost(){},withWreckBatch,lastFrame:80,clock:4,elapsed:0,accumulator:0,frames:[],eventFrameTimes:[],capturedFrames:null,physics:{},orbit:{enabled:false},
+ Object.assign(h.c,{adaptiveGraphics:{sample:()=>false},preparingEvent:false,updateRumble(){order.push('rumble');},updateTrialGhost(){},withWreckBatch,lastFrame:80,clock:4,elapsed:0,accumulator:0,frames:[],eventFrameTimes:[],capturedFrames:null,physics:{},orbit:{enabled:false},
   navigator:{getGamepads:()=>[currentPad]},performance:{now:()=>wallTime},requestAnimationFrame(){order.push('raf');},
   document:{getElementById:(id:string)=>id==='overlay'?{remove(){h.ui.children.delete('#overlay');order.push('remove-overlay');}}:null},
   hud(){order.push('hud');},step(dt:number){order.push('physics');physicsInputs.push(h.functions.input());h.c.elapsed+=dt;},updateCamera(dt:number){order.push('camera');cameraDt.push(dt);},

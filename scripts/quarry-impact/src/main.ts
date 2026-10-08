@@ -1,3 +1,4 @@
+import {AdaptiveGraphics,graphicsChoice} from './adaptive-graphics';
 import {createAshfordWorld} from './ashford-world';
 import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
 import {mountSaveBackup} from './save-backup-ui';
@@ -118,12 +119,13 @@ try {
   saved = JSON.parse(localStorage.getItem(saveKey) ?? '{}');
 } catch {}
 const settings = {
-  quality: saved.quality ?? 'ultra',
+  quality: graphicsChoice(saved.quality),
   performance: saved.performance === true,
   engine: saved.engine ?? 0.72,
   effects: saved.effects ?? 0.8,
   ambience: saved.ambience ?? 0.45,
 };
+const adaptiveGraphics=new AdaptiveGraphics();
 let drivingControls=readControls();
 try{drivingControls=readControls(localStorage.getItem(CONTROLS_KEY));}catch{}
 let garage=readGarage();
@@ -861,12 +863,12 @@ function pause(settingsOnly = false) {
   online?.network.clearInput();
   sound.pause(true);
   orbit.enabled = false;
-  ui.insertAdjacentHTML('beforeend', `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<div class="settings-row"><label for="performance">Performance display</label><input type="checkbox" id="performance" ${settings.performance?'checked':''}></div><p>${demo?'C camera · [ / ] choose car<br>Space / Escape pause · M mute · F fullscreen<br>Free orbit: drag to look around, scroll to zoom':"Driving keys and gamepad: expand controls below<br>C camera · R recover · M mute · F fullscreen · Escape pause"+(mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : '')}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`);
+  ui.insertAdjacentHTML('beforeend', `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="auto">Auto (recommended)</option><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div><p>Auto adjusts graphics for smoother driving. Car counts, physics and collision damage stay the same.</p>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<div class="settings-row"><label for="performance">Performance display</label><input type="checkbox" id="performance" ${settings.performance?'checked':''}></div><p>${demo?'C camera · [ / ] choose car<br>Space / Escape pause · M mute · F fullscreen<br>Free orbit: drag to look around, scroll to zoom':"Driving keys and gamepad: expand controls below<br>C camera · R recover · M mute · F fullscreen · Escape pause"+(mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : '')}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`);
   document.querySelector<HTMLInputElement>('#performance')!.onchange=e=>{settings.performance=(e.target as HTMLInputElement).checked;persist();};
   const quality = document.querySelector<HTMLSelectElement>('#quality')!;
   quality.value = settings.quality;
   quality.onchange = () => {
-    settings.quality = quality.value;
+    settings.quality = graphicsChoice(quality.value);
     applyQuality();
     persist();
   };
@@ -916,10 +918,12 @@ function resume() {
   lastFrame = performance.now();
 }
 function applyQuality() {
+  adaptiveGraphics.configure(settings.quality);
+  const quality=adaptiveGraphics.quality;
   qualityScale =
-    settings.quality === 'ultra'
+    quality === 'ultra'
       ? 1
-      : settings.quality === 'high'
+      : quality === 'high'
         ? 0.85
         : 0.65;
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5) * qualityScale);
@@ -928,20 +932,20 @@ function applyQuality() {
   composer.setSize(innerWidth, innerHeight);
   if (quarry) {
     quarry.sun.shadow.mapSize.setScalar(
-      settings.quality === 'ultra' ? 4096 : 2048,
+      quality === 'ultra' ? 4096 : 2048,
     );
     quarry.sun.shadow.map?.dispose();
     quarry.sun.shadow.map = null;
     quarry.sun.shadow.needsUpdate = true;
   }
-  staticShadows?.setQuality(settings.quality);
-  vehicleFire?.setQuality(settings.quality);
-  puddleSplashes?.setQuality(settings.quality);
-  quarry?.referenceArena.setQuality(settings.quality);
-  ao.enabled = settings.quality !== 'medium';
-  reflections.enabled = settings.quality !== 'medium';
-  reflections.interval = settings.quality === 'ultra' ? 3 : 6;
-  renderer.shadowMap.enabled = settings.quality !== 'medium';
+  staticShadows?.setQuality(quality);
+  vehicleFire?.setQuality(quality);
+  puddleSplashes?.setQuality(quality);
+  quarry?.referenceArena.setQuality(quality);
+  ao.enabled = quality !== 'medium';
+  reflections.enabled = quality !== 'medium';
+  reflections.interval = quality === 'ultra' ? 3 : 6;
+  renderer.shadowMap.enabled = quality !== 'medium';
 }
 function fullScreen() {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -1382,6 +1386,7 @@ function frame(now: number) {
   updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading') return;
+  if(adaptiveGraphics.sample(raw*1000,!document.hidden&&!preparingEvent&&!studio&&state==='playing'))applyQuality();
   // Include long stalls in the sustained benchmark, including event restarts.
   if(capturedFrames&&capturedFrames.length<50_000&&Number.isFinite(raw)&&raw>0)capturedFrames.push(raw*1000);
   if (raw < 1) {
@@ -1553,8 +1558,8 @@ async function boot() {
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
-  vehicleFire.setQuality(settings.quality);
-  puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(settings.quality);
+  vehicleFire.setQuality(adaptiveGraphics.quality);
+  puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(adaptiveGraphics.quality);
   const beforeQuarry=new Set(scene.children);
   quarry = new Quarry(scene, physics);
   const quarryRoot=new T.Group();quarryRoot.name='quarry_venue';
@@ -1649,7 +1654,7 @@ async function boot() {
     seedFireTest:(seed:number)=>{
       vehicleFire?.dispose();let randomState=seed>>>0;
       vehicleFire=new VehicleFire(scene,(p,n,t,f)=>fx.emit(p,n,t,f),()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;return randomState/4294967296;});
-      vehicleFire.setQuality(settings.quality);
+      vehicleFire.setQuality(adaptiveGraphics.quality);
     },
     seedFireStress:()=>{
       // Explicit QA fixture for the maximum effects budget; unused by gameplay.
@@ -1711,8 +1716,9 @@ async function boot() {
       createCars(true);
       menu();
     },
+    get graphics(){return{choice:settings.quality,active:adaptiveGraphics.quality};},
     setQuality: (v: string) => {
-      settings.quality = v;
+      settings.quality = graphicsChoice(v);
       applyQuality();
     },
     lighting: (v:{fog?:number;sun?:number;sky?:number;exposure?:number;ambient?:number;tone?:string;staticShadows?:boolean})=>{
