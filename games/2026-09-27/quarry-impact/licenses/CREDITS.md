@@ -193,3 +193,7 @@ The optional impact beams, sill rails, bracing, mounting pads and fasteners are
 original procedural Quarry Impact geometry. They use vehicle-specific mounting
 layouts shared with the collision simulation. The underlying vehicle credits
 and licenses above continue to apply.
+
+## Calder Shuttle
+
+Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SHUTTLE.md).

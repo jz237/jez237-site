@@ -1,5 +1,5 @@
 import {gridPool,isGridLineup,type GridLineup} from './grid-rules';
-import type {CarKind,Mode} from './rules';
+import {isCarKind,type CarKind,type Mode} from './rules';
 import type {CourseId} from './course-id';
 import {isAIDifficulty,type AIDifficulty} from './ai-difficulty';
 import type {RunStats} from './session-telemetry';
@@ -52,8 +52,8 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
  ])}),
 ]);
 export function clubRoster(kind:CarKind,lineup:GridLineup='mixed'){
- requireValue(CLUB_KINDS.includes(kind)&&isGridLineup(lineup),'selected car or field rule');
- const eligible=gridPool(kind,lineup),pool=CLUB_KINDS.filter(k=>eligible.includes(k)),offset=pool.indexOf(kind);
+ requireValue(isCarKind(kind)&&isGridLineup(lineup),'selected car or field rule');
+ const eligible=gridPool(kind,lineup),pool=(kind==='shuttle'?['shuttle',...CLUB_KINDS] as CarKind[]:CLUB_KINDS).filter(k=>eligible.includes(k)),offset=pool.indexOf(kind);
  return CLUB_KINDS.map((_,slot)=>({slot,kind:pool[(offset+slot)%pool.length]}));
 }
 export const clubSeries=(cup?:Pick<ClubCupState,'series'>|null):ClubSeries=>CLUB_SERIES.find(s=>s.id===(cup?.series??'club'))!;
@@ -123,7 +123,7 @@ function validate(value:unknown):ClubCupState{
  requireValue(v.lineup===undefined||isGridLineup(v.lineup),'field rule');
  const rounds=clubRounds({series:v.series as ClubSeriesId|undefined});
  requireValue(Array.isArray(v.roster)&&v.roster.length===11,'roster');
- const first=object(v.roster[0],['slot','kind']).kind,offset=CLUB_KINDS.indexOf(first as typeof CLUB_KINDS[number]);requireValue(offset>=0,'selected car');
+ const first=object(v.roster[0],['slot','kind']).kind;requireValue(isCarKind(first),'selected car');
  const expected=clubRoster(first as CarKind,v.lineup as GridLineup|undefined);
  const roster=v.roster.map((raw,i)=>{const r=object(raw,['slot','kind']);requireValue(r.slot===i&&r.kind===expected[i].kind,'roster order or field eligibility');return {slot:i,kind:r.kind as CarKind};});
  requireValue(Array.isArray(v.results)&&v.results.length<=rounds.length,'results');
@@ -142,7 +142,7 @@ export function readClubCup(text?:string|null):ClubCupState|null{
  if(typeof text!=='string'||text.length>100000)return null;try{return validate(JSON.parse(text));}catch{return null;}
 }
 export function createClubCup(kind:CarKind,id:string,created:number,series?:ClubSeriesId,difficulty?:AIDifficulty,lineup?:GridLineup):ClubCupState{
- const offset=CLUB_KINDS.indexOf(kind as typeof CLUB_KINDS[number]);requireValue(offset>=0,'selected car');
+ requireValue(isCarKind(kind),'selected car');
  return validate({version:1,id,created,...(series?{series}:{}),...(difficulty?{difficulty}:{}),...(lineup&&lineup!=='mixed'?{lineup}:{}),roster:clubRoster(kind,lineup),phase:'ready',results:[]});
 }
 export function currentClubRound(cup:ClubCupState):ClubRound|null{return clubRounds(cup)[validate(cup).results.length]??null;}

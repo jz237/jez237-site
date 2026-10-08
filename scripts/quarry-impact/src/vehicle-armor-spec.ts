@@ -13,6 +13,7 @@ type Fit={front:number;rear:number;frontY:number;rearY:number;frontWidth:number;
 // coordinates. The three modern bodies are asymmetric and wider than their
 // simple chassis boxes, so nominal halfLength/halfWidth cannot fit their kits.
 const fits:Record<CarKind,Fit>={
+ shuttle:{front:3.11,rear:-3.11,frontY:.56,rearY:.56,frontWidth:1.06,rearWidth:1.06,sideX:1.085,sideY:.58,rearRise:0},
  coupe:{front:2.26,rear:-1.97,frontY:.51,rearY:.66,frontWidth:1.015,rearWidth:1.035,sideX:1.11,sideY:.40,rearRise:.15},
  sedan:{front:2.484,rear:-2.157,frontY:.52,rearY:.69,frontWidth:.975,rearWidth:1.00,sideX:1.08,sideY:.43,rearRise:.14},
  hatch:{front:2.05,rear:-1.781,frontY:.51,rearY:.70,frontWidth:.935,rearWidth:.96,sideX:1.04,sideY:.43,rearRise:.14},

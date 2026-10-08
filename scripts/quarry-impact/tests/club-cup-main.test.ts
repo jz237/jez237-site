@@ -47,7 +47,7 @@ import {SessionTelemetry} from '../src/session-telemetry';
 let initialized:Promise<void>|undefined;
 function init(){return initialized??=(async()=>{
  await R.init();const original=GLTFLoader.prototype.loadAsync;
- GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
+ GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|shuttle|wheel-machining)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 })();}
 /** Actual prepared Vehicle objects and current controllers; only GPU, sound and
@@ -94,7 +94,7 @@ function base(overrides:Record<string,unknown>={}){
  const context:any={...Arenas,awardCareerPodiums,recordRumbleImpact(){},...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Cup,...Records,clubRecords:Records.readClubRecords(),clubCup:null,activeTimeTrial:null,openTimeTrialSetup(){},COURSE_NAMES,RACE_NAMES,structuredClone,Error,Date,console,resolveCourseId,derbyGridSlot,directionForCar,eventDerbyOrder,courseRoute,courseRecoverySlot,courseGridSlot,checkRoute,lapProgress,stepScoreRespawns,stockSetup,readProfile,PROFILE_KEY,settleRun,SessionTelemetry,ReplayRecorder,CAR_KINDS,DEFINITIONS,WaypointRace,demoCarKind,demoVehicleSetup,
   activeClubRound:null,clubWarning:'',clubOpen:false,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,
   activeChallenge:undefined,demo:false,online:null,kind:'tern',mode:'race',eventOptions:{...readEventOptions(),course:'ironfield-figure-eight-v1',field:24,laps:9,direction:'reverse',race:'random',derby:'score',duration:420},demoOptions:{field:6,laps:4,duration:30,camera:'director',loop:'stop',lineup:'mixed',build:'stock'},
-  profile:readProfile(),profileStorageWarning:'',telemetry:new SessionTelemetry(),runId:'ordinary-run',runSettled:false,lastAward:null,state:'playing',elapsed:10,preparingEvent:false,keys:new Set(['KeyW']),testInput:null,cars:CAR_KINDS.map((kind,i)=>car(i,kind)),activeVenue:quarryVenue,quarryVenue,waypointRace:null,combat:new CombatScoreboard(),autopilot:false,
+  profile:readProfile(),profileStorageWarning:'',telemetry:new SessionTelemetry(),runId:'ordinary-run',runSettled:false,lastAward:null,state:'playing',elapsed:10,preparingEvent:false,keys:new Set(['KeyW']),testInput:null,cars:Cup.CLUB_KINDS.map((kind,i)=>car(i,kind)),activeVenue:quarryVenue,quarryVenue,waypointRace:null,combat:new CombatScoreboard(),autopilot:false,
   director:{reset(){}},orbit:{enabled:false,maxDistance:22,enablePan:true},openGarage(){},openCareer(){},openProfile(){},openEventSetup(){},replayMenu(){},pause(){},fullScreen(){},onlineUI:{show(){}},
   ui,document:{createElement:node,querySelector:ui.querySelector,hidden:false},localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>{writes.push(key);storage.set(key,value);},removeItem:(key:string)=>{storage.delete(key);}},crypto:{randomUUID:()=>uuid},
   sound:{pause(){},clearCars(){},attach(){},async init(){},impact(){}},captureReplay(){calls.capture++;},studioButtons(){calls.studio++;},showClubCup(_ui:unknown,_cup:unknown,_kind:unknown,callbacks:unknown,_warning:unknown,_records:unknown,selection:unknown){context.board=callbacks;context.boardCup=_cup;context.boardSelection=selection;},
@@ -234,8 +234,8 @@ test('selective cup-save failure still protects old award receipts through ordin
 
 
 test('every championship grid matches its round direction, checkpoint debt and replay orientation',()=>{
- for(const series of Cup.CLUB_SERIES)for(const lineup of ['mixed','selected','drivetrain','weight'] as const){
-  const initial=Cup.createClubCup('buggy',uuid,1000,series.id,'expert',lineup);
+ for(const selected of ['buggy','shuttle'] as const)for(const series of Cup.CLUB_SERIES)for(const lineup of ['mixed','selected','drivetrain','weight'] as const){
+  const initial=Cup.createClubCup(selected,uuid,1000,series.id,'expert',lineup);
   for(const round of series.rounds){
    if(round.mode!=='race')continue;
    const h=base({clubCup:initial,activeClubRound:round.index,mode:'race'}),spawns:Array<{id:number;x:number;z:number;yaw:number}>=[];
