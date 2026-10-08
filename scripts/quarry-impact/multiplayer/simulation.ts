@@ -1,3 +1,4 @@
+import {validDrivingAssists} from '../src/driving-assists';
 import {combatMotion} from '../src/combat-feats';
 import {validTransmissionState} from '../src/transmission';
 import type {VehicleStructure} from '../src/vehicle-structure';
@@ -85,7 +86,7 @@ export class Simulation {
   }
   private wheelPatchLoad(c:Car,i:number){return clamp((c.controller.wheelSuspensionForce(i)??0)/(c.specification.mass*9.81/4),0,2)+(c.state.components?.wheelDamage[i]??0)*.5;}
   start() { this.phase = 'countdown'; this.countdown = 3; }
-  setInput(id: number, input: Controls) { this.cars[id].state.input = {...input,...(input.transmission?{transmission:{...input.transmission}}:{})}; }
+  setInput(id: number, input: Controls) { this.cars[id].state.input = {...input,...(input.assists?{assists:{...input.assists}}:{}),...(input.transmission?{transmission:{...input.transmission}}:{})}; }
   recover(id: number) {
     const c = this.cars[id], s = c?.state;
     if (!s || this.phase !== 'playing' || this.elapsed-c.lastRecovery<5 || (s.health<=0 && this.mode!=='playground')) return false;
@@ -231,7 +232,7 @@ export class Simulation {
     this.damageId=Math.max(0,...s.damage.map(d=>d.id),...s.cars.flatMap(c=>(c.dents??[]).map(d=>d.id)));
     for(const car of s.cars){if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
       if(c.state.kind!==car.kind||!sameOnlineSetup(c.state.setup,car.setup,car.kind)){this.world.removeVehicleController(c.controller);this.world.removeRigidBody(c.body);c=this.cars[car.id]=this.createCar(car.id,car.kind,car.setup);}
-      c.state={...c.state,...structuredClone(car),surface:car.surface??surfaceAt(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL};c.state.transmission=validTransmissionState(car.transmission)?structuredClone(car.transmission):undefined;if(c.state.transmission)c.state.input.transmission={mode:c.state.transmission.mode,up:false,down:false,clutch:0};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
+      c.state={...c.state,...structuredClone(car),surface:car.surface??surfaceAt(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL,...(validDrivingAssists(car.input.assists)?{assists:{...car.input.assists}}:{})};c.state.transmission=validTransmissionState(car.transmission)?structuredClone(car.transmission):undefined;if(c.state.transmission)c.state.input.transmission={mode:c.state.transmission.mode,up:false,down:false,clutch:0};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
       const engineHistory=(c.state.dents??[]).filter(hit=>hit.repair===c.state.repair);
       // A bounded legacy history may have lost older hits. Only infer the new
       // component when those retained hits account for all structural health

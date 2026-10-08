@@ -1,3 +1,4 @@
+import {DEFAULT_ASSISTS,validDrivingAssists,type DrivingAssists} from './driving-assists';
 import type {TransmissionMode} from './transmission';
 import type {Input} from './vehicle';
 export const CONTROLS_KEY='quarry-impact-controls-v1';
@@ -5,7 +6,7 @@ export const ACTIONS=['throttle','reverse','left','right','handbrake','shiftUp',
 export type Action=typeof ACTIONS[number];
 export const ACTION_LABELS:Record<Action,string>={throttle:'Accelerate',reverse:'Brake / reverse',left:'Steer left',right:'Steer right',handbrake:'Handbrake',shiftUp:'Shift up',shiftDown:'Shift down',clutch:'Clutch'};
 export interface DrivingControls {
- version:1; keys:Record<Action,string[]>;
+ version:1; assists?:DrivingAssists; keys:Record<Action,string[]>;
  pad:number; axis:number; invert:boolean; center:number; deadzone:number; saturation:number; curve:number;
  throttleButton:number; brakeButton:number; handbrakeButton:number; triggerDeadzone:number;
  speedAssist:number; rumble:number; transmission:TransmissionMode; shiftUpButton:number; shiftDownButton:number; clutchButton:number;
@@ -23,6 +24,7 @@ export function readControls(raw?:string|null):DrivingControls{
   if(entries===undefined&&['shiftUp','shiftDown','clutch'].includes(action)){const fallback=[...d.keys[action],'KeyZ','KeyX','KeyV','KeyB','KeyN','KeyL','KeyJ','KeyK','ShiftRight'].find(k=>!seen.has(k));entries=[fallback];}
  if(!Array.isArray(entries)||entries.length<1||entries.length>2){valid=false;break;}keys[action]=[];for(const key of entries){if(typeof key!=='string'||!allowedKey(key)||seen.has(key)){valid=false;break;}seen.add(key);keys[action].push(key);}}
  if(valid)d.keys=keys;
+ if(validDrivingAssists(v.assists)&&(v.assists.traction!==DEFAULT_ASSISTS.traction||v.assists.stability!==DEFAULT_ASSISTS.stability))d.assists={...v.assists};
  if(v.transmission==='manual'||v.transmission==='clutch')d.transmission=v.transmission;
  for(const k of ['pad','axis','throttleButton','brakeButton','handbrakeButton','shiftUpButton','shiftDownButton','clutchButton'] as const)d[k]=Math.round(bound(v[k],k==='pad'?-1:0,k==='pad'?3:k==='axis'?7:31,d[k]));
  d.invert=v.invert===true;
@@ -46,7 +48,7 @@ export function steeringAxis(raw:number,config:DrivingControls):number{
  const amount=Math.max(0,Math.min(1,(Math.abs(value)-config.deadzone)/(config.saturation-config.deadzone)));
  return Math.sign(value)*Math.pow(amount,config.curve)*(config.invert?-1:1);
 }
-export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pads:readonly(Pad|null)[],speed:number,transmissionAvailable=true):Input{
+export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pads:readonly(Pad|null)[],speed:number,transmissionAvailable=true,assistsAvailable=true):Input{
  const held=(action:Action)=>config.keys[action].some(key=>keys.has(key));
  let up=held('shiftUp'),down=held('shiftDown'),clutch=Number(held('clutch'));
  let steer=Number(held('right'))-Number(held('left')),gas=Number(held('throttle')),reverse=Number(held('reverse')),handbrake=held('handbrake');
@@ -60,8 +62,9 @@ export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pad
  const brake=reverse>0&&(safeSpeed>1||gas>0)?reverse:0;
  const throttle=brake>0?0:reverse>0?-reverse*.6:gas;
  steer*=Math.max(.35,1/(1+Math.abs(safeSpeed)*config.speedAssist*.025));
- if(transmissionAvailable&&config.transmission!=='automatic')return{throttle:reverse>0?0:gas,brake:reverse,steer,handbrake,transmission:{mode:config.transmission,up,down,clutch}};
- return {throttle,brake,steer,handbrake};
+ const assists=assistsAvailable&&config.assists?{assists:{...config.assists}}:{};
+ if(transmissionAvailable&&config.transmission!=='automatic')return{...assists,throttle:reverse>0?0:gas,brake:reverse,steer,handbrake,transmission:{mode:config.transmission,up,down,clutch}};
+ return {...assists,throttle,brake,steer,handbrake};
 }
 
 export const drivingButtons=(config:DrivingControls,transmissionAvailable=true)=>[config.throttleButton,config.brakeButton,config.handbrakeButton,...(transmissionAvailable&&config.transmission!=='automatic'?[config.shiftUpButton,config.shiftDownButton,...(config.transmission==='clutch'?[config.clutchButton]:[])]:[])];
