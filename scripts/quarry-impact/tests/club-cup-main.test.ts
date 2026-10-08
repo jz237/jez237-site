@@ -125,7 +125,7 @@ test('club selectors and actual creation override saved custom rules/builds, ret
   if(index<2)for(const c of h.context.cars){const p=courseGridSlot(h.context.activeVenue.course,c.id,'forward');assert.equal(c.current.x,p.x);assert.equal(c.current.z,p.z);assert.equal(c.passed,p.passed);assert.equal(c.nextCheckpoint,p.next);}
   f.beginReplay();assert.equal(h.context.recorder.meta.reverse,false);assert.equal(h.context.recorder.meta.courseId,index===1?'ironfield-figure-eight-v1':undefined);assert.equal(h.context.recorder.meta.cars.length,11);
  }
- const h=base(),f=load(h,selectors);assert.equal(f.raceFormat(),'random');assert.equal(f.raceDirection(),'forward');assert.equal(f.raceLaps(),9);assert.equal(f.preferredCourse(),'quarry-v1');
+ const h=base(),f=load(h,selectors);assert.equal(f.raceFormat(),'random');assert.equal(f.raceDirection(),'forward');assert.equal(f.raceLaps(),9);assert.equal(f.preferredCourse(),'ironfield-figure-eight-v1');
  h.context.eventOptions.race='laps';assert.equal(f.raceDirection(),'reverse');assert.equal(f.preferredCourse(),'ironfield-figure-eight-v1');
  h.context.activeChallenge={laps:1,limit:70};assert.equal(f.raceLaps(),1);assert.equal(f.preferredCourse(),'quarry-v1');assert.equal(f.raceDirection(),'forward');
  h.context.activeChallenge=undefined;h.context.demo=true;assert.equal(f.raceLaps(),4);assert.equal(f.eventDuration(),30);

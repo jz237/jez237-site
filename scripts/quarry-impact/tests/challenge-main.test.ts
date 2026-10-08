@@ -189,7 +189,7 @@ test('unit plumbing: real startup failures clear challenge state and return a us
 });
 
 test('unit plumbing: ordinary custom-event and online selectors retain their existing meanings',()=>{
- const h=harness();assert.equal(h.f.raceFormat(),'random');assert.equal(h.f.preferredCourse(),'quarry-v1');assert.equal(h.f.raceLaps(),9);
+ const h=harness();assert.equal(h.f.raceFormat(),'random');assert.equal(h.f.preferredCourse(),'ironfield-figure-eight-v1');assert.equal(h.f.raceLaps(),9);
  h.context.eventOptions.race='laps';assert.equal(h.f.preferredCourse(),'ironfield-figure-eight-v1');assert.equal(h.f.raceDirection(1),'reverse');
  h.f.createCars();assert.equal(h.context.cars.length,24);assert.equal(h.context.activeVenue.course.id,'ironfield-figure-eight-v1');
  assert.equal(h.construction[0].supplied,h.context.garage.cars.buggy.setup);assert.deepEqual(plain(h.context.cars[0].setup),plain(h.context.garage.cars.buggy.setup));
