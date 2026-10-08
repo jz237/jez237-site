@@ -98,7 +98,7 @@ function harness(faults:Faults={}){
   director:{reset(){},select(){}},sound:{async init(){if(faults.audio)throw Error('Audio unavailable');},pause(){},clearCars(){},attach(){}},
   drivers:{reset(){}},combat:new CombatScoreboard(),collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:{clear(){}},collisions:0,vehicleFire:undefined,puddleSplashes:undefined,
   physics:{step(){calls.physics++;}},events:{clear(){}},fx:{reset(){}},quarry:{resetProps(){}},DERBY_ARENA:{x:0,z:0,radius:45},
-  ensureVenue(id:string){venueCalls++;if(faults.venue&&(venueCalls===1||faults.recovery))throw Error('Venue unavailable');return id==='quarry-v1'?quarry:ironfield;},
+  ensureVenue(id:string){venueCalls++;if(faults.venue&&(venueCalls===1||faults.recovery))throw Error('Venue unavailable');return id==='quarry-v1'?quarry:{course:getRaceCourse(resolveCourseId(id)),props:[],puddles:[]};},
   activateVenue(venue:unknown){context.activeVenue=venue;},setQuarryMode(){},archiveReplay(){calls.archive++;},captureReplay(){calls.capture++;},syncClubAwards(){},
   loading(){ui.innerHTML='<div class="loading"></div>';},hud(){ui.innerHTML='<div class="hud"></div>';},async warmPrograms(){calls.warm++;if(faults.warm)throw Error('GPU compile failed');},
   toast(message:string){notices.push(message);},pause(){context.state='paused';},studioButtons(container:unknown){assert.ok(container,'Result studio container exists');},
@@ -123,8 +123,8 @@ function harness(faults:Faults={}){
  return{context,f,calls,ui,storage,writes,construction,notices,logs,preferences,click,settle,select};
 }
 
-test('unit plumbing: all 38 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
- assert.equal(Challenges.CHALLENGES.length,38);
+test('unit plumbing: all 44 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
+ assert.equal(Challenges.CHALLENGES.length,44);
  for(const challenge of Challenges.CHALLENGES){
   const h=harness(),preferences=h.preferences();await h.select(challenge);
   assert.equal(h.context.activeChallenge,challenge);assert.equal(h.context.kind,challenge.car);assert.equal(h.context.mode,challenge.mode);
@@ -251,7 +251,7 @@ test('career storage failure leaves points unspent and unlock closed; start fail
  const broken=harness({venue:true});broken.f.openCareer();assert.equal(await broken.f.startCareerEvent('first-lap'),false);assert.equal(broken.context.state,'menu');assert.equal(broken.context.careerOpen,true);assert.equal(broken.context.activeChallenge,undefined);assert.match(broken.ui.innerHTML,/could not start/);
 });
 
-test('all 27 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
+test('all 33 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
  for(const group of Career.CAREER_GROUPS)for(const id of group.events){
   const h=harness();for(const g of Career.CAREER_GROUPS)for(const event of g.events)h.context.profile.challenges[event]={medal:3,best:1,attempts:1};h.context.profile.career={unlocked:Career.CAREER_GROUPS.filter(g=>g.cost).map(g=>g.id)};
   assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;

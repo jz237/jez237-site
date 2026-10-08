@@ -13,6 +13,8 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'open-road',title:'Open Road',discipline:'stunts',description:'Build speed, explore in the Bramble, and learn to hold a drift.',cost:0,events:['speed-coupe','bramble-roam','first-drift']},
  {id:'gravel-artists',title:'Gravel Artists',discipline:'stunts',description:'Link longer slides and carry momentum across the quarry.',cost:3,events:['long-drift','hatch-drift','distance-sedan']},
  {id:'flight-school',title:'Flight School',discipline:'stunts',description:'Land jumps in three different cars, including the open-frame Ravine.',cost:3,events:['air-coupe','air-hatch','ravine-flight']},
+ {id:'county-tour',title:'County Tour',discipline:'racing',description:'A bus on the oval, a hatch on mixed surfaces, and a buggy in the dirt stadium.',cost:3,events:['shuttle-cinderbank','tern-bracken','ravine-redbank']},
+ {id:'road-masters',title:'Road Masters',discipline:'racing',description:'Protect the Marten and Shuttle, then bring the Bramble through two technical laps.',cost:3,events:['marten-ashford','shuttle-ironfield','bramble-ashford']},
 ];
 export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{

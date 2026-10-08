@@ -45,6 +45,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('tern-ironfield','Tern at the crossing','tern',1,[95,62,45]),course:'ironfield-figure-eight-v1'},
   race('marten-home','Rear-engine return','marten',1,[100,65,43],60),
   event('ravine-flight','Ravine flight school','buggy','airtime',120,[.5,.7,.8],'Find a quarry ramp and land the stock Ravine. Only significant jumps with a living landing count.'),
+  {...race('shuttle-cinderbank','Last bus around','shuttle',2,[150,100,78]),course:'cinderbank-oval-v1'},
+  {...race('tern-bracken','Front-wheel trail','tern',1,[115,72,50]),course:'bracken-rallycross-v1'},
+  {...race('ravine-redbank','Dirt stadium dash','buggy',1,[100,65,40]),course:'redbank-jump-v1'},
+  {...race('marten-ashford','Rear-engine precision','marten',1,[125,80,55],40),course:'ashford-autodrome-v1'},
+  {...race('shuttle-ironfield','Crossing service','shuttle',1,[110,70,50],40),course:'ironfield-figure-eight-v1'},
+  {...race('bramble-ashford','V8 road endurance','muscle',2,[250,155,105],25),course:'ashford-autodrome-v1'},
 ];
 /** Only circuit challenges select another venue; the arena and ramps stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode==='race'?resolveCourseId(c.course):'quarry-v1';
