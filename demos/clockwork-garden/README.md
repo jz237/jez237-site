@@ -260,6 +260,9 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   (three octaves of noise, turned 37 degrees so the cells never line up with a hedge's faces: dark between, light at the tips), fading with distance and as a pixel outgrows a leaf, and not under snow.
 - **Bark** (the `bark` kind in `explore/scenery.js`, the trunks of the specimen trees and the woods): furrows running up the trunk (noise drawn out thirty times along its height, three scales), dark in the grooves, with a
   damp green at the foot; within about 900 units, fading with distance and as a pixel outgrows a furrow, and not under snow. (Before, a trunk was a smooth brown column.)
+- **The temple, up close** (`Outside._temple`; the `column`, `copper` and `stone` kinds in `explore/scenery.js`): the eight columns are fluted (twelve flutes, 32 sides to the shaft instead of 14, grime at the foot, staining
+  down them), the dome is copper that has gone to verdigris (24 meridian seams and a ring every ten degrees, old brown copper showing between the green streaks), and the steps and entablature are weathered stone. A lantern hangs from the
+  dome over the statue, and at dusk it lights (a bulb, a halo, and a warm pool of light on the columns and the underside of the entablature, from the same point-light loop as the street lamps, with a bigger reach).
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
