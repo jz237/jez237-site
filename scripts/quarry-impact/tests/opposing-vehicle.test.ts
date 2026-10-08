@@ -1,3 +1,4 @@
+import {collisionDamageMultiplier,type DamageRule} from '../src/damage-rules';
 import {RaceRecovery,freeRecoverySlot} from '../src/race-recovery';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import test from 'node:test';
@@ -42,7 +43,7 @@ function mainStep(context:Record<string,unknown>){
  runInNewContext(code,context);return context.tick as (dt:number)=>void;
 }
 
-async function fixture(kinds:readonly [CarKind,CarKind],gap:number,speed:number){
+async function fixture(kinds:readonly [CarKind,CarKind],gap:number,speed:number,damage:DamageRule='normal'){
  await init();const world=new R.World({x:0,y:-9.81,z:0}),events=new R.EventQueue(true),scene=new T.Scene();world.timestep=dt;
  world.createCollider(R.ColliderDesc.cuboid(120,.5,120).setTranslation(0,-.5,0));
  const fx={emit(){},mark(){},detach(mesh:T.Mesh){mesh.visible=false;},update(){}} as any;
@@ -69,7 +70,7 @@ async function fixture(kinds:readonly [CarKind,CarKind],gap:number,speed:number)
  // navigation. The production 24-checkpoint indexing remains in use.
  const routes=[1,-1].map(direction=>Array.from({length:24},(_,i)=>({x:0,z:direction*(i===0?-100:100*i)})));
  const drivers=new DrivingBrain(),venue={course:{...surface,halfWidth:12,distance:(x:number)=>Math.abs(x),outside:()=>false}};
- const context:any={T,R,DEFINITIONS,raceRecovery:new RaceRecovery(),freeRecoverySlot,activeTimeTrial:null,cars,physics:world,events,fx,drivers,drivingObstacleClearance,vehicleContact,vehicleContactManifold,checkRoute,lapProgress,
+ const context:any={collisionDamageMultiplier,damageRule:()=>damage,T,R,DEFINITIONS,raceRecovery:new RaceRecovery(),freeRecoverySlot,activeTimeTrial:null,cars,physics:world,events,fx,drivers,drivingObstacleClearance,vehicleContact,vehicleContactManifold,checkRoute,lapProgress,
   activeVenue:venue,quarryVenue:venue,raceRoute:(id:number)=>routes[id===1?0:1],raceLaps:()=>2,raceTimeLimit:()=>0,scoreDerby:()=>false,
   state:'playing',elapsed:0,countdown:0,online:null,demo:true,autopilot:false,testInput:null,mode:'race',telemetry:null,waypointRace:null,
   activeClubRound:null,clubPlayerStopped:false,clubRetired:false,activeChallenge:undefined,collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:new ImpactAdjudicator(),combat:new CombatScoreboard(),collisions:0,
@@ -119,5 +120,26 @@ test('an unavoidable opposing impact still generates real contact forces, struct
    assert.equal(h.stats.recoveries,0);assert.ok(h.cars.every(c=>c.penalty===0),'No recovery fabricates contact or damage');
    t.diagnostic(`${label}: ${h.stats.forceEvents} body-force events, peak ${(h.stats.maximumForce/1000).toFixed(1)} kN; health ${h.cars.map(c=>c.health.toFixed(2)).join('/')}; engine damage ${h.cars.map(c=>(c.engineDamage??0).toFixed(3)).join('/')}; maximum wheel damage ${h.cars.map(c=>Math.max(...c.wreckParts.wheelDamage).toFixed(3)).join('/')}`);
   }finally{h.dispose();}
+ }
+});
+
+// The same actual contact is tested at each severity before damaged physics diverge.
+test('damage rules change the first real collision for both cars, preserve visible scars and replay the resolved amounts',async()=>{
+ const health:number[][]=[],hits:number[][]=[];
+ for(const rule of ['reduced','normal','severe'] as const){
+  const f=await fixture(['tern','tern'],DEFINITIONS.tern.halfLength*2+.15,24,rule);
+  try{
+   const recorded:any[][]=[[],[]];f.cars.forEach((c,i)=>c.onVisualEvent=e=>recorded[i].push(e));
+   for(let tick=0;tick<20&&!f.cars.some(c=>c.impactSerial>0);tick++)f.tick(dt);
+   assert.ok(f.cars.every(c=>c.impactSerial>0&&c.health>0&&c.health<100));
+   assert.ok(recorded.every(events=>events.some(e=>e.scar)),'Every rule retains contact scars');
+   const amounts=recorded.map(events=>events.filter(e=>e.kind==='hit'&&!e.scar).reduce((s,e)=>s+e.damage,0));
+   health.push(f.cars.map(c=>100-c.health));hits.push(amounts);
+   f.cars.forEach((c,i)=>assert.ok(Math.abs(amounts[i]*c.specification.damageScale-(100-c.health))<1e-5,'Replay records resolved damage, including severity exactly once'));
+  }finally{f.dispose();}
+ }
+ for(let car=0;car<2;car++){
+  assert.ok(Math.abs(health[0][car]*2-health[1][car])<1e-5);assert.ok(Math.abs(health[1][car]*2-health[2][car])<1e-5);
+  assert.ok(Math.abs(hits[0][car]*2-hits[1][car])<1e-5);assert.ok(Math.abs(hits[1][car]*2-hits[2][car])<1e-5);
  }
 });
