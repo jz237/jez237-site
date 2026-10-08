@@ -17,7 +17,7 @@ function complete(series:typeof CLUB_SERIES[number]['id'],difficulty:'novice'|'a
  }
  return cup;
 }
-test('four series complete every round with canonical standings, real course routes and recoverable XP',()=>{
+test('all championship series complete every round with canonical standings, real course routes and recoverable XP',()=>{
  for(const series of CLUB_SERIES)for(const difficulty of ['novice','amateur','expert'] as const){
   for(const round of series.rounds){assert.equal(getRaceCourse(round.course).id,round.course);if(round.mode==='race')assert.equal(courseRoute(getRaceCourse(round.course),round.direction==='reverse'?'reverse':'forward').length,24);}
   const cup=complete(series.id,difficulty);assert.equal(cup.phase,'complete');assert.equal(cup.results.length,series.rounds.length);assert.equal(clubStandings(cup)[0].slot,0);assert.equal(clubStandings(cup)[0].points,25*series.rounds.length);

@@ -9,14 +9,14 @@ export const CLUB_CUP_KEY='quarry-impact-club-cup-v1';
 /** Version 1 keeps its roster/order even if a later release adds more cars. */
 export const CLUB_KINDS=Object.freeze(['coupe','sedan','hatch','muscle','wagon','utility','compact','van','tern','marten','buggy'] as const);
 export const CLUB_POINTS=Object.freeze([25,20,16,13,11,9,7,5,3,2,1] as const);
-export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse';
+export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse';
 export type ClubRound=Readonly<{index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;laps:number;duration:number;stock:true;direction?:'forward'|'reverse'|'opposing'}>;
 export const CLUB_ROUNDS:readonly ClubRound[]=Object.freeze([
  Object.freeze({index:0,id:'quarry-circuit',name:'Quarry Circuit',mode:'race',course:'quarry-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:1,id:'ironfield-circuit',name:'Ironfield Raceway',mode:'race',course:'ironfield-figure-eight-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:2,id:'quarry-survival',name:'Quarry Survival',mode:'derby',course:'quarry-v1',laps:0,duration:90,stock:true} as const),
 ]);
-export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt';
+export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt'|'road-rally';
 export type ClubSeries=Readonly<{id:ClubSeriesId;name:string;description:string;rounds:readonly ClubRound[]}>;
 const round=(index:number,id:ClubRoundId,name:string,course:CourseId,laps=1,direction:ClubRound['direction']='forward'):ClubRound=>Object.freeze({index,id,name,course,laps,direction,mode:'race',duration:0,stock:true});
 export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
@@ -43,6 +43,12 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
   round(0,'bracken-sprint','Bracken Rallycross','bracken-rallycross-v1'),
   round(1,'redbank-sprint','Redbank Jump Circuit','redbank-jump-v1'),
   round(2,'redbank-reverse','Redbank Reverse','redbank-jump-v1',1,'reverse'),
+ ])}),
+ Object.freeze({id:'road-rally',name:'Road & Rally',description:'Four one-lap races from the speedway to rallycross, then Ashford in both directions.',rounds:Object.freeze([
+  round(0,'cinderbank-sprint','Cinderbank Sprint','cinderbank-oval-v1'),
+  round(1,'bracken-sprint','Bracken Rallycross','bracken-rallycross-v1'),
+  round(2,'ashford-sprint','Ashford Autodrome','ashford-autodrome-v1'),
+  round(3,'ashford-reverse','Ashford Reverse','ashford-autodrome-v1',1,'reverse'),
  ])}),
 ]);
 export function clubRoster(kind:CarKind,lineup:GridLineup='mixed'){

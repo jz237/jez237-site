@@ -2,7 +2,7 @@ import {AdaptiveGraphics,graphicsChoice} from './adaptive-graphics';
 import {createAshfordWorld} from './ashford-world';
 import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
 import {mountSaveBackup} from './save-backup-ui';
-import {CAREER_GROUPS,careerChallenge,careerStatus,unlockCareerGroup} from './career';
+import {CAREER_GROUPS,awardCareerPodiums,careerChallenge,careerStatus,unlockCareerGroup} from './career';
 import {showCareer} from './career-ui';
 import './career.css';
 import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
@@ -89,7 +89,7 @@ import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,check
 import {showEventSetup} from './event-ui';
 import {loadTimeTrialRecords,saveTimeTrialRecords,isTimeTrialConfig,timeTrialBest,formatTrialTime,finishTimeTrialRecord,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
 import {showTimeTrialSetup,showTimeTrialResult} from './time-trial-ui';
-import {CLUB_CUP_KEY,CLUB_ROUNDS,clubRounds,clubSeries,createClubCup,readClubCup,beginClubRound,finishClubRound,clubRoundRunId,replayCupAwards,type ClubCupState,type ClubRowInput} from './club-cup';
+import {CLUB_CUP_KEY,CLUB_ROUNDS,clubRounds,clubSeries,createClubCup,readClubCup,beginClubRound,finishClubRound,clubRoundRunId,replayCupAwards,type ClubSeriesId,type ClubCupState,type ClubRowInput} from './club-cup';
 import {showClubCup} from './club-cup-ui';
 import {CLUB_RECORDS_KEY,readClubRecords,recordClubFinish} from './club-records';
 import type {RunStats} from './session-telemetry';
@@ -240,6 +240,7 @@ function openProfile(initialDiscipline:Discipline='racing'){
 }
 function openCareer(discipline:Discipline='racing',notice=''){
   if(preparingEvent||online?.active||!['menu','result'].includes(state))return;
+  if(awardCareerPodiums(profile,clubRecords))try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}catch{profileStorageWarning='Career rewards are available this session, but could not be saved.';}
   careerOpen=true;keys.clear();
   showCareer(ui,profile,{
     close:()=>{careerOpen=false;menu();},
@@ -251,6 +252,7 @@ function openCareer(discipline:Discipline='racing',notice=''){
       catch{openCareer(group,'Could not save this unlock. Your points have not been spent.');}
     },
     start:id=>{void startCareerEvent(id);},
+    championship:series=>{careerOpen=false;openClubCup('',series);},
   },[notice,profileStorageWarning].filter(Boolean).join(' '),discipline);
 }
 function careerGroupForId(id:string):Discipline{return CAREER_GROUPS.find(g=>g.id===id)?.discipline??'racing';}
@@ -274,6 +276,7 @@ function syncClubAwards(){
   if(!saved)return;
   if(clubCup.phase==='complete'){
     clubRecords=recordClubFinish(clubRecords,clubCup);
+    awardCareerPodiums(profile,clubRecords);
     try{localStorage.setItem(CLUB_RECORDS_KEY,JSON.stringify(clubRecords));}
     catch{clubWarning='This cup is saved, but championship records could not be saved. Keep this completed cup until browser storage is available.';}
   }
@@ -282,13 +285,14 @@ function syncClubAwards(){
   catch{profileStorageWarning='Cup results are saved. Driver XP will be recovered when profile saving is available.';}
 }
 function closeClubCup(){clubOpen=false;createCars(true);menu();}
-function openClubCup(notice=''){
+function openClubCup(notice='',selection?:ClubSeriesId){
+  if(selection&&clubCup&&clubCup.phase!=='complete'&&clubSeries(clubCup).id!==selection)notice='Your saved '+clubSeries(clubCup).name+' is in progress. Finish or restart it before choosing another series.';
   keys.clear();clubOpen=true;syncClubAwards();if(notice)clubWarning=[notice,clubWarning].filter(Boolean).join(' ');
-  showClubCup(ui,clubCup,kind,{
+  showClubCup(ui,selection&&clubCup?.phase==='complete'?null:clubCup,kind,{
     create:(series,difficulty,lineup)=>{clubCup=createClubCup(kind,crypto.randomUUID(),Date.now(),series,difficulty,lineup);saveClubCup();openClubCup();},
-    start:()=>{void startClubRound();},close:closeClubCup,
+    start:()=>{void startClubRound();},close:closeClubCup,career:()=>{closeClubCup();openCareer();},
     abandon:()=>{try{localStorage.removeItem(CLUB_CUP_KEY);clubCup=null;clubWarning='';}catch{clubWarning='The saved cup could not be reset. Please try again.';}openClubCup();},
-  },[clubWarning,profileStorageWarning].filter(Boolean).join(' '),clubRecords);
+  },[clubWarning,profileStorageWarning].filter(Boolean).join(' '),clubRecords,selection);
   if(state==='result')studioButtons(ui.querySelector('.club-actions'));
 }
 async function startClubRound(){
@@ -572,7 +576,7 @@ function menu() {
   const garageButton=document.createElement('button');garageButton.id='garage';garageButton.className='small-button';garageButton.textContent='GARAGE & TUNING';garageButton.onclick=openGarage;ui.querySelector('.intro')!.append(garageButton);
   const profileButton=document.createElement('button');profileButton.id='driver-profile';profileButton.className='small-button';profileButton.textContent='DRIVER PROFILE & CHALLENGES';profileButton.onclick=()=>openProfile();ui.querySelector('.intro')!.append(profileButton);
   const trialButton=document.createElement('button');trialButton.id='time-trial';trialButton.className='small-button';trialButton.textContent='TIME TRIAL · PERSONAL BESTS';trialButton.onclick=()=>openTimeTrialSetup();ui.querySelector('.intro')!.append(trialButton);
-  const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CHAMPIONSHIPS · FINAL STANDINGS':clubCup?'CONTINUE '+clubSeries(clubCup).name.toUpperCase():'CHAMPIONSHIPS · FIVE SERIES';cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
+  const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CHAMPIONSHIPS · FINAL STANDINGS':clubCup?'CONTINUE '+clubSeries(clubCup).name.toUpperCase():'CHAMPIONSHIPS · SIX SERIES';cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
   if(lastAward?.qualified){const note=document.createElement('p');note.className='last-award';note.textContent=awardText(lastAward);ui.querySelector('.intro')!.append(note);}
   const eventButton=document.createElement('button');eventButton.id='event-setup';eventButton.className='small-button';eventButton.textContent=`EVENT RULES · ${eventOptions.field} CARS · ${GRID_LINEUPS[eventOptions.lineup??'mixed'].toUpperCase()} · ${AI_DIFFICULTIES[readAIDifficulty(eventOptions.difficulty)].label.toUpperCase()}`;eventButton.onclick=openEventSetup;ui.querySelector('.intro')!.append(eventButton);
   const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';

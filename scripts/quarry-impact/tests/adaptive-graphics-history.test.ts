@@ -1,6 +1,7 @@
+import {restoreCareerCupsBytes} from './career-cups-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readAdaptiveGraphicsPrevious,restoreAdaptiveGraphicsBytes,verifyAdaptiveGraphicsRevision} from './adaptive-graphics-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCareerCupsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('AdaptiveGraphics preserves every prior fixture, vehicle asset, control and camera input',verifyAdaptiveGraphicsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/adaptive-graphics/revision.json').toString());
