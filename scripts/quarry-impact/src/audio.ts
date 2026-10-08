@@ -1,3 +1,4 @@
+import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice} from './classic-vehicle-specs';
 import {impactSoundLayers} from './impact-response';
@@ -115,12 +116,14 @@ export class Sound {
   attach(cars: Vehicle[]) {
     this.clearCars();
     if (!this.ready) return;
+    if(!this.buffers.has('starter')){const c=this.ctx!,samples=starterSamples(c.sampleRate),buffer=c.createBuffer(1,samples.length,c.sampleRate);buffer.copyToChannel(samples,0);this.buffers.set('starter',buffer);}
     for (const car of cars) {
       const loops = new Map<string, Loop>();
       for (const name of ['idle', 'low', 'mid', 'high', 'load', 'damaged']) {
         const loop = this.loop(classicEngineVoice(car.kind).bank + '-' + name, this.engineBus!);
         if (loop) {loop.source.playbackRate.value=classicEngineVoice(car.kind).pitch;loops.set(name, loop);}
       }
+      const starter=this.loop('starter',this.engineBus!);if(starter)loops.set('starter',starter);
       for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
         const loop = this.loop(name, this.fxBus!);
         if (loop) loops.set(name, loop);
@@ -231,11 +234,11 @@ export class Sound {
         car.controller.wheelIsInContact(i),
       );
       if (prior && !wreckInspection) {
-        if (car.gear !== prior.gear && Math.abs(car.speed) > 3) {
+        if (!(car.engineStall!>0)&&car.health>0&&car.gear !== prior.gear && Math.abs(car.speed) > 3) {
           this.shot(classicEngineVoice(car.kind).bank + '-shift', car.current, 0.18);
           this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.12);
         }
-        if (prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
+        if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
           this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
         if (car.slip > 3 && prior.slip <= 3)
           this.shot('skid', car.current, 0.16);
@@ -278,7 +281,8 @@ export class Sound {
             c.currentTime,
             0.13,
           );
-        } else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
+        } else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
+        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
         else if (name === 'damaged')
           v = engineDamageLevel(car.health,car.engineDamage) * 0.18;
         else if (name === 'tires')
@@ -294,6 +298,7 @@ export class Sound {
           v=Math.max(car.slip>4&&car.health<80?.035:0,Math.min(.13,(car.scraping??0)*.12));
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
+        if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
         if(wreckInspection)v=0;
         l.gain.gain.setTargetAtTime(v, c.currentTime, 0.08);
       }

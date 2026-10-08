@@ -88,6 +88,7 @@ export class OnlineView {
       // Legacy rooms report only general health; do not invent authoritative
       // engine condition from incomplete visual hit packets.
       c.engineDamage=at.components?.engineDamage;
+      c.engineStall=at.engineStall;
       c.tyreDamage=at.components?.tyreDamage?.slice();
       c.input=at.input; c.surface=at.surface;
       c.slip=at.slip;

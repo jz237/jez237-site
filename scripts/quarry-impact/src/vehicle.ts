@@ -1,3 +1,4 @@
+import {stalledByImpact} from './engine-stall';
 import {cancelWreckNormals} from './wreck-batch';
 import {markCollision} from './collision-scars';
 import {BuggySuspension} from './buggy-suspension';
@@ -73,6 +74,7 @@ export class Vehicle {
   health = 100;
   /** Undefined only for an older online authority without component condition. */
   engineDamage:number|undefined = 0;
+  engineStall:number|undefined = 0;
   /** Missing on legacy snapshots/replays: do not infer flats from bent wheels. */
   tyreDamage:number[]|undefined = [0,0,0,0];
   inflicted = 0;
@@ -191,6 +193,7 @@ export class Vehicle {
     this.impactEffects = {glass:false,debris:false};
     this.health = 100;
     this.engineDamage = 0;
+    this.engineStall = 0;
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
     this.damageLeft = this.damageRight = 0;
@@ -402,6 +405,8 @@ export class Vehicle {
     }
     this.wreckParts.hit(contact,impactDirection,dentDamage);
     this.engineDamage=components.engineDamage;
+    this.engineStall=stalledByImpact(this.engineStall,this.health,this.engineDamage,damage);
+    if(this.engineStall!>0||this.health<=0)this.rpm=0;
     this.tyreDamage=components.tyreDamage;
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));

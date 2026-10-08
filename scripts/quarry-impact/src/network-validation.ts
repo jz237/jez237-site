@@ -1,3 +1,4 @@
+import {validEngineStall} from './engine-stall';
 import {validOnlineEventState} from './online-events';
 import {validOnlineSetup,validOnlineLoadout} from './online-setup';
 import {validCapacity} from './online-capacity';
@@ -21,7 +22,7 @@ export function validOnlineSnapshot(s:Snapshot):boolean {
   return s.cars.every(c=>c&&Number.isInteger(c.id)&&c.id>=0&&c.id<capacity&&
     ['coupe','sedan','hatch'].includes(c.kind)&&vector(c.p)&&quaternion(c.q)&&vector(c.v)&&vector(c.av)&&
     ['health','inflicted','damageLeft','damageRight','steering','speed','rpm','gear','passed','nextCheckpoint','lap','finishTime','penalty','repair','slip'].every(k=>finite((c as any)[k]))&&
-    (c.components===undefined||validComponents(c.components))&&(c.setup===undefined||validOnlineSetup(c.setup))&&
+    validEngineStall(c.engineStall)&&(c.components===undefined||validComponents(c.components))&&(c.setup===undefined||validOnlineSetup(c.setup))&&
     c.nextCheckpoint>=0&&c.nextCheckpoint<24&&['asphalt','gravel'].includes(c.surface)&&input(c.input)&&
     Array.isArray(c.wheels)&&c.wheels.length<=4&&c.wheels.every(w=>finite(w.suspension)&&finite(w.rotation)&&(w.patch===undefined||typeof w.contact==='boolean'&&patch(w.patch)))&&
     (c.dents===undefined||Array.isArray(c.dents)&&c.dents.length<=334&&c.dents.every(dent)))&&

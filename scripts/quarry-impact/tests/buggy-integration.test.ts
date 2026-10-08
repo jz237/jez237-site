@@ -84,6 +84,8 @@ test('Ravine rear impacts reduce engine torque while an equal front impact retai
   try{
     pose(rear);pose(front,12);hit(rear,new T.Vector3(0,0,-1.45),36);hit(front,new T.Vector3(0,0,1.45),36);
     assert.equal(rear.health,front.health);assert.ok(rear.engineDamage!>.4);assert.equal(front.engineDamage,0);
+    // Compare persistent power loss after the independently tested transient restart.
+    assert.ok(rear.engineStall!>0&&front.engineStall!>0);rear.engineStall=front.engineStall=0;
     const reduced=force(rear),condition=rear.engineDamage;rear.engineDamage=0;const sameWheels=force(rear);rear.engineDamage=condition;
     assert.ok(reduced<sameWheels*.8,'The engine itself reduces drive independently of damaged rear wheels');
     assert.equal(Math.abs(rear.controller.wheelEngineForce(0)!),0);assert.ok(rear.controller.wheelEngineForce(2)!>0);
