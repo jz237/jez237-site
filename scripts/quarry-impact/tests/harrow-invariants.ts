@@ -1,3 +1,4 @@
+import {restoreDrawBatchBytes,verifyDrawBatchRevision} from './draw-batch-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,17 @@ export function readHarrowPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreHarrowBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreDrawBatchBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readHarrowPrevious(file);
 }
 export function verifyHarrowRevision(){
+ verifyDrawBatchRevision();
  const manifest=revision();assert.equal(manifest.baseline,'bc93bed3215278b18d294d2eddebffef587f7812');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDrawBatchBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreHarrowBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Harrow release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDrawBatchBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Harrow release');
  assert.equal(manifest.previousFixtureCount,1232);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1232);
 }

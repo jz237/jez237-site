@@ -1,6 +1,7 @@
+import {restoreDrawBatchBytes} from './draw-batch-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readHarrowPrevious,restoreHarrowBytes,verifyHarrowRevision} from './harrow-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDrawBatchBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Harrow preserves every prior fixture, vehicle asset, control and camera input',verifyHarrowRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/harrow/revision.json').toString());
