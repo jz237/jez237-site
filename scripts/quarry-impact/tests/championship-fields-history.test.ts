@@ -1,6 +1,7 @@
+import {restoreRaceSafetyBytes} from './race-safety-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readChampionshipFieldsPrevious,restoreChampionshipFieldsBytes,verifyChampionshipFieldsRevision} from './championship-fields-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRaceSafetyBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ChampionshipFields preserves every prior fixture, vehicle asset, control and camera input',verifyChampionshipFieldsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/championship-fields/revision.json').toString());

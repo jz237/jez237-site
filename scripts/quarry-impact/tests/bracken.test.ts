@@ -23,7 +23,7 @@ test('every stock vehicle completes actual forward and reverse laps with normal 
   const driver:DriverCar={id:0,kind,current:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0},forward:{x:0,y:0,z:1},right:{x:1,y:0,z:0},speed:0,health:100,finished:false,nextCheckpoint:grid.next,surface:'asphalt'};
   let passed=grid.passed,last=Infinity,strikes=0,ticks=0,maxRoadDistance=0,minUp=1,asphalt=0,gravel=0;
   const read=()=>{driver.current={...car.body.translation()};driver.velocity={...car.body.linvel()};driver.forward=rotateVehicleVector({x:0,y:0,z:1},car.body.rotation());driver.right=rotateVehicleVector({x:1,y:0,z:0},car.body.rotation());driver.speed=driver.velocity.x*driver.forward.x+driver.velocity.y*driver.forward.y+driver.velocity.z*driver.forward.z;driver.surface=s.surface=BRACKEN.surface(driver.current.x,driver.current.z);};
-  const probe=()=>{const yaw=Math.atan2(driver.forward.x,driver.forward.z),ray=(a:number)=>{const hit=world.castRay(new R.Ray({x:driver.current.x,y:Math.max(driver.current.y,BRACKEN.height(driver.current.x,driver.current.z)+.55),z:driver.current.z},{x:Math.sin(yaw+a),y:0,z:Math.cos(yaw+a)}),24,true,undefined,undefined,undefined,car.body);return hit?drivingObstacleClearance(driver,a,hit.timeOfImpact):24;};return{front:ray(0),left:ray(-.55),right:ray(.55),rear:ray(Math.PI)};};
+  const probe=()=>{const yaw=Math.atan2(driver.forward.x,driver.forward.z),ray=(a:number)=>{const hit=world.castRay(new R.Ray({x:driver.current.x,y:Math.max(driver.current.y,BRACKEN.height(driver.current.x,driver.current.z)+.55),z:driver.current.z},{x:Math.sin(yaw+a),y:0,z:Math.cos(yaw+a)}),24,true,undefined,undefined,undefined,car.body,BRACKEN.isDrivingObstacle);return hit?drivingObstacleClearance(driver,a,hit.timeOfImpact):24;};return{front:ray(0),left:ray(-.55),right:ray(.55),rear:ray(Math.PI)};};
   try{
    for(let i=0;i<90;i++){stepVehiclePhysics(car.body,car.controller,kind,spec,s,dt,undefined,undefined,0,[0,0,0,0]);world.step();}events.clear();read();
    for(;ticks<12000&&passed<24;ticks++){
@@ -94,4 +94,16 @@ test('rallycross physics rolls back failed allocations and groups every terrain 
  const world=new R.World({x:0,y:0,z:0}),sentinel=world.createRigidBody(R.RigidBodyDesc.fixed());world.createCollider(R.ColliderDesc.ball(.1),sentinel);
  const create=world.createCollider.bind(world);let calls=0;world.createCollider=((...args:Parameters<typeof create>)=>{if(++calls===30)throw Error('allocation failed');return create(...args);})as typeof world.createCollider;
  try{assert.throws(()=>BRACKEN.buildPhysics(R,world),/allocation failed/);assert.equal(world.bodies.len(),1);assert.equal(world.colliders.len(),1);world.createCollider=create;const owned=BRACKEN.buildPhysics(R,world),ground=world.getRigidBody(owned[0])!;for(let i=0;i<ground.numColliders();i++)assert.equal(terrainContactHandle(world,ground.collider(i).handle),ground.collider(0).handle);for(const h of owned)world.removeRigidBody(world.getRigidBody(h)!);assert.equal(world.bodies.len(),1);assert.equal(world.colliders.len(),1);}finally{world.free();}
+});
+
+test('Bracken AI ignores uphill driving terrain while walls and foreign obstacles remain detectable and physical',()=>{
+ const world=new R.World({x:0,y:0,z:0}),owned=BRACKEN.buildPhysics(R,world);world.step();
+ try{
+  const y=BRACKEN.height(0,87)+.6,ray=new R.Ray({x:0,y,z:87},{x:-1,y:0,z:0});
+  const hit=world.castRay(ray,50,true)!;assert.ok(hit);assert.equal(hit.collider.parent()!.handle,owned[0]);assert.equal(BRACKEN.isDrivingObstacle(hit.collider),false);
+  assert.equal(BRACKEN.isDrivingObstacle(world.getRigidBody(owned[1])!.collider(0)),true);
+  const body=world.createRigidBody(R.RigidBodyDesc.fixed().setTranslation(-30,y,87)),obstacle=world.createCollider(R.ColliderDesc.cuboid(.5,2,2),body);world.step();
+  assert.equal(world.castRay(ray,50,true,undefined,undefined,undefined,undefined,BRACKEN.isDrivingObstacle)!.collider,obstacle);
+  assert.equal(world.castRay(ray,50,true)!.collider.parent()!.handle,owned[0],'actual physical terrain stays collidable');
+ }finally{world.free();}
 });

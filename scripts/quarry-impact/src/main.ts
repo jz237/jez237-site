@@ -955,11 +955,12 @@ function ai(car: Vehicle, dt: number): Input {
     if(waypointRace)car.nextCheckpoint=waypointRace.navigation(car.id,car.current).next;
     const nearest=activeVenue.course.distance(car.current.x,car.current.z);
     car.offTrackTime=nearest>14?car.offTrackTime+dt:0;
-    if(car.offTrackTime>7||car.rollTime>4){
+    const needsRecovery=car.offTrackTime>7||car.rollTime>4;
+    if(waypointRace&&needsRecovery){
       const prev=raceRoute(car.id)[(car.nextCheckpoint+23)%24],next=raceRoute(car.id)[car.nextCheckpoint];
       car.place(prev.x,prev.z,Math.atan2(next.x-prev.x,next.z-prev.z));car.offTrackTime=0;car.penalty+=5;drivers.memory.delete(car.id);raceRecovery.clear(car);
     }
-    if(!waypointRace&&raceRecovery.ready(car,dt,drivers.memory.get(car.id)?.attempts??0)){
+    if(!waypointRace&&(needsRecovery||raceRecovery.ready(car,dt,drivers.memory.get(car.id)?.attempts??0))){
       const def=DEFINITIONS[car.kind],shape=new R.Cuboid(def.halfWidth+.2,.25,def.halfLength+.2);
       const at=freeRecoverySlot(car,cars,raceRoute(car.id),activeVenue.course,slot=>!!physics.intersectionWithShape(
         {x:slot.x,y:activeVenue.course.height(slot.x,slot.z)+.8,z:slot.z},
