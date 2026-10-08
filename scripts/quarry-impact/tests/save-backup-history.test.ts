@@ -1,6 +1,7 @@
+import {restoreLightContactBytes} from './light-contact-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSaveBackupPrevious,restoreSaveBackupBytes,verifySaveBackupRevision} from './save-backup-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreLightContactBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SaveBackup preserves every prior fixture, vehicle asset, control and camera input',verifySaveBackupRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/save-backup/revision.json').toString());

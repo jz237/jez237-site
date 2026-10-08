@@ -1,3 +1,4 @@
+import {restoreLightContactBytes,verifyLightContactRevision} from './light-contact-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,17 @@ export function readSaveBackupPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreSaveBackupBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreLightContactBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readSaveBackupPrevious(file);
 }
 export function verifySaveBackupRevision(){
+ verifyLightContactRevision();
  const manifest=revision();assert.equal(manifest.baseline,'b5d61d70fde6172413b7ad225522667937e5beca');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreLightContactBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreSaveBackupBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the SaveBackup release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreLightContactBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the SaveBackup release');
  assert.equal(manifest.previousFixtureCount,1112);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1112);
 }

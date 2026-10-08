@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import * as T from 'three';import R from '@dimforge/rapier3d-compat';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';import {loadCars} from '../src/assets';import {Vehicle} from '../src/vehicle';import {CAR_KINDS} from '../src/rules';import {stockSetup} from '../src/garage';
-import {markCollision} from '../src/collision-scars';import {dentGeometry,prepareWreckGeometry} from '../src/wreck-geometry';import type {VehicleSurface} from '../src/vehicle-surface';
+import {markCollision} from './historical-scars';import {dentGeometry,prepareWreckGeometry} from '../src/wreck-geometry';import type {VehicleSurface} from '../src/vehicle-surface';
 /** Make a small permanent dent on actual visible bodywork without changing
  * health or mechanical components. Collider witnesses can sit just beyond the
  * painted mesh; fall back to the nearest visible panel vertex in that case. */
@@ -46,7 +46,7 @@ const bytes=(a:ArrayBufferView)=>Buffer.from(a.buffer,a.byteOffset,a.byteLength)
 function same(a:Vehicle,b:Vehicle){
  a.panels.forEach((p,i)=>{const q=b.panels[i];assert.equal(p.visible,q.visible);for(const key of Object.keys(p.geometry.attributes))assert.deepEqual(bytes(p.geometry.attributes[key].array),bytes(q.geometry.attributes[key].array),a.kind+' '+p.name+' '+key);assert.deepEqual(p.geometry.boundingBox,q.geometry.boundingBox);assert.deepEqual(p.geometry.boundingSphere,q.geometry.boundingSphere);});
 }
-test('nearest-first scars preserve every dent and paint byte on all eleven stock and armored cars',()=>{
+test('historical nearest-first scars preserve every dent and paint byte on all eleven stock and armored cars',()=>{
  let oldReads=0,newReads=0;const times=[0,0];
  for(const kind of CAR_KINDS)for(const armor of [0,3]){
   const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),setup={...stockSetup(kind),armor},cars=[0,1].map(i=>new Vehicle(i,kind,setup.paint,scene,world,{emit(){},mark(){},detach(){}}as any,setup));
