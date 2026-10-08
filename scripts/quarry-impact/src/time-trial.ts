@@ -18,6 +18,8 @@ type WriteStorage=Pick<Storage,'setItem'>;
 const MAX_SECONDS=86400;
 const recordKeys=new Set(CAR_KINDS.flatMap(kind=>Object.keys(COURSE_NAMES).flatMap(course=>
   ['forward','reverse'].map(direction=>`${course}:${kind}:${direction}`))));
+// Bounded capacity grows with the registered keys; each finite number needs at most 24 characters.
+export const TIME_TRIAL_STORE_LIMIT=128+[...recordKeys].reduce((size,key)=>size+key.length+32,0);
 const emptyRecords=():TimeTrialRecords=>({version:1,bests:{}});
 const validTime=(value:unknown):value is number=>typeof value==='number'&&Number.isFinite(value)&&value>0&&value<=MAX_SECONDS;
 const plainObject=(value:unknown):value is Record<string,unknown>=>!!value&&typeof value==='object'&&!Array.isArray(value)&&
@@ -38,9 +40,9 @@ function validRecords(value:unknown):value is TimeTrialRecords{
 }
 
 /** Legacy race records have no comparable car/setup identity. Read only the
- * 66 known categories so one malformed entry cannot erase other valid PBs. */
+ * registered categories so one malformed entry cannot erase other valid PBs. */
 export function readTimeTrialRecords(text?:string|null):TimeTrialRecords{
-  if(typeof text!=='string'||text.length>16000)return emptyRecords();
+  if(typeof text!=='string'||text.length>TIME_TRIAL_STORE_LIMIT)return emptyRecords();
   try{
     const value:unknown=JSON.parse(text);
     if(plainObject(value)&&value.version===1&&Object.keys(value).length===2&&plainObject(value.bests)){

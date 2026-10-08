@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {CAR_KINDS} from '../src/rules';
 import {COURSE_NAMES,type CourseId} from '../src/course-id';
+import {exportSave,readSave} from '../src/save-backup';
 import {SessionTelemetry} from '../src/session-telemetry';
-import {TIME_TRIAL_KEY,finishTimeTrialRecord,formatTrialDelta,formatTrialTime,isTimeTrialConfig,loadTimeTrialRecords,readTimeTrialRecords,saveTimeTrialRecords,timeTrialBest,timeTrialKey,type TimeTrialConfig,type TimeTrialEvidence,type TimeTrialRecords} from '../src/time-trial';
+import {TIME_TRIAL_STORE_LIMIT,TIME_TRIAL_KEY,finishTimeTrialRecord,formatTrialDelta,formatTrialTime,isTimeTrialConfig,loadTimeTrialRecords,readTimeTrialRecords,saveTimeTrialRecords,timeTrialBest,timeTrialKey,type TimeTrialConfig,type TimeTrialEvidence,type TimeTrialRecords} from '../src/time-trial';
 
 const config:TimeTrialConfig={kind:'tern',course:'ironfield-figure-eight-v1',direction:'forward'};
 /** Fixed-step samples exercise the production telemetry contract. Position and
@@ -17,16 +18,19 @@ function evidence():TimeTrialEvidence{
 }
 function at(seconds:number):TimeTrialEvidence{const value=evidence();value.finishTime=seconds;value.run!.seconds=seconds;return value;}
 
-test('all registered car/course/direction identities round-trip independently without borrowing a different personal best',()=>{
+test('all registered car/course/direction identities round-trip independently without borrowing a different personal best',async()=>{
   let records=readTimeTrialRecords();const identities=new Set<string>();let time=30;
   for(const kind of CAR_KINDS)for(const course of Object.keys(COURSE_NAMES) as CourseId[])for(const direction of ['forward','reverse'] as const){
     const selection={kind,course,direction};assert.equal(timeTrialBest(records,selection),null);
     const next=finishTimeTrialRecord(records,selection,at(time));identities.add(timeTrialKey(selection));
     assert.equal(next.result.newBest,true);assert.equal(next.result.best,time);records=next.records;time+=.0123456789;
   }
-  const expected=CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2;assert.equal(expected,234);assert.equal(identities.size,expected);assert.equal(Object.keys(records.bests).length,expected);
+  const expected=CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2;assert.equal(expected,312);assert.equal(identities.size,expected);assert.equal(Object.keys(records.bests).length,expected);
   let saved='';assert.equal(saveTimeTrialRecords(records,{setItem(key,text){assert.equal(key,TIME_TRIAL_KEY);saved=text;}}),true);
+  assert.ok(saved.length>16000,'Full-precision records exceed the obsolete fixed capacity');
   assert.deepEqual(readTimeTrialRecords(saved),records);
+  const backup=await readSave(await exportSave({getItem:key=>key===TIME_TRIAL_KEY?saved:null}));
+  assert.deepEqual(readTimeTrialRecords(backup.entries[TIME_TRIAL_KEY]),records);
   const untouched=JSON.stringify(records);const loaded=readTimeTrialRecords(saved);loaded.bests[timeTrialKey(config)]=1;
   assert.equal(JSON.stringify(records),untouched,'Loaded stores do not share caller-owned references');
 });
@@ -40,7 +44,7 @@ test('the strict versioned codec rejects poisoned or oversized stores without re
     {version:1,bests:{'ironfield-figure-eight-v1:tern:opposing':12}},
     {best:{[key]:5}}];
   for(const value of invalid)assert.deepEqual(readTimeTrialRecords(JSON.stringify(value)),{version:1,bests:{}});
-  for(const text of ['{broken',`{"version":1,"bests":{"__proto__":4}}`,`{"version":1,"bests":{"${key}":1e309}}`,' '.repeat(16001)])
+  for(const text of ['{broken',`{"version":1,"bests":{"__proto__":4}}`,`{"version":1,"bests":{"${key}":1e309}}`,JSON.stringify(valid)+' '.repeat(TIME_TRIAL_STORE_LIMIT)])
     assert.deepEqual(readTimeTrialRecords(text),{version:1,bests:{}});
   assert.deepEqual(readTimeTrialRecords(JSON.stringify(valid)),valid);assert.equal(({} as Record<string,unknown>).polluted,undefined);
   const mixed={version:1,bests:{...valid.bests,'unknown:tern:forward':12,[timeTrialKey({...config,direction:'reverse'})]:'31'}};
