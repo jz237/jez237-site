@@ -1,6 +1,7 @@
+import {restoreBrackenBytes} from './bracken-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readEngineStallPrevious,restoreEngineStallBytes,verifyEngineStallRevision} from './engine-stall-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBrackenBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Engine stall preserves every prior fixture, vehicle asset, control and camera input',verifyEngineStallRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/engine-stall/revision.json').toString());

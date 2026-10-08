@@ -1,3 +1,4 @@
+import {RaceRecovery,freeRecoverySlot} from './race-recovery';
 import {stallHint} from './engine-stall';
 import {AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey} from './ai-difficulty';
 import {withWreckBatch} from './wreck-batch';
@@ -5,6 +6,7 @@ import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from './co
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 import {getRaceCourse,courseRoute,courseGridSlot,courseRecoverySlot,type RaceCourse} from './race-course';
 import {createIronfieldWorld} from './ironfield-world';
+import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {engineStatus} from './engine-condition';
@@ -301,6 +303,7 @@ const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
 let vehicleFire:VehicleFire | undefined;
 let puddleSplashes:PuddleSplashes|undefined;
+const raceRecovery=new RaceRecovery();
 const drivers=new DrivingBrain(DERBY_ARENA),director=new DemoDirector(DERBY_ARENA,(from,to,car)=>cameraObstruction(physics,from,to,car.body,true),(x,z)=>activeVenue.course.height(x,z));
 let demo=false,demoRestart=0,demoHudHidden=false;
 let demoOptions=readDemoOptions();try{demoOptions=readDemoOptions(localStorage.getItem(DEMO_KEY));}catch{}
@@ -397,7 +400,7 @@ function ensureVenue(id:CourseId):VenueContext{
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
   let artwork:{root:T.Group;dispose():void}|undefined;
   try{
-    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
+    const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
     const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;
@@ -904,7 +907,17 @@ function ai(car: Vehicle, dt: number): Input {
     car.offTrackTime=nearest>14?car.offTrackTime+dt:0;
     if(car.offTrackTime>7||car.rollTime>4){
       const prev=raceRoute(car.id)[(car.nextCheckpoint+23)%24],next=raceRoute(car.id)[car.nextCheckpoint];
-      car.place(prev.x,prev.z,Math.atan2(next.x-prev.x,next.z-prev.z));car.offTrackTime=0;car.penalty+=5;drivers.memory.delete(car.id);
+      car.place(prev.x,prev.z,Math.atan2(next.x-prev.x,next.z-prev.z));car.offTrackTime=0;car.penalty+=5;drivers.memory.delete(car.id);raceRecovery.clear(car);
+    }
+    if(!waypointRace&&raceRecovery.ready(car,dt,drivers.memory.get(car.id)?.attempts??0)){
+      const def=DEFINITIONS[car.kind],shape=new R.Cuboid(def.halfWidth+.2,.25,def.halfLength+.2);
+      const at=freeRecoverySlot(car,cars,raceRoute(car.id),activeVenue.course,slot=>!!physics.intersectionWithShape(
+        {x:slot.x,y:activeVenue.course.height(slot.x,slot.z)+.8,z:slot.z},
+        {x:0,y:Math.sin(slot.yaw/2),z:0,w:Math.cos(slot.yaw/2)},shape,undefined,undefined,undefined,car.body));
+      if(at){
+        car.place(at.x,at.z,at.yaw);car.offTrackTime=0;car.checkpointDistance=Infinity;car.penalty+=5;
+        drivers.memory.delete(car.id);raceRecovery.clear(car);
+      }
     }
   }else if(car.rollTime>5){car.place(car.current.x,car.current.z,yaw);car.health=Math.max(1,car.health-7);car.penalty+=5;drivers.memory.delete(car.id);}
   return drivers.update(car,cars,mode,dt,()=>{

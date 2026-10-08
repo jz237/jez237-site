@@ -59,14 +59,14 @@ function harness(){
  const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
  const context:any={T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
-  createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),
+  createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
   quarry:{checkpoint,modeScenery:[],props:[],sun:{shadow:{needsUpdate:false}},collisionPhysics:{statics:new Map()},arenaPhysics:{walls:[]},setMode(){log.push('quarry mode');},resetProps(){log.push('reset props');}},quarryMode:'derby',
   kind:'coupe',mode:'race',demo:false,online:{active:false},onlineRules:()=>context.online.network?.snapshot?.event?.rules,
   activeClubRound:null,clubCup:null,round:null,clubRound:()=>context.round,activeChallenge:undefined,traffic:false,
   eventOptions:{course:'cinderbank-oval-v1',race:'laps',laps:1,field:8,direction:'forward'},demoOptions:{course:'cinderbank-oval-v1',field:11,lineup:'mixed',setups:'stock',laps:1},
   waypointRace:null,WaypointRace:class{constructor(){throw Error('Waypoint constructor intentionally outside fixture');}},courseRoute,courseGridSlot,directionForCar,derbyGridSlot,DERBY_ARENA,DEFINITIONS,CAR_KINDS,demoCarKind,demoVehicleSetup,
-  Vehicle:FixtureCar,cars:[],garage:readGarage(),bankRun(){log.push('bank');},drivers:{reset(){log.push('drivers reset');}},combat:{reset(){}},
+  stockSetup,Vehicle:FixtureCar,cars:[],garage:readGarage(),bankRun(){log.push('bank');},drivers:{reset(){log.push('drivers reset');}},combat:{reset(){}},
   sound:{clearCars(){},attach(){},pause(value:boolean){log.push('sound '+value);}},vehicleFire:undefined,puddleSplashes:undefined,
   fx:{world:quarryPhysics,groundHeight:quarryVenue.course.height,reset(){log.push('effects reset');},debris:[],evidence:{}},events:{clear(){log.push('events clear');}},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:{clear(){log.push('impacts clear');}},collisions:19,
   ReplayRecorder,replayCourseId,captureReplayFrame:frame,recorder:null,lastReplay:null,replayEpochs:[],elapsed:0,studio:null,studioRestore:null,preparingEvent:false,state:'result',
@@ -144,5 +144,16 @@ test('production car creation selects independent custom/demo difficulty and res
   c.demo=false;c.activeChallenge={course:'cinderbank-oval-v1',laps:1};c.createCars();assert.equal(c.drivers.difficulty,'amateur');
   c.activeChallenge=undefined;c.mode='playground';c.createCars();assert.equal(c.drivers.difficulty,'amateur');
   c.mode='race';c.createCars();assert.equal(c.drivers.difficulty,'novice');c.createCars(true);assert.equal(c.drivers.difficulty,'amateur');
+ }finally{h.close();}
+});
+
+
+test('Bracken event, demo, time trial and replay use an isolated hilly world then restore the previous venue',()=>{
+ const h=harness();try{const c=h.c,old=c.ensureVenue('cinderbank-oval-v1'),venue=c.ensureVenue('bracken-rallycross-v1');
+  assert.notEqual(venue.physics,old.physics);assert.equal(c.ensureVenue('bracken-rallycross-v1'),venue);assert.equal(venue.checkpoint.name,'bracken-rallycross-v1_checkpoint');
+  c.eventOptions.course='bracken-rallycross-v1';for(const direction of ['forward','reverse','opposing']){c.eventOptions.direction=direction;c.createCars();assert.equal(c.activeVenue,venue);assert.equal(c.fx.groundHeight,venue.course.height);for(const car of c.cars)assert.equal(car.ground,venue.course);}
+  c.demoOptions.course='bracken-rallycross-v1';c.demo=true;c.createCars();assert.equal(c.activeVenue,venue);assert.equal(c.cars.length,11);
+  c.demo=false;c.activeTimeTrial={kind:'tern',course:'bracken-rallycross-v1',direction:'reverse'};c.createCars();assert.equal(c.activeVenue,venue);assert.equal(c.cars.length,1);c.beginReplay();c.elapsed=1;c.captureReplay(true);const doc=c.recorder.document();assert.equal(doc.meta.courseId,'bracken-rallycross-v1');assert.equal(doc.meta.reverse,true);
+  c.activeTimeTrial=null;c.createCars(true);c.state='menu';const previous=c.activeVenue;assert.equal(c.openStudio(false,doc),true);assert.equal(c.activeVenue,venue);c.closeStudio();assert.equal(c.activeVenue,previous);assert.equal(venue.root.visible,false);assert.equal(c.physics,previous.physics);assert.equal(old.physics.freed,0);
  }finally{h.close();}
 });
