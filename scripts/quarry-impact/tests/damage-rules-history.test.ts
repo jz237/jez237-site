@@ -1,6 +1,7 @@
+import {restoreRedbankBytes} from './redbank-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDamageRulesPrevious,restoreDamageRulesBytes,verifyDamageRulesRevision} from './damage-rules-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRedbankBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DamageRules preserves every prior fixture, vehicle asset, control and camera input',verifyDamageRulesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/damage-rules/revision.json').toString());
