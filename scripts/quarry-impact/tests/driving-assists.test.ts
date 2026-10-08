@@ -17,7 +17,8 @@ function rig(kind:CarKind,api:typeof Physics=Physics){
  return{world,car,state,step(){api.stepVehiclePhysics(car.body,car.controller,kind,spec,state,dt);world.step();},free(){world.free();}};
 }
 test('every chassis keeps its exact pre-assist trajectory when preferences are absent or at defaults',()=>{
- for(const kind of CAR_KINDS){const a=rig(kind,prior),b=rig(kind),c=rig(kind);try{
+ // The pre-assist fixture predates the Regent chassis.
+ for(const kind of CAR_KINDS.filter(k=>k!=='regent')){const a=rig(kind,prior),b=rig(kind),c=rig(kind);try{
   for(let i=0;i<540;i++){const input={throttle:i>=120&&i<400?1:i>=480?-.6:0,brake:i>=400&&i<480?1:0,steer:i>=240&&i<380?.3:0,handbrake:i>=360&&i<385};
    a.state.input=input;b.state.input=input;c.state.input={...input,assists:{...DEFAULT_ASSISTS}};
    for(const r of [a,b,c])r.step();for(const r of [b,c]){assert.deepEqual(r.car.body.translation(),a.car.body.translation(),kind+' tick '+i);assert.deepEqual(r.car.body.rotation(),a.car.body.rotation());}

@@ -1,3 +1,4 @@
+import {restoreRegentBytes} from './regent-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -16,9 +17,9 @@ export function restoreDrivingAssistsBytes(file:string,bytes:Buffer):Buffer{
 export function verifyDrivingAssistsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'7002cea0554d86c75c048cf2b88761d3d4b0d286');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreRegentBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreDrivingAssistsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the DrivingAssists release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreRegentBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the DrivingAssists release');
  assert.equal(manifest.previousFixtureCount,1456);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1456);
 }

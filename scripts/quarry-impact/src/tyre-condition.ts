@@ -17,8 +17,8 @@ export function tyreFailure(damage?:number){
 
 // Measured metal bounds exclude rubber ribs and wheel-view blockers. The sphere
 // contains every actual metal vertex, so its clearance also covers camber/spin.
-const metalRadius:Record<CarKind,number>={shuttle:.2553125,coupe:.31640545,sedan:.34432976,hatch:.34882476,muscle:.24835855,wagon:.24835855,utility:.24835855,compact:.19000000,van:.22265625,tern:.19000000,marten:.19000000,buggy:.20800001};
-const metalSphere:Record<CarKind,number>={shuttle:.2775462,coupe:.343084,sedan:.366979,hatch:.369064,muscle:.271376,wagon:.271376,utility:.271376,compact:.206546,van:.242046,tern:.206546,marten:.206546,buggy:.234413};
+const metalRadius:Record<CarKind,number>={regent:.225625,shuttle:.2553125,coupe:.31640545,sedan:.34432976,hatch:.34882476,muscle:.24835855,wagon:.24835855,utility:.24835855,compact:.19000000,van:.22265625,tern:.19000000,marten:.19000000,buggy:.20800001};
+const metalSphere:Record<CarKind,number>={regent:.2452734,shuttle:.2775462,coupe:.343084,sedan:.366979,hatch:.369064,muscle:.271376,wagon:.271376,utility:.271376,compact:.206546,van:.242046,tern:.206546,marten:.206546,buggy:.234413};
 export const vehicleFlatTyreRadius=(kind:CarKind)=>Math.max(metalRadius[kind]+.015,metalSphere[kind]+.005,vehicleWheelRadius(kind)*.70);
 
 function lowerWishboneWeight(point:DamageVector,corner:number){

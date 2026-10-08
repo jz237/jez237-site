@@ -197,3 +197,5 @@ and licenses above continue to apply.
 ## Calder Shuttle
 
 Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SHUTTLE.md).
+
+- Hartwell Regent: original Quarry Impact full-size saloon, including original project wheel artwork. See [HARTWELL-REGENT.md](HARTWELL-REGENT.md).

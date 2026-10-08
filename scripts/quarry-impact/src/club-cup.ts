@@ -62,7 +62,7 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
 ]);
 export function clubRoster(kind:CarKind,lineup:GridLineup='mixed',field=11){
  requireValue(isCarKind(kind)&&isGridLineup(lineup)&&isClubField(field),'selected car or field rule');
- const eligible=gridPool(kind,lineup),pool=(field===11?(kind==='shuttle'?['shuttle',...CLUB_KINDS] as CarKind[]:CLUB_KINDS):FIELD_KINDS).filter(k=>eligible.includes(k)),offset=pool.indexOf(kind);
+ const eligible=gridPool(kind,lineup),pool=(kind==='regent'?['regent',...(field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:field===11?(kind==='shuttle'?['shuttle',...CLUB_KINDS] as CarKind[]:CLUB_KINDS):FIELD_KINDS).filter(k=>eligible.includes(k)),offset=pool.indexOf(kind);
  return Array.from({length:field},(_,slot)=>({slot,kind:pool[(offset+slot)%pool.length]}));
 }
 export const clubSeries=(cup?:Pick<ClubCupState,'series'>|null):ClubSeries=>CLUB_SERIES.find(s=>s.id===(cup?.series??'club'))!;
