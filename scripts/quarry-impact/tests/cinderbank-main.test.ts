@@ -1,3 +1,4 @@
+import {WaypointRace} from '../src/waypoint-race';
 import {HARROW_ARENA,buildHarrowPhysics,harrowGround} from '../src/harrow-arena';
 import {createHarrowWorld} from '../src/harrow-world';
 import * as Arenas from '../src/arena-id';
@@ -71,7 +72,7 @@ function harness(){
   kind:'coupe',mode:'race',demo:false,online:{active:false},onlineRules:()=>context.online.network?.snapshot?.event?.rules,
   activeClubRound:null,clubCup:null,round:null,clubRound:()=>context.round,activeChallenge:undefined,traffic:false,
   eventOptions:{course:'cinderbank-oval-v1',race:'laps',laps:1,field:8,direction:'forward'},demoOptions:{course:'cinderbank-oval-v1',field:11,lineup:'mixed',setups:'stock',laps:1},
-  waypointRace:null,WaypointRace:class{constructor(){throw Error('Waypoint constructor intentionally outside fixture');}},courseRoute,courseGridSlot,directionForCar,derbyGridSlot,DERBY_ARENA,DEFINITIONS,CAR_KINDS,demoCarKind,demoVehicleSetup,
+  waypointRace:null,WaypointRace,courseRoute,courseGridSlot,directionForCar,derbyGridSlot,DERBY_ARENA,DEFINITIONS,CAR_KINDS,demoCarKind,demoVehicleSetup,
   stockSetup,Vehicle:FixtureCar,cars:[],garage:readGarage(),bankRun(){log.push('bank');},drivers:{reset(){log.push('drivers reset');}},combat:{reset(){}},
   sound:{clearCars(){},attach(){},pause(value:boolean){log.push('sound '+value);}},vehicleFire:undefined,puddleSplashes:undefined,
   fx:{world:quarryPhysics,groundHeight:quarryVenue.course.height,reset(){log.push('effects reset');},debris:[],evidence:{}},events:{clear(){log.push('events clear');}},collisionScars:new CollisionScars(),captureCollisionMotion,collisionPointVelocity,impactAdjudicator:{clear(){log.push('impacts clear');}},collisions:19,
@@ -121,12 +122,12 @@ test('actual createCars binds course/world/effects and exact ordered grids throu
  }finally{h.close();}
 });
 
-test('production preference routing preserves old defaults and excludes new circuit from waypoint, nonrace and online modes',()=>{
+test('production preference routing preserves old defaults and allows waypoint venues while preserving nonrace and online defaults',()=>{
  const h=harness();try{
   const c=h.c,f=c.bindings.preferredCourse;assert.equal(f(),'cinderbank-oval-v1');
   c.eventOptions.course=undefined;assert.equal(f(),'quarry-v1');c.eventOptions.course='ironfield-figure-eight-v1';assert.equal(f(),'ironfield-figure-eight-v1');
   c.demo=true;assert.equal(f(),'cinderbank-oval-v1');c.mode='derby';assert.equal(f(),'quarry-v1');c.mode='playground';assert.equal(f(),'quarry-v1');
-  c.demo=false;c.mode='race';c.eventOptions.course='cinderbank-oval-v1';for(const race of ['ordered','free','random']){c.eventOptions.race=race;assert.equal(f(),'quarry-v1');}c.eventOptions.race='laps';
+  c.demo=false;c.mode='race';c.eventOptions.course='cinderbank-oval-v1';for(const race of ['ordered','free','random']){c.eventOptions.race=race;assert.equal(f(),'cinderbank-oval-v1');}c.eventOptions.race='laps';
   c.online.active=true;assert.equal(f(),'quarry-v1');c.online.active=false;c.activeChallenge={id:'original'};assert.equal(f(),'quarry-v1');c.activeChallenge.course='ironfield-figure-eight-v1';assert.equal(f(),'ironfield-figure-eight-v1');
   c.round={course:'quarry-v1'};assert.equal(f(),'quarry-v1');c.round={course:'ironfield-figure-eight-v1'};assert.equal(f(),'ironfield-figure-eight-v1');
  }finally{h.close();}
@@ -212,4 +213,14 @@ test('Harrow custom/demo worlds preserve circuit choices, ground, grid, camera b
   c.mode='race';c.createCars();assert.equal(c.activeVenue.course.id,'cinderbank-oval-v1');assert.equal(c.activeVenue.arenaId,undefined);assert.equal(c.demoOptions.arena,'harrow-bowl-v1');
   c.mode='derby';c.demo=false;c.activeChallenge={id:'fixture',course:'quarry-v1',mode:'derby'};c.createCars();assert.equal(c.activeVenue,c.quarryVenue,'fixed challenges keep their existing arena');
  }finally{h.close();}
+});
+
+test('all production waypoint grids and recordings use their selected venue in solo and demo modes',()=>{
+ for(const id of Object.keys(COURSE_NAMES) as CourseId[])for(const format of ['ordered','free','random'] as const)for(const demo of [false,true]){
+  const h=harness();try{const c=h.c;c.demo=demo;c.eventOptions.course=id;c.eventOptions.race=format;c.demoOptions.course=id;c.demoOptions.race=format;c.createCars();
+   assert.equal(c.activeVenue.course.id,id);assert.ok(c.waypointRace instanceof WaypointRace);assert.equal(c.waypointRace.order,format);assert.deepEqual(c.waypointRace.stations.map((p:any)=>({x:p.x,z:p.z})),[0,3,7,11,15,19].map(i=>getRaceCourse(id).checkpoints[i]));
+   const direction=c.waypointRace.startDirection();for(const car of c.cars){const spawn=courseGridSlot(getRaceCourse(id),car.id,direction);assert.ok(Math.abs(car.current.x-spawn.x)<1e-7);assert.ok(Math.abs(car.current.z-spawn.z)<1e-7);assert.equal(car.passed,0);}
+   c.beginReplay();assert.equal(c.recorder.meta.courseId,id==='quarry-v1'?undefined:id);
+  }finally{h.close();}
+ }
 });

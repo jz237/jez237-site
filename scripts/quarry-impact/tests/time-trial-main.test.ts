@@ -265,7 +265,7 @@ test('actual start failures clear attempt state, preserve records/previous repla
 
 test('leaving trial restores custom-event, garage, demo and online defaults rather than retaining solo overrides',async()=>{
  const h=harness();await h.select(configurations[5]);h.context.state='playing';h.f.pause();h.click('#main-menu');
- assert.equal(h.context.activeTimeTrial,null);assert.equal(h.f.customEvent(),true);assert.equal(h.f.raceFormat(),'random');assert.equal(h.f.raceLaps(),9);assert.equal(h.f.preferredCourse(),'quarry-v1');
+ assert.equal(h.context.activeTimeTrial,null);assert.equal(h.f.customEvent(),true);assert.equal(h.f.raceFormat(),'random');assert.equal(h.f.raceLaps(),9);assert.equal(h.f.preferredCourse(),'ironfield-figure-eight-v1');
  h.context.eventOptions.race='laps';h.f.createCars();assert.equal(h.context.cars.length,24);assert.equal(h.context.activeVenue.course.id,'ironfield-figure-eight-v1');assert.equal(h.f.raceDirection(1),'reverse');assert.deepEqual(h.context.cars[0].setup,h.context.garage.cars[h.context.kind].setup);
  h.context.state='menu';await h.f.startTimeTrial(configurations[0]);await h.f.start(true);assert.equal(h.context.activeTimeTrial,null);assert.equal(h.context.demo,true);assert.equal(h.context.cars.length,24);assert.equal(h.context.telemetry,null);
  h.context.demo=false;h.context.online={active:true,network:{snapshot:{event:{rules:{race:'laps',direction:'reverse',laps:5,duration:99,derby:'score'}}}}};
