@@ -1,6 +1,7 @@
+import {restoreChampionshipsBytes} from './championships-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRaceRecoveryHarnessPrevious,restoreRaceRecoveryHarnessBytes,verifyRaceRecoveryHarnessRevision} from './race-recovery-harness-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreChampionshipsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RaceRecoveryHarness preserves every prior fixture, vehicle asset, control and camera input',verifyRaceRecoveryHarnessRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/race-recovery-harness/revision.json').toString());

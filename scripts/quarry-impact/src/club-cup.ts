@@ -1,5 +1,6 @@
 import type {CarKind,Mode} from './rules';
 import type {CourseId} from './course-id';
+import {isAIDifficulty,type AIDifficulty} from './ai-difficulty';
 import type {RunStats} from './session-telemetry';
 import {settleRun,type Award,type DriverProfile} from './progression';
 
@@ -7,18 +8,44 @@ export const CLUB_CUP_KEY='quarry-impact-club-cup-v1';
 /** Version 1 keeps its roster/order even if a later release adds more cars. */
 export const CLUB_KINDS=Object.freeze(['coupe','sedan','hatch','muscle','wagon','utility','compact','van','tern','marten','buggy'] as const);
 export const CLUB_POINTS=Object.freeze([25,20,16,13,11,9,7,5,3,2,1] as const);
-export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival';
-export type ClubRound=Readonly<{index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;laps:number;duration:number;stock:true}>;
+export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale';
+export type ClubRound=Readonly<{index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;laps:number;duration:number;stock:true;direction?:'forward'|'reverse'|'opposing'}>;
 export const CLUB_ROUNDS:readonly ClubRound[]=Object.freeze([
  Object.freeze({index:0,id:'quarry-circuit',name:'Quarry Circuit',mode:'race',course:'quarry-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:1,id:'ironfield-circuit',name:'Ironfield Raceway',mode:'race',course:'ironfield-figure-eight-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:2,id:'quarry-survival',name:'Quarry Survival',mode:'derby',course:'quarry-v1',laps:0,duration:90,stock:true} as const),
 ]);
+export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet';
+export type ClubSeries=Readonly<{id:ClubSeriesId;name:string;description:string;rounds:readonly ClubRound[]}>;
+const round=(index:number,id:ClubRoundId,name:string,course:CourseId,laps=1,direction:ClubRound['direction']='forward'):ClubRound=>Object.freeze({index,id,name,course,laps,direction,mode:'race',duration:0,stock:true});
+export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
+ Object.freeze({id:'club',name:'Club Cup',description:'Two circuit races and a survival finale. The original three-round championship.',rounds:CLUB_ROUNDS}),
+ Object.freeze({id:'sprint',name:'Sprint Series',description:'Three quick one-lap races, including a reverse oval and the Bracken rallycross finale.',rounds:Object.freeze([
+  round(0,'cinderbank-sprint','Cinderbank Sprint','cinderbank-oval-v1'),
+  round(1,'cinderbank-reverse','Cinderbank Reverse','cinderbank-oval-v1',1,'reverse'),
+  round(2,'bracken-sprint','Bracken Sprint','bracken-rallycross-v1'),
+ ])}),
+ Object.freeze({id:'tour',name:'Four Course Tour',description:'Two laps at every venue. Carry your points from Quarry to the elevated Bracken finale.',rounds:Object.freeze([
+  round(0,'quarry-circuit','Quarry Circuit','quarry-v1',2),
+  round(1,'ironfield-circuit','Ironfield Raceway','ironfield-figure-eight-v1',2),
+  round(2,'cinderbank-circuit','Cinderbank Speedway','cinderbank-oval-v1',2),
+  round(3,'bracken-circuit','Bracken Rallycross','bracken-rallycross-v1',2),
+ ])}),
+ Object.freeze({id:'gauntlet',name:'Wreckers Gauntlet',description:'Five rounds of opposing traffic, reverse rallycross and survival derbies. Repairs between rounds keep you in the fight.',rounds:Object.freeze([
+  round(0,'ironfield-opposing','Ironfield Head-On','ironfield-figure-eight-v1',1,'opposing'),
+  Object.freeze({...CLUB_ROUNDS[2],index:1}),
+  round(2,'quarry-opposing','Quarry Head-On','quarry-v1',1,'opposing'),
+  round(3,'bracken-reverse','Bracken Reverse','bracken-rallycross-v1',2,'reverse'),
+  Object.freeze({...CLUB_ROUNDS[2],index:4,id:'quarry-finale' as const,name:'Last Car Standing',duration:120}),
+ ])}),
+]);
+export const clubSeries=(cup?:Pick<ClubCupState,'series'>|null):ClubSeries=>CLUB_SERIES.find(s=>s.id===(cup?.series??'club'))!;
+export const clubRounds=(cup?:Pick<ClubCupState,'series'>|null)=>clubSeries(cup).rounds;
 export type ClubStatus='finished'|'survived'|'wrecked'|'dnf'|'retired';
 export type ClubRowInput=Readonly<{slot:number;status:ClubStatus;finishTime:number|null;health:number;progress:number;damage:number}>;
 export type ClubResultRow=ClubRowInput&Readonly<{place:number;points:number}>;
 export type ClubRoundResult=Readonly<{index:number;round:ClubRoundId;rows:readonly ClubResultRow[];runStats?:Readonly<RunStats>}>;
-export type ClubCupState=Readonly<{version:1;id:string;created:number;roster:readonly Readonly<{slot:number;kind:CarKind}>[];phase:'ready'|'running'|'complete';results:readonly ClubRoundResult[]}>;
+export type ClubCupState=Readonly<{version:1;id:string;created:number;series?:ClubSeriesId;difficulty?:AIDifficulty;roster:readonly Readonly<{slot:number;kind:CarKind}>[];phase:'ready'|'running'|'complete';results:readonly ClubRoundResult[]}>;
 export type ClubStanding=Readonly<{slot:number;kind:CarKind;points:number;wins:number;place:number}>;
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 function requireValue(condition:unknown,message:string):asserts condition{if(!condition)throw new Error('Invalid Club Cup: '+message);}
@@ -32,9 +59,9 @@ function number(value:unknown,min:number,max:number,integer=false):number{
 }
 function freeze<T>(value:T):T{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;}
 const rowFields=['slot','status','finishTime','health','progress','damage'] as const;
-function canonicalRows(value:unknown,index:number):readonly ClubResultRow[]{
+function canonicalRows(value:unknown,index:number,rounds:readonly ClubRound[]=CLUB_ROUNDS):readonly ClubResultRow[]{
  requireValue(Array.isArray(value)&&value.length===11,'every round needs all 11 slots');
- const round=CLUB_ROUNDS[index];requireValue(round,'round index');
+ const round=rounds[index];requireValue(round,'round index');
  const rows:ClubRowInput[]=value.map(raw=>{
   const v=object(raw,rowFields,['place','points']);const slot=number(v.slot,0,10,true),health=number(v.health,0,100),progress=number(v.progress,-100,1e6),damage=number(v.damage,0,10000);
   requireValue(['finished','survived','wrecked','dnf','retired'].includes(v.status as string),'status');const status=v.status as ClubStatus;
@@ -73,45 +100,48 @@ function outcomeStats(value:unknown,rows:readonly ClubResultRow[]):Readonly<RunS
 function sameRows(a:readonly ClubResultRow[],b:readonly ClubResultRow[]){return a.length===b.length&&a.every((r,i)=>[...rowFields,'place','points'].every(k=>r[k as keyof ClubResultRow]===b[i][k as keyof ClubResultRow]));}
 function sameStats(a:Readonly<RunStats>|undefined,b:Readonly<RunStats>|undefined){return a===undefined||b===undefined?a===b:[...statFields,'won'].every(k=>a[k as keyof RunStats]===b[k as keyof RunStats]);}
 function validate(value:unknown):ClubCupState{
- const v=object(value,['version','id','created','roster','phase','results']);requireValue(v.version===1&&typeof v.id==='string'&&UUID.test(v.id),'version or UUID');number(v.created,0,8640000000000000,true);
+ const v=object(value,['version','id','created','roster','phase','results'],['series','difficulty']);requireValue(v.version===1&&typeof v.id==='string'&&UUID.test(v.id),'version or UUID');number(v.created,0,8640000000000000,true);
+ requireValue(v.series===undefined||CLUB_SERIES.some(s=>s.id===v.series),'series');
+ requireValue(v.difficulty===undefined||isAIDifficulty(v.difficulty),'difficulty');
+ const rounds=clubRounds({series:v.series as ClubSeriesId|undefined});
  requireValue(Array.isArray(v.roster)&&v.roster.length===11,'roster');
  const first=object(v.roster[0],['slot','kind']).kind,offset=CLUB_KINDS.indexOf(first as typeof CLUB_KINDS[number]);requireValue(offset>=0,'selected car');
  const roster=v.roster.map((raw,i)=>{const r=object(raw,['slot','kind']);requireValue(r.slot===i&&r.kind===CLUB_KINDS[(offset+i)%11],'roster order');return {slot:i,kind:r.kind as CarKind};});
- requireValue(Array.isArray(v.results)&&v.results.length<=3,'results');
- requireValue(v.phase==='ready'||v.phase==='running'||v.phase==='complete','phase');requireValue((v.phase==='complete')===(v.results.length===3),'phase/result count');
+ requireValue(Array.isArray(v.results)&&v.results.length<=rounds.length,'results');
+ requireValue(v.phase==='ready'||v.phase==='running'||v.phase==='complete','phase');requireValue((v.phase==='complete')===(v.results.length===rounds.length),'phase/result count');
  const results=v.results.map((raw,index)=>{
-  const r=object(raw,['index','round','rows'],['runStats']);requireValue(r.index===index&&r.round===CLUB_ROUNDS[index].id,'round order');const rows=canonicalRows(r.rows,index);
+  const r=object(raw,['index','round','rows'],['runStats']);requireValue(r.index===index&&r.round===rounds[index].id,'round order');const rows=canonicalRows(r.rows,index,rounds);
   requireValue(Array.isArray(r.rows)&&r.rows.every((row,i)=>{const x=object(row,[...rowFields,'place','points']);return Object.keys(x).every(k=>x[k]===rows[i][k as keyof ClubResultRow]);}),'noncanonical result order, rank or points');
   const runStats=Object.hasOwn(r,'runStats')?stats(r.runStats):undefined;
   if(runStats)requireValue(sameStats(runStats,outcomeStats(runStats,rows)),'telemetry outcome disagrees with results');
-  return {index,round:CLUB_ROUNDS[index].id,rows,...(runStats?{runStats}:{})};
+  return {index,round:rounds[index].id,rows,...(runStats?{runStats}:{})};
  });
- return freeze({version:1,id:v.id,created:v.created as number,roster,phase:v.phase,results});
+ return freeze({version:1,id:v.id,created:v.created as number,...(v.series?{series:v.series as ClubSeriesId}:{}),...(v.difficulty?{difficulty:v.difficulty as AIDifficulty}:{}),roster,phase:v.phase,results});
 }
 /** Reject the whole save rather than repairing rankings, awards or poisoned fields. */
 export function readClubCup(text?:string|null):ClubCupState|null{
  if(typeof text!=='string'||text.length>100000)return null;try{return validate(JSON.parse(text));}catch{return null;}
 }
-export function createClubCup(kind:CarKind,id:string,created:number):ClubCupState{
+export function createClubCup(kind:CarKind,id:string,created:number,series?:ClubSeriesId,difficulty?:AIDifficulty):ClubCupState{
  const offset=CLUB_KINDS.indexOf(kind as typeof CLUB_KINDS[number]);requireValue(offset>=0,'selected car');
- return validate({version:1,id,created,roster:CLUB_KINDS.map((_,i)=>({slot:i,kind:CLUB_KINDS[(offset+i)%11]})),phase:'ready',results:[]});
+ return validate({version:1,id,created,...(series?{series}:{}),...(difficulty?{difficulty}:{}),roster:CLUB_KINDS.map((_,i)=>({slot:i,kind:CLUB_KINDS[(offset+i)%11]})),phase:'ready',results:[]});
 }
-export function currentClubRound(cup:ClubCupState):ClubRound|null{return CLUB_ROUNDS[validate(cup).results.length]??null;}
+export function currentClubRound(cup:ClubCupState):ClubRound|null{return clubRounds(cup)[validate(cup).results.length]??null;}
 export function beginClubRound(cup:ClubCupState):ClubCupState{
  const state=validate(cup);requireValue(state.phase!=='complete','cup already complete');return freeze({...state,phase:'running' as const});
 }
 export function rankClubRows(cup:ClubCupState,rows:readonly ClubRowInput[],roundIndex=validate(cup).results.length):readonly ClubResultRow[]{
- validate(cup);number(roundIndex,0,2,true);return canonicalRows(rows,roundIndex);
+ validate(cup);const rounds=clubRounds(cup);number(roundIndex,0,rounds.length-1,true);return canonicalRows(rows,roundIndex,rounds);
 }
 /** Persist the returned result before settling XP. Pass the captured round index
  * from main so a delayed callback cannot complete a different, newly started round. */
 export function finishClubRound(cup:ClubCupState,rows:readonly ClubRowInput[],runStats?:RunStats,roundIndex?:number):ClubCupState{
- const state=validate(cup),index=roundIndex??(state.phase==='running'?state.results.length:state.results.length-1);number(index,0,2,true);
- const ranked=canonicalRows(rows,index),observed=runStats===undefined?undefined:outcomeStats(runStats,ranked),prior=state.results[index];
+ const state=validate(cup),rounds=clubRounds(state),index=roundIndex??(state.phase==='running'?state.results.length:state.results.length-1);number(index,0,rounds.length-1,true);
+ const ranked=canonicalRows(rows,index,rounds),observed=runStats===undefined?undefined:outcomeStats(runStats,ranked),prior=state.results[index];
  if(prior){requireValue(sameRows(prior.rows,ranked)&&(observed===undefined||sameStats(prior.runStats,observed)),'attempted to change a recorded result');return state;}
  requireValue(state.phase==='running'&&index===state.results.length,'round is not running');
- const result:ClubRoundResult={index,round:CLUB_ROUNDS[index].id,rows:ranked,...(observed?{runStats:observed}:{})},results=[...state.results,result];
- return freeze({...state,phase:results.length===3?'complete' as const:'ready' as const,results});
+ const result:ClubRoundResult={index,round:rounds[index].id,rows:ranked,...(observed?{runStats:observed}:{})},results=[...state.results,result];
+ return freeze({...state,phase:results.length===rounds.length?'complete' as const:'ready' as const,results});
 }
 export function clubStandings(cup:ClubCupState):readonly ClubStanding[]{
  const state=validate(cup),rows=state.roster.map(r=>({...r,points:0,wins:0}));
