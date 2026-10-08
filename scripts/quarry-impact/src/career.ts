@@ -17,7 +17,7 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'road-masters',title:'Road Masters',discipline:'racing',description:'Protect the Marten and Shuttle, then bring the Bramble through two technical laps.',cost:3,events:['marten-ashford','shuttle-ironfield','bramble-ashford']},
  {id:'ridge-runners',title:'Ridge Runners',discipline:'racing',description:'Climb Pinecrest in a coupe and buggy, then keep the Shuttle running for two laps.',cost:3,events:['coupe-pinecrest','buggy-pinecrest','shuttle-pinecrest']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));

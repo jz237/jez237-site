@@ -11,6 +11,7 @@ export function readRegentPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreRegentBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreAbsBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readRegentPrevious(file);
 }

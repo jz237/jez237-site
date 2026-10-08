@@ -17,14 +17,14 @@ function evidence():TimeTrialEvidence{
 }
 function at(seconds:number):TimeTrialEvidence{const value=evidence();value.finishTime=seconds;value.run!.seconds=seconds;return value;}
 
-test('all 110 car/course/direction identities round-trip independently without borrowing a different personal best',()=>{
+test('all registered car/course/direction identities round-trip independently without borrowing a different personal best',()=>{
   let records=readTimeTrialRecords();const identities=new Set<string>();let time=30;
   for(const kind of CAR_KINDS)for(const course of Object.keys(COURSE_NAMES) as CourseId[])for(const direction of ['forward','reverse'] as const){
     const selection={kind,course,direction};assert.equal(timeTrialBest(records,selection),null);
     const next=finishTimeTrialRecord(records,selection,at(time));identities.add(timeTrialKey(selection));
     assert.equal(next.result.newBest,true);assert.equal(next.result.best,time);records=next.records;time+=.0123456789;
   }
-  assert.equal(identities.size,110);assert.equal(Object.keys(records.bests).length,110);
+  const expected=CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2;assert.equal(expected,234);assert.equal(identities.size,expected);assert.equal(Object.keys(records.bests).length,expected);
   let saved='';assert.equal(saveTimeTrialRecords(records,{setItem(key,text){assert.equal(key,TIME_TRIAL_KEY);saved=text;}}),true);
   assert.deepEqual(readTimeTrialRecords(saved),records);
   const untouched=JSON.stringify(records);const loaded=readTimeTrialRecords(saved);loaded.bests[timeTrialKey(config)]=1;
