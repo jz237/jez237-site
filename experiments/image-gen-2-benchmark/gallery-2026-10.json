@@ -1,5 +1,159 @@
 [
   {
+    "id": "2026-10-08-factual-infographic-factual-infographic-retinal-detachment-",
+    "title": "Factual infographic: Retinal Detachment — The Lifting Light Layer",
+    "tests": "factual_subtype: medical-health-infographic; eight substantive panels; four-plus explanatory diagrams; no subjective review; requested quality high, size auto, opaque; archive_slot=2026-10-08T02:20; concept=retinal-detachment-tear-subretinal-fluid-eye-repair; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, museum-quality medical infographic directly on the image canvas, NOT a photographed poster, room, screen, desk, framed chart, or mockup. A sophisticated richly detailed portrait educational plate titled “RETINAL DETACHMENT” with subtitle “When the light-sensitive layer lifts away”. Request high quality, opaque output, automatic native size. Prioritize exceptionally readable typography and medically coherent explanatory diagrams. Use a warm ivory background, deep navy typography, coral retinal tissue, muted blue vitreous, ocher supporting wall, teal clinical annotations, and a restrained red urgent-care band. No logo, watermark, source URLs, bibliography, or tiny citations. No graphic gore. General education, not diagnosis.\n\nINFORMATION ARCHITECTURE: One dominant integrated anatomical hero occupies the upper central 40 percent, surrounded and continued below by EIGHT distinct numbered substantive panels. Strong title hierarchy, short captions, disciplined whitespace, tidy leader lines, exact labels, and at least four explanatory close-ups or sectional diagrams. All panels have large illustrations, not just icons. Rich material realism with translucent gel, delicate curved tissue, anatomical layering and subtle volumetric highlights; arrows communicate supported physical mechanisms, not decorative movement. Avoid long paragraphs and invented numbers. Illustration thickness is exaggerated for clarity; label “schematic — not to scale”.\n\nHERO: large oblique sagittal cutaway of an eye, its anterior segment quiet and subordinate, its posterior hemisphere clearly opened to reveal the vitreous cavity and curving retina. Show a localized tear-related detachment: a thin coral retinal flap separates from the ocher underlying wall, a blue pocket of fluid is clearly BETWEEN retina and wall, and a tear in the flap communicates with the vitreous cavity. Blue arrows travel through this tear into the subretinal pocket, never through intact retina. The remaining retina stays attached. Precise callouts: “Vitreous gel”, “Retina — light-sensitive tissue”, “Retinal tear”, “Fluid beneath retina”, “Detached retina”, “Macula — central retina”, “Optic nerve”. Mark the macula unobtrusively in the posterior retina, the nerve exiting the globe. A small functional ribbon reads “Light → retinal signals → optic nerve → brain”. Add a magnified attached-versus-detached cross-section with the supporting blood-supply layer below the retina and label “Separation disrupts function and risks permanent vision loss”. Do not imply the retina is wallpaper or that the whole globe has ruptured.\n\nPANEL 1 — “A tear opens a pathway”: three staged cutaway close-ups, aligned at the same scale: aging-related vitreous separation can pull on retina → a tear opens → fluid passes beneath and lifts retina. Label “Most common type: tear-related”. Draw the gel traction vector separately from the fluid-flow arrows. Caption: “Vitreous separation can cause a tear; not every separation leads to detachment.”\nPANEL 2 — “Three routes to detachment”: three compact comparative sectional diagrams, clearly named “Tear-related: fluid through a break”, “Tractional: scar tissue pulls”, “Exudative: leaking vessels add fluid”. In tractional show a surface scar tether lifting retina without inventing a tear. In exudative show fluid below an intact layer without inventing a hole. One short annotation: “Diabetes can cause tractional disease; inflammation or abnormal vessels can cause exudative disease.”\nPANEL 3 — “Warning signs”: three simulated visual fields showing new dark specks and squiggles, peripheral light flashes, and a dark peripheral curtain encroaching on the field. Labels “Sudden new floaters”, “Flashes”, “Curtain or shadow”. Keep a distinguishable view behind each simulation; no rigid symptom timeline. Caption “Some small detachments have no symptoms.” Prominent integrated red band: “NEW WARNING SIGNS? Eye doctor or emergency room RIGHT AWAY.” State “Retinal detachment is a medical emergency.”\nPANEL 4 — “Who is at higher risk?”: carefully rendered miniature eye-context vignettes and concise labels: “Extreme nearsightedness”, “Advancing age”, “Previous eye surgery”, “Serious eye injury”, “Personal or family history”. Distinguish risk from certainty with “Risk factors are not a diagnosis.” Do not fabricate risk percentages.\nPANEL 5 — “How it is checked”: dignified close vignette of an older adult with medium-brown skin having an eye examination; beside it an enlarged pupil and a peripheral-retina inspection schematic. Labels “Dilated eye exam” and “Inspect the peripheral retina”. Separate small layered section with label “OCT or ultrasound may help”. Do not suggest a home vision test can exclude detachment.\nPANEL 6 — “Seal a tear / support the retina”: three illustrated treatment mini-cutaways, separated from untreated anatomy, labeled “Laser or freezing: seal a tear”, “Scleral buckle: external silicone support”, “Pneumatic retinopexy: gas bubble + prescribed head posture”. Draw an external band pressing the wall toward the tear, NOT inside the eye. Draw the gas bubble within the vitreous cavity, buoyant against the selected tear; show the treatment as specialist-selected, not do-it-yourself. Caption “Larger detachments may need surgery.”\nPANEL 7 — “Vitrectomy and recovery”: two-step enlarged surgical schematic, no graphic operation scene: “Remove gel / drain fluid” → “Seal tears / gas support while healing”. Show retinal apposition after repair with the bubble in the cavity, not beneath retina. Add a macula-focused close-up and caption “Central-retina involvement affects visual outcome.” Below: “Treatment is individualized; repeat procedures may be needed. Reattachment does not guarantee full visual recovery.” No promise of a cure or invented statistics.\nPANEL 8 — “Protect vision”: illustrated protective goggles beside a sports context and a small scheduled eye-exam vignette; concise labels “Protect eyes during risky activities”, “Regular dilated exams can detect small tears”, “Aging-related detachment often cannot be prevented”. Emphasize “Act promptly on new symptoms”, never portray routine exams as a substitute for urgent evaluation.\n\nMaintain eight genuinely explanatory panels, a dominant detailed eye hero, multiple magnified anatomical cross-sections, precise causal arrows, and readable text without crowding. Use short exact labels from this prompt; factual content only as specified, no new statistics, prescription doses, claims of guaranteed prevention, universal treatment advice, or unrelated diseases.",
+    "image": "images/2026-10-08-factual-infographic-factual-infographic-retinal-detachment-.jpg",
+    "thumb": "thumbs/2026-10-08-factual-infographic-factual-infographic-retinal-detachment-.webp",
+    "color": "#c6bab7",
+    "date": "2026-10-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "retinal-detachment-tear-subretinal-fluid-eye-repair",
+      "imageSha256": "a4a26895edb68f29538539409255db0ff44ea393e9a24ae6a925d82549e7935e",
+      "imageDHash": "e4e2e297e6a2505d"
+    },
+    "factualInfographic": {
+      "topic": "How retinal detachment separates the light-sensitive retina from the back wall of the eye, produces warning signs, and is evaluated and repaired",
+      "description": "Anatomical cutaway and eight source-backed panels explain detachment mechanisms, warning signs, risk factors, diagnosis, repair and prevention limits.",
+      "sourceNote": "Verified anatomy, clinical warning signs, diagnosis and treatment mechanisms against National Eye Institute: https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment and American Society of Retina Specialists: https://www.asrs.org/patients/retinal-diseases/6/retinal-detachment",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-08T06:22:02.478627+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Eye Institute",
+            "title": "Retinal Detachment",
+            "sourceType": "government-agency",
+            "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Society of Retina Specialists",
+            "title": "Retinal Detachment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.asrs.org/patients/retinal-diseases/6/retinal-detachment"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The retina is light-sensitive tissue lining the back of the eye; it converts entering light into electrical signals sent to the brain through the optic nerve.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Retinal detachment separates the retina from its normal position at the back wall and underlying blood supply, impairing function and risking permanent vision loss.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In the most common, tear-related (rhegmatogenous) type, fluid passes through a retinal hole or tear and collects beneath the retina, lifting it away.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Aging-related separation of vitreous gel from the retina can cause a retinal tear; thinning peripheral retina and trauma can also lead to tears.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Tractional detachment occurs when scar tissue pulls the retina away; diabetes or other conditions can cause it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exudative detachment occurs when leaking vessels allow fluid to accumulate beneath the retina; inflammation or abnormal vessels can be involved.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Warning signs include a sudden increase in floaters, flashes of light, and a dark curtain or shadow in the field of vision; some small detachments cause no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Retinal detachment is a medical emergency; symptoms require an eye doctor or emergency room right away, and prompt treatment can help protect vision.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Risk factors include extreme nearsightedness, advancing age, previous eye surgery, serious eye injury, previous detachment, and family history; risk factors do not mean detachment is inevitable.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses a dilated eye exam to inspect the retina, including its periphery; OCT or ultrasound may help when more information is needed.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Laser or freezing treatment can seal retinal tears; a larger detachment may require surgery to put the retina back into place.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A scleral buckle is a silicone band outside the eye wall that pushes it closer to a retinal tear; freezing treatment seals the tear.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Vitrectomy removes vitreous gel and drains fluid from beneath the retina; laser or freezing seals tears and a gas bubble can hold the retina while it heals.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pneumatic retinopexy uses a gas bubble and specific head posture to position the bubble over a tear, with laser or freezing to seal it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A retina specialist selects treatment based on the detachment; more than one procedure may be needed and reattachment does not guarantee complete visual recovery.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The macula is the center of the retina; involvement of this central area affects visual prognosis.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Many aging-related detachments cannot be prevented; protective eyewear during risky activities reduces injury risk and regular dilated eye exams can find small tears or detachments early.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-07-random-image-style-sgraffito-the-staircase-returns-its-foot",
     "title": "Sgraffito — The Staircase Returns Its Footsteps",
     "tests": "Fictional staircase memory-return ritual; true sgraffito subtractive layer logic, sectional zigzag composition, limited mineral palette. Cyanotype candidate excluded because prior run found archive-wide medium duplication.; archive_slot=2026-10-07T17:20; concept=staircase-releases-preserved-footsteps-returning-owners; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported low\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported low. Original output retained.",
