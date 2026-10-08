@@ -1,3 +1,4 @@
+import {AI_DIFFICULTIES,type AIDifficulty} from './ai-difficulty';
 import {driveDerby,type DerbyManeuver} from './derby-driving';
 import {CHECKPOINTS, DEFINITIONS, clamp, trackPoint, wrap, type Mode, type CarKind} from './rules';
 import type {Input} from './vehicle';
@@ -28,7 +29,7 @@ function oncomingEncounter(car:DriverCar,other:DriverCar):Encounter|null{
 
 /** Solo driving decisions. Vehicle simulation and the online authority stay separate. */
 export class DrivingBrain {
-  constructor(private arena:ArenaLayout=LEGACY_ARENA){}
+  constructor(private arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
   readonly memory=new Map<number,DriverMemory>();
   reset(){this.memory.clear();}
   update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS):Input {
@@ -40,7 +41,7 @@ export class DrivingBrain {
     const yaw=Math.atan2(car.forward.x,car.forward.z);
     let tx=0,tz=0,desiredSpeed=18;
     if(mode==='derby'){
-      return driveDerby(car,cars,m,this.arena,dt);
+      return driveDerby(car,cars,m,this.arena,dt,AI_DIFFICULTIES[this.difficulty]);
     }else{
       let prev:{x:number;z:number},next:{x:number;z:number},after:{x:number;z:number};
       if(mode==='race'){
@@ -57,12 +58,12 @@ export class DrivingBrain {
       const turn=Math.abs(wrap(Math.atan2(after.x-next.x,after.z-next.z)-Math.atan2(sx,sz)));
       const near=Math.hypot(next.x-car.current.x,next.z-car.current.z);
       if(near<15){const blend=clamp((15-near)/15,0,.55);tx+=(after.x-next.x)*blend;tz+=(after.z-next.z)*blend;}
-      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='gravel'?.87:1);
+      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='gravel'?.87:1)*AI_DIFFICULTIES[this.difficulty].racePace;
       m.phase='racing';
     }
     let angle=wrap(Math.atan2(tx-car.current.x,tz-car.current.z)-yaw);
     let steer=clamp(angle*1.75,-1,1);
-    desiredSpeed=Math.min(desiredSpeed,clamp(23-Math.abs(angle)*12,4.5,23));
+    desiredSpeed=Math.min(desiredSpeed,clamp(23*AI_DIFFICULTIES[this.difficulty].racePace-Math.abs(angle)*12,4.5,23*AI_DIFFICULTIES[this.difficulty].racePace));
     let avoidance=0,oncomingAvoidance=0;
     const encounters=mode==='race'?cars.map(other=>oncomingEncounter(car,other)).filter((value):value is Encounter=>value!==null):[];
     let target=encounters.find(e=>e.car.id===m.pass?.target&&e.ahead> -5&&Math.abs(e.side)<6);
