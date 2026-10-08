@@ -1453,6 +1453,7 @@ function frame(now: number) {
     activeVenue.checkpoint.position.set(p.x,activeVenue===quarryVenue?terrainHeight(p.x,p.z):activeVenue.course.height(p.x,p.z),p.z);
     activeVenue.checkpoint.rotation.y=Math.atan2(ahead.x-p.x,ahead.z-p.z);
   }
+  for(const car of cars)car.syncDrawBatch();
   renderer.info.reset();
   if (staticShadows) {
     for (const car of cars) staticShadows.bindReceivers(car.root);

@@ -1,3 +1,4 @@
+import {VehicleDrawBatch} from './vehicle-draw-batch';
 import {stalledByImpact} from './engine-stall';
 import {cancelWreckNormals} from './wreck-batch';
 import {markCollision} from './collision-scars';
@@ -39,6 +40,9 @@ export type Input = {
   handbrake: boolean;
 };
 export class Vehicle {
+  private drawBatch?:VehicleDrawBatch;
+  syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.root);this.drawBatch.sync();}
+  get drawBatchStats(){return{batches:this.drawBatch?.batches.length??0,panels:this.drawBatch?.batches.reduce((n,b)=>n+b.parts.length,0)??0};}
   readonly suspension?:BuggySuspension;
   syncSuspension(){this.suspension?.update();}
   onVisualEvent?: (event:VisualEvent)=>void;
@@ -416,6 +420,7 @@ export class Vehicle {
     }
   }
   dispose() {
+    this.drawBatch?.dispose();
     this.livery.dispose();
     this.tireContacts.forEach(contact=>contact.dispose());
     this.world.removeVehicleController(this.controller);
