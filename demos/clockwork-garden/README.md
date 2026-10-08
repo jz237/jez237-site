@@ -244,6 +244,16 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   garden's sounds opens as it leaves the house. Handed back to the autopilot (Follow) from outside, it flies home by itself: through the doors if it is north of the house and
   lined up, otherwise up over the ridge first (`_homeward`), and the director resumes inside. The chase and follow cameras end in a hard stop (`cameras.js: hardStop`): never
   past the first solid, and pushed out of one if the bee's own trailing image sits in it (a crown it skims), so the camera never ends up inside a roof or a tree.
+- **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
+  height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
+  widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
+  reflection does that) and inside the house (the real shadows do).
+- **The bee in the water**: its rig, with its lights' glows, is drawn into the pool's mirror pass while the bee can fly (`Pond.mirrorBee`, 49 meshes; they cost nothing unless the bee is in
+  the mirror camera's frustum), so a bee skimming the pool, seen from the side or low, has its reflection with the red and green lights and the headlamp beam in the water.
+- **Grass and daisies** (the lawn shader in `explore/scenery.js`): within about 190 units of the camera the lawn has grain (noise drawn out along a direction picked per cell, two
+  layers whose cell edges fade so no seam shows) and light blade tips, in the lawn's own mean brightness, and here and there a daisy (white petals round a yellow eye, one cell in
+  about two in 24-unit cells, to 420 units). Both fade with distance and as a pixel grows past a blade, leaving the colour that was there. (A `sin`-based hash lost its randomness
+  on big arguments on this GPU, so the cells use a hash without `sin`.) `?grass=0` compiles the lawn without it and `?nobee=1` leaves out the bee's shadow and reflection, both for A/B tests.
 - **Fireflies over the pool**, after dark: a few hundred, hanging over the water, in the reeds and along the lawn's edge, each
   drifting on its own loop and pulsing in its own time (a soft pulse every few seconds, so the swarm sparkles and never blinks
   together). Worked out in the vertex shader (no CPU), HDR sprites that the bloom takes up; they are drawn in the pool's mirror
