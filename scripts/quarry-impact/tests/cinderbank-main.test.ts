@@ -62,7 +62,7 @@ function harness(){
  const frame=(cars:any[],props:any[],_epochs:number[],tyreModel?:1,engineModel?:1)=>{const stride=replayCarStride({tyreModel,engineModel});const data=new Float32Array(cars.length*stride+props.length*7);for(let i=0;i<cars.length;i++){const o=i*stride;data[o+6]=1;data[o+14]=100;for(let w=0;w<4;w++){data[o+21+w*8]=1;data[o+57+w*6]=1;}}return data;};
  const context:any={...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,activeTimeTrial:null,structuredClone,R:{...R,World:TrackedWorld},scene,quarryVenue,activeVenue:quarryVenue,physics:quarryPhysics,raceVenues:{},COURSE_NAMES,resolveCourseId,
   getRaceCourse(id:CourseId){const course=getRaceCourse(id);if(faults.build===id)return{...course,buildPhysics(api:typeof R,world:R.World){world.createRigidBody(api.RigidBodyDesc.fixed());throw Error(id+' physics failed');}};return course;},
-  createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),createRedbankWorld:()=>art('redbank-jump-v1'),
+  createAshfordWorld:()=>art('ashford-autodrome-v1'),createIronfieldWorld:()=>art('ironfield-figure-eight-v1'),createCinderbankWorld:()=>art('cinderbank-oval-v1'),createBrackenWorld:()=>art('bracken-rallycross-v1'),createRedbankWorld:()=>art('redbank-jump-v1'),
   staticShadows:{replaceCasters(root:unknown){log.push('casters '+(root===context.activeVenue.root));},bindReceivers(){log.push('receivers');}},reflections:{invalidate(){log.push('reflections');}},
   quarry:{checkpoint,modeScenery:[],props:[],sun:{shadow:{needsUpdate:false}},collisionPhysics:{statics:new Map()},arenaPhysics:{walls:[]},setMode(){log.push('quarry mode');},resetProps(){log.push('reset props');}},quarryMode:'derby',
   kind:'coupe',mode:'race',demo:false,online:{active:false},onlineRules:()=>context.online.network?.snapshot?.event?.rules,
@@ -184,5 +184,14 @@ test('Redbank owns a distinct live world and actual production grid; replay rest
   assert.equal(c.activeVenue.course.id,'redbank-jump-v1');assert.equal(c.cars.length,24);assert.equal(h.artworks.at(-1)?.id,'redbank-jump-v1');
   for(const car of c.cars){const slot=courseGridSlot(getRaceCourse('redbank-jump-v1'),car.id,'forward');assert.equal(car.current.x,slot.x);assert.equal(car.current.z,slot.z);}
   c.beginReplay();assert.equal(c.recorder.meta.courseId,'redbank-jump-v1');
+ }finally{h.close();}
+});
+
+test('Ashford owns a distinct live world and actual production grid; replay restores its course',()=>{
+ const h=harness();try{
+  const c=h.c;c.eventOptions.course='ashford-autodrome-v1';c.eventOptions.field=24;c.createCars();
+  assert.equal(c.activeVenue.course.id,'ashford-autodrome-v1');assert.equal(c.cars.length,24);assert.equal(h.artworks.at(-1)?.id,'ashford-autodrome-v1');
+  for(const car of c.cars){const slot=courseGridSlot(getRaceCourse('ashford-autodrome-v1'),car.id,'forward');assert.equal(car.current.x,slot.x);assert.equal(car.current.z,slot.z);}
+  c.beginReplay();assert.equal(c.recorder.meta.courseId,'ashford-autodrome-v1');
  }finally{h.close();}
 });
