@@ -44,13 +44,13 @@ const config:TimeTrialConfig={kind:'tern',course:'ironfield-figure-eight-v1',dir
 const result=(changes:Partial<TimeTrialResult>={}):TimeTrialResult=>({status:'finished',eligible:true,reason:'',time:31.123456,previousBest:null,best:31.123456,delta:null,newBest:true,...changes});
 function fixture(){const root=new Element();return{root,ui:root as unknown as HTMLElement,get:(id:string)=>{const node=root.querySelector('#'+id);assert.ok(node,id);return node;}};}
 
-test('setup exposes native eleven-car, six-course and two-direction controls and refreshes the exact selection PB without mutating settings',()=>{
+test('setup exposes native twelve-car, six-course and two-direction controls and refreshes the exact selection PB without mutating settings',()=>{
   const h=fixture(),records=readTimeTrialRecords(),original=Object.freeze({...config});
   records.bests[timeTrialKey(config)]=31.123456;
   records.bests[timeTrialKey({...config,direction:'reverse'})]=32.987654;
   let starts=0;
   showTimeTrialSetup(h.ui,original,records,{start(){starts++;},close(){}});
-  assert.equal(h.get('time-trial-kind').tagName,'SELECT');assert.equal(h.get('time-trial-kind').options.length,11);
+  assert.equal(h.get('time-trial-kind').tagName,'SELECT');assert.equal(h.get('time-trial-kind').options.length,12);
   assert.equal(h.get('time-trial-course').options.length,6);assert.equal(h.get('time-trial-direction').options.length,2);
   assert.equal(h.get('time-trial-kind').value,'tern');assert.equal(h.get('time-trial-course').value,'ironfield-figure-eight-v1');
   assert.equal(h.get('time-trial-best').textContent,'0:31.12');
@@ -120,4 +120,21 @@ test('ghost control saves its preference and updates availability when category 
  assert.equal(h.get('time-trial-ghost-enabled').value,'on');assert.equal(h.get('time-trial-ghost-status').textContent,'Ghost ready');
  const toggle=h.get('time-trial-ghost-enabled');toggle.value='off';toggle.dispatchEvent(new Event('change'));assert.equal(enabled,false);
  const direction=h.get('time-trial-direction');direction.value='reverse';direction.dispatchEvent(new Event('change'));assert.equal(h.get('time-trial-ghost-status').textContent,'Set a new personal best');
+});
+
+
+test('shared opponent controls change category safely and render rival names as text',()=>{
+ const h=fixture();let source='personal',removed=0;
+ const ghost={version:1 as const,config:{...config},time:24,frames:[] as any[],gates:[] as number[]};
+ showTimeTrialSetup(h.ui,config,readTimeTrialRecords(),{start(){},close(){}},'',{
+  enabled:true,change(){},status:()=>source,
+  exchange:{source:()=>source,choose:value=>{source=value;},rival:selected=>selected.direction==='forward'?{name:'<script>Friend</script>',ghost}:null,available:()=>false,export:async()=>'',use:()=>'',remove:()=>{removed++;return 'Removed';}},
+ });
+ assert.equal(h.get('trial-ghost-export').disabled,true);
+ assert.equal(h.get('trial-shared-status').textContent,'<script>Friend</script> · 0:24.00');assert.equal(h.root.querySelector('script'),null);
+ const selector=h.get('trial-ghost-source');selector.value='shared';selector.dispatchEvent(new Event('change'));assert.equal(source,'shared');
+ h.get('trial-shared-remove').click();assert.equal(removed,1);
+ const direction=h.get('time-trial-direction');direction.value='reverse';direction.dispatchEvent(new Event('change'));
+ assert.equal(h.get('trial-shared-remove').disabled,true);assert.equal(h.get('trial-shared-status').textContent,'No shared rival for this selection.');
+ assert.equal(h.get('trial-ghost-use').disabled,true);assert.equal(h.get('time-trial-start').disabled,false);
 });
