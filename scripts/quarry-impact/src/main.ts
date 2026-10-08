@@ -1475,7 +1475,7 @@ addEventListener('keydown', (e) => {
   if(eventSetupOpen){if(e.code==='Escape'){eventSetupOpen=false;menu();}return;}
   if(careerOpen){if(e.code==='Escape'){careerOpen=false;menu();}return;}
   if(profileOpen){if(e.code==='Escape'){profileOpen=false;menu();}return;}
-  if(garageOpen){if(e.code==='Escape'){garageOpen=false;createCars(true);menu();}return;}
+  if(garageOpen){if(e.code==='Escape')ui.querySelector<HTMLButtonElement>('#garage-close')?.click();return;}
   if(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement)return;
   if(state==='lobby')return;
   if (
