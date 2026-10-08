@@ -1,3 +1,6 @@
+import {CAREER_GROUPS,careerChallenge,careerStatus,unlockCareerGroup} from './career';
+import {showCareer} from './career-ui';
+import './career.css';
 import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
 import {TrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
@@ -119,6 +122,7 @@ try{drivingControls=readControls(localStorage.getItem(CONTROLS_KEY));}catch{}
 let garage=readGarage();
 try { garage=readGarage(localStorage.getItem(GARAGE_KEY)); } catch {}
 let garageFace:LiveryFace='right';
+let careerOpen=false,careerRun=false;
 let garageOpen=false,profileOpen=false,eventSetupOpen=false,clubOpen=false;
 let clubCup:ClubCupState|null=null,clubWarning='';
 try{const stored=localStorage.getItem(CLUB_CUP_KEY);clubCup=readClubCup(stored);if(stored&&!clubCup)clubWarning='The saved cup could not be read. You can start a new cup.';}catch{clubWarning='Cup saving is unavailable in this browser.';}
@@ -223,7 +227,31 @@ function bankRun(completed:boolean){
 }
 function openProfile(initialDiscipline:Discipline='racing'){
   profileOpen=true;keys.clear();
-  showDriverProfile(ui,profile,{close:()=>{profileOpen=false;menu();},start:challenge=>{profileOpen=false;activeTimeTrial=null;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);}},profileStorageWarning,initialDiscipline);
+  showDriverProfile(ui,profile,{close:()=>{profileOpen=false;menu();},start:challenge=>{profileOpen=false;careerRun=false;activeTimeTrial=null;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);}},profileStorageWarning,initialDiscipline);
+}
+function openCareer(discipline:Discipline='racing',notice=''){
+  if(preparingEvent||online?.active||!['menu','result'].includes(state))return;
+  careerOpen=true;keys.clear();
+  showCareer(ui,profile,{
+    close:()=>{careerOpen=false;menu();},
+    unlock:id=>{
+      if(!careerOpen||preparingEvent||online?.active)return;
+      const next=unlockCareerGroup(profile,id);if(!next)return;
+      const group=careerGroupForId(id);
+      try{localStorage.setItem(PROFILE_KEY,JSON.stringify(next));profile=next;profileStorageWarning='';openCareer(group, 'Group opened. Choose an event.');}
+      catch{openCareer(group,'Could not save this unlock. Your points have not been spent.');}
+    },
+    start:id=>{void startCareerEvent(id);},
+  },[notice,profileStorageWarning].filter(Boolean).join(' '),discipline);
+}
+function careerGroupForId(id:string):Discipline{return CAREER_GROUPS.find(g=>g.id===id)?.discipline??'racing';}
+async function startCareerEvent(id:string){
+  if(!careerOpen||preparingEvent||online?.active||!['menu','result'].includes(state))return false;
+  const challenge=careerChallenge(profile,id);if(!challenge)return false;
+  careerOpen=false;profileOpen=false;careerRun=true;activeTimeTrial=null;activeClubRound=null;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;
+  const ok=await start(false);
+  if(!ok&&state==='menu')openCareer(challenge.discipline,'The event could not start. Your saved progress is unchanged.');
+  return ok;
 }
 function saveClubCup(){
   if(!clubCup)return false;
@@ -505,7 +533,7 @@ function openGarage() {
 }
 function menu() {
   archiveReplay();bankRun(false);telemetry=null;activeChallenge=undefined;activeTimeTrial=null;timeTrialOpen=false;timeTrialResult=null;timeTrialInvalidReason='';
-  garageOpen=false;profileOpen=false;eventSetupOpen=false;clubOpen=false;activeClubRound=null;clubPlayerStopped=false;clubRetired=false;clubPlayerRow=null;clubRunStats=undefined;clubFirstFinish=null;
+  careerOpen=false;careerRun=false;garageOpen=false;profileOpen=false;eventSetupOpen=false;clubOpen=false;activeClubRound=null;clubPlayerStopped=false;clubRetired=false;clubPlayerRow=null;clubRunStats=undefined;clubFirstFinish=null;
   demo=false;demoRestart=0;demoHudHidden=false;ui.classList.remove('demo-clean');director.reset();orbit.maxDistance=22;orbit.enablePan=true;
   if (online?.active) online.disconnect();
   state = 'menu';
@@ -541,6 +569,7 @@ function menu() {
   const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';
   watch.onclick=()=>{if(mode==='playground')mode='derby';void start(true);};
   ui.querySelector('.intro')!.append(watch);
+  const careerButton=document.createElement('button');careerButton.id='career-open';careerButton.className='small-button';careerButton.textContent='CAREER · CHOOSE YOUR PATH';careerButton.onclick=()=>openCareer();ui.querySelector('.intro')!.append(careerButton);
   const demoSetup=document.createElement('button');demoSetup.className='small-button';demoSetup.id='demo-options';demoSetup.textContent='DEMO OPTIONS';demoSetup.onclick=()=>{eventSetupOpen=true;showDemoSetup(ui,demoOptions,kind,value=>{try{localStorage.setItem(DEMO_KEY,JSON.stringify(value));return true;}catch{return false;}},()=>{eventSetupOpen=false;},()=>{if(mode==='playground')mode='derby';void start(true);});};ui.querySelector('.intro')!.append(demoSetup);
   document.querySelector<HTMLButtonElement>('#settings')!.onclick = () =>
     pause(true);
@@ -1023,10 +1052,10 @@ function finish(title: string) {
   if(activeChallenge&&telemetry){
     const medal=lastAward?.medal??0;
     const detail=activeChallenge.mode==='race'&&!cars[0].finished?'Race not finished':formatChallengeValue(activeChallenge,challengeValue(activeChallenge,telemetry.stats));
-    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${challengeVenueName(activeChallenge)} / ${activeChallenge.title.toUpperCase()} / CHALLENGE</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p><p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">CHALLENGE BOARD</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
+    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${challengeVenueName(activeChallenge)} / ${activeChallenge.title.toUpperCase()} / CHALLENGE</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p>${careerRun?`<p>${careerStatus(profile).available} unlock points available · Best medals count once.</p>`:''}<p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">${careerRun?'CAREER BOARD':'CHALLENGE BOARD'}</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
     studioButtons(ui.querySelector('.challenge-result'));
     ui.querySelector<HTMLButtonElement>('#challenge-retry')!.onclick=()=>{void start(false);};
-    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{const discipline=activeChallenge!.discipline;createCars(true);menu();openProfile(discipline);};
+    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{const discipline=activeChallenge!.discipline,returnToCareer=careerRun;createCars(true);menu();if(returnToCareer)openCareer(discipline);else openProfile(discipline);};
     ui.querySelector<HTMLButtonElement>('#challenge-menu')!.onclick=()=>{createCars(true);menu();};
     return;
   }
@@ -1261,6 +1290,7 @@ function controllerContext():NavigationContext|null {
   }
   if(timeTrialOpen)return screen('time-trial-setup','#time-trial-setup','#time-trial-course',click('#time-trial-close'));
   if(eventSetupOpen)return screen('event-setup','.event-setup','#event-field',click('#event-close'));
+  if(careerOpen)return screen('career','.career-board','[data-career-filter="racing"]',click('#career-close'));
   if(profileOpen)return screen('profile','.profile-board','[data-filter="racing"]',click('#profile-close'));
   if(garageOpen)return screen('garage','.garage-screen','#garage-engine',click('#garage-close'));
   if(state==='result'&&activeTimeTrial)return screen('time-trial-result','#time-trial-result','#again',click('#back'));
@@ -1410,6 +1440,7 @@ addEventListener('keydown', (e) => {
   if(clubOpen){if(e.code==='Escape'){e.preventDefault();closeClubCup();}return;}
   if(timeTrialOpen){if(e.code==='Escape'){e.preventDefault();ui.querySelector<HTMLButtonElement>('#time-trial-close')?.click();}return;}
   if(eventSetupOpen){if(e.code==='Escape'){eventSetupOpen=false;menu();}return;}
+  if(careerOpen){if(e.code==='Escape'){careerOpen=false;menu();}return;}
   if(profileOpen){if(e.code==='Escape'){profileOpen=false;menu();}return;}
   if(garageOpen){if(e.code==='Escape'){garageOpen=false;createCars(true);menu();}return;}
   if(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement)return;

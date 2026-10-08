@@ -91,7 +91,7 @@ function harness(faults:Faults={}){
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
   crypto:{randomUUID:()=>`unit-run-${++serial}`},console:{warn:(...v:unknown[])=>logs.push(v),error:(...v:unknown[])=>logs.push(v)},location:{reload(){calls.reload++;}},
   activeClubRound:null,clubCup:null,clubWarning:'',clubOpen:false,clubRetired:false,clubPlayerStopped:false,clubFirstFinish:null,clubPlayerRow:null,clubRunStats:undefined,
-  activeChallenge:undefined,profile:readProfile(),profileStorageWarning:'',profileOpen:false,garageOpen:false,eventSetupOpen:false,garage:readGarage(),kind:'buggy',mode:'race',
+  activeChallenge:undefined,profile:readProfile(),profileStorageWarning:'',careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,eventSetupOpen:false,garage:readGarage(),kind:'buggy',mode:'race',
   eventOptions:{...readEventOptions(),course:'ironfield-figure-eight-v1',field:24,laps:9,direction:'opposing',race:'random',derby:'score',duration:420},demoOptions:{field:24,laps:9,duration:30,camera:'director',lineup:'mixed',build:'garage'},
   online:null,demo:false,demoRestart:0,demoHudHidden:false,autopilot:false,testInput:null,keys:new Set(['KeyW']),traffic:true,
   state:'menu',preparingEvent:false,preparationInterrupted:false,telemetry:null,runId:'',runSettled:true,lastAward:null,resultTitle:'',elapsed:0,countdown:0,accumulator:0,eventFrameTimes:[],wreckHold:0,
