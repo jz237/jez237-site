@@ -165,6 +165,9 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   the reflection and the ripples gone, the ducks and lilies away, the koi under it unseen. **The panes frost** at their edges and
   corners in veined crystals, growing in with the cover. The birds and the insects keep indoors; the crickets and frogs go quiet; and
   with sound on the outdoors is muffled (the glazing's low-pass closes from 7.2 kHz to 2.3 kHz) with a low, breathing hush.
+- **Shooting stars** on clear nights: three slots (every 19, 27 and 37 s) each leave a thin bright trail with a soft glow across the upper sky for about
+  a second (the bloom takes up the head), in the sky shader (so they reflect in the pool, and cost nothing the rest of the time: a compare and a
+  return). None under a storm, snow or fog.
 - **Fog** (`V`, the menu's Fog, `?fog=1`; the third weather, never together with rain or snow): it comes in over a dozen seconds and lifts in
   about eight. The haze outside thickens to a pale wall a few hundred units deep (its reach follows the density: the pool is milk, the avenue
   dissolves toward the manor), warm in the evening and a moonlit blue-grey at night; the sky is one pale brightness, a soft glow where the sun
@@ -229,9 +232,12 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   water's own shader where it is not mirroring, displaced as the water refracts the line of sight (so they slide as you move) and
   bent by the ripples, passing under the lily pads (which are real geometry over the water); now and then one rises to the surface
   with a ring and a soft "bloop".
-- **APX-9's wake**: fly low over the pool and it leaves rings behind it, as over the fountain (the ducks quack at it, as before);
-  skim it close enough and the water splashes (with sound on). (The ring buffer is shared out: the ducks', the bee's, and the
-  occasional ones.)
+- **Autumn leaves** from the trees come down on the water and drift across it on the breeze, from the upwind margin to the downwind
+  one, turning slowly (up to 24: an instanced mesh, culled with the pool); they are gone under ice.
+- **Written for a bee that can fly out over the pool, and so dormant today**: APX-9 leaves a wake (rings, as over the fountain), the koi bolt away
+  from it and settle back over a few seconds, the ducks quack at it, and the water splashes as it skims. The bee is confined to the
+  glasshouse's flight volume (`explore/bounds.js`), and the pool lies outside the glass, so none of this can trigger yet: it is tested
+  by placing the bee over the water in a harness, not in play. (The pool's ring buffer is shared out: the ducks', the bee's, the occasional ones.)
 - **Fireflies over the pool**, after dark: a few hundred, hanging over the water, in the reeds and along the lawn's edge, each
   drifting on its own loop and pulsing in its own time (a soft pulse every few seconds, so the swarm sparkles and never blinks
   together). Worked out in the vertex shader (no CPU), HDR sprites that the bloom takes up; they are drawn in the pool's mirror
@@ -256,11 +262,11 @@ recording: every sound is synthesised, and every one is fired by something that 
 - **The wind in the trees** follows the garden's own gust field at the camera (the crowns you see lean as it swells), harder in a
   storm; **the pool** laps at its stone and tinkles, and the reeds hiss in a gust: both pan toward the pool and swell as you near it.
 - **Ducks**: the mallards quack now and then, each from where it floats; a duck that tips up splashes as its head goes under and
-  as it comes up; APX-9 passing low over one startles it into a run of quacks and a slap of water.
+  as it comes up (and would quack and splash if APX-9 flew low over one: see the pool's dormant list).
 - **Geese** honk as their formation crosses (a chorus from the flock's own place in the sky); **swallows** twitter as a stream darts
   by; the **starling** cloud rustles and whistles as it swirls above the roof.
-- **The pool's new life** is heard too: a koi's bloop, a dragonfly's whirr and the drop where it touches the water, and a splash
-  when APX-9 skims the surface.
+- **The pool's new life** is heard too: a koi's bloop and a dragonfly's whirr and the drop where it touches the water (and a
+  splash if APX-9 were to skim the surface).
 - **Songbirds** sing far off: a dawn chorus at first light, a few through the day, one or two at dusk. **Rain** makes the pool
   plink. After dusk, and in the wet, **frogs** croak at the pool; **crickets** chirp on the lawns at night, and now and then an
   **owl** calls from the woods.
@@ -467,6 +473,33 @@ up once there's headroom. On 120 Hz+ displays that can't be held at full rate
 it paces frames to an even 60. `?debug=1` shows a readout (fps, slowest
 frames, missed frames, CPU/GPU ms, resolution, detail level); `?adapt=0` turns
 the governor off.
+
+**How it actually runs** (measured with `tools/perfaudit.mjs`: vsync on, a cold cache, the network and the CPU throttled; the build is
+compared with the one before it, alternately, on a quiet machine). The development box has a very fast CPU and GPU, so the slower classes of
+machine are emulated by throttling the CPU (÷2 a mid laptop, ÷4 a mid phone, ÷6 a budget phone) and by rendering at HiDPI:
+
+| | load to first frame | frame rate |
+|---|---|---|
+| desktop, 1080p | 3.5 s (about 3.3 MB over a CDN) | holds 60 (58.8) |
+| desktop, 4K pixel load | 3.8 s | 57: the governor renders at half the pixels |
+| mid laptop (CPU ÷2, HiDPI) | 5.3 s | 28-45: it sits on the 60 Hz cliff (work just over 16.7 ms is a 33 ms frame) |
+| mid phone (CPU ÷4, 4G, `low` tier) | 8.5 s (2.3 MB) | 41 |
+| budget phone (CPU ÷6) | 11 s | about 22 |
+
+Loading is CPU-bound, not network-bound (the page is 410 KB of JavaScript, 284 KB of font and 0.9 MB of planting on a phone, brotli over the
+CDN). The main thread is the limit: about 1,200 draw calls in the glasshouse. The things added around it (the pool, the birds, the lights)
+are held to about 1 ms of main-thread time a frame in total: the pool's mirror pass (a second render of the outdoors) uses an oblique
+near plane, not a clipping plane (a clipping plane made every material drawn in both passes look its shader program up again, twice a
+frame), leaves every branch that holds nothing the mirror shows out of the walk, and skips the scene's matrix update; and every shader-driven
+object has a culling volume, so the pool's ducks, dragonflies, mist and fireflies and the bee's lights are not drawn when they are off screen.
+The wildlife (31 rigs of 25-57 parts) is on a ladder: as a rig shrinks on screen its minor parts (legs, antennae, joints) go first, so a distant
+butterfly keeps its body, head and wings and costs a quarter of the draw calls (800 fewer in the long view of the house; 0.03% of the frame's
+pixels differ).
+
+**The performance gate.** Every change since has to pass `tools/perfgate.mjs` before it ships: fixed cameras on the live build and the candidate,
+alternated, the CPU throttled to a mid phone (÷4); the main thread within +4% (and 1.5 ms at full speed) in every view, the cold boot within +5%,
+the planting ready within +10% (a stale bake grows the planting for 15 s instead of loading it in 0.3: `node tools/bake.mjs` after touching
+`src/world`, `src/materials`, `src/geometry`, `src/creatures` or the planting's own files), the payload within +40 KB.
 
 ## URL parameters
 
