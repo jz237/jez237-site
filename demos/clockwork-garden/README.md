@@ -15,8 +15,11 @@ The landing screen (the garden is already alive behind it) offers:
 | Mode | What it is |
 |---|---|
 | **Film** | the original 58-second film, unchanged and deterministic |
-| **Fly as APX-9** | third-person flight: hover, turn, climb, bank, boost; land on blooms, gather pollen, carry it home |
+| **Fly as APX-9** | third-person flight: hover, turn, climb, bank, boost; land on blooms, gather pollen, carry it home; **fly out of the north doors into the walled garden** (the avenue and its lamps, the reflecting pool, the temple, the manor's gate) and land on its lilies, flower beds, statue and lamps |
 | **Follow APX-9** | APX-9 works on its own (visits blooms, gathers, deposits at the skep, winds the garden); the camera is directed like a film: composed shots joined by cuts (fly-bys set ahead on its route, wide views of the house, a crane after take-off, long-lens tracking, close-ups of its landings, cutaways to the wildlife) |
+
+Both interactive modes now reach the world beyond the glass: the garden is lit by the day's sun and by its own lamps after dark, it has its own weather (rain with puddles, snow, fog, a rainbow after a storm),
+a reflecting pool with koi, ducks, dragonflies and fireflies, and sound (wind, water, birds, frogs, an owl); and every few minutes Follow takes APX-9 out on a trip of its own. (The sections "The world outside the glass", "The reflecting pool and the birds" and "The sound of the garden" say how each piece is made.)
 
 Switch any time: the explore button (winged hexagon) in the film's control
 bar, the menu (top left) in the interactive modes, or `C` / the
@@ -273,6 +276,8 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   had been a flat green disc).
 - **What a struggling device gives up** (`Explore.setPerfLevel`): the garden's close-range detail (the lawn's grain and daisies, the hedges' leaves, the bark: `uDetail` and `scenery.grassU`) is off on the `low` tier from the start and
   from the governor's level 2 on any tier; the lamps' light falls from seven street lamps to four (level 2) and two (level 3), the bee's own lights staying. (The puddles and the night light cost nothing when it is dry and day.)
+- **The gate's piers, the manor's stone and the wall's copings** use the same dressed, weathered stone as the glasshouse's base: ashlar in 70-unit tiles on the gate piers (a box whose texture coordinates run in world units, `_ashlarBox`), and the weathering of the `stone` kind (broad
+  staining and a fine grit) on the manor's columns, pediment, steps and terrace and on the garden wall's coping and pier caps. (The gate's piers had been flat beige slabs, a hundred and ninety units high.)
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
@@ -455,7 +460,7 @@ is found in the project, via `$ESBUILD`, or in wrangler's own install.
 | `A` `D` · `←` `→` | turn; the camera turns with you and, left alone, swings round to the direction of travel |
 | `Space` / `E` · `Shift` / `Q` | climb · descend |
 | `F` or hold left mouse | boost |
-| `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
+| `C` (or `Tab`) | hand APX-9 to its autopilot (Follow); from out in the garden it flies home by itself, round the house's corner and in through the north doors |
 | `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
 | `R` | bring the rain, or clear it |
 | `N` | let it snow, or clear it |
@@ -495,6 +500,8 @@ clear path exists; never during a landing or at the skep).
 Drag to orbit, wheel or pinch to zoom; the camera drifts back to its own
 framing after a few seconds (and leaves a cutaway at once). `C` or *Take the
 controls* to fly from where APX-9 is.
+
+Out of doors (the trips described under "The world outside the glass") the camera has no cutaways and no composed shots: it follows the bee along the avenue, over the lawn and the pool, and into a macro on the lily or the lamp where it rests.
 
 ### Film
 
@@ -569,6 +576,8 @@ the planting ready within +10% (a stale bake grows the planting for 15 s instead
 | `?snow=1` | start in the snow, already lying (`N` clears it) |
 | `?fog=1` | start in the fog (`V` lifts it) |
 | `?garden=fresh` | ignore the saved garden for this visit |
+| `?nobee=1` | leave out the bee's shadow and its reflection in the pool (for A/B timing) |
+| `?grass=0` | compile the lawn without its close-range grass and daisies (for A/B timing) |
 | `?touch=1\|0` | force the touch interface on or off |
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
 | `?adapt=0` | hold resolution and detail fixed (no frame governor) |
