@@ -244,6 +244,10 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   garden's sounds opens as it leaves the house. Handed back to the autopilot (Follow) from outside, it flies home by itself: through the doors if it is north of the house and
   lined up, otherwise up over the ridge first (`_homeward`), and the director resumes inside. The chase and follow cameras end in a hard stop (`cameras.js: hardStop`): never
   past the first solid, and pushed out of one if the bee's own trailing image sits in it (a crown it skims), so the camera never ends up inside a roof or a tree.
+- **Somewhere to land out there** (`Explore._outdoorLandables`): fly low over the pool and settle on a **water lily** (the flowers give a little pollen, which can be carried home to the skep), on a bare **lily pad**
+  (just a rest: the water stays still beneath you, a ring spreads, the hint says "Perched on a lily pad"), or high up on the **temple statue's head**, the **copper ball on the temple's lantern** (the highest spot in the
+  garden, with the whole avenue below) and the **lamp posts' caps** (about 40 of them along the walks; lit ones at dusk). Same controls as a bloom: slow down over it and descend gently; Space to take off. The perches
+  count for nothing in the pollination tally, the autopilot never chooses them (it stays in the glasshouse), and the pads are gone under ice.
 - **The bee's shadow** (`explore/beeshadow.js`): out in the garden the bee throws a soft shadow on the ground (nothing fell outside the glass before, so low flight had no sense of
   height). One quad on the ground, thrown along the sun (kept near; stretched as the sun lowers), cross-shaped (body along its heading, wings across), sharp a few units up and
   widening and fading to nothing by about 170 units; the sun's share of the light darkens it (cloud softens it to a pool of shade), it goes out at night and over the water (the
