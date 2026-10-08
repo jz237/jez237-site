@@ -224,3 +224,28 @@ test('selective cup-save failure still protects old award receipts through ordin
  assert.equal(h.context.profile.xp.racing,before+300);assert.equal(h.context.profile.events,301);
  h.context.localStorage.setItem=save;f.syncClubAwards();assert.equal(h.context.profile.events,302);const after=JSON.stringify(h.context.profile);f.syncClubAwards();assert.equal(JSON.stringify(h.context.profile),after);
 });
+
+
+test('every championship grid matches its round direction, checkpoint debt and replay orientation',()=>{
+ for(const series of Cup.CLUB_SERIES){
+  const initial=Cup.createClubCup('buggy',uuid,1000,series.id,'expert');
+  for(const round of series.rounds){
+   if(round.mode!=='race')continue;
+   const h=base({clubCup:initial,activeClubRound:round.index,mode:'race'}),spawns:Array<{id:number;x:number;z:number;yaw:number}>=[];
+   h.context.ensureVenue=(id:any)=>({course:getRaceCourse(id),props:[]});
+   h.context.Vehicle=class {
+    id:number;kind:CarKind;setup:any;paintColor:T.Color;root=new T.Group();current=new T.Vector3();previous=new T.Vector3();waters=[];nextCheckpoint=0;passed=0;
+    constructor(id:number,kind:CarKind,color:number,_scene:unknown,_world:unknown,_fx:unknown,setup:unknown){this.id=id;this.kind=kind;this.paintColor=new T.Color(color);this.setup=normalizeSetup(setup,kind);}
+    place(x:number,z:number,yaw:number){this.current.set(x,.89,z);spawns.push({id:this.id,x,z,yaw});}preStep(){}postStep(){}render(){}dispose(){}
+   };
+   const f=load(h,[...selectors,'createCars','beginReplay']);f.createCars();
+   assert.equal(h.context.activeVenue.course.id,round.course);assert.equal(spawns.length,11);assert.equal(h.context.drivers.difficulty,'expert');
+   for(const car of h.context.cars){
+    const expected=courseGridSlot(getRaceCourse(round.course),car.id,round.direction??'forward'),placed=spawns[car.id];
+    assert.deepEqual(placed,{id:car.id,x:expected.x,z:expected.z,yaw:expected.yaw},series.id+' round '+round.index+' slot '+car.id);
+    assert.equal(car.nextCheckpoint,expected.next);assert.equal(car.passed,expected.passed);assert.equal(f.raceDirection(car.id),directionForCar(round.direction??'forward',car.id));
+   }
+   f.beginReplay();assert.equal(h.context.recorder.meta.reverse,round.direction==='reverse');
+  }
+ }
+});
