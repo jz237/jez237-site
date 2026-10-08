@@ -165,6 +165,16 @@ Interactive modes only; the film's pixels are untouched (`filmidentity`, `determ
   the reflection and the ripples gone, the ducks and lilies away, the koi under it unseen. **The panes frost** at their edges and
   corners in veined crystals, growing in with the cover. The birds and the insects keep indoors; the crickets and frogs go quiet; and
   with sound on the outdoors is muffled (the glazing's low-pass closes from 7.2 kHz to 2.3 kHz) with a low, breathing hush.
+- **Fog** (`V`, the menu's Fog, `?fog=1`; the third weather, never together with rain or snow): it comes in over a dozen seconds and lifts in
+  about eight. The haze outside thickens to a pale wall a few hundred units deep (its reach follows the density: the pool is milk, the avenue
+  dissolves toward the manor), warm in the evening and a moonlit blue-grey at night; the sky is one pale brightness, a soft glow where the sun
+  is (no disc), brighter at the horizon; low mist banks lie on the land. **Inside the glasshouse the air thickens too**, so the sunbeams stand
+  out in it (the shafts and the god rays are stronger in fog, not weaker as in rain), and at golden hour it is a cathedral of light. The panes
+  **bead with dew**: many fine drops, no runs, each a small lens. **Mist lifts off the pool**: soft wisps drifting low over the water (36 on
+  `high`), in fog and at first light on a clear morning, a faint glow at night. The lamps kindle by day, the blooms glow a little, the geese and
+  the dragonflies keep away (the swallows come out of it). With sound on the outdoors is muffled a little and dew drips from the glasshouse; and
+  every minute or so a **bronze bell tolls**, far off, from the manor (a hum an octave under, the prime, the minor third, the fifth, the octave
+  and upper partials, each dying at its own rate, soft-clipped well below the limiter).
 - **A rainbow after the rain**: when a downpour has cleared and the sun is low enough (the bow's top stands
   42 degrees above the point opposite the sun, so it needs a sun below about 40 degrees: dawn and the morning
   of the slider, or the viewer's own evening), a bow forms opposite it over a few seconds, hangs for about a minute
@@ -393,7 +403,8 @@ is found in the project, via `$ESBUILD`, or in wrangler's own install.
 | `C` (or `Tab`) | hand APX-9 to its autopilot (Follow) |
 | `T` · `[` `]` | cycle the hour (midnight, dusk, dawn, golden hour) · finer |
 | `R` | bring the rain, or clear it |
-| `N` | let it snow, or clear it (rain and snow are never on together) |
+| `N` | let it snow, or clear it |
+| `V` | bring the fog, or lift it (rain, snow and fog are never on together) |
 | `L` | APX-9's navigation lights, on or off |
 | `P` · `Enter` | photo mode · save PNG |
 | `M` · `H` · `G` | sound · controls help · menu |
@@ -474,6 +485,7 @@ the governor off.
 | `?tod=live` | the hour follows your own clock (the menu's *My clock* keeps that choice) |
 | `?rain=1` | start in the rain (`R` clears it) |
 | `?snow=1` | start in the snow, already lying (`N` clears it) |
+| `?fog=1` | start in the fog (`V` lifts it) |
 | `?garden=fresh` | ignore the saved garden for this visit |
 | `?touch=1\|0` | force the touch interface on or off |
 | `?debug=1` | frame-rate readout in the corner (fps, slowest 5% of frames, missed refreshes, CPU/GPU ms, resolution, detail level) |
