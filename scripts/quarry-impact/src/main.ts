@@ -170,10 +170,10 @@ const customEvent=()=>activeClubRound===null&&!activeChallenge&&!activeTimeTrial
 const aiDifficulty=()=>activeClubRound!==null?readAIDifficulty(clubCup?.difficulty):sessionAIDifficulty(customEvent()&&mode!=='playground',demo,eventOptions.difficulty,demoOptions.difficulty);
 let waypointRace:WaypointRace|null=null,waypointMarkers:WaypointMarkers|undefined;
 const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undefined;
-const raceFormat=()=>demo?(demoOptions.race??'laps'):onlineRules()?.race??(customEvent()?eventOptions.race:'laps');
+const raceFormat=()=>demo?(demoOptions.race??'laps'):onlineRules()?.race??clubRound()?.race??activeChallenge?.race??(customEvent()?eventOptions.race:'laps');
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
 const raceTimeLimit=()=>timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
-const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
+const raceDirection=(id=0)=>directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
 const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,mode==='playground'?'forward':raceDirection(id));
 const scoreDerby=()=>mode==='derby'&&(online?.active?onlineRules()?.derby==='score':demo?demoOptions.derby==='score':customEvent()&&eventOptions.derby==='score');
 const derbyRanking=()=>online?.active?online.network.snapshot!.ranking.map(id=>cars.find(c=>c.id===id)!):eventDerbyOrder(cars,scoreDerby(),combat);
@@ -368,7 +368,7 @@ function archiveReplay(){
 }
 function beginReplay(){
   lastReplay=null;replayEpochs=cars.map(()=>0);
-  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
+  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
   cars.forEach((car,i)=>car.onVisualEvent=e=>{if(e.kind==='jump'||e.kind==='repair')replayEpochs[i]++;recorder?.event(i,elapsed,e);});
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
@@ -674,7 +674,7 @@ function receiveOnline() {
 function createCars(attract = false, previewSetup?:Setup) {
   const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId(clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
   archiveReplay();bankRun(false);
-  drivers.difficulty=attract?'amateur':aiDifficulty();drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
+  drivers.difficulty=attract?'amateur':aiDifficulty();drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();
   puddleSplashes?.reset();
@@ -709,7 +709,7 @@ function createCars(attract = false, previewSetup?:Setup) {
       const spawn=derbyGridSlot(i,count,activeVenue.arena??DERBY_ARENA);
       car.place(spawn.x,spawn.z,spawn.yaw);
     } else if (mode === 'race') {
-      const spawn=courseGridSlot(activeVenue.course,i,waypointRace?.startDirection()??clubRound()?.direction??activeTimeTrial?.direction??(customEvent()&&raceFormat()==='laps'?eventOptions.direction:'forward'));
+      const spawn=courseGridSlot(activeVenue.course,i,waypointRace?.startDirection()??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()&&raceFormat()==='laps'?eventOptions.direction:'forward'));
       car.place(spawn.x,spawn.z,spawn.yaw);
       car.nextCheckpoint=spawn.next;car.passed=waypointRace?0:spawn.passed;
     } else if(activeVenue!==quarryVenue){const spawn=(i===0?stuntChallengeSpawn(activeChallenge?.stunt):undefined)??freeDriveSpawn(activeVenue.course,i);car.place(spawn.x,spawn.z,spawn.yaw);car.nextCheckpoint=spawn.next;}
@@ -1246,7 +1246,7 @@ function step(dt: number) {
     if(mode==='race'&&waypointRace){
       const reached=waypointRace.sample(c.id,c.current),progress=waypointRace.get(c.id);c.passed=progress.passed;c.lap=progress.round+1;
       if(reached&&c.id===0&&!demo)toast(reached.finished?'ALL STATIONS COMPLETE':reached.id===0?'ROUND COMPLETE':`STATION ${reached.id} COLLECTED`,1.2);
-      if(progress.finished&&!c.finished){c.finished=true;c.finishTime=elapsed+c.penalty;if(c.id===0&&!demo)finish('WAYPOINT FINISH');}
+      if(progress.finished&&!c.finished){c.finished=true;c.finishTime=elapsed+c.penalty;if(c.id===0&&!demo){if(activeClubRound!==null)freezeClubPlayer();else finish('WAYPOINT FINISH');}}
       if(c.id===0&&!demo)c.nextCheckpoint=waypointRace.navigation(c.id,c.current,c.forward).next;
     } else if (mode === 'race') {
       const check = checkRoute(

@@ -125,19 +125,19 @@ function harness(faults:Faults={}){
  return{context,f,calls,ui,storage,writes,construction,notices,logs,preferences,click,settle,select};
 }
 
-test('unit plumbing: all 59 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
- assert.equal(Challenges.CHALLENGES.length,59);
+test('unit plumbing: all 65 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
+ assert.equal(Challenges.CHALLENGES.length,65);
  for(const challenge of Challenges.CHALLENGES){
   const h=harness(),preferences=h.preferences();await h.select(challenge);
   assert.equal(h.context.activeChallenge,challenge);assert.equal(h.context.kind,challenge.car);assert.equal(h.context.mode,challenge.mode);
   assert.equal(h.context.state,challenge.mode==='playground'?'playing':'countdown');assert.equal(h.context.preparingEvent,false);
-  assert.equal(h.context.activeVenue.course.id,(challenge as any).course??'quarry-v1');assert.equal(h.f.raceFormat(),'laps');
-  assert.equal(h.f.raceDirection(0),'forward');assert.equal(h.f.raceDirection(1),'forward');assert.equal(h.f.scoreDerby(),false);
+  assert.equal(h.context.activeVenue.course.id,(challenge as any).course??'quarry-v1');assert.equal(h.f.raceFormat(),challenge.race??'laps');
+  assert.equal(h.f.raceDirection(0),challenge.direction??'forward');assert.equal(h.f.raceDirection(1),challenge.direction??'forward');assert.equal(h.f.scoreDerby(),false);
   assert.equal(h.f.eventDuration(),challenge.limit);assert.equal(h.f.raceLaps(),challenge.laps??9);
   assert.equal(h.context.cars.length,challenge.mode==='playground'?(challenge.traffic?5:1):8);
   for(const created of h.construction){assert.equal(created.supplied,undefined);assert.deepEqual(plain(created.car.setup),stockSetup(created.kind));assert.equal(created.ground,h.context.activeVenue.course);}
   assert.equal(h.calls.physics,90,'Only mocked creation-settling calls; no physics completion claim');
-  assert.equal(h.context.waypointRace,null);assert.equal(h.context.recorder.meta.reverse,false);
+  assert.equal(!!h.context.waypointRace,!!challenge.race);assert.equal(h.context.recorder.meta.reverse,challenge.direction==='reverse');
   assert.equal(h.context.recorder.meta.courseId,h.context.activeVenue.course.id==='quarry-v1'?undefined:h.context.activeVenue.course.id);
   assert.equal(h.preferences(),preferences);assert.deepEqual(h.writes,[]);
   const carBefore=plain(h.context.cars[0].current);h.f.recover();assert.deepEqual(plain(h.context.cars[0].current),carBefore);assert.match(h.notices.at(-1)!,/NO RECOVERIES/);
@@ -253,7 +253,7 @@ test('career storage failure leaves points unspent and unlock closed; start fail
  const broken=harness({venue:true});broken.f.openCareer();assert.equal(await broken.f.startCareerEvent('first-lap'),false);assert.equal(broken.context.state,'menu');assert.equal(broken.context.careerOpen,true);assert.equal(broken.context.activeChallenge,undefined);assert.match(broken.ui.innerHTML,/could not start/);
 });
 
-test('all 48 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
+test('all 54 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
  for(const group of Career.CAREER_GROUPS)for(const id of group.events){
   const h=harness();for(const g of Career.CAREER_GROUPS)for(const event of g.events)h.context.profile.challenges[event]={medal:3,best:1,attempts:1};h.context.profile.career={unlocked:Career.CAREER_GROUPS.filter(g=>g.cost).map(g=>g.id)};
   assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;
@@ -264,4 +264,16 @@ test('all 48 career entries launch their actual declared rules and no closed or 
 test('career imports archived championship medals once and preserves them through unlocks and failed saves',()=>{
  const h=harness();h.context.clubRecords={version:1,best:[{series:'road-rally',difficulty:'novice',kind:'buggy',place:1,points:100,wins:4}]};h.f.openCareer('stunts');assert.equal(Career.careerStatus(h.context.profile).available,3);h.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(h.context.profile).available,0);h.f.openCareer();assert.equal(Career.careerStatus(h.context.profile).available,0);assert.match(h.ui.innerHTML,/Road &amp; Rally|Road & Rally/);assert.equal(readProfile(h.storage.get(PROFILE_KEY)).career?.podiums?.['road-rally'],3);
  const blocked=harness({storage:true});blocked.context.clubRecords=h.context.clubRecords;blocked.f.openCareer('stunts');assert.match(blocked.ui.innerHTML,/could not be saved/);blocked.click('[data-career-unlock="flight-school"]');assert.equal(Career.careerStatus(blocked.context.profile).available,3);assert.equal(Career.careerChallenge(blocked.context.profile,'ravine-flight'),undefined);
+});
+
+
+test('fixed waypoint challenge seed and reverse challenge grid survive Retry despite custom preferences',async()=>{
+ for(const id of ['regent-rookvale','shuttle-elmsworth']){
+  const challenge=Challenges.CHALLENGES.find(c=>c.id===id)!,h=harness();await h.select(challenge);
+  const before=plain(h.context.cars[0].current),orientation=plain(h.context.cars[0].currentQ);
+  if(challenge.race){assert.equal(h.context.waypointRace.seed,237);assert.equal(h.context.waypointRace.order,'random');}
+  if(challenge.direction)assert.equal(h.context.recorder.meta.reverse,true);
+  h.context.state='playing';h.f.finish('ATTEMPT ENDED');h.click('#challenge-retry');await h.settle();assert.deepEqual(plain(h.context.cars[0].current),before);assert.deepEqual(plain(h.context.cars[0].currentQ),orientation);
+  if(challenge.race)assert.equal(h.context.waypointRace.seed,237);
+ }
 });

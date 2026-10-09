@@ -20,8 +20,10 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'airfield-timber',title:'Airfield & Timber',discipline:'racing',description:'Sprint around Merefield, protect the Regent at Millhaven, and finish a two-lap Shuttle run.',cost:3,events:['coupe-merefield','regent-millhaven','shuttle-millhaven']},
  {id:'banger-weekend',title:'Banger Weekend',discipline:'racing',description:'Race the Tern on clay, carry the Shuttle through the crossing and protect the Regent at Alderwick.',cost:3,events:['tern-fenwick','shuttle-fenwick','regent-alderwick']},
  {id:'stunt-park',title:'Stunt Park',discipline:'stunts',description:'Build approach speed, complete the loop and land the gap jump in the Ravine.',cost:3,events:['ravine-alderwick-speed','ravine-alderwick-loop','ravine-alderwick-gap']},
+ {id:'freight-runners',title:'Freight Runners',discipline:'racing',description:'Learn the freight stations, choose open-yard shortcuts and follow changing dispatches.',cost:3,events:['carrier-rookvale','ravine-rookvale','regent-rookvale']},
+ {id:'banked-racers',title:'Banked Racers',discipline:'racing',description:'Master Elmsworth banking, reverse the Shuttle and hold the Bramble together for two laps.',cost:3,events:['tern-elmsworth','shuttle-elmsworth','bramble-elmsworth']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
