@@ -1,3 +1,4 @@
+import {restoreCoastalTourBytes} from './coastal-tour-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,16 @@ export function readCoastForestPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreCoastForestBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreCoastalTourBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readCoastForestPrevious(file);
 }
 export function verifyCoastForestRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'84643fac9a4f090631c2072a5ccb8d7f746dbc1a');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreCoastalTourBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreCoastForestBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the CoastForest release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreCoastalTourBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the CoastForest release');
  assert.equal(manifest.previousFixtureCount,1869);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1869);
 }
