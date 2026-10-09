@@ -1,3 +1,5 @@
+import {FOUNDRY_ARENA,buildFoundryPhysics,foundryGround} from './foundry-arena';
+import {createFoundryWorld} from './foundry-world';
 import {StuntChallengeProgress,stuntChallengeSpawn} from './stunt-challenge';
 import {createFenwickWorld} from './fenwick-world';
 import {createStuntWorld} from './stunt-world';
@@ -520,11 +522,11 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
     const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
     let artwork:ReturnType<typeof createHarrowWorld>|undefined;
     try{
-      const briarhill=arenaId==='briarhill-bowl-v1';
-      (briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=briarhill?createBriarhillWorld():createHarrowWorld();
-      const course:RaceCourse={...getRaceCourse(),...(briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
+      const briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
+      (foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
+      const course:RaceCourse={...getRaceCourse(),...(foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-      const venue:VenueContext={arenaId,arena:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
+      const venue:VenueContext={arenaId,arena:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
       arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }
