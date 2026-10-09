@@ -79,6 +79,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('tern-willowbank','Heathland introduction','tern',1,[155,110,85],40),course:'willowbank-heath-v1'},
   {...race('marten-willowbank','Reverse ridge run','marten',1,[160,115,90],35),course:'willowbank-heath-v1',direction:'reverse',description:'Finish one reverse gravel lap with at least 35% condition. Keep the rear-engine Marten settled through the linked bends. No recoveries.'},
   {...race('bramble-willowbank','Heathland endurance','muscle',2,[310,225,170],30),course:'willowbank-heath-v1'},
+  {...race('tern-westmere','Club grip sprint','tern',1,[130,90,65],50),course:'westmere-club-v1'},
+  {...race('marten-westmere','Club reverse precision','marten',1,[135,95,70],40),course:'westmere-club-v1',direction:'reverse',description:'Finish one reverse asphalt lap with at least 40% condition. Keep the rear-engine Marten settled through the tightening turns. No recoveries.'},
+  {...race('regent-westmere','Club heavyweight endurance','regent',2,[260,180,130],35),course:'westmere-club-v1'},
+  {...race('ravine-harrowstone','Rolling ridge sprint','buggy',1,[150,105,75],40),course:'harrowstone-ridge-v1'},
+  {...race('shuttle-harrowstone','Ridge return service','shuttle',1,[160,115,85],35),course:'harrowstone-ridge-v1',direction:'reverse',description:'Finish one reverse mixed-surface lap with at least 35% condition. Brake before the gravel crests. No recoveries.'},
+  {...race('bramble-harrowstone','Ridge double crest','muscle',2,[300,210,150],30),course:'harrowstone-ridge-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
