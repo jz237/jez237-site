@@ -1,5 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'millbrook-canal-v1':'Millbrook Canal Circuit',
+ 'granite-pass-v1':'Granite Pass Rally',
  'kingswell-park-v1':'Kingswell Park Circuit',
  'copperfield-dunes-v1':'Copperfield Dunes Rally',
  'holloway-stadium-v1':'Holloway Stadium Circuit',
