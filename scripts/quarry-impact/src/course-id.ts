@@ -1,5 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'kingswell-park-v1':'Kingswell Park Circuit',
+ 'copperfield-dunes-v1':'Copperfield Dunes Rally',
  'holloway-stadium-v1':'Holloway Stadium Circuit',
  'bramblebrook-reservoir-v1':'Bramblebrook Reservoir Rally',
  'saltmarsh-port-v1':'Saltmarsh Port Rallycross',
