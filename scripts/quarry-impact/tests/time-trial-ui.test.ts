@@ -1,3 +1,6 @@
+import {stockSetup} from '../src/garage';
+import {classTimeTrial,finishTimeTrialRecord} from '../src/time-trial';
+import {emptyRun} from '../src/session-telemetry';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {showTimeTrialResult,showTimeTrialSetup} from '../src/time-trial-ui';
@@ -60,7 +63,7 @@ test('setup exposes native fourteen-car, thirty-course and two-direction control
   assert.equal(h.get('time-trial-best').textContent,'—');
   const kind=h.get('time-trial-kind');kind.value='marten';kind.dispatchEvent(new Event('change'));
   assert.equal(h.get('time-trial-best').textContent,'—');assert.deepEqual(original,config);assert.equal(starts,0);
-  assert.match(h.root.textContent,/One lap\. Factory stock/);assert.match(h.root.textContent,/Recovery makes the run practice only/);
+  assert.match(h.root.textContent,/Factory stock · Garage upgrades do not apply/);assert.match(h.root.textContent,/Recovery makes the run practice only/);
 });
 
 test('Start passes a fresh valid selection and Back only closes; invalid native values cannot launch',()=>{
@@ -137,4 +140,16 @@ test('shared opponent controls change category safely and render rival names as 
  const direction=h.get('time-trial-direction');direction.value='reverse';direction.dispatchEvent(new Event('change'));
  assert.equal(h.get('trial-shared-remove').disabled,true);assert.equal(h.get('trial-shared-status').textContent,'No shared rival for this selection.');
  assert.equal(h.get('trial-ghost-use').disabled,true);assert.equal(h.get('time-trial-start').disabled,false);
+});
+
+
+test('class setup panel shows the computed class, sorted local car board and exact winning build export controls',()=>{
+ const h=fixture(),selected=classTimeTrial({...config,kind:'trail'},stockSetup('trail')),other=classTimeTrial({...config,kind:'wagon'},stockSetup('wagon'));
+ let records=readTimeTrialRecords();for(const [c,seconds]of [[selected,60],[other,50]] as const)records=finishTimeTrialRecord(records,c,{run:{...emptyRun(),seconds,health:100,checkpoints:24,finished:true,completed:true},finished:true,health:100,passed:24,finishTime:seconds,demo:false,online:false,synthetic:false,stock:false,selectionMatches:true,setup:c.setup}).records;
+ let started:TimeTrialConfig|undefined;
+ showTimeTrialSetup(h.ui,selected,records,{start:c=>{started=c;},close(){}});
+ assert.equal(h.get('time-trial-build').value,'class');assert.match(h.get('time-trial-build-status').textContent,/Class C/);
+ const board=h.get('time-trial-class-board');assert.match(board.textContent,/MILLHAVEN ESTATE/);assert.match(board.textContent,/BIRCH TRAIL/);assert.ok(board.textContent.indexOf('MILLHAVEN ESTATE')<board.textContent.indexOf('BIRCH TRAIL'));assert.equal(board.querySelectorAll('button').length,2);
+ h.get('time-trial-start').click();assert.deepEqual(started,selected);
+ h.get('time-trial-build').value='stock';h.get('time-trial-build').dispatchEvent(new Event('change'));assert.equal(board.textContent,'');assert.equal(h.get('time-trial-best').textContent,'—');
 });

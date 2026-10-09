@@ -1,3 +1,4 @@
+import {cloneCar} from './assets';
 import * as T from 'three';
 import {sampleTrialGhost,type TrialGhost} from './trial-ghost';
 
@@ -31,4 +32,17 @@ export class TrialGhostView{
     this.mesh.material.opacity=.04+.19*Math.min(1,this.mesh.position.distanceTo(player)/4);
   }
   dispose(){this.mesh.removeFromParent();this.mesh.geometry.dispose();this.mesh.material.dispose();}
+}
+
+/** Build-specific silhouettes use their recorded reinforcement, with no physics allocation. */
+export function createTrialGhostView(scene:T.Scene,source:T.Object3D,ghost:TrialGhost){
+  if(!ghost.config.performanceClass)return new TrialGhostView(scene,source,ghost);
+  const setup=ghost.config.setup!,model=cloneCar(ghost.config.kind,setup.paint,setup.armor),root=new T.Group();root.add(model);
+  try{return new TrialGhostView(scene,root,ghost);}
+  finally{
+    const materials=new Set<T.Material>();
+    model.traverse(o=>{if(o instanceof T.Mesh){if(/^(panel_|glass_)/.test(o.name))o.geometry.dispose();for(const material of Array.isArray(o.material)?o.material:[o.material])materials.add(material);}});
+    for(const material of materials)material.dispose();
+    root.clear();
+  }
 }

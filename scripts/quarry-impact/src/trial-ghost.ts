@@ -1,4 +1,4 @@
-import {isTimeTrialConfig,timeTrialKey,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
+import {copyTimeTrialConfig,isTimeTrialConfig,timeTrialKey,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
 
 export const TRIAL_GHOST_KEY='quarry-impact-trial-ghosts-v1';
 export const MAX_GHOST_SECONDS=600;
@@ -98,7 +98,7 @@ export class TrialGhostRecorder{
   }
   finish(time:number,p:Pose,q:Rotation):TrialGhost|null{
     this.sample(time,p,q,true);
-    const ghost:TrialGhost={version:1,config:{...this.config},time,frames:this.frames,gates:this.gates};
+    const ghost:TrialGhost={version:1,config:copyTimeTrialConfig(this.config),time,frames:this.frames,gates:this.gates};
     return !this.invalid&&validTrialGhost(ghost)?ghost:null;
   }
 }
@@ -138,7 +138,7 @@ export function addSharedGhost(library:GhostLibrary,rival:SharedGhost):GhostLibr
   return next;
 }
 function copySharedGhost(rival:SharedGhost):SharedGhost{
-  const g=rival.ghost;return{name:rival.name,ghost:{version:1,config:{kind:g.config.kind,course:g.config.course,direction:g.config.direction},time:g.time,frames:g.frames.map(f=>[...f]),gates:[...g.gates]}};
+  const g=rival.ghost;return{name:rival.name,ghost:{version:1,config:copyTimeTrialConfig(g.config),time:g.time,frames:g.frames.map(f=>[...f]),gates:[...g.gates]}};
 }
 async function ghostChecksum(body:unknown):Promise<string>{
   const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(body)));
