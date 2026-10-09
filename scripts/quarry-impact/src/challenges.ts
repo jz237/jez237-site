@@ -94,6 +94,18 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('trail-hazelwood','Four-wheel forest patrol','trail',1,[160,110,80],40),course:'hazelwood-forest-v1'},
   {...race('trail-seabrook','Coastal patrol return','trail',1,[150,100,75],40),course:'seabrook-coast-v1',direction:'reverse',description:'Finish one reverse coastal lap in the Trail with at least 40% condition. Brake before the inland bends. No recoveries.'},
   {...race('trail-redbank','Heavyweight dirt patrol','trail',2,[200,140,100],30),course:'redbank-jump-v1'},
+  {...race('hatch-kingswell','Parkland pocket rocket','hatch',1,[130,90,65],50),course:'kingswell-park-v1'},
+  {...race('marten-kingswell','Park reverse precision','marten',1,[140,95,70],40),course:'kingswell-park-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('regent-kingswell','Park heavyweight endurance','regent',2,[270,185,135],35),course:'kingswell-park-v1'},
+  {...race('ravine-copperfield','Dune buggy sprint','buggy',1,[155,105,78],40),course:'copperfield-dunes-v1'},
+  {...race('trail-copperfield','Dune patrol return','trail',1,[165,115,80],40),course:'copperfield-dunes-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('utility-copperfield','Dune service endurance','utility',2,[310,215,155],30),course:'copperfield-dunes-v1'},
+  {...race('tern-millbrook','Lockside grip change','tern',1,[135,95,65],50),course:'millbrook-canal-v1'},
+  {...race('carrier-millbrook','Canal return delivery','van',1,[150,105,75],40),course:'millbrook-canal-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('estate-millbrook','Canal double shift','wagon',2,[280,195,140],35),course:'millbrook-canal-v1'},
+  {...race('trail-granite','Granite patrol climb','trail',1,[160,110,78],40),course:'granite-pass-v1'},
+  {...race('shuttle-granite','Mountain return service','shuttle',1,[175,120,85],35),course:'granite-pass-v1',direction:'reverse',description:'Finish one reverse lap with at least 35% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('bramble-granite','Granite V8 endurance','muscle',2,[310,215,155],30),course:'granite-pass-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
