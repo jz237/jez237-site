@@ -1,10 +1,11 @@
+import {simulateCornering} from './setup-cornering';
 import R from '@dimforge/rapier3d-compat';
 import {normalizeSetup,stockSetup,type Setup} from './garage';
 import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification,type PhysicsState} from './vehicle-physics';
 import type {CarKind} from './rules';
 
 export type BenchmarkSurface='asphalt'|'gravel';
-export type SetupBenchmark={acceleration:number|null;speed:number;braking:number|null};
+export type SetupBenchmark={acceleration:number|null;speed:number;braking:number|null;cornering:number|null};
 const dt=1/60,target=100/3.6,stop=.1;
 /** Paint and decals do not alter a physical measurement. */
 export function benchmarkKey(kind:CarKind,input:Setup,surface:BenchmarkSurface){
@@ -30,7 +31,7 @@ export function* simulateSetup(kind:CarKind,input:Setup,surface:BenchmarkSurface
    if(acceleration===null&&speed>=target)acceleration=(i+(target-previous)/(speed-previous))*dt;
    previous=speed;if(i%60===59)yield;
   }
-  const result:SetupBenchmark={acceleration,speed:speed*3.6,braking:null};
+  const result:SetupBenchmark={acceleration,speed:speed*3.6,braking:null,cornering:null};
   // A standard 100 km/h entry, independent of acceleration ability. Settle
   // the same tuned chassis afresh so pitch at the end of the speed run does
   // not contaminate braking. No fake distance or force-derived estimate.
@@ -46,6 +47,7 @@ export function* simulateSetup(kind:CarKind,input:Setup,surface:BenchmarkSurface
    if(i%60===59)yield;
   }
   if(!Number.isFinite(result.speed)||result.speed<0)throw new Error('The test car did not complete a valid straight run.');
+  result.cornering=yield* simulateCornering(kind,setup,surface);
   return result;
  }finally{world.free();}
 }
@@ -62,6 +64,6 @@ export async function benchmarkSetup(kind:CarKind,setup:Setup,surface:BenchmarkS
    if(result.done){if(cache.size>=64)cache.delete(cache.keys().next().value!);cache.set(key,result.value);return {...result.value};}
    await new Promise<void>(resolve=>setTimeout(resolve,0));
   }
- }finally{run.return({acceleration:null,speed:0,braking:null});}
+ }finally{run.return({acceleration:null,speed:0,braking:null,cornering:null});}
 }
 export const benchmarkStock=(kind:CarKind,surface:BenchmarkSurface,signal:AbortSignal)=>benchmarkSetup(kind,stockSetup(kind),surface,signal);
