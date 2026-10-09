@@ -1,3 +1,8 @@
+import {gearboxGrindSamples} from './transmission';
+import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
+import {starterSamples} from './engine-stall';
+import {engineDamageLevel} from './engine-condition';
+import {classicEngineVoice} from './classic-vehicle-specs';
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
@@ -24,8 +29,10 @@ export class Sound {
     { throttle: number; slip: number; grounded: boolean; gear: number }
   >();
   listenerPrevious = new T.Vector3();
+  private listenerMotion=new AudioListenerMotion();
   private files?: Promise<{id:string; data:ArrayBuffer}[]>;
   private initializing?: Promise<void>;
+  private paused = false;
   /** Fetch bundled clips while lighting warms up. Audio playback still starts
    * only after the user's gesture, using the real output context's sample rate. */
   preload() {
@@ -63,7 +70,9 @@ export class Sound {
       b.connect(this.master);
     this.setLevels();
     }
-    await this.ctx.resume();
+    // Browser activation may leave resume pending indefinitely. Asset readiness
+    // must not wait for permission to play when Start came from a polled pad.
+    this.unlock();
     if(this.ready)return;
     await (this.initializing ??= (async()=>{
       const files=await this.preload();
@@ -73,6 +82,15 @@ export class Sound {
       this.ambient=this.loop('ambience',this.ambientBus!);
       if(this.ambient)this.ambient.gain.gain.value=.45;
     })().catch(error=>{this.initializing=undefined;this.files=undefined;throw error;}));
+  }
+  /** Call synchronously from a real pointer/key gesture to retry audio activation. */
+  unlock() {
+    const ctx=this.ctx;
+    if(!ctx||this.paused||ctx.state==='running'||ctx.state==='closed')return;
+    void ctx.resume().then(()=>{
+      // A request made before Pause may only resolve on a later user gesture.
+      if(this.paused&&this.ctx===ctx)return this.pause(true);
+    }).catch(()=>{});
   }
   setLevels() {
     if (this.engineBus) this.engineBus.gain.value = this.levels.engine;
@@ -101,12 +119,16 @@ export class Sound {
   attach(cars: Vehicle[]) {
     this.clearCars();
     if (!this.ready) return;
+    if(!this.buffers.has('starter')){const c=this.ctx!,samples=starterSamples(c.sampleRate),buffer=c.createBuffer(1,samples.length,c.sampleRate);buffer.copyToChannel(samples,0);this.buffers.set('starter',buffer);}
+    if(!this.buffers.has('gear-grind')){const c=this.ctx!,samples=gearboxGrindSamples(c.sampleRate),buffer=c.createBuffer(1,samples.length,c.sampleRate);buffer.copyToChannel(samples,0);this.buffers.set('gear-grind',buffer);}
     for (const car of cars) {
       const loops = new Map<string, Loop>();
       for (const name of ['idle', 'low', 'mid', 'high', 'load', 'damaged']) {
-        const loop = this.loop(car.kind + '-' + name, this.engineBus!);
-        if (loop) loops.set(name, loop);
+        const loop = this.loop(classicEngineVoice(car.kind).bank + '-' + name, this.engineBus!);
+        if (loop) {loop.source.playbackRate.value=classicEngineVoice(car.kind).pitch;loops.set(name, loop);}
       }
+      const grind=this.loop('gear-grind',this.engineBus!);if(grind)loops.set('gear-grind',grind);
+      const starter=this.loop('starter',this.engineBus!);if(starter)loops.set('starter',starter);
       for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
         const loop = this.loop(name, this.fxBus!);
         if (loop) loops.set(name, loop);
@@ -125,6 +147,7 @@ export class Sound {
       }
     this.loops.clear();
     this.history.clear();
+    this.listenerMotion.reset();
     this.lastShot.clear();
   }
   thermal(sources:ThermalAudio[],bursts:ThermalAudio[]) {
@@ -183,15 +206,13 @@ export class Sound {
       source.start(at);source.stop(at+duration);
     }else source.start();
   }
-  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false) {
+  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false,perspective?:AudioPerspective) {
     if (!this.ready) return;
     const c = this.ctx!,
       listener = c.listener;
-    const p = camera.position;
-    const listenerVelocity = p
-      .clone()
-      .sub(this.listenerPrevious)
-      .divideScalar(Math.max(0.001, dt));
+    const focused=cars.find(car=>car.id===perspective?.id)??cars[0];
+    const p=audioListenerPosition(camera.position,focused?.current,perspective?.view);
+    const listenerVelocity=this.listenerMotion.velocity(p,dt,`${focused?.id??-1}:${perspective?.view??'world'}`);
     this.listenerPrevious.copy(p);
     listener.positionX.value = p.x;
     listener.positionY.value = p.y;
@@ -217,13 +238,13 @@ export class Sound {
         car.controller.wheelIsInContact(i),
       );
       if (prior && !wreckInspection) {
-        if (car.gear !== prior.gear && Math.abs(car.speed) > 3) {
-          this.shot(car.kind + '-shift', car.current, 0.18);
-          this.shot(car.kind + '-exhaust', car.current, 0.12);
+        if (!(car.engineStall!>0)&&car.health>0&&car.gear !== prior.gear && Math.abs(car.speed) > 3) {
+          this.shot(classicEngineVoice(car.kind).bank + '-shift', car.current, 0.18);
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.12);
         }
-        if (prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
-          this.shot(car.kind + '-exhaust', car.current, 0.14);
-        if (car.slip > 3 && prior.slip <= 3)
+        if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
+        if (grounded && car.slip > 3 && prior.slip <= 3)
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
@@ -243,7 +264,7 @@ export class Sound {
         ),
       );
       const rpm = car.rpm,
-        level = car === cars[0] ? 0.38 : 0.22;
+        level = car === focused ? 0.38 : 0.22;
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -257,16 +278,18 @@ export class Sound {
           high: 6500,
         };
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(rpm - centers[name]) / 2100) * level;
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level;
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
-            Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler)),
+            Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
             c.currentTime,
             0.13,
           );
-        } else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
+        } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
+        else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
+        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
         else if (name === 'damaged')
-          v = Math.max(0, (40 - car.health) / 40) * 0.18;
+          v = engineDamageLevel(car.health,car.engineDamage) * 0.18;
         else if (name === 'tires')
           v =
             Math.min(0.35, car.slip * 0.06) *
@@ -277,18 +300,26 @@ export class Sound {
               ? Math.min(0.22, Math.abs(car.speed) * 0.008)
               : 0;
         else if (name === 'scrape')
-          v = car.slip > 4 && car.health < 80 ? 0.035 : 0;
+          v=Math.max(car.slip>4&&car.health<80?.035:0,Math.min(.13,(car.scraping??0)*.12));
+        if (!grounded && ['tires','gravel'].includes(name)) v=0;
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
+        if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
         if(wreckInspection)v=0;
         l.gain.gain.setTargetAtTime(v, c.currentTime, 0.08);
       }
     }
   }
   async pause(value: boolean) {
+    this.paused=value;
+    this.listenerMotion.reset();
     if (!this.ctx) return;
-    if (value) await this.ctx.suspend();
-    else await this.ctx.resume();
+    if (value) {
+      await this.ctx.suspend().catch(()=>{});
+      // Resume may have been requested while this suspension was in flight.
+      if(!this.paused)this.unlock();
+    }
+    else this.unlock();
   }
   mute() {
     this.muted = !this.muted;
