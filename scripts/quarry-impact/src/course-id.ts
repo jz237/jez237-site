@@ -1,5 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'holloway-stadium-v1':'Holloway Stadium Circuit',
+ 'bramblebrook-reservoir-v1':'Bramblebrook Reservoir Rally',
  'saltmarsh-port-v1':'Saltmarsh Port Rallycross',
  'dunmere-farm-v1':'Dunmere Farm Circuit',
  'seabrook-coast-v1':'Seabrook Coast Circuit',
