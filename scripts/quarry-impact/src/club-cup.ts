@@ -14,14 +14,14 @@ export const isClubField=(value:unknown):value is number=>typeof value==='number
 // Freeze new field rosters too: later vehicle additions must not rewrite saved cups.
 const FIELD_KINDS=Object.freeze([...CLUB_KINDS,'shuttle'] as const);
 export const CLUB_POINTS=Object.freeze([25,20,16,13,11,9,7,5,3,2,1] as const);
-export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse'|'pinecrest-climb'|'pinecrest-return'|'dockside-sprint'|'dockside-return'|'fairground-sprint'|'fairground-return'|'merefield-sprint'|'merefield-return'|'millhaven-sprint'|'millhaven-return'|'fenwick-oval'|'fenwick-eight'|'alderwick-sprint'|'fenwick-return'|'harrow-survival'|'briarhill-survival'|'foundry-survival'|'rookvale-route'|'elmsworth-sprint'|'rookvale-dispatch'|'elmsworth-return'|'sable-sprint'|'willowbank-sprint'|'sable-return'|'willowbank-return'|'westmere-sprint'|'harrowstone-sprint'|'westmere-return'|'harrowstone-return'|'seabrook-sprint'|'hazelwood-sprint'|'seabrook-return'|'hazelwood-return';
+export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse'|'pinecrest-climb'|'pinecrest-return'|'dockside-sprint'|'dockside-return'|'fairground-sprint'|'fairground-return'|'merefield-sprint'|'merefield-return'|'millhaven-sprint'|'millhaven-return'|'fenwick-oval'|'fenwick-eight'|'alderwick-sprint'|'fenwick-return'|'harrow-survival'|'briarhill-survival'|'foundry-survival'|'rookvale-route'|'elmsworth-sprint'|'rookvale-dispatch'|'elmsworth-return'|'sable-sprint'|'willowbank-sprint'|'sable-return'|'willowbank-return'|'westmere-sprint'|'harrowstone-sprint'|'westmere-return'|'harrowstone-return'|'seabrook-sprint'|'hazelwood-sprint'|'seabrook-return'|'hazelwood-return'|'kingswell-sprint'|'copperfield-sprint'|'kingswell-return'|'copperfield-return'|'millbrook-sprint'|'granite-sprint'|'millbrook-return'|'granite-return';
 export type ClubRound=Readonly<{race?:'ordered'|'free'|'random';seed?:number;index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;arena?:ArenaId;laps:number;duration:number;stock:true;direction?:'forward'|'reverse'|'opposing'}>;
 export const CLUB_ROUNDS:readonly ClubRound[]=Object.freeze([
  Object.freeze({index:0,id:'quarry-circuit',name:'Quarry Circuit',mode:'race',course:'quarry-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:1,id:'ironfield-circuit',name:'Ironfield Raceway',mode:'race',course:'ironfield-figure-eight-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:2,id:'quarry-survival',name:'Quarry Survival',mode:'derby',course:'quarry-v1',laps:0,duration:90,stock:true} as const),
 ]);
-export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt'|'road-rally'|'woodland'|'county-weekender'|'airfield-rally'|'banger-weekend'|'demolition-tour'|'freight-speed'|'heath-canyon'|'club-ridge'|'coastal-tour';
+export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt'|'road-rally'|'woodland'|'county-weekender'|'airfield-rally'|'banger-weekend'|'demolition-tour'|'freight-speed'|'heath-canyon'|'club-ridge'|'coastal-tour'|'park-dunes-tour'|'canal-pass-tour';
 export type ClubSeries=Readonly<{id:ClubSeriesId;name:string;description:string;rounds:readonly ClubRound[]}>;
 const round=(index:number,id:ClubRoundId,name:string,course:CourseId,laps=1,direction:ClubRound['direction']='forward'):ClubRound=>Object.freeze({index,id,name,course,laps,direction,mode:'race',duration:0,stock:true});
 export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
@@ -107,6 +107,18 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
   round(1,'hazelwood-sprint','Hazelwood Forest Sprint','hazelwood-forest-v1'),
   round(2,'seabrook-return','Seabrook Coastal Return','seabrook-coast-v1',1,'reverse'),
   round(3,'hazelwood-return','Hazelwood Forest Endurance','hazelwood-forest-v1',2,'reverse'),
+ ])}),
+ Object.freeze({id:'park-dunes-tour',name:'Park & Dunes',description:'Four stock rounds across Kingswell asphalt and Copperfield dirt. Learn both courses, reverse the park and finish with two reverse dune laps.',rounds:Object.freeze([
+  round(0,'kingswell-sprint','Kingswell Park Sprint','kingswell-park-v1'),
+  round(1,'copperfield-sprint','Copperfield Dune Sprint','copperfield-dunes-v1'),
+  round(2,'kingswell-return','Kingswell Park Return','kingswell-park-v1',1,'reverse'),
+  round(3,'copperfield-return','Copperfield Dune Endurance','copperfield-dunes-v1',2,'reverse'),
+ ])}),
+ Object.freeze({id:'canal-pass-tour',name:'Canal & Pass',description:'Four stock rounds linking Millbrook surface changes with Granite Pass climbs. Reverse the canal, then tackle a two-lap reverse mountain finale.',rounds:Object.freeze([
+  round(0,'millbrook-sprint','Millbrook Canal Sprint','millbrook-canal-v1'),
+  round(1,'granite-sprint','Granite Pass Sprint','granite-pass-v1'),
+  round(2,'millbrook-return','Millbrook Canal Return','millbrook-canal-v1',1,'reverse'),
+  round(3,'granite-return','Granite Pass Endurance','granite-pass-v1',2,'reverse'),
  ])}),
 ]);
 export function clubRoster(kind:CarKind,lineup:GridLineup='mixed',field=11){

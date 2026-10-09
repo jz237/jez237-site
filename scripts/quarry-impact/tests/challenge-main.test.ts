@@ -1,3 +1,4 @@
+import * as PerformanceClass from '../src/performance-class';
 import * as Stunts from '../src/stunt-challenge';
 import {freeDriveSpawn} from '../src/free-drive';
 import * as Arenas from '../src/arena-id';
@@ -85,7 +86,7 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const quarry={course:getRaceCourse('quarry-v1'),props:[],puddles:[]},ironfield={course:getRaceCourse('ironfield-figure-eight-v1'),props:[],puddles:[]};
- const context:any={...Stunts,freeDriveSpawn,...Arenas,clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+ const context:any={...Stunts,freeDriveSpawn,...Arenas,clubRecords:{version:1,best:[]},openClubCup(){},...Career,showCareer,careerOpen:false,careerRun:false,...DamageRules,...GridSetup,...PerformanceClass,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,activeTimeTrial:null,openTimeTrialSetup(){},showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
   CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,CLUB_SERIES,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
@@ -125,8 +126,8 @@ function harness(faults:Faults={}){
  return{context,f,calls,ui,storage,writes,construction,notices,logs,preferences,click,settle,select};
 }
 
-test('unit plumbing: all 65 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
- assert.equal(Challenges.CHALLENGES.length,65);
+test('unit plumbing: all 98 current board entries create their declared stock cars and fixed rules despite hostile preferences',async()=>{
+ assert.equal(Challenges.CHALLENGES.length,98);
  for(const challenge of Challenges.CHALLENGES){
   const h=harness(),preferences=h.preferences();await h.select(challenge);
   assert.equal(h.context.activeChallenge,challenge);assert.equal(h.context.kind,challenge.car);assert.equal(h.context.mode,challenge.mode);
@@ -253,7 +254,7 @@ test('career storage failure leaves points unspent and unlock closed; start fail
  const broken=harness({venue:true});broken.f.openCareer();assert.equal(await broken.f.startCareerEvent('first-lap'),false);assert.equal(broken.context.state,'menu');assert.equal(broken.context.careerOpen,true);assert.equal(broken.context.activeChallenge,undefined);assert.match(broken.ui.innerHTML,/could not start/);
 });
 
-test('all 54 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
+test('all 87 career entries launch their actual declared rules and no closed or busy launch bypasses admission',async()=>{
  for(const group of Career.CAREER_GROUPS)for(const id of group.events){
   const h=harness();for(const g of Career.CAREER_GROUPS)for(const event of g.events)h.context.profile.challenges[event]={medal:3,best:1,attempts:1};h.context.profile.career={unlocked:Career.CAREER_GROUPS.filter(g=>g.cost).map(g=>g.id)};
   assert.equal(await h.f.startCareerEvent(id),false,'requires the career board');h.f.openCareer(group.discipline);h.context.preparingEvent=true;assert.equal(await h.f.startCareerEvent(id),false);h.context.preparingEvent=false;

@@ -29,8 +29,12 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'coast-runners',title:'Coast Runners',discipline:'racing',description:'Sprint down the coast in the Vesper, reverse the Carrier and complete two laps in the Estate.',cost:3,events:['coupe-seabrook','carrier-seabrook','estate-seabrook']},
  {id:'forest-runners',title:'Forest Runners',discipline:'racing',description:'Thread the Rook through gravel esses, reverse the Marten and bring the Utility home after two laps.',cost:3,events:['rook-hazelwood','marten-hazelwood','utility-hazelwood']},
  {id:'trail-patrol',title:'Trail Patrol',discipline:'racing',description:'Put the Birch 4×4 to work on forest gravel, a reverse coastal run and two laps over Redbank jumps.',cost:3,events:['trail-hazelwood','trail-seabrook','trail-redbank']},
+ {id:'park-racers',title:'Park Racers',discipline:'racing',description:'Find parkland grip in the Stryde, reverse the Marten and finish two laps in the Regent.',cost:3,events:['hatch-kingswell', 'marten-kingswell', 'regent-kingswell']},
+ {id:'dune-runners',title:'Dune Runners',discipline:'racing',description:'Carry the Ravine across the dunes, reverse the Trail and complete a two-lap Utility run.',cost:3,events:['ravine-copperfield', 'trail-copperfield', 'utility-copperfield']},
+ {id:'canal-runners',title:'Canal Runners',discipline:'racing',description:'Switch between asphalt and gravel in the Tern, reverse the Carrier and take the Estate through two laps.',cost:3,events:['tern-millbrook', 'carrier-millbrook', 'estate-millbrook']},
+ {id:'pass-climbers',title:'Pass Climbers',discipline:'racing',description:'Climb Granite Pass in the Trail, reverse the Shuttle and preserve the Bramble over two gravel laps.',cost:3,events:['trail-granite', 'shuttle-granite', 'bramble-granite']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
