@@ -1,5 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'saltmarsh-port-v1':'Saltmarsh Port Rallycross',
+ 'dunmere-farm-v1':'Dunmere Farm Circuit',
  'seabrook-coast-v1':'Seabrook Coast Circuit',
  'hazelwood-forest-v1':'Hazelwood Forest Rally',
  'westmere-club-v1':'Westmere Club Circuit',
