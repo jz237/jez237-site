@@ -1,3 +1,4 @@
+import {addCourseRockDetail} from './course-materials';
 import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
@@ -37,6 +38,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;const ctx=canvas.getContext('2d');
   if(ctx){ctx.fillStyle='#b6b6b6';ctx.fillRect(0,0,128,128);for(let i=0;i<1800;i++){const c=100+Math.floor(random()*150);ctx.fillStyle=`rgb(${c},${c},${c})`;ctx.beginPath();ctx.ellipse(random()*128,random()*128,1+random()*3,1+random()*2,random()*6.28,0,Math.PI*2);ctx.fill();}const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.repeat.set(2,2);foliageTextures.push(texture);materials.leaf.map=materials.pine.map=texture;}
  }
+ const stoneDetail=addCourseRockDetail(materials.stone);
  const batches=new Map<string,{shape:Shape;finish:Finish;matrices:T.Matrix4[];colors:T.Color[]}>(),q=new T.Quaternion(),matrix=new T.Matrix4();
  const treeCards:{x:number;y:number;z:number;size:number;kind:string}[]=[];
  const placements:{x:number;z:number;radius:number;kind:string;halfWidth?:number;halfDepth?:number}[]=[];
@@ -137,7 +139,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   positions.push(x,y,z);const color=new T.Color(p.hill).multiplyScalar(.86+.12*Math.sin(a*3+ring*.4));colorsOut.push(color.r,color.g,color.b);
   if(ring<rings-1&&i<segments){const n=ring*(segments+1)+i;indices.push(n,n+segments+1,n+1,n+1,n+segments+1,n+segments+2);}
  }
- horizon.setAttribute('position',new T.Float32BufferAttribute(positions,3));horizon.setAttribute('color',new T.Float32BufferAttribute(colorsOut,3));horizon.setIndex(indices);horizon.computeVertexNormals();const hm=new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide}),hills=new T.Mesh(horizon,hm);hills.name=course.id+'_surrounding_landscape';hills.receiveShadow=true;root.add(hills);ownedGeometries.push(horizon);ownedMaterials.push(hm);
+ horizon.setAttribute('position',new T.Float32BufferAttribute(positions,3));horizon.setAttribute('color',new T.Float32BufferAttribute(colorsOut,3));horizon.setIndex(indices);horizon.computeVertexNormals();const hm=new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide}),hills=new T.Mesh(horizon,hm);hills.name=course.id+'_surrounding_landscape';const ridgeDetail=addCourseRockDetail(hm);hills.receiveShadow=true;root.add(hills);ownedGeometries.push(horizon);ownedMaterials.push(hm);
  if(typeof document!=='undefined'){
   // Reuse the licensed tree photographs already shipped with the quarry.
   // The vertex shader faces the camera without per-frame scene mutations.
@@ -170,5 +172,5 @@ reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
  }
  for(const [key,b]of batches){const mesh=new T.InstancedMesh(geometries[b.shape],materials[b.finish],b.matrices.length);b.matrices.forEach((m,i)=>{mesh.setMatrixAt(i,m);mesh.setColorAt(i,b.colors[i]);});mesh.name=course.id+'_dressing_'+key;mesh.castShadow=b.shape==='box'||b.finish==='bark';mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  root.userData.placements=placements;root.userData.theme=theme;
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
 }
