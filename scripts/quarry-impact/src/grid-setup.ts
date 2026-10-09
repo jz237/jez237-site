@@ -1,3 +1,6 @@
+import {performanceGrid} from './performance-grid';
+import type {ClassLimit} from './performance-class';
+import type {GridLineup} from './grid-rules';
 import {DEFINITIONS,type CarKind} from './rules';
 import {normalizeSetup,stockSetup,type Garage,type Setup} from './garage';
 import type {GridPerformance} from './grid-rules';
@@ -10,3 +13,5 @@ export function eventGridSetup(kind:CarKind,selected:CarKind,garage:Garage,rule:
  const cosmetics=player?garage.cars[kind].setup:{...stockSetup(kind),paint};
  return performanceSetup(kind,cosmetics,rule==='stock'?stockSetup(kind):garage.cars[selected].setup);
 }
+
+export function eventPerformanceGrid(selected:CarKind,options:{lineup?:GridLineup;performance?:GridPerformance;classLimit?:ClassLimit},garage:Garage){return performanceGrid(selected,options.lineup,options.classLimit,(kind,player)=>eventGridSetup(kind,selected,garage,options.performance,player));}
