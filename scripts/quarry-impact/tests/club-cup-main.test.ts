@@ -329,3 +329,26 @@ test('waypoint cup finish freezes the player and waits for the complete field wi
  const frozen=JSON.stringify(h.context.clubRunStats),row=JSON.stringify(h.f.clubRow(player));player.health=5;h.f.step(1/60);assert.equal(JSON.stringify(h.context.clubRunStats),frozen);assert.equal(JSON.stringify(h.f.clubRow(player)),row);
  for(const station of race.stations.slice(1))race.sample(1,station);ai.current.copy(player.current);h.f.step(1/60);assert.equal(ai.finished,true);assert.equal(h.context.state,'result');assert.deepEqual(h.titles,['CLUB ROUND COMPLETE']);
 });
+
+test('class-limited cup creation uses the locked eligible roster and stock physics even with upgraded garage and unrelated custom rules',()=>{
+ for(const classLimit of ['D','C','B'] as const){
+  const index=0,cup=Cup.createClubCup('shuttle',uuid,1000,'club','novice','mixed',24,classLimit);
+  const h=base({clubCup:cup,activeClubRound:index,kind:'shuttle'});
+  for(const k of CAR_KINDS)h.context.garage.cars[k].setup={...stockSetup(k),engine:3,armor:3,tires:3};
+  h.context.eventOptions.lineup='selected';h.context.eventOptions.performance='matched';
+  const supplied:Array<unknown>=[];
+  h.context.Vehicle=class {
+   id:number;kind:CarKind;setup:any;paintColor:T.Color;root=new T.Group();current=new T.Vector3();previous=new T.Vector3();waters=[];nextCheckpoint=0;passed=0;
+   constructor(id:number,kind:CarKind,color:number,_scene:unknown,_world:unknown,_fx:unknown,setup:unknown,readonly ground:unknown){this.id=id;this.kind=kind;this.paintColor=new T.Color(color);this.setup=normalizeSetup(setup,kind);supplied.push(setup);}
+   place(x:number,z:number){this.current.set(x,.89,z);}preStep(){}postStep(){}render(){}dispose(){}
+  };
+  const f=load(h,[...selectors,'createCars','beginReplay']);h.context.mode=Cup.CLUB_ROUNDS[index].mode;
+  assert.equal(f.raceFormat(),'laps');assert.equal(f.raceDirection(0),'forward');assert.equal(f.raceDirection(1),'forward');assert.equal(f.scoreDerby(),false);assert.equal(f.raceLaps(),Cup.CLUB_ROUNDS[index].laps);assert.equal(f.eventDuration(),Cup.CLUB_ROUNDS[index].duration);
+  f.createCars();assert.equal(h.context.cars.length,24);assert.deepEqual(plain(h.context.cars.map((c:any)=>c.kind)),cup.roster.map(r=>r.kind));assert.ok(supplied.every(s=>s===undefined));
+  for(const c of h.context.cars)assert.deepEqual(plain(c.setup),plain(stockSetup(c.kind)));
+  assert.ok(h.context.cars.every((c:any)=>PerformanceClass.classEligible(c.kind,c.setup,classLimit)));
+  assert.equal(h.context.activeVenue.course.id,Cup.CLUB_ROUNDS[index].course);assert.equal(h.calls.physics,90);assert.equal(h.context.waypointRace,null);
+  if(index<2)for(const c of h.context.cars){const p=courseGridSlot(h.context.activeVenue.course,c.id,'forward');assert.equal(c.current.x,p.x);assert.equal(c.current.z,p.z);assert.equal(c.passed,p.passed);assert.equal(c.nextCheckpoint,p.next);}
+  f.beginReplay();assert.equal(h.context.recorder.meta.reverse,false);assert.equal(h.context.recorder.meta.courseId,index===1?'ironfield-figure-eight-v1':undefined);assert.equal(h.context.recorder.meta.cars.length,24);
+ }
+});
