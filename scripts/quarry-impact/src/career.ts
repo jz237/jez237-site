@@ -24,8 +24,10 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'banked-racers',title:'Banked Racers',discipline:'racing',description:'Master Elmsworth banking, reverse the Shuttle and hold the Bramble together for two laps.',cost:3,events:['tern-elmsworth','shuttle-elmsworth','bramble-elmsworth']},
  {id:'canyon-crossers',title:'Canyon Crossers',discipline:'racing',description:'Cross the gravel crests, bring the Shuttle home in reverse and complete a heavyweight double lap.',cost:3,events:['ravine-sable','shuttle-sable','regent-sable']},
  {id:'heath-runners',title:'Heath Runners',discipline:'racing',description:'Find grip on Willowbank gravel, reverse the ridge and preserve the Bramble over two laps.',cost:3,events:['tern-willowbank','marten-willowbank','bramble-willowbank']},
+ {id:'club-specialists',title:'Club Specialists',discipline:'racing',description:'Find asphalt grip in the Tern, reverse the Marten and complete a heavyweight two-lap run at Westmere.',cost:3,events:['tern-westmere','marten-westmere','regent-westmere']},
+ {id:'ridge-crossers',title:'Ridge Crossers',discipline:'racing',description:'Carry the Ravine over Harrowstone crests, reverse the Shuttle and finish two laps in the Bramble.',cost:3,events:['ravine-harrowstone','shuttle-harrowstone','bramble-harrowstone']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
