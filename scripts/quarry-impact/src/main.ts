@@ -18,7 +18,7 @@ import {createBriarhillWorld} from './briarhill-world';
 import {createCountyWorld} from './county-world';
 import {createPinecrestWorld} from './pinecrest-world';
 import {combatMotion,COMBAT_AWARDS} from './combat-feats';
-import {transmissionGearLabel} from './transmission';
+import {transmissionGearLabel,transmissionNotice} from './transmission';
 import {drivingButtons} from './driving-controls';
 import {AdaptiveGraphics,graphicsChoice} from './adaptive-graphics';
 import {createAshfordWorld} from './ashford-world';
@@ -840,7 +840,7 @@ function updateHud() {
   const instruments=document.querySelector<HTMLCanvasElement>('#instruments');if(instruments)drawInstruments(instruments,player.speed,player.rpm,player.gear,player.health);
   text(
     'gear',
-    `GEAR ${transmissionGearLabel(player.gear)}  /  ${Math.round(player.rpm)} RPM${player.transmission?.notice?' · SHIFT NOT ENGAGED':player.transmission?.pending!==null&&player.transmission?.pending!==undefined?' · SHIFTING':''}`,
+    `GEAR ${transmissionGearLabel(player.gear)}  /  ${Math.round(player.rpm)} RPM${transmissionNotice(player)}`,
   );
   document.getElementById('rpm-bar')!.style.width =
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
