@@ -1,3 +1,4 @@
+import {restoreFenwickBytes} from './fenwick-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,16 @@ export function readStuntPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreStuntBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreFenwickBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readStuntPrevious(file);
 }
 export function verifyStuntRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'ccf06114d3f45838bb3fab89a18fe2eff9577da5');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreFenwickBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreStuntBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Stunt release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreFenwickBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Stunt release');
  assert.equal(manifest.previousFixtureCount,1634);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,1634);
 }

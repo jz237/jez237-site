@@ -2,7 +2,7 @@ import type R from '@dimforge/rapier3d-compat';
 import {registerTerrainContacts} from './terrain-collision';
 import type {CourseId} from './course-id';
 type Point={x:number;z:number};
-export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startZ:number;height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
+export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startX?:number;startZ:number;height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
 export function createCountyCourse(config:CountyCourseConfig){
 const controls=config.controls;
 const wrap=(n:number,p:number)=>((n%p)+p)%p;
@@ -16,7 +16,7 @@ const path=Array.from({length:1025},(_,i)=>curve(i/1024)),distances=[0];
 for(let i=1;i<path.length;i++)distances.push(distances[i-1]+Math.hypot(path[i].x-path[i-1].x,path[i].z-path[i-1].z));
 const length=distances.at(-1)!;
 // Arc-length sampling keeps checkpoint spacing and both starting grids consistent.
-const start=(()=>{let best=Infinity,at=0;path.forEach((p,i)=>{const d=Math.hypot(p.x,p.z-config.startZ);if(d<best){best=d;at=distances[i];}});return at;})();
+const start=(()=>{let best=Infinity,at=0;path.forEach((p,i)=>{const d=Math.hypot(p.x-(config.startX??0),p.z-config.startZ);if(d<best){best=d;at=distances[i];}});return at;})();
 function point(t:number):Point{
  const distance=wrap(start+t*length,length);let lo=0,hi=distances.length-1;
  while(hi-lo>1){const mid=(lo+hi)>>1;if(distances[mid]<=distance)lo=mid;else hi=mid;}
