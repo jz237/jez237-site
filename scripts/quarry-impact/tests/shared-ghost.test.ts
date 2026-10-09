@@ -8,14 +8,14 @@ import {exportSave,readSave,SAVE_KEYS} from '../src/save-backup';
 const config:TimeTrialConfig={kind:'tern',course:'cinderbank-oval-v1',direction:'forward'};
 function lap(c=config):G.TrialGhost{return{version:1,config:{...c},time:24,gates:Array.from({length:24},(_,i)=>i+1),frames:Array.from({length:241},(_,i)=>[i/10,i/10,1,0,0,0,0,1])};}
 const library=():G.GhostLibrary=>({version:1,enabled:true,ghosts:[lap()]});
-test('all 144 categories export/import precise frames and gates, including names and reverse direction',async()=>{
+test('all 840 stock categories export/import precise frames and gates, including names and reverse direction',async()=>{
  let count=0;
  for(const kind of CAR_KINDS)for(const course of Object.keys(COURSE_NAMES))for(const direction of ['forward','reverse'] as const){
   const ghost=lap({kind,course:course as TimeTrialConfig['course'],direction});
   const text=await G.exportTrialGhost(ghost,'Racer <&> 🏁');
   assert.deepEqual(await G.importTrialGhost(text),{name:'Racer <&> 🏁',ghost});count++;
  }
- assert.equal(count,144);
+ assert.equal(count,840);
 });
 test('tampered/truncated/oversized or malformed ghost files cannot become rivals',async()=>{
  const text=await G.exportTrialGhost(lap(),'Driver');

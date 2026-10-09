@@ -34,7 +34,7 @@ import {CAREER_GROUPS,awardCareerPodiums,careerChallenge,careerStatus,unlockCare
 import {showCareer} from './career-ui';
 import './career.css';
 import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,raceTrialGhost,sharedTrialGhost,addSharedGhost,removeSharedGhost,exportTrialGhost,settleTrialGhost,TrialGhostRecorder,type TrialGhost} from './trial-ghost';
-import {TrialGhostView} from './trial-ghost-view';
+import {TrialGhostView,createTrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
 import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,damageRecordKey} from './damage-rules';
@@ -118,7 +118,7 @@ import { PROFILE_KEY, readProfile, settleRun, type Award } from './progression';
 import { showDriverProfile, awardText, MEDALS } from './profile-ui';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
 import {showEventSetup} from './event-ui';
-import {loadTimeTrialRecords,saveTimeTrialRecords,isTimeTrialConfig,timeTrialBest,formatTrialTime,finishTimeTrialRecord,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
+import {classTimeTrial,copyTimeTrialConfig,timeTrialSetup,timeTrialBuildLabel,loadTimeTrialRecords,saveTimeTrialRecords,isTimeTrialConfig,timeTrialBest,formatTrialTime,finishTimeTrialRecord,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
 import {showTimeTrialSetup,showTimeTrialResult} from './time-trial-ui';
 import {CLUB_CUP_KEY,CLUB_ROUNDS,CLUB_SERIES,clubRounds,clubSeries,createClubCup,readClubCup,beginClubRound,finishClubRound,clubRoundRunId,replayCupAwards,type ClubSeriesId,type ClubCupState,type ClubRowInput} from './club-cup';
 import {showClubCup} from './club-cup-ui';
@@ -202,7 +202,7 @@ function beginTrialGhost(){
   trialGhostRecorder.sample(0,cars[0].current,cars[0].currentQ);
   const rival=raceTrialGhost(trialGhostLibrary,activeTimeTrial,timeTrialBest(timeTrialRecords,activeTimeTrial));
   trialGhostTarget=rival?.ghost??null;trialGhostLabel=rival?.label??'PERSONAL BEST';
-  if(trialGhostLibrary.enabled&&trialGhostTarget)trialGhostView=new TrialGhostView(scene,cars[0].root,trialGhostTarget);
+  if(trialGhostLibrary.enabled&&trialGhostTarget)trialGhostView=createTrialGhostView(scene,cars[0].root,trialGhostTarget);
 }
 function finishTrialGhost(config:TimeTrialConfig,result:TimeTrialResult){
   const recording=trialGhostRecorder?.finish(cars[0].finishTime,cars[0].current,cars[0].currentQ)??null;
@@ -222,8 +222,9 @@ function updateTrialGhost(){
 function openTimeTrialSetup(){
   if(preparingEvent||online?.active)return;
   timeTrialOpen=true;keys.clear();
-  const config:TimeTrialConfig={kind,course:timeTrialSelection?.course??resolveCourseId(eventOptions.course),direction:timeTrialSelection?.direction??(eventOptions.direction==='reverse'?'reverse':'forward')};
-  showTimeTrialSetup(ui,config,timeTrialRecords,{start:config=>{void startTimeTrial(config);},close:()=>{timeTrialOpen=false;menu();}},[timeTrialWarning,trialGhostWarning].filter(Boolean).join(' '),{
+  let config:TimeTrialConfig={kind,course:timeTrialSelection?.course??resolveCourseId(eventOptions.course),direction:timeTrialSelection?.direction??(eventOptions.direction==='reverse'?'reverse':'forward')};
+  if(timeTrialSelection?.performanceClass)config=classTimeTrial(config,garage.cars[kind].setup);
+  showTimeTrialSetup(ui,config,timeTrialRecords,{setup:selected=>garage.cars[selected].setup,start:config=>{void startTimeTrial(config);},close:()=>{timeTrialOpen=false;menu();}},[timeTrialWarning,trialGhostWarning].filter(Boolean).join(' '),{
     enabled:trialGhostLibrary.enabled,
     change:enabled=>{trialGhostLibrary={...trialGhostLibrary,enabled};if(!saveGhostLibrary(trialGhostLibrary))trialGhostWarning='Ghost preference could not be saved; it applies for this session.';},
     status:selected=>{const rival=raceTrialGhost(trialGhostLibrary,selected,timeTrialBest(timeTrialRecords,selected));return rival?`${rival.label} · ${formatTrialTime(rival.ghost.time)} · Ghost ready.`:trialGhostLibrary.target==='shared'?'Import a shared lap for this selection, or choose My personal best.':'Set a new personal best to record a ghost for this selection.';},
@@ -241,14 +242,14 @@ function openTimeTrialSetup(){
 async function startTimeTrial(config:TimeTrialConfig){
   if(preparingEvent||online?.active||!isTimeTrialConfig(config)||!['menu','result'].includes(state))return false;
   bankRun(false);telemetry=null;activeChallenge=undefined;activeClubRound=null;clubOpen=false;timeTrialOpen=false;
-  activeTimeTrial=Object.freeze({...config});timeTrialSelection={...config};kind=config.kind;mode='race';
+  activeTimeTrial=Object.freeze(copyTimeTrialConfig(config));if(activeTimeTrial.setup){Object.freeze(activeTimeTrial.setup.tune);Object.freeze(activeTimeTrial.setup.livery);Object.freeze(activeTimeTrial.setup);}timeTrialSelection=copyTimeTrialConfig(config);kind=config.kind;mode='race';
   return start(false);
 }
 function finishTimeTrial(){
   const config=activeTimeTrial;if(!config)return;
   const player=cars[0],run=telemetry?.stats??null;
   if(run)Object.assign(run,{completed:true,finished:player.finished&&player.health>0,health:player.health,rank:0,won:false,checkpoints:player.passed});
-  const outcome=finishTimeTrialRecord(timeTrialRecords,config,{run,finished:player.finished,health:player.health,passed:player.passed,finishTime:player.finished?player.finishTime:elapsed+player.penalty,demo,online:!!online?.active,synthetic:autopilot||!!testInput||!!timeTrialInvalidReason&&timeTrialInvalidReason!=='RECOVERY USED',stock:cars.length===1&&player.kind===config.kind&&activeVenue.course.id===config.course&&raceDirection()===config.direction&&JSON.stringify(player.setup)===JSON.stringify(stockSetup(player.kind))});
+  const outcome=finishTimeTrialRecord(timeTrialRecords,config,{run,finished:player.finished,health:player.health,passed:player.passed,finishTime:player.finished?player.finishTime:elapsed+player.penalty,demo,online:!!online?.active,synthetic:autopilot||!!testInput||!!timeTrialInvalidReason&&timeTrialInvalidReason!=='RECOVERY USED',setup:player.setup,selectionMatches:cars.length===1&&player.kind===config.kind&&activeVenue.course.id===config.course&&raceDirection()===config.direction,stock:cars.length===1&&player.kind===config.kind&&activeVenue.course.id===config.course&&raceDirection()===config.direction&&JSON.stringify(player.setup)===JSON.stringify(stockSetup(player.kind))});
   timeTrialRecords=outcome.records;timeTrialResult=outcome.result;
   finishTrialGhost(config,timeTrialResult);
   if(timeTrialResult.eligible)timeTrialWarning=saveTimeTrialRecords(timeTrialRecords)?'':'Personal bests are available for this session, but browser storage could not save them.';
@@ -710,7 +711,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   for (let i = 0; i < count; i++) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
-    const setup=!attract&&activeTimeTrial?stockSetup(type):!attract&&activeClubRound!==null?undefined:demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length]):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
+    const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?undefined:demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length]):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup,activeVenue.course);
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
@@ -811,7 +812,7 @@ function hud() {
   if(waypointRace)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="waypoint-status"></div>');
   if(settings.performance)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="performance-readout" id="performance-readout"></div>');
   if(activeChallenge){ui.querySelector('.hud-title')!.textContent=activeChallenge.title.toUpperCase();ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live"><strong id="challenge-score"></strong><span id="challenge-target"></span></div>');}
-  if(activeTimeTrial){ui.querySelector('.hud-title')!.textContent=`TIME TRIAL · ${activeTimeTrial.direction.toUpperCase()}`;text('event-label','PERSONAL BEST');ui.querySelector('.event-stats > div:nth-child(2) > span')!.textContent='LAP TIME';text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live" role="status"><strong id="time-trial-progress">0 / 24 GATES</strong><span id="time-trial-validity">FACTORY STOCK · ONE LAP · NO RECOVERY</span><span id="time-trial-ghost">PERSONAL-BEST GHOST</span></div>');}
+  if(activeTimeTrial){ui.querySelector('.hud-title')!.textContent=`TIME TRIAL · ${activeTimeTrial.direction.toUpperCase()}`;text('event-label','PERSONAL BEST');ui.querySelector('.event-stats > div:nth-child(2) > span')!.textContent='LAP TIME';text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="challenge-live" role="status"><strong id="time-trial-progress">0 / 24 GATES</strong><span id="time-trial-validity">'+timeTrialBuildLabel(activeTimeTrial).toUpperCase()+' · ONE LAP · NO RECOVERY</span><span id="time-trial-ghost">PERSONAL-BEST GHOST</span></div>');}
   if(customEvent()&&mode!=='playground')ui.querySelector('.hud-title')!.textContent+=' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI · '+DAMAGE_RULES[damageRule()].label.toUpperCase();
   if(demo)demoHud();
   if(customEvent()&&mode!=='playground'&&!demo&&eventOptions.classLimit)ui.querySelector('.hud-title')!.textContent+=' · '+classLimitLabel(eventOptions.classLimit).toUpperCase();
@@ -887,7 +888,7 @@ function updateHud() {
           ? 'TRAFFIC ON'
           : 'SOLO',
   );
-  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:'FACTORY STOCK · ONE LAP · NO RECOVERY');text('time-trial-ghost',!trialGhostLibrary.enabled?'GHOST OFF':trialGhostTarget?trialGhostSplit||`RACING ${trialGhostLabel} GHOST`:'NO SAVED GHOST · SET A NEW PERSONAL BEST');}
+  if(activeTimeTrial){text('time-value',formatTrialTime(player.finished?player.finishTime:elapsed+player.penalty));text('event-value',formatTrialTime(timeTrialBest(timeTrialRecords,activeTimeTrial)));text('time-trial-progress',`${Math.min(24,Math.max(0,player.passed))} / 24 GATES`);text('time-trial-validity',timeTrialInvalidReason?`PRACTICE ONLY · ${timeTrialInvalidReason}`:timeTrialBuildLabel(activeTimeTrial).toUpperCase()+' · ONE LAP · NO RECOVERY');text('time-trial-ghost',!trialGhostLibrary.enabled?'GHOST OFF':trialGhostTarget?trialGhostSplit||`RACING ${trialGhostLabel} GHOST`:'NO SAVED GHOST · SET A NEW PERSONAL BEST');}
   document.getElementById('countdown')!.innerHTML =
     state === 'countdown'
       ? `<strong>${Math.ceil(countdown)}</strong><p>${mode === 'derby' ? 'SURVIVE THE IMPACT' : 'FIND YOUR LINE'}</p>`

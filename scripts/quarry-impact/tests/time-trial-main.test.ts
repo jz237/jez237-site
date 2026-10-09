@@ -1,3 +1,9 @@
+import * as Cup from '../src/club-cup';
+import * as PerformanceClass from '../src/performance-class';
+import {awardCareerPodiums} from '../src/career';
+import {challengeCourse} from '../src/challenges';
+import {stuntChallengeSpawn} from '../src/stunt-challenge';
+import {freeDriveSpawn} from '../src/free-drive';
 import * as Arenas from '../src/arena-id';
 import * as Ghost from '../src/trial-ghost';
 import {TrialGhostView} from '../src/trial-ghost-view';
@@ -30,7 +36,7 @@ import {RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrde
 import {COURSE_NAMES,resolveCourseId} from '../src/course-id';
 import {getRaceCourse,courseRoute,courseGridSlot} from '../src/race-course';
 import {CLUB_ROUNDS} from '../src/club-cup';
-import {demoCarKind,demoVehicleSetup} from '../src/demo-session';
+import {demoCarKind,demoVehicleSetup,demoPerformanceGrid} from '../src/demo-session';
 import {WaypointRace} from '../src/waypoint-race';
 import {ReplayRecorder} from '../src/replay-data';
 
@@ -86,8 +92,8 @@ function harness(faults:Faults={}){
  const ui=new UINode(),storage=new Map<string,string>(),writes:string[]=[],construction:any[]=[],notices:string[]=[],logs:unknown[]=[];
  const calls={physics:0,render:0,archive:0,capture:0,warm:0,reload:0};let serial=0,venueCalls=0;
  const venues=Object.fromEntries(Object.keys(COURSE_NAMES).map(id=>[id,{course:getRaceCourse(id as any),props:[],puddles:[]} ])),quarry=venues['quarry-v1'];
- const context:any={...Arenas,controllerRumble:{stop(){}},...Ghost,TrialGhostView,trialGhostLibrary:Ghost.readGhostLibrary(null),trialGhostWarning:'',trialGhostRecorder:null,trialGhostView:null,trialGhostTarget:null,trialGhostSplit:'',trialGhostLabel:'PERSONAL BEST',...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
-  CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,WaypointRace,structuredClone,Error,Date,
+ const context:any={...Cup,stuntProgress:null,...Arenas,...PerformanceClass,awardCareerPodiums,challengeCourse,stuntChallengeSpawn,freeDriveSpawn,controllerRumble:{stop(){}},...Ghost,TrialGhostView,createTrialGhostView:(scene:T.Scene,source:T.Object3D,ghost:Ghost.TrialGhost)=>new TrialGhostView(scene,source,ghost),trialGhostLibrary:Ghost.readGhostLibrary(null),trialGhostWarning:'',trialGhostRecorder:null,trialGhostView:null,trialGhostTarget:null,trialGhostSplit:'',trialGhostLabel:'PERSONAL BEST',...DamageRules,...GridSetup,...Grid,...Timed,...Timed,T,AI_DIFFICULTIES,readAIDifficulty,sessionAIDifficulty,difficultyRecordKey,...Challenges,...Trial,stockSetup,showTimeTrialSetup,showTimeTrialResult,activeTimeTrial:null,timeTrialOpen:false,timeTrialRecords:Trial.readTimeTrialRecords(),timeTrialSelection:undefined,timeTrialWarning:'',timeTrialInvalidReason:'',timeTrialResult:null,showDriverProfile,MEDALS,awardText,SessionTelemetry,readProfile,settleRun,PROFILE_KEY,ReplayRecorder,
+  CAR_KINDS,DEFINITIONS,RACE_NAMES,readEventOptions,directionForCar,derbyGridSlot,eventDerbyOrder,courseRoute,courseGridSlot,COURSE_NAMES,resolveCourseId,CLUB_ROUNDS,demoCarKind,demoVehicleSetup,demoPerformanceGrid,WaypointRace,structuredClone,Error,Date,
   ui,document:{querySelector:(selector:string)=>ui.querySelector(selector),createElement:()=>new UINode(),hidden:false},
   localStorage:{getItem:(key:string)=>storage.get(key)??null,setItem(key:string,value:string){if(faults.storage||faults.trialStorage&&key===Trial.TIME_TRIAL_KEY)throw Error('Storage blocked');storage.set(key,value);writes.push(key);}},
   crypto:{randomUUID:()=>`unit-run-${++serial}`},console:{warn:(...v:unknown[])=>logs.push(v),error:(...v:unknown[])=>logs.push(v)},location:{reload(){calls.reload++;}},
@@ -283,4 +289,13 @@ test('actual Time Trial handlers save a complete PB ghost, race it on Retry and 
  await h.f.start(false);assert.equal(h.context.trialGhostTarget.time,40);assert.ok(h.context.trialGhostView);
  assert.equal(h.context.trialGhostRecorder.gates.length,0);assert.equal(h.context.cars.length,1);
  outcome(h,35);h.context.timeTrialInvalidReason='ASSISTED RUN';result(h);assert.equal(h.storage.get(Ghost.TRIAL_GHOST_KEY),saved);
+});
+
+test('class trial main locks the garage build through Retry, rejects mid-run setup changes and preserves stock records',async()=>{
+ const h=harness(),base=configurations[0],config=Trial.classTimeTrial(base,h.context.garage.cars[base.kind].setup),original=h.preferences();
+ assert.ok(await h.f.startTimeTrial(config));assert.deepEqual(h.context.cars[0].setup,config.setup);assert.ok(Object.isFrozen(h.context.activeTimeTrial.setup.tune));
+ outcome(h,40);const first=result(h);assert.ok(first.eligible&&first.newBest);assert.equal(Trial.timeTrialBest(h.context.timeTrialRecords,base),null);
+ const saved=h.storage.get(Trial.TIME_TRIAL_KEY);assert.ok(saved);assert.ok(Trial.readTimeTrialRecords(saved).builds![Trial.timeTrialKey(config)]);
+ h.click('#again');await h.settle();assert.deepEqual(h.context.cars[0].setup,config.setup);h.context.cars[0].setup.tune.gearing=0;outcome(h,35);assert.equal(result(h).eligible,false);assert.equal(h.storage.get(Trial.TIME_TRIAL_KEY),saved);assert.equal(h.preferences(),original);
+ h.click('#time-trial-setup-back');assert.equal(h.ui.querySelector('#time-trial-build')!.value,'class');h.ui.querySelector('#time-trial-build')!.value='stock';h.ui.querySelector('#time-trial-build')!.onchange?.();h.click('#time-trial-start');await h.settle();assert.deepEqual(h.context.cars[0].setup,stockSetup(base.kind));
 });

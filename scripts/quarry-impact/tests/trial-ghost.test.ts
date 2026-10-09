@@ -13,12 +13,12 @@ function lap(selected=config){
  for(let i=0;i<=1440;i++){const t=i/60;p.set(t,1,t*2);r.sample(t,p,q);if(i&&i%60===0)r.gate(i/60,t);}
  const ghost=r.finish(24,p,q);assert.ok(ghost);return ghost;
 }
-test('complete fixed-step laps retain all gate times and bounded 10 Hz poses for all 110 categories',()=>{
+test('complete fixed-step laps retain all gate times and bounded 10 Hz poses for all 840 stock categories',()=>{
  let count=0;
  for(const kind of CAR_KINDS)for(const course of Object.keys(COURSE_NAMES))for(const direction of ['forward','reverse'] as const){
   const g=lap({kind,course:course as TimeTrialConfig['course'],direction});assert.equal(g.frames.length,241);assert.equal(g.gates.length,24);assert.equal(g.time,24);count++;
  }
- assert.equal(count,110);
+ assert.equal(count,840);
 });
 test('only eligible new PBs replace matching ghosts; bad or overlong recordings remove stale ghosts without touching other categories',()=>{
  const a=lap(),b=lap({...config,direction:'reverse'}),library:G.GhostLibrary={version:1,enabled:true,ghosts:[a,b]};
