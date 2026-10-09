@@ -670,7 +670,7 @@ function receiveOnline() {
   }
 }
 function createCars(attract = false, previewSetup?:Setup) {
-  const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'&&customEvent()?resolveArenaId(demo?demoOptions.arena:eventOptions.arena):'quarry-arena-v1');
+  const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId(clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
   archiveReplay();bankRun(false);
   drivers.difficulty=attract?'amateur':aiDifficulty();drivers.reset();combat.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
