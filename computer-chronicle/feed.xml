@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 09 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 10-16, 1984 — Ghostbusters turns the Commodore 64 into a paranormal franchise</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-12-10</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-10</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Activision turns a hit film into equipment-buying strategy and audiovisual spectacle on the C64. Ghostbusters gives the Commodore 64 owner a business to run as well as ghosts to catch. Activision’s game makes the player the proprietor of a Ghostbusters franchise, bringing the film’s premise to a home-computer screen. December’s Computer Gaming World includes it among the games receiving a first look. Also this week: Tandy 1000 offers a $1,200 challenge to IBM’s junior · Plus/4’s improved BASIC runs into Commodore’s compatibility wall · Archon II: Adept trades the chessboard for elemental combat.</description>
+    </item>
     <item>
       <title>Week of December 3-9, 1984 — F-15 Strike Eagle brings combat flying to Atari and Commodore desktops</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-12-03</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-30</guid>
       <pubDate>Thu, 17 Sep 2026 12:00:00 GMT</pubDate>
       <description>Thousands of public-domain programs are moving through online services and local bulletin boards, challenging the idea that every useful disk must arrive in a shrink-wrapped box. A Macintosh communications program has become the calling card for a much wider movement. MIT-trained consultant Dennis Brothers wrote MacTEP after probing the new machine closely enough to make it talk over telephone lines, then gave the program away. CompuServe placed it before a reported 135,000 subscribers, and calls soon reached Brothers from Britain and the Dominican Republic. Also this week: Tramiel Takes Atari and the Ax Falls · A Fantasy Computer Game Becomes a Novel · BYTE Surveys the Small-System Frontier.</description>
-    </item>
-    <item>
-      <title>Week of July 23-29, 1984 — Activision Forces &apos;Cuthbert in the Jungle&apos; Off the Market</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-07-23</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-23</guid>
-      <pubDate>Wed, 16 Sep 2026 12:00:00 GMT</pubDate>
-      <description>A High Court undertaking pulls Microdeal&apos;s Commodore 64 game from sale and makes the young software trade confront the difference between inspiration and imitation. LONDON — Activision has forced Microdeal to withdraw Cuthbert in the Jungle after bringing High Court proceedings that alleged the Commodore 64 title copied Pitfall!, Popular Computing Weekly reported on July 26. Microdeal gave the court an undertaking that it would no longer produce the game in any form and notified suppliers that the title could no longer be sold. Also this week: Tramiel&apos;s Atari Shake-Up Reaches Britain · Apple Plans to Double Macintosh Production · A Computer Fantasy Game Becomes an Alan Dean Foster Novel.</description>
     </item>
   </channel>
 </rss>

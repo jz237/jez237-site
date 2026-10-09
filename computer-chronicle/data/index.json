@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-09",
+      "historicDate": "1984-12-10",
+      "displayDate": "Week of December 10-16, 1984",
+      "edition": "Issue 124 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Who buys the ghostbusting gear? The player at the Commodore keyboard.",
+      "leadHeadline": "Ghostbusters turns the Commodore 64 into a paranormal franchise",
+      "storyHeadlines": [
+        "Tandy 1000 offers a $1,200 challenge to IBM’s junior",
+        "Plus/4’s improved BASIC runs into Commodore’s compatibility wall",
+        "Archon II: Adept trades the chessboard for elemental combat"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-10.png",
+      "thumb": "media/thumbs/1984-12-10.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-08",
       "historicDate": "1984-12-03",
       "displayDate": "Week of December 3-9, 1984",
