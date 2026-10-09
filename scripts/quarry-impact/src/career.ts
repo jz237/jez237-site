@@ -22,8 +22,10 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'stunt-park',title:'Stunt Park',discipline:'stunts',description:'Build approach speed, complete the loop and land the gap jump in the Ravine.',cost:3,events:['ravine-alderwick-speed','ravine-alderwick-loop','ravine-alderwick-gap']},
  {id:'freight-runners',title:'Freight Runners',discipline:'racing',description:'Learn the freight stations, choose open-yard shortcuts and follow changing dispatches.',cost:3,events:['carrier-rookvale','ravine-rookvale','regent-rookvale']},
  {id:'banked-racers',title:'Banked Racers',discipline:'racing',description:'Master Elmsworth banking, reverse the Shuttle and hold the Bramble together for two laps.',cost:3,events:['tern-elmsworth','shuttle-elmsworth','bramble-elmsworth']},
+ {id:'canyon-crossers',title:'Canyon Crossers',discipline:'racing',description:'Cross the gravel crests, bring the Shuttle home in reverse and complete a heavyweight double lap.',cost:3,events:['ravine-sable','shuttle-sable','regent-sable']},
+ {id:'heath-runners',title:'Heath Runners',discipline:'racing',description:'Find grip on Willowbank gravel, reverse the ridge and preserve the Bramble over two laps.',cost:3,events:['tern-willowbank','marten-willowbank','bramble-willowbank']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
