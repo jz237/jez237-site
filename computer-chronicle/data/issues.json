@@ -9,6 +9,443 @@
         "secondary": "royal blue",
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 10-16, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Ghostbusters gaming lead with C64 halftone",
+        "secondaryRail": "Tandy, Commodore, music and cinema shelves",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "visualProfile": {
+        "tone": "December 1984 holiday home-computing newsprint",
+        "motifs": [
+          "Commodore 64 Ghostbusters game",
+          "Tandy 1000",
+          "Plus/4",
+          "floppy disks"
+        ],
+        "layout": "Dense warm newspaper with red and blue section headers"
+      },
+      "currentDate": "2026-10-09",
+      "historicDate": "1984-12-10",
+      "displayDate": "Week of December 10-16, 1984",
+      "edition": "Issue 124 - Weekly 1984 Computer & Culture Chronicle",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-12-10.png",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for December 10-16, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Holiday home computing brings ghostbusting, compatible PCs and elemental strategy to the desk.",
+      "morningLine": "Who buys the ghostbusting gear? The player at the Commodore keyboard.",
+      "lead": {
+        "headline": "Ghostbusters turns the Commodore 64 into a paranormal franchise",
+        "dek": "Activision turns a hit film into equipment-buying strategy and audiovisual spectacle on the C64.",
+        "body": [
+          "Ghostbusters gives the Commodore 64 owner a business to run as well as ghosts to catch. Activision’s game makes the player the proprietor of a Ghostbusters franchise, bringing the film’s premise to a home-computer screen. December’s Computer Gaming World includes it among the games receiving a first look.",
+          "The franchise begins with $2,000 in game money. That purse buys a vehicle and ghostbusting equipment, making purchasing decisions part of the play. The figure is fictional starting capital, not the price of the program on a shop shelf.",
+          "The magazine singles out the Commodore 64’s graphics and sound and calls the program well executed. Its assessment suggests an attraction for moviegoers who want to carry the ghost-catching business home. The machine’s audiovisual abilities are central to this contemporary appraisal.",
+          "Activision’s December Creative Computing advertisement also places Ghostbusters in its holiday lineup alongside Space Shuttle, Mindshadow and other named titles. The attention is documented December coverage; it does not establish a launch during December 10–16. Nor does the advertisement’s broad computer list establish that every advertised game runs on every named machine."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Tandy 1000 offers a $1,200 challenge to IBM’s junior",
+          "body": [
+            "Radio Shack has a new contender for the home-and-office computer desk. John J. Anderson’s December Creative Computing review reports the Tandy 1000 at a $1,200 base price, with an 8088 processor, 128K of memory expandable to 640K and a double-sided 360K floppy drive. A monitor is not established as part of that base package.",
+            "Three expansion slots, two joystick ports and three-voice sound give the machine interests beyond office work. MS-DOS, Microsoft GW BASIC and DeskMate are included. DeskMate brings word processing, spreadsheet, file management and telecommunications functions together, though Anderson’s tested version is still developing.",
+            "The compatibility promise has limits. Lotus 1-2-3 ran successfully, while Imagic Touchdown Football showed speech-speed and color differences. Software depending on IBM monochrome circuitry would not run. Buyers should judge the programs they need, not assume that the compatible label means universal equivalence.",
+            "A second internal floppy and a 128K memory expansion are each listed at $300. A 300-baud modem option costs $180, with an RS-232 interface listed separately at $100. The review is December reporting rather than evidence of an exact launch this week."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Plus/4’s improved BASIC runs into Commodore’s compatibility wall",
+          "body": [
+            "Commodore’s Plus/4 gives BASIC programmers a roomier working environment, but leaves familiar C64 accessories at a crossroads. Anderson’s December column reports 64K of RAM, about 60K available to BASIC, more than 75 commands, a machine-language monitor and programmable function keys.",
+            "Five graphics modes include 320-by-200 bitmapped displays, with 121 colors and split text-and-graphics screens. C64-style sprites are absent. Built-in word processing, spreadsheet and file management sound convenient, but the reviewer finds the applications weak and criticizes incompatible joystick, cassette and cartridge ports.",
+            "The same column looks ahead to Commodore’s Amiga Lorraine prototype. That is a glimpse of work in progress, not a shipping Amiga specification sheet. For the holiday purchaser, the immediate lesson is simpler: a better BASIC and more built-in applications do not remove the cost of changing a peripheral and software collection."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Archon II: Adept trades the chessboard for elemental combat",
+          "body": [
+            "Electronic Arts brings a different battlefield to its December advertising for Archon II: Adept. The ad names Jon Freeman, Paul Reiche III and Anne Westfall as the creators, and replaces the original Archon chessboard motif with a map of Earth, Air, Fire and Water.",
+            "Good and evil remain opponents, but the publisher promises greater magic, deeper strategy and smarter computer play. Those are advertising claims rather than independent test results. No exact release day, retail price or platform-specific shipping date is established by this advertisement."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Tandy 1000",
+          "summary": "8088; 128K–640K RAM; 360K floppy; three-voice sound; two joystick ports",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Commodore Plus/4",
+          "summary": "64K RAM; approximately 60K BASIC workspace; 320×200 graphics; 121 colors; integrated ROM applications",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Amiga Lorraine",
+          "summary": "Prototype only; December press report predates final commercial Amiga and cannot establish shipping specifications.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "DeskMate",
+          "detail": "Bundled with Tandy 1000 in December review. Integrated word processing, spreadsheet, file management, telecommunications, calendar, E-mail, help and calculator. Reviewer’s version still under development; avoid claiming every function independently tested.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "BetterBasic",
+          "detail": "Susan Glinert-Cole reviews it in December Creative Computing. IBM PC/XT or fully compatible; minimum 128K, recommended 192K; single-sided drive and PC-DOS 1.1 or later. Structured procedures/functions, full-screen editor, syntax checking, modules and support for 640K; Microsoft BASIC conversion may require edits. Extra-cost modules include windows, 8087 support, assembly-language support, and runtime distribution. No verified price retained.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — December editorial shelf, not a sales chart",
+          "items": [
+            "Ghostbusters",
+            "Pitstop II",
+            "Cutthroats",
+            "Zenji",
+            "Archon II: Adept"
+          ],
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "label": "Top 5 Movies — U.S. weekend December 14-16",
+          "items": [
+            "Beverly Hills Cop",
+            "Dune",
+            "City Heat",
+            "2010: The Year We Make Contact",
+            "The Cotton Club"
+          ],
+          "sourceRefs": [
+            8
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Tandy 1000 base system",
+          "price": "$1,200.00",
+          "note": "review-reported base price, monitor not established as included",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Tandy 1000 300-baud modem option",
+          "price": "$180.00",
+          "note": "December review-reported option price",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Tandy 1000 second internal floppy drive",
+          "price": "$300.00",
+          "note": "December review-reported option price",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Alphacom 42 with C64 interface",
+          "price": "$150.00",
+          "note": "approximately; reviewer-reported typical selling price",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Hayes Smartmodem 1200",
+          "price": "$469.00",
+          "note": "LYCO Computer mail-order advertisement; not MSRP; OCR decimal spacing normalized",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Anchor Volksmodem",
+          "price": "$55.99",
+          "note": "LYCO Computer mail-order advertisement, not MSRP",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "The World Connection",
+          "price": "$9.95",
+          "note": "book price in contemporary review",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "Don Henley",
+          "title": "The Boys of Summer",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1984-12-15",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Bryan Adams",
+          "title": "Run to You",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1984-12-15",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Foreigner",
+          "title": "I Want to Know What Love Is",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1984-12-15",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Pat Benatar",
+          "title": "We Belong",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1984-12-15",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "The Kinks",
+          "title": "Do It Again",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1984-12-15",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Infocom packaging gets easier to shelve",
+          "summary": "December CGW applauds Cutthroats’ book-like package after complaining about earlier irregular boxes. This is contemporary opinion, not a new corporate announcement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "AM stereo reaches a shared Chicago holiday promotion",
+          "summary": "Billboard December 15, p.20 reports WLS, WMAQ, WGN, WAIT and WGCI cooperating with Sony in a month-long AM stereo promotion, with Walkman/table-radio giveaways and 150 dealers offering point-of-purchase listening demonstrations.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Activision fills the holiday software shelf",
+        "summary": "December advertising pairs Ghostbusters with Space Shuttle, Mindshadow, The Tracer Sanction, The Designer’s Pencil, Pitfall II, H.E.R.O. and The Activision Decathlon.",
+        "tagline": "Film fun, flight and adventure in the December lineup.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "market": {
+        "headline": "Compatibility has a price beyond the base box",
+        "summary": "Tandy’s $1,200 base price includes software but does not establish an included monitor. Plus/4 buyers face changed peripheral connections; software and accessory fit matter alongside the sticker price.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Thatcher and Gorbachev meet at Chequers",
+        "summary": "Margaret Thatcher meets Mikhail Gorbachev at Chequers on December 16 for talks on East–West relations, arms control and security. Gorbachev is a Politburo member and Central Committee secretary, not yet Soviet leader.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "A teenage author explains the world beyond the keyboard",
+        "posts": [
+          {
+            "topic": "Services versus local boards",
+            "platform": "CompuServe / The Source / local BBS",
+            "text": "Knight’s book contrasts commercial information utilities with local bulletin boards and explains subscription costs and offerings; the review does not quote current service tariffs."
+          },
+          {
+            "topic": "Hardware to get connected",
+            "platform": "Novation / Hayes / Radio Shack",
+            "text": "The review names CAT and D-CAT, Hayes Smartmodem, and Radio Shack Modem I and II as units discussed. Tandy 1000’s separate December review prices its 300-baud direct-connect modem option at $180."
+          },
+          {
+            "topic": "Software coverage is uneven",
+            "platform": "TRS-80 and other micros",
+            "text": "Murphy says the book’s communications-software chapter largely favors TRS-80 and names VisiTerm, Smart-80, Modem 80 and Super Terminal. Do not assign every named program to a specific platform from this review alone."
+          }
+        ],
+        "summary": "December Creative Computing reviews 16-year-old Timothy Orr Knight’s The World Connection, a 142-page, $9.95 introduction to online services and local boards. Brian J. Murphy praises its accessible approach but faults narrow communications-software coverage.",
+        "sourceRefs": [
+          4,
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "The printer whose paper comes in black or blue",
+        "summary": "A quiet little thermal printer offers an unusual holiday accessory.",
+        "detail": "John J. Anderson’s December Commodore column reports the 40-column Alphacom 42 using continuous-roll thermal paper available in black and blue, with just on/off and paper-advance controls and no power-state indication. With the C64 interface it generally sells for about $150; the reviewer calls it whisper quiet.",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Sony backs Chicago’s AM stereo Christmas push",
+        "summary": "Billboard December 15 reports a coordinated five-station promotion with AM-stereo/FM-stereo Walkmans and AM stereo table radios; receivers are described as accommodating the AM stereo systems in use. No model numbers or prices verified.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "sources": [
+        {
+          "title": "Computer Gaming World, Vol.4 No.6, Taking a Peek and Cutthroats coverage",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_4.6.pdf",
+          "date": "1984-12"
+        },
+        {
+          "title": "Creative Computing, Vol.10 No.12, full OCR; Electronic Arts and Activision advertisements; LYCO prices",
+          "url": "https://archive.org/stream/creativecomputing-1984-12/Creative_Computing_v10_n12_1984_Dec_djvu.txt",
+          "date": "1984-12"
+        },
+        {
+          "title": "Tandy Model 1000: junior meets his match, John J. Anderson, p.44",
+          "url": "https://www.atarimagazines.com/creative/v10n12/44_Tandy_Model_1000_junior_.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "Commodore’s port, John J. Anderson, p.216",
+          "url": "https://www.atarimagazines.com/creative/v10n12/216_Commodores_port_preview.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "The World Connection, Brian J. Murphy, p.199",
+          "url": "https://www.atarimagazines.com/creative/v10n12/199_The_world_connection.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "Enter the Movits, Tim Onosko, p.119",
+          "url": "https://www.atarimagazines.com/creative/v10n12/119_Enter_the_Movits_highte.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "IBM images: Better Basic, Susan Glinert-Cole, p.223",
+          "url": "https://www.atarimagazines.com/creative/v10n12/223_IBM_images_Better_Basic_.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "Billboard Vol.96 No.50, Top Rock Tracks and AM stereo promotion, printed p.20",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-12-15-90th.pdf",
+          "date": "1984-12-15"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend December 14–16",
+          "url": "https://www.boxofficemojo.com/weekend/1984W50/",
+          "date": "1984-12-14/1984-12-16"
+        },
+        {
+          "title": "National Security Archive: record of Thatcher–Gorbachev meeting at Chequers",
+          "url": "https://nsarchive.gwu.edu/media/21538/ocr",
+          "date": "1984-12-16"
+        }
+      ],
+      "accuracyLedger": {
+        "items": [
+          "Computing candidates are verified December coverage, not proven announcements during December 10–16. Do not call these launches this week.",
+          "Billboard chart transcribed from original magazine p.20; do not substitute Tunecaster’s different chart.",
+          "Film data are retrospective weekend figures; use only if the issue’s editorial cutoff permits December 16 results.",
+          "Amiga acquisition happened earlier; prototype discussion is not an exact-week milestone. No milestone claimed.",
+          "The New York Times December 10 school-computer-market article was located, but full text was blocked; exclude unverified particulars.",
+          "No exact-week scene bust or named cracking crew verified. Underground item is limited to documented print discussion.",
+          "Game shelf is an editorial selection, not a sales ranking. Modem posts are desk summaries, not recovered user messages."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
       "currentDate": "2026-10-08",
       "historicDate": "1984-12-03",
       "displayDate": "Week of December 3-9, 1984",
