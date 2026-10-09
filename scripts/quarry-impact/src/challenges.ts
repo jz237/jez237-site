@@ -73,6 +73,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('tern-elmsworth','Banking introduction','tern',1,[100,70,55]),course:'elmsworth-speedway-v1'},
   {...race('shuttle-elmsworth','Return service','shuttle',1,[110,80,60],30),course:'elmsworth-speedway-v1',direction:'reverse',description:'Finish one reverse lap on the banked speedway with at least 30% condition. No recoveries.'},
   {...race('bramble-elmsworth','Banked endurance','muscle',2,[210,145,110],25),course:'elmsworth-speedway-v1'},
+  {...race('ravine-sable','Canyon crest sprint','buggy',1,[140,95,65],40),course:'sable-canyon-v1'},
+  {...race('shuttle-sable','Canyon return service','shuttle',1,[150,105,75],35),course:'sable-canyon-v1',direction:'reverse',description:'Finish one reverse canyon lap with at least 35% condition. Brake for the gravel crests. No recoveries.'},
+  {...race('regent-sable','Canyon double crossing','regent',2,[280,195,140],35),course:'sable-canyon-v1'},
+  {...race('tern-willowbank','Heathland introduction','tern',1,[155,110,85],40),course:'willowbank-heath-v1'},
+  {...race('marten-willowbank','Reverse ridge run','marten',1,[160,115,90],35),course:'willowbank-heath-v1',direction:'reverse',description:'Finish one reverse gravel lap with at least 35% condition. Keep the rear-engine Marten settled through the linked bends. No recoveries.'},
+  {...race('bramble-willowbank','Heathland endurance','muscle',2,[310,225,170],30),course:'willowbank-heath-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
