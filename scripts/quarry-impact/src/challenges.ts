@@ -1,0 +1,134 @@
+import type {StuntTask} from './stunt-challenge';
+import type {CarKind,Mode} from './rules';
+import type {RunStats} from './session-telemetry';
+import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
+export type Discipline='racing'|'impact'|'stunts';
+export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
+export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;stunt?:StuntTask};
+const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
+const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
+export const CHALLENGES:readonly Challenge[]=[
+  race('first-lap','First lap','coupe',1,[110,85,65]),
+  race('hatch-sprint','Pocket rocket','hatch',1,[110,82,62]),
+  race('sedan-sprint','Heavy metal sprint','sedan',1,[115,88,68]),
+  race('double-duty','Double duty','coupe',2,[220,170,130]),
+  race('hatch-double','Small car, long fight','hatch',2,[220,165,125]),
+  race('three-lap','The long way home','sedan',3,[330,265,210]),
+  race('clean-coupe','Bring it home','coupe',1,[130,95,75],75),
+  race('clean-hatch','Handle with care','hatch',2,[260,200,160],65),
+  {id:'podium',title:'Podium hunter',car:'sedan',laps:2,medals:[3,2,1],metric:'position',mode:'race',discipline:'racing',limit:260,description:'Finish two laps on the podium. Gold requires first place. No recoveries.'},
+  {id:'champion',title:'Quarry champion',car:'coupe',laps:3,medals:[3,2,1],metric:'position',mode:'race',discipline:'racing',limit:350,minHealth:20,description:'Finish three laps on the podium with at least 20% condition.'},
+  event('first-contact','First contact','sedan','damage',60,[30,65,100],'Deal damage to opponents in a one-minute derby.'),
+  event('coupe-impact','V8 punch','coupe','damage',90,[70,130,200],'Use the coupe to deliver sustained damage. Armor and overkill do not inflate the score.'),
+  event('hatch-impact','Punch above your weight','hatch','damage',90,[60,115,180],'Keep the hatch moving and damage heavier opponents.'),
+  event('heavy-impact','Heavy hitter','sedan','damage',120,[100,190,290],'Chain high-speed intercepts across a two-minute derby.'),
+  event('wreck-one','Final blow','sedan','knockouts',120,[1,2,3],'Deliver the final impact to knock out opponents.'),
+  event('wreck-coupe','Wrecking crew','coupe','knockouts',150,[1,2,4],'Finish weakened opponents without wasting hits on wrecks.'),
+  event('wreck-hatch','Giant killer','hatch','knockouts',150,[1,2,3],'Take down larger cars with the lightweight hatch.'),
+  event('survivor','Survivor','sedan','condition',45,[20,45,70],'Survive 45 seconds with condition remaining. Deal at least 15 damage to qualify.'),
+  event('steel-nerves','Nerves of steel','coupe','condition',75,[15,35,60],'Stay alive for 75 seconds and deal at least 15 damage.'),
+  event('last-light','Lightweight endurance','hatch','condition',90,[10,30,55],'Protect the hatch for 90 seconds while dealing at least 15 damage.'),
+  event('first-drift','Sideways introduction','coupe','drift',60,[25,70,130],'Accumulate controlled drift distance above 25 km/h. Ground contact is required.'),
+  event('long-drift','Gravel artist','coupe','drift',90,[90,180,300],'Link sustained drifts across the quarry floor.'),
+  event('hatch-drift','Four-wheel flourish','hatch','drift',90,[60,130,220],'Use the handbrake to rotate the all-wheel-drive hatch.'),
+  event('speed-coupe','V8 velocity','coupe','speed',75,[90,110,125],'Reach a measured ground speed. Use the circuit, not wheelspin.'),
+  event('speed-sedan','Express service','sedan','speed',75,[85,105,120],'Find a clear line and build speed in the sedan.'),
+  event('mile-maker','Cover ground','hatch','distance',90,[600,950,1300],'Drive as far as possible in 90 seconds. Airborne travel does not count.'),
+  event('distance-sedan','Endurance shakedown','sedan','distance',120,[800,1300,1800],'Keep momentum for two minutes and explore the whole quarry.'),
+  event('air-coupe','Flight school','coupe','airtime',120,[.6,1.5,3],'Use the playground ramps and land jumps. Tiny bumps and unfinished falls do not count.'),
+  event('air-hatch','Light air','hatch','airtime',120,[.6,1.5,3],'Accumulate landed airtime in the hatch.'),
+  event('all-rounder','Quarry all-rounder','coupe','combo',120,[100,240,400],'Combine drift distance and landed jumps: one point per drift metre, 60 per airborne second.'),
+  event('bramble-roam','V8 ground tour','muscle','distance',60,[250,500,750],'Cover ground in the stock Bramble for one minute. Keep it moving; airborne travel does not count.'),
+  {...race('millhaven-haul','Estate endurance','wagon',2,[190,125,95],35),course:'ironfield-figure-eight-v1'},
+  event('utility-impact','Utility work','utility','damage',60,[25,45,60],'Deliver actual opponent damage in a one-minute stock Utility derby. Keep room for another run-up.'),
+  {...race('rook-ironfield','Small circuit, big heart','compact',1,[100,65,47]),course:'ironfield-figure-eight-v1'},
+  event('carrier-survival','Keep the load moving','van','condition',45,[20,40,60],'Survive 45 seconds in the stock Carrier with condition remaining. Deal at least 15 damage to qualify.'),
+  {...race('tern-ironfield','Tern at the crossing','tern',1,[95,62,45]),course:'ironfield-figure-eight-v1'},
+  race('marten-home','Rear-engine return','marten',1,[100,65,43],60),
+  event('ravine-flight','Ravine flight school','buggy','airtime',120,[.5,.7,.8],'Find a quarry ramp and land the stock Ravine. Only significant jumps with a living landing count.'),
+  {...race('shuttle-cinderbank','Last bus around','shuttle',2,[150,100,78]),course:'cinderbank-oval-v1'},
+  {...race('tern-bracken','Front-wheel trail','tern',1,[115,72,50]),course:'bracken-rallycross-v1'},
+  {...race('ravine-redbank','Dirt stadium dash','buggy',1,[100,65,40]),course:'redbank-jump-v1'},
+  {...race('marten-ashford','Rear-engine precision','marten',1,[125,80,55],40),course:'ashford-autodrome-v1'},
+  {...race('shuttle-ironfield','Crossing service','shuttle',1,[110,70,50],40),course:'ironfield-figure-eight-v1'},
+  {...race('bramble-ashford','V8 road endurance','muscle',2,[250,155,105],25),course:'ashford-autodrome-v1'},
+  {...race('coupe-pinecrest','Ridge ascent','coupe',1,[150,95,68]),course:'pinecrest-ridge-v1'},
+  {...race('buggy-pinecrest','Woodland runner','buggy',1,[150,95,68]),course:'pinecrest-ridge-v1'},
+  {...race('shuttle-pinecrest','Uphill service','shuttle',2,[300,195,140],25),course:'pinecrest-ridge-v1'},
+  {...race('regent-dockside','Dockside heavyweight','regent',1,[160,100,70]),course:'dockside-loop-v1'},
+  {...race('carrier-dockside','Harbor double shift','van',2,[300,195,135],25),course:'dockside-loop-v1'},
+  {...race('buggy-fairground','Fairground flyer','buggy',1,[150,95,65]),course:'fairground-scramble-v1'},
+  {...race('coupe-merefield','Runway perimeter','coupe',1,[130,85,60]),course:'merefield-airfield-v1'},
+  {...race('regent-millhaven','Timber heavyweight','regent',1,[160,100,65],35),course:'millhaven-rally-v1'},
+  {...race('shuttle-millhaven','Mill shuttle endurance','shuttle',2,[320,200,135],25),course:'millhaven-rally-v1'},
+  {...race('tern-fenwick','Clay oval sprint','tern',1,[100,70,55]),course:'fenwick-oval-v1'},
+  {...race('shuttle-fenwick','Crossing commute','shuttle',1,[115,80,65],30),course:'fenwick-eight-v1'},
+  {...race('regent-alderwick','Park perimeter','regent',1,[110,80,65],40),course:'alderwick-stunt-v1'},
+  {...event('ravine-alderwick-speed','Loop run-up','buggy','speed',30,[80,100,110],'Build ground speed on the painted loop approach in the stock Ravine. Finish with at least 20% condition. No recovery.'),course:'alderwick-stunt-v1',minHealth:20},
+  {id:'ravine-alderwick-loop',title:'Full circle',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'loop',description:'Follow the painted approach into the loop, pass over its top and exit upright. Finish with at least 50% condition. No recovery.'},
+  {id:'ravine-alderwick-gap',title:'Clear the gap',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'gap',description:'Use the gold jump lane: launch, clear the 20-metre gap and land upright on the far ramp. Aim for 90–110 km/h. Keep at least 50% condition. No recovery.'},
+  {...race('carrier-rookvale','Freight delivery','van',1,[150,110,80],30),course:'rookvale-yard-v1',race:'ordered',seed:237,description:'Visit five freight stations in order, then return to FINISH. Keep at least 30% condition. No recoveries.'},
+  {...race('ravine-rookvale','Yard shortcuts','buggy',1,[125,90,65],30),course:'rookvale-yard-v1',race:'free',seed:237,description:'Choose your route through all five stations, then return to FINISH. Keep at least 30% condition. No recoveries.'},
+  {...race('regent-rookvale','Dispatch changes','regent',1,[170,130,100],30),course:'rookvale-yard-v1',race:'random',seed:237,description:'Follow the revealed station targets across the yard, then return to FINISH. The route stays fixed on Retry. Keep at least 30% condition. No recoveries.'},
+  {...race('tern-elmsworth','Banking introduction','tern',1,[100,70,55]),course:'elmsworth-speedway-v1'},
+  {...race('shuttle-elmsworth','Return service','shuttle',1,[110,80,60],30),course:'elmsworth-speedway-v1',direction:'reverse',description:'Finish one reverse lap on the banked speedway with at least 30% condition. No recoveries.'},
+  {...race('bramble-elmsworth','Banked endurance','muscle',2,[210,145,110],25),course:'elmsworth-speedway-v1'},
+  {...race('ravine-sable','Canyon crest sprint','buggy',1,[140,95,65],40),course:'sable-canyon-v1'},
+  {...race('shuttle-sable','Canyon return service','shuttle',1,[150,105,75],35),course:'sable-canyon-v1',direction:'reverse',description:'Finish one reverse canyon lap with at least 35% condition. Brake for the gravel crests. No recoveries.'},
+  {...race('regent-sable','Canyon double crossing','regent',2,[280,195,140],35),course:'sable-canyon-v1'},
+  {...race('tern-willowbank','Heathland introduction','tern',1,[155,110,85],40),course:'willowbank-heath-v1'},
+  {...race('marten-willowbank','Reverse ridge run','marten',1,[160,115,90],35),course:'willowbank-heath-v1',direction:'reverse',description:'Finish one reverse gravel lap with at least 35% condition. Keep the rear-engine Marten settled through the linked bends. No recoveries.'},
+  {...race('bramble-willowbank','Heathland endurance','muscle',2,[310,225,170],30),course:'willowbank-heath-v1'},
+  {...race('tern-westmere','Club grip sprint','tern',1,[130,90,65],50),course:'westmere-club-v1'},
+  {...race('marten-westmere','Club reverse precision','marten',1,[135,95,70],40),course:'westmere-club-v1',direction:'reverse',description:'Finish one reverse asphalt lap with at least 40% condition. Keep the rear-engine Marten settled through the tightening turns. No recoveries.'},
+  {...race('regent-westmere','Club heavyweight endurance','regent',2,[260,180,130],35),course:'westmere-club-v1'},
+  {...race('ravine-harrowstone','Rolling ridge sprint','buggy',1,[150,105,75],40),course:'harrowstone-ridge-v1'},
+  {...race('shuttle-harrowstone','Ridge return service','shuttle',1,[160,115,85],35),course:'harrowstone-ridge-v1',direction:'reverse',description:'Finish one reverse mixed-surface lap with at least 35% condition. Brake before the gravel crests. No recoveries.'},
+  {...race('bramble-harrowstone','Ridge double crest','muscle',2,[300,210,150],30),course:'harrowstone-ridge-v1'},
+  {...race('coupe-seabrook','Coastal express','coupe',1,[130,90,65],50),course:'seabrook-coast-v1'},
+  {...race('carrier-seabrook','Seaside return delivery','van',1,[145,100,75],40),course:'seabrook-coast-v1',direction:'reverse',description:'Finish one reverse coastal lap in the Carrier with at least 40% condition. Brake early for the inland bends. No recoveries.'},
+  {...race('estate-seabrook','Coastal family endurance','wagon',2,[260,180,135],35),course:'seabrook-coast-v1'},
+  {...race('rook-hazelwood','Forest lightweight sprint','compact',1,[150,105,75],40),course:'hazelwood-forest-v1'},
+  {...race('marten-hazelwood','Woodland return','marten',1,[160,110,80],35),course:'hazelwood-forest-v1',direction:'reverse',description:'Finish one reverse gravel lap in the Marten with at least 35% condition. Keep the rear-engine car settled over the wooded crest. No recoveries.'},
+  {...race('utility-hazelwood','Forest service endurance','utility',2,[300,210,150],30),course:'hazelwood-forest-v1'},
+  {...race('trail-hazelwood','Four-wheel forest patrol','trail',1,[160,110,80],40),course:'hazelwood-forest-v1'},
+  {...race('trail-seabrook','Coastal patrol return','trail',1,[150,100,75],40),course:'seabrook-coast-v1',direction:'reverse',description:'Finish one reverse coastal lap in the Trail with at least 40% condition. Brake before the inland bends. No recoveries.'},
+  {...race('trail-redbank','Heavyweight dirt patrol','trail',2,[200,140,100],30),course:'redbank-jump-v1'},
+  {...race('hatch-kingswell','Parkland pocket rocket','hatch',1,[130,90,65],50),course:'kingswell-park-v1'},
+  {...race('marten-kingswell','Park reverse precision','marten',1,[140,95,70],40),course:'kingswell-park-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('regent-kingswell','Park heavyweight endurance','regent',2,[270,185,135],35),course:'kingswell-park-v1'},
+  {...race('ravine-copperfield','Dune buggy sprint','buggy',1,[155,105,78],40),course:'copperfield-dunes-v1'},
+  {...race('trail-copperfield','Dune patrol return','trail',1,[165,115,80],40),course:'copperfield-dunes-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('utility-copperfield','Dune service endurance','utility',2,[310,215,155],30),course:'copperfield-dunes-v1'},
+  {...race('tern-millbrook','Lockside grip change','tern',1,[135,95,65],50),course:'millbrook-canal-v1'},
+  {...race('carrier-millbrook','Canal return delivery','van',1,[150,105,75],40),course:'millbrook-canal-v1',direction:'reverse',description:'Finish one reverse lap with at least 40% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('estate-millbrook','Canal double shift','wagon',2,[280,195,140],35),course:'millbrook-canal-v1'},
+  {...race('trail-granite','Granite patrol climb','trail',1,[160,110,78],40),course:'granite-pass-v1'},
+  {...race('shuttle-granite','Mountain return service','shuttle',1,[175,120,85],35),course:'granite-pass-v1',direction:'reverse',description:'Finish one reverse lap with at least 35% condition. Brake before the tighter turns and surface changes. No recoveries.'},
+  {...race('bramble-granite','Granite V8 endurance','muscle',2,[310,215,155],30),course:'granite-pass-v1'},
+];
+/** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
+export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
+export const challengeVenueName=(c:Challenge)=>COURSE_NAMES[challengeCourse(c)];
+export function challengeValue(c:Challenge,r:RunStats){
+  switch(c.metric){case'time':return r.seconds;case'position':return r.rank;case'damage':return r.damage;case'knockouts':return r.knockouts;case'condition':return r.health;case'drift':return r.drift;case'distance':return r.distance;case'speed':return r.maxSpeed*3.6;case'airtime':return r.airtime;case'combo':return r.drift+r.airtime*60;}
+}
+export const lowerIsBetter=(c:Challenge)=>c.metric==='time'||c.metric==='position';
+export function challengeMedal(c:Challenge,r:RunStats):number {
+  if(!r.completed||r.recovered||r.health<(c.minHealth??0)||r.damage<(c.minDamage??0))return 0;
+  if(c.mode==='race'&&(!r.finished||r.checkpoints<(c.laps??3)*(c.race?6:24)||r.seconds>c.limit+.001))return 0;
+  if(c.stunt&&(!r.finished||r.health<=0||r.seconds>c.limit+.001))return 0;
+  if(c.metric==='position'&&(!Number.isInteger(r.rank)||r.rank<1))return 0;
+  if(c.metric==='condition'&&(r.seconds<c.limit-.05||r.health<=0))return 0;
+  const value=challengeValue(c,r);if(!Number.isFinite(value))return 0;
+  return c.medals.reduce((medal,threshold,i)=> (lowerIsBetter(c)?value<=threshold:value>=threshold)?i+1:medal,0);
+}
+export function formatChallengeValue(c:Challenge,value:number){
+  if(c.metric==='time')return value.toFixed(1)+' s';
+  if(c.metric==='position')return '#'+Math.round(value);
+  if(c.metric==='condition')return Math.round(value)+'%';
+  if(c.metric==='speed')return Math.round(value)+' km/h';
+  if(c.metric==='airtime')return value.toFixed(1)+' s';
+  if(c.metric==='drift'||c.metric==='distance')return Math.round(value)+' m';
+  return Math.round(value).toString();
+}
