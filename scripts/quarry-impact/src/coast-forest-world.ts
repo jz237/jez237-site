@@ -1,3 +1,4 @@
+import {createCourseScenery} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {SEABROOK,HAZELWOOD} from './coast-forest-courses';
@@ -34,23 +35,8 @@ export function createCoastForestWorld(id:'seabrook-coast-v1'|'hazelwood-forest-
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
  for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
- // Scenery stays behind the physical walls, clear of recovery and racing lines.
- for(let i=0;i<150;i++){
-  const x=-204+(i*67.13%408),z=-150+(i*41.71%300);
-  if(course.distance(x,z)<29||z< -90)continue;
-  const y=course.height(x,z);
-  if(paved){if(i%7===0){box(x,y+1.2,z,8,2.4,5,'blue');box(x,y+2.7,z,9,.6,6,'steel');}}
-  else{box(x,y+2.5,z,.8,5,.8,'red');box(x,y+5,z,5,4,5,'grass',i*.61);box(x,y+7.2,z,3.5,2,3.5,'seat',i*.61);}
- }
- // A sea strip and lighthouse give the coastal venue a recognizable horizon.
- if(paved){
-  box(0,-.3,220,600,.3,90,'blue');box(0,.1,177,440,.4,9,'concrete');
-  box(192,6,138,5,12,5,'concrete');box(192,13,138,6,2,6,'red');box(192,14.5,138,7,1,7,'steel');
- }
- // Service paddock and spectator terraces stay behind the southern wall.
- for(const x of [-65,0,65]){box(x,2,-157,45,4,14,'red');box(x,4.3,-157,47,.6,16,'steel');}
- for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
+ const scenery=createCourseScenery(course,paved?'coast':'forest');root.add(scenery.root);
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
