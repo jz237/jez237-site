@@ -11,6 +11,6 @@ export function accumulateStructure(state:number[],kind:CarKind,point:Vec,direct
  const length=Math.hypot(direction.x,direction.y,direction.z);if(length<1e-8)return;
  const d=DEFINITIONS[kind],x=direction.x/length,y=direction.y/length,z=direction.z/length;
  const edge=(p:number,span:number)=>Math.max(0,Math.min(1,(p/span-.3)/.45));
- const weights=[edge(point.z,d.halfLength)*Math.max(0,-z),edge(-point.z,d.halfLength)*Math.max(0,z),edge(-point.x,d.halfWidth)*Math.max(0,x),edge(point.x,d.halfWidth)*Math.max(0,-x),edge(point.y,kind==='shuttle'?1.6:kind==='van'?1.1:.7)*Math.max(0,-y)];
+ const weights=[edge(point.z,d.halfLength)*Math.max(0,-z),edge(-point.z,d.halfLength)*Math.max(0,z),edge(-point.x,d.halfWidth)*Math.max(0,x),edge(point.x,d.halfWidth)*Math.max(0,-x),edge(point.y,kind==='trail'?1.1:kind==='shuttle'?1.6:kind==='van'?1.1:.7)*Math.max(0,-y)];
  for(let i=0;i<5;i++)state[i]=Math.min(1,state[i]+(damage-2)*.016*weights[i]);
 }

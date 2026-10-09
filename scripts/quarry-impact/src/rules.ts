@@ -1,7 +1,7 @@
 import {CLASSIC_VEHICLES} from './classic-vehicle-specs';
 import { circuitSurfaceAt } from './circuit-grip';
 export type Mode = 'derby' | 'playground' | 'race';
-export type CarKind = 'coupe' | 'sedan' | 'hatch' | 'muscle' | 'wagon' | 'utility' | 'compact' | 'van' | 'tern' | 'marten' | 'buggy' | 'shuttle' | 'regent';
+export type CarKind = 'coupe' | 'sedan' | 'hatch' | 'muscle' | 'wagon' | 'utility' | 'compact' | 'van' | 'tern' | 'marten' | 'buggy' | 'shuttle' | 'regent' | 'trail';
 export const clamp = (n: number, a: number, b: number) =>
   Math.max(a, Math.min(b, n));
 export const wrap = (v: number) => Math.atan2(Math.sin(v), Math.cos(v));

@@ -199,3 +199,7 @@ and licenses above continue to apply.
 Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SHUTTLE.md).
 
 - Hartwell Regent: original Quarry Impact full-size saloon, including original project wheel artwork. See [HARTWELL-REGENT.md](HARTWELL-REGENT.md).
+
+## Birch Trail 4×4
+
+Original Quarry Impact three-door 4×4 artwork, using original Rook wheel tooling. See [BIRCH-TRAIL.md](BIRCH-TRAIL.md).

@@ -91,6 +91,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('rook-hazelwood','Forest lightweight sprint','compact',1,[150,105,75],40),course:'hazelwood-forest-v1'},
   {...race('marten-hazelwood','Woodland return','marten',1,[160,110,80],35),course:'hazelwood-forest-v1',direction:'reverse',description:'Finish one reverse gravel lap in the Marten with at least 35% condition. Keep the rear-engine car settled over the wooded crest. No recoveries.'},
   {...race('utility-hazelwood','Forest service endurance','utility',2,[300,210,150],30),course:'hazelwood-forest-v1'},
+  {...race('trail-hazelwood','Four-wheel forest patrol','trail',1,[160,110,80],40),course:'hazelwood-forest-v1'},
+  {...race('trail-seabrook','Coastal patrol return','trail',1,[150,100,75],40),course:'seabrook-coast-v1',direction:'reverse',description:'Finish one reverse coastal lap in the Trail with at least 40% condition. Brake before the inland bends. No recoveries.'},
+  {...race('trail-redbank','Heavyweight dirt patrol','trail',2,[200,140,100],30),course:'redbank-jump-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
