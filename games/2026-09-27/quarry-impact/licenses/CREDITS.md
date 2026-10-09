@@ -1,5 +1,29 @@
 # Credits and asset provenance
 
+## Reference arena overhaul
+
+Original Quarry Impact fabrication and geology additions are released as CC0 1.0:
+`arena-industrial.glb`, `wheel-machining.glb`, and the added fracture relief/bedding
+planes in `arena-escarpment.glb`. They are authored locally with Blender 5.2.1 LTS.
+Editable scenes, scripts, original input hashes and output hashes are retained in
+`source/models/*-manifest.json`. The underlying original quarry derivative meshes
+and their source licenses remain as recorded below. No source quarry/car GLB is
+overwritten. Wheel machining is an original separate addition to the attributed
+Car Concept derivatives. New fictional signage and HUD typography are original
+game authoring, with the already bundled licensed font unchanged.
+
+The arena reuses Poly Haven CC0 photographic `circuit_asphalt`, `gravel`, `scree`
+and quarry geology maps, plus the existing workyard concrete photograph. Their
+source URLs, licenses and original file checksums remain in the retained asset
+manifests. New crest conifers reuse the existing attributed scanned branch
+geometry and material maps. All 38 bundled ElevenLabs clips are retained. The
+user-provided art-direction screenshot is not distributed or used as a texture.
+No purchases or sound generation were made for this pass.
+
+## Fluid effects
+
+The fire and smoke atlases are original Quarry Impact procedural authoring, released under CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/. They are rendered from a Blender 5.2.1 LTS Mantaflow fuel/gas simulation, then assembled into animated texture atlases. Authoring and packing scripts, the editable Blender scene, render-frame checksums, adjustments and final asset hashes are recorded in `source/fx/manifest.json` and `source/structural-realism.md`. Blender itself is an authoring tool and is not bundled into gameplay. No downloaded third-party fire footage or paid service is used.
+
 ## Cars
 
 The released car models derive from **Car Concept**, model and textures by **Eric Chadwick**, copyright **2024 Darmstadt Graphics Group GmbH**, distributed through the Khronos glTF Sample Assets repository under **Creative Commons Attribution 4.0 International**.
@@ -133,3 +157,49 @@ New photographic materials, all **CC0 1.0** from Poly Haven:
 - [Concrete Layers 02](https://polyhaven.com/a/concrete_layers_02), **Rob Tuytel**, 2 m scale.
 
 The nine original 2k JPEGs are bundled locally with their source URLs, official checksums and local hashes in `public/assets/workyard/manifest.json`; source metadata is retained in `source/workyard/`. Existing cladding maps are reused. The crash sound refinement reuses the existing ElevenLabs recordings; this update generated no additional audio and incurred no asset purchases.
+
+## Bramble V8 replacement model
+
+Muscle Car 3D Model by **BrightRetro**, released under **CC-BY 3.0**.
+Source: https://opengameart.org/content/muscle-car-3d-model
+License: https://creativecommons.org/licenses/by/3.0/
+
+Adapted for Quarry Impact: geometry format conversion, shading and recolorable
+paint, separate damage panels and wheel pivots, tire sizing and inner structure.
+BrightRetro does not endorse this game. Original archive and provenance are
+preserved under source/vehicles/brightretro-muscle.
+
+The estate development candidate also uses this attributed base, with a new
+cargo cabin, roof, glazing, pillars and four separate door assemblies.
+
+### Ironvale Utility
+
+Original coupe-utility conversion for Quarry Impact, derived from BrightRetro's
+Muscle Car 3D Model under CC-BY 3.0. Attribution and modification details:
+[ironvale-utility.txt](ironvale-utility.txt).
+
+### Original small, commercial and special vehicles
+
+The [Rook 1100](ROOK-1100.md), [Rillford Carrier](RILLFORD-CARRIER.md),
+[Tern 1400](TERN-1400.md), [Marten 1600](MARTEN-1600.md), and
+[Ravine 1800](RAVINE-1800.md) use original Quarry Impact bodywork, interiors and
+mechanical artwork. The road cars share wheel tooling; the Ravine uses original
+off-road wheels. Existing bundled engine audio
+is reused; model-specific provenance and beta limitations are in those notes.
+
+### Fitted reinforcement
+
+The optional impact beams, sill rails, bracing, mounting pads and fasteners are
+original procedural Quarry Impact geometry. They use vehicle-specific mounting
+layouts shared with the collision simulation. The underlying vehicle credits
+and licenses above continue to apply.
+
+## Calder Shuttle
+
+Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SHUTTLE.md).
+
+- Hartwell Regent: original Quarry Impact full-size saloon, including original project wheel artwork. See [HARTWELL-REGENT.md](HARTWELL-REGENT.md).
+
+## Birch Trail 4×4
+
+Original Quarry Impact three-door 4×4 artwork, using original Rook wheel tooling. See [BIRCH-TRAIL.md](BIRCH-TRAIL.md).
