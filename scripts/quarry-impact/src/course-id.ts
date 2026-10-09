@@ -1,5 +1,6 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'elmsworth-speedway-v1':'Elmsworth Speedway',
  'rookvale-yard-v1':'Rookvale Freight Yard',
  'fenwick-oval-v1':'Fenwick Banger Oval',
  'fenwick-eight-v1':'Fenwick Figure Eight',
