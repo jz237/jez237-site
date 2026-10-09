@@ -68,3 +68,12 @@ test('open airfield map shows all crossing runways at their driving widths',asyn
  drawQuarryMap(r.canvas,[],{x:0,z:0,radius:64},'race',0,[],{point:MEREFIELD.point,extent:MEREFIELD.mapExtent,halfWidth:MEREFIELD.halfWidth,lines:MEREFIELD.mapLines});
  for(const line of MEREFIELD.mapLines){const [a,b]=line.points;assert.ok(r.paints.some(p=>p.operation==='stroke'&&p.style.lineWidth===line.width*scale&&JSON.stringify(p.path)===JSON.stringify([['moveTo',200+a.x*scale,200-a.z*scale],['lineTo',200+b.x*scale,200-b.z*scale]])));}
 });
+
+import {FOUNDRY_ARENA,FOUNDRY_OUTLINE} from '../src/foundry-arena';
+test('Foundry minimap follows the eight physical wall edges without invented water patches',()=>{
+ const r=canvasRecorder(400),scale=180/(FOUNDRY_ARENA.radius+13);drawQuarryMap(r.canvas,[],FOUNDRY_ARENA,'derby',0);
+ const expected=[...FOUNDRY_OUTLINE.map((p,i)=>[i?'lineTo':'moveTo',200+p.x*scale,200-p.z*scale]),['closePath']];
+ assert.ok(r.paints.some(p=>p.operation==='stroke'&&JSON.stringify(p.path)===JSON.stringify(expected)));
+ assert.ok(r.paints.some(p=>p.operation==='fill'&&JSON.stringify(p.path)===JSON.stringify(expected)));
+ assert.equal(r.calls.filter(c=>c[0]==='ellipse').length,0);
+});

@@ -6,7 +6,7 @@ import {landscapeHeight} from './quarry-layout';
 // outside the barrier, while leaving longer run-ups through the central floor.
 export const DERBY_ARENA={x:18,z:14,radius:64,segments:96,spawnRadius:43,fenceRadius:70} as const;
 export const LEGACY_ARENA={x:0,z:0,radius:46,segments:66,spawnRadius:29,fenceRadius:50} as const;
-export type ArenaLayout={x:number;z:number;radius:number;segments:number;spawnRadius:number;fenceRadius:number};
+export type ArenaLayout={x:number;z:number;radius:number;segments:number;spawnRadius:number;fenceRadius:number;outline?:readonly {x:number;z:number}[]};
 export function arenaBarrier(i:number,layout:ArenaLayout=DERBY_ARENA){
   const yaw=i/layout.segments*Math.PI*2,x=layout.x+Math.sin(yaw)*layout.radius,z=layout.z+Math.cos(yaw)*layout.radius;
   return {x,z,y:landscapeHeight(x,z),yaw};
