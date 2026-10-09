@@ -7,7 +7,7 @@ export const isGridLineup=(v:unknown):v is GridLineup=>typeof v==='string'&&Obje
 export const isGridPerformance=(v:unknown):v is GridPerformance=>typeof v==='string'&&Object.hasOwn(GRID_PERFORMANCE,v);
 /** Match the actual driven axles; weight classes use factory chassis mass so
  * fitting armor never silently changes the eligible field. */
-export const vehicleDrivetrain=(kind:CarKind)=>kind==='tern'?'FWD':kind==='sedan'||kind==='hatch'?'AWD':'RWD';
+export const vehicleDrivetrain=(kind:CarKind)=>kind==='tern'?'FWD':kind==='sedan'||kind==='hatch'||kind==='trail'?'AWD':'RWD';
 export const vehicleWeightClass=(kind:CarKind)=>DEFINITIONS[kind].mass<1200?'Light':DEFINITIONS[kind].mass<1700?'Middle':'Heavy';
 export function gridPool(selected:CarKind,lineup:GridLineup='mixed'):CarKind[]{
  return CAR_KINDS.filter(k=>lineup==='selected'?k===selected:lineup==='drivetrain'?vehicleDrivetrain(k)===vehicleDrivetrain(selected):lineup==='weight'?vehicleWeightClass(k)===vehicleWeightClass(selected):true);

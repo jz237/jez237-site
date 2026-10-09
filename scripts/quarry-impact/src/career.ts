@@ -28,6 +28,7 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'ridge-crossers',title:'Ridge Crossers',discipline:'racing',description:'Carry the Ravine over Harrowstone crests, reverse the Shuttle and finish two laps in the Bramble.',cost:3,events:['ravine-harrowstone','shuttle-harrowstone','bramble-harrowstone']},
  {id:'coast-runners',title:'Coast Runners',discipline:'racing',description:'Sprint down the coast in the Vesper, reverse the Carrier and complete two laps in the Estate.',cost:3,events:['coupe-seabrook','carrier-seabrook','estate-seabrook']},
  {id:'forest-runners',title:'Forest Runners',discipline:'racing',description:'Thread the Rook through gravel esses, reverse the Marten and bring the Utility home after two laps.',cost:3,events:['rook-hazelwood','marten-hazelwood','utility-hazelwood']},
+ {id:'trail-patrol',title:'Trail Patrol',discipline:'racing',description:'Put the Birch 4×4 to work on forest gravel, a reverse coastal run and two laps over Redbank jumps.',cost:3,events:['trail-hazelwood','trail-seabrook','trail-redbank']},
 ];
 export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{

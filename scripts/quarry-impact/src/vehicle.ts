@@ -365,7 +365,7 @@ export class Vehicle {
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());
-    const zone=contact.y>(this.kind==='shuttle'?2.30:this.kind==='van'?1.76:1.35)?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
+    const zone=contact.y>(this.kind==='trail'?1.85:this.kind==='shuttle'?2.30:this.kind==='van'?1.76:1.35)?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
     this.damageZones[zone]+=damage;
     const dentDamage=bodyworkDentDamage(damage);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
