@@ -26,8 +26,10 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'heath-runners',title:'Heath Runners',discipline:'racing',description:'Find grip on Willowbank gravel, reverse the ridge and preserve the Bramble over two laps.',cost:3,events:['tern-willowbank','marten-willowbank','bramble-willowbank']},
  {id:'club-specialists',title:'Club Specialists',discipline:'racing',description:'Find asphalt grip in the Tern, reverse the Marten and complete a heavyweight two-lap run at Westmere.',cost:3,events:['tern-westmere','marten-westmere','regent-westmere']},
  {id:'ridge-crossers',title:'Ridge Crossers',discipline:'racing',description:'Carry the Ravine over Harrowstone crests, reverse the Shuttle and finish two laps in the Bramble.',cost:3,events:['ravine-harrowstone','shuttle-harrowstone','bramble-harrowstone']},
+ {id:'coast-runners',title:'Coast Runners',discipline:'racing',description:'Sprint down the coast in the Vesper, reverse the Carrier and complete two laps in the Estate.',cost:3,events:['coupe-seabrook','carrier-seabrook','estate-seabrook']},
+ {id:'forest-runners',title:'Forest Runners',discipline:'racing',description:'Thread the Rook through gravel esses, reverse the Marten and bring the Utility home after two laps.',cost:3,events:['rook-hazelwood','marten-hazelwood','utility-hazelwood']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));

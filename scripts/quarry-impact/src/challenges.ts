@@ -85,6 +85,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('ravine-harrowstone','Rolling ridge sprint','buggy',1,[150,105,75],40),course:'harrowstone-ridge-v1'},
   {...race('shuttle-harrowstone','Ridge return service','shuttle',1,[160,115,85],35),course:'harrowstone-ridge-v1',direction:'reverse',description:'Finish one reverse mixed-surface lap with at least 35% condition. Brake before the gravel crests. No recoveries.'},
   {...race('bramble-harrowstone','Ridge double crest','muscle',2,[300,210,150],30),course:'harrowstone-ridge-v1'},
+  {...race('coupe-seabrook','Coastal express','coupe',1,[130,90,65],50),course:'seabrook-coast-v1'},
+  {...race('carrier-seabrook','Seaside return delivery','van',1,[145,100,75],40),course:'seabrook-coast-v1',direction:'reverse',description:'Finish one reverse coastal lap in the Carrier with at least 40% condition. Brake early for the inland bends. No recoveries.'},
+  {...race('estate-seabrook','Coastal family endurance','wagon',2,[260,180,135],35),course:'seabrook-coast-v1'},
+  {...race('rook-hazelwood','Forest lightweight sprint','compact',1,[150,105,75],40),course:'hazelwood-forest-v1'},
+  {...race('marten-hazelwood','Woodland return','marten',1,[160,110,80],35),course:'hazelwood-forest-v1',direction:'reverse',description:'Finish one reverse gravel lap in the Marten with at least 35% condition. Keep the rear-engine car settled over the wooded crest. No recoveries.'},
+  {...race('utility-hazelwood','Forest service endurance','utility',2,[300,210,150],30),course:'hazelwood-forest-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
