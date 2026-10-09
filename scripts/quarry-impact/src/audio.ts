@@ -1,3 +1,4 @@
+import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
@@ -119,12 +120,14 @@ export class Sound {
     this.clearCars();
     if (!this.ready) return;
     if(!this.buffers.has('starter')){const c=this.ctx!,samples=starterSamples(c.sampleRate),buffer=c.createBuffer(1,samples.length,c.sampleRate);buffer.copyToChannel(samples,0);this.buffers.set('starter',buffer);}
+    if(!this.buffers.has('gear-grind')){const c=this.ctx!,samples=gearboxGrindSamples(c.sampleRate),buffer=c.createBuffer(1,samples.length,c.sampleRate);buffer.copyToChannel(samples,0);this.buffers.set('gear-grind',buffer);}
     for (const car of cars) {
       const loops = new Map<string, Loop>();
       for (const name of ['idle', 'low', 'mid', 'high', 'load', 'damaged']) {
         const loop = this.loop(classicEngineVoice(car.kind).bank + '-' + name, this.engineBus!);
         if (loop) {loop.source.playbackRate.value=classicEngineVoice(car.kind).pitch;loops.set(name, loop);}
       }
+      const grind=this.loop('gear-grind',this.engineBus!);if(grind)loops.set('gear-grind',grind);
       const starter=this.loop('starter',this.engineBus!);if(starter)loops.set('starter',starter);
       for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
         const loop = this.loop(name, this.fxBus!);
@@ -275,14 +278,15 @@ export class Sound {
           high: 6500,
         };
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(rpm - centers[name]) / 2100) * level;
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level;
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
             Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
             c.currentTime,
             0.13,
           );
-        } else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
+        } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
+        else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
         else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
         else if (name === 'damaged')
           v = engineDamageLevel(car.health,car.engineDamage) * 0.18;

@@ -1,5 +1,5 @@
 import {limitBrakeImpulse,limitTractionForce,type DrivingAssists} from './driving-assists';
-import {stepTransmission,type TransmissionInput,type TransmissionState} from './transmission';
+import {manualEngineBrake,stepTransmission,type TransmissionInput,type TransmissionState} from './transmission';
 import {VehicleStructure} from './vehicle-structure';
 import {advanceEngineRestart,starterRPM} from './engine-stall';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
@@ -148,6 +148,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
  const force=running?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ const engineBrake=running?manualEngineBrake(state,spec):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
   const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind)),shift=wheelShift[i];
@@ -162,7 +163,8 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   controller.setWheelEngineForce(i,wheelForce);
   let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
   if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),(state.surface==='asphalt'?3.2:2.4)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,state.speed,dt);
-  controller.setWheelBrake(i,!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag);
+  const driven=kind==='tern'?i<2:(kind==='coupe'||isClassicKind(kind))?i>1:true;
+  controller.setWheelBrake(i,!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
   controller.setWheelFrictionSlip(i,(state.surface==='asphalt'?3.2:2.4)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }
