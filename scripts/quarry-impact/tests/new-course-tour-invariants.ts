@@ -1,3 +1,4 @@
+import {restoreChampionshipClassesBytes} from './championship-classes-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,16 @@ export function readNewCourseTourPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreNewCourseTourBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreChampionshipClassesBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readNewCourseTourPrevious(file);
 }
 export function verifyNewCourseTourRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'5f5ab5742c9b7cf43c8c9c3a929523e50ae8702b');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreChampionshipClassesBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreNewCourseTourBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the NewCourseTour release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreChampionshipClassesBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the NewCourseTour release');
  assert.equal(manifest.previousFixtureCount,2012);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2012);
 }
