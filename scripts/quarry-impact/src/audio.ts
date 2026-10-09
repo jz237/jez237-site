@@ -1,3 +1,4 @@
+import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice} from './classic-vehicle-specs';
@@ -27,6 +28,7 @@ export class Sound {
     { throttle: number; slip: number; grounded: boolean; gear: number }
   >();
   listenerPrevious = new T.Vector3();
+  private listenerMotion=new AudioListenerMotion();
   private files?: Promise<{id:string; data:ArrayBuffer}[]>;
   private initializing?: Promise<void>;
   private paused = false;
@@ -142,6 +144,7 @@ export class Sound {
       }
     this.loops.clear();
     this.history.clear();
+    this.listenerMotion.reset();
     this.lastShot.clear();
   }
   thermal(sources:ThermalAudio[],bursts:ThermalAudio[]) {
@@ -200,15 +203,13 @@ export class Sound {
       source.start(at);source.stop(at+duration);
     }else source.start();
   }
-  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false) {
+  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false,perspective?:AudioPerspective) {
     if (!this.ready) return;
     const c = this.ctx!,
       listener = c.listener;
-    const p = camera.position;
-    const listenerVelocity = p
-      .clone()
-      .sub(this.listenerPrevious)
-      .divideScalar(Math.max(0.001, dt));
+    const focused=cars.find(car=>car.id===perspective?.id)??cars[0];
+    const p=audioListenerPosition(camera.position,focused?.current,perspective?.view);
+    const listenerVelocity=this.listenerMotion.velocity(p,dt,`${focused?.id??-1}:${perspective?.view??'world'}`);
     this.listenerPrevious.copy(p);
     listener.positionX.value = p.x;
     listener.positionY.value = p.y;
@@ -240,7 +241,7 @@ export class Sound {
         }
         if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
           this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
-        if (car.slip > 3 && prior.slip <= 3)
+        if (grounded && car.slip > 3 && prior.slip <= 3)
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
@@ -260,7 +261,7 @@ export class Sound {
         ),
       );
       const rpm = car.rpm,
-        level = car === cars[0] ? 0.38 : 0.22;
+        level = car === focused ? 0.38 : 0.22;
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -296,6 +297,7 @@ export class Sound {
               : 0;
         else if (name === 'scrape')
           v=Math.max(car.slip>4&&car.health<80?.035:0,Math.min(.13,(car.scraping??0)*.12));
+        if (!grounded && ['tires','gravel'].includes(name)) v=0;
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
         if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
@@ -306,6 +308,7 @@ export class Sound {
   }
   async pause(value: boolean) {
     this.paused=value;
+    this.listenerMotion.reset();
     if (!this.ctx) return;
     if (value) {
       await this.ctx.suspend().catch(()=>{});

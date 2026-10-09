@@ -1490,7 +1490,7 @@ function frame(now: number) {
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
   if(!studio&&state==='playing')captureReplay();
-  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked');if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
+  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo?director.followed:cars[0]?.id??0,view:demo?director.activeView:hood?'hood':'chase'});if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
   waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state),activeVenue.course.height);
   if(waypointRace)activeVenue.checkpoint.visible=false;
