@@ -4,7 +4,7 @@ import type {RunStats} from './session-telemetry';
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 export type Discipline='racing'|'impact'|'stunts';
 export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
-export type Challenge={id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;stunt?:StuntTask};
+export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;stunt?:StuntTask};
 const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
 const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
 export const CHALLENGES:readonly Challenge[]=[
@@ -67,6 +67,12 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('ravine-alderwick-speed','Loop run-up','buggy','speed',30,[80,100,110],'Build ground speed on the painted loop approach in the stock Ravine. Finish with at least 20% condition. No recovery.'),course:'alderwick-stunt-v1',minHealth:20},
   {id:'ravine-alderwick-loop',title:'Full circle',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'loop',description:'Follow the painted approach into the loop, pass over its top and exit upright. Finish with at least 50% condition. No recovery.'},
   {id:'ravine-alderwick-gap',title:'Clear the gap',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'gap',description:'Use the gold jump lane: launch, clear the 20-metre gap and land upright on the far ramp. Aim for 90–110 km/h. Keep at least 50% condition. No recovery.'},
+  {...race('carrier-rookvale','Freight delivery','van',1,[150,110,80],30),course:'rookvale-yard-v1',race:'ordered',seed:237,description:'Visit five freight stations in order, then return to FINISH. Keep at least 30% condition. No recoveries.'},
+  {...race('ravine-rookvale','Yard shortcuts','buggy',1,[125,90,65],30),course:'rookvale-yard-v1',race:'free',seed:237,description:'Choose your route through all five stations, then return to FINISH. Keep at least 30% condition. No recoveries.'},
+  {...race('regent-rookvale','Dispatch changes','regent',1,[170,130,100],30),course:'rookvale-yard-v1',race:'random',seed:237,description:'Follow the revealed station targets across the yard, then return to FINISH. The route stays fixed on Retry. Keep at least 30% condition. No recoveries.'},
+  {...race('tern-elmsworth','Banking introduction','tern',1,[100,70,55]),course:'elmsworth-speedway-v1'},
+  {...race('shuttle-elmsworth','Return service','shuttle',1,[110,80,60],30),course:'elmsworth-speedway-v1',direction:'reverse',description:'Finish one reverse lap on the banked speedway with at least 30% condition. No recoveries.'},
+  {...race('bramble-elmsworth','Banked endurance','muscle',2,[210,145,110],25),course:'elmsworth-speedway-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
@@ -77,7 +83,7 @@ export function challengeValue(c:Challenge,r:RunStats){
 export const lowerIsBetter=(c:Challenge)=>c.metric==='time'||c.metric==='position';
 export function challengeMedal(c:Challenge,r:RunStats):number {
   if(!r.completed||r.recovered||r.health<(c.minHealth??0)||r.damage<(c.minDamage??0))return 0;
-  if(c.mode==='race'&&(!r.finished||r.checkpoints<(c.laps??3)*24||r.seconds>c.limit+.001))return 0;
+  if(c.mode==='race'&&(!r.finished||r.checkpoints<(c.laps??3)*(c.race?6:24)||r.seconds>c.limit+.001))return 0;
   if(c.stunt&&(!r.finished||r.health<=0||r.seconds>c.limit+.001))return 0;
   if(c.metric==='position'&&(!Number.isInteger(r.rank)||r.rank<1))return 0;
   if(c.metric==='condition'&&(r.seconds<c.limit-.05||r.health<=0))return 0;
