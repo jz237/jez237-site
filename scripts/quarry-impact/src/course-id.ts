@@ -1,5 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'seabrook-coast-v1':'Seabrook Coast Circuit',
+ 'hazelwood-forest-v1':'Hazelwood Forest Rally',
  'westmere-club-v1':'Westmere Club Circuit',
  'harrowstone-ridge-v1':'Harrowstone Ridge',
  'willowbank-heath-v1':'Willowbank Heath Circuit',

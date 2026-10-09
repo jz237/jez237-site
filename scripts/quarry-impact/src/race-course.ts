@@ -1,3 +1,4 @@
+import {SEABROOK,HAZELWOOD} from './coast-forest-courses';
 import {WESTMERE,HARROWSTONE} from './ridge-club-courses';
 import {WILLOWBANK} from './willowbank-course';
 import {SABLE} from './sable-course';
@@ -48,7 +49,7 @@ export const QUARRY_COURSE:RaceCourse={
  distance:(x,z)=>{let nearest=Infinity;for(const p of quarrySamples)nearest=Math.min(nearest,Math.hypot(x-p.x,z-p.z));return nearest;},
  outside:(x,y,z)=>Math.hypot(x,z)>255||y< -8,
 };
-const COURSES:Record<CourseId,RaceCourse>={'westmere-club-v1':WESTMERE,'harrowstone-ridge-v1':HARROWSTONE,'willowbank-heath-v1':WILLOWBANK,'sable-canyon-v1':SABLE,'elmsworth-speedway-v1':ELMSWORTH,'rookvale-yard-v1':ROOKVALE,'fenwick-oval-v1':FENWICK_OVAL,'fenwick-eight-v1':FENWICK_EIGHT,'alderwick-stunt-v1':STUNT_PARK,'millhaven-rally-v1':MILLHAVEN,'merefield-airfield-v1':MEREFIELD,'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
+const COURSES:Record<CourseId,RaceCourse>={'seabrook-coast-v1':SEABROOK,'hazelwood-forest-v1':HAZELWOOD,'westmere-club-v1':WESTMERE,'harrowstone-ridge-v1':HARROWSTONE,'willowbank-heath-v1':WILLOWBANK,'sable-canyon-v1':SABLE,'elmsworth-speedway-v1':ELMSWORTH,'rookvale-yard-v1':ROOKVALE,'fenwick-oval-v1':FENWICK_OVAL,'fenwick-eight-v1':FENWICK_EIGHT,'alderwick-stunt-v1':STUNT_PARK,'millhaven-rally-v1':MILLHAVEN,'merefield-airfield-v1':MEREFIELD,'dockside-loop-v1':DOCKSIDE,'fairground-scramble-v1':FAIRGROUND,'pinecrest-ridge-v1':PINECREST,'ashford-autodrome-v1':ASHFORD,'quarry-v1':QUARRY_COURSE,'ironfield-figure-eight-v1':IRONFIELD,'cinderbank-oval-v1':CINDERBANK,'bracken-rallycross-v1':BRACKEN,'redbank-jump-v1':REDBANK};
 export const getRaceCourse=(id:CourseId='quarry-v1'):RaceCourse=>COURSES[id];
 const reverseRoutes=new WeakMap<RaceCourse,readonly RoutePoint[]>();
 export function courseRoute(course:RaceCourse,direction:CourseDirection):readonly RoutePoint[]{
