@@ -1,5 +1,6 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
+ 'willowbank-heath-v1':'Willowbank Heath Circuit',
  'sable-canyon-v1':'Sable Canyon Rallycross',
  'elmsworth-speedway-v1':'Elmsworth Speedway',
  'rookvale-yard-v1':'Rookvale Freight Yard',
