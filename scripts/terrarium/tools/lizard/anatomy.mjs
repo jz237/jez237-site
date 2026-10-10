@@ -323,7 +323,8 @@ export function surfaceInfo(x, y, z) {
   if (x > HINGE_X - 0.1 && x < X_MAX) {
     const pr = profile(x);
     const m = mouthY(x);
-    mouth = (1 - smoothstep(MOUTH_HALF + 0.015, MOUTH_HALF + 0.05, Math.abs(y - m))) * (1 - smoothstep(pr.w * 0.7, pr.w * 0.92, Math.abs(z)));
+    // the pink interior shows only inside the mouth, not at the closed lips of the snout tip
+    mouth = (1 - smoothstep(MOUTH_HALF + 0.015, MOUTH_HALF + 0.05, Math.abs(y - m))) * (1 - smoothstep(pr.w * 0.7, pr.w * 0.92, Math.abs(z))) * (1 - smoothstep(11.9, 12.25, x));
   }
   return { weights: weights.map(([b, w]) => [b, w / sum]), claw: claw / (total || 1), mouth };
 }
