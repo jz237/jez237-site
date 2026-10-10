@@ -7,6 +7,8 @@ export const foliageUniforms = {
   uKeyDirView: {value: new THREE.Vector3(0, 1, 0)},
   uKeyColor: {value: new THREE.Color(1, 0.8, 0.6)},
   uWet: {value: 0},
+  /** Up to three spheres (x, y, z, radius) that push foliage aside: the lizard's head, chest and hips. */
+  uPush: {value: [new THREE.Vector4(0, -1, 0, 0), new THREE.Vector4(0, -1, 0, 0), new THREE.Vector4(0, -1, 0, 0)]},
 };
 
 /**
@@ -20,7 +22,7 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
     Object.assign(s.uniforms, foliageUniforms);
     s.vertexShader = s.vertexShader
       .replace('#include <common>', `#include <common>
-uniform float uTime; uniform vec3 uWind;
+uniform float uTime; uniform vec3 uWind; uniform vec4 uPush[3];
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
 varying float vFlex;`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
@@ -45,6 +47,24 @@ varying float vFlex;`)
     mat3 toLocal = inverse(mat3(modelMatrix));
   #endif
   transformed += toLocal * sway * flex;
+  // bend away from the lizard as it pushes through
+  #ifdef USE_INSTANCING
+    vec3 vw = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+  #else
+    vec3 vw = (modelMatrix * vec4(transformed, 1.0)).xyz;
+  #endif
+  vec3 push = vec3(0.0);
+  for (int i = 0; i < 3; i++) {
+    vec4 p = uPush[i];
+    vec3 d = vw - p.xyz;
+    float dist = length(d.xz);
+    if (p.w > 0.0 && dist < p.w && abs(d.y) < p.w * 1.6) {
+      vec2 away = dist > 1e-4 ? d.xz / dist : vec2(1.0, 0.0);
+      float k = (p.w - dist) / p.w;
+      push += vec3(away.x, -0.6 * k, away.y) * (p.w - dist) * 1.1;
+    }
+  }
+  transformed += toLocal * push * max(flex, 0.25);
 }`);
     s.fragmentShader = s.fragmentShader
       .replace('#include <common>', `#include <common>

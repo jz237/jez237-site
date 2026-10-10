@@ -198,8 +198,9 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   soil = mix(soil, vec3(0.22, 0.12, 0.05) * (0.7 + 0.5 * gn(p * 300.0)), litter * 0.8);
   float speck = smoothstep(0.93, 0.97, gn(p * 700.0));
   soil = mix(soil, vec3(0.5, 0.48, 0.44), speck * 0.5 * (1.0 - moss));
-  vec3 mossC = mix(vec3(0.05, 0.1, 0.018), vec3(0.14, 0.22, 0.035), gfbm(p * 40.0));
-  mossC = mix(mossC, vec3(0.22, 0.26, 0.05), smoothstep(0.6, 0.85, gn(p * 220.0)) * 0.5);
+  // under the shell moss: the shaded depths of the carpet
+  vec3 mossC = mix(vec3(0.02, 0.04, 0.008), vec3(0.06, 0.1, 0.018), gfbm(p * 40.0));
+  mossC = mix(mossC, vec3(0.1, 0.13, 0.03), smoothstep(0.6, 0.85, gn(p * 220.0)) * 0.4);
   mossC *= 0.6 + 0.6 * gn(p * 900.0);
   vec3 col = mix(soil, mossC, moss);
   // pool bed: rounded pebbles under clear water

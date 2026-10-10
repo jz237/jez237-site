@@ -112,6 +112,7 @@ export class LizardRig {
   private tailRadius: number[] = [];
   private bindTilt: THREE.Matrix4[] = [];
   private boneWorld: THREE.Matrix4[];
+  private headLift = [0, 0];
   private headYaw = 0;
   private headPitchCur = 0;
   private headGoalYaw = 0;
@@ -378,6 +379,18 @@ export class LizardRig {
     walk(chainB, backYaw, backPitch, -1);
     // head bob (push-ups) raises the front of the chain
     if (I.bob) for (const k of [0, 1, 2]) this.spinePos[k].addScaledVector(this.bodyUp, I.bob * K * (k === 2 ? 0.7 : 1));
+    // Keep the head and neck above whatever lies under them (stones, roots, the log).
+    for (const k of [1, 0]) {
+      const p = this.spinePos[k];
+      const need = this.ground.heightAt(p.x, p.z) + (k === 0 ? 0.75 : 0.95) * K;
+      const lift = need - p.y;
+      if (lift > 0) {
+        this.headLift[k] = Math.max(this.headLift[k], lift);
+      }
+      this.headLift[k] = Math.max(0, this.headLift[k] - 0.02 * K);
+      p.y += this.headLift[k];
+      if (k === 1) this.spinePos[0].y += this.headLift[1];
+    }
     // Frames from neighbouring joints (tangent toward the head).
     const snoutLocal = new THREE.Vector3(13.1 - this.spineBindX[0], 2.5 - this.spineBindY[0], 0);
     for (let k = 0; k < 6; k++) {

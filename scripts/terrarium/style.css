@@ -20,7 +20,7 @@ body[data-tool="wipe"] #scene canvas, body[data-tool="feed"] #scene canvas, body
 body[data-tool="wind"] #scene canvas, body[data-tool="mist"] #scene canvas { cursor: cell; }
 
 #veil { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, #1b1916, #0b0907 70%); transition: opacity 1.4s ease 0.2s, visibility 0s linear 1.6s; }
-body.ready #veil { opacity: 0; visibility: hidden; }
+body.ready #veil { opacity: 0; visibility: hidden; pointer-events: none; }
 .veil-inner { text-align: center; padding: 0 24px; }
 .veil-title { font-family: var(--serif); font-size: 34px; letter-spacing: 0.08em; }
 .veil-sub { margin-top: 10px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); animation: pulse 1.8s ease-in-out infinite; }

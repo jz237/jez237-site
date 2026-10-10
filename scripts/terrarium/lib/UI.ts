@@ -104,6 +104,8 @@ export class UI {
     };
     this.bindPointer(host);
     this.say(TOOLS[0].hint, 6);
+    // A second tip once the first has been read.
+    setTimeout(() => {if (!this.follow && this.tool === 'hand') this.say('Tip: the eye button follows the lizard up close', 6);}, 9000);
   }
 
   setSoundState(on: boolean) {

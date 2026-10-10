@@ -31,7 +31,7 @@ export class MossShells {
       n.set(groundHeight(x - e, z) - groundHeight(x + e, z), 2 * e, groundHeight(x, z - e) - groundHeight(x, z + e)).normalize();
       pos.push(x, y, z);
       nrm.push(n.x, n.y, n.z);
-      keep[j * (NX + 1) + i] = moss.at(x, z) > 0.04 && y > WATER_LEVEL + 0.004 && n.y > 0.6 && surface.heightAt(x, z) < y + 0.03 ? 1 : 0;
+      keep[j * (NX + 1) + i] = moss.at(x, z) > 0.04 && y > WATER_LEVEL + 0.004 && n.y > 0.6 ? 1 : 0;
     }
     for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
       const a = j * (NX + 1) + i, b = a + 1, c = a + NX + 1, d = c + 1;
@@ -79,7 +79,10 @@ vec2 mh2(vec2 p){ return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(
 float mn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(mh(i), mh(i+vec2(1,0)), f.x), mix(mh(i+vec2(0,1)), mh(i+vec2(1,1)), f.x), f.y); }`)
         .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
 float mossF = texture2D(tMoss, vMW.xz / uTank + 0.5).r;
-if (mossF < 0.07 + 0.12 * mh(floor(vMW.xz * 1900.0)) + vShell * 0.25 || (vMossH < 0.0006 && vShell > 0.05)) discard;
+// Edges come from the moss map per pixel (not per triangle), so they stay organic.
+float edgeN = mh(floor(vMW.xz * 1900.0));
+float coverage = smoothstep(0.05, 0.5, mossF);
+if (mossF < 0.06 + 0.1 * edgeN || coverage < vShell * (0.85 + 0.3 * edgeN)) discard;
 vec2 sp = vMW.xz * 1900.0;
 vec2 ci = floor(sp), cf = fract(sp);
 vec2 jit = mh2(ci);

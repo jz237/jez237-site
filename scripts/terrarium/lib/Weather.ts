@@ -97,13 +97,18 @@ void main(){
     return smooth(6.5, 8.0, h) * (1 - smooth(19.5, 21.0, h));
   }
 
+  private held: Cloud | null = null;
+
+  /** Squeeze a cloud while it is held; released clouds ease off. */
   squeeze(c: Cloud | null, amount: number) {
-    for (const cl of this.clouds.clouds) cl.squeeze = cl === c ? amount : Math.max(0, cl.squeeze - 0.05);
+    this.held = c;
+    if (c) c.squeeze = amount;
   }
 
   update(dt: number, time: number) {
     this.hours = (this.hours + this.timeFlow * dt + 24) % 24;
     this.wind.multiplyScalar(Math.exp(-dt * 0.9));
+    for (const c of this.clouds.clouds) if (c !== this.held) c.squeeze = Math.max(0, c.squeeze - dt * 1.5);
     this.clouds.update(dt, time, this.wind);
     this.rainAmount = this.clouds.clouds.reduce((s, c) => s + c.rain, 0);
     // humidity rises with rain and mist, dries under the lamp

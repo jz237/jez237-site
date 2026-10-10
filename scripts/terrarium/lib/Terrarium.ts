@@ -380,6 +380,10 @@ export class Terrarium {
     this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
     this.brain.update(dt);
+    const sp = this.rig.spinePoints();
+    foliageUniforms.uPush.value[0].set(this.rig.snout.x, this.rig.snout.y, this.rig.snout.z, 0.03);
+    foliageUniforms.uPush.value[1].set(sp[2].x, sp[2].y, sp[2].z, 0.045);
+    foliageUniforms.uPush.value[2].set(sp[5].x, sp[5].y, sp[5].z, 0.042);
     // Focus on the orbit target; the room falls out of focus naturally.
     this.post.settings.focus = this.camera.position.distanceTo(this.controls.target);
     this.renderer.shadowMap.needsUpdate = true;
