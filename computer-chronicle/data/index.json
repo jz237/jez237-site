@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-10",
+      "historicDate": "1984-12-17",
+      "displayDate": "Week of December 17-23, 1984",
+      "edition": "Issue 125 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "At the Macintosh, a novice magician wins by thinking rather than fighting.",
+      "leadHeadline": "Enchanter brings a spellbook to the Macintosh",
+      "storyHeadlines": [
+        "MSX promises a common language for home computers",
+        "Plus/4 improves BASIC but leaves C64 software behind",
+        "A modem makes the home computer social"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-17.png",
+      "thumb": "media/thumbs/1984-12-17.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-09",
       "historicDate": "1984-12-10",
       "displayDate": "Week of December 10-16, 1984",
