@@ -4,6 +4,9 @@ import { readFile } from 'node:fs/promises';
 import { createStreetGraph,createTraffic,trafficPose } from '../src/city-traffic.js';
 import { roofDetails,insideRoof } from '../src/roof-details.js';
 import { buildLandmarkModels } from '../src/landmark-models.js';
+import * as THREE from '../vendor/three.module.min.js';
+import { createCityStreets } from '../src/city-streets.js';
+import { createCityUniforms } from '../src/city-lighting.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z};
 test('landmark façades retain a local anchor far from the scene origin',()=>{
@@ -40,6 +43,66 @@ test('real Philadelphia simulation remains finite and stays on directed streets 
     if(Math.hypot(pos.x-initial[i].x,pos.z-initial[i].z)>20)moved++;
   }
   assert.ok(moved>sim.cars.length*.8,`${moved} moving vehicles`);
+});
+test('turns retain position and heading through the street boundary, including U-turns',()=>{
+  for(const end of [[100,100],[100,-100],[200,0],[0,0]]){
+    const graph=createStreetGraph({roads:[{id:1,oneway:1,width:10,
+      points:[[1,0,0],[2,100,0],[3,...end]]}]},projection,()=>4);
+    const [incoming,outgoing]=graph.edges;
+    const pose=distance=>trafficPose(distance<0
+      ?{edge:incoming,distance:incoming.length+distance,nextEdge:outgoing}
+      :{edge:outgoing,distance,previousEdge:incoming});
+    let previous=pose(-15);
+    for(let d=-14.9;d<=15;d+=.1){
+      const current=pose(d),angle=Math.atan2(Math.sin(current.angle-previous.angle),
+        Math.cos(current.angle-previous.angle));
+      assert.ok(Math.hypot(current.x-previous.x,current.z-previous.z)<.2,'no position jump');
+      assert.ok(Math.abs(angle)<.2,'no heading snap');
+      assert.equal(current.ground,4);
+      previous=current;
+    }
+    const before=pose(-.00001),after=pose(.00001);
+    assert.ok(Math.hypot(after.x-before.x,after.z-before.z)<.0001);
+    assert.ok(Math.abs(Math.atan2(Math.sin(after.angle-before.angle),Math.cos(after.angle-before.angle)))<.0001);
+  }
+});
+test('traffic advances the same elapsed time at 10 fps and 20 fps, and ignores invalid deltas',()=>{
+  const graph=createStreetGraph({roads:[{id:1,oneway:1,width:10,
+    points:[[1,0,0],[2,100,0],[3,100,100],[4,0,100],[1,0,0]]}]},projection,()=>4);
+  const fast=createTraffic(graph,12,239),slow=createTraffic(graph,12,239);
+  for(let i=0;i<600;i++)fast.update(.05);
+  for(let i=0;i<300;i++)slow.update(.1);
+  const snapshot=sim=>sim.cars.map(car=>[car.edge.id,car.distance,car.speed,trafficPose(car)]);
+  assert.deepEqual(snapshot(slow),snapshot(fast));
+  const prior=snapshot(slow);
+  for(const dt of [NaN,Infinity,-1,0])slow.update(dt);
+  assert.deepEqual(snapshot(slow),prior);
+});
+test('unchanged street furniture is retained, while a new view radius rebuilds it',async()=>{
+  const previousFetch=globalThis.fetch;
+  globalThis.fetch=async()=>({ok:true,json:async()=>({roads:[{id:1,oneway:0,width:10,
+    points:[[1,0,0],[2,100,0],[3,200,0]]}]})});
+  const scene=new THREE.Scene();
+  const streets=createCityStreets(THREE,{scene,
+    projection:{...projection,xToLon:x=>x,zToLat:z=>z},sampleElevation:()=>4,
+    lighting:{uniforms:createCityUniforms(THREE)}});
+  try{
+    const params={camera:{position:new THREE.Vector3(50,500,500)},
+      pose:{lon:50,lat:0,dist:900},state:{era:'present',compareMode:'off',lightweight:false,
+        layers:{structures:true},streetLife:true,animationSpeed:1},
+      exaggeration:1,sunDir:new THREE.Vector3(.3,1,0),dt:1.01,reducedMotion:true,archive:false,quality:'balanced'};
+    streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
+    const furniture=streets.group.children[0],vehicles=streets.group.children[2];
+    assert.ok(furniture.count>0);
+    assert.ok(vehicles.instanceMatrix.count>=620*8,'complete vehicles fit the simulation budget');
+    assert.equal(vehicles.instanceMatrix.updateRanges[0].count,vehicles.count*16);
+    assert.equal(vehicles.instanceColor.updateRanges[0].count,vehicles.count*3);
+    const version=furniture.instanceMatrix.version;
+    for(let i=0;i<20;i++)streets.update(params);
+    assert.equal(furniture.instanceMatrix.version,version,'idle view does not re-upload unchanged streets');
+    streets.update({...params,pose:{...params.pose,dist:2400}});
+    assert.ok(furniture.instanceMatrix.version>version,'zooming out refreshes the wider neighborhood');
+  }finally{streets.dispose();globalThis.fetch=previousFetch;}
 });
 test('roof equipment stays inside concave footprints and keeps the original roof elevation',()=>{
   const poly=[0,0,30,0,30,10,10,10,10,30,0,30];
