@@ -50,9 +50,11 @@ import { createNeighborhood } from './neighborhood.js?v=philly-2026092121';
 import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092201';
 import { createSky, sunDirection } from './sky.js?v=philly-2026092121';
 import { createPostFX } from './postfx.js?v=philly-2026092121';
+import { createCityLighting } from './city-lighting.js?v=philly-2026100901';
 import { createCameraRig } from './camera.js?v=philly-2026092121';
 import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092122';
 import { createStructures } from './structures.js?v=philly-2026092121';
+import { createCityStreets } from './city-streets.js?v=philly-2026100901';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
 } from './structures-data.js?v=philly-2026092121';
@@ -61,6 +63,7 @@ import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
 } from './flood.js?v=philly-2026092121';
 import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092121';
+import { detailedLandmarks } from './landmark-detail.js?v=philly-2026100901';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
 } from './vectors.js?v=philly-2026092201';
@@ -336,13 +339,15 @@ async function boot() {
     ? createAdaptiveQuality({ start: effectiveQuality }) : null;
 
   const scene = new THREE.Scene();
+  const cityLighting = createCityLighting(THREE, renderer);
+  const streetLife = createCityStreets(THREE,{scene,projection,sampleElevation,lighting:cityLighting});
   const sky = createSky(THREE);
   scene.add(sky.mesh);
 
   const macro = await prepareMacroGrid(grid, meta.width, meta.height, 256);
   let terrain = createTerrain(THREE, {
     meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
-    reefImagery: data.reefImagery, quality: effectiveQuality,
+    reefImagery: data.reefImagery, quality: effectiveQuality, lighting: cityLighting,
   });
   scene.add(terrain.mesh);
   const diorama = createDiorama(THREE, { terrain, projection, sampleElevation,
@@ -442,6 +447,7 @@ async function boot() {
       projection,
       sampleElevation,
       quality: effectiveQuality,
+      lighting: cityLighting,
     });
     scene.add(structures.group);
     scene.add(structures.inspectionGroup);
@@ -1125,6 +1131,12 @@ async function boot() {
       });
     }
 
+    cityLighting.update({group:mapLayers.archiveActive?null:structures?.group,
+      focusX:projection.lonToX(now.lon),focusZ:projection.latToZ(now.lat),
+      ground:sampleElevation(now.lon,now.lat),exaggeration,sunDir,distance:now.dist,
+      state,quality:effectiveQuality,dt,time:REDUCED_MOTION?0:elapsed,miniature});
+    streetLife.update({camera,pose:now,state,exaggeration,sunDir,dt,reducedMotion:REDUCED_MOTION,
+      archive:mapLayers.archiveActive,quality:effectiveQuality});
     renderer.setRenderTarget(postfx.renderTarget);
     renderer.clear();
     overlayRoot.visible = !mapLayers.archiveActive;
@@ -1141,6 +1153,7 @@ async function boot() {
     lastRenderInfo = { calls: renderer.info.render.calls, triangles: renderer.info.render.triangles };
     postfx.setPresentation(camera, state.diorama && state.layers.structures
       && state.era === 'present' && state.compareMode === 'off', miniature);
+    postfx.renderClouds(camera, sky.uniforms, cityLighting.uniforms, effectiveQuality);
     postfx.composite(!!state.lightweight);
 
     labelClock += dt; labelLayoutAge += dt;
@@ -1244,7 +1257,7 @@ async function boot() {
     terrain.dispose();
     terrain = createTerrain(THREE, {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
-      reefImagery: data.reefImagery, quality });
+      reefImagery: data.reefImagery, quality, lighting: cityLighting });
     bathymetry?.setTerrain(terrain);
     cityFeatures?.refresh();
     imageryDetail.attachTerrain(terrain);
@@ -1275,6 +1288,7 @@ async function boot() {
     aircraftLayer.dispose();
     cityFeatures?.dispose();
     bathymetry.dispose();
+    streetLife.dispose(); cityLighting.dispose(); postfx.dispose();
     mapLayers.dispose();
     photographic.dispose();
     cameraLayer.dispose();
@@ -2265,8 +2279,9 @@ function wireInterface(deps) {
 
 /** Schematic landmark models, packed for the structures shader (or null). */
 function packLandmarkModels(data, projection, sampleElevation) {
-  const doc = data.landmarkModels;
+  let doc = data.landmarkModels;
   if (!doc || !Array.isArray(doc.models)) return null;
+  for(const id of ['city-hall','independence-hall','museum-of-art'])doc=detailedLandmarks(doc,id);
   const anchors = new Map((data.landmarks?.landmarks || []).map((l) => [l.n, { lon: l.lon, lat: l.lat }]));
   return buildLandmarkModels(doc, {
     anchors,

@@ -10,6 +10,8 @@
  * it is turned up too far.
  */
 
+import { createClouds } from './clouds.js?v=philly-2026100901';
+
 const QUAD_VERTEX = /* glsl */ `
   varying vec2 vUv;
   void main() {
@@ -61,9 +63,13 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
   uniform float uVignette;
   uniform sampler2D uDepth;
   uniform mat4 uInverseProjection;
+  uniform mat4 uProjection;
   uniform vec2 uTexel;
   uniform float uContact;
   uniform float uRadius;
+  uniform sampler2D uClouds;
+  uniform float uCloudsOn;
+  uniform float uReflections;
   varying vec2 vUv;
 
   vec3 viewPosition(vec2 uv) {
@@ -74,24 +80,59 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
   void main() {
     vec3 scene = texture2D(uScene, vUv).rgb;
     vec3 color = scene;
+    float pane=1.0-texture2D(uScene,vUv).a;
+    vec3 surface=viewPosition(vUv);
+    vec3 surfaceNormal=normalize(cross(dFdx(surface),dFdy(surface)));
+    if(dot(surfaceNormal,-surface)<0.0)surfaceNormal=-surfaceNormal;
+    if(uReflections>.5&&pane>.02&&texture2D(uDepth,vUv).r<.999999){
+      vec3 start=surface;
+      vec3 normal=surfaceNormal;
+      vec3 ray=reflect(normalize(start),normal);
+      vec3 probe=start+normal*1.2+ray*2.0;
+      for(int i=0;i<28;i++){
+        probe+=ray*(1.5+float(i)*.8);
+        vec4 clip=uProjection*vec4(probe,1.0);
+        vec2 uv=clip.xy/clip.w*.5+.5;
+        if(clip.w<=0.0||any(lessThan(uv,vec2(.005)))||any(greaterThan(uv,vec2(.995))))break;
+        float gap=viewPosition(uv).z-probe.z;
+        if(gap>0.0&&gap<2.0+float(i)*.16&&texture2D(uDepth,uv).r<.999999){
+          float edge=smoothstep(0.0,.08,min(min(uv.x,1.0-uv.x),min(uv.y,1.0-uv.y)));
+          float confidence=smoothstep(8.0,24.0,length(probe-start));
+          color=mix(color,texture2D(uScene,uv).rgb,pane*.28*edge*confidence);
+          break;
+        }
+      }
+    }
     if (uIntensity > 0.0) color += texture2D(uBloom, vUv).rgb * uIntensity;
     // Contact occlusion uses the actual rendered geometry and preserves image sharpness.
     if (uContact > .001 && texture2D(uDepth, vUv).r < .999999) {
-      vec3 center = viewPosition(vUv);
-      vec3 normal = normalize(cross(dFdx(center), dFdy(center)));
-      float radius = clamp(uRadius / max(1.0, -center.z) / uTexel.y, 2.0, 16.0);
+      vec3 center = surface;
+      vec3 normal = surfaceNormal;
+      float radius = clamp(uRadius / max(1.0, -center.z) / uTexel.y, 2.0, 40.0);
       float occlusion = 0.0;
-      for (int i = 0; i < 8; i++) {
+      for (int i = 0; i < 16; i++) {
         float angle = float(i) * 2.39996;
-        vec2 offset = vec2(cos(angle), sin(angle)) * radius * (.4 + float(i) * .085) * uTexel;
+        vec2 offset = vec2(cos(angle), sin(angle)) * radius * sqrt((float(i)+.5)/16.0) * uTexel;
         vec3 delta = viewPosition(clamp(vUv + offset, .001, .999)) - center;
         float len = length(delta);
-        occlusion += max(0.0, dot(normal, delta / max(len, .001)) - .18)
+        occlusion += max(0.0, dot(normal, delta / max(len, .001)) - .08)
           * (1.0 - smoothstep(uRadius * .4, uRadius * 2.0, len));
       }
-      color *= 1.0 - min(.26, occlusion * .075) * uContact;
+      color *= 1.0 - min(.48, occlusion * .14) * uContact;
     }
 
+    if(uCloudsOn>.5){
+      vec4 cloud=vec4(0.0);float weight=0.0;
+      float centerDepth=texture2D(uDepth,vUv).r;
+      for(int x=-2;x<=2;x++)for(int y=-2;y<=2;y++){
+        vec2 uv=vUv+vec2(float(x),float(y))*uTexel*2.0;
+        float w=exp(-float(x*x+y*y)*.35);
+        w*=step(abs(texture2D(uDepth,uv).r-centerDepth),.00001);
+        vec4 c=texture2D(uClouds,uv);cloud+=vec4(c.rgb*c.a,c.a)*w;weight+=w;
+      }
+      cloud/=max(weight,.001);
+      color=color*(1.0-cloud.a)+cloud.rgb;
+    }
     // A whisper of vignette to settle the frame; never enough to read as one.
     vec2 d = vUv - 0.5;
     float vig = 1.0 - uVignette * dot(d, d) * 1.35;
@@ -121,6 +162,7 @@ export function createPostFX(THREE, renderer) {
 
   const sceneRT = new THREE.WebGLRenderTarget(1, 1, rtOptions);
   sceneRT.depthTexture = new THREE.DepthTexture(1, 1, THREE.UnsignedIntType);
+  const clouds = createClouds(THREE, renderer, sceneRT.depthTexture);
   const brightRT = new THREE.WebGLRenderTarget(1, 1, { ...rtOptions, depthBuffer: false });
   const blurRT = new THREE.WebGLRenderTarget(1, 1, { ...rtOptions, depthBuffer: false });
 
@@ -155,9 +197,12 @@ export function createPostFX(THREE, renderer) {
       uVignette: { value: 0.5 },
       uDepth: { value: sceneRT.depthTexture },
       uInverseProjection: { value: new THREE.Matrix4() },
+      uProjection: { value: new THREE.Matrix4() },
+      uReflections: { value: 1 },
       uTexel: { value: new THREE.Vector2(1, 1) },
       uContact: { value: 0 },
       uRadius: { value: 25 },
+      uClouds: { value: clouds.texture }, uCloudsOn: { value: 0 },
     },
     vertexShader: QUAD_VERTEX,
     fragmentShader: COMPOSITE_FRAGMENT,
@@ -194,6 +239,7 @@ export function createPostFX(THREE, renderer) {
       bloomWidth = Math.max(1, Math.floor(width / 4));
       bloomHeight = Math.max(1, Math.floor(height / 4));
       sceneRT.setSize(width, height);
+      clouds.setSize(width,height);
       brightRT.setSize(bloomWidth, bloomHeight);
       blurRT.setSize(bloomWidth, bloomHeight);
     },
@@ -201,6 +247,7 @@ export function createPostFX(THREE, renderer) {
     setPresentation(camera, enabled, amount) {
       const u = compositeMat.uniforms;
       u.uInverseProjection.value.copy(camera.projectionMatrixInverse);
+      u.uProjection.value.copy(camera.projectionMatrix);
       u.uTexel.value.set(1 / width, 1 / height);
       u.uContact.value = enabled ? 1 : 0;
       u.uRadius.value = 22 + amount * 350;
@@ -208,6 +255,13 @@ export function createPostFX(THREE, renderer) {
 
     setIntensity(value) {
       compositeMat.uniforms.uIntensity.value = value;
+    },
+
+    renderClouds(camera,sky,lighting,quality) {
+      compositeMat.uniforms.uReflections.value=quality==='performance'?0:1;
+      const on=lighting.uCloudCoverage.value>.01;
+      compositeMat.uniforms.uCloudsOn.value=on?1:0;
+      if(on)clouds.render(camera,sky,lighting,quality);
     },
 
     setVignette(value) {
@@ -222,9 +276,10 @@ export function createPostFX(THREE, renderer) {
     composite(lightweight = false) {
       if (lightweight) {
         const u = compositeMat.uniforms, intensity = u.uIntensity.value, contact = u.uContact.value;
-        u.uIntensity.value = 0; u.uContact.value = 0;
+        const reflections=u.uReflections.value;
+        u.uIntensity.value = 0; u.uContact.value = 0;u.uReflections.value=0;
         draw(compositeMat, null);
-        u.uIntensity.value = intensity; u.uContact.value = contact;
+        u.uIntensity.value = intensity; u.uContact.value = contact;u.uReflections.value=reflections;
         return;
       }
       if (compositeMat.uniforms.uIntensity.value === 0) {
@@ -246,6 +301,7 @@ export function createPostFX(THREE, renderer) {
     },
 
     dispose() {
+      clouds.dispose();
       sceneRT.dispose();
       brightRT.dispose();
       blurRT.dispose();

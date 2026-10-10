@@ -21,6 +21,8 @@ import {
 } from './structures-data.js?v=philly-2026092121';
 import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092121';
 import { damp } from './geo.js?v=philly-2026092121';
+import { CITY_LIGHT_GLSL, createCityUniforms } from './city-lighting.js?v=philly-2026100901';
+import { roofDetails } from './roof-details.js?v=philly-2026100901';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;
@@ -60,7 +62,8 @@ const VERTEX_SHADER = /* glsl */ `
     vClock = vec4(aClock.x, aGround * uExag + aClock.y * uHScale, aClock.z, aClock.w);
     #else
     float structural = (aInfo.y + position.y) * uGrow;
-    vStyle = smoothstep(24.0, 65.0, aInfo.x);
+    float typeSeed=fract(sin(dot(aFacadeOrigin,vec2(.173,.271)))*43758.54);
+    vStyle = smoothstep(24.0, 65.0, aInfo.x)*mix(.12,1.0,step(.28,typeSeed));
     #endif
     vec3 p = vec3(position.x, aGround * uExag + structural * uHScale + 0.5, position.z);
     vHeight = aInfo.x;
@@ -78,6 +81,7 @@ const VERTEX_SHADER = /* glsl */ `
 
 const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
+  ${CITY_LIGHT_GLSL}
   varying vec4 vFinish;
 
   varying vec2 vFacadeXZ;
@@ -157,14 +161,16 @@ const FRAGMENT_SHADER = /* glsl */ `
       * (1.0 - smoothstep(vec2(0.78) - aa, vec2(0.78), cell));
     float window = opening.x * opening.y * (1.0 - roof) * legible * uFacade;
     vec2 buildingAnchor = vWorld.xz - vFacadeXZ;
-    float variation = fract(sin(dot(floor(buildingAnchor), vec2(.173,.271))
-      + floor(vHeight) * 71.17) * 43758.54);
+    float variation = fract(sin(dot(floor(buildingAnchor+.1), vec2(.173,.271))
+      + floor(vHeight+.01) * 71.17) * 43758.54);
     vec3 masonry = mix(vec3(0.25, 0.10, 0.065), vec3(0.48, 0.38, 0.27), variation);
+    masonry=mix(masonry,vec3(.58,.55,.46),smoothstep(.62,.78,variation));
     #ifdef LANDMARK
     masonry = vec3(0.64, 0.60, 0.49);
     #endif
     vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
-    vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
+    vec3 metal=mix(vec3(.12,.21,.26),vec3(.29,.31,.28),variation);
+    vec3 facade = mix(masonry, metal, vStyle);
     facade = mix(facade, vFinish.rgb, min(1.0, vFinish.a));
     window *= 1.0 - step(1.5, vFinish.a);
     vec2 brickGrid = vec2(across / .32, vStorey / .105);
@@ -246,6 +252,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     float diffuse = max(0.0, ndl);
     float wrapped = max(0.0, (ndl + 0.35) / 1.35);
     vec3 key = uSunColor * uKey * 0.85 * mix(diffuse, wrapped, 0.35);
+    key *= citySunVisibility(vWorld, n, uSunDir);
     vec3 sky = uSkyColor * uAmbient * (0.85 + 0.15 * n.y);
     // Ground bounce warms the shadow side a little.
     vec3 bounce = uFogColor * uAmbient * 0.35 * max(0.0, -ndl);
@@ -253,7 +260,27 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Keep the aerial overlay chromatically neutral even under the warm dusk
     // sun.  The geometry is a survey aid here, not a second painted city.
     float reflection = pow(1.0 - max(0.0, dot(n, viewDir)), 3.0);
-    color += uSkyColor * reflection * window * vStyle * 0.38;
+    vec3 reflected=reflect(-viewDir,n);
+    vec3 environment=mix(uFogColor*.48,uSkyColor*1.35,smoothstep(-.15,.7,reflected.y));
+    environment+=uSunColor*pow(max(0.0,dot(reflected,uSunDir)),160.0)*uKey;
+    float fresnel=.06+.68*reflection;
+    color=mix(color,environment,window*vStyle*fresnel);
+    // View-dependent room boxes behind the panes, with independent blinds.
+    vec3 roomRay=vec3(dot(-viewDir,tangent)/3.0,-viewDir.y/3.4,
+      -abs(dot(viewDir,n))/4.0);
+    vec2 roomUV=clamp((cell-.16)/.62,.001,.999);
+    vec2 side=(step(vec2(0.0),roomRay.xy)-roomUV)/
+      (mix(vec2(-1.0),vec2(1.0),step(vec2(0.0),roomRay.xy))*max(abs(roomRay.xy),vec2(.0001)));
+    float back=-1.0/min(-.0001,roomRay.z);
+    float travel=min(back,min(side.x,side.y));
+    vec3 hit=vec3(roomUV,0.0)+roomRay*travel;
+    float roomSeed=fract(sin(dot(floor(bay)+floor(buildingAnchor*.2+.1),vec2(71.7,13.1)))*43758.54);
+    vec3 room=mix(vec3(.065,.082,.10),vec3(.20,.17,.12),roomSeed);
+    room*=travel==back?.8:travel==side.y?(roomRay.y>0.0?1.2:.45):.62;
+    float blind=step(.66,roomSeed)*step(1.0-(roomSeed-.66)*1.8,roomUV.y);
+    room=mix(room,vec3(.32,.33,.31),blind);
+    room*=.65+.35*smoothstep(-1.0,0.0,hit.z);
+    color=mix(color,room,window*(1.0-fresnel)*.5);
     vec3 halfVector = normalize(uSunDir + viewDir);
     color += uSunColor * pow(max(0.0, dot(n, halfVector)), 65.0)
       * window * vStyle * .22;
@@ -309,7 +336,8 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 fogColor = mix(uFogColor, uFogTint, pow(towardSun, 3.0));
     color = mix(color, fogColor, clamp(fog, 0.0, 1.0));
 
-    gl_FragColor = vec4(color, 1.0);
+    // Opaque material: alpha is a reflection mask consumed by the post pass.
+    gl_FragColor = vec4(color, 1.0-window*vStyle*.7*(1.0-roof));
   }
 `;
 
@@ -389,6 +417,7 @@ export function createStructures(THREE, options) {
   const emptyRoof = new THREE.DataTexture(new Uint8Array([96,96,96,255]),1,1);
   emptyRoof.needsUpdate = true;
   const sharedUniforms = {
+    ...(options.lighting?.uniforms || createCityUniforms(THREE)),
     uStudyBounds: { value: new THREE.Vector4() },
     uViewToWorld: { value: new THREE.Matrix3() },
     uExag: { value: 10 },
@@ -496,7 +525,19 @@ export function createStructures(THREE, options) {
       minX: projection.lonToX(zone.bounds.west), maxX: projection.lonToX(zone.bounds.east),
       minZ: projection.latToZ(zone.bounds.north), maxZ: projection.latToZ(zone.bounds.south),
     };
-    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, packed, parsed, originX, originZ,
+    let roof=null;
+    if(zone.id!=='local-detail'){
+      const details=roofDetails(parsed.buildings);
+      const roofPacked=extrudeBuildings(details.parts,{originX,originZ,groundAt});
+      if(roofPacked.vertexCount){
+        const roofMaterial=makeSolidMaterial(false,false);
+        roofMaterial.uniforms={...mesh.material.uniforms,uFacade:{value:0},uRoofPhotoOn:{value:0}};
+        const roofMesh=new THREE.Mesh(solidGeometry(roofPacked),roofMaterial);
+        roofMesh.name='roof-parapets-and-equipment';roofMesh.frustumCulled=false;group.add(roofMesh);
+        roof={mesh:roofMesh,packed:roofPacked,ends:details.ends};
+      }
+    }
+    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, roof, packed, parsed, originX, originZ,
       box, grow: 0, count: parsed.count, meta: tierMeta });
     buildingTotal += parsed.count;
     return parsed.count;
@@ -750,6 +791,13 @@ export function createStructures(THREE, options) {
       t.mesh.material.uniforms.uLocalClip.value = localActive && !isLocal ? 1 : 0;
       const visible = isLocal ? localActive : t.grow > 0.005;
       t.mesh.visible = visible;
+      if(t.roof){
+        t.roof.mesh.visible=visible&&state.camDist<5500&&!state.lightweight&&state.era==='present'
+          &&state.compareMode==='off'&&q!=='performance';
+        const n=Math.min(t.roof.ends.length,Math.round(t.packed.buildingCount*fraction));
+        const end=n?t.roof.ends[n-1]:0;
+        t.roof.mesh.geometry.setDrawRange(0,end?t.roof.packed.buildingEnd[end-1]:0);
+      }
       if (!visible) continue;
       t.mesh.material.uniforms.uGrow.value = isLocal ? 1 : t.grow;
       const count = drawIndexCount(t.packed, isLocal ? 1 : fraction);
@@ -822,6 +870,8 @@ export function createStructures(THREE, options) {
         if (studyBounds) tier.mesh.material.defines.ARCHITECTURAL_STUDY = 1;
         else delete tier.mesh.material.defines.ARCHITECTURAL_STUDY;
         tier.mesh.material.needsUpdate = true;
+        if(tier.roof){tier.roof.mesh.material.defines={...tier.mesh.material.defines};
+          tier.roof.mesh.material.needsUpdate=true;}
       }
       if (!landmarkMesh) return;
       if (!packed) {
@@ -953,6 +1003,7 @@ export function createStructures(THREE, options) {
       group.remove(t.mesh);
       t.mesh.geometry.dispose();
       t.mesh.material.dispose();
+      if(t.roof){group.remove(t.roof.mesh);t.roof.mesh.geometry.dispose();t.roof.mesh.material.dispose();}
       buildingTotal -= t.count;
       return true;
     },
@@ -986,6 +1037,7 @@ export function createStructures(THREE, options) {
       for (const t of tiers) {
         t.mesh.geometry.dispose();
         t.mesh.material.dispose();
+        if(t.roof){t.roof.mesh.geometry.dispose();t.roof.mesh.material.dispose();}
       }
       tiers.length = 0;
       if (bridgeSolid) {
