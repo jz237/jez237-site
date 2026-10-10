@@ -4,6 +4,7 @@ import type {MossMap} from './Plants';
 import type {Surface} from './Surface';
 import {WATER_LEVEL, groundHeight} from './Ground';
 import {foliageUniforms} from './Foliage';
+import {WIND_GLSL} from './WindField';
 
 /**
  * Cushion moss rendered as stacked shells: each layer keeps only the strands
@@ -12,7 +13,7 @@ import {foliageUniforms} from './Foliage';
  */
 export class MossShells {
   readonly mesh: THREE.InstancedMesh;
-  readonly uniforms = {uShells: {value: 14}, uHeight: {value: 0.0065}, tMoss: {value: null as THREE.Texture | null}, uPress: {value: new THREE.Vector4(0, 0, 0, 0)}};
+  readonly uniforms = {uShells: {value: 14}, uHeight: {value: 0.0085}, tMoss: {value: null as THREE.Texture | null}, uPress: {value: new THREE.Vector4(0, 0, 0, 0)}};
 
   constructor(surface: Surface, moss: MossMap, shells = 14) {
     this.uniforms.uShells.value = shells;
@@ -44,11 +45,12 @@ export class MossShells {
     const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.9});
     const u = this.uniforms;
     m.onBeforeCompile = (s) => {
-      Object.assign(s.uniforms, u, {uTime: foliageUniforms.uTime, uWind: foliageUniforms.uWind, uWet: foliageUniforms.uWet, uTank: {value: new THREE.Vector2(TANK.w, TANK.d)}});
+      Object.assign(s.uniforms, u, {uTime: foliageUniforms.uTime, tWind: foliageUniforms.tWind, uWindBox: foliageUniforms.uWindBox, uGust: foliageUniforms.uGust, uWet: foliageUniforms.uWet, uTank: {value: new THREE.Vector2(TANK.w, TANK.d)}});
       s.vertexShader = s.vertexShader
         .replace('#include <common>', `#include <common>
-uniform float uShells, uHeight, uTime; uniform vec3 uWind; uniform sampler2D tMoss; uniform vec2 uTank; uniform vec4 uPress;
-varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss;`)
+uniform float uShells, uHeight, uTime; uniform sampler2D tMoss; uniform vec2 uTank; uniform vec4 uPress;
+varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust;
+${WIND_GLSL}`)
         .replace('#include <begin_vertex>', `#include <begin_vertex>
 {
   float sh = float(gl_InstanceID) / (uShells - 1.0);
@@ -56,14 +58,25 @@ varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMos
   float mm = texture2D(tMoss, position.xz / uTank + 0.5).r;
   vMoss = mm;
   // cushions: the carpet swells into low mounds
+  // cushions: separate mounds of different heights, not an even carpet
   float cush = 0.55 + 0.45 * sin(position.x * 61.0 + sin(position.z * 47.0) * 2.0) * sin(position.z * 53.0 + position.x * 9.0);
-  float h = uHeight * smoothstep(0.03, 0.5, mm) * (0.6 + 0.6 * cush);
+  float mound = wgn(position.xz * 38.0 + 3.0);
+  mound = mound * mound * (3.0 - 2.0 * mound);
+  float h = uHeight * smoothstep(0.03, 0.5, mm) * (0.35 + 0.5 * cush + 1.15 * mound * mound);
   // pressed flat where the lizard lies or walks
   float press = 1.0 - uPress.w * exp(-dot(position.xz - uPress.xy, position.xz - uPress.xy) / (uPress.z * uPress.z));
   h *= press;
   vMossH = h;
-  vec3 sway = vec3(sin(uTime * 1.3 + position.x * 40.0), 0.0, cos(uTime * 1.1 + position.z * 37.0)) * 0.0004 + uWind * 0.004;
-  transformed += objectNormal * (sh * h + 0.0004) + sway * sh * sh;
+  // wind combs the carpet: travelling gust bands lay the tips over and show their paler sides
+  vec2 w = windAt(position.xz, uTime);
+  float sp = length(w);
+  vec2 dir = sp > 1e-4 ? w / sp : vec2(1.0, 0.0);
+  float wave = 0.5 + 0.5 * sin(dot(position.xz, dir) * 23.0 - uTime * (2.2 + min(sp * 4.0, 4.0) * 0.5) + wgn(position.xz * 8.0) * 5.0);
+  wave = wave * wave * (3.0 - 2.0 * wave);
+  float lay = (1.0 - exp(-sp * 2.8)) * (0.6 + 0.8 * wave);
+  vGust = wave * (1.0 - exp(-sp * 2.2)) * (0.6 + 0.4 * windTex(position.xz).a);
+  vec3 sway = vec3(sin(uTime * 1.3 + position.x * 40.0), 0.0, cos(uTime * 1.1 + position.z * 37.0)) * 0.0004 + vec3(dir.x, 0.0, dir.y) * lay * 0.0045;
+  transformed += objectNormal * (sh * h * (1.0 - lay * 0.25) + 0.0004) + sway * sh * sh;
   vMW = transformed;
 }`)
         .replace('#include <project_vertex>', `vec4 mvPosition = vec4(transformed, 1.0);
@@ -73,7 +86,7 @@ gl_Position = projectionMatrix * mvPosition;`);
         .replace('#include <common>', `#include <common>
 uniform float uWet;
 uniform sampler2D tMoss; uniform vec2 uTank;
-varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss;
+varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust;
 float mh(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 vec2 mh2(vec2 p){ return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453); }
 float mn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(mh(i), mh(i+vec2(1,0)), f.x), mix(mh(i+vec2(0,1)), mh(i+vec2(1,1)), f.x), f.y); }`)
@@ -95,12 +108,18 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 {
   float hue = mn(vMW.xz * 60.0);
+  // several species side by side: yellow-green sheet moss, deep green cushions, pale blue-grey Leucobryum
+  float sp = mn(vMW.xz * 14.0 + 7.0);
   vec3 deep = vec3(0.012, 0.02, 0.006);
   vec3 midC = mix(vec3(0.05, 0.1, 0.018), vec3(0.09, 0.14, 0.02), hue);
   vec3 tip = mix(vec3(0.13, 0.22, 0.035), vec3(0.26, 0.28, 0.06), mn(vMW.xz * 220.0) * 0.7 + mn(vMW.xz * 31.0) * 0.3);
+  tip = mix(tip, vec3(0.06, 0.13, 0.03), smoothstep(0.55, 0.7, sp));
+  tip = mix(tip, vec3(0.16, 0.21, 0.14), smoothstep(0.78, 0.9, sp));
+  midC = mix(midC, vec3(0.04, 0.08, 0.02), smoothstep(0.55, 0.7, sp));
   vec3 c = mix(deep, midC, smoothstep(0.0, 0.5, vShell));
   c = mix(c, tip, smoothstep(0.45, 1.0, vShell) * (0.6 + 0.4 * mh(ci)));
   c *= 0.8 + 0.4 * mh(ci + 9.1);
+  c = mix(c, c * 1.5 + vec3(0.012, 0.014, 0.002), clamp(vGust, 0.0, 1.0) * vShell * vShell);
   diffuseColor.rgb = c * mix(1.0, 0.7, uWet);
 }`)
         .replace('#include <roughnessmap_fragment>', `float roughnessFactor = mix(0.95, 0.55, uWet);`)
@@ -111,7 +130,7 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
 }
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => 'moss-shells-v1';
+    m.customProgramCacheKey = () => 'moss-shells-v3';
     this.mesh = new THREE.InstancedMesh(g, m, shells);
     const I = new THREE.Matrix4();
     for (let i = 0; i < shells; i++) this.mesh.setMatrixAt(i, I);

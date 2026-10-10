@@ -20,6 +20,14 @@ export class Cricket {
   private t = Math.random() * 10;
   private hindLegs: THREE.Object3D[] = [];
   age = 0;
+  splashed = false;
+
+  /** Something alarming at `from`: hop away from it right now. */
+  startle(from: THREE.Vector3) {
+    if (this.caught || this.airborne) return;
+    this.heading = Math.atan2(-(this.pos.z - from.z), this.pos.x - from.x) + (Math.random() - 0.5) * 0.8;
+    this.hopT = 0;
+  }
 
   constructor(start: THREE.Vector3, material: THREE.Material, geo: THREE.BufferGeometry, legGeo: THREE.BufferGeometry) {
     this.pos.copy(start);
@@ -58,6 +66,7 @@ export class Cricket {
         this.airborne = false;
         this.vel.set(0, 0, 0);
         if (ground <= WATER_LEVEL + 0.001) {
+          this.splashed = true;
           // landed in the pool: kick back toward the shore
           this.vel.set(-Math.cos(this.heading) * 0.6, 1.2, Math.sin(this.heading) * 0.6);
           this.airborne = true;
@@ -73,7 +82,7 @@ export class Cricket {
         for (let k = 0; k < 8; k++) {
           const h = this.heading + (Math.random() - 0.5) * 2.2 * (k + 1) * 0.5;
           const lx = this.pos.x + Math.cos(h) * s * 0.3, lz = this.pos.z - Math.sin(h) * s * 0.3;
-          if (nav.walkable(lx, lz)) {this.heading = h; break;}
+          if (nav.dry(lx, lz)) {this.heading = h; break;}
           if (k === 7) s = 0.15;
         }
         this.vel.set(Math.cos(this.heading) * s, 0.9 + Math.random() * 0.5, -Math.sin(this.heading) * s);
@@ -82,7 +91,7 @@ export class Cricket {
         // short scuttles
         const fx = Math.cos(this.heading), fz = -Math.sin(this.heading);
         const nx = this.pos.x + fx * 0.03 * dt, nz = this.pos.z + fz * 0.03 * dt;
-        if (nav.walkable(nx, nz)) {this.pos.x = nx; this.pos.z = nz;} else this.heading += 1.5;
+        if (nav.dry(nx, nz)) {this.pos.x = nx; this.pos.z = nz;} else this.heading += 1.5;
         this.pos.y = surface.heightAt(this.pos.x, this.pos.z);
         if (this.walkT < 0) this.walkT = 0.8 + Math.random() * 1.5;
       }
@@ -133,6 +142,13 @@ export class Insects {
     this.leg.translate(-0.005, 0, 0);
   }
 
+  onSplash?: (x: number, z: number) => void;
+
+  /** Crickets near a point (a lightning strike, a tap) jump away. */
+  scatter(p: THREE.Vector3, r: number) {
+    for (const c of this.crickets) if (c.pos.distanceTo(p) < r) c.startle(p);
+  }
+
   release(): Cricket {
     const x = (Math.random() - 0.5) * (TANK.w * 0.6), z = (Math.random() - 0.5) * (TANK.d * 0.4) + 0.04;
     const c = new Cricket(new THREE.Vector3(x, TANK.h - 0.03, z), this.material, this.body, this.leg);
@@ -142,7 +158,10 @@ export class Insects {
   }
 
   update(dt: number) {
-    for (const c of this.crickets) c.update(dt, this.surface, this.nav);
+    for (const c of this.crickets) {
+      c.update(dt, this.surface, this.nav);
+      if (c.splashed) {c.splashed = false; this.onSplash?.(c.pos.x, c.pos.z);}
+    }
     for (const c of this.crickets.filter((c) => c.eaten)) this.group.remove(c.group);
     for (let i = this.crickets.length - 1; i >= 0; i--) if (this.crickets[i].eaten) this.crickets.splice(i, 1);
   }

@@ -31,24 +31,49 @@ export function poolDistance(x: number, z: number) {
   return Math.hypot((x - POOL.cx) / POOL.rx, (z - POOL.cz) / POOL.rz) - 1 + wobble;
 }
 
-export function groundHeight(x: number, z: number) {
+/** Where the cascade lands: the plunge pocket is scoured deepest here. */
+export const PLUNGE = {x: 0.1, z: 0.075};
+
+/**
+ * Water depth inside the pool (0 outside): a pebbly shelf about 2 cm deep that
+ * a lizard can wade across, and a plunge pocket scoured out under the falls.
+ */
+export function poolDepth(x: number, z: number) {
+  const d = poolDistance(x, z);
+  if (d >= 0) return 0;
+  const shelf = 0.0175 * smooth(0.0, -0.3, d);
+  const pocket = 0.05 * gauss(x - PLUNGE.x - 0.03, z - PLUNGE.z, 0.13, 0.085) * smooth(0.0, -0.22, d);
+  const ripples = (fbm(x * 26, z * 26) - 0.5) * 0.004 * smooth(0.0, -0.12, d);
+  return Math.max(0, shelf + pocket + ripples);
+}
+
+function landHeight(x: number, z: number) {
   let h = 0.146 - z * 0.1;
   h += 0.075 * gauss(x + 0.05, z + 0.15, 0.26, 0.11);
-  h += 0.05 * gauss(x - 0.43, z + 0.16, 0.15, 0.1);
+  h += 0.032 * gauss(x - 0.43, z + 0.17, 0.15, 0.09);
   h += 0.04 * gauss(x + 0.46, z + 0.17, 0.13, 0.09);
   h += 0.012 * gauss(x + 0.34, z - 0.04, 0.2, 0.12);
+  // low hummocks and a root-raised bank give the floor some relief
+  h += 0.008 * gauss(x + 0.22, z - 0.12, 0.07, 0.05) + 0.006 * gauss(x - 0.47, z - 0.02, 0.06, 0.06);
   h += (fbm(x * 14 + 3, z * 14) - 0.5) * 0.012 + (fbm(x * 55, z * 55) - 0.5) * 0.003;
+  return h;
+}
+
+export function groundHeight(x: number, z: number) {
   const d = poolDistance(x, z);
-  const bed = 0.046 + (fbm(x * 20, z * 20) - 0.5) * 0.008;
-  const t = smooth(0.18, -0.4, d);
-  return h + (bed - h) * t;
+  if (d < 0) return WATER_LEVEL - poolDepth(x, z);
+  // the bank slopes down to the water line as a gravel beach
+  const h = landHeight(x, z);
+  // a higher bank gets a longer beach, so the shore stays walkable
+  const t = smooth(0.16 + Math.max(0, h - WATER_LEVEL) * 7, 0.0, d);
+  return h + (WATER_LEVEL - h) * t;
 }
 
 /** Ground mesh plus the cut-away substrate seen through the glass. */
 export class Ground {
   readonly mesh: THREE.Mesh;
   readonly walls: THREE.Mesh;
-  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}};
+  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}, tWetMap: {value: null as THREE.Texture | null}};
 
   constructor() {
     const NX = 360, NZ = 150;
@@ -98,6 +123,7 @@ export class Ground {
       s.uniforms.uTime = u.uTime;
       s.uniforms.uWet = u.uWet;
       s.uniforms.tMoss = u.tMoss;
+      s.uniforms.tWetMap = u.tWetMap;
       s.uniforms.uCaustic = u.uCaustic;
       s.uniforms.uTank = {value: new THREE.Vector2(TANK.w, TANK.d)};
       s.uniforms.uWater = {value: WATER_LEVEL};
@@ -107,10 +133,11 @@ export class Ground {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss; uniform vec2 uTank;
+varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss, tWetMap; uniform vec2 uTank;
 ${GROUND_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
-GroundSample gs = groundSample(vW, uTime, uWet, uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
+vec4 wetMap = texture2D(tWetMap, vW.xz / uTank + 0.5);
+GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
 diffuseColor.rgb = gs.color;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gs.rough;')
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -120,7 +147,7 @@ reflectedLight.indirectDiffuse *= gs.ao; reflectedLight.indirectSpecular *= gs.a
 #include <aomap_fragment>
 reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;`);
     };
-    m.customProgramCacheKey = () => 'terrarium-ground-v1';
+    m.customProgramCacheKey = () => 'terrarium-ground-v2';
     return m;
   }
 
@@ -182,9 +209,12 @@ vec3 pebbles(vec2 p){
 const GROUND_GLSL = NOISE_GLSL + /* glsl */ `
 struct GroundSample { vec3 color; float rough; vec3 normal; float ao; float caustic; };
 float groundBumps(vec2 p, float moss){
-  float soil = gfbm(p * 140.0) * 0.6 + gn(p * 600.0) * 0.4;
+  // humus: crumbs and grains, with flat bark chips lying on top
+  vec3 crumb = pebbles(p * 520.0);
+  vec3 chip = pebbles(p * vec2(150.0, 260.0) + 3.0);
+  float soil = gfbm(p * 140.0) * 0.45 + crumb.x * 0.55 + smoothstep(0.55, 0.6, chip.y) * chip.x * 0.8;
   float mossH = gfbm(p * 260.0) * 0.6 + gn(p * 900.0) * 0.4;
-  return mix(soil * 0.0012, mossH * 0.0018, moss);
+  return mix(soil * 0.0016, mossH * 0.0018, moss);
 }
 GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap){
   GroundSample g;
@@ -192,7 +222,12 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   float under = smoothstep(water - 0.001, water - 0.008, w.y);
   float shore = smoothstep(water + 0.025, water + 0.001, w.y) * (1.0 - under);
   float moss = smoothstep(0.05, 0.6, mossMap) * (1.0 - under) * (1.0 - shore * 0.85);
-  vec3 soil = vec3(0.1, 0.065, 0.04) * (0.7 + 0.6 * gfbm(p * 60.0));
+  vec3 soil = vec3(0.075, 0.05, 0.032) * (0.7 + 0.6 * gfbm(p * 60.0));
+  // crumbs and grains catch the light; bark chips are redder
+  vec3 crumb = pebbles(p * 520.0);
+  soil *= 0.7 + 0.6 * crumb.x * (0.6 + 0.8 * crumb.y);
+  vec3 chip = pebbles(p * vec2(150.0, 260.0) + 3.0);
+  soil = mix(soil, vec3(0.16, 0.085, 0.045) * (0.7 + 0.5 * chip.x), smoothstep(0.55, 0.6, chip.y) * step(0.15, chip.x) * 0.85);
   // leaf litter flecks
   float litter = smoothstep(0.72, 0.8, gn(p * 90.0 + 3.1)) * (1.0 - moss);
   soil = mix(soil, vec3(0.22, 0.12, 0.05) * (0.7 + 0.5 * gn(p * 300.0)), litter * 0.8);
@@ -203,27 +238,39 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   mossC = mix(mossC, vec3(0.1, 0.13, 0.03), smoothstep(0.6, 0.85, gn(p * 220.0)) * 0.4);
   mossC *= 0.6 + 0.6 * gn(p * 900.0);
   vec3 col = mix(soil, mossC, moss);
-  // pool bed: rounded pebbles under clear water
-  vec3 pb = pebbles(p * 130.0);
-  vec3 stone = mix(vec3(0.16, 0.13, 0.1), vec3(0.42, 0.36, 0.28), pb.y) * (0.45 + 0.55 * pb.x);
-  stone = mix(stone, vec3(0.05, 0.06, 0.03), (1.0 - smoothstep(0.0, 0.12, pb.z)) * 0.6);
-  stone = mix(stone, vec3(0.1, 0.14, 0.05), smoothstep(0.55, 0.8, gn(p * 30.0)) * 0.5);
+  // pool bed: dark silt and sand with scattered pebbles, algae and sunken leaves
+  float depthB = clamp((water - w.y) / 0.05, 0.0, 1.0);
+  vec3 silt = mix(vec3(0.07, 0.055, 0.035), vec3(0.15, 0.12, 0.08), gfbm(p * 70.0)) * (0.8 + 0.4 * gn(p * 600.0));
+  silt = mix(silt, vec3(0.035, 0.03, 0.02), depthB * 0.6);
+  vec3 pb = pebbles(p * 160.0);
+  float pebMask = smoothstep(0.62, 0.86, gn(p * 22.0 + 4.0)) * (1.0 - depthB * 0.5);
+  vec3 stone = mix(vec3(0.07, 0.06, 0.05), vec3(0.22, 0.19, 0.15), pb.y) * (0.45 + 0.55 * pb.x);
+  stone = mix(stone, vec3(0.03, 0.03, 0.02), (1.0 - smoothstep(0.0, 0.12, pb.z)) * 0.6);
+  vec3 bedC = mix(silt, stone, pebMask * step(0.08, pb.x));
+  // green-brown algae film and dark sunken leaves
+  bedC = mix(bedC, vec3(0.04, 0.07, 0.025), smoothstep(0.5, 0.8, gfbm(p * 25.0 + 9.0)) * 0.7);
+  float leaf = smoothstep(0.82, 0.86, gn(p * 55.0 + 2.0)) * smoothstep(0.3, 0.5, gn(p * 300.0));
+  bedC = mix(bedC, vec3(0.08, 0.04, 0.015), leaf * 0.8);
   float bedMix = under;
-  col = mix(col, stone, bedMix);
-  // wet gravel at the margin
+  col = mix(col, bedC, bedMix);
+  // the wet beach: dark sand and mud, a few pebbles
   float grit = gn(p * 900.0) * 0.6 + gn(p * 2400.0) * 0.4;
-  vec3 gravel = mix(vec3(0.06, 0.05, 0.04), vec3(0.2, 0.17, 0.13), grit) * (0.8 + 0.4 * gn(p * 150.0));
-  col = mix(col, gravel, shore * (1.0 - moss));
+  vec3 sand = mix(vec3(0.07, 0.055, 0.035), vec3(0.16, 0.13, 0.09), grit) * (0.75 + 0.45 * gn(p * 120.0));
+  sand = mix(sand, stone * 0.9, pebMask * step(0.1, pb.x) * 0.8);
+  col = mix(col, sand, shore * (1.0 - moss));
   // wet margin
-  col *= mix(1.0, 0.55, shore + wet * (1.0 - moss) * 0.4);
+  col *= mix(1.0, 0.6, shore + wet * (1.0 - moss) * 0.4);
   g.color = col;
   g.rough = mix(mix(0.92, 0.82, moss), 0.35, max(shore, bedMix * 0.6));
   g.rough = mix(g.rough, 0.45, wet * 0.6);
   // bump normal
   float e = 0.0006;
-  float h0 = groundBumps(p, moss) + pb.x * 0.0025 * bedMix;
-  float hx = groundBumps(p + vec2(e, 0.0), moss) + pebbles((p + vec2(e, 0.0)) * 130.0).x * 0.0025 * bedMix;
-  float hz = groundBumps(p + vec2(0.0, e), moss) + pebbles((p + vec2(0.0, e)) * 130.0).x * 0.0025 * bedMix;
+  float pbk = 0.0018 * max(bedMix, shore) * pebMask;
+  // silt under the water is smooth; the crumb relief belongs to the dry soil
+  float soilK = 1.0 - max(bedMix, shore) * 0.85;
+  float h0 = groundBumps(p, moss) * soilK + pb.x * pbk;
+  float hx = groundBumps(p + vec2(e, 0.0), moss) * soilK + pebbles((p + vec2(e, 0.0)) * 160.0).x * pbk;
+  float hz = groundBumps(p + vec2(0.0, e), moss) * soilK + pebbles((p + vec2(0.0, e)) * 160.0).x * pbk;
   vec3 dx = vec3(e, hx - h0, 0.0), dz = vec3(0.0, hz - h0, e);
   vec3 nb = normalize(cross(dz, dx));
   vec3 n = normalize(cross(dFdy(w), dFdx(w)));
@@ -235,7 +282,7 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   vec2 cp = p * 38.0;
   float c1 = gn(cp + vec2(t * 0.35, t * 0.22)), c2 = gn(cp * 1.37 - vec2(t * 0.27, -t * 0.31));
   float caustic = pow(1.0 - abs(c1 - c2) * 2.2, 6.0);
-  g.caustic = caustic * under * 0.9;
+  g.caustic = caustic * under * 0.55 * (1.0 - depthB * 0.6);
   return g;
 }
 `;
