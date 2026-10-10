@@ -19,6 +19,129 @@
     }
   },
   {
+    "id": "2026-10-10-factual-infographic-factual-infographic-insect-phobia-the-m",
+    "title": "Factual infographic: Insect Phobia — The Moth Beyond the Glass",
+    "tests": "{\"factual_subtype\": \"phobia-infographic\", \"phobia\": \"Insect phobia\", \"hero\": \"ordinary-scale moth outside glass; fictional illustration\", \"panels\": 8, \"explanatory_diagrams\": 4}; archive_slot=2026-10-10T04:08; concept=insect-phobia-moth-glass-doorway-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported medium\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported medium. Original output retained.; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, museum-quality direct-canvas educational infographic, portrait-oriented composition selected with size auto, quality high, opaque output. Title: “INSECT PHOBIA”. Subtitle: “When a small encounter feels overwhelming”. This is an intense but compassionate, source-backed educational plate, not a diagnosis, not a photographed poster, book, room display or screen mockup. No logos, citations, URLs, invented prevalence statistics, monsters, gore, infestation, swarm, insect attack, or giant creatures. All insects remain ordinary real-world scale; anxiety belongs to perception, not a claim that the moth is dangerous.\n\nDominant hero occupying the central upper half: an adult woman with medium-brown skin, short dark hair and linen shirt steps back from an open summer garden-room doorway at dusk, hand drawn protectively toward her chest, expressive tense posture without caricature. A single small moth rests on the OUTSIDE of the glass adjacent to a warm porch light. Fine pale wing scales, slender antennae and six legs, visible at ordinary scale against the door frame. Damp slate threshold, worn timber grain, cool blue garden silhouettes, tiny condensation trails on glass, reflected amber light, subtly woven clothing, believable skin and fingers. Garden detail is embedded inside the hero illustration, not a surrounding room containing a poster. A separate magnified window clearly labeled “Illustrative close-up — not life size” shows moth wing texture and the glass barrier; it does not assert species identity. Do not show stingers, venom, bites or parasitism. Dramatic cool/warm lighting and detailed natural materials; composed fear rather than spectacle. Thin callouts connect the person to symptom diagrams, and the moth to the trigger panels.\n\nSurround this hero with EIGHT substantive numbered panels, broad readable headers, 1–2 short lines each, purposeful diagrams with generous spacing. Use large cream typography on navy, warm amber emphasis, desaturated teal help diagrams, precise linework and clean visual hierarchy. Make the panels genuinely illustrated rather than eight text boxes. At least four explanatory close-ups/diagrams: magnified moth/glass window, body-symptom map, avoidance pathway, and supported treatment step strip. Render all specified short text cleanly; no tiny paragraphs or extra unsupported facts.\n1 “More than dislike”: side-by-side calm observer and distressed observer, same small insect silhouette. Text “Intense fear beyond the actual danger.” The illustrative comparison is conceptual, not a diagnostic test.\n2 “Triggers vary”: three clearly illustrative vignettes of insect sight, movement near a window, and the thought of encountering one. Text “Seeing an insect — or anticipating one — may trigger anxiety.” No universal claim about insects or every person.\n3 “When the view is unclear”: two enlargements of the same glass edge, one blurred by reflection and one clear; accompanying thought bubble “What if it comes inside?” Text “Anticipation can feel overwhelming.” This is an illustration of worried expectation, not a claim about a sensory-processing mechanism.\n4 “Body alarm”: detailed clothed silhouette with heart, chest, stomach and trembling hand close-ups, restrained dotted leader lines. Labels “Palpitations”, “Chest tightness”, “Nausea”, “Trembling”, “Dizziness”. Small line “Symptoms differ between people.” Not an anatomical brain mechanism, not all symptoms occurring in everyone, no invented vital-sign numbers.\n5 “Avoidance can shrink life”: an illustrated pathway “Anticipate → Feel anxious → Avoid”, ending at a calendar with cancelled garden visit. A curved arrow back to anticipation is labeled “The next encounter is still feared”, showing a recurring pattern, not asserting a measured neurological cause. Caption “Daily activities may become restricted.”\n6 “Feeling is not a risk measure”: two parallel illustrations, one thought bubble filling the person's attention and one small moth behind glass, both same reality. Text “Fear can be out of proportion to the situation.” Do not claim all insects are harmless or advise touching unidentified insects.\n7 “Evidence-based help”: therapist and adult at a table with a clearly schematic, individually planned progression from talking about fear to observing an image to a planned observation at a comfortable distance, with captions “CBT”, “Gradual exposure”, “Individual plan”. Text “A qualified professional can help you plan manageable steps.” No exact schedule, forced confrontation, surprise exposures, self-directed insect handling, guarantee of cure or medication instructions.\n8 “Support and next steps”: three detailed icons, calm breathing with no timing claims, trusted conversation, health professional visit. Text “Breathing exercises and support may help.” Second line “Seek help when fear disrupts everyday life.”\n\nBottom micro-banner in readable type: “Educational illustration • Experiences and treatment needs vary”. Make the hero atmospheric and realistic while diagrams remain precise and comfortable to read. Use a coherent illustrated editorial layout with eight distinct explanatory panels, detailed insets, clean leader lines, real-world scale cues and strong typographic hierarchy. No bibliography on the artwork. Preserve all factual qualifiers.",
+    "image": "images/2026-10-10-factual-infographic-factual-infographic-insect-phobia-the-m.jpg",
+    "thumb": "thumbs/2026-10-10-factual-infographic-factual-infographic-insect-phobia-the-m.webp",
+    "color": "#475059",
+    "date": "2026-10-10",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "insect-phobia-moth-glass-doorway-avoidance",
+      "imageSha256": "ce71985e006e504cbd90ed0ca52869946db145799976965e939ccd216fede0bb",
+      "imageDHash": "25991932a7944656"
+    },
+    "factualInfographic": {
+      "topic": "Insect phobia: intense fear of insects, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "An illustrated account of insect-focused specific phobia and source-backed support, with an ordinary-scale moth beyond glass as a fictional hero situation.",
+      "sourceNote": "National Institute of Mental Health: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; NHS inform: https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/ — Verified specific animal phobia, variable symptoms, anticipation, avoidance-related restriction, CBT, gradual exposure, and supportive help. Hero scene and trigger vignettes are illustrative, not diagnostic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-10T08:10:24.111119+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Insects can be the focus of a specific animal phobia.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phobia fear is intense and out of proportion to the actual danger; it is more than ordinary dislike.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipating or thinking about the feared object can provoke intense anxiety; encountering it can also trigger anxiety.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "People with phobias may actively avoid feared objects and situations or endure them with intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include palpitations, chest tightness, nausea, trembling, dizziness, and severe worry; symptoms vary.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance of the feared object can limit daily activities and lead people to organise life around avoiding their fear.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT teaches different ways of thinking, behaving, and reacting to reduce fear and anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method particularly effective for phobias; simple-phobia treatment can involve gradually becoming exposed to the feared object.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized; a qualified mental health professional can help plan next steps.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Breathing exercises, talking with a trusted person, and support groups can help manage symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek professional help when phobia symptoms interfere with everyday life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-09-intense-phobia-situation-thalassophobia-below-the-last-surf",
     "title": "Thalassophobia — Below the Last Surface Light",
     "tests": "Phobia: Thalassophobia; prompt-design pressure devices: intimate immersion, immense depth, enclosing low visibility, remote surface. Non-factual staged documentary scene; no subjective post-generation review.; archive_slot=2026-10-09T05:20; concept=freediver-hand-open-ocean-abyss; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"low\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"mismatch\", \"qualityWarning\": \"image 1: requested quality high, backend reported low\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"low\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; Requested quality high; backend reported low. Original output retained.",
