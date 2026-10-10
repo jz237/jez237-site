@@ -12,6 +12,7 @@
  */
 
 import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+import { CITY_LIGHT_GLSL, createCityUniforms } from './city-lighting.js?v=philly-2026100901';
 
 import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
 
@@ -60,6 +61,7 @@ const VERTEX_SHADER = /* glsl */ `
 `;
 
 const FRAGMENT_SHADER = /* glsl */ `
+  ${CITY_LIGHT_GLSL}
   precision highp float;
 
   uniform sampler2D uHeight;
@@ -241,6 +243,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     aerialBase = mix(aerialBase, aerialBase * vec3(1.08, 1.13, .85), green * uDiorama * .7);
     vec3 aerialLit = aerialBase * aerialShade;
     vec3 lit = mix(reliefLit, aerialLit, surfaceImagery);
+    lit *= mix(.48,1.0,citySunVisibility(vWorld,n,uSunDir));
 
     vec3 viewDir = normalize(uCameraPos - vWorld);
     vec3 halfVec = normalize(uSunDir + viewDir);
@@ -440,6 +443,7 @@ export function createTerrain(THREE, options) {
   let hasDetail = false;
 
   const uniforms = {
+    ...(options.lighting?.uniforms || createCityUniforms(THREE)),
     ...bathymetryUniforms(THREE, heightTex),
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },

@@ -73,7 +73,7 @@ async function walk(dir) {
 }
 
 function checkSecrets(rel, text) {
-  const lines = text.split('\n');
+  const lines = text.split(/\r?\n/);
   lines.forEach((line, i) => {
     for (const [pattern, message] of SECRET_PATTERNS) {
       if (pattern.test(line)) fail(rel, i + 1, 'secret', message);
@@ -82,7 +82,7 @@ function checkSecrets(rel, text) {
 }
 
 function checkBrowserSource(rel, text) {
-  const lines = text.split('\n');
+  const lines = text.split(/\r?\n/);
 
   lines.forEach((line, i) => {
     const n = i + 1;
@@ -123,7 +123,7 @@ function checkBrowserSource(rel, text) {
 }
 
 function checkHtml(rel, text) {
-  const lines = text.split('\n');
+  const lines = text.split(/\r?\n/);
   lines.forEach((line, i) => {
     const n = i + 1;
     // Only things the browser actually *loads*. A canonical link or an og:url

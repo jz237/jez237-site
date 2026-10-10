@@ -25,7 +25,8 @@ const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
  */
 export const PRESET_EXCLUDED = new Set(['quality', 'animationSpeed', 'floodMode', 'seaLevelRise',
   'diorama', 'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era', 'imageryDetail',
-  'compareMode', 'comparePosition', 'photoMode', 'lightweight']);
+  'compareMode', 'comparePosition', 'photoMode', 'lightweight', 'cloudCoverage', 'cityShadows',
+  'streetLife']);
 /** Layers that are the viewer's own choice: a preset never switches them. */
 export const PRESET_EXCLUDED_LAYERS = new Set(['flood']);
 

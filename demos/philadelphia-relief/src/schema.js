@@ -77,6 +77,19 @@ export const CONTROLS = {
   },
 
   // ---- atmosphere --------------------------------------------------------
+  cloudCoverage: {
+    k: 'ccv', kind: 'range', min: 0, max: 1, step: .01, def: .55,
+    group: 'atmosphere', label: 'Cloud coverage',
+    hint: 'Animated cumulus clouds and drifting cloud shadows. Simulated weather.',
+  },
+  streetLife: {
+    k: 'stl', kind: 'enum', values: [1,0], def: 1, group: 'atmosphere', label: 'Street life',
+    hint: 'Simulated traffic, trees, curbs and crossings in Center City and University City.',
+  },
+  cityShadows: {
+    k: 'csh', kind: 'enum', values: [1,0], def: 1, group: 'light', label: 'Building shadows',
+    hint: 'Nearby buildings cast soft shadows onto streets and neighboring façades.',
+  },
   fogDensity: {
     k: 'fd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.32,
     group: 'atmosphere', label: 'Fog / haze density',
@@ -327,5 +340,6 @@ export const CHEAP_KEYS = new Set([
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
-  'imageryDetail', 'compareMode', 'comparePosition', 'photoMode',
+  'imageryDetail', 'compareMode', 'comparePosition', 'photoMode', 'cloudCoverage', 'cityShadows',
+  'streetLife',
 ]);
