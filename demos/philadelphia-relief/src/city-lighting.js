@@ -25,7 +25,7 @@ float cloudField(vec3 p, float time, float coverage, float base) {
 `;
 
 export const CITY_LIGHT_GLSL = /* glsl */ `
-uniform sampler2D uCityShadow;
+uniform highp sampler2D uCityShadow;
 uniform mat4 uCityShadowMatrix;
 uniform float uCityShadowOn;
 uniform vec2 uCityShadowTexel;

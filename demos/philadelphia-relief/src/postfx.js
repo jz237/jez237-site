@@ -56,12 +56,15 @@ const BLUR_FRAGMENT = /* glsl */ `
 `;
 
 const COMPOSITE_FRAGMENT = /* glsl */ `
-  precision mediump float;
+  // Reconstructing kilometre-scale positions from perspective depth needs full
+  // precision. mediump can round depth to 1 or overflow at the regional view,
+  // producing bands and invalid normals on GPUs that use native half floats.
+  precision highp float;
   uniform sampler2D uScene;
   uniform sampler2D uBloom;
   uniform float uIntensity;
   uniform float uVignette;
-  uniform sampler2D uDepth;
+  uniform highp sampler2D uDepth;
   uniform mat4 uInverseProjection;
   uniform mat4 uProjection;
   uniform vec2 uTexel;
@@ -82,7 +85,8 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
     vec3 color = scene;
     float pane=1.0-texture2D(uScene,vUv).a;
     vec3 surface=viewPosition(vUv);
-    vec3 surfaceNormal=normalize(cross(dFdx(surface),dFdy(surface)));
+    vec3 surfaceGradient=cross(dFdx(surface),dFdy(surface));
+    vec3 surfaceNormal=surfaceGradient/max(length(surfaceGradient),1e-8);
     if(dot(surfaceNormal,-surface)<0.0)surfaceNormal=-surfaceNormal;
     if(uReflections>.5&&pane>.02&&texture2D(uDepth,vUv).r<.999999){
       vec3 start=surface;

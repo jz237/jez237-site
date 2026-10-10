@@ -5,7 +5,7 @@ void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}`;
 const FRAGMENT=/* glsl */ `
 precision highp float;
 varying vec2 vUv;
-uniform sampler2D uDepth;
+uniform highp sampler2D uDepth;
 uniform mat4 uInverseProjection,uCameraWorld;
 uniform vec3 uCamera,uSun,uSunColor,uSkyColor;
 uniform float uTime,uCoverage,uBase,uSteps,uNight;
