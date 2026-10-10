@@ -1,4 +1,5 @@
 import './style.css';
+import * as THREE from 'three';
 import {Terrarium} from './lib/Terrarium';
 import {UI} from './lib/UI';
 
@@ -39,7 +40,7 @@ try {
     console.error(e);
     fail('The terrarium could not load. Please reload the page.');
   });
-  if (import.meta.env.DEV) (window as unknown as {terrarium: Terrarium}).terrarium = t;
+  if (import.meta.env.DEV) Object.assign(window, {terrarium: t, THREE});
 } catch (e) {
   console.error(e);
   fail('This terrarium needs WebGL 2. Try a current version of Chrome, Edge, Firefox or Safari.');
