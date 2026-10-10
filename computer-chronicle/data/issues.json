@@ -12,6 +12,405 @@
       "masthead": {
         "title": "Computer Chronicle",
         "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 17-23, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Enchanter Macintosh gaming lead with spellbook and CRT halftone",
+        "secondaryRail": "Tandy, Commodore, music and cinema shelves",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "visualProfile": {
+        "tone": "December 1984 holiday home-computing newsprint",
+        "motifs": [
+          "Macintosh text adventure",
+          "spellbook",
+          "MSX cartridges",
+          "Plus/4",
+          "modem"
+        ],
+        "layout": "Dense warm newspaper with red and blue section headers"
+      },
+      "currentDate": "2026-10-10",
+      "historicDate": "1984-12-17",
+      "displayDate": "Week of December 17-23, 1984",
+      "edition": "Issue 125 - Weekly 1984 Computer & Culture Chronicle",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-12-17.png",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for December 17-23, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Spellbooks, cartridge standards and social modems fill the December computer desk.",
+      "morningLine": "At the Macintosh, a novice magician wins by thinking rather than fighting.",
+      "lead": {
+        "headline": "Enchanter brings a spellbook to the Macintosh",
+        "dek": "Infocom’s adventure rewards ingenuity as a novice confronts the sorcerer Krill.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "An adventure need not begin with a drawn sword. In Infocom’s Enchanter, the Circle of Enchanters sends a novice to confront the sorcerer Krill. Marc Berman’s December COMPUTE! review follows that journey on the Macintosh, where words and spells supply the action.",
+          "Scrolls teach spells that change objects and allow communication with animals. The challenge is to discover what a magical tool can do and when to use it. Berman stresses that outwitting opponents is more effective than killing them: the keyboard becomes an instrument of deduction rather than reflex.",
+          "The review praises the adventure’s continuity, challenge and documentation, while finding some humor and writing less successful. That mixed verdict makes Enchanter more than a holiday advertisement. Its appeal rests on the sustained pleasure of solving a world whose rules must be learned.",
+          "On the Macintosh, Berman reports a 122K game and a further 139K system folder. A saved game takes 13K; he estimates room for ten saves on the game disk. Apple II, Atari and Commodore 64 disk versions are also listed. This is December review coverage, not an announcement of a new release during December 17–23."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "MSX promises a common language for home computers",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "More than a dozen electronics and computer makers are preparing inexpensive MSX machines for an anticipated American entry in early 1985, according to December’s COMPUTE! report. Microsoft developed and licensed the standard; Kazuhiko Kaye Nishi is identified as a driving force. The January Las Vegas electronics show is an expected showcase, not a completed launch.",
+            "The proposition is practical: cartridges and standards-compliant peripherals should work across brands. Sony, Yamaha, Sanyo and other licensees could offer different cabinets without making each owner start a separate software library. The reported specification includes a Z80A processor, TI 9918A video, 16 colors, 32 programmable sprites and three-channel sound.",
+            "Whether mature 8-bit hardware can compete with newer machines remains the question. The magazine projects low-end prices around $200 or less, rather than quoting an American retail offer. Software breadth and mass marketing may count as much as processor novelty."
+          ]
+        },
+        {
+          "headline": "Plus/4 improves BASIC but leaves C64 software behind",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "John J. Anderson’s December Creative Computing column finds promise and problems in Commodore’s Plus/4. Its 64K memory leaves about 60K for BASIC, and more than 75 commands broaden the language. Built-in applications cover word processing, spreadsheets and file management, alongside a machine-language monitor.",
+            "The buyer’s difficulty is compatibility. C64 software does not carry over, and joystick, cassette and cartridge connections differ. Anderson criticizes the bundled applications and expects a premium over the C64. A familiar Commodore name does not mean a familiar software shelf.",
+            "Graphics include a 320-by-200 bitmap mode, but no hardware sprites. Anderson’s wished-for compatible C128 is an editorial proposal, not an announced shipping product. His separate discussion of the Amiga Lorraine concerns a prototype acquired earlier, not a new machine launched this week."
+          ]
+        },
+        {
+          "headline": "A modem makes the home computer social",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "COMPUTE! opens its Telecomputing Today column this month with Arlan R. Levitan, an AMIS bulletin-board software designer and CompuServe assistant sysop. His subject is the people at the other end of the telephone line, not simply another solitary program.",
+            "CompuServe’s CB simulation offers conversation; The Source’s POST helps connect buyers and collectors; Delphi’s ORACLE brings questions to self-described experts. Free public bulletin boards and public-domain terminal programs provide other entrances. Levitan reports that reliable modems can cost under $100, without identifying a particular offer here.",
+            "The economics are not uniformly attractive. Levitan contrasts electronic newspaper costs of $5 to $10 with a 25-cent printed paper and describes slow adoption of electronic banking. Yet conversation and shared interests give the home computer a purpose that a new spreadsheet alone cannot supply."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Amiga Lorraine prototype",
+          "summary": "Anderson reports Commodore acquired the project earlier; prototype described as 8 MHz 68000, three custom chips for graphics/sound/I/O, 128K expandable to at least 1 MB, four-channel stereo and a 5.25-inch 320K internal floppy. These are 1984 prototype claims, NOT specifications of the later production Amiga.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Alphacom 42 thermal printer",
+          "summary": "40-column continuous-roll printer tested with C64 serial interface; black or blue paper, graphics and reverse printing; reviewer reports about $150 with interface.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Commodore 64 Logo",
+          "detail": "Commodore 64 Logo brings the educational programming language to the C64. Andrew Keith’s December COMPUTE! review lists a $69.95 price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "64 Paintbox",
+          "detail": "Chris Metcalf’s C64 graphics type-in appears in December COMPUTE!, p.118.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "VIC Music Maker",
+          "detail": "Frank Colosimo’s VIC-20 music type-in appears in December COMPUTE!, p.130.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — December editorial selection, not a sales chart",
+          "items": [
+            "Enchanter",
+            "Microsoft Flight Simulator for PC & PCjr",
+            "Elite",
+            "Things In The Dark",
+            "Chess"
+          ],
+          "confidence": "period",
+          "sourceRefs": [
+            0,
+            6
+          ]
+        },
+        {
+          "label": "Top 5 Movies — December 21-23 weekend box office",
+          "items": [
+            "Beverly Hills Cop",
+            "Dune",
+            "City Heat",
+            "2010",
+            "Pinocchio (reissue)"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "MSX low-end forecast",
+          "price": "$200.00",
+          "note": "Around $200 or less is COMPUTE!’s projection, not a verified US sale.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 16",
+          "price": "$99.00",
+          "note": "Anderson reports a 16K machine for $99; contemporary column quotation only.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Alphacom 42 plus C64 interface",
+          "price": "$150.00",
+          "note": "Generally about $150 according to the hands-on reviewer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Commodore 64 Logo",
+          "price": "$69.95",
+          "note": "Review lists $69.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Sequential MusicMate",
+          "price": "$99.00",
+          "note": "December COMPUTE! order form on p.151 offers MusicMate for $99; SONG BUILDER $39.95, SONG EDITOR and SONG PRINTER $19.95 each, SOUNDMaker $39.95; $4 shipping, California tax extra.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Boys Of Summer",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (current archive calls it Mainstream Rock Airplay)",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Run To You",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks (current archive calls it Mainstream Rock Airplay)",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks (current archive calls it Mainstream Rock Airplay)",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Do It Again",
+          "artist": "The Kinks",
+          "chart": "Billboard Top Rock Tracks (current archive calls it Mainstream Rock Airplay)",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "We Belong",
+          "artist": "Pat Benatar",
+          "chart": "Billboard Top Rock Tracks (current archive calls it Mainstream Rock Airplay)",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "BBC Domesday project",
+          "summary": "December Acorn User contents describes a school/BBC Micro-assisted modern Domesday survey on videodisc planned for the 900th anniversary in 1986; contents-level verification only.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "headline": "New Christmas releases at cinemas",
+          "summary": "Protocol opens at No. 7 and Johnny Dangerously at No. 9 in the December 21–23 domestic weekend box-office tally.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "MusicMate offers a keyboard companion",
+        "summary": "Sequential’s December COMPUTE! order form offers MusicMate for $99, SONG BUILDER for $39.95 and SONG EDITOR and SONG PRINTER for $19.95 each. Shipping is $4; California tax is extra.",
+        "tagline": "A music desk beside the computer desk.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "The software library is part of the purchase",
+        "summary": "MSX promises inter-brand cartridge compatibility, while Plus/4 buyers cannot carry over C64 software. The price of a new box is only one part of changing systems. MSX’s projected US prices are not current retail quotations.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Britain and China agree Hong Kong’s future",
+        "summary": "Britain and China sign the Joint Declaration on December 19. It sets July 1, 1997 for China’s resumption of sovereignty over Hong Kong and promises a special administrative region with high autonomy except in foreign and defence affairs, with stated policies unchanged for 50 years.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "bbsNote": {
+        "headline": "Telecomputing Today opens a social window",
+        "summary": "Dated December debut column, with identifiable sysop and platforms; summaries below are editorial notes, not fabricated BBS transcripts.",
+        "posts": [
+          {
+            "topic": "CB conversation",
+            "platform": "CompuServe",
+            "text": "Levitan describes nationwide CB simulation as a popular people-to-people feature."
+          },
+          {
+            "topic": "Classified connections",
+            "platform": "The Source / POST",
+            "text": "POST connects users looking to buy equipment or trade collectibles."
+          },
+          {
+            "topic": "Ask the network",
+            "platform": "Delphi / ORACLE",
+            "text": "Self-described experts answer questions on many subjects."
+          },
+          {
+            "topic": "Sysop and BBS software",
+            "platform": "Atari / AMIS",
+            "text": "Column introduction identifies Levitan as AMIS system designer and a CompuServe assistant sysop."
+          }
+        ],
+        "sourceRefs": [
+          0
+        ]
+      },
+      "curiosity": {
+        "headline": "A television with an MSX hiding below the picture",
+        "summary": "General’s Japanese television contains a built-in home computer.",
+        "detail": "COMPUTE!’s December MSX report describes a 14-inch General Corporation TV with its tuner and MSX computer behind a three-inch panel below the screen; attach a detachable keyboard to use it as a computer. Cartridge and printer connections are integral. Reported Japanese price converts to about $550; not a US offer or a December-week launch.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 55, December 1984 (primary issue PDF)",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_055_1984_Dec.pdf",
+          "date": "1984-12"
+        },
+        {
+          "title": "Creative Computing 10(12), p.216: Commodore’s port — John J. Anderson",
+          "url": "https://www.atarimagazines.com/creative/v10n12/216_Commodores_port_preview.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "Billboard rock chart, December 22, 1984 (HTML chart rows inspected directly)",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/",
+          "date": "1984-12-22"
+        },
+        {
+          "title": "The Numbers weekend domestic chart, December 21–23",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/12/21",
+          "date": "1984-12-21"
+        },
+        {
+          "title": "Sino-British Joint Declaration text, USC US-China Institute",
+          "url": "https://china.usc.edu/node/20322",
+          "date": "1984-12-19"
+        },
+        {
+          "title": "Centre for Computing History catalogue: Acorn User December 1984",
+          "url": "https://www.computinghistory.org.uk/det/3985/Acorn-User-December-1984/",
+          "date": "1984-12"
+        },
+        {
+          "title": "RAM/C chart transcription from Acorn User #29 p.186; underlying sales window approximately September 18",
+          "url": "https://computerhits.org/archive/acorn%20user_1984-12_bbcelectron/",
+          "date": "1984-12"
+        }
+      ],
+      "accuracyLedger": {
+        "items": [
+          "No exact-week computer launch or dated wire story was sufficiently verified; lead and three story candidates are explicitly same-month reporting/reviews.",
+          "No major computing milestone established; omitted. No verified breaking standalone gadget news; omitted.",
+          "Underground check found December Acorn User’s Software piracy letter listing and the December 2600 issue, but did not establish a reportable incident or named scene identity from inspected contents. Omitted undergroundCandidates rather than inventing groups or details.",
+          "Elite chart is publication-month evidence with an older sales window, not a December 22 game chart. Original piracy letters and additional dated InfoWorld coverage remain unverified.",
+          "Contemporary quotes are attributed to magazine reviewers. Prototype specifications, forecast prices and marketing claims must stay identified as such.",
+          "Elite is a period shelf selection, not a December-week sales ranking. Things In The Dark and Chess are magazine type-ins. Modem posts are editorial summaries, not recovered messages."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
         "dateline": "December 10-16, 1984",
         "price": "75 cents"
       },

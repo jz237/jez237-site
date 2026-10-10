@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 17-23, 1984 — Enchanter brings a spellbook to the Macintosh</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-12-17</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-17</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Infocom’s adventure rewards ingenuity as a novice confronts the sorcerer Krill. An adventure need not begin with a drawn sword. In Infocom’s Enchanter, the Circle of Enchanters sends a novice to confront the sorcerer Krill. Marc Berman’s December COMPUTE! review follows that journey on the Macintosh, where words and spells supply the action. Also this week: MSX promises a common language for home computers · Plus/4 improves BASIC but leaves C64 software behind · A modem makes the home computer social.</description>
+    </item>
     <item>
       <title>Week of December 10-16, 1984 — Ghostbusters turns the Commodore 64 into a paranormal franchise</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-12-10</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-06</guid>
       <pubDate>Fri, 18 Sep 2026 12:00:00 GMT</pubDate>
       <description>A rough but dazzling 68000 prototype promises color, sound, animation, speech, and communications in one home machine. Visitors invited behind closed doors at the Summer Consumer Electronics Show saw something very different from another beige box. Amiga&apos;s Lorraine prototype, now detailed in COMPUTE!&apos;s August issue, paired a Motorola 68000 processor with custom graphics and sound hardware intended to make animation, music, and multitasking central parts of personal computing. Also this week: Symphony and Framework Fight to Define Integrated Software · Compaq Deskpro Turns Compatibility into a Speed Contest · Questprobe Sends the Hulk into the Adventure Machine · IBM&apos;s Price Cuts Put PC-Compatible Makers in a Squeeze.</description>
-    </item>
-    <item>
-      <title>Week of July 30-August 5, 1984 — Free Software Travels the Phone Lines</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-07-30</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-30</guid>
-      <pubDate>Thu, 17 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Thousands of public-domain programs are moving through online services and local bulletin boards, challenging the idea that every useful disk must arrive in a shrink-wrapped box. A Macintosh communications program has become the calling card for a much wider movement. MIT-trained consultant Dennis Brothers wrote MacTEP after probing the new machine closely enough to make it talk over telephone lines, then gave the program away. CompuServe placed it before a reported 135,000 subscribers, and calls soon reached Brothers from Britain and the Dominican Republic. Also this week: Tramiel Takes Atari and the Ax Falls · A Fantasy Computer Game Becomes a Novel · BYTE Surveys the Small-System Frontier.</description>
     </item>
   </channel>
 </rss>
