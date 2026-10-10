@@ -29,3 +29,13 @@ test('serves SignForge with its own path and preserves app matching', async () =
  assert.equal((await worker.fetch(new Request(url,{method:'HEAD'}),env)).status,200);
  assert.equal((await worker.fetch(new Request(url.replace('/signforge/','/photocraft/'),{method:'HEAD'}),env)).status,404);
 });
+
+test('serves FilmCraft and rejects mismatched app paths', async () => {
+ const url='https://jez237.com/software-downloads/filmcraft/'+ 'c'.repeat(64) + '/FilmCraft-0.5.0-Setup-x64.exe';
+ const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
+ const response=await worker.fetch(new Request(url,{method:'HEAD'}),env);
+ assert.equal(response.status,200);
+ assert.match(response.headers.get('X-Robots-Tag'),/noindex/);
+ assert.equal(response.headers.get('Content-Disposition'),'attachment; filename="FilmCraft-0.5.0-Setup-x64.exe"');
+ assert.equal((await worker.fetch(new Request(url.replace('/filmcraft/','/photocraft/'),{method:'HEAD'}),env)).status,404);
+});

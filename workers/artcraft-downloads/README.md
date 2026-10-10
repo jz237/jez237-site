@@ -1,7 +1,7 @@
 # Unlisted ArtCraft installer downloads
 
 Standalone Worker for `/software-downloads/*`; not a Pages deployment.
-It streams only hash-addressed PhotoCraft/VectorCraft EXEs from the existing
+It streams only hash-addressed PhotoCraft/VectorCraft/SignForge/FilmCraft EXEs from the existing
 site-media R2 bucket. There is no index, upload endpoint or listing operation.
 All responses carry `X-Robots-Tag: noindex, nofollow, noarchive, nosnippet`.
 Successful downloads are attachments with no-store and no-referrer headers.
