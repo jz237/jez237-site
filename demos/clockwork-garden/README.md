@@ -227,8 +227,23 @@ Interactive modes only (`explore/pond.js`, `explore/birds.js`).
   stands above it, is read back in the water's shader through a Fresnel term and bent by its ripples, so the far bank's trunks and
   the evening sky stand upside down in it. The pass is skipped when the pool is out of the frame, is a third of the screen's
   width, and is absent on `low` (the sky's own reflection stands in) and under a frame-rate squeeze.
-- **The surface** is the fountain's (a slow swell, rings from drops, a downpour's when it rains, wake rings) at the pool's
-  scale: sparser drops, rings from wherever a duck has been.
+- **The surface is a simulation** (`explore/pondsim.js`; not on `low`, and off at the governor's detail level 2 and up, where the old analytic rings stand in).
+  A 2-D wave equation on a GPU heightfield covering the whole pool (two half-float channels, a damped Verlet step at a fixed 1/60 s, a texel about 1.2 units on `high`),
+  ripples travelling at about 30 units a second. What touches the water presses a Gaussian dent into it: the bee's downwash (every frame it is under 45 units over the
+  pool, wider and softer from higher up), a duck's paddling and dabbling, a koi rising or bolting, a dragonfly dipping, the bee touching down on a pad or a lotus. The dents
+  spread as rings, run through one another, and come back off the coping: the shore is a wall (a cell beside the stone sees its own height in place of the stone's), a
+  little of the ring is lost there. The bee flies faster than the ripples travel, so what it leaves is a **Mach wedge**: two arms of crests opening behind it, with white
+  water where the field is steep. The lily pads, their flowers, the autumn leaves and the ducks read the field in their vertex shaders at their centres and rise and tilt
+  with it (the pads rock as a wake passes). Nothing is read back to the CPU. The fountain's analytic drops stay for the rain, and for the `low` tier's rings.
+- **The water is deep and clear.** The shader sends the line of sight into the water (bent by the ripple normal) to a bed that is a bowl (2.5 units at the shore, shelving to
+  about 32 in the middle; the depth comes from a small mask texture of the pool's outline that the wave field shares), with gravel near the shore, silt and a film of algae
+  in the deep, a net of caustics drifting over it (sunlit, fading with depth), and Beer-Lambert absorption taking the red out the deeper the ray goes, so the shallows show
+  stones and the middle is a dark green. It is added as the light the water lets through (what the surface does not reflect), under the mirror's reflection, so the pool is
+  glass at a grazing angle and a window from above. **Small wind waves** (four trains a few units long, running downwind, phases broken by noise, rougher in gusts that
+  cross the pool: the wind strength drives them) give the surface its grain, a **sun glitter** on them (a narrow lobe, warm toward the horizon, thinned by cloud) a
+  column of sparks toward the sun, and a lace of foam sits along the shore. Gated: not on `low` (the old sky-on-water look), and the bed, the wind waves and the glitter go
+  at detail level 2.
+- **The older surface** is the fountain's (a slow swell, rings from drops, a downpour's when it rains), at the pool's scale: sparser drops.
 - **Life in it**: water lilies and flowers on their pads, reeds clumped along some stretches of the margin that bend and nod in the
   breeze, eight mallards drifting about on slow loops that turn to face their way, bank into it, and now and then tip up to dabble.
 - **Koi** swim under the surface (three to seven, by tier): orange, white-and-orange, gold and calico, each a soft fish drawn in the
@@ -701,7 +716,7 @@ src/explore/                   the interactive modes:
   fountain.js · rain.js · weather.js  the living fountain (water, wake, caustic stone) · weather (rain, lightning, the
                                  sky's overcast, the streaks) · its shared uniforms (world/weatherU.js)
   scenery.js · outside.js        the land, its trees and light · what stands on it (manor, temple, gate, lamps, borders, shadows, leaves)
-  pond.js · birds.js             the reflecting pool (mirror pass, lilies, reeds, ducks) · geese, swallows and a murmuration of starlings
+  pond.js · pondsim.js · birds.js  the reflecting pool (mirror pass, bed and caustics, lilies, reeds, ducks) · its wave field (the dents, the wake, the shore's reflection) · geese, swallows and a murmuration of starlings
   outdoors.js                    what it sounds like out there: wind, water, ducks, flocks, songbirds, frogs, crickets, an owl
   nightflies.js · dragonflies.js fireflies over the pool at night (reflected in it) · dragonflies by day (dashing, hanging, dipping)
   beelights.js                   APX-9's navigation lights (wingtips, tail, strobe, lamp and beam, light-painted wing arcs)
