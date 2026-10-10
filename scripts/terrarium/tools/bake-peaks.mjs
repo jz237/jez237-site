@@ -154,7 +154,7 @@ function rockDisplace(x, y, z) {
   const sy = y + x * 0.25 + z * 0.15;
   const strata = 1 - Math.abs(Math.sin(sy * 120 + fbm3(x * 15, y * 15, z * 15, 2) * 4));
   // ridges stand proud (subtracting the ridged field) so edges read sharp
-  return cols * 0.0022 - (big - 0.5) * 0.014 - (frac - 0.5) * 0.006 + (grain - 0.5) * 0.0008 - strata * strata * strata * 0.0016;
+  return cols * 0.0032 - (big - 0.5) * 0.014 - (frac - 0.5) * 0.007 + (grain - 0.5) * 0.0008 - strata * strata * strata * 0.0007;
 }
 
 function sdf(x, y, z) {

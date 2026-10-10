@@ -112,24 +112,24 @@ float isSpike = step(0.005, spikeT);
 float headW = smoothstep(9.4, 10.0, P.x);
 float tailW = smoothstep(-0.3, -1.6, P.x);
 // --- scales ---
-float freq = mix(10.0, 8.0, belly) * mix(1.0, 0.85, tailW);
+float freq = mix(11.0, 8.5, belly) * mix(1.0, 0.88, tailW);
 vec3 sp = P * freq;
 sp.x *= mix(1.0, 0.72, max(belly, tailW * 0.6));
 vec3 sGrad, sCell;
-float sH = lzScale(sp, 0.85, 0.42, mix(0.7, 0.35, belly), sGrad, sCell);
+float sH = lzScale(sp, 0.9, 0.48, mix(0.75, 0.4, belly), sGrad, sCell);
 sGrad *= freq;
 float pix = length(fwidth(P)) * freq;
-float detail = (1.0 - smoothstep(0.35, 1.0, pix)) * (1.0 - isSpike * smoothstep(0.02, 0.15, spikeT));
+float detail = (1.0 - smoothstep(0.5, 1.6, pix)) * (1.0 - isSpike * smoothstep(0.02, 0.15, spikeT));
 // Larger head plates.
 float plate = headW * smoothstep(-0.1, 0.4, yn) * (1.0 - belly);
 vec3 hGrad = vec3(0.0), hCell = vec3(0.5);
 float hH = 0.0;
 if (plate > 0.01) {
-  float hf = 8.5;
-  hH = lzScale(P * hf + vec3(13.7), 0.9, 0.3, 0.55, hGrad, hCell);
+  float hf = 10.0;
+  hH = lzScale(P * hf + vec3(13.7), 0.95, 0.42, 0.65, hGrad, hCell);
   hGrad *= hf;
   float hpix = length(fwidth(P)) * hf;
-  float hdetail = 1.0 - smoothstep(0.35, 1.0, hpix);
+  float hdetail = 1.0 - smoothstep(0.5, 1.6, hpix);
   sH = mix(sH, hH, plate); sGrad = mix(sGrad, hGrad, plate) * mix(detail, hdetail, plate) / max(detail, 1e-3);
   sCell = mix(sCell, hCell, plate);
   detail = mix(detail, hdetail, plate);
@@ -154,15 +154,15 @@ vec3 g0, g1;
 vec3 spot = lzVoronoi(vec3(P.x * 1.5, P.y * 0.6, P.z * 1.5), 0.8, g0, g1);
 float spots = (1.0 - smoothstep(0.24, 0.36, spot.x)) * smoothstep(0.35, 0.75, zn) * torso * up;
 float ring = smoothstep(0.24, 0.32, spot.x) * (1.0 - smoothstep(0.34, 0.46, spot.x)) * smoothstep(0.35, 0.75, zn) * torso * up;
-col = mix(col, cLight * 1.05, spots * 0.4);
-col = mix(col, cDark, ring * 0.25);
+col = mix(col, cLight * 1.1, spots * 0.6);
+col = mix(col, cDark, ring * 0.4);
 // Tail banding.
 float tb = smoothstep(0.2, 0.75, sin(P.x * 2.3 + mott));
 col = mix(col, mix(col, cDark, 0.55), tb * tailW * up * 0.8);
 col = mix(col, cLight, (1.0 - tb) * tailW * up * 0.18);
 // Dark streak from the eye toward the ear.
 float streak = headW * exp(-pow((P.y - (pr.w + 0.12 + (P.x - 10.9) * 0.08)) / 0.13, 2.0)) * smoothstep(9.6, 10.3, P.x) * (1.0 - smoothstep(11.0, 11.4, P.x)) * smoothstep(0.6, 0.95, zn);
-col = mix(col, cDark, streak * 0.6);
+col = mix(col, cDark, streak * 0.75);
 // Lighter lips and labial scales.
 float lip = headW * smoothstep(0.85, 0.98, zn) * exp(-pow((yn + 0.12) / 0.18, 2.0));
 col = mix(col, cBelly * 0.9, lip * 0.6);
@@ -175,9 +175,12 @@ col = mix(col, cBeard, beard * (0.45 + 0.55 * uDisplay));
 float limb = 1.0 - onLoft;
 col = mix(col, mix(col, cDark, 0.4), limb * smoothstep(0.3, 0.8, sin((P.y + P.x * 0.4) * 5.0 + mott * 3.0)) * up * 0.6);
 // Per-scale tint and crevices.
-float tint = 0.86 + 0.28 * sCell.z;
-col *= mix(1.0, tint, detail * 0.9);
-col *= mix(1.0, 0.72 + 0.28 * smoothstep(0.0, 0.7, sH), detail);
+float tint = 0.93 + 0.14 * sCell.z;
+// salt-and-pepper: occasional dark and pale scales
+float sp1 = fract(sCell.z * 17.31);
+tint *= sp1 < 0.07 ? 0.62 : (sp1 > 0.93 ? 1.3 : 1.0);
+col *= mix(1.0, tint, detail);
+col *= mix(1.0, 0.84 + 0.16 * smoothstep(0.0, 0.6, sH), detail);
 // far away: the average of scale tops and darker crevices, plus fine mottling
 col = mix(col, col * (0.8 + 0.12 * lzNoise(P * 9.0)), (1.0 - detail) * 0.9);
 // Spines: pale horn tips.
@@ -185,7 +188,7 @@ col = mix(col, vec3(0.42, 0.32, 0.2), isSpike * smoothstep(0.35, 1.0, spikeT) * 
 // Claws and mouth.
 vec3 claw = mix(vec3(0.07, 0.06, 0.05), vec3(0.42, 0.37, 0.3), smoothstep(0.4, 1.0, vAux.y) * 0.3);
 col = mix(col, claw, smoothstep(0.25, 0.6, vAux.y));
-float deep = smoothstep(0.55, 0.25, zn);
+float deep = smoothstep(0.4, 0.15, zn);
 col = mix(col, mix(vec3(0.07, 0.035, 0.03), vec3(0.5, 0.19, 0.16), deep), vAux.z);
 // Dust on the dry skin.
 col = mix(col, vec3(0.45, 0.37, 0.27), uDust * up * (0.5 + 0.5 * lzNoise(P * 6.0)) * (1.0 - uWet));

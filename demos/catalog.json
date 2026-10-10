@@ -407,5 +407,29 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Desktop & touch controls · Preview captured from the running demo"
+  },
+  {
+    "id": "019",
+    "title": "Weatherglass Terrarium",
+    "category": "3D · Living terrarium",
+    "description": "A photoreal rainforest under glass with a living bearded dragon. It basks, explores, drinks, waves and hunts crickets while you move the clouds, wring out rain, blow wind, raise mist and wipe the fogged glass.",
+    "url": "terrarium/",
+    "image": "assets/terrarium.jpg",
+    "imageAlt": "Actual Weatherglass Terrarium scene: a bearded dragon basking on driftwood beside basalt peaks, a waterfall and pool, ferns and moss inside a brass-framed glass case with three small clouds",
+    "imageWidth": 1440,
+    "imageHeight": 900,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/terrarium",
+    "features": [
+      "Procedurally sculpted, skinned lizard",
+      "IK gait, dragging tail & behaviour",
+      "Rain, mist, wind & wipeable glass",
+      "Follow camera & lamp day cycle"
+    ],
+    "facts": [
+      "Three.js · WebGL 2",
+      "Procedural + CC0 scans",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Best on desktop GPUs · Preview captured from the running demo"
   }
 ]

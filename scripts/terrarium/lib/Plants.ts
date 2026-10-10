@@ -32,7 +32,7 @@ export class MossMap {
       m *= 1 - 0.8 * path;
       // shore: wet gravel rather than moss
       const pd = poolDistance(x, z);
-      m *= Math.min(1, Math.max(0, (pd - 0.05) / 0.25));
+      m *= Math.min(1, Math.max(0, (pd - 0.04) / 0.1));
       this.data[j * this.w + i] = m;
       bytes[j * this.w + i] = m * 255;
     }
@@ -256,7 +256,7 @@ if (vKind < 0.5) { // pilea: radiating veins from the peltate point
   vein = mid * 0.5;
 } else { // fallen leaf litter
   float t = vInstTint;
-  col = mix(vec3(0.16, 0.08, 0.035), vec3(0.32, 0.2, 0.08), t);
+  col = mix(vec3(0.07, 0.04, 0.02), vec3(0.17, 0.1, 0.045), t);
   col = mix(col, vec3(0.08, 0.05, 0.03), smoothstep(0.5, 0.9, ln(vec2(u, v) * 6.0 + t * 10.0)) * 0.7);
   vein = mid * 0.3;
 }
@@ -394,23 +394,23 @@ export class Plants {
 
   /** Fallen leaves on the bare soil and under the plants. */
   private litter(surface: Surface, rnd: () => number) {
-    const leaf = leafGeometry({length: 1, width: 0.55, shape: (u) => Math.pow(Math.sin(Math.PI * Math.pow(u, 0.8)), 0.8), arch: 0.04, cup: 0.35, twist: 0.4, segs: [8, 4]});
+    const leaf = leafGeometry({length: 1, width: 0.5, shape: (u) => Math.pow(Math.sin(Math.PI * Math.pow(u, 0.8)), 0.8), arch: 0.02, cup: 0.12, twist: 0.25, segs: [8, 4]});
     const n = leaf.attributes.position.count;
     leaf.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(n).fill(5), 1));
     leaf.setAttribute('aTint', new THREE.BufferAttribute(new Float32Array(n).fill(0.5), 1));
     const mat = leafMaterial();
     const list: THREE.Matrix4[] = [];
-    for (let i = 0; i < 1400 && list.length < 340; i++) {
+    for (let i = 0; i < 1400 && list.length < 140; i++) {
       const x = (rnd() - 0.5) * (TANK.w - 0.02), z = (rnd() - 0.5) * (TANK.d - 0.02);
       const k = surface.kindAt(x, z);
       if (k === SurfaceKind.Water || k === SurfaceKind.Rock) continue;
       const y = surface.heightAt(x, z);
       if (y < WATER_LEVEL + 0.002) continue;
       const bare = 1 - this.moss.at(x, z);
-      if (rnd() > bare * 0.9 + 0.06) continue;
+      if (rnd() > bare * 0.8 + 0.02) continue;
       const nrm = surface.normalAt(x, z);
       const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), nrm).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.5, rnd() * 6.28, (rnd() - 0.5) * 0.3)));
-      const s = 0.012 + rnd() * 0.016;
+      const s = 0.008 + rnd() * 0.009;
       list.push(new THREE.Matrix4().compose(new THREE.Vector3(x, y + 0.0008, z), q, new THREE.Vector3(s, s, s)));
     }
     const inst = new THREE.InstancedMesh(leaf, mat, list.length);
@@ -431,9 +431,13 @@ export class Plants {
       ['fittonia', -0.12, 0.14, 1.0], ['fittonia', 0.42, -0.1, 1.0], ['fittonia', -0.56, 0.02, 0.9], ['fittonia', 0.26, -0.09, 0.8],
       ['cryptanthus', -0.47, 0.0, 1.0], ['cryptanthus', 0.16, -0.0, 0.85],
       ['creeper', -0.58, 0.2, 1], ['creeper', -0.32, 0.21, 1], ['creeper', -0.05, 0.215, 1], ['creeper', 0.58, -0.08, 1],
+      ['fittonia', 0.4, -0.09, 1.0], ['pilea', 0.5, -0.1, 1.1], ['fittonia', 0.56, -0.06, 0.9], ['pilea', 0.33, -0.1, 0.8],
+      ['creeper', 0.36, -0.06, 1], ['creeper', 0.47, -0.05, 1], ['fittonia', 0.12, -0.07, 0.8],
     ];
     const parts: THREE.BufferGeometry[] = [];
     for (const [kind, x, z, s] of plants) {
+      // keep land plants out of the water
+      if (poolDistance(x, z) < 0.06) continue;
       const site = this.site(surface, x, z);
       const local = kind === 'pilea' ? pilea(rnd) : kind === 'fittonia' ? fittonia(rnd) : kind === 'cryptanthus' ? cryptanthus(rnd) : creeper(rnd, 0.12 + rnd() * 0.06);
       const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.002, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rnd() * 6.28, 0)), new THREE.Vector3(s, s, s));

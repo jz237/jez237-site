@@ -116,6 +116,8 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
     this.mesh.castShadow = false;
     this.mesh.frustumCulled = false;
     this.mesh.name = 'moss-shells';
+    // Layer 5: drawn by the main camera, skipped by the pool's mirror render.
+    this.mesh.layers.set(5);
   }
 
   /** Flattens the carpet under a resting body (x, z, radius, amount). */

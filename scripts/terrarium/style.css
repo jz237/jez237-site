@@ -92,3 +92,4 @@ body.no-ui .show-ui { display: block; }
   .tools button { width: 46px; }
   .readout { gap: 9px; }
 }
+body.present .show-ui { display: none !important; }

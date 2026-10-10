@@ -45,7 +45,7 @@ float strata = sin((P.y + P.x * 0.25 + P.z * 0.15) * 120.0 + pf(P * 15.0) * 4.0)
 float tone = pf(P * 30.0);
 vec3 basalt = mix(vec3(0.022, 0.021, 0.02), vec3(0.065, 0.06, 0.055), tone);
 basalt = mix(basalt, vec3(0.1, 0.09, 0.08), smoothstep(0.75, 0.95, pn(P * vec3(90.0, 12.0, 90.0))) * 0.5);
-basalt *= 0.85 + 0.3 * strata * strata;
+basalt *= 0.9 + 0.18 * strata * strata;
 // pale lichen speckles on exposed faces
 float lichen = smoothstep(0.78, 0.86, pf(P * 160.0)) * smoothstep(-0.2, 0.4, N.z + 0.3) * (1.0 - smoothstep(0.6, 0.9, up));
 basalt = mix(basalt, vec3(0.32, 0.33, 0.27), lichen * 0.55);
@@ -55,8 +55,8 @@ float mossN = pf(P * 45.0);
 float mossBig = pf(P * 14.0);
 float moss = smoothstep(0.62, 0.78, up * 0.75 + mossBig * 0.5 + crev * 0.2 + mossN * 0.15 - 0.12);
 moss = max(moss, smoothstep(0.76, 0.86, mossBig + crev * 0.3) * 0.8);
-vec3 mossC = mix(vec3(0.03, 0.06, 0.012), vec3(0.1, 0.16, 0.03), pf(P * 160.0));
-mossC = mix(mossC, vec3(0.2, 0.22, 0.05), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.4);
+vec3 mossC = mix(vec3(0.022, 0.045, 0.01), vec3(0.07, 0.115, 0.022), pf(P * 160.0));
+mossC = mix(mossC, vec3(0.13, 0.15, 0.035), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.35);
 // wet dark streak where the cascade runs
 float cd = length((P.xz - uCascade.xy) / vec2(0.07, 0.16));
 float wetC = smoothstep(1.0, 0.5, cd) * smoothstep(0.45, 0.13, P.y);

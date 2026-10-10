@@ -47,6 +47,9 @@ export class LizardBrain {
   private huntPhase: 'notice' | 'approach' | 'fix' | 'strike' | 'chew' | 'lick' = 'notice';
   private phaseT = 0;
   private lapCount = 0;
+  private drinkPitch = -0.55;
+  private huntGoal: [number, number] | null = null;
+  private misses = 0;
   private gapeT = 0;
   private displayKind: 'bob' | 'wave' = 'bob';
   private boredom = 0;
@@ -92,7 +95,7 @@ export class LizardBrain {
       walk: {clearance: 0.75, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
       rest: {clearance: 0.12, chestLift: 0.45, headPitch: 0.02, lid: 1, breath: 1},
       sleep: {clearance: -0.15, chestLift: -0.2, headPitch: -0.22, lid: 0, breath: 0.6},
-      drink: {clearance: 0.4, chestLift: -0.35, headPitch: -0.55, lid: 1, breath: 1},
+      drink: {clearance: 0.25, chestLift: -0.6, headPitch: -0.55, lid: 1, breath: 1},
     };
     this.poseGoal = {...p[kind]};
   }
@@ -113,34 +116,40 @@ export class LizardBrain {
     return true;
   }
 
-  /** Points on the shore where the head can reach the water. */
+  /** A body position on the shore from which the head reaches over the water. */
   private drinkSpot(): [number, number, number] | null {
     const I = this.rig.inputs;
     const candidates: [number, number, number, number][] = [];
-    for (let a = 0; a < Math.PI * 2; a += 0.12) {
-      for (let r = 0.9; r < 1.7; r += 0.04) {
-        const x = POOL.cx + Math.cos(a) * POOL.rx * r, z = POOL.cz + Math.sin(a) * POOL.rz * r;
-        if (Math.abs(z) > TANK.d / 2 - 0.04 || Math.abs(x) > TANK.w / 2 - 0.04) break;
-        if (poolDistance(x, z) > 0.04 && this.nav.walkable(x, z)) {
-          const heading = Math.atan2(-(POOL.cz - z), POOL.cx - x);
-          // back the body off so the snout sits over the shallows
-          const d = Math.hypot(x - I.x, z - I.z);
-          candidates.push([x, z, heading, d]);
-          break;
+    for (let x = POOL.cx - POOL.rx * 1.5; x <= POOL.cx + POOL.rx * 1.5; x += 0.012) {
+      for (let z = POOL.cz - POOL.rz * 1.6; z <= Math.min(TANK.d / 2 - 0.04, POOL.cz + POOL.rz * 1.6); z += 0.012) {
+        if (!this.nav.walkable(x, z) || poolDistance(x, z) < 0.03) continue;
+        const ground = this.surface.heightAt(x, z);
+        if (ground > WATER_LEVEL + 0.035) continue;
+        // face the nearest open water
+        let best = -1, bestA = 0;
+        for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
+          const hx = x + Math.cos(a) * 0.085, hz = z - Math.sin(a) * 0.085;
+          const d = -poolDistance(hx, hz);
+          if (d > best) {best = d; bestA = a;}
         }
+        if (best < 0.02) continue;
+        // front feet must stay dry
+        const fx = x + Math.cos(bestA) * 0.035, fz = z - Math.sin(bestA) * 0.035;
+        if (poolDistance(fx, fz) < 0.01) continue;
+        candidates.push([x, z, bestA, Math.hypot(x - I.x, z - I.z)]);
       }
     }
     if (!candidates.length) return null;
     candidates.sort((a, b) => a[3] - b[3]);
-    const pick = candidates[Math.floor(rnd() * Math.min(5, candidates.length))];
-    // step back so the head (≈ 9 cm ahead of the body centre) reaches the edge
-    const back = 0.05;
-    return [pick[0] - Math.cos(pick[2]) * back, pick[1] + Math.sin(pick[2]) * back, pick[2]];
+    return candidates[Math.floor(rnd() * Math.min(6, candidates.length))].slice(0, 3) as [number, number, number];
   }
 
   private chooseActivity() {
     if (this.night) {
-      if (!this.goTo(this.sleepSpot[0], this.sleepSpot[1], 'sleep', 0.08)) this.setMode('sleep', 'Asleep');
+      // Sleeps where it basks if it is already up on the log; otherwise in the ferns.
+      const I = this.rig.inputs;
+      if (Math.hypot(I.x - this.baskSpot[0], I.z - this.baskSpot[1]) < 0.06) {this.setMode('sleep', 'Falling asleep'); return;}
+      if (!this.goTo(this.sleepSpot[0], this.sleepSpot[1], 'sleep', 0.08)) this.setMode('sleep', 'Falling asleep');
       return;
     }
     const prey = this.insects.nearest(this.rig.snout);
@@ -172,6 +181,8 @@ export class LizardBrain {
 
   startHunt(c: Cricket) {
     this.prey = c;
+    this.path = [];
+    this.huntGoal = null;
     this.huntPhase = 'notice';
     this.phaseT = 0;
     this.setMode('hunt', 'Spotted a cricket');
@@ -195,6 +206,8 @@ export class LizardBrain {
     I.bob = damp(I.bob, 0, 20, dt);
     I.wave = damp(I.wave, 0, 3, dt);
     I.display = damp(I.display, 0, 1.5, dt);
+    const twitch = this.mode === 'hunt' && (this.huntPhase === 'approach' || this.huntPhase === 'fix') ? 1 : 0;
+    I.tailTwitch = damp(I.tailTwitch, twitch, 6, dt);
     let targetSpeed = 0, targetTurn = 0;
 
     // Sudden close movement of the pointer near the head makes it flinch away.
@@ -205,10 +218,14 @@ export class LizardBrain {
       this.pointerPrev.copy(this.pointer);
     }
     // Prey appearing interrupts calm activities.
-    if (!this.night && this.mode !== 'hunt' && this.mode !== 'startle' && this.modeT > 0.8) {
+    this.boredom = Math.max(0, this.boredom - dt);
+    if (!this.night && this.mode !== 'hunt' && this.mode !== 'startle' && this.modeT > 0.8 && this.boredom <= 0) {
       const prey = this.insects.nearest(this.rig.snout);
       if (prey && !prey.airborne && prey.pos.distanceTo(this.rig.snout) < 0.6) this.startHunt(prey);
     }
+
+    // Lights out: wind down promptly.
+    if (this.night && (this.mode === 'bask' || this.mode === 'idle' || this.mode === 'display') && this.modeT > 2.5) this.chooseActivity();
 
     switch (this.mode) {
       case 'bask': {
@@ -259,6 +276,9 @@ export class LizardBrain {
         this.posePreset('drink');
         this.status = 'Drinking';
         this.rig.inputs.look = null;
+        // lower the head until the mouth meets the water
+        this.drinkPitch = clamp(this.drinkPitch - (this.rig.mouth.y - (WATER_LEVEL + 0.002)) * 22 * dt, -1.1, 0.2);
+        this.poseGoal.headPitch = this.drinkPitch;
         const lapT = this.modeT - 0.8;
         if (lapT > 0) {
           const ph = (lapT * 1.8) % 1;
@@ -270,7 +290,7 @@ export class LizardBrain {
             this.onLap?.(this.rig.mouth.clone());
           }
         }
-        if (this.modeT > 6 + rnd() * 50 * dt) {this.lapCount = 0; this.setMode('idle', 'Watching');}
+        if (this.modeT > 6 + rnd() * 50 * dt) {this.lapCount = 0; this.drinkPitch = -0.55; this.setMode('idle', 'Watching');}
         break;
       }
       case 'hunt': {
@@ -281,7 +301,7 @@ export class LizardBrain {
       case 'sleep': {
         this.posePreset('sleep');
         I.look = null;
-        this.status = 'Asleep';
+        this.status = this.modeT < 4 ? 'Falling asleep' : 'Asleep';
         if (!this.night && this.modeT > 3) {this.posePreset('alert'); this.setMode('idle', 'Waking up');}
         break;
       }
@@ -375,6 +395,7 @@ export class LizardBrain {
   private travel(dt: number) {
     const I = this.rig.inputs;
     if (!this.path.length || this.pathI >= this.path.length) {
+      if (this.mode === 'hunt') return {speed: 0, turn: 0};
       this.setMode(this.after, this.after === 'bask' ? 'Basking under the lamp' : this.after === 'drink' ? 'Drinking' : this.after === 'sleep' ? 'Asleep' : 'Watching');
       if (this.after === 'bask') this.posePreset('bask');
       return {speed: 0, turn: 0};
@@ -402,7 +423,7 @@ export class LizardBrain {
     const remaining = d + this.path.slice(this.pathI + 1).reduce((s, p, i, arr) => s + (i === 0 ? Math.hypot(p[0] - wx, p[1] - wz) : Math.hypot(p[0] - arr[i - 1][0], p[1] - arr[i - 1][1])), 0);
     speed *= clamp(remaining / 0.04, 0.35, 1);
     this.burstLeft -= this.speed * dt;
-    if (this.burstLeft <= 0 && this.mode === 'travel' && remaining > 0.06) {
+    if (this.burstLeft <= 0 && (this.mode === 'travel' || this.mode === 'hunt') && remaining > 0.06) {
       this.pauseT = 0.4 + rnd() * (rnd() < 0.3 ? 2.6 : 1.0);
     }
     return {speed, turn};
@@ -426,22 +447,42 @@ export class LizardBrain {
         return {speed: 0, turn: Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
       case 'approach': {
         this.status = 'Stalking';
-        this.posePreset('alert');
-        if (c.airborne) return {speed: 0, turn: 0};
-        if (flat < 0.05 && Math.abs(err) < 0.35) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
-        // stalk: slow, with frequent freezes
-        const stepping = (this.phaseT % 1.1) < 0.65;
-        const speed = stepping && Math.abs(err) < 0.8 ? 0.06 : 0;
-        if (!this.nav.walkable(I.x + Math.cos(I.heading) * 0.02, I.z - Math.sin(I.heading) * 0.02) && flat > 0.08) {
-          // prey out of reach (on rock or in water): give up for now
-          if (this.phaseT > 6) {this.prey = null; this.setMode('idle', 'Watching');}
-          return {speed: 0, turn: this.turnToward(want)};
+        if (c.airborne) {this.posePreset('alert'); return {speed: 0, turn: 0};}
+        const mouthD = c.pos.distanceTo(this.rig.mouth);
+        if (mouthD < 0.055 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
+        if (this.phaseT > 14) {this.prey = null; this.boredom = 10; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
+        // Plan a route to a spot just short of the prey; replan if it moves.
+        const stand = 0.085;
+        const ax = c.pos.x - Math.cos(want) * stand, az = c.pos.z + Math.sin(want) * stand;
+        const moved = !this.huntGoal || Math.hypot(this.huntGoal[0] - ax, this.huntGoal[1] - az) > 0.03;
+        if (moved || !this.path.length) {
+          const path = this.nav.path(I.x, I.z, ax, az);
+          this.huntGoal = [ax, az];
+          if (!path) {
+            if (this.phaseT > 4) {this.prey = null; this.setMode('idle', 'Watching');}
+            return {speed: 0, turn: this.turnToward(want)};
+          }
+          this.path = path;
+          this.pathI = 1;
+          this.cruise = flat > 0.25 ? 0.12 : 0.05;
+          this.burstLeft = 0.05;
         }
-        return {speed, turn: clamp(err * 5, -2.5, 2.5)};
+        if (this.pathI >= this.path.length) {
+          // at the stand-off point: creep and face the prey; strike from a little further if it cannot get closer
+          const ahead = this.nav.walkable(I.x + Math.cos(I.heading) * 0.015, I.z - Math.sin(I.heading) * 0.015);
+          if (!ahead && mouthD < 0.075 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
+          return {speed: Math.abs(err) < 0.3 && mouthD > 0.05 && ahead ? 0.03 : 0, turn: clamp(err * 5, -2.5, 2.5)};
+        }
+        const r = this.travel(dt);
+        // stalking: look only at the prey, freeze often
+        this.lookPoint.copy(c.pos);
+        I.look = this.lookPoint;
+        if (this.mode !== 'hunt') this.mode = 'hunt';
+        return r;
       }
       case 'fix':
         this.status = 'Fixating';
-        if (flat > 0.075 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
+        if (c.pos.distanceTo(this.rig.mouth) > 0.085 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
         if (this.phaseT > 0.35 + rnd() * 0.02) {this.huntPhase = 'strike'; this.phaseT = 0;}
         return {speed: 0, turn: clamp(err * 6, -2, 2)};
       case 'strike': {
@@ -450,22 +491,24 @@ export class LizardBrain {
         I.lunge = k < 0.09 ? k / 0.09 : Math.max(0, 1 - (k - 0.09) / 0.25);
         I.jaw = k < 0.12 ? 0.85 : I.jaw;
         I.tongue = k < 0.14 ? 0.7 : I.tongue;
-        if (k > 0.08 && k < 0.16 && !c.caught && c.pos.distanceTo(this.rig.mouth) < 0.022) {
+        // the sticky tongue extends the reach of the snap
+        if (k > 0.06 && k < 0.18 && !c.caught && c.pos.distanceTo(this.rig.mouth) < 0.04) {
           c.caught = true;
           c.airborne = false;
         }
         if (k > 0.3) {
           this.phaseT = 0;
-          if (c.caught) {this.huntPhase = 'chew';} else {this.huntPhase = 'approach';}
+          if (c.caught) {this.huntPhase = 'chew';} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix';}
+          if (this.misses > 5) {this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
         }
-        return {speed: k < 0.1 ? 0.25 : 0, turn: 0};
+        return {speed: k < 0.1 ? 0.32 : 0, turn: clamp(err * 6, -3, 3)};
       }
       case 'chew': {
         this.status = 'Eating';
         I.look = null;
         this.poseGoal.headPitch = 0.2;
         I.jaw = 0.18 + 0.2 * Math.max(0, Math.sin(this.phaseT * 13));
-        if (this.phaseT > 2.4) {c.eaten = true; this.huntPhase = 'lick'; this.phaseT = 0;}
+        if (this.phaseT > 2.4) {c.eaten = true; this.misses = 0; this.huntPhase = 'lick'; this.phaseT = 0;}
         return {speed: 0, turn: 0};
       }
       case 'lick': {

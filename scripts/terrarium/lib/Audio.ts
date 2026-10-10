@@ -17,6 +17,15 @@ export class TerrariumAudio {
 
   get running() {return !!this.ctx && this.ctx.state === 'running';}
 
+  constructor() {
+    // Fall silent while the page is hidden.
+    document.addEventListener('visibilitychange', () => {
+      if (!this.ctx) return;
+      if (document.hidden) void this.ctx.suspend();
+      else void this.ctx.resume();
+    });
+  }
+
   start() {
     if (this.ctx) {void this.ctx.resume(); return;}
     const AC = window.AudioContext || (window as unknown as {webkitAudioContext: typeof AudioContext}).webkitAudioContext;

@@ -1,11 +1,12 @@
 {
- "built": "2026-10-10T17:25:47.320Z",
+ "built": "2026-10-10T18:02:59.666Z",
  "files": [
-  "assets/main-BOSXLAUM.js",
-  "assets/main-o947WhyO.css",
+  "README.md",
+  "assets/main-Ck17ap_Q.js",
+  "assets/main-DBHL9MpB.css",
   "favicon.svg",
   "index.html",
-  "lizard/lizard-95feb064ad84.bin",
+  "lizard/lizard-a2b259ac1f3a.bin",
   "lizard/lizard.json",
   "models/ATTRIBUTION.md",
   "models/dead_tree_trunk_02/dead_tree_trunk_02.bin",
@@ -33,7 +34,7 @@
   "models/rock_moss_set_01/textures/rock_moss_set_01_diff_2k.jpg",
   "models/rock_moss_set_01/textures/rock_moss_set_01_nor_gl_2k.jpg",
   "models/rock_moss_set_01/textures/rock_moss_set_01_rough_2k.jpg",
-  "peaks/peaks-aff76add18a8.bin",
+  "peaks/peaks-0b672bcb042a.bin",
   "peaks/peaks.json"
  ]
 }

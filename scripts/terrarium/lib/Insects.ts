@@ -68,8 +68,14 @@ export class Cricket {
       this.walkT -= dt;
       if (this.hopT < 0) {
         this.hopT = 1.5 + Math.random() * 4;
-        this.heading += (Math.random() - 0.5) * 2.2;
-        const s = 0.35 + Math.random() * 0.45;
+        // pick a hop that lands on open ground
+        let s = 0.35 + Math.random() * 0.45;
+        for (let k = 0; k < 8; k++) {
+          const h = this.heading + (Math.random() - 0.5) * 2.2 * (k + 1) * 0.5;
+          const lx = this.pos.x + Math.cos(h) * s * 0.3, lz = this.pos.z - Math.sin(h) * s * 0.3;
+          if (nav.walkable(lx, lz)) {this.heading = h; break;}
+          if (k === 7) s = 0.15;
+        }
         this.vel.set(Math.cos(this.heading) * s, 0.9 + Math.random() * 0.5, -Math.sin(this.heading) * s);
         this.airborne = true;
       } else if (this.walkT < 0.4) {

@@ -34,7 +34,7 @@ export class Nav {
       // the lizard clambers onto wood readily, but not up steep soil or rock
       if (slope > (kind === SurfaceKind.Wood ? 2.8 : 0.85)) c = Infinity;
       else c += Math.min(slope, 1.5) * 4;
-      if (kind === SurfaceKind.Rock && surface.heightAt(x, z) > 0.2) c = Infinity;
+      if (kind === SurfaceKind.Rock) c = surface.heightAt(x, z) > 0.2 ? Infinity : c + 4;
       for (const o of obstacles) {
         const d = Math.hypot(x - o.x, z - o.z);
         if (d < o.r) c += 3 * (1 - d / o.r);

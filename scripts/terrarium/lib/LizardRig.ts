@@ -85,12 +85,13 @@ export interface RigInputs {
   bob: number; // head-bob offset in cm (push-ups)
   wave: number; // 0..1 arm-wave amount (left front limb)
   sideLean: number; // body roll, radians
+  tailTwitch: number; // 0..1 predatory flicking of the tail tip
 }
 
 export class LizardRig {
   readonly inputs: RigInputs = {
     x: 0, z: 0, heading: 0, speed: 0, turnRate: 0, clearance: 0.7, chestLift: 0, headPitch: 0,
-    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0,
+    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0,
   };
   /** Gait phase 0..1 and the derived standing wave in the trunk. */
   phase = 0;
@@ -364,7 +365,8 @@ export class LizardRig {
         q.multiply(jq);
         const nx = this.spineBindX[idx], ny = this.spineBindY[idx];
         const seg = new THREE.Vector3((nx - px) * K, (ny - py) * K, 0);
-        if (idx === 0) seg.x += I.lunge * 1.2 * K; // head thrust
+        if (idx === 0) seg.x += I.lunge * 1.6 * K; // head thrust
+        if (idx === 1) seg.x += I.lunge * 1.0 * K; // neck stretch
         seg.applyQuaternion(q);
         pos = pos.clone().add(seg);
         this.spinePos[idx].copy(pos);
@@ -428,6 +430,8 @@ export class LizardRig {
       ang = clamp(ang, -maxBend, maxBend);
       // travelling wobble
       ang += Math.sin((this.phase - i * 0.11) * Math.PI * 2) * sway * 0.28;
+      // a hunting lizard flicks the tip of its tail
+      if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
       const ca = Math.cos(ang), sa = Math.sin(ang);
       dir.set(prevDir.x * ca - prevDir.z * sa, 0, prevDir.x * sa + prevDir.z * ca);
       // rest on the ground; the base hangs from the raised pelvis

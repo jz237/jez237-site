@@ -2,6 +2,36 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import {woodTextures, dataTexture, tileFbm} from './Textures';
 
+function backgroundPlant(x: number, z: number, h: number, seed: number) {
+  let s0 = seed * 7919;
+  const r = () => ((s0 = (s0 * 16807) % 2147483647) / 2147483647);
+  const g = new THREE.Group();
+  const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.1, 0.22, 32), new THREE.MeshStandardMaterial({color: 0x3a2618, roughness: 0.8}));
+  pot.position.y = -0.075 + 0.11 - 0.0;
+  g.add(pot);
+  const leafMat = new THREE.MeshStandardMaterial({color: new THREE.Color(0.05, 0.11, 0.04), roughness: 0.55, side: THREE.DoubleSide});
+  const stemMat = new THREE.MeshStandardMaterial({color: new THREE.Color(0.08, 0.12, 0.05), roughness: 0.7});
+  const n = 9 + Math.floor(r() * 5);
+  for (let i = 0; i < n; i++) {
+    const a = r() * Math.PI * 2, lean = 0.2 + r() * 0.6, len = h * (0.55 + r() * 0.5);
+    const end = new THREE.Vector3(Math.cos(a) * Math.sin(lean) * len, Math.cos(lean) * len, Math.sin(a) * Math.sin(lean) * len);
+    const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, 0.1, 0), new THREE.Vector3(end.x * 0.3, end.y * 0.8, end.z * 0.3), end);
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 8, 0.006, 5), stemMat));
+    const shape = new THREE.Shape();
+    const L = 0.2 + r() * 0.16, W = L * (0.55 + r() * 0.2);
+    shape.moveTo(0, 0);
+    shape.bezierCurveTo(W * 0.7, L * 0.1, W * 0.6, L * 0.85, 0, L);
+    shape.bezierCurveTo(-W * 0.6, L * 0.85, -W * 0.7, L * 0.1, 0, 0);
+    const leaf = new THREE.Mesh(new THREE.ShapeGeometry(shape, 10), leafMat);
+    leaf.position.copy(end);
+    leaf.rotation.set(-0.9 - r() * 0.5, a + Math.PI / 2, (r() - 0.5) * 0.6, 'YXZ');
+    g.add(leaf);
+  }
+  g.position.set(x, 0, z);
+  g.traverse((o) => {if ((o as THREE.Mesh).isMesh) {o.castShadow = false; o.receiveShadow = true;}});
+  return g;
+}
+
 /** The dim study around the case: table, back wall, shelves and an Edison lamp. */
 export class Room {
   readonly group = new THREE.Group();
@@ -88,13 +118,16 @@ export class Room {
     const filament = new THREE.Mesh(new THREE.TorusKnotGeometry(0.012, 0.0012, 64, 6, 2, 5), this.bulb);
     filament.position.y = tableTop + 0.62;
     lamp.add(base, stem, socket, bulbGlass, filament);
-    lamp.position.set(-1.12, 0, -0.32);
+    lamp.position.set(-0.98, 0, -0.55);
     lamp.traverse((o) => {if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true;});
     bulbGlass.castShadow = false; filament.castShadow = false;
     this.group.add(lamp);
     this.lampLight = new THREE.PointLight(0xffa860, 2.2, 6, 2);
-    this.lampLight.position.set(-1.12, tableTop + 0.62, -0.32);
+    this.lampLight.position.set(-0.98, tableTop + 0.62, -0.55);
     this.group.add(this.lampLight);
+
+    // Out-of-focus house plants behind the case.
+    this.group.add(backgroundPlant(1.05, -1.05, 1.0, 11), backgroundPlant(-1.55, -1.2, 0.85, 23), backgroundPlant(0.35, -1.45, 0.7, 37));
 
     // Environment used for reflections (brass, glass, water, eyes).
     const env = this.envScene;

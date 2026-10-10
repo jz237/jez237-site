@@ -4,7 +4,7 @@ import {UI} from './lib/UI';
 
 const host = document.querySelector<HTMLElement>('#scene')!;
 const params = new URLSearchParams(location.search);
-if (params.get('ui') === '0') document.body.classList.add('no-ui');
+if (params.get('ui') === '0') document.body.classList.add('no-ui', 'present');
 
 function fail(message: string) {
   const el = document.getElementById('fatal')!;

@@ -48,7 +48,7 @@ export function groundHeight(x: number, z: number) {
 export class Ground {
   readonly mesh: THREE.Mesh;
   readonly walls: THREE.Mesh;
-  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, tMoss: {value: null as THREE.Texture | null}};
+  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}};
 
   constructor() {
     const NX = 360, NZ = 150;
@@ -98,6 +98,7 @@ export class Ground {
       s.uniforms.uTime = u.uTime;
       s.uniforms.uWet = u.uWet;
       s.uniforms.tMoss = u.tMoss;
+      s.uniforms.uCaustic = u.uCaustic;
       s.uniforms.uTank = {value: new THREE.Vector2(TANK.w, TANK.d)};
       s.uniforms.uWater = {value: WATER_LEVEL};
       s.uniforms.uPool = {value: new THREE.Vector4(POOL.cx, POOL.cz, POOL.rx, POOL.rz)};
@@ -106,7 +107,7 @@ export class Ground {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-varying vec3 vW; uniform float uTime, uWet, uWater; uniform vec4 uPool; uniform sampler2D tMoss; uniform vec2 uTank;
+varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss; uniform vec2 uTank;
 ${GROUND_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 GroundSample gs = groundSample(vW, uTime, uWet, uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
@@ -117,7 +118,7 @@ normal = normalize((viewMatrix * vec4(normalize(gs.normal), 0.0)).xyz);`)
         .replace('#include <aomap_fragment>', `
 reflectedLight.indirectDiffuse *= gs.ao; reflectedLight.indirectSpecular *= gs.ao; reflectedLight.directDiffuse *= mix(1.0, gs.ao, 0.5);
 #include <aomap_fragment>
-reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4;`);
+reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;`);
     };
     m.customProgramCacheKey = () => 'terrarium-ground-v1';
     return m;

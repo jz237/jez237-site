@@ -24,7 +24,7 @@ export class Condensation {
       const u = x / (w - 1), v = y / (h - 1); // v = 0 bottom, 1 top
       const edge = Math.max(Math.pow(Math.abs(u - 0.5) * 2, 6), Math.pow(v, 3) * 0.9, Math.pow(1 - v, 8) * 0.4);
       const n = Math.sin(u * 13.1 + seed) * Math.sin(v * 9.7 - seed * 0.7) * 0.5 + 0.5;
-      const kindBias = kind === 'front' ? 0.25 : kind === 'top' ? 0.85 : kind === 'back' ? 0.55 : 0.75;
+      const kindBias = kind === 'front' ? 0.18 : kind === 'top' ? 0.8 : kind === 'back' ? 0.5 : 0.7;
       this.bias[y * w + x] = Math.min(1, kindBias * (0.45 + 0.55 * edge) + 0.25 * edge + 0.15 * (n - 0.5));
     }
     this.texture = new THREE.DataTexture(this.bytes, w, h, THREE.RedFormat, THREE.UnsignedByteType);

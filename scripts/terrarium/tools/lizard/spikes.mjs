@@ -18,14 +18,14 @@ export function spikeSeeds() {
         const jitter = (rand(i * 3 + k, s + 5) - 0.5) * 0.08;
         const y = pr.cy - pr.hb * Math.cos(th);
         const z = pr.w * Math.sin(th) * s;
-        push([x + jitter, y, z], [-0.35, -0.55, 0.45 * s], 0.07 + 0.12 * back * (0.6 + 0.8 * rand(i, k + 11)), 0.045 + 0.02 * back);
+        push([x + jitter, y, z], [-0.35, -0.55, 0.45 * s], 0.09 + 0.17 * back * (0.6 + 0.8 * rand(i, k + 11)), 0.05 + 0.025 * back);
       }
     }
     // Spines clustered around and behind the ear opening.
     const ear = [[10.2, 0.32], [9.95, 0.42], [9.65, 0.3], [9.45, 0.05], [9.6, -0.22], [9.95, -0.32], [10.25, -0.18], [9.25, 0.32]];
     ear.forEach(([x, dy], k) => {
       const pr = profile(x);
-      push([x, pr.cy + dy, (pr.w + 0.05) * s], [-0.5, 0.15 * Math.sign(dy || 1), 0.8 * s], 0.24 + 0.12 * rand(k, 21 + s), 0.06);
+      push([x, pr.cy + dy, (pr.w + 0.05) * s], [-0.5, 0.15 * Math.sign(dy || 1), 0.8 * s], 0.3 + 0.16 * rand(k, 21 + s), 0.075);
     });
     // Occipital crown and supraocular scales.
     for (let k = 0; k < 4; k++) {

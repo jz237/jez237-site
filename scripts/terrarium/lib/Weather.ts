@@ -42,7 +42,7 @@ export class Weather {
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: {uColor: {value: new THREE.Color(0.55, 0.55, 0.52)}},
       vertexShader: `attribute float aA; varying float vA; void main(){ vA = aA; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-      fragmentShader: `uniform vec3 uColor; varying float vA; void main(){ gl_FragColor = vec4(uColor * vA * 0.35, 0.0); }`,
+      fragmentShader: `uniform vec3 uColor; varying float vA; void main(){ gl_FragColor = vec4(uColor * vA, 0.0); }`,
     }));
     this.rainLines.frustumCulled = false;
     this.group.add(this.rainLines);
@@ -149,7 +149,7 @@ void main(){
           this.spawnSplash(d.p.x, floor, d.p.z);
         }
       }
-      const len = 0.012;
+      const len = 0.02;
       pos.setXYZ(i * 2, d.p.x, d.alive ? d.p.y : -10, d.p.z);
       pos.setXYZ(i * 2 + 1, d.p.x - d.v.x * len / 2, d.alive ? d.p.y - d.v.y * len / 2 * 0.5 + len : -10, d.p.z - d.v.z * len / 2);
       al.setX(i * 2, 0.9);
@@ -206,6 +206,12 @@ void main(){
     });
     pos.needsUpdate = true;
     size.needsUpdate = true;
+  }
+
+  /** Light reaching rain, splashes and mist (follows the lamp). */
+  setLight(level: number) {
+    (this.rainLines.material as THREE.ShaderMaterial).uniforms.uColor.value.setRGB(0.9, 0.9, 0.86).multiplyScalar(0.15 + 0.85 * level);
+    (this.mistSprites.material as THREE.ShaderMaterial).uniforms.uColor.value.setRGB(0.6, 0.58, 0.55).multiplyScalar(0.12 + 0.88 * level);
   }
 
   setPixelScale(pixelsPerUnit: number) {

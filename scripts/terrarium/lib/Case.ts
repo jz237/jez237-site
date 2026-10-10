@@ -101,7 +101,8 @@ vec3 hazeCol = bgFog * 0.8 + uHaze;
 float cov = clamp(hazeAmt + dropCov * 0.92, 0.0, 1.0);
 vec3 X = (hazeAmt * hazeCol + dropCov * 0.92 * dropCol) / max(cov, 1e-4);
 float T = (1.0 - F) * 0.965;
-vec3 rgb = outgoingLight * (1.0 + dropCov) + cov * X * T;
+// keep droplet glints bright but below the bloom's star threshold
+vec3 rgb = min(outgoingLight * (1.0 + dropCov * 0.25), vec3(mix(6.0, 1.2, dropCov))) + cov * X * T;
 float a = 1.0 - T * (1.0 - cov);
 gl_FragColor = vec4(rgb, a);
 `);

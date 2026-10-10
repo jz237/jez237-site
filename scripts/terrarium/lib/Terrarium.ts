@@ -48,6 +48,7 @@ export class Terrarium {
   private plaqueT = 0;
   readonly moon: THREE.DirectionalLight;
   private homeView = {pos: new THREE.Vector3(0, 0.44, 1.78), target: new THREE.Vector3(0, 0.29, 0)};
+  private quality = {window: 0, frames: 0, level: 0, locked: false};
   lizard!: LizardModel;
   readonly key: THREE.SpotLight;
   readonly heat: THREE.SpotLight;
@@ -113,13 +114,15 @@ export class Terrarium {
     s.add(this.fill);
 
     const cam = this.camera;
-    cam.position.set(0, 0.44, 1.78);
+    cam.layers.enable(5);
     this.controls = new OrbitControls(cam, r.domElement);
-    this.controls.target.set(0, 0.29, 0);
+    this.fitHome();
+    cam.position.copy(this.homeView.pos);
+    this.controls.target.copy(this.homeView.target);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
     this.controls.minDistance = 0.18;
-    this.controls.maxDistance = 3.2;
+    this.controls.maxDistance = 4.2;
     this.controls.minPolarAngle = 0.55;
     this.controls.maxPolarAngle = 1.66;
     this.controls.minAzimuthAngle = -1.15;
@@ -137,6 +140,7 @@ export class Terrarium {
     this.post = new Post(r, s, cam);
     const q = new URLSearchParams(location.search);
     for (const k of ['ao', 'bloom', 'dof'] as const) if (q.get(k) === '0') this.post.settings[k] = false;
+    if (q.get('quality') === 'full' || q.has('frames')) this.quality.locked = true;
     this.resize();
     new ResizeObserver(() => this.resize()).observe(host);
     this.ready = this.load();
@@ -190,12 +194,6 @@ export class Terrarium {
     this.renderer.setAnimationLoop(() => this.frame());
   }
 
-  surfaceHeight(x: number, z: number) {
-    const ray = new THREE.Raycaster(new THREE.Vector3(x, 1, z), new THREE.Vector3(0, -1, 0));
-    const hits = ray.intersectObjects([this.ground.mesh, ...this.hardscape.placed.map((p) => p.mesh)], false);
-    return hits.length ? hits[0].point.y : 0;
-  }
-
   /** Advances the living parts of the scene (no rendering). */
   simulate(dt: number) {
     this.time += dt;
@@ -223,8 +221,12 @@ export class Terrarium {
     this.room.setLampLevel(0.75 + 0.25 * (1 - day));
     const cl = this.weather.clouds.shared;
     cl.uLightDir.value.copy(this.key.position).sub(this.key.target.position).normalize();
-    cl.uLightColor.value.setRGB(1.0 * day + 0.12, 0.84 * day + 0.16, 0.64 * day + 0.3);
-    cl.uAmbient.value.setRGB(0.12 + 0.24 * day, 0.11 + 0.2 * day, 0.13 + 0.14 * day);
+    cl.uLightColor.value.setRGB(1.0 * day + 0.035, 0.84 * day + 0.05, 0.64 * day + 0.11);
+    cl.uAmbient.value.setRGB(0.03 + 0.33 * day, 0.03 + 0.28 * day, 0.04 + 0.23 * day);
+    cl.uGlow.value.copy(this.case.regulatorGlow.emissive).multiplyScalar(0.6);
+    this.water.setLight(day, this.key.color);
+    this.weather.setLight(day);
+    this.ground.uniforms.uCaustic.value = day;
     // wetness darkens soil, glosses leaves, rock and skin
     this.ground.uniforms.uWet.value = w.wet;
     foliageUniforms.uWet.value = w.wet;
@@ -243,7 +245,28 @@ export class Terrarium {
     this.audio.update(dt, {rain: w.rainAmount, wind: w.wind.length(), crickets: this.insects.crickets.length, night: 1 - day, flow: 1});
   }
 
+  /** Frames the whole case for the current aspect, leaving room for the controls. */
+  private fitHome() {
+    const w = this.host.clientWidth || innerWidth, h = this.host.clientHeight || innerHeight;
+    const aspect = w / h;
+    const vfov = THREE.MathUtils.degToRad(this.camera.fov);
+    const top = 64 / h, bottom = (w < 720 ? 150 : 110) / h; // HUD bands as fractions of the view
+    const usable = 1 - top - bottom;
+    const caseH = 0.8;
+    // On tall, narrow screens let the case overflow the sides a little so it reads larger.
+    const caseW = aspect < 0.8 ? 0.95 : 1.36;
+    const dV = (caseH / 2) / Math.tan(vfov / 2) / usable;
+    const dH = (caseW / 2) / (Math.tan(vfov / 2) * aspect) / 0.96;
+    const d = Math.max(dV, dH);
+    // shift the aim so the case sits in the band between the HUD rows
+    const shift = (bottom - top) * Math.tan(vfov / 2) * d;
+    const dir = new THREE.Vector3(0, 0.08, 1).normalize();
+    this.homeView.target.set(0, 0.3 - shift * 0.95, 0);
+    this.homeView.pos.copy(this.homeView.target).addScaledVector(dir, d);
+  }
+
   resetView() {
+    this.fitHome();
     this.camera.position.copy(this.homeView.pos);
     this.controls.target.copy(this.homeView.target);
     this.controls.update();
@@ -263,9 +286,10 @@ export class Terrarium {
     return hits.length ? hits[0].point : null;
   }
 
-  feed(at: THREE.Vector3 | null) {
+  feed(at: {x: number; z: number} | null) {
     const c = this.insects.release();
     if (at) {c.pos.x = THREE.MathUtils.clamp(at.x, -0.5, 0.5); c.pos.z = THREE.MathUtils.clamp(at.z, -0.2, 0.2);}
+    return c;
   }
 
   wipeGlass(ray: THREE.Ray) {
@@ -282,10 +306,25 @@ export class Terrarium {
     if (best) best.pane.fog.wipe(best.uv.x, best.uv.y, 0.035);
   }
 
+  /** The follow camera keeps the lizard centred and eases in to a close view. */
+  updateFollow(dt: number) {
+    if (!this.follow) return;
+    const head = this.rig.snout;
+    const body = new THREE.Vector3(this.rig.inputs.x, head.y - 0.01, this.rig.inputs.z);
+    const focus = body.lerp(head, 0.45);
+    const before = this.controls.target.clone();
+    this.controls.target.lerp(focus, 1 - Math.exp(-dt * 3));
+    // carry the camera along with the target so the framing does not swing
+    this.camera.position.add(this.controls.target.clone().sub(before));
+    const d = this.camera.position.distanceTo(this.controls.target);
+    if (d > 0.42) this.camera.position.lerp(this.controls.target, 1 - Math.exp(-dt * 1.2));
+  }
+
   addFrameHandler(f: (dt: number, t: number) => void) {this.onFrame.push(f);}
 
   resize() {
     const w = this.host.clientWidth || innerWidth, h = this.host.clientHeight || innerHeight;
+    this.weather?.setPixelScale(h * this.renderer.getPixelRatio() / (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2)));
     this.renderer.setSize(w, h, false);
     this.renderer.domElement.style.width = `${w}px`;
     this.renderer.domElement.style.height = `${h}px`;
@@ -297,8 +336,37 @@ export class Terrarium {
     this.water?.uniforms.uResolution.value.set(Math.round(w * pr), Math.round(h * pr));
   }
 
+  /** Steps effects down only after sustained slow frames; never on device labels. */
+  private adapt(rawDt: number) {
+    const q = this.quality;
+    if (q.locked) return;
+    q.window += rawDt;
+    q.frames++;
+    if (q.window < 2.5) return;
+    const avg = q.window / q.frames;
+    q.window = 0;
+    q.frames = 0;
+    if (avg < 1 / 40 || this.time < 4) return;
+    q.level++;
+    const r = this.renderer;
+    if (q.level === 1) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.5));
+    else if (q.level === 2) this.post.settings.dof = false;
+    else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
+    else if (q.level === 4) this.post.settings.ao = false;
+    else if (q.level === 5) {this.moss.mesh.count = 8; this.moss.uniforms.uShells.value = 8;}
+    else if (q.level === 6) r.setPixelRatio(0.9);
+    else q.locked = true;
+    this.resize();
+  }
+
+  setQualityLocked(full: boolean) {
+    this.quality.locked = full;
+  }
+
   frame(fixedDt?: number) {
-    const dt = fixedDt ?? Math.min(0.05, this.clock.getDelta());
+    const raw = this.clock.getDelta();
+    if (fixedDt === undefined) this.adapt(raw);
+    const dt = fixedDt ?? Math.min(0.05, raw);
     this.time += dt;
     this.controls.update();
     this.ground.uniforms.uTime.value = this.time;
@@ -308,18 +376,10 @@ export class Terrarium {
     for (const f of this.onFrame) f(dt, this.time);
     this.weather.update(dt, this.time);
     this.applyClimate(dt);
-    if (this.follow) {
-      const head = this.rig.snout;
-      const body = new THREE.Vector3(this.rig.inputs.x, head.y - 0.01, this.rig.inputs.z);
-      const focus = body.lerp(head, 0.45);
-      this.controls.target.lerp(focus, 1 - Math.exp(-dt * 3));
-      const d = this.camera.position.distanceTo(this.controls.target);
-      if (d > 0.42) this.camera.position.lerp(this.controls.target, 1 - Math.exp(-dt * 1.2));
-    }
+    this.updateFollow(dt);
     this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
     this.brain.update(dt);
-    this.lizard.root.updateMatrixWorld(true);
     // Focus on the orbit target; the room falls out of focus naturally.
     this.post.settings.focus = this.camera.position.distanceTo(this.controls.target);
     this.renderer.shadowMap.needsUpdate = true;
@@ -338,9 +398,10 @@ export class Terrarium {
     this.post.render(this.time, (refraction) => {
       this.case.shared.tRefract.value = refraction;
       this.water.uniforms.tRefract.value = refraction;
+      const mask = this.camera.layers.mask;
       this.camera.layers.set(1);
       this.renderer.render(this.scene, this.camera);
-      this.camera.layers.set(0);
+      this.camera.layers.mask = mask;
     });
   }
 }

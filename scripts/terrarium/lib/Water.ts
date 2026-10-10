@@ -43,6 +43,7 @@ export class Water {
     uImpact: {value: new THREE.Vector3(0.06, WATER_LEVEL, 0.07)},
     uRipples: {value: Array.from({length: 12}, () => new THREE.Vector4(0, 0, -100, 0))},
     uRain: {value: 0},
+    uAmbient: {value: 1},
   };
   readonly reflectRT: THREE.WebGLRenderTarget;
   private mirrorCam = new THREE.PerspectiveCamera();
@@ -91,11 +92,11 @@ export class Water {
     sp.setAttribute('aLife', new THREE.BufferAttribute(new Float32Array(N), 1));
     for (let i = 0; i < N; i++) this.sprayData.push({p: new THREE.Vector3(0, -1, 0), v: new THREE.Vector3(), life: Math.random(), max: 1});
     this.spray = new THREE.Points(sp, new THREE.ShaderMaterial({
-      uniforms: {uScale: {value: 1}},
+      uniforms: {uScale: {value: 900}, uLight: {value: 1}},
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       vertexShader: `attribute float aLife; varying float vL; uniform float uScale;
 void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = uScale * (0.004 + 0.012 * (1.0 - aLife)) / -mv.z; }`,
-      fragmentShader: `varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(c)); gl_FragColor = vec4(vec3(0.85, 0.8, 0.72) * a * vL * 0.18, 0.0); }`,
+      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(c)); gl_FragColor = vec4(vec3(0.85, 0.8, 0.72) * a * vL * 0.18 * uLight, 0.0); }`,
     }));
     this.spray.frustumCulled = false;
     this.spray.layers.set(1);
@@ -274,10 +275,11 @@ void main(){
       vertexShader: `attribute vec2 aFlow; varying vec2 vUv; varying vec2 vFlow; varying vec3 vW; varying vec3 vN;
 void main(){ vUv = uv; vFlow = aFlow; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * w; }`,
       fragmentShader: /* glsl */ `
-uniform float uTime; uniform sampler2D tRefract; uniform vec2 uResolution; uniform vec3 uKeyDir, uKeyColor;
+uniform float uTime, uAmbient; uniform sampler2D tRefract; uniform vec2 uResolution; uniform vec3 uKeyDir, uKeyColor;
 varying vec2 vUv; varying vec2 vFlow; varying vec3 vW; varying vec3 vN;
 ${commonGLSL}
 void main(){
+  if (vW.y < ${WATER_LEVEL.toFixed(4)} - 0.0008) discard;
   float steep = vFlow.x;
   float speed = mix(0.12, 0.42, steep);
   float u = vUv.x, v = vUv.y;
@@ -292,7 +294,7 @@ void main(){
   vec2 suv = gl_FragCoord.xy / uResolution;
   vec3 behind = texture2D(tRefract, suv + vec2((streak - 0.5) * 0.012, 0.0)).rgb;
   float F = 0.02 + 0.98 * pow(1.0 - abs(dot(n, V)), 5.0);
-  vec3 lit = uKeyColor * (0.35 + 0.65 * max(dot(n, uKeyDir), 0.0)) * 0.9 + vec3(0.12, 0.1, 0.08);
+  vec3 lit = uKeyColor * (0.35 + 0.65 * max(dot(n, uKeyDir), 0.0)) * 0.9 + vec3(0.12, 0.1, 0.08) * uAmbient;
   vec3 col = mix(behind * vec3(0.86, 0.92, 0.9), lit * vec3(0.92, 0.93, 0.95), foam * 0.9);
   float spec = pow(max(dot(reflect(-uKeyDir, n), V), 0.0), 60.0) * (0.3 + streak);
   col += uKeyColor * spec * 0.6 + F * 0.15;
@@ -302,6 +304,12 @@ void main(){
   gl_FragColor = vec4(col, a);
 }`,
     });
+  }
+
+  setLight(level: number, keyColor: THREE.Color) {
+    this.uniforms.uKeyColor.value.copy(keyColor).multiplyScalar(level);
+    this.uniforms.uAmbient.value = 0.15 + 0.85 * level;
+    (this.spray.material as THREE.ShaderMaterial).uniforms.uLight.value = 0.1 + 0.9 * level;
   }
 
   addRipple(x: number, z: number, strength: number, time: number) {
@@ -342,6 +350,7 @@ void main(){
     if (this.reflectRT.width !== w || this.reflectRT.height !== h) this.reflectRT.setSize(w, h);
     const m = this.mirrorCam;
     m.copy(camera);
+    m.layers.set(0);
     const reflectY = (v: THREE.Vector3) => v.set(v.x, 2 * WATER_LEVEL - v.y, v.z);
     const eye = reflectY(camera.position.clone());
     const dir = camera.getWorldDirection(new THREE.Vector3());
