@@ -20855,5 +20855,141 @@
       "imageSha256": "7eadcdb659f82d3ce72ed11da9d6b45c98bb8fc32ecded8a21e31ac4ba68aee5",
       "imageDHash": "4743071739181818"
     }
+  },
+  {
+    "id": "2026-10-10-factual-infographic-factual-infographic-ornithophobia-feath",
+    "title": "Factual infographic: Ornithophobia — Feathers at the Courtyard Gate",
+    "tests": "{\"factual_subtype\": \"phobia-infographic\", \"phobia\": \"Ornithophobia\", \"hero\": \"fictional courtyard encounter; ordinary-sized birds; no contact\", \"panels\": 8, \"explanatory_diagrams\": 4}; archive_slot=2026-10-10T12:08; concept=ornithophobia-birds-courtyard-gate; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished direct-canvas museum-quality educational infographic, not a photographed poster, framed print, room display, screen or mockup. Prefer a spacious portrait composition chosen at native automatic size. Opaque output, high quality. Title: “ORNITHOPHOBIA”. Subtitle: “Feathers at the Courtyard Gate”. Small introductory line: “When fear of birds narrows everyday life”. Adult scientific editorial illustration combining an immersive realistic hero with exceptionally precise diagrammatic overlays and elegant legible typography. No monsters, gore, attacks, exaggerated birds, invented statistics or diagnostic checklist.\n\nVISUAL ARCHITECTURE: One dominant cinematic hero fills the upper-middle third; eight distinct substantial illustrated panels are integrated around and below it in a carefully ordered readable grid. At least four explanatory diagrams, fine leader lines, substantial short labels, generous margins and clear large section numbers. Warm chalk and muted sage background, graphite typography, copper-red for subjective alarm, cool teal for context and support. Avoid tiny paragraphs: each panel gets a clear heading, one short explanatory sentence and a specific illustration. Include five or more information layers: immersive context scene, symptom map, cue-to-thought process strip, avoidance feedback loop, perceived-versus-observed comparison, daily-life consequence map, and supported-care progression.\n\nHERO: A fictional adult with medium-brown skin and short silver-streaked curls pauses at a wrought-iron courtyard gate, torso in three-quarter view, hand held close to chest rather than clutching the gate, shoulders tense, gaze toward two ordinary-sized pigeons several paces away. One bird stands on weathered paving; another flutters from a low planter, wing fully extended with individually resolved feathers and natural anatomy. The scene is fear-provoking through close perspective, a sharply silhouetted wing and anticipated crossing of the threshold, not through any aggression. No bird touches or pursues the person. Damp limestone texture, iron patina, fine feather edges, fallen leaves, moss seams and late-afternoon light across the gate establish credible material depth. The gate is open and route clear. Faint copper-red thought callout “What if I cannot cope?” linked to person; teal observation “Two birds; no contact” linked to the actual scene. Label the scene “Illustrated example — experiences vary”. No bird biology labels or disease claims.\n\nPANEL 1 — “What the name means”. A clear bird silhouette beside a person icon with a small not-equal comparison mark. Text: “An intense fear of birds; a type of specific phobia.” Second short line: “Fear and avoidance can disrupt daily life.” Distinguish ordinary caution from disabling fear without claiming to diagnose anyone.\nPANEL 2 — “Encounter or anticipation”. A three-frame illustrated strip: courtyard bird, small bird picture, imagined courtyard visit. Labels: “Seeing”, “A picture”, “Thinking ahead”. Line: “Cues differ between people.” These are illustrative possible triggers; no universal ranking. Bird-picture illustration must not look like another whole poster.\nPANEL 3 — “Uncertainty feeds predictions”. Explanatory close-up diagram, not anatomical brain localization: eye watching a partly obscured ordinary bird wing → thought bubble “Something bad might happen” → alarm icon. Label the arrows “Interpretation”, “Alarm”. Short line: “Danger can be overestimated; coping underestimated.” A clear footnote within this panel: “A thought is not a prediction of fact.”\nPANEL 4 — “The body’s alarm”. Detailed realistic chest-up human silhouette and magnified hand with discreet numbered leader lines: heart icon “Fast heartbeat”; forehead droplet “Sweating”; hand contour “Trembling”; shoulder muscle hatch “Tension”; stomach icon “Nausea”; small head-ring “Dizziness”. Title line beneath: “Fight-or-flight prepares for perceived danger.” Add “Symptoms vary.” No ECG diagnosis, endocrine chain, invented neural pathway or exact rates.\nPANEL 5 — “Why avoidance keeps fear going”. Large four-node circular causal diagram: “Bird cue” → “Alarm” → “Avoid or leave” → “Quick relief”; closing arrow caption “Fewer chances to revise the fear”. Tiny courtyard departure vignette sits within the loop; make the cycle prominent, readable and compassionate. Short line: “Short-term relief can keep the pattern going.”\nPANEL 6 — “Fear versus this scene”. Two-column comparison diagram with matched gate-and-bird thumbnails. Copper heading “Feared outcome”, text “I will not cope”; teal heading “Observed context”, text “Birds at a distance; no contact”. Beneath: “Strong alarm does not measure actual danger.” This concerns only the illustrated scene, not a claim that all birds or contexts are harmless. Do not prescribe approaching, feeding, touching or confronting wildlife.\nPANEL 7 — “When life gets smaller”. Small illustrated route map with courtyard as a node, a detour and a cancelled park visit icon; no quantitative scale. Text “Avoidance may restrict ordinary activities.” Second line “Seek support when fear affects your life.” Show fictional examples, not a claim of universal impairment. Include a nonjudgmental seated listener vignette, not a caricature of panic.\nPANEL 8 — “Help can be gradual”. The widest bottom panel, a compassionate adult therapist-and-client illustration next to a four-step non-prescriptive process diagram: “Discuss the fear” → “Plan manageable steps” → “Practice with support” → “Review what was learned”. Caption: “CBT and individually planned graded exposure can help.” Additional concise line: “Talk to someone you trust; relaxing breathing may help.” Small footer: “Educational, not a diagnosis. Do not force exposure or handle birds.” Represent jointly chosen therapy planning, not a do-it-yourself exposure ladder, guaranteed cure, countdown or universal sequence of touching animals.\n\nMaintain rich layered illustration, lifelike textures, restrained editorial color, consistent scale, clean precise callout connections and readable text at a glance. All factual content is limited to the claims above. No bibliography, URLs, logos, watermark, numerical prevalence, exact treatment durations or outcome promises. The final image itself is the educational plate; do not depict it as printed paper lying on anything.",
+    "image": "images/2026-10-10-factual-infographic-factual-infographic-ornithophobia-feath.jpg",
+    "thumb": "thumbs/2026-10-10-factual-infographic-factual-infographic-ornithophobia-feath.webp",
+    "color": "#b1a89a",
+    "date": "2026-10-10",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ornithophobia-birds-courtyard-gate",
+      "imageSha256": "6cc16ee52124543a9aac2da64e6e327d3c52dd90b28c75436dae684eb8a56239",
+      "imageDHash": "7a62d266a1b2a681"
+    },
+    "factualInfographic": {
+      "topic": "Ornithophobia: intense fear of birds, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "Bird-focused specific phobia explained through a fictional courtyard encounter, eight substantive panels and four explanatory diagrams.",
+      "sourceNote": "Verified definition and animal-type classification, anticipation, body symptoms, avoidance maintenance, daily-life impact and CBT/graded-exposure support. NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; Industrial Psychiatry Journal: https://pmc.ncbi.nlm.nih.gov/articles/PMC5248412/ ; NHS inform: https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-10T16:10:00.998716+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Industrial Psychiatry Journal",
+            "title": "A rare case of alektorophobia treated successfully with graded exposure therapy",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5248412/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform (NHS Scotland)",
+            "title": "Phobias self-help guide",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ornithophobia means phobia of birds and is an animal-type specific phobia.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Specific phobias involve intense fear out of proportion to actual danger; avoidance and distress can interfere with life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Encountering, anticipating, or thinking about a feared object can produce anxiety; pictures can also trigger fear in some people. Bird pictures and courtyard encounters are illustrative examples, not universal triggers.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "People may overestimate danger and underestimate their ability to cope; uncertainty about a feared encounter may fuel anxious predictions.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Possible physical symptoms include fast heartbeat, sweating, trembling, tense muscles, dizziness, chest tightness and nausea; symptoms vary between people.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Physical alarm prepares the body for possible danger, the fight-or-flight response; alarm does not itself prove the feared situation is dangerous.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance can reduce anxiety quickly but prevents opportunities to revise feared predictions and can maintain the phobia.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Repeated avoidance can restrict everyday activities; skipping the illustrated courtyard is a fictional example of this impact.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "A frightening event or learned responses may contribute to phobias, but a clear cause is not always identifiable.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT examines unhelpful thoughts and habits; graded exposure uses small manageable steps, and therapist-assisted exposure can treat specific phobias. Steps are individually chosen, not a universal exposure prescription.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Talking to someone trusted and practicing relaxing breathing may help; seek professional help if fear affects daily life.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The hero scene and supporting courtyard/picture vignettes are fictional educational illustrations, not a diagnosis or instructions to approach or handle birds.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
