@@ -9,7 +9,7 @@ import {FullScreenQuad} from 'three/examples/jsm/postprocessing/Pass.js';
  * depth of field → exposure, ACES, vignette, grain, faint chromatic aberration.
  */
 export interface PostSettings {
-  ao: boolean; bloom: boolean; dof: boolean;
+  ao: boolean; bloom: boolean; dof: boolean; bloomStrength: number;
   exposure: number; focus: number; aperture: number; maxBlur: number;
 }
 
@@ -100,6 +100,14 @@ void main(){
 }`,
 };
 
+// View distance (m) per pixel from the depth buffer, for volumes drawn in the glass pass.
+const distShader = {
+  uniforms: {tDepth: {value: null as THREE.Texture | null}, uInvProj: {value: new THREE.Matrix4()}},
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+  fragmentShader: `precision highp float; uniform sampler2D tDepth; uniform mat4 uInvProj; varying vec2 vUv;
+void main(){ float z = texture2D(tDepth, vUv).x; vec4 v = uInvProj * vec4(vUv * 2.0 - 1.0, z * 2.0 - 1.0, 1.0); v /= v.w; gl_FragColor = vec4(z >= 1.0 ? 1e4 : length(v.xyz), 0.0, 0.0, 1.0); }`,
+};
+
 const aoShader = {
   uniforms: {tColor: {value: null as THREE.Texture | null}, tAO: {value: null as THREE.Texture | null}, uAO: {value: 1}},
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
@@ -110,6 +118,9 @@ void main(){ vec4 c = texture2D(tColor, vUv); float ao = texture2D(tAO, vUv).r; 
 export class Post {
   readonly sceneRT: THREE.WebGLRenderTarget;
   readonly refractRT: THREE.WebGLRenderTarget;
+  /** Camera distance of the opaque scene, for clouds and fog in the glass pass. */
+  readonly distRT: THREE.WebGLRenderTarget;
+  private distQuad = new FullScreenQuad(new THREE.ShaderMaterial(distShader));
   private aRT: THREE.WebGLRenderTarget;
   private bRT: THREE.WebGLRenderTarget;
   private gtao: GTAOPass;
@@ -118,7 +129,7 @@ export class Post {
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
   private aoQuad = new FullScreenQuad(new THREE.ShaderMaterial(aoShader));
   private copyQuad = new FullScreenQuad(new THREE.MeshBasicMaterial({toneMapped: false}));
-  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, exposure: 1.0, focus: 1.5, aperture: 0.6, maxBlur: 9};
+  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.0, focus: 1.5, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
 
   constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera) {
@@ -127,6 +138,7 @@ export class Post {
     const msaa = new URLSearchParams(location.search).get('msaa');
     this.sceneRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, samples: msaa === null ? 4 : Number(msaa), depthTexture: depth});
     this.refractRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter});
+    this.distRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter});
     this.aRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
     this.bRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
     this.gtao = new GTAOPass(scene, camera, 2, 2);
@@ -142,6 +154,7 @@ export class Post {
     this.width = W; this.height = H;
     this.sceneRT.setSize(W, H);
     this.refractRT.setSize(W, H);
+    this.distRT.setSize(W, H);
     this.aRT.setSize(W, H);
     this.bRT.setSize(W, H);
     this.gtao.setSize(Math.ceil(W / 2), Math.ceil(H / 2));
@@ -155,7 +168,7 @@ export class Post {
    * Renders the opaque/transparent scene, then `overlay` (glass) with access to
    * a mip-mapped copy of what lies behind it, then the post chain to the screen.
    */
-  render(time: number, overlay?: (refraction: THREE.Texture) => void) {
+  render(time: number, overlay?: (refraction: THREE.Texture, distance: THREE.Texture) => void) {
     const r = this.renderer;
     const s = this.settings;
     r.setRenderTarget(this.sceneRT);
@@ -165,8 +178,13 @@ export class Post {
       (this.copyQuad.material as THREE.MeshBasicMaterial).map = this.sceneRT.texture;
       r.setRenderTarget(this.refractRT);
       this.copyQuad.render(r);
+      const dm = this.distQuad.material as THREE.ShaderMaterial;
+      dm.uniforms.tDepth.value = this.sceneRT.depthTexture;
+      dm.uniforms.uInvProj.value.copy(this.camera.projectionMatrixInverse);
+      r.setRenderTarget(this.distRT);
+      this.distQuad.render(r);
       r.setRenderTarget(this.sceneRT);
-      overlay(this.refractRT.texture);
+      overlay(this.refractRT.texture, this.distRT.texture);
     }
     let color: THREE.WebGLRenderTarget = this.sceneRT;
     if (s.ao) {
@@ -185,6 +203,7 @@ export class Post {
         this.copyQuad.render(r);
         color = this.aRT;
       }
+      this.bloom.strength = s.bloomStrength;
       this.bloom.render(r, null as unknown as THREE.WebGLRenderTarget, color, 0, false);
     }
     if (s.dof) {

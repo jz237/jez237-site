@@ -194,7 +194,7 @@ const json = {
   })),
   eye: { radius: EYE.radius, centre: EYE.centre.map(r4), axis: EYE.axis.map(r4) },
   hingeX: meta.hingeX,
-  mouth: [13.1, 12.4, 11.6, 10.8, 10.3].map((x) => [x, r4(meta.mouthAt(x))]),
+  mouth: [12.4, 11.95, 11.4, 10.8, 10.0].map((x) => [x, r4(meta.mouthAt(x))]),
   spine: meta.spine.map((s) => ({ name: s.name, x: s.x, y: r4(s.y) })),
   profile: Array.from({ length: 62 }, (_, i) => { const x = -17.2 + i * 0.5; const p = profile(x); return [r4(x), r4(p.w), r4(p.ht), r4(p.hb), r4(p.cy)]; }),
 };

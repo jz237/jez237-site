@@ -31,24 +31,49 @@ export function poolDistance(x: number, z: number) {
   return Math.hypot((x - POOL.cx) / POOL.rx, (z - POOL.cz) / POOL.rz) - 1 + wobble;
 }
 
-export function groundHeight(x: number, z: number) {
+/** Where the cascade lands: the plunge pocket is scoured deepest here. */
+export const PLUNGE = {x: 0.1, z: 0.075};
+
+/**
+ * Water depth inside the pool (0 outside): a pebbly shelf about 2 cm deep that
+ * a lizard can wade across, and a plunge pocket scoured out under the falls.
+ */
+export function poolDepth(x: number, z: number) {
+  const d = poolDistance(x, z);
+  if (d >= 0) return 0;
+  const shelf = 0.0175 * smooth(0.0, -0.3, d);
+  const pocket = 0.05 * gauss(x - PLUNGE.x - 0.03, z - PLUNGE.z, 0.13, 0.085) * smooth(0.0, -0.22, d);
+  const ripples = (fbm(x * 26, z * 26) - 0.5) * 0.004 * smooth(0.0, -0.12, d);
+  return Math.max(0, shelf + pocket + ripples);
+}
+
+function landHeight(x: number, z: number) {
   let h = 0.146 - z * 0.1;
   h += 0.075 * gauss(x + 0.05, z + 0.15, 0.26, 0.11);
-  h += 0.05 * gauss(x - 0.43, z + 0.16, 0.15, 0.1);
+  h += 0.032 * gauss(x - 0.43, z + 0.17, 0.15, 0.09);
   h += 0.04 * gauss(x + 0.46, z + 0.17, 0.13, 0.09);
   h += 0.012 * gauss(x + 0.34, z - 0.04, 0.2, 0.12);
+  // low hummocks and a root-raised bank give the floor some relief
+  h += 0.008 * gauss(x + 0.22, z - 0.12, 0.07, 0.05) + 0.006 * gauss(x - 0.47, z - 0.02, 0.06, 0.06);
   h += (fbm(x * 14 + 3, z * 14) - 0.5) * 0.012 + (fbm(x * 55, z * 55) - 0.5) * 0.003;
+  return h;
+}
+
+export function groundHeight(x: number, z: number) {
   const d = poolDistance(x, z);
-  const bed = 0.046 + (fbm(x * 20, z * 20) - 0.5) * 0.008;
-  const t = smooth(0.18, -0.4, d);
-  return h + (bed - h) * t;
+  if (d < 0) return WATER_LEVEL - poolDepth(x, z);
+  // the bank slopes down to the water line as a gravel beach
+  const h = landHeight(x, z);
+  // a higher bank gets a longer beach, so the shore stays walkable
+  const t = smooth(0.16 + Math.max(0, h - WATER_LEVEL) * 7, 0.0, d);
+  return h + (WATER_LEVEL - h) * t;
 }
 
 /** Ground mesh plus the cut-away substrate seen through the glass. */
 export class Ground {
   readonly mesh: THREE.Mesh;
   readonly walls: THREE.Mesh;
-  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}};
+  readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}, tWetMap: {value: null as THREE.Texture | null}};
 
   constructor() {
     const NX = 360, NZ = 150;
@@ -98,6 +123,7 @@ export class Ground {
       s.uniforms.uTime = u.uTime;
       s.uniforms.uWet = u.uWet;
       s.uniforms.tMoss = u.tMoss;
+      s.uniforms.tWetMap = u.tWetMap;
       s.uniforms.uCaustic = u.uCaustic;
       s.uniforms.uTank = {value: new THREE.Vector2(TANK.w, TANK.d)};
       s.uniforms.uWater = {value: WATER_LEVEL};
@@ -107,10 +133,11 @@ export class Ground {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss; uniform vec2 uTank;
+varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss, tWetMap; uniform vec2 uTank;
 ${GROUND_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
-GroundSample gs = groundSample(vW, uTime, uWet, uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
+vec4 wetMap = texture2D(tWetMap, vW.xz / uTank + 0.5);
+GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
 diffuseColor.rgb = gs.color;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gs.rough;')
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -120,7 +147,7 @@ reflectedLight.indirectDiffuse *= gs.ao; reflectedLight.indirectSpecular *= gs.a
 #include <aomap_fragment>
 reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;`);
     };
-    m.customProgramCacheKey = () => 'terrarium-ground-v1';
+    m.customProgramCacheKey = () => 'terrarium-ground-v2';
     return m;
   }
 

@@ -9,30 +9,34 @@ import {
 
 // x, half width, half height above / below the centreline, centre height, cross-section exponent
 const PROFILE = [
-  [-15.6, 0.03, 0.03, 0.03, 0.25, 2.0],
-  [-14.9, 0.1, 0.09, 0.09, 0.27, 2.0],
-  [-12.5, 0.22, 0.18, 0.17, 0.42, 2.05],
-  [-9.5, 0.36, 0.28, 0.27, 0.66, 2.1],
-  [-6.4, 0.55, 0.4, 0.38, 1.02, 2.15],
-  [-3.6, 0.78, 0.52, 0.5, 1.4, 2.2],
-  [-1.6, 1.0, 0.64, 0.6, 1.68, 2.25],
-  [-0.2, 1.22, 0.76, 0.72, 1.86, 2.3],
-  [0.8, 1.55, 0.88, 0.82, 1.95, 2.35],
-  [1.8, 2.0, 1.02, 0.95, 2.02, 2.45],
-  [3.0, 2.48, 1.15, 1.08, 2.08, 2.55],
-  [4.5, 2.68, 1.22, 1.14, 2.12, 2.6],
-  [6.0, 2.56, 1.2, 1.13, 2.18, 2.55],
-  [7.4, 2.12, 1.08, 1.06, 2.25, 2.45],
-  [8.4, 1.66, 0.94, 0.98, 2.34, 2.3],
-  [9.05, 1.52, 0.88, 1.0, 2.44, 2.25],
-  [9.55, 1.7, 0.92, 1.12, 2.52, 2.3],
-  [10.05, 1.8, 0.96, 1.06, 2.6, 2.4],
-  [10.6, 1.6, 0.96, 0.86, 2.66, 2.5],
-  [11.25, 1.28, 0.88, 0.7, 2.68, 2.6],
-  [11.9, 0.98, 0.72, 0.57, 2.66, 2.65],
-  [12.45, 0.72, 0.55, 0.45, 2.62, 2.6],
-  [12.82, 0.5, 0.4, 0.33, 2.58, 2.4],
-  [13.02, 0.16, 0.15, 0.13, 2.56, 2.0],
+  [-16.4, 0.03, 0.03, 0.03, 0.22, 2.0],
+  [-15.6, 0.1, 0.09, 0.09, 0.26, 2.0],
+  [-13.0, 0.22, 0.19, 0.18, 0.4, 2.05],
+  [-10.0, 0.37, 0.3, 0.29, 0.62, 2.1],
+  [-7.0, 0.56, 0.42, 0.4, 0.95, 2.2],
+  [-4.2, 0.82, 0.55, 0.52, 1.32, 2.3],
+  [-2.0, 1.12, 0.66, 0.62, 1.62, 2.4],
+  [-0.4, 1.45, 0.75, 0.7, 1.82, 2.5],
+  // the broad, flat trunk of Pogona: an oval disc in plan
+  [0.7, 1.9, 0.86, 0.78, 1.94, 2.6],
+  [1.8, 2.45, 0.98, 0.88, 2.02, 2.7],
+  [3.0, 2.9, 1.08, 0.95, 2.08, 2.75],
+  [4.4, 3.08, 1.14, 0.98, 2.12, 2.8],
+  [5.8, 2.95, 1.12, 0.97, 2.17, 2.75],
+  [7.1, 2.5, 1.04, 0.98, 2.24, 2.6],
+  [8.1, 1.98, 0.98, 1.02, 2.33, 2.45],
+  [8.85, 1.72, 0.96, 1.12, 2.42, 2.35],
+  // the head: wide spiny jowls, a flat crown, a deep jaw and a short, blunt snout
+  [9.4, 1.92, 1.0, 1.3, 2.52, 2.4],
+  [9.85, 2.02, 1.02, 1.3, 2.58, 2.5],
+  [10.3, 1.9, 1.0, 1.15, 2.63, 2.6],
+  [10.75, 1.66, 0.97, 0.98, 2.66, 2.7],
+  [11.2, 1.38, 0.9, 0.84, 2.66, 2.75],
+  [11.6, 1.1, 0.78, 0.74, 2.62, 2.7],
+  [11.95, 0.86, 0.62, 0.62, 2.56, 2.6],
+  [12.2, 0.64, 0.47, 0.5, 2.5, 2.5],
+  [12.34, 0.42, 0.34, 0.36, 2.47, 2.3],
+  [12.44, 0.12, 0.12, 0.12, 2.45, 2.0],
 ];
 const X_MIN = PROFILE[0][0], X_MAX = PROFILE[PROFILE.length - 1][0];
 const profileAt = monotoneChannels(PROFILE, 5);
@@ -42,14 +46,14 @@ export function profile(x) {
   return { w: P[0], ht: P[1], hb: P[2], cy: P[3], n: P[4] };
 }
 
-export const HINGE_X = 10.3;
+export const HINGE_X = 10.0;
 const MOUTH_HALF = 0.05;
 export function mouthY(x) {
   const { cy } = profile(x);
-  const back = smoothstep(13.1, HINGE_X, x);
+  const back = smoothstep(12.45, HINGE_X, x);
   // A faint upturn at the corner gives the characteristic agamid "smile".
   const corner = Math.exp(-(((x - (HINGE_X + 0.25)) / 0.3) ** 2)) * 0.05;
-  return cy - 0.07 - 0.21 * back + corner;
+  return cy - 0.1 - 0.2 * back + corner;
 }
 
 // --- skeleton ---------------------------------------------------------------
@@ -61,13 +65,13 @@ function addBone(name, origin, axes = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], parent 
   return bones.length - 1;
 }
 const SPINE = [
-  ['tail10', -15.0], ['tail9', -13.6], ['tail8', -12.1], ['tail7', -10.5], ['tail6', -8.9],
-  ['tail5', -7.2], ['tail4', -5.5], ['tail3', -3.8], ['tail2', -2.2], ['tail1', -0.65],
-  ['pelvis', 0.9], ['spine1', 3.0], ['spine2', 5.2], ['chest', 7.5], ['neck', 9.1], ['head', 10.35],
+  ['tail10', -15.5], ['tail9', -14.0], ['tail8', -12.4], ['tail7', -10.8], ['tail6', -9.1],
+  ['tail5', -7.4], ['tail4', -5.7], ['tail3', -4.0], ['tail2', -2.3], ['tail1', -0.65],
+  ['pelvis', 0.9], ['spine1', 3.0], ['spine2', 5.2], ['chest', 7.5], ['neck', 9.0], ['head', 10.3],
 ];
 for (const [name, x] of SPINE) addBone(name, [x, profile(x).cy, 0]);
 addBone('jaw', [HINGE_X, mouthY(HINGE_X), 0], undefined, 'head');
-addBone('gular', [9.75, profile(9.75).cy - 0.5, 0], undefined, 'neck');
+addBone('gular', [9.6, profile(9.6).cy - 0.6, 0], undefined, 'neck');
 const B = (n) => boneIndex.get(n);
 
 function spineWeights(x, out) {
@@ -84,11 +88,11 @@ function spineWeights(x, out) {
 }
 
 // --- head features -------------------------------------------------------------
-const eyeX = 11.12;
+const eyeX = 11.0;
 const eyeProfile = profile(eyeX);
 export const EYE = {
   radius: 0.235,
-  centre: [eyeX, eyeProfile.cy + 0.27, eyeProfile.w - 0.15],
+  centre: [eyeX, eyeProfile.cy + 0.24, eyeProfile.w - 0.2],
   axis: norm([0.18, 0.3, 1]),
 };
 const eyeFeatures = [];
@@ -99,21 +103,21 @@ for (const s of [1, -1]) {
     s, c, axis,
     rim: torus(add(c, scale(axis, 0.1)), axis, 0.215, 0.07),
     socket: sphere(c, EYE.radius + 0.018),
-    brow: ellipsoid(add(c, [0.0, 0.22, -0.06 * s]), [0.5, 0.13, 0.2], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
-    nostrilRim: sphere([12.74, profile(12.74).cy + 0.15, 0.42 * s], 0.085),
-    nostril: sphere([12.76, profile(12.74).cy + 0.16, 0.5 * s], 0.048),
-    ear: ellipsoid([9.85, profile(9.85).cy - 0.04, (profile(9.85).w + 0.06) * s], [0.15, 0.21, 0.14]),
+    brow: ellipsoid(add(c, [0.02, 0.24, -0.06 * s]), [0.58, 0.16, 0.24], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
+    nostrilRim: sphere([12.12, profile(12.12).cy + 0.1, profile(12.12).w * 0.86 * s], 0.065),
+    nostril: sphere([12.13, profile(12.12).cy + 0.1, profile(12.12).w * 0.97 * s], 0.036),
+    ear: ellipsoid([9.9, profile(9.9).cy + 0.0, (profile(9.9).w + 0.04) * s], [0.17, 0.24, 0.16]),
   });
 }
 
 // Lateral body fold that carries the fringe of spines.
 const foldParts = [];
 for (const s of [1, -1]) {
-  const pts = [7.5, 6.3, 5.0, 3.8, 2.6, 1.9].map((x) => {
+  const pts = [7.6, 6.4, 5.1, 3.9, 2.7, 1.6].map((x) => {
     const p = profile(x);
-    return [x, p.cy - 0.18, (p.w - 0.1) * s];
+    return [x, p.cy - 0.2, (p.w - 0.08) * s];
   });
-  for (let i = 0; i < pts.length - 1; i++) foldParts.push(roundCone(pts[i], pts[i + 1], 0.13, 0.13));
+  for (let i = 0; i < pts.length - 1; i++) foldParts.push(roundCone(pts[i], pts[i + 1], 0.16, 0.16));
 }
 
 function loftDistance(x, y, z) {
@@ -144,8 +148,8 @@ function loftDistance(x, y, z) {
 function headDistance(x, y, z) {
   let d = loftDistance(x, y, z);
   // Lateral fold.
-  if (x > 1.4 && x < 8.0 && Math.abs(z) > 1.2) for (const f of foldParts) if (inBox(f.box, x, y, z, 0.3)) d = smin(d, f.f(x, y, z), 0.12);
-  if (x > 8.9) {
+  if (x > 1.2 && x < 8.1 && Math.abs(z) > 1.4) for (const f of foldParts) if (inBox(f.box, x, y, z, 0.3)) d = smin(d, f.f(x, y, z), 0.12);
+  if (x > 8.8) {
     for (const e of eyeFeatures) {
       if (Math.sign(z) !== e.s) continue;
       d = smin(d, e.brow.f(x, y, z), 0.09);
@@ -172,8 +176,8 @@ function headWeights(x, y, z) {
   spineWeights(x, out);
   const p = profile(clamp(x, X_MIN, X_MAX));
   const m = mouthY(Math.max(x, HINGE_X - 0.6));
-  const jaw = smoothstep(m + 0.03, m - 0.03, y) * smoothstep(9.55, 10.35, x);
-  const gular = smoothstep(p.cy - 0.25, p.cy - p.hb * 0.85, y) * smoothstep(8.5, 9.4, x) * (1 - smoothstep(10.4, 11.3, x)) * (1 - smoothstep(0.55, 1.3, Math.abs(z)));
+  const jaw = smoothstep(m + 0.03, m - 0.03, y) * smoothstep(9.35, 10.1, x);
+  const gular = smoothstep(p.cy - 0.25, p.cy - p.hb * 0.85, y) * smoothstep(8.4, 9.2, x) * (1 - smoothstep(10.2, 11.0, x)) * (1 - smoothstep(0.7, 1.5, Math.abs(z)));
   const keep = (1 - jaw) * (1 - gular);
   const res = out.map(([b, w]) => [b, w * keep]);
   res.push([B('jaw'), jaw * (1 - gular)], [B('gular'), gular]);
@@ -190,16 +194,16 @@ const mz = (p, s) => [p[0], p[1], p[2] * s];
 
 const LIMB_SPECS = {
   front: {
-    root: [7.7, 1.86, 1.6], mid: [7.25, 1.56, 3.5], wrist: [7.75, 0.42, 3.95],
-    footYaw: 28, palm: [0.32, 0.1, 0.29], palmOffset: 0.22, rUpper: [0.56, 0.36], rLower: [0.36, 0.23],
-    digits: [[-55, 0.42, 0.075], [-22, 0.62, 0.08], [6, 0.8, 0.082], [32, 0.9, 0.08], [72, 0.52, 0.07]],
-    upperBlend: 0.32,
+    root: [7.6, 1.95, 2.0], mid: [7.15, 1.7, 4.2], wrist: [7.7, 0.48, 4.55],
+    footYaw: 28, palm: [0.38, 0.12, 0.34], palmOffset: 0.26, rUpper: [0.72, 0.48], rLower: [0.48, 0.32],
+    digits: [[-55, 0.5, 0.09], [-22, 0.72, 0.095], [6, 0.92, 0.097], [32, 1.0, 0.095], [72, 0.6, 0.085]],
+    upperBlend: 0.36,
   },
   hind: {
-    root: [1.15, 1.76, 1.35], mid: [2.1, 1.58, 3.65], wrist: [1.3, 0.44, 4.3],
-    footYaw: 58, palm: [0.44, 0.11, 0.32], palmOffset: 0.28, rUpper: [0.74, 0.43], rLower: [0.43, 0.26],
-    digits: [[-52, 0.5, 0.078], [-26, 0.76, 0.084], [-4, 1.0, 0.086], [18, 1.38, 0.084], [78, 0.68, 0.078, -0.18]],
-    upperBlend: 0.38,
+    root: [1.2, 1.8, 1.9], mid: [2.3, 1.62, 4.5], wrist: [1.35, 0.48, 5.05],
+    footYaw: 58, palm: [0.5, 0.13, 0.36], palmOffset: 0.32, rUpper: [0.98, 0.56], rLower: [0.56, 0.34],
+    digits: [[-52, 0.6, 0.09], [-26, 0.88, 0.096], [-4, 1.15, 0.098], [18, 1.6, 0.096], [78, 0.78, 0.088, -0.18]],
+    upperBlend: 0.42,
   },
 };
 
@@ -232,7 +236,7 @@ for (const kind of ['front', 'hind']) {
     spec.digits.forEach(([deg, length, r0, back = 0], i) => {
       const dir = norm(rotY(fwd, deg * s));
       const base = add(add(palmC, scale(dir, spec.palm[0] * 0.75)), scale(fwd, back));
-      base[1] = 0.12;
+      base[1] = 0.13;
       const segs = [0.36, 0.34, 0.3];
       const pts = [base];
       let p = base;
@@ -251,10 +255,10 @@ for (const kind of ['front', 'hind']) {
         // knuckle swelling
         if (k > 0) limbParts.push({ ...sphere(pts[k], radii[k] * 1.12), k: 0.03, w: [[b, 1]], tag: 0 });
       }
-      const c1 = add(pts[3], add(scale(dir, 0.085), [0, -0.004, 0]));
-      const c2 = add(c1, add(scale(dir, 0.075), [0, -0.045, 0]));
-      limbParts.push({ ...roundCone(pts[3], c1, 0.036, 0.022), k: 0.012, w: [[b, 1]], tag: 1 });
-      limbParts.push({ ...roundCone(c1, c2, 0.022, 0.006), k: 0.006, w: [[b, 1]], tag: 1 });
+      const c1 = add(pts[3], add(scale(dir, 0.11), [0, -0.004, 0]));
+      const c2 = add(c1, add(scale(dir, 0.1), [0, -0.06, 0]));
+      limbParts.push({ ...roundCone(pts[3], c1, 0.042, 0.026), k: 0.012, w: [[b, 1]], tag: 1 });
+      limbParts.push({ ...roundCone(c1, c2, 0.026, 0.006), k: 0.006, w: [[b, 1]], tag: 1 });
     });
     const ax = footFrame;
     limbParts.push({ ...ellipsoid(palmC, spec.palm, ax[0], ax[1], ax[2]), k: 0.08, w: [[hand, 1]], tag: 0 });
@@ -273,7 +277,7 @@ for (const kind of ['front', 'hind']) {
 }
 
 // --- assembly ------------------------------------------------------------------
-const bodyBox = aabbOf([[X_MIN, 0, 0], [X_MAX, 3.5, 0]], 2.6);
+const bodyBox = aabbOf([[X_MIN, 0, 0], [X_MAX, 3.6, 0]], 3.3);
 const body = { f: headDistance, box: bodyBox, k: 0, weights: headWeights, tag: 0 };
 const parts = [body, ...limbParts.map((p) => ({ ...p, weights: () => p.w }))];
 export const bounds = (() => {

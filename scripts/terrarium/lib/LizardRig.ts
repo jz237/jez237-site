@@ -132,6 +132,8 @@ export class LizardRig {
   readonly mouth = new THREE.Vector3();
   moving = false;
   private initialised = false;
+  /** Called whenever a foot is put down (world position). */
+  onFootDown?: (p: THREE.Vector3, front: boolean) => void;
 
   constructor(readonly model: LizardModel, readonly ground: GroundQuery) {
     const d = model.data;
@@ -141,7 +143,7 @@ export class LizardRig {
     this.tailIdx = Array.from({length: 10}, (_, i) => model.bone(`tail${i + 1}`));
     this.tailBind = this.tailIdx.map((i) => new THREE.Vector3(...(d.bones[i].origin as [number, number, number])));
     // tail tip beyond the last bone
-    this.tailBind.push(new THREE.Vector3(-15.6, 0.25, 0));
+    this.tailBind.push(new THREE.Vector3(-16.3, 0.23, 0));
     this.boneWorld = d.bones.map(() => new THREE.Matrix4());
     // Bind tilt of every spine/tail bone: its frame if it followed the bind curve.
     const chainX = [...this.spineBindX, ...this.tailBind.map((p) => p.x)];
@@ -308,7 +310,7 @@ export class LizardRig {
     // Lizards move the head in quick saccades, then hold it still.
     let goalYaw = 0, goalPitch = 0;
     if (I.look) {
-      const chestWorld = this.bodyToWorld(new THREE.Vector3(9.5, 2.6, 0), new THREE.Vector3());
+      const chestWorld = this.bodyToWorld(new THREE.Vector3(9.4, 2.6, 0), new THREE.Vector3());
       const d = I.look.clone().sub(chestWorld);
       const local = new THREE.Vector3(d.dot(this.bodyFwd), d.dot(this.bodyUp), d.dot(this.bodyRight));
       goalYaw = clamp(-Math.atan2(local.z, local.x) - this.bend * 0.6, -1.1, 1.1);
@@ -392,7 +394,7 @@ export class LizardRig {
       if (k === 1) this.spinePos[0].y += this.headLift[1];
     }
     // Frames from neighbouring joints (tangent toward the head).
-    const snoutLocal = new THREE.Vector3(13.1 - this.spineBindX[0], 2.5 - this.spineBindY[0], 0);
+    const snoutLocal = new THREE.Vector3(12.46 - this.spineBindX[0], 2.45 - this.spineBindY[0], 0);
     for (let k = 0; k < 6; k++) {
       let ahead: THREE.Vector3, behind: THREE.Vector3;
       if (k === 0) {
@@ -482,6 +484,7 @@ export class LizardRig {
           leg.plantedYaw = leg.toYaw;
           this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
           leg.forcedStep = false;
+          this.onFootDown?.(leg.planted, leg.front);
         }
       } else {
         this.homeWorld(leg, home);
@@ -581,7 +584,7 @@ export class LizardRig {
     model.skin.uDisplay.value = damp(model.skin.uDisplay.value, I.display, 3, 1 / 60);
     model.tongueOut = I.tongue;
     // mouth point (for drinking, eating): inside the jaw, near the front
-    this.mouth.set(12.6 - jb[0], model.data.mouth[1][1] - jb[1] - 0.05, 0).applyMatrix4(jawM);
+    this.mouth.set(11.95 - jb[0], model.data.mouth[1][1] - jb[1] - 0.05, 0).applyMatrix4(jawM);
     // legs
     for (const leg of this.legs) this.solveLeg(leg);
     for (const e of model.eyes) {

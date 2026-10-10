@@ -3,24 +3,26 @@ import {TANK} from './Case';
 import {groundHeight, poolDistance, WATER_LEVEL, POOL} from './Ground';
 import type {Surface} from './Surface';
 import type {Ledge} from './Peaks';
+import {Ripples} from './Ripples';
+import {WIND_GLSL} from './WindField';
 
 const HZ = TANK.d / 2;
 
 /** Ground-height texture over the pool so the water knows its own depth. */
-function bedTexture(x0: number, x1: number, z0: number, z1: number, n = 128) {
-  const data = new Float32Array(n * n);
+function bedTexture(x0: number, x1: number, z0: number, z1: number, n = 192) {
+  // half floats filter linearly on every WebGL 2 device
+  const data = new Uint16Array(n * n);
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
     const x = x0 + (i / (n - 1)) * (x1 - x0), z = z0 + (j / (n - 1)) * (z1 - z0);
-    data[j * n + i] = groundHeight(x, z);
+    data[j * n + i] = THREE.DataUtils.toHalfFloat(groundHeight(x, z));
   }
-  const t = new THREE.DataTexture(data, n, n, THREE.RedFormat, THREE.FloatType);
+  const t = new THREE.DataTexture(data, n, n, THREE.RedFormat, THREE.HalfFloatType);
   t.magFilter = THREE.LinearFilter;
   t.minFilter = THREE.LinearFilter;
   t.needsUpdate = true;
   return t;
 }
 
-export interface Ripple {x: number; z: number; t0: number; strength: number}
 
 const commonGLSL = /* glsl */ `
 float wh(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -41,13 +43,23 @@ export class Water {
     uKeyDir: {value: new THREE.Vector3(0, 1, 0)},
     uKeyColor: {value: new THREE.Color(1, 0.85, 0.65)},
     uImpact: {value: new THREE.Vector3(0.06, WATER_LEVEL, 0.07)},
-    uRipples: {value: Array.from({length: 12}, () => new THREE.Vector4(0, 0, -100, 0))},
     uRain: {value: 0},
     uAmbient: {value: 1},
+    uFlash: {value: 0},
+    tRipple: {value: null as THREE.Texture | null},
+    uRippleBox: {value: new THREE.Vector4()},
+    uRippleTexel: {value: new THREE.Vector2()},
+    uRippleA: {value: 0},
+    tWind: {value: null as THREE.Texture | null},
+    uWindBox: {value: new THREE.Vector4(-TANK.w / 2, -TANK.d / 2, TANK.w, TANK.d)},
+    uGust: {value: new THREE.Vector3()},
   };
+  readonly ripples: Ripples;
+  private impactT = 0;
+  private drips: {p: THREE.Vector3; v: THREE.Vector3; life: number}[] = [];
+  private dripPoints: THREE.Points;
   readonly reflectRT: THREE.WebGLRenderTarget;
   private mirrorCam = new THREE.PerspectiveCamera();
-  private ripples: Ripple[] = [];
   readonly fall: THREE.Mesh;
   readonly spray: THREE.Points;
   private sprayData: {p: THREE.Vector3; v: THREE.Vector3; life: number; max: number}[] = [];
@@ -58,6 +70,9 @@ export class Water {
     const z0 = POOL.cz - POOL.rz * 1.3, z1 = HZ;
     this.uniforms.tBed.value = bedTexture(x0, x1, z0, z1);
     this.uniforms.uBedBox.value.set(x0, z0, x1 - x0, z1 - z0);
+    this.ripples = new Ripples(this.uniforms.uBedBox.value.clone(), this.uniforms.tBed.value!);
+    this.uniforms.uRippleBox.value.copy(this.ripples.box);
+    this.uniforms.uRippleTexel.value.set(1 / this.ripples.nx, 1 / this.ripples.nz);
     this.reflectRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
 
     // Pool surface
@@ -93,7 +108,7 @@ export class Water {
     for (let i = 0; i < N; i++) this.sprayData.push({p: new THREE.Vector3(0, -1, 0), v: new THREE.Vector3(), life: Math.random(), max: 1});
     this.spray = new THREE.Points(sp, new THREE.ShaderMaterial({
       uniforms: {uScale: {value: 900}, uLight: {value: 1}},
-      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
       vertexShader: `attribute float aLife; varying float vL; uniform float uScale;
 void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = uScale * (0.004 + 0.012 * (1.0 - aLife)) / -mv.z; }`,
       fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(c)); gl_FragColor = vec4(vec3(0.85, 0.8, 0.72) * a * vL * 0.18 * uLight, 0.0); }`,
@@ -102,6 +117,23 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
     this.spray.layers.set(1);
     this.spray.renderOrder = 5;
     this.group.add(this.spray);
+
+    // droplets flicked up when the water is touched
+    const D = 90;
+    for (let i = 0; i < D; i++) this.drips.push({p: new THREE.Vector3(0, -1, 0), v: new THREE.Vector3(), life: 0});
+    const dg = new THREE.BufferGeometry();
+    dg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(D * 3), 3).setUsage(THREE.DynamicDrawUsage));
+    dg.setAttribute('aLife', new THREE.BufferAttribute(new Float32Array(D), 1).setUsage(THREE.DynamicDrawUsage));
+    this.dripPoints = new THREE.Points(dg, new THREE.ShaderMaterial({
+      uniforms: {uScale: {value: 900}, uLight: {value: 1}},
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
+      vertexShader: `attribute float aLife; varying float vL; uniform float uScale; void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = max(1.5, 0.0028 * uScale / -mv.z); }`,
+      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.15, length(c)); float glint = smoothstep(0.2, 0.0, length(c - vec2(-0.12, -0.12))); gl_FragColor = vec4(vec3(0.75, 0.78, 0.8) * (a * 0.5 + glint) * vL * uLight, 0.0); }`,
+    }));
+    this.dripPoints.frustumCulled = false;
+    this.dripPoints.layers.set(1);
+    this.dripPoints.renderOrder = 5;
+    this.group.add(this.dripPoints);
   }
 
   private cascadePoints: THREE.Vector3[] = [];
@@ -183,25 +215,16 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
 varying vec3 vW; varying vec4 vClip;
 void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vClip = projectionMatrix * viewMatrix * w; gl_Position = vClip; }`,
       fragmentShader: /* glsl */ `
-uniform float uTime, uRain; uniform sampler2D tRefract, tReflect, tBed; uniform vec2 uResolution; uniform vec4 uBedBox;
-uniform mat4 uReflectMatrix; uniform vec3 uKeyDir, uKeyColor, uImpact; uniform vec4 uRipples[12];
+uniform float uTime, uRain, uFlash, uRippleA; uniform sampler2D tRefract, tReflect, tBed, tRipple; uniform vec2 uResolution, uRippleTexel; uniform vec4 uBedBox, uRippleBox;
+uniform mat4 uReflectMatrix; uniform vec3 uKeyDir, uKeyColor, uImpact;
 varying vec3 vW; varying vec4 vClip;
 ${commonGLSL}
-float waveH(vec2 p){
+${WIND_GLSL}
+float rippleH(vec2 uv){ vec4 r = texture2D(tRipple, uv); return mix(r.g, r.r, uRippleA); }
+float waveH(vec2 p, float chop){
   float h = 0.0;
-  h += (wn(p * 90.0 + vec2(uTime * 0.21, uTime * 0.13)) - 0.5) * 0.0005;
-  h += (wn(p * 210.0 - vec2(uTime * 0.31, -uTime * 0.27)) - 0.5) * 0.00025;
-  // rings spreading from the foot of the falls
-  float d = distance(p, uImpact.xz);
-  h += sin(d * 520.0 - uTime * 22.0) * 0.00028 * exp(-d * 28.0) * smoothstep(0.004, 0.012, d);
-  for (int i = 0; i < 12; i++) {
-    vec4 r = uRipples[i];
-    float age = uTime - r.z;
-    if (age < 0.0 || age > 2.0) continue;
-    float rd = distance(p, r.xy);
-    float front = age * 0.11;
-    h += sin((rd - front) * 900.0) * exp(-pow((rd - front) * 140.0, 2.0)) * r.w * 0.0006 * (1.0 - age / 2.0);
-  }
+  h += (wn(p * 90.0 + vec2(uTime * 0.21, uTime * 0.13)) - 0.5) * 0.0005 * (0.4 + chop);
+  h += (wn(p * 210.0 - vec2(uTime * 0.31, -uTime * 0.27)) - 0.5) * 0.00025 * (0.4 + chop * 1.4);
   return h;
 }
 void main(){
@@ -209,9 +232,19 @@ void main(){
   float bed = texture2D(tBed, bedUv).r;
   float depth = ${WATER_LEVEL.toFixed(4)} - bed;
   if (depth < -0.0005) discard;
+  // wind roughens the surface into cat's paws
+  vec2 wv = windAt(vW.xz, uTime);
+  float paw = wgn(vW.xz * 18.0 - wv * uTime * 3.0);
+  float chop = smoothstep(0.03, 0.6, length(wv)) * (0.6 + 1.2 * smoothstep(0.42, 0.8, paw));
   float e = 0.0004;
-  float h0 = waveH(vW.xz);
-  vec3 n = normalize(vec3(-(waveH(vW.xz + vec2(e, 0.0)) - h0) / e, 1.0, -(waveH(vW.xz + vec2(0.0, e)) - h0) / e));
+  float h0 = waveH(vW.xz, chop);
+  vec3 n = normalize(vec3(-(waveH(vW.xz + vec2(e, 0.0), chop) - h0) / e, 1.0, -(waveH(vW.xz + vec2(0.0, e), chop) - h0) / e));
+  // simulated ripples: touches, raindrops, wading feet, the falls
+  vec2 rpuv = (vW.xz - uRippleBox.xy) / uRippleBox.zw;
+  float rs = 0.00035;
+  float rx = (rippleH(rpuv + vec2(uRippleTexel.x, 0.0)) - rippleH(rpuv - vec2(uRippleTexel.x, 0.0))) * rs / (2.0 * uRippleTexel.x * uRippleBox.z);
+  float rz = (rippleH(rpuv + vec2(0.0, uRippleTexel.y)) - rippleH(rpuv - vec2(0.0, uRippleTexel.y))) * rs / (2.0 * uRippleTexel.y * uRippleBox.w);
+  n = normalize(n + vec3(-rx, 0.0, -rz));
   vec3 V = normalize(cameraPosition - vW);
   float cosT = max(dot(n, V), 0.0);
   float F = 0.02 + 0.98 * pow(1.0 - cosT, 5.0);
@@ -230,7 +263,7 @@ void main(){
   float spec = pow(max(dot(n, H), 0.0), 900.0) * 18.0 + pow(max(dot(n, H), 0.0), 120.0) * 0.4;
   float foamD = distance(vW.xz, uImpact.xz);
   float foam = smoothstep(0.035, 0.0, foamD) * smoothstep(0.35, 0.75, wn(vW.xz * 300.0 + vec2(uTime * 0.6, -uTime)) + 0.3 * smoothstep(0.03, 0.0, foamD));
-  vec3 col = below * (1.0 - F) + refl * F + uKeyColor * spec + foam * vec3(0.7, 0.68, 0.62) * 0.6;
+  vec3 col = below * (1.0 - F) + refl * F + uKeyColor * spec + foam * vec3(0.7, 0.68, 0.62) * 0.6 + vec3(0.8, 0.85, 1.0) * uFlash * F * 2.0;
   float edge = smoothstep(0.0, 0.004, depth);
   gl_FragColor = vec4(col, edge);
 }`,
@@ -244,13 +277,14 @@ void main(){
       depthWrite: false,
       vertexShader: `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
       fragmentShader: /* glsl */ `
-uniform float uTime; uniform sampler2D tRefract, tBed; uniform vec2 uResolution; uniform vec4 uBedBox;
+uniform float uTime, uRippleA; uniform sampler2D tRefract, tBed, tRipple; uniform vec2 uResolution; uniform vec4 uBedBox, uRippleBox;
 varying vec3 vW;
 ${commonGLSL}
 void main(){
   vec2 bedUv = (vec2(vW.x, ${(HZ - 0.004).toFixed(4)}) - uBedBox.xy) / uBedBox.zw;
   float bed = texture2D(tBed, bedUv).r;
-  float surf = ${WATER_LEVEL.toFixed(4)} + sin(vW.x * 400.0 + uTime * 3.0) * 0.0002;
+  vec4 rp = texture2D(tRipple, (vec2(vW.x, ${(HZ - 0.006).toFixed(4)}) - uRippleBox.xy) / uRippleBox.zw);
+  float surf = ${WATER_LEVEL.toFixed(4)} + sin(vW.x * 400.0 + uTime * 3.0) * 0.0002 + mix(rp.g, rp.r, uRippleA) * 0.00025;
   if (vW.y > surf || vW.y < bed - 0.0005) discard;
   vec2 suv = gl_FragCoord.xy / uResolution;
   float wob = (wn(vec2(vW.x * 160.0, uTime * 0.7)) - 0.5) * 0.002;
@@ -306,21 +340,82 @@ void main(){
     });
   }
 
+  stepRipples(renderer: THREE.WebGLRenderer, dt: number) {
+    this.ripples.update(renderer, dt);
+    this.uniforms.tRipple.value = this.ripples.texture;
+    this.uniforms.uRippleA.value = this.ripples.alpha;
+  }
+
+  setPixelScale(s: number) {(this.dripPoints.material as THREE.ShaderMaterial).uniforms.uScale.value = s;}
+
   setLight(level: number, keyColor: THREE.Color) {
+    (this.dripPoints.material as THREE.ShaderMaterial).uniforms.uLight.value = 0.15 + 0.85 * level;
     this.uniforms.uKeyColor.value.copy(keyColor).multiplyScalar(level);
     this.uniforms.uAmbient.value = 0.15 + 0.85 * level;
     (this.spray.material as THREE.ShaderMaterial).uniforms.uLight.value = 0.1 + 0.9 * level;
   }
 
-  addRipple(x: number, z: number, strength: number, time: number) {
-    if (poolDistance(x, z) > 0.1) return;
-    this.ripples.push({x, z, t0: time, strength});
-    if (this.ripples.length > 12) this.ripples.shift();
-    this.ripples.forEach((r, i) => this.uniforms.uRipples.value[i].set(r.x, r.z, r.t0, r.strength));
+  /** A small disturbance (a lap of the tongue, a raindrop, a footfall). */
+  addRipple(x: number, z: number, strength: number, time?: number) {
+    void time;
+    if (poolDistance(x, z) > 0.02) return;
+    this.ripples.add(x, z, 0.0035, -strength * 1.6);
+  }
+
+  /** A finger poked into the water: a dent, a rebound and a few flicked drops. */
+  poke(x: number, z: number, strength = 1) {
+    if (poolDistance(x, z) > 0.0) return false;
+    this.ripples.add(x, z, 0.006 + 0.003 * strength, -7 * strength);
+    this.ripples.add(x, z, 0.0022, 4 * strength);
+    this.flick(x, z, Math.round(5 + 6 * strength), 0.25 * strength);
+    return true;
+  }
+
+  /** A finger drawn through the water leaves a wake. */
+  stir(x: number, z: number, speed: number) {
+    if (poolDistance(x, z) > 0.0) return;
+    const u = Math.min(1, speed * 6);
+    this.ripples.add(x, z, 0.0035, -1.4 - 2.2 * u);
+    if (Math.random() < u * 0.5) this.flick(x, z, 1, 0.12 * u);
+  }
+
+  /** Flicks droplets up from the surface; they ripple where they land. */
+  flick(x: number, z: number, n: number, speed: number) {
+    for (const d of this.drips) {
+      if (n <= 0) break;
+      if (d.life > 0) continue;
+      const a = Math.random() * Math.PI * 2, s = (0.2 + Math.random() * 0.8) * speed * 0.35;
+      d.p.set(x, WATER_LEVEL + 0.002, z);
+      d.v.set(Math.cos(a) * s, (0.4 + Math.random() * 0.6) * speed + 0.05, Math.sin(a) * s);
+      d.life = 1;
+      n--;
+    }
   }
 
   update(dt: number, time: number, flow: number) {
     this.uniforms.uTime.value = time;
+    // the falls keep the plunge pool trembling
+    this.impactT -= dt;
+    if (this.impactT < 0) {
+      this.impactT = 0.03 + Math.random() * 0.05;
+      const im = this.uniforms.uImpact.value;
+      this.ripples.add(im.x + (Math.random() - 0.5) * 0.02, im.z + (Math.random() - 0.5) * 0.02, 0.004, -(0.8 + Math.random() * 1.2) * flow);
+    }
+    const dp = this.dripPoints.geometry.attributes.position as THREE.BufferAttribute;
+    const dl = this.dripPoints.geometry.attributes.aLife as THREE.BufferAttribute;
+    this.drips.forEach((d, i) => {
+      if (d.life > 0) {
+        d.v.y -= 2.4 * dt;
+        d.p.addScaledVector(d.v, dt);
+        if (d.p.y < WATER_LEVEL && d.v.y < 0) {
+          d.life = 0;
+          if (poolDistance(d.p.x, d.p.z) < 0) this.ripples.add(d.p.x, d.p.z, 0.0025, -0.9);
+        }
+      }
+      dp.setXYZ(i, d.p.x, d.life > 0 ? d.p.y : -10, d.p.z);
+      dl.setX(i, d.life);
+    });
+    dp.needsUpdate = dl.needsUpdate = true;
     const pos = this.spray.geometry.attributes.position as THREE.BufferAttribute;
     const life = this.spray.geometry.attributes.aLife as THREE.BufferAttribute;
     const impact = this.uniforms.uImpact.value;
@@ -351,6 +446,7 @@ void main(){
     const m = this.mirrorCam;
     m.copy(camera);
     m.layers.set(0);
+    m.layers.enable(2);
     const reflectY = (v: THREE.Vector3) => v.set(v.x, 2 * WATER_LEVEL - v.y, v.z);
     const eye = reflectY(camera.position.clone());
     const dir = camera.getWorldDirection(new THREE.Vector3());

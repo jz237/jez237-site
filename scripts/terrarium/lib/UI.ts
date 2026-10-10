@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import type {Terrarium} from './Terrarium';
-import type {Cloud} from './Clouds';
+import {WATER_LEVEL, poolDistance} from './Ground';
 
-export type Tool = 'hand' | 'rain' | 'mist' | 'wind' | 'wipe' | 'feed';
+export type Tool = 'hand' | 'cloud' | 'wind' | 'fog' | 'wipe' | 'feed';
 
 const ICON: Record<string, string> = {
   hand: '<path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6a1.5 1.5 0 0 1 3 0v7c0 4-2.5 7-6 7-2.5 0-4-1-5.5-3.2L3.3 13a1.4 1.4 0 0 1 2.3-1.6L8 14"/>',
-  rain: '<path d="M7 16a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.6 3.6 0 0 1 .5 7.2"/><path d="M9 18.5l-1 2.5M13 17.5l-1 2.5M17 17l-1 2.5"/>',
-  mist: '<path d="M4 9h11a3 3 0 1 0-3-3M3 13h16M5 17h10a3 3 0 1 1-3 3"/>',
+  cloud: '<path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.6 8.6 4.2 4.2 0 0 1 17.5 18z"/><path d="M12 11v4M10 13h4"/>',
+  fog: '<path d="M4 9h11a3 3 0 1 0-3-3M3 13h16M5 17h10a3 3 0 1 1-3 3"/>',
   wind: '<path d="M3 8h10a2.5 2.5 0 1 0-2.5-2.5M3 12h15a3 3 0 1 1-3 3M3 16h7"/>',
   wipe: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 15c2-4 6-7 8-8M7 11c1.5-2.5 3.5-4 5.5-5"/>',
   feed: '<path d="M6 14c3-1 6-1 9 0M5 14c0-3 3-6 7-6s7 3 7 6M12 8V5M9.5 5.5 12 3l2.5 2.5"/><circle cx="16.5" cy="17" r="1.5"/><circle cx="9" cy="18" r="1.2"/>',
@@ -23,10 +23,10 @@ const ICON: Record<string, string> = {
 const svg = (k: string) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
 
 const TOOLS: {id: Tool; label: string; hint: string}[] = [
-  {id: 'hand', label: 'Hand', hint: 'Drag to look around · grab a cloud to move it · touch the lizard'},
-  {id: 'rain', label: 'Rain', hint: 'Press and hold a cloud to wring out rain'},
-  {id: 'mist', label: 'Mist', hint: 'Hold anywhere to fill the case with mist'},
-  {id: 'wind', label: 'Wind', hint: 'Drag across the scene to blow a gust'},
+  {id: 'hand', label: 'Hand', hint: 'Grab a cloud and hold still to wring out rain · shake it hard for lightning · touch the water or the lizard'},
+  {id: 'cloud', label: 'Cloud', hint: 'Hold to condense a new cloud · drag to stretch it · push clouds together to build a storm'},
+  {id: 'wind', label: 'Wind', hint: 'Drag across the case to blow a gust'},
+  {id: 'fog', label: 'Fog', hint: 'Hold or drag to pour fog — it runs downhill and pools on the water'},
   {id: 'wipe', label: 'Wipe', hint: 'Drag across the glass to wipe away condensation'},
   {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard'},
 ];
@@ -41,7 +41,8 @@ export class UI {
   private readout: {temp: HTMLElement; hum: HTMLElement; time: HTMLElement};
   private slider: HTMLInputElement;
   private play: HTMLButtonElement;
-  private drag: {kind: 'cloud' | 'tool'; cloud?: Cloud; plane?: THREE.Plane; offset?: THREE.Vector3; last: THREE.Vector2; moved: number} | null = null;
+  private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number} | null = null;
+  private coached = false;
   private ray = new THREE.Raycaster();
   private ndc = new THREE.Vector2();
   onSound?: () => void;
@@ -140,78 +141,167 @@ export class UI {
     this.ray.setFromCamera(this.ndc, this.t.camera);
   }
 
+  /** Where a ray meets the pool surface, if the water is the first thing it hits. */
+  private pickWater(ray: THREE.Ray): THREE.Vector3 | null {
+    const t = this.t;
+    const hit = ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -WATER_LEVEL), new THREE.Vector3());
+    if (!hit || poolDistance(hit.x, hit.z) > -0.01) return null;
+    const solid = t.pickInside(ray);
+    if (solid && solid.distanceTo(ray.origin) < hit.distanceTo(ray.origin) - 0.002) return null;
+    return hit;
+  }
+
+  /** A point for the wind and fog tools: on the ground or water, else a mid-air plane. */
+  private pickFloor(ray: THREE.Ray, lift: number): THREE.Vector3 {
+    const water = this.pickWater(ray);
+    const p = water ?? this.t.pickInside(ray) ?? ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.2), new THREE.Vector3()) ?? new THREE.Vector3(0, 0.2, 0);
+    p.x = THREE.MathUtils.clamp(p.x, -0.58, 0.58);
+    p.z = THREE.MathUtils.clamp(p.z, -0.23, 0.23);
+    p.y += lift;
+    return p;
+  }
+
   private bindPointer(host: HTMLElement) {
     const t = this.t;
     const canvas = t.renderer.domElement;
+    const w = () => t.weather;
     // Capture-phase on the host so tools can pre-empt the orbit controls.
     host.addEventListener('pointerdown', (e) => {
       if (e.target !== canvas) return;
       if (!t.audio.running) {t.audio.start(); this.setSoundState(!t.audio.muted);}
       this.setRay(e, host);
       const last = new THREE.Vector2(e.clientX, e.clientY);
+      const now = performance.now() / 1000;
+      const capture = () => {e.stopPropagation(); canvas.setPointerCapture(e.pointerId);};
       if (this.tool === 'hand') {
-        const c = t.weather.clouds.pick(this.ray.ray);
+        const c = w().clouds.pick(this.ray.ray);
         if (c) {
-          const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -c.centre.y);
-          const hit = this.ray.ray.intersectPlane(plane, new THREE.Vector3());
-          this.drag = {kind: 'cloud', cloud: c, plane, offset: hit ? c.centre.clone().sub(hit) : new THREE.Vector3(), last, moved: 0};
-          e.stopPropagation();
-          canvas.setPointerCapture(e.pointerId);
+          w().clouds.grab(c.cloud, c.point, this.ray.ray);
+          this.drag = {kind: 'cloud', last, lastT: now, moved: 0, downT: now};
+          capture();
           document.body.classList.add('grabbing');
+          if (!this.coached) {this.coached = true; this.say('Hold still to squeeze out rain · shake it hard to build a storm', 5);}
+          return;
+        }
+        // a tap on the lizard is a gentle touch
+        this.pendingPet = t.hitLizard(this.ray.ray);
+        if (this.pendingPet) return;
+        const water = this.pickWater(this.ray.ray);
+        if (water) {
+          t.water.poke(water.x, water.z, 1);
+          t.audio.splash(0.8, THREE.MathUtils.clamp(water.x / 0.6, -1, 1) * 0.6);
+          t.insects.scatter(water, 0.12);
+          this.drag = {kind: 'water', last, lastWorld: water, lastT: now, moved: 0, downT: now};
+          capture();
           return;
         }
         this.drag = null;
-        // a tap on the lizard is a gentle touch
-        this.pendingPet = t.hitLizard(this.ray.ray);
         return;
       }
-      e.stopPropagation();
-      canvas.setPointerCapture(e.pointerId);
-      this.drag = {kind: 'tool', last, moved: 0};
-      if (this.tool === 'rain') {
-        const c = t.weather.clouds.pick(this.ray.ray);
-        if (c) {this.drag.cloud = c; t.weather.squeeze(c, 1); this.say('Rain!', 2);}
-        else this.say('Press and hold on a cloud to wring out its rain', 3);
+      capture();
+      this.drag = {kind: 'tool', last, lastT: now, moved: 0, downT: now};
+      if (this.tool === 'cloud') {
+        const c = w().clouds.pick(this.ray.ray);
+        const p = this.ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.555), new THREE.Vector3()) ?? new THREE.Vector3(0, 0.555, 0);
+        w().clouds.condense(c ? c.point : p, c?.cloud ?? null);
+        this.drag.kind = 'condense';
       } else if (this.tool === 'feed') {
         const p = t.pickInside(this.ray.ray);
         t.feed(p);
         this.say('A cricket drops in…', 3);
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
-      } else if (this.tool === 'mist') {
-        t.weather.mistTarget = Math.min(1, t.weather.mistTarget + 0.15);
+      } else if (this.tool === 'fog') {
+        const p = this.pickFloor(this.ray.ray, 0);
+        w().pourFog(p.x, p.z, 'down');
+        t.audio.fogWhoosh();
+        this.drag.lastWorld = p;
+      } else if (this.tool === 'wind') {
+        this.drag.lastWorld = this.pickFloor(this.ray.ray, 0.024);
       }
     }, true);
     host.addEventListener('pointermove', (e) => {
       if (e.target !== canvas) return;
       this.setRay(e, host);
-      t.brain.pointer = this.tool === 'hand' || this.tool === 'feed' ? t.pickInside(this.ray.ray) : null;
+      const inside = this.tool === 'hand' || this.tool === 'feed' ? t.pickInside(this.ray.ray) : null;
+      t.brain.pointer = inside;
+      // the hand brushes through the plants it passes over
+      if (this.tool === 'hand' && inside) t.handPush.set(inside.x, inside.y, inside.z, 0.028);
+      else t.handPush.w = 0;
+      if (this.tool === 'hand' && !this.drag) w().clouds.setHover(w().clouds.pick(this.ray.ray)?.cloud ?? null);
       const d = this.drag;
       if (!d) return;
+      const now = performance.now() / 1000;
+      const dt = Math.max(1 / 240, now - d.lastT);
       const dx = e.clientX - d.last.x, dy = e.clientY - d.last.y;
-      d.moved += Math.hypot(dx, dy);
+      const px = Math.hypot(dx, dy);
+      d.moved += px;
       d.last.set(e.clientX, e.clientY);
-      if (d.kind === 'cloud' && d.cloud && d.plane) {
-        const hit = this.ray.ray.intersectPlane(d.plane, new THREE.Vector3());
-        if (hit) {
-          const target = hit.add(d.offset!);
-          d.cloud.velocity.copy(target).sub(d.cloud.centre).multiplyScalar(8);
-          d.cloud.centre.lerp(target, 0.6);
+      d.lastT = now;
+      if (d.kind === 'cloud') {
+        w().clouds.drag(this.ray.ray, px);
+      } else if (d.kind === 'water') {
+        const p = this.pickWater(this.ray.ray);
+        if (p && d.lastWorld) {
+          const dist = p.distanceTo(d.lastWorld);
+          const n = Math.min(12, Math.floor(dist / 0.006));
+          for (let i = 1; i <= n; i++) {
+            const q = d.lastWorld.clone().lerp(p, i / n);
+            t.water.stir(q.x, q.z, dist / dt);
+          }
+          if (n > 0) d.lastWorld = p;
         }
-      } else if (this.tool === 'wind') {
-        const right = new THREE.Vector3().setFromMatrixColumn(t.camera.matrixWorld, 0).setY(0).normalize();
-        const fwd = new THREE.Vector3().setFromMatrixColumn(t.camera.matrixWorld, 2).setY(0).normalize().negate();
-        const gust = right.multiplyScalar(dx).addScaledVector(fwd, -dy).multiplyScalar(0.004);
-        t.weather.wind.add(gust).clampLength(0, 1.6);
+      } else if (d.kind === 'condense') {
+        const p = this.ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.555), new THREE.Vector3());
+        if (p) w().clouds.condenseMove(p);
+      } else if (this.tool === 'wind' && d.lastWorld) {
+        const p = this.pickFloor(this.ray.ray, 0.024);
+        const seg = p.clone().sub(d.lastWorld);
+        seg.y = 0;
+        const dist = seg.length();
+        if (dist > 0.002) {
+          const speed = Math.min(1.5, (dist / dt) * 0.9);
+          const dir = seg.normalize();
+          const n = Math.max(1, Math.min(12, Math.ceil(dist / 0.02)));
+          for (let i = 1; i <= n; i++) {
+            const q = d.lastWorld.clone().lerp(p, i / n);
+            w().stroke(q.x, q.z, dir.x * speed, dir.z * speed);
+          }
+          t.audio.windStroke(speed / 1.5, THREE.MathUtils.clamp(p.x / 0.6, -1, 1) * 0.7);
+          d.lastWorld = p;
+        }
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
-      } else if (this.tool === 'mist') {
-        t.weather.mistTarget = Math.min(1, t.weather.mistTarget + 0.01);
+      } else if (this.tool === 'fog' && d.lastWorld) {
+        const p = this.pickFloor(this.ray.ray, 0);
+        const dist = Math.hypot(p.x - d.lastWorld.x, p.z - d.lastWorld.z);
+        const n = Math.min(24, Math.floor(dist / 0.012));
+        const dir = new THREE.Vector2(p.x - d.lastWorld.x, p.z - d.lastWorld.z).normalize();
+        for (let i = 1; i <= n; i++) {
+          const q = d.lastWorld.clone().lerp(p, i / n);
+          w().pourFog(q.x, q.z, 'move', 0, 0, dir);
+        }
+        if (n > 0) d.lastWorld = p;
       }
     }, true);
+    host.addEventListener('wheel', (e) => {
+      if (this.tool !== 'hand') return;
+      const r = host.getBoundingClientRect();
+      this.ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      this.ray.setFromCamera(this.ndc, t.camera);
+      const c = w().clouds.pick(this.ray.ray);
+      if (c && e.deltaY > 0) {
+        // scrolling down over a cloud wrings it out instead of zooming
+        w().clouds.wheel(c.cloud, e.deltaY);
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }, {capture: true, passive: false});
     const end = (e: PointerEvent) => {
-      if (this.drag?.kind === 'tool' && this.tool === 'rain') t.weather.squeeze(null, 0);
-      if (this.drag?.kind === 'cloud') document.body.classList.remove('grabbing');
+      const d = this.drag;
+      if (d?.kind === 'cloud') {w().clouds.release(); document.body.classList.remove('grabbing');}
+      if (d?.kind === 'condense') w().clouds.condenseEnd();
+      if (d?.kind === 'water' && d.lastWorld) t.water.flick(d.lastWorld.x, d.lastWorld.z, 2 + Math.floor(Math.random() * 3), 0.15);
       this.drag = null;
       if (this.pendingPet && this.tool === 'hand') {
         this.setRay(e, host);
@@ -221,12 +311,15 @@ export class UI {
     };
     host.addEventListener('pointerup', end, true);
     host.addEventListener('pointercancel', end, true);
-    host.addEventListener('pointerleave', () => {t.brain.pointer = null;});
+    host.addEventListener('pointerleave', () => {t.brain.pointer = null; t.handPush.w = 0; w().clouds.setHover(null);});
   }
   private pendingPet = false;
 
   update(dt: number) {
     const t = this.t;
+    // holding still with the fog or cloud tool keeps pouring / condensing
+    const d = this.drag;
+    if (d && this.tool === 'fog' && d.lastWorld) t.weather.pourFog(d.lastWorld.x, d.lastWorld.z, 'hold', dt, performance.now() / 1000 - d.downT);
     if (this.toastTimer > 0) {
       this.toastTimer -= dt;
       if (this.toastTimer <= 0) this.toast.classList.remove('show');

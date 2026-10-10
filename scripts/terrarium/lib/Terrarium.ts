@@ -3,7 +3,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {Post} from './Post';
 import {Room} from './Room';
 import {Case, TANK, type Pane} from './Case';
-import {Ground} from './Ground';
+import {Ground, poolDistance} from './Ground';
 import {Hardscape} from './Hardscape';
 import {loadScans} from './Assets';
 import {LizardModel} from './LizardModel';
@@ -19,6 +19,7 @@ import {LizardRig} from './LizardRig';
 import {LizardBrain} from './LizardBrain';
 import {Weather} from './Weather';
 import {TerrariumAudio} from './Audio';
+import {CloudShadow} from './CloudShadow';
 
 const DIRECT = new URLSearchParams(location.search).has('direct');
 
@@ -43,6 +44,10 @@ export class Terrarium {
   brain!: LizardBrain;
   weather!: Weather;
   readonly audio = new TerrariumAudio();
+  readonly cloudShadow = new CloudShadow();
+  /** The hand's push on the foliage (x, y, z, radius). */
+  readonly handPush = foliageUniforms.uPush.value[3];
+  private wadeT = 0;
   follow = false;
   temperature = 27;
   private plaqueT = 0;
@@ -93,6 +98,8 @@ export class Terrarium {
     this.key.shadow.camera.near = 0.3;
     this.key.shadow.camera.far = 1.6;
     this.key.shadow.radius = 2;
+    // passing clouds shade whatever the lamp lights
+    this.key.map = this.cloudShadow.target.texture;
     s.add(this.key, this.key.target);
     // Basking lamp over the log.
     this.heat = new THREE.SpotLight(new THREE.Color(1.0, 0.72, 0.45), 1.1, 1.4, 0.3, 0.95, 2);
@@ -168,8 +175,22 @@ export class Terrarium {
     this.rig = new LizardRig(this.lizard, this.surface);
     this.brain = new LizardBrain(this.rig, this.nav, this.surface, this.insects, this.water);
     this.brain.onLap = (p) => this.water.addRipple(p.x, p.z, 1, this.time);
+    // feet in the shallows ring the water; the body pushes a little wake
+    this.rig.onFootDown = (p) => {
+      if (poolDistance(p.x, p.z) < 0) {
+        this.water.ripples.add(p.x, p.z, 0.004, -2.2);
+        if (Math.random() < 0.3) this.water.flick(p.x, p.z, 1, 0.08);
+      }
+    };
+    this.insects.onSplash = (x, z) => {this.water.ripples.add(x, z, 0.004, -2.5); this.water.flick(x, z, 3, 0.15);};
     this.weather = new Weather(this.surface, this.water);
     this.scene.add(this.weather.group);
+    this.weather.lightning.light.layers.enable(1);
+    foliageUniforms.tWind.value = this.weather.wind.texture;
+    this.water.uniforms.tWind.value = this.weather.wind.texture;
+    this.ground.uniforms.tWetMap.value = this.weather.rain.wetTexture;
+    this.hookWeather();
+    this.resize();
     for (const pane of this.case.panes) pane.fog.settle(this.weather.humidity);
     {
       const q = new URLSearchParams(location.search);
@@ -194,55 +215,98 @@ export class Terrarium {
     this.renderer.setAnimationLoop(() => this.frame());
   }
 
+  /** Sound and the lizard follow the weather's events. */
+  private hookWeather() {
+    const w = this.weather, a = this.audio;
+    const pan = (x: number) => THREE.MathUtils.clamp(x / (TANK.w / 2), -1, 1) * 0.7;
+    w.clouds.events.squish = (c, amt) => a.squish(amt);
+    w.clouds.events.grab = () => a.grab();
+    w.clouds.events.release = (c, sp) => a.release(sp);
+    w.clouds.events.merge = () => a.merge();
+    w.clouds.events.pop = () => a.pop();
+    w.clouds.events.zap = (c) => a.zap(pan(c.pos.x));
+    w.onStrike = (end, strength, water, first) => {
+      if (!first) return;
+      const dist = this.camera.position.distanceTo(end);
+      a.thunder(Math.min(1.2, strength), 0.12 + dist * 0.16, pan(end.x));
+      this.brain.lightning(end, strength);
+      this.insects.scatter(end, 0.25);
+    };
+  }
+
   /** Advances the living parts of the scene (no rendering). */
   simulate(dt: number) {
     this.time += dt;
-    this.weather.update(dt, this.time);
+    this.weather.update(dt, this.time, this.camera);
     this.applyClimate(dt);
     this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
     this.brain.update(dt);
+    this.wake(dt);
     this.water.update(dt, this.time, 1);
+  }
+
+  /** The lizard wading: a bow wave at the chest and a trail behind. */
+  private wake(dt: number) {
+    const I = this.rig.inputs;
+    if (poolDistance(I.x, I.z) > -0.01) return;
+    this.wadeT -= dt;
+    const sp = Math.abs(I.speed);
+    if (this.wadeT > 0) return;
+    this.wadeT = sp > 0.01 ? 0.05 : 0.6;
+    const chest = this.rig.spinePoints()[2];
+    this.water.ripples.add(chest.x, chest.z, 0.008, -(0.6 + sp * 25));
+    if (sp < 0.01) this.water.ripples.add(I.x, I.z, 0.01, -0.5);
   }
 
   /** Lights, wetness and condensation follow the weather and the lamp's day. */
   private applyClimate(dt: number) {
     const w = this.weather;
     const day = w.daylight;
-    const overcast = Math.min(1, w.rainAmount * 0.4);
-    this.key.intensity = 11 * day * (1 - overcast * 0.35);
-    this.heat.intensity = 1.1 * day;
-    this.hemi.intensity = 0.15 + 0.35 * day;
-    this.fill.intensity = 0.35 + 0.55 * day;
+    // clouds and storms dim the lamp; lightning flashes the whole case
+    const gloom = THREE.MathUtils.smoothstep(w.clouds.cover * 0.55 + w.clouds.storminess * 0.75, 0, 1);
+    const flash = w.flash * (1 - 0.55 * day);
+    const overcast = gloom;
+    this.key.intensity = 11 * day * (1 - gloom * 0.55);
+    this.key.color.setRGB(1.0, 0.84, 0.64).lerp(new THREE.Color(0.86, 0.9, 1.0), gloom * 0.5);
+    this.heat.intensity = 1.1 * day * (1 - gloom * 0.4);
+    this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
+    this.fill.intensity = (0.35 + 0.55 * day) * (1 - gloom * 0.25);
     this.moon.intensity = 0.55 * (1 - day);
-    this.rim.intensity = 0.2 + 0.3 * day;
+    this.rim.intensity = 0.2 + 0.3 * day + flash * 0.8;
+    this.scene.environmentIntensity = 1.0 * (1 - gloom * 0.2) + flash * 0.3;
+    this.post.settings.bloomStrength = 0.22 + 0.9 * flash;
     this.case.regulatorGlow.emissive.setRGB(0.3 + 0.7 * day, 0.35 + 0.27 * day, 1.0 - 0.72 * day);
     this.case.regulatorGlow.emissiveIntensity = 1.2 + 1.3 * day;
     this.room.setLampLevel(0.75 + 0.25 * (1 - day));
     const cl = this.weather.clouds.shared;
-    cl.uLightDir.value.copy(this.key.position).sub(this.key.target.position).normalize();
-    cl.uLightColor.value.setRGB(1.0 * day + 0.035, 0.84 * day + 0.05, 0.64 * day + 0.11);
-    cl.uAmbient.value.setRGB(0.03 + 0.33 * day, 0.03 + 0.28 * day, 0.04 + 0.23 * day);
-    cl.uGlow.value.copy(this.case.regulatorGlow.emissive).multiplyScalar(0.6);
-    this.water.setLight(day, this.key.color);
-    this.weather.setLight(day);
+    cl.uLightColor.value.setRGB(1.0 * day + 0.035, 0.84 * day + 0.05, 0.64 * day + 0.11).multiplyScalar(1 - gloom * 0.45);
+    cl.uAmbient.value.setRGB(0.03 + 0.2 * day, 0.03 + 0.17 * day, 0.04 + 0.14 * day);
+    cl.uSky.value.setRGB(0.05 + 0.33 * day, 0.05 + 0.3 * day, 0.06 + 0.26 * day).lerp(new THREE.Color(0.11, 0.12, 0.14), gloom * 0.6);
+    cl.uLidGlow.value.copy(this.case.regulatorGlow.emissive).multiplyScalar(0.6);
+    this.water.setLight(day * (1 - gloom * 0.4), this.key.color);
+    this.water.uniforms.uFlash.value = flash;
+    const ambient = new THREE.Color(0.03 + 0.17 * day, 0.03 + 0.15 * day, 0.035 + 0.12 * day).multiplyScalar(1 - gloom * 0.3);
+    this.weather.setLight(day * (1 - gloom * 0.45), this.key.color, this.key.position, ambient);
+    foliageUniforms.uGust.value.copy(this.weather.wind.uniforms.uGust.value);
+    this.water.uniforms.uGust.value.copy(this.weather.wind.uniforms.uGust.value);
     this.ground.uniforms.uCaustic.value = day;
     // wetness darkens soil, glosses leaves, rock and skin
     this.ground.uniforms.uWet.value = w.wet;
     foliageUniforms.uWet.value = w.wet;
-    foliageUniforms.uWind.value.copy(w.wind);
     this.peaks.uniforms.uWet.value = w.wet * 0.8;
     this.lizard.skin.uWet.value = w.wet * 0.5;
     this.brain.night = day < 0.2;
     this.brain.raining = w.rainAmount > 0.1;
+    this.brain.storm = w.clouds.storminess;
     this.brain.heat = day;
-    this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5;
+    this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0);
     const warmth = day * 0.7;
-    for (const pane of this.case.panes) pane.fog.update(dt, w.humidity, warmth);
+    for (const pane of this.case.panes) pane.fog.update(dt, Math.min(1, w.humidity + w.mist * 0.25), warmth);
     this.case.shared.uHaze.value.setRGB(0.012 + 0.02 * day, 0.011 + 0.016 * day, 0.01 + 0.012 * day);
     this.plaqueT -= dt;
     if (this.plaqueT < 0) {this.plaqueT = 2; this.case.drawPlaque(this.temperature, w.humidity * 100);}
-    this.audio.update(dt, {rain: w.rainAmount, wind: w.wind.length(), crickets: this.insects.crickets.length, night: 1 - day, flow: 1});
+    this.audio.update(dt, {rain: w.rainAmount, wind: w.wind.energy, crickets: this.insects.crickets.length, night: 1 - day, flow: 1});
   }
 
   /** Frames the whole case for the current aspect, leaving room for the controls. */
@@ -324,7 +388,9 @@ export class Terrarium {
 
   resize() {
     const w = this.host.clientWidth || innerWidth, h = this.host.clientHeight || innerHeight;
-    this.weather?.setPixelScale(h * this.renderer.getPixelRatio() / (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2)));
+    const pxScale = h * this.renderer.getPixelRatio() / (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2));
+    this.weather?.setPixelScale(pxScale);
+    this.water?.setPixelScale(pxScale);
     this.renderer.setSize(w, h, false);
     this.renderer.domElement.style.width = `${w}px`;
     this.renderer.domElement.style.height = `${h}px`;
@@ -334,6 +400,7 @@ export class Terrarium {
     this.post.setSize(w, h, pr);
     this.case.shared.uResolution.value.set(Math.round(w * pr), Math.round(h * pr));
     this.water?.uniforms.uResolution.value.set(Math.round(w * pr), Math.round(h * pr));
+    this.weather?.setResolution(Math.round(w * pr), Math.round(h * pr));
   }
 
   /** Steps effects down only after sustained slow frames; never on device labels. */
@@ -374,12 +441,15 @@ export class Terrarium {
     this.camera.updateMatrixWorld();
     foliageUniforms.uKeyDirView.value.copy(this.key.position).sub(this.key.target.position).normalize().transformDirection(this.camera.matrixWorldInverse);
     for (const f of this.onFrame) f(dt, this.time);
-    this.weather.update(dt, this.time);
+    this.weather.update(dt, this.time, this.camera);
+    this.weather.clouds.sort(this.camera);
+    this.weather.fogVolume.update(dt, this.time, this.camera, this.post.distRT.texture, this.post.width, this.post.height);
     this.applyClimate(dt);
     this.updateFollow(dt);
     this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
     this.brain.update(dt);
+    this.wake(dt);
     const sp = this.rig.spinePoints();
     foliageUniforms.uPush.value[0].set(this.rig.snout.x, this.rig.snout.y, this.rig.snout.z, 0.03);
     foliageUniforms.uPush.value[1].set(sp[2].x, sp[2].y, sp[2].z, 0.045);
@@ -390,7 +460,11 @@ export class Terrarium {
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
     this.water.uniforms.uKeyDir.value.copy(keyDir);
     this.water.update(dt, this.time, 1);
+    this.water.stepRipples(this.renderer, dt);
     this.lizard.root.updateMatrixWorld(true);
+    this.cloudShadow.update(this.renderer, this.weather.clouds, this.key);
+    // the pool mirrors the clouds too (without the main view's depth)
+    this.weather.setDistance(null);
     this.water.renderReflection(this.renderer, this.scene, this.camera, this.post.width, this.post.height);
     if (DIRECT) {
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -399,11 +473,13 @@ export class Terrarium {
       this.renderer.render(this.scene, this.camera);
       return;
     }
-    this.post.render(this.time, (refraction) => {
+    this.post.render(this.time, (refraction, distance) => {
       this.case.shared.tRefract.value = refraction;
       this.water.uniforms.tRefract.value = refraction;
+      this.weather.setDistance(distance);
       const mask = this.camera.layers.mask;
       this.camera.layers.set(1);
+      this.camera.layers.enable(2);
       this.renderer.render(this.scene, this.camera);
       this.camera.layers.mask = mask;
     });

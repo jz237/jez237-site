@@ -19,7 +19,7 @@ export interface LizardData {
 }
 
 /** Lizard length is 30.5 cm in the sculpt; scene units are metres. */
-export const LIZARD_SCALE = 0.0092;
+export const LIZARD_SCALE = 0.0105;
 
 function irisTexture(): THREE.DataTexture {
   const W = 256, H = 256;
@@ -109,7 +109,7 @@ float up = mix(smoothstep(-0.35, 0.65, nR.y), smoothstep(-0.25, 0.55, yn), onLof
 float belly = mix(smoothstep(-0.2, -0.8, nR.y), smoothstep(-0.25, -0.75, yn) * smoothstep(-0.1, -0.6, nR.y), onLoft);
 float spikeT = vAux.w;
 float isSpike = step(0.005, spikeT);
-float headW = smoothstep(9.4, 10.0, P.x);
+float headW = smoothstep(9.2, 9.8, P.x);
 float tailW = smoothstep(-0.3, -1.6, P.x);
 // --- scales ---
 float freq = mix(11.0, 8.5, belly) * mix(1.0, 0.88, tailW);
@@ -134,46 +134,64 @@ if (plate > 0.01) {
   sCell = mix(sCell, hCell, plate);
   detail = mix(detail, hdetail, plate);
 }
-// --- colour pattern (linear) ---
-vec3 cBase = vec3(0.24, 0.14, 0.065);
-vec3 cLight = vec3(0.42, 0.28, 0.14);
-vec3 cDark = vec3(0.095, 0.058, 0.03);
-vec3 cBelly = vec3(0.46, 0.37, 0.24);
-vec3 cHead = vec3(0.29, 0.165, 0.075);
+// --- colour pattern (linear): Pogona vitticeps, sandy tan with dark reticulated blotches ---
+vec3 cBase = vec3(0.4, 0.225, 0.088);
+vec3 cLight = vec3(0.56, 0.37, 0.17);
+vec3 cDark = vec3(0.075, 0.045, 0.022);
+vec3 cMid = vec3(0.19, 0.1, 0.042);
+vec3 cBelly = vec3(0.56, 0.45, 0.29);
+vec3 cOrange = vec3(0.6, 0.21, 0.045);
 float mott = lzFbm(P * 0.9 + vec3(2.0, 0.0, 5.0));
-vec3 col = mix(cBase, cHead, headW * 0.8);
-col *= 0.85 + 0.3 * mott;
-// Paravertebral chevrons and dorsolateral light spots.
-float torso = smoothstep(0.4, 1.4, P.x) * (1.0 - smoothstep(8.2, 9.2, P.x));
-float chev = sin(P.x * 2.15 + abs(P.z) * 1.6 + mott * 3.2 + lzNoise(P * 2.7) * 1.4);
-float band = smoothstep(0.45, 0.8, chev);
-float bandEdge = smoothstep(0.1, 0.42, chev) * (1.0 - band);
-col = mix(col, cLight, band * torso * up * 0.45 * (1.0 - smoothstep(0.55, 0.9, zn)) * (0.6 + 0.6 * lzNoise(P * 1.9)));
-col = mix(col, cDark, bandEdge * torso * up * 0.3);
+vec3 col = cBase * (0.86 + 0.28 * mott);
+float torso = smoothstep(-0.2, 0.8, P.x) * (1.0 - smoothstep(8.4, 9.3, P.x));
+float back = up * torso;
+// dorsal blotches: dark cells in a reticulum, grouped into loose transverse bands
 vec3 g0, g1;
-vec3 spot = lzVoronoi(vec3(P.x * 1.5, P.y * 0.6, P.z * 1.5), 0.8, g0, g1);
-float spots = (1.0 - smoothstep(0.24, 0.36, spot.x)) * smoothstep(0.35, 0.75, zn) * torso * up;
-float ring = smoothstep(0.24, 0.32, spot.x) * (1.0 - smoothstep(0.34, 0.46, spot.x)) * smoothstep(0.35, 0.75, zn) * torso * up;
-col = mix(col, cLight * 1.1, spots * 0.6);
-col = mix(col, cDark, ring * 0.4);
-// Tail banding.
-float tb = smoothstep(0.2, 0.75, sin(P.x * 2.3 + mott));
-col = mix(col, mix(col, cDark, 0.55), tb * tailW * up * 0.8);
-col = mix(col, cLight, (1.0 - tb) * tailW * up * 0.18);
-// Dark streak from the eye toward the ear.
-float streak = headW * exp(-pow((P.y - (pr.w + 0.12 + (P.x - 10.9) * 0.08)) / 0.13, 2.0)) * smoothstep(9.6, 10.3, P.x) * (1.0 - smoothstep(11.0, 11.4, P.x)) * smoothstep(0.6, 0.95, zn);
-col = mix(col, cDark, streak * 0.75);
-// Lighter lips and labial scales.
-float lip = headW * smoothstep(0.85, 0.98, zn) * exp(-pow((yn + 0.12) / 0.18, 2.0));
-col = mix(col, cBelly * 0.9, lip * 0.6);
-// Belly and beard.
-col = mix(col, cBelly * (0.9 + 0.2 * mott), belly);
-float beard = smoothstep(8.8, 9.4, P.x) * (1.0 - smoothstep(10.9, 11.4, P.x)) * smoothstep(-0.1, -0.6, yn);
-vec3 cBeard = mix(vec3(0.22, 0.16, 0.1), vec3(0.025, 0.022, 0.02), uDisplay);
-col = mix(col, cBeard, beard * (0.45 + 0.55 * uDisplay));
-// Limb bands.
+vec3 bl = lzVoronoi(vec3(P.x * 1.4, P.y * 0.35, P.z * 1.4 + 0.5), 0.8, g0, g1);
+float edgeN = (lzNoise(P * 3.1) - 0.5) * 0.3;
+float bandMod = 0.6 + 0.4 * smoothstep(-0.3, 0.6, sin(P.x * 1.2 + 0.5 + mott * 1.2));
+float blotch = (1.0 - smoothstep(0.3, 0.48, bl.x + edgeN)) * step(0.28, bl.z) * bandMod;
+float midline = 1.0 - smoothstep(0.0, 0.18, abs(P.z) / max(pr.x, 0.1));
+col = mix(col, cDark, blotch * back * 0.95 * (1.0 - midline * 0.5));
+col = mix(col, cMid, (1.0 - smoothstep(0.42, 0.62, bl.x + edgeN)) * (1.0 - blotch) * back * 0.35);
+// pale spots in the gaps
+float pale = (1.0 - smoothstep(0.1, 0.22, bl.x)) * (1.0 - step(0.28, bl.z));
+col = mix(col, cLight, pale * back * 0.7);
+// a pale stripe along the spine and on the dorsolateral line
+col = mix(col, cLight, midline * back * 0.25);
+// flanks: darker vertical bars under the fringe
+float flank = smoothstep(0.55, 0.85, zn) * onLoft * torso * smoothstep(-0.6, 0.3, yn) * (1.0 - belly);
+col = mix(col, cMid, flank * smoothstep(0.2, 0.7, sin(P.x * 3.4 + mott * 2.0)) * 0.6);
+// fine dark speckling everywhere above
+float speck = smoothstep(0.72, 0.88, lzNoise(P * 8.5 + 3.0));
+col = mix(col, cDark * 1.4, speck * up * 0.4);
+// tail: bands that fade toward the tip, speckled
+float tb = smoothstep(0.05, 0.6, sin(P.x * 2.7 + mott * 1.4));
+col = mix(col, mix(col, cMid, 0.85), tb * tailW * up * 0.8);
+col = mix(col, cLight, (1.0 - tb) * tailW * up * 0.15);
+// head: orange flush on the jowls, the beard's base and around the eyes
+float jowl = smoothstep(8.9, 9.5, P.x) * (1.0 - smoothstep(10.9, 11.6, P.x)) * smoothstep(0.5, 0.9, zn) * (1.0 - belly * 0.5);
+col = mix(col, cOrange, jowl * 0.5);
+vec3 eyeC = vec3(11.0, pr.w + 0.24, sign(P.z) * (pr.x - 0.2));
+float eyeRing = exp(-pow(length(P.yz - eyeC.yz) / 0.5, 2.0)) * exp(-pow((P.x - eyeC.x) / 0.55, 2.0)) * headW;
+col = mix(col, cOrange * 1.1, eyeRing * 0.55);
+// dark stripe from the eye back to the ear
+float streak = headW * exp(-pow((P.y - (pr.w + 0.2 + (P.x - 10.75) * 0.12)) / 0.12, 2.0)) * smoothstep(9.75, 10.3, P.x) * (1.0 - smoothstep(10.75, 11.1, P.x)) * smoothstep(0.6, 0.95, zn);
+col = mix(col, cDark, streak * 0.6);
+// head top: finer, warmer
+col = mix(col, col * vec3(1.05, 0.95, 0.85), headW * up * 0.5);
+// pale lips and labial scales
+float lip = headW * smoothstep(0.82, 0.98, zn) * exp(-pow((yn + 0.12) / 0.16, 2.0));
+col = mix(col, cBelly, lip * 0.6);
+// cream belly, faint grey barring
+col = mix(col, cBelly * (0.9 + 0.2 * mott) * (1.0 - 0.12 * smoothstep(0.4, 0.9, sin(P.x * 2.2))), belly);
+// beard: orange-tan, turning sooty black when displayed
+float beard = smoothstep(8.7, 9.3, P.x) * (1.0 - smoothstep(10.8, 11.3, P.x)) * smoothstep(-0.15, -0.6, yn);
+vec3 cBeard = mix(mix(cOrange * 0.8, cBelly * 0.8, 0.45), vec3(0.02, 0.018, 0.016), uDisplay);
+col = mix(col, cBeard, beard * (0.6 + 0.4 * uDisplay));
+// limbs: tan with darker blotches and banding
 float limb = 1.0 - onLoft;
-col = mix(col, mix(col, cDark, 0.4), limb * smoothstep(0.3, 0.8, sin((P.y + P.x * 0.4) * 5.0 + mott * 3.0)) * up * 0.6);
+col = mix(col, mix(col, cMid, 0.7), limb * smoothstep(0.25, 0.75, sin((P.y + P.x * 0.4) * 5.0 + mott * 3.0)) * up * 0.7);
 // Per-scale tint and crevices.
 float tint = 0.93 + 0.14 * sCell.z;
 // salt-and-pepper: occasional dark and pale scales
@@ -184,9 +202,9 @@ col *= mix(1.0, 0.84 + 0.16 * smoothstep(0.0, 0.6, sH), detail);
 // far away: the average of scale tops and darker crevices, plus fine mottling
 col = mix(col, col * (0.8 + 0.12 * lzNoise(P * 9.0)), (1.0 - detail) * 0.9);
 // Spines: pale horn tips.
-col = mix(col, vec3(0.42, 0.32, 0.2), isSpike * smoothstep(0.35, 1.0, spikeT) * 0.4);
+col = mix(col, vec3(0.62, 0.48, 0.3), isSpike * smoothstep(0.3, 1.0, spikeT) * 0.55);
 // Claws and mouth.
-vec3 claw = mix(vec3(0.07, 0.06, 0.05), vec3(0.42, 0.37, 0.3), smoothstep(0.4, 1.0, vAux.y) * 0.3);
+vec3 claw = mix(vec3(0.035, 0.028, 0.022), vec3(0.2, 0.16, 0.12), smoothstep(0.4, 1.0, vAux.y) * 0.25);
 col = mix(col, claw, smoothstep(0.25, 0.6, vAux.y));
 float deep = smoothstep(0.4, 0.15, zn);
 col = mix(col, mix(vec3(0.07, 0.035, 0.03), vec3(0.5, 0.19, 0.16), deep), vAux.z);
@@ -220,7 +238,7 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
 }
 `);
   };
-  material.customProgramCacheKey = () => 'lizard-skin-v1';
+  material.customProgramCacheKey = () => 'lizard-skin-v2';
   return {material, uniforms};
 }
 
@@ -347,8 +365,8 @@ export class LizardModel {
     const tongueMat = new THREE.MeshPhysicalMaterial({color: new THREE.Color(0.62, 0.24, 0.22), roughness: 0.25, clearcoat: 0.6, clearcoatRoughness: 0.2, sheen: 0.4, sheenColor: new THREE.Color(0.9, 0.5, 0.5)});
     this.tongue = new THREE.Mesh(tg, tongueMat);
     this.tongue.matrixAutoUpdate = false;
-    const mouthY = data.mouth.find((m) => m[0] <= 12.4)![1];
-    this.tongueRest.makeTranslation(12.0, mouthY - 0.1, 0);
+    const mouthY = data.mouth.find((m) => m[0] <= 12.0)![1];
+    this.tongueRest.makeTranslation(10.95, mouthY - 0.1, 0);
     this.root.add(this.tongue);
     this.setBindPose(new THREE.Matrix4());
   }

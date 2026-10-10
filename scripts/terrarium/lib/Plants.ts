@@ -213,7 +213,7 @@ function creeper(rnd: () => number, length: number) {
 
 function leafMaterial() {
   const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.42, side: THREE.DoubleSide});
-  addFoliage(m, {flexAttr: true, translucency: 0.8, key: 'leaf'});
+  addFoliage(m, {flexAttr: true, height: 0.06, translucency: 0.8, key: 'leaf'});
   const base = m.onBeforeCompile;
   m.onBeforeCompile = (s, r) => {
     base(s, r);
@@ -302,7 +302,7 @@ export class Plants {
     mat.side = THREE.DoubleSide;
     mat.color = new THREE.Color(0.62, 0.78, 0.5);
     mat.roughness = 1;
-    addFoliage(mat, {height: 0.35, translucency: 0.9, key: 'fern'});
+    addFoliage(mat, {height: 0.35, translucency: 0.9, stiffness: 1.2, key: 'fern'});
     const spots: [number, number, number, number][] = [
       [-0.53, -0.19, 0.3, 0], [-0.33, -0.18, 0.27, 1], [-0.02, -0.21, 0.24, 0], [0.31, -0.19, 0.29, 1], [0.5, -0.17, 0.32, 0],
       [-0.15, -0.02, 0.16, 2], [-0.08, 0.06, 0.14, 3], [0.53, -0.01, 0.2, 2], [-0.55, 0.16, 0.18, 3], [-0.4, -0.09, 0.2, 2],
