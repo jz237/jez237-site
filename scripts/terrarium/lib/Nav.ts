@@ -54,7 +54,7 @@ export class Nav {
       if (kind === SurfaceKind.Rock) c = y > 0.24 ? Infinity : c + 2;
       for (const o of obstacles) {
         const d = Math.hypot(x - o.x, z - o.z);
-        if (d < o.r) c += 3 * (1 - d / o.r);
+        if (d < o.r * 1.3) c += 6 * (1 - d / (o.r * 1.3));
       }
       this.cost[j * this.nx + i] = c;
     }

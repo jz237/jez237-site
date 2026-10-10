@@ -25,8 +25,9 @@ export class MossMap {
     const bytes = new Uint8Array(this.w * this.h);
     for (let j = 0; j < this.h; j++) for (let i = 0; i < this.w; i++) {
       const x = -TANK.w / 2 + (i / (this.w - 1)) * TANK.w, z = -TANK.d / 2 + (j / (this.h - 1)) * TANK.d;
-      let m = fbm(x * 9 + 4, z * 9 + 1, 4) + 0.2 + (fbm(x * 30, z * 30, 3) - 0.5) * 0.25;
-      m = Math.min(1, Math.max(0, (m - 0.42) / 0.22));
+      // clumpy cushions with soil and litter showing between them
+      let m = fbm(x * 9 + 4, z * 9 + 1, 4) + 0.12 + (fbm(x * 30, z * 30, 3) - 0.5) * 0.38 + (fbm(x * 70 + 9, z * 70, 2) - 0.5) * 0.16;
+      m = Math.min(1, Math.max(0, (m - 0.44) / 0.16));
       // a worn path where the lizard walks between the log and the pool
       const path = Math.exp(-(((x + 0.1) / 0.075) ** 2) - (((z - 0.15) / 0.1) ** 2));
       m *= 1 - 0.8 * path;
@@ -51,12 +52,12 @@ export class MossMap {
 // ---------------------------------------------------------------------------
 // Procedural leaves
 
-interface LeafOpts {
+export interface LeafOpts {
   length: number; width: number;
   shape: (u: number) => number; // half-width profile 0..1 along the blade
   arch: number; cup: number; twist?: number; wave?: number; segs?: [number, number];
 }
-function leafGeometry(o: LeafOpts) {
+export function leafGeometry(o: LeafOpts) {
   const [nu, nv] = o.segs ?? [12, 6];
   const pos: number[] = [], uv: number[] = [], idx: number[] = [], flex: number[] = [];
   for (let i = 0; i <= nu; i++) {
@@ -86,7 +87,7 @@ function leafGeometry(o: LeafOpts) {
   return g;
 }
 
-function stemGeometry(points: THREE.Vector3[], r0: number, r1: number) {
+export function stemGeometry(points: THREE.Vector3[], r0: number, r1: number) {
   const curve = new THREE.CatmullRomCurve3(points);
   const g = new THREE.TubeGeometry(curve, 6, 1, 5, false);
   const pos = g.attributes.position as THREE.BufferAttribute;
@@ -109,14 +110,14 @@ function stemGeometry(points: THREE.Vector3[], r0: number, r1: number) {
   return g;
 }
 
-function placeLeaf(g: THREE.BufferGeometry, at: THREE.Vector3, yaw: number, pitch: number, roll: number, scale: number) {
+export function placeLeaf(g: THREE.BufferGeometry, at: THREE.Vector3, yaw: number, pitch: number, roll: number, scale: number) {
   const m = new THREE.Matrix4().compose(at, new THREE.Quaternion().setFromEuler(new THREE.Euler(roll, yaw, pitch, 'YZX')), new THREE.Vector3(scale, scale, scale));
   const c = g.clone();
   c.applyMatrix4(m);
   return c;
 }
 
-function tag(g: THREE.BufferGeometry, kind: number, tint: number) {
+export function tag(g: THREE.BufferGeometry, kind: number, tint: number) {
   const n = g.attributes.position.count;
   g.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(n).fill(kind), 1));
   g.setAttribute('aTint', new THREE.BufferAttribute(new Float32Array(n).fill(tint), 1));
@@ -307,6 +308,10 @@ export class Plants {
       [-0.53, -0.19, 0.3, 0], [-0.33, -0.18, 0.27, 1], [-0.02, -0.21, 0.24, 0], [0.31, -0.19, 0.29, 1], [0.5, -0.17, 0.32, 0],
       [-0.15, -0.02, 0.16, 2], [-0.08, 0.06, 0.14, 3], [0.53, -0.01, 0.2, 2], [-0.55, 0.16, 0.18, 3], [-0.4, -0.09, 0.2, 2],
       [0.21, -0.04, 0.16, 3], [0.42, -0.21, 0.24, 1], [-0.22, -0.22, 0.22, 1], [0.14, -0.23, 0.2, 2],
+      // a fuller back row and corners, so the case reads as a planted rainforest
+      [-0.46, -0.21, 0.36, 1], [-0.27, -0.215, 0.3, 0], [0.24, -0.215, 0.33, 0], [0.56, -0.21, 0.36, 1], [0.08, -0.22, 0.26, 1],
+      [-0.12, -0.215, 0.28, 2], [0.38, -0.22, 0.3, 2], [-0.56, -0.12, 0.26, 0], [0.57, -0.12, 0.24, 3], [-0.36, -0.13, 0.18, 3],
+      [0.45, -0.08, 0.2, 2], [-0.21, -0.07, 0.15, 3], [0.29, -0.09, 0.17, 2], [-0.5, 0.05, 0.16, 2], [-0.57, 0.2, 0.15, 1],
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
@@ -400,14 +405,14 @@ export class Plants {
     leaf.setAttribute('aTint', new THREE.BufferAttribute(new Float32Array(n).fill(0.5), 1));
     const mat = leafMaterial();
     const list: THREE.Matrix4[] = [];
-    for (let i = 0; i < 1400 && list.length < 140; i++) {
+    for (let i = 0; i < 4000 && list.length < 460; i++) {
       const x = (rnd() - 0.5) * (TANK.w - 0.02), z = (rnd() - 0.5) * (TANK.d - 0.02);
       const k = surface.kindAt(x, z);
       if (k === SurfaceKind.Water || k === SurfaceKind.Rock) continue;
       const y = surface.heightAt(x, z);
       if (y < WATER_LEVEL + 0.002) continue;
       const bare = 1 - this.moss.at(x, z);
-      if (rnd() > bare * 0.8 + 0.02) continue;
+      if (rnd() > bare * 0.85 + 0.06) continue;
       const nrm = surface.normalAt(x, z);
       const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), nrm).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.5, rnd() * 6.28, (rnd() - 0.5) * 0.3)));
       const s = 0.008 + rnd() * 0.009;
@@ -433,6 +438,10 @@ export class Plants {
       ['creeper', -0.58, 0.2, 1], ['creeper', -0.32, 0.21, 1], ['creeper', -0.05, 0.215, 1], ['creeper', 0.58, -0.08, 1],
       ['fittonia', 0.4, -0.09, 1.0], ['pilea', 0.5, -0.1, 1.1], ['fittonia', 0.56, -0.06, 0.9], ['pilea', 0.33, -0.1, 0.8],
       ['creeper', 0.36, -0.06, 1], ['creeper', 0.47, -0.05, 1], ['fittonia', 0.12, -0.07, 0.8],
+      ['pilea', -0.55, -0.08, 1.0], ['pilea', -0.2, 0.19, 0.8], ['fittonia', -0.42, 0.2, 0.9], ['fittonia', -0.33, -0.1, 0.9],
+      ['cryptanthus', -0.25, -0.1, 0.9], ['cryptanthus', 0.5, -0.04, 0.8], ['pilea', 0.2, -0.12, 0.9], ['fittonia', -0.03, -0.12, 0.8],
+      ['creeper', -0.48, -0.15, 1], ['creeper', -0.14, -0.15, 1], ['creeper', 0.06, -0.17, 1], ['creeper', 0.57, 0.04, 1],
+      ['pilea', -0.58, 0.1, 0.8], ['fittonia', -0.12, 0.2, 0.7], ['cryptanthus', -0.57, -0.02, 0.7],
     ];
     const parts: THREE.BufferGeometry[] = [];
     for (const [kind, x, z, s] of plants) {

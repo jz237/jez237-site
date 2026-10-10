@@ -61,6 +61,7 @@ export class LizardBrain {
   private stallT = 0;
   private stallRef = new THREE.Vector2();
   private leadT = 0;
+  private lickT = 0;
   private tmp2: [number, number] = [0, 0];
   private ignorePrey = new WeakMap<Cricket, number>();
   night = false;
@@ -575,6 +576,14 @@ export class LizardBrain {
     if (this.pauseT > 0) {
       this.pauseT -= dt;
       this.idleLook(dt, 0.25);
+      // exploring lizards stop to taste the ground with a quick tongue-tap
+      if (this.lickT > 0) {
+        this.lickT -= dt;
+        I.look = null;
+        this.poseGoal.headPitch = -0.45;
+        const ph = 1 - this.lickT / 0.5;
+        if (ph > 0.35 && ph < 0.6) I.tongue = Math.max(I.tongue, Math.sin((ph - 0.35) / 0.25 * Math.PI) * 0.55);
+      } else if (this.mode === 'travel' && rnd() < dt * 0.25) this.lickT = 0.5;
       if (this.mode !== 'startle') this.posePreset(this.pauseT > 1.2 ? 'rest' : 'alert');
       if (this.pauseT <= 0) {
         this.burstLeft = 0.1 + rnd() * 0.3;

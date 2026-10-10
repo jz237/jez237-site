@@ -215,7 +215,7 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
 varying vec3 vW; varying vec4 vClip;
 void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vClip = projectionMatrix * viewMatrix * w; gl_Position = vClip; }`,
       fragmentShader: /* glsl */ `
-uniform float uTime, uRain, uFlash, uRippleA; uniform sampler2D tRefract, tReflect, tBed, tRipple; uniform vec2 uResolution, uRippleTexel; uniform vec4 uBedBox, uRippleBox;
+uniform float uTime, uRain, uFlash, uRippleA, uAmbient; uniform sampler2D tRefract, tReflect, tBed, tRipple; uniform vec2 uResolution, uRippleTexel; uniform vec4 uBedBox, uRippleBox;
 uniform mat4 uReflectMatrix; uniform vec3 uKeyDir, uKeyColor, uImpact;
 varying vec3 vW; varying vec4 vClip;
 ${commonGLSL}
@@ -241,7 +241,7 @@ void main(){
   vec3 n = normalize(vec3(-(waveH(vW.xz + vec2(e, 0.0), chop) - h0) / e, 1.0, -(waveH(vW.xz + vec2(0.0, e), chop) - h0) / e));
   // simulated ripples: touches, raindrops, wading feet, the falls
   vec2 rpuv = (vW.xz - uRippleBox.xy) / uRippleBox.zw;
-  float rs = 0.00035;
+  float rs = 0.0018;
   float rx = (rippleH(rpuv + vec2(uRippleTexel.x, 0.0)) - rippleH(rpuv - vec2(uRippleTexel.x, 0.0))) * rs / (2.0 * uRippleTexel.x * uRippleBox.z);
   float rz = (rippleH(rpuv + vec2(0.0, uRippleTexel.y)) - rippleH(rpuv - vec2(0.0, uRippleTexel.y))) * rs / (2.0 * uRippleTexel.y * uRippleBox.w);
   n = normalize(n + vec3(-rx, 0.0, -rz));
@@ -252,19 +252,25 @@ void main(){
   // refraction: shift the view of the bed by the surface slope, more where it is deep
   vec2 roff = n.xz * clamp(depth, 0.0, 0.06) * 2.2;
   vec3 below = texture2D(tRefract, suv + roff).rgb;
-  vec3 absorb = exp(-depth * vec3(14.0, 7.0, 10.0));
-  vec3 scatter = vec3(0.012, 0.02, 0.012) * (1.0 - absorb.g);
+  // tea-stained terrarium water: tannins absorb blue first
+  vec3 absorb = exp(-(depth + 0.005) * vec3(16.0, 28.0, 52.0));
+  vec3 scatter = vec3(0.012, 0.016, 0.008) * (1.0 - absorb.g);
   below = below * absorb + scatter;
   // planar reflection
   vec4 rc = uReflectMatrix * vec4(vW, 1.0);
   vec2 ruv = rc.xy / rc.w + n.xz * 0.04;
   vec3 refl = texture2D(tReflect, ruv).rgb;
   vec3 H = normalize(uKeyDir + V);
-  float spec = pow(max(dot(n, H), 0.0), 900.0) * 18.0 + pow(max(dot(n, H), 0.0), 120.0) * 0.4;
+  float spec = pow(max(dot(n, H), 0.0), 700.0) * 30.0 + pow(max(dot(n, H), 0.0), 90.0) * 0.6;
   float foamD = distance(vW.xz, uImpact.xz);
   float foam = smoothstep(0.035, 0.0, foamD) * smoothstep(0.35, 0.75, wn(vW.xz * 300.0 + vec2(uTime * 0.6, -uTime)) + 0.3 * smoothstep(0.03, 0.0, foamD));
   vec3 col = below * (1.0 - F) + refl * F + uKeyColor * spec + foam * vec3(0.7, 0.68, 0.62) * 0.6 + vec3(0.8, 0.85, 1.0) * uFlash * F * 2.0;
-  float edge = smoothstep(0.0, 0.004, depth);
+  // ripple faces tilted toward the lamplit lid catch its glow
+  vec3 Rv = reflect(-V, n);
+  col += uKeyColor * 0.35 * pow(smoothstep(0.55, 1.0, Rv.y), 3.0) * (1.0 - F * 0.5);
+  // a bright wet line where the water meets the shore
+  col += vec3(0.1, 0.1, 0.09) * smoothstep(0.0035, 0.0008, depth) * (0.4 + 0.6 * F) * uAmbient;
+  float edge = smoothstep(0.0, 0.002, depth);
   gl_FragColor = vec4(col, edge);
 }`,
     });
@@ -294,7 +300,7 @@ void main(){
   c += vec3(0.008, 0.016, 0.01);
   // bright meniscus where the surface meets the glass
   float men = exp(-pow((surf - vW.y) / 0.0012, 2.0));
-  c += vec3(0.35, 0.36, 0.3) * men;
+  c += vec3(0.16, 0.16, 0.14) * men;
   gl_FragColor = vec4(c, 1.0);
 }`,
     });

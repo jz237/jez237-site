@@ -10,8 +10,8 @@ export const foliageUniforms = {
   tWind: {value: null as THREE.Texture | null},
   uWindBox: {value: new THREE.Vector4(-0.6, -0.25, 1.2, 0.5)},
   uGust: {value: new THREE.Vector3()},
-  /** Up to four spheres (x, y, z, radius) that push foliage aside: the lizard's head, chest, hips and the hand. */
-  uPush: {value: [new THREE.Vector4(0, -1, 0, 0), new THREE.Vector4(0, -1, 0, 0), new THREE.Vector4(0, -1, 0, 0), new THREE.Vector4(0, -1, 0, 0)]},
+  /** Spheres (x, y, z, radius) that push foliage aside: the hand, then the lizard's head, chest, mid-body, hips and tail. */
+  uPush: {value: Array.from({length: 6}, () => new THREE.Vector4(0, -1, 0, 0))},
 };
 
 /** Vertex GLSL: bend `transformed` (local) for a plant rooted at world `root` with flexibility `flex` and height `H`. */
@@ -49,7 +49,7 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
     Object.assign(s.uniforms, foliageUniforms);
     s.vertexShader = s.vertexShader
       .replace('#include <common>', `#include <common>
-uniform float uTime; uniform vec4 uPush[4];
+uniform float uTime; uniform vec4 uPush[6];
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
 varying float vFlex; varying float vGust;
 ${FOLIAGE_WIND_GLSL}`)
@@ -75,14 +75,14 @@ ${FOLIAGE_WIND_GLSL}`)
   vw += bend;
   // bend away from the lizard (and the hand) as they push through
   vec3 push = vec3(0.0);
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 6; i++) {
     vec4 p = uPush[i];
     vec3 d = vw - p.xyz;
     float dist = length(d.xz);
-    if (p.w > 0.0 && dist < p.w && abs(d.y) < p.w * 1.6) {
+    if (p.w > 0.0 && dist < p.w && d.y < p.w * 1.6 && d.y > -p.w * 2.5) {
       vec2 away = dist > 1e-4 ? d.xz / dist : vec2(1.0, 0.0);
       float k = (p.w - dist) / p.w;
-      push += vec3(away.x, -0.6 * k, away.y) * (p.w - dist) * 1.1;
+      push += vec3(away.x, -1.1 * k, away.y) * (p.w - dist) * 1.2;
     }
   }
   transformed += toLocal * push * max(flex, 0.25);
@@ -104,5 +104,5 @@ roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);`)
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * clamp(vGust, 0.0, 1.0) * vFlex * 0.25;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage2-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage3-${opts.key}`;
 }

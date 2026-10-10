@@ -28,7 +28,7 @@ export class Weather {
   readonly fogVolume: FogVolume;
   readonly wisps: Wisps;
   readonly group = new THREE.Group();
-  humidity = 0.5; // 0..1
+  humidity = 0.72; // 0..1 (a rainforest case runs humid)
   wet = 0; // overall wetness (leaves, rock, skin)
   hours = 11.5; // time of day
   timeFlow = 0; // hours per second (0 = paused)
@@ -127,8 +127,8 @@ export class Weather {
     this.wisps.update(dt, camera);
     // humidity rises with rain and fog, and the lamp dries the air
     const rain = this.rain.amount;
-    this.humidity = THREE.MathUtils.clamp(this.humidity + (rain * 0.03 + this.mist * 0.04 - (0.004 + 0.006 * day) * (this.humidity - 0.42)) * dt, 0.3, 1);
-    this.wet = THREE.MathUtils.clamp(this.wet + (rain * 0.12 + this.mist * 0.01 - 0.01 - 0.02 * day) * dt, 0, 1);
+    this.humidity = THREE.MathUtils.clamp(this.humidity + (rain * 0.012 + this.mist * 0.03 - (0.02 + 0.03 * day) * (this.humidity - 0.62)) * dt, 0.3, 1);
+    this.wet = THREE.MathUtils.clamp(this.wet + (rain * 0.12 + this.mist * 0.01 - 0.012 - 0.025 * day) * dt, 0, 1);
   }
 
   /** Light from the lamp, in the colours the volumes and rain use. */

@@ -131,6 +131,8 @@ export class LizardRig {
   readonly headForward = new THREE.Vector3(1, 0, 0);
   readonly mouth = new THREE.Vector3();
   moving = false;
+  /** 0 walking .. 1 full sprint: the body rises, the nose lifts and the tail comes off the ground. */
+  private sprint = 0;
   private initialised = false;
   /** Called whenever a foot is put down (world position). */
   onFootDown?: (p: THREE.Vector3, front: boolean) => void;
@@ -254,11 +256,11 @@ export class LizardRig {
     const r = this.ground.heightAt(I.x + right.x * 0.022, I.z + right.z * 0.022);
     const mid = this.ground.heightAt(I.x, I.z);
     const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004);
-    const pitch = Math.atan2(c - p, 0.065);
+    const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
     const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
     // body centre height: belly clearance + half the trunk depth
-    const targetY = base + (I.clearance + 1.05 + bob) * K;
+    const targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
     if (snap) {this.bodyY = targetY; this.bodyPitch = pitch; this.bodyRoll = roll;}
     else {
       this.bodyY = damp(this.bodyY, targetY, 9, dt);
@@ -286,6 +288,7 @@ export class LizardRig {
     const I = this.inputs;
     const speedCm = Math.abs(I.speed) / K;
     this.moving = speedCm > 0.6 || Math.abs(I.turnRate) > 0.25;
+    this.sprint = damp(this.sprint, smooth(clamp((speedCm - 12) / 14, 0, 1)), 6, dt);
     // Stride frequency rises with speed; lizards take quick, short steps.
     const freq = clamp(1.3 + speedCm / 11, 1.3, 5.2) * (Math.abs(I.turnRate) > 0.25 && speedCm < 2 ? 1.5 : 1);
     const duty = clamp(0.68 - speedCm / 260, 0.5, 0.68);
@@ -328,6 +331,9 @@ export class LizardRig {
     this.headYaw = damp(this.headYaw, this.headGoalYaw, 16, dt);
     this.headPitchCur = damp(this.headPitchCur, this.headGoalPitch, 14, dt);
   }
+
+  /** A point along the tail (0 = base). */
+  tailPoint(i: number) {return this.tailPts[Math.min(i, this.tailPts.length - 1)] ?? this.spinePos[5];}
 
   /** World positions of head..pelvis (for picking). */
   spinePoints() {return this.spinePos;}
@@ -451,7 +457,9 @@ export class LizardRig {
       dir.set(prevDir.x * ca - prevDir.z * sa, 0, prevDir.x * sa + prevDir.z * ca);
       // rest on the ground; the base hangs from the raised pelvis
       const gx = prev.x + dir.x * L, gz = prev.z + dir.z * L;
-      const g = this.ground.heightAt(gx, gz) + this.tailRadius[i];
+      // the base of the tail is carried a little clear of the ground on the move, more in a sprint
+      const carry = (this.moving ? 0.25 : 0) + this.sprint * 1.6;
+      const g = this.ground.heightAt(gx, gz) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
       let y = Math.max(g, prev.y - L * 0.55);
       y = Math.min(y, prev.y + L * 0.5);
       const dy = y - prev.y;

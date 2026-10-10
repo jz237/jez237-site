@@ -47,13 +47,13 @@ export function profile(x) {
 }
 
 export const HINGE_X = 10.0;
-const MOUTH_HALF = 0.05;
+const MOUTH_HALF = 0.032;
 export function mouthY(x) {
   const { cy } = profile(x);
   const back = smoothstep(12.45, HINGE_X, x);
   // A faint upturn at the corner gives the characteristic agamid "smile".
   const corner = Math.exp(-(((x - (HINGE_X + 0.25)) / 0.3) ** 2)) * 0.05;
-  return cy - 0.1 - 0.2 * back + corner;
+  return cy - 0.04 - 0.24 * back + corner;
 }
 
 // --- skeleton ---------------------------------------------------------------

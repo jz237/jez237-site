@@ -213,7 +213,8 @@ export class Post {
       m.uniforms.uNear.value = this.camera.near;
       m.uniforms.uFar.value = this.camera.far;
       m.uniforms.uFocus.value = s.focus;
-      m.uniforms.uAperture.value = s.aperture;
+      // a macro lens at a few centimetres still keeps the subject in focus: scale the aperture with the focus distance
+      m.uniforms.uAperture.value = s.aperture * Math.min(1, Math.pow(s.focus / 0.6, 1.2));
       m.uniforms.uMaxBlur.value = s.maxBlur * (this.height / 1080) * 1.4;
       const target = color === this.bRT ? this.aRT : this.bRT;
       r.setRenderTarget(target);

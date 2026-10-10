@@ -9,6 +9,7 @@ import {loadScans} from './Assets';
 import {LizardModel} from './LizardModel';
 import {Surface, SurfaceKind} from './Surface';
 import {Plants} from './Plants';
+import {Flora} from './Flora';
 import {foliageUniforms} from './Foliage';
 import {Water} from './Water';
 import {Peaks} from './Peaks';
@@ -26,7 +27,7 @@ const DIRECT = new URLSearchParams(location.search).has('direct');
 export class Terrarium {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene = new THREE.Scene();
-  readonly camera = new THREE.PerspectiveCamera(30, 1, 0.02, 30);
+  readonly camera = new THREE.PerspectiveCamera(30, 1, 0.004, 30);
   readonly controls: OrbitControls;
   readonly post: Post;
   readonly room = new Room();
@@ -35,6 +36,7 @@ export class Terrarium {
   hardscape!: Hardscape;
   surface!: Surface;
   plants!: Plants;
+  flora!: Flora;
   water!: Water;
   peaks!: Peaks;
   moss!: MossShells;
@@ -46,7 +48,7 @@ export class Terrarium {
   readonly audio = new TerrariumAudio();
   readonly cloudShadow = new CloudShadow();
   /** The hand's push on the foliage (x, y, z, radius). */
-  readonly handPush = foliageUniforms.uPush.value[3];
+  readonly handPush = foliageUniforms.uPush.value[0];
   private wadeT = 0;
   follow = false;
   temperature = 27;
@@ -128,7 +130,7 @@ export class Terrarium {
     this.controls.target.copy(this.homeView.target);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
-    this.controls.minDistance = 0.18;
+    this.controls.minDistance = 0.05;
     this.controls.maxDistance = 4.2;
     this.controls.minPolarAngle = 0.55;
     this.controls.maxPolarAngle = 1.66;
@@ -162,6 +164,8 @@ export class Terrarium {
     this.plants = new Plants(scans, this.surface);
     this.ground.uniforms.tMoss.value = this.plants.moss.texture;
     this.scene.add(this.plants.group);
+    this.flora = new Flora(this.surface, this.hardscape.placed.filter((p) => p.mesh !== this.hardscape.log).map((p) => p.mesh), this.hardscape.log);
+    this.scene.add(this.flora.group);
     this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || 14));
     this.scene.add(this.moss.mesh);
     this.water = new Water(this.surface, this.peaks.data.ledges);
@@ -169,7 +173,7 @@ export class Terrarium {
     this.resize();
     this.lizard = await LizardModel.load('./lizard/');
     this.scene.add(this.lizard.root);
-    this.nav = new Nav(this.surface, this.plants.obstacles);
+    this.nav = new Nav(this.surface, [...this.plants.obstacles, ...this.flora.obstacles]);
     this.insects = new Insects(this.surface, this.nav);
     this.scene.add(this.insects.group);
     this.rig = new LizardRig(this.lizard, this.surface);
@@ -191,7 +195,7 @@ export class Terrarium {
     this.ground.uniforms.tWetMap.value = this.weather.rain.wetTexture;
     this.hookWeather();
     this.resize();
-    for (const pane of this.case.panes) pane.fog.settle(this.weather.humidity);
+    for (const pane of this.case.panes) pane.fog.settle(this.glassHumidity());
     {
       const q = new URLSearchParams(location.search);
       const crickets = Number(q.get('crickets') || 0);
@@ -269,7 +273,7 @@ export class Terrarium {
     const overcast = gloom;
     this.key.intensity = 11 * day * (1 - gloom * 0.55);
     this.key.color.setRGB(1.0, 0.84, 0.64).lerp(new THREE.Color(0.86, 0.9, 1.0), gloom * 0.5);
-    this.heat.intensity = 1.1 * day * (1 - gloom * 0.4);
+    this.heat.intensity = 0.75 * day * (1 - gloom * 0.4);
     this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
     this.fill.intensity = (0.35 + 0.55 * day) * (1 - gloom * 0.25);
     this.moon.intensity = 0.55 * (1 - day);
@@ -302,11 +306,17 @@ export class Terrarium {
     this.brain.heat = day;
     this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0);
     const warmth = day * 0.7;
-    for (const pane of this.case.panes) pane.fog.update(dt, Math.min(1, w.humidity + w.mist * 0.25), warmth);
+    for (const pane of this.case.panes) pane.fog.update(dt, this.glassHumidity(), warmth);
     this.case.shared.uHaze.value.setRGB(0.012 + 0.02 * day, 0.011 + 0.016 * day, 0.01 + 0.012 * day);
     this.plaqueT -= dt;
     if (this.plaqueT < 0) {this.plaqueT = 2; this.case.drawPlaque(this.temperature, w.humidity * 100);}
     this.audio.update(dt, {rain: w.rainAmount, wind: w.wind.energy, crickets: this.insects.crickets.length, night: 1 - day, flow: 1});
+  }
+
+  /** How hard the glass fogs: the case's usual humid air keeps it mostly clear; rain and fog steam it up. */
+  private glassHumidity() {
+    const w = this.weather;
+    return THREE.MathUtils.clamp(0.45 + (w.humidity - 0.65) * 1.6 + w.mist * 0.25, 0, 1);
   }
 
   /** Frames the whole case for the current aspect, leaving room for the controls. */
@@ -382,6 +392,9 @@ export class Terrarium {
     this.camera.position.add(this.controls.target.clone().sub(before));
     const d = this.camera.position.distanceTo(this.controls.target);
     if (d > 0.42) this.camera.position.lerp(this.controls.target, 1 - Math.exp(-dt * 1.2));
+    // never let the follow camera dip into the ground or a rock
+    const floor = this.surface.heightAt(this.camera.position.x, this.camera.position.z) + 0.012;
+    if (this.camera.position.y < floor) this.camera.position.y = floor;
   }
 
   addFrameHandler(f: (dt: number, t: number) => void) {this.onFrame.push(f);}
@@ -417,7 +430,7 @@ export class Terrarium {
     q.level++;
     const r = this.renderer;
     if (q.level === 1) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.5));
-    else if (q.level === 2) this.post.settings.dof = false;
+    else if (q.level === 2) {this.post.settings.dof = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26;}
     else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
     else if (q.level === 4) this.post.settings.ao = false;
     else if (q.level === 5) {this.moss.mesh.count = 8; this.moss.uniforms.uShells.value = 8;}
@@ -451,9 +464,14 @@ export class Terrarium {
     this.brain.update(dt);
     this.wake(dt);
     const sp = this.rig.spinePoints();
-    foliageUniforms.uPush.value[0].set(this.rig.snout.x, this.rig.snout.y, this.rig.snout.z, 0.03);
-    foliageUniforms.uPush.value[1].set(sp[2].x, sp[2].y, sp[2].z, 0.045);
-    foliageUniforms.uPush.value[2].set(sp[5].x, sp[5].y, sp[5].z, 0.042);
+    // the body parts the plants: head, chest, mid-body, hips and tail base
+    const push = foliageUniforms.uPush.value;
+    push[1].set(this.rig.snout.x, this.rig.snout.y, this.rig.snout.z, 0.035);
+    push[2].set(sp[2].x, sp[2].y, sp[2].z, 0.06);
+    push[3].set((sp[3].x + sp[4].x) / 2, (sp[3].y + sp[4].y) / 2, (sp[3].z + sp[4].z) / 2, 0.065);
+    push[4].set(sp[5].x, sp[5].y, sp[5].z, 0.055);
+    const tail = this.rig.tailPoint(2);
+    push[5].set(tail.x, tail.y, tail.z, 0.03);
     // Focus on the orbit target; the room falls out of focus naturally.
     this.post.settings.focus = this.camera.position.distanceTo(this.controls.target);
     this.renderer.shadowMap.needsUpdate = true;

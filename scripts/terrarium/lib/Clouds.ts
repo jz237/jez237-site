@@ -91,6 +91,7 @@ export class Clouds {
     uInvProj: {value: new THREE.Matrix4()},
     uCamWorld: {value: new THREE.Matrix4()},
     uResolution: {value: new THREE.Vector2(1, 1)},
+    uSteps: {value: 34},
   };
   events: CloudEvents = {};
   private nextId = 1;
@@ -101,9 +102,9 @@ export class Clouds {
 
   constructor(noise: THREE.Texture) {
     this.shared.tNoise.value = noise;
-    this.spawn({x: -0.2, z: -0.05, y: 0.55, size: 0.95, water: 0.35});
-    this.spawn({x: 0.06, z: 0.04, y: 0.535, size: 0.75, water: 0.3});
-    this.spawn({x: 0.3, z: -0.07, y: 0.565, size: 1.05, water: 0.4});
+    this.spawn({x: -0.22, z: -0.05, y: 0.55, size: 1.1, water: 0.45});
+    this.spawn({x: 0.05, z: 0.04, y: 0.535, size: 0.9, water: 0.35});
+    this.spawn({x: 0.32, z: -0.07, y: 0.565, size: 1.2, water: 0.5});
     for (const c of this.clouds) c.fade = 1;
   }
 
@@ -469,13 +470,14 @@ export class Clouds {
 
   private waterCycle(c: Cloud, dt: number, humidity: number, day: number, wind: WindField) {
     const eff = c.squeeze;
-    let f = ss(0.02, 0.3, c.water) * (Math.pow(eff, 1.25) * (0.5 + 1.1 * Math.min(c.water, 1.2)) + 0.5 * ss(1.05, 1.5, c.water) + c.storm * (0.45 + 0.8 * Math.min(c.water, 1.2)));
+    let f = ss(0.02, 0.3, c.water) * (Math.pow(eff, 1.25) * (0.5 + 1.1 * Math.min(c.water, 1.2)) + 0.5 * ss(1.25, 1.5, c.water) + c.storm * (0.45 + 0.8 * Math.min(c.water, 1.2)));
     f = c.dissolving ? 0 : Math.min(2.2, f * c.fade);
     c.rate = approach(c.rate, f, f > c.rate ? 3 : 1.6, dt);
     const before = c.water;
-    c.water -= c.rate * dt * (c.heldSqueeze > 0 ? 0.006 : 0.03) * (1 - 0.6 * c.storm);
-    if (humidity > 0.58) c.water += (humidity - 0.58) * dt * 0.06 * (0.6 + 0.4 * c.size);
-    c.water += c.storm * humidity * dt * 0.022;
+    c.water -= c.rate * dt * (c.heldSqueeze > 0 ? 0.006 : 0.04) * (1 - 0.6 * c.storm);
+    // only saturated air feeds the clouds (the case's usual humid air holds them steady)
+    if (humidity > 0.7) c.water += (humidity - 0.7) * dt * 0.04 * (0.6 + 0.4 * c.size);
+    c.water += c.storm * Math.max(0, humidity - 0.5) * dt * 0.03;
     const k = clamp01((0.5 - humidity) / 0.25);
     c.water -= dt * 0.03 * k * day * (1.3 - 0.6 * Math.min(c.size, 1.2)) * 0.5;
     c.water = clamp(c.water, 0, 1.5);
@@ -612,7 +614,7 @@ const CLOUD_FRAG = /* glsl */ `
 precision highp float;
 precision highp sampler3D;
 uniform sampler3D tNoise; uniform sampler2D tDepth;
-uniform float uTime, uFlash, uUseDepth, uInside; uniform int uCount;
+uniform float uTime, uFlash, uUseDepth, uInside, uSteps; uniform int uCount;
 uniform vec4 uPuffs[${MAX_PUFFS}];
 uniform vec3 uBoxMin, uBoxMax, uLightPos, uLightColor, uAmbient, uSky, uLidGlow, uCenter, uSeed;
 uniform vec4 uShape, uLook, uLook2, uGlow;
@@ -687,7 +689,7 @@ void main(){
   float grey = uLook.x, storm = uLook.y, hover = uLook.w;
   float sigma = 20.0 / S * uLook.z / max(0.6, pow(size, 0.35));
   float chord = t1 - t0;
-  float ds = max(chord / 34.0, 0.02 * S);
+  float ds = max(chord / uSteps, 0.02 * S);
   float t = t0 + ds * ign(gl_FragCoord.xy);
   vec3 col = vec3(0.0);
   float T = 1.0;

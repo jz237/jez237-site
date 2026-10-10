@@ -135,11 +135,11 @@ if (plate > 0.01) {
   detail = mix(detail, hdetail, plate);
 }
 // --- colour pattern (linear): Pogona vitticeps, sandy tan with dark reticulated blotches ---
-vec3 cBase = vec3(0.4, 0.225, 0.088);
-vec3 cLight = vec3(0.56, 0.37, 0.17);
+vec3 cBase = vec3(0.3, 0.14, 0.042);
+vec3 cLight = vec3(0.44, 0.27, 0.11);
 vec3 cDark = vec3(0.075, 0.045, 0.022);
 vec3 cMid = vec3(0.19, 0.1, 0.042);
-vec3 cBelly = vec3(0.56, 0.45, 0.29);
+vec3 cBelly = vec3(0.48, 0.38, 0.24);
 vec3 cOrange = vec3(0.6, 0.21, 0.045);
 float mott = lzFbm(P * 0.9 + vec3(2.0, 0.0, 5.0));
 vec3 col = cBase * (0.86 + 0.28 * mott);
@@ -161,7 +161,9 @@ col = mix(col, cLight, pale * back * 0.7);
 col = mix(col, cLight, midline * back * 0.25);
 // flanks: darker vertical bars under the fringe
 float flank = smoothstep(0.55, 0.85, zn) * onLoft * torso * smoothstep(-0.6, 0.3, yn) * (1.0 - belly);
-col = mix(col, cMid, flank * smoothstep(0.2, 0.7, sin(P.x * 3.4 + mott * 2.0)) * 0.6);
+vec3 fb = lzVoronoi(vec3(P.x * 2.2, P.y * 2.2, P.z * 0.6), 0.85, g0, g1);
+col = mix(col, cMid, flank * (1.0 - smoothstep(0.25, 0.42, fb.x)) * step(0.35, fb.z) * 0.75);
+col = mix(col, cLight, flank * (1.0 - smoothstep(0.08, 0.16, fb.x)) * (1.0 - step(0.35, fb.z)) * 0.5);
 // fine dark speckling everywhere above
 float speck = smoothstep(0.72, 0.88, lzNoise(P * 8.5 + 3.0));
 col = mix(col, cDark * 1.4, speck * up * 0.4);
@@ -337,7 +339,7 @@ export class LizardModel {
 
     // Eyes and lids follow the head bone.
     const iris = irisTexture();
-    const eyeMat = new THREE.MeshPhysicalMaterial({map: iris, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.025, specularIntensity: 1, ior: 1.38});
+    const eyeMat = new THREE.MeshPhysicalMaterial({map: iris, roughness: 0.5, clearcoat: 1, clearcoatRoughness: 0.03, specularIntensity: 0.6, ior: 1.38, envMapIntensity: 0.3});
     const r = data.eye.radius;
     for (const side of [1, -1]) {
       const c = new THREE.Vector3(data.eye.centre[0], data.eye.centre[1], data.eye.centre[2] * side);
