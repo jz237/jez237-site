@@ -1,0 +1,6 @@
+node_modules/
+dist/
+# Baked at build time by tools/bake-*.mjs
+public/lizard/
+public/peaks/
+.qa-results/
