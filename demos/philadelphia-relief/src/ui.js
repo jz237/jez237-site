@@ -19,6 +19,8 @@ const ENUM_LABELS = {
   lightweight: v => v ? 'On · older computers' : 'Off · full graphics',
   photoMode: v => ({ auto: 'Automatic', relief: 'Diorama', photo: 'Photo close-ups' }[v] || v),
   diorama: v => v ? 'Miniature' : 'Classic map',
+  cityShadows: v => v ? 'On' : 'Off',
+  streetLife: v => v ? 'On · simulated' : 'Off',
   theme: (v) => getTheme(v).label,
   quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',
     cinematic: 'Cinematic' }[v] || v),
