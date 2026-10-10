@@ -26,7 +26,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(count*3),3);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;
     mesh.count=0;group.add(mesh);return mesh;};
-  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,3000);
+  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*8);
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   function put(mesh,x,y,z,w,h,d,angle,tint){
     if(mesh.count>=mesh.instanceMatrix.count)return;
@@ -35,7 +35,16 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     if(Array.isArray(tint))color.setRGB(...tint);else color.set(tint);
     mesh.setColorAt(mesh.count++,color);
   }
-  let graph=null,traffic=null,loading=false,disposed=false,age=10,lastX=Infinity,lastZ=Infinity,lastExag=0;
+  function uploadInstances(mesh){
+    // Upload only populated instances, not the full regional capacity, on
+    // every frame. A close-up usually shows a small fraction of all vehicles.
+    for(const [attribute,stride] of [[mesh.instanceMatrix,16],[mesh.instanceColor,3]]){
+      attribute.clearUpdateRanges();
+      if(mesh.count){attribute.addUpdateRange(0,mesh.count*stride);attribute.needsUpdate=true;}
+    }
+  }
+  let graph=null,traffic=null,loading=false,disposed=false,age=10;
+  let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   function load(){if(loading)return;loading=true;
     fetch('data/city-streets.json').then(r=>{
@@ -75,8 +84,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
           .65,.035,2.7,angle,0xc9c6ac);
       }
     }
-    for(const mesh of [street,trees]){mesh.instanceMatrix.needsUpdate=true;
-      if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;}
+    for(const mesh of [street,trees])uploadInstances(mesh);
   }
   return {group,
     update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
@@ -86,8 +94,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       const x=projection.lonToX(pose.lon),z=projection.latToZ(pose.lat);
       const radius=quality==='performance'?650:Math.min(2000,Math.max(850,pose.dist*.8));
       age+=dt;
-      if(age>1&&(Math.hypot(x-lastX,z-lastZ)>100||exaggeration!==lastExag||age>8)){
-        rebuild(x,z,exaggeration,radius);age=0;lastX=x;lastZ=z;lastExag=exaggeration;
+      if(age>1&&(Math.hypot(x-lastX,z-lastZ)>100||exaggeration!==lastExag||Math.abs(radius-lastRadius)>100)){
+        rebuild(x,z,exaggeration,radius);age=0;lastX=x;lastZ=z;lastExag=exaggeration;lastRadius=radius;
       }
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
@@ -112,8 +120,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
           put(vehicles,hx,y+.35,hz,.38,.18,.12,p.angle,[2.2,2.1,1.65]);
         }
       }
-      vehicles.instanceMatrix.needsUpdate=true;
-      if(vehicles.instanceColor)vehicles.instanceColor.needsUpdate=true;
+      uploadInstances(vehicles);
     },
     dispose(){disposed=true;scene.remove(group);box.dispose();crown.dispose();material.dispose();
       for(const m of [street,trees,vehicles])m.dispose();},
