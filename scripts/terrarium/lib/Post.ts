@@ -167,7 +167,7 @@ export class Post {
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
   private aoQuad = new FullScreenQuad(new THREE.ShaderMaterial(aoShader));
   private cleanQuad = new FullScreenQuad(new THREE.ShaderMaterial(cleanShader));
-  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.0, focus: 1.5, aperture: 0.6, maxBlur: 9};
+  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.12, focus: 1.5, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
 
   constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera, samples = 4) {
