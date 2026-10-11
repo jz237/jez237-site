@@ -1212,6 +1212,12 @@ after meaningful movement, zoom or elevation-scale changes.
 Curbs and sidewalks join along offset lines at ordinary street bends, including
 changes in road width. Acute or short corners use bounded setbacks instead of
 spikes; true intersections retain open approaches and their crosswalks.
+Vehicles follow both the forward grade and the cross-slope, keeping all four
+tyres on the surface while the body and lamps share the same orientation.
+Rooftop parapets and equipment share their building's terrain anchor, so they
+remain attached on hills and under terrain exaggeration. Equipment rectangles
+also reject concave roof notches even when all four corners have support.
+`tools/roof-fixture.html` checks these attachments with the production renderer.
 
 The three detailed historic landmarks use wider masonry window spacing and
 opaque architectural trim. City Hall's clock stage has taller bays and a clear
@@ -1258,7 +1264,7 @@ an idle scene, and disposal prevents late pedestrian attachment.
 `tools/street-startup.html` compares route preparation with continuous browser
 animation on the real Philadelphia street graph.
 
-Validation: 487 automated checks, including ten simulated minutes on the real
+Validation: 489 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
