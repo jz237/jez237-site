@@ -99,6 +99,7 @@ export const EYE = {
   centre: [eyeX, eyeProfile.cy + 0.31, eyeProfile.w - 0.26],
   axis: norm([0.18, 0.3, 1]),
 };
+export const NOSTRIL = [12.42, profile(12.4).cy + 0.08, profile(12.4).w * 0.96];
 const eyeFeatures = [];
 for (const s of [1, -1]) {
   const c = [EYE.centre[0], EYE.centre[1], EYE.centre[2] * s];
@@ -109,8 +110,8 @@ for (const s of [1, -1]) {
     socket: sphere(c, EYE.radius + 0.018),
     // the supraocular ridge: a low shelf along the canthus that overhangs the eye
     brow: ellipsoid(add(c, [-0.04, 0.19, -0.13 * s]), [0.42, 0.1, 0.19], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
-    nostrilRim: sphere([12.4, profile(12.4).cy + 0.08, profile(12.4).w * 0.86 * s], 0.06),
-    nostril: sphere([12.41, profile(12.4).cy + 0.08, profile(12.4).w * 0.97 * s], 0.034),
+    nostrilRim: sphere([12.4, profile(12.4).cy + 0.08, profile(12.4).w * 0.84 * s], 0.08),
+    nostril: sphere([12.42, profile(12.4).cy + 0.08, profile(12.4).w * 1.0 * s], 0.05),
     ear: ellipsoid([9.92, profile(9.92).cy + 0.04, (profile(9.92).w + 0.02) * s], [0.2, 0.27, 0.24]),
     earRim: torus([9.92, profile(9.92).cy + 0.04, (profile(9.92).w - 0.03) * s], [0.15, 0, s], 0.25, 0.05),
     // the spiny jowl pad behind the corner of the mouth

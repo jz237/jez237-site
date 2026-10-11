@@ -5,6 +5,7 @@ import {Room} from './Room';
 import {Case, TANK, type Pane} from './Case';
 import {Ground, poolDistance, CAVE} from './Ground';
 import {Meadow} from './Meadow';
+import {Dish} from './Dish';
 import {Motes} from './Motes';
 import {LeafDrift} from './LeafDrift';
 import {Hardscape} from './Hardscape';
@@ -24,6 +25,8 @@ import {LizardBrain} from './LizardBrain';
 import {Weather} from './Weather';
 import {TerrariumAudio} from './Audio';
 import {CloudShadow} from './CloudShadow';
+import {Rainbow} from './Rainbow';
+import {mulberry32} from './Textures';
 
 const DIRECT = new URLSearchParams(location.search).has('direct');
 const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
@@ -66,8 +69,13 @@ export class Terrarium {
   lizard!: LizardModel;
   readonly key: THREE.SpotLight;
   meadow!: Meadow;
+  dish!: Dish;
   motes!: Motes;
   leafDrift!: LeafDrift;
+  rainbow!: Rainbow;
+  /** Leaf tips that hold rain: drips fall from them and the dragon licks them. */
+  leafTips: THREE.Vector3[] = [];
+  private dripT = 0;
   readonly heat: THREE.SpotLight;
   readonly hemi: THREE.HemisphereLight;
   readonly rim: THREE.DirectionalLight;
@@ -176,7 +184,11 @@ export class Terrarium {
     this.scene.add(this.plants.group);
     this.flora = new Flora(this.surface, this.hardscape.placed.filter((p) => p.mesh !== this.hardscape.log).map((p) => p.mesh), this.hardscape.log);
     this.scene.add(this.flora.group);
-    this.meadow = new Meadow(this.surface);
+    // a dish of greens on open ground at the front
+    const ds = Dish.findSpot(this.surface, [...this.plants.obstacles, ...this.flora.obstacles]);
+    this.dish = new Dish(this.surface, ds[0], ds[1]);
+    this.scene.add(this.dish.group);
+    this.meadow = new Meadow(this.surface, 720, [{x: ds[0], z: ds[1], r: this.dish.radius + 0.012}]);
     this.scene.add(this.meadow.mesh);
     this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || 14));
     this.scene.add(this.moss.mesh);
@@ -184,12 +196,14 @@ export class Terrarium {
     this.scene.add(this.water.group);
     this.resize();
     this.lizard = await LizardModel.load('./lizard/');
+    this.lizard.setMorph(new URLSearchParams(location.search).get('morph') ?? 'normal');
     this.scene.add(this.lizard.root);
-    this.nav = new Nav(this.surface, [...this.plants.obstacles, ...this.flora.obstacles]);
+    this.nav = new Nav(this.surface, [...this.plants.obstacles, ...this.flora.obstacles, {x: this.dish.centre.x, z: this.dish.centre.z, r: this.dish.radius * 0.9}]);
     this.insects = new Insects(this.surface, this.nav);
     this.scene.add(this.insects.group);
     this.rig = new LizardRig(this.lizard, this.surface);
     this.brain = new LizardBrain(this.rig, this.nav, this.surface, this.insects, this.water);
+    this.brain.dish = this.dish;
     this.brain.onLap = (p) => this.water.addRipple(p.x, p.z, 1, this.time);
     // feet in the shallows ring the water; the body pushes a little wake
     this.rig.onFootDown = (p) => {
@@ -210,6 +224,12 @@ export class Terrarium {
     this.scene.add(this.motes.points);
     this.leafDrift = new LeafDrift(this.surface, this.weather.wind);
     this.scene.add(this.leafDrift.mesh);
+    this.rainbow = new Rainbow((x, z) => this.surface.topAt(x, z));
+    this.scene.add(this.rainbow.mesh);
+    this.collectLeafTips();
+    this.brain.leafTips = this.leafTips;
+    // a lick knocks the odd drop off the leaf
+    this.brain.onSip = (p) => {if (Math.random() < 0.35) this.weather.rain.drip(p.x, p.y - 0.002, p.z);};
     this.weather.lightning.light.layers.enable(1);
     foliageUniforms.tWind.value = this.weather.wind.texture;
     this.water.uniforms.tWind.value = this.weather.wind.texture;
@@ -238,6 +258,43 @@ export class Terrarium {
       return;
     }
     this.renderer.setAnimationLoop(() => this.frame());
+  }
+
+  /** Tips of the plants' leaves (and points on the fern fronds), clear of the ground. */
+  private collectLeafTips() {
+    const rnd = mulberry32(99);
+    const out: THREE.Vector3[] = [];
+    const m = new THREE.Matrix4();
+    this.plants.group.traverse((o) => {
+      if (!(o instanceof THREE.Mesh)) return;
+      const g = o.geometry as THREE.BufferGeometry;
+      const pos = g.attributes.position as THREE.BufferAttribute;
+      if (o.name === 'leaf-plants') {
+        // the midrib's last vertex on each blade (not stems or creepers)
+        const uv = g.attributes.uv as THREE.BufferAttribute, kind = g.attributes.aKind as THREE.BufferAttribute;
+        for (let i = 0; i < pos.count; i++) {
+          if (kind.getX(i) > 2.5 || uv.getX(i) < 0.99 || Math.abs(uv.getY(i) - 0.5) > 0.01) continue;
+          out.push(new THREE.Vector3().fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld));
+        }
+      } else if (o instanceof THREE.InstancedMesh && o.name.startsWith('ferns-')) {
+        for (let k = 0; k < o.count; k++) {
+          o.getMatrixAt(k, m);
+          for (let s = 0; s < 16; s++) out.push(new THREE.Vector3().fromBufferAttribute(pos, Math.floor(rnd() * pos.count)).applyMatrix4(m));
+        }
+      }
+    });
+    this.leafTips = out.filter((p) => p.y > this.surface.heightAt(p.x, p.z) + 0.012 && !this.surface.roofed(p.x, p.z) && poolDistance(p.x, p.z) > 0);
+  }
+
+  /** One squeeze of the misting bottle aimed at `at` (a point in the case). */
+  mist(at: THREE.Vector3) {
+    // the nozzle is a hand's breadth off the target, towards the viewer and up
+    const toEye = this.camera.position.clone().sub(at).setY(0).normalize();
+    const from = at.clone().addScaledVector(toEye, 0.08).add(new THREE.Vector3(0, 0.07, 0));
+    this.weather.mistPuff(from, at);
+    this.rainbow.spray(from, at);
+    this.brain.misted(at);
+    this.audio.mist();
   }
 
   /** Sound and the lizard follow the weather's events. */
@@ -324,6 +381,8 @@ export class Terrarium {
     const ambient = new THREE.Color(0.03 + 0.17 * day, 0.03 + 0.15 * day, 0.035 + 0.12 * day).multiplyScalar(1 - gloom * 0.3);
     this.weather.setLight(day * (1 - gloom * 0.45), this.key.color, this.key.position, ambient);
     foliageUniforms.uGust.value.copy(this.weather.wind.uniforms.uGust.value);
+    // what shines through leaves and thin skin: the lamp as it is now (off at night)
+    foliageUniforms.uKeyColor.value.copy(this.key.color).multiplyScalar(this.key.intensity / 11);
     this.water.uniforms.uGust.value.copy(this.weather.wind.uniforms.uGust.value);
     this.ground.uniforms.uCaustic.value = day;
     // wetness darkens soil, glosses leaves, rock and skin
@@ -331,10 +390,35 @@ export class Terrarium {
     foliageUniforms.uWet.value = w.wet;
     this.peaks.uniforms.uWet.value = w.wet * 0.8;
     this.lizard.skin.uWet.value = w.wet * 0.5;
+    this.brain.leavesWet = w.wet;
+    // after rain the leaves drip for a while
+    if (w.wet > 0.12 && this.leafTips.length) {
+      this.dripT -= dt * 9 * (w.wet - 0.1);
+      while (this.dripT < 0) {
+        this.dripT += 0.5 + Math.random();
+        const p = this.leafTips[Math.floor(Math.random() * this.leafTips.length)];
+        w.rain.drip(p.x, p.y - 0.001, p.z);
+      }
+    }
+    // a bow in the rain wherever the lamp shines through it
+    this.rainbow.update(dt, w.clouds.sources, this.camera, this.key.position, this.key.target.position, this.key.color,
+      THREE.MathUtils.clamp(this.key.intensity / 11, 0, 1.3) * (1 - 0.8 * w.clouds.storminess) * 0.9);
     this.brain.night = day < 0.2;
     this.brain.raining = w.rainAmount > 0.1;
     this.brain.storm = w.clouds.storminess;
     this.brain.heat = day;
+    {
+      // how warm the dragon's spot is: the basking lamp's pool of light, the
+      // sun-lamp unless it is in the cave, minus rain on its back
+      const I = this.rig.inputs;
+      const hx = this.heat.target.position.x, hz = this.heat.target.position.z;
+      const lamp = THREE.MathUtils.smoothstep(0.2 - Math.hypot(I.x - hx, I.z - hz), 0, 0.14) * (this.heat.intensity / 0.75);
+      const roofed = this.surface.roofed(I.x, I.z);
+      const sun = day * (1 - gloom * 0.6) * (roofed ? 0.2 : 1);
+      this.brain.lampOnIt = lamp;
+      // (the rock of the cave holds the day's warmth)
+      this.brain.envTemp = THREE.MathUtils.clamp(0.14 + 0.3 * sun + 0.5 * lamp + (roofed ? 0.12 * day : 0) - (roofed ? 0 : 0.22 * Math.min(1, w.rainAmount)) - 0.08 * w.wet, 0, 1);
+    }
     this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0);
     const warmth = day * 0.7;
     for (const pane of this.case.panes) pane.fog.update(dt, this.glassHumidity(), warmth);
@@ -355,7 +439,7 @@ export class Terrarium {
     const w = this.host.clientWidth || innerWidth, h = this.host.clientHeight || innerHeight;
     const aspect = w / h;
     const vfov = THREE.MathUtils.degToRad(this.camera.fov);
-    const top = 64 / h, bottom = (w < 720 ? 150 : 110) / h; // HUD bands as fractions of the view
+    const top = 64 / h, bottom = (w <= 1010 ? 150 : 110) / h; // HUD bands as fractions of the view
     const usable = 1 - top - bottom;
     const caseH = 0.8;
     // On tall, narrow screens let the case overflow the sides a little so it reads larger.

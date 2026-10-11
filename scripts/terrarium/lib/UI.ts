@@ -3,7 +3,7 @@ import type {Terrarium} from './Terrarium';
 import type {Cloud} from './Clouds';
 import {WATER_LEVEL, poolDistance} from './Ground';
 
-export type Tool = 'hand' | 'cloud' | 'wind' | 'fog' | 'wipe' | 'feed';
+export type Tool = 'hand' | 'cloud' | 'wind' | 'fog' | 'wipe' | 'feed' | 'mist';
 
 const ICON: Record<string, string> = {
   hand: '<path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6a1.5 1.5 0 0 1 3 0v7c0 4-2.5 7-6 7-2.5 0-4-1-5.5-3.2L3.3 13a1.4 1.4 0 0 1 2.3-1.6L8 14"/>',
@@ -20,6 +20,8 @@ const ICON: Record<string, string> = {
   play: '<path d="M8 5.5v13l10.5-6.5z"/>',
   pause: '<path d="M8 5v14M16 5v14"/>',
   reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/>',
+  morph: '<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.9 1.4-2-.5-1.3.2-2.5 1.7-2.5h1.8a3.6 3.6 0 0 0 3.6-3.6C20.5 7.3 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10.5" cy="7.3" r="1.1"/><circle cx="15" cy="7.6" r="1.1"/>',
+  mist: '<path d="M9 9h5v11a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1zM10 9V6h3v3M13 6.5h3.5l1 1.5M17.5 5l3-1M17.5 8l3 1M17.5 6.5h3.5"/>',
 };
 const svg = (k: string) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
 
@@ -29,7 +31,8 @@ const TOOLS: {id: Tool; label: string; hint: string}[] = [
   {id: 'wind', label: 'Wind', hint: 'Drag across the case to blow a gust'},
   {id: 'fog', label: 'Fog', hint: 'Hold or drag to pour fog — it runs downhill and pools on the water'},
   {id: 'wipe', label: 'Wipe', hint: 'Drag across the glass to wipe away condensation'},
-  {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard'},
+  {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard · tap the dish to refill its greens'},
+  {id: 'mist', label: 'Mist', hint: 'Tap or hold to mist the plants · the dragon licks the wet leaves · look for a rainbow in the spray'},
 ];
 
 export class UI {
@@ -42,7 +45,7 @@ export class UI {
   private readout: {temp: HTMLElement; hum: HTMLElement; time: HTMLElement};
   private slider: HTMLInputElement;
   private play: HTMLButtonElement;
-  private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense' | 'shrink'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number; cloud?: Cloud | null} | null = null;
+  private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense' | 'shrink'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number; cloud?: Cloud | null; puffT?: number} | null = null;
   private coached = false;
   private coachedShrink = false;
   private ray = new THREE.Raycaster();
@@ -63,6 +66,7 @@ export class UI {
   <button data-a="follow" title="Follow the lizard" aria-pressed="false">${svg('follow')}</button>
   <button data-a="reset" title="Reset view">${svg('reset')}</button>
   <button data-a="sound" title="Sound" aria-pressed="false">${svg('mute')}</button>
+  <button data-a="morph" title="Colour morph (M)">${svg('morph')}</button>
   <button data-a="full" title="Full screen">${svg('full')}</button>
   <button data-a="hide" title="Hide controls (H)">${svg('hide')}</button>
 </div>
@@ -94,9 +98,11 @@ export class UI {
       else void document.documentElement.requestFullscreen?.();
     };
     q('[data-a="hide"]').onclick = () => document.body.classList.add('no-ui');
+    q('[data-a="morph"]').onclick = () => this.nextMorph();
     q('.show-ui').onclick = () => document.body.classList.remove('no-ui');
     addEventListener('keydown', (e) => {
       if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('no-ui');
+      if (e.key === 'm' || e.key === 'M') this.nextMorph();
       const idx = Number(e.key) - 1;
       if (idx >= 0 && idx < TOOLS.length) this.setTool(TOOLS[idx].id);
     });
@@ -109,6 +115,15 @@ export class UI {
     this.say(TOOLS[0].hint, 6);
     // A second tip once the first has been read.
     setTimeout(() => {if (!this.follow && this.tool === 'hand') this.say('Tip: the eye button follows the lizard up close', 6);}, 9000);
+  }
+
+  /** Cycles the dragon's colour morph. */
+  nextMorph() {
+    const order = ['normal', 'red', 'citrus', 'hypo'];
+    const names: Record<string, string> = {normal: 'Normal (wild-type)', red: 'Red', citrus: 'Citrus', hypo: 'Hypo (pale, clear claws)'};
+    const next = order[(order.indexOf(this.t.lizard.morph) + 1) % order.length];
+    this.t.lizard.setMorph(next);
+    this.say(`Colour morph: ${names[next]}`, 3);
   }
 
   setSoundState(on: boolean) {
@@ -151,6 +166,18 @@ export class UI {
     const solid = t.pickInside(ray);
     if (solid && solid.distanceTo(ray.origin) < hit.distanceTo(ray.origin) - 0.002) return null;
     return hit;
+  }
+
+  /** Where the misting bottle is aimed: the lizard if the pointer is on it, else the floor, a rock or a plant. */
+  private pickMist(ray: THREE.Ray): THREE.Vector3 {
+    const t = this.t;
+    if (t.hitLizard(ray)) {
+      const pts = [t.rig.snout, ...t.rig.spinePoints()];
+      let best = pts[0], bd = Infinity;
+      for (const p of pts) {const d = ray.distanceToPoint(p); if (d < bd) {bd = d; best = p;}}
+      return ray.closestPointToPoint(best, new THREE.Vector3());
+    }
+    return this.pickFloor(ray, 0.012);
   }
 
   /** A point for the wind and fog tools: on the ground or water, else a mid-air plane. */
@@ -220,10 +247,14 @@ export class UI {
         this.drag.kind = 'condense';
       } else if (this.tool === 'feed') {
         const p = t.pickInside(this.ray.ray);
-        t.feed(p);
-        this.say('A cricket drops in…', 3);
+        if (p && t.dish.hit(p)) {t.dish.refill(); this.say('Fresh greens in the dish', 3);}
+        else {t.feed(p); this.say('A cricket drops in…', 3);}
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
+      } else if (this.tool === 'mist') {
+        this.drag.lastWorld = this.pickMist(this.ray.ray);
+        this.drag.puffT = 0.2;
+        t.mist(this.drag.lastWorld);
       } else if (this.tool === 'fog') {
         const p = this.pickFloor(this.ray.ray, 0);
         w().pourFog(p.x, p.z, 'down');
@@ -288,6 +319,8 @@ export class UI {
         }
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
+      } else if (this.tool === 'mist') {
+        d.lastWorld = this.pickMist(this.ray.ray);
       } else if (this.tool === 'fog' && d.lastWorld) {
         const p = this.pickFloor(this.ray.ray, 0);
         const dist = Math.hypot(p.x - d.lastWorld.x, p.z - d.lastWorld.z);
@@ -341,6 +374,11 @@ export class UI {
       if (d.cloud.dissolving) d.cloud = null;
     }
     if (d && this.tool === 'fog' && d.lastWorld) t.weather.pourFog(d.lastWorld.x, d.lastWorld.z, 'hold', dt, performance.now() / 1000 - d.downT);
+    // holding the misting bottle keeps squeezing, a few puffs a second
+    if (d && this.tool === 'mist' && d.lastWorld && d.puffT !== undefined) {
+      d.puffT -= dt;
+      if (d.puffT <= 0) {d.puffT = 0.28; t.mist(d.lastWorld);}
+    }
     if (this.toastTimer > 0) {
       this.toastTimer -= dt;
       if (this.toastTimer <= 0) this.toast.classList.remove('show');

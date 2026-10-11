@@ -105,10 +105,41 @@ export function spikeSeeds() {
     const yy = pr.cy + pr.ht * Math.sqrt(Math.max(0, 1 - (Math.abs(z) / pr.w) ** 2.6));
     push([x, yy, z], [-0.4, 1, 0.3 * Math.sign(z)], 0.045 + 0.05 * rand(k, 93), 0.04, 'tubercle');
   }
+  // Dense small conical scales: the bumpy, gritty outline of a real Pogona
+  // across the back, the flanks, the neck and the sides of the head.
+  for (let k = 0; k < 360; k++) {
+    const x = 0.2 + rand(k, 121) * 8.4;
+    const pr = profile(x);
+    const z = (rand(k, 122) * 2 - 1) * pr.w * 0.95;
+    const yy = pr.cy + pr.ht * Math.sqrt(Math.max(0, 1 - (Math.abs(z) / pr.w) ** 2.6));
+    push([x, yy, z], [-0.45, 1, 0.35 * Math.sign(z)], 0.028 + 0.035 * rand(k, 123), 0.026 + 0.012 * rand(k, 124), 'tubercle');
+  }
+  for (const s of [1, -1]) {
+    for (let k = 0; k < 110; k++) {
+      const x = 0.6 + rand(k, 131 + s) * 7.4;
+      const pr = profile(x);
+      const dy = (rand(k, 133 + s) - 0.35) * pr.ht * 1.1;
+      push([x, pr.cy + dy, pr.w * 0.98 * s], [-0.45, 0.2, 0.9 * s], 0.035 + 0.045 * rand(k, 135 + s), 0.028, rand(k, 137 + s) < 0.3 ? 'spine' : 'tubercle');
+    }
+    for (let k = 0; k < 40; k++) {
+      // neck and nape
+      const x = 8.0 + rand(k, 141 + s) * 1.4;
+      const pr = profile(x);
+      const a = (rand(k, 143 + s) - 0.2) * 1.3;
+      push([x, pr.cy + Math.sin(a) * pr.ht, Math.cos(a) * pr.w * s], [-0.5, 0.5, 0.7 * s], 0.035 + 0.05 * rand(k, 145 + s), 0.03, 'tubercle');
+    }
+    for (let k = 0; k < 36; k++) {
+      // the temples and cheeks behind the eye: small pointed scales
+      const x = 9.7 + rand(k, 151 + s) * 1.0;
+      const pr = profile(x);
+      const dy = (rand(k, 153 + s) - 0.4) * pr.ht * 0.9;
+      push([x, pr.cy + dy, pr.w * s], [-0.4, 0.2, 0.9 * s], 0.03 + 0.035 * rand(k, 155 + s), 0.025, 'tubercle');
+    }
+  }
   // Tubercles on the thighs and upper arms: their spiny look.
   limbs.forEach((l, li) => {
-    for (let k = 0; k < 12; k++) {
-      const t = 0.15 + 0.7 * rand(k, 101 + li);
+    for (let k = 0; k < 34; k++) {
+      const t = 0.12 + 0.76 * rand(k, 101 + li);
       const p = [l.root[0] + (l.mid[0] - l.root[0]) * t, l.root[1] + (l.mid[1] - l.root[1]) * t + 0.45, l.root[2] + (l.mid[2] - l.root[2]) * t];
       push(p, [-0.4, 1, 0.3 * l.side], 0.07 + 0.06 * rand(k, 111 + li), 0.04, k % 3 === 0 ? 'spine' : 'tubercle');
     }

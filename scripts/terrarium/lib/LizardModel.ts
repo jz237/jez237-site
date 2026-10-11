@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {voronoiChunk} from './ScaleShader';
+import {foliageUniforms} from './Foliage';
 
 export interface LizardLimbData {
   kind: 'front' | 'hind'; side: number;
@@ -13,10 +14,23 @@ export interface LizardData {
   bones: {name: string; origin: number[]; axes: number[][]}[];
   limbs: LizardLimbData[];
   eye: {radius: number; centre: number[]; axis: number[]};
+  nostril?: number[];
   hingeX: number; mouth: number[][];
   spine: {name: string; x: number; y: number}[];
   profile: number[][];
 }
+
+/**
+ * Colour morphs (linear RGB): base, light, dark, mid, belly, orange, cream, claw.
+ * Normal is the wild sandy-gold; red and citrus are the selectively bred
+ * colours; hypo (hypomelanistic) is pale with clear claws.
+ */
+export const MORPHS: Record<string, [number, number, number][]> = {
+  normal: [[0.32, 0.165, 0.045], [0.52, 0.33, 0.11], [0.085, 0.048, 0.022], [0.2, 0.11, 0.045], [0.6, 0.48, 0.31], [0.62, 0.22, 0.04], [0.64, 0.52, 0.34], [0.018, 0.015, 0.013]],
+  red: [[0.42, 0.11, 0.03], [0.62, 0.25, 0.07], [0.12, 0.03, 0.012], [0.28, 0.07, 0.025], [0.62, 0.42, 0.26], [0.72, 0.12, 0.02], [0.66, 0.48, 0.3], [0.02, 0.014, 0.012]],
+  citrus: [[0.5, 0.33, 0.04], [0.68, 0.52, 0.1], [0.16, 0.1, 0.02], [0.34, 0.2, 0.04], [0.66, 0.56, 0.3], [0.7, 0.38, 0.03], [0.7, 0.6, 0.36], [0.03, 0.022, 0.015]],
+  hypo: [[0.5, 0.38, 0.22], [0.7, 0.58, 0.38], [0.28, 0.19, 0.1], [0.42, 0.3, 0.17], [0.72, 0.64, 0.5], [0.66, 0.36, 0.14], [0.76, 0.68, 0.54], [0.5, 0.45, 0.38]],
+};
 
 /** Lizard length is 30.5 cm in the sculpt; scene units are metres. */
 export const LIZARD_SCALE = 0.0105;
@@ -59,27 +73,37 @@ function irisTexture(): THREE.DataTexture {
 export interface SkinUniforms {
   uProfile: {value: THREE.DataTexture};
   uDisplay: {value: number};
+  /** -1 pale (hot) .. 0 .. 1 dark (cold): melanophores spreading to soak up heat. */
+  uTone: {value: number};
+  /** 0..1 the beard blackens under stress, without being puffed. */
+  uBeardDark: {value: number};
+  uPal: {value: THREE.Color[]};
   uWet: {value: number};
   uDust: {value: number};
   uScaleMeters: {value: number};
   uScaleDir: {value: THREE.Vector3[]};
   uEye: {value: THREE.Vector3};
+  uNostril: {value: THREE.Vector3};
 }
 
-function skinMaterial(profileTex: THREE.DataTexture, scaleDirs: THREE.Vector3[], eye: THREE.Vector3): {material: THREE.MeshPhysicalMaterial; uniforms: SkinUniforms} {
+function skinMaterial(profileTex: THREE.DataTexture, scaleDirs: THREE.Vector3[], eye: THREE.Vector3, nostril: THREE.Vector3): {material: THREE.MeshPhysicalMaterial; uniforms: SkinUniforms} {
   const material = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, roughness: 0.6, metalness: 0,
     sheen: 0.15, sheenRoughness: 0.6, sheenColor: new THREE.Color(0.5, 0.4, 0.3),
     specularIntensity: 0.55,
   });
   const uniforms: SkinUniforms = {
-    uProfile: {value: profileTex}, uDisplay: {value: 0}, uWet: {value: 0}, uDust: {value: 0.08},
+    uProfile: {value: profileTex}, uDisplay: {value: 0}, uTone: {value: 0}, uBeardDark: {value: 0}, uPal: {value: MORPHS.normal.map((c) => new THREE.Color(...c))}, uWet: {value: 0}, uDust: {value: 0.08},
     uScaleMeters: {value: LIZARD_SCALE},
     uScaleDir: {value: scaleDirs},
     uEye: {value: eye},
+    uNostril: {value: nostril},
   };
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
+    // the lamp's direction and colour (shared with the plants) for light glowing through thin skin
+    shader.uniforms.uKeyDirView = foliageUniforms.uKeyDirView;
+    shader.uniforms.uKeyColor = foliageUniforms.uKeyColor;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', `#include <common>
 attribute vec4 aux;
@@ -101,7 +125,8 @@ vScaleDir = vec3(-1.0, 0.0, 0.0);
 #endif`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
-uniform sampler2D uProfile; uniform vec3 uEye; uniform float uDisplay; uniform float uWet; uniform float uDust; uniform float uScaleMeters;
+uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform vec3 uNostril;
+uniform sampler2D uProfile; uniform vec3 uEye; uniform float uDisplay; uniform float uTone; uniform float uBeardDark; uniform vec3 uPal[8]; uniform float uWet; uniform float uDust; uniform float uScaleMeters;
 varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir;
 ${voronoiChunk}
 float lzNoise(vec3 p){
@@ -169,10 +194,12 @@ vec3 sGrad = gEdge * (M + keelG) + edgeS * (gM + gKeel);
 // back from scale space to the body (cm)
 sGrad = freq * (sGrad + (elong - 1.0) * sdir * dot(sdir, sGrad));
 vec3 sCell = vc;
-float spikeT = vAux.w;
-float isSpike = step(0.005, spikeT);
+// aux.w: 0 skin, 0.02..0.45 a tubercle (base..tip), 0.55..1 a spine (base..tip)
+float isSpike = step(0.5, vAux.w);
+float isTuber = step(0.005, vAux.w) * (1.0 - isSpike);
+float spikeT = isSpike > 0.5 ? (vAux.w - 0.55) / 0.45 : (vAux.w - 0.02) / 0.43;
 float pix = length(fwidth(P)) * freq;
-float detail = (1.0 - smoothstep(0.5, 1.6, pix)) * (1.0 - isSpike * smoothstep(0.02, 0.15, spikeT));
+float detail = (1.0 - smoothstep(0.5, 1.6, pix)) * (1.0 - max(isSpike, isTuber) * smoothstep(0.02, 0.15, spikeT));
 // the mouth line and the labial plates either side of it
 float mY = pr.w - 0.04 - 0.24 * (1.0 - smoothstep(10.0, 12.7, P.x)) + 0.1 * exp(-pow((P.x - 10.3) / 0.45, 2.0));
 float dyM = P.y - mY;
@@ -189,13 +216,8 @@ vec3 earC = vec3(9.92, pr.w + 0.04, sign(P.z) * (pr.x + 0.02));
 float earD = length((P - earC) / vec3(0.2, 0.27, 0.24));
 float ear = (1.0 - smoothstep(0.75, 1.15, earD)) * smoothstep(9.4, 9.7, P.x) * (1.0 - smoothstep(10.3, 10.5, P.x));
 // --- colour pattern (linear): Pogona vitticeps, sandy tan with dark reticulated blotches ---
-vec3 cBase = vec3(0.32, 0.165, 0.045);
-vec3 cLight = vec3(0.52, 0.33, 0.11);
-vec3 cDark = vec3(0.085, 0.048, 0.022);
-vec3 cMid = vec3(0.2, 0.11, 0.045);
-vec3 cBelly = vec3(0.6, 0.48, 0.31);
-vec3 cOrange = vec3(0.62, 0.22, 0.04);
-vec3 cCream = vec3(0.64, 0.52, 0.34);
+// the palette comes from the colour morph (normal, red, citrus, hypo)
+vec3 cBase = uPal[0], cLight = uPal[1], cDark = uPal[2], cMid = uPal[3], cBelly = uPal[4], cOrange = uPal[5], cCream = uPal[6];
 float mott = lzFbm(P * 0.9 + vec3(2.0, 0.0, 5.0));
 vec3 col = cBase * (0.86 + 0.28 * mott);
 float torso = smoothstep(-0.2, 0.8, P.x) * (1.0 - smoothstep(8.4, 9.3, P.x));
@@ -260,28 +282,45 @@ col = mix(col, cCream * (0.78 + 0.22 * plate), lipBand * 0.42);
 col = mix(col, cBelly * (0.9 + 0.2 * mott) * (1.0 - 0.12 * smoothstep(0.4, 0.9, sin(P.x * 2.2))), belly);
 // beard: orange-tan, turning sooty black when displayed
 float beard = smoothstep(8.7, 9.3, P.x) * (1.0 - smoothstep(10.8, 11.3, P.x)) * smoothstep(-0.15, -0.6, yn);
-vec3 cBeard = mix(mix(cOrange * 0.8, cBelly * 0.8, 0.45), vec3(0.02, 0.018, 0.016), uDisplay);
-col = mix(col, cBeard, beard * (0.6 + 0.4 * uDisplay));
+float beardBlack = max(uDisplay, uBeardDark);
+vec3 cBeard = mix(mix(cOrange * 0.8, cBelly * 0.8, 0.45), vec3(0.02, 0.018, 0.016), beardBlack);
+col = mix(col, cBeard, beard * (0.6 + 0.4 * beardBlack));
 // limbs: tan with darker blotches and banding
 col = mix(col, mix(col, cMid, 0.4), limb * up * 0.6);
 col = mix(col, cDark * 1.4, limb * smoothstep(0.25, 0.75, sin((P.y + P.x * 0.4) * 5.0 + mott * 3.0)) * up * 0.6);
+// the nostrils: small dark openings near the tip of the snout
+float nosD = length((P - vec3(uNostril.x, uNostril.y, sign(P.z) * uNostril.z)) / vec3(0.075, 0.06, 0.07));
+float nostril = 1.0 - smoothstep(0.55, 1.0, nosD);
+col = mix(col, vec3(0.02, 0.012, 0.01), nostril * 0.9);
+// broad warm/cool drifts in hue, golden legs, a duller tail, and scale-to-scale hue jitter
+float hueN = lzFbm(P * 0.55 + vec3(11.0, 3.0, 7.0)) - 0.5;
+col *= vec3(1.0 + 0.16 * hueN, 1.0 + 0.02 * hueN, 1.0 - 0.2 * hueN);
+col *= mix(vec3(1.0), vec3(1.1, 1.03, 0.82), limb * 0.6);
+col = mix(col, vec3(dot(col, vec3(0.33))) * vec3(1.05, 1.0, 0.92), tailW * 0.18);
+col *= mix(vec3(1.0), vec3(1.0 + 0.1 * (sCell.z - 0.5), 1.0, 1.0 - 0.14 * (sCell.z - 0.5)), detail);
+// Thermoregulation: a cold dragon darkens its back to soak up heat, a hot one pales.
+float toneK = (1.0 - belly) * (0.35 + 0.65 * up) * (1.0 - isSpike * 0.5);
+col = mix(col, col * vec3(0.4, 0.37, 0.36), max(uTone, 0.0) * 0.8 * toneK);
+col = mix(col, col * 1.28 + vec3(0.03, 0.022, 0.01), max(-uTone, 0.0) * 0.55 * toneK);
 // Per-scale tint and crevices.
 float tint = 0.93 + 0.14 * sCell.z;
 // salt-and-pepper: occasional dark and pale scales
 float sp1 = fract(sCell.z * 17.31);
 tint *= sp1 < mix(0.07, 0.16, headW * up) ? 0.6 : (sp1 > 0.92 ? 1.3 : 1.0);
 col *= mix(1.0, tint, detail);
-col *= mix(1.0, mix(0.84 + 0.16 * smoothstep(0.0, 0.6, sH), 0.72 + 0.4 * smoothstep(0.1, 0.9, sH), headK), detail);
+col *= mix(1.0, mix(0.84 + 0.16 * smoothstep(0.0, 0.6, sH), 0.83 + 0.26 * smoothstep(0.1, 0.9, sH), headK), detail);
 // far away: the average of scale tops and darker crevices, plus fine mottling
 col = mix(col, col * (0.8 + 0.12 * lzNoise(P * 9.0)), (1.0 - detail) * 0.9);
 // Spines: pale horn tips.
 // Spines: ivory, warmer at the base and faintly amber at the tip
 col = mix(col, cCream * 0.95, isSpike * smoothstep(0.0, 0.45, spikeT) * 0.82);
+// tubercles: the skin's own colour, a little paler and worn at the tip
+col = mix(col, col * 1.18 + vec3(0.02, 0.015, 0.008), isTuber * smoothstep(0.4, 1.0, spikeT) * 0.6);
 col = mix(col, vec3(0.42, 0.26, 0.12), isSpike * smoothstep(0.8, 1.0, spikeT) * 0.45);
 // the ear opening
 col = mix(col, vec3(0.025, 0.016, 0.012), ear * 0.92);
 // Claws and mouth.
-vec3 claw = vec3(0.018, 0.015, 0.013);
+vec3 claw = uPal[7];
 col = mix(col, claw, smoothstep(0.25, 0.6, vAux.y));
 float deep = smoothstep(0.4, 0.15, zn);
 col = mix(col, mix(vec3(0.07, 0.035, 0.03), vec3(0.5, 0.19, 0.16), deep), vAux.z);
@@ -295,6 +334,7 @@ roughnessFactor = mix(roughnessFactor, 0.78, (1.0 - smoothstep(0.0, 0.25, sH)) *
 roughnessFactor = mix(roughnessFactor, 0.4, smoothstep(0.25, 0.6, vAux.y));
 roughnessFactor = mix(roughnessFactor, 0.28, vAux.z);
 roughnessFactor = mix(roughnessFactor, 0.48, isSpike);
+roughnessFactor = mix(roughnessFactor, 0.55, isTuber);
 roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
 `)
       .replace('#include <normal_fragment_maps>', `
@@ -307,17 +347,26 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
   normal = normalize(vSkinN * nP);
 }
 `)
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+{
+  // the lamp glowing through thin parts: spines, the beard's fringe and claws
+  float thin = isSpike * (0.35 + 0.65 * spikeT) + clawK * 0.5 + beard * 0.25 + lipBand * 0.1;
+  vec3 nV = normalize(normal);
+  float backL = max(0.0, dot(-nV, uKeyDirView));
+  float through = pow(max(0.0, dot(-normalize(vViewPosition), uKeyDirView)), 3.0);
+  totalEmissiveRadiance += diffuseColor.rgb * vec3(1.0, 0.62, 0.36) * uKeyColor * thin * (backL * 0.55 + through * 1.1) * 0.8;
+}`)
       .replace('#include <aomap_fragment>', `
 {
   float ao = vAux.x;
-  float micro = mix(1.0, mix(0.55, 0.68, headK) + mix(0.45, 0.32, headK) * smoothstep(0.0, 0.45, sH), detail) * (1.0 - ear * 0.8);
+  float micro = mix(1.0, mix(0.55, 0.8, headK) + mix(0.45, 0.2, headK) * smoothstep(0.0, 0.45, sH), detail) * (1.0 - ear * 0.8);
   reflectedLight.indirectDiffuse *= ao * micro;
   reflectedLight.indirectSpecular *= ao * micro;
   reflectedLight.directDiffuse *= mix(1.0, ao, 0.45) * mix(1.0, micro, 0.5);
 }
 `);
   };
-  material.customProgramCacheKey = () => 'lizard-skin-v3';
+  material.customProgramCacheKey = () => 'lizard-skin-v5';
   return {material, uniforms};
 }
 
@@ -377,6 +426,10 @@ export class LizardModel {
   readonly eyes: EyeRig[] = [];
   readonly tongue: THREE.Mesh;
   tongueOut = 0;
+  /** 0..1 a full prey-catching flick: the tongue shoots out well past the snout. */
+  tongueReach = 0;
+  /** World position of the tongue's tip, updated with the attachments. */
+  readonly tongueTip = new THREE.Vector3();
   private tongueRest = new THREE.Matrix4();
   private tmp = new THREE.Matrix4();
   private tmp2 = new THREE.Matrix4();
@@ -402,7 +455,8 @@ export class LizardModel {
     profileTex.needsUpdate = true;
     // scales point down the limbs (along each limb bone) and back along the body
     const scaleDirs = data.bones.map((b) => /upper|lower|hand|_d\d/.test(b.name) ? new THREE.Vector3(...b.axes[0]).normalize() : new THREE.Vector3(-1, 0, 0));
-    const {material, uniforms} = skinMaterial(profileTex, scaleDirs, new THREE.Vector3(data.eye.centre[0], data.eye.centre[1], Math.abs(data.eye.centre[2])));
+    const nos = data.nostril ?? [12.42, 2.5, 0.45];
+    const {material, uniforms} = skinMaterial(profileTex, scaleDirs, new THREE.Vector3(data.eye.centre[0], data.eye.centre[1], Math.abs(data.eye.centre[2])), new THREE.Vector3(nos[0], nos[1], Math.abs(nos[2])));
     this.skin = uniforms;
 
     data.bones.forEach((b, i) => {
@@ -470,6 +524,14 @@ export class LizardModel {
 
   bone(name: string) {return this.boneIndex.get(name)!;}
 
+  /** Switches the colour morph. */
+  setMorph(name: string) {
+    const m = MORPHS[name] ?? MORPHS.normal;
+    m.forEach((c, i) => this.skin.uPal.value[i].setRGB(c[0], c[1], c[2]));
+    this.morph = MORPHS[name] ? name : 'normal';
+  }
+  morph = 'normal';
+
   /** Places every bone at its bind frame, transformed by `world` (metres) and the sculpt scale. */
   setBindPose(world: THREE.Matrix4) {
     const s = new THREE.Matrix4().makeScale(LIZARD_SCALE, LIZARD_SCALE, LIZARD_SCALE);
@@ -490,8 +552,10 @@ export class LizardModel {
     }
     const jawM = new THREE.Matrix4().copy(this.bones[jaw].matrix).multiply(new THREE.Matrix4().copy(this.bind[jaw]).invert());
     const ext = this.tongueOut;
-    const t = new THREE.Matrix4().makeTranslation(ext * 0.95, ext * -0.05, 0).multiply(this.tongueRest).multiply(new THREE.Matrix4().makeScale(1 + ext * 0.3, 1, 1 - ext * 0.15));
+    const reach = this.tongueReach;
+    const t = new THREE.Matrix4().makeTranslation(ext * 0.95 + reach * 1.9, ext * -0.05 - reach * 0.1, 0).multiply(this.tongueRest).multiply(new THREE.Matrix4().makeScale(1 + ext * 0.3 + reach * 1.0, 1 - reach * 0.15, 1 - ext * 0.15));
     this.tongue.matrix.copy(jawM).multiply(t);
+    this.tongueTip.set(0.46, 0, 0).applyMatrix4(this.tongue.matrix);
     this.tongue.visible = true;
   }
 }

@@ -18,7 +18,7 @@ export interface RainSource {x: number; y: number; z: number; radius: number; ra
  */
 export class Rain {
   readonly group = new THREE.Group();
-  private drops: {p: THREE.Vector3; v: THREE.Vector3; alive: boolean; seed: number}[] = [];
+  private drops: {p: THREE.Vector3; v: THREE.Vector3; alive: boolean; seed: number; mist: boolean}[] = [];
   private streaks: THREE.Mesh;
   private iPos: Float32Array;
   private iVel: Float32Array;
@@ -55,7 +55,7 @@ export class Rain {
   private time = 0;
 
   constructor(private heightAt: (x: number, z: number) => number, private wind: WindField) {
-    for (let i = 0; i < MAX_DROPS; i++) this.drops.push({p: new THREE.Vector3(), v: new THREE.Vector3(), alive: false, seed: Math.random()});
+    for (let i = 0; i < MAX_DROPS; i++) this.drops.push({p: new THREE.Vector3(), v: new THREE.Vector3(), alive: false, seed: Math.random(), mist: false});
     // streaks: instanced camera-facing quads
     const quad = new THREE.InstancedBufferGeometry();
     quad.setAttribute('position', new THREE.Float32BufferAttribute([-1, 0, 0, 1, 0, 0, -1, 1, 0, 1, 1, 0], 3));
@@ -79,10 +79,12 @@ varying vec2 vU; varying vec3 vCol;
 void main(){
   float speed = length(iVel);
   vec3 axis = speed > 1e-4 ? iVel / speed : vec3(0.0, -1.0, 0.0);
+  // seeds from 2 up mark the fine droplets of the misting bottle
+  float mist = step(1.5, iSeed), sd = iSeed - 2.0 * mist;
   // a drop is a millimetre or two across, but what the eye sees is its blur
   // over about a fortieth of a second: a streak a few centimetres long
-  float len = clamp(speed * 0.024, 0.006, 0.034) * (0.75 + 0.5 * iSeed);
-  float wid = mix(0.0004, 0.0008, fract(iSeed * 7.3));
+  float len = mist > 0.5 ? clamp(speed * 0.01, 0.0015, 0.008) : clamp(speed * 0.024, 0.006, 0.034) * (0.75 + 0.5 * sd);
+  float wid = mist > 0.5 ? 0.0003 : mix(0.0004, 0.0008, fract(sd * 7.3));
   vec3 view = normalize(cameraPosition - iPos);
   vec3 side = normalize(cross(axis, view));
   float dist = length(cameraPosition - iPos);
@@ -96,7 +98,7 @@ void main(){
   // drops scatter the lamp forward: backlit rain glints
   float back = pow(fwd, 5.0) * 1.6 + pow(fwd, 40.0) * 3.0;
   float energy = mix(0.55, 1.0, sqrt(wid * pxPerM / widPx));
-  vCol = ((uAmbient * 2.2 + uLight * (0.55 + back)) * (0.75 + 0.5 * iSeed) + vec3(0.8, 0.86, 1.0) * uFlash * 1.6) * energy * 0.62;
+  vCol = ((uAmbient * 2.2 + uLight * (0.55 + back)) * (0.75 + 0.5 * sd) + vec3(0.8, 0.86, 1.0) * uFlash * 1.6) * energy * (0.62 - 0.27 * mist);
   gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
 }`,
       fragmentShader: /* glsl */ `varying vec2 vU; varying vec3 vCol;
@@ -222,6 +224,33 @@ void main(){
   }
 
   setResolution(w: number, h: number) {this.uniforms.uRes.value.set(w, h);}
+
+  /** A single drop falling from a leaf tip after rain. */
+  drip(x: number, y: number, z: number) {
+    const d = this.drops.find((q) => !q.alive);
+    if (!d) return;
+    d.p.set(x, y, z);
+    d.v.set(0, -0.05, 0);
+    d.seed = Math.random();
+    d.mist = false;
+    d.alive = true;
+  }
+
+  /** A puff from a misting bottle: fine droplets thrown from `from` toward `to`. */
+  spray(from: THREE.Vector3, to: THREE.Vector3, n: number) {
+    const dir = to.clone().sub(from).normalize();
+    for (const d of this.drops) {
+      if (n <= 0) break;
+      if (d.alive) continue;
+      const sp = 0.6 + Math.random() * 0.7;
+      d.p.copy(from).addScaledVector(dir, Math.random() * 0.01);
+      d.v.copy(dir).multiplyScalar(sp).add(new THREE.Vector3((Math.random() - 0.5) * 0.35, (Math.random() - 0.5) * 0.25, (Math.random() - 0.5) * 0.35));
+      d.seed = Math.random();
+      d.mist = true;
+      d.alive = true;
+      n--;
+    }
+  }
   setPixelScale(s: number) {(this.bitPoints.material as THREE.ShaderMaterial).uniforms.uScale.value = s;}
 
   /** Wetness under a point (0..1), for the brain and the plants. */
@@ -231,14 +260,14 @@ void main(){
     return this.wet[j * this.wetNx + i];
   }
 
-  private deposit(x: number, z: number) {
+  private deposit(x: number, z: number, amt = 1) {
     const i = Math.min(this.wetNx - 1, Math.max(0, Math.floor((x + TANK.w / 2) / TANK.w * this.wetNx)));
     const j = Math.min(this.wetNz - 1, Math.max(0, Math.floor((z + TANK.d / 2) / TANK.d * this.wetNz)));
     for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
       const ii = i + di, jj = j + dj;
       if (ii < 0 || jj < 0 || ii >= this.wetNx || jj >= this.wetNz) continue;
       const k = jj * this.wetNx + ii;
-      const w = di === 0 && dj === 0 ? 1 : 0.4;
+      const w = (di === 0 && dj === 0 ? 1 : 0.4) * amt;
       this.wet[k] = Math.min(1, this.wet[k] + 0.012 * w);
       this.rainNow[k] = Math.min(1, this.rainNow[k] + 0.05 * w);
     }
@@ -277,6 +306,7 @@ void main(){
         this.wind.sample(d.p.x, d.p.z, w2);
         d.v.set(src.vx + w2.x * 0.3, -0.35 - Math.random() * 0.2, src.vz + w2.y * 0.3);
         d.seed = Math.random();
+        d.mist = false;
         d.alive = true;
         n--;
       }
@@ -286,24 +316,28 @@ void main(){
     for (const d of this.drops) {
       if (!d.alive) continue;
       this.wind.sample(d.p.x, d.p.z, w2);
-      d.v.y = Math.max(-TERMINAL, d.v.y - 4 * dt);
-      d.v.x += (w2.x * 0.8 - d.v.x) * (1 - Math.exp(-3 * dt));
-      d.v.z += (w2.y * 0.8 - d.v.z) * (1 - Math.exp(-3 * dt));
+      // fine mist is all drag: it slows within a hand's breadth and drifts down
+      const drag = 1 - Math.exp(-(d.mist ? 7 : 3) * dt);
+      d.v.y = d.mist ? d.v.y + (-0.22 - d.v.y) * drag : Math.max(-TERMINAL, d.v.y - 4 * dt);
+      d.v.x += (w2.x * 0.8 - d.v.x) * drag;
+      d.v.z += (w2.y * 0.8 - d.v.z) * drag;
       d.p.addScaledVector(d.v, dt);
       if (Math.abs(d.p.x) > TANK.w / 2 - 0.002 || Math.abs(d.p.z) > TANK.d / 2 - 0.002) {d.alive = false; continue;}
       const inPool = poolDistance(d.p.x, d.p.z) < 0;
       const floor = inPool ? WATER_LEVEL : this.heightAt(d.p.x, d.p.z);
       if (d.p.y <= floor) {
         d.alive = false;
-        if (Math.random() < 0.6) this.splash(d.p.x, floor, d.p.z, inPool);
-        if (inPool) {if (Math.random() < 0.5) this.onWaterDrop?.(d.p.x, d.p.z, 0.6 + Math.random() * 0.6);}
-        else if (!this.roofed?.(d.p.x, d.p.z)) this.deposit(d.p.x, d.p.z);
+        // a soaked hollow holds a puddle: drops splash into it like water
+        const puddle = !inPool && this.wetAt(d.p.x, d.p.z) > 0.75;
+        if (!d.mist && Math.random() < 0.6) this.splash(d.p.x, floor, d.p.z, inPool || puddle);
+        if (inPool) {if (Math.random() < (d.mist ? 0.08 : 0.5)) this.onWaterDrop?.(d.p.x, d.p.z, d.mist ? 0.2 : 0.6 + Math.random() * 0.6);}
+        else if (!this.roofed?.(d.p.x, d.p.z)) this.deposit(d.p.x, d.p.z, d.mist ? 0.35 : 1);
         this.onLand?.();
         continue;
       }
       this.iPos.set([d.p.x, d.p.y, d.p.z], count * 3);
       this.iVel.set([d.v.x, d.v.y, d.v.z], count * 3);
-      this.iSeed[count] = d.seed;
+      this.iSeed[count] = d.seed + (d.mist ? 2 : 0);
       count++;
     }
     const g = this.streaks.geometry as THREE.InstancedBufferGeometry;
@@ -340,7 +374,7 @@ void main(){
     this.bitPoints.visible = bits > 0;
     this.updateShafts(dt, sources, camera);
     // wetness dries, faster under the lamp and in the wind
-    const dry = dt * (0.004 + 0.012 * day + 0.03 * this.wind.energy);
+    const dry = dt * (0.003 + 0.007 * day + 0.025 * this.wind.energy);
     const fade = Math.exp(-2.5 * dt);
     let any = false;
     for (let k = 0; k < this.wet.length; k++) {

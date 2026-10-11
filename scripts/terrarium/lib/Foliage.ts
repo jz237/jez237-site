@@ -52,7 +52,7 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
 uniform float uTime; uniform vec4 uPush[6];
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
 ${opts.phaseAttr ? 'attribute float aPhase;' : ''}
-varying float vFlex; varying float vGust;
+varying float vFlex; varying float vGust; varying vec3 vFolW;
 ${FOLIAGE_WIND_GLSL}`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
 {
@@ -88,13 +88,31 @@ ${FOLIAGE_WIND_GLSL}`)
     }
   }
   transformed += toLocal * push * max(flex, 0.25);
+  vFolW = vw + push * max(flex, 0.25);
 }`);
     s.fragmentShader = s.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform float uWet;
-varying float vFlex; varying float vGust;`)
+varying float vFlex; varying float vGust; varying vec3 vFolW;
+// water beaded on the leaf after rain or misting: little domes in 2-3 mm cells
+float folHash(vec3 p){ return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
+vec4 folBead(vec3 w, float wet){
+  vec3 bp = w * 380.0;
+  vec3 bi = floor(bp), bf = fract(bp) - 0.5;
+  float h = folHash(bi);
+  float r = 0.22 + 0.2 * fract(h * 7.31);
+  vec3 off = bf - (vec3(fract(h * 3.1), fract(h * 5.7), fract(h * 9.3)) - 0.5) * 0.3;
+  float on = step(1.0 - wet * 0.6, h);
+  float d = length(off);
+  return vec4(off / max(d, 1e-3), on * (1.0 - smoothstep(r * 0.7, r, d)));
+}`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);`)
+roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);
+vec4 bead = uWet > 0.04 ? folBead(vFolW, clamp(uWet * 1.4, 0.0, 1.0)) : vec4(0.0);
+roughnessFactor = mix(roughnessFactor, 0.03, bead.w);`)
+      .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+// each bead is a little lens: tilt the normal across its dome so it catches the lamp
+normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 1.6);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
 {
   // Light passing through the blade when it is lit from behind.
@@ -104,7 +122,9 @@ roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);`)
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * (back * 0.6 + view * view * 0.4) * ${translucency.toFixed(3)} * 0.55;
   // leaves turned by a gust flash their paler undersides
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * clamp(vGust, 0.0, 1.0) * vFlex * 0.25;
+  // a bright pin of light at the top of each bead
+  totalEmissiveRadiance += uKeyColor * bead.w * pow(max(0.0, dot(normal, uKeyDirView)), 24.0) * 0.6;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage4-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage5-${opts.key}`;
 }
