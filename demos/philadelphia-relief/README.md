@@ -1150,6 +1150,10 @@ regional scale; distant window patterns are filtered before they alias. This doe
 not establish that every device-specific diagonal-line report is resolved.
 Adjacent aerial tiles retain full edge opacity to avoid exposing the lighter
 fallback as thin bright seams; newly arriving tiles still fade in together.
+Night Metro and clock-driven dusk also dim and cool the aerial ground imagery,
+so photographed streets no longer remain daylight-bright beneath dark buildings.
+Daytime imagery retains its original color; both base and detailed tiles share
+the same gradual transition.
 Bridge cable ribbons keep the same screen-space normal at both endpoints,
 preventing crossed triangles. Automatic water tint fades out with the regional
 miniature, returning neighborhood views to aerial water rather than a flat sheet
@@ -1191,8 +1195,11 @@ view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
 keeps the diorama available if the photographic provider cannot finish.
 
-Validation: 446 automated checks, including ten simulated minutes on the real
+Validation: 447 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
 clouds above and below their deck, and visible production Cesium close-ups.
+The guarded release checks compare the staged entry, manifest and all referenced
+bundles with the checkout, then verify the exact build and asset hashes on the
+preview and live domain. A healthy service response cannot hide an older build.

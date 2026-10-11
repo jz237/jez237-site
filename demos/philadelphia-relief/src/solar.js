@@ -123,6 +123,10 @@ export function effectiveLight(state, bounds = { altMin: 2, altMax: 90 }) {
     altitude = Math.min(bounds.altMax, Math.max(bounds.altMin, sun.altitude));
   }
   const night = clock && sun.altitude < -6;
+  // Captured aerial streets still need to join the simulated night scene.
+  // Keep daytime photography neutral; only twilight and Night Metro tint it.
+  const aerialNight = state.theme === 'noir' ? 1 : 1 - twilight;
+  const aerialLight = [.14, .20, .31].map(channel => 1 + (channel - 1) * aerialNight);
   return {
     sunAzimuth: azimuth,
     sunAltitude: altitude,
@@ -134,6 +138,7 @@ export function effectiveLight(state, bounds = { altMin: 2, altMax: 90 }) {
     waterIntensity: Math.min(1, state.waterIntensity * weather.water),
     skySun: weather.sky * twilight,
     twilight,
+    aerialLight,
     night,
     weather: state.weather in WEATHER_PRESETS ? state.weather : 'clear',
     clock,
