@@ -39,6 +39,23 @@ async function run() {
     let mode = 'normal';
     let releaseRefresh;
     let refreshGate;
+    let satelliteMode = 'normal', releaseSatellite, releaseImage;
+    const satelliteRequests = [];
+    await context.route('https://nowcoast.noaa.gov/**', async route => {
+      const url = new URL(route.request().url());
+      satelliteRequests.push(url);
+      const params = new Map([...url.searchParams].map(([key,value]) => [key.toLowerCase(),value]));
+      if (params.get('request')?.toLowerCase() === 'getcapabilities') {
+        if (satelliteMode === 'delayed') await new Promise(resolve => { releaseSatellite = resolve; });
+        const time = new Date(NOW - (satelliteMode === 'stale' ? 8 * 3600000 : satelliteMode === 'image-error' ? 60000 : satelliteMode === 'image-timeout' ? 120000 : 0)).toISOString();
+        const body = satelliteMode === 'malformed' ? '<ServiceExceptionReport>Unavailable</ServiceExceptionReport>' : `<WMS_Capabilities xmlns="http://www.opengis.net/wms"><Capability><Layer><Layer><Name>global_longwave_imagery_mosaic</Name><Dimension name="time" default="${time}">${time}</Dimension></Layer></Layer></Capability></WMS_Capabilities>`;
+        return route.fulfill({status:200,contentType:'text/xml',body});
+      }
+      if (satelliteMode === 'image-error') return route.abort('failed');
+      if (satelliteMode === 'image-timeout') await new Promise(resolve => { releaseImage = resolve; });
+      // A transparent test tile. Real cloud imagery is never bundled as fixture data.
+      return route.fulfill({status:200,contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGNgAAIAAAUAAXpeqz8AAAAASUVORK5CYII=','base64')});
+    });
     await context.route('https://mapservices.weather.noaa.gov/**', async route=>{
       const layer = Number(route.request().url().match(/MapServer\/(\d+)\/query/)?.[1]);
       if (mode==='delayed') await refreshGate;
@@ -137,6 +154,59 @@ async function run() {
     await page.locator('#hurricane-forecast-table summary').click();
     await page.setViewportSize({width:1280,height:900});
     results.push('Larger desktop/mobile map, Escape and close-button focus restoration, forecast table selection, and mobile home navigation');
+
+    assert.equal(satelliteRequests.length,0,'Satellite uses no network until enabled');
+    await page.locator('#hurricane-satellite').check();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-satellite-status').textContent.startsWith('Infrared mosaic') && !document.querySelector('#hurricane-satellite-status').textContent.includes('loading'));
+    assert.ok(await page.locator('.leaflet-hurricane-satellite-pane img').count()>0);
+    const imageRequests = satelliteRequests.filter(url=>url.searchParams.get('request')==='GetMap');
+    assert.ok(imageRequests.length>0,'Satellite image requested');
+    for (const url of imageRequests) {
+      assert.equal(url.searchParams.get('time'),new Date(NOW).toISOString());
+      assert.ok(Number(url.searchParams.get('width'))*Number(url.searchParams.get('height'))<=1000000,'Image request exceeds its pixel budget');
+    }
+    const imageSources = await page.locator('.leaflet-hurricane-satellite-pane img').evaluateAll(images=>images.map(img=>img.src));
+    await page.locator('#hurricane-next').click();
+    assert.deepEqual(await page.locator('.leaflet-hurricane-satellite-pane img').evaluateAll(images=>images.map(img=>img.src)),imageSources,'Forecast slider must not change the observed satellite image');
+    await page.setViewportSize({width:320,height:844});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Satellite controls overflow a small phone');
+    await page.setViewportSize({width:1280,height:900});
+    await page.locator('#hurricane-satellite').uncheck();
+    assert.equal(await page.locator('.leaflet-hurricane-satellite-pane img').count(),0);
+    assert.equal(await page.locator('#hurricane-satellite-info').isVisible(),false);
+    for (const failure of ['stale','malformed','image-error']) {
+      satelliteMode=failure;
+      await page.locator('#hurricane-satellite').check();
+      await page.waitForFunction(()=>!document.querySelector('#hurricane-satellite-retry').hidden);
+      assert.match(await page.locator('#hurricane-satellite-status').innerText(),/unavailable/);
+      assert.equal(await page.locator('.leaflet-hurricane-satellite-pane img').count(),0);
+      assert.equal(await page.locator('[data-storm]').count(),1,'Imagery failure must preserve the storm forecast');
+      await page.locator('#hurricane-satellite').uncheck();
+    }
+    satelliteMode='image-error';
+    await page.locator('#hurricane-satellite').check();
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-satellite-retry').hidden);
+    satelliteMode='normal';
+    await page.locator('#hurricane-satellite-retry').click();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-satellite-status').textContent.startsWith('Infrared mosaic') && !document.querySelector('#hurricane-satellite-status').textContent.includes('loading'));
+    await page.locator('#hurricane-satellite').uncheck();
+    satelliteMode='delayed';
+    await page.locator('#hurricane-satellite').check();
+    while (!releaseSatellite) await page.waitForTimeout(20);
+    await page.locator('#hurricane-satellite').uncheck();
+    releaseSatellite();
+    await page.waitForTimeout(100);
+    assert.equal(await page.locator('.leaflet-hurricane-satellite-pane img').count(),0,'Turning satellite off cancels pending activation');
+    assert.equal(await page.locator('#hurricane-satellite-info').isVisible(),false);
+    satelliteMode='image-timeout';
+    await page.locator('#hurricane-satellite').check();
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-satellite-retry').hidden,{},{timeout:22000});
+    assert.equal(await page.locator('.leaflet-hurricane-satellite-pane img').count(),0,'A stalled image request has a bounded wait');
+    assert.equal(await page.locator('[data-storm]').count(),1);
+    releaseImage?.();
+    await page.locator('#hurricane-satellite').uncheck();
+    satelliteMode='normal';
+    results.push('Satellite is opt-in, uses exact observation time, stays fixed during forecast playback, fits mobile, and recovers from stale metadata, failed imagery, and image timeouts without losing forecasts');
 
     mode='delayed';
     refreshGate=new Promise(resolve=>{releaseRefresh=resolve;});
