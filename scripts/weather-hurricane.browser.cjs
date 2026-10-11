@@ -62,8 +62,13 @@ async function run() {
       if (mode==='offline' || (mode==='partial'&&layer===7)) return route.abort('failed');
       let data = mode==='empty' ? empty : structuredClone(source[layer]||empty);
       if (mode==='stale') for (const f of data.features) {f.properties.idp_filedate=NOW-48*3600000;f.properties.advdate='500 PM EDT Thu Oct 01 2026';}
+      if (mode==='unverified') for (const f of data.features) f.properties.advdate='Unrecognized advisory time';
       if (mode==='malformed'&&layer===5) data={error:{code:500,message:'Fixture service failure'}};
       if (mode==='incomplete'&&layer===5) data.features=data.features.filter(f=>f.properties.tau>0);
+      if (mode==='bad-geometry'&&layer===7) data.features[0].geometry.coordinates=[[]];
+      if (mode==='bad-geometry'&&layer===3) data.features=[null];
+      if (mode==='bad-geometry'&&layer===8) data.features[0].geometry.coordinates=[[null,18],[-65,18]];
+      if (mode==='bad-geometry'&&layer===10) data.features[0].geometry.coordinates=[-70,100];
       return route.fulfill({status:200,contentType:'application/geo+json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(data)});
     });
     const page = await context.newPage();
@@ -210,11 +215,18 @@ async function run() {
 
     mode='delayed';
     refreshGate=new Promise(resolve=>{releaseRefresh=resolve;});
+    await page.evaluate(()=>{
+      const cached=JSON.parse(localStorage.getItem('jez237-hurricane-map-v1'));
+      cached.layers.cones.features[0].geometry.coordinates=[null];
+      localStorage.setItem('jez237-hurricane-map-v1',JSON.stringify(cached));
+    });
     await page.reload({waitUntil:'domcontentloaded'});
     await page.locator('#weather-hurricanes').scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('Saved data'));
     await page.waitForFunction(()=>document.querySelectorAll('.leaflet-hurricane-land-pane path').length>0);
     assert.equal(await page.locator('#hurricane-notice').isVisible(),false);
+    assert.equal(await page.locator('[data-storm]').count(),1,'A malformed cached cone must not discard valid saved storm positions');
+    assert.match(await page.locator('#hurricane-storm-detail').innerText(),/matching forecast cone is not available/);
     assert.equal(await page.locator('#hurricane-refresh').isDisabled(),true);
     const topBefore=await page.locator('.hurricane-workspace').evaluate(el=>el.getBoundingClientRect().top);
     releaseRefresh();
@@ -222,7 +234,7 @@ async function run() {
     const topAfter=await page.locator('.hurricane-workspace').evaluate(el=>el.getBoundingClientRect().top);
     assert.ok(Math.abs(topAfter-topBefore)<1,'Refreshing saved data moves the map');
     mode='normal';
-    results.push('Saved data remains steady and shows no false outage while an initial refresh is pending');
+    results.push('Saved positions survive a malformed cached cone, remain steady, and show no false outage while an initial refresh is pending');
 
     for (const width of [320,390,768,1280,1536]) {
       await page.setViewportSize({width,height:900});
@@ -253,6 +265,28 @@ async function run() {
     assert.match(await page.locator('#hurricane-notice').innerText(),/could not be refreshed/);
     results.push('Failed refresh retains the previously loaded advisory with a saved-data warning');
 
+    await page.evaluate(()=>{
+      window.__weatherTestNow=Date.now;
+      const checkedAt=JSON.parse(localStorage.getItem('jez237-hurricane-map-v1')).checkedAt;
+      Date.now=()=>checkedAt+25*3600000;
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').dataset.feed==='error');
+    assert.equal(await page.locator('[data-storm]').count(),0);
+    assert.equal(await page.locator('.hurricane-map-marker').count(),0);
+    assert.equal(await page.locator('#hurricane-timeline').isVisible(),false);
+    assert.match(await page.locator('#hurricane-notice').innerText(),/saved storm data has expired/);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('jez237-hurricane-map-v1')),null);
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
+    await page.evaluate(()=>{Date.now=window.__weatherTestNow;delete window.__weatherTestNow;});
+    mode='normal';
+    await page.locator('#hurricane-refresh').click();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('NOAA checked'));
+    assert.equal(await page.locator('[data-storm]').count(),1);
+    assert.equal(await page.locator('#hurricane-notice').isVisible(),false);
+    results.push('Saved storms expire after 24 hours without a page reload, disappear from the map and storage, and recover after a successful refresh');
+
+    mode='offline';
     await context.clearCookies();
     await page.evaluate(()=>localStorage.clear());
     await page.reload({waitUntil:'domcontentloaded'});
@@ -262,7 +296,7 @@ async function run() {
     assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
     results.push('First-visit outage is distinct from a genuine no-storms result');
 
-    for (const nextMode of ['partial','empty','malformed','incomplete','stale']) {
+    for (const nextMode of ['partial','empty','malformed','incomplete','stale','unverified','bad-geometry']) {
       mode=nextMode;
       await page.evaluate(()=>localStorage.clear());
       await page.reload({waitUntil:'domcontentloaded'});
@@ -271,9 +305,16 @@ async function run() {
       if (mode==='partial') { assert.match(await page.locator('#hurricane-notice').innerText(),/forecast cones/); assert.equal(await page.locator('[data-storm]').count(),1); }
       if (mode==='empty') { assert.equal(await page.locator('[data-storm]').count(),0); assert.match(await page.locator('#hurricane-storm-list').innerText(),/No systems/); assert.equal(await page.locator('#hurricane-notice').isVisible(),false); }
       if (mode==='malformed'||mode==='incomplete') assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
-      if (mode==='stale') { assert.equal(await page.locator('#weather-hurricanes').getAttribute('data-feed'),'stale'); assert.match(await page.locator('#hurricane-notice').innerText(),/12 hours old/); }
+      if (mode==='stale'||mode==='unverified') { assert.equal(await page.locator('#weather-hurricanes').getAttribute('data-feed'),'stale'); assert.match(await page.locator('#hurricane-notice').innerText(),/12 hours old/); }
+      if (mode==='bad-geometry') {
+        assert.equal(await page.locator('[data-storm]').count(),1);
+        assert.equal(await page.locator('.hurricane-map-marker').count(),1);
+        assert.match(await page.locator('#hurricane-notice').innerText(),/forecast cones, past tracks, development areas, coastal alerts/);
+        await page.locator('#hurricane-next').click();
+        assert.match(await page.locator('#hurricane-forecast-readout').innerText(),/\+12 hours/);
+      }
     }
-    results.push('Partial layer failures, empty successful feeds, malformed responses and stale advisories');
+    results.push('Partial layer failures, malformed optional geometry, empty successful feeds, malformed responses, stale advisories and unverified issuance times');
     assert.deepEqual(errors,[]);
     results.push('No uncaught JavaScript errors');
     await fs.writeFile(path.join(output,'browser-results.json'),JSON.stringify({checkedAt:new Date().toISOString(),results},null,2));

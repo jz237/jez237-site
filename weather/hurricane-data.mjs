@@ -3,6 +3,7 @@
 export const NOAA_SERVICE = 'https://mapservices.weather.noaa.gov/tropical/rest/services/tropical/NHC_tropical_weather_summary/MapServer';
 export const LAYERS = { points: 5, cones: 7, history: 10, outlook: 3, warnings: 8 };
 export const MAX_AGE = 12 * 60 * 60 * 1000;
+export const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 export const REFRESH_INTERVAL = 10 * 60 * 1000;
 const ZONES = { UTC: 0, GMT: 0, AST: -4, EDT: -4, EST: -5, CDT: -5, CST: -6, MDT: -6, MST: -7, PDT: -7, PST: -8, HST: -10 };
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -18,7 +19,7 @@ export function escapeHtml(value) {
 }
 
 export function stormId(properties = {}) {
-  for (const value of [properties.idp_subset, properties.idp_source]) {
+  for (const value of [properties?.idp_subset, properties?.idp_source]) {
     const match = String(value || '').match(/^(?:al|ep|cp)\d{6}/i);
     if (match) return match[0].toLowerCase();
   }
@@ -106,7 +107,7 @@ export function riskColor(value) {
 }
 
 export function basinFor(properties = {}) {
-  const basin = String(properties.basin || '').toLowerCase();
+  const basin = String(properties?.basin || '').toLowerCase();
   return basin === 'al' || basin === 'atlantic' ? 'atlantic' : ['ep', 'cp', 'pacific', 'eastern pacific', 'central pacific'].includes(basin) ? 'pacific' : 'unknown';
 }
 
@@ -160,7 +161,7 @@ export function buildStorms(collection, now = Date.now()) {
       id, name: String(p.stormname || id.toUpperCase()).replace(/^(?:Potential Tropical Cyclone|Post-Tropical Cyclone|Subtropical Depression|Subtropical Storm|Tropical Depression|Tropical Storm|Major Hurricane|Hurricane)\s+/i, ''),
       basin: basinFor(p), bin: String(p.binnumber || ''), advisory: String(p.advisnum || '—'),
       advisoryLabel: String(p.advdate || ''), issuedAt, sourceUpdatedAt,
-      stale: reference === null || now - reference > MAX_AGE || reference - now > 3600000,
+      stale: issuedAt === null || now - issuedAt > MAX_AGE || issuedAt - now > 3600000,
       current: points[0], points, pressure: number(p.mslp) > 0 ? number(p.mslp) : null,
       movement: number(p.tcspd), direction: direction(p.tcdir),
       ...intensity(p.maxwind, p.stormtype)
@@ -206,6 +207,39 @@ export function validateForecastCollection(data) {
   return data;
 }
 
+export function validateLayerCollection(name, data) {
+  if (name === 'points') return validateForecastCollection(data);
+  if (!Object.hasOwn(LAYERS, name)) throw new Error('Unknown NOAA layer');
+  validateCollection(data);
+  const coordinate = value => Array.isArray(value) && value.length >= 2 &&
+    value.every(n => typeof n === 'number' && Number.isFinite(n)) && Math.abs(value[0]) <= 180 && Math.abs(value[1]) <= 90;
+  const line = value => Array.isArray(value) && value.length >= 2 && value.every(coordinate);
+  const ring = value => line(value) && value.length >= 4 && value[0][0] === value.at(-1)[0] && value[0][1] === value.at(-1)[1];
+  const polygon = value => Array.isArray(value) && value.length > 0 && value.every(ring);
+  const geometries = {
+    history: { Point:coordinate },
+    cones: { Polygon:polygon, MultiPolygon:value => Array.isArray(value) && value.length > 0 && value.every(polygon) },
+    outlook: { Polygon:polygon, MultiPolygon:value => Array.isArray(value) && value.length > 0 && value.every(polygon) },
+    warnings: { LineString:line, MultiLineString:value => Array.isArray(value) && value.length > 0 && value.every(line) }
+  }[name];
+  if (!geometries) throw new Error('Unknown NOAA layer');
+  for (const feature of data.features) {
+    const geometry = feature?.geometry;
+    if (feature?.type !== 'Feature' || (feature.properties !== null && (typeof feature.properties !== 'object' || Array.isArray(feature.properties))) ||
+      !geometry || !Object.hasOwn(geometries, geometry.type) || !geometries[geometry.type](geometry.coordinates) ||
+      (name === 'outlook' && basinFor(feature.properties) === 'unknown')) {
+      // Reject the whole optional layer rather than silently omit part of a
+      // warning coastline or development area. Other layers remain usable.
+      throw new Error(`NOAA returned an invalid ${name} map feature.`);
+    }
+  }
+  return data;
+}
+
+export function cacheIsRecent(checkedAt, now = Date.now()) {
+  return Number.isFinite(checkedAt) && checkedAt <= now + 60000 && now - checkedAt <= CACHE_MAX_AGE;
+}
+
 export async function fetchLayers(fetcher = fetch, now = Date.now()) {
   const result = { checkedAt: now, layers: {}, errors: [] };
   const requests = await Promise.allSettled(Object.entries(LAYERS).map(async ([name, id]) => {
@@ -220,7 +254,7 @@ export async function fetchLayers(fetcher = fetch, now = Date.now()) {
           throw error;
         }
         const data = await response.json();
-        return [name, name === 'points' ? validateForecastCollection(data) : validateCollection(data)];
+        return [name, validateLayerCollection(name, data)];
       } catch (error) {
         // ArcGIS can briefly return an error object with HTTP 200 while a layer
         // updates. Retry that layer once, without reusing a cached error body.
