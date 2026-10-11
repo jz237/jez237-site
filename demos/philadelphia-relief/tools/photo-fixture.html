@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Philadelphia photographic renderer fixture</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Widgets/widgets.css">
+<style>
+  body{margin:0;background:#17313c;color:#fff;font:14px system-ui}
+  header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px}
+  button,select{padding:8px}#stage{position:relative;height:calc(100vh - 115px)}
+  #fallback{padding:32px;font-size:22px}.photographic-stage{position:absolute;inset:0;opacity:0}
+  .photographic-stage.visible{opacity:1}.cesium-viewer,.cesium-viewer-cesiumWidgetContainer,
+  .cesium-widget,.cesium-widget canvas{width:100%;height:100%}#photoCredits{position:fixed;bottom:0}
+  #state{padding:0 12px 12px}#photoMode{display:none}
+</style>
+<header>
+  <strong>Local geometry · real Cesium renderer</strong>
+  <button id="south">South: landmark behind tall building</button>
+  <button id="north">North: landmark visible</button>
+  <button id="fail">Fail photo renderer once</button>
+  <button id="save">Save fixture PNG</button>
+  <span id="photoStatus"></span><button id="photoRetry" hidden>Retry</button>
+  <select id="photoMode"><option value="photo">Photo</option></select>
+</header>
+<div id="state" role="status"></div>
+<div id="stage"><div id="fallback">Diorama fallback remains available</div></div>
+<div id="photoCredits"></div>
+<script src="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Cesium.js"></script>
+<script type="module">
+  import {createPhotographic} from '../src/photographic.js';
+  import {createStore} from '../src/state.js';
+  import {fixtureTileset} from './photo-fixture.mjs';
+  const C=window.Cesium,stage=document.querySelector('#stage'),store=createStore({photoMode:'photo'});
+  const pose={lon:-75.1635,lat:39.9526,dist:600,pitch:55,bearing:0,fov:40};
+  const fixture=fixtureTileset(C,pose.lon,pose.lat);
+  let testTiles,tileFailure='';
+  const engine={...C,createGooglePhotorealistic3DTileset:async(_,options)=>{
+    testTiles=await C.Cesium3DTileset.fromUrl(fixture.url,options);
+    testTiles.tileFailed.addEventListener(error=>{tileFailure=error.message;});
+    return testTiles;
+  }};
+  const photo=createPhotographic({stage,store,sampleElevation:()=>4,
+    landmarks:{landmarks:[{n:'Test landmark',lon:pose.lon,lat:pose.lat,r:1}]},onSelect(){},
+    resources:async()=>[engine,{ionToken:''}]});
+  document.querySelector('#south').onclick=()=>{pose.bearing=0;};
+  document.querySelector('#north').onclick=()=>{pose.bearing=180;};
+  document.querySelector('#fail').onclick=()=>{
+    const viewer=photo.aircraftViewer;if(!viewer)return;
+    viewer.scene.renderError.raiseEvent(viewer.scene,new Error('Local fixture failure'));
+  };
+  document.querySelector('#save').onclick=()=>{
+    if(!photo.active)return;
+    photo.capture().toBlob(blob=>{
+      const url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download=`philadelphia-photo-fixture-${pose.bearing}.png`;a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    });
+  };
+  let disposed=false;
+  function frame(){
+    if(disposed)return;
+    photo.update(pose,store.get(),stage.clientWidth,stage.clientHeight);
+    const stats=photo.stats();
+    document.querySelector('#state').textContent=`View ${pose.bearing===0?'south':'north'} · `+
+      `${stats.active?'photographic scene':stats.failed?'failed safely':'loading'} · `+
+      `${stage.querySelectorAll('canvas').length} renderer canvas · ${stats.pending} pending · ${tileFailure}`;
+    requestAnimationFrame(frame);
+  }
+  frame();
+  addEventListener('pagehide',()=>{disposed=true;photo.dispose();fixture.dispose();},{once:true});
+</script>
+</html>

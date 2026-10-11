@@ -1,5 +1,7 @@
-import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady, PHOTO_PRELOAD }
+import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
+  photoLandmarkVisible, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
+import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -18,10 +20,13 @@ function loadEngine() {
   });
   return enginePromise;
 }
+function loadResources(){
+  return Promise.all([loadEngine(),import('../../philadelphia-cesium/config.js?v=philly-2026092121')]);
+}
 
 /** A second renderer, driven by the SAME geographic camera and controls. */
 export function createPhotographic({ stage, store, sampleElevation, landmarks, onSelect,
-  isOverlayActive = () => false }) {
+  isOverlayActive = () => false, resources = loadResources }) {
   const host = document.createElement('div');
   host.className = 'photographic-stage'; host.setAttribute('aria-hidden', 'true');
   stage.append(host);
@@ -33,7 +38,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
-  let resourceTimer, firstViewTimer, press, exhibitBounds;
+  let resourceTimer, press, exhibitBounds;
+  const firstViewDeadline=createVisibleTimeout(document,unavailable,90000);
   let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
@@ -47,14 +53,23 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     credits.hidden = !on;
   }
   function unavailable() {
+    if(disposed||failed)return;
+    const ticket=++generation;
     failed = true; loading = false; present(false);
-    clearTimeout(firstViewTimer); clearTimeout(resourceTimer);
+    firstViewDeadline.cancel(); clearTimeout(resourceTimer);
     retry.hidden = false;
     report('Photo detail unavailable · diorama still works');
+    // renderError can fire inside Cesium's render traversal. Free the failed
+    // viewer and its tile cache after that call returns, without touching a
+    // renderer created by a subsequent retry.
+    queueMicrotask(()=>{
+      if(!disposed&&failed&&ticket===generation)destroyRenderer();
+    });
   }
   function setCamera(pose, w, h) {
     const C = window.Cesium;
     const camera = viewer.camera, mapped = photoCamera(pose, w / h);
+    updateLandmarks(pose);
     camera.frustum.fov = mapped.fov;
     viewer.scene.backgroundColor = C.Color.fromCssColorString(pose.flightView ? '#bacfdc' : '#203b43');
     if (pose.flightView) {
@@ -74,12 +89,15 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     camera.lookAtTransform(C.Matrix4.IDENTITY);
     viewer.scene.requestRender();
   }
+  function updateLandmarks(pose=lastPose) {
+    if(!viewer)return;
+    for (const entity of viewer.entities.values) {
+      entity.show=photoLandmarkVisible(entity.reliefPlace,pose,exhibitBounds);
+    }
+  }
   function applyExhibit() {
     if (!tileset || !viewer) return true;
-    for (const entity of viewer.entities.values) {
-      const p = entity.reliefPlace, b = exhibitBounds;
-      entity.show = !b || p.lon >= b.west && p.lon <= b.east && p.lat >= b.south && p.lat <= b.north;
-    }
+    updateLandmarks();
     if (!exhibitBounds) { tileset.clippingPolygons = undefined; return true; }
     const C = window.Cesium, b = exhibitBounds;
     if (!C.ClippingPolygonCollection.isSupported(viewer.scene)) return false;
@@ -95,8 +113,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     loading = true; report('Preparing photographic detail…');
     resourceTimer = setTimeout(unavailable, 45000);
     try {
-      const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092121')]);
+      const [C, config] = await resources();
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -108,6 +125,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         creditContainer: credits, creditViewport: document.body,
       });
       viewer.scene.screenSpaceCameraController.enableInputs = false;
+      // The relief rig owns the camera. Tile collision data is used only to
+      // anchor labels to their actual roofs, not to move that shared camera.
+      viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
       viewer.resolutionScale = Math.min(window.devicePixelRatio || 1, 2);
       viewer.scene.backgroundColor = C.Color.fromCssColorString('#203b43');
       viewer.scene.postProcessStages.fxaa.enabled = true;
@@ -117,6 +137,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
       const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
         maximumScreenSpaceError: 16, dynamicScreenSpaceError: false,
+        enableCollision: true,
         cacheBytes: 384 * 1024 * 1024, maximumCacheOverflowBytes: 128 * 1024 * 1024,
         preloadFlightDestinations: false, showCreditsOnScreen: true,
       });
@@ -136,16 +157,16 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       for (const place of landmarks?.landmarks || []) {
         if (place.r > 1 && !/Bauder|Hidden Reef/.test(place.n)) continue;
         const entity = viewer.entities.add({
-          position: C.Cartesian3.fromDegrees(place.lon, place.lat),
+          position: C.Cartesian3.fromDegrees(place.lon, place.lat, 3),
           point: { pixelSize: 7, color: C.Color.fromCssColorString('#f4c679'),
             outlineColor: C.Color.fromCssColorString('#16313b'), outlineWidth: 2,
-            heightReference: C.HeightReference.CLAMP_TO_3D_TILE,
-            disableDepthTestDistance: Infinity },
+            heightReference: C.HeightReference.RELATIVE_TO_3D_TILE,
+            disableDepthTestDistance: 0 },
           label: { text: place.n, font: '600 12px sans-serif', showBackground: true,
             backgroundColor: C.Color.fromCssColorString('#16313be8'),
             pixelOffset: new C.Cartesian2(0, -24), backgroundPadding: new C.Cartesian2(8, 5),
-            heightReference: C.HeightReference.CLAMP_TO_3D_TILE,
-            disableDepthTestDistance: Infinity,
+            heightReference: C.HeightReference.RELATIVE_TO_3D_TILE,
+            disableDepthTestDistance: 0,
             distanceDisplayCondition: new C.DistanceDisplayCondition(0, 22000) },
         });
         entity.reliefPlace = place;
@@ -161,13 +182,19 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   select.value = store.value('photoMode');
   select.onchange = () => store.set({ photoMode: select.value,
     ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
-  function release() {
-    generation++; clearTimeout(firstViewTimer); clearTimeout(resourceTimer);
+  function destroyRenderer(){
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
-    viewer = undefined; tileset = undefined; failed = false; loading = false;
-    firstViewReady = false; firstViewTimer = undefined; lastPoseKey = ''; pending = 0;
+    viewer=undefined;tileset=undefined;
+    firstViewReady = false; lastPoseKey = ''; pending = 0;
+    visibleTiles=0;detailTiles=0;bestError=Infinity;
+    host.replaceChildren();credits.replaceChildren();
+    delete message.dataset.visibleTiles;delete message.dataset.detailTiles;delete message.dataset.bestError;
+  }
+  function release() {
+    generation++; firstViewDeadline.cancel(); clearTimeout(resourceTimer);
+    destroyRenderer();failed=false;loading=false;
     present(false);
-    host.replaceChildren(); credits.replaceChildren(); retry.hidden = true;
+    retry.hidden = true;
   }
   retry.onclick = () => {
     release(); enginePromise = undefined;
@@ -194,7 +221,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return !viewer || window.Cesium.ClippingPolygonCollection.isSupported(viewer.scene);
     },
     get active() { return active; },
-    get aircraftViewer() { return viewer && !viewer.isDestroyed() ? viewer : null; },
+    get aircraftViewer() { return !failed && viewer && !viewer.isDestroyed() ? viewer : null; },
     pickLocation(x, y) {
       if (!active || !viewer) return null;
       const C = window.Cesium;
@@ -215,6 +242,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     },
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
+      if(disposed)return false;
       lastPose = pose; width = w; height = h;
       if (state.lightweight) {
         if (viewer || loading || failed) release();
@@ -223,7 +251,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
-        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+        firstViewDeadline.cancel();
       }
       if (failed) return false;
       const preload = !isOverlayActive() && photoAllowed(state) && state.photoMode !== 'relief'
@@ -239,13 +267,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // Warm the engine near the boundary without requesting a second,
       // regional photographic scene while the miniature is still in use.
       if (!wanted) {
-        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+        firstViewDeadline.cancel();
         report('Diorama · photographic engine ready');
         return false;
       }
-      if (!firstViewReady && !firstViewTimer) {
-        firstViewTimer = setTimeout(unavailable, 90000);
-      }
+      if (!firstViewReady) firstViewDeadline.start();
       const key = [pose.lon, pose.lat, pose.dist, pose.pitch, pose.bearing,
         pose.fov, pose.targetAltitude, pose.flightView?.lon, pose.flightView?.lat,
         pose.flightView?.height, pose.flightView?.heading, pose.flightView?.pitch, w, h].join(':');
@@ -265,15 +291,17 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       viewer.entities.show = state.layers.landmarks;
       visibleTiles = 0; detailTiles = 0; bestError = Infinity;
       try { viewer.render(); } catch { unavailable(); return false; }
+      if(failed||disposed)return false;
       if (visibleTiles) {
         message.dataset.visibleTiles = String(visibleTiles);
         message.dataset.detailTiles = String(detailTiles);
         message.dataset.bestError = String(Math.round(bestError));
       }
       // Keep the miniature visible through the initial coarse/empty frames.
-      // Require neighborhood-scale geometry, not merely visible coarse tiles.
+      // Require neighborhood geometry AND a completed initial view; a handful
+      // of fine tiles must not reveal a mostly coarse, partially loaded scene.
       if (!firstViewReady && photoReady(detailTiles, visibleTiles, tileset.tilesLoaded)) {
-        firstViewReady = true; clearTimeout(firstViewTimer);
+        firstViewReady = true; firstViewDeadline.cancel();
       }
       present(wanted && firstViewReady);
       report(active ? pending ? `Photographic 3D · refining ${pending} tiles`
@@ -304,9 +332,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return canvas;
     },
     dispose() {
-      disposed = true; clearTimeout(resourceTimer); clearTimeout(firstViewTimer); unsubscribe();
+      disposed = true; clearTimeout(resourceTimer); firstViewDeadline.dispose(); unsubscribe();
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
-      if (viewer && !viewer.isDestroyed()) viewer.destroy();
+      destroyRenderer();present(false);host.remove();select.onchange=null;retry.onclick=null;
     },
   };
 }
