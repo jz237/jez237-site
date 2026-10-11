@@ -256,10 +256,15 @@ test('unchanged street furniture is retained, while a new view radius rebuilds i
     for(let i=0;i<20;i++)streets.update(params);
     assert.equal(furniture.instanceMatrix.version,version,'idle view does not re-upload unchanged streets');
     assert.equal(vehicles.instanceMatrix.version,vehicleVersion,'reduced-motion cars retain their GPU buffers');
+    assert.equal(streets.animating,false,'reduced motion allows the deepest idle pacing');
     streets.update({...params,reducedMotion:false,state:{...params.state,animationSpeed:0}});
     assert.equal(vehicles.instanceMatrix.version,vehicleVersion,'paused traffic retains its GPU buffers');
+    assert.equal(streets.animating,false);
     streets.update({...params,reducedMotion:false,dt:.1});
     assert.ok(vehicles.instanceMatrix.version>vehicleVersion,'moving cars still upload their new poses');
+    assert.equal(streets.animating,true,'visible vehicles request the moving idle cadence');
+    streets.update({...params,reducedMotion:false,pose:{...params.pose,lon:100000}});
+    assert.equal(streets.animating,false,'an empty neighborhood does not keep waking for distant cars');
     streets.update({...params,pose:{...params.pose,dist:2400}});
     assert.ok(furniture.instanceMatrix.version>version,'zooming out refreshes the wider neighborhood');
   }finally{streets.dispose();globalThis.fetch=previousFetch;}

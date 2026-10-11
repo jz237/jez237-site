@@ -1235,11 +1235,13 @@ async function boot() {
     const photo = photographic.stats();
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
       moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
+      streets: !photographic.active && streetLife.animating,
       loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });
     const text = scheduledDelay === 500 ? 'Saving power · idle refresh · full detail retained'
-      : scheduledDelay ? 'Live aircraft · reduced idle work · full detail retained'
+      : scheduledDelay ? (aircraftLayer.animating ? 'Live aircraft' : 'Animating streets')
+          + ' · reduced idle work · full detail retained'
         : powerToggle.checked ? 'Full detail · power saving resumes when idle'
           : 'Continuous animation · full detail';
     if (text !== powerText) { powerText = text; powerStatus.textContent = text; }

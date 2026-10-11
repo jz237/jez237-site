@@ -55,7 +55,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     }
   }
   let graph=null,traffic=null,curbLayout=null,loading=false,disposed=false,age=10;
-  let retryDelay=0,request=null,vehicleView=null;
+  let retryDelay=0,request=null,vehicleView=null,motionEnabled=false;
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   const lamps={indicator:[2.6,1.8,.025],head:[2.2,2.1,1.65],
@@ -165,8 +165,11 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     for(const mesh of [street,trees,signals])uploadInstances(mesh);
   }
   return {group,
+    get animating(){return !disposed&&group.visible&&motionEnabled
+      &&(vehicles.count>0||signals.count>0||people.visible&&people.count>0);},
     update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
       if(disposed)return;
+      motionEnabled=!reducedMotion&&state.animationSpeed>0;
       retryDelay=Math.max(0,retryDelay-(Number.isFinite(dt)?Math.max(0,dt):0));
       group.visible=state.era==='present'&&state.compareMode==='off'&&!state.lightweight
         &&!archive&&state.layers.structures&&pose.dist<6500&&!!state.streetLife;
@@ -179,7 +182,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       }
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
-      const advancing=!reducedMotion&&Number.isFinite(dt)&&dt>0&&state.animationSpeed>0;
+      const advancing=motionEnabled&&Number.isFinite(dt)&&dt>0;
       if(advancing){traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
         walkingTime+=Math.min(dt*state.animationSpeed,.25);}
       people.visible=heads.visible=pose.dist<1800;
