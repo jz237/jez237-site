@@ -581,8 +581,9 @@ export class LizardRig {
         }
       } else {
         this.homeWorld(leg, home);
-        // (measured across the ground: a foot hanging over a drop is not "strained")
-        const drift = Math.hypot(home.x - leg.planted.x, home.z - leg.planted.z);
+        // (in 3-D: a foot left on the floor as the body climbs onto the log must
+        // follow it up; a hanging foot is dealt with separately below)
+        const drift = home.distanceTo(leg.planted);
         const yawErr = Math.abs(wrapAngle(I.heading - leg.plantedYaw));
         // A foot with nothing under it (over the side of the log) stays hanging,
         // gripping the flank, instead of pawing the air: it steps again only when
