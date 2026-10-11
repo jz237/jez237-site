@@ -16,9 +16,12 @@ export function photoTileReady(error, flightHeight, viewDistance = 0) {
   return Number.isFinite(error) && error <= threshold;
 }
 
-// A loaded planet-scale fallback is not a usable photographic close-up.
+// Tile counts alone say nothing about coverage: eight fine tiles can occupy
+// one corner while a coarse fallback fills the rest. Wait for Cesium to finish
+// the current view's initial screen-space-error target before revealing it.
+// A settled planet-scale fallback is still not a usable photographic close-up.
 export function photoReady(detailTiles, visibleTiles, settled) {
-  return detailTiles >= 8 || (settled && detailTiles >= 1 && detailTiles === visibleTiles);
+  return settled && (detailTiles >= 8 || (detailTiles >= 1 && detailTiles === visibleTiles));
 }
 
 export function photoAllowed(state) {
