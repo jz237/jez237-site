@@ -110,6 +110,52 @@ async function run() {
       }
       if(scenario==='nws') await page.locator('.weather-dashboard-grid').screenshot({path:path.join(output,'nws-backup-mobile.png')});
     }
+    const recentCache=structuredClone(legacyCache);
+    recentCache.fetchedAt=new Date(Date.now()-2*3600000).toISOString();
+    recentCache.cachedAt=new Date().toISOString();
+    const seedCache=cache=>page.evaluate(value=>{localStorage.clear();localStorage.setItem('jez237-weather-cache-v2:19111',JSON.stringify(value));},cache);
+    mode='offline';
+    await seedCache(recentCache);
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForSelector('.weather-stale-banner');
+    assert.match(await page.locator('.weather-stale-banner').innerText(),new RegExp(new Date(recentCache.fetchedAt).getUTCFullYear()));
+    assert.equal(await page.locator('.weather-now-badge strong').innerText(),'62°','A recent saved forecast remains useful during an outage');
+    await page.locator('#weather-zip-input').fill('10001');
+    await page.evaluate(()=>{
+      window.__weatherNow=Date.now;
+      const fetchedAt=Date.parse(JSON.parse(localStorage.getItem('jez237-weather-cache-v2:19111')).fetchedAt);
+      Date.now=()=>fetchedAt+25*3600000;
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await page.waitForFunction(()=>!document.querySelector('.weather-now-badge'));
+    assert.match(await page.locator('#weather-status').innerText(),/more than 24 hours old/);
+    assert.equal(await page.locator('#weather-zip-input').inputValue(),'10001','Expiry preserves a location being typed');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'weather-zip-input');
+    assert.equal(await page.evaluate(()=>localStorage.getItem('jez237-weather-cache-v2:19111')),null);
+    await page.locator('#weather-refresh').click();
+    await page.waitForFunction(()=>!document.querySelector('#weather-refresh').disabled);
+    assert.equal(await page.locator('.weather-now-badge').count(),0,'A failed refresh must not revive expired values');
+    await page.evaluate(()=>{Date.now=window.__weatherNow;delete window.__weatherNow;});
+    mode='zero';
+    await page.locator('#weather-refresh').click();
+    await page.waitForSelector('.weather-now-badge');
+    assert.equal(await page.locator('.weather-now-badge strong').innerText(),'0°','Live weather recovers after expired cache');
+    mode='offline';
+    const expiredCache={...recentCache,fetchedAt:new Date(Date.now()-72*3600000).toISOString()};
+    await seedCache(expiredCache);
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.querySelector('#weather-status')?.textContent.includes('more than 24 hours old'));
+    assert.equal(await page.locator('.weather-now-badge').count(),0,'A newer cachedAt cannot disguise old weather on a cold load');
+    assert.equal(await page.evaluate(()=>localStorage.getItem('jez237-weather-cache-v2:19111')),null);
+    await page.setViewportSize({width:320,height:844});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Unavailable forecast controls must fit a small phone');
+    await page.locator('#weather-now').screenshot({path:path.join(output,'local-weather-expired-320.png')});
+    // A near-expiry saved forecast also disappears on its own timer.
+    await seedCache({...recentCache,fetchedAt:new Date(Date.now()-24*3600000+2000).toISOString()});
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForSelector('.weather-now-badge');
+    await page.waitForFunction(()=>!document.querySelector('.weather-now-badge'));
+    assert.match(await page.locator('#weather-status').innerText(),/more than 24 hours old/);
     legacyCache.source=legacyCache.weather.source='NWS backup';
     legacyCache.weather.current.cloud_cover=80;
     legacyCache.weather.current.wind_gusts_10m=legacyCache.weather.current.wind_speed_10m;
@@ -120,6 +166,7 @@ async function run() {
     assert.equal(await page.locator('.weather-now-badge').count(),0,'Old NWS cache with assumed measurements must not reappear during an outage');
     assert.deepEqual(errors,[]);
     console.log('PASS NWS backup and partial weather preserve missing measurements, keep known zero values, identify forecast sources, and avoid unsupported fishing/AQI claims');
+    console.log('PASS saved local forecasts expire on load, timer and visibility checks, preserve usable controls, and recover after an outage');
   } finally { await browser.close(); }
 }
 run().catch(error=>{console.error(error);process.exitCode=1;});

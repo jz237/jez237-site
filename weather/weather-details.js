@@ -8,6 +8,12 @@ window.WeatherDetails = (() => {
   const inches = value => finite(value) ? (Number(value) > 0 && Number(value) < .005 ? '<0.01 in' : `${Number(value).toFixed(2)} in`) : 'Unavailable';
   const rainTotal = (rain, showers) => finite(rain) && finite(showers) ? Number(rain) + Number(showers) : null;
   const temperature = period => !finite(period?.temperature) ? null : period.temperatureUnit === 'C' ? Number(period.temperature) * 9 / 5 + 32 : Number(period.temperature);
+  const WEATHER_CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
+  const savedWeatherTimestamp = bundle => Date.parse(bundle?.fetchedAt ?? bundle?.cachedAt);
+  function savedWeatherIsRecent(bundle, now = Date.now()) {
+    const saved = savedWeatherTimestamp(bundle);
+    return Number.isFinite(saved) && Number.isFinite(now) && saved <= now + 60000 && now - saved <= WEATHER_CACHE_MAX_AGE;
+  }
 
   function forecastDay(date, daily, periods = []) {
     const index = (daily.time || []).indexOf(date);
@@ -176,5 +182,5 @@ window.WeatherDetails = (() => {
       if (meta.generatedAt && Number.isFinite(Date.parse(meta.generatedAt))) caption.textContent += ` Created ${new Date(meta.generatedAt).toLocaleString('en-US', {timeZone:'America/New_York'})} Eastern.`;
     } catch (_) { caption.textContent = 'Illustrated Philly 19111 forecast snapshot. Edition details are unavailable; use the live forecast above for updated conditions.'; }
   }
-  return { normalize, chart, bindChart, almanac, forecastDay, age, degrees, percent, inches, rainTotal, temperature, number };
+  return { normalize, chart, bindChart, almanac, forecastDay, age, degrees, percent, inches, rainTotal, temperature, number, WEATHER_CACHE_MAX_AGE, savedWeatherTimestamp, savedWeatherIsRecent };
 })();

@@ -10,6 +10,9 @@
   let mapLayer = 'radar';
   const REFRESH_INTERVAL = 10 * 60 * 1000;
   let displayedBundle = null;
+  let unavailablePlace = null;
+  let expiredSavedWeather = false;
+  let cacheExpiry;
   let requestVersion = 0;
   let loading = false;
   let lastAttempt = 0;
@@ -133,6 +136,13 @@
   function loadWeatherCache(place) {
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey(place)) || 'null');
+      if (!details.savedWeatherIsRecent(cached)) {
+        if (cached) {
+          expiredSavedWeather = Date.now() - details.savedWeatherTimestamp(cached) > details.WEATHER_CACHE_MAX_AGE;
+          localStorage.removeItem(cacheKey(place));
+        }
+        return null;
+      }
       // Old backup entries contain estimated cloud cover and duplicated wind gusts.
       if (cached?.weather?.current && cached.source !== 'NWS backup' && cached.weather.source !== 'NWS backup') return { ...cached, stale: true };
     } catch (_) {}
@@ -489,6 +499,7 @@
 
   async function updatePlace(placeOrZip, { background = false } = {}) {
     if (background && loading) return;
+    expireSavedWeather();
     const version = ++requestVersion;
     loading = true;
     lastAttempt = Date.now();
@@ -509,12 +520,13 @@
     } catch (err) {
       if (version !== requestVersion) return;
       const samePlace = nextPlace && displayedBundle && cacheKey(nextPlace) === cacheKey(displayedBundle.place);
-      const cached = samePlace ? displayedBundle : nextPlace && loadWeatherCache(nextPlace);
+      expireSavedWeather();
+      const cached = samePlace && displayedBundle ? displayedBundle : nextPlace && loadWeatherCache(nextPlace);
       if (cached) render({ ...cached, stale: true, error: 'Refresh failed. Showing the last available forecast.' });
       else if (displayedBundle) {
         root.querySelector('#weather-status').textContent = `Could not update location. Still showing ${displayedBundle.place.name}. ${err?.message || ''}`;
       } else {
-        root.innerHTML = '<div class="weather-dashboard-card weather-loading">Weather is temporarily unavailable. <button type="button" data-weather-refresh>Try again</button></div>';
+        renderUnavailable(nextPlace || unavailablePlace || loadSavedPlace());
       }
     } finally {
       if (version === requestVersion) {
@@ -526,6 +538,7 @@
   }
 
   function updateFreshness() {
+    expireSavedWeather();
     if (!displayedBundle) return;
     const label = root.querySelector('#weather-freshness');
     if (label) label.textContent = `${displayedBundle.stale ? 'Cached · last updated' : 'Updated'} ${details.age(displayedBundle.fetchedAt || displayedBundle.cachedAt)}`;
@@ -536,7 +549,39 @@
     if (document.hidden || loading || Date.now() - lastAttempt < REFRESH_INTERVAL) return;
     // Wait while someone is typing, exploring the graph, or reading a popup.
     if (document.activeElement?.matches('#weather-zip-input, #weather-chart-hour') || !forecastPopup.hidden) return;
-    updatePlace(displayedBundle?.place || loadSavedPlace(), { background: true });
+    updatePlace(displayedBundle?.place || unavailablePlace || loadSavedPlace(), { background: true });
+  }
+
+  function renderUnavailable(place) {
+    const active = document.activeElement;
+    const hadFocus = root.contains(active) || forecastPopup.contains(active);
+    const typedZip = active?.id === 'weather-zip-input' ? active.value : null;
+    const focusedId = active?.id;
+    closeForecast();
+    clearTimeout(cacheExpiry);
+    displayedBundle = null;
+    unavailablePlace = place;
+    root.innerHTML = `<div class="weather-dashboard-card" id="weather-now">
+      <h2>Local forecast unavailable</h2>
+      <p id="weather-status" role="status">${expiredSavedWeather ? 'The saved forecast is more than 24 hours old and has been removed. ' : ''}Weather is temporarily unavailable. Try refreshing or choose another ZIP code.</p>
+      <form class="weather-location-form" id="weather-location-form">
+        <label for="weather-zip-input">ZIP forecast</label>
+        <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(typedZip ?? place?.zip ?? '')}">
+        <button type="submit" id="weather-update-location">Update</button>
+        <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
+      </form>
+      <div class="weather-refresh-row"><button id="weather-refresh" type="button" data-weather-refresh ${loading ? 'disabled' : ''}>${loading ? 'Refreshing…' : 'Try again'}</button></div>
+      <p class="weather-detail-note">Use the <a href="https://www.weather.gov/" target="_blank" rel="noopener noreferrer">National Weather Service</a> for the latest local forecast and alerts.</p>
+    </div>`;
+    if (hadFocus) (document.getElementById(focusedId) || root.querySelector('#weather-refresh'))?.focus({preventScroll:true});
+  }
+
+  function expireSavedWeather() {
+    if (!displayedBundle || details.savedWeatherIsRecent(displayedBundle)) return;
+    const place = displayedBundle.place;
+    expiredSavedWeather = true;
+    try { localStorage.removeItem(cacheKey(place)); } catch (_) {}
+    renderUnavailable(place);
   }
 
   // Mount outside the scrolling forecast strip so the description is never clipped.
@@ -627,12 +672,17 @@
   }, true);
 
   function render(bundle) {
+    if (!details.savedWeatherIsRecent(bundle)) { expiredSavedWeather = true; renderUnavailable(bundle.place); return; }
     const { weather, aq, fetchedAt, todayPeriod, tonightPeriod, forecastPeriods = [], alerts, place, source, stale, cachedAt, error } = bundle;
     const samePlace = displayedBundle && cacheKey(displayedBundle.place) === cacheKey(place);
     const existingMap = samePlace && root.querySelector('.weather-radar-embed iframe');
     const focusedId = samePlace && document.activeElement?.id;
     const scrollPositions = samePlace ? [...root.querySelectorAll('.weather-chart-scroll, .weather-five-day, .weather-hourly-strip')].map(el => el.scrollLeft) : [];
     displayedBundle = bundle;
+    unavailablePlace = null;
+    expiredSavedWeather = false;
+    clearTimeout(cacheExpiry);
+    cacheExpiry = setTimeout(expireSavedWeather, Math.max(0, details.savedWeatherTimestamp(bundle) + details.WEATHER_CACHE_MAX_AGE - Date.now()) + 1);
     TZ = bundle.timezone || weather.timezone || 'America/New_York';
     const zoneLabel = new Intl.DateTimeFormat('en-US', {timeZone: TZ, timeZoneName: 'short'}).formatToParts(new Date()).find(p => p.type === 'timeZoneName')?.value || TZ;
     closeForecast();
@@ -675,7 +725,8 @@
     const ozone = Math.max(...[dayOzone.max, nightOzone.max].filter(Number.isFinite));
     const dominantPollutant = !Number.isFinite(pm25) && !Number.isFinite(ozone) ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
     const todaySummary = todayPeriod?.detailedForecast || summarizeToday(weather);
-    const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ }) : '';
+    const savedTime = details.savedWeatherTimestamp(bundle);
+    const cachedTime = Number.isFinite(savedTime) ? new Date(savedTime).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZone:TZ, timeZoneName:'short' }) : '';
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 24).map((ts, offset) => {
       const i = hourlyIndex + offset;
       const [hIcon, hLabel] = weatherLabel(hourly.weather_code?.[i]);
@@ -877,7 +928,7 @@
 
   root.addEventListener('click', event => {
     if (event.target?.closest?.('[data-weather-refresh]')) {
-      updatePlace(displayedBundle?.place || loadSavedPlace());
+      updatePlace(displayedBundle?.place || unavailablePlace || loadSavedPlace());
       return;
     }
     if (!event.target?.closest?.('[data-weather-reset="true"]')) return;
@@ -885,7 +936,7 @@
     updatePlace(DEFAULT_PLACE);
   });
 
-  root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading weather…</div>';
+  root.innerHTML = '<div class="weather-dashboard-card weather-loading" id="weather-now">Loading weather…</div>';
   updatePlace(loadSavedPlace());
   setInterval(maybeRefresh, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeRefresh(); });
