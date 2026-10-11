@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { defaults } from '../src/schema.js';
 import { createStore } from '../src/state.js';
 import { encodeState, decodeState } from '../src/urlstate.js';
-import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady } from '../src/photo-policy.js';
+import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
+  photoLandmarkVisible } from '../src/photo-policy.js';
 import { PRESET_EXCLUDED } from '../src/presets.js';
 
 test('aircraft horizon handoff accepts neighborhood tiles but rejects country-scale geometry', () => {
@@ -82,4 +83,17 @@ test('view choice survives shared URLs and presets preserve it', () => {
   assert.ok(PRESET_EXCLUDED.has('photoMode'));
   store.set({ photoMode: 'untrusted-value' });
   assert.equal(store.value('photoMode'), 'relief');
+});
+
+test('photographic close-ups omit distant landmarks while preserving nearby, wide and exhibit views',()=>{
+  const cityHall={lon:-75.1636,lat:39.9526},wissahickon={lon:-75.2135,lat:40.0555};
+  const pose={lon:-75.1655,lat:39.9505,dist:900};
+  assert.equal(photoLandmarkVisible(cityHall,pose),true);
+  assert.equal(photoLandmarkVisible(wissahickon,pose),false,'a valley label must not overlay Center City');
+  assert.equal(photoLandmarkVisible(wissahickon,{...pose,dist:9000}),true);
+  assert.equal(photoLandmarkVisible(wissahickon,{...pose,lon:wissahickon.lon,lat:wissahickon.lat}),true);
+  assert.equal(photoLandmarkVisible(cityHall,{...pose,flightView:{lon:-75.2135,lat:40.0555}}),true);
+  const bounds={west:-75.166,east:-75.165,south:39.95,north:39.951};
+  assert.equal(photoLandmarkVisible(cityHall,pose,bounds),false,'distance filtering must preserve exhibit clipping');
+  assert.equal(photoLandmarkVisible({lon:pose.lon,lat:pose.lat},pose,bounds),true);
 });
