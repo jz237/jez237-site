@@ -119,13 +119,15 @@ window.WeatherDetails = (() => {
       <g class="chart-cursor" aria-hidden="true"><line x1="0" x2="0" y1="40" y2="292"/><circle cx="0" cy="0" r="6"/></g>
       ${hours.map((h, i) => `<rect data-chart-hour="${i}" data-x="${x(i)}" data-y="${finite(h.temp) ? y(h.temp) : ''}" x="${x(i) - 752 / Math.max(1, hours.length - 1) / 2}" y="32" width="${752 / Math.max(1, hours.length - 1)}" height="265" class="chart-hit"><title>${escape(hourDescription(h))}</title></rect>`).join('')}
       </svg></div>
+      <p class="weather-chart-scroll-hint"><span aria-hidden="true">↔</span> Swipe or scroll sideways for more hours.</p>
       <div class="weather-chart-inspector"><label for="weather-chart-hour">Explore an hour</label><input id="weather-chart-hour" type="range" min="0" max="${hours.length - 1}" value="0" aria-valuetext="${escape(hourDescription(hours[0]))}" aria-controls="weather-chart-readout"><output id="weather-chart-readout" for="weather-chart-hour" aria-live="polite">${escape(hourDescription(hours[0]))}</output></div>
       <p class="weather-detail-note">Temperature and precipitation: ${escape(source)}. Rainfall: Open-Meteo, for the hour beginning at each time. Hover, tap, or use the hour slider.</p></figure>`;
   }
   function bindChart(root, hours) {
     const slider = root.querySelector('#weather-chart-hour');
     if (!slider) return;
-    const select = index => {
+    const scroller = root.querySelector('.weather-chart-scroll');
+    const select = (index, reveal = false) => {
       if (!hours[index]) return;
       slider.value = index;
       const text = hourDescription(hours[index]);
@@ -139,9 +141,24 @@ window.WeatherDetails = (() => {
         const dot = cursor.querySelector('circle');
         dot.setAttribute('cy', hit.dataset.y || 0);
         dot.style.display = hit.dataset.y ? '' : 'none';
+        if (reveal && scroller && scroller.scrollWidth > scroller.clientWidth) {
+          // Reveal only within the chart. scrollIntoView would also move the page.
+          const svg = hit.ownerSVGElement;
+          const bounds = svg.getBoundingClientRect();
+          const viewBox = svg.viewBox.baseVal;
+          const x = bounds.left + (Number(hit.dataset.x) - viewBox.x) * bounds.width / viewBox.width;
+          const left = scroller.getBoundingClientRect().left + scroller.clientLeft + 24;
+          const right = left + scroller.clientWidth - 48;
+          // At either end, also reveal the outer axis labels.
+          const shift = index === 0 ? -scroller.scrollLeft
+            : index === hours.length - 1 ? scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft
+            : x < left ? x - left : x > right ? x - right : 0;
+          // Immediate scrolling tracks range dragging and respects reduced motion.
+          if (shift) scroller.scrollTo({left: scroller.scrollLeft + shift, behavior: 'instant'});
+        }
       }
     };
-    slider.addEventListener('input', () => select(Number(slider.value)));
+    slider.addEventListener('input', () => select(Number(slider.value), true));
     root.querySelectorAll('[data-chart-hour]').forEach(el => {
       el.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') select(Number(el.dataset.chartHour)); });
       el.addEventListener('click', () => select(Number(el.dataset.chartHour)));
