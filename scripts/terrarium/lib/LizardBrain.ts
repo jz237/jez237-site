@@ -117,14 +117,32 @@ export class LizardBrain {
   onCrunch?: (p: THREE.Vector3, strength: number) => void;
 
   constructor(readonly rig: LizardRig, readonly nav: Nav, readonly surface: Surface, readonly insects: Insects, readonly water: Water) {
-    // Highest comfortable point on the log under the basking lamp.
+    // Highest comfortable stretch of the log under the basking lamp: the whole
+    // body (head to hips, both flanks) must lie on wood, level and without a
+    // crack under it, so it lies along the log rather than hanging off its edge.
     let best = -Infinity;
     for (let x = -0.5; x <= -0.26; x += 0.005) for (let z = 0.02; z <= 0.15; z += 0.005) {
-      if (surface.kindAt(x, z) !== SurfaceKind.Wood) continue;
-      const y = surface.heightAt(x, z) - Math.abs(x + 0.38) * 0.2;
-      // the body needs a flat stretch along the log
-      const flat = Math.abs(surface.heightAt(x + 0.04, z) - surface.heightAt(x - 0.04, z));
-      if (y - flat * 2 > best && nav.reachable(x, z)) {best = y - flat * 2; this.baskSpot = [x, z, 0.2];}
+      if (surface.kindAt(x, z) !== SurfaceKind.Wood || !nav.reachable(x, z)) continue;
+      for (let h = -0.3; h <= 0.71; h += 0.1) {
+        const fx = Math.cos(h), fz = -Math.sin(h);
+        let lo = Infinity, hi = -Infinity, sum = 0, n = 0, dip = 0, ok = true;
+        for (const sd of [-0.01, 0, 0.01]) {
+          let y0 = NaN, y1 = NaN;
+          for (let a = -0.065; a <= 0.076 && ok; a += 0.01) {
+            const sx = x + fx * a - fz * sd, sz = z + fz * a + fx * sd;
+            if (surface.kindAt(sx, sz) !== SurfaceKind.Wood) {ok = false; break;}
+            const y = surface.heightAt(sx, sz);
+            lo = Math.min(lo, y); hi = Math.max(hi, y); sum += y; n++;
+            // a crack: a sample well below the line through its neighbours
+            if (!Number.isNaN(y0)) dip = Math.max(dip, (y0 + y) / 2 - y1);
+            y0 = y1; y1 = y;
+          }
+          if (!ok) break;
+        }
+        if (!ok || dip > 0.005 || hi - lo > 0.03) continue;
+        const score = sum / n - (hi - lo) * 3 - dip * 4 - Math.abs(x + 0.38) * 0.2;
+        if (score > best) {best = score; this.baskSpot = [x, z, h];}
+      }
     }
     // Sleeps tucked in among the ferns at the back left, on reachable ground.
     const sleep = nav.nearestWalkable(this.sleepSpot[0], this.sleepSpot[1], nav.mainRegion);
@@ -492,6 +510,12 @@ export class LizardBrain {
 
     switch (this.mode) {
       case 'bask': {
+        // settles along the log first (it arrives facing however the path came in)
+        if (this.faceHeading !== null && Math.abs(wrap(this.faceHeading - I.heading)) > 0.12 && this.modeT < 3) {
+          targetTurn = this.turnToward(this.faceHeading);
+          this.posePreset('alert');
+          break;
+        }
         this.posePreset('bask');
         this.status = this.bodyTemp < 0.42 ? 'Warming up under the lamp' : this.bodyTemp > 0.78 ? 'Hot: gaping to cool off' : 'Basking under the lamp';
         // Gaping (mouth held open) is how agamids shed excess heat.

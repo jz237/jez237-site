@@ -74,6 +74,9 @@ export class Terrarium {
   readonly moon: THREE.DirectionalLight;
   private homeView = {pos: new THREE.Vector3(0, 0.44, 1.78), target: new THREE.Vector3(0, 0.29, 0)};
   private quality = {window: 0, frames: 0, level: 0, locked: false};
+  /** Draw the panes facing the eye after the clouds, over a fresh copy of the view (one more full-screen copy). */
+  private glassOverClouds = true;
+  private tmpEye = new THREE.Vector3();
   lizard!: LizardModel;
   readonly key: THREE.SpotLight;
   meadow!: Meadow;
@@ -190,9 +193,10 @@ export class Terrarium {
     }
     this.controls.update();
 
-    for (const l of [this.key, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) l.layers.enable(1);
+    // (layer 3: the near panes, drawn last over the clouds)
+    for (const l of [this.key, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) {l.layers.enable(1); l.layers.enable(3);}
     this.post = new Post(r, s, cam, LITE ? 0 : 4);
-    if (LITE) {this.post.settings.ao = false; this.post.settings.dof = false;}
+    if (LITE) {this.post.settings.ao = false; this.post.settings.dof = false; this.glassOverClouds = false;}
     const q = new URLSearchParams(location.search);
     for (const k of ['ao', 'bloom', 'dof'] as const) if (q.get(k) === '0') this.post.settings[k] = false;
     if (q.get('quality') === 'full' || q.has('frames')) this.quality.locked = true;
@@ -294,6 +298,7 @@ export class Terrarium {
     // a lick knocks the odd drop off the leaf
     this.brain.onSip = (p) => {if (Math.random() < 0.35) this.weather.rain.drip(p.x, p.y - 0.002, p.z);};
     this.weather.lightning.light.layers.enable(1);
+    this.weather.lightning.light.layers.enable(3);
     foliageUniforms.tWind.value = this.weather.wind.texture;
     this.water.uniforms.tWind.value = this.weather.wind.texture;
     this.ground.uniforms.tWetMap.value = this.weather.rain.wetTexture;
@@ -649,7 +654,7 @@ export class Terrarium {
     q.level++;
     const r = this.renderer;
     if (q.level === 1) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.5));
-    else if (q.level === 2) {this.post.settings.dof = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
+    else if (q.level === 2) {this.post.settings.dof = false; this.glassOverClouds = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
     else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
     else if (q.level === 4) {this.post.settings.ao = false; this.air.enabled = false;}
     else if (q.level === 5) {for (const m of [this.moss, this.rockMoss]) {m.mesh.count = 8; m.uniforms.uShells.value = 8;}}
@@ -720,11 +725,22 @@ export class Terrarium {
       this.water.uniforms.tRefract.value = refraction;
       this.weather.setDistance(distance);
       const mask = this.camera.layers.mask;
+      // The panes between the eye and the clouds are drawn last, refracting a
+      // fresh copy of the view that has the clouds (and the fog, the rain) in it:
+      // their condensation and haze then lie over a cloud as over everything else.
+      const near = this.glassOverClouds ? this.case.panes.filter((p) => p.mesh.visible && p.normal.dot(this.tmpEye.subVectors(this.camera.position, p.mesh.position)) > 0) : [];
+      for (const p of near) p.mesh.layers.set(3);
       this.camera.layers.set(1);
       this.camera.layers.enable(2);
       this.renderer.render(this.scene, this.camera);
+      if (near.length) {
+        this.post.copyRefraction();
+        this.camera.layers.set(3);
+        this.renderer.render(this.scene, this.camera);
+        for (const p of near) p.mesh.layers.set(1);
+      }
       this.camera.layers.mask = mask;
-    });
+    }, (target) => this.weather.clouds.renderDistance(this.renderer, this.camera, target));
     this.framesDrawn++;
     this.checkBlack();
   }

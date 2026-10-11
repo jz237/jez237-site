@@ -5,8 +5,9 @@ import {FullScreenQuad} from 'three/examples/jsm/postprocessing/Pass.js';
 
 /**
  * Photographic post-processing:
- * scene (MSAA, HDR) → copy for glass refraction → glass layer → GTAO → bloom →
- * depth of field → exposure, ACES, vignette, grain, faint chromatic aberration.
+ * scene (MSAA, HDR) → GTAO → copy for glass refraction → glass layer (glass,
+ * clouds, fog) → bloom → depth of field → exposure, ACES, vignette, grade, grain,
+ * faint chromatic aberration.
  */
 export interface PostSettings {
   ao: boolean; bloom: boolean; dof: boolean; bloomStrength: number;
@@ -17,6 +18,8 @@ const dofShader = {
   uniforms: {
     tColor: {value: null as THREE.Texture | null},
     tDepth: {value: null as THREE.Texture | null},
+    tCloud: {value: null as THREE.Texture | null},
+    uUseCloud: {value: 0},
     uPixel: {value: new THREE.Vector2()},
     uNear: {value: 0.01}, uFar: {value: 20},
     uFocus: {value: 1.5}, uAperture: {value: 1}, uMaxBlur: {value: 10},
@@ -24,10 +27,21 @@ const dofShader = {
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
   fragmentShader: /* glsl */ `
 precision highp float;
-uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uPixel;
-uniform float uNear, uFar, uFocus, uAperture, uMaxBlur;
+uniform sampler2D tColor; uniform sampler2D tDepth; uniform sampler2D tCloud; uniform vec2 uPixel;
+uniform float uNear, uFar, uFocus, uAperture, uMaxBlur, uUseCloud;
 varying vec2 vUv;
-float linDepth(vec2 uv){ float z = texture2D(tDepth, uv).x * 2.0 - 1.0; return 2.0 * uNear * uFar / (uFar + uNear - z * (uFar - uNear)); }
+float linDepth(vec2 uv){
+  float z = texture2D(tDepth, uv).x * 2.0 - 1.0;
+  float d = 2.0 * uNear * uFar / (uFar + uNear - z * (uFar - uNear));
+  // where a cloud covers the scene, the depth that matters is the cloud's
+  // (they draw no depth of their own: without this they would be blurred by
+  // the leaves and walls behind them, printing those edges into the cloud)
+  if (uUseCloud > 0.5) {
+    vec4 c = texture2D(tCloud, uv);
+    if (c.a > 0.02) d = mix(d, min(d, c.r / c.a), smoothstep(0.08, 0.5, c.a));
+  }
+  return d;
+}
 float coc(float d){ return clamp((1.0 / uFocus - 1.0 / d) * uAperture, -1.0, 1.0) * uMaxBlur; }
 const float GOLDEN = 2.39996323;
 void main(){
@@ -57,19 +71,21 @@ void main(){
 const finalShader = {
   uniforms: {
     tColor: {value: null as THREE.Texture | null},
-    tAO: {value: null as THREE.Texture | null},
-    uAO: {value: 1},
     uExposure: {value: 1},
     uTime: {value: 0},
     uPixel: {value: new THREE.Vector2()},
     uGrain: {value: 0.035},
     uVignette: {value: 0.32},
     uCA: {value: 0.9},
+    // the grade: a little more colour and contrast, warm lamplight in the highlights
+    uSat: {value: 1.14},
+    uContrast: {value: 0.22},
+    uWarm: {value: 1},
   },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
   fragmentShader: /* glsl */ `
 precision highp float;
-uniform sampler2D tColor; uniform float uExposure, uTime, uGrain, uVignette, uCA; uniform vec2 uPixel;
+uniform sampler2D tColor; uniform float uExposure, uTime, uGrain, uVignette, uCA, uSat, uContrast, uWarm; uniform vec2 uPixel;
 varying vec2 vUv;
 vec3 aces(vec3 x){
   // Stephen Hill's fitted ACES (RRT+ODT)
@@ -94,6 +110,12 @@ void main(){
   col = aces(col);
   col *= 1.0 - uVignette * smoothstep(0.08, 0.62, r2 * 1.6);
   col = toSRGB(col);
+  // grade (display space): saturation, a soft S-curve, golden highlights over umber shadows
+  float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  col = max(mix(vec3(luma), col, uSat), 0.0);
+  col = mix(col, col * col * (3.0 - 2.0 * col), uContrast);
+  col += uWarm * (vec3(0.018, 0.006, -0.014) * smoothstep(0.35, 0.9, luma) + vec3(0.006, 0.002, -0.004) * (1.0 - smoothstep(0.0, 0.3, luma)));
+  col = clamp(col, 0.0, 1.0);
   float g = hash(gl_FragCoord.xy + fract(uTime) * 917.0) - 0.5;
   col += g * uGrain * (0.6 + 0.4 * (1.0 - dot(col, vec3(0.33))));
   gl_FragColor = vec4(col, 1.0);
@@ -131,16 +153,15 @@ vec3 cleanColor(sampler2D tex, vec2 uv, vec2 px){
   return n > 0.0 ? s / n : vec3(0.0);
 }`;
 
-const aoShader = {
-  uniforms: {tColor: {value: null as THREE.Texture | null}, tAO: {value: null as THREE.Texture | null}, uAO: {value: 1}, uPixel: {value: new THREE.Vector2(1, 1)}},
+// Darkens what is already drawn by the ambient occlusion (multiplied in by blending).
+const aoMulShader = {
+  uniforms: {tAO: {value: null as THREE.Texture | null}},
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-  fragmentShader: `precision highp float; uniform sampler2D tColor, tAO; uniform float uAO; uniform vec2 uPixel; varying vec2 vUv;
-${FINITE_GLSL}
+  fragmentShader: `precision highp float; uniform sampler2D tAO; varying vec2 vUv;
 void main(){
-  vec3 c = cleanColor(tColor, vUv, uPixel);
-  float ao = uAO > 0.0 ? texture2D(tAO, vUv).r : 1.0;
+  float ao = texture2D(tAO, vUv).r;
   ao = (ao >= 0.0 && ao <= 1.0) ? ao : 1.0;
-  gl_FragColor = vec4(c * mix(1.0, ao, uAO), 1.0);
+  gl_FragColor = vec4(vec3(ao), 1.0);
 }`,
 };
 
@@ -159,13 +180,19 @@ export class Post {
   /** Camera distance of the opaque scene, for clouds and fog in the glass pass. */
   readonly distRT: THREE.WebGLRenderTarget;
   private distQuad = new FullScreenQuad(new THREE.ShaderMaterial(distShader));
+  /** Opacity-weighted camera depth of the clouds (half size), for depth of field. */
+  private cloudRT: THREE.WebGLRenderTarget;
   private aRT: THREE.WebGLRenderTarget;
   private bRT: THREE.WebGLRenderTarget;
   private gtao: GTAOPass;
   private bloom: UnrealBloomPass;
   private dofQuad = new FullScreenQuad(new THREE.ShaderMaterial(dofShader));
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
-  private aoQuad = new FullScreenQuad(new THREE.ShaderMaterial(aoShader));
+  private aoMulQuad = new FullScreenQuad(new THREE.ShaderMaterial({
+    ...aoMulShader, depthTest: false, depthWrite: false, transparent: true,
+    blending: THREE.CustomBlending, blendSrc: THREE.ZeroFactor, blendDst: THREE.SrcColorFactor,
+    blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor,
+  }));
   private cleanQuad = new FullScreenQuad(new THREE.ShaderMaterial(cleanShader));
   readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.12, focus: 1.5, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
@@ -177,6 +204,7 @@ export class Post {
     this.sceneRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, samples: msaa === null ? samples : Number(msaa), depthTexture: depth});
     this.refractRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter});
     this.distRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter});
+    this.cloudRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false});
     this.aRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
     this.bRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
     this.gtao = new GTAOPass(scene, camera, 2, 2);
@@ -201,6 +229,7 @@ export class Post {
     this.sceneRT.setSize(W, H);
     this.refractRT.setSize(W, H);
     this.distRT.setSize(W, H);
+    this.cloudRT.setSize(Math.ceil(W / 2), Math.ceil(H / 2));
     this.aRT.setSize(W, H);
     this.bRT.setSize(W, H);
     this.gtao.setSize(Math.ceil(W / 2), Math.ceil(H / 2));
@@ -208,20 +237,41 @@ export class Post {
     const px = new THREE.Vector2(1 / W, 1 / H);
     (this.dofQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
     (this.finalQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
-    (this.aoQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
     (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
+  }
+
+  /**
+   * Refreshes the glass's view of the scene from what has been drawn so far
+   * (during the overlay, so later panes see the clouds drawn before them).
+   */
+  copyRefraction() {
+    const r = this.renderer;
+    (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.tColor.value = this.sceneRT.texture;
+    r.setRenderTarget(this.refractRT);
+    this.cleanQuad.render(r);
+    r.setRenderTarget(this.sceneRT);
   }
 
   /**
    * Renders the opaque/transparent scene, then `overlay` (glass) with access to
    * a mip-mapped copy of what lies behind it, then the post chain to the screen.
+   * `overlayDistance` draws the depth of overlay volumes (clouds) for the depth of field.
    */
-  render(time: number, overlay?: (refraction: THREE.Texture, distance: THREE.Texture) => void) {
+  render(time: number, overlay?: (refraction: THREE.Texture, distance: THREE.Texture) => void, overlayDistance?: (target: THREE.WebGLRenderTarget) => void) {
     const r = this.renderer;
     const s = this.settings;
     r.setRenderTarget(this.sceneRT);
     r.clear();
     r.render(this.scene, this.camera);
+    // ambient occlusion darkens the solid scene only, before the glass, clouds and
+    // fog go over it (applied after them, the occlusion of whatever stands behind
+    // a cloud was printed into the cloud)
+    if (s.ao) {
+      this.gtao.render(r, null as unknown as THREE.WebGLRenderTarget, this.sceneRT, 0, false);
+      (this.aoMulQuad.material as THREE.ShaderMaterial).uniforms.tAO.value = this.gtao.gtaoMap;
+      r.setRenderTarget(this.sceneRT);
+      this.aoMulQuad.render(r);
+    }
     if (overlay) {
       (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.tColor.value = this.sceneRT.texture;
       r.setRenderTarget(this.refractRT);
@@ -234,14 +284,10 @@ export class Post {
       r.setRenderTarget(this.sceneRT);
       overlay(this.refractRT.texture, this.distRT.texture);
     }
-    // ambient occlusion (when on) and the clean-up of bad pixels, into aRT
-    if (s.ao) this.gtao.render(r, null as unknown as THREE.WebGLRenderTarget, this.sceneRT, 0, false);
-    const m = this.aoQuad.material as THREE.ShaderMaterial;
-    m.uniforms.tColor.value = this.sceneRT.texture;
-    m.uniforms.tAO.value = s.ao ? this.gtao.gtaoMap : null;
-    m.uniforms.uAO.value = s.ao ? 1 : 0;
+    // the clean-up of bad pixels, into aRT
+    (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.tColor.value = this.sceneRT.texture;
     r.setRenderTarget(this.aRT);
-    this.aoQuad.render(r);
+    this.cleanQuad.render(r);
     let color: THREE.WebGLRenderTarget = this.aRT;
     if (s.bloom) {
       this.bloom.strength = s.bloomStrength;
@@ -249,6 +295,16 @@ export class Post {
     }
     if (s.dof) {
       const m = this.dofQuad.material as THREE.ShaderMaterial;
+      if (overlay && overlayDistance) {
+        const clear = r.getClearColor(new THREE.Color()), alpha = r.getClearAlpha();
+        r.setRenderTarget(this.cloudRT);
+        r.setClearColor(0x000000, 0);
+        r.clear(true, false, false);
+        overlayDistance(this.cloudRT);
+        r.setClearColor(clear, alpha);
+      }
+      m.uniforms.tCloud.value = this.cloudRT.texture;
+      m.uniforms.uUseCloud.value = overlay && overlayDistance ? 1 : 0;
       m.uniforms.tColor.value = color.texture;
       m.uniforms.tDepth.value = this.sceneRT.depthTexture;
       m.uniforms.uNear.value = this.camera.near;
