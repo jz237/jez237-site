@@ -238,7 +238,7 @@ export class LizardBrain {
         const x = p.x + Math.cos(a) * 0.066, z = p.z + Math.sin(a) * 0.066;
         // the tip must be at head height from where it stands (not down off a log)
         const h = p.y - this.surface.heightAt(x, z);
-        if (h < 0.03 || h > 0.07) continue;
+        if (h < 0.03 || h > 0.06) continue;
         if (!this.nav.reachable(x, z) || this.nav.isWet(x, z)) continue;
         const score = dc + Math.hypot(x - I.x, z - I.z) * 0.5 + rnd() * 0.05;
         if (score < bs) {bs = score; best = [x, z, Math.atan2(-(p.z - z), p.x - x)]; this.sipTip.copy(p);}
@@ -638,11 +638,11 @@ export class LizardBrain {
           const want = Math.atan2(-(this.sipTip.z - I.z), this.sipTip.x - I.x);
           if (Math.abs(wrap(want - I.heading)) > 0.04) targetTurn = this.turnToward(want) * 0.5;
           const reach = Math.hypot(this.sipTip.x - I.x, this.sipTip.z - I.z) - Math.hypot(this.rig.mouth.x - I.x, this.rig.mouth.z - I.z);
-          I.lunge = Math.max(I.lunge, clamp(reach / 0.03, 0, 0.5));
+          I.lunge = Math.max(I.lunge, clamp(reach / 0.03, 0, 0.3));
         }
         // stretch up (or dip) until the mouth meets the leaf tip, then lap at it
         this.poseGoal.chestLift = 1.15;
-        this.sipPitch = clamp(this.sipPitch - (this.rig.mouth.y - this.sipTip.y) * 18 * dt, -0.6, 0.6);
+        this.sipPitch = clamp(this.sipPitch - (this.rig.mouth.y - this.sipTip.y) * 18 * dt, -0.5, 0.35);
         this.poseGoal.headPitch = this.sipPitch;
         const lapT = this.modeT - 0.9;
         if (lapT > 0) {

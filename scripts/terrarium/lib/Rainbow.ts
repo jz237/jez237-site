@@ -74,7 +74,7 @@ void main(){
            + vec3(0.08) * smoothstep(26.0, 40.2, th) * step(th, 40.4);
   // how much falling water the eye looks through here
   float u = vQ.x, v = vQ.y;
-  float dens = exp(-u * u * 3.6) * smoothstep(0.0, 0.18, v) * smoothstep(1.0, 0.7, v) * vQ.z;
+  float dens = exp(-u * u * 3.6) * smoothstep(0.0, 0.18, v) * (1.0 - smoothstep(0.7, 1.0, v)) * vQ.z;
   // it lives in the falling drops: streaky, and moving down with them
   dens *= 0.6 + 0.55 * rn(vec2(u * 16.0, v * 4.0 + uTime * 3.2));
   // the cloud shades the top of its own rain: light reaches it slanting in under the edge

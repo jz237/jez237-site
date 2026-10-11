@@ -62,7 +62,7 @@ void main(){
   float side = vAux.x, u = vAux.y;
   float edge = (1.0 - side * side); edge *= edge;
   float streak = 0.5 + 0.5 * n(vec2(u * 7.0 - uTime * 2.0, side * 1.5 + vAux.z * 40.0)) * n(vec2(u * 17.0 - uTime * 3.0, side * 3.0));
-  float taper = smoothstep(0.0, 0.12, u) * smoothstep(1.0, 0.55, u);
+  float taper = smoothstep(0.0, 0.12, u) * (1.0 - smoothstep(0.55, 1.0, u));
   float a = edge * streak * taper * vAux.z;
   gl_FragColor = vec4(uColor * a, a * 0.6);
 }`,

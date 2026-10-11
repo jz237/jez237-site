@@ -59,7 +59,7 @@ vec3 mossC = mix(vec3(0.022, 0.045, 0.01), vec3(0.07, 0.115, 0.022), pf(P * 160.
 mossC = mix(mossC, vec3(0.13, 0.15, 0.035), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.35);
 // wet dark streak where the cascade runs
 float cd = length((P.xz - uCascade.xy) / vec2(0.07, 0.16));
-float wetC = smoothstep(1.0, 0.5, cd) * smoothstep(0.45, 0.13, P.y);
+float wetC = (1.0 - smoothstep(0.5, 1.0, cd)) * (1.0 - smoothstep(0.13, 0.45, P.y));
 vec3 col = mix(basalt, mossC, moss);
 col *= mix(1.0, 0.55, max(wetC, uWet * 0.5));
 diffuseColor.rgb = col;
