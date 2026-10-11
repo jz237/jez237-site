@@ -1,0 +1,295 @@
+// Decorative traffic follows the public street graph. It is not a live traffic feed.
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
+export function* streetGraphSteps(doc,projection,sampleElevation){
+  const nodes=new Map(),edges=[],segments=[];
+  let work=0;
+  for(const road of doc.roads||[]){
+    for(const [id,lon,lat] of road.points){
+      if(++work%128===0)yield;
+      if(!nodes.has(id))nodes.set(id,{id,x:projection.lonToX(lon),z:projection.latToZ(lat),
+        ground:sampleElevation(lon,lat),out:[],neighbors:new Set()});
+    }
+    for(let i=1;i<road.points.length;i++){
+      if(++work%128===0)yield;
+      const a=nodes.get(road.points[i-1][0]),b=nodes.get(road.points[i][0]);
+      const length=Math.hypot(b.x-a.x,b.z-a.z);
+      if(length<.5||length>800)continue;
+      const segment={a,b,length,width:road.width,oneway:road.oneway,road:road.id};
+      segments.push(segment);a.neighbors.add(b.id);b.neighbors.add(a.id);
+      const add=(from,to)=>{
+        const edge={id:edges.length,from,to,length,width:road.width,
+          lane:road.oneway?0:Math.min(road.width*.22,2),
+          dx:(to.x-from.x)/length,dz:(to.z-from.z)/length};
+        edges.push(edge);from.out.push(edge);
+      };
+      if(road.oneway>=0)add(a,b);if(road.oneway<=0)add(b,a);
+    }
+  }
+  // Several OSM nodes can describe one physical junction. Keep nearby connected
+  // pieces under one occupancy lock, with a bounded footprint so a densely
+  // sampled road cannot collapse into one enormous intersection.
+  const parents=new Map(),bounds=new Map();
+  for(const node of nodes.values()){
+    if(++work%128===0)yield;
+    parents.set(node.id,node.id);bounds.set(node.id,[node.x,node.z,node.x,node.z]);
+  }
+  const root=id=>{while(parents.get(id)!==id){
+    parents.set(id,parents.get(parents.get(id)));id=parents.get(id);}
+    return id;};
+  for(const segment of segments){
+    if(++work%128===0)yield;
+    if(segment.length>12)continue;
+    const a=root(segment.a.id),b=root(segment.b.id);if(a===b)continue;
+    const aa=bounds.get(a),bb=bounds.get(b);
+    const joined=[Math.min(aa[0],bb[0]),Math.min(aa[1],bb[1]),
+      Math.max(aa[2],bb[2]),Math.max(aa[3],bb[3])];
+    if(joined[2]-joined[0]>18||joined[3]-joined[1]>18)continue;
+    parents.set(b,a);bounds.set(a,joined);
+  }
+  const signalized=new Set();
+  for(const node of nodes.values()){
+    if(++work%128===0)yield;
+    node.junction=root(node.id);if(node.neighbors.size>2)signalized.add(node.junction);
+  }
+  for(const node of nodes.values()){
+    if(++work%128===0)yield;
+    node.signalized=signalized.has(node.junction);
+  }
+  return {nodes,edges,segments};
+}
+export function createStreetGraph(...args){
+  const steps=streetGraphSteps(...args);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+export function prepareStreetGraph(doc,projection,sampleElevation,options){
+  return prepareInBatches(streetGraphSteps(doc,projection,sampleElevation),options);
+}
+export function trafficSignal(edge,time){
+  const phase=(time+Math.abs(edge.to.junction%19))%42;
+  const horizontal=Math.abs(edge.dx)>Math.abs(edge.dz);
+  const local=(phase+(horizontal?0:21))%42;
+  return local<18?'green':local<20?'amber':'red';
+}
+function lanePoint(e,distance){
+  const t=Math.min(1,Math.max(0,distance/e.length));
+  return {x:e.from.x+(e.to.x-e.from.x)*t-e.dz*e.lane,
+    z:e.from.z+(e.to.z-e.from.z)*t+e.dx*e.lane,
+    ground:e.from.ground+(e.to.ground-e.from.ground)*t,angle:Math.atan2(e.dx,e.dz)};
+}
+function turnSpan(from,to){
+  return Math.min(12,Math.max(from.width,to.width)*.75,from.length*.24,to.length*.24);
+}
+function stopLine(car){
+  return car.edge.length-Math.max(5,(car.nextEdge?turnSpan(car.edge,car.nextEdge):0)+3);
+}
+function followingGap(car,queues,routes,visited){
+  let edge=car.edge,offset=-car.distance,gap=Infinity;
+  visited.length=0;
+  // OSM often splits a single street into very short edges. Following distance
+  // must span those edges, otherwise a queued car on the next five-metre piece
+  // is invisible until its follower has already reached its bumper.
+  for(let hop=0;edge&&hop<12&&offset<50&&!visited.includes(edge.id);hop++){
+    visited.push(edge.id);
+    for(const other of queues[edge.id]){
+      if(other===car||other.edge!==edge)continue;
+      const ahead=offset+other.distance;
+      if(ahead>0)gap=Math.min(gap,Math.max(0,ahead-7));
+    }
+    offset+=edge.length;
+    if(!hop)edge=car.nextEdge;
+    else{
+      edge=routes[edge.id].continuation;
+    }
+  }
+  return gap;
+}
+function turnPose(from,to,distance){
+  const span=turnSpan(from,to),t=Math.max(0,Math.min(1,(distance+span)/(2*span))),s=1-t;
+  const a=lanePoint(from,from.length-span),b=lanePoint(to,span),handle=span*2/3;
+  const ax=a.x+from.dx*handle,az=a.z+from.dz*handle;
+  const bx=b.x-to.dx*handle,bz=b.z-to.dz*handle;
+  // Coincident centre lanes at a one-way dead end need a small loop. Without
+  // it, a reversal's tangent reaches zero and the car spins abruptly in place.
+  const loop=from.dx*to.dx+from.dz*to.dz<-.95&&from.lane+to.lane<.1
+    ?Math.min(span*.2,Math.min(from.width,to.width)*.15)*64:0;
+  const offset=loop*t*t*s*s*(2*t-1);
+  const tangent=loop*(2*t*s*(1-2*t)*(2*t-1)+2*t*t*s*s);
+  const dx=3*s*s*(ax-a.x)+6*s*t*(bx-ax)+3*t*t*(b.x-bx)-from.dz*tangent;
+  const dz=3*s*s*(az-a.z)+6*s*t*(bz-az)+3*t*t*(b.z-bz)+from.dx*tangent;
+  return {x:s*s*s*a.x+3*s*s*t*ax+3*s*t*t*bx+t*t*t*b.x-from.dz*offset,
+    z:s*s*s*a.z+3*s*s*t*az+3*s*t*t*bz+t*t*t*b.z+from.dx*offset,
+    ground:a.ground+(b.ground-a.ground)*t,angle:Math.atan2(dx,dz)};
+}
+export function trafficPose(car){
+  const e=car.edge;
+  // Evaluate the same curve on both sides of the graph boundary: lane offsets
+  // and heading remain continuous when the simulation advances to a new edge.
+  if(car.previousEdge&&car.distance<turnSpan(car.previousEdge,e)){
+    return turnPose(car.previousEdge,e,car.distance);
+  }
+  if(car.nextEdge&&car.distance>e.length-turnSpan(e,car.nextEdge)){
+    return turnPose(e,car.nextEdge,car.distance-e.length);
+  }
+  return lanePoint(e,car.distance);
+}
+
+// Mesh-local +X is the driver's left (world Z points south). Keep an indicator
+// through both halves of the same turn curve, then cancel once the car is straight.
+export function trafficIndicator(car,time){
+  let from=car.edge,to=car.nextEdge;
+  if(car.previousEdge&&car.distance<turnSpan(car.previousEdge,car.edge)){
+    from=car.previousEdge;to=car.edge;
+  }else if(!to||from.length-car.distance>Math.max(18,car.speed*3))return 0;
+  const dot=from.dx*to.dx+from.dz*to.dz;
+  if(dot>.8)return 0;
+  const cross=from.dx*to.dz-from.dz*to.dx;
+  const side=Math.abs(cross)<.05?1:-Math.sign(cross);
+  const phase=((time+car.seed*.8)%.8+.8)%.8;
+  return phase<.4?side:0;
+}
+
+export function* trafficSteps(graph,count=260,seed=239){
+  let randomState=seed>>>0,time=0,view=null;
+  const random=()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;
+    return randomState/4294967296;};
+  const eligible=graph.edges.filter(e=>e.length>30&&e.to.out.length);
+  const spawnEdges=eligible.filter(e=>e.length>=50);
+  const cars=[];
+  if(!eligible.length)return {cars,
+    update(dt){if(Number.isFinite(dt)&&dt>0)time+=Math.min(dt,.25);},signal:edge=>trafficSignal(edge,time),
+    indicator:car=>trafficIndicator(car,time)};
+  // The street graph is immutable. Calculate turn weights once, rather than
+  // allocating filtered routes for every car and every following-distance scan.
+  const routes=[];
+  for(const edge of graph.edges){
+    if(routes.length%128===0)yield;
+    const options=edge.to.out.filter(next=>next.to!==edge.from);
+    const weighted=options.map(e=>({e,w:1+Math.max(0,e.dx*edge.dx+e.dz*edge.dz)*3}));
+    routes.push({weighted,total:weighted.reduce((sum,option)=>sum+option.w,0),
+      fallback:options[0]||edge.to.out[0]||null,continuation:options.length===1?options[0]:null});
+  }
+  const queues=graph.edges.map(()=>[]),activeQueues=[],visited=[];
+  const reserved=new Set(),junctions=new Map(),ownerPool=[];
+  let ownerCount=0;
+  const occupy=(node,car)=>{
+    let owners=junctions.get(node.junction);
+    if(!owners){
+      owners=ownerPool[ownerCount]||(ownerPool[ownerCount]=new Set());ownerCount++;
+      owners.clear();junctions.set(node.junction,owners);
+    }
+    owners.add(car);
+  };
+  const occupied=new Map();
+  for(let i=0;i<count*5&&cars.length<count;i++){
+    const edge=eligible[Math.floor(random()*eligible.length)],distance=8+random()*(edge.length-28);
+    const positions=occupied.get(edge.id)||[];
+    if(positions.some(p=>Math.abs(p-distance)<12))continue;
+    positions.push(distance);occupied.set(edge.id,positions);
+    cars.push({edge,distance,speed:0,cruise:6+random()*6,seed:random(),braking:true,idleTime:0,
+      previousEdge:null,nextEdge:null});
+  }
+  function choose(car){
+    const route=routes[car.edge.id];
+    if(!route.weighted.length)return route.fallback;
+    let n=random()*route.total;
+    for(const v of route.weighted){n-=v.w;if(n<=0)return v.e;}return route.fallback;
+  }
+  for(const car of cars)car.nextEdge=choose(car);
+  function step(dt){
+      time+=dt;
+      for(const q of activeQueues)q.length=0;
+      activeQueues.length=0;reserved.clear();junctions.clear();ownerCount=0;
+      // Reserve from before the turn starts until the rear of the vehicle has
+      // cleared it. Waiting until the graph edge changes is too late: two
+      // incoming cars may already be on overlapping curves by then.
+      for(const car of cars){
+        if(car.distance>stopLine(car)||car.edge.from.junction===car.edge.to.junction)occupy(car.edge.to,car);
+        const clear=car.previousEdge?turnSpan(car.previousEdge,car.edge)+4:8;
+        if(car.distance<clear)occupy(car.edge.from,car);
+      }
+      for(const car of cars){
+        const q=queues[car.edge.id];if(!q.length)activeQueues.push(q);q.push(car);
+      }
+      for(const q of activeQueues)q.sort((a,b)=>b.distance-a.distance);
+      for(const q of activeQueues)for(let i=0;i<q.length;i++){
+        const car=q[i],edge=car.edge,node=edge.to;
+        const green=trafficSignal(edge,time)==='green';
+        const next=car.nextEdge;
+        const span=next?turnSpan(edge,next):0;
+        const stopAt=stopLine(car);
+        const owners=junctions.get(node.junction);
+        const occupiedJunction=owners&&(owners.size>1||!owners.has(car));
+        const blocked=occupiedJunction||next&&(reserved.has(next.id)||queues[next.id]
+          .some(other=>other!==car&&other.edge===next&&other.distance<span+8));
+        let gap=followingGap(car,queues,routes,visited);
+        // A car that has passed the stop line clears the intersection even if
+        // the signal changes; it must not freeze halfway through a turn.
+        const insideJunction=edge.from.junction===node.junction;
+        if(!insideJunction&&car.distance<=stopAt&&((node.signalized&&!green)||blocked)){
+          gap=Math.min(gap,Math.max(0,stopAt-car.distance));
+        }
+        const turning=next&&edge.dx*next.dx+edge.dz*next.dz<.8;
+        const cruise=turning&&edge.length-car.distance<span+12?Math.min(car.cruise,4.5):car.cruise;
+        const target=Math.min(cruise,Math.sqrt(4*gap));
+        car.braking=target<car.speed-.2||car.speed<.4;
+        car.speed+=Math.max(-dt*6,Math.min(dt*2,target-car.speed));
+        car.distance+=Math.min(car.speed*dt,gap);
+        if(car.distance>stopAt)occupy(node,car);
+        let guard=0;
+        while(car.distance>=car.edge.length&&guard++<8){
+          const next=car.nextEdge;
+          if(!next){car.distance=car.edge.length;car.speed=0;car.braking=true;break;}
+          // Wait at the junction if the receiving lane has no room.
+          if(reserved.has(next.id)||queues[next.id]
+            .some(other=>other!==car&&other.edge===next&&other.distance<8)){
+            car.distance=car.edge.length-.1;car.speed=0;car.braking=true;break;
+          }
+          reserved.add(next.id);
+          car.distance-=car.edge.length;car.previousEdge=car.edge;car.edge=next;
+          car.nextEdge=choose(car);
+        }
+        car.idleTime=car.speed<.25?car.idleTime+dt:0;
+      }
+      // Cropped map roads have exits. Replenish cars that leave the network,
+      // and clear long gridlocks, only outside the displayed neighborhood.
+      // This keeps a long-running scene alive without visible teleportation.
+      let positions=null;
+      const inView=p=>view&&Math.hypot(p.x-view.x,p.z-view.z)<=view.radius;
+      for(const [index,car] of cars.entries()){
+        const exited=!car.nextEdge&&car.distance>=car.edge.length-.01;
+        const threshold=exited?3:120;
+        if(car.idleTime<threshold||!spawnEdges.length||inView(trafficPose(car)))continue;
+        positions??=cars.map(trafficPose);
+        let placed=false;
+        for(let attempt=0;attempt<24;attempt++){
+          const edge=spawnEdges[Math.floor(random()*spawnEdges.length)];
+          const distance=20+random()*(edge.length-40),p=lanePoint(edge,distance);
+          if(inView(p)||positions.some((other,i)=>i!==index&&Math.hypot(p.x-other.x,p.z-other.z)<12))continue;
+          Object.assign(car,{edge,distance,speed:0,braking:true,idleTime:0,previousEdge:null});
+          car.nextEdge=choose(car);positions[index]=p;placed=true;break;
+        }
+        if(!placed)car.idleTime=threshold-1;
+      }
+  }
+  return {cars,
+    signal(edge){return trafficSignal(edge,time);},
+    indicator(car){return trafficIndicator(car,time);},
+    update(dt,protectedView=null){
+      // Preserve elapsed time at low frame rates without a large unstable step
+      // or a long catch-up loop when the tab wakes after being hidden.
+      if(!Number.isFinite(dt)||dt<=0)return;
+      view=protectedView;
+      let remaining=Math.min(dt,.25);
+      while(remaining>1e-8){const elapsed=Math.min(remaining,.05);step(elapsed);remaining-=elapsed;}
+    },
+  };
+}
+
+export function createTraffic(...args){
+  const steps=trafficSteps(...args);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+export function prepareTraffic(graph,count=260,seed=239,options){
+  return prepareInBatches(trafficSteps(graph,count,seed),options);
+}
