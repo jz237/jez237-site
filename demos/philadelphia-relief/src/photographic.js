@@ -1,4 +1,5 @@
-import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady, PHOTO_PRELOAD }
+import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
+  photoLandmarkVisible, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
@@ -55,6 +56,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   function setCamera(pose, w, h) {
     const C = window.Cesium;
     const camera = viewer.camera, mapped = photoCamera(pose, w / h);
+    updateLandmarks(pose);
     camera.frustum.fov = mapped.fov;
     viewer.scene.backgroundColor = C.Color.fromCssColorString(pose.flightView ? '#bacfdc' : '#203b43');
     if (pose.flightView) {
@@ -74,12 +76,15 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     camera.lookAtTransform(C.Matrix4.IDENTITY);
     viewer.scene.requestRender();
   }
+  function updateLandmarks(pose=lastPose) {
+    if(!viewer)return;
+    for (const entity of viewer.entities.values) {
+      entity.show=photoLandmarkVisible(entity.reliefPlace,pose,exhibitBounds);
+    }
+  }
   function applyExhibit() {
     if (!tileset || !viewer) return true;
-    for (const entity of viewer.entities.values) {
-      const p = entity.reliefPlace, b = exhibitBounds;
-      entity.show = !b || p.lon >= b.west && p.lon <= b.east && p.lat >= b.south && p.lat <= b.north;
-    }
+    updateLandmarks();
     if (!exhibitBounds) { tileset.clippingPolygons = undefined; return true; }
     const C = window.Cesium, b = exhibitBounds;
     if (!C.ClippingPolygonCollection.isSupported(viewer.scene)) return false;

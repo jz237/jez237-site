@@ -45,3 +45,17 @@ export function photoCamera(pose, aspect) {
     fov: aspect > 1 ? 2 * Math.atan(Math.tan(vertical / 2) * aspect) : vertical,
   };
 }
+
+export function photoLandmarkVisible(place, pose, bounds) {
+  if(bounds&&(place.lon<bounds.west||place.lon>bounds.east
+    ||place.lat<bounds.south||place.lat>bounds.north))return false;
+  if(!pose)return true;
+  const center=pose.flightView||pose;
+  const dx=(place.lon-center.lon)*111320*Math.cos(center.lat*Math.PI/180);
+  const dz=(place.lat-center.lat)*111320;
+  // Distant tile-clamped markers can remain visible through the close-up model.
+  // Keep orbit labels local to the viewed neighborhood, with the existing wider
+  // range retained for forward-looking aircraft views and regional overviews.
+  const radius=pose.flightView?22000:Math.max(1200,Math.min(22000,pose.dist*2));
+  return Math.hypot(dx,dz)<=radius;
+}

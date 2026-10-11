@@ -1168,7 +1168,11 @@ cannot leave floating crowns or unlit lamp poles. Tree variations are determinis
 illustration, not a survey of actual trees. Static street buffers rebuild only
 after meaningful movement, zoom or elevation-scale changes.
 
-Validation: 440 automated checks, including ten simulated minutes on the real
+Photographic close-up landmark markers are limited to the viewed neighborhood.
+This prevents distant tile-clamped pins appearing over unrelated buildings;
+regional and aircraft views retain their wider range, and exhibit bounds still apply.
+
+Validation: 441 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
