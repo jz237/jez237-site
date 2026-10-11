@@ -176,3 +176,33 @@ test('an optional layer failure preserves other live layers and its explicit err
   assert.deepEqual(bundle.errors,['cones']);
   assert.equal(bundle.checkedAt,NOW);
 });
+
+test('a temporary ArcGIS error retries only its failed layer using the same deadline', async () => {
+  const calls = [];
+  const bundle = await fetchLayers(async (url, options) => {
+    calls.push({url, options});
+    const firstPointsAttempt = url.includes('/5/') && calls.filter(call => call.url === url).length === 1;
+    return {ok:true,json:async()=>firstPointsAttempt ? {error:{code:400,message:'Failed to execute query.'}} : EMPTY};
+  }, NOW);
+  assert.deepEqual(bundle.errors, []);
+  assert.equal(calls.length, 6);
+  const retries = calls.filter(call => call.url.includes('/5/'));
+  assert.equal(retries.length, 2);
+  assert.equal(retries[0].options.signal, retries[1].options.signal);
+  assert.equal(retries[0].options.cache, 'no-cache');
+  assert.equal(retries[1].options.cache, 'no-store');
+});
+
+test('persistent errors stop after one retry; rate limits are not retried', async () => {
+  const calls = new Map();
+  const bundle = await fetchLayers(async url => {
+    calls.set(url, (calls.get(url) || 0) + 1);
+    if (url.includes('/7/')) return {ok:false,status:429};
+    if (url.includes('/5/')) throw new TypeError('Network failure');
+    return {ok:true,json:async()=>EMPTY};
+  }, NOW);
+  assert.deepEqual(bundle.errors, ['points','cones']);
+  assert.equal(calls.get(queryUrl(5)), 2);
+  assert.equal(calls.get(queryUrl(7)), 1);
+  assert.equal(calls.get(queryUrl(3)), 1);
+});

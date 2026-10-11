@@ -24,6 +24,8 @@ The page checks all five layers at first view and every ten minutes while the tr
 
 The cone represents uncertainty in the center track, not storm size or every hazard. The UI directs visitors to official advisories and local guidance.
 
+Transient network, server, and ArcGIS JSON errors receive one retry for the affected layer. Both attempts share the same 16-second request deadline; the retry bypasses browser caching of an error response. HTTP rate limits and other nontransient client errors are not retried. Persistent failures remain explicitly unavailable.
+
 ## Checks
 
 ```text
