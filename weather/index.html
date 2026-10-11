@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Weather Console — Jez237</title>
-  <meta name="description" content="Jez237 weather console with local forecasts, weather alerts, daily conditions, radar-style summaries, and practical outdoor planning context." />
+  <meta name="description" content="Track hurricanes on an interactive NOAA/NHC map with forecast paths, uncertainty cones and tropical development areas, alongside local forecasts, alerts and radar." />
   <meta name="keywords" content="Jez237 weather, weather console, local forecast, weather alerts, Philadelphia weather, garden weather, outdoor planning, daily weather dashboard" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jez237.com/weather/" />
   <meta property="og:title" content="Weather Console — Jez237" />
-  <meta property="og:description" content="Local forecasts, weather alerts, daily conditions, and outdoor planning context." />
+  <meta property="og:description" content="Interactive hurricane tracking with official NOAA/NHC forecasts, plus local weather, alerts and radar." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jez237.com/weather/" />
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
@@ -70,9 +70,11 @@
       .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
     }
   </style>
-  <link rel="stylesheet" href="weather-details.css?v=20260924-smooth" />
+  <link rel="stylesheet" href="weather-details.css?v=20261010-7" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="hurricane-tracker.css?v=20261010-13" />
 </head>
-<body>
+<body class="weather-page">
   <header id="site-nav" class="home-hidden-nav"></header>
 
   <main class="container workbench-home">
@@ -94,8 +96,9 @@
       <div class="hub-main">
         <div class="hub-topbar weather-page-intro">
           <div>
+            <a class="weather-home-link" href="../"><span aria-hidden="true">←</span> Jez237 home</a>
             <h1 id="weather-title">Weather Console</h1>
-            <p>ZIP-aware weather with alerts, air quality, UV index, radar, and the next few days.</p>
+            <p>Your local forecast and a wider view of the tropics. Official storm tracks, alerts, radar, and the days ahead.</p>
           </div>
           <div class="topbar-actions">
             <a href="../">Overview</a>
@@ -104,8 +107,39 @@
         </div>
 
         <nav class="weather-jump-nav" aria-label="Weather sections">
-          <a href="#weather-now">Now</a><a href="#weather-hourly">Hourly</a><a href="#weather-five-day">Five-day</a><a href="#weather-map">Map</a><a href="#weather-almanac">Almanac</a>
+          <a href="#weather-hurricanes" class="weather-hurricane-jump">Hurricanes</a><a href="#weather-now">Now</a><a href="#weather-hourly">Hourly</a><a href="#weather-five-day">Five-day</a><a href="#weather-map">Radar</a><a href="#weather-almanac">Almanac</a>
         </nav>
+        <section id="weather-hurricanes" class="hurricane-tracker" aria-labelledby="hurricane-title">
+          <header class="hurricane-header">
+            <div><span class="hurricane-kicker"><span class="hurricane-status-dot" aria-hidden="true"></span> Tropical weather watch</span><h2 id="hurricane-title">Hurricane tracker</h2><p>Atlantic, eastern &amp; central Pacific · Official NOAA / NHC / WPC guidance</p></div>
+            <a class="hurricane-source-link" href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">NHC advisories <span aria-hidden="true">↗</span></a>
+          </header>
+          <div class="hurricane-toolbar">
+            <div class="hurricane-basins" role="group" aria-label="Hurricane map basin"><button type="button" data-basin="all" aria-pressed="true">All systems</button><button type="button" data-basin="atlantic" aria-pressed="false">Atlantic</button><button type="button" data-basin="pacific" aria-pressed="false">Pacific</button></div>
+            <label class="hurricane-units">Wind <select id="hurricane-units" aria-label="Hurricane wind speed units"><option value="mph">mph</option><option value="km/h">km/h</option><option value="kt">knots</option></select></label>
+            <button type="button" id="hurricane-refresh" class="hurricane-refresh">Refresh</button>
+          </div>
+          <div class="hurricane-feed-row"><p id="hurricane-feed-status" role="status" aria-live="polite">Connecting to NOAA…</p><span id="hurricane-basin-count"></span></div>
+          <p id="hurricane-notice" class="hurricane-notice" hidden></p>
+          <div class="hurricane-workspace">
+            <div class="hurricane-map-column">
+              <label class="hurricane-storm-picker" for="hurricane-system">Show system <select id="hurricane-system" disabled><option value="">Loading systems…</option></select></label>
+              <div class="hurricane-map-frame"><div id="hurricane-map" aria-label="Interactive hurricane map. Use the arrow keys to pan and plus or minus to zoom. Storm details are also available in the adjacent storm list."></div><div id="hurricane-map-message" class="hurricane-map-message">Loading the tropical weather map…</div><div class="hurricane-map-actions"><button type="button" id="hurricane-reset-view" class="hurricane-reset-view" title="Fit the current basin and systems">Reset view</button><button type="button" id="hurricane-expand" aria-haspopup="dialog" aria-controls="hurricane-expanded" aria-expanded="false" aria-label="Open larger hurricane map">Expand <span aria-hidden="true">↗</span></button></div></div>
+              <div class="hurricane-layers" role="group" aria-label="Hurricane map layers"><label><input type="checkbox" data-layer="cones" checked> Forecast cone</label><label><input type="checkbox" data-layer="history" checked> Past track</label><label><input type="checkbox" data-layer="outlook" checked> Development areas</label><label><input type="checkbox" data-layer="warnings" checked> Coastal alerts</label><label><input type="checkbox" id="hurricane-satellite" aria-describedby="hurricane-satellite-note"> Satellite (infrared)</label></div>
+              <div id="hurricane-satellite-info" class="hurricane-satellite-info" hidden><p id="hurricane-satellite-status" role="status"></p><button type="button" id="hurricane-satellite-retry" hidden>Retry imagery</button><p id="hurricane-satellite-note">Hourly NOAA infrared mosaic; imagery can lag observations by several hours. Forecast controls move the storm positions; the satellite image stays at the time shown.</p></div>
+              <div id="hurricane-timeline" class="hurricane-timeline" hidden>
+                <div class="hurricane-timeline-heading"><span>Explore the forecast</span><button type="button" id="hurricane-play" aria-pressed="false">▶ Play</button></div>
+                <div class="hurricane-timeline-controls"><button type="button" id="hurricane-previous" aria-label="Previous forecast point">‹</button><input type="range" id="hurricane-forecast-step" min="0" max="1" value="0" step="1" aria-label="Official forecast point"><button type="button" id="hurricane-next" aria-label="Next forecast point">›</button></div>
+                <output id="hurricane-forecast-readout" for="hurricane-forecast-step"></output>
+                <details id="hurricane-forecast-table" class="hurricane-forecast-table"><summary>All forecast positions</summary><div id="hurricane-table-content"></div></details>
+              </div>
+              <div class="hurricane-map-legend" aria-label="Map legend"><span><i class="hurricane-legend-past"></i>Past track</span><span><i class="hurricane-legend-track"></i>Forecast</span><span><i class="hurricane-legend-cone"></i>Uncertainty cone</span><span><i class="hurricane-legend-outlook"></i>Formation area</span></div>
+            </div>
+            <aside class="hurricane-sidebar" aria-label="Storms and development areas"><div class="hurricane-panel-label">Systems with official forecasts</div><div id="hurricane-storm-list" class="hurricane-storm-list"><p class="hurricane-empty">Loading storm positions…</p></div><div id="hurricane-storm-detail"></div><div id="hurricane-outlook-list"></div></aside>
+          </div>
+          <footer class="hurricane-footer"><p>The cone shows uncertainty in the storm center’s path, not the storm’s size. Dangerous conditions can occur outside it.</p><details class="hurricane-map-guide"><summary>Map key &amp; data notes</summary><div class="hurricane-guide-content"><p>Markers show the latest available NHC or WPC advisory position at its stated time. Colored points show forecast intensity; the slider steps through official forecast positions. A cone may end before five days if the forecast is shorter.</p><div class="hurricane-intensity-key"><span style="--key:#6dcaf6">D · Depression</span><span style="--key:#6de4bd">S · Tropical storm</span><span style="--key:#ffdc79">1 · Hurricane</span><span style="--key:#ffb45d">2</span><span style="--key:#ff8264">3 · Major</span><span style="--key:#ee73a7">4</span><span style="--key:#d5a0ff">5</span><span style="--key:#b1bccc">Other / post-tropical</span></div><p>Development areas show the chance of a tropical cyclone forming within seven days, not the chance of a hurricane hitting a location. Coastal lines show hurricane warnings (red), hurricane watches (pink), tropical storm warnings (blue), and tropical storm watches (yellow). Inland hazards and storm surge are not fully represented here.</p><p>Map layers come from the <a href="https://mapservices.weather.noaa.gov/tropical/rest/services/tropical/NHC_tropical_weather_summary/MapServer" target="_blank" rel="noopener noreferrer">NOAA tropical weather service</a> and are checked every ten minutes while this tracker is visible. Map publication may lag NHC advisories. Inland systems are added from <a href="https://www.wpc.ncep.noaa.gov/tropical/tropical_advisories.php" target="_blank" rel="noopener noreferrer">WPC advisories</a> through the official NWS API. Their tracks have no supplied uncertainty cone. Systems may disappear after official advisories stop; lingering rain and flooding are not fully mapped. Wind speeds are converted from knots; times use your device’s time zone. <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">Use the latest NHC advisories and local emergency guidance.</a></p></div></details></footer>
+          <noscript><p class="hurricane-notice">JavaScript is needed for the interactive map. <a href="https://www.nhc.noaa.gov/">View the current hurricane outlook and forecasts at the National Hurricane Center.</a></p></noscript>
+        </section>
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
           <div id="philly-weather-widget"></div>
           <figure id="weather-almanac" style="margin-top:22px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(135deg,rgba(13,19,28,.88),rgba(11,15,20,.7));box-shadow:0 18px 46px rgba(0,0,0,.22);">
@@ -124,11 +158,15 @@
     </footer>
   </main>
 
-  <script src="../assets/app.js"></script>
+  <dialog id="hurricane-expanded" class="hurricane-expanded-dialog" aria-labelledby="hurricane-title" aria-describedby="hurricane-expanded-help"><div class="hurricane-dialog-bar"><span id="hurricane-expanded-help">Expanded map · Escape to close</span><button type="button" id="hurricane-close">Close map <span aria-hidden="true">×</span></button></div></dialog>
+
+  <script src="../assets/app.js" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=chronicle-20260612" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
-  <script src="weather-details.js?v=20260924-smooth" defer></script>
-  <script src="weather-widget.js?v=20260924-smooth" defer></script>
+  <script src="weather-details.js?v=20261010-9" defer></script>
+  <script src="weather-widget.js?v=20261010-9" defer></script>
+  <script src="vendor/leaflet/leaflet.js" defer></script>
+  <script type="module" src="hurricane-tracker.mjs?v=20261010-15"></script>
 </body>
 </html>
