@@ -342,7 +342,8 @@ async function boot() {
 
   const scene = new THREE.Scene();
   const cityLighting = createCityLighting(THREE, renderer);
-  const streetLife = createCityStreets(THREE,{scene,projection,sampleElevation,lighting:cityLighting});
+  const streetLife = createCityStreets(THREE,{scene,projection,sampleElevation,
+    lighting:cityLighting,onReady:()=>wake()});
   const sky = createSky(THREE);
   scene.add(sky.mesh);
 

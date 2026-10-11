@@ -1248,8 +1248,14 @@ occlusion, failure cleanup and retry with a small generated local GLB tileset.
 It uses no ion account or remote photographic tile requests.
 `tools/traffic-fixture.html` uses the production street renderer with a local square
 block for repeatable vehicle, lamp, pedestrian, and pause inspection.
+Sidewalk topology prepares in cancellable, four-millisecond batches after cars
+become available. This avoids monopolizing the main thread during route setup;
+the completed routes are identical to the synchronous reference. Readiness wakes
+an idle scene, and disposal prevents late pedestrian attachment.
+`tools/street-startup.html` compares route preparation with continuous browser
+animation on the real Philadelphia street graph.
 
-Validation: 481 automated checks, including ten simulated minutes on the real
+Validation: 483 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
