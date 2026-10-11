@@ -10899,5 +10899,143 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-10-factual-infographic-factual-infographic-ailurophobia-a-cat-",
+    "title": "Factual infographic: Ailurophobia — A Cat Across the Landing",
+    "tests": "{\"factual_subtype\": \"phobia-infographic\", \"phobia\": \"Ailurophobia\", \"hero\": \"Fictional ordinary-scale cat across a domestic landing; no contact\", \"panels\": 8, \"explanatory_diagrams\": 4}; archive_slot=2026-10-10T20:08; concept=ailurophobia-cat-stair-landing-anticipation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"high\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2.5; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=high, size=auto, background=opaque; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, museum-quality, direct-canvas educational phobia infographic, portrait-oriented composition within size auto. Explicit request quality high, opaque background. It is the actual infographic artwork, not a photograph of a poster, book, screen, room display or framed page. Title: “AILUROPHOBIA”. Subtitle: “When fear of cats takes over”. Strong readable hierarchy, generous gutters, precise fine leader lines, large short labels; no bibliography, URLs, brand marks, diagnostic checklist, prevalence numbers or fabricated statistics.\n\nDOMINANT HERO: a richly rendered fictional domestic stair landing at dusk viewed from a worried adult's eye level, integrated seamlessly into the upper-middle canvas rather than a surrounding prop scene. An ordinary-sized short-haired tabby sits several steps away in a warm pool of window light, not attacking, no bared teeth, no supernatural eyes, no exaggerated claws. Render individually layered silver-brown hairs, soft ear edges, whiskers, realistically proportioned paws, rounded tail, dusty woodgrain stair treads, flaking painted balusters, linen curtain fibers, worn ceramic planter, subtle floor reflections and floating dust. A brown-skinned adult with a fuller body stands in foreground three-quarter profile at the doorway, shoulders tight, hands trembling lightly, conscious worried expression, no caricature or humiliation. Believable perspective and a visibly open alternate route. The visual tension comes from anticipation and distance, not animal aggression. Overlay two distinct slim graphic contours: coral for the person's feared prediction, muted teal for the observed scene. A callout reads “Fictional scene — not a safety assessment”. The hero occupies about one-third of the canvas; all remaining space carries substantive illustrated information, not empty decorative filler.\n\nArrange EIGHT numbered supporting panels in a carefully integrated grid flanking and below the hero. Every panel has one explanatory illustration and only the specified concise copy. The three major explanatory diagrams are body-alarm mapping, the avoidance-feedback loop, and a graded-care sequence; add a fourth perception comparison diagram. All symptoms and routes are illustrative possibilities, not universal claims.\n1 — “WHAT IT MEANS”: small cat silhouette beside person/context scale vignette. Copy: “Intense fear of cats. A specific phobia can disrupt daily life.” Distinguish ordinary dislike from disabling fear with a simple two-column visual, labeled “Dislike” and “Life disrupted”, not a diagnosis quiz.\n2 — “ENCOUNTER + ANTICIPATION”: two illustrative windows, the actual cat several steps away and a thought bubble of a possible later encounter. Copy: “Seeing a cat — or thinking about one — may trigger anxiety.” No implication that every cat-focused fear has the same trigger.\n3 — “THE UNCERTAIN NEXT MOMENT”: magnified detail inset of the cat's ordinary outline, paired with a clearly marked human prediction bubble, not animal behavior analysis. Labels: “Observed: a cat on the landing” / “Predicted: ‘I won't cope’”. Copy: “Fear can overestimate danger and underestimate coping.” Do not teach tail/ear decoding or claim a calm-looking animal is guaranteed safe.\n4 — “BODY ALARM”: detailed semi-transparent upper-body medical-style illustration, no invented brain circuitry; leader lines to chest, hands, face, stomach and shoulder muscles. Labels: “Pounding heart”, “Shaking”, “Sweating”, “Nausea”, “Tense muscles”. Footer: “Symptoms vary from person to person.” Use a symbolic pulse trace without numeric values; not a physiological measurement.\n5 — “THE AVOIDANCE LOOP”: large four-node coral-to-neutral feedback diagram with curved arrows, “Cat cue” → “Alarm” → “Avoid / escape” → “Short-term relief”, returning via an outer dashed arrow labeled “Less chance to learn coping”. Copy: “Relief now can keep fear going.” Clearly distinguish conceptual feedback from an anatomical pathway.\n6 — “FEAR ≠ DANGER”: comparison diagram with equal-sized outlined cards, “Felt alarm” and “Actual situation”, connected by an unequal symbol. Copy: “A strong feeling is not a safety assessment.” Show the same ordinary-sized cat image only once in this panel and a symbolic worry cloud opposite. Do not label cats harmless, do not show touching, cornering or challenging animals.\n7 — “HELP THAT BUILDS COPING”: three-stage conceptual treatment strip, a respectful conversation with a clinician, a jointly drawn plan, and a comfortable seated person looking at a small cat drawing with the clinician nearby. Labels: “CBT” / “Individual plan” / “Gradual, controlled steps”. Copy: “Work at your own pace with qualified support.” No numbered exposure prescription, mandatory animal contact, forced exposure, restraint, medication details or promise of cure.\n8 — “WHEN LIFE GETS SMALLER”: tiny route-map vignette comparing an intended social visit to an avoided detour, plus a trusted conversation and a gentle breathing motif. Copy: “If fear changes daily life, seek professional help.” Secondary short line: “Breathing exercises and trusted support may help manage anxiety.” No breath timing, emergency claims or treatment substitution.\n\nMaintain intense educational clarity, scientifically modest claim language and humane portrayal. Palette charcoal navy, warm ivory, muted sage-teal and restrained coral alarm cues; precise editorial lettering, refined borders and iconography. Layer photographic realism in the hero with clinical illustration and highly legible vector-like diagrams. At least five information layers: dominant environmental hero, fear-versus-observation comparison, body symptom mapping, avoidance cause/effect, contextual route vignette, treatment sequence, and concise labels. Fine detail must not overwhelm the eight short readable panels. No gore, monsters, giant cat, actual injury, invented scan, compulsory confrontation, paper texture mockup or illegible paragraphs.",
+    "image": "images/2026-10-10-factual-infographic-factual-infographic-ailurophobia-a-cat-.jpg",
+    "thumb": "thumbs/2026-10-10-factual-infographic-factual-infographic-ailurophobia-a-cat-.webp",
+    "color": "#908b86",
+    "date": "2026-10-10",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ailurophobia-cat-stair-landing-anticipation",
+      "imageSha256": "3adc24d4988d6d788b1e87fbf52cdb8c780127ef961211e03d15be99ca064b0e",
+      "imageDHash": "13e1646a5a5c749a"
+    },
+    "factualInfographic": {
+      "topic": "Ailurophobia: intense fear of cats, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "Cat-focused specific phobia illustrated through a fictional stair-landing encounter, with eight source-backed panels and four explanatory diagrams.",
+      "sourceNote": "Verified definition, symptom variability, anticipatory anxiety, avoidance feedback and support: National Institute of Mental Health https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders; Harvard Health Publishing https://www.health.harvard.edu/a_to_z/phobia-a-to-z; NHS https://www.nhs.uk/mental-health/conditions/phobias/; NHS inform https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-11T00:09:24.100042+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "Harvard Health Publishing",
+            "title": "Phobia",
+            "sourceType": "university",
+            "url": "https://www.health.harvard.edu/a_to_z/phobia-a-to-z"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "NHS inform",
+            "title": "Phobias self-help guide",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ailurophobia means fear of cats and is an animal-focused specific phobia.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phobic fear can be intense and out of proportion to actual danger; symptoms can interfere with daily life.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Encountering or thinking about a feared animal can trigger anxiety; an illustrated cat encounter and anticipation are examples, not universal triggers.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobic thinking can overestimate harm or likelihood of encountering the feared object and underestimate coping; the next event may be imagined as threatening.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Body alarm may include pounding heart, shaking, sweating, tight muscles, dizziness and nausea; not everyone experiences the same symptoms.",
+            "sourceIds": [
+              "S2",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Avoidance can quickly reduce anxiety but prevent learning that a situation can be manageable, maintaining phobic fear.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Avoidance can change routes and interfere with social activities and everyday life.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Feeling afraid is not itself a measure of actual danger; the depicted cat scene is fictional and does not prove animal safety.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT and gradual exposure under controlled circumstances at an individual pace can help specific phobias.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Breathing exercises and talking to a trusted person can help manage anxiety; seek professional support when fear affects daily life.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Treatment illustration is conceptual, not an instruction to approach, touch, restrain or provoke an animal; care planning is individualized.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
