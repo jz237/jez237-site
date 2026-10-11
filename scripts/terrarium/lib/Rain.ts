@@ -144,7 +144,7 @@ void main(){
   float R = (1.0 - exp(-16.0 * t * 0.16)) * 0.85 + 0.1;
   // ring on the ground (an ellipse seen from the camera's height)
   vec2 q = vec2(vQ.x, vQ.y / vSquash);
-  float ring = exp(-pow((length(q) - R) / 0.07, 2.0)) * step(vQ.y, 0.05);
+  float ring = exp(-(((length(q) - R) / 0.07) * ((length(q) - R) / 0.07))) * step(vQ.y, 0.05);
   float a = 0.0;
   if (water < 0.5) {
     // crown: fingers rising from the rim
@@ -152,12 +152,12 @@ void main(){
     float ang = atan(q.y, q.x);
     float fing = smoothstep(0.55, 0.95, cos(ang * 9.0));
     float rimX = abs(vQ.x) < R ? 1.0 : 0.0;
-    float finger = rimX * fing * smoothstep(-0.02, 0.0, vQ.y) * (1.0 - smoothstep(H * 0.6, H, vQ.y)) * exp(-pow((abs(vQ.x) - R * 0.9) / 0.12, 2.0));
+    float finger = rimX * fing * smoothstep(-0.02, 0.0, vQ.y) * (1.0 - smoothstep(H * 0.6, H, vQ.y)) * exp(-(((abs(vQ.x) - R * 0.9) / 0.12) * ((abs(vQ.x) - R * 0.9) / 0.12)));
     a = ring * 0.8 + finger * 0.9;
   } else {
     // jet: a little column thrown up from the centre
     float H = 0.55 * sin(3.14159 * min(1.0, t));
-    float jet = exp(-pow(vQ.x / 0.06, 2.0)) * step(0.0, vQ.y) * (1.0 - smoothstep(H * 0.7, H, vQ.y));
+    float jet = exp(-((vQ.x / 0.06) * (vQ.x / 0.06))) * step(0.0, vQ.y) * (1.0 - smoothstep(H * 0.7, H, vQ.y));
     a = ring * 0.5 + jet;
   }
   a *= (1.0 - t) * 0.3;

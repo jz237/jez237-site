@@ -299,7 +299,7 @@ void main(){
   c *= exp(-vec3(5.0, 2.6, 3.8) * (0.05 + d * 0.6));
   c += vec3(0.008, 0.016, 0.01);
   // bright meniscus where the surface meets the glass
-  float men = exp(-pow((surf - vW.y) / 0.0012, 2.0));
+  float men = exp(-(((surf - vW.y) / 0.0012) * ((surf - vW.y) / 0.0012)));
   c += vec3(0.16, 0.16, 0.14) * men;
   gl_FragColor = vec4(c, 1.0);
 }`,
@@ -368,9 +368,13 @@ void main(){
     this.ripples.add(x, z, 0.0035, -strength * 1.6);
   }
 
+  /** Something touched the water (for the fish). */
+  onDisturb?: (x: number, z: number, strength: number) => void;
+
   /** A finger poked into the water: a dent, a rebound and a few flicked drops. */
   poke(x: number, z: number, strength = 1) {
     if (poolDistance(x, z) > 0.0) return false;
+    this.onDisturb?.(x, z, 1.2 * strength);
     this.ripples.add(x, z, 0.006 + 0.003 * strength, -7 * strength);
     this.ripples.add(x, z, 0.0022, 4 * strength);
     this.flick(x, z, Math.round(5 + 6 * strength), 0.25 * strength);
@@ -381,6 +385,7 @@ void main(){
   stir(x: number, z: number, speed: number) {
     if (poolDistance(x, z) > 0.0) return;
     const u = Math.min(1, speed * 6);
+    this.onDisturb?.(x, z, 0.4 + u);
     this.ripples.add(x, z, 0.0035, -1.4 - 2.2 * u);
     if (Math.random() < u * 0.5) this.flick(x, z, 1, 0.12 * u);
   }

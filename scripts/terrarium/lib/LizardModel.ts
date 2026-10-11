@@ -201,7 +201,7 @@ float spikeT = isSpike > 0.5 ? (vAux.w - 0.55) / 0.45 : (vAux.w - 0.02) / 0.43;
 float pix = length(fwidth(P)) * freq;
 float detail = (1.0 - smoothstep(0.5, 1.6, pix)) * (1.0 - max(isSpike, isTuber) * smoothstep(0.02, 0.15, spikeT));
 // the mouth line and the labial plates either side of it
-float mY = pr.w - 0.04 - 0.24 * (1.0 - smoothstep(10.0, 12.7, P.x)) + 0.1 * exp(-pow((P.x - 10.3) / 0.45, 2.0));
+float mY = pr.w - 0.04 - 0.24 * (1.0 - smoothstep(10.0, 12.7, P.x)) + 0.1 * exp(-(((P.x - 10.3) / 0.45) * ((P.x - 10.3) / 0.45)));
 float dyM = P.y - mY;
 float lipW = dyM > 0.0 ? 0.085 : 0.1;
 float lipBand = headW * smoothstep(0.8, 0.93, zn) * smoothstep(0.02, 0.04, abs(dyM)) * (1.0 - smoothstep(lipW - 0.03, lipW, abs(dyM))) * smoothstep(10.2, 10.45, P.x);
@@ -239,7 +239,7 @@ col = mix(col, cDark, blotch * back * 0.85);
 col = mix(col, cLight * 0.9, back * blotch * smoothstep(0.75, 0.95, lzNoise(P * 9.0)) * 0.35);
 col = mix(col, cLight, midline * back * 0.55);
 // dorsolateral pale stripe with dark spots below it
-float dl = exp(-pow((zn - 0.7 + edgeN * 0.08) / 0.06, 2.0));
+float dl = exp(-(((zn - 0.7 + edgeN * 0.08) / 0.06) * ((zn - 0.7 + edgeN * 0.08) / 0.06)));
 col = mix(col, cLight, dl * back * 0.45);
 // flanks: dark reticulum with pale spots, under the fringe
 float flank = smoothstep(0.62, 0.85, zn) * onLoft * torso * smoothstep(-0.7, 0.3, yn) * (1.0 - belly);
@@ -267,12 +267,12 @@ float crownM = smoothstep(0.42, 0.62, lzFbm(P * 3.6 + vec3(5.0)));
 col = mix(col, mix(cMid, cBase, 0.25), headW * up * (0.45 + 0.5 * crownM) * (1.0 - jowl));
 vec3 eyeC = vec3(uEye.x, uEye.y, sign(P.z) * uEye.z);
 float eyeD = length(P - eyeC);
-float eyeRing = exp(-pow(eyeD / 0.6, 2.0)) * headW;
+float eyeRing = exp(-((eyeD / 0.6) * (eyeD / 0.6))) * headW;
 col = mix(col, cOrange * 1.1, eyeRing * 0.55);
 // the scaly turret around the eye: darker orange-brown
 col = mix(col, vec3(0.2, 0.085, 0.025), (1.0 - smoothstep(0.3, 0.42, eyeD)) * headW * 0.6);
 // dark stripe from the eye back to the ear
-float streak = headW * exp(-pow((P.y - (pr.w + 0.2 + (P.x - 10.75) * 0.12)) / 0.12, 2.0)) * smoothstep(9.75, 10.3, P.x) * (1.0 - smoothstep(10.75, 11.1, P.x)) * smoothstep(0.6, 0.95, zn);
+float streak = headW * exp(-(((P.y - (pr.w + 0.2 + (P.x - 10.75) * 0.12)) / 0.12) * ((P.y - (pr.w + 0.2 + (P.x - 10.75) * 0.12)) / 0.12))) * smoothstep(9.75, 10.3, P.x) * (1.0 - smoothstep(10.75, 11.1, P.x)) * smoothstep(0.6, 0.95, zn);
 col = mix(col, cDark, streak * 0.6);
 // head top: finer, warmer
 col = mix(col, col * vec3(1.05, 0.95, 0.85), headW * up * 0.5);
@@ -388,7 +388,7 @@ float h = atan(q.x, q.y);
 float v = atan(q.z, q.y);
 float o = max(uOpen, 0.0);
 float c = -0.16 * (1.0 - o);
-float e = pow(h / 0.66, 2.0) + pow((v - c) / max(0.56 * o, 1e-3), 2.0);
+float e = ((h / 0.66) * (h / 0.66)) + (((v - c) / max(0.56 * o, 1e-3)) * ((v - c) / max(0.56 * o, 1e-3)));
 if (o > 0.02 && e < 1.0) discard;
 float margin = o > 0.02 ? 1.0 - smoothstep(1.0, 1.5, e) : 0.0;
 `)
