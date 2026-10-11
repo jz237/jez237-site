@@ -25,18 +25,22 @@ const PROFILE = [
   [5.8, 2.95, 1.12, 0.97, 2.17, 2.75],
   [7.1, 2.5, 1.04, 0.98, 2.24, 2.6],
   [8.1, 1.98, 0.98, 1.02, 2.33, 2.45],
-  [8.85, 1.72, 0.96, 1.12, 2.42, 2.35],
-  // the head: wide spiny jowls, a flat crown, a deep jaw and a short, blunt snout
-  [9.4, 1.92, 1.0, 1.3, 2.52, 2.4],
-  [9.85, 2.02, 1.02, 1.3, 2.58, 2.5],
-  [10.3, 1.9, 1.0, 1.15, 2.63, 2.6],
-  [10.75, 1.66, 0.97, 0.98, 2.66, 2.7],
-  [11.2, 1.38, 0.9, 0.84, 2.66, 2.75],
-  [11.6, 1.1, 0.78, 0.74, 2.62, 2.7],
-  [11.95, 0.86, 0.62, 0.62, 2.56, 2.6],
-  [12.2, 0.64, 0.47, 0.5, 2.5, 2.5],
-  [12.34, 0.42, 0.34, 0.36, 2.47, 2.3],
-  [12.44, 0.12, 0.12, 0.12, 2.45, 2.0],
+  [8.85, 1.55, 0.94, 1.08, 2.42, 2.35],
+  // the head, measured from photographs: from the ear to the snout about twice
+  // as long as it is deep at the eye, the snout about twice the ear-to-eye
+  // distance; a spade in plan, wide at the spiny jowls; a flat crown with sharp
+  // canthal edges and a forehead sloping down to a blunt, rounded nose
+  [9.4, 1.62, 0.96, 1.2, 2.52, 2.4],
+  [9.85, 1.62, 0.95, 1.04, 2.58, 2.5],
+  [10.3, 1.5, 0.9, 0.88, 2.62, 2.6],
+  [10.75, 1.34, 0.84, 0.75, 2.65, 2.7],
+  [11.2, 1.14, 0.76, 0.65, 2.64, 2.75],
+  [11.54, 0.97, 0.67, 0.58, 2.61, 2.7],
+  [11.88, 0.8, 0.57, 0.5, 2.57, 2.6],
+  [12.22, 0.63, 0.46, 0.43, 2.52, 2.5],
+  [12.47, 0.49, 0.35, 0.35, 2.47, 2.4],
+  [12.6, 0.34, 0.25, 0.26, 2.45, 2.2],
+  [12.68, 0.12, 0.11, 0.11, 2.44, 2.0],
 ];
 const X_MIN = PROFILE[0][0], X_MAX = PROFILE[PROFILE.length - 1][0];
 const profileAt = monotoneChannels(PROFILE, 5);
@@ -47,12 +51,12 @@ export function profile(x) {
 }
 
 export const HINGE_X = 10.0;
-const MOUTH_HALF = 0.032;
+const MOUTH_HALF = 0.02;
 export function mouthY(x) {
   const { cy } = profile(x);
-  const back = smoothstep(12.45, HINGE_X, x);
+  const back = smoothstep(12.7, HINGE_X, x);
   // A faint upturn at the corner gives the characteristic agamid "smile".
-  const corner = Math.exp(-(((x - (HINGE_X + 0.25)) / 0.3) ** 2)) * 0.05;
+  const corner = Math.exp(-(((x - (HINGE_X + 0.3)) / 0.45) ** 2)) * 0.1;
   return cy - 0.04 - 0.24 * back + corner;
 }
 
@@ -91,8 +95,8 @@ function spineWeights(x, out) {
 const eyeX = 11.0;
 const eyeProfile = profile(eyeX);
 export const EYE = {
-  radius: 0.235,
-  centre: [eyeX, eyeProfile.cy + 0.24, eyeProfile.w - 0.2],
+  radius: 0.27,
+  centre: [eyeX, eyeProfile.cy + 0.31, eyeProfile.w - 0.26],
   axis: norm([0.18, 0.3, 1]),
 };
 const eyeFeatures = [];
@@ -101,13 +105,25 @@ for (const s of [1, -1]) {
   const axis = [EYE.axis[0], EYE.axis[1], EYE.axis[2] * s];
   eyeFeatures.push({
     s, c, axis,
-    rim: torus(add(c, scale(axis, 0.1)), axis, 0.215, 0.07),
+    rim: torus(add(c, scale(axis, 0.08)), axis, 0.285, 0.09),
     socket: sphere(c, EYE.radius + 0.018),
-    brow: ellipsoid(add(c, [0.02, 0.24, -0.06 * s]), [0.58, 0.16, 0.24], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
-    nostrilRim: sphere([12.12, profile(12.12).cy + 0.1, profile(12.12).w * 0.86 * s], 0.065),
-    nostril: sphere([12.13, profile(12.12).cy + 0.1, profile(12.12).w * 0.97 * s], 0.036),
-    ear: ellipsoid([9.9, profile(9.9).cy + 0.0, (profile(9.9).w + 0.04) * s], [0.17, 0.24, 0.16]),
+    // the supraocular ridge: a low shelf along the canthus that overhangs the eye
+    brow: ellipsoid(add(c, [-0.04, 0.19, -0.13 * s]), [0.42, 0.1, 0.19], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
+    nostrilRim: sphere([12.4, profile(12.4).cy + 0.08, profile(12.4).w * 0.86 * s], 0.06),
+    nostril: sphere([12.41, profile(12.4).cy + 0.08, profile(12.4).w * 0.97 * s], 0.034),
+    ear: ellipsoid([9.92, profile(9.92).cy + 0.04, (profile(9.92).w + 0.02) * s], [0.2, 0.27, 0.24]),
+    earRim: torus([9.92, profile(9.92).cy + 0.04, (profile(9.92).w - 0.03) * s], [0.15, 0, s], 0.25, 0.05),
+    // the spiny jowl pad behind the corner of the mouth
+    jowl: ellipsoid([9.6, profile(9.6).cy - 0.2, (profile(9.6).w - 0.38) * s], [0.5, 0.46, 0.4]),
   });
+}
+
+// Lips: a low swelling along both edges of the mouth, where the pale labial
+// scales sit.
+const lipParts = [];
+for (const s of [1, -1]) for (const off of [0.065, -0.07]) {
+  const pts = [10.15, 10.6, 11.05, 11.45, 11.85, 12.18, 12.44, 12.6].map((x) => [x, mouthY(x) + off, profile(x).w * (x > 12.52 ? 0.9 : 0.955) * s]);
+  for (let i = 0; i < pts.length - 1; i++) lipParts.push(roundCone(pts[i], pts[i + 1], 0.07, 0.07 - 0.008 * (i > 4)));
 }
 
 // Lateral body fold that carries the fringe of spines.
@@ -122,9 +138,11 @@ for (const s of [1, -1]) {
 
 function loftDistance(x, y, z) {
   const xc = clamp(x, X_MIN, X_MAX);
-  const { w, ht, hb, cy, n } = profile(xc);
+  let { w, ht, hb, cy, n } = profile(xc);
   const dy = y - cy;
   const h = dy > 0 ? ht : hb;
+  // the crown and the top of the snout are flat, edged by the canthal ridges
+  if (dy > 0) n += 1.5 * smoothstep(10.0, 10.9, xc) * (1 - smoothstep(11.55, 12.4, xc));
   const a = Math.abs(z) / w, b = Math.abs(dy) / h;
   const an = Math.pow(a, n), bn = Math.pow(b, n);
   const r = Math.pow(an + bn, 1 / n);
@@ -152,13 +170,16 @@ function headDistance(x, y, z) {
   if (x > 8.8) {
     for (const e of eyeFeatures) {
       if (Math.sign(z) !== e.s) continue;
-      d = smin(d, e.brow.f(x, y, z), 0.09);
+      d = smin(d, e.brow.f(x, y, z), 0.14);
       d = smin(d, e.rim.f(x, y, z), 0.07);
       d = smax(d, -e.socket.f(x, y, z), 0.03);
       d = smin(d, e.nostrilRim.f(x, y, z), 0.05);
       d = smax(d, -e.nostril.f(x, y, z), 0.025);
-      d = smax(d, -e.ear.f(x, y, z), 0.05);
+      if (x < 10.6) d = smin(d, e.jowl.f(x, y, z), 0.22);
+      if (x < 10.4) d = smin(d, e.earRim.f(x, y, z), 0.05);
+      d = smax(d, -e.ear.f(x, y, z), 0.04);
     }
+    if (x > 10.0) for (const l of lipParts) if (inBox(l.box, x, y, z, 0.1)) d = smin(d, l.f(x, y, z), 0.05);
     // Mouth: a slit that separates the upper and lower jaws back to the hinge.
     if (x > HINGE_X - 0.2) {
       const m = mouthY(x);
@@ -255,10 +276,13 @@ for (const kind of ['front', 'hind']) {
         // knuckle swelling
         if (k > 0) limbParts.push({ ...sphere(pts[k], radii[k] * 1.12), k: 0.03, w: [[b, 1]], tag: 0 });
       }
-      const c1 = add(pts[3], add(scale(dir, 0.11), [0, -0.004, 0]));
-      const c2 = add(c1, add(scale(dir, 0.1), [0, -0.06, 0]));
-      limbParts.push({ ...roundCone(pts[3], c1, 0.042, 0.026), k: 0.012, w: [[b, 1]], tag: 1 });
-      limbParts.push({ ...roundCone(c1, c2, 0.026, 0.006), k: 0.006, w: [[b, 1]], tag: 1 });
+      // long, curved, dark claws
+      const c1 = add(pts[3], add(scale(dir, 0.15), [0, 0.012, 0]));
+      const c2 = add(c1, add(scale(dir, 0.13), [0, -0.035, 0]));
+      const c3 = add(c2, add(scale(dir, 0.06), [0, -0.075, 0]));
+      limbParts.push({ ...roundCone(pts[3], c1, 0.046, 0.032), k: 0.012, w: [[b, 1]], tag: 1 });
+      limbParts.push({ ...roundCone(c1, c2, 0.032, 0.018), k: 0.006, w: [[b, 1]], tag: 1 });
+      limbParts.push({ ...roundCone(c2, c3, 0.018, 0.004), k: 0.004, w: [[b, 1]], tag: 1 });
     });
     const ax = footFrame;
     limbParts.push({ ...ellipsoid(palmC, spec.palm, ax[0], ax[1], ax[2]), k: 0.08, w: [[hand, 1]], tag: 0 });
@@ -324,7 +348,7 @@ export function surfaceInfo(x, y, z) {
     const pr = profile(x);
     const m = mouthY(x);
     // the pink interior shows only inside the mouth, not at the closed lips of the snout tip
-    mouth = (1 - smoothstep(MOUTH_HALF + 0.015, MOUTH_HALF + 0.05, Math.abs(y - m))) * (1 - smoothstep(pr.w * 0.7, pr.w * 0.92, Math.abs(z))) * (1 - smoothstep(11.9, 12.25, x));
+    mouth = (1 - smoothstep(MOUTH_HALF + 0.015, MOUTH_HALF + 0.05, Math.abs(y - m))) * (1 - smoothstep(pr.w * 0.7, pr.w * 0.92, Math.abs(z))) * (1 - smoothstep(12.2, 12.5, x));
   }
   return { weights: weights.map(([b, w]) => [b, w / sum]), claw: claw / (total || 1), mouth };
 }

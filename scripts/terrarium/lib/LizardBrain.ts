@@ -5,7 +5,7 @@ import type {Surface} from './Surface';
 import {SurfaceKind} from './Surface';
 import type {Insects, Cricket} from './Insects';
 import type {Water} from './Water';
-import {POOL, poolDistance, WATER_LEVEL} from './Ground';
+import {POOL, poolDistance, WATER_LEVEL, CAVE} from './Ground';
 import {TANK} from './Case';
 
 /**
@@ -15,7 +15,9 @@ import {TANK} from './Case';
  * signal with head bobs and slow arm waves, and sleep flat at night.
  * Timings are illustrative, not measured ethology.
  */
-type Mode = 'bask' | 'idle' | 'travel' | 'drink' | 'hunt' | 'sleep' | 'display' | 'startle' | 'petted' | 'soak';
+type Mode = 'bask' | 'idle' | 'travel' | 'drink' | 'hunt' | 'sleep' | 'display' | 'startle' | 'petted' | 'soak' | 'shelter';
+/** Facing straight out of the cave mouth (towards the glass). */
+const FACE_OUT = -Math.PI / 2;
 
 const rnd = Math.random;
 const clamp = (x: number, a: number, b: number) => Math.min(b, Math.max(a, x));
@@ -44,7 +46,10 @@ export class LizardBrain {
   private poseGoal: Pose = {clearance: 0.1, chestLift: 1.3, headPitch: 0.22, lid: 1, breath: 1};
   private faceHeading: number | null = null;
   private prey: Cricket | null = null;
-  private huntPhase: 'notice' | 'approach' | 'fix' | 'strike' | 'chew' | 'lick' = 'notice';
+  private huntPhase: 'notice' | 'approach' | 'fix' | 'strike' | 'grip' | 'chew' | 'swallow' | 'lick' = 'notice';
+  private bites = 0;
+  private biteT = 0;
+  private preySide = 1;
   private phaseT = 0;
   private lapCount = 0;
   private drinkPitch = -0.55;
@@ -64,6 +69,9 @@ export class LizardBrain {
   private lickT = 0;
   private tmp2: [number, number] = [0, 0];
   private ignorePrey = new WeakMap<Cricket, number>();
+  /** Running for the cave: no stops to look around on the way. */
+  private hurry = false;
+  private clearT = 0;
   night = false;
   raining = false;
   heat = 1;
@@ -74,6 +82,8 @@ export class LizardBrain {
   private baskSpot: [number, number, number] = [-0.4, 0.085, 0];
   private sleepSpot: [number, number, number] = [-0.47, -0.08, 0.6];
   onLap?: (p: THREE.Vector3) => void;
+  /** Each bite through a cricket's shell. */
+  onCrunch?: (p: THREE.Vector3, strength: number) => void;
 
   constructor(readonly rig: LizardRig, readonly nav: Nav, readonly surface: Surface, readonly insects: Insects, readonly water: Water) {
     // Highest comfortable point on the log under the basking lamp.
@@ -128,11 +138,12 @@ export class LizardBrain {
     this.stallT = 0;
     this.stallRef.set(I.x, I.z);
     this.after = then;
+    this.hurry = false;
     this.cruise = cruise * (0.85 + rnd() * 0.3);
     this.burstLeft = 0.12 + rnd() * 0.3;
     this.pauseT = 0;
     this.leadT = 0.2;
-    this.setMode('travel', then === 'drink' ? 'Heading to the water' : then === 'bask' ? 'Returning to the basking log' : then === 'sleep' ? 'Looking for a place to sleep' : then === 'soak' ? 'Wading into the shallows' : 'Exploring');
+    this.setMode('travel', then === 'drink' ? 'Heading to the water' : then === 'bask' ? 'Returning to the basking log' : then === 'sleep' ? 'Looking for a place to sleep' : then === 'soak' ? 'Wading into the shallows' : then === 'shelter' ? 'Heading for the cave' : 'Exploring');
     this.posePreset('walk');
     return true;
   }
@@ -263,13 +274,36 @@ export class LizardBrain {
     this.posePreset('alert');
   }
 
+  /** On its way to the cave, or in it. */
+  get sheltering() {return this.mode === 'shelter' || (this.hurry && this.after === 'shelter' && (this.mode === 'travel' || this.mode === 'startle'));}
+
+  /** Makes for the cave (urgently after a close strike). */
+  private seekShelter(urgent: boolean) {
+    if (this.sheltering) return true;
+    if (this.prey?.caught) return false; // finish the mouthful first
+    if (!this.goTo(CAVE.den.x, CAVE.den.z, 'shelter', urgent ? 0.22 : 0.15)) return false;
+    this.hurry = true;
+    this.prey = null;
+    this.faceHeading = FACE_OUT;
+    this.status = urgent ? 'Bolting for the cave' : 'Heading for the cave';
+    this.posePreset('walk');
+    return true;
+  }
+
   /** Lightning struck at `p`: bolt for cover if it was close, otherwise freeze and stare. */
   lightning(p: THREE.Vector3, strength: number) {
-    if (this.mode === 'sleep') {this.setMode('idle', 'Woken by the thunder'); this.posePreset('alert');}
-    const d = Math.hypot(p.x - this.rig.inputs.x, p.z - this.rig.inputs.z);
     this.lookPoint.copy(p);
     this.looking = true;
     this.lookT = 2.5;
+    // safe in the cave: a flinch and a blink
+    if (this.mode === 'shelter') {
+      this.pose.lid = 0.1;
+      this.pose.headPitch -= 0.15;
+      return;
+    }
+    if (this.mode === 'sleep') {this.setMode('idle', 'Woken by the thunder'); this.posePreset('alert');}
+    const d = Math.hypot(p.x - this.rig.inputs.x, p.z - this.rig.inputs.z);
+    if (this.storm > 0.3 && this.seekShelter(d < 0.3 * strength)) return;
     if (d < 0.22 * strength && this.mode !== 'hunt') {
       this.startle(p);
       if (this.mode === 'startle') this.status = 'Startled by the lightning';
@@ -300,6 +334,8 @@ export class LizardBrain {
     I.jaw = damp(I.jaw, 0, 6, dt);
     I.tongue = damp(I.tongue, 0, 12, dt);
     I.lunge = damp(I.lunge, 0, 10, dt);
+    I.shake = damp(I.shake, 0, 8, dt);
+    I.swallow = damp(I.swallow, 0, 3, dt);
     I.bob = damp(I.bob, 0, 20, dt);
     I.wave = damp(I.wave, 0, 3, dt);
     I.display = damp(I.display, 0, 1.5, dt);
@@ -316,7 +352,10 @@ export class LizardBrain {
     }
     // Prey appearing interrupts calm activities.
     this.boredom = Math.max(0, this.boredom - dt);
-    if (!this.night && this.mode !== 'hunt' && this.mode !== 'startle' && this.modeT > 0.8 && this.boredom <= 0) {
+    // A storm sends it to the cave.
+    const stormy = this.storm > 0.42 || (this.raining && this.storm > 0.25);
+    if (stormy && !this.sheltering && this.mode !== 'startle' && this.modeT > 0.5) this.seekShelter(false);
+    if (!this.night && !this.sheltering && this.mode !== 'hunt' && this.mode !== 'startle' && this.modeT > 0.8 && this.boredom <= 0) {
       const prey = this.insects.nearest(this.rig.snout);
       if (prey && !prey.airborne && prey.pos.distanceTo(this.rig.snout) < 0.6 && this.canHunt(prey)) this.startHunt(prey);
       else if (prey && this.mode !== 'travel') {this.lookPoint.copy(prey.pos); this.looking = true; this.lookT = 0.8;}
@@ -417,6 +456,29 @@ export class LizardBrain {
         targetSpeed = r.speed; targetTurn = r.turn;
         break;
       }
+      case 'shelter': {
+        // turn round to face out of the mouth, then settle low and watch the storm
+        if (this.modeT < 3 && Math.abs(wrap(FACE_OUT - I.heading)) > 0.15) {
+          targetTurn = this.turnToward(FACE_OUT);
+          this.posePreset('alert');
+          break;
+        }
+        if (this.night && this.modeT > 6) {
+          this.posePreset('sleep');
+          I.look = null;
+          this.status = 'Asleep in the cave';
+        } else {
+          this.posePreset('rest');
+          this.poseGoal.headPitch = 0.1;
+          this.poseGoal.lid = 0.8;
+          this.status = this.storm > 0.2 || this.raining ? 'Sheltering in the cave' : 'Peering out of the cave';
+          this.idleLook(dt, 0.45);
+        }
+        // out again once the weather has been clear for a little while (in daylight)
+        this.clearT = this.storm < 0.15 && !this.raining ? this.clearT + dt : 0;
+        if (this.clearT > 6 && !this.night) {this.clearT = 0; this.hurry = false; this.posePreset('alert'); this.chooseActivity();}
+        break;
+      }
       case 'petted': {
         this.posePreset('rest');
         this.poseGoal.lid = 0.15;
@@ -458,11 +520,20 @@ export class LizardBrain {
     I.lid = p.lid;
     I.breath = p.breath;
     this.rig.update(dt);
-    // A caught cricket stays in the jaws.
+    // A caught cricket is held crosswise in the jaws, sticking out of one side
+    // and drawn further in with every bite.
     if (this.prey && this.prey.caught) {
-      this.prey.pos.copy(this.rig.mouth);
-      this.prey.group.position.copy(this.rig.mouth);
-      this.prey.group.rotation.y = this.rig.inputs.heading + Math.PI / 2;
+      const c = this.prey;
+      const fwd = this.rig.headForward;
+      const lat = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(this.preySide);
+      const upH = new THREE.Vector3().crossVectors(lat, fwd).normalize().multiplyScalar(this.preySide);
+      const out = (0.006 + 0.004 * (1 - c.consumed)) * (1 - c.consumed * 0.7);
+      c.pos.copy(this.rig.mouth).addScaledVector(lat, out).addScaledVector(upH, -0.0022);
+      c.group.position.copy(c.pos);
+      // the cricket's head points out of the side of the mouth, its back up
+      const m = new THREE.Matrix4().makeBasis(lat, upH, new THREE.Vector3().crossVectors(lat, upH));
+      c.group.quaternion.setFromRotationMatrix(m);
+      c.group.rotation.order = 'XYZ';
     }
   }
 
@@ -510,7 +581,7 @@ export class LizardBrain {
     if (this.mode === 'hunt') {this.pathI = this.path.length; return;}
     this.path = [];
     if (this.mode === 'startle') {this.setMode('idle', 'Watching'); return;}
-    this.setMode(this.after, this.after === 'bask' ? 'Basking under the lamp' : this.after === 'drink' ? 'Drinking' : this.after === 'sleep' ? 'Asleep' : this.after === 'soak' ? 'Soaking in the shallows' : 'Watching');
+    this.setMode(this.after, this.after === 'bask' ? 'Basking under the lamp' : this.after === 'drink' ? 'Drinking' : this.after === 'sleep' ? 'Asleep' : this.after === 'soak' ? 'Soaking in the shallows' : this.after === 'shelter' ? 'Sheltering in the cave' : 'Watching');
     if (this.after === 'bask') this.posePreset('bask');
   }
 
@@ -583,7 +654,7 @@ export class LizardBrain {
         this.poseGoal.headPitch = -0.45;
         const ph = 1 - this.lickT / 0.5;
         if (ph > 0.35 && ph < 0.6) I.tongue = Math.max(I.tongue, Math.sin((ph - 0.35) / 0.25 * Math.PI) * 0.55);
-      } else if (this.mode === 'travel' && rnd() < dt * 0.25) this.lickT = 0.5;
+      } else if (this.mode === 'travel' && !this.hurry && rnd() < dt * 0.25) this.lickT = 0.5;
       if (this.mode !== 'startle') this.posePreset(this.pauseT > 1.2 ? 'rest' : 'alert');
       if (this.pauseT <= 0) {
         this.burstLeft = 0.1 + rnd() * 0.3;
@@ -624,7 +695,7 @@ export class LizardBrain {
     const maxTurn = this.mode === 'startle' ? 4 : 2.6;
     const turn = clamp(err * 5, -maxTurn, maxTurn);
     this.burstLeft -= this.speed * dt;
-    if (this.burstLeft <= 0 && this.mode !== 'startle' && remaining > 0.08) {
+    if (this.burstLeft <= 0 && this.mode !== 'startle' && !this.hurry && remaining > 0.08) {
       this.pauseT = rnd() < 0.25 ? 1.2 + rnd() * 2.5 : 0.25 + rnd() * 0.7;
     }
     return {speed, turn};
@@ -633,7 +704,7 @@ export class LizardBrain {
   private hunt(dt: number) {
     const I = this.rig.inputs;
     const c = this.prey;
-    if (!c || c.eaten) {this.prey = null; this.setMode('idle', 'Watching'); return {speed: 0, turn: 0};}
+    if (!c || (c.eaten && this.huntPhase !== 'lick')) {this.prey = null; this.setMode('idle', 'Watching'); return {speed: 0, turn: 0};}
     this.phaseT += dt;
     const head = this.rig.snout;
     const toPrey = new THREE.Vector3().subVectors(c.pos, head);
@@ -709,17 +780,55 @@ export class LizardBrain {
         }
         if (k > 0.3) {
           this.phaseT = 0;
-          if (c.caught) {this.huntPhase = 'chew';} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix';}
+          if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix';}
           if (this.misses > 5) {this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
         }
         return {speed: k < 0.1 ? 0.32 : 0, turn: clamp(err * 6, -3, 3)};
       }
+      case 'grip': {
+        // clamp down and thrash the head to subdue it
+        this.status = 'Caught it!';
+        I.look = null;
+        I.jaw = 0.12;
+        I.shake = this.phaseT < 0.55 ? 1 : 0;
+        c.struggle = 1;
+        if (this.phaseT > 0.4 && this.phaseT - dt <= 0.4) this.onCrunch?.(this.rig.mouth, 0.7);
+        if (this.phaseT > 0.75) {this.huntPhase = 'chew'; this.phaseT = 0; this.bites = 0; this.biteT = 0;}
+        return {speed: 0, turn: 0};
+      }
       case 'chew': {
+        // bite after bite: open, snap shut with a crunch, work it further in
         this.status = 'Eating';
         I.look = null;
-        this.poseGoal.headPitch = 0.2;
-        I.jaw = 0.18 + 0.2 * Math.max(0, Math.sin(this.phaseT * 13));
-        if (this.phaseT > 2.4) {c.eaten = true; this.misses = 0; this.huntPhase = 'lick'; this.phaseT = 0;}
+        this.poseGoal.headPitch = 0.18;
+        this.biteT += dt;
+        const dur = 0.42 + 0.08 * Math.sin(this.bites * 1.7);
+        const k = this.biteT / dur;
+        I.jaw = k < 0.45 ? 0.12 + 0.3 * Math.sin((k / 0.45) * Math.PI * 0.5) : 0.42 * Math.max(0, 1 - (k - 0.45) / 0.12) + 0.08;
+        I.lunge = Math.max(I.lunge, k > 0.4 && k < 0.6 ? 0.18 : 0);
+        c.struggle = Math.max(0.05, 1 - this.bites * 0.22);
+        if (k >= 1) {
+          this.biteT = 0;
+          this.bites++;
+          c.consumed = Math.min(0.85, c.consumed + 0.16);
+          this.onCrunch?.(this.rig.mouth, 1 - this.bites * 0.1);
+          // now and then a re-grip with a quick shake
+          if (this.bites === 2) I.shake = 0.6;
+        }
+        if (this.bites >= 5) {this.huntPhase = 'swallow'; this.phaseT = 0;}
+        return {speed: 0, turn: 0};
+      }
+      case 'swallow': {
+        // head up, eyes half shut, the throat working it down
+        this.status = 'Swallowing';
+        I.look = null;
+        I.jaw = this.phaseT < 0.25 ? 0.16 : 0.02;
+        I.swallow = Math.sin(Math.min(1, this.phaseT / 0.9) * Math.PI);
+        this.poseGoal.lid = 0.35;
+        c.consumed = Math.min(1, c.consumed + dt * 0.9);
+        c.struggle = 0;
+        if (this.phaseT > 0.35) c.group.visible = false;
+        if (this.phaseT > 1.0) {c.eaten = true; this.misses = 0; this.huntPhase = 'lick'; this.phaseT = 0; this.poseGoal.lid = 1;}
         return {speed: 0, turn: 0};
       }
       case 'lick': {

@@ -3,7 +3,10 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {Post} from './Post';
 import {Room} from './Room';
 import {Case, TANK, type Pane} from './Case';
-import {Ground, poolDistance} from './Ground';
+import {Ground, poolDistance, CAVE} from './Ground';
+import {Meadow} from './Meadow';
+import {Motes} from './Motes';
+import {LeafDrift} from './LeafDrift';
 import {Hardscape} from './Hardscape';
 import {loadScans} from './Assets';
 import {LizardModel} from './LizardModel';
@@ -23,6 +26,10 @@ import {TerrariumAudio} from './Audio';
 import {CloudShadow} from './CloudShadow';
 
 const DIRECT = new URLSearchParams(location.search).has('direct');
+const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
+const DUSK_SKY = new THREE.Color(0.62, 0.42, 0.36);
+const NIGHT_GLOW = new THREE.Color(0.035, 0.05, 0.11);
+const CAVE_VIEW = new THREE.Vector3(CAVE.view.x, CAVE.view.y, CAVE.view.z);
 
 export class Terrarium {
   readonly renderer: THREE.WebGLRenderer;
@@ -58,6 +65,9 @@ export class Terrarium {
   private quality = {window: 0, frames: 0, level: 0, locked: false};
   lizard!: LizardModel;
   readonly key: THREE.SpotLight;
+  meadow!: Meadow;
+  motes!: Motes;
+  leafDrift!: LeafDrift;
   readonly heat: THREE.SpotLight;
   readonly hemi: THREE.HemisphereLight;
   readonly rim: THREE.DirectionalLight;
@@ -98,7 +108,7 @@ export class Terrarium {
     this.key.shadow.bias = -0.00025;
     this.key.shadow.normalBias = 0.0015;
     this.key.shadow.camera.near = 0.3;
-    this.key.shadow.camera.far = 1.6;
+    this.key.shadow.camera.far = 2.3;
     this.key.shadow.radius = 2;
     // passing clouds shade whatever the lamp lights
     this.key.map = this.cloudShadow.target.texture;
@@ -166,6 +176,8 @@ export class Terrarium {
     this.scene.add(this.plants.group);
     this.flora = new Flora(this.surface, this.hardscape.placed.filter((p) => p.mesh !== this.hardscape.log).map((p) => p.mesh), this.hardscape.log);
     this.scene.add(this.flora.group);
+    this.meadow = new Meadow(this.surface);
+    this.scene.add(this.meadow.mesh);
     this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || 14));
     this.scene.add(this.moss.mesh);
     this.water = new Water(this.surface, this.peaks.data.ledges);
@@ -188,7 +200,16 @@ export class Terrarium {
     };
     this.insects.onSplash = (x, z) => {this.water.ripples.add(x, z, 0.004, -2.5); this.water.flick(x, z, 3, 0.15);};
     this.weather = new Weather(this.surface, this.water);
+    {
+      const h = Number(new URLSearchParams(location.search).get('hours'));
+      if (h > 0) this.weather.hours = this.weather.sunHours = h % 24;
+    }
     this.scene.add(this.weather.group);
+    // dust on the air and loose leaves on the floor, both moved by the wind field
+    this.motes = new Motes(this.weather.wind, (x, z) => this.surface.topAt(x, z));
+    this.scene.add(this.motes.points);
+    this.leafDrift = new LeafDrift(this.surface, this.weather.wind);
+    this.scene.add(this.leafDrift.mesh);
     this.weather.lightning.light.layers.enable(1);
     foliageUniforms.tWind.value = this.weather.wind.texture;
     this.water.uniforms.tWind.value = this.weather.wind.texture;
@@ -228,6 +249,8 @@ export class Terrarium {
     w.clouds.events.release = (c, sp) => a.release(sp);
     w.clouds.events.merge = () => a.merge();
     w.clouds.events.pop = () => a.pop();
+    w.clouds.events.shrink = (c, amt) => a.shrink(amt);
+    this.brain.onCrunch = (p, strength) => a.crunch(strength, pan(p.x));
     w.clouds.events.zap = (c) => a.zap(pan(c.pos.x));
     w.onStrike = (end, strength, water, first) => {
       if (!first) return;
@@ -243,6 +266,8 @@ export class Terrarium {
     this.time += dt;
     this.weather.update(dt, this.time, this.camera);
     this.applyClimate(dt);
+    this.motes.update(dt, this.weather.daylight, this.key.position, this.key.target.position, this.key.color);
+    this.leafDrift.update(dt);
     this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
     this.brain.update(dt);
@@ -271,10 +296,16 @@ export class Terrarium {
     const gloom = THREE.MathUtils.smoothstep(w.clouds.cover * 0.55 + w.clouds.storminess * 0.75, 0, 1);
     const flash = w.flash * (1 - 0.55 * day);
     const overcast = gloom;
-    this.key.intensity = 11 * day * (1 - gloom * 0.55);
-    this.key.color.setRGB(1.0, 0.84, 0.64).lerp(new THREE.Color(0.86, 0.9, 1.0), gloom * 0.5);
+    // the lamp follows its arc like a sun: shadows swing through the day and
+    // the light comes in low, long and amber in the morning and evening
+    const sd = w.sunDir;
+    const lift = Math.max(sd.y, 0.42);
+    this.key.position.set(sd.x * 0.85, lift, Math.max(0.12, sd.z)).normalize().multiplyScalar(1.12).add(this.key.target.position);
+    this.key.intensity = 11 * day * (1 - gloom * 0.55) * (1 + 0.25 * w.golden);
+    this.key.color.copy(w.sunColor).lerp(STORM_LIGHT, gloom * 0.5);
     this.heat.intensity = 0.75 * day * (1 - gloom * 0.4);
     this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
+    this.hemi.color.setRGB(0.55, 0.45, 0.35).lerp(DUSK_SKY, w.golden * 0.7);
     this.fill.intensity = (0.35 + 0.55 * day) * (1 - gloom * 0.25);
     this.moon.intensity = 0.55 * (1 - day);
     this.rim.intensity = 0.2 + 0.3 * day + flash * 0.8;
@@ -284,7 +315,7 @@ export class Terrarium {
     this.case.regulatorGlow.emissiveIntensity = 1.2 + 1.3 * day;
     this.room.setLampLevel(0.75 + 0.25 * (1 - day));
     const cl = this.weather.clouds.shared;
-    cl.uLightColor.value.setRGB(1.0 * day + 0.035, 0.84 * day + 0.05, 0.64 * day + 0.11).multiplyScalar(1 - gloom * 0.45);
+    cl.uLightColor.value.copy(w.sunColor).multiplyScalar(day).add(NIGHT_GLOW).multiplyScalar(1 - gloom * 0.45);
     cl.uAmbient.value.setRGB(0.03 + 0.2 * day, 0.03 + 0.17 * day, 0.04 + 0.14 * day);
     cl.uSky.value.setRGB(0.05 + 0.33 * day, 0.05 + 0.3 * day, 0.06 + 0.26 * day).lerp(new THREE.Color(0.11, 0.12, 0.14), gloom * 0.6);
     cl.uLidGlow.value.copy(this.case.regulatorGlow.emissive).multiplyScalar(0.6);
@@ -392,8 +423,10 @@ export class Terrarium {
     this.camera.position.add(this.controls.target.clone().sub(before));
     const d = this.camera.position.distanceTo(this.controls.target);
     if (d > 0.42) this.camera.position.lerp(this.controls.target, 1 - Math.exp(-dt * 1.2));
+    // in the cave: come round to the front to look in at the mouth
+    if (this.brain.mode === 'shelter') this.camera.position.lerp(CAVE_VIEW, 1 - Math.exp(-dt * 0.5));
     // never let the follow camera dip into the ground or a rock
-    const floor = this.surface.heightAt(this.camera.position.x, this.camera.position.z) + 0.012;
+    const floor = this.surface.topAt(this.camera.position.x, this.camera.position.z) + 0.012;
     if (this.camera.position.y < floor) this.camera.position.y = floor;
   }
 
@@ -403,6 +436,7 @@ export class Terrarium {
     const w = this.host.clientWidth || innerWidth, h = this.host.clientHeight || innerHeight;
     const pxScale = h * this.renderer.getPixelRatio() / (2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2));
     this.weather?.setPixelScale(pxScale);
+    this.motes?.setPixelScale(pxScale);
     this.water?.setPixelScale(pxScale);
     this.renderer.setSize(w, h, false);
     this.renderer.domElement.style.width = `${w}px`;

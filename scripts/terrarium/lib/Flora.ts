@@ -3,7 +3,7 @@ import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {Surface, SurfaceKind} from './Surface';
 import {addFoliage} from './Foliage';
 import {mulberry32} from './Textures';
-import {WATER_LEVEL, poolDistance, poolDepth} from './Ground';
+import {WATER_LEVEL, poolDistance, poolDepth, caveKeepClear, CAVE} from './Ground';
 import {TANK} from './Case';
 import {leafGeometry, stemGeometry, placeLeaf, tag} from './Plants';
 
@@ -297,10 +297,13 @@ export class Flora {
     const rnd = mulberry32(4321);
     const at = (local: Parts, x: number, z: number, opts: {y?: number; normal?: THREE.Vector3; scale?: number; yaw?: number; sink?: number} = {}) => {
       const y = opts.y ?? surface.heightAt(x, z);
+      // nothing grows on the cave floor or across its mouth (the roof is fine)
+      if (caveKeepClear(x, z) && y < CAVE.floor + CAVE.h + 0.02) return false;
       const n = opts.normal ?? up;
       const q = new THREE.Quaternion().setFromUnitVectors(up, n.clone().lerp(up, 0.5).normalize()).multiply(new THREE.Quaternion().setFromAxisAngle(up, opts.yaw ?? rnd() * Math.PI * 2));
       const m = new THREE.Matrix4().compose(new THREE.Vector3(x, y - (opts.sink ?? 0.002), z), q, new THREE.Vector3().setScalar(opts.scale ?? 1));
       for (const p of local) {p.applyMatrix4(m); this.parts.push(p);}
+      return true;
     };
     const dry = (x: number, z: number) => poolDistance(x, z) > 0.05 && surface.kindAt(x, z) !== SurfaceKind.Water;
     const inside = (x: number, z: number, m = 0.03) => Math.abs(x) < TANK.w / 2 - m && Math.abs(z) < TANK.d / 2 - m;
@@ -326,7 +329,7 @@ export class Flora {
       [() => orchid(rnd), 0.47, -0.14, 0.04], [() => orchid(rnd), -0.52, -0.18, 0.04],
       [() => calathea(rnd), 0.53, -0.19, 0.06], [() => calathea(rnd), -0.38, -0.205, 0.06], [() => calathea(rnd), 0.38, -0.2, 0.05],
     ];
-    for (const [f, x, z, r] of spots) if (dry(x, z)) {at(f(), x, z); this.obstacles.push({x, z, r});}
+    for (const [f, x, z, r] of spots) if (dry(x, z) && at(f(), x, z)) this.obstacles.push({x, z, r});
     // Sedges along the shore and in the back corners.
     for (let i = 0, placed = 0; i < 400 && placed < 16; i++) {
       const x = (rnd() - 0.5) * (TANK.w - 0.06), z = (rnd() - 0.5) * (TANK.d - 0.06);
