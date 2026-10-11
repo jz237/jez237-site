@@ -1,4 +1,6 @@
 import { BATHYMETRY_GLSL } from './bathymetry-shader.js?v=philly-2026092201';
+import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
+import { WATER_SURFACE_GLSL } from './water-surface.js?v=philly-2026101001';
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
 import { fetchTile } from './tile-cache.js?v=philly-2026092121';
 export { fetchTile };
@@ -321,6 +323,10 @@ export function createImageryTiles(THREE, options) {
   `;
   const fragmentShader = `
     ${BATHYMETRY_GLSL}
+    ${CITY_LIGHT_GLSL}
+    ${WATER_SURFACE_GLSL}
+    uniform vec3 uSunDir;
+    uniform vec3 uAerialLight;
     uniform vec2 uRegionSize;
     uniform sampler2D uTile; uniform float uCompareMode; uniform float uComparePosition;
     uniform sampler2D uPrevious; uniform float uBlend; uniform float uArrival;
@@ -336,11 +342,13 @@ export function createImageryTiles(THREE, options) {
       c = pow(max(c, vec3(0.0)), vec3(0.98));
       c = mix(vec3(dot(c, vec3(0.2126,0.7152,0.0722))), c, 1.08);
       c = clamp((c - 0.5) * 1.055 + 0.5, 0.0, 1.0);
+      c*=uAerialLight*mix(.48,1.0,citySunVisibility(vWorld,vec3(0.0,1.0,0.0),uSunDir));
+      c=shadeMappedWater(c,vWorld,uCameraPos,uSunDir);
       float depth = length(vWorld-uCameraPos) * uFogDensity * exp(-max(0.0,vElev)/260.0);
-      vec2 edgeDistance = min(vUv, 1.0-vUv);
-      vec2 aa = max(fwidth(vUv), vec2(.00001));
-      float edge = smoothstep(0.0, aa.x*.6, edgeDistance.x) * smoothstep(0.0, aa.y*.6, edgeDistance.y);
-      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), uArrival * edge);
+      // Adjacent tiles meet at a shared edge. Fading each edge separately
+      // exposes the brighter fallback as a fine line through the photograph.
+      // Raster coverage handles the boundary; fade only the tile's arrival.
+      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), uArrival);
     }
   `;
   function remove(key) {

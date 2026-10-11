@@ -12,6 +12,9 @@
  */
 
 import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+import { CITY_LIGHT_GLSL, createCityUniforms } from './city-lighting.js?v=philly-2026100901';
+import { waterMaskUniforms } from './water-mask.js?v=philly-2026101001';
+import { WATER_SURFACE_GLSL } from './water-surface.js?v=philly-2026101001';
 
 import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
 
@@ -60,6 +63,8 @@ const VERTEX_SHADER = /* glsl */ `
 `;
 
 const FRAGMENT_SHADER = /* glsl */ `
+  ${CITY_LIGHT_GLSL}
+  ${WATER_SURFACE_GLSL}
   precision highp float;
 
   uniform sampler2D uHeight;
@@ -84,6 +89,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform vec3  uContourColor;
   uniform vec3  uContourIndexColor;
   uniform vec3  uCameraPos;
+  uniform vec3  uAerialLight;
 
   uniform float uKey;
   uniform float uAmbient;
@@ -239,8 +245,9 @@ const FRAGMENT_SHADER = /* glsl */ `
     float green = smoothstep(.008, .045, aerialBase.g - aerialBase.r)
       * smoothstep(.01, .06, aerialBase.g - aerialBase.b);
     aerialBase = mix(aerialBase, aerialBase * vec3(1.08, 1.13, .85), green * uDiorama * .7);
-    vec3 aerialLit = aerialBase * aerialShade;
+    vec3 aerialLit = aerialBase * aerialShade * uAerialLight;
     vec3 lit = mix(reliefLit, aerialLit, surfaceImagery);
+    lit *= mix(.48,1.0,citySunVisibility(vWorld,n,uSunDir));
 
     vec3 viewDir = normalize(uCameraPos - vWorld);
     vec3 halfVec = normalize(uSunDir + viewDir);
@@ -251,9 +258,10 @@ const FRAGMENT_SHADER = /* glsl */ `
     // flatShade because plain "flat" is a reserved interpolation qualifier
     // in GLSL ES 3.0, which is what three compiles to on WebGL 2.
     vec3 reliefFlat = reliefBase * (uAmbient * 0.6 + 0.75) * uExposure * 0.8;
-    vec3 flatShade = mix(reliefFlat, aerialBase, surfaceImagery);
+    vec3 flatShade = mix(reliefFlat, aerialBase * uAerialLight, surfaceImagery);
     float effectiveHillshade = mix(uHillshade, uHillshade * mix(0.18, 1.0, uDiorama), surfaceImagery);
     vec3 color = mix(flatShade, lit, effectiveHillshade);
+    color = shadeMappedWater(color,vWorld,uCameraPos,uSunDir);
 
     // ---- contours ------------------------------------------------------
     if (uContourStrength > 0.001 && uContourInterval > 0.0) {
@@ -440,6 +448,8 @@ export function createTerrain(THREE, options) {
   let hasDetail = false;
 
   const uniforms = {
+    ...(options.water?.uniforms || waterMaskUniforms(THREE)),
+    ...(options.lighting?.uniforms || createCityUniforms(THREE)),
     ...bathymetryUniforms(THREE, heightTex),
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },
@@ -468,6 +478,7 @@ export function createTerrain(THREE, options) {
     uContourColor: { value: new THREE.Vector3(0.1, 0.08, 0.05) },
     uContourIndexColor: { value: new THREE.Vector3(0.05, 0.04, 0.02) },
     uCameraPos: { value: new THREE.Vector3() },
+    uAerialLight: { value: new THREE.Vector3(1, 1, 1) },
     uKey: { value: 1.15 },
     uAmbient: { value: 0.34 },
     uFogDensity: { value: 1.2e-5 },
