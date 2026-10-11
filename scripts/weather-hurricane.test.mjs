@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  advisoryRank, advisoryTime, basinFor, buildStorms, direction, escapeHtml,
+  CACHE_MAX_AGE, advisoryRank, advisoryTime, basinFor, buildStorms, cacheIsRecent, direction, escapeHtml,
   fetchLayers, forecastTime, intensity, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
-  position, probability, queryUrl, validateCollection, validateForecastCollection, wind
+  position, probability, queryUrl, validateCollection, validateForecastCollection, validateLayerCollection, wind
 } from '../weather/hurricane-data.mjs';
 import { satelliteTime } from '../weather/hurricane-satellite.mjs';
 
@@ -115,6 +115,8 @@ test('old and unverified advisory times are visibly stale; fresh issuance surviv
   assert.equal(buildStorms(collection([point()]),NOW)[0].stale, false);
   assert.equal(buildStorms(collection([point()]),NOW+13*3600000)[0].stale, true);
   assert.equal(buildStorms(collection([point({advdate:'unknown',idp_filedate:null})]),NOW)[0].stale, true);
+  assert.equal(buildStorms(collection([point({advdate:'unknown',idp_filedate:NOW})]),NOW)[0].stale, true);
+  assert.equal(buildStorms(collection([point({idp_filedate:NOW-24*3600000})]),NOW)[0].stale, false);
   assert.equal(buildStorms(collection([point()]),NOW-2*3600000)[0].stale, true);
 });
 
@@ -127,6 +129,7 @@ test('probability, basin and movement normalization preserve unavailable data', 
   assert.equal(basinFor({basin:'Atlantic'}),'atlantic');
   assert.equal(basinFor({basin:'cp'}),'pacific');
   assert.equal(basinFor({basin:'North Pacific'}),'unknown');
+  assert.equal(basinFor(null),'unknown');
   assert.equal(direction(360),'N');
   assert.equal(direction(-45),'NW');
   assert.equal(direction(null),'—');
@@ -154,6 +157,42 @@ test('Pacific tracks and split polygons stay continuous across the date line', (
 test('a real empty FeatureCollection is valid; API errors and truncated responses are not', () => {
   assert.equal(validateCollection(EMPTY),EMPTY);
   for (const invalid of [{error:{code:500}},{features:[]},{...EMPTY,exceededTransferLimit:true},{...EMPTY,properties:{exceededTransferLimit:true}}]) assert.throws(()=>validateCollection(invalid));
+});
+
+test('optional map geometry is checked before rendering, including rings and multipart shapes', () => {
+  const ring = [[-70,20],[-68,20],[-68,22],[-70,20]];
+  const feature = geometry => ({type:'Feature',properties:{basin:'AL'},geometry});
+  for (const name of ['cones','outlook']) {
+    for (const geometry of [{type:'Polygon',coordinates:[ring]}, {type:'MultiPolygon',coordinates:[[ring]]}]) {
+      assert.doesNotThrow(()=>validateLayerCollection(name,collection([feature(geometry)])));
+    }
+    for (const bad of [null, {}, {type:'Polygon',coordinates:[]}, {type:'Polygon',coordinates:[ring.slice(0,-1)]},
+      {type:'Polygon',coordinates:[[...ring.slice(0,-1),[-70,21]]]}, {type:'MultiPolygon',coordinates:[[[]]]},
+      {type:'Polygon',coordinates:[[[null,20],[-68,20],[-68,22],[null,20]]]}, {type:'toString',coordinates:ring},
+      {type:'Point',coordinates:[-70,20]}]) assert.throws(()=>validateLayerCollection(name,collection([feature(bad)])));
+  }
+  assert.doesNotThrow(()=>validateLayerCollection('warnings',collection([feature({type:'MultiLineString',coordinates:[ring.slice(0,2)]})])));
+  assert.throws(()=>validateLayerCollection('warnings',collection([feature({type:'LineString',coordinates:[[-70,91],[-69,20]]})])));
+  assert.doesNotThrow(()=>validateLayerCollection('history',collection([point()])));
+  assert.throws(()=>validateLayerCollection('history',collection([point({},['-70',20])])));
+  for (const bad of [null, {}, {...feature({type:'Polygon',coordinates:[ring]}),properties:[]}]) assert.throws(()=>validateLayerCollection('cones',collection([bad])));
+  assert.throws(()=>validateLayerCollection('outlook',collection([{...feature({type:'Polygon',coordinates:[ring]}),properties:null}])));
+  assert.doesNotThrow(()=>validateLayerCollection('warnings',EMPTY));
+});
+
+test('saved data has a 24-hour limit and cannot use an invalid or future check time', () => {
+  assert.equal(cacheIsRecent(NOW, NOW),true);
+  assert.equal(cacheIsRecent(NOW-CACHE_MAX_AGE, NOW),true);
+  for (const bad of [null, undefined, NaN, Infinity, '2026-10-11', NOW-CACHE_MAX_AGE-1, NOW+60001]) assert.equal(cacheIsRecent(bad,NOW),false);
+});
+
+test('malformed optional geometry makes only its layer unavailable', async () => {
+  const malformed = collection([{type:'Feature',properties:{basin:'AL'},geometry:{type:'Polygon',coordinates:[[null]]}}]);
+  const bundle = await fetchLayers(async url => ({ok:true,json:async()=>url.includes('/3/') ? malformed : url.includes('/5/') ? collection([point()]) : EMPTY}),NOW);
+  assert.equal(bundle.layers.outlook,undefined);
+  assert.deepEqual(bundle.errors,['outlook']);
+  assert.equal(bundle.layers.points.features.length,1);
+  assert.deepEqual(bundle.layers.cones,EMPTY);
 });
 
 test('a failed mandatory feed is not interpreted as no storms, while independent outlook can load', async () => {

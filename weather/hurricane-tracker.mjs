@@ -1,8 +1,8 @@
 import {
-  MAX_AGE, REFRESH_INTERVAL, buildStorms, direction, escapeHtml as esc,
+  MAX_AGE, CACHE_MAX_AGE, REFRESH_INTERVAL, buildStorms, cacheIsRecent, direction, escapeHtml as esc,
   fetchLayers, historyTime, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
-  position, probability, riskColor, basinFor, validateCollection, validateForecastCollection, wind
-} from './hurricane-data.mjs?v=20261010-3';
+  position, probability, riskColor, basinFor, validateLayerCollection, validateForecastCollection, wind
+} from './hurricane-data.mjs?v=20261010-6';
 import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
 
 const root = document.getElementById('weather-hurricanes');
@@ -13,9 +13,9 @@ const LABELS = { points: 'storm positions', cones: 'forecast cones', history: 'p
 const WATCHES = { HWR: ['Hurricane warning', '#ff676b'], HWA: ['Hurricane watch', '#f2a3d0'], TWR: ['Tropical storm warning', '#64b3ff'], TWA: ['Tropical storm watch', '#ffe083'] };
 const BOUNDS = { atlantic: [[3, -102], [49, -18]], pacific: [[1, -179], [43, -79]], all: [[1, -173], [52, -25]] };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const state = { basin: 'all', selected: null, step: 0, unit: 'mph', storms: [], bundle: null, cached: false, failedRefresh: false, loading: false, inView: true, initialized: false, lastAttempt: 0, basemapError: false, layers: { cones: true, history: true, outlook: true, warnings: true } };
+const state = { basin: 'all', selected: null, step: 0, unit: 'mph', storms: [], bundle: null, cached: false, expiredCache: false, failedRefresh: false, loading: false, inView: true, initialized: false, lastAttempt: 0, basemapError: false, layers: { cones: true, history: true, outlook: true, warnings: true } };
 let map, graphics, highlight, labelLayer, playback, satellite, land;
-let observer, resizeObserver;
+let observer, resizeObserver, cacheExpiry;
 const outlookLayers = new Map();
 
 function formatTime(value, date = true) {
@@ -44,10 +44,15 @@ function stormSymbol() {
 function loadCache() {
   try {
     const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
-    if (!cached || !Number.isFinite(cached.checkedAt) || Date.now() - cached.checkedAt > 24 * 3600000 || cached.checkedAt > Date.now() + 60000) return null;
+    if (!cached || !cacheIsRecent(cached.checkedAt)) return null;
     if (!cached.layers?.points) return null;
-    Object.values(cached.layers).forEach(validateCollection);
     validateForecastCollection(cached.layers.points);
+    cached.errors = Array.isArray(cached.errors) ? cached.errors.filter(name => Object.hasOwn(LABELS, name)) : [];
+    for (const [name, data] of Object.entries(cached.layers)) {
+      if (name === 'points') continue;
+      try { validateLayerCollection(name, data); }
+      catch { delete cached.layers[name]; if (Object.hasOwn(LABELS, name) && !cached.errors.includes(name)) cached.errors.push(name); }
+    }
     return cached;
   } catch { return null; }
 }
@@ -125,13 +130,13 @@ function renderStatus() {
   const unavailable = !bundle.layers.points;
   const old = state.cached || state.storms.some(s => s.stale) || visibleOutlooks().some(isOldFeature);
   root.dataset.feed = unavailable ? 'error' : old ? 'stale' : 'fresh';
-  $('#hurricane-feed-status').textContent = `${state.cached ? 'Saved data' : 'NOAA checked'} · ${formatTime(bundle.checkedAt, false)}`;
+  $('#hurricane-feed-status').textContent = unavailable && state.expiredCache ? 'Saved storm data expired' : `${state.cached ? 'Saved data' : 'NOAA checked'} · ${formatTime(bundle.checkedAt, false)}`;
   const count = visibleStorms().length, areas = visibleOutlooks().length;
   $('#hurricane-basin-count').textContent = `${unavailable ? 'Storm feed unavailable' : `${count} forecast ${count === 1 ? 'system' : 'systems'}`} · ${bundle.layers.outlook ? `${areas} ${areas === 1 ? 'area' : 'areas'} to watch` : 'Outlook unavailable'}`;
   const messages = [];
   if (state.basemapError) messages.push('The coastline map could not load. Storm coordinates and advisory details remain available.');
   if (state.cached && state.failedRefresh) messages.push(`The feed could not be refreshed. Showing saved data checked ${formatTime(bundle.checkedAt)}.`);
-  else if (unavailable) messages.push('NOAA storm positions are temporarily unavailable. This does not mean there are no storms.');
+  else if (unavailable) messages.push(`${state.expiredCache ? 'The saved storm data has expired. ' : ''}NOAA storm positions are temporarily unavailable. This does not mean there are no storms.`);
   if (state.storms.some(s => s.stale)) messages.push('Some advisories are more than 12 hours old or have an unverified time. Check NHC before using them.');
   if (visibleOutlooks().some(isOldFeature)) messages.push('The development outlook has an older or unverified publication time.');
   const missing = (bundle.errors || []).filter(name => name !== 'points');
@@ -270,16 +275,28 @@ function fitView() {
 }
 
 function renderBundle(bundle, cached = false, initialFit = false) {
+  clearTimeout(cacheExpiry);
   state.bundle = bundle;
   state.cached = cached;
   state.storms = buildStorms(bundle.layers.points);
   if (!visibleStorms().some(s => s.id === state.selected)) { state.selected = visibleStorms()[0]?.id || null; state.step = 0; }
   renderList(); renderDetail(); renderOutlooks(); drawMap(); renderStatus();
   if (initialFit) fitView();
+  if (bundle.layers.points) cacheExpiry = setTimeout(expireSavedData, Math.max(0, bundle.checkedAt + CACHE_MAX_AGE - Date.now()) + 1);
+}
+
+function expireSavedData() {
+  const bundle = state.bundle;
+  if (!bundle?.layers.points || cacheIsRecent(bundle.checkedAt)) return;
+  state.expiredCache = true;
+  state.failedRefresh = true;
+  try { localStorage.removeItem(CACHE_KEY); } catch { /* Storage remains optional. */ }
+  renderBundle({ checkedAt:bundle.checkedAt, layers:{}, errors:Object.keys(LABELS) });
 }
 
 async function refresh() {
   if (state.loading) return;
+  expireSavedData();
   satellite?.refresh();
   state.loading = true;
   state.lastAttempt = Date.now();
@@ -287,19 +304,22 @@ async function refresh() {
   $('#hurricane-refresh').textContent = 'Checking…';
   try {
     const bundle = await fetchLayers();
-    const initialFit = !state.bundle;
+    expireSavedData();
+    const initialFit = !state.bundle?.layers.points;
     if (!bundle.layers.points && state.bundle?.layers.points) {
       state.failedRefresh = true;
       renderBundle(state.bundle, true);
     } else {
       state.failedRefresh = false;
+      if (bundle.layers.points) state.expiredCache = false;
       renderBundle(bundle, false, initialFit);
       if (bundle.layers.points) try { localStorage.setItem(CACHE_KEY, JSON.stringify(bundle)); } catch { /* Private browsing or storage quota must not prevent live data. */ }
     }
   } catch {
     state.failedRefresh = true;
-    if (state.bundle) renderBundle(state.bundle, true);
-    else { root.dataset.feed = 'error'; showNotice('The hurricane feed is temporarily unavailable. Open the NHC advisories for current information.'); showMapMessage('Storm data unavailable'); }
+    expireSavedData();
+    if (state.bundle?.layers.points) renderBundle(state.bundle, true);
+    else renderBundle({ checkedAt:Date.now(), layers:{}, errors:Object.keys(LABELS) });
   } finally {
     state.loading = false;
     $('#hurricane-refresh').disabled = false;
@@ -438,7 +458,10 @@ function bindControls() {
   });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopPlayback();
-    else if (state.inView && Date.now() - state.lastAttempt >= REFRESH_INTERVAL) refresh();
+    else {
+      expireSavedData();
+      if (state.inView && Date.now() - state.lastAttempt >= REFRESH_INTERVAL) refresh();
+    }
   });
 }
 
@@ -453,7 +476,11 @@ async function initialize() {
   const mapPromise = initializeMap();
   await refresh();
   await mapPromise;
-  setInterval(() => { if (!document.hidden && state.inView && Date.now() - state.lastAttempt >= REFRESH_INTERVAL) refresh(); }, 60000);
+  setInterval(() => {
+    if (document.hidden) return;
+    expireSavedData();
+    if (state.inView && Date.now() - state.lastAttempt >= REFRESH_INTERVAL) refresh();
+  }, 60000);
 }
 
 if (root) {

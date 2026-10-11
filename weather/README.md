@@ -27,6 +27,10 @@ The cone represents uncertainty in the center track, not storm size or every haz
 
 Transient network, server, and ArcGIS JSON errors receive one retry for the affected layer. Both attempts share the same 16-second request deadline; the retry bypasses browser caching of an error response. HTTP rate limits and other nontransient client errors are not retried. Persistent failures remain explicitly unavailable.
 
+Optional GeoJSON layers are validated before Leaflet sees them, including finite geographic coordinates, the expected geometry type, closed polygon rings, and a known basin for development areas. A malformed layer is reported as unavailable rather than silently dropping part of a warning coastline or development area. The other valid layers remain usable. A malformed optional layer in browser storage is discarded independently of valid saved forecast positions.
+
+The 24-hour saved-data limit also applies while a page remains open: an expiry timer and visibility checks remove expired storm positions and forecasts from the map, controls, and storage, with an explicit unavailable notice. A successful refresh restores the map. Advisory freshness is based on a verified issue time; a recent file-ingestion timestamp cannot make an unverified advisory appear fresh.
+
 ## Checks
 
 ```text
