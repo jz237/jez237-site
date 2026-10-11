@@ -50,7 +50,10 @@ void main(){
   float haze=1.0-exp(-start/45000.0);
   vec3 color=scattering/max(alpha,.0001);
   color=mix(color,uSkyColor,haze*.5);
-  gl_FragColor=vec4(color,alpha*(1.0-smoothstep(25000.0,42000.0,start)));
+  alpha*=1.0-smoothstep(25000.0,42000.0,start);
+  // Premultiply before half-resolution interpolation so transparent edge pixels
+  // cannot darken their neighboring cloud samples during upsampling.
+  gl_FragColor=vec4(color*alpha,alpha);
 }`;
 
 export function createClouds(THREE,renderer,depthTexture){

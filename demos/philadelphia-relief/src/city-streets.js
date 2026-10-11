@@ -26,7 +26,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(count*3),3);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;
     mesh.count=0;group.add(mesh);return mesh;};
-  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*8);
+  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*10);
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   function put(mesh,x,y,z,w,h,d,angle,tint){
     if(mesh.count>=mesh.instanceMatrix.count)return;
@@ -104,10 +104,12 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
         const ground=sampleElevation(projection.xToLon(p.x),projection.zToLat(p.z));
-        const y=ground*exaggeration+1.0,van=car.seed>.88,length=van?6.4:4.4;
+        // Tire bottoms sit just above the road instead of floating half a metre
+        // over it. Vans retain their taller body without sinking into the road.
+        const y=ground*exaggeration+.4,van=car.seed>.88,length=van?6.4:4.4;
         const tint=palette[Math.floor(car.seed*palette.length)%palette.length];
-        put(vehicles,p.x,y+.45,p.z,1.85,van?1.7:.85,length,p.angle,tint);
-        put(vehicles,p.x,y+1.1,p.z,1.6,.65,length*.52,p.angle,0x29424e);
+        put(vehicles,p.x,y+(van?.75:.25),p.z,1.85,van?1.7:.75,length,p.angle,tint);
+        put(vehicles,p.x,y+(van?1.1:.78),p.z,1.6,.6,length*.52,p.angle,0x29424e);
         // Four dark tyres and paired bright headlight lenses retain their scale up close.
         for(const side of [-1,1])for(const end of [-1,1]){
           const dx=Math.cos(p.angle)*side*.9+Math.sin(p.angle)*end*length*.31;
@@ -117,7 +119,12 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
         for(const side of [-1,1]){
           const hx=p.x+Math.sin(p.angle)*length*.51+Math.cos(p.angle)*side*.61;
           const hz=p.z+Math.cos(p.angle)*length*.51-Math.sin(p.angle)*side*.61;
-          put(vehicles,hx,y+.35,hz,.38,.18,.12,p.angle,[2.2,2.1,1.65]);
+          put(vehicles,hx,y+.25,hz,.38,.18,.12,p.angle,[2.2,2.1,1.65]);
+        }
+        for(const side of [-1,1]){
+          const tx=p.x-Math.sin(p.angle)*length*.51+Math.cos(p.angle)*side*.61;
+          const tz=p.z-Math.cos(p.angle)*length*.51-Math.sin(p.angle)*side*.61;
+          put(vehicles,tx,y+.25,tz,.38,.18,.12,p.angle,car.braking?[2.5,.035,.012]:[1.2,.015,.006]);
         }
       }
       uploadInstances(vehicles);

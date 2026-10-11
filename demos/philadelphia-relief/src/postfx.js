@@ -72,6 +72,9 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
   uniform float uRadius;
   uniform sampler2D uClouds;
   uniform float uCloudsOn;
+  uniform float uCloudBase;
+  uniform float uCameraHeight;
+  uniform vec3 uViewWorldY;
   uniform float uReflections;
   varying vec2 vUv;
 
@@ -125,14 +128,19 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
       color *= 1.0 - min(.48, occlusion * .14) * uContact;
     }
 
-    if(uCloudsOn>.5){
+    // A ray with both endpoints below the cloud deck cannot cross it. Most
+    // close-up street pixels therefore need no cloud/depth upsampling taps.
+    float surfaceHeight=uCameraHeight+dot(uViewWorldY,surface);
+    bool belowClouds=uCameraHeight<uCloudBase&&surfaceHeight<uCloudBase
+      &&texture2D(uDepth,vUv).r<.999999;
+    if(uCloudsOn>.5&&!belowClouds){
       vec4 cloud=vec4(0.0);float weight=0.0;
       float centerDepth=texture2D(uDepth,vUv).r;
       for(int x=-2;x<=2;x++)for(int y=-2;y<=2;y++){
         vec2 uv=vUv+vec2(float(x),float(y))*uTexel*2.0;
         float w=exp(-float(x*x+y*y)*.35);
         w*=step(abs(texture2D(uDepth,uv).r-centerDepth),.00001);
-        vec4 c=texture2D(uClouds,uv);cloud+=vec4(c.rgb*c.a,c.a)*w;weight+=w;
+        cloud+=texture2D(uClouds,uv)*w;weight+=w;
       }
       cloud/=max(weight,.001);
       color=color*(1.0-cloud.a)+cloud.rgb;
@@ -207,6 +215,8 @@ export function createPostFX(THREE, renderer) {
       uContact: { value: 0 },
       uRadius: { value: 25 },
       uClouds: { value: clouds.texture }, uCloudsOn: { value: 0 },
+      uCloudBase: { value: 1600 }, uCameraHeight: { value: 0 },
+      uViewWorldY: { value: new THREE.Vector3(0,1,0) },
     },
     vertexShader: QUAD_VERTEX,
     fragmentShader: COMPOSITE_FRAGMENT,
@@ -262,7 +272,11 @@ export function createPostFX(THREE, renderer) {
     },
 
     renderClouds(camera,sky,lighting,quality) {
-      compositeMat.uniforms.uReflections.value=quality==='performance'?0:1;
+      const u=compositeMat.uniforms,e=camera.matrixWorld.elements;
+      u.uReflections.value=quality==='performance'?0:1;
+      u.uCloudBase.value=lighting.uCloudBase.value;
+      u.uCameraHeight.value=camera.position.y;
+      u.uViewWorldY.value.set(e[1],e[5],e[9]);
       const on=lighting.uCloudCoverage.value>.01;
       compositeMat.uniforms.uCloudsOn.value=on?1:0;
       if(on)clouds.render(camera,sky,lighting,quality);

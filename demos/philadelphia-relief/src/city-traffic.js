@@ -74,7 +74,8 @@ export function createTraffic(graph,count=260,seed=239){
     const positions=occupied.get(edge.id)||[];
     if(positions.some(p=>Math.abs(p-distance)<12))continue;
     positions.push(distance);occupied.set(edge.id,positions);
-    cars.push({edge,distance,speed:0,cruise:6+random()*6,seed:random(),previousEdge:null,nextEdge:null});
+    cars.push({edge,distance,speed:0,cruise:6+random()*6,seed:random(),braking:true,
+      previousEdge:null,nextEdge:null});
   }
   function choose(car){
     const options=car.edge.to.out.filter(e=>e.to!==car.edge.from);
@@ -109,6 +110,7 @@ export function createTraffic(graph,count=260,seed=239){
         const turning=next&&edge.dx*next.dx+edge.dz*next.dz<.8;
         const cruise=turning&&edge.length-car.distance<span+12?Math.min(car.cruise,4.5):car.cruise;
         const target=Math.min(cruise,Math.sqrt(4*gap));
+        car.braking=target<car.speed-.2||car.speed<.4;
         car.speed+=Math.max(-dt*6,Math.min(dt*2,target-car.speed));
         car.distance+=Math.min(car.speed*dt,gap);
         let guard=0;
@@ -118,7 +120,7 @@ export function createTraffic(graph,count=260,seed=239){
           // Wait at the junction if the receiving lane has no room.
           if(reserved.has(next.id)||(queues.get(next.id)||[])
             .some(other=>other!==car&&other.edge===next&&other.distance<8)){
-            car.distance=car.edge.length-.1;car.speed=0;break;
+            car.distance=car.edge.length-.1;car.speed=0;car.braking=true;break;
           }
           reserved.add(next.id);
           car.distance-=car.edge.length;car.previousEdge=car.edge;car.edge=next;
