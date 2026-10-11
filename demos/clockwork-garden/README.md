@@ -592,6 +592,19 @@ alternated, the CPU throttled to a mid phone (÷4); the main thread within +4% (
 the planting ready within +10% (a stale bake grows the planting for 15 s instead of loading it in 0.3: `node tools/bake.mjs` after touching
 `src/world`, `src/materials`, `src/geometry`, `src/creatures` or the planting's own files), the payload within +40 KB.
 
+**How the page boots, and what was taken out of it** (`src/main.js`, `explore/nearfield.js`; measured with `tools/bootprofile.mjs`, `tools/bootcpu.mjs --cpu 4`). The loading screen waits for, in order: the materials and their procedural textures, the film's world (with the planting
+resolved against everything solid), the creatures, the interactive garden (`Explore`: the walks, the pool, the wildlife, the light field), and one frame of it drawn, which is where its
+shaders are built. A profile of the first launch showed that about half of it was the driver building shader programs one after another (about 250 programs, 5 ms each on
+the test machine, in one process, so nothing is gained by asking for them in parallel: a pass that issued them all before the first draw took exactly as long), and that a third of *those* were the film's, which someone who flies or follows never
+sees. Three changes: (1) **the film's own warm-up is only done when the page opens on the film** (`?mode=film`, `?t=`, `?paused=1`, capture and `?clean=1`: the eight frames and the
+two compile passes it used to run for everybody). (2) What the film's pass was also doing, without anyone knowing, was taking the post-processing passes and the lights' shadow maps through their first frame; without it the first two seconds of
+`?mode=fly` ran at 4 frames a second. So the film's pipeline is drawn once over an empty scene (a few milliseconds), and (3) the film's shaders are issued at that point and awaited by nobody, so the driver builds them in its own process while the
+interactive garden is being constructed (0.4 s hidden natively), and choosing the film from the landing finds them ready (its first frame took 0.3 s, it now takes about 0.08 s; the landing's fade starts first, on the compositor, before it is drawn). The
+planting's bake (1.8 MB) is now requested when the page's script starts, not once the planting is constructed, so on a slow link it arrives during the build instead of after it. The film's pixels: a page that opened on the film is unchanged byte for byte
+(`filmidentity`); one that opened on the garden and went to the film differs by a level or two over part of the picture at a few moments (something in what the film animates keeps state from the frames rendered before it: the largest differences are round the hero bee's legs), which
+`filmidentity` checks with a tolerance. Results against the build before (same machine, alternating): to the first frame 3.6 s -> 2.1 s natively (-44%), CPU ÷4 on 4G 12.1 s -> 10.5 s; the planting ready 1.6 s sooner;
+the CPU gate's per-frame lines unchanged (-1% to -3%), payload +1 KB. Also: `tileNoise` (the procedural textures) hoists what depends on x or y alone out of its pixel loop (the same numbers, bit for bit, 1.7x faster).
+
 ## URL parameters
 
 | Parameter | Effect |
@@ -618,6 +631,7 @@ the planting ready within +10% (a stale bake grows the planting for 15 s instead
 | `?adapt=0` | hold resolution and detail fixed (no frame governor) |
 | `?bake=0` | grow the bee-scale planting in the page instead of loading the pre-built one |
 | `?scans=0` | the procedural surfaces and reflections only (no photographed scans; for comparison) |
+| `?fw=1` | warm the film's shaders and frames at boot even when the page opens on the garden (the old boot; for A/B timing) |
 
 Film-only parameters (`t`, `paused`, `clean`, `capture`, `look`) open the film
 directly. Reduced motion (system setting or `?motion=reduced`) also applies to
@@ -648,7 +662,7 @@ node tools/drive.mjs --scenario tools/scenarios/outdoors.json --out review/x   #
 node tools/sweep.mjs --grid full --out review/explore/sweep               # camera sweep: positions x heights x yaws, contact sheets
 node tools/sweep.mjs --views tools/views/key.json --tod 0.05 --out ...      # fixed key views at an hour
 node tools/explorefps.mjs --q high                                          # real-time fps in fly mode at the busiest spots + follow
-node tools/filmidentity.mjs --before <port>                                 # the film is pixel-identical after exploring (and vs a rollback copy)
+node tools/filmidentity.mjs --before <port>                                 # the film is pixel-identical after exploring (and vs a rollback copy; from the garden within a tolerance)
 node tools/overlapcheck.mjs                                                 # does anything pass through anything? (film set and bee-scale set)
 node tools/living.mjs --shots tools/views/living.json --out review/x --sheet 1   # deterministic stills and frame strips (fly, follow, views, film)
 node tools/living.mjs --shots tools/views/night.json --out review/x --sheet 1     # night key views (night_tod.json: the hours; night2.json: ribs, moon)
@@ -664,7 +678,7 @@ node tools/cutaways.mjs [--secs 150] [--tod 0]                              # Fo
 node tools/followsmooth.mjs [--port <rollback>]                             # Follow camera fluidity: snaps, quick view turns, acceleration jolts
 node tools/landings.mjs [--mode fly] [--per 3] [--port <rollback>]          # lands APX-9 on every kind of bloom: how much of it the camera sees, stills
 node tools/flutter.mjs [--port <rollback>] [--secs 6]                       # the butterflies in flight: a still camera on a busy patch, a clip, flight numbers
-node tools/bootprofile.mjs [--net 4g] [--cpu 4] · node tools/bootcpu.mjs    # where the startup goes (network, boot steps, planting) / its CPU profile
+node tools/bootprofile.mjs [--net 4g] [--cpu 4] · node tools/bootcpu.mjs [--cpu 4]    # where the startup goes (network, boot steps, planting) / its CPU profile
 node tools/cachebust.mjs && node tools/bake.mjs && node tools/bakecheck.mjs  # stamp modules (and preload list), bake the planting, check the bake
 ```
 
