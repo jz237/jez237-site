@@ -10,6 +10,7 @@ import { wireLooks } from './looks.js?v=philly-2026092121';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092122';
 import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092201';
+import { createMapLifecycle } from './map-lifecycle.js?v=philly-2026101001';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092204';
 import { createCameraLayer } from './camera-layer.js?v=philly-2026092204';
 import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092204';
@@ -1230,25 +1231,19 @@ async function boot() {
     queueFrame(scheduledDelay);
   }
 
-  // Pause when the tab is hidden so a backgrounded map costs nothing.
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      running = false;
-      cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
-      frameTicket = undefined; frameTimer = undefined;
-    } else if (!running) {
+  function pauseLoop() {
+    running = false;
+    cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
+    frameTicket = undefined; frameTimer = undefined;
+  }
+  function resumeLoop() {
+    if (!running && !sceneDisposed) {
       running = true;
       last = performance.now();
       adaptive?.disturb();
       wake();
     }
-  });
-
-  dom.canvas.addEventListener('webglcontextlost', (event) => {
-    event.preventDefault();
-    running = false;
-    showBanner(webglFailure('lost'));
-  });
+  }
 
   ui.setCapture(() => {
     adaptive?.disturb();
@@ -1282,7 +1277,14 @@ async function boot() {
   queueFrame();
   finishLoading();
 
-  window.addEventListener('pagehide', () => {
+  createMapLifecycle({window,document,canvas:dom.canvas,pause:pauseLoop,resume:resumeLoop,
+    contextLost(){showBanner(webglFailure('lost'));},
+    contextRestored(){
+      cityLighting.invalidate();
+      if (status.mode !== MODE.FULL) showBanner(status);
+      else if (dom.degraded) dom.degraded.hidden = true;
+    },
+    dispose() {
     sceneDisposed = true;
     running = false; cancelAnimationFrame(frameTicket); clearTimeout(frameTimer); wakeState();
     for (const type of wakeEvents) document.removeEventListener(type, wake);
@@ -1299,8 +1301,8 @@ async function boot() {
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
     orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
     disposeMapChrome(); disposeWindows();
-  },
-      { once: true });
+    },
+  });
 
   // The visible field notes and gesture hint introduce the map without a blocking dialog.
 }

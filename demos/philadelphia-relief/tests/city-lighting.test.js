@@ -38,6 +38,16 @@ test('stationary buildings reuse shadow depth while cloud animation keeps advanc
   }finally{f.lighting.dispose();}
 });
 
+test('restoring a graphics context refreshes cached shadow depth before reusing it',()=>{
+  const f=fixture();
+  try{
+    f.update();f.update();assert.equal(f.renders.length,1);
+    f.lighting.invalidate();f.params.dt=.001;f.update();
+    assert.equal(f.renders.length,2,'empty restored depth targets are rebuilt immediately');
+    f.update();assert.equal(f.renders.length,2);
+  }finally{f.lighting.dispose();}
+});
+
 test('shadow depth refreshes for geometry, growth, clipping, transforms and lighting changes',()=>{
   const f=fixture();
   try{

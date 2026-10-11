@@ -117,6 +117,7 @@ export function createCityLighting(THREE, renderer) {
   const oldColor=new THREE.Color(); let age=1, size=2048, lightState=null, wasEnabled=false;
   return {
     uniforms,
+    invalidate(){lightState=null;wasEnabled=false;age=1;},
     update({group, focusX,focusZ,ground,exaggeration,sunDir,distance,state,quality,dt,time,miniature}) {
       uniforms.uCityTime.value=time;
       uniforms.uCloudCoverage.value=state.lightweight||state.era!=='present'||state.compareMode!=='off'
