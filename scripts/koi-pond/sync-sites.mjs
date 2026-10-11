@@ -1,7 +1,7 @@
 import {cp,readFile,writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
 const root=import.meta.dirname,repo=path.resolve(root,'../..'),dist=path.join(root,'dist');
-const targets=[['demos/hidden-reef-koi',true],['demos/koi-pond-garden',true],['prototypes/hidden-reef/learn/koi-pond',false],['prototypes/hidden-reef-header-preview/learn/koi-pond',false]];
+const targets=[['demos/hidden-reef-koi',true],['demos/koi-pond-garden',true]];
 for(const [relative,demo] of targets){
  const destination=path.resolve(repo,relative);
  await mkdir(destination,{recursive:true});

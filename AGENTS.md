@@ -28,3 +28,6 @@ task is `Philadelphia Relief Aircraft Recovery`. Do not reinstall under AppData:
 packaged Codex redirects that folder into its MSIX LocalCache, which Windows
 startup tasks cannot access through the same apparent path. Test recovery by
 running the scheduled task, not just launching the helper from Codex.
+
+# Hidden Reef ownership
+Read HIDDEN_REEF.md. Do not restore full Hidden Reef storefronts in this repository. Both prototypes paths are redirects only. Its authoritative editable source is on Evo X2, and its live site is https://hidden-reef.pages.dev/.

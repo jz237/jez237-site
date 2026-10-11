@@ -6,6 +6,8 @@ import { spawnSync } from 'node:child_process';
 import { checkPhillyLive } from './check_philly_live.mjs';
 import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
 import { checkPondFilterLinks } from './check_pond_filter_links.mjs';
+import { checkOceanSnapshot, checkOpenSeaLive } from './check_open_sea_live.mjs';
+import { waitForProductionBuilds } from './wait_pages_builds.mjs';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -13,6 +15,10 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const stage = resolve(process.argv[2] || '.');
 const prepareOnly = process.argv.includes('--prepare-only');
 const requireAircraft = process.argv.includes('--require-aircraft');
+const requireOutages = process.argv.includes('--require-outages');
+const publishBeforeArg = process.argv.find(arg => arg.startsWith('--publish-before='));
+const publishBefore = publishBeforeArg ? Date.parse(publishBeforeArg.split('=')[1]) : Infinity;
+if (Number.isNaN(publishBefore)) throw new Error('Invalid --publish-before timestamp.');
 const rel = relative(repo, stage);
 if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
   throw new Error('Use a separate, disposable public upload directory outside the repository.');
@@ -22,14 +28,15 @@ for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.h
 }
 // A current checkout does not make a reused public upload snapshot current.
 // Reject stale policy/storefront files before they can replace a repaired site.
-for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
+const phillyRoot = 'demos/philadelphia-relief/';
+const expectedBuild = JSON.parse(readFileSync(resolve(repo, phillyRoot, 'load/manifest.json'), 'utf8'));
+for (const path of ['_headers', `${phillyRoot}index.html`, `${phillyRoot}load/manifest.json`,
+  ...Object.keys(expectedBuild.files).map(path => `${phillyRoot}${path}`),
+  'prototypes/hidden-reef/index.html',
   'prototypes/hidden-reef-header-preview/index.html',
   'demos/hidden-reef-koi/index.html', 'demos/hidden-reef-koi/koi-pond.html',
   'demos/koi-pond-garden/index.html', 'demos/koi-pond-garden/koi-pond.html',
-  'prototypes/hidden-reef/learn/koi-pond/index.html',
-  'prototypes/hidden-reef-header-preview/learn/koi-pond/index.html',
-  'prototypes/hidden-reef/assets/pond-preview.js',
-  'prototypes/hidden-reef-header-preview/assets/pond-preview.js']) {
+  'HIDDEN_REEF.md']) {
   const expected = readFileSync(resolve(repo, path), 'utf8').replaceAll('\r\n', '\n');
   if (!existsSync(resolve(stage, path))
     || readFileSync(resolve(stage, path), 'utf8').replaceAll('\r\n', '\n') !== expected) {
@@ -37,6 +44,7 @@ for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
   }
 }
 const wranglerPackage = createRequire(import.meta.url).resolve('wrangler/package.json');
+checkOceanSnapshot(repo,stage);
 const wrangler = resolve(dirname(wranglerPackage),
   JSON.parse(readFileSync(wranglerPackage, 'utf8')).bin.wrangler);
 const env = { ...process.env, CF_PAGES_BRANCH: 'main',
@@ -54,9 +62,10 @@ async function verifyRelease(url) {
   // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
   for (let attempt = 0; attempt < 6; attempt++) {
     try {
-      await checkPhillyLive(url, fetch, { requireAircraft });
+      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages, expectedBuild });
       await checkHiddenReefImages(url);
       await checkPondFilterLinks(url);
+      await checkOpenSeaLive(url,repo);
       return;
     }
     catch (error) {
@@ -83,12 +92,21 @@ for (const marker of ['Invalid detail imagery request', 'Invalid neighborhood', 
 if (prepareOnly) {
   console.log('Upload prepared with compiled Functions. No deployment was made.');
 } else {
-  const deploy = branch => run(process.execPath, [wrangler, 'pages', 'deploy', stage,
-    '--project-name', 'jez237-site', '--branch', branch, '--commit-hash', sha, '--commit-dirty=false']);
+  const waitForBuilds = () => waitForProductionBuilds({ wrangler, repo, env,
+    accountId: env.CLOUDFLARE_ACCOUNT_ID, projectName: 'jez237-site', deadline: publishBefore });
+  const deploy = branch => {
+    if (Date.now() >= publishBefore) throw new Error('Publication cutoff reached; no deployment started.');
+    return run(process.execPath, [wrangler, 'pages', 'deploy', stage,
+      '--project-name', 'jez237-site', '--branch', branch, '--commit-hash', sha, '--commit-dirty=false']);
+  };
+  await waitForBuilds();
   const preview = deploy(`release-check-${sha.slice(0, 12)}`);
   const previewUrl = preview.match(/https:\/\/[a-z0-9]+\.jez237-site\.pages\.dev/)?.[0];
   if (!previewUrl) throw new Error('Preview deployment URL was not returned; production unchanged.');
   await verifyRelease(previewUrl);
+  // Git-triggered builds can finish after a direct upload and replace it with
+  // an older commit. Drain the recent production queue, then recheck main.
+  await waitForBuilds();
   git('fetch', 'origin', 'main');
   if (sha !== git('rev-parse', 'origin/main')) throw new Error('Main changed during preview; production unchanged.');
   deploy('main');
