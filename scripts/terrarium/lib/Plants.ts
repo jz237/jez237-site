@@ -31,6 +31,8 @@ export class MossMap {
       m = Math.min(1, Math.max(0, (m - 0.44) / 0.16));
       // a worn path where the lizard walks between the log and the pool
       const path = Math.exp(-(((x + 0.1) / 0.075) ** 2) - (((z - 0.15) / 0.1) ** 2));
+      // a deep cushion of moss in the front-left corner, in front of the log
+      m = Math.max(m, 0.95 * Math.exp(-(((x + 0.47) / 0.12) ** 2) - (((z - 0.18) / 0.07) ** 2)) * (0.75 + 0.5 * fbm(x * 40, z * 40, 2)));
       m *= 1 - 0.8 * path;
       // shore: wet gravel rather than moss
       const pd = poolDistance(x, z);
@@ -327,7 +329,7 @@ export class Plants {
       // a fuller back row and corners, so the case reads as a planted rainforest
       [-0.46, -0.21, 0.36, 1], [-0.27, -0.215, 0.3, 0], [0.24, -0.215, 0.33, 0], [0.56, -0.21, 0.36, 1], [0.08, -0.22, 0.26, 1],
       [-0.12, -0.215, 0.28, 2], [0.38, -0.22, 0.3, 2], [-0.56, -0.12, 0.26, 0], [0.57, -0.12, 0.24, 3], [-0.36, -0.13, 0.18, 3],
-      [0.45, -0.08, 0.2, 2], [-0.21, -0.07, 0.15, 3], [0.29, -0.09, 0.17, 2], [-0.5, 0.05, 0.16, 2], [-0.57, 0.2, 0.15, 1],
+      [0.45, -0.08, 0.2, 2], [-0.21, -0.07, 0.15, 3], [0.29, -0.09, 0.17, 2], [-0.5, 0.05, 0.16, 2], [-0.57, 0.2, 0.2, 1],
       // big fronds arching out at the sides, as in a lush planted case
       [-0.55, -0.03, 0.3, 0], [0.52, 0.06, 0.26, 1], [-0.38, -0.2, 0.34, 0], [0.33, -0.2, 0.32, 1], [0.12, -0.2, 0.3, 0],
       // and a tall screen of sword ferns along the back and up the sides
@@ -431,8 +433,10 @@ export class Plants {
     for (let i = 0; i < n; i++) flex.setX(i, flex.getX(i) * 0.3);
     const mat = leafMaterial(true);
     const list: THREE.Matrix4[] = [];
-    for (let i = 0; i < 4000 && list.length < 460; i++) {
-      const x = (rnd() - 0.5) * (TANK.w - 0.02), z = (rnd() - 0.5) * (TANK.d - 0.02);
+    for (let i = 0; i < 6000 && list.length < 560; i++) {
+      // a drift of leaves gathers in the front-left corner under the big plants
+      const drift = i % 5 === 0;
+      const x = drift ? -0.56 + rnd() * 0.3 : (rnd() - 0.5) * (TANK.w - 0.02), z = drift ? 0.1 + rnd() * 0.13 : (rnd() - 0.5) * (TANK.d - 0.02);
       const k = surface.kindAt(x, z);
       if (k === SurfaceKind.Water || k === SurfaceKind.Rock) continue;
       const y = surface.heightAt(x, z);
