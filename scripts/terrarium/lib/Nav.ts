@@ -1,6 +1,6 @@
 import {TANK} from './Case';
 import {Surface, SurfaceKind} from './Surface';
-import {WATER_LEVEL} from './Ground';
+import {WATER_LEVEL, groundHeight} from './Ground';
 
 /** Deepest water the dragon will wade through (metres). */
 export const WADE_DEPTH = 0.021;
@@ -42,13 +42,16 @@ export class Nav {
         if (depth > WADE_DEPTH) c = Infinity;
         else {c += 2.5 + depth * 120; this.wet[j * this.nx + i] = 1;}
       }
-      // slope from the height grid around the cell
+      // slope from the height grid around the cell (the soil at the foot of the
+      // log is judged by the soil, not by the log rising beside it)
       const e = 0.012;
-      const hx = surface.heightAt(x + e, z) - surface.heightAt(x - e, z);
-      const hz = surface.heightAt(x, z + e) - surface.heightAt(x, z - e);
+      const h = (xx: number, zz: number) => kind !== SurfaceKind.Wood && surface.kindAt(xx, zz) === SurfaceKind.Wood ? groundHeight(xx, zz) : surface.heightAt(xx, zz);
+      const hx = h(x + e, z) - h(x - e, z);
+      const hz = h(x, z + e) - h(x, z - e);
       const slope = Math.hypot(hx, hz) / (2 * e);
-      // the lizard clambers onto wood and rough stone readily, but not up steep soil
-      const limit = kind === SurfaceKind.Wood ? 2.8 : kind === SurfaceKind.Rock ? 1.15 : 0.9;
+      // the lizard clambers up the sides of the log and onto rough stone readily,
+      // but not up steep soil
+      const limit = kind === SurfaceKind.Wood ? 12 : kind === SurfaceKind.Rock ? 1.15 : 0.9;
       if (slope > limit) c = Infinity;
       else c += Math.min(slope, 1.5) * 3;
       if (kind === SurfaceKind.Rock) c = y > 0.24 ? Infinity : c + 2;

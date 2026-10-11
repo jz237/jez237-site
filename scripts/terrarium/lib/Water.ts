@@ -62,7 +62,9 @@ export class Water {
   private mirrorCam = new THREE.PerspectiveCamera();
   readonly fall: THREE.Mesh;
   readonly spray: THREE.Points;
-  private sprayData: {p: THREE.Vector3; v: THREE.Vector3; life: number; max: number}[] = [];
+  private sprayData: {p: THREE.Vector3; v: THREE.Vector3; life: number; max: number; floor: number}[] = [];
+  /** Where each fall lands on the ledge below it (the pool's impact is separate). */
+  private landings: THREE.Vector3[] = [];
   readonly surfaceMesh: THREE.Mesh;
 
   constructor(surface: Surface, private ledges: Ledge[]) {
@@ -99,13 +101,18 @@ export class Water {
     this.group.add(this.fall);
     const last = this.cascadePoints[this.cascadePoints.length - 1];
     this.uniforms.uImpact.value.set(last.x, WATER_LEVEL, last.z);
+    // white water churning where each fall lands on the ledge below
+    const foam = this.foamPads();
+    foam.layers.set(1);
+    foam.renderOrder = 4.5;
+    this.group.add(foam);
 
     // Spray and mist at the foot of the falls.
     const N = 260;
     const sp = new THREE.BufferGeometry();
     sp.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
     sp.setAttribute('aLife', new THREE.BufferAttribute(new Float32Array(N), 1));
-    for (let i = 0; i < N; i++) this.sprayData.push({p: new THREE.Vector3(0, -1, 0), v: new THREE.Vector3(), life: Math.random(), max: 1});
+    for (let i = 0; i < N; i++) this.sprayData.push({p: new THREE.Vector3(0, -1, 0), v: new THREE.Vector3(), life: Math.random(), max: 1, floor: WATER_LEVEL});
     this.spray = new THREE.Points(sp, new THREE.ShaderMaterial({
       uniforms: {uScale: {value: 900}, uLight: {value: 1}},
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
@@ -165,7 +172,7 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
       start.y = top(start.x, start.z) + 0.0035;
       const lip = new THREE.Vector3(l.cx + 0.004, 0, l.cz + l.hd * 0.95);
       lip.y = top(lip.x, lip.z) + 0.003;
-      if (prev) fallTo(prev, start, 8 + i, pts);
+      if (prev) {fallTo(prev, start, 8 + i, pts); this.landings.push(start.clone());}
       else pts.push(start.clone().add(new THREE.Vector3(0, 0.003, -0.008)), start);
       slide(start, lip, 5, pts);
       prev = lip;
@@ -180,8 +187,8 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
       const t = i / segs;
       const p = curve.getPointAt(t);
       const tan = curve.getTangentAt(t);
-      // Width grows as the sheet spreads down the cascade.
-      const w = 0.016 + 0.022 * t + 0.008 * Math.sin(t * 9.0);
+      // A broad sheet, spreading as it goes down the cascade (most of each ledge's width).
+      const w = 0.032 + 0.03 * t + 0.007 * Math.sin(t * 9.0);
       const side = new THREE.Vector3(-tan.z, 0, tan.x).normalize();
       const steep = Math.min(1, Math.max(0, -tan.y * 1.4));
       const normal = new THREE.Vector3().crossVectors(side, tan).normalize();
@@ -204,6 +211,53 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
     g.setIndex(idx);
     g.computeVertexNormals();
     return g;
+  }
+
+  /** Churning foam on each ledge where a fall lands, and around the plunge. */
+  private foamPads() {
+    const spots = [...this.landings.map((p) => ({p, r: 0.026})), {p: this.uniforms.uImpact.value.clone(), r: 0.04}];
+    const pos: number[] = [], aux: number[] = [], idx: number[] = [];
+    const SEG = 20;
+    spots.forEach(({p, r}, k) => {
+      const base = pos.length / 3;
+      pos.push(p.x, p.y + 0.0018, p.z + 0.004); aux.push(0, k);
+      for (let i = 0; i < SEG; i++) {
+        const a = (i / SEG) * Math.PI * 2;
+        // spread downstream (toward the glass) more than up
+        const rr = r * (1 + 0.35 * Math.max(0, Math.sin(a)));
+        pos.push(p.x + Math.cos(a) * rr, p.y + 0.0012, p.z + 0.004 + Math.sin(a) * rr * 0.8);
+        aux.push(1, k);
+        idx.push(base, base + 1 + i, base + 1 + ((i + 1) % SEG));
+      }
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('aFoam', new THREE.Float32BufferAttribute(aux, 2));
+    g.setIndex(idx);
+    const m = new THREE.ShaderMaterial({
+      uniforms: this.uniforms,
+      transparent: true, depthWrite: false, side: THREE.DoubleSide,
+      vertexShader: `attribute vec2 aFoam; varying vec2 vF; varying vec3 vW;
+void main(){ vF = aFoam; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
+      fragmentShader: /* glsl */ `
+uniform float uTime, uAmbient; uniform vec3 uKeyColor;
+varying vec2 vF; varying vec3 vW;
+${commonGLSL}
+void main(){
+  // bubbles boiling up and drifting away from the strike
+  vec2 p = vW.xz * 520.0 + vF.y * 17.0;
+  float b = wn(p + vec2(0.0, -uTime * 9.0)) * 0.55 + wn(p * 2.3 + vec2(uTime * 5.0, uTime * 3.0)) * 0.45;
+  float churn = wn(vW.xz * 140.0 + vec2(sin(uTime * 3.0 + vF.y), uTime * 2.2));
+  float k = (1.0 - smoothstep(0.35, 1.0, vF.x + (churn - 0.5) * 0.5));
+  float a = k * smoothstep(0.35, 0.75, b * 0.7 + churn * 0.5) * 0.85;
+  vec3 col = uKeyColor * 0.95 + vec3(0.14, 0.13, 0.12) * uAmbient;
+  gl_FragColor = vec4(col, a);
+}`,
+    });
+    const mesh = new THREE.Mesh(g, m);
+    mesh.frustumCulled = false;
+    mesh.name = 'falls-foam';
+    return mesh;
   }
 
   private surfaceMaterial() {
@@ -327,8 +381,9 @@ void main(){
   float streak = wn(vec2(u * 26.0, v * 7.0 - uTime * speed * 7.0)) * 0.6 + wn(fp) * 0.4;
   float churn = wn(vec2(u * 40.0, v * 60.0 - uTime * speed * 60.0));
   float edge = smoothstep(0.0, 0.18, u) * (1.0 - smoothstep(0.82, 1.0, u));
-  float aer = mix(0.25, 0.85, steep);
-  float foam = smoothstep(0.45 - aer * 0.3, 0.9, streak * 0.7 + churn * 0.45) * edge;
+  // falling water is white with air; sliding over a ledge it clears a little
+  float aer = mix(0.45, 1.0, steep);
+  float foam = smoothstep(0.42 - aer * 0.35, 0.82, streak * 0.7 + churn * 0.45) * edge;
   vec3 n = normalize(vN * (gl_FrontFacing ? 1.0 : -1.0));
   vec3 V = normalize(cameraPosition - vW);
   vec2 suv = gl_FragCoord.xy / uResolution;
@@ -339,7 +394,7 @@ void main(){
   float spec = pow(max(dot(reflect(-uKeyDir, n), V), 0.0), 60.0) * (0.3 + streak);
   col += uKeyColor * spec * 0.6 + F * 0.15;
   // fade in at the source, out into the pool
-  float a = edge * smoothstep(0.0, 0.04, vFlow.y) * (0.55 + 0.45 * foam);
+  float a = edge * smoothstep(0.0, 0.04, vFlow.y) * (0.62 + 0.38 * foam);
   a *= (1.0 - smoothstep(0.94, 1.0, vFlow.y)) * 0.6 + 0.4;
   gl_FragColor = vec4(col, a);
 }`,
@@ -435,14 +490,17 @@ void main(){
       if (d.life <= 0) {
         d.max = 0.6 + Math.random() * 1.4;
         d.life = 1;
-        d.p.set(impact.x + (Math.random() - 0.5) * 0.02, impact.y + 0.002, impact.z + (Math.random() - 0.5) * 0.02);
+        // most at the pool, the rest where each fall strikes a ledge
+        const at = Math.random() < 0.55 || !this.landings.length ? impact : this.landings[Math.floor(Math.random() * this.landings.length)];
+        d.floor = at === impact ? WATER_LEVEL : at.y;
+        d.p.set(at.x + (Math.random() - 0.5) * 0.025, at.y + 0.002, at.z + (Math.random() - 0.5) * 0.02);
         const a = Math.random() * Math.PI * 2, s = 0.02 + Math.random() * 0.06 * flow;
         d.v.set(Math.cos(a) * s, 0.03 + Math.random() * 0.08 * flow, Math.sin(a) * s);
       }
       d.v.y -= dt * 0.12;
       d.v.multiplyScalar(1 - dt * 1.5);
       d.p.addScaledVector(d.v, dt);
-      if (d.p.y < WATER_LEVEL) d.p.y = WATER_LEVEL;
+      if (d.p.y < d.floor) d.p.y = d.floor;
       pos.setXYZ(i, d.p.x, d.p.y, d.p.z);
       life.setX(i, d.life);
     });

@@ -99,6 +99,9 @@ export class Surface {
       this.ray.far = 0.14;
       let ceiling = Infinity;
       for (const h of this.meshes) {
+        // only rock makes a cave roof: the log's end overhangs the ground nearby,
+        // but nothing can walk under it
+        if (h.kind === SurfaceKind.Wood) continue;
         const hit = this.ray.intersectObject(h.mesh, false)[0];
         if (hit && hit.point.y < ceiling) ceiling = hit.point.y;
       }

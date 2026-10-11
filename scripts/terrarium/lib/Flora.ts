@@ -468,6 +468,8 @@ export class Flora {
       [-0.1, -0.04, 0.9], [0.43, -0.03, 1.1],
       // a tall canopy of big leaves along the back and in the corners
       [-0.46, -0.19, 2.3], [-0.28, -0.2, 2.0], [-0.08, -0.205, 2.1], [0.28, -0.2, 2.2], [0.52, -0.19, 2.4], [-0.56, -0.02, 1.8], [0.56, -0.1, 1.9],
+      // the front-left corner, as in a planted display case
+      [-0.53, 0.17, 1.5], [-0.42, 0.2, 1.15], [-0.31, 0.19, 1.0], [-0.55, 0.09, 1.3],
     ];
     for (const [x, z, size] of heartSpots) {
       if (!dry(x, z) || !inside(x, z, 0.04) || surface.kindAt(x, z) === SurfaceKind.Rock) continue;

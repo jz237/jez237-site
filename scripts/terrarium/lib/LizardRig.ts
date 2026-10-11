@@ -25,7 +25,10 @@ function insideGlass(p: THREE.Vector3, r: number) {
 export interface GroundQuery {
   heightAt(x: number, z: number): number;
   normalAt(x: number, z: number, out?: THREE.Vector3): THREE.Vector3;
+  /** What is there (SurfaceKind: 1 rock, 2 wood); optional. */
+  kindAt?(x: number, z: number): number;
 }
+const WOOD = 2;
 
 const K = LIZARD_SCALE; // metres per sculpt centimetre
 const UP = new THREE.Vector3(0, 1, 0);
@@ -218,6 +221,8 @@ export class LizardRig {
     return out.set((p.x - this.rootX) * K, p.y * K, p.z * K).applyMatrix4(this.body);
   }
 
+  /** Set by homeWorld: the last foot target had nothing under it within reach. */
+  private homeHangs = false;
   private homeWorld(leg: Leg, out: THREE.Vector3, ahead = 0) {
     const h = leg.homeLocal;
     const along = (h.x - this.rootX) * K + ahead;
@@ -231,10 +236,11 @@ export class LizardRig {
       out.z += this.inputs.z;
       insideGlass(out, 0.009); // a foot never steps through the glass
       out.y = this.ground.heightAt(out.x, out.z);
-      if (this.bodyY - out.y < reachDown + 1.2 * K) return out;
+      if (this.bodyY - out.y < reachDown + 1.2 * K) {this.homeHangs = false; return out;}
     }
     // Nothing within reach: hold the foot against the side of the perch.
     out.y = Math.max(out.y, this.bodyY - reachDown);
+    this.homeHangs = true;
     return out;
   }
 
@@ -271,7 +277,16 @@ export class LizardRig {
     const l = this.ground.heightAt(I.x - right.x * 0.022, I.z - right.z * 0.022);
     const r = this.ground.heightAt(I.x + right.x * 0.022, I.z + right.z * 0.022);
     const mid = this.ground.heightAt(I.x, I.z);
-    const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004);
+    // the trunk never sinks into what it straddles (the log, a stone): its belly
+    // stays above the highest point anywhere under its footprint
+    // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
+    let under = mid;
+    for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
+      const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
+      const h = this.ground.heightAt(sx, sz);
+      if (h - mid < 0.03 || (h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD)) under = Math.max(under, h);
+    }
+    const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006);
     const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
     const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
@@ -319,6 +334,21 @@ export class LizardRig {
         const q = insideGlass(p.clone(), r);
         I.x += q.x - p.x;
         I.z += q.z - p.z;
+      }
+      // Stone is solid as well: a flank that has strayed over a tall rock beside
+      // it is eased back off (the log, which it can climb, is left to lift it,
+      // except its tall root end).
+      const fwd = tmpV.set(Math.cos(I.heading), 0, -Math.sin(I.heading));
+      const right = tmpV2.set(-fwd.z, 0, fwd.x);
+      const mid = this.ground.heightAt(I.x, I.z);
+      for (const a of [0.035, 0, -0.035]) for (const sd of [-0.022, 0.022]) {
+        const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
+        const rise = this.ground.heightAt(sx, sz) - mid;
+        if (rise > 0.03 && (rise > 0.12 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
+          const k = Math.sign(sd) * 0.1 * Math.min(1, dt * 30);
+          I.x -= right.x * k * 0.035;
+          I.z -= right.z * k * 0.035;
+        }
       }
     }
     this.computeBodyFrame(dt);
@@ -541,7 +571,9 @@ export class LizardRig {
         if (leg.swingT >= 1) {
           leg.swing = false;
           leg.planted.copy(leg.to);
-          leg.planted.y = this.ground.heightAt(leg.to.x, leg.to.z);
+          // set down on what is under it, unless that is out of reach: then it hangs
+          // where homeWorld held it, against the side of the perch
+          leg.planted.y = Math.max(this.ground.heightAt(leg.to.x, leg.to.z), leg.to.y);
           leg.plantedYaw = leg.toYaw;
           this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
           leg.forcedStep = false;
@@ -549,8 +581,23 @@ export class LizardRig {
         }
       } else {
         this.homeWorld(leg, home);
+        // (in 3-D: a foot left on the floor as the body climbs onto the log must
+        // follow it up; a hanging foot is dealt with separately below)
         const drift = home.distanceTo(leg.planted);
         const yawErr = Math.abs(wrapAngle(I.heading - leg.plantedYaw));
+        // A foot with nothing under it (over the side of the log) stays hanging,
+        // gripping the flank, instead of pawing the air: it steps again only when
+        // there is something to step onto, or when the body has left it far behind.
+        const hangs = this.homeHangs && leg.planted.y - this.ground.heightAt(leg.planted.x, leg.planted.z) > 0.008;
+        if (hangs) {
+          // touching nothing, it is simply carried along with the body
+          const k = 1 - Math.exp(-dt * 10);
+          leg.planted.lerp(home, k);
+          leg.plantedYaw += wrapAngle(I.heading - leg.plantedYaw) * k;
+          leg.lastPhase = ph;
+          leg.heel = damp(leg.heel, 0.25, 8, dt);
+          continue;
+        }
         const gaitLift = this.moving && ph >= duty && leg.lastPhase < duty;
         const strained = drift > leg.reach * 0.55 || yawErr > 0.9;
         // When standing still, tidy up feet that are badly out of place one at a time.
