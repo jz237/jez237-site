@@ -7,9 +7,20 @@ export function createRegionalContext({map,L,escapeHtml,onError}) {
 
   function drawLabels() {
     labels.clearLayers();
+    const container = map.getContainer();
+    const viewport = container.getBoundingClientRect();
+    const inside = box => box.left >= viewport.left+4 && box.right <= viewport.right-4 && box.top >= viewport.top+4 && box.bottom <= viewport.bottom-4;
+    const obstacles = [...container.parentElement.querySelectorAll('.leaflet-control, .hurricane-map-actions, .hurricane-map-message, .hurricane-map-marker, .hurricane-storm-tooltip')]
+      .map(el=>el.getBoundingClientRect()).filter(box=>box.width && box.height);
+    // Measure before writing visibility; cities and oceans retain their real coordinates.
+    const contextLabels = [...container.querySelectorAll('.hurricane-city-label, .hurricane-ocean-label')]
+      .map(el=>({el,box:el.getBoundingClientRect()}));
+    for (const {el,box} of contextLabels) {
+      const visible = inside(box) && !obstacles.some(other=>overlaps(box,other));
+      el.style.visibility = visible ? '' : 'hidden';
+      if (visible) obstacles.push(box);
+    }
     if (!data || map.getZoom() < minimumZoom) return;
-    const viewport = map.getContainer().getBoundingClientRect();
-    const obstacles = [...map.getContainer().querySelectorAll('.hurricane-city-label, .hurricane-map-marker, .hurricane-storm-tooltip')].map(el=>el.getBoundingClientRect());
     for (const label of data.labels) {
       if (!map.getBounds().contains([label.lat,label.lon])) continue;
       const text = map.getZoom() >= 5.5 ? label.name : label.short;
@@ -17,7 +28,7 @@ export function createRegionalContext({map,L,escapeHtml,onError}) {
       const point = map.latLngToContainerPoint([label.lat,label.lon]);
       const box = {left:viewport.left+point.x-width/2,right:viewport.left+point.x+width/2,top:viewport.top+point.y-height/2,bottom:viewport.top+point.y+height/2};
       // Do not move a state name outside its geographic position to make room.
-      if (box.left < viewport.left+4 || box.right > viewport.right-4 || box.top < viewport.top+4 || box.bottom > viewport.bottom-4 || obstacles.some(other=>overlaps(box,other))) continue;
+      if (!inside(box) || obstacles.some(other=>overlaps(box,other))) continue;
       L.marker([label.lat,label.lon],{pane:'hurricane-regions',interactive:false,keyboard:false,icon:L.divIcon({className:'hurricane-region-label',html:escapeHtml(text),iconSize:[width,height],iconAnchor:[width/2,height/2]})}).addTo(labels);
       obstacles.push(box);
     }

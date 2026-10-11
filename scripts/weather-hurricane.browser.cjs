@@ -47,6 +47,22 @@ MAX WIND 25 KT...GUSTS 35 KT.
 FORECAST VALID ${utcStamp(wpcIssue+45*3600000)}Z...DISSIPATED
 `};
 
+async function readableMapLabels(page) {
+  const result=await page.evaluate(()=>{
+    const map=document.querySelector('#hurricane-map');
+    const controls=[...map.parentElement.querySelectorAll('.leaflet-control, .hurricane-map-actions, .hurricane-map-marker, .hurricane-storm-tooltip')]
+      .map(el=>el.getBoundingClientRect()).filter(box=>box.width&&box.height);
+    const visible=[...map.querySelectorAll('.hurricane-city-label, .hurricane-region-label, .hurricane-ocean-label')]
+      .filter(el=>getComputedStyle(el).visibility!=='hidden');
+    return {visible:visible.map(el=>el.textContent),overlaps:visible.filter(el=>{
+      const a=el.getBoundingClientRect();
+      return controls.some(b=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top);
+    }).map(el=>el.textContent)};
+  });
+  assert.deepEqual(result.overlaps,[],'Geographic labels must yield to map controls and storm markers');
+  return result.visible;
+}
+
 async function run() {
   await fs.mkdir(output,{recursive:true});
   const browser = await chromium.launch({channel:'msedge',headless:true});
@@ -165,6 +181,7 @@ async function run() {
     assert.ok(expandedMap.width>normalMap.width+100,'Desktop expanded map is not wider');
     assert.ok(expandedMap.height>normalMap.height,'Expanded map is not taller');
     await page.waitForTimeout(60);
+    await readableMapLabels(page);
     const offsetAfter=await markerOffset();
     assert.ok(offsetAfter.every((value,index)=>Math.abs(value-offsetBefore[index])<2),'Map center drifts when expanded');
     await page.locator('#hurricane-forecast-table summary').click();
@@ -401,8 +418,21 @@ async function run() {
       assert.equal(await page.locator('[data-storm="al992026"]').getAttribute('aria-pressed'),'true');
       await page.locator('#hurricane-system').selectOption('al982026');
       assert.equal(await page.locator('[data-storm="al982026"]').getAttribute('aria-pressed'),'true');
+      await page.waitForTimeout(100);
+      assert.ok((await readableMapLabels(page)).length>=2,'Collision handling must retain useful geographic context');
+      if(width===320) {
+        const hiddenBefore=await page.locator('.hurricane-city-label').evaluateAll(elements=>elements.filter(el=>getComputedStyle(el).visibility==='hidden').map(el=>el.textContent));
+        await page.locator('#hurricane-map').focus();
+        for(let i=0;i<2;i++) { await page.keyboard.press('ArrowRight'); await page.waitForTimeout(350); }
+        const visibleAfter=await readableMapLabels(page);
+        assert.ok(visibleAfter.some(name=>hiddenBefore.includes(name)),`Panning restores geographic labels when room becomes available: ${JSON.stringify({hiddenBefore,visibleAfter})}`);
+        assert.equal(await page.locator('.hurricane-map-marker').count(),2,'Label collision handling never removes storm markers');
+        for(let i=0;i<2;i++) { await page.keyboard.press('ArrowLeft'); await page.waitForTimeout(350); }
+        await readableMapLabels(page);
+      }
     }
     results.push('Above-map system selection fits phones, synchronizes with storm controls, stays available when expanded, and preserves focus and selection across refreshes');
+    results.push('Geographic labels avoid controls and storm markers at phone/desktop widths and return as keyboard panning makes room');
     await page.locator('#weather-hurricanes').screenshot({path:path.join(output,'wpc-remnant-tracker.png')});
     satelliteMode='normal';
     await page.locator('#hurricane-satellite').check();

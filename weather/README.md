@@ -29,6 +29,8 @@ The cone represents uncertainty in the center track, not storm size or every haz
 
 The **Show system** selector above the map uses the current basin's forecast systems and stays synchronized with map markers and the detailed storm list. It focuses the chosen track without scrolling the page, works in the expanded map, and keeps keyboard focus and the selected system during a refresh. Empty basins and unavailable data have distinct disabled states.
 
+Decorative city, ocean, and state/province labels yield to map controls and storm markers. Labels stay at their geographic coordinates and return when panning or resizing provides space; collision handling never removes the forecast markers or controls. City text uses its actual width rather than a fixed label box.
+
 Transient network, server, and ArcGIS JSON errors receive one retry for the affected layer. Both attempts share the same 16-second request deadline; the retry bypasses browser caching of an error response. HTTP rate limits and other nontransient client errors are not retried. Persistent failures remain explicitly unavailable.
 
 Optional GeoJSON layers are validated before Leaflet sees them, including finite geographic coordinates, the expected geometry type, closed polygon rings, and a known basin for development areas. A malformed layer is reported as unavailable rather than silently dropping part of a warning coastline or development area. The other valid layers remain usable. A malformed optional layer in browser storage is discarded independently of valid saved forecast positions.

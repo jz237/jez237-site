@@ -5,7 +5,7 @@ import {
 } from './hurricane-data.mjs?v=20261010-10';
 import { combinedStorms, fetchWpcForecasts, validateWpcCollection } from './hurricane-wpc.mjs?v=20261010-10';
 import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
-import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-11';
+import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-13';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);
@@ -403,6 +403,7 @@ async function initializeMap() {
   regions = createRegionalContext({map,L,escapeHtml:esc,onError:error=>{state.regionsError=error;if(state.bundle) renderStatus();}});
   fitView();
   addMapLabels();
+  regions.update();
   resizeObserver = new ResizeObserver(() => { map.closePopup(); map.invalidateSize({ animate:false }); });
   resizeObserver.observe($('#hurricane-map'));
   try {
