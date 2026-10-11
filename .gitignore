@@ -16,6 +16,8 @@ build/
 # Externally hosted media
 /experiments/image-gen-2-benchmark/images/
 /experiments/image-gen-2-benchmark/thumbs/
+# Malformed audio was explicitly deleted; do not reintroduce quarantined binaries.
+/experiments/amiga-mod-player/audio-quarantine/*/
 /photos/garden/images/
 
 # Secrets/credentials

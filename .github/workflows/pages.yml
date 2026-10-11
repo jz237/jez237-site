@@ -37,12 +37,17 @@ jobs:
             /scripts/check_games_catalog_syntax.mjs
             /scripts/weather-hurricane.test.mjs
             /scripts/check_aquarium_release.mjs
+            /scripts/publish_generated_assets.mjs
+            /scripts/publish_generated_assets.test.mjs
+            /scripts/prune_pages_artifacts.mjs
+            /scripts/prune_pages_artifacts.test.mjs
             /scripts/rotatable-aquascape/qa/approved-build.json
             /scripts/rotatable-aquascape/public/
             !/stock-market-src/
             !/tmp/
             !/workers/
             !/experiments/amiga-mod-player/audio/
+            !/experiments/amiga-mod-player/audio-quarantine/
             !/experiments/amiga-mod-player/mods/
             !/experiments/image-gen-2-benchmark/__pycache__/
             !/experiments/image-gen-2-benchmark/images/
@@ -89,6 +94,9 @@ jobs:
       - name: Check tested aquarium build
         run: node scripts/check_aquarium_release.mjs
 
+      - name: Check bounded cleanup safeguards
+        run: node --test scripts/publish_generated_assets.test.mjs scripts/prune_pages_artifacts.test.mjs
+
       - name: Keep Hidden Reef pointer-only
         run: node scripts/check_hidden_reef_retired.mjs
 
@@ -113,6 +121,7 @@ jobs:
             --exclude='./tmp' \
             --exclude='./workers' \
             --exclude='./experiments/amiga-mod-player/audio' \
+            --exclude='./experiments/amiga-mod-player/audio-quarantine' \
             --exclude='./experiments/amiga-mod-player/mods' \
             --exclude='./experiments/image-gen-2-benchmark/__pycache__' \
             --exclude='./experiments/image-gen-2-benchmark/images' \
