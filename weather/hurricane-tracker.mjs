@@ -5,7 +5,7 @@ import {
 } from './hurricane-data.mjs?v=20261010-10';
 import { combinedStorms, fetchWpcForecasts, validateWpcCollection } from './hurricane-wpc.mjs?v=20261010-10';
 import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
-import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-14';
+import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-15';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);
