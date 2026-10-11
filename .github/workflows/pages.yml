@@ -32,6 +32,7 @@ jobs:
             !/functions/
             !/scripts/
             /scripts/check_games_catalog_syntax.mjs
+            /scripts/weather-hurricane.test.mjs
             /scripts/check_aquarium_release.mjs
             /scripts/rotatable-aquascape/qa/approved-build.json
             /scripts/rotatable-aquascape/public/
@@ -78,6 +79,9 @@ jobs:
 
       - name: Check GameMaster catalog JavaScript
         run: node scripts/check_games_catalog_syntax.mjs
+
+      - name: Check hurricane data handling
+        run: node --test scripts/weather-hurricane.test.mjs
 
       - name: Check tested aquarium build
         run: node scripts/check_aquarium_release.mjs
