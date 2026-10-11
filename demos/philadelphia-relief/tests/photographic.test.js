@@ -32,7 +32,11 @@ test('photographic handoff rejects a loaded coarse fallback and sparse initial d
   assert.equal(photoReady(0, 50, true), false);
   assert.equal(photoReady(1, 20, false), false);
   assert.equal(photoReady(1, 20, true), false);
-  assert.equal(photoReady(8, 30, false), true);
+  assert.equal(photoReady(8, 30, false), false, 'a detailed corner cannot reveal the coarse remainder');
+  assert.equal(photoReady(80, 90, false), false, 'tile count is not screen coverage');
+  assert.equal(photoReady(8, 30, true), true, 'settled horizon views may retain coarse distant tiles');
+  assert.equal(photoReady(0, 0, true), false);
+  assert.equal(photoReady(1, 1, false), false);
   assert.equal(photoReady(1, 1, true), true);
 });
 

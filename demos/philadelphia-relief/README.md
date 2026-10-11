@@ -1171,6 +1171,10 @@ after meaningful movement, zoom or elevation-scale changes.
 Photographic close-up landmark markers are limited to the viewed neighborhood.
 This prevents distant tile-clamped pins appearing over unrelated buildings;
 regional and aircraft views retain their wider range, and exhibit bounds still apply.
+The initial photographic handoff waits for Cesium to finish loading the current
+view at its initial detail target. A handful of detailed tiles in one corner no
+longer reveals a mostly coarse scene. The existing 90-second loading timeout
+keeps the diorama available if the photographic provider cannot finish.
 
 Validation: 441 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only

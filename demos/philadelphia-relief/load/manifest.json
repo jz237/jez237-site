@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.1",
-  "sourceHash": "042d17d29f9c482ef8896d410df72b5501e8d38c22ef32754181a4a8a7341011",
-  "entry": "load/app-OPUWCT37.js",
+  "sourceHash": "702d0e989a610b30c84420f4d5ab82a4ddd353007c7f2b41ec9cd2e92e11e681",
+  "entry": "load/app-J7NOUGUA.js",
   "css": "load/style-49a2eea61d53.css",
   "startupRequests": 3,
-  "startupBytes": 1093102,
+  "startupBytes": 1093104,
   "files": {
-    "load/app-OPUWCT37.js": "f29b0f8b9efca7d8d1d690759d39f4452df85ba624585735cf835cdc8a42fb36",
+    "load/app-J7NOUGUA.js": "3e46c0bae1ca817b883767dba87657b0b2ec9e707dbaebe0264254a2eeb81c91",
     "load/chunk-WWEFO7CE.js": "1606971e6bf6a1ce0f218cb61c8086624a5f786dcd579dee1c219400120822b6",
     "load/chunk-UC44IGDQ.js": "a2e7a9fc2ab51b5a9f905e17fd11704f469a8bfdda5f4fe89c37981b31b0f705",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",

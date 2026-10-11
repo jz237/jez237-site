@@ -276,7 +276,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         message.dataset.bestError = String(Math.round(bestError));
       }
       // Keep the miniature visible through the initial coarse/empty frames.
-      // Require neighborhood-scale geometry, not merely visible coarse tiles.
+      // Require neighborhood geometry AND a completed initial view; a handful
+      // of fine tiles must not reveal a mostly coarse, partially loaded scene.
       if (!firstViewReady && photoReady(detailTiles, visibleTiles, tileset.tilesLoaded)) {
         firstViewReady = true; clearTimeout(firstViewTimer);
       }
