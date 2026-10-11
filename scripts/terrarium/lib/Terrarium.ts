@@ -29,6 +29,8 @@ import {Rainbow} from './Rainbow';
 import {mulberry32} from './Textures';
 
 const DIRECT = new URLSearchParams(location.search).has('direct');
+/** `?lite`: a lighter start for weak GPUs (and the reload after the GPU dropped the page). */
+const LITE = new URLSearchParams(location.search).has('lite');
 const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
 const DUSK_SKY = new THREE.Color(0.62, 0.42, 0.36);
 const NIGHT_GLOW = new THREE.Color(0.035, 0.05, 0.11);
@@ -84,10 +86,16 @@ export class Terrarium {
   private clock = new THREE.Clock();
   time = 0;
   private onFrame: ((dt: number, t: number) => void)[] = [];
+  /** Effects turned off because the picture came out black, in order. */
+  readonly fallbacks: string[] = [];
+  private direct = DIRECT;
+  private watch = {t: 0, black: 0, checks: 0};
+  /** The browser took the GPU context away (a GPU reset, or memory pressure on a phone). */
+  onContextLost?: () => void;
 
   constructor(readonly host: HTMLElement) {
     const r = new THREE.WebGLRenderer({antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: new URLSearchParams(location.search).has('capture')});
-    r.setPixelRatio(new URLSearchParams(location.search).has('frames') ? 1 : Math.min(devicePixelRatio, 2));
+    r.setPixelRatio(new URLSearchParams(location.search).has('frames') ? 1 : Math.min(devicePixelRatio, LITE ? 1.25 : 2));
     r.toneMapping = THREE.NoToneMapping;
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.shadowMap.enabled = true;
@@ -96,6 +104,11 @@ export class Terrarium {
     this.renderer = r;
     host.append(r.domElement);
     r.domElement.id = 'scene-canvas';
+    r.domElement.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      r.setAnimationLoop(null);
+      this.onContextLost?.();
+    });
 
     const s = this.scene;
     // No scene.background: a colour background force-clears on every render() call,
@@ -112,7 +125,7 @@ export class Terrarium {
     this.key.position.set(-0.08, 1.1, 0.3);
     this.key.target.position.set(0.0, 0.12, -0.04);
     this.key.castShadow = true;
-    this.key.shadow.mapSize.set(2048, 2048);
+    this.key.shadow.mapSize.setScalar(LITE ? 1024 : 2048);
     this.key.shadow.bias = -0.00025;
     this.key.shadow.normalBias = 0.0015;
     this.key.shadow.camera.near = 0.3;
@@ -164,7 +177,8 @@ export class Terrarium {
     this.controls.update();
 
     for (const l of [this.key, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) l.layers.enable(1);
-    this.post = new Post(r, s, cam);
+    this.post = new Post(r, s, cam, LITE ? 0 : 4);
+    if (LITE) {this.post.settings.ao = false; this.post.settings.dof = false;}
     const q = new URLSearchParams(location.search);
     for (const k of ['ao', 'bloom', 'dof'] as const) if (q.get(k) === '0') this.post.settings[k] = false;
     if (q.get('quality') === 'full' || q.has('frames')) this.quality.locked = true;
@@ -190,7 +204,7 @@ export class Terrarium {
     this.scene.add(this.dish.group);
     this.meadow = new Meadow(this.surface, 720, [{x: ds[0], z: ds[1], r: this.dish.radius + 0.012}]);
     this.scene.add(this.meadow.mesh);
-    this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || 14));
+    this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || (LITE ? 8 : 14)));
     this.scene.add(this.moss.mesh);
     this.water = new Water(this.surface, this.peaks.data.ledges);
     this.scene.add(this.water.group);
@@ -237,6 +251,12 @@ export class Terrarium {
     this.hookWeather();
     this.resize();
     for (const pane of this.case.panes) pane.fog.settle(this.glassHumidity());
+    // compile every material's shaders now, behind the loading screen, instead of
+    // stalling the first frames (a phone can take many seconds over them); in the
+    // target's format, so the programs are the ones the frames will use
+    this.renderer.setRenderTarget(this.post.sceneRT);
+    try {await this.renderer.compileAsync(this.scene, this.camera);} catch (e) {console.warn('Terrarium: shader precompile', e);}
+    this.renderer.setRenderTarget(null);
     {
       const q = new URLSearchParams(location.search);
       const crickets = Number(q.get('crickets') || 0);
@@ -602,7 +622,7 @@ export class Terrarium {
     // the pool mirrors the clouds too (without the main view's depth)
     this.weather.setDistance(null);
     this.water.renderReflection(this.renderer, this.scene, this.camera, this.post.width, this.post.height);
-    if (DIRECT) {
+    if (this.direct) {
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
       this.renderer.setRenderTarget(null);
       this.renderer.clear();
@@ -619,6 +639,44 @@ export class Terrarium {
       this.renderer.render(this.scene, this.camera);
       this.camera.layers.mask = mask;
     });
+    this.checkBlack(dt);
+  }
+
+  /**
+   * Looks at the finished picture now and then. If it comes out black twice in a
+   * row (a GPU failing at one of the effects), turns effects off one at a time
+   * until the scene shows.
+   */
+  private checkBlack(dt: number) {
+    const w = this.watch;
+    w.t += dt;
+    if (w.t < (w.checks < 15 ? 1.5 : 8) || document.visibilityState !== 'visible') return;
+    w.t = 0;
+    w.checks++;
+    const gl = this.renderer.getContext();
+    const W = gl.drawingBufferWidth, H = gl.drawingBufferHeight;
+    const row = new Uint8Array(W * 4);
+    let lit = 0;
+    for (const f of [0.3, 0.5, 0.7]) {
+      gl.readPixels(0, Math.floor(H * f), W, 1, gl.RGBA, gl.UNSIGNED_BYTE, row);
+      for (let i = 0; i < W; i++) if (Math.max(row[i * 4], row[i * 4 + 1], row[i * 4 + 2]) > 10) lit++;
+    }
+    w.black = lit < W * 3 * 0.002 ? w.black + 1 : 0;
+    if (w.black >= 2) {w.black = 0; this.degrade();}
+  }
+
+  /** Turns off the next effect in line after a black picture. */
+  degrade() {
+    const s = this.post.settings;
+    let step: string;
+    if (s.bloom) {s.bloom = false; step = 'bloom';}
+    else if (s.ao) {s.ao = false; step = 'ambient occlusion';}
+    else if (s.dof) {s.dof = false; step = 'depth of field';}
+    else if (this.post.samples > 0) {this.post.setSamples(0); step = 'multisampling';}
+    else if (!this.direct) {this.direct = true; step = 'post-processing';}
+    else return;
+    this.fallbacks.push(step);
+    console.warn(`Terrarium: the picture came out black; turned off ${step}`);
   }
 }
 

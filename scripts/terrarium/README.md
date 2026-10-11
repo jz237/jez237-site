@@ -200,6 +200,8 @@ Development URL options:
 - `?quality=full` disables adaptive quality.
 - `?hours=H` starts at a given time of day.
 - `?morph=normal|red|citrus|hypo` chooses the dragon's colour morph.
+- `?lite` starts lighter: a lower pixel ratio, no multisampling, ambient occlusion or depth of field, fewer moss layers and a smaller shadow map.
+- `?debug` shows a small panel with the GPU, its relevant WebGL extensions, the frame rate, which effects are on, anything turned off after a black picture, and any shader errors. Use it to report a problem from a phone.
 - `?cam=x,y,z&target=x,y,z` places the camera.
 
 ## Performance
@@ -212,6 +214,14 @@ The full effects are tuned for desktop GPUs. If frames are sustained-slow, the d
 4. moss layers.
 
 It never decides from device labels. Use `?quality=full` to keep every effect on.
+
+Some phone GPUs fail where desktop ones do not, so there are some safeguards.
+
+- **Bad pixels:** one shader producing a NaN or an infinity in a single pixel would be smeared by the glass blur, the depth of field and the bloom's widest level across the whole frame, which shows as a black screen. Every pass that blurs therefore reads the scene through a clean-up step: bad pixels become black specks and extreme highlights are capped.
+- **Shader compiling:** all shaders are compiled behind the loading screen, in parallel where the browser supports it, rather than stalling the first frames.
+- **Black picture:** the finished picture is sampled now and then. If it comes out black twice in a row, effects are turned off one at a time until the scene shows: bloom, ambient occlusion, depth of field, multisampling, then the whole post-processing chain.
+- **Lost GPU context:** if the browser takes the GPU context away, the page reloads once in `?lite` mode.
+- **Float textures:** only half-float data textures are filtered, because 32-bit float filtering is missing on many phones.
 
 ## Limits
 

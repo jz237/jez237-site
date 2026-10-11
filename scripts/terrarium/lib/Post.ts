@@ -108,11 +108,40 @@ const distShader = {
 void main(){ float z = texture2D(tDepth, vUv).x; vec4 v = uInvProj * vec4(vUv * 2.0 - 1.0, z * 2.0 - 1.0, 1.0); v /= v.w; gl_FragColor = vec4(z >= 1.0 ? 1e4 : length(v.xyz), 0.0, 0.0, 1.0); }`,
 };
 
+/**
+ * A pixel that is not a finite number (NaN or infinity: a phone GPU can give one
+ * for normalize(0), pow of a negative or an overflowing highlight) would be
+ * smeared by the glass blur, the depth of field and the bloom's widest level
+ * across much or all of the frame, which shows as a black screen. Every pass that
+ * blurs reads the scene through this first: bad pixels become black specks and
+ * extreme highlights are capped.
+ */
+const FINITE_GLSL = /* glsl */ `
+vec3 finiteColor(vec3 c){
+  bool bad = any(isnan(c)) || any(isinf(c)) || !(c.r + c.g + c.b < 1e20) || !(c.r + c.g + c.b > -1e20);
+  return bad ? vec3(0.0) : clamp(c, vec3(0.0), vec3(256.0));
+}`;
+
 const aoShader = {
   uniforms: {tColor: {value: null as THREE.Texture | null}, tAO: {value: null as THREE.Texture | null}, uAO: {value: 1}},
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-  fragmentShader: `uniform sampler2D tColor, tAO; uniform float uAO; varying vec2 vUv;
-void main(){ vec4 c = texture2D(tColor, vUv); float ao = texture2D(tAO, vUv).r; gl_FragColor = vec4(c.rgb * mix(1.0, ao, uAO), 1.0); }`,
+  fragmentShader: `precision highp float; uniform sampler2D tColor, tAO; uniform float uAO; varying vec2 vUv;
+${FINITE_GLSL}
+void main(){
+  vec3 c = finiteColor(texture2D(tColor, vUv).rgb);
+  float ao = uAO > 0.0 ? texture2D(tAO, vUv).r : 1.0;
+  ao = (ao >= 0.0 && ao <= 1.0) ? ao : 1.0;
+  gl_FragColor = vec4(c * mix(1.0, ao, uAO), 1.0);
+}`,
+};
+
+// A plain copy that also clears bad pixels (for the glass's blurred view of the scene).
+const cleanShader = {
+  uniforms: {tColor: {value: null as THREE.Texture | null}},
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+  fragmentShader: `precision highp float; uniform sampler2D tColor; varying vec2 vUv;
+${FINITE_GLSL}
+void main(){ gl_FragColor = vec4(finiteColor(texture2D(tColor, vUv).rgb), 1.0); }`,
 };
 
 export class Post {
@@ -128,15 +157,15 @@ export class Post {
   private dofQuad = new FullScreenQuad(new THREE.ShaderMaterial(dofShader));
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
   private aoQuad = new FullScreenQuad(new THREE.ShaderMaterial(aoShader));
-  private copyQuad = new FullScreenQuad(new THREE.MeshBasicMaterial({toneMapped: false}));
+  private cleanQuad = new FullScreenQuad(new THREE.ShaderMaterial(cleanShader));
   readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.0, focus: 1.5, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
 
-  constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera) {
+  constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera, samples = 4) {
     const depth = new THREE.DepthTexture(1, 1);
     depth.type = THREE.UnsignedIntType;
     const msaa = new URLSearchParams(location.search).get('msaa');
-    this.sceneRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, samples: msaa === null ? 4 : Number(msaa), depthTexture: depth});
+    this.sceneRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, samples: msaa === null ? samples : Number(msaa), depthTexture: depth});
     this.refractRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter});
     this.distRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter});
     this.aRT = new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType});
@@ -147,6 +176,14 @@ export class Post {
     this.gtao.updateGtaoMaterial({radius: 0.06, distanceExponent: 1.4, thickness: 0.6, scale: 1.1, samples: 12, distanceFallOff: 1});
     this.gtao.updatePdMaterial({lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 12});
     this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.22, 0.5, 1.4);
+  }
+
+  get samples() {return this.sceneRT.samples;}
+
+  /** Changes the scene's multisampling (the target is rebuilt on its next use). */
+  setSamples(n: number) {
+    this.sceneRT.samples = n;
+    this.sceneRT.dispose();
   }
 
   setSize(w: number, h: number, pixelRatio: number) {
@@ -175,9 +212,9 @@ export class Post {
     r.clear();
     r.render(this.scene, this.camera);
     if (overlay) {
-      (this.copyQuad.material as THREE.MeshBasicMaterial).map = this.sceneRT.texture;
+      (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.tColor.value = this.sceneRT.texture;
       r.setRenderTarget(this.refractRT);
-      this.copyQuad.render(r);
+      this.cleanQuad.render(r);
       const dm = this.distQuad.material as THREE.ShaderMaterial;
       dm.uniforms.tDepth.value = this.sceneRT.depthTexture;
       dm.uniforms.uInvProj.value.copy(this.camera.projectionMatrixInverse);
@@ -186,23 +223,16 @@ export class Post {
       r.setRenderTarget(this.sceneRT);
       overlay(this.refractRT.texture, this.distRT.texture);
     }
-    let color: THREE.WebGLRenderTarget = this.sceneRT;
-    if (s.ao) {
-      this.gtao.render(r, null as unknown as THREE.WebGLRenderTarget, this.sceneRT, 0, false);
-      const m = this.aoQuad.material as THREE.ShaderMaterial;
-      m.uniforms.tColor.value = this.sceneRT.texture;
-      m.uniforms.tAO.value = this.gtao.gtaoMap;
-      r.setRenderTarget(this.aRT);
-      this.aoQuad.render(r);
-      color = this.aRT;
-    }
+    // ambient occlusion (when on) and the clean-up of bad pixels, into aRT
+    if (s.ao) this.gtao.render(r, null as unknown as THREE.WebGLRenderTarget, this.sceneRT, 0, false);
+    const m = this.aoQuad.material as THREE.ShaderMaterial;
+    m.uniforms.tColor.value = this.sceneRT.texture;
+    m.uniforms.tAO.value = s.ao ? this.gtao.gtaoMap : null;
+    m.uniforms.uAO.value = s.ao ? 1 : 0;
+    r.setRenderTarget(this.aRT);
+    this.aoQuad.render(r);
+    let color: THREE.WebGLRenderTarget = this.aRT;
     if (s.bloom) {
-      if (color === this.sceneRT) {
-        (this.copyQuad.material as THREE.MeshBasicMaterial).map = this.sceneRT.texture;
-        r.setRenderTarget(this.aRT);
-        this.copyQuad.render(r);
-        color = this.aRT;
-      }
       this.bloom.strength = s.bloomStrength;
       this.bloom.render(r, null as unknown as THREE.WebGLRenderTarget, color, 0, false);
     }

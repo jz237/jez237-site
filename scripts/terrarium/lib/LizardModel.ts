@@ -447,9 +447,10 @@ export class LizardModel {
     g.setIndex(new THREE.BufferAttribute(new Uint32Array(buffer, offsets.index, I), 1));
     g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e3);
 
-    const prof = new Float32Array(data.profile.length * 4);
-    data.profile.forEach((p, i) => prof.set([p[1], p[2], p[3], p[4]], i * 4));
-    const profileTex = new THREE.DataTexture(prof, data.profile.length, 1, THREE.RGBAFormat, THREE.FloatType);
+    // half floats: filterable on every WebGL 2 GPU (32-bit float textures are not, on most phones)
+    const prof = new Uint16Array(data.profile.length * 4);
+    data.profile.forEach((p, i) => prof.set([p[1], p[2], p[3], p[4]].map((v) => THREE.DataUtils.toHalfFloat(v)), i * 4));
+    const profileTex = new THREE.DataTexture(prof, data.profile.length, 1, THREE.RGBAFormat, THREE.HalfFloatType);
     profileTex.magFilter = THREE.LinearFilter;
     profileTex.minFilter = THREE.LinearFilter;
     profileTex.needsUpdate = true;
