@@ -297,7 +297,8 @@ export class LizardBrain {
     }
     if (r < 0.46) {
       // come to the front glass and look out at the room
-      const p = this.nav.randomPoint(rnd, {x0: -0.5, x1: 0.5, z0: 0.15, z1: 0.21});
+      // (far enough back that the snout stays off the glass)
+      const p = this.nav.randomPoint(rnd, {x0: -0.5, x1: 0.5, z0: 0.12, z1: 0.165});
       if (p && this.goTo(p[0], p[1], 'idle')) {this.faceHeading = -Math.PI / 2 + (rnd() - 0.5) * 0.6; return;}
     }
     if (r < 0.54) {

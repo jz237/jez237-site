@@ -8,7 +8,7 @@ leaves bead and drip, puddles gather, and with the lamp behind you a rainbow can
 The bearded dragon basks, roams the whole case, wades in the shallows, drinks, signals, hunts
 crickets, grazes from a dish of greens, licks droplets off the leaves and shelters from storms in a
 cave in the rock. Its colour follows its temperature and mood. A school of neon tetras lives in the
-pool.
+pool, and a fire-bellied toad sits on the bank and floats among them.
 
 - Demo: https://jez237.com/demos/terrarium/
 - Source: `scripts/terrarium/` (this folder). The public build lives in `demos/terrarium/`.
@@ -17,7 +17,7 @@ pool.
 
 | Tool | What it does |
 |---|---|
-| **Hand** | Grab a cloud to move it or fling it. Hold still on it, or scroll down over it, to squeeze out rain. Shake it hard to build a charge until lightning strikes. Right-click a cloud to shrink it; hold the right button to evaporate it. Touch or drag through the pool to make ripples and splashes. Brush over plants to part them, and tap the lizard to touch it. Dragging anywhere else turns the view; scroll or pinch to zoom right in. |
+| **Hand** | Grab a cloud to move it or fling it. Hold still on it, or scroll down over it, to squeeze out rain. Shake it hard to build a charge until lightning strikes. Right-click a cloud to shrink it; hold the right button to evaporate it. Touch or drag through the pool to make ripples and splashes. Brush over plants to part them, tap the lizard to touch it, and poke the toad to see its warning colours. Dragging anywhere else turns the view; scroll or pinch to zoom right in. |
 | **Cloud** | Hold to condense a new cloud, or to grow one you press on. Drag to stretch it out. Push clouds together to merge them: a big, wet cloud turns into a storm. |
 | **Wind** | Drag across the case to blow a gust. Faint wisps and drifting dust trace the air. The grass parts along the stroke, loose leaves lift and tumble, and plants, moss, water, rain, fog and clouds all follow the flow. |
 | **Fog** | Hold or drag to pour fog. It spreads out, runs downhill, pools on the water and burns off under the lamp. |
@@ -95,13 +95,17 @@ All motion constants are illustrative. They are not measured from real bearded d
   - **Floor and roof:** the surface map keeps two heights. Rays cast up from the ground find the ceiling, so the floor is what feet stand on and the roof is what the rain, clouds, lightning and camera see.
   - **Shelter:** rain lands on the roof, and the floor stays dry.
   - **Clear ground:** plants are kept off the floor and its apron.
-- **Fish (`lib/Fish.ts`).** A school of fourteen neon tetras (*Paracheirodon innesi*, about 2.4 cm) lives in the pool.
+- **Fish (`lib/Fish.ts`).** A school of fourteen neon tetras (*Paracheirodon innesi*, about 2 cm) lives in the pool.
   - **Model:** each fish is sculpted in code. It has a laterally flattened body lofted from height and width profiles, a forked tail, and dorsal, adipose, anal, pelvic and pectoral fins with visible rays. The eyes are large, with a big black pupil and a dark silver iris.
   - **Colour:** the shader paints the iridescent stripe, blue face-on and turning green-cyan at a glancing view and brightest at the lamp's mirror angle. It also paints the red rear half, the silver belly, the translucent olive back, the gill cover, fine scales and the white leading edge of the anal fin.
   - **Swimming:** the body bends in a travelling wave whose beat follows the speed, the body curves into turns and the pectoral fins scull.
   - **Behaviour:** they school as boids inside water deep enough for them, away from the churn under the falls. A finger, a falling cricket, raindrops and lightning on the water make them dart away, and they keep clear of the wading dragon. They rise to flakes from the Feed tool and snap them up with a tiny ring on the surface. At night they slow down and rest low, and, like real neons, their colours fade.
+- **Toad (`lib/Toad.ts`).** An Oriental fire-bellied toad (*Bombina orientalis*), about 3.5 cm long.
+  - **Model:** a broad, flat body with a low hump over the hips, bulging gold eyes with heart-shaped pupils, and jointed limbs with four fingers and five long toes, all built in code.
+  - **Skin:** bright green and warty above with black blotches, scarlet-orange with black spots below, under a wet sheen. The warts are a bump pattern that holds up close.
+  - **Behaviour:** it sits on the bank breathing (its throat pumps), blinks, hops along the shore and into the pool, floats with only its eyes and back above the water, and swims with frog kicks that ring the surface and make the tetras dart. When the dragon's head comes close, or you poke it, it does the unken reflex: it arches its back and turns up its red palms and soles as a warning, then makes for deep water. After dark it calls, a soft "oop" with its throat swelling.
 - **Water.**
-  - The pool has a wadeable pebble-and-silt shelf and a plunge pocket scoured out under the falls. Its tea-stained water absorbs light with depth, refracts the bed and reflects the scene through a planar mirror render.
+  - The pool has a wadeable pebble-and-silt shelf, a plunge pocket scoured out under the falls, and a deep basin dug down into the substrate along the front glass, where the fish and the toad can be watched through the glass. Its tea-stained water absorbs light with depth, refracts the bed and reflects the scene through a planar mirror render.
   - A GPU wave simulation (two height buffers, 120 steps a second) carries ripples from fingers and stirring, raindrops, wading feet, lapping, falling crickets, the falls and lightning strikes. Waves reflect off the shore and die away, and ripple faces catch the lamp. Touching the water flicks up droplets that ripple where they land.
   - Wind roughens the surface into cat's paws.
   - The water column is visible through the front glass, its surface line moving with the ripples.
@@ -109,7 +113,8 @@ All motion constants are illustrative. They are not measured from real bearded d
 - **Planting.**
   - **Moss:** 14-layer shell-rendered moss. It grows in mounded cushions of several species with soil showing between them, and wind combs it in visible gust bands.
   - **Ferns:** CC0 scanned fern clumps with backlit translucency, filling the back of the case.
-  - **Leafy plants:** procedurally modelled Pilea, Fittonia, earth-star bromeliads and creeping fig.
+  - **Leafy plants:** procedurally modelled Pilea, Fittonia, earth-star bromeliads and creeping fig, and glossy heart-leaf philodendron and pothos (some streaked with gold) at the foot of the rocks, behind the log and in the corners, with pothos trailing down the rock faces.
+  - **Close up:** every leaf has a surface. Veins (pinnate, radiating, parallel or netted, by species) are drawn as relief as well as colour, and a fine net of veinlets and the sheen of the leaf's cells appear only once the camera is near enough to resolve them, so nothing shimmers from a distance. Scanned textures use anisotropic filtering. Each leaf looks its lamp shadow up a few millimetres towards the lamp, so thin leaves never shade themselves into a dotted pattern.
   - **Understorey (`lib/Flora.ts`):**
     - red-hearted Neoregelia bromeliads and ferns rooted in the rock shelves;
     - air plants on the log;
@@ -119,11 +124,13 @@ All motion constants are illustrative. They are not measured from real bearded d
     - twigs and pebbles, and leaves floating on the pool.
   - **Litter:** several hundred fallen leaves on crumbly humus with bark chips.
   - **Meadow (`lib/Meadow.ts`):** about 7 000 fine grass and sedge blades in clumps across open soil, along the shore and at the front glass.
-  - **The glass:** no plant passes through it. Creeping fig is turned about its root until the whole vine lies inside the case, and every leaf and blade that reaches a pane, by growth, wind or the dragon pushing through, presses flat against it.
+  - **The glass and the log:** no plant passes through the glass, the stones or the log. Creeping fig is turned about its root until the whole vine lies inside the case, and every leaf and blade that reaches a pane, by growth, wind or the dragon pushing through, presses flat against it. A leaf the dragon presses down comes to rest on whatever is under it (a height map of the ground, stones and log); one pushed sideways into a stone or the log goes only as far as its flank. Fallen leaves lie where they are.
   - **Wind response:** every plant reads the wind where each of its parts stands, not just at its root. A gust crossing a fern bends its near fronds first, and a wind stroke parts the meadow along its path while gusts run through it in waves. Plants flutter in turbulence and flash their paler undersides in gusts.
   - **Loose leaves (`lib/LeafDrift.ts`):** dead leaves lie on the floor. A strong enough local wind lifts them; they tumble with the air, flutter down and settle again, or float on the pool.
   - **Dust (`lib/Motes.ts`):** motes and spores ride the wind field exactly, and glint where they cross the lamp's beam.
-- **Substrate.** A cut-away front shows drainage pebbles, soil, bark, perlite and roots.
+- **Substrate.** A cut-away front shows a drainage layer of rounded river pebbles, dark granular humus with the odd bark flake and grain of perlite, fine roots hanging down from the surface, and a band of leaf litter and moss at the top. The pool bed is rippled sand with scattered stones.
+- **Rock.** The basalt peaks have vertical fissures and blocky fractures in their relief, dark in the cracks, with moss on the ledges and in the crevices.
+- **Air (`lib/AirGlow.ts`).** The humid air glows faintly in the lamp's light. Rays are marched through the case and stopped by the scene; each step asks the lamp's shadow map and the clouds' shadow whether it is lit, so the haze is broken into soft shafts by the rocks, the plants and passing clouds. It thickens with humidity, mist and rain.
 - **Glass.**
   - The glass is drawn in its own pass with access to a mip-mapped copy of the scene behind it.
   - Fog blurs what is behind it, and droplets act as small lenses with rims and highlights.
@@ -164,7 +171,8 @@ The weather systems follow Weatherglass's design, rescaled to this case.
 - **Sound.** All sound is procedural Web Audio:
   - the cascade, rain hiss and ticks, drips and cricket chirps;
   - a whoosh that follows wind strokes;
-  - squish, grab, fling and merge sounds for the clouds, and crackles in charged clouds;
+  - the clouds use Weatherglass's own sounds, ported voice for voice from its sound bank: the grab, the release as you let go (louder the faster it is flung), the squish as it is squeezed, the deep merge as two clouds join, the pop as one condenses, and the static crackle of a charged cloud, with the same small reverb;
+  - the toad's soft night call;
   - thunder (an immediate crack, then a delayed rolling rumble);
   - splashes when the water is touched;
   - a rising hiss as a cloud evaporates, and crunches as the lizard eats;
