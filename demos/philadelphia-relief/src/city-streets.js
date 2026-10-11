@@ -57,6 +57,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   let retryDelay=0,request=null,vehicleView=null;
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
+  const lamps={indicator:[2.6,1.8,.025],head:[2.2,2.1,1.65],
+    brake:[2.5,.035,.012],tail:[1.2,.015,.006]};
   const foliage=[0x466544,0x536c3f,0x3d6047,0x60764b];
   const shirts=[0x536b84,0xa16e53,0x8f535f,0x567d70,0xd3c6a7,0x5e586f];
   function load(){if(loading||graph||retryDelay>0||disposed)return;loading=true;
@@ -216,6 +218,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       vehicles.count=0;
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+        const indicator=traffic.indicator(car);
         const van=car.seed>.88,length=van?6.4:4.4,sin=Math.sin(p.angle),cos=Math.cos(p.angle);
         const groundAt=along=>sampleElevation(projection.xToLon(p.x+sin*along),
           projection.zToLat(p.z+cos*along))*exaggeration;
@@ -238,10 +241,12 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
           part(side*.9,-.1,end*length*.31,.22,.55,.6,0x202221);
         }
         for(const side of [-1,1]){
-          part(side*.61,.25,length*.51,.38,.18,.12,[2.2,2.1,1.65]);
+          part(side*.61,.25,length*.51,.38,.18,.12,
+            indicator===side?lamps.indicator:lamps.head);
         }
         for(const side of [-1,1]){
-          part(side*.61,.25,-length*.51,.38,.18,.12,car.braking?[2.5,.035,.012]:[1.2,.015,.006]);
+          part(side*.61,.25,-length*.51,.38,.18,.12,indicator===side?lamps.indicator
+            :car.braking?lamps.brake:lamps.tail);
         }
       }
       uploadInstances(vehicles);

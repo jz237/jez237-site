@@ -1178,7 +1178,11 @@ These reduce rendering work without changing the original aerial resolution.
 
 Decorative cars follow the shipped OSM street graph, one-way directions, local
 queues and simulated junction signals. They use continuous turn curves, brake
-lamps and road-aligned vehicle geometry. Vans have visible cab glazing around
+lamps and road-aligned vehicle geometry. Amber turn indicators anticipate each
+planned corner, keep blinking through its curve, and cancel when the car straightens.
+Individual phase offsets avoid synchronized flashing. They reuse the existing
+lamp geometry, remain visible in daylight, and freeze with paused traffic.
+Vans have visible cab glazing around
 a solid cargo body. Visible red/amber/green signal heads use the same phases as
 the cars; connected short OSM nodes share the control at the junction boundary.
 Crossings cover both ends of eligible street segments with centered markings.
@@ -1237,8 +1241,10 @@ viewer. The local recovery page also provides a one-shot photo-render failure ch
 `tools/photo-fixture.html` tests real Cesium rendering, rooftop placement,
 occlusion, failure cleanup and retry with a small generated local GLB tileset.
 It uses no ion account or remote photographic tile requests.
+`tools/traffic-fixture.html` uses the production street renderer with a local square
+block for repeatable vehicle, lamp, pedestrian, and pause inspection.
 
-Validation: 476 automated checks, including ten simulated minutes on the real
+Validation: 478 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
