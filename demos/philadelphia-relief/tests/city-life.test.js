@@ -34,15 +34,21 @@ test('real Philadelphia simulation remains finite and stays on directed streets 
   const p={lonToX:x=>(x+75.17)*85000,latToZ:z=>(39.95-z)*111000};
   const graph=createStreetGraph(doc,p,()=>10),sim=createTraffic(graph,620);
   const initial=sim.cars.map(c=>trafficPose(c));
-  for(let i=0;i<12000;i++)sim.update(.05);
-  let moved=0;
+  let lastMinute;
+  for(let i=0;i<12000;i++){
+    sim.update(.05,{x:382,z:-56,radius:2070});
+    if(i===10799)lastMinute=sim.cars.map(trafficPose);
+  }
+  let moved=0,recentlyMoved=0;
   for(const [i,car] of sim.cars.entries()){
     assert.ok(car.distance>=0&&car.distance<=car.edge.length);
     assert.ok(car.edge.from.out.includes(car.edge));
     const pos=trafficPose(car);assert.ok(Number.isFinite(pos.x+pos.z+pos.angle));
     if(Math.hypot(pos.x-initial[i].x,pos.z-initial[i].z)>20)moved++;
+    if(Math.hypot(pos.x-lastMinute[i].x,pos.z-lastMinute[i].z)>20)recentlyMoved++;
   }
   assert.ok(moved>sim.cars.length*.8,`${moved} moving vehicles`);
+  assert.ok(recentlyMoved>sim.cars.length*.6,`${recentlyMoved} vehicles moving in the final minute`);
 });
 test('turns retain position and heading through the street boundary, including U-turns',()=>{
   for(const end of [[100,100],[100,-100],[200,0],[0,0]]){
@@ -89,12 +95,26 @@ test('cars yield before a multi-node junction until the crossing vehicle clears'
     distance:80,speed:6,cruise:8,previousEdge:null,nextEdge:graph.edges[i?4:1]});
   let closest=Infinity;
   for(let i=0;i<1200;i++){
-    sim.update(.05);
+    sim.update(.05,{x:0,z:0,radius:1000});
     const [a,b]=sim.cars.map(trafficPose);
     closest=Math.min(closest,Math.hypot(a.x-b.x,a.z-b.z));
   }
   assert.ok(closest>4,`vehicles kept only ${closest.toFixed(2)} metres apart`);
   assert.ok(sim.cars.every(car=>car.edge.from.id===3),'both vehicles eventually pass the junction');
+});
+test('traffic leaving the cropped network replenishes only outside the visible neighborhood',()=>{
+  const graph=createStreetGraph({roads:[{id:1,oneway:1,width:10,
+    points:[[1,0,0],[2,100,0],[3,200,0]]}]},projection,()=>0);
+  const sim=createTraffic(graph,1),car=sim.cars[0],seed=car.seed;
+  Object.assign(car,{edge:graph.edges[1],distance:100,speed:0,previousEdge:graph.edges[0],nextEdge:null});
+  for(let i=0;i<200;i++)sim.update(.05,{x:200,z:0,radius:30});
+  assert.equal(car.edge,graph.edges[1],'a visible car must never teleport');
+  for(let i=0;i<40;i++)sim.update(.05,{x:50,z:0,radius:60});
+  assert.equal(car.edge,graph.edges[1],'no replacement may appear inside the displayed neighborhood');
+  for(let i=0;i<40;i++)sim.update(.05,{x:1000,z:0,radius:30});
+  assert.equal(car.edge,graph.edges[0],'offscreen exits are replenished on an open street');
+  assert.equal(car.seed,seed,'the replacement keeps the vehicle appearance');
+  assert.ok(car.distance>0&&car.distance<100);
 });
 test('closely sampled street nodes form bounded junctions rather than one region-wide lock',()=>{
   const points=Array.from({length:30},(_,i)=>[i,i*3,0]);
