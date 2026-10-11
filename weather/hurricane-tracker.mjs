@@ -2,7 +2,7 @@ import {
   MAX_AGE, REFRESH_INTERVAL, buildStorms, direction, escapeHtml as esc,
   fetchLayers, historyTime, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
   position, probability, riskColor, basinFor, validateCollection, validateForecastCollection, wind
-} from './hurricane-data.mjs?v=20261010-2';
+} from './hurricane-data.mjs?v=20261010-3';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);

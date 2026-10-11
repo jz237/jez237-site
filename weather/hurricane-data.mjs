@@ -209,10 +209,26 @@ export function validateForecastCollection(data) {
 export async function fetchLayers(fetcher = fetch, now = Date.now()) {
   const result = { checkedAt: now, layers: {}, errors: [] };
   const requests = await Promise.allSettled(Object.entries(LAYERS).map(async ([name, id]) => {
-    const response = await fetcher(queryUrl(id), { signal: AbortSignal.timeout(16000), cache: 'no-cache', credentials: 'omit' });
-    if (!response.ok) throw new Error(`NOAA ${name}: HTTP ${response.status}`);
-    const data = await response.json();
-    return [name, name === 'points' ? validateForecastCollection(data) : validateCollection(data)];
+    const signal = AbortSignal.timeout(16000);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      signal.throwIfAborted();
+      try {
+        const response = await fetcher(queryUrl(id), { signal, cache: attempt ? 'no-store' : 'no-cache', credentials: 'omit' });
+        if (!response.ok) {
+          const error = new Error(`NOAA ${name}: HTTP ${response.status}`);
+          error.retryable = response.status >= 500 || response.status === 408;
+          throw error;
+        }
+        const data = await response.json();
+        return [name, name === 'points' ? validateForecastCollection(data) : validateCollection(data)];
+      } catch (error) {
+        // ArcGIS can briefly return an error object with HTTP 200 while a layer
+        // updates. Retry that layer once, without reusing a cached error body.
+        // Both attempts share one deadline; rate limits are never retried here.
+        if (attempt || signal.aborted || error.retryable === false) throw error;
+        await new Promise(resolve => setTimeout(resolve, 400));
+      }
+    }
   }));
   requests.forEach((request, i) => {
     if (request.status === 'fulfilled') result.layers[request.value[0]] = request.value[1];
