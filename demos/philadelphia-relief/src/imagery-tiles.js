@@ -324,6 +324,7 @@ export function createImageryTiles(THREE, options) {
     ${BATHYMETRY_GLSL}
     ${CITY_LIGHT_GLSL}
     uniform vec3 uSunDir;
+    uniform vec3 uAerialLight;
     uniform vec2 uRegionSize;
     uniform sampler2D uTile; uniform float uCompareMode; uniform float uComparePosition;
     uniform sampler2D uPrevious; uniform float uBlend; uniform float uArrival;
@@ -339,7 +340,7 @@ export function createImageryTiles(THREE, options) {
       c = pow(max(c, vec3(0.0)), vec3(0.98));
       c = mix(vec3(dot(c, vec3(0.2126,0.7152,0.0722))), c, 1.08);
       c = clamp((c - 0.5) * 1.055 + 0.5, 0.0, 1.0);
-      c*=mix(.48,1.0,citySunVisibility(vWorld,vec3(0.0,1.0,0.0),uSunDir));
+      c*=uAerialLight*mix(.48,1.0,citySunVisibility(vWorld,vec3(0.0,1.0,0.0),uSunDir));
       float depth = length(vWorld-uCameraPos) * uFogDensity * exp(-max(0.0,vElev)/260.0);
       // Adjacent tiles meet at a shared edge. Fading each edge separately
       // exposes the brighter fallback as a fine line through the photograph.

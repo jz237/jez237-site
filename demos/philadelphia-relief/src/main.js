@@ -1446,6 +1446,7 @@ function applyState(state, ctx) {
   const u = terrain.uniforms;
   u.uKey.value = light.keyLight;
   u.uAmbient.value = light.ambient;
+  u.uAerialLight.value.set(...light.aerialLight);
   u.uFogDensity.value = fogDensityFor(light.fogDensity);
   u.uContourStrength.value = state.layers.contours ? state.contourStrength : 0;
   u.uContourInterval.value = state.contourInterval;

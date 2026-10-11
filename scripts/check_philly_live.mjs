@@ -1,9 +1,11 @@
 import { pathToFileURL } from 'node:url';
+import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 
 // Invalid requests exercise routing without downloading imagery or contacting
 // aircraft providers. Missing Functions otherwise look like a healthy HTML site.
 export async function checkPhillyLive(base, fetcher = fetch,
-  { requireAircraft = false, requireOutages = false } = {}) {
+  { requireAircraft = false, requireOutages = false, expectedBuild = null } = {}) {
   const root = new URL('/demos/philadelphia-relief/', base);
   const request = async (path, method = 'GET') => {
     const url = new URL(path, root);
@@ -25,8 +27,29 @@ export async function checkPhillyLive(base, fetcher = fetch,
       throw new Error(`Philadelphia deployment blocked: missing Cesium ${directive} permission.`);
     }
   }
-  if (!page.ok || !(await page.text()).includes('id="photoMode"')) {
+  const html = await page.text();
+  if (!page.ok || !html.includes('id="photoMode"')) {
     throw new Error('Philadelphia page missing from deployment.');
+  }
+  if (expectedBuild) {
+    const entry = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/g)]
+      .map(match => match[1]).find(src => src.startsWith('load/app-'));
+    if (entry !== expectedBuild.entry) {
+      throw new Error(`Philadelphia build mismatch: expected ${expectedBuild.entry}, received ${entry || 'no entry'}.`);
+    }
+    const response = await request('load/manifest.json');
+    let manifest;
+    try { manifest = await response.json(); } catch { /* fail closed below */ }
+    if (!response.ok || !isDeepStrictEqual(manifest, expectedBuild)) {
+      throw new Error('Philadelphia build mismatch: deployed manifest differs from the release.');
+    }
+    for (const [path, expectedHash] of Object.entries(expectedBuild.files)) {
+      const asset = await request(path);
+      const hash = createHash('sha256').update(Buffer.from(await asset.arrayBuffer())).digest('hex');
+      if (!asset.ok || hash !== expectedHash) {
+        throw new Error(`Philadelphia build mismatch: ${path} is missing or has different contents.`);
+      }
+    }
   }
   for (const [path, method, status, text] of [
     ['detail-imagery', 'GET', 400, 'Invalid detail imagery request'],

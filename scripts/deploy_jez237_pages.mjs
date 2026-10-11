@@ -24,7 +24,11 @@ for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.h
 }
 // A current checkout does not make a reused public upload snapshot current.
 // Reject stale policy/storefront files before they can replace a repaired site.
-for (const path of ['_headers', 'prototypes/hidden-reef/index.html',
+const phillyRoot = 'demos/philadelphia-relief/';
+const expectedBuild = JSON.parse(readFileSync(resolve(repo, phillyRoot, 'load/manifest.json'), 'utf8'));
+for (const path of ['_headers', `${phillyRoot}index.html`, `${phillyRoot}load/manifest.json`,
+  ...Object.keys(expectedBuild.files).map(path => `${phillyRoot}${path}`),
+  'prototypes/hidden-reef/index.html',
   'prototypes/hidden-reef-header-preview/index.html',
   'demos/hidden-reef-koi/index.html', 'demos/hidden-reef-koi/koi-pond.html',
   'demos/koi-pond-garden/index.html', 'demos/koi-pond-garden/koi-pond.html',
@@ -57,7 +61,7 @@ async function verifyRelease(url) {
   // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
   for (let attempt = 0; attempt < 6; attempt++) {
     try {
-      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages });
+      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages, expectedBuild });
       await checkHiddenReefImages(url);
       await checkPondFilterLinks(url);
       await checkOpenSeaLive(url,repo);

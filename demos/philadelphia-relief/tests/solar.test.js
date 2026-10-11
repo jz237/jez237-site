@@ -68,6 +68,21 @@ test('effective light', async (t) => {
     assert.equal(l.fogDensity, 0.3);
     assert.equal(l.night, false);
     assert.equal(l.clock, false);
+    assert.deepEqual(l.aerialLight, [1, 1, 1], 'daytime imagery retains its captured colors');
+  });
+
+  await t.test('aerial ground joins clock-driven night and the Night Metro theme', () => {
+    const night = effectiveLight({ ...base, timeMode: 'clock', clockHour: 1 });
+    const noir = effectiveLight({ ...base, theme: 'noir' });
+    assert.deepEqual(noir.aerialLight, night.aerialLight);
+    assert.ok(night.aerialLight.every(channel => channel > .1 && channel < .4));
+    assert.ok(night.aerialLight[2] > night.aerialLight[0], 'night fill stays cool and legible');
+    const twilight = effectiveLight({ ...base, timeMode: 'clock', clockHour: 20.4 });
+    for (let i = 0; i < 3; i++) {
+      assert.ok(twilight.aerialLight[i] > night.aerialLight[i] && twilight.aerialLight[i] < 1);
+    }
+    const noon = effectiveLight({ ...base, timeMode: 'clock', clockHour: 13 });
+    assert.deepEqual(noon.aerialLight, [1, 1, 1]);
   });
 
   await t.test('clock mode follows the sun and stays inside the slider range', () => {
