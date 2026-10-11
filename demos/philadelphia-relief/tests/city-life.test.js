@@ -177,6 +177,40 @@ test('roof equipment stays inside concave footprints and keeps the original roof
   assert.equal(rect.parts.at(-1).minHeight,21.35);
 });
 
+test('dense street scenery retains complete trees and lamps when an instance budget is exhausted',async()=>{
+  const previousFetch=globalThis.fetch;
+  const roads=Array.from({length:250},(_,i)=>({id:i,oneway:0,width:10,
+    points:[[i*2,-250,i*4-500],[i*2+1,250,i*4-500]]}));
+  globalThis.fetch=async()=>({ok:true,json:async()=>({roads})});
+  const streets=createCityStreets(THREE,{scene:new THREE.Scene(),
+    projection:{...projection,xToLon:x=>x,zToLat:z=>z},sampleElevation:()=>4,
+    lighting:{uniforms:createCityUniforms(THREE)}});
+  try{
+    const params={camera:{position:new THREE.Vector3(0,500,500)},pose:{lon:0,lat:0,dist:2400},
+      state:{era:'present',compareMode:'off',lightweight:false,layers:{structures:true},streetLife:true,
+        animationSpeed:1},exaggeration:1,sunDir:new THREE.Vector3(.3,1,0),dt:1.01,
+      reducedMotion:true,archive:false,quality:'balanced'};
+    streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
+    const [furniture,trees]=streets.group.children,matrix=new THREE.Matrix4();
+    const position=new THREE.Vector3(),scale=new THREE.Vector3(),rotation=new THREE.Quaternion();
+    const trunks=new Set();let poles=0,lamps=0;
+    for(let i=0;i<furniture.count;i++){
+      furniture.getMatrixAt(i,matrix);matrix.decompose(position,rotation,scale);
+      if(Math.abs(scale.y-3.7)<.001)trunks.add(`${position.x},${position.z}`);
+      if(Math.abs(scale.y-5.8)<.001)poles++;
+      if(Math.abs(scale.y-.18)<.001)lamps++;
+    }
+    assert.equal(furniture.count,furniture.instanceMatrix.count,'fixture fills the street buffer');
+    assert.equal(trees.count,trees.instanceMatrix.count,'fixture fills the canopy buffer');
+    assert.equal(trunks.size,trees.count,'no bare trunks survive a full canopy buffer');
+    assert.equal(poles,lamps,'every lamp retains both its pole and light');
+    for(let i=0;i<trees.count;i++){
+      trees.getMatrixAt(i,matrix);matrix.decompose(position,rotation,scale);
+      assert.ok(trunks.has(`${position.x},${position.z}`),'each crown has its matching trunk');
+    }
+  }finally{streets.dispose();globalThis.fetch=previousFetch;}
+});
+
 test('street curbs follow sloping and curved terrain instead of hovering at the average height',async()=>{
   const previousFetch=globalThis.fetch;
   globalThis.fetch=async()=>({ok:true,json:async()=>({roads:[{id:1,oneway:0,width:10,
