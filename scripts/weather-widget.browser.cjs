@@ -28,6 +28,7 @@ async function run() {
     await page.route('https://api.weather.gov/**',route=>{
       if(mode==='offline') return json(route,{error:true},503);
       const url=route.request().url();
+      if(url.includes('/products/')) return json(route,{'@graph':[]});
       if(url.includes('/points/')) return json(route,{properties:{timeZone:'America/New_York',forecast:'https://api.weather.gov/gridpoints/PHI/49,80/forecast',forecastHourly:'https://api.weather.gov/gridpoints/PHI/49,80/forecast/hourly'}});
       if(url.includes('/alerts/')) return json(route,{type:'FeatureCollection',features:[]});
       if(url.endsWith('/hourly')) return json(route,{properties:{periods:times.slice(0,24).map(startTime=>({startTime,temperature:mode==='missing'?null:62,temperatureUnit:'F',windSpeed:mode==='missing'?null:'5 to 10 mph',windDirection:mode==='missing'?null:'E',shortForecast:mode==='missing'?'':'Mostly Cloudy',probabilityOfPrecipitation:{value:mode==='missing'?null:10}}))}});

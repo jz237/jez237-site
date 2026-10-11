@@ -6,6 +6,7 @@ import {
   position, probability, queryUrl, validateCollection, validateForecastCollection, validateLayerCollection, wind
 } from '../weather/hurricane-data.mjs';
 import { satelliteTime } from '../weather/hurricane-satellite.mjs';
+import { WPC_INDEX, combinedStorms, fetchWpcForecasts, parseWpcForecast, validateWpcCollection } from '../weather/hurricane-wpc.mjs';
 
 const NOW = Date.UTC(2026, 9, 11, 0);
 const EMPTY = { type:'FeatureCollection', features:[] };
@@ -255,4 +256,131 @@ test('persistent errors stop after one retry; rate limits are not retried', asyn
   assert.equal(calls.get(queryUrl(5)), 2);
   assert.equal(calls.get(queryUrl(7)), 1);
   assert.equal(calls.get(queryUrl(3)), 1);
+});
+
+const wpcProduct = () => ({
+  id:'11111111-1111-4111-8111-111111111111',issuingOffice:'KWNH',productCode:'TCM',wmoCollectiveId:'WTNT24',issuanceTime:'2026-10-10T20:37:00Z',
+  productText:`000
+WTNT24 KWNH 102037
+TCMAT4
+POST-TROPICAL CYCLONE EXAMPLE FORECAST/ADVISORY NUMBER  17
+NWS WEATHER PREDICTION CENTER COLLEGE PARK MD   AL092026
+2100 UTC SAT OCT 10 2026
+POST-TROPICAL CYCLONE CENTER LOCATED NEAR 33.5N  86.9W AT 10/2100Z
+PRESENT MOVEMENT TOWARD THE NORTH-NORTHEAST OR  25 DEGREES AT  13 KT
+ESTIMATED MINIMUM CENTRAL PRESSURE 1007 MB
+MAX SUSTAINED WINDS  25 KT WITH GUSTS TO  35 KT.
+FORECAST VALID 11/0600Z 35.2N  86.0W...POST-TROP/INLAND
+MAX WIND  25 KT...GUSTS  35 KT.
+FORECAST VALID 11/1800Z 37.9N  81.9W...POST-TROP/INLAND
+MAX WIND  25 KT...GUSTS  35 KT.
+FORECAST VALID 12/1800Z...DISSIPATED
+NEXT ADVISORY AT 11/0300Z
+$$`
+});
+
+test('WPC handoff preserves official positions, valid times, source knots and dissipation without an invented endpoint', () => {
+  const data = parseWpcForecast(wpcProduct(),NOW);
+  const storm = combinedStorms(EMPTY,data,NOW)[0];
+  assert.equal(storm.name,'Example');
+  assert.equal(storm.source,'WPC');
+  assert.equal(storm.label,'Post-tropical');
+  assert.equal(storm.advisory,'17');
+  assert.equal(storm.issuedAt,Date.UTC(2026,9,10,21));
+  assert.deepEqual(storm.current.latlng,[33.5,-86.9]);
+  assert.deepEqual(storm.points.map(p=>p.hour),[0,9,21]);
+  assert.deepEqual(storm.points[2].latlng,[37.9,-81.9]);
+  assert.equal(storm.current.wind,25);
+  assert.equal(storm.current.gust,35);
+  assert.equal(storm.pressure,1007);
+  assert.equal(storm.movement,13);
+  assert.equal(storm.direction,'NNE');
+  assert.equal(storm.dissipatedAt,Date.UTC(2026,9,12,18));
+  assert.equal(officialUrl(storm),'https://www.wpc.ncep.noaa.gov/tropical/tropical_advisories.php?storm=EXAMPLE');
+});
+
+test('WPC forecasts cross year boundaries and classify future post-tropical positions independently', () => {
+  const product=wpcProduct();
+  product.issuanceTime='2026-12-31T20:37:00Z';
+  product.productText=product.productText.replace('SAT OCT 10','THU DEC 31').replace('AT 10/2100Z','AT 31/2100Z').replaceAll('11/','01/').replaceAll('12/','02/').replace('POST-TROPICAL CYCLONE EXAMPLE','TROPICAL STORM EXAMPLE');
+  const storm=combinedStorms(EMPTY,parseWpcForecast(product,Date.UTC(2027,0,1)),Date.UTC(2027,0,1))[0];
+  assert.equal(storm.current.type,'TS');
+  assert.equal(storm.points[1].type,'PTC');
+  assert.equal(storm.points[1].time,Date.UTC(2027,0,1,6));
+  assert.equal(storm.dissipatedAt,Date.UTC(2027,0,2,18));
+});
+
+test('WPC missing measurements stay unknown while a published calm wind remains zero', () => {
+  const product=wpcProduct();
+  product.productText=product.productText.replace(/PRESENT MOVEMENT[^\n]+\n|ESTIMATED MINIMUM CENTRAL PRESSURE[^\n]+\n|MAX SUSTAINED WINDS[^\n]+\n/g,'').replace('MAX WIND  25 KT...GUSTS  35 KT.','MAX WIND  0 KT.');
+  const storm=combinedStorms(EMPTY,parseWpcForecast(product,NOW),NOW)[0];
+  for (const value of [storm.pressure,storm.movement,storm.current.wind,storm.current.gust]) assert.equal(value,null);
+  assert.equal(storm.points[1].wind,0);
+  assert.equal(storm.points[1].gust,null);
+});
+
+test('malformed WPC identities, dates, positions and forecast ordering cannot create a map marker', () => {
+  for (const transform of [
+    p=>{p.issuingOffice='KNHC';}, p=>{p.id='../arbitrary-url';}, p=>{p.wmoCollectiveId='WTPZ24';},
+    p=>{p.productText=p.productText.replace('OCT 10','FEB 31');},
+    p=>{p.productText=p.productText.replace('33.5N','93.5N');},
+    p=>{p.productText=p.productText.replace('AT 10/2100Z','AT 10/1800Z');},
+    p=>{p.productText=p.productText.replace('FORECAST VALID 11/1800Z','FORECAST VALID 11/0600Z');},
+    p=>{p.productText=p.productText.replace('FORECAST VALID 11/0600Z','FORECAST VALID INVALID');},
+    p=>{p.productText=p.productText.replace('35.2N  86.0W','POSITION UNAVAILABLE');},
+    p=>{p.productText=p.productText.replace('...DISSIPATED','...UNRECOGNIZED');},
+    p=>{p.productText=p.productText.replace('POST-TROPICAL CYCLONE CENTER LOCATED NEAR','REPEAT...CENTER LOCATED NEAR');},
+    p=>{p.issuanceTime='2025-10-10T20:37:00Z';}
+  ]) { const product=wpcProduct();transform(product);assert.throws(()=>parseWpcForecast(product,NOW)); }
+  assert.throws(()=>parseWpcForecast(wpcProduct(),Date.UTC(2026,9,10,18)));
+  assert.deepEqual(parseWpcForecast(wpcProduct(),NOW+12*3600000),EMPTY,'A new feed check cannot revive an expired WPC advisory');
+});
+
+test('NHC and WPC duplicate IDs keep only the newer complete advisory', () => {
+  const remnants=parseWpcForecast(wpcProduct(),NOW);
+  const nhc=collection([point({idp_subset:'al092026',advdate:'400 AM CDT Sat Oct 10 2026',advisnum:'15',maxwind:30})]);
+  const storms=combinedStorms(nhc,remnants,NOW);
+  assert.equal(storms.length,1);
+  assert.equal(storms[0].source,'WPC');
+  assert.equal(storms[0].points.length,3);
+  nhc.features[0].properties.advdate='800 PM EDT Sat Oct 10 2026';
+  nhc.features[0].properties.advisnum='18';
+  const returned=combinedStorms(nhc,remnants,NOW);
+  assert.equal(returned.length,1);
+  assert.equal(returned[0].source,'NHC');
+  assert.equal(returned[0].points.length,1);
+});
+
+test('WPC discovery fetches only the newest product for a slot, shares a deadline and ignores arbitrary feed URLs', async () => {
+  const product=wpcProduct();
+  const meta={...product,'@id':'https://example.invalid/injected'};
+  delete meta.productText;
+  const earlier={...meta,id:'22222222-2222-4222-8222-222222222222',issuanceTime:'2026-10-10T14:37:00Z'};
+  const calls=[];
+  const data=await fetchWpcForecasts(async (url,options)=>{
+    calls.push({url,options});
+    return {ok:true,json:async()=>url===WPC_INDEX ? {'@graph':[earlier,meta]} : product};
+  },NOW);
+  assert.equal(data.features.length,3);
+  assert.deepEqual(calls.map(c=>c.url),[WPC_INDEX,`https://api.weather.gov/products/${product.id}`]);
+  assert.equal(calls[0].options.signal,calls[1].options.signal);
+});
+
+test('a WPC slot returned to NHC or an older WPC report is not resurrected', async () => {
+  const product=wpcProduct();
+  for (const items of [[],[{...product,issuanceTime:'2026-10-09T20:37:00Z'}],[product,{...product,issuingOffice:'KNHC',issuanceTime:'2026-10-10T23:37:00Z'}]]) {
+    const calls=[];
+    const data=await fetchWpcForecasts(async url=>{calls.push(url);return {ok:true,json:async()=>({'@graph':items})};},NOW);
+    assert.deepEqual(data,EMPTY);
+    assert.equal(calls.length,1);
+  }
+});
+
+test('failed or malformed WPC feeds remain unavailable instead of reporting no inland systems', async () => {
+  await assert.rejects(fetchWpcForecasts(async()=>({ok:false,status:503}),NOW));
+  await assert.rejects(fetchWpcForecasts(async()=>({ok:true,json:async()=>({})}),NOW));
+  await assert.rejects(fetchWpcForecasts(async url=>({ok:true,json:async()=>url===WPC_INDEX ? {'@graph':[wpcProduct()]} : {...wpcProduct(),id:'22222222-2222-4222-8222-222222222222'}}),NOW));
+  const data=parseWpcForecast(wpcProduct(),NOW);
+  data.features[0].properties.source_agency='NHC';
+  assert.throws(()=>validateWpcCollection(data));
 });
