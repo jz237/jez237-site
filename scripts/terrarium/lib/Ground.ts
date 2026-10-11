@@ -44,8 +44,11 @@ export function poolDepth(x: number, z: number) {
   if (d >= 0) return 0;
   const shelf = 0.0175 * smooth(0.0, -0.3, d);
   const pocket = 0.05 * gauss(x - PLUNGE.x - 0.03, z - PLUNGE.z, 0.13, 0.085) * smooth(0.0, -0.22, d);
+  // a basin dug down into the substrate along the front glass, so the water
+  // column shows through the cut-away, deepest in the middle of the pool's front
+  const basin = 0.045 * smooth(0.0, -0.19, d) * smooth(0.09, 0.21, z);
   const ripples = (fbm(x * 26, z * 26) - 0.5) * 0.004 * smooth(0.0, -0.12, d);
-  return Math.max(0, shelf + pocket + ripples);
+  return Math.max(0, shelf + Math.max(pocket, basin) + ripples);
 }
 
 function landHeight(x: number, z: number) {
@@ -113,6 +116,7 @@ export class Ground {
     // Walls follow the perimeter just inside the glass.
     const wallPos: number[] = [];
     const wallUv: number[] = [];
+    const wallTop: number[] = [];
     const idx: number[] = [];
     const edge = (x0: number, z0: number, x1: number, z1: number, n: number) => {
       const base = wallPos.length / 3;
@@ -122,6 +126,8 @@ export class Ground {
         wallPos.push(x, 0.0, z, x, h, z);
         const s = Math.abs(x1 - x0) > 0 ? x : z;
         wallUv.push(s, 0, s, h);
+        // where the surface is above this column (under the pool: its bed), and whether it is wet
+        wallTop.push(h, poolDistance(x, z) < 0 ? 1 : 0, h, poolDistance(x, z) < 0 ? 1 : 0);
       }
       for (let i = 0; i < n; i++) {const a = base + i * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);}
     };
@@ -132,6 +138,7 @@ export class Ground {
     const wg = new THREE.BufferGeometry();
     wg.setAttribute('position', new THREE.Float32BufferAttribute(wallPos, 3));
     wg.setAttribute('uv', new THREE.Float32BufferAttribute(wallUv, 2));
+    wg.setAttribute('aTop', new THREE.Float32BufferAttribute(wallTop, 2));
     wg.setIndex(idx);
     wg.computeVertexNormals();
     this.walls = new THREE.Mesh(wg, this.wallMaterial());
@@ -173,7 +180,7 @@ reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;
 { float fr = pow(1.0 - clamp(normalize(cameraPosition - vW).y, 0.0, 1.0), 4.0);
   reflectedLight.indirectSpecular += gs.puddle * (0.05 + 0.9 * fr) * vec3(0.15, 0.13, 0.1) * (0.2 + 0.8 * uCaustic); }`);
     };
-    m.customProgramCacheKey = () => 'terrarium-ground-v4';
+    m.customProgramCacheKey = () => 'terrarium-ground-v5';
     return m;
   }
 
@@ -181,14 +188,14 @@ reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;
     const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.92});
     m.onBeforeCompile = (s) => {
       s.vertexShader = s.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying vec2 vSub; varying vec3 vWn;')
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSub = uv; vWn = normalize(mat3(modelMatrix) * objectNormal);');
+        .replace('#include <common>', '#include <common>\nvarying vec2 vSub; varying vec3 vWn; attribute vec2 aTop; varying vec2 vTop;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSub = uv; vTop = aTop; vWn = normalize(mat3(modelMatrix) * objectNormal);');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-varying vec2 vSub; varying vec3 vWn;
+varying vec2 vSub; varying vec3 vWn; varying vec2 vTop;
 ${WALL_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
-WallSample ws = wallSample(vSub);
+WallSample ws = wallSample(vSub, vTop.x, vTop.y);
 diffuseColor.rgb = ws.color;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = ws.rough;')
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -203,7 +210,7 @@ diffuseColor.rgb = ws.color;`)
 reflectedLight.indirectDiffuse *= ws.ao; reflectedLight.directDiffuse *= mix(1.0, ws.ao, 0.7); reflectedLight.indirectSpecular *= ws.ao;
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => 'terrarium-wall-v1';
+    m.customProgramCacheKey = () => 'terrarium-wall-v2';
     return m;
   }
 }
@@ -229,6 +236,27 @@ vec3 pebbles(vec2 p){
   float e = d2 - d1;
   float h = sqrt(max(0.0, 1.0 - d1 * d1 * 1.25)) * smoothstep(0.0, 0.18, e);
   return vec3(h, gh1(id * 1.37), e);
+}
+// Rounded stones lying in a layer, each a dome that hides the ones behind it
+// (fill ~1: packed; less: scattered). x = height 0..1 (0 between them), y = id, z = 1 - r/R.
+vec3 stones(vec2 p, float fill){
+  vec2 i = floor(p), f = fract(p);
+  float best = 0.0, id = 0.0, rim = 0.0;
+  for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++){
+    vec2 n = vec2(float(x), float(y));
+    vec2 h = gh2(i + n);
+    vec2 r = n + 0.5 + (h - 0.5) * 0.55 - f;
+    float a = h.x * 6.2832;
+    r = mat2(cos(a), -sin(a), sin(a), cos(a)) * r;
+    r.x *= 0.8 + 0.4 * h.y;
+    float R = fill * (0.5 + 0.22 * h.y);
+    float d = length(r) / R;
+    if (d < 1.0) {
+      float hh = sqrt(1.0 - d * d) * (0.65 + 0.35 * h.x);
+      if (hh > best) { best = hh; id = gh1(i + n + 0.37); rim = 1.0 - d; }
+    }
+  }
+  return vec3(best, id, rim);
 }
 `;
 
@@ -284,11 +312,14 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   float depthB = clamp((water - w.y) / 0.05, 0.0, 1.0);
   vec3 silt = mix(vec3(0.07, 0.055, 0.035), vec3(0.15, 0.12, 0.08), gfbm(p * 70.0)) * (0.8 + 0.4 * gn(p * 600.0));
   silt = mix(silt, vec3(0.035, 0.03, 0.02), depthB * 0.6);
-  vec3 pb = pebbles(p * 160.0);
-  float pebMask = smoothstep(0.62, 0.86, gn(p * 22.0 + 4.0)) * (1.0 - depthB * 0.5);
+  vec3 pb = stones(p * 160.0, 0.75);
+  float pebMask = smoothstep(0.55, 0.85, gn(p * 22.0 + 4.0)) * (1.0 - depthB * 0.5);
   vec3 stone = mix(vec3(0.07, 0.06, 0.05), vec3(0.22, 0.19, 0.15), pb.y) * (0.45 + 0.55 * pb.x);
-  stone = mix(stone, vec3(0.03, 0.03, 0.02), (1.0 - smoothstep(0.0, 0.12, pb.z)) * 0.6);
-  vec3 bedC = mix(silt, stone, pebMask * step(0.08, pb.x));
+  stone = mix(stone, vec3(0.03, 0.03, 0.02), (1.0 - smoothstep(0.0, 0.25, pb.z)) * 0.5);
+  // fine sand rippled by the flow, with stones scattered over it (not a paving)
+  float ripple = sin(dot(p, vec2(0.6, 0.8)) * 260.0 + gn(p * 30.0) * 6.0) * 0.5 + 0.5;
+  silt = mix(silt, silt * 1.25 + vec3(0.02, 0.018, 0.012), ripple * 0.35 * (1.0 - depthB * 0.5));
+  vec3 bedC = mix(silt, stone, pebMask * step(0.62, pb.y) * smoothstep(0.0, 0.15, pb.x));
   // green-brown algae film and dark sunken leaves
   bedC = mix(bedC, vec3(0.04, 0.07, 0.025), smoothstep(0.5, 0.8, gfbm(p * 25.0 + 9.0)) * 0.7);
   float leaf = smoothstep(0.82, 0.86, gn(p * 55.0 + 2.0)) * smoothstep(0.3, 0.5, gn(p * 300.0));
@@ -319,12 +350,12 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   g.rough = mix(g.rough, 0.45, wet * 0.6);
   // bump normal
   float e = 0.0006;
-  float pbk = 0.0018 * max(bedMix, shore) * pebMask;
+  float pbk = 0.0018 * max(bedMix, shore) * pebMask * step(0.62, pb.y);
   // silt under the water and the cave's grit are smooth; the crumb relief belongs to the dry soil
   float soilK = 1.0 - max(max(bedMix, shore), caveK) * 0.85;
   float h0 = groundBumps(p, moss) * soilK + pb.x * pbk;
-  float hx = groundBumps(p + vec2(e, 0.0), moss) * soilK + pebbles((p + vec2(e, 0.0)) * 160.0).x * pbk;
-  float hz = groundBumps(p + vec2(0.0, e), moss) * soilK + pebbles((p + vec2(0.0, e)) * 160.0).x * pbk;
+  float hx = groundBumps(p + vec2(e, 0.0), moss) * soilK + stones((p + vec2(e, 0.0)) * 160.0, 0.75).x * pbk;
+  float hz = groundBumps(p + vec2(0.0, e), moss) * soilK + stones((p + vec2(0.0, e)) * 160.0, 0.75).x * pbk;
   vec3 dx = vec3(e, hx - h0, 0.0), dz = vec3(0.0, hz - h0, e);
   vec3 nb = normalize(cross(dz, dx));
   vec3 n = normalize(cross(dFdy(w), dFdx(w)));
@@ -360,37 +391,80 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
 
 const WALL_GLSL = NOISE_GLSL + /* glsl */ `
 struct WallSample { vec3 color; float rough; vec2 slope; float ao; };
-WallSample wallSample(vec2 uv){
+// fine roots hanging down from the surface: wavering threads that thin and end
+float wallRoots(float x, float y, float top){
+  float r = 0.0;
+  float depth = top - y;
+  for (int k = 0; k < 3; k++) {
+    float fk = float(k);
+    float K = k == 0 ? 11.0 : (k == 1 ? 27.0 : 63.0);
+    float w = (gn(vec2(x * 5.0 + fk * 7.0, y * 16.0 + fk)) - 0.5) * 0.9 + (gn(vec2(x * 40.0 + fk * 3.0, y * 90.0)) - 0.5) * 0.18;
+    float u = x * K + w;
+    float id = floor(u);
+    float h = gh1(vec2(id, fk * 5.1 + 1.0));
+    float len = (0.012 + 0.07 * h) * (k == 0 ? 1.0 : (k == 1 ? 0.7 : 0.4));
+    float wid = (k == 0 ? 0.0009 : (k == 1 ? 0.0005 : 0.00028)) * (1.0 - 0.7 * clamp(depth / len, 0.0, 1.0));
+    float d = abs(fract(u) - 0.5) / K;
+    float on = step(k == 0 ? 0.45 : 0.3, gh1(vec2(id * 1.7, fk + 3.0)));
+    r = max(r, (1.0 - smoothstep(wid * 0.4, wid, d)) * (1.0 - smoothstep(len * 0.55, len, depth)) * on * (0.55 + 0.45 * (1.0 - fk * 0.3)));
+  }
+  return r * smoothstep(0.0, 0.004, depth);
+}
+WallSample wallSample(vec2 uv, float top, float wet){
   WallSample s;
   float x = uv.x, y = uv.y;
-  float layer = 0.042 + (gfbm(vec2(x * 9.0, 1.0)) - 0.5) * 0.012;
-  // drainage pebbles
-  vec3 pb = pebbles(vec2(x, y) * vec2(110.0, 120.0));
-  vec3 peb = mix(vec3(0.17, 0.13, 0.09), vec3(0.5, 0.42, 0.32), pb.y) * (0.35 + 0.65 * pb.x);
-  peb = mix(peb, vec3(0.62, 0.55, 0.45), smoothstep(0.85, 1.0, pb.y) * 0.5);
-  float gap = 1.0 - smoothstep(0.0, 0.1, pb.z);
-  peb = mix(peb, vec3(0.03, 0.022, 0.016), gap * 0.85);
-  // soil with fibres, bark and perlite
-  float fib = gn(vec2(x * 900.0, y * 140.0 + gn(vec2(x * 40.0, y * 40.0)) * 6.0));
-  vec3 soil = vec3(0.09, 0.055, 0.032) * (0.6 + 0.7 * gfbm(vec2(x, y) * 220.0));
-  soil = mix(soil, vec3(0.2, 0.12, 0.06), smoothstep(0.72, 0.9, fib) * 0.5);
-  float bark = smoothstep(0.78, 0.86, gn(vec2(x, y) * vec2(160.0, 260.0)));
-  soil = mix(soil, vec3(0.16, 0.08, 0.04), bark * 0.7);
-  float perl = smoothstep(0.94, 0.985, gn(vec2(x, y) * 520.0));
-  soil = mix(soil, vec3(0.62, 0.6, 0.55), perl * 0.7);
+  float layer = 0.04 + (gfbm(vec2(x * 9.0, 1.0)) - 0.5) * 0.012;
+  // drainage layer: rounded river pebbles heaped against the glass, tan to grey-brown
+  vec2 pq = vec2(x, y) * vec2(72.0, 80.0);
+  bool lowLayer = y < layer + 0.006;
+  vec3 pb = lowLayer ? stones(pq, 1.05) : vec3(0.0);
+  float hue = fract(pb.y * 7.13);
+  vec3 pc = mix(vec3(0.3, 0.22, 0.14), vec3(0.52, 0.41, 0.27), hue);
+  pc = mix(pc, vec3(0.36, 0.33, 0.3), step(0.7, fract(pb.y * 3.7)) * 0.8);
+  pc = mix(pc, vec3(0.6, 0.53, 0.43), step(0.9, pb.y) * 0.6);
+  pc = mix(pc, vec3(0.2, 0.15, 0.1), step(fract(pb.y * 11.3), 0.15) * 0.7);
+  pc *= 0.85 + 0.3 * gn(vec2(x, y) * 1100.0 + pb.y * 50.0);
+  float gap = 1.0 - smoothstep(0.02, 0.2, pb.x);
+  vec3 peb = pc * (0.35 + 0.65 * sqrt(pb.x));
+  // soil washed down between the top stones, and the dark between them all
+  float fill = smoothstep(layer - 0.012, layer, y);
+  peb = mix(peb, vec3(0.02, 0.014, 0.01), max(gap, fill * (1.0 - smoothstep(0.3, 0.7, pb.x))));
+  // soil: dark humus with fibres, bark chips and perlite; darker and finer near the top
+  float grain = gfbm(vec2(x, y) * 300.0);
+  vec3 soil = vec3(0.06, 0.037, 0.022) * (0.65 + 0.7 * grain);
+  float fib = gn(vec2(x * 700.0 + gn(vec2(x, y) * 60.0) * 4.0, y * 700.0) * mat2(0.8, -0.6, 0.6, 0.8));
+  soil = mix(soil, vec3(0.14, 0.085, 0.045), smoothstep(0.75, 0.92, fib) * 0.4);
+  // flat bark flakes lying in the mix (fewer where the noise says so), and the odd grain of perlite
+  vec3 chip = stones(vec2(x, y) * vec2(110.0, 260.0) + 7.0, 0.5 + 0.35 * gn(vec2(x, y) * 40.0));
+  float chipOn = step(0.95 - 0.08 * gn(vec2(x, y) * 25.0 + 3.0), chip.y) * smoothstep(0.0, 0.2, chip.x) * smoothstep(0.3, 0.6, gn(vec2(x, y) * 900.0 + chip.y * 30.0) + chip.x * 0.4);
+  soil = mix(soil, mix(vec3(0.07, 0.036, 0.018), vec3(0.15, 0.075, 0.035), fract(chip.y * 9.1)) * (0.6 + 0.5 * chip.x), chipOn * 0.7);
+  // crumbs: the mix is granular, each grain catching a little light
+  vec3 crumb = stones(vec2(x, y) * 1300.0 + 5.0, 1.0);
+  soil *= 0.62 + 0.55 * crumb.x * (0.7 + 0.6 * crumb.y);
+  vec3 perlite = stones(vec2(x, y) * 700.0 + 3.0, 0.4);
+  soil = mix(soil, vec3(0.55, 0.53, 0.5) * (0.5 + 0.5 * perlite.x), step(0.975, perlite.y) * smoothstep(0.0, 0.3, perlite.x) * 0.6);
+  float depth = top - y;
+  soil *= mix(0.7, 1.0, smoothstep(0.0, 0.03, depth));
+  // the top: a band of leaf litter and moss pressed against the glass
+  float litterBand = (1.0 - smoothstep(0.004, 0.011 + 0.006 * gn(vec2(x * 30.0, 2.0)), depth)) * (1.0 - wet);
+  vec3 lf = depth < 0.02 ? stones(vec2(x * 70.0, y * 420.0) + 2.0, 0.95) : vec3(0.0);
+  vec3 litter = mix(vec3(0.12, 0.06, 0.025), vec3(0.3, 0.17, 0.07), lf.y) * (0.45 + 0.4 * lf.x + 0.3 * gn(vec2(x * 600.0, y * 2000.0)));
+  litter = mix(litter, vec3(0.04, 0.075, 0.018) * (0.7 + 0.5 * lf.x), step(0.8, fract(lf.y * 5.3)));
+  soil = mix(soil, litter, litterBand * smoothstep(0.0, 0.1, lf.x) * step(0.25, lf.y) * smoothstep(0.25, 0.5, gn(vec2(x * 300.0, y * 900.0)) + 0.3));
   // roots
-  float rootN = abs(gn(vec2(x * 70.0, y * 26.0) + gn(vec2(x, y) * 30.0) * 2.0) - 0.5);
-  float root = (1.0 - smoothstep(0.0, 0.025, rootN)) * smoothstep(layer, layer + 0.02, y);
-  soil = mix(soil, vec3(0.3, 0.2, 0.11), root * 0.7);
-  float isPeb = 1.0 - smoothstep(layer - 0.004, layer + 0.004, y);
+  float root = wallRoots(x, y, top) * (1.0 - wet) * smoothstep(layer, layer + 0.01, y);
+  soil = mix(soil, vec3(0.42, 0.32, 0.2) * (0.8 + 0.3 * gn(vec2(x, y) * 800.0)), root * 0.85);
+  float isPeb = 1.0 - smoothstep(layer - 0.003, layer + 0.003, y);
   vec3 col = mix(soil, peb, isPeb);
+  // under the pool: wet and darker
+  col *= mix(1.0, 0.7, wet);
   s.color = col;
-  s.rough = mix(0.95, 0.6, isPeb);
-  // slope from pebble domes (finite difference)
-  float e = 0.0008;
-  float hx = pebbles(vec2(x + e, y) * vec2(110.0, 120.0)).x, hy = pebbles(vec2(x, y + e) * vec2(110.0, 120.0)).x;
-  s.slope = isPeb * vec2(pb.x - hx, pb.x - hy) * 1.2;
-  s.ao = mix(0.8 + 0.2 * gn(vec2(x, y) * 300.0), 0.25 + 0.75 * pb.x * (1.0 - gap * 0.7), isPeb);
+  s.rough = mix(mix(0.95, 0.38, isPeb * (1.0 - gap)), 0.35, wet * 0.5);
+  // slope from the pebble domes (finite difference)
+  float e = 0.0006;
+  float hx = lowLayer ? stones(vec2(x + e, y) * vec2(72.0, 80.0), 1.05).x : 0.0, hy = lowLayer ? stones(vec2(x, y + e) * vec2(72.0, 80.0), 1.05).x : 0.0;
+  s.slope = isPeb * clamp(vec2(pb.x - hx, pb.x - hy) * 3.0, -1.5, 1.5) + (1.0 - isPeb) * (root * vec2(0.0, 0.15) + chip.x * chipOn * vec2(0.1));
+  s.ao = mix(0.8 + 0.2 * grain, 0.15 + 0.85 * pb.x, isPeb);
   return s;
 }
 `;

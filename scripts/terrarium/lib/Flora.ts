@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {Surface, SurfaceKind} from './Surface';
-import {addFoliage} from './Foliage';
+import {addFoliage, PINNATE_GLSL} from './Foliage';
 import {mulberry32} from './Textures';
 import {WATER_LEVEL, poolDistance, poolDepth, caveKeepClear, CAVE} from './Ground';
 import {TANK} from './Case';
@@ -13,7 +13,7 @@ import {leafGeometry, stemGeometry, placeLeaf, tag} from './Plants';
  * ferns tucked into the rock, creeping fig climbing the peaks, mushrooms by the
  * log, twigs, pebbles, and leaves floating on the pool.
  */
-const K = {bromOuter: 6, bromInner: 7, orchidLeaf: 8, petal: 9, cap: 10, stipe: 11, grass: 12, tilly: 13, spike: 14, calathea: 15, fernlet: 16, twig: 17, fig: 18, lily: 19};
+const K = {bromOuter: 6, bromInner: 7, orchidLeaf: 8, petal: 9, cap: 10, stipe: 11, grass: 12, tilly: 13, spike: 14, calathea: 15, fernlet: 16, twig: 17, fig: 18, lily: 19, heart: 20};
 
 type Parts = THREE.BufferGeometry[];
 const up = new THREE.Vector3(0, 1, 0);
@@ -158,6 +158,32 @@ function calathea(rnd: () => number): Parts {
   return parts;
 }
 
+/** The heart-shaped blade of a philodendron or pothos (the stalk joins between its lobes). */
+function heartBlade() {
+  const g = leafGeometry({length: 1, width: 0.84, shape: (u) => Math.pow(Math.sin(Math.PI * Math.min(1, 0.1 + u * 0.92)), 0.55) * (1 - 0.3 * u * u), arch: 0.08, cup: 0.14, wave: 0.025, segs: [16, 8]});
+  g.translate(-0.1, 0, 0);
+  return g;
+}
+
+/** Heart-leaf philodendron and pothos: glossy leaves held out on long stalks from a short stem. */
+function heartleaf(rnd: () => number, size: number): Parts {
+  const parts: Parts = [];
+  const blade = heartBlade();
+  const n = 6 + Math.floor(rnd() * 5);
+  const hue = rnd();
+  for (let i = 0; i < n; i++) {
+    const yaw = (i / n) * Math.PI * 2 + rnd() * 0.8;
+    const lean = 0.2 + rnd() * 0.8;
+    const h = size * (0.03 + rnd() * 0.055);
+    const dir = new THREE.Vector3(Math.cos(yaw) * Math.sin(lean), Math.cos(lean), -Math.sin(yaw) * Math.sin(lean));
+    const mid = dir.clone().multiplyScalar(h * 0.55).add(new THREE.Vector3(0, h * 0.18, 0));
+    const tip = dir.clone().multiplyScalar(h);
+    parts.push(tag(stemGeometry([new THREE.Vector3(), mid, tip], 0.0017 * size, 0.0011 * size), K.stipe, 0.5));
+    parts.push(tag(placeLeaf(blade, tip, yaw + (rnd() - 0.5) * 0.4, -0.35 + rnd() * 0.7, (rnd() - 0.5) * 0.35, size * (0.03 + rnd() * 0.024)), K.heart, hue));
+  }
+  return parts;
+}
+
 function fernlet(rnd: () => number, size: number): Parts {
   const parts: Parts = [];
   const pinna = leafGeometry({length: 1, width: 0.32, shape: (u) => Math.pow(Math.sin(Math.PI * Math.min(1, u)), 0.8), arch: 0.05, cup: 0.15, segs: [4, 2]});
@@ -215,7 +241,10 @@ float fh(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
 float fn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(fh(i), fh(i+vec2(1,0)), f.x), mix(fh(i+vec2(0,1)), fh(i+vec2(1,1)), f.x), f.y); }`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 float u = vLeafUv.x, v = vLeafUv.y * 2.0 - 1.0;
+vec2 fwUv = fwidth(vec2(u, v));
 float mid = 1.0 - smoothstep(0.0, 0.05, abs(v));
+// parallel veins down a strap leaf (bromeliads, orchids, sedges)
+float par = folLine(v * 6.0, 0.06, fwUv.y * 6.0);
 float k = vKind;
 vec3 col = vec3(0.05, 0.1, 0.03);
 float rough = 0.45;
@@ -223,19 +252,28 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
   col = mix(vec3(0.05, 0.11, 0.025), vec3(0.09, 0.15, 0.03), fract(vTint * 3.7));
   col = mix(col, vec3(0.22, 0.03, 0.05), (1.0 - smoothstep(0.0, 0.55, u)) * 0.55);
   col = mix(col, vec3(0.3, 0.05, 0.08), smoothstep(0.8, 0.95, fn(vec2(u * 30.0, v * 6.0))) * 0.6);
+  // fine silvery scales catch the light in bands across the leaf
+  float scale = smoothstep(0.7, 0.95, fn(vec2(u * 90.0, v * 14.0)));
+  col = mix(col * (1.0 + 0.2 * par), vec3(0.32, 0.34, 0.3), scale * 0.18);
+  folRelief += -0.012 * par + 0.008 * scale;
   rough = 0.35;
 } else if (k < 7.5) { // bromeliad heart: glossy red
   col = mix(vec3(0.38, 0.03, 0.06), vec3(0.2, 0.02, 0.06), u);
   col = mix(col, vec3(0.08, 0.13, 0.03), smoothstep(0.75, 1.0, u) * 0.6);
+  col *= 1.0 + 0.15 * par;
+  folRelief -= 0.01 * par;
   rough = 0.28;
 } else if (k < 8.5) { // orchid leaf: thick, glossy, dark
   col = vec3(0.035, 0.085, 0.025) * (0.85 + 0.3 * vTint);
+  col *= 1.0 + 0.12 * par;
+  folRelief -= 0.05 * mid + 0.008 * par;
   rough = 0.25;
 } else if (k < 9.5) { // orchid petals: white or pink with magenta veins
   float pink = step(0.5, fract(vTint));
   col = mix(vec3(0.85, 0.82, 0.8), vec3(0.75, 0.32, 0.55), pink);
   col = mix(col, vec3(0.55, 0.08, 0.3), smoothstep(0.85, 1.0, sin(v * 18.0)) * (0.3 + 0.4 * pink) * (1.0 - u));
   if (vTint > 1.5) col = mix(vec3(0.85, 0.55, 0.1), vec3(0.6, 0.06, 0.2), u);
+  folRelief -= 0.01 * smoothstep(0.85, 1.0, sin(v * 18.0));
   rough = 0.55;
 } else if (k < 10.5) { // mushroom caps: tan to rust, paler at the rim
   col = mix(vec3(0.38, 0.22, 0.1), vec3(0.32, 0.12, 0.05), vTint);
@@ -248,10 +286,16 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
 } else if (k < 12.5) { // sedge blades
   col = mix(vec3(0.05, 0.12, 0.03), vec3(0.11, 0.17, 0.04), vTint);
   col = mix(col, vec3(0.2, 0.17, 0.08), smoothstep(0.75, 1.0, u) * 0.5);
+  col *= 1.0 + 0.15 * par;
+  folRelief += 0.012 * par + 0.04 * (1.0 - abs(v)); // folded along the keel
   rough = 0.4;
 } else if (k < 13.5) { // air plant: silvery trichomes over grey-green
   col = mix(vec3(0.1, 0.15, 0.09), vec3(0.18, 0.23, 0.15), vTint);
   col = mix(col, vec3(0.3, 0.08, 0.1), smoothstep(0.6, 1.0, 1.0 - u) * 0.35);
+  // the grey fuzz is a felt of tiny scales (trichomes)
+  float tri = smoothstep(0.55, 0.9, fn(vec2(u * 70.0, v * 10.0)));
+  col = mix(col, vec3(0.4, 0.43, 0.38), tri * 0.3);
+  folRelief += 0.012 * tri;
   rough = 0.75;
 } else if (k < 14.5) { // spikemoss: bright, almost emerald
   col = mix(vec3(0.05, 0.15, 0.04), vec3(0.09, 0.22, 0.05), vTint);
@@ -261,20 +305,41 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
   float feather = smoothstep(0.55, 0.75, sin(u * 22.0 - abs(v) * 6.0)) * (1.0 - smoothstep(0.55, 0.95, abs(v))) * smoothstep(0.05, 0.2, u);
   col = mix(col, vec3(0.14, 0.24, 0.08), feather * 0.8);
   col = mix(col, vec3(0.2, 0.28, 0.1), mid * 0.6);
+  float lat = folLine((u * 22.0 - abs(v) * 6.0) / 6.2832 - 0.25, 0.035, (fwUv.x * 22.0 + fwUv.y * 6.0) / 6.2832);
+  col = mix(col, col * 1.5, lat * 0.4);
   if (!gl_FrontFacing) col = vec3(0.16, 0.03, 0.08);
+  folRelief -= 0.02 * lat + 0.04 * mid;
   rough = 0.4;
 } else if (k < 16.5) { // small ferns
   col = mix(vec3(0.05, 0.12, 0.03), vec3(0.1, 0.19, 0.04), vTint);
+  float vein = max(mid, pinnate(u, v, 8.0, 1.5, 0.05, fwUv) * 0.6);
+  col *= 1.0 + 0.25 * vein;
+  folRelief -= 0.02 * vein;
   rough = 0.5;
 } else if (k < 17.5) { // twigs: grey-brown bark
   col = mix(vec3(0.12, 0.08, 0.05), vec3(0.2, 0.16, 0.11), vTint) * (0.8 + 0.4 * fn(vec2(u * 40.0, v * 4.0)));
+  float groove = folLine(v * 2.5 + fn(vec2(u * 14.0, v * 2.0)) * 0.7, 0.12, fwUv.y * 2.5 + fwUv.x * 6.0);
+  col *= 1.0 - 0.3 * groove;
+  folRelief -= 0.05 * groove;
   rough = 0.85;
 } else if (k < 18.5) { // creeping fig
   col = mix(vec3(0.04, 0.11, 0.025), vec3(0.08, 0.17, 0.04), vTint);
+  float vein = max(mid * 0.6, pinnate(u, v, 5.0, 1.3, 0.05, fwUv) * smoothstep(0.04, 0.15, u) * 0.45);
+  col = mix(col, col * 1.6, vein * 0.5);
+  folRelief -= 0.025 * vein;
   rough = 0.42;
-} else {             // floating leaves, waterlogged
+} else if (k < 19.5) { // floating leaves, waterlogged
   col = mix(vec3(0.1, 0.07, 0.03), vec3(0.18, 0.11, 0.04), vTint);
   rough = 0.3;
+} else {             // philodendron and pothos: deep glossy green, some streaked with gold
+  col = mix(vec3(0.028, 0.085, 0.018), vec3(0.06, 0.15, 0.03), fract(vTint * 5.3));
+  float gold = step(0.72, vTint) * smoothstep(0.5, 0.85, fn(vec2(u * 2.5 + v * 0.8, v * 7.0) + vTint * 40.0));
+  col = mix(col, vec3(0.42, 0.4, 0.12), gold * 0.75);
+  float vein = max(mid * 0.8, pinnate(u, v, 4.5, 1.6, 0.05, fwUv) * smoothstep(0.05, 0.2, u) * (1.0 - smoothstep(0.7, 0.95, abs(v))) * 0.6);
+  col = mix(col, col * 1.45 + vec3(0.01, 0.02, 0.0), vein * 0.55);
+  if (!gl_FrontFacing) col = col * 1.25 + vec3(0.02, 0.03, 0.0);
+  folRelief -= 0.03 * vein + 0.03 * mid;
+  rough = gl_FrontFacing ? 0.22 : 0.5;
 }
 col *= 0.88 + 0.24 * fn(vec2(u, v) * 24.0);
 float edge = smoothstep(0.85, 1.0, abs(v));
@@ -282,9 +347,11 @@ col = mix(col, col * 0.75, edge * 0.4);
 diffuseColor.rgb = col;`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor = rough;`);
-    s.fragmentShader = s.fragmentShader.replace('void main() {', 'float rough = 0.45;\nvoid main() {');
+    s.fragmentShader = s.fragmentShader.replace('void main() {', `float rough = 0.45;
+${PINNATE_GLSL}
+void main() {`);
   };
-  m.customProgramCacheKey = () => 'flora-v1';
+  m.customProgramCacheKey = () => 'flora-v4';
   return m;
 }
 
@@ -374,6 +441,19 @@ export class Flora {
     }
     // Creeping fig climbing the faces of the peaks.
     this.climbers(rockMeshes, rnd);
+    // Philodendron and pothos: big glossy leaves at the foot of the rocks, behind
+    // the log and in the corners, as a planted rainforest case has them
+    const heartSpots: [number, number, number][] = [
+      [-0.3, -0.09, 1.5], [-0.17, -0.13, 1.3], [-0.04, -0.15, 1.2], [0.2, -0.12, 1.4], [0.36, -0.1, 1.3], [0.47, -0.17, 1.5],
+      [-0.52, -0.16, 1.4], [-0.43, -0.05, 1.2], [-0.56, 0.08, 1.1], [0.55, 0.02, 1.2], [-0.22, 0.02, 0.9], [0.28, -0.03, 1.0],
+      [-0.1, -0.04, 0.9], [0.43, -0.03, 1.1],
+    ];
+    for (const [x, z, size] of heartSpots) {
+      if (!dry(x, z) || !inside(x, z, 0.04) || surface.kindAt(x, z) === SurfaceKind.Rock) continue;
+      if (at(heartleaf(rnd, size), x, z, {normal: surface.normalAt(x, z)})) this.obstacles.push({x, z, r: 0.012 * size});
+    }
+    rockSites.slice(19, 24).forEach((sh) => at(heartleaf(rnd, 0.8 + rnd() * 0.3), sh.p.x, sh.p.z, {y: sh.p.y, normal: sh.n}));
+    this.trailers(rockMeshes, rockSites.slice(0, 12), rnd);
 
     const merged = mergeGeometries(this.parts.map((p) => {
       const q = p.index ? p.toNonIndexed() : p;
@@ -446,6 +526,42 @@ export class Flora {
         const g = placeLeaf(leaf, new THREE.Vector3(), side * (0.6 + rnd() * 0.5), Math.PI / 2 - 0.3, Math.PI / 2, 0.007 + rnd() * 0.004);
         g.translate(p.x, p.y, p.z + 0.001);
         this.parts.push(tag(g, K.fig, rnd()));
+      }
+    }
+  }
+
+  /** Pothos trailing down the rock faces from the shelves where it is rooted. */
+  private trailers(rocks: THREE.Mesh[], sites: {p: THREE.Vector3; n: THREE.Vector3}[], rnd: () => number) {
+    const ray = new THREE.Raycaster();
+    (ray as unknown as {firstHitOnly: boolean}).firstHitOnly = true;
+    const blade = heartBlade();
+    for (const site of sites) {
+      if (rnd() < 0.35) continue;
+      const pts: THREE.Vector3[] = [];
+      let y = site.p.y - 0.004, x = site.p.x;
+      for (let k = 0; k < 30; k++) {
+        ray.set(new THREE.Vector3(x, y, 0.22), new THREE.Vector3(0, 0, -1));
+        const hit = ray.intersectObjects(rocks, false)[0];
+        if (!hit) break;
+        const p = hit.point.clone().add(new THREE.Vector3(0, 0, 0.003));
+        if (pts.length && p.distanceTo(pts[pts.length - 1]) > 0.035) break;
+        pts.push(p);
+        y -= 0.009 + rnd() * 0.006;
+        x += (rnd() - 0.5) * 0.014;
+        if (y < 0.14) break;
+      }
+      if (pts.length < 4) continue;
+      this.parts.push(tag(stemGeometry(pts, 0.0011, 0.0008), K.stipe, 0.5));
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const n = Math.floor(curve.getLength() / 0.013);
+      const hue = rnd();
+      for (let i = 1; i <= n; i++) {
+        const p = curve.getPointAt(Math.min(1, i / n));
+        const side = i % 2 ? 1 : -1;
+        // each leaf hangs from the vine, turned out towards the light and the glass
+        const g = placeLeaf(blade, new THREE.Vector3(), Math.PI / 2 + side * (0.5 + rnd() * 0.5), -0.5 - rnd() * 0.5, (rnd() - 0.5) * 0.4, 0.014 + rnd() * 0.01 * (1 - i / n * 0.5));
+        g.translate(p.x + side * 0.003, p.y, p.z + 0.004);
+        this.parts.push(tag(g, K.heart, hue));
       }
     }
   }

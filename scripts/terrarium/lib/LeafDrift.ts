@@ -31,7 +31,7 @@ export class LeafDrift {
     const n = g.attributes.position.count;
     g.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(n).fill(5), 1));
     g.setAttribute('aTint', new THREE.BufferAttribute(new Float32Array(n).fill(0.5), 1));
-    this.mesh = new THREE.InstancedMesh(g, leafMaterial(), N);
+    this.mesh = new THREE.InstancedMesh(g, leafMaterial(true), N);
     const tint = new Float32Array(N);
     for (let i = 0; i < N; i++) tint[i] = Math.random();
     this.mesh.geometry.setAttribute('aInstTint', new THREE.InstancedBufferAttribute(tint, 1));

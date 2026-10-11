@@ -5,7 +5,7 @@ import {WATER_LEVEL, POOL, PLUNGE, poolDepth} from './Ground';
 import {foliageUniforms} from './Foliage';
 
 /**
- * A school of neon tetras (Paracheirodon innesi, about 2.4 cm) in the pool.
+ * A school of neon tetras (Paracheirodon innesi, about 2 cm) in the pool.
  *
  * Each fish is sculpted in code: a laterally flattened body lofted from
  * measured-looking height and width profiles, a forked tail, dorsal, adipose,
@@ -18,7 +18,7 @@ import {foliageUniforms} from './Foliage';
  * like real neons, their colours fade).
  */
 const N_FISH = 14;
-const LEN = 0.024;
+const LEN = 0.02;
 const MAX_FLAKES = 40;
 
 // body profiles along u (0 = tail end, 1 = snout), in body lengths

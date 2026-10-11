@@ -30,10 +30,10 @@ export class Nav {
     this.wet = new Uint8Array(N);
     for (let j = 0; j < this.nz; j++) for (let i = 0; i < this.nx; i++) {
       const x = this.x0 + i * this.cell, z = this.z0 + j * this.cell;
-      // keep the body (≈ 4 cm wide) clear of the glass
+      // keep the body (≈ 4 cm wide, with legs splayed wider) clear of the glass
       const margin = Math.min(x + TANK.w / 2, TANK.w / 2 - x, z + TANK.d / 2, TANK.d / 2 - z);
       let c = 1;
-      if (margin < 0.032) c = Infinity;
+      if (margin < 0.042) c = Infinity;
       const kind = surface.kindAt(x, z);
       const y = surface.heightAt(x, z);
       if (kind === SurfaceKind.Water) {
