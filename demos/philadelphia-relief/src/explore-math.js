@@ -24,6 +24,14 @@ export function exhibitBounds(lon, lat, size, projection) {
     north: Math.min(b.north, lat + half / projection.metersPerDegLat) };
 }
 
+export function exhibitDistance(size,fov=42,aspect=1){
+  const angle=(Number.isFinite(fov)?Math.max(1,Math.min(179,fov)):42)*RAD/2;
+  // Keep the established wide-angle framing, but back away after a narrow
+  // street inspection so the same miniature and its tower still fit on screen.
+  return size*1.65*Math.max(1,1/Math.max(.05,aspect))
+    *Math.max(1,Math.tan(21*RAD)/Math.tan(angle));
+}
+
 export function insideExhibit(point, bounds) {
   return !bounds || point.lon >= bounds.west && point.lon <= bounds.east
     && point.lat >= bounds.south && point.lat <= bounds.north;

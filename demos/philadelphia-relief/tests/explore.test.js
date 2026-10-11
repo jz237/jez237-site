@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as THREE from '../vendor/three.module.min.js';
-import { observerView, SPOTTERS, exhibitBounds, insideExhibit } from '../src/explore-math.js';
+import { observerView, SPOTTERS, exhibitBounds, exhibitDistance, insideExhibit } from '../src/explore-math.js';
 import { createExhibit } from '../src/exhibit.js';
 import { createCameraRig } from '../src/camera.js';
 import { createStore } from '../src/state.js';
@@ -12,6 +12,16 @@ import { buildLandmarkModels, validateModels } from '../src/landmark-models.js';
 
 const json = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 const projection = createProjection(json('../data/terrain.json'));
+
+test('exhibit framing keeps towers in view after narrow-angle inspection and in portrait layouts',()=>{
+  const normal=exhibitDistance(440,42,1.7),narrow=exhibitDistance(440,22,1.7);
+  assert.equal(normal,726);
+  assert.ok(narrow>normal*1.9,'narrow-angle inspection needs a more distant exhibit camera');
+  assert.ok(Math.abs(narrow*Math.tan(11*Math.PI/180)-normal*Math.tan(21*Math.PI/180))<1e-9,
+    'the angular viewport retains the same target-plane coverage');
+  assert.equal(exhibitDistance(440,22,.5),narrow*2,'portrait view keeps horizontal room');
+  assert.equal(exhibitDistance(440,70,1.7),normal,'wide angles retain the established safe distance');
+});
 test('spotter remains fixed while the observed aircraft changes direction and height', () => {
   const station = SPOTTERS[0];
   const a = observerView(station, { lon: station.lon, lat: station.lat + .01, height: 200 }, 10);

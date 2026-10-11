@@ -1,4 +1,4 @@
-import { exhibitBounds } from './explore-math.js?v=philly-2026092121';
+import { exhibitBounds, exhibitDistance } from './explore-math.js?v=philly-2026092121';
 import { createExhibit } from './exhibit.js?v=philly-2026092121';
 import { detailedLandmarks, DETAIL_NOTES } from './landmark-detail.js?v=philly-2026092121';
 import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092121';
@@ -48,8 +48,9 @@ export function createExploreModes(THREE, options) {
   }
   function resizeExhibit() {
     bounds = exhibitBounds(location.lon, location.lat, exhibitSize, projection); exhibit.set(bounds);
-    store.set({ camLon: location.lon, camLat: location.lat, camDist: exhibitSize * 1.65
-      * Math.max(1, stage.clientHeight / Math.max(1, stage.clientWidth)),
+    store.set({ camLon: location.lon, camLat: location.lat,
+      camDist: exhibitDistance(exhibitSize,store.value('fov'),
+        stage.clientWidth/Math.max(1,stage.clientHeight)),
       camPitch: 55, camBearing: 25 }, { source: 'explore' });
     invalidate();
   }
