@@ -86,12 +86,14 @@ export interface RigInputs {
   wave: number; // 0..1 arm-wave amount (left front limb)
   sideLean: number; // body roll, radians
   tailTwitch: number; // 0..1 predatory flicking of the tail tip
+  shake: number; // 0..1 thrashing the head side to side (subduing prey)
+  swallow: number; // 0..1 a gulp: the throat bulges and the head lifts
 }
 
 export class LizardRig {
   readonly inputs: RigInputs = {
     x: 0, z: 0, heading: 0, speed: 0, turnRate: 0, clearance: 0.7, chestLift: 0, headPitch: 0,
-    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0,
+    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0, shake: 0, swallow: 0,
   };
   /** Gait phase 0..1 and the derived standing wave in the trunk. */
   phase = 0;
@@ -329,7 +331,9 @@ export class LizardRig {
     }
     // fast, critically damped approach = a crisp, bird-like head flick
     this.headYaw = damp(this.headYaw, this.headGoalYaw, 16, dt);
-    this.headPitchCur = damp(this.headPitchCur, this.headGoalPitch, 14, dt);
+    this.headPitchCur = damp(this.headPitchCur, this.headGoalPitch + I.swallow * 0.35, 14, dt);
+    // thrashing prey: quick, wide side-to-side snaps of the head
+    if (I.shake > 0.01) this.headYaw += Math.sin(this.time * 23) * 0.32 * I.shake * Math.min(1, dt * 60);
   }
 
   /** A point along the tail (0 = base). */
@@ -400,7 +404,7 @@ export class LizardRig {
       if (k === 1) this.spinePos[0].y += this.headLift[1];
     }
     // Frames from neighbouring joints (tangent toward the head).
-    const snoutLocal = new THREE.Vector3(12.46 - this.spineBindX[0], 2.45 - this.spineBindY[0], 0);
+    const snoutLocal = new THREE.Vector3(12.68 - this.spineBindX[0], 2.44 - this.spineBindY[0], 0);
     for (let k = 0; k < 6; k++) {
       let ahead: THREE.Vector3, behind: THREE.Vector3;
       if (k === 0) {
@@ -585,14 +589,14 @@ export class LizardRig {
     this.boneWorld[jawIdx].copy(jawM);
     const nb = model.data.bones[neck].origin, gb = model.data.bones[gIdx].origin;
     const gular = Math.sin(this.gularT * Math.PI * 2 / 1.7) * 0.5 + 0.5;
-    const puff = 1 + I.display * 0.55 + gular * 0.05 * I.breath;
+    const puff = 1 + I.display * 0.55 + gular * 0.05 * I.breath + I.swallow * 0.3;
     const gM = this.boneWorld[neck].clone().multiply(tmpM.makeTranslation(gb[0] - nb[0], gb[1] - nb[1], gb[2] - nb[2])).multiply(tmpM2.makeScale(1, puff, 1 + I.display * 0.35));
     model.bones[gIdx].matrix.copy(gM);
     this.boneWorld[gIdx].copy(gM);
     model.skin.uDisplay.value = damp(model.skin.uDisplay.value, I.display, 3, 1 / 60);
     model.tongueOut = I.tongue;
     // mouth point (for drinking, eating): inside the jaw, near the front
-    this.mouth.set(11.95 - jb[0], model.data.mouth[1][1] - jb[1] - 0.05, 0).applyMatrix4(jawM);
+    this.mouth.set(12.15 - jb[0], model.data.mouth[1][1] - jb[1] - 0.05, 0).applyMatrix4(jawM);
     // legs
     for (const leg of this.legs) this.solveLeg(leg);
     for (const e of model.eyes) {

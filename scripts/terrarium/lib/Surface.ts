@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {computeBoundsTree, acceleratedRaycast} from 'three-mesh-bvh';
 import {TANK} from './Case';
-import {WATER_LEVEL, groundHeight} from './Ground';
+import {WATER_LEVEL, groundHeight, CAVE} from './Ground';
 
 declare module 'three' {
   interface BufferGeometry {computeBoundsTree: typeof computeBoundsTree}
@@ -9,16 +9,21 @@ declare module 'three' {
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
-export const enum SurfaceKind {Ground = 0, Rock = 1, Wood = 2, Water = 3}
+export const enum SurfaceKind {Ground = 0, Rock = 1, Wood = 2, Water = 3, Cave = 4}
 
 /**
- * The top surface inside the case, sampled on a grid by casting rays down onto
- * the ground and hardscape. Used for planting and by the lizard's feet.
+ * The surfaces inside the case, sampled on a grid by casting rays onto the
+ * ground and hardscape. `height` is the floor something can stand on (under a
+ * rock roof, the cave floor); `top` is what the sky sees (rain, clouds, the
+ * camera). Used for planting, by the lizard's feet and by the weather.
  */
 export class Surface {
   readonly nx: number;
   readonly nz: number;
   readonly height: Float32Array;
+  readonly top: Float32Array;
+  /** 1 under a roof of rock (the cave), else 0. */
+  readonly roof: Uint8Array;
   readonly normal: Float32Array;
   readonly kind: Uint8Array;
   readonly x0 = -TANK.w / 2 + 0.002;
@@ -32,6 +37,8 @@ export class Surface {
     this.nx = Math.floor((TANK.w - 0.004) / cell) + 1;
     this.nz = Math.floor((TANK.d - 0.004) / cell) + 1;
     this.height = new Float32Array(this.nx * this.nz);
+    this.top = new Float32Array(this.nx * this.nz);
+    this.roof = new Uint8Array(this.nx * this.nz);
     this.normal = new Float32Array(this.nx * this.nz * 3);
     this.kind = new Uint8Array(this.nx * this.nz);
     for (const h of hard) {
@@ -65,10 +72,47 @@ export class Surface {
         }
       }
       this.height[k] = y;
+      this.top[k] = y;
       this.normal.set([n.x, n.y, n.z], k * 3);
       this.kind[k] = kind;
     }
+    this.findCave();
     void ground;
+  }
+
+  /**
+   * Under the cave's roof a ray from above meets the rock, not the floor. Where
+   * a ray cast up from just above the ground meets a ceiling with room beneath
+   * it, the floor is the ground and the cell is sheltered.
+   */
+  private findCave() {
+    const up = new THREE.Vector3(0, 1, 0), o = new THREE.Vector3();
+    const x0 = CAVE.x - CAVE.rx - 0.03, x1 = CAVE.x + CAVE.rx + 0.03;
+    const z0 = CAVE.z - CAVE.rz - 0.03, z1 = CAVE.mouth.z + CAVE.mouth.rz + 0.03;
+    const e = 0.002;
+    for (let j = 0; j < this.nz; j++) for (let i = 0; i < this.nx; i++) {
+      const x = this.x0 + i * this.cell, z = this.z0 + j * this.cell;
+      if (x < x0 || x > x1 || z < z0 || z > z1) continue;
+      const g = groundHeight(x, z);
+      o.set(x, g + 0.004, z);
+      this.ray.set(o, up);
+      this.ray.far = 0.14;
+      let ceiling = Infinity;
+      for (const h of this.meshes) {
+        const hit = this.ray.intersectObject(h.mesh, false)[0];
+        if (hit && hit.point.y < ceiling) ceiling = hit.point.y;
+      }
+      this.ray.far = Infinity;
+      if (!Number.isFinite(ceiling)) continue;
+      const k = j * this.nx + i;
+      this.roof[k] = 1;
+      // too low to crawl under: leave it as rock
+      if (ceiling - g < 0.026) continue;
+      this.height[k] = g;
+      this.kind[k] = SurfaceKind.Cave;
+      const n = new THREE.Vector3(groundHeight(x - e, z) - groundHeight(x + e, z), 2 * e, groundHeight(x, z - e) - groundHeight(x, z + e)).normalize();
+      this.normal.set([n.x, n.y, n.z], k * 3);
+    }
   }
 
   private idx(x: number, z: number) {
@@ -77,15 +121,20 @@ export class Surface {
     return j * this.nx + i;
   }
 
-  /** Bilinear surface height. */
-  heightAt(x: number, z: number) {
+  private bilinear(h: Float32Array, x: number, z: number) {
     const fx = Math.min(this.nx - 1.001, Math.max(0, (x - this.x0) / this.cell));
     const fz = Math.min(this.nz - 1.001, Math.max(0, (z - this.z0) / this.cell));
     const i = Math.floor(fx), j = Math.floor(fz), u = fx - i, v = fz - j;
-    const h = this.height, n = this.nx;
+    const n = this.nx;
     const a = h[j * n + i], b = h[j * n + i + 1], c = h[(j + 1) * n + i], d = h[(j + 1) * n + i + 1];
     return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
   }
+  /** Bilinear floor height (what feet stand on). */
+  heightAt(x: number, z: number) {return this.bilinear(this.height, x, z);}
+  /** Bilinear height of the uppermost surface (what rain lands on). */
+  topAt(x: number, z: number) {return this.bilinear(this.top, x, z);}
+  /** True under the cave's roof. */
+  roofed(x: number, z: number) {return this.roof[this.idx(x, z)] === 1;}
   normalAt(x: number, z: number, out = new THREE.Vector3()) {
     const k = this.idx(x, z) * 3;
     return out.set(this.normal[k], this.normal[k + 1], this.normal[k + 2]);

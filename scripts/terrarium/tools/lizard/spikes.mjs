@@ -22,9 +22,20 @@ export function spikeSeeds() {
         const jitter = (rand(i * 5 + k, s + 5) - 0.5) * 0.09;
         const y = pr.cy - pr.hb * Math.cos(th) * 0.98;
         const z = pr.w * Math.sin(th) * s;
-        const big = k >= 3 ? 1.25 : 1;
-        push([x + jitter, y, z], [-0.3, -0.55 - 0.1 * (k < 2), (0.3 + 0.12 * k) * s], (0.12 + 0.28 * back * (0.6 + 0.8 * rand(i, k + 11))) * big, 0.05 + 0.03 * back);
+        const big = k >= 3 ? 1.35 : 1;
+        push([x + jitter, y, z], [-0.3, -0.55 - 0.1 * (k < 2), (0.3 + 0.12 * k) * s], (0.16 + 0.34 * back * (0.6 + 0.8 * rand(i, k + 11))) * big, 0.05 + 0.035 * back);
       }
+      // the beard's outer edge along the jaw: the longest, pointing out and down
+      if (x < 10.5) {
+        const pr2 = profile(x + 0.08);
+        push([x + 0.08, pr2.cy - pr2.hb * 0.42, pr2.w * 0.99 * s], [-0.35, -0.5, 0.85 * s], 0.3 + 0.32 * back * (0.7 + 0.6 * rand(i, 13 + s)), 0.06 + 0.035 * back);
+      }
+    }
+    // The great spines behind the ear, fanning back and out.
+    for (let k = 0; k < 5; k++) {
+      const x = 9.48 + k * 0.07, pr = profile(x);
+      const dy = 0.42 - k * 0.2;
+      push([x, pr.cy + dy, (pr.w + 0.02) * s], [-0.75, 0.2 + dy * 0.6, 0.75 * s], 0.5 + 0.2 * rand(k, 19 + s) + (k === 1 || k === 2 ? 0.12 : 0), 0.072);
     }
     // The spiny jowl: a dense cluster around and below the ear.
     for (let k = 0; k < 14; k++) {
@@ -41,7 +52,7 @@ export function spikeSeeds() {
     // Occipital crown: a row of spines across the back of the head.
     for (let k = 0; k < 6; k++) {
       const x = 9.62 + k * 0.03, z = (0.25 + k * 0.29) * s, pr = profile(x);
-      push([x, pr.cy + pr.ht * (0.95 - k * 0.05), z], [-0.65, 0.7, 0.3 * s], 0.16 + 0.07 * rand(k, 31), 0.06);
+      push([x, pr.cy + pr.ht * (0.95 - k * 0.05), z], [-0.65, 0.7, 0.3 * s], 0.22 + 0.1 * rand(k, 31) + k * 0.02, 0.065);
     }
     // Supraocular and temporal scales above the eye.
     for (let k = 0; k < 4; k++) {
@@ -51,12 +62,12 @@ export function spikeSeeds() {
     // Lower jaw edge and lip.
     for (let k = 0; k < 7; k++) {
       const x = 10.15 + k * 0.24, pr = profile(x);
-      push([x, pr.cy - pr.hb * 0.5, pr.w * 0.9 * s], [-0.4, -0.45, 0.7 * s], 0.11 - k * 0.009, 0.04);
+      push([x, pr.cy - pr.hb * 0.8, pr.w * 0.72 * s], [-0.4, -0.7, 0.55 * s], 0.11 - k * 0.009, 0.04);
     }
     // Neck sides: clusters of tall spines.
     for (let k = 0; k < 9; k++) {
       const x = 8.1 + k * 0.17, pr = profile(x);
-      push([x, pr.cy - 0.15 + (k % 3) * 0.26, pr.w * 0.98 * s], [-0.5, 0.15, 0.85 * s], 0.22 + 0.14 * rand(k, 41 + s), 0.065);
+      push([x, pr.cy - 0.15 + (k % 3) * 0.26, pr.w * 0.98 * s], [-0.5, 0.15, 0.85 * s], 0.28 + 0.18 * rand(k, 41 + s), 0.07);
     }
     // Lateral fringe on the fold: three offset rows, longest mid-body.
     i = 0;

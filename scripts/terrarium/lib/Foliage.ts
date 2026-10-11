@@ -41,7 +41,7 @@ vec3 foliageWind(vec3 root, float flex, float H, float phase, float stiff){
  * Adds wind, push and translucency to a material. `flexAttr` reads flexibility
  * from an attribute; otherwise it comes from the local vertex height.
  */
-export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?: number; translucency?: number; flexAttr?: boolean; stiffness?: number; key: string}) {
+export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?: number; translucency?: number; flexAttr?: boolean; phaseAttr?: boolean; stiffness?: number; key: string}) {
   const height = opts.height ?? 0.3;
   const translucency = opts.translucency ?? 0.6;
   const stiff = opts.stiffness ?? 1;
@@ -51,6 +51,7 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
       .replace('#include <common>', `#include <common>
 uniform float uTime; uniform vec4 uPush[6];
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
+${opts.phaseAttr ? 'attribute float aPhase;' : ''}
 varying float vFlex; varying float vGust;
 ${FOLIAGE_WIND_GLSL}`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
@@ -64,10 +65,11 @@ ${FOLIAGE_WIND_GLSL}`)
     mat4 toWorld = modelMatrix;
   #endif
   vec3 root = (toWorld * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-  float ph = dot(root.xz, vec2(73.0, 51.0)) + position.x * 9.0;
+  float ph = ${opts.phaseAttr ? 'aPhase' : 'dot(root.xz, vec2(73.0, 51.0)) + position.x * 9.0'};
   vec3 vw = (toWorld * vec4(transformed, 1.0)).xyz;
-  // plants rooted in one spot sway about that spot; long creepers about each vertex
-  vec3 anchor = ${opts.flexAttr ? 'vw' : 'root'};
+  // the wind is read where each part of the plant actually is, so a gust
+  // crossing a fern bends its near fronds before its far ones
+  vec3 anchor = ${opts.flexAttr ? 'vw' : 'mix(root, vw, 0.8)'};
   vec3 bend = foliageWind(vec3(anchor.x, root.y, anchor.z), flex, ${(height * 1.0).toFixed(4)}, ph, ${stiff.toFixed(3)});
   vGust = length(bend.xz) / ${(height * 0.25).toFixed(4)};
   mat3 toLocal = inverse(mat3(toWorld));
@@ -104,5 +106,5 @@ roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);`)
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * clamp(vGust, 0.0, 1.0) * vFlex * 0.25;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage3-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage4-${opts.key}`;
 }

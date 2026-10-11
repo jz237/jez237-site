@@ -3,7 +3,7 @@ import {TANK} from './Case';
 import {WATER_LEVEL, poolDistance} from './Ground';
 import type {WindField} from './WindField';
 
-const MAX_DROPS = 2600;
+const MAX_DROPS = 3000;
 const MAX_CROWNS = 160;
 const MAX_BITS = 500;
 const TERMINAL = 1.15; // m/s
@@ -49,6 +49,8 @@ export class Rain {
   private wetDirty = 0;
   amount = 0; // total rain rate
   onWaterDrop?: (x: number, z: number, strength: number) => void;
+  /** True where a drop lands on a roof (the cave), so the floor beneath stays dry. */
+  roofed?: (x: number, z: number) => boolean;
   onLand?: () => void;
   private time = 0;
 
@@ -68,6 +70,8 @@ export class Rain {
     this.streaks = new THREE.Mesh(quad, new THREE.ShaderMaterial({
       uniforms: this.uniforms,
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
+      // the quads turn to face the camera, so either winding can come out
+      side: THREE.DoubleSide,
       vertexShader: /* glsl */ `
 attribute vec3 iPos, iVel; attribute float iSeed;
 uniform vec2 uRes; uniform vec3 uLight, uLightPos, uAmbient; uniform float uFlash;
@@ -75,20 +79,24 @@ varying vec2 vU; varying vec3 vCol;
 void main(){
   float speed = length(iVel);
   vec3 axis = speed > 1e-4 ? iVel / speed : vec3(0.0, -1.0, 0.0);
-  float len = clamp(speed * 0.012, 0.004, 0.02) * (0.8 + 0.4 * iSeed);
-  float wid = mix(0.00024, 0.00045, fract(iSeed * 7.3));
+  // a drop is a millimetre or two across, but what the eye sees is its blur
+  // over about a fortieth of a second: a streak a few centimetres long
+  float len = clamp(speed * 0.024, 0.006, 0.034) * (0.75 + 0.5 * iSeed);
+  float wid = mix(0.0004, 0.0008, fract(iSeed * 7.3));
   vec3 view = normalize(cameraPosition - iPos);
   vec3 side = normalize(cross(axis, view));
   float dist = length(cameraPosition - iPos);
   float pxPerM = uRes.y * 0.5 * projectionMatrix[1][1] / dist;
-  float widPx = max(wid * pxPerM, 1.0);
+  float widPx = max(wid * pxPerM, 1.15);
   float w = widPx / pxPerM;
   vec3 p = iPos + side * position.x * w - axis * len * position.y;
   vU = vec2(position.x, position.y);
   vec3 L = normalize(uLightPos - iPos);
   float fwd = max(0.0, dot(-view, L));
+  // drops scatter the lamp forward: backlit rain glints
   float back = pow(fwd, 5.0) * 1.6 + pow(fwd, 40.0) * 3.0;
-  vCol = ((uAmbient * 0.9 + uLight * (0.3 + back)) * (0.7 + 0.6 * iSeed) + vec3(0.8, 0.86, 1.0) * uFlash * 1.2) * 1.1 * sqrt(wid * pxPerM / widPx);
+  float energy = mix(0.55, 1.0, sqrt(wid * pxPerM / widPx));
+  vCol = ((uAmbient * 2.2 + uLight * (0.55 + back)) * (0.75 + 0.5 * iSeed) + vec3(0.8, 0.86, 1.0) * uFlash * 1.6) * energy * 0.62;
   gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
 }`,
       fragmentShader: /* glsl */ `varying vec2 vU; varying vec3 vCol;
@@ -111,6 +119,8 @@ void main(){ float a = exp(-vU.x * vU.x * 2.6) * smoothstep(0.0, 0.14, vU.y) * (
     this.crownMesh = new THREE.Mesh(cg, new THREE.ShaderMaterial({
       uniforms: this.uniforms,
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
+      // the quads turn to face the camera, so either winding can come out
+      side: THREE.DoubleSide,
       vertexShader: /* glsl */ `
 attribute vec3 iPos, iAux; uniform vec3 uLight, uAmbient; uniform float uFlash;
 varying vec2 vQ; varying vec3 vAux; varying vec3 vCol; varying float vSquash;
@@ -183,7 +193,7 @@ void main(){
     sg.setIndex(sidx);
     this.shafts = new THREE.Mesh(sg, new THREE.ShaderMaterial({
       uniforms: this.uniforms,
-      transparent: true, depthWrite: false,
+      transparent: true, depthWrite: false, side: THREE.DoubleSide,
       blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
       vertexShader: `attribute vec4 aUv; varying vec4 vUv; void main(){ vUv = aUv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
       fragmentShader: /* glsl */ `uniform float uTime, uFlash; uniform vec3 uLight, uAmbient; varying vec4 vUv;
@@ -194,7 +204,7 @@ void main(){
   float streak = n(vec2(u * 14.0 + seed * 20.0, v * 3.0 + uTime * 3.4)) * 0.6 + n(vec2(u * 31.0 - seed * 7.0, v * 5.0 + uTime * 4.6)) * 0.4;
   float clump = n(vec2(u * 3.0 + seed, v * 1.2 + uTime * 0.8));
   float edge = 1.0 - u * u;
-  float a = amt * (0.3 + 0.7 * streak) * (0.55 + 0.9 * clump) * 0.17 * edge * smoothstep(0.0, 0.12, v) * smoothstep(1.0, 0.85, v);
+  float a = amt * (0.3 + 0.7 * streak) * (0.55 + 0.9 * clump) * 0.2 * edge * smoothstep(0.0, 0.12, v) * smoothstep(1.0, 0.85, v);
   vec3 col = (uAmbient * 1.2 + uLight * 0.25 + vec3(0.8, 0.86, 1.0) * uFlash) * 0.7;
   gl_FragColor = vec4(col * a, a);
 }`,
@@ -257,7 +267,7 @@ void main(){
     const w2 = new THREE.Vector2();
     for (const src of sources) {
       const area = (src.radius / 0.05) ** 2;
-      let n = Math.floor(650 * Math.pow(src.rate, 0.8) * area * dt + Math.random());
+      let n = Math.floor(620 * Math.pow(src.rate, 0.8) * area * dt + Math.random());
       for (const d of this.drops) {
         if (n <= 0) break;
         if (d.alive) continue;
@@ -287,7 +297,7 @@ void main(){
         d.alive = false;
         if (Math.random() < 0.6) this.splash(d.p.x, floor, d.p.z, inPool);
         if (inPool) {if (Math.random() < 0.5) this.onWaterDrop?.(d.p.x, d.p.z, 0.6 + Math.random() * 0.6);}
-        else this.deposit(d.p.x, d.p.z);
+        else if (!this.roofed?.(d.p.x, d.p.z)) this.deposit(d.p.x, d.p.z);
         this.onLand?.();
         continue;
       }

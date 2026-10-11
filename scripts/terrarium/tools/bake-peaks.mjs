@@ -8,6 +8,7 @@ import { clamp, smin, smax, smoothstep, valueNoise3 } from './lizard/sdf.mjs';
 import { meshSDF, projectToSurface, compact, gradient } from './lizard/mesher.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
+const CAVE = JSON.parse(await readFile(path.join(root, 'lib', 'cave.json'), 'utf8'));
 const outDir = path.join(root, 'public', 'peaks');
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, '').split('=')));
 const H = Number(args.h || 0.0022);
@@ -15,7 +16,7 @@ const TARGET = Number(args.tris || 150000);
 const log = (...m) => console.log('[peaks]', ...m);
 
 const hash = createHash('sha256');
-for (const f of ['tools/bake-peaks.mjs', 'tools/lizard/sdf.mjs', 'tools/lizard/mesher.mjs']) hash.update(await readFile(path.join(root, f)));
+for (const f of ['tools/bake-peaks.mjs', 'tools/lizard/sdf.mjs', 'tools/lizard/mesher.mjs', 'lib/cave.json']) hash.update(await readFile(path.join(root, f)));
 hash.update(`${H}:${TARGET}`);
 const digest = hash.digest('hex').slice(0, 16);
 try {
@@ -104,8 +105,11 @@ const LEFT = [
   col(-0.17, -0.06, -0.165, 0.31, -0.075, 0.055, 0.045, 5, 5.9),
   col(-0.275, -0.1, -0.285, 0.27, -0.11, 0.05, 0.045, 6, 6.6),
   col(-0.08, -0.05, -0.078, 0.28, -0.06, 0.05, 0.045, 5, 7.4),
-  col(-0.13, -0.025, -0.135, 0.2, -0.035, 0.06, 0.04, 6, 8.1),
   col(-0.3, -0.16, -0.31, 0.33, -0.18, 0.05, 0.04, 5, 3.3),
+  // the cave's brow: two jambs and a lintel that bring the face forward
+  col(-0.195, -0.035, -0.2, 0.31, -0.05, 0.055, 0.05, 6, 14.6),
+  col(-0.045, -0.04, -0.05, 0.3, -0.055, 0.05, 0.045, 5, 15.3),
+  col(-0.12, -0.04, -0.122, 0.35, -0.065, 0.078, 0.05, 6, 16.1),
 ];
 const RIGHT = [
   col(0.2, -0.12, 0.195, 0.455, -0.14, 0.082, 0.072, 5, 7.3),
@@ -144,6 +148,24 @@ function massif(parts, x, y, z) {
   return d;
 }
 
+// The cave: a low chamber with a levelled floor, opening to the front through
+// an arched mouth (see lib/cave.json). Superellipsoids give it headroom out to
+// the walls; noise makes the walls irregular.
+function superEllipsoid(x, y, z, cx, cy, cz, rx, ry, rz) {
+  const lx = Math.abs(x - cx) / rx, ly = Math.abs(y - cy) / ry, lz = Math.abs(z - cz) / rz;
+  const r = Math.pow(Math.pow(lx, 2.5) + Math.pow(lz, 2.5), 1 / 2.5);
+  return (Math.pow(Math.pow(r, 3) + Math.pow(ly, 3), 1 / 3) - 1) * Math.min(rx, ry, rz);
+}
+function caveHollow(x, y, z) {
+  const sink = 0.02; // the hollow reaches below the floor, so the ground shows through
+  const C = CAVE, M = CAVE.mouth;
+  const room = superEllipsoid(x, y, z, C.x, C.floor - sink, C.z, C.rx, C.h + sink, C.rz);
+  const mouth = superEllipsoid(x, y, z, M.x, C.floor - sink, M.z, M.rx, M.h + sink, M.rz);
+  const n = (valueNoise3(x * 45, y * 45, z * 45) - 0.5) * 0.012 + (valueNoise3(x * 120 + 5, y * 120, z * 120) - 0.5) * 0.004;
+  return smin(room, mouth, 0.02) + n;
+}
+const CAVE_BOX = {min: [CAVE.x - CAVE.rx - 0.03, CAVE.floor - 0.04, CAVE.z - CAVE.rz - 0.03], max: [CAVE.x + CAVE.rx + 0.03, CAVE.floor + CAVE.h + 0.03, CAVE.mouth.z + CAVE.mouth.rz + 0.03]};
+
 function rockDisplace(x, y, z) {
   // columnar basalt: vertical striations + ridged fracture + fine grain
   const cols = valueNoise3(x * 60, y * 5, z * 60) + valueNoise3(x * 130, y * 9, z * 130) * 0.5;
@@ -162,6 +184,7 @@ function sdf(x, y, z) {
   if (inBox(BACKWALL.box, x, y, z, 0.03)) d = smin(d, BACKWALL.f(x, y, z), 0.03);
   for (const l of LEDGE_SHAPES) if (inBox(l.box, x, y, z, 0.03)) d = smin(d, l.f(x, y, z), 0.012);
   if (d > 0.03) return d;
+  if (inBox(CAVE_BOX, x, y, z, 0.02)) d = smax(d, -caveHollow(x, y, z), 0.01);
   d += rockDisplace(x, y, z);
   // Bury the bases: nothing below the floor of the case.
   d = Math.max(d, 0.045 - y);
