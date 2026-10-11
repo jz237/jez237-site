@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>The Clockwork Garden</title>
+  <meta name="description" content="A Victorian glasshouse of brass, porcelain and glass, rendered live in your browser. Watch the 58-second film, fly APX-9 the mechanical bee, or follow it as it tends the garden." />
+  <meta name="theme-color" content="#06141c" />
+  <link rel="canonical" href="https://jez237.com/demos/clockwork-garden/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306141c' stroke='%23d9b56a' stroke-width='1.6'/%3E%3Cpath d='M16 6v10l6 4' fill='none' stroke='%23d9b56a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="jez237.com" />
+  <meta property="og:title" content="The Clockwork Garden" />
+  <meta property="og:description" content="A Victorian glasshouse of brass and porcelain, alive in your browser. Fly APX-9, the mechanical bee, pollinate the blooms and wake the garden." />
+  <meta property="og:url" content="https://jez237.com/demos/clockwork-garden/" />
+  <meta property="og:image" content="https://jez237.com/demos/clockwork-garden/assets/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="APX-9, a brass and porcelain mechanical bee, flying down a lantern-lit avenue of glowing porcelain flowers inside a Victorian glasshouse at night." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Clockwork Garden" />
+  <meta name="twitter:description" content="A Victorian glasshouse of brass and porcelain, alive in your browser. Fly APX-9, the mechanical bee, and wake the garden." />
+  <meta name="twitter:image" content="https://jez237.com/demos/clockwork-garden/assets/og.jpg" />
+  <link rel="stylesheet" href="styles.css?v=dae1f1f351" />
+  <script type="importmap">
+    {
+      "imports": {
+        "./src/audio/live.js": "./src/audio/live.js?v=a3bafd1ece",
+        "./src/audio/score.js": "./src/audio/score.js?v=65a5fc7f61",
+        "./src/core/ease.js": "./src/core/ease.js?v=1c12c5a05a",
+        "./src/core/fastmatrix.js": "./src/core/fastmatrix.js?v=8e12d0f210",
+        "./src/core/quality.js": "./src/core/quality.js?v=f7eb881e92",
+        "./src/core/rng.js": "./src/core/rng.js?v=6ce6aeb932",
+        "./src/creatures/apx9.js": "./src/creatures/apx9.js?v=9f8a6e8b3a",
+        "./src/creatures/apx9Shape.js": "./src/creatures/apx9Shape.js?v=887208490f",
+        "./src/creatures/bee.js": "./src/creatures/bee.js?v=d0c30cba59",
+        "./src/creatures/beetle.js": "./src/creatures/beetle.js?v=50180e41b6",
+        "./src/creatures/bird.js": "./src/creatures/bird.js?v=43e5c36cf5",
+        "./src/creatures/butterfly.js": "./src/creatures/butterfly.js?v=bb8f06e226",
+        "./src/creatures/common.js": "./src/creatures/common.js?v=6e3785a4fc",
+        "./src/creatures/compact.js": "./src/creatures/compact.js?v=8ed6841453",
+        "./src/creatures/dragonfly.js": "./src/creatures/dragonfly.js?v=f9f2521275",
+        "./src/creatures/manager.js": "./src/creatures/manager.js?v=c00ceb8004",
+        "./src/direction/beats.js": "./src/direction/beats.js?v=978af0c393",
+        "./src/direction/camera.js": "./src/direction/camera.js?v=8557f310f9",
+        "./src/direction/director.js": "./src/direction/director.js?v=7120fe5b94",
+        "./src/direction/shots.js": "./src/direction/shots.js?v=4d62441256",
+        "./src/explore/actor.js": "./src/explore/actor.js?v=59e93bdf0c",
+        "./src/explore/ambient.js": "./src/explore/ambient.js?v=ae9899fc8e",
+        "./src/explore/beelights.js": "./src/explore/beelights.js?v=9e3a0fa395",
+        "./src/explore/beeshadow.js": "./src/explore/beeshadow.js?v=9b001bce92",
+        "./src/explore/bells.js": "./src/explore/bells.js?v=7c1dc1f6d6",
+        "./src/explore/birds.js": "./src/explore/birds.js?v=5e44543ffc",
+        "./src/explore/bounds.js": "./src/explore/bounds.js?v=53fd94c27f",
+        "./src/explore/butterflies.js": "./src/explore/butterflies.js?v=ab916ab6cd",
+        "./src/explore/cameras.js": "./src/explore/cameras.js?v=a2dad0ecf6",
+        "./src/explore/cull.js": "./src/explore/cull.js?v=5a9f30bbe9",
+        "./src/explore/dragonflies.js": "./src/explore/dragonflies.js?v=bbef7c4548",
+        "./src/explore/explore.js": "./src/explore/explore.js?v=37751e04fb",
+        "./src/explore/fireflies.js": "./src/explore/fireflies.js?v=dee5cee105",
+        "./src/explore/flutter.js": "./src/explore/flutter.js?v=857d75a349",
+        "./src/explore/fountain.js": "./src/explore/fountain.js?v=a253acd4aa",
+        "./src/explore/gardenscape.js": "./src/explore/gardenscape.js?v=43ec0aebaa",
+        "./src/explore/growth.js": "./src/explore/growth.js?v=09968e6f02",
+        "./src/explore/heron.js": "./src/explore/heron.js?v=508af8fc41",
+        "./src/explore/interactions.js": "./src/explore/interactions.js?v=a9a8bc0b16",
+        "./src/explore/lowroutes.js": "./src/explore/lowroutes.js?v=014c3fcdb2",
+        "./src/explore/nearfield.js": "./src/explore/nearfield.js?v=906bbf64f1",
+        "./src/explore/night.js": "./src/explore/night.js?v=c329b16c83",
+        "./src/explore/nightflies.js": "./src/explore/nightflies.js?v=bc90e1d1d8",
+        "./src/explore/outdoors.js": "./src/explore/outdoors.js?v=8b96257535",
+        "./src/explore/outside.js": "./src/explore/outside.js?v=b5066cd447",
+        "./src/explore/pilot.js": "./src/explore/pilot.js?v=0f7e6a12b6",
+        "./src/explore/pond.js": "./src/explore/pond.js?v=78e80214ce",
+        "./src/explore/pondsim.js": "./src/explore/pondsim.js?v=1533451a0e",
+        "./src/explore/rabbits.js": "./src/explore/rabbits.js?v=7648efea5b",
+        "./src/explore/rain.js": "./src/explore/rain.js?v=3b2ab49ce5",
+        "./src/explore/robins.js": "./src/explore/robins.js?v=d0da4fdf8f",
+        "./src/explore/save.js": "./src/explore/save.js?v=081b428c83",
+        "./src/explore/scenery.js": "./src/explore/scenery.js?v=96c222ab12",
+        "./src/explore/timeofday.js": "./src/explore/timeofday.js?v=95b871e238",
+        "./src/explore/upgrade.js": "./src/explore/upgrade.js?v=d3920f13b0",
+        "./src/explore/weather.js": "./src/explore/weather.js?v=9fc4e3fc3f",
+        "./src/explore/wetpath.js": "./src/explore/wetpath.js?v=3f5ee58337",
+        "./src/geometry/gears.js": "./src/geometry/gears.js?v=28a5480034",
+        "./src/geometry/intersect.js": "./src/geometry/intersect.js?v=9b2368346a",
+        "./src/geometry/leaf.js": "./src/geometry/leaf.js?v=c1d64fa2c4",
+        "./src/geometry/parts.js": "./src/geometry/parts.js?v=7c23b182ca",
+        "./src/geometry/shapes.js": "./src/geometry/shapes.js?v=91af2e6e67",
+        "./src/input/input.js": "./src/input/input.js?v=63a7f3e6f4",
+        "./src/main.js": "./src/main.js?v=b903f94aa3",
+        "./src/materials/library.js": "./src/materials/library.js?v=a23f0a2f5b",
+        "./src/materials/scanlist.js": "./src/materials/scanlist.js?v=f6cfd06d9d",
+        "./src/materials/scans.js": "./src/materials/scans.js?v=204d248c0c",
+        "./src/materials/textures.js": "./src/materials/textures.js?v=a1fb35513c",
+        "./src/render/governor.js": "./src/render/governor.js?v=14156591c3",
+        "./src/render/pipeline.js": "./src/render/pipeline.js?v=105337c853",
+        "./src/render/singlepass.js": "./src/render/singlepass.js?v=0d1efc1113",
+        "./src/ui/controls.js": "./src/ui/controls.js?v=8499f4c844",
+        "./src/ui/hud.js": "./src/ui/hud.js?v=dd44f782f2",
+        "./src/ui/landing.js": "./src/ui/landing.js?v=91b840e47e",
+        "./src/ui/perfmeter.js": "./src/ui/perfmeter.js?v=db8de9a812",
+        "./src/world/atmosphere.js": "./src/world/atmosphere.js?v=665a2e404e",
+        "./src/world/dome.js": "./src/world/dome.js?v=e5edf9e459",
+        "./src/world/environment.js": "./src/world/environment.js?v=bb5e311365",
+        "./src/world/escapement.js": "./src/world/escapement.js?v=51e5fcc5ad",
+        "./src/world/flora.js": "./src/world/flora.js?v=da120bf78c",
+        "./src/world/foliage.js": "./src/world/foliage.js?v=5423265746",
+        "./src/world/garden.js": "./src/world/garden.js?v=50c0cc3d37",
+        "./src/world/greatTree.js": "./src/world/greatTree.js?v=0906ca636a",
+        "./src/world/greenhouse.js": "./src/world/greenhouse.js?v=a6c8afe74a",
+        "./src/world/heroFlower.js": "./src/world/heroFlower.js?v=81e0c3bc95",
+        "./src/world/layout.js": "./src/world/layout.js?v=16dd22caff",
+        "./src/world/lightfield.js": "./src/world/lightfield.js?v=b1c42bc6ab",
+        "./src/world/lighting.js": "./src/world/lighting.js?v=d055bc832a",
+        "./src/world/planting.js": "./src/world/planting.js?v=93d4ed8a7d",
+        "./src/world/promenade.js": "./src/world/promenade.js?v=3b3044fc18",
+        "./src/world/props.js": "./src/world/props.js?v=1cbf9461f2",
+        "./src/world/rootCrown.js": "./src/world/rootCrown.js?v=9b40b3ec83",
+        "./src/world/roots.js": "./src/world/roots.js?v=1f23cfd457",
+        "./src/world/sky.js": "./src/world/sky.js?v=f8f7a7d89b",
+        "./src/world/sunpath.js": "./src/world/sunpath.js?v=3238621c55",
+        "./src/world/weatherU.js": "./src/world/weatherU.js?v=586aecb158",
+        "./src/world/wind.js": "./src/world/wind.js?v=dbac592e47",
+        "./src/world/world.js": "./src/world/world.js?v=9dcfb198ce"
+      }
+    }
+  </script>
+  <link rel="modulepreload" href="./garden.SELV7B5D.js" />
+</head>
+<body>
+  <canvas id="film" role="img" aria-label="The Clockwork Garden: a procedural film of a Victorian glasshouse and a garden you can fly through as a mechanical bee"></canvas>
+  <div id="title" aria-hidden="true"><h1>The Clockwork Garden</h1><span class="rule"></span></div>
+  <div id="loading" role="status" aria-live="polite"><span class="tick"></span><span class="msg">winding the garden…</span></div>
+  <noscript>The Clockwork Garden needs JavaScript and WebGL.</noscript>
+  <script type="module" src="./garden.SELV7B5D.js"></script>
+</body>
+</html>
