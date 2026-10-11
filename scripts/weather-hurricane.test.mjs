@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   advisoryRank, advisoryTime, basinFor, buildStorms, direction, escapeHtml,
   fetchLayers, forecastTime, intensity, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
-  position, probability, queryUrl, validateCollection, wind
+  position, probability, queryUrl, validateCollection, validateForecastCollection, wind
 } from '../weather/hurricane-data.mjs';
 
 const NOW = Date.UTC(2026, 9, 11, 0);
@@ -153,6 +153,20 @@ test('a failed mandatory feed is not interpreted as no storms, while independent
   assert.equal(bundle.layers.points,undefined);
   assert.deepEqual(bundle.layers.outlook,EMPTY);
   assert.deepEqual(bundle.errors,['points']);
+});
+
+test('populated but incomplete forecasts cannot masquerade as empty or complete storm feeds', async () => {
+  assert.equal(validateForecastCollection(EMPTY), EMPTY);
+  assert.doesNotThrow(() => validateForecastCollection(collection([point(), point({tau:12})])));
+  for (const features of [
+    [point({tau:12})], [point({idp_subset:'',idp_source:''})], [null],
+    [point(), point({idp_subset:'ep012026',tau:12})],
+    [point(), point({advisnum:'9',tau:12})],
+    [point({tau:null})], [point({advisnum:'unknown'})], [point({},[-75,200])]
+  ]) assert.throws(() => validateForecastCollection(collection(features)));
+  const bundle = await fetchLayers(async url => ({ok:true, json:async()=>url.includes('/5/') ? collection([point({tau:12})]) : EMPTY}), NOW);
+  assert.equal(bundle.layers.points, undefined);
+  assert.deepEqual(bundle.errors, ['points']);
 });
 
 test('an optional layer failure preserves other live layers and its explicit error state', async () => {

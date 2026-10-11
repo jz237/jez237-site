@@ -22,9 +22,10 @@
 #weather-hurricanes .hurricane-basins button[aria-pressed="true"] { background:#285365; color:#fff; border-color:#437385; }
 .hurricane-units { display:flex; align-items:center; gap:8px; margin-left:auto; color:var(--hc-muted); font-size:12px; }
 #weather-hurricanes .hurricane-units select { min-width:72px; padding-right:6px; }
-.hurricane-feed-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; align-items:center; padding:12px 0; font-size:11px; color:var(--hc-muted); }
+.hurricane-feed-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; align-items:center; min-height:44px; padding:12px 0; font-size:11px; color:var(--hc-muted); }
 #weather-hurricanes .hurricane-feed-row p { margin:0; }
 #hurricane-basin-count { color:#d0e3e9; font-weight:600; }
+#weather-hurricanes .hurricane-refresh { min-width:92px; }
 #weather-hurricanes .hurricane-notice { margin:0 0 14px; padding:11px 13px; border:1px solid #976c39; border-radius:8px; color:#ffe2b4; background:#68432238; font-size:12px; line-height:1.6; }
 .hurricane-workspace { display:grid; grid-template-columns:minmax(0,1fr) 234px; gap:18px; align-items:start; }
 .hurricane-map-column,.hurricane-sidebar { min-width:0; }
@@ -110,5 +111,6 @@
 @media (max-width:1100px) { .hurricane-workspace { grid-template-columns:minmax(0,1fr); } .hurricane-sidebar { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); column-gap:20px; align-items:start; } .hurricane-panel-label { grid-column:1; } .hurricane-storm-list { grid-column:1; grid-row:2; } #hurricane-storm-detail { grid-column:2; grid-row:1 / span 3; } .hurricane-storm-details { margin-top:0; } #hurricane-outlook-list { grid-column:1; } }
 @media (max-width:760px) { #weather-hurricanes { margin:16px 0 22px; padding:16px 12px; border-radius:14px; } #weather-hurricanes .hurricane-header { align-items:flex-start; gap:8px; margin-bottom:16px; } #weather-hurricanes .hurricane-header h2 { font-size:30px; } #weather-hurricanes .hurricane-header p { font-size:11px; } #weather-hurricanes .hurricane-source-link { max-width:72px; font-size:10px; line-height:1.5; text-align:right; } .hurricane-toolbar { gap:8px; } .hurricane-basins { width:100%; } #weather-hurricanes .hurricane-basins button { flex:1; padding:8px 7px; } .hurricane-units { margin-left:0; } #weather-hurricanes .hurricane-refresh { margin-left:auto; } #hurricane-map { height:365px; } .hurricane-workspace { gap:17px; } .hurricane-layers { column-gap:14px; } .hurricane-layers label { min-height:36px; } .hurricane-map-legend { gap:10px; } .hurricane-sidebar { column-gap:13px; } .hurricane-stat-grid { gap:9px; } .hurricane-stat-grid dd { font-size:17px; } }
 @media (max-width:440px) { .hurricane-sidebar { display:block; } .hurricane-storm-list { grid-template-columns:1fr; } .hurricane-storm-details { margin-top:15px; } .hurricane-stat-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; } .hurricane-stat-grid dd { font-size:16px; } .hurricane-stat-grid dd small { display:block; margin-top:3px; } .hurricane-stat-grid dt { font-size:9px; } #hurricane-map { height:338px; } .hurricane-outlook-title { margin-top:15px; } }
+@media (max-width:760px) { .hurricane-feed-row { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(16px,auto) minmax(16px,auto); gap:3px; min-height:59px; } }
 @media (prefers-reduced-motion:reduce) { .hurricane-map-marker.is-selected .hurricane-center-icon::before { animation:none; } }
 @media print { #weather-hurricanes { break-inside:avoid; } .hurricane-toolbar,.hurricane-layers,.hurricane-timeline-controls,.hurricane-timeline-heading button,#hurricane-reset-view,.leaflet-control-zoom { display:none !important; } }
