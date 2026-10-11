@@ -1209,6 +1209,9 @@ after meaningful movement, zoom or elevation-scale changes.
 Photographic close-up landmark markers are limited to the viewed neighborhood.
 This prevents distant tile-clamped pins appearing over unrelated buildings;
 regional and aircraft views retain their wider range, and exhibit bounds still apply.
+Markers use tile collision data to sit three metres above their mapped surface,
+and both dots and labels obey depth testing, so foreground buildings hide them.
+The shared geographic camera remains controlled by the relief rig.
 The initial photographic handoff waits for Cesium to finish loading the current
 view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
@@ -1222,6 +1225,9 @@ Photographic failure releases its viewer and cached tiles after the current rend
 call returns. Failed views cannot reactivate during that call or supply an aircraft
 renderer. Late tile downloads are discarded; an explicit retry starts a fresh
 viewer. The local recovery page also provides a one-shot photo-render failure check.
+`tools/photo-fixture.html` tests real Cesium rendering, rooftop placement,
+occlusion, failure cleanup and retry with a small generated local GLB tileset.
+It uses no ion account or remote photographic tile requests.
 
 Validation: 475 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
