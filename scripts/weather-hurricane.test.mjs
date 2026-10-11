@@ -5,6 +5,7 @@ import {
   fetchLayers, forecastTime, intensity, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
   position, probability, queryUrl, validateCollection, validateForecastCollection, wind
 } from '../weather/hurricane-data.mjs';
+import { satelliteTime } from '../weather/hurricane-satellite.mjs';
 
 const NOW = Date.UTC(2026, 9, 11, 0);
 const EMPTY = { type:'FeatureCollection', features:[] };
@@ -17,6 +18,16 @@ const point = (overrides = {}, coordinates = [-64.5, 24.2]) => ({
   }
 });
 const collection = features => ({type:'FeatureCollection',features});
+
+test('satellite images require a recent, explicitly advertised observation time', () => {
+  const time = '2026-10-11T00:00:00Z';
+  assert.equal(satelliteTime(time, '2026-10-10T23:00:00.000Z,2026-10-11T00:00:00.000Z', NOW), NOW);
+  for (const invalid of [null, '', 'current', '2026-10-11', '2026-10-11T01:00:00Z', '2026-10-10T17:00:00Z', '2026-02-31T00:00:00Z']) {
+    assert.throws(() => satelliteTime(invalid, invalid, NOW));
+  }
+  assert.throws(() => satelliteTime(time, '2026-10-10T23:00:00Z', NOW));
+  assert.throws(() => satelliteTime(time, '', NOW));
+});
 
 test('missing measurements never become zero wind or pressure', () => {
   for (const value of [null, undefined, '', '  ', false, 'unknown', NaN, Infinity]) {

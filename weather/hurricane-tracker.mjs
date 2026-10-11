@@ -3,6 +3,7 @@ import {
   fetchLayers, historyTime, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
   position, probability, riskColor, basinFor, validateCollection, validateForecastCollection, wind
 } from './hurricane-data.mjs?v=20261010-3';
+import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);
@@ -13,7 +14,7 @@ const WATCHES = { HWR: ['Hurricane warning', '#ff676b'], HWA: ['Hurricane watch'
 const BOUNDS = { atlantic: [[3, -102], [49, -18]], pacific: [[1, -179], [43, -79]], all: [[1, -173], [52, -25]] };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const state = { basin: 'all', selected: null, step: 0, unit: 'mph', storms: [], bundle: null, cached: false, failedRefresh: false, loading: false, inView: true, initialized: false, lastAttempt: 0, basemapError: false, layers: { cones: true, history: true, outlook: true, warnings: true } };
-let map, graphics, highlight, labelLayer, playback;
+let map, graphics, highlight, labelLayer, playback, satellite, land;
 let observer, resizeObserver;
 const outlookLayers = new Map();
 
@@ -279,6 +280,7 @@ function renderBundle(bundle, cached = false, initialFit = false) {
 
 async function refresh() {
   if (state.loading) return;
+  satellite?.refresh();
   state.loading = true;
   state.lastAttempt = Date.now();
   $('#hurricane-refresh').disabled = true;
@@ -326,7 +328,7 @@ function addMapLabels() {
 }
 
 async function initializeMap() {
-  if (!window.L) { showMapMessage('Interactive map unavailable · storm details are listed below'); return; }
+  if (!window.L) { $('#hurricane-satellite').disabled = true; showMapMessage('Interactive map unavailable · storm details are listed below'); return; }
   const L = window.L;
   map = L.map('hurricane-map', {
     zoomSnap: .25, zoomDelta: .5, minZoom: 1.25, maxZoom: 6.5,
@@ -336,11 +338,18 @@ async function initializeMap() {
   });
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>');
   map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA/NHC</a>');
-  for (const [name, z] of [['land',200],['grid',210],['labels',250],['outlook',300],['cones',310],['tracks',320],['warnings',330],['points',340],['selection',350],['centers',410]]) {
+  for (const [name, z] of [['land',200],['satellite',205],['grid',210],['labels',250],['outlook',300],['cones',310],['tracks',320],['warnings',330],['points',340],['selection',350],['centers',410]]) {
     map.createPane(`hurricane-${name}`).style.zIndex = String(z);
     if (name !== 'centers') map.getPane(`hurricane-${name}`).setAttribute('aria-hidden', 'true');
-    if (['land','grid','labels'].includes(name)) map.getPane(`hurricane-${name}`).style.pointerEvents = 'none';
+    if (['land','satellite','grid','labels'].includes(name)) map.getPane(`hurricane-${name}`).style.pointerEvents = 'none';
   }
+  satellite = createSatelliteOverlay({ map, L, input:$('#hurricane-satellite'), panel:$('#hurricane-satellite-info'), status:$('#hurricane-satellite-status'), retry:$('#hurricane-satellite-retry'), formatTime,
+    onDisplay:active => {
+      root.classList.toggle('hurricane-satellite-active', active);
+      map.getPane('hurricane-land').style.zIndex = active ? '240' : '200';
+      land?.setStyle({ fillOpacity:active ? 0 : 1, color:active ? '#92b2c1' : '#45667a' });
+    }
+  });
   const grid = L.layerGroup().addTo(map);
   for (let lon = -180; lon <= 10; lon += 10) L.polyline([[-8,lon],[72,lon]], { pane: 'hurricane-grid', color:'#7da6bc', opacity:.09, weight:1, interactive:false }).addTo(grid);
   for (let lat = 0; lat <= 70; lat += 10) L.polyline([[lat,-180],[lat,12]], { pane: 'hurricane-grid', color:'#7da6bc', opacity:.09, weight:1, interactive:false }).addTo(grid);
@@ -355,7 +364,8 @@ async function initializeMap() {
   try {
     const response = await fetch(new URL('./data/basemap.geojson?v=20261010-4', import.meta.url), { signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error('Basemap unavailable');
-    L.geoJSON(await response.json(), { pane:'hurricane-land', interactive:false, style:{ color:'#45667a', weight:.7, fillColor:'#1b3a4b', fillOpacity:1 } }).addTo(map);
+    const active = root.classList.contains('hurricane-satellite-active');
+    land = L.geoJSON(await response.json(), { pane:'hurricane-land', interactive:false, style:{ color:active ? '#92b2c1' : '#45667a', weight:.7, fillColor:'#1b3a4b', fillOpacity:active ? 0 : 1 } }).addTo(map);
   } catch { state.basemapError = true; showNotice('The coastline map could not load. Storm coordinates and advisory details remain available.'); }
   if (state.bundle) { drawMap(); renderStatus(); fitView(); }
 }
