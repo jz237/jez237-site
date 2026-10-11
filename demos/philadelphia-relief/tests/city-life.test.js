@@ -78,6 +78,34 @@ test('traffic advances the same elapsed time at 10 fps and 20 fps, and ignores i
   for(const dt of [NaN,Infinity,-1,0])slow.update(dt);
   assert.deepEqual(snapshot(slow),prior);
 });
+test('cars yield before a multi-node junction until the crossing vehicle clears',()=>{
+  const graph=createStreetGraph({roads:[
+    {id:1,oneway:1,width:10,points:[[1,-100,0],[2,0,0],[3,4,0],[4,104,0]]},
+    {id:2,oneway:1,width:10,points:[[5,4,-100],[3,4,0],[6,4,100]]},
+  ]},projection,()=>4);
+  assert.equal(graph.nodes.get(2).junction,graph.nodes.get(3).junction);
+  const sim=createTraffic(graph,2);
+  for(const [i,car] of sim.cars.entries())Object.assign(car,{edge:graph.edges[i?3:0],
+    distance:80,speed:6,cruise:8,previousEdge:null,nextEdge:graph.edges[i?4:1]});
+  let closest=Infinity;
+  for(let i=0;i<1200;i++){
+    sim.update(.05);
+    const [a,b]=sim.cars.map(trafficPose);
+    closest=Math.min(closest,Math.hypot(a.x-b.x,a.z-b.z));
+  }
+  assert.ok(closest>4,`vehicles kept only ${closest.toFixed(2)} metres apart`);
+  assert.ok(sim.cars.every(car=>car.edge.from.id===3),'both vehicles eventually pass the junction');
+});
+test('closely sampled street nodes form bounded junctions rather than one region-wide lock',()=>{
+  const points=Array.from({length:30},(_,i)=>[i,i*3,0]);
+  const graph=createStreetGraph({roads:[{id:1,oneway:1,width:8,points}]},projection,()=>0);
+  const groups=new Map();
+  for(const node of graph.nodes.values()){
+    const xs=groups.get(node.junction)||[];xs.push(node.x);groups.set(node.junction,xs);
+  }
+  assert.ok(groups.size>1);
+  for(const xs of groups.values())assert.ok(Math.max(...xs)-Math.min(...xs)<=18);
+});
 test('unchanged street furniture is retained, while a new view radius rebuilds it',async()=>{
   const previousFetch=globalThis.fetch;
   globalThis.fetch=async()=>({ok:true,json:async()=>({roads:[{id:1,oneway:0,width:10,
@@ -106,8 +134,14 @@ test('unchanged street furniture is retained, while a new view radius rebuilds i
     assert.equal(vehicles.instanceMatrix.updateRanges[0].count,vehicles.count*16);
     assert.equal(vehicles.instanceColor.updateRanges[0].count,vehicles.count*3);
     const version=furniture.instanceMatrix.version;
+    const vehicleVersion=vehicles.instanceMatrix.version;
     for(let i=0;i<20;i++)streets.update(params);
     assert.equal(furniture.instanceMatrix.version,version,'idle view does not re-upload unchanged streets');
+    assert.equal(vehicles.instanceMatrix.version,vehicleVersion,'reduced-motion cars retain their GPU buffers');
+    streets.update({...params,reducedMotion:false,state:{...params.state,animationSpeed:0}});
+    assert.equal(vehicles.instanceMatrix.version,vehicleVersion,'paused traffic retains its GPU buffers');
+    streets.update({...params,reducedMotion:false,dt:.1});
+    assert.ok(vehicles.instanceMatrix.version>vehicleVersion,'moving cars still upload their new poses');
     streets.update({...params,pose:{...params.pose,dist:2400}});
     assert.ok(furniture.instanceMatrix.version>version,'zooming out refreshes the wider neighborhood');
   }finally{streets.dispose();globalThis.fetch=previousFetch;}

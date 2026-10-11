@@ -21,6 +21,26 @@ export function createStreetGraph(doc,projection,sampleElevation){
       if(road.oneway>=0)add(a,b);if(road.oneway<=0)add(b,a);
     }
   }
+  // Several OSM nodes can describe one physical junction. Keep nearby connected
+  // pieces under one occupancy lock, with a bounded footprint so a densely
+  // sampled road cannot collapse into one enormous intersection.
+  const parents=new Map(),bounds=new Map();
+  for(const node of nodes.values()){
+    parents.set(node.id,node.id);bounds.set(node.id,[node.x,node.z,node.x,node.z]);
+  }
+  const root=id=>{while(parents.get(id)!==id){
+    parents.set(id,parents.get(parents.get(id)));id=parents.get(id);}
+    return id;};
+  for(const segment of segments){
+    if(segment.length>12)continue;
+    const a=root(segment.a.id),b=root(segment.b.id);if(a===b)continue;
+    const aa=bounds.get(a),bb=bounds.get(b);
+    const joined=[Math.min(aa[0],bb[0]),Math.min(aa[1],bb[1]),
+      Math.max(aa[2],bb[2]),Math.max(aa[3],bb[3])];
+    if(joined[2]-joined[0]>18||joined[3]-joined[1]>18)continue;
+    parents.set(b,a);bounds.set(a,joined);
+  }
+  for(const node of nodes.values())node.junction=root(node.id);
   return {nodes,edges,segments};
 }
 function lanePoint(e,distance){
@@ -31,6 +51,31 @@ function lanePoint(e,distance){
 }
 function turnSpan(from,to){
   return Math.min(12,Math.max(from.width,to.width)*.75,from.length*.24,to.length*.24);
+}
+function stopLine(car){
+  return car.edge.length-Math.max(5,(car.nextEdge?turnSpan(car.edge,car.nextEdge):0)+3);
+}
+function followingGap(car,queues){
+  let edge=car.edge,offset=-car.distance,gap=Infinity;
+  const visited=new Set();
+  // OSM often splits a single street into very short edges. Following distance
+  // must span those edges, otherwise a queued car on the next five-metre piece
+  // is invisible until its follower has already reached its bumper.
+  for(let hop=0;edge&&hop<12&&offset<50&&!visited.has(edge.id);hop++){
+    visited.add(edge.id);
+    for(const other of queues.get(edge.id)||[]){
+      if(other===car||other.edge!==edge)continue;
+      const ahead=offset+other.distance;
+      if(ahead>0)gap=Math.min(gap,Math.max(0,ahead-7));
+    }
+    offset+=edge.length;
+    if(!hop)edge=car.nextEdge;
+    else{
+      const continuations=edge.to.out.filter(next=>next.to!==edge.from);
+      edge=continuations.length===1?continuations[0]:null;
+    }
+  }
+  return gap;
 }
 function turnPose(from,to,distance){
   const span=turnSpan(from,to),t=Math.max(0,Math.min(1,(distance+span)/(2*span))),s=1-t;
@@ -70,7 +115,7 @@ export function createTraffic(graph,count=260,seed=239){
   if(!eligible.length)return {cars,update(){}};
   const occupied=new Map();
   for(let i=0;i<count*5&&cars.length<count;i++){
-    const edge=eligible[Math.floor(random()*eligible.length)],distance=random()*edge.length;
+    const edge=eligible[Math.floor(random()*eligible.length)],distance=8+random()*(edge.length-28);
     const positions=occupied.get(edge.id)||[];
     if(positions.some(p=>Math.abs(p-distance)<12))continue;
     positions.push(distance);occupied.set(edge.id,positions);
@@ -89,22 +134,36 @@ export function createTraffic(graph,count=260,seed=239){
       time+=dt;
       const queues=new Map();
       const reserved=new Set();
+      const junctions=new Map();
+      const occupy=(node,car)=>{
+        const owners=junctions.get(node.junction)||new Set();
+        owners.add(car);junctions.set(node.junction,owners);
+      };
+      // Reserve from before the turn starts until the rear of the vehicle has
+      // cleared it. Waiting until the graph edge changes is too late: two
+      // incoming cars may already be on overlapping curves by then.
+      for(const car of cars){
+        if(car.distance>stopLine(car)||car.edge.from.junction===car.edge.to.junction)occupy(car.edge.to,car);
+        const clear=car.previousEdge?turnSpan(car.previousEdge,car.edge)+4:8;
+        if(car.distance<clear)occupy(car.edge.from,car);
+      }
       for(const car of cars){const q=queues.get(car.edge.id)||[];q.push(car);queues.set(car.edge.id,q);}
       for(const q of queues.values())q.sort((a,b)=>b.distance-a.distance);
       for(const q of queues.values())for(let i=0;i<q.length;i++){
         const car=q[i],edge=car.edge,node=edge.to;
-        const phase=(time+Math.abs(node.id%19))%42;
+        const phase=(time+Math.abs(node.junction%19))%42;
         const green=Math.abs(edge.dx)>Math.abs(edge.dz)?phase<18:phase>=21&&phase<39;
         const next=car.nextEdge;
         const span=next?turnSpan(edge,next):0;
-        const stopAt=edge.length-Math.max(5,span+3);
-        const blocked=next&&(reserved.has(next.id)||(queues.get(next.id)||[])
+        const stopAt=stopLine(car);
+        const occupiedJunction=[...(junctions.get(node.junction)||[])].some(owner=>owner!==car);
+        const blocked=occupiedJunction||next&&(reserved.has(next.id)||(queues.get(next.id)||[])
           .some(other=>other!==car&&other.edge===next&&other.distance<span+8));
-        const leader=i&&q[i-1].edge===edge?q[i-1]:null;
-        let gap=leader?Math.max(0,leader.distance-car.distance-7):Infinity;
+        let gap=followingGap(car,queues);
         // A car that has passed the stop line clears the intersection even if
         // the signal changes; it must not freeze halfway through a turn.
-        if(car.distance<=stopAt&&((node.neighbors.size>2&&!green)||blocked)){
+        const insideJunction=edge.from.junction===node.junction;
+        if(!insideJunction&&car.distance<=stopAt&&((node.neighbors.size>2&&!green)||blocked)){
           gap=Math.min(gap,Math.max(0,stopAt-car.distance));
         }
         const turning=next&&edge.dx*next.dx+edge.dz*next.dz<.8;
@@ -113,6 +172,7 @@ export function createTraffic(graph,count=260,seed=239){
         car.braking=target<car.speed-.2||car.speed<.4;
         car.speed+=Math.max(-dt*6,Math.min(dt*2,target-car.speed));
         car.distance+=Math.min(car.speed*dt,gap);
+        if(car.distance>stopAt)occupy(node,car);
         let guard=0;
         while(car.distance>=car.edge.length&&guard++<8){
           const next=car.nextEdge;
