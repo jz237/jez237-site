@@ -1170,8 +1170,11 @@ to repair self-intersections and duplicate source surfaces while retaining islan
 Building shadow maps retain their depth result while geometry, clipping, growth,
 light and shadow coverage remain unchanged. Clouds render at half resolution with
 premultiplied edges; close-up pixels below the cloud deck skip cloud compositing
-samples. Performance mode disables screen-space glass reflections. These reduce
-rendering work without changing the original aerial resolution.
+samples. Contact shading also runs at half resolution, with depth-aware
+upsampling to preserve building edges. Cloud composition uses four matching
+samples instead of a 25-sample neighborhood; roofs below the cloud deck do not
+punch holes through it. Performance mode disables screen-space glass reflections.
+These reduce rendering work without changing the original aerial resolution.
 
 Decorative cars follow the shipped OSM street graph, one-way directions, local
 queues and simulated junction signals. They use continuous turn curves, brake
@@ -1210,7 +1213,7 @@ scene instead of disposing it. After a restored WebGL context, rendering resumes
 and cached building shadows refresh. `tools/lifecycle-check.html` provides local
 buttons for reproducing graphics-context loss and restoration in the browser.
 
-Validation: 467 automated checks, including ten simulated minutes on the real
+Validation: 470 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
