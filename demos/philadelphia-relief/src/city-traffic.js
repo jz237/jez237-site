@@ -107,10 +107,11 @@ export function trafficPose(car){
   return lanePoint(e,car.distance);
 }
 export function createTraffic(graph,count=260,seed=239){
-  let randomState=seed>>>0,time=0;
+  let randomState=seed>>>0,time=0,view=null;
   const random=()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;
     return randomState/4294967296;};
   const eligible=graph.edges.filter(e=>e.length>30&&e.to.out.length);
+  const spawnEdges=eligible.filter(e=>e.length>=50);
   const cars=[];
   if(!eligible.length)return {cars,update(){}};
   const occupied=new Map();
@@ -119,7 +120,7 @@ export function createTraffic(graph,count=260,seed=239){
     const positions=occupied.get(edge.id)||[];
     if(positions.some(p=>Math.abs(p-distance)<12))continue;
     positions.push(distance);occupied.set(edge.id,positions);
-    cars.push({edge,distance,speed:0,cruise:6+random()*6,seed:random(),braking:true,
+    cars.push({edge,distance,speed:0,cruise:6+random()*6,seed:random(),braking:true,idleTime:0,
       previousEdge:null,nextEdge:null});
   }
   function choose(car){
@@ -176,7 +177,7 @@ export function createTraffic(graph,count=260,seed=239){
         let guard=0;
         while(car.distance>=car.edge.length&&guard++<8){
           const next=car.nextEdge;
-          if(!next){car.distance=car.edge.length;car.speed=0;break;}
+          if(!next){car.distance=car.edge.length;car.speed=0;car.braking=true;break;}
           // Wait at the junction if the receiving lane has no room.
           if(reserved.has(next.id)||(queues.get(next.id)||[])
             .some(other=>other!==car&&other.edge===next&&other.distance<8)){
@@ -186,13 +187,35 @@ export function createTraffic(graph,count=260,seed=239){
           car.distance-=car.edge.length;car.previousEdge=car.edge;car.edge=next;
           car.nextEdge=choose(car);
         }
+        car.idleTime=car.speed<.25?car.idleTime+dt:0;
+      }
+      // Cropped map roads have exits. Replenish cars that leave the network,
+      // and clear long gridlocks, only outside the displayed neighborhood.
+      // This keeps a long-running scene alive without visible teleportation.
+      let positions=null;
+      const inView=p=>view&&Math.hypot(p.x-view.x,p.z-view.z)<=view.radius;
+      for(const [index,car] of cars.entries()){
+        const exited=!car.nextEdge&&car.distance>=car.edge.length-.01;
+        const threshold=exited?3:120;
+        if(car.idleTime<threshold||!spawnEdges.length||inView(trafficPose(car)))continue;
+        positions??=cars.map(trafficPose);
+        let placed=false;
+        for(let attempt=0;attempt<24;attempt++){
+          const edge=spawnEdges[Math.floor(random()*spawnEdges.length)];
+          const distance=20+random()*(edge.length-40),p=lanePoint(edge,distance);
+          if(inView(p)||positions.some((other,i)=>i!==index&&Math.hypot(p.x-other.x,p.z-other.z)<12))continue;
+          Object.assign(car,{edge,distance,speed:0,braking:true,idleTime:0,previousEdge:null});
+          car.nextEdge=choose(car);positions[index]=p;placed=true;break;
+        }
+        if(!placed)car.idleTime=threshold-1;
       }
   }
   return {cars,
-    update(dt){
+    update(dt,protectedView=null){
       // Preserve elapsed time at low frame rates without a large unstable step
       // or a long catch-up loop when the tab wakes after being hidden.
       if(!Number.isFinite(dt)||dt<=0)return;
+      view=protectedView;
       let remaining=Math.min(dt,.25);
       while(remaining>1e-8){const elapsed=Math.min(remaining,.05);step(elapsed);remaining-=elapsed;}
     },

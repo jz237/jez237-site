@@ -106,7 +106,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
       const advancing=!reducedMotion&&Number.isFinite(dt)&&dt>0&&state.animationSpeed>0;
-      if(advancing)traffic.update(dt*state.animationSpeed);
+      if(advancing)traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
       if(!advancing&&vehicleView&&vehicleView.x===x&&vehicleView.z===z
         &&vehicleView.radius===radius&&vehicleView.exaggeration===exaggeration)return;
       vehicleView={x,z,radius,exaggeration};
