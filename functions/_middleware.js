@@ -1,3 +1,12 @@
+// Hidden Reef is hosted only in its standalone Cloudflare project.
+function onRequestHiddenReef(context) {
+  const url = new URL(context.request.url);
+  const match = url.pathname.match(/^\/prototypes\/(?:hidden-reef|hidden-reef-header-preview)(?:\/(.*))?$/);
+  if (!match) return null;
+  const target = new URL('https://hidden-reef.pages.dev/' + (match[1] || ''));
+  target.search = url.search;
+  return Response.redirect(target.href, 302);
+}
 const GOOGLE_ANALYTICS_ID = "G-S7VKNPPZHV";
 const FINAL_BLOW_SERVICE_WORKER_PATH = "/games/2026-08-20/final-blow/sw.js";
 
@@ -83,6 +92,7 @@ function isBlockedSourcePath(pathname) {
 }
 
 export async function onRequest(context) {
+  const reefRedirect = onRequestHiddenReef(context); if (reefRedirect) return reefRedirect;
   const url = new URL(context.request.url);
   const retiredPaths = [
     "/games/2026-06-06/missile-command-3js",

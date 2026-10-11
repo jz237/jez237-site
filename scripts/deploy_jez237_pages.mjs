@@ -36,10 +36,7 @@ for (const path of ['_headers', `${phillyRoot}index.html`, `${phillyRoot}load/ma
   'prototypes/hidden-reef-header-preview/index.html',
   'demos/hidden-reef-koi/index.html', 'demos/hidden-reef-koi/koi-pond.html',
   'demos/koi-pond-garden/index.html', 'demos/koi-pond-garden/koi-pond.html',
-  'prototypes/hidden-reef/learn/koi-pond/index.html',
-  'prototypes/hidden-reef-header-preview/learn/koi-pond/index.html',
-  'prototypes/hidden-reef/assets/pond-preview.js',
-  'prototypes/hidden-reef-header-preview/assets/pond-preview.js']) {
+  'HIDDEN_REEF.md']) {
   const expected = readFileSync(resolve(repo, path), 'utf8').replaceAll('\r\n', '\n');
   if (!existsSync(resolve(stage, path))
     || readFileSync(resolve(stage, path), 'utf8').replaceAll('\r\n', '\n') !== expected) {

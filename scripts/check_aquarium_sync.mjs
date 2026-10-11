@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {resolve,relative,sep} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
-export const aquariumCopies=['demos/rotatable-aquascape','prototypes/hidden-reef/showroom/aquarium','prototypes/hidden-reef-header-preview/showroom/aquarium'];
+export const aquariumCopies=['demos/rotatable-aquascape'];
 const hash=file=>createHash('sha256').update(readFileSync(file)).digest('hex');
 function files(directory,prefix=''){
  return readdirSync(directory,{withFileTypes:true}).flatMap(e=>e.isDirectory()?files(resolve(directory,e.name),prefix+e.name+'/'):[prefix+e.name]);
@@ -36,6 +36,6 @@ export function checkAquariumSync(root=resolve(import.meta.dirname,'..')){
  return assets.length;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
- try{console.log(`Aquarium synchronization passed (${checkAquariumSync()} assets across all three copies).`);}
+ try{console.log(`Aquarium synchronization passed (${checkAquariumSync()} assets in the standalone gallery demo).`);}
  catch(error){console.error(error.message);process.exitCode=1;}
 }

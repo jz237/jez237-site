@@ -33,6 +33,7 @@ jobs:
             !/.wrangler/
             !/functions/
             !/scripts/
+            /scripts/check_hidden_reef_retired.mjs
             /scripts/check_games_catalog_syntax.mjs
             /scripts/weather-hurricane.test.mjs
             /scripts/check_aquarium_release.mjs
@@ -87,6 +88,9 @@ jobs:
 
       - name: Check tested aquarium build
         run: node scripts/check_aquarium_release.mjs
+
+      - name: Keep Hidden Reef pointer-only
+        run: node scripts/check_hidden_reef_retired.mjs
 
       - name: Prepare GitHub Pages payload
         run: |
