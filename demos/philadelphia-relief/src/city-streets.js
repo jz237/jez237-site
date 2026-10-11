@@ -1,5 +1,6 @@
 import { createStreetGraph, createTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
+import { createCurbLayout } from './city-curbs.js?v=philly-2026101001';
 import { prepareSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
   from './city-walkers.js?v=philly-2026101001';
 
@@ -53,7 +54,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       if(mesh.count){attribute.addUpdateRange(0,mesh.count*stride);attribute.needsUpdate=true;}
     }
   }
-  let graph=null,traffic=null,loading=false,disposed=false,age=10;
+  let graph=null,traffic=null,curbLayout=null,loading=false,disposed=false,age=10;
   let retryDelay=0,request=null,vehicleView=null;
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
@@ -66,7 +67,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
       .then(async doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
-        traffic=createTraffic(graph,620);age=10;onReady();
+        traffic=createTraffic(graph,620);curbLayout=createCurbLayout(graph);age=10;onReady();
         // Cars can start while sidewalk topology is prepared in short tasks.
         // Disposal cancels the remaining work before it can attach late walkers.
         const routes=await prepareSidewalkRoutes(graph,{signal:request.signal});
@@ -119,10 +120,10 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       // Keep the photographic road surface visible; narrow raised curbs define its edges.
       for(const side of [-1,1]){
         const off=side*(s.width/2+.35);
-        for(const [offset,width,height,clearance,tint] of [[off,.35,.24,.48,0x9c998d],
-          [off+side,1.5,.16,.38,0x88877e]]){
-          strip(s.a.x+dx*trimA-dz*offset,s.a.z+dz*trimA+dx*offset,
-            s.b.x-dx*trimB-dz*offset,s.b.z-dz*trimB+dx*offset,width,height,clearance,tint);
+        for(const [margin,width,height,clearance,tint] of [[.35,.35,.24,.48,0x9c998d],
+          [1.35,1.5,.16,.38,0x88877e]]){
+          const span=curbLayout(s,side,margin);
+          if(span)strip(...span,width,height,clearance,tint);
         }
         if(s.length>28)for(let t=16;t<s.length-12;t+=34){
           const tx=s.a.x+dx*t-dz*(off+side*1.1),tz=s.a.z+dz*t+dx*(off+side*1.1);
