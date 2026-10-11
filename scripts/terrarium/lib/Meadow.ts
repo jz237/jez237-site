@@ -17,7 +17,7 @@ export class Meadow {
   readonly mesh: THREE.Mesh;
   blades = 0;
 
-  constructor(surface: Surface, tufts = 720) {
+  constructor(surface: Surface, tufts = 720, avoid: {x: number; z: number; r: number}[] = []) {
     const rnd = mulberry32(777);
     const pos: number[] = [], nrm: number[] = [], col: number[] = [], flex: number[] = [], phase: number[] = [], idx: number[] = [];
     const up = new THREE.Vector3(0, 1, 0);
@@ -26,6 +26,7 @@ export class Meadow {
     for (let tries = 0; tries < 40000 && placed < tufts; tries++) {
       const x = (rnd() - 0.5) * (TANK.w - 0.03), z = (rnd() - 0.5) * (TANK.d - 0.03);
       if (surface.kindAt(x, z) !== SurfaceKind.Ground || caveKeepClear(x, z)) continue;
+      if (avoid.some((o) => Math.hypot(x - o.x, z - o.z) < o.r)) continue;
       const y = surface.heightAt(x, z);
       const pd = poolDistance(x, z);
       if (y < WATER_LEVEL + 0.004 || pd < 0.02) continue;

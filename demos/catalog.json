@@ -412,7 +412,7 @@
     "id": "019",
     "title": "Weatherglass Terrarium",
     "category": "3D · Living terrarium",
-    "description": "A photoreal rainforest under glass with a living bearded dragon. It roams, wades, basks, hunts and eats crickets, and runs for its rock cave when you squeeze clouds into a storm. Wring out rain, shake out lightning, shrink clouds, stir the wind through the grass, pour fog and ripple the pool.",
+    "description": "A photoreal rainforest under glass with a living bearded dragon. It basks until warm, changes colour with temperature and mood, snaps up crickets with its tongue, grazes greens, licks raindrops off the leaves and runs for its rock cave when you squeeze clouds into a storm. Wring out rain, shake out lightning, mist the plants, stir the wind and ripple the pool.",
     "url": "terrarium/",
     "image": "assets/terrarium.jpg",
     "imageAlt": "Actual Weatherglass Terrarium scene: a bearded dragon on driftwood, rain falling from a cloud, mossy basalt peaks with a cave, grass, bromeliads and a waterfall inside a glass case",
@@ -420,10 +420,10 @@
     "imageHeight": 900,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/terrarium",
     "features": [
-      "Sculpted, skinned bearded dragon",
-      "Storms, rain & a cave to shelter in",
+      "Sculpted bearded dragon, four colour morphs",
+      "Storms, puddles, rainbows & a cave",
       "Wind through grass, leaves & dust",
-      "Hunting, eating & roaming behaviour"
+      "Hunting, grazing & basking to warm up"
     ],
     "facts": [
       "Three.js · WebGL 2",

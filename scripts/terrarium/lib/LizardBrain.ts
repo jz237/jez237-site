@@ -5,6 +5,7 @@ import type {Surface} from './Surface';
 import {SurfaceKind} from './Surface';
 import type {Insects, Cricket} from './Insects';
 import type {Water} from './Water';
+import type {Dish} from './Dish';
 import {POOL, poolDistance, WATER_LEVEL, CAVE} from './Ground';
 import {TANK} from './Case';
 
@@ -15,7 +16,7 @@ import {TANK} from './Case';
  * signal with head bobs and slow arm waves, and sleep flat at night.
  * Timings are illustrative, not measured ethology.
  */
-type Mode = 'bask' | 'idle' | 'travel' | 'drink' | 'hunt' | 'sleep' | 'display' | 'startle' | 'petted' | 'soak' | 'shelter';
+type Mode = 'bask' | 'idle' | 'travel' | 'drink' | 'hunt' | 'sleep' | 'display' | 'startle' | 'petted' | 'soak' | 'shelter' | 'graze' | 'sip';
 /** Facing straight out of the cave mouth (towards the glass). */
 const FACE_OUT = -Math.PI / 2;
 
@@ -23,6 +24,7 @@ const rnd = Math.random;
 const clamp = (x: number, a: number, b: number) => Math.min(b, Math.max(a, x));
 const damp = (cur: number, target: number, rate: number, dt: number) => cur + (target - cur) * (1 - Math.exp(-rate * dt));
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a));
+const smoothstep01 = (t: number) => {t = clamp(t, 0, 1); return t * t * (3 - 2 * t);};
 
 interface Pose {clearance: number; chestLift: number; headPitch: number; lid: number; breath: number}
 
@@ -72,10 +74,37 @@ export class LizardBrain {
   /** Running for the cave: no stops to look around on the way. */
   private hurry = false;
   private clearT = 0;
+  /** The dish of greens, and grazing from it. */
+  dish: Dish | null = null;
+  private grazePhase: 'face' | 'reach' | 'bite' | 'chew' = 'face';
+  private grazeBites = 0;
+  private grazeT = 0;
+  private lastGraze = -60;
+  /** The current strike is a tongue flick (small prey within reach) rather than a lunge. */
+  private tongueStrike = false;
+  private onTongue = false;
+  /** Leaf tips that hold droplets after rain or misting, and how wet the leaves are (0..1). */
+  leafTips: THREE.Vector3[] = [];
+  leavesWet = 0;
+  private sipTip = new THREE.Vector3();
+  private sipPitch = 0;
+  private lastSip = -60;
+  private lastMist = -60;
+  private snoutLickT = 0;
+  /** Each lick at a wet leaf. */
+  onSip?: (p: THREE.Vector3) => void;
   night = false;
   raining = false;
   heat = 1;
   storm = 0;
+  /** What the surroundings would warm or cool the body to (0 cold .. 1 hot); set from the lamp, shade and rain. */
+  envTemp = 0.5;
+  /** 0..1 how strongly the basking lamp falls on it. */
+  lampOnIt = 0;
+  /** Body temperature, 0 cold .. 1 hot: it follows envTemp over tens of seconds. */
+  bodyTemp = 0.55;
+  /** 0..1 alarm (storms, lightning, sudden movement); fades over about twenty seconds. */
+  stress = 0;
   cameraPos = new THREE.Vector3();
   pointer: THREE.Vector3 | null = null;
   private pointerPrev = new THREE.Vector3();
@@ -143,7 +172,7 @@ export class LizardBrain {
     this.burstLeft = 0.12 + rnd() * 0.3;
     this.pauseT = 0;
     this.leadT = 0.2;
-    this.setMode('travel', then === 'drink' ? 'Heading to the water' : then === 'bask' ? 'Returning to the basking log' : then === 'sleep' ? 'Looking for a place to sleep' : then === 'soak' ? 'Wading into the shallows' : then === 'shelter' ? 'Heading for the cave' : 'Exploring');
+    this.setMode('travel', then === 'drink' ? 'Heading to the water' : then === 'bask' ? 'Returning to the basking log' : then === 'sleep' ? 'Looking for a place to sleep' : then === 'soak' ? 'Wading into the shallows' : then === 'shelter' ? 'Heading for the cave' : then === 'graze' ? 'Off to the greens dish' : then === 'sip' ? 'Off to lick the wet leaves' : 'Exploring');
     this.posePreset('walk');
     return true;
   }
@@ -176,6 +205,65 @@ export class LizardBrain {
     return candidates[Math.floor(rnd() * Math.min(6, candidates.length))].slice(0, 3) as [number, number, number];
   }
 
+  /** A reachable spot beside the dish, facing it, with the mouth over the greens. */
+  private grazeSpot(): [number, number, number] | null {
+    const d = this.dish;
+    if (!d) return null;
+    const I = this.rig.inputs;
+    let best: [number, number, number] | null = null, bd = Infinity;
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2;
+      const x = d.centre.x + Math.cos(a) * 0.1, z = d.centre.z + Math.sin(a) * 0.1;
+      if (!this.nav.reachable(x, z) || this.nav.isWet(x, z)) continue;
+      const dist = Math.hypot(x - I.x, z - I.z);
+      if (dist < bd) {bd = dist; best = [x, z, Math.atan2(-(d.centre.z - z), d.centre.x - x)];}
+    }
+    return best;
+  }
+
+  /**
+   * A reachable stance facing a leaf tip at licking height, near `near` when
+   * given (where the mist went) or else near the lizard.
+   */
+  private sipSpot(near?: THREE.Vector3): [number, number, number] | null {
+    const I = this.rig.inputs;
+    const cx = near?.x ?? I.x, cz = near?.z ?? I.z;
+    let best: [number, number, number] | null = null, bs = Infinity;
+    for (const p of this.leafTips) {
+      const dc = Math.hypot(p.x - cx, p.z - cz);
+      if (dc > (near ? 0.16 : 0.45)) continue;
+      if (p.y - this.surface.heightAt(p.x, p.z) < 0.02) continue;
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2;
+        const x = p.x + Math.cos(a) * 0.066, z = p.z + Math.sin(a) * 0.066;
+        // the tip must be at head height from where it stands (not down off a log)
+        const h = p.y - this.surface.heightAt(x, z);
+        if (h < 0.03 || h > 0.07) continue;
+        if (!this.nav.reachable(x, z) || this.nav.isWet(x, z)) continue;
+        const score = dc + Math.hypot(x - I.x, z - I.z) * 0.5 + rnd() * 0.05;
+        if (score < bs) {bs = score; best = [x, z, Math.atan2(-(p.z - z), p.x - x)]; this.sipTip.copy(p);}
+      }
+    }
+    return best;
+  }
+
+  /** The misting bottle sprayed at `p`: a lick of the snout if it caught the face, and a trip to the wet leaves. */
+  misted(p: THREE.Vector3) {
+    if (this.mode === 'sleep') return;
+    const I = this.rig.inputs;
+    if (p.distanceTo(this.rig.snout) < 0.07 || Math.hypot(p.x - I.x, p.z - I.z) < 0.06) {
+      this.snoutLickT = 2.4;
+      this.pose.lid = 0.15;
+    }
+    if (this.t - this.lastMist < 1.5) return;
+    this.lastMist = this.t;
+    if (this.mode === 'hunt' || this.sheltering || this.mode === 'startle' || this.mode === 'sip' || this.mode === 'graze' || this.mode === 'petted') return;
+    if (this.mode === 'travel' && this.after === 'sip') return;
+    if (Math.hypot(p.x - I.x, p.z - I.z) > 0.55 || rnd() > 0.8) return;
+    const s = this.sipSpot(p);
+    if (s && this.goTo(s[0], s[1], 'sip')) this.faceHeading = s[2];
+  }
+
   private chooseActivity() {
     if (this.night) {
       // Sleeps where it basks if it is already up on the log; otherwise in the ferns.
@@ -189,11 +277,20 @@ export class LizardBrain {
     const r = rnd();
     const I = this.rig.inputs;
     const onLog = Math.hypot(I.x - this.baskSpot[0], I.z - this.baskSpot[1]) < 0.03;
+    // after rain (or misting) it licks the droplets off the leaves
+    if (this.leavesWet > 0.25 && this.t - this.lastSip > 20 && rnd() < 0.6) {
+      const s = this.sipSpot();
+      if (s && this.goTo(s[0], s[1], 'sip')) {this.faceHeading = s[2]; return;}
+    }
+    if (this.dish && this.dish.remaining > 0 && this.t - this.lastGraze > 45 && rnd() < 0.35) {
+      const s = this.grazeSpot();
+      if (s && this.goTo(s[0], s[1], 'graze')) {this.faceHeading = s[2]; return;}
+    }
     if (r < 0.18) {
       const s = this.drinkSpot();
       if (s && this.goTo(s[0], s[1], 'drink')) {this.faceHeading = s[2]; return;}
     }
-    if (r < 0.36 && !onLog && this.heat > 0.5) {
+    if ((r < 0.36 || (this.bodyTemp < 0.38 && r < 0.75)) && !onLog && this.heat > 0.5) {
       if (this.goTo(this.baskSpot[0], this.baskSpot[1], 'bask')) {this.faceHeading = this.baskSpot[2]; return;}
     }
     if (r < 0.46) {
@@ -292,6 +389,8 @@ export class LizardBrain {
 
   /** Lightning struck at `p`: bolt for cover if it was close, otherwise freeze and stare. */
   lightning(p: THREE.Vector3, strength: number) {
+    const near = Math.hypot(p.x - this.rig.inputs.x, p.z - this.rig.inputs.z) < 0.3;
+    this.stress = Math.min(1, this.stress + (near ? 0.6 : 0.3) * strength * (this.mode === 'shelter' ? 0.5 : 1));
     this.lookPoint.copy(p);
     this.looking = true;
     this.lookT = 2.5;
@@ -317,6 +416,7 @@ export class LizardBrain {
   /** Called when the pointer touches the lizard with the hand tool. */
   pet() {
     if (this.mode === 'sleep' || this.mode === 'hunt') return;
+    this.stress = Math.max(0, this.stress - 0.3);
     this.setMode('petted', 'Enjoying the attention');
   }
 
@@ -335,6 +435,7 @@ export class LizardBrain {
     I.tongue = damp(I.tongue, 0, 12, dt);
     I.lunge = damp(I.lunge, 0, 10, dt);
     I.shake = damp(I.shake, 0, 8, dt);
+    if (this.mode !== 'hunt' || this.huntPhase !== 'strike') I.tongueReach = damp(I.tongueReach, 0, 20, dt);
     I.swallow = damp(I.swallow, 0, 3, dt);
     I.bob = damp(I.bob, 0, 20, dt);
     I.wave = damp(I.wave, 0, 3, dt);
@@ -342,6 +443,14 @@ export class LizardBrain {
     const twitch = this.mode === 'hunt' && (this.huntPhase === 'approach' || this.huntPhase === 'fix') ? 1 : 0;
     I.tailTwitch = damp(I.tailTwitch, twitch, 6, dt);
     let targetSpeed = 0, targetTurn = 0;
+    // Thermoregulation: the body follows its surroundings slowly; colour and
+    // posture follow the body. A storm keeps it on edge.
+    this.bodyTemp += (this.envTemp - this.bodyTemp) * (1 - Math.exp(-dt / 32));
+    this.stress = Math.max(this.storm > 0.4 ? 0.45 * this.storm : 0, this.stress - dt / 18);
+    I.tone = damp(I.tone, clamp((0.5 - this.bodyTemp) * 2.4, -1, 1), 0.4, dt);
+    I.beardDark = damp(I.beardDark, smoothstep01((this.stress - 0.25) / 0.5), 1.5, dt);
+    const flatGoal = this.mode === 'bask' ? clamp((0.9 - this.bodyTemp) * 2.2, 0.25, 1) * Math.min(1, 0.3 + this.lampOnIt) : this.mode === 'soak' || this.mode === 'sleep' ? 0.25 : 0;
+    I.flatten = damp(I.flatten, flatGoal, 1.2, dt);
 
     // Sudden close movement of the pointer near the head makes it flinch away.
     if (this.pointer && this.mode !== 'sleep' && this.mode !== 'startle' && this.mode !== 'petted') {
@@ -367,13 +476,16 @@ export class LizardBrain {
     switch (this.mode) {
       case 'bask': {
         this.posePreset('bask');
+        this.status = this.bodyTemp < 0.42 ? 'Warming up under the lamp' : this.bodyTemp > 0.78 ? 'Hot: gaping to cool off' : 'Basking under the lamp';
         // Gaping (mouth held open) is how agamids shed excess heat.
         this.gapeT -= dt;
-        if (this.gapeT < -14 - rnd() * 20 && this.heat > 0.7) this.gapeT = 4 + rnd() * 6;
+        if (this.gapeT < -14 - rnd() * 20 && this.bodyTemp > 0.7) this.gapeT = 4 + rnd() * 6;
         if (this.gapeT > 0) I.jaw = damp(I.jaw, 0.38, 4, dt);
         this.poseGoal.lid = this.gapeT > 0 ? 0.7 : 0.85;
         this.idleLook(dt, 0.35);
-        if (this.modeT > 18 + rnd() * 400 * dt) this.chooseActivity();
+        // a cold dragon stays put until it has warmed; a hot one soon moves off to cool
+        const done = this.bodyTemp > 0.74 ? this.modeT > 6 : this.bodyTemp > 0.5 ? this.modeT > 18 + rnd() * 400 * dt : this.modeT > 150;
+        if (done) this.chooseActivity();
         break;
       }
       case 'idle': {
@@ -479,6 +591,70 @@ export class LizardBrain {
         if (this.clearT > 6 && !this.night) {this.clearT = 0; this.hurry = false; this.posePreset('alert'); this.chooseActivity();}
         break;
       }
+      case 'graze': {
+        const d = this.dish;
+        if (!d || d.remaining <= 0 || this.grazeBites >= 4) {this.setMode('idle', 'Content'); break;}
+        this.status = 'Eating greens';
+        this.grazeT += dt;
+        if (this.grazePhase === 'face') {
+          this.posePreset('alert');
+          if (this.faceHeading !== null && Math.abs(wrap(this.faceHeading - I.heading)) > 0.12 && this.grazeT < 2) {targetTurn = this.turnToward(this.faceHeading); break;}
+          this.grazePhase = 'reach'; this.grazeT = 0;
+        }
+        // head down to the dish, eyeing a piece, then a sideways nip and a few chews
+        this.lookPoint.copy(d.centre); this.looking = true; I.look = this.lookPoint;
+        this.posePreset('drink');
+        this.poseGoal.headPitch = -0.5;
+        if (this.grazePhase === 'reach') {
+          I.lunge = Math.max(I.lunge, Math.min(1, this.grazeT / 0.4) * 0.35);
+          I.jaw = Math.max(I.jaw, Math.min(1, this.grazeT / 0.4) * 0.38);
+          if (this.grazeT > 0.45) {this.grazePhase = 'bite'; this.grazeT = 0;}
+        } else if (this.grazePhase === 'bite') {
+          I.jaw = 0.04;
+          if (this.grazeT > 0.08 && d.take(this.rig.mouth)) {
+            this.onCrunch?.(this.rig.mouth, 0.35);
+            this.grazePhase = 'chew'; this.grazeT = 0; this.grazeBites++;
+          } else if (this.grazeT > 0.3) {this.grazePhase = 'chew'; this.grazeT = 0; this.grazeBites++;}
+        } else {
+          this.poseGoal.headPitch = 0.05;
+          I.look = null;
+          I.jaw = 0.06 + 0.14 * Math.max(0, Math.sin(this.grazeT * 17));
+          if (this.grazeT > 1.1 && this.grazeT < 1.5) I.tongue = Math.max(I.tongue, Math.sin((this.grazeT - 1.1) / 0.4 * Math.PI) * 0.5);
+          if (this.grazeT > 1.7) {this.grazePhase = 'reach'; this.grazeT = 0;}
+        }
+        break;
+      }
+      case 'sip': {
+        if (this.faceHeading !== null && Math.abs(wrap(this.faceHeading - I.heading)) > 0.12 && this.modeT < 2) {
+          targetTurn = this.turnToward(this.faceHeading);
+          this.posePreset('alert');
+          break;
+        }
+        this.posePreset('alert');
+        this.status = 'Lapping droplets off the leaves';
+        this.lookPoint.copy(this.sipTip); this.looking = true; I.look = this.lookPoint;
+        // keep the snout on the leaf: small turns of the body and a stretch of the neck
+        {
+          const want = Math.atan2(-(this.sipTip.z - I.z), this.sipTip.x - I.x);
+          if (Math.abs(wrap(want - I.heading)) > 0.04) targetTurn = this.turnToward(want) * 0.5;
+          const reach = Math.hypot(this.sipTip.x - I.x, this.sipTip.z - I.z) - Math.hypot(this.rig.mouth.x - I.x, this.rig.mouth.z - I.z);
+          I.lunge = Math.max(I.lunge, clamp(reach / 0.03, 0, 0.5));
+        }
+        // stretch up (or dip) until the mouth meets the leaf tip, then lap at it
+        this.poseGoal.chestLift = 1.15;
+        this.sipPitch = clamp(this.sipPitch - (this.rig.mouth.y - this.sipTip.y) * 18 * dt, -0.6, 0.6);
+        this.poseGoal.headPitch = this.sipPitch;
+        const lapT = this.modeT - 0.9;
+        if (lapT > 0) {
+          const ph = (lapT * 1.6) % 1;
+          I.tongue = Math.max(I.tongue, ph < 0.4 ? Math.sin((ph / 0.4) * Math.PI) * 0.85 : 0);
+          I.jaw = Math.max(I.jaw, I.tongue * 0.15);
+          const lap = Math.floor(lapT * 1.6);
+          if (lap > this.lapCount && ph > 0.2) {this.lapCount = lap; this.onSip?.(this.sipTip);}
+        }
+        if (this.modeT > 5 + rnd() * 60 * dt) {this.lapCount = 0; this.lastSip = this.t; this.setMode('idle', 'Watching');}
+        break;
+      }
       case 'petted': {
         this.posePreset('rest');
         this.poseGoal.lid = 0.15;
@@ -489,6 +665,12 @@ export class LizardBrain {
       }
     }
     if (this.raining && this.mode !== 'sleep' && rnd() < dt * 0.15) I.tongue = Math.max(I.tongue, 0.6);
+    // mist on the face: blink, and lick it off the lips
+    if (this.snoutLickT > 0) {
+      this.snoutLickT -= dt;
+      const ph = (this.snoutLickT * 2.2) % 1;
+      if (this.mode !== 'hunt') I.tongue = Math.max(I.tongue, ph > 0.6 ? Math.sin(((ph - 0.6) / 0.4) * Math.PI) * 0.7 : 0);
+    }
 
     // Snappy acceleration and braking: bursts, not glides.
     this.speed = damp(this.speed, targetSpeed, targetSpeed > this.speed ? 9 : 14, dt);
@@ -522,7 +704,11 @@ export class LizardBrain {
     this.rig.update(dt);
     // A caught cricket is held crosswise in the jaws, sticking out of one side
     // and drawn further in with every bite.
-    if (this.prey && this.prey.caught) {
+    if (this.prey && this.prey.caught && this.onTongue) {
+      // stuck to the tongue as it reels in
+      this.prey.pos.copy(this.rig.model.tongueTip);
+      this.prey.group.position.copy(this.prey.pos);
+    } else if (this.prey && this.prey.caught) {
       const c = this.prey;
       const fwd = this.rig.headForward;
       const lat = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize().multiplyScalar(this.preySide);
@@ -565,6 +751,7 @@ export class LizardBrain {
 
   private startle(from: THREE.Vector3) {
     const I = this.rig.inputs;
+    this.stress = Math.min(1, this.stress + 0.35);
     const away = Math.atan2(-(I.z - from.z), I.x - from.x);
     const dist = 0.1 + rnd() * 0.08;
     const tx = I.x + Math.cos(away) * dist, tz = I.z - Math.sin(away) * dist;
@@ -581,8 +768,10 @@ export class LizardBrain {
     if (this.mode === 'hunt') {this.pathI = this.path.length; return;}
     this.path = [];
     if (this.mode === 'startle') {this.setMode('idle', 'Watching'); return;}
-    this.setMode(this.after, this.after === 'bask' ? 'Basking under the lamp' : this.after === 'drink' ? 'Drinking' : this.after === 'sleep' ? 'Asleep' : this.after === 'soak' ? 'Soaking in the shallows' : this.after === 'shelter' ? 'Sheltering in the cave' : 'Watching');
+    this.setMode(this.after, this.after === 'bask' ? 'Basking under the lamp' : this.after === 'drink' ? 'Drinking' : this.after === 'sleep' ? 'Asleep' : this.after === 'soak' ? 'Soaking in the shallows' : this.after === 'shelter' ? 'Sheltering in the cave' : this.after === 'graze' ? 'Eating greens' : this.after === 'sip' ? 'Lapping droplets off the leaves' : 'Watching');
+    if (this.after === 'graze') {this.grazePhase = 'face'; this.grazeBites = 0; this.grazeT = 0; this.lastGraze = this.t;}
     if (this.after === 'bask') this.posePreset('bask');
+    if (this.after === 'sip') {this.sipPitch = 0; this.lapCount = 0;}
   }
 
   /** The route ahead: a point `ahead` metres further along the path from the lizard. */
@@ -765,11 +954,37 @@ export class LizardBrain {
       case 'fix':
         this.status = 'Fixating';
         if (c.pos.distanceTo(this.rig.mouth) > 0.085 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
-        if (this.phaseT > 0.35 + rnd() * 0.02) {this.huntPhase = 'strike'; this.phaseT = 0;}
+        if (this.phaseT > 0.35 + rnd() * 0.02) {
+          this.huntPhase = 'strike'; this.phaseT = 0;
+          // close prey is often picked up with a flick of the sticky tongue
+          this.tongueStrike = c.pos.distanceTo(this.rig.mouth) < 0.042 && rnd() < 0.75;
+          this.onTongue = false;
+          // and a cricket that sees it coming may hop clear
+          if (rnd() < 0.25) c.startle(this.rig.snout);
+        }
         return {speed: 0, turn: clamp(err * 6, -2, 2)};
       case 'strike': {
         this.status = 'Strike!';
         const k = this.phaseT;
+        if (this.tongueStrike) {
+          // the tongue shoots out, sticks to the prey and reels it into the mouth
+          I.lunge = k < 0.07 ? (k / 0.07) * 0.35 : Math.max(0, 0.35 * (1 - (k - 0.07) / 0.2));
+          I.jaw = k < 0.26 ? 0.42 : I.jaw;
+          I.tongueReach = k < 0.08 ? k / 0.08 : Math.max(0, 1 - (k - 0.12) / 0.12);
+          if (k > 0.04 && k < 0.15 && !c.caught && c.pos.distanceTo(this.rig.model.tongueTip) < 0.013) {
+            c.caught = true;
+            c.airborne = false;
+            this.onTongue = true;
+          }
+          if (k > 0.26) this.onTongue = false;
+          if (k > 0.32) {
+            I.tongueReach = 0;
+            this.phaseT = 0;
+            if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix'; this.status = 'Missed';}
+            if (this.misses > 5) {this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
+          }
+          return {speed: 0, turn: clamp(err * 6, -3, 3)};
+        }
         I.lunge = k < 0.09 ? k / 0.09 : Math.max(0, 1 - (k - 0.09) / 0.25);
         I.jaw = k < 0.12 ? 0.85 : I.jaw;
         I.tongue = k < 0.14 ? 0.7 : I.tongue;

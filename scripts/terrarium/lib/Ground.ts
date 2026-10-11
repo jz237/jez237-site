@@ -160,7 +160,7 @@ varying vec3 vW; varying float vCave; uniform float uTime, uWet, uWater, uCausti
 ${GROUND_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 vec4 wetMap = texture2D(tWetMap, vW.xz / uTank + 0.5);
-GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r, vCave);
+GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r, vCave, wetMap.rg);
 diffuseColor.rgb = gs.color;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gs.rough;')
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -168,9 +168,12 @@ normal = normalize((viewMatrix * vec4(normalize(gs.normal), 0.0)).xyz);`)
         .replace('#include <aomap_fragment>', `
 reflectedLight.indirectDiffuse *= gs.ao; reflectedLight.indirectSpecular *= gs.ao; reflectedLight.directDiffuse *= mix(1.0, gs.ao, 0.5);
 #include <aomap_fragment>
-reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;`);
+reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;
+// a puddle mirrors the lamp-lit case behind it, strongly at a glancing view
+{ float fr = pow(1.0 - clamp(normalize(cameraPosition - vW).y, 0.0, 1.0), 4.0);
+  reflectedLight.indirectSpecular += gs.puddle * (0.05 + 0.9 * fr) * vec3(0.15, 0.13, 0.1) * (0.2 + 0.8 * uCaustic); }`);
     };
-    m.customProgramCacheKey = () => 'terrarium-ground-v3';
+    m.customProgramCacheKey = () => 'terrarium-ground-v4';
     return m;
   }
 
@@ -230,7 +233,7 @@ vec3 pebbles(vec2 p){
 `;
 
 const GROUND_GLSL = NOISE_GLSL + /* glsl */ `
-struct GroundSample { vec3 color; float rough; vec3 normal; float ao; float caustic; };
+struct GroundSample { vec3 color; float rough; vec3 normal; float ao; float caustic; float puddle; };
 float groundBumps(vec2 p, float moss){
   // humus: crumbs and grains, with flat bark chips lying on top
   vec3 crumb = pebbles(p * 520.0);
@@ -239,7 +242,23 @@ float groundBumps(vec2 p, float moss){
   float mossH = gfbm(p * 260.0) * 0.6 + gn(p * 900.0) * 0.4;
   return mix(soil * 0.0016, mossH * 0.0018, moss);
 }
-GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap, float cave){
+// rings from raindrops landing in a puddle: the slope they put on the water
+vec2 rainRings(vec2 p, float t){
+  vec2 s = vec2(0.0);
+  for(int k=0;k<2;k++){
+    vec2 q = p * 95.0 + float(k) * 3.7;
+    vec2 i = floor(q), f = fract(q) - 0.5;
+    vec2 h = gh2(i + float(k) * 11.0);
+    vec2 d = f - (h - 0.5) * 0.4;
+    float r = length(d);
+    float ph = fract(t * (1.1 + h.y) + h.x);
+    float R = ph * 0.45;
+    float wv = sin((r - R) * 48.0) * exp(-pow((r - R) / 0.08, 2.0)) * (1.0 - ph);
+    s += d / max(r, 1e-3) * wv;
+  }
+  return s;
+}
+GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap, float cave, vec2 wetMap){
   GroundSample g;
   vec2 p = w.xz;
   float under = smoothstep(water - 0.001, water - 0.008, w.y);
@@ -313,6 +332,23 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   // tilt the bump normal into the geometric normal frame
   g.normal = normalize(n + (nb - vec3(0.0, 1.0, 0.0)) * 1.2);
   g.ao = mix(0.75 + 0.25 * smoothstep(0.0, 1.0, gn(p * 300.0)), 0.6 + 0.4 * pb.x, bedMix);
+  // puddles: when the open floor is soaked its hollows fill, deepest first,
+  // and shrink back as it dries; a dark, glassy film with rings while it rains
+  float level = clamp((wetMap.x - 0.5) / 0.5, 0.0, 1.0);
+  g.puddle = 0.0;
+  if (level > 0.0) {
+    float hollow = gfbm(p * 16.0 + 5.0) * 0.75 + gn(p * 70.0) * 0.25;
+    float thr = mix(0.24, 0.52, level);
+    float pud = (1.0 - smoothstep(thr - 0.03, thr, hollow)) * smoothstep(0.0, 0.08, level);
+    // (the cave's roof keeps its floor dry; the worn apron outside it puddles readily)
+    pud *= smoothstep(0.94, 0.985, n.y) * (1.0 - moss) * (1.0 - under) * (1.0 - shore);
+    vec2 rings = rainRings(p, t) * 0.35 * clamp(wetMap.y * 3.0, 0.0, 1.0);
+    g.color = mix(g.color, g.color * 0.42 + vec3(0.003, 0.005, 0.007), pud);
+    g.rough = mix(g.rough, 0.035, pud);
+    g.normal = normalize(mix(g.normal, n, pud) + vec3(rings.x, 0.0, rings.y) * pud);
+    g.ao = mix(g.ao, 1.0, pud * 0.5);
+    g.puddle = pud;
+  }
   // caustics on the pool bed
   vec2 cp = p * 38.0;
   float c1 = gn(cp + vec2(t * 0.35, t * 0.22)), c2 = gn(cp * 1.37 - vec2(t * 0.27, -t * 0.31));

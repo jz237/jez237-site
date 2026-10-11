@@ -88,12 +88,16 @@ export interface RigInputs {
   tailTwitch: number; // 0..1 predatory flicking of the tail tip
   shake: number; // 0..1 thrashing the head side to side (subduing prey)
   swallow: number; // 0..1 a gulp: the throat bulges and the head lifts
+  flatten: number; // 0..1 basking: ribs spread, the body widens and flattens to the lamp
+  tone: number; // -1 pale (hot) .. 1 dark (cold)
+  beardDark: number; // 0..1 a stressed dragon's beard blackens
+  tongueReach: number; // 0..1 shooting the tongue out to pick up prey
 }
 
 export class LizardRig {
   readonly inputs: RigInputs = {
     x: 0, z: 0, heading: 0, speed: 0, turnRate: 0, clearance: 0.7, chestLift: 0, headPitch: 0,
-    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0, shake: 0, swallow: 0,
+    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0, shake: 0, swallow: 0, flatten: 0, tone: 0, beardDark: 0, tongueReach: 0,
   };
   /** Gait phase 0..1 and the derived standing wave in the trunk. */
   phase = 0;
@@ -566,8 +570,10 @@ export class LizardRig {
     // spine
     for (let k = 0; k < 6; k++) {
       const bi = this.spineIdx[k];
-      const sy = k === 2 || k === 3 ? 1 + (flank - 1) * 0.6 : 1;
-      const sz = k === 2 || k === 3 || k === 4 ? flank : 1;
+      // basking: the ribs spread, so the trunk widens and flattens
+      const flat = k >= 2 ? I.flatten * (k === 5 ? 0.5 : 1) : 0;
+      const sy = (k === 2 || k === 3 ? 1 + (flank - 1) * 0.6 : 1) * (1 - 0.14 * flat);
+      const sz = (k === 2 || k === 3 || k === 4 ? flank : 1) * (1 + 0.17 * flat);
       this.setBone(bi, this.spinePos[k], this.spineFrame[k], sy, sz);
     }
     // tail
@@ -594,7 +600,10 @@ export class LizardRig {
     model.bones[gIdx].matrix.copy(gM);
     this.boneWorld[gIdx].copy(gM);
     model.skin.uDisplay.value = damp(model.skin.uDisplay.value, I.display, 3, 1 / 60);
-    model.tongueOut = I.tongue;
+    model.skin.uTone.value = I.tone;
+    model.skin.uBeardDark.value = I.beardDark;
+    model.tongueOut = Math.max(I.tongue, I.tongueReach);
+    model.tongueReach = I.tongueReach;
     // mouth point (for drinking, eating): inside the jaw, near the front
     this.mouth.set(12.15 - jb[0], model.data.mouth[1][1] - jb[1] - 0.05, 0).applyMatrix4(jawM);
     // legs
