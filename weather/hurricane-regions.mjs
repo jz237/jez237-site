@@ -62,6 +62,7 @@ export function createRegionalContext({map,L,escapeHtml,onError}) {
     drawLabels();
   }
   map.on('zoomend moveend',update);
+  map.on('layeradd layerremove',event=>{ if (event.layer.options?.attribution) update(); });
   update();
   return {update,refresh(){failed=false;update();}};
 }
