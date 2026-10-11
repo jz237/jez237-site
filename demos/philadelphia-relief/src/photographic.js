@@ -1,6 +1,7 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
   photoLandmarkVisible, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
+import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -34,7 +35,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
-  let resourceTimer, firstViewTimer, press, exhibitBounds;
+  let resourceTimer, press, exhibitBounds;
+  const firstViewDeadline=createVisibleTimeout(document,unavailable,90000);
   let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
@@ -49,7 +51,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   }
   function unavailable() {
     failed = true; loading = false; present(false);
-    clearTimeout(firstViewTimer); clearTimeout(resourceTimer);
+    firstViewDeadline.cancel(); clearTimeout(resourceTimer);
     retry.hidden = false;
     report('Photo detail unavailable · diorama still works');
   }
@@ -167,10 +169,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   select.onchange = () => store.set({ photoMode: select.value,
     ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
   function release() {
-    generation++; clearTimeout(firstViewTimer); clearTimeout(resourceTimer);
+    generation++; firstViewDeadline.cancel(); clearTimeout(resourceTimer);
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
     viewer = undefined; tileset = undefined; failed = false; loading = false;
-    firstViewReady = false; firstViewTimer = undefined; lastPoseKey = ''; pending = 0;
+    firstViewReady = false; lastPoseKey = ''; pending = 0;
     present(false);
     host.replaceChildren(); credits.replaceChildren(); retry.hidden = true;
   }
@@ -228,7 +230,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
-        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+        firstViewDeadline.cancel();
       }
       if (failed) return false;
       const preload = !isOverlayActive() && photoAllowed(state) && state.photoMode !== 'relief'
@@ -244,13 +246,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // Warm the engine near the boundary without requesting a second,
       // regional photographic scene while the miniature is still in use.
       if (!wanted) {
-        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+        firstViewDeadline.cancel();
         report('Diorama · photographic engine ready');
         return false;
       }
-      if (!firstViewReady && !firstViewTimer) {
-        firstViewTimer = setTimeout(unavailable, 90000);
-      }
+      if (!firstViewReady) firstViewDeadline.start();
       const key = [pose.lon, pose.lat, pose.dist, pose.pitch, pose.bearing,
         pose.fov, pose.targetAltitude, pose.flightView?.lon, pose.flightView?.lat,
         pose.flightView?.height, pose.flightView?.heading, pose.flightView?.pitch, w, h].join(':');
@@ -279,7 +279,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // Require neighborhood geometry AND a completed initial view; a handful
       // of fine tiles must not reveal a mostly coarse, partially loaded scene.
       if (!firstViewReady && photoReady(detailTiles, visibleTiles, tileset.tilesLoaded)) {
-        firstViewReady = true; clearTimeout(firstViewTimer);
+        firstViewReady = true; firstViewDeadline.cancel();
       }
       present(wanted && firstViewReady);
       report(active ? pending ? `Photographic 3D · refining ${pending} tiles`
@@ -310,7 +310,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return canvas;
     },
     dispose() {
-      disposed = true; clearTimeout(resourceTimer); clearTimeout(firstViewTimer); unsubscribe();
+      disposed = true; clearTimeout(resourceTimer); firstViewDeadline.dispose(); unsubscribe();
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
       if (viewer && !viewer.isDestroyed()) viewer.destroy();
     },

@@ -147,7 +147,7 @@ export function webglFailure(reason) {
     message:
       reason === 'lost'
         ? 'The graphics context was lost — usually the browser reclaiming GPU ' +
-          'memory. Reload the page to restore the map.'
+          'memory. Waiting for the browser to restore it. Reload if the map does not return.'
         : 'This browser could not start WebGL 2, which the terrain renderer ' +
           'needs. Try a current desktop browser, or enable hardware ' +
           'acceleration if it is switched off.',

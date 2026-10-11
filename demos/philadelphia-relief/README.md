@@ -1200,8 +1200,13 @@ The initial photographic handoff waits for Cesium to finish loading the current
 view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
 keeps the diorama available if the photographic provider cannot finish.
+That timeout counts foreground viewing time, so leaving a loading tab in the
+background does not consume its budget. Back/Forward cache navigation pauses the
+scene instead of disposing it. After a restored WebGL context, rendering resumes
+and cached building shadows refresh. `tools/lifecycle-check.html` provides local
+buttons for reproducing graphics-context loss and restoration in the browser.
 
-Validation: 453 automated checks, including ten simulated minutes on the real
+Validation: 462 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

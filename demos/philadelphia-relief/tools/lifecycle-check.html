@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Philadelphia renderer recovery check</title>
+<style>
+  body{margin:0;background:#172a32;color:#fff;font:15px system-ui}
+  header{padding:12px;display:flex;align-items:center;gap:12px}
+  button,a{padding:8px 12px}a{color:#ffce7e}iframe{width:100%;height:calc(100vh - 66px);border:0}
+</style>
+<header>
+  <strong>Local renderer recovery check</strong>
+  <button id="lose">Lose graphics context</button>
+  <button id="restore" disabled>Restore graphics context</button>
+  <span id="status" role="status">Waiting for the map</span>
+</header>
+<iframe id="map" title="Philadelphia test view"
+  src="../#pm=relief&amp;x=-75.174321&amp;y=39.948178&amp;d=350&amp;p=50&amp;b=280&amp;fv=22&amp;ex=1&amp;lg=0"></iframe>
+<script type="module">
+  const frame=document.querySelector('#map'),status=document.querySelector('#status');
+  const lose=document.querySelector('#lose'),restore=document.querySelector('#restore');
+  let extension;
+  window.addEventListener('pageshow',event=>{
+    if(event.persisted)status.textContent='Returned from the browser history cache';
+  });
+  frame.addEventListener('load',()=>{status.textContent='Map loaded; wait for imagery before testing';});
+  lose.onclick=()=>{
+    const canvas=frame.contentDocument.querySelector('#canvas');
+    extension=canvas?.getContext('webgl2')?.getExtension('WEBGL_lose_context');
+    if(!extension){status.textContent='Context-loss testing is unavailable in this browser';return;}
+    canvas.addEventListener('webglcontextlost',()=>{status.textContent='Graphics context lost';},{once:true});
+    canvas.addEventListener('webglcontextrestored',()=>{status.textContent='Graphics context restored';},{once:true});
+    extension.loseContext();restore.disabled=false;
+  };
+  restore.onclick=()=>{extension?.restoreContext();restore.disabled=true;};
+</script>
+</html>
