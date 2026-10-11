@@ -163,7 +163,10 @@ export function extrudeBuildings(buildings, ctx) {
       cx += x;
       cz += z;
     }
-    const g = groundAt(originX + cx / n, originZ + cz / n);
+    // Attached roof details share their parent building's terrain anchor. Using
+    // each tiny part's centroid would bury or float parapets on sloping ground.
+    const g = groundAt(originX + (b.groundAnchor?.[0] ?? cx / n),
+      originZ + (b.groundAnchor?.[1] ?? cz / n));
 
     const base = v;
     for (let k = 0; k < n; k += 1) {
