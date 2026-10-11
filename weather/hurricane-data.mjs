@@ -126,6 +126,7 @@ export function mapFeature(feature, basin) {
 }
 
 export function officialUrl(storm) {
+  if (storm?.source === 'WPC') return `https://www.wpc.ncep.noaa.gov/tropical/tropical_advisories.php?storm=${encodeURIComponent(String(storm.name || '').toUpperCase())}`;
   const bin = String(storm?.bin || '').toLowerCase();
   return /^(at|ep|cp)[1-5]$/.test(bin) ? `https://www.nhc.noaa.gov/graphics_${bin}.shtml` : 'https://www.nhc.noaa.gov/';
 }
@@ -161,6 +162,7 @@ export function buildStorms(collection, now = Date.now()) {
       id, name: String(p.stormname || id.toUpperCase()).replace(/^(?:Potential Tropical Cyclone|Post-Tropical Cyclone|Subtropical Depression|Subtropical Storm|Tropical Depression|Tropical Storm|Major Hurricane|Hurricane)\s+/i, ''),
       basin: basinFor(p), bin: String(p.binnumber || ''), advisory: String(p.advisnum || '—'),
       advisoryLabel: String(p.advdate || ''), issuedAt, sourceUpdatedAt,
+      source: p.source_agency === 'WPC' ? 'WPC' : 'NHC', dissipatedAt: number(p.dissipated_at),
       stale: issuedAt === null || now - issuedAt > MAX_AGE || issuedAt - now > 3600000,
       current: points[0], points, pressure: number(p.mslp) > 0 ? number(p.mslp) : null,
       movement: number(p.tcspd), direction: direction(p.tcdir),

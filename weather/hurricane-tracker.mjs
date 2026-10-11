@@ -1,15 +1,16 @@
 import {
-  MAX_AGE, CACHE_MAX_AGE, REFRESH_INTERVAL, buildStorms, cacheIsRecent, direction, escapeHtml as esc,
+  MAX_AGE, CACHE_MAX_AGE, REFRESH_INTERVAL, cacheIsRecent, direction, escapeHtml as esc,
   fetchLayers, historyTime, mapFeature, mapPosition, matchingFeatures, number, officialUrl,
   position, probability, riskColor, basinFor, validateLayerCollection, validateForecastCollection, wind
-} from './hurricane-data.mjs?v=20261010-6';
+} from './hurricane-data.mjs?v=20261010-10';
+import { combinedStorms, fetchWpcForecasts, validateWpcCollection } from './hurricane-wpc.mjs?v=20261010-10';
 import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);
 const CACHE_KEY = 'jez237-hurricane-map-v1';
 const UNIT_KEY = 'jez237-hurricane-units';
-const LABELS = { points: 'storm positions', cones: 'forecast cones', history: 'past tracks', outlook: 'development areas', warnings: 'coastal alerts' };
+const LABELS = { points: 'storm positions', cones: 'forecast cones', history: 'past tracks', outlook: 'development areas', warnings: 'coastal alerts', remnants: 'inland systems (WPC)' };
 const WATCHES = { HWR: ['Hurricane warning', '#ff676b'], HWA: ['Hurricane watch', '#f2a3d0'], TWR: ['Tropical storm warning', '#64b3ff'], TWA: ['Tropical storm watch', '#ffe083'] };
 const BOUNDS = { atlantic: [[3, -102], [49, -18]], pacific: [[1, -179], [43, -79]], all: [[1, -173], [52, -25]] };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -50,7 +51,7 @@ function loadCache() {
     cached.errors = Array.isArray(cached.errors) ? cached.errors.filter(name => Object.hasOwn(LABELS, name)) : [];
     for (const [name, data] of Object.entries(cached.layers)) {
       if (name === 'points') continue;
-      try { validateLayerCollection(name, data); }
+      try { name === 'remnants' ? validateWpcCollection(data) : validateLayerCollection(name, data); }
       catch { delete cached.layers[name]; if (Object.hasOwn(LABELS, name) && !cached.errors.includes(name)) cached.errors.push(name); }
     }
     return cached;
@@ -64,7 +65,7 @@ function renderList() {
   $('#hurricane-storm-list').innerHTML = storms.length ? storms.map(storm => `
     <button class="hurricane-storm-button" type="button" data-storm="${esc(storm.id)}" aria-pressed="${state.selected === storm.id}" style="--storm-color:${storm.color}" aria-label="${esc(storm.name)}, ${esc(storm.label)}, ${wind(storm.current.wind, state.unit)} ${esc(state.unit)}${storm.stale ? ', older advisory' : ''}">
       <span class="hurricane-storm-symbol">${stormSymbol()}</span><span><strong>${esc(storm.name)}</strong><small>${esc(storm.label)}${storm.stale ? ' · older data' : ''}</small></span><span class="hurricane-list-wind">${wind(storm.current.wind, state.unit)}<small>${esc(state.unit)}</small></span>
-    </button>`).join('') : `<p class="hurricane-empty">${available ? `No systems with NHC forecast tracks in the ${state.basin === 'atlantic' ? 'Atlantic' : state.basin === 'pacific' ? 'eastern or central Pacific' : 'monitored basins'}. Check the development outlook below and the latest NHC advisories.` : 'Storm positions are unavailable. Please use the NHC advisory link or try Refresh.'}</p>`;
+    </button>`).join('') : `<p class="hurricane-empty">${available ? `No systems in the available forecast feeds for the ${state.basin === 'atlantic' ? 'Atlantic' : state.basin === 'pacific' ? 'eastern or central Pacific' : 'monitored basins'}. Check the development outlook below and official advisories.` : 'Storm positions are unavailable. Please use the official advisory links or try Refresh.'}</p>`;
   $('#hurricane-storm-list').querySelectorAll('[data-storm]').forEach(button => button.addEventListener('click', () => selectStorm(button.dataset.storm, true)));
   if (focusedId) [...$('#hurricane-storm-list').querySelectorAll('[data-storm]')].find(button => button.dataset.storm === focusedId)?.focus({ preventScroll:true });
 }
@@ -72,12 +73,12 @@ function renderList() {
 function renderDetail() {
   const storm = selectedStorm();
   if (!storm) { $('#hurricane-storm-detail').innerHTML = ''; $('#hurricane-table-content').innerHTML = ''; return; }
-  const coneAvailable = matchingFeatures(state.bundle.layers.cones, storm, true).length > 0;
-  const warnings = matchingFeatures(state.bundle.layers.warnings, storm, true);
+  const coneAvailable = storm.source !== 'WPC' && matchingFeatures(state.bundle.layers.cones, storm, true).length > 0;
+  const warnings = storm.source === 'WPC' ? [] : matchingFeatures(state.bundle.layers.warnings, storm, true);
   const warningNames = [...new Set(warnings.map(f => WATCHES[f.properties.tcww]?.[0]).filter(Boolean))];
   const [lat, mapLon] = storm.current.latlng;
   const lon = ((mapLon + 540) % 360) - 180;
-  const warningLayerUpdating = matchingFeatures(state.bundle.layers.warnings, storm).length > 0 && !warnings.length;
+  const warningLayerUpdating = storm.source !== 'WPC' && matchingFeatures(state.bundle.layers.warnings, storm).length > 0 && !warnings.length;
   $('#hurricane-storm-detail').innerHTML = `
     <div class="hurricane-storm-details" style="--storm-color:${storm.color}">
       <div class="hurricane-detail-heading"><span class="hurricane-category">${esc(storm.label)}</span></div>
@@ -87,10 +88,12 @@ function renderDetail() {
         <div><dt>Pressure</dt><dd>${storm.pressure ?? '—'} <small>mb</small></dd></div>
         <div><dt>Movement ${esc(storm.direction)}</dt><dd>${wind(storm.movement, state.unit)} <small>${esc(state.unit)}</small></dd></div>
       </dl>
-      <p class="hurricane-advisory-time">Advisory ${esc(storm.advisory)} · ${esc(formatTime(storm.issuedAt))}<br>${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} · ${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}${storm.stale ? '<br><strong>Older advisory — check NHC for an update.</strong>' : ''}</p>
-      <a class="hurricane-detail-link" href="${officialUrl(storm)}" target="_blank" rel="noopener noreferrer">${esc(storm.name)} forecast &amp; advisory ↗</a>
+      <p class="hurricane-advisory-time">${storm.source} advisory ${esc(storm.advisory)} · ${esc(formatTime(storm.issuedAt))}<br>${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} · ${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}${storm.stale ? `<br><strong>Older advisory — check ${storm.source} for an update.</strong>` : ''}</p>
+      <a class="hurricane-detail-link" href="${officialUrl(storm)}" target="_blank" rel="noopener noreferrer">${esc(storm.name)} ${storm.source} forecast &amp; advisory ↗</a>
+      ${storm.source === 'WPC' ? '<p class="hurricane-layer-note">NOAA’s Weather Prediction Center continues tracking this inland system. The marker shows its position at the advisory time above. Flooding and wind hazards can continue after a storm becomes post-tropical.</p>' : ''}
+      ${Number.isFinite(storm.dissipatedAt) ? `<p class="hurricane-layer-note">Forecast to dissipate by ${esc(formatTime(storm.dissipatedAt))}. Only published positions are plotted.</p>` : ''}
       ${warningNames.length ? `<div class="hurricane-coastal-note">Coastal map: ${warningNames.map(esc).join(' · ')}. Open the NHC advisory for affected locations.</div>` : ''}
-      ${!coneAvailable ? '<p class="hurricane-layer-note">A matching forecast cone is not available for this advisory.</p>' : ''}
+      ${!coneAvailable ? `<p class="hurricane-layer-note">${storm.source === 'WPC' ? 'No uncertainty cone is supplied with this WPC track.' : 'A matching forecast cone is not available for this advisory.'}</p>` : ''}
       ${warningLayerUpdating ? '<p class="hurricane-layer-note">The coastal alert map is awaiting this advisory’s update. Check the NHC advisory for current watches and warnings.</p>' : ''}
     </div>`;
   renderForecastTable(storm);
@@ -137,7 +140,7 @@ function renderStatus() {
   if (state.basemapError) messages.push('The coastline map could not load. Storm coordinates and advisory details remain available.');
   if (state.cached && state.failedRefresh) messages.push(`The feed could not be refreshed. Showing saved data checked ${formatTime(bundle.checkedAt)}.`);
   else if (unavailable) messages.push(`${state.expiredCache ? 'The saved storm data has expired. ' : ''}NOAA storm positions are temporarily unavailable. This does not mean there are no storms.`);
-  if (state.storms.some(s => s.stale)) messages.push('Some advisories are more than 12 hours old or have an unverified time. Check NHC before using them.');
+  if (state.storms.some(s => s.stale)) messages.push('Some advisories are more than 12 hours old or have an unverified time. Check the official advisory before using them.');
   if (visibleOutlooks().some(isOldFeature)) messages.push('The development outlook has an older or unverified publication time.');
   const missing = (bundle.errors || []).filter(name => name !== 'points');
   if (!state.cached && missing.length) messages.push(`Unavailable map layers: ${missing.map(name => LABELS[name]).join(', ')}.`);
@@ -167,7 +170,7 @@ function drawMap() {
   for (const storm of visibleStorms()) {
     const selected = storm.id === state.selected;
     const opacity = selected ? 1 : .63;
-    if (state.layers.cones) {
+    if (state.layers.cones && storm.source !== 'WPC') {
       L.geoJSON(mapFeatureCollection(matchingFeatures(state.bundle.layers.cones, storm, true).map(f => mapFeature(f, storm.basin))), {
         pane: 'hurricane-cones', interactive: false,
         style: { color: storm.color, weight: 1.2, opacity: opacity * .8, fillColor: storm.color, fillOpacity: selected ? .14 : .05 }
@@ -177,7 +180,7 @@ function drawMap() {
       const past = matchingFeatures(state.bundle.layers.history, storm).filter(f => position(f)).sort((a, b) => (historyTime(a.properties) || 0) - (historyTime(b.properties) || 0));
       if (past.length > 1) L.polyline(past.map(f => mapPosition(position(f), storm.basin)), { pane: 'hurricane-tracks', color: '#9ab8ca', weight: 1.8, opacity: selected ? .75 : .35, dashArray: '3 5', interactive: false }).addTo(graphics);
     }
-    if (state.layers.warnings) {
+    if (state.layers.warnings && storm.source !== 'WPC') {
       L.geoJSON(mapFeatureCollection(matchingFeatures(state.bundle.layers.warnings, storm, true).map(f => mapFeature(f, storm.basin))), {
         pane: 'hurricane-warnings', style: f => ({ color: WATCHES[f.properties.tcww]?.[1] || '#d2dce3', weight: 5, opacity: .95 }),
         onEachFeature: (feature, layer) => layer.bindPopup(`<strong>${esc(WATCHES[feature.properties.tcww]?.[0] || 'Coastal watch / warning')}</strong>${esc(storm.name)} · Advisory ${esc(storm.advisory)}<br><a href="${officialUrl(storm)}" target="_blank" rel="noopener noreferrer">Affected locations and official guidance ↗</a>`)
@@ -278,7 +281,7 @@ function renderBundle(bundle, cached = false, initialFit = false) {
   clearTimeout(cacheExpiry);
   state.bundle = bundle;
   state.cached = cached;
-  state.storms = buildStorms(bundle.layers.points);
+  state.storms = bundle.layers.points ? combinedStorms(bundle.layers.points, bundle.layers.remnants) : [];
   if (!visibleStorms().some(s => s.id === state.selected)) { state.selected = visibleStorms()[0]?.id || null; state.step = 0; }
   renderList(); renderDetail(); renderOutlooks(); drawMap(); renderStatus();
   if (initialFit) fitView();
@@ -303,7 +306,9 @@ async function refresh() {
   $('#hurricane-refresh').disabled = true;
   $('#hurricane-refresh').textContent = 'Checking…';
   try {
-    const bundle = await fetchLayers();
+    const [bundle, remnants] = await Promise.all([fetchLayers(), fetchWpcForecasts().then(data=>({data}),()=>({error:true}))]);
+    if (remnants.error) bundle.errors.push('remnants');
+    else bundle.layers.remnants = remnants.data;
     expireSavedData();
     const initialFit = !state.bundle?.layers.points;
     if (!bundle.layers.points && state.bundle?.layers.points) {
@@ -357,7 +362,7 @@ async function initializeMap() {
     fadeAnimation: !reducedMotion.matches, markerZoomAnimation: !reducedMotion.matches
   });
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>');
-  map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA/NHC</a>');
+  map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA/NHC</a> · <a href="https://www.wpc.ncep.noaa.gov/" target="_blank" rel="noopener noreferrer">WPC</a>');
   for (const [name, z] of [['land',200],['satellite',205],['grid',210],['labels',250],['outlook',300],['cones',310],['tracks',320],['warnings',330],['points',340],['selection',350],['centers',410]]) {
     map.createPane(`hurricane-${name}`).style.zIndex = String(z);
     if (name !== 'centers') map.getPane(`hurricane-${name}`).setAttribute('aria-hidden', 'true');

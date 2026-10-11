@@ -29,6 +29,23 @@ const source = {
   3:{type:'FeatureCollection',features:[{type:'Feature',properties:{basin:'Atlantic',prob2day:'20%',prob7day:'70%',idp_filedate:NOW},geometry:{type:'Polygon',coordinates:[[[-50,10],[-43,12],[-45,18],[-53,14],[-50,10]]]}}]},
   8:{type:'FeatureCollection',features:[{type:'Feature',properties:{...forecast[0].properties,tcww:'HWR'},geometry:{type:'LineString',coordinates:[[-66,18],[-65,18]]}}]}
 };
+const wpcIssue=Math.floor(NOW/3600000)*3600000;
+const wpcDate=new Date(wpcIssue);
+const utcStamp=time=>{const d=new Date(time);return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCHours()).padStart(2,'0')}00`;};
+const wpcProduct={id:'11111111-1111-4111-8111-111111111111',issuingOffice:'KWNH',productCode:'TCM',wmoCollectiveId:'WTNT24',issuanceTime:new Date(wpcIssue-23*60000).toISOString(),productText:`
+POST-TROPICAL CYCLONE INLAND EXAMPLE FORECAST/ADVISORY NUMBER  17
+NWS WEATHER PREDICTION CENTER COLLEGE PARK MD   AL982026
+${String(wpcDate.getUTCHours()).padStart(2,'0')}00 UTC ${wpcDate.toLocaleDateString('en-US',{timeZone:'UTC',weekday:'short'}).toUpperCase()} ${wpcDate.toLocaleDateString('en-US',{timeZone:'UTC',month:'short'}).toUpperCase()} ${wpcDate.getUTCDate()} ${wpcDate.getUTCFullYear()}
+POST-TROPICAL CYCLONE CENTER LOCATED NEAR 33.5N  86.9W AT ${utcStamp(wpcIssue)}Z
+PRESENT MOVEMENT TOWARD THE NORTH-NORTHEAST OR 25 DEGREES AT 13 KT
+ESTIMATED MINIMUM CENTRAL PRESSURE 1007 MB
+MAX SUSTAINED WINDS 25 KT WITH GUSTS TO 35 KT.
+FORECAST VALID ${utcStamp(wpcIssue+9*3600000)}Z 35.2N 86.0W...POST-TROP/INLAND
+MAX WIND 25 KT...GUSTS 35 KT.
+FORECAST VALID ${utcStamp(wpcIssue+21*3600000)}Z 37.9N 81.9W...POST-TROP/INLAND
+MAX WIND 25 KT...GUSTS 35 KT.
+FORECAST VALID ${utcStamp(wpcIssue+45*3600000)}Z...DISSIPATED
+`};
 
 async function run() {
   await fs.mkdir(output,{recursive:true});
@@ -36,7 +53,14 @@ async function run() {
   const results=[];
   try {
     const context = await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
-    let mode = 'normal';
+    let mode = 'normal', wpcMode = 'empty';
+    await context.route('https://api.weather.gov/products/**',route=>{
+      if(wpcMode==='offline') return route.abort('failed');
+      const product=structuredClone(wpcProduct);
+      if(wpcMode==='malformed') product.productText=product.productText.replace('33.5N','93.5N');
+      const data=route.request().url().endsWith('/types/TCM') ? {'@graph':wpcMode==='empty'?[]:[product]} : product;
+      return route.fulfill({contentType:'application/json',body:JSON.stringify(data)});
+    });
     let releaseRefresh;
     let refreshGate;
     let satelliteMode = 'normal', releaseSatellite, releaseImage;
@@ -315,6 +339,54 @@ async function run() {
       }
     }
     results.push('Partial layer failures, malformed optional geometry, empty successful feeds, malformed responses, stale advisories and unverified issuance times');
+
+    mode='normal';wpcMode='normal';
+    await page.evaluate(()=>localStorage.clear());
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForSelector('[data-storm="al982026"]');
+    assert.equal(await page.locator('[data-storm]').count(),2);
+    assert.equal(await page.locator('.hurricane-map-marker').count(),2);
+    await page.locator('[data-storm="al982026"]').click();
+    assert.match(await page.locator('#hurricane-storm-detail').innerText(),/WPC advisory 17/);
+    assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Weather Prediction Center/);
+    assert.match(await page.locator('#hurricane-storm-detail').innerText(),/No uncertainty cone/);
+    assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Forecast to dissipate/);
+    assert.doesNotMatch(await page.locator('#hurricane-storm-detail').innerText(),/Hurricane warning/);
+    assert.match(await page.locator('.hurricane-detail-link').getAttribute('href'),/^https:\/\/www\.wpc\.ncep\.noaa\.gov\//);
+    assert.equal(await page.locator('#hurricane-forecast-step').getAttribute('max'),'2','Dissipation has no invented map position');
+    await page.locator('#hurricane-next').click();
+    assert.match(await page.locator('#hurricane-forecast-readout').innerText(),/\+9 hours/);
+    for(const width of [320,390,1280]) {
+      await page.setViewportSize({width,height:900});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'WPC details must fit mobile screens');
+    }
+    await page.locator('#weather-hurricanes').screenshot({path:path.join(output,'wpc-remnant-tracker.png')});
+    for(const nextWpc of ['offline','malformed']) {
+      wpcMode=nextWpc;
+      await page.locator('#hurricane-refresh').click();
+      await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
+      assert.equal(await page.locator('[data-storm]').count(),1,'An unavailable WPC feed must preserve NHC systems');
+      assert.match(await page.locator('#hurricane-notice').innerText(),/inland systems \(WPC\)/);
+    }
+    wpcMode='normal';
+    await page.locator('#hurricane-refresh').click();
+    await page.waitForSelector('[data-storm="al982026"]');
+    mode='offline';wpcMode='offline';
+    await page.locator('#hurricane-refresh').click();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('Saved data'));
+    assert.equal(await page.locator('[data-storm]').count(),2,'A full outage retains recently saved NHC and WPC advisories together');
+    await page.evaluate(()=>{
+      window.__weatherTestNow=Date.now;
+      const checkedAt=JSON.parse(localStorage.getItem('jez237-hurricane-map-v1')).checkedAt;
+      Date.now=()=>checkedAt+25*3600000;
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').dataset.feed==='error');
+    assert.equal(await page.locator('[data-storm]').count(),0,'WPC remnants expire along with the saved map');
+    assert.equal(await page.locator('.hurricane-map-marker').count(),0);
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
+    await page.evaluate(()=>{Date.now=window.__weatherTestNow;delete window.__weatherTestNow;});
+    results.push('WPC inland remnants show exact advisory/forecast positions and sources, fit phones, isolate feed failures, and obey cache expiry');
     assert.deepEqual(errors,[]);
     results.push('No uncaught JavaScript errors');
     await fs.writeFile(path.join(output,'browser-results.json'),JSON.stringify({checkedAt:new Date().toISOString(),results},null,2));
