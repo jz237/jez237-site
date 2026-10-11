@@ -13,7 +13,9 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  # The public payload is large. Let the active deployment finish while GitHub
+  # keeps the newest pending run, so frequent content updates cannot starve it.
+  cancel-in-progress: false
 
 jobs:
   deploy:
