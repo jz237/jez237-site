@@ -35,11 +35,13 @@
 .weather-dashboard-top .weather-period-summary + .weather-detail-note { margin-top:16px; }
 .weather-map-controls { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
 .weather-radar-embed h3 { margin:20px 0 10px; }
-.weather-chart { margin:16px 0; padding:16px 8px 0; border:1px solid var(--line, #526576); border-radius:14px; background:linear-gradient(180deg, rgba(89,185,245,.05), rgba(0,0,0,.14)); }
+.weather-chart { container-type:inline-size; margin:16px 0; padding:16px 8px 0; border:1px solid var(--line, #526576); border-radius:14px; background:linear-gradient(180deg, rgba(89,185,245,.05), rgba(0,0,0,.14)); }
 .weather-chart figcaption { display:flex; flex-wrap:wrap; gap:20px; padding:0 12px; font-size:14px; }
 .chart-temp-key::before, .chart-rain-key::before { content:""; display:inline-block; width:20px; height:4px; border-radius:4px; background:#ffcb74; vertical-align:middle; margin-right:8px; }
 .chart-rain-key::before { background:linear-gradient(#59b9f5, rgba(89,185,245,.35)); width:12px; height:12px; border-radius:3px 3px 1px 1px; }
 .weather-chart-scroll { overflow-x:auto; }
+.weather-chart-scroll-hint { display:none; margin:4px 12px 8px; color:var(--ink-lo, #c5d2dd); font-size:12px; line-height:1.5; }
+@container (max-width:699px) { .weather-chart-scroll-hint { display:block; } }
 .weather-chart svg { display:block; width:100%; min-width:700px; height:auto; }
 .weather-chart svg text { fill:var(--ink, #edf4fa); font:14px system-ui,sans-serif; }
 .chart-grid { stroke:var(--ink-lo, #c5d2dd); opacity:.14; stroke-dasharray:2 6; stroke-linecap:round; }

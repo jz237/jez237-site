@@ -43,6 +43,9 @@ In another terminal, with Playwright available:
 
 ```text
 node scripts/weather-hurricane.browser.cjs
+node scripts/weather-details.browser.cjs
 ```
 
 `PLAYWRIGHT_MODULE` may point to an existing Playwright installation. `WEATHER_QA_URL` can override the local URL. The browser checks use synthetic data only in intercepted test requests, and cover responsive layouts, keyboard controls, playback, outages, genuine empty feeds, malformed responses, stale advisories, and partial failures. Screenshots and results are written under ignored `tmp/hurricane-qa/`. Live NOAA data should also be checked in a browser before release.
+
+The hourly chart follows slider and keyboard selections horizontally when the plot is wider than its container, without scrolling the page. Pointer exploration preserves the visitor's scroll position. A container-sized hint appears only when there are hours outside the visible chart. The separate local-weather browser check exercises this behavior using the real page styles at phone and desktop widths, including reduced motion.
