@@ -20,6 +20,6 @@ This is an original approximate reconstruction, not a measured service model. In
 
 ## Publishing
 
-Publish identical static files to `demos/filtoclear-studio`, `prototypes/hidden-reef/learn/filtoclear` and `prototypes/hidden-reef-header-preview/learn/filtoclear` in jez237-site. Local pond links adapt when mounted under `/learn/filtoclear/`. Exclude package.json and tests from public copies; preserve this source with the tests under `scripts/filtoclear-studio`.
+As of 2026-10-11, jez237-site publishes only `demos/filtoclear-studio`. Hidden Reef owns its separate `/learn/filtoclear/` copy under the sole Evo X2 source `/home/jez237/projects/hidden-reef`. Coordinate authorized updates across the two independent projects; never recreate storefront or header-preview copies in jez237-site. Local pond links adapt when mounted under `/learn/filtoclear/`. Exclude package.json and tests from public copies; preserve this source with the tests under `scripts/filtoclear-studio`.
 
 The jez237 Pages wrapper in root AGENTS.md is mandatory. The separate Hidden Reef Pages project publishes the full current `prototypes/hidden-reef` tree using its existing footer-link cleanup policy.

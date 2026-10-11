@@ -1,3 +1,5 @@
+> **2026-10-11 ownership update:** The complete storefront moved to `/home/jez237/projects/hidden-reef` on Evo X2 and https://hidden-reef.pages.dev/. GitHub keeps links only. Commands mentioning mirror/preview copies below are historical; do not recreate them. Read HIDDEN_REEF.md.
+
 # Hidden Reef Living Showroom
 
 The flagship aquarium feature precedes the shopping hero on the homepage. Desktop navigation includes 3D Aquarium; the phone navigation has a permanently visible aquarium entry outside its collapsed menu. Freshwater and help-center pages also invite visitors into the showroom.
