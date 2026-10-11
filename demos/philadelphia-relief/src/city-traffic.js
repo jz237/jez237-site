@@ -1,12 +1,17 @@
 // Decorative traffic follows the public street graph. It is not a live traffic feed.
-export function createStreetGraph(doc,projection,sampleElevation){
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
+export function* streetGraphSteps(doc,projection,sampleElevation){
   const nodes=new Map(),edges=[],segments=[];
+  let work=0;
   for(const road of doc.roads||[]){
     for(const [id,lon,lat] of road.points){
+      if(++work%128===0)yield;
       if(!nodes.has(id))nodes.set(id,{id,x:projection.lonToX(lon),z:projection.latToZ(lat),
         ground:sampleElevation(lon,lat),out:[],neighbors:new Set()});
     }
     for(let i=1;i<road.points.length;i++){
+      if(++work%128===0)yield;
       const a=nodes.get(road.points[i-1][0]),b=nodes.get(road.points[i][0]);
       const length=Math.hypot(b.x-a.x,b.z-a.z);
       if(length<.5||length>800)continue;
@@ -26,12 +31,14 @@ export function createStreetGraph(doc,projection,sampleElevation){
   // sampled road cannot collapse into one enormous intersection.
   const parents=new Map(),bounds=new Map();
   for(const node of nodes.values()){
+    if(++work%128===0)yield;
     parents.set(node.id,node.id);bounds.set(node.id,[node.x,node.z,node.x,node.z]);
   }
   const root=id=>{while(parents.get(id)!==id){
     parents.set(id,parents.get(parents.get(id)));id=parents.get(id);}
     return id;};
   for(const segment of segments){
+    if(++work%128===0)yield;
     if(segment.length>12)continue;
     const a=root(segment.a.id),b=root(segment.b.id);if(a===b)continue;
     const aa=bounds.get(a),bb=bounds.get(b);
@@ -42,10 +49,21 @@ export function createStreetGraph(doc,projection,sampleElevation){
   }
   const signalized=new Set();
   for(const node of nodes.values()){
+    if(++work%128===0)yield;
     node.junction=root(node.id);if(node.neighbors.size>2)signalized.add(node.junction);
   }
-  for(const node of nodes.values())node.signalized=signalized.has(node.junction);
+  for(const node of nodes.values()){
+    if(++work%128===0)yield;
+    node.signalized=signalized.has(node.junction);
+  }
   return {nodes,edges,segments};
+}
+export function createStreetGraph(...args){
+  const steps=streetGraphSteps(...args);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+export function prepareStreetGraph(doc,projection,sampleElevation,options){
+  return prepareInBatches(streetGraphSteps(doc,projection,sampleElevation),options);
 }
 export function trafficSignal(edge,time){
   const phase=(time+Math.abs(edge.to.junction%19))%42;
@@ -131,22 +149,26 @@ export function trafficIndicator(car,time){
   return phase<.4?side:0;
 }
 
-export function createTraffic(graph,count=260,seed=239){
+export function* trafficSteps(graph,count=260,seed=239){
   let randomState=seed>>>0,time=0,view=null;
   const random=()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;
     return randomState/4294967296;};
   const eligible=graph.edges.filter(e=>e.length>30&&e.to.out.length);
   const spawnEdges=eligible.filter(e=>e.length>=50);
   const cars=[];
-  if(!eligible.length)return {cars,update(){}};
+  if(!eligible.length)return {cars,
+    update(dt){if(Number.isFinite(dt)&&dt>0)time+=Math.min(dt,.25);},signal:edge=>trafficSignal(edge,time),
+    indicator:car=>trafficIndicator(car,time)};
   // The street graph is immutable. Calculate turn weights once, rather than
   // allocating filtered routes for every car and every following-distance scan.
-  const routes=graph.edges.map(edge=>{
+  const routes=[];
+  for(const edge of graph.edges){
+    if(routes.length%128===0)yield;
     const options=edge.to.out.filter(next=>next.to!==edge.from);
     const weighted=options.map(e=>({e,w:1+Math.max(0,e.dx*edge.dx+e.dz*edge.dz)*3}));
-    return {weighted,total:weighted.reduce((sum,option)=>sum+option.w,0),
-      fallback:options[0]||edge.to.out[0]||null,continuation:options.length===1?options[0]:null};
-  });
+    routes.push({weighted,total:weighted.reduce((sum,option)=>sum+option.w,0),
+      fallback:options[0]||edge.to.out[0]||null,continuation:options.length===1?options[0]:null});
+  }
   const queues=graph.edges.map(()=>[]),activeQueues=[],visited=[];
   const reserved=new Set(),junctions=new Map(),ownerPool=[];
   let ownerCount=0;
@@ -262,4 +284,12 @@ export function createTraffic(graph,count=260,seed=239){
       while(remaining>1e-8){const elapsed=Math.min(remaining,.05);step(elapsed);remaining-=elapsed;}
     },
   };
+}
+
+export function createTraffic(...args){
+  const steps=trafficSteps(...args);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+export function prepareTraffic(graph,count=260,seed=239,options){
+  return prepareInBatches(trafficSteps(graph,count,seed),options);
 }

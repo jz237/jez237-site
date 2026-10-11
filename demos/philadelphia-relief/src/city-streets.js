@@ -1,6 +1,6 @@
-import { createStreetGraph, createTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
+import { prepareStreetGraph, prepareTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
-import { createCurbLayout } from './city-curbs.js?v=philly-2026101001';
+import { prepareCurbLayout } from './city-curbs.js?v=philly-2026101001';
 import { prepareSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
   from './city-walkers.js?v=philly-2026101001';
 
@@ -66,11 +66,14 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     request=new AbortController();
     fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
-      .then(async doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
-        traffic=createTraffic(graph,620);curbLayout=createCurbLayout(graph);age=10;onReady();
+      .then(async doc=>{if(disposed)return;const options={signal:request.signal};
+        const nextGraph=await prepareStreetGraph(doc,projection,sampleElevation,options);
+        const nextTraffic=await prepareTraffic(nextGraph,620,239,options);
+        const nextCurbs=await prepareCurbLayout(nextGraph,options);
+        if(disposed)return;graph=nextGraph;traffic=nextTraffic;curbLayout=nextCurbs;age=10;onReady();
         // Cars can start while sidewalk topology is prepared in short tasks.
         // Disposal cancels the remaining work before it can attach late walkers.
-        const routes=await prepareSidewalkRoutes(graph,{signal:request.signal});
+        const routes=await prepareSidewalkRoutes(graph,options);
         if(disposed)return;sidewalkRoutes=routes;lastX=Infinity;age=10;onReady();})
       .catch(error=>{if(disposed||error.name==='AbortError')return;
         retryDelay=30;console.warn('Decorative street layer:',error.message);})

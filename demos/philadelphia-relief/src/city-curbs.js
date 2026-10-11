@@ -1,9 +1,13 @@
 // Join the two sides of ordinary bends in offset space. Stopping both strips at
 // the road centre node makes their ends cross the carriageway on sharp corners.
-export function createCurbLayout(graph){
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
+export function* curbLayoutSteps(graph){
   const adjoining=new Map();
+  let work=0;
   for(const segment of graph.segments)
     for(const [node,other] of [[segment.a,segment.b],[segment.b,segment.a]]){
+    if(++work%128===0)yield;
     let connections=adjoining.get(node);
     if(!connections){connections=new Map();adjoining.set(node,connections);}
     const previous=connections.get(other);
@@ -37,4 +41,12 @@ export function createCurbLayout(graph){
     const dx=(segment.b.x-segment.a.x)/segment.length,dz=(segment.b.z-segment.a.z)/segment.length;
     return (b.x-a.x)*dx+(b.z-a.z)*dz>1?[a.x,a.z,b.x,b.z]:null;
   };
+}
+
+export function createCurbLayout(graph){
+  const steps=curbLayoutSteps(graph);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+export function prepareCurbLayout(graph,options){
+  return prepareInBatches(curbLayoutSteps(graph),options);
 }
