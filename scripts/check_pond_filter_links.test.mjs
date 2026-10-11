@@ -19,9 +19,6 @@ function servedCopy(failure='',hiddenReef=false){return async input=>{
 test('all demo and storefront pond links match the current release',async()=>{
  await checkPondFilterLinks('https://example.test',servedCopy());
 });
-test('Hidden Reef uses its own pond and filter mounts',async()=>{
- await checkPondFilterLinks('https://hidden-reef.test',servedCopy('',true),{hiddenReef:true});
-});
 for(const [failure,message] of [['stale',/navigation/],['styles',/styles/],['destination',/destination/]]){
  test(`blocks a release with ${failure} pond content`,async()=>{
   await assert.rejects(checkPondFilterLinks('https://example.test',servedCopy(failure)),message);

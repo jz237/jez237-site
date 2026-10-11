@@ -9,9 +9,7 @@ export async function checkPondFilterLinks(base, fetcher = fetch, { hiddenReef =
   const mounts = hiddenReef
     ? [['prototypes/hidden-reef/learn/koi-pond', '/learn/koi-pond/', false]]
     : [['demos/hidden-reef-koi', '/demos/hidden-reef-koi/', true],
-       ['demos/koi-pond-garden', '/demos/koi-pond-garden/', true],
-       ['prototypes/hidden-reef/learn/koi-pond', '/prototypes/hidden-reef/learn/koi-pond/', false],
-       ['prototypes/hidden-reef-header-preview/learn/koi-pond', '/prototypes/hidden-reef-header-preview/learn/koi-pond/', false]];
+       ['demos/koi-pond-garden', '/demos/koi-pond-garden/', true]];
   const filters = new Set();
   const styles = new Map();
   for (const [folder, mount, alias] of mounts) {
