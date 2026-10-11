@@ -125,6 +125,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         creditContainer: credits, creditViewport: document.body,
       });
       viewer.scene.screenSpaceCameraController.enableInputs = false;
+      // The relief rig owns the camera. Tile collision data is used only to
+      // anchor labels to their actual roofs, not to move that shared camera.
+      viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
       viewer.resolutionScale = Math.min(window.devicePixelRatio || 1, 2);
       viewer.scene.backgroundColor = C.Color.fromCssColorString('#203b43');
       viewer.scene.postProcessStages.fxaa.enabled = true;
@@ -134,6 +137,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
       const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
         maximumScreenSpaceError: 16, dynamicScreenSpaceError: false,
+        enableCollision: true,
         cacheBytes: 384 * 1024 * 1024, maximumCacheOverflowBytes: 128 * 1024 * 1024,
         preloadFlightDestinations: false, showCreditsOnScreen: true,
       });
@@ -153,16 +157,16 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       for (const place of landmarks?.landmarks || []) {
         if (place.r > 1 && !/Bauder|Hidden Reef/.test(place.n)) continue;
         const entity = viewer.entities.add({
-          position: C.Cartesian3.fromDegrees(place.lon, place.lat),
+          position: C.Cartesian3.fromDegrees(place.lon, place.lat, 3),
           point: { pixelSize: 7, color: C.Color.fromCssColorString('#f4c679'),
             outlineColor: C.Color.fromCssColorString('#16313b'), outlineWidth: 2,
-            heightReference: C.HeightReference.CLAMP_TO_3D_TILE,
-            disableDepthTestDistance: Infinity },
+            heightReference: C.HeightReference.RELATIVE_TO_3D_TILE,
+            disableDepthTestDistance: 0 },
           label: { text: place.n, font: '600 12px sans-serif', showBackground: true,
             backgroundColor: C.Color.fromCssColorString('#16313be8'),
             pixelOffset: new C.Cartesian2(0, -24), backgroundPadding: new C.Cartesian2(8, 5),
-            heightReference: C.HeightReference.CLAMP_TO_3D_TILE,
-            disableDepthTestDistance: Infinity,
+            heightReference: C.HeightReference.RELATIVE_TO_3D_TILE,
+            disableDepthTestDistance: 0,
             distanceDisplayCondition: new C.DistanceDisplayCondition(0, 22000) },
         });
         entity.reliefPlace = place;
