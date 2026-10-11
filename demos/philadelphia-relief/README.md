@@ -1168,7 +1168,11 @@ rendering work without changing the original aerial resolution.
 Decorative cars follow the shipped OSM street graph, one-way directions, local
 queues and simulated junction signals. They use continuous turn curves, brake
 lamps and road-aligned vehicle geometry. Vans have visible cab glazing around
-a solid cargo body. This is not live traffic. Cars leaving
+a solid cargo body. Visible red/amber/green signal heads use the same phases as
+the cars; connected short OSM nodes share the control at the junction boundary.
+Crossings cover both ends of eligible street segments with centered markings.
+Signal color buffers upload only when a phase changes, and paused views retain
+their static signal geometry. This is not live traffic. Cars leaving
 the cropped graph, or stuck for two minutes, may be replenished only outside the
 displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
 Street downloads retry after a bounded backoff and are aborted on disposal.
@@ -1187,7 +1191,7 @@ view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
 keeps the diorama available if the photographic provider cannot finish.
 
-Validation: 443 automated checks, including ten simulated minutes on the real
+Validation: 446 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
