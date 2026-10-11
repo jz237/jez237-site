@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 11 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 24-30, 1984 — Ghostbusters turns the Commodore 64 into a movie franchise</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-12-24</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-24</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <description>December’s game reviews put a familiar movie business on the home computer. Activision’s Ghostbusters puts the Commodore 64 owner in charge of a ghost-catching franchise. Computer Gaming World’s December roundup finds the movie license well executed, with a particular eye for the machine’s graphics and sound. It is a holiday-season review, not an announcement of a Christmas-week shipment. Also this week: MSX promises a common language for incompatible home computers · A Commodore can switch the lights and watch the windows · Year-end editors still choose the under-$200 Commodore 64.</description>
+    </item>
     <item>
       <title>Week of December 17-23, 1984 — Enchanter brings a spellbook to the Macintosh</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-12-17</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-13</guid>
       <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
       <description>IBM unveils the 80286-powered 5170 with a 16-bit expansion path, high-capacity floppy, larger hard disks, and prices starting at $3,995. IBM used August 14 to introduce two models of the Personal Computer AT, a machine it says runs more than twice as fast as the current PC family. Both are built around Intel&apos;s 80286, with a 24-bit address path and a 16-bit data path that moves the IBM line decisively beyond the original 8088 generation. Also this week: DOS 3.0 and PC Network Prepare IBM Machines to Share · Home-Computer Adventures Hook a Growing Adult Audience.</description>
-    </item>
-    <item>
-      <title>Week of August 6-12, 1984 — Behind Closed Doors, Amiga&apos;s Lorraine Points to a New Generation</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-08-06</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-06</guid>
-      <pubDate>Fri, 18 Sep 2026 12:00:00 GMT</pubDate>
-      <description>A rough but dazzling 68000 prototype promises color, sound, animation, speech, and communications in one home machine. Visitors invited behind closed doors at the Summer Consumer Electronics Show saw something very different from another beige box. Amiga&apos;s Lorraine prototype, now detailed in COMPUTE!&apos;s August issue, paired a Motorola 68000 processor with custom graphics and sound hardware intended to make animation, music, and multitasking central parts of personal computing. Also this week: Symphony and Framework Fight to Define Integrated Software · Compaq Deskpro Turns Compatibility into a Speed Contest · Questprobe Sends the Hulk into the Adventure Machine · IBM&apos;s Price Cuts Put PC-Compatible Makers in a Squeeze.</description>
     </item>
   </channel>
 </rss>

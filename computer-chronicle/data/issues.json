@@ -12,6 +12,402 @@
       "masthead": {
         "title": "Computer Chronicle",
         "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 24-30, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Ghostbusters C-64 gaming lead with CRT and ghost-catching equipment halftone",
+        "secondaryRail": "Tandy, Commodore, music and cinema shelves",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "visualProfile": {
+        "tone": "December 1984 holiday home-computing newsprint",
+        "motifs": [
+          "Commodore 64",
+          "Ghostbusters",
+          "MSX cartridges",
+          "home control",
+          "300-baud modem"
+        ],
+        "layout": "Dense warm newspaper with red and blue section headers"
+      },
+      "currentDate": "2026-10-11",
+      "historicDate": "1984-12-24",
+      "displayDate": "Week of December 24-30, 1984",
+      "edition": "Issue 126 - Weekly 1984 Computer & Culture Chronicle",
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-12-24.png",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for December 24-30, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A holiday desk of movie games, home-computer standards and household control.",
+      "morningLine": "The Commodore 64 has a new line of work: catching ghosts.",
+      "lead": {
+        "headline": "Ghostbusters turns the Commodore 64 into a movie franchise",
+        "dek": "December’s game reviews put a familiar movie business on the home computer.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          2
+        ],
+        "body": [
+          "Activision’s Ghostbusters puts the Commodore 64 owner in charge of a ghost-catching franchise. Computer Gaming World’s December roundup finds the movie license well executed, with a particular eye for the machine’s graphics and sound. It is a holiday-season review, not an announcement of a Christmas-week shipment.",
+          "The player begins with $2,000 in game capital and must buy a vehicle and ghost-catching hardware. That sum belongs to the simulation’s business ledger, not to a shop’s price tag. The premise makes the film’s comic enterprise into something the player can manage at the keyboard.",
+          "The magazine says the program “showcases the graphics and sound capabilities of the C-64” and judges that it should appeal to people who saw the movie. The familiar title thus arrives with a machine-specific attraction: the home computer supplies the sound and moving picture as well as the decisions.",
+          "Ghostbusters shares the December roundup with Zenji, Park Patrol, Space Shuttle and Zone Ranger. The breadth of that shelf matters as much as the license: buyers can choose a pathway puzzle, an arcade challenge or a spacecraft alongside the recognizable cinema name. No verified sales total or exact Christmas-week release date accompanies this review."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "MSX promises a common language for incompatible home computers",
+          "body": [
+            "Home computers have made a habit of speaking incompatible languages. COMPUTE!’s December report by Tom R. Halfhill and Selby Bateman offers MSX as a possible escape: conforming cartridges, disks, tapes and peripherals could work across machines bearing different manufacturers’ names.",
+            "The common specification uses a Zilog Z80A processor, TI 9918A video, 16 colors, 32 sprites and three-channel sound. The report describes 32K ROM and 16K to 64K RAM. Sony, Yamaha, Panasonic, Sanyo, JVC and Hitachi appear in a scheme that makes the software library less dependent on the badge on the case.",
+            "The authors report more than 265,000 units sold by midsummer after the Japanese debut in November 1983. Their expected January Las Vegas introduction and low-end American prices around $200 or less remain prospects, not current offers. MSX-DOS disk-format compatibility should not be mistaken for the ability to run IBM programs."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "A Commodore can switch the lights and watch the windows",
+          "body": [
+            "A computer can do household work without becoming a robot. Sharon Darling’s December COMPUTE! feature describes Genesis controllers for the VIC-20 and Commodore 64, with timed lighting and appliance schedules passed through BSR-type remote switches.",
+            "The VIController is quoted at $69.95 with disk software; COMsense costs another $69.95. Used with magnetic reed switches, the sensing accessory can signal an opened window or door. Plug-in modules and sensors remain part of the installation, not free extras hidden inside the controller price.",
+            "James Coffron estimates around $200 for a simple Commodore-based control setup. The feature ranges further into temperature, soil moisture and humidity sensing, but its predictions of energy savings and future computer-equipped houses are expectations, not measured results."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Year-end editors still choose the under-$200 Commodore 64",
+          "body": [
+            "David H. Ahl’s December Creative Computing buying guide puts the Commodore 64 first in the under-$500 home-computer category. Thirteen editors weigh software, support, distribution and usability alongside specifications; the reported street price is generally below $200 for the computer itself.",
+            "The verdict is no blank cheque. Ahl records complaints about the slow disk drive, cursor keys, nonstandard interfaces and manufacturer support. The Plus/4’s integrated applications do not erase its lack of sprites or its incompatibility with much of the established C-64 library.",
+            "The notebook counter offers another calculation. Radio Shack’s Model 100 takes the under-$1,000 category at $599 for 8K or $799 for 24K, helped by its built-in modem and store network. The guide’s category awards should not be read as a single winner for every buyer."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "MSX",
+          "summary": "December outlook, Z80A CPU, TI video and 16K–64K RAM; anticipated U.S. marketing rather than verified launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Genesis VIController and COMsense",
+          "summary": "C-64/VIC-20 home-control accessories; each $69.95 in December COMPUTE! feature.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "HP Portable",
+          "summary": "Ahl’s no-price-limit notebook winner; CMOS 8086, 272K RAM, 384K ROM, built-in Lotus 1-2-3 and MemoMaker; $2,995 reported.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "IBM PC AT enhanced configuration",
+          "summary": "Ahl reports $5,795 with 512K, one floppy, 20MB hard disk and serial/parallel board, without monitor; not a new December launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Logo for the 64",
+          "detail": "Andrew Keith’s December COMPUTE! review, p. 138: Terrapin-developed Commodore Logo supports turtle graphics, sprites, sound and list processing; includes manual/tutorial and utilities/demo disk. Reported range $50–$80, with some sales as low as $35.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "The Designer’s Pencil",
+          "detail": "Activision December advertisement: Garry Kitchen-designed joystick-driven C-64 graphics and music software with on-screen commands; contest advertised at $10,000, not software price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — December editorial selection, not a sales chart",
+          "items": [
+            "Ghostbusters",
+            "Zenji",
+            "Return of Heracles",
+            "After Pearl",
+            "Breakthrough in the Ardennes"
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — December 28-30 weekend box office",
+          "items": [
+            "Beverly Hills Cop",
+            "Pinocchio (reissue)",
+            "2010",
+            "Protocol",
+            "City Heat"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "C-64",
+          "price": "Under $200",
+          "note": "Generally under $200; machine-only comparison, not full disk-based system price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "TRS-80 Model 100",
+          "price": "$599 / $799",
+          "note": "List $599 (8K) / $799 (24K).",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "TRS-80 Model 4",
+          "price": "$1,299",
+          "note": "Reported $1,299 with two disk drives.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Kaypro 2",
+          "price": "$1,295",
+          "note": "Dual-drive unit and bundled software, $1,295.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "VIController / COMsense",
+          "price": "$69.95 each",
+          "note": "$69.95 each; other modules/sensors may be needed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Tournament disks turn magazine readers into game researchers",
+          "summary": "CGW December offers Cosmic Balance Shipyard disk with over 20 contest ships for $15, Apple/Atari/C-64; requires SSI’s Cosmic Balance. Robotwar tournament disks $15 each or $25 for both require Muse’s Robotwar.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Boys Of Summer",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks — December 22 chart, latest verified selection; not December 29 ranks",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Run To You",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks — December 22 chart, latest verified selection; not December 29 ranks",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks — December 22 chart, latest verified selection; not December 29 ranks",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Do It Again",
+          "artist": "The Kinks",
+          "chart": "Billboard Top Rock Tracks — December 22 chart, latest verified selection; not December 29 ranks",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "We Belong",
+          "artist": "Pat Benatar",
+          "chart": "Billboard Top Rock Tracks — December 22 chart, latest verified selection; not December 29 ranks",
+          "chartDate": "1984-12-22",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1984-12-22/"
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Moscow chooses a veteran defense minister after Ustinov’s death",
+        "summary": "December 24 reporting describes Marshal Sergei Sokolov replacing Dmitri Ustinov as Soviet defense minister. The veteran appointment signals continuity while the question of leadership after Chernenko remains unsettled.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "An Apple modem bundle offers a doorway to The Source",
+        "summary": "December COMPUTE! carries Zoom Telephonics’ NETWORKER modem starter-set advertisement; the Source offer explicitly expires December 31, 1984.",
+        "posts": [
+          {
+            "topic": "Starter-set offer",
+            "platform": "Apple II / II+ / IIe; The Source",
+            "text": "Period-ad synopsis, not a recovered BBS post: 300-baud modem card, menu-driven communications software and a subscription to The Source are bundled. No price or hourly service charge is stated in the inspected ad; do not invent one."
+          },
+          {
+            "topic": "Portable telecommunications",
+            "platform": "TRS-80 Model 100",
+            "text": "Period buying-guide synopsis, not a BBS post: Ahl names the built-in modem as one reason the Model 100 beats the NEC PC-8201 in the under-$1,000 notebook category."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          1,
+          3
+        ]
+      },
+      "curiosity": {
+        "headline": "A joystick paint program dangles a $10,000 prize",
+        "summary": "Activision advertises The Designer’s Pencil as a C-64 way to create graphics and accompanying music, and invites users into a $10,000 contest.",
+        "detail": "The December COMPUTE! ad credits Garry Kitchen and says contest details are in specially marked packages. The $10,000 is the advertised contest amount, not a verified award paid that week; no deadline or winners were inspected.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "periodAd": {
+        "headline": "NETWORKER opens a line to The Source",
+        "summary": "Zoom Telephonics advertises an Apple II-family 300-baud modem card, communications software and a subscription to The Source. The advertised Source offer expires December 31, 1984; no price or hourly service charge is quoted here.",
+        "tagline": "A modem starter set for the Apple desk.",
+        "sourceRefs": [
+          0,
+          1,
+          3
+        ]
+      },
+      "market": {
+        "headline": "A software library adds weight to the price tag",
+        "summary": "The C-64’s established library supports its buying-guide verdict; MSX proposes sharing software between brands. Hardware price alone cannot settle the cost of choosing a home-computer system.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3,
+          0,
+          1
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-day or same-week computing launch/wire coverage was not established; magazine stories are explicitly same-month and must not be redated as Christmas-week events.",
+          "Billboard rock chart for December 29 could not be verified: official historical endpoint extracted no ranks; World Radio History PDF returned 403. Do not substitute Tunecaster’s independently compiled chart or Hot 100 for Billboard rock. musicChart is intentionally empty.",
+          "No verified breaking noncomputer gadget event or named underground crew/handle/board found in this pass. Omit gadgetCandidates and milestone; this is not an era-defining launch week on available evidence.",
+          "Quotes normalized from primary-source OCR; preserve attribution. No invented BBS posts: modem post-shaped entries are expressly period-source synopses.",
+          "Music uses the verified December 22 Top Rock Tracks chart as an explicitly dated selection, not invented December 29 ranks.",
+          "Game list is an editorial shelf selection, not a sales chart."
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 55, December 1984 (features, reviews and advertisements)",
+          "url": "https://archive.org/details/1984-12-compute-magazine",
+          "date": "1984-12"
+        },
+        {
+          "title": "COMPUTE! issue 55 OCR; wording/price evidence checked in scratch",
+          "url": "https://archive.org/download/1984-12-compute-magazine/Compute_Issue_055_1984_Dec_djvu.txt",
+          "date": "1984-12"
+        },
+        {
+          "title": "Computer Gaming World vol. 4 no. 6",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_4.6.pdf",
+          "date": "1984-12"
+        },
+        {
+          "title": "David H. Ahl, Top 12 computers of 1984, Creative Computing p. 10",
+          "url": "https://www.atarimagazines.com/creative/v10n12/10_Top_12_computers_of_1984.php",
+          "date": "1984-12"
+        },
+        {
+          "title": "The Numbers, domestic weekend December 28, 1984 (retrospective)",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/12/28",
+          "date": "1984-12-28"
+        },
+        {
+          "title": "Gary Thatcher, Moscow’s safe choice, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1984/1224/122436.html",
+          "date": "1984-12-24"
+        }
+      ]
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
         "dateline": "December 17-23, 1984",
         "price": "75 cents"
       },
