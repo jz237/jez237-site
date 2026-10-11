@@ -1,0 +1,42 @@
+name: Prune superseded Pages artifacts
+
+on:
+  workflow_run:
+    workflows: [Deploy GitHub Pages Mirror]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: prune-pages-artifacts
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/prune_pages_artifacts.mjs
+            /scripts/prune_pages_artifacts.test.mjs
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Check retention safety
+        run: node --test scripts/prune_pages_artifacts.test.mjs
+      - name: Keep current and rollback; prune only completed Pages uploads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: node scripts/prune_pages_artifacts.mjs --apply
