@@ -1,5 +1,6 @@
 // Illustrative pedestrians follow the inside sidewalks of closed street blocks.
 // Open roads, dead ends and narrow/ambiguous faces do not invent walking routes.
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
 const cross=(a,b)=>a.x*b.z-a.z*b.x;
 const delta=(a,b)=>({x:b.x-a.x,z:b.z-a.z});
 const mix=(a,b,t)=>({x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t});
@@ -60,9 +61,11 @@ function roundedRoute(points){
   return {pieces,length};
 }
 
-export function createSidewalkRoutes(graph){
+export function* sidewalkRouteSteps(graph){
   const outgoing=new Map(),edges=[],dedupe=new Set(),roadCells=new Map();
+  let work=0;
   for(const segment of graph.segments){
+    if(++work%64===0)yield;
     const key=[segment.a.id,segment.b.id].sort((a,b)=>a-b).join(':');
     if(dedupe.has(key))continue;dedupe.add(key);
     const margin=segment.width/2+1;
@@ -80,13 +83,18 @@ export function createSidewalkRoutes(graph){
       edges.push(e);const bucket=outgoing.get(a.id)||[];bucket.push(e);outgoing.set(a.id,bucket);
     }
   }
-  for(const bucket of outgoing.values())bucket.sort((a,b)=>a.angle-b.angle);
+  for(const bucket of outgoing.values()){
+    if(++work%128===0)yield;
+    bucket.sort((a,b)=>a.angle-b.angle);
+  }
   for(const edge of edges){
+    if(++work%128===0)yield;
     const choices=outgoing.get(edge.b.id),reverse=choices.findIndex(e=>e.b===edge.a);
     edge.next=choices[(reverse+choices.length-1)%choices.length];
   }
   const visited=new Set(),routes=[];
   for(const start of edges){
+    if(++work%64===0)yield;
     if(visited.has(start))continue;const ring=[];let edge=start;
     while(!visited.has(edge)){visited.add(edge);ring.push(edge);edge=edge.next;}
     if(edge!==start||ring.length<3||ring.length>80)continue;
@@ -100,6 +108,7 @@ export function createSidewalkRoutes(graph){
     // grade-separated alignments). Reject it rather than invent a crossing.
     let clear=true;
     for(let d=0;clear&&d<route.length;d+=1){
+      if(++work%128===0)yield;
       const p=sidewalkPose(route,d);
       for(const edge of roadCells.get(`${Math.floor(p.x/50)}:${Math.floor(p.z/50)}`)||[]){
         const dx=(edge.b.x-edge.a.x)/edge.length,dz=(edge.b.z-edge.a.z)/edge.length;
@@ -114,6 +123,15 @@ export function createSidewalkRoutes(graph){
     routes.push(route);
   }
   return routes;
+}
+
+export function createSidewalkRoutes(graph){
+  const steps=sidewalkRouteSteps(graph);
+  for(;;){const step=steps.next();if(step.done)return step.value;}
+}
+
+export function prepareSidewalkRoutes(graph,options){
+  return prepareInBatches(sidewalkRouteSteps(graph),options);
 }
 
 export function sidewalkPose(route,distanceAlong,direction=1){

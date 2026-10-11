@@ -1,10 +1,10 @@
 import { createStreetGraph, createTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
-import { createSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
+import { prepareSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
   from './city-walkers.js?v=philly-2026101001';
 
 // Instanced, illustrative street furniture; the OSM centerlines remain authoritative.
-export function createCityStreets(THREE,{scene,projection,sampleElevation,lighting}){
+export function createCityStreets(THREE,{scene,projection,sampleElevation,lighting,onReady=()=>{}}){
   const group=new THREE.Group();group.name='city-street-life';scene.add(group);
   const uniforms={...lighting.uniforms,uSun:{value:new THREE.Vector3()},uNight:{value:0},
     uEye:{value:new THREE.Vector3()},uFog:{value:new THREE.Color(.55,.64,.72)}};
@@ -65,8 +65,12 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     request=new AbortController();
     fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
-      .then(doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
-        traffic=createTraffic(graph,620);sidewalkRoutes=createSidewalkRoutes(graph);age=10;})
+      .then(async doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
+        traffic=createTraffic(graph,620);age=10;onReady();
+        // Cars can start while sidewalk topology is prepared in short tasks.
+        // Disposal cancels the remaining work before it can attach late walkers.
+        const routes=await prepareSidewalkRoutes(graph,{signal:request.signal});
+        if(disposed)return;sidewalkRoutes=routes;lastX=Infinity;age=10;onReady();})
       .catch(error=>{if(disposed||error.name==='AbortError')return;
         retryDelay=30;console.warn('Decorative street layer:',error.message);})
       .finally(()=>{loading=false;request=null;});

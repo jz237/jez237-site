@@ -3,12 +3,24 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import * as THREE from '../vendor/three.module.min.js';
 import { createStreetGraph } from '../src/city-traffic.js';
-import { createSidewalkRoutes, sidewalkPose, walkerTravel, walkersForRoutes } from '../src/city-walkers.js';
+import { createSidewalkRoutes, prepareSidewalkRoutes, sidewalkPose, walkerTravel, walkersForRoutes }
+  from '../src/city-walkers.js';
 import { createCityStreets } from '../src/city-streets.js';
 import { createCityUniforms } from '../src/city-lighting.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z,xToLon:x=>x,zToLat:z=>z};
 const square={roads:[{id:1,oneway:1,width:10,points:[[1,0,0],[2,100,0],[3,100,100],[4,0,100],[1,0,0]]}]};
+
+test('sidewalk preparation yields to rendering and supports cancellation before completing a route',async()=>{
+  const graph=createStreetGraph(square,projection,()=>0);let pauses=0;
+  const prepared=await prepareSidewalkRoutes(graph,{budget:0,pause:async()=>{pauses++;}});
+  assert.deepEqual(prepared,createSidewalkRoutes(graph));
+  assert.ok(pauses>1,'even one long sidewalk can yield between clearance checks');
+  const controller=new AbortController();let cancelledPauses=0;
+  await assert.rejects(prepareSidewalkRoutes(graph,{signal:controller.signal,budget:0,
+    pause:async()=>{cancelledPauses++;controller.abort();}}),{name:'AbortError'});
+  assert.equal(cancelledPauses,1,'no further work is scheduled after disposal');
+});
 
 test('walkers use the inside sidewalks of a closed block, independent of vehicle one-way rules',()=>{
   const routes=createSidewalkRoutes(createStreetGraph(square,projection,()=>0));
@@ -62,6 +74,11 @@ test('real Philadelphia walking circuits remain finite through ten simulated min
   const doc=JSON.parse(await readFile(new URL('../data/city-streets.json',import.meta.url)));
   const projection={lonToX:x=>(x+75.17)*85000,latToZ:z=>(39.95-z)*111000};
   const graph=createStreetGraph(doc,projection,()=>10),routes=createSidewalkRoutes(graph);
+  let pauses=0,clock=0;
+  const prepared=await prepareSidewalkRoutes(graph,{budget:4,now:()=>++clock,
+    pause:async()=>{pauses++;}});
+  assert.ok(pauses>50,'regional topology preparation is divided into short tasks');
+  assert.deepEqual(prepared,routes,'batching preserves every mapped walking route exactly');
   assert.ok(routes.length>500&&routes.length<2000);
   const cells=new Map();
   for(const edge of graph.segments){
