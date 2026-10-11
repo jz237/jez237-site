@@ -13,6 +13,8 @@
 
 import { prepareInBatches } from './background-work.js?v=philly-2026092207';
 import { CITY_LIGHT_GLSL, createCityUniforms } from './city-lighting.js?v=philly-2026100901';
+import { waterMaskUniforms } from './water-mask.js?v=philly-2026101001';
+import { WATER_SURFACE_GLSL } from './water-surface.js?v=philly-2026101001';
 
 import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
 
@@ -62,6 +64,7 @@ const VERTEX_SHADER = /* glsl */ `
 
 const FRAGMENT_SHADER = /* glsl */ `
   ${CITY_LIGHT_GLSL}
+  ${WATER_SURFACE_GLSL}
   precision highp float;
 
   uniform sampler2D uHeight;
@@ -258,6 +261,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 flatShade = mix(reliefFlat, aerialBase * uAerialLight, surfaceImagery);
     float effectiveHillshade = mix(uHillshade, uHillshade * mix(0.18, 1.0, uDiorama), surfaceImagery);
     vec3 color = mix(flatShade, lit, effectiveHillshade);
+    color = shadeMappedWater(color,vWorld,uCameraPos,uSunDir);
 
     // ---- contours ------------------------------------------------------
     if (uContourStrength > 0.001 && uContourInterval > 0.0) {
@@ -444,6 +448,7 @@ export function createTerrain(THREE, options) {
   let hasDetail = false;
 
   const uniforms = {
+    ...(options.water?.uniforms || waterMaskUniforms(THREE)),
     ...(options.lighting?.uniforms || createCityUniforms(THREE)),
     ...bathymetryUniforms(THREE, heightTex),
     uHeight: { value: heightTex },

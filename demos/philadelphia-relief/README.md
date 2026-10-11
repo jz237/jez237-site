@@ -1156,9 +1156,13 @@ Daytime imagery retains its original color; both base and detailed tiles share
 the same gradual transition.
 Bridge cable ribbons keep the same screen-space normal at both endpoints,
 preventing crossed triangles. Automatic water tint fades out with the regional
-miniature, returning neighborhood views to aerial water rather than a flat sheet
-intersecting the terrain. The explicit water layer remains available; its flat
-surface can still intersect uneven DEM samples.
+miniature, returning neighborhood views to aerial water. The explicit water layer
+now shades the actual terrain and aerial tile surfaces using mapped coverage,
+so an independent flat sheet cannot cut triangular edges through the banks.
+A regional mask and a camera-following detail mask preserve islands and piers;
+close-up coverage reaches 2 m sampling. The two single-channel masks use 8 MiB
+of GPU storage together and prepare in yielding batches. Water centerlines are
+hidden inside filled river areas, while unmapped narrow streams remain visible.
 The baked water polygons have valid outlines and non-overlapping coverage.
 After regenerating vectors, run `python tools/repair_water.py` (requires Shapely)
 to repair self-intersections and duplicate source surfaces while retaining islands.
@@ -1206,7 +1210,7 @@ scene instead of disposing it. After a restored WebGL context, rendering resumes
 and cached building shadows refresh. `tools/lifecycle-check.html` provides local
 buttons for reproducing graphics-context loss and restoration in the browser.
 
-Validation: 462 automated checks, including ten simulated minutes on the real
+Validation: 467 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

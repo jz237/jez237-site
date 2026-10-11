@@ -1,4 +1,6 @@
 import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=philly-2026092201';
+import { WATER_COVERAGE_GLSL } from './water-surface.js?v=philly-2026101001';
+import { waterMaskUniforms } from './water-mask.js?v=philly-2026101001';
 /**
  * Vector overlays: rivers, roads, rail, boundaries, parks and open water,
  * draped on the terrain.
@@ -13,6 +15,9 @@ import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=ph
 import { hexToRgb } from './themes.js?v=philly-2026092121';
 
 const LINE_VERTEX = /* glsl */ `
+  #ifdef WATER_LINE
+  varying vec2 vWaterXZ;
+  #endif
   attribute vec3  aOther;      // the far end of this segment
   attribute float aSide;       // -1 / +1, which edge of the ribbon
   attribute float aElev;       // metres, this vertex
@@ -33,6 +38,9 @@ const LINE_VERTEX = /* glsl */ `
 
   void main() {
     vec3 a = vec3(position.x, aElev * uExag + uLift, position.z);
+    #ifdef WATER_LINE
+    vWaterXZ=a.xz;
+    #endif
     vec3 b = vec3(aOther.x, aOtherElev * uExag + uLift, aOther.z);
 
     vec2 roadDir = normalize(b.xz - a.xz + vec2(0.000001));
@@ -73,6 +81,10 @@ const LINE_VERTEX = /* glsl */ `
 
 const LINE_FRAGMENT = /* glsl */ `
   precision highp float;
+  #ifdef WATER_LINE
+  ${WATER_COVERAGE_GLSL}
+  varying vec2 vWaterXZ;
+  #endif
   uniform vec3  uColor;
   uniform float uOpacity;
   varying float vAlong;
@@ -82,6 +94,9 @@ const LINE_FRAGMENT = /* glsl */ `
   uniform float uRoadWidth;
 
   void main() {
+    #ifdef WATER_LINE
+    if(uWaterReady>.5&&mappedWater(vWaterXZ)>.5)discard;
+    #endif
     // Soften the ribbon edge so thin lines do not crawl when the camera moves.
     float edge = 1.0 - smoothstep(0.55, 1.0, abs(vAlong));
     vec3 color = uColor;
@@ -354,7 +369,9 @@ export function buildLineMesh(THREE, parts, ctx, options) {
   geometry.setIndex(new THREE.BufferAttribute(indices, 1));
 
   const material = new THREE.ShaderMaterial({
+    defines: options.waterMask ? { WATER_LINE: 1 } : {},
     uniforms: {
+      ...(options.waterMask ? waterMaskUniforms(THREE) : {}),
       uResolution: { value: new THREE.Vector2(1, 1) },
       uWidth: { value: options.width ?? 2 },
       uRoadWidth: { value: options.roadWidth || 0 },
