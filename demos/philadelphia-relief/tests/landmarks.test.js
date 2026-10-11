@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 import { buildLandmarkModels, validateModels, PRIMITIVE_TYPES } from '../src/landmark-models.js';
+import { detailedLandmarks } from '../src/landmark-detail.js';
 
 const dataDir = new URL('../data/', import.meta.url);
 const landmarks = JSON.parse(await readFile(new URL('landmarks.json', dataDir), 'utf8'));
@@ -115,6 +116,22 @@ test('Center City landmarks retain their referenced heights and facade styles', 
   assert.equal(tower.facade, 'glass');
   assert.equal(Math.max(...tower.parts.map((p) => (p.base || 0) + p.h)), 341);
   assert.equal(Math.max(...hall.parts.map((p) => (p.base || 0) + p.h)), 167);
+});
+
+test('City Hall detailing retains its summit and gives the bronze figure solid, finite geometry',()=>{
+  const original=JSON.stringify(models),detailed=detailedLandmarks(models,'city-hall');
+  assert.equal(JSON.stringify(models),original,'architectural studies do not mutate the source model');
+  assert.deepEqual(validateModels(detailed,names),[]);
+  const hall=detailed.models.find(m=>m.id==='city-hall');
+  assert.equal(Math.max(...hall.parts.map(p=>(p.base||0)+p.h+(p.ridge||0))),167);
+  const figure=hall.parts.filter(p=>p.base>=155.7);
+  assert.ok(figure.length>=8,'coat, legs, arms, head and hat form a recognizable silhouette');
+  assert.ok(figure.every(p=>p.finish[3]===2),'bronze sculpture must never acquire façade windows');
+  const packed=buildLandmarkModels({models:[hall]},
+    {anchors:new Map([['Philadelphia City Hall',{lon:0,lat:0}]]),toWorld:()=>[0,0],groundAt:()=>8});
+  assert.ok(packed.position.every(Number.isFinite));
+  assert.ok(packed.vertexCount<5000,'landmark detail stays within a compact geometry budget');
+  assert.ok(hall.parts.filter(p=>p.type==='gable').every(p=>p.finish[3]===2));
 });
 
 

@@ -136,8 +136,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   // Integrate the repeating opening over a pixel footprint instead of sampling
   // fract() at its center. Distant windows retain their average glazing coverage
   // without producing diagonal moire bands as the camera moves.
-  vec2 openingIntegral(vec2 p) {
-    return floor(p) * .62 + clamp(fract(p) - .16, vec2(0.0), vec2(.62));
+  vec2 openingIntegral(vec2 p, vec2 start, vec2 width) {
+    return floor(p) * width + clamp(fract(p) - start, vec2(0.0), width);
   }
 
   void main() {
@@ -160,14 +160,25 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Procedural architectural finishes, illustrative rather than surveyed facades.
     vec3 tangent = normalize(vec3(n.z, 0.0, -n.x) + vec3(0.00001));
     float across = dot(vFacadeXZ, tangent.xz);
-    vec2 bay = vec2(across / mix(2.6, 3.2, vStyle), vStorey / mix(3.2, 3.8, vStyle));
+    float historic=0.0,plain=step(1.5,vFinish.a);
+    #ifdef LANDMARK
+    historic=step(.5,vFinish.a);
+    #endif
+    vec2 pitch=mix(vec2(mix(2.6,3.2,vStyle),mix(3.2,3.8,vStyle)),vec2(6.0,6.8),historic);
+    #ifdef LANDMARK
+    pitch.y=mix(pitch.y,14.0,step(.1,vClock.w)*step(70.0,vStorey));
+    #endif
+    vec2 bay=vec2(across,vStorey)/pitch+vec2(historic*.5,0.0);
     vec2 cell = fract(bay);
     vec2 aa = max(fwidth(bay), vec2(0.015));
     float legible = 1.0 - smoothstep(0.2, 0.5, max(aa.x, aa.y));
-    vec2 opening = (openingIntegral(bay + aa * .5) - openingIntegral(bay - aa * .5)) / aa;
+    vec2 openingStart=mix(vec2(.16),vec2(.3,.2),historic);
+    vec2 openingWidth=mix(vec2(.62),vec2(.4,.6),historic);
+    vec2 opening=(openingIntegral(bay+aa*.5,openingStart,openingWidth)
+      -openingIntegral(bay-aa*.5,openingStart,openingWidth))/aa;
     // Above Nyquist, blend to the exact area average rather than letting the
     // remaining periodic contrast beat against the screen's pixel grid.
-    opening = mix(vec2(.62), opening, legible);
+    opening = mix(openingWidth, opening, legible);
     float window = opening.x * opening.y * (1.0 - roof) * uFacade;
     vec2 buildingAnchor = vWorld.xz - vFacadeXZ;
     float variation = fract(sin(dot(floor(buildingAnchor+.1), vec2(.173,.271))
@@ -181,13 +192,17 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 metal=mix(vec3(.12,.21,.26),vec3(.29,.31,.28),variation);
     vec3 facade = mix(masonry, metal, vStyle);
     facade = mix(facade, vFinish.rgb, min(1.0, vFinish.a));
-    window *= 1.0 - step(1.5, vFinish.a);
+    window *= 1.0-plain;
+    #ifdef LANDMARK
+    window *= 1.0-step(.1,vClock.w)*(1.0-smoothstep(7.0,9.0,abs(vWorld.y-vClock.y)));
+    #endif
     vec2 brickGrid = vec2(across / .32, vStorey / .105);
     brickGrid.x += mod(floor(brickGrid.y), 2.0) * .5;
     vec2 brickAA = max(fwidth(brickGrid), vec2(.025));
     vec2 mortar = 1.0 - smoothstep(vec2(.06), vec2(.06) + brickAA, fract(brickGrid));
     float brickLegible = 1.0 - smoothstep(.2,.7,max(brickAA.x,brickAA.y));
-    facade = mix(facade, facade * .62, max(mortar.x,mortar.y) * brickLegible * (1.0-vStyle) * .5);
+    facade = mix(facade, facade * .62,
+      max(mortar.x,mortar.y) * brickLegible * (1.0-vStyle) * (1.0-plain) * .5);
     // Glazing reflects a broad sky gradient; stone and brick retain a tactile finish.
     float pane = fract(sin(dot(floor(bay), vec2(41.17, 19.43))) * 17371.3);
     float skyBand = .5 + .5 * sin(vRel * 7.0 + n.x * 2.0 + n.z * 3.0);
@@ -195,18 +210,19 @@ const FRAGMENT_SHADER = /* glsl */ `
     glass *= .82 + mix(.5, pane, legible) * .35;
     facade = mix(facade, glass, window);
     // Shallow recess shadow and a restrained sill make masonry openings read in depth.
-    float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible;
+    float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible * (1.0-plain);
     facade *= 1.0 - recess * (1.0-vStyle) * .22;
-    float sill = (1.0-smoothstep(.025,.025+aa.y,abs(cell.y-.15))) * opening.x * legible;
+    float sill=(1.0-smoothstep(.025,.025+aa.y,abs(cell.y-mix(.15,openingStart.y,historic))))
+      * opening.x * legible * (1.0-plain);
     facade = mix(facade, masonry * 1.22, sill * (1.0-vStyle) * .65);
     float door = (1.0 - smoothstep(.15,.18,abs(cell.x-.5)))
-      * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle);
+      * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle) * (1.0-plain);
     facade = mix(facade, vec3(.05,.065,.06), door * .7);
     float mullion = (1.0 - smoothstep(.025, .025 + aa.x, cell.x)) * legible;
     facade = mix(facade, vec3(.40, .43, .41), mullion * vStyle * .48);
-    float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible;
+    float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible * (1.0-plain);
     facade = mix(facade, vec3(0.53, 0.49, 0.40), course * (1.0 - vStyle) * 0.55);
-    float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof);
+    float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof) * (1.0-plain);
     facade = mix(facade, vec3(0.48, 0.45, 0.37), cornice * (1.0 - vStyle));
     vec2 roofCell = fract(vWorld.xz / 18.0);
     vec2 roofAA = max(fwidth(vWorld.xz / 18.0), vec2(0.015));
@@ -217,6 +233,7 @@ const FRAGMENT_SHADER = /* glsl */ `
       * (1.0 - smoothstep(0.2, 0.6, max(roofAA.x, roofAA.y)));
     vec3 roofFinish = uRoof * mix(0.48, 0.82, variation);
     roofFinish = mix(roofFinish, vec3(0.12, 0.14, 0.14), roofDetail);
+    roofFinish=mix(roofFinish,vFinish.rgb*.82,historic);
     base = mix(base, mix(facade, roofFinish, roof), uFacade);
     #ifdef LANDMARK
     if (vClock.w > 0.0 && roof < 0.1) {
@@ -236,7 +253,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     #endif
 
     // Georeferenced photography supplies real rooftop equipment and surface detail.
-    if (roof > 0.75 && uRoofPhotoOn > 0.5) {
+    if (roof > 0.75 && uRoofPhotoOn > 0.5 && historic < .5) {
       vec2 uv0 = (vWorld.xz-uRoofPhotoBounds0.xy)/max(vec2(0.001),uRoofPhotoBounds0.zw-uRoofPhotoBounds0.xy);
       vec2 uv1 = (vWorld.xz-uRoofPhotoBounds1.xy)/max(vec2(0.001),uRoofPhotoBounds1.zw-uRoofPhotoBounds1.xy);
       vec2 uv2 = (vWorld.xz-uRoofPhotoBounds2.xy)/max(vec2(0.001),uRoofPhotoBounds2.zw-uRoofPhotoBounds2.xy);
