@@ -1206,6 +1206,15 @@ cannot leave floating crowns or unlit lamp poles. Tree variations are determinis
 illustration, not a survey of actual trees. Static street buffers rebuild only
 after meaningful movement, zoom or elevation-scale changes.
 
+The three detailed historic landmarks use wider masonry window spacing and
+opaque architectural trim. City Hall's clock stage has taller bays and a clear
+clock surround; slate roofs retain their authored material instead of sampling
+modern rooftop imagery. Its former cylindrical statue is now a compact bronze
+silhouette with a coat, legs, extended arm and broad hat. The figure is roughly
+37 feet tall, matching the [City's conservation account](https://www.phila.gov/press-releases/kenney/city-begins-conservation-of-william-penn-statue-atop-city-hall/),
+and the complete model retains its 167 m summit. These remain schematic studies.
+Ordinary neighborhood buildings retain their existing window grid and roof photos.
+
 Photographic close-up landmark markers are limited to the viewed neighborhood.
 This prevents distant tile-clamped pins appearing over unrelated buildings;
 regional and aircraft views retain their wider range, and exhibit bounds still apply.
@@ -1229,7 +1238,7 @@ viewer. The local recovery page also provides a one-shot photo-render failure ch
 occlusion, failure cleanup and retry with a small generated local GLB tileset.
 It uses no ion account or remote photographic tile requests.
 
-Validation: 475 automated checks, including ten simulated minutes on the real
+Validation: 476 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

@@ -8,7 +8,8 @@ export const DETAIL_NOTES = {
     text: 'Columned porticos, capitals, terraces and roof cornices. Architectural study; dimensions rounded.',
     url: 'https://press.philamuseum.org/new-master-plan-designed-by-frank-gehry-2014/' },
   'city-hall': { size: 440,
-    text: 'Pavilion dormers, stone pilasters and window surrounds. 548 ft overall; ornament simplified.',
+    text: 'Pavilion dormers, stone pilasters, slate roofs and a simplified bronze Penn silhouette. '
+      + '548 ft overall.',
     url: 'https://www.asce.org/about-civil-engineering/history-and-heritage/'
       + 'historic-landmarks/philadelphia-city-hall/' },
 };
@@ -45,6 +46,24 @@ export function detailedLandmarks(doc, id) {
         const [x, z] = rotate(0, 35 + i * 1.4); box(x, z, 72, 1.5, 8 - i * .85, 0, 40);
       }
     } else {
+      const statue=parts.findIndex(p=>p.type==='cylinder'&&p.base===150);
+      if(statue>=0){
+        // The 37 ft bronze figure is a small architectural silhouette: coat,
+        // legs, an extended arm and broad hat, with the original 167 m summit.
+        const bronze=[.19,.23,.20,2],stone=[.62,.62,.55,2];
+        const figure=[
+          {type:'box',x:0,z:-45,w:3.8,d:3.8,h:5.7,base:150,finish:stone},
+          ...[-1,1].map(side=>({type:'box',x:side*.75,z:-45,w:.8,d:1.2,h:4,
+            base:155.7,finish:bronze})),
+          {type:'box',x:0,z:-45,w:3.5,d:2.1,h:5.1,base:158.7,finish:bronze},
+          {type:'box',x:2,z:-45,w:.8,d:.9,h:3.6,base:159.2,finish:bronze},
+          {type:'box',x:-2.3,z:-45,w:2.4,d:.9,h:1,base:162,finish:bronze},
+          {type:'cylinder',x:0,z:-45,r:.9,h:1.4,base:163.8,segs:10,finish:bronze},
+          {type:'cylinder',x:0,z:-45,r:2,h:.35,base:165.2,segs:12,finish:bronze},
+          {type:'cylinder',x:0,z:-45,r:1.05,h:1.45,base:165.55,segs:12,finish:bronze},
+        ];
+        parts.splice(statue,1,...figure);
+      }
       for (const side of [-1, 1]) for (const x of [-52, -40, -28, -16, 16, 28, 40, 52]) {
         box(x, side * 60.3, 1, .75, 24, 3);
         box(side * 60.3, x, .75, 1, 24, 3);
@@ -56,7 +75,11 @@ export function detailedLandmarks(doc, id) {
       }
     }
     for (let i = 0; i < parts.length; i++) {
-      const p = parts[i], ornament = i >= model.parts.length || p.type === 'pyramid';
+      const p = parts[i];if(p.finish)continue;
+      const ornament=i>=model.parts.length||p.type==='pyramid'||p.h<=3;
+      if(p.type==='gable'||id==='city-hall'&&p.type==='pyramid'){
+        p.finish=[.18,.23,.25,2];continue;
+      }
       p.finish = id === 'independence-hall' && !ornament && (p.base || 0) < 14
         ? [.42, .16, .10, 1] : id === 'museum-of-art'
           ? [.67, .57, .39, ornament ? 2 : 1] : [.70, .68, .60, ornament ? 2 : 1];
