@@ -84,7 +84,7 @@ export const CONTROLS = {
   },
   streetLife: {
     k: 'stl', kind: 'enum', values: [1,0], def: 1, group: 'atmosphere', label: 'Street life',
-    hint: 'Simulated traffic, trees, curbs and crossings in Center City and University City.',
+    hint: 'Simulated cars, sidewalk walkers, trees and crossings in central Philadelphia.',
   },
   cityShadows: {
     k: 'csh', kind: 'enum', values: [1,0], def: 1, group: 'light', label: 'Building shadows',

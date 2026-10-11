@@ -1,5 +1,7 @@
 import { createStreetGraph, createTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
+import { createSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
+  from './city-walkers.js?v=philly-2026101001';
 
 // Instanced, illustrative street furniture; the OSM centerlines remain authoritative.
 export function createCityStreets(THREE,{scene,projection,sampleElevation,lighting}){
@@ -30,6 +32,9 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.count=0;group.add(mesh);return mesh;};
   const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*10);
   const signals=make(box,1800);
+  const people=make(box,240*5),heads=make(crown,240);
+  people.name='sidewalk-walkers';heads.name='sidewalk-walker-heads';
+  let sidewalkRoutes=[],walkers=[],walkingTime=0;
   let signalHeads=[];
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   function put(mesh,x,y,z,w,h,d,angle,tint,pitch=0){
@@ -53,18 +58,20 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   const foliage=[0x466544,0x536c3f,0x3d6047,0x60764b];
+  const shirts=[0x536b84,0xa16e53,0x8f535f,0x567d70,0xd3c6a7,0x5e586f];
   function load(){if(loading||graph||retryDelay>0||disposed)return;loading=true;
     request=new AbortController();
     fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
       .then(doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
-        traffic=createTraffic(graph,620);age=10;})
+        traffic=createTraffic(graph,620);sidewalkRoutes=createSidewalkRoutes(graph);age=10;})
       .catch(error=>{if(disposed||error.name==='AbortError')return;
         retryDelay=30;console.warn('Decorative street layer:',error.message);})
       .finally(()=>{loading=false;request=null;});
   }
   function rebuild(x,z,exag,radius){
     street.count=0;trees.count=0;signals.count=0;signalHeads=[];
+    walkers=walkersForRoutes(sidewalkRoutes,x,z,Math.min(radius,600));vehicleView=null;
     const groundAt=(x,z)=>sampleElevation(projection.xToLon(x),projection.zToLat(z))*exag;
     function strip(ax,az,bx,bz,width,height,clearance,tint,depth=0,ay=groundAt(ax,az),by=groundAt(bx,bz)){
       if(street.count>=street.instanceMatrix.count)return;
@@ -163,7 +170,9 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
       const advancing=!reducedMotion&&Number.isFinite(dt)&&dt>0&&state.animationSpeed>0;
-      if(advancing)traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
+      if(advancing){traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
+        walkingTime+=Math.min(dt*state.animationSpeed,.25);}
+      people.visible=heads.visible=pose.dist<1800;
       let signalsChanged=false;
       for(const head of signalHeads){
         const phase=traffic.signal(head.edge);if(phase===head.state)continue;
@@ -176,8 +185,34 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       if(signalsChanged){const attribute=signals.instanceColor;attribute.clearUpdateRanges();
         attribute.addUpdateRange(0,signals.count*3);attribute.needsUpdate=true;}
       if(!advancing&&vehicleView&&vehicleView.x===x&&vehicleView.z===z
-        &&vehicleView.radius===radius&&vehicleView.exaggeration===exaggeration)return;
-      vehicleView={x,z,radius,exaggeration};
+        &&vehicleView.radius===radius&&vehicleView.exaggeration===exaggeration
+        &&vehicleView.dist===pose.dist&&vehicleView.quality===quality)return;
+      vehicleView={x,z,radius,exaggeration,dist:pose.dist,quality};
+      people.count=0;heads.count=0;
+      if(people.visible)for(const walker of walkers){
+        if(heads.count>=(quality==='performance'?90:240))break;
+        const travel=walkerTravel(walkingTime,walker.seed);
+        const p=sidewalkPose(walker.route,walker.offset+travel.distance*walker.direction,walker.direction);
+        if(Math.hypot(p.x-x,p.z-z)>Math.min(600,Math.max(220,pose.dist*.65)))continue;
+        const sin=Math.sin(p.angle),cos=Math.cos(p.angle),size=.9+walker.seed*.2;
+        // Opposite directions keep to separate halves of the sidewalk.
+        p.x-=cos*.2;p.z+=sin*.2;
+        const ground=sampleElevation(projection.xToLon(p.x),projection.zToLat(p.z))*exaggeration+.47;
+        const stride=Math.sin(travel.distance*6+walker.seed*6)*travel.pace;
+        const shirt=shirts[Math.floor(walker.seed*shirts.length)%shirts.length];
+        const part=(side,up,along,w,h,d,tint,pitch=0)=>put(people,
+          p.x+cos*side*size+sin*along*size,ground+up*size,
+          p.z-sin*side*size+cos*along*size,w*size,h*size,d*size,p.angle,tint,pitch);
+        part(0,1.08,0,.43,.62,.25,shirt);
+        for(const side of [-1,1]){
+          const leg=stride*side*.43,arm=-stride*side*.35;
+          part(side*.12,.79-Math.cos(leg)*.39,-Math.sin(leg)*.39,.16,.78,.18,0x333f4a,leg);
+          part(side*.285,1.32-Math.cos(arm)*.28,-Math.sin(arm)*.28,.12,.56,.14,shirt,arm);
+        }
+        const skin=walker.seed<.35?0x875d47:walker.seed<.7?0xb78a64:0xd0ae8c;
+        put(heads,p.x,ground+1.57*size,p.z,.16*size,.19*size,.16*size,p.angle,skin);
+      }
+      uploadInstances(people);uploadInstances(heads);
       vehicles.count=0;
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
@@ -213,6 +248,6 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     },
     dispose(){disposed=true;request?.abort();scene.remove(group);
       box.dispose();crown.dispose();material.dispose();
-      for(const m of [street,trees,vehicles,signals])m.dispose();},
+      for(const m of [street,trees,vehicles,signals,people,heads])m.dispose();},
   };
 }
