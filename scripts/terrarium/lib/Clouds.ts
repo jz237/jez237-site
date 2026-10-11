@@ -771,7 +771,7 @@ void main(){
       Lin *= 1.0 - low * (grey * 0.45 + storm * 0.58);
       Lin += vec3(0.8, 0.85, 1.0) * uFlash * 1.6 * (0.35 + 0.65 * low);
       Lin += vec3(0.72, 0.8, 1.0) * uGlow.w * 2.6 * exp(-length(p - uGlow.xyz) / (size * S) * 3.4);
-      Lin += hover * smoothstep(0.7, 0.3, cov) * (sunCol * 0.03 + uSky * 0.3);
+      Lin += hover * (1.0 - smoothstep(0.3, 0.7, cov)) * (sunCol * 0.03 + uSky * 0.3);
       vec3 alb = mix(vec3(1.0), vec3(0.37, 0.4, 0.47), grey);
       alb = mix(alb, vec3(0.2, 0.215, 0.26), storm * 0.85);
       float a = 1.0 - exp(-dens * sigma * ds);

@@ -147,9 +147,9 @@ float zn = abs(P.z) / max(pr.x, 0.05);
 float onLoft = 1.0 - smoothstep(1.05, 1.3, pow(pow(zn, 4.0) + pow(abs(yn), 4.0), 0.25));
 vec3 nR = normalize(vRestN);
 float up = mix(smoothstep(-0.35, 0.65, nR.y), smoothstep(-0.25, 0.55, yn), onLoft);
-float belly = mix(smoothstep(-0.2, -0.8, nR.y), smoothstep(-0.25, -0.75, yn) * smoothstep(-0.1, -0.6, nR.y), onLoft);
+float belly = mix((1.0 - smoothstep(-0.8, -0.2, nR.y)), (1.0 - smoothstep(-0.75, -0.25, yn)) * (1.0 - smoothstep(-0.6, -0.1, nR.y)), onLoft);
 float headW = smoothstep(9.2, 9.8, P.x);
-float tailW = smoothstep(-0.3, -1.6, P.x);
+float tailW = (1.0 - smoothstep(-1.6, -0.3, P.x));
 // --- scales: one field whose size, shape and overlap follow the body ---
 // Limbs and tail carry large keeled scales overlapping toward the toes and the
 // tail tip; the belly small smooth overlapping ones; the head fine granular
@@ -207,8 +207,8 @@ float lipW = dyM > 0.0 ? 0.085 : 0.1;
 float lipBand = headW * smoothstep(0.8, 0.93, zn) * smoothstep(0.02, 0.04, abs(dyM)) * (1.0 - smoothstep(lipW - 0.03, lipW, abs(dyM))) * smoothstep(10.2, 10.45, P.x);
 float lcOff = dyM > 0.0 ? 0.0 : 0.5;
 float lc = fract(P.x * 5.6 + lcOff), lc2 = fract((P.x + 0.004) * 5.6 + lcOff);
-float plate = smoothstep(0.0, 0.12, lc) * smoothstep(1.0, 0.88, lc);
-float plate2 = smoothstep(0.0, 0.12, lc2) * smoothstep(1.0, 0.88, lc2);
+float plate = smoothstep(0.0, 0.12, lc) * (1.0 - smoothstep(0.88, 1.0, lc));
+float plate2 = smoothstep(0.0, 0.12, lc2) * (1.0 - smoothstep(0.88, 1.0, lc2));
 sH = mix(sH, plate * 0.9, lipBand);
 sGrad = mix(sGrad, vec3((plate2 - plate) / 0.004 * 0.9, 0.0, 0.0), lipBand);
 // the ear: a deep, dark opening behind the corner of the mouth
@@ -281,7 +281,7 @@ col = mix(col, cCream * (0.78 + 0.22 * plate), lipBand * 0.42);
 // cream belly, faint grey barring
 col = mix(col, cBelly * (0.9 + 0.2 * mott) * (1.0 - 0.12 * smoothstep(0.4, 0.9, sin(P.x * 2.2))), belly);
 // beard: orange-tan, turning sooty black when displayed
-float beard = smoothstep(8.7, 9.3, P.x) * (1.0 - smoothstep(10.8, 11.3, P.x)) * smoothstep(-0.15, -0.6, yn);
+float beard = smoothstep(8.7, 9.3, P.x) * (1.0 - smoothstep(10.8, 11.3, P.x)) * (1.0 - smoothstep(-0.6, -0.15, yn));
 float beardBlack = max(uDisplay, uBeardDark);
 vec3 cBeard = mix(mix(cOrange * 0.8, cBelly * 0.8, 0.45), vec3(0.02, 0.018, 0.016), beardBlack);
 col = mix(col, cBeard, beard * (0.6 + 0.4 * beardBlack));
@@ -322,7 +322,7 @@ col = mix(col, vec3(0.025, 0.016, 0.012), ear * 0.92);
 // Claws and mouth.
 vec3 claw = uPal[7];
 col = mix(col, claw, smoothstep(0.25, 0.6, vAux.y));
-float deep = smoothstep(0.4, 0.15, zn);
+float deep = (1.0 - smoothstep(0.15, 0.4, zn));
 col = mix(col, mix(vec3(0.07, 0.035, 0.03), vec3(0.5, 0.19, 0.16), deep), vAux.z);
 // Dust on the dry skin.
 col = mix(col, vec3(0.45, 0.37, 0.27), uDust * up * (0.5 + 0.5 * lzNoise(P * 6.0)) * (1.0 - uWet));
@@ -399,7 +399,7 @@ float ri = (ringR - 1.0) * 9.0;
 float ang = atan(v - c, h);
 float nAround = 26.0 + floor(max(ri, 0.0)) * 3.0;
 vec2 rc = vec2(fract(ri), fract(ang / 6.2832 * nAround + floor(ri) * 0.5));
-float bead = smoothstep(0.62, 0.25, length(rc - 0.5));
+float bead = (1.0 - smoothstep(0.25, 0.62, length(rc - 0.5)));
 // dark at the margin, then rings of orange-brown scales fading to the face's tan
 vec3 lid = mix(vec3(0.16, 0.07, 0.025), vec3(0.42, 0.19, 0.055), smoothstep(1.0, 1.35, ringR));
 lid = mix(lid, vec3(0.36, 0.2, 0.07), smoothstep(1.6, 2.6, ringR));

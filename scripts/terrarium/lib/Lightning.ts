@@ -87,7 +87,7 @@ export class Lightning {
       vertexShader: /* glsl */ `attribute vec2 aAux; varying vec2 vAux; uniform float uScale;
 void main(){ vAux = aAux; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = max(1.5, 0.0022 * uScale / -mv.z * (0.6 + aAux.x)); }`,
       fragmentShader: /* glsl */ `varying vec2 vAux;
-void main(){ float r = length(gl_PointCoord - 0.5) * 2.0; float a = smoothstep(1.0, 0.0, r) * vAux.x;
+void main(){ float r = length(gl_PointCoord - 0.5) * 2.0; float a = (1.0 - smoothstep(0.0, 1.0, r)) * vAux.x;
   vec3 hot = mix(vec3(1.0, 0.25, 0.05), vec3(1.0, 0.95, 0.85), vAux.x * vAux.x);
   vec3 col = mix(hot, vec3(0.55, 0.75, 1.0), vAux.y);
   gl_FragColor = vec4(col * a * 3.0, 0.0); }`,

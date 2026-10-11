@@ -80,8 +80,8 @@ void main(){
   float r = length(c) * 2.0;
   vec4 n = texture(tNoise, vec3(c * 0.9 + vAux.z, uTime * 0.05 + vAux.z * 3.0));
   // cauliflower: a disc eroded by billows
-  float edge = smoothstep(1.0, 0.35, r + (n.r - 0.5) * 0.7);
-  float a = edge * (0.55 + 0.45 * n.g) * vAux.y;
+  float edge = 1.0 - smoothstep(0.35, 1.0, r + (n.r - 0.5) * 0.7);
+  float a = clamp(edge * (0.55 + 0.45 * n.g) * vAux.y, 0.0, 1.0);
   float lit = 0.6 + 0.4 * (0.5 - c.y);
   vec3 col = vec3(0.95, 0.96, 0.98) * (uKeyColor * 0.38 * lit + uAmbient * 0.9 + vec3(0.8, 0.85, 1.0) * uFlash * 0.6);
   gl_FragColor = vec4(col * a, a);
@@ -171,10 +171,12 @@ uniform vec4 uFogBox; uniform float uUseDepth, uFlash, uTime; uniform int uSteps
 uniform mat4 uInvProj, uCamWorld; uniform vec2 uResolution;
 uniform vec3 uKeyPos, uKeyColor, uAmbient, uDrift0, uDrift1, uBoxMin, uBoxMax;
 varying vec3 vW;
-float hg(float c, float g){ float g2 = g * g; return (1.0 - g2) / (12.566 * pow(1.0 + g2 - 2.0 * g * c, 1.5)); }
+// (written to stay finite on every GPU: phone GPUs turned the fog into black holes)
+float hg(float c, float g){ float g2 = g * g; return (1.0 - g2) / (12.566 * pow(max(1.0 + g2 - 2.0 * g * c, 1e-4), 1.5)); }
 float ign(vec2 p){ return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715)))); }
 vec2 boxHit(vec3 ro, vec3 rd){
-  vec3 inv = 1.0 / rd;
+  vec3 safe = vec3(abs(rd.x) < 1e-5 ? 1e-5 : rd.x, abs(rd.y) < 1e-5 ? 1e-5 : rd.y, abs(rd.z) < 1e-5 ? 1e-5 : rd.z);
+  vec3 inv = 1.0 / safe;
   vec3 a = (uBoxMin - ro) * inv, b = (uBoxMax - ro) * inv;
   vec3 lo = min(a, b), hi = max(a, b);
   return vec2(max(max(lo.x, lo.y), lo.z), min(min(hi.x, hi.y), hi.z));
@@ -190,7 +192,8 @@ float fogDensity(vec3 p, out float billow){
   float amp = clamp(H, 0.008, 0.1) * (0.55 + 0.45 * billow);
   float topN = f.g + ((nb.r - 0.5) * 1.1 + (nd.r - 0.5) * 0.18) * amp;
   float hf = clamp((p.y - f.b) / max(H, 1e-3), 0.0, 1.0);
-  float prof = smoothstep(topN + 0.0015, topN - max(0.0035, 0.3 * H), p.y) * mix(1.22, 0.85, hf);
+  // (smoothstep with its edges reversed is undefined in GLSL; some GPUs return garbage)
+  float prof = (1.0 - smoothstep(topN - max(0.0035, 0.3 * H), topN + 0.0015, p.y)) * mix(1.22, 0.85, hf);
   // settled fog erodes softly (perlin); fresh fog is lumpy (worley); thin mist goes to tendrils
   float m = mix(nb.a, nb.g, billow) * 0.7 + nd.b * 0.3;
   return D * prof * mix(0.15 + 0.95 * m, 0.72 + 0.38 * m, smoothstep(0.35, 1.0, D));
@@ -234,6 +237,7 @@ void main(){
     t += ds;
   }
   float alpha = 1.0 - T;
-  if (alpha < 0.002) discard;
-  gl_FragColor = vec4(col, alpha);
+  // anything not a finite colour shows the scene behind instead of a hole
+  if (!(alpha >= 0.002 && alpha <= 1.0) || any(isnan(col)) || any(isinf(col))) discard;
+  gl_FragColor = vec4(clamp(col, 0.0, 64.0), alpha);
 }`;

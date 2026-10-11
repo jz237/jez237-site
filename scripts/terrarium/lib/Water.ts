@@ -111,7 +111,7 @@ export class Water {
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
       vertexShader: `attribute float aLife; varying float vL; uniform float uScale;
 void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = uScale * (0.004 + 0.012 * (1.0 - aLife)) / -mv.z; }`,
-      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.0, length(c)); gl_FragColor = vec4(vec3(0.85, 0.8, 0.72) * a * vL * 0.18 * uLight, 0.0); }`,
+      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = (1.0 - smoothstep(0.0, 0.5, length(c))); gl_FragColor = vec4(vec3(0.85, 0.8, 0.72) * a * vL * 0.18 * uLight, 0.0); }`,
     }));
     this.spray.frustumCulled = false;
     this.spray.layers.set(1);
@@ -128,7 +128,7 @@ void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Pos
       uniforms: {uScale: {value: 900}, uLight: {value: 1}},
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
       vertexShader: `attribute float aLife; varying float vL; uniform float uScale; void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = max(1.5, 0.0028 * uScale / -mv.z); }`,
-      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = smoothstep(0.5, 0.15, length(c)); float glint = smoothstep(0.2, 0.0, length(c - vec2(-0.12, -0.12))); gl_FragColor = vec4(vec3(0.75, 0.78, 0.8) * (a * 0.5 + glint) * vL * uLight, 0.0); }`,
+      fragmentShader: `uniform float uLight; varying float vL; void main(){ vec2 c = gl_PointCoord - 0.5; float a = (1.0 - smoothstep(0.15, 0.5, length(c))); float glint = (1.0 - smoothstep(0.0, 0.2, length(c - vec2(-0.12, -0.12)))); gl_FragColor = vec4(vec3(0.75, 0.78, 0.8) * (a * 0.5 + glint) * vL * uLight, 0.0); }`,
     }));
     this.dripPoints.frustumCulled = false;
     this.dripPoints.layers.set(1);
@@ -263,13 +263,13 @@ void main(){
   vec3 H = normalize(uKeyDir + V);
   float spec = pow(max(dot(n, H), 0.0), 700.0) * 30.0 + pow(max(dot(n, H), 0.0), 90.0) * 0.6;
   float foamD = distance(vW.xz, uImpact.xz);
-  float foam = smoothstep(0.035, 0.0, foamD) * smoothstep(0.35, 0.75, wn(vW.xz * 300.0 + vec2(uTime * 0.6, -uTime)) + 0.3 * smoothstep(0.03, 0.0, foamD));
+  float foam = (1.0 - smoothstep(0.0, 0.035, foamD)) * smoothstep(0.35, 0.75, wn(vW.xz * 300.0 + vec2(uTime * 0.6, -uTime)) + 0.3 * (1.0 - smoothstep(0.0, 0.03, foamD)));
   vec3 col = below * (1.0 - F) + refl * F + uKeyColor * spec + foam * vec3(0.7, 0.68, 0.62) * 0.6 + vec3(0.8, 0.85, 1.0) * uFlash * F * 2.0;
   // ripple faces tilted toward the lamplit lid catch its glow
   vec3 Rv = reflect(-V, n);
   col += uKeyColor * 0.35 * pow(smoothstep(0.55, 1.0, Rv.y), 3.0) * (1.0 - F * 0.5);
   // a bright wet line where the water meets the shore
-  col += vec3(0.1, 0.1, 0.09) * smoothstep(0.0035, 0.0008, depth) * (0.4 + 0.6 * F) * uAmbient;
+  col += vec3(0.1, 0.1, 0.09) * (1.0 - smoothstep(0.0008, 0.0035, depth)) * (0.4 + 0.6 * F) * uAmbient;
   float edge = smoothstep(0.0, 0.002, depth);
   gl_FragColor = vec4(col, edge);
 }`,
@@ -326,7 +326,7 @@ void main(){
   vec2 fp = vec2(u * 9.0, v * 26.0 - uTime * speed * 26.0);
   float streak = wn(vec2(u * 26.0, v * 7.0 - uTime * speed * 7.0)) * 0.6 + wn(fp) * 0.4;
   float churn = wn(vec2(u * 40.0, v * 60.0 - uTime * speed * 60.0));
-  float edge = smoothstep(0.0, 0.18, u) * smoothstep(1.0, 0.82, u);
+  float edge = smoothstep(0.0, 0.18, u) * (1.0 - smoothstep(0.82, 1.0, u));
   float aer = mix(0.25, 0.85, steep);
   float foam = smoothstep(0.45 - aer * 0.3, 0.9, streak * 0.7 + churn * 0.45) * edge;
   vec3 n = normalize(vN * (gl_FrontFacing ? 1.0 : -1.0));
@@ -340,7 +340,7 @@ void main(){
   col += uKeyColor * spec * 0.6 + F * 0.15;
   // fade in at the source, out into the pool
   float a = edge * smoothstep(0.0, 0.04, vFlow.y) * (0.55 + 0.45 * foam);
-  a *= smoothstep(1.0, 0.94, vFlow.y) * 0.6 + 0.4;
+  a *= (1.0 - smoothstep(0.94, 1.0, vFlow.y)) * 0.6 + 0.4;
   gl_FragColor = vec4(col, a);
 }`,
     });
