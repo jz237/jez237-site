@@ -11,6 +11,7 @@ import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?
 import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092201';
 import { createMapLifecycle } from './map-lifecycle.js?v=philly-2026101001';
+import { createWaterMask } from './water-mask.js?v=philly-2026101001';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092204';
 import { createCameraLayer } from './camera-layer.js?v=philly-2026092204';
 import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092204';
@@ -380,6 +381,16 @@ async function boot() {
   overlayRoot.name = 'overlays';
   scene.add(overlayRoot);
   const overlays = buildOverlays(data, { projection, sampleElevation }, overlayRoot);
+  const waterEntry=overlays.areas.find(entry=>entry.kind==='water');
+  let wakeWater=()=>{};
+  const waterSurface=waterEntry?createWaterMask(THREE,{entries:collectRings(data.water),projection,
+    source:waterEntry.material.uniforms,onReady:()=>wakeWater()}):null;
+  if(waterSurface){
+    Object.assign(terrain.uniforms,waterSurface.uniforms);
+    for(const entry of overlays.lines)if(entry.material.defines.WATER_LINE){
+      Object.assign(entry.material.uniforms,waterSurface.uniforms);
+    }
+  }
 
   // Flood hazard data is fetched the first time its layer is switched on:
   // FEMA zones and NOAA sea-level scenarios are each a packed binary plus a
@@ -970,6 +981,7 @@ async function boot() {
     else frameTicket = requestAnimationFrame(tick);
   }
   function wake() { lastInteraction = performance.now(); queueFrame(); }
+  wakeWater=wake;
   const wakeEvents = ['pointerdown', 'wheel', 'keydown', 'input', 'change', 'click'];
   for (const type of wakeEvents) document.addEventListener(type, wake, { passive: true });
   const wakeState = store.subscribe(wake);
@@ -1010,8 +1022,7 @@ async function boot() {
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
     // The illustrative river tint belongs to the regional miniature. At street
-    // scale, return to the photograph unless the user explicitly enables water;
-    // a forced flat sheet intersects the DEM and exposes broad diagonal patches.
+    // scale, keep the captured water unless the user enables its mapped tint.
     const modelWater = state.diorama && state.layers.terrain && state.layers.structures
       && state.era === 'present' && state.compareMode === 'off' ? miniature : 0;
     const exaggeration = displayExaggeration(state, now.dist);
@@ -1105,7 +1116,8 @@ async function boot() {
       u.uLift.value = lift;
       u.uNear.value = camera.near;
       if (entry.kind === 'shoreline') {
-        entry.mesh.visible = state.layers.water || modelWater > .01;
+        entry.mesh.visible = !waterSurface?.uniforms.uWaterReady.value
+          && (state.layers.water || modelWater > .01);
         u.uOpacity.value = state.layers.water ? .3 : modelWater * .36;
         u.uLift.value = Math.min(3,lift*.15) + .1;
       }
@@ -1119,12 +1131,14 @@ async function boot() {
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
       if (entry.kind === 'water') {
-        entry.mesh.visible = state.layers.water || modelWater > .01;
+        entry.mesh.visible = !waterSurface?.uniforms.uWaterReady.value
+          && (state.layers.water || modelWater > .01);
         u.uOpacity.value = state.layers.water ? 1 : modelWater * .86;
         u.uSunDir.value.copy(sunDir);
         u.uTime.value = elapsed;
       }
     }
+    waterSurface?.update(now);
 
     if (structures) {
       structures.setRoofImagery(imageryDetail.roofTiles(now),
@@ -1255,7 +1269,7 @@ async function boot() {
     terrain.dispose();
     terrain = createTerrain(THREE, {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
-      reefImagery: data.reefImagery, quality, lighting: cityLighting });
+      reefImagery: data.reefImagery, quality, lighting: cityLighting, water:waterSurface });
     bathymetry?.setTerrain(terrain);
     cityFeatures?.refresh();
     imageryDetail.attachTerrain(terrain);
@@ -1293,7 +1307,7 @@ async function boot() {
     aircraftLayer.dispose();
     cityFeatures?.dispose();
     bathymetry.dispose();
-    streetLife.dispose(); cityLighting.dispose(); postfx.dispose();
+    streetLife.dispose(); cityLighting.dispose(); postfx.dispose();waterSurface?.dispose();
     mapLayers.dispose();
     photographic.dispose();
     cameraLayer.dispose();
@@ -1385,6 +1399,7 @@ function buildOverlays(data, ctx, root) {
         opacity: rank === 'major' ? 1 : 0.8,
         renderOrder: 12,
         name: `water-${rank}`,
+        waterMask: true,
       }), 'water', `water-${rank}`);
     }
   }
