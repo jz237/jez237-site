@@ -346,7 +346,9 @@ const FRAGMENT_SHADER = /* glsl */ `
     color = mix(color, fogColor, clamp(fog, 0.0, 1.0));
 
     // Opaque material: alpha is a reflection mask consumed by the post pass.
-    gl_FragColor = vec4(color, 1.0-window*vStyle*.7*(1.0-roof));
+    // Subpixel panes use the stable environment reflection already shaded above;
+    // reserve screen-space ray tracing for individually visible nearby windows.
+    gl_FragColor = vec4(color, 1.0-window*vStyle*.7*(1.0-roof)*legible);
   }
 `;
 

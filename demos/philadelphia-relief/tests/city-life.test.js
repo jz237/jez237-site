@@ -94,7 +94,15 @@ test('unchanged street furniture is retained, while a new view radius rebuilds i
     streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
     const furniture=streets.group.children[0],vehicles=streets.group.children[2];
     assert.ok(furniture.count>0);
-    assert.ok(vehicles.instanceMatrix.count>=620*8,'complete vehicles fit the simulation budget');
+    assert.ok(vehicles.instanceMatrix.count>=620*10,'complete vehicles fit the simulation budget');
+    assert.equal(vehicles.count%10,0,'cars include wheels, headlamps and tail lamps');
+    const matrix=new THREE.Matrix4(),position=new THREE.Vector3(),scale=new THREE.Vector3();
+    const rotation=new THREE.Quaternion();
+    for(let car=0;car<vehicles.count;car+=10)for(let wheel=2;wheel<6;wheel++){
+      vehicles.getMatrixAt(car+wheel,matrix);matrix.decompose(position,rotation,scale);
+      const bottom=position.y-scale.y/2;
+      assert.ok(bottom>=4&&bottom<4.05,'tires contact the sampled road surface');
+    }
     assert.equal(vehicles.instanceMatrix.updateRanges[0].count,vehicles.count*16);
     assert.equal(vehicles.instanceColor.updateRanges[0].count,vehicles.count*3);
     const version=furniture.instanceMatrix.version;
