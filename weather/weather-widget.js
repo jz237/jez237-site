@@ -4,10 +4,15 @@
   const STORAGE_KEY = 'jez237-weather-place-v1';
   const CACHE_KEY_PREFIX = 'jez237-weather-cache-v2:';
   const details = window.WeatherDetails;
+  const rounded = value => { const n = details.number(value); return n == null ? null : Math.round(n); };
+  const windText = value => value == null ? 'Wind unavailable' : `${value} mph`;
   details.almanac();
   let mapLayer = 'radar';
   const REFRESH_INTERVAL = 10 * 60 * 1000;
   let displayedBundle = null;
+  let unavailablePlace = null;
+  let expiredSavedWeather = false;
+  let cacheExpiry;
   let requestVersion = 0;
   let loading = false;
   let lastAttempt = 0;
@@ -39,11 +44,12 @@
   };
 
   function weatherLabel(code) {
+    if (code == null) return ['🌡️', 'Forecast'];
     return codeMap[Number(code)] || ['🌡️', 'Forecast'];
   }
 
   function conditionClass(code, rain = 0, wind = 0) {
-    const n = Number(code);
+    const n = details.number(code);
     if ([95, 96, 99].includes(n) || wind >= 22) return 'stormy';
     if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(n) || rain >= 55) return 'rainy';
     if ([71, 73, 75].includes(n)) return 'snowy';
@@ -92,12 +98,13 @@
     if (/partly|mostly sunny/.test(value)) return 2;
     if (/sunny|clear/.test(value)) return 0;
     if (/cloud|overcast/.test(value)) return 3;
-    return 3;
+    return null;
   }
 
   function parseWindSpeed(value) {
-    const nums = String(value || '').match(/\d+/g)?.map(Number) || [];
-    return nums.length ? Math.max(...nums) : 0;
+    if (/^calm$/i.test(String(value).trim())) return 0;
+    const nums = String(value || '').match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
+    return nums.length ? Math.max(...nums) : null;
   }
 
   function fmtDate(ts) {
@@ -129,7 +136,15 @@
   function loadWeatherCache(place) {
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey(place)) || 'null');
-      if (cached?.weather?.current) return { ...cached, stale: true };
+      if (!details.savedWeatherIsRecent(cached)) {
+        if (cached) {
+          expiredSavedWeather = Date.now() - details.savedWeatherTimestamp(cached) > details.WEATHER_CACHE_MAX_AGE;
+          localStorage.removeItem(cacheKey(place));
+        }
+        return null;
+      }
+      // Old backup entries contain estimated cloud cover and duplicated wind gusts.
+      if (cached?.weather?.current && cached.source !== 'NWS backup' && cached.weather.source !== 'NWS backup') return { ...cached, stale: true };
     } catch (_) {}
     return null;
   }
@@ -186,19 +201,20 @@
     const dates = [...new Set(dailyPeriods.map(p => p.startTime.slice(0, 10)))].slice(0, 6);
     const days = dates.map(date => details.forecastDay(date, {}, dailyPeriods));
     return {
-      source: 'NWS backup',
+      source: 'NWS hourly forecast',
+      forecastOnly: true,
       current: {
         time: currentPeriod.startTime,
         temperature_2m: details.temperature(currentPeriod),
         apparent_temperature: null,
         weather_code: codeFromForecast(currentPeriod.shortForecast),
-        cloud_cover: /cloud|overcast/i.test(currentPeriod.shortForecast || '') ? 80 : 35,
+        cloud_cover: null,
         pressure_msl: null,
         relative_humidity_2m: null,
         dew_point_2m: null,
         wind_speed_10m: parseWindSpeed(currentPeriod.windSpeed),
         wind_direction_10m: currentPeriod.windDirection,
-        wind_gusts_10m: parseWindSpeed(currentPeriod.windSpeed)
+        wind_gusts_10m: null
       },
       hourly: {
         time: hourlyPeriods.map(p => p.startTime),
@@ -206,11 +222,11 @@
         apparent_temperature: hourlyPeriods.map(() => null),
         precipitation_probability: hourlyPeriods.map(p => p.probabilityOfPrecipitation?.value ?? null),
         weather_code: hourlyPeriods.map(p => codeFromForecast(p.shortForecast)),
-        cloud_cover: hourlyPeriods.map(p => /cloud|overcast/i.test(p.shortForecast || '') ? 80 : 35),
+        cloud_cover: hourlyPeriods.map(() => null),
         pressure_msl: hourlyPeriods.map(() => null),
         wind_speed_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed)),
         wind_direction_10m: hourlyPeriods.map(p => p.windDirection),
-        wind_gusts_10m: hourlyPeriods.map(p => parseWindSpeed(p.windSpeed))
+        wind_gusts_10m: hourlyPeriods.map(() => null)
       },
       daily: {
         time: dates,
@@ -312,11 +328,13 @@
     if (hour.rain >= 55) notes.push('rain window');
     if (hour.wind >= 15 || hour.gust >= 22) notes.push('windy');
     if (hour.cloud >= 70) notes.push('low light');
-    if (hour.rain < 25 && hour.wind < 12) notes.push('fishable');
+    if (hour.rain != null && hour.wind != null && hour.rain < 25 && hour.wind < 12) notes.push('fishable');
     return notes.slice(0, 2).join(' · ') || 'steady';
   }
 
   function fishingScore(hour) {
+    if ([hour.rain, hour.wind, hour.gust, hour.cloud].some(value => value == null)
+      || hour.pressureTrend === 'unknown' || !hour.hasSunTimes) return null;
     let score = 5;
     if (hour.cloud >= 60) score += 1;
     if (hour.rain > 0 && hour.rain <= 45) score += 1;
@@ -363,8 +381,8 @@
     const vals = aq.hourly?.[key] || [];
     const selected = [];
     times.forEach((ts, i) => {
-      const val = Number(vals[i]);
-      if (!Number.isFinite(val)) return;
+      const val = details.number(vals[i]);
+      if (val == null) return;
       const dateKey = localDateKey(ts, TZ);
       const hour = localHour(ts, TZ);
       const tomorrow = new Date(`${targetDate}T12:00:00`);
@@ -393,9 +411,9 @@
     const remainingIndexes = daytimeIndexes.filter(i => localHour(hourly.time?.[i], TZ) >= Math.min(18, nowHour));
     const indexes = remainingIndexes.length ? remainingIndexes : daytimeIndexes;
     const codes = indexes.map(i => hourly.weather_code?.[i]).filter(v => v != null);
-    const clouds = indexes.map(i => Number(hourly.cloud_cover?.[i])).filter(Number.isFinite);
-    const rainChances = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
-    const winds = indexes.map(i => Number(hourly.wind_speed_10m?.[i])).filter(Number.isFinite);
+    const clouds = indexes.map(i => details.number(hourly.cloud_cover?.[i])).filter(v => v != null);
+    const rainChances = indexes.map(i => details.number(hourly.precipitation_probability?.[i])).filter(v => v != null);
+    const winds = indexes.map(i => details.number(hourly.wind_speed_10m?.[i])).filter(v => v != null);
     const code = codes.length ? codes[Math.floor(codes.length / 2)] : (current.weather_code ?? daily.weather_code?.[0]);
     const [, label] = weatherLabel(code);
     const hi = daily.temperature_2m_max?.[0] == null ? null : Math.round(daily.temperature_2m_max[0]);
@@ -465,11 +483,11 @@
   function daytimeOutlookForDate(hourly, daily, idx) {
     const date = daily.time?.[idx];
     const indexes = (hourly.time || []).map((ts, i) => localDateKey(ts, TZ) === date && localHour(ts, TZ) >= 6 && localHour(ts, TZ) <= 18 ? i : -1).filter(i => i >= 0);
-    const rainVals = indexes.map(i => Number(hourly.precipitation_probability?.[i])).filter(Number.isFinite);
-    const rain = rainVals.length ? Math.round(Math.max(...rainVals)) : Math.round(daily.precipitation_probability_max?.[idx] ?? 0);
+    const rainVals = indexes.map(i => details.number(hourly.precipitation_probability?.[i])).filter(v => v != null);
+    const rain = rainVals.length ? Math.round(Math.max(...rainVals)) : rounded(daily.precipitation_probability_max?.[idx]);
     const wetIndexes = indexes.filter(i => Number(hourly.precipitation_probability?.[i] || 0) >= 30 && [51,53,55,61,63,65,80,81,82,95,96,99].includes(Number(hourly.weather_code?.[i])));
     const codeSource = wetIndexes.length ? wetIndexes : indexes.filter(i => localHour(hourly.time?.[i], TZ) >= 10 && localHour(hourly.time?.[i], TZ) <= 16);
-    const codes = (codeSource.length ? codeSource : indexes).map(i => Number(hourly.weather_code?.[i])).filter(Number.isFinite);
+    const codes = (codeSource.length ? codeSource : indexes).map(i => details.number(hourly.weather_code?.[i])).filter(v => v != null);
     const code = codes.length ? codes[Math.floor(codes.length / 2)] : daily.weather_code?.[idx];
     return { code, rain };
   }
@@ -481,6 +499,7 @@
 
   async function updatePlace(placeOrZip, { background = false } = {}) {
     if (background && loading) return;
+    expireSavedWeather();
     const version = ++requestVersion;
     loading = true;
     lastAttempt = Date.now();
@@ -501,12 +520,13 @@
     } catch (err) {
       if (version !== requestVersion) return;
       const samePlace = nextPlace && displayedBundle && cacheKey(nextPlace) === cacheKey(displayedBundle.place);
-      const cached = samePlace ? displayedBundle : nextPlace && loadWeatherCache(nextPlace);
+      expireSavedWeather();
+      const cached = samePlace && displayedBundle ? displayedBundle : nextPlace && loadWeatherCache(nextPlace);
       if (cached) render({ ...cached, stale: true, error: 'Refresh failed. Showing the last available forecast.' });
       else if (displayedBundle) {
         root.querySelector('#weather-status').textContent = `Could not update location. Still showing ${displayedBundle.place.name}. ${err?.message || ''}`;
       } else {
-        root.innerHTML = '<div class="weather-dashboard-card weather-loading">Weather is temporarily unavailable. <button type="button" data-weather-refresh>Try again</button></div>';
+        renderUnavailable(nextPlace || unavailablePlace || loadSavedPlace());
       }
     } finally {
       if (version === requestVersion) {
@@ -518,6 +538,7 @@
   }
 
   function updateFreshness() {
+    expireSavedWeather();
     if (!displayedBundle) return;
     const label = root.querySelector('#weather-freshness');
     if (label) label.textContent = `${displayedBundle.stale ? 'Cached · last updated' : 'Updated'} ${details.age(displayedBundle.fetchedAt || displayedBundle.cachedAt)}`;
@@ -528,7 +549,39 @@
     if (document.hidden || loading || Date.now() - lastAttempt < REFRESH_INTERVAL) return;
     // Wait while someone is typing, exploring the graph, or reading a popup.
     if (document.activeElement?.matches('#weather-zip-input, #weather-chart-hour') || !forecastPopup.hidden) return;
-    updatePlace(displayedBundle?.place || loadSavedPlace(), { background: true });
+    updatePlace(displayedBundle?.place || unavailablePlace || loadSavedPlace(), { background: true });
+  }
+
+  function renderUnavailable(place) {
+    const active = document.activeElement;
+    const hadFocus = root.contains(active) || forecastPopup.contains(active);
+    const typedZip = active?.id === 'weather-zip-input' ? active.value : null;
+    const focusedId = active?.id;
+    closeForecast();
+    clearTimeout(cacheExpiry);
+    displayedBundle = null;
+    unavailablePlace = place;
+    root.innerHTML = `<div class="weather-dashboard-card" id="weather-now">
+      <h2>Local forecast unavailable</h2>
+      <p id="weather-status" role="status">${expiredSavedWeather ? 'The saved forecast is more than 24 hours old and has been removed. ' : ''}Weather is temporarily unavailable. Try refreshing or choose another ZIP code.</p>
+      <form class="weather-location-form" id="weather-location-form">
+        <label for="weather-zip-input">ZIP forecast</label>
+        <input id="weather-zip-input" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="19111" value="${escapeHtml(typedZip ?? place?.zip ?? '')}">
+        <button type="submit" id="weather-update-location">Update</button>
+        <button type="button" id="weather-reset-location" data-weather-reset="true">Philly</button>
+      </form>
+      <div class="weather-refresh-row"><button id="weather-refresh" type="button" data-weather-refresh ${loading ? 'disabled' : ''}>${loading ? 'Refreshing…' : 'Try again'}</button></div>
+      <p class="weather-detail-note">Use the <a href="https://www.weather.gov/" target="_blank" rel="noopener noreferrer">National Weather Service</a> for the latest local forecast and alerts.</p>
+    </div>`;
+    if (hadFocus) (document.getElementById(focusedId) || root.querySelector('#weather-refresh'))?.focus({preventScroll:true});
+  }
+
+  function expireSavedWeather() {
+    if (!displayedBundle || details.savedWeatherIsRecent(displayedBundle)) return;
+    const place = displayedBundle.place;
+    expiredSavedWeather = true;
+    try { localStorage.removeItem(cacheKey(place)); } catch (_) {}
+    renderUnavailable(place);
   }
 
   // Mount outside the scrolling forecast strip so the description is never clipped.
@@ -619,28 +672,35 @@
   }, true);
 
   function render(bundle) {
+    if (!details.savedWeatherIsRecent(bundle)) { expiredSavedWeather = true; renderUnavailable(bundle.place); return; }
     const { weather, aq, fetchedAt, todayPeriod, tonightPeriod, forecastPeriods = [], alerts, place, source, stale, cachedAt, error } = bundle;
     const samePlace = displayedBundle && cacheKey(displayedBundle.place) === cacheKey(place);
     const existingMap = samePlace && root.querySelector('.weather-radar-embed iframe');
     const focusedId = samePlace && document.activeElement?.id;
     const scrollPositions = samePlace ? [...root.querySelectorAll('.weather-chart-scroll, .weather-five-day, .weather-hourly-strip')].map(el => el.scrollLeft) : [];
     displayedBundle = bundle;
+    unavailablePlace = null;
+    expiredSavedWeather = false;
+    clearTimeout(cacheExpiry);
+    cacheExpiry = setTimeout(expireSavedWeather, Math.max(0, details.savedWeatherTimestamp(bundle) + details.WEATHER_CACHE_MAX_AGE - Date.now()) + 1);
     TZ = bundle.timezone || weather.timezone || 'America/New_York';
     const zoneLabel = new Intl.DateTimeFormat('en-US', {timeZone: TZ, timeZoneName: 'short'}).formatToParts(new Date()).find(p => p.type === 'timeZoneName')?.value || TZ;
     closeForecast();
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
-    const [icon, label] = weatherLabel(current.weather_code ?? daily.weather_code?.[0]);
+    const [icon, label] = weatherLabel(current.weather_code);
     const today = details.forecastDay(localDateKey(Date.now(), TZ), daily, forecastPeriods);
     const hi = today.high;
     const lo = today.low;
-    const temp = Math.round(current.temperature_2m ?? hi);
+    const nightOnly = today.source === 'NWS' && lo != null && !today.periods.some(p => p.isDaytime === true);
+    const nightName = today.periods.findLast(p => p.isDaytime === false)?.name || 'Overnight';
+    const temp = rounded(current.temperature_2m);
     const feels = details.number(current.apparent_temperature);
     const hourlyIndex = nearestHourlyIndex(hourly.time || []);
     const rain = peakRainFromIndex(hourly, hourlyIndex, 12);
-    const wind = Math.round(current.wind_speed_10m ?? 0);
-    const gust = Math.round(current.wind_gusts_10m ?? wind);
+    const wind = rounded(current.wind_speed_10m);
+    const gust = rounded(current.wind_gusts_10m);
     const dir = windDir(current.wind_direction_10m);
     const humidity = current.relative_humidity_2m == null ? null : Math.round(current.relative_humidity_2m);
     const dewPoint = current.dew_point_2m == null ? null : Math.round(current.dew_point_2m);
@@ -651,7 +711,7 @@
     const currentTrend = pressureTrend(hourly.pressure_msl, hourlyIndex);
     const sunrise = daily.sunrise?.[0];
     const sunset = daily.sunset?.[0];
-    const condition = conditionClass(current.weather_code ?? daily.weather_code?.[0], rain, Math.max(wind, gust));
+    const condition = conditionClass(current.weather_code, rain, Math.max(wind, gust));
     const todayKey = localDateKey(current.time || Date.now(), TZ);
     const dayAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, false);
     const nightAqi = summarizeAqWindow(aq, 'us_aqi', todayKey, true);
@@ -665,26 +725,30 @@
     const ozone = Math.max(...[dayOzone.max, nightOzone.max].filter(Number.isFinite));
     const dominantPollutant = !Number.isFinite(pm25) && !Number.isFinite(ozone) ? 'No pollutant detail available' : (Number(pm25 || 0) >= Number(ozone || 0) / 8 ? 'PM2.5 is the main watch item' : 'Ozone is the main watch item');
     const todaySummary = todayPeriod?.detailedForecast || summarizeToday(weather);
-    const cachedTime = cachedAt ? new Date(cachedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ }) : '';
+    const savedTime = details.savedWeatherTimestamp(bundle);
+    const cachedTime = Number.isFinite(savedTime) ? new Date(savedTime).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZone:TZ, timeZoneName:'short' }) : '';
     const nextHours = (hourly.time || []).slice(hourlyIndex, hourlyIndex + 24).map((ts, offset) => {
       const i = hourlyIndex + offset;
       const [hIcon, hLabel] = weatherLabel(hourly.weather_code?.[i]);
+      const dayIndex = daily.time?.indexOf(localDateKey(ts, TZ));
+      const hourSunrise = daily.sunrise?.[dayIndex], hourSunset = daily.sunset?.[dayIndex];
       const h = {
         time: new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', timeZone: TZ }),
         fullTime: new Date(ts).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', timeZone: TZ }),
         icon: hIcon,
         label: hLabel,
         temp: details.number(hourly.temperature_2m?.[i]),
-        feels: Math.round(hourly.apparent_temperature?.[i] ?? hourly.temperature_2m?.[i] ?? temp),
+        feels: rounded(hourly.apparent_temperature?.[i]),
         rain: details.number(hourly.precipitation_probability?.[i]),
         // Open-Meteo rain at t is the preceding hour; display the interval starting at t.
         amount: details.rainTotal(hourly.rain?.[i + 1], hourly.showers?.[i + 1]),
-        wind: Math.round(hourly.wind_speed_10m?.[i] ?? wind),
-        gust: Math.round(hourly.wind_gusts_10m?.[i] ?? gust),
+        wind: rounded(hourly.wind_speed_10m?.[i]),
+        gust: rounded(hourly.wind_gusts_10m?.[i]),
         dir: windDir(hourly.wind_direction_10m?.[i]),
-        cloud: Math.round(hourly.cloud_cover?.[i] ?? current.cloud_cover ?? 0),
+        cloud: rounded(hourly.cloud_cover?.[i]),
         pressureTrend: pressureTrend(hourly.pressure_msl, i),
-        isGolden: nearSunWindow(ts, daily.sunrise?.[daily.time?.indexOf(localDateKey(ts, TZ))], daily.sunset?.[daily.time?.indexOf(localDateKey(ts, TZ))])
+        hasSunTimes: Number.isFinite(Date.parse(hourSunrise)) && Number.isFinite(Date.parse(hourSunset)),
+        isGolden: nearSunWindow(ts, hourSunrise, hourSunset)
       };
       h.note = fishingNote(h);
       h.score = fishingScore(h);
@@ -709,12 +773,12 @@
               </div>
             </div>
             <p>${escapeHtml(placeTitle)}${place?.zip ? ` · ${escapeHtml(place.zip)}` : ''} · ${fmtDate(current.time || Date.now())}</p>
-            ${todaySummary ? `<p class="weather-day-summary weather-period-summary"><strong>Today (${todayPeriod ? 'NWS' : 'Open-Meteo'}):</strong> ${escapeHtml(todaySummary)}</p>` : ''}
+            ${todaySummary ? `<p class="weather-day-summary weather-period-summary"><strong>Today (${todayPeriod ? 'NWS' : escapeHtml(source || 'Open-Meteo')}):</strong> ${escapeHtml(todaySummary)}</p>` : ''}
             ${tonightPeriod?.detailedForecast ? `<p class="weather-night-summary weather-period-summary"><strong>Tonight (National Weather Service):</strong> ${escapeHtml(tonightPeriod.detailedForecast)}</p>` : ''}
-            <p class="weather-detail-note">Refreshes every 10 minutes while this page is visible. Conditions valid ${fmtClock(current.time)} ${escapeHtml(zoneLabel)} · ${escapeHtml(source || 'Open-Meteo')}${bundle.forecastIssuedAt ? `<br>NWS forecast issued ${escapeHtml(new Date(bundle.forecastIssuedAt).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZone:TZ}))} ${escapeHtml(zoneLabel)}.` : ''}</p>
+            <p class="weather-detail-note">Refreshes every 10 minutes while this page is visible. ${weather.forecastOnly ? 'Hourly forecast' : 'Conditions'} valid ${fmtClock(current.time)} ${escapeHtml(zoneLabel)} · ${escapeHtml(source || 'Open-Meteo')}${bundle.forecastIssuedAt ? `<br>NWS forecast issued ${escapeHtml(new Date(bundle.forecastIssuedAt).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZone:TZ}))} ${escapeHtml(zoneLabel)}.` : ''}</p>
           </div>
           <div class="weather-now-badge">
-            <strong>${temp}°</strong>
+            <strong>${temp == null ? '—' : `${temp}°`}</strong>
             <span>feels ${details.degrees(feels)}</span>
           </div>
         </div>
@@ -726,20 +790,20 @@
 
         <div class="weather-dashboard-grid">
           <div class="weather-metric primary">
-            <span>Today</span>
-            <strong>High ${details.degrees(hi)}</strong>
-            <em>Low ${details.degrees(lo)} · ${today.source}</em>
-            <div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>
+            <span>${nightOnly ? escapeHtml(nightName) : 'Today'}</span>
+            <strong>${nightOnly ? `Low ${details.degrees(lo)}` : `High ${details.degrees(hi)}`}</strong>
+            <em>${nightOnly ? `${today.source} forecast` : `Low ${details.degrees(lo)} · ${today.source}`}</em>
+            ${temp == null ? '' : `<div class="weather-temp-track"><i style="left:${Math.max(4, Math.min(88, ((temp - 20) / 90) * 100))}%"></i></div>`}
           </div>
           <div class="weather-metric">
             <span>Peak precipitation · next 12h</span>
             <strong>${details.percent(rain)}</strong>
-            <div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>
+            ${rain == null ? '' : `<div class="weather-bar"><i style="width:${Math.max(2, Math.min(100, rain))}%"></i></div>`}
           </div>
           <div class="weather-metric">
             <span>Wind</span>
-            <strong>${wind} mph ${dir}</strong>
-            <em>gust ${gust} mph</em>
+            <strong>${wind == null ? 'Unknown' : windText(wind)} ${escapeHtml(dir)}</strong>
+            <em>${gust == null ? 'Gusts unavailable' : `gust ${gust} mph`}</em>
           </div>
           <div class="weather-metric pressure">
             <span>Pressure</span>
@@ -760,13 +824,13 @@
             <span>Today’s peak UV</span>
             <strong>${uvMax == null ? '—' : uvMax}</strong>
             <em>${uvAdvice(uvMax)}</em>
-            <div class="weather-uv-scale"><i style="left:${uvPct(uvMax)}%"></i></div>
+            ${uvMax == null ? '' : `<div class="weather-uv-scale"><i style="left:${uvPct(uvMax)}%"></i></div>`}
           </div>
           <div class="weather-metric aqi ${aqi.cls}">
-            <span>Daytime peak AQI</span>
+            <span>${dayAqi.max != null ? 'Daytime peak AQI' : nightAqi.max != null ? 'Tonight peak AQI' : 'Air quality'}</span>
             <strong>${aqi.text}</strong>
             <em>${aqi.advice}</em>
-            <div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>
+            ${aqiMax == null ? '' : `<div class="weather-aqi-scale"><i style="left:${aqi.pct}%"></i></div>`}
           </div>
         </div>
 
@@ -802,15 +866,15 @@
           </div>
           <p>Rain, wind, and pressure trend hour by hour.</p>
         </div>
-        <details class="weather-score-explanation"><summary>How the estimated fishing score works</summary><p>A weather-based estimate, not a catch prediction or a safety rating. Starts at 5/10: cloud cover ≥60% +1; rain chance 1–45% +1 or ≥70% −2; wind 8–14 mph +1; wind ≥18 mph or gusts ≥25 mph −2; falling pressure +1 or rising pressure −1; within 90 minutes of sunrise or sunset +2. Limited to 1–10. It does not account for species, water temperature, tides, or local water conditions.</p></details>
+        <details class="weather-score-explanation"><summary>How the estimated fishing score works</summary><p>A weather-based estimate, not a catch prediction or a safety rating. Starts at 5/10: cloud cover ≥60% +1; rain chance 1–45% +1 or ≥70% −2; wind 8–14 mph +1; wind ≥18 mph or gusts ≥25 mph −2; falling pressure +1 or rising pressure −1; within 90 minutes of sunrise or sunset +2. Limited to 1–10. The estimate is unavailable when wind, gusts, precipitation chance, cloud cover, pressure, or sunrise/sunset data is missing. It does not account for species, water temperature, tides, or local water conditions.</p></details>
         <div class="weather-hourly-strip fishing-timeline" aria-label="Hourly fishing weather">
           ${nextHours.slice(0, 12).map(h => `<div class="${h.rain >= 55 ? 'rainy' : h.wind >= 15 ? 'windy' : h.cloud >= 70 ? 'cloudy' : ''}">
             <span>${h.time}</span>
             <strong>${h.icon} ${details.degrees(h.temp)}</strong>
             <em>${h.label}</em>
-            <small>${details.percent(h.rain)} precip · ${h.wind} mph ${h.dir}${h.gust > h.wind ? ` · gust ${h.gust}` : ''}</small>
+            <small>${details.percent(h.rain)} precip · ${windText(h.wind)} ${escapeHtml(h.dir)}${h.gust != null && (h.wind == null || h.gust > h.wind) ? ` · gust ${h.gust} mph` : ''}</small>
             <small>pressure ${h.pressureTrend}</small>
-            <small class="weather-fishing-score">Fishing estimate ${h.score}/10</small>
+            <small class="weather-fishing-score">${h.score == null ? 'Estimate unavailable' : `Fishing estimate ${h.score}/10`}</small>
           </div>`).join('')}
         </div>
 
@@ -864,7 +928,7 @@
 
   root.addEventListener('click', event => {
     if (event.target?.closest?.('[data-weather-refresh]')) {
-      updatePlace(displayedBundle?.place || loadSavedPlace());
+      updatePlace(displayedBundle?.place || unavailablePlace || loadSavedPlace());
       return;
     }
     if (!event.target?.closest?.('[data-weather-reset="true"]')) return;
@@ -872,7 +936,7 @@
     updatePlace(DEFAULT_PLACE);
   });
 
-  root.innerHTML = '<div class="weather-dashboard-card weather-loading">Loading weather…</div>';
+  root.innerHTML = '<div class="weather-dashboard-card weather-loading" id="weather-now">Loading weather…</div>';
   updatePlace(loadSavedPlace());
   setInterval(maybeRefresh, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) maybeRefresh(); });

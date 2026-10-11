@@ -41,3 +41,13 @@ test('Freshness ages actual successful retrieval timestamps, including cached an
  assert.equal(d.age('2026-09-22T13:52:00Z',now),'8 minutes ago');
  assert.equal(d.age('2026-09-21T14:00:00Z',now),'1 day ago');assert.equal(d.age(undefined,now),'time unavailable');
 });
+
+test('Saved weather expires after 24 hours, rejects unknown/future times, and cannot be made fresh by rewriting cachedAt',()=>{
+ const now=Date.parse('2026-10-11T01:00:00Z');
+ assert.equal(d.savedWeatherIsRecent({fetchedAt:'2026-10-10T01:00:00Z'},now),true);
+ assert.equal(d.savedWeatherIsRecent({fetchedAt:'2026-10-10T00:59:59Z',cachedAt:'2026-10-11T01:00:00Z'},now),false);
+ assert.equal(d.savedWeatherIsRecent({fetchedAt:'invalid',cachedAt:'2026-10-11T01:00:00Z'},now),false);
+ assert.equal(d.savedWeatherIsRecent({},now),false);
+ assert.equal(d.savedWeatherIsRecent({fetchedAt:'2026-10-11T01:02:00Z'},now),false);
+ assert.equal(d.savedWeatherIsRecent({cachedAt:'2026-10-11T00:30:00Z'},now),true);
+});
