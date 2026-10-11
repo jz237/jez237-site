@@ -89,9 +89,14 @@ export class Terrarium {
   /** Effects turned off because the picture came out black, in order. */
   readonly fallbacks: string[] = [];
   private direct = DIRECT;
-  private watch = {t: 0, black: 0, checks: 0};
+  private watch = {last: 0, black: 0, checks: 0};
   /** The browser took the GPU context away (a GPU reset, or memory pressure on a phone). */
   onContextLost?: () => void;
+  /** Frames finished so far (a stalled count means nothing is being drawn). */
+  framesDrawn = 0;
+  /** A frame threw (the first time, and every so often after). */
+  onFrameError?: (e: unknown) => void;
+  private frameErrors = 0;
 
   constructor(readonly host: HTMLElement) {
     const r = new THREE.WebGLRenderer({antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: new URLSearchParams(location.search).has('capture')});
@@ -277,7 +282,7 @@ export class Terrarium {
       this.renderer.getContext().finish();
       return;
     }
-    this.renderer.setAnimationLoop(() => this.frame());
+    this.renderer.setAnimationLoop(() => this.safeFrame());
   }
 
   /** Tips of the plants' leaves (and points on the fern fronds), clear of the ground. */
@@ -554,6 +559,24 @@ export class Terrarium {
     this.weather?.setResolution(Math.round(w * pr), Math.round(h * pr));
   }
 
+  /**
+   * One frame, kept going through an error: three's loop stops for good at the
+   * first exception, which would leave the canvas blank with the controls and
+   * sound still running. A failure that repeats turns the effects down.
+   */
+  private safeFrame() {
+    try {
+      this.frame();
+    } catch (e) {
+      this.frameErrors++;
+      if (this.frameErrors === 1 || this.frameErrors % 300 === 0) {
+        console.error('Terrarium: a frame failed', e);
+        this.onFrameError?.(e);
+      }
+      if (this.frameErrors % 30 === 0) this.degrade();
+    }
+  }
+
   /** Steps effects down only after sustained slow frames; never on device labels. */
   private adapt(rawDt: number) {
     const q = this.quality;
@@ -627,6 +650,7 @@ export class Terrarium {
       this.renderer.setRenderTarget(null);
       this.renderer.clear();
       this.renderer.render(this.scene, this.camera);
+      this.framesDrawn++;
       return;
     }
     this.post.render(this.time, (refraction, distance) => {
@@ -639,7 +663,8 @@ export class Terrarium {
       this.renderer.render(this.scene, this.camera);
       this.camera.layers.mask = mask;
     });
-    this.checkBlack(dt);
+    this.framesDrawn++;
+    this.checkBlack();
   }
 
   /**
@@ -647,11 +672,11 @@ export class Terrarium {
    * row (a GPU failing at one of the effects), turns effects off one at a time
    * until the scene shows.
    */
-  private checkBlack(dt: number) {
-    const w = this.watch;
-    w.t += dt;
-    if (w.t < (w.checks < 15 ? 1.5 : 8) || document.visibilityState !== 'visible') return;
-    w.t = 0;
+  private checkBlack() {
+    // (by the clock, not the simulation's capped steps, so a slow phone is not kept waiting)
+    const w = this.watch, now = performance.now();
+    if (now - w.last < (w.checks < 15 ? 1500 : 8000) || document.visibilityState !== 'visible') return;
+    w.last = now;
     w.checks++;
     const gl = this.renderer.getContext();
     const W = gl.drawingBufferWidth, H = gl.drawingBufferHeight;
