@@ -454,7 +454,27 @@ export class Plants {
       if (poolDistance(x, z) < 0.06 || caveKeepClear(x, z)) continue;
       const site = this.site(surface, x, z);
       const local = kind === 'pilea' ? pilea(rnd) : kind === 'fittonia' ? fittonia(rnd) : kind === 'cryptanthus' ? cryptanthus(rnd) : creeper(rnd, 0.12 + rnd() * 0.06);
-      const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.002, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rnd() * 6.28, 0)), new THREE.Vector3(s, s, s));
+      const yaw0 = rnd() * 6.28;
+      const at = new THREE.Vector3(x, site.y - 0.002, z), scale = new THREE.Vector3(s, s, s);
+      let m = new THREE.Matrix4().compose(at, new THREE.Quaternion().setFromEuler(new THREE.Euler(0, yaw0, 0)), scale);
+      if (kind === 'creeper') {
+        // creeping fig wanders where it likes, but not out through the glass:
+        // turn the vine about its root until all of it stays inside the case
+        const v = new THREE.Vector3();
+        let best = Infinity;
+        for (let k = 0; k < 16 && best > 0; k++) {
+          const mm = new THREE.Matrix4().compose(at, new THREE.Quaternion().setFromEuler(new THREE.Euler(0, yaw0 + (k / 16) * Math.PI * 2, 0)), scale);
+          let over = -Infinity;
+          for (const p of local) {
+            const pos = p.attributes.position as THREE.BufferAttribute;
+            for (let i = 0; i < pos.count; i += 2) {
+              v.fromBufferAttribute(pos, i).applyMatrix4(mm);
+              over = Math.max(over, Math.abs(v.x) - (TANK.w / 2 - 0.008), Math.abs(v.z) - (TANK.d / 2 - 0.008));
+            }
+          }
+          if (over < best) {best = over; m = mm;}
+        }
+      }
       for (const p of local) {
         p.applyMatrix4(m);
         parts.push(p);

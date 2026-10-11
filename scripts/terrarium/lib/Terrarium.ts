@@ -26,6 +26,7 @@ import {Weather} from './Weather';
 import {TerrariumAudio} from './Audio';
 import {CloudShadow} from './CloudShadow';
 import {Rainbow} from './Rainbow';
+import {FishSchool} from './Fish';
 import {mulberry32} from './Textures';
 
 const DIRECT = new URLSearchParams(location.search).has('direct');
@@ -75,6 +76,8 @@ export class Terrarium {
   motes!: Motes;
   leafDrift!: LeafDrift;
   rainbow!: Rainbow;
+  fish!: FishSchool;
+  private poolWind = new THREE.Vector2();
   /** Leaf tips that hold rain: drips fall from them and the dragon licks them. */
   leafTips: THREE.Vector3[] = [];
   private dripT = 0;
@@ -213,6 +216,11 @@ export class Terrarium {
     this.scene.add(this.moss.mesh);
     this.water = new Water(this.surface, this.peaks.data.ledges);
     this.scene.add(this.water.group);
+    // a school of neon tetras in the pool
+    this.fish = new FishSchool();
+    this.scene.add(this.fish.group);
+    this.fish.onBite = (x, z) => this.water.ripples.add(x, z, 0.0012, -0.9);
+    this.water.onDisturb = (x, z, s) => this.fish.startle(x, z, s);
     this.resize();
     this.lizard = await LizardModel.load('./lizard/');
     this.lizard.setMorph(new URLSearchParams(location.search).get('morph') ?? 'normal');
@@ -231,13 +239,18 @@ export class Terrarium {
         if (Math.random() < 0.3) this.water.flick(p.x, p.z, 1, 0.08);
       }
     };
-    this.insects.onSplash = (x, z) => {this.water.ripples.add(x, z, 0.004, -2.5); this.water.flick(x, z, 3, 0.15);};
+    this.insects.onSplash = (x, z) => {this.water.ripples.add(x, z, 0.004, -2.5); this.water.flick(x, z, 3, 0.15); this.fish.startle(x, z, 0.7, 0.09);};
     this.weather = new Weather(this.surface, this.water);
     {
       const h = Number(new URLSearchParams(location.search).get('hours'));
       if (h > 0) this.weather.hours = this.weather.sunHours = h % 24;
     }
     this.scene.add(this.weather.group);
+    {
+      // raindrops on the pool make the fish twitch now and then
+      const drop = this.weather.rain.onWaterDrop;
+      this.weather.rain.onWaterDrop = (x, z, s) => {drop?.(x, z, s); if (Math.random() < 0.12) this.fish.startle(x, z, 0.35, 0.04);};
+    }
     // dust on the air and loose leaves on the floor, both moved by the wind field
     this.motes = new Motes(this.weather.wind, (x, z) => this.surface.topAt(x, z));
     this.scene.add(this.motes.points);
@@ -340,6 +353,7 @@ export class Terrarium {
       a.thunder(Math.min(1.2, strength), 0.12 + dist * 0.16, pan(end.x));
       this.brain.lightning(end, strength);
       this.insects.scatter(end, 0.25);
+      if (water) this.fish.startle(end.x, end.z, 2, 0.45);
     };
   }
 
@@ -354,7 +368,17 @@ export class Terrarium {
     this.insects.update(dt);
     this.brain.update(dt);
     this.wake(dt);
+    this.updateFish(dt);
     this.water.update(dt, this.time, 1);
+  }
+
+  /** The fish: they keep clear of the dragon when it wades. */
+  private updateFish(dt: number) {
+    const I = this.rig.inputs;
+    const threats: {p: THREE.Vector3; r: number}[] = [];
+    if (poolDistance(I.x, I.z) < 0.15) threats.push({p: this.rig.spinePoints()[2], r: 0.11}, {p: this.rig.snout, r: 0.08});
+    this.weather.wind.sample(0.3, 0.1, this.poolWind);
+    this.fish.update(dt, threats, this.weather.daylight, this.poolWind);
   }
 
   /** The lizard wading: a bow wave at the chest and a trail behind. */
@@ -624,6 +648,7 @@ export class Terrarium {
     this.insects.update(dt);
     this.brain.update(dt);
     this.wake(dt);
+    this.updateFish(dt);
     const sp = this.rig.spinePoints();
     // the body parts the plants: head, chest, mid-body, hips and tail base
     const push = foliageUniforms.uPush.value;

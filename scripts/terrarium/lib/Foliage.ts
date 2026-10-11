@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {WIND_GLSL} from './WindField';
+import {TANK} from './Case';
 
 /** Shared shader hooks for plants: wind from the flow field, gust waves, flutter and thin-leaf translucency. */
 export const foliageUniforms = {
@@ -12,6 +13,8 @@ export const foliageUniforms = {
   uGust: {value: new THREE.Vector3()},
   /** Spheres (x, y, z, radius) that push foliage aside: the hand, then the lizard's head, chest, mid-body, hips and tail. */
   uPush: {value: Array.from({length: 6}, () => new THREE.Vector4(0, -1, 0, 0))},
+  /** Inner faces of the glass (half width, half depth), just inside the panes. */
+  uGlass: {value: new THREE.Vector2(TANK.w / 2 - 0.004, TANK.d / 2 - 0.004)},
 };
 
 /** Vertex GLSL: bend `transformed` (local) for a plant rooted at world `root` with flexibility `flex` and height `H`. */
@@ -49,7 +52,7 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
     Object.assign(s.uniforms, foliageUniforms);
     s.vertexShader = s.vertexShader
       .replace('#include <common>', `#include <common>
-uniform float uTime; uniform vec4 uPush[6];
+uniform float uTime; uniform vec4 uPush[6]; uniform vec2 uGlass;
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
 ${opts.phaseAttr ? 'attribute float aPhase;' : ''}
 varying float vFlex; varying float vGust; varying vec3 vFolW;
@@ -88,7 +91,11 @@ ${FOLIAGE_WIND_GLSL}`)
     }
   }
   transformed += toLocal * push * max(flex, 0.25);
-  vFolW = vw + push * max(flex, 0.25);
+  vec3 wf = vw + push * max(flex, 0.25);
+  // the glass: a leaf that reaches it presses flat against it, never through it
+  vec3 wc = vec3(clamp(wf.x, -uGlass.x, uGlass.x), wf.y, clamp(wf.z, -uGlass.y, uGlass.y));
+  transformed += toLocal * (wc - wf);
+  vFolW = wc;
 }`);
     s.fragmentShader = s.fragmentShader
       .replace('#include <common>', `#include <common>
@@ -126,5 +133,5 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 1.
   totalEmissiveRadiance += uKeyColor * bead.w * pow(max(0.0, dot(normal, uKeyDirView)), 24.0) * 0.6;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage5-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage6-${opts.key}`;
 }
