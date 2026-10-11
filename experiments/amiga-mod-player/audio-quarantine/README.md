@@ -1,4 +1,9 @@
-# audio-quarantine/ — DO NOT SOURCE AUDIO FROM THIS FOLDER
+# audio-quarantine/ — rejected-audio tombstone (binaries deleted)
+
+Jez explicitly requested deletion without archival on 2026-10-11. The 96 bad
+audio binaries have been removed from the current repository tree. No new
+archive was created. Keep this explanation so automated imports do not fetch
+the same malformed sources again. Existing Git history was not rewritten.
 
 The `Project-X/`, `Apidya/`, and `Turrican_II/` folders were moved here from
 `../audio/` on 2026-07-10. **Every file in them is malformed.** Despite their
@@ -8,26 +13,25 @@ sound like howling wind. Confirmed by reading full-length spectrograms of the
 files (2026-07-10) — no harmonic lines, no rhythmic structure, only diagonal
 sweep curves over a uniform wash.
 
-## Why they are quarantined instead of deleted
+## Why they were originally quarantined
 
-They are kept as evidence and as a tombstone: automated file-pickers sourced
+They were originally kept as evidence: automated file-pickers sourced
 "music" from these folders three separate times while building the Shatter
 Storm Amiga edition (v3.0.1 → v3.0.3, the recurring "wind noise" bug — see
 `games/2026-03-11/shatter-storm/amiga/README.md` and
 `games/2026-03-11/shatter-storm/amiga/audio/sfx-manifest.json`). Anything that
 scans `experiments/amiga-mod-player/audio/` for soundtrack files must never
-find these again, so they no longer live there.
+find these again. The binaries were subsequently deleted at Jez's request.
 
 Rules:
 
 - **Never** pick music, SFX, or "reference audio" from this folder.
-- **Never** move these files back into `../audio/`.
+- **Never** restore these files to this folder or to `../audio/`.
 - The mod-player UI does not list them: the entries were removed from
   `../tracks.js`, and `../app.js` additionally refuses any track whose path
   points here (defense in depth in case tracks.js is ever regenerated).
-- This folder is excluded from the Cloudflare Pages deploy
-  (`workspace/scripts/deploy_cloudflare_pages_site.sh`), so the files are not
-  served on jez237.com either.
+- This folder is excluded from both the GitHub Pages mirror payload and the
+  Cloudflare Pages staging helper (`workspace/scripts/deploy_cloudflare_pages_site.sh`).
 
 ## How to verify audio before trusting it (the lesson)
 
