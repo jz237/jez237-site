@@ -201,7 +201,7 @@ Development URL options:
 - `?hours=H` starts at a given time of day.
 - `?morph=normal|red|citrus|hypo` chooses the dragon's colour morph.
 - `?lite` starts lighter: a lower pixel ratio, no multisampling, ambient occlusion or depth of field, fewer moss layers and a smaller shadow map.
-- `?debug` shows a small panel with the GPU, its relevant WebGL extensions, the frame rate, which effects are on, anything turned off after a black picture, and any shader errors. Use it to report a problem from a phone.
+- `?debug` shows a small panel with the build, the GPU, its relevant WebGL extensions, the frame rate, which effects are on, anything turned off after a black picture, and any errors. Use it to report a problem from a phone. It also appears on its own if drawing fails.
 - `?cam=x,y,z&target=x,y,z` places the camera.
 
 ## Performance
@@ -219,7 +219,9 @@ Some phone GPUs fail where desktop ones do not, so there are some safeguards.
 
 - **Bad pixels:** one shader producing a NaN or an infinity in a single pixel would be smeared by the glass blur, the depth of field and the bloom's widest level across the whole frame, which shows as a black screen. Every pass that blurs therefore reads the scene through a clean-up step: bad pixels become black specks and extreme highlights are capped.
 - **Shader compiling:** all shaders are compiled behind the loading screen, in parallel where the browser supports it, rather than stalling the first frames.
-- **Black picture:** the finished picture is sampled now and then. If it comes out black twice in a row, effects are turned off one at a time until the scene shows: bloom, ambient occlusion, depth of field, multisampling, then the whole post-processing chain.
+- **Black picture:** the finished picture is sampled every second and a half at first (by the clock), then less often. If it comes out black twice in a row, effects are turned off one at a time until the scene shows: bloom, ambient occlusion, depth of field, multisampling, then the whole post-processing chain.
+- **Frame errors:** three.js stops its animation loop for good at the first exception, which would leave a blank case with the controls and sound still working. Each frame is guarded instead: the loop carries on, a failure that keeps repeating turns the effects down, and the diagnostics panel appears.
+- **Stalls:** if no frame finishes for 14 seconds, or every fallback has been used, the diagnostics panel appears with the reason.
 - **Lost GPU context:** if the browser takes the GPU context away, the page reloads once in `?lite` mode.
 - **Float textures:** only half-float data textures are filtered, because 32-bit float filtering is missing on many phones.
 
