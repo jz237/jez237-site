@@ -117,18 +117,27 @@ void main(){ float z = texture2D(tDepth, vUv).x; vec4 v = uInvProj * vec4(vUv * 
  * extreme highlights are capped.
  */
 const FINITE_GLSL = /* glsl */ `
-vec3 finiteColor(vec3 c){
-  bool bad = any(isnan(c)) || any(isinf(c)) || !(c.r + c.g + c.b < 1e20) || !(c.r + c.g + c.b > -1e20);
-  return bad ? vec3(0.0) : clamp(c, vec3(0.0), vec3(256.0));
+bool finiteOk(vec3 c){ return !(any(isnan(c)) || any(isinf(c)) || !(c.r + c.g + c.b < 1e20) || !(c.r + c.g + c.b > -1e20)); }
+// a bad pixel takes the average of the good ones around it (a speck vanishes; black only if all are bad)
+vec3 cleanColor(sampler2D tex, vec2 uv, vec2 px){
+  vec3 c = texture2D(tex, uv).rgb;
+  if (finiteOk(c)) return clamp(c, vec3(0.0), vec3(256.0));
+  vec3 s = vec3(0.0); float n = 0.0;
+  for (int k = 0; k < 12; k++) {
+    float a = float(k) * 0.5236, r = k < 6 ? 2.0 : 5.0;
+    vec3 q = texture2D(tex, uv + vec2(cos(a), sin(a)) * r * px).rgb;
+    if (finiteOk(q)) {s += clamp(q, vec3(0.0), vec3(256.0)); n += 1.0;}
+  }
+  return n > 0.0 ? s / n : vec3(0.0);
 }`;
 
 const aoShader = {
-  uniforms: {tColor: {value: null as THREE.Texture | null}, tAO: {value: null as THREE.Texture | null}, uAO: {value: 1}},
+  uniforms: {tColor: {value: null as THREE.Texture | null}, tAO: {value: null as THREE.Texture | null}, uAO: {value: 1}, uPixel: {value: new THREE.Vector2(1, 1)}},
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-  fragmentShader: `precision highp float; uniform sampler2D tColor, tAO; uniform float uAO; varying vec2 vUv;
+  fragmentShader: `precision highp float; uniform sampler2D tColor, tAO; uniform float uAO; uniform vec2 uPixel; varying vec2 vUv;
 ${FINITE_GLSL}
 void main(){
-  vec3 c = finiteColor(texture2D(tColor, vUv).rgb);
+  vec3 c = cleanColor(tColor, vUv, uPixel);
   float ao = uAO > 0.0 ? texture2D(tAO, vUv).r : 1.0;
   ao = (ao >= 0.0 && ao <= 1.0) ? ao : 1.0;
   gl_FragColor = vec4(c * mix(1.0, ao, uAO), 1.0);
@@ -137,11 +146,11 @@ void main(){
 
 // A plain copy that also clears bad pixels (for the glass's blurred view of the scene).
 const cleanShader = {
-  uniforms: {tColor: {value: null as THREE.Texture | null}},
+  uniforms: {tColor: {value: null as THREE.Texture | null}, uPixel: {value: new THREE.Vector2(1, 1)}},
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
-  fragmentShader: `precision highp float; uniform sampler2D tColor; varying vec2 vUv;
+  fragmentShader: `precision highp float; uniform sampler2D tColor; uniform vec2 uPixel; varying vec2 vUv;
 ${FINITE_GLSL}
-void main(){ gl_FragColor = vec4(finiteColor(texture2D(tColor, vUv).rgb), 1.0); }`,
+void main(){ gl_FragColor = vec4(cleanColor(tColor, vUv, uPixel), 1.0); }`,
 };
 
 export class Post {
@@ -199,6 +208,8 @@ export class Post {
     const px = new THREE.Vector2(1 / W, 1 / H);
     (this.dofQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
     (this.finalQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
+    (this.aoQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
+    (this.cleanQuad.material as THREE.ShaderMaterial).uniforms.uPixel.value.copy(px);
   }
 
   /**

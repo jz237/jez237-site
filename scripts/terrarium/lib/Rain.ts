@@ -177,7 +177,7 @@ void main(){
       uniforms: {...this.uniforms, uScale: {value: 900}},
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, premultipliedAlpha: true,
       vertexShader: `attribute float aLife; varying float vL; uniform float uScale; void main(){ vL = aLife; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mv; gl_PointSize = max(1.2, 0.0011 * uScale / -mv.z); }`,
-      fragmentShader: `uniform vec3 uLight, uAmbient; uniform float uFlash; varying float vL; void main(){ float a = smoothstep(0.5, 0.1, length(gl_PointCoord - 0.5)); gl_FragColor = vec4((uAmbient + uLight * 0.6 + uFlash) * a * vL * 0.7, 0.0); }`,
+      fragmentShader: `uniform vec3 uLight, uAmbient; uniform float uFlash; varying float vL; void main(){ float a = (1.0 - smoothstep(0.1, 0.5, length(gl_PointCoord - 0.5))); gl_FragColor = vec4((uAmbient + uLight * 0.6 + uFlash) * a * vL * 0.7, 0.0); }`,
     }));
     this.bitPoints.frustumCulled = false;
     this.group.add(this.bitPoints);
@@ -206,7 +206,7 @@ void main(){
   float streak = n(vec2(u * 14.0 + seed * 20.0, v * 3.0 + uTime * 3.4)) * 0.6 + n(vec2(u * 31.0 - seed * 7.0, v * 5.0 + uTime * 4.6)) * 0.4;
   float clump = n(vec2(u * 3.0 + seed, v * 1.2 + uTime * 0.8));
   float edge = 1.0 - u * u;
-  float a = amt * (0.3 + 0.7 * streak) * (0.55 + 0.9 * clump) * 0.2 * edge * smoothstep(0.0, 0.12, v) * smoothstep(1.0, 0.85, v);
+  float a = amt * (0.3 + 0.7 * streak) * (0.55 + 0.9 * clump) * 0.2 * edge * smoothstep(0.0, 0.12, v) * (1.0 - smoothstep(0.85, 1.0, v));
   vec3 col = (uAmbient * 1.2 + uLight * 0.25 + vec3(0.8, 0.86, 1.0) * uFlash) * 0.7;
   gl_FragColor = vec4(col * a, a);
 }`,

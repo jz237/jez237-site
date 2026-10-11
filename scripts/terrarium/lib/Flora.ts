@@ -239,7 +239,7 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
   rough = 0.55;
 } else if (k < 10.5) { // mushroom caps: tan to rust, paler at the rim
   col = mix(vec3(0.38, 0.22, 0.1), vec3(0.32, 0.12, 0.05), vTint);
-  col = mix(col, vec3(0.6, 0.5, 0.36), smoothstep(0.3, 0.0, u) * 0.6);
+  col = mix(col, vec3(0.6, 0.5, 0.36), (1.0 - smoothstep(0.0, 0.3, u)) * 0.6);
   col *= 0.85 + 0.3 * fn(vec2(u * 20.0, v * 20.0));
   rough = 0.6;
 } else if (k < 11.5) { // stems and stalks
@@ -258,7 +258,7 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
   rough = 0.4;
 } else if (k < 15.5) { // calathea: dark green, feathered pale bands, purple below
   col = vec3(0.025, 0.07, 0.03);
-  float feather = smoothstep(0.55, 0.75, sin(u * 22.0 - abs(v) * 6.0)) * smoothstep(0.95, 0.55, abs(v)) * smoothstep(0.05, 0.2, u);
+  float feather = smoothstep(0.55, 0.75, sin(u * 22.0 - abs(v) * 6.0)) * (1.0 - smoothstep(0.55, 0.95, abs(v))) * smoothstep(0.05, 0.2, u);
   col = mix(col, vec3(0.14, 0.24, 0.08), feather * 0.8);
   col = mix(col, vec3(0.2, 0.28, 0.1), mid * 0.6);
   if (!gl_FrontFacing) col = vec3(0.16, 0.03, 0.08);

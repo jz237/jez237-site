@@ -50,7 +50,7 @@ void main(){
   vCol = uKeyColor * uDay * (0.05 + 0.5 * cone + 1.6 * fwd * cone) * aFade + vec3(0.012) * aFade;
 }`,
       fragmentShader: /* glsl */ `varying vec3 vCol;
-void main(){ float d = length(gl_PointCoord - 0.5); float a = smoothstep(0.5, 0.1, d); gl_FragColor = vec4(vCol * a, 0.0); }`,
+void main(){ float d = length(gl_PointCoord - 0.5); float a = (1.0 - smoothstep(0.1, 0.5, d)); gl_FragColor = vec4(vCol * a, 0.0); }`,
     }));
     this.points.frustumCulled = false;
     this.points.renderOrder = 6;

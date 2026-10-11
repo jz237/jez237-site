@@ -261,8 +261,8 @@ vec2 rainRings(vec2 p, float t){
 GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap, float cave, vec2 wetMap){
   GroundSample g;
   vec2 p = w.xz;
-  float under = smoothstep(water - 0.001, water - 0.008, w.y);
-  float shore = smoothstep(water + 0.025, water + 0.001, w.y) * (1.0 - under);
+  float under = (1.0 - smoothstep(water - 0.008, water - 0.001, w.y));
+  float shore = (1.0 - smoothstep(water + 0.001, water + 0.025, w.y)) * (1.0 - under);
   float moss = smoothstep(0.05, 0.6, mossMap) * (1.0 - under) * (1.0 - shore * 0.85);
   vec3 soil = vec3(0.075, 0.05, 0.032) * (0.7 + 0.6 * gfbm(p * 60.0));
   // crumbs and grains catch the light; bark chips are redder

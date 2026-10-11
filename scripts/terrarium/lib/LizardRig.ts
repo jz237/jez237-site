@@ -325,7 +325,9 @@ export class LizardRig {
       goalYaw = clamp(-Math.atan2(local.z, local.x) - this.bend * 0.6, -1.1, 1.1);
       goalPitch = clamp(Math.atan2(local.y, Math.hypot(local.x, local.z)), -0.6, 0.6);
     }
-    goalPitch += I.headPitch;
+    // a bearded dragon's neck is short and thick: the head tips up by about 35°
+    // at most (more comes only from raising the chest), and down far enough to drink
+    goalPitch = clamp(goalPitch + I.headPitch, -1.15, 0.6);
     this.headHold -= dt;
     const err = Math.abs(goalYaw - this.headGoalYaw) + Math.abs(goalPitch - this.headGoalPitch);
     if (err > 0.14 || (this.headHold < 0 && err > 0.03)) {
@@ -382,8 +384,11 @@ export class LizardRig {
         q.multiply(jq);
         const nx = this.spineBindX[idx], ny = this.spineBindY[idx];
         const seg = new THREE.Vector3((nx - px) * K, (ny - py) * K, 0);
-        if (idx === 0) seg.x += I.lunge * 1.6 * K; // head thrust
-        if (idx === 1) seg.x += I.lunge * 1.0 * K; // neck stretch
+        // a lunge throws the head forward and the short neck gives a little,
+        // never a snake-like stretch (and none with the head tipped up)
+        const level = 1 - clamp(this.headPitchCur / 0.6, 0, 1) * 0.85;
+        if (idx === 0) seg.x += I.lunge * 1.6 * K * level; // head thrust
+        if (idx === 1) seg.x += I.lunge * 0.6 * K * level; // neck
         seg.applyQuaternion(q);
         pos = pos.clone().add(seg);
         this.spinePos[idx].copy(pos);
