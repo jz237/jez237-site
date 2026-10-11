@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-11",
+      "historicDate": "1984-12-24",
+      "displayDate": "Week of December 24-30, 1984",
+      "edition": "Issue 126 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The Commodore 64 has a new line of work: catching ghosts.",
+      "leadHeadline": "Ghostbusters turns the Commodore 64 into a movie franchise",
+      "storyHeadlines": [
+        "MSX promises a common language for incompatible home computers",
+        "A Commodore can switch the lights and watch the windows",
+        "Year-end editors still choose the under-$200 Commodore 64"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-24.png",
+      "thumb": "media/thumbs/1984-12-24.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-10",
       "historicDate": "1984-12-17",
       "displayDate": "Week of December 17-23, 1984",
