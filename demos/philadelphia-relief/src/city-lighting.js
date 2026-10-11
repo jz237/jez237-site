@@ -82,6 +82,28 @@ export function createCityUniforms(THREE) {
   };
 }
 
+// Only values that affect the depth pass belong here. Cloud time, facade color,
+// and the view camera change independently and must not invalidate this cache.
+function depthState(source, visible) {
+  const geometry=source.geometry, uniforms=source.material.uniforms;
+  const values=[geometry,source.material.vertexShader,JSON.stringify(source.material.defines),
+    visible,source.frustumCulled,geometry.drawRange.start,geometry.drawRange.count];
+  for(const name of ['position','aGround','aInfo','aYear']){
+    const attribute=geometry.attributes[name];
+    values.push(attribute,attribute?.version,attribute?.data?.version);
+  }
+  values.push(geometry.index,geometry.index?.version);
+  for(const name of ['uGrow','uExag','uHScale','uLocalClip','uLocalBounds','uEraYear','uStudyBounds']){
+    const value=uniforms[name]?.value;
+    if(value?.toArray)values.push(...value.toArray());
+    else values.push(value);
+  }
+  values.push(...source.matrixWorld.elements);
+  return values;
+}
+
+function sameState(a,b){return !!a&&a.length===b.length&&a.every((value,i)=>value===b[i]);}
+
 export function createCityLighting(THREE, renderer) {
   const uniforms=createCityUniforms(THREE);
   const target=new THREE.WebGLRenderTarget(2048,2048,{minFilter:THREE.NearestFilter,
@@ -92,7 +114,7 @@ export function createCityLighting(THREE, renderer) {
   const scene=new THREE.Scene(), entries=new Map();
   const bias=new THREE.Matrix4().set(.5,0,0,.5,0,.5,0,.5,0,0,.5,.5,0,0,0,1);
   const focus=new THREE.Vector3(), previous=new THREE.Vector3(Infinity,0,0);
-  const oldColor=new THREE.Color(); let age=1, size=2048;
+  const oldColor=new THREE.Color(); let age=1, size=2048, lightState=null, wasEnabled=false;
   return {
     uniforms,
     update({group, focusX,focusZ,ground,exaggeration,sunDir,distance,state,quality,dt,time,miniature}) {
@@ -103,13 +125,16 @@ export function createCityLighting(THREE, renderer) {
       const enabled=!!group?.visible&&state.cityShadows&&!state.lightweight
         &&distance<16000&&sunDir.y>.04&&state.compareMode==='off';
       uniforms.uCityShadowOn.value=enabled?1:0;
-      if(!enabled)return;
+      if(!enabled){wasEnabled=false;return;}
+      const resumed=!wasEnabled;wasEnabled=true;
       age+=dt;
       focus.set(focusX,ground*exaggeration+120,focusZ);
-      if(age<.1&&focus.distanceToSquared(previous)<1600)return;
+      if(!resumed&&age<.1&&focus.distanceToSquared(previous)<1600)return;
       age=0;previous.copy(focus);
       const extent=Math.min(5500,Math.max(650,distance*.72));
       const nextSize=quality==='cinematic'?4096:quality==='performance'?1024:2048;
+      const nextLightState=[focus.x,focus.y,focus.z,sunDir.x,sunDir.y,sunDir.z,extent,nextSize];
+      let dirty=resumed||!sameState(lightState,nextLightState);
       if(size!==nextSize){size=nextSize;
     target.setSize(size,size);
     uniforms.uCityShadowTexel.value.set(1/size,1/size);
@@ -128,27 +153,43 @@ export function createCityLighting(THREE, renderer) {
         .multiply(camera.matrixWorldInverse);
 
       const seen=new Set();
+      group.updateWorldMatrix(true,true);
       group.traverse(source=>{
         if(!source.isMesh||!source.geometry.attributes.aGround||!source.material.uniforms?.uGrow)return;
         seen.add(source); let entry=entries.get(source);
         const defines=JSON.stringify(source.material.defines);
-        if(!entry){
+        if(!entry||entry.vertexShader!==source.material.vertexShader){
+          if(entry){scene.remove(entry.mesh);entry.mesh.material.dispose();}
           const material=new THREE.ShaderMaterial({vertexShader:source.material.vertexShader,
             fragmentShader:DEPTH_FRAGMENT,uniforms:source.material.uniforms,
             defines:{...source.material.defines},side:THREE.DoubleSide});
           const mesh=new THREE.Mesh(source.geometry,material);mesh.frustumCulled=source.frustumCulled;
-          scene.add(mesh);entry={mesh,defines};entries.set(source,entry);
+          mesh.matrixAutoUpdate=false;
+          scene.add(mesh);entry={mesh,defines,vertexShader:source.material.vertexShader};
+          entries.set(source,entry);
         }
         if(entry.defines!==defines){entry.mesh.material.defines={...source.material.defines};
     entry.mesh.material.needsUpdate=true;
     entry.defines=defines;
     }
-        entry.mesh.geometry=source.geometry;entry.mesh.visible=source.visible;
+        let visible=true;
+        for(let parent=source;parent;parent=parent.parent)if(!parent.visible){visible=false;break;}
+        const snapshot=depthState(source,visible);
+        if(!sameState(entry.snapshot,snapshot))dirty=true;
+        entry.snapshot=snapshot;
+        entry.mesh.geometry=source.geometry;entry.mesh.visible=visible;
+        entry.mesh.material.uniforms=source.material.uniforms;
+        entry.mesh.frustumCulled=source.frustumCulled;
+        entry.mesh.matrix.copy(source.matrixWorld);
+        entry.mesh.matrixWorldNeedsUpdate=true;
       });
       for(const [source,entry] of entries)if(!seen.has(source)){scene.remove(entry.mesh);
     entry.mesh.material.dispose();
     entries.delete(source);
+    dirty=true;
     }
+      if(!dirty)return;
+      lightState=nextLightState;
       const prior=renderer.getRenderTarget(), alpha=renderer.getClearAlpha();renderer.getClearColor(oldColor);
       renderer.setRenderTarget(target);
     renderer.setClearColor(0xffffff,1);

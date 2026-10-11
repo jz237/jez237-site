@@ -133,6 +133,13 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying float vElev;
   varying float vRel;
 
+  // Integrate the repeating opening over a pixel footprint instead of sampling
+  // fract() at its center. Distant windows retain their average glazing coverage
+  // without producing diagonal moire bands as the camera moves.
+  vec2 openingIntegral(vec2 p) {
+    return floor(p) * .62 + clamp(fract(p) - .16, vec2(0.0), vec2(.62));
+  }
+
   void main() {
     if (uLocalClip > 0.5 && vWorld.x > uLocalBounds.x && vWorld.x < uLocalBounds.z
         && vWorld.z > uLocalBounds.y && vWorld.z < uLocalBounds.w) discard;
@@ -156,10 +163,12 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec2 bay = vec2(across / mix(2.6, 3.2, vStyle), vStorey / mix(3.2, 3.8, vStyle));
     vec2 cell = fract(bay);
     vec2 aa = max(fwidth(bay), vec2(0.015));
-    float legible = 1.0 - smoothstep(0.65, 1.5, max(aa.x, aa.y));
-    vec2 opening = smoothstep(vec2(0.16), vec2(0.16) + aa, cell)
-      * (1.0 - smoothstep(vec2(0.78) - aa, vec2(0.78), cell));
-    float window = opening.x * opening.y * (1.0 - roof) * legible * uFacade;
+    float legible = 1.0 - smoothstep(0.2, 0.5, max(aa.x, aa.y));
+    vec2 opening = (openingIntegral(bay + aa * .5) - openingIntegral(bay - aa * .5)) / aa;
+    // Above Nyquist, blend to the exact area average rather than letting the
+    // remaining periodic contrast beat against the screen's pixel grid.
+    opening = mix(vec2(.62), opening, legible);
+    float window = opening.x * opening.y * (1.0 - roof) * uFacade;
     vec2 buildingAnchor = vWorld.xz - vFacadeXZ;
     float variation = fract(sin(dot(floor(buildingAnchor+.1), vec2(.173,.271))
       + floor(vHeight+.01) * 71.17) * 43758.54);
@@ -183,7 +192,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     float pane = fract(sin(dot(floor(bay), vec2(41.17, 19.43))) * 17371.3);
     float skyBand = .5 + .5 * sin(vRel * 7.0 + n.x * 2.0 + n.z * 3.0);
     glass = mix(glass, vec3(.23, .34, .39), skyBand * vStyle * .55);
-    glass *= .82 + pane * .35;
+    glass *= .82 + mix(.5, pane, legible) * .35;
     facade = mix(facade, glass, window);
     // Shallow recess shadow and a restrained sill make masonry openings read in depth.
     float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible;
@@ -280,12 +289,12 @@ const FRAGMENT_SHADER = /* glsl */ `
     float blind=step(.66,roomSeed)*step(1.0-(roomSeed-.66)*1.8,roomUV.y);
     room=mix(room,vec3(.32,.33,.31),blind);
     room*=.65+.35*smoothstep(-1.0,0.0,hit.z);
-    color=mix(color,room,window*(1.0-fresnel)*.5);
+    color=mix(color,room,window*(1.0-fresnel)*.5*legible);
     vec3 halfVector = normalize(uSunDir + viewDir);
     color += uSunColor * pow(max(0.0, dot(n, halfVector)), 65.0)
       * window * vStyle * .22;
     float occupied = step(0.64, fract(sin(dot(floor(bay), vec2(12.9898, 78.233))) * 43758.5));
-    color += vec3(1.0, 0.67, 0.28) * occupied * window * uGlowAmount * 1.8;
+    color += vec3(1.0, 0.67, 0.28) * mix(.36,occupied,legible) * window * uGlowAmount * 1.8;
 
     // Historical views: documented-newer buildings vanish; undated ones fade
     // into the haze, because a missing date is not a missing building.
