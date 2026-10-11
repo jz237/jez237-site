@@ -357,6 +357,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;
   attribute float aSide;
+  attribute float aDirection;
   attribute float aElev;
   attribute float aOtherElev;
   attribute float aStruct;
@@ -389,7 +390,9 @@ const LINE_VERTEX = /* glsl */ `
     vec4 cb = projectionMatrix * vb;
     vec2 sa = (ca.xy / max(ca.w, 1e-6)) * uResolution;
     vec2 sb = (cb.xy / max(cb.w, 1e-6)) * uResolution;
-    vec2 dir = sb - sa;
+    // The far endpoint stores the reversed segment. Keep its screen-space
+    // normal aligned with the start so the ribbon's triangles never cross.
+    vec2 dir = (sb - sa) * aDirection;
     float len = length(dir);
     dir = len > 1e-5 ? dir / len : vec2(1.0, 0.0);
     vec2 perp = vec2(-dir.y, dir.x);
@@ -604,6 +607,7 @@ export function createStructures(THREE, options) {
     const position = new Float32Array(n * 4 * 3);
     const other = new Float32Array(n * 4 * 3);
     const side = new Float32Array(n * 4);
+    const direction = new Float32Array(n * 4);
     const elev = new Float32Array(n * 4);
     const otherElev = new Float32Array(n * 4);
     const struct = new Float32Array(n * 4);
@@ -626,6 +630,7 @@ export function createStructures(THREE, options) {
         struct[idx] = atStart ? s.sa : s.sb;
         otherStruct[idx] = atStart ? s.sb : s.sa;
         side[idx] = k % 2 === 0 ? -1 : 1;
+        direction[idx] = atStart ? 1 : -1;
       }
       index[i] = v; index[i + 1] = v + 1; index[i + 2] = v + 2;
       index[i + 3] = v + 2; index[i + 4] = v + 1; index[i + 5] = v + 3;
@@ -636,6 +641,7 @@ export function createStructures(THREE, options) {
     geometry.setAttribute('position', new THREE3.BufferAttribute(position, 3));
     geometry.setAttribute('aOther', new THREE3.BufferAttribute(other, 3));
     geometry.setAttribute('aSide', new THREE3.BufferAttribute(side, 1));
+    geometry.setAttribute('aDirection', new THREE3.BufferAttribute(direction, 1));
     geometry.setAttribute('aElev', new THREE3.BufferAttribute(elev, 1));
     geometry.setAttribute('aOtherElev', new THREE3.BufferAttribute(otherElev, 1));
     geometry.setAttribute('aStruct', new THREE3.BufferAttribute(struct, 1));
