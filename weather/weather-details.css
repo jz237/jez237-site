@@ -1,4 +1,14 @@
 /* Scoped to this page so the home dashboard keeps its existing widget. */
+.weather-page .hub-main { min-width:0; }
+/* Keep the decorative galaxy inside the page instead of creating sideways scroll. */
+.weather-page .desktop-hub::before { inset:0; animation:none; }
+@media (min-width:761px) and (max-width:1000px) {
+  .weather-page .desktop-hub { grid-template-columns:minmax(0,1fr); }
+  .weather-page .hub-sidebar { display:none; }
+  .weather-page .hub-main { padding:24px; }
+  .weather-page .weather-title-row { grid-template-columns:minmax(0,1fr); gap:8px; }
+  .weather-page .weather-title-tools { padding-left:0; border-left:0; }
+}
 .weather-jump-nav { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0; }
 .weather-jump-nav a, .weather-map-controls button { border:1px solid var(--line, #526576); background:var(--panel, #122638); color:var(--ink, #edf4fa); padding:10px 16px; border-radius:10px; font:inherit; font-size:14px; text-decoration:none; cursor:pointer; }
 .weather-jump-nav a:hover, .weather-map-controls button[aria-pressed="true"] { background:#174f83; color:#fff; border-color:#73c9ff; }

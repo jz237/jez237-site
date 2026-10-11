@@ -1,0 +1,114 @@
+/* Isolated from the shared weather widget and the site's button/heading skins. */
+#weather-hurricanes { --hc-bg:#071c2b; --hc-panel:#102b3b; --hc-line:#294859; --hc-ink:#edf6f9; --hc-muted:#a9c0cc; --hc-accent:#7de3d3; margin:26px 0; padding:24px; border:1px solid #355363; border-radius:22px; background:linear-gradient(135deg,#112e40,#071b2b 62%); color:var(--hc-ink); box-shadow:0 16px 46px #0003; scroll-margin-top:20px; isolation:isolate; }
+#weather-hurricanes *, #weather-hurricanes *::before, #weather-hurricanes *::after { box-sizing:border-box; }
+#weather-hurricanes [hidden] { display:none !important; }
+#weather-hurricanes h2,#weather-hurricanes h3,#weather-hurricanes p { color:inherit; }
+#weather-hurricanes a { color:#a4e7ed; }
+#weather-hurricanes button,#weather-hurricanes select { min-height:38px; margin:0; padding:8px 12px; border:1px solid var(--hc-line); border-radius:8px; background:#183748; box-shadow:none; color:var(--hc-ink); font:600 13px/1.3 system-ui,sans-serif; text-transform:none; letter-spacing:normal; cursor:pointer; transform:none; }
+#weather-hurricanes button:hover,#weather-hurricanes select:hover { background:#24485b; border-color:#729aab; }
+#weather-hurricanes button:disabled { opacity:.45; cursor:default; }
+#weather-hurricanes :is(button,select,input,a,summary):focus-visible { outline:3px solid #83eedc; outline-offset:3px; }
+#weather-hurricanes .hurricane-header { position:static; display:flex; justify-content:space-between; align-items:center; gap:16px; margin:0 0 22px; padding:0; background:none; border:0; box-shadow:none; }
+#weather-hurricanes .hurricane-kicker { display:flex; align-items:center; gap:8px; color:var(--hc-accent); font:700 10px/1.5 system-ui,sans-serif; letter-spacing:.17em; text-transform:uppercase; }
+.hurricane-status-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#86a6ba; box-shadow:0 0 0 4px #86a6ba15; }
+#weather-hurricanes[data-feed="fresh"] .hurricane-status-dot { background:var(--hc-accent); box-shadow:0 0 0 4px #7de3d318; }
+#weather-hurricanes[data-feed="stale"] .hurricane-status-dot,#weather-hurricanes[data-feed="error"] .hurricane-status-dot { background:#ffc271; box-shadow:0 0 0 4px #ffc27115; }
+#weather-hurricanes .hurricane-header h2 { margin:7px 0 8px; font:700 clamp(29px,3.1vw,40px)/1.1 Georgia,serif; letter-spacing:-.035em; text-shadow:none; }
+#weather-hurricanes .hurricane-header p { margin:0; color:var(--hc-muted); font-size:12px; line-height:1.6; }
+#weather-hurricanes .hurricane-source-link { flex:none; padding:9px 0; font-size:12px; text-decoration:none; border-bottom:1px solid #7de3d34a; }
+.hurricane-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.hurricane-basins { display:flex; padding:3px; gap:3px; border:1px solid var(--hc-line); border-radius:10px; background:#061725; }
+#weather-hurricanes .hurricane-basins button { background:transparent; border:1px solid transparent; min-height:34px; padding:7px 13px; color:var(--hc-muted); }
+#weather-hurricanes .hurricane-basins button[aria-pressed="true"] { background:#285365; color:#fff; border-color:#437385; }
+.hurricane-units { display:flex; align-items:center; gap:8px; margin-left:auto; color:var(--hc-muted); font-size:12px; }
+#weather-hurricanes .hurricane-units select { min-width:72px; padding-right:6px; }
+.hurricane-feed-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; align-items:center; padding:12px 0; font-size:11px; color:var(--hc-muted); }
+#weather-hurricanes .hurricane-feed-row p { margin:0; }
+#hurricane-basin-count { color:#d0e3e9; font-weight:600; }
+#weather-hurricanes .hurricane-notice { margin:0 0 14px; padding:11px 13px; border:1px solid #976c39; border-radius:8px; color:#ffe2b4; background:#68432238; font-size:12px; line-height:1.6; }
+.hurricane-workspace { display:grid; grid-template-columns:minmax(0,1fr) 234px; gap:18px; align-items:start; }
+.hurricane-map-column,.hurricane-sidebar { min-width:0; }
+.hurricane-map-frame { position:relative; overflow:hidden; border:1px solid #416374; border-radius:12px; background:#061b2c; }
+#hurricane-map { height:408px; width:100%; background:radial-gradient(ellipse at 58% 45%,#12374c,#061b2c 78%); font-family:system-ui,sans-serif; cursor:grab; z-index:0; }
+#hurricane-map:focus-visible { outline:3px solid #83eedc; outline-offset:-4px; }
+#hurricane-map .leaflet-pane,#hurricane-map svg { max-width:none !important; }
+#hurricane-map .leaflet-control-zoom { border:1px solid #466475; box-shadow:0 3px 14px #0005; border-radius:8px; overflow:hidden; }
+#hurricane-map .leaflet-control-zoom a { width:34px; height:34px; line-height:34px; background:#112e40; color:#fff; border-color:#466475; }
+#hurricane-map .leaflet-control-attribution { max-width:100%; background:#071c2be8; color:#b3c9d3; font-size:9px; padding:3px 6px; }
+#hurricane-map .leaflet-control-attribution a { color:#b3e9e2; }
+#weather-hurricanes #hurricane-reset-view { position:absolute; top:10px; right:10px; z-index:401; min-height:32px; font-size:11px; background:#0d283aef; border-color:#426576; box-shadow:0 3px 14px #0004; }
+.hurricane-map-message { position:absolute; top:64px; left:20px; right:20px; z-index:402; margin:auto; width:fit-content; max-width:calc(100% - 40px); padding:12px 16px; border:1px solid #416374; border-radius:10px; background:#0c273beb; color:#d7e8ef; font-size:12px; line-height:1.6; text-align:center; box-shadow:0 5px 24px #0004; pointer-events:none; }
+.hurricane-layers { display:flex; flex-wrap:wrap; gap:2px 15px; padding:10px 1px 4px; }
+.hurricane-layers label { display:flex; align-items:center; gap:6px; min-height:34px; color:#c0d2dc; font-size:11px; cursor:pointer; }
+.hurricane-layers input { width:15px; height:15px; accent-color:#83dbc9; margin:0; cursor:pointer; }
+.hurricane-map-legend { display:flex; flex-wrap:wrap; gap:8px 15px; padding:12px 1px 3px; color:#b0c9d5; font-size:10px; }
+.hurricane-map-legend span { display:flex; align-items:center; gap:6px; }
+.hurricane-map-legend i { display:inline-block; width:18px; height:10px; flex:none; }
+.hurricane-legend-past { border-top:2px dashed #819fb0; transform:translateY(4px); }
+.hurricane-legend-track { border-top:2px solid #b8edf2; transform:translateY(4px); }
+.hurricane-legend-cone { border:1px solid #b6d9e7; background:#b6d9e722; border-radius:50% 70% 70% 50%; }
+.hurricane-legend-outlook { border:1px dashed #ffc271; background:#ffc27118; border-radius:50%; }
+.hurricane-panel-label { margin:0 0 9px; color:var(--hc-muted); font-size:10px; text-transform:uppercase; letter-spacing:.09em; font-weight:700; }
+.hurricane-storm-list { display:grid; gap:7px; }
+#weather-hurricanes .hurricane-storm-button { display:grid; grid-template-columns:36px 1fr auto; align-items:center; gap:9px; width:100%; padding:11px 10px; text-align:left; border-radius:9px; background:#0a2131; border-color:#2a495b; }
+#weather-hurricanes .hurricane-storm-button[aria-pressed="true"] { background:#193c4c; border-color:#74aeae; box-shadow:inset 3px 0 var(--storm-color); }
+.hurricane-storm-symbol { position:relative; display:grid; place-items:center; width:34px; height:34px; color:var(--storm-color); }
+.hurricane-storm-symbol svg { display:block; width:34px; height:34px; }
+.hurricane-storm-button strong { display:block; font:700 15px/1.25 system-ui,sans-serif; }
+.hurricane-storm-button small { display:block; margin-top:3px; color:#c0d4de; font:400 10px/1.35 system-ui,sans-serif; }
+.hurricane-storm-button .hurricane-list-wind { color:var(--storm-color); font-size:14px; white-space:nowrap; }
+.hurricane-list-wind small { text-align:right; font-size:9px; color:#b0c9d5; }
+#weather-hurricanes .hurricane-empty { padding:12px; margin:0; border:1px solid #315365; border-radius:8px; color:#c0d2dc; font-size:12px; line-height:1.6; background:#102b3b; }
+.hurricane-storm-details { margin-top:14px; }
+.hurricane-detail-heading { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--hc-muted); }
+.hurricane-category { display:inline-block; padding:4px 7px; border:1px solid var(--storm-color); color:var(--storm-color); border-radius:5px; font-size:10px; font-weight:700; }
+.hurricane-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:13px 0; }
+.hurricane-stat-grid div { border-bottom:1px solid #315060; padding-bottom:8px; }
+.hurricane-stat-grid dt { color:var(--hc-muted); font-size:10px; margin-bottom:5px; }
+.hurricane-stat-grid dd { margin:0; color:#edf6f9; font-size:18px; font-weight:650; letter-spacing:-.02em; }
+.hurricane-stat-grid dd small { font-size:10px; font-weight:400; color:#b0c9d5; letter-spacing:0; }
+#weather-hurricanes .hurricane-advisory-time { margin:6px 0 10px; font-size:11px; line-height:1.6; color:#b7ced9; }
+.hurricane-detail-link { font-size:11px; font-weight:600; line-height:1.5; }
+#weather-hurricanes .hurricane-layer-note { margin:9px 0; font-size:10px; line-height:1.55; color:#b1c8d3; }
+.hurricane-coastal-note { padding:8px 9px; margin-top:10px; background:#244459; border-radius:6px; color:#d6e6ee; font-size:10px; line-height:1.5; }
+.hurricane-outlook-title { margin:20px 0 8px; padding-top:15px; border-top:1px solid #315060; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--hc-muted); }
+#weather-hurricanes .hurricane-outlook-button { width:100%; display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; text-align:left; padding:10px; margin:6px 0; background:#112c3c; border-color:#3b5260; }
+.hurricane-outlook-button strong { color:var(--area-color); font-size:22px; line-height:1; }
+.hurricane-outlook-button span { color:#d7e5eb; font-size:11px; }
+.hurricane-outlook-button small { display:block; margin-top:4px; color:#adc5d1; font-size:10px; font-weight:400; }
+.hurricane-timeline { margin-top:8px; padding:12px 14px; border:1px solid #315363; border-radius:10px; background:#0d293b; }
+.hurricane-timeline-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; color:#bed7e0; font-size:11px; font-weight:600; }
+#weather-hurricanes .hurricane-timeline-heading button { min-height:30px; padding:5px 10px; font-size:10px; background:#204456; }
+.hurricane-timeline-controls { display:flex; align-items:center; gap:12px; padding:9px 0 5px; }
+#weather-hurricanes .hurricane-timeline-controls button { min-height:32px; width:32px; flex:none; padding:0; font:22px/1 system-ui,sans-serif; }
+#hurricane-forecast-step { width:100%; min-width:40px; height:24px; margin:0; accent-color:#8de6d3; cursor:pointer; }
+#hurricane-forecast-readout { display:block; min-height:34px; color:#e2f1f5; font-size:12px; line-height:1.6; }
+#hurricane-forecast-readout small { display:block; font-size:10px; color:#abc5d1; }
+.hurricane-footer { border-top:1px solid #294959; margin-top:18px; padding-top:14px; }
+#weather-hurricanes .hurricane-footer > p { color:#b4cbd6; margin:0 0 8px; font-size:11px; line-height:1.7; }
+.hurricane-map-guide summary { width:fit-content; min-height:32px; padding:6px 0; color:#aadfdc; cursor:pointer; font-size:11px; font-weight:600; }
+.hurricane-guide-content { font-size:12px; line-height:1.75; color:#bbd2dd; }
+.hurricane-intensity-key { display:flex; gap:8px 16px; flex-wrap:wrap; font-size:11px; margin:16px 0; }
+.hurricane-intensity-key span::before { content:''; display:inline-block; width:8px; height:8px; background:var(--key); border-radius:50%; margin-right:6px; }
+/* Leaflet DOM icons deliberately use CSS/inline SVG, avoiding external icon assets. */
+.hurricane-map-marker { background:transparent; border:0; }
+.hurricane-center-icon { position:relative; width:38px; height:38px; display:grid; place-items:center; border:2px solid var(--storm-color); border-radius:50%; color:var(--storm-color); background:#071d2bf5; box-shadow:0 2px 12px #0008; }
+.hurricane-center-icon strong { font:800 16px/1 system-ui,sans-serif; }
+.hurricane-map-marker.is-selected .hurricane-center-icon::before { content:''; position:absolute; inset:-7px; border:1px solid var(--storm-color); border-radius:50%; opacity:.5; animation:hurricane-beacon 3s ease-out infinite; }
+@keyframes hurricane-beacon { 0%,100% { transform:scale(.93); opacity:.45; } 65% { transform:scale(1.16); opacity:.08; } }
+.hurricane-city-label { background:none; border:none; color:#a4c2d1; font:10px/1 system-ui,sans-serif; text-shadow:0 1px 3px #00131f,0 -1px 3px #00131f; white-space:nowrap; pointer-events:none; }
+.hurricane-city-label::before { content:''; display:inline-block; width:3px; height:3px; background:#a4c2d1; border-radius:50%; margin:0 4px 2px 0; }
+.hurricane-ocean-label { color:#79a6bf77; font:italic 13px/1.1 Georgia,serif; letter-spacing:.08em; white-space:nowrap; pointer-events:none; text-align:center; }
+#hurricane-map .hurricane-storm-tooltip { padding:4px 8px; border:1px solid #638493; border-radius:5px; background:#0a2538ed; color:#e2f1f5; font:600 11px/1.4 system-ui,sans-serif; box-shadow:0 2px 8px #0004; }
+#hurricane-map .hurricane-storm-tooltip::before { border-top-color:#638493; }
+#hurricane-map .leaflet-popup-content-wrapper,#hurricane-map .leaflet-popup-tip { background:#102d40; color:#edf6f9; }
+#hurricane-map .leaflet-popup-content { margin:13px 16px; font:12px/1.7 system-ui,sans-serif; }
+#hurricane-map .leaflet-popup-close-button { color:#b8d4de; }
+#hurricane-map .leaflet-popup-content strong { display:block; margin-bottom:4px; }
+.weather-jump-nav .weather-hurricane-jump { border-color:#558c9b; color:#b2e5e5; }
+@media (min-width:1550px) { .hurricane-workspace { grid-template-columns:minmax(0,1fr) 260px; } #hurricane-map { height:440px; } }
+@media (max-width:1100px) { .hurricane-workspace { grid-template-columns:minmax(0,1fr); } .hurricane-sidebar { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); column-gap:20px; align-items:start; } .hurricane-panel-label { grid-column:1; } .hurricane-storm-list { grid-column:1; grid-row:2; } #hurricane-storm-detail { grid-column:2; grid-row:1 / span 3; } .hurricane-storm-details { margin-top:0; } #hurricane-outlook-list { grid-column:1; } }
+@media (max-width:760px) { #weather-hurricanes { margin:16px 0 22px; padding:16px 12px; border-radius:14px; } #weather-hurricanes .hurricane-header { align-items:flex-start; gap:8px; margin-bottom:16px; } #weather-hurricanes .hurricane-header h2 { font-size:30px; } #weather-hurricanes .hurricane-header p { font-size:11px; } #weather-hurricanes .hurricane-source-link { max-width:72px; font-size:10px; line-height:1.5; text-align:right; } .hurricane-toolbar { gap:8px; } .hurricane-basins { width:100%; } #weather-hurricanes .hurricane-basins button { flex:1; padding:8px 7px; } .hurricane-units { margin-left:0; } #weather-hurricanes .hurricane-refresh { margin-left:auto; } #hurricane-map { height:365px; } .hurricane-workspace { gap:17px; } .hurricane-layers { column-gap:14px; } .hurricane-layers label { min-height:36px; } .hurricane-map-legend { gap:10px; } .hurricane-sidebar { column-gap:13px; } .hurricane-stat-grid { gap:9px; } .hurricane-stat-grid dd { font-size:17px; } }
+@media (max-width:440px) { .hurricane-sidebar { display:block; } .hurricane-storm-list { grid-template-columns:1fr; } .hurricane-storm-details { margin-top:15px; } .hurricane-stat-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; } .hurricane-stat-grid dd { font-size:16px; } .hurricane-stat-grid dd small { display:block; margin-top:3px; } .hurricane-stat-grid dt { font-size:9px; } #hurricane-map { height:338px; } .hurricane-outlook-title { margin-top:15px; } }
+@media (prefers-reduced-motion:reduce) { .hurricane-map-marker.is-selected .hurricane-center-icon::before { animation:none; } }
+@media print { #weather-hurricanes { break-inside:avoid; } .hurricane-toolbar,.hurricane-layers,.hurricane-timeline-controls,.hurricane-timeline-heading button,#hurricane-reset-view,.leaflet-control-zoom { display:none !important; } }
