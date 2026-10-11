@@ -58,8 +58,8 @@ varying vec3 vQ; varying vec4 vCloud; varying vec3 vW;
 // 0 violet .. 1 red
 vec3 spectrum(float t){
   vec3 c = vec3(smoothstep(0.45, 0.75, t) + 0.35 * (1.0 - smoothstep(0.0, 0.18, t)),
-                exp(-pow((t - 0.5) / 0.2, 2.0)),
-                exp(-pow((t - 0.15) / 0.17, 2.0)));
+                exp(-(((t - 0.5) / 0.2) * ((t - 0.5) / 0.2))),
+                exp(-(((t - 0.15) / 0.17) * ((t - 0.15) / 0.17))));
   return mix(c, vec3(dot(c, vec3(0.333))), 0.2);
 }
 float band(float t){ return smoothstep(-0.15, 0.12, t) * (1.0 - smoothstep(0.88, 1.15, t)); }

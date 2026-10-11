@@ -7,7 +7,8 @@ stir the air, pour fog, mist the plants, touch the pool and wipe the fogged glas
 leaves bead and drip, puddles gather, and with the lamp behind you a rainbow can show in the rain.
 The bearded dragon basks, roams the whole case, wades in the shallows, drinks, signals, hunts
 crickets, grazes from a dish of greens, licks droplets off the leaves and shelters from storms in a
-cave in the rock. Its colour follows its temperature and mood.
+cave in the rock. Its colour follows its temperature and mood. A school of neon tetras lives in the
+pool.
 
 - Demo: https://jez237.com/demos/terrarium/
 - Source: `scripts/terrarium/` (this folder). The public build lives in `demos/terrarium/`.
@@ -21,7 +22,7 @@ cave in the rock. Its colour follows its temperature and mood.
 | **Wind** | Drag across the case to blow a gust. Faint wisps and drifting dust trace the air. The grass parts along the stroke, loose leaves lift and tumble, and plants, moss, water, rain, fog and clouds all follow the flow. |
 | **Fog** | Hold or drag to pour fog. It spreads out, runs downhill, pools on the water and burns off under the lamp. |
 | **Wipe** | Drag across the glass to clear condensation. |
-| **Feed** | Drop a cricket in. The lizard spots it, stalks it, fixes on it and strikes. Tap the stone dish to refill its greens. |
+| **Feed** | Drop a cricket in. The lizard spots it, stalks it, fixes on it and strikes. Tap the stone dish to refill its greens. Tap the pool to scatter flakes for the fish. |
 | **Mist** | Tap or hold to spray a fine mist from a bottle. It wets the leaves and the dragon comes over to lick the droplets off. Mist its face and it blinks and licks its lips. With the lamp behind you, a small rainbow can show in the spray. |
 
 Other controls:
@@ -94,6 +95,11 @@ All motion constants are illustrative. They are not measured from real bearded d
   - **Floor and roof:** the surface map keeps two heights. Rays cast up from the ground find the ceiling, so the floor is what feet stand on and the roof is what the rain, clouds, lightning and camera see.
   - **Shelter:** rain lands on the roof, and the floor stays dry.
   - **Clear ground:** plants are kept off the floor and its apron.
+- **Fish (`lib/Fish.ts`).** A school of fourteen neon tetras (*Paracheirodon innesi*, about 2.4 cm) lives in the pool.
+  - **Model:** each fish is sculpted in code. It has a laterally flattened body lofted from height and width profiles, a forked tail, and dorsal, adipose, anal, pelvic and pectoral fins with visible rays. The eyes are large, with a big black pupil and a dark silver iris.
+  - **Colour:** the shader paints the iridescent stripe, blue face-on and turning green-cyan at a glancing view and brightest at the lamp's mirror angle. It also paints the red rear half, the silver belly, the translucent olive back, the gill cover, fine scales and the white leading edge of the anal fin.
+  - **Swimming:** the body bends in a travelling wave whose beat follows the speed, the body curves into turns and the pectoral fins scull.
+  - **Behaviour:** they school as boids inside water deep enough for them, away from the churn under the falls. A finger, a falling cricket, raindrops and lightning on the water make them dart away, and they keep clear of the wading dragon. They rise to flakes from the Feed tool and snap them up with a tiny ring on the surface. At night they slow down and rest low, and, like real neons, their colours fade.
 - **Water.**
   - The pool has a wadeable pebble-and-silt shelf and a plunge pocket scoured out under the falls. Its tea-stained water absorbs light with depth, refracts the bed and reflects the scene through a planar mirror render.
   - A GPU wave simulation (two height buffers, 120 steps a second) carries ripples from fingers and stirring, raindrops, wading feet, lapping, falling crickets, the falls and lightning strikes. Waves reflect off the shore and die away, and ripple faces catch the lamp. Touching the water flicks up droplets that ripple where they land.
@@ -113,6 +119,7 @@ All motion constants are illustrative. They are not measured from real bearded d
     - twigs and pebbles, and leaves floating on the pool.
   - **Litter:** several hundred fallen leaves on crumbly humus with bark chips.
   - **Meadow (`lib/Meadow.ts`):** about 7 000 fine grass and sedge blades in clumps across open soil, along the shore and at the front glass.
+  - **The glass:** no plant passes through it. Creeping fig is turned about its root until the whole vine lies inside the case, and every leaf and blade that reaches a pane, by growth, wind or the dragon pushing through, presses flat against it.
   - **Wind response:** every plant reads the wind where each of its parts stands, not just at its root. A gust crossing a fern bends its near fronds first, and a wind stroke parts the meadow along its path while gusts run through it in waves. Plants flutter in turbulence and flash their paler undersides in gusts.
   - **Loose leaves (`lib/LeafDrift.ts`):** dead leaves lie on the floor. A strong enough local wind lifts them; they tumble with the air, flutter down and settle again, or float on the pool.
   - **Dust (`lib/Motes.ts`):** motes and spores ride the wind field exactly, and glint where they cross the lamp's beam.
@@ -224,6 +231,7 @@ Some phone GPUs fail where desktop ones do not, so there are some safeguards.
 - **Stalls:** if no frame finishes for 14 seconds, or every fallback has been used, the diagnostics panel appears with the reason.
 - **Lost GPU context:** if the browser takes the GPU context away, the page reloads once in `?lite` mode.
 - **Float textures:** only half-float data textures are filtered, because 32-bit float filtering is missing on many phones.
+- **Undefined maths:** the shaders avoid operations that GLSL leaves undefined and GPUs answer differently: `smoothstep` with reversed edges, and `pow` of a possibly negative number (squares are written out).
 
 ## Limits
 

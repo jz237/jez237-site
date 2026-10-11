@@ -253,7 +253,7 @@ vec2 rainRings(vec2 p, float t){
     float r = length(d);
     float ph = fract(t * (1.1 + h.y) + h.x);
     float R = ph * 0.45;
-    float wv = sin((r - R) * 48.0) * exp(-pow((r - R) / 0.08, 2.0)) * (1.0 - ph);
+    float wv = sin((r - R) * 48.0) * exp(-(((r - R) / 0.08) * ((r - R) / 0.08))) * (1.0 - ph);
     s += d / max(r, 1e-3) * wv;
   }
   return s;

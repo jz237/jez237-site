@@ -31,7 +31,7 @@ const TOOLS: {id: Tool; label: string; hint: string}[] = [
   {id: 'wind', label: 'Wind', hint: 'Drag across the case to blow a gust'},
   {id: 'fog', label: 'Fog', hint: 'Hold or drag to pour fog — it runs downhill and pools on the water'},
   {id: 'wipe', label: 'Wipe', hint: 'Drag across the glass to wipe away condensation'},
-  {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard · tap the dish to refill its greens'},
+  {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard · tap the dish to refill its greens · tap the pool to feed the fish'},
   {id: 'mist', label: 'Mist', hint: 'Tap or hold to mist the plants · the dragon licks the wet leaves · look for a rainbow in the spray'},
 ];
 
@@ -247,7 +247,9 @@ export class UI {
         this.drag.kind = 'condense';
       } else if (this.tool === 'feed') {
         const p = t.pickInside(this.ray.ray);
-        if (p && t.dish.hit(p)) {t.dish.refill(); this.say('Fresh greens in the dish', 3);}
+        const pond = this.pickWater(this.ray.ray);
+        if (pond && t.fish.feed(pond.x, pond.z)) {t.water.addRipple(pond.x, pond.z, 0.4); this.say('A pinch of flakes for the fish', 3);}
+        else if (p && t.dish.hit(p)) {t.dish.refill(); this.say('Fresh greens in the dish', 3);}
         else {t.feed(p); this.say('A cricket drops in…', 3);}
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
