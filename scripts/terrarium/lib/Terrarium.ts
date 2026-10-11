@@ -24,6 +24,8 @@ import {LizardRig} from './LizardRig';
 import {LizardBrain} from './LizardBrain';
 import {Weather} from './Weather';
 import {TerrariumAudio} from './Audio';
+import {AirGlow} from './AirGlow';
+import {Toad} from './Toad';
 import {CloudShadow} from './CloudShadow';
 import {Rainbow} from './Rainbow';
 import {FishSchool} from './Fish';
@@ -59,6 +61,7 @@ export class Terrarium {
   brain!: LizardBrain;
   weather!: Weather;
   readonly audio = new TerrariumAudio();
+  readonly air = new AirGlow();
   readonly cloudShadow = new CloudShadow();
   /** The hand's push on the foliage (x, y, z, radius). */
   readonly handPush = foliageUniforms.uPush.value[0];
@@ -77,6 +80,7 @@ export class Terrarium {
   leafDrift!: LeafDrift;
   rainbow!: Rainbow;
   fish!: FishSchool;
+  toad!: Toad;
   private poolWind = new THREE.Vector2();
   /** Leaf tips that hold rain: drips fall from them and the dragon licks them. */
   leafTips: THREE.Vector3[] = [];
@@ -125,7 +129,7 @@ export class Terrarium {
     const pmrem = new THREE.PMREMGenerator(r);
     s.environment = pmrem.fromScene(this.room.envScene, 0.02).texture;
     s.environmentIntensity = 1.0;
-    s.add(this.room.group, this.case.group, this.case.glassGroup, this.ground.mesh, this.ground.walls);
+    s.add(this.room.group, this.case.group, this.case.glassGroup, this.ground.mesh, this.ground.walls, this.air.mesh);
     r.shadowMap.autoUpdate = false;
 
     // Lamp in the lid: warm key light with soft shadows.
@@ -201,6 +205,15 @@ export class Terrarium {
     this.hardscape = new Hardscape(scans, peaks);
     this.scene.add(this.hardscape.group);
     this.surface = new Surface(this.ground.mesh, this.hardscape.placed.map((p) => ({mesh: p.mesh, kind: p.mesh === this.hardscape.log ? SurfaceKind.Wood : SurfaceKind.Rock})));
+    {
+      // what lies on top everywhere (ground, stones, the log): pushed leaves rest on it
+      const NX = 240, NZ = 100, top = new Uint16Array(NX * NZ);
+      for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) top[j * NX + i] = THREE.DataUtils.toHalfFloat(this.surface.topAt(-TANK.w / 2 + ((i + 0.5) / NX) * TANK.w, -TANK.d / 2 + ((j + 0.5) / NZ) * TANK.d));
+      const tex = new THREE.DataTexture(top, NX, NZ, THREE.RedFormat, THREE.HalfFloatType);
+      tex.magFilter = tex.minFilter = THREE.LinearFilter;
+      tex.needsUpdate = true;
+      foliageUniforms.tTop.value = tex;
+    }
     this.plants = new Plants(scans, this.surface);
     this.ground.uniforms.tMoss.value = this.plants.moss.texture;
     this.scene.add(this.plants.group);
@@ -221,6 +234,15 @@ export class Terrarium {
     this.scene.add(this.fish.group);
     this.fish.onBite = (x, z) => this.water.ripples.add(x, z, 0.0012, -0.9);
     this.water.onDisturb = (x, z, s) => this.fish.startle(x, z, s);
+    // a fire-bellied toad on the bank and in the pool
+    this.toad = new Toad(this.surface);
+    this.scene.add(this.toad.group);
+    this.toad.onRipple = (x, z, s) => {
+      this.water.ripples.add(x, z, 0.003 + 0.004 * s, -(0.6 + 1.6 * s));
+      if (s > 0.5) this.water.flick(x, z, 2, 0.1);
+      this.fish.startle(x, z, 0.4 + s, 0.07);
+    };
+    this.toad.onCall = (pan) => this.audio.toadCall(pan);
     this.resize();
     this.lizard = await LizardModel.load('./lizard/');
     this.lizard.setMorph(new URLSearchParams(location.search).get('morph') ?? 'normal');
@@ -340,13 +362,13 @@ export class Terrarium {
     const w = this.weather, a = this.audio;
     const pan = (x: number) => THREE.MathUtils.clamp(x / (TANK.w / 2), -1, 1) * 0.7;
     w.clouds.events.squish = (c, amt) => a.squish(amt);
-    w.clouds.events.grab = () => a.grab();
-    w.clouds.events.release = (c, sp) => a.release(sp);
-    w.clouds.events.merge = () => a.merge();
-    w.clouds.events.pop = () => a.pop();
+    w.clouds.events.grab = (c) => a.grab(c.size);
+    w.clouds.events.release = (c, sp) => a.release(c.size, sp, c.squeeze);
+    w.clouds.events.merge = (c) => a.merge(c.size);
+    w.clouds.events.pop = (c, big) => a.pop(big);
     w.clouds.events.shrink = (c, amt) => a.shrink(amt);
     this.brain.onCrunch = (p, strength) => a.crunch(strength, pan(p.x));
-    w.clouds.events.zap = (c) => a.zap(pan(c.pos.x));
+    w.clouds.events.zap = (c) => a.zap(c.charge);
     w.onStrike = (end, strength, water, first) => {
       if (!first) return;
       const dist = this.camera.position.distanceTo(end);
@@ -379,6 +401,8 @@ export class Terrarium {
     if (poolDistance(I.x, I.z) < 0.15) threats.push({p: this.rig.spinePoints()[2], r: 0.11}, {p: this.rig.snout, r: 0.08});
     this.weather.wind.sample(0.3, 0.1, this.poolWind);
     this.fish.update(dt, threats, this.weather.daylight, this.poolWind);
+    // the toad flashes its belly at the dragon's head or chest coming close
+    this.toad.update(dt, {threats: [{p: this.rig.snout, r: 0.075}, {p: this.rig.spinePoints()[2], r: 0.06}], night: 1 - this.weather.daylight});
   }
 
   /** The lizard wading: a bow wave at the chest and a trail behind. */
@@ -615,9 +639,9 @@ export class Terrarium {
     q.level++;
     const r = this.renderer;
     if (q.level === 1) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.5));
-    else if (q.level === 2) {this.post.settings.dof = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26;}
+    else if (q.level === 2) {this.post.settings.dof = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
     else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
-    else if (q.level === 4) this.post.settings.ao = false;
+    else if (q.level === 4) {this.post.settings.ao = false; this.air.enabled = false;}
     else if (q.level === 5) {this.moss.mesh.count = 8; this.moss.uniforms.uShells.value = 8;}
     else if (q.level === 6) r.setPixelRatio(0.9);
     else q.locked = true;
@@ -638,10 +662,13 @@ export class Terrarium {
     foliageUniforms.uTime.value = this.time;
     this.camera.updateMatrixWorld();
     foliageUniforms.uKeyDirView.value.copy(this.key.position).sub(this.key.target.position).normalize().transformDirection(this.camera.matrixWorldInverse);
+    foliageUniforms.uFolKeyPos.value.copy(this.key.position);
     for (const f of this.onFrame) f(dt, this.time);
     this.weather.update(dt, this.time, this.camera);
     this.weather.clouds.sort(this.camera);
     this.weather.fogVolume.update(dt, this.time, this.camera, this.post.distRT.texture, this.post.width, this.post.height);
+    this.air.moisture = THREE.MathUtils.clamp(this.weather.humidity * 0.8 + this.weather.mist * 0.5 + this.weather.rainAmount * 0.3, 0, 1);
+    this.air.update(this.key, this.cloudShadow.target.texture, this.post.distRT.texture, this.post.width, this.post.height, this.framesDrawn);
     this.applyClimate(dt);
     this.updateFollow(dt);
     this.brain.cameraPos.copy(this.camera.position);

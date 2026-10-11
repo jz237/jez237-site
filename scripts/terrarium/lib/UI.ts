@@ -226,6 +226,13 @@ export class UI {
         // a tap on the lizard is a gentle touch
         this.pendingPet = t.hitLizard(this.ray.ray);
         if (this.pendingPet) return;
+        // the toad answers a poke with its warning colours
+        if (t.toad.hit(this.ray.ray)) {
+          t.toad.poke(this.ray.ray.origin);
+          this.say('The toad arches and flashes its fire-red belly: a warning', 3.5);
+          this.drag = null;
+          return;
+        }
         const water = this.pickWater(this.ray.ray);
         if (water) {
           t.water.poke(water.x, water.z, 1);

@@ -73,7 +73,8 @@ export interface CloudEvents {
   grab?: (c: Cloud) => void;
   release?: (c: Cloud, speed: number) => void;
   merge?: (c: Cloud) => void;
-  pop?: (c: Cloud) => void;
+  /** A cloud condensing or thinning away (`big`), or a puff added as one grows. */
+  pop?: (c: Cloud, big: boolean) => void;
   shrink?: (c: Cloud, amount: number) => void;
   zap?: (c: Cloud) => void;
   strike?: (c: Cloud, start: THREE.Vector3, strength: number) => void;
@@ -271,7 +272,7 @@ export class Clouds {
     c.storm *= 1 - amount * 0.5;
     c.charge *= 1 - amount;
     c.compVel -= amount * 3;
-    if (c.size < 0.26) {c.dissolving = true; this.events.pop?.(c);}
+    if (c.size < 0.26) {c.dissolving = true; this.events.pop?.(c, true);}
     else if (sound) this.events.shrink?.(c, amount);
   }
 
@@ -288,12 +289,13 @@ export class Clouds {
   /** Starts condensing a cloud at a point (or grows the one under the pointer). */
   condense(at: THREE.Vector3, existing: Cloud | null) {
     let c = existing;
+    const fresh = !c || c.size >= 2.2;
     if (!c || c.size >= 2.2) {
       c = this.spawn({x: clamp(at.x, -TANK.w / 2 + 0.06, TANK.w / 2 - 0.06), z: clamp(at.z, -TANK.d / 2 + 0.05, TANK.d / 2 - 0.05), y: HOME_Y + (Math.random() - 0.5) * 0.012, size: 0.22, water: 0.12, fadeIn: true});
     }
     this.growing = {cloud: c, lastPuff: at.clone()};
     c.touchedAt = this.now;
-    this.events.pop?.(c);
+    if (fresh) this.events.pop?.(c, true);
   }
   condenseMove(at: THREE.Vector3) {
     const g = this.growing;
@@ -313,7 +315,7 @@ export class Clouds {
     const r = Math.max(0.2, 0.32 + Math.random() * 0.12);
     c.puffs.splice(normal.length, 0, {rest, r, pos: at.clone().setY(c.pos.y), vel: new THREE.Vector3(), rCur: 0.002, ph: Math.random() * 10, storm: 0, weight: 1, idx: normal.length});
     c.size = Math.min(2.2, c.size + 0.03);
-    this.events.pop?.(c);
+    this.events.pop?.(c, false);
   }
   condenseEnd() {
     const g = this.growing;

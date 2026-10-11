@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type {ScanSet} from './Assets';
 import {Surface, SurfaceKind} from './Surface';
-import {addFoliage} from './Foliage';
+import {addFoliage, PINNATE_GLSL} from './Foliage';
 import {mulberry32} from './Textures';
 import {fbm, WATER_LEVEL, poolDistance, caveKeepClear, caveFloorWeight} from './Ground';
 import {TANK} from './Case';
@@ -11,6 +11,7 @@ const texLoader = new THREE.TextureLoader();
 function alphaTex(url: string) {
   const t = texLoader.load(url);
   t.colorSpace = THREE.NoColorSpace;
+  t.anisotropy = 8; // fronds seen edge-on stay crisp
   return t;
 }
 
@@ -214,9 +215,10 @@ function creeper(rnd: () => number, length: number) {
   return parts;
 }
 
-export function leafMaterial() {
+/** `litter`: fallen leaves, which lie where they are (a gust only lifts an edge). */
+export function leafMaterial(litter = false) {
   const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.42, side: THREE.DoubleSide});
-  addFoliage(m, {flexAttr: true, height: 0.06, translucency: 0.8, key: 'leaf'});
+  addFoliage(m, {flexAttr: true, height: 0.06, translucency: 0.8, push: !litter, key: litter ? 'litter' : 'leaf'});
   const base = m.onBeforeCompile;
   m.onBeforeCompile = (s, r) => {
     base(s, r);
@@ -230,6 +232,7 @@ float lh(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
 float ln(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(lh(i), lh(i+vec2(1,0)), f.x), mix(lh(i+vec2(0,1)), lh(i+vec2(1,1)), f.x), f.y); }`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 float u = vLeafUv.x, v = vLeafUv.y * 2.0 - 1.0;
+vec2 fwUv = fwidth(vec2(u, v));
 vec3 col;
 float vein = 0.0;
 float mid = 1.0 - smoothstep(0.0, 0.035, abs(v));
@@ -239,12 +242,15 @@ if (vKind < 0.5) { // pilea: radiating veins from the peltate point
   vein = (1.0 - smoothstep(0.0, 0.06, abs(sin(a * 4.5)))) * smoothstep(0.03, 0.12, length(q)) * 0.5;
   col = mix(vec3(0.035, 0.1, 0.018), vec3(0.07, 0.16, 0.03), vTint);
   col = mix(col, col * 1.5, vein * 0.4);
+  // quilted: the veins sunk, the leaf puffed up between them
+  folRelief += -0.05 * vein + 0.02 * ln(vec2(u, v) * 7.0);
 } else if (vKind < 1.5) { // fittonia: white vein network
   float lat = abs(fract(u * 7.0 - abs(v) * 1.6) - 0.5);
   float net = abs(fract(u * 21.0 + abs(v) * 3.0 + ln(vec2(u, v) * 12.0)) - 0.5);
   vein = max(mid, max(1.0 - smoothstep(0.0, 0.06, lat), (1.0 - smoothstep(0.0, 0.05, net)) * 0.7));
   col = mix(vec3(0.04, 0.11, 0.025), vec3(0.08, 0.17, 0.04), vTint);
   col = mix(col, mix(vec3(0.75, 0.75, 0.68), vec3(0.6, 0.2, 0.2), step(0.7, vTint)), vein * 0.8);
+  folRelief -= 0.025 * vein;
 } else if (vKind < 2.5) { // cryptanthus: bronze-red bands
   float band = smoothstep(0.35, 0.6, sin(u * 34.0 + ln(vec2(u * 8.0, v)) * 3.0));
   col = mix(vec3(0.16, 0.05, 0.03), vec3(0.3, 0.1, 0.06), vTint);
@@ -252,16 +258,22 @@ if (vKind < 0.5) { // pilea: radiating veins from the peltate point
   col = mix(col, vec3(0.12, 0.1, 0.04), (1.0 - u) * 0.6);
   col = mix(col, col * 1.3, 1.0 - smoothstep(0.0, 0.25, abs(abs(v) - 0.7)));
   vein = mid * 0.4;
+  folRelief += 0.03 * band - 0.03 * mid;
 } else if (vKind < 3.5) { // stems
   col = mix(vec3(0.12, 0.16, 0.06), vec3(0.2, 0.14, 0.08), vTint);
 } else if (vKind < 4.5) { // creeping fig
   col = mix(vec3(0.05, 0.13, 0.03), vec3(0.09, 0.2, 0.05), vTint);
-  vein = mid * 0.5;
+  vein = max(mid * 0.5, pinnate(u, v, 5.0, 1.3, 0.05, fwUv) * smoothstep(0.04, 0.15, u) * (1.0 - smoothstep(0.75, 0.95, abs(v))) * 0.45);
+  col = mix(col, col * 1.6 + vec3(0.01, 0.015, 0.0), vein * 0.6);
+  folRelief -= 0.025 * vein;
 } else { // fallen leaf litter
   float t = vInstTint;
   col = mix(vec3(0.07, 0.04, 0.02), vec3(0.17, 0.1, 0.045), t);
   col = mix(col, vec3(0.08, 0.05, 0.03), smoothstep(0.5, 0.9, ln(vec2(u, v) * 6.0 + t * 10.0)) * 0.7);
-  vein = mid * 0.3;
+  // dry: the veins stand proud and the blade between them crinkles
+  vein = max(mid * 0.5, pinnate(u, v, 7.0, 1.2, 0.045, fwUv) * smoothstep(0.04, 0.12, u) * 0.4);
+  col = mix(col, col * 1.4 + vec3(0.015, 0.01, 0.0), vein);
+  folRelief += 0.04 * vein + 0.035 * ln(vec2(u, v) * 8.0 + t * 7.0);
 }
 col *= 0.85 + 0.3 * ln(vec2(u, v) * 30.0);
 col = mix(col, col * 1.25 + vec3(0.02, 0.02, 0.0), mid * 0.5 * step(vKind, 2.5));
@@ -270,8 +282,10 @@ col = mix(col, col * 0.7 + vec3(0.03, 0.025, 0.0), edge * 0.5);
 diffuseColor.rgb = col;`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor = vKind < 0.5 ? 0.38 : (vKind < 1.5 ? 0.55 : (vKind < 2.5 ? 0.5 : (vKind < 4.5 ? 0.45 : 0.8)));`);
+    s.fragmentShader = s.fragmentShader.replace('void main() {', `${PINNATE_GLSL}
+void main() {`);
   };
-  m.customProgramCacheKey = () => 'leaf-plants-v1';
+  m.customProgramCacheKey = () => litter ? 'leaf-litter-v4' : 'leaf-plants-v4';
   return m;
 }
 
@@ -314,6 +328,8 @@ export class Plants {
       [-0.46, -0.21, 0.36, 1], [-0.27, -0.215, 0.3, 0], [0.24, -0.215, 0.33, 0], [0.56, -0.21, 0.36, 1], [0.08, -0.22, 0.26, 1],
       [-0.12, -0.215, 0.28, 2], [0.38, -0.22, 0.3, 2], [-0.56, -0.12, 0.26, 0], [0.57, -0.12, 0.24, 3], [-0.36, -0.13, 0.18, 3],
       [0.45, -0.08, 0.2, 2], [-0.21, -0.07, 0.15, 3], [0.29, -0.09, 0.17, 2], [-0.5, 0.05, 0.16, 2], [-0.57, 0.2, 0.15, 1],
+      // big fronds arching out at the sides, as in a lush planted case
+      [-0.55, -0.03, 0.3, 0], [0.52, 0.06, 0.26, 1], [-0.38, -0.2, 0.34, 0], [0.33, -0.2, 0.32, 1], [0.12, -0.2, 0.3, 0],
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
@@ -406,7 +422,10 @@ export class Plants {
     const n = leaf.attributes.position.count;
     leaf.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(n).fill(5), 1));
     leaf.setAttribute('aTint', new THREE.BufferAttribute(new Float32Array(n).fill(0.5), 1));
-    const mat = leafMaterial();
+    // lying flat: only the tip of a leaf curls up a little in a gust
+    const flex = leaf.attributes.aFlex as THREE.BufferAttribute;
+    for (let i = 0; i < n; i++) flex.setX(i, flex.getX(i) * 0.3);
+    const mat = leafMaterial(true);
     const list: THREE.Matrix4[] = [];
     for (let i = 0; i < 4000 && list.length < 460; i++) {
       const x = (rnd() - 0.5) * (TANK.w - 0.02), z = (rnd() - 0.5) * (TANK.d - 0.02);

@@ -10,6 +10,12 @@ float pn(vec3 p){ vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
              mix(mix(ph(i+vec3(0,0,1)), ph(i+vec3(1,0,1)), f.x), mix(ph(i+vec3(0,1,1)), ph(i+vec3(1,1,1)), f.x), f.y), f.z); }
 float pf(vec3 p){ return 0.5*pn(p) + 0.25*pn(p*2.03+3.1) + 0.125*pn(p*4.1+7.7) + 0.0625*pn(p*8.3+1.3); }
 float grainH(vec3 p){ return pf(p * 420.0) * 0.6 + pn(p * 1500.0) * 0.4; }
+// craggy relief: vertical fissures and flutes with blocky fractures across them
+float cragH(vec3 p){
+  float flute = 1.0 - abs(2.0 * pn(p * vec3(34.0, 7.0, 34.0) + pn(p * 12.0) * 1.5) - 1.0);
+  float block = pn(p * vec3(18.0, 26.0, 18.0) + 4.0);
+  return flute * 0.65 + block * 0.35 + pn(p * 90.0) * 0.15;
+}
 `;
 
 /** Procedural basalt peaks baked at build time (see tools/bake-peaks.mjs). */
@@ -43,9 +49,12 @@ vec3 N = normalize(vWN);
 float up = N.y;
 float strata = sin((P.y + P.x * 0.25 + P.z * 0.15) * 120.0 + pf(P * 15.0) * 4.0) * 0.5 + 0.5;
 float tone = pf(P * 30.0);
+float crag = cragH(P);
 vec3 basalt = mix(vec3(0.022, 0.021, 0.02), vec3(0.065, 0.06, 0.055), tone);
 basalt = mix(basalt, vec3(0.1, 0.09, 0.08), smoothstep(0.75, 0.95, pn(P * vec3(90.0, 12.0, 90.0))) * 0.5);
 basalt *= 0.9 + 0.18 * strata * strata;
+// fissures run dark, the ribs between them catch the light
+basalt *= mix(0.35, 1.2, smoothstep(0.2, 0.9, crag));
 // pale lichen speckles on exposed faces
 float lichen = smoothstep(0.78, 0.86, pf(P * 160.0)) * smoothstep(-0.2, 0.4, N.z + 0.3) * (1.0 - smoothstep(0.6, 0.9, up));
 basalt = mix(basalt, vec3(0.32, 0.33, 0.27), lichen * 0.55);
@@ -53,8 +62,8 @@ basalt = mix(basalt, vec3(0.32, 0.33, 0.27), lichen * 0.55);
 float crev = 1.0 - vAO;
 float mossN = pf(P * 45.0);
 float mossBig = pf(P * 14.0);
-float moss = smoothstep(0.62, 0.78, up * 0.75 + mossBig * 0.5 + crev * 0.2 + mossN * 0.15 - 0.12);
-moss = max(moss, smoothstep(0.76, 0.86, mossBig + crev * 0.3) * 0.8);
+float moss = smoothstep(0.58, 0.74, up * 0.75 + mossBig * 0.5 + crev * 0.2 + mossN * 0.15 + (1.0 - crag) * 0.12 - 0.12);
+moss = max(moss, smoothstep(0.72, 0.84, mossBig + crev * 0.3 + (1.0 - crag) * 0.15) * 0.85);
 vec3 mossC = mix(vec3(0.022, 0.045, 0.01), vec3(0.07, 0.115, 0.022), pf(P * 160.0));
 mossC = mix(mossC, vec3(0.13, 0.15, 0.035), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.35);
 // wet dark streak where the cascade runs
@@ -71,14 +80,18 @@ float rockMoss = moss; float rockWet = max(wetC, uWet);`)
   float g0 = grainH(P);
   vec3 gN = vec3(grainH(P + vec3(e, 0, 0)) - g0, grainH(P + vec3(0, e, 0)) - g0, grainH(P + vec3(0, 0, e)) - g0) / e;
   float amp = mix(0.0005, 0.0012, rockMoss);
-  vec3 wN = normalize(N - (gN - dot(gN, N) * N) * amp);
+  float c0 = cragH(P);
+  float ec = 0.0015;
+  vec3 cN = vec3(cragH(P + vec3(ec, 0, 0)) - c0, cragH(P + vec3(0, ec, 0)) - c0, cragH(P + vec3(0, 0, ec)) - c0) / ec;
+  vec3 tilt = (gN - dot(gN, N) * N) * amp + (cN - dot(cN, N) * N) * 0.009 * (1.0 - rockMoss * 0.6);
+  vec3 wN = normalize(N - tilt);
   normal = normalize((viewMatrix * vec4(wN, 0.0)).xyz);
 }`)
         .replace('#include <aomap_fragment>', `
 reflectedLight.indirectDiffuse *= vAO; reflectedLight.indirectSpecular *= vAO; reflectedLight.directDiffuse *= mix(1.0, vAO, 0.5);
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => 'peaks-basalt-v1';
+    m.customProgramCacheKey = () => 'peaks-basalt-v2';
     this.mesh = new THREE.Mesh(g, m);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;

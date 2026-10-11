@@ -1,5 +1,14 @@
 import * as THREE from 'three';
 import {LizardModel, LIZARD_SCALE, LizardLimbData} from './LizardModel';
+import {TANK} from './Case';
+
+/** Keeps a point (with a radius) inside the glass. */
+function insideGlass(p: THREE.Vector3, r: number) {
+  const mx = TANK.w / 2 - 0.004 - r, mz = TANK.d / 2 - 0.004 - r;
+  p.x = Math.max(-mx, Math.min(mx, p.x));
+  p.z = Math.max(-mz, Math.min(mz, p.z));
+  return p;
+}
 
 /**
  * Procedural skeleton for the agamid. The brain sets intentions (where the
@@ -220,6 +229,7 @@ export class LizardRig {
       out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, h.z * K * w);
       out.x += this.inputs.x;
       out.z += this.inputs.z;
+      insideGlass(out, 0.009); // a foot never steps through the glass
       out.y = this.ground.heightAt(out.x, out.z);
       if (this.bodyY - out.y < reachDown + 1.2 * K) return out;
     }
@@ -302,6 +312,15 @@ export class LizardRig {
     const freq = clamp(1.3 + speedCm / 11, 1.3, 5.2) * (Math.abs(I.turnRate) > 0.25 && speedCm < 2 ? 1.5 : 1);
     const duty = clamp(0.68 - speedCm / 260, 0.5, 0.68);
     if (this.moving) this.phase = (this.phase + dt * freq) % 1;
+    // The glass is solid: if the head or chest reached it last frame (a look out
+    // of the front, a turn by the side), the body is nudged back off it.
+    if (this.initialised) {
+      for (const [p, r] of [[this.snout, 0.006], [this.spinePos[1], 0.014], [this.spinePos[2], 0.018]] as [THREE.Vector3, number][]) {
+        const q = insideGlass(p.clone(), r);
+        I.x += q.x - p.x;
+        I.z += q.z - p.z;
+      }
+    }
     this.computeBodyFrame(dt);
 
     // Lateral standing wave in the trunk, synchronised with the diagonal pairs.
@@ -487,7 +506,9 @@ export class LizardRig {
       const ca = Math.cos(ang), sa = Math.sin(ang);
       dir.set(prevDir.x * ca - prevDir.z * sa, 0, prevDir.x * sa + prevDir.z * ca);
       // rest on the ground; the base hangs from the raised pelvis
-      const gx = prev.x + dir.x * L, gz = prev.z + dir.z * L;
+      // (the tail slides along the glass rather than through it)
+      const gp = insideGlass(new THREE.Vector3(prev.x + dir.x * L, 0, prev.z + dir.z * L), this.tailRadius[i] + 0.002);
+      const gx = gp.x, gz = gp.z;
       // the base of the tail is carried a little clear of the ground on the move, more in a sprint
       const carry = (this.moving ? 0.25 : 0) + this.sprint * 1.6;
       const g = this.ground.heightAt(gx, gz) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
@@ -496,6 +517,7 @@ export class LizardRig {
       const dy = y - prev.y;
       const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
       p.set(prev.x + dir.x * h, y, prev.z + dir.z * h);
+      insideGlass(p, this.tailRadius[i] + 0.002);
       prevDir = dir;
       prev = p;
     }
