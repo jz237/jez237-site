@@ -1180,6 +1180,12 @@ their static signal geometry. This is not live traffic. Cars leaving
 the cropped graph, or stuck for two minutes, may be replenished only outside the
 displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
 Street downloads retry after a bounded backoff and are aborted on disposal.
+Small pedestrians follow the inside sidewalks of closed mapped blocks, with
+rounded corners, separate directions, varied walking speeds and occasional pauses.
+Routes near ambiguous junctions, open roads or another carriageway are excluded.
+They are illustrative people, not live reports. Local ground sampling keeps them
+on the pavement; reduced motion freezes their poses. The close-up population is
+capped at 240, or 90 in Performance mode, and hidden beyond neighborhood scale.
 
 Curbs follow sampled terrain grades and bends. Trees and lamps use local ground
 heights, with complete-object reservations at instance limits so buffer pressure
@@ -1195,7 +1201,7 @@ view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
 keeps the diorama available if the photographic provider cannot finish.
 
-Validation: 447 automated checks, including ten simulated minutes on the real
+Validation: 453 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
@@ -1203,3 +1209,6 @@ clouds above and below their deck, and visible production Cesium close-ups.
 The guarded release checks compare the staged entry, manifest and all referenced
 bundles with the checkout, then verify the exact build and asset hashes on the
 preview and live domain. A healthy service response cannot hide an older build.
+The wrapper waits for recent automatic production builds before uploading, then
+rechecks main so a slower build cannot normally replace the release with an older
+snapshot. `--publish-before=<ISO timestamp>` stops uploads at a requested cutoff.
