@@ -153,7 +153,10 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
           p.z-sin*side+cos*(cp*along+sp*up),w,h,d,p.angle,tint,pitch);
         const tint=palette[Math.floor(car.seed*palette.length)%palette.length];
         part(0,van?.75:.25,0,1.85,van?1.7:.75,length,tint);
-        part(0,van?1.1:.78,0,1.6,.6,length*.52,0x29424e);
+        // Vans keep a solid cargo body; the glazing wraps the front cab just
+        // outside its sides and nose instead of disappearing inside the body.
+        part(0,van?1.1:.78,van?length*.5-.72:0,van?1.89:1.6,.6,
+          van?1.48:length*.52,0x29424e);
         // Four dark tyres and paired bright headlight lenses retain their scale up close.
         for(const side of [-1,1])for(const end of [-1,1]){
           part(side*.9,-.1,end*length*.31,.22,.55,.6,0x202221);

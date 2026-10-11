@@ -1148,6 +1148,8 @@ Photographic 3D retains its captured appearance and is checked separately after
 each release. Full-precision depth reconstruction avoids half-float overflow at
 regional scale; distant window patterns are filtered before they alias. This does
 not establish that every device-specific diagonal-line report is resolved.
+Adjacent aerial tiles retain full edge opacity to avoid exposing the lighter
+fallback as thin bright seams; newly arriving tiles still fade in together.
 
 Building shadow maps retain their depth result while geometry, clipping, growth,
 light and shadow coverage remain unchanged. Clouds render at half resolution with
@@ -1157,7 +1159,8 @@ rendering work without changing the original aerial resolution.
 
 Decorative cars follow the shipped OSM street graph, one-way directions, local
 queues and simulated junction signals. They use continuous turn curves, brake
-lamps and road-aligned vehicle geometry. This is not live traffic. Cars leaving
+lamps and road-aligned vehicle geometry. Vans have visible cab glazing around
+a solid cargo body. This is not live traffic. Cars leaving
 the cropped graph, or stuck for two minutes, may be replenished only outside the
 displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
 Street downloads retry after a bounded backoff and are aborted on disposal.

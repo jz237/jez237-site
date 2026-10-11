@@ -341,10 +341,10 @@ export function createImageryTiles(THREE, options) {
       c = clamp((c - 0.5) * 1.055 + 0.5, 0.0, 1.0);
       c*=mix(.48,1.0,citySunVisibility(vWorld,vec3(0.0,1.0,0.0),uSunDir));
       float depth = length(vWorld-uCameraPos) * uFogDensity * exp(-max(0.0,vElev)/260.0);
-      vec2 edgeDistance = min(vUv, 1.0-vUv);
-      vec2 aa = max(fwidth(vUv), vec2(.00001));
-      float edge = smoothstep(0.0, aa.x*.6, edgeDistance.x) * smoothstep(0.0, aa.y*.6, edgeDistance.y);
-      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), uArrival * edge);
+      // Adjacent tiles meet at a shared edge. Fading each edge separately
+      // exposes the brighter fallback as a fine line through the photograph.
+      // Raster coverage handles the boundary; fade only the tile's arrival.
+      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), uArrival);
     }
   `;
   function remove(key) {
