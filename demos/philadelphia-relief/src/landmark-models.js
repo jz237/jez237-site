@@ -44,7 +44,7 @@ export function validateModels(doc, landmarkNames) {
  */
 export function buildLandmarkModels(doc, ctx) {
   const { anchors, toWorld, groundAt } = ctx;
-  const out = { position: [], ground: [], info: [], model: [], style: [], clock: [],
+  const out = { position: [], ground: [], info: [], model: [], style: [], clock: [], facadeOrigin: [],
     year: [], finish: [], index: [] };
   const models = [];
 
@@ -61,6 +61,7 @@ export function buildLandmarkModels(doc, ctx) {
 
     for (const part of model.parts) {
       const partStart = out.position.length / 3;
+      let roofStart=Infinity;
       const base = part.base || 0;
       const rot = (part.rot || 0) * DEG;
       const cx = ax + (part.x || 0);
@@ -83,7 +84,11 @@ export function buildLandmarkModels(doc, ctx) {
         const long = (part.w || 0) >= (part.d || 0);
         const r1 = long ? place(-part.w / 2, 0) : place(0, -part.d / 2);
         const r2 = long ? place(part.w / 2, 0) : place(0, part.d / 2);
-        gableRoof(out, ring, r1, r2, base + part.h, base + part.h + (part.ridge || 4),
+        roofStart=out.position.length/3;
+        // The roof builder expects its first side to run parallel to the ridge.
+        // Reorder depth-aligned gables so their slopes cannot form crossed triangles.
+        const roofRing=long?ring:[ring[1],ring[2],ring[3],ring[0]];
+        gableRoof(out, roofRing, r1, r2, base + part.h, base + part.h + (part.ridge || 4),
           ground, modelIndex);
         top = Math.max(top, base + part.h + (part.ridge || 4));
       } else if (part.type === 'ring') {
@@ -98,12 +103,13 @@ export function buildLandmarkModels(doc, ctx) {
           base, base + part.h, ground, modelIndex);
       }
       for (let v = partStart; v < out.position.length / 3; v++) {
-        out.finish.push(...(part.finish || [0, 0, 0, 0]));
+        out.finish.push(...(v>=roofStart&&part.roofFinish||part.finish||[0,0,0,0]));
       }
     }
 
     const vertexEnd = out.position.length / 3;
     for (let v = vertexStart; v < vertexEnd; v += 1) {
+      out.facadeOrigin.push(ax,az);
       out.year[v] = model.built || 0;
       out.style[v] = model.facade === 'glass' ? 1 : 0;
       out.clock.push(ax + (model.clock?.x || 0), model.clock?.height || 0,
@@ -119,6 +125,7 @@ export function buildLandmarkModels(doc, ctx) {
 
   return {
     position: new Float32Array(out.position),
+    facadeOrigin: new Float32Array(out.facadeOrigin),
     ground: new Float32Array(out.ground),
     finish: new Float32Array(out.finish),
     info: new Float32Array(out.info),

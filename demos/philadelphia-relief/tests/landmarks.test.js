@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 import { buildLandmarkModels, validateModels, PRIMITIVE_TYPES } from '../src/landmark-models.js';
+import { detailedLandmarks } from '../src/landmark-detail.js';
 
 const dataDir = new URL('../data/', import.meta.url);
 const landmarks = JSON.parse(await readFile(new URL('landmarks.json', dataDir), 'utf8'));
@@ -115,6 +116,59 @@ test('Center City landmarks retain their referenced heights and facade styles', 
   assert.equal(tower.facade, 'glass');
   assert.equal(Math.max(...tower.parts.map((p) => (p.base || 0) + p.h)), 341);
   assert.equal(Math.max(...hall.parts.map((p) => (p.base || 0) + p.h)), 167);
+});
+
+test('City Hall detailing retains its summit and gives the bronze figure solid, finite geometry',()=>{
+  const original=JSON.stringify(models),detailed=detailedLandmarks(models,'city-hall');
+  assert.equal(JSON.stringify(models),original,'architectural studies do not mutate the source model');
+  assert.deepEqual(validateModels(detailed,names),[]);
+  const hall=detailed.models.find(m=>m.id==='city-hall');
+  assert.equal(Math.max(...hall.parts.map(p=>(p.base||0)+p.h+(p.ridge||0))),167);
+  const figure=hall.parts.filter(p=>p.base>=155.7);
+  assert.ok(figure.length>=8,'coat, legs, arms, head and hat form a recognizable silhouette');
+  assert.ok(figure.every(p=>p.finish[3]===2),'bronze sculpture must never acquire façade windows');
+  const packed=buildLandmarkModels({models:[hall]},
+    {anchors:new Map([['Philadelphia City Hall',{lon:0,lat:0}]]),toWorld:()=>[0,0],groundAt:()=>8});
+  assert.ok(packed.position.every(Number.isFinite));
+  assert.ok(packed.vertexCount<5000,'landmark detail stays within a compact geometry budget');
+  assert.ok(hall.parts.filter(p=>p.type==='gable').every(p=>p.finish[3]===2));
+});
+
+test('historic gables retain masonry walls below their separate opaque roof finish',()=>{
+  for(const id of ['independence-hall','museum-of-art']){
+    const model=detailedLandmarks(models,id).models.find(m=>m.id===id);
+    for(const part of model.parts.filter(p=>p.type==='gable')){
+      assert.equal(part.finish[3],1,'main walls retain historic window openings');
+      assert.equal(part.roofFinish[3],2,'roof material stays opaque');
+      assert.notDeepEqual(part.finish.slice(0,3),part.roofFinish.slice(0,3));
+      const packed=buildLandmarkModels({models:[{...model,lon:0,lat:0,parts:[part]}]},
+        {anchors:new Map(),toWorld:()=>[0,0],groundAt:()=>0});
+      const eave=(part.base||0)+part.h;
+      for(let v=0;v<packed.vertexCount;v++)if(packed.position[v*3+1]<eave){
+        assert.equal(packed.finish[v*4+3],1,'roof color never spreads down to the masonry');
+      }
+    }
+  }
+});
+
+test('gable slopes have the same correct surface area along either footprint axis',()=>{
+  const areas=[];
+  for(const [w,d] of [[30,10],[10,30]]){
+    const roof=buildLandmarkModels({models:[{id:'gable',lon:0,lat:0,parts:[{
+      type:'gable',w,d,h:20,ridge:5,finish:[.7,.5,.3,1],roofFinish:[.2,.3,.4,2]}]}]},
+      {anchors:new Map(),toWorld:()=>[0,0],groundAt:()=>0});
+    let area=0;
+    for(let i=0;i<roof.index.length;i+=3){
+      const ids=[...roof.index.slice(i,i+3)];
+      if(ids.some(v=>roof.finish[v*4+3]!==2))continue;
+      const [a,b,c]=ids.map(v=>Array.from(roof.position.slice(v*3,v*3+3)));
+      const u=b.map((n,j)=>n-a[j]),v=c.map((n,j)=>n-a[j]);
+      const triangle=Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0])/2;
+      assert.ok(triangle>0,'roof triangles cannot collapse');area+=triangle;
+    }
+    areas.push(area);assert.ok(Math.abs(area-(60*Math.hypot(5,5)+50))<.001);
+  }
+  assert.ok(Math.abs(areas[0]-areas[1])<.001);
 });
 
 
