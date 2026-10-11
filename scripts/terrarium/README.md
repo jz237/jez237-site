@@ -129,7 +129,7 @@ All motion constants are illustrative. They are not measured from real bearded d
   - **Loose leaves (`lib/LeafDrift.ts`):** dead leaves lie on the floor. A strong enough local wind lifts them; they tumble with the air, flutter down and settle again, or float on the pool.
   - **Dust (`lib/Motes.ts`):** motes and spores ride the wind field exactly, and glint where they cross the lamp's beam.
 - **Substrate.** A cut-away front shows a drainage layer of rounded river pebbles, dark granular humus with the odd bark flake and grain of perlite, fine roots hanging down from the surface, and a band of leaf litter and moss at the top. The pool bed is rippled sand with scattered stones, and rounded stones and clumps of eelgrass (*Vallisneria*) sit in the deep basin behind the front glass.
-- **Rock.** The basalt peaks have vertical fissures and blocky fractures in their relief, dark in the cracks, with moss on the ledges and in the crevices.
+- **Rock.** The basalt peaks have vertical fissures and blocky fractures in their relief, dark in the cracks, with moss on the ledges and in the crevices. Cushions of real shell-rendered moss (the same strands as the floor's carpet) are draped over the rock ledges and shoulders and here and there on the log, thick in the middle and thinning to ragged edges.
 - **Air (`lib/AirGlow.ts`).** The humid air glows faintly in the lamp's light. Rays are marched through the case and stopped by the scene; each step asks the lamp's shadow map and the clouds' shadow whether it is lit, so the haze is broken into soft shafts by the rocks, the plants and passing clouds. It thickens with humidity, mist and rain.
 - **Glass.**
   - The glass is drawn in its own pass with access to a mip-mapped copy of the scene behind it.

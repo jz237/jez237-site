@@ -56,6 +56,7 @@ export class Terrarium {
   water!: Water;
   peaks!: Peaks;
   moss!: MossShells;
+  rockMoss!: MossShells;
   nav!: Nav;
   insects!: Insects;
   rig!: LizardRig;
@@ -228,6 +229,13 @@ export class Terrarium {
     this.scene.add(this.meadow.mesh);
     this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || (LITE ? 8 : 14)));
     this.scene.add(this.moss.mesh);
+    // cushions of moss on the rock ledges and here and there on the log
+    {
+      const shells = Number(new URLSearchParams(location.search).get('shells') || (LITE ? 8 : 12));
+      const rocks = this.hardscape.placed.filter((p) => p.mesh !== this.hardscape.log).map((p) => p.mesh);
+      this.rockMoss = new MossShells(this.surface, this.plants.moss, shells, MossShells.rockGeometry(rocks, this.hardscape.log, mulberry32(99)));
+      this.scene.add(this.rockMoss.mesh);
+    }
     this.water = new Water(this.surface, this.peaks.data.ledges);
     this.scene.add(this.water.group);
     // a school of neon tetras in the pool
@@ -644,7 +652,7 @@ export class Terrarium {
     else if (q.level === 2) {this.post.settings.dof = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
     else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
     else if (q.level === 4) {this.post.settings.ao = false; this.air.enabled = false;}
-    else if (q.level === 5) {this.moss.mesh.count = 8; this.moss.uniforms.uShells.value = 8;}
+    else if (q.level === 5) {for (const m of [this.moss, this.rockMoss]) {m.mesh.count = 8; m.uniforms.uShells.value = 8;}}
     else if (q.level === 6) r.setPixelRatio(0.9);
     else q.locked = true;
     this.resize();
