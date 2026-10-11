@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<title>Philadelphia sidewalk preparation check</title>
+<title>Philadelphia street preparation check</title>
 <style>
 body{margin:2rem;background:#172b34;color:#e1e9e9;font:18px system-ui;max-width:65rem}
 button{padding:12px 18px;margin:0 12px 16px 0;font:inherit}h1{font-size:1.6rem}
@@ -9,18 +9,20 @@ button{padding:12px 18px;margin:0 12px 16px 0;font:inherit}h1{font-size:1.6rem}
 #car{position:absolute;top:26px;left:0;width:40px;height:24px;border-radius:6px;background:#dfb649}
 #status{white-space:pre-line;line-height:1.6;padding:1rem 0}
 </style>
-<h1>Philadelphia sidewalk preparation</h1>
-<p>Real street data, rendered motion, and the production route builder. Compare the largest frame gap while routes are prepared.</p>
+<h1>Philadelphia street preparation</h1>
+<p>Real street data and the production graph, traffic, curb, and sidewalk builders. Compare the largest frame gap while the whole street layer is prepared.</p>
 <button id="batched" disabled>Prepare in short batches</button>
 <button id="sync" disabled>Synchronous reference</button>
 <div id="lane" aria-label="Continuous animation during preparation"><div id="car"></div></div>
 <div id="status" role="status">Loading local Philadelphia streets…</div>
 <script type="module">
-import {createStreetGraph} from '../src/city-traffic.js';
+import {createStreetGraph,prepareStreetGraph,createTraffic,prepareTraffic} from '../src/city-traffic.js';
+import {createCurbLayout,prepareCurbLayout} from '../src/city-curbs.js';
 import {createSidewalkRoutes,prepareSidewalkRoutes} from '../src/city-walkers.js';
+import {yieldToBrowser} from '../src/background-work.js';
 const status=document.querySelector('#status'),car=document.querySelector('#car');
 const buttons=[...document.querySelectorAll('button')];
-let last=performance.now(),active=false,frames=0,maxGap=0,graph;
+let last=performance.now(),active=false,frames=0,maxGap=0;
 function frame(now){
   if(active){frames++;maxGap=Math.max(maxGap,now-last);}
   last=now;car.style.transform=`translateX(${(now*.15)%(document.querySelector('#lane').clientWidth-40)}px)`;
@@ -28,18 +30,26 @@ function frame(now){
 }
 requestAnimationFrame(frame);
 const documentData=await fetch('../data/city-streets.json').then(r=>r.json());
-graph=createStreetGraph(documentData,{lonToX:x=>(x+75.17)*85000,latToZ:z=>(39.95-z)*111000},()=>0);
-status.textContent=`Ready · ${graph.segments.length.toLocaleString()} street segments`;
+const projection={lonToX:x=>(x+75.17)*85000,latToZ:z=>(39.95-z)*111000};
+status.textContent=`Ready · ${documentData.roads.length.toLocaleString()} Philadelphia roads`;
 buttons.forEach(button=>button.disabled=false);
 async function run(batched){
   buttons.forEach(button=>button.disabled=true);status.textContent='Preparing walking routes…';
   await new Promise(requestAnimationFrame);frames=0;maxGap=0;active=true;
-  const start=performance.now();
-  const routes=batched?await prepareSidewalkRoutes(graph):createSidewalkRoutes(graph);
+  const start=performance.now();let batchStart=start,maxBatch=0;
+  const options={pause:async()=>{maxBatch=Math.max(maxBatch,performance.now()-batchStart);
+    await yieldToBrowser();batchStart=performance.now();}};
+  const graph=batched?await prepareStreetGraph(documentData,projection,()=>0,options)
+    :createStreetGraph(documentData,projection,()=>0);
+  const traffic=batched?await prepareTraffic(graph,620,239,options):createTraffic(graph,620,239);
+  const curbs=batched?await prepareCurbLayout(graph,options):createCurbLayout(graph);
+  const routes=batched?await prepareSidewalkRoutes(graph,options):createSidewalkRoutes(graph);
+  maxBatch=Math.max(maxBatch,performance.now()-batchStart);
   const elapsed=performance.now()-start;
   await new Promise(requestAnimationFrame);active=false;
-  status.textContent=`${batched?'Batched':'Synchronous'} · ${routes.length} routes\n`
-    +`${elapsed.toFixed(1)} ms elapsed · ${frames} animation frames · largest gap ${maxGap.toFixed(1)} ms`;
+  status.textContent=`${batched?'Batched':'Synchronous'} · ${routes.length} routes · ${traffic.cars.length} cars · curbs ${typeof curbs==='function'?'ready':'missing'}\n`
+    +`${elapsed.toFixed(1)} ms elapsed · ${frames} animation frames · largest gap ${maxGap.toFixed(1)} ms\n`
+    +`Longest preparation task ${maxBatch.toFixed(1)} ms`;
   buttons.forEach(button=>button.disabled=false);
 }
 document.querySelector('#batched').onclick=()=>run(true);
