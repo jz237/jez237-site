@@ -63,6 +63,17 @@ function renderList() {
   const focusedId = document.activeElement?.closest('#hurricane-storm-list [data-storm]')?.dataset.storm;
   const storms = visibleStorms();
   const available = !!state.bundle?.layers.points;
+  const picker = $('#hurricane-system');
+  const choices = storms.map(storm => [storm.id, `${storm.name} · ${storm.label}${storm.stale ? ' · older advisory' : ''}`]);
+  if (!choices.length) choices.push(['', available ? 'No forecast systems in this basin' : 'Storm data unavailable']);
+  // Keep the select itself and unchanged options in place across automatic refreshes.
+  const choiceKey = JSON.stringify(choices);
+  if (picker.dataset.choices !== choiceKey) {
+    picker.replaceChildren(...choices.map(([value, label]) => new Option(label, value)));
+    picker.dataset.choices = choiceKey;
+  }
+  picker.disabled = !storms.length;
+  picker.value = state.selected || '';
   $('#hurricane-storm-list').innerHTML = storms.length ? storms.map(storm => `
     <button class="hurricane-storm-button" type="button" data-storm="${esc(storm.id)}" aria-pressed="${state.selected === storm.id}" style="--storm-color:${storm.color}" aria-label="${esc(storm.name)}, ${esc(storm.label)}, ${wind(storm.current.wind, state.unit)} ${esc(state.unit)}${storm.stale ? ', older advisory' : ''}">
       <span class="hurricane-storm-symbol">${stormSymbol()}</span><span><strong>${esc(storm.name)}</strong><small>${esc(storm.label)}${storm.stale ? ' · older data' : ''}</small></span><span class="hurricane-list-wind">${wind(storm.current.wind, state.unit)}<small>${esc(state.unit)}</small></span>
@@ -438,6 +449,9 @@ function bindExpandedMap() {
 
 function bindControls() {
   bindExpandedMap();
+  $('#hurricane-system').addEventListener('change', event => {
+    if (visibleStorms().some(storm => storm.id === event.target.value)) selectStorm(event.target.value, true);
+  });
   root.querySelectorAll('[data-basin]').forEach(button => button.addEventListener('click', () => {
     stopPlayback();
     state.basin = button.dataset.basin;

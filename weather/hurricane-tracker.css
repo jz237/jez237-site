@@ -29,6 +29,8 @@
 #weather-hurricanes .hurricane-notice { margin:0 0 14px; padding:11px 13px; border:1px solid #976c39; border-radius:8px; color:#ffe2b4; background:#68432238; font-size:12px; line-height:1.6; }
 .hurricane-workspace { display:grid; grid-template-columns:minmax(0,1fr) 234px; gap:18px; align-items:start; }
 .hurricane-map-column,.hurricane-sidebar { min-width:0; }
+.hurricane-storm-picker { display:flex; align-items:center; gap:10px; margin:0 0 10px; color:var(--hc-muted); font-size:12px; }
+#weather-hurricanes .hurricane-storm-picker select { flex:1; min-width:0; max-width:100%; font-size:12px; text-overflow:ellipsis; }
 .hurricane-map-frame { position:relative; overflow:hidden; border:1px solid #416374; border-radius:12px; background:#061b2c; }
 #hurricane-map { height:408px; width:100%; background:radial-gradient(ellipse at 58% 45%,#12374c,#061b2c 78%); font-family:system-ui,sans-serif; cursor:grab; z-index:0; }
 #hurricane-map:focus-visible { outline:3px solid #83eedc; outline-offset:-4px; }
