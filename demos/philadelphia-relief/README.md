@@ -1218,6 +1218,9 @@ silhouette with a coat, legs, extended arm and broad hat. The figure is roughly
 37 feet tall, matching the [City's conservation account](https://www.phila.gov/press-releases/kenney/city-begins-conservation-of-william-penn-statue-atop-city-hall/),
 and the complete model retains its 167 m summit. These remain schematic studies.
 Ordinary neighborhood buildings retain their existing window grid and roof photos.
+Gabled landmark primitives keep separate roof and wall finishes, preserving
+Independence Hall's brick and the museum's stone below the eaves. Roof triangles
+follow the long footprint axis in either orientation, without crossed slopes.
 
 Photographic close-up landmark markers are limited to the viewed neighborhood.
 This prevents distant tile-clamped pins appearing over unrelated buildings;
@@ -1244,7 +1247,7 @@ It uses no ion account or remote photographic tile requests.
 `tools/traffic-fixture.html` uses the production street renderer with a local square
 block for repeatable vehicle, lamp, pedestrian, and pause inspection.
 
-Validation: 478 automated checks, including ten simulated minutes on the real
+Validation: 480 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

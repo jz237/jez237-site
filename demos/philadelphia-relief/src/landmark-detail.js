@@ -77,7 +77,11 @@ export function detailedLandmarks(doc, id) {
     for (let i = 0; i < parts.length; i++) {
       const p = parts[i];if(p.finish)continue;
       const ornament=i>=model.parts.length||p.type==='pyramid'||p.h<=3;
-      if(p.type==='gable'||id==='city-hall'&&p.type==='pyramid'){
+      if(p.type==='gable'){
+        p.roofFinish=[.18,.23,.25,2];
+        if(id==='city-hall'){p.finish=p.roofFinish;continue;}
+      }
+      if(id==='city-hall'&&p.type==='pyramid'){
         p.finish=[.18,.23,.25,2];continue;
       }
       p.finish = id === 'independence-hall' && !ornament && (p.base || 0) < 14
