@@ -110,3 +110,5 @@
   .weather-metric span, .weather-metric em { font-size:12px !important; }
   .weather-dashboard-card .weather-chart svg { max-width:none !important; min-width:700px !important; }
 }
+.weather-page .weather-home-link { display:none; }
+@media (max-width:1000px) { .weather-page .weather-home-link { display:inline-block; margin:0 0 9px; padding:5px 0; color:#a9dde2; font:600 12px/1.5 system-ui,sans-serif; text-decoration:none; } .weather-page .weather-home-link:focus-visible { outline:3px solid #83eedc; outline-offset:3px; } }

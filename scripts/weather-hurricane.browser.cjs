@@ -58,6 +58,13 @@ async function run() {
     assert.match(await page.locator('.hurricane-map-marker').getAttribute('aria-label'),/Test System, Category 3 hurricane/);
     assert.match(await page.locator('#hurricane-forecast-step').getAttribute('aria-valuetext'),/Test System: Advisory position/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Hurricane warning/);
+    await page.locator('[data-storm]').click();
+    assert.equal(await page.evaluate(()=>document.activeElement?.hasAttribute('data-storm')),true);
+    await page.locator('.hurricane-map-marker').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.evaluate(()=>document.activeElement?.classList.contains('hurricane-map-marker')),true);
+    await page.keyboard.press('Space');
+    assert.equal(await page.evaluate(()=>document.activeElement?.classList.contains('hurricane-map-marker')),true);
     assert.equal(await page.locator('#hurricane-forecast-step').getAttribute('max'),'5');
     await page.locator('#hurricane-next').click();
     assert.match(await page.locator('#hurricane-forecast-readout').innerText(),/\+12 hours/);
@@ -83,6 +90,53 @@ async function run() {
     assert.equal(await page.locator('[data-layer="outlook"]').isChecked(),true);
     await page.locator('#hurricane-reset-view').click();
     results.push('Basin filtering, empty basin, development-area focus and layer controls');
+
+    await page.locator('[data-storm]').click();
+    const markerOffset=()=>page.evaluate(()=>{
+      const map=document.querySelector('#hurricane-map').getBoundingClientRect();
+      const marker=document.querySelector('.hurricane-map-marker').getBoundingClientRect();
+      return [marker.x+marker.width/2-map.x-map.width/2,marker.y+marker.height/2-map.y-map.height/2];
+    });
+    const offsetBefore=await markerOffset();
+    const normalMap=await page.locator('#hurricane-map').boundingBox();
+    await page.locator('#hurricane-expand').click();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-expanded').open);
+    assert.equal(await page.locator('#hurricane-expand').getAttribute('aria-expanded'),'true');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-close');
+    const expandedMap=await page.locator('#hurricane-map').boundingBox();
+    assert.ok(expandedMap.width>normalMap.width+100,'Desktop expanded map is not wider');
+    assert.ok(expandedMap.height>normalMap.height,'Expanded map is not taller');
+    await page.waitForTimeout(60);
+    const offsetAfter=await markerOffset();
+    assert.ok(offsetAfter.every((value,index)=>Math.abs(value-offsetBefore[index])<2),'Map center drifts when expanded');
+    await page.locator('#hurricane-forecast-table summary').click();
+    assert.equal(await page.locator('#hurricane-table-content tbody tr').count(),6);
+    await page.locator('[data-forecast="3"]').click();
+    assert.match(await page.locator('#hurricane-forecast-readout').innerText(),/\+48 hours/);
+    assert.equal(await page.locator('[data-forecast="3"]').getAttribute('aria-current'),'step');
+    await page.locator('#hurricane-units').selectOption('mph');
+    assert.match(await page.locator('[data-forecast-row="3"]').innerText(),/81 mph/);
+    await page.locator('#hurricane-expanded').evaluate(el=>{el.scrollTop=0;});
+    await page.locator('#hurricane-expanded').screenshot({path:path.join(output,'expanded-1280.png')});
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-expanded').open && document.activeElement?.id==='hurricane-expand');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-expand');
+    assert.equal(await page.locator('#hurricane-forecast-step').inputValue(),'3');
+    assert.equal(await page.locator('#hurricane-expand').getAttribute('aria-expanded'),'false');
+    assert.equal(await page.locator('#weather-hurricanes').evaluate(el=>el.parentElement.classList.contains('hub-main')),true);
+    await page.setViewportSize({width:390,height:844});
+    assert.equal(await page.locator('.weather-home-link').isVisible(),true);
+    await page.locator('#hurricane-expand').click();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-expanded').open);
+    assert.ok((await page.locator('#hurricane-map').boundingBox()).height>390);
+    assert.equal(await page.locator('#hurricane-expanded').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
+    await page.locator('#hurricane-expanded').screenshot({path:path.join(output,'expanded-390.png')});
+    await page.locator('#hurricane-close').click();
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-expanded').open && document.activeElement?.id==='hurricane-expand');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-expand');
+    await page.locator('#hurricane-forecast-table summary').click();
+    await page.setViewportSize({width:1280,height:900});
+    results.push('Larger desktop/mobile map, Escape and close-button focus restoration, forecast table selection, and mobile home navigation');
 
     mode='delayed';
     refreshGate=new Promise(resolve=>{releaseRefresh=resolve;});
@@ -112,6 +166,12 @@ async function run() {
       if (width<=768) assert.ok(dimensions.pageWidth<=width,`Page overflows at ${width}px: ${JSON.stringify(dimensions)}`);
       assert.ok(dimensions.rootWidth<=width,`Tracker overflows at ${width}px`);
       assert.ok(dimensions.mapWidth>=250,`Map collapsed at ${width}px`);
+      if (width===320) {
+        await page.locator('#hurricane-forecast-table summary').click();
+        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Open forecast table overflows a small phone');
+        await page.locator('#hurricane-timeline').screenshot({path:path.join(output,'forecast-table-320.png')});
+        await page.locator('#hurricane-forecast-table summary').click();
+      }
       await page.locator('#weather-hurricanes').screenshot({path:path.join(output,`tracker-${width}.png`)});
     }
     results.push('Responsive layouts at 320, 390, 768, 1280 and 1536 pixels');
