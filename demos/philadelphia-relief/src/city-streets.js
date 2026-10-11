@@ -9,7 +9,9 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   const material=new THREE.ShaderMaterial({uniforms,vertexShader:`
     varying vec3 vWorld,vNormal,vColor;
     void main(){vec4 p=instanceMatrix*vec4(position,1.0);
-      vWorld=p.xyz;vNormal=normalize(mat3(instanceMatrix)*normal);vColor=instanceColor;
+      mat3 basis=mat3(instanceMatrix);
+      vec3 corrected=normal/vec3(dot(basis[0],basis[0]),dot(basis[1],basis[1]),dot(basis[2],basis[2]));
+      vWorld=p.xyz;vNormal=normalize(basis*corrected);vColor=instanceColor;
       gl_Position=projectionMatrix*modelViewMatrix*p;}`,
   fragmentShader:`precision highp float;
     varying vec3 vWorld,vNormal,vColor;
@@ -28,9 +30,10 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.count=0;group.add(mesh);return mesh;};
   const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*10);
   const dummy=new THREE.Object3D(),color=new THREE.Color();
-  function put(mesh,x,y,z,w,h,d,angle,tint){
+  function put(mesh,x,y,z,w,h,d,angle,tint,pitch=0){
     if(mesh.count>=mesh.instanceMatrix.count)return;
-    dummy.position.set(x,y,z);dummy.rotation.set(0,angle,0);dummy.scale.set(w,h,d);dummy.updateMatrix();
+    dummy.position.set(x,y,z);dummy.rotation.set(pitch,angle,0,'YXZ');
+    dummy.scale.set(w,h,d);dummy.updateMatrix();
     mesh.setMatrixAt(mesh.count,dummy.matrix);
     if(Array.isArray(tint))color.setRGB(...tint);else color.set(tint);
     mesh.setColorAt(mesh.count++,color);
@@ -59,33 +62,47 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   }
   function rebuild(x,z,exag,radius){
     street.count=0;trees.count=0;
+    const groundAt=(x,z)=>sampleElevation(projection.xToLon(x),projection.zToLat(z))*exag;
+    function strip(ax,az,bx,bz,width,height,clearance,tint,depth=0,ay=groundAt(ax,az),by=groundAt(bx,bz)){
+      if(street.count>=street.instanceMatrix.count)return;
+      const mx=(ax+bx)/2,mz=(az+bz)/2,my=groundAt(mx,mz),length=Math.hypot(bx-ax,bz-az);
+      // Short straight grades cost one instance. Split long spans and terrain
+      // bends so sidewalks neither float nor disappear into the ground.
+      if(depth<5&&length>8&&(length>45||Math.abs(my-(ay+by)/2)>.12)){
+        strip(ax,az,mx,mz,width,height,clearance,tint,depth+1,ay,my);
+        strip(mx,mz,bx,bz,width,height,clearance,tint,depth+1,my,by);return;
+      }
+      put(street,mx,(ay+by)/2+clearance,mz,width,height,Math.hypot(length,by-ay),
+        Math.atan2(bx-ax,bz-az),tint,-Math.atan2(by-ay,length));
+    }
     const segments=graph.segments.filter(s=>Math.hypot((s.a.x+s.b.x)/2-x,(s.a.z+s.b.z)/2-z)<radius)
       .sort((a,b)=>Math.hypot(a.a.x-x,a.a.z-z)-Math.hypot(b.a.x-x,b.a.z-z));
     for(const s of segments){
       const dx=(s.b.x-s.a.x)/s.length,dz=(s.b.z-s.a.z)/s.length,angle=Math.atan2(dx,dz);
-      const mx=(s.a.x+s.b.x)/2,mz=(s.a.z+s.b.z)/2,g=(s.a.ground+s.b.ground)/2*exag;
       const trimA=s.a.neighbors.size>2?s.width*.7:0,trimB=s.b.neighbors.size>2?s.width*.7:0;
-      const curbLength=s.length-trimA-trimB,shift=(trimA-trimB)/2;
+      const curbLength=s.length-trimA-trimB;
       if(curbLength<1)continue;
       // Keep the photographic road surface visible; narrow raised curbs define its edges.
       for(const side of [-1,1]){
         const off=side*(s.width/2+.35);
-        put(street,mx+dx*shift-dz*off,g+.48,mz+dz*shift+dx*off,.35,.24,curbLength,angle,0x9c998d);
-        put(street,mx+dx*shift-dz*(off+side),g+.38,mz+dz*shift+dx*(off+side),
-          1.5,.16,curbLength,angle,0x88877e);
+        for(const [offset,width,height,clearance,tint] of [[off,.35,.24,.48,0x9c998d],
+          [off+side,1.5,.16,.38,0x88877e]]){
+          strip(s.a.x+dx*trimA-dz*offset,s.a.z+dz*trimA+dx*offset,
+            s.b.x-dx*trimB-dz*offset,s.b.z-dz*trimB+dx*offset,width,height,clearance,tint);
+        }
         if(s.length>28)for(let t=16;t<s.length-12;t+=34){
-          const ground=(s.a.ground+(s.b.ground-s.a.ground)*t/s.length)*exag;
           const tx=s.a.x+dx*t-dz*(off+side*1.1),tz=s.a.z+dz*t+dx*(off+side*1.1);
+          const ground=groundAt(tx,tz);
           put(street,tx,ground+2.2,tz,.35,3.7,.35,0,0x58473a);
           put(trees,tx,ground+5.0,tz,2.3,2.9,2.3,angle,0x466544);
-          if(side===1){const lx=tx+dx*5,lz=tz+dz*5;
-            put(street,lx,ground+3.2,lz,.14,5.8,.14,0,0x434847);
-            put(street,lx-dz*.5,ground+6.1,lz+dx*.5,1.25,.18,.36,angle,[1.9,1.6,1.15]);}
+          if(side===1){const lx=tx+dx*5,lz=tz+dz*5,lg=groundAt(lx,lz);
+            put(street,lx,lg+3.2,lz,.14,5.8,.14,0,0x434847);
+            put(street,lx-dz*.5,lg+6.1,lz+dx*.5,1.25,.18,.36,angle,[1.9,1.6,1.15]);}
         }
       }
       if(s.length>25&&s.a.neighbors.size>2)for(let across=-s.width/2+1;across<s.width/2;across+=1.7){
-        put(street,s.a.x+dx*7-dz*across,s.a.ground*exag+.52,s.a.z+dz*7+dx*across,
-          .65,.035,2.7,angle,0xc9c6ac);
+        strip(s.a.x+dx*5.65-dz*across,s.a.z+dz*5.65+dx*across,
+          s.a.x+dx*8.35-dz*across,s.a.z+dz*8.35+dx*across,.65,.035,.52,0xc9c6ac);
       }
     }
     for(const mesh of [street,trees])uploadInstances(mesh);
@@ -113,28 +130,29 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       vehicles.count=0;
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
-        const ground=sampleElevation(projection.xToLon(p.x),projection.zToLat(p.z));
-        // Tire bottoms sit just above the road instead of floating half a metre
-        // over it. Vans retain their taller body without sinking into the road.
-        const y=ground*exaggeration+.4,van=car.seed>.88,length=van?6.4:4.4;
+        const van=car.seed>.88,length=van?6.4:4.4,sin=Math.sin(p.angle),cos=Math.cos(p.angle);
+        const groundAt=along=>sampleElevation(projection.xToLon(p.x+sin*along),
+          projection.zToLat(p.z+cos*along))*exaggeration;
+        const rear=groundAt(-length*.31),front=groundAt(length*.31);
+        const pitch=-Math.atan2(front-rear,length*.62),cp=Math.cos(pitch),sp=Math.sin(pitch);
+        const y=(rear+front)/2+.4;
+        // Transform every part in the same road-aligned frame, keeping both
+        // axles on a grade instead of burying the front tyres or lifting the rear.
+        const part=(side,up,along,w,h,d,tint)=>put(vehicles,
+          p.x+cos*side+sin*(cp*along+sp*up),y+cp*up-sp*along,
+          p.z-sin*side+cos*(cp*along+sp*up),w,h,d,p.angle,tint,pitch);
         const tint=palette[Math.floor(car.seed*palette.length)%palette.length];
-        put(vehicles,p.x,y+(van?.75:.25),p.z,1.85,van?1.7:.75,length,p.angle,tint);
-        put(vehicles,p.x,y+(van?1.1:.78),p.z,1.6,.6,length*.52,p.angle,0x29424e);
+        part(0,van?.75:.25,0,1.85,van?1.7:.75,length,tint);
+        part(0,van?1.1:.78,0,1.6,.6,length*.52,0x29424e);
         // Four dark tyres and paired bright headlight lenses retain their scale up close.
         for(const side of [-1,1])for(const end of [-1,1]){
-          const dx=Math.cos(p.angle)*side*.9+Math.sin(p.angle)*end*length*.31;
-          const dz=-Math.sin(p.angle)*side*.9+Math.cos(p.angle)*end*length*.31;
-          put(vehicles,p.x+dx,y-.1,p.z+dz,.22,.55,.6,p.angle,0x202221);
+          part(side*.9,-.1,end*length*.31,.22,.55,.6,0x202221);
         }
         for(const side of [-1,1]){
-          const hx=p.x+Math.sin(p.angle)*length*.51+Math.cos(p.angle)*side*.61;
-          const hz=p.z+Math.cos(p.angle)*length*.51-Math.sin(p.angle)*side*.61;
-          put(vehicles,hx,y+.25,hz,.38,.18,.12,p.angle,[2.2,2.1,1.65]);
+          part(side*.61,.25,length*.51,.38,.18,.12,[2.2,2.1,1.65]);
         }
         for(const side of [-1,1]){
-          const tx=p.x-Math.sin(p.angle)*length*.51+Math.cos(p.angle)*side*.61;
-          const tz=p.z-Math.cos(p.angle)*length*.51-Math.sin(p.angle)*side*.61;
-          put(vehicles,tx,y+.25,tz,.38,.18,.12,p.angle,car.braking?[2.5,.035,.012]:[1.2,.015,.006]);
+          part(side*.61,.25,-length*.51,.38,.18,.12,car.braking?[2.5,.035,.012]:[1.2,.015,.006]);
         }
       }
       uploadInstances(vehicles);
