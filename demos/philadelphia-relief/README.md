@@ -1186,6 +1186,12 @@ Signal color buffers upload only when a phase changes, and paused views retain
 their static signal geometry. This is not live traffic. Cars leaving
 the cropped graph, or stuck for two minutes, may be replenished only outside the
 displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
+Traffic reuses lane queues and junction occupancy sets, and caches the immutable
+street graph's turn choices. `node tools/benchmark-traffic.mjs` measures ten
+simulated minutes with 620 cars and reports a trajectory hash; an optional module
+path compares an earlier implementation. This measures simulation CPU time,
+not browser frame rate. The allocation changes preserve the original seeded
+trajectory at every sampled second, including replenishment and junction waits.
 Street downloads retry after a bounded backoff and are aborted on disposal.
 Small pedestrians follow the inside sidewalks of closed mapped blocks, with
 rounded corners, separate directions, varied walking speeds and occasional pauses.
@@ -1212,8 +1218,12 @@ background does not consume its budget. Back/Forward cache navigation pauses the
 scene instead of disposing it. After a restored WebGL context, rendering resumes
 and cached building shadows refresh. `tools/lifecycle-check.html` provides local
 buttons for reproducing graphics-context loss and restoration in the browser.
+Photographic failure releases its viewer and cached tiles after the current render
+call returns. Failed views cannot reactivate during that call or supply an aircraft
+renderer. Late tile downloads are discarded; an explicit retry starts a fresh
+viewer. The local recovery page also provides a one-shot photo-render failure check.
 
-Validation: 470 automated checks, including ten simulated minutes on the real
+Validation: 475 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

@@ -65,15 +65,15 @@ function turnSpan(from,to){
 function stopLine(car){
   return car.edge.length-Math.max(5,(car.nextEdge?turnSpan(car.edge,car.nextEdge):0)+3);
 }
-function followingGap(car,queues){
+function followingGap(car,queues,routes,visited){
   let edge=car.edge,offset=-car.distance,gap=Infinity;
-  const visited=new Set();
+  visited.length=0;
   // OSM often splits a single street into very short edges. Following distance
   // must span those edges, otherwise a queued car on the next five-metre piece
   // is invisible until its follower has already reached its bumper.
-  for(let hop=0;edge&&hop<12&&offset<50&&!visited.has(edge.id);hop++){
-    visited.add(edge.id);
-    for(const other of queues.get(edge.id)||[]){
+  for(let hop=0;edge&&hop<12&&offset<50&&!visited.includes(edge.id);hop++){
+    visited.push(edge.id);
+    for(const other of queues[edge.id]){
       if(other===car||other.edge!==edge)continue;
       const ahead=offset+other.distance;
       if(ahead>0)gap=Math.min(gap,Math.max(0,ahead-7));
@@ -81,8 +81,7 @@ function followingGap(car,queues){
     offset+=edge.length;
     if(!hop)edge=car.nextEdge;
     else{
-      const continuations=edge.to.out.filter(next=>next.to!==edge.from);
-      edge=continuations.length===1?continuations[0]:null;
+      edge=routes[edge.id].continuation;
     }
   }
   return gap;
@@ -124,6 +123,25 @@ export function createTraffic(graph,count=260,seed=239){
   const spawnEdges=eligible.filter(e=>e.length>=50);
   const cars=[];
   if(!eligible.length)return {cars,update(){}};
+  // The street graph is immutable. Calculate turn weights once, rather than
+  // allocating filtered routes for every car and every following-distance scan.
+  const routes=graph.edges.map(edge=>{
+    const options=edge.to.out.filter(next=>next.to!==edge.from);
+    const weighted=options.map(e=>({e,w:1+Math.max(0,e.dx*edge.dx+e.dz*edge.dz)*3}));
+    return {weighted,total:weighted.reduce((sum,option)=>sum+option.w,0),
+      fallback:options[0]||edge.to.out[0]||null,continuation:options.length===1?options[0]:null};
+  });
+  const queues=graph.edges.map(()=>[]),activeQueues=[],visited=[];
+  const reserved=new Set(),junctions=new Map(),ownerPool=[];
+  let ownerCount=0;
+  const occupy=(node,car)=>{
+    let owners=junctions.get(node.junction);
+    if(!owners){
+      owners=ownerPool[ownerCount]||(ownerPool[ownerCount]=new Set());ownerCount++;
+      owners.clear();junctions.set(node.junction,owners);
+    }
+    owners.add(car);
+  };
   const occupied=new Map();
   for(let i=0;i<count*5&&cars.length<count;i++){
     const edge=eligible[Math.floor(random()*eligible.length)],distance=8+random()*(edge.length-28);
@@ -134,22 +152,16 @@ export function createTraffic(graph,count=260,seed=239){
       previousEdge:null,nextEdge:null});
   }
   function choose(car){
-    const options=car.edge.to.out.filter(e=>e.to!==car.edge.from);
-    if(!options.length)return car.edge.to.out[0]||null;
-    const weighted=options.map(e=>({e,w:1+Math.max(0,e.dx*car.edge.dx+e.dz*car.edge.dz)*3}));
-    let n=random()*weighted.reduce((s,v)=>s+v.w,0);
-    for(const v of weighted){n-=v.w;if(n<=0)return v.e;}return options[0];
+    const route=routes[car.edge.id];
+    if(!route.weighted.length)return route.fallback;
+    let n=random()*route.total;
+    for(const v of route.weighted){n-=v.w;if(n<=0)return v.e;}return route.fallback;
   }
   for(const car of cars)car.nextEdge=choose(car);
   function step(dt){
       time+=dt;
-      const queues=new Map();
-      const reserved=new Set();
-      const junctions=new Map();
-      const occupy=(node,car)=>{
-        const owners=junctions.get(node.junction)||new Set();
-        owners.add(car);junctions.set(node.junction,owners);
-      };
+      for(const q of activeQueues)q.length=0;
+      activeQueues.length=0;reserved.clear();junctions.clear();ownerCount=0;
       // Reserve from before the turn starts until the rear of the vehicle has
       // cleared it. Waiting until the graph edge changes is too late: two
       // incoming cars may already be on overlapping curves by then.
@@ -158,18 +170,21 @@ export function createTraffic(graph,count=260,seed=239){
         const clear=car.previousEdge?turnSpan(car.previousEdge,car.edge)+4:8;
         if(car.distance<clear)occupy(car.edge.from,car);
       }
-      for(const car of cars){const q=queues.get(car.edge.id)||[];q.push(car);queues.set(car.edge.id,q);}
-      for(const q of queues.values())q.sort((a,b)=>b.distance-a.distance);
-      for(const q of queues.values())for(let i=0;i<q.length;i++){
+      for(const car of cars){
+        const q=queues[car.edge.id];if(!q.length)activeQueues.push(q);q.push(car);
+      }
+      for(const q of activeQueues)q.sort((a,b)=>b.distance-a.distance);
+      for(const q of activeQueues)for(let i=0;i<q.length;i++){
         const car=q[i],edge=car.edge,node=edge.to;
         const green=trafficSignal(edge,time)==='green';
         const next=car.nextEdge;
         const span=next?turnSpan(edge,next):0;
         const stopAt=stopLine(car);
-        const occupiedJunction=[...(junctions.get(node.junction)||[])].some(owner=>owner!==car);
-        const blocked=occupiedJunction||next&&(reserved.has(next.id)||(queues.get(next.id)||[])
+        const owners=junctions.get(node.junction);
+        const occupiedJunction=owners&&(owners.size>1||!owners.has(car));
+        const blocked=occupiedJunction||next&&(reserved.has(next.id)||queues[next.id]
           .some(other=>other!==car&&other.edge===next&&other.distance<span+8));
-        let gap=followingGap(car,queues);
+        let gap=followingGap(car,queues,routes,visited);
         // A car that has passed the stop line clears the intersection even if
         // the signal changes; it must not freeze halfway through a turn.
         const insideJunction=edge.from.junction===node.junction;
@@ -188,7 +203,7 @@ export function createTraffic(graph,count=260,seed=239){
           const next=car.nextEdge;
           if(!next){car.distance=car.edge.length;car.speed=0;car.braking=true;break;}
           // Wait at the junction if the receiving lane has no room.
-          if(reserved.has(next.id)||(queues.get(next.id)||[])
+          if(reserved.has(next.id)||queues[next.id]
             .some(other=>other!==car&&other.edge===next&&other.distance<8)){
             car.distance=car.edge.length-.1;car.speed=0;car.braking=true;break;
           }

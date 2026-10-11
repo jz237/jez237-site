@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.1",
-  "sourceHash": "e8366eaee7be3933c29e9b17d892441eb08d0479bb65a1bb707f44f0670571d5",
-  "entry": "load/app-FA5ZJIGM.js",
+  "sourceHash": "ef9d50255a67d31b496365c03674a728cca82963b195e3e821086c8309251b4a",
+  "entry": "load/app-Z3EMQLHO.js",
   "css": "load/style-49a2eea61d53.css",
   "startupRequests": 3,
-  "startupBytes": 1110515,
+  "startupBytes": 1110959,
   "files": {
-    "load/app-FA5ZJIGM.js": "4129af56b73f92b7258fa774a6bc87cb3d11b7052d8541ebe3e8045a9842e3ba",
+    "load/app-Z3EMQLHO.js": "f95fca6c21a37e6f69b8d83d41490f4bcd2012dd8916cb3fdae8aadb153b6721",
     "load/chunk-WWEFO7CE.js": "1606971e6bf6a1ce0f218cb61c8086624a5f786dcd579dee1c219400120822b6",
     "load/chunk-UC44IGDQ.js": "a2e7a9fc2ab51b5a9f905e17fd11704f469a8bfdda5f4fe89c37981b31b0f705",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",
