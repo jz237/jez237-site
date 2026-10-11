@@ -420,6 +420,15 @@ async function run() {
       assert.equal(await page.locator('[data-storm="al982026"]').getAttribute('aria-pressed'),'true');
       await page.waitForTimeout(100);
       assert.ok((await readableMapLabels(page)).length>=2,'Collision handling must retain useful geographic context');
+      if(width===390) {
+        await page.locator('#hurricane-satellite').check();
+        await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').classList.contains('hurricane-satellite-active'));
+        assert.match(await page.locator('.leaflet-control-attribution').innerText(),/NOAA\/NESDIS satellite/);
+        await readableMapLabels(page);
+        await page.locator('#hurricane-satellite').uncheck();
+        assert.doesNotMatch(await page.locator('.leaflet-control-attribution').innerText(),/NOAA\/NESDIS satellite/);
+        await readableMapLabels(page);
+      }
       if(width===320) {
         const hiddenBefore=await page.locator('.hurricane-city-label').evaluateAll(elements=>elements.filter(el=>getComputedStyle(el).visibility==='hidden').map(el=>el.textContent));
         await page.locator('#hurricane-map').focus();
