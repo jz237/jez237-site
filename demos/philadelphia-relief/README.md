@@ -1262,6 +1262,9 @@ with four-millisecond work budgets. Cars become available before sidewalk
 topology finishes. The resulting routes and vehicle trajectories match the
 synchronous reference. Readiness wakes an idle scene, and disposal prevents
 late attachment. Tiny streets without spawnable segments still cycle their signals.
+Power saving keeps a moving idle cadence while nearby cars, pedestrians, or
+signals animate. Empty views, paused motion, and reduced-motion preferences keep
+the deeper idle cadence; photographic views do not wake for hidden street geometry.
 `tools/street-startup.html` compares the complete preparation sequence with
 continuous browser animation on the real Philadelphia street graph.
 
