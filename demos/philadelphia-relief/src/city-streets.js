@@ -50,6 +50,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   let retryDelay=0,request=null,vehicleView=null;
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
+  const foliage=[0x466544,0x536c3f,0x3d6047,0x60764b];
   function load(){if(loading||graph||retryDelay>0||disposed)return;loading=true;
     request=new AbortController();
     fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
@@ -78,6 +79,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     const segments=graph.segments.filter(s=>Math.hypot((s.a.x+s.b.x)/2-x,(s.a.z+s.b.z)/2-z)<radius)
       .sort((a,b)=>Math.hypot(a.a.x-x,a.a.z-z)-Math.hypot(b.a.x-x,b.a.z-z));
     for(const s of segments){
+      if(street.count>=street.instanceMatrix.count)break;
       const dx=(s.b.x-s.a.x)/s.length,dz=(s.b.z-s.a.z)/s.length,angle=Math.atan2(dx,dz);
       const trimA=s.a.neighbors.size>2?s.width*.7:0,trimB=s.b.neighbors.size>2?s.width*.7:0;
       const curbLength=s.length-trimA-trimB;
@@ -93,9 +95,17 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
         if(s.length>28)for(let t=16;t<s.length-12;t+=34){
           const tx=s.a.x+dx*t-dz*(off+side*1.1),tz=s.a.z+dz*t+dx*(off+side*1.1);
           const ground=groundAt(tx,tz);
-          put(street,tx,ground+2.2,tz,.35,3.7,.35,0,0x58473a);
-          put(trees,tx,ground+5.0,tz,2.3,2.9,2.3,angle,0x466544);
-          if(side===1){const lx=tx+dx*5,lz=tz+dz*5,lg=groundAt(lx,lz);
+          // Reserve the complete object across both buffers: a full canopy
+          // buffer must not leave bare trunks, nor a full street buffer floating crowns.
+          if(street.count<street.instanceMatrix.count&&trees.count<trees.instanceMatrix.count){
+            const seed=(Math.imul(s.a.id|0,1664525)+Math.imul(t,1013904223)+(side+1)*239)>>>0;
+            const shape=(seed%997)/997,tone=(seed>>>12)%foliage.length;
+            put(street,tx,ground+2.2,tz,.35,3.7,.35,0,0x58473a);
+            put(trees,tx,ground+4.65+shape*.7,tz,1.9+shape*.7,2.5+shape*.8,
+              2.4-shape*.3,angle,foliage[tone]);
+          }
+          if(side===1&&street.count+2<=street.instanceMatrix.count){
+            const lx=tx+dx*5,lz=tz+dz*5,lg=groundAt(lx,lz);
             put(street,lx,lg+3.2,lz,.14,5.8,.14,0,0x434847);
             put(street,lx-dz*.5,lg+6.1,lz+dx*.5,1.25,.18,.36,angle,[1.9,1.6,1.15]);}
         }

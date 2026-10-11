@@ -1138,3 +1138,38 @@ Source checked: https://www.fox29.com/philadelphia-international-airport-camera
 Validation includes camera heading/offset/terrain-clearance calculations, return to
 orbit, preview resource cleanup, desktop and 390px mobile flight controls, and the
 actual airport preview. Photographic ride-along is checked on the deployed domain.
+
+### Diorama rendering and street life (10 October 2026)
+
+The diorama adds procedural window interiors, local building shadows, contact
+occlusion, glass reflections, cloud lighting, rooftop equipment and illustrative
+street life. These are styling layers over the mapped geometry and aerial data.
+Photographic 3D retains its captured appearance and is checked separately after
+each release. Full-precision depth reconstruction avoids half-float overflow at
+regional scale; distant window patterns are filtered before they alias. This does
+not establish that every device-specific diagonal-line report is resolved.
+
+Building shadow maps retain their depth result while geometry, clipping, growth,
+light and shadow coverage remain unchanged. Clouds render at half resolution with
+premultiplied edges; close-up pixels below the cloud deck skip cloud compositing
+samples. Performance mode disables screen-space glass reflections. These reduce
+rendering work without changing the original aerial resolution.
+
+Decorative cars follow the shipped OSM street graph, one-way directions, local
+queues and simulated junction signals. They use continuous turn curves, brake
+lamps and road-aligned vehicle geometry. This is not live traffic. Cars leaving
+the cropped graph, or stuck for two minutes, may be replenished only outside the
+displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
+Street downloads retry after a bounded backoff and are aborted on disposal.
+
+Curbs follow sampled terrain grades and bends. Trees and lamps use local ground
+heights, with complete-object reservations at instance limits so buffer pressure
+cannot leave floating crowns or unlit lamp poles. Tree variations are deterministic
+illustration, not a survey of actual trees. Static street buffers rebuild only
+after meaningful movement, zoom or elevation-scale changes.
+
+Validation: 440 automated checks, including ten simulated minutes on the real
+street graph, multi-node junction separation, continuous U-turns, offscreen-only
+replenishment, tyre and curb elevation checks, and saturated scenery buffers.
+Browser checks cover diorama day/night views, sloped streets, mobile controls,
+clouds above and below their deck, and visible production Cesium close-ups.
