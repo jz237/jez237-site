@@ -64,6 +64,8 @@ export interface Cloud {
   crackleT: number;
   shake: number;
   mesh: THREE.Mesh;
+  /** Writes how far away the cloud is (for depth of field) instead of its colour. */
+  distMat: THREE.ShaderMaterial;
   uniforms: Record<string, THREE.IUniform>;
   seed: THREE.Vector3;
 }
@@ -100,6 +102,8 @@ export class Clouds {
     uSteps: {value: 34},
   };
   events: CloudEvents = {};
+  /** Size of the target the distance pass draws into. */
+  private distRes = {value: new THREE.Vector2(1, 1)};
   private nextId = 1;
   private geo = new THREE.BoxGeometry(1, 1, 1).translate(0.5, 0.5, 0.5);
   /** The cloud held by the hand, and the pointer target it is pulled toward. */
@@ -144,6 +148,17 @@ export class Clouds {
       vertexShader: /* glsl */ `varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
       fragmentShader: CLOUD_FRAG,
     });
+    const distMat = new THREE.ShaderMaterial({
+      uniforms: {...uniforms, uResolution: this.distRes},
+      defines: {CLOUD_DIST: 1},
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      side: THREE.FrontSide,
+      blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
+      vertexShader: mat.vertexShader,
+      fragmentShader: CLOUD_FRAG,
+    });
     const mesh = new THREE.Mesh(this.geo, mat);
     mesh.frustumCulled = false;
     mesh.layers.set(2);
@@ -154,7 +169,7 @@ export class Clouds {
       squeeze: 0, userSqueeze: 0, wheelSqueeze: 0, wheelHold: 0, heldSqueeze: o.squeeze ?? 0, charge: 0, storm: o.storm ?? 0, stormTarget: o.storm ?? 0, stormAge: 0, stormLife: 28 + Math.random() * 17, touchedAt: -1e9,
       comp: 0, compVel: 0, rate: 0, fade: o.fadeIn ? 0 : 1, dissolving: false, hover: 0, hoverTarget: 0, glow: 0, glowPos: new THREE.Vector3(),
       puffs: [], grabbed: false, yaw: Math.random() * Math.PI * 2, phase: Math.random() * 10, vfit: 1, baseY: 0, radius: 0.05,
-      lastSquish: 0, crackleT: 0, shake: 0, mesh, uniforms, seed: uniforms.uSeed.value as THREE.Vector3,
+      lastSquish: 0, crackleT: 0, shake: 0, mesh, distMat, uniforms, seed: uniforms.uSeed.value as THREE.Vector3,
     };
     this.layout(c, 8 + Math.floor(Math.random() * 4));
     this.clouds.push(c);
@@ -376,7 +391,7 @@ export class Clouds {
     // remove faded-out clouds
     for (let i = this.clouds.length - 1; i >= 0; i--) {
       const c = this.clouds[i];
-      if (c.dissolving && c.fade <= 0) {this.group.remove(c.mesh); (c.mesh.material as THREE.Material).dispose(); this.clouds.splice(i, 1);}
+      if (c.dissolving && c.fade <= 0) {this.group.remove(c.mesh); (c.mesh.material as THREE.Material).dispose(); c.distMat.dispose(); this.clouds.splice(i, 1);}
     }
     let cover = 0, storm = 0;
     for (const c of this.clouds) {
@@ -660,17 +675,35 @@ export class Clouds {
     c.mesh.visible = n > 0 && c.fade > 0.01;
   }
 
+  /**
+   * Draws each cloud's camera depth (weighted by its opacity, with the opacity
+   * in alpha) into `target`, so depth of field blurs a cloud by its own
+   * distance rather than by the distance of whatever lies behind it.
+   */
+  renderDistance(renderer: THREE.WebGLRenderer, camera: THREE.Camera, target: THREE.WebGLRenderTarget) {
+    this.distRes.value.set(target.width, target.height);
+    const mask = camera.layers.mask;
+    camera.layers.set(2);
+    const colour = this.clouds.map((c) => c.mesh.material);
+    for (const c of this.clouds) c.mesh.material = c.distMat;
+    renderer.render(this.group, camera);
+    this.clouds.forEach((c, i) => (c.mesh.material = colour[i]));
+    camera.layers.mask = mask;
+  }
+
   /** Back-to-front order for blending, and inside-the-box handling. */
   sort(camera: THREE.Camera) {
     const sorted = [...this.clouds].sort((a, b) => b.pos.distanceToSquared(camera.position) - a.pos.distanceToSquared(camera.position));
     sorted.forEach((c, i) => {
-      c.mesh.renderOrder = 10 + i * 0.01;
+      // (after the glass panes, renderOrder 10, never tied with them)
+      c.mesh.renderOrder = 10.01 + i * 0.01;
       const u = c.uniforms;
       const mn = u.uBoxMin.value as THREE.Vector3, mx = u.uBoxMax.value as THREE.Vector3;
       const p = camera.position, m = 0.01;
       const inside = p.x > mn.x - m && p.x < mx.x + m && p.y > mn.y - m && p.y < mx.y + m && p.z > mn.z - m && p.z < mx.z + m;
       const mat = c.mesh.material as THREE.ShaderMaterial;
       mat.side = inside ? THREE.BackSide : THREE.FrontSide;
+      c.distMat.side = mat.side;
       mat.depthTest = !inside;
       u.uInside.value = inside ? 1 : 0;
     });
@@ -762,6 +795,7 @@ void main(){
   float T = 1.0;
   int lightEvery = 0;
   float od = 0.0;
+  float zacc = 0.0;
   for (int i = 0; i < 64; i++) {
     if (t > t1) break;
     vec3 p = ro + rd * t;
@@ -770,6 +804,12 @@ void main(){
     float cov;
     float dens = fullDensity(p, sd, cov);
     if (dens > 0.004) {
+#ifdef CLOUD_DIST
+      float a = 1.0 - exp(-dens * sigma * ds);
+      zacc += T * a * -(viewMatrix * vec4(p, 1.0)).z;
+      T *= 1.0 - a;
+      if (T < 0.02) break;
+#else
       vec3 L = normalize(uLightPos - p);
       if (lightEvery == 0) {
         od = 0.0;
@@ -802,10 +842,15 @@ void main(){
       col += T * alb * Lin * a;
       T *= 1.0 - a;
       if (T < 0.02) break;
+#endif
     }
     t += ds;
   }
   float alpha = (1.0 - T) * uLook2.x;
   if (alpha < 0.003) discard;
+#ifdef CLOUD_DIST
+  gl_FragColor = vec4(zacc * uLook2.x, 0.0, 0.0, alpha);
+#else
   gl_FragColor = vec4(col * uLook2.x, alpha);
+#endif
 }`;

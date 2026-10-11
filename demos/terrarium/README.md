@@ -78,7 +78,7 @@ The bearded dragon (*Pogona vitticeps*) is sculpted in code, not downloaded.
   - **Navigation:** routes come from A* over a walkability grid that prefers clearance from walls, rock edges and plants. A shallow pebble shelf lets the lizard wade across the pool to reach the far bank. It steers smoothly around corners, slides along obstacles, re-plans when blocked or stalled and gives up gracefully. It only heads for places it can reach, and it favours parts of the case it has not visited lately. It climbs up the sides of the log to get onto it or over it to the back of the case.
   - **Moving around:** bursts and freezes with head scanning. It turns its head toward the route before setting off, and stops now and then to tongue-tap the ground.
   - **Temperature:** its body temperature follows its surroundings over tens of seconds. The basking lamp warms it; shade, the cave, rain and wet skin cool it. A cold dragon makes for the lamp and stays until it has warmed up; a hot one gapes and soon moves off.
-  - **Basking and soaking:** it basks under the lamp with the chest raised and the body flattened, sometimes with the mouth open to shed heat. It also soaks in the shallows.
+  - **Basking and soaking:** it basks under the lamp with the chest raised and the body flattened, sometimes with the mouth open to shed heat. Its spot is the highest stretch of the log where its whole body lies level along the wood, clear of the edges and of cracks, and it turns to lie along the log when it arrives. It also soaks in the shallows.
   - **Drinking:** the head is lowered until the mouth meets the water, and each lap ripples it. After rain or misting it walks over to the wet plants, stretches up to a leaf tip and laps the droplets off it, sometimes knocking a drop loose.
   - **Greens:** now and then it grazes from the dish of torn greens and squash, nipping out one piece at a time and chewing.
   - **Signalling:** head-bob displays and slow arm waves.
@@ -137,7 +137,10 @@ All motion constants are illustrative. They are not measured from real bearded d
   - Fog blurs what is behind it, and droplets act as small lenses with rims and highlights.
   - Condensation is simulated per pane: it collects at cool edges, can be wiped away, and sheds drips that leave clear trails.
   - Faint smudges vary the reflections.
-- **Room and camera.** The room around the case has a walnut table, an Edison lamp and out-of-focus house plants, two of them behind the case, lit from behind so their leaves show softly through its back glass. The lamp gilds the clouds a warm cream. Post-processing adds ground-truth ambient occlusion, bloom, depth of field focused on the orbit target, ACES tone mapping, a vignette, film grain and faint chromatic aberration.
+- **Room and camera.** The room around the case has a walnut table, an Edison lamp and out-of-focus house plants, two of them behind the case, lit from behind so their leaves show softly through its back glass. The lamp gilds the clouds a warm cream. Post-processing adds ground-truth ambient occlusion, bloom, depth of field focused on the orbit target, ACES tone mapping, a warm grade (a little more saturation and contrast, golden highlights over umber shadows), a vignette, film grain and faint chromatic aberration.
+  - Ambient occlusion darkens only the solid scene, before the glass, clouds and fog are drawn over it, so the shapes behind a cloud never print into it.
+  - The clouds draw a half-size map of their own depth, so the depth of field blurs each cloud by its own distance rather than by whatever lies behind it.
+  - The panes facing the viewer are drawn after the clouds, over a fresh copy of the view, so their condensation and haze lie over a cloud just as over everything else.
 
 ### Weather
 
@@ -225,7 +228,7 @@ Development URL options:
 The full effects are tuned for desktop GPUs. If frames are sustained-slow, the demo steps down gradually in this order:
 
 1. pixel ratio;
-2. depth of field and the cloud and fog ray-march steps;
+2. depth of field (with the clouds' depth map), the near panes' second view of the scene, and the cloud and fog ray-march steps;
 3. ambient occlusion;
 4. moss layers.
 

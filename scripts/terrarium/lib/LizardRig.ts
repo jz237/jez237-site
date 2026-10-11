@@ -272,10 +272,12 @@ export class LizardRig {
     const fwd = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading));
     const right = new THREE.Vector3(-fwd.z, 0, fwd.x); // +Z when facing +X
     // Sample the surface under the chest, pelvis and flanks.
-    const c = this.ground.heightAt(I.x + fwd.x * 0.035, I.z + fwd.z * 0.035);
-    const p = this.ground.heightAt(I.x - fwd.x * 0.03, I.z - fwd.z * 0.03);
-    const l = this.ground.heightAt(I.x - right.x * 0.022, I.z - right.z * 0.022);
-    const r = this.ground.heightAt(I.x + right.x * 0.022, I.z + right.z * 0.022);
+    // (each a little patch, so a crack in the log is bridged rather than dropped into)
+    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a + right.x * sd, I.z + fwd.z * a + right.z * sd);
+    const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0));
+    const p = Math.max(H(-0.02, 0), H(-0.03, 0), H(-0.042, 0));
+    const l = Math.max(H(0.01, -0.022), H(-0.012, -0.022));
+    const r = Math.max(H(0.01, 0.022), H(-0.012, 0.022));
     const mid = this.ground.heightAt(I.x, I.z);
     // the trunk never sinks into what it straddles (the log, a stone): its belly
     // stays above the highest point anywhere under its footprint
