@@ -5,6 +5,7 @@ import {
 } from './hurricane-data.mjs?v=20261010-10';
 import { combinedStorms, fetchWpcForecasts, validateWpcCollection } from './hurricane-wpc.mjs?v=20261010-10';
 import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
+import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-11';
 
 const root = document.getElementById('weather-hurricanes');
 const $ = selector => root.querySelector(selector);
@@ -14,8 +15,8 @@ const LABELS = { points: 'storm positions', cones: 'forecast cones', history: 'p
 const WATCHES = { HWR: ['Hurricane warning', '#ff676b'], HWA: ['Hurricane watch', '#f2a3d0'], TWR: ['Tropical storm warning', '#64b3ff'], TWA: ['Tropical storm watch', '#ffe083'] };
 const BOUNDS = { atlantic: [[3, -102], [49, -18]], pacific: [[1, -179], [43, -79]], all: [[1, -173], [52, -25]] };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const state = { basin: 'all', selected: null, step: 0, unit: 'mph', storms: [], bundle: null, cached: false, expiredCache: false, failedRefresh: false, loading: false, inView: true, initialized: false, lastAttempt: 0, basemapError: false, layers: { cones: true, history: true, outlook: true, warnings: true } };
-let map, graphics, highlight, labelLayer, playback, satellite, land;
+const state = { basin: 'all', selected: null, step: 0, unit: 'mph', storms: [], bundle: null, cached: false, expiredCache: false, failedRefresh: false, loading: false, inView: true, initialized: false, lastAttempt: 0, basemapError: false, regionsError: false, layers: { cones: true, history: true, outlook: true, warnings: true } };
+let map, graphics, highlight, labelLayer, playback, satellite, land, regions;
 let observer, resizeObserver, cacheExpiry;
 const outlookLayers = new Map();
 
@@ -138,6 +139,7 @@ function renderStatus() {
   $('#hurricane-basin-count').textContent = `${unavailable ? 'Storm feed unavailable' : `${count} forecast ${count === 1 ? 'system' : 'systems'}`} · ${bundle.layers.outlook ? `${areas} ${areas === 1 ? 'area' : 'areas'} to watch` : 'Outlook unavailable'}`;
   const messages = [];
   if (state.basemapError) messages.push('The coastline map could not load. Storm coordinates and advisory details remain available.');
+  if (state.regionsError) messages.push('State and province boundaries could not load. Storm positions remain available.');
   if (state.cached && state.failedRefresh) messages.push(`The feed could not be refreshed. Showing saved data checked ${formatTime(bundle.checkedAt)}.`);
   else if (unavailable) messages.push(`${state.expiredCache ? 'The saved storm data has expired. ' : ''}NOAA storm positions are temporarily unavailable. This does not mean there are no storms.`);
   if (state.storms.some(s => s.stale)) messages.push('Some advisories are more than 12 hours old or have an unverified time. Check the official advisory before using them.');
@@ -214,6 +216,7 @@ function drawMap() {
     if (focusedMarkerId === storm.id) element.focus({ preventScroll:true });
   }
   renderTimeline();
+  regions?.update();
 }
 
 function setStep(value, stop = false) {
@@ -301,6 +304,7 @@ async function refresh() {
   if (state.loading) return;
   expireSavedData();
   satellite?.refresh();
+  regions?.refresh();
   state.loading = true;
   state.lastAttempt = Date.now();
   $('#hurricane-refresh').disabled = true;
@@ -338,6 +342,9 @@ function addMapLabels() {
   const cities = [
     [40.06,-75.08,'Philadelphia',3], [25.76,-80.19,'Miami',3], [29.95,-90.07,'New Orleans',3],
     [29.76,-95.37,'Houston',4], [32.78,-79.93,'Charleston',4], [18.47,-66.11,'San Juan',3],
+    [36.172,-86.782,'Nashville',4.5], [33.739,-84.368,'Atlanta',4.5], [35.970,-83.920,'Knoxville',5.5],
+    [35.773,-78.647,'Raleigh',5], [37.552,-77.452,'Richmond',5], [40.432,-80.002,'Pittsburgh',5],
+    [43.665,-79.389,'Toronto',4.5], [44.650,-63.600,'Halifax',4.5], [42.332,-71.072,'Boston',4.5],
     [23.11,-82.37,'Havana',4], [21.16,-86.85,'Cancún',4], [18.49,-69.93,'Santo Domingo',4],
     [32.31,-64.75,'Bermuda',3], [13.10,-59.61,'Barbados',4], [28.13,-15.44,'Canary Is.',3],
     [14.69,-17.45,'Dakar',3], [32.72,-117.16,'San Diego',3], [22.89,-109.92,'Cabo San Lucas',3],
@@ -363,10 +370,10 @@ async function initializeMap() {
   });
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>');
   map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> · <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA/NHC</a> · <a href="https://www.wpc.ncep.noaa.gov/" target="_blank" rel="noopener noreferrer">WPC</a>');
-  for (const [name, z] of [['land',200],['satellite',205],['grid',210],['labels',250],['outlook',300],['cones',310],['tracks',320],['warnings',330],['points',340],['selection',350],['centers',410]]) {
+  for (const [name, z] of [['land',200],['satellite',205],['grid',210],['regions',245],['labels',250],['outlook',300],['cones',310],['tracks',320],['warnings',330],['points',340],['selection',350],['centers',410]]) {
     map.createPane(`hurricane-${name}`).style.zIndex = String(z);
     if (name !== 'centers') map.getPane(`hurricane-${name}`).setAttribute('aria-hidden', 'true');
-    if (['land','satellite','grid','labels'].includes(name)) map.getPane(`hurricane-${name}`).style.pointerEvents = 'none';
+    if (['land','satellite','grid','regions','labels'].includes(name)) map.getPane(`hurricane-${name}`).style.pointerEvents = 'none';
   }
   satellite = createSatelliteOverlay({ map, L, input:$('#hurricane-satellite'), panel:$('#hurricane-satellite-info'), status:$('#hurricane-satellite-status'), retry:$('#hurricane-satellite-retry'), formatTime,
     onDisplay:active => {
@@ -382,6 +389,7 @@ async function initializeMap() {
   highlight = L.layerGroup().addTo(map);
   labelLayer = L.layerGroup().addTo(map);
   map.on('zoomend', addMapLabels);
+  regions = createRegionalContext({map,L,escapeHtml:esc,onError:error=>{state.regionsError=error;if(state.bundle) renderStatus();}});
   fitView();
   addMapLabels();
   resizeObserver = new ResizeObserver(() => { map.closePopup(); map.invalidateSize({ animate:false }); });
