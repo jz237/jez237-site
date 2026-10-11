@@ -7,6 +7,7 @@ import { checkPhillyLive } from './check_philly_live.mjs';
 import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
 import { checkPondFilterLinks } from './check_pond_filter_links.mjs';
 import { checkOceanSnapshot, checkOpenSeaLive } from './check_open_sea_live.mjs';
+import { waitForProductionBuilds } from './wait_pages_builds.mjs';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -15,6 +16,9 @@ const stage = resolve(process.argv[2] || '.');
 const prepareOnly = process.argv.includes('--prepare-only');
 const requireAircraft = process.argv.includes('--require-aircraft');
 const requireOutages = process.argv.includes('--require-outages');
+const publishBeforeArg = process.argv.find(arg => arg.startsWith('--publish-before='));
+const publishBefore = publishBeforeArg ? Date.parse(publishBeforeArg.split('=')[1]) : Infinity;
+if (Number.isNaN(publishBefore)) throw new Error('Invalid --publish-before timestamp.');
 const rel = relative(repo, stage);
 if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
   throw new Error('Use a separate, disposable public upload directory outside the repository.');
@@ -91,12 +95,21 @@ for (const marker of ['Invalid detail imagery request', 'Invalid neighborhood', 
 if (prepareOnly) {
   console.log('Upload prepared with compiled Functions. No deployment was made.');
 } else {
-  const deploy = branch => run(process.execPath, [wrangler, 'pages', 'deploy', stage,
-    '--project-name', 'jez237-site', '--branch', branch, '--commit-hash', sha, '--commit-dirty=false']);
+  const waitForBuilds = () => waitForProductionBuilds({ wrangler, repo, env,
+    accountId: env.CLOUDFLARE_ACCOUNT_ID, projectName: 'jez237-site', deadline: publishBefore });
+  const deploy = branch => {
+    if (Date.now() >= publishBefore) throw new Error('Publication cutoff reached; no deployment started.');
+    return run(process.execPath, [wrangler, 'pages', 'deploy', stage,
+      '--project-name', 'jez237-site', '--branch', branch, '--commit-hash', sha, '--commit-dirty=false']);
+  };
+  await waitForBuilds();
   const preview = deploy(`release-check-${sha.slice(0, 12)}`);
   const previewUrl = preview.match(/https:\/\/[a-z0-9]+\.jez237-site\.pages\.dev/)?.[0];
   if (!previewUrl) throw new Error('Preview deployment URL was not returned; production unchanged.');
   await verifyRelease(previewUrl);
+  // Git-triggered builds can finish after a direct upload and replace it with
+  // an older commit. Drain the recent production queue, then recheck main.
+  await waitForBuilds();
   git('fetch', 'origin', 'main');
   if (sha !== git('rev-parse', 'origin/main')) throw new Error('Main changed during preview; production unchanged.');
   deploy('main');
