@@ -128,7 +128,7 @@
 .hurricane-center-icon strong { font:800 16px/1 system-ui,sans-serif; }
 .hurricane-map-marker.is-selected .hurricane-center-icon::before { content:''; position:absolute; inset:-7px; border:1px solid var(--storm-color); border-radius:50%; opacity:.5; animation:hurricane-beacon 3s ease-out infinite; }
 @keyframes hurricane-beacon { 0%,100% { transform:scale(.93); opacity:.45; } 65% { transform:scale(1.16); opacity:.08; } }
-.hurricane-city-label { background:none; border:none; color:#a4c2d1; font:10px/1 system-ui,sans-serif; text-shadow:0 1px 3px #00131f,0 -1px 3px #00131f; white-space:nowrap; pointer-events:none; }
+.hurricane-city-label { width:max-content !important; background:none; border:none; color:#a4c2d1; font:10px/1 system-ui,sans-serif; text-shadow:0 1px 3px #00131f,0 -1px 3px #00131f; white-space:nowrap; pointer-events:none; }
 .hurricane-city-label::before { content:''; display:inline-block; width:3px; height:3px; background:#a4c2d1; border-radius:50%; margin:0 4px 2px 0; }
 .hurricane-region-label { color:#a2bac8; font:600 10px/1.25 system-ui,sans-serif; letter-spacing:.07em; text-transform:uppercase; text-align:center; text-shadow:0 1px 3px #00131f,0 -1px 3px #00131f; pointer-events:none; }
 .hurricane-ocean-label { color:#79a6bf77; font:italic 13px/1.1 Georgia,serif; letter-spacing:.08em; white-space:nowrap; pointer-events:none; text-align:center; }
