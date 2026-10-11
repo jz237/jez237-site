@@ -319,7 +319,7 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   // fine sand rippled by the flow, with stones scattered over it (not a paving)
   float ripple = sin(dot(p, vec2(0.6, 0.8)) * 260.0 + gn(p * 30.0) * 6.0) * 0.5 + 0.5;
   silt = mix(silt, silt * 1.25 + vec3(0.02, 0.018, 0.012), ripple * 0.35 * (1.0 - depthB * 0.5));
-  vec3 bedC = mix(silt, stone, pebMask * step(0.62, pb.y) * smoothstep(0.0, 0.15, pb.x));
+  vec3 bedC = mix(silt, stone * (0.7 + 0.5 * fract(pb.y * 13.7)), pebMask * step(0.8, pb.y) * smoothstep(0.0, 0.15, pb.x) * 0.85);
   // green-brown algae film and dark sunken leaves
   bedC = mix(bedC, vec3(0.04, 0.07, 0.025), smoothstep(0.5, 0.8, gfbm(p * 25.0 + 9.0)) * 0.7);
   float leaf = smoothstep(0.82, 0.86, gn(p * 55.0 + 2.0)) * smoothstep(0.3, 0.5, gn(p * 300.0));
@@ -350,7 +350,7 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   g.rough = mix(g.rough, 0.45, wet * 0.6);
   // bump normal
   float e = 0.0006;
-  float pbk = 0.0018 * max(bedMix, shore) * pebMask * step(0.62, pb.y);
+  float pbk = 0.0018 * max(bedMix, shore) * pebMask * step(0.8, pb.y);
   // silt under the water and the cave's grit are smooth; the crumb relief belongs to the dry soil
   float soilK = 1.0 - max(max(bedMix, shore), caveK) * 0.85;
   float h0 = groundBumps(p, moss) * soilK + pb.x * pbk;

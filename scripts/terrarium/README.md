@@ -112,8 +112,8 @@ All motion constants are illustrative. They are not measured from real bearded d
   - The cascade is a set of flowing, foaming ribbons with spray.
 - **Planting.**
   - **Moss:** 14-layer shell-rendered moss. It grows in mounded cushions of several species with soil showing between them, and wind combs it in visible gust bands.
-  - **Ferns:** CC0 scanned fern clumps with backlit translucency, filling the back of the case.
-  - **Leafy plants:** procedurally modelled Pilea, Fittonia, earth-star bromeliads and creeping fig, and glossy heart-leaf philodendron and pothos (some streaked with gold) at the foot of the rocks, behind the log and in the corners, with pothos trailing down the rock faces.
+  - **Ferns:** CC0 scanned fern clumps with backlit translucency. They fill the back of the case and climb the sides, the back row stretched upright like sword ferns.
+  - **Leafy plants:** procedurally modelled Pilea, Fittonia, earth-star bromeliads and creeping fig, and glossy heart-leaf philodendron and pothos (some streaked with gold) at the foot of the rocks, behind the log and in the corners, with a tall canopy of big leaves along the back. Pothos trails down the rock faces, and big plants and bromeliads crown the rocks, kept well below the clouds.
   - **Close up:** every leaf has a surface. Veins (pinnate, radiating, parallel or netted, by species) are drawn as relief as well as colour, and a fine net of veinlets and the sheen of the leaf's cells appear only once the camera is near enough to resolve them, so nothing shimmers from a distance. Scanned textures use anisotropic filtering. Each leaf looks its lamp shadow up a few millimetres towards the lamp, so thin leaves never shade themselves into a dotted pattern.
   - **Understorey (`lib/Flora.ts`):**
     - red-hearted Neoregelia bromeliads and ferns rooted in the rock shelves;
@@ -128,7 +128,7 @@ All motion constants are illustrative. They are not measured from real bearded d
   - **Wind response:** every plant reads the wind where each of its parts stands, not just at its root. A gust crossing a fern bends its near fronds first, and a wind stroke parts the meadow along its path while gusts run through it in waves. Plants flutter in turbulence and flash their paler undersides in gusts.
   - **Loose leaves (`lib/LeafDrift.ts`):** dead leaves lie on the floor. A strong enough local wind lifts them; they tumble with the air, flutter down and settle again, or float on the pool.
   - **Dust (`lib/Motes.ts`):** motes and spores ride the wind field exactly, and glint where they cross the lamp's beam.
-- **Substrate.** A cut-away front shows a drainage layer of rounded river pebbles, dark granular humus with the odd bark flake and grain of perlite, fine roots hanging down from the surface, and a band of leaf litter and moss at the top. The pool bed is rippled sand with scattered stones.
+- **Substrate.** A cut-away front shows a drainage layer of rounded river pebbles, dark granular humus with the odd bark flake and grain of perlite, fine roots hanging down from the surface, and a band of leaf litter and moss at the top. The pool bed is rippled sand with scattered stones, and rounded stones and clumps of eelgrass (*Vallisneria*) sit in the deep basin behind the front glass.
 - **Rock.** The basalt peaks have vertical fissures and blocky fractures in their relief, dark in the cracks, with moss on the ledges and in the crevices.
 - **Air (`lib/AirGlow.ts`).** The humid air glows faintly in the lamp's light. Rays are marched through the case and stopped by the scene; each step asks the lamp's shadow map and the clouds' shadow whether it is lit, so the haze is broken into soft shafts by the rocks, the plants and passing clouds. It thickens with humidity, mist and rain.
 - **Glass.**
@@ -136,7 +136,7 @@ All motion constants are illustrative. They are not measured from real bearded d
   - Fog blurs what is behind it, and droplets act as small lenses with rims and highlights.
   - Condensation is simulated per pane: it collects at cool edges, can be wiped away, and sheds drips that leave clear trails.
   - Faint smudges vary the reflections.
-- **Room and camera.** The room around the case has a walnut table, an Edison lamp and out-of-focus house plants. Post-processing adds ground-truth ambient occlusion, bloom, depth of field focused on the orbit target, ACES tone mapping, a vignette, film grain and faint chromatic aberration.
+- **Room and camera.** The room around the case has a walnut table, an Edison lamp and out-of-focus house plants, two of them behind the case, lit from behind so their leaves show softly through its back glass. The lamp gilds the clouds a warm cream. Post-processing adds ground-truth ambient occlusion, bloom, depth of field focused on the orbit target, ACES tone mapping, a vignette, film grain and faint chromatic aberration.
 
 ### Weather
 

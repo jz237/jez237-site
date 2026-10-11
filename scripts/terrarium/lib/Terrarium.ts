@@ -36,6 +36,7 @@ const DIRECT = new URLSearchParams(location.search).has('direct');
 const LITE = new URLSearchParams(location.search).has('lite');
 const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
 const DUSK_SKY = new THREE.Color(0.62, 0.42, 0.36);
+const CLOUD_TINT = new THREE.Color(1.0, 0.88, 0.7);
 const NIGHT_GLOW = new THREE.Color(0.035, 0.05, 0.11);
 const CAVE_VIEW = new THREE.Vector3(CAVE.view.x, CAVE.view.y, CAVE.view.z);
 
@@ -445,8 +446,9 @@ export class Terrarium {
     this.case.regulatorGlow.emissiveIntensity = 1.2 + 1.3 * day;
     this.room.setLampLevel(0.75 + 0.25 * (1 - day));
     const cl = this.weather.clouds.shared;
-    cl.uLightColor.value.copy(w.sunColor).multiplyScalar(day).add(NIGHT_GLOW).multiplyScalar(1 - gloom * 0.45);
-    cl.uAmbient.value.setRGB(0.03 + 0.2 * day, 0.03 + 0.17 * day, 0.04 + 0.14 * day);
+    // the lamp gilds the clouds: warm cream on top, not paper white
+    cl.uLightColor.value.copy(w.sunColor).multiply(CLOUD_TINT).multiplyScalar(day * 0.82).add(NIGHT_GLOW).multiplyScalar(1 - gloom * 0.45);
+    cl.uAmbient.value.setRGB(0.03 + 0.21 * day, 0.03 + 0.165 * day, 0.04 + 0.12 * day);
     cl.uSky.value.setRGB(0.05 + 0.33 * day, 0.05 + 0.3 * day, 0.06 + 0.26 * day).lerp(new THREE.Color(0.11, 0.12, 0.14), gloom * 0.6);
     cl.uLidGlow.value.copy(this.case.regulatorGlow.emissive).multiplyScalar(0.6);
     this.water.setLight(day * (1 - gloom * 0.4), this.key.color);
