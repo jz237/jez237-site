@@ -11,6 +11,8 @@
   <strong>Local renderer recovery check</strong>
   <button id="lose">Lose graphics context</button>
   <button id="restore" disabled>Restore graphics context</button>
+  <button id="photo">Load photographic view</button>
+  <button id="failPhoto">Fail photo renderer once</button>
   <span id="status" role="status">Waiting for the map</span>
 </header>
 <iframe id="map" title="Philadelphia test view"
@@ -32,5 +34,19 @@
     extension.loseContext();restore.disabled=false;
   };
   restore.onclick=()=>{extension?.restoreContext();restore.disabled=true;};
+  document.querySelector('#photo').onclick=()=>{
+    frame.src='../#pm=photo&x=-75.1655&y=39.9505&d=650&p=55&b=25&ex=1&lg=0';
+  };
+  document.querySelector('#failPhoto').onclick=()=>{
+    const Scene=frame.contentWindow.Cesium?.Scene;
+    if(!Scene){status.textContent='Load the photographic view first';return;}
+    const render=Scene.prototype.render;
+    Scene.prototype.render=function(...args){
+      Scene.prototype.render=render;
+      status.textContent='Triggered one controlled photo-render failure';
+      throw new Error('Local recovery check');
+    };
+    status.textContent='Failure armed for the next photographic frame';
+  };
 </script>
 </html>

@@ -20,10 +20,13 @@ function loadEngine() {
   });
   return enginePromise;
 }
+function loadResources(){
+  return Promise.all([loadEngine(),import('../../philadelphia-cesium/config.js?v=philly-2026092121')]);
+}
 
 /** A second renderer, driven by the SAME geographic camera and controls. */
 export function createPhotographic({ stage, store, sampleElevation, landmarks, onSelect,
-  isOverlayActive = () => false }) {
+  isOverlayActive = () => false, resources = loadResources }) {
   const host = document.createElement('div');
   host.className = 'photographic-stage'; host.setAttribute('aria-hidden', 'true');
   stage.append(host);
@@ -50,10 +53,18 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     credits.hidden = !on;
   }
   function unavailable() {
+    if(disposed||failed)return;
+    const ticket=++generation;
     failed = true; loading = false; present(false);
     firstViewDeadline.cancel(); clearTimeout(resourceTimer);
     retry.hidden = false;
     report('Photo detail unavailable · diorama still works');
+    // renderError can fire inside Cesium's render traversal. Free the failed
+    // viewer and its tile cache after that call returns, without touching a
+    // renderer created by a subsequent retry.
+    queueMicrotask(()=>{
+      if(!disposed&&failed&&ticket===generation)destroyRenderer();
+    });
   }
   function setCamera(pose, w, h) {
     const C = window.Cesium;
@@ -102,8 +113,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     loading = true; report('Preparing photographic detail…');
     resourceTimer = setTimeout(unavailable, 45000);
     try {
-      const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092121')]);
+      const [C, config] = await resources();
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -168,13 +178,19 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   select.value = store.value('photoMode');
   select.onchange = () => store.set({ photoMode: select.value,
     ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
+  function destroyRenderer(){
+    if (viewer && !viewer.isDestroyed()) viewer.destroy();
+    viewer=undefined;tileset=undefined;
+    firstViewReady = false; lastPoseKey = ''; pending = 0;
+    visibleTiles=0;detailTiles=0;bestError=Infinity;
+    host.replaceChildren();credits.replaceChildren();
+    delete message.dataset.visibleTiles;delete message.dataset.detailTiles;delete message.dataset.bestError;
+  }
   function release() {
     generation++; firstViewDeadline.cancel(); clearTimeout(resourceTimer);
-    if (viewer && !viewer.isDestroyed()) viewer.destroy();
-    viewer = undefined; tileset = undefined; failed = false; loading = false;
-    firstViewReady = false; lastPoseKey = ''; pending = 0;
+    destroyRenderer();failed=false;loading=false;
     present(false);
-    host.replaceChildren(); credits.replaceChildren(); retry.hidden = true;
+    retry.hidden = true;
   }
   retry.onclick = () => {
     release(); enginePromise = undefined;
@@ -201,7 +217,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return !viewer || window.Cesium.ClippingPolygonCollection.isSupported(viewer.scene);
     },
     get active() { return active; },
-    get aircraftViewer() { return viewer && !viewer.isDestroyed() ? viewer : null; },
+    get aircraftViewer() { return !failed && viewer && !viewer.isDestroyed() ? viewer : null; },
     pickLocation(x, y) {
       if (!active || !viewer) return null;
       const C = window.Cesium;
@@ -222,6 +238,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     },
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
+      if(disposed)return false;
       lastPose = pose; width = w; height = h;
       if (state.lightweight) {
         if (viewer || loading || failed) release();
@@ -270,6 +287,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       viewer.entities.show = state.layers.landmarks;
       visibleTiles = 0; detailTiles = 0; bestError = Infinity;
       try { viewer.render(); } catch { unavailable(); return false; }
+      if(failed||disposed)return false;
       if (visibleTiles) {
         message.dataset.visibleTiles = String(visibleTiles);
         message.dataset.detailTiles = String(detailTiles);
@@ -312,7 +330,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     dispose() {
       disposed = true; clearTimeout(resourceTimer); firstViewDeadline.dispose(); unsubscribe();
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
-      if (viewer && !viewer.isDestroyed()) viewer.destroy();
+      destroyRenderer();present(false);host.remove();select.onchange=null;retry.onclick=null;
     },
   };
 }
