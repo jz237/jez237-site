@@ -11,6 +11,24 @@ export function pendingProductionBuilds(deployments) {
   });
 }
 
+export async function readProductionBuilds(url, headers, { fetcher = fetch, deadline = Infinity,
+  pause = ms => new Promise(resolve => setTimeout(resolve, ms)), now = Date.now } = {}) {
+  let status = 'network';
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (now() >= deadline) throw new Error('Publication cutoff reached while checking Pages builds.');
+    try {
+      const response = await fetcher(url, { headers, redirect: 'error',
+        signal: AbortSignal.timeout(Math.max(1, Math.min(20000, deadline - now()))) });
+      status = response.status;
+      if ([400, 401, 403, 404].includes(status)) break;
+      const data = await response.json();
+      if (response.ok && data.success && Array.isArray(data.result) && data.result.length) return data.result;
+    } catch { /* Never log an upstream body or a credential-bearing request. */ }
+    if (attempt < 2) await pause(Math.min(2000 * (attempt + 1), Math.max(0, deadline - now())));
+  }
+  throw new Error(`Cannot verify the recent Pages build queue (${status}); publication stopped.`);
+}
+
 export async function waitForProductionBuilds({ wrangler, repo, env, accountId, projectName, deadline = Infinity }) {
   // Credentials stay in memory and are sent only to Cloudflare's API.
   const result = spawnSync(process.execPath, [wrangler, 'auth', 'token', '--json'],
@@ -25,13 +43,8 @@ export async function waitForProductionBuilds({ wrangler, repo, env, accountId, 
   let previous = '';
   for (;;) {
     if (Date.now() >= deadline) throw new Error('Publication cutoff reached while waiting for Pages builds.');
-    const response = await fetch(`${root}?env=production`,
-      { headers, signal: AbortSignal.timeout(20000), redirect: 'error' });
-    const data = await response.json();
-    if (!response.ok || !data.success || !Array.isArray(data.result) || !data.result.length) {
-      throw new Error('Cannot verify the recent Pages build queue; publication stopped.');
-    }
-    const pending = pendingProductionBuilds(data.result);
+    const deployments = await readProductionBuilds(`${root}?env=production`, headers, { deadline });
+    const pending = pendingProductionBuilds(deployments);
     if (!pending.length) return;
     const label = pending.map(d => `${d.deployment_trigger?.metadata?.commit_hash?.slice(0, 7) || d.id}: ${d.latest_stage?.name || 'unknown'}`).join(', ');
     if (label !== previous) console.log(`Waiting for earlier production builds before publishing: ${label}`);
