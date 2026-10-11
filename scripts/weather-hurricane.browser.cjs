@@ -421,13 +421,14 @@ async function run() {
       await page.waitForTimeout(100);
       assert.ok((await readableMapLabels(page)).length>=2,'Collision handling must retain useful geographic context');
       if(width===390) {
+        const labelsBeforeImage=await readableMapLabels(page);
         await page.locator('#hurricane-satellite').check();
         await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').classList.contains('hurricane-satellite-active'));
         assert.match(await page.locator('.leaflet-control-attribution').innerText(),/NOAA\/NESDIS satellite/);
         await readableMapLabels(page);
         await page.locator('#hurricane-satellite').uncheck();
         assert.doesNotMatch(await page.locator('.leaflet-control-attribution').innerText(),/NOAA\/NESDIS satellite/);
-        await readableMapLabels(page);
+        assert.deepEqual((await readableMapLabels(page)).sort(),labelsBeforeImage.sort(),'Turning imagery off restores labels after its credit strip shrinks');
       }
       if(width===320) {
         const hiddenBefore=await page.locator('.hurricane-city-label').evaluateAll(elements=>elements.filter(el=>getComputedStyle(el).visibility==='hidden').map(el=>el.textContent));
