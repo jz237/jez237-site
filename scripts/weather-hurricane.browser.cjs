@@ -37,12 +37,16 @@ async function run() {
   try {
     const context = await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
     let mode = 'normal';
+    let releaseRefresh;
+    let refreshGate;
     await context.route('https://mapservices.weather.noaa.gov/**', async route=>{
       const layer = Number(route.request().url().match(/MapServer\/(\d+)\/query/)?.[1]);
+      if (mode==='delayed') await refreshGate;
       if (mode==='offline' || (mode==='partial'&&layer===7)) return route.abort('failed');
       let data = mode==='empty' ? empty : structuredClone(source[layer]||empty);
       if (mode==='stale') for (const f of data.features) {f.properties.idp_filedate=NOW-48*3600000;f.properties.advdate='500 PM EDT Thu Oct 01 2026';}
       if (mode==='malformed'&&layer===5) data={error:{code:500,message:'Fixture service failure'}};
+      if (mode==='incomplete'&&layer===5) data.features=data.features.filter(f=>f.properties.tau>0);
       return route.fulfill({status:200,contentType:'application/geo+json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(data)});
     });
     const page = await context.newPage();
@@ -51,6 +55,8 @@ async function run() {
     await page.goto(BASE,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status')?.textContent.includes('NOAA checked'));
     assert.equal(await page.locator('[data-storm]').count(),1);
+    assert.match(await page.locator('.hurricane-map-marker').getAttribute('aria-label'),/Test System, Category 3 hurricane/);
+    assert.match(await page.locator('#hurricane-forecast-step').getAttribute('aria-valuetext'),/Test System: Advisory position/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Hurricane warning/);
     assert.equal(await page.locator('#hurricane-forecast-step').getAttribute('max'),'5');
     await page.locator('#hurricane-next').click();
@@ -77,6 +83,22 @@ async function run() {
     assert.equal(await page.locator('[data-layer="outlook"]').isChecked(),true);
     await page.locator('#hurricane-reset-view').click();
     results.push('Basin filtering, empty basin, development-area focus and layer controls');
+
+    mode='delayed';
+    refreshGate=new Promise(resolve=>{releaseRefresh=resolve;});
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.locator('#weather-hurricanes').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('Saved data'));
+    await page.waitForFunction(()=>document.querySelectorAll('.leaflet-hurricane-land-pane path').length>0);
+    assert.equal(await page.locator('#hurricane-notice').isVisible(),false);
+    assert.equal(await page.locator('#hurricane-refresh').isDisabled(),true);
+    const topBefore=await page.locator('.hurricane-workspace').evaluate(el=>el.getBoundingClientRect().top);
+    releaseRefresh();
+    await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('NOAA checked'));
+    const topAfter=await page.locator('.hurricane-workspace').evaluate(el=>el.getBoundingClientRect().top);
+    assert.ok(Math.abs(topAfter-topBefore)<1,'Refreshing saved data moves the map');
+    mode='normal';
+    results.push('Saved data remains steady and shows no false outage while an initial refresh is pending');
 
     for (const width of [320,390,768,1280,1536]) {
       await page.setViewportSize({width,height:900});
@@ -110,7 +132,7 @@ async function run() {
     assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
     results.push('First-visit outage is distinct from a genuine no-storms result');
 
-    for (const nextMode of ['partial','empty','malformed','stale']) {
+    for (const nextMode of ['partial','empty','malformed','incomplete','stale']) {
       mode=nextMode;
       await page.evaluate(()=>localStorage.clear());
       await page.reload({waitUntil:'domcontentloaded'});
@@ -118,7 +140,7 @@ async function run() {
       await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('NOAA checked'));
       if (mode==='partial') { assert.match(await page.locator('#hurricane-notice').innerText(),/forecast cones/); assert.equal(await page.locator('[data-storm]').count(),1); }
       if (mode==='empty') { assert.equal(await page.locator('[data-storm]').count(),0); assert.match(await page.locator('#hurricane-storm-list').innerText(),/No systems/); assert.equal(await page.locator('#hurricane-notice').isVisible(),false); }
-      if (mode==='malformed') assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
+      if (mode==='malformed'||mode==='incomplete') assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
       if (mode==='stale') { assert.equal(await page.locator('#weather-hurricanes').getAttribute('data-feed'),'stale'); assert.match(await page.locator('#hurricane-notice').innerText(),/12 hours old/); }
     }
     results.push('Partial layer failures, empty successful feeds, malformed responses and stale advisories');

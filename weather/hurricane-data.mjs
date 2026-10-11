@@ -185,12 +185,34 @@ export function validateCollection(data) {
   return data;
 }
 
+export function validateForecastCollection(data) {
+  validateCollection(data);
+  // An empty successful feed is meaningful. A populated feed that cannot yield
+  // every system's current center is incomplete, not evidence of no storms.
+  const ids = new Set();
+  for (const feature of data.features) {
+    const p = feature?.properties || {};
+    const id = stormId(p);
+    const hour = number(p.tau);
+    if (!id || !position(feature) || hour === null || hour < 0 || advisoryRank(p.advisnum) < 0) {
+      throw new Error('NOAA returned an invalid forecast position.');
+    }
+    ids.add(id);
+  }
+  const currentIds = new Set(buildStorms(data).map(storm => storm.id));
+  if ([...ids].some(id => !currentIds.has(id))) {
+    throw new Error('NOAA returned forecast positions without a current center.');
+  }
+  return data;
+}
+
 export async function fetchLayers(fetcher = fetch, now = Date.now()) {
   const result = { checkedAt: now, layers: {}, errors: [] };
   const requests = await Promise.allSettled(Object.entries(LAYERS).map(async ([name, id]) => {
     const response = await fetcher(queryUrl(id), { signal: AbortSignal.timeout(16000), cache: 'no-cache', credentials: 'omit' });
     if (!response.ok) throw new Error(`NOAA ${name}: HTTP ${response.status}`);
-    return [name, validateCollection(await response.json())];
+    const data = await response.json();
+    return [name, name === 'points' ? validateForecastCollection(data) : validateCollection(data)];
   }));
   requests.forEach((request, i) => {
     if (request.status === 'fulfilled') result.layers[request.value[0]] = request.value[1];

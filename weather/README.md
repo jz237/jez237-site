@@ -20,7 +20,7 @@ The current center uses the advisory issue time, because intermediate files can 
 
 The interface intentionally says **systems with NHC forecasts**. The summary GIS service can omit post-tropical systems after NHC stops issuing their forecast track. The official NHC link and the map's data notes explain this limit.
 
-The page checks all five layers at first view and every ten minutes while the tracker is visible. Requests time out after 16 seconds. Optional-layer failures are reported independently. A failed storm feed is never reported as “no storms.” A previously loaded collection can be shown from browser storage for up to 24 hours, with an explicit saved-data notice. Advisories and outlooks older than 12 hours are flagged. Browser storage is optional and failures do not block live data. There is no permanently bundled “live” storm snapshot.
+The page checks all five layers at first view and every ten minutes while the tracker is visible. Requests time out after 16 seconds. Optional-layer failures are reported independently. A failed storm feed is never reported as “no storms.” A populated forecast collection is rejected if a system lacks a valid current center or a position has malformed required fields. A previously loaded collection can be shown from browser storage for up to 24 hours, with a saved-data label and an explicit notice after a failed refresh. An initial refresh does not falsely announce an outage. Advisories and outlooks older than 12 hours are flagged. Browser storage is optional and failures do not block live data. There is no permanently bundled “live” storm snapshot.
 
 The cone represents uncertainty in the center track, not storm size or every hazard. The UI directs visitors to official advisories and local guidance.
 
