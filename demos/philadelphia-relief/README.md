@@ -1150,6 +1150,14 @@ regional scale; distant window patterns are filtered before they alias. This doe
 not establish that every device-specific diagonal-line report is resolved.
 Adjacent aerial tiles retain full edge opacity to avoid exposing the lighter
 fallback as thin bright seams; newly arriving tiles still fade in together.
+Bridge cable ribbons keep the same screen-space normal at both endpoints,
+preventing crossed triangles. Automatic water tint fades out with the regional
+miniature, returning neighborhood views to aerial water rather than a flat sheet
+intersecting the terrain. The explicit water layer remains available; its flat
+surface can still intersect uneven DEM samples.
+The baked water polygons have valid outlines and non-overlapping coverage.
+After regenerating vectors, run `python tools/repair_water.py` (requires Shapely)
+to repair self-intersections and duplicate source surfaces while retaining islands.
 
 Building shadow maps retain their depth result while geometry, clipping, growth,
 light and shadow coverage remain unchanged. Clouds render at half resolution with
@@ -1179,7 +1187,7 @@ view at its initial detail target. A handful of detailed tiles in one corner no
 longer reveals a mostly coarse scene. The existing 90-second loading timeout
 keeps the diorama available if the photographic provider cannot finish.
 
-Validation: 441 automated checks, including ten simulated minutes on the real
+Validation: 443 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,

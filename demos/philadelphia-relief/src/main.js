@@ -1008,8 +1008,11 @@ async function boot() {
     }
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
+    // The illustrative river tint belongs to the regional miniature. At street
+    // scale, return to the photograph unless the user explicitly enables water;
+    // a forced flat sheet intersects the DEM and exposes broad diagonal patches.
     const modelWater = state.diorama && state.layers.terrain && state.layers.structures
-      && state.era === 'present' && state.compareMode === 'off' ? Math.max(miniature,.24) : miniature;
+      && state.era === 'present' && state.compareMode === 'off' ? miniature : 0;
     const exaggeration = displayExaggeration(state, now.dist);
     document.body.classList.toggle('diorama-view', miniature > .1);
     document.body.classList.toggle('neighborhood-view', now.dist < 6500);
