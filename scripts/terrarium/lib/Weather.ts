@@ -126,6 +126,7 @@ export class Weather {
   stroke(x: number, z: number, vx: number, vz: number) {
     this.wind.addForce(x, z, vx, vz, 0.075, 0.55);
     this.wisps.stroke(x, z, vx, vz);
+    this.clouds.touchNear(x, z, 0.12);
   }
 
   /** Pours fog: `kind` press, drag or hold. */

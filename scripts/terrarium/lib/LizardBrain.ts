@@ -83,6 +83,8 @@ export class LizardBrain {
   /** The current strike is a tongue flick (small prey within reach) rather than a lunge. */
   private tongueStrike = false;
   private onTongue = false;
+  /** How long the current cricket has been held in the jaws. */
+  private caughtT = 0;
   /** Leaf tips that hold droplets after rain or misting, and how wet the leaves are (0..1). */
   leafTips: THREE.Vector3[] = [];
   leavesWet = 0;
@@ -360,6 +362,7 @@ export class LizardBrain {
   }
 
   startHunt(c: Cricket) {
+    if (this.prey?.caught && !this.prey.eaten) return; // one mouthful at a time
     this.prey = c;
     this.path = [];
     this.huntGoal = null;
@@ -453,12 +456,25 @@ export class LizardBrain {
     I.flatten = damp(I.flatten, flatGoal, 1.2, dt);
 
     // Sudden close movement of the pointer near the head makes it flinch away.
-    if (this.pointer && this.mode !== 'sleep' && this.mode !== 'startle' && this.mode !== 'petted') {
+    // (not with a cricket in its jaws: it finishes the mouthful first)
+    if (this.pointer && this.mode !== 'sleep' && this.mode !== 'startle' && this.mode !== 'petted' && !this.prey?.caught) {
       const pv = this.pointer.distanceTo(this.pointerPrev) / Math.max(dt, 1e-3);
       const close = this.pointer.distanceTo(this.rig.snout) < 0.06;
       if (close && pv > 0.8 && rnd() < 0.25) this.startle(this.pointer);
       this.pointerPrev.copy(this.pointer);
     }
+    // A cricket in the jaws is always finished off, whatever interrupted the meal
+    // (and after a long while it is simply swallowed, so one is never carried for ever).
+    if (this.prey?.caught && !this.prey.eaten) {
+      this.caughtT += dt;
+      if (this.caughtT > 25) {this.prey.eaten = true; this.prey.group.visible = false; this.prey = null; this.onTongue = false;}
+      else if (this.mode !== 'hunt' && this.mode !== 'startle' && this.mode !== 'travel') {
+        this.onTongue = false;
+        if (this.huntPhase !== 'grip' && this.huntPhase !== 'chew' && this.huntPhase !== 'swallow' && this.huntPhase !== 'lick') this.huntPhase = 'grip';
+        this.phaseT = 0;
+        this.setMode('hunt', 'Eating');
+      }
+    } else this.caughtT = 0;
     // Prey appearing interrupts calm activities.
     this.boredom = Math.max(0, this.boredom - dt);
     // A storm sends it to the cave.

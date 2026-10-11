@@ -274,7 +274,10 @@ export class LizardRig {
       this.bodyRoll = damp(this.bodyRoll, roll, 6, dt);
     }
     const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
-    this.body.compose(new THREE.Vector3(I.x, this.bodyY - this.spineBindYAt(this.rootX) * K, I.z), q, new THREE.Vector3(1, 1, 1));
+    // a lunge throws the whole body forward on its planted feet, as a real dragon
+    // strikes; the short, thick neck itself barely lengthens (see solveSpine)
+    const thrust = I.lunge * 1.6 * K;
+    this.body.compose(new THREE.Vector3(I.x + fwd.x * thrust, this.bodyY - this.spineBindYAt(this.rootX) * K, I.z + fwd.z * thrust), q, new THREE.Vector3(1, 1, 1));
     this.bodyFwd.set(1, 0, 0).applyQuaternion(q);
     this.bodyUp.set(0, 1, 0).applyQuaternion(q);
     this.bodyRight.set(0, 0, 1).applyQuaternion(q);
@@ -387,8 +390,8 @@ export class LizardRig {
         // a lunge throws the head forward and the short neck gives a little,
         // never a snake-like stretch (and none with the head tipped up)
         const level = 1 - clamp(this.headPitchCur / 0.6, 0, 1) * 0.85;
-        if (idx === 0) seg.x += I.lunge * 1.6 * K * level; // head thrust
-        if (idx === 1) seg.x += I.lunge * 0.6 * K * level; // neck
+        if (idx === 0) seg.x += I.lunge * 0.4 * K * level; // head thrust
+        if (idx === 1) seg.x += I.lunge * 0.2 * K * level; // neck
         seg.applyQuaternion(q);
         pos = pos.clone().add(seg);
         this.spinePos[idx].copy(pos);
@@ -401,6 +404,7 @@ export class LizardRig {
     // head bob (push-ups) raises the front of the chain
     if (I.bob) for (const k of [0, 1, 2]) this.spinePos[k].addScaledVector(this.bodyUp, I.bob * K * (k === 2 ? 0.7 : 1));
     // Keep the head and neck above whatever lies under them (stones, roots, the log).
+    const len12 = this.spinePos[1].distanceTo(this.spinePos[2]), len01 = this.spinePos[0].distanceTo(this.spinePos[1]);
     for (const k of [1, 0]) {
       const p = this.spinePos[k];
       const need = this.ground.heightAt(p.x, p.z) + (k === 0 ? 0.75 : 0.95) * K;
@@ -411,6 +415,20 @@ export class LizardRig {
       this.headLift[k] = Math.max(0, this.headLift[k] - 0.02 * K);
       p.y += this.headLift[k];
       if (k === 1) this.spinePos[0].y += this.headLift[1];
+    }
+    // ...by rearing the neck and head up, never by stretching them: each joint
+    // keeps its distance from the one behind it, trading reach for height
+    if (this.headLift[0] > 0 || this.headLift[1] > 0) {
+      const keepLen = (p: THREE.Vector3, base: THREE.Vector3, len: number) => {
+        const dx = p.x - base.x, dz = p.z - base.z;
+        const dy = clamp(p.y - base.y, -0.9 * len, 0.9 * len);
+        const h = Math.sqrt(Math.max(0, len * len - dy * dy)), hl = Math.hypot(dx, dz);
+        const before = p.clone();
+        p.set(base.x + (hl > 1e-6 ? dx / hl * h : 0), base.y + dy, base.z + (hl > 1e-6 ? dz / hl * h : 0));
+        return p.clone().sub(before);
+      };
+      this.spinePos[0].add(keepLen(this.spinePos[1], this.spinePos[2], len12));
+      keepLen(this.spinePos[0], this.spinePos[1], len01);
     }
     // Frames from neighbouring joints (tangent toward the head).
     const snoutLocal = new THREE.Vector3(12.68 - this.spineBindX[0], 2.44 - this.spineBindY[0], 0);
