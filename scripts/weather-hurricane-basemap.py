@@ -28,23 +28,8 @@ def simplify(points, tolerance=0.025):
     return [points[0], points[-1]]
 
 
-def clip_ring(ring):
-    points = ring[:-1]
-    for axis, edge, keep_above in [(0, -180, True), (0, 12, False), (1, -8, True), (1, 72, False)]:
-        result = []
-        if not points:
-            return []
-        previous = points[-1]
-        inside = lambda point: point[axis] >= edge if keep_above else point[axis] <= edge
-        for current in points:
-            if inside(current) != inside(previous):
-                t = (edge - previous[axis]) / (current[axis] - previous[axis])
-                result.append([previous[j] + t * (current[j] - previous[j]) for j in range(2)])
-            if inside(current):
-                result.append(current)
-            previous = current
-        points = result
-    rounded = [[round(x, 3), round(y, 3)] for x, y in points]
+def prepare_ring(ring):
+    rounded = [[round(x, 3), round(y, 3)] for x, y in simplify(ring)[:-1]]
     if len(rounded) < 3:
         return []
     return rounded + [rounded[0]]
@@ -57,9 +42,14 @@ for feature in source['features']:
     polygons = [geometry['coordinates']] if geometry['type'] == 'Polygon' else geometry['coordinates']
     retained = []
     for polygon in polygons:
-        shell = clip_ring(simplify(polygon[0]))
-        if len(shell) >= 4:
-            retained.append([shell])
+        rings = [prepare_ring(ring) for ring in polygon]
+        if rings[0]:
+            valid = [ring for ring in rings if ring]
+            retained.append(valid)
+            # Leaflet can display longitudes outside -180..180. Keep an intact
+            # western copy of date-line land so Pacific tracks have context.
+            if max(point[0] for point in valid[0]) >= 130:
+                retained.append([[[round(x - 360, 3), y] for x, y in ring] for ring in valid])
     if retained:
         properties = feature['properties']
         features.append({'type': 'Feature', 'properties': {'name': properties['NAME_EN']},

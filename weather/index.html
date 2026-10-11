@@ -70,9 +70,9 @@
       .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
     }
   </style>
-  <link rel="stylesheet" href="weather-details.css?v=20261010-hurricane" />
+  <link rel="stylesheet" href="weather-details.css?v=20261010-4" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="hurricane-tracker.css?v=20261010-2" />
+  <link rel="stylesheet" href="hurricane-tracker.css?v=20261010-4" />
 </head>
 <body class="weather-page">
   <header id="site-nav" class="home-hidden-nav"></header>
@@ -96,6 +96,7 @@
       <div class="hub-main">
         <div class="hub-topbar weather-page-intro">
           <div>
+            <a class="weather-home-link" href="../"><span aria-hidden="true">←</span> Jez237 home</a>
             <h1 id="weather-title">Weather Console</h1>
             <p>Your local forecast and a wider view of the tropics. Official storm tracks, alerts, radar, and the days ahead.</p>
           </div>
@@ -122,12 +123,13 @@
           <p id="hurricane-notice" class="hurricane-notice" hidden></p>
           <div class="hurricane-workspace">
             <div class="hurricane-map-column">
-              <div class="hurricane-map-frame"><div id="hurricane-map" aria-label="Interactive hurricane map. Use the arrow keys to pan and plus or minus to zoom. Storm details are also available in the adjacent storm list."></div><div id="hurricane-map-message" class="hurricane-map-message">Loading the tropical weather map…</div><button type="button" id="hurricane-reset-view" class="hurricane-reset-view" title="Fit the current basin and systems">Reset view</button></div>
+              <div class="hurricane-map-frame"><div id="hurricane-map" aria-label="Interactive hurricane map. Use the arrow keys to pan and plus or minus to zoom. Storm details are also available in the adjacent storm list."></div><div id="hurricane-map-message" class="hurricane-map-message">Loading the tropical weather map…</div><div class="hurricane-map-actions"><button type="button" id="hurricane-reset-view" class="hurricane-reset-view" title="Fit the current basin and systems">Reset view</button><button type="button" id="hurricane-expand" aria-haspopup="dialog" aria-controls="hurricane-expanded" aria-expanded="false" aria-label="Open larger hurricane map">Expand <span aria-hidden="true">↗</span></button></div></div>
               <div class="hurricane-layers" role="group" aria-label="Hurricane map layers"><label><input type="checkbox" data-layer="cones" checked> Forecast cone</label><label><input type="checkbox" data-layer="history" checked> Past track</label><label><input type="checkbox" data-layer="outlook" checked> Development areas</label><label><input type="checkbox" data-layer="warnings" checked> Coastal alerts</label></div>
               <div id="hurricane-timeline" class="hurricane-timeline" hidden>
                 <div class="hurricane-timeline-heading"><span>Explore the forecast</span><button type="button" id="hurricane-play" aria-pressed="false">▶ Play</button></div>
                 <div class="hurricane-timeline-controls"><button type="button" id="hurricane-previous" aria-label="Previous forecast point">‹</button><input type="range" id="hurricane-forecast-step" min="0" max="1" value="0" step="1" aria-label="Official forecast point"><button type="button" id="hurricane-next" aria-label="Next forecast point">›</button></div>
                 <output id="hurricane-forecast-readout" for="hurricane-forecast-step"></output>
+                <details id="hurricane-forecast-table" class="hurricane-forecast-table"><summary>All forecast positions</summary><div id="hurricane-table-content"></div></details>
               </div>
               <div class="hurricane-map-legend" aria-label="Map legend"><span><i class="hurricane-legend-past"></i>Past track</span><span><i class="hurricane-legend-track"></i>Forecast</span><span><i class="hurricane-legend-cone"></i>Uncertainty cone</span><span><i class="hurricane-legend-outlook"></i>Formation area</span></div>
             </div>
@@ -154,13 +156,15 @@
     </footer>
   </main>
 
-  <script src="../assets/app.js"></script>
+  <dialog id="hurricane-expanded" class="hurricane-expanded-dialog" aria-labelledby="hurricane-title" aria-describedby="hurricane-expanded-help"><div class="hurricane-dialog-bar"><span id="hurricane-expanded-help">Expanded map · Escape to close</span><button type="button" id="hurricane-close">Close map <span aria-hidden="true">×</span></button></div></dialog>
+
+  <script src="../assets/app.js" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=chronicle-20260612" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="weather-details.js?v=20260924-smooth" defer></script>
   <script src="weather-widget.js?v=20260924-smooth" defer></script>
   <script src="vendor/leaflet/leaflet.js" defer></script>
-  <script type="module" src="hurricane-tracker.mjs?v=20261010-3"></script>
+  <script type="module" src="hurricane-tracker.mjs?v=20261010-4"></script>
 </body>
 </html>

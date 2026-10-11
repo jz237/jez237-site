@@ -52,6 +52,7 @@ function loadCache() {
 }
 
 function renderList() {
+  const focusedId = document.activeElement?.closest('#hurricane-storm-list [data-storm]')?.dataset.storm;
   const storms = visibleStorms();
   const available = !!state.bundle?.layers.points;
   $('#hurricane-storm-list').innerHTML = storms.length ? storms.map(storm => `
@@ -59,11 +60,12 @@ function renderList() {
       <span class="hurricane-storm-symbol">${stormSymbol()}</span><span><strong>${esc(storm.name)}</strong><small>${esc(storm.label)}${storm.stale ? ' · older data' : ''}</small></span><span class="hurricane-list-wind">${wind(storm.current.wind, state.unit)}<small>${esc(state.unit)}</small></span>
     </button>`).join('') : `<p class="hurricane-empty">${available ? `No systems with NHC forecast tracks in the ${state.basin === 'atlantic' ? 'Atlantic' : state.basin === 'pacific' ? 'eastern or central Pacific' : 'monitored basins'}. Check the development outlook below and the latest NHC advisories.` : 'Storm positions are unavailable. Please use the NHC advisory link or try Refresh.'}</p>`;
   $('#hurricane-storm-list').querySelectorAll('[data-storm]').forEach(button => button.addEventListener('click', () => selectStorm(button.dataset.storm, true)));
+  if (focusedId) [...$('#hurricane-storm-list').querySelectorAll('[data-storm]')].find(button => button.dataset.storm === focusedId)?.focus({ preventScroll:true });
 }
 
 function renderDetail() {
   const storm = selectedStorm();
-  if (!storm) { $('#hurricane-storm-detail').innerHTML = ''; return; }
+  if (!storm) { $('#hurricane-storm-detail').innerHTML = ''; $('#hurricane-table-content').innerHTML = ''; return; }
   const coneAvailable = matchingFeatures(state.bundle.layers.cones, storm, true).length > 0;
   const warnings = matchingFeatures(state.bundle.layers.warnings, storm, true);
   const warningNames = [...new Set(warnings.map(f => WATCHES[f.properties.tcww]?.[0]).filter(Boolean))];
@@ -85,6 +87,19 @@ function renderDetail() {
       ${!coneAvailable ? '<p class="hurricane-layer-note">A matching forecast cone is not available for this advisory.</p>' : ''}
       ${warningLayerUpdating ? '<p class="hurricane-layer-note">The coastal alert map is awaiting this advisory’s update. Check the NHC advisory for current watches and warnings.</p>' : ''}
     </div>`;
+  renderForecastTable(storm);
+}
+
+function renderForecastTable(storm) {
+  const target = $('#hurricane-table-content');
+  const focusedStep = document.activeElement?.closest('#hurricane-table-content [data-forecast]')?.dataset.forecast;
+  target.innerHTML = `<table aria-label="${esc(storm.name)} official forecast positions"><caption>${esc(storm.name)} · Advisory ${esc(storm.advisory)}. Select a time to highlight its official position.</caption><thead><tr><th scope="col">Time · local</th><th scope="col">Wind / status</th><th scope="col">Position</th></tr></thead><tbody>${storm.points.map((point, index) => {
+    const [lat, mapLon] = point.latlng;
+    const lon = ((mapLon + 540) % 360) - 180;
+    return `<tr data-forecast-row="${index}"><th scope="row"><button type="button" data-forecast="${index}" aria-label="${esc(storm.name)}, ${esc(pointCaption(storm, point))}, ${esc(formatTime(point.time))}. Show position on map."><strong>${point.hour === 0 ? 'Advisory' : esc(pointCaption(storm, point).replace(' after advisory', ''))}</strong><small>${esc(formatTime(point.time))}</small></button></th><td><strong style="color:${point.color}">${wind(point.wind, state.unit)} ${esc(state.unit)}</strong><small>${esc(point.label)}</small></td><td><span>${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'}</span><span>${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}</span></td></tr>`;
+  }).join('')}</tbody></table>`;
+  target.querySelectorAll('[data-forecast]').forEach(button => button.addEventListener('click', () => setStep(button.dataset.forecast, true)));
+  if (focusedStep !== undefined) target.querySelector(`[data-forecast="${focusedStep}"]`)?.focus({ preventScroll:true });
 }
 
 function renderOutlooks() {
@@ -132,6 +147,7 @@ function mapFeatureCollection(features) { return { type: 'FeatureCollection', fe
 function drawMap() {
   if (!map || !state.bundle) return;
   const L = window.L;
+  const focusedMarkerId = document.activeElement?.closest('#hurricane-map .hurricane-map-marker')?.dataset.markerStorm;
   graphics.clearLayers();
   highlight.clearLayers();
   outlookLayers.clear();
@@ -180,7 +196,13 @@ function drawMap() {
     marker.on('click', () => selectStorm(storm.id, false));
     marker.bindTooltip(esc(storm.name), { permanent: true, direction: 'bottom', offset: [0, 19], className: 'hurricane-storm-tooltip' });
     marker.addTo(graphics);
-    marker.getElement()?.setAttribute('aria-label', `${storm.name}, ${storm.label}, ${wind(storm.current.wind, state.unit)} ${state.unit}. Show storm details.`);
+    const element = marker.getElement();
+    element.dataset.markerStorm = storm.id;
+    element.setAttribute('aria-label', `${storm.name}, ${storm.label}, ${wind(storm.current.wind, state.unit)} ${state.unit}. Show storm details.`);
+    element.addEventListener('keydown', event => {
+      if (event.key === ' ') { event.preventDefault(); selectStorm(storm.id, false); }
+    });
+    if (focusedMarkerId === storm.id) element.focus({ preventScroll:true });
   }
   renderTimeline();
 }
@@ -209,6 +231,12 @@ function renderTimeline() {
   $('#hurricane-next').disabled = state.step === storm.points.length - 1;
   $('#hurricane-play').disabled = storm.points.length < 2;
   $('#hurricane-forecast-readout').innerHTML = `<strong>${esc(storm.name)} · ${esc(pointCaption(storm, point))}</strong> · <span style="color:${point.color}">${wind(point.wind, state.unit)} ${esc(state.unit)}</span><small>${esc(formatTime(point.time))} · ${esc(point.label)}</small>`;
+  root.querySelectorAll('[data-forecast]').forEach(button => {
+    const current = Number(button.dataset.forecast) === state.step;
+    if (current) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
+    button.closest('tr').classList.toggle('is-current', current);
+  });
   if (map && state.step > 0) {
     window.L.circleMarker(point.latlng, { pane: 'hurricane-selection', radius: 11, weight: 2, color: '#effbff', fillColor: point.color, fillOpacity: .22, interactive: false }).addTo(highlight);
   }
@@ -322,17 +350,51 @@ async function initializeMap() {
   map.on('zoomend', addMapLabels);
   fitView();
   addMapLabels();
-  resizeObserver = new ResizeObserver(() => { map.closePopup(); map.invalidateSize({ pan:false }); });
+  resizeObserver = new ResizeObserver(() => { map.closePopup(); map.invalidateSize({ animate:false }); });
   resizeObserver.observe($('#hurricane-map'));
   try {
-    const response = await fetch(new URL('./data/basemap.geojson', import.meta.url), { signal: AbortSignal.timeout(10000) });
+    const response = await fetch(new URL('./data/basemap.geojson?v=20261010-4', import.meta.url), { signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error('Basemap unavailable');
     L.geoJSON(await response.json(), { pane:'hurricane-land', interactive:false, style:{ color:'#45667a', weight:.7, fillColor:'#1b3a4b', fillOpacity:1 } }).addTo(map);
   } catch { state.basemapError = true; showNotice('The coastline map could not load. Storm coordinates and advisory details remain available.'); }
   if (state.bundle) { drawMap(); renderStatus(); fitView(); }
 }
 
+function bindExpandedMap() {
+  const dialog = document.getElementById('hurricane-expanded');
+  const openButton = $('#hurricane-expand');
+  if (!dialog?.showModal) { openButton.hidden = true; return; }
+  let placeholder, scrollPosition, previousOverflow;
+  openButton.addEventListener('click', () => {
+    if (dialog.open) return;
+    stopPlayback();
+    scrollPosition = [window.scrollX, window.scrollY];
+    previousOverflow = document.body.style.overflow;
+    placeholder = document.createElement('div');
+    placeholder.style.height = `${root.getBoundingClientRect().height}px`;
+    placeholder.style.margin = getComputedStyle(root).margin;
+    placeholder.setAttribute('aria-hidden', 'true');
+    root.before(placeholder);
+    dialog.append(root);
+    openButton.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    dialog.showModal();
+    document.getElementById('hurricane-close').focus({ preventScroll:true });
+  });
+  document.getElementById('hurricane-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => {
+    stopPlayback();
+    placeholder?.replaceWith(root);
+    placeholder = null;
+    openButton.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = previousOverflow || '';
+    window.scrollTo({ left:scrollPosition?.[0] || 0, top:scrollPosition?.[1] || 0, behavior:'instant' });
+    openButton.focus({ preventScroll:true });
+  });
+}
+
 function bindControls() {
+  bindExpandedMap();
   root.querySelectorAll('[data-basin]').forEach(button => button.addEventListener('click', () => {
     stopPlayback();
     state.basin = button.dataset.basin;
