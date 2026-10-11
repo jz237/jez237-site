@@ -53,7 +53,13 @@ async function run() {
   const results=[];
   try {
     const context = await browser.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});
-    let mode = 'normal', wpcMode = 'empty';
+    let mode = 'normal', wpcMode = 'empty', regionMode = 'normal', regionRequests = 0;
+    await context.route('**/data/north-america-regions.geojson*',route=>{
+      regionRequests++;
+      if(regionMode==='offline') return route.abort('failed');
+      if(regionMode==='malformed') return route.fulfill({contentType:'application/json',body:JSON.stringify({type:'FeatureCollection',features:[],labels:[{name:null,short:'AL',lat:32,lon:-86}]})});
+      return route.continue();
+    });
     await context.route('https://api.weather.gov/products/**',route=>{
       if(wpcMode==='offline') return route.abort('failed');
       const product=structuredClone(wpcProduct);
@@ -101,6 +107,7 @@ async function run() {
     await page.goto(BASE,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status')?.textContent.includes('NOAA checked'));
     assert.equal(await page.locator('[data-storm]').count(),1);
+    assert.equal(regionRequests,0,'Regional detail must not load for a broad basin overview');
     assert.match(await page.locator('.hurricane-map-marker').getAttribute('aria-label'),/Test System, Category 3 hurricane/);
     assert.match(await page.locator('#hurricane-forecast-step').getAttribute('aria-valuetext'),/Test System: Advisory position/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Hurricane warning/);
@@ -340,13 +347,25 @@ async function run() {
     }
     results.push('Partial layer failures, malformed optional geometry, empty successful feeds, malformed responses, stale advisories and unverified issuance times');
 
-    mode='normal';wpcMode='normal';
+    mode='normal';wpcMode='normal';regionRequests=0;
     await page.evaluate(()=>localStorage.clear());
     await page.reload({waitUntil:'domcontentloaded'});
     await page.waitForSelector('[data-storm="al982026"]');
     assert.equal(await page.locator('[data-storm]').count(),2);
     assert.equal(await page.locator('.hurricane-map-marker').count(),2);
     await page.locator('[data-storm="al982026"]').click();
+    await page.waitForFunction(()=>document.querySelectorAll('.hurricane-region-label').length>0);
+    assert.equal(regionRequests,1,'Regional context loads once when an inland track is selected');
+    assert.ok(await page.locator('.leaflet-hurricane-regions-pane path').count()>0);
+    assert.equal(await page.locator('.leaflet-hurricane-regions-pane').getAttribute('aria-hidden'),'true');
+    assert.match((await page.locator('.hurricane-region-label').allTextContents()).join(' '),/Tennessee/);
+    await page.locator('[data-basin="pacific"]').click();
+    assert.equal(await page.locator('.hurricane-region-label').count(),0,'Region labels clear in a wide ocean view');
+    assert.equal(await page.locator('.leaflet-hurricane-regions-pane path').count(),0);
+    await page.locator('[data-basin="atlantic"]').click();
+    await page.locator('[data-storm="al982026"]').click();
+    await page.waitForFunction(()=>document.querySelectorAll('.hurricane-region-label').length>0);
+    assert.equal(regionRequests,1,'Returning to a close-up reuses the local context');
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/WPC advisory 17/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Weather Prediction Center/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/No uncertainty cone/);
@@ -361,6 +380,23 @@ async function run() {
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'WPC details must fit mobile screens');
     }
     await page.locator('#weather-hurricanes').screenshot({path:path.join(output,'wpc-remnant-tracker.png')});
+    satelliteMode='normal';
+    await page.locator('#hurricane-satellite').check();
+    await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').classList.contains('hurricane-satellite-active'));
+    assert.ok(await page.evaluate(()=>Number(document.querySelector('.leaflet-hurricane-regions-pane').style.zIndex)>Number(document.querySelector('.leaflet-hurricane-land-pane').style.zIndex)),'State boundaries stay above the satellite coastline layer');
+    await page.locator('#hurricane-satellite').uncheck();
+    for(const nextRegion of ['offline','malformed']) {
+      regionMode=nextRegion;
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
+      await page.locator('[data-storm="al982026"]').click();
+      await page.waitForFunction(()=>document.querySelector('#hurricane-notice').textContent.includes('State and province boundaries could not load'));
+      assert.equal(await page.locator('.hurricane-map-marker').count(),2,'Missing context must not hide valid storm positions');
+      regionMode='normal';
+      await page.locator('#hurricane-refresh').click();
+      await page.waitForFunction(()=>document.querySelectorAll('.hurricane-region-label').length>0 && !document.querySelector('#hurricane-refresh').disabled);
+      assert.equal(await page.locator('#hurricane-notice').isVisible(),false,'Refresh retries unavailable geographic context');
+    }
     for(const nextWpc of ['offline','malformed']) {
       wpcMode=nextWpc;
       await page.locator('#hurricane-refresh').click();
@@ -387,6 +423,7 @@ async function run() {
     await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
     await page.evaluate(()=>{Date.now=window.__weatherTestNow;delete window.__weatherTestNow;});
     results.push('WPC inland remnants show exact advisory/forecast positions and sources, fit phones, isolate feed failures, and obey cache expiry');
+    results.push('State/province context loads only for close views, reuses data, stays above satellite imagery, and fails independently with retry');
     assert.deepEqual(errors,[]);
     results.push('No uncaught JavaScript errors');
     await fs.writeFile(path.join(output,'browser-results.json'),JSON.stringify({checkedAt:new Date().toISOString(),results},null,2));
