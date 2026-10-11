@@ -3,9 +3,11 @@
 A glass-cased rainforest terrarium with a living bearded dragon. It is a photoreal companion to
 [Weatherglass](../weatherglass/) and works the same way: the weather lives inside the box. You
 can grab the clouds under the brass lid, wring rain out of them, shake them into thunderstorms,
-stir the air, pour fog, touch the pool and wipe the fogged glass. The bearded dragon basks,
-roams the whole case, wades in the shallows, drinks, signals, hunts crickets and shelters from
-storms in a cave in the rock.
+stir the air, pour fog, mist the plants, touch the pool and wipe the fogged glass. After rain the
+leaves bead and drip, puddles gather, and with the lamp behind you a rainbow can show in the rain.
+The bearded dragon basks, roams the whole case, wades in the shallows, drinks, signals, hunts
+crickets, grazes from a dish of greens, licks droplets off the leaves and shelters from storms in a
+cave in the rock. Its colour follows its temperature and mood.
 
 - Demo: https://jez237.com/demos/terrarium/
 - Source: `scripts/terrarium/` (this folder). The public build lives in `demos/terrarium/`.
@@ -19,11 +21,13 @@ storms in a cave in the rock.
 | **Wind** | Drag across the case to blow a gust. Faint wisps and drifting dust trace the air. The grass parts along the stroke, loose leaves lift and tumble, and plants, moss, water, rain, fog and clouds all follow the flow. |
 | **Fog** | Hold or drag to pour fog. It spreads out, runs downhill, pools on the water and burns off under the lamp. |
 | **Wipe** | Drag across the glass to clear condensation. |
-| **Feed** | Drop a cricket in. The lizard spots it, stalks it, fixes on it and strikes. |
+| **Feed** | Drop a cricket in. The lizard spots it, stalks it, fixes on it and strikes. Tap the stone dish to refill its greens. |
+| **Mist** | Tap or hold to spray a fine mist from a bottle. It wets the leaves and the dragon comes over to lick the droplets off. Mist its face and it blinks and licks its lips. With the lamp behind you, a small rainbow can show in the spray. |
 
 Other controls:
 
 - The **eye** button follows the lizard with a close camera.
+- The **palette** button, or `M`, cycles the dragon's colour morph: normal (wild-type), red, citrus and hypo (pale, with clear claws).
 - Right-clicking a cloud with any tool shrinks it, and holding the button evaporates it.
 - The **lamp schedule** dial sets the time of day. The lamp behaves like Weatherglass's sun.
   - **Its arc:** it rises at about 6:15 and sets at about 18:15, sweeping from left to right, so shadows swing through the day.
@@ -31,7 +35,7 @@ Other controls:
   - **The dial:** moving it makes the light glide rather than jump.
   - **The play button:** runs a day in about four minutes.
 - At night the lamp goes off, the lid core glows blue and the lizard goes to sleep.
-- Keys `1`–`6` choose tools, and `H` hides the controls.
+- Keys `1`–`7` choose tools, `M` changes the colour morph, and `H` hides the controls.
 - `?ui=0` gives a clean presentation view.
 
 ## How it is made
@@ -48,18 +52,23 @@ The bearded dragon (*Pogona vitticeps*) is sculpted in code, not downloaded.
   - The limbs are sturdy and sprawling, with long knuckled toes and long, curved dark claws. A lateral body fold carries the fringe.
   - A separate mouth slit lets the jaw open onto a pink interior.
   - Sparse surface nets mesh it, the vertices are projected back onto the exact surface, and meshoptimizer simplifies it to about 150 000 triangles.
-- **Skinning and spines.** Every primitive carries its bones, so skin weights come from the same soft blend that joins the shapes. That gives 50 bones: spine, tail, jaw, throat, limbs and every digit. Over 700 spines and tubercles are grown on the surface:
+- **Skinning and spines.** Every primitive carries its bones, so skin weights come from the same soft blend that joins the shapes. That gives 50 bones: spine, tail, jaw, throat, limbs and every digit. About 1 600 spines and raised tubercles are grown on the surface, so the outline is rough up close, not just the shading:
   - rows of beard spines across the throat, with the longest along its outer edge under the jaw;
   - the great spines fanning back from behind each ear, the spiny jowl around the ear, and the nape and neck clusters;
   - a three-row flank fringe;
-  - paravertebral and scattered dorsal tubercles;
+  - paravertebral rows and a dense field of low dorsal tubercles;
+  - raised scales and spines over the flanks, neck, temples and cheeks, and studded limbs;
   - rows along the tail sides.
+- **Nostril.** A rimmed, dark nostril opening sits on each side of the snout.
 - **Lighting bake.** Ambient occlusion is baked from the distance field.
 - **Skin shader.** One field of 3D Voronoi scales changes size, shape and overlap across the body, with an analytic height gradient so the scales stay sharp in close-up and fade cleanly at a distance.
   - **Scale types:** the limbs and tail carry large keeled scales that overlap toward the toes and the tail tip. Each one points down its own limb, taken from the bone it is skinned to. The back and flanks have small keeled scales, the belly small smooth overlapping ones, and the head and throat fine round beads. A row of rectangular labial plates runs along each lip.
   - **Pattern:** golden tan. A pale stripe runs down the spine between two rows of irregular dark blotches, with pale stripes along each side of the back and darker reticulated flanks with pale spots. There are dark bars on the nape, fine speckling, and banded legs and tail.
   - **Face:** an orange flush on the jowls, the beard's base and around the eyes, a browner mottled crown, a dark eye stripe, cream lips and an ivory beard and spines. The beard darkens to black during display.
   - **Eyes:** a golden-amber iris with radial fibres, flecks and a round black pupil, under a clear-coated cornea. Lids of concentric orange-brown scale rings close from below.
+  - **Tone:** the golden-orange drifts in hue across the body, the legs are warmer and the tail duller, and each scale varies a little. The lamp glows through thin parts (spines, beard, toes and the lateral fringe).
+  - **Colour change:** like a real dragon it darkens when cool, to absorb more heat, and pales as it warms. Under stress (storms, lightning, sudden movement) the beard goes black. While basking it flattens its body to catch more light.
+  - **Morphs:** four colour palettes: normal, red, citrus and hypo. Choose with the palette button, `M` or `?morph=`.
 - **Rig** (`lib/LizardRig.ts`):
   - **Gait:** a trot-like gait with diagonal limb pairs. Feet stay planted, the heel peels off before lift-off, the toes roll, and steps re-aim mid-swing. Two-bone IK keeps elbows and knees sprawled outward. Feet grip the edge of narrow perches such as the log.
   - **Body:** the trunk bends in a standing wave timed to the steps, while the head counter-rotates to keep its gaze steady. The tail is a follow-the-leader rope: its base is carried a little clear of the ground on the move, and the rest drags. In a sprint the body rises, the nose lifts and the tail comes off the ground.
@@ -67,10 +76,12 @@ The bearded dragon (*Pogona vitticeps*) is sculpted in code, not downloaded.
 - **Behaviour** (`lib/LizardBrain.ts`):
   - **Navigation:** routes come from A* over a walkability grid that prefers clearance from walls, rock edges and plants. A shallow pebble shelf lets the lizard wade across the pool to reach the far bank. It steers smoothly around corners, slides along obstacles, re-plans when blocked or stalled and gives up gracefully. It only heads for places it can reach, and it favours parts of the case it has not visited lately.
   - **Moving around:** bursts and freezes with head scanning. It turns its head toward the route before setting off, and stops now and then to tongue-tap the ground.
-  - **Basking and soaking:** it basks under the lamp with the chest raised, sometimes with the mouth open to shed heat. It also soaks in the shallows.
-  - **Drinking:** the head is lowered until the mouth meets the water, and each lap ripples it.
+  - **Temperature:** its body temperature follows its surroundings over tens of seconds. The basking lamp warms it; shade, the cave, rain and wet skin cool it. A cold dragon makes for the lamp and stays until it has warmed up; a hot one gapes and soon moves off.
+  - **Basking and soaking:** it basks under the lamp with the chest raised and the body flattened, sometimes with the mouth open to shed heat. It also soaks in the shallows.
+  - **Drinking:** the head is lowered until the mouth meets the water, and each lap ripples it. After rain or misting it walks over to the wet plants, stretches up to a leaf tip and laps the droplets off it, sometimes knocking a drop loose.
+  - **Greens:** now and then it grazes from the dish of torn greens and squash, nipping out one piece at a time and chewing.
   - **Signalling:** head-bob displays and slow arm waves.
-  - **Hunting:** stalking from a reachable stand-off point, fixation and a lunging strike with tongue reach. It grabs the cricket crosswise and thrashes its head to subdue it. Then it chews the cricket in bite by bite, with a crunch at each snap of the jaws, while the cricket's legs kick less and less. It swallows with its head raised and its throat bulging, then licks its lips. Crickets it cannot reach are watched, not chased.
+  - **Hunting:** stalking from a reachable stand-off point, fixation and a strike. A cricket within reach is taken with a flick of the sticky tongue and reeled in; one further off gets a lunge. Crickets sometimes hop away at the last moment, and the strike misses. It grabs the cricket crosswise and thrashes its head to subdue it. Then it chews the cricket in bite by bite, with a crunch at each snap of the jaws, while the cricket's legs kick less and less. It swallows with its head raised and its throat bulging, then licks its lips. Crickets it cannot reach are watched, not chased.
   - **Storms:** a storm sends it hurrying to its cave without the usual stops. There it turns round to face out of the mouth and watches the storm, flinching and blinking at the thunder. If night falls it sleeps there, and it comes out once the weather has been clear for a few seconds.
   - **Rest and reactions:** it sleeps flat at night and flinches from fast movement nearby. Close lightning sends it running; distant lightning makes it freeze and stare. It closes its eyes when touched. Plants part around its body as it pushes through.
 
@@ -132,6 +143,10 @@ The weather systems follow Weatherglass's design, rescaled to this case.
   - Each drop shows as a streak: its blur over about a fortieth of a second. The streak is lit by the lamp and glints when backlit.
   - Heavy rain shows as grey shafts under the cloud.
   - The soil darkens only where it actually rained, then dries under the lamp and in the wind.
+  - **Puddles:** where open, level soil is soaked, the hollows fill first and grow into dark, glassy puddles, with rings from the drops landing in them. They shrink again as the floor dries. The cave's roof keeps its floor dry, but the worn apron at its mouth puddles readily.
+  - **Wet leaves:** after rain the leaves are beaded with water that glints in the lamp, and drops fall from the leaf tips for a minute or so.
+  - **Rainbow:** where the lamp shines through falling rain or mist, a bow can appear: about 41° from the point opposite the light, red outside, with a fainter, reversed secondary bow beyond it. It only shows with the lamp behind you, it moves as you move, and the cloud shades the top of its own rain. The lamp hangs almost overhead, so the bow is drawn as if the light came in lower, as the sun does on a showery afternoon.
+- **Misting.** The misting bottle throws fine droplets that slow within a hand's breadth and drift down. They wet the leaves and raise the humidity.
 - **Fog.** A shallow-fluid grid holds density, layer thickness, freshness and momentum. Fog spreads where it is poured, runs downhill, levels like a liquid, drifts with the air, and burns off under the lamp or in strong wind. It is ray-marched as a lit volume with billowing tops and wispy edges, stopped by the scene's depth, and fresh pours throw off billows.
 - **Climate.** Rain and fog raise the humidity, which drives condensation on the glass and wetness on the leaves, rock and skin. The lamp's arc sets the lights and the lizard's day.
 - **Crickets.** Feeder crickets are modelled as house crickets (*Acheta domesticus*):
@@ -145,7 +160,8 @@ The weather systems follow Weatherglass's design, rescaled to this case.
   - squish, grab, fling and merge sounds for the clouds, and crackles in charged clouds;
   - thunder (an immediate crack, then a delayed rolling rumble);
   - splashes when the water is touched;
-  - a rising hiss as a cloud evaporates, and crunches as the lizard eats.
+  - a rising hiss as a cloud evaporates, and crunches as the lizard eats;
+  - the click and hiss of the misting bottle.
 
   Sound starts only after you interact with the page.
 
@@ -183,6 +199,9 @@ Development URL options:
 - `?ao=0`, `?dof=0` and `?bloom=0` turn off individual effects.
 - `?quality=full` disables adaptive quality.
 - `?hours=H` starts at a given time of day.
+- `?morph=normal|red|citrus|hypo` chooses the dragon's colour morph.
+- `?lite` starts lighter: a lower pixel ratio, no multisampling, ambient occlusion or depth of field, fewer moss layers and a smaller shadow map.
+- `?debug` shows a small panel with the GPU, its relevant WebGL extensions, the frame rate, which effects are on, anything turned off after a black picture, and any shader errors. Use it to report a problem from a phone.
 - `?cam=x,y,z&target=x,y,z` places the camera.
 
 ## Performance
@@ -195,6 +214,14 @@ The full effects are tuned for desktop GPUs. If frames are sustained-slow, the d
 4. moss layers.
 
 It never decides from device labels. Use `?quality=full` to keep every effect on.
+
+Some phone GPUs fail where desktop ones do not, so there are some safeguards.
+
+- **Bad pixels:** one shader producing a NaN or an infinity in a single pixel would be smeared by the glass blur, the depth of field and the bloom's widest level across the whole frame, which shows as a black screen. Every pass that blurs therefore reads the scene through a clean-up step: bad pixels become black specks and extreme highlights are capped.
+- **Shader compiling:** all shaders are compiled behind the loading screen, in parallel where the browser supports it, rather than stalling the first frames.
+- **Black picture:** the finished picture is sampled now and then. If it comes out black twice in a row, effects are turned off one at a time until the scene shows: bloom, ambient occlusion, depth of field, multisampling, then the whole post-processing chain.
+- **Lost GPU context:** if the browser takes the GPU context away, the page reloads once in `?lite` mode.
+- **Float textures:** only half-float data textures are filtered, because 32-bit float filtering is missing on many phones.
 
 ## Limits
 

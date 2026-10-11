@@ -4,7 +4,7 @@ import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { MeshoptSimplifier } from 'meshoptimizer';
-import { sdf, surfaceInfo, bones, limbs, bounds, EYE, meta, profile } from './lizard/anatomy.mjs';
+import { sdf, surfaceInfo, bones, limbs, bounds, EYE, NOSTRIL, meta, profile } from './lizard/anatomy.mjs';
 import { meshSDF, projectToSurface, compact, gradient } from './lizard/mesher.mjs';
 import { spikeSeeds } from './lizard/spikes.mjs';
 
@@ -126,12 +126,12 @@ for (const s of seeds) {
       const slope = dome ? (t * s.h) / Math.max(s.r, 1e-3) : s.r / s.h;
       const nn = [rad[0] + axis[0] * slope, rad[1] + axis[1] * slope, rad[2] + axis[2] * slope];
       const nl = Math.hypot(...nn);
-      pushVertex([c[0] + rad[0] * r, c[1] + rad[1] * r, c[2] + rad[2] * r], nn.map((q) => q / nl), info, ao * (0.85 + 0.15 * t), Math.max(t, 0.02));
+      pushVertex([c[0] + rad[0] * r, c[1] + rad[1] * r, c[2] + rad[2] * r], nn.map((q) => q / nl), info, ao * (0.85 + 0.15 * t), dome ? 0.02 + 0.43 * t : 0.55 + 0.45 * t);
     }
   }
   const tipBend = dome ? 0 : s.h * 0.18;
   const tip = [p[0] - n[0] * sink + axis[0] * s.h - tipBend, p[1] - n[1] * sink + axis[1] * s.h, p[2] - n[2] * sink + axis[2] * s.h];
-  pushVertex(tip, axis, info, ao, 1);
+  pushVertex(tip, axis, info, ao, dome ? 0.45 : 1); // aux.w: spines 0.55..1 along their length, tubercles 0.02..0.45
   const tipIndex = base + rings.length * SEG;
   for (let r = 0; r < rings.length - 1; r++) for (let k = 0; k < SEG; k++) {
     const a = base + r * SEG + k, b = base + r * SEG + ((k + 1) % SEG);
@@ -193,6 +193,7 @@ const json = {
     digits: l.digits.map((d) => ({ base: d.base.map(r4), dir: d.dir.map(r4), length: r4(d.length), tip: d.tip.map(r4) })),
   })),
   eye: { radius: EYE.radius, centre: EYE.centre.map(r4), axis: EYE.axis.map(r4) },
+  nostril: NOSTRIL.map(r4),
   hingeX: meta.hingeX,
   mouth: [12.6, 12.15, 11.6, 10.8, 10.0].map((x) => [x, r4(meta.mouthAt(x))]),
   spine: meta.spine.map((s) => ({ name: s.name, x: s.x, y: r4(s.y) })),

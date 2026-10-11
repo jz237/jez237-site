@@ -182,6 +182,11 @@ export class TerrariumAudio {
       setTimeout(() => this.ping(1100 + Math.random() * 1400, 0.02 * strength, 0.06, this.master), 60 + Math.random() * 260);
     }
   }
+  /** A squeeze of the misting bottle: a short, bright hiss with the pump's click. */
+  mist() {
+    this.shot(this.white, {gain: 0.012, attack: 0.001, decay: 0.02, type: 'bandpass', freq: 1500, q: 2});
+    this.shot(this.white, {gain: 0.07, attack: 0.012, decay: 0.32, type: 'highpass', freq: 3800, freqTo: 5200, delay: 0.01});
+  }
   fogWhoosh() {this.shot(this.pink, {gain: 0.06, attack: 0.08, decay: 0.6, type: 'bandpass', freq: 500, freqTo: 250, q: 0.8});}
 
   /** The wind tool: s = stroke strength 0..1, pan -1..1. */

@@ -77,6 +77,11 @@ body.no-ui .hud > *:not(.show-ui) { display: none; }
 .show-ui { display: none; position: absolute; right: var(--gut); bottom: var(--gut); padding: 8px 14px; border-radius: 999px; background: rgba(21, 19, 17, 0.5) !important; border: 1px solid var(--edge) !important; }
 body.no-ui .show-ui { display: block; }
 
+/* seven tools reach the clock on mid-width screens: lift it above the toolbar */
+@media (min-width: 721px) and (max-width: 1010px) {
+  .clock { bottom: calc(var(--gut) + 74px + env(safe-area-inset-bottom, 0px)); }
+  .toast { bottom: calc(var(--gut) + 150px + env(safe-area-inset-bottom, 0px)); }
+}
 @media (max-width: 720px) {
   :root { --gut: 12px; }
   .title { font-size: 20px; }

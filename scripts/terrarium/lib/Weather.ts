@@ -145,6 +145,14 @@ export class Weather {
     }
   }
 
+  /** One squeeze of the misting bottle, from `from` at the spot `to`. */
+  mistPuff(from: THREE.Vector3, to: THREE.Vector3) {
+    this.rain.spray(from, to, 46);
+    this.fog.splat(to.x, to.z, 0.03, 0.05, 0.02, 0.02, 0.3);
+    this.wet = Math.min(1, this.wet + 0.035);
+    this.humidity = Math.min(1, this.humidity + 0.004);
+  }
+
   // --------------------------------------------------------------------------
   update(dt: number, time: number, camera: THREE.PerspectiveCamera) {
     this.hours = (this.hours + this.timeFlow * dt + 24) % 24;
@@ -160,7 +168,8 @@ export class Weather {
     // humidity rises with rain and fog, and the lamp dries the air
     const rain = this.rain.amount;
     this.humidity = THREE.MathUtils.clamp(this.humidity + (rain * 0.012 + this.mist * 0.03 - (0.02 + 0.03 * day) * (this.humidity - 0.62)) * dt, 0.3, 1);
-    this.wet = THREE.MathUtils.clamp(this.wet + (rain * 0.12 + this.mist * 0.01 - 0.012 - 0.025 * day) * dt, 0, 1);
+    // (beads of water stay on the leaves for a minute or so after rain)
+    this.wet = THREE.MathUtils.clamp(this.wet + (rain * 0.12 + this.mist * 0.01 - 0.006 - 0.012 * day) * dt, 0, 1);
   }
 
   /** Light from the lamp, in the colours the volumes and rain use. */
