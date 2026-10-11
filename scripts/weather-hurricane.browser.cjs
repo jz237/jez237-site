@@ -108,6 +108,8 @@ async function run() {
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status')?.textContent.includes('NOAA checked'));
     assert.equal(await page.locator('[data-storm]').count(),1);
     assert.equal(regionRequests,0,'Regional detail must not load for a broad basin overview');
+    assert.equal(await page.locator('#hurricane-system').inputValue(),'al992026');
+    assert.match(await page.locator('#hurricane-system option').innerText(),/Test System · Category 3 hurricane/);
     assert.match(await page.locator('.hurricane-map-marker').getAttribute('aria-label'),/Test System, Category 3 hurricane/);
     assert.match(await page.locator('#hurricane-forecast-step').getAttribute('aria-valuetext'),/Test System: Advisory position/);
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/Hurricane warning/);
@@ -135,6 +137,8 @@ async function run() {
 
     await page.locator('[data-basin="pacific"]').click();
     assert.equal(await page.locator('[data-storm]').count(),0);
+    assert.equal(await page.locator('#hurricane-system').isDisabled(),true);
+    assert.match(await page.locator('#hurricane-system').innerText(),/No forecast systems in this basin/);
     assert.equal(await page.locator('#hurricane-timeline').isVisible(),false);
     assert.match(await page.locator('#hurricane-storm-list').innerText(),/No systems/);
     await page.locator('[data-basin="atlantic"]').click();
@@ -156,6 +160,7 @@ async function run() {
     await page.waitForFunction(()=>document.querySelector('#hurricane-expanded').open);
     assert.equal(await page.locator('#hurricane-expand').getAttribute('aria-expanded'),'true');
     assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-close');
+    assert.equal(await page.locator('#hurricane-expanded #hurricane-system').count(),1,'The same system picker is available in the larger map');
     const expandedMap=await page.locator('#hurricane-map').boundingBox();
     assert.ok(expandedMap.width>normalMap.width+100,'Desktop expanded map is not wider');
     assert.ok(expandedMap.height>normalMap.height,'Expanded map is not taller');
@@ -325,6 +330,8 @@ async function run() {
     await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').dataset.feed==='error');
     assert.match(await page.locator('#hurricane-notice').innerText(),/does not mean there are no storms/);
     assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
+    assert.equal(await page.locator('#hurricane-system').isDisabled(),true);
+    assert.match(await page.locator('#hurricane-system').innerText(),/Storm data unavailable/);
     results.push('First-visit outage is distinct from a genuine no-storms result');
 
     for (const nextMode of ['partial','empty','malformed','incomplete','stale','unverified','bad-geometry']) {
@@ -353,7 +360,18 @@ async function run() {
     await page.waitForSelector('[data-storm="al982026"]');
     assert.equal(await page.locator('[data-storm]').count(),2);
     assert.equal(await page.locator('.hurricane-map-marker').count(),2);
-    await page.locator('[data-storm="al982026"]').click();
+    assert.equal(await page.locator('#hurricane-system option').count(),2);
+    await page.locator('#hurricane-system').scrollIntoViewIfNeeded();
+    await page.locator('#hurricane-system').focus();
+    const pickerScrollBefore=await page.evaluate(()=>scrollY);
+    await page.locator('#hurricane-system').selectOption('al982026');
+    assert.equal(await page.locator('[data-storm="al982026"]').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-system');
+    assert.ok(Math.abs(await page.evaluate(()=>scrollY)-pickerScrollBefore)<1,'Selecting a system must not scroll away from the map');
+    await page.evaluate(()=>document.querySelector('#hurricane-refresh').click());
+    await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
+    assert.equal(await page.locator('#hurricane-system').inputValue(),'al982026','Refreshing preserves the selected system');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'hurricane-system','Refreshing preserves picker focus');
     await page.waitForFunction(()=>document.querySelectorAll('.hurricane-region-label').length>0);
     assert.equal(regionRequests,1,'Regional context loads once when an inland track is selected');
     assert.ok(await page.locator('.leaflet-hurricane-regions-pane path').count()>0);
@@ -364,6 +382,7 @@ async function run() {
     assert.equal(await page.locator('.leaflet-hurricane-regions-pane path').count(),0);
     await page.locator('[data-basin="atlantic"]').click();
     await page.locator('[data-storm="al982026"]').click();
+    assert.equal(await page.locator('#hurricane-system').inputValue(),'al982026','Storm list selection updates the picker');
     await page.waitForFunction(()=>document.querySelectorAll('.hurricane-region-label').length>0);
     assert.equal(regionRequests,1,'Returning to a close-up reuses the local context');
     assert.match(await page.locator('#hurricane-storm-detail').innerText(),/WPC advisory 17/);
@@ -378,7 +397,12 @@ async function run() {
     for(const width of [320,390,1280]) {
       await page.setViewportSize({width,height:900});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'WPC details must fit mobile screens');
+      await page.locator('#hurricane-system').selectOption('al992026');
+      assert.equal(await page.locator('[data-storm="al992026"]').getAttribute('aria-pressed'),'true');
+      await page.locator('#hurricane-system').selectOption('al982026');
+      assert.equal(await page.locator('[data-storm="al982026"]').getAttribute('aria-pressed'),'true');
     }
+    results.push('Above-map system selection fits phones, synchronizes with storm controls, stays available when expanded, and preserves focus and selection across refreshes');
     await page.locator('#weather-hurricanes').screenshot({path:path.join(output,'wpc-remnant-tracker.png')});
     satelliteMode='normal';
     await page.locator('#hurricane-satellite').check();

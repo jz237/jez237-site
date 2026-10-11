@@ -72,7 +72,7 @@
   </style>
   <link rel="stylesheet" href="weather-details.css?v=20261010-7" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="hurricane-tracker.css?v=20261010-11" />
+  <link rel="stylesheet" href="hurricane-tracker.css?v=20261010-12" />
 </head>
 <body class="weather-page">
   <header id="site-nav" class="home-hidden-nav"></header>
@@ -123,6 +123,7 @@
           <p id="hurricane-notice" class="hurricane-notice" hidden></p>
           <div class="hurricane-workspace">
             <div class="hurricane-map-column">
+              <label class="hurricane-storm-picker" for="hurricane-system">Show system <select id="hurricane-system" disabled><option value="">Loading systems…</option></select></label>
               <div class="hurricane-map-frame"><div id="hurricane-map" aria-label="Interactive hurricane map. Use the arrow keys to pan and plus or minus to zoom. Storm details are also available in the adjacent storm list."></div><div id="hurricane-map-message" class="hurricane-map-message">Loading the tropical weather map…</div><div class="hurricane-map-actions"><button type="button" id="hurricane-reset-view" class="hurricane-reset-view" title="Fit the current basin and systems">Reset view</button><button type="button" id="hurricane-expand" aria-haspopup="dialog" aria-controls="hurricane-expanded" aria-expanded="false" aria-label="Open larger hurricane map">Expand <span aria-hidden="true">↗</span></button></div></div>
               <div class="hurricane-layers" role="group" aria-label="Hurricane map layers"><label><input type="checkbox" data-layer="cones" checked> Forecast cone</label><label><input type="checkbox" data-layer="history" checked> Past track</label><label><input type="checkbox" data-layer="outlook" checked> Development areas</label><label><input type="checkbox" data-layer="warnings" checked> Coastal alerts</label><label><input type="checkbox" id="hurricane-satellite" aria-describedby="hurricane-satellite-note"> Satellite (infrared)</label></div>
               <div id="hurricane-satellite-info" class="hurricane-satellite-info" hidden><p id="hurricane-satellite-status" role="status"></p><button type="button" id="hurricane-satellite-retry" hidden>Retry imagery</button><p id="hurricane-satellite-note">Hourly NOAA infrared mosaic; imagery can lag observations by several hours. Forecast controls move the storm positions; the satellite image stays at the time shown.</p></div>
@@ -166,6 +167,6 @@
   <script src="weather-details.js?v=20261010-9" defer></script>
   <script src="weather-widget.js?v=20261010-9" defer></script>
   <script src="vendor/leaflet/leaflet.js" defer></script>
-  <script type="module" src="hurricane-tracker.mjs?v=20261010-11"></script>
+  <script type="module" src="hurricane-tracker.mjs?v=20261010-12"></script>
 </body>
 </html>
