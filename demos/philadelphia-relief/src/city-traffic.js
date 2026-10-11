@@ -40,8 +40,18 @@ export function createStreetGraph(doc,projection,sampleElevation){
     if(joined[2]-joined[0]>18||joined[3]-joined[1]>18)continue;
     parents.set(b,a);bounds.set(a,joined);
   }
-  for(const node of nodes.values())node.junction=root(node.id);
+  const signalized=new Set();
+  for(const node of nodes.values()){
+    node.junction=root(node.id);if(node.neighbors.size>2)signalized.add(node.junction);
+  }
+  for(const node of nodes.values())node.signalized=signalized.has(node.junction);
   return {nodes,edges,segments};
+}
+export function trafficSignal(edge,time){
+  const phase=(time+Math.abs(edge.to.junction%19))%42;
+  const horizontal=Math.abs(edge.dx)>Math.abs(edge.dz);
+  const local=(phase+(horizontal?0:21))%42;
+  return local<18?'green':local<20?'amber':'red';
 }
 function lanePoint(e,distance){
   const t=Math.min(1,Math.max(0,distance/e.length));
@@ -152,8 +162,7 @@ export function createTraffic(graph,count=260,seed=239){
       for(const q of queues.values())q.sort((a,b)=>b.distance-a.distance);
       for(const q of queues.values())for(let i=0;i<q.length;i++){
         const car=q[i],edge=car.edge,node=edge.to;
-        const phase=(time+Math.abs(node.junction%19))%42;
-        const green=Math.abs(edge.dx)>Math.abs(edge.dz)?phase<18:phase>=21&&phase<39;
+        const green=trafficSignal(edge,time)==='green';
         const next=car.nextEdge;
         const span=next?turnSpan(edge,next):0;
         const stopAt=stopLine(car);
@@ -164,7 +173,7 @@ export function createTraffic(graph,count=260,seed=239){
         // A car that has passed the stop line clears the intersection even if
         // the signal changes; it must not freeze halfway through a turn.
         const insideJunction=edge.from.junction===node.junction;
-        if(!insideJunction&&car.distance<=stopAt&&((node.neighbors.size>2&&!green)||blocked)){
+        if(!insideJunction&&car.distance<=stopAt&&((node.signalized&&!green)||blocked)){
           gap=Math.min(gap,Math.max(0,stopAt-car.distance));
         }
         const turning=next&&edge.dx*next.dx+edge.dz*next.dz<.8;
@@ -211,6 +220,7 @@ export function createTraffic(graph,count=260,seed=239){
       }
   }
   return {cars,
+    signal(edge){return trafficSignal(edge,time);},
     update(dt,protectedView=null){
       // Preserve elapsed time at low frame rates without a large unstable step
       // or a long catch-up loop when the tab wakes after being hidden.

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createStreetGraph,createTraffic,trafficPose } from '../src/city-traffic.js';
+import { createStreetGraph,createTraffic,trafficPose,trafficSignal } from '../src/city-traffic.js';
 import { roofDetails,insideRoof } from '../src/roof-details.js';
 import { buildLandmarkModels } from '../src/landmark-models.js';
 import * as THREE from '../vendor/three.module.min.js';
@@ -9,6 +9,76 @@ import { createCityStreets } from '../src/city-streets.js';
 import { createCityUniforms } from '../src/city-lighting.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z};
+
+test('simulated signals share a safe cycle across opposite and crossing approaches',()=>{
+  const approach=(dx,dz)=>({dx,dz,to:{junction:38}});
+  for(let time=0;time<84;time+=.25){
+    const east=trafficSignal(approach(1,0),time),west=trafficSignal(approach(-1,0),time);
+    const north=trafficSignal(approach(0,1),time),south=trafficSignal(approach(0,-1),time);
+    assert.equal(east,west);assert.equal(north,south);
+    assert.ok(!(east==='green'&&north==='green'),'crossing traffic never gets simultaneous green');
+  }
+  assert.equal(trafficSignal(approach(1,0),18),'amber');
+  assert.equal(trafficSignal(approach(1,0),20),'red');
+  assert.equal(trafficSignal(approach(0,1),21),'green');
+  assert.equal(trafficSignal(approach(0,1),39),'amber');
+  assert.equal(trafficSignal(approach(0,1),41),'red');
+});
+
+test('signal controls extend to the outer boundary of a multi-node junction',()=>{
+  const graph=createStreetGraph({roads:[
+    {id:1,oneway:0,width:10,points:[[1,-100,0],[2,-5,0],[3,0,0],[4,5,0],[5,100,0]]},
+    {id:2,oneway:0,width:10,points:[[6,0,-100],[7,0,-5],[3,0,0],[8,0,5],[9,0,100]]},
+  ]},projection,()=>0);
+  assert.equal(graph.nodes.get(2).neighbors.size,2);
+  for(const id of [2,3,4,7,8])assert.equal(graph.nodes.get(id).signalized,true);
+  for(const id of [1,5,6,9])assert.equal(graph.nodes.get(id).signalized,false);
+});
+
+test('crossings cover both junction approaches and are unchanged when a way is reversed',async()=>{
+  const previousFetch=globalThis.fetch;
+  const main=[[1,0,0],[2,100,0]],branches=[
+    [[3,0,-60],[1,0,0],[4,0,60]],[[5,100,-60],[2,100,0],[6,100,60]]];
+  async function markings(reverse){
+    const roads=[reverse?[...main].reverse():main,...branches]
+      .map((points,id)=>({id,oneway:0,width:10,points}));
+    globalThis.fetch=async()=>({ok:true,json:async()=>({roads})});
+    const streets=createCityStreets(THREE,{scene:new THREE.Scene(),
+      projection:{...projection,xToLon:x=>x,zToLat:z=>z},sampleElevation:(x,z)=>4+x*.03+z*.01,
+      lighting:{uniforms:createCityUniforms(THREE)}});
+    try{
+      const params={camera:{position:new THREE.Vector3(50,500,500)},pose:{lon:50,lat:0,dist:900},
+        state:{era:'present',compareMode:'off',lightweight:false,layers:{structures:true},streetLife:true,
+          animationSpeed:1},exaggeration:1,sunDir:new THREE.Vector3(.3,1,0),dt:1.01,
+        reducedMotion:true,archive:false,quality:'balanced'};
+      streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
+      const mesh=streets.group.children[0],matrix=new THREE.Matrix4(),position=new THREE.Vector3();
+      const scale=new THREE.Vector3(),rotation=new THREE.Quaternion(),points=[];
+      for(let i=0;i<mesh.count;i++){
+        mesh.getMatrixAt(i,matrix);matrix.decompose(position,rotation,scale);
+        if(Math.abs(scale.y-.035)<.001)points.push([position.x,position.y,position.z]);
+      }
+      assert.equal(points.filter(p=>p[0]>5&&p[0]<12&&Math.abs(p[2])<5).length,5);
+      assert.equal(points.filter(p=>p[0]>88&&p[0]<95&&Math.abs(p[2])<5).length,5);
+      for(const p of points)assert.ok(Math.abs(p[1]-(4+p[0]*.03+p[2]*.01+.52))<.001);
+      const signals=streets.group.children[3];
+      assert.ok(signals.count>=12,'visible intersections receive complete signal heads');
+      assert.equal(signals.count%3,0);
+      const colors=signals.instanceColor;
+      for(let i=0;i<signals.count;i+=3){
+        let lit=0;for(let j=0;j<3;j++)if(Math.max(colors.getX(i+j),colors.getY(i+j),colors.getZ(i+j))>1)lit++;
+        assert.equal(lit,1,'each head shows exactly one active light');
+      }
+      const versions=[signals.instanceMatrix.version,colors.version];
+      streets.update(params);
+      assert.deepEqual([signals.instanceMatrix.version,colors.version],versions,
+        'paused signals do not upload unchanged matrices or colors');
+      return points.map(p=>p.map(n=>n.toFixed(3)).join(',')).sort();
+    }finally{streets.dispose();}
+  }
+  try{assert.deepEqual(await markings(false),await markings(true));}
+  finally{globalThis.fetch=previousFetch;}
+});
 test('landmark façades retain a local anchor far from the scene origin',()=>{
   const packed=buildLandmarkModels({models:[{id:'test',landmark:'test',
     parts:[{type:'box',w:30,d:30,h:100}]}]},

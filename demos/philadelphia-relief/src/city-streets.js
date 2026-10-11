@@ -29,6 +29,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;
     mesh.count=0;group.add(mesh);return mesh;};
   const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*10);
+  const signals=make(box,1800);
+  let signalHeads=[];
   const dummy=new THREE.Object3D(),color=new THREE.Color();
   function put(mesh,x,y,z,w,h,d,angle,tint,pitch=0){
     if(mesh.count>=mesh.instanceMatrix.count)return;
@@ -62,7 +64,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       .finally(()=>{loading=false;request=null;});
   }
   function rebuild(x,z,exag,radius){
-    street.count=0;trees.count=0;
+    street.count=0;trees.count=0;signals.count=0;signalHeads=[];
     const groundAt=(x,z)=>sampleElevation(projection.xToLon(x),projection.zToLat(z))*exag;
     function strip(ax,az,bx,bz,width,height,clearance,tint,depth=0,ay=groundAt(ax,az),by=groundAt(bx,bz)){
       if(street.count>=street.instanceMatrix.count)return;
@@ -78,6 +80,23 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     }
     const segments=graph.segments.filter(s=>Math.hypot((s.a.x+s.b.x)/2-x,(s.a.z+s.b.z)/2-z)<radius)
       .sort((a,b)=>Math.hypot(a.a.x-x,a.a.z-z)-Math.hypot(b.a.x-x,b.a.z-z));
+    // Reserve complete signal assemblies before filling the remaining street
+    // budget with scenery. Nearest approaches win when a view is very dense.
+    const approaches=graph.edges.filter(edge=>edge.to.signalized
+      &&edge.from.junction!==edge.to.junction&&edge.length>=5
+      &&Math.hypot(edge.to.x-x,edge.to.z-z)<radius)
+      .sort((a,b)=>Math.hypot(a.to.x-x,a.to.z-z)-Math.hypot(b.to.x-x,b.to.z-z));
+    for(const edge of approaches){
+      if(street.count+2>street.instanceMatrix.count||signals.count+3>signals.instanceMatrix.count)break;
+      const node=edge.to,side=edge.width/2+1,px=node.x-edge.dx*5-edge.dz*side,
+        pz=node.z-edge.dz*5+edge.dx*side,ground=groundAt(px,pz),angle=Math.atan2(edge.dx,edge.dz);
+      put(street,px,ground+2.25,pz,.13,4.5,.13,angle,0x434847);
+      put(street,px,ground+4.15,pz,.48,1.35,.28,angle,0x272c2b);
+      const start=signals.count;
+      for(let lens=0;lens<3;lens++)put(signals,px-edge.dx*.16,ground+4.57-lens*.42,
+        pz-edge.dz*.16,.28,.28,.055,angle,0x151c18);
+      signalHeads.push({edge,start,state:null});
+    }
     for(const s of segments){
       if(street.count>=street.instanceMatrix.count)break;
       const dx=(s.b.x-s.a.x)/s.length,dz=(s.b.z-s.a.z)/s.length,angle=Math.atan2(dx,dz);
@@ -110,12 +129,23 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
             put(street,lx-dz*.5,lg+6.1,lz+dx*.5,1.25,.18,.36,angle,[1.9,1.6,1.15]);}
         }
       }
-      if(s.length>25&&s.a.neighbors.size>2)for(let across=-s.width/2+1;across<s.width/2;across+=1.7){
-        strip(s.a.x+dx*5.65-dz*across,s.a.z+dz*5.65+dx*across,
-          s.a.x+dx*8.35-dz*across,s.a.z+dz*8.35+dx*across,.65,.035,.52,0xc9c6ac);
+      if(s.length>25)for(const [node,sign] of [[s.a,1],[s.b,-1]]){
+        if(node.neighbors.size<=2)continue;
+        // Both approaches get a crossing, independent of the source way's
+        // direction. Start beyond the junction opening on wider streets.
+        const setback=Math.max(7,s.width*.7+1.35);
+        if(setback+1.35>s.length*.45)continue;
+        const stripes=Math.max(1,Math.floor((s.width-2)/1.7)+1);
+        if(street.count+stripes>street.instanceMatrix.count)continue;
+        for(let stripe=0;stripe<stripes;stripe++){
+          const across=(stripe-(stripes-1)/2)*1.7;
+          strip(node.x+dx*sign*(setback-1.35)-dz*across,node.z+dz*sign*(setback-1.35)+dx*across,
+            node.x+dx*sign*(setback+1.35)-dz*across,node.z+dz*sign*(setback+1.35)+dx*across,
+            .65,.035,.52,0xc9c6ac);
+        }
       }
     }
-    for(const mesh of [street,trees])uploadInstances(mesh);
+    for(const mesh of [street,trees,signals])uploadInstances(mesh);
   }
   return {group,
     update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
@@ -134,6 +164,17 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
       const advancing=!reducedMotion&&Number.isFinite(dt)&&dt>0&&state.animationSpeed>0;
       if(advancing)traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
+      let signalsChanged=false;
+      for(const head of signalHeads){
+        const phase=traffic.signal(head.edge);if(phase===head.state)continue;
+        head.state=phase;signalsChanged=true;
+        for(const [lens,name,tint] of [[0,'red',[2.8,.035,.015]],
+          [1,'amber',[2.6,1.4,.025]],[2,'green',[.025,2.3,.25]]]){
+          color.setRGB(...(phase===name?tint:[.018,.024,.019]));signals.setColorAt(head.start+lens,color);
+        }
+      }
+      if(signalsChanged){const attribute=signals.instanceColor;attribute.clearUpdateRanges();
+        attribute.addUpdateRange(0,signals.count*3);attribute.needsUpdate=true;}
       if(!advancing&&vehicleView&&vehicleView.x===x&&vehicleView.z===z
         &&vehicleView.radius===radius&&vehicleView.exaggeration===exaggeration)return;
       vehicleView={x,z,radius,exaggeration};
@@ -172,6 +213,6 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     },
     dispose(){disposed=true;request?.abort();scene.remove(group);
       box.dispose();crown.dispose();material.dispose();
-      for(const m of [street,trees,vehicles])m.dispose();},
+      for(const m of [street,trees,vehicles,signals])m.dispose();},
   };
 }
