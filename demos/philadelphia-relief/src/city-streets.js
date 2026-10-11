@@ -44,14 +44,18 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     }
   }
   let graph=null,traffic=null,loading=false,disposed=false,age=10;
+  let retryDelay=0,request=null,vehicleView=null;
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
-  function load(){if(loading)return;loading=true;
-    fetch('data/city-streets.json').then(r=>{
+  function load(){if(loading||graph||retryDelay>0||disposed)return;loading=true;
+    request=new AbortController();
+    fetch('data/city-streets.json',{signal:request.signal}).then(r=>{
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
       .then(doc=>{if(disposed)return;graph=createStreetGraph(doc,projection,sampleElevation);
         traffic=createTraffic(graph,620);age=10;})
-      .catch(error=>console.warn('Decorative street layer:',error.message));
+      .catch(error=>{if(disposed||error.name==='AbortError')return;
+        retryDelay=30;console.warn('Decorative street layer:',error.message);})
+      .finally(()=>{loading=false;request=null;});
   }
   function rebuild(x,z,exag,radius){
     street.count=0;trees.count=0;
@@ -88,6 +92,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   }
   return {group,
     update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
+      if(disposed)return;
+      retryDelay=Math.max(0,retryDelay-(Number.isFinite(dt)?Math.max(0,dt):0));
       group.visible=state.era==='present'&&state.compareMode==='off'&&!state.lightweight
         &&!archive&&state.layers.structures&&pose.dist<6500&&!!state.streetLife;
       if(!group.visible)return;load();if(!graph)return;
@@ -99,7 +105,11 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       }
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
-      if(!reducedMotion)traffic.update(dt*state.animationSpeed);
+      const advancing=!reducedMotion&&Number.isFinite(dt)&&dt>0&&state.animationSpeed>0;
+      if(advancing)traffic.update(dt*state.animationSpeed);
+      if(!advancing&&vehicleView&&vehicleView.x===x&&vehicleView.z===z
+        &&vehicleView.radius===radius&&vehicleView.exaggeration===exaggeration)return;
+      vehicleView={x,z,radius,exaggeration};
       vehicles.count=0;
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
@@ -129,7 +139,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       }
       uploadInstances(vehicles);
     },
-    dispose(){disposed=true;scene.remove(group);box.dispose();crown.dispose();material.dispose();
+    dispose(){disposed=true;request?.abort();scene.remove(group);
+      box.dispose();crown.dispose();material.dispose();
       for(const m of [street,trees,vehicles])m.dispose();},
   };
 }

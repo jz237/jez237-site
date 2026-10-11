@@ -315,10 +315,10 @@ const FRAGMENT_SHADER = /* glsl */ `
       }
     }
 
-    // Night themes light the upper floors; restrained so towers read as
-    // lit buildings, not lanterns.
+    // The detailed facade already emits light from occupied windows. Retain a
+    // little ambient wall glow, while bridges keep their cartographic lighting.
     color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8)
-      * (1.0 - uHybrid);
+      * (1.0 - uHybrid) * mix(1.0, .08, uFacade);
 
     #ifdef LANDMARK
     // A selected model glows with the accent colour and breathes gently.
