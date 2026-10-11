@@ -110,7 +110,7 @@ void main(){
     u.uKeyDir.value.copy(key.target.position).sub(key.position).normalize();
     u.uCone.value.set(Math.cos(key.angle), Math.cos(key.angle * (1 - key.penumbra)));
     u.uKeyColor.value.copy(key.color).multiplyScalar(key.intensity);
-    u.uDensity.value = 0.011 * (0.6 + 0.8 * this.moisture);
+    u.uDensity.value = 0.016 * (0.6 + 0.8 * this.moisture);
     u.uResolution.value.set(width, height);
     u.uFrame.value = frame % 1000;
     // (a shadow sampler must never see anything but the lamp's depth map)
