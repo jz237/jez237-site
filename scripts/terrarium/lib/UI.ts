@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type {Terrarium} from './Terrarium';
+import type {Cloud} from './Clouds';
 import {WATER_LEVEL, poolDistance} from './Ground';
 
 export type Tool = 'hand' | 'cloud' | 'wind' | 'fog' | 'wipe' | 'feed';
@@ -24,7 +25,7 @@ const svg = (k: string) => `<svg class="ico" viewBox="0 0 24 24" fill="none" str
 
 const TOOLS: {id: Tool; label: string; hint: string}[] = [
   {id: 'hand', label: 'Hand', hint: 'Grab a cloud and hold still to wring out rain · shake it hard for lightning · touch the water or the lizard'},
-  {id: 'cloud', label: 'Cloud', hint: 'Hold to condense a new cloud · drag to stretch it · push clouds together to build a storm'},
+  {id: 'cloud', label: 'Cloud', hint: 'Hold to condense a new cloud · drag to stretch it · push clouds together to build a storm · right-click a cloud to shrink it'},
   {id: 'wind', label: 'Wind', hint: 'Drag across the case to blow a gust'},
   {id: 'fog', label: 'Fog', hint: 'Hold or drag to pour fog — it runs downhill and pools on the water'},
   {id: 'wipe', label: 'Wipe', hint: 'Drag across the glass to wipe away condensation'},
@@ -41,8 +42,9 @@ export class UI {
   private readout: {temp: HTMLElement; hum: HTMLElement; time: HTMLElement};
   private slider: HTMLInputElement;
   private play: HTMLButtonElement;
-  private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number} | null = null;
+  private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense' | 'shrink'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number; cloud?: Cloud | null} | null = null;
   private coached = false;
+  private coachedShrink = false;
   private ray = new THREE.Raycaster();
   private ndc = new THREE.Vector2();
   onSound?: () => void;
@@ -100,7 +102,7 @@ export class UI {
     });
     this.slider.oninput = () => {t.weather.hours = Number(this.slider.value);};
     this.play.onclick = () => {
-      t.weather.timeFlow = t.weather.timeFlow ? 0 : 0.25;
+      t.weather.timeFlow = t.weather.timeFlow ? 0 : 0.1; // a day in four minutes
       this.play.innerHTML = svg(t.weather.timeFlow ? 'pause' : 'play');
     };
     this.bindPointer(host);
@@ -173,6 +175,17 @@ export class UI {
       const last = new THREE.Vector2(e.clientX, e.clientY);
       const now = performance.now() / 1000;
       const capture = () => {e.stopPropagation(); canvas.setPointerCapture(e.pointerId);};
+      // right-click on a cloud (with any tool) evaporates it; holding keeps shrinking it
+      if (e.button === 2) {
+        const c = w().clouds.pick(this.ray.ray);
+        if (!c) return; // elsewhere the right button pans the view
+        w().clouds.shrink(c.cloud, 0.2);
+        this.drag = {kind: 'shrink', last, lastT: now, moved: 0, downT: now, cloud: c.cloud};
+        capture();
+        e.preventDefault();
+        if (!this.coachedShrink) {this.coachedShrink = true; this.say('Right-click a cloud to shrink it · hold to evaporate it', 4);}
+        return;
+      }
       if (this.tool === 'hand') {
         const c = w().clouds.pick(this.ray.ray);
         if (c) {
@@ -240,6 +253,9 @@ export class UI {
       d.lastT = now;
       if (d.kind === 'cloud') {
         w().clouds.drag(this.ray.ray, px);
+      } else if (d.kind === 'shrink') {
+        // keep shrinking whichever cloud is under the pointer
+        d.cloud = w().clouds.pick(this.ray.ray)?.cloud ?? null;
       } else if (d.kind === 'water') {
         const p = this.pickWater(this.ray.ray);
         if (p && d.lastWorld) {
@@ -310,6 +326,7 @@ export class UI {
       this.pendingPet = false;
     };
     host.addEventListener('pointerup', end, true);
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     host.addEventListener('pointercancel', end, true);
     host.addEventListener('pointerleave', () => {t.brain.pointer = null; t.handPush.w = 0; w().clouds.setHover(null);});
   }
@@ -319,6 +336,10 @@ export class UI {
     const t = this.t;
     // holding still with the fog or cloud tool keeps pouring / condensing
     const d = this.drag;
+    if (d?.kind === 'shrink' && d.cloud) {
+      t.weather.clouds.shrink(d.cloud, Math.min(0.5, dt * 0.35 * (1 + (performance.now() / 1000 - d.downT))), false);
+      if (d.cloud.dissolving) d.cloud = null;
+    }
     if (d && this.tool === 'fog' && d.lastWorld) t.weather.pourFog(d.lastWorld.x, d.lastWorld.z, 'hold', dt, performance.now() / 1000 - d.downT);
     if (this.toastTimer > 0) {
       this.toastTimer -= dt;

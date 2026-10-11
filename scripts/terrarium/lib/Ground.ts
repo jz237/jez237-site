@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {TANK} from './Case';
+import CAVE from './cave.json';
 
 // Terrain: an analytic height field (metres) used by the mesh, the plants and the lizard.
 export const WATER_LEVEL = 0.105;
@@ -59,6 +60,20 @@ function landHeight(x: number, z: number) {
   return h;
 }
 
+/** 0..1: the levelled floor of the cave and the apron at its mouth. */
+export function caveFloorWeight(x: number, z: number) {
+  const e1 = Math.hypot((x - CAVE.x) / (CAVE.rx + 0.03), (z - CAVE.z) / (CAVE.rz + 0.03));
+  const M = CAVE.mouth;
+  const e2 = Math.hypot((x - M.x) / (M.rx + 0.02), (z - M.z - 0.03) / 0.065);
+  return Math.max(1 - smooth(0.8, 1.0, e1), 1 - smooth(0.3, 1.0, e2));
+}
+
+/** True on the cave floor and its apron, which are kept clear of plants. */
+export function caveKeepClear(x: number, z: number) {
+  return caveFloorWeight(x, z) > 0.01;
+}
+export {CAVE};
+
 export function groundHeight(x: number, z: number) {
   const d = poolDistance(x, z);
   if (d < 0) return WATER_LEVEL - poolDepth(x, z);
@@ -66,7 +81,10 @@ export function groundHeight(x: number, z: number) {
   const h = landHeight(x, z);
   // a higher bank gets a longer beach, so the shore stays walkable
   const t = smooth(0.16 + Math.max(0, h - WATER_LEVEL) * 7, 0.0, d);
-  return h + (WATER_LEVEL - h) * t;
+  const g = h + (WATER_LEVEL - h) * t;
+  // the cave's floor is worn level, with a little grit
+  const c = caveFloorWeight(x, z);
+  return c > 0 ? g + (CAVE.floor + (fbm(x * 60, z * 60) - 0.5) * 0.002 - g) * c : g;
 }
 
 /** Ground mesh plus the cut-away substrate seen through the glass. */
@@ -80,7 +98,12 @@ export class Ground {
     const geo = new THREE.PlaneGeometry(HX * 2, HZ * 2, NX, NZ);
     geo.rotateX(-Math.PI / 2);
     const pos = geo.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < pos.count; i++) pos.setY(i, groundHeight(pos.getX(i), pos.getZ(i)));
+    const cave = new Float32Array(pos.count);
+    for (let i = 0; i < pos.count; i++) {
+      pos.setY(i, groundHeight(pos.getX(i), pos.getZ(i)));
+      cave[i] = caveFloorWeight(pos.getX(i), pos.getZ(i));
+    }
+    geo.setAttribute('aCave', new THREE.BufferAttribute(cave, 1));
     geo.computeVertexNormals();
     this.mesh = new THREE.Mesh(geo, this.groundMaterial());
     this.mesh.receiveShadow = true;
@@ -129,15 +152,15 @@ export class Ground {
       s.uniforms.uWater = {value: WATER_LEVEL};
       s.uniforms.uPool = {value: new THREE.Vector4(POOL.cx, POOL.cz, POOL.rx, POOL.rz)};
       s.vertexShader = s.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vW;')
-        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+        .replace('#include <common>', '#include <common>\nvarying vec3 vW; attribute float aCave; varying float vCave;')
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz; vCave = aCave;');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-varying vec3 vW; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss, tWetMap; uniform vec2 uTank;
+varying vec3 vW; varying float vCave; uniform float uTime, uWet, uWater, uCaustic; uniform vec4 uPool; uniform sampler2D tMoss, tWetMap; uniform vec2 uTank;
 ${GROUND_GLSL}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 vec4 wetMap = texture2D(tWetMap, vW.xz / uTank + 0.5);
-GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r);
+GroundSample gs = groundSample(vW, uTime, clamp(max(uWet * 0.35, wetMap.r * 1.4), 0.0, 1.0), uWater, texture2D(tMoss, vW.xz / uTank + 0.5).r, vCave);
 diffuseColor.rgb = gs.color;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gs.rough;')
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -147,7 +170,7 @@ reflectedLight.indirectDiffuse *= gs.ao; reflectedLight.indirectSpecular *= gs.a
 #include <aomap_fragment>
 reflectedLight.directDiffuse += gs.caustic * gs.color * 1.4 * uCaustic;`);
     };
-    m.customProgramCacheKey = () => 'terrarium-ground-v2';
+    m.customProgramCacheKey = () => 'terrarium-ground-v3';
     return m;
   }
 
@@ -216,7 +239,7 @@ float groundBumps(vec2 p, float moss){
   float mossH = gfbm(p * 260.0) * 0.6 + gn(p * 900.0) * 0.4;
   return mix(soil * 0.0016, mossH * 0.0018, moss);
 }
-GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap){
+GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap, float cave){
   GroundSample g;
   vec2 p = w.xz;
   float under = smoothstep(water - 0.001, water - 0.008, w.y);
@@ -256,8 +279,20 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   // the wet beach: dark sand and mud, a few pebbles
   float grit = gn(p * 900.0) * 0.6 + gn(p * 2400.0) * 0.4;
   vec3 sand = mix(vec3(0.07, 0.055, 0.035), vec3(0.16, 0.13, 0.09), grit) * (0.75 + 0.45 * gn(p * 120.0));
-  sand = mix(sand, stone * 0.9, pebMask * step(0.1, pb.x) * 0.8);
+  // scattered pebbles, not a paving: only some cells hold a stone
+  float beachStone = step(0.62, pb.y) * smoothstep(0.15, 0.4, pb.x);
+  sand = mix(sand, stone * 0.9, max(pebMask * 0.6, 0.35) * beachStone);
   col = mix(col, sand, shore * (1.0 - moss));
+  // the cave floor and its apron: dry grit and small stones, worn smooth
+  float caveK = smoothstep(0.25, 0.85, cave) * (1.0 - under);
+  vec3 grit2 = mix(vec3(0.06, 0.046, 0.032), vec3(0.13, 0.105, 0.075), grit) * (0.8 + 0.35 * gn(p * 140.0));
+  grit2 = mix(grit2, soil, 0.3 * (1.0 - smoothstep(0.5, 0.95, cave)));
+  // a few loose pebbles, not a paving: only some cells hold a (small, rounded) stone
+  vec3 cpb = pebbles(p * 300.0 + 11.0);
+  float caveStones = step(0.88, cpb.y) * smoothstep(0.3, 0.6, cpb.x);
+  vec3 pebble = mix(vec3(0.1, 0.085, 0.07), vec3(0.2, 0.17, 0.13), fract(cpb.y * 7.3)) * (0.8 + 0.2 * cpb.x);
+  grit2 = mix(grit2, pebble, caveStones * 0.9);
+  col = mix(col, grit2, caveK);
   // wet margin
   col *= mix(1.0, 0.6, shore + wet * (1.0 - moss) * 0.4);
   g.color = col;
@@ -266,8 +301,8 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   // bump normal
   float e = 0.0006;
   float pbk = 0.0018 * max(bedMix, shore) * pebMask;
-  // silt under the water is smooth; the crumb relief belongs to the dry soil
-  float soilK = 1.0 - max(bedMix, shore) * 0.85;
+  // silt under the water and the cave's grit are smooth; the crumb relief belongs to the dry soil
+  float soilK = 1.0 - max(max(bedMix, shore), caveK) * 0.85;
   float h0 = groundBumps(p, moss) * soilK + pb.x * pbk;
   float hx = groundBumps(p + vec2(e, 0.0), moss) * soilK + pebbles((p + vec2(e, 0.0)) * 160.0).x * pbk;
   float hz = groundBumps(p + vec2(0.0, e), moss) * soilK + pebbles((p + vec2(0.0, e)) * 160.0).x * pbk;

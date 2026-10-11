@@ -40,6 +40,8 @@ export interface Cloud {
   charge: number;
   storm: number;
   stormTarget: number;
+  stormAge: number;
+  stormLife: number;
   comp: number;
   compVel: number;
   rate: number; // current rain rate 0..2.2
@@ -70,6 +72,7 @@ export interface CloudEvents {
   release?: (c: Cloud, speed: number) => void;
   merge?: (c: Cloud) => void;
   pop?: (c: Cloud) => void;
+  shrink?: (c: Cloud, amount: number) => void;
   zap?: (c: Cloud) => void;
   strike?: (c: Cloud, start: THREE.Vector3, strength: number) => void;
 }
@@ -145,7 +148,7 @@ export class Clouds {
     this.group.add(mesh);
     const c: Cloud = {
       id: this.nextId++, pos: new THREE.Vector3(o.x, o.y ?? HOME_Y, o.z), vel: new THREE.Vector3(), size, water: o.water ?? 0.5,
-      squeeze: 0, userSqueeze: 0, wheelSqueeze: 0, wheelHold: 0, heldSqueeze: o.squeeze ?? 0, charge: 0, storm: o.storm ?? 0, stormTarget: o.storm ?? 0,
+      squeeze: 0, userSqueeze: 0, wheelSqueeze: 0, wheelHold: 0, heldSqueeze: o.squeeze ?? 0, charge: 0, storm: o.storm ?? 0, stormTarget: o.storm ?? 0, stormAge: 0, stormLife: 28 + Math.random() * 17,
       comp: 0, compVel: 0, rate: 0, fade: o.fadeIn ? 0 : 1, dissolving: false, hover: 0, hoverTarget: 0, glow: 0, glowPos: new THREE.Vector3(),
       puffs: [], grabbed: false, yaw: Math.random() * Math.PI * 2, phase: Math.random() * 10, vfit: 1, baseY: 0, radius: 0.05,
       lastSquish: 0, crackleT: 0, shake: 0, mesh, uniforms, seed: uniforms.uSeed.value as THREE.Vector3,
@@ -247,6 +250,22 @@ export class Clouds {
 
   get holding() {return this.held?.cloud ?? null;}
 
+  /**
+   * Right-click: evaporates part of a cloud (and calms it); small enough and
+   * it thins away. `sound` is false for the continuous shrink while held.
+   */
+  shrink(c: Cloud, amount: number, sound = true) {
+    if (c.dissolving) return;
+    c.size = Math.max(0.1, c.size * (1 - amount));
+    c.water = Math.max(0, c.water * (1 - amount * 1.2));
+    c.stormTarget *= 1 - amount;
+    c.storm *= 1 - amount * 0.5;
+    c.charge *= 1 - amount;
+    c.compVel -= amount * 3;
+    if (c.size < 0.26) {c.dissolving = true; this.events.pop?.(c);}
+    else if (sound) this.events.shrink?.(c, amount);
+  }
+
   /** Mouse-wheel squeeze over a cloud. */
   wheel(c: Cloud, deltaY: number) {
     c.wheelSqueeze = clamp01(c.wheelSqueeze + Math.max(0, deltaY) * 0.0016);
@@ -322,7 +341,7 @@ export class Clouds {
       const c = h.cloud;
       c.shake = approach(c.shake, accel, 5, dt);
       const n = ss(1.6, 6.5, c.shake);
-      c.charge = Math.min(1.02, c.charge + dt * n * 0.8);
+      c.charge = Math.min(1.02, c.charge + dt * n * 0.48);
       h.still += dt;
       if (h.still > 0.2) c.userSqueeze = Math.min(1, c.userSqueeze + dt * 0.55 * (1 - 0.35 * c.userSqueeze));
       else c.userSqueeze = Math.max(0, c.userSqueeze - dt * 0.6);
@@ -382,34 +401,48 @@ export class Clouds {
       const k = 0.75 / (0.55 + 0.45 * c.size);
       c.vel.x = approach(c.vel.x, w.x * 0.5 * u1, k, dt);
       c.vel.z = approach(c.vel.z, w.y * 0.5 * u1, k, dt);
-      const homeY = HOME_Y - 0.45 * c.storm * S + 0.07 * S * Math.sin(0.45 * time + c.phase);
+      const homeY = HOME_Y + 0.07 * S * Math.sin(0.45 * time + c.phase);
       c.vel.y += ((homeY - c.pos.y) * 2.2 - c.vel.y * 2) * dt;
     }
-    c.pos.addScaledVector(c.vel, dt);
-    // glass walls: push back and bounce
+    // How big the cloud is at rest (from its layout, not its wobbling puffs, so
+    // nothing feeds back): a big storm cloud is squeezed to fit the case instead
+    // of fighting the glass on both sides.
     const s = c.size * (0.55 + 0.45 * ss(0, 1, c.fade * 1.4));
-    const ext = this.extent(c);
-    const hx = TANK.w / 2 - 0.01, hz = TANK.d / 2 - 0.01;
-    const bump = (over: number, axis: 'x' | 'z', sign: number) => {
-      if (over <= 0) return;
-      const v = c.vel[axis] * sign;
-      c.pos[axis] -= sign * over * Math.min(1, 60 * dt);
-      if (v > 0) {c.vel[axis] = -c.vel[axis] * 0.45; if (v > 0.054) c.compVel += 0.6 * v / S * 0.06;}
-    };
-    bump(ext.maxX - hx, 'x', 1); bump(-hx - ext.minX, 'x', -1);
-    bump(ext.maxZ - hz, 'z', 1); bump(-hz - ext.minZ, 'z', -1);
-    // stay above the peaks and below the lid
-    const floor = this.floorAt(c.pos.x, c.pos.z) + (0.45 + 0.28 * c.size) * S;
-    if (c.pos.y < floor) {c.pos.y += (floor - c.pos.y) * Math.min(1, 8 * dt); c.vel.y = Math.max(0, c.vel.y);}
-    const tall = ext.maxY - c.pos.y;
-    const room = TOP_Y - c.pos.y;
-    c.vfit = approach(c.vfit, clamp(room / Math.max(tall / c.vfit, 1e-3), 0.45, 1), 6, dt);
-    if (c.pos.y > TOP_Y - 0.03) {c.pos.y = TOP_Y - 0.03; c.vel.y = Math.min(0, c.vel.y);}
-    // puffs
     const a = 1 - 0.38 * c.comp;
+    const cy = Math.cos(c.yaw), sy = Math.sin(c.yaw);
+    let rx = 0.3, rz = 0.3, ry = 0.3;
+    for (const p of c.puffs) {
+      if (p.storm === 2) continue;
+      const pr = p.storm ? p.r * p.weight : p.r;
+      rx = Math.max(rx, Math.abs(p.rest.x) + pr);
+      rz = Math.max(rz, Math.abs(p.rest.z) + pr);
+      if (!p.storm) ry = Math.max(ry, p.rest.y + pr);
+    }
+    const halfX = (Math.abs(cy) * rx + Math.abs(sy) * rz) * s * S * a;
+    const halfZ = (Math.abs(sy) * rx + Math.abs(cy) * rz) * s * S * a;
+    const roomX = TANK.w / 2 - 0.012, roomZ = TANK.d / 2 - 0.012;
+    const xfit = Math.min(1, roomX / Math.max(halfX, 1e-3)), zfit = Math.min(1, roomZ / Math.max(halfZ, 1e-3));
+    // the walls: a soft push, and a bounce only when moving into the glass
+    const wall = (axis: 'x' | 'z', lim: number) => {
+      const p = c.pos[axis], over = Math.abs(p) - lim;
+      if (over <= 0) return;
+      const sign = Math.sign(p), v = c.vel[axis] * sign;
+      c.vel[axis] -= sign * over * 40 * dt;
+      if (v > 0.02) {c.vel[axis] = -c.vel[axis] * 0.45; if (v > 0.054) c.compVel += 0.6 * v;}
+    };
+    wall('x', Math.max(0, roomX - halfX * xfit));
+    wall('z', Math.max(0, roomZ - halfZ * zfit));
+    // stay above the peaks and below the lid, as springs rather than hard stops
+    const floor = Math.min(TOP_Y - 0.07, this.floorAt(c.pos.x, c.pos.z) + (0.45 + 0.28 * c.size) * S);
+    if (c.pos.y < floor) c.vel.y += (floor - c.pos.y) * 25 * dt;
+    if (c.pos.y > TOP_Y - 0.035) c.vel.y += (TOP_Y - 0.035 - c.pos.y) * 25 * dt;
+    c.vel.multiplyScalar(c.pos.y < floor || c.pos.y > TOP_Y - 0.035 ? Math.exp(-3 * dt) : 1);
+    c.pos.addScaledVector(c.vel, dt);
+    const tallRest = ry * s * S * (1 - 0.16 * c.comp) * (1 + 0.32 * c.storm);
+    c.vfit = approach(c.vfit, clamp((TOP_Y - 0.01 - c.pos.y) / Math.max(tallRest, 1e-3), 0.45, 1), 4, dt);
+    // puffs
     const l = (1 - 0.16 * c.comp) * (1 + 0.32 * c.storm) * c.vfit;
     const cs = (1 - 0.2 * c.comp) * (1 + 0.12 * c.storm);
-    const cy = Math.cos(c.yaw), sy = Math.sin(c.yaw);
     const turb = wind.turbulence(c.pos.x, c.pos.z);
     const rel = new THREE.Vector3(w.x - c.vel.x, 0, w.y - c.vel.z);
     const tgt = new THREE.Vector3();
@@ -423,16 +456,23 @@ export class Clouds {
       } else if (p.storm === 2) {
         weightT = clamp01((c.storm - 0.35) * 2.2);
         const ring = 0.25 + 0.55 * weightT;
-        rest = new THREE.Vector3(p.rest.x * ring + w.x * 2 * weightT, (TOP_Y - 0.012 - c.pos.y) / (s * S) / Math.max(l, 0.2), p.rest.z * ring + w.y * 2 * weightT);
+        rest = new THREE.Vector3(p.rest.x * ring + w.x * 2 * weightT, 0, p.rest.z * ring + w.y * 2 * weightT);
         r = p.r * (1 + 0.3 * weightT);
       }
       p.weight = approach(p.weight, weightT, 1.5, dt);
+      const rT = r * s * S * cs * (1 + Math.sin(time * 0.55 + p.ph) * 0.03 + Math.sin(time * 0.23 + 1.7 * p.ph) * 0.025) * (p.storm ? p.weight : 1);
       const lx = rest.x * a, ly = rest.y * l, lz = rest.z * a;
-      tgt.set(lx * cy - lz * sy, ly, lx * sy + lz * cy).multiplyScalar(s * S).add(c.pos);
+      tgt.set((lx * cy - lz * sy) * s * S * xfit, ly * s * S, (lx * sy + lz * cy) * s * S * zfit).add(c.pos);
+      // the anvil spreads out flat under the lid
+      if (p.storm === 2) tgt.y = TOP_Y - 0.012 - rT * 0.35;
       tgt.x += Math.sin(time * 0.31 + p.ph) * 0.02 * s * S;
       tgt.y += Math.sin(time * 0.27 + p.ph * 1.3) * 0.012 * s * S;
       tgt.addScaledVector(new THREE.Vector3(Math.sin(time * 13 + p.ph), Math.sin(time * 11 + p.ph * 2), Math.cos(time * 12 + p.ph)), Math.max(0, c.comp) * 0.05 * s * S);
-      const rT = r * s * S * cs * (1 + Math.sin(time * 0.55 + p.ph) * 0.03 + Math.sin(time * 0.23 + 1.7 * p.ph) * 0.025) * (p.storm ? p.weight : 1);
+      // targets stay inside the glass, so the springs never push a puff into it
+      const mx = TANK.w / 2 - rT * 0.6, mz = TANK.d / 2 - rT * 0.6;
+      tgt.x = clamp(tgt.x, -mx, mx);
+      tgt.z = clamp(tgt.z, -mz, mz);
+      tgt.y = Math.min(tgt.y, TOP_Y - rT * 0.5);
       const hd = Math.hypot(rest.x, rest.z);
       const k = clamp(88 - 26 * hd - 20 * Math.max(0, rest.y) + Math.sin(p.ph * 7) * 5, 46, 96);
       const damp = 2 * Math.sqrt(k) * (0.3 + 0.08 * Math.abs(Math.sin(p.ph * 3)));
@@ -442,13 +482,14 @@ export class Clouds {
       p.vel.z += ((tgt.z - p.pos.z) * k - p.vel.z * damp + rel.z * windF * 0.1 + Math.cos(time * 1.3 + p.ph * 4) * turb * 14 * s * S) * dt;
       p.pos.addScaledVector(p.vel, dt);
       p.rCur = approach(p.rCur, rT, 9, dt);
-      // inside the glass
-      const mx = TANK.w / 2 - p.rCur * 0.6, mz = TANK.d / 2 - p.rCur * 0.6;
-      if (Math.abs(p.pos.x) > mx) {p.pos.x = Math.sign(p.pos.x) * mx; p.vel.x *= -0.3;}
-      if (Math.abs(p.pos.z) > mz) {p.pos.z = Math.sign(p.pos.z) * mz; p.vel.z *= -0.3;}
-      if (p.pos.y + p.rCur * 0.5 > TOP_Y) {p.pos.y = TOP_Y - p.rCur * 0.5; p.vel.y *= -0.3;}
+      // inside the glass: stop at it rather than bouncing off it
+      const px = TANK.w / 2 - p.rCur * 0.6, pz = TANK.d / 2 - p.rCur * 0.6;
+      if (Math.abs(p.pos.x) > px) {p.pos.x = Math.sign(p.pos.x) * px; if (p.vel.x * p.pos.x > 0) p.vel.x = 0;}
+      if (Math.abs(p.pos.z) > pz) {p.pos.z = Math.sign(p.pos.z) * pz; if (p.vel.z * p.pos.z > 0) p.vel.z = 0;}
+      if (p.pos.y + p.rCur * 0.5 > TOP_Y) {p.pos.y = TOP_Y - p.rCur * 0.5; if (p.vel.y > 0) p.vel.y = 0;}
       if (p.rCur > 0.003) {top = Math.max(top, p.pos.y + p.rCur); base = Math.min(base, p.pos.y - 0.1 * p.rCur);}
     }
+    const ext = this.extent(c);
     c.baseY = base - 0.14 * c.size * S * (1 - 0.3 * c.comp);
     c.radius = Math.max(0.03, (ext.maxX - ext.minX + ext.maxZ - ext.minZ) * 0.25);
     this.waterCycle(c, dt, humidity, day, wind);
@@ -477,7 +518,6 @@ export class Clouds {
     c.water -= c.rate * dt * (c.heldSqueeze > 0 ? 0.006 : 0.04) * (1 - 0.6 * c.storm);
     // only saturated air feeds the clouds (the case's usual humid air holds them steady)
     if (humidity > 0.7) c.water += (humidity - 0.7) * dt * 0.04 * (0.6 + 0.4 * c.size);
-    c.water += c.storm * Math.max(0, humidity - 0.5) * dt * 0.03;
     const k = clamp01((0.5 - humidity) / 0.25);
     c.water -= dt * 0.03 * k * day * (1.3 - 0.6 * Math.min(c.size, 1.2)) * 0.5;
     c.water = clamp(c.water, 0, 1.5);
@@ -486,8 +526,11 @@ export class Clouds {
       c.size -= 0.12 * dt;
       if (c.size < 0.18) c.dissolving = true;
     }
-    // storms wind down without water
+    // a storm has a life: it builds, rains itself out over the best part of a
+    // minute and clears (sooner once the cloud has rained most of its water)
+    c.stormAge = c.stormTarget > 0.01 ? c.stormAge + dt : 0;
     if (c.water < 0.45) c.stormTarget = Math.max(0, c.stormTarget - 0.08 * dt);
+    else if (c.stormAge > c.stormLife) c.stormTarget = Math.max(0, c.stormTarget - 0.045 * dt);
     else if (c.storm > 0.5) c.stormTarget = Math.max(0, c.stormTarget - 0.0035 * dt);
     c.storm = approach(c.storm, c.stormTarget, 0.35, dt);
     if (c.rate > 0.02) {
@@ -519,7 +562,7 @@ export class Clouds {
       c.glow = 2.6;
       c.glowPos.copy(start).y += 0.25 * c.size * S;
       c.charge = 0.04 + Math.random() * 0.28;
-      c.compVel += 1.8;
+      c.compVel += 0.9;
       this.events.strike?.(c, start, strength);
     }
     void time;
@@ -555,7 +598,7 @@ export class Clouds {
     keep.charge = Math.max(keep.charge, gone.charge);
     keep.storm = Math.max(keep.storm, gone.storm);
     keep.stormTarget = Math.max(keep.stormTarget, gone.stormTarget);
-    if (keep.water >= 1 && keep.size >= 1.4) keep.stormTarget = Math.max(keep.stormTarget, 0.55 + 0.45 * ss(1, 1.45, keep.water));
+    if (keep.water >= 1 && keep.size >= 1.4) {keep.stormTarget = Math.max(keep.stormTarget, 0.55 + 0.45 * ss(1, 1.45, keep.water)); keep.stormAge = 0; keep.stormLife = 28 + Math.random() * 17;}
     const total = clamp(Math.round(0.7 * (n1 + n2)), 9, 13);
     this.layout(keep, total, old);
     keep.compVel += 2.4;

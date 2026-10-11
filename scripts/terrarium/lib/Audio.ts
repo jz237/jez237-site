@@ -166,6 +166,12 @@ export class TerrariumAudio {
   grab() {this.shot(this.pink, {gain: 0.05, attack: 0.01, decay: 0.16, type: 'bandpass', freq: 1300, freqTo: 600, q: 1.2});}
   release(speed: number) {this.shot(this.pink, {gain: Math.min(0.12, 0.03 + speed * 0.3), attack: 0.02, decay: 0.3, type: 'bandpass', freq: 700, freqTo: 1500, q: 1});}
   merge() {this.shot(this.brown, {gain: 0.2, attack: 0.04, decay: 0.7, type: 'lowpass', freq: 600, freqTo: 180});}
+  /** A cloud evaporating under a right-click: a soft, rising hiss. */
+  shrink(amount: number) {this.shot(this.pink, {gain: 0.04 + 0.12 * amount, attack: 0.03, decay: 0.35, type: 'bandpass', freq: 600, freqTo: 2400, q: 1.1});}
+  /** Jaws crunching through a cricket's shell: a couple of brittle clicks. */
+  crunch(strength: number, pan: number) {
+    for (let i = 0; i < 2 + Math.round(Math.random()); i++) this.shot(this.white, {gain: (0.05 + 0.07 * strength) * (1 - i * 0.25), attack: 0.002, decay: 0.035 + Math.random() * 0.03, type: 'bandpass', freq: 2200 + Math.random() * 2600, q: 1.6, delay: i * (0.025 + Math.random() * 0.03), pan});
+  }
   pop() {this.shot(this.pink, {gain: 0.06, attack: 0.01, decay: 0.12, type: 'bandpass', freq: 1800, freqTo: 900, q: 2});}
   zap(pan: number) {this.shot(this.white, {gain: 0.05 + Math.random() * 0.04, attack: 0.001, decay: 0.05 + Math.random() * 0.05, type: 'bandpass', freq: 3000 + Math.random() * 3000, q: 3, pan});}
   splash(strength: number, pan: number) {

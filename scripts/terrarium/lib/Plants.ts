@@ -4,7 +4,7 @@ import type {ScanSet} from './Assets';
 import {Surface, SurfaceKind} from './Surface';
 import {addFoliage} from './Foliage';
 import {mulberry32} from './Textures';
-import {fbm, WATER_LEVEL, poolDistance} from './Ground';
+import {fbm, WATER_LEVEL, poolDistance, caveKeepClear, caveFloorWeight} from './Ground';
 import {TANK} from './Case';
 
 const texLoader = new THREE.TextureLoader();
@@ -34,6 +34,8 @@ export class MossMap {
       // shore: wet gravel rather than moss
       const pd = poolDistance(x, z);
       m *= Math.min(1, Math.max(0, (pd - 0.04) / 0.1));
+      // the cave floor is bare grit
+      m *= 1 - Math.min(1, caveFloorWeight(x, z) * 1.5);
       this.data[j * this.w + i] = m;
       bytes[j * this.w + i] = m * 255;
     }
@@ -212,7 +214,7 @@ function creeper(rnd: () => number, length: number) {
   return parts;
 }
 
-function leafMaterial() {
+export function leafMaterial() {
   const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.42, side: THREE.DoubleSide});
   addFoliage(m, {flexAttr: true, height: 0.06, translucency: 0.8, key: 'leaf'});
   const base = m.onBeforeCompile;
@@ -306,7 +308,7 @@ export class Plants {
     addFoliage(mat, {height: 0.35, translucency: 0.9, stiffness: 1.2, key: 'fern'});
     const spots: [number, number, number, number][] = [
       [-0.53, -0.19, 0.3, 0], [-0.33, -0.18, 0.27, 1], [-0.02, -0.21, 0.24, 0], [0.31, -0.19, 0.29, 1], [0.5, -0.17, 0.32, 0],
-      [-0.15, -0.02, 0.16, 2], [-0.08, 0.06, 0.14, 3], [0.53, -0.01, 0.2, 2], [-0.55, 0.16, 0.18, 3], [-0.4, -0.09, 0.2, 2],
+      [-0.265, -0.035, 0.14, 2], [-0.025, 0.1, 0.13, 3], [0.53, -0.01, 0.2, 2], [-0.55, 0.16, 0.18, 3], [-0.4, -0.09, 0.2, 2],
       [0.21, -0.04, 0.16, 3], [0.42, -0.21, 0.24, 1], [-0.22, -0.22, 0.22, 1], [0.14, -0.23, 0.2, 2],
       // a fuller back row and corners, so the case reads as a planted rainforest
       [-0.46, -0.21, 0.36, 1], [-0.27, -0.215, 0.3, 0], [0.24, -0.215, 0.33, 0], [0.56, -0.21, 0.36, 1], [0.08, -0.22, 0.26, 1],
@@ -315,6 +317,7 @@ export class Plants {
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
+      if (caveKeepClear(x, z)) continue;
       const site = this.site(surface, x, z);
       const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.004, z), new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.15, rnd() * Math.PI * 2, (rnd() - 0.5) * 0.15)), new THREE.Vector3(s, s * 1.45, s));
       const list = byVariant.get(v) ?? [];
@@ -370,7 +373,7 @@ export class Plants {
     const tryPlace = (x: number, z: number, density: number) => {
       if (rnd() > density) return;
       const k = surface.kindAt(x, z);
-      if (k === SurfaceKind.Water) return;
+      if (k === SurfaceKind.Water || k === SurfaceKind.Cave || caveKeepClear(x, z)) return;
       const y = surface.heightAt(x, z);
       if (y < WATER_LEVEL + 0.003) return;
       const n = surface.normalAt(x, z);
@@ -411,6 +414,8 @@ export class Plants {
       if (k === SurfaceKind.Water || k === SurfaceKind.Rock) continue;
       const y = surface.heightAt(x, z);
       if (y < WATER_LEVEL + 0.002) continue;
+      // a few leaves have blown into the cave, none on its apron
+      if (caveKeepClear(x, z) && (k !== SurfaceKind.Cave || rnd() < 0.7)) continue;
       const bare = 1 - this.moss.at(x, z);
       if (rnd() > bare * 0.85 + 0.06) continue;
       const nrm = surface.normalAt(x, z);
@@ -445,8 +450,8 @@ export class Plants {
     ];
     const parts: THREE.BufferGeometry[] = [];
     for (const [kind, x, z, s] of plants) {
-      // keep land plants out of the water
-      if (poolDistance(x, z) < 0.06) continue;
+      // keep land plants out of the water and the cave
+      if (poolDistance(x, z) < 0.06 || caveKeepClear(x, z)) continue;
       const site = this.site(surface, x, z);
       const local = kind === 'pilea' ? pilea(rnd) : kind === 'fittonia' ? fittonia(rnd) : kind === 'cryptanthus' ? cryptanthus(rnd) : creeper(rnd, 0.12 + rnd() * 0.06);
       const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.002, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rnd() * 6.28, 0)), new THREE.Vector3(s, s, s));
