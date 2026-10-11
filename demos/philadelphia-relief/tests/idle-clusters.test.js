@@ -11,6 +11,7 @@ test('idle pacing yields immediately to movement, loading and recent input', () 
   const idle = { saving: true, now: 5000, lastInteraction: 0 };
   assert.equal(frameDelay(idle), 500);
   assert.equal(frameDelay({ ...idle, live: true }), 50);
+  assert.equal(frameDelay({ ...idle, streets: true }), 50,'street motion remains smooth without aircraft');
   for (const override of [{ saving: false }, { moving: true }, { loading: true },
     { lastInteraction: 4000 }]) assert.equal(frameDelay({ ...idle, ...override }), 0);
   assert.equal(frameDelay({ ...idle, lastInteraction: 3000 }), 500);

@@ -160,10 +160,15 @@ button in the phone toolbar. Camera cards open the official EarthCam, 511PA,
 embedded: EarthCam's linking rules prohibit framing, and PennDOT's streaming
 feeds require separate registration and a video-sharing agreement.
 
-Street View links use Google's documented, key-free Maps URLs and the geographic
-map center when the panel opens. Shortcuts cover City Hall, Bauder Signs and The
-Hidden Reef. Availability and capture dates belong to Google; these are not live
-views and are not a new Cesium layer.
+Street-level links follow the geographic map center when the panel opens. Inside
+the Philadelphia city limits they open the City's public Cyclomedia viewer
+(cyclomedia.phila.gov, `?lat=…&lng=…`), the 360° imagery also shown in Atlas.
+Cyclomedia has no imagery beyond the city, so suburban and New Jersey centers fall
+back to Google's documented, key-free Street View URL. The city test uses
+OpenDataPhilly's City_Limits polygon simplified to about 50 m
+(`src/city-limits-data.js`). Shortcuts cover City Hall and Bauder Signs
+(Cyclomedia) and The Hidden Reef (Google). Coverage and capture dates belong to
+each provider; these are not live views and are not a new Cesium layer.
 
 Weather & river loads only on demand. A bounded same-origin Pages Function reads
 the nearest of five NWS airport stations and NOAA's Philadelphia gauge 8545240.
@@ -174,6 +179,8 @@ and preliminary quality are labeled. The gauge value is not a flood overlay.
 
 Sources: https://www.earthcam.com/site/linktous.php,
 https://www.pa.gov/services/penndot/request-access-to-transportation-related-data-feeds,
+https://cyclomedia.phila.gov/, https://github.com/CityOfPhiladelphia/vue3-cyclomedia,
+https://opendataphilly.org/datasets/city-limits/,
 https://developers.google.com/maps/documentation/urls/get-started,
 https://www.weather.gov/documentation/services-web-api,
 https://api.tidesandcurrents.noaa.gov/api/prod/.
@@ -1131,3 +1138,144 @@ Source checked: https://www.fox29.com/philadelphia-international-airport-camera
 Validation includes camera heading/offset/terrain-clearance calculations, return to
 orbit, preview resource cleanup, desktop and 390px mobile flight controls, and the
 actual airport preview. Photographic ride-along is checked on the deployed domain.
+
+### Diorama rendering and street life (10 October 2026)
+
+The diorama adds procedural window interiors, local building shadows, contact
+occlusion, glass reflections, cloud lighting, rooftop equipment and illustrative
+street life. These are styling layers over the mapped geometry and aerial data.
+Photographic 3D retains its captured appearance and is checked separately after
+each release. Full-precision depth reconstruction avoids half-float overflow at
+regional scale; distant window patterns are filtered before they alias. This does
+not establish that every device-specific diagonal-line report is resolved.
+Adjacent aerial tiles retain full edge opacity to avoid exposing the lighter
+fallback as thin bright seams; newly arriving tiles still fade in together.
+Night Metro and clock-driven dusk also dim and cool the aerial ground imagery,
+so photographed streets no longer remain daylight-bright beneath dark buildings.
+Daytime imagery retains its original color; both base and detailed tiles share
+the same gradual transition.
+Bridge cable ribbons keep the same screen-space normal at both endpoints,
+preventing crossed triangles. Automatic water tint fades out with the regional
+miniature, returning neighborhood views to aerial water. The explicit water layer
+now shades the actual terrain and aerial tile surfaces using mapped coverage,
+so an independent flat sheet cannot cut triangular edges through the banks.
+A regional mask and a camera-following detail mask preserve islands and piers;
+close-up coverage reaches 2 m sampling. The two single-channel masks use 8 MiB
+of GPU storage together and prepare in yielding batches. Water centerlines are
+hidden inside filled river areas, while unmapped narrow streams remain visible.
+The baked water polygons have valid outlines and non-overlapping coverage.
+After regenerating vectors, run `python tools/repair_water.py` (requires Shapely)
+to repair self-intersections and duplicate source surfaces while retaining islands.
+
+Building shadow maps retain their depth result while geometry, clipping, growth,
+light and shadow coverage remain unchanged. Clouds render at half resolution with
+premultiplied edges; close-up pixels below the cloud deck skip cloud compositing
+samples. Contact shading also runs at half resolution, with depth-aware
+upsampling to preserve building edges. Cloud composition uses four matching
+samples instead of a 25-sample neighborhood; roofs below the cloud deck do not
+punch holes through it. Performance mode disables screen-space glass reflections.
+These reduce rendering work without changing the original aerial resolution.
+
+Decorative cars follow the shipped OSM street graph, one-way directions, local
+queues and simulated junction signals. They use continuous turn curves, brake
+lamps and road-aligned vehicle geometry. Amber turn indicators anticipate each
+planned corner, keep blinking through its curve, and cancel when the car straightens.
+Individual phase offsets avoid synchronized flashing. They reuse the existing
+lamp geometry, remain visible in daylight, and freeze with paused traffic.
+Vans have visible cab glazing around
+a solid cargo body. Visible red/amber/green signal heads use the same phases as
+the cars; connected short OSM nodes share the control at the junction boundary.
+Crossings cover both ends of eligible street segments with centered markings.
+Signal color buffers upload only when a phase changes, and paused views retain
+their static signal geometry. This is not live traffic. Cars leaving
+the cropped graph, or stuck for two minutes, may be replenished only outside the
+displayed neighborhood. Reduced-motion and paused views retain vehicle buffers.
+Traffic reuses lane queues and junction occupancy sets, and caches the immutable
+street graph's turn choices. `node tools/benchmark-traffic.mjs` measures ten
+simulated minutes with 620 cars and reports a trajectory hash; an optional module
+path compares an earlier implementation. This measures simulation CPU time,
+not browser frame rate. The allocation changes preserve the original seeded
+trajectory at every sampled second, including replenishment and junction waits.
+Street downloads retry after a bounded backoff and are aborted on disposal.
+Small pedestrians follow the inside sidewalks of closed mapped blocks, with
+rounded corners, separate directions, varied walking speeds and occasional pauses.
+Routes near ambiguous junctions, open roads or another carriageway are excluded.
+They are illustrative people, not live reports. Local ground sampling keeps them
+on the pavement; reduced motion freezes their poses. The close-up population is
+capped at 240, or 90 in Performance mode, and hidden beyond neighborhood scale.
+
+Curbs follow sampled terrain grades and bends. Trees and lamps use local ground
+heights, with complete-object reservations at instance limits so buffer pressure
+cannot leave floating crowns or unlit lamp poles. Tree variations are deterministic
+illustration, not a survey of actual trees. Static street buffers rebuild only
+after meaningful movement, zoom or elevation-scale changes.
+Curbs and sidewalks join along offset lines at ordinary street bends, including
+changes in road width. Acute or short corners use bounded setbacks instead of
+spikes; true intersections retain open approaches and their crosswalks.
+Vehicles follow both the forward grade and the cross-slope, keeping all four
+tyres on the surface while the body and lamps share the same orientation.
+Rooftop parapets and equipment share their building's terrain anchor, so they
+remain attached on hills and under terrain exaggeration. Equipment rectangles
+also reject concave roof notches even when all four corners have support.
+`tools/roof-fixture.html` checks these attachments with the production renderer.
+
+The three detailed historic landmarks use wider masonry window spacing and
+opaque architectural trim. City Hall's clock stage has taller bays and a clear
+clock surround; slate roofs retain their authored material instead of sampling
+modern rooftop imagery. Its former cylindrical statue is now a compact bronze
+silhouette with a coat, legs, extended arm and broad hat. The figure is roughly
+37 feet tall, matching the [City's conservation account](https://www.phila.gov/press-releases/kenney/city-begins-conservation-of-william-penn-statue-atop-city-hall/),
+and the complete model retains its 167 m summit. These remain schematic studies.
+Ordinary neighborhood buildings retain their existing window grid and roof photos.
+Gabled landmark primitives keep separate roof and wall finishes, preserving
+Independence Hall's brick and the museum's stone below the eaves. Roof triangles
+follow the long footprint axis in either orientation, without crossed slopes.
+Exhibit framing accounts for narrow street-inspection fields of view and portrait
+layouts, keeping the same miniature footprint and tower in view when opened.
+
+Photographic close-up landmark markers are limited to the viewed neighborhood.
+This prevents distant tile-clamped pins appearing over unrelated buildings;
+regional and aircraft views retain their wider range, and exhibit bounds still apply.
+Markers use tile collision data to sit three metres above their mapped surface,
+and both dots and labels obey depth testing, so foreground buildings hide them.
+The shared geographic camera remains controlled by the relief rig.
+The initial photographic handoff waits for Cesium to finish loading the current
+view at its initial detail target. A handful of detailed tiles in one corner no
+longer reveals a mostly coarse scene. The existing 90-second loading timeout
+keeps the diorama available if the photographic provider cannot finish.
+That timeout counts foreground viewing time, so leaving a loading tab in the
+background does not consume its budget. Back/Forward cache navigation pauses the
+scene instead of disposing it. After a restored WebGL context, rendering resumes
+and cached building shadows refresh. `tools/lifecycle-check.html` provides local
+buttons for reproducing graphics-context loss and restoration in the browser.
+Photographic failure releases its viewer and cached tiles after the current render
+call returns. Failed views cannot reactivate during that call or supply an aircraft
+renderer. Late tile downloads are discarded; an explicit retry starts a fresh
+viewer. The local recovery page also provides a one-shot photo-render failure check.
+`tools/photo-fixture.html` tests real Cesium rendering, rooftop placement,
+occlusion, failure cleanup and retry with a small generated local GLB tileset.
+It uses no ion account or remote photographic tile requests.
+`tools/traffic-fixture.html` uses the production street renderer with a local square
+block for repeatable vehicle, lamp, pedestrian, and pause inspection.
+Street graph, traffic, curb, and sidewalk preparation use cancellable batches
+with four-millisecond work budgets. Cars become available before sidewalk
+topology finishes. The resulting routes and vehicle trajectories match the
+synchronous reference. Readiness wakes an idle scene, and disposal prevents
+late attachment. Tiny streets without spawnable segments still cycle their signals.
+Power saving keeps a moving idle cadence while nearby cars, pedestrians, or
+signals animate. Empty views, paused motion, and reduced-motion preferences keep
+the deeper idle cadence; photographic views do not wake for hidden street geometry.
+`tools/street-startup.html` compares the complete preparation sequence with
+continuous browser animation on the real Philadelphia street graph.
+
+Validation: 493 automated checks, including ten simulated minutes on the real
+street graph, multi-node junction separation, continuous U-turns, offscreen-only
+replenishment, tyre and curb elevation checks, and saturated scenery buffers.
+Browser checks cover diorama day/night views, sloped streets, mobile controls,
+clouds above and below their deck, and visible production Cesium close-ups.
+The guarded release checks compare the staged entry, manifest and all referenced
+bundles with the checkout, then verify the exact build and asset hashes on the
+preview and live domain. A healthy service response cannot hide an older build.
+The wrapper waits for recent automatic production builds before uploading, then
+rechecks main so a slower build cannot normally replace the release with an older
+snapshot. `--publish-before=<ISO timestamp>` stops uploads at a requested cutoff.

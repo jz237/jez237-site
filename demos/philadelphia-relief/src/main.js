@@ -10,6 +10,8 @@ import { wireLooks } from './looks.js?v=philly-2026092121';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092122';
 import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092201';
+import { createMapLifecycle } from './map-lifecycle.js?v=philly-2026101001';
+import { createWaterMask } from './water-mask.js?v=philly-2026101001';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092204';
 import { createCameraLayer } from './camera-layer.js?v=philly-2026092204';
 import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092204';
@@ -50,9 +52,11 @@ import { createNeighborhood } from './neighborhood.js?v=philly-2026092121';
 import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092201';
 import { createSky, sunDirection } from './sky.js?v=philly-2026092121';
 import { createPostFX } from './postfx.js?v=philly-2026092121';
+import { createCityLighting } from './city-lighting.js?v=philly-2026100901';
 import { createCameraRig } from './camera.js?v=philly-2026092121';
 import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092122';
 import { createStructures } from './structures.js?v=philly-2026092121';
+import { createCityStreets } from './city-streets.js?v=philly-2026100901';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
 } from './structures-data.js?v=philly-2026092121';
@@ -61,6 +65,7 @@ import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
 } from './flood.js?v=philly-2026092121';
 import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092121';
+import { detailedLandmarks } from './landmark-detail.js?v=philly-2026100901';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
 } from './vectors.js?v=philly-2026092201';
@@ -336,13 +341,16 @@ async function boot() {
     ? createAdaptiveQuality({ start: effectiveQuality }) : null;
 
   const scene = new THREE.Scene();
+  const cityLighting = createCityLighting(THREE, renderer);
+  const streetLife = createCityStreets(THREE,{scene,projection,sampleElevation,
+    lighting:cityLighting,onReady:()=>wake()});
   const sky = createSky(THREE);
   scene.add(sky.mesh);
 
   const macro = await prepareMacroGrid(grid, meta.width, meta.height, 256);
   let terrain = createTerrain(THREE, {
     meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
-    reefImagery: data.reefImagery, quality: effectiveQuality,
+    reefImagery: data.reefImagery, quality: effectiveQuality, lighting: cityLighting,
   });
   scene.add(terrain.mesh);
   const diorama = createDiorama(THREE, { terrain, projection, sampleElevation,
@@ -374,6 +382,16 @@ async function boot() {
   overlayRoot.name = 'overlays';
   scene.add(overlayRoot);
   const overlays = buildOverlays(data, { projection, sampleElevation }, overlayRoot);
+  const waterEntry=overlays.areas.find(entry=>entry.kind==='water');
+  let wakeWater=()=>{};
+  const waterSurface=waterEntry?createWaterMask(THREE,{entries:collectRings(data.water),projection,
+    source:waterEntry.material.uniforms,onReady:()=>wakeWater()}):null;
+  if(waterSurface){
+    Object.assign(terrain.uniforms,waterSurface.uniforms);
+    for(const entry of overlays.lines)if(entry.material.defines.WATER_LINE){
+      Object.assign(entry.material.uniforms,waterSurface.uniforms);
+    }
+  }
 
   // Flood hazard data is fetched the first time its layer is switched on:
   // FEMA zones and NOAA sea-level scenarios are each a packed binary plus a
@@ -442,6 +460,7 @@ async function boot() {
       projection,
       sampleElevation,
       quality: effectiveQuality,
+      lighting: cityLighting,
     });
     scene.add(structures.group);
     scene.add(structures.inspectionGroup);
@@ -963,6 +982,7 @@ async function boot() {
     else frameTicket = requestAnimationFrame(tick);
   }
   function wake() { lastInteraction = performance.now(); queueFrame(); }
+  wakeWater=wake;
   const wakeEvents = ['pointerdown', 'wheel', 'keydown', 'input', 'change', 'click'];
   for (const type of wakeEvents) document.addEventListener(type, wake, { passive: true });
   const wakeState = store.subscribe(wake);
@@ -1002,8 +1022,10 @@ async function boot() {
     }
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
+    // The illustrative river tint belongs to the regional miniature. At street
+    // scale, keep the captured water unless the user enables its mapped tint.
     const modelWater = state.diorama && state.layers.terrain && state.layers.structures
-      && state.era === 'present' && state.compareMode === 'off' ? Math.max(miniature,.24) : miniature;
+      && state.era === 'present' && state.compareMode === 'off' ? miniature : 0;
     const exaggeration = displayExaggeration(state, now.dist);
     document.body.classList.toggle('diorama-view', miniature > .1);
     document.body.classList.toggle('neighborhood-view', now.dist < 6500);
@@ -1095,7 +1117,8 @@ async function boot() {
       u.uLift.value = lift;
       u.uNear.value = camera.near;
       if (entry.kind === 'shoreline') {
-        entry.mesh.visible = state.layers.water || modelWater > .01;
+        entry.mesh.visible = !waterSurface?.uniforms.uWaterReady.value
+          && (state.layers.water || modelWater > .01);
         u.uOpacity.value = state.layers.water ? .3 : modelWater * .36;
         u.uLift.value = Math.min(3,lift*.15) + .1;
       }
@@ -1109,12 +1132,14 @@ async function boot() {
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
       if (entry.kind === 'water') {
-        entry.mesh.visible = state.layers.water || modelWater > .01;
+        entry.mesh.visible = !waterSurface?.uniforms.uWaterReady.value
+          && (state.layers.water || modelWater > .01);
         u.uOpacity.value = state.layers.water ? 1 : modelWater * .86;
         u.uSunDir.value.copy(sunDir);
         u.uTime.value = elapsed;
       }
     }
+    waterSurface?.update(now);
 
     if (structures) {
       structures.setRoofImagery(imageryDetail.roofTiles(now),
@@ -1125,6 +1150,12 @@ async function boot() {
       });
     }
 
+    cityLighting.update({group:mapLayers.archiveActive?null:structures?.group,
+      focusX:projection.lonToX(now.lon),focusZ:projection.latToZ(now.lat),
+      ground:sampleElevation(now.lon,now.lat),exaggeration,sunDir,distance:now.dist,
+      state,quality:effectiveQuality,dt,time:REDUCED_MOTION?0:elapsed,miniature});
+    streetLife.update({camera,pose:now,state,exaggeration,sunDir,dt,reducedMotion:REDUCED_MOTION,
+      archive:mapLayers.archiveActive,quality:effectiveQuality});
     renderer.setRenderTarget(postfx.renderTarget);
     renderer.clear();
     overlayRoot.visible = !mapLayers.archiveActive;
@@ -1141,6 +1172,7 @@ async function boot() {
     lastRenderInfo = { calls: renderer.info.render.calls, triangles: renderer.info.render.triangles };
     postfx.setPresentation(camera, state.diorama && state.layers.structures
       && state.era === 'present' && state.compareMode === 'off', miniature);
+    postfx.renderClouds(camera, sky.uniforms, cityLighting.uniforms, effectiveQuality);
     postfx.composite(!!state.lightweight);
 
     labelClock += dt; labelLayoutAge += dt;
@@ -1203,36 +1235,32 @@ async function boot() {
     const photo = photographic.stats();
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
       moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
+      streets: !photographic.active && streetLife.animating,
       loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });
     const text = scheduledDelay === 500 ? 'Saving power · idle refresh · full detail retained'
-      : scheduledDelay ? 'Live aircraft · reduced idle work · full detail retained'
+      : scheduledDelay ? (aircraftLayer.animating ? 'Live aircraft' : 'Animating streets')
+          + ' · reduced idle work · full detail retained'
         : powerToggle.checked ? 'Full detail · power saving resumes when idle'
           : 'Continuous animation · full detail';
     if (text !== powerText) { powerText = text; powerStatus.textContent = text; }
     queueFrame(scheduledDelay);
   }
 
-  // Pause when the tab is hidden so a backgrounded map costs nothing.
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      running = false;
-      cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
-      frameTicket = undefined; frameTimer = undefined;
-    } else if (!running) {
+  function pauseLoop() {
+    running = false;
+    cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
+    frameTicket = undefined; frameTimer = undefined;
+  }
+  function resumeLoop() {
+    if (!running && !sceneDisposed) {
       running = true;
       last = performance.now();
       adaptive?.disturb();
       wake();
     }
-  });
-
-  dom.canvas.addEventListener('webglcontextlost', (event) => {
-    event.preventDefault();
-    running = false;
-    showBanner(webglFailure('lost'));
-  });
+  }
 
   ui.setCapture(() => {
     adaptive?.disturb();
@@ -1244,7 +1272,7 @@ async function boot() {
     terrain.dispose();
     terrain = createTerrain(THREE, {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
-      reefImagery: data.reefImagery, quality });
+      reefImagery: data.reefImagery, quality, lighting: cityLighting, water:waterSurface });
     bathymetry?.setTerrain(terrain);
     cityFeatures?.refresh();
     imageryDetail.attachTerrain(terrain);
@@ -1266,7 +1294,14 @@ async function boot() {
   queueFrame();
   finishLoading();
 
-  window.addEventListener('pagehide', () => {
+  createMapLifecycle({window,document,canvas:dom.canvas,pause:pauseLoop,resume:resumeLoop,
+    contextLost(){showBanner(webglFailure('lost'));},
+    contextRestored(){
+      cityLighting.invalidate();
+      if (status.mode !== MODE.FULL) showBanner(status);
+      else if (dom.degraded) dom.degraded.hidden = true;
+    },
+    dispose() {
     sceneDisposed = true;
     running = false; cancelAnimationFrame(frameTicket); clearTimeout(frameTimer); wakeState();
     for (const type of wakeEvents) document.removeEventListener(type, wake);
@@ -1275,6 +1310,7 @@ async function boot() {
     aircraftLayer.dispose();
     cityFeatures?.dispose();
     bathymetry.dispose();
+    streetLife.dispose(); cityLighting.dispose(); postfx.dispose();waterSurface?.dispose();
     mapLayers.dispose();
     photographic.dispose();
     cameraLayer.dispose();
@@ -1282,8 +1318,8 @@ async function boot() {
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
     orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
     disposeMapChrome(); disposeWindows();
-  },
-      { once: true });
+    },
+  });
 
   // The visible field notes and gesture hint introduce the map without a blocking dialog.
 }
@@ -1366,6 +1402,7 @@ function buildOverlays(data, ctx, root) {
         opacity: rank === 'major' ? 1 : 0.8,
         renderOrder: 12,
         name: `water-${rank}`,
+        waterMask: true,
       }), 'water', `water-${rank}`);
     }
   }
@@ -1429,6 +1466,7 @@ function applyState(state, ctx) {
   const u = terrain.uniforms;
   u.uKey.value = light.keyLight;
   u.uAmbient.value = light.ambient;
+  u.uAerialLight.value.set(...light.aerialLight);
   u.uFogDensity.value = fogDensityFor(light.fogDensity);
   u.uContourStrength.value = state.layers.contours ? state.contourStrength : 0;
   u.uContourInterval.value = state.contourInterval;
@@ -2265,8 +2303,9 @@ function wireInterface(deps) {
 
 /** Schematic landmark models, packed for the structures shader (or null). */
 function packLandmarkModels(data, projection, sampleElevation) {
-  const doc = data.landmarkModels;
+  let doc = data.landmarkModels;
   if (!doc || !Array.isArray(doc.models)) return null;
+  for(const id of ['city-hall','independence-hall','museum-of-art'])doc=detailedLandmarks(doc,id);
   const anchors = new Map((data.landmarks?.landmarks || []).map((l) => [l.n, { lon: l.lon, lat: l.lat }]));
   return buildLandmarkModels(doc, {
     anchors,
