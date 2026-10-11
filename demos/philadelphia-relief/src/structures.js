@@ -21,6 +21,8 @@ import {
 } from './structures-data.js?v=philly-2026092121';
 import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092121';
 import { damp } from './geo.js?v=philly-2026092121';
+import { CITY_LIGHT_GLSL, createCityUniforms } from './city-lighting.js?v=philly-2026100901';
+import { roofDetails } from './roof-details.js?v=philly-2026100901';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;
@@ -60,7 +62,8 @@ const VERTEX_SHADER = /* glsl */ `
     vClock = vec4(aClock.x, aGround * uExag + aClock.y * uHScale, aClock.z, aClock.w);
     #else
     float structural = (aInfo.y + position.y) * uGrow;
-    vStyle = smoothstep(24.0, 65.0, aInfo.x);
+    float typeSeed=fract(sin(dot(aFacadeOrigin,vec2(.173,.271)))*43758.54);
+    vStyle = smoothstep(24.0, 65.0, aInfo.x)*mix(.12,1.0,step(.28,typeSeed));
     #endif
     vec3 p = vec3(position.x, aGround * uExag + structural * uHScale + 0.5, position.z);
     vHeight = aInfo.x;
@@ -78,6 +81,7 @@ const VERTEX_SHADER = /* glsl */ `
 
 const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
+  ${CITY_LIGHT_GLSL}
   varying vec4 vFinish;
 
   varying vec2 vFacadeXZ;
@@ -129,6 +133,13 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying float vElev;
   varying float vRel;
 
+  // Integrate the repeating opening over a pixel footprint instead of sampling
+  // fract() at its center. Distant windows retain their average glazing coverage
+  // without producing diagonal moire bands as the camera moves.
+  vec2 openingIntegral(vec2 p, vec2 start, vec2 width) {
+    return floor(p) * width + clamp(fract(p) - start, vec2(0.0), width);
+  }
+
   void main() {
     if (uLocalClip > 0.5 && vWorld.x > uLocalBounds.x && vWorld.x < uLocalBounds.z
         && vWorld.z > uLocalBounds.y && vWorld.z < uLocalBounds.w) discard;
@@ -149,49 +160,69 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Procedural architectural finishes, illustrative rather than surveyed facades.
     vec3 tangent = normalize(vec3(n.z, 0.0, -n.x) + vec3(0.00001));
     float across = dot(vFacadeXZ, tangent.xz);
-    vec2 bay = vec2(across / mix(2.6, 3.2, vStyle), vStorey / mix(3.2, 3.8, vStyle));
+    float historic=0.0,plain=step(1.5,vFinish.a);
+    #ifdef LANDMARK
+    historic=step(.5,vFinish.a);
+    #endif
+    vec2 pitch=mix(vec2(mix(2.6,3.2,vStyle),mix(3.2,3.8,vStyle)),vec2(6.0,6.8),historic);
+    #ifdef LANDMARK
+    pitch.y=mix(pitch.y,14.0,step(.1,vClock.w)*step(70.0,vStorey));
+    #endif
+    vec2 bay=vec2(across,vStorey)/pitch+vec2(historic*.5,0.0);
     vec2 cell = fract(bay);
     vec2 aa = max(fwidth(bay), vec2(0.015));
-    float legible = 1.0 - smoothstep(0.65, 1.5, max(aa.x, aa.y));
-    vec2 opening = smoothstep(vec2(0.16), vec2(0.16) + aa, cell)
-      * (1.0 - smoothstep(vec2(0.78) - aa, vec2(0.78), cell));
-    float window = opening.x * opening.y * (1.0 - roof) * legible * uFacade;
+    float legible = 1.0 - smoothstep(0.2, 0.5, max(aa.x, aa.y));
+    vec2 openingStart=mix(vec2(.16),vec2(.3,.2),historic);
+    vec2 openingWidth=mix(vec2(.62),vec2(.4,.6),historic);
+    vec2 opening=(openingIntegral(bay+aa*.5,openingStart,openingWidth)
+      -openingIntegral(bay-aa*.5,openingStart,openingWidth))/aa;
+    // Above Nyquist, blend to the exact area average rather than letting the
+    // remaining periodic contrast beat against the screen's pixel grid.
+    opening = mix(openingWidth, opening, legible);
+    float window = opening.x * opening.y * (1.0 - roof) * uFacade;
     vec2 buildingAnchor = vWorld.xz - vFacadeXZ;
-    float variation = fract(sin(dot(floor(buildingAnchor), vec2(.173,.271))
-      + floor(vHeight) * 71.17) * 43758.54);
+    float variation = fract(sin(dot(floor(buildingAnchor+.1), vec2(.173,.271))
+      + floor(vHeight+.01) * 71.17) * 43758.54);
     vec3 masonry = mix(vec3(0.25, 0.10, 0.065), vec3(0.48, 0.38, 0.27), variation);
+    masonry=mix(masonry,vec3(.58,.55,.46),smoothstep(.62,.78,variation));
     #ifdef LANDMARK
     masonry = vec3(0.64, 0.60, 0.49);
     #endif
     vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
-    vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
+    vec3 metal=mix(vec3(.12,.21,.26),vec3(.29,.31,.28),variation);
+    vec3 facade = mix(masonry, metal, vStyle);
     facade = mix(facade, vFinish.rgb, min(1.0, vFinish.a));
-    window *= 1.0 - step(1.5, vFinish.a);
+    window *= 1.0-plain;
+    #ifdef LANDMARK
+    window *= 1.0-step(.1,vClock.w)*(1.0-smoothstep(7.0,9.0,abs(vWorld.y-vClock.y)));
+    #endif
     vec2 brickGrid = vec2(across / .32, vStorey / .105);
     brickGrid.x += mod(floor(brickGrid.y), 2.0) * .5;
     vec2 brickAA = max(fwidth(brickGrid), vec2(.025));
     vec2 mortar = 1.0 - smoothstep(vec2(.06), vec2(.06) + brickAA, fract(brickGrid));
     float brickLegible = 1.0 - smoothstep(.2,.7,max(brickAA.x,brickAA.y));
-    facade = mix(facade, facade * .62, max(mortar.x,mortar.y) * brickLegible * (1.0-vStyle) * .5);
+    facade = mix(facade, facade * .62,
+      max(mortar.x,mortar.y) * brickLegible * (1.0-vStyle) * (1.0-plain) * .5);
     // Glazing reflects a broad sky gradient; stone and brick retain a tactile finish.
     float pane = fract(sin(dot(floor(bay), vec2(41.17, 19.43))) * 17371.3);
     float skyBand = .5 + .5 * sin(vRel * 7.0 + n.x * 2.0 + n.z * 3.0);
     glass = mix(glass, vec3(.23, .34, .39), skyBand * vStyle * .55);
-    glass *= .82 + pane * .35;
+    glass *= .82 + mix(.5, pane, legible) * .35;
     facade = mix(facade, glass, window);
     // Shallow recess shadow and a restrained sill make masonry openings read in depth.
-    float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible;
+    float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible * (1.0-plain);
     facade *= 1.0 - recess * (1.0-vStyle) * .22;
-    float sill = (1.0-smoothstep(.025,.025+aa.y,abs(cell.y-.15))) * opening.x * legible;
+    float sill=(1.0-smoothstep(.025,.025+aa.y,abs(cell.y-mix(.15,openingStart.y,historic))))
+      * opening.x * legible * (1.0-plain);
     facade = mix(facade, masonry * 1.22, sill * (1.0-vStyle) * .65);
     float door = (1.0 - smoothstep(.15,.18,abs(cell.x-.5)))
-      * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle);
+      * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle) * (1.0-plain);
     facade = mix(facade, vec3(.05,.065,.06), door * .7);
     float mullion = (1.0 - smoothstep(.025, .025 + aa.x, cell.x)) * legible;
     facade = mix(facade, vec3(.40, .43, .41), mullion * vStyle * .48);
-    float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible;
+    float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible * (1.0-plain);
     facade = mix(facade, vec3(0.53, 0.49, 0.40), course * (1.0 - vStyle) * 0.55);
-    float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof);
+    float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof) * (1.0-plain);
     facade = mix(facade, vec3(0.48, 0.45, 0.37), cornice * (1.0 - vStyle));
     vec2 roofCell = fract(vWorld.xz / 18.0);
     vec2 roofAA = max(fwidth(vWorld.xz / 18.0), vec2(0.015));
@@ -202,6 +233,7 @@ const FRAGMENT_SHADER = /* glsl */ `
       * (1.0 - smoothstep(0.2, 0.6, max(roofAA.x, roofAA.y)));
     vec3 roofFinish = uRoof * mix(0.48, 0.82, variation);
     roofFinish = mix(roofFinish, vec3(0.12, 0.14, 0.14), roofDetail);
+    roofFinish=mix(roofFinish,vFinish.rgb*.82,historic);
     base = mix(base, mix(facade, roofFinish, roof), uFacade);
     #ifdef LANDMARK
     if (vClock.w > 0.0 && roof < 0.1) {
@@ -221,7 +253,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     #endif
 
     // Georeferenced photography supplies real rooftop equipment and surface detail.
-    if (roof > 0.75 && uRoofPhotoOn > 0.5) {
+    if (roof > 0.75 && uRoofPhotoOn > 0.5 && historic < .5) {
       vec2 uv0 = (vWorld.xz-uRoofPhotoBounds0.xy)/max(vec2(0.001),uRoofPhotoBounds0.zw-uRoofPhotoBounds0.xy);
       vec2 uv1 = (vWorld.xz-uRoofPhotoBounds1.xy)/max(vec2(0.001),uRoofPhotoBounds1.zw-uRoofPhotoBounds1.xy);
       vec2 uv2 = (vWorld.xz-uRoofPhotoBounds2.xy)/max(vec2(0.001),uRoofPhotoBounds2.zw-uRoofPhotoBounds2.xy);
@@ -246,6 +278,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     float diffuse = max(0.0, ndl);
     float wrapped = max(0.0, (ndl + 0.35) / 1.35);
     vec3 key = uSunColor * uKey * 0.85 * mix(diffuse, wrapped, 0.35);
+    key *= citySunVisibility(vWorld, n, uSunDir);
     vec3 sky = uSkyColor * uAmbient * (0.85 + 0.15 * n.y);
     // Ground bounce warms the shadow side a little.
     vec3 bounce = uFogColor * uAmbient * 0.35 * max(0.0, -ndl);
@@ -253,12 +286,32 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Keep the aerial overlay chromatically neutral even under the warm dusk
     // sun.  The geometry is a survey aid here, not a second painted city.
     float reflection = pow(1.0 - max(0.0, dot(n, viewDir)), 3.0);
-    color += uSkyColor * reflection * window * vStyle * 0.38;
+    vec3 reflected=reflect(-viewDir,n);
+    vec3 environment=mix(uFogColor*.48,uSkyColor*1.35,smoothstep(-.15,.7,reflected.y));
+    environment+=uSunColor*pow(max(0.0,dot(reflected,uSunDir)),160.0)*uKey;
+    float fresnel=.06+.68*reflection;
+    color=mix(color,environment,window*vStyle*fresnel);
+    // View-dependent room boxes behind the panes, with independent blinds.
+    vec3 roomRay=vec3(dot(-viewDir,tangent)/3.0,-viewDir.y/3.4,
+      -abs(dot(viewDir,n))/4.0);
+    vec2 roomUV=clamp((cell-.16)/.62,.001,.999);
+    vec2 side=(step(vec2(0.0),roomRay.xy)-roomUV)/
+      (mix(vec2(-1.0),vec2(1.0),step(vec2(0.0),roomRay.xy))*max(abs(roomRay.xy),vec2(.0001)));
+    float back=-1.0/min(-.0001,roomRay.z);
+    float travel=min(back,min(side.x,side.y));
+    vec3 hit=vec3(roomUV,0.0)+roomRay*travel;
+    float roomSeed=fract(sin(dot(floor(bay)+floor(buildingAnchor*.2+.1),vec2(71.7,13.1)))*43758.54);
+    vec3 room=mix(vec3(.065,.082,.10),vec3(.20,.17,.12),roomSeed);
+    room*=travel==back?.8:travel==side.y?(roomRay.y>0.0?1.2:.45):.62;
+    float blind=step(.66,roomSeed)*step(1.0-(roomSeed-.66)*1.8,roomUV.y);
+    room=mix(room,vec3(.32,.33,.31),blind);
+    room*=.65+.35*smoothstep(-1.0,0.0,hit.z);
+    color=mix(color,room,window*(1.0-fresnel)*.5*legible);
     vec3 halfVector = normalize(uSunDir + viewDir);
     color += uSunColor * pow(max(0.0, dot(n, halfVector)), 65.0)
       * window * vStyle * .22;
     float occupied = step(0.64, fract(sin(dot(floor(bay), vec2(12.9898, 78.233))) * 43758.5));
-    color += vec3(1.0, 0.67, 0.28) * occupied * window * uGlowAmount * 1.8;
+    color += vec3(1.0, 0.67, 0.28) * mix(.36,occupied,legible) * window * uGlowAmount * 1.8;
 
     // Historical views: documented-newer buildings vanish; undated ones fade
     // into the haze, because a missing date is not a missing building.
@@ -279,10 +332,10 @@ const FRAGMENT_SHADER = /* glsl */ `
       }
     }
 
-    // Night themes light the upper floors; restrained so towers read as
-    // lit buildings, not lanterns.
+    // The detailed facade already emits light from occupied windows. Retain a
+    // little ambient wall glow, while bridges keep their cartographic lighting.
     color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8)
-      * (1.0 - uHybrid);
+      * (1.0 - uHybrid) * mix(1.0, .08, uFacade);
 
     #ifdef LANDMARK
     // A selected model glows with the accent colour and breathes gently.
@@ -309,7 +362,10 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 fogColor = mix(uFogColor, uFogTint, pow(towardSun, 3.0));
     color = mix(color, fogColor, clamp(fog, 0.0, 1.0));
 
-    gl_FragColor = vec4(color, 1.0);
+    // Opaque material: alpha is a reflection mask consumed by the post pass.
+    // Subpixel panes use the stable environment reflection already shaded above;
+    // reserve screen-space ray tracing for individually visible nearby windows.
+    gl_FragColor = vec4(color, 1.0-window*vStyle*.7*(1.0-roof)*legible);
   }
 `;
 
@@ -318,6 +374,7 @@ const FRAGMENT_SHADER = /* glsl */ `
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;
   attribute float aSide;
+  attribute float aDirection;
   attribute float aElev;
   attribute float aOtherElev;
   attribute float aStruct;
@@ -350,7 +407,9 @@ const LINE_VERTEX = /* glsl */ `
     vec4 cb = projectionMatrix * vb;
     vec2 sa = (ca.xy / max(ca.w, 1e-6)) * uResolution;
     vec2 sb = (cb.xy / max(cb.w, 1e-6)) * uResolution;
-    vec2 dir = sb - sa;
+    // The far endpoint stores the reversed segment. Keep its screen-space
+    // normal aligned with the start so the ribbon's triangles never cross.
+    vec2 dir = (sb - sa) * aDirection;
     float len = length(dir);
     dir = len > 1e-5 ? dir / len : vec2(1.0, 0.0);
     vec2 perp = vec2(-dir.y, dir.x);
@@ -389,6 +448,7 @@ export function createStructures(THREE, options) {
   const emptyRoof = new THREE.DataTexture(new Uint8Array([96,96,96,255]),1,1);
   emptyRoof.needsUpdate = true;
   const sharedUniforms = {
+    ...(options.lighting?.uniforms || createCityUniforms(THREE)),
     uStudyBounds: { value: new THREE.Vector4() },
     uViewToWorld: { value: new THREE.Matrix3() },
     uExag: { value: 10 },
@@ -496,7 +556,19 @@ export function createStructures(THREE, options) {
       minX: projection.lonToX(zone.bounds.west), maxX: projection.lonToX(zone.bounds.east),
       minZ: projection.latToZ(zone.bounds.north), maxZ: projection.latToZ(zone.bounds.south),
     };
-    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, packed, parsed, originX, originZ,
+    let roof=null;
+    if(zone.id!=='local-detail'){
+      const details=roofDetails(parsed.buildings);
+      const roofPacked=extrudeBuildings(details.parts,{originX,originZ,groundAt});
+      if(roofPacked.vertexCount){
+        const roofMaterial=makeSolidMaterial(false,false);
+        roofMaterial.uniforms={...mesh.material.uniforms,uFacade:{value:0},uRoofPhotoOn:{value:0}};
+        const roofMesh=new THREE.Mesh(solidGeometry(roofPacked),roofMaterial);
+        roofMesh.name='roof-parapets-and-equipment';roofMesh.frustumCulled=false;group.add(roofMesh);
+        roof={mesh:roofMesh,packed:roofPacked,ends:details.ends};
+      }
+    }
+    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, roof, packed, parsed, originX, originZ,
       box, grow: 0, count: parsed.count, meta: tierMeta });
     buildingTotal += parsed.count;
     return parsed.count;
@@ -552,6 +624,7 @@ export function createStructures(THREE, options) {
     const position = new Float32Array(n * 4 * 3);
     const other = new Float32Array(n * 4 * 3);
     const side = new Float32Array(n * 4);
+    const direction = new Float32Array(n * 4);
     const elev = new Float32Array(n * 4);
     const otherElev = new Float32Array(n * 4);
     const struct = new Float32Array(n * 4);
@@ -574,6 +647,7 @@ export function createStructures(THREE, options) {
         struct[idx] = atStart ? s.sa : s.sb;
         otherStruct[idx] = atStart ? s.sb : s.sa;
         side[idx] = k % 2 === 0 ? -1 : 1;
+        direction[idx] = atStart ? 1 : -1;
       }
       index[i] = v; index[i + 1] = v + 1; index[i + 2] = v + 2;
       index[i + 3] = v + 2; index[i + 4] = v + 1; index[i + 5] = v + 3;
@@ -584,6 +658,7 @@ export function createStructures(THREE, options) {
     geometry.setAttribute('position', new THREE3.BufferAttribute(position, 3));
     geometry.setAttribute('aOther', new THREE3.BufferAttribute(other, 3));
     geometry.setAttribute('aSide', new THREE3.BufferAttribute(side, 1));
+    geometry.setAttribute('aDirection', new THREE3.BufferAttribute(direction, 1));
     geometry.setAttribute('aElev', new THREE3.BufferAttribute(elev, 1));
     geometry.setAttribute('aOtherElev', new THREE3.BufferAttribute(otherElev, 1));
     geometry.setAttribute('aStruct', new THREE3.BufferAttribute(struct, 1));
@@ -750,6 +825,13 @@ export function createStructures(THREE, options) {
       t.mesh.material.uniforms.uLocalClip.value = localActive && !isLocal ? 1 : 0;
       const visible = isLocal ? localActive : t.grow > 0.005;
       t.mesh.visible = visible;
+      if(t.roof){
+        t.roof.mesh.visible=visible&&state.camDist<5500&&!state.lightweight&&state.era==='present'
+          &&state.compareMode==='off'&&q!=='performance';
+        const n=Math.min(t.roof.ends.length,Math.round(t.packed.buildingCount*fraction));
+        const end=n?t.roof.ends[n-1]:0;
+        t.roof.mesh.geometry.setDrawRange(0,end?t.roof.packed.buildingEnd[end-1]:0);
+      }
       if (!visible) continue;
       t.mesh.material.uniforms.uGrow.value = isLocal ? 1 : t.grow;
       const count = drawIndexCount(t.packed, isLocal ? 1 : fraction);
@@ -822,6 +904,8 @@ export function createStructures(THREE, options) {
         if (studyBounds) tier.mesh.material.defines.ARCHITECTURAL_STUDY = 1;
         else delete tier.mesh.material.defines.ARCHITECTURAL_STUDY;
         tier.mesh.material.needsUpdate = true;
+        if(tier.roof){tier.roof.mesh.material.defines={...tier.mesh.material.defines};
+          tier.roof.mesh.material.needsUpdate=true;}
       }
       if (!landmarkMesh) return;
       if (!packed) {
@@ -953,6 +1037,7 @@ export function createStructures(THREE, options) {
       group.remove(t.mesh);
       t.mesh.geometry.dispose();
       t.mesh.material.dispose();
+      if(t.roof){group.remove(t.roof.mesh);t.roof.mesh.geometry.dispose();t.roof.mesh.material.dispose();}
       buildingTotal -= t.count;
       return true;
     },
@@ -986,6 +1071,7 @@ export function createStructures(THREE, options) {
       for (const t of tiers) {
         t.mesh.geometry.dispose();
         t.mesh.material.dispose();
+        if(t.roof){t.roof.mesh.geometry.dispose();t.roof.mesh.material.dispose();}
       }
       tiers.length = 0;
       if (bridgeSolid) {
