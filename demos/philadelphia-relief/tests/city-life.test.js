@@ -176,3 +176,43 @@ test('roof equipment stays inside concave footprints and keeps the original roof
   assert.equal(rect.parts.length,6);
   assert.equal(rect.parts.at(-1).minHeight,21.35);
 });
+
+test('street curbs follow sloping and curved terrain instead of hovering at the average height',async()=>{
+  const previousFetch=globalThis.fetch;
+  globalThis.fetch=async()=>({ok:true,json:async()=>({roads:[{id:1,oneway:0,width:10,
+    points:[[1,0,0],[2,160,0]]}]})});
+  const sample=(x,z)=>4+.06*x+.02*z+1.2*Math.sin(x/40);
+  const streets=createCityStreets(THREE,{scene:new THREE.Scene(),
+    projection:{...projection,xToLon:x=>x,zToLat:z=>z},sampleElevation:sample,
+    lighting:{uniforms:createCityUniforms(THREE)}});
+  try{
+    const params={camera:{position:new THREE.Vector3(50,500,500)},pose:{lon:50,lat:0,dist:900},
+      state:{era:'present',compareMode:'off',lightweight:false,layers:{structures:true},streetLife:true,
+        animationSpeed:1},exaggeration:2,sunDir:new THREE.Vector3(.3,1,0),dt:1.01,
+      reducedMotion:true,archive:false,quality:'balanced'};
+    streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
+    const furniture=streets.group.children[0],matrix=new THREE.Matrix4();
+    const position=new THREE.Vector3(),scale=new THREE.Vector3(),rotation=new THREE.Quaternion();
+    let curbs=0;
+    for(let i=0;i<furniture.count;i++){
+      furniture.getMatrixAt(i,matrix);matrix.decompose(position,rotation,scale);
+      if(Math.abs(scale.x-.35)>.001||Math.abs(scale.y-.24)>.001)continue;
+      curbs++;
+      for(const along of [-.5,0,.5]){
+        const top=new THREE.Vector3(0,0,along).applyMatrix4(matrix);
+        assert.ok(Math.abs(top.y-sample(top.x,top.z)*2-.48)<.13,
+          'each curb joint and midpoint stays on the sampled surface');
+      }
+    }
+    assert.ok(curbs>4,'long, curved streets receive enough joints to follow the terrain');
+    assert.ok(furniture.count<furniture.instanceMatrix.count);
+    const vehicles=streets.group.children[2];
+    assert.ok(vehicles.count>0);
+    for(let car=0;car<vehicles.count;car+=10)for(let wheel=2;wheel<6;wheel++){
+      vehicles.getMatrixAt(car+wheel,matrix);
+      const bottom=new THREE.Vector3(0,-.5,0).applyMatrix4(matrix);
+      assert.ok(Math.abs(bottom.y-sample(bottom.x,bottom.z)*2)<.09,
+        'front and rear tyres follow the grade in either driving direction');
+    }
+  }finally{streets.dispose();globalThis.fetch=previousFetch;}
+});
