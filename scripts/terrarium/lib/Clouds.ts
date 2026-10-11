@@ -42,6 +42,8 @@ export interface Cloud {
   stormTarget: number;
   stormAge: number;
   stormLife: number;
+  /** When the user last held, flung, squeezed or grew it (clouds clock, s). */
+  touchedAt: number;
   comp: number;
   compVel: number;
   rate: number; // current rain rate 0..2.2
@@ -148,7 +150,7 @@ export class Clouds {
     this.group.add(mesh);
     const c: Cloud = {
       id: this.nextId++, pos: new THREE.Vector3(o.x, o.y ?? HOME_Y, o.z), vel: new THREE.Vector3(), size, water: o.water ?? 0.5,
-      squeeze: 0, userSqueeze: 0, wheelSqueeze: 0, wheelHold: 0, heldSqueeze: o.squeeze ?? 0, charge: 0, storm: o.storm ?? 0, stormTarget: o.storm ?? 0, stormAge: 0, stormLife: 28 + Math.random() * 17,
+      squeeze: 0, userSqueeze: 0, wheelSqueeze: 0, wheelHold: 0, heldSqueeze: o.squeeze ?? 0, charge: 0, storm: o.storm ?? 0, stormTarget: o.storm ?? 0, stormAge: 0, stormLife: 28 + Math.random() * 17, touchedAt: -1e9,
       comp: 0, compVel: 0, rate: 0, fade: o.fadeIn ? 0 : 1, dissolving: false, hover: 0, hoverTarget: 0, glow: 0, glowPos: new THREE.Vector3(),
       puffs: [], grabbed: false, yaw: Math.random() * Math.PI * 2, phase: Math.random() * 10, vfit: 1, baseY: 0, radius: 0.05,
       lastSquish: 0, crackleT: 0, shake: 0, mesh, uniforms, seed: uniforms.uSeed.value as THREE.Vector3,
@@ -210,6 +212,7 @@ export class Clouds {
 
   grab(c: Cloud, hit: THREE.Vector3, ray: THREE.Ray) {
     c.grabbed = true;
+    c.touchedAt = this.now;
     c.compVel -= 0.8;
     c.userSqueeze = Math.max(c.userSqueeze, c.heldSqueeze * 0.7);
     c.heldSqueeze = 0;
@@ -242,6 +245,7 @@ export class Clouds {
     if (!h) return;
     const c = h.cloud;
     c.grabbed = false;
+    c.touchedAt = this.now;
     c.vel.set(h.vel.x, 0, h.vel.z).clampLength(0, 0.42);
     c.userSqueeze = 0;
     this.held = null;
@@ -249,6 +253,11 @@ export class Clouds {
   }
 
   get holding() {return this.held?.cloud ?? null;}
+
+  /** A wind stroke passed near (x, z): clouds it blows into each other count as the user's doing. */
+  touchNear(x: number, z: number, r: number) {
+    for (const c of this.clouds) if (Math.hypot(c.pos.x - x, c.pos.z - z) < r + c.radius) c.touchedAt = this.now;
+  }
 
   /**
    * Right-click: evaporates part of a cloud (and calms it); small enough and
@@ -269,6 +278,7 @@ export class Clouds {
   /** Mouse-wheel squeeze over a cloud. */
   wheel(c: Cloud, deltaY: number) {
     c.wheelSqueeze = clamp01(c.wheelSqueeze + Math.max(0, deltaY) * 0.0016);
+    c.touchedAt = this.now;
     c.wheelHold = 2.2;
   }
 
@@ -282,6 +292,7 @@ export class Clouds {
       c = this.spawn({x: clamp(at.x, -TANK.w / 2 + 0.06, TANK.w / 2 - 0.06), z: clamp(at.z, -TANK.d / 2 + 0.05, TANK.d / 2 - 0.05), y: HOME_Y + (Math.random() - 0.5) * 0.012, size: 0.22, water: 0.12, fadeIn: true});
     }
     this.growing = {cloud: c, lastPuff: at.clone()};
+    c.touchedAt = this.now;
     this.events.pop?.(c);
   }
   condenseMove(at: THREE.Vector3) {
@@ -327,8 +338,12 @@ export class Clouds {
   cover = 0;
   storminess = 0;
 
+  /** The clouds' own clock (s). */
+  private now = 0;
+
   update(dt: number, time: number, wind: WindField, humidity: number, day: number) {
     this.shared.uTime.value = time;
+    this.now += dt;
     this.sources.length = 0;
     // held cloud: pointer velocity and shake
     const h = this.held;
@@ -349,6 +364,7 @@ export class Clouds {
     // a cloud being condensed grows and gathers water while the pointer is held
     if (this.growing) {
       const c = this.growing.cloud;
+      c.touchedAt = this.now;
       c.size = Math.min(1.8, c.size + dt * (0.18 + 0.5 * humidity) * (1.2 - c.size / 1.9));
       c.water = Math.min(1.5, c.water + dt * (0.04 + 0.1 * humidity));
       c.dissolving = false;
@@ -516,8 +532,10 @@ export class Clouds {
     c.rate = approach(c.rate, f, f > c.rate ? 3 : 1.6, dt);
     const before = c.water;
     c.water -= c.rate * dt * (c.heldSqueeze > 0 ? 0.006 : 0.04) * (1 - 0.6 * c.storm);
-    // only saturated air feeds the clouds (the case's usual humid air holds them steady)
-    if (humidity > 0.7) c.water += (humidity - 0.7) * dt * 0.04 * (0.6 + 0.4 * c.size);
+    // only saturated air feeds the clouds (the case's usual humid air holds them
+    // steady), and only up to a comfortable load: damp air after a storm must not
+    // brew clouds that rain, or storm again, on their own
+    if (humidity > 0.7 && c.water < 0.9) c.water = Math.min(0.9, c.water + (humidity - 0.7) * dt * 0.04 * (0.6 + 0.4 * c.size));
     const k = clamp01((0.5 - humidity) / 0.25);
     c.water -= dt * 0.03 * k * day * (1.3 - 0.6 * Math.min(c.size, 1.2)) * 0.5;
     c.water = clamp(c.water, 0, 1.5);
@@ -598,7 +616,11 @@ export class Clouds {
     keep.charge = Math.max(keep.charge, gone.charge);
     keep.storm = Math.max(keep.storm, gone.storm);
     keep.stormTarget = Math.max(keep.stormTarget, gone.stormTarget);
-    if (keep.water >= 1 && keep.size >= 1.4) {keep.stormTarget = Math.max(keep.stormTarget, 0.55 + 0.45 * ss(1, 1.45, keep.water)); keep.stormAge = 0; keep.stormLife = 28 + Math.random() * 17;}
+    // a storm is the user's doing: a merge they made (holding, flinging or growing a
+    // cloud into another) can start one; clouds that only drift together combine
+    const userMade = keep.grabbed || gone.grabbed || this.now - Math.max(keep.touchedAt, gone.touchedAt) < 5;
+    keep.touchedAt = Math.max(keep.touchedAt, gone.touchedAt);
+    if (userMade && keep.water >= 1 && keep.size >= 1.4) {keep.stormTarget = Math.max(keep.stormTarget, 0.55 + 0.45 * ss(1, 1.45, keep.water)); keep.stormAge = 0; keep.stormLife = 28 + Math.random() * 17;}
     const total = clamp(Math.round(0.7 * (n1 + n2)), 9, 13);
     this.layout(keep, total, old);
     keep.compVel += 2.4;
