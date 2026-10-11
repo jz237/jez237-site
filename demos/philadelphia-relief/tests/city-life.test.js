@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createStreetGraph,createTraffic,trafficPose,trafficSignal } from '../src/city-traffic.js';
+import { createStreetGraph,createTraffic,trafficPose,trafficSignal,trafficIndicator } from '../src/city-traffic.js';
 import { roofDetails,insideRoof } from '../src/roof-details.js';
 import { buildLandmarkModels } from '../src/landmark-models.js';
 import * as THREE from '../vendor/three.module.min.js';
@@ -9,6 +9,33 @@ import { createCityStreets } from '../src/city-streets.js';
 import { createCityUniforms } from '../src/city-lighting.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z};
+
+test('turn indicators use the correct side through the corner and cancel afterwards',()=>{
+  for(const [end,side] of [[[100,100],-1],[[100,-100],1],[[0,0],1]]){
+    const graph=createStreetGraph({roads:[{id:1,oneway:1,width:10,
+      points:[[1,0,0],[2,100,0],[3,...end]]}]},projection,()=>0);
+    const [incoming,outgoing]=graph.edges;
+    const car={edge:incoming,nextEdge:outgoing,previousEdge:null,distance:50,speed:8,seed:0};
+    assert.equal(trafficIndicator(car,0),0,'no signal halfway down a long block');
+    car.distance=80;assert.equal(trafficIndicator(car,0),side,'anticipate the turn');
+    car.distance=99.99;assert.equal(trafficIndicator(car,0),side);
+    Object.assign(car,{edge:outgoing,previousEdge:incoming,nextEdge:null,distance:.01});
+    assert.equal(trafficIndicator(car,0),side,'do not cancel at the graph node');
+    car.distance=15;assert.equal(trafficIndicator(car,0),0,'cancel after clearing the curve');
+  }
+});
+
+test('indicator cadence varies per car and straight travel remains unlit',()=>{
+  const edge={dx:1,dz:0,length:100,width:10},turn={dx:0,dz:1,length:100,width:10};
+  const car={edge,nextEdge:turn,previousEdge:null,distance:90,speed:5,seed:0};
+  assert.equal(trafficIndicator(car,.1),-1);
+  assert.equal(trafficIndicator(car,.5),0);
+  assert.equal(trafficIndicator(car,.9),-1);
+  assert.equal(trafficIndicator({...car,seed:.5},.1),0,'individual phase offset');
+  assert.equal(trafficIndicator({...car,nextEdge:edge},.1),0,'straight junction');
+  assert.equal(trafficIndicator({...car,nextEdge:{...edge,dx:.98,dz:.2}},.1),0,'ordinary bend');
+  assert.equal(trafficIndicator({...car,nextEdge:null},.1),0,'cropped road exit');
+});
 
 test('simulated signals share a safe cycle across opposite and crossing approaches',()=>{
   const approach=(dx,dz)=>({dx,dz,to:{junction:38}});

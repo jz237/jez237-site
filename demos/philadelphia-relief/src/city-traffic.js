@@ -115,6 +115,22 @@ export function trafficPose(car){
   }
   return lanePoint(e,car.distance);
 }
+
+// Mesh-local +X is the driver's left (world Z points south). Keep an indicator
+// through both halves of the same turn curve, then cancel once the car is straight.
+export function trafficIndicator(car,time){
+  let from=car.edge,to=car.nextEdge;
+  if(car.previousEdge&&car.distance<turnSpan(car.previousEdge,car.edge)){
+    from=car.previousEdge;to=car.edge;
+  }else if(!to||from.length-car.distance>Math.max(18,car.speed*3))return 0;
+  const dot=from.dx*to.dx+from.dz*to.dz;
+  if(dot>.8)return 0;
+  const cross=from.dx*to.dz-from.dz*to.dx;
+  const side=Math.abs(cross)<.05?1:-Math.sign(cross);
+  const phase=((time+car.seed*.8)%.8+.8)%.8;
+  return phase<.4?side:0;
+}
+
 export function createTraffic(graph,count=260,seed=239){
   let randomState=seed>>>0,time=0,view=null;
   const random=()=>{randomState=(Math.imul(randomState,1664525)+1013904223)>>>0;
@@ -236,6 +252,7 @@ export function createTraffic(graph,count=260,seed=239){
   }
   return {cars,
     signal(edge){return trafficSignal(edge,time);},
+    indicator(car){return trafficIndicator(car,time);},
     update(dt,protectedView=null){
       // Preserve elapsed time at low frame rates without a large unstable step
       // or a long catch-up loop when the tab wakes after being hidden.

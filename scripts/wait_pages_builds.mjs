@@ -29,7 +29,7 @@ export async function readProductionBuilds(url, headers, { fetcher = fetch, dead
   throw new Error(`Cannot verify the recent Pages build queue (${status}); publication stopped.`);
 }
 
-export async function waitForProductionBuilds({ wrangler, repo, env, accountId, projectName, deadline = Infinity }) {
+function wranglerHeaders({wrangler,repo,env}) {
   // Credentials stay in memory and are sent only to Cloudflare's API.
   const result = spawnSync(process.execPath, [wrangler, 'auth', 'token', '--json'],
     { cwd: repo, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -38,18 +38,29 @@ export async function waitForProductionBuilds({ wrangler, repo, env, accountId, 
   const headers = auth.token ? { Authorization: `Bearer ${auth.token}` }
     : auth.type === 'api_key' ? { 'X-Auth-Key': auth.key, 'X-Auth-Email': auth.email } : null;
   if (!headers) throw new Error('Cannot check the Pages build queue: unsupported credentials.');
+  return headers;
+}
+
+export async function waitForProductionBuilds({ wrangler, repo, env, accountId, projectName, deadline = Infinity },
+  { credentialReader=wranglerHeaders, fetcher=fetch, now=Date.now,
+    pause=ms=>new Promise(resolve=>setTimeout(resolve,ms)), log=console.log }={}) {
   const root = `https://api.cloudflare.com/client/v4/accounts/${accountId}/pages/projects/${projectName}/deployments`;
-  const start = Date.now();
+  const start = now();
   let previous = '';
   for (;;) {
-    if (Date.now() >= deadline) throw new Error('Publication cutoff reached while waiting for Pages builds.');
-    const deployments = await readProductionBuilds(`${root}?env=production`, headers, { deadline });
+    if (now() >= deadline) throw new Error('Publication cutoff reached while waiting for Pages builds.');
+    // A queue can outlive the access token captured when the release began.
+    // Let Wrangler refresh its existing OAuth session before each queue read.
+    // Authentication failures still stop immediately; no scopes are expanded.
+    const headers=credentialReader({wrangler,repo,env});
+    const deployments = await readProductionBuilds(`${root}?env=production`, headers,
+      { deadline,fetcher,now,pause });
     const pending = pendingProductionBuilds(deployments);
     if (!pending.length) return;
     const label = pending.map(d => `${d.deployment_trigger?.metadata?.commit_hash?.slice(0, 7) || d.id}: ${d.latest_stage?.name || 'unknown'}`).join(', ');
-    if (label !== previous) console.log(`Waiting for earlier production builds before publishing: ${label}`);
+    if (label !== previous) log(`Waiting for earlier production builds before publishing: ${label}`);
     previous = label;
-    if (Date.now() - start > 10 * 60 * 1000) throw new Error('Pages build queue did not settle within ten minutes; publication stopped.');
-    await new Promise(resolve => setTimeout(resolve, 15000));
+    if (now() - start > 10 * 60 * 1000) throw new Error('Pages build queue did not settle within ten minutes; publication stopped.');
+    await pause(Math.min(15000,Math.max(0,deadline-now())));
   }
 }

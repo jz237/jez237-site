@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.1",
-  "sourceHash": "a12d71e7fb75e0342f89176a288dce446cdfd7646c0a5ef862252f4dab35ebdf",
-  "entry": "load/app-WKUFMN33.js",
+  "sourceHash": "24c6992b074029c85a386db345002ab8229ba455dc8f00d49bc5972abfe0574b",
+  "entry": "load/app-PRI57U6V.js",
   "css": "load/style-49a2eea61d53.css",
   "startupRequests": 3,
-  "startupBytes": 1112597,
+  "startupBytes": 1113065,
   "files": {
-    "load/app-WKUFMN33.js": "535dc370a702eedb99ee701a3f0ab3f6e226e97eb43ddcc02de1846e1b946e04",
+    "load/app-PRI57U6V.js": "7701e603385dee87ea11c185d0ce9fd18ed8240a723f4c71982616f05ac5f215",
     "load/chunk-BR7OAJYC.js": "a1a4df0365bca228e167242a0f68483bca66f0396f4a164318b30fb330f5a9ca",
     "load/chunk-5FBNK7SK.js": "353a49ebc40a3e44ed265371c2350cf1758f93f2f4f13083195e9cc7edc6986c",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { pendingProductionBuilds, readProductionBuilds } from './wait_pages_builds.mjs';
+import { pendingProductionBuilds, readProductionBuilds, waitForProductionBuilds } from './wait_pages_builds.mjs';
 
 const deployment = (name, status, ended_on = null, environment = 'production') =>
   ({ environment, latest_stage: { name, status, ended_on } });
@@ -53,4 +53,37 @@ test('the publication deadline also applies during queue retry backoff', async (
     pause: async ms => { clock += ms; },
   }), /cutoff reached/);
   assert.equal(calls, 1); assert.equal(clock, 1000);
+});
+
+test('long queue waits obtain the current Wrangler credential before every read',async()=>{
+  let clock=0,credentials=0,calls=0;const authorizations=[];
+  await waitForProductionBuilds({accountId:'test',projectName:'test',deadline:60000},{
+    credentialReader:()=>({Authorization:`Bearer test-${++credentials}`}),
+    fetcher:async(_url,{headers})=>{authorizations.push(headers.Authorization);calls++;
+      return Response.json({success:true,result:[calls===1?deployment('build','active')
+        :deployment('deploy','success','done')]});},
+    now:()=>clock,pause:async ms=>{clock+=ms;},log:()=>{},
+  });
+  assert.deepEqual(authorizations,['Bearer test-1','Bearer test-2']);
+  assert.equal(clock,15000);assert.equal(credentials,2);
+});
+
+test('queue waits stop at the publication cutoff without another credential or network read',async()=>{
+  let clock=0,credentials=0,calls=0;
+  await assert.rejects(waitForProductionBuilds({accountId:'test',projectName:'test',deadline:1000},{
+    credentialReader:()=>{credentials++;return {};},
+    fetcher:async()=>{calls++;return Response.json({success:true,result:[deployment('build','active')]});},
+    now:()=>clock,pause:async ms=>{clock+=ms;},log:()=>{},
+  }),/cutoff reached/);
+  assert.equal(clock,1000);assert.equal(credentials,1);assert.equal(calls,1);
+});
+
+test('a rejected current credential stops the wait without renewing or retrying access',async()=>{
+  let credentials=0,calls=0;
+  await assert.rejects(waitForProductionBuilds({accountId:'test',projectName:'test'},{
+    credentialReader:()=>{credentials++;return {};},
+    fetcher:async()=>{calls++;return new Response('private detail',{status:401});},
+    pause:async()=>assert.fail('authentication rejection must not be retried'),log:()=>{},
+  }),/\(401\)/);
+  assert.equal(credentials,1);assert.equal(calls,1);
 });
