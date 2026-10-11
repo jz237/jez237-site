@@ -21,7 +21,7 @@ export const ASSETS = [
     label: 'city aerial imagery' },
   { id: 'reefImagery', path: 'data/imagery-levittown.webp', kind: 'image', supplemental: true,
     label: 'Levittown aerial imagery' },
-  { id: 'water', path: 'data/water.geojson', kind: 'geojson', layer: 'water',
+  { id: 'water', path: 'data/water.geojson?v=valid-20261010', kind: 'geojson', layer: 'water',
     label: 'waterways' },
   { id: 'parks', path: 'data/parks.geojson', kind: 'geojson', layer: 'parks',
     label: 'parks' },
@@ -147,7 +147,7 @@ export function webglFailure(reason) {
     message:
       reason === 'lost'
         ? 'The graphics context was lost — usually the browser reclaiming GPU ' +
-          'memory. Reload the page to restore the map.'
+          'memory. Waiting for the browser to restore it. Reload if the map does not return.'
         : 'This browser could not start WebGL 2, which the terrain renderer ' +
           'needs. Try a current desktop browser, or enable hardware ' +
           'acceleration if it is switched off.',
