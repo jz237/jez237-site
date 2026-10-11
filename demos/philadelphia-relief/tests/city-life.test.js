@@ -7,6 +7,7 @@ import { buildLandmarkModels } from '../src/landmark-models.js';
 import * as THREE from '../vendor/three.module.min.js';
 import { createCityStreets } from '../src/city-streets.js';
 import { createCityUniforms } from '../src/city-lighting.js';
+import { extrudeBuildings } from '../src/structures-data.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z};
 
@@ -274,6 +275,30 @@ test('roof equipment stays inside concave footprints and keeps the original roof
   assert.equal(rect.parts.at(-1).minHeight,21.35);
 });
 
+test('roof equipment cannot bridge a narrow courtyard even when all four corners have support',()=>{
+  const poly=[0,0,40,0,40,30,0,30,0,16,19,16,19,14,0,14];
+  for(const [x,z] of [[10.95,10.5],[18.55,10.5],[18.55,19.5],[10.95,19.5]]){
+    assert.equal(insideRoof(x,z,poly),true);
+  }
+  const {parts}=roofDetails([{poly,height:20,minHeight:0}]);
+  assert.equal(parts.length,8,'only perimeter parapets remain; no equipment bridges the notch');
+});
+
+test('parapets and rooftop equipment retain the parent roof plane over sloping terrain',()=>{
+  const building={poly:[0,0,60,0,60,40,0,40],height:30,minHeight:4};
+  const ctx={originX:12000,originZ:40000,groundAt:(x,z)=>10+(x-12000)*.08+(z-40000)*.12};
+  const parent=extrudeBuildings([building],ctx),parts=roofDetails([building]).parts;
+  const details=extrudeBuildings(parts,ctx);
+  for(const ground of details.ground)assert.equal(ground,parent.ground[0]);
+  for(const exag of [1,4])for(const heightScale of [1,2]){
+    const roof=parent.ground[0]*exag+(building.height+building.minHeight)*heightScale;
+    for(let i=0;i<details.vertexCount;i++){
+      const base=details.ground[i]*exag+details.info[i*2+1]*heightScale;
+      assert.ok(base>=roof-1e-5&&base<=roof+1.36*heightScale,'details stay attached to their roof');
+    }
+  }
+});
+
 test('dense street scenery retains complete trees and lamps when an instance budget is exhausted',async()=>{
   const previousFetch=globalThis.fetch;
   const roads=Array.from({length:250},(_,i)=>({id:i,oneway:0,width:10,
@@ -311,8 +336,8 @@ test('dense street scenery retains complete trees and lamps when an instance bud
 test('street curbs follow sloping and curved terrain instead of hovering at the average height',async()=>{
   const previousFetch=globalThis.fetch;
   globalThis.fetch=async()=>({ok:true,json:async()=>({roads:[{id:1,oneway:0,width:10,
-    points:[[1,0,0],[2,160,0]]}]})});
-  const sample=(x,z)=>4+.06*x+.02*z+1.2*Math.sin(x/40);
+    points:[[1,0,0],[2,160,70]]}]})});
+  const sample=(x,z)=>4+.06*x+.12*z+1.2*Math.sin(x/40);
   const streets=createCityStreets(THREE,{scene:new THREE.Scene(),
     projection:{...projection,xToLon:x=>x,zToLat:z=>z},sampleElevation:sample,
     lighting:{uniforms:createCityUniforms(THREE)}});
@@ -343,7 +368,7 @@ test('street curbs follow sloping and curved terrain instead of hovering at the 
       vehicles.getMatrixAt(car+wheel,matrix);
       const bottom=new THREE.Vector3(0,-.5,0).applyMatrix4(matrix);
       assert.ok(Math.abs(bottom.y-sample(bottom.x,bottom.z)*2)<.09,
-        'front and rear tyres follow the grade in either driving direction');
+        'all four tyres follow both the forward grade and cross-slope in either driving direction');
     }
   }finally{streets.dispose();globalThis.fetch=previousFetch;}
 });

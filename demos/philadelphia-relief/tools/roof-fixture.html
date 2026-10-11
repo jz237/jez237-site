@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Philadelphia rooftop attachment check</title>
+<style>
+body{margin:0;background:#1b303a;color:#fff;font:15px system-ui}header{padding:12px;display:flex;gap:14px;align-items:center}
+button{padding:10px}canvas{display:block;width:100%;height:calc(100vh - 66px)}
+</style>
+<header><strong>Production rooftop geometry · sloping ground and a concave notch</strong>
+<button id="scale">Terrain exaggeration: 1×</button><button id="orbit">Rotate view</button>
+<button id="save">Save PNG</button><span id="status" role="status"></span></header>
+<canvas id="view" aria-label="Parapets and equipment attached to level roof surfaces"></canvas>
+<script type="module">
+import * as THREE from '../vendor/three.module.min.js';
+import {createStructures} from '../src/structures.js';
+import {defaults} from '../src/schema.js';
+const canvas=document.querySelector('#view'),renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+const scene=new THREE.Scene();scene.background=new THREE.Color('#b9c7ca');
+const camera=new THREE.PerspectiveCamera(42,1,.1,2000);
+const buildings=[{poly:[0,0,60,0,60,40,0,40],height:30,minHeight:0},
+  {poly:[90,0,130,0,130,30,90,30,90,16,109,16,109,14,90,14],height:20,minHeight:0}];
+const sampleElevation=(x,z)=>10+x*.08+z*.12;
+const structures=createStructures(THREE,{manifest:{zones:[{id:'fixture',origin:{lon:0,lat:0},
+  bounds:{west:0,east:140,north:0,south:50},tiers:[{tier:'mid',file:'fixture'}]}]},
+  tierBuffers:new Map([['fixture',buildings]]),projection:{lonToX:x=>x,latToZ:z=>z,xToLon:x=>x,zToLat:z=>z},
+  sampleElevation,quality:'cinematic'});
+scene.add(structures.group);
+const state={...defaults(),quality:'cinematic',structureDetail:1,structureHeight:1,camDist:300,era:'present',compareMode:'off'};
+state.layers={...state.layers,structures:true};
+const floorGeometry=new THREE.PlaneGeometry(220,130,1,1);floorGeometry.rotateX(-Math.PI/2);
+const position=floorGeometry.attributes.position;
+for(let i=0;i<position.count;i++){position.setX(i,position.getX(i)+65);position.setZ(i,position.getZ(i)+20);}
+const floor=new THREE.Mesh(floorGeometry,new THREE.MeshBasicMaterial({color:0x707d79,side:THREE.DoubleSide}));scene.add(floor);
+let exaggeration=1,angle=.75;
+function render(){
+  for(let i=0;i<position.count;i++)position.setY(i,sampleElevation(position.getX(i),position.getZ(i))*exaggeration-.02);
+  position.needsUpdate=true;
+  const focus=new THREE.Vector3(65,20*exaggeration+15,20);
+  camera.position.copy(focus).add(new THREE.Vector3(Math.cos(angle)*200,130,Math.sin(angle)*200));camera.lookAt(focus);
+  camera.updateMatrixWorld();
+  structures.update({camera,state,exaggeration,dt:10,sunDir:new THREE.Vector3(-.4,1,.6).normalize(),fogDensity:0});
+  renderer.render(scene,camera);
+  document.querySelector('#status').textContent=`${exaggeration}× terrain · ${renderer.info.render.calls} draw calls`;
+}
+function resize(){renderer.setSize(innerWidth,Math.max(300,innerHeight-document.querySelector('header').offsetHeight),false);
+  camera.aspect=canvas.width/canvas.height;camera.updateProjectionMatrix();structures.setResolution(canvas.width,canvas.height);render();}
+document.querySelector('#scale').onclick=event=>{exaggeration=exaggeration===1?4:1;event.target.textContent=`Terrain exaggeration: ${exaggeration}×`;render();};
+document.querySelector('#orbit').onclick=()=>{angle+=Math.PI/2;render();};
+document.querySelector('#save').onclick=()=>{canvas.toBlob(blob=>{const link=document.createElement('a');link.href=URL.createObjectURL(blob);
+  link.download=`philadelphia-roof-fixture-${exaggeration}x.png`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);});};
+window.addEventListener('resize',resize);resize();
+</script>
+</html>

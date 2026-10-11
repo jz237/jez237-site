@@ -4,12 +4,13 @@
 <title>Philadelphia street traffic visual check</title>
 <style>
 body{margin:0;background:#15242a;color:#fff;font:14px system-ui}header{padding:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-button{padding:9px 13px}canvas{display:block;width:100%;height:calc(100vh - 64px)}
+button{padding:9px 13px}a{color:#ecdec1}canvas{display:block;width:100%;height:calc(100vh - 64px)}
 </style>
 <header><strong>Street traffic visual check · local data</strong>
 <button id="play">Play</button><button id="step">Step 0.1 s</button>
 <button id="focus">Inspect a signalling car</button><button id="wide">Whole block</button>
 <button id="night">Night lighting</button><button id="save">Save PNG</button>
+<a href="traffic-fixture.html">Flat block</a><a href="traffic-fixture.html?slope=1">Sloped block</a>
 <span id="status" role="status">Loading local street geometry</span></header>
 <canvas id="view" aria-label="Traffic on a generated square block"></canvas>
 <script type="module">
@@ -23,21 +24,26 @@ const nativeFetch=window.fetch.bind(window);
 window.fetch=(url,options)=>String(url)==='data/city-streets.json'
   ?Promise.resolve({ok:true,json:async()=>documentData}):nativeFetch(url,options);
 const canvas=document.querySelector('#view'),status=document.querySelector('#status');
+const sloped=new URL(location.href).searchParams.has('slope'),exaggeration=sloped?2:1;
+const elevation=(x,z)=>sloped?.08*x+.12*z:0;
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 const scene=new THREE.Scene();scene.background=new THREE.Color('#bfc9c9');
 const camera=new THREE.PerspectiveCamera(45,1,.1,1000);
 const lighting={uniforms:createCityUniforms(THREE)};
 const streets=createCityStreets(THREE,{scene,projection:{lonToX:x=>x,latToZ:z=>z,
-  xToLon:x=>x,zToLat:z=>z},sampleElevation:()=>0,lighting});
+  xToLon:x=>x,zToLat:z=>z},sampleElevation:elevation,lighting});
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(240,240),new THREE.MeshBasicMaterial({color:0x6b7471}));
-ground.rotation.x=-Math.PI/2;ground.position.set(50,-.01,50);scene.add(ground);
+ground.geometry.rotateX(-Math.PI/2);ground.position.set(50,0,50);
+const floor=ground.geometry.attributes.position;
+for(let i=0;i<floor.count;i++)floor.setY(i,elevation(floor.getX(i)+50,floor.getZ(i)+50)*exaggeration-.01);
+scene.add(ground);
 const state={era:'present',compareMode:'off',lightweight:false,layers:{structures:true},streetLife:true,animationSpeed:1};
-const params={camera,pose:{lon:50,lat:50,dist:300},state,exaggeration:1,
+const params={camera,pose:{lon:50,lat:50,dist:300},state,exaggeration,
   sunDir:new THREE.Vector3(.3,1,.2).normalize(),reducedMotion:false,archive:false,quality:'balanced'};
 const matrix=new THREE.Matrix4(),point=new THREE.Vector3(),tint=new THREE.Color();
 let running=false,night=false,selected=-1,elapsed=0,last=performance.now();
-function wide(){selected=-1;camera.position.set(170,150,185);camera.lookAt(50,0,50);}
+function wide(){selected=-1;const y=elevation(50,50)*exaggeration;camera.position.set(170,150+y,185);camera.lookAt(50,y,50);}
 function resize(){renderer.setSize(innerWidth,Math.max(300,innerHeight-document.querySelector('header').offsetHeight),false);
   camera.aspect=canvas.width/canvas.height;camera.updateProjectionMatrix();}
 function render(dt=0){
@@ -68,7 +74,7 @@ document.querySelector('#wide').onclick=()=>{wide();render();};
 document.querySelector('#night').onclick=event=>{night=!night;params.sunDir.set(.3,night?-.3:1,.2).normalize();
   scene.background.set(night?'#172a38':'#bfc9c9');event.target.textContent=night?'Day lighting':'Night lighting';render();};
 document.querySelector('#save').onclick=()=>{render();canvas.toBlob(blob=>{const link=document.createElement('a');
-  link.href=URL.createObjectURL(blob);link.download=`philadelphia-traffic-fixture-${elapsed.toFixed(1)}.png`;link.click();
+  link.href=URL.createObjectURL(blob);link.download=`philadelphia-traffic-fixture-${sloped?'sloped-':''}${elapsed.toFixed(1)}.png`;link.click();
   setTimeout(()=>URL.revokeObjectURL(link.href),1000);});};
 window.addEventListener('resize',()=>{resize();render();});
 wide();resize();render(1.01);

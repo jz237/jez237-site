@@ -38,9 +38,9 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   let sidewalkRoutes=[],walkers=[],walkingTime=0;
   let signalHeads=[];
   const dummy=new THREE.Object3D(),color=new THREE.Color();
-  function put(mesh,x,y,z,w,h,d,angle,tint,pitch=0){
+  function put(mesh,x,y,z,w,h,d,angle,tint,pitch=0,roll=0){
     if(mesh.count>=mesh.instanceMatrix.count)return;
-    dummy.position.set(x,y,z);dummy.rotation.set(pitch,angle,0,'YXZ');
+    dummy.position.set(x,y,z);dummy.rotation.set(pitch,angle,roll,'YXZ');
     dummy.scale.set(w,h,d);dummy.updateMatrix();
     mesh.setMatrixAt(mesh.count,dummy.matrix);
     if(Array.isArray(tint))color.setRGB(...tint);else color.set(tint);
@@ -225,16 +225,19 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
         const indicator=traffic.indicator(car);
         const van=car.seed>.88,length=van?6.4:4.4,sin=Math.sin(p.angle),cos=Math.cos(p.angle);
-        const groundAt=along=>sampleElevation(projection.xToLon(p.x+sin*along),
-          projection.zToLat(p.z+cos*along))*exaggeration;
-        const rear=groundAt(-length*.31),front=groundAt(length*.31);
+        const groundAt=(side,along)=>sampleElevation(projection.xToLon(p.x+cos*side+sin*along),
+          projection.zToLat(p.z-sin*side+cos*along))*exaggeration;
+        const rear=groundAt(0,-length*.31),front=groundAt(0,length*.31);
         const pitch=-Math.atan2(front-rear,length*.62),cp=Math.cos(pitch),sp=Math.sin(pitch);
-        const y=(rear+front)/2+.4;
-        // Transform every part in the same road-aligned frame, keeping both
-        // axles on a grade instead of burying the front tyres or lifting the rear.
-        const part=(side,up,along,w,h,d,tint)=>put(vehicles,
-          p.x+cos*side+sin*(cp*along+sp*up),y+cp*up-sp*along,
-          p.z-sin*side+cos*(cp*along+sp*up),w,h,d,p.angle,tint,pitch);
+        const roll=Math.atan((groundAt(.9,0)-groundAt(-.9,0))/1.8*cp);
+        const cr=Math.cos(roll),sr=Math.sin(roll),y=(rear+front)/2+.4/(cp*cr);
+        // Pitch and roll share one road-aligned frame. All four tyres remain
+        // on the surface when a hillside slopes both along and across the road.
+        const part=(side,up,along,w,h,d,tint)=>{
+          const sx=cr*side-sr*up,sy=sr*side+cr*up,sz=cp*along+sp*sy;
+          put(vehicles,p.x+cos*sx+sin*sz,y+cp*sy-sp*along,
+            p.z-sin*sx+cos*sz,w,h,d,p.angle,tint,pitch,roll);
+        };
         const tint=palette[Math.floor(car.seed*palette.length)%palette.length];
         part(0,van?.75:.25,0,1.85,van?1.7:.75,length,tint);
         // Vans keep a solid cargo body; the glazing wraps the front cab just
