@@ -2,14 +2,15 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import {woodTextures, dataTexture, tileFbm} from './Textures';
 
-function backgroundPlant(x: number, z: number, h: number, seed: number) {
+function backgroundPlant(x: number, z: number, h: number, seed: number, glow = 0) {
   let s0 = seed * 7919;
   const r = () => ((s0 = (s0 * 16807) % 2147483647) / 2147483647);
   const g = new THREE.Group();
   const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.1, 0.22, 32), new THREE.MeshStandardMaterial({color: 0x3a2618, roughness: 0.8}));
   pot.position.y = -0.075 + 0.11 - 0.0;
   g.add(pot);
-  const leafMat = new THREE.MeshStandardMaterial({color: new THREE.Color(0.05, 0.11, 0.04), roughness: 0.55, side: THREE.DoubleSide});
+  // (`glow`: light coming through the leaves from a lamp behind them)
+  const leafMat = new THREE.MeshStandardMaterial({color: new THREE.Color(0.05, 0.11, 0.04), roughness: 0.55, side: THREE.DoubleSide, emissive: new THREE.Color(0.09, 0.13, 0.03), emissiveIntensity: glow});
   const stemMat = new THREE.MeshStandardMaterial({color: new THREE.Color(0.08, 0.12, 0.05), roughness: 0.7});
   const n = 9 + Math.floor(r() * 5);
   for (let i = 0; i < n; i++) {
@@ -128,6 +129,8 @@ export class Room {
 
     // Out-of-focus house plants behind the case.
     this.group.add(backgroundPlant(1.05, -1.05, 1.0, 11), backgroundPlant(-1.55, -1.2, 0.85, 23), backgroundPlant(0.35, -1.45, 0.7, 37));
+    // big tropical plants just behind the case, their leaves seen softly through its back glass
+    this.group.add(backgroundPlant(-0.5, -1.0, 0.72, 51, 0.22), backgroundPlant(0.55, -1.1, 0.8, 63, 0.2));
 
     // Environment used for reflections (brass, glass, water, eyes).
     const env = this.envScene;

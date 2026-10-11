@@ -330,12 +330,16 @@ export class Plants {
       [0.45, -0.08, 0.2, 2], [-0.21, -0.07, 0.15, 3], [0.29, -0.09, 0.17, 2], [-0.5, 0.05, 0.16, 2], [-0.57, 0.2, 0.15, 1],
       // big fronds arching out at the sides, as in a lush planted case
       [-0.55, -0.03, 0.3, 0], [0.52, 0.06, 0.26, 1], [-0.38, -0.2, 0.34, 0], [0.33, -0.2, 0.32, 1], [0.12, -0.2, 0.3, 0],
+      // and a tall screen of sword ferns along the back and up the sides
+      [-0.5, -0.2, 0.38, 0], [-0.2, -0.21, 0.34, 1], [0.46, -0.2, 0.38, 0], [-0.57, -0.07, 0.32, 1], [0.56, -0.05, 0.3, 0], [-0.44, -0.12, 0.3, 1],
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
       if (caveKeepClear(x, z)) continue;
       const site = this.site(surface, x, z);
-      const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.004, z), new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.15, rnd() * Math.PI * 2, (rnd() - 0.5) * 0.15)), new THREE.Vector3(s, s * 1.45, s));
+      // the back and side ferns stand taller and more upright, like sword ferns
+      const tall = 1.45 + 0.5 * THREE.MathUtils.smoothstep(-z, 0.04, 0.19) * THREE.MathUtils.smoothstep(s, 0.2, 0.3);
+      const m = new THREE.Matrix4().compose(new THREE.Vector3(x, site.y - 0.004, z), new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.15, rnd() * Math.PI * 2, (rnd() - 0.5) * 0.15)), new THREE.Vector3(s * (tall > 1.6 ? 0.85 : 1), s * tall, s * (tall > 1.6 ? 0.85 : 1)));
       const list = byVariant.get(v) ?? [];
       list.push(m);
       byVariant.set(v, list);

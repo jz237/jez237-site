@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import {mergeGeometries, mergeVertices} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {Surface, SurfaceKind} from './Surface';
 import {addFoliage, PINNATE_GLSL} from './Foliage';
 import {mulberry32} from './Textures';
@@ -109,6 +109,17 @@ function mushrooms(rnd: () => number): Parts {
     parts.push(tag(cap.toNonIndexed(), K.cap, hue));
   }
   return parts.map((p) => (p.index ? p.toNonIndexed() : p));
+}
+
+/** Eelgrass (Vallisneria): ribbon leaves rising from the pool bed and bending over near the surface. */
+function eelgrass(rnd: () => number, depth: number): Parts {
+  const parts: Parts = [];
+  const n = 8 + Math.floor(rnd() * 7);
+  for (let i = 0; i < n; i++) {
+    const blade = leafGeometry({length: 1, width: 0.07, shape: (u) => 1 - 0.35 * u * u, arch: 0.18 + 0.2 * rnd(), cup: 0.04, twist: (rnd() - 0.5) * 2.4, segs: [16, 1]});
+    parts.push(tag(placeLeaf(blade, new THREE.Vector3((rnd() - 0.5) * 0.008, 0, (rnd() - 0.5) * 0.008), rnd() * Math.PI * 2, 1.15 + rnd() * 0.35, (rnd() - 0.5) * 0.3, depth * (0.75 + rnd() * 0.55)), K.grass, 0.55 + rnd() * 0.45));
+  }
+  return parts;
 }
 
 function sedge(rnd: () => number, size: number): Parts {
@@ -441,19 +452,31 @@ export class Flora {
     }
     // Creeping fig climbing the faces of the peaks.
     this.climbers(rockMeshes, rnd);
+    // Eelgrass in the deep basin along the front glass, swaying in the water
+    for (let i = 0, placed = 0; i < 400 && placed < 6; i++) {
+      const x = 0.12 + rnd() * 0.42, z = 0.13 + rnd() * 0.1;
+      const d = poolDepth(x, z);
+      if (d < 0.025 || Math.hypot(x - 0.1, z - 0.075) < 0.09) continue;
+      at(eelgrass(rnd, d), x, z, {y: WATER_LEVEL - d, sink: 0.001});
+      placed++;
+    }
     // Philodendron and pothos: big glossy leaves at the foot of the rocks, behind
     // the log and in the corners, as a planted rainforest case has them
     const heartSpots: [number, number, number][] = [
       [-0.3, -0.09, 1.5], [-0.17, -0.13, 1.3], [-0.04, -0.15, 1.2], [0.2, -0.12, 1.4], [0.36, -0.1, 1.3], [0.47, -0.17, 1.5],
       [-0.52, -0.16, 1.4], [-0.43, -0.05, 1.2], [-0.56, 0.08, 1.1], [0.55, 0.02, 1.2], [-0.22, 0.02, 0.9], [0.28, -0.03, 1.0],
       [-0.1, -0.04, 0.9], [0.43, -0.03, 1.1],
+      // a tall canopy of big leaves along the back and in the corners
+      [-0.46, -0.19, 2.3], [-0.28, -0.2, 2.0], [-0.08, -0.205, 2.1], [0.28, -0.2, 2.2], [0.52, -0.19, 2.4], [-0.56, -0.02, 1.8], [0.56, -0.1, 1.9],
     ];
     for (const [x, z, size] of heartSpots) {
       if (!dry(x, z) || !inside(x, z, 0.04) || surface.kindAt(x, z) === SurfaceKind.Rock) continue;
       if (at(heartleaf(rnd, size), x, z, {normal: surface.normalAt(x, z)})) this.obstacles.push({x, z, r: 0.012 * size});
     }
     rockSites.slice(19, 24).forEach((sh) => at(heartleaf(rnd, 0.8 + rnd() * 0.3), sh.p.x, sh.p.z, {y: sh.p.y, normal: sh.n}));
-    this.trailers(rockMeshes, rockSites.slice(0, 12), rnd);
+    // and big plants crowning the rocks, as in a case grown in for years
+    this.summits(rockMeshes, rnd).forEach((sm, i) => at(i % 2 ? bromeliad(rnd, 1.2) : heartleaf(rnd, 1.05 + rnd() * 0.25), sm.p.x, sm.p.z, {y: sm.p.y, normal: sm.n, sink: 0.004}));
+    this.trailers(rockMeshes, rockSites, rnd);
 
     const merged = mergeGeometries(this.parts.map((p) => {
       const q = p.index ? p.toNonIndexed() : p;
@@ -530,13 +553,34 @@ export class Flora {
     }
   }
 
+  /** High pockets on the rocks (above the shelves) with room for a big plant. */
+  private summits(rocks: THREE.Mesh[], rnd: () => number) {
+    const ray = new THREE.Raycaster();
+    (ray as unknown as {firstHitOnly: boolean}).firstHitOnly = true;
+    const found: {p: THREE.Vector3; n: THREE.Vector3}[] = [];
+    for (let i = 0; i < 3000; i++) {
+      const x = -0.38 + rnd() * 0.78, z = -0.2 + rnd() * 0.22;
+      ray.set(new THREE.Vector3(x, 0.8, z), new THREE.Vector3(0, -1, 0));
+      const hit = ray.intersectObjects(rocks, false)[0];
+      if (!hit || !hit.face || hit.point.y < 0.3 || hit.point.y > 0.44) continue; // (well below the clouds)
+      const n = hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+      if (n.y < 0.55) continue;
+      if (Math.abs(x - 0.06) < 0.07 && z > -0.15) continue; // not in the falls
+      found.push({p: hit.point.clone(), n});
+    }
+    found.sort((a, b) => b.p.y - a.p.y);
+    const out: typeof found = [];
+    for (const f of found) if (out.length < 5 && out.every((o) => o.p.distanceTo(f.p) > 0.09)) out.push(f);
+    return out;
+  }
+
   /** Pothos trailing down the rock faces from the shelves where it is rooted. */
   private trailers(rocks: THREE.Mesh[], sites: {p: THREE.Vector3; n: THREE.Vector3}[], rnd: () => number) {
     const ray = new THREE.Raycaster();
     (ray as unknown as {firstHitOnly: boolean}).firstHitOnly = true;
     const blade = heartBlade();
     for (const site of sites) {
-      if (rnd() < 0.35) continue;
+      if (rnd() < 0.2) continue;
       const pts: THREE.Vector3[] = [];
       let y = site.p.y - 0.004, x = site.p.x;
       for (let k = 0; k < 30; k++) {
@@ -568,7 +612,8 @@ export class Flora {
 
   /** Pebbles and grit scattered over the soil and along the beach. */
   private pebbles(rnd: () => number) {
-    const geo = new THREE.IcosahedronGeometry(1, 2);
+    // (merged so the normals are smooth: a pebble seen close up is round, not faceted)
+    const geo = mergeVertices(new THREE.IcosahedronGeometry(1, 3).deleteAttribute('normal').deleteAttribute('uv'));
     const pos = geo.attributes.position as THREE.BufferAttribute;
     for (let i = 0; i < pos.count; i++) {
       const v = new THREE.Vector3().fromBufferAttribute(pos, i);
@@ -600,6 +645,16 @@ diffuseColor.rgb = c;`);
       const s = 0.002 + rnd() * rnd() * 0.007;
       const q = new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.4, rnd() * 6.28, (rnd() - 0.5) * 0.4));
       list.push(new THREE.Matrix4().compose(new THREE.Vector3(x, y + s * 0.15, z), q, new THREE.Vector3(s, s, s)));
+    }
+    // and bigger stones lying in the deep water along the front glass
+    for (let i = 0, placed = 0; i < 400 && placed < 8; i++) {
+      const x = 0.08 + rnd() * 0.48, z = 0.15 + rnd() * 0.085;
+      const d = poolDepth(x, z);
+      if (d < 0.02 || Math.hypot(x - 0.1, z - 0.075) < 0.08) continue;
+      const s = 0.007 + rnd() * 0.009;
+      const q = new THREE.Quaternion().setFromEuler(new THREE.Euler((rnd() - 0.5) * 0.5, rnd() * 6.28, (rnd() - 0.5) * 0.5));
+      list.push(new THREE.Matrix4().compose(new THREE.Vector3(x, WATER_LEVEL - d + s * 0.2, z), q, new THREE.Vector3(s, s * (0.8 + rnd() * 0.5), s)));
+      placed++;
     }
     const inst = new THREE.InstancedMesh(geo, mat, list.length);
     list.forEach((m, i) => inst.setMatrixAt(i, m));
