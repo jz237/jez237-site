@@ -23,7 +23,7 @@ const DEN = window.__jtDen || { x: 4.4, z: -1.7, hx: 0.95, hz: 0.75, y: 0.72 };
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', ready: true, count: 1, clearance: 0.14, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
+    id: 'trex', ready: true, count: 1, clearance: 0.08, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
     acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
@@ -32,7 +32,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: false, count: 3, clearance: 0.12, maxWater: 0.6, maxSlope: 0.3, herd: true,
+    id: 'triceratops', ready: false, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -41,7 +41,7 @@ const SPECIES = [
     fact: 'Healed Tyrannosaurus bite marks have been found on Triceratops frills and horns: some survived the attacks.',
   },
   {
-    id: 'stegosaurus', ready: false, count: 2, clearance: 0.1, maxWater: 0.6, maxSlope: 0.3, herd: true,
+    id: 'stegosaurus', ready: true, count: 2, clearance: 0.06, maxWater: 0.6, maxSlope: 0.3, herd: true,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, tailswing: 1 },
     sounds: { alert: 'grunt', tailswing: 'hiss' }, step: 1.4, feet: [0, 0.25, 0.5, 0.75],
     common: 'Stegosaurus', badge: 'browser', dot: '#a5603a',
@@ -50,7 +50,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.22, maxWater: 0.75, maxSlope: 0.28, noRun: true,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',

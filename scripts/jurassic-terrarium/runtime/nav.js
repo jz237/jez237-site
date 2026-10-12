@@ -17,6 +17,7 @@ export class NavGrid {
     this.height = new Float32Array(this.nx * this.nz);
     this.slope = new Float32Array(this.nx * this.nz);
     this.water = new Float32Array(this.nx * this.nz);
+    this.lake = new Float32Array(this.nx * this.nz);
     const T = ctx.terrain;
     const S = T.shape;
     const trees = ctx.modules.vegetation?.trees || [];
@@ -30,11 +31,13 @@ export class NavGrid {
         const s = T.slope(x, z);
         this.height[k] = h;
         this.slope[k] = s;
-        const wet = Math.max(T.lakeMask(x, z), T.riverMask(x, z));
+        const lake = T.lakeMask(x, z), river = T.riverMask(x, z);
+        const wet = Math.max(lake, river);
         this.water[k] = wet;
+        this.lake[k] = lake;
         let c = 1 + s * 6;
         if (s > 0.85) c = Infinity; // cliffs and peaks
-        if (wet > 0.5) c += 6; // wading is slow; deep water is cut below per species
+        if (wet > 0.5) c += 6; // wading is slow; the stream can be forded, the deep lake cannot (below)
         if (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + 0.1) c = Infinity;
         this.base[k] = c;
       }
@@ -51,12 +54,15 @@ export class NavGrid {
         }
     }
     // planted trunks (tree ferns, cycads)
-    for (const o of obstacles) this._stamp(o.x, o.z, o.r + 0.04, Infinity);
-    // trees: block the trunk, add cost under the crown
+    for (const o of obstacles) this._stamp(o.x, o.z, o.r, Infinity);
+    // trees: block only the trunk, add cost under the crown; shrubs are pushed through
     for (const t of trees) {
-      const r = Math.max(0.06, t.radius * 0.35);
-      this._stamp(t.x, t.z, r + 0.05, Infinity);
-      this._stamp(t.x, t.z, t.radius * 0.9, 5);
+      if (t.kind === 'bush' || t.height < 0.45) {
+        this._stamp(t.x, t.z, t.radius * 0.8, 2);
+        continue;
+      }
+      this._stamp(t.x, t.z, 0.05, Infinity);
+      this._stamp(t.x, t.z, t.radius * 0.9, 4);
     }
   }
 
@@ -81,7 +87,7 @@ export class NavGrid {
     const rad = Math.ceil(clearance / this.cell);
     for (let k = 0; k < n; k++) {
       let c = this.base[k];
-      if (this.water[k] > maxWater || this.slope[k] > maxSlope) c = Infinity;
+      if (this.lake[k] > maxWater || this.slope[k] > maxSlope) c = Infinity;
       cost[k] = c;
     }
     if (rad <= 0) return new NavLayer(this, cost);
@@ -105,8 +111,35 @@ class NavLayer {
   constructor(grid, cost) {
     this.g = grid;
     this.cost = cost;
+    // the biggest connected region: spawns and wander targets come from it, so nobody is stranded
+    const g = grid, n = cost.length, comp = new Int32Array(n).fill(-1);
+    let best = -1, bestSize = 0, id = 0;
+    for (let k0 = 0; k0 < n; k0++) {
+      if (cost[k0] === Infinity || comp[k0] >= 0) continue;
+      let size = 0;
+      const st = [k0];
+      comp[k0] = id;
+      while (st.length) {
+        const k = st.pop();
+        size++;
+        const i = k % g.nx, j = (k / g.nx) | 0;
+        for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const ii = i + di, jj = j + dj;
+          if (ii < 0 || jj < 0 || ii >= g.nx || jj >= g.nz) continue;
+          const kk = jj * g.nx + ii;
+          if (comp[kk] < 0 && cost[kk] < Infinity) {
+            comp[kk] = id;
+            st.push(kk);
+          }
+        }
+      }
+      if (size > bestSize) (bestSize = size), (best = id);
+      id++;
+    }
+    this.comp = comp;
+    this.main = best;
     this.open = [];
-    for (let k = 0; k < cost.length; k++) if (cost[k] < Infinity) this.open.push(k);
+    for (let k = 0; k < n; k++) if (comp[k] === best) this.open.push(k);
   }
   cellOf(x, z) {
     const g = this.g;

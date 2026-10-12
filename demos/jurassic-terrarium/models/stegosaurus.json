@@ -1,0 +1,50 @@
+{
+ "id": "stegosaurus",
+ "name": "Stegosaurus stenops",
+ "common": "Stegosaurus",
+ "length": 6.5,
+ "mass_t": 3.5,
+ "height": 1.75,
+ "clips": {
+  "idle": {
+   "loop": true,
+   "frames": 240
+  },
+  "walk": {
+   "loop": true,
+   "speed": 1.0,
+   "stride": 2.1,
+   "period": 2.1,
+   "frames": 63
+  },
+  "run": {
+   "loop": true,
+   "speed": 2.0,
+   "stride": 2.94,
+   "period": 1.4667,
+   "frames": 44
+  },
+  "graze": {
+   "loop": false,
+   "frames": 180
+  },
+  "drink": {
+   "loop": false,
+   "frames": 180
+  },
+  "alert": {
+   "loop": false,
+   "frames": 120
+  },
+  "rest": {
+   "loop": true,
+   "frames": 180
+  },
+  "tailswing": {
+   "loop": false,
+   "frames": 90
+  }
+ },
+ "behaviour": {},
+ "facts": []
+}

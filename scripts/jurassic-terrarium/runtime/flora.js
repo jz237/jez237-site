@@ -50,7 +50,7 @@ export class Flora {
         const kind = rand() < 0.6 ? 'treefern' : 'cycad';
         const r = kind === 'treefern' ? 0.18 : 0.12;
         if (!free(x, z, r)) continue;
-        add(kind, x, z, 0.8 + rand() * 0.5, r, kind === 'treefern' ? 0.06 : 0.05);
+        add(kind, x, z, 0.8 + rand() * 0.5, r, kind === 'treefern' ? 0.05 : 0.04);
         n--;
       }
     };
@@ -69,7 +69,7 @@ export class Flora {
       const kind = rand() < 0.55 ? 'treefern' : 'cycad';
       const r = kind === 'treefern' ? 0.2 : 0.13;
       if (!free(x, z, r)) continue;
-      add(kind, x, z, 0.75 + rand() * 0.55, r, kind === 'treefern' ? 0.06 : 0.05);
+      add(kind, x, z, 0.75 + rand() * 0.55, r, kind === 'treefern' ? 0.05 : 0.04);
       want--;
     }
     // ferns carpet the meadows, thickest under the tree ferns
