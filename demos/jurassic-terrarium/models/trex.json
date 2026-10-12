@@ -1,0 +1,42 @@
+{
+ "id": "trex",
+ "name": "Tyrannosaurus rex",
+ "common": "Tyrannosaurus",
+ "length": 12.3,
+ "mass_t": 8.4,
+ "height": 3.74,
+ "clips": {
+  "idle": {
+   "loop": true,
+   "frames": 240
+  },
+  "walk": {
+   "loop": true,
+   "speed": 1.4,
+   "stride": 3.6,
+   "period": 2.5667,
+   "frames": 77
+  },
+  "run": {
+   "loop": true,
+   "speed": 3.36,
+   "stride": 5.4,
+   "period": 1.6,
+   "frames": 48
+  },
+  "roar": {
+   "loop": false,
+   "frames": 102
+  },
+  "sniff": {
+   "loop": false,
+   "frames": 120
+  },
+  "rest": {
+   "loop": true,
+   "frames": 180
+  }
+ },
+ "behaviour": {},
+ "facts": []
+}
