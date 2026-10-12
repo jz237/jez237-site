@@ -311,9 +311,11 @@ col *= mix(1.0, tint, detail);
 col *= mix(1.0, mix(0.84 + 0.16 * smoothstep(0.0, 0.6, sH), 0.83 + 0.26 * smoothstep(0.1, 0.9, sH), headK), detail);
 // far away: the average of scale tops and darker crevices, plus fine mottling
 col = mix(col, col * (0.8 + 0.12 * lzNoise(P * 9.0)), (1.0 - detail) * 0.9);
-// Spines: pale horn tips.
-// Spines: ivory, warmer at the base and faintly amber at the tip
-col = mix(col, cCream * 0.95, isSpike * smoothstep(0.0, 0.45, spikeT) * 0.82);
+// Spines: horn the colour of the skin at the base, paling toward the tip, some
+// paler than others (a uniform ivory reads as rows of white dots), and faintly
+// amber where the very tip is thin
+float spikePale = mix(0.3, 0.75, smoothstep(0.25, 0.75, lzNoise(P * 3.1 + 4.0)));
+col = mix(col, mix(col * 1.25, cCream * 0.92, 0.6), isSpike * smoothstep(0.1, 0.75, spikeT) * spikePale);
 // tubercles: the skin's own colour, a little paler and worn at the tip
 col = mix(col, col * 1.18 + vec3(0.02, 0.015, 0.008), isTuber * smoothstep(0.4, 1.0, spikeT) * 0.6);
 col = mix(col, vec3(0.42, 0.26, 0.12), isSpike * smoothstep(0.8, 1.0, spikeT) * 0.45);
@@ -366,7 +368,7 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
 }
 `);
   };
-  material.customProgramCacheKey = () => 'lizard-skin-v5';
+  material.customProgramCacheKey = () => 'lizard-skin-v6';
   return {material, uniforms};
 }
 
