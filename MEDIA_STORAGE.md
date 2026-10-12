@@ -21,9 +21,13 @@ update the relevant catalog/player URL and exact legacy mapping if needed.
 Never delete a source copy until verification and an independent backup exist.
 
 The separate `jz237/multimedia` repository holds full-resolution-master pointers
-and the legacy-video deployment workflow. Its history can be cleaned independently.
-The website's protected main branch forbids force pushes; migration does not
-disable this protection or claim its historical storage has been reclaimed.
+and the legacy-video deployment workflow. Both repositories' selected media history was cleaned with Jez's authorization.
+The website's protected main branch normally forbids force pushes. The one-time
+rewrite temporarily allows the coordinated update, then restores that protection.
+Old clones must resynchronize or transplant only their unpublished changes onto
+the rewritten history; never merge or force-push the old history back. The
+deployment baseline retains the same protected tree with its mapped commit ID.
+GitHub's reported storage may lag until server-side garbage collection.
 
 Deployment watch paths skip root documentation, local agent instructions and
 test-only changes. Public content, runtime code and deployment guards still run
