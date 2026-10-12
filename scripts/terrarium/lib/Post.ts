@@ -84,12 +84,13 @@ const focusShader = {
     tCloud: {value: null as THREE.Texture | null},
     uUseCloud: {value: 0},
     uSubject: {value: 0},
+    uSubjectUv: {value: new THREE.Vector2(0.5, 0.5)},
     uNear: {value: 0.01}, uFar: {value: 20}, uRate: {value: 1}, uAspect: {value: 1},
   },
   vertexShader: `void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }`,
   fragmentShader: /* glsl */ `
 precision highp float;
-uniform sampler2D tDepth; uniform sampler2D tPrev; uniform sampler2D tCloud; uniform float uNear, uFar, uRate, uAspect, uUseCloud, uSubject;
+uniform sampler2D tDepth; uniform sampler2D tPrev; uniform sampler2D tCloud; uniform float uNear, uFar, uRate, uAspect, uUseCloud, uSubject; uniform vec2 uSubjectUv;
 float linDepth(vec2 uv){
   float z = texture2D(tDepth, uv).x * 2.0 - 1.0;
   float d = 2.0 * uNear * uFar / (uFar + uNear - z * (uFar - uNear));
@@ -109,7 +110,9 @@ void main(){
   // median of nine (a partial insertion sort)
   for (int i = 1; i < 9; i++) for (int k = 8; k > 0; k--) if (k <= i && d[k] < d[k - 1]) { float t = d[k]; d[k] = d[k - 1]; d[k - 1] = t; }
   // (a subject in view, the lizard, takes the focus; otherwise the middle of the picture)
-  float target = clamp(uSubject > 0.0 ? uSubject : d[4], uNear * 4.0, 6.0);
+  // (only if it can be seen: hidden behind the rock or a plant, the picture's middle wins)
+  bool seen = uSubject > 0.0 && linDepth(uSubjectUv) > uSubject * 0.9 - 0.01;
+  float target = clamp(seen ? uSubject : d[4], uNear * 4.0, 6.0);
   // eased in diopters (1/m), as a lens racks focus
   float prev = texture2D(tPrev, vec2(0.5)).r;
   float f = prev > 0.0 ? 1.0 / mix(1.0 / prev, 1.0 / target, uRate) : target;
@@ -240,8 +243,10 @@ export class Post {
   private focusRT = [0, 1].map(() => new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter}));
   private focusI = 0;
   private lastTime = -1;
-  /** Distance (m) to a subject to focus on (the lizard, when it is in view), or 0 to focus on the middle of the picture. */
+  /** Depth (m, along the view) of a subject to focus on (the lizard, when it is in view), or 0 to focus on the middle of the picture. */
   subject = 0;
+  /** Where the subject is in the picture (uv), to check it is not hidden. */
+  readonly subjectUv = new THREE.Vector2(0.5, 0.5);
   private lastCam = {pos: new THREE.Vector3(), quat: new THREE.Quaternion()};
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
   private aoMulQuad = new FullScreenQuad(new THREE.ShaderMaterial({
@@ -380,6 +385,7 @@ export class Post {
         const jumped = this.camera.position.distanceTo(this.lastCam.pos) > 0.05 || this.camera.quaternion.angleTo(this.lastCam.quat) > 0.3;
         this.lastCam.pos.copy(this.camera.position); this.lastCam.quat.copy(this.camera.quaternion);
         fq.uniforms.uSubject.value = this.subject;
+        fq.uniforms.uSubjectUv.value.copy(this.subjectUv);
         fq.uniforms.uRate.value = this.lastTime < 0 || jumped ? 1 : 1 - Math.exp(-dt * 14);
         this.focusI = 1 - this.focusI;
         r.setRenderTarget(this.focusRT[this.focusI]);

@@ -300,8 +300,9 @@ export class LizardRig {
       // climbing onto (or down off) the log is a ramp, not a step: the log ahead or
       // behind lifts the body by its height less a 35° slope back to it, so the
       // body rises steadily, nose up, as it climbs, and comes down the same way
-      // (to the side as well as ahead: angling up onto it, the body rises as it gets over it)
-      if (h - mid > 0.006 && h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD) ramp = Math.max(ramp, h - (Math.abs(a) + Math.abs(sd)) * 0.7);
+      // (to the side as well as ahead, angling up onto it, though a log only brushing
+      // the flank lifts it little: the side counts three times as far off)
+      if (h - mid > 0.006 && h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD) ramp = Math.max(ramp, h - (Math.abs(a) + 3 * Math.abs(sd)) * 0.7);
       // (the log counts only right under the belly: climbing onto it, the chest
       // rises first with the forelegs, and the body follows as it gets on top,
       // rather than the whole lizard popping up the moment its nose is over it)

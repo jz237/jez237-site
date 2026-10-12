@@ -754,8 +754,10 @@ export class Terrarium {
       const sp = this.rig.spinePoints();
       const body = this.tmpFocus.copy(sp[2]).lerp(this.rig.snout, 0.35);
       const ndc = body.clone().project(this.camera);
-      const d = body.distanceTo(this.camera.position);
-      this.post.subject = ndc.z < 1 && Math.abs(ndc.x) < 0.8 && Math.abs(ndc.y) < 0.8 ? d : 0;
+      // (its depth along the view, as the depth of field measures it)
+      const d = -body.clone().applyMatrix4(this.camera.matrixWorldInverse).z;
+      this.post.subject = ndc.z < 1 && d > 0 && Math.abs(ndc.x) < 0.8 && Math.abs(ndc.y) < 0.8 ? d : 0;
+      this.post.subjectUv.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
     }
     this.renderer.shadowMap.needsUpdate = true;
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
