@@ -1,0 +1,22 @@
+{
+ "id": "pteranodon",
+ "name": "Pteranodon longiceps",
+ "common": "Pteranodon",
+ "length": 2.29,
+ "mass_t": 0.03,
+ "height": 0.628,
+ "clips": {
+  "glide": {
+   "loop": true,
+   "speed": 12.0,
+   "frames": 180
+  },
+  "flap": {
+   "loop": true,
+   "period": 0.4333,
+   "frames": 13
+  }
+ },
+ "behaviour": {},
+ "facts": []
+}

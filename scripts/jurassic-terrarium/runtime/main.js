@@ -17,11 +17,13 @@ import { Voices } from './voice.js';
 // pine is an 11 m conifer (miniature-scale trees, as in a diorama).
 export const METRES_PER_UNIT = 8;
 const S = 1 / METRES_PER_UNIT;
+// The den: must match DEN in tools/build-page.mjs (the terrain shelf under it).
+const DEN = window.__jtDen || { x: 4.4, z: -1.7, hx: 0.95, hz: 0.75, y: 0.72 };
 
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', ready: true, count: 1, clearance: 0.14, maxWater: 0.7, maxSlope: 0.32, predator: true,
+    id: 'trex', ready: true, count: 1, clearance: 0.14, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
     acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
@@ -57,7 +59,7 @@ const SPECIES = [
     fact: 'Its front legs were longer than its back legs, so it stood like a giraffe and could feed higher than any other animal of its time.',
   },
   {
-    id: 'pteranodon', ready: false, count: 2, flyer: true,
+    id: 'pteranodon', ready: true, count: 2, flyer: true,
     common: 'Pteranodon', badge: 'flying reptile', dot: '#b8432a',
     era: 'Late Cretaceous, 86–84 million years ago · over the Western Interior Seaway',
     size: 'wingspan 6 m', mass: 'about 30 kg', diet: 'fish, caught at the sea surface',
@@ -78,11 +80,16 @@ class Dino {
     this.model = cloneSkinned(gltf.scene);
     this.model.scale.setScalar(S);
     this.root.add(this.model);
+    this.skins = [];
     this.model.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = true;
         o.receiveShadow = true;
         o.frustumCulled = false;
+        if (o.material?.roughnessMap) {
+          o.material = o.material.clone(); // per-animal, so wetness can differ
+          this.skins.push(o.material);
+        }
       }
     });
     this.mixer = new AnimationMixer(this.model);
@@ -169,6 +176,19 @@ class Dino {
     return true;
   }
 
+  inDen() {
+    const d = this.mod.den;
+    return Math.abs(this.pos.x - d.x) < 0.7 && Math.abs(this.pos.z - d.z) < 0.6;
+  }
+
+  goDen() {
+    const d = this.mod.den;
+    if (!this.goTo(d.inside.x, d.inside.z, () => {
+      this.state = 'turn';
+      this.turnTo = 0; // face +z: out of the mouth, towards the glass
+    })) this.timer = 2;
+  }
+
   oneShot(name, fade = 0.4) {
     const a = this.actions[name];
     if (!a) return false;
@@ -190,6 +210,28 @@ class Dino {
     this.timer -= dt;
     const mod = this.mod;
     const night = env.night > 0.6;
+    // rain darkens and glosses the skin; it dries slowly afterwards
+    const wantWet = Math.min(1, env.rain * 1.5 + env.wet * 0.6);
+    this.wet = (this.wet || 0) + (wantWet - (this.wet || 0)) * Math.min(1, dt * (wantWet > (this.wet || 0) ? 0.5 : 0.08));
+    for (const m of this.skins) {
+      m.roughness = 1 - 0.45 * this.wet;
+      m.color.setScalar(1 - 0.22 * this.wet);
+    }
+    // a lightning strike close by: flinch and run from it
+    const bolt = mod.bolt;
+    if (bolt && bolt.t > (this.lastBolt || 0) && this.state !== 'sleep') {
+      this.lastBolt = bolt.t;
+      const dd = Math.hypot(bolt.x - this.pos.x, bolt.z - this.pos.z);
+      if (dd < 2.5) {
+        const k = 2.6 / Math.max(dd, 0.05);
+        const t = this.layer.nearestOpen(this.pos.x + (this.pos.x - bolt.x) * k, this.pos.z + (this.pos.z - bolt.z) * k);
+        if (t && this.goTo(t.x, t.z, null, 'run')) {
+          this.state = 'flee';
+          const call = this.sp.sounds?.alert || this.sp.sounds?.roar;
+          if (call) mod.voice.play(call, this.root.position, this.sp.step || 1);
+        }
+      }
+    }
     // herbivores watch the predator: alert when it is near, run when it is close
     if (!this.sp.predator && mod.predator && this.state !== 'flee' && this.state !== 'sleep') {
       const p = mod.predator.pos;
@@ -219,7 +261,11 @@ class Dino {
         this.huntStep(dt);
         break;
       case 'idle':
-        if (night) {
+        if ((night || env.storm > 0.6) && this.sp.den && !this.inDen()) {
+          this.goDen();
+          break;
+        }
+        if (night || (this.sp.den && env.storm > 0.6)) {
           this.state = 'sleep';
           this.play('rest', 1.5);
           break;
@@ -230,8 +276,20 @@ class Dino {
         if (this.timer <= 0) this.rest(0.6);
         break;
       case 'sleep':
-        if (!night) this.rest(1.5);
+        if (!night && !(this.sp.den && env.storm > 0.6)) this.rest(1.5);
         break;
+      case 'turn': {
+        // turn on the spot (small steps) to face the den's mouth
+        let dh = Math.atan2(Math.sin(this.turnTo - this.heading), Math.cos(this.turnTo - this.heading));
+        this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 0.7);
+        this.play('walk', 0.4);
+        if (this.current) this.current.timeScale = 0.45;
+        if (Math.abs(dh) < 0.05) {
+          this.state = 'sleep';
+          this.play('rest', 1.2);
+        }
+        break;
+      }
       case 'walk':
       case 'flee':
         this.walkStep(dt);
@@ -434,8 +492,16 @@ class Flyer {
     this.state = 'fly';
     this.place(0);
     this.prev.copy(this.pos);
-    this.current = this.actions.glide;
-    this.current?.play();
+    // glide and flap play together; the flap's weight rises when climbing. Blending the two also
+    // narrows the stroke, which suits the slow, soaring flight in the case.
+    this.flapW = 0;
+    for (const [n, a] of Object.entries(this.actions)) {
+      a.setLoop(LoopRepeat, Infinity);
+      a.enabled = true;
+      a.play();
+      a.setEffectiveWeight(n === 'glide' ? 1 : 0);
+      if (n === 'flap') a.timeScale = 0.55;
+    }
   }
 
   pickPoints() {
@@ -488,13 +554,9 @@ class Flyer {
       this.flapT -= dt;
       const wantFlap = climb > 0.05 || this.flapT > 0;
       if (!wantFlap && rand() < dt * 0.06) this.flapT = 1.5 + rand() * 2;
-      const name = wantFlap ? 'flap' : 'glide';
-      const a = this.actions[name];
-      if (a && this.current !== a) {
-        a.reset().play();
-        a.crossFadeFrom(this.current, 0.6, false);
-        this.current = a;
-      }
+      this.flapW += ((wantFlap ? 0.62 : 0) - this.flapW) * Math.min(1, dt * 1.8);
+      this.actions.flap?.setEffectiveWeight(this.flapW);
+      this.actions.glide?.setEffectiveWeight(1 - this.flapW);
     }
     this.root.position.copy(this.pos);
     this.root.rotation.set(this.pitch, this.heading, this.roll, 'YXZ');
@@ -513,9 +575,21 @@ class Dinosaurs {
     this.layers = {};
     this.ready = false;
     this.voice = new Voices(ctx);
+    this.bolt = null;
+    ctx.events?.on?.('lightning', (e) => {
+      const p = e?.end;
+      if (p) this.bolt = { x: p.x, z: p.z, t: performance.now() };
+    });
     this.flora = new Flora(ctx, S, rand);
     this.group.add(this.flora.group);
-    this.nav = new NavGrid(ctx, { obstacles: this.flora.obstacles });
+    this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 }, mouth: { x: DEN.x, z: DEN.z + 0.75 } };
+    this.nav = new NavGrid(ctx, {
+      obstacles: this.flora.obstacles,
+      rects: [
+        { x0: DEN.x - 1.45, x1: DEN.x + 1.45, z0: DEN.z - 1.5, z1: DEN.z + 0.55, block: true },
+        { x0: DEN.x - 0.72, x1: DEN.x + 0.72, z0: DEN.z - 0.6, z1: DEN.z + 0.62, block: false },
+      ],
+    });
     for (const sp of SPECIES.filter((s) => !s.flyer))
       this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope });
     // let the camera come close enough to see a dinosaur's skin
@@ -531,6 +605,22 @@ class Dinosaurs {
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const base = new URL('models/', document.baseURI);
     const floraReady = this.flora.load(base).catch((e) => console.warn('[flora] load failed', e));
+    const denReady = loader
+      .loadAsync(new URL('den.glb', base).href)
+      .then((g) => {
+        const m = g.scene;
+        m.scale.setScalar(S);
+        m.position.set(DEN.x, DEN.y - 0.03, DEN.z);
+        m.traverse((o) => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+          }
+        });
+        m.name = 'den';
+        this.group.add(m);
+      })
+      .catch((e) => console.warn('[den] load failed', e));
     await Promise.all(
       SPECIES.filter((sp) => sp.ready).map(async (sp) => {
         const [gltf, info] = await Promise.all([
@@ -545,6 +635,7 @@ class Dinosaurs {
       }),
     );
     await floraReady;
+    await denReady;
     this.predator = this.dinos.find((d) => d.sp.predator) || null;
     this.walkers = this.dinos.filter((d) => !d.sp.flyer);
     this.ready = true;
@@ -586,7 +677,7 @@ class Dinosaurs {
     const life = this.ctx.modules.life?.env;
     const tod = this.ctx.world.timeOfDay ?? 0.5; // 0..1, 0.5 = noon
     const night = life ? life.night : tod < 0.23 || tod > 0.8 ? 1 : 0;
-    return { night, storm: life?.storm || 0, rain: life?.rain || 0 };
+    return { night, storm: life?.storm || 0, rain: life?.rain || 0, wet: life?.wet || this.ctx.world.groundWetness || 0 };
   }
 
   update(dt) {

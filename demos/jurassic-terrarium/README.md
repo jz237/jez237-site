@@ -14,11 +14,11 @@ This is a work in progress, published as it grows.
 
 | Animal | Status |
 |---|---|
-| Tyrannosaurus rex | in the case |
+| Tyrannosaurus rex | in the case, with a den under a basalt overhang |
+| Pteranodon (2) | in the case, soaring |
 | Triceratops | being sculpted |
 | Stegosaurus | being sculpted |
 | Brachiosaurus | being sculpted |
-| Pteranodon | being sculpted |
 
 ## How the dinosaurs are made
 
@@ -51,7 +51,14 @@ Every animal is modelled from code and rendered in Blender 4.5. Nothing is downl
    young fronds) and horsetails are modelled procedurally in Blender (`blender/flora.py`) and instanced
    with a wind-sway shader. They replace Weatherglass's oaks, birches and cherries, and thin out its
    flowers and grass. The conifers and shrubs stay.
-7. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
+7. **Sound.** Voices are synthesised live with Web Audio through Weatherglass's audio engine, so its
+   sound button and volume apply. They are informed by living archosaurs (crocodilians and birds boom,
+   hiss and grunt with closed mouths): the T. rex's deep rasping growl, snorts, grunts, a sauropod's
+   rumble, pterosaur croaks, and footfalls synced to each gait.
+8. **Weather.** Skin darkens and turns glossy in rain. A nearby lightning strike sends animals running.
+   At night, or in a storm, the T. rex retires to its den: a basalt overhang sculpted and baked the same
+   way, over a level shelf patched into the terrain.
+9. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
    a walkability grid of the terrain, which keeps animals off cliffs, deep water, trees and the hut.
    It then drives behaviour: idle, wander, sniff, roar, graze, drink and sleep at night.
 

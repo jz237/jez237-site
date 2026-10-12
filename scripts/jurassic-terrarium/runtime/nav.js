@@ -5,7 +5,7 @@
 // are string-pulled (line-of-sight shortcuts) so animals walk smooth diagonals, not grid steps.
 
 export class NavGrid {
-  constructor(ctx, { cell = 0.1, margin = 0.35, obstacles = [] } = {}) {
+  constructor(ctx, { cell = 0.1, margin = 0.35, obstacles = [], rects = [] } = {}) {
     const box = ctx.box;
     this.ctx = ctx;
     this.cell = cell;
@@ -38,6 +38,17 @@ export class NavGrid {
         if (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + 0.1) c = Infinity;
         this.base[k] = c;
       }
+    }
+    // rectangles: rock masses block, hollows inside them open up again (applied in order)
+    for (const r of rects) {
+      for (let j = 0; j < this.nz; j++)
+        for (let i = 0; i < this.nx; i++) {
+          const x = this.minX + (i + 0.5) * cell, z = this.minZ + (j + 0.5) * cell;
+          if (x < r.x0 || x > r.x1 || z < r.z0 || z > r.z1) continue;
+          const k = j * this.nx + i;
+          this.base[k] = r.block ? Infinity : 1;
+          if (!r.block) this.slope[k] = Math.min(this.slope[k], 0.1);
+        }
     }
     // planted trunks (tree ferns, cycads)
     for (const o of obstacles) this._stamp(o.x, o.z, o.r + 0.04, Infinity);
@@ -141,8 +152,20 @@ class NavLayer {
   // A* with an octile heuristic; returns [{x,z}...] or null.
   path(ax, az, bx, bz, maxIter = 40000) {
     const g = this.g, nx = g.nx, nz = g.nz;
-    const s = this.cellOf(ax, az), t = this.cellOf(bx, bz);
-    if (this.cost[t] === Infinity) return null;
+    // an animal standing in a blocked cell (pushed into a grove, or spawned there) starts from the
+    // nearest open one; an unreachable goal snaps to the nearest open cell too
+    let s = this.cellOf(ax, az), t = this.cellOf(bx, bz);
+    if (this.cost[s] === Infinity) {
+      const c = this.nearestOpen(ax, az);
+      if (!c) return null;
+      s = this.cellOf(c.x, c.z);
+    }
+    if (this.cost[t] === Infinity) {
+      const c = this.nearestOpen(bx, bz);
+      if (!c) return null;
+      t = this.cellOf(c.x, c.z);
+      (bx = c.x), (bz = c.z);
+    }
     const n = nx * nz;
     const gs = new Float32Array(n).fill(Infinity);
     const from = new Int32Array(n).fill(-1);

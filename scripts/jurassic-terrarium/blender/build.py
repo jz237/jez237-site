@@ -324,6 +324,8 @@ def stage_anim():
     kind = meta['gait']['kind']
     if kind == 'biped':
         gen = anim.Biped(R, meta)
+    elif kind == 'flyer':
+        gen = anim.Flyer(R, meta)
     else:
         gen = getattr(anim, meta['gait'].get('generator', 'Quadruped'))(R, meta)
     info = {}

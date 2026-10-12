@@ -33,7 +33,9 @@ export class Flora {
     const taken = [];
     const free = (x, z, r) => taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
     const inBox = (x, z, m) => Math.abs(x) < box.halfW - m && Math.abs(z) < box.halfD - m;
-    const nearCabin = (x, z, r) => cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + r;
+    const denAt = window.__jtDenAt || (() => false);
+    const nearCabin = (x, z, r) =>
+      (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + r) || denAt(x, z, r);
     const water = (x, z) => Math.max(T.lakeMask(x, z), T.riverMask(x, z));
     const add = (kind, x, z, scale, r, block) => {
       P[kind].push({ x, z, y: T.height(x, z), scale, rot: rand() * Math.PI * 2, v: Math.floor(rand() * 8) });

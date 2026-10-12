@@ -65,11 +65,28 @@ patch('broad:e.pick(11,16,20)', 'broad:0', 'broadleaf count');
 patch('h=FC(e.pick(2e4,6e4,12e4),l,c)', 'h=FC(e.pick(9e3,26e3,52e3),l,c)', 'grass count');
 patch('const f=NC(e.pick(1800,3500,7e3),l,c)', 'const f=NC(e.pick(250,500,1e3),l,c)', 'flower count');
 
+// The T. rex den: a level shelf cut into the foot of the right-hand peak, under the rock overhang that
+// dinos.js places there. The terrain function is shared by the mesh bake, water, planting and routing,
+// so everything agrees about the new ground. DEN must match DEN in runtime/main.js.
+const DEN = { x: 4.4, z: -1.7, hx: 0.95, hz: 0.75, y: 0.72 };
+patch('h=(w,y,_,M,A)=>!(!a(w,y,M)||', 'h=(w,y,_,M,A)=>!(!a(w,y,M)||window.__jtDenAt&&window.__jtDenAt(w,y,M)||', 'no trees in the den');
+patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
+
 // Hold the veil while dinos.js loads its models. The hold is set before the bundle runs.
 patch(
   '<link rel="icon" href="favicon.svg" type="image/svg+xml">',
   '<link rel="icon" href="favicon.svg" type="image/svg+xml"><script>window.__wgHold=1</script>',
   'hold flag',
+);
+patch(
+  '<script>window.__wgHold=1</script>',
+  `<script>window.__wgHold=1</script><script>window.__jtDen=${JSON.stringify(DEN)};window.__jtCave=function(x,z,e){` +
+    `var d=window.__jtDen,u=Math.abs(x-d.x)/d.hx,v=Math.abs(z-d.z)/d.hz;` +
+    `function s(a,b,t){t=Math.min(1,Math.max(0,(t-a)/(b-a)));return t*t*(3-2*t)}` +
+    `var m=(1-s(0.75,1.3,u))*(1-s(0.75,1.3,v));return e+(d.y-e)*m};` +
+    `window.__jtDenAt=function(x,z,r){var d=window.__jtDen;r=r||0;` +
+    `return Math.abs(x-d.x)<1.55+r&&z>d.z-1.7-r&&z<d.z+0.95+r}</script>`,
+  'den terrain hook',
 );
 patch(
   '_===2&&(document.body.classList.add("ready"),S.ready=!0)',
