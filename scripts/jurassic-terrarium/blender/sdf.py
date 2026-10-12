@@ -336,6 +336,101 @@ class Loft(Prim):
         return (self.par[j] * (1 - t) + self.par[j + 1] * t) / (len(self.sections) - 1)
 
 
+class SmoothLoft(Loft):
+    """Opt-in Loft with a crease-free distance, for thick bent tubes (trunk, neck, tail, limbs).
+
+    Same constructor, sections, frames, bbox and param() as Loft; only dist() differs.
+
+    Loft takes the union of its pieces, each extruded a little past its ends. Where the tube bends or
+    its section changes size, the overlapping piece ends leave a rib at every sample, and sheets,
+    creases and pits at the joints. Here every point is measured against ONE piece of the centre line
+    (no union), in the cross-section plane that passes through the point: the plane's normal turns
+    smoothly from one sample's tangent to the next along the piece, and the section size is
+    interpolated with it. Neighbouring pieces share their end plane, so on the outside of a bend the
+    planes fan out continuously; there is neither a rib nor a plateau where one piece hands over to the
+    next. A point is given to the nearest piece (by its centre line) or one of that piece's neighbours,
+    whichever actually holds the point's plane.
+
+    The true ends are capped with a half-ellipsoid. Its distance scale starts equal to the side's at the
+    end plane, so the field does not jump there, and becomes direction-independent at the tip (no pinch
+    at the pole).
+
+    Combines stegosaurus.SmoothLoft (one nearest piece, no union) with triceratops.WLoft (the point's
+    own interpolated section plane, the continuous cap).
+    """
+
+    def _plane_u(self, P, j):
+        """Parameter u along piece j whose interpolated section plane passes through P (unclamped).
+        (P - A - u AB) . (T0 + u dT) = 0 is a quadratic in u; take the root near the chord projection."""
+        A = self.S[j]
+        AB = self.S[j + 1] - A
+        T0 = self.T[j]
+        dT = self.T[j + 1] - T0
+        PA = P - A
+        qa = -np.einsum('ij,ij->i', AB, dT)
+        qb = np.einsum('ij,ij->i', PA, dT) - np.einsum('ij,ij->i', AB, T0)
+        qc = np.einsum('ij,ij->i', PA, T0)
+        disc = qb * qb - 4 * qa * qc
+        sq = np.sqrt(np.maximum(disc, 0.0))
+        den = -qb - np.where(qb >= 0, sq, -sq)
+        u_lin = -qc / np.where(np.abs(qb) > 1e-12, qb, -1e-12)
+        u = np.where((disc >= 0) & (np.abs(den) > 1e-12), 2 * qc / np.where(np.abs(den) > 1e-12, den, 1.0), u_lin)
+        return u
+
+    def _piece_dist(self, P, j, u):
+        """Distance measured in piece j's section plane at parameter u (clamped to the piece; beyond a
+        true end the remainder becomes the cap). Returns (distance, |P - centre|)."""
+        last = len(self.S) - 2
+        tc = np.clip(u, 0.0, 1.0)
+        tt = tc[:, None]
+        C = self.S[j] * (1 - tt) + self.S[j + 1] * tt
+        T = self.T[j] * (1 - tt) + self.T[j + 1] * tt
+        T /= np.linalg.norm(T, axis=1, keepdims=True)
+        Sd = self.Sd[j] * (1 - tt) + self.Sd[j + 1] * tt
+        Up = self.Up[j] * (1 - tt) + self.Up[j + 1] * tt
+        Vv = self.V[j] * (1 - tt) + self.V[j + 1] * tt
+        q = P - C
+        cdist = np.linalg.norm(q, axis=1)
+        along = np.einsum('ij,ij->i', q, T)
+        q = q - along[:, None] * T
+        x = np.einsum('ij,ij->i', q, Sd)
+        y = np.einsum('ij,ij->i', q, Up)
+        w, top, bot, nt, nb = Vv[:, 0], Vv[:, 1], Vv[:, 2], Vv[:, 3], Vv[:, 4]
+        h = np.where(y > 0, top, bot)
+        n = np.where(y > 0, nt, nb)
+        r = ((np.abs(x) / w) ** n + (np.abs(y) / h) ** n) ** (1.0 / n)
+        rho = np.sqrt(x * x + y * y)
+        rb = np.where(r > 1e-9, rho / np.maximum(r, 1e-9), np.minimum(w, h))  # boundary radius this way
+        true_end = ((u > 1.0) & (along > 0) & (j == last)) | ((u < 0.0) & (along < 0) & (j == 0))
+        # 'along' is ~0 when the plane was solved; elsewhere the joint's section is swept around it
+        d_side = np.sqrt(rho * rho + along * along) - rb
+        if not self.cap:
+            return np.where(true_end, np.maximum(rho - rb, np.abs(along)), d_side), cdist
+        rc = np.minimum(w, np.minimum(top, bot))
+        z = np.abs(along) / rc
+        sc = np.clip(z, 0.0, 1.0)
+        d_cap = (np.sqrt(r * r + z * z) - 1.0) * (rb * (1 - sc) + rc * sc)
+        return np.where(true_end, d_cap, d_side), cdist
+
+    def dist(self, P, K=1):
+        j0, t0 = self._candidates(P, 1)
+        j0, t0 = j0[:, 0], t0[:, 0]
+        last = len(self.S) - 2
+        tol = 1e-6
+        # fallback: the nearest piece at its chord projection (as stegosaurus.SmoothLoft)
+        best, _ = self._piece_dist(P, j0, t0)
+        bestc = np.full(len(P), np.inf)
+        for o in (0, -1, 1):
+            j = np.clip(j0 + o, 0, last)
+            u = self._plane_u(P, j)
+            ok = ((u >= -tol) | (j == 0)) & ((u <= 1 + tol) | (j == last))
+            d, cd = self._piece_dist(P, j, u)
+            take = ok & (cd < bestc)
+            best = np.where(take, d, best)
+            bestc = np.where(take, cd, bestc)
+        return best
+
+
 class Field:
     """An ordered list of primitives combined left to right."""
 

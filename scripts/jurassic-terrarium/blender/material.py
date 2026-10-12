@@ -96,6 +96,9 @@ def skin_material(meta, name='skin_src'):
                      domes, m; 0 = none), tubercle_density (0..1), border (0..1 darkness of scale borders),
                      folds (strength of transverse skin folds)
     meta['accent_grad']: [z_lo, z_hi] metres: accent -> accent2 with height (plate rims, frill edges)
+    meta['palette']['osteo2'] + meta['osteo_shade']: [a_lo, a_hi]: optional; osteo-tagged parts shade
+                     from osteo to osteo2 as their accent amount goes from a_lo to a_hi
+    meta['osteo_rough']: optional roughness of osteo-tagged parts (default 0.5)
     """
     pal = {k: hex2rgb(v) for k, v in meta['palette'].items()}
     pat = meta.get('pattern', {})
@@ -256,13 +259,22 @@ def skin_material(meta, name='skin_src'):
     col = g.mix(tooth, col, hex2rgb('#d9cfb4'))
     col = g.mix(eye, col, pal['eye'])
     if 'osteo' in pal:
-        col = g.mix(osteo, col, pal['osteo'])
+        oc = pal['osteo']
+        if 'osteo2' in pal:
+            # optional second tone for osteo-tagged parts, chosen per part by its accent amount:
+            # accent osteo_shade[0] -> osteo, osteo_shade[1] -> osteo2 (linear), with a little
+            # large-scale noise so the tone is not flat
+            lo, hi = meta.get('osteo_shade', (0.0, 1.0))
+            sh = g.math('MULTIPLY', g.math('SUBTRACT', accent, lo), 1.0 / max(hi - lo, 1e-6))
+            sh = g.math('ADD', sh, g.math('MULTIPLY', g.math('SUBTRACT', noise(4.0, 3), 0.5), 0.3), clamp=True)
+            oc = g.mix(sh, pal['osteo'], pal['osteo2'])
+        col = g.mix(osteo, col, oc)
     g.link(col, bsdf.inputs['Base Color'])
 
     # ---- roughness
     rough = g.math('ADD', 0.66, g.math('MULTIPLY', relief, 0.16))
     rough = g.mixf(kerat, rough, 0.4)
-    rough = g.mixf(osteo, rough, 0.5)
+    rough = g.mixf(osteo, rough, meta.get('osteo_rough', 0.5))
     rough = g.mixf(claw, rough, 0.32)
     rough = g.mixf(mouth, rough, 0.25)
     rough = g.mixf(eye, rough, 0.1)

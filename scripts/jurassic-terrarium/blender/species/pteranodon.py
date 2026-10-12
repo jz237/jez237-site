@@ -180,6 +180,58 @@ class SideSheet(Sheet):
         return Sheet.binding(self, P[:, self._perm])
 
 
+class Tint(sdf.Prim):
+    """Colour-only companion of a primitive: it never changes the shape, it only joins the surface's
+    material / accent mix with a weight weight(P) in 0..1.
+
+    Its distance is inner's plus a positive offset, so with k = 0 the union (a plain min against a field
+    that already contains inner) leaves the field exactly as it is. Field.tag_weights weighs a primitive
+    by exp(-d / sigma) at the surface, so an offset of -sigma ln(weight) gives it that weight. It carries
+    no bone binding and inherits inner's UV region."""
+
+    EPS = 2e-4
+
+    def __init__(self, inner, weight, sigma, tag='skin', accent=0.0, name='tint'):
+        super().__init__(k=0.0, tag=tag, accent=accent, detail=inner.detail, name=name)
+        self.inner = inner
+        self.weight = weight
+        self.sigma = sigma
+
+    def dist(self, P):
+        w = np.clip(self.weight(P), 1e-4, 1.0)
+        return self.inner.dist(P) + self.EPS - self.sigma * np.log(w)
+
+    def bbox(self):
+        return self.inner.bbox()
+
+
+def _polyline_dist2d(X, Y, pts):
+    """Distance from 2D points to a polyline (m, 2)."""
+    pts = np.asarray(pts, float)
+    d = np.full(np.shape(X), np.inf)
+    for a, b in zip(pts[:-1], pts[1:]):
+        d = np.minimum(d, _seg_dist2d(X, Y, a, b))
+    return d
+
+
+def _raster2d(fn, lo, hi, res):
+    """Sample fn(X, Y) once on a grid over the xy box lo..hi; return a bilinear lookup f(P) (P: (n, 3))."""
+    lo = np.asarray(lo, float)
+    nx, ny = (int(math.ceil((hi[i] - lo[i]) / res)) + 1 for i in (0, 1))
+    X, Y = np.meshgrid(lo[0] + np.arange(nx) * res, lo[1] + np.arange(ny) * res, indexing='ij')
+    M = np.asarray(fn(X, Y), np.float32)
+
+    def look(P):
+        fx = np.clip((P[:, 0] - lo[0]) / res, 0, nx - 1.0001)
+        fy = np.clip((P[:, 1] - lo[1]) / res, 0, ny - 1.0001)
+        i, j = fx.astype(np.int64), fy.astype(np.int64)
+        tx, ty = fx - i, fy - j
+        return (M[i, j] * (1 - tx) * (1 - ty) + M[i + 1, j] * tx * (1 - ty) + M[i, j + 1] * (1 - tx) * ty
+                + M[i + 1, j + 1] * tx * ty)
+
+    return look
+
+
 # ------------------------------------------------------------------------------ body
 def build():
     b = Body('pteranodon')
@@ -347,9 +399,27 @@ def build():
             out[k_] = out.get(k_, 0) + beta * w
         return out
 
-    wing = Sheet(poly, wing_z, wing_h, wing_bind, res=0.004, k=0.02, tag='membrane', detail=0.25,
+    # colour: the shader has no membrane channel, so the membrane takes the osteo slot (this animal has
+    # no osteoderms): warm rufous, shading towards osteo2 by the accent amount (meta osteo_shade). A Tint
+    # (accent 1, colour only) raises the accent in a dark band along the free trailing edge and a
+    # lighter one along the leading edge (spar and propatagium).
+    wing = Sheet(poly, wing_z, wing_h, wing_bind, res=0.004, k=0.02, tag='osteo', detail=0.25,
                  name='brachiopatagium', region='membrane.L')
     left.append(b.add(wing))
+    tag_sigma = 0.012 * float(tip[0] - tail_tip[0]) / 12 + 0.004  # build.py's tag_weights sigma
+    le_xy = np.vstack([np.array([Sh, El])[:, :2], spar_curve[:, :2]])
+
+    def wing_shade(X, Y):
+        """Wanted shade 0 (osteo) .. 1 (osteo2) over the planform, as a Tint weight (accent = s / 2)."""
+        bw = np.interp(Y, [0.2, 1.5, 2.9], [0.22, 0.17, 0.09])
+        s_te = 1 - _sstep(0.4 * bw, bw, _polyline_dist2d(X, Y, te2))
+        d_le = np.minimum(_polyline_dist2d(X, Y, le_xy), _polyline_dist2d(X, Y, prop))
+        s_le = 0.42 * (1 - _sstep(0.025, 0.085, d_le))
+        s = np.clip(np.maximum(s_te, s_le), 0, 0.999)
+        return s / (2 - s)
+
+    left.append(b.add(Tint(wing, _raster2d(wing_shade, wing.lo2, wing.hi2, 0.006), tag_sigma, tag='osteo',
+                           accent=1.0, name='wingshade')))
 
     # uropatagium: a small web between the inner thighs and the base of the tail
     thigh_p = Hp + 0.8 * (Kn - Hp)
@@ -368,8 +438,15 @@ def build():
     uro_segs = [(S_['tail1'], hip, tail_tip), (S_['pelvis'], hip, spine_pts[0]), (S_['thigh.L'], Hp, Kn),
                 (S_['shin.L'], Kn, An)]
     uro = Sheet(uro_poly, uro_z, lambda X, Y, D: np.full_like(X, 0.0085), lambda X, Y: _softmin_bind(X, Y, uro_segs, 0.03),
-                res=0.003, k=0.015, tag='membrane', detail=0.25, name='uropatagium', region='membrane.L')
+                res=0.003, k=0.015, tag='osteo', detail=0.25, name='uropatagium', region='membrane.L')
     left.append(b.add(uro))
+
+    def uro_shade(X, Y):
+        s = np.clip(1 - _sstep(0.012, 0.04, _polyline_dist2d(X, Y, uro_te)), 0, 0.999)
+        return s / (2 - s)
+
+    left.append(b.add(Tint(uro, _raster2d(uro_shade, uro.lo2, uro.hi2, 0.004), tag_sigma, tag='osteo',
+                           accent=1.0, name='uroshade')))
 
     # -------------------------------------------------------------- arm (pycnofibre-covered proximally)
     arm_secs = [
@@ -381,8 +458,18 @@ def build():
         sec(El + 0.8 * (Wr - El), 0.031, 0.022, 0.022),
         sec(Wr, 0.030, 0.021, 0.021),
     ]
-    left.append(b.loft_chain(arm_secs, [S_['upperarm.L'], S_['forearm.L']], [El], blend=0.06, k=0.03,
-                             side=(-1, 0, 0), samples=10, tag='feather', detail=0.5, name='arm'))
+    # the arm carries the wing's leading edge: wing-coloured (a shade darker), fading to the body's
+    # fuzz towards the shoulder (a feather Tint)
+    arm = b.loft_chain(arm_secs, [S_['upperarm.L'], S_['forearm.L']], [El], blend=0.06, k=0.03,
+                       side=(-1, 0, 0), samples=10, tag='osteo', detail=0.5, name='arm')
+    arm.accent = 0.25
+    left.append(arm)
+    hu = El - Sh
+
+    def shoulder_fuzz(P):
+        return 1 - _sstep(0.0, 0.4, ((P - Sh) @ hu) / float(hu @ hu))
+
+    left.append(b.add(Tint(arm, shoulder_fuzz, tag_sigma, tag='feather', name='armfuzz')))
     # wing metacarpal and the wing finger: one spar from the wrist to the tip
     hand_secs = [sec(p, w, t_, t_) for p, w, t_ in [
         (Wr, 0.030, 0.021),
@@ -390,7 +477,8 @@ def build():
         (Kn4, 0.027, 0.021),
     ]]
     left.append(b.loft_chain(hand_secs, [S_['hand.L']], [], k=0.02, side=(-1, 0, 0), samples=10, detail=0.4,
-                             name='metacarpal'))
+                             tag='osteo', name='metacarpal'))
+    left[-1].accent = 0.25
     fin_secs = [sec(p, w, t_, t_) for p, w, t_ in [
         (Kn4, 0.025, 0.020),
         (Kn4 + 0.5 * (F1 - Kn4), 0.021, 0.0168),
@@ -401,10 +489,12 @@ def build():
         (Tip, 0.005, 0.0050),
     ]]
     left.append(b.loft_chain(fin_secs, [S_['wingfinger1.L'], S_['wingfinger2.L'], S_['wingfinger3.L']], [F1, F2],
-                             blend=0.06, k=0.016, side=(-1, 0, 0), samples=10, detail=0.3, name='wingfinger'))
+                             blend=0.06, k=0.016, side=(-1, 0, 0), samples=10, detail=0.3, tag='osteo',
+                             name='wingfinger'))
+    left[-1].accent = 0.25
     # pteroid: a slender rod from the wrist pointing to the neck, carrying the propatagium's edge
     left.append(b.add(RoundCone(Wr + V(0.01, -0.01, 0), pter_tip, 0.011, 0.006, k=0.012, bind=S_['forearm.L'],
-                                detail=0.3, name='pteroid')))
+                                detail=0.3, tag='osteo', accent=0.25, name='pteroid')))
     # three small clawed fingers (I-III) at the end of the wing metacarpal, held forward in flight
     for off, dirv, L in [(V(0.012, -0.050, 0.010), V(0.88, -0.42, 0.22), 0.058),
                          (V(0.016, -0.022, 0.008), V(0.97, -0.12, 0.20), 0.068),
@@ -518,9 +608,13 @@ def build():
         name='Pteranodon longiceps', common='Pteranodon', length=round(length, 2), wingspan=round(span, 2),
         wingspan_bones=6.0, mass_t=0.03, sex='male',
         voxel=0.006, jaw_open=JAW_OPEN, jaw_seal=0.0, faces=50000, tex=2048,
+        # osteo / osteo2: the wing membrane (see wing_shade): warm rufous, a dark chestnut trailing edge
         palette=dict(back='#4A4D52', flank='#E8E4DA', belly='#DEDBD3', pattern='#2A2B2E', accent='#B8432A',
-                     accent2='#3A2420', keratin='#C9B78C', claw='#2A2622', mouth='#C46A4A', eye='#2B2420'),
+                     accent2='#3A2420', keratin='#C9B78C', claw='#2A2622', mouth='#C46A4A', eye='#2B2420',
+                     osteo='#A3552A', osteo2='#3E1D11'),
         accent_grad=[0.86, 0.97],
+        osteo_shade=[0.0, 0.5],  # a Tint of weight f gives accent f / (1 + f): 0.5 = the full osteo2 band
+        osteo_rough=0.72,  # matte skin, not the default glossy keratin of an osteo part
         pattern=dict(kind='none', strength=0.0, mottle=0.12),
         scales=dict(base=0.006, feature=0.012, border=0.12, folds=0.15, bump=0.5),
         feature_on_body=0.3, feature_on_limbs=0.3,

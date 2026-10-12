@@ -7,9 +7,25 @@ covered when the mouth is shut. Fine pebbly scales (Bell et al. 2017); no feathe
 import math
 import numpy as np
 from anatomy import Body, sec, claw, V
-from sdf import Loft, Ellipsoid, RoundCone, Xform, rot_euler, normalize, Group
+from sdf import Loft, SmoothLoft, Ellipsoid, RoundCone, Xform, rot_euler, normalize, Group, chain_binding
 
 JAW_OPEN = math.radians(4.0)  # rest pose opens the jaw a little so the lips separate cleanly
+
+
+def smooth_chain(b, sections, bones, joint_points, blend=0.05, side=(0, 1, 0), k=0.1, tag='skin', samples=10,
+                 detail=1.0, name='', region=None):
+    """Body.loft_chain with an sdf.SmoothLoft: same binding, no ribs or creases at bends and joints."""
+    lf = SmoothLoft(sections, side=side, samples_per_seg=samples, k=k, tag=tag, name=name, detail=detail)
+    lf.chain = list(bones)
+    lf.region = region
+    if len(bones) == 1:
+        lf.bind = bones[0]
+    else:
+        ju = lf.param(np.array(joint_points, float))
+        total = sum(np.linalg.norm(np.asarray(sections[i + 1]['p']) - np.asarray(sections[i]['p']))
+                    for i in range(len(sections) - 1))
+        lf.bind = chain_binding(lf, bones, ju, blend / max(total, 1e-6))
+    return b.add(lf)
 
 
 def build():
@@ -74,7 +90,7 @@ def build():
     joints = [tail_pts[i] for i in range(6, 0, -1)] + [V(0.0, 0, 3.08)]  # ... tail1|pelvis (at the hip)
     joints += [V(0.6, 0, 3.07), V(1.25, 0, 3.04), V(1.9, 0, 3.02), V(2.5, 0, 3.02), V(2.92, 0, 3.12),
                V(3.35, 0, 3.38), V(3.82, 0, 3.74)]
-    b.loft_chain(ax, axial_bones, joints, blend=0.32, k=0.0, samples=12, name='axial')
+    smooth_chain(b, ax, axial_bones, joints, blend=0.32, k=0.0, samples=12, name='axial')
     # muscle masses that give the silhouette its anatomy
     # neck: the deep, muscular base and the throat beneath it
     b.add(Ellipsoid((3.05, 0, 2.95), (0.55, 0.38, 0.42), R=rot_euler(ry=-0.45), k=0.22, bind=S['neck1'], name='neckbase'))
@@ -198,7 +214,7 @@ def build():
         sec((0.01, 0.47, 0.37), 0.085, 0.08, 0.072),
         sec(Bl + V(0, 0, 0.02), 0.11, 0.085, 0.08),
     ]
-    left.append(b.loft_chain(leg, [S['thigh.L'], S['shin.L'], S['meta.L']], [K, A], blend=0.12, k=0.28,
+    left.append(smooth_chain(b, leg, [S['thigh.L'], S['shin.L'], S['meta.L']], [K, A], blend=0.12, k=0.28,
                              side=(0, 1, 0), samples=10, name='leg'))
     # gastrocnemius / calf
     left.append(b.add(Ellipsoid((0.19, 0.50, 1.40), (0.15, 0.13, 0.30), R=rot_euler(ry=-0.42), k=0.1,
@@ -218,7 +234,7 @@ def build():
         ws = [w, w * 0.92, w * 0.85, w * 0.75, w * 0.6]
         knuckle = [1.0, 1.12, 0.95, 1.08, 0.9]
         secs = [sec(p + V(0, 0, 0.012 * kk), ww * kk, ww * 0.85 * kk, ww * 0.9) for p, ww, kk in zip(pts, ws, knuckle)]
-        left.append(b.loft_chain(secs, [S['meta.L'], S['toe.L']], [base + d * 0.12], blend=0.06, k=0.04,
+        left.append(smooth_chain(b, secs, [S['meta.L'], S['toe.L']], [base + d * 0.12], blend=0.06, k=0.04,
                                  side=(-d[1], d[0], 0), samples=8, name='toe', detail=0.8, region='foot.L'))
         left.append(b.add(claw(tip + normalize(d) * 0.01 + V(0, 0, 0.012), d, 0.14, 0.04, V(0, 0, -1),
                                side=(-d[1], d[0], 0), bind=S['toe.L'])))
@@ -237,7 +253,7 @@ def build():
         sec((El + Wr) / 2, 0.07, 0.065, 0.062),
         sec(Wr, 0.055, 0.05, 0.048),
     ]
-    left.append(b.loft_chain(arm, [S['upperarm.L'], S['forearm.L'], S['hand.L']], [El, Wr], blend=0.05, k=0.07,
+    left.append(smooth_chain(b, arm, [S['upperarm.L'], S['forearm.L'], S['hand.L']], [El, Wr], blend=0.05, k=0.07,
                              side=(0, 1, 0), samples=8, name='arm'))
     for dy, L in ((0.022, 0.17), (-0.024, 0.15)):
         f0 = Wr + V(0.01, dy, -0.01)
