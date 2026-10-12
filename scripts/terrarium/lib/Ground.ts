@@ -416,15 +416,17 @@ float wallRoots(float x, float y, float top){
 WallSample wallSample(vec2 uv, float top, float wet){
   WallSample s;
   float x = uv.x, y = uv.y;
-  float layer = 0.04 + (gfbm(vec2(x * 9.0, 1.0)) - 0.5) * 0.012;
+  // (kept at least 2 cm under the surface: where the bed dips, the pebbles do too)
+  float layer = min(0.06 + (gfbm(vec2(x * 9.0, 1.0)) - 0.5) * 0.014, top - 0.022);
   // drainage layer: rounded river pebbles heaped against the glass, tan to grey-brown
-  vec2 pq = vec2(x, y) * vec2(72.0, 80.0);
+  vec2 pq = vec2(x, y) * vec2(70.0, 76.0);
   bool lowLayer = y < layer + 0.006;
   vec3 pb = lowLayer ? stones(pq, 1.05) : vec3(0.0);
   float hue = fract(pb.y * 7.13);
-  vec3 pc = mix(vec3(0.3, 0.22, 0.14), vec3(0.52, 0.41, 0.27), hue);
-  pc = mix(pc, vec3(0.36, 0.33, 0.3), step(0.7, fract(pb.y * 3.7)) * 0.8);
-  pc = mix(pc, vec3(0.6, 0.53, 0.43), step(0.9, pb.y) * 0.6);
+  vec3 pc = mix(vec3(0.36, 0.25, 0.15), vec3(0.62, 0.48, 0.31), hue);
+  pc = mix(pc, vec3(0.46, 0.42, 0.38), step(0.72, fract(pb.y * 3.7)) * 0.8);
+  pc = mix(pc, vec3(0.5, 0.27, 0.14), step(0.82, fract(pb.y * 5.9)) * 0.75);
+  pc = mix(pc, vec3(0.74, 0.65, 0.52), step(0.88, pb.y) * 0.7);
   pc = mix(pc, vec3(0.2, 0.15, 0.1), step(fract(pb.y * 11.3), 0.15) * 0.7);
   pc *= 0.85 + 0.3 * gn(vec2(x, y) * 1100.0 + pb.y * 50.0);
   float gap = 1.0 - smoothstep(0.02, 0.2, pb.x);
@@ -465,7 +467,7 @@ WallSample wallSample(vec2 uv, float top, float wet){
   s.rough = mix(mix(0.95, 0.38, isPeb * (1.0 - gap)), 0.35, wet * 0.5);
   // slope from the pebble domes (finite difference)
   float e = 0.0006;
-  float hx = lowLayer ? stones(vec2(x + e, y) * vec2(72.0, 80.0), 1.05).x : 0.0, hy = lowLayer ? stones(vec2(x, y + e) * vec2(72.0, 80.0), 1.05).x : 0.0;
+  float hx = lowLayer ? stones(vec2(x + e, y) * vec2(70.0, 76.0), 1.05).x : 0.0, hy = lowLayer ? stones(vec2(x, y + e) * vec2(70.0, 76.0), 1.05).x : 0.0;
   s.slope = isPeb * clamp(vec2(pb.x - hx, pb.x - hy) * 3.0, -1.5, 1.5) + (1.0 - isPeb) * (root * vec2(0.0, 0.15) + chip.x * chipOn * vec2(0.1));
   s.ao = mix(0.8 + 0.2 * grain, 0.15 + 0.85 * pb.x, isPeb);
   return s;
