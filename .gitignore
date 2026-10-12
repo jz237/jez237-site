@@ -39,3 +39,24 @@ credentials.json
 # run and already excluded from deploy (scripts/deploy_cloudflare_pages_site.sh).
 # Intentionally untracked to stop multi-MB churn commits. Do not force-add.
 ai-news/data/
+
+# Verified R2 media; binaries must not return to Git.
+/experiments/amiga-mod-player/audio/
+/experiments/amiga-mod-player/mods/
+/assets/videos/ai-video/Star_Trek_One_Second_Ahead_30s_fal_H3_2K.mp4
+/assets/videos/oceanic-art/oil-painted-reef-turtle-short-clip.mp4
+/downloads/beach-cocktail-women-close-group-15s.mp4
+/downloads/beach-cocktail-women-close-group.mp4
+/downloads/beach-cocktail-women-dialogue-revised.mp4
+/downloads/beach-cocktail-women-original-man.mp4
+/downloads/harryhausen-style-pterodactyl-abduction.mp4
+/multimedia/anatidaephobia-duck-fire-ant-horror/anatidaephobia-seedvr2-7b-1440p.mp4
+/multimedia/port-richmond-aramingo-walk/port-richmond-aramingo-walk-b13-720p.mp4
+/multimedia/port-richmond-castor-terminal-walk/port-richmond-castor-terminal-walk-b13-720p.mp4
+/multimedia/port-richmond-el-kensington-walk/port-richmond-el-kensington-walk-b13-720p.mp4
+/multimedia/port-richmond-frankford-rec-walk/port-richmond-frankford-rec-walk-b13-720p.mp4
+/multimedia/port-richmond-rowhomes-joyce-walk/port-richmond-rowhomes-joyce-walk-b13-720p.mp4
+/multimedia/port-richmond-title-loop/port-richmond-title-loop-b10-720p.mp4
+/multimedia/port-richmond-title-loop/preview-b10.mp4
+/multimedia/port-richmond-weikel-tulip-walk/port-richmond-weikel-tulip-walk-b13-720p.mp4
+/multimedia/vengeance-cybertect-van/vengeance-cybertect-van-full-master.mp4

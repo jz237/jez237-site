@@ -1,0 +1,30 @@
+# R2 media storage
+
+Music and selected standalone videos migrated on October 11, 2026. The canonical
+public origin is `https://media.jez237.com`, backed by `jez237-site-media` R2.
+`media-r2-manifest.json` records exact object paths, byte counts and SHA-256 hashes.
+Keep these pointers in Git; do not recommit the migrated binaries.
+
+The Amiga player fetches both MP3 soundtracks and original MOD files directly
+from R2. Video pages use R2 too. Cloudflare Pages middleware redirects exact old
+URLs, including known retired video aliases. The global CSP permits this origin.
+R2 CORS allows the existing site, mirror and local test origins.
+
+GitHub Pages has no server-side redirect support for binary URLs. Its build
+therefore restores only previously served video files from R2 into the disposable
+payload, verifying every checksum. This is an intentional compatibility exception,
+not source storage. Do not run `scripts/restore_legacy_media.py` for Cloudflare.
+
+For new media: upload to R2 without overwriting different existing objects,
+verify full public-download checksums and playback, add a manifest entry, and
+update the relevant catalog/player URL and exact legacy mapping if needed.
+Never delete a source copy until verification and an independent backup exist.
+
+The separate `jz237/multimedia` repository holds full-resolution-master pointers
+and the legacy-video deployment workflow. Its history can be cleaned independently.
+The website's protected main branch forbids force pushes; migration does not
+disable this protection or claim its historical storage has been reclaimed.
+
+Deployment watch paths skip root documentation, local agent instructions and
+test-only changes. Public content, runtime code and deployment guards still run
+their existing validation; genuine site updates are not delayed.
