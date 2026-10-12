@@ -42,26 +42,45 @@ export function setRoot(g: THREE.BufferGeometry, x: number, y: number, z: number
 export const PINNATE_GLSL = /* glsl */ `
 float pinnate(float u, float v, float n, float s, float w, vec2 fw){ return folLine(u * n - abs(v) * s, w, fw.x * n + fw.y * s); }`;
 
-/** Vertex GLSL: bend `transformed` (local) for a plant rooted at world `root` with flexibility `flex` and height `H`. */
+/**
+ * Vertex GLSL: the wind's displacement (world) of a point on a plant rooted at
+ * \`root\`, \`Hw\` tall (m), \`flex\` = (height fraction)², as Weatherglass moves
+ * its plants: the whole plant leans with the wind at its root and sways at its
+ * own natural frequency (slower the taller it is), a little across the wind
+ * too, with the tip dipping as it leans (an arc, not a shear); gust crests run
+ * downwind across the case; and the leaves flutter a little on top. \`n\`: the
+ * point's normal (world), the way its leaf flutters. Returns xyz, and in
+ * \`gust\` how far it is laid over (0..1).
+ */
 export const FOLIAGE_WIND_GLSL = WIND_GLSL + /* glsl */ `
-vec3 foliageWind(vec3 root, float flex, float H, float phase, float stiff){
-  vec4 wt = windTex(root.xz);
+vec3 foliageWind(vec3 root, float flex, float Hw, float phase, float stiff, vec3 n, vec3 rest, out float gust){
   vec2 w = windAt(root.xz, uTime);
   float sp = length(w);
   vec2 dir = sp > 1e-4 ? w / sp : vec2(1.0, 0.0);
   vec2 perp = vec2(-dir.y, dir.x);
+  float turb = windTex(root.xz).a;
   // travelling gust crests: bands of plants lean further as each one passes
   float wave = 0.5 + 0.5 * sin(dot(root.xz, dir) * 23.0 - uTime * (2.2 + min(sp * 4.0, 4.0) * 0.5) + wgn(root.xz * 8.0) * 5.0);
   wave = wave * wave * (3.0 - 2.0 * wave);
-  float amt = (1.0 - exp(-sp * 2.2 / stiff)) * (0.68 + 0.64 * wave);
-  float turb = wt.a;
-  float flutter = sin(uTime * (6.5 + 4.0 * fract(phase * 7.13)) + phase * 11.0) * (0.035 + 0.16 * turb + 0.035 * min(sp * 4.0, 4.0)) / stiff;
-  float idle = sin(uTime * 0.7 + phase) * 0.012 + sin(uTime * 1.9 + phase * 1.7) * 0.005;
-  vec2 lean = dir * amt * 0.42 + perp * (flutter * (0.3 + amt) + idle) + vec2(idle * 0.6, 0.0);
-  vec3 top = vec3(lean.x, 0.0, lean.y) * H;
-  // keep the stem length: bending also lowers the tip
-  top.y = -dot(top.xz, top.xz) / max(H, 1e-3) * 0.55;
-  return top * flex;
+  float lean = (1.0 - exp(-sp * 1.6 / stiff)) * 0.24 / stiff * (0.68 + 0.64 * wave);
+  // the plant's own sway: a tall fern rocks about once a second, a sprig of grass faster
+  float f = 0.95 / sqrt(max(Hw * 5.0, 0.04));
+  float ph = phase * 6.2831853;
+  float osc = sin(uTime * f * 6.2831853 + ph) * 0.6 + sin(uTime * f * 14.7 + ph * 1.7) * 0.22;
+  float swirl = sin(uTime * f * 8.3 + ph * 2.3) + 0.4 * sin(uTime * f * 19.0 + ph);
+  float whip = 0.22 + turb * 0.8 + min(sp * 5.0, 5.0) * 0.1;
+  vec2 top = dir * lean * (1.0 + osc * whip) + perp * lean * swirl * (0.12 + turb * 0.6);
+  // and in still air it only breathes
+  top += vec2(sin(uTime * 0.7 + ph), cos(uTime * 0.53 + ph * 1.3)) * 0.006;
+  gust = clamp(length(top) / 0.2, 0.0, 1.0);
+  vec3 d = vec3(top.x, 0.0, top.y) * Hw * flex;
+  d.y = -dot(top, top) * Hw * 0.55 * flex * sqrt(flex);
+  // leaves flutter about where they hang: faster, small, smooth across a leaf
+  float energy = 0.004 + 0.006 * min(sp * 5.0, 6.0) + 0.018 * turb;
+  float lp = dot(rest, vec3(37.0, 23.0, 41.0));
+  float lf = sin(uTime * 12.0 + lp + ph) + 0.5 * sin(uTime * 17.3 + lp * 1.7);
+  d += n * lf * flex * (energy * 1.8 + 0.002) * Hw / stiff;
+  return d;
 }
 `;
 
@@ -114,6 +133,42 @@ vec3 folPush(vec2 at, vec3 vw, float k, float downK){
   }
   return push;
 }
+// Keeps a point out of the lizard's head, body and tail (pushers 1-4, centred on
+// its spine line): a plant rooted under it is pressed flat beneath the belly, a
+// plant beside it is held off the flank. The two blend as the body passes over,
+// so nothing jumps.
+vec3 folBody(vec3 q, vec3 rootW){
+  for (int i = 1; i <= 4; i++) {
+    vec4 p = uPush[i], b = uPushB[i];
+    if (p.w <= 0.0 || b.w <= 0.0) continue;
+    vec3 ab = b.xyz - p.xyz;
+    float l2 = dot(ab.xz, ab.xz);
+    float t = l2 > 1e-8 ? clamp(dot(q.xz - p.xz, ab.xz) / l2, 0.0, 1.0) : 0.0;
+    float tr = l2 > 1e-8 ? clamp(dot(rootW.xz - p.xz, ab.xz) / l2, 0.0, 1.0) : 0.0;
+    vec3 c = p.xyz + ab * t;
+    float hw = p.w * 0.55, hh = 0.016, belly = c.y - 0.0105;
+    float rootR = length(rootW.xz - (p.xz + ab.xz * tr));
+    vec2 d = q.xz - c.xz;
+    float r = length(d);
+    float under = 1.0 - smoothstep(hw * 0.9, hw * 1.35, rootR);
+    vec3 qu = q;
+    if (q.y > belly - 0.0015) qu.y = mix(q.y, belly - 0.0015, 1.0 - smoothstep(hw, hw * 1.4, r));
+    // (held off the flank on its root's side: a broad leaf reaching across the
+    // back is moved as one, not split to both sides and stretched through the body)
+    vec2 side = rootW.xz - (p.xz + ab.xz * tr);
+    float sl = length(side);
+    side = sl > 1e-5 ? side / sl : (r > 1e-5 ? d / r : vec2(1.0, 0.0));
+    vec3 qs = q;
+    float dy = (q.y - c.y) / hh;
+    if (abs(dy) < 1.0) {
+      float rt = (hw + 0.002) * sqrt(1.0 - dy * dy);
+      float sd = dot(d, side);
+      if (r < rt && sd < rt) qs.xz += side * (rt - sd);
+    }
+    q = mix(qs, qu, under);
+  }
+  return q;
+}
 ${FOLIAGE_WIND_GLSL}`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
 {
@@ -126,16 +181,20 @@ ${FOLIAGE_WIND_GLSL}`)
     mat4 toWorld = modelMatrix;
   #endif
   vec3 root = (toWorld * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-  float ph = ${opts.phaseAttr ? 'aPhase' : 'dot(root.xz, vec2(73.0, 51.0)) + position.x * 9.0'};
   vec3 vw = (toWorld * vec4(transformed, 1.0)).xyz;
   // where this point lies on its plant (it moves with the plant, not with the
   // wind), so the fine detail drawn there never swims over the leaf
   vFolRest = position * length(toWorld[0].xyz) + root;
-  // the wind is read where each part of the plant actually is, so a gust
-  // crossing a fern bends its near fronds before its far ones
-  vec3 anchor = ${opts.flexAttr ? 'vw' : 'mix(root, vw, 0.8)'};
-  vec3 bend = foliageWind(vec3(anchor.x, root.y, anchor.z), flex, ${(height * 1.0).toFixed(4)}, ph, ${stiff.toFixed(3)});
-  vGust = length(bend.xz) / ${(height * 0.25).toFixed(4)};
+  // the plant this point belongs to: where it is rooted, and how tall it is
+  vec3 folRootW = ${opts.rootAttr ? '(modelMatrix * vec4(aRoot, 1.0)).xyz' : (opts.flexAttr ? 'vw' : 'root')};
+  float folH = ${opts.flexAttr ? height.toFixed(4) : `${height.toFixed(4)} * length(toWorld[1].xyz)`};
+  // (each plant its own phase; smooth across space, so a part without a known root still moves as one)
+  float ph = ${opts.phaseAttr ? 'aPhase' : 'dot(folRootW.xz, vec2(1.16, 0.81)) + 0.35 * sin(dot(folRootW.xz, vec2(31.0, 23.0)))'};
+  // the whole plant sways with the wind at its root (see foliageWind)
+  vec3 folN = normalize(mat3(toWorld) * objectNormal);
+  float folGust;
+  vec3 bend = foliageWind(folRootW, flex, folH, ph, ${stiff.toFixed(3)}, folN, vFolRest, folGust);
+  vGust = folGust;
   mat3 toLocal = inverse(mat3(toWorld));
   transformed += toLocal * bend;
   vw += bend;
@@ -143,12 +202,14 @@ ${FOLIAGE_WIND_GLSL}`)
   // leans as a whole: the push is read between its root and the point, so a
   // leaf moves with its stem instead of being pulled apart, plus a little of
   // the push right at the point to keep leaves out of the body.
-  vec3 folRootW = ${opts.rootAttr ? '(modelMatrix * vec4(aRoot, 1.0)).xyz' : (opts.flexAttr ? 'vw' : 'root')};
   vec3 push = ${opts.push === false ? 'vec3(0.0)' : 'folPush(mix(folRootW.xz, vw.xz, 0.3), vw, 2.0, 0.45) + folPush(vw.xz, vw, 0.4, 0.0)'};
   float pushLen = length(push.xz);
   if (pushLen > 0.045) push.xz *= 0.045 / pushLen;
-  transformed += toLocal * push * max(flex, 0.25);
   vec3 wf = vw + push * max(flex, 0.25);
+  // nothing passes through the lizard: a plant it stands on is pressed flat
+  // under its belly, one beside it is held off its flank
+  ${opts.push === false ? '' : 'wf = folBody(wf, folRootW);'}
+  transformed += toLocal * (wf - vw);
   // the glass: a leaf that reaches it presses flat against it, never through it
   vec3 wc = vec3(clamp(wf.x, -uGlass.x, uGlass.x), wf.y, clamp(wf.z, -uGlass.y, uGlass.y));
   // ...and a leaf pushed down (by the dragon, by a gust) comes to rest on whatever
@@ -282,5 +343,5 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.
   totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage13-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage15-${opts.key}`;
 }

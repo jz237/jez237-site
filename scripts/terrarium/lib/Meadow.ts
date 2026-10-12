@@ -99,7 +99,7 @@ export class Meadow {
     g.setIndex(idx);
     g.computeBoundingSphere();
     const m = new THREE.MeshStandardMaterial({vertexColors: true, side: THREE.DoubleSide, roughness: 0.7});
-    addFoliage(m, {flexAttr: true, phaseAttr: true, rootAttr: true, height: 0.03, translucency: 0.45, stiffness: 0.8, key: 'meadow'});
+    addFoliage(m, {flexAttr: true, phaseAttr: true, rootAttr: true, height: 0.03, translucency: 0.45, stiffness: 0.55, key: 'meadow'});
     // up close each blade is folded along its keel, with fine veins running its length
     const base = m.onBeforeCompile;
     m.onBeforeCompile = (s, r) => {

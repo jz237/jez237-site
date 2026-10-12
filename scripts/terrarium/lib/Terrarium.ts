@@ -591,8 +591,9 @@ export class Terrarium {
     B[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, h.w);
     const sp = this.rig.spinePoints(), sn = this.rig.snout;
     const tail = this.rig.tailPoint(2), tail2 = this.rig.tailPoint(5);
-    A[1].set(sn.x, sn.y, sn.z, 0.035); B[1].set(sn.x, sn.y, sn.z, 1);
-    A[2].set(sp[2].x, sp[2].y, sp[2].z, 0.062); B[2].set(sp[5].x, sp[5].y, sp[5].z, 1);
+    // (the head from the snout back to the neck, then the body from the neck to the hips: no gap between them)
+    A[1].set(sn.x, sn.y, sn.z, 0.04); B[1].set(sp[1].x, sp[1].y, sp[1].z, 1);
+    A[2].set(sp[1].x, sp[1].y, sp[1].z, 0.062); B[2].set(sp[5].x, sp[5].y, sp[5].z, 1);
     A[3].set(sp[5].x, sp[5].y, sp[5].z, 0.035); B[3].set(tail.x, tail.y, tail.z, 1);
     A[4].set(tail.x, tail.y, tail.z, 0.022); B[4].set(tail2.x, tail2.y, tail2.z, 1);
     // the wake: chest, hips and tail as they were a moment ago, fading as the body catches up
