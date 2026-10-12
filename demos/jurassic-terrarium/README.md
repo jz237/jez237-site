@@ -69,7 +69,7 @@ Every animal is modelled from code and rendered in Blender 4.5. Nothing is downl
    a walkability grid of the terrain, which keeps animals off cliffs, deep water, trees and the hut.
    It then drives behaviour: idle, wander, sniff, roar, graze, drink and sleep at night.
 
-The case is a long, low display cabinet, 18 × 8 units under a lid at 5.6. Weatherglass's box is 12 × 8 × 7.4, and everything in it sizes itself from one constant, which the page build patches. Like a museum diorama, the animals are shown large against the landscape, at 1 unit ≈ 5.5 m. The jungle floor is a carpet of about 1,400 ferns, with crimson rosettes, tree ferns and cycads; Weatherglass's grass, flowers and pines are thinned, and its ground pushed to a deep moss green.
+The case is a long, low display cabinet, 18 × 8 units under a lid at 5.6. Weatherglass's box is 12 × 8 × 7.4, and everything in it sizes itself from one constant, which the page build patches. Like a museum diorama, the animals are shown large against the landscape, at 1 unit ≈ 5.5 m. Tall tree ferns frame the scene like palms over a carpet of about 1,400 ferns, crimson rosettes and cycads, and a row of warm display spotlights under the lid lights the case, brightest at dusk and at night; Weatherglass's grass, flowers and pines are thinned, and its ground pushed to a deep moss green.
 
 ## Provenance
 

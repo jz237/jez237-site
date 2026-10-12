@@ -13,6 +13,7 @@ import { Guide } from './ui.js';
 import { Flora } from './flora.js';
 import { Voices } from './voice.js';
 import { Flex } from './flex.js';
+import { Lamps } from './lamps.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -636,6 +637,7 @@ class Dinosaurs {
     this.layers = {};
     this.ready = false;
     this.voice = new Voices(ctx);
+    this.lamps = params.get('lamps') === '0' ? null : new Lamps(ctx, { spots: (ctx.quality?.tier ?? 1) > 0 ? 3 : 1 });
     this.bolt = null;
     ctx.events?.on?.('lightning', (e) => {
       const p = e?.end;
@@ -747,6 +749,7 @@ class Dinosaurs {
     if (!this.ready) return;
     const env = this.env();
     this.flora.update(dt);
+    this.lamps?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.guide?.update(dt);
   }

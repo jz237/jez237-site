@@ -56,10 +56,22 @@ export class Flora {
         const kind = rand() < 0.6 ? 'treefern' : 'cycad';
         const r = kind === 'treefern' ? 0.18 : 0.12;
         if (!free(x, z, r)) continue;
-        add(kind, x, z, (kind === 'treefern' ? 1.1 : 1.3) + rand() * 0.6, r, kind === 'treefern' ? 0.05 : 0.04);
+        add(kind, x, z, (kind === 'treefern' ? 0.75 : 1.0) + rand() * 0.5, r, kind === 'treefern' ? 0.05 : 0.04);
         n--;
       }
     };
+    // tall tree ferns standing over the jungle like the palms in a diorama, around the edges and up the
+    // foothills where they frame the scene
+    const heroes = [[-7.6, 1.6], [-6.8, -1.6], [-5.2, -2.6], [-3.3, 0.9], [-1.6, -1.9], [2.4, -1.5], [3.4, 1.0],
+      [7.5, -2.4], [8.0, 0.4], [7.0, 2.6], [-8.0, -0.3], [0.9, 2.9]];
+    for (const [hx, hz] of heroes) {
+      for (let t = 0; t < 12; t++) {
+        const x = hx + (rand() - 0.5) * 0.6, z = hz + (rand() - 0.5) * 0.6;
+        if (!inBox(x, z, 0.4) || nearCabin(x, z, 0.3) || water(x, z) > 0.15 || T.slope(x, z) > 0.6 || !free(x, z, 0.22)) continue;
+        add('treefern', x, z, 1.45 + rand() * 0.55, 0.22, 0.06);
+        break;
+      }
+    }
     // where Weatherglass's hero trees stood, and a few groves
     groveAt(-3.95, 0.25, 4, 0.6);
     groveAt(-3.75, 2.4, 3, 0.45);
@@ -67,7 +79,7 @@ export class Flora {
     groveAt(-4.95, 1.5, 3, 0.4);
     // scattered tree ferns and cycads by the terrain's tree suitability
     let tries = 0;
-    let want = 64;
+    let want = 34;
     while (want > 0 && tries++ < 12000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.4), z = (rand() * 2 - 1) * (box.halfD - 0.4);
       // meadow edges and the lower mountain slopes, like the palms climbing the peaks in a jungle diorama
@@ -76,7 +88,7 @@ export class Flora {
       const kind = rand() < 0.55 ? 'treefern' : 'cycad';
       const r = kind === 'treefern' ? 0.2 : 0.13;
       if (!free(x, z, r)) continue;
-      add(kind, x, z, (kind === 'treefern' ? 1.0 : 1.2) + rand() * 0.6, r, kind === 'treefern' ? 0.05 : 0.04);
+      add(kind, x, z, (kind === 'treefern' ? 0.65 : 0.9) + rand() * 0.5, r, kind === 'treefern' ? 0.05 : 0.04);
       want--;
     }
     // ferns carpet the meadows, thickest under the tree ferns
@@ -137,12 +149,15 @@ export class Flora {
       kinds.map(async (kind) => {
         const gltf = await loader.loadAsync(new URL(`${kind}.glb`, base).href);
         const meshes = [];
+        gltf.scene.updateMatrixWorld(true);
         gltf.scene.traverse((o) => o.isMesh && meshes.push(o));
         const list = this.placements[kind];
         meshes.forEach((m, vi) => {
           const mine = list.filter((p) => p.v % meshes.length === vi);
           if (!mine.length) return;
-          const im = new InstancedMesh(m.geometry, this.material(kind), mine.length);
+          m.geometry.computeBoundingBox();
+          const bb = m.geometry.boundingBox;
+          const im = new InstancedMesh(m.geometry, this.material(kind, bb.min.y, bb.max.y), mine.length);
           const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3();
           mine.forEach((p, i) => {
             q.setFromAxisAngle(UP, p.rot);
@@ -150,6 +165,8 @@ export class Flora {
             s.set(sc, sc, sc);
             t.set(p.x, p.y - 0.004, p.z);
             M.compose(t, q, s);
+            // the compressed mesh is stored normalised; its node carries the real size and offset
+            M.multiply(m.matrixWorld);
             im.setMatrixAt(i, M);
           });
           im.instanceMatrix.needsUpdate = true;
@@ -163,13 +180,14 @@ export class Flora {
     );
   }
 
-  material(kind) {
-    if (!this._mats) this._mats = {};
-    if (this._mats[kind]) return this._mats[kind];
-    const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
+  // sway is measured within each mesh's own bounding box (the compressed geometry is normalised), so the
+  // same numbers work whatever the plant's size: 0 at the root, 1 at the top, tip moving a fraction of the
+  // plant's height
+  material(kind, y0 = 0, y1 = 1) {
     const U = this.uniforms;
-    const amp = { fern: 0.05, fernlet: 0.05, redplant: 0.03, horsetail: 0.08, treefern: 0.07, cycad: 0.03 }[kind] || 0.05;
-    const H = { fern: 1.0, fernlet: 0.8, redplant: 0.7, horsetail: 1.6, treefern: 5.5, cycad: 2.6 }[kind] || 1.0; // metres
+    const rel = { fern: 0.05, fernlet: 0.06, redplant: 0.03, horsetail: 0.07, treefern: 0.035, cycad: 0.02 }[kind] || 0.04;
+    const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
+    const h = Math.max(1e-4, y1 - y0);
     m.onBeforeCompile = (sh) => {
       sh.uniforms.uTime = U.uTime;
       sh.uniforms.uWind = U.uWind;
@@ -184,16 +202,15 @@ export class Flora {
   #else
   float ph = 0.0;
   #endif
-  float sway = pow(clamp(position.y / ${H.toFixed(2)}, 0.0, 1.2), 1.5); // 0 at the root .. 1 at the top
-  float gust = sin(uTime * 1.3 + ph) * 0.6 + sin(uTime * 2.9 + ph * 1.7) * 0.4;
-  transformed.x += sway * sway * ${amp.toFixed(3)} * (0.4 + uWind) * gust / 1.0 * 8.0;
-  transformed.z += sway * sway * ${amp.toFixed(3)} * (0.4 + uWind) * sin(uTime * 1.1 + ph * 0.7) * 4.0;`,
+  float sway = pow(clamp((position.y - (${y0.toFixed(4)})) / ${h.toFixed(4)}, 0.0, 1.2), 1.5);
+  float amp = sway * ${(rel * h).toFixed(5)} * (0.5 + uWind);
+  transformed.x += amp * (sin(uTime * 1.3 + ph) * 0.6 + sin(uTime * 2.9 + ph * 1.7) * 0.4);
+  transformed.z += amp * 0.6 * sin(uTime * 1.1 + ph * 0.7);`,
         );
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec3 uTint;')
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;');
     };
-    this._mats[kind] = m;
     return m;
   }
 
