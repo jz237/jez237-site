@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 12 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 31, 1984-January 6, 1985 — Atari shows a $599 512K ST, challenging the high-end divide</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-12-31</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-31</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Winter CES opens with 68000 power, GEM windows and unfinished prototypes. LAS VEGAS — Winter CES opens January 5 with Atari putting a new family of personal computers before the trade. The 512K 520ST carries an announced computer price of $599; the 128K 130ST is announced at $399. Neither figure buys a complete monitor-and-drive system. The show runs through January 8, with its opening two days falling in this week. Also this week: Commodore 128 promises three computers in one · Coleco pulls out of Adam; inventory sale points to bargains · Epyx puts young players in charge of its CES demonstrations · Commodore’s LCD portable packs office tools and a modem.</description>
+    </item>
     <item>
       <title>Week of December 24-30, 1984 — Ghostbusters turns the Commodore 64 into a movie franchise</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-12-24</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-20</guid>
       <pubDate>Sun, 20 Sep 2026 12:00:00 GMT</pubDate>
       <description>The 80286-powered 5170 brings a 16-bit expansion path, a 1.2MB floppy, larger storage, and prices beginning at $3,995. IBM&apos;s Personal Computer AT dominates the conversation as the week opens. Announced August 14, the machine type 5170 is built around Intel&apos;s 80286, with a 16-bit data path and 24-bit addressing. IBM says it performs more than twice as fast as current members of the PC family, a claim that marks a clean break from the original 8088 generation. Also this week: Software Becomes the Home-Computer Show&apos;s Main Event · Low-Cost Adapters Put Atari and Apple Owners on the Line · Infocom Sends Adventurers Diving for Treasure in Cutthroats.</description>
-    </item>
-    <item>
-      <title>Week of August 13-19, 1984 — IBM&apos;s PC/AT Opens a Second Generation of Personal Computing</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-08-13</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-13</guid>
-      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
-      <description>IBM unveils the 80286-powered 5170 with a 16-bit expansion path, high-capacity floppy, larger hard disks, and prices starting at $3,995. IBM used August 14 to introduce two models of the Personal Computer AT, a machine it says runs more than twice as fast as the current PC family. Both are built around Intel&apos;s 80286, with a 24-bit address path and a 16-bit data path that moves the IBM line decisively beyond the original 8088 generation. Also this week: DOS 3.0 and PC Network Prepare IBM Machines to Share · Home-Computer Adventures Hook a Growing Adult Audience.</description>
     </item>
   </channel>
 </rss>

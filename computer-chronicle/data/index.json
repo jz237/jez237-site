@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-12",
+      "historicDate": "1984-12-31",
+      "displayDate": "Week of December 31, 1984-January 6, 1985",
+      "edition": "Issue 127 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Atari brings a mouse, windows and a $599 challenge to Las Vegas.",
+      "leadHeadline": "Atari shows a $599 512K ST, challenging the high-end divide",
+      "storyHeadlines": [
+        "Commodore 128 promises three computers in one",
+        "Coleco pulls out of Adam; inventory sale points to bargains",
+        "Epyx puts young players in charge of its CES demonstrations",
+        "Commodore’s LCD portable packs office tools and a modem"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-31.png",
+      "thumb": "media/thumbs/1984-12-31.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-11",
       "historicDate": "1984-12-24",
       "displayDate": "Week of December 24-30, 1984",
