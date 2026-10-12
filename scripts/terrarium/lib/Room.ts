@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import {woodTextures, dataTexture, tileFbm} from './Textures';
 
+const WALL_GLOW = new THREE.Color(0.3, 0.14, 0.05);
+
 function backgroundPlant(x: number, z: number, h: number, seed: number, glow = 0) {
   let s0 = seed * 7919;
   const r = () => ((s0 = (s0 * 16807) % 2147483647) / 2147483647);
@@ -38,16 +40,18 @@ export class Room {
   readonly group = new THREE.Group();
   readonly lampLight: THREE.PointLight;
   readonly bulb: THREE.MeshStandardMaterial;
+  private wallMat: THREE.MeshStandardMaterial;
+  private shelfBulb: THREE.MeshStandardMaterial;
   readonly envScene = new THREE.Scene();
   private envBulb: THREE.MeshBasicMaterial;
 
   constructor() {
     const tableTop = -0.075;
-    const wood = woodTextures(1024, 7, [52, 30, 18]);
+    const wood = woodTextures(1024, 7, [92, 50, 27]);
     wood.color.repeat.set(1.2, 3.2);
     wood.rough.repeat.copy(wood.color.repeat);
     const tableMat = new THREE.MeshPhysicalMaterial({
-      map: wood.color, roughnessMap: wood.rough, roughness: 0.55, clearcoat: 0.55, clearcoatRoughness: 0.22,
+      map: wood.color, roughnessMap: wood.rough, roughness: 0.55, clearcoat: 0.7, clearcoatRoughness: 0.16,
     });
     const table = new THREE.Mesh(new RoundedBoxGeometry(4.2, 0.06, 1.7, 2, 0.008), tableMat);
     table.position.set(0, tableTop - 0.03, 0.12);
@@ -61,7 +65,17 @@ export class Room {
       o[0] = v * 1.05; o[1] = v * 0.86; o[2] = v * 0.68;
     });
     plaster.repeat.set(3, 2);
-    const wallMat = new THREE.MeshStandardMaterial({map: plaster, roughness: 0.95});
+    // The wall glows amber: the Edison lamp's halo on the left, a smaller lamp on
+    // the shelf, and the case's own light spilling onto the plaster behind it.
+    const glow = dataTexture(256, 128, (x, y, o) => {
+      const wx = (x / 256 - 0.5) * 9, wy = y / 128 * 4 - 0.8;
+      const g = (cx: number, cy: number, rx: number, ry: number) => Math.exp(-(((wx - cx) / rx) ** 2 + ((wy - cy) / ry) ** 2));
+      const v = Math.min(1, (0.5 * g(0, 0.4, 1.3, 0.75) + 0.95 * g(-1.05, 0.6, 0.55, 0.5) + 0.35 * g(-1.05, 0.6, 1.3, 1.1) + 0.5 * g(1.95, 0.85, 0.5, 0.4))
+        * (0.75 + 0.5 * tileFbm(x / 256 * 5, y / 128 * 3, 5, 4, 33)));
+      o[0] = o[1] = o[2] = 255 * v;
+    });
+    const wallMat = new THREE.MeshStandardMaterial({map: plaster, roughness: 0.95, emissive: WALL_GLOW, emissiveMap: glow, emissiveIntensity: 1});
+    this.wallMat = wallMat;
     const wall = new THREE.Mesh(new THREE.PlaneGeometry(9, 4), wallMat);
     wall.position.set(0, 1.2, -1.6);
     wall.receiveShadow = true;
@@ -100,6 +114,13 @@ export class Room {
       jar.position.set(x, 0.265 + h / 2, 0.06);
       shelfGroup.add(jar);
     }
+    // a little brass lamp on the top shelf: a warm blur at the edge of the picture
+    this.shelfBulb = new THREE.MeshStandardMaterial({color: 0x000000, emissive: new THREE.Color(1.0, 0.6, 0.28), emissiveIntensity: 6});
+    const sb = new THREE.Mesh(new THREE.SphereGeometry(0.035, 20, 14), this.shelfBulb);
+    sb.position.set(0.5, 0.86, 0.04);
+    const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.07, 0.07, 28, 1, true), new THREE.MeshStandardMaterial({color: 0xb08d57, metalness: 1, roughness: 0.35, side: THREE.DoubleSide}));
+    shade.position.set(0.5, 0.9, 0.04);
+    shelfGroup.add(sb, shade);
     shelfGroup.position.set(1.75, 0.05, -1.35);
     this.group.add(shelfGroup);
 
@@ -146,6 +167,7 @@ export class Room {
       m.position.copy(p); m.rotation.y = ry; env.add(m);
     };
     panel(new THREE.Color(0.5, 0.36, 0.22), 2.2, 0.9, new THREE.Vector3(0, 2.4, 0.4), 0); // ceiling glow
+    panel(new THREE.Color(0.2, 0.1, 0.045), 4.0, 1.6, new THREE.Vector3(0, 0.6, -1.6), 0); // the glowing wall behind the case
     panel(new THREE.Color(0.25, 0.18, 0.12), 2.5, 1.4, new THREE.Vector3(0, 1.0, 3.5), Math.PI); // room behind camera
     panel(new THREE.Color(0.18, 0.2, 0.22), 1.0, 1.4, new THREE.Vector3(3.6, 1.2, 0.5), -Math.PI / 2); // cool window
     const tableEnv = new THREE.Mesh(new THREE.PlaneGeometry(6, 3), new THREE.MeshBasicMaterial({color: new THREE.Color(0.06, 0.035, 0.02)}));
@@ -157,5 +179,7 @@ export class Room {
     this.bulb.emissiveIntensity = 14 * level;
     this.lampLight.intensity = 2.2 * level;
     this.envBulb.color.setRGB(9 * level + 0.2, 5 * level + 0.1, 2 * level + 0.05);
+    this.wallMat.emissiveIntensity = level;
+    this.shelfBulb.emissiveIntensity = 6 * level;
   }
 }
