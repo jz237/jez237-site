@@ -18,10 +18,12 @@ def build():
     # ------------------------------------------------------------------ skeleton
     root = b.bone('root', V(0, 0, 0), V(0, 0, 0.6))
     b.bone('pelvis', V(0, 0, 3.08), V(0.6, 0, 3.07), 'root')
-    b.bone('spine1', V(0.6, 0, 3.07), V(1.5, 0, 3.02), 'pelvis')
-    b.bone('spine2', V(1.5, 0, 3.02), V(2.5, 0, 3.02), 'spine1')
-    b.bone('neck1', V(2.5, 0, 3.02), V(3.12, 0, 3.24), 'spine2')
-    b.bone('neck2', V(3.12, 0, 3.24), V(3.82, 0, 3.74), 'neck1')
+    b.bone('spine1', V(0.6, 0, 3.07), V(1.25, 0, 3.04), 'pelvis')
+    b.bone('spine2', V(1.25, 0, 3.04), V(1.9, 0, 3.02), 'spine1')
+    b.bone('spine3', V(1.9, 0, 3.02), V(2.5, 0, 3.02), 'spine2')
+    b.bone('neck1', V(2.5, 0, 3.02), V(2.92, 0, 3.12), 'spine3')
+    b.bone('neck2', V(2.92, 0, 3.12), V(3.35, 0, 3.38), 'neck1')
+    b.bone('neck3', V(3.35, 0, 3.38), V(3.82, 0, 3.74), 'neck2')
     b.bone('head', V(3.82, 0, 3.74), V(5.2, 0, 3.66), 'neck2')
     jaw_pivot = V(3.98, 0, 3.52)
     Rj = rot_euler(ry=JAW_OPEN)
@@ -44,7 +46,7 @@ def build():
     for s in ('L', 'R'):
         m = 1 if s == 'L' else -1
         f = lambda v: V(v[0], v[1] * m, v[2])
-        b.bone(f'upperarm.{s}', f(Sh), f(El), 'spine2', z=(1, 0, 0))
+        b.bone(f'upperarm.{s}', f(Sh), f(El), 'spine3', z=(1, 0, 0))
         b.bone(f'forearm.{s}', f(El), f(Wr), f'upperarm.{s}', z=(0, 0, 1))
         b.bone(f'hand.{s}', f(Wr), f(Fi), f'forearm.{s}', z=(0, 0, 1))
 
@@ -67,18 +69,19 @@ def build():
         sec((3.55, 0, 3.52), 0.35, 0.40, 0.50, 2.0, 2.0),
         sec((3.92, 0, 3.76), 0.31, 0.34, 0.38, 2.0, 2.0),
     ]
-    axial_bones = [S[f'tail{i}'] for i in range(7, 0, -1)] + [S['pelvis'], S['spine1'], S['spine2'], S['neck1'],
-                                                              S['neck2'], S['head']]
+    axial_bones = [S[f'tail{i}'] for i in range(7, 0, -1)] + [S['pelvis'], S['spine1'], S['spine2'], S['spine3'],
+                                                              S['neck1'], S['neck2'], S['neck3'], S['head']]
     joints = [tail_pts[i] for i in range(6, 0, -1)] + [V(0.0, 0, 3.08)]  # ... tail1|pelvis (at the hip)
-    joints += [V(0.6, 0, 3.07), V(1.5, 0, 3.02), V(2.5, 0, 3.02), V(3.12, 0, 3.24), V(3.82, 0, 3.74)]
-    b.loft_chain(ax, axial_bones, joints, blend=0.45, k=0.0, samples=12, name='axial')
+    joints += [V(0.6, 0, 3.07), V(1.25, 0, 3.04), V(1.9, 0, 3.02), V(2.5, 0, 3.02), V(2.92, 0, 3.12),
+               V(3.35, 0, 3.38), V(3.82, 0, 3.74)]
+    b.loft_chain(ax, axial_bones, joints, blend=0.32, k=0.0, samples=12, name='axial')
     # muscle masses that give the silhouette its anatomy
     # neck: the deep, muscular base and the throat beneath it
     b.add(Ellipsoid((3.05, 0, 2.95), (0.55, 0.38, 0.42), R=rot_euler(ry=-0.45), k=0.22, bind=S['neck1'], name='neckbase'))
-    b.add(Ellipsoid((3.45, 0, 3.25), (0.40, 0.27, 0.30), R=rot_euler(ry=-0.6), k=0.18, bind=S['neck2'], name='throat'))
+    b.add(Ellipsoid((3.45, 0, 3.25), (0.40, 0.27, 0.30), R=rot_euler(ry=-0.6), k=0.18, bind=S['neck3'], name='throat'))
     # shoulder girdle: the coracoids bulge in front of and above the arms
     for m in (1, -1):
-        b.add(Ellipsoid((2.42, 0.36 * m, 2.62), (0.34, 0.16, 0.28), R=rot_euler(ry=0.35), k=0.18, bind=S['spine2'],
+        b.add(Ellipsoid((2.42, 0.36 * m, 2.62), (0.34, 0.16, 0.28), R=rot_euler(ry=0.35), k=0.18, bind=S['spine3'],
                         name='coracoid'))
         # thigh muscle (iliotibialis): a broad oval mass on the flank, standing proud of the body wall
         b.add(Ellipsoid((0.12, 0.52 * m, 2.62), (0.62, 0.20, 0.55), R=rot_euler(ry=-0.15), k=0.2,
@@ -89,7 +92,7 @@ def build():
     # pubic boot: the deep keel at the bottom of the hips
     b.add(Ellipsoid((0.45, 0, 1.98), (0.42, 0.24, 0.16), k=0.25, bind=S['pelvis'], name='pubic'))
     # chest / pectoral mass
-    b.add(Ellipsoid((2.15, 0, 2.38), (0.45, 0.42, 0.45), k=0.25, bind=S['spine2'], name='chest'))
+    b.add(Ellipsoid((2.15, 0, 2.38), (0.45, 0.42, 0.45), k=0.25, bind=S['spine3'], name='chest'))
 
     # ------------------------------------------------------------------ head
     head_secs = [

@@ -233,18 +233,42 @@ class Biped:
         return M
 
     def body_locals(self, t, yaw_wave=0.0, pitch=0.0, neck_pitch=0.0, head_yaw=0.0, head_pitch=0.0, tail_yaw=0.0,
-                    tail_phase=0.0, tail_pitch=0.0, jaw=0.0, breath=0.0):
+                    tail_phase=0.0, tail_pitch=0.0, jaw=0.0, breath=0.0, wave=None, sway=1.0):
+        """Local rotations for the axial chain. 'wave' (a gait phase in radians) adds a travelling
+        S-wave: the trunk flexes side to side with each stride, the bend passing forward up the neck
+        (the head counter-turns to keep its gaze) and back down the tail, as in walking lizards, birds
+        and crocodilians. 'sway' scales how supple the animal is (meta['flex'])."""
+        flex = self.meta.get('flex', 1.0) * sway
         loc = {}
+        ns, nn, nt = max(1, len(self.spines)), max(1, len(self.necks)), max(1, len(self.tails))
         for i, s in enumerate(self.spines):
-            loc[s] = rot(UP, -yaw_wave * 0.35) @ rot(LEFT, pitch / max(1, len(self.spines)) + breath * 0.01)
+            yw = -yaw_wave * 0.35
+            pt = pitch / ns + breath * 0.012
+            if wave is not None:
+                yw += 0.045 * flex * math.sin(wave + math.pi + i * 0.7)
+                pt += 0.012 * flex * math.sin(2 * wave + i * 0.6)
+            loc[s] = rot(UP, yw) @ rot(LEFT, pt)
+        neck_wave = 0.0
         for i, s in enumerate(self.necks):
-            loc[s] = rot(UP, head_yaw * 0.25 + yaw_wave * 0.2) @ rot(LEFT, neck_pitch / max(1, len(self.necks)))
-        loc['head'] = rot(UP, head_yaw * 0.5) @ rot(LEFT, head_pitch)
-        n = len(self.tails)
+            yw = head_yaw * 0.6 / nn + yaw_wave * 0.2
+            pt = neck_pitch / nn
+            if wave is not None:
+                w = 0.05 * flex * math.sin(wave + math.pi * 0.5 + i * 0.5) / max(1, nn ** 0.5)
+                yw += w
+                neck_wave += w
+                pt += 0.015 * flex * math.sin(2 * wave + 1.0 + i * 0.4)
+            loc[s] = rot(UP, yw) @ rot(LEFT, pt)
+        # the head keeps its gaze: it undoes most of the neck's swing
+        loc['head'] = rot(UP, head_yaw * 0.4 - 0.75 * neck_wave) @ rot(LEFT, head_pitch)
         for i, s in enumerate(self.tails):
-            f = (i + 1) / n
-            w = tail_yaw * (0.35 + 0.65 * f) * math.sin(tail_phase - i * 0.55)
-            loc[s] = rot(UP, w / n * 2.2) @ rot(LEFT, -tail_pitch / n)
+            f = (i + 1) / nt
+            w = tail_yaw * (0.35 + 0.65 * f) * math.sin(tail_phase - i * 0.55) / nt * 2.2
+            pt = -tail_pitch / nt
+            if wave is not None:
+                # the tail carries the trunk's wave backwards, growing towards the tip
+                w += 0.05 * flex * (0.5 + f) * math.sin(wave + math.pi + (ns + i) * 0.7)
+                pt += 0.01 * flex * math.sin(2 * wave + 1.5 + i * 0.5)
+            loc[s] = rot(UP, w) @ rot(LEFT, pt)
         if self.r.has('jaw'):
             loc['jaw'] = rot(LEFT, -self.jaw_rest + jaw)
         return loc
@@ -313,7 +337,7 @@ class Biped:
             Mp = self.pelvis(dz=dz, dx=dx, yaw=yaw, roll=roll, pitch=g.get('pitch', 0.0))
             loc = self.body_locals(p, yaw_wave=yaw, neck_pitch=-0.6 * bob * math.cos(2 * ph) / max(self.hip_h, 1) * 3,
                                    head_yaw=-yaw * 0.8, head_pitch=0.0, tail_yaw=g.get('tail', 0.12),
-                                   tail_phase=ph + 0.9, tail_pitch=0.02 * math.cos(2 * ph))
+                                   tail_phase=ph + 0.9, tail_pitch=0.02 * math.cos(2 * ph), wave=ph)
             self.arms(loc, swing=math.sin(ph), fold=0.1)
             hooks = self.stand_hooks(Mp, feet=feet)
             _, B = self.r.solve(local=loc, world={'pelvis': Mp}, hooks=hooks)
@@ -331,7 +355,8 @@ class Biped:
             Mp = self.pelvis(dz=-0.03 * self.hip_h + 0.01 * breath, dx=0.03 * math.sin(w), yaw=0.03 * math.sin(w),
                              roll=0.01 * math.sin(w))
             loc = self.body_locals(t, head_yaw=look, head_pitch=0.08 * math.sin(2 * w + 0.5), neck_pitch=0.04 * breath,
-                                   tail_yaw=0.06, tail_phase=w * 2, tail_pitch=0.02 * math.sin(w), breath=breath)
+                                   tail_yaw=0.14, tail_phase=w * 2, tail_pitch=0.03 * math.sin(w), breath=breath,
+                                   wave=w * 2, sway=0.6)
             self.arms(loc, swing=0.2 * math.sin(w), fold=0.12)
             hooks = self.stand_hooks(Mp, gauge=self.g.get('stand_gauge', 0.9))
             _, B = self.r.solve(local=loc, world={'pelvis': Mp}, hooks=hooks)
@@ -500,7 +525,7 @@ class Quadruped(Biped):
             Mp = self.pelvis(dz=dz, dx=dx, yaw=yaw, roll=roll)
             loc = self.body_locals(p, yaw_wave=-yaw, neck_pitch=g.get('neck_walk', 0.0) + 0.02 * math.cos(2 * ph),
                                    head_yaw=0.6 * yaw, head_pitch=0.0, tail_yaw=g.get('tail', 0.1),
-                                   tail_phase=ph + 1.2, tail_pitch=0.0)
+                                   tail_phase=ph + 1.2, tail_pitch=0.0, wave=ph)
             hooks = self.legs(Mp, fh, ff)
             _, B = self.r.solve(local=loc, world={'pelvis': Mp}, hooks=hooks)
             frames.append(B)
@@ -527,7 +552,7 @@ class Quadruped(Biped):
             br = math.sin(2 * math.pi * ts / 4.5)
             return (dict(dz=0.004 * br * self.hip_h, dx=0.015 * math.sin(w), yaw=0.02 * math.sin(w)),
                     dict(head_yaw=0.3 * math.sin(w) + 0.1 * math.sin(3 * w), head_pitch=0.05 * math.sin(2 * w),
-                         neck_pitch=0.03 * br, tail_yaw=0.05, tail_phase=2 * w, breath=br), 0.95)
+                         neck_pitch=0.03 * br, tail_yaw=0.12, tail_phase=2 * w, breath=br, wave=2 * w, sway=0.6), 0.95)
         return self._still(seconds, fps, fn, name, True)
 
     def graze(self, seconds=6.0, fps=30, name='graze'):

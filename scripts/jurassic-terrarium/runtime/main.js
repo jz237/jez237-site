@@ -12,6 +12,7 @@ import { NavGrid } from './nav.js';
 import { Guide } from './ui.js';
 import { Flora } from './flora.js';
 import { Voices } from './voice.js';
+import { Flex } from './flex.js';
 
 // One terrarium unit is 8 m: the 12 x 8 unit floor is a 96 x 64 m valley, and a 1.4-unit
 // pine is an 11 m conifer (miniature-scale trees, as in a diorama).
@@ -32,7 +33,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true,
+    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.75,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -50,7 +51,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -116,6 +117,11 @@ class Dino {
     this.play('idle', 0);
     this.length = info.length * S;
     this.height = (info.height || 3) * S;
+    this.flex = new Flex(this.model, { flex: sp.flex ?? 1 });
+    this.segLen = this.length / Math.max(6, this.flex.spine.length + this.flex.neck.length + this.flex.tail.length + 2);
+    this.prevHeading = this.heading;
+    this.glance = null;
+    this.glanceT = 2 + rand() * 4;
     this.followRadius = Math.max(1.0, this.length * 1.6);
     this.pickRadius = Math.max(this.length, this.height) * 0.35;
     this._pp = [new Vector3(), new Vector3(), new Vector3()];
@@ -307,7 +313,56 @@ class Dino {
   finish(dt) {
     this.place();
     this.mixer.update(dt);
+    if (dt > 0) {
+      let dh = this.heading - this.prevHeading;
+      dh = Math.atan2(Math.sin(dh), Math.cos(dh));
+      this.prevHeading = this.heading;
+      const moving = this.state === 'walk' || this.state === 'flee' || this.state === 'hunt';
+      this.flex.update(dt, {
+        turnRate: dh / dt,
+        speed: moving ? this.speed : 0,
+        segLen: this.segLen,
+        look: this.lookTarget(dt),
+        calm: moving ? 0.35 : this.state === 'sleep' ? 0.15 : 1,
+      });
+    }
     this.sounds(dt);
+  }
+
+  // what the animal is watching: the hunter for prey, the prey for the hunter, otherwise now and
+  // then a neighbour; returned as yaw/pitch relative to the body
+  lookTarget(dt) {
+    const mod = this.mod;
+    let tgt = null;
+    if (this.state === 'sleep' || this.state === 'oneshot') return null;
+    if (this.sp.predator && this.prey) tgt = this.prey;
+    else if (!this.sp.predator && mod.predator) {
+      const p = mod.predator;
+      if (Math.hypot(p.pos.x - this.pos.x, p.pos.z - this.pos.z) < 3.2 && p.state !== 'sleep') tgt = p;
+    }
+    if (!tgt) {
+      this.glanceT -= dt;
+      if (this.glanceT <= 0) {
+        this.glanceT = 3 + rand() * 6;
+        const near = (mod.walkers || []).filter(
+          (d) => d !== this && Math.hypot(d.pos.x - this.pos.x, d.pos.z - this.pos.z) < 3.5,
+        );
+        this.glance = rand() < 0.6 && near.length ? near[Math.floor(rand() * near.length)] : null;
+        this.glanceUntil = 1.5 + rand() * 2.5;
+      }
+      if (this.glance) {
+        this.glanceUntil -= dt;
+        if (this.glanceUntil > 0) tgt = this.glance;
+      }
+    }
+    if (!tgt) return null;
+    const dx = tgt.pos.x - this.pos.x, dz = tgt.pos.z - this.pos.z;
+    let yaw = Math.atan2(dx, dz) - this.heading;
+    yaw = Math.atan2(Math.sin(yaw), Math.cos(yaw));
+    if (Math.abs(yaw) > 2.2) return null; // behind: it would have to turn round
+    const dist = Math.hypot(dx, dz);
+    const dy = (tgt.height || 0) * 0.6 - this.height * 0.6;
+    return { yaw, pitch: -Math.atan2(dy, Math.max(dist, 0.2)) * 0.5 };
   }
 
   // stalk the prey, then charge; give up after a while, or when it stands its ground

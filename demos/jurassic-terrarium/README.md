@@ -47,18 +47,25 @@ Every animal is modelled from code and rendered in Blender 4.5. Nothing is downl
 5. **Animation.** Gait cycles come from a pose solver with leg IK. Digitigrade hind legs use a
    pantograph constraint: the metatarsus stays parallel to the femur, as in birds. Planted feet
    don't slide, because the terrarium moves each animal at its clip's stride speed.
-6. **Planting.** The valley is replanted for the Mesozoic. Tree ferns, cycads, fern clumps (some with red
+6. **Suppleness.** Walking clips carry a travelling S-wave: the trunk flexes with each stride, the bend
+   passing forward up the neck (the head counter-turns to hold its gaze) and back down the tail. On top
+   of the clips, a live layer (`runtime/flex.js`) does three things:
+   - it bends the body along the path when turning, capped at about 65° end to end;
+   - it turns the neck and head towards whatever the animal watches, such as the T. rex, its prey or a
+     neighbour;
+   - it gives each tail segment springy follow-through.
+7. **Planting.** The valley is replanted for the Mesozoic. Tree ferns, cycads, fern clumps (some with red
    young fronds) and horsetails are modelled procedurally in Blender (`blender/flora.py`) and instanced
    with a wind-sway shader. They replace Weatherglass's oaks, birches and cherries, and thin out its
    flowers and grass. The conifers and shrubs stay.
-7. **Sound.** Voices are synthesised live with Web Audio through Weatherglass's audio engine, so its
+8. **Sound.** Voices are synthesised live with Web Audio through Weatherglass's audio engine, so its
    sound button and volume apply. They are informed by living archosaurs (crocodilians and birds boom,
    hiss and grunt with closed mouths): the T. rex's deep rasping growl, snorts, grunts, a sauropod's
    rumble, pterosaur croaks, and footfalls synced to each gait.
-8. **Weather.** Skin darkens and turns glossy in rain. A nearby lightning strike sends animals running.
+9. **Weather.** Skin darkens and turns glossy in rain. A nearby lightning strike sends animals running.
    At night, or in a storm, the T. rex retires to its den: a basalt overhang sculpted and baked the same
    way, over a level shelf patched into the terrain.
-9. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
+10. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
    a walkability grid of the terrain, which keeps animals off cliffs, deep water, trees and the hut.
    It then drives behaviour: idle, wander, sniff, roar, graze, drink and sleep at night.
 
