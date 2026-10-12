@@ -8,10 +8,17 @@
 // pool wherever it is. Water level is y = 0.
 import {
   Group, Mesh, InstancedMesh, BufferGeometry, BufferAttribute, IcosahedronGeometry, MeshStandardMaterial,
-  Matrix4, Quaternion, Vector3, Euler, Color, DoubleSide,
+  Matrix4, Quaternion, Vector3, Euler, Color, DoubleSide, CircleGeometry,
 } from 'three';
 
 const WATER_Y = 0;
+// lip -> foot of each river cascade, with the water height at the foot; must match the 'tiered
+// cascades' spline in tools/build-page.mjs
+const CASCADES = [
+  { lip: { x: -1.12, z: -0.98 }, foot: { x: -0.95, z: -0.78, y: 0.7 } },
+  { lip: { x: -0.45, z: -0.2 }, foot: { x: -0.28, z: 0, y: 0.42 } },
+  { lip: { x: 0.45, z: 0.62 }, foot: { x: 0.62, z: 0.78, y: 0.17 } },
+];
 
 function hash3(x, y, z) {
   const s = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453;
@@ -91,6 +98,7 @@ export class Aquatic {
     }
     this.buildEelgrass(bed, [60, 110, 160][Math.min(2, tier)] ?? 110);
     this.buildStones(bed, shore, tier);
+    this.buildCascadeRocks();
     ctx.scene.add(this.group);
   }
 
@@ -213,7 +221,60 @@ export class Aquatic {
     place(shoreSpots, true, false, [0.07, 0.19], 0.3, true);
   }
 
+  // mossy rocks shouldering each cascade's lip and foot, as in the concept's stepped falls
+  buildCascadeRocks() {
+    const T = this.ctx.terrain, rand = this.rand;
+    const spots = [];
+    for (const c of CASCADES) {
+      let dx = c.foot.x - c.lip.x, dz = c.foot.z - c.lip.z;
+      const l = Math.hypot(dx, dz);
+      dx /= l; dz /= l;
+      const px = -dz, pz = dx;
+      for (const side of [1, -1]) {
+        for (const [at, off, r] of [[0, 0.2, 0.085], [0.15, 0.25, 0.06], [1, 0.24, 0.07], [-0.25, 0.27, 0.055]]) {
+          const x = c.lip.x + dx * l * at + px * side * (off + rand() * 0.04);
+          const z = c.lip.z + dz * l * at + pz * side * (off + rand() * 0.04);
+          spots.push({ x, z, h: T.height(x, z), r: r * (0.8 + rand() * 0.45) });
+        }
+      }
+    }
+    const M = new Matrix4(), q = new Quaternion(), e = new Euler(), sc = new Vector3(), p = new Vector3();
+    const mat = new MeshStandardMaterial({ vertexColors: true, roughness: 0.88, metalness: 0 });
+    const mesh = new InstancedMesh(rockGeometry(5.3, true, false), mat, spots.length);
+    mesh.name = 'aquatic-cascade-rocks';
+    mesh.castShadow = mesh.receiveShadow = true;
+    spots.forEach((s, i) => {
+      e.set((rand() - 0.5) * 0.4, rand() * 6.28, (rand() - 0.5) * 0.4);
+      q.setFromEuler(e);
+      sc.set(s.r * (0.9 + rand() * 0.4), s.r * (0.9 + rand() * 0.5), s.r * (0.9 + rand() * 0.4));
+      p.set(s.x, s.h - s.r * 0.2, s.z);
+      M.compose(p, q, sc);
+      mesh.setMatrixAt(i, M);
+      this.obstacles.push({ x: s.x, z: s.z, r: s.r * 0.7 });
+    });
+    this.group.add(mesh);
+  }
+
+  // churned white water at the foot of each cascade: Weatherglass's own plunge-pool foam shader
+  // (its vertex shader takes positions in world space, so the discs are built where they sit)
+  buildFoam() {
+    const src = this.ctx.scene.getObjectByName('water:plunge-pool');
+    if (!src) return false;
+    for (const c of CASCADES) {
+      const g = new CircleGeometry(0.15, 32);
+      g.rotateX(-Math.PI / 2);
+      g.translate(c.foot.x, c.foot.y + 0.008, c.foot.z);
+      const m = new Mesh(g, src.material);
+      m.name = 'aquatic-cascade-foam';
+      m.renderOrder = src.renderOrder + 0.001;
+      m.frustumCulled = false;
+      this.ctx.scene.add(m);
+    }
+    return true;
+  }
+
   update(dt) {
     this.uniforms.uTime.value += dt;
+    if (!this.foamed) this.foamed = this.buildFoam();
   }
 }

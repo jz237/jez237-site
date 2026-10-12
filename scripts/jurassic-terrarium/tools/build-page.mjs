@@ -85,6 +85,16 @@ patch(
   }`,
   'mossy dark rock',
 );
+// Tiered cascades, as in the concept: below the waterfall's plunge pool the river no longer slides
+// gently to the lake; it steps down in three short cascades between calm pools, the last dropping into
+// the front pool. Each spline segment eases in and out, so a short, steep segment between long, flat
+// ones is a cascade. The terrain carves its bed to the spline, so the channel steps with it.
+patch(
+  'In=[{x:-1.8,z:-2.35,y:2.2},{x:-1.55,z:-1.72,y:2.02},{x:-1.35,z:-1.22,y:.98},{x:-.7,z:-.55,y:.66},{x:-.05,z:.25,y:.46},{x:.75,z:.8,y:.3},{x:1.5,z:1.5,y:.16},{x:2.15,z:2.1,y:.06}]',
+  'In=[{x:-1.8,z:-2.35,y:2.2},{x:-1.55,z:-1.72,y:2.02},{x:-1.35,z:-1.22,y:.98},{x:-1.12,z:-.98,y:.95},{x:-.95,z:-.78,y:.7},' +
+    '{x:-.45,z:-.2,y:.64},{x:-.28,z:0,y:.42},{x:.45,z:.62,y:.36},{x:.62,z:.78,y:.17},{x:1.5,z:1.5,y:.12},{x:2.15,z:2.1,y:.06}]',
+  'tiered cascades',
+);
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's

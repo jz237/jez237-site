@@ -26,6 +26,7 @@ How they move and what's around them:
 - The trunk swings over each planted foot.
 - The head flicks to look at something and holds there while the neck catches up.
 - Ferns lean away and press down as an animal pushes through them.
+- The waterfall steps down through three white-water cascades into the front pool.
 - The front pool has eelgrass meadows streaming in the current and stones on its bed.
 - Mossy boulders line the pool's bank.
 
