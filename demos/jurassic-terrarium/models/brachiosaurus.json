@@ -1,0 +1,50 @@
+{
+ "id": "brachiosaurus",
+ "name": "Brachiosaurus altithorax",
+ "common": "Brachiosaurus",
+ "length": 22.0,
+ "mass_t": 30.0,
+ "height": 10.98,
+ "clips": {
+  "idle": {
+   "loop": true,
+   "frames": 240
+  },
+  "walk": {
+   "loop": true,
+   "speed": 1.1,
+   "stride": 4.0,
+   "period": 3.6333,
+   "frames": 109
+  },
+  "run": {
+   "loop": true,
+   "speed": 2.2,
+   "stride": 5.6,
+   "period": 2.5333,
+   "frames": 76
+  },
+  "graze": {
+   "loop": false,
+   "frames": 180
+  },
+  "drink": {
+   "loop": false,
+   "frames": 180
+  },
+  "alert": {
+   "loop": false,
+   "frames": 120
+  },
+  "rest": {
+   "loop": true,
+   "frames": 180
+  },
+  "browse": {
+   "loop": false,
+   "frames": 210
+  }
+ },
+ "behaviour": {},
+ "facts": []
+}
