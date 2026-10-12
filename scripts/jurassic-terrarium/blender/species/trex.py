@@ -95,7 +95,7 @@ def build():
         b.add(Ellipsoid((4.02, 0.22 * m, 4.08), (0.22, 0.16, 0.13), R=rot_euler(rz=0.25 * m), k=0.1, bind=head,
                         name='adductor'))
         # postorbital boss (brow horn) and lacrimal ridge
-        b.add(Ellipsoid((4.16, 0.29 * m, 4.10), (0.10, 0.06, 0.065), k=0.05, bind=head, detail=1.6, name='postorb'))
+        b.add(Ellipsoid((4.14, 0.29 * m, 4.11), (0.12, 0.075, 0.08), k=0.05, bind=head, detail=1.6, name='postorb'))
         b.add(Ellipsoid((4.40, 0.21 * m, 4.07), (0.10, 0.045, 0.05), R=rot_euler(rz=-0.3 * m), k=0.05, bind=head,
                         detail=1.6, name='lacrimal'))
         # cheek / jugal flare
@@ -135,31 +135,34 @@ def build():
         b.add(Ellipsoid((3.83, 0.36 * m, 3.77), (0.035, 0.03, 0.05), k=0.015, op='sub', name='ear'))
 
     # eyes: socket + lids are field shapes; the eyeball itself is a separate mesh
-    eye_r = 0.05
+    eye_r = 0.058
     for m, s in ((1, 'L'), (-1, 'R')):
         c = V(4.29, 0.285 * m, 3.98)
         look = normalize(V(0.55, 0.83 * m, 0.05))
-        b.add(Ellipsoid(c + look * 0.005, (0.085, 0.075, 0.07), k=0.03, bind=head, name='lids'))
+        b.add(Ellipsoid(c + look * 0.005, (0.095, 0.085, 0.078), k=0.03, bind=head, name='lids'))
+        # heavy brow: a ridge over the eye from the lacrimal to the postorbital boss
+        b.add(Ellipsoid(c + V(-0.02, 0.025 * m, 0.085), (0.14, 0.06, 0.045), R=rot_euler(rz=0.35 * m, rx=-0.25 * m), k=0.04,
+                        bind=head, detail=1.6, name='brow'))
         b.add(Ellipsoid(c, (eye_r + 0.004,) * 3, k=0.004, op='sub', name='socket'))
         # almond-shaped opening between the lids, facing 'look'
         R = np.stack([look, normalize(np.cross(V(0, 0, 1), look)), normalize(np.cross(look, np.cross(V(0, 0, 1), look)))], axis=1)
-        b.add(Ellipsoid(c + look * 0.07, (0.05, 0.05, 0.024), R=R, k=0.012, op='sub', name='aperture'))
+        b.add(Ellipsoid(c + look * 0.075, (0.055, 0.062, 0.03), R=R, k=0.012, op='sub', name='aperture'))
         b.attachments.append(dict(kind='eye', center=c.tolist(), radius=eye_r, look=look.tolist(), bone='head',
                                   iris=[0.72, 0.52, 0.18], pupil='round'))
 
     # teeth: separate meshes inside the lips (visible when the jaw opens)
     teeth = []
     for m in (1, -1):
-        for i, x in enumerate(np.linspace(4.30, 5.18, 11)):
-            u = (x - 4.30) / 0.88
+        for i, x in enumerate(np.linspace(4.40, 5.18, 10)):
+            u = (x - 4.40) / 0.78
             half_w = np.interp(x, [4.0, 4.6, 4.95, 5.18], [0.40, 0.22, 0.17, 0.12]) - 0.035
-            base = V(x, half_w * m, 3.53 - 0.03 * u)
-            L = 0.045 + 0.03 * math.sin(math.pi * min(1, u * 1.25))
+            base = V(x, half_w * m, 3.55 - 0.03 * u)
+            L = 0.035 + 0.028 * math.sin(math.pi * min(1, u * 1.25))
             teeth.append(dict(base=base.tolist(), dir=[0.12, -0.05 * m, -1], length=L, radius=0.022, bone='head'))
         for i, x in enumerate(np.linspace(4.42, 5.04, 9)):
             u = (x - 4.42) / 0.7
             half_w = np.interp(x, [3.9, 4.6, 4.95, 5.18], [0.38, 0.20, 0.155, 0.12]) - 0.05
-            base = (V(x, half_w * m, 3.49) - jaw_pivot) @ Rj.T + jaw_pivot
+            base = (V(x, half_w * m, 3.47) - jaw_pivot) @ Rj.T + jaw_pivot
             d = V(0.1, 0.05 * m, 1) @ Rj.T
             teeth.append(dict(base=base.tolist(), dir=d.tolist(), length=0.035 + 0.02 * u, radius=0.017, bone='jaw'))
     b.attachments.append(dict(kind='teeth', items=teeth))
@@ -234,7 +237,8 @@ def build():
         palette=dict(back='#463725', flank='#7a6142', belly='#cdb894', pattern='#2a2016', accent='#8a4a30',
                      keratin='#2d2823', claw='#221e1a', mouth='#8f4545', eye='#c99a3b'),
         pattern=dict(kind='bands', count=17, start=-6.8, end=3.4, strength=0.75, mottle=0.35, low=-0.25, high=0.45),
-        scales=dict(base=0.03, feature=0.075, border=0.35, folds=0.7),
+        scales=dict(base=0.028, feature=0.07, border=0.18, folds=0.75, tubercle=0.09, tubercle_density=0.22,
+                    tubercle_from=0.35),
         accent=[((4.05, 0.3, 3.62), (0.32, 0.12, 0.2), 0.45), ((4.05, -0.3, 3.62), (0.32, 0.12, 0.2), 0.45)],
         gait=dict(kind='biped', stride=3.6, duty=0.62, speed=1.4, bob=0.06, sway=0.05),
     )

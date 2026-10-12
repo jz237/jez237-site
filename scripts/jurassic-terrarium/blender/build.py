@@ -211,6 +211,8 @@ def mark_seams(ob):
         if m.any():
             ang = tube_angle(lf, Pf[m])
             phi[m] = (ang - cut + math.pi) % (2 * math.pi) - math.pi  # 0 at the cut, +-pi opposite
+    # cap regions (head, jaw) are split down the sagittal midline so the snout and chin don't stretch
+    mid_cut = {ri for ri, nm in enumerate(names) if nm in ('head', 'jaw')}
     n_seam = 0
     for e in bm.edges:
         lf_ = e.link_faces
@@ -220,6 +222,11 @@ def mark_seams(ob):
         if lab[a] != lab[c]:
             e.seam = True
             n_seam += 1
+            continue
+        if lab[a] in mid_cut and (Pf[a, 1] > 0) != (Pf[c, 1] > 0):
+            e.seam = True
+            n_seam += 1
+            continue
         elif lab[a] in cut_of:
             # faces on opposite sides of the cut line, close to it
             if phi[a] * phi[c] < 0 and abs(phi[a]) < 1.2 and abs(phi[c]) < 1.2:
@@ -436,8 +443,24 @@ def stage_render():
     ro.location = (-L * 0.7, L * 0.6, L * 0.6); anim_look(ro, (0, 0, 1.5))
     low = bpy.data.objects['body']
     os.makedirs(os.path.join(WORK, 'render'), exist_ok=True)
-    blib.preview([low], os.path.join(WORK, 'render', f'{SP}-{clip}{frame}'), views=('side', 'three'),
-                 engine='cycles')
+    if os.environ.get('RENDER_HEAD'):
+        # close-up of the head from the front-left, three-quarter view
+        bpy.context.view_layer.update()
+        hb = arm.pose.bones['head']
+        hp = arm.matrix_world @ hb.head
+        tp = arm.matrix_world @ hb.tail
+        ctr = hp * 0.45 + tp * 0.55
+        cam_data = bpy.data.cameras.new('hc'); cam_data.lens = 85
+        cam = bpy.data.objects.new('hc', cam_data); scn.collection.objects.link(cam); scn.camera = cam
+        d = (tp - hp).length
+        cam.location = ctr + Vector((d * 2.6, -d * 2.4, d * 0.9))
+        anim_look(cam, ctr)
+        scn.render.resolution_x, scn.render.resolution_y = 1200, 900
+        scn.render.filepath = os.path.join(WORK, 'render', f'{SP}-{clip}{frame}-head.png')
+        bpy.ops.render.render(write_still=True)
+    else:
+        blib.preview([low], os.path.join(WORK, 'render', f'{SP}-{clip}{frame}'), views=('side', 'three'),
+                     engine='cycles')
     log('rendered')
 
 

@@ -5,7 +5,7 @@
 // are string-pulled (line-of-sight shortcuts) so animals walk smooth diagonals, not grid steps.
 
 export class NavGrid {
-  constructor(ctx, { cell = 0.1, margin = 0.35 } = {}) {
+  constructor(ctx, { cell = 0.1, margin = 0.35, obstacles = [] } = {}) {
     const box = ctx.box;
     this.ctx = ctx;
     this.cell = cell;
@@ -39,11 +39,13 @@ export class NavGrid {
         this.base[k] = c;
       }
     }
+    // planted trunks (tree ferns, cycads)
+    for (const o of obstacles) this._stamp(o.x, o.z, o.r + 0.04, Infinity);
     // trees: block the trunk, add cost under the crown
     for (const t of trees) {
       const r = Math.max(0.06, t.radius * 0.35);
       this._stamp(t.x, t.z, r + 0.05, Infinity);
-      this._stamp(t.x, t.z, t.radius * 0.9, 2);
+      this._stamp(t.x, t.z, t.radius * 0.9, 5);
     }
   }
 

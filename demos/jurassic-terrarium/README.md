@@ -47,7 +47,11 @@ Every animal is modelled from code and rendered in Blender 4.5. Nothing is downl
 5. **Animation.** Gait cycles come from a pose solver with leg IK. Digitigrade hind legs use a
    pantograph constraint: the metatarsus stays parallel to the femur, as in birds. Planted feet
    don't slide, because the terrarium moves each animal at its clip's stride speed.
-6. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
+6. **Planting.** The valley is replanted for the Mesozoic. Tree ferns, cycads, fern clumps (some with red
+   young fronds) and horsetails are modelled procedurally in Blender (`blender/flora.py`) and instanced
+   with a wind-sway shader. They replace Weatherglass's oaks, birches and cherries, and thin out its
+   flowers and grass. The conifers and shrubs stay.
+7. **Terrarium.** A small module joins Weatherglass's simulation loop. It plans routes with A* over
    a walkability grid of the terrain, which keeps animals off cliffs, deep water, trees and the hut.
    It then drives behaviour: idle, wander, sniff, roar, graze, drink and sleep at night.
 

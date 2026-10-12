@@ -54,6 +54,17 @@ patch(
 );
 patch('R1="weatherglass.coach.v1"', 'R1="jurassic-terrarium.coach.v1"', 'coach key');
 
+// Jurassic planting: Weatherglass's oak, birch and cherry trees and most of its flowers and grass give way
+// to tree ferns, cycads, ferns and horsetails planted by dinos.js. Conifers and shrubs stay.
+patch(
+  'u(-3.95,.25,Re.oak,1.3,.64,.5),u(-3.75,2.4,Re.cherry,.8,.47,.35),u(3.3,.35,Re.cherry,.74,.44,.45),u(-4.95,1.5,Re.birch,1.2,.3,.4);',
+  '',
+  'hero broadleaf trees',
+);
+patch('broad:e.pick(11,16,20)', 'broad:0', 'broadleaf count');
+patch('h=FC(e.pick(2e4,6e4,12e4),l,c)', 'h=FC(e.pick(9e3,26e3,52e3),l,c)', 'grass count');
+patch('const f=NC(e.pick(1800,3500,7e3),l,c)', 'const f=NC(e.pick(250,500,1e3),l,c)', 'flower count');
+
 // Hold the veil while dinos.js loads its models. The hold is set before the bundle runs.
 patch(
   '<link rel="icon" href="favicon.svg" type="image/svg+xml">',

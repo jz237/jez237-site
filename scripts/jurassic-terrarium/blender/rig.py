@@ -97,8 +97,8 @@ def iris_image(name, iris_rgb, pupil='round', size=256, sclera=(0.06, 0.04, 0.03
     lat = (v + 0.5) / size * math.pi - math.pi / 2  # -pi/2 (bottom) .. pi/2 (top pole)
     lon = (u + 0.5) / size * 2 * math.pi
     r = (math.pi / 2 - lat)  # angular distance from the pole
-    iris_r = 0.62
-    pup_r = 0.24
+    iris_r = 0.95
+    pup_r = 0.16
     # pupil shape: round or vertical slit (squash across longitude)
     x = r * np.cos(lon)
     y = r * np.sin(lon)
@@ -107,7 +107,8 @@ def iris_image(name, iris_rgb, pupil='round', size=256, sclera=(0.06, 0.04, 0.03
     else:
         pmask = r < pup_r
     rng = np.random.default_rng(7)
-    fib = 0.75 + 0.25 * np.sin(lon * 60 + rng.normal(0, 0.4, lon.shape)) * np.exp(-((r - 0.42) ** 2) / 0.03)
+    fib = 0.8 + 0.2 * np.sin(lon * 70 + rng.normal(0, 0.5, lon.shape)) * np.exp(-((r - 0.5) ** 2) / 0.08)
+    fib = fib * (1.0 - 0.35 * np.clip((r - 0.2) / 0.75, 0, 1))  # warmer, brighter round the pupil
     base = np.array(iris_rgb)[None, None, :] * fib[..., None]
     ring = np.clip((r - iris_r * 0.82) / (iris_r * 0.18), 0, 1)[..., None]
     base = base * (1 - 0.65 * ring)
@@ -139,6 +140,7 @@ def add_attachments(body, mesh_ob, arm_ob, meta):
     """Eyes and teeth as extra geometry in the body mesh, rigidly skinned to one bone each."""
     sk = body.skel
     bm = bmesh.new()
+    bm.loops.layers.uv.verify()  # primitives only write UVs into an existing layer
     pieces = []  # (bmesh verts list, bone name, material index)
     mats = []
 

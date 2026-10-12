@@ -141,7 +141,7 @@ def skin_material(meta, name='skin_src'):
 
     base = sc.get('base', 0.03)
     feat = sc.get('feature', base * 2.2)
-    border = sc.get('border', 0.35)
+    border = sc.get('border', 0.2)
     # ---- relief
     vfe = vor(base, 'DISTANCE_TO_EDGE')
     bead = g.smooth(vfe.outputs['Distance'], 0.0, 0.28)
@@ -160,7 +160,8 @@ def skin_material(meta, name='skin_src'):
         g.link(vt.outputs['Color'], sept.inputs[0])
         pick = g.math('LESS_THAN', sept.outputs[0], sc.get('tubercle_density', 0.2))
         dome = g.math('SUBTRACT', 1.0, g.smooth(vt.outputs['Distance'], 0.0, 0.36))
-        tubmask = g.math('MULTIPLY', g.math('MULTIPLY', pick, dome), g.smooth(dors, -0.5, 0.2))
+        tlo = sc.get('tubercle_from', -0.5)  # dorsal coordinate where tubercles begin
+        tubmask = g.math('MULTIPLY', g.math('MULTIPLY', pick, dome), g.smooth(dors, tlo, tlo + 0.7))
         height = g.math('ADD', height, g.math('MULTIPLY', tubmask, 2.2))
     # transverse skin folds: waves across the body axis (Blender Y), warped by noise; where detail is high
     folds = sc.get('folds', 0.6)

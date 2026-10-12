@@ -9,6 +9,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { NavGrid } from './nav.js';
 import { Guide } from './ui.js';
+import { Flora } from './flora.js';
 
 // One terrarium unit is 8 m: the 12 x 8 unit floor is a 96 x 64 m valley, and a 1.4-unit
 // pine is an 11 m conifer (miniature-scale trees, as in a diorama).
@@ -416,7 +417,9 @@ class Dinosaurs {
     this.dinos = [];
     this.layers = {};
     this.ready = false;
-    this.nav = new NavGrid(ctx);
+    this.flora = new Flora(ctx, S, rand);
+    this.group.add(this.flora.group);
+    this.nav = new NavGrid(ctx, { obstacles: this.flora.obstacles });
     for (const sp of SPECIES.filter((s) => !s.flyer))
       this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope });
     // let the camera come close enough to see a dinosaur's skin
@@ -431,6 +434,7 @@ class Dinosaurs {
   async load() {
     const loader = new GLTFLoader();
     const base = new URL('models/', document.baseURI);
+    const floraReady = this.flora.load(base).catch((e) => console.warn('[flora] load failed', e));
     await Promise.all(
       SPECIES.filter((sp) => sp.ready).map(async (sp) => {
         const [gltf, info] = await Promise.all([
@@ -444,6 +448,7 @@ class Dinosaurs {
         }
       }),
     );
+    await floraReady;
     this.predator = this.dinos.find((d) => d.sp.predator) || null;
     this.walkers = this.dinos.filter((d) => !d.sp.flyer);
     this.ready = true;
@@ -491,6 +496,7 @@ class Dinosaurs {
   update(dt) {
     if (!this.ready) return;
     const env = this.env();
+    this.flora.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.guide?.update(dt);
   }
