@@ -22,6 +22,7 @@ import { Room } from './room.js';
 import { Effects } from './effects.js';
 import { Ambience } from './ambience.js';
 import { Nest } from './nest.js';
+import { debugPanel } from './debug.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -1112,8 +1113,14 @@ class Dinosaurs {
         { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
       ],
     });
-    for (const sp of SPECIES.filter((s) => !s.flyer))
-      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope });
+    // the den (rock and hollow) is the T. rex's alone; tall animals keep further off so a neck can't
+    // reach over or through the overhang
+    const denRect = { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds };
+    for (const sp of SPECIES.filter((s) => !s.flyer)) {
+      const m = sp.den ? null : sp.tooBig ? 1.8 : 0.25;
+      const blockRects = m === null ? [] : [{ x0: denRect.x0 - m, x1: denRect.x1 + m, z0: denRect.z0 - m, z1: denRect.z1 + m }];
+      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects });
+    }
     // let the camera come close enough to see a dinosaur's skin
     const rig = ctx.cameraRig;
     if (rig) rig.limits.minRadius = 0.9;
@@ -1171,6 +1178,7 @@ class Dinosaurs {
     }
     this.ready = true;
     this.guide = new Guide(this, SPECIES);
+    if (params.has('debug')) debugPanel(this.ctx, this);
     window.__wgHold = 0;
   }
 

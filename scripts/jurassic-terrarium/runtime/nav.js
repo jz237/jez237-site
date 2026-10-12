@@ -81,7 +81,8 @@ export class NavGrid {
   }
 
   // A per-species view: bigger animals need clearance from blocked cells; deep water may be banned.
-  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7 } = {}) {
+  // blockRects: extra no-go rectangles for this species only (the den is open to its owner alone)
+  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7, blockRects = [] } = {}) {
     const n = this.nx * this.nz;
     const cost = new Float32Array(n);
     const rad = Math.ceil(clearance / this.cell);
@@ -90,6 +91,12 @@ export class NavGrid {
       if (this.lake[k] > maxWater || this.slope[k] > maxSlope) c = Infinity;
       cost[k] = c;
     }
+    for (const r of blockRects)
+      for (let j = 0; j < this.nz; j++)
+        for (let i = 0; i < this.nx; i++) {
+          const x = this.minX + (i + 0.5) * this.cell, z = this.minZ + (j + 0.5) * this.cell;
+          if (x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1) cost[j * this.nx + i] = Infinity;
+        }
     if (rad <= 0) return new NavLayer(this, cost);
     const out = new Float32Array(cost);
     for (let j = 0; j < this.nz; j++)
