@@ -746,8 +746,7 @@ export class Terrarium {
     this.wake(dt);
     this.updateFish(dt);
     this.updatePush(dt);
-    // Focus on the orbit target; the room falls out of focus naturally.
-    this.post.settings.focus = this.camera.position.distanceTo(this.controls.target);
+    // (the depth of field focuses itself on the middle of the picture: see Post)
     this.renderer.shadowMap.needsUpdate = true;
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
     this.water.uniforms.uKeyDir.value.copy(keyDir);
