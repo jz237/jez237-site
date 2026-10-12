@@ -41,7 +41,7 @@ export class Effects {
     this.steam = [];
     for (let i = 0; i < 70; i++) {
       const s = new Sprite(new SpriteMaterial({ map: tex, color: 0xf4f6f2, transparent: true, opacity: 0, depthWrite: false }));
-      s.visible = false;
+      s.scale.setScalar(1e-4); // visible but empty, so it compiles at load
       s.name = 'effects-steam';
       this.group.add(s);
       this.steam.push({ s, life: 0 });
@@ -67,7 +67,6 @@ export class Effects {
       S.p = new Vector3(x, Math.max(h, 0) + 0.05, z);
       S.life = S.max = 5 + Math.random() * 3;
       S.size = 0.25 + Math.random() * 0.25;
-      S.s.visible = true;
     }
     for (const S of this.steam) {
       if (S.life <= 0) continue;
@@ -78,7 +77,10 @@ export class Effects {
       S.s.position.copy(S.p);
       S.s.scale.setScalar(S.size * (1 + t * 1.8));
       S.s.material.opacity = 0.2 * Math.sin(Math.PI * t);
-      if (S.life <= 0) S.s.visible = false;
+      if (S.life <= 0) {
+        S.s.material.opacity = 0;
+        S.s.scale.setScalar(1e-4);
+      }
     }
   }
 
@@ -119,7 +121,8 @@ export class Effects {
     for (let i = 0; i < NR; i++) {
       const r = new Mesh(new RingGeometry(0.8, 1, 40), this.ringMat.clone());
       r.rotation.x = -Math.PI / 2;
-      r.visible = false;
+      r.scale.setScalar(1e-4); // kept visible so its shader compiles at load, not mid-animation
+      r.material.opacity = 0;
       r.renderOrder = 1.06;
       r.name = 'effects-ring';
       this.group.add(r);
@@ -144,7 +147,6 @@ export class Effects {
       R.delay = k * 0.25;
       R.life = 1.6;
       R.size = size;
-      R.mesh.visible = false;
     }
     for (let k = 0; k < 14; k++) {
       const D = this.drops[this.dropNext];
@@ -226,8 +228,8 @@ export class Effects {
       const t = 1 - R.life / 1.6;
       const s = (0.03 + t * 0.28) * R.size;
       R.mesh.scale.set(s, s, s);
-      R.mesh.material.opacity = 0.55 * (1 - t);
-      R.mesh.visible = R.life > 0;
+      R.mesh.material.opacity = R.life > 0 ? 0.55 * (1 - t) : 0;
+      if (R.life <= 0) R.mesh.scale.setScalar(1e-4);
     }
     // drops arc out and fall back
     let dropsLive = false;

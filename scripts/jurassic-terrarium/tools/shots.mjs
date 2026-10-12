@@ -52,7 +52,7 @@ const browser = await chromium.launch({
     ? ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
     : ['--use-angle=vulkan', '--enable-features=Vulkan', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'],
 });
-const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: Number(opt('--dpr', '1')) });
 await ctx.route(`${ORIGIN}/**`, async (route) => {
   let p = decodeURIComponent(new URL(route.request().url()).pathname);
   if (p.endsWith('/')) p += 'index.html';

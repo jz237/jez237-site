@@ -2,7 +2,8 @@
 // meadows and horsetails along the water. Plants are instanced Blender meshes (scripts/.../blender/flora.py);
 // a small shader patch bends them in the wind, more the higher a vertex sits on the plant.
 import {
-  Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Vector4, Color, DoubleSide,
+  Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Vector4, Vector2, Color, DoubleSide,
+  InstancedBufferAttribute, DynamicDrawUsage,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -28,8 +29,7 @@ export class Flora {
       uTime: { value: 0 },
       uWind: { value: 0.2 },
       uTint: { value: new Color(1, 1, 1) },
-      // bodies pushing through the planting: xyz centre, w radius (after the reptile terrarium's Foliage.ts)
-      uPush: { value: Array.from({ length: 16 }, () => new Vector4(0, -99, 0, 0)) },
+      uWindDir: { value: new Vector2(0.94, 0.34) },
       // a roar close by: plants within the radius shiver (x, z, radius, strength 0..1)
       uShiver: { value: new Vector4(0, 0, 0, 0) },
     };
@@ -135,7 +135,7 @@ export class Flora {
     }
     // a carpet of small ferns over everything that isn't water, rock, path or building
     tries = 0;
-    want = [700, 1400, 2200][tier] ?? 1400;
+    want = [450, 900, 1500][tier] ?? 900;
     while (want > 0 && tries++ < 60000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.1), z = (rand() * 2 - 1) * (box.halfD - 0.1);
       const g = Math.max(sh.suitability(x, z, 'grass'), 0.6 * sh.suitability(x, z, 'flower'));
@@ -172,6 +172,10 @@ export class Flora {
 
   // ---------------------------------------------------------------- meshes
   async load(base) {
+    this.plants = [];
+    this.live = [];
+    this.grid = new Map();
+    this.cell = 0.5;
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const kinds = Object.keys(this.placements);
     await Promise.all(
@@ -206,6 +210,22 @@ export class Flora {
             p.top = _top.set(0, bb.max.y, 0).applyMatrix4(M).y; // crown height, for browsers
           });
           im.instanceMatrix.needsUpdate = true;
+          // per-plant spring bend, written by simulate()
+          const attr = new InstancedBufferAttribute(new Float32Array(mine.length * 2), 2);
+          attr.setUsage(DynamicDrawUsage);
+          im.geometry = im.geometry.clone();
+          im.geometry.setAttribute('aBend', attr);
+          const mo = Flora.MOTION[kind] || Flora.MOTION.fern;
+          mine.forEach((p, i) => {
+            im.getMatrixAt(i, M);
+            const top = _top.set(0, bb.max.y, 0).applyMatrix4(M).y;
+            const rec = { x: p.x, z: p.z, y: p.y, H: Math.max(0.02, top - p.y), give: mo.give, k: mo.k, crown: !!mo.crown,
+              attr, i, bx: 0, bz: 0, vx: 0, vz: 0, tx: 0, tz: 0, live: false };
+            this.plants.push(rec);
+            const key = Math.floor(p.x / this.cell) * 4096 + Math.floor(p.z / this.cell);
+            if (!this.grid.has(key)) this.grid.set(key, []);
+            this.grid.get(key).push(rec);
+          });
           im.castShadow = kind === 'treefern' || kind === 'cycad';
           im.receiveShadow = true;
           im.frustumCulled = false;
@@ -219,71 +239,69 @@ export class Flora {
   // sway is measured within each mesh's own bounding box (the compressed geometry is normalised), so the
   // same numbers work whatever the plant's size: 0 at the root, 1 at the top, tip moving a fraction of the
   // plant's height
+  // How each kind moves. flex: wind bend (radians per unit of wind); give: how far a body can push it
+  // aside (0 = not at all); curve: how the bend is spread up the plant (higher = stiff stem, supple top);
+  // k: spring stiffness, i.e. how fast it swings back once released.
+  static MOTION = {
+    fern: { flex: 0.48, give: 1.0, curve: 1.3, k: 70 },
+    fernlet: { flex: 0.56, give: 1.0, curve: 1.2, k: 90 },
+    redplant: { flex: 0.3, give: 0.8, curve: 1.4, k: 110 },
+    horsetail: { flex: 0.5, give: 0.9, curve: 1.1, k: 60 },
+    treefern: { flex: 0.15, give: 0.22, curve: 3.0, k: 25, crown: true },
+    cycad: { flex: 0.12, give: 0.35, curve: 2.0, k: 45 },
+  };
+
+  // Every plant bends about its own root by a 2D bend vector (radians at the tip, pointing where the
+  // top goes): wind (computed here in the shader, gusts rolling across the case) plus a per-plant
+  // spring bend (aBend, simulated on the CPU when an animal pushes through it).
   material(kind, y0 = 0, y1 = 1) {
     const U = this.uniforms;
-    // how far each kind gives way as an animal pushes through it (tree trunks stand firm)
-    const give = { fern: 1, fernlet: 1, redplant: 0.9, horsetail: 0.8, treefern: 0.0, cycad: 0.3 }[kind] ?? 0.6;
-    // and how much the crown gives locally around a body inside it (a browsing head)
-    const local = { treefern: 1, cycad: 0.8 }[kind] ?? 0.3;
-    const rel = { fern: 0.05, fernlet: 0.06, redplant: 0.03, horsetail: 0.07, treefern: 0.035, cycad: 0.02 }[kind] || 0.04;
+    const M = Flora.MOTION[kind] || Flora.MOTION.fern;
     const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
     const h = Math.max(1e-4, y1 - y0);
     m.onBeforeCompile = (sh) => {
       sh.uniforms.uTime = U.uTime;
       sh.uniforms.uWind = U.uWind;
+      sh.uniforms.uWindDir = U.uWindDir;
       sh.uniforms.uTint = U.uTint;
-      sh.uniforms.uPush = U.uPush;
       sh.uniforms.uShiver = U.uShiver;
       sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec4 uPush[16];\nuniform vec4 uShiver;')
+        .replace(
+          '#include <common>',
+          '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec2 uWindDir;\nuniform vec4 uShiver;\nattribute vec2 aBend;',
+        )
         .replace(
           '#include <begin_vertex>',
           `#include <begin_vertex>
-  #ifdef USE_INSTANCING
-  float ph = dot(instanceMatrix[3].xz, vec2(3.7, 2.9));
-  #else
-  float ph = 0.0;
-  #endif
-  float sway = pow(clamp((position.y - (${y0.toFixed(4)})) / ${h.toFixed(4)}, 0.0, 1.2), 1.5);
-  float amp = sway * ${(rel * h).toFixed(5)} * (0.5 + uWind);
-  transformed.x += amp * (sin(uTime * 1.3 + ph) * 0.6 + sin(uTime * 2.9 + ph * 1.7) * 0.4);
-  transformed.z += amp * 0.6 * sin(uTime * 1.1 + ph * 0.7);
-  // part around animals: brushed aside at the rim, pressed down near the middle of the body
   #ifdef USE_INSTANCING
   mat4 toW = modelMatrix * instanceMatrix;
   #else
   mat4 toW = modelMatrix;
   #endif
-  vec3 vw = (toW * vec4(transformed, 1.0)).xyz;
-  vec3 pushW = vec3(0.0);
-  vec3 localW = vec3(0.0);
-  float hW = max(0.0, vw.y - toW[3].y); // height of this vertex above the plant's own base
-  for (int i = 0; i < 16; i++) {
-    vec4 p = uPush[i];
-    vec2 d = vw.xz - p.xz;
-    float dist = length(d);
-    if (p.w > 0.0 && dist < p.w * 1.3 && toW[3].y < p.y + p.w && toW[3].y > p.y - p.w * 3.0) {
-      // lean the plant away from the body and press it down: a bend about its base, not a slide
-      vec2 away = dist > 1e-4 ? d / dist : vec2(1.0, 0.0);
-      float k = smoothstep(p.w * 1.3, p.w * 0.35, dist);
-      pushW += vec3(away.x * hW * 1.3, -hW * 0.65, away.y * hW * 1.3) * k;
-    }
-    // crowns of tall plants: only the fronds right around the body (a browsing head) are pushed
-    vec3 d3 = vw - p.xyz;
-    float l3 = length(d3);
-    if (${local.toFixed(2)} > 0.0 && p.w > 0.0 && l3 < p.w) {
-      localW += (d3 / max(l3, 1e-4)) * (p.w - l3) * 0.9 + vec3(0.0, -0.35, 0.0) * (p.w - l3);
-    }
-  }
-  // a roar: everything nearby shivers
-  float shD = length(vw.xz - uShiver.xy);
-  if (uShiver.w > 0.0 && shD < uShiver.z) {
-    float shK = uShiver.w * (1.0 - shD / uShiver.z) * sway;
-    localW += vec3(sin(uTime * 41.0 + ph * 3.0), 0.0, cos(uTime * 37.0 + ph * 2.0)) * shK * min(max(hW, 0.05), 0.4) * 0.12 / max(${local.toFixed(2)}, 0.3);
-  }
-  pushW.y = max(pushW.y, -hW * 0.8);
-  pushW.xz = clamp(pushW.xz, vec2(-hW * 1.2), vec2(hW * 1.2));
-  transformed += inverse(mat3(toW)) * (pushW * ${give.toFixed(2)} + localW * ${local.toFixed(2)}) * sway;`,
+  vec3 base = toW[3].xyz;
+  float ph = dot(base.xz, vec2(3.7, 2.9));
+  float f = clamp((position.y - (${y0.toFixed(4)})) / ${h.toFixed(4)}, 0.0, 1.2); // 0 at the root, 1 at the top
+  // wind: a steady lean down-wind and gusts that roll across the case, with a quick flutter on top
+  vec2 across = vec2(-uWindDir.y, uWindDir.x);
+  float gust = 0.5 + 0.5 * sin(dot(base.xz, uWindDir) * 1.3 - uTime * 1.7 + sin(dot(base.xz, across) * 0.8 + uTime * 0.37) * 1.6);
+  float wl = uWind * ${M.flex.toFixed(3)} * (0.2 + 0.8 * gust * gust);
+  vec2 bend = aBend + uWindDir * wl
+    + vec2(sin(uTime * 6.7 + ph * 2.3), cos(uTime * 5.9 + ph * 1.7)) * 0.035 * uWind * ${M.flex.toFixed(3)} * (0.5 + gust) * 2.0;
+  // a roar close by: everything shivers
+  float shD = length(base.xz - uShiver.xy);
+  if (uShiver.w > 0.0 && shD < uShiver.z)
+    bend += vec2(sin(uTime * 41.0 + ph * 3.0), cos(uTime * 37.0 + ph * 2.0)) * uShiver.w * (1.0 - shD / uShiver.z) * 0.22;
+  float bl = min(length(bend), 1.45);
+  if (bl > 1e-4) {
+    // rotate about the root, the stem curving most towards the top (keeps the frond lengths)
+    float ang = bl * pow(f, ${M.curve.toFixed(2)});
+    vec3 axis = vec3(bend.y, 0.0, -bend.x) / max(length(bend), 1e-5);
+    vec3 vw = (toW * vec4(transformed, 1.0)).xyz;
+    vec3 r = vw - base;
+    float c = cos(ang), s = sin(ang);
+    vec3 rr = r * c + cross(axis, r) * s + axis * dot(axis, r) * (1.0 - c);
+    transformed += inverse(mat3(toW)) * (rr - r);
+  }`,
         );
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec3 uTint;')
@@ -297,14 +315,75 @@ export class Flora {
     this.uniforms.uShiver.value.set(x, z, r, strength);
   }
 
-  // spheres along animals' bodies (from the runtime each frame)
+  // spheres along animals' bodies (from the runtime each frame): {x, y, z, r}
   setPushers(list) {
-    const P = this.uniforms.uPush.value;
-    for (let i = 0; i < P.length; i++) {
-      const s = list[i];
-      if (s) P[i].set(s.x, s.y, s.z, s.r);
-      else P[i].set(0, -99, 0, 0);
+    this.pushers = list;
+  }
+
+  // The springs: plants touched by a body are driven towards a bend away from it (flattened when the
+  // body is right over them); released, they swing back and wobble a little before settling. Only
+  // plants that are being touched or still moving are simulated.
+  simulate(dt) {
+    if (!this.plants || dt <= 0) return;
+    dt = Math.min(dt, 1 / 30);
+    const G = this.grid, cs = this.cell;
+    const touched = this._touched || (this._touched = new Set());
+    touched.clear();
+    for (const s of this.pushers || []) {
+      const reachMax = s.r + 0.45;
+      const i0 = Math.floor((s.x - reachMax) / cs), i1 = Math.floor((s.x + reachMax) / cs);
+      const j0 = Math.floor((s.z - reachMax) / cs), j1 = Math.floor((s.z + reachMax) / cs);
+      for (let i = i0; i <= i1; i++) {
+        for (let j = j0; j <= j1; j++) {
+          const list = G.get(i * 4096 + j);
+          if (!list) continue;
+          for (const p of list) {
+            if (!p.give) continue;
+            // vertical: low bodies push low plants; only a head up in the fronds pushes a crown
+            if (p.crown ? s.y < p.y + p.H * 0.6 || s.y > p.y + p.H * 1.25 : s.y - s.r > p.y + p.H * 1.15 || s.y + s.r < p.y) continue;
+            const dx = p.x - s.x, dz = p.z - s.z, d = Math.hypot(dx, dz);
+            const reach = s.r + (p.crown ? p.H * 0.25 : p.H * 0.55);
+            if (d >= reach) continue;
+            const k = 1 - d / reach;
+            const mag = Math.min(1.45, (0.35 + 1.25 * k) * k * 1.6) * p.give;
+            const ux = d > 1e-4 ? dx / d : 1, uz = d > 1e-4 ? dz / d : 0;
+            if (!touched.has(p) || mag > Math.hypot(p.tx, p.tz)) {
+              p.tx = ux * mag;
+              p.tz = uz * mag;
+            }
+            touched.add(p);
+            if (!p.live) {
+              p.live = true;
+              this.live.push(p);
+            }
+          }
+        }
+      }
     }
+    const dirty = this._dirty || (this._dirty = new Set());
+    dirty.clear();
+    for (let n = this.live.length - 1; n >= 0; n--) {
+      const p = this.live[n];
+      const on = touched.has(p);
+      if (!on) p.tx = p.tz = 0;
+      // pushed: give way quickly; released: a softer, under-damped return (a little overshoot)
+      const K = on ? p.k * 2.5 : p.k, C = 2 * Math.sqrt(K) * (on ? 0.9 : 0.38);
+      p.vx += (K * (p.tx - p.bx) - C * p.vx) * dt;
+      p.vz += (K * (p.tz - p.bz) - C * p.vz) * dt;
+      p.bx += p.vx * dt;
+      p.bz += p.vz * dt;
+      if (!on && Math.abs(p.bx) + Math.abs(p.bz) + 0.1 * (Math.abs(p.vx) + Math.abs(p.vz)) < 0.002) {
+        p.bx = p.bz = p.vx = p.vz = 0;
+        p.live = false;
+        this.live[n] = this.live[this.live.length - 1];
+        this.live.pop();
+      }
+      const a = p.attr.array;
+      a[p.i * 2] = p.bx;
+      a[p.i * 2 + 1] = p.bz;
+      dirty.add(p.attr);
+    }
+    for (const attr of dirty) attr.needsUpdate = true;
   }
 
   update(dt) {
@@ -319,6 +398,10 @@ export class Flora {
     }
     const U = this.uniforms;
     U.uTime.value += dt;
+    this.simulate(dt);
+    // the prevailing wind swings slowly round
+    const wa = 0.35 + 0.5 * Math.sin(U.uTime.value * 0.031) + 0.25 * Math.sin(U.uTime.value * 0.083);
+    U.uWindDir.value.set(Math.cos(wa), Math.sin(wa));
     U.uShiver.value.w = Math.max(0, U.uShiver.value.w - dt * 0.6);
     const w = this.ctx.world;
     U.uWind.value += ((w.windEnergy || 0) * 1.5 + 0.15 - U.uWind.value) * Math.min(1, dt);

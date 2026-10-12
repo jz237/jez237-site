@@ -110,6 +110,16 @@ patch(
 patch('seasonBase:[12,24,10,-7]', 'seasonBase:[21,27,22,-7]', 'tropical seasons');
 patch('class bE{constructor(){this.season=.25,', 'class bE{constructor(){this.season=.85,', 'opens in summer');
 patch('calm(r){const{world:t}=r;t.season=.25,', 'calm(r){const{world:t}=r;t.season=.85,', 'calm is summer');
+// Steadier adaptive resolution. Weatherglass re-tuned every 0.75 s with a 1.2 s cool-down, so on a machine
+// near its 50/58 fps thresholds it kept resizing the canvas up and down every couple of seconds, and every
+// resize rebuilds the post-processing targets: the picture flickered. Now it measures over 2 s, steps down
+// only on two low readings in a row (or one very low), never climbs back to a level that just failed
+// (unless fps stays high for ~40 s), and changes at most every 4 s.
+patch(
+  "sample(t){if(!this.adaptive||t>.5||(this._acc+=t,this._frames++,this._cool-=t,this._acc<.75))return;const e=this._frames/this._acc;if(this._acc=0,this._frames=0,this._cool>0)return;let i=this.dpr;e<50?i=Math.max(this.minDpr,this.dpr*(e<35?.8:.9)):e>58&&this.dpr<this.maxDpr&&(i=Math.min(this.maxDpr,this.dpr*1.06)),Math.abs(i-this.dpr)>.01&&(this.dpr=i,this._cool=1.2,this.onChange?.(this.dpr)),e<45&&this.dpr<=this.minDpr+.01?++this._lowStreak>=3&&this.postLevel>0&&(this.postLevel--,this._lowStreak=0,this._cool=2,this.onPostLevel?.(this.postLevel)):this._lowStreak=0}",
+  "sample(t){if(!this.adaptive||t>.5)return;this._acc+=t;this._frames++;this._cool-=t;if(this._acc<2)return;const e=this._frames/this._acc;this._acc=0;this._frames=0;if(this._cool>0)return;this._lo=e<48?(this._lo||0)+1:0;this._hi=e>58?(this._hi||0)+1:0;let i=this.dpr;if(e<34||this._lo>=2){i=Math.max(this.minDpr,this.dpr*.86);this._ceil=this.dpr*.98;this._lo=0;this._hi=0}else if(this._hi>=4&&this.dpr<this.maxDpr){const c=this._hi>=20?this.maxDpr:Math.min(this.maxDpr,this._ceil||this.maxDpr);c>this.dpr+.01&&(i=Math.min(c,this.dpr*1.08))}if(Math.abs(i-this.dpr)>.01){this.dpr=i;this._cool=4;this.onChange?.(this.dpr)}e<42&&this.dpr<=this.minDpr+.01?++this._lowStreak>=2&&this.postLevel>0&&(this.postLevel--,this._lowStreak=0,this._cool=4,this.onPostLevel?.(this.postLevel)):this._lowStreak=0}",
+  'steady resolution governor',
+);
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
@@ -118,7 +128,7 @@ patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.
 if (!process.env.JT_TALL) {
   patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-1.15,topY:5.0,glass:.08}', 'wide case');
   patch('on={minY:4.5,maxY:6.5,defaultY:5.5}', 'on={minY:3.2,maxY:4.25,defaultY:3.75}', 'cloud band');
-  patch('const i=12.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'const i=18.8/(2*Math.tan(Mr.degToRad(e/2))*t);', 'camera fit');
+  patch('const i=12.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'const i=22.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'camera fit');
   patch('me={top:Ci.y0,coreW:6.36,', 'me={top:Ci.y0,coreW:9.36,', 'plinth width');
   patch('new C(-6.36-me.footOffset,me.bottom,-4.36-me.footOffset)', 'new C(-me.coreW-me.footOffset,me.bottom,-me.coreD-me.footOffset)', 'plinth hit box');
   // look at the cabinet from the front, a little above the lid line, as you would in a room

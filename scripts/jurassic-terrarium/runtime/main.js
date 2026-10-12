@@ -4,7 +4,9 @@
 // own loop (after the vegetation and wildlife, before the clouds). Models are rigged GLBs built in
 // Blender (scripts/jurassic-terrarium/blender); each comes with a JSON sidecar describing its size,
 // gait speeds and clips.
-import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial } from 'three';
+import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3 } from 'three';
+
+const _ka = new Vector3(), _kb = new Vector3(), _kc = new Vector3(), _kd = new Vector3();
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -105,6 +107,14 @@ class Dino {
         }
       }
     });
+    // how far the body reaches in front of and behind its root (snout, tail tip), from the bind pose
+    {
+      this.root.updateMatrixWorld(true);
+      const bb = new Box3().setFromObject(this.model);
+      this.front = bb.max.z;
+      this.back = -bb.min.z;
+      this.side = Math.max(bb.max.x, -bb.min.x);
+    }
     this.mixer = new AnimationMixer(this.model);
     this.actions = {};
     for (const clip of gltf.animations) {
@@ -118,7 +128,7 @@ class Dino {
     }
     this.layer = mod.layers[sp.id];
     const nav = mod.nav;
-    const p = opts.at || this.layer.randomOpen(rand, (x, z, k) => nav.slope[k] < 0.18 && nav.water[k] < 0.1);
+    const p = opts.at || this.layer.randomOpen(rand, (x, z, k) => nav.slope[k] < 0.18 && nav.water[k] < 0.1 && this.clearOfGlass(x, z));
     this.pos = new Vector3(p.x, 0, p.z);
     this.heading = rand() * Math.PI * 2;
     this.speed = 0;
@@ -194,6 +204,10 @@ class Dino {
   }
 
   goTo(x, z, then = null, gait = 'walk') {
+    if (!this.clearOfGlass(x, z) && !this.parent) {
+      const g = this.insideGoal(x, z), o = this.layer.nearestOpen(g.x, g.z);
+      if (o) (x = o.x), (z = o.z);
+    }
     const path = this.layer.path(this.pos.x, this.pos.z, x, z);
     if (!path || path.length < 2) return false;
     this.path = path;
@@ -207,8 +221,48 @@ class Dino {
 
   // long animals stop well inside the case, so a turning head or tail stays off the glass
   clearOfGlass(x, z) {
-    const b = this.mod.ctx.box, m = this.length * 0.5 + 0.15;
+    const b = this.mod.ctx.box, m = Math.max(this.front ?? 0, this.back ?? 0, this.length * 0.5) + 0.12;
     return Math.abs(x) < b.halfW - m && Math.abs(z) < b.halfD - m;
+  }
+
+  // the nearest point to (x, z) where the whole body fits inside the glass whichever way it faces
+  insideGoal(x, z) {
+    const b = this.mod.ctx.box, m = Math.max(this.front ?? 0, this.back ?? 0, this.length * 0.5) + 0.12;
+    const mx = Math.max(0.2, b.halfW - m), mz = Math.max(0.2, b.halfD - m);
+    return { x: Math.max(-mx, Math.min(mx, x)), z: Math.max(-mz, Math.min(mz, z)) };
+  }
+
+  // Glass guard: whatever the animal is doing, if its snout or tail tip would pass the glass, slide it
+  // back inside. Runs after the pose is final, on the actual bone positions.
+  keepInside() {
+    if (!this.tipBones) {
+      const bones = {};
+      this.model.traverse((o) => o.isBone && (bones[o.name] = o));
+      const tails = Object.keys(bones).filter((n) => /^tail\d+$/.test(n)).sort((a, b) => +a.slice(4) - +b.slice(4));
+      const necks = Object.keys(bones).filter((n) => /^neck\d+$/.test(n)).sort((a, b) => +a.slice(4) - +b.slice(4));
+      this.tipBones = { head: bones.head, neck: bones[necks[necks.length - 1]] || bones.spine3, tail: bones[tails[tails.length - 1]] };
+      // the snout reaches this far past the head joint (bind pose)
+      this.root.updateMatrixWorld(true);
+      const hp = this.root.worldToLocal(bones.head.getWorldPosition(new Vector3()));
+      this.snout = Math.max(0.03, (this.front ?? 0) - hp.z);
+    }
+    const T = this.tipBones, b = this.mod.ctx.box, m = 0.05;
+    const a = _ka.copy(T.head.getWorldPosition(_ka)), n = T.neck.getWorldPosition(_kb);
+    const tip = _kc.subVectors(a, n).normalize().multiplyScalar(this.snout).add(a);
+    let push = 0, px = 0, pz = 0;
+    for (const v of [tip, a, T.tail ? T.tail.getWorldPosition(_kd) : null]) {
+      if (!v) continue;
+      const ox = Math.abs(v.x) - (b.halfW - m), oz = Math.abs(v.z) - (b.halfD - m);
+      if (ox > 0) px = Math.max(Math.abs(px), ox) * -Math.sign(v.x);
+      if (oz > 0) pz = Math.max(Math.abs(pz), oz) * -Math.sign(v.z);
+      push = Math.max(push, ox, oz);
+    }
+    if (push <= 0) return;
+    this.pos.x += px;
+    this.pos.z += pz;
+    this.root.position.x += px;
+    this.root.position.z += pz;
+    this.root.updateMatrixWorld(true);
   }
 
   inDen() {
@@ -298,6 +352,12 @@ class Dino {
         break;
       case 'idle':
         if (this.parent) {
+          // they sleep when she sleeps, curled up at her side
+          if (this.parent.state === 'sleep' && this.actions.rest) {
+            this.state = 'sleep';
+            this.play('rest', 1.2);
+            break;
+          }
           if (this.timer <= 0 || this.parent.state === 'flee') this.follow();
           break;
         }
@@ -322,6 +382,10 @@ class Dino {
         if (this.timer <= 0) this.rest(0.6);
         break;
       case 'sleep':
+        if (this.parent) {
+          if (this.parent.state !== 'sleep') this.rest(1.0);
+          break;
+        }
         if (!night && !(this.sp.den && (env.storm > 0.6 || env.rain > 0.25))) this.rest(1.5);
         break;
       case 'shelter':
@@ -485,6 +549,7 @@ class Dino {
       });
       // feet onto the real ground (not while lying down), and breathing
       this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' });
+      this.keepInside();
     }
     this.crop(dt);
     this.sounds(dt);
@@ -746,6 +811,7 @@ class Flyer {
     this.roll = 0;
     this.pitch = 0;
     this.state = 'fly';
+    this.makeFish();
     this.place(0);
     this.prev.copy(this.pos);
     // glide and flap play together; the flap's weight rises when climbing. Blending the two also
@@ -844,19 +910,24 @@ class Flyer {
     bez(D.legs[D.leg], Math.min(1, D.u), this.pos);
   }
 
-  catchFish() {
-    if (!this.headBone) this.model.traverse((o) => o.isBone && o.name === 'jaw' && (this.headBone = o));
+  // the fish it carries: made at load (held at zero size) so its shader is compiled before it is needed
+  makeFish() {
+    this.model.traverse((o) => o.isBone && o.name === 'jaw' && (this.headBone = o));
     if (!this.headBone) return;
-    if (!this.fish) {
-      this.fish = new Mesh(new SphereGeometry(1, 10, 6), new MeshStandardMaterial({ color: 0xc9d4d8, metalness: 0.6, roughness: 0.3 }));
-      this.fish.name = 'pteranodon-fish';
-    }
+    this.fish = new Mesh(new SphereGeometry(1, 10, 6), new MeshStandardMaterial({ color: 0xc9d4d8, metalness: 0.6, roughness: 0.3 }));
+    this.fish.name = 'pteranodon-fish';
+    this.fish.frustumCulled = false;
+    this.fish.scale.setScalar(1e-5);
+    this.headBone.add(this.fish);
+  }
+
+  catchFish() {
+    if (!this.fish) return;
     // held crosswise in the beak; the bone is in the model's (scaled) space
     const k = 1 / S;
     this.fish.scale.set(0.006 * k, 0.005 * k, 0.022 * k);
     this.fish.position.set(0, 0.03 * k, 0.05 * k);
     this.fish.rotation.set(0, Math.PI / 2, 0);
-    this.headBone.add(this.fish);
     this.fishHold = 3.5;
   }
 
@@ -864,7 +935,7 @@ class Flyer {
     if (this.fishHold !== undefined) {
       this.fishHold -= dt;
       if (this.fishHold <= 0) {
-        this.fish?.removeFromParent(); // swallowed
+        this.fish?.scale.setScalar(1e-5); // swallowed
         this.fishHold = undefined;
         this.mod.voice.play('croak', this.root.position);
       }
