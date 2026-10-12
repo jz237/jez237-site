@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - README.md
+      - AGENTS.md
+      - ".claude/**"
+      - "scripts/**/tests/**"
+      - "tests/**"
   workflow_dispatch:
 
 permissions:
@@ -13,7 +19,9 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  # The public payload is large. Let the active deployment finish while GitHub
+  # keeps the newest pending run, so frequent content updates cannot starve it.
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -31,14 +39,25 @@ jobs:
             !/.wrangler/
             !/functions/
             !/scripts/
+            /scripts/check_hidden_reef_retired.mjs
             /scripts/check_games_catalog_syntax.mjs
+            /scripts/weather-hurricane.test.mjs
             /scripts/check_aquarium_release.mjs
+            /scripts/publish_generated_assets.mjs
+            /scripts/publish_generated_assets.test.mjs
+            /scripts/prune_pages_artifacts.mjs
+            /scripts/prune_pages_artifacts.test.mjs
+            /scripts/restore_legacy_media.py
+            /scripts/media-r2.test.mjs
+            /media-r2-manifest.json
+            /shared/media-redirects.mjs
             /scripts/rotatable-aquascape/qa/approved-build.json
             /scripts/rotatable-aquascape/public/
             !/stock-market-src/
             !/tmp/
             !/workers/
             !/experiments/amiga-mod-player/audio/
+            !/experiments/amiga-mod-player/audio-quarantine/
             !/experiments/amiga-mod-player/mods/
             !/experiments/image-gen-2-benchmark/__pycache__/
             !/experiments/image-gen-2-benchmark/images/
@@ -79,8 +98,20 @@ jobs:
       - name: Check GameMaster catalog JavaScript
         run: node scripts/check_games_catalog_syntax.mjs
 
+      - name: Check hurricane data handling
+        run: node --test scripts/weather-hurricane.test.mjs
+
       - name: Check tested aquarium build
         run: node scripts/check_aquarium_release.mjs
+
+      - name: Check bounded cleanup safeguards
+        run: node --test scripts/publish_generated_assets.test.mjs scripts/prune_pages_artifacts.test.mjs
+
+      - name: Verify migrated media links
+        run: node --test scripts/media-r2.test.mjs
+
+      - name: Keep Hidden Reef pointer-only
+        run: node scripts/check_hidden_reef_retired.mjs
 
       - name: Prepare GitHub Pages payload
         run: |
@@ -103,6 +134,7 @@ jobs:
             --exclude='./tmp' \
             --exclude='./workers' \
             --exclude='./experiments/amiga-mod-player/audio' \
+            --exclude='./experiments/amiga-mod-player/audio-quarantine' \
             --exclude='./experiments/amiga-mod-player/mods' \
             --exclude='./experiments/image-gen-2-benchmark/__pycache__' \
             --exclude='./experiments/image-gen-2-benchmark/images' \
@@ -116,6 +148,9 @@ jobs:
             --exclude='./yarn.lock' \
             --exclude='./wrangler.toml' \
             -cf - . | tar -xf - -C _site
+
+      - name: Preserve legacy direct video URLs from R2
+        run: python3 scripts/restore_legacy_media.py _site
 
       - name: Report payload size
         run: |
