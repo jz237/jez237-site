@@ -105,6 +105,11 @@ patch(
         diffuseColor.rgb = mix(tR.albedo * vec3(0.55, 0.53, 0.5), jrMossC, jrMoss);`,
   'mossy boulders',
 );
+// A warm, humid Mesozoic jungle: spring and autumn are tropical (winter keeps its snow), and the case
+// opens in early summer, so Weatherglass's own fireflies, butterflies and insects come out
+patch('seasonBase:[12,24,10,-7]', 'seasonBase:[21,27,22,-7]', 'tropical seasons');
+patch('class bE{constructor(){this.season=.25,', 'class bE{constructor(){this.season=.85,', 'opens in summer');
+patch('calm(r){const{world:t}=r;t.season=.25,', 'calm(r){const{world:t}=r;t.season=.85,', 'calm is summer');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's

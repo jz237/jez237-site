@@ -82,6 +82,25 @@ export class Flora {
         break;
       }
     }
+    // browse trees: tall tree ferns on open, gentle ground, their crowns at the height a Brachiosaurus
+    // feeds (scaled to fit when the mesh loads), placed so it can stand beside them inside the glass
+    const browse = [];
+    for (let tries = 0; tries < 4000 && browse.length < 5; tries++) {
+      const x = (rand() * 2 - 1) * 7.2, z = (rand() * 2 - 1) * 2.4;
+      const h = T.height(x, z);
+      if (h < 0.05 || h > 0.9 || T.slope(x, z) > 0.14 || water(x, z) > 0.05 || nearCabin(x, z, 0.6)) continue;
+      if (!free(x, z, 0.35) || browse.some((b) => Math.hypot(b.x - x, b.z - z) < 2.2)) continue;
+      // open ground around it for the browser to stand on
+      let open = 0;
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2, sx = x + Math.cos(a) * 1.7, sz = z + Math.sin(a) * 1.7;
+        if (Math.abs(sx) < 6.7 && Math.abs(sz) < 1.75 && T.slope(sx, sz) < 0.2 && water(sx, sz) < 0.1) open++;
+      }
+      if (open < 2) continue;
+      browse.push({ x, z });
+      add('treefern', x, z, 1.6, 0.25, 0.06);
+      P.treefern[P.treefern.length - 1].wantTop = 2.2; // crown this far above its foot
+    }
     // where Weatherglass's hero trees stood, and a few groves
     groveAt(-3.95, 0.25, 4, 0.6);
     groveAt(-3.75, 2.4, 3, 0.45);
@@ -171,6 +190,12 @@ export class Flora {
           const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3();
           mine.forEach((p, i) => {
             q.setFromAxisAngle(UP, p.rot);
+            if (p.wantTop) {
+              // scale this one so the crown lands at its wanted height (the transform is linear in scale)
+              M.compose(t.set(0, 0, 0), q, s.setScalar(this.S)).multiply(m.matrixWorld);
+              const h1 = _top.set(0, bb.max.y, 0).applyMatrix4(M).y;
+              p.scale = (p.wantTop + 0.004) / Math.max(h1, 1e-4);
+            }
             const sc = p.scale * this.S;
             s.set(sc, sc, sc);
             t.set(p.x, p.y - 0.004, p.z);

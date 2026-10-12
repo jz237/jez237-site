@@ -7,7 +7,7 @@
 import {
   Group, InstancedMesh, Mesh, PlaneGeometry, RingGeometry, SphereGeometry, CylinderGeometry, BoxGeometry,
   MeshStandardMaterial, MeshBasicMaterial, PointLight, Matrix4, Quaternion, Vector3, Euler, Color, DoubleSide,
-  AdditiveBlending,
+  AdditiveBlending, Sprite, SpriteMaterial, CanvasTexture,
 } from 'three';
 
 const M = new Matrix4(), Q = new Quaternion(), E = new Euler(), P = new Vector3(), Sc = new Vector3();
@@ -22,6 +22,64 @@ export class Effects {
     this.buildLeaves();
     this.buildSplash();
     this.buildLantern();
+    this.buildSteam();
+  }
+
+  // ---------------------------------------------------------------- steam after rain
+  // When the sun comes out on a soaked jungle, soft wisps rise off the floor and the pool and fade.
+  buildSteam() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    r.addColorStop(0, 'rgba(255,255,255,0.9)');
+    r.addColorStop(0.5, 'rgba(255,255,255,0.35)');
+    r.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = r;
+    g.fillRect(0, 0, 64, 64);
+    const tex = new CanvasTexture(c);
+    this.steam = [];
+    for (let i = 0; i < 70; i++) {
+      const s = new Sprite(new SpriteMaterial({ map: tex, color: 0xf4f6f2, transparent: true, opacity: 0, depthWrite: false }));
+      s.visible = false;
+      s.name = 'effects-steam';
+      this.group.add(s);
+      this.steam.push({ s, life: 0 });
+    }
+    this.steamNext = 0;
+    this.steamAcc = 0;
+  }
+
+  updateSteam(dt) {
+    const w = this.ctx.world, life = this.ctx.modules.life?.env;
+    const wet = Math.max(w.groundWetness || 0, life?.wet || 0);
+    const sun = (life?.sunny ?? 0) * (1 - (life?.rain || 0));
+    const amount = Math.min(1, wet * 1.6) * sun * Math.min(1, ((life?.temp ?? 20) - 8) / 10);
+    this.steamAcc += dt * amount * 14;
+    const T = this.ctx.terrain, box = this.ctx.box, wind = w.windEnergy || 0;
+    while (this.steamAcc >= 1) {
+      this.steamAcc -= 1;
+      const S = this.steam[this.steamNext];
+      this.steamNext = (this.steamNext + 1) % this.steam.length;
+      const x = (Math.random() * 2 - 1) * (box.halfW - 0.6), z = (Math.random() * 2 - 1) * (box.halfD - 0.5);
+      const h = T.height(x, z);
+      if (h > 2.2) continue; // not off the peaks
+      S.p = new Vector3(x, Math.max(h, 0) + 0.05, z);
+      S.life = S.max = 5 + Math.random() * 3;
+      S.size = 0.25 + Math.random() * 0.25;
+      S.s.visible = true;
+    }
+    for (const S of this.steam) {
+      if (S.life <= 0) continue;
+      S.life -= dt;
+      const t = 1 - S.life / S.max;
+      S.p.y += dt * 0.12;
+      S.p.x += dt * (0.03 + wind * 0.08);
+      S.s.position.copy(S.p);
+      S.s.scale.setScalar(S.size * (1 + t * 1.8));
+      S.s.material.opacity = 0.2 * Math.sin(Math.PI * t);
+      if (S.life <= 0) S.s.visible = false;
+    }
   }
 
   // ---------------------------------------------------------------- leaf bits
@@ -138,6 +196,7 @@ export class Effects {
   }
 
   update(dt, env) {
+    this.updateSteam(dt);
     // leaves tumble and drift down, then lie on the ground a moment and vanish
     let leavesLive = false;
     this.leaves.forEach((L, i) => {

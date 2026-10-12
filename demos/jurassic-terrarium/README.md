@@ -35,6 +35,10 @@ How they move and what's around them:
 - The Brachiosaurus crops tree-fern crowns, bowing its neck into lower ones; torn fronds tumble down.
 - When the T. rex roars, the planting round it shivers and every herbivore within earshot turns to look.
 - Babbling water at the cascades, cicadas by day and frogs by the pool at night; a lantern glows at the end of the jetty.
+- A Triceratops nest: one of the herd guards a clutch of eggs; about a minute in they rock, crack and three hatchlings climb out, grow and trot after their mother (`?hatch=<seconds>` to set the time).
+- Weather changes behaviour: in rain the herbivores shelter under the tree ferns and the T. rex retreats to its den; when the sun comes out on soaked ground, steam rises off the jungle.
+- A warm Mesozoic climate: the case opens in early summer, so fireflies come out over the jungle at night.
+- Tall tree ferns at a Brachiosaurus's feeding height stand in the open, so it browses often.
 
 ## How the dinosaurs are made
 

@@ -19,6 +19,7 @@ import { Aquatic } from './aquatic.js';
 import { Room } from './room.js';
 import { Effects } from './effects.js';
 import { Ambience } from './ambience.js';
+import { Nest } from './nest.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -78,14 +79,19 @@ const params = new URLSearchParams(location.search);
 const rand = mulberry32(Number(params.get('seed') || 20261011));
 
 class Dino {
-  constructor(mod, sp, info, gltf, idx) {
+  // opts.scale: size relative to the adult (hatchlings); opts.parent: the adult it follows;
+  // opts.at: where it starts
+  constructor(mod, sp, info, gltf, idx, opts = {}) {
+    this.k = opts.scale ?? 1;
+    this.parent = opts.parent || null;
+    this.grow = this.parent ? 0.45 : 1; // hatchlings start small and grow into their size
     this.mod = mod;
     this.sp = sp;
     this.info = info;
     this.root = new Object3D();
     this.root.name = `${sp.id}-${idx}`;
     this.model = cloneSkinned(gltf.scene);
-    this.model.scale.setScalar(S);
+    this.model.scale.setScalar(S * this.k * this.grow);
     this.root.add(this.model);
     this.skins = [];
     this.model.traverse((o) => {
@@ -112,7 +118,7 @@ class Dino {
     }
     this.layer = mod.layers[sp.id];
     const nav = mod.nav;
-    const p = this.layer.randomOpen(rand, (x, z, k) => nav.slope[k] < 0.18 && nav.water[k] < 0.1);
+    const p = opts.at || this.layer.randomOpen(rand, (x, z, k) => nav.slope[k] < 0.18 && nav.water[k] < 0.1);
     this.pos = new Vector3(p.x, 0, p.z);
     this.heading = rand() * Math.PI * 2;
     this.speed = 0;
@@ -122,8 +128,9 @@ class Dino {
     this.path = null;
     this.current = null;
     this.play('idle', 0);
-    this.length = info.length * S;
-    this.height = (info.height || 3) * S;
+    this.length = info.length * S * this.k;
+    this.height = (info.height || 3) * S * this.k;
+    this.stepSize = (sp.step || 1) * this.k;
     this.flex = new Flex(this.model, { flex: sp.flex ?? 1 });
     this.feet = new Feet(this.model, this.root, mod.ctx.terrain);
     this.model.traverse((o) => o.isBone && o.name === 'head' && (this.headBone = o));
@@ -132,7 +139,7 @@ class Dino {
     // the hips and the chest press the ferns aside as the animal pushes through
     this.pushBones = [this.flex.spine[this.flex.spine.length - 1], null].filter(Boolean);
     this.model.traverse((o) => o.isBone && o.name === 'pelvis' && this.pushBones.unshift(o));
-    this.pushR = Math.max(0.12, (info.length || 6) * S * 0.16);
+    this.pushR = Math.max(0.12 * this.k, (info.length || 6) * S * this.k * 0.16);
     this.segLen = this.length / Math.max(6, this.flex.spine.length + this.flex.neck.length + this.flex.tail.length + 2);
     this.prevHeading = this.heading;
     this.glance = null;
@@ -170,7 +177,7 @@ class Dino {
   }
 
   clipSpeed(name) {
-    return (this.info.clips[name]?.speed || 1) * S;
+    return (this.info.clips[name]?.speed || 1) * S * this.k * this.grow;
   }
 
   // choose the next activity by weight, using only clips this model has
@@ -221,7 +228,7 @@ class Dino {
     const a = this.actions[name];
     if (!a) return false;
     const snd = this.sp.sounds?.[name];
-    if (snd) this.mod.voice.play(snd, this.root.position, this.sp.step || 1);
+    if (snd) this.mod.voice.play(snd, this.root.position, this.stepSize);
     if (name === 'roar' && this.sp.predator) this.mod.roared(this);
     this.state = 'oneshot';
     this.play(name, fade);
@@ -257,7 +264,7 @@ class Dino {
         if (t && this.goTo(t.x, t.z, null, 'run')) {
           this.state = 'flee';
           const call = this.sp.sounds?.alert || this.sp.sounds?.roar;
-          if (call) mod.voice.play(call, this.root.position, this.sp.step || 1);
+          if (call) mod.voice.play(call, this.root.position, this.stepSize);
         }
       }
     }
@@ -290,11 +297,21 @@ class Dino {
         this.huntStep(dt);
         break;
       case 'idle':
-        if ((night || env.storm > 0.6) && this.sp.den && !this.inDen()) {
+        if (this.parent) {
+          if (this.timer <= 0 || this.parent.state === 'flee') this.follow();
+          break;
+        }
+        if (this.guarding && this.timer <= 0) {
+          this.guard();
+          break;
+        }
+        // rain: the herbivores get under the tree ferns (sauropods don't bother)
+        if (env.rain > 0.35 && !this.sp.predator && !this.sp.tooBig && this.shelter()) break;
+        if ((night || env.storm > 0.6 || env.rain > 0.35) && this.sp.den && !this.inDen()) {
           this.goDen();
           break;
         }
-        if (night || (this.sp.den && env.storm > 0.6)) {
+        if (night || (this.sp.den && (env.storm > 0.6 || env.rain > 0.35))) {
           this.state = 'sleep';
           this.play('rest', 1.5);
           break;
@@ -305,7 +322,19 @@ class Dino {
         if (this.timer <= 0) this.rest(0.6);
         break;
       case 'sleep':
-        if (!night && !(this.sp.den && env.storm > 0.6)) this.rest(1.5);
+        if (!night && !(this.sp.den && (env.storm > 0.6 || env.rain > 0.25))) this.rest(1.5);
+        break;
+      case 'shelter':
+        // wait out the rain under the fronds, now and then shaking the water off
+        if (env.rain < 0.15) {
+          if (this.sheltered) this.sheltered.sheltering--;
+          this.sheltered = null;
+          this.rest(0.8);
+        } else if (this.timer <= 0) {
+          this.timer = 6 + rand() * 8;
+          if (rand() < 0.4 && this.actions.alert) this.play('alert', 0.5);
+          else this.play('idle', 0.8);
+        }
         break;
       case 'turn': {
         // turn on the spot (small steps) to face the den's mouth
@@ -321,10 +350,89 @@ class Dino {
       }
       case 'walk':
       case 'flee':
+        // a hatchling keeps re-aiming at its mother as she moves
+        if (this.parent && (this.replanT = (this.replanT ?? 1) - dt) <= 0) {
+          this.replanT = 1.2;
+          this.follow();
+          if (this.state !== 'walk' && this.state !== 'flee') break;
+        }
         this.walkStep(dt);
         break;
     }
     this.finish(dt);
+  }
+
+  // a hatchling stays at its mother's flank, a little behind, trotting to catch up when she moves off
+  follow() {
+    const m = this.parent;
+    const side = this.followSide ?? (this.followSide = (rand() < 0.5 ? -1 : 1) * (0.5 + rand() * 0.9));
+    const a = m.heading + Math.PI + side;
+    const r = m.length * 0.45 + 0.08;
+    const tx = m.pos.x + Math.sin(a) * r, tz = m.pos.z + Math.cos(a) * r;
+    const d = Math.hypot(tx - this.pos.x, tz - this.pos.z);
+    if (d < 0.2) {
+      this.state = 'idle';
+      this.speed = 0;
+      this.timer = 0.6 + rand() * 1.2;
+      // look where she looks, nibble now and then
+      if (rand() < 0.25 && this.actions.graze) this.oneShot('graze');
+      else this.play('idle', 0.5);
+      return;
+    }
+    const gait = d > 0.6 || m.state === 'flee' ? 'run' : 'walk';
+    const t = this.layer.nearestOpen(tx, tz);
+    if (!t || !this.goTo(t.x, t.z, null, gait)) {
+      this.state = 'idle';
+      this.timer = 0.5;
+    }
+  }
+
+  // the nest's guardian keeps close: back to its side when she strays, otherwise standing, grazing,
+  // looking round
+  guard() {
+    const n = this.guarding;
+    if (n.done) {
+      this.guarding = null;
+      return this.rest(0.6);
+    }
+    const d = Math.hypot(n.site.x - this.pos.x, n.site.z - this.pos.z);
+    if (d > 1.0) {
+      const a = rand() * Math.PI * 2, r = 0.45 + this.length * 0.3;
+      const t = this.layer.nearestOpen(n.site.x + Math.cos(a) * r, n.site.z + Math.sin(a) * r);
+      if (t && this.goTo(t.x, t.z, () => {
+        this.heading = Math.atan2(n.site.x - this.pos.x, n.site.z - this.pos.z) + (rand() - 0.5);
+        this.rest(0.6);
+      })) return;
+    }
+    const k = rand();
+    if (k < 0.4 && this.actions.graze) this.oneShot('graze');
+    else if (k < 0.55 && this.actions.alert) this.oneShot('alert');
+    else this.rest(0.6);
+  }
+
+  // walk in under the nearest tall tree fern that isn't already crowded, and turn to face out
+  shelter() {
+    const mod = this.mod;
+    const ferns = (mod.flora.placements.treefern || []).filter((t) => t.top && t.top - t.y > 0.9 && (t.sheltering || 0) < 2);
+    ferns.sort((a, b) => Math.hypot(a.x - this.pos.x, a.z - this.pos.z) - Math.hypot(b.x - this.pos.x, b.z - this.pos.z));
+    for (const t of ferns.slice(0, 6)) {
+      const r = 0.18 + this.length * 0.22;
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2 + rand() * 0.4;
+        const x = t.x + Math.cos(a) * r, z = t.z + Math.sin(a) * r;
+        if (!this.layer.walkable(x, z) || !this.clearOfGlass(x, z)) continue;
+        t.sheltering = (t.sheltering || 0) + 1;
+        if (this.goTo(x, z, () => {
+          this.heading = Math.atan2(x - t.x, z - t.z);
+          this.sheltered = t;
+          this.state = 'shelter';
+          this.timer = 4 + rand() * 4;
+          this.play('idle', 0.8);
+        })) return true;
+        t.sheltering--;
+      }
+    }
+    return false;
   }
 
   measureReach(name) {
@@ -356,6 +464,10 @@ class Dino {
   }
 
   finish(dt) {
+    if (this.grow < 1) {
+      this.grow = Math.min(1, this.grow + dt / 45);
+      this.model.scale.setScalar(S * this.k * this.grow);
+    }
     this.place();
     this.mixer.update(dt);
     if (dt > 0) {
@@ -467,12 +579,12 @@ class Dino {
       const prev = this._stepPhase ?? p;
       for (const f of this.sp.feet) {
         const crossed = prev <= p ? prev < f && f <= p : prev < f || f <= p;
-        if (crossed) this.mod.voice.play('step', this.root.position, this.sp.step * (name === 'run' ? 1.3 : 1));
+        if (crossed) this.mod.voice.play('step', this.root.position, this.stepSize * (name === 'run' ? 1.3 : 1));
       }
       this._stepPhase = p;
     } else this._stepPhase = undefined;
     if (this.state === 'idle' && this.sp.sounds?.idle && rand() < dt * 0.02)
-      this.mod.voice.play(this.sp.sounds.idle, this.root.position, this.sp.step);
+      this.mod.voice.play(this.sp.sounds.idle, this.root.position, this.stepSize);
   }
 
   act(kind) {
@@ -481,7 +593,7 @@ class Dino {
       let tx, tz;
       if (this.sp.herd) {
         // stay with the herd: aim near the herd's centre
-        const mates = mod.dinos.filter((d) => d.sp.id === this.sp.id);
+        const mates = mod.dinos.filter((d) => d.sp.id === this.sp.id && !d.parent);
         const cx = mates.reduce((a, d) => a + d.pos.x, 0) / mates.length;
         const cz = mates.reduce((a, d) => a + d.pos.z, 0) / mates.length;
         const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5);
@@ -496,7 +608,7 @@ class Dino {
       if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
     } else if (kind === 'hunt') {
       const prey = mod.walkers
-        .filter((d) => !d.sp.predator && !d.sp.tooBig && d.state !== 'sleep')
+        .filter((d) => !d.sp.predator && !d.sp.tooBig && !d.parent && d.state !== 'sleep')
         .sort((a, b) => Math.hypot(a.pos.x - this.pos.x, a.pos.z - this.pos.z) - Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z))[0];
       if (!prey) return void (this.timer = 1);
       this.prey = prey;
@@ -832,12 +944,14 @@ class Dinosaurs {
     const ds = DEN.s / (1 / 8); // relative to the 1/8 scale the rectangles below were measured at
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
+    const hatch = params.get('hatch');
+    this.nest = params.get('nest') === '0' ? null : new Nest(ctx, this.flora, rand, { hatchAt: hatch != null ? Number(hatch) : undefined });
     this.room = params.get('room') === '0' ? null : new Room(ctx, new URL('models/room.webp', document.baseURI).href);
     this.effects = new Effects(ctx);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     this.nav = new NavGrid(ctx, {
-      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || [])],
+      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
       rects: [
         { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
         { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
@@ -880,6 +994,7 @@ class Dinosaurs {
           loader.loadAsync(new URL(`${sp.id}.glb`, base).href),
           fetch(new URL(`${sp.id}.json`, base)).then((r) => r.json()),
         ]);
+        (this.assets || (this.assets = {}))[sp.id] = { gltf, info };
         for (let i = 0; i < sp.count; i++) {
           const d = sp.flyer ? new Flyer(this, sp, info, gltf, i) : new Dino(this, sp, info, gltf, i);
           this.group.add(d.root);
@@ -891,6 +1006,14 @@ class Dinosaurs {
     await denReady;
     this.predator = this.dinos.find((d) => d.sp.predator) || null;
     this.walkers = this.dinos.filter((d) => !d.sp.flyer);
+    // the herd's first Triceratops guards the nest until the eggs have hatched
+    const mother = this.dinos.find((d) => d.sp.id === 'triceratops');
+    if (this.nest?.site && mother) {
+      this.mother = mother;
+      mother.guarding = this.nest;
+      const t = mother.layer.nearestOpen(this.nest.site.x + 0.6, this.nest.site.z + 0.2);
+      if (t) mother.pos.set(t.x, 0, t.z);
+    }
     this.ready = true;
     this.guide = new Guide(this, SPECIES);
     window.__wgHold = 0;
@@ -908,6 +1031,22 @@ class Dinosaurs {
       if (dist < bd) (bd = dist), (best = c);
     }
     return best ? { ...best, water: true } : null;
+  }
+
+  // an egg has opened: a Triceratops hatchling climbs out and turns to find its mother
+  hatchling(p, a) {
+    const A = this.assets?.triceratops, mother = this.mother;
+    if (!A || !mother) return;
+    const sp = SPECIES.find((s) => s.id === 'triceratops');
+    const d = new Dino(this, sp, A.info, A.gltf, `hatchling${this.dinos.length}`, { scale: 0.22, parent: mother, at: { x: p.x, z: p.z } });
+    d.heading = a;
+    d.state = 'idle';
+    d.timer = 1.5 + rand(); // a moment to find its feet
+    this.group.add(d.root);
+    this.dinos.push(d);
+    this.walkers.push(d);
+    this.voice.play('grunt', p, 0.3);
+    if (this.nest.hatched >= this.nest.eggs.length) this.nest.done = true;
   }
 
   later(t, fn) {
@@ -997,6 +1136,7 @@ class Dinosaurs {
     this.flora.update(dt);
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
+    this.nest?.update(dt, (p, a) => this.hatchling(p, a));
     this.ambience.update(dt, env);
     for (let i = this.timers.length - 1; i >= 0; i--) {
       const T = this.timers[i];
