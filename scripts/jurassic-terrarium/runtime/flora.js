@@ -5,6 +5,7 @@ import {
   Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Color, DoubleSide,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 const UP = new Vector3(0, 1, 0);
 
@@ -70,8 +71,9 @@ export class Flora {
       want--;
     }
     // ferns carpet the meadows, thickest under the tree ferns
+    const tier = ctx.quality?.tier ?? 1; // 0 low, 1 medium, 2 high
     tries = 0;
-    want = 420;
+    want = [160, 300, 420][tier] ?? 300;
     while (want > 0 && tries++ < 20000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.15), z = (rand() * 2 - 1) * (box.halfD - 0.15);
       const g = sh.suitability(x, z, 'grass');
@@ -83,7 +85,7 @@ export class Flora {
     }
     // horsetails crowd the shore of the lake and the river banks
     tries = 0;
-    want = 90;
+    want = [40, 70, 90][tier] ?? 70;
     while (want > 0 && tries++ < 20000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.2), z = (rand() * 2 - 1) * (box.halfD - 0.2);
       const w = water(x, z);
@@ -96,7 +98,7 @@ export class Flora {
 
   // ---------------------------------------------------------------- meshes
   async load(base) {
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const kinds = Object.keys(this.placements);
     await Promise.all(
       kinds.map(async (kind) => {

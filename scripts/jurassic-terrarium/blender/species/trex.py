@@ -72,6 +72,20 @@ def build():
     joints = [tail_pts[i] for i in range(6, 0, -1)] + [V(0.0, 0, 3.08)]  # ... tail1|pelvis (at the hip)
     joints += [V(0.6, 0, 3.07), V(1.5, 0, 3.02), V(2.5, 0, 3.02), V(3.12, 0, 3.24), V(3.82, 0, 3.74)]
     b.loft_chain(ax, axial_bones, joints, blend=0.45, k=0.0, samples=12, name='axial')
+    # muscle masses that give the silhouette its anatomy
+    # neck: the deep, muscular base and the throat beneath it
+    b.add(Ellipsoid((3.05, 0, 2.95), (0.55, 0.38, 0.42), R=rot_euler(ry=-0.45), k=0.22, bind=S['neck1'], name='neckbase'))
+    b.add(Ellipsoid((3.45, 0, 3.25), (0.40, 0.27, 0.30), R=rot_euler(ry=-0.6), k=0.18, bind=S['neck2'], name='throat'))
+    # shoulder girdle: the coracoids bulge in front of and above the arms
+    for m in (1, -1):
+        b.add(Ellipsoid((2.42, 0.36 * m, 2.62), (0.34, 0.16, 0.28), R=rot_euler(ry=0.35), k=0.18, bind=S['spine2'],
+                        name='coracoid'))
+        # thigh muscle (iliotibialis): a broad oval mass on the flank, standing proud of the body wall
+        b.add(Ellipsoid((0.12, 0.52 * m, 2.62), (0.62, 0.20, 0.55), R=rot_euler(ry=-0.15), k=0.2,
+                        bind=[(S['thigh.L' if m > 0 else 'thigh.R'], 0.7), (S['pelvis'], 0.3)], name='iliotib'))
+        # caudofemoralis: the great tail-base muscle that pulls the thigh back
+        b.add(Ellipsoid((-0.85, 0.30 * m, 2.82), (0.85, 0.24, 0.36), R=rot_euler(ry=0.06), k=0.25,
+                        bind=[(S['tail1'], 0.7), (S['pelvis'], 0.3)], name='caudofem'))
     # pubic boot: the deep keel at the bottom of the hips
     b.add(Ellipsoid((0.45, 0, 1.98), (0.42, 0.24, 0.16), k=0.25, bind=S['pelvis'], name='pubic'))
     # chest / pectoral mass
@@ -170,14 +184,13 @@ def build():
     # ------------------------------------------------------------------ hind limbs (left; mirrored)
     left = []
     leg = [
-        sec((0.05, 0.40, 3.12), 0.26, 0.50, 0.55),
-        sec(H + V(0.04, 0.02, 0), 0.33, 0.58, 0.66),
-        sec((0.20, 0.50, 2.40), 0.30, 0.46, 0.50),
+        sec(H + V(0.02, -0.02, 0.05), 0.24, 0.40, 0.44),
+        sec((0.20, 0.50, 2.40), 0.28, 0.44, 0.48),
         sec((0.32, 0.52, 1.98), 0.20, 0.26, 0.26),
         sec(K, 0.16, 0.18, 0.19),
-        sec((0.26, 0.51, 1.46), 0.18, 0.16, 0.28),
-        sec((0.10, 0.50, 1.14), 0.135, 0.12, 0.19),
-        sec((-0.02, 0.49, 0.85), 0.10, 0.09, 0.10),
+        sec((0.26, 0.51, 1.46), 0.205, 0.18, 0.30),
+        sec((0.10, 0.50, 1.14), 0.16, 0.14, 0.21),
+        sec((-0.02, 0.49, 0.85), 0.115, 0.10, 0.115),
         sec(A, 0.10, 0.09, 0.095),
         sec((0.01, 0.47, 0.37), 0.085, 0.08, 0.072),
         sec(Bl + V(0, 0, 0.02), 0.11, 0.085, 0.08),
@@ -234,9 +247,9 @@ def build():
     b.meta = dict(
         name='Tyrannosaurus rex', common='Tyrannosaurus', length=12.3, mass_t=8.4,
         voxel=0.016, jaw_open=JAW_OPEN, jaw_seal=0.035, tail_split=-2.4, faces=64000, tex=2048,
-        palette=dict(back='#463725', flank='#7a6142', belly='#cdb894', pattern='#2a2016', accent='#8a4a30',
+        palette=dict(back='#3b2c1c', flank='#74552f', belly='#c9b28a', pattern='#211810', accent='#8a4a30',
                      keratin='#2d2823', claw='#221e1a', mouth='#8f4545', eye='#c99a3b'),
-        pattern=dict(kind='bands', count=17, start=-6.8, end=3.4, strength=0.75, mottle=0.35, low=-0.25, high=0.45),
+        pattern=dict(kind='bands', count=17, start=-6.8, end=3.4, strength=0.85, mottle=0.4, low=-0.35, high=0.35),
         scales=dict(base=0.028, feature=0.07, border=0.18, folds=0.75, tubercle=0.09, tubercle_density=0.22,
                     tubercle_from=0.35),
         accent=[((4.05, 0.3, 3.62), (0.32, 0.12, 0.2), 0.45), ((4.05, -0.3, 3.62), (0.32, 0.12, 0.2), 0.45)],

@@ -7,9 +7,11 @@
 import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { NavGrid } from './nav.js';
 import { Guide } from './ui.js';
 import { Flora } from './flora.js';
+import { Voices } from './voice.js';
 
 // One terrarium unit is 8 m: the 12 x 8 unit floor is a 96 x 64 m valley, and a 1.4-unit
 // pine is an 11 m conifer (miniature-scale trees, as in a diorama).
@@ -20,7 +22,8 @@ const S = 1 / METRES_PER_UNIT;
 const SPECIES = [
   {
     id: 'trex', ready: true, count: 1, clearance: 0.14, maxWater: 0.7, maxSlope: 0.32, predator: true,
-    acts: { wander: 5, sniff: 2, roar: 1, drink: 1 },
+    acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
+    sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
     size: '12.3 m long, hips 3.1 m high', mass: 'about 8 tonnes', diet: 'meat: hadrosaurs, Triceratops',
@@ -28,7 +31,8 @@ const SPECIES = [
   },
   {
     id: 'triceratops', ready: false, count: 3, clearance: 0.12, maxWater: 0.6, maxSlope: 0.3, herd: true,
-    acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 },
+    acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
+    sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
     size: '8.5 m long', mass: 'about 8 tonnes', diet: 'low plants, cropped with a parrot-like beak',
@@ -37,6 +41,7 @@ const SPECIES = [
   {
     id: 'stegosaurus', ready: false, count: 2, clearance: 0.1, maxWater: 0.6, maxSlope: 0.3, herd: true,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, tailswing: 1 },
+    sounds: { alert: 'grunt', tailswing: 'hiss' }, step: 1.4, feet: [0, 0.25, 0.5, 0.75],
     common: 'Stegosaurus', badge: 'browser', dot: '#a5603a',
     era: 'Late Jurassic, 155–150 million years ago · western North America',
     size: '6.5 m long', mass: 'about 3.5 tonnes', diet: 'ferns, cycads and other low plants',
@@ -45,6 +50,7 @@ const SPECIES = [
   {
     id: 'brachiosaurus', ready: false, count: 1, clearance: 0.22, maxWater: 0.75, maxSlope: 0.28,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
+    sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
     era: 'Late Jurassic, 154–153 million years ago · western North America',
     size: '22 m long, head about 10 m up', mass: 'about 30 tonnes', diet: 'treetops: conifers, ginkgos, tree ferns',
@@ -142,7 +148,10 @@ class Dino {
   // choose the next activity by weight, using only clips this model has
   chooseAct() {
     const acts = this.sp.acts || { wander: 1 };
-    const opts = Object.entries(acts).filter(([k]) => k === 'wander' || k === 'drink' || this.actions[k]);
+    const prey = this.mod.walkers?.some((d) => !d.sp.predator);
+    const opts = Object.entries(acts).filter(
+      ([k]) => k === 'wander' || k === 'drink' || (k === 'hunt' && prey) || this.actions[k],
+    );
     let tot = opts.reduce((a, [, w]) => a + w, 0);
     let r = rand() * tot;
     for (const [k, w] of opts) if ((r -= w) <= 0) return k;
@@ -163,6 +172,8 @@ class Dino {
   oneShot(name, fade = 0.4) {
     const a = this.actions[name];
     if (!a) return false;
+    const snd = this.sp.sounds?.[name];
+    if (snd) this.mod.voice.play(snd, this.root.position, this.sp.step || 1);
     this.state = 'oneshot';
     this.play(name, fade);
     this.timer = a.getClip().duration - fade * 0.5;
@@ -183,7 +194,17 @@ class Dino {
     if (!this.sp.predator && mod.predator && this.state !== 'flee' && this.state !== 'sleep') {
       const p = mod.predator.pos;
       const dd = Math.hypot(p.x - this.pos.x, p.z - this.pos.z);
-      if (dd < 1.6 && !night) {
+      const charging = mod.predator.state === 'hunt' && mod.predator.prey === this;
+      if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
+        if (charging && this.sp.standsGround && this.actions.threat && rand() < this.sp.standsGround) {
+          // face the predator and present the horns
+          this.heading = Math.atan2(p.x - this.pos.x, p.z - this.pos.z);
+          this.oneShot('threat', 0.25);
+          this.state = 'standoff';
+          this.timer = this.actions.threat.getClip().duration;
+          mod.predator.deterred = this;
+          return this.finish(dt);
+        }
         const ax = this.pos.x - p.x, az = this.pos.z - p.z;
         const k = 2.5 / Math.max(dd, 0.01);
         const t = this.layer.nearestOpen(this.pos.x + ax * k, this.pos.z + az * k);
@@ -191,6 +212,12 @@ class Dino {
       } else if (dd < 3 && this.state === 'idle' && this.actions.alert && rand() < dt * 0.3) this.oneShot('alert');
     }
     switch (this.state) {
+      case 'standoff':
+        if (this.timer <= 0) this.rest(0.6);
+        break;
+      case 'hunt':
+        this.huntStep(dt);
+        break;
       case 'idle':
         if (night) {
           this.state = 'sleep';
@@ -210,8 +237,63 @@ class Dino {
         this.walkStep(dt);
         break;
     }
+    this.finish(dt);
+  }
+
+  finish(dt) {
     this.place();
     this.mixer.update(dt);
+    this.sounds(dt);
+  }
+
+  // stalk the prey, then charge; give up after a while, or when it stands its ground
+  huntStep(dt) {
+    const prey = this.prey;
+    this.huntT -= dt;
+    if (!prey || this.huntT <= 0 || this.deterred) {
+      const near = this.deterred;
+      this.prey = null;
+      this.deterred = null;
+      if (near) this.heading = Math.atan2(near.pos.x - this.pos.x, near.pos.z - this.pos.z);
+      this.speed = 0;
+      this.oneShot('roar', 0.3) || this.rest(0.5);
+      return;
+    }
+    const d = Math.hypot(prey.pos.x - this.pos.x, prey.pos.z - this.pos.z);
+    this.replan -= dt;
+    if (this.replan <= 0 || !this.path) {
+      this.replan = 1.2;
+      const t = this.layer.nearestOpen(prey.pos.x, prey.pos.z);
+      const path = t && this.layer.path(this.pos.x, this.pos.z, t.x, t.z);
+      if (path && path.length > 1) {
+        this.path = path;
+        this.pathIdx = 1;
+      }
+    }
+    if (d < this.length * 0.55) {
+      this.huntT = 0; // caught up: it lunges and roars, the prey bolts
+      return;
+    }
+    this.gait = d < 2.4 ? 'run' : 'walk';
+    if (this.path) this.walkStep(dt, true);
+  }
+
+  // footfalls synced to the gait clip's contact phases, and the odd idle call
+  sounds(dt) {
+    const a = this.current;
+    const name = this.currentName;
+    if (a && (name === 'walk' || name === 'run') && this.sp.feet) {
+      const d = a.getClip().duration;
+      const p = (a.time % d) / d;
+      const prev = this._stepPhase ?? p;
+      for (const f of this.sp.feet) {
+        const crossed = prev <= p ? prev < f && f <= p : prev < f || f <= p;
+        if (crossed) this.mod.voice.play('step', this.root.position, this.sp.step * (name === 'run' ? 1.3 : 1));
+      }
+      this._stepPhase = p;
+    } else this._stepPhase = undefined;
+    if (this.state === 'idle' && this.sp.sounds?.idle && rand() < dt * 0.02)
+      this.mod.voice.play(this.sp.sounds.idle, this.root.position, this.sp.step);
   }
 
   act(kind) {
@@ -233,6 +315,17 @@ class Dino {
         (tx = t.x), (tz = t.z);
       }
       if (!this.goTo(tx, tz, null, rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
+    } else if (kind === 'hunt') {
+      const prey = mod.walkers
+        .filter((d) => !d.sp.predator)
+        .sort((a, b) => Math.hypot(a.pos.x - this.pos.x, a.pos.z - this.pos.z) - Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z))[0];
+      if (!prey) return void (this.timer = 1);
+      this.prey = prey;
+      this.state = 'hunt';
+      this.huntT = 16 + rand() * 8;
+      this.replan = 0;
+      this.path = null;
+      this.deterred = null;
     } else if (kind === 'drink') {
       const shore = mod.shore(this);
       if (!shore || !this.goTo(shore.x, shore.z, () => this.oneShot(this.actions.drink ? 'drink' : 'sniff')))
@@ -248,7 +341,7 @@ class Dino {
     } else if (!this.oneShot(kind)) this.timer = 1;
   }
 
-  walkStep(dt) {
+  walkStep(dt, hunting = false) {
     const gait = this.gait || 'walk';
     const v = this.clipSpeed(gait);
     const wp = this.path[this.pathIdx];
@@ -257,6 +350,7 @@ class Dino {
     if (d < Math.max(0.06, v * 0.25)) {
       this.pathIdx++;
       if (this.pathIdx >= this.path.length) {
+        if (hunting) return void (this.path = null);
         this.speed = 0;
         const then = this.then;
         this.then = null;
@@ -405,6 +499,7 @@ class Flyer {
     this.root.position.copy(this.pos);
     this.root.rotation.set(this.pitch, this.heading, this.roll, 'YXZ');
     this.mixer.update(dt);
+    if (rand() < dt * 0.015) this.mod.voice.play('croak', this.root.position);
   }
 }
 
@@ -417,6 +512,7 @@ class Dinosaurs {
     this.dinos = [];
     this.layers = {};
     this.ready = false;
+    this.voice = new Voices(ctx);
     this.flora = new Flora(ctx, S, rand);
     this.group.add(this.flora.group);
     this.nav = new NavGrid(ctx, { obstacles: this.flora.obstacles });
@@ -432,7 +528,7 @@ class Dinosaurs {
   }
 
   async load() {
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const base = new URL('models/', document.baseURI);
     const floraReady = this.flora.load(base).catch((e) => console.warn('[flora] load failed', e));
     await Promise.all(

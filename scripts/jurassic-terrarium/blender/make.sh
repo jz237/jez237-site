@@ -8,3 +8,4 @@ bstages=$(echo "$stages" | tr ',' '\n' | grep -v '^grid$' | paste -sd, -)
 if [[ -n "$bstages" ]]; then
   blender -b -P build.py -- "$sp" --stages "$bstages" 2>&1 | grep -E '^\[|Error|Traceback|line [0-9]+|Exception' || true
 fi
+if [[ ",$stages," == *",export,"* ]]; then (cd .. && node tools/optimize.mjs "$sp"); fi

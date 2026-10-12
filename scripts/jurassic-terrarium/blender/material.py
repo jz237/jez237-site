@@ -176,10 +176,19 @@ def skin_material(meta, name='skin_src'):
         height = g.math('ADD', height, fold)
     smooth_mask = g.math('ADD', g.math('ADD', kerat, claw, clamp=True), g.math('ADD', mouth, eye, clamp=True), clamp=True)
     smooth_mask = g.math('ADD', smooth_mask, tooth, clamp=True)
+    smooth_mask = g.math('ADD', smooth_mask, osteo, clamp=True)  # keratin-sheathed plates and spikes
     height = g.math('MULTIPLY', height, g.math('SUBTRACT', 1.0, g.math('MULTIPLY', smooth_mask, 0.9)))
     # keratin gets fine lengthwise striations instead
     kn = noise(1.0 / max(base * 0.6, 0.004), detail=2)
-    height = g.math('ADD', height, g.math('MULTIPLY', g.math('MULTIPLY', kn, kerat), 0.25))
+    hard = g.math('ADD', kerat, osteo, clamp=True)
+    height = g.math('ADD', height, g.math('MULTIPLY', g.math('MULTIPLY', kn, hard), 0.25))
+    # bony plates: fine radiating grooves (vascular channels) instead of scales
+    vg = g.node('ShaderNodeTexWave', wave_type='BANDS', bands_direction='Z', wave_profile='SIN')
+    g.link(obj, vg.inputs['Vector'])
+    vg.inputs['Scale'].default_value = 1.0 / max(base * 1.5, 0.01)
+    vg.inputs['Distortion'].default_value = 4.0
+    vg.inputs['Detail'].default_value = 2.0
+    height = g.math('ADD', height, g.math('MULTIPLY', g.math('MULTIPLY', vg.outputs['Fac'], osteo), 0.18))
     bump = g.node('ShaderNodeBump')
     bump.inputs['Strength'].default_value = sc.get('bump', 0.85)
     bump.inputs['Distance'].default_value = base * 0.3
@@ -253,6 +262,7 @@ def skin_material(meta, name='skin_src'):
     # ---- roughness
     rough = g.math('ADD', 0.66, g.math('MULTIPLY', relief, 0.16))
     rough = g.mixf(kerat, rough, 0.4)
+    rough = g.mixf(osteo, rough, 0.5)
     rough = g.mixf(claw, rough, 0.32)
     rough = g.mixf(mouth, rough, 0.25)
     rough = g.mixf(eye, rough, 0.1)
