@@ -14,6 +14,7 @@ import { Flora } from './flora.js';
 import { Voices } from './voice.js';
 import { Flex } from './flex.js';
 import { Lamps } from './lamps.js';
+import { Aquatic } from './aquatic.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -25,7 +26,7 @@ const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
+    id: 'trex', ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.035,
     acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
@@ -34,7 +35,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.75,
+    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.75, gaitSwing: 0.05,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -52,7 +53,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.16, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.16, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.03,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -119,6 +120,10 @@ class Dino {
     this.length = info.length * S;
     this.height = (info.height || 3) * S;
     this.flex = new Flex(this.model, { flex: sp.flex ?? 1 });
+    // the hips and the chest press the ferns aside as the animal pushes through
+    this.pushBones = [this.flex.spine[this.flex.spine.length - 1], null].filter(Boolean);
+    this.model.traverse((o) => o.isBone && o.name === 'pelvis' && this.pushBones.unshift(o));
+    this.pushR = Math.max(0.12, (info.length || 6) * S * 0.16);
     this.segLen = this.length / Math.max(6, this.flex.spine.length + this.flex.neck.length + this.flex.tail.length + 2);
     this.prevHeading = this.heading;
     this.glance = null;
@@ -325,9 +330,19 @@ class Dino {
         segLen: this.segLen,
         look: this.lookTarget(dt),
         calm: moving ? 0.35 : this.state === 'sleep' ? 0.15 : 1,
+        gait: this.gaitWave(),
       });
     }
     this.sounds(dt);
+  }
+
+  // the stride phase of the walk or run clip, for the trunk's sideways swing (heavier animals swing less)
+  gaitWave() {
+    const a = this.current, name = this.currentName;
+    if (!a || (name !== 'walk' && name !== 'run') || this.sp.flyer) return null;
+    const d = a.getClip().duration;
+    const amp = (this.sp.gaitSwing ?? 0.06) * Math.min(1, this.speed / Math.max(0.01, this.clipSpeed('walk')) + 0.3);
+    return { phase: (a.time % d) / d, amp: amp * (name === 'run' ? 0.6 : 1) };
   }
 
   // what the animal is watching: the hunter for prey, the prey for the hunter, otherwise now and
@@ -648,8 +663,9 @@ class Dinosaurs {
     // den footprint in units: the rock was modelled in metres and is shown at DEN.s
     const ds = DEN.s / (1 / 8); // relative to the 1/8 scale the rectangles below were measured at
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
+    this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
     this.nav = new NavGrid(ctx, {
-      obstacles: this.flora.obstacles,
+      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || [])],
       rects: [
         { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
         { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
@@ -749,6 +765,16 @@ class Dinosaurs {
     if (!this.ready) return;
     const env = this.env();
     this.flora.update(dt);
+    this.aquatic?.update(dt);
+    // bodies that push the planting aside: hips and chest of every walker
+    const pushers = [];
+    for (const d of this.walkers || []) {
+      for (const b of d.pushBones) {
+        b.getWorldPosition(this._pv || (this._pv = new Vector3()));
+        pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: d.pushR });
+      }
+    }
+    this.flora.setPushers(pushers);
     this.lamps?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.guide?.update(dt);

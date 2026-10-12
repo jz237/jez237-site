@@ -2,7 +2,7 @@
 // meadows and horsetails along the water. Plants are instanced Blender meshes (scripts/.../blender/flora.py);
 // a small shader patch bends them in the wind, more the higher a vertex sits on the plant.
 import {
-  Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Color, DoubleSide,
+  Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Vector4, Color, DoubleSide,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -22,7 +22,13 @@ export class Flora {
     this.rand = rand;
     this.group = new Group();
     this.group.name = 'jurassic-flora';
-    this.uniforms = { uTime: { value: 0 }, uWind: { value: 0.2 }, uTint: { value: new Color(1, 1, 1) } };
+    this.uniforms = {
+      uTime: { value: 0 },
+      uWind: { value: 0.2 },
+      uTint: { value: new Color(1, 1, 1) },
+      // bodies pushing through the planting: xyz centre, w radius (after the reptile terrarium's Foliage.ts)
+      uPush: { value: Array.from({ length: 16 }, () => new Vector4(0, -99, 0, 0)) },
+    };
     this.obstacles = []; // {x, z, r} trunks for the dinosaurs' route finder
     this.placements = {};
     this.plan();
@@ -185,6 +191,8 @@ export class Flora {
   // plant's height
   material(kind, y0 = 0, y1 = 1) {
     const U = this.uniforms;
+    // how far each kind gives way as an animal pushes through it (tree trunks stand firm)
+    const give = { fern: 1, fernlet: 1, redplant: 0.9, horsetail: 0.8, treefern: 0.0, cycad: 0.3 }[kind] ?? 0.6;
     const rel = { fern: 0.05, fernlet: 0.06, redplant: 0.03, horsetail: 0.07, treefern: 0.035, cycad: 0.02 }[kind] || 0.04;
     const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
     const h = Math.max(1e-4, y1 - y0);
@@ -192,8 +200,9 @@ export class Flora {
       sh.uniforms.uTime = U.uTime;
       sh.uniforms.uWind = U.uWind;
       sh.uniforms.uTint = U.uTint;
+      sh.uniforms.uPush = U.uPush;
       sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nuniform float uTime;\nuniform float uWind;')
+        .replace('#include <common>', '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec4 uPush[16];')
         .replace(
           '#include <begin_vertex>',
           `#include <begin_vertex>
@@ -205,13 +214,46 @@ export class Flora {
   float sway = pow(clamp((position.y - (${y0.toFixed(4)})) / ${h.toFixed(4)}, 0.0, 1.2), 1.5);
   float amp = sway * ${(rel * h).toFixed(5)} * (0.5 + uWind);
   transformed.x += amp * (sin(uTime * 1.3 + ph) * 0.6 + sin(uTime * 2.9 + ph * 1.7) * 0.4);
-  transformed.z += amp * 0.6 * sin(uTime * 1.1 + ph * 0.7);`,
+  transformed.z += amp * 0.6 * sin(uTime * 1.1 + ph * 0.7);
+  // part around animals: brushed aside at the rim, pressed down near the middle of the body
+  #ifdef USE_INSTANCING
+  mat4 toW = modelMatrix * instanceMatrix;
+  #else
+  mat4 toW = modelMatrix;
+  #endif
+  vec3 vw = (toW * vec4(transformed, 1.0)).xyz;
+  vec3 pushW = vec3(0.0);
+  float hW = max(0.0, vw.y - toW[3].y); // height of this vertex above the plant's own base
+  for (int i = 0; i < 16; i++) {
+    vec4 p = uPush[i];
+    vec2 d = vw.xz - p.xz;
+    float dist = length(d);
+    if (p.w > 0.0 && dist < p.w * 1.3 && toW[3].y < p.y + p.w && toW[3].y > p.y - p.w * 3.0) {
+      // lean the plant away from the body and press it down: a bend about its base, not a slide
+      vec2 away = dist > 1e-4 ? d / dist : vec2(1.0, 0.0);
+      float k = smoothstep(p.w * 1.3, p.w * 0.35, dist);
+      pushW += vec3(away.x * hW * 1.3, -hW * 0.65, away.y * hW * 1.3) * k;
+    }
+  }
+  pushW.y = max(pushW.y, -hW * 0.8);
+  pushW.xz = clamp(pushW.xz, vec2(-hW * 1.2), vec2(hW * 1.2));
+  transformed += inverse(mat3(toW)) * pushW * sway * ${give.toFixed(2)};`,
         );
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec3 uTint;')
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;');
     };
     return m;
+  }
+
+  // spheres along animals' bodies (from the runtime each frame)
+  setPushers(list) {
+    const P = this.uniforms.uPush.value;
+    for (let i = 0; i < P.length; i++) {
+      const s = list[i];
+      if (s) P[i].set(s.x, s.y, s.z, s.r);
+      else P[i].set(0, -99, 0, 0);
+    }
   }
 
   update(dt) {

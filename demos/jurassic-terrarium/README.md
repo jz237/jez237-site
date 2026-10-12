@@ -20,6 +20,15 @@ All six animals from the concept are in the case. It is still being refined, and
 | Stegosaurus (2) | in the case: grazes, drinks, swings its spiked tail; flees the T. rex |
 | Triceratops (3) | in the case: a herd that grazes and drinks; one may stand its ground against the T. rex with a horn display |
 
+How they move and what's around them:
+
+- Animals bend into their turns.
+- The trunk swings over each planted foot.
+- The head flicks to look at something and holds there while the neck catches up.
+- Ferns lean away and press down as an animal pushes through them.
+- The front pool has eelgrass meadows streaming in the current and stones on its bed.
+- Mossy boulders line the pool's bank.
+
 ## How the dinosaurs are made
 
 Every animal is modelled from code and rendered in Blender 4.5. Nothing is downloaded or traced.
