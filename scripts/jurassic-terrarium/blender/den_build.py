@@ -48,11 +48,12 @@ def rock_material():
     # cracks: Voronoi edges, darkened
     vo = g.node('ShaderNodeTexVoronoi', feature='DISTANCE_TO_EDGE', voronoi_dimensions='3D')
     g.link(obj, vo.inputs['Vector'])
-    vo.inputs['Scale'].default_value = 2.2
+    vo.inputs['Scale'].default_value = 0.7
     vo.inputs['Randomness'].default_value = 1.0
-    wob = noise(1.5, 3)
-    crack = g.math('MULTIPLY', g.math('SUBTRACT', 1.0, g.smooth(vo.outputs['Distance'], 0.0, 0.035)),
-                   g.smooth(wob, 0.35, 0.65))
+    wob = noise(1.2, 3)
+    # sparse fractures: only some cell edges crack, and they fade in and out along their length
+    crack = g.math('MULTIPLY', g.math('SUBTRACT', 1.0, g.smooth(vo.outputs['Distance'], 0.0, 0.02)),
+                   g.smooth(wob, 0.5, 0.7))
     col = g.mix(g.math('MULTIPLY', crack, 0.55), col, hex2rgb('#24211e'))
     # lichen spots on the steep faces
     vl = g.node('ShaderNodeTexVoronoi', feature='F1', voronoi_dimensions='3D')

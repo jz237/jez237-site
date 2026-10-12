@@ -50,7 +50,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: false, count: 1, clearance: 0.22, maxWater: 0.75, maxSlope: 0.28,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.22, maxWater: 0.75, maxSlope: 0.28, noRun: true,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -171,9 +171,15 @@ class Dino {
     this.path = path;
     this.pathIdx = 1;
     this.state = 'walk';
-    this.gait = this.actions[gait] ? gait : 'walk';
+    this.gait = this.actions[gait] && !(gait === 'run' && this.sp.noRun) ? gait : 'walk';
     this.then = then;
     return true;
+  }
+
+  // long animals stop well inside the case, so a turning head or tail stays off the glass
+  clearOfGlass(x, z) {
+    const b = this.mod.ctx.box, m = this.length * 0.5 + 0.15;
+    return Math.abs(x) < b.halfW - m && Math.abs(z) < b.halfD - m;
   }
 
   inDen() {
@@ -363,16 +369,16 @@ class Dino {
         const mates = mod.dinos.filter((d) => d.sp.id === this.sp.id);
         const cx = mates.reduce((a, d) => a + d.pos.x, 0) / mates.length;
         const cz = mates.reduce((a, d) => a + d.pos.z, 0) / mates.length;
-        const t = this.layer.randomOpen(rand, (x, z) => Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5);
+        const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5);
         (tx = t.x), (tz = t.z);
       } else {
         const t = this.layer.randomOpen(rand, (x, z) => {
           const d = Math.hypot(x - this.pos.x, z - this.pos.z);
-          return d > 1.5 && d < 6;
+          return d > 1.5 && d < 6 && this.clearOfGlass(x, z);
         });
         (tx = t.x), (tz = t.z);
       }
-      if (!this.goTo(tx, tz, null, rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
+      if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
     } else if (kind === 'hunt') {
       const prey = mod.walkers
         .filter((d) => !d.sp.predator)

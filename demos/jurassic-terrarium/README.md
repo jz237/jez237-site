@@ -16,9 +16,9 @@ This is a work in progress, published as it grows.
 |---|---|
 | Tyrannosaurus rex | in the case, with a den under a basalt overhang |
 | Pteranodon (2) | in the case, soaring |
+| Brachiosaurus | in the case: browses the conifers, drinks, dozes standing |
 | Triceratops | being sculpted |
 | Stegosaurus | being sculpted |
-| Brachiosaurus | being sculpted |
 
 ## How the dinosaurs are made
 

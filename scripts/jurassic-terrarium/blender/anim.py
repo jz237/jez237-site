@@ -108,13 +108,17 @@ class Rig:
 
 def leg_ik(rig, side, target_ball, toe_dir, knee_fwd, chain=('thigh', 'shin', 'meta', 'toe'), plantigrade=False):
     """Hook for a digitigrade leg: the metatarsus is kept parallel to the femur (a pantograph), which
-    turns the 3-bone leg into a 2-bone problem with lengths (femur + metatarsus) and tibia."""
+    turns the 3-bone leg into a 2-bone problem with lengths (femur + metatarsus) and tibia.
+    Plantigrade (elephantine) feet instead keep the foot at its rest angle and solve femur + tibia to
+    the ankle above the contact point."""
     th, sh, me, to = [f'{c}.{side}' for c in chain]
     Lf, Lt, Lm = rig.length[rig.idx[th]], rig.length[rig.idx[sh]], rig.length[rig.idx[me]]
+    meta_vec = rig.tail(me) - rig.head(me)
 
     def hook(rig_, Mp, M):
         H = (Mp @ rig.rel[rig.idx[th]])[:3, 3]
-        D = np.asarray(target_ball) - H
+        goal = np.asarray(target_ball) - (meta_vec if plantigrade else 0)
+        D = goal - H
         d = np.linalg.norm(D)
         if plantigrade:
             a1, a2 = Lf, Lt
@@ -133,7 +137,7 @@ def leg_ik(rig, side, target_ball, toe_dir, knee_fwd, chain=('thigh', 'shin', 'm
         t /= max(np.linalg.norm(t), 1e-9)
         aims = {th: f, sh: t, me: f}
         if plantigrade:
-            aims = {th: f, sh: t}
+            aims = {th: f, sh: t, me: meta_vec / max(np.linalg.norm(meta_vec), 1e-9)}
         if toe_dir is not None and rig.has(to):
             aims[to] = toe_dir
         return aims
@@ -601,7 +605,17 @@ class Quadruped(Biped):
         return name, frames, dict(loop=False)
 
     def rest(self, seconds=6.0, fps=30, name='rest'):
-        """Lying down: body lowered onto the belly, legs folded."""
+        """Lying down: body lowered onto the belly, legs folded. Giants (meta rest_stand) doze standing,
+        neck lowered and slack."""
+        if self.meta.get('rest_stand'):
+            low = self.g.get('neck_rest_stand', 0.5)
+
+            def fn(t, ts):
+                br = math.sin(2 * math.pi * ts / 6.0)
+                return (dict(dz=-0.015 * self.hip_h + 0.004 * br * self.hip_h),
+                        dict(neck_pitch=low + 0.02 * br, head_pitch=0.2, tail_yaw=0.02, tail_phase=ts * 0.5,
+                             breath=br), 0.98)
+            return self._still(seconds, fps, fn, name, True)
         N = int(seconds * fps)
         frames = []
         drop = self.meta.get('rest_drop', 0.45) * self.hip_h
