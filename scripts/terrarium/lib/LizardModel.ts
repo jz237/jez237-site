@@ -45,16 +45,17 @@ function irisTexture(): THREE.DataTexture {
     const theta = ((H - 1 - y) / (H - 1)) * Math.PI; // 0 = centre of the pupil (+Y pole)
     for (let x = 0; x < W; x++) {
       const f = fibre[x] * 0.7 + fibre[(x + 1) % W] * 0.3;
-      // Pogona's eye: a round black pupil in a golden-amber iris, a bright
-      // ring around the pupil, radial fibres and flecks, a dark limbus
+      // Pogona's eye: a round black pupil ringed with gold, in a dark bronze-brown
+      // iris with radial fibres and flecks, and a near-black limbus (a bright
+      // yellow iris all over reads as a cartoon's)
       let r: number, g: number, b: number;
-      const fleck = rnd(x * 7 + Math.floor(theta * 40) * 131) > 0.93 ? 0.55 : 1;
-      if (theta < 0.25) {r = 3; g = 2; b = 2;}
-      else if (theta < 0.31) {const t = (theta - 0.25) / 0.06; r = 236 - 20 * t; g = 196 - 30 * t; b = 110 - 40 * t;}
+      const fleck = rnd(x * 7 + Math.floor(theta * 40) * 131) > 0.93 ? 0.6 : 1;
+      if (theta < 0.29) {r = 3; g = 2; b = 2;}
+      else if (theta < 0.36) {const t = (theta - 0.29) / 0.07; r = 226 - 60 * t; g = 168 - 62 * t; b = 72 - 38 * t;}
       else if (theta < 1.0) {
-        const t = (theta - 0.31) / 0.69;
-        r = (214 - 70 * t + 30 * (f - 0.5)) * fleck; g = (150 - 72 * t + 24 * (f - 0.5)) * fleck; b = (52 - 28 * t + 10 * (f - 0.5)) * fleck;
-      } else if (theta < 1.14) {const t = (theta - 1.0) / 0.14; r = 120 - 90 * t; g = 70 - 55 * t; b = 28 - 20 * t;}
+        const t = (theta - 0.36) / 0.64;
+        r = (132 - 66 * t + 34 * (f - 0.5)) * fleck; g = (78 - 44 * t + 20 * (f - 0.5)) * fleck; b = (30 - 16 * t + 8 * (f - 0.5)) * fleck;
+      } else if (theta < 1.14) {const t = (theta - 1.0) / 0.14; r = 66 - 50 * t; g = 34 - 24 * t; b = 14 - 8 * t;}
       else {r = 14; g = 10; b = 8;}
       const i = (y * W + x) * 4;
       data[i] = r; data[i + 1] = g; data[i + 2] = b; data[i + 3] = 255;
@@ -108,7 +109,7 @@ function skinMaterial(profileTex: THREE.DataTexture, scaleDirs: THREE.Vector3[],
       .replace('#include <common>', `#include <common>
 attribute vec4 aux;
 uniform vec3 uScaleDir[${scaleDirs.length}];
-varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir;`)
+varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir; varying float vScaleK;`)
       .replace('#include <skinnormal_vertex>', `#include <skinnormal_vertex>
 #ifdef USE_SKINNING
   vSkinN = normalMatrix * mat3(skinMatrix);
@@ -120,14 +121,17 @@ vRest = position; vRestN = normal; vAux = aux;
 #ifdef USE_SKINNING
 // the way the scales point (towards the free edges): down the limbs, back along the body
 vScaleDir = uScaleDir[int(skinIndex.x)] * skinWeight.x + uScaleDir[int(skinIndex.y)] * skinWeight.y + uScaleDir[int(skinIndex.z)] * skinWeight.z + uScaleDir[int(skinIndex.w)] * skinWeight.w;
+// how much one bone has this skin to itself (its scales point one way)
+vScaleK = max(max(skinWeight.x, skinWeight.y), max(skinWeight.z, skinWeight.w));
 #else
 vScaleDir = vec3(-1.0, 0.0, 0.0);
+vScaleK = 1.0;
 #endif`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform vec3 uNostril;
 uniform sampler2D uProfile; uniform vec3 uEye; uniform float uDisplay; uniform float uTone; uniform float uBeardDark; uniform vec3 uPal[8]; uniform float uWet; uniform float uDust; uniform float uScaleMeters;
-varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir;
+varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir; varying float vScaleK;
 ${voronoiChunk}
 float lzNoise(vec3 p){
   vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
@@ -159,12 +163,17 @@ float clawK = smoothstep(0.25, 0.6, vAux.y);
 float limb = (1.0 - onLoft) * (1.0 - clawK) * (1.0 - smoothstep(9.0, 9.4, P.x));
 float headK = headW * (1.0 - limb); // granular beads all over the head, jaw and throat
 float freq = mix(12.5, 10.0, belly);
-freq = mix(freq, 7.2, limb);
-freq = mix(freq, 7.8, tailW * (1.0 - limb));
+// (a limb's scales are small and overlap like roof tiles: drawn larger, they read as
+// a tortoise's cobbles)
+freq = mix(freq, 10.5, limb);
+freq = mix(freq, 9.0, tailW * (1.0 - limb));
 freq = mix(freq, 15.0, headK);
-float elong = mix(0.85, 0.62, max(limb, tailW));
+float elong = mix(0.85, 0.66, max(limb, tailW));
 elong = mix(elong, 0.7, belly);
 elong = mix(elong, 1.0, headK);
+// (where bones share the skin the scales' direction turns within a few
+// millimetres, and stretching along it would squeeze the cells into streaks)
+elong = mix(1.0, elong, smoothstep(0.6, 0.9, vScaleK));
 float keelK = mix(0.25, 0.8, max(limb, tailW)) * (1.0 - belly) * (1.0 - headK);
 float overlap = mix(0.7, 1.0, max(limb, max(tailW, belly))) * (1.0 - headK);
 vec3 sp = P * freq;
@@ -368,7 +377,7 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
 }
 `);
   };
-  material.customProgramCacheKey = () => 'lizard-skin-v6';
+  material.customProgramCacheKey = () => 'lizard-skin-v8';
   return {material, uniforms};
 }
 
