@@ -10,7 +10,7 @@ with sickle claws on digits I-III. No skin is known: polygonal tubercles as in o
 import math
 import numpy as np
 from anatomy import Body, sec, claw, V
-from sdf import Loft, Ellipsoid, RoundCone, Box, rot_euler, normalize
+from sdf import Loft, SmoothLoft, Ellipsoid, RoundCone, Box, rot_euler, normalize, chain_binding
 
 JAW_OPEN = math.radians(3.5)     # rest pose: the lips just part
 HEAD_PITCH = math.radians(30.0)  # snout points forward-down
@@ -63,6 +63,23 @@ def _surface_v(prims, u, w):
         else:
             hi = mid
     return lo
+
+
+def smooth_chain(b, sections, bones, joint_points, blend=0.05, side=(0, 1, 0), k=0.1, tag='skin', samples=10,
+                 detail=1.0, name='', region=None):
+    """Body.loft_chain with an sdf.SmoothLoft: same binding, no ribs or creases at bends and joints
+    (as in trex.py)."""
+    lf = SmoothLoft(sections, side=side, samples_per_seg=samples, k=k, tag=tag, name=name, detail=detail)
+    lf.chain = list(bones)
+    lf.region = region
+    if len(bones) == 1:
+        lf.bind = bones[0]
+    else:
+        ju = lf.param(np.array(joint_points, float))
+        total = sum(np.linalg.norm(np.asarray(sections[i + 1]['p']) - np.asarray(sections[i]['p']))
+                    for i in range(len(sections) - 1))
+        lf.bind = chain_binding(lf, bones, ju, blend / max(total, 1e-6))
+    return b.add(lf)
 
 
 def build():
@@ -134,7 +151,7 @@ def build():
     axial_bones = [S[f'tail{i}'] for i in range(9, 0, -1)] + [S['pelvis'], S['spine1'], S['spine2'], S['spine3']]
     axial_bones += [S[f'neck{i}'] for i in range(1, 8)] + [S['head']]
     joints = [tail_pts[i] for i in range(8, 0, -1)] + [tail_pts[0]] + sp[1:] + neck_pts[1:]
-    b.loft_chain(ax, axial_bones, joints, blend=0.4, k=0.0, samples=28, name='axial')
+    smooth_chain(b, ax, axial_bones, joints, blend=0.4, k=0.0, samples=28, name='axial')
     # deep chest and the pectoral girdle: fills the junction of chest and neck underside
     b.add(Ellipsoid((4.30, 0, 3.50), (1.00, 0.88, 1.00), R=rot_euler(ry=-0.5), k=0.5, bind=S['spine3'],
                     name='chest'))
@@ -230,7 +247,7 @@ def build():
         sec(A, 0.31, 0.30, 0.33),
         sec((-0.02, 0.62, 0.22), 0.36, 0.37, 0.36),
     ]
-    left.append(b.loft_chain(leg, [S['thigh.L'], S['shin.L'], S['meta.L']], [K, A], blend=0.25, k=0.55,
+    left.append(smooth_chain(b, leg, [S['thigh.L'], S['shin.L'], S['meta.L']], [K, A], blend=0.25, k=0.55,
                              side=(0, 1, 0), samples=16, name='leg'))
     # elephantine foot: broad sole with a heel pad behind the ankle
     left.append(b.add(Ellipsoid((0.16, 0.63, 0.18), (0.44, 0.37, 0.18), k=0.14, bind=S['meta.L'], name='foot',
@@ -269,7 +286,7 @@ def build():
         sec((4.03, 0.875, 0.55), 0.27, 0.285, 0.26),
         sec((4.04, 0.87, 0.24), 0.30, 0.315, 0.28),
     ]
-    left.append(b.loft_chain(arm, [S['upperarm.L'], S['forearm.L'], S['hand.L']], [El, Wr], blend=0.25, k=0.45,
+    left.append(smooth_chain(b, arm, [S['upperarm.L'], S['forearm.L'], S['hand.L']], [El, Wr], blend=0.25, k=0.45,
                              side=(0, 1, 0), samples=16, name='arm'))
     # manus: a vertical tube of metacarpals on a crescent (horseshoe) pad
     left.append(b.add(Ellipsoid((4.07, 0.87, 0.12), (0.32, 0.34, 0.12), k=0.1, bind=S['hand.L'], name='manus',

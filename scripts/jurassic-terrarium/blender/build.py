@@ -242,15 +242,15 @@ def stage_mesh():
     blib.reset_scene()
     high = blib.grid_mesh(WORK, name='sculpt')
     log('sculpt', len(high.data.vertices), 'verts')
-    # game mesh: decimate a copy (symmetric about the sagittal plane, Blender X = 0)
+    # game mesh: decimate a copy. Not symmetric: on the smooth SmoothLoft sculpts, symmetric collapse
+    # folds triangles over (139 on the Brachiosaurus against 6 without), which bake to dark specks
     low = high.copy()
     low.data = high.data.copy()
     low.name = low.data.name = 'body'
     bpy.context.scene.collection.objects.link(low)
     dec = low.modifiers.new('dec', 'DECIMATE')
     dec.ratio = min(1.0, FACES / max(1, len(high.data.polygons) * 2))
-    dec.use_symmetry = True
-    dec.symmetry_axis = 'X'
+    dec.use_symmetry = False
     bpy.context.view_layer.objects.active = low
     bpy.ops.object.modifier_apply(modifier='dec')
     log('game mesh', len(low.data.polygons), 'faces')

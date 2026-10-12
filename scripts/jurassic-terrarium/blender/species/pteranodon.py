@@ -25,6 +25,7 @@ from anatomy import Body, sec, claw, V, bezier
 from sdf import Loft, Ellipsoid, RoundCone, Xform, rot_euler, normalize
 
 JAW_OPEN = math.radians(1.3)  # a small gap between the rhamphothecae
+TAG_SIGMA = 0.0035  # material blend width in metres (see the wing colour notes in build())
 
 
 # ------------------------------------------------------------------------------ helpers
@@ -406,7 +407,10 @@ def build():
     wing = Sheet(poly, wing_z, wing_h, wing_bind, res=0.004, k=0.02, tag='osteo', detail=0.25,
                  name='brachiopatagium', region='membrane.L')
     left.append(b.add(wing))
-    tag_sigma = 0.012 * float(tip[0] - tail_tip[0]) / 12 + 0.004  # build.py's tag_weights sigma
+    # material blend width (meta['tag_sigma'], also used by the Tints below). build.py's default,
+    # 0.012 * length / 12 + 0.004 = 6.3 mm here, is mostly its 4 mm floor: on this small animal it
+    # smeared the pale body fuzz 3-4 cm out over the membrane where the body fillets into the wing.
+    tag_sigma = TAG_SIGMA
     le_xy = np.vstack([np.array([Sh, El])[:, :2], spar_curve[:, :2]])
 
     def wing_shade(X, Y):
@@ -467,7 +471,12 @@ def build():
     hu = El - Sh
 
     def shoulder_fuzz(P):
-        return 1 - _sstep(0.0, 0.4, ((P - Sh) @ hu) / float(hu @ hu))
+        # dorsal side only: the arm's underside is the membrane's leading strip, so from below the
+        # fuzz would show as a pale blur around the shoulders. Below the arm's centre line the
+        # membrane colour runs right up to the body and meets it in the short tag blend.
+        s = ((P - Sh) @ hu) / float(hu @ hu)
+        dz = P[:, 2] - (Sh[2] + np.clip(s, 0.0, 1.0) * hu[2])
+        return (1 - _sstep(0.0, 0.4, s)) * _sstep(-0.004, 0.010, dz)
 
     left.append(b.add(Tint(arm, shoulder_fuzz, tag_sigma, tag='feather', name='armfuzz')))
     # wing metacarpal and the wing finger: one spar from the wrist to the tip
@@ -614,6 +623,7 @@ def build():
                      osteo='#A3552A', osteo2='#3E1D11'),
         accent_grad=[0.86, 0.97],
         osteo_shade=[0.0, 0.5],  # a Tint of weight f gives accent f / (1 + f): 0.5 = the full osteo2 band
+        tag_sigma=TAG_SIGMA,  # crisp body/membrane colour junction (the Tints are tuned to it)
         osteo_rough=0.72,  # matte skin, not the default glossy keratin of an osteo part
         pattern=dict(kind='none', strength=0.0, mottle=0.12),
         scales=dict(base=0.006, feature=0.012, border=0.12, folds=0.15, bump=0.5),
