@@ -72,6 +72,7 @@ export class Terrarium {
   private wakeB = new THREE.Vector3();
   private wakeT = new THREE.Vector3();
   private wakeInit = false;
+  private tmpFocus = new THREE.Vector3();
   private wadeT = 0;
   follow = false;
   temperature = 27;
@@ -747,7 +748,17 @@ export class Terrarium {
     this.wake(dt);
     this.updateFish(dt);
     this.updatePush(dt);
-    // (the depth of field focuses itself on the middle of the picture: see Post)
+    // The depth of field focuses on the lizard while it is in view (it is what one
+    // looks at), otherwise on the middle of the picture (see Post).
+    {
+      const sp = this.rig.spinePoints();
+      const body = this.tmpFocus.copy(sp[2]).lerp(this.rig.snout, 0.35);
+      const ndc = body.clone().project(this.camera);
+      // (its depth along the view, as the depth of field measures it)
+      const d = -body.clone().applyMatrix4(this.camera.matrixWorldInverse).z;
+      this.post.subject = ndc.z < 1 && d > 0 && Math.abs(ndc.x) < 0.8 && Math.abs(ndc.y) < 0.8 ? d : 0;
+      this.post.subjectUv.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
+    }
     this.renderer.shadowMap.needsUpdate = true;
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
     this.water.uniforms.uKeyDir.value.copy(keyDir);

@@ -75,8 +75,14 @@ vec3 foliageWind(vec3 root, float flex, float Hw, float phase, float stiff, vec3
   gust = clamp(length(top) / 0.2, 0.0, 1.0);
   vec3 d = vec3(top.x, 0.0, top.y) * Hw * flex;
   d.y = -dot(top, top) * Hw * 0.55 * flex * sqrt(flex);
-  // leaves flutter about where they hang: faster, small, smooth across a leaf
+  // fronds and branches move each on their own, faster than the plant and out of
+  // step with their neighbours (a smooth field over where they hang, a few
+  // centimetres across, so each frond moves as one)
   float energy = 0.004 + 0.006 * min(sp * 5.0, 6.0) + 0.018 * turb;
+  vec3 bq = rest * 15.0;
+  vec3 br = vec3(sin(uTime * 3.7 + bq.x + bq.y + ph), sin(uTime * 4.3 + bq.z * 1.3 + ph * 1.3) * 0.5, sin(uTime * 3.1 + bq.z + bq.y * 0.7 + ph * 0.7));
+  d += br * energy * 1.6 * Hw * flex / stiff;
+  // leaves flutter about where they hang: faster, small, smooth across a leaf
   float lp = dot(rest, vec3(37.0, 23.0, 41.0));
   float lf = sin(uTime * 12.0 + lp + ph) + 0.5 * sin(uTime * 17.3 + lp * 1.7);
   d += n * lf * flex * (energy * 1.8 + 0.002) * Hw / stiff;
@@ -108,7 +114,7 @@ float foliageTop(vec2 xz){ return texture2D(tTop, clamp((xz - uTopBox.xy) / uTop
 // The push of everything parting the plants, read at \`at\` (xz) for a point at height
 // vw.y: k is how hard it pushes aside, downK how hard it presses down. The field is
 // smooth everywhere, so nothing a leaf can straddle tears it.
-vec3 folPush(vec2 at, vec3 vw, float k, float downK){
+vec3 folPush(vec2 at, vec3 vw, float rootY, float k, float downK){
   vec3 push = vec3(0.0);
   for (int i = 0; i < PUSHERS; i++) {
     vec4 p = uPush[i], q = uPushB[i];
@@ -122,6 +128,9 @@ vec3 folPush(vec2 at, vec3 vw, float k, float downK){
     float R = p.w * 1.35;
     float r = length(d);
     if (r >= R) continue;
+    // (a plant rooted well above the body, on a ledge over it, is out of its reach)
+    float reach = 1.0 - smoothstep(0.02, 0.05, rootY - c.y);
+    if (reach <= 0.0) continue;
     float s = 1.0 - r / R;
     // the part above the contact moves with it (fading well above it); below, toward the root, less
     float vy = smoothstep(-2.2 * p.w, -0.3 * p.w, dy) * (1.0 - smoothstep(3.0 * p.w, 7.0 * p.w, dy));
@@ -129,7 +138,7 @@ vec3 folPush(vec2 at, vec3 vw, float k, float downK){
     vec2 side = d * (k * s * s);
     // pressed down under the body (not above it, where it would sink into it)
     float down = -downK * p.w * s * s * (1.0 - smoothstep(-0.2 * p.w, p.w, dy));
-    push += vec3(side.x, down, side.y) * vy * q.w;
+    push += vec3(side.x, down, side.y) * vy * q.w * reach;
   }
   return push;
 }
@@ -165,7 +174,9 @@ vec3 folBody(vec3 q, vec3 rootW){
       float sd = dot(d, side);
       if (r < rt && sd < rt) qs.xz += side * (rt - sd);
     }
-    q = mix(qs, qu, under);
+    // (a plant rooted well above the body, on a ledge over it, it never touches)
+    float reach = 1.0 - smoothstep(0.015, 0.04, rootW.y - (p.y + ab.y * tr));
+    q = mix(q, mix(qs, qu, under), reach);
   }
   return q;
 }
@@ -202,7 +213,7 @@ ${FOLIAGE_WIND_GLSL}`)
   // leans as a whole: the push is read between its root and the point, so a
   // leaf moves with its stem instead of being pulled apart, plus a little of
   // the push right at the point to keep leaves out of the body.
-  vec3 push = ${opts.push === false ? 'vec3(0.0)' : 'folPush(mix(folRootW.xz, vw.xz, 0.3), vw, 2.0, 0.45) + folPush(vw.xz, vw, 0.4, 0.0)'};
+  vec3 push = ${opts.push === false ? 'vec3(0.0)' : 'folPush(mix(folRootW.xz, vw.xz, 0.3), vw, folRootW.y, 2.0, 0.45) + folPush(vw.xz, vw, folRootW.y, 0.4, 0.0)'};
   float pushLen = length(push.xz);
   if (pushLen > 0.045) push.xz *= 0.045 / pushLen;
   vec3 wf = vw + push * max(flex, 0.25);
@@ -343,5 +354,5 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.
   totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage15-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage17-${opts.key}`;
 }
