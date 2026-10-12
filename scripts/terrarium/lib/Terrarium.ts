@@ -65,8 +65,13 @@ export class Terrarium {
   readonly audio = new TerrariumAudio();
   readonly air = new AirGlow();
   readonly cloudShadow = new CloudShadow();
-  /** The hand's push on the foliage (x, y, z, radius). */
-  readonly handPush = foliageUniforms.uPush.value[0];
+  /** Where the hand brushes the plants (null: it's elsewhere); it eases in and out. */
+  private hand = {target: null as THREE.Vector3 | null, pos: new THREE.Vector3(), w: 0};
+  /** The lizard's wake: where its body and tail were a moment ago, for the plants to spring back from. */
+  private wakeA = new THREE.Vector3();
+  private wakeB = new THREE.Vector3();
+  private wakeT = new THREE.Vector3();
+  private wakeInit = false;
   private wadeT = 0;
   follow = false;
   temperature = 27;
@@ -94,10 +99,9 @@ export class Terrarium {
   readonly hemi: THREE.HemisphereLight;
   readonly rim: THREE.DirectionalLight;
   readonly fill: THREE.DirectionalLight;
-  /** The lid's light along the front glass (soft, no shadows): the foreground isn't left in the dark. */
-  readonly lidFront: THREE.SpotLight;
   readonly ready: Promise<void>;
-  private clock = new THREE.Clock();
+  private clock = new THREE.Timer();
+  private clockStarted = false;
   time = 0;
   private onFrame: ((dt: number, t: number) => void)[] = [];
   /** Effects turned off because the picture came out black, in order. */
@@ -140,9 +144,10 @@ export class Terrarium {
     r.shadowMap.autoUpdate = false;
 
     // Lamp in the lid: warm key light with soft shadows.
-    this.key = new THREE.SpotLight(new THREE.Color(1.0, 0.84, 0.64), 11, 3, 0.8, 0.85, 2);
+    // (a broad beam with a soft edge, reaching the moss along the front glass)
+    this.key = new THREE.SpotLight(new THREE.Color(1.0, 0.84, 0.64), 11, 3, 0.9, 0.6, 2);
     this.key.position.set(-0.08, 1.1, 0.3);
-    this.key.target.position.set(0.0, 0.12, -0.04);
+    this.key.target.position.set(-0.02, 0.11, 0.01);
     this.key.castShadow = true;
     this.key.shadow.mapSize.setScalar(LITE ? 1024 : 2048);
     this.key.shadow.bias = -0.00025;
@@ -153,10 +158,6 @@ export class Terrarium {
     // passing clouds shade whatever the lamp lights
     this.key.map = this.cloudShadow.target.texture;
     s.add(this.key, this.key.target);
-    this.lidFront = new THREE.SpotLight(new THREE.Color(1.0, 0.86, 0.68), 2.2, 1.3, 1.05, 1.0, 2);
-    this.lidFront.position.set(-0.05, 0.62, 0.17);
-    this.lidFront.target.position.set(-0.08, 0.06, 0.14);
-    s.add(this.lidFront, this.lidFront.target);
     // Basking lamp over the log.
     this.heat = new THREE.SpotLight(new THREE.Color(1.0, 0.72, 0.45), 1.1, 1.4, 0.3, 0.95, 2);
     this.heat.position.set(-0.36, 0.78, 0.05);
@@ -200,7 +201,7 @@ export class Terrarium {
     this.controls.update();
 
     // (layer 3: the near panes, drawn last over the clouds)
-    for (const l of [this.key, this.lidFront, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) {l.layers.enable(1); l.layers.enable(3);}
+    for (const l of [this.key, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) {l.layers.enable(1); l.layers.enable(3);}
     this.post = new Post(r, s, cam, LITE ? 0 : 4);
     if (LITE) {this.post.settings.ao = false; this.post.settings.dof = false; this.glassOverClouds = false;}
     const q = new URLSearchParams(location.search);
@@ -455,8 +456,6 @@ export class Terrarium {
     this.key.intensity = 11 * day * (1 - gloom * 0.55) * (1 + 0.25 * w.golden);
     this.key.color.copy(w.sunColor).lerp(STORM_LIGHT, gloom * 0.5);
     this.heat.intensity = 0.75 * day * (1 - gloom * 0.4);
-    this.lidFront.intensity = 2.2 * day * (1 - gloom * 0.55);
-    this.lidFront.color.copy(this.key.color);
     this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
     this.hemi.color.setRGB(0.55, 0.45, 0.35).lerp(DUSK_SKY, w.golden * 0.7);
     this.fill.intensity = (0.35 + 0.55 * day) * (1 - gloom * 0.25);
@@ -566,6 +565,47 @@ export class Terrarium {
   }
 
   /** Where a ray meets the ground or hardscape inside the case. */
+  /** The hand is over the plants at `p` (a point on the ground, stones or log), or has left them (null). */
+  setHand(p: THREE.Vector3 | null) {
+    if (p) (this.hand.target ??= new THREE.Vector3()).copy(p);
+    else this.hand.target = null;
+  }
+
+  /**
+   * What parts the plants: the hand, the lizard's head, body and tail (as
+   * capsules, so overlapping spheres never double the push), and its wake,
+   * which lags behind so the plants it passed spring back over a moment
+   * instead of snapping upright.
+   */
+  updatePush(dt: number) {
+    const A = foliageUniforms.uPush.value, B = foliageUniforms.uPushB.value;
+    const h = this.hand;
+    if (h.target) {
+      // eases toward the pointer (a jump from the floor onto the log sweeps, not snaps)
+      if (h.w < 0.02) h.pos.copy(h.target);
+      else h.pos.lerp(h.target, 1 - Math.exp(-dt * 18));
+      h.w = Math.min(1, h.w + dt * 6);
+    } else h.w = Math.max(0, h.w - dt * 4);
+    // (held a little above the surface: a hand brushing through, not raking the soil)
+    A[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, 0.04);
+    B[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, h.w);
+    const sp = this.rig.spinePoints(), sn = this.rig.snout;
+    const tail = this.rig.tailPoint(2), tail2 = this.rig.tailPoint(5);
+    A[1].set(sn.x, sn.y, sn.z, 0.035); B[1].set(sn.x, sn.y, sn.z, 1);
+    A[2].set(sp[2].x, sp[2].y, sp[2].z, 0.062); B[2].set(sp[5].x, sp[5].y, sp[5].z, 1);
+    A[3].set(sp[5].x, sp[5].y, sp[5].z, 0.035); B[3].set(tail.x, tail.y, tail.z, 1);
+    A[4].set(tail.x, tail.y, tail.z, 0.022); B[4].set(tail2.x, tail2.y, tail2.z, 1);
+    // the wake: chest, hips and tail as they were a moment ago, fading as the body catches up
+    if (!this.wakeInit) {this.wakeA.copy(sp[2]); this.wakeB.copy(sp[5]); this.wakeT.copy(tail); this.wakeInit = true;}
+    const k = 1 - Math.exp(-dt / 0.35);
+    this.wakeA.lerp(sp[2], k); this.wakeB.lerp(sp[5], k); this.wakeT.lerp(tail, k);
+    const lag = Math.max(this.wakeA.distanceTo(sp[2]), this.wakeB.distanceTo(sp[5]));
+    const wake = 0.7 * THREE.MathUtils.smoothstep(lag, 0.004, 0.035);
+    A[5].set(this.wakeA.x, this.wakeA.y, this.wakeA.z, 0.058); B[5].set(this.wakeB.x, this.wakeB.y, this.wakeB.z, wake);
+    A[6].set(this.wakeB.x, this.wakeB.y, this.wakeB.z, 0.032); B[6].set(this.wakeT.x, this.wakeT.y, this.wakeT.z, wake);
+    A[7].w = 0; B[7].w = 0;
+  }
+
   pickInside(ray: THREE.Ray): THREE.Vector3 | null {
     const rc = new THREE.Raycaster(ray.origin, ray.direction);
     (rc as any).firstHitOnly = true;
@@ -678,6 +718,10 @@ export class Terrarium {
   }
 
   frame(fixedDt?: number) {
+    // (starts at the first frame, and a tab left in the background doesn't count
+    // as one long frame when it comes back)
+    if (!this.clockStarted) {this.clockStarted = true; this.clock.connect(document); this.clock.reset();}
+    this.clock.update();
     const raw = this.clock.getDelta();
     if (fixedDt === undefined) this.adapt(raw);
     const dt = fixedDt ?? Math.min(0.05, raw);
@@ -701,17 +745,8 @@ export class Terrarium {
     this.brain.update(dt);
     this.wake(dt);
     this.updateFish(dt);
-    const sp = this.rig.spinePoints();
-    // the body parts the plants: head, chest, mid-body, hips and tail base
-    const push = foliageUniforms.uPush.value;
-    push[1].set(this.rig.snout.x, this.rig.snout.y, this.rig.snout.z, 0.035);
-    push[2].set(sp[2].x, sp[2].y, sp[2].z, 0.06);
-    push[3].set((sp[3].x + sp[4].x) / 2, (sp[3].y + sp[4].y) / 2, (sp[3].z + sp[4].z) / 2, 0.065);
-    push[4].set(sp[5].x, sp[5].y, sp[5].z, 0.055);
-    const tail = this.rig.tailPoint(2);
-    push[5].set(tail.x, tail.y, tail.z, 0.03);
-    // Focus on the orbit target; the room falls out of focus naturally.
-    this.post.settings.focus = this.camera.position.distanceTo(this.controls.target);
+    this.updatePush(dt);
+    // (the depth of field focuses itself on the middle of the picture: see Post)
     this.renderer.shadowMap.needsUpdate = true;
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
     this.water.uniforms.uKeyDir.value.copy(keyDir);

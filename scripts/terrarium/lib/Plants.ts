@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type {ScanSet} from './Assets';
 import {Surface, SurfaceKind} from './Surface';
-import {addFoliage, PINNATE_GLSL} from './Foliage';
+import {addFoliage, setRoot, PINNATE_GLSL} from './Foliage';
 import {mulberry32} from './Textures';
 import {fbm, WATER_LEVEL, poolDistance, caveKeepClear, caveFloorWeight} from './Ground';
 import {TANK} from './Case';
@@ -220,7 +220,7 @@ function creeper(rnd: () => number, length: number) {
 /** `litter`: fallen leaves, which lie where they are (a gust only lifts an edge). */
 export function leafMaterial(litter = false) {
   const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.42, side: THREE.DoubleSide});
-  addFoliage(m, {flexAttr: true, height: 0.06, translucency: 0.8, push: !litter, key: litter ? 'litter' : 'leaf'});
+  addFoliage(m, {flexAttr: true, rootAttr: !litter, height: 0.06, translucency: 0.8, push: !litter, key: litter ? 'litter' : 'leaf'});
   const base = m.onBeforeCompile;
   m.onBeforeCompile = (s, r) => {
     base(s, r);
@@ -508,6 +508,7 @@ export class Plants {
       }
       for (const p of local) {
         p.applyMatrix4(m);
+        setRoot(p, x, site.y, z);
         parts.push(p);
       }
       if (kind !== 'creeper') this.obstacles.push({x, z, r: 0.03 * s});

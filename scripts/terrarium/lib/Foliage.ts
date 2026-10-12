@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import {WIND_GLSL} from './WindField';
 import {TANK} from './Case';
 
+export const PUSHERS = 8;
+
 /** Shared shader hooks for plants: wind from the flow field, gust waves, flutter and thin-leaf translucency. */
 export const foliageUniforms = {
   uTime: {value: 0},
@@ -13,8 +15,13 @@ export const foliageUniforms = {
   tWind: {value: null as THREE.Texture | null},
   uWindBox: {value: new THREE.Vector4(-0.6, -0.25, 1.2, 0.5)},
   uGust: {value: new THREE.Vector3()},
-  /** Spheres (x, y, z, radius) that push foliage aside: the hand, then the lizard's head, chest, mid-body, hips and tail. */
-  uPush: {value: Array.from({length: 6}, () => new THREE.Vector4(0, -1, 0, 0))},
+  /**
+   * What pushes the foliage aside: capsules from (x, y, z, radius) to uPushB's
+   * (x, y, z, strength 0..1). The hand, then the lizard's head, body and tail,
+   * and the wake it leaves as the plants spring back.
+   */
+  uPush: {value: Array.from({length: PUSHERS}, () => new THREE.Vector4(0, -1, 0, 0))},
+  uPushB: {value: Array.from({length: PUSHERS}, () => new THREE.Vector4(0, -1, 0, 0))},
   /** Inner faces of the glass (half width, half depth), just inside the panes. */
   uGlass: {value: new THREE.Vector2(TANK.w / 2 - 0.004, TANK.d / 2 - 0.004)},
   /** Height of whatever lies on top (ground, stones, the log) over the tank, and its box. */
@@ -23,6 +30,13 @@ export const foliageUniforms = {
   /** The lamp (world), for the shadow lookup. */
   uFolKeyPos: {value: new THREE.Vector3(0, 1, 0)},
 };
+
+/** Every point of a part belongs to the plant rooted at (x, y, z): it leans with that plant when pushed. */
+export function setRoot(g: THREE.BufferGeometry, x: number, y: number, z: number) {
+  const n = g.attributes.position.count, a = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {a[i * 3] = x; a[i * 3 + 1] = y; a[i * 3 + 2] = z;}
+  g.setAttribute('aRoot', new THREE.BufferAttribute(a, 3));
+}
 
 /** Side veins running out from a leaf's midrib towards its tip (leaf uv: u along, v across -1..1). */
 export const PINNATE_GLSL = /* glsl */ `
@@ -56,7 +70,7 @@ vec3 foliageWind(vec3 root, float flex, float H, float phase, float stiff){
  * from an attribute; otherwise it comes from the local vertex height. `push:
  * false` is for things lying flat (fallen leaves), which nothing pushes aside.
  */
-export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?: number; translucency?: number; flexAttr?: boolean; phaseAttr?: boolean; stiffness?: number; push?: boolean; micro?: number; key: string}) {
+export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?: number; translucency?: number; flexAttr?: boolean; phaseAttr?: boolean; rootAttr?: boolean; stiffness?: number; push?: boolean; micro?: number; key: string}) {
   const height = opts.height ?? 0.3;
   const translucency = opts.translucency ?? 0.6;
   const stiff = opts.stiffness ?? 1;
@@ -65,11 +79,41 @@ export function addFoliage(material: THREE.MeshStandardMaterial, opts: {height?:
     Object.assign(s.uniforms, foliageUniforms);
     s.vertexShader = s.vertexShader
       .replace('#include <common>', `#include <common>
-uniform float uTime; uniform vec4 uPush[6]; uniform vec2 uGlass; uniform sampler2D tTop; uniform vec4 uTopBox; uniform vec3 uFolKeyPos;
+#define PUSHERS ${PUSHERS}
+uniform float uTime; uniform vec4 uPush[${PUSHERS}]; uniform vec4 uPushB[${PUSHERS}]; uniform vec2 uGlass; uniform sampler2D tTop; uniform vec4 uTopBox; uniform vec3 uFolKeyPos;
 ${opts.flexAttr ? 'attribute float aFlex;' : ''}
 ${opts.phaseAttr ? 'attribute float aPhase;' : ''}
+${opts.rootAttr ? 'attribute vec3 aRoot;' : ''}
 varying float vFlex; varying float vGust; varying vec3 vFolW; varying vec3 vFolRest;
 float foliageTop(vec2 xz){ return texture2D(tTop, clamp((xz - uTopBox.xy) / uTopBox.zw, 0.0, 1.0)).r; }
+// The push of everything parting the plants, read at \`at\` (xz) for a point at height
+// vw.y: k is how hard it pushes aside, downK how hard it presses down. The field is
+// smooth everywhere, so nothing a leaf can straddle tears it.
+vec3 folPush(vec2 at, vec3 vw, float k, float downK){
+  vec3 push = vec3(0.0);
+  for (int i = 0; i < PUSHERS; i++) {
+    vec4 p = uPush[i], q = uPushB[i];
+    if (p.w <= 0.0 || q.w <= 0.0) continue;
+    vec3 ab = q.xyz - p.xyz;
+    float l2 = dot(ab.xz, ab.xz);
+    float t = l2 > 1e-8 ? clamp(dot(at - p.xz, ab.xz) / l2, 0.0, 1.0) : 0.0;
+    vec3 c = p.xyz + ab * t;
+    vec2 d = at - c.xz;
+    float dy = vw.y - c.y;
+    float R = p.w * 1.35;
+    float r = length(d);
+    if (r >= R) continue;
+    float s = 1.0 - r / R;
+    // the part above the contact moves with it (fading well above it); below, toward the root, less
+    float vy = smoothstep(-2.2 * p.w, -0.3 * p.w, dy) * (1.0 - smoothstep(3.0 * p.w, 7.0 * p.w, dy));
+    // aside: from nothing at the centre to a peak a third of the way out, back to nothing at the rim
+    vec2 side = d * (k * s * s);
+    // pressed down under the body (not above it, where it would sink into it)
+    float down = -downK * p.w * s * s * (1.0 - smoothstep(-0.2 * p.w, p.w, dy));
+    push += vec3(side.x, down, side.y) * vy * q.w;
+  }
+  return push;
+}
 ${FOLIAGE_WIND_GLSL}`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
 {
@@ -95,18 +139,14 @@ ${FOLIAGE_WIND_GLSL}`)
   mat3 toLocal = inverse(mat3(toWorld));
   transformed += toLocal * bend;
   vw += bend;
-  // bend away from the lizard (and the hand) as they push through
-  vec3 push = vec3(0.0);
-  for (int i = 0; i < ${opts.push === false ? 0 : 6}; i++) {
-    vec4 p = uPush[i];
-    vec3 d = vw - p.xyz;
-    float dist = length(d.xz);
-    if (p.w > 0.0 && dist < p.w && d.y < p.w * 1.6 && d.y > -p.w * 2.5) {
-      vec2 away = dist > 1e-4 ? d.xz / dist : vec2(1.0, 0.0);
-      float k = (p.w - dist) / p.w;
-      push += vec3(away.x, -1.1 * k, away.y) * (p.w - dist) * 1.2;
-    }
-  }
+  // bend away from the lizard (and the hand) as they push through. Each plant
+  // leans as a whole: the push is read between its root and the point, so a
+  // leaf moves with its stem instead of being pulled apart, plus a little of
+  // the push right at the point to keep leaves out of the body.
+  vec3 folRootW = ${opts.rootAttr ? '(modelMatrix * vec4(aRoot, 1.0)).xyz' : (opts.flexAttr ? 'vw' : 'root')};
+  vec3 push = ${opts.push === false ? 'vec3(0.0)' : 'folPush(mix(folRootW.xz, vw.xz, 0.3), vw, 2.0, 0.45) + folPush(vw.xz, vw, 0.4, 0.0)'};
+  float pushLen = length(push.xz);
+  if (pushLen > 0.045) push.xz *= 0.045 / pushLen;
   transformed += toLocal * push * max(flex, 0.25);
   vec3 wf = vw + push * max(flex, 0.25);
   // the glass: a leaf that reaches it presses flat against it, never through it
@@ -242,5 +282,5 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.
   totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage11-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage13-${opts.key}`;
 }

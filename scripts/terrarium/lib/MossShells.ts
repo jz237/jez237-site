@@ -67,7 +67,7 @@ export class MossShells {
       s.vertexShader = s.vertexShader
         .replace('#include <common>', `${ROCK}#include <common>
 uniform float uShells, uHeight, uTime; uniform sampler2D tMoss; uniform vec2 uTank; uniform vec4 uPress;
-varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust;
+varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust; varying vec3 vMN;
 #ifdef ROCK_MOSS
 attribute float aCov;
 #endif
@@ -76,6 +76,7 @@ ${WIND_GLSL}`)
 {
   float sh = float(gl_InstanceID) / (uShells - 1.0);
   vShell = sh;
+  vMN = objectNormal;
   #ifdef ROCK_MOSS
   float mm = aCov;
   #else
@@ -111,7 +112,7 @@ gl_Position = projectionMatrix * mvPosition;`);
         .replace('#include <common>', `${ROCK}#include <common>
 uniform float uWet;
 uniform sampler2D tMoss; uniform vec2 uTank;
-varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust;
+varying float vShell; varying vec3 vMW; varying float vMossH; varying float vMoss; varying float vGust; varying vec3 vMN;
 float mh(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 vec2 mh2(vec2 p){ return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453); }
 float mn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(mh(i), mh(i+vec2(1,0)), f.x), mix(mh(i+vec2(0,1)), mh(i+vec2(1,1)), f.x), f.y); }`)
@@ -121,27 +122,37 @@ float mossF = vMoss;
 #else
 float mossF = texture2D(tMoss, vMW.xz / uTank + 0.5).r;
 #endif
+// The strands stand on a grid laid in the plane the surface faces most (on the
+// flank of the log or a stone a grid in x, z would smear into stripes).
+vec3 mAn = abs(vMN);
+vec2 mP = mAn.y >= max(mAn.x, mAn.z) ? vMW.xz : (mAn.x > mAn.z ? vMW.zy : vMW.xy);
+// Seen almost edge-on, stacked shells show as stripes, not fuzz: only the
+// lower layers are drawn there.
+float mNdv = abs(dot(normalize(vNormal), normalize(vViewPosition)));
+if (vShell > 0.3 + 0.7 * smoothstep(0.06, 0.32, mNdv)) discard;
 // Edges come from the moss map per pixel (not per triangle), so they stay organic.
-float edgeN = mh(floor(vMW.xz * 1900.0));
+float edgeN = mh(floor(mP * 1900.0));
 float coverage = smoothstep(0.05, 0.5, mossF);
 if (mossF < 0.06 + 0.1 * edgeN || coverage < vShell * (0.85 + 0.3 * edgeN)) discard;
-vec2 sp = vMW.xz * 1900.0;
+vec2 sp = mP * 1900.0;
 vec2 ci = floor(sp), cf = fract(sp);
 vec2 jit = mh2(ci);
 float strandH = 0.3 + 0.7 * mh(ci + 3.7) * mh(ci + 1.3);
 // strand thins toward its tip
-float r = length(cf - (0.25 + 0.5 * jit)) / 0.5;
+// each strand leans its own way and curls a little toward its tip
+vec2 lean = (mh2(ci + 5.3) - 0.5) * 0.55 * vShell + (mh2(ci + 9.1) - 0.5) * 0.25 * vShell * vShell;
+float r = length(cf - (0.25 + 0.5 * jit) - lean) / 0.5;
 float keep = strandH - vShell;
 if (vShell > 0.02 && (keep < 0.0 || r > 0.95 * (1.0 - vShell / strandH * 0.8))) discard;
 float tipLight = smoothstep(0.0, 1.0, vShell);`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 {
-  float hue = mn(vMW.xz * 60.0);
+  float hue = mn(mP * 60.0);
   // several species side by side: yellow-green sheet moss, deep green cushions, pale blue-grey Leucobryum
-  float sp = mn(vMW.xz * 14.0 + 7.0);
+  float sp = mn(mP * 14.0 + 7.0);
   vec3 deep = vec3(0.012, 0.02, 0.006);
   vec3 midC = mix(vec3(0.07, 0.15, 0.02), vec3(0.13, 0.21, 0.025), hue);
-  vec3 tip = mix(vec3(0.2, 0.34, 0.04), vec3(0.36, 0.42, 0.07), mn(vMW.xz * 220.0) * 0.7 + mn(vMW.xz * 31.0) * 0.3);
+  vec3 tip = mix(vec3(0.2, 0.34, 0.04), vec3(0.36, 0.42, 0.07), mn(mP * 220.0) * 0.7 + mn(mP * 31.0) * 0.3);
   tip = mix(tip, vec3(0.09, 0.2, 0.035), smoothstep(0.6, 0.72, sp));
   tip = mix(tip, vec3(0.16, 0.21, 0.14), smoothstep(0.78, 0.9, sp));
   midC = mix(midC, vec3(0.05, 0.11, 0.022), smoothstep(0.6, 0.72, sp));
@@ -160,7 +171,7 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
 }
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => ROCK ? 'moss-shells-rock-v2' : 'moss-shells-v4';
+    m.customProgramCacheKey = () => ROCK ? 'moss-shells-rock-v3' : 'moss-shells-v5';
     const mesh = new THREE.InstancedMesh(g, m, shells);
     const I = new THREE.Matrix4();
     for (let i = 0; i < shells; i++) mesh.setMatrixAt(i, I);
@@ -206,10 +217,13 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
         const px = x + Math.cos(ang) * rr, pz = z + Math.sin(ang) * rr;
         const h = hitAt(px, pz, c.p.y + 0.03);
         const k = r === RINGS ? 0 : 1 - (r / RINGS) * (0.5 + 0.4 * rnd());
-        if (!h || Math.abs(h.p.y - c.p.y) > R * 2) {
-          // over an edge: the patch thins out there, lying where the ledge would be
+        if (!h || Math.abs(h.p.y - c.p.y) > R * 0.8 || h.n.y < 0.55) {
+          // over an edge: the patch ends at the edge (the last point on the stone,
+          // bare), rather than hanging out over the drop as a curtain of moss
           misses++;
-          pts.push({p: new THREE.Vector3(px, c.p.y - rr * 0.3, pz), n: c.n, k: 0});
+          const prev = r === 1 ? pts[0] : pts[1 + (r - 2) * SEG + a];
+          pts.push({p: prev.p.clone(), n: prev.n, k: 0});
+          if (r > 1) prev.k = 0;
         } else pts.push({p: h.p, n: h.n, k});
       }
       if (misses > SEG * 1.5) continue;
@@ -231,6 +245,16 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
     g.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3));
     g.setAttribute('aCov', new THREE.Float32BufferAttribute(cov, 1));
     g.setIndex(idx);
+    // the shells stand off the patch's own surface (on a sloping shoulder, not
+    // straight up from it), facing the same side as the stone
+    const given = (g.attributes.normal as THREE.BufferAttribute).clone();
+    g.computeVertexNormals();
+    const nA = g.attributes.normal as THREE.BufferAttribute;
+    for (let i = 0; i < nA.count; i++) {
+      const d = nA.getX(i) * given.getX(i) + nA.getY(i) * given.getY(i) + nA.getZ(i) * given.getZ(i);
+      if (!(Math.hypot(nA.getX(i), nA.getY(i), nA.getZ(i)) > 0.5)) nA.setXYZ(i, given.getX(i), given.getY(i), given.getZ(i));
+      else if (d < 0) nA.setXYZ(i, -nA.getX(i), -nA.getY(i), -nA.getZ(i));
+    }
     return g;
   }
 

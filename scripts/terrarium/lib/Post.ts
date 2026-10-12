@@ -19,6 +19,7 @@ const dofShader = {
     tColor: {value: null as THREE.Texture | null},
     tDepth: {value: null as THREE.Texture | null},
     tCloud: {value: null as THREE.Texture | null},
+    tFocus: {value: null as THREE.Texture | null},
     uUseCloud: {value: 0},
     uPixel: {value: new THREE.Vector2()},
     uNear: {value: 0.01}, uFar: {value: 20},
@@ -27,8 +28,9 @@ const dofShader = {
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
   fragmentShader: /* glsl */ `
 precision highp float;
-uniform sampler2D tColor; uniform sampler2D tDepth; uniform sampler2D tCloud; uniform vec2 uPixel;
+uniform sampler2D tColor; uniform sampler2D tDepth; uniform sampler2D tCloud; uniform sampler2D tFocus; uniform vec2 uPixel;
 uniform float uNear, uFar, uFocus, uAperture, uMaxBlur, uUseCloud;
+float focusD, apertureK;
 varying vec2 vUv;
 float linDepth(vec2 uv){
   float z = texture2D(tDepth, uv).x * 2.0 - 1.0;
@@ -42,9 +44,13 @@ float linDepth(vec2 uv){
   }
   return d;
 }
-float coc(float d){ return clamp((1.0 / uFocus - 1.0 / d) * uAperture, -1.0, 1.0) * uMaxBlur; }
+float coc(float d){ return clamp((1.0 / focusD - 1.0 / d) * apertureK, -1.0, 1.0) * uMaxBlur; }
 const float GOLDEN = 2.39996323;
 void main(){
+  // (uFocus < 0: autofocus; a macro lens close up still keeps its subject sharp,
+  // so the aperture narrows as the focus comes in)
+  focusD = uFocus > 0.0 ? uFocus : max(texture2D(tFocus, vec2(0.5)).r, 0.02);
+  apertureK = uAperture * min(1.0, pow(focusD / 0.6, 1.2));
   float cd = linDepth(vUv);
   float cs = abs(coc(cd));
   vec3 col = texture2D(tColor, vUv).rgb;
@@ -65,6 +71,47 @@ void main(){
     ang += GOLDEN;
   }
   gl_FragColor = vec4(col / tot, 1.0);
+}`,
+};
+
+// Autofocus: like a camera's, it focuses on what is in the middle of the
+// picture (the median depth of a small grid there, so a stray leaf edge
+// doesn't grab it), easing there over a moment. One pixel, kept on the GPU.
+const focusShader = {
+  uniforms: {
+    tDepth: {value: null as THREE.Texture | null},
+    tPrev: {value: null as THREE.Texture | null},
+    tCloud: {value: null as THREE.Texture | null},
+    uUseCloud: {value: 0},
+    uNear: {value: 0.01}, uFar: {value: 20}, uRate: {value: 1}, uAspect: {value: 1},
+  },
+  vertexShader: `void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+  fragmentShader: /* glsl */ `
+precision highp float;
+uniform sampler2D tDepth; uniform sampler2D tPrev; uniform sampler2D tCloud; uniform float uNear, uFar, uRate, uAspect, uUseCloud;
+float linDepth(vec2 uv){
+  float z = texture2D(tDepth, uv).x * 2.0 - 1.0;
+  float d = 2.0 * uNear * uFar / (uFar + uNear - z * (uFar - uNear));
+  // (a cloud in front counts, as it does for the blur)
+  if (uUseCloud > 0.5) {
+    vec4 c = texture2D(tCloud, uv);
+    if (c.a > 0.02) d = mix(d, min(d, c.r / c.a), smoothstep(0.08, 0.5, c.a));
+  }
+  return d;
+}
+void main(){
+  float d[9];
+  for (int j = 0; j < 3; j++) for (int i = 0; i < 3; i++) {
+    vec2 o = vec2(float(i - 1), float(j - 1)) * vec2(0.05 / uAspect, 0.05);
+    d[j * 3 + i] = linDepth(vec2(0.5) + o);
+  }
+  // median of nine (a partial insertion sort)
+  for (int i = 1; i < 9; i++) for (int k = 8; k > 0; k--) if (k <= i && d[k] < d[k - 1]) { float t = d[k]; d[k] = d[k - 1]; d[k - 1] = t; }
+  float target = clamp(d[4], uNear * 4.0, 6.0);
+  // eased in diopters (1/m), as a lens racks focus
+  float prev = texture2D(tPrev, vec2(0.5)).r;
+  float f = prev > 0.0 ? 1.0 / mix(1.0 / prev, 1.0 / target, uRate) : target;
+  gl_FragColor = vec4(f, 0.0, 0.0, 1.0);
 }`,
 };
 
@@ -187,6 +234,11 @@ export class Post {
   private gtao: GTAOPass;
   private bloom: UnrealBloomPass;
   private dofQuad = new FullScreenQuad(new THREE.ShaderMaterial(dofShader));
+  private focusQuad = new FullScreenQuad(new THREE.ShaderMaterial(focusShader));
+  private focusRT = [0, 1].map(() => new THREE.WebGLRenderTarget(1, 1, {type: THREE.HalfFloatType, depthBuffer: false, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter}));
+  private focusI = 0;
+  private lastTime = -1;
+  private lastCam = {pos: new THREE.Vector3(), quat: new THREE.Quaternion()};
   private finalQuad = new FullScreenQuad(new THREE.ShaderMaterial(finalShader));
   private aoMulQuad = new FullScreenQuad(new THREE.ShaderMaterial({
     ...aoMulShader, depthTest: false, depthWrite: false, transparent: true,
@@ -194,7 +246,8 @@ export class Post {
     blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor,
   }));
   private cleanQuad = new FullScreenQuad(new THREE.ShaderMaterial(cleanShader));
-  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.16, focus: 1.5, aperture: 0.6, maxBlur: 9};
+  /** `focus` is a fixed distance (m), or 0 for autofocus on the middle of the picture. */
+  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.16, focus: 0, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
 
   constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera, samples = 4) {
@@ -309,9 +362,28 @@ export class Post {
       m.uniforms.tDepth.value = this.sceneRT.depthTexture;
       m.uniforms.uNear.value = this.camera.near;
       m.uniforms.uFar.value = this.camera.far;
-      m.uniforms.uFocus.value = s.focus;
-      // a macro lens at a few centimetres still keeps the subject in focus: scale the aperture with the focus distance
-      m.uniforms.uAperture.value = s.aperture * Math.min(1, Math.pow(s.focus / 0.6, 1.2));
+      if (s.focus <= 0) {
+        const fq = this.focusQuad.material as THREE.ShaderMaterial;
+        const dt = this.lastTime < 0 ? 1 : Math.min(0.25, Math.max(0, time - this.lastTime));
+        fq.uniforms.tDepth.value = this.sceneRT.depthTexture;
+        fq.uniforms.tPrev.value = this.focusRT[this.focusI].texture;
+        fq.uniforms.uNear.value = this.camera.near;
+        fq.uniforms.uFar.value = this.camera.far;
+        fq.uniforms.uAspect.value = this.width / this.height;
+        fq.uniforms.tCloud.value = this.cloudRT.texture;
+        fq.uniforms.uUseCloud.value = m.uniforms.uUseCloud.value;
+        // (a cut, or the camera thrown somewhere new: focus at once)
+        const jumped = this.camera.position.distanceTo(this.lastCam.pos) > 0.05 || this.camera.quaternion.angleTo(this.lastCam.quat) > 0.3;
+        this.lastCam.pos.copy(this.camera.position); this.lastCam.quat.copy(this.camera.quaternion);
+        fq.uniforms.uRate.value = this.lastTime < 0 || jumped ? 1 : 1 - Math.exp(-dt * 7);
+        this.focusI = 1 - this.focusI;
+        r.setRenderTarget(this.focusRT[this.focusI]);
+        this.focusQuad.render(r);
+        m.uniforms.tFocus.value = this.focusRT[this.focusI].texture;
+      }
+      this.lastTime = time;
+      m.uniforms.uFocus.value = s.focus > 0 ? s.focus : -1;
+      m.uniforms.uAperture.value = s.aperture;
       m.uniforms.uMaxBlur.value = s.maxBlur * (this.height / 1080) * 1.4;
       const target = color === this.bRT ? this.aRT : this.bRT;
       r.setRenderTarget(target);

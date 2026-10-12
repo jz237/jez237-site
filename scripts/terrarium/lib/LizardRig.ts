@@ -328,6 +328,13 @@ export class LizardRig {
       this.bodyY = damp(this.bodyY, targetY, 9, dt);
       this.bodyPitch = damp(this.bodyPitch, pitch, 7, dt);
       this.bodyRoll = damp(this.bodyRoll, roll, 6, dt);
+      // the smoothing never lets the chest or hips lag down into a bank it is
+      // climbing (a low rise under them, not a wall it keeps off)
+      if (this.initialised) {
+        const sp = Math.sin(this.bodyPitch), belly = (1.05 + 0.1) * K;
+        if (c - mid < 0.03) this.bodyY = Math.max(this.bodyY, c + belly - 0.04 * sp);
+        if (p - mid < 0.03) this.bodyY = Math.max(this.bodyY, p + belly + 0.035 * sp);
+      }
     }
     const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
     // a lunge throws the whole body forward on its planted feet, as a real dragon
