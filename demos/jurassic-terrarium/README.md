@@ -30,6 +30,11 @@ How they move and what's around them:
 - The front pool has eelgrass meadows streaming in the current and stones on its bed.
 - Mossy boulders line the pool's bank.
 - The case sits in a warm, lamplit study, softly out of focus (backdrop built from a generated photo).
+- Feet plant on the real ground on slopes and banks (two-bone leg IK), and chests rise and fall with breathing; an animal that has just run pants.
+- The Pteranodons now and then dive to the pool, skim the surface and snatch a fish, leaving rings on the water.
+- The Brachiosaurus crops tree-fern crowns, bowing its neck into lower ones; torn fronds tumble down.
+- When the T. rex roars, the planting round it shivers and every herbivore within earshot turns to look.
+- Babbling water at the cascades, cicadas by day and frogs by the pool at night; a lantern glows at the end of the jetty.
 
 ## How the dinosaurs are made
 

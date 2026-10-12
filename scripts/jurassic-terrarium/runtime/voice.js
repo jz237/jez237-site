@@ -190,6 +190,25 @@ export class Voices {
         for (let i = 0; i < 2; i++)
           this.growl(e, out, t0 + i * 0.32, 0.26, 420, 300, { formants: [900, 2100], rasp: 0.9, vib: 25, level: 0.9 });
         break;
+      case 'splash': // a pterosaur's beak hitting the water: a slap, a spray and a low plop
+        {
+          const s = this.noiseSrc(ac, t0, t0 + 0.5);
+          const g = this.env(ac, t0, 0.004, 0.03, 0.3, 0.8);
+          s.connect(this.bp(ac, 1500, 0.8)).connect(g).connect(out);
+          const o = this.osc(ac, 'sine', 320, t0, t0 + 0.25);
+          o.frequency.exponentialRampToValueAtTime(110, t0 + 0.2);
+          const og = this.env(ac, t0, 0.005, 0.02, 0.15, 0.5);
+          o.connect(og).connect(out);
+        }
+        break;
+      case 'crop': // a sauropod stripping fronds: a few dry tears and crackles
+        for (let i = 0; i < 3; i++) {
+          const t = t0 + i * (0.08 + Math.random() * 0.06);
+          const s = this.noiseSrc(ac, t, t + 0.12);
+          const g = this.env(ac, t, 0.003, 0.02, 0.07, 0.35);
+          s.connect(this.bp(ac, 2400 + Math.random() * 1500, 1.2)).connect(g).connect(out);
+        }
+        break;
       case 'step':
         this.thump(e, out, t0, 48 / Math.sqrt(size), Math.min(1, 0.25 * size), 0.3);
         break;

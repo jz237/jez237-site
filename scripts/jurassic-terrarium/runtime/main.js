@@ -4,7 +4,7 @@
 // own loop (after the vegetation and wildlife, before the clouds). Models are rigged GLBs built in
 // Blender (scripts/jurassic-terrarium/blender); each comes with a JSON sidecar describing its size,
 // gait speeds and clips.
-import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils } from 'three';
+import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -13,9 +13,12 @@ import { Guide } from './ui.js';
 import { Flora } from './flora.js';
 import { Voices } from './voice.js';
 import { Flex } from './flex.js';
+import { Feet } from './feet.js';
 import { Lamps } from './lamps.js';
 import { Aquatic } from './aquatic.js';
 import { Room } from './room.js';
+import { Effects } from './effects.js';
+import { Ambience } from './ambience.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -122,6 +125,10 @@ class Dino {
     this.length = info.length * S;
     this.height = (info.height || 3) * S;
     this.flex = new Flex(this.model, { flex: sp.flex ?? 1 });
+    this.feet = new Feet(this.model, this.root, mod.ctx.terrain);
+    this.model.traverse((o) => o.isBone && o.name === 'head' && (this.headBone = o));
+    // where the head is at the height of a browse (measured on the clip once): up and forward of the feet
+    if (this.actions.browse && this.headBone) this.browseReach = this.measureReach('browse');
     // the hips and the chest press the ferns aside as the animal pushes through
     this.pushBones = [this.flex.spine[this.flex.spine.length - 1], null].filter(Boolean);
     this.model.traverse((o) => o.isBone && o.name === 'pelvis' && this.pushBones.unshift(o));
@@ -215,6 +222,7 @@ class Dino {
     if (!a) return false;
     const snd = this.sp.sounds?.[name];
     if (snd) this.mod.voice.play(snd, this.root.position, this.sp.step || 1);
+    if (name === 'roar' && this.sp.predator) this.mod.roared(this);
     this.state = 'oneshot';
     this.play(name, fade);
     this.timer = a.getClip().duration - fade * 0.5;
@@ -319,6 +327,34 @@ class Dino {
     this.finish(dt);
   }
 
+  measureReach(name) {
+    const a = this.actions[name], clip = a.getClip();
+    const p = new Vector3();
+    this.root.position.set(0, 0, 0);
+    this.root.rotation.set(0, 0, 0);
+    a.reset().play();
+    a.setEffectiveWeight(1);
+    this.mixer.setTime(clip.duration * 0.5);
+    this.root.updateMatrixWorld(true);
+    this.headBone.getWorldPosition(p);
+    a.stop();
+    this.mixer.setTime(0);
+    return { up: p.y, fwd: Math.hypot(p.x, p.z) };
+  }
+
+  // cropping fronds: a bite every second or so through the middle of the browse
+  crop(dt) {
+    if (this.currentName !== 'browse' || this.cropT === undefined) return;
+    this.cropT -= dt;
+    const a = this.current, d = a.getClip().duration;
+    if (this.cropT <= 0 && a.time > 1.5 && a.time < d - 1.5) {
+      this.cropT = 0.9 + rand() * 0.8;
+      const p = this.headBone.getWorldPosition(new Vector3());
+      this.mod.effects.leafBurst(p, 3 + Math.floor(rand() * 4));
+      this.mod.voice.play('crop', p, 1);
+    }
+  }
+
   finish(dt) {
     this.place();
     this.mixer.update(dt);
@@ -335,7 +371,10 @@ class Dino {
         calm: moving ? 0.35 : this.state === 'sleep' ? 0.15 : 1,
         gait: this.gaitWave(),
       });
+      // feet onto the real ground (not while lying down), and breathing
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' });
     }
+    this.crop(dt);
     this.sounds(dt);
   }
 
@@ -353,6 +392,8 @@ class Dino {
   lookTarget(dt) {
     const mod = this.mod;
     let tgt = null;
+    // browsing a lower crown: the neck bows down into it
+    if (this.currentName === 'browse' && this.browseDip) return { yaw: 0, pitch: this.browseDip, maxPitch: 1.2 };
     if (this.state === 'sleep' || this.state === 'oneshot') return null;
     if (this.sp.predator && this.prey) tgt = this.prey;
     else if (!this.sp.predator && mod.predator) {
@@ -474,6 +515,8 @@ class Dino {
       if (tree && this.goTo(tree.x, tree.z, () => {
         this.heading = Math.atan2(tree.tx - this.pos.x, tree.tz - this.pos.z);
         this.oneShot('browse');
+        this.cropT = 1.6; // first bite once the neck is up
+        this.browseDip = tree.dip || 0;
       })) return;
       this.oneShot('browse') || (this.timer = 1);
     } else if (!this.oneShot(kind)) this.timer = 1;
@@ -627,7 +670,97 @@ class Flyer {
     this.pos.y = this.y;
   }
 
+  // ------------------------------------------------------------ fishing
+  // Now and then a Pteranodon leaves its circuit, glides down to the pool, skims the surface and snatches
+  // a fish, then climbs away with it and rejoins the circuit. The dive is two Bezier legs (down to the
+  // water, up and away) whose route is checked against the terrain before it commits.
+  planDive() {
+    const T = this.mod.ctx.terrain, box = this.box;
+    let target = null;
+    for (let i = 0; i < 60 && !target; i++) {
+      const x = 0.8 + rand() * 3.8, z = 1.3 + rand() * 1.9;
+      if (T.lakeMask(x, z) > 0.9 && T.height(x, z) < -0.2 && z < box.halfD - 0.6) target = new Vector3(x, 0.07, z);
+    }
+    if (!target) return false;
+    const p0 = this.pos.clone();
+    const fwd = new Vector3(Math.sin(this.heading), 0, Math.cos(this.heading));
+    const app = target.clone().sub(p0).setY(0);
+    const dist = app.length();
+    if (dist < 2.2) return false;
+    app.normalize();
+    const exitDir = app.clone().lerp(fwd, 0.3).normalize();
+    const legs = [
+      [p0, p0.clone().addScaledVector(fwd, dist * 0.35), target.clone().addScaledVector(app, -1.1).setY(0.25), target],
+      [target, target.clone().addScaledVector(exitDir, 0.7).setY(0.1), target.clone().addScaledVector(exitDir, 1.6).setY(1.1),
+        target.clone().addScaledVector(exitDir, 2.6).setY(2.3)],
+    ];
+    // the whole route must clear the ground (except the water it skims) and stay inside the glass
+    const q = new Vector3();
+    for (const L of legs) {
+      for (let i = 1; i < 20; i++) {
+        bez(L, i / 20, q);
+        if (Math.abs(q.x) > box.halfW - 0.7 || Math.abs(q.z) > box.halfD - 0.45) return false;
+        const g = T.height(q.x, q.z);
+        if (q.y < Math.max(g, 0) + (q.distanceTo(target) < 0.5 ? 0.03 : 0.2)) return false;
+      }
+    }
+    this.dive = { legs, leg: 0, u: 0, target, lens: legs.map((L) => bezLen(L)) };
+    this.state = 'dive';
+    return true;
+  }
+
+  diveStep(dt) {
+    const D = this.dive;
+    const speed = D.leg === 0 ? 1.15 : 0.85;
+    D.u += (dt * speed) / D.lens[D.leg];
+    if (D.u >= 1) {
+      if (D.leg === 0) {
+        D.leg = 1;
+        D.u = 0;
+        this.mod.effects.splash(D.target.x, D.target.z, 0, 1);
+        this.mod.voice.play('splash', D.target, 1);
+        this.catchFish();
+      } else {
+        // rejoin the circuit from wherever the climb ended
+        this.state = 'rejoin';
+        this.rejoin = { from: this.pos.clone(), vel: this.pos.clone().sub(this.prev).divideScalar(Math.max(dt, 1e-3)), t: 0 };
+        this.y = this.pos.y;
+        this.dive = null;
+        return;
+      }
+    }
+    bez(D.legs[D.leg], Math.min(1, D.u), this.pos);
+  }
+
+  catchFish() {
+    if (!this.headBone) this.model.traverse((o) => o.isBone && o.name === 'jaw' && (this.headBone = o));
+    if (!this.headBone) return;
+    if (!this.fish) {
+      this.fish = new Mesh(new SphereGeometry(1, 10, 6), new MeshStandardMaterial({ color: 0xc9d4d8, metalness: 0.6, roughness: 0.3 }));
+      this.fish.name = 'pteranodon-fish';
+    }
+    // held crosswise in the beak; the bone is in the model's (scaled) space
+    const k = 1 / S;
+    this.fish.scale.set(0.006 * k, 0.005 * k, 0.022 * k);
+    this.fish.position.set(0, 0.03 * k, 0.05 * k);
+    this.fish.rotation.set(0, Math.PI / 2, 0);
+    this.headBone.add(this.fish);
+    this.fishHold = 3.5;
+  }
+
   update(dt, env) {
+    if (this.fishHold !== undefined) {
+      this.fishHold -= dt;
+      if (this.fishHold <= 0) {
+        this.fish?.removeFromParent(); // swallowed
+        this.fishHold = undefined;
+        this.mod.voice.play('croak', this.root.position);
+      }
+    }
+    this.fishT = (this.fishT ?? 18 + rand() * 25) - dt;
+    if (this.state === 'fly' && this.fishT <= 0) {
+      this.fishT = this.planDive() ? 40 + rand() * 40 : 6;
+    }
     // drift the circuit around the case now and then
     this.retarget -= dt;
     if (this.retarget < 0) {
@@ -640,16 +773,27 @@ class Flyer {
     const rMean = (this.rx + this.rz) / 2;
     this.a += (this.dir * this.speed * dt) / rMean;
     this.prev.copy(this.pos);
-    const y0 = this.y ?? 0;
-    this.place(dt);
+    const y0 = this.state === 'fly' ? this.y ?? 0 : this.pos.y;
+    if (this.state === 'dive') this.diveStep(dt);
+    else if (this.state === 'rejoin') {
+      const R = this.rejoin;
+      R.t += dt;
+      const from = R.from.clone().addScaledVector(R.vel, Math.min(R.t, 3) * 0.6);
+      this.place(dt);
+      const k = Math.min(1, R.t / 3.5), e = k * k * (3 - 2 * k);
+      this.pos.lerpVectors(from, this.pos.clone(), e);
+      if (k >= 1) this.state = 'fly';
+    } else this.place(dt);
+    if (this.state !== 'fly') this.y = this.state === 'rejoin' ? this.y : this.pos.y;
     const v = this.pos.clone().sub(this.prev);
     if (dt > 0 && v.lengthSq() > 1e-10) {
       const h = Math.atan2(v.x, v.z);
       let dh = Math.atan2(Math.sin(h - this.heading), Math.cos(h - this.heading));
       this.heading += dh;
       const turn = dh / Math.max(dt, 1e-3);
-      this.roll += (MathUtils.clamp(-turn * 0.9, -0.6, 0.6) - this.roll) * Math.min(1, dt * 2);
-      const climb = (this.y - y0) / Math.max(dt, 1e-3);
+      const bank = this.state === 'fly' ? 0.6 : 0.3; // a shallow bank on the dive's long curve
+      this.roll += (MathUtils.clamp(-turn * 0.9, -bank, bank) - this.roll) * Math.min(1, dt * 2);
+      const climb = (this.pos.y - y0) / Math.max(dt, 1e-3);
       this.pitch += (MathUtils.clamp(-climb * 0.8, -0.3, 0.3) - this.pitch) * Math.min(1, dt * 2);
       // flap when climbing, or in short bursts to hold speed
       this.flapT -= dt;
@@ -689,6 +833,9 @@ class Dinosaurs {
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
     this.room = params.get('room') === '0' ? null : new Room(ctx, new URL('models/room.webp', document.baseURI).href);
+    this.effects = new Effects(ctx);
+    this.ambience = new Ambience(ctx, this.voice);
+    this.timers = [];
     this.nav = new NavGrid(ctx, {
       obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || [])],
       rects: [
@@ -763,8 +910,66 @@ class Dinosaurs {
     return best ? { ...best, water: true } : null;
   }
 
-  // stand beside a tall tree to browse it
+  later(t, fn) {
+    this.timers.push({ t, fn });
+  }
+
+  // the T. rex roars: the planting round it shivers and every herbivore in earshot turns to look; the
+  // nearest ones start up in alarm
+  roared(rex) {
+    const p = rex.pos;
+    this.later(0.4, () => this.flora.shiver(p.x, p.z, 1.8, 1));
+    for (const d of this.walkers || []) {
+      if (d === rex || d.sp.predator || d.state === 'sleep') continue;
+      const dd = Math.hypot(d.pos.x - p.x, d.pos.z - p.z);
+      if (dd > 5) continue;
+      this.later(0.35 + dd * 0.08 + rand() * 0.2, () => {
+        d.glance = rex;
+        d.glanceUntil = 2.5 + rand();
+        d.glanceT = 4 + rand() * 2;
+        if (dd < 3 && (d.state === 'idle' || d.state === 'walk') && d.actions.alert && rand() < 0.7) {
+          d.heading = Math.atan2(p.x - d.pos.x, p.z - d.pos.z) * 0.3 + d.heading * 0.7;
+          d.oneShot('alert');
+        }
+      });
+    }
+  }
+
+  // stand where a browsing head reaches into a tree-fern crown at the height it feeds
   nearTree(d) {
+    const reach = d.browseReach;
+    const ferns = (this.flora.placements.treefern || []).filter((t) => t.top);
+    if (reach && ferns.length) {
+      ferns.sort((a, b) => Math.hypot(a.x - d.pos.x, a.z - d.pos.z) - Math.hypot(b.x - d.pos.x, b.z - d.pos.z));
+      const T = this.ctx.terrain, half = d.length * 0.25;
+      for (const t of ferns.slice(0, 12)) {
+        for (let i = 0; i < 10; i++) {
+          const ang = (i / 10) * Math.PI * 2 + rand() * 0.3;
+          const cx = Math.cos(ang), cz = Math.sin(ang);
+          // on a slope the body pitches (as place() does), which lifts the head and pulls it back:
+          // settle the stand-off distance so the head ends up over the trunk
+          let D = reach.fwd, x = 0, z = 0, headY = 0;
+          for (let k = 0; k < 3; k++) {
+            x = t.x + cx * D;
+            z = t.z + cz * D;
+            const hf = T.height(x - cx * half, z - cz * half), hb = T.height(x + cx * half, z + cz * half);
+            const th = Math.atan2(hf - hb, 2 * half) * 0.6; // nose up when the tree side is higher
+            D = Math.max(0.5, reach.fwd * Math.cos(th) - reach.up * Math.sin(th));
+            headY = Math.min(T.height(x, z), (hf + hb) / 2) + reach.up * Math.cos(th) + reach.fwd * Math.sin(th);
+          }
+          if (!d.layer.walkable(x, z) || !d.clearOfGlass(x, z)) continue;
+          // into the fronds, just under the top; a crown that is lower is reached by dipping the neck
+          const err = headY - (t.top - 0.12);
+          if (err < -0.3 || err > 0.85) continue;
+          return { x, z, tx: t.x, tz: t.z, fern: t, dip: Math.max(0, Math.min(1.2, err / 0.6)) };
+        }
+      }
+    }
+    return this.nearPine(d);
+  }
+
+  // Weatherglass's own conifers, when no tree fern fits
+  nearPine(d) {
     const trees = (this.ctx.modules.vegetation?.trees || []).filter((t) => t.height > 0.6);
     if (!trees.length) return null;
     trees.sort((a, b) => Math.hypot(a.x - d.pos.x, a.z - d.pos.z) - Math.hypot(b.x - d.pos.x, b.z - d.pos.z));
@@ -773,7 +978,7 @@ class Dinosaurs {
         const ang = (i / 8) * Math.PI * 2;
         const r = t.radius + d.length * 0.45;
         const x = t.x + Math.cos(ang) * r, z = t.z + Math.sin(ang) * r;
-        if (d.layer.walkable(x, z)) return { x, z, tx: t.x, tz: t.z };
+        if (d.layer.walkable(x, z) && d.clearOfGlass(x, z)) return { x, z, tx: t.x, tz: t.z };
       }
     }
     return null;
@@ -791,6 +996,15 @@ class Dinosaurs {
     const env = this.env();
     this.flora.update(dt);
     this.aquatic?.update(dt);
+    this.effects.update(dt, env);
+    this.ambience.update(dt, env);
+    for (let i = this.timers.length - 1; i >= 0; i--) {
+      const T = this.timers[i];
+      if ((T.t -= dt) <= 0) {
+        this.timers.splice(i, 1);
+        T.fn();
+      }
+    }
     // bodies that push the planting aside: hips and chest of every walker
     const pushers = [];
     for (const d of this.walkers || []) {
@@ -799,11 +1013,39 @@ class Dinosaurs {
         pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: d.pushR });
       }
     }
+    // a browsing head pushes into the crown it is cropping
+    for (const d of this.walkers || []) {
+      if (d.currentName !== 'browse' || !d.headBone) continue;
+      d.headBone.getWorldPosition(this._pv);
+      pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: 0.2 });
+    }
     this.flora.setPushers(pushers);
     this.lamps?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.guide?.update(dt);
   }
+}
+
+// cubic Bezier through four points
+function bez([a, b, c, d], t, out) {
+  const u = 1 - t;
+  return out
+    .copy(a).multiplyScalar(u * u * u)
+    .addScaledVector(b, 3 * u * u * t)
+    .addScaledVector(c, 3 * u * t * t)
+    .addScaledVector(d, t * t * t);
+}
+
+function bezLen(P) {
+  let len = 0;
+  const a = new Vector3(), b = new Vector3();
+  bez(P, 0, a);
+  for (let i = 1; i <= 24; i++) {
+    bez(P, i / 24, b);
+    len += a.distanceTo(b);
+    a.copy(b);
+  }
+  return len;
 }
 
 function mulberry32(a) {

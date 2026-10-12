@@ -8,6 +8,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 const UP = new Vector3(0, 1, 0);
+const _top = new Vector3();
+
 const JUNGLE = {
   grass: new Color(0x1c3614).convertSRGBToLinear(),
   dry: new Color(0x3e4424).convertSRGBToLinear(),
@@ -28,6 +30,8 @@ export class Flora {
       uTint: { value: new Color(1, 1, 1) },
       // bodies pushing through the planting: xyz centre, w radius (after the reptile terrarium's Foliage.ts)
       uPush: { value: Array.from({ length: 16 }, () => new Vector4(0, -99, 0, 0)) },
+      // a roar close by: plants within the radius shiver (x, z, radius, strength 0..1)
+      uShiver: { value: new Vector4(0, 0, 0, 0) },
     };
     this.obstacles = []; // {x, z, r} trunks for the dinosaurs' route finder
     this.placements = {};
@@ -174,6 +178,7 @@ export class Flora {
             // the compressed mesh is stored normalised; its node carries the real size and offset
             M.multiply(m.matrixWorld);
             im.setMatrixAt(i, M);
+            p.top = _top.set(0, bb.max.y, 0).applyMatrix4(M).y; // crown height, for browsers
           });
           im.instanceMatrix.needsUpdate = true;
           im.castShadow = kind === 'treefern' || kind === 'cycad';
@@ -193,6 +198,8 @@ export class Flora {
     const U = this.uniforms;
     // how far each kind gives way as an animal pushes through it (tree trunks stand firm)
     const give = { fern: 1, fernlet: 1, redplant: 0.9, horsetail: 0.8, treefern: 0.0, cycad: 0.3 }[kind] ?? 0.6;
+    // and how much the crown gives locally around a body inside it (a browsing head)
+    const local = { treefern: 1, cycad: 0.8 }[kind] ?? 0.3;
     const rel = { fern: 0.05, fernlet: 0.06, redplant: 0.03, horsetail: 0.07, treefern: 0.035, cycad: 0.02 }[kind] || 0.04;
     const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
     const h = Math.max(1e-4, y1 - y0);
@@ -201,8 +208,9 @@ export class Flora {
       sh.uniforms.uWind = U.uWind;
       sh.uniforms.uTint = U.uTint;
       sh.uniforms.uPush = U.uPush;
+      sh.uniforms.uShiver = U.uShiver;
       sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec4 uPush[16];')
+        .replace('#include <common>', '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec4 uPush[16];\nuniform vec4 uShiver;')
         .replace(
           '#include <begin_vertex>',
           `#include <begin_vertex>
@@ -223,6 +231,7 @@ export class Flora {
   #endif
   vec3 vw = (toW * vec4(transformed, 1.0)).xyz;
   vec3 pushW = vec3(0.0);
+  vec3 localW = vec3(0.0);
   float hW = max(0.0, vw.y - toW[3].y); // height of this vertex above the plant's own base
   for (int i = 0; i < 16; i++) {
     vec4 p = uPush[i];
@@ -234,16 +243,33 @@ export class Flora {
       float k = smoothstep(p.w * 1.3, p.w * 0.35, dist);
       pushW += vec3(away.x * hW * 1.3, -hW * 0.65, away.y * hW * 1.3) * k;
     }
+    // crowns of tall plants: only the fronds right around the body (a browsing head) are pushed
+    vec3 d3 = vw - p.xyz;
+    float l3 = length(d3);
+    if (${local.toFixed(2)} > 0.0 && p.w > 0.0 && l3 < p.w) {
+      localW += (d3 / max(l3, 1e-4)) * (p.w - l3) * 0.9 + vec3(0.0, -0.35, 0.0) * (p.w - l3);
+    }
+  }
+  // a roar: everything nearby shivers
+  float shD = length(vw.xz - uShiver.xy);
+  if (uShiver.w > 0.0 && shD < uShiver.z) {
+    float shK = uShiver.w * (1.0 - shD / uShiver.z) * sway;
+    localW += vec3(sin(uTime * 41.0 + ph * 3.0), 0.0, cos(uTime * 37.0 + ph * 2.0)) * shK * min(max(hW, 0.05), 0.4) * 0.12 / max(${local.toFixed(2)}, 0.3);
   }
   pushW.y = max(pushW.y, -hW * 0.8);
   pushW.xz = clamp(pushW.xz, vec2(-hW * 1.2), vec2(hW * 1.2));
-  transformed += inverse(mat3(toW)) * pushW * sway * ${give.toFixed(2)};`,
+  transformed += inverse(mat3(toW)) * (pushW * ${give.toFixed(2)} + localW * ${local.toFixed(2)}) * sway;`,
         );
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec3 uTint;')
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;');
     };
     return m;
+  }
+
+  // a roar at (x, z): plants within r shiver, fading out
+  shiver(x, z, r, strength = 1) {
+    this.uniforms.uShiver.value.set(x, z, r, strength);
   }
 
   // spheres along animals' bodies (from the runtime each frame)
@@ -268,6 +294,7 @@ export class Flora {
     }
     const U = this.uniforms;
     U.uTime.value += dt;
+    U.uShiver.value.w = Math.max(0, U.uShiver.value.w - dt * 0.6);
     const w = this.ctx.world;
     U.uWind.value += ((w.windEnergy || 0) * 1.5 + 0.15 - U.uWind.value) * Math.min(1, dt);
     // seasons: ferns brown a little in autumn and dull in winter

@@ -103,7 +103,8 @@ export class Flex {
       want = I;
     }
     const wantYaw = Math.max(-1.2, Math.min(1.2, want.yaw));
-    const wantPitch = Math.max(-0.5, Math.min(0.5, want.pitch));
+    const mp = want.maxPitch ?? 0.5;
+    const wantPitch = Math.max(-0.5, Math.min(mp, want.pitch));
     if (Math.abs(wantYaw - this.gazeYaw) > 0.14 || Math.abs(wantPitch - this.gazePitch) > 0.1) {
       this.gazeYaw = wantYaw;
       this.gazePitch = wantPitch;
