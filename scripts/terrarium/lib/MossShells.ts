@@ -13,7 +13,7 @@ import {WIND_GLSL} from './WindField';
  */
 export class MossShells {
   readonly mesh: THREE.InstancedMesh;
-  readonly uniforms = {uShells: {value: 14}, uHeight: {value: 0.0085}, tMoss: {value: null as THREE.Texture | null}, uPress: {value: new THREE.Vector4(0, 0, 0, 0)}};
+  readonly uniforms = {uShells: {value: 14}, uHeight: {value: 0.0105}, tMoss: {value: null as THREE.Texture | null}, uPress: {value: new THREE.Vector4(0, 0, 0, 0)}};
 
   /**
    * `rock`: a ready-made base (patches draped over the rocks and the log) whose
@@ -140,11 +140,11 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
   // several species side by side: yellow-green sheet moss, deep green cushions, pale blue-grey Leucobryum
   float sp = mn(vMW.xz * 14.0 + 7.0);
   vec3 deep = vec3(0.012, 0.02, 0.006);
-  vec3 midC = mix(vec3(0.05, 0.1, 0.018), vec3(0.09, 0.14, 0.02), hue);
-  vec3 tip = mix(vec3(0.13, 0.22, 0.035), vec3(0.26, 0.28, 0.06), mn(vMW.xz * 220.0) * 0.7 + mn(vMW.xz * 31.0) * 0.3);
-  tip = mix(tip, vec3(0.06, 0.13, 0.03), smoothstep(0.55, 0.7, sp));
+  vec3 midC = mix(vec3(0.07, 0.15, 0.02), vec3(0.13, 0.21, 0.025), hue);
+  vec3 tip = mix(vec3(0.2, 0.34, 0.04), vec3(0.36, 0.42, 0.07), mn(vMW.xz * 220.0) * 0.7 + mn(vMW.xz * 31.0) * 0.3);
+  tip = mix(tip, vec3(0.09, 0.2, 0.035), smoothstep(0.6, 0.72, sp));
   tip = mix(tip, vec3(0.16, 0.21, 0.14), smoothstep(0.78, 0.9, sp));
-  midC = mix(midC, vec3(0.04, 0.08, 0.02), smoothstep(0.55, 0.7, sp));
+  midC = mix(midC, vec3(0.05, 0.11, 0.022), smoothstep(0.6, 0.72, sp));
   vec3 c = mix(deep, midC, smoothstep(0.0, 0.5, vShell));
   c = mix(c, tip, smoothstep(0.45, 1.0, vShell) * (0.6 + 0.4 * mh(ci)));
   c *= 0.8 + 0.4 * mh(ci + 9.1);
@@ -155,11 +155,12 @@ float tipLight = smoothstep(0.0, 1.0, vShell);`)
         .replace('#include <aomap_fragment>', `
 {
   float ao = mix(0.25, 1.0, smoothstep(0.0, 0.9, vShell));
-  reflectedLight.indirectDiffuse *= ao; reflectedLight.indirectSpecular *= ao; reflectedLight.directDiffuse *= mix(0.45, 1.0, smoothstep(0.0, 0.8, vShell));
+  // (a cushion scatters light through its whole pile: the tips glow even in shade)
+  reflectedLight.indirectDiffuse *= ao * mix(1.0, 1.9, smoothstep(0.4, 1.0, vShell)); reflectedLight.indirectSpecular *= ao; reflectedLight.directDiffuse *= mix(0.45, 1.0, smoothstep(0.0, 0.8, vShell));
 }
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => ROCK ? 'moss-shells-rock-v1' : 'moss-shells-v3';
+    m.customProgramCacheKey = () => ROCK ? 'moss-shells-rock-v2' : 'moss-shells-v4';
     const mesh = new THREE.InstancedMesh(g, m, shells);
     const I = new THREE.Matrix4();
     for (let i = 0; i < shells; i++) mesh.setMatrixAt(i, I);

@@ -94,6 +94,8 @@ export class Terrarium {
   readonly hemi: THREE.HemisphereLight;
   readonly rim: THREE.DirectionalLight;
   readonly fill: THREE.DirectionalLight;
+  /** The lid's light along the front glass (soft, no shadows): the foreground isn't left in the dark. */
+  readonly lidFront: THREE.SpotLight;
   readonly ready: Promise<void>;
   private clock = new THREE.Clock();
   time = 0;
@@ -151,6 +153,10 @@ export class Terrarium {
     // passing clouds shade whatever the lamp lights
     this.key.map = this.cloudShadow.target.texture;
     s.add(this.key, this.key.target);
+    this.lidFront = new THREE.SpotLight(new THREE.Color(1.0, 0.86, 0.68), 2.2, 1.3, 1.05, 1.0, 2);
+    this.lidFront.position.set(-0.05, 0.62, 0.17);
+    this.lidFront.target.position.set(-0.08, 0.06, 0.14);
+    s.add(this.lidFront, this.lidFront.target);
     // Basking lamp over the log.
     this.heat = new THREE.SpotLight(new THREE.Color(1.0, 0.72, 0.45), 1.1, 1.4, 0.3, 0.95, 2);
     this.heat.position.set(-0.36, 0.78, 0.05);
@@ -194,7 +200,7 @@ export class Terrarium {
     this.controls.update();
 
     // (layer 3: the near panes, drawn last over the clouds)
-    for (const l of [this.key, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) {l.layers.enable(1); l.layers.enable(3);}
+    for (const l of [this.key, this.lidFront, this.heat, this.hemi, this.rim, this.fill, this.moon, this.room.lampLight]) {l.layers.enable(1); l.layers.enable(3);}
     this.post = new Post(r, s, cam, LITE ? 0 : 4);
     if (LITE) {this.post.settings.ao = false; this.post.settings.dof = false; this.glassOverClouds = false;}
     const q = new URLSearchParams(location.search);
@@ -449,6 +455,8 @@ export class Terrarium {
     this.key.intensity = 11 * day * (1 - gloom * 0.55) * (1 + 0.25 * w.golden);
     this.key.color.copy(w.sunColor).lerp(STORM_LIGHT, gloom * 0.5);
     this.heat.intensity = 0.75 * day * (1 - gloom * 0.4);
+    this.lidFront.intensity = 2.2 * day * (1 - gloom * 0.55);
+    this.lidFront.color.copy(this.key.color);
     this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
     this.hemi.color.setRGB(0.55, 0.45, 0.35).lerp(DUSK_SKY, w.golden * 0.7);
     this.fill.intensity = (0.35 + 0.55 * day) * (1 - gloom * 0.25);

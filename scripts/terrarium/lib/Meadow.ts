@@ -35,9 +35,9 @@ export class Meadow {
       const patch = THREE.MathUtils.smoothstep(fbm(x * 7 + 11, z * 7 - 3), 0.45, 0.68);
       const shore = pd < 0.16 ? 0.7 : 0;
       // (the front-left corner is given over to big leaves, ferns and moss)
-      const corner = Math.exp(-(((x + 0.45) / 0.14) ** 2) - (((z - 0.17) / 0.09) ** 2));
+      const corner = Math.exp(-(((x + 0.42) / 0.19) ** 2) - (((z - 0.17) / 0.09) ** 2));
       const front = z > 0.13 ? 0.45 * (1 - corner) : 0;
-      if (rnd() > Math.max(patch * (1 - 0.8 * corner), shore, front) * 0.9 + 0.03) continue;
+      if (rnd() > Math.max(patch * (1 - 0.95 * corner), shore, front) * 0.9 + 0.03 * (1 - corner)) continue;
       placed++;
       const n = 6 + Math.floor(rnd() * 9);
       const tuftH = 0.016 + rnd() * 0.026;

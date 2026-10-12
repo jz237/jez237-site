@@ -32,7 +32,7 @@ export class MossMap {
       // a worn path where the lizard walks between the log and the pool
       const path = Math.exp(-(((x + 0.1) / 0.075) ** 2) - (((z - 0.15) / 0.1) ** 2));
       // a deep cushion of moss in the front-left corner, in front of the log
-      m = Math.max(m, 0.95 * Math.exp(-(((x + 0.47) / 0.12) ** 2) - (((z - 0.18) / 0.07) ** 2)) * (0.75 + 0.5 * fbm(x * 40, z * 40, 2)));
+      m = Math.max(m, 0.95 * Math.exp(-(((x + 0.42) / 0.17) ** 2) - (((z - 0.17) / 0.08) ** 2)) * (0.75 + 0.5 * fbm(x * 40, z * 40, 2)));
       m *= 1 - 0.8 * path;
       // shore: wet gravel rather than moss
       const pd = poolDistance(x, z);
@@ -319,7 +319,8 @@ export class Plants {
     mat.alphaTest = 0.45;
     mat.transparent = false;
     mat.side = THREE.DoubleSide;
-    mat.color = new THREE.Color(0.62, 0.78, 0.5);
+    // fresh lime fronds, as in the reference
+    mat.color = new THREE.Color(0.86, 1.05, 0.5);
     mat.roughness = 1;
     addFoliage(mat, {height: 0.35, translucency: 0.9, stiffness: 1.2, key: 'fern'});
     const spots: [number, number, number, number][] = [
@@ -334,6 +335,9 @@ export class Plants {
       [-0.55, -0.03, 0.3, 0], [0.52, 0.06, 0.26, 1], [-0.38, -0.2, 0.34, 0], [0.33, -0.2, 0.32, 1], [0.12, -0.2, 0.3, 0],
       // and a tall screen of sword ferns along the back and up the sides
       [-0.5, -0.2, 0.38, 0], [-0.2, -0.21, 0.34, 1], [0.46, -0.2, 0.38, 0], [-0.57, -0.07, 0.32, 1], [0.56, -0.05, 0.3, 0], [-0.44, -0.12, 0.3, 1],
+      // ferns where big heart-leaf plants stood: the case is mostly fern
+      [-0.17, -0.13, 0.22, 2], [-0.04, -0.15, 0.2, 3], [0.36, -0.1, 0.22, 2], [-0.43, -0.05, 0.2, 3], [-0.22, 0.02, 0.15, 2],
+      [0.28, -0.03, 0.16, 3], [0.43, -0.03, 0.18, 2], [-0.08, -0.205, 0.3, 1], [0.52, -0.19, 0.34, 0],
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
@@ -470,7 +474,7 @@ export class Plants {
       ['creeper', -0.58, 0.2, 1], ['creeper', -0.32, 0.21, 1], ['creeper', -0.05, 0.215, 1], ['creeper', 0.58, -0.08, 1],
       ['fittonia', 0.4, -0.09, 1.0], ['pilea', 0.5, -0.1, 1.1], ['fittonia', 0.56, -0.06, 0.9], ['pilea', 0.33, -0.1, 0.8],
       ['creeper', 0.36, -0.06, 1], ['creeper', 0.47, -0.05, 1], ['fittonia', 0.12, -0.07, 0.8],
-      ['pilea', -0.55, -0.08, 1.0], ['pilea', -0.2, 0.19, 0.8], ['fittonia', -0.42, 0.2, 0.9], ['fittonia', -0.33, -0.1, 0.9],
+      ['pilea', -0.55, -0.08, 1.0], ['fittonia', -0.33, -0.1, 0.9],
       ['cryptanthus', -0.25, -0.1, 0.9], ['cryptanthus', 0.5, -0.04, 0.8], ['pilea', 0.2, -0.12, 0.9], ['fittonia', -0.03, -0.12, 0.8],
       ['creeper', -0.48, -0.15, 1], ['creeper', -0.14, -0.15, 1], ['creeper', 0.06, -0.17, 1], ['creeper', 0.57, 0.04, 1],
       ['pilea', -0.58, 0.1, 0.8], ['fittonia', -0.12, 0.2, 0.7], ['cryptanthus', -0.57, -0.02, 0.7],

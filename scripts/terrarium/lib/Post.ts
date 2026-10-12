@@ -78,7 +78,7 @@ const finalShader = {
     uVignette: {value: 0.32},
     uCA: {value: 0.9},
     // the grade: a little more colour and contrast, warm lamplight in the highlights
-    uSat: {value: 1.14},
+    uSat: {value: 1.22},
     uContrast: {value: 0.22},
     uWarm: {value: 1},
   },
@@ -194,7 +194,7 @@ export class Post {
     blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor,
   }));
   private cleanQuad = new FullScreenQuad(new THREE.ShaderMaterial(cleanShader));
-  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.12, focus: 1.5, aperture: 0.6, maxBlur: 9};
+  readonly settings: PostSettings = {ao: true, bloom: true, dof: true, bloomStrength: 0.22, exposure: 1.16, focus: 1.5, aperture: 0.6, maxBlur: 9};
   width = 1; height = 1;
 
   constructor(private renderer: THREE.WebGLRenderer, private scene: THREE.Scene, private camera: THREE.PerspectiveCamera, samples = 4) {

@@ -74,11 +74,17 @@ float up = N.y;
 float strata = sin((P.y + P.x * 0.25 + P.z * 0.15) * 120.0 + pf(P * 15.0) * 4.0) * 0.5 + 0.5;
 float tone = pf(P * 30.0);
 float crag = cragH(P);
-vec3 basalt = mix(vec3(0.022, 0.021, 0.02), vec3(0.065, 0.06, 0.055), tone);
+vec3 basalt = mix(vec3(0.03, 0.028, 0.026), vec3(0.095, 0.086, 0.076), tone);
 basalt = mix(basalt, vec3(0.1, 0.09, 0.08), smoothstep(0.75, 0.95, pn(P * vec3(90.0, 12.0, 90.0))) * 0.5);
 basalt *= 0.9 + 0.18 * strata * strata;
 // fissures run dark, the ribs between them catch the light
 basalt *= mix(0.35, 1.2, smoothstep(0.2, 0.9, crag));
+// lava rock is full of gas holes: small dark pits, some in clusters
+float vesG = pn(P * 70.0);
+float ves = smoothstep(0.7, 0.85, pn(P * 520.0 + vesG * 3.0)) * (0.55 + 0.45 * smoothstep(0.35, 0.7, vesG));
+basalt *= 1.0 - 0.8 * ves;
+// the lumps' crowns catch the lamp and the creases between them stay black
+basalt *= mix(0.45, 1.15, vAO);
 // wet dark rock where the falls run and splash
 float wetC = fallWet(P);
 // pale lichen speckles on exposed faces (none in the splash zone)
@@ -88,10 +94,13 @@ basalt = mix(basalt, vec3(0.32, 0.33, 0.27), lichen * 0.55);
 float crev = 1.0 - vAO;
 float mossN = pf(P * 45.0);
 float mossBig = pf(P * 14.0);
-float moss = smoothstep(0.58, 0.74, up * 0.75 + mossBig * 0.5 + crev * 0.2 + mossN * 0.15 + (1.0 - crag) * 0.12 - 0.12);
-moss = max(moss, smoothstep(0.72, 0.84, mossBig + crev * 0.3 + (1.0 - crag) * 0.15) * 0.85);
-vec3 mossC = mix(vec3(0.022, 0.045, 0.01), vec3(0.07, 0.115, 0.022), pf(P * 160.0));
-mossC = mix(mossC, vec3(0.13, 0.15, 0.035), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.35);
+// (mostly on the tops: the faces stay bare, dark lava rock)
+float moss = smoothstep(0.62, 0.76, up * 0.9 + mossBig * 0.45 + crev * 0.12 + mossN * 0.15 + (1.0 - crag) * 0.08 - 0.12);
+moss = max(moss, smoothstep(0.8, 0.9, mossBig + crev * 0.25 + (1.0 - crag) * 0.1) * 0.7);
+// cushion moss: lime on the sunny tops, deeper green in the shade
+vec3 mossC = mix(vec3(0.04, 0.085, 0.012), vec3(0.15, 0.24, 0.03), pf(P * 160.0));
+mossC = mix(mossC, vec3(0.26, 0.3, 0.05), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.4);
+mossC *= mix(0.7, 1.15, smoothstep(0.2, 0.9, up));
 // nothing grows where the water itself runs: bare, slick rock in the channel
 moss *= 1.0 - smoothstep(0.55, 0.95, wetC);
 vec3 col = mix(basalt, mossC, moss);
@@ -117,7 +126,7 @@ float rockMoss = moss; float rockWet = max(wetC, uWet);`)
 reflectedLight.indirectDiffuse *= vAO; reflectedLight.indirectSpecular *= vAO; reflectedLight.directDiffuse *= mix(1.0, vAO, 0.5);
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => 'peaks-basalt-v3';
+    m.customProgramCacheKey = () => 'peaks-basalt-v4';
     this.mesh = new THREE.Mesh(g, m);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
