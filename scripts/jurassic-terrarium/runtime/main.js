@@ -15,6 +15,7 @@ import { Voices } from './voice.js';
 import { Flex } from './flex.js';
 import { Lamps } from './lamps.js';
 import { Aquatic } from './aquatic.js';
+import { Room } from './room.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -664,6 +665,7 @@ class Dinosaurs {
     const ds = DEN.s / (1 / 8); // relative to the 1/8 scale the rectangles below were measured at
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
+    this.room = params.get('room') === '0' ? null : new Room(ctx, new URL('models/room.webp', document.baseURI).href);
     this.nav = new NavGrid(ctx, {
       obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || [])],
       rects: [

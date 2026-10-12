@@ -29,6 +29,7 @@ How they move and what's around them:
 - The waterfall steps down through three white-water cascades into the front pool.
 - The front pool has eelgrass meadows streaming in the current and stones on its bed.
 - Mossy boulders line the pool's bank.
+- The case sits in a warm, lamplit study, softly out of focus (backdrop built from a generated photo).
 
 ## How the dinosaurs are made
 
