@@ -5124,24 +5124,34 @@ vec2 windAt(vec2 xz, float t){
 }
 `,T_={uTime:{value:0},uKeyDirView:{value:new U(0,1,0)},uKeyColor:{value:new K(1,.8,.6)},uWet:{value:0},uHumid:{value:.5},tWind:{value:null},uWindBox:{value:new W(-.6,-.25,1.2,.5)},uGust:{value:new U},uPush:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uPushB:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uGlass:{value:new H($.w/2-.004,$.d/2-.004)},tTop:{value:null},uTopBox:{value:new W(-$.w/2,-$.d/2,$.w,$.d)},uFolKeyPos:{value:new U(0,1,0)}};function E_(e,t,n,r){let i=e.attributes.position.count,a=new Float32Array(i*3);for(let e=0;e<i;e++)a[e*3]=t,a[e*3+1]=n,a[e*3+2]=r;e.setAttribute(`aRoot`,new q(a,3))}var D_=`
 float pinnate(float u, float v, float n, float s, float w, vec2 fw){ return folLine(u * n - abs(v) * s, w, fw.x * n + fw.y * s); }`,O_=w_+`
-vec3 foliageWind(vec3 root, float flex, float H, float phase, float stiff){
-  vec4 wt = windTex(root.xz);
+vec3 foliageWind(vec3 root, float flex, float Hw, float phase, float stiff, vec3 n, vec3 rest, out float gust){
   vec2 w = windAt(root.xz, uTime);
   float sp = length(w);
   vec2 dir = sp > 1e-4 ? w / sp : vec2(1.0, 0.0);
   vec2 perp = vec2(-dir.y, dir.x);
+  float turb = windTex(root.xz).a;
   // travelling gust crests: bands of plants lean further as each one passes
   float wave = 0.5 + 0.5 * sin(dot(root.xz, dir) * 23.0 - uTime * (2.2 + min(sp * 4.0, 4.0) * 0.5) + wgn(root.xz * 8.0) * 5.0);
   wave = wave * wave * (3.0 - 2.0 * wave);
-  float amt = (1.0 - exp(-sp * 2.2 / stiff)) * (0.68 + 0.64 * wave);
-  float turb = wt.a;
-  float flutter = sin(uTime * (6.5 + 4.0 * fract(phase * 7.13)) + phase * 11.0) * (0.035 + 0.16 * turb + 0.035 * min(sp * 4.0, 4.0)) / stiff;
-  float idle = sin(uTime * 0.7 + phase) * 0.012 + sin(uTime * 1.9 + phase * 1.7) * 0.005;
-  vec2 lean = dir * amt * 0.42 + perp * (flutter * (0.3 + amt) + idle) + vec2(idle * 0.6, 0.0);
-  vec3 top = vec3(lean.x, 0.0, lean.y) * H;
-  // keep the stem length: bending also lowers the tip
-  top.y = -dot(top.xz, top.xz) / max(H, 1e-3) * 0.55;
-  return top * flex;
+  float lean = (1.0 - exp(-sp * 1.6 / stiff)) * 0.24 / stiff * (0.68 + 0.64 * wave);
+  // the plant's own sway: a tall fern rocks about once a second, a sprig of grass faster
+  float f = 0.95 / sqrt(max(Hw * 5.0, 0.04));
+  float ph = phase * 6.2831853;
+  float osc = sin(uTime * f * 6.2831853 + ph) * 0.6 + sin(uTime * f * 14.7 + ph * 1.7) * 0.22;
+  float swirl = sin(uTime * f * 8.3 + ph * 2.3) + 0.4 * sin(uTime * f * 19.0 + ph);
+  float whip = 0.22 + turb * 0.8 + min(sp * 5.0, 5.0) * 0.1;
+  vec2 top = dir * lean * (1.0 + osc * whip) + perp * lean * swirl * (0.12 + turb * 0.6);
+  // and in still air it only breathes
+  top += vec2(sin(uTime * 0.7 + ph), cos(uTime * 0.53 + ph * 1.3)) * 0.006;
+  gust = clamp(length(top) / 0.2, 0.0, 1.0);
+  vec3 d = vec3(top.x, 0.0, top.y) * Hw * flex;
+  d.y = -dot(top, top) * Hw * 0.55 * flex * sqrt(flex);
+  // leaves flutter about where they hang: faster, small, smooth across a leaf
+  float energy = 0.004 + 0.006 * min(sp * 5.0, 6.0) + 0.018 * turb;
+  float lp = dot(rest, vec3(37.0, 23.0, 41.0));
+  float lf = sin(uTime * 12.0 + lp + ph) + 0.5 * sin(uTime * 17.3 + lp * 1.7);
+  d += n * lf * flex * (energy * 1.8 + 0.002) * Hw / stiff;
+  return d;
 }
 `;function k_(e,t){let n=t.height??.3,r=t.translucency??.6,i=t.stiffness??1,a=t.micro??1;e.onBeforeCompile=e=>{Object.assign(e.uniforms,T_),e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
 #define PUSHERS 8
@@ -5179,6 +5189,36 @@ vec3 folPush(vec2 at, vec3 vw, float k, float downK){
   }
   return push;
 }
+// Keeps a point out of the lizard's head, body and tail (pushers 1-4, centred on
+// its spine line): a plant rooted under it is pressed flat beneath the belly, a
+// plant beside it is held off the flank. The two blend as the body passes over,
+// so nothing jumps.
+vec3 folBody(vec3 q, vec3 rootW){
+  for (int i = 1; i <= 4; i++) {
+    vec4 p = uPush[i], b = uPushB[i];
+    if (p.w <= 0.0 || b.w <= 0.0) continue;
+    vec3 ab = b.xyz - p.xyz;
+    float l2 = dot(ab.xz, ab.xz);
+    float t = l2 > 1e-8 ? clamp(dot(q.xz - p.xz, ab.xz) / l2, 0.0, 1.0) : 0.0;
+    float tr = l2 > 1e-8 ? clamp(dot(rootW.xz - p.xz, ab.xz) / l2, 0.0, 1.0) : 0.0;
+    vec3 c = p.xyz + ab * t;
+    float hw = p.w * 0.55, hh = 0.016, belly = c.y - 0.0105;
+    float rootR = length(rootW.xz - (p.xz + ab.xz * tr));
+    vec2 d = q.xz - c.xz;
+    float r = length(d);
+    float under = 1.0 - smoothstep(hw * 0.9, hw * 1.35, rootR);
+    vec3 qu = q;
+    if (q.y > belly - 0.0015) qu.y = mix(q.y, belly - 0.0015, 1.0 - smoothstep(hw, hw * 1.4, r));
+    vec3 qs = q;
+    float dy = (q.y - c.y) / hh;
+    if (abs(dy) < 1.0 && r > 1e-5) {
+      float rt = (hw + 0.002) * sqrt(1.0 - dy * dy);
+      if (r < rt) qs.xz = c.xz + d / r * rt;
+    }
+    q = mix(qs, qu, under);
+  }
+  return q;
+}
 ${O_}`).replace(`#include <begin_vertex>`,`#include <begin_vertex>
 {
   float flex = ${t.flexAttr?`aFlex`:`clamp(position.y / ${n.toFixed(4)}, 0.0, 1.0)`};
@@ -5190,16 +5230,20 @@ ${O_}`).replace(`#include <begin_vertex>`,`#include <begin_vertex>
     mat4 toWorld = modelMatrix;
   #endif
   vec3 root = (toWorld * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-  float ph = ${t.phaseAttr?`aPhase`:`dot(root.xz, vec2(73.0, 51.0)) + position.x * 9.0`};
   vec3 vw = (toWorld * vec4(transformed, 1.0)).xyz;
   // where this point lies on its plant (it moves with the plant, not with the
   // wind), so the fine detail drawn there never swims over the leaf
   vFolRest = position * length(toWorld[0].xyz) + root;
-  // the wind is read where each part of the plant actually is, so a gust
-  // crossing a fern bends its near fronds before its far ones
-  vec3 anchor = ${t.flexAttr?`vw`:`mix(root, vw, 0.8)`};
-  vec3 bend = foliageWind(vec3(anchor.x, root.y, anchor.z), flex, ${(n*1).toFixed(4)}, ph, ${i.toFixed(3)});
-  vGust = length(bend.xz) / ${(n*.25).toFixed(4)};
+  // the plant this point belongs to: where it is rooted, and how tall it is
+  vec3 folRootW = ${t.rootAttr?`(modelMatrix * vec4(aRoot, 1.0)).xyz`:t.flexAttr?`vw`:`root`};
+  float folH = ${t.flexAttr?n.toFixed(4):`${n.toFixed(4)} * length(toWorld[1].xyz)`};
+  // (each plant its own phase; smooth across space, so a part without a known root still moves as one)
+  float ph = ${t.phaseAttr?`aPhase`:`dot(folRootW.xz, vec2(1.16, 0.81)) + 0.35 * sin(dot(folRootW.xz, vec2(31.0, 23.0)))`};
+  // the whole plant sways with the wind at its root (see foliageWind)
+  vec3 folN = normalize(mat3(toWorld) * objectNormal);
+  float folGust;
+  vec3 bend = foliageWind(folRootW, flex, folH, ph, ${i.toFixed(3)}, folN, vFolRest, folGust);
+  vGust = folGust;
   mat3 toLocal = inverse(mat3(toWorld));
   transformed += toLocal * bend;
   vw += bend;
@@ -5207,12 +5251,14 @@ ${O_}`).replace(`#include <begin_vertex>`,`#include <begin_vertex>
   // leans as a whole: the push is read between its root and the point, so a
   // leaf moves with its stem instead of being pulled apart, plus a little of
   // the push right at the point to keep leaves out of the body.
-  vec3 folRootW = ${t.rootAttr?`(modelMatrix * vec4(aRoot, 1.0)).xyz`:t.flexAttr?`vw`:`root`};
   vec3 push = ${t.push===!1?`vec3(0.0)`:`folPush(mix(folRootW.xz, vw.xz, 0.3), vw, 2.0, 0.45) + folPush(vw.xz, vw, 0.4, 0.0)`};
   float pushLen = length(push.xz);
   if (pushLen > 0.045) push.xz *= 0.045 / pushLen;
-  transformed += toLocal * push * max(flex, 0.25);
   vec3 wf = vw + push * max(flex, 0.25);
+  // nothing passes through the lizard: a plant it stands on is pressed flat
+  // under its belly, one beside it is held off its flank
+  ${t.push===!1?``:`wf = folBody(wf, folRootW);`}
+  transformed += toLocal * (wf - vw);
   // the glass: a leaf that reaches it presses flat against it, never through it
   vec3 wc = vec3(clamp(wf.x, -uGlass.x, uGlass.x), wf.y, clamp(wf.z, -uGlass.y, uGlass.y));
   // ...and a leaf pushed down (by the dragon, by a gust) comes to rest on whatever
@@ -5337,7 +5383,7 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.
   vec3 keyW = (vec4(uKeyDirView, 0.0) * viewMatrix).xyz;
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * (1.0 - smoothstep(0.15, 0.75, beadR)) * bead.w * 0.3;
   totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
-}`)},e.customProgramCacheKey=()=>`foliage13-${t.key}`}var A_=5,j_=class{mesh;blades=0;constructor(e,t=720,n=[]){let r=Fp(777),i=[],a=[],o=[],s=[],c=[],l=[],u=[],d=[],f=new U(0,1,0),p=new K,m=new K,h=0;for(let g=0;g<4e4&&h<t;g++){let t=(r()-.5)*($.w-.03),g=(r()-.5)*($.d-.03);if(e.kindAt(t,g)!==b_.Ground||fm(t,g)||n.some(e=>Math.hypot(t-e.x,g-e.z)<e.r))continue;let _=e.heightAt(t,g),v=sm(t,g);if(_<.109||v<.02||e.normalAt(t,g).y<.78)continue;let y=Mt.smoothstep(im(t*7+11,g*7-3),.45,.68),b=v<.16?.7:0,x=Math.exp(-(((t+.42)/.19)**2)-((g-.17)/.09)**2),S=g>.13?.45*(1-x):0;if(r()>Math.max(y*(1-.95*x),b,S)*.9+.03*(1-x))continue;h++;let C=6+Math.floor(r()*9),w=.016+r()*.026,T=r()<.12;for(let n=0;n<C;n++){let n=r()*Math.PI*2,h=Math.sqrt(r())*.006,_=t+Math.cos(n)*h,v=g+Math.sin(n)*h,y=e.heightAt(_,v)-.0015,b=w*(.6+r()*.6),x=.0011+r()*.0011,S=n+(r()-.5)*.8,C=.12+r()*.45,E=.1+r()*.5,D=new U(Math.cos(S),0,Math.sin(S)),O=new U(-D.z,0,D.x),k=(r()-.5)*1.2,A=T?r()<.7:r()<.06;p.setHSL(A?.09+r()*.03:.2+r()*.07,A?.4:.6+r()*.2,A?.12+r()*.06:.045+r()*.04),m.copy(p).offsetHSL(A?0:-.04,0,.06);let j=r()*40,ee=i.length/3;for(let e=0;e<=A_;e++){let t=e/A_,n=D.clone().multiplyScalar(b*(Math.sin(C)*t+E*t*t)),r=y+b*t*Math.cos(C)-E*.55*b*t*t,h=O.clone().applyAxisAngle(f,k*t),g=x*.5*(1-t**1.4*.92),S=D.clone().multiplyScalar(Math.sin(C)+2*E*t).setY(Math.cos(C)-1.1*E*t).normalize(),w=new U().crossVectors(h,S).normalize();w.y<0&&w.negate(),w.lerp(f,.35).normalize();for(let e of[-1,1]){i.push(_+n.x+h.x*g*e,r,v+n.z+h.z*g*e),a.push(w.x,w.y,w.z);let d=.45+.55*Math.min(1,t*1.6);o.push((p.r+(m.r-p.r)*t)*d,(p.g+(m.g-p.g)*t)*d,(p.b+(m.b-p.b)*t)*d),s.push(t),c.push(j),u.push(_,y,v),l.push(t,e<0?0:1)}if(e<A_){let t=ee+e*2;d.push(t,t+1,t+2,t+1,t+3,t+2)}}this.blades++}}let g=new Y;g.setAttribute(`position`,new J(i,3)),g.setAttribute(`normal`,new J(a,3)),g.setAttribute(`color`,new J(o,3)),g.setAttribute(`aFlex`,new J(s,1)),g.setAttribute(`aPhase`,new J(c,1)),g.setAttribute(`aRoot`,new J(u,3)),g.setAttribute(`uv`,new J(l,2)),g.setIndex(d),g.computeBoundingSphere();let _=new Ps({vertexColors:!0,side:2,roughness:.7});k_(_,{flexAttr:!0,phaseAttr:!0,rootAttr:!0,height:.03,translucency:.45,stiffness:.8,key:`meadow`});let v=_.onBeforeCompile;_.onBeforeCompile=(e,t)=>{v(e,t),e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
+}`)},e.customProgramCacheKey=()=>`foliage14-${t.key}`}var A_=5,j_=class{mesh;blades=0;constructor(e,t=720,n=[]){let r=Fp(777),i=[],a=[],o=[],s=[],c=[],l=[],u=[],d=[],f=new U(0,1,0),p=new K,m=new K,h=0;for(let g=0;g<4e4&&h<t;g++){let t=(r()-.5)*($.w-.03),g=(r()-.5)*($.d-.03);if(e.kindAt(t,g)!==b_.Ground||fm(t,g)||n.some(e=>Math.hypot(t-e.x,g-e.z)<e.r))continue;let _=e.heightAt(t,g),v=sm(t,g);if(_<.109||v<.02||e.normalAt(t,g).y<.78)continue;let y=Mt.smoothstep(im(t*7+11,g*7-3),.45,.68),b=v<.16?.7:0,x=Math.exp(-(((t+.42)/.19)**2)-((g-.17)/.09)**2),S=g>.13?.45*(1-x):0;if(r()>Math.max(y*(1-.95*x),b,S)*.9+.03*(1-x))continue;h++;let C=6+Math.floor(r()*9),w=.016+r()*.026,T=r()<.12;for(let n=0;n<C;n++){let n=r()*Math.PI*2,h=Math.sqrt(r())*.006,_=t+Math.cos(n)*h,v=g+Math.sin(n)*h,y=e.heightAt(_,v)-.0015,b=w*(.6+r()*.6),x=.0011+r()*.0011,S=n+(r()-.5)*.8,C=.12+r()*.45,E=.1+r()*.5,D=new U(Math.cos(S),0,Math.sin(S)),O=new U(-D.z,0,D.x),k=(r()-.5)*1.2,A=T?r()<.7:r()<.06;p.setHSL(A?.09+r()*.03:.2+r()*.07,A?.4:.6+r()*.2,A?.12+r()*.06:.045+r()*.04),m.copy(p).offsetHSL(A?0:-.04,0,.06);let j=r()*40,ee=i.length/3;for(let e=0;e<=A_;e++){let t=e/A_,n=D.clone().multiplyScalar(b*(Math.sin(C)*t+E*t*t)),r=y+b*t*Math.cos(C)-E*.55*b*t*t,h=O.clone().applyAxisAngle(f,k*t),g=x*.5*(1-t**1.4*.92),S=D.clone().multiplyScalar(Math.sin(C)+2*E*t).setY(Math.cos(C)-1.1*E*t).normalize(),w=new U().crossVectors(h,S).normalize();w.y<0&&w.negate(),w.lerp(f,.35).normalize();for(let e of[-1,1]){i.push(_+n.x+h.x*g*e,r,v+n.z+h.z*g*e),a.push(w.x,w.y,w.z);let d=.45+.55*Math.min(1,t*1.6);o.push((p.r+(m.r-p.r)*t)*d,(p.g+(m.g-p.g)*t)*d,(p.b+(m.b-p.b)*t)*d),s.push(t),c.push(j),u.push(_,y,v),l.push(t,e<0?0:1)}if(e<A_){let t=ee+e*2;d.push(t,t+1,t+2,t+1,t+3,t+2)}}this.blades++}}let g=new Y;g.setAttribute(`position`,new J(i,3)),g.setAttribute(`normal`,new J(a,3)),g.setAttribute(`color`,new J(o,3)),g.setAttribute(`aFlex`,new J(s,1)),g.setAttribute(`aPhase`,new J(c,1)),g.setAttribute(`aRoot`,new J(u,3)),g.setAttribute(`uv`,new J(l,2)),g.setIndex(d),g.computeBoundingSphere();let _=new Ps({vertexColors:!0,side:2,roughness:.7});k_(_,{flexAttr:!0,phaseAttr:!0,rootAttr:!0,height:.03,translucency:.45,stiffness:.55,key:`meadow`});let v=_.onBeforeCompile;_.onBeforeCompile=(e,t)=>{v(e,t),e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
 varying vec2 vBladeUv;`).replace(`#include <begin_vertex>`,`#include <begin_vertex>
 vBladeUv = uv;`),e.fragmentShader=e.fragmentShader.replace(`#include <common>`,`#include <common>
 varying vec2 vBladeUv;`).replace(`#include <color_fragment>`,`#include <color_fragment>
