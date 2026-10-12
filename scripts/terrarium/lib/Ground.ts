@@ -266,7 +266,7 @@ float groundBumps(vec2 p, float moss){
   // humus: crumbs and grains, with flat bark chips lying on top
   vec3 crumb = pebbles(p * 520.0);
   vec3 chip = pebbles(p * vec2(150.0, 260.0) + 3.0);
-  float soil = gfbm(p * 140.0) * 0.45 + crumb.x * 0.55 + smoothstep(0.55, 0.6, chip.y) * chip.x * 0.8;
+  float soil = gfbm(p * 140.0) * 0.45 + crumb.x * 0.55 + smoothstep(0.78, 0.84, chip.y) * chip.x * 0.8;
   float mossH = gfbm(p * 260.0) * 0.6 + gn(p * 900.0) * 0.4;
   return mix(soil * 0.0016, mossH * 0.0018, moss);
 }
@@ -292,12 +292,14 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   float under = (1.0 - smoothstep(water - 0.008, water - 0.001, w.y));
   float shore = (1.0 - smoothstep(water + 0.001, water + 0.025, w.y)) * (1.0 - under);
   float moss = smoothstep(0.05, 0.6, mossMap) * (1.0 - under) * (1.0 - shore * 0.85);
-  vec3 soil = vec3(0.075, 0.05, 0.032) * (0.7 + 0.6 * gfbm(p * 60.0));
+  // dark, damp humus (the case's air never lets it dry out)
+  vec3 soil = vec3(0.064, 0.042, 0.027) * (0.7 + 0.6 * gfbm(p * 60.0));
   // crumbs and grains catch the light; bark chips are redder
   vec3 crumb = pebbles(p * 520.0);
   soil *= 0.7 + 0.6 * crumb.x * (0.6 + 0.8 * crumb.y);
   vec3 chip = pebbles(p * vec2(150.0, 260.0) + 3.0);
-  soil = mix(soil, vec3(0.16, 0.085, 0.045) * (0.7 + 0.5 * chip.x), smoothstep(0.55, 0.6, chip.y) * step(0.15, chip.x) * 0.85);
+  // (a scatter of chips with soft edges: packed edge to edge they read as cracked, dried mud)
+  soil = mix(soil, vec3(0.12, 0.065, 0.035) * (0.7 + 0.5 * chip.x), smoothstep(0.78, 0.84, chip.y) * smoothstep(0.1, 0.4, chip.x) * 0.75);
   // leaf litter flecks
   float litter = smoothstep(0.72, 0.8, gn(p * 90.0 + 3.1)) * (1.0 - moss);
   soil = mix(soil, vec3(0.22, 0.12, 0.05) * (0.7 + 0.5 * gn(p * 300.0)), litter * 0.8);
@@ -346,7 +348,8 @@ GroundSample groundSample(vec3 w, float t, float wet, float water, float mossMap
   // wet margin
   col *= mix(1.0, 0.6, shore + wet * (1.0 - moss) * 0.4);
   g.color = col;
-  g.rough = mix(mix(0.92, 0.82, moss), 0.35, max(shore, bedMix * 0.6));
+  // damp: a soft sheen on the humus and moss
+  g.rough = mix(mix(0.74, 0.72, moss), 0.35, max(shore, bedMix * 0.6));
   g.rough = mix(g.rough, 0.45, wet * 0.6);
   // bump normal
   float e = 0.0006;

@@ -241,6 +241,7 @@ export class Terrarium {
       this.scene.add(this.rockMoss.mesh);
     }
     this.water = new Water(this.surface, this.peaks.data.ledges);
+    this.peaks.setFallSpots(this.water.wetSpots(24));
     this.scene.add(this.water.group);
     // a school of neon tetras in the pool
     this.fish = new FishSchool();
@@ -476,6 +477,7 @@ export class Terrarium {
     // wetness darkens soil, glosses leaves, rock and skin
     this.ground.uniforms.uWet.value = w.wet;
     foliageUniforms.uWet.value = w.wet;
+    foliageUniforms.uHumid.value = THREE.MathUtils.clamp((w.humidity - 0.45) * 2.2 + w.mist * 0.3, 0, 1);
     this.peaks.uniforms.uWet.value = w.wet * 0.8;
     this.lizard.skin.uWet.value = w.wet * 0.5;
     this.brain.leavesWet = w.wet;
@@ -723,6 +725,7 @@ export class Terrarium {
     this.post.render(this.time, (refraction, distance) => {
       this.case.shared.tRefract.value = refraction;
       this.water.uniforms.tRefract.value = refraction;
+      this.water.setDistance(distance);
       this.weather.setDistance(distance);
       const mask = this.camera.layers.mask;
       // The panes between the eye and the clouds are drawn last, refracting a
