@@ -18,10 +18,24 @@ float cragH(vec3 p){
 }
 `;
 
+const FALL_SPOTS = 24;
+
 /** Procedural basalt peaks baked at build time (see tools/bake-peaks.mjs). */
 export class Peaks {
   readonly mesh: THREE.Mesh;
-  readonly uniforms = {uWet: {value: 0}, uTime: {value: 0}, uCascade: {value: new THREE.Vector4(0.045, -0.06, 0.04, 0)}};
+  readonly uniforms = {
+    uWet: {value: 0}, uTime: {value: 0},
+    uFall: {value: Array.from({length: FALL_SPOTS}, () => new THREE.Vector4())},
+    /** min x, min z, max x, max z of everything the falls wet (the rest of the rock skips them) */
+    uFallBox: {value: new THREE.Vector4(1, 1, -1, -1)},
+  };
+  /** Where the falls wet the rock: points along their path with a reach (m). */
+  setFallSpots(spots: THREE.Vector4[]) {
+    this.uniforms.uFall.value.forEach((v, i) => (spots[i] ? v.copy(spots[i]) : v.set(0, 0, 0, 0)));
+    const box = this.uniforms.uFallBox.value.set(1, 1, -1, -1);
+    for (const f of spots.slice(0, FALL_SPOTS)) box.set(Math.min(box.x, f.x - f.w), Math.min(box.y, f.z - f.w), Math.max(box.z, f.x + f.w), Math.max(box.w, f.z + f.w));
+  }
+
   constructor(readonly data: PeaksData, buffer: ArrayBuffer) {
     const g = new THREE.BufferGeometry();
     const V = data.vertexCount;
@@ -40,9 +54,19 @@ export class Peaks {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvAO = aAO; vWP = (modelMatrix * vec4(transformed, 1.0)).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);');
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>
-uniform float uWet, uTime; uniform vec4 uCascade;
+uniform float uWet, uTime; uniform vec4 uFall[${FALL_SPOTS}]; uniform vec4 uFallBox;
 varying float vAO; varying vec3 vWP; varying vec3 vWN;
-${ROCK_GLSL}`)
+${ROCK_GLSL}
+// soaked by the falls and their spray: within reach of the water's path
+float fallWet(vec3 P){
+  float w = 0.0;
+  if (any(lessThan(P.xz, uFallBox.xy)) || any(greaterThan(P.xz, uFallBox.zw))) return w;
+  for (int i = 0; i < ${FALL_SPOTS}; i++) {
+    vec4 f = uFall[i];
+    if (f.w > 0.0) w = max(w, 1.0 - smoothstep(0.5, 1.0, length(P - f.xyz) / f.w));
+  }
+  return w;
+}`)
         .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 P = vWP;
 vec3 N = normalize(vWN);
@@ -55,8 +79,10 @@ basalt = mix(basalt, vec3(0.1, 0.09, 0.08), smoothstep(0.75, 0.95, pn(P * vec3(9
 basalt *= 0.9 + 0.18 * strata * strata;
 // fissures run dark, the ribs between them catch the light
 basalt *= mix(0.35, 1.2, smoothstep(0.2, 0.9, crag));
-// pale lichen speckles on exposed faces
-float lichen = smoothstep(0.78, 0.86, pf(P * 160.0)) * smoothstep(-0.2, 0.4, N.z + 0.3) * (1.0 - smoothstep(0.6, 0.9, up));
+// wet dark rock where the falls run and splash
+float wetC = fallWet(P);
+// pale lichen speckles on exposed faces (none in the splash zone)
+float lichen = smoothstep(0.78, 0.86, pf(P * 160.0)) * smoothstep(-0.2, 0.4, N.z + 0.3) * (1.0 - smoothstep(0.6, 0.9, up)) * (1.0 - wetC);
 basalt = mix(basalt, vec3(0.32, 0.33, 0.27), lichen * 0.55);
 // moss: on ledges and up-facing shoulders, creeping into crevices
 float crev = 1.0 - vAO;
@@ -66,20 +92,20 @@ float moss = smoothstep(0.58, 0.74, up * 0.75 + mossBig * 0.5 + crev * 0.2 + mos
 moss = max(moss, smoothstep(0.72, 0.84, mossBig + crev * 0.3 + (1.0 - crag) * 0.15) * 0.85);
 vec3 mossC = mix(vec3(0.022, 0.045, 0.01), vec3(0.07, 0.115, 0.022), pf(P * 160.0));
 mossC = mix(mossC, vec3(0.13, 0.15, 0.035), smoothstep(0.65, 0.9, pn(P * 600.0)) * 0.35);
-// wet dark streak where the cascade runs
-float cd = length((P.xz - uCascade.xy) / vec2(0.07, 0.16));
-float wetC = (1.0 - smoothstep(0.5, 1.0, cd)) * (1.0 - smoothstep(0.13, 0.45, P.y));
+// nothing grows where the water itself runs: bare, slick rock in the channel
+moss *= 1.0 - smoothstep(0.55, 0.95, wetC);
 vec3 col = mix(basalt, mossC, moss);
 col *= mix(1.0, 0.55, max(wetC, uWet * 0.5));
 diffuseColor.rgb = col;
 float rockMoss = moss; float rockWet = max(wetC, uWet);`)
-        .replace('#include <roughnessmap_fragment>', `float roughnessFactor = mix(mix(0.82, 0.95, rockMoss), 0.3, rockWet * 0.85);`)
+        .replace('#include <roughnessmap_fragment>', `float roughnessFactor = mix(mix(0.82, 0.95, rockMoss), 0.42, rockWet * 0.85);`)
         .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 {
   float e = 0.0005;
   float g0 = grainH(P);
   vec3 gN = vec3(grainH(P + vec3(e, 0, 0)) - g0, grainH(P + vec3(0, e, 0)) - g0, grainH(P + vec3(0, 0, e)) - g0) / e;
-  float amp = mix(0.0005, 0.0012, rockMoss);
+  // (a film of water fills the fine grain: wet rock shines smooth, not glittering)
+  float amp = mix(0.0005, 0.0012, rockMoss) * (1.0 - 0.75 * rockWet);
   float c0 = cragH(P);
   float ec = 0.0015;
   vec3 cN = vec3(cragH(P + vec3(ec, 0, 0)) - c0, cragH(P + vec3(0, ec, 0)) - c0, cragH(P + vec3(0, 0, ec)) - c0) / ec;
@@ -91,7 +117,7 @@ float rockMoss = moss; float rockWet = max(wetC, uWet);`)
 reflectedLight.indirectDiffuse *= vAO; reflectedLight.indirectSpecular *= vAO; reflectedLight.directDiffuse *= mix(1.0, vAO, 0.5);
 #include <aomap_fragment>`);
     };
-    m.customProgramCacheKey = () => 'peaks-basalt-v2';
+    m.customProgramCacheKey = () => 'peaks-basalt-v3';
     this.mesh = new THREE.Mesh(g, m);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;

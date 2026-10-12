@@ -166,7 +166,7 @@ export class LizardBrain {
     const p: Record<string, Pose> = {
       bask: {clearance: 0.05, chestLift: 1.35, headPitch: 0.24, lid: 0.85, breath: 1},
       alert: {clearance: 0.35, chestLift: 0.9, headPitch: 0.12, lid: 1, breath: 1},
-      walk: {clearance: 0.75, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
+      walk: {clearance: 0.6, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
       rest: {clearance: 0.12, chestLift: 0.45, headPitch: 0.02, lid: 1, breath: 1},
       sleep: {clearance: -0.15, chestLift: -0.2, headPitch: -0.22, lid: 0, breath: 0.6},
       drink: {clearance: 0.25, chestLift: -0.6, headPitch: -0.55, lid: 1, breath: 1},
@@ -737,7 +737,7 @@ export class LizardBrain {
     p.headPitch = damp(p.headPitch, g.headPitch, 5, dt);
     p.lid = damp(p.lid, g.lid, this.mode === 'sleep' ? 0.6 : 5, dt);
     p.breath = damp(p.breath, g.breath, 2, dt);
-    I.clearance = p.clearance + (this.speed > 0.02 ? 0.35 : 0);
+    I.clearance = p.clearance + (this.speed > 0.02 ? 0.2 : 0);
     I.chestLift = p.chestLift;
     I.headPitch = p.headPitch;
     I.lid = p.lid;
@@ -906,8 +906,14 @@ export class LizardBrain {
     const remaining = this.remaining();
     const [ex, ez] = this.path[this.path.length - 1];
     if (remaining < 0.014 || (this.pathI === this.path.length - 1 && Math.hypot(ex - I.x, ez - I.z) < 0.014)) {this.arrive(); return {speed: 0, turn: 0};}
-    const look = this.pathPoint(0.11, this.tmp2);
-    this.lookPoint.set(look[0], this.surface.heightAt(look[0], look[1]) + 0.025, look[1]);
+    // It watches the way ahead, low and a hand's length out: near the end of the
+    // path the gaze runs on past it rather than dropping to a spot under its chin
+    // (which would rear its head up like a periscope).
+    const look = this.pathPoint(Math.min(0.11, remaining), this.tmp2);
+    const over = Math.max(0, 0.11 - remaining);
+    const lx = look[0] + Math.cos(I.heading) * over, lz = look[1] - Math.sin(I.heading) * over;
+    // (and over a dip, a hollow or the pool, at about the level it walks on)
+    this.lookPoint.set(lx, Math.max(this.surface.heightAt(lx, lz), this.surface.heightAt(I.x, I.z) - 0.01) + 0.02, lz);
     I.look = this.lookPoint;
     const aim = this.pathPoint(Math.min(0.045, remaining), this.tmp2);
     const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x);

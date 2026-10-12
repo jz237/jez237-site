@@ -8,6 +8,8 @@ export const foliageUniforms = {
   uKeyDirView: {value: new THREE.Vector3(0, 1, 0)},
   uKeyColor: {value: new THREE.Color(1, 0.8, 0.6)},
   uWet: {value: 0},
+  /** 0..1: the moisture the case's humid air leaves on the leaves (a film and, close up, dew). */
+  uHumid: {value: 0.5},
   tWind: {value: null as THREE.Texture | null},
   uWindBox: {value: new THREE.Vector4(-0.6, -0.25, 1.2, 0.5)},
   uGust: {value: new THREE.Vector3()},
@@ -144,7 +146,7 @@ ${FOLIAGE_WIND_GLSL}`)
 #endif`);
     s.fragmentShader = s.fragmentShader
       .replace('#include <common>', `#include <common>
-uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform float uWet;
+uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform float uWet, uHumid;
 varying float vFlex; varying float vGust; varying vec3 vFolW; varying vec3 vFolRest;
 // Relief of the leaf surface in millimetres (veins, ribs, the puckering
 // between them), drawn as a bump: each material adds its own pattern.
@@ -176,6 +178,7 @@ vec3 folBump(vec3 n, float h, float faceDir){
 }
 // water beaded on the leaf after rain or misting: little domes in 2-3 mm cells
 float folHash(vec3 p){ return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
+// (xyz: where the point lies across the bead, centre 0 to rim 1; w: coverage)
 vec4 folBead(vec3 w, float wet){
   vec3 bp = w * 380.0;
   vec3 bi = floor(bp), bf = fract(bp) - 0.5;
@@ -183,8 +186,7 @@ vec4 folBead(vec3 w, float wet){
   float r = 0.22 + 0.2 * fract(h * 7.31);
   vec3 off = bf - (vec3(fract(h * 3.1), fract(h * 5.7), fract(h * 9.3)) - 0.5) * 0.3;
   float on = step(1.0 - wet * 0.6, h);
-  float d = length(off);
-  return vec4(off / max(d, 1e-3), on * (1.0 - smoothstep(r * 0.7, r, d)));
+  return vec4(off / r, on * (1.0 - smoothstep(r * 0.8, r, length(off))));
 }`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 // Close up, the leaf has a surface: a fine net of veinlets and the sheen of its
@@ -201,13 +203,29 @@ if (folNetK > 0.0) {
   roughnessFactor = clamp(roughnessFactor + folNetK * 0.1 * net - folCellK * 0.12 * (cell - 0.5), 0.05, 1.0);
   folRelief += folNetK * (0.008 * net + 0.01 * n1) + folCellK * 0.0025 * cell;
 }
-roughnessFactor = mix(roughnessFactor, 0.25, uWet * 0.6);
-vec4 bead = uWet > 0.04 ? folBead(vFolW, clamp(uWet * 1.4, 0.0, 1.0)) : vec4(0.0);
-roughnessFactor = mix(roughnessFactor, 0.03, bead.w);`)
+// The case's humid air leaves a film of moisture on every leaf: a wet sheen
+// (the lamp's own, shadowed highlight, sharpened) and a slightly deeper colour;
+// rain or misting soaks them further.
+float folFilm = clamp(max(uHumid * 0.8, uWet), 0.0, 1.0);
+roughnessFactor = mix(roughnessFactor, 0.22, folFilm * 0.6);
+diffuseColor.rgb *= 1.0 - 0.1 * folFilm;
+// Beads of water: dew in the humid air, more after rain. Only drawn where a
+// pixel can resolve them (at a distance they would only glitter).
+float folBeadK = 1.0 - smoothstep(0.3, 0.8, folPx);
+float folBeadAmt = clamp(uWet * 1.4 + uHumid * 0.3, 0.0, 1.0);
+vec4 bead = (folBeadAmt > 0.04 && folBeadK > 0.0) ? folBead(vFolW, folBeadAmt) : vec4(0.0);
+bead.w *= folBeadK;
+// a drop is a little lens: the leaf seen through it, ringed by a thin dark rim
+float beadR = length(bead.xyz);
+diffuseColor.rgb *= 1.0 - 0.4 * smoothstep(0.7, 0.98, beadR) * bead.w;
+roughnessFactor = mix(roughnessFactor, 0.05, bead.w);`)
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+// (the film of water reflects more than the leaf's own cuticle)
+reflectedLight.directSpecular *= 1.0 + folFilm * 0.7;`)
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 normal = folBump(normal, folRelief, faceDirection);
-// each bead is a little lens: tilt the normal across its dome so it catches the lamp
-normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 1.6);`)
+// each bead is a low dome: the normal tilts towards its rim
+normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.9);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
 {
   // Light passing through the blade when it is lit from behind.
@@ -217,9 +235,12 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 1.
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * (back * 0.6 + view * view * 0.4) * ${translucency.toFixed(3)} * 0.55;
   // leaves turned by a gust flash their paler undersides
   totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * clamp(vGust, 0.0, 1.0) * vFlex * 0.25;
-  // a bright pin of light at the top of each bead
-  totalEmissiveRadiance += uKeyColor * bead.w * pow(max(0.0, dot(normal, uKeyDirView)), 24.0) * 0.6;
+  // light gathered through each bead brightens the leaf under it, and a pin of
+  // the lamp shines on its shoulder towards the lamp
+  vec3 keyW = (vec4(uKeyDirView, 0.0) * viewMatrix).xyz;
+  totalEmissiveRadiance += diffuseColor.rgb * uKeyColor * (1.0 - smoothstep(0.15, 0.75, beadR)) * bead.w * 0.3;
+  totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage10-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage11-${opts.key}`;
 }

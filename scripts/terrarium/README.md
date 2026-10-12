@@ -65,13 +65,16 @@ The bearded dragon (*Pogona vitticeps*) is sculpted in code, not downloaded.
 - **Skin shader.** One field of 3D Voronoi scales changes size, shape and overlap across the body, with an analytic height gradient so the scales stay sharp in close-up and fade cleanly at a distance.
   - **Scale types:** the limbs and tail carry large keeled scales that overlap toward the toes and the tail tip. Each one points down its own limb, taken from the bone it is skinned to. The back and flanks have small keeled scales, the belly small smooth overlapping ones, and the head and throat fine round beads. A row of rectangular labial plates runs along each lip.
   - **Pattern:** golden tan. A pale stripe runs down the spine between two rows of irregular dark blotches, with pale stripes along each side of the back and darker reticulated flanks with pale spots. There are dark bars on the nape, fine speckling, and banded legs and tail.
-  - **Face:** an orange flush on the jowls, the beard's base and around the eyes, a browner mottled crown, a dark eye stripe, cream lips and an ivory beard and spines. The beard darkens to black during display.
+  - **Face:** an orange flush on the jowls, the beard's base and around the eyes, a browner mottled crown, a dark eye stripe, cream lips and a pale beard. Spines are horn the colour of the skin at the base, paling toward the tip, some paler than others. The beard darkens to black during display.
   - **Eyes:** a golden-amber iris with radial fibres, flecks and a round black pupil, under a clear-coated cornea. Lids of concentric orange-brown scale rings close from below.
   - **Tone:** the golden-orange drifts in hue across the body, the legs are warmer and the tail duller, and each scale varies a little. The lamp glows through thin parts (spines, beard, toes and the lateral fringe).
   - **Colour change:** like a real dragon it darkens when cool, to absorb more heat, and pales as it warms. Under stress (storms, lightning, sudden movement) the beard goes black. While basking it flattens its body to catch more light.
   - **Morphs:** four colour palettes: normal, red, citrus and hypo. Choose with the palette button, `M` or `?morph=`.
 - **Rig** (`lib/LizardRig.ts`):
   - **Gait:** a trot-like gait with diagonal limb pairs. Feet stay planted, the heel peels off before lift-off, the toes roll, and steps re-aim mid-swing. Two-bone IK keeps elbows and knees sprawled outward. Feet grip the edge of narrow perches such as the log.
+  - **Sprawl:** the body rides low between its feet, never higher than lets each planted foot be reached with the limb bent (about 80% of its length), so elbows and knees stay out to the side near shoulder and hip height rather than standing on straight, pillar-like legs. Its belly still stays on top of whatever lies under its midline, and it rolls with a cross-slope.
+  - **Body wave:** the trunk swings in an S with each diagonal pair, more the faster it goes, and the wave runs on down the tail, growing toward the tip.
+  - **Head carriage:** on the move it watches the way ahead, low and about a hand's length out, so the head is carried low and level; near the end of a path the gaze runs on past it rather than dropping to a spot under its chin.
   - **Body:** the trunk bends in a standing wave timed to the steps, while the head counter-rotates to keep its gaze steady. The tail is a follow-the-leader rope: its base is carried a little clear of the ground on the move, and the rest drags. In a sprint the body rises, the nose lifts and the tail comes off the ground.
   - **Head and breathing:** quick saccadic head turns, eye saccades, blinking, flank breathing and throat pumping. The head tips up by about 35° at most (more height comes from raising the chest), and over a stone or the log the neck rears up rather than stretching. The beard puffs during display, and the jaw and tongue move.
 - **Behaviour** (`lib/LizardBrain.ts`):
@@ -91,7 +94,7 @@ All motion constants are illustrative. They are not measured from real bearded d
 
 ### The case and its landscape
 
-- **Peaks.** The two basalt massifs and their cascade ledges are baked by `tools/bake-peaks.mjs`. They are clusters of leaning, faceted columns with proud fracture ridges and inclined strata, also meshed from a distance field with baked occlusion. The shader adds dark stone, lichen, moss on upward faces and in crevices, and a wet streak down the cascade.
+- **Peaks.** The two basalt massifs and their cascade ledges are baked by `tools/bake-peaks.mjs`. They are clusters of leaning, faceted columns with proud fracture ridges and inclined strata, also meshed from a distance field with baked occlusion. The shader adds dark stone, lichen, moss on upward faces and in crevices. Along the falls' actual path and around each strike the rock is dark, wet and slick: no moss or lichen grows where the water runs, and the film of water smooths its fine grain to a shine.
 - **Cave.** A cave is hollowed into the foot of the left massif (`lib/cave.json`): a low chamber with a levelled floor of grit and loose pebbles, and an arched mouth framed by jamb rocks.
   - **Floor and roof:** the surface map keeps two heights. Rays cast up from the ground find the ceiling, so the floor is what feet stand on and the roof is what the rain, clouds, lightning and camera see.
   - **Shelter:** rain lands on the roof, and the floor stays dry.
@@ -110,7 +113,9 @@ All motion constants are illustrative. They are not measured from real bearded d
   - A GPU wave simulation (two height buffers, 120 steps a second) carries ripples from fingers and stirring, raindrops, wading feet, lapping, falling crickets, the falls and lightning strikes. Waves reflect off the shore and die away, and ripple faces catch the lamp. Touching the water flicks up droplets that ripple where they land.
   - Wind roughens the surface into cat's paws.
   - The water column is visible through the front glass, its surface line moving with the ripples.
-  - The cascade is a broad sheet of white water stepping down four rock ledges: aerated where it falls, clearer where it slides over a ledge, with churning foam and spray where each tier lands and at the plunge pool.
+  - The cascade is a broad sheet of water stepping down four rock ledges. The ledges are steps whose backs lie under the one above, so each fall drops off its lip, keeps clear of the rounded nose of rock below it, and strikes the open part of the next ledge.
+  - Over each lip it runs as a smooth, glassy tongue, whitening with the air it draws in as it falls. Where it strikes, it boils white: a low heaving dome of bubbles that breaks into lace as it spreads to the next lip. Soft mist rises over each strike and the plunge pool, and spray flies off them.
+  - Fine noise on the water is faded by how much of it falls in a pixel, so seen at a grazing angle across a ledge it never breaks up into grain.
 - **Planting.**
   - **Moss:** 14-layer shell-rendered moss. It grows in mounded cushions of several species with soil showing between them, and wind combs it in visible gust bands.
   - **Ferns:** CC0 scanned fern clumps with backlit translucency. They fill the back of the case and climb the sides, the back row stretched upright like sword ferns.
@@ -123,7 +128,7 @@ All motion constants are illustrative. They are not measured from real bearded d
     - sedges along the shore, spikemoss carpets and mushrooms by the log;
     - creeping fig climbing the peaks;
     - twigs and pebbles, and leaves floating on the pool.
-  - **Litter:** several hundred fallen leaves on crumbly humus with bark chips.
+  - **Litter:** several hundred fallen leaves on dark, damp, crumbly humus with a scatter of bark chips.
   - **Meadow (`lib/Meadow.ts`):** about 7 000 fine grass and sedge blades in clumps across open soil, along the shore and at the front glass.
   - **The glass and the log:** no plant passes through the glass, the stones or the log. Creeping fig is turned about its root until the whole vine lies inside the case, and every leaf and blade that reaches a pane, by growth, wind or the dragon pushing through, presses flat against it. A leaf the dragon presses down comes to rest on whatever is under it (a height map of the ground, stones and log); one pushed sideways into a stone or the log goes only as far as its flank. Fallen leaves lie where they are.
   - **Wind response:** every plant reads the wind where each of its parts stands, not just at its root. A gust crossing a fern bends its near fronds first, and a wind stroke parts the meadow along its path while gusts run through it in waves. Plants flutter in turbulence and flash their paler undersides in gusts.
@@ -163,6 +168,7 @@ The weather systems follow Weatherglass's design, rescaled to this case.
   - The soil darkens only where it actually rained, then dries under the lamp and in the wind.
   - **Puddles:** where open, level soil is soaked, the hollows fill first and grow into dark, glassy puddles, with rings from the drops landing in them. They shrink again as the floor dries. The cave's roof keeps its floor dry, but the worn apron at its mouth puddles readily.
   - **Wet leaves:** after rain the leaves are beaded with water that glints in the lamp, and drops fall from the leaf tips for a minute or so.
+  - **Humid air:** even between showers the case's humid air keeps the leaves moist: a film of water sharpens the lamp's highlight on them and deepens their colour, and up close a scatter of dew beads sits on them. Each bead is a little lens, with the leaf bright through it, a thin dark rim and a pin of lamplight on its shoulder. Beads are drawn only where a pixel can resolve them.
   - **Rainbow:** where the lamp shines through falling rain or mist, a bow can appear: about 41° from the point opposite the light, red outside, with a fainter, reversed secondary bow beyond it. It only shows with the lamp behind you, it moves as you move, and the cloud shades the top of its own rain. The lamp hangs almost overhead, so the bow is drawn as if the light came in lower, as the sun does on a showery afternoon.
 - **Misting.** The misting bottle throws fine droplets that slow within a hand's breadth and drift down. They wet the leaves and raise the humidity.
 - **Fog.** A shallow-fluid grid holds density, layer thickness, freshness and momentum. Fog spreads where it is poured, runs downhill, levels like a liquid, drifts with the air, and burns off under the lamp or in strong wind. It is ray-marched as a lit volume with billowing tops and wispy edges, stopped by the scene's depth, and fresh pours throw off billows.
