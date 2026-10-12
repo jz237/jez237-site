@@ -110,15 +110,16 @@ patch(
 patch('seasonBase:[12,24,10,-7]', 'seasonBase:[21,27,22,-7]', 'tropical seasons');
 patch('class bE{constructor(){this.season=.25,', 'class bE{constructor(){this.season=.85,', 'opens in summer');
 patch('calm(r){const{world:t}=r;t.season=.25,', 'calm(r){const{world:t}=r;t.season=.85,', 'calm is summer');
-// Steadier adaptive resolution. Weatherglass re-tuned every 0.75 s with a 1.2 s cool-down, so on a machine
-// near its 50/58 fps thresholds it kept resizing the canvas up and down every couple of seconds, and every
-// resize rebuilds the post-processing targets: the picture flickered. Now it measures over 2 s, steps down
-// only on two low readings in a row (or one very low), never climbs back to a level that just failed
-// (unless fps stays high for ~40 s), and changes at most every 4 s.
+// Settle, then lock the resolution. Weatherglass re-tuned it every 0.75 s with a 1.2 s cool-down, so on a
+// machine near its 50/58 fps thresholds it kept resizing the canvas: every change re-renders the whole
+// picture at a new sharpness, with the glow and soft-focus rebuilt, which reads as a flash. Now it adapts
+// only in the first 12 s after the veil lifts (stepping down to a level the machine can hold), then holds
+// that resolution; after that only an emergency (below 26 fps for 6 s) can lower it once more, and it
+// never steps back up.
 patch(
   "sample(t){if(!this.adaptive||t>.5||(this._acc+=t,this._frames++,this._cool-=t,this._acc<.75))return;const e=this._frames/this._acc;if(this._acc=0,this._frames=0,this._cool>0)return;let i=this.dpr;e<50?i=Math.max(this.minDpr,this.dpr*(e<35?.8:.9)):e>58&&this.dpr<this.maxDpr&&(i=Math.min(this.maxDpr,this.dpr*1.06)),Math.abs(i-this.dpr)>.01&&(this.dpr=i,this._cool=1.2,this.onChange?.(this.dpr)),e<45&&this.dpr<=this.minDpr+.01?++this._lowStreak>=3&&this.postLevel>0&&(this.postLevel--,this._lowStreak=0,this._cool=2,this.onPostLevel?.(this.postLevel)):this._lowStreak=0}",
-  "sample(t){if(!this.adaptive||t>.5)return;this._acc+=t;this._frames++;this._cool-=t;if(this._acc<2)return;const e=this._frames/this._acc;this._acc=0;this._frames=0;if(this._cool>0)return;this._lo=e<48?(this._lo||0)+1:0;this._hi=e>58?(this._hi||0)+1:0;let i=this.dpr;if(e<34||this._lo>=2){i=Math.max(this.minDpr,this.dpr*.86);this._ceil=this.dpr*.98;this._lo=0;this._hi=0}else if(this._hi>=4&&this.dpr<this.maxDpr){const c=this._hi>=20?this.maxDpr:Math.min(this.maxDpr,this._ceil||this.maxDpr);c>this.dpr+.01&&(i=Math.min(c,this.dpr*1.08))}if(Math.abs(i-this.dpr)>.01){this.dpr=i;this._cool=4;this.onChange?.(this.dpr)}e<42&&this.dpr<=this.minDpr+.01?++this._lowStreak>=2&&this.postLevel>0&&(this.postLevel--,this._lowStreak=0,this._cool=4,this.onPostLevel?.(this.postLevel)):this._lowStreak=0}",
-  'steady resolution governor',
+  "sample(t){if(!this.adaptive||t>.5)return;if(!document.body.classList.contains(\"ready\"))return;this._age=(this._age||0)+t;this._acc+=t;this._frames++;this._cool-=t;if(this._acc<2)return;const e=this._frames/this._acc;this._acc=0;this._frames=0;if(this._cool>0)return;const settled=this._age>12;this._vlo=e<26?(this._vlo||0)+1:0;let i=this.dpr;if(!settled){e<48&&(i=Math.max(this.minDpr,this.dpr*(e<34?.8:.88)))}else if(this._vlo>=3){i=Math.max(this.minDpr,this.dpr*.85);this._vlo=0}if(Math.abs(i-this.dpr)>.01){this.dpr=i;this._cool=2;this.onChange?.(this.dpr)}!settled&&e<42&&this.dpr<=this.minDpr+.01&&this.postLevel>0&&(this.postLevel--,this._cool=2,this.onPostLevel?.(this.postLevel))}",
+  'settle-then-lock resolution governor',
 );
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
