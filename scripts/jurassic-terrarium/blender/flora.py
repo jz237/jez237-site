@@ -293,6 +293,50 @@ def make_araucaria(name, height):
     return B.mesh(name)
 
 
+def make_fernlet(name, size, red=False):
+    """A cheap carpet fern: few fronds, few leaflets, so thousands can be planted."""
+    B = Builder()
+    nf = int(rng.integers(5, 8))
+    cols = (hexc('#243a1b'), hexc('#3f6a2c'), hexc('#7aa64c'))
+    for k in range(nf):
+        a = 2 * math.pi * k / nf + rng.normal(0, 0.3)
+        elev = rng.uniform(0.55, 1.1)
+        d = [math.cos(a) * math.cos(elev), math.sin(a) * math.cos(elev), math.sin(elev)]
+        L = size * rng.uniform(0.8, 1.1)
+        frond(B, [0, 0, 0.01], d, L, L * 0.34, droop=rng.uniform(0.2, 0.45), cols=cols, n=8,
+              red=(red and rng.random() < 0.6))
+    return B.mesh(name)
+
+
+def make_redplant(name, size):
+    """A bromeliad-like rosette of strap leaves, crimson with a green heart (the concept's red plants)."""
+    B = Builder()
+    nl = int(rng.integers(12, 18))
+    for k in range(nl):
+        a = 2 * math.pi * k / nl + rng.normal(0, 0.15)
+        elev = rng.uniform(0.35, 1.2)
+        L = size * rng.uniform(0.6, 1.0) * (1.1 - 0.3 * (elev - 0.35))
+        d = np.array([math.cos(a) * math.cos(elev), math.sin(a) * math.cos(elev), math.sin(elev)])
+        side = np.cross(d, [0, 0, 1])
+        side /= np.linalg.norm(side) + 1e-9
+        up = np.cross(side, d)
+        n = 6
+        pts = [d * L * (i / (n - 1)) - np.array([0, 0, 1.0]) * L * 0.35 * (i / (n - 1)) ** 2 for i in range(n)]
+        w0 = size * 0.07
+        c_in, c_mid, c_out = hexc('#2f5a2a'), hexc('#a3242a'), hexc('#d84a3a')
+        for i in range(n - 1):
+            t0, t1 = i / (n - 1), (i + 1) / (n - 1)
+            wa = w0 * (1 - t0 * 0.85)
+            wb = w0 * (1 - t1 * 0.85)
+            # leaves are channelled (a shallow V across the blade)
+            a0, a1 = pts[i] + side * wa + up * wa * 0.25, pts[i] - side * wa + up * wa * 0.25
+            b0, b1 = pts[i + 1] + side * wb + up * wb * 0.25, pts[i + 1] - side * wb + up * wb * 0.25
+            ca = lerp(c_in, c_mid, min(1, t0 * 2.2)) if t0 < 0.5 else lerp(c_mid, c_out, (t0 - 0.5) * 2)
+            cb = lerp(c_in, c_mid, min(1, t1 * 2.2)) if t1 < 0.5 else lerp(c_mid, c_out, (t1 - 0.5) * 2)
+            B.quad(a0, a1, b1, b0, ca, ca, cb, cb)
+    return B.mesh(name)
+
+
 def material():
     m = bpy.data.materials.new('plant')
     m.use_nodes = True
@@ -326,6 +370,8 @@ def export(name, objs):
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 export('fern', [make_fern(f'fern{i}', rng.uniform(0.7, 1.3), red=(i == 3)) for i in range(4)])
-export('treefern', [make_treefern(f'treefern{i}', rng.uniform(2.6, 4.8)) for i in range(3)])
+export('treefern', [make_treefern(f'treefern{i}', h) for i, h in enumerate([2.8, 3.9, 5.2, 6.5])])
 export('cycad', [make_cycad(f'cycad{i}', rng.uniform(0.5, 1.6), cone=(i == 1)) for i in range(3)])
 export('horsetail', [make_horsetail(f'horsetail{i}', rng.uniform(1.0, 1.7)) for i in range(2)])
+export('fernlet', [make_fernlet(f'fernlet{i}', rng.uniform(0.6, 1.0), red=(i == 2)) for i in range(3)])
+export('redplant', [make_redplant(f'redplant{i}', rng.uniform(0.6, 0.9)) for i in range(2)])

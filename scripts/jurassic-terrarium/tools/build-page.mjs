@@ -55,22 +55,37 @@ patch(
 patch('R1="weatherglass.coach.v1"', 'R1="jurassic-terrarium.coach.v1"', 'coach key');
 
 // Jurassic planting: Weatherglass's oak, birch and cherry trees and most of its flowers and grass give way
-// to tree ferns, cycads, ferns and horsetails planted by dinos.js. Conifers and shrubs stay.
+// to tree ferns, cycads, ferns, red rosettes and horsetails planted by dinos.js. Fewer conifers.
 patch(
   'u(-3.95,.25,Re.oak,1.3,.64,.5),u(-3.75,2.4,Re.cherry,.8,.47,.35),u(3.3,.35,Re.cherry,.74,.44,.45),u(-4.95,1.5,Re.birch,1.2,.3,.4);',
   '',
   'hero broadleaf trees',
 );
 patch('broad:e.pick(11,16,20)', 'broad:0', 'broadleaf count');
-patch('h=FC(e.pick(2e4,6e4,12e4),l,c)', 'h=FC(e.pick(9e3,26e3,52e3),l,c)', 'grass count');
-patch('const f=NC(e.pick(1800,3500,7e3),l,c)', 'const f=NC(e.pick(250,500,1e3),l,c)', 'flower count');
+patch('h=FC(e.pick(2e4,6e4,12e4),l,c)', 'h=FC(e.pick(3e3,8e3,16e3),l,c)', 'grass count');
+patch('const f=NC(e.pick(1800,3500,7e3),l,c)', 'const f=NC(e.pick(80,160,320),l,c)', 'flower count');
+patch('pine:e.pick(16,24,30)', 'pine:e.pick(9,13,16)', 'fewer pines');
 
 // The T. rex den: a level shelf cut into the foot of the right-hand peak, under the rock overhang that
 // dinos.js places there. The terrain function is shared by the mesh bake, water, planting and routing,
 // so everything agrees about the new ground. DEN must match DEN in runtime/main.js.
-const DEN = { x: 4.4, z: -1.7, hx: 0.95, hz: 0.75, y: 0.72 };
+const DEN = { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
 patch('h=(w,y,_,M,A)=>!(!a(w,y,M)||', 'h=(w,y,_,M,A)=>!(!a(w,y,M)||window.__jtDenAt&&window.__jtDenAt(w,y,M)||', 'no trees in the den');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
+
+// The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
+// tall 12 x 8 x 7.4 box. Everything in Weatherglass sizes itself from this one constant; the clouds'
+// band drops to sit beside the peaks, and the camera fit frames the wider case.
+if (!process.env.JT_TALL) {
+  patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-1.8,topY:5.6,glass:.08}', 'wide case');
+  patch('on={minY:4.5,maxY:6.5,defaultY:5.5}', 'on={minY:3.3,maxY:4.7,defaultY:4.0}', 'cloud band');
+  patch('const i=12.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'const i=18.8/(2*Math.tan(Mr.degToRad(e/2))*t);', 'camera fit');
+  patch('me={top:Ci.y0,coreW:6.36,', 'me={top:Ci.y0,coreW:9.36,', 'plinth width');
+  patch('new C(-6.36-me.footOffset,me.bottom,-4.36-me.footOffset)', 'new C(-me.coreW-me.footOffset,me.bottom,-me.coreD-me.footOffset)', 'plinth hit box');
+  // look at the cabinet from the front, a little above the lid line, as you would in a room
+  patch('front:{theta:0,phi:1.2,radius:21,target:[0,1.6,0]}', 'front:{theta:0,phi:1.3,radius:21,target:[0,1.25,0]}', 'front view');
+  patch('n.preset(ki.get("cam")||"hero",!0)', 'n.preset(ki.get("cam")||"front",!0)', 'default view');
+}
 
 // Hold the veil while dinos.js loads its models. The hold is set before the bundle runs.
 patch(
@@ -85,7 +100,7 @@ patch(
     `function s(a,b,t){t=Math.min(1,Math.max(0,(t-a)/(b-a)));return t*t*(3-2*t)}` +
     `var m=(1-s(0.75,1.3,u))*(1-s(0.75,1.3,v));return e+(d.y-e)*m};` +
     `window.__jtDenAt=function(x,z,r){var d=window.__jtDen;r=r||0;` +
-    `return Math.abs(x-d.x)<1.55+r&&z>d.z-1.7-r&&z<d.z+0.95+r}</script>`,
+    `return Math.abs(x-d.x)<d.hx*1.65+r&&z>d.z-d.hz*2.3-r&&z<d.z+d.hz*1.25+r}</script>`,
   'den terrain hook',
 );
 patch(

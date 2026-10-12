@@ -439,9 +439,9 @@
     "description": "A miniature prehistoric world under glass, sculpted from research and rendered in Blender. A lipped Tyrannosaurus prowls a valley of tree ferns, cycads and horsetails, hunting and retiring to its rock den at night. A Triceratops herd may stand its ground against it, Stegosaurus graze and flee, a Brachiosaurus browses the treetops and Pteranodons soar under the clouds. Grab the clouds to make rain, stir the wind and run the sun and seasons.",
     "url": "jurassic-terrarium/",
     "image": "assets/jurassic-terrarium.jpg",
-    "imageAlt": "Actual Jurassic Terrarium scene: Triceratops by a hut, Stegosaurus at a dock, a Brachiosaurus wading a stream below a waterfall and a Tyrannosaurus by its rock den, in a miniature valley under glass",
+    "imageAlt": "Actual Jurassic Terrarium scene: a long, low brass-framed glass cabinet holding a fern jungle with a Brachiosaurus by a hut, Triceratops and Stegosaurus, a Tyrannosaurus in a rock cave, a waterfall and a lake",
     "imageWidth": 1440,
-    "imageHeight": 900,
+    "imageHeight": 810,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/jurassic-terrarium",
     "features": [
       "Research-based dinosaurs sculpted & baked in Blender",

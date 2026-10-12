@@ -14,17 +14,17 @@ import { Flora } from './flora.js';
 import { Voices } from './voice.js';
 import { Flex } from './flex.js';
 
-// One terrarium unit is 8 m: the 12 x 8 unit floor is a 96 x 64 m valley, and a 1.4-unit
-// pine is an 11 m conifer (miniature-scale trees, as in a diorama).
-export const METRES_PER_UNIT = 8;
+// One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
+// the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
+export const METRES_PER_UNIT = 5.5;
 const S = 1 / METRES_PER_UNIT;
 // The den: must match DEN in tools/build-page.mjs (the terrain shelf under it).
-const DEN = window.__jtDen || { x: 4.4, z: -1.7, hx: 0.95, hz: 0.75, y: 0.72 };
+const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
 
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', ready: true, count: 1, clearance: 0.08, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
+    id: 'trex', ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true,
     acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
@@ -51,7 +51,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.16, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -190,7 +190,7 @@ class Dino {
 
   inDen() {
     const d = this.mod.den;
-    return Math.abs(this.pos.x - d.x) < 0.7 && Math.abs(this.pos.z - d.z) < 0.6;
+    return Math.abs(this.pos.x - d.x) < d.hx * 0.7 && Math.abs(this.pos.z - d.z) < d.hz * 0.8;
   }
 
   goDen() {
@@ -643,12 +643,14 @@ class Dinosaurs {
     });
     this.flora = new Flora(ctx, S, rand);
     this.group.add(this.flora.group);
-    this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 }, mouth: { x: DEN.x, z: DEN.z + 0.75 } };
+    // den footprint in units: the rock was modelled in metres and is shown at DEN.s
+    const ds = DEN.s / (1 / 8); // relative to the 1/8 scale the rectangles below were measured at
+    this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.nav = new NavGrid(ctx, {
       obstacles: this.flora.obstacles,
       rects: [
-        { x0: DEN.x - 1.45, x1: DEN.x + 1.45, z0: DEN.z - 1.5, z1: DEN.z + 0.55, block: true },
-        { x0: DEN.x - 0.72, x1: DEN.x + 0.72, z0: DEN.z - 0.6, z1: DEN.z + 0.62, block: false },
+        { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
+        { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
       ],
     });
     for (const sp of SPECIES.filter((s) => !s.flyer))
@@ -670,7 +672,7 @@ class Dinosaurs {
       .loadAsync(new URL('den.glb', base).href)
       .then((g) => {
         const m = g.scene;
-        m.scale.setScalar(S);
+        m.scale.setScalar(DEN.s);
         m.position.set(DEN.x, DEN.y - 0.03, DEN.z);
         m.traverse((o) => {
           if (o.isMesh) {

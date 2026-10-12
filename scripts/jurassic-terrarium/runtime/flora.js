@@ -8,6 +8,12 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 const UP = new Vector3(0, 1, 0);
+const JUNGLE = {
+  grass: new Color(0x23401a).convertSRGBToLinear(),
+  dry: new Color(0x3e4424).convertSRGBToLinear(),
+  foliage: new Color(0x2c4a22).convertSRGBToLinear(),
+  foliage2: new Color(0x3d5a26).convertSRGBToLinear(),
+};
 
 export class Flora {
   constructor(ctx, S, rand) {
@@ -29,7 +35,7 @@ export class Flora {
     const sh = T.shape;
     const box = ctx.box;
     const cabin = sh.CABIN;
-    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [] });
+    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [], fernlet: [], redplant: [] });
     const taken = [];
     const free = (x, z, r) => taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
     const inBox = (x, z, m) => Math.abs(x) < box.halfW - m && Math.abs(z) < box.halfD - m;
@@ -50,7 +56,7 @@ export class Flora {
         const kind = rand() < 0.6 ? 'treefern' : 'cycad';
         const r = kind === 'treefern' ? 0.18 : 0.12;
         if (!free(x, z, r)) continue;
-        add(kind, x, z, 0.8 + rand() * 0.5, r, kind === 'treefern' ? 0.05 : 0.04);
+        add(kind, x, z, (kind === 'treefern' ? 1.1 : 1.3) + rand() * 0.6, r, kind === 'treefern' ? 0.05 : 0.04);
         n--;
       }
     };
@@ -61,28 +67,53 @@ export class Flora {
     groveAt(-4.95, 1.5, 3, 0.4);
     // scattered tree ferns and cycads by the terrain's tree suitability
     let tries = 0;
-    let want = 28;
-    while (want > 0 && tries++ < 6000) {
+    let want = 64;
+    while (want > 0 && tries++ < 12000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.4), z = (rand() * 2 - 1) * (box.halfD - 0.4);
-      const s = sh.suitability(x, z, 'tree');
-      if (rand() > s * 1.6 || water(x, z) > 0.15 || nearCabin(x, z, 0.35) || T.slope(x, z) > 0.5) continue;
+      // meadow edges and the lower mountain slopes, like the palms climbing the peaks in a jungle diorama
+      const s = Math.max(sh.suitability(x, z, 'tree'), 0.7 * sh.suitability(x, z, 'pine'));
+      if (rand() > s * 1.6 || water(x, z) > 0.15 || nearCabin(x, z, 0.35) || T.slope(x, z) > 0.62) continue;
       const kind = rand() < 0.55 ? 'treefern' : 'cycad';
       const r = kind === 'treefern' ? 0.2 : 0.13;
       if (!free(x, z, r)) continue;
-      add(kind, x, z, 0.75 + rand() * 0.55, r, kind === 'treefern' ? 0.05 : 0.04);
+      add(kind, x, z, (kind === 'treefern' ? 1.0 : 1.2) + rand() * 0.6, r, kind === 'treefern' ? 0.05 : 0.04);
       want--;
     }
     // ferns carpet the meadows, thickest under the tree ferns
     const tier = ctx.quality?.tier ?? 1; // 0 low, 1 medium, 2 high
     tries = 0;
-    want = [160, 300, 420][tier] ?? 300;
+    want = [120, 220, 300][tier] ?? 220;
     while (want > 0 && tries++ < 20000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.15), z = (rand() * 2 - 1) * (box.halfD - 0.15);
       const g = sh.suitability(x, z, 'grass');
       const near = P.treefern.some((t) => Math.hypot(t.x - x, t.z - z) < 0.5);
       if (rand() > g * 1.4 + (near ? 0.5 : 0) || water(x, z) > 0.1 || nearCabin(x, z, 0.1)) continue;
       if (!free(x, z, 0.035)) continue;
-      add('fern', x, z, 0.7 + rand() * 0.7, 0.035, 0);
+      add('fern', x, z, 1.3 + rand() * 1.0, 0.035, 0);
+      want--;
+    }
+    // a carpet of small ferns over everything that isn't water, rock, path or building
+    tries = 0;
+    want = [700, 1400, 2200][tier] ?? 1400;
+    while (want > 0 && tries++ < 60000) {
+      const x = (rand() * 2 - 1) * (box.halfW - 0.1), z = (rand() * 2 - 1) * (box.halfD - 0.1);
+      const g = Math.max(sh.suitability(x, z, 'grass'), 0.6 * sh.suitability(x, z, 'flower'));
+      const sl = T.slope(x, z);
+      if (rand() > g * 1.8 + 0.15 || water(x, z) > 0.08 || nearCabin(x, z, 0.05) || sl > 0.7) continue;
+      add('fernlet', x, z, 1.3 + rand() * 1.3, 0.0, 0);
+      want--;
+    }
+    // crimson rosettes in drifts under the tree ferns and along the paths
+    tries = 0;
+    want = [50, 100, 150][tier] ?? 100;
+    while (want > 0 && tries++ < 30000) {
+      const host = P.treefern.length && rand() < 0.7 ? P.treefern[Math.floor(rand() * P.treefern.length)] : null;
+      const x = host ? host.x + (rand() - 0.5) * 0.9 : (rand() * 2 - 1) * (box.halfW - 0.2);
+      const z = host ? host.z + (rand() - 0.5) * 0.9 : (rand() * 2 - 1) * (box.halfD - 0.2);
+      if (Math.abs(x) > box.halfW - 0.15 || Math.abs(z) > box.halfD - 0.15) continue;
+      if (water(x, z) > 0.08 || nearCabin(x, z, 0.05) || T.slope(x, z) > 0.6) continue;
+      if (!free(x, z, 0.03)) continue;
+      add('redplant', x, z, 1.2 + rand() * 1.0, 0.03, 0);
       want--;
     }
     // horsetails crowd the shore of the lake and the river banks
@@ -122,7 +153,7 @@ export class Flora {
             im.setMatrixAt(i, M);
           });
           im.instanceMatrix.needsUpdate = true;
-          im.castShadow = kind !== 'horsetail' && kind !== 'fern';
+          im.castShadow = kind === 'treefern' || kind === 'cycad';
           im.receiveShadow = true;
           im.frustumCulled = false;
           im.name = `flora-${kind}-${vi}`;
@@ -137,8 +168,8 @@ export class Flora {
     if (this._mats[kind]) return this._mats[kind];
     const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
     const U = this.uniforms;
-    const amp = { fern: 0.05, horsetail: 0.08, treefern: 0.07, cycad: 0.03 }[kind] || 0.05;
-    const H = { fern: 1.0, horsetail: 1.6, treefern: 4.5, cycad: 2.6 }[kind] || 1.0; // metres
+    const amp = { fern: 0.05, fernlet: 0.05, redplant: 0.03, horsetail: 0.08, treefern: 0.07, cycad: 0.03 }[kind] || 0.05;
+    const H = { fern: 1.0, fernlet: 0.8, redplant: 0.7, horsetail: 1.6, treefern: 5.5, cycad: 2.6 }[kind] || 1.0; // metres
     m.onBeforeCompile = (sh) => {
       sh.uniforms.uTime = U.uTime;
       sh.uniforms.uWind = U.uWind;
@@ -167,6 +198,15 @@ export class Flora {
   }
 
   update(dt) {
+    // a deep, mossy jungle floor instead of a bright meadow: Weatherglass recomputes its seasonal
+    // palette every frame and copies it into the terrain and grass shaders afterwards
+    const sea = this.ctx.world.seasonal;
+    if (sea?.grass) {
+      sea.grass.lerp(JUNGLE.grass, 0.6);
+      sea.grassDry?.lerp(JUNGLE.dry, 0.55);
+      sea.foliage?.lerp(JUNGLE.foliage, 0.35);
+      sea.foliage2?.lerp(JUNGLE.foliage2, 0.35);
+    }
     const U = this.uniforms;
     U.uTime.value += dt;
     const w = this.ctx.world;
