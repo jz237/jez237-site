@@ -126,6 +126,8 @@ export class LizardRig {
   private tailIdx: number[];
   private tailBind: THREE.Vector3[];
   private tailPts: THREE.Vector3[] = [];
+  /** How far the tail bends along its length (rad, signed), eased. */
+  private tailBend = 0;
   private tailPrev: THREE.Vector3[] = [];
   private tailLen: number[] = [];
   private tailRadius: number[] = [];
@@ -276,24 +278,44 @@ export class LizardRig {
     // Sample the surface under the chest, pelvis and flanks.
     // (each a little patch, so a crack in the log is bridged rather than dropped into)
     const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a + right.x * sd, I.z + fwd.z * a + right.z * sd);
-    const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0));
-    const p = Math.max(H(-0.02, 0), H(-0.03, 0), H(-0.042, 0));
-    const l = Math.max(H(0.01, -0.022), H(-0.012, -0.022));
-    const r = Math.max(H(0.01, 0.022), H(-0.012, 0.022));
+    // ground under the chest and hips; a rise just beyond the trunk counts for less
+    // with distance (a 35° slope), so a step coming up is met smoothly, not all at once
+    const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0), H(0.06, 0) - 0.0105, H(0.075, 0) - 0.021);
+    const p = Math.max(H(-0.02, 0), H(-0.03, 0), H(-0.042, 0), H(-0.055, 0) - 0.009, H(-0.07, 0) - 0.0196);
     const mid = this.ground.heightAt(I.x, I.z);
+    // (the ground either side; something tall beside it, like the log it walks
+    // along, is a wall it keeps off, not ground to tilt onto)
+    const side = (h: number) => (h - mid > 0.03 ? mid : h);
+    const l = Math.max(side(H(0.01, -0.022)), side(H(-0.012, -0.022)));
+    const r = Math.max(side(H(0.01, 0.022)), side(H(-0.012, 0.022)));
     // the trunk never sinks into what it straddles (the log, a stone): its belly
     // stays above the highest point anywhere under its footprint
     // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
-    let under = mid, underMid = mid;
+    let under = mid, underMid = mid, ramp = -Infinity;
+    // (pitched nose-up on the climb, the belly ahead of the middle is that much higher)
+    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065), -0.9, 0.9));
     for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
       const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
       const h = this.ground.heightAt(sx, sz);
-      if (h - mid < 0.03 || (h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD)) {
+      // climbing onto (or down off) the log is a ramp, not a step: the log ahead or
+      // behind lifts the body by its height less a 35° slope back to it, so the
+      // body rises steadily, nose up, as it climbs, and comes down the same way
+      // (to the side as well as ahead: angling up onto it, the body rises as it gets over it)
+      if (h - mid > 0.006 && h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD) ramp = Math.max(ramp, h - (Math.abs(a) + Math.abs(sd)) * 0.7);
+      // (the log counts only right under the belly: climbing onto it, the chest
+      // rises first with the forelegs, and the body follows as it gets on top,
+      // rather than the whole lizard popping up the moment its nose is over it)
+      if (h - mid < 0.03) {
         under = Math.max(under, h);
         if (sd === 0) underMid = Math.max(underMid, h);
+      } else if (h - mid < 0.12 && Math.abs(a) <= 0.045 && this.ground.kindAt?.(sx, sz) === WOOD) {
+        // (the trunk stays on top of the log under it, pitched as it is; its flanks may tuck a little)
+        const need = h - a * tanP - (sd !== 0 ? 0.008 : 0);
+        under = Math.max(under, need);
+        if (sd === 0) underMid = Math.max(underMid, need);
       }
     }
-    const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006);
+    const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006, ramp);
     const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
     const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
@@ -548,54 +570,65 @@ export class LizardRig {
   }
 
   private updateTail(dt: number, speedCm: number) {
-    // Follow-the-leader rope: each joint keeps its place on the ground (drag)
-    // and is pulled gently straight; a small travelling wobble rides on top.
+    // A lizard's tail is not a snake's: no wave runs down it, and it never curls
+    // into an S. Its base swings with the hips and the rest follows, fairly stiff,
+    // in one smooth curve. Where it is dragged (each joint keeps its place on the
+    // ground, follow-the-leader) gives how much it bends in all; the tail is then
+    // laid out as a single arc with that bend, curling a little more toward the tip.
     const pelvis = this.spinePos[5];
     const back = new THREE.Vector3().copy(this.spinePos[4]).sub(pelvis);
     back.y = 0;
     back.normalize().negate();
     const N = this.tailPts.length;
-    // A lizard's tail is not a snake's: no wave runs down it. Its base swings with
-    // the hips (more the faster it goes) and the rest follows, fairly stiff.
-    let prev = pelvis.clone();
-    let prevDir = back.clone();
+    if (!N) return;
     const relax = 1 - Math.exp(-dt * (this.moving ? 3.2 : 1.6));
+    // 1. the drag: how far the rope, pulled from its old place, wants to bend
+    let prev = new THREE.Vector2(pelvis.x, pelvis.z);
+    let prevDir = new THREE.Vector2(back.x, back.z);
+    let total = 0;
+    for (let i = 0; i < N; i++) {
+      const p = this.tailPts[i];
+      const drag = new THREE.Vector2(p.x - prev.x, p.z - prev.y);
+      if (drag.lengthSq() < 1e-12) drag.copy(prevDir);
+      drag.normalize();
+      const straight = clamp(0.55 - i * 0.025, 0.25, 0.55);
+      const dir = drag.lerp(prevDir, clamp(straight * relax * 6, 0, 1)).normalize();
+      const ang = clamp(Math.atan2(prevDir.x * dir.y - prevDir.y * dir.x, prevDir.x * dir.x + prevDir.y * dir.y), -0.22, 0.22);
+      total += ang;
+      const ca = Math.cos(ang), sa = Math.sin(ang);
+      dir.set(prevDir.x * ca - prevDir.y * sa, prevDir.x * sa + prevDir.y * ca);
+      prev = new THREE.Vector2(prev.x + dir.x * this.tailLen[i], prev.y + dir.y * this.tailLen[i]);
+      prevDir = dir;
+    }
+    // (no more than ~95° in all, and eased, so the curve swings over smoothly)
+    total = clamp(total, -1.65, 1.65);
+    this.tailBend = damp(this.tailBend, total, 6, dt);
+    // 2. lay it out as one arc
+    let wsum = 0;
+    for (let i = 0; i < N; i++) wsum += 0.7 + 0.6 * i / Math.max(1, N - 1);
+    let prev3 = pelvis.clone();
+    let dir3 = back.clone();
     for (let i = 0; i < N; i++) {
       const p = this.tailPts[i];
       const L = this.tailLen[i];
-      const drag = new THREE.Vector3(p.x - prev.x, 0, p.z - prev.z);
-      if (drag.lengthSq() < 1e-12) drag.copy(prevDir);
-      drag.normalize();
-      // straighten toward the previous segment, more strongly near the base
-      const straight = clamp(0.55 - i * 0.025, 0.25, 0.55);
-      const dir = drag.lerp(prevDir, clamp(straight * relax * 6, 0, 1)).normalize();
-      // limit the bend at each joint
-      const maxBend = 0.3;
-      const cross = prevDir.x * dir.z - prevDir.z * dir.x;
-      const dot = prevDir.x * dir.x + prevDir.z * dir.z;
-      let ang = Math.atan2(cross, dot);
-      ang = clamp(ang, -maxBend, maxBend);
-      // travelling wobble
+      let ang = this.tailBend * (0.7 + 0.6 * i / Math.max(1, N - 1)) / wsum;
       // a hunting lizard flicks the tip of its tail
       if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
       const ca = Math.cos(ang), sa = Math.sin(ang);
-      dir.set(prevDir.x * ca - prevDir.z * sa, 0, prevDir.x * sa + prevDir.z * ca);
+      dir3 = new THREE.Vector3(dir3.x * ca - dir3.z * sa, 0, dir3.x * sa + dir3.z * ca);
       // rest on the ground; the base hangs from the raised pelvis
       // (the tail slides along the glass rather than through it)
-      const gp = insideGlass(new THREE.Vector3(prev.x + dir.x * L, 0, prev.z + dir.z * L), this.tailRadius[i] + 0.002);
-      const gx = gp.x, gz = gp.z;
-      // the base of the tail is carried a little clear of the ground on the move, more in a sprint
-      // (walking, it carries the base of its tail clear of the ground, the tip trailing)
+      const gp = insideGlass(new THREE.Vector3(prev3.x + dir3.x * L, 0, prev3.z + dir3.z * L), this.tailRadius[i] + 0.002);
+      // walking, it carries the base of its tail clear of the ground, the tip trailing
       const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
-      const g = this.ground.heightAt(gx, gz) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
-      let y = Math.max(g, prev.y - L * 0.55);
-      y = Math.min(y, prev.y + L * 0.5);
-      const dy = y - prev.y;
+      const g = this.ground.heightAt(gp.x, gp.z) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
+      let y = Math.max(g, prev3.y - L * 0.55);
+      y = Math.min(y, prev3.y + L * 0.5);
+      const dy = y - prev3.y;
       const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
-      p.set(prev.x + dir.x * h, y, prev.z + dir.z * h);
+      p.set(prev3.x + dir3.x * h, y, prev3.z + dir3.z * h);
       insideGlass(p, this.tailRadius[i] + 0.002);
-      prevDir = dir;
-      prev = p;
+      prev3 = p;
     }
   }
 
