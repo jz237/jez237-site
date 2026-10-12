@@ -11,7 +11,7 @@ import hashlib
 import json
 from pathlib import Path
 from urllib.parse import urlparse
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 def restore(row, destination):
     relative = Path(row['path'])
@@ -25,7 +25,8 @@ def restore(row, destination):
     checksum = hashlib.sha256()
     size = 0
     try:
-        with urlopen(row['url'], timeout=120) as source, temporary.open('wb') as output:
+        request = Request(row['url'], headers={'User-Agent': 'Jez237-Media-Deployment/1.0 (+https://github.com/jz237)'})
+        with urlopen(request, timeout=120) as source, temporary.open('wb') as output:
             while data := source.read(1024 * 1024):
                 output.write(data)
                 checksum.update(data)
