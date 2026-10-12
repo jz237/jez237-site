@@ -166,6 +166,32 @@ function caveHollow(x, y, z) {
 }
 const CAVE_BOX = {min: [CAVE.x - CAVE.rx - 0.03, CAVE.floor - 0.04, CAVE.z - CAVE.rz - 0.03], max: [CAVE.x + CAVE.rx + 0.03, CAVE.floor + CAVE.h + 0.03, CAVE.mouth.z + CAVE.mouth.rz + 0.03]};
 
+// Cellular noise: distances (m) to the nearest and second-nearest of jittered
+// points, one per cell of `size` (y squashed so the cells stand a little taller).
+function hash3(i, j, k, s) {const n = Math.sin(i * 127.1 + j * 311.7 + k * 74.7 + s * 17.3) * 43758.5453; return n - Math.floor(n);}
+function cells(x, y, z, size, stretch, seed) {
+  const px = x / size, py = y / (size * stretch), pz = z / size;
+  const ix = Math.floor(px), iy = Math.floor(py), iz = Math.floor(pz);
+  let f1 = 9, f2 = 9;
+  for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
+    const cx = ix + a, cy = iy + b, cz = iz + c;
+    const dx = cx + hash3(cx, cy, cz, seed) - px, dy = cy + hash3(cx, cy, cz, seed + 1) - py, dz = cz + hash3(cx, cy, cz, seed + 2) - pz;
+    const d = dx * dx + dy * dy + dz * dz;
+    if (d < f1) {f2 = f1; f1 = d;} else if (d < f2) f2 = d;
+  }
+  return [Math.sqrt(f1) * size, Math.sqrt(f2) * size];
+}
+
+// Lava rock: rounded lumps a couple of centimetres across, with deep creases
+// between them (positive = into the rock).
+function lavaLumps(x, y, z) {
+  const [a1, a2] = cells(x, y, z, 0.019, 1.25, 3);
+  const [b1, b2] = cells(x + 0.3, y, z, 0.008, 1.1, 9);
+  const crease = 1 - smoothstep(0, 0.0055, a2 - a1);
+  const fine = 1 - smoothstep(0, 0.0022, b2 - b1);
+  return crease * 0.0032 + smoothstep(0.002, 0.012, a1) * 0.0012 + fine * 0.0009;
+}
+
 function rockDisplace(x, y, z) {
   // columnar basalt: vertical striations + ridged fracture + fine grain
   const cols = valueNoise3(x * 60, y * 5, z * 60) + valueNoise3(x * 130, y * 9, z * 130) * 0.5;
@@ -176,7 +202,7 @@ function rockDisplace(x, y, z) {
   const sy = y + x * 0.25 + z * 0.15;
   const strata = 1 - Math.abs(Math.sin(sy * 120 + fbm3(x * 15, y * 15, z * 15, 2) * 4));
   // ridges stand proud (subtracting the ridged field) so edges read sharp
-  return cols * 0.0032 - (big - 0.5) * 0.014 - (frac - 0.5) * 0.007 + (grain - 0.5) * 0.0008 - strata * strata * strata * 0.0007;
+  return lavaLumps(x, y, z) + cols * 0.0022 - (big - 0.5) * 0.014 - (frac - 0.5) * 0.007 + (grain - 0.5) * 0.0008 - strata * strata * strata * 0.0007;
 }
 
 function sdf(x, y, z) {

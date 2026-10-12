@@ -1,9 +1,9 @@
 {
- "built": "2026-10-12T13:21:08.485Z",
+ "built": "2026-10-12T13:58:53.576Z",
  "files": [
   "README.md",
+  "assets/main-C_hlsb8b.js",
   "assets/main-DqBUlK5b.css",
-  "assets/main-dMTk15oo.js",
   "favicon.svg",
   "index.html",
   "lizard/lizard-bb948c50f114.bin",
@@ -34,7 +34,7 @@
   "models/rock_moss_set_01/textures/rock_moss_set_01_diff_2k.jpg",
   "models/rock_moss_set_01/textures/rock_moss_set_01_nor_gl_2k.jpg",
   "models/rock_moss_set_01/textures/rock_moss_set_01_rough_2k.jpg",
-  "peaks/peaks-ec563254d02d.bin",
+  "peaks/peaks-f369cc7a1700.bin",
   "peaks/peaks.json"
  ]
 }

@@ -322,7 +322,7 @@ if (k < 6.5) {        // bromeliad, outer: green with a wine blush and speckles 
   folRelief -= 0.02 * lat + 0.04 * mid;
   rough = 0.4;
 } else if (k < 16.5) { // small ferns
-  col = mix(vec3(0.05, 0.12, 0.03), vec3(0.1, 0.19, 0.04), vTint);
+  col = mix(vec3(0.08, 0.2, 0.03), vec3(0.17, 0.31, 0.05), vTint);
   float vein = max(mid, pinnate(u, v, 8.0, 1.5, 0.05, fwUv) * 0.6);
   col *= 1.0 + 0.25 * vein;
   folRelief -= 0.02 * vein;
@@ -362,7 +362,7 @@ roughnessFactor = rough;`);
 ${PINNATE_GLSL}
 void main() {`);
   };
-  m.customProgramCacheKey = () => 'flora-v4';
+  m.customProgramCacheKey = () => 'flora-v5';
   return m;
 }
 
@@ -462,22 +462,19 @@ export class Flora {
     }
     // Philodendron and pothos: big glossy leaves at the foot of the rocks, behind
     // the log and in the corners, as a planted rainforest case has them
+    // (a few only: ferns fill the rest, and the front-left corner is moss)
     const heartSpots: [number, number, number][] = [
-      [-0.3, -0.09, 1.5], [-0.17, -0.13, 1.3], [-0.04, -0.15, 1.2], [0.2, -0.12, 1.4], [0.36, -0.1, 1.3], [0.47, -0.17, 1.5],
-      [-0.52, -0.16, 1.4], [-0.43, -0.05, 1.2], [-0.56, 0.08, 1.1], [0.55, 0.02, 1.2], [-0.22, 0.02, 0.9], [0.28, -0.03, 1.0],
-      [-0.1, -0.04, 0.9], [0.43, -0.03, 1.1],
-      // a tall canopy of big leaves along the back and in the corners
-      [-0.46, -0.19, 2.3], [-0.28, -0.2, 2.0], [-0.08, -0.205, 2.1], [0.28, -0.2, 2.2], [0.52, -0.19, 2.4], [-0.56, -0.02, 1.8], [0.56, -0.1, 1.9],
-      // the front-left corner, as in a planted display case
-      [-0.53, 0.17, 1.5], [-0.42, 0.2, 1.15], [-0.31, 0.19, 1.0], [-0.55, 0.09, 1.3],
+      [-0.3, -0.09, 1.5], [0.2, -0.12, 1.4], [0.47, -0.17, 1.5], [-0.52, -0.16, 1.4], [0.55, 0.02, 1.2],
+      // a canopy of big leaves at the back
+      [-0.28, -0.2, 2.0], [0.28, -0.2, 2.2], [0.56, -0.1, 1.9],
     ];
     for (const [x, z, size] of heartSpots) {
       if (!dry(x, z) || !inside(x, z, 0.04) || surface.kindAt(x, z) === SurfaceKind.Rock) continue;
       if (at(heartleaf(rnd, size), x, z, {normal: surface.normalAt(x, z)})) this.obstacles.push({x, z, r: 0.012 * size});
     }
-    rockSites.slice(19, 24).forEach((sh) => at(heartleaf(rnd, 0.8 + rnd() * 0.3), sh.p.x, sh.p.z, {y: sh.p.y, normal: sh.n}));
-    // and big plants crowning the rocks, as in a case grown in for years
-    this.summits(rockMeshes, rnd).forEach((sm, i) => at(i % 2 ? bromeliad(rnd, 1.2) : heartleaf(rnd, 1.05 + rnd() * 0.25), sm.p.x, sm.p.z, {y: sm.p.y, normal: sm.n, sink: 0.004}));
+    rockSites.slice(19, 24).forEach((sh) => at(fernlet(rnd, 1.5 + rnd() * 0.5), sh.p.x, sh.p.z, {y: sh.p.y, normal: sh.n}));
+    // and ferns and bromeliads crowning the rocks, as in a case grown in for years
+    this.summits(rockMeshes, rnd).forEach((sm, i) => at(i % 2 ? bromeliad(rnd, 1.2) : fernlet(rnd, 2.0 + rnd() * 0.5), sm.p.x, sm.p.z, {y: sm.p.y, normal: sm.n, sink: 0.004}));
     this.trailers(rockMeshes, rockSites, rnd);
 
     const merged = mergeGeometries(this.parts.map((p) => {
