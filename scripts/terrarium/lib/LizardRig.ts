@@ -97,6 +97,7 @@ export interface RigInputs {
   bob: number; // head-bob offset in cm (push-ups)
   wave: number; // 0..1 arm-wave amount (left front limb)
   sideLean: number; // body roll, radians
+  headTilt: number; // head roll, radians (positive: the left eye turns up)
   tailTwitch: number; // 0..1 predatory flicking of the tail tip
   shake: number; // 0..1 thrashing the head side to side (subduing prey)
   swallow: number; // 0..1 a gulp: the throat bulges and the head lifts
@@ -109,7 +110,7 @@ export interface RigInputs {
 export class LizardRig {
   readonly inputs: RigInputs = {
     x: 0, z: 0, heading: 0, speed: 0, turnRate: 0, clearance: 0.7, chestLift: 0, headPitch: 0,
-    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0, shake: 0, swallow: 0, flatten: 0, tone: 0, beardDark: 0, tongueReach: 0,
+    look: null, jaw: 0, tongue: 0, display: 0, lid: 1, breath: 1, lunge: 0, bob: 0, wave: 0, sideLean: 0, tailTwitch: 0, shake: 0, swallow: 0, headTilt: 0, flatten: 0, tone: 0, beardDark: 0, tongueReach: 0,
   };
   /** Gait phase 0..1 and the derived standing wave in the trunk. */
   phase = 0;
@@ -133,6 +134,7 @@ export class LizardRig {
   private headLift = [0, 0];
   private headYaw = 0;
   private headPitchCur = 0;
+  private headRollCur = 0;
   private headGoalYaw = 0;
   private headGoalPitch = 0;
   private headHold = 0;
@@ -422,6 +424,8 @@ export class LizardRig {
     // fast, critically damped approach = a crisp, bird-like head flick
     this.headYaw = damp(this.headYaw, this.headGoalYaw, 16, dt);
     this.headPitchCur = damp(this.headPitchCur, this.headGoalPitch + I.swallow * 0.35, 14, dt);
+    // a slow, deliberate tilt, held, as it turns one eye up to watch something
+    this.headRollCur = damp(this.headRollCur, I.headTilt, 4, dt);
     // thrashing prey: quick, wide side-to-side snaps of the head
     if (I.shake > 0.01) this.headYaw += Math.sin(this.time * 23) * 0.32 * I.shake * Math.min(1, dt * 60);
   }
@@ -464,7 +468,9 @@ export class LizardRig {
         const idx = order[k];
         // rotate at this joint (before the segment leading to the next bone)
         const yaw = yaws[k] * dir, pitch = pitches[k];
-        const jq = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, yaw, pitch * dir, 'YZX'));
+        // (the head and, a little, the neck roll when it tilts its head)
+        const roll = dir > 0 ? (idx === 0 ? this.headRollCur * 0.7 : idx === 1 ? this.headRollCur * 0.3 : 0) : 0;
+        const jq = new THREE.Quaternion().setFromEuler(new THREE.Euler(roll, yaw, pitch * dir, 'YZX'));
         q.multiply(jq);
         const nx = this.spineBindX[idx], ny = this.spineBindY[idx];
         const seg = new THREE.Vector3((nx - px) * K, (ny - py) * K, 0);
@@ -542,8 +548,8 @@ export class LizardRig {
     back.y = 0;
     back.normalize().negate();
     const N = this.tailPts.length;
-    // (the wave runs on down the tail, growing toward the tip)
-    const sway = this.moving ? clamp(0.06 + speedCm / 150, 0, 0.28) : 0;
+    // A lizard's tail is not a snake's: no wave runs down it. Its base swings with
+    // the hips (more the faster it goes) and the rest follows, fairly stiff.
     let prev = pelvis.clone();
     let prevDir = back.clone();
     const relax = 1 - Math.exp(-dt * (this.moving ? 3.2 : 1.6));
@@ -554,16 +560,15 @@ export class LizardRig {
       if (drag.lengthSq() < 1e-12) drag.copy(prevDir);
       drag.normalize();
       // straighten toward the previous segment, more strongly near the base
-      const straight = clamp(0.42 - i * 0.03, 0.12, 0.42);
+      const straight = clamp(0.55 - i * 0.025, 0.25, 0.55);
       const dir = drag.lerp(prevDir, clamp(straight * relax * 6, 0, 1)).normalize();
       // limit the bend at each joint
-      const maxBend = 0.42;
+      const maxBend = 0.3;
       const cross = prevDir.x * dir.z - prevDir.z * dir.x;
       const dot = prevDir.x * dir.x + prevDir.z * dir.z;
       let ang = Math.atan2(cross, dot);
       ang = clamp(ang, -maxBend, maxBend);
       // travelling wobble
-      ang += Math.sin((this.phase - i * 0.11) * Math.PI * 2) * sway * (0.26 + 0.12 * i / N);
       // a hunting lizard flicks the tip of its tail
       if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
       const ca = Math.cos(ang), sa = Math.sin(ang);
@@ -573,7 +578,8 @@ export class LizardRig {
       const gp = insideGlass(new THREE.Vector3(prev.x + dir.x * L, 0, prev.z + dir.z * L), this.tailRadius[i] + 0.002);
       const gx = gp.x, gz = gp.z;
       // the base of the tail is carried a little clear of the ground on the move, more in a sprint
-      const carry = (this.moving ? 0.25 : 0) + this.sprint * 1.6;
+      // (walking, it carries the base of its tail clear of the ground, the tip trailing)
+      const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
       const g = this.ground.heightAt(gx, gz) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
       let y = Math.max(g, prev.y - L * 0.55);
       y = Math.min(y, prev.y + L * 0.5);
@@ -614,6 +620,7 @@ export class LizardRig {
         }
       } else {
         this.homeWorld(leg, home);
+        const homeInAir = this.homeHangs;
         // (in 3-D: a foot left on the floor as the body climbs onto the log must
         // follow it up; a hanging foot is dealt with separately below)
         const drift = home.distanceTo(leg.planted);
@@ -634,7 +641,8 @@ export class LizardRig {
         const gaitLift = this.moving && ph >= duty && leg.lastPhase < duty;
         const strained = drift > leg.reach * 0.55 || yawErr > 0.9;
         // When standing still, tidy up feet that are badly out of place one at a time.
-        const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && !this.legs.some((l) => l.swing);
+        // (but not just to lift a foot off solid footing and hang it over an edge)
+        const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && (!homeInAir || drift > 0.035) && !this.legs.some((l) => l.swing);
         if (gaitLift || strained || settle) {
           leg.swing = true;
           leg.swingT = 0;
