@@ -282,18 +282,45 @@ export class LizardRig {
     // the trunk never sinks into what it straddles (the log, a stone): its belly
     // stays above the highest point anywhere under its footprint
     // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
-    let under = mid;
+    let under = mid, underMid = mid;
     for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
       const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
       const h = this.ground.heightAt(sx, sz);
-      if (h - mid < 0.03 || (h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD)) under = Math.max(under, h);
+      if (h - mid < 0.03 || (h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD)) {
+        under = Math.max(under, h);
+        if (sd === 0) underMid = Math.max(underMid, h);
+      }
     }
     const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006);
     const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
     const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
     // body centre height: belly clearance + half the trunk depth
-    const targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
+    let targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
+    // A lizard sprawls: its elbows and knees stay bent, out to the side, and the
+    // body rides low between its feet. No higher, then, than lets every planted
+    // foot be reached with the limb bent (never stood on straight, pillar-like
+    // legs), but never down into what it walks over.
+    if (this.initialised) {
+      const spineBind = this.spineBindYAt(this.rootX);
+      let cap = Infinity;
+      for (const leg of this.legs) {
+        if (leg.swing || leg.planted.y < base - 0.02) continue; // (a foot hanging over the side)
+        const r = leg.data.root;
+        const along = (r[0] - this.rootX) * K, out = r[2] * K;
+        const sx = I.x + fwd.x * along + right.x * out, sz = I.z + fwd.z * along + right.z * out;
+        const dh = Math.hypot(leg.planted.x - sx, leg.planted.z - sz);
+        const R = leg.reach * (this.sprint > 0.3 ? 0.92 : leg.front ? 0.78 : 0.84);
+        const dv = Math.sqrt(Math.max(0, R * R - dh * dh));
+        // the wrist sits half a centimetre above the sole; the shoulder a little below the spine
+        cap = Math.min(cap, leg.planted.y + 0.47 * K + dv - (r[1] - spineBind) * K);
+      }
+      // (however low it sprawls, the belly stays on top of the highest thing under
+      // its midline; across a slope the body rolls with it, so the flanks are left
+      // to the roll)
+      const floor = Math.max(base, underMid) + (1.05 + 0.15) * K;
+      targetY = Math.max(floor, Math.min(targetY, cap));
+    }
     if (snap) {this.bodyY = targetY; this.bodyPitch = pitch; this.bodyRoll = roll;}
     else {
       this.bodyY = damp(this.bodyY, targetY, 9, dt);
@@ -355,8 +382,9 @@ export class LizardRig {
     }
     this.computeBodyFrame(dt);
 
-    // Lateral standing wave in the trunk, synchronised with the diagonal pairs.
-    const amp = this.moving ? clamp(0.05 + speedCm / 160, 0.05, 0.3) : 0;
+    // Lateral standing wave in the trunk, synchronised with the diagonal pairs:
+    // a sprawling lizard swings its shoulders and hips to lengthen each stride.
+    const amp = this.moving ? clamp(0.08 + speedCm / 90, 0.08, 0.38) : 0;
     const steer = clamp(I.turnRate * 0.12, -0.35, 0.35);
     this.bend = damp(this.bend, -amp * Math.cos(this.phase * Math.PI * 2) + steer, 14, dt);
 
@@ -378,6 +406,8 @@ export class LizardRig {
       const local = new THREE.Vector3(d.dot(this.bodyFwd), d.dot(this.bodyUp), d.dot(this.bodyRight));
       goalYaw = clamp(-Math.atan2(local.z, local.x) - this.bend * 0.6, -1.1, 1.1);
       goalPitch = clamp(Math.atan2(local.y, Math.hypot(local.x, local.z)), -0.6, 0.6);
+      // on the move the head is carried low and level, glancing only a little up or down
+      if (this.moving) goalPitch = clamp(goalPitch, -0.35, 0.18);
     }
     // a bearded dragon's neck is short and thick: the head tips up by about 35°
     // at most (more comes only from raising the chest), and down far enough to drink
@@ -512,7 +542,8 @@ export class LizardRig {
     back.y = 0;
     back.normalize().negate();
     const N = this.tailPts.length;
-    const sway = this.moving ? clamp(0.04 + speedCm / 260, 0, 0.2) : 0;
+    // (the wave runs on down the tail, growing toward the tip)
+    const sway = this.moving ? clamp(0.06 + speedCm / 150, 0, 0.28) : 0;
     let prev = pelvis.clone();
     let prevDir = back.clone();
     const relax = 1 - Math.exp(-dt * (this.moving ? 3.2 : 1.6));
@@ -532,7 +563,7 @@ export class LizardRig {
       let ang = Math.atan2(cross, dot);
       ang = clamp(ang, -maxBend, maxBend);
       // travelling wobble
-      ang += Math.sin((this.phase - i * 0.11) * Math.PI * 2) * sway * 0.28;
+      ang += Math.sin((this.phase - i * 0.11) * Math.PI * 2) * sway * (0.26 + 0.12 * i / N);
       // a hunting lizard flicks the tip of its tail
       if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
       const ca = Math.cos(ang), sa = Math.sin(ang);
@@ -784,7 +815,8 @@ export class LizardRig {
     }
     if (dist < minR) dist = minR;
     const dir = W.clone().sub(S).normalize();
-    const pole = S.clone().addScaledVector(this.bodyRight, leg.side * 0.04).addScaledVector(this.bodyUp, 0.03).addScaledVector(this.bodyFwd, leg.front ? -0.015 : 0.02);
+    // (the elbow out and back, the knee out and forward, both held up near the level of the shoulder and hip)
+    const pole = S.clone().addScaledVector(this.bodyRight, leg.side * 0.045).addScaledVector(this.bodyUp, 0.045).addScaledVector(this.bodyFwd, leg.front ? -0.018 : 0.022);
     const toPole = pole.sub(S);
     const perp = toPole.addScaledVector(dir, -toPole.dot(dir)).normalize();
     const x = (a * a - b * b + dist * dist) / (2 * dist);
