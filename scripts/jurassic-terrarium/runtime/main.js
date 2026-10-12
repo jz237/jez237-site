@@ -24,6 +24,9 @@ import { Ambience } from './ambience.js';
 import { Nest } from './nest.js';
 import { debugPanel } from './debug.js';
 import { guardWater } from './safety.js';
+import { Atmosphere } from './atmosphere.js';
+import { Contact } from './contact.js';
+import { GroundCover } from './groundcover.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -107,6 +110,19 @@ class Dino {
           o.material = o.material.clone(); // per-animal, so wetness can differ
           this.skins.push(o.material);
         }
+        if (/_eye$/.test(o.material?.name || '')) {
+          // a wet, glassy eye with a sharp highlight; at night it catches the lamplight (eyeshine)
+          o.material = o.material.clone();
+          o.material.roughness = 0.08;
+          if ('clearcoat' in o.material) {
+            o.material.clearcoat = 1;
+            o.material.clearcoatRoughness = 0.03;
+          }
+          o.material.envMapIntensity = 1.6;
+          o.material.emissive?.setRGB(1.0, 0.62, 0.22);
+          o.material.emissiveIntensity = 0;
+          this.eyes = (this.eyes || []).concat(o.material);
+        }
       }
     });
     // how far the body reaches in front of and behind its root (snout, tail tip), from the bind pose
@@ -148,6 +164,10 @@ class Dino {
     // heavier animals land harder; footfalls of the big ones raise dust and (close to the camera) a tremor
     this.feet.weight = Math.min(1.7, Math.max(0.35, Math.sqrt(this.length / 1.5)));
     this.feet.onPlant = (p, running) => {
+      mod.contact?.footprint(this, p, this.heading, !this.sp.predator);
+      const T = mod.ctx.terrain;
+      if (Math.max(T.lakeMask(p.x, p.z), T.riverMask(p.x, p.z)) > 0.35)
+        mod.ctx.modules.water?.ripple?.(p.x, p.z, Math.min(0.12, 0.025 + this.length * 0.02), running ? 1.4 : 0.9);
       if (this.length > 1.3 || running) mod.effects.dust(p, this.length * (running ? 0.05 : 0.035));
       if (this.length > 2) {
         const cam = mod.ctx.camera.position, d = cam.distanceTo(p);
@@ -345,7 +365,9 @@ class Dino {
     const mod = this.mod;
     const night = env.night > 0.6;
     // rain darkens and glosses the skin; it dries slowly afterwards
-    const wantWet = Math.min(1, env.rain * 1.5 + env.wet * 0.6);
+    const T = mod.ctx.terrain;
+    this.inWater = Math.max(T.lakeMask(this.pos.x, this.pos.z), T.riverMask(this.pos.x, this.pos.z));
+    const wantWet = Math.min(1, Math.max(env.rain * 1.5 + env.wet * 0.6, this.inWater > 0.35 ? 0.85 : 0));
     this.wet = (this.wet || 0) + (wantWet - (this.wet || 0)) * Math.min(1, dt * (wantWet > (this.wet || 0) ? 0.5 : 0.08));
     for (const m of this.skins) {
       m.roughness = 1 - 0.45 * this.wet;
@@ -638,7 +660,29 @@ class Dino {
       this.keepInside();
     }
     this.crop(dt);
+    this.waterTouch(dt);
+    if (this.eyes) {
+      const night = this.mod.ctx.modules.life?.env?.night ?? 0;
+      for (const m of this.eyes) m.emissiveIntensity = 0.35 * night;
+    }
     this.sounds(dt);
+  }
+
+  // wading leaves a wake; drinking rings the water at the mouth
+  waterTouch(dt) {
+    const W = this.mod.ctx.modules.water;
+    if (!W?.ripple) return;
+    this.wakeT = (this.wakeT ?? 0) - dt;
+    if (this.inWater > 0.35 && this.speed > 0.02 && this.wakeT <= 0) {
+      this.wakeT = 0.35;
+      const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
+      W.ripple(this.pos.x + fx * this.length * 0.2, this.pos.z + fz * this.length * 0.2, Math.min(0.2, this.length * 0.08), 0.8);
+    }
+    if (this.currentName === 'drink' && this.headBone && this.wakeT <= 0) {
+      this.wakeT = 1.1 + rand() * 0.8;
+      const p = this.headBone.getWorldPosition(_kd);
+      W.ripple(p.x, p.z, 0.03, 0.6);
+    }
   }
 
   // the stride phase of the walk or run clip, for the trunk's sideways swing (heavier animals swing less)
@@ -1101,14 +1145,16 @@ class Dinosaurs {
     const ds = DEN.s / (1 / 8); // relative to the 1/8 scale the rectangles below were measured at
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
+    this.ground = params.get('ground') === '0' ? null : new GroundCover(ctx, this.flora, rand);
     const hatch = params.get('hatch');
     this.nest = params.get('nest') === '0' ? null : new Nest(ctx, this.flora, rand, { hatchAt: hatch != null ? Number(hatch) : undefined });
     this.room = params.get('room') === '0' ? null : new Room(ctx, new URL('models/room.webp', document.baseURI).href);
     this.effects = new Effects(ctx);
+    this.contact = new Contact(ctx, this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     this.nav = new NavGrid(ctx, {
-      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
+      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.ground?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
       rects: [
         { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
         { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
@@ -1181,6 +1227,7 @@ class Dinosaurs {
     this.guide = new Guide(this, SPECIES);
     // the water's shaders can produce NaN/Inf pixels on some GPUs (bloomed into full-screen flashes)
     if (params.get('waterguard') !== '0') this.guarded = guardWater(this.ctx.scene);
+    this.atmosphere = params.get('air') === '0' ? null : new Atmosphere(this.ctx, this);
     if (params.has('debug')) debugPanel(this.ctx, this);
     window.__wgHold = 0;
   }
@@ -1302,6 +1349,8 @@ class Dinosaurs {
     this.flora.update(dt);
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
+    this.contact.update(dt);
+    this.atmosphere?.update(dt);
     this.nest?.update(dt, (p, a) => this.hatchling(p, a));
     this.ambience.update(dt, env);
     for (let i = this.timers.length - 1; i >= 0; i--) {

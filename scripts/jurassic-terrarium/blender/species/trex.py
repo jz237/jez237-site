@@ -265,7 +265,7 @@ def build():
     # ------------------------------------------------------------------ metadata
     b.meta = dict(
         name='Tyrannosaurus rex', common='Tyrannosaurus', length=12.3, mass_t=8.4,
-        voxel=0.016, jaw_open=JAW_OPEN, jaw_seal=0.035, tail_split=-2.4, faces=64000, tex=2048,
+        voxel=0.016, jaw_open=JAW_OPEN, jaw_seal=0.035, tail_split=-2.4, faces=64000, tex=4096,
         palette=dict(back='#3b2c1c', flank='#74552f', belly='#c9b28a', pattern='#211810', accent='#8a4a30',
                      keratin='#2d2823', claw='#221e1a', mouth='#8f4545', eye='#c99a3b'),
         pattern=dict(kind='bands', count=17, start=-6.8, end=3.4, strength=0.85, mottle=0.4, low=-0.35, high=0.35),

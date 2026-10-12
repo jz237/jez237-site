@@ -3,10 +3,10 @@
 // textured frond cards with alpha-to-coverage edges), instanced, and bent about their roots by
 // Weatherglass's wind field (windAt) plus a per-plant spring when an animal pushes through.
 import {
-  Group, InstancedMesh, MeshStandardMaterial, MeshDepthMaterial, RGBADepthPacking, Matrix4, Quaternion, Vector3,
+  Group, Mesh, InstancedMesh, MeshStandardMaterial, MeshDepthMaterial, RGBADepthPacking, Matrix4, Quaternion, Vector3,
   Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage,
 } from 'three';
-import { frondAtlas, plantGeometry, BASE_H } from './floragen.js';
+import { frondAtlas, plantGeometry, vineGeometry, BASE_H } from './floragen.js';
 
 const UP = new Vector3(0, 1, 0);
 const _top = new Vector3();
@@ -45,7 +45,7 @@ export class Flora {
     const sh = T.shape;
     const box = ctx.box;
     const cabin = sh.CABIN;
-    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [], fernlet: [], redplant: [] });
+    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [], fernlet: [], redplant: [], araucaria: [], ginkgo: [] });
     const taken = [];
     const free = (x, z, r) => taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
     const inBox = (x, z, m) => Math.abs(x) < box.halfW - m && Math.abs(z) < box.halfD - m;
@@ -101,6 +101,19 @@ export class Flora {
       add('treefern', x, z, 1.6, 0.25, 0.06);
       P.treefern[P.treefern.length - 1].wantTop = 2.2; // crown this far above its foot
     }
+    // Jurassic conifers and ginkgos among the tree ferns: monkey puzzles at the back and on the
+    // foothills, ginkgos at the meadow edges
+    const tall = (kind, n, zRange, scale) => {
+      for (let tries = 0; tries < 3000 && n > 0; tries++) {
+        const x = (rand() * 2 - 1) * 7.6, z = zRange[0] + rand() * (zRange[1] - zRange[0]);
+        const h = T.height(x, z);
+        if (h < 0.05 || T.slope(x, z) > 0.4 || water(x, z) > 0.05 || nearCabin(x, z, 0.6) || !free(x, z, 0.4)) continue;
+        add(kind, x, z, scale[0] + rand() * (scale[1] - scale[0]), 0.4, 0.06);
+        n--;
+      }
+    };
+    tall('araucaria', 6, [-3.4, -0.6], [1.1, 1.8]);
+    tall('ginkgo', 5, [-1.6, 2.6], [1.0, 1.5]);
     // where Weatherglass's hero trees stood, and a few groves
     groveAt(-3.95, 0.25, 4, 0.6);
     groveAt(-3.75, 2.4, 3, 0.45);
@@ -177,10 +190,10 @@ export class Flora {
     this.grid = new Map();
     this.cell = 0.5;
     const tier = this.ctx.quality?.tier ?? 1;
-    this.atlas = frondAtlas(tier === 0 ? 512 : 1024);
+    this.atlas = frondAtlas(tier === 0 ? 1024 : 2048);
     const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3(), col = new Color();
     for (const [kind, list] of Object.entries(this.placements)) {
-      const variants = kind === 'treefern' || kind === 'cycad' ? 4 : 3;
+      const variants = kind === 'treefern' || kind === 'cycad' ? 4 : kind === 'araucaria' || kind === 'ginkgo' ? 3 : 3;
       for (let vi = 0; vi < variants; vi++) {
         const mine = list.filter((p) => p.v % variants === vi);
         if (!mine.length) continue;
@@ -200,8 +213,16 @@ export class Flora {
           M.compose(t, q, s);
           im.setMatrixAt(i, M);
           // a little colour variation per plant
-          const k = 1.0 + ((p.v * 0.618 + i * 0.31) % 1) * 0.26;
-          col.setRGB(k, k * (0.97 + ((i * 0.13) % 0.06)), k * 0.95);
+          // colour per plant: the fern carpet in many shades (deep, fresh, yellow-green, a few bronze flushes
+          // of new growth); trees vary less
+          const r1 = (p.v * 0.618 + i * 0.31) % 1, r2 = (i * 0.137 + p.v * 0.29) % 1;
+          const k = 1.0 + r1 * 0.26;
+          if (kind === 'fern' || kind === 'fernlet') {
+            if (r2 < 0.08) col.setRGB(k * 1.25, k * 0.85, k * 0.55); // bronze new growth
+            else if (r2 < 0.35) col.setRGB(k * 1.08, k * 1.06, k * 0.78); // yellow-green
+            else if (r2 < 0.6) col.setRGB(k * 0.8, k * 0.95, k * 0.92); // deep blue-green
+            else col.setRGB(k, k, k * 0.95);
+          } else col.setRGB(k, k * (0.97 + ((i * 0.13) % 0.06)), k * 0.95);
           im.setColorAt(i, col);
           p.top = p.y + H * s.y; // crown height, for browsers
           const rec = { x: p.x, z: p.z, y: p.y, H: Math.max(0.02, H * s.y), give: mo.give, k: mo.k, crown: !!mo.crown,
@@ -213,7 +234,7 @@ export class Flora {
         });
         im.instanceMatrix.needsUpdate = true;
         if (im.instanceColor) im.instanceColor.needsUpdate = true;
-        im.castShadow = kind === 'treefern' || kind === 'cycad';
+        im.castShadow = kind === 'treefern' || kind === 'cycad' || kind === 'araucaria' || kind === 'ginkgo';
         if (im.castShadow) im.customDepthMaterial = this.depthMaterial(kind);
         im.receiveShadow = true;
         im.frustumCulled = false;
@@ -221,6 +242,30 @@ export class Flora {
         this.group.add(im);
       }
     }
+    this.buildVines();
+  }
+
+  // vines hanging from the tall tree-fern crowns, strung with small leaves
+  buildVines() {
+    const rand = this.rand;
+    const anchors = [];
+    for (const p of this.placements.treefern) {
+      if (!p.top || p.top - p.y < 0.9 || rand() < 0.35) continue;
+      const n = 2 + Math.floor(rand() * 3), crownR = (p.top - p.y) * 0.32;
+      for (let i = 0; i < n; i++) {
+        const a = rand() * Math.PI * 2, r = crownR * (0.5 + rand() * 0.5);
+        anchors.push({ x: p.x + Math.cos(a) * r, y: p.top - (p.top - p.y) * 0.06, z: p.z + Math.sin(a) * r,
+          drop: (p.top - p.y) * (0.12 + rand() * 0.22), dx: Math.cos(a), dz: Math.sin(a), ph: rand() * 6 });
+      }
+    }
+    if (!anchors.length) return;
+    const geo = vineGeometry(anchors, rand);
+    const m = new Mesh(geo, this.material('vine', { vine: true }));
+    m.name = 'flora-vines';
+    m.castShadow = false;
+    m.receiveShadow = true;
+    m.frustumCulled = false;
+    this.group.add(m);
   }
 
   // How each kind moves. flex: wind bend (radians per unit of wind); give: how far a body can push it
@@ -233,6 +278,9 @@ export class Flora {
     horsetail: { flex: 0.5, give: 0.9, curve: 1.1, k: 60 },
     treefern: { flex: 0.15, give: 0.22, curve: 3.0, k: 25, crown: true },
     cycad: { flex: 0.12, give: 0.35, curve: 2.0, k: 45 },
+    araucaria: { flex: 0.07, give: 0.0, curve: 2.6, k: 30 },
+    ginkgo: { flex: 0.12, give: 0.15, curve: 2.2, k: 35, crown: true },
+    vine: { flex: 0.5, give: 0.0, curve: 1.2, k: 40 },
   };
 
   // Every plant bends about its own root by a 2D bend vector (radians at the tip, pointing where the
@@ -247,12 +295,18 @@ export class Flora {
   #else
   mat4 toW = modelMatrix;
   #endif
+  #ifdef VINE
+  vec3 base = aRoot;
+  vec2 aBendV = vec2(0.0);
+  #else
   vec3 base = toW[3].xyz;
+  vec2 aBendV = aBend;
+  #endif
   float ph = dot(base.xz, vec2(3.7, 2.9));
   // Weatherglass's wind: the simulated field (the wind tool, gusts) and its travelling gusts
   vec2 wv = windAt(base.xz);
   float wl = length(wv);
-  vec2 bend = aBend + wv * ${(M.flex * 0.42).toFixed(3)}
+  vec2 bend = aBendV + wv * ${(M.flex * 0.42).toFixed(3)}
     + uFWindDir * ${(M.flex * 0.06).toFixed(3)} * sin(uFTime * 0.9 + ph)                               // never quite still
     + vec2(sin(uFTime * 5.3 + aPh + ph), cos(uFTime * 4.7 + aPh * 1.3)) * ${(M.flex * 0.05).toFixed(3)} * min(wl, 2.0); // flutter
   float shD = length(base.xz - uShiver.xy);
@@ -277,7 +331,12 @@ uniform vec2 uFWindDir;
 uniform vec4 uShiver;
 attribute float aT;
 attribute float aPh;
+attribute float aTrunk;
+#ifdef VINE
+attribute vec3 aRoot;
+#else
 attribute vec2 aBend;
+#endif
 `;
   }
 
@@ -293,28 +352,34 @@ attribute vec2 aBend;
   // Shaded like Weatherglass's foliage: frond atlas with alpha-to-coverage, ambient occlusion in the heart
   // of the plant (vertex colour), per-plant colour variation (instance colour), a soft glow when lit from
   // behind, and alpha kept up at a distance so canopies stay full instead of thinning and sparkling.
-  material(kind) {
+  material(kind, { vine = false } = {}) {
     const tier = this.ctx.quality?.tier ?? 1;
     const m = new MeshStandardMaterial({
       map: this.atlas, vertexColors: true, roughness: 0.78, metalness: 0, side: DoubleSide,
       alphaTest: 0.5, alphaToCoverage: tier > 0, envMapIntensity: 0.55,
     });
+    if (vine) m.defines = { VINE: 1 };
     m.onBeforeCompile = (sh) => {
       this.hookUniforms(sh);
       sh.vertexShader = sh.vertexShader
         .replace('#include <common>', '#include <common>\n' + this.head() + 'varying vec3 vFWorld;\nvarying float vTrunk;')
         .replace('#include <begin_vertex>', this.bendChunk(kind))
-        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = uv.x < -0.5 ? 1.0 : 0.0;');
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = aTrunk;');
       sh.fragmentShader = sh.fragmentShader
         .replace('#include <common>', '#include <common>\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;')
         .replace('#include <map_fragment>', `
   if (vTrunk > 0.5) {
-    diffuseColor.rgb *= vec3(0.36, 0.25, 0.16) * 1.6; // fibrous trunk: brown, shaded by the vertex colour
+    // bark: the vertex colour is the albedo (brown, greening to moss towards the foot)
   } else {
     vec4 tx = texture2D(map, vMapUv);
     vec2 ts = vMapUv * vec2(textureSize(map, 0));
     float lod = max(0.0, 0.5 * log2(max(dot(dFdx(ts), dFdx(ts)), dot(dFdy(ts), dFdy(ts)))));
-    tx.a = clamp(tx.a * (1.0 + lod * 0.32), 0.0, 1.0); // keep fronds full at a distance
+    // close up: crisp leaflets. Once they are small on screen their outlines would flicker as the view
+    // moves, so they soften and swell into one another: the frond reads as a solid, steady shape
+    vec4 soft = texture2D(map, vMapUv, 1.5);
+    float far = smoothstep(1.5, 3.0, lod);
+    tx.rgb = mix(tx.rgb, soft.rgb, far);
+    tx.a = clamp(mix(tx.a * (1.0 + lod * 0.32), soft.a * (1.0 + lod * 0.55), far), 0.0, 1.0);
     diffuseColor *= tx;
   }`)
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;')
@@ -326,7 +391,7 @@ attribute vec2 aBend;
     reflectedLight.indirectDiffuse += diffuseColor.rgb * uLightColor * back * 0.28;
   }`);
     };
-    m.customProgramCacheKey = () => `jt-flora-${kind}`;
+    m.customProgramCacheKey = () => `jt-flora-${kind}${vine ? '-vine' : ''}`;
     return m;
   }
 

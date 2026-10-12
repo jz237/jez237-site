@@ -311,7 +311,7 @@ def build():
     # ------------------------------------------------------------------ metadata
     b.meta = dict(
         name='Brachiosaurus altithorax', common='Brachiosaurus', length=22.0, mass_t=30.0,
-        voxel=0.03, jaw_open=JAW_OPEN, tail_split=-1.6, faces=70000, tex=2048,
+        voxel=0.03, jaw_open=JAW_OPEN, tail_split=-1.6, faces=70000, tex=4096,
         palette=dict(back='#56553f', flank='#76735c', belly='#a99f86', pattern='#3d3c2e', accent='#9A6B4F',
                      keratin='#3B3631', claw='#3B3631', mouth='#7E5248', eye='#4A3A28'),
         # low-contrast vertical banding over the back and upper flanks (the palette's pattern colour is

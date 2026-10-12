@@ -1,0 +1,305 @@
+// Air in the case, as in the concept: warm shafts of light falling from the lid spotlights through humid
+// jungle air, specks of dust turning in them, a low haze lying between the trees, mist drifting off the
+// waterfall and the cascades, and at night faint cool moonbeams through the glass and fireflies over the
+// pool. Every material here is additive and soft, and guarded against invalid pixels (see safety.js):
+// a bad pixel in an additive HDR layer would be bloomed into a full-screen flash.
+import {
+  Group, Mesh, Points, CylinderGeometry, BufferGeometry, BufferAttribute, ShaderMaterial, AdditiveBlending,
+  Vector3, Color, DoubleSide, Sprite, SpriteMaterial, CanvasTexture,
+} from 'three';
+import { guardMaterial } from './safety.js';
+
+const BEAM_VS = `
+varying vec3 vW;
+varying vec3 vN;
+varying float vY;
+void main() {
+  vec4 w = modelMatrix * vec4(position, 1.0);
+  vW = w.xyz;
+  vN = normalize(mat3(modelMatrix) * normal);
+  vY = uv.y;
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`;
+
+const BEAM_FS = `
+uniform vec3 uColor;
+uniform float uAmount;
+uniform float uTime;
+varying vec3 vW;
+varying vec3 vN;
+varying float vY;
+float hash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float noise(vec3 x) {
+  vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(hash(i), hash(i + vec3(1, 0, 0)), f.x), mix(hash(i + vec3(0, 1, 0)), hash(i + vec3(1, 1, 0)), f.x), f.y),
+             mix(mix(hash(i + vec3(0, 0, 1)), hash(i + vec3(1, 0, 1)), f.x), mix(hash(i + vec3(0, 1, 1)), hash(i + vec3(1, 1, 1)), f.x), f.y), f.z);
+}
+void main() {
+  vec3 V = normalize(cameraPosition - vW);
+  // a soft-edged shaft: brightest where we look through the most air (the middle), fading at the rim
+  float edge = pow(abs(dot(normalize(vN), V)), 1.6);
+  // strongest near the lamp, fading as it spreads towards the ground
+  float along = smoothstep(0.0, 0.12, vY) * pow(1.0 - vY, 1.4);
+  // slowly drifting humidity: the shaft is never a flat cone
+  float n = noise(vW * 4.0 + vec3(0.0, -uTime * 0.05, uTime * 0.03)) * 0.6 + noise(vW * 11.0 + uTime * 0.04) * 0.4;
+  float a = edge * along * (0.55 + 0.7 * n) * uAmount;
+  gl_FragColor = vec4(uColor * a, 1.0);
+}`;
+
+function softSpriteTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  r.addColorStop(0, 'rgba(255,255,255,0.85)');
+  r.addColorStop(0.45, 'rgba(255,255,255,0.3)');
+  r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = r;
+  g.fillRect(0, 0, 64, 64);
+  return new CanvasTexture(c);
+}
+
+export class Atmosphere {
+  constructor(ctx, mod) {
+    this.ctx = ctx;
+    this.mod = mod;
+    this.group = new Group();
+    this.group.name = 'atmosphere';
+    this.t = 0;
+    this.tier = ctx.quality?.tier ?? 1;
+    this.soft = softSpriteTexture();
+    this.buildBeams();
+    this.buildMotes();
+    this.buildHaze();
+    this.buildMoonbeams();
+    this.buildFireflies();
+    ctx.scene.add(this.group);
+  }
+
+  beamMaterial(color) {
+    const m = new ShaderMaterial({
+      uniforms: { uColor: { value: new Color(color) }, uAmount: { value: 0 }, uTime: { value: 0 } },
+      vertexShader: BEAM_VS, fragmentShader: BEAM_FS,
+      transparent: true, depthWrite: false, blending: AdditiveBlending, side: DoubleSide,
+    });
+    guardMaterial(m);
+    return m;
+  }
+
+  // a cone of light from `from` towards `to`, radius r0 at the lamp, r1 at the far end
+  cone(from, to, r0, r1, mat) {
+    const dir = to.clone().sub(from), L = dir.length();
+    const g = new CylinderGeometry(r0, r1, L, 32, 1, true);
+    g.translate(0, -L / 2, 0); // the top at the origin
+    // uv.y: 0 at the lamp, 1 at the far end
+    const uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setY(i, 1 - uv.getY(i));
+    const m = new Mesh(g, mat);
+    m.position.copy(from);
+    m.quaternion.setFromUnitVectors(new Vector3(0, -1, 0), dir.normalize());
+    m.renderOrder = 40;
+    m.frustumCulled = false;
+    return m;
+  }
+
+  buildBeams() {
+    const L = this.mod.lamps;
+    this.beamMat = this.beamMaterial(0xffc98a);
+    this.beams = [];
+    if (!L) return;
+    const box = this.ctx.box, y = box.topY - 0.5, z = box.halfD * 0.55;
+    for (const x of L.xs) {
+      const to = new Vector3(x * 0.92, this.ctx.terrain.height(x * 0.92, -0.2) + 0.1, -0.2);
+      const m = this.cone(new Vector3(x, y, z), to, 0.07, 0.95, this.beamMat);
+      m.name = 'atmosphere-beam';
+      this.group.add(m);
+      this.beams.push(m);
+    }
+  }
+
+  // dust specks turning slowly inside the shafts, catching the light
+  buildMotes() {
+    const L = this.mod.lamps;
+    const n = this.tier === 0 ? 150 : 420;
+    const pos = new Float32Array(n * 3), seed = new Float32Array(n);
+    const box = this.ctx.box, y0 = box.topY - 0.5, z0 = box.halfD * 0.55;
+    const xs = L?.xs || [0];
+    for (let i = 0; i < n; i++) {
+      const x = xs[i % xs.length], u = Math.random();
+      const to = new Vector3(x * 0.92, 0.6, -0.2), from = new Vector3(x, y0, z0);
+      const p = from.clone().lerp(to, u);
+      const r = (0.07 + 0.85 * u) * Math.sqrt(Math.random()) * 0.8, a = Math.random() * 6.28;
+      pos.set([p.x + Math.cos(a) * r, p.y, p.z + Math.sin(a) * r], i * 3);
+      seed[i] = Math.random();
+    }
+    const g = new BufferGeometry();
+    g.setAttribute('position', new BufferAttribute(pos, 3));
+    g.setAttribute('aSeed', new BufferAttribute(seed, 1));
+    const m = new ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uAmount: { value: 0 }, uScale: { value: 1 } },
+      vertexShader: `
+uniform float uTime; uniform float uScale; attribute float aSeed; varying float vA;
+void main() {
+  vec3 p = position + vec3(sin(uTime * 0.21 + aSeed * 40.0), sin(uTime * 0.13 + aSeed * 23.0) * 0.6, cos(uTime * 0.17 + aSeed * 31.0)) * 0.05;
+  vec4 mv = viewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(uScale * (1.2 + aSeed * 1.6) / -mv.z, 1.0, 4.0);
+  vA = 0.5 + 0.5 * sin(uTime * (0.6 + aSeed) + aSeed * 50.0); // specks turn and glint
+}`,
+      fragmentShader: `
+uniform float uAmount; varying float vA;
+void main() {
+  vec2 d = gl_PointCoord - 0.5;
+  float a = smoothstep(0.5, 0.1, length(d)) * vA * uAmount;
+  gl_FragColor = vec4(vec3(1.0, 0.86, 0.62) * a, 1.0);
+}`,
+      transparent: true, depthWrite: false, blending: AdditiveBlending,
+    });
+    guardMaterial(m);
+    this.motes = new Points(g, m);
+    this.motes.name = 'atmosphere-motes';
+    this.motes.frustumCulled = false;
+    this.group.add(this.motes);
+  }
+
+  // low haze lying between the trees, and mist rising off the falls and cascades
+  buildHaze() {
+    const T = this.ctx.terrain, box = this.ctx.box;
+    this.haze = [];
+    const n = this.tier === 0 ? 14 : 30;
+    for (let i = 0; i < n; i++) {
+      const x = (Math.random() * 2 - 1) * (box.halfW - 1.2), z = (Math.random() * 2 - 1) * (box.halfD - 0.9);
+      const h = T.height(x, z);
+      if (h > 1.4) {
+        i--;
+        continue;
+      }
+      const s = new Sprite(new SpriteMaterial({ map: this.soft, color: 0xdfe6dc, transparent: true, opacity: 0, depthWrite: false }));
+      s.position.set(x, Math.max(h, 0.1) + 0.2 + Math.random() * 0.25, z);
+      s.scale.set(2.2 + Math.random() * 1.6, 0.55 + Math.random() * 0.3, 1);
+      s.userData = { base: s.position.clone(), ph: Math.random() * 6.28, k: 0.5 + Math.random() * 0.5 };
+      s.renderOrder = 6;
+      s.name = 'atmosphere-haze';
+      this.group.add(s);
+      this.haze.push(s);
+    }
+    // mist at the waterfall's foot and the three cascades
+    const spots = [[-1.38, 1.0, -1.26, 0.5], [-0.95, 0.72, -0.78, 0.3], [-0.28, 0.44, 0.0, 0.3], [0.62, 0.2, 0.78, 0.35]];
+    this.mist = [];
+    for (const [x, y, z, s0] of spots) {
+      for (let k = 0; k < 4; k++) {
+        const s = new Sprite(new SpriteMaterial({ map: this.soft, color: 0xffffff, transparent: true, opacity: 0, depthWrite: false }));
+        s.userData = { x, y, z, s0, life: Math.random() * 4, max: 3.5 + Math.random() * 1.5 };
+        s.renderOrder = 7;
+        s.name = 'atmosphere-mist';
+        this.group.add(s);
+        this.mist.push(s);
+      }
+    }
+  }
+
+  // two faint cool shafts slanting in through the front glass at night
+  buildMoonbeams() {
+    this.moonMat = this.beamMaterial(0x9fb8e8);
+    this.moon = [];
+    for (const [x0, x1] of [[-3.5, -2.3], [2.2, 3.4]]) {
+      const from = new Vector3(x0, this.ctx.box.topY - 0.15, this.ctx.box.halfD + 0.4);
+      const to = new Vector3(x1, this.ctx.terrain.height(x1, -0.8) + 0.05, -0.8);
+      const m = this.cone(from, to, 0.35, 1.1, this.moonMat);
+      m.name = 'atmosphere-moonbeam';
+      this.group.add(m);
+      this.moon.push(m);
+    }
+  }
+
+  // fireflies over the pool and along the stream at night: drifting, blinking points of green-gold
+  buildFireflies() {
+    const n = this.tier === 0 ? 40 : 90;
+    const pos = new Float32Array(n * 3), seed = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.28, r = Math.sqrt(Math.random());
+      const nearPool = i % 3 !== 0;
+      const x = nearPool ? 2.75 + Math.cos(a) * 2.4 * r : -1.2 + Math.random() * 2.2;
+      const z = nearPool ? 2.5 + Math.sin(a) * 1.4 * r : -0.9 + Math.random() * 1.8;
+      pos.set([x, Math.max(0.06, this.ctx.terrain.height(x, z)) + 0.08 + Math.random() * 0.35, z], i * 3);
+      seed[i] = Math.random();
+    }
+    const g = new BufferGeometry();
+    g.setAttribute('position', new BufferAttribute(pos, 3));
+    g.setAttribute('aSeed', new BufferAttribute(seed, 1));
+    const m = new ShaderMaterial({
+      uniforms: { uTime: { value: 0 }, uAmount: { value: 0 }, uScale: { value: 1 } },
+      vertexShader: `
+uniform float uTime; uniform float uScale; attribute float aSeed; varying float vA;
+void main() {
+  float t = uTime * (0.25 + aSeed * 0.2);
+  vec3 p = position + vec3(sin(t + aSeed * 30.0) * 0.25, sin(t * 1.7 + aSeed * 11.0) * 0.06, cos(t * 0.8 + aSeed * 17.0) * 0.18);
+  vec4 mv = viewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(uScale * 2.2 / -mv.z, 1.5, 6.0);
+  float blink = fract(uTime * (0.18 + aSeed * 0.12) + aSeed * 7.0);
+  vA = smoothstep(0.0, 0.08, blink) * smoothstep(0.45, 0.2, blink); // a slow pulse, then dark
+}`,
+      fragmentShader: `
+uniform float uAmount; varying float vA;
+void main() {
+  vec2 d = gl_PointCoord - 0.5;
+  float r = length(d);
+  float a = (smoothstep(0.5, 0.0, r) * 0.6 + smoothstep(0.15, 0.0, r)) * vA * uAmount;
+  gl_FragColor = vec4(vec3(0.75, 1.0, 0.35) * a * 2.2, 1.0);
+}`,
+      transparent: true, depthWrite: false, blending: AdditiveBlending,
+    });
+    guardMaterial(m);
+    this.flies = new Points(g, m);
+    this.flies.name = 'atmosphere-fireflies';
+    this.flies.frustumCulled = false;
+    this.group.add(this.flies);
+  }
+
+  update(dt) {
+    this.t += dt;
+    const life = this.ctx.modules.life?.env, w = this.ctx.world;
+    const night = life?.night ?? 0, dusk = Math.max(life?.dusk || 0, life?.golden || 0);
+    const hum = Math.min(1, (w.humidity ?? 0.5) * 0.8 + (w.groundWetness || 0) * 0.6 + (life?.rain || 0) * 0.5);
+    const scale = this.ctx.renderer.domElement.height * 0.9;
+    // lamp shafts: faint by day (the sun drowns them), clear at dusk, strongest at night; humid air shows more
+    const beam = (0.05 + 0.08 * dusk + 0.11 * night) * (0.6 + 0.6 * hum);
+    this.beamMat.uniforms.uAmount.value += (beam - this.beamMat.uniforms.uAmount.value) * Math.min(1, dt);
+    this.beamMat.uniforms.uTime.value = this.t;
+    this.motes.material.uniforms.uTime.value = this.t;
+    this.motes.material.uniforms.uAmount.value = 0.35 + 0.9 * night + 0.4 * dusk;
+    this.motes.material.uniforms.uScale.value = scale * 0.02;
+    // moonbeams only at night
+    this.moonMat.uniforms.uAmount.value = 0.09 * night * (1 - (life?.rain || 0));
+    this.moonMat.uniforms.uTime.value = this.t;
+    // haze: thicker in the morning and after rain, lit warm by day and blue-grey at night
+    const morning = Math.max(0, 1 - Math.abs((w.timeOfDay ?? 0.5) - 0.3) * 6);
+    const hz = 0.05 + 0.1 * hum + 0.08 * morning + 0.05 * night;
+    for (const s of this.haze) {
+      const u = s.userData;
+      s.position.x = u.base.x + Math.sin(this.t * 0.03 + u.ph) * 0.4;
+      s.material.opacity = hz * u.k * (0.7 + 0.3 * Math.sin(this.t * 0.07 + u.ph));
+      s.material.color.setRGB(0.85 - 0.3 * night, 0.88 - 0.25 * night, 0.84 - 0.1 * night);
+    }
+    // waterfall mist: puffs born at the foot of each fall, rising and spreading as they fade
+    for (const s of this.mist) {
+      const u = s.userData;
+      u.life += dt;
+      if (u.life > u.max) {
+        u.life = 0;
+        u.ox = (Math.random() - 0.5) * 0.12;
+        u.oz = (Math.random() - 0.5) * 0.12;
+      }
+      const k = u.life / u.max;
+      s.position.set(u.x + (u.ox || 0) + k * 0.1, u.y + 0.04 + k * 0.28, u.z + (u.oz || 0));
+      s.scale.setScalar(u.s0 * (0.4 + k));
+      s.material.opacity = 0.16 * Math.sin(Math.PI * k) * (0.7 + 0.5 * hum);
+    }
+    // fireflies: warm nights only
+    const warm = Math.min(1, Math.max(0, ((life?.temp ?? 20) - 12) / 8));
+    this.flies.material.uniforms.uTime.value = this.t;
+    this.flies.material.uniforms.uAmount.value = night * warm * (1 - (life?.rain || 0));
+    this.flies.material.uniforms.uScale.value = scale * 0.02;
+  }
+}
