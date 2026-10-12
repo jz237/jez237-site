@@ -49,7 +49,13 @@ export class Feet {
       }
     }
     this.reach = hipH * 0.5; // the most a foot is moved up or down
+    this.hipH = hipH;
     this.hipDrop = 0;
+    this.dip = 0;
+    this.dipV = 0;
+    this.liftMul = 2.3; // swing lift relative to the clip's
+    this.weight = 1; // landing dip scale (set by the runtime from the animal's size)
+    for (const L of this.legs) (L.lockW = 0), (L.cx = 0), (L.cz = 0), (L.lift = 0);
     // breathing
     const spine = [];
     for (let i = 1; i < 20 && bones.get(`spine${i}`); i++) spine.push(bones.get(`spine${i}`));
@@ -60,44 +66,93 @@ export class Feet {
     this.rate = 1 / Math.max(0.6, Math.sqrt(hipH) * 2.2); // breaths per second: slower for big animals
   }
 
-  update(dt, { running = false, enabled = true } = {}) {
+  // Planted feet and weight. Each frame, for every leg:
+  //  - stance: the clip has the foot down (its height above the clip's floor is near the lowest it gets).
+  //    At touch-down the foot's spot on the ground is locked, and the IK holds it there while the body
+  //    walks over it, so a planted foot never skates. If holding it would over-stretch the leg (a turn on
+  //    the spot, a sudden stop), the lock lets go and the foot takes a fresh step.
+  //  - swing: the clip's foot lift is exaggerated, so steps are lifted, not shuffled.
+  //  - every leg: the ground under the foot replaces the clip's flat floor (slopes, banks).
+  //  - touch-down: a small dip of the body that springs back (heavier animals dip more), and onPlant for
+  //    sound, dust and shake.
+  update(dt, { running = false, enabled = true, moving = false } = {}) {
     if (dt <= 0) return;
     this.breathe(dt, running);
-    if (!enabled || !this.legs.length) return;
+    if (!enabled || !this.legs.length) {
+      for (const L of this.legs) (L.lock = null), (L.lockW = 0);
+      return;
+    }
     const root = this.root, T = this.T;
     root.updateMatrixWorld(true);
-    // how far the real ground is from the clip's floor under each foot (world y)
+    const tol = this.hipH * 0.03, maxSlip = this.hipH * 0.38;
     let lowest = 0;
     for (const L of this.legs) {
       L.contact.getWorldPosition(_p);
       const local = root.worldToLocal(_c.copy(_p));
+      // the clip's lowest foot height, adapting slowly (poses differ between clips)
+      L.minY = L.minY === undefined ? local.y : Math.min(local.y, L.minY + dt * this.hipH * 0.05);
+      const lift = local.y - L.minY;
+      // stance: in the body's own frame a planted foot travels backward, a swinging one forward
+      const vz = L.pz === undefined ? 0 : (local.z - L.pz) / dt;
+      L.pz = local.z;
+      L.vz = L.vz === undefined ? vz : L.vz + (vz - L.vz) * Math.min(1, dt * 20);
+      const stance = moving ? L.vz < 0 && lift < tol * 2.5 : lift < tol;
+      if (stance && !L.lock) {
+        L.lock = { x: _p.x, z: _p.z };
+        if (moving && L.wasSwing) this.plant(L, _p, running);
+      } else if (!stance && L.lock) L.lock = null;
+      L.wasSwing = !stance;
+      L.lockW += ((L.lock ? 1 : 0) - (L.lockW || 0)) * Math.min(1, dt * 18);
+      let cx = 0, cz = 0;
+      if (L.lock) {
+        cx = (L.lock.x - _p.x) * L.lockW;
+        cz = (L.lock.z - _p.z) * L.lockW;
+        if (Math.hypot(cx, cz) > maxSlip) {
+          L.lock = { x: _p.x, z: _p.z }; // too far: let it go, step afresh
+          cx = cz = 0;
+        }
+      }
+      L.cx = cx;
+      L.cz = cz;
+      // the swing lifted higher than the clip has it
+      L.lift = stance ? 0 : lift * (this.liftMul - 1) * Math.min(1, lift / (tol * 2));
+      const gx = _p.x + cx, gz = _p.z + cz;
       const floorY = _p.y - local.y; // the clip's floor under this foot
-      L.want = Math.max(-this.reach, Math.min(this.reach, T.height(_p.x, _p.z) - floorY));
+      L.want = Math.max(-this.reach, Math.min(this.reach, T.height(gx, gz) - floorY));
       lowest = Math.min(lowest, L.want);
     }
     // let the body sink when a downhill foot would have to stretch for the ground
     const drop = Math.max(-this.reach * 0.6, lowest * 0.6);
     this.hipDrop += (drop - this.hipDrop) * Math.min(1, dt * 6);
-    if (Math.abs(this.hipDrop) > 1e-4) {
-      root.position.y += this.hipDrop;
+    // the landing dip: a damped spring kicked at each touch-down
+    this.dipV += (-90 * this.dip - 13 * this.dipV) * dt;
+    this.dip += this.dipV * dt;
+    const y = this.hipDrop + this.dip;
+    if (Math.abs(y) > 1e-4) {
+      root.position.y += y;
       root.updateMatrixWorld(true);
     }
     for (const L of this.legs) {
-      const dy = L.want - this.hipDrop;
+      const dy = L.want - y + L.lift;
       L.off += (dy - L.off) * Math.min(1, dt * 12); // no pops when a foot crosses a step in the ground
-      if (Math.abs(L.off) < 1e-4) continue;
-      this.solve(L, L.off);
+      if (Math.abs(L.off) < 1e-4 && Math.abs(L.cx) + Math.abs(L.cz) < 1e-4) continue;
+      this.solve(L, L.cx, L.off, L.cz);
     }
   }
 
-  // move the end of a two-bone chain by dy (world), knee kept in its plane, foot kept at its angle
-  solve(L, dy) {
+  plant(L, p, running) {
+    this.dipV -= this.hipH * (running ? 0.5 : 0.3) * this.weight;
+    this.onPlant?.(p, running);
+  }
+
+  // move the end of a two-bone chain by (dx, dy, dz) (world), knee kept in its plane, foot kept at its angle
+  solve(L, dx, dy, dz) {
     const { a: A, b: B, c: C } = L;
     A.getWorldPosition(_a);
     B.getWorldPosition(_b);
     C.getWorldPosition(_c);
     C.getWorldQuaternion(_qm);
-    _t.copy(_c).y += dy;
+    _t.set(_c.x + dx, _c.y + dy, _c.z + dz);
     const la = _a.distanceTo(_b), lb = _b.distanceTo(_c);
     _dir.subVectors(_t, _a);
     const d = Math.min(Math.max(_dir.length(), Math.abs(la - lb) + 1e-4), la + lb - 1e-4);

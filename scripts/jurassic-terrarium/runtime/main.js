@@ -143,6 +143,18 @@ class Dino {
     this.stepSize = (sp.step || 1) * this.k;
     this.flex = new Flex(this.model, { flex: sp.flex ?? 1 });
     this.feet = new Feet(this.model, this.root, mod.ctx.terrain);
+    // heavier animals land harder; footfalls of the big ones raise dust and (close to the camera) a tremor
+    this.feet.weight = Math.min(1.7, Math.max(0.35, Math.sqrt(this.length / 1.5)));
+    this.feet.onPlant = (p, running) => {
+      if (this.length > 1.3 || running) mod.effects.dust(p, this.length * (running ? 0.05 : 0.035));
+      if (this.length > 2) {
+        const cam = mod.ctx.camera.position, d = cam.distanceTo(p);
+        if (d < 7) mod.ctx.cameraRig?.shake?.(0.012 * this.feet.weight * (1 - d / 7));
+      }
+    };
+    // the ground speed each gait's stride really covers, measured from the clip (so feet don't skate)
+    this.stride = {};
+    for (const g of ['walk', 'run']) if (this.actions[g]) this.stride[g] = this.measureStride(g);
     this.model.traverse((o) => o.isBone && o.name === 'head' && (this.headBone = o));
     // where the head is at the height of a browse (measured on the clip once): up and forward of the feet
     if (this.actions.browse && this.headBone) this.browseReach = this.measureReach('browse');
@@ -187,7 +199,46 @@ class Dino {
   }
 
   clipSpeed(name) {
-    return (this.info.clips[name]?.speed || 1) * S * this.k * this.grow;
+    const st = this.stride?.[name];
+    return (st ?? (this.info.clips[name]?.speed || 1) * S) * this.k * this.grow;
+  }
+
+  // how fast a planted foot sweeps backward under the body in this clip, at adult size (units/s)
+  measureStride(name) {
+    const a = this.actions[name], clip = a.getClip(), N = 48;
+    const legs = this.feet.legs;
+    if (!legs.length) return undefined;
+    this.root.position.set(0, 0, 0);
+    this.root.rotation.set(0, 0, 0);
+    this.mixer.stopAllAction();
+    a.reset().play();
+    a.setEffectiveWeight(1);
+    const pts = legs.map(() => []);
+    const p = new Vector3();
+    for (let i = 0; i <= N; i++) {
+      this.mixer.setTime((clip.duration * i) / N);
+      this.root.updateMatrixWorld(true);
+      legs.forEach((L, j) => {
+        const l = this.root.worldToLocal(L.contact.getWorldPosition(p));
+        pts[j].push([l.y, l.z]);
+      });
+    }
+    a.stop();
+    this.mixer.setTime(0);
+    const dt = clip.duration / N;
+    let sum = 0, n = 0;
+    for (const P of pts) {
+      const minY = Math.min(...P.map((q) => q[0]));
+      const tol = (this.feet.hipH || 0.3) * 0.03;
+      for (let i = 1; i < P.length; i++) {
+        if (P[i][0] - minY < tol && P[i - 1][0] - minY < tol) {
+          const v = (P[i - 1][1] - P[i][1]) / dt; // backward sweep
+          if (v > 0) (sum += v), n++;
+        }
+      }
+    }
+    // per unit of model scale, so hatchlings (and growth) scale it
+    return n ? sum / n / (this.k * this.grow) : undefined;
   }
 
   // choose the next activity by weight, using only clips this model has
@@ -548,7 +599,8 @@ class Dino {
         gait: this.gaitWave(),
       });
       // feet onto the real ground (not while lying down), and breathing
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' });
+      const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest', moving: stepping || this.state === 'turn' });
       this.keepInside();
     }
     this.crop(dt);

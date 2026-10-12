@@ -23,6 +23,57 @@ export class Effects {
     this.buildSplash();
     this.buildLantern();
     this.buildSteam();
+    this.buildDust();
+  }
+
+  // ---------------------------------------------------------------- footfall dust
+  buildDust() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const g = c.getContext('2d');
+    const r = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+    r.addColorStop(0, 'rgba(255,255,255,0.8)');
+    r.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = r;
+    g.fillRect(0, 0, 32, 32);
+    const tex = new CanvasTexture(c);
+    this.dusts = [];
+    for (let i = 0; i < 48; i++) {
+      const s = new Sprite(new SpriteMaterial({ map: tex, color: 0x8a7458, transparent: true, opacity: 0, depthWrite: false }));
+      s.scale.setScalar(1e-4); // visible but empty, so it compiles at load
+      s.name = 'effects-dust';
+      this.group.add(s);
+      this.dusts.push({ s, life: 0 });
+    }
+    this.dustNext = 0;
+  }
+
+  dust(p, size) {
+    const wet = this.ctx.world.groundWetness || 0;
+    if (wet > 0.5) return; // no dust off wet ground
+    for (let k = 0; k < 3; k++) {
+      const D = this.dusts[this.dustNext];
+      this.dustNext = (this.dustNext + 1) % this.dusts.length;
+      const a = Math.random() * Math.PI * 2;
+      D.p = new Vector3(p.x + Math.cos(a) * size * 0.4, p.y + 0.01, p.z + Math.sin(a) * size * 0.4);
+      D.v = new Vector3(Math.cos(a) * size * 0.6, size * 0.5, Math.sin(a) * size * 0.6);
+      D.life = D.max = 0.8 + Math.random() * 0.5;
+      D.size = size * (0.8 + Math.random() * 0.6) * (1 - wet);
+    }
+  }
+
+  updateDust(dt) {
+    for (const D of this.dusts) {
+      if (D.life <= 0) continue;
+      D.life -= dt;
+      const t = 1 - D.life / D.max;
+      D.v.multiplyScalar(1 - dt * 3);
+      D.p.addScaledVector(D.v, dt);
+      D.s.position.copy(D.p);
+      D.s.scale.setScalar(D.size * (0.6 + t * 1.6));
+      D.s.material.opacity = D.life > 0 ? 0.32 * (1 - t) * Math.min(1, t * 6) : 0;
+      if (D.life <= 0) D.s.scale.setScalar(1e-4);
+    }
   }
 
   // ---------------------------------------------------------------- steam after rain
@@ -199,6 +250,7 @@ export class Effects {
 
   update(dt, env) {
     this.updateSteam(dt);
+    this.updateDust(dt);
     // leaves tumble and drift down, then lie on the ground a moment and vanish
     let leavesLive = false;
     this.leaves.forEach((L, i) => {
