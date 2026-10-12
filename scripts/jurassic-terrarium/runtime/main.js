@@ -32,7 +32,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: false, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true,
+    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -50,7 +50,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true,
+    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.12, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -155,7 +155,7 @@ class Dino {
   // choose the next activity by weight, using only clips this model has
   chooseAct() {
     const acts = this.sp.acts || { wander: 1 };
-    const prey = this.mod.walkers?.some((d) => !d.sp.predator);
+    const prey = this.mod.walkers?.some((d) => !d.sp.predator && !d.sp.tooBig);
     const opts = Object.entries(acts).filter(
       ([k]) => k === 'wander' || k === 'drink' || (k === 'hunt' && prey) || this.actions[k],
     );
@@ -381,7 +381,7 @@ class Dino {
       if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
     } else if (kind === 'hunt') {
       const prey = mod.walkers
-        .filter((d) => !d.sp.predator)
+        .filter((d) => !d.sp.predator && !d.sp.tooBig && d.state !== 'sleep')
         .sort((a, b) => Math.hypot(a.pos.x - this.pos.x, a.pos.z - this.pos.z) - Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z))[0];
       if (!prey) return void (this.timer = 1);
       this.prey = prey;

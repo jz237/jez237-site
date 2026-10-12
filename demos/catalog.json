@@ -436,10 +436,10 @@
     "id": "020",
     "title": "Jurassic Terrarium",
     "category": "3D · Dinosaur terrarium",
-    "description": "A miniature prehistoric world under glass, growing as new animals hatch. The dinosaurs are sculpted from research and rendered in Blender. A lipped Tyrannosaurus prowls a valley of tree ferns, cycads and horsetails, sniffing, roaring, drinking at the lake and retiring to its rock den at night, a Brachiosaurus browses the treetops, a pair of Stegosaurus graze (and run when the T. rex hunts) and Pteranodons soar under the clouds. Triceratops are on the way. Grab the clouds to make rain, stir the wind and run the sun and seasons.",
+    "description": "A miniature prehistoric world under glass, sculpted from research and rendered in Blender. A lipped Tyrannosaurus prowls a valley of tree ferns, cycads and horsetails, hunting and retiring to its rock den at night. A Triceratops herd may stand its ground against it, Stegosaurus graze and flee, a Brachiosaurus browses the treetops and Pteranodons soar under the clouds. Grab the clouds to make rain, stir the wind and run the sun and seasons.",
     "url": "jurassic-terrarium/",
     "image": "assets/jurassic-terrarium.jpg",
-    "imageAlt": "Actual Jurassic Terrarium scene: a Tyrannosaurus walking through a miniature valley with mountains, a waterfall and a lake inside a brass-framed glass case",
+    "imageAlt": "Actual Jurassic Terrarium scene: Triceratops by a hut, Stegosaurus at a dock, a Brachiosaurus wading a stream below a waterfall and a Tyrannosaurus by its rock den, in a miniature valley under glass",
     "imageWidth": 1440,
     "imageHeight": 900,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/jurassic-terrarium",
@@ -450,7 +450,7 @@
       "Follow-cam for close-ups"
     ],
     "facts": [
-      "Work in progress",
+      "5 species, 9 animals",
       "Three.js · WebGL 2",
       "Mouse & touch"
     ],

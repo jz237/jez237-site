@@ -1,0 +1,50 @@
+{
+ "id": "triceratops",
+ "name": "Triceratops prorsus",
+ "common": "Triceratops",
+ "length": 8.5,
+ "mass_t": 8.0,
+ "height": 2.1,
+ "clips": {
+  "idle": {
+   "loop": true,
+   "frames": 240
+  },
+  "walk": {
+   "loop": true,
+   "speed": 1.1,
+   "stride": 2.7,
+   "period": 2.4667,
+   "frames": 74
+  },
+  "run": {
+   "loop": true,
+   "speed": 3.0,
+   "stride": 3.6,
+   "period": 1.2,
+   "frames": 36
+  },
+  "graze": {
+   "loop": false,
+   "frames": 180
+  },
+  "drink": {
+   "loop": false,
+   "frames": 180
+  },
+  "alert": {
+   "loop": false,
+   "frames": 120
+  },
+  "rest": {
+   "loop": true,
+   "frames": 180
+  },
+  "threat": {
+   "loop": false,
+   "frames": 105
+  }
+ },
+ "behaviour": {},
+ "facts": []
+}

@@ -580,8 +580,10 @@ class Quadruped(Biped):
         def fn(t, ts):
             d = smoothstep(t / 0.15) * (1 - smoothstep((t - 0.8) / 0.2))
             toss = 0.18 * math.sin(ts * 6) * smoothstep((t - 0.3) / 0.1) * (1 - smoothstep((t - 0.7) / 0.1))
-            return (dict(dz=-0.04 * self.hip_h * d, pitch=0.08 * d, dx=0.02 * math.sin(ts * 6) * d),
-                    dict(neck_pitch=0.35 * d, head_pitch=0.25 * d + toss, head_yaw=0.1 * math.sin(ts * 4) * d,
+            g = self.g
+            return (dict(dz=-0.04 * self.hip_h * d, pitch=g.get('pitch_threat', 0.08) * d, dx=0.02 * math.sin(ts * 6) * d),
+                    dict(neck_pitch=g.get('neck_threat', 0.35) * d, head_pitch=g.get('head_threat', 0.25) * d + toss,
+                         head_yaw=0.1 * math.sin(ts * 4) * d,
                          tail_yaw=0.1, tail_phase=ts * 4, tail_pitch=0.1 * d), 0.95)
         return self._still(seconds, fps, fn, name, False)
 

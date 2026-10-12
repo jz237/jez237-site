@@ -10,7 +10,7 @@ roam the valley, graze, drink at the lake, rest at night and react to each other
 
 ## Status
 
-This is a work in progress, published as it grows.
+All six animals from the concept are in the case. It is still being refined, and published as it grows.
 
 | Animal | Status |
 |---|---|
@@ -18,7 +18,7 @@ This is a work in progress, published as it grows.
 | Pteranodon (2) | in the case, soaring |
 | Brachiosaurus | in the case: browses the conifers, drinks, dozes standing |
 | Stegosaurus (2) | in the case: grazes, drinks, swings its spiked tail; flees the T. rex |
-| Triceratops | being sculpted |
+| Triceratops (3) | in the case: a herd that grazes and drinks; one may stand its ground against the T. rex with a horn display |
 
 ## How the dinosaurs are made
 
