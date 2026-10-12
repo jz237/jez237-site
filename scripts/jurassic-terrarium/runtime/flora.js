@@ -9,7 +9,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 
 const UP = new Vector3(0, 1, 0);
 const JUNGLE = {
-  grass: new Color(0x23401a).convertSRGBToLinear(),
+  grass: new Color(0x1c3614).convertSRGBToLinear(),
   dry: new Color(0x3e4424).convertSRGBToLinear(),
   foliage: new Color(0x2c4a22).convertSRGBToLinear(),
   foliage2: new Color(0x3d5a26).convertSRGBToLinear(),
@@ -100,7 +100,7 @@ export class Flora {
     // ferns carpet the meadows, thickest under the tree ferns
     const tier = ctx.quality?.tier ?? 1; // 0 low, 1 medium, 2 high
     tries = 0;
-    want = [120, 220, 300][tier] ?? 220;
+    want = [180, 330, 450][tier] ?? 330;
     while (want > 0 && tries++ < 20000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.15), z = (rand() * 2 - 1) * (box.halfD - 0.15);
       const g = sh.suitability(x, z, 'grass');
@@ -123,7 +123,7 @@ export class Flora {
     }
     // crimson rosettes in drifts under the tree ferns and along the paths
     tries = 0;
-    want = [50, 100, 150][tier] ?? 100;
+    want = [80, 160, 240][tier] ?? 160;
     while (want > 0 && tries++ < 30000) {
       const host = P.treefern.length && rand() < 0.7 ? P.treefern[Math.floor(rand() * P.treefern.length)] : null;
       const x = host ? host.x + (rand() - 0.5) * 0.9 : (rand() * 2 - 1) * (box.halfW - 0.2);
@@ -261,8 +261,8 @@ export class Flora {
     // palette every frame and copies it into the terrain and grass shaders afterwards
     const sea = this.ctx.world.seasonal;
     if (sea?.grass) {
-      sea.grass.lerp(JUNGLE.grass, 0.6);
-      sea.grassDry?.lerp(JUNGLE.dry, 0.55);
+      sea.grass.lerp(JUNGLE.grass, 0.75);
+      sea.grassDry?.lerp(JUNGLE.dry, 0.7);
       sea.foliage?.lerp(JUNGLE.foliage, 0.35);
       sea.foliage2?.lerp(JUNGLE.foliage2, 0.35);
     }

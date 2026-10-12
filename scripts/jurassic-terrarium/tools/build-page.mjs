@@ -95,6 +95,16 @@ patch(
     '{x:-.45,z:-.2,y:.64},{x:-.28,z:0,y:.42},{x:.45,z:.62,y:.36},{x:.62,z:.78,y:.17},{x:1.5,z:1.5,y:.12},{x:2.15,z:2.1,y:.06}]',
   'tiered cascades',
 );
+// the scattered boulders too: dark basalt with moss on their tops, as in the concept's jungle floor
+patch(
+  `TRock tR = rockSurface(vRPos, normalize(vRNrm), vRLoc, vRock, vRock2);
+        diffuseColor.rgb = tR.albedo;`,
+  `TRock tR = rockSurface(vRPos, normalize(vRNrm), vRLoc, vRock, vRock2);
+        float jrMoss = smoothstep(0.45, 0.7, smoothstep(0.1, 0.75, tR.n.y) * 0.75 + wgNoise(vRPos.xz * 9.0 + vRLoc.y * 3.0) * 0.55);
+        vec3 jrMossC = mix(vec3(0.1, 0.16, 0.045), vec3(0.2, 0.28, 0.08), wgNoise(vRPos.xz * 31.0));
+        diffuseColor.rgb = mix(tR.albedo * vec3(0.55, 0.53, 0.5), jrMossC, jrMoss);`,
+  'mossy boulders',
+);
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
