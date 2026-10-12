@@ -1,0 +1,475 @@
+{
+  "currentDate": "2026-10-12",
+  "historicDate": "1984-12-31",
+  "displayDate": "Week of December 31, 1984-January 6, 1985",
+  "edition": "Issue 127 - Weekly 1984 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "1985 International Winter Consumer Electronics Show official directory (archival catalog)",
+      "url": "https://library.gamehistory.org/repositories/2/archival_objects/20967",
+      "date": "1985-01-05/1985-01-08"
+    },
+    {
+      "title": "Tom R. Halfhill, The Next Generation: New Computers at Winter CES, COMPUTE! issue 59, p. 25",
+      "url": "https://www.atarimagazines.com/compute/issue59/next_generation.php",
+      "date": "1985-04"
+    },
+    {
+      "title": "David H. Ahl, 1985 Winter Consumer Electronic Show, Creative Computing vol. 11 no. 4, p. 50",
+      "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+      "date": "1985-04"
+    },
+    {
+      "title": "COMPUTE! issue 56, January 1985 (full issue OCR; modem column, JTERM and advertisements)",
+      "url": "https://archive.org/download/1985-01-compute-magazine/Compute_Issue_056_1985_Jan_djvu.txt",
+      "date": "1985-01"
+    },
+    {
+      "title": "Coleco Discontinues Its Adam Computer Line, Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-01-03-fi-11281-story.html",
+      "date": "1985-01-03"
+    },
+    {
+      "title": "Billboard vol. 97 no. 1: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf",
+      "date": "1985-01-05"
+    },
+    {
+      "title": "Box Office Mojo: Domestic Weekend January 4–6, 1985",
+      "url": "https://www.boxofficemojo.com/weekend/1985W01/",
+      "date": "1985-01-04/1985-01-06"
+    },
+    {
+      "title": "An Ethiopian Exodus: Israel Airlifts Jews From Famine, Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-01-04-mn-6469-story.html",
+      "date": "1985-01-04"
+    },
+    {
+      "title": "Mark I. Pinsky, Computer Scheme: 2 Charged in Credit Card Fraud Case, Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-01-05-me-11500-story.html",
+      "date": "1985-01-05"
+    }
+  ],
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "December 31, 1984-January 6, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Winter CES home-computing newspaper",
+    "motifs": [
+      "Atari ST",
+      "Commodore 128",
+      "CRT screens",
+      "joysticks",
+      "300-bps modem"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Atari ST prototype dominates; gaming demonstrations beside hardware",
+    "secondaryRail": "Commodore, Adam, games, rock and cinema",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-12-31.png",
+    "alt": "GPT Image 2 Computer Chronicle newspaper for December 31, 1984-January 6, 1985",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A new year opens with bold prototypes and hard choices for home-computer buyers.",
+  "morningLine": "Atari brings a mouse, windows and a $599 challenge to Las Vegas.",
+  "lead": {
+    "headline": "Atari shows a $599 512K ST, challenging the high-end divide",
+    "dek": "Winter CES opens with 68000 power, GEM windows and unfinished prototypes.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "LAS VEGAS — Winter CES opens January 5 with Atari putting a new family of personal computers before the trade. The 512K 520ST carries an announced computer price of $599; the 128K 130ST is announced at $399. Neither figure buys a complete monitor-and-drive system. The show runs through January 8, with its opening two days falling in this week.",
+      "An 8 MHz Motorola 68000 sits at the heart of the machines. Atari plans TOS and Digital Research’s GEM interface, giving the mouse work to do among icons, windows and dropdown menus. The systems shown are prototypes, and operating software is unfinished: this is a bid for the next home-computer shelf, not proof that production machines are already arriving in stores.",
+      "The graphics specification offers 320 by 200 with sixteen colors, 640 by 200 with four, and 640 by 400 monochrome, drawing on a 512-color palette. Serial and parallel connections accompany disk interfaces and MIDI ports. Atari’s slogan, “Power Without The Price,” draws attention to a specification sheet usually associated with more expensive machines.",
+      "A new computer must also win programs. Atari offers publishers preproduction machines and technical help, while the shortage of software for a fresh platform remains a practical concern. Alongside the ST, the company shows the 65XE, a remodeled 800XL announced at $99: the inexpensive eight-bit desk is not being abandoned while Atari pursues a graphical future."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Commodore 128 promises three computers in one",
+      "body": [
+        "Commodore’s new 128 promises three personalities under one keyboard: Commodore 64 compatibility, a native 128K mode built around the 8502, and CP/M operation with a Z80A. For households with a C64 library, compatibility is a substantial part of the pitch.",
+        "Forty- or eighty-column text brings a choice of working space, though the latter requires a suitable monitor. CP/M 3.0 is supplied on disk; extra memory may serve as a RAM disk rather than a single contiguous program area. Native mode is the power-on default.",
+        "No official CES price is announced. Period estimates below $300 are estimates, not a shop ticket; projected April or May introduction is likewise a plan rather than a shipment. Commodore is showing its proposed next step, with familiar software helping bridge the gap."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "headline": "Coleco pulls out of Adam; inventory sale points to bargains",
+      "body": [
+        "Coleco announces on January 2 that it is discontinuing Adam, selling its entire inventory at a loss to an unidentified retail chain. Assembly is expected to continue for several months to consume parts already on hand.",
+        "Morton E. Handel promises continued service and software support. The company expects substantial fourth-quarter and full-year losses, but final figures are not yet released. Adam owners must weigh that promise against the retreat of the machine’s manufacturer.",
+        "The reported $499 retail asking price must not be confused with October’s wholesale reduction to $475. Forecasts of roughly $300 clearance systems remain predictions. Coleco says it will continue video games; its large Cabbage Patch business gives the company a very different center of gravity."
+      ],
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "Epyx puts young players in charge of its CES demonstrations",
+      "body": [
+        "Epyx turns the demonstration floor over to children aged eight to fourteen while president Mike Katz stands back. Its show lineup includes Barbie, Hot Wheels and G.I. Joe adaptations described as nonstructured creative play for younger children; the show report does not establish firm launch dates or prices.",
+        "Creative Software brings Trolls and Tribulations, guiding trolls through underground caverns in search of treasure. Break Street puts breakdancing on the screen, with Seattle’s DeRoxy Crew advising its movement vocabulary. These are gaming-floor attractions, not an asserted sales ranking.",
+        "The demonstrations make a lively counterpoint to the hardware specifications elsewhere in the hall. A computer’s appeal still depends on what happens after it is switched on: exploring, making things and learning the next move."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        2
+      ]
+    },
+    {
+      "headline": "Commodore’s LCD portable packs office tools and a modem",
+      "body": [
+        "Commodore also shows an LCD portable prototype with an eighty-column, sixteen-line folding screen and a seventy-two-key keyboard. The approximately three-pound machine pairs a 65C102 with 32K RAM and 96K ROM.",
+        "Built-in tools range from word processing and a spreadsheet to a scheduler, address book and terminal emulator. A 300-bps autoanswer/autodial modem gives the briefcase machine a line to distant services, while serial, parallel and Commodore interfaces link it to peripherals.",
+        "Some built-in programs are not yet functioning at the show. A proposed price well under $1,000 is not a firm retail price, and availability is not established. This portable is a demonstration of an office-on-the-road idea, not a released product."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari ST prototypes",
+      "summary": "520ST 512K and 130ST 128K with 68000 and GEM; announced at Winter CES, not yet finished production machines.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Atari 65XE",
+      "summary": "Remodeled 800XL styled like the new ST series; announced at $99.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Commodore 128",
+      "summary": "128K home computer with C64/native/CP/M modes and 80-column capability; price unannounced.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "Wico SmartBoard",
+      "summary": "CES keyboard/trackball peripheral for IBM PC and Apple II. Ten function keys can each hold up to 126 characters; trackball offers cursor control or mouse emulation.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "JTERM 3.8 for Atari",
+      "detail": "Frank C. Jones’s January COMPUTE! article, p. 145, publishes a BASIC/machine-language terminal program with new 1200-bps modem support; needs at least 32K RAM and an 850 Interface Module or equivalent. Supports BBSs, commercial services and file transfers.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "Smart Start",
+      "detail": "Muse founder Ed Zaron’s Commodore 64 package is described in CES coverage as making C64 capabilities easier to use. No price verified.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "The Print Shop and The Graphics Library",
+      "detail": "Cathy Carlston tells Creative Computing at CES that Print Shop sales exceeded expectations and its add-on graphics/font library was boosting sales. Qualitative company claim, not audited sales numbers.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — show and online editorial selection, not a sales chart",
+      "items": [
+        "Trolls and Tribulations",
+        "Break Street",
+        "MegaWars",
+        "Barbie",
+        "Hot Wheels"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "label": "Top 5 Movies — January 4-6 weekend box office",
+      "items": [
+        "Beverly Hills Cop",
+        "City Heat",
+        "Protocol",
+        "2010: The Year We Make Contact",
+        "Micki + Maude"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 520ST",
+      "price": "$599",
+      "note": "$599 announced computer price for 512K prototype; peripherals extra.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari 130ST",
+      "price": "$399",
+      "note": "$399 announced computer price for 128K prototype; not a verified shipping SKU.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari 65XE",
+      "price": "$99",
+      "note": "$99 CES announced price.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari XM301",
+      "price": "Estimated under $50",
+      "note": "300-bps direct-connect modem estimated under $50 in CES coverage.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Hayes Smartmodem 1200B",
+      "price": "$459",
+      "note": "$459 in AB Computers advertisement, January COMPUTE!; includes Smartcom II software.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Hayes Smartmodem 1200/300",
+      "price": "$529",
+      "note": "$529 in the same AB Computers advertisement; shipping/tax extra.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Anchor Mark XII",
+      "price": "$265",
+      "note": "$265 in AB Computers advertisement, January COMPUTE!.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Adam system",
+      "price": "$499",
+      "note": "$499 contemporary retail asking price reported January 3; predicted $300 clearance figure is only speculation. Includes keyboard, tape storage, letter-quality printer and software.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "The Boys of Summer",
+      "artist": "Don Henley",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-05",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Run to You",
+      "artist": "Bryan Adams",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-05",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "I Want to Know What Love Is",
+      "artist": "Foreigner",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-05",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Do It Again",
+      "artist": "The Kinks",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-05",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Call to the Heart",
+      "artist": "Giuffria",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-05",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-05.pdf"
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "MSX suppliers hesitate over U.S. timing",
+      "summary": "COMPUTE! reports thirteen Japanese companies demonstrating MSX-standard systems but suggesting U.S. entry might be delayed another year. Creative Computing likewise says orders were not being taken and records a wait-until-Summer-CES line. Report hesitation, not a firm launch cancellation.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "headline": "January home-computing magazine desk",
+      "summary": "COMPUTE! issue 56 covers Music in the Computer Age, MSX and downloadable/type-in software including JTERM. These are same-month reading leads, not exact-week product announcements.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "worldAnchor": {
+    "headline": "Israel discloses an airlift of Ethiopian Jews",
+    "summary": "Israel discloses on January 3 that thousands of Ethiopian Jews have been airlifted to Israel during the preceding month amid famine. Contemporary reporting describes the scale in estimates, as the rescue becomes public.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "From 300 to 2400 bps: how much speed is worth buying?",
+    "summary": "January COMPUTE! provides a dated modem-market guide, a 1200-bps Atari terminal program, and an online-game advertisement; CES adds an inexpensive Atari modem prototype. No invented BBS posts or sysops.",
+    "posts": [
+      {
+        "topic": "Modem buying",
+        "platform": "COMPUTE!, Telecomputing Today, January 1985, pp. 160–161",
+        "text": "Arlan R. Levitan’s Smokey & The Modem—Part 8086 describes 300-bps units at $50–$280, full-featured 300/1200-bps models breaking $300, and 2400-bps models at $800–$1,500. These are author-reported market ranges."
+      },
+      {
+        "topic": "Atari terminal software",
+        "platform": "COMPUTE!, January 1985, p. 145",
+        "text": "JTERM 3.8 adds 1200-bps support to Frank C. Jones’s terminal software for BBS and commercial-service access; 32K and an 850 interface or equivalent are required."
+      },
+      {
+        "topic": "Online play and services",
+        "platform": "CompuServe advertisement in COMPUTE!, January 1985",
+        "text": "CompuServe promotes MegaWars, flight schedules and reservations via the Official Airline Guide Electronic Edition, and Value Line/Standard & Poor’s financial information. Advertising evidence, not an independent service review."
+      },
+      {
+        "topic": "Low-cost direct connection",
+        "platform": "Atari Winter CES announcement, reported by COMPUTE! April 1985",
+        "text": "XM301 is a 300-bps direct-connect modem with an estimated under-$50 price. Announced product, not verified immediate availability."
+      }
+    ],
+    "sourceRefs": [
+      1,
+      3
+    ]
+  },
+  "curiosity": {
+    "headline": "A tiny robot whose metal remembers its shape",
+    "summary": "Creative Computing’s CES reporter spots Toki’s unusual biometal robot.",
+    "detail": "David H. Ahl describes a miniature robot actuated by a titanium-nickel alloy that remembers a position: heating changes the joint position and cooling returns it. Toki also showed a light-driven control interface. Ahl’s judgment that it would never reach market is speculation, not a documented product fate; no price verified.",
+    "sourceRefs": [
+      0,
+      2
+    ]
+  },
+  "periodAd": {
+    "headline": "CompuServe puts MegaWars on the modem desk",
+    "summary": "January COMPUTE! advertising promotes online space combat alongside airline schedules and financial information. This is a period advertisement, not a new-release announcement.",
+    "tagline": "The computer shelf reaches beyond the room.",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "market": {
+    "headline": "Adam retreats as Atari and Commodore make new bids",
+    "summary": "Coleco shares close January 2 at $14.375, up $2.25, despite its exit from Adam. New CES prototypes promise lower-cost computing, but announced prices and shipping products remain different things.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      4,
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "CES official directory dates the show January 5–8; only its opening two days fall within this issue. Do not describe the entire show as completed by January 6.",
+      "April 1985 COMPUTE! and Creative Computing reports are period retrospective evidence of January CES announcements, not April launches. Avoid their subsequent forecasts or editorial hindsight as facts known this week.",
+      "Announced prototype prices, estimated prices, dealer advertisements, retail asking prices and wholesale figures must remain distinct. No claim that show prototypes are already shipping.",
+      "No milestone flag: strong ST lead stands without an Extra Edition designation. Gadget search produced no adequately verified noncomputing breaking item; omitted. Scene search found an exact-week BBS-related case, but no named crew, handle or board.",
+      "Games are an editorial selection, not a sales chart; Barbie and Hot Wheels are show material, not verified shipments.",
+      "Edition year follows the historical start date, 1984, despite the week crossing into 1985."
+    ]
+  }
+}
