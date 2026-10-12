@@ -124,6 +124,16 @@ patch(
 );
 // gentler film grain: it is redrawn every frame, and at reduced resolution it crawls like static
 patch('uVignette:{value:.32},uGrain:{value:.035}', 'uVignette:{value:.32},uGrain:{value:.014}', 'gentle grain');
+// The pool's mirror reflection was refreshed only every 2 frames while the view moved and every 4-5
+// when it was still, at a resolution and margin that changed with the view: everything reflected in the
+// pool (swaying planting, walking animals, clouds) moved in jerky steps and the reflection popped
+// between sharpnesses: the water flickered. Now on medium/high it is redrawn every frame at a fixed
+// scale and margin. And the sun glitter twinkles slower and less hot, so it no longer strobes the glow.
+patch('this.fastEvery=n.pick(2,2,1),this.slowEvery=n.pick(5,4,3)', 'this.fastEvery=n.pick(2,1,1),this.slowEvery=n.pick(3,1,1)', 'mirror every frame');
+patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
+patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');
+patch('float tw = wgHash(gc + floor(uTime * 5.0 + wgHash(gc) * 5.0) * 0.731);', 'float tw = wgHash(gc + floor(uTime * 1.2 + wgHash(gc) * 5.0) * 0.731);', 'slower glitter twinkle');
+patch('float k = (g * 5.0 * fade + pdf * 1.1) * F * amount;', 'float k = (g * 1.8 * fade + pdf * 1.1) * F * amount;', 'softer glitter');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's

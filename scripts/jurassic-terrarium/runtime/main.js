@@ -23,6 +23,7 @@ import { Effects } from './effects.js';
 import { Ambience } from './ambience.js';
 import { Nest } from './nest.js';
 import { debugPanel } from './debug.js';
+import { guardWater } from './safety.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -1178,6 +1179,8 @@ class Dinosaurs {
     }
     this.ready = true;
     this.guide = new Guide(this, SPECIES);
+    // the water's shaders can produce NaN/Inf pixels on some GPUs (bloomed into full-screen flashes)
+    if (params.get('waterguard') !== '0') this.guarded = guardWater(this.ctx.scene);
     if (params.has('debug')) debugPanel(this.ctx, this);
     window.__wgHold = 0;
   }
