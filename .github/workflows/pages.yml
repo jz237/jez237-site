@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - README.md
+      - AGENTS.md
+      - ".claude/**"
+      - "scripts/**/tests/**"
+      - "tests/**"
   workflow_dispatch:
 
 permissions:
@@ -41,6 +47,10 @@ jobs:
             /scripts/publish_generated_assets.test.mjs
             /scripts/prune_pages_artifacts.mjs
             /scripts/prune_pages_artifacts.test.mjs
+            /scripts/restore_legacy_media.py
+            /scripts/media-r2.test.mjs
+            /media-r2-manifest.json
+            /shared/media-redirects.mjs
             /scripts/rotatable-aquascape/qa/approved-build.json
             /scripts/rotatable-aquascape/public/
             !/stock-market-src/
@@ -97,6 +107,9 @@ jobs:
       - name: Check bounded cleanup safeguards
         run: node --test scripts/publish_generated_assets.test.mjs scripts/prune_pages_artifacts.test.mjs
 
+      - name: Verify migrated media links
+        run: node --test scripts/media-r2.test.mjs
+
       - name: Keep Hidden Reef pointer-only
         run: node scripts/check_hidden_reef_retired.mjs
 
@@ -135,6 +148,9 @@ jobs:
             --exclude='./yarn.lock' \
             --exclude='./wrangler.toml' \
             -cf - . | tar -xf - -C _site
+
+      - name: Preserve legacy direct video URLs from R2
+        run: python3 scripts/restore_legacy_media.py _site
 
       - name: Report payload size
         run: |

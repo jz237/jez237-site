@@ -1,3 +1,4 @@
+import { migratedMediaResponse } from "../shared/media-redirects.mjs";
 // Hidden Reef is hosted only in its standalone Cloudflare project.
 function onRequestHiddenReef(context) {
   const url = new URL(context.request.url);
@@ -92,6 +93,8 @@ function isBlockedSourcePath(pathname) {
 }
 
 export async function onRequest(context) {
+  const mediaRedirect = migratedMediaResponse(context.request);
+  if (mediaRedirect) return mediaRedirect;
   const reefRedirect = onRequestHiddenReef(context); if (reefRedirect) return reefRedirect;
   const url = new URL(context.request.url);
   const retiredPaths = [
