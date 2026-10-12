@@ -153,11 +153,17 @@ vec3 folBody(vec3 q, vec3 rootW){
     float under = 1.0 - smoothstep(hw * 0.9, hw * 1.35, rootR);
     vec3 qu = q;
     if (q.y > belly - 0.0015) qu.y = mix(q.y, belly - 0.0015, 1.0 - smoothstep(hw, hw * 1.4, r));
+    // (held off the flank on its root's side: a broad leaf reaching across the
+    // back is moved as one, not split to both sides and stretched through the body)
+    vec2 side = rootW.xz - (p.xz + ab.xz * tr);
+    float sl = length(side);
+    side = sl > 1e-5 ? side / sl : (r > 1e-5 ? d / r : vec2(1.0, 0.0));
     vec3 qs = q;
     float dy = (q.y - c.y) / hh;
-    if (abs(dy) < 1.0 && r > 1e-5) {
+    if (abs(dy) < 1.0) {
       float rt = (hw + 0.002) * sqrt(1.0 - dy * dy);
-      if (r < rt) qs.xz = c.xz + d / r * rt;
+      float sd = dot(d, side);
+      if (r < rt && sd < rt) qs.xz += side * (rt - sd);
     }
     q = mix(qs, qu, under);
   }
@@ -337,5 +343,5 @@ normal = normalize(normal + (viewMatrix * vec4(bead.xyz, 0.0)).xyz * bead.w * 0.
   totalEmissiveRadiance += uKeyColor * bead.w * (1.0 - smoothstep(0.0, 0.26, length(bead.xyz - keyW * 0.4))) * 1.1;
 }`);
   };
-  material.customProgramCacheKey = () => `foliage14-${opts.key}`;
+  material.customProgramCacheKey = () => `foliage15-${opts.key}`;
 }
