@@ -22,7 +22,7 @@ All six animals from the concept are in the case. It is still being refined, and
 
 How they move and what's around them:
 
-- Animals bend into their turns.
+- Animals steer smoothly along their routes and their bodies curve along the arc they walk.
 - The trunk swings over each planted foot.
 - The head flicks to look at something and holds there while the neck catches up.
 - Ferns lean away and press down as an animal pushes through them.

@@ -36,7 +36,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.75, gaitSwing: 0.05,
+    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.05,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -113,6 +113,7 @@ class Dino {
     this.pos = new Vector3(p.x, 0, p.z);
     this.heading = rand() * Math.PI * 2;
     this.speed = 0;
+    this.yawRate = 0;
     this.state = 'idle';
     this.timer = 2 + rand() * 4;
     this.path = null;
@@ -183,6 +184,7 @@ class Dino {
     if (!path || path.length < 2) return false;
     this.path = path;
     this.pathIdx = 1;
+    this.yawRate = 0;
     this.state = 'walk';
     this.gait = this.actions[gait] && !(gait === 'run' && this.sp.noRun) ? gait : 'walk';
     this.then = then;
@@ -477,13 +479,30 @@ class Dino {
     } else if (!this.oneShot(kind)) this.timer = 1;
   }
 
+  // the point `dist` further along the route from where the animal stands
+  carrot(dist) {
+    let px = this.pos.x, pz = this.pos.z, left = dist;
+    for (let i = this.pathIdx; i < this.path.length; i++) {
+      const w = this.path[i];
+      const sx = w.x - px, sz = w.z - pz, s = Math.hypot(sx, sz);
+      if (s >= left) return { x: px + (sx / s) * left, z: pz + (sz / s) * left };
+      left -= s;
+      px = w.x;
+      pz = w.z;
+    }
+    return { x: px, z: pz };
+  }
+
   walkStep(dt, hunting = false) {
     const gait = this.gait || 'walk';
     const v = this.clipSpeed(gait);
     const wp = this.path[this.pathIdx];
-    const dx = wp.x - this.pos.x, dz = wp.z - this.pos.z;
-    const d = Math.hypot(dx, dz);
-    if (d < Math.max(0.06, v * 0.25)) {
+    const d = Math.hypot(wp.x - this.pos.x, wp.z - this.pos.z);
+    // steer for a point a little way down the route, not the next waypoint: the animal curves through
+    // the route's corners instead of walking straight and pivoting at each one, so its body bends
+    const look = Math.max(0.2, this.length * 0.45);
+    const last = this.pathIdx >= this.path.length - 1;
+    if (d < (last ? Math.max(0.06, v * 0.25) : Math.max(0.06, v * 0.25, look * 0.6))) {
       this.pathIdx++;
       if (this.pathIdx >= this.path.length) {
         if (hunting) return void (this.path = null);
@@ -495,11 +514,15 @@ class Dino {
       }
       return;
     }
-    const want = Math.atan2(dx, dz);
+    const c = this.carrot(look);
+    const want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
     let dh = want - this.heading;
     dh = Math.atan2(Math.sin(dh), Math.cos(dh));
     const turnRate = (gait === 'run' ? 1.4 : 0.9) * Math.min(2, 1.2 / Math.max(this.length, 0.4));
-    this.heading += MathUtils.clamp(dh, -turnRate * dt, turnRate * dt);
+    // the turn rate itself eases in and out (no instant pivots), which the flex layer reads as a curve
+    const wantRate = MathUtils.clamp(dh * 2.2, -turnRate, turnRate);
+    this.yawRate += (wantRate - this.yawRate) * Math.min(1, dt * 4);
+    this.heading += this.yawRate * dt;
     const align = Math.max(0.2, Math.cos(Math.min(Math.abs(dh), Math.PI / 2)));
     this.speed += (v * align - this.speed) * Math.min(1, dt * 1.5);
     this.pos.x += Math.sin(this.heading) * this.speed * dt;

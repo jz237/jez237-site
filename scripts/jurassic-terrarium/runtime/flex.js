@@ -79,10 +79,11 @@ export class Flex {
     const flex = this.opts.flex ?? 1;
     // curvature of the path; turning on the spot still bends the body
     const k = speed > 0.02 ? turnRate / speed : turnRate * 1.6;
-    // a body can only curve so far: about 65 degrees end to end for a supple animal
+    // a body can only curve so far: about 110 degrees end to end for a supple animal, enough for it to
+    // lie along the arc it walks rather than swing round it like a plank
     const nS = this.spine.length, nN = this.neck.length, nT = this.tail.length;
     const joints = Math.max(4, nS + nN + nT);
-    const kMax = (1.15 * flex) / (segLen * joints);
+    const kMax = (1.9 * flex) / (segLen * joints);
     const kWant = Math.max(-kMax, Math.min(kMax, k));
     this.curv += (kWant - this.curv) * Math.min(1, dt * 3.0);
     const arc = this.curv * segLen * flex; // rotation per joint for the body to lie on the arc
@@ -117,7 +118,7 @@ export class Flex {
     // the stride: the trunk swings over each planted foot, the wave travelling back down the tail
     const gp = gait ? gait.phase * Math.PI * 4 : 0; // two footfalls of each side per cycle
     const ga = gait ? gait.amp * flex : 0;
-    for (let i = 0; i < nS; i++) this.bend(this.spine[i], arc * 0.55 + ga * Math.sin(gp - i * 0.5) * 0.6);
+    for (let i = 0; i < nS; i++) this.bend(this.spine[i], arc * 0.75 + ga * Math.sin(gp - i * 0.5) * 0.6);
     for (let i = 0; i < nN; i++) {
       const w = (i + 1) / ((nN * (nN + 1)) / 2); // more bend towards the head
       // the neck damps the trunk's swing so the head stays steady
