@@ -19,7 +19,7 @@ export class Meadow {
 
   constructor(surface: Surface, tufts = 720, avoid: {x: number; z: number; r: number}[] = []) {
     const rnd = mulberry32(777);
-    const pos: number[] = [], nrm: number[] = [], col: number[] = [], flex: number[] = [], phase: number[] = [], uv: number[] = [], idx: number[] = [];
+    const pos: number[] = [], nrm: number[] = [], col: number[] = [], flex: number[] = [], phase: number[] = [], uv: number[] = [], root: number[] = [], idx: number[] = [];
     const up = new THREE.Vector3(0, 1, 0);
     const c = new THREE.Color(), tip = new THREE.Color();
     let placed = 0;
@@ -77,6 +77,7 @@ export class Meadow {
             col.push((c.r + (tip.r - c.r) * t) * k, (c.g + (tip.g - c.g) * t) * k, (c.b + (tip.b - c.b) * t) * k);
             flex.push(t);
             phase.push(ph);
+            root.push(bx, by, bz);
             uv.push(t, sgn < 0 ? 0 : 1);
           }
           if (i < SEG) {
@@ -93,11 +94,12 @@ export class Meadow {
     g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
     g.setAttribute('aFlex', new THREE.Float32BufferAttribute(flex, 1));
     g.setAttribute('aPhase', new THREE.Float32BufferAttribute(phase, 1));
+    g.setAttribute('aRoot', new THREE.Float32BufferAttribute(root, 3));
     g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
     g.setIndex(idx);
     g.computeBoundingSphere();
     const m = new THREE.MeshStandardMaterial({vertexColors: true, side: THREE.DoubleSide, roughness: 0.7});
-    addFoliage(m, {flexAttr: true, phaseAttr: true, height: 0.03, translucency: 0.45, stiffness: 0.8, key: 'meadow'});
+    addFoliage(m, {flexAttr: true, phaseAttr: true, rootAttr: true, height: 0.03, translucency: 0.45, stiffness: 0.8, key: 'meadow'});
     // up close each blade is folded along its keel, with fine veins running its length
     const base = m.onBeforeCompile;
     m.onBeforeCompile = (s, r) => {

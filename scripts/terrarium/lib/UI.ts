@@ -279,8 +279,7 @@ export class UI {
       const inside = this.tool === 'hand' || this.tool === 'feed' ? t.pickInside(this.ray.ray) : null;
       t.brain.pointer = inside;
       // the hand brushes through the plants it passes over
-      if (this.tool === 'hand' && inside) t.handPush.set(inside.x, inside.y, inside.z, 0.028);
-      else t.handPush.w = 0;
+      t.setHand(this.tool === 'hand' ? inside : null);
       if (this.tool === 'hand' && !this.drag) w().clouds.setHover(w().clouds.pick(this.ray.ray)?.cloud ?? null);
       const d = this.drag;
       if (!d) return;
@@ -370,7 +369,7 @@ export class UI {
     host.addEventListener('pointerup', end, true);
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     host.addEventListener('pointercancel', end, true);
-    host.addEventListener('pointerleave', () => {t.brain.pointer = null; t.handPush.w = 0; w().clouds.setHover(null);});
+    host.addEventListener('pointerleave', () => {t.brain.pointer = null; t.setHand(null); w().clouds.setHover(null);});
   }
   private pendingPet = false;
 

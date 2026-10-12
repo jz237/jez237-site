@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {mergeGeometries, mergeVertices} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {Surface, SurfaceKind} from './Surface';
-import {addFoliage, PINNATE_GLSL} from './Foliage';
+import {addFoliage, setRoot, PINNATE_GLSL} from './Foliage';
 import {mulberry32} from './Textures';
 import {WATER_LEVEL, poolDistance, poolDepth, caveKeepClear, CAVE} from './Ground';
 import {TANK} from './Case';
@@ -238,7 +238,7 @@ function twig(rnd: () => number): Parts {
 
 function floraMaterial() {
   const m = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.45, side: THREE.DoubleSide});
-  addFoliage(m, {flexAttr: true, height: 0.08, translucency: 0.75, key: 'flora'});
+  addFoliage(m, {flexAttr: true, rootAttr: true, height: 0.08, translucency: 0.75, key: 'flora'});
   const base = m.onBeforeCompile;
   m.onBeforeCompile = (s, r) => {
     base(s, r);
@@ -380,7 +380,7 @@ export class Flora {
       const n = opts.normal ?? up;
       const q = new THREE.Quaternion().setFromUnitVectors(up, n.clone().lerp(up, 0.5).normalize()).multiply(new THREE.Quaternion().setFromAxisAngle(up, opts.yaw ?? rnd() * Math.PI * 2));
       const m = new THREE.Matrix4().compose(new THREE.Vector3(x, y - (opts.sink ?? 0.002), z), q, new THREE.Vector3().setScalar(opts.scale ?? 1));
-      for (const p of local) {p.applyMatrix4(m); this.parts.push(p);}
+      for (const p of local) {p.applyMatrix4(m); setRoot(p, x, y, z); this.parts.push(p);}
       return true;
     };
     const dry = (x: number, z: number) => poolDistance(x, z) > 0.05 && surface.kindAt(x, z) !== SurfaceKind.Water;
@@ -479,7 +479,9 @@ export class Flora {
 
     const merged = mergeGeometries(this.parts.map((p) => {
       const q = p.index ? p.toNonIndexed() : p;
-      for (const k of Object.keys(q.attributes)) if (!['position', 'normal', 'uv', 'aFlex', 'aKind', 'aTint'].includes(k)) q.deleteAttribute(k);
+      for (const k of Object.keys(q.attributes)) if (!['position', 'normal', 'uv', 'aFlex', 'aKind', 'aTint', 'aRoot'].includes(k)) q.deleteAttribute(k);
+      // (parts placed on their own, like the vines on the rocks, are pushed point by point)
+      if (!q.attributes.aRoot) q.setAttribute('aRoot', q.attributes.position.clone());
       if (!q.attributes.aFlex) q.setAttribute('aFlex', new THREE.BufferAttribute(new Float32Array(q.attributes.position.count).fill(0.3), 1));
       if (!q.attributes.normal) q.computeVertexNormals();
       return q;
