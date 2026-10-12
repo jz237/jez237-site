@@ -4852,6 +4852,11 @@ TSurf terrainSurface(vec3 p, vec3 nG, float lift) {
     rough = mix(rough, 0.84, rockM);
     H = mix(H, rH, rockM);
     ao = mix(1.0, rAO, rockM);
+    float jMoss = smoothstep(0.5, 0.72, smoothstep(0.2, 0.8, nG.y) * 0.75 + (n3 * 0.6 + nC * 0.4) * 0.55);
+    vec3 jDark = rock * vec3(0.5, 0.48, 0.45);
+    vec3 jMossC = mix(vec3(0.1, 0.16, 0.045), vec3(0.2, 0.28, 0.08), nD) * (0.8 + 0.4 * nC);
+    col = mix(col, mix(jDark, jMossC, jMoss), rockM);
+    rough = mix(rough, mix(0.84, 0.96, jMoss), rockM);
   }
 
   // ---- river bed and lake floor

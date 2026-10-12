@@ -71,6 +71,20 @@ patch('pine:e.pick(16,24,30)', 'pine:e.pick(9,13,16)', 'fewer pines');
 // so everything agrees about the new ground. DEN must match DEN in runtime/main.js.
 const DEN = { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
 patch('h=(w,y,_,M,A)=>!(!a(w,y,M)||', 'h=(w,y,_,M,A)=>!(!a(w,y,M)||window.__jtDenAt&&window.__jtDenAt(w,y,M)||', 'no trees in the den');
+// Jurassic rock: the concept's mountains are dark volcanic stone thick with moss on every ledge and
+// upward face (moss rule after the reptile terrarium's rocks), not pale alpine limestone
+patch(
+  `    ao = mix(1.0, rAO, rockM);
+  }`,
+  `    ao = mix(1.0, rAO, rockM);
+    float jMoss = smoothstep(0.5, 0.72, smoothstep(0.2, 0.8, nG.y) * 0.75 + (n3 * 0.6 + nC * 0.4) * 0.55);
+    vec3 jDark = rock * vec3(0.5, 0.48, 0.45);
+    vec3 jMossC = mix(vec3(0.1, 0.16, 0.045), vec3(0.2, 0.28, 0.08), nD) * (0.8 + 0.4 * nC);
+    col = mix(col, mix(jDark, jMossC, jMoss), rockM);
+    rough = mix(rough, mix(0.84, 0.96, jMoss), rockM);
+  }`,
+  'mossy dark rock',
+);
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
