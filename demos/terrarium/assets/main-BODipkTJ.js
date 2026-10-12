@@ -5442,10 +5442,10 @@ float lzScale(vec3 p, float jitter, float edge, float dome, out vec3 grad, out v
   cell = v;
   return s * dm;
 }
-`,sy={normal:[[.32,.165,.045],[.52,.33,.11],[.085,.048,.022],[.2,.11,.045],[.6,.48,.31],[.62,.22,.04],[.64,.52,.34],[.018,.015,.013]],red:[[.42,.11,.03],[.62,.25,.07],[.12,.03,.012],[.28,.07,.025],[.62,.42,.26],[.72,.12,.02],[.66,.48,.3],[.02,.014,.012]],citrus:[[.5,.33,.04],[.68,.52,.1],[.16,.1,.02],[.34,.2,.04],[.66,.56,.3],[.7,.38,.03],[.7,.6,.36],[.03,.022,.015]],hypo:[[.5,.38,.22],[.7,.58,.38],[.28,.19,.1],[.42,.3,.17],[.72,.64,.5],[.66,.36,.14],[.76,.68,.54],[.5,.45,.38]]},cy=.0105;function ly(){let e=new Uint8Array(262144),t=e=>{let t=Math.sin(e*127.1+311.7)*43758.5453;return t-Math.floor(t)},n=new Float32Array(256);for(let e=0;e<256;e++)n[e]=.6*t(e)+.4*t(Math.floor(e/3)+999);for(let r=0;r<256;r++){let i=(255-r)/255*Math.PI;for(let a=0;a<256;a++){let o=n[a]*.7+n[(a+1)%256]*.3,s,c,l,u=t(a*7+Math.floor(i*40)*131)>.93?.55:1;if(i<.25)s=3,c=2,l=2;else if(i<.31){let e=(i-.25)/.06;s=236-20*e,c=196-30*e,l=110-40*e}else if(i<1){let e=(i-.31)/.69;s=(214-70*e+30*(o-.5))*u,c=(150-72*e+24*(o-.5))*u,l=(52-28*e+10*(o-.5))*u}else if(i<1.14){let e=(i-1)/.14;s=120-90*e,c=70-55*e,l=28-20*e}else s=14,c=10,l=8;let d=(r*256+a)*4;e[d]=s,e[d+1]=c,e[d+2]=l,e[d+3]=255}}let r=new Fi(e,256,256);return r.colorSpace=Ue,r.wrapS=i,r.magFilter=u,r.minFilter=f,r.generateMipmaps=!0,r.needsUpdate=!0,r}function uy(e,t,n,r){let i=new Fs({color:16777215,roughness:.6,metalness:0,sheen:.15,sheenRoughness:.6,sheenColor:new K(.5,.4,.3),specularIntensity:.55}),a={uProfile:{value:e},uDisplay:{value:0},uTone:{value:0},uBeardDark:{value:0},uPal:{value:sy.normal.map(e=>new K(...e))},uWet:{value:0},uDust:{value:.08},uScaleMeters:{value:cy},uScaleDir:{value:t},uEye:{value:n},uNostril:{value:r}};return i.onBeforeCompile=e=>{Object.assign(e.uniforms,a),e.uniforms.uKeyDirView=S_.uKeyDirView,e.uniforms.uKeyColor=S_.uKeyColor,e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
+`,sy={normal:[[.32,.165,.045],[.52,.33,.11],[.085,.048,.022],[.2,.11,.045],[.6,.48,.31],[.62,.22,.04],[.64,.52,.34],[.018,.015,.013]],red:[[.42,.11,.03],[.62,.25,.07],[.12,.03,.012],[.28,.07,.025],[.62,.42,.26],[.72,.12,.02],[.66,.48,.3],[.02,.014,.012]],citrus:[[.5,.33,.04],[.68,.52,.1],[.16,.1,.02],[.34,.2,.04],[.66,.56,.3],[.7,.38,.03],[.7,.6,.36],[.03,.022,.015]],hypo:[[.5,.38,.22],[.7,.58,.38],[.28,.19,.1],[.42,.3,.17],[.72,.64,.5],[.66,.36,.14],[.76,.68,.54],[.5,.45,.38]]},cy=.0105;function ly(){let e=new Uint8Array(262144),t=e=>{let t=Math.sin(e*127.1+311.7)*43758.5453;return t-Math.floor(t)},n=new Float32Array(256);for(let e=0;e<256;e++)n[e]=.6*t(e)+.4*t(Math.floor(e/3)+999);for(let r=0;r<256;r++){let i=(255-r)/255*Math.PI;for(let a=0;a<256;a++){let o=n[a]*.7+n[(a+1)%256]*.3,s,c,l,u=t(a*7+Math.floor(i*40)*131)>.93?.6:1;if(i<.29)s=3,c=2,l=2;else if(i<.36){let e=(i-.29)/.07;s=226-60*e,c=168-62*e,l=72-38*e}else if(i<1){let e=(i-.36)/.64;s=(132-66*e+34*(o-.5))*u,c=(78-44*e+20*(o-.5))*u,l=(30-16*e+8*(o-.5))*u}else if(i<1.14){let e=(i-1)/.14;s=66-50*e,c=34-24*e,l=14-8*e}else s=14,c=10,l=8;let d=(r*256+a)*4;e[d]=s,e[d+1]=c,e[d+2]=l,e[d+3]=255}}let r=new Fi(e,256,256);return r.colorSpace=Ue,r.wrapS=i,r.magFilter=u,r.minFilter=f,r.generateMipmaps=!0,r.needsUpdate=!0,r}function uy(e,t,n,r){let i=new Fs({color:16777215,roughness:.6,metalness:0,sheen:.15,sheenRoughness:.6,sheenColor:new K(.5,.4,.3),specularIntensity:.55}),a={uProfile:{value:e},uDisplay:{value:0},uTone:{value:0},uBeardDark:{value:0},uPal:{value:sy.normal.map(e=>new K(...e))},uWet:{value:0},uDust:{value:.08},uScaleMeters:{value:cy},uScaleDir:{value:t},uEye:{value:n},uNostril:{value:r}};return i.onBeforeCompile=e=>{Object.assign(e.uniforms,a),e.uniforms.uKeyDirView=S_.uKeyDirView,e.uniforms.uKeyColor=S_.uKeyColor,e.vertexShader=e.vertexShader.replace(`#include <common>`,`#include <common>
 attribute vec4 aux;
 uniform vec3 uScaleDir[${t.length}];
-varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir;`).replace(`#include <skinnormal_vertex>`,`#include <skinnormal_vertex>
+varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir; varying float vScaleK;`).replace(`#include <skinnormal_vertex>`,`#include <skinnormal_vertex>
 #ifdef USE_SKINNING
   vSkinN = normalMatrix * mat3(skinMatrix);
 #else
@@ -5455,12 +5455,15 @@ vRest = position; vRestN = normal; vAux = aux;
 #ifdef USE_SKINNING
 // the way the scales point (towards the free edges): down the limbs, back along the body
 vScaleDir = uScaleDir[int(skinIndex.x)] * skinWeight.x + uScaleDir[int(skinIndex.y)] * skinWeight.y + uScaleDir[int(skinIndex.z)] * skinWeight.z + uScaleDir[int(skinIndex.w)] * skinWeight.w;
+// how much one bone has this skin to itself (its scales point one way)
+vScaleK = max(max(skinWeight.x, skinWeight.y), max(skinWeight.z, skinWeight.w));
 #else
 vScaleDir = vec3(-1.0, 0.0, 0.0);
+vScaleK = 1.0;
 #endif`),e.fragmentShader=e.fragmentShader.replace(`#include <common>`,`#include <common>
 uniform vec3 uKeyDirView; uniform vec3 uKeyColor; uniform vec3 uNostril;
 uniform sampler2D uProfile; uniform vec3 uEye; uniform float uDisplay; uniform float uTone; uniform float uBeardDark; uniform vec3 uPal[8]; uniform float uWet; uniform float uDust; uniform float uScaleMeters;
-varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir;
+varying vec3 vRest; varying vec3 vRestN; varying vec4 vAux; varying mat3 vSkinN; varying vec3 vScaleDir; varying float vScaleK;
 ${oy}
 float lzNoise(vec3 p){
   vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
@@ -5491,12 +5494,17 @@ float clawK = smoothstep(0.25, 0.6, vAux.y);
 float limb = (1.0 - onLoft) * (1.0 - clawK) * (1.0 - smoothstep(9.0, 9.4, P.x));
 float headK = headW * (1.0 - limb); // granular beads all over the head, jaw and throat
 float freq = mix(12.5, 10.0, belly);
-freq = mix(freq, 7.2, limb);
-freq = mix(freq, 7.8, tailW * (1.0 - limb));
+// (a limb's scales are small and overlap like roof tiles: drawn larger, they read as
+// a tortoise's cobbles)
+freq = mix(freq, 10.5, limb);
+freq = mix(freq, 9.0, tailW * (1.0 - limb));
 freq = mix(freq, 15.0, headK);
-float elong = mix(0.85, 0.62, max(limb, tailW));
+float elong = mix(0.85, 0.66, max(limb, tailW));
 elong = mix(elong, 0.7, belly);
 elong = mix(elong, 1.0, headK);
+// (where bones share the skin the scales' direction turns within a few
+// millimetres, and stretching along it would squeeze the cells into streaks)
+elong = mix(1.0, elong, smoothstep(0.6, 0.9, vScaleK));
 float keelK = mix(0.25, 0.8, max(limb, tailW)) * (1.0 - belly) * (1.0 - headK);
 float overlap = mix(0.7, 1.0, max(limb, max(tailW, belly))) * (1.0 - headK);
 vec3 sp = P * freq;
@@ -5694,7 +5702,7 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
   reflectedLight.indirectSpecular *= ao * micro;
   reflectedLight.directDiffuse *= mix(1.0, ao, 0.45) * mix(1.0, micro, 0.5);
 }
-`)},i.customProgramCacheKey=()=>`lizard-skin-v6`,{material:i,uniforms:a}}function dy(){let e={value:1},t=new Fs({color:new K(.5,.34,.2),roughness:.62,sheen:.3,sheenColor:new K(.5,.42,.32)});return t.onBeforeCompile=t=>{t.uniforms.uOpen=e,t.vertexShader=t.vertexShader.replace(`#include <common>`,`#include <common>
+`)},i.customProgramCacheKey=()=>`lizard-skin-v8`,{material:i,uniforms:a}}function dy(){let e={value:1},t=new Fs({color:new K(.5,.34,.2),roughness:.62,sheen:.3,sheenColor:new K(.5,.42,.32)});return t.onBeforeCompile=t=>{t.uniforms.uOpen=e,t.vertexShader=t.vertexShader.replace(`#include <common>`,`#include <common>
 varying vec3 vLid;`).replace(`#include <begin_vertex>`,`#include <begin_vertex>
 vLid = position;`),t.fragmentShader=t.fragmentShader.replace(`#include <common>`,`#include <common>
 uniform float uOpen; varying vec3 vLid;
