@@ -160,7 +160,12 @@ export class LizardBrain {
     this.mode = m;
     this.modeT = 0;
     this.status = status;
+    // A bearded dragon is a sit-and-wait lizard: once settled it stays put for
+    // tens of seconds to minutes, watching, before it moves on.
+    if (m === 'idle') this.holdFor = Math.min(70, 8 + -Math.log(1 - rnd() * 0.98) * 16);
   }
+  private holdFor = 20;
+  private tmpTilt = new THREE.Vector3();
 
   private posePreset(kind: 'bask' | 'alert' | 'walk' | 'rest' | 'sleep' | 'drink') {
     const p: Record<string, Pose> = {
@@ -175,7 +180,8 @@ export class LizardBrain {
   }
 
   /** Plans a route; returns false if there is no way there. */
-  private goTo(x: number, z: number, then: Mode, cruise = 0.11) {
+  // (an unhurried walk: about 7 cm/s; it dashes only after prey or when startled)
+  private goTo(x: number, z: number, then: Mode, cruise = 0.075) {
     const I = this.rig.inputs;
     const path = this.nav.path(I.x, I.z, x, z);
     if (!path || path.length < 2) return false;
@@ -297,6 +303,8 @@ export class LizardBrain {
     const r = rnd();
     const I = this.rig.inputs;
     const onLog = Math.hypot(I.x - this.baskSpot[0], I.z - this.baskSpot[1]) < 0.03;
+    // most often it simply stays where it is and keeps watching
+    if (rnd() < 0.25 && this.bodyTemp > 0.4 && this.t > 5) {this.setMode('idle', onLog ? 'Basking under the lamp' : 'Watching'); return;}
     // after rain (or misting) it licks the droplets off the leaves
     if (this.leavesWet > 0.25 && this.t - this.lastSip > 20 && rnd() < 0.6) {
       const s = this.sipSpot();
@@ -310,7 +318,7 @@ export class LizardBrain {
       const s = this.drinkSpot();
       if (s && this.goTo(s[0], s[1], 'drink')) {this.faceHeading = s[2]; return;}
     }
-    if ((r < 0.36 || (this.bodyTemp < 0.38 && r < 0.75)) && !onLog && this.heat > 0.5) {
+    if ((r < 0.42 || (this.bodyTemp < 0.45 && r < 0.8)) && !onLog && this.heat > 0.5) {
       if (this.goTo(this.baskSpot[0], this.baskSpot[1], 'bask')) {this.faceHeading = this.baskSpot[2]; return;}
     }
     if (r < 0.46) {
@@ -508,6 +516,18 @@ export class LizardBrain {
     // Lights out: wind down promptly.
     if (this.night && (this.mode === 'bask' || this.mode === 'idle' || this.mode === 'display') && this.modeT > 2.5) this.chooseActivity();
 
+    // Its eyes are on the sides of its head: to watch something above it (a
+    // finger, the camera, the lamp) it tilts its head to turn one eye up.
+    I.headTilt = 0;
+    if ((this.mode === 'idle' || this.mode === 'bask') && I.look && this.modeT > 1) {
+      const d = this.tmpTilt.copy(I.look).sub(this.rig.snout);
+      const len = Math.max(0.01, d.length());
+      const upK = d.y / len;
+      if (upK > 0.3 && len < 0.9) {
+        const side = d.x * Math.sin(I.heading) + d.z * Math.cos(I.heading); // + = to its right
+        I.headTilt = -Math.sign(side || 1) * clamp((upK - 0.3) * 1.3, 0, 0.42);
+      }
+    }
     switch (this.mode) {
       case 'bask': {
         // settles along the log first (it arrives facing however the path came in)
@@ -525,7 +545,7 @@ export class LizardBrain {
         this.poseGoal.lid = this.gapeT > 0 ? 0.7 : 0.85;
         this.idleLook(dt, 0.35);
         // a cold dragon stays put until it has warmed; a hot one soon moves off to cool
-        const done = this.bodyTemp > 0.74 ? this.modeT > 6 : this.bodyTemp > 0.5 ? this.modeT > 18 + rnd() * 400 * dt : this.modeT > 150;
+        const done = this.bodyTemp > 0.74 ? this.modeT > 20 : this.bodyTemp > 0.5 ? this.modeT > 45 + rnd() * 900 * dt : this.modeT > 150;
         if (done) this.chooseActivity();
         break;
       }
@@ -533,7 +553,7 @@ export class LizardBrain {
         if (this.faceHeading !== null) targetTurn = this.turnToward(this.faceHeading);
         if (this.modeT > 0.3) this.posePreset(this.modeT > 6 ? 'rest' : 'alert');
         this.idleLook(dt, 0.55);
-        if (this.modeT > 4 + rnd() * 600 * dt) {this.faceHeading = null; this.chooseActivity();}
+        if (this.modeT > this.holdFor) {this.faceHeading = null; this.chooseActivity();}
         break;
       }
       case 'display': {

@@ -267,10 +267,12 @@ col = mix(col, cDark * 1.3, nape * smoothstep(0.2, 0.6, sin(P.x * 9.0 + 1.0)) * 
 float speck = smoothstep(0.72, 0.88, lzNoise(P * 8.5 + 3.0));
 col = mix(col, cDark * 1.4, speck * up * 0.4);
 // tail: dark bands that fade toward the tip, speckled
-float tb = smoothstep(0.05, 0.6, sin(P.x * 2.7 + mott * 1.4));
-col = mix(col, mix(col, cMid, 0.6), tailW * up * 0.5);
-col = mix(col, cDark * 1.3, tb * tailW * up * 0.7 * smoothstep(-16.0, -6.0, P.x));
-col = mix(col, cLight, (1.0 - tb) * tailW * up * 0.15);
+// (bold dark and pale rings in photographs, running nearly to the tip)
+float tb = smoothstep(0.1, 0.45, sin(P.x * 2.7 + mott * 1.4));
+float tailUp = tailW * mix(0.45, 1.0, up);
+col = mix(col, mix(col, cMid, 0.5), tailUp * 0.4);
+col = mix(col, cDark * 1.4, tb * tailUp * 0.82 * smoothstep(-17.0, -11.0, P.x));
+col = mix(col, cLight, (1.0 - tb) * tailUp * 0.3);
 // head: orange flush on the jowls, the beard's base and around the eyes
 float jowl = smoothstep(8.9, 9.5, P.x) * (1.0 - smoothstep(10.9, 11.6, P.x)) * smoothstep(0.5, 0.9, zn) * (1.0 - belly * 0.5);
 col = mix(col, cOrange, jowl * 0.65);
@@ -386,7 +388,7 @@ roughnessFactor = mix(roughnessFactor, 0.22, uWet * 0.8);
 }
 `);
   };
-  material.customProgramCacheKey = () => 'lizard-skin-v10';
+  material.customProgramCacheKey = () => 'lizard-skin-v11';
   return {material, uniforms};
 }
 

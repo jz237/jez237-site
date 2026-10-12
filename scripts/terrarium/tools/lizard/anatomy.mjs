@@ -10,11 +10,12 @@ import {
 // x, half width, half height above / below the centreline, centre height, cross-section exponent
 const PROFILE = [
   [-16.4, 0.03, 0.03, 0.03, 0.22, 2.0],
-  [-15.6, 0.1, 0.09, 0.09, 0.26, 2.0],
-  [-13.0, 0.22, 0.19, 0.18, 0.4, 2.05],
-  [-10.0, 0.37, 0.3, 0.29, 0.62, 2.1],
-  [-7.0, 0.56, 0.42, 0.4, 0.95, 2.2],
-  [-4.2, 0.82, 0.55, 0.52, 1.32, 2.3],
+  // the tail: thick at the root, then tapering quickly to a long, whip-thin end
+  [-15.6, 0.08, 0.075, 0.075, 0.26, 2.0],
+  [-13.0, 0.17, 0.15, 0.145, 0.4, 2.05],
+  [-10.0, 0.29, 0.24, 0.23, 0.62, 2.1],
+  [-7.0, 0.46, 0.35, 0.33, 0.95, 2.2],
+  [-4.2, 0.74, 0.5, 0.47, 1.32, 2.3],
   [-2.0, 1.12, 0.66, 0.62, 1.62, 2.4],
   [-0.4, 1.45, 0.75, 0.7, 1.82, 2.5],
   // the broad, flat trunk of Pogona: an oval disc in plan
@@ -31,16 +32,18 @@ const PROFILE = [
   // distance; a spade in plan, wide at the spiny jowls; a flat crown with sharp
   // canthal edges and a forehead sloping down to a blunt, rounded nose
   [9.4, 1.62, 0.96, 1.2, 2.52, 2.4],
-  [9.85, 1.62, 0.87, 1.04, 2.58, 2.5],
-  [10.3, 1.5, 0.82, 0.88, 2.62, 2.6],
-  [10.75, 1.34, 0.78, 0.75, 2.65, 2.7],
-  [11.2, 1.14, 0.71, 0.65, 2.64, 2.75],
-  [11.54, 0.97, 0.64, 0.58, 2.61, 2.7],
+  // (deep at the eye and jaw, the snout short for that depth: from the eye to the
+  // tip about 0.85 of the head's depth there, as in side-on photographs)
+  [9.85, 1.62, 0.92, 1.06, 2.58, 2.5],
+  [10.3, 1.5, 0.89, 0.96, 2.62, 2.6],
+  [10.75, 1.34, 0.85, 0.85, 2.65, 2.7],
+  [11.2, 1.14, 0.77, 0.73, 2.64, 2.75],
+  [11.54, 0.97, 0.66, 0.63, 2.61, 2.7],
   [11.88, 0.8, 0.57, 0.5, 2.57, 2.6],
   [12.22, 0.63, 0.46, 0.43, 2.52, 2.5],
   [12.47, 0.49, 0.35, 0.35, 2.47, 2.4],
-  [12.6, 0.34, 0.25, 0.26, 2.45, 2.2],
-  [12.68, 0.12, 0.11, 0.11, 2.44, 2.0],
+  [12.54, 0.34, 0.25, 0.26, 2.45, 2.2],
+  [12.6, 0.12, 0.11, 0.11, 2.44, 2.0],
 ];
 const X_MIN = PROFILE[0][0], X_MAX = PROFILE[PROFILE.length - 1][0];
 const profileAt = monotoneChannels(PROFILE, 5);
@@ -123,7 +126,7 @@ for (const s of [1, -1]) {
 // scales sit.
 const lipParts = [];
 for (const s of [1, -1]) for (const off of [0.065, -0.07]) {
-  const pts = [10.15, 10.6, 11.05, 11.45, 11.85, 12.18, 12.44, 12.6].map((x) => [x, mouthY(x) + off, profile(x).w * (x > 12.52 ? 0.9 : 0.955) * s]);
+  const pts = [10.15, 10.6, 11.05, 11.45, 11.85, 12.18, 12.4, 12.52].map((x) => [x, mouthY(x) + off, profile(x).w * (x > 12.46 ? 0.9 : 0.955) * s]);
   for (let i = 0; i < pts.length - 1; i++) lipParts.push(roundCone(pts[i], pts[i + 1], 0.07, 0.07 - 0.008 * (i > 4)));
 }
 
