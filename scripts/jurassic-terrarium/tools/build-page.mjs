@@ -101,13 +101,13 @@ patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.
 // tall 12 x 8 x 7.4 box. Everything in Weatherglass sizes itself from this one constant; the clouds'
 // band drops to sit beside the peaks, and the camera fit frames the wider case.
 if (!process.env.JT_TALL) {
-  patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-1.8,topY:5.6,glass:.08}', 'wide case');
-  patch('on={minY:4.5,maxY:6.5,defaultY:5.5}', 'on={minY:3.3,maxY:4.7,defaultY:4.0}', 'cloud band');
+  patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-1.15,topY:5.0,glass:.08}', 'wide case');
+  patch('on={minY:4.5,maxY:6.5,defaultY:5.5}', 'on={minY:3.2,maxY:4.25,defaultY:3.75}', 'cloud band');
   patch('const i=12.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'const i=18.8/(2*Math.tan(Mr.degToRad(e/2))*t);', 'camera fit');
   patch('me={top:Ci.y0,coreW:6.36,', 'me={top:Ci.y0,coreW:9.36,', 'plinth width');
   patch('new C(-6.36-me.footOffset,me.bottom,-4.36-me.footOffset)', 'new C(-me.coreW-me.footOffset,me.bottom,-me.coreD-me.footOffset)', 'plinth hit box');
   // look at the cabinet from the front, a little above the lid line, as you would in a room
-  patch('front:{theta:0,phi:1.2,radius:21,target:[0,1.6,0]}', 'front:{theta:0,phi:1.3,radius:21,target:[0,1.25,0]}', 'front view');
+  patch('front:{theta:0,phi:1.2,radius:21,target:[0,1.6,0]}', 'front:{theta:0,phi:1.32,radius:21.6,target:[0,1.2,0]}', 'front view');
   patch('n.preset(ki.get("cam")||"hero",!0)', 'n.preset(ki.get("cam")||"front",!0)', 'default view');
 }
 
