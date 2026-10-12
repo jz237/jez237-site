@@ -4,7 +4,7 @@
 // own loop (after the vegetation and wildlife, before the clouds). Models are rigged GLBs built in
 // Blender (scripts/jurassic-terrarium/blender); each comes with a JSON sidecar describing its size,
 // gait speeds and clips.
-import { Group, Object3D, Vector3, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3 } from 'three';
+import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3 } from 'three';
 
 const _ka = new Vector3(), _kb = new Vector3(), _kc = new Vector3(), _kd = new Vector3();
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -205,26 +205,17 @@ class Dino {
 
   // how fast a planted foot sweeps backward under the body in this clip, at adult size (units/s)
   measureStride(name) {
-    const a = this.actions[name], clip = a.getClip(), N = 48;
+    const clip = this.actions[name].getClip(), N = 48;
     const legs = this.feet.legs;
     if (!legs.length) return undefined;
-    this.root.position.set(0, 0, 0);
-    this.root.rotation.set(0, 0, 0);
-    this.mixer.stopAllAction();
-    a.reset().play();
-    a.setEffectiveWeight(1);
     const pts = legs.map(() => []);
     const p = new Vector3();
-    for (let i = 0; i <= N; i++) {
-      this.mixer.setTime((clip.duration * i) / N);
-      this.root.updateMatrixWorld(true);
+    this.sampleClip(name, Array.from({ length: N + 1 }, (_, i) => i / N), () => {
       legs.forEach((L, j) => {
         const l = this.root.worldToLocal(L.contact.getWorldPosition(p));
         pts[j].push([l.y, l.z]);
       });
-    }
-    a.stop();
-    this.mixer.setTime(0);
+    });
     const dt = clip.duration / N;
     let sum = 0, n = 0;
     for (const P of pts) {
@@ -550,18 +541,28 @@ class Dino {
     return false;
   }
 
-  measureReach(name) {
-    const a = this.actions[name], clip = a.getClip();
-    const p = new Vector3();
+  // Sample a clip on a throwaway mixer, so the animal's own animation state is never disturbed
+  // (stopping its actions here once left the idle clip dead and blends going through odd poses).
+  sampleClip(name, times, fn) {
+    const clip = this.actions[name].getClip();
+    const tmp = new AnimationMixer(this.model);
+    const a = tmp.clipAction(clip);
+    a.play();
     this.root.position.set(0, 0, 0);
     this.root.rotation.set(0, 0, 0);
-    a.reset().play();
-    a.setEffectiveWeight(1);
-    this.mixer.setTime(clip.duration * 0.5);
-    this.root.updateMatrixWorld(true);
-    this.headBone.getWorldPosition(p);
-    a.stop();
-    this.mixer.setTime(0);
+    for (const t of times) {
+      tmp.setTime(t * clip.duration);
+      this.root.updateMatrixWorld(true);
+      fn(t);
+    }
+    tmp.stopAllAction();
+    tmp.uncacheRoot(this.model);
+    this.mixer.update(0); // back to the animal's own pose
+  }
+
+  measureReach(name) {
+    const p = new Vector3();
+    this.sampleClip(name, [0.5], () => this.headBone.getWorldPosition(p));
     return { up: p.y, fwd: Math.hypot(p.x, p.z) };
   }
 
@@ -578,13 +579,44 @@ class Dino {
     }
   }
 
+  // three.js's mixer only writes a bone when the clip's value for it changes, so in a held pose (an alert,
+  // a drink) it stops rewriting the legs and the spine, and the bends and IK added on top each frame would
+  // pile up (feet upside down, legs twisted). So: before the mixer runs, put back the clean clip pose of
+  // every bone this runtime adjusts; right after it, take a fresh snapshot.
+  restorePose() {
+    if (!this._pose) return;
+    for (const p of this._pose) {
+      p.b.quaternion.copy(p.q);
+      p.b.scale.copy(p.s);
+    }
+  }
+
+  snapPose() {
+    if (!this._pose) {
+      const set = new Set([...this.flex.spine, ...this.flex.neck, ...this.flex.tail]);
+      if (this.flex.head) set.add(this.flex.head);
+      for (const L of this.feet.legs) set.add(L.a).add(L.b).add(L.c);
+      if (this.feet.chest) {
+        set.add(this.feet.chest);
+        for (const c of this.feet.chestKids) set.add(c);
+      }
+      this._pose = [...set].map((b) => ({ b, q: new Quaternion(), s: new Vector3() }));
+    }
+    for (const p of this._pose) {
+      p.q.copy(p.b.quaternion);
+      p.s.copy(p.b.scale);
+    }
+  }
+
   finish(dt) {
     if (this.grow < 1) {
       this.grow = Math.min(1, this.grow + dt / 45);
       this.model.scale.setScalar(S * this.k * this.grow);
     }
     this.place();
+    this.restorePose();
     this.mixer.update(dt);
+    this.snapPose();
     if (dt > 0) {
       let dh = this.heading - this.prevHeading;
       dh = Math.atan2(Math.sin(dh), Math.cos(dh));
@@ -1094,7 +1126,7 @@ class Dinosaurs {
   async load() {
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
     const base = new URL('models/', document.baseURI);
-    const floraReady = this.flora.load(base).catch((e) => console.warn('[flora] load failed', e));
+    const floraReady = this.flora.load().catch((e) => console.warn('[flora] load failed', e));
     const denReady = loader
       .loadAsync(new URL('den.glb', base).href)
       .then((g) => {

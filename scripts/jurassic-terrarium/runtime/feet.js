@@ -40,12 +40,12 @@ export class Feet {
     for (const s of ['L', 'R']) {
       const thigh = bones.get(`thigh${s}`), shin = bones.get(`shin${s}`), meta = bones.get(`meta${s}`);
       const toe = bones.get(`toe${s}`);
-      if (thigh && shin && meta) this.legs.push({ a: thigh, b: shin, c: meta, contact: toe || meta, off: 0 });
+      if (thigh && shin && meta) this.legs.push({ a: thigh, b: shin, c: meta, contact: toe || meta, off: 0, liftMul: 2.3 });
       const up = bones.get(`upperarm${s}`), fore = bones.get(`forearm${s}`), hand = bones.get(`hand${s}`);
       if (up && fore && hand) {
         // only forelimbs that walk: the wrist hangs near the ground in the rest pose
         const wy = root.worldToLocal(hand.getWorldPosition(new Vector3())).y;
-        if (wy < hipH * 0.4) this.legs.push({ a: up, b: fore, c: hand, contact: hand, off: 0 });
+        if (wy < hipH * 0.4) this.legs.push({ a: up, b: fore, c: hand, contact: hand, off: 0, liftMul: 1.4 });
       }
     }
     this.reach = hipH * 0.5; // the most a foot is moved up or down
@@ -97,10 +97,10 @@ export class Feet {
       L.pz = local.z;
       L.vz = L.vz === undefined ? vz : L.vz + (vz - L.vz) * Math.min(1, dt * 20);
       const stance = moving ? L.vz < 0 && lift < tol * 2.5 : lift < tol;
-      if (stance && !L.lock) {
+      if (stance && !L.lock && moving) {
         L.lock = { x: _p.x, z: _p.z };
         if (moving && L.wasSwing) this.plant(L, _p, running);
-      } else if (!stance && L.lock) L.lock = null;
+      } else if ((!stance || !moving) && L.lock) L.lock = null;
       L.wasSwing = !stance;
       L.lockW += ((L.lock ? 1 : 0) - (L.lockW || 0)) * Math.min(1, dt * 18);
       let cx = 0, cz = 0;
@@ -114,8 +114,9 @@ export class Feet {
       }
       L.cx = cx;
       L.cz = cz;
-      // the swing lifted higher than the clip has it
-      L.lift = stance ? 0 : lift * (this.liftMul - 1) * Math.min(1, lift / (tol * 2));
+      // the swing lifted higher than the clip has it, only while actually stepping (a raised paw in an
+      // alert or a drink is the clip's own pose and must not be exaggerated); forefeet only a little
+      L.lift = stance || !moving ? 0 : lift * (L.liftMul - 1) * Math.min(1, lift / (tol * 2));
       const gx = _p.x + cx, gz = _p.z + cz;
       const floorY = _p.y - local.y; // the clip's floor under this foot
       L.want = Math.max(-this.reach, Math.min(this.reach, T.height(gx, gz) - floorY));

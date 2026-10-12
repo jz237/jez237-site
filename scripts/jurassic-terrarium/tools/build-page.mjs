@@ -112,15 +112,18 @@ patch('class bE{constructor(){this.season=.25,', 'class bE{constructor(){this.se
 patch('calm(r){const{world:t}=r;t.season=.25,', 'calm(r){const{world:t}=r;t.season=.85,', 'calm is summer');
 // Settle, then lock the resolution. Weatherglass re-tuned it every 0.75 s with a 1.2 s cool-down, so on a
 // machine near its 50/58 fps thresholds it kept resizing the canvas: every change re-renders the whole
-// picture at a new sharpness, with the glow and soft-focus rebuilt, which reads as a flash. Now it adapts
-// only in the first 12 s after the veil lifts (stepping down to a level the machine can hold), then holds
-// that resolution; after that only an emergency (below 26 fps for 6 s) can lower it once more, and it
-// never steps back up.
+// picture at a new sharpness, with the glow and soft-focus rebuilt, which reads as a flash. Now: nothing
+// for the first 5 s after the veil lifts (shaders and textures are still warming up then), small steps
+// only on two low readings in a row until 20 s, then it holds; afterwards only an emergency (below
+// 26 fps for 6 s) lowers it. Never below 0.75 on medium/high tiers (lower aliases badly), never back up,
+// and the glow and soft focus are never switched off.
 patch(
   "sample(t){if(!this.adaptive||t>.5||(this._acc+=t,this._frames++,this._cool-=t,this._acc<.75))return;const e=this._frames/this._acc;if(this._acc=0,this._frames=0,this._cool>0)return;let i=this.dpr;e<50?i=Math.max(this.minDpr,this.dpr*(e<35?.8:.9)):e>58&&this.dpr<this.maxDpr&&(i=Math.min(this.maxDpr,this.dpr*1.06)),Math.abs(i-this.dpr)>.01&&(this.dpr=i,this._cool=1.2,this.onChange?.(this.dpr)),e<45&&this.dpr<=this.minDpr+.01?++this._lowStreak>=3&&this.postLevel>0&&(this.postLevel--,this._lowStreak=0,this._cool=2,this.onPostLevel?.(this.postLevel)):this._lowStreak=0}",
-  "sample(t){if(!this.adaptive||t>.5)return;if(!document.body.classList.contains(\"ready\"))return;this._age=(this._age||0)+t;this._acc+=t;this._frames++;this._cool-=t;if(this._acc<2)return;const e=this._frames/this._acc;this._acc=0;this._frames=0;if(this._cool>0)return;const settled=this._age>12;this._vlo=e<26?(this._vlo||0)+1:0;let i=this.dpr;if(!settled){e<48&&(i=Math.max(this.minDpr,this.dpr*(e<34?.8:.88)))}else if(this._vlo>=3){i=Math.max(this.minDpr,this.dpr*.85);this._vlo=0}if(Math.abs(i-this.dpr)>.01){this.dpr=i;this._cool=2;this.onChange?.(this.dpr)}!settled&&e<42&&this.dpr<=this.minDpr+.01&&this.postLevel>0&&(this.postLevel--,this._cool=2,this.onPostLevel?.(this.postLevel))}",
+  "sample(t){if(!this.adaptive||t>.5)return;if(!document.body.classList.contains(\"ready\"))return;this._age=(this._age||0)+t;if(this._age<5)return;this._acc+=t;this._frames++;this._cool-=t;if(this._acc<2)return;const e=this._frames/this._acc;this._acc=0;this._frames=0;if(this._cool>0)return;const floor=this.tier>0?Math.max(this.minDpr,Math.min(.75,this.maxDpr)):this.minDpr;const settled=this._age>20;this._lo=e<44?(this._lo||0)+1:0;this._vlo=e<26?(this._vlo||0)+1:0;let i=this.dpr;if(!settled){this._lo>=2&&(i=Math.max(floor,this.dpr*.9),this._lo=0)}else if(this._vlo>=3){i=Math.max(floor,this.dpr*.88);this._vlo=0}if(Math.abs(i-this.dpr)>.01){this.dpr=i;this._cool=2;this.onChange?.(this.dpr)}}",
   'settle-then-lock resolution governor',
 );
+// gentler film grain: it is redrawn every frame, and at reduced resolution it crawls like static
+patch('uVignette:{value:.32},uGrain:{value:.035}', 'uVignette:{value:.32},uGrain:{value:.014}', 'gentle grain');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's

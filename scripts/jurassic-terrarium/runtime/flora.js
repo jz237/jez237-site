@@ -1,12 +1,12 @@
 // Mesozoic planting: tree ferns and cycads where Weatherglass grew broadleaf trees, fern carpets over the
-// meadows and horsetails along the water. Plants are instanced Blender meshes (scripts/.../blender/flora.py);
-// a small shader patch bends them in the wind, more the higher a vertex sits on the plant.
+// meadows and horsetails along the water. Plants are built like Weatherglass's own trees (floragen.js:
+// textured frond cards with alpha-to-coverage edges), instanced, and bent about their roots by
+// Weatherglass's wind field (windAt) plus a per-plant spring when an animal pushes through.
 import {
-  Group, InstancedMesh, MeshStandardMaterial, Matrix4, Quaternion, Vector3, Vector4, Vector2, Color, DoubleSide,
-  InstancedBufferAttribute, DynamicDrawUsage,
+  Group, InstancedMesh, MeshStandardMaterial, MeshDepthMaterial, RGBADepthPacking, Matrix4, Quaternion, Vector3,
+  Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage,
 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { frondAtlas, plantGeometry, BASE_H } from './floragen.js';
 
 const UP = new Vector3(0, 1, 0);
 const _top = new Vector3();
@@ -26,10 +26,10 @@ export class Flora {
     this.group = new Group();
     this.group.name = 'jurassic-flora';
     this.uniforms = {
-      uTime: { value: 0 },
-      uWind: { value: 0.2 },
+      uFTime: { value: 0 },
+      uFWind: { value: 0.2 },
       uTint: { value: new Color(1, 1, 1) },
-      uWindDir: { value: new Vector2(0.94, 0.34) },
+      uFWindDir: { value: new Vector2(0.94, 0.34) },
       // a roar close by: plants within the radius shiver (x, z, radius, strength 0..1)
       uShiver: { value: new Vector4(0, 0, 0, 0) },
     };
@@ -135,7 +135,7 @@ export class Flora {
     }
     // a carpet of small ferns over everything that isn't water, rock, path or building
     tries = 0;
-    want = [450, 900, 1500][tier] ?? 900;
+    want = [700, 1400, 2200][tier] ?? 1400;
     while (want > 0 && tries++ < 60000) {
       const x = (rand() * 2 - 1) * (box.halfW - 0.1), z = (rand() * 2 - 1) * (box.halfD - 0.1);
       const g = Math.max(sh.suitability(x, z, 'grass'), 0.6 * sh.suitability(x, z, 'flower'));
@@ -171,74 +171,58 @@ export class Flora {
   }
 
   // ---------------------------------------------------------------- meshes
-  async load(base) {
+  async load() {
     this.plants = [];
     this.live = [];
     this.grid = new Map();
     this.cell = 0.5;
-    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-    const kinds = Object.keys(this.placements);
-    await Promise.all(
-      kinds.map(async (kind) => {
-        const gltf = await loader.loadAsync(new URL(`${kind}.glb`, base).href);
-        const meshes = [];
-        gltf.scene.updateMatrixWorld(true);
-        gltf.scene.traverse((o) => o.isMesh && meshes.push(o));
-        const list = this.placements[kind];
-        meshes.forEach((m, vi) => {
-          const mine = list.filter((p) => p.v % meshes.length === vi);
-          if (!mine.length) return;
-          m.geometry.computeBoundingBox();
-          const bb = m.geometry.boundingBox;
-          const im = new InstancedMesh(m.geometry, this.material(kind, bb.min.y, bb.max.y), mine.length);
-          const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3();
-          mine.forEach((p, i) => {
-            q.setFromAxisAngle(UP, p.rot);
-            if (p.wantTop) {
-              // scale this one so the crown lands at its wanted height (the transform is linear in scale)
-              M.compose(t.set(0, 0, 0), q, s.setScalar(this.S)).multiply(m.matrixWorld);
-              const h1 = _top.set(0, bb.max.y, 0).applyMatrix4(M).y;
-              p.scale = (p.wantTop + 0.004) / Math.max(h1, 1e-4);
-            }
-            const sc = p.scale * this.S;
-            s.set(sc, sc, sc);
-            t.set(p.x, p.y - 0.004, p.z);
-            M.compose(t, q, s);
-            // the compressed mesh is stored normalised; its node carries the real size and offset
-            M.multiply(m.matrixWorld);
-            im.setMatrixAt(i, M);
-            p.top = _top.set(0, bb.max.y, 0).applyMatrix4(M).y; // crown height, for browsers
-          });
-          im.instanceMatrix.needsUpdate = true;
-          // per-plant spring bend, written by simulate()
-          const attr = new InstancedBufferAttribute(new Float32Array(mine.length * 2), 2);
-          attr.setUsage(DynamicDrawUsage);
-          im.geometry = im.geometry.clone();
-          im.geometry.setAttribute('aBend', attr);
-          const mo = Flora.MOTION[kind] || Flora.MOTION.fern;
-          mine.forEach((p, i) => {
-            im.getMatrixAt(i, M);
-            const top = _top.set(0, bb.max.y, 0).applyMatrix4(M).y;
-            const rec = { x: p.x, z: p.z, y: p.y, H: Math.max(0.02, top - p.y), give: mo.give, k: mo.k, crown: !!mo.crown,
-              attr, i, bx: 0, bz: 0, vx: 0, vz: 0, tx: 0, tz: 0, live: false };
-            this.plants.push(rec);
-            const key = Math.floor(p.x / this.cell) * 4096 + Math.floor(p.z / this.cell);
-            if (!this.grid.has(key)) this.grid.set(key, []);
-            this.grid.get(key).push(rec);
-          });
-          im.castShadow = kind === 'treefern' || kind === 'cycad';
-          im.receiveShadow = true;
-          im.frustumCulled = false;
-          im.name = `flora-${kind}-${vi}`;
-          this.group.add(im);
+    const tier = this.ctx.quality?.tier ?? 1;
+    this.atlas = frondAtlas(tier === 0 ? 512 : 1024);
+    const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3(), col = new Color();
+    for (const [kind, list] of Object.entries(this.placements)) {
+      const variants = kind === 'treefern' || kind === 'cycad' ? 4 : 3;
+      for (let vi = 0; vi < variants; vi++) {
+        const mine = list.filter((p) => p.v % variants === vi);
+        if (!mine.length) continue;
+        const geo = plantGeometry(kind, vi);
+        const H = geo.boundingBox.max.y; // height at scale 1
+        const im = new InstancedMesh(geo, this.material(kind), mine.length);
+        const attr = new InstancedBufferAttribute(new Float32Array(mine.length * 2), 2);
+        attr.setUsage(DynamicDrawUsage);
+        geo.setAttribute('aBend', attr);
+        const mo = Flora.MOTION[kind] || Flora.MOTION.fern;
+        mine.forEach((p, i) => {
+          q.setFromAxisAngle(UP, p.rot);
+          // same size as the planting it replaces; browse trees sized so the crown is at the wanted height
+          const sc = p.wantTop ? p.wantTop / H : (p.scale * BASE_H[kind]) / H;
+          s.set(sc, p.wantTop ? sc : sc * (0.92 + ((p.v * 0.137) % 0.16)), sc);
+          t.set(p.x, p.y - 0.004, p.z);
+          M.compose(t, q, s);
+          im.setMatrixAt(i, M);
+          // a little colour variation per plant
+          const k = 1.0 + ((p.v * 0.618 + i * 0.31) % 1) * 0.26;
+          col.setRGB(k, k * (0.97 + ((i * 0.13) % 0.06)), k * 0.95);
+          im.setColorAt(i, col);
+          p.top = p.y + H * s.y; // crown height, for browsers
+          const rec = { x: p.x, z: p.z, y: p.y, H: Math.max(0.02, H * s.y), give: mo.give, k: mo.k, crown: !!mo.crown,
+            attr, i, bx: 0, bz: 0, vx: 0, vz: 0, tx: 0, tz: 0, live: false };
+          this.plants.push(rec);
+          const key = Math.floor(p.x / this.cell) * 4096 + Math.floor(p.z / this.cell);
+          if (!this.grid.has(key)) this.grid.set(key, []);
+          this.grid.get(key).push(rec);
         });
-      }),
-    );
+        im.instanceMatrix.needsUpdate = true;
+        if (im.instanceColor) im.instanceColor.needsUpdate = true;
+        im.castShadow = kind === 'treefern' || kind === 'cycad';
+        if (im.castShadow) im.customDepthMaterial = this.depthMaterial(kind);
+        im.receiveShadow = true;
+        im.frustumCulled = false;
+        im.name = `flora-${kind}-${vi}`;
+        this.group.add(im);
+      }
+    }
   }
 
-  // sway is measured within each mesh's own bounding box (the compressed geometry is normalised), so the
-  // same numbers work whatever the plant's size: 0 at the root, 1 at the top, tip moving a fraction of the
-  // plant's height
   // How each kind moves. flex: wind bend (radians per unit of wind); give: how far a body can push it
   // aside (0 = not at all); curve: how the bend is spread up the plant (higher = stiff stem, supple top);
   // k: spring stiffness, i.e. how fast it swings back once released.
@@ -254,25 +238,10 @@ export class Flora {
   // Every plant bends about its own root by a 2D bend vector (radians at the tip, pointing where the
   // top goes): wind (computed here in the shader, gusts rolling across the case) plus a per-plant
   // spring bend (aBend, simulated on the CPU when an animal pushes through it).
-  material(kind, y0 = 0, y1 = 1) {
-    const U = this.uniforms;
+  // the bend about the root (wind field + spring + shiver), shared by the colour and shadow materials
+  bendChunk(kind) {
     const M = Flora.MOTION[kind] || Flora.MOTION.fern;
-    const m = new MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0, side: DoubleSide });
-    const h = Math.max(1e-4, y1 - y0);
-    m.onBeforeCompile = (sh) => {
-      sh.uniforms.uTime = U.uTime;
-      sh.uniforms.uWind = U.uWind;
-      sh.uniforms.uWindDir = U.uWindDir;
-      sh.uniforms.uTint = U.uTint;
-      sh.uniforms.uShiver = U.uShiver;
-      sh.vertexShader = sh.vertexShader
-        .replace(
-          '#include <common>',
-          '#include <common>\nuniform float uTime;\nuniform float uWind;\nuniform vec2 uWindDir;\nuniform vec4 uShiver;\nattribute vec2 aBend;',
-        )
-        .replace(
-          '#include <begin_vertex>',
-          `#include <begin_vertex>
+    return `#include <begin_vertex>
   #ifdef USE_INSTANCING
   mat4 toW = modelMatrix * instanceMatrix;
   #else
@@ -280,33 +249,96 @@ export class Flora {
   #endif
   vec3 base = toW[3].xyz;
   float ph = dot(base.xz, vec2(3.7, 2.9));
-  float f = clamp((position.y - (${y0.toFixed(4)})) / ${h.toFixed(4)}, 0.0, 1.2); // 0 at the root, 1 at the top
-  // wind: a steady lean down-wind and gusts that roll across the case, with a quick flutter on top
-  vec2 across = vec2(-uWindDir.y, uWindDir.x);
-  float gust = 0.5 + 0.5 * sin(dot(base.xz, uWindDir) * 1.3 - uTime * 1.7 + sin(dot(base.xz, across) * 0.8 + uTime * 0.37) * 1.6);
-  float wl = uWind * ${M.flex.toFixed(3)} * (0.2 + 0.8 * gust * gust);
-  vec2 bend = aBend + uWindDir * wl
-    + vec2(sin(uTime * 6.7 + ph * 2.3), cos(uTime * 5.9 + ph * 1.7)) * 0.035 * uWind * ${M.flex.toFixed(3)} * (0.5 + gust) * 2.0;
-  // a roar close by: everything shivers
+  // Weatherglass's wind: the simulated field (the wind tool, gusts) and its travelling gusts
+  vec2 wv = windAt(base.xz);
+  float wl = length(wv);
+  vec2 bend = aBend + wv * ${(M.flex * 0.42).toFixed(3)}
+    + uFWindDir * ${(M.flex * 0.06).toFixed(3)} * sin(uFTime * 0.9 + ph)                               // never quite still
+    + vec2(sin(uFTime * 5.3 + aPh + ph), cos(uFTime * 4.7 + aPh * 1.3)) * ${(M.flex * 0.05).toFixed(3)} * min(wl, 2.0); // flutter
   float shD = length(base.xz - uShiver.xy);
   if (uShiver.w > 0.0 && shD < uShiver.z)
-    bend += vec2(sin(uTime * 41.0 + ph * 3.0), cos(uTime * 37.0 + ph * 2.0)) * uShiver.w * (1.0 - shD / uShiver.z) * 0.22;
-  float bl = min(length(bend), 1.45);
+    bend += vec2(sin(uFTime * 41.0 + ph * 3.0), cos(uFTime * 37.0 + ph * 2.0)) * uShiver.w * (1.0 - shD / uShiver.z) * 0.22;
+  float bl = min(length(bend), 1.35);
   if (bl > 1e-4) {
-    // rotate about the root, the stem curving most towards the top (keeps the frond lengths)
-    float ang = bl * pow(f, ${M.curve.toFixed(2)});
+    float ang = bl * pow(clamp(aT, 0.0, 1.3), ${M.curve.toFixed(2)});
     vec3 axis = vec3(bend.y, 0.0, -bend.x) / max(length(bend), 1e-5);
     vec3 vw = (toW * vec4(transformed, 1.0)).xyz;
     vec3 r = vw - base;
     float c = cos(ang), s = sin(ang);
     vec3 rr = r * c + cross(axis, r) * s + axis * dot(axis, r) * (1.0 - c);
     transformed += inverse(mat3(toW)) * (rr - r);
-  }`,
-        );
+  }`;
+  }
+
+  head() {
+    return `${this.ctx.GLSL_COMMON}
+uniform float uFTime;
+uniform vec2 uFWindDir;
+uniform vec4 uShiver;
+attribute float aT;
+attribute float aPh;
+attribute vec2 aBend;
+`;
+  }
+
+  hookUniforms(sh) {
+    Object.assign(sh.uniforms, this.ctx.uniforms);
+    const U = this.uniforms;
+    sh.uniforms.uFTime = U.uFTime;
+    sh.uniforms.uFWindDir = U.uFWindDir;
+    sh.uniforms.uShiver = U.uShiver;
+    sh.uniforms.uTint = U.uTint;
+  }
+
+  // Shaded like Weatherglass's foliage: frond atlas with alpha-to-coverage, ambient occlusion in the heart
+  // of the plant (vertex colour), per-plant colour variation (instance colour), a soft glow when lit from
+  // behind, and alpha kept up at a distance so canopies stay full instead of thinning and sparkling.
+  material(kind) {
+    const tier = this.ctx.quality?.tier ?? 1;
+    const m = new MeshStandardMaterial({
+      map: this.atlas, vertexColors: true, roughness: 0.78, metalness: 0, side: DoubleSide,
+      alphaTest: 0.5, alphaToCoverage: tier > 0, envMapIntensity: 0.55,
+    });
+    m.onBeforeCompile = (sh) => {
+      this.hookUniforms(sh);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\n' + this.head() + 'varying vec3 vFWorld;\nvarying float vTrunk;')
+        .replace('#include <begin_vertex>', this.bendChunk(kind))
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = uv.x < -0.5 ? 1.0 : 0.0;');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform vec3 uTint;')
-        .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;');
+        .replace('#include <common>', '#include <common>\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;')
+        .replace('#include <map_fragment>', `
+  if (vTrunk > 0.5) {
+    diffuseColor.rgb *= vec3(0.36, 0.25, 0.16) * 1.6; // fibrous trunk: brown, shaded by the vertex colour
+  } else {
+    vec4 tx = texture2D(map, vMapUv);
+    vec2 ts = vMapUv * vec2(textureSize(map, 0));
+    float lod = max(0.0, 0.5 * log2(max(dot(dFdx(ts), dFdx(ts)), dot(dFdy(ts), dFdy(ts)))));
+    tx.a = clamp(tx.a * (1.0 + lod * 0.32), 0.0, 1.0); // keep fronds full at a distance
+    diffuseColor *= tx;
+  }`)
+        .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;')
+        .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  if (vTrunk < 0.5) {
+    // light through the fronds when the sun is behind them
+    vec3 V = normalize(cameraPosition - vFWorld);
+    float back = pow(clamp(dot(V, -uLightDir), 0.0, 1.0), 3.0);
+    reflectedLight.indirectDiffuse += diffuseColor.rgb * uLightColor * back * 0.28;
+  }`);
     };
+    m.customProgramCacheKey = () => `jt-flora-${kind}`;
+    return m;
+  }
+
+  depthMaterial(kind) {
+    const m = new MeshDepthMaterial({ map: this.atlas, alphaTest: 0.5, depthPacking: RGBADepthPacking, side: DoubleSide });
+    m.onBeforeCompile = (sh) => {
+      this.hookUniforms(sh);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\n' + this.head())
+        .replace('#include <begin_vertex>', this.bendChunk(kind));
+    };
+    m.customProgramCacheKey = () => `jt-flora-depth-${kind}`;
     return m;
   }
 
@@ -397,14 +429,12 @@ export class Flora {
       sea.foliage2?.lerp(JUNGLE.foliage2, 0.35);
     }
     const U = this.uniforms;
-    U.uTime.value += dt;
+    U.uFTime.value += dt;
     this.simulate(dt);
     // the prevailing wind swings slowly round
-    const wa = 0.35 + 0.5 * Math.sin(U.uTime.value * 0.031) + 0.25 * Math.sin(U.uTime.value * 0.083);
-    U.uWindDir.value.set(Math.cos(wa), Math.sin(wa));
+    const wa = 0.35 + 0.5 * Math.sin(U.uFTime.value * 0.031) + 0.25 * Math.sin(U.uFTime.value * 0.083);
+    U.uFWindDir.value.set(Math.cos(wa), Math.sin(wa));
     U.uShiver.value.w = Math.max(0, U.uShiver.value.w - dt * 0.6);
-    const w = this.ctx.world;
-    U.uWind.value += ((w.windEnergy || 0) * 1.5 + 0.15 - U.uWind.value) * Math.min(1, dt);
     // seasons: ferns brown a little in autumn and dull in winter
     const env = this.ctx.modules.life?.env;
     if (env) {
