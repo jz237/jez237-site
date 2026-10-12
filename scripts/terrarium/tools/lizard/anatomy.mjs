@@ -31,11 +31,11 @@ const PROFILE = [
   // distance; a spade in plan, wide at the spiny jowls; a flat crown with sharp
   // canthal edges and a forehead sloping down to a blunt, rounded nose
   [9.4, 1.62, 0.96, 1.2, 2.52, 2.4],
-  [9.85, 1.62, 0.95, 1.04, 2.58, 2.5],
-  [10.3, 1.5, 0.9, 0.88, 2.62, 2.6],
-  [10.75, 1.34, 0.84, 0.75, 2.65, 2.7],
-  [11.2, 1.14, 0.76, 0.65, 2.64, 2.75],
-  [11.54, 0.97, 0.67, 0.58, 2.61, 2.7],
+  [9.85, 1.62, 0.87, 1.04, 2.58, 2.5],
+  [10.3, 1.5, 0.82, 0.88, 2.62, 2.6],
+  [10.75, 1.34, 0.78, 0.75, 2.65, 2.7],
+  [11.2, 1.14, 0.71, 0.65, 2.64, 2.75],
+  [11.54, 0.97, 0.64, 0.58, 2.61, 2.7],
   [11.88, 0.8, 0.57, 0.5, 2.57, 2.6],
   [12.22, 0.63, 0.46, 0.43, 2.52, 2.5],
   [12.47, 0.49, 0.35, 0.35, 2.47, 2.4],
@@ -95,8 +95,8 @@ function spineWeights(x, out) {
 const eyeX = 11.0;
 const eyeProfile = profile(eyeX);
 export const EYE = {
-  radius: 0.27,
-  centre: [eyeX, eyeProfile.cy + 0.31, eyeProfile.w - 0.26],
+  radius: 0.295,
+  centre: [eyeX, eyeProfile.cy + 0.31, eyeProfile.w - 0.27],
   axis: norm([0.18, 0.3, 1]),
 };
 export const NOSTRIL = [12.42, profile(12.4).cy + 0.08, profile(12.4).w * 0.96];
@@ -106,10 +106,10 @@ for (const s of [1, -1]) {
   const axis = [EYE.axis[0], EYE.axis[1], EYE.axis[2] * s];
   eyeFeatures.push({
     s, c, axis,
-    rim: torus(add(c, scale(axis, 0.08)), axis, 0.285, 0.09),
+    rim: torus(add(c, scale(axis, 0.08)), axis, 0.31, 0.09),
     socket: sphere(c, EYE.radius + 0.018),
     // the supraocular ridge: a low shelf along the canthus that overhangs the eye
-    brow: ellipsoid(add(c, [-0.04, 0.19, -0.13 * s]), [0.42, 0.1, 0.19], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
+    brow: ellipsoid(add(c, [-0.04, 0.22, -0.12 * s]), [0.48, 0.12, 0.22], norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s]), norm(cross(norm([1, 0.12, 0.08 * s]), norm([-0.12, 1, 0.1 * s])))),
     nostrilRim: sphere([12.4, profile(12.4).cy + 0.08, profile(12.4).w * 0.84 * s], 0.08),
     nostril: sphere([12.42, profile(12.4).cy + 0.08, profile(12.4).w * 1.0 * s], 0.05),
     ear: ellipsoid([9.92, profile(9.92).cy + 0.04, (profile(9.92).w + 0.02) * s], [0.2, 0.27, 0.24]),
@@ -142,8 +142,9 @@ function loftDistance(x, y, z) {
   let { w, ht, hb, cy, n } = profile(xc);
   const dy = y - cy;
   const h = dy > 0 ? ht : hb;
-  // the crown and the top of the snout are flat, edged by the canthal ridges
-  if (dy > 0) n += 1.5 * smoothstep(10.0, 10.9, xc) * (1 - smoothstep(11.55, 12.4, xc));
+  // the crown and the top of the snout are flat (photographs show a broad, level
+  // head, not a dome), edged by the canthal ridges
+  if (dy > 0) n += 2.3 * smoothstep(9.5, 10.5, xc) * (1 - smoothstep(11.55, 12.4, xc));
   const a = Math.abs(z) / w, b = Math.abs(dy) / h;
   const an = Math.pow(a, n), bn = Math.pow(b, n);
   const r = Math.pow(an + bn, 1 / n);
