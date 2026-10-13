@@ -21,23 +21,23 @@ const ICON: Record<string, string> = {
   pause: '<path d="M8 5v14M16 5v14"/>',
   reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/>',
   morph: '<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.9 1.4-2-.5-1.3.2-2.5 1.7-2.5h1.8a3.6 3.6 0 0 0 3.6-3.6C20.5 7.3 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10.5" cy="7.3" r="1.1"/><circle cx="15" cy="7.6" r="1.1"/>',
+  tornado: '<path d="M3 4.5h18M4.8 8.5h14.4M7.6 12.5h9.6M10.2 16.5h5.6M12.4 20.5h2.2"/>',
   mist: '<path d="M9 9h5v11a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1zM10 9V6h3v3M13 6.5h3.5l1 1.5M17.5 5l3-1M17.5 8l3 1M17.5 6.5h3.5"/>',
 };
 const svg = (k: string) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
 
 const TOOLS: {id: Tool; label: string; hint: string}[] = [
-  {id: 'hand', label: 'Hand', hint: 'Grab a cloud and hold still to wring out rain · shake it hard for lightning · touch the water or the lizard'},
+  {id: 'hand', label: 'Hand', hint: 'Grab a cloud and hold still to wring out rain · shake it hard for lightning · touch the water or the toad'},
   {id: 'cloud', label: 'Cloud', hint: 'Hold to condense a new cloud · drag to stretch it · push clouds together to build a storm · right-click a cloud to shrink it'},
   {id: 'wind', label: 'Wind', hint: 'Drag across the case to blow a gust'},
   {id: 'fog', label: 'Fog', hint: 'Hold or drag to pour fog — it runs downhill and pools on the water'},
   {id: 'wipe', label: 'Wipe', hint: 'Drag across the glass to wipe away condensation'},
-  {id: 'feed', label: 'Feed', hint: 'Tap to drop a cricket in for the lizard · tap the dish to refill its greens · tap the pool to feed the fish'},
-  {id: 'mist', label: 'Mist', hint: 'Tap or hold to mist the plants · the dragon licks the wet leaves · look for a rainbow in the spray'},
+  {id: 'feed', label: 'Feed', hint: 'Tap the pool to feed the fish'},
+  {id: 'mist', label: 'Mist', hint: 'Tap or hold to mist the plants · look for a rainbow in the spray'},
 ];
 
 export class UI {
   tool: Tool = 'hand';
-  follow = false;
   private root: HTMLElement;
   private toast: HTMLElement;
   private toastTimer = 0;
@@ -48,6 +48,13 @@ export class UI {
   private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense' | 'shrink'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number; cloud?: Cloud | null; puffT?: number} | null = null;
   private coached = false;
   private coachedShrink = false;
+  private tornadoBtn: HTMLButtonElement;
+  private tornadoLabel: HTMLElement;
+  private tornadoState = '';
+  /** When the last storm began (for a word about the tornado button), s. */
+  private stormSaidT = -1e9;
+  private wasStormy = false;
+  private clockT = 0;
   private ray = new THREE.Raycaster();
   private ndc = new THREE.Vector2();
   onSound?: () => void;
@@ -58,19 +65,18 @@ export class UI {
     this.root.innerHTML = `
 <div class="brand">
   <div class="title">Weatherglass</div>
-  <div class="subtitle">Terrarium · a bearded dragon in a glass-cased world</div>
+  <div class="subtitle">Rainforest terrarium · a living world under glass</div>
   <div class="readout"><span><b data-r="temp">--°</b></span><span><b data-r="hum">--%</b> humidity</span><span><b data-r="time">--:--</b></span></div>
   <div class="status"><i class="dot"></i><span data-r="status">Waking the terrarium…</span></div>
 </div>
 <div class="actions panel">
-  <button data-a="follow" title="Follow the lizard" aria-pressed="false">${svg('follow')}</button>
   <button data-a="reset" title="Reset view">${svg('reset')}</button>
   <button data-a="sound" title="Sound" aria-pressed="false">${svg('mute')}</button>
-  <button data-a="morph" title="Colour morph (M)">${svg('morph')}</button>
   <button data-a="full" title="Full screen">${svg('full')}</button>
   <button data-a="hide" title="Hide controls (H)">${svg('hide')}</button>
 </div>
 <div class="toast panel" role="status"></div>
+<button class="storm-btn panel" data-a="tornado" aria-pressed="false" title="Tornado (T)">${svg('tornado')}<span>Tornado</span></button>
 <div class="tools panel" role="toolbar" aria-label="Weather tools">
   ${TOOLS.map((x) => `<button data-tool="${x.id}" aria-pressed="${x.id === 'hand'}" title="${x.label}">${svg(x.id)}<span>${x.label}</span></button>`).join('')}
 </div>
@@ -89,20 +95,21 @@ export class UI {
     this.readout = {temp: q('[data-r="temp"]'), hum: q('[data-r="hum"]'), time: q('[data-r="time"]')};
     this.slider = this.root.querySelector('input[type=range]')!;
     this.play = q('[data-a="play"]') as HTMLButtonElement;
+    this.tornadoBtn = q('[data-a="tornado"]') as HTMLButtonElement;
+    this.tornadoLabel = this.tornadoBtn.querySelector('span')!;
+    this.tornadoBtn.onclick = () => this.toggleTornado();
     this.root.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => (b.onclick = () => this.setTool(b.dataset.tool as Tool)));
-    q('[data-a="follow"]').onclick = () => this.setFollow(!this.follow);
-    q('[data-a="reset"]').onclick = () => {this.setFollow(false); t.resetView();};
+    q('[data-a="reset"]').onclick = () => t.resetView();
     q('[data-a="sound"]').onclick = () => this.onSound?.();
     q('[data-a="full"]').onclick = () => {
       if (document.fullscreenElement) void document.exitFullscreen();
       else void document.documentElement.requestFullscreen?.();
     };
     q('[data-a="hide"]').onclick = () => document.body.classList.add('no-ui');
-    q('[data-a="morph"]').onclick = () => this.nextMorph();
     q('.show-ui').onclick = () => document.body.classList.remove('no-ui');
     addEventListener('keydown', (e) => {
       if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('no-ui');
-      if (e.key === 'm' || e.key === 'M') this.nextMorph();
+      if (e.key === 't' || e.key === 'T') this.toggleTornado();
       const idx = Number(e.key) - 1;
       if (idx >= 0 && idx < TOOLS.length) this.setTool(TOOLS[idx].id);
     });
@@ -114,16 +121,18 @@ export class UI {
     this.bindPointer(host);
     this.say(TOOLS[0].hint, 6);
     // A second tip once the first has been read.
-    setTimeout(() => {if (!this.follow && this.tool === 'hand') this.say('Tip: the eye button follows the lizard up close', 6);}, 9000);
   }
 
-  /** Cycles the dragon's colour morph. */
-  nextMorph() {
-    const order = ['normal', 'red', 'citrus', 'hypo'];
-    const names: Record<string, string> = {normal: 'Normal (wild-type)', red: 'Red', citrus: 'Citrus', hypo: 'Hypo (pale, clear claws)'};
-    const next = order[(order.indexOf(this.t.lizard.morph) + 1) % order.length];
-    this.t.lizard.setMorph(next);
-    this.say(`Colour morph: ${names[next]}`, 3);
+  /** Brings a tornado down from the storm (brewing one first under a calm sky), or sends it back up. */
+  toggleTornado() {
+    const t = this.t, tw = t.weather.tornado;
+    if (!t.audio.running) {t.audio.start(); this.setSoundState(!t.audio.muted);}
+    if (tw.live) {tw.dissipate(); this.say('The tornado ropes out and lifts back into the storm', 4); return;}
+    if (tw.phase === 'brewing') {tw.dissipate(); this.say('The storm settles without a tornado', 3); return;}
+    if (tw.phase === 'roping') return;
+    const stormy = t.weather.clouds.storminess > 0.4;
+    if (tw.request(t.weather.clouds) === 'brewing') this.say('Feeding the biggest cloud into a rotating storm… a funnel will lower from its base', 6);
+    else this.say(stormy ? 'The storm starts to rotate: a funnel is lowering' : 'A funnel is lowering from the storm', 5);
   }
 
   setSoundState(on: boolean) {
@@ -137,13 +146,6 @@ export class UI {
     this.root.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === id)));
     this.say(TOOLS.find((x) => x.id === id)!.hint, 5);
     document.body.dataset.tool = id;
-  }
-
-  setFollow(on: boolean) {
-    this.follow = on;
-    this.t.follow = on;
-    (this.root.querySelector('[data-a="follow"]') as HTMLElement).setAttribute('aria-pressed', String(on));
-    if (on) this.say('Following the lizard — drag to circle it, scroll to come closer', 5);
   }
 
   say(text: string, seconds = 4) {
@@ -168,15 +170,9 @@ export class UI {
     return hit;
   }
 
-  /** Where the misting bottle is aimed: the lizard if the pointer is on it, else the floor, a rock or a plant. */
+  /** Where the misting bottle meets the floor, a rock or a plant. */
   private pickMist(ray: THREE.Ray): THREE.Vector3 {
     const t = this.t;
-    if (t.hitLizard(ray)) {
-      const pts = [t.rig.snout, ...t.rig.spinePoints()];
-      let best = pts[0], bd = Infinity;
-      for (const p of pts) {const d = ray.distanceToPoint(p); if (d < bd) {bd = d; best = p;}}
-      return ray.closestPointToPoint(best, new THREE.Vector3());
-    }
     return this.pickFloor(ray, 0.012);
   }
 
@@ -223,9 +219,6 @@ export class UI {
           if (!this.coached) {this.coached = true; this.say('Hold still to squeeze out rain · shake it hard to build a storm', 5);}
           return;
         }
-        // a tap on the lizard is a gentle touch
-        this.pendingPet = t.hitLizard(this.ray.ray);
-        if (this.pendingPet) return;
         // the toad answers a poke with its warning colours
         if (t.toad.hit(this.ray.ray)) {
           t.toad.poke(this.ray.ray.origin);
@@ -253,11 +246,9 @@ export class UI {
         w().clouds.condense(c ? c.point : p, c?.cloud ?? null);
         this.drag.kind = 'condense';
       } else if (this.tool === 'feed') {
-        const p = t.pickInside(this.ray.ray);
         const pond = this.pickWater(this.ray.ray);
         if (pond && t.fish.feed(pond.x, pond.z)) {t.water.addRipple(pond.x, pond.z, 0.4); this.say('A pinch of flakes for the fish', 3);}
-        else if (p && t.dish.hit(p)) {t.dish.refill(); this.say('Fresh greens in the dish', 3);}
-        else {t.feed(p); this.say('A cricket drops in…', 3);}
+        else this.say('Tap the pool to feed the fish', 3);
       } else if (this.tool === 'wipe') {
         t.wipeGlass(this.ray.ray);
       } else if (this.tool === 'mist') {
@@ -277,7 +268,6 @@ export class UI {
       if (e.target !== canvas) return;
       this.setRay(e, host);
       const inside = this.tool === 'hand' || this.tool === 'feed' ? t.pickInside(this.ray.ray) : null;
-      t.brain.pointer = inside;
       // the hand brushes through the plants it passes over
       t.setHand(this.tool === 'hand' ? inside : null);
       if (this.tool === 'hand' && !this.drag) w().clouds.setHover(w().clouds.pick(this.ray.ray)?.cloud ?? null);
@@ -360,18 +350,12 @@ export class UI {
       if (d?.kind === 'condense') w().clouds.condenseEnd();
       if (d?.kind === 'water' && d.lastWorld) t.water.flick(d.lastWorld.x, d.lastWorld.z, 2 + Math.floor(Math.random() * 3), 0.15);
       this.drag = null;
-      if (this.pendingPet && this.tool === 'hand') {
-        this.setRay(e, host);
-        if (t.hitLizard(this.ray.ray)) {t.brain.pet(); this.say('The dragon closes its eyes', 3);}
-      }
-      this.pendingPet = false;
     };
     host.addEventListener('pointerup', end, true);
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     host.addEventListener('pointercancel', end, true);
-    host.addEventListener('pointerleave', () => {t.brain.pointer = null; t.setHand(null); w().clouds.setHover(null);});
+    host.addEventListener('pointerleave', () => {t.setHand(null); w().clouds.setHover(null);});
   }
-  private pendingPet = false;
 
   update(dt: number) {
     const t = this.t;
@@ -399,6 +383,32 @@ export class UI {
     if (document.activeElement !== this.slider) this.slider.value = String(w.hours);
     this.readout.temp.textContent = `${t.temperature.toFixed(0)}°C`;
     this.readout.hum.textContent = `${Math.round(w.humidity * 100)}%`;
-    this.status.textContent = t.brain.status;
+    const tw = t.weather.tornado;
+    this.status.textContent =
+      tw.phase === 'brewing' ? 'A storm is building' :
+      tw.phase === 'forming' ? (tw.touch > 0.5 ? 'Touchdown!' : 'A funnel cloud is lowering') :
+      tw.phase === 'mature' ? (tw.water > 0.5 ? 'A waterspout over the pool' : 'Tornado on the ground') :
+      tw.phase === 'roping' ? 'The tornado is roping out' :
+      t.weather.clouds.storminess > 0.4 ? 'A storm is rotating over the rainforest' :
+      t.weather.rainAmount > 0.1 ? 'Rain over the rainforest' : t.weather.daylight < 0.2 ? 'Night in the rainforest' : 'A living rainforest under glass';
+    // the tornado button: lit while a storm could drop one, pressed while one is down
+    this.clockT += dt;
+    const stormy = w.clouds.storminess > 0.4;
+    const state = tw.live || tw.phase === 'brewing' ? 'active' : tw.phase === 'roping' ? 'roping' : stormy ? 'ready' : 'calm';
+    if (state !== this.tornadoState) {
+      this.tornadoState = state;
+      const b = this.tornadoBtn;
+      b.dataset.state = state;
+      b.setAttribute('aria-pressed', String(state === 'active'));
+      b.disabled = state === 'roping';
+      this.tornadoLabel.textContent = state === 'active' ? 'Calm it' : 'Tornado';
+      b.title = state === 'active' ? 'Send the tornado back up (T)' : state === 'ready' ? 'Bring a tornado down from the storm (T)' : 'Brew a storm and bring a tornado down (T)';
+    }
+    // a word, once in a while, when a storm gets going on its own
+    if (stormy && !this.wasStormy && !tw.active && this.clockT - this.stormSaidT > 60) {
+      this.stormSaidT = this.clockT;
+      this.say('The storm is rotating · press Tornado to bring one down', 5);
+    }
+    this.wasStormy = stormy;
   }
 }

@@ -31,6 +31,13 @@ export class WindField {
   energy = 0; // mean speed, for sound and drying
   storm = 0; // set by the clouds: storms are gustier
   private time = 0;
+  /**
+   * A vortex laid over the simulated flow (a tornado), turning counter-clockwise
+   * seen from above: the grid is too coarse to carry a core a few centimetres
+   * across (advection smears it away), so it is added wherever the flow is read.
+   * `v` is the peak speed (m/s), at radius `core`; it is gone by `reach` (m).
+   */
+  readonly vortex = {x: 0, z: 0, v: 0, core: 0.04, reach: 0.24};
   readonly uniforms = {
     tWind: {value: null as THREE.Texture | null},
     uWindBox: {value: new THREE.Vector4(-TANK.w / 2, -TANK.d / 2, TANK.w, TANK.d)},
@@ -69,10 +76,30 @@ export class WindField {
   sample(x: number, z: number, out = new THREE.Vector2()) {
     const gx = (x - this.x0) / this.cell - 0.5, gz = (z - this.z0) / this.cell - 0.5;
     const g = this.gust(x, z);
-    return out.set(this.sampleField(this.u, gx, gz) + this.ambient.x * g, this.sampleField(this.w, gx, gz) + this.ambient.y * g);
+    out.set(this.sampleField(this.u, gx, gz) + this.ambient.x * g, this.sampleField(this.w, gx, gz) + this.ambient.y * g);
+    return this.addVortexAt(x, z, out);
   }
   turbulence(x: number, z: number) {
-    return this.sampleField(this.turb, (x - this.x0) / this.cell - 0.5, (z - this.z0) / this.cell - 0.5);
+    return Math.min(1, this.sampleField(this.turb, (x - this.x0) / this.cell - 0.5, (z - this.z0) / this.cell - 0.5) + this.vortexTurb(x, z));
+  }
+
+  /** Adds the overlaid vortex's flow at (x, z) to `out`. */
+  private addVortexAt(x: number, z: number, out: THREE.Vector2) {
+    const V = this.vortex;
+    if (V.v <= 0) return out;
+    const dx = x - V.x, dz = z - V.z, d = Math.hypot(dx, dz);
+    if (d >= V.reach || d < 1e-5) return out;
+    const q = Math.min(1, Math.max(0, (d - V.reach * 0.45) / (V.reach * 0.55)));
+    const vt = V.v * (d < V.core ? d / V.core : V.core / d) * (1 - q * q * (3 - 2 * q));
+    out.x += (vt * dz) / d;
+    out.y -= (vt * dx) / d;
+    return out;
+  }
+  private vortexTurb(x: number, z: number) {
+    const V = this.vortex;
+    if (V.v <= 0) return 0;
+    const d2 = ((x - V.x) ** 2 + (z - V.z) ** 2) / (4 * V.core * V.core);
+    return d2 > 9 ? 0 : Math.min(1, V.v) * Math.exp(-d2);
   }
   private gust(x: number, z: number) {
     const t = this.time;
@@ -110,6 +137,29 @@ export class WindField {
         const k = j * this.nx + i;
         this.u[k] += (dx / d) * f;
         this.w[k] += (dz / d) * f;
+      }
+    }
+  }
+
+  /**
+   * Blends the flow towards a vortex turning counter-clockwise seen from above
+   * (as a storm's does): solid-body inside `core`, falling off as 1/r outside it
+   * and gone by `reach` (metres). It is divergence-free, so the projection keeps it.
+   */
+  addVortex(x: number, z: number, vmax: number, core: number, reach: number, blend: number) {
+    const ci = (x - this.x0) / this.cell - 0.5, cj = (z - this.z0) / this.cell - 0.5;
+    const r = Math.ceil(reach / this.cell);
+    for (let j = Math.max(0, Math.floor(cj - r)); j <= Math.min(this.nz - 1, Math.ceil(cj + r)); j++) {
+      for (let i = Math.max(0, Math.floor(ci - r)); i <= Math.min(this.nx - 1, Math.ceil(ci + r)); i++) {
+        const dx = (i - ci) * this.cell, dz = (j - cj) * this.cell, d = Math.hypot(dx, dz);
+        if (d >= reach || d < 1e-5) continue;
+        const q = Math.min(1, Math.max(0, (d - reach * 0.45) / (reach * 0.55)));
+        const fall = 1 - q * q * (3 - 2 * q);
+        const vt = vmax * (d < core ? d / core : core / d) * fall;
+        const wgt = blend * (0.25 + 0.75 * fall);
+        const k = j * this.nx + i;
+        this.u[k] += ((vt * dz) / d - this.u[k]) * wgt;
+        this.w[k] += ((-vt * dx) / d - this.w[k]) * wgt;
       }
     }
   }
@@ -155,6 +205,7 @@ export class WindField {
       }
     }
     const decay = Math.exp(-0.55 * dt);
+    const vtx = new THREE.Vector2();
     let sum = 0;
     for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
       const k = j * nx + i;
@@ -162,13 +213,20 @@ export class WindField {
       this.w[k] = (this.w[k] - 0.5 * (at(this.p, i, j + 1) - at(this.p, i, j - 1))) * decay;
       const curl = (at(this.w, i + 1, j) - at(this.w, i - 1, j)) - (at(this.u, i, j + 1) - at(this.u, i, j - 1));
       this.turb[k] += (Math.min(1, Math.abs(curl) * 6) - this.turb[k]) * (1 - Math.exp(-4 * dt));
-      const sp = Math.hypot(this.u[k], this.w[k]);
+      let u = this.u[k], w = this.w[k], tb = this.turb[k];
+      if (this.vortex.v > 0) {
+        const x = this.x0 + (i + 0.5) * this.cell, z = this.z0 + (j + 0.5) * this.cell;
+        this.addVortexAt(x, z, vtx.set(0, 0));
+        u += vtx.x; w += vtx.y;
+        tb = Math.min(1, tb + this.vortexTurb(x, z));
+      }
+      const sp = Math.hypot(u, w);
       sum += sp;
       const q = k * 4;
-      this.pixels[q] = toHalf(this.u[k] + this.ambient.x);
-      this.pixels[q + 1] = toHalf(this.w[k] + this.ambient.y);
+      this.pixels[q] = toHalf(u + this.ambient.x);
+      this.pixels[q + 1] = toHalf(w + this.ambient.y);
       this.pixels[q + 2] = toHalf(sp);
-      this.pixels[q + 3] = toHalf(this.turb[k]);
+      this.pixels[q + 3] = toHalf(tb);
     }
     this.energy = sum / N + this.ambient.length();
     this.texture.needsUpdate = true;

@@ -68,6 +68,8 @@ export interface Cloud {
   distMat: THREE.ShaderMaterial;
   uniforms: Record<string, THREE.IUniform>;
   seed: THREE.Vector3;
+  /** 0..1 how little the case's air moves it (a tornado's parent storm isn't blown about by its own vortex). */
+  anchor?: number;
 }
 
 export interface CloudEvents {
@@ -291,6 +293,26 @@ export class Clouds {
     else if (sound) this.events.shrink?.(c, amount);
   }
 
+  /** Feeds a cloud towards a storm (a tornado asked for under a calm sky): it fattens, darkens and towers. */
+  brew(c: Cloud, dt: number) {
+    c.touchedAt = this.now;
+    c.dissolving = false;
+    c.size = Math.min(2.2, approach(c.size, Math.max(c.size, 1.65), 1.1, dt));
+    c.water = approach(c.water, 1.3, 1.4, dt);
+    c.stormTarget = 1;
+    c.stormAge = 0;
+  }
+
+  /** Keeps a tornado's storm going, turning it slowly about its updraught (counter-clockwise from above). */
+  sustain(c: Cloud, dt: number, spin: number) {
+    c.touchedAt = this.now;
+    c.stormTarget = Math.max(c.stormTarget, 0.9);
+    c.stormAge = Math.min(c.stormAge, c.stormLife * 0.5);
+    c.water = Math.max(c.water, 0.95);
+    c.anchor = 0.85 * spin;
+    c.yaw -= dt * 0.12 * spin;
+  }
+
   /** Mouse-wheel squeeze over a cloud. */
   wheel(c: Cloud, deltaY: number) {
     c.wheelSqueeze = clamp01(c.wheelSqueeze + Math.max(0, deltaY) * 0.0016);
@@ -423,6 +445,7 @@ export class Clouds {
     c.comp = clamp(c.comp + c.compVel * dt, -0.5, 1.15);
     // body motion
     const w = wind.sample(c.pos.x, c.pos.z, new THREE.Vector2());
+    if (c.anchor) {w.multiplyScalar(1 - c.anchor); c.anchor = Math.max(0, c.anchor - dt * 0.4);}
     const wallD = Math.min(TANK.w / 2 - Math.abs(c.pos.x), TANK.d / 2 - Math.abs(c.pos.z));
     const u1 = wallD > 0.11 ? 1 : -0.15 + 1.15 * (wallD / 0.11) ** 2;
     if (this.held?.cloud === c) {

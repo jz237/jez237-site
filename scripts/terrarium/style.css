@@ -63,6 +63,16 @@ body.no-ui .hud > *:not(.show-ui) { display: none; }
 .toast { position: absolute; left: 50%; bottom: calc(var(--gut) + 78px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 8px); padding: 10px 16px; border-radius: 999px; font-size: 13px; color: var(--ink); opacity: 0; transition: opacity 0.35s, transform 0.35s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+.hud .storm-btn { position: absolute; right: calc(var(--gut) + env(safe-area-inset-right, 0px)); bottom: calc(var(--gut) + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 17px 0 13px; border-radius: 999px; color: var(--ink-3); background: linear-gradient(180deg, rgba(255, 250, 240, 0.075), rgba(255, 250, 240, 0.015) 38%, rgba(0, 0, 0, 0.05)), var(--glass); border: 1px solid var(--edge); transition: color 0.3s, background-color 0.3s, box-shadow 0.4s, opacity 0.3s, transform 0.25s cubic-bezier(0.3, 1.45, 0.45, 1); }
+.hud .storm-btn span { font-size: 12px; letter-spacing: 0.05em; }
+.hud .storm-btn:hover { color: var(--ink); }
+.hud .storm-btn:active { transform: scale(0.95); }
+/* a storm is up: the option glows */
+.hud .storm-btn[data-state="ready"] { color: var(--brass); box-shadow: inset 0 0 0 1px rgba(255, 217, 138, 0.35), 0 0 22px -4px rgba(255, 217, 138, 0.45); animation: storm-ready 2.2s ease-in-out infinite; }
+.hud .storm-btn[data-state="active"] { color: var(--brass); background: linear-gradient(180deg, rgba(255, 217, 138, 0.18), rgba(255, 217, 138, 0.05)), var(--glass); box-shadow: inset 0 0 0 1px rgba(255, 217, 138, 0.32); }
+.hud .storm-btn[data-state="roping"] { opacity: 0.45; cursor: default; }
+@keyframes storm-ready { 50% { box-shadow: inset 0 0 0 1px rgba(255, 217, 138, 0.5), 0 0 30px -2px rgba(255, 217, 138, 0.6); } }
+
 .clock { position: absolute; left: calc(var(--gut) + env(safe-area-inset-left, 0px)); bottom: calc(var(--gut) + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 10px; padding: 10px 14px 10px 10px; width: 230px; }
 .clock > button { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(255, 246, 228, 0.18) !important; color: var(--ink); }
 .clock > button .ico { width: 15px; height: 15px; }
@@ -80,6 +90,7 @@ body.no-ui .show-ui { display: block; }
 /* seven tools reach the clock on mid-width screens: lift it above the toolbar */
 @media (min-width: 721px) and (max-width: 1010px) {
   .clock { bottom: calc(var(--gut) + 74px + env(safe-area-inset-bottom, 0px)); }
+  .hud .storm-btn { bottom: calc(var(--gut) + 80px + env(safe-area-inset-bottom, 0px)); }
   .toast { bottom: calc(var(--gut) + 150px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (max-width: 720px) {
@@ -90,6 +101,7 @@ body.no-ui .show-ui { display: block; }
   .tools button { width: 50px; height: 50px; border-radius: 13px; }
   .tools button span { font-size: 9px; }
   .clock { bottom: calc(var(--gut) + 66px + env(safe-area-inset-bottom, 0px)); width: 200px; padding: 8px 12px 8px 8px; }
+  .hud .storm-btn { bottom: calc(var(--gut) + 68px + env(safe-area-inset-bottom, 0px)); height: 42px; padding: 0 14px 0 11px; }
   .toast { bottom: calc(var(--gut) + 136px + env(safe-area-inset-bottom, 0px)); font-size: 12px; }
   .actions button { width: 32px; height: 32px; }
 }

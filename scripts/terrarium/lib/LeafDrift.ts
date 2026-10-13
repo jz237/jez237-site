@@ -24,6 +24,9 @@ export class LeafDrift {
   private w = new THREE.Vector2();
   private m = new THREE.Matrix4();
   private time = 0;
+  /** Air movement the flat wind field can't carry (a tornado's updraught, inflow and outflow), m/s. */
+  airflow?: (p: THREE.Vector3, out: THREE.Vector3) => THREE.Vector3;
+  private air = new THREE.Vector3();
 
   constructor(private surface: Surface, private wind: WindField) {
     const g = leafGeometry({length: 1, width: 0.52, shape: (u) => Math.pow(Math.sin(Math.PI * Math.pow(u, 0.8)), 0.8), arch: 0.04, cup: 0.18, twist: 0.3, segs: [8, 4]});
@@ -75,6 +78,7 @@ export class LeafDrift {
     for (const l of this.leaves) {
       this.wind.sample(l.p.x, l.p.z, this.w);
       const speed = this.w.length();
+      const air = this.airflow ? this.airflow(l.p, this.air) : this.air.set(0, 0, 0);
       if (!l.airborne) {
         l.rest += dt;
         if (l.floating) {
@@ -84,7 +88,9 @@ export class LeafDrift {
           if (poolDistance(l.p.x, l.p.z) > -0.01) {l.p.x -= this.w.x * 0.06 * dt; l.p.z -= this.w.y * 0.06 * dt;}
         }
         // a strong enough gust under the leaf picks it up
-        if (speed > l.lift && l.rest > 0.4 && Math.random() < dt * 6 * (speed - l.lift)) {
+        // (or an updraught: a tornado sucks them up)
+        const pull = speed + Math.max(0, air.y) * 0.8;
+        if (pull > l.lift && l.rest > 0.4 && Math.random() < dt * 6 * (pull - l.lift)) {
           l.airborne = true;
           l.floating = false;
           l.v.set(this.w.x * 0.5, 0.12 + 0.18 * Math.min(1.5, speed), this.w.y * 0.5);
@@ -95,9 +101,9 @@ export class LeafDrift {
       }
       // in the air: carried by the wind, falling slowly with a flutter
       const drag = 1 - Math.exp(-dt * 3.2);
-      l.v.x += (this.w.x - l.v.x) * drag;
-      l.v.z += (this.w.y - l.v.z) * drag;
-      const sink = -0.18 + Math.min(0.2, speed * 0.12) + Math.sin(this.time * 7 + l.phase) * 0.12;
+      l.v.x += (this.w.x + air.x - l.v.x) * drag;
+      l.v.z += (this.w.y + air.z - l.v.z) * drag;
+      const sink = -0.18 + Math.min(0.2, speed * 0.12) + Math.sin(this.time * 7 + l.phase) * 0.12 + air.y;
       l.v.y += (sink - l.v.y) * (1 - Math.exp(-dt * 2.5));
       l.p.addScaledVector(l.v, dt);
       // spin, tipping toward flat as it slows

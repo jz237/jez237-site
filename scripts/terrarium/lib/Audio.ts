@@ -238,6 +238,9 @@ export class TerrariumAudio {
   private nextDrip = 0;
   private nextChirp = 0;
   private nextTick = 0;
+  private torn: {roar: GainNode; roarLP: BiquadFilterNode; rush: GainNode; rushBP: BiquadFilterNode; hiss: GainNode; pan: StereoPannerNode} | null = null;
+  private tornT = 0;
+  private nextRattle = 0;
 
   get running() {return !!this.ctx && this.ctx.state === 'running';}
 
@@ -470,6 +473,59 @@ export class TerrariumAudio {
     this.strokeBP.frequency.setTargetAtTime(320 + 1500 * s, t, 0.05);
     this.strokeBP.Q.setTargetAtTime(0.8 + 0.8 * s, t, 0.05);
     this.strokePan.pan.setTargetAtTime(pan, t, 0.05);
+  }
+
+  /**
+   * The tornado, every frame: level 0..1 (strength, nearness), pan -1..1, water
+   * 0..1 (a waterspout hisses). A continuous roar like a freight train that surges
+   * and settles, the rushing whine of the vortex, debris rattling round it.
+   */
+  tornado(level: number, pan: number, water: number, dt: number) {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state !== 'running') return;
+    if (!this.torn) {
+      if (level < 0.005) return;
+      const loop = (b: AudioBuffer, rate: number) => {const n = ctx.createBufferSource(); n.buffer = b; n.loop = true; n.playbackRate.value = rate; n.start(0, Math.random() * b.duration); return n;};
+      const out = ctx.createStereoPanner();
+      out.connect(this.master);
+      const roarLP = ctx.createBiquadFilter();
+      roarLP.type = 'lowpass'; roarLP.frequency.value = 160; roarLP.Q.value = 0.9;
+      const roarHP = ctx.createBiquadFilter();
+      roarHP.type = 'highpass'; roarHP.frequency.value = 28;
+      const roar = ctx.createGain();
+      roar.gain.value = 0;
+      loop(this.brown, 0.8).connect(roarLP).connect(roarHP).connect(roar).connect(out);
+      const rushBP = ctx.createBiquadFilter();
+      rushBP.type = 'bandpass'; rushBP.frequency.value = 520; rushBP.Q.value = 1.4;
+      const rush = ctx.createGain();
+      rush.gain.value = 0;
+      loop(this.pink, 1).connect(rushBP).connect(rush).connect(out);
+      const hissHP = ctx.createBiquadFilter();
+      hissHP.type = 'highpass'; hissHP.frequency.value = 2600;
+      const hiss = ctx.createGain();
+      hiss.gain.value = 0;
+      loop(this.white, 1).connect(hissHP).connect(hiss).connect(out);
+      this.torn = {roar, roarLP, rush, rushBP, hiss, pan: out};
+    }
+    const n = this.torn, t = ctx.currentTime;
+    this.tornT += dt;
+    const T = this.tornT;
+    const L = Math.min(1.4, Math.max(0, level));
+    // surges, like a train passing over joints, and a slow swell
+    const surge = 0.78 + 0.12 * Math.sin(T * 1.9) * Math.sin(T * 0.7 + 1) + 0.1 * Math.sin(T * 0.37 + 2);
+    n.roar.gain.setTargetAtTime(0.75 * L * surge, t, 0.25);
+    n.roarLP.frequency.setTargetAtTime(110 + 300 * L * surge, t, 0.25);
+    n.rush.gain.setTargetAtTime(0.13 * L * (0.7 + 0.3 * Math.sin(T * 3.1)), t, 0.15);
+    n.rushBP.frequency.setTargetAtTime(380 + 300 * L + 140 * Math.sin(T * 0.53) + 80 * Math.sin(T * 2.3), t, 0.2);
+    n.hiss.gain.setTargetAtTime(0.06 * L * water, t, 0.3);
+    n.pan.pan.setTargetAtTime(pan, t, 0.3);
+    // debris rattling (spray patters instead over the pool)
+    if (L > 0.12 && t > this.nextRattle) {
+      this.nextRattle = t + (0.03 + Math.random() * 0.16) / L;
+      if (water < 0.5) this.shot(this.white, {gain: (0.015 + 0.04 * Math.random()) * L, attack: 0.001, decay: 0.02 + Math.random() * 0.05, type: 'bandpass', freq: 1200 + Math.random() * 3600, q: 1.4, pan: pan + (Math.random() - 0.5) * 0.4});
+      else this.ping(2400 + Math.random() * 2600, 0.012 * L, 0.03, this.master);
+      if (Math.random() < 0.08 * L) this.shot(this.brown, {gain: 0.18 * L, attack: 0.01, decay: 0.25 + Math.random() * 0.3, type: 'lowpass', freq: 380, freqTo: 120, pan});
+    }
   }
 
   setMuted(m: boolean) {
