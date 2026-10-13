@@ -1,0 +1,22 @@
+{
+  "provider": "fal",
+  "model": "openai/gpt-image-2",
+  "image_size": {"width": 1536, "height": 1024},
+  "quality": "medium",
+  "num_images": 1,
+  "output_format": "png",
+  "studies": [
+    {
+      "name": "aloe-rosette-reference",
+      "prompt": "Use case: photorealistic-natural. Asset type: botanical visual reference for a realistic 3D desert terrarium. Create a photographic reference study of a small healthy Aloe vera rosette growing in sandy mineral soil. One large three-quarter view occupies the left two thirds; two close-up photographs on the right show a leaf edge and leaf surface. Show thick fleshy tapering lance-shaped leaves with a shallow concave upper surface, a rounded convex underside, subtle blue-green wax, pale natural speckling, small cream teeth along the margins, and a few dry brown tips on the oldest outer leaves. Outer leaves arch away from the centre; younger inner leaves are more upright. Natural irregular leaf lengths and angles, visible central rosette, believable soft flesh and fine cuticle, realistic scale and crisp surface detail. Soft neutral daylight and a plain warm grey background; no pot, no hands, no text, no watermarks, no glossy plastic, no giant agave, no invented flowers. Photograph-like color and lighting; maintain consistent anatomy across the overview and close-ups."
+    },
+    {
+      "name": "cactus-reference",
+      "prompt": "Use case: photorealistic-natural. Asset type: botanical visual reference for a realistic 3D desert terrarium. Create a photographic reference study of a young Echinopsis spachiana columnar cactus, with one small ribbed barrel cactus beside it. One large three-quarter photograph occupies the left two thirds; two close-up photographs on the right show an areole and ribbed green epidermis. Show 10 to 14 rounded longitudinal ribs, olive to deep green skin with subtle wax and tiny natural pores, cream woolly areoles following the rib crests, small clusters of fine straw-colored radial spines, slightly staggered areole spacing and a gently rounded crowded growing tip. Include understated tan corking and a few pale healed marks near the base. The small barrel cactus has one realistic pink-purple cactus flower at its crown, thin silky layered petals and a yellow stamen centre. Sandy mineral soil, soft neutral daylight, plain warm grey background. No pot, hands, text, watermarks, neon green, identical repeated stripes or plastic gloss. Photograph-like detail and consistent plant anatomy."
+    },
+      {
+      "name": "dry-shrub-reference",
+      "prompt": "Use case: photorealistic-natural. Asset type: botanical visual reference for a realistic 3D desert terrarium. Create a photographic reference study of a small weathered desert sagebrush-like shrub growing in sandy mineral soil. One large three-quarter photograph occupies the left two thirds; two close-up photographs on the right show a twig with narrow silver-olive leaves and a dry seed-bearing tip. Sparse asymmetrically branching woody stems with grey-tan fibrous bark, fine side twigs, dull grey-green small narrow leaves with natural curling and occasional three-toothed ends, ochre-brown dried leaves mixed with living foliage, tiny irregular beige seed clusters. Dense lower branching with a few taller shoots, open gaps between twigs, authentic dry arid appearance rather than grass or a tumbleweed. Soft neutral daylight and a plain warm grey background. No pot, hands, text, watermarks, bright flowers, plastic cones, green tropical foliage or repeated identical stems. Photograph-like botanical forms and crisp natural surface detail."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "images": [
+    {
+      "url": "https://v3b.fal.media/files/b/0aae4348/_r-WOJvhj9k7ygMEFlyzz_OtueKZIZ.png",
+      "content_type": "image/png",
+      "file_name": "_r-WOJvhj9k7ygMEFlyzz_OtueKZIZ.png",
+      "file_size": null,
+      "width": null,
+      "height": null
+    }
+  ],
+  "request_id": "01a13724-30cb-7002-ae5b-4ab2f249f6b4",
+  "provider": "fal",
+  "model": "openai/gpt-image-2",
+  "sha256": "2bb170b1e27eb3bb52700c27390a1a19ffead0d7d7ad2307ad92b75b0f595dcc"
+}
