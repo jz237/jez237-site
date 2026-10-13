@@ -195,6 +195,11 @@ patch('  float bareM = smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5
 // shift + right still turns it. The pan reaches the ends of the wider case.
 patch('this.orbiting=t.button===2&&!t.shiftKey?"orbit":"pan"', 'this.orbiting=t.button===2&&t.shiftKey?"orbit":"pan"', 'right button pans');
 patch('this.goalTarget.x=it(this.goalTarget.x,-5,5)', 'this.goalTarget.x=it(this.goalTarget.x,-N.halfW+1,N.halfW-1)', 'pan the whole case');
+// The view never moves on its own: no idle drift (once the view could be slid off-centre, the drift's
+// slow swing carried the whole case across the screen), and a drag ends the moment no mouse button is
+// held, even if its release was missed (a release outside the window, a context menu), so it can't stick.
+patch('this.enabledDrift&&this.idle>30&&', '!1&&this.enabledDrift&&this.idle>30&&', 'no idle drift');
+patch('_move(t){if(!this.enabled)return;', '_move(t){if(!this.enabled)return;if(this.orbiting&&t.pointerType==="mouse"&&t.buttons===0){this.orbiting=null,this.pointer.down=!1,this.touches.clear(),this._updateCursor()}', 'drag ends when no button is held');
 // The wind tool blows where the stroke is drawn on the ground, so a stroke drawn across the smoke in the
 // air landed far behind the cabin, and the smoke, caught in the side-draught of that gust, went the other
 // way. A stroke that passes over the plume now blows at the plume itself (window.__jtWindPick, weather.js).

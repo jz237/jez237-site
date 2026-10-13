@@ -278,3 +278,7 @@ v1.36: game trails:
 v1.37: every tree in hand; right-drag pans:
 - **Grab any tree:** with the hand, any tree can be grabbed by its crown and pulled about: the conifers, redwoods, tree ferns, cycads and the rest of the planting, as well as Weatherglass's own trees. It leans after the hand, shakes leaves loose and startles the birds. Let go and it whips back and sways to rest; a click without a drag flicks it.
 - **Mouse:** the right button now slides the view around (pan) while the left button turns it; Shift + right still turns it. The pan reaches the ends of the wider case.
+
+v1.37.1: the view stays put:
+- **No idle drift:** Weatherglass slowly swung the camera round after 30 seconds without input. Once the view could be slid off-centre with the right button, that swing carried the whole case across the screen, and it came back every time you stopped. It's off: the view only moves when you move it.
+- **No stuck drags:** a mouse drag now ends the moment no button is held, even if the release was missed (let go outside the window, a context menu), so the view can't get stuck sliding with the mouse.
