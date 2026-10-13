@@ -262,6 +262,14 @@ def stage_mesh():
     set_color_attr(high, 'mA', mA)
     set_color_attr(high, 'mB', mB)
     set_color_attr(high, 'pat', pat)
+    # optional (meta 'fine_zone'): where the skin takes a finer scale pattern (e.g. a small head)
+    if meta.get('fine_zone'):
+        fine = np.zeros(len(P))
+        for c, r, s in meta['fine_zone']:
+            q = (P - np.asarray(c)) / np.asarray(r)
+            fine = np.maximum(fine, s * np.clip(1.25 - np.linalg.norm(q, axis=1), 0, 1) * 2)
+        fine = np.clip(fine, 0, 1)
+        set_color_attr(high, 'mC', np.stack([fine, np.zeros_like(fine), np.zeros_like(fine), np.ones_like(fine)], 1))
     log('attributes')
     # UVs on the game mesh: anatomical seams, conformal unwrap, packed
     names, lab, ns = mark_seams(low)

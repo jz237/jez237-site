@@ -318,7 +318,10 @@ def build():
         # close to the back colour, so a high strength still reads as subtle), plus a mild dapple
         pattern=dict(kind='bands', count=26, start=-8.0, end=10.4, strength=0.8, mottle=0.3, low=-0.45,
                      high=0.3),
-        scales=dict(base=0.05, feature=0.12, border=0.4, folds=0.55),
+        scales=dict(base=0.05, feature=0.12, border=0.4, folds=0.55, fine=0.014, fine_relief=0.85),
+        # the head and jaw: fine polygonal scales (a small head under big body scales read as smooth)
+        fine_zone=[(hp(0.36, 0.02).tolist(), (0.42, 0.26, 0.22), 1.0),
+                   (hp(0.40, -0.08, jaw=True).tolist(), (0.38, 0.14, 0.2), 1.0)],
         feature_on_body=0.5, feature_on_limbs=1.0,
         # display skin: a flush on the throat and the cheeks below the eyes
         accent=[(hp(0.02, -0.16).tolist(), (0.45, 0.24, 0.22), 0.35),

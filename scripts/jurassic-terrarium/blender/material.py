@@ -192,6 +192,18 @@ def skin_material(meta, name='skin_src'):
     vg.inputs['Distortion'].default_value = 4.0
     vg.inputs['Detail'].default_value = 2.0
     height = g.math('ADD', height, g.math('MULTIPLY', g.math('MULTIPLY', vg.outputs['Fac'], osteo), 0.18))
+    # optional finer scales in a zone (meta 'fine_zone' + scales 'fine'): small polygonal scales with low
+    # domes replace the big dorsal scales there, e.g. on a small head, where big scales read as smooth
+    fine = sc.get('fine')
+    if fine and meta.get('fine_zone'):
+        fz = attr('mC')[0]
+        vfn = vor(fine, 'DISTANCE_TO_EDGE')
+        fbead = g.smooth(vfn.outputs['Distance'], 0.0, 0.3)
+        vfd = vor(fine * 0.55, 'F1', 0.9)
+        fdome = g.math('MULTIPLY', g.math('SUBTRACT', 1.0, g.smooth(vfd.outputs['Distance'], 0.0, 0.5)), 0.35)
+        fh = g.math('MULTIPLY', g.math('ADD', fbead, fdome), 0.75)
+        # keep the existing bump scale meaningful: fine relief is scaled to the base scale's height range
+        height = g.mixf(fz, height, g.math('MULTIPLY', fh, sc.get('fine_relief', 0.8)))
     bump = g.node('ShaderNodeBump')
     bump.inputs['Strength'].default_value = sc.get('bump', 0.85)
     bump.inputs['Distance'].default_value = base * 0.3
