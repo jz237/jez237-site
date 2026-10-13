@@ -3,7 +3,7 @@ import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeomet
 import {woodTextures, brassRoughness} from './Textures';
 import {Condensation} from './Condensation';
 
-export const TANK = {w: 1.2, d: 0.5, h: 0.66};
+export const TANK = {w: 1.6, d: 0.5, h: 0.66};
 const HX = TANK.w / 2, HZ = TANK.d / 2;
 
 export interface Pane {

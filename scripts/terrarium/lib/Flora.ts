@@ -10,8 +10,8 @@ import {leafGeometry, stemGeometry, placeLeaf, tag} from './Plants';
 /**
  * The understorey that makes the case feel lived-in: bromeliads and air
  * plants, a flowering miniature orchid, Calathea, sedges and spikemoss, small
- * ferns tucked into the rock, creeping fig climbing the peaks, mushrooms by the
- * log, twigs, pebbles, and leaves floating on the pool.
+ * ferns tucked into the rock, mushrooms by the log, twigs, pebbles, and leaves
+ * floating on the pool.
  */
 const K = {bromOuter: 6, bromInner: 7, orchidLeaf: 8, petal: 9, cap: 10, stipe: 11, grass: 12, tilly: 13, spike: 14, calathea: 15, fernlet: 16, twig: 17, fig: 18, lily: 19, heart: 20};
 
@@ -450,8 +450,7 @@ export class Flora {
       this.parts.push(tag(g, K.lily, rnd()));
       placed++;
     }
-    // Creeping fig climbing the faces of the peaks.
-    this.climbers(rockMeshes, rnd);
+    // (no vines on the rock faces: leaves sprouting from bare stone looked wrong)
     // Eelgrass in the deep basin along the front glass, swaying in the water
     for (let i = 0, placed = 0; i < 400 && placed < 6; i++) {
       const x = 0.12 + rnd() * 0.42, z = 0.13 + rnd() * 0.1;
@@ -475,7 +474,7 @@ export class Flora {
     rockSites.slice(19, 24).forEach((sh) => at(fernlet(rnd, 1.5 + rnd() * 0.5), sh.p.x, sh.p.z, {y: sh.p.y, normal: sh.n}));
     // and ferns and bromeliads crowning the rocks, as in a case grown in for years
     this.summits(rockMeshes, rnd).forEach((sm, i) => at(i % 2 ? bromeliad(rnd, 1.2) : fernlet(rnd, 2.0 + rnd() * 0.5), sm.p.x, sm.p.z, {y: sm.p.y, normal: sm.n, sink: 0.004}));
-    this.trailers(rockMeshes, rockSites, rnd);
+
 
     const merged = mergeGeometries(this.parts.map((p) => {
       const q = p.index ? p.toNonIndexed() : p;
@@ -516,44 +515,6 @@ export class Flora {
     return sites;
   }
 
-  /** Creeping fig: stems that find their way up the rock faces, leaves alternating. */
-  private climbers(rocks: THREE.Mesh[], rnd: () => number) {
-    const ray = new THREE.Raycaster();
-    (ray as unknown as {firstHitOnly: boolean}).firstHitOnly = true;
-    const leaf = leafGeometry({length: 1, width: 0.78, shape: (u) => Math.pow(Math.sin(Math.PI * Math.pow(u, 0.75)), 0.75), arch: 0.04, cup: 0.12, segs: [6, 4]});
-    const starts = [[-0.25, -0.02], [-0.1, 0.0], [0.24, 0.0], [0.33, -0.04], [-0.31, -0.08], [0.15, -0.02]];
-    for (const [sx, sz] of starts) {
-      // aim horizontally from in front of the rock toward its interior
-      const pts: THREE.Vector3[] = [];
-      let y = 0.135 + rnd() * 0.02;
-      let x = sx;
-      for (let k = 0; k < 26; k++) {
-        ray.set(new THREE.Vector3(x, y, 0.2), new THREE.Vector3(0, 0, -1));
-        const hit = ray.intersectObjects(rocks, false)[0];
-        if (!hit) break;
-        const p = hit.point.clone().add(new THREE.Vector3(0, 0, 0.0015));
-        if (pts.length && p.distanceTo(pts[pts.length - 1]) > 0.04) break;
-        pts.push(p);
-        y += 0.008 + rnd() * 0.006;
-        x += (rnd() - 0.5) * 0.012;
-        if (y > 0.36) break;
-      }
-      if (pts.length < 4) continue;
-      this.parts.push(tag(stemGeometry(pts, 0.0007, 0.0005), K.twig, 0.3));
-      const curve = new THREE.CatmullRomCurve3(pts);
-      const n = Math.floor(curve.getLength() / 0.006);
-      for (let i = 1; i < n; i++) {
-        const t = i / n;
-        const p = curve.getPointAt(t);
-        const side = i % 2 ? 1 : -1;
-        // leaves lie flat against the rock, pointing up and out
-        const g = placeLeaf(leaf, new THREE.Vector3(), side * (0.6 + rnd() * 0.5), Math.PI / 2 - 0.3, Math.PI / 2, 0.007 + rnd() * 0.004);
-        g.translate(p.x, p.y, p.z + 0.001);
-        this.parts.push(tag(g, K.fig, rnd()));
-      }
-    }
-  }
-
   /** High pockets on the rocks (above the shelves) with room for a big plant. */
   private summits(rocks: THREE.Mesh[], rnd: () => number) {
     const ray = new THREE.Raycaster();
@@ -573,42 +534,6 @@ export class Flora {
     const out: typeof found = [];
     for (const f of found) if (out.length < 5 && out.every((o) => o.p.distanceTo(f.p) > 0.09)) out.push(f);
     return out;
-  }
-
-  /** Pothos trailing down the rock faces from the shelves where it is rooted. */
-  private trailers(rocks: THREE.Mesh[], sites: {p: THREE.Vector3; n: THREE.Vector3}[], rnd: () => number) {
-    const ray = new THREE.Raycaster();
-    (ray as unknown as {firstHitOnly: boolean}).firstHitOnly = true;
-    const blade = heartBlade();
-    for (const site of sites) {
-      if (rnd() < 0.2) continue;
-      const pts: THREE.Vector3[] = [];
-      let y = site.p.y - 0.004, x = site.p.x;
-      for (let k = 0; k < 30; k++) {
-        ray.set(new THREE.Vector3(x, y, 0.22), new THREE.Vector3(0, 0, -1));
-        const hit = ray.intersectObjects(rocks, false)[0];
-        if (!hit) break;
-        const p = hit.point.clone().add(new THREE.Vector3(0, 0, 0.003));
-        if (pts.length && p.distanceTo(pts[pts.length - 1]) > 0.035) break;
-        pts.push(p);
-        y -= 0.009 + rnd() * 0.006;
-        x += (rnd() - 0.5) * 0.014;
-        if (y < 0.14) break;
-      }
-      if (pts.length < 4) continue;
-      this.parts.push(tag(stemGeometry(pts, 0.0011, 0.0008), K.stipe, 0.5));
-      const curve = new THREE.CatmullRomCurve3(pts);
-      const n = Math.floor(curve.getLength() / 0.013);
-      const hue = rnd();
-      for (let i = 1; i <= n; i++) {
-        const p = curve.getPointAt(Math.min(1, i / n));
-        const side = i % 2 ? 1 : -1;
-        // each leaf hangs from the vine, turned out towards the light and the glass
-        const g = placeLeaf(blade, new THREE.Vector3(), Math.PI / 2 + side * (0.5 + rnd() * 0.5), -0.5 - rnd() * 0.5, (rnd() - 0.5) * 0.4, 0.014 + rnd() * 0.01 * (1 - i / n * 0.5));
-        g.translate(p.x + side * 0.003, p.y, p.z + 0.004);
-        this.parts.push(tag(g, K.heart, hue));
-      }
-    }
   }
 
   /** Pebbles and grit scattered over the soil and along the beach. */

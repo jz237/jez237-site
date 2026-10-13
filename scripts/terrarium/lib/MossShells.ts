@@ -32,7 +32,7 @@ export class MossShells {
   }
 
   private static floorGeometry(moss: MossMap) {
-    const NX = 260, NZ = 108;
+    const NX = Math.round(216 * TANK.w), NZ = 108;
     const x0 = -TANK.w / 2 + 0.003, z0 = -TANK.d / 2 + 0.003;
     const W = TANK.w - 0.006, D = TANK.d - 0.006;
     const pos: number[] = [], nrm: number[] = [], idx: number[] = [];

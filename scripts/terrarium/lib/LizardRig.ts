@@ -233,6 +233,14 @@ export class LizardRig {
     // On a narrow perch (a log) the outer support may be far below: bring the
     // foot inward until it lands on something within reach, so it grips the edge.
     const reachDown = (leg.front ? 1.9 : 2.1) * K + this.inputs.clearance * K;
+    // Walking on the ground beside the log, a foot stays on the ground: the log is
+    // a wall it keeps off, not something to plant two feet on. Only where the log
+    // is under the body's own midline (climbing it head on, or on top) do the feet
+    // step up onto the wood.
+    const hd = this.inputs.heading;
+    const mx = this.inputs.x + Math.cos(hd) * along, mz = this.inputs.z - Math.sin(hd) * along;
+    const lineY = Math.max(this.ground.heightAt(mx, mz), this.bodyY - (1.05 + 0.3) * K - this.inputs.clearance * K);
+    let wall = false;
     for (let k = 0; k <= 6; k++) {
       const w = 1 - k * 0.12;
       out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, h.z * K * w);
@@ -240,7 +248,17 @@ export class LizardRig {
       out.z += this.inputs.z;
       insideGlass(out, 0.009); // a foot never steps through the glass
       out.y = this.ground.heightAt(out.x, out.z);
+      // (wood well above the midline beside it: bring the foot in, toward the ground under the body)
+      wall = out.y - lineY > 0.012 && this.ground.kindAt?.(out.x, out.z) === WOOD;
+      if (wall) continue;
       if (this.bodyY - out.y < reachDown + 1.2 * K) {this.homeHangs = false; return out;}
+    }
+    if (wall) {
+      // (still on the wood at its innermost: plant it on the ground at the midline)
+      out.x = mx; out.z = mz;
+      out.y = this.ground.heightAt(mx, mz);
+      this.homeHangs = false;
+      return out;
     }
     // Nothing within reach: hold the foot against the side of the perch.
     out.y = Math.max(out.y, this.bodyY - reachDown);
@@ -546,6 +564,20 @@ export class LizardRig {
       };
       this.spinePos[0].add(keepLen(this.spinePos[1], this.spinePos[2], len12));
       keepLen(this.spinePos[0], this.spinePos[1], len01);
+    }
+    // Last of all, the trunk never sinks into what it lies across: pitched steeply
+    // down off the log (to the dish, say) the hips can come lower than the floor
+    // under the root allows for, so the whole body is lifted to keep every
+    // vertebra's belly on top of the wood or stone under it.
+    let sink = 0;
+    for (const k of [2, 3, 4, 5]) {
+      const p = this.spinePos[k];
+      sink = Math.max(sink, this.ground.heightAt(p.x, p.z) + 1.05 * K - p.y);
+    }
+    if (sink > 0) {
+      for (const p of this.spinePos) p.y += sink;
+      this.bodyY += sink;
+      this.body.elements[13] += sink;
     }
     // Frames from neighbouring joints (tangent toward the head).
     const snoutLocal = new THREE.Vector3(12.68 - this.spineBindX[0], 2.44 - this.spineBindY[0], 0);

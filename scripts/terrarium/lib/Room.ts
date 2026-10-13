@@ -70,7 +70,7 @@ export class Room {
     const glow = dataTexture(256, 128, (x, y, o) => {
       const wx = (x / 256 - 0.5) * 9, wy = y / 128 * 4 - 0.8;
       const g = (cx: number, cy: number, rx: number, ry: number) => Math.exp(-(((wx - cx) / rx) ** 2 + ((wy - cy) / ry) ** 2));
-      const v = Math.min(1, (0.5 * g(0, 0.4, 1.3, 0.75) + 0.95 * g(-1.05, 0.6, 0.55, 0.5) + 0.35 * g(-1.05, 0.6, 1.3, 1.1) + 0.5 * g(1.95, 0.85, 0.5, 0.4))
+      const v = Math.min(1, (0.5 * g(0, 0.4, 1.65, 0.75) + 0.95 * g(-1.3, 0.6, 0.55, 0.5) + 0.35 * g(-1.3, 0.6, 1.3, 1.1) + 0.5 * g(2.05, 0.85, 0.5, 0.4))
         * (0.75 + 0.5 * tileFbm(x / 256 * 5, y / 128 * 3, 5, 4, 33)));
       o[0] = o[1] = o[2] = 255 * v;
     });
@@ -121,7 +121,7 @@ export class Room {
     const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.07, 0.07, 28, 1, true), new THREE.MeshStandardMaterial({color: 0xb08d57, metalness: 1, roughness: 0.35, side: THREE.DoubleSide}));
     shade.position.set(0.5, 0.9, 0.04);
     shelfGroup.add(sb, shade);
-    shelfGroup.position.set(1.75, 0.05, -1.35);
+    shelfGroup.position.set(1.85, 0.05, -1.35);
     this.group.add(shelfGroup);
 
     // Edison lamp at the left.
@@ -140,12 +140,12 @@ export class Room {
     const filament = new THREE.Mesh(new THREE.TorusKnotGeometry(0.012, 0.0012, 64, 6, 2, 5), this.bulb);
     filament.position.y = tableTop + 0.62;
     lamp.add(base, stem, socket, bulbGlass, filament);
-    lamp.position.set(-0.98, 0, -0.55);
+    lamp.position.set(-1.2, 0, -0.55);
     lamp.traverse((o) => {if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).castShadow = true;});
     bulbGlass.castShadow = false; filament.castShadow = false;
     this.group.add(lamp);
     this.lampLight = new THREE.PointLight(0xffa860, 2.2, 6, 2);
-    this.lampLight.position.set(-0.98, tableTop + 0.62, -0.55);
+    this.lampLight.position.set(-1.2, tableTop + 0.62, -0.55);
     this.group.add(this.lampLight);
 
     // Out-of-focus house plants behind the case.

@@ -221,7 +221,7 @@ export class Terrarium {
     this.surface = new Surface(this.ground.mesh, this.hardscape.placed.map((p) => ({mesh: p.mesh, kind: p.mesh === this.hardscape.log ? SurfaceKind.Wood : SurfaceKind.Rock})));
     {
       // what lies on top everywhere (ground, stones, the log): pushed leaves rest on it
-      const NX = 240, NZ = 100, top = new Uint16Array(NX * NZ);
+      const NX = Math.round(200 * TANK.w), NZ = 100, top = new Uint16Array(NX * NZ);
       for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) top[j * NX + i] = THREE.DataUtils.toHalfFloat(this.surface.topAt(-TANK.w / 2 + ((i + 0.5) / NX) * TANK.w, -TANK.d / 2 + ((j + 0.5) / NZ) * TANK.d));
       const tex = new THREE.DataTexture(top, NX, NZ, THREE.RedFormat, THREE.HalfFloatType);
       tex.magFilter = tex.minFilter = THREE.LinearFilter;
@@ -541,7 +541,7 @@ export class Terrarium {
     const usable = 1 - top - bottom;
     const caseH = 0.8;
     // On tall, narrow screens let the case overflow the sides a little so it reads larger.
-    const caseW = aspect < 0.8 ? 0.95 : 1.36;
+    const caseW = aspect < 0.8 ? 0.95 : TANK.w + 0.16;
     const dV = (caseH / 2) / Math.tan(vfov / 2) / usable;
     const dH = (caseW / 2) / (Math.tan(vfov / 2) * aspect) / 0.96;
     const d = Math.max(dV, dH);
