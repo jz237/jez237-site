@@ -182,6 +182,15 @@ patch('_=(.12+d*.25)*t;', '_=(.12+d*.25)*(1+1.6*Math.min(1.5,Math.hypot(Kf.x,Kf.
 // frames while one crossed). Clamp it, and keep the streak's direction defined at launch.
 patch('float a = pow(vT, 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'float a = pow(clamp(vT, 0.0, 1.0), 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'meteor NaN');
 patch('vec3 dir = normalize(uHead - uTail);\n  vec3 toCam', 'vec3 dir = normalize(uHead - uTail + vec3(1e-4, 0.0, 0.0));\n  vec3 toCam', 'meteor direction');
+// Game trails (runtime/trails.js keeps the map): a shared trample texture every Weatherglass shader can
+// read; the grass lies flat and short where the animals keep walking, and the ground wears to bare earth.
+patch('const ke={uTime:{value:0},', 'const ke={uJtTrample:{value:null},uTime:{value:0},', 'trample uniform');
+patch('vec2 fieldUV(vec2 xz) { return clamp((xz - uFieldMin) / uFieldSize, 0.0, 1.0); }',
+  'vec2 fieldUV(vec2 xz) { return clamp((xz - uFieldMin) / uFieldSize, 0.0, 1.0); }\nuniform sampler2D uJtTrample;\nfloat jtTrample(vec2 xz) { return texture2D(uJtTrample, fieldUV(xz)).r; }', 'trample lookup');
+patch('  H *= 1.0 - 0.55 * snowFlat;\n  // drowned', '  H *= 1.0 - 0.55 * snowFlat;\n  float jtTr = jtTrample(aRoot.xz);\n  H *= 1.0 - 0.7 * jtTr; // trodden flat\n  // drowned', 'trodden grass');
+patch('  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45);', '  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45 + jtTr * 3.0);', 'trodden grass droops');
+patch('  float bareM = smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24) * (1.0 - rockM);',
+  '  float bareM = max(smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24), smoothstep(0.3, 0.85, jtTrample(p.xz) + (nB - 0.5) * 0.25) * (1.0 - riverBed)) * (1.0 - rockM);', 'worn trails');
 // The wind tool blows where the stroke is drawn on the ground, so a stroke drawn across the smoke in the
 // air landed far behind the cabin, and the smoke, caught in the side-draught of that gust, went the other
 // way. A stroke that passes over the plume now blows at the plume itself (window.__jtWindPick, weather.js).

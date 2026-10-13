@@ -270,3 +270,7 @@ v1.35: Pteranodon wings:
 - **Flexible curving:** each wing is a chain of springs on top of the flapping animation. The joints further out lag behind the stroke and the air holds them bent against it, so on the downstroke the wing bows and the tips trail upward, and at the top of the upstroke they trail down and whip through. Folded on a perch, the wing stays still.
 - **Billowing membrane:** the membrane bellies against the air: lifted on each downstroke, pressed down on the upstroke, most across the middle of the span, with a light flutter in a glide.
 - **Detail:** fine stiffening fibres (actinofibrils) run out across the membrane, slanting back towards the trailing edge. They show as faint ridges close up and as dark lines when the wing is against the light, alongside the veins. The wing is smooth skin; scales are on the body only.
+
+v1.36: game trails:
+- **Trample map:** a low-resolution map of the whole case that every walking animal presses into round its body, the heavy ones harder. It recovers over a few minutes, so a route used again and again becomes a trail and an abandoned one grows back.
+- **What it changes:** Weatherglass's grass lies short and flat along a trail, the planted ferns are trodden down and splayed out, and the ground wears to bare earth. `?trails=0` turns it off for comparison.

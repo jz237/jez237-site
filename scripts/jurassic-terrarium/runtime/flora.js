@@ -392,7 +392,13 @@ export class Flora {
   vec3 base = toW[3].xyz;
   vec2 aBendV = aBend;
   #endif
-  float ph = dot(base.xz, vec2(3.7, 2.9));
+  float ph = dot(base.xz, vec2(3.7, 2.9));${M.crown || kind === 'cycad' ? '' : `
+  // on a game trail the fronds are trodden down: lower, splayed out (see trails.js)
+  {
+    float tr = jtTrample(base.xz);
+    transformed.y *= 1.0 - 0.6 * tr;
+    transformed.xz *= 1.0 + 0.3 * tr;
+  }`}
   // Weatherglass's wind: the simulated field (the wind tool, gusts) and its travelling gusts
   vec2 wv = windAt(base.xz);
   float wl = length(wv);
