@@ -14,6 +14,7 @@ import {Post} from './lib/Post';
 import {foliageUniforms} from './lib/Foliage';
 import {TANK} from './lib/Case';
 import {BASK} from './lib/Ground';
+import {plantLightStrength} from './lib/DesertPlants';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -79,6 +80,7 @@ export class DesertTerrarium {
   private applyClimate(dt:number) {
     const daylight=THREE.MathUtils.smoothstep(Math.sin((this.hours-6)/12*Math.PI),0,.18),night=daylight<.1;
     this.habitat.warm.intensity=2.4*daylight;this.habitat.daylight.intensity=1.65*daylight;
+    plantLightStrength.value=daylight;
     for(const b of this.habitat.bulbs)b.emissiveIntensity=daylight*2.3;
     this.ambient.intensity=.10+.48*daylight;this.fill.intensity=.10+.52*daylight;
     this.brain.night=night;this.brain.heat=daylight;this.brain.storm=0;this.brain.raining=false;this.brain.leavesWet=0;
