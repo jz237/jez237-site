@@ -172,6 +172,46 @@ patch(`    roots = max(tRoots(u, d - rimB, 22.0, 0.75, mix(0.34, 0.12, m), 0.004
                 tRoots(u + 3.1, d - rimB, 4.0, 0.5, mix(0.5, 0.2, m), 0.014, fw)) * rootZone;`, 'more hanging roots');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
+// The cabin's chimney smoke follows the wind harder: carried closer to the wind's own speed, laid
+// down flatter as the wind strengthens (rising slower against it), and torn ragged by gusts.
+patch('const v=.55+.45*Math.min(1,d*3),g=(1.1+d*1.5)*t;', 'const v=(.6+.55*Math.min(1,d*3))*1.25,g=(1.4+d*1.8)*t;', 'smoke carried by the wind');
+patch('const x=(.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12;', 'const x=((.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12)/(1+.9*Math.hypot(Kf.x,Kf.z));', 'smoke laid down by the wind');
+patch('_=(.12+d*.25)*t;', '_=(.12+d*.25)*(1+1.6*Math.min(1.5,Math.hypot(Kf.x,Kf.z)))*t;', 'smoke torn by gusts');
+// Meteors at night made the whole screen flicker: the streak's fragment shader raised vT (interpolated,
+// so a hair below 0 at the tail) to a power, a NaN, which the bloom spread over the whole frame (black
+// frames while one crossed). Clamp it, and keep the streak's direction defined at launch.
+patch('float a = pow(vT, 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'float a = pow(clamp(vT, 0.0, 1.0), 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'meteor NaN');
+patch('vec3 dir = normalize(uHead - uTail);\n  vec3 toCam', 'vec3 dir = normalize(uHead - uTail + vec3(1e-4, 0.0, 0.0));\n  vec3 toCam', 'meteor direction');
+// Game trails (runtime/trails.js keeps the map): a shared trample texture every Weatherglass shader can
+// read; the grass lies flat and short where the animals keep walking, and the ground wears to bare earth.
+patch('const ke={uTime:{value:0},', 'const ke={uJtTrample:{value:null},uTime:{value:0},', 'trample uniform');
+patch('vec2 fieldUV(vec2 xz) { return clamp((xz - uFieldMin) / uFieldSize, 0.0, 1.0); }',
+  'vec2 fieldUV(vec2 xz) { return clamp((xz - uFieldMin) / uFieldSize, 0.0, 1.0); }\nuniform sampler2D uJtTrample;\nfloat jtTrample(vec2 xz) { return texture2D(uJtTrample, fieldUV(xz)).r; }', 'trample lookup');
+patch('  H *= 1.0 - 0.55 * snowFlat;\n  // drowned', '  H *= 1.0 - 0.55 * snowFlat;\n  float jtTr = jtTrample(aRoot.xz);\n  H *= 1.0 - 0.7 * jtTr; // trodden flat\n  // drowned', 'trodden grass');
+patch('  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45);', '  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45 + jtTr * 3.0);', 'trodden grass droops');
+patch('  float bareM = smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24) * (1.0 - rockM);',
+  '  float bareM = max(smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24), smoothstep(0.3, 0.85, jtTrample(p.xz) + (nB - 0.5) * 0.25) * (1.0 - riverBed)) * (1.0 - rockM);', 'worn trails');
+// Mouse: the right button slides the view (pans) and the left turns it, as in most 3D viewers;
+// shift + right still turns it. The pan reaches the ends of the wider case.
+patch('this.orbiting=t.button===2&&!t.shiftKey?"orbit":"pan"', 'this.orbiting=t.button===2&&t.shiftKey?"orbit":"pan"', 'right button pans');
+patch('this.goalTarget.x=it(this.goalTarget.x,-5,5)', 'this.goalTarget.x=it(this.goalTarget.x,-N.halfW+1,N.halfW-1)', 'pan the whole case');
+// The view never moves on its own: no idle drift (once the view could be slid off-centre, the drift's
+// slow swing carried the whole case across the screen), and a drag ends the moment no mouse button is
+// held, even if its release was missed (a release outside the window, a context menu), so it can't stick.
+patch('this.enabledDrift&&this.idle>30&&', '!1&&this.enabledDrift&&this.idle>30&&', 'no idle drift');
+patch('_move(t){if(!this.enabled)return;', '_move(t){if(!this.enabled)return;if(this.orbiting&&t.pointerType==="mouse"&&t.buttons===0){this.orbiting=null,this.pointer.down=!1,this.touches.clear(),this._updateCursor()}', 'drag ends when no button is held');
+// The wind tool blows where the stroke is drawn on the ground, so a stroke drawn across the smoke in the
+// air landed far behind the cabin, and the smoke, caught in the side-draught of that gust, went the other
+// way. A stroke that passes over the plume now blows at the plume itself (window.__jtWindPick, weather.js).
+patch('function l(c){return t.rayToTerrain(c)?(c.y+=.4,c):t.rayToPlaneY(1.2,c)}', 'function l(c){return window.__jtWindPick&&window.__jtWindPick(t.pointer.ray,c)?c:t.rayToTerrain(c)?(c.y+=.4,c):t.rayToPlaneY(1.2,c)}', 'wind at the smoke');
+// In a wind the chimney puffs out faster and each puff swells and thins sooner, so the smoke streams
+// off as one ribbon instead of separate balls (this._ws: the wind at the chimney, 0..1.6).
+patch('_sim(t,e){if(t<=0)return;this.time+=t;const i=(2.2+e.fire*9)*(1-e.rain*.35);',
+  '_sim(t,e){if(t<=0)return;this.time+=t;this.ctx.wind.sample(this.origin.x,this.origin.z,Kf,.4);this._ws=Math.min(1.6,Math.hypot(Kf.x,Kf.z))||0;const i=(2.2+e.fire*9)*(1-e.rain*.35)*(1+2.4*this._ws);', 'smoke puffs faster in wind');
+patch('this.age[u]+=t;const d=this.age[u]/this.life[u];', 'this.age[u]+=t*(1+.9*this._ws);const d=this.age[u]/this.life[u];', 'smoke thins sooner in wind');
+patch('p=this.s0[u]+(this.s1[u]-this.s0[u])*Math.sqrt(d),v=$(0,.05,d)*Math.pow(1-d,1.6)*this.dens[u];',
+  'p=(this.s0[u]+(this.s1[u]-this.s0[u])*Math.sqrt(d))*(1+1.1*(this._ws||0)*Math.sqrt(d)),v=$(0,.05,d)*Math.pow(1-d,1.6)*this.dens[u]/(1+.45*(this._ws||0));', 'smoke swells in wind');
+
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
 // tall 12 x 8 x 7.4 box. Everything in Weatherglass sizes itself from this one constant; the clouds'
 // band drops to sit beside the peaks, and the camera fit frames the wider case.
