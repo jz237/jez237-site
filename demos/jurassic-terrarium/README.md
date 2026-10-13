@@ -260,3 +260,8 @@ v1.33: family and social moments; two fixes:
 - **Documentary:** it films each of these with its own caption.
 - **Fix: smoke against the wind tool.** A wind stroke drawn across the chimney smoke used to land on the ground behind the cabin, and the smoke, caught in that gust's side-draught, blew the wrong way. A stroke passing over the plume now blows at the plume itself.
 - **Fix: screen flicker when a meteor crosses the night sky.** The meteor's shader could produce an invalid pixel at its tail, which the bloom spread over the whole screen as black frames. It's clamped, and the sky's glowing layers are now guarded like the water's.
+
+v1.34: painted end walls:
+- **Ends:** both end walls now carry the painted valley, carried on from the back wall round each corner (mirrored there, so the horizon and colours meet without a seam), with the same haze where it meets the ground.
+- **Ground mist:** the mist bands now run round the back corners and part way down each end.
+- **See-through when turned:** like the back, each end is painted only on its inside. Turn the case to look along its length and the near end is clear glass while the far end is the backdrop.

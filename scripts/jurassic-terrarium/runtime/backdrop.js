@@ -4,6 +4,10 @@
 // time of day and the weather (dim and blue at night, greyer under storm cloud). Both are one-sided:
 // seen from behind the case they vanish, so you can still look in through the back glass.
 //
+// The two end walls carry the painting too, carried on from the back wall round each corner (mirrored
+// there, so its horizon and colours meet without a seam). They are one-sided like the back: turn the
+// case to look along it and the near end is clear glass, the far end is the backdrop.
+//
 // Blending the painting into the scenery, so there is no line where the case's ground stops and the
 // picture starts:
 //   - aerial haze on the painting itself, thickest low down where it meets the ground, in the colour of
@@ -61,10 +65,11 @@ float vn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
 float fbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * vn(p); p = p * 2.03 + 7.1; a *= 0.5; } return s; }
 void main() {
   // vV: 0 at the band's foot (just below the ground) to 1 at its top
-  vec2 p = vec2(vW.x * 0.9, vV * 2.2) + uDrift + vec2(0.0, -uTime * 0.01);
+  vec2 p = vec2((vW.x + vW.z) * 0.9, vV * 2.2) + uDrift + vec2(0.0, -uTime * 0.01);
   float n = fbm(p + vec2(fbm(p * 0.6 + uTime * 0.004), 0.0) * 0.8);
   float rise = vV + (n - 0.5) * 0.35;
   float a = smoothstep(0.0, 0.1, vV) * pow(clamp(1.0 - rise, 0.0, 1.0), 1.6) * (0.55 + 0.75 * n) * uAmount;
+  a *= smoothstep(0.0, 0.07, vUv.x) * smoothstep(1.0, 0.93, vUv.x); // fading out part way down each end
   if (a < 0.003) discard;
   gl_FragColor = vec4(uColor, min(a, 0.92));
 }`;
@@ -103,17 +108,39 @@ export class Backdrop {
     this.near.position.set(0, 0.15 + nh / 2, -box.halfD + 0.45);
     this.near.name = 'backdrop-near';
     this.near.renderOrder = 0.5;
-    for (const m of [this.far, this.near]) {
+    // the end walls: the same painting, its u running on from the back wall's edge (mirrored at the corner)
+    this.sides = [-1, 1].map((sx) => {
+      const g = new PlaneGeometry(box.halfD * 2, H);
+      g.rotateY(-sx * Math.PI / 2); // facing in
+      const pos = g.attributes.position, uv = g.attributes.uv;
+      for (let i = 0; i < pos.count; i++) {
+        const z = pos.getZ(i), k = (z + box.halfD) / W; // 0 at the back corner
+        uv.setX(i, sx < 0 ? k : 1 - k);
+      }
+      const m = new Mesh(g, this.farMat);
+      m.position.set(sx * (box.halfW - 0.03), box.bottomY + H / 2, 0);
+      m.name = 'backdrop-side';
+      m.renderOrder = -1;
+      return m;
+    });
+    for (const m of [this.far, this.near, ...this.sides]) {
       m.frustumCulled = false;
       ctx.scene.add(m);
     }
-    // ground mist along the back: one band hugging the painting (behind the painted conifers), one a
-    // little further in among the real trees
+    // ground mist along the back and down the ends: one band hugging the painting (behind the painted
+    // conifers), one a little further in among the real trees; each runs from part way down one end,
+    // round the back, to the same point on the other end, fading out at its ends
     this.mists = [];
     for (const [dz, top, amt, order] of blend ? [[0.22, 1.5, 0.75, 0.45], [0.95, 0.7, 0.3, 0.62]] : []) {
-      const z = -box.halfD + dz, N = 96, pos = [], uv = [], av = [], idx = [];
+      const x0 = box.halfW - dz, z0 = -box.halfD + dz, zf = box.halfD * 0.25;
+      const legs = [[-x0, zf, -x0, z0], [-x0, z0, x0, z0], [x0, z0, x0, zf]];
+      const lens = legs.map(([a, b, c, d]) => Math.hypot(c - a, d - b)), total = lens.reduce((a, b) => a + b, 0);
+      const N = 160, pos = [], uv = [], av = [], idx = [];
       for (let i = 0; i <= N; i++) {
-        const x = -box.halfW + 0.02 + (W * i) / N, h = T.height(x, z);
+        let u = (i / N) * total, L = 0;
+        while (L < 2 && u > lens[L]) (u -= lens[L]), L++;
+        const [a, b, c, d] = legs[L], f = Math.min(1, u / lens[L]);
+        const x = a + (c - a) * f, z = b + (d - b) * f, h = T.height(x, z);
         pos.push(x, h - 0.12, z, x, h + top, z);
         uv.push(i / N, 0, i / N, 1);
         av.push(0, 1);
