@@ -162,3 +162,18 @@ v1.22 (close-up skin and faces):
   - the throat pulses while an animal calls;
   - saliva strings between the T. rex's teeth as its jaws open on a roar, sagging and snapping one by one.
 - `?skindebug=1` shows the measured layers: thin skin red, mud green, neck blue.
+
+v1.23 (more life in the movement, perching Pteranodons):
+
+- New idles, layered on the animals' own poses:
+  - shaking off water after wading, a wet-dog shake rippling down the body with drops flying off;
+  - yawning, with the head up, the jaw gaping and the eyes squeezed shut;
+  - rubbing against a tree trunk, side-on, leaning in and swaying up and down while the tree shakes and drops leaves;
+  - dust-bathing (Triceratops and Stegosaurus): lying down and rolling with dust kicked up, coming up dusty;
+  - scratching the flank with a hind foot, head turned to it.
+- A little more side-to-side weight shift as they walk. Long animals no longer circle a goal that's very close by.
+- Pteranodons land and perch on big boulders, the cabin's ridge and the den rock:
+  - a curving approach that slows, with braking wingbeats at the end;
+  - wings folded tight and standing on all fours as pterosaurs did;
+  - preening and looking about;
+  - flying off when their time is up or when something comes close.

@@ -190,6 +190,19 @@ export class Effects {
     this.group.add(this.dropMesh);
   }
 
+  // drops flung off a body (a shake after wading): outwards and up from p, falling to the ground at y0
+  spray(p, n = 4, speed = 0.3, y0 = 0, out = null) {
+    for (let k = 0; k < n; k++) {
+      const D = this.drops[this.dropNext];
+      this.dropNext = (this.dropNext + 1) % this.drops.length;
+      const a = Math.random() * Math.PI * 2, s = speed * (0.5 + Math.random() * 0.8);
+      D.p = new Vector3(p.x, p.y, p.z);
+      D.v = new Vector3(Math.cos(a) * s + (out?.x || 0) * speed, (0.2 + Math.random() * 0.5) * speed * 1.5, Math.sin(a) * s + (out?.z || 0) * speed);
+      D.life = 1.4;
+      D.y0 = y0;
+    }
+  }
+
   splash(x, z, y = 0, size = 1) {
     for (let k = 0; k < 3; k++) {
       const R = this.rings[this.ringNext];

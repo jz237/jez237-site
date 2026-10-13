@@ -61,6 +61,7 @@ export class Rocks {
     this.group = new Group();
     this.group.name = 'rockwork';
     this.obstacles = [];
+    this.tops = [];
     const T = ctx.terrain, box = ctx.box, tier = ctx.quality?.tier ?? 1;
     const k = tier === 0 ? 0.5 : tier === 1 ? 1 : 1.3;
     const water = (x, z) => Math.max(T.lakeMask(x, z), T.riverMask(x, z));
@@ -119,6 +120,8 @@ export class Rocks {
         const y = T.height(r.x, r.z) + (r.lift || 0) - r.s * r.sink;
         E.set((rand() - 0.5) * 0.5, rand() * 6.28, (rand() - 0.5) * 0.5);
         M.compose(P.set(r.x, y, r.z), Q.setFromEuler(E), S.set(r.s * (0.8 + rand() * 0.5), r.s * (0.75 + rand() * 0.55), r.s * (0.8 + rand() * 0.5)));
+        // big, fairly level boulders make perches for the Pteranodons
+        if (r.s > 0.2 && !r.bank && !r.lift && Math.abs(E.x) < 0.2 && Math.abs(E.z) < 0.2) this.tops.push({ x: r.x, z: r.z, y: y + S.y * 0.8, s: r.s });
         im.setMatrixAt(i, M);
         // walkable-ground boulders block the route finder, except round the cave mouth: the den's
         // way in must stay open (the rubble there is decoration on the flanks)

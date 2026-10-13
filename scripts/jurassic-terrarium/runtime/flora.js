@@ -46,13 +46,14 @@ export class Flora {
     const RAD = { treefern: 0.035, cycad: 0.085, araucaria: 0.05, redwood: 0.05, ginkgo: 0.04 };
     const CROWN = { treefern: 0.75, cycad: 0.25, araucaria: 0.35, redwood: 0.2, ginkgo: 0.4 };
     // how high the trunk is solid: a conifer's runs up through its crown to near the top
+    // (not the browse trees: a Brachiosaurus neck reaches into their crowns)
     const SOLID = { araucaria: 0.9, redwood: 0.9 };
     this.trunks = [];
     for (const [kind, list] of Object.entries(this.placements)) {
       if (!RAD[kind]) continue;
       for (const p of list) {
         const H = p.wantTop || p.scale * BASE_H[kind];
-        this.trunks.push({ x: p.x, z: p.z, r: RAD[kind] * H, y0: p.y, crownY: p.y + (SOLID[kind] ?? CROWN[kind]) * H, leafY: p.y + CROWN[kind] * H, top: p.y + H, kind });
+        this.trunks.push({ x: p.x, z: p.z, r: RAD[kind] * H, y0: p.y, crownY: p.y + ((p.wantTop ? null : SOLID[kind]) ?? CROWN[kind]) * H, leafY: p.y + CROWN[kind] * H, top: p.y + H, kind });
       }
     }
     // each conifer stand is closed as a whole to the route finder (animals go round a grove, not between

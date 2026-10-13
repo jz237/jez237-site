@@ -4,9 +4,10 @@
 // own loop (after the vegetation and wildlife, before the clouds). Models are rigged GLBs built in
 // Blender (scripts/jurassic-terrarium/blender); each comes with a JSON sidecar describing its size,
 // gait speeds and clips.
-import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3, Ray } from 'three';
+import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3, Ray, Raycaster } from 'three';
 
 const _ka = new Vector3(), _kb = new Vector3(), _kc = new Vector3(), _kd = new Vector3();
+const _tv = new Vector3(), _tq1 = new Quaternion(), _tq2 = new Quaternion();
 // Close-up dressing shared by walkers and flyers: the skin shader (light through thin skin, mud, creases,
 // sheen, nostrils) and the eyes (lids, saccades), each with its own uniforms on its own material copies
 function dress(owner) {
@@ -96,8 +97,8 @@ const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', bodyR: 0.19, ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.035,
-    acts: { wander: 4, trail: 1.5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
+    id: 'trex', bodyR: 0.19, ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.045,
+    acts: { wander: 4, trail: 1.5, sniff: 2, roar: 1, drink: 1, hunt: 2, yawn: 0.5, rub: 0.7, scratch: 0.5 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
@@ -105,8 +106,8 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', bodyR: 0.18, ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.05,
-    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
+    id: 'triceratops', bodyR: 0.18, ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.065,
+    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, threat: 1, yawn: 0.5, rub: 0.8, dustbath: 0.7, scratch: 0.5 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
@@ -115,7 +116,7 @@ const SPECIES = [
   },
   {
     id: 'stegosaurus', bodyR: 0.12, ready: true, count: 2, clearance: 0.06, maxWater: 0.6, maxSlope: 0.3, herd: true,
-    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, tailswing: 1 },
+    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, tailswing: 1, yawn: 0.5, rub: 0.8, dustbath: 0.7, scratch: 0.5 },
     sounds: { alert: 'grunt', tailswing: 'hiss' }, step: 1.4, feet: [0, 0.25, 0.5, 0.75],
     common: 'Stegosaurus', badge: 'browser', dot: '#a5603a',
     era: 'Late Jurassic, 155–150 million years ago · western North America',
@@ -123,8 +124,8 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', bodyR: 0.16, ready: true, count: 1, clearance: 0.1, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.03,
-    acts: { wander: 2, trail: 1.5, browse: 4, drink: 1, alert: 1 },
+    id: 'brachiosaurus', bodyR: 0.16, ready: true, count: 1, clearance: 0.1, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.04,
+    acts: { wander: 2, trail: 1.5, browse: 4, drink: 1, alert: 1, yawn: 0.5, rub: 0.6 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
     era: 'Late Jurassic, 154–153 million years ago · western North America',
@@ -142,6 +143,9 @@ const SPECIES = [
 
 const params = new URLSearchParams(location.search);
 const rand = mulberry32(Number(params.get('seed') || 20261011));
+
+// procedural idles (no clip of their own): played on top of idle (or rest) by Dino.performFrame
+const PERFORM = new Set(['yawn', 'rub', 'dustbath', 'scratch', 'shake']);
 
 class Dino {
   // opts.scale: size relative to the adult (hatchlings); opts.parent: the adult it follows;
@@ -332,7 +336,7 @@ class Dino {
     const acts = this.sp.acts || { wander: 1 };
     const prey = this.mod.walkers?.some((d) => !d.sp.predator && !d.sp.tooBig);
     const opts = Object.entries(acts).filter(
-      ([k]) => k === 'wander' || k === 'drink' || k === 'trail' || (k === 'hunt' && prey) || this.actions[k],
+      ([k]) => k === 'wander' || k === 'drink' || k === 'trail' || PERFORM.has(k) || (k === 'hunt' && prey) || this.actions[k],
     );
     let tot = opts.reduce((a, [, w]) => a + w, 0);
     let r = rand() * tot;
@@ -442,7 +446,8 @@ class Dino {
       const k = 1 + 0.08 * Math.sin(t * 17) * Math.min(1, this._callT * 3);
       for (const b of this.flex.neck.slice(0, 2)) (b.scale.x *= k), (b.scale.y *= k);
     }
-    const shut = this.state === 'sleep' ? 1 : this.state === 'shelter' ? 0.35 : this.state === 'idle' && (env.night || 0) > 0.4 ? 0.45 : 0;
+    let shut = this.state === 'sleep' ? 1 : this.state === 'shelter' ? 0.35 : this.state === 'idle' && (env.night || 0) > 0.4 ? 0.45 : 0;
+    if (this.perf?.kind === 'yawn') shut = Math.max(shut, (this._yawnShut || 0) * 0.9);
     faceEyes(this, dt, { shut });
     if (this.saliva) this.saliva.update(dt, this.currentName === 'roar', mod.ctx.camera.position, this.model.scale.x, { x: Math.sin(this.heading), z: Math.cos(this.heading) });
   }
@@ -511,7 +516,8 @@ class Dino {
             const u = L > 1e-8 ? Math.max(0, Math.min(1, ((t.x - ax) * ex + (t.z - az) * ez) / L)) : 0;
             const cx = ax + ex * u, cz = az + ez * u, cy = a.y + (b.y - a.y) * u;
             if (cy - Math.max(r, down) > t.crownY) continue; // the belly hangs lower than the bone
-            const dx = cx - t.x, dz = cz - t.z, d = Math.hypot(dx, dz), need = t.r + r + 0.012;
+            // (the trunk it is rubbing on may press into the skin a little)
+            const dx = cx - t.x, dz = cz - t.z, d = Math.hypot(dx, dz), need = t === this.rubTrunk ? t.r + r * 0.6 : t.r + r + 0.012;
             if (d >= need) continue;
             const nx = d > 1e-4 ? dx / d : Math.cos(this.heading), nz = d > 1e-4 ? dz / d : -Math.sin(this.heading);
             px += nx * (need - d);
@@ -585,6 +591,8 @@ class Dino {
     // rain darkens and glosses the skin; it dries slowly afterwards
     const T = mod.ctx.terrain;
     this.inWater = Math.max(T.lakeMask(this.pos.x, this.pos.z), T.riverMask(this.pos.x, this.pos.z));
+    if (this.inWater > 0.35) this._dripT = 8;
+    else if (this._dripT > 0) this._dripT -= dt;
     const wantWet = Math.min(1, Math.max(env.rain * 1.5 + env.wet * 0.6, this.inWater > 0.35 ? 0.85 : 0));
     this.wet = (this.wet || 0) + (wantWet - (this.wet || 0)) * Math.min(1, dt * (wantWet > (this.wet || 0) ? 0.5 : 0.08));
     for (const m of this.skins) {
@@ -656,6 +664,12 @@ class Dino {
           this.guard();
           break;
         }
+        // just out of the water: shake it off
+        if ((this._dripT || 0) > 0 && !this.swimming && this.inWater < 0.05 && rand() < 0.8) {
+          this._dripT = 0;
+          this.perform('shake');
+          break;
+        }
         // rain: the herbivores get under the tree ferns (sauropods don't bother)
         if (env.rain > 0.35 && !this.sp.predator && !this.sp.tooBig && this.shelter()) break;
         if ((night || env.storm > 0.6 || env.rain > 0.35) && this.sp.den && !this.inDen()) {
@@ -671,6 +685,14 @@ class Dino {
         break;
       case 'oneshot':
         if (this.timer <= 0) this.rest(0.6);
+        break;
+      case 'perform':
+        this.perf.t += dt;
+        if (this.perf.t >= this.perf.len) {
+          this.perf = null;
+          this.rubTrunk = null;
+          this.rest(0.6);
+        }
         break;
       case 'sleep':
         if (this.parent) {
@@ -881,7 +903,8 @@ class Dino {
       });
       // feet onto the real ground (not while lying down), and breathing
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming, moving: stepping || this.state === 'turn' });
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch', moving: stepping || this.state === 'turn' });
+      this.performFrame(dt);
       this.keepOffTrunks();
       this.keepInside();
       this.skinFrame(dt);
@@ -965,7 +988,7 @@ class Dino {
     const a = this.current, name = this.currentName;
     if (!a || (name !== 'walk' && name !== 'run') || this.sp.flyer) return null;
     const d = a.getClip().duration;
-    const amp = (this.sp.gaitSwing ?? 0.06) * Math.min(1, this.speed / Math.max(0.01, this.clipSpeed('walk')) + 0.3);
+    const amp = (this.sp.gaitSwing ?? 0.075) * Math.min(1, this.speed / Math.max(0.01, this.clipSpeed('walk')) + 0.3);
     return { phase: (a.time % d) / d, amp: amp * (name === 'run' ? 0.6 : 1) };
   }
 
@@ -1092,6 +1115,26 @@ class Dino {
       if (!shore || !this.goTo(shore.x, shore.z, () => this.oneShot(this.actions.drink ? 'drink' : 'sniff')))
         this.timer = 1;
       else this.faceWater = shore.water;
+    } else if (kind === 'rub') {
+      // to the nearest trunk, flank to it
+      const t = (this.mod.trunks || []).filter((t) => t.kind !== 'stand' && t.kind !== 'cabin' && t.kind !== 'cycad' && Math.hypot(t.x - this.pos.x, t.z - this.pos.z) < 6)
+        .sort((a, b) => Math.hypot(a.x - this.pos.x, a.z - this.pos.z) - Math.hypot(b.x - this.pos.x, b.z - this.pos.z))[0];
+      // the open ground at the trunk's flank, on this side of it
+      const reach = t ? t.r + (this.sp.bodyR ?? 0.12) * this.k + 0.08 : 0, dd = t ? Math.hypot(this.pos.x - t.x, this.pos.z - t.z) || 1 : 1;
+      const spot = t && this.layer.nearestOpen(t.x + ((this.pos.x - t.x) / dd) * reach, t.z + ((this.pos.z - t.z) / dd) * reach);
+      if (t && spot && Math.hypot(spot.x - this.pos.x, spot.z - this.pos.z) < 0.3 && Math.hypot(this.pos.x - t.x, this.pos.z - t.z) < reach + 0.4) {
+        this.perform('rub', { trunk: t }); // already beside it
+        return;
+      }
+      if (!t || !spot || Math.hypot(spot.x - t.x, spot.z - t.z) > reach + 0.4 || !this.goTo(spot.x, spot.z, () => this.perform('rub', { trunk: t })))
+        this.act('wander');
+      else this.rubTrunk = t; // the guard lets it come right up to this trunk
+    } else if (kind === 'dustbath') {
+      const T = this.mod.ctx.terrain;
+      if (T.slope(this.pos.x, this.pos.z) > 0.15 || this.inWater > 0.05 || (this.mod.ctx.world.groundWetness || 0) > 0.5) this.act('wander');
+      else this.perform('dustbath');
+    } else if (PERFORM.has(kind)) {
+      this.perform(kind);
     } else if (kind === 'trail') {
       if (!this.walkTrail()) this.act('wander');
     } else if (kind === 'browse') {
@@ -1153,6 +1196,111 @@ class Dino {
     return true;
   }
 
+  // ---------------------------------------------------------------- idles without clips
+  perform(kind, opts = {}) {
+    const len = { yawn: 2.8, rub: 6 + rand() * 3, dustbath: 7 + rand() * 3, scratch: 3.2, shake: 1.7 }[kind];
+    this.perf = { kind, t: 0, len, side: rand() < 0.5 ? -1 : 1, ...opts };
+    if (kind === 'rub') {
+      // turn so the trunk is at the flank
+      const a = Math.atan2(opts.trunk.x - this.pos.x, opts.trunk.z - this.pos.z);
+      const c1 = a + Math.PI / 2, c2 = a - Math.PI / 2, d = (h) => Math.abs(Math.atan2(Math.sin(h - this.heading), Math.cos(h - this.heading)));
+      this.perf.h0 = this.heading;
+      this.perf.h1 = d(c1) < d(c2) ? c1 : c2;
+      this.perf.side = d(c1) < d(c2) ? -1 : 1; // which flank faces the trunk
+      this.rubTrunk = opts.trunk;
+    }
+    this.state = 'perform';
+    this.speed = 0;
+    this.path = null;
+    this.play(kind === 'dustbath' ? 'rest' : 'idle', 0.6);
+  }
+
+  // turn a bone about one of the animal's own axes ('x' across, 'y' up, 'z' forward), whatever the rig's
+  // local axes: positive x lowers the jaw and tips a limb backwards, positive z rolls to the left
+  turnBone(bone, axis, angle) {
+    if (!bone || !angle) return;
+    const rq = this.root.getWorldQuaternion(_tq1), bq = bone.getWorldQuaternion(_tq2);
+    _tv.set(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0).applyQuaternion(rq).applyQuaternion(bq.invert());
+    bone.rotateOnAxis(_tv.normalize(), angle);
+  }
+
+  // the motion of each, layered on the pose after the bends and feet (bones are restored each frame)
+  performFrame(dt) {
+    if (this.perf && this.state !== 'perform') (this.perf = null), (this.rubTrunk = null); // interrupted
+    if (!this.perf && this.rubTrunk && this.state !== 'walk') this.rubTrunk = null;
+    const P = this.perf;
+    if (!P) return;
+    const fx = this.flex, t = P.t, k = Math.min(1, t / Math.min(0.6, P.len * 0.25), (P.len - t) / Math.min(0.6, P.len * 0.25));
+    const env = Math.max(0, k), turn = (b, a, x) => this.turnBone(b, a, x);
+    const B = this._pfb || (this._pfb = (() => { const b = {}; this.model.traverse((o) => o.isBone && (b[o.name] = o)); return b; })());
+    if (P.kind === 'shake') {
+      // a wet-dog shake travelling down the body, drops flying off
+      const w = 2 * Math.PI * 7;
+      fx.spine.forEach((b, i) => turn(b, 'z', 0.1 * env * Math.sin(w * t - i * 0.7)));
+      fx.neck.forEach((b, i) => turn(b, 'z', 0.14 * env * Math.sin(w * t + 0.8 - i * 0.5)));
+      turn(B.head, 'y', 0.3 * env * Math.sin(w * t + 1.5));
+      fx.tail.forEach((b, i) => turn(b, 'y', 0.12 * env * Math.sin(w * t - 1 - i * 0.5)));
+      P.dropT = (P.dropT || 0) - dt;
+      if (P.dropT <= 0 && env > 0.3) {
+        P.dropT = 0.05;
+        const src = [...fx.spine, ...fx.neck][Math.floor(rand() * (fx.spine.length + fx.neck.length))];
+        if (src) this.mod.effects.spray(src.getWorldPosition(_kd), 3, 0.25 + this.length * 0.08, this.mod.ctx.terrain.height(this.pos.x, this.pos.z));
+      }
+    } else if (P.kind === 'yawn') {
+      // the head lifts, the jaw gapes slowly, eyes squeezed shut, then it closes
+      const g = Math.sin(Math.PI * Math.min(1, t / P.len)) ** 0.7;
+      if (fx.neck[0]) turn(fx.neck[0], 'x', -0.15 * g);
+      turn(B.head, 'x', -0.3 * g);
+      turn(B.jaw, 'x', 0.6 * g);
+      this._yawnShut = g;
+    } else if (P.kind === 'rub') {
+      // turn side-on, then lean in and rub up and down the trunk; the tree shakes
+      const tw = Math.min(1, t / 0.9), e = tw * tw * (3 - 2 * tw);
+      this.heading = P.h0 + Math.atan2(Math.sin(P.h1 - P.h0), Math.cos(P.h1 - P.h0)) * e;
+      const s = Math.sin(t * 2.1), lean = env * (0.5 + 0.5 * s);
+      fx.spine.forEach((b) => turn(b, 'z', -P.side * 0.06 * lean));
+      if (fx.neck[0]) turn(fx.neck[0], 'y', P.side * 0.3 * env);
+      const tr = P.trunk, dx = tr.x - this.pos.x, dz = tr.z - this.pos.z, d = Math.hypot(dx, dz) || 1;
+      const push = Math.max(0, d - tr.r - (this.sp.bodyR ?? 0.12) * this.k * 0.95) * lean * 0.8;
+      this.root.position.x += (dx / d) * push;
+      this.root.position.z += (dz / d) * push;
+      this.root.position.y += 0.012 * this.k * Math.sin(t * 4.2) * env;
+      this.mod.shakeTree?.(tr, lean);
+      P.leafT = (P.leafT || 0.8) - dt;
+      if (P.leafT <= 0 && env > 0.5) {
+        P.leafT = 1.2 + rand();
+        this.mod.effects.leafBurst(new Vector3(tr.x, tr.crownY + (tr.top ? (tr.top - tr.crownY) * 0.3 : 0.2), tr.z), 2 + Math.floor(rand() * 3));
+      }
+    } else if (P.kind === 'dustbath') {
+      // lying down, it rolls onto one side and back, kicking up dust, and comes up dusty
+      const roll = P.side * 0.5 * env * (0.6 + 0.4 * Math.sin(t * 1.3));
+      this.root.rotateZ(roll);
+      this.root.position.y += Math.abs(roll) * this.height * 0.08;
+      P.dustT = (P.dustT || 0) - dt;
+      if (P.dustT <= 0 && env > 0.2) {
+        P.dustT = 0.22;
+        const a = rand() * Math.PI * 2, r = this.length * 0.3;
+        this.mod.effects.dust(new Vector3(this.pos.x + Math.cos(a) * r, this.mod.ctx.terrain.height(this.pos.x, this.pos.z), this.pos.z + Math.sin(a) * r), this.length * 0.09);
+      }
+      const U = this.skinU;
+      if (U && env > 0.5) {
+        U.uMudLine.value = Math.max(U.uMudAmt.value > 0.05 ? U.uMudLine.value : 0, (this.hipHeight() / this.model.scale.x) * 1.3);
+        U.uMudAmt.value = Math.max(U.uMudAmt.value, 0.6);
+        U.uMudWet.value = Math.min(U.uMudWet.value, 0.05);
+      }
+    } else if (P.kind === 'scratch') {
+      // a hind foot swung up and out to scratch the flank in quick strokes, head turned to it, the body
+      // leaning onto the other three legs
+      const L = P.side > 0, g = env, th = B[L ? 'thighL' : 'thighR'], sh = B[L ? 'shinL' : 'shinR'];
+      fx.spine.forEach((b) => turn(b, 'z', (L ? -1 : 1) * 0.03 * g));
+      turn(th, 'x', -0.85 * g);
+      turn(th, 'z', (L ? 1 : -1) * 0.35 * g);
+      turn(sh, 'x', (0.9 + 0.3 * Math.sin(t * 20)) * g);
+      if (fx.neck[0]) turn(fx.neck[0], 'y', (L ? 1 : -1) * 0.45 * g);
+      turn(B.head, 'y', (L ? 1 : -1) * 0.3 * g);
+    }
+  }
+
   // the point `dist` further along the route from where the animal stands
   carrot(dist) {
     let px = this.pos.x, pz = this.pos.z, left = dist;
@@ -1176,7 +1324,9 @@ class Dino {
     // the route's corners instead of walking straight and pivoting at each one, so its body bends
     const look = Math.max(0.2, this.length * 0.45);
     const last = this.pathIdx >= this.path.length - 1;
-    if (d < (last ? Math.max(0.06, v * 0.25) : Math.max(0.06, v * 0.25, look * 0.6))) {
+    // (the last point counts as reached within a fraction of the body's length: a long animal with a
+    // limited turning circle would otherwise orbit a goal close by)
+    if (d < (last ? Math.max(0.06, v * 0.25, this.length * 0.12) : Math.max(0.06, v * 0.25, look * 0.6))) {
       this.pathIdx++;
       if (this.pathIdx >= this.path.length) {
         if (hunting) return void (this.path = null);
@@ -1443,6 +1593,148 @@ class Flyer {
     this.fishHold = 3.5;
   }
 
+  // ------------------------------------------------------------ perching
+  // Now and then a Pteranodon glides in to land on a big boulder, the cabin's ridge or the den rock: a
+  // curving approach that slows, a flare with a few wingbeats, then it folds its wings and stands on all
+  // fours as pterosaurs did (the folded wing finger swept back up along the body, the long hand bones as
+  // front legs). It preens and looks about, and leaves when its time is up or when something comes close.
+  planPerch() {
+    const spots = this.mod.perchSpots().filter((s) => !this.mod.dinos.some((o) => o !== this && o.perch && Math.hypot(o.perch.spot.x - s.x, o.perch.spot.z - s.z) < 0.6));
+    const T = this.mod.ctx.terrain, box = this.box, q = new Vector3();
+    for (let tries = 0; tries < 8 && spots.length; tries++) {
+      const s = spots[Math.floor(rand() * spots.length)];
+      const target = new Vector3(s.x, s.y, s.z), p0 = this.pos.clone();
+      const fwd = new Vector3(Math.sin(this.heading), 0, Math.cos(this.heading));
+      const app = target.clone().sub(p0).setY(0), dist = app.length();
+      if (dist < 1.6 || dist > 7) continue;
+      app.normalize();
+      const L = [p0, p0.clone().addScaledVector(fwd, dist * 0.4), target.clone().addScaledVector(app, -0.9).setY(Math.min(box.topY - 0.7, target.y + 0.55)), target.clone()];
+      let ok = true;
+      for (let i = 1; i < 24 && ok; i++) {
+        bez(L, i / 24, q);
+        if (Math.abs(q.x) > box.halfW - 0.5 || Math.abs(q.z) > box.halfD - 0.35 || q.y > box.topY - 0.3) ok = false;
+        else if (q.distanceTo(target) > 0.45 && q.y < Math.max(T.height(q.x, q.z), 0) + 0.25) ok = false;
+      }
+      if (!ok) continue;
+      this.perch = { spot: s, target, legs: L, u: 0, len: bezLen(L), face: Math.atan2(app.x, app.z), fold: 0 };
+      this.state = 'toPerch';
+      return true;
+    }
+    return false;
+  }
+
+  takeOff() {
+    const P = this.perch, box = this.box;
+    let h = this.heading;
+    // leave towards the open middle of the case if facing the glass
+    const t = P.target, ahead = (k) => new Vector3(t.x + Math.sin(h) * k, 0, t.z + Math.cos(h) * k);
+    if (Math.abs(ahead(2.4).x) > box.halfW - 0.8 || Math.abs(ahead(2.4).z) > box.halfD - 0.6) h = Math.atan2(-t.x, -t.z);
+    const f = new Vector3(Math.sin(h), 0, Math.cos(h));
+    P.legs = [t.clone(), t.clone().addScaledVector(f, 0.35).setY(t.y + 0.25), t.clone().addScaledVector(f, 1.5).setY(t.y + 1.0), t.clone().addScaledVector(f, 2.6).setY(Math.min(box.topY - 0.8, Math.max(t.y + 1.2, this.alt - 0.6)))];
+    P.len = bezLen(P.legs);
+    P.u = 0;
+    this.heading = h;
+    this.state = 'takeoff';
+    this.flapT = 2.5;
+    this.mod.voice.play('croak', this.root.position);
+  }
+
+  // the folded, standing pose: each wing and leg bone turned to point where it should (in the heading's
+  // frame), blended in by w; then the body set down so knuckles and toes rest on the perch
+  perchPose(w) {
+    if (w <= 0.001) return;
+    if (!this._pb) {
+      const b = {};
+      this.model.traverse((o) => o.isBone && (b[o.name] = o));
+      const chain = (side, names, dirs) => names.map((n, i) => ({ bone: b[n + side], kid: b[(names[i + 1] || (side === 'L' || side === 'R' ? '' : '')) + side] || b[n + side]?.children.find((c) => c.isBone), dir: dirs[i], sx: side === 'L' ? 1 : -1 }));
+      const arm = ['upperarm', 'forearm', 'hand', 'wingfinger1', 'wingfinger2'];
+      const armD = [[0.45, -0.45, -0.25], [0.15, -0.55, 0.6], [0.05, -0.98, 0.12], [0.12, 0.72, -0.68], [0.05, 0.3, -0.95]];
+      const leg = ['thigh', 'shin', 'meta'];
+      const legD = [[0.2, -0.85, 0.25], [0.08, -0.85, -0.45], [0, -0.25, 1]];
+      this._pb = { list: [...chain('L', arm, armD), ...chain('R', arm, armD), ...chain('L', leg, legD), ...chain('R', leg, legD)].filter((c) => c.bone && c.kid), b };
+    }
+    const h = this.heading, ch = Math.cos(h), sh = Math.sin(h);
+    const a = new Vector3(), c = new Vector3(), d = new Vector3(), qd = new Quaternion(), qw = new Quaternion(), qp = new Quaternion();
+    this.root.updateMatrixWorld(true);
+    for (const L of this._pb.list) {
+      const [x, y, z] = L.dir, X = x * L.sx;
+      d.set(X * ch + z * sh, y, -X * sh + z * ch).normalize();
+      L.bone.getWorldPosition(a);
+      L.kid.getWorldPosition(c);
+      qd.setFromUnitVectors(c.sub(a).normalize(), d);
+      L.bone.getWorldQuaternion(qw);
+      L.bone.parent.getWorldQuaternion(qp);
+      const local = qp.invert().multiply(qd.multiply(qw));
+      L.bone.quaternion.slerp(local, w);
+      L.bone.updateMatrixWorld(true);
+    }
+    // the wing finger and its membrane draw in tight as it folds (the skin can't really collapse, so the
+    // finger is drawn shorter instead)
+    const B = this._pb.b;
+    for (const n of ['wingfinger1L', 'wingfinger1R']) if (B[n]) B[n].scale.setScalar(1 - 0.55 * w);
+    for (const n of ['wingfinger2L', 'wingfinger2R']) if (B[n]) B[n].scale.setScalar(1 - 0.3 * w);
+    this.root.updateMatrixWorld(true);
+    // stand on the perch: the lowest knuckle or toe touches its top
+    let low = Infinity;
+    for (const n of ['wingfinger1L', 'wingfinger1R', 'toeL', 'toeR']) if (B[n]) low = Math.min(low, B[n].getWorldPosition(a).y);
+    if (low < Infinity && this.perch) this.root.position.y += (this.perch.target.y - low) * w;
+  }
+
+  perchStep(dt) {
+    const P = this.perch;
+    if (this.state === 'toPerch') {
+      P.u += (dt * 0.95 * (1 - 0.55 * P.u)) / P.len;
+      if (P.u > 0.65) this.flapT = Math.max(this.flapT, 0.4); // the flare: a few braking wingbeats
+      if (P.u >= 1) {
+        this.state = 'perch';
+        P.t = 14 + rand() * 30;
+        P.preen = 3 + rand() * 4;
+        this.pos.copy(P.target);
+        return;
+      }
+      bez(P.legs, Math.min(1, P.u), this.pos);
+      return;
+    }
+    if (this.state === 'perch') {
+      P.t -= dt;
+      const near = this.mod.walkers?.some((d) => Math.hypot(d.pos.x - P.target.x, d.pos.z - P.target.z) < 0.9);
+      if (P.t <= 0 || near || this.mod.tapped?.()) this.takeOff();
+      return;
+    }
+    // takeoff
+    P.u += (dt * 0.75 * (0.5 + P.u)) / P.len;
+    if (P.u >= 1) {
+      this.state = 'rejoin';
+      this.rejoin = { from: this.pos.clone(), vel: this.pos.clone().sub(this.prev).divideScalar(Math.max(dt, 1e-3)), t: 0 };
+      this.y = this.pos.y;
+      this.perch = null;
+      return;
+    }
+    bez(P.legs, Math.min(1, P.u), this.pos);
+  }
+
+  // preening and looking about while perched: now the neck sweeps round and the beak works along a wing
+  preen(dt) {
+    const P = this.perch, b = this._pb?.b;
+    if (!b) return;
+    P.preen -= dt;
+    if (P.preen <= 0 && !P.act) P.act = { t: 0, len: 2.2 + rand() * 1.5, side: rand() < 0.5 ? -1 : 1, kind: rand() < 0.6 ? 'preen' : 'look' };
+    const A = P.act;
+    if (!A) return;
+    A.t += dt;
+    const e = Math.sin(Math.PI * Math.min(1, A.t / A.len));
+    if (A.kind === 'preen') {
+      b.neck1?.rotateY(0.55 * A.side * e);
+      b.neck2?.rotateY(0.5 * A.side * e);
+      b.neck3?.rotateX(0.35 * e);
+      b.head?.rotateX(0.25 * e + 0.08 * Math.sin(A.t * 14) * e);
+    } else {
+      b.neck2?.rotateY(0.45 * A.side * e);
+      b.head?.rotateY(0.3 * A.side * e);
+    }
+    if (A.t >= A.len) (P.act = null), (P.preen = 2.5 + rand() * 5);
+  }
+
   update(dt, env) {
     if (this.fishHold !== undefined) {
       this.fishHold -= dt;
@@ -1456,6 +1748,8 @@ class Flyer {
     if (this.state === 'fly' && this.fishT <= 0) {
       this.fishT = this.planDive() ? 40 + rand() * 40 : 6;
     }
+    this.perchT = (this.perchT ?? 25 + rand() * 40) - dt;
+    if (this.state === 'fly' && this.perchT <= 0) this.perchT = this.planPerch() ? 70 + rand() * 60 : 8;
     // drift the circuit around the case now and then
     this.retarget -= dt;
     if (this.retarget < 0) {
@@ -1469,7 +1763,9 @@ class Flyer {
     this.a += (this.dir * this.speed * dt) / rMean;
     this.prev.copy(this.pos);
     const y0 = this.state === 'fly' ? this.y ?? 0 : this.pos.y;
+    const perching = this.state === 'toPerch' || this.state === 'perch' || this.state === 'takeoff';
     if (this.state === 'dive') this.diveStep(dt);
+    else if (perching) this.perchStep(dt);
     else if (this.state === 'rejoin') {
       const R = this.rejoin;
       R.t += dt;
@@ -1480,8 +1776,16 @@ class Flyer {
       if (k >= 1) this.state = 'fly';
     } else this.place(dt);
     if (this.state !== 'fly') this.y = this.state === 'rejoin' ? this.y : this.pos.y;
+    const standing = this.state === 'perch';
     const v = this.pos.clone().sub(this.prev);
-    if (dt > 0 && v.lengthSq() > 1e-10) {
+    if (standing) {
+      // perched: level, nose up, wings and legs folding in; flap/glide fade out
+      this.roll += (0 - this.roll) * Math.min(1, dt * 3);
+      this.pitch += (-0.5 - this.pitch) * Math.min(1, dt * 3);
+      this.flapW += (0 - this.flapW) * Math.min(1, dt * 3);
+      this.actions.flap?.setEffectiveWeight(this.flapW);
+      this.actions.glide?.setEffectiveWeight(1 - this.flapW);
+    } else if (dt > 0 && v.lengthSq() > 1e-10) {
       const h = Math.atan2(v.x, v.z);
       let dh = Math.atan2(Math.sin(h - this.heading), Math.cos(h - this.heading));
       this.heading += dh;
@@ -1501,6 +1805,14 @@ class Flyer {
     this.root.position.copy(this.pos);
     this.root.rotation.set(this.pitch, this.heading, this.roll, 'YXZ');
     this.mixer.update(dt);
+    // the fold blends in as it lands and out as it leaves
+    if (this.perch) {
+      const want = this.state === 'perch' ? 1 : this.state === 'toPerch' ? Math.max(0, (this.perch.u - 0.85) / 0.15) * 0.6 : Math.max(0, 1 - this.perch.u * 4);
+      this.perch.fold += (want - this.perch.fold) * Math.min(1, dt * (this.state === 'perch' ? 2.5 : 6));
+      this.perchPose(this.perch.fold);
+      if (this.state === 'perch') this.preen(dt);
+    }
+    faceEyes(this, dt, { shut: this.state === 'perch' && (env?.night || 0) > 0.6 ? 0.8 : 0 });
     if (rand() < dt * 0.015) this.mod.voice.play('croak', this.root.position);
   }
 }
@@ -1756,6 +2068,31 @@ class Dinosaurs {
     }
   }
 
+  // an animal rubbing against a trunk: its crown is pushed to and fro
+  shakeTree(t, amount) {
+    if (!t.top) return;
+    const H = t.top - t.y0, ph = (this.clock || 0) * 2.1;
+    (this._shake || (this._shake = [])).push({ x: t.x + Math.sin(ph) * 0.05, y: t.y0 + H * 0.85, z: t.z + Math.cos(ph) * 0.05, r: 0.08 + 0.12 * amount });
+  }
+
+  // places a Pteranodon can land: the tops of big boulders, the cabin's ridge, the den rock (heights found
+  // by casting down onto them)
+  perchSpots() {
+    if (this._perches) return this._perches;
+    const list = [], ray = new Raycaster(), hits = [this.rocks?.group, this.group.getObjectByName('den')].filter(Boolean);
+    const at = (x, z, kind) => {
+      ray.set(new Vector3(x, 8, z), new Vector3(0, -1, 0));
+      const h = ray.intersectObjects(hits, true)[0];
+      if (h && h.point.y > 0.3) list.push({ x, z, y: h.point.y + 0.005, kind });
+    };
+    for (const t of this.rocks?.tops || []) at(t.x, t.z, 'rock');
+    for (const B of this.solidBoxes || []) at((B.x0 + B.x1) / 2, (B.z0 + B.z1) / 2 + 0.3, 'den');
+    const lp = this.ctx.modules.life?.props, cab = this.ctx.terrain.shape?.CABIN;
+    if (lp?.ridgeY && cab) list.push({ x: cab.x, z: cab.z, y: lp.ridgeY + 0.01, kind: 'roof' });
+    const box = this.ctx.box;
+    return (this._perches = list.filter((s) => Math.abs(s.x) < box.halfW - 0.9 && Math.abs(s.z) < box.halfD - 0.7));
+  }
+
   // the water's surface height at (x, z), or null on dry ground
   waterSurface(x, z) {
     const g = this.nav;
@@ -1887,6 +2224,9 @@ class Dinosaurs {
       d.headBone.getWorldPosition(this._pv);
       pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: 0.12 * d.k });
     }
+    // trees being rubbed against sway (requests from the last frame)
+    for (const e of this._shake || []) pushers.push(e);
+    this._shake = [];
     this.flora.setPushers(pushers);
     this.branchPush(dt);
     this.lamps?.update(dt);
