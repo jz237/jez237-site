@@ -56,6 +56,14 @@ export class Nav {
       else c += Math.min(slope, 1.5) * 3;
       if (kind === SurfaceKind.Rock) c = y > 0.335 ? Infinity : c + 2;
       if (kind === SurfaceKind.Wood && y > 0.25) c = Infinity;
+      // Route the trunk around tall faces before the rig has to shove it away.
+      // Low risers and the sides of a climbable log remain available footholds.
+      for (let a = 0; a < 8 && Number.isFinite(c); a++) {
+        const angle = a * Math.PI / 4, px = x + Math.cos(angle) * .034, pz = z + Math.sin(angle) * .034;
+        const rise = surface.heightAt(px, pz) - y;
+        const limit = surface.kindAt(px, pz) === SurfaceKind.Wood ? .12 : .075;
+        if (rise > limit) c = Infinity;
+      }
       for (const o of obstacles) {
         const d = Math.hypot(x - o.x, z - o.z);
         if (d < o.r * 1.3) c += 6 * (1 - d / (o.r * 1.3));
@@ -87,6 +95,8 @@ export class Nav {
           // Connected regions use the same corner clearance as A* routes.
           if (dx && dz && (!Number.isFinite(this.cost[cz * this.nx + X]) || !Number.isFinite(this.cost[Z * this.nx + cx]))) continue;
           const kk = Z * this.nx + X;
+          if (!this.canTraverse(this.x0 + cx * this.cell, this.z0 + cz * this.cell, this.x0 + X * this.cell, this.z0 + Z * this.cell)) continue;
+          if (!this.canTraverse(this.x0 + X * this.cell, this.z0 + Z * this.cell, this.x0 + cx * this.cell, this.z0 + cz * this.cell)) continue;
           if (this.region[kk] < 0 && Number.isFinite(this.cost[kk])) {this.region[kk] = id; stack.push(kk);}
         }
       }
@@ -127,6 +137,11 @@ export class Nav {
   walkable(x: number, z: number) {
     const k = this.idx(x, z);
     return k >= 0 && Number.isFinite(this.cost[k]);
+  }
+  /** A foothold-sized step is climbable; a tall ledge requires another route. */
+  canTraverse(ax: number, az: number, bx: number, bz: number) {
+    const rise = this.surface.heightAt(bx, bz) - this.surface.heightAt(ax, az);
+    return rise <= .036 && rise >= -.040;
   }
   /** Walkable and in the lizard's home region. */
   reachable(x: number, z: number) {
@@ -170,6 +185,7 @@ export class Nav {
       const t = i / n;
       const k = this.idx(ax + (bx - ax) * t, az + (bz - az) * t);
       if (k < 0 || !Number.isFinite(this.cost[k]) || this.cost[k] > maxCost) return false;
+      if (i > 0 && !this.canTraverse(ax + (bx - ax) * (i - 1) / n, az + (bz - az) * (i - 1) / n, ax + (bx - ax) * t, az + (bz - az) * t)) return false;
     }
     return true;
   }
@@ -233,6 +249,7 @@ export class Nav {
         if (x < 0 || z < 0 || x >= this.nx || z >= this.nz) continue;
         const k = z * this.nx + x;
         if (closed[k] || !Number.isFinite(this.cost[k])) continue;
+        if (!this.canTraverse(this.x0 + cx * this.cell, this.z0 + cz * this.cell, this.x0 + x * this.cell, this.z0 + z * this.cell)) continue;
         // no cutting diagonally past a blocked corner
         if (dx && dz && (!Number.isFinite(this.cost[cz * this.nx + x]) || !Number.isFinite(this.cost[z * this.nx + cx]))) continue;
         const t = gScore[cur] + w * (this.cost[k] + this.cost[cur]) * 0.5;

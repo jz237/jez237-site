@@ -32,6 +32,7 @@ export class TailContacts implements TailCollision {
   private sampleBefore = new THREE.Vector3();
   private sampleNormal = new THREE.Vector3();
   private sampleCorrection = new THREE.Vector3();
+  private segmentNormal = new THREE.Vector3();
 
   constructor(meshes: THREE.Mesh[], private floor: (x: number, z: number) => number) {
     this.solids = meshes.map(mesh => {
@@ -149,6 +150,7 @@ export class TailContacts implements TailCollision {
           contact = this.touchesSolid = true;
         }
       }
+      let deepest = 0, weightA = 0, weightB = 0;
       solid.tree.shapecast({
         intersectsBounds: box => box.intersectsBox(this.box),
         intersectsTriangle: triangle => {
@@ -159,19 +161,32 @@ export class TailContacts implements TailCollision {
           this.direction.subVectors(this.axisPoint, this.surfacePoint);
           if (distance > 0.000001) this.direction.divideScalar(distance);
           else triangle.getNormal(this.direction);
+          triangle.getNormal(this.faceNormal);
+          if (this.direction.dot(this.faceNormal) < -.00001 && solid.box.containsPoint(this.axisPoint)) {
+            this.insideRay.set(this.axisPoint, this.insideDirection);
+            const exit = solid.tree.raycastFirst(this.insideRay, THREE.DoubleSide);
+            if (exit && exit.face!.normal.dot(this.insideDirection) > 0) this.direction.copy(this.faceNormal);
+          }
           const wa = pinnedA ? 0 : 1 - t, wb = t;
           const denominator = wa * (1 - t) + wb * t;
           if (denominator < 0.04) return false; // the pelvis is kinematic
           const correction = Math.min(0.025, (radius - distance) / denominator);
-          a.addScaledVector(this.direction, correction * wa);
-          b.addScaledVector(this.direction, correction * wb);
-          this.line.set(a, b);
-          na.addScaledVector(this.direction, wa); nb.addScaledVector(this.direction, wb);
-          contact = true;
-          this.touchesSolid = true;
+          if (correction > deepest) {
+            deepest = correction; weightA = wa; weightB = wb; this.segmentNormal.copy(this.direction);
+          }
           return false;
         },
       });
+      if (deepest > 0) {
+        // One contact manifold correction per solid/pass avoids neighbouring
+        // triangles alternately kicking the same capsule in opposite directions.
+        a.addScaledVector(this.segmentNormal, deepest * weightA);
+        b.addScaledVector(this.segmentNormal, deepest * weightB);
+        this.line.set(a, b);
+        this.box.makeEmpty().expandByPoint(a).expandByPoint(b).expandByScalar(Math.max(ra, rb) + skin);
+        na.addScaledVector(this.segmentNormal, weightA); nb.addScaledVector(this.segmentNormal, weightB);
+        contact = this.touchesSolid = true;
+      }
     }
     if (contact) for (const t of [.25, .5, .75]) {
       // A bone can cross a narrow rim with both joints outside the solid. A

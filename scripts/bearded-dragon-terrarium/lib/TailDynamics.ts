@@ -10,11 +10,11 @@ export class TailDynamics {
   private normals: THREE.Vector3[];
   private root = new THREE.Vector3();
   private anchor = new THREE.Vector3();
-  private lastStep = 1 / 120;
   private delta = new THREE.Vector3();
   private velocity = new THREE.Vector3();
   private baseTarget = new THREE.Vector3();
   private time = 0;
+  private remainder = 0;
 
   constructor(readonly lengths: number[], readonly radii: number[], private collision: TailCollision) {
     this.points = lengths.map(() => new THREE.Vector3());
@@ -25,7 +25,7 @@ export class TailDynamics {
   }
 
   reset(root: THREE.Vector3, back: THREE.Vector3) {
-    this.root.copy(root); this.anchor.copy(root); this.lastStep = 1 / 120; this.time = 0;
+    this.root.copy(root); this.anchor.copy(root); this.time = 0; this.remainder = 0;
     let p = root;
     for (let i = 0; i < this.points.length; i++) {
       this.points[i].copy(p).addScaledVector(back, this.lengths[i]);
@@ -38,17 +38,21 @@ export class TailDynamics {
 
   update(dt: number, root: THREE.Vector3, back: THREE.Vector3, twitch: number) {
     if (!(dt > 0) || !Number.isFinite(dt)) return;
-    const steps = Math.max(1, Math.ceil(dt * 120)), h = dt / steps;
+    // A fixed physics clock keeps muscle/contact equilibrium independent of
+    // render timing. Variable substeps made a resting tail repeatedly resettle.
+    const h = 1 / 120, offset = h - this.remainder;
+    const elapsed = dt + this.remainder, steps = Math.floor((elapsed + 1e-10) / h);
+    this.remainder = Math.max(0, elapsed - steps * h);
     const start = this.root.clone();
     for (let s = 1; s <= steps; s++) {
       this.time += h;
       this.collision.beginStep?.();
-      this.anchor.lerpVectors(start, root, s / steps);
-      const drag = Math.exp(-4 * h), ratio = h / this.lastStep;
+      this.anchor.lerpVectors(start, root, Math.min(1, (offset + (s - 1) * h) / dt));
+      const drag = Math.exp(-9 * h);
       for (let i = 0; i < this.points.length; i++) {
         const p = this.points[i]; this.before[i].copy(p); this.normals[i].set(0, 0, 0);
-        this.velocity.subVectors(p, this.previous[i]).multiplyScalar(drag * ratio);
-        this.velocity.clampLength(0, 1.4 * h);
+        this.velocity.subVectors(p, this.previous[i]).multiplyScalar(drag);
+        this.velocity.clampLength(0, .8 * h);
         this.previous[i].copy(p); p.add(this.velocity); p.y -= 9.81 * h * h;
         if (twitch > 0 && i > 6) {
           const flick = Math.sin(this.time * 19 + i * 1.3) * twitch * .25 * h * h;
@@ -59,12 +63,13 @@ export class TailDynamics {
       this.contacts();
       for (let pass = 0; pass < 12; pass++) {
         // The thick base follows the hips; the thinner end has more freedom to sag.
-        this.points[0].lerp(this.baseTarget, this.collision.touchesSolid ? .04 : .12);
+        this.points[0].lerp(this.baseTarget, .12);
         for (let i = 0; i < this.points.length; i++) this.lengthConstraint(i);
         for (let i = this.points.length - 1; i >= 0; i--) this.lengthConstraint(i);
         for (let i = 0; i < this.points.length - 1; i++) {
           const a = i === 0 ? this.anchor : this.points[i - 1], b = this.points[i + 1];
-          const minimum = (this.lengths[i] + this.lengths[i + 1]) * (this.collision.touchesSolid ? .96 : .99);
+          const straightness = .991 - i * .0014;
+          const minimum = (this.lengths[i] + this.lengths[i + 1]) * straightness;
           this.delta.subVectors(b, a);
           const length = this.delta.length();
           if (length >= minimum || length < .000001) continue;
@@ -88,13 +93,15 @@ export class TailDynamics {
       }
       // Remove velocity into contacts and apply dry friction only where there is contact.
       for (let i = 0; i < this.points.length; i++) {
-        const n = this.normals[i]; if (n.lengthSq() < .000001) continue;
-        n.normalize(); this.velocity.subVectors(this.points[i], this.previous[i]);
-        this.velocity.addScaledVector(n, -Math.min(0, this.velocity.dot(n)));
-        this.velocity.multiplyScalar(Math.exp(-18 * h));
+        const n = this.normals[i];
+        this.velocity.subVectors(this.points[i], this.previous[i]).clampLength(0, .8 * h);
+        if (n.lengthSq() > .000001) {
+          n.normalize();
+          this.velocity.addScaledVector(n, -Math.min(0, this.velocity.dot(n)));
+          this.velocity.multiplyScalar(Math.exp(-24 * h));
+        }
         this.previous[i].copy(this.points[i]).sub(this.velocity);
       }
-      this.lastStep = h;
     }
     this.root.copy(root);
   }
