@@ -19,6 +19,10 @@
 //     crevices. Worked out per pixel from the skin's own bind-pose position, it sharpens in as the camera
 //     comes closer and fades out where a scale would be smaller than a few pixels (so far views neither
 //     shimmer nor pay for it).
+//   - flesh in motion: the belly, the throat and the mass of the thighs are soft (aSoft, found from the
+//     bone each vertex hangs from and which way it faces) and are moved by per-animal springs that lag
+//     behind the body as it speeds up, slows, turns and lands each foot; the ribcage swells with each
+//     breath; the muscle at the top of each leg bunches as the leg swings.
 // Also kept per model, for weather.js: the nostril and snout-tip vertices (breath) and a spread of the
 // lowest, downward-facing vertices (chin, throat, belly, tail underside) where water drips from.
 // Eyes: a lid of skin closes over the eyeball (blinks, drowsy half-closed, shut in sleep) and the
@@ -161,11 +165,56 @@ export function prepareSkinGeometry(mesh) {
   for (let i = 0; i < n; i++) if (N[i * 3 + 1] < -0.55) down.push(i);
   const dripIdx = [];
   for (let k = 0; k < 160 && down.length; k++) dripIdx.push(down[Math.floor((k * 7919) % down.length)]);
+  // soft flesh: x belly (under the trunk), y throat (under the neck and head), z thigh mass (the outer
+  // thigh), w the ribcage (the front of the trunk). Weighted by how much of the vertex the bone carries.
+  const soft = new Float32Array(n * 4);
+  const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  let tz0 = 1e9, tz1 = -1e9;
+  for (let i = 0; i < n; i++) if (/^(spine|pelvis)/.test(boneOf(mesh, i)?.name || '')) (tz0 = Math.min(tz0, P[i * 3 + 2])), (tz1 = Math.max(tz1, P[i * 3 + 2]));
+  for (let i = 0; i < n; i++) {
+    const name = boneOf(mesh, i)?.name || '', ny = N[i * 3 + 1], nx = N[i * 3];
+    let w = 0;
+    for (let c = 0; c < 4; c++) if (bones[si.getComponent(i, c)]?.name === name) w += sw.getComponent(i, c);
+    if (/^(spine|pelvis)/.test(name)) {
+      soft[i * 4] = sm(-0.15, -0.75, ny) * w;
+      const front = sm(0.45, 0.85, (P[i * 3 + 2] - tz0) / Math.max(1e-6, tz1 - tz0));
+      soft[i * 4 + 3] = front * (1 - Math.abs(ny) * 0.5) * w;
+    } else if (/^(neck|head)/.test(name)) soft[i * 4 + 1] = sm(-0.2, -0.8, ny) * w;
+    else if (/^thigh/.test(name)) soft[i * 4 + 2] = sm(0.2, 0.8, Math.abs(nx)) * w;
+  }
+  // smoothed over the surface (vertices at the same spot share one value, so seams don't open), so the
+  // soft regions fade out instead of ending at a bone boundary
+  {
+    const weld = new Map(), id = new Int32Array(n);
+    for (let i = 0; i < n; i++) {
+      const k = `${Math.round(P[i * 3] * 2e3)},${Math.round(P[i * 3 + 1] * 2e3)},${Math.round(P[i * 3 + 2] * 2e3)}`;
+      let v = weld.get(k);
+      if (v === undefined) weld.set(k, (v = weld.size));
+      id[i] = v;
+    }
+    const m = weld.size, idx = g.index ? g.index.array : null;
+    let cur = new Float32Array(m * 4);
+    for (let i = 0; i < n; i++) for (let c = 0; c < 4; c++) cur[id[i] * 4 + c] = Math.max(cur[id[i] * 4 + c], soft[i * 4 + c]);
+    const edges = [];
+    if (idx) for (let t = 0; t < idx.length; t += 3) for (const [a, b] of [[idx[t], idx[t + 1]], [idx[t + 1], idx[t + 2]], [idx[t + 2], idx[t]]]) edges.push(id[a], id[b]);
+    for (let it = 0; it < 4 && edges.length; it++) {
+      const sum = new Float32Array(cur), k = new Float32Array(m).fill(1);
+      for (let e = 0; e < edges.length; e += 2) {
+        const a = edges[e], b = edges[e + 1];
+        for (let c = 0; c < 4; c++) (sum[a * 4 + c] += cur[b * 4 + c]), (sum[b * 4 + c] += cur[a * 4 + c]);
+        k[a]++, k[b]++;
+      }
+      for (let v = 0; v < m; v++) for (let c = 0; c < 4; c++) sum[v * 4 + c] /= k[v];
+      cur = sum;
+    }
+    for (let i = 0; i < n; i++) for (let c = 0; c < 4; c++) soft[i * 4 + c] = cur[id[i] * 4 + c];
+  }
+  g.setAttribute('aSoft', new BufferAttribute(soft, 4));
   g.setAttribute('aBind', new BufferAttribute(P, 3)); // the bind pose in metres: mud, creases and veins stay put on the skin
   g.setAttribute('aThin', new BufferAttribute(thin, 1));
   g.setAttribute('aNeck', new BufferAttribute(neck, 1));
   g.setAttribute('aNos', new BufferAttribute(nos, 1));
-  return (g.userData.jtSkin = { nostrils, nostrilDepth: nr * 0.3 / perUnit, nosIdx, snoutIdx, dripIdx });
+  return (g.userData.jtSkin = { nostrils, nostrilDepth: nr * 0.3 / perUnit, nosIdx, snoutIdx, dripIdx, perUnit });
 }
 
 // the eyeballs: centre and radius of the ball each vertex belongs to (two balls, split by side)
@@ -239,6 +288,11 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uBend: { value: 0 }, // neck bend, 0..1
     uFlare: { value: 0 }, // nostril flare, 0..1
     uNosDepth: { value: info?.nostrilDepth || 0 }, // how deep a full flare dips, in stored units
+    uJig: { value: [new Vector3(), new Vector3(), new Vector3()] }, // belly, throat, thigh offsets (metres, model frame)
+    uBreath: { value: 0 }, // ribcage swell, metres
+    uLegFlex: { value: new Vector4() }, // bunching at the top of each leg (thigh L, R, upper arm L, R), metres
+    uLegIdx: { value: new Vector4(-1, -1, -1, -1) }, // their bone indices in the skeleton
+    uInvUnit: { value: 1 / (info?.perUnit || 1) }, // stored units per metre
     uWet: { value: 0 }, // 0..1 how wet the skin is (rain, a wade)
     uRain: { value: 0 }, // 0..1 rain falling on it now
   };
@@ -262,6 +316,12 @@ attribute float aThin;
 attribute float aNeck;
 attribute float aNos;
 attribute vec3 aBind;
+attribute vec4 aSoft;
+uniform vec3 uJig[3];
+uniform float uBreath;
+uniform vec4 uLegFlex;
+uniform vec4 uLegIdx;
+uniform float uInvUnit;
 uniform float uFlare;
 uniform float uNosDepth;
 varying float vThin;
@@ -273,7 +333,20 @@ varying vec3 vLocal;`)
   vLocal = aBind; // the bind pose, in metres: patterns stick to the skin as it moves`)
       // nostrils: the skin round each one dips in a little (flaring), in the bind pose before skinning
       .replace('#include <begin_vertex>', `#include <begin_vertex>
-  transformed -= normalize(objectNormal) * aNos * uFlare * uNosDepth;`);
+  transformed -= normalize(objectNormal) * aNos * uFlare * uNosDepth;
+  {
+    // soft flesh lagging the body, the ribcage breathing, the muscle at the top of each leg bunching
+    vec3 jn = normalize(objectNormal);
+    vec3 jd = uJig[0] * aSoft.x + uJig[1] * aSoft.y + uJig[2] * aSoft.z + jn * (uBreath * aSoft.w);
+    vec4 lw = vec4(0.0);
+    for (int c = 0; c < 4; c++) {
+      float bi = skinIndex[c], bw = skinWeight[c];
+      lw += bw * vec4(step(abs(bi - uLegIdx.x), 0.5), step(abs(bi - uLegIdx.y), 0.5), step(abs(bi - uLegIdx.z), 0.5), step(abs(bi - uLegIdx.w), 0.5));
+    }
+    // strongest where the leg's bone shares the vertex with the body: the muscle at the joint
+    jd += jn * dot(lw * (1.0 - lw) * 4.0, uLegFlex);
+    transformed += jd * uInvUnit;
+  }`);
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform vec3 uLightDir;

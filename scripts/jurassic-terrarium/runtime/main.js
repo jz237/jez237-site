@@ -96,6 +96,8 @@ import { BufferGeometry as BG3, BufferAttribute as BA3, DoubleSide as DS3 } from
 export const METRES_PER_UNIT = 5.5;
 const S = 1 / METRES_PER_UNIT;
 // The den: must match DEN in tools/build-page.mjs (the terrain shelf under it).
+const _jv = new Vector3(), _ja = new Vector3();
+const FLESH = Number(new URLSearchParams(location.search).get('flesh') ?? 1); // ?flesh=0 off, >1 exaggerated (testing)
 const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
 
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
@@ -239,6 +241,7 @@ class Dino {
     // heavier animals land harder; footfalls of the big ones raise dust and (close to the camera) a tremor
     this.feet.weight = Math.min(1.7, Math.max(0.35, Math.sqrt(this.length / 1.5)));
     this.feet.onPlant = (p, running) => {
+      if (this._jig) this._jig.kick += (running ? 9 : 5) * this.feet.weight; // the flesh drops as the foot lands
       mod.contact?.footprint(this, p, this.heading, !this.sp.predator);
       const T = mod.ctx.terrain;
       if (Math.max(T.lakeMask(p.x, p.z), T.riverMask(p.x, p.z)) > 0.35)
@@ -422,6 +425,67 @@ class Dino {
     this.root.updateMatrixWorld(true);
   }
 
+  // Flesh in motion (see skin.js): springs for the belly, the throat and the thigh mass, driven by the
+  // body's acceleration in its own frame (the flesh lags as it speeds up, slows and turns) and kicked
+  // down by each footfall; the ribcage swelling with each breath (deeper after a run); the muscle at the
+  // top of each leg bunching as the leg swings away from its rest pose. Sizes in metres of the animal.
+  flesh(dt) {
+    const U = this.skinU;
+    if (!U || dt <= 0) return;
+    const J = this._jig || (this._jig = {
+      x: [new Vector3(), new Vector3(), new Vector3()], v: [new Vector3(), new Vector3(), new Vector3()],
+      pv: new Vector3(), pp: this.root.position.clone(), legs: null, kick: 0,
+    });
+    const ws = this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x;
+    const Lm = this.info?.length || 6; // the body's length in the bind pose's metres (a hatchling shares its mother's)
+    // velocity and acceleration of the body, in metres, in its own frame (x side, y up, z forward)
+    const p = this.root.position, vel = _jv.copy(p).sub(J.pp).divideScalar(dt * ws);
+    J.pp.copy(p);
+    if (!J.started) (J.started = true), J.pv.copy(vel);
+    const acc = _ja.copy(vel).sub(J.pv).divideScalar(dt);
+    J.pv.copy(vel);
+    acc.clampLength(0, 12);
+    const h = this.heading, c = Math.cos(h), sn = Math.sin(h);
+    const ax = acc.x * c - acc.z * sn, az = acc.x * sn + acc.z * c, ay = acc.y;
+    // per group: stiffness, damping ratio, how far it may swing (fraction of the body's length)
+    const G = [[55, 0.28, 0.012], [80, 0.3, 0.008], [130, 0.35, 0.005]];
+    const kick = J.kick;
+    J.kick = 0;
+    for (let g = 0; g < 3; g++) {
+      const [k, z, lim] = G[g], x = J.x[g], v = J.v[g], w = Math.sqrt(k);
+      v.x += (-k * x.x - 2 * z * w * v.x - ax) * dt;
+      v.y += (-k * x.y - 2 * z * w * v.y - ay - kick * (g === 1 ? 0.6 : 1)) * dt;
+      v.z += (-k * x.z - 2 * z * w * v.z - az) * dt;
+      x.addScaledVector(v, dt);
+      // a soft end stop: past its reach the flesh is held back and loses its swing
+      if (x.length() > Lm * lim) x.setLength(Lm * lim), v.multiplyScalar(0.6);
+      U.uJig.value[g].copy(x).multiplyScalar(FLESH);
+    }
+    // breathing (the feet module keeps the breath, quicker and deeper after a run)
+    const F = this.feet;
+    U.uBreath.value = FLESH * Lm * 0.0028 * (1 + 2.2 * (F?.puff || 0)) * (0.5 + 0.5 * Math.sin(F?.breathT || 0));
+    // the legs: how far each has swung from its rest pose
+    if (!J.legs && this.skinMesh?.skeleton) {
+      const bones = this.skinMesh.skeleton.bones;
+      J.legs = ['thighL', 'thighR', 'upperarmL', 'upperarmR'].map((n) => {
+        const b = bones.find((o) => o.name === n);
+        return b ? { b, i: bones.indexOf(b), q0: b.quaternion.clone(), a: 0 } : null;
+      });
+      U.uLegIdx.value.set(...J.legs.map((l) => (l ? l.i : -1)));
+    }
+    if (J.legs) {
+      const out = [0, 0, 0, 0];
+      J.legs.forEach((l, i) => {
+        if (!l) return;
+        const dq = Math.min(1, Math.abs(l.b.quaternion.dot(l.q0)));
+        const ang = 2 * Math.acos(dq);
+        l.a += (ang - l.a) * Math.min(1, dt * 12);
+        out[i] = Math.min(1, Math.max(0, (l.a - 0.08) * 2.2)) * Lm * 0.006;
+      });
+      U.uLegFlex.value.set(...out.map((x) => x * FLESH));
+    }
+  }
+
   // A muzzle in the water: rings spread from it while it drinks; lifted, water runs off the chin
   drinkFx(dt) {
     const mod = this.mod, h = this.headBone;
@@ -488,6 +552,7 @@ class Dino {
       if (name === 'sniff') flare = 0.45 + 0.45 * Math.sin(t * 15);
       if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
       U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
+      this.flesh(dt);
       // the scales' relief, from metres in the bind pose to the view's units
       if (U.uScaleH.value > 0) U.uScaleH.value = (SCALES[this.sp.id]?.h ?? 0.012) * (this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x);
     }

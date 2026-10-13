@@ -239,3 +239,9 @@ v1.30: nights:
 - **Warm light on the animals:** after dark, the cabin's hearth glows out through its windows and lights animals passing close, warm and flickering, with a pool of firelight on the ground round the cabin. The jetty lantern does the same, and so do the lanterns along the footpath (the two with an animal nearest them). This is worked out in the animals' own skin shader, so the rest of the scene costs nothing extra.
 - **Eyeshine:** awake animals' eyes throw light back in the dark: amber for the T. rex, green for Triceratops, gold for Stegosaurus, blue for Brachiosaurus. It's brightest when they look straight at you and flares near a light. Shut eyes don't shine, so you'll mostly see it on the T. rex prowling at night.
 - **Lightning:** a strike rims every animal in hard cold light, darkens its near side and flares the painted sky behind it, so for an instant they stand out as silhouettes.
+
+v1.31: flesh in motion:
+- **Soft flesh:** each animal's belly, throat and the mass of its thighs are soft. They lag behind the body as it speeds up, slows and turns, drop and bounce back with each footfall (harder at a run and for the heavy animals), and settle when it stops. The soft regions are found from the bone each part of the skin hangs from and which way it faces, then blended smoothly into the rest of the body.
+- **Breathing:** the ribcage swells and falls with each breath, deeper and quicker after a run.
+- **Muscle:** the muscle at the top of each leg bunches as the leg swings away from rest.
+- `?flesh=0` turns it off for comparison (and `?flesh=3` exaggerates it).
