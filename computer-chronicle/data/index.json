@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-13",
+      "historicDate": "1985-01-07",
+      "displayDate": "Week of January 7-13, 1985",
+      "edition": "Issue 128 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "LAS VEGAS — Lower prices, new keyboards and telephone-line play crowd the winter show floor.",
+      "leadHeadline": "Atari challenges Macintosh with a $400–$600 ST family",
+      "storyHeadlines": [
+        "Commodore answers with the C128—and a portable proposal",
+        "Nintendo proposes an Advanced Video System for America",
+        "PlayNet puts C64 board games on the telephone line"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-07.png",
+      "thumb": "media/thumbs/1985-01-07.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-12",
       "historicDate": "1984-12-31",
       "displayDate": "Week of December 31, 1984-January 6, 1985",

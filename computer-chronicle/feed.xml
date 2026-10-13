@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 13 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 7-13, 1985 — Atari challenges Macintosh with a $400–$600 ST family</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-01-07</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-07</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Jack Tramiel puts a new 68000 computer family against the established names; software and delivery will decide the contest. Atari is taking aim at the price of personal computing. As Winter CES closes January 8, Jack Tramiel’s company is promoting an ST family announced at $400–$600. The demonstrations began over the preceding weekend; the quoted range is an announced computer price, not a complete system already sitting on a dealer’s shelf. Also this week: Commodore answers with the C128—and a portable proposal · Nintendo proposes an Advanced Video System for America · PlayNet puts C64 board games on the telephone line.</description>
+    </item>
     <item>
       <title>Week of December 31, 1984-January 6, 1985 — Atari shows a $599 512K ST, challenging the high-end divide</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-12-31</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-27</guid>
       <pubDate>Mon, 21 Sep 2026 12:00:00 GMT</pubDate>
       <description>The rescued Lorraine project promises vivid color, 32-bit ambition, and a fresh answer to Apple and Atari. Commodore International has agreed to acquire privately held Amiga Corporation, bringing one of the personal-computer industry’s most closely watched experimental machines under the company that made the VIC-20 and Commodore 64. Terms were not disclosed, but the purchase gives Commodore a dramatic new technology platform just as competition in home computing is being rearranged. Also this week: IBM&apos;s PC/AT Launch Echoes Through the Week · Home-Computer Games Move Beyond the Arcade Formula · Macintosh and PCjr Face the Review Bench.</description>
-    </item>
-    <item>
-      <title>Week of August 20-26, 1984 — IBM&apos;s PC/AT Pushes Personal Computing Into a New Generation</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-08-20</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-20</guid>
-      <pubDate>Sun, 20 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The 80286-powered 5170 brings a 16-bit expansion path, a 1.2MB floppy, larger storage, and prices beginning at $3,995. IBM&apos;s Personal Computer AT dominates the conversation as the week opens. Announced August 14, the machine type 5170 is built around Intel&apos;s 80286, with a 16-bit data path and 24-bit addressing. IBM says it performs more than twice as fast as current members of the PC family, a claim that marks a clean break from the original 8088 generation. Also this week: Software Becomes the Home-Computer Show&apos;s Main Event · Low-Cost Adapters Put Atari and Apple Owners on the Line · Infocom Sends Adventurers Diving for Treasure in Cutthroats.</description>
     </item>
   </channel>
 </rss>
