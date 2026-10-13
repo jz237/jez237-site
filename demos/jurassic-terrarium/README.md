@@ -148,3 +148,17 @@ v1.21:
 - Branches react to bodies. Monkey-puzzle, redwood, ginkgo, tree-fern and cycad branches part round a passing back, neck or head, shiver while it moves and are dragged its way. Heads in a crown sway the whole tree, and a body pushing through at pace shakes a few leaves loose. Conifer trunks are solid up through the crown.
 
 v1.21.1: the field guide minimises to a small pill (tap its heading; phones start minimised, and your choice is remembered). Minimised, it hides the Drop food and Photo mode row too.
+
+v1.22 (close-up skin and faces):
+
+- Light through thin skin. When the sun is behind them, Triceratops frills, Stegosaurus plates and Pteranodon wing membranes (veins and all) glow warm red-orange. They're found by measuring how thin each part of the model is, and only flat parts count, so cone tips stay dark.
+- Mud. Wading leaves the legs and belly muddy up to the water line, with flecks above it. It's near-black and glistening while wet, then dries to a pale crust and slowly wears off; rain washes it away sooner. Walking along muddy banks dirties the feet.
+- Neck creases deepen as the neck bends, and the sheen breaks up across the scales.
+- Faces:
+  - eyelids blink, sometimes twice;
+  - eyelids droop at night and close in sleep;
+  - eyes dart in small quick saccades towards whatever the animal is watching;
+  - nostrils flare with each breath, flutter on a sniff and open wide on a roar;
+  - the throat pulses while an animal calls;
+  - saliva strings between the T. rex's teeth as its jaws open on a roar, sagging and snapping one by one.
+- `?skindebug=1` shows the measured layers: thin skin red, mud green, neck blue.

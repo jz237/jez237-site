@@ -7,6 +7,52 @@
 import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3, Ray } from 'three';
 
 const _ka = new Vector3(), _kb = new Vector3(), _kc = new Vector3(), _kd = new Vector3();
+// Close-up dressing shared by walkers and flyers: the skin shader (light through thin skin, mud, creases,
+// sheen, nostrils) and the eyes (lids, saccades), each with its own uniforms on its own material copies
+function dress(owner) {
+  owner.model.traverse((o) => {
+    if (!o.isSkinnedMesh || !/_skin/.test(o.material?.name || '') || !o.geometry.userData.jtSkin) return;
+    if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
+    owner.skinU = skinUniforms(o.geometry.userData.jtSkin);
+    skinShader(o.material, owner.skinU, owner.mod.ctx.uniforms, { membrane: !!owner.sp.flyer });
+    owner.lidColour = o.geometry.userData.jtLid || (o.geometry.userData.jtLid = averageColour(o.material.map));
+  });
+  owner.model.traverse((o) => {
+    if (!o.isSkinnedMesh || !/_eye$/.test(o.material?.name || '') || !o.geometry.userData.jtEye) return;
+    if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
+    owner.eyeU = eyeUniforms(owner.lidColour?.clone().multiplyScalar(0.8));
+    eyeShader(o.material, owner.eyeU);
+  });
+}
+
+// lids and eyeballs: blinks (now and then a double), drowsy and shut lids, quick small saccades that lean
+// towards whatever the animal is watching
+function faceEyes(o, dt, { shut = 0 } = {}) {
+  const E = o.eyeU;
+  if (!E) return;
+  o._blinkT = (o._blinkT ?? 1 + rand() * 4) - dt;
+  if (o._blinkT <= 0) {
+    o._blinkPh = 0;
+    o._blinkT = rand() < 0.15 ? 0.3 : 2.5 + rand() * 5;
+  }
+  let b = shut;
+  if (o._blinkPh !== undefined) {
+    o._blinkPh += dt;
+    const p = o._blinkPh / 0.17;
+    if (p >= 1) o._blinkPh = undefined;
+    else b = Math.max(b, Math.sin(Math.PI * p));
+  }
+  E.uBlink.value += (b - E.uBlink.value) * Math.min(1, dt * (b > E.uBlink.value ? 40 : 14));
+  o._sacT = (o._sacT ?? 0) - dt;
+  if (o._sacT <= 0) {
+    o._sacT = 0.3 + rand() * 2.2;
+    o._eyeGoal = [MathUtils.clamp((rand() - 0.5) * 0.3 + (o._look?.yaw || 0) * 0.4, -0.22, 0.22), MathUtils.clamp((rand() - 0.5) * 0.12 + (o._look?.pitch || 0) * 0.3, -0.1, 0.1)];
+  }
+  const g = o._eyeGoal || [0, 0], e = E.uEyeRot.value, k = Math.min(1, dt * 30);
+  e.x += (g[0] - e.x) * k;
+  e.y += (g[1] - e.y) * k;
+}
+
 // distance in plan from (px, pz) to the segment a-b
 function segDist2D(px, pz, ax, az, bx, bz) {
   const ex = bx - ax, ez = bz - az, L = ex * ex + ez * ez;
@@ -29,7 +75,7 @@ import { Effects } from './effects.js';
 import { Ambience } from './ambience.js';
 import { Nest } from './nest.js';
 import { debugPanel } from './debug.js';
-import { guardWater } from './safety.js';
+import { guardWater, guardMaterial } from './safety.js';
 import { Atmosphere } from './atmosphere.js';
 import { Contact } from './contact.js';
 import { GroundCover } from './groundcover.js';
@@ -37,6 +83,8 @@ import { Interact } from './interact.js';
 import { Backdrop } from './backdrop.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
+import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms } from './skin.js';
+import { BufferGeometry as BG3, BufferAttribute as BA3, DoubleSide as DS3 } from 'three';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -134,6 +182,15 @@ class Dino {
           this.eyes = (this.eyes || []).concat(o.material);
         }
       }
+    });
+    for (const m of this.skins) m.userData.jtOwn = true;
+    for (const m of this.eyes || []) m.userData.jtOwn = true;
+    dress(this);
+    // the T. rex: saliva strung between its teeth when it roars
+    this.model.traverse((o) => {
+      const pairs = o.isSkinnedMesh && o.geometry.userData.jtStrands;
+      if (pairs?.length && !this.saliva)
+        this.saliva = new Saliva(o, pairs, { Mesh, BufferGeometry: BG3, BufferAttribute: BA3, MeshStandardMaterial, DoubleSide: DS3 }, guardMaterial, mod.ctx.scene);
     });
     // how far the body reaches in front of and behind its root (snout, tail tip), from the bind pose
     {
@@ -345,6 +402,51 @@ class Dino {
     this.root.updateMatrixWorld(true);
   }
 
+  // Skin and face, each frame: mud up to the water line (fresh and wet, then drying paler and slowly
+  // wearing off; rain washes it), neck creases with the bend, nostrils flaring with each breath, a sniff or
+  // a roar, the throat pulsing while it calls, and the eyes
+  skinFrame(dt) {
+    const U = this.skinU, mod = this.mod, T = mod.ctx.terrain, env = this._env || {};
+    const t = (this._ft = (this._ft || 0) + dt);
+    if (U) {
+      const sc = this.model.scale.x, g = T.height(this.pos.x, this.pos.z), sy = mod.waterSurface(this.pos.x, this.pos.z);
+      if (sy != null && sy > g + 0.004) {
+        const line = (sy - g) / sc + (this.speed > 0.05 ? 0.35 : 0.15) + (this.swimming ? 0.4 : 0);
+        U.uMudLine.value = U.uMudAmt.value > 0.05 ? Math.max(U.uMudLine.value, line) : line;
+        U.uMudAmt.value = 1;
+        U.uMudWet.value = 1;
+      } else {
+        U.uMudWet.value = Math.max(0, U.uMudWet.value - dt / 80);
+        U.uMudAmt.value = Math.max(0, U.uMudAmt.value - dt / ((env.rain || 0) > 0.3 ? 45 : 420));
+        // soft banks: the feet pick up mud as they walk
+        const bank = Math.max(T.lakeMask(this.pos.x, this.pos.z), T.riverMask(this.pos.x, this.pos.z));
+        if (bank > 0.06 && this.speed > 0.03) {
+          const foot = (this.hipHeight() / sc) * 0.28;
+          U.uMudLine.value = U.uMudAmt.value > 0.05 ? Math.max(U.uMudLine.value, foot) : foot;
+          U.uMudAmt.value = Math.max(U.uMudAmt.value, 0.75);
+          U.uMudWet.value = Math.max(U.uMudWet.value, 0.8);
+        }
+      }
+      const lk = this._look, bowed = /graze|drink|browse/.test(this.currentName || '') ? 0.75 : 0;
+      const bend = Math.min(1, Math.max(bowed, (lk ? Math.abs(lk.yaw) * 1.1 + Math.abs(lk.pitch) * 1.4 : 0) + Math.abs(this.yawRate) * 0.6));
+      U.uBend.value += (bend - U.uBend.value) * Math.min(1, dt * 3);
+      const name = this.currentName;
+      let flare = 0.18 + 0.22 * (0.5 + 0.5 * Math.sin(t * (this.speed > 0.2 ? 4.5 : 1.7)));
+      if (name === 'sniff') flare = 0.45 + 0.45 * Math.sin(t * 15);
+      if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
+      U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
+    }
+    // the throat pulses with each call
+    if ((this._callT || 0) > 0) {
+      this._callT -= dt;
+      const k = 1 + 0.08 * Math.sin(t * 17) * Math.min(1, this._callT * 3);
+      for (const b of this.flex.neck.slice(0, 2)) (b.scale.x *= k), (b.scale.y *= k);
+    }
+    const shut = this.state === 'sleep' ? 1 : this.state === 'shelter' ? 0.35 : this.state === 'idle' && (env.night || 0) > 0.4 ? 0.45 : 0;
+    faceEyes(this, dt, { shut });
+    if (this.saliva) this.saliva.update(dt, this.currentName === 'roar', mod.ctx.camera.position, this.model.scale.x, { x: Math.sin(this.heading), z: Math.cos(this.heading) });
+  }
+
   // Trunk guard: the routes keep the body clear of every trunk, but steering cuts corners, a turning body
   // swings its hips and tail, and a head dips to sniff. So, on the final pose, the body is tested as a
   // chain of capsules (each bone to its child, its radius measured from the skin bound to that bone),
@@ -477,6 +579,7 @@ class Dino {
 
   update(dt, env) {
     this.timer -= dt;
+    this._env = env;
     const mod = this.mod;
     const night = env.night > 0.6;
     // rain darkens and glosses the skin; it dries slowly afterwards
@@ -772,7 +875,7 @@ class Dino {
         turnRate: dh / dt,
         speed: moving ? this.speed : 0,
         segLen: this.segLen,
-        look: this.lookTarget(dt),
+        look: (this._look = this.lookTarget(dt)),
         calm: moving ? 0.35 : this.state === 'sleep' ? 0.15 : 1,
         gait: this.gaitWave(),
       });
@@ -781,6 +884,7 @@ class Dino {
       this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming, moving: stepping || this.state === 'turn' });
       this.keepOffTrunks();
       this.keepInside();
+      this.skinFrame(dt);
     }
     this.crop(dt);
     this.waterTouch(dt);
@@ -1192,6 +1296,7 @@ class Flyer {
         o.frustumCulled = false;
       }
     });
+    dress(this);
     this.mixer = new AnimationMixer(this.model);
     this.actions = {};
     for (const clip of gltf.animations) this.actions[clip.name] = this.mixer.clipAction(clip);
@@ -1410,6 +1515,14 @@ class Dinosaurs {
     this.layers = {};
     this.ready = false;
     this.voice = new Voices(ctx);
+    // which animal is calling: a vocal call sets that animal's throat pulsing
+    {
+      const play = this.voice.play.bind(this.voice), quiet = /^(step|crop|splash|croak)$/;
+      this.voice.play = (name, at, ...rest) => {
+        if (!quiet.test(name)) for (const d of this.dinos || []) if (d.root?.position === at) d._callT = 1.1;
+        return play(name, at, ...rest);
+      };
+    }
     this.lamps = params.get('lamps') === '0' ? null : new Lamps(ctx, { spots: (ctx.quality?.tier ?? 1) > 0 ? 3 : 1 });
     this.bolt = null;
     ctx.events?.on?.('lightning', (e) => {
@@ -1521,6 +1634,14 @@ class Dinosaurs {
           fetch(new URL(`${sp.id}.json`, base)).then((r) => r.json()),
         ]);
         (this.assets || (this.assets = {}))[sp.id] = { gltf, info };
+        // measure the skin (thickness, neck, nostrils) and the eyeballs once per model
+        gltf.scene.updateMatrixWorld(true);
+        gltf.scene.traverse((o) => {
+          if (!o.isSkinnedMesh) return;
+          if (/_skin/.test(o.material?.name || '')) prepareSkinGeometry(o);
+          else if (sp.id === 'trex' && /_tooth/.test(o.material?.name || '')) prepareTeeth(o);
+          else if (/_eye$/.test(o.material?.name || '')) prepareEyeGeometry(o);
+        });
         for (let i = 0; i < sp.count; i++) {
           const d = sp.flyer ? new Flyer(this, sp, info, gltf, i) : new Dino(this, sp, info, gltf, i);
           this.group.add(d.root);
