@@ -616,7 +616,7 @@ def build():
     b.meta = dict(
         name='Pteranodon longiceps', common='Pteranodon', length=round(length, 2), wingspan=round(span, 2),
         wingspan_bones=6.0, mass_t=0.03, sex='male',
-        voxel=0.006, jaw_open=JAW_OPEN, jaw_seal=0.0, faces=50000, tex=2048,
+        voxel=0.006, jaw_open=JAW_OPEN, jaw_seal=0.0, faces=50000, tex=4096,
         # osteo / osteo2: the wing membrane (see wing_shade): warm rufous, a dark chestnut trailing edge
         palette=dict(back='#4A4D52', flank='#E8E4DA', belly='#DEDBD3', pattern='#2A2B2E', accent='#B8432A',
                      accent2='#3A2420', keratin='#C9B78C', claw='#2A2622', mouth='#C46A4A', eye='#2B2420',

@@ -269,6 +269,14 @@ def stage_mesh():
             q = (P - np.asarray(c)) / np.asarray(r)
             fine = np.maximum(fine, s * np.clip(1.25 - np.linalg.norm(q, axis=1), 0, 1) * 2)
         fine = np.clip(fine, 0, 1)
+        # optional (meta 'fine_mask'): parts inside the zone that keep their own surface. 'hard' = the
+        # shader's smooth parts (keratin, mouth, claw, eye, osteo, tooth); 'accent' = display skin such
+        # as a frill. (The shader's fine scales replace the relief outright, smooth mask included.)
+        fm = meta.get('fine_mask', ())
+        if 'hard' in fm:
+            fine *= 1 - np.clip(mA.sum(1) + mB[:, 0] + mB[:, 1], 0, 1)
+        if 'accent' in fm:
+            fine *= 1 - np.clip(pat[:, 2] * 1.5, 0, 1)
         set_color_attr(high, 'mC', np.stack([fine, np.zeros_like(fine), np.zeros_like(fine), np.ones_like(fine)], 1))
     log('attributes')
     # UVs on the game mesh: anatomical seams, conformal unwrap, packed

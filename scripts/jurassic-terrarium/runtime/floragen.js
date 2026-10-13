@@ -400,20 +400,21 @@ const bark = (rnd, dark, light, mossy = 0.6) => {
     const v = (dark + (light - dark) * (0.2 + 0.35 * fibre + 0.2 * ring)) * (0.8 + rnd() * 0.35) * 0.55;
     b.setRGB(v * 1.2, v * 0.85, v * 0.55);
     const moss = mossy * Math.max(0, 1 - s * 3.2) * (0.6 + 0.4 * Math.sin(k * 6.3 + s * 20));
-    return b.clone().lerp(m, Math.max(0, moss));
+    // these are display (sRGB) colours; vertex colours are linear light
+    return b.clone().lerp(m, Math.max(0, moss)).convertSRGBToLinear();
   };
 };
 
-function rosette(rnd, H, { n, len, rise: [r0, r1], droop, pairs, pinna, cell, aoBase = 0.55, segs = 6 }) {
+function rosette(rnd, H, { n, len, rise: [r0, r1], droop, pairs, pinna, pinnaW = 0.3, cell, aoBase = 0.55, segs = 6, fiddle = true }) {
   const b = new Builder();
   const o = new Vector3();
   for (let i = 0; i < n; i++) {
     const yaw = (i / n) * Math.PI * 2 + (rnd() - 0.5) * 0.7;
     const L = H * len * (0.72 + rnd() * 0.5);
-    b.frond(o, { yaw, rise: r0 + (r1 - r0) * rnd(), droop: droop * (0.7 + rnd() * 0.6), length: L, segs, pairs, pinna, cell: rnd() < 0.5 ? cell : CELL.fernPinnaB, aoBase, ph: rnd() * 6.28, rnd, roll: (rnd() - 0.5) * 0.4 });
+    b.frond(o, { yaw, rise: r0 + (r1 - r0) * rnd(), droop: droop * (0.7 + rnd() * 0.6), length: L, segs, pairs, pinna, pinnaW, cell: rnd() < 0.5 ? cell : CELL.fernPinnaB, aoBase, ph: rnd() * 6.28, rnd, roll: (rnd() - 0.5) * 0.4 });
   }
   // a young fiddlehead or two in the middle
-  if (H > 0.08)
+  if (H > 0.08 && fiddle)
     for (let i = 0; i < 2; i++) {
       const a = rnd() * 6.28;
       b.card(new Vector3(Math.cos(a) * H * 0.05, 0, Math.sin(a) * H * 0.05), new Vector3(0, 1, 0), new Vector3(Math.cos(a), 0, Math.sin(a)), H * 0.45, H * 0.25, CELL.fiddle, 0.7, 0.4, rnd() * 6);
@@ -421,13 +422,16 @@ function rosette(rnd, H, { n, len, rise: [r0, r1], droop, pairs, pinna, cell, ao
   return b;
 }
 
-export function plantGeometry(kind, variant) {
+export function plantGeometry(kind, variant, { far = false } = {}) {
   const rnd = mulberry(1000 + variant * 97 + kind.length * 13);
   const H = BASE_H[kind];
   switch (kind) {
     case 'fern':
+      // far: the same plant shape, fewer and broader leaflets (stable when small on screen)
+      if (far) return rosette(rnd, H, { n: 11 + Math.floor(rnd() * 5), len: 1.35, rise: [0.5, 1.15], droop: 1.2, pairs: 5, pinna: 0.5, pinnaW: 0.55, cell: CELL.fernPinna, segs: 4, fiddle: false }).build();
       return rosette(rnd, H, { n: 11 + Math.floor(rnd() * 5), len: 1.35, rise: [0.5, 1.15], droop: 1.2, pairs: 14, pinna: 0.3, cell: CELL.fernPinna }).build();
     case 'fernlet':
+      if (far) return rosette(rnd, H, { n: 7 + Math.floor(rnd() * 3), len: 1.3, rise: [0.6, 1.2], droop: 1.05, pairs: 4, pinna: 0.52, pinnaW: 0.55, cell: CELL.fernPinna, segs: 3, fiddle: false }).build();
       return rosette(rnd, H, { n: 7 + Math.floor(rnd() * 3), len: 1.3, rise: [0.6, 1.2], droop: 1.05, pairs: 9, pinna: 0.32, cell: CELL.fernPinna, segs: 5 }).build();
     case 'redplant': {
       const b = new Builder();
@@ -509,14 +513,14 @@ export function plantGeometry(kind, variant) {
           }
           b.tube(bp, bp.map((_, j) => r * 0.35 * (1 - j * 0.18)), { color: bark(rnd, 0.25, 0.5, 0), sides: 4, t0: s * 0.6, t1: s * 0.6 + 0.35 });
           // branchlets: two rows of upturned scale-leaved shoots along the branch, plus one at the tip
-          for (let j = 1; j <= 7; j++) {
-            const u = j / 8, p = bp[Math.min(3, Math.floor(u * 4))].clone().lerp(bp[Math.min(4, Math.floor(u * 4) + 1)], (u * 4) % 1);
+          for (let j = 1; j <= 11; j++) {
+            const u = j / 12, p = bp[Math.min(3, Math.floor(u * 4))].clone().lerp(bp[Math.min(4, Math.floor(u * 4) + 1)], (u * 4) % 1);
             const along = bp[4].clone().sub(bp[0]).normalize();
             for (const sg of [-1, 1]) {
               const side = new Vector3().crossVectors(along, UPV).normalize().multiplyScalar(sg);
               const out = side.clone().multiplyScalar(0.75).addScaledVector(along, 0.45).add(new Vector3(0, 0.35, 0)).normalize();
               const L = reach * (0.42 - 0.18 * u);
-              b.card(p, out, new Vector3().crossVectors(out, UPV).normalize(), L, L * 0.38, CELL.araucaria, 0.5, s * 0.6 + 0.35 * u, rnd() * 6, s * 0.6 + 0.35 * u + 0.1);
+              b.card(p, out, new Vector3().crossVectors(out, UPV).normalize().lerp(UPV, 0.35).normalize(), L, L * 0.55, CELL.araucaria, 0.5, s * 0.6 + 0.35 * u, rnd() * 6, s * 0.6 + 0.35 * u + 0.1);
             }
           }
           const tipDir = bp[4].clone().sub(bp[3]).normalize();
@@ -576,7 +580,7 @@ export function vineGeometry(anchors, rnd) {
       pts.push(new Vector3(A.x + A.dx * u * L * 0.6 + Math.sin(u * 7 + A.ph) * L * 0.06, A.y - L * Math.sin(u * Math.PI * 0.55), A.z + A.dz * u * L * 0.6 + Math.cos(u * 6 + A.ph) * L * 0.05));
     }
     const n0 = b.p.length / 3;
-    b.tube(pts, pts.map((_, i) => 0.0022 * (1 - (i / segs) * 0.5)), { color: () => new Color(0.16, 0.24, 0.09), sides: 3, t0: 0.6, t1: 1.3 });
+    b.tube(pts, pts.map((_, i) => 0.0022 * (1 - (i / segs) * 0.5)), { color: () => new Color(0.16, 0.24, 0.09).convertSRGBToLinear(), sides: 3, t0: 0.6, t1: 1.3 });
     for (let i = 1; i <= segs * 3; i++) {
       const u = i / (segs * 3), p = pts[Math.floor(u * segs * 0.999)].clone().lerp(pts[Math.min(segs, Math.floor(u * segs) + 1)], (u * segs) % 1);
       const a = rnd() * 6.28, out = new Vector3(Math.cos(a), -0.3 + rnd() * 0.4, Math.sin(a)).normalize();

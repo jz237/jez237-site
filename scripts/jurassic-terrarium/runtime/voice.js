@@ -8,10 +8,26 @@ import { Vector3 } from 'three';
 
 const tmp = new Vector3();
 
+// Every call has several variants (pitch, length, vowel colour, number of syllables), picked at random
+// and never the same one twice in a row for that call, so no sound repeats identically.
+const VARIANTS = 5;
+
 export class Voices {
   constructor(ctx) {
     this.ctx = ctx;
     this.noiseBuf = null;
+    this.last = {};
+  }
+
+  // a variant for this call: pitch p, length d, formant shift f, syllables n, roughness r
+  vary(kind) {
+    let i;
+    do i = Math.floor(Math.random() * VARIANTS);
+    while (i === this.last[kind] && VARIANTS > 1);
+    this.last[kind] = i;
+    const u = i / (VARIANTS - 1); // 0..1 across the variants, plus a little random spread
+    const j = () => (Math.random() - 0.5) * 0.08;
+    return { i, p: 0.86 + 0.28 * u + j(), d: 1.15 - 0.3 * u + j(), f: 0.9 + 0.2 * ((i * 3) % VARIANTS) / (VARIANTS - 1) + j(), n: 1 + (i % 3), r: 0.7 + 0.6 * ((i * 2) % VARIANTS) / (VARIANTS - 1) };
   }
 
   get engine() {
@@ -155,29 +171,61 @@ export class Voices {
     const { gain, pan } = this.place(pos);
     const t0 = ac.currentTime + 0.03;
     const out = this.out(e, t0, gain, pan, kind === 'step' ? 0.08 : 0.3);
+    const V = this.vary(kind);
     switch (kind) {
-      case 'roar': // T. rex: a long, rasping open-mouthed growl over a sub-bass boom
-        this.growl(e, out, t0 + 0.35, 2.2, 62, 44, { formants: [330, 820], rasp: 0.9, level: 1.1 });
-        this.thump(e, out, t0 + 0.35, 38, 0.8, 1.6);
+      case 'roar': // T. rex: a long, rasping open-mouthed growl over a sub-bass boom (5 variants)
+        this.growl(e, out, t0 + 0.35, 2.2 * V.d, 62 * V.p, 44 * V.p, { formants: [330 * V.f, 820 * V.f], rasp: 0.9 * V.r, level: 1.1 });
+        this.thump(e, out, t0 + 0.35, 38 * V.p, 0.8, 1.6 * V.d);
+        if (V.n === 3) this.growl(e, out, t0 + 0.35 + 2.2 * V.d, 0.7, 50 * V.p, 40 * V.p, { formants: [300, 700], rasp: 0.6, level: 0.6 }); // a trailing huff
         break;
       case 'boom': // closed-mouth boom (T. rex, idle)
-        this.thump(e, out, t0, 42, 0.7, 1.8);
-        this.growl(e, out, t0, 1.6, 48, 40, { formants: [180, 420], rasp: 0.15, vib: 3, level: 0.5 });
+        this.thump(e, out, t0, 42 * V.p, 0.7, 1.8 * V.d);
+        this.growl(e, out, t0, 1.6 * V.d, 48 * V.p, 40 * V.p, { formants: [180 * V.f, 420 * V.f], rasp: 0.15, vib: 3, level: 0.5 });
+        break;
+      case 'stalk': // T. rex hunting: a low, close growl with breath
+        this.growl(e, out, t0, 1.3 * V.d, 40 * V.p, 36 * V.p, { formants: [210 * V.f, 520 * V.f], rasp: 0.55 * V.r, vib: 4, level: 0.55 });
+        this.snort(e, out, t0 + 1.0 * V.d, 1, 0.45);
+        break;
+      case 'snore': // a sleeping animal's slow breath: an in-breath hiss and a low out-breath
+        {
+          const s = this.noiseSrc(ac, t0, t0 + 2.4);
+          const g = this.env(ac, t0, 0.7 * V.d, 0.2, 0.6, 0.12 * Math.min(1.5, size * 0.4));
+          s.connect(this.bp(ac, 420 * V.f, 1.5)).connect(g).connect(out);
+          this.growl(e, out, t0 + 1.1 * V.d, 0.9 * V.d, 34 * V.p / Math.sqrt(size), 30 * V.p / Math.sqrt(size), { formants: [160, 380], rasp: 0.1, vib: 2, level: 0.18 });
+        }
+        break;
+      case 'contact': // herd contact call: a soft, nasal honk (ceratopsians, stegosaurs)
+      case 'answer':
+        for (let k = 0; k < (kind === 'answer' ? 1 + (V.n % 2) : V.n); k++)
+          this.growl(e, out, t0 + k * 0.42, 0.32 * V.d, (kind === 'answer' ? 118 : 104) * V.p / size, (kind === 'answer' ? 92 : 86) * V.p / size, { formants: [520 * V.f, 1250 * V.f], rasp: 0.2, vib: 7, level: 0.42 });
+        break;
+      case 'peep': // a hatchling: high, falling chirps
+        for (let k = 0; k < V.n + 1; k++) {
+          const t = t0 + k * (0.13 + Math.random() * 0.06);
+          const o = this.osc(ac, 'triangle', 900 * V.p, t, t + 0.16);
+          o.frequency.exponentialRampToValueAtTime(560 * V.p, t + 0.13);
+          const g = this.env(ac, t, 0.01, 0.03, 0.09, 0.22);
+          o.connect(this.bp(ac, 1500 * V.f, 1.2)).connect(g).connect(out);
+        }
+        break;
+      case 'purr': // a sauropod content while browsing: a long, very low rumble you feel more than hear
+        this.thump(e, out, t0, 30 * V.p, 0.45, 2.2 * V.d);
+        this.growl(e, out, t0 + 0.2, 1.8 * V.d, 40 * V.p, 34 * V.p, { formants: [200 * V.f, 470 * V.f], rasp: 0.1, vib: 2, level: 0.35 });
         break;
       case 'sniff':
         this.snort(e, out, t0 + 0.6, 4, 1.5);
         break;
       case 'grunt': // ceratopsian / stegosaur
-        this.growl(e, out, t0, 0.55, 95 / size, 80 / size, { formants: [420, 1100], rasp: 0.5, vib: 9, level: 0.6 });
+        this.growl(e, out, t0, 0.55 * V.d, (95 * V.p) / size, (80 * V.p) / size, { formants: [420 * V.f, 1100 * V.f], rasp: 0.5 * V.r, vib: 9, level: 0.6 });
         this.snort(e, out, t0 + 0.45, 1, 0.5);
         break;
       case 'bellow': // threat display
-        this.growl(e, out, t0, 1.3, 80, 62, { formants: [360, 900], rasp: 0.7, level: 0.9 });
+        this.growl(e, out, t0, 1.3 * V.d, 80 * V.p, 62 * V.p, { formants: [360 * V.f, 900 * V.f], rasp: 0.7 * V.r, level: 0.9 });
         this.snort(e, out, t0 + 1.2, 2, 0.6);
         break;
       case 'rumble': // sauropod: deep rumble with a nasal honk
-        this.thump(e, out, t0, 36, 0.8, 2.4);
-        this.growl(e, out, t0 + 0.3, 1.8, 58, 46, { formants: [240, 560], rasp: 0.2, vib: 2.5, level: 0.7 });
+        this.thump(e, out, t0, 36 * V.p, 0.8, 2.4 * V.d);
+        this.growl(e, out, t0 + 0.3, 1.8 * V.d, 58 * V.p, 46 * V.p, { formants: [240 * V.f, 560 * V.f], rasp: 0.2, vib: 2.5, level: 0.7 });
         break;
       case 'hiss':
         {
@@ -187,8 +235,8 @@ export class Voices {
         }
         break;
       case 'croak': // pterosaur call: short, raspy, falling
-        for (let i = 0; i < 2; i++)
-          this.growl(e, out, t0 + i * 0.32, 0.26, 420, 300, { formants: [900, 2100], rasp: 0.9, vib: 25, level: 0.9 });
+        for (let i = 0; i < 1 + V.n % 3; i++)
+          this.growl(e, out, t0 + i * 0.3 * V.d, 0.26 * V.d, 420 * V.p, 300 * V.p, { formants: [900 * V.f, 2100 * V.f], rasp: 0.9 * V.r, vib: 25, level: 0.9 });
         break;
       case 'splash': // a pterosaur's beak hitting the water: a slap, a spray and a low plop
         {

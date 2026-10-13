@@ -12,6 +12,7 @@ const M = new Matrix4(), Q = new Quaternion(), P = new Vector3(), S = new Vector
 
 // paint a geometry one colour (as vertex colour), optionally darkened by a function of position
 function tint(g, col, shade = () => 1) {
+  col = col.clone().convertSRGBToLinear(); // display colours -> linear vertex colours
   const p = g.attributes.position, c = new Float32Array(p.count * 3), v = new Vector3();
   for (let i = 0; i < p.count; i++) {
     v.fromBufferAttribute(p, i);
@@ -220,7 +221,7 @@ export class GroundCover {
         M.compose(P.set(p.x, T.height(p.x, p.z) + p.s * 0.2, p.z), Q.setFromEuler(E), S.set(p.s * (1 + rand() * 0.6), p.s * 0.55, p.s));
         im.setMatrixAt(i, M);
         const v = 0.3 + rand() * 0.35;
-        im.setColorAt(i, new Color(v * (1 + rand() * 0.2), v * (0.95 + rand() * 0.1), v * 0.9));
+        im.setColorAt(i, new Color(v * (1 + rand() * 0.2), v * (0.95 + rand() * 0.1), v * 0.9).convertSRGBToLinear());
       });
       im.receiveShadow = true;
       im.name = 'groundcover-pebbles';

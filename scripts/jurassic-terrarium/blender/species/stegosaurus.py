@@ -546,7 +546,7 @@ def build():
     # ------------------------------------------------------------------ metadata
     b.meta = dict(
         name='Stegosaurus stenops', common='Stegosaurus', length=LEN, mass_t=3.5,
-        voxel=0.01, jaw_open=JAW_OPEN, tail_split=-1.0, faces=60000, tex=2048,
+        voxel=0.01, jaw_open=JAW_OPEN, tail_split=-1.0, faces=60000, tex=4096,
         palette=dict(back='#6A5F45', flank='#8A7D5C', belly='#CFC3A0', pattern='#3F3829',
                      accent='#7E4A30', accent2='#CF8A50', keratin='#D8CBAE', claw='#2C2824', mouth='#8a5a50',
                      eye='#6B4A26'),

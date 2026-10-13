@@ -27,6 +27,7 @@ import { guardWater } from './safety.js';
 import { Atmosphere } from './atmosphere.js';
 import { Contact } from './contact.js';
 import { GroundCover } from './groundcover.js';
+import { Interact } from './interact.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -661,11 +662,53 @@ class Dino {
     }
     this.crop(dt);
     this.waterTouch(dt);
+    this.vocalize(dt);
     if (this.eyes) {
       const night = this.mod.ctx.modules.life?.env?.night ?? 0;
       for (const m of this.eyes) m.emissiveIntensity = 0.35 * night;
     }
     this.sounds(dt);
+  }
+
+  // calls tied to what the animal is doing (each call has several variants, never the same twice running)
+  vocalize(dt) {
+    const mod = this.mod, V = mod.voice, at = this.root.position, size = this.stepSize;
+    const T = (this._vt = this._vt || {});
+    const tick = (k, lo, hi) => {
+      T[k] = (T[k] ?? lo + rand() * (hi - lo)) - dt;
+      if (T[k] > 0) return false;
+      T[k] = lo + rand() * (hi - lo);
+      return true;
+    };
+    if (this.state === 'sleep') {
+      if (tick('snore', 4, 7.5)) V.play('snore', at, size);
+      return;
+    }
+    if (this.parent) {
+      // hatchlings peep; fast and often when they've lost their mother or are running
+      const m = this.parent, far = Math.hypot(m.pos.x - this.pos.x, m.pos.z - this.pos.z) > 1.5 || this.state === 'flee';
+      if (tick('peep', far ? 1.4 : 5, far ? 2.6 : 12)) {
+        V.play('peep', at, 1);
+        // she answers a lost one now and then (not every peep)
+        if (far && rand() < 0.3 && (m._answered ?? 0) < performance.now() - 6000) {
+          m._answered = performance.now();
+          mod.later(0.5 + rand() * 0.5, () => V.play('answer', m.root.position, m.stepSize));
+        }
+      }
+      return;
+    }
+    if (this.sp.predator) {
+      if (this.state === 'hunt' && tick('stalk', 3.5, 6)) V.play('stalk', at, size);
+      return;
+    }
+    if (this.currentName === 'browse' && tick('purr', 2.5, 4.5)) V.play('purr', at, size);
+    // herd contact calls, answered by a nearby herd mate
+    if (this.sp.herd && (this.state === 'idle' || this.state === 'walk') && tick('contact', 15, 40)) {
+      V.play('contact', at, size);
+      const mate = (mod.walkers || []).find((d) => d !== this && d.sp.id === this.sp.id && !d.parent && d.state !== 'sleep' &&
+        Math.hypot(d.pos.x - this.pos.x, d.pos.z - this.pos.z) < 4);
+      if (mate) mod.later(0.6 + rand() * 0.8, () => V.play('answer', mate.root.position, mate.stepSize));
+    }
   }
 
   // wading leaves a wake; drinking rings the water at the mouth
@@ -1225,6 +1268,8 @@ class Dinosaurs {
     }
     this.ready = true;
     this.guide = new Guide(this, SPECIES);
+    this.interact = new Interact(this, this.flora);
+    this.interact.mountButtons(this.guide.el);
     // the water's shaders can produce NaN/Inf pixels on some GPUs (bloomed into full-screen flashes)
     if (params.get('waterguard') !== '0') this.guarded = guardWater(this.ctx.scene);
     this.atmosphere = params.get('air') === '0' ? null : new Atmosphere(this.ctx, this);
@@ -1350,6 +1395,7 @@ class Dinosaurs {
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
     this.contact.update(dt);
+    this.interact?.update(dt);
     this.atmosphere?.update(dt);
     this.nest?.update(dt, (p, a) => this.hatchling(p, a));
     this.ambience.update(dt, env);

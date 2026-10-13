@@ -109,3 +109,10 @@ Detail pass (v1.15):
 - On the floor: fallen logs with moss and bracket fungi, mushroom clusters, leaf litter, pebbles along the banks.
 - Air: warm shafts of light from the lid lamps with dust turning in them, low haze between the trees, mist off the falls; at night faint moonbeams and fireflies over the pool.
 - Animals: 4K skin on the T. rex and Brachiosaurus, glassy wet eyes with eyeshine at night, soft contact shadows under bodies and feet, footprints in soft ground, ripples and wakes when they wade or drink, wet skin after wading.
+
+v1.17:
+
+- 4K skins on every animal; fine face scales on the Triceratops (behind the beak, round the eyes, the jaw), T. rex (snout, jaws, lips) and Brachiosaurus.
+- Distant ferns swap smoothly to a simpler version, so the full-detail leaflets don't shimmer from afar.
+- Voices: every call has five variants and never repeats twice running; herd contact calls answered by a herd mate, hatchling peeps (urgent when lost, and the mother answers), the T. rex's stalking growl, sleepers' breathing, the Brachiosaurus rumbling as it browses.
+- Things to do (in the field guide): Drop food, and the plant-eaters come to eat it bite by bite; tap the glass and nearby animals startle, the closest shy away and the T. rex may roar back; Photo mode for a slow, letterboxed, shallow-focus camera drifting round one animal after another (Esc or click to leave).

@@ -270,7 +270,15 @@ def build():
                      keratin='#2d2823', claw='#221e1a', mouth='#8f4545', eye='#c99a3b'),
         pattern=dict(kind='bands', count=17, start=-6.8, end=3.4, strength=0.85, mottle=0.4, low=-0.35, high=0.35),
         scales=dict(base=0.028, feature=0.07, border=0.18, folds=0.75, tubercle=0.09, tubercle_density=0.22,
-                    tubercle_from=0.35),
+                    tubercle_from=0.35, fine=0.013, fine_relief=1.4),
+        # fine polygonal scales on the snout, upper and lower jaw and lips; the skull roof and the brow
+        # keep the bigger scales (head in rest pose: animal-space x along the skull, z up). fine_relief is
+        # higher than the Brachiosaurus' 0.85 because the bump distance scales with the smaller base scale
+        # (0.028 m): at 0.85 the snout read flatter than the body-size scales it replaced
+        fine_zone=[((5.00, 0.0, 3.72), (0.42, 0.60, 0.38), 1.0),   # snout, nasals, front of the upper jaw
+                   ((4.35, 0.0, 3.62), (0.55, 1.00, 0.22), 1.0),   # upper jaw below the eye, upper lip
+                   ((4.55, 0.0, 3.28), (0.75, 1.00, 0.28), 1.0)],  # lower jaw and lower lip
+        fine_mask=('hard',),
         accent=[((4.05, 0.3, 3.62), (0.32, 0.12, 0.2), 0.45), ((4.05, -0.3, 3.62), (0.32, 0.12, 0.2), 0.45)],
         gait=dict(kind='biped', stride=3.6, duty=0.62, speed=1.4, bob=0.06, sway=0.05),
     )

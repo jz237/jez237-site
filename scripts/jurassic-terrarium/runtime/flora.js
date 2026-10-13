@@ -185,6 +185,7 @@ export class Flora {
 
   // ---------------------------------------------------------------- meshes
   async load() {
+    this.lods = [];
     this.plants = [];
     this.live = [];
     this.grid = new Map();
@@ -240,6 +241,25 @@ export class Flora {
         im.frustumCulled = false;
         im.name = `flora-${kind}-${vi}`;
         this.group.add(im);
+        // distant ferns: a simpler twin with the same instances; each plant crossfades between the two by
+        // its distance from the camera (aFar), sharing the wind and push bend
+        if (kind === 'fern' || kind === 'fernlet') {
+          const fg = plantGeometry(kind, vi, { far: true });
+          const farA = new InstancedBufferAttribute(new Float32Array(mine.length), 1);
+          farA.setUsage(DynamicDrawUsage);
+          geo.setAttribute('aFar', farA);
+          fg.setAttribute('aBend', attr);
+          fg.setAttribute('aFar', farA);
+          im.material = this.material(kind, { lod: 'near' });
+          const twin = new InstancedMesh(fg, this.material(kind, { lod: 'far' }), mine.length);
+          twin.instanceMatrix = im.instanceMatrix;
+          twin.instanceColor = im.instanceColor;
+          twin.receiveShadow = true;
+          twin.frustumCulled = false;
+          twin.name = `flora-${kind}-far-${vi}`;
+          this.group.add(twin);
+          this.lods.push({ farA, pos: mine.map((p) => [p.x, p.y, p.z]) });
+        }
       }
     }
     this.buildVines();
@@ -271,6 +291,10 @@ export class Flora {
   // How each kind moves. flex: wind bend (radians per unit of wind); give: how far a body can push it
   // aside (0 = not at all); curve: how the bend is spread up the plant (higher = stiff stem, supple top);
   // k: spring stiffness, i.e. how fast it swings back once released.
+  // full-detail ferns within this distance of the camera (units), fading to the simpler version over the band
+  static LOD_NEAR = 7.0;
+  static LOD_BAND = 3.0;
+
   static MOTION = {
     fern: { flex: 0.48, give: 1.0, curve: 1.3, k: 70 },
     fernlet: { flex: 0.56, give: 1.0, curve: 1.2, k: 90 },
@@ -332,6 +356,10 @@ uniform vec4 uShiver;
 attribute float aT;
 attribute float aPh;
 attribute float aTrunk;
+#if defined(LOD_NEAR) || defined(LOD_FAR)
+attribute float aFar;
+varying float vLod;
+#endif
 #ifdef VINE
 attribute vec3 aRoot;
 #else
@@ -352,21 +380,22 @@ attribute vec2 aBend;
   // Shaded like Weatherglass's foliage: frond atlas with alpha-to-coverage, ambient occlusion in the heart
   // of the plant (vertex colour), per-plant colour variation (instance colour), a soft glow when lit from
   // behind, and alpha kept up at a distance so canopies stay full instead of thinning and sparkling.
-  material(kind, { vine = false } = {}) {
+  material(kind, { vine = false, lod = null } = {}) {
     const tier = this.ctx.quality?.tier ?? 1;
     const m = new MeshStandardMaterial({
       map: this.atlas, vertexColors: true, roughness: 0.78, metalness: 0, side: DoubleSide,
       alphaTest: 0.5, alphaToCoverage: tier > 0, envMapIntensity: 0.55,
     });
     if (vine) m.defines = { VINE: 1 };
+    if (lod) m.defines = { ...(m.defines || {}), [lod === 'far' ? 'LOD_FAR' : 'LOD_NEAR']: 1 };
     m.onBeforeCompile = (sh) => {
       this.hookUniforms(sh);
       sh.vertexShader = sh.vertexShader
         .replace('#include <common>', '#include <common>\n' + this.head() + 'varying vec3 vFWorld;\nvarying float vTrunk;')
         .replace('#include <begin_vertex>', this.bendChunk(kind))
-        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = aTrunk;');
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = aTrunk;\n  #if defined(LOD_NEAR)\n  vLod = 1.0 - aFar;\n  if (aFar > 0.999) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);\n  #elif defined(LOD_FAR)\n  vLod = aFar;\n  if (aFar < 0.001) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);\n  #endif');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;')
+        .replace('#include <common>', '#include <common>\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;\n#if defined(LOD_NEAR) || defined(LOD_FAR)\nvarying float vLod;\n#endif')
         .replace('#include <map_fragment>', `
   if (vTrunk > 0.5) {
     // bark: the vertex colour is the albedo (brown, greening to moss towards the foot)
@@ -380,6 +409,9 @@ attribute vec2 aBend;
     float far = smoothstep(1.5, 3.0, lod);
     tx.rgb = mix(tx.rgb, soft.rgb, far);
     tx.a = clamp(mix(tx.a * (1.0 + lod * 0.32), soft.a * (1.0 + lod * 0.55), far), 0.0, 1.0);
+    #if defined(LOD_NEAR) || defined(LOD_FAR)
+    tx.a *= vLod; // crossfade between the near and far versions (alpha-to-coverage dissolves smoothly)
+    #endif
     diffuseColor *= tx;
   }`)
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;')
@@ -391,7 +423,7 @@ attribute vec2 aBend;
     reflectedLight.indirectDiffuse += diffuseColor.rgb * uLightColor * back * 0.28;
   }`);
     };
-    m.customProgramCacheKey = () => `jt-flora-${kind}${vine ? '-vine' : ''}`;
+    m.customProgramCacheKey = () => `jt-flora-${kind}${vine ? '-vine' : ''}${lod ? '-' + lod : ''}`;
     return m;
   }
 
@@ -405,6 +437,29 @@ attribute vec2 aBend;
     };
     m.customProgramCacheKey = () => `jt-flora-depth-${kind}`;
     return m;
+  }
+
+  // which ferns are near enough for the full-detail version: by distance from the camera, with a fade band
+  updateLod() {
+    if (!this.lods?.length) return;
+    this._lodN = ((this._lodN || 0) + 1) % 4;
+    if (this._lodN) return;
+    const c = this.ctx.camera.position;
+    const near = Flora.LOD_NEAR, band = Flora.LOD_BAND;
+    for (const L of this.lods) {
+      const a = L.farA.array;
+      let changed = false;
+      for (let i = 0; i < a.length; i++) {
+        const p = L.pos[i];
+        const d = Math.hypot(p[0] - c.x, p[1] - c.y, p[2] - c.z);
+        const f = Math.min(1, Math.max(0, (d - near) / band));
+        if (Math.abs(f - a[i]) > 0.02 || (f !== a[i] && (f === 0 || f === 1))) {
+          a[i] = f;
+          changed = true;
+        }
+      }
+      if (changed) L.farA.needsUpdate = true;
+    }
   }
 
   // a roar at (x, z): plants within r shiver, fading out
@@ -496,6 +551,7 @@ attribute vec2 aBend;
     const U = this.uniforms;
     U.uFTime.value += dt;
     this.simulate(dt);
+    this.updateLod();
     // the prevailing wind swings slowly round
     const wa = 0.35 + 0.5 * Math.sin(U.uFTime.value * 0.031) + 0.25 * Math.sin(U.uFTime.value * 0.083);
     U.uFWindDir.value.set(Math.cos(wa), Math.sin(wa));

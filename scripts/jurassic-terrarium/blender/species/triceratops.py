@@ -37,6 +37,13 @@ def sksec(s, h, w, top, bot=None, nt=2.0, nb=2.0):
     return sec(sk(s, h), w, top, bot, nt, nb)
 
 
+# fine face scales (meta fine_zone): skull-frame (s, h) centres, axis-aligned animal-space radii
+FINE_ZONE = [(sk(1.15, -0.02).tolist(), (0.30, 0.40, 0.36), 1.0),   # snout behind the beak, nostrils
+             (sk(0.70, 0.00).tolist(), (0.38, 0.75, 0.50), 1.0),    # mid face: cheeks, eyes, nasal-horn base
+             (sk(0.30, -0.05).tolist(), (0.28, 0.75, 0.50), 1.0),   # jugal flare, forehead
+             (sk(0.75, -0.42).tolist(), (0.55, 0.65, 0.22), 1.0)]   # lower jaw
+
+
 # ---------------------------------------------------------------------- helpers
 class FrillShell(sdf.Prim):
     """A thin shell flaring backwards like a funnel: the ceratopsid frill.
@@ -523,13 +530,18 @@ def build():
     # ------------------------------------------------------------------ metadata
     b.meta = dict(
         name='Triceratops prorsus', common='Triceratops', length=8.5, mass_t=8.0,
-        voxel=0.012, jaw_open=JAW_OPEN, tail_split=-1.0, faces=60000, tex=2048,
+        voxel=0.012, jaw_open=JAW_OPEN, tail_split=-1.0, faces=60000, tex=4096,
         palette=dict(back='#5d5240', flank='#806f55', belly='#c9ba9c', pattern='#3f362b', accent='#8c4b2e',
                      accent2='#a35c37', keratin='#332b24', claw='#4a4136', mouth='#5a3a33', eye='#5a3b22',
                      osteo='#d4c4a0'),
         accent_grad=[1.9, 2.6],  # the frill's rust warms a little towards its top
         pattern=dict(kind='bands', count=11, start=-3.0, end=3.0, strength=0.6, mottle=0.35, low=-0.25, high=0.45),
-        scales=dict(base=0.045, feature=0.10, tubercle=0.17, tubercle_density=0.18, border=0.4, folds=0.5),
+        scales=dict(base=0.045, feature=0.10, tubercle=0.17, tubercle_density=0.18, border=0.4, folds=0.5,
+                    fine=0.013, fine_relief=0.85),
+        # the face between beak and frill (snout, cheeks, around the eyes, the jaw): fine polygonal scales.
+        # The zone is generous; the beak, horns and epijugals (keratin/osteo) and the frill (accent) are
+        # masked out of it per vertex, so they keep their own surface
+        fine_zone=FINE_ZONE, fine_mask=('hard', 'accent'),
         gait=dict(kind='quad', stride=2.7, duty=0.65, speed=1.1, offsets=(0.0, 0.25, 0.5, 0.75), gauge=0.9,
                   elbow_out=0.35, lift=0.14, bob=0.03, sway=0.03, tail=0.12, neck_graze=0.16, head_graze=0.14,
                   neck_browse=-0.12, run_speed=3.0, run_stride=3.6, run_duty=0.45, extra=['threat'], neck_rest=-0.35, neck_threat=0.05, head_threat=0.12, pitch_threat=0.02),
