@@ -196,3 +196,8 @@ v1.24.2:
 - **Weatherglass pines:** the Brachiosaurus gives them a wide berth, so its legs, neck and tail don't keep getting shoved off them as it passes (behind the cabin especially). It straddles low cycads.
 - **Standing animals:** one pressed off an obstacle takes a step away instead of sliding.
 - **Demo-page card:** a new image of the current terrarium.
+
+v1.24.3: phones and tablets (desktop unchanged):
+- **Smaller skins on phones and tablets.** The cast's 4096 px skins need about 1.3 GB of graphics memory, more than a phone has; running out lost the WebGL context and Chrome then blocked WebGL on the page ("Error creating WebGL context"). On phones and tablets each skin is now shrunk to 2048 px as it loads (1024 px on devices with 4 GB of RAM or less), one species at a time. `?skins=1024|2048` forces a size and `?skins=4096` full size.
+- **No reload loop.** On phones and tablets a lost WebGL context no longer reloads the page automatically; it shows a message with a reload and a lighter reload (`?quality=low&skins=1024`).
+- **Plain-words message.** When a phone or tablet browser won't provide WebGL 2 at all, the page explains what happened and what to do instead of showing the raw three.js error.

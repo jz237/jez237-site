@@ -61,6 +61,7 @@ function segDist2D(px, pz, ax, az, bx, bz) {
   return Math.hypot(px - ax - ex * u, pz - az - ez * u);
 }
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { skinCap, capLoaderTextures } from './skincap.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { NavGrid, fords } from './nav.js';
@@ -1935,7 +1936,9 @@ class Dinosaurs {
   }
 
   async load() {
-    const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+    // phones and tablets get smaller skins, loaded one species at a time (see skincap.js)
+    const cap = skinCap(this.ctx.quality, params);
+    const loader = capLoaderTextures(new GLTFLoader().setMeshoptDecoder(MeshoptDecoder), cap);
     const base = new URL('models/', document.baseURI);
     const floraReady = this.flora.load().catch((e) => console.warn('[flora] load failed', e));
     const denReady = loader
@@ -1957,8 +1960,7 @@ class Dinosaurs {
         this.solidBoxes = [{ x0: bb.min.x + 0.15, x1: bb.max.x - 0.15, z0: bb.min.z, z1: bb.max.z - 0.12, top: bb.max.y - 0.1 }];
       })
       .catch((e) => console.warn('[den] load failed', e));
-    await Promise.all(
-      SPECIES.filter((sp) => sp.ready).map(async (sp) => {
+    const loadSpecies = async (sp) => {
         const [gltf, info] = await Promise.all([
           loader.loadAsync(new URL(`${sp.id}.glb`, base).href),
           fetch(new URL(`${sp.id}.json`, base)).then((r) => r.json()),
@@ -1977,8 +1979,14 @@ class Dinosaurs {
           this.group.add(d.root);
           this.dinos.push(d);
         }
-      }),
-    );
+    };
+    const ready = SPECIES.filter((sp) => sp.ready);
+    if (cap) {
+      // one at a time, so only one model's full-size images are ever decoded at once
+      for (const sp of ready) await loadSpecies(sp);
+    } else {
+      await Promise.all(ready.map(loadSpecies));
+    }
     await floraReady;
     await denReady;
     this.predator = this.dinos.find((d) => d.sp.predator) || null;

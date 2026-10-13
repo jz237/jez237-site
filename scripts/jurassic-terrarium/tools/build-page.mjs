@@ -39,10 +39,22 @@ patch(
   '<div class="veil-title">Jurassic Terrarium</div><div class="veil-sub">hatching the Mesozoic…</div>',
   'veil',
 );
+// When the browser will not give us WebGL 2 at all (most often Chrome blocking it on the page after the
+// GPU ran out of memory on an earlier visit), phones and tablets say so in plain words, with what to do,
+// instead of three.js's raw "Error creating WebGL context". Desktop and other errors keep the plain message.
 patch(
-  'Weatherglass could not start: ',
-  'Jurassic Terrarium could not start: ',
+  't.textContent="Weatherglass could not start: "+r.message',
+  '(/WebGL/.test(r.message)&&window.__jtNoGL&&window.__jtNoGL(t)||(t.textContent="Jurassic Terrarium could not start: "+r.message))',
   'fatal message',
+);
+// A lost WebGL context used to reload the page as soon as the browser restored it. When the loss came
+// from running out of graphics memory, the reload ran out again: a loop that ends with Chrome blocking
+// WebGL on the page. Now, on phones and tablets only, the page stops and offers a reload or a lighter reload
+// (low quality, small skins). Desktop keeps the old reload-on-restore unchanged.
+patch(
+  'r.addEventListener("webglcontextlost",T=>{T.preventDefault()},!1),r.addEventListener("webglcontextrestored",()=>location.reload(),!1)',
+  'r.addEventListener("webglcontextlost",T=>{T.preventDefault(),t.mobile&&window.__jtLost&&window.__jtLost()},!1),r.addEventListener("webglcontextrestored",()=>{t.mobile||location.reload()},!1)',
+  'no reload loop on context loss',
 );
 
 // On-screen names: the HUD title, the brass plaque on the case, and the coach-mark storage key.
@@ -174,10 +186,30 @@ if (!process.env.JT_TALL) {
   patch('n.preset(ki.get("cam")||"hero",!0)', 'n.preset(ki.get("cam")||"front",!0)', 'default view');
 }
 
+// The messages shown when WebGL 2 is unavailable or the context is lost (see the patches above). The
+// lighter link reloads with ?quality=low&skins=1024: the low tier and 1024 px dinosaur skins.
+const GL_HELP =
+  '<script>(function(){' +
+  'function lite(){var u=new URL(location.href);u.searchParams.set("quality","low");u.searchParams.set("skins","1024");return u.href}' +
+  'var B="display:inline-block;margin:12px 10px 0 0;padding:8px 14px;border-radius:8px;border:1px solid #ffd98a;color:#ffd98a;background:none;font:inherit;text-decoration:none;cursor:pointer";' +
+  'function show(el,html){var v=document.getElementById("veil");v&&(v.style.display="none");el.innerHTML=html;el.style.width="min(420px,calc(100vw - 32px))";el.style.display="block";el.style.pointerEvents="auto"}' +
+  'var M=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||typeof matchMedia=="function"&&matchMedia("(pointer: coarse)").matches&&navigator.maxTouchPoints>1&&Math.min(screen.width,screen.height)<900;' +
+  'window.__jtNoGL=function(el){if(!M)return!1;show(el,' +
+  '"<b>3D graphics are switched off in this browser right now.</b><br>' +
+  'Jurassic Terrarium needs WebGL 2. Browsers turn it off for a page after it runs out of graphics memory. ' +
+  'Close the browser completely (on a phone, swipe it away from recent apps), open it again and reload, or try another browser.<br>' +
+  '<a style=\\""+B+"\\" href=\\""+lite()+"\\">Reload the lighter version</a>");return!0};' +
+  'window.__jtLost=function(){var el=document.getElementById("fatal");el&&show(el,' +
+  '"<b>The 3D view stopped: the graphics chip ran out of memory.</b><br>' +
+  'The lighter version uses smaller dinosaur skins and less detail.<br>' +
+  '<a style=\\""+B+"\\" href=\\""+lite()+"\\">Reload the lighter version</a>' +
+  '<a style=\\""+B+"\\" href=\\"javascript:location.reload()\\">Reload</a>")}' +
+  '})()</script>';
+
 // Hold the veil while dinos.js loads its models. The hold is set before the bundle runs.
 patch(
   '<link rel="icon" href="favicon.svg" type="image/svg+xml">',
-  '<link rel="icon" href="favicon.svg" type="image/svg+xml"><script>window.__wgHold=1</script>',
+  '<link rel="icon" href="favicon.svg" type="image/svg+xml"><script>window.__wgHold=1</script>' + GL_HELP,
   'hold flag',
 );
 patch(
