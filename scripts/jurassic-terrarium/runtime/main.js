@@ -511,6 +511,7 @@ class Dino {
           const cell = grid.get(gx + di + ',' + (gz + dj));
           if (!cell) continue;
           for (const t of cell) {
+            if (t.kind === 'cycad' && this.sp.tooBig) continue; // stubby: a sauropod straddles them
             // closest point of the segment to the trunk's axis (in plan), and its height
             const ax = a.x + px, az = a.z + pz, bx = b.x + px, bz = b.z + pz;
             const ex = bx - ax, ez = bz - az, L = ex * ex + ez * ez;
@@ -544,8 +545,18 @@ class Dino {
         }
       }
     if (!px && !pz) return;
-    const m = Math.hypot(px, pz), cap = 0.08;
+    const m = Math.hypot(px, pz), walking = this.state === 'walk' || this.state === 'flee' || this.state === 'hunt';
+    const cap = walking ? 0.03 : 0.012;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
+    // standing and being pressed off something: take a step away rather than slide
+    if (!walking && this.state !== 'sleep' && this.state !== 'perform' && !this.parent) {
+      this._pressed = (this._pressed || 0) + m;
+      if (this._pressed > 0.03 * this.length) {
+        this._pressed = 0;
+        const t = this.layer.nearestOpen(this.pos.x + (px / m) * this.length * 0.25, this.pos.z + (pz / m) * this.length * 0.25);
+        if (t) this.goTo(t.x, t.z, null);
+      }
+    }
     this.pos.x += px;
     this.pos.z += pz;
     this.root.position.x += px;
@@ -1892,7 +1903,10 @@ class Dinosaurs {
     for (const sp of SPECIES.filter((s) => !s.flyer)) {
       const m = sp.den ? null : sp.tooBig ? 0.6 : 0.25; // (the body guard keeps necks off the rock itself)
       const blockRects = m === null ? [] : [{ x0: denRect.x0 - m, x1: denRect.x1 + m, z0: denRect.z0 - m, z1: denRect.z1 + m }];
-      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects, bodyR: sp.bodyR ?? 0.12 });
+      // a sauropod's legs, neck and tail sweep wide of its route: it gives Weatherglass's trees a wide berth
+      // (the cabin can't be: it stands in the way between two halves of its range)
+      const discs = sp.tooBig ? this.trunks.filter((t) => /^wg-/.test(t.kind)).map((t) => ({ x: t.x, z: t.z, r: t.r + (sp.bodyR ?? 0.12) + 0.55 })) : [];
+      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects, bodyR: sp.bodyR ?? 0.12, discs });
     }
     // the water surface over each wet cell of the route grid (the lake's level is read live; the stream's
     // surface is fixed), for animals that have to swim

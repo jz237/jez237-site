@@ -110,7 +110,8 @@ export class NavGrid {
   // A per-species view: bigger animals need clearance from blocked cells; deep water may be banned.
   // blockRects: extra no-go rectangles for this species only (the den is open to its owner alone)
   // bodyR: half the body's width; every trunk is kept that far off its bark, so dense groves are closed
-  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7, blockRects = [], bodyR = 0.1 } = {}) {
+  // discs: extra round no-go areas for this species only ({x, z, r})
+  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7, blockRects = [], bodyR = 0.1, discs = [] } = {}) {
     const n = this.nx * this.nz;
     const cost = new Float32Array(n);
     const rad = Math.ceil(clearance / this.cell);
@@ -132,6 +133,7 @@ export class NavGrid {
           if (x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1) cost[j * this.nx + i] = Infinity;
         }
     const trunk = (arr) => {
+      for (const c of discs) this._stampInto(arr, c.x, c.z, c.r);
       // a little more than the body guard needs, so a planned route never brushes a trunk
       for (const t of this.trunks) this._stampInto(arr, t.x, t.z, t.r + bodyR + (t.kind === 'stand' ? 0 : 0.04));
       return arr;

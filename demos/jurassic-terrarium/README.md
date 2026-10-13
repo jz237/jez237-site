@@ -190,3 +190,9 @@ v1.24.1: smooth legs:
 - Feet ease out of the hold when they lift off.
 - The walk clip slows right down to match a slow start, rather than running ahead of the body.
 - Standing feet stay planted during a shake, a rub or a yawn.
+
+v1.24.2:
+- **Knees:** they no longer bend backwards. Sauropod legs are near-straight pillars, and the foot solver took the bend direction from the current pose, which flips on an almost straight leg. Knees now always bend forwards and elbows backwards.
+- **Weatherglass pines:** the Brachiosaurus gives them a wide berth, so its legs, neck and tail don't keep getting shoved off them as it passes (behind the cabin especially). It straddles low cycads.
+- **Standing animals:** one pressed off an obstacle takes a step away instead of sliding.
+- **Demo-page card:** a new image of the current terrarium.

@@ -40,12 +40,13 @@ export class Feet {
     for (const s of ['L', 'R']) {
       const thigh = bones.get(`thigh${s}`), shin = bones.get(`shin${s}`), meta = bones.get(`meta${s}`);
       const toe = bones.get(`toe${s}`);
-      if (thigh && shin && meta) this.legs.push({ a: thigh, b: shin, c: meta, contact: toe || meta, off: 0, liftMul: 2.3 });
+      // knee: hind knees bend forwards, elbows backwards (in the body's frame)
+      if (thigh && shin && meta) this.legs.push({ a: thigh, b: shin, c: meta, contact: toe || meta, off: 0, liftMul: 2.3, knee: 1 });
       const up = bones.get(`upperarm${s}`), fore = bones.get(`forearm${s}`), hand = bones.get(`hand${s}`);
       if (up && fore && hand) {
         // only forelimbs that walk: the wrist hangs near the ground in the rest pose
         const wy = root.worldToLocal(hand.getWorldPosition(new Vector3())).y;
-        if (wy < hipH * 0.4) this.legs.push({ a: up, b: fore, c: hand, contact: hand, off: 0, liftMul: 1.4 });
+        if (wy < hipH * 0.4) this.legs.push({ a: up, b: fore, c: hand, contact: hand, off: 0, liftMul: 1.4, knee: -1 });
       }
     }
     this.reach = hipH * 0.5; // the most a foot is moved up or down
@@ -170,12 +171,20 @@ export class Feet {
     _dir.subVectors(_t, _a);
     const d = Math.min(Math.max(_dir.length(), Math.abs(la - lb) + 1e-4), la + lb - 1e-4);
     _dir.normalize();
-    // the knee's plane, from the current pose
-    _n.crossVectors(_v1.subVectors(_c, _a), _v2.subVectors(_b, _a));
-    if (_n.lengthSq() < 1e-10) return;
-    _n.normalize();
-    _perp.crossVectors(_n, _dir).normalize();
-    if (_perp.dot(_v2) < 0) _perp.negate();
+    // which way the joint bends: the clip's own knee offset when it is clearly bent the right way,
+    // otherwise straight forwards (knees) or backwards (elbows) in the body's frame. Sauropod legs are
+    // near-straight pillars, and a plane taken from an almost straight leg flips at the slightest change:
+    // knees bending backwards.
+    _v2.subVectors(_b, _a);
+    _v1.subVectors(_c, _a);
+    const t = _v2.dot(_v1) / Math.max(1e-8, _v1.lengthSq());
+    const off = _v2.clone().addScaledVector(_v1, -t); // the knee's offset from the hip-ankle line
+    _n.set(0, 0, L.knee || 1).applyQuaternion(this.root.getWorldQuaternion(_qp)); // the way it should bend
+    if (off.length() > la * 0.12 && off.dot(_n) > 0) _perp.copy(off);
+    else _perp.copy(_n);
+    _perp.addScaledVector(_dir, -_perp.dot(_dir));
+    if (_perp.lengthSq() < 1e-10) return;
+    _perp.normalize();
     const cosA = Math.max(-1, Math.min(1, (la * la + d * d - lb * lb) / (2 * la * d)));
     const sinA = Math.sqrt(1 - cosA * cosA);
     const knee = _p.copy(_a).addScaledVector(_dir, la * cosA).addScaledVector(_perp, la * sinA);
