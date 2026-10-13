@@ -4,13 +4,19 @@
 // own loop (after the vegetation and wildlife, before the clouds). Models are rigged GLBs built in
 // Blender (scripts/jurassic-terrarium/blender); each comes with a JSON sidecar describing its size,
 // gait speeds and clips.
-import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3 } from 'three';
+import { Group, Object3D, Vector3, Quaternion, AnimationMixer, LoopOnce, LoopRepeat, MathUtils, Mesh, SphereGeometry, MeshStandardMaterial, Box3, Ray } from 'three';
 
 const _ka = new Vector3(), _kb = new Vector3(), _kc = new Vector3(), _kd = new Vector3();
+// distance in plan from (px, pz) to the segment a-b
+function segDist2D(px, pz, ax, az, bx, bz) {
+  const ex = bx - ax, ez = bz - az, L = ex * ex + ez * ez;
+  const u = L > 1e-10 ? Math.max(0, Math.min(1, ((px - ax) * ex + (pz - az) * ez) / L)) : 0;
+  return Math.hypot(px - ax - ex * u, pz - az - ez * u);
+}
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { NavGrid } from './nav.js';
+import { NavGrid, fords } from './nav.js';
 import { Guide } from './ui.js';
 import { Flora } from './flora.js';
 import { Voices } from './voice.js';
@@ -42,7 +48,7 @@ const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s
 // Species in the case. 'ready' species are loaded; the rest show in the field guide as hatching soon.
 const SPECIES = [
   {
-    id: 'trex', ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.035,
+    id: 'trex', bodyR: 0.19, ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.035,
     acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
@@ -51,7 +57,7 @@ const SPECIES = [
     fact: 'The strongest bite of any land animal. A 2023 study of teeth and jaws suggests scaly lips covered the teeth when the mouth was shut, as in lizards.',
   },
   {
-    id: 'triceratops', ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.05,
+    id: 'triceratops', bodyR: 0.18, ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.05,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
@@ -60,7 +66,7 @@ const SPECIES = [
     fact: 'Healed Tyrannosaurus bite marks have been found on Triceratops frills and horns: some survived the attacks.',
   },
   {
-    id: 'stegosaurus', ready: true, count: 2, clearance: 0.06, maxWater: 0.6, maxSlope: 0.3, herd: true,
+    id: 'stegosaurus', bodyR: 0.12, ready: true, count: 2, clearance: 0.06, maxWater: 0.6, maxSlope: 0.3, herd: true,
     acts: { wander: 3, graze: 4, drink: 1, alert: 1, tailswing: 1 },
     sounds: { alert: 'grunt', tailswing: 'hiss' }, step: 1.4, feet: [0, 0.25, 0.5, 0.75],
     common: 'Stegosaurus', badge: 'browser', dot: '#a5603a',
@@ -69,7 +75,7 @@ const SPECIES = [
     fact: 'Its 17 plates alternate in two rows. An Allosaurus tail bone has been found pierced by a Stegosaurus tail spike.',
   },
   {
-    id: 'brachiosaurus', ready: true, count: 1, clearance: 0.16, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.03,
+    id: 'brachiosaurus', bodyR: 0.16, ready: true, count: 1, clearance: 0.1, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.03,
     acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
@@ -326,6 +332,88 @@ class Dino {
       push = Math.max(push, ox, oz);
     }
     if (push <= 0) return;
+    this.pos.x += px;
+    this.pos.z += pz;
+    this.root.position.x += px;
+    this.root.position.z += pz;
+    this.root.updateMatrixWorld(true);
+  }
+
+  // Trunk guard: the routes keep the body clear of every trunk, but steering cuts corners, a turning body
+  // swings its hips and tail, and a head dips to sniff. So, on the final pose, the body is tested as a
+  // chain of capsules (each bone to its child, its radius measured from the skin bound to that bone),
+  // and if any capsule below a tree's crown reaches into a trunk, the animal slides straight off it.
+  buildCapsules() {
+    const caps = [], byBone = new Map();
+    this.root.updateMatrixWorld(true);
+    const v = new Vector3(), a = new Vector3(), b = new Vector3();
+    this.model.traverse((o) => {
+      if (!o.isBone || /claw|finger|eye/i.test(o.name)) return;
+      const kid = o.children.find((c) => c.isBone);
+      const cap = { a: o, b: kid || null, r: 0, d: [], dn: [] };
+      caps.push(cap);
+      byBone.set(o, cap);
+    });
+    // the skin round each bone: horizontal distance of its vertices from the bone's segment
+    this.model.traverse((m) => {
+      if (!m.isSkinnedMesh) return;
+      const si = m.geometry.attributes.skinIndex, sw = m.geometry.attributes.skinWeight, n = m.geometry.attributes.position.count;
+      for (let i = 0; i < n; i += 3) {
+        let best = 0, bw = -1;
+        for (let c = 0; c < 4; c++) if (sw.getComponent(i, c) > bw) (bw = sw.getComponent(i, c)), (best = si.getComponent(i, c));
+        const cap = byBone.get(m.skeleton.bones[best]);
+        if (!cap) continue;
+        m.getVertexPosition(i, v).applyMatrix4(m.matrixWorld);
+        cap.a.getWorldPosition(a);
+        if (cap.b) cap.b.getWorldPosition(b);
+        else b.copy(a);
+        cap.d.push(segDist2D(v.x, v.z, a.x, a.z, b.x, b.z));
+        cap.dn.push(Math.max(0, Math.min(a.y, b.y) - v.y)); // how far the skin hangs below the bone
+      }
+    });
+    const scale = this.model.scale.x;
+    for (const c of caps) {
+      c.d.sort((x, y) => x - y);
+      c.r = c.d.length ? c.d[Math.floor(c.d.length * 0.97)] / scale : 0; // per unit of model scale (horn tips included)
+      c.dn.sort((x, y) => x - y);
+      c.down = c.dn.length ? c.dn[Math.floor(c.dn.length * 0.97)] / scale : 0;
+      delete c.d;
+      delete c.dn;
+    }
+    this._caps = caps.filter((c) => c.r > 0);
+  }
+
+  keepOffTrunks() {
+    const grid = this.mod.trunkGrid;
+    if (!grid) return;
+    if (!this._caps) this.buildCapsules();
+    const scale = this.model.scale.x;
+    let px = 0, pz = 0;
+    for (const c of this._caps) {
+      const a = c.a.getWorldPosition(_ka), b = c.b ? c.b.getWorldPosition(_kb) : _kb.copy(a), r = c.r * scale, down = c.down * scale;
+      const gx = Math.floor((a.x + b.x) / 1.0), gz = Math.floor((a.z + b.z) / 1.0); // midpoint's 0.5 cell
+      for (let di = -1; di <= 1; di++)
+        for (let dj = -1; dj <= 1; dj++) {
+          const cell = grid.get(gx + di + ',' + (gz + dj));
+          if (!cell) continue;
+          for (const t of cell) {
+            // closest point of the segment to the trunk's axis (in plan), and its height
+            const ax = a.x + px, az = a.z + pz, bx = b.x + px, bz = b.z + pz;
+            const ex = bx - ax, ez = bz - az, L = ex * ex + ez * ez;
+            const u = L > 1e-8 ? Math.max(0, Math.min(1, ((t.x - ax) * ex + (t.z - az) * ez) / L)) : 0;
+            const cx = ax + ex * u, cz = az + ez * u, cy = a.y + (b.y - a.y) * u;
+            if (cy - Math.max(r, down) > t.crownY) continue; // the belly hangs lower than the bone
+            const dx = cx - t.x, dz = cz - t.z, d = Math.hypot(dx, dz), need = t.r + r + 0.012;
+            if (d >= need) continue;
+            const nx = d > 1e-4 ? dx / d : Math.cos(this.heading), nz = d > 1e-4 ? dz / d : -Math.sin(this.heading);
+            px += nx * (need - d);
+            pz += nz * (need - d);
+          }
+        }
+    }
+    if (!px && !pz) return;
+    const m = Math.hypot(px, pz), cap = 0.08;
+    if (m > cap) (px *= cap / m), (pz *= cap / m);
     this.pos.x += px;
     this.pos.z += pz;
     this.root.position.x += px;
@@ -661,6 +749,7 @@ class Dino {
       // feet onto the real ground (not while lying down), and breathing
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
       this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest', moving: stepping || this.state === 'turn' });
+      this.keepOffTrunks();
       this.keepInside();
     }
     this.crop(dt);
@@ -910,6 +999,26 @@ class Dino {
       }
       return;
     }
+    // no progress towards the waypoint for a few seconds (pushed off the line by a trunk, wedged against
+    // another animal): plan again from here, and after a second failure give up and stand
+    const pr = this._prog || (this._prog = { idx: -1, best: 0, t: 0, tries: 0 });
+    if (pr.idx !== this.pathIdx || pr.path !== this.path) Object.assign(pr, { idx: this.pathIdx, path: this.path, best: d, t: 0 });
+    else if (d < pr.best - 0.02) (pr.best = d), (pr.t = 0);
+    else if ((pr.t += dt) > 3) {
+      const end = this.path[this.path.length - 1], was = this.state, then = this.then;
+      pr.tries = (pr.tries || 0) + 1;
+      if (pr.tries > 2 || hunting || !this.goTo(end.x, end.z, then, this.gait)) {
+        pr.tries = 0;
+        if (hunting) return void (this.path = null);
+        this.speed = 0;
+        this.then = null;
+        this.rest(0.5);
+        return;
+      }
+      if (was === 'flee') this.state = 'flee';
+      return;
+    }
+    if (pr.t === 0 && d < 0.1) pr.tries = 0;
     const c = this.carrot(look);
     const want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
     let dh = want - this.heading;
@@ -928,6 +1037,17 @@ class Dino {
     if (this.state === 'flee' && this.pathIdx >= this.path.length - 1) this.state = 'walk';
   }
 
+  // hip joint above the feet, for the current size (measured once on the bind pose)
+  hipHeight() {
+    if (this._hip0 === undefined) {
+      let pel = null;
+      this.model.traverse((o) => o.isBone && o.name === 'pelvis' && (pel = o));
+      this.root.updateMatrixWorld(true);
+      this._hip0 = pel ? (pel.getWorldPosition(_ka).y - this.root.position.y) / this.model.scale.x : 0;
+    }
+    return this._hip0 * this.model.scale.x;
+  }
+
   place() {
     const T = this.mod.ctx.terrain;
     const h = T.height(this.pos.x, this.pos.z);
@@ -936,7 +1056,15 @@ class Dino {
     const hf = T.height(this.pos.x + fx * half, this.pos.z + fz * half);
     const hb = T.height(this.pos.x - fx * half, this.pos.z - fz * half);
     const pitch = Math.atan2(hb - hf, 2 * half) * 0.6;
-    this.root.position.set(this.pos.x, Math.min(h, (hf + hb) / 2 + 0.002), this.pos.z);
+    let y = Math.min(h, (hf + hb) / 2 + 0.002);
+    // where the water is deeper than half the legs (a hatchling at a ford), the animal swims: it floats
+    // with the water line at mid-leg instead of walking on the bottom with only its back showing
+    const sy = this.mod.waterSurface?.(this.pos.x, this.pos.z);
+    if (sy != null) {
+      const hip = this.hipHeight();
+      if (hip > 0 && sy - y > hip * 0.5) y = sy - hip * 0.5;
+    }
+    this.root.position.set(this.pos.x, y, this.pos.z);
     this.root.rotation.set(pitch, this.heading, 0, 'YXZ');
   }
 }
@@ -1202,7 +1330,24 @@ class Dinosaurs {
     this.contact = new Contact(ctx, this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
+    // trunks the bodies keep off: the planted ones and Weatherglass's own trees
+    this.trunks = [
+      ...this.flora.trunks,
+      ...(ctx.modules.vegetation?.trees || []).filter((t) => t.kind !== 'bush' && t.height >= 0.45)
+        .map((t) => ({ x: t.x, z: t.z, r: 0.04, y0: t.y, crownY: t.y + t.height * 0.3, kind: 'wg-' + t.kind })),
+    ];
+    // the cabin is solid to the ridge: a swinging tail or a passing neck keeps off its walls and roof
+    const cab = ctx.terrain.shape?.CABIN, lp = ctx.modules.life?.props;
+    if (cab && lp?.ridgeY) this.trunks.push({ x: cab.x, z: cab.z, r: 0.44, y0: cab.y ?? 0, crownY: lp.ridgeY + 0.05, kind: 'cabin' });
+    this.trunkGrid = new Map();
+    for (const t of this.trunks) {
+      const key = Math.floor(t.x / 0.5) + ',' + Math.floor(t.z / 0.5);
+      if (!this.trunkGrid.has(key)) this.trunkGrid.set(key, []);
+      this.trunkGrid.get(key).push(t);
+    }
     this.nav = new NavGrid(ctx, {
+      trunks: this.trunks,
+      fords: fords(ctx.terrain),
       obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.ground?.obstacles || []), ...(this.rocks?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
       rects: [
         { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
@@ -1215,7 +1360,24 @@ class Dinosaurs {
     for (const sp of SPECIES.filter((s) => !s.flyer)) {
       const m = sp.den ? null : sp.tooBig ? 1.8 : 0.25;
       const blockRects = m === null ? [] : [{ x0: denRect.x0 - m, x1: denRect.x1 + m, z0: denRect.z0 - m, z1: denRect.z1 + m }];
-      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects });
+      this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects, bodyR: sp.bodyR ?? 0.12 });
+    }
+    // the water surface over each wet cell of the route grid (the lake's level is read live; the stream's
+    // surface is fixed), for animals that have to swim
+    {
+      const g = this.nav, Wt = ctx.modules.water, ray = new Ray(), out = new Vector3();
+      this.surf = new Float32Array(g.nx * g.nz).fill(NaN);
+      for (let k = 0; k < this.surf.length; k++) {
+        if (g.water[k] < 0.2 || !Wt) continue;
+        const x = g.minX + ((k % g.nx) + 0.5) * g.cell, z = g.minZ + (Math.floor(k / g.nx) + 0.5) * g.cell;
+        if (Wt.lakeDepth(x, z) > 0.006) {
+          this.surf[k] = -Infinity;
+          continue;
+        }
+        ray.origin.set(x, 8, z);
+        ray.direction.set(0, -1, 0);
+        if (Wt._rayRiver?.(ray, out) != null) this.surf[k] = out.y;
+      }
     }
     // let the camera come close enough to see a dinosaur's skin
     const rig = ctx.cameraRig;
@@ -1319,6 +1481,18 @@ class Dinosaurs {
 
   // the T. rex roars: the planting round it shivers and every herbivore in earshot turns to look; the
   // nearest ones start up in alarm
+  // the water's surface height at (x, z), or null on dry ground
+  waterSurface(x, z) {
+    const g = this.nav;
+    if (!g || !this.surf) return null;
+    const i = Math.floor((x - g.minX) / g.cell), j = Math.floor((z - g.minZ) / g.cell);
+    if (i < 0 || j < 0 || i >= g.nx || j >= g.nz) return null;
+    const v = this.surf[j * g.nx + i];
+    if (Number.isNaN(v)) return null;
+    if (v === -Infinity) return this.ctx.modules.water.lakeDepth(x, z) > 0.006 ? this.ctx.modules.water.level : null;
+    return v;
+  }
+
   roared(rex) {
     const p = rex.pos;
     this.later(0.4, () => this.flora.shiver(p.x, p.z, 1.8, 1));

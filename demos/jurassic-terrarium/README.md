@@ -127,3 +127,11 @@ v1.19 (after the "Terrarium Terramundi" reference):
 - Footpaths: a winding dirt track from the cabin door down to the jetty, and a branch that crosses the stream on stepping stones and climbs to the cave. Lantern posts along the way light up at dusk (`?paths=0`).
 - More fallen logs, sawn stumps by the cabin and snapped ones in the forest (roots, moss, bracket fungi), and a woodpile stacked against the cabin wall.
 - Dense conifer stands at the back and on the foothills: monkey puzzles and a redwood-type conifer of the cypress family (a Jurassic group), with a buttressed red-brown trunk and flat, feathery sprays. Monkey-puzzle limbs are now clad in leaves, with crossed shoots that never vanish edge-on.
+
+v1.20 (animals no longer pass through trees or sink into the stream):
+
+- Every trunk now blocks each animal by its real body width, so the route finder keeps whole bodies clear. Each conifer grove is closed as a whole, so the herds walk round a grove rather than threading between its trees.
+- A body guard runs on the final pose every frame. The body is tested as a chain of capsules, one per bone, sized from that animal's own skin (horns, frill and belly included). If any part reaches into a trunk or the cabin, the animal slides off it.
+- The stream is no longer walked along or down the cascades, which buried the legs in the falls. It's crossed at two shin-deep fords and on the footpath's stepping stones. The path doubles as the corridor between the two halves of the case, and trees are kept back from it.
+- Hatchlings swim, with the water at mid-leg, where the water is deeper than their legs.
+- If an animal stops making progress, it re-plans its route, and after a second failure it stops and rests.

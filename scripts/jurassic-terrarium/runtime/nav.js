@@ -4,8 +4,32 @@
 // the glass walls block; gentle slopes and the lake shallows cost more than open meadow. Routes
 // are string-pulled (line-of-sight shortcuts) so animals walk smooth diagonals, not grid steps.
 
+// Where the stream is forded: two shallow runs between the cascades (about shin deep), and wherever the
+// footpath crosses water or the steep stream banks (the stepping stones). The footpath is kept clear of
+// trees, so it is the guaranteed corridor between the two halves of the case.
+let fordCache = null;
+export function fords(T) {
+  if (fordCache) return fordCache;
+  const list = [{ x: -0.68, z: -0.42, r: 0.32 }, { x: 0.02, z: 0.3, r: 0.32 }];
+  for (const line of window.__jtPathLines || [])
+    for (let i = 0; i < line.length - 1; i++) {
+      const [ax, az] = line[i], [bx, bz] = line[i + 1], n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 0.08));
+      for (let k = 0; k <= n; k++) {
+        const x = ax + ((bx - ax) * k) / n, z = az + ((bz - az) * k) / n;
+        if (Math.max(T.lakeMask(x, z), T.riverMask(x, z)) < 0.05 && T.slope(x, z) < 0.28) continue;
+        if (list.some((f) => Math.hypot(f.x - x, f.z - z) < 0.12)) continue;
+        list.push({ x, z, r: 0.3, trail: true });
+      }
+    }
+  return (fordCache = list);
+}
+const inFord = (list, x, z) => list.some((f) => Math.hypot(x - f.x, z - f.z) < f.r);
+
 export class NavGrid {
-  constructor(ctx, { cell = 0.1, margin = 0.35, obstacles = [], rects = [] } = {}) {
+  constructor(ctx, { cell = 0.1, margin = 0.35, obstacles = [], rects = [], trunks = [], fords = [] } = {}) {
+    this.trunks = trunks;
+    this.fords = fords;
+    this.inFord = new Uint8Array(0);
     const box = ctx.box;
     this.ctx = ctx;
     this.cell = cell;
@@ -37,7 +61,10 @@ export class NavGrid {
         this.lake[k] = lake;
         let c = 1 + s * 6;
         if (s > 0.85) c = Infinity; // cliffs and peaks
-        if (wet > 0.5) c += 6; // wading is slow; the stream can be forded, the deep lake cannot (below)
+        if (wet > 0.5) c += 6; // wading is slow; the deep lake is banned per species (below)
+        // the stream is crossed only at its fords, never walked along: wading down the channel and over the
+        // cascades buried the legs in the falls
+        if (river > 0.45 && lake < 0.2 && !inFord(fords, x, z)) c = Infinity;
         if (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + 0.1) c = Infinity;
         this.base[k] = c;
       }
@@ -82,13 +109,20 @@ export class NavGrid {
 
   // A per-species view: bigger animals need clearance from blocked cells; deep water may be banned.
   // blockRects: extra no-go rectangles for this species only (the den is open to its owner alone)
-  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7, blockRects = [] } = {}) {
+  // bodyR: half the body's width; every trunk is kept that far off its bark, so dense groves are closed
+  layer({ clearance = 0.1, maxWater = 0.85, maxSlope = 0.7, blockRects = [], bodyR = 0.1 } = {}) {
     const n = this.nx * this.nz;
     const cost = new Float32Array(n);
     const rad = Math.ceil(clearance / this.cell);
+    if (this.inFord.length !== n) {
+      this.inFord = new Uint8Array(n);
+      for (let k = 0; k < n; k++)
+        this.inFord[k] = inFord(this.fords, this.minX + ((k % this.nx) + 0.5) * this.cell, this.minZ + (Math.floor(k / this.nx) + 0.5) * this.cell) ? 1 : 0;
+    }
     for (let k = 0; k < n; k++) {
       let c = this.base[k];
-      if (this.lake[k] > maxWater || this.slope[k] > maxSlope) c = Infinity;
+      // at a ford the shallows and the stepped banks are allowed (the animal picks its way across)
+      if (!this.inFord[k] && (this.lake[k] > maxWater || this.slope[k] > maxSlope)) c = Infinity;
       cost[k] = c;
     }
     for (const r of blockRects)
@@ -97,7 +131,12 @@ export class NavGrid {
           const x = this.minX + (i + 0.5) * this.cell, z = this.minZ + (j + 0.5) * this.cell;
           if (x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1) cost[j * this.nx + i] = Infinity;
         }
-    if (rad <= 0) return new NavLayer(this, cost);
+    const trunk = (arr) => {
+      // a little more than the body guard needs, so a planned route never brushes a trunk
+      for (const t of this.trunks) this._stampInto(arr, t.x, t.z, t.r + bodyR + (t.kind === 'stand' ? 0 : 0.04));
+      return arr;
+    };
+    if (rad <= 0) return new NavLayer(this, trunk(cost));
     const out = new Float32Array(cost);
     for (let j = 0; j < this.nz; j++)
       for (let i = 0; i < this.nx; i++) {
@@ -107,10 +146,19 @@ export class NavGrid {
             if (di * di + dj * dj > rad * rad) continue;
             const ii = i + di, jj = j + dj;
             if (ii < 0 || jj < 0 || ii >= this.nx || jj >= this.nz) continue;
-            out[jj * this.nx + ii] = Infinity;
+            if (!this.inFord[jj * this.nx + ii]) out[jj * this.nx + ii] = Infinity; // a ford's crossing stays open
           }
       }
-    return new NavLayer(this, out);
+    return new NavLayer(this, trunk(out));
+  }
+
+  _stampInto(arr, x, z, r) {
+    const c = this.cell;
+    const i0 = Math.max(0, Math.floor((x - r - this.minX) / c)), i1 = Math.min(this.nx - 1, Math.floor((x + r - this.minX) / c));
+    const j0 = Math.max(0, Math.floor((z - r - this.minZ) / c)), j1 = Math.min(this.nz - 1, Math.floor((z + r - this.minZ) / c));
+    for (let j = j0; j <= j1; j++)
+      for (let i = i0; i <= i1; i++)
+        if (Math.hypot(this.minX + (i + 0.5) * c - x, this.minZ + (j + 0.5) * c - z) <= r) arr[j * this.nx + i] = Infinity;
   }
 }
 

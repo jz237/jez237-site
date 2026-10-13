@@ -7,6 +7,7 @@ import {
   Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage,
 } from 'three';
 import { pathAt } from './paths.js';
+import { fords } from './nav.js';
 import { frondAtlas, plantGeometry, vineGeometry, BASE_H } from './floragen.js';
 
 const UP = new Vector3(0, 1, 0);
@@ -37,6 +38,26 @@ export class Flora {
     this.obstacles = []; // {x, z, r} trunks for the dinosaurs' route finder
     this.placements = {};
     this.plan();
+    // trunks, for the animals' bodies to keep off: the stem's radius at the foot and the height where the
+    // crown begins (above it only fronds and branches, which part)
+    const RAD = { treefern: 0.035, cycad: 0.085, araucaria: 0.05, redwood: 0.05, ginkgo: 0.04 };
+    const CROWN = { treefern: 0.75, cycad: 0.25, araucaria: 0.35, redwood: 0.2, ginkgo: 0.4 };
+    this.trunks = [];
+    for (const [kind, list] of Object.entries(this.placements)) {
+      if (!RAD[kind]) continue;
+      for (const p of list) {
+        const H = p.wantTop || p.scale * BASE_H[kind];
+        this.trunks.push({ x: p.x, z: p.z, r: RAD[kind] * H, y0: p.y, crownY: p.y + CROWN[kind] * H, kind });
+      }
+    }
+    // each conifer stand is closed as a whole to the route finder (animals go round a grove, not between
+    // its trees): a disc over its trees, ignored by the body guard (crownY below everything)
+    for (const c of this.stands || []) {
+      if (c.trees.length < 2) continue;
+      const cx = c.trees.reduce((s, t) => s + t.x, 0) / c.trees.length, cz = c.trees.reduce((s, t) => s + t.z, 0) / c.trees.length;
+      const r = Math.max(...c.trees.map((t) => Math.hypot(t.x - cx, t.z - cz))) + 0.06;
+      this.trunks.push({ x: cx, z: cz, r, y0: -9, crownY: -9, kind: 'stand' });
+    }
   }
 
   // ---------------------------------------------------------------- where things grow
@@ -51,7 +72,9 @@ export class Flora {
     // the view into the cave stays open: nothing tall grows in the strip in front of its mouth
     const dn = window.__jtDen;
     const denFront = (x, z) => dn && Math.abs(x - dn.x) < 1.3 && z > dn.z && z < dn.z + dn.hz * 2.6;
-    const free = (x, z, r) => !(r >= 0.1 && denFront(x, z)) && !pathAt(x, z, r) && taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
+    // trees keep well back from the footpaths, which double as the big animals' corridors
+    const nearFord = (x, z) => fords(T).some((f) => Math.hypot(f.x - x, f.z - z) < (f.trail ? 0.9 : 1.3));
+    const free = (x, z, r) => !(r >= 0.1 && (denFront(x, z) || nearFord(x, z))) && !pathAt(x, z, r >= 0.1 ? r + 0.35 : r) && taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
     const inBox = (x, z, m) => Math.abs(x) < box.halfW - m && Math.abs(z) < box.halfD - m;
     const denAt = window.__jtDenAt || (() => false);
     const nearCabin = (x, z, r) =>
@@ -128,9 +151,14 @@ export class Flora {
         const h = T.height(x, z);
         if (h < 0.1 || h > 1.7 || T.slope(x, z) > 0.45 || water(x, z) > 0.05 || nearCabin(x, z, 0.8)) continue;
         if (centres.some((c) => Math.hypot(c.x - x, c.z - z) < 1.7)) continue;
+        // groves stand at the back or up on the foothills, never across the meadows the animals cross,
+        // the stream's fords or the footpaths
+        if (z > -1.3 && h < 0.7) continue;
+        if (fords(T).some((f) => Math.hypot(f.x - x, f.z - z) < 1.4) || pathAt(x, z, 0.9)) continue;
         centres.push({ x, z });
       }
       for (const c of centres) {
+        c.trees = [];
         let n = (tier === 0 ? 3 : 5) + Math.floor(rand() * 3);
         for (let t = 0; t < 120 && n > 0; t++) {
           const a = rand() * Math.PI * 2, d = 0.75 * Math.sqrt(rand()), x = c.x + Math.cos(a) * d, z = c.z + Math.sin(a) * d;
@@ -138,6 +166,7 @@ export class Flora {
           if (h < 0.05 || h > 1.9 || T.slope(x, z) > 0.5 || water(x, z) > 0.05 || nearCabin(x, z, 0.4) || !inBox(x, z, 0.35) || !free(x, z, 0.15)) continue;
           const kind = rand() < 0.6 ? 'redwood' : 'araucaria';
           add(kind, x, z, kind === 'redwood' ? 0.75 + rand() * 0.75 : 0.7 + rand() * 0.6, 0.15, 0.05);
+          c.trees.push({ x, z });
           n--;
         }
       }
