@@ -3,8 +3,9 @@
 //     plant-eaters come over and eat it bite by bite.
 //   - Tap the glass (Weatherglass's own glass tap): animals near the tap startle: heads snap round, the
 //     closest shy away, sleepers wake, the Pteranodons flap off, and the T. rex may roar back.
-//   - Photo mode: the interface hides, the view letterboxes, and a slow cinematic camera drifts round one
-//     animal after another with a shallow depth of field. Esc or a click leaves it.
+//   - Documentary mode (docu.js): the interface hides, the view letterboxes, and a director picks what is
+//     happening and films it in cuts, with captions. Esc or a click leaves it.
+import { Docu } from './docu.js';
 import { Group, Mesh, SphereGeometry, MeshStandardMaterial, Vector3, BufferAttribute } from 'three';
 import { plantGeometry } from './floragen.js';
 
@@ -31,7 +32,7 @@ export class Interact {
   mountButtons(panel) {
     const row = document.createElement('div');
     row.className = 'jt-actions';
-    row.innerHTML = `<button data-a="feed">Drop food</button><button data-a="photo">Photo mode</button>
+    row.innerHTML = `<button data-a="feed">Drop food</button><button data-a="photo">Documentary</button>
       <div class="jt-hint">Tap the glass to startle them</div>`;
     row.querySelector('[data-a=feed]').addEventListener('click', () => this.setMode(this.mode === 'feed' ? null : 'feed'));
     row.querySelector('[data-a=photo]').addEventListener('click', () => this.enterPhoto());
@@ -193,12 +194,11 @@ export class Interact {
     }
   }
 
-  // ------------------------------------------------------------------ photo mode
+  // ------------------------------------------------------------------ documentary mode
   enterPhoto() {
-    const subjects = (this.mod.dinos || []).filter((d) => d.root.visible);
-    if (!subjects.length) return;
+    if (!(this.mod.dinos || []).length) return;
     this.setMode(null);
-    this.photo = { subjects, i: Math.floor(Math.random() * subjects.length), t: 0, wasUi: document.body.classList.contains('no-ui') };
+    this.photo = { wasUi: document.body.classList.contains('no-ui') };
     if (!this.bars) {
       this.bars = ['t', 'b'].map((c) => {
         const el = document.createElement('div');
@@ -208,26 +208,16 @@ export class Interact {
       });
     }
     document.body.classList.add('no-ui', 'jt-photo');
-    this.tip('Photo mode — Esc or click to leave');
+    this.tip('Documentary — Esc or click to leave');
     setTimeout(() => this.photo && this.tip(''), 2500);
     this.mod.guide?.release?.();
-    this.next();
-  }
-
-  next() {
-    const P = this.photo;
-    P.i = (P.i + 1) % P.subjects.length;
-    P.t = 0;
-    P.dir = Math.random() < 0.5 ? -1 : 1;
-    const d = P.subjects[P.i], rig = this.ctx.cameraRig;
-    P.radius = Math.max(0.9, (d.length || 0.6) * (1.3 + Math.random() * 0.6));
-    rig.goal.radius = P.radius;
-    rig.goal.phi = 1.15 + Math.random() * 0.25;
-    rig.goal.theta = (d.heading ?? 0) + (Math.random() < 0.5 ? 1.2 : -1.2);
+    this.docu = this.docu || new Docu(this.mod, this.ctx);
+    this.docu.start();
   }
 
   exitPhoto() {
     if (!this.photo) return;
+    this.docu?.stop();
     if (!this.photo.wasUi) document.body.classList.remove('no-ui');
     document.body.classList.remove('jt-photo');
     this.photo = null;
@@ -270,18 +260,6 @@ export class Interact {
         }
       }
     }
-    // photo mode camera: a slow drift round the subject, close, shallow focus
-    const P = this.photo;
-    if (P) {
-      const d = P.subjects[P.i], rig = this.ctx.cameraRig;
-      P.t += dt;
-      const p = d.root.getWorldPosition(new Vector3());
-      rig.goalTarget.set(p.x, p.y + (d.height || 0.3) * 0.55, p.z);
-      rig.goal.theta += P.dir * dt * 0.07;
-      rig.goal.radius = P.radius * (1 - 0.15 * Math.min(1, P.t / 18));
-      rig.idle = 0;
-      this.ctx.post?.setTiltShift?.(0.5, 0.1, 1.15);
-      if (P.t > 18) this.next();
-    }
+    this.docu?.update(dt);
   }
 }

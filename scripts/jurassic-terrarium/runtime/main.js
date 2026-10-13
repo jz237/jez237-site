@@ -351,6 +351,7 @@ class Dino {
     }
     const path = this.layer.path(this.pos.x, this.pos.z, x, z);
     if (!path || path.length < 2) return false;
+    this._trailWalk = false;
     this.path = path;
     this.pathIdx = 1;
     this.yawRate = 0;
@@ -1187,6 +1188,7 @@ class Dino {
     }
     const start = this.layer.path(this.pos.x, this.pos.z, pts[0].x, pts[0].z);
     if (!start) return false;
+    this._trailWalk = true;
     this.path = start.concat(pts.slice(1).map((p) => ({ x: p.x, z: p.z })));
     this.pathIdx = 1;
     this.yawRate = 0;

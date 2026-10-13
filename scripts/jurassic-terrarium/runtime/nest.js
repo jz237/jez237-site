@@ -106,6 +106,11 @@ export class Nest {
     }
   }
 
+  // eggs about to open (or opening): something worth filming
+  get hatching() {
+    return !!this.site && this.eggs.some((E) => !E.done && E.at - this.t < 8) || this.eggs.some((E) => E.done && this.t - E.at < 4);
+  }
+
   // hatch(eggPos) is called when an egg opens: the runtime makes the hatchling
   update(dt, hatch) {
     if (!this.site) return;

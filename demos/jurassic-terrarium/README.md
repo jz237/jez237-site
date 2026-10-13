@@ -177,3 +177,10 @@ v1.23 (more life in the movement, perching Pteranodons):
   - wings folded tight and standing on all fours as pterosaurs did;
   - preening and looking about;
   - flying off when their time is up or when something comes close.
+
+v1.24 (Documentary mode replaces Photo mode):
+
+- **Choosing what to film.** A director watches the case and scores what's happening: a hunt, a standoff, a stream crossing, a hatching, hatchlings swimming or following their mother, a Pteranodon landing or fishing, a roar, a dust bath, browsing, drinking, sleep. It stays with a story and cuts away early only for something better.
+- **Shots.** Each story is filmed in a few shots chosen to suit it: a side tracking shot, a slow push-in, a low hero angle, an orbit, a long-lens shot from across the case, a high crane shot, a chase behind a flier.
+- **Clear views.** The crew searches for a clear line of sight past plants, rocks, the den, hills and other animals, and moves or cuts if the view gets blocked mid-shot.
+- **Look.** Shallow focus, letterbox bars, and a caption naming the animal (with its Latin name) and what it's doing. Esc or a click leaves.
