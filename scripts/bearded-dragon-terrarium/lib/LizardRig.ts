@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {LizardModel, LIZARD_SCALE, LizardLimbData} from './LizardModel';
 import {TANK} from './Case';
+import {TailDynamics} from './TailDynamics';
+import type {TailCollision} from './TailContacts';
 
 /** Keeps a point (with a radius) inside the glass. */
 function insideGlass(p: THREE.Vector3, r: number) {
@@ -27,6 +29,9 @@ export interface GroundQuery {
   normalAt(x: number, z: number, out?: THREE.Vector3): THREE.Vector3;
   /** What is there (SurfaceKind: 1 rock, 2 wood); optional. */
   kindAt?(x: number, z: number): number;
+  heightBelow?(x: number, z: number, ceiling: number): number;
+  supportAt?(x: number, z: number, ceiling: number, out: {y: number; normal: THREE.Vector3}): {y: number; normal: THREE.Vector3};
+  tailContacts?: TailCollision;
 }
 const WOOD = 2;
 
@@ -75,7 +80,12 @@ interface Leg {
   bindUpper: THREE.Matrix4;
   bindLower: THREE.Matrix4;
   reach: number;
-  forcedStep: boolean;
+  stepDue: boolean;
+  stepTop: number;
+  bendDirection: THREE.Vector3;
+  wristDirection: THREE.Vector3;
+  handForward: THREE.Vector3;
+  handNormal: THREE.Vector3;
 }
 
 export interface RigInputs {
@@ -126,9 +136,7 @@ export class LizardRig {
   private tailIdx: number[];
   private tailBind: THREE.Vector3[];
   private tailPts: THREE.Vector3[] = [];
-  /** How far the tail bends along its length (rad, signed), eased. */
-  private tailBend = 0;
-  private tailPrev: THREE.Vector3[] = [];
+  private tailDynamics: TailDynamics;
   private tailLen: number[] = [];
   private tailRadius: number[] = [];
   private bindTilt: THREE.Matrix4[] = [];
@@ -155,11 +163,30 @@ export class LizardRig {
   moving = false;
   /** 0 walking .. 1 full sprint: the body rises, the nose lifts and the tail comes off the ground. */
   private sprint = 0;
+  private walkExtension = 0;
+  private strideHz = 0.85;
   private initialised = false;
+  private hasPose = false;
+  private poseDt = 1 / 60;
+  readonly ground: GroundQuery;
   /** Called whenever a foot is put down (world position). */
   onFootDown?: (p: THREE.Vector3, front: boolean) => void;
 
-  constructor(readonly model: LizardModel, readonly ground: GroundQuery) {
+  constructor(readonly model: LizardModel, source: GroundQuery) {
+    const ceiling=()=>this.initialised ? this.bodyY+.055 : source.heightAt(this.inputs.x,this.inputs.z)+.055;
+    const height=(x:number,z:number)=>source.heightBelow
+      ? source.heightBelow(x,z,ceiling()) : source.heightAt(x,z);
+    this.ground={
+      heightAt:height,
+      kindAt:source.kindAt?.bind(source),
+      supportAt:source.supportAt?.bind(source),
+      normalAt:(x,z,out=new THREE.Vector3())=>{
+        if(source.heightBelow && source.heightAt(x,z)>ceiling()){
+          const e=.002;return out.set(height(x-e,z)-height(x+e,z),2*e,height(x,z-e)-height(x,z+e)).normalize();
+        }
+        return source.normalAt(x,z,out);
+      },
+    };
     const d = model.data;
     this.spineIdx = this.spineNames.map((n) => model.bone(n));
     this.spineBindX = this.spineIdx.map((i) => d.bones[i].origin[0]);
@@ -174,7 +201,7 @@ export class LizardRig {
     const chainY = [...this.spineBindY, ...this.tailBind.map((p) => p.y)];
     const chainIdx = [...this.spineIdx, ...this.tailIdx];
     chainIdx.forEach((bi, k) => {
-      const a = Math.max(0, k - 1), b = Math.min(chainX.length - 1, k + 1);
+      const a = Math.max(0, k - 1), b = k === 5 ? 5 : Math.min(chainX.length - 1, k + 1);
       const tan = new THREE.Vector3(chainX[a] - chainX[b], chainY[a] - chainY[b], 0).normalize();
       this.bindTilt[bi] = frameMatrix(tan, UP, new THREE.Matrix4()).clone();
     });
@@ -189,7 +216,18 @@ export class LizardRig {
       const i = clamp(Math.round((x + 17.2) / 0.5), 0, prof.length - 1);
       return Math.max(prof[i][1], prof[i][3]);
     };
-    this.tailRadius = this.tailBind.map((p) => radiusAt(p.x) * K * 0.85);
+    // Include the visible scale/spine thickness, rather than testing just the
+    // thinner centre line that could leave the rendered skin inside a branch.
+    this.tailRadius = this.tailBind.map((p) => radiusAt(p.x) * K * 1.06 + .0004);
+    const collision = source.tailContacts ?? {
+      projectPoint: (_previous: THREE.Vector3, point: THREE.Vector3, radius: number, normal: THREE.Vector3) => {
+        insideGlass(point, radius + .010);
+        const floor = (source.heightBelow ? source.heightBelow(point.x, point.z, point.y + radius) : source.heightAt(point.x, point.z)) + radius;
+        if (point.y >= floor) return false;
+        point.y = floor; normal.y += 1; return true;
+      },
+    };
+    this.tailDynamics = new TailDynamics(this.tailLen, this.tailRadius, collision);
 
     const offsets: Record<string, number> = {'front-1': 0.0, 'hind1': 0.06, 'front1': 0.5, 'hind-1': 0.56};
     for (const limb of d.limbs) {
@@ -207,7 +245,10 @@ export class LizardRig {
         bindUpper: model.bind[limb.bones.upper].clone(),
         bindLower: model.bind[limb.bones.lower].clone(),
         reach: (limb.upperLength + limb.lowerLength) * K,
-        forcedStep: false,
+        stepDue: false,
+        stepTop: 0,
+        bendDirection: new THREE.Vector3(), wristDirection: new THREE.Vector3(),
+        handForward: new THREE.Vector3(), handNormal: new THREE.Vector3(),
       };
       this.legs.push(leg);
     }
@@ -227,6 +268,19 @@ export class LizardRig {
 
   /** Set by homeWorld: the last foot target had nothing under it within reach. */
   private homeHangs = false;
+  private footSupport(x: number, z: number, out = {y: 0, normal: new THREE.Vector3()}) {
+    if (this.ground.supportAt) return this.ground.supportAt(x, z, this.bodyY + .055, out);
+    out.y = this.ground.heightAt(x, z); this.ground.normalAt(x, z, out.normal); return out;
+  }
+
+  private stepObstacle(leg: Leg) {
+    let top = Math.max(leg.from.y, leg.to.y);
+    for (const t of [.25, .5, .75]) {
+      top = Math.max(top, this.footSupport(THREE.MathUtils.lerp(leg.from.x, leg.to.x, t), THREE.MathUtils.lerp(leg.from.z, leg.to.z, t)).y);
+    }
+    return top;
+  }
+
   private homeWorld(leg: Leg, out: THREE.Vector3, ahead = 0) {
     const h = leg.homeLocal;
     const along = (h.x - this.rootX) * K + ahead;
@@ -242,12 +296,15 @@ export class LizardRig {
     const lineY = Math.max(this.ground.heightAt(mx, mz), this.bodyY - (1.05 + 0.3) * K - this.inputs.clearance * K);
     let wall = false;
     for (let k = 0; k <= 6; k++) {
-      const w = 1 - k * 0.12;
-      out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, h.z * K * w);
+      const w = (1 - k * 0.12) * (1 - this.walkExtension * 0.045);
+      // A forepaw may grip the side of a narrow perch, but cannot be folded
+      // inward underneath its shoulder just to find the perch's upper surface.
+      const lateral = leg.front ? Math.sign(h.z) * Math.max(Math.abs(h.z * K * w), (Math.abs(leg.data.root[2]) + .6) * K) : h.z * K * w;
+      out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, lateral);
       out.x += this.inputs.x;
       out.z += this.inputs.z;
       insideGlass(out, 0.009); // a foot never steps through the glass
-      out.y = this.ground.heightAt(out.x, out.z);
+      out.y = this.footSupport(out.x, out.z).y;
       // (wood well above the midline beside it: bring the foot in, toward the ground under the body)
       wall = out.y - lineY > 0.012 && this.ground.kindAt?.(out.x, out.z) === WOOD;
       if (wall) continue;
@@ -261,7 +318,9 @@ export class LizardRig {
       return out;
     }
     // Nothing within reach: hold the foot against the side of the perch.
-    out.y = Math.max(out.y, this.bodyY - reachDown);
+    const shoulder = this.bodyToWorld(new THREE.Vector3(...leg.data.root as [number, number, number]), new THREE.Vector3());
+    const hangingHeight = leg.front ? shoulder.y - (leg.data.root[1] - leg.data.wrist[1]) * K - .007 : this.bodyY - reachDown;
+    out.y = Math.max(out.y, hangingHeight);
     this.homeHangs = true;
     return out;
   }
@@ -269,23 +328,22 @@ export class LizardRig {
   /** Teleports the lizard: feet planted at their homes, tail laid out behind. */
   reset() {
     const I = this.inputs;
+    this.initialised = false;
+    this.hasPose = false;
     this.computeBodyFrame(1, true);
     for (const leg of this.legs) {
       this.homeWorld(leg, leg.planted);
       leg.plantedYaw = I.heading;
       leg.swing = false;
-      this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
+      leg.stepDue = false;
+      leg.bendDirection.set(0, 0, 0); leg.wristDirection.set(0, 0, 0);
+      leg.handForward.set(0, 0, 0); leg.handNormal.set(0, 0, 0);
+      leg.lastPhase = (this.phase + leg.offset) % 1;
+      leg.normal.copy(this.footSupport(leg.planted.x, leg.planted.z).normal);
     }
-    this.tailPts = [];
-    this.tailPrev = [];
     const pelvis = this.bodyToWorld(new THREE.Vector3(0.9, this.spineBindY[5], 0), new THREE.Vector3());
-    let p = pelvis.clone();
-    for (let i = 0; i < this.tailBind.length; i++) {
-      p = p.clone().addScaledVector(this.bodyFwd, -this.tailLen[i]);
-      p.y = this.ground.heightAt(p.x, p.z) + this.tailRadius[i];
-      this.tailPts.push(p.clone());
-      this.tailPrev.push(p.clone());
-    }
+    this.tailDynamics.reset(pelvis, this.bodyFwd.clone().negate());
+    this.tailPts = this.tailDynamics.points;
     this.initialised = true;
   }
 
@@ -295,7 +353,8 @@ export class LizardRig {
     const right = new THREE.Vector3(-fwd.z, 0, fwd.x); // +Z when facing +X
     // Sample the surface under the chest, pelvis and flanks.
     // (each a little patch, so a crack in the log is bridged rather than dropped into)
-    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a + right.x * sd, I.z + fwd.z * a + right.z * sd);
+    const size = K / 0.0105;
+    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a * size + right.x * sd * size, I.z + fwd.z * a * size + right.z * sd * size);
     // ground under the chest and hips; a rise just beyond the trunk counts for less
     // with distance (a 35° slope), so a step coming up is met smoothly, not all at once
     const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0), H(0.06, 0) - 0.0105, H(0.075, 0) - 0.021);
@@ -311,7 +370,7 @@ export class LizardRig {
     // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
     let under = mid, underMid = mid, ramp = -Infinity;
     // (pitched nose-up on the climb, the belly ahead of the middle is that much higher)
-    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065), -0.9, 0.9));
+    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58));
     for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
       const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
       const h = this.ground.heightAt(sx, sz);
@@ -335,8 +394,8 @@ export class LizardRig {
       }
     }
     const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006, ramp);
-    const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
-    const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
+    const pitch = clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58) + this.sprint * 0.08;
+    const roll = clamp(Math.atan2(l - r, 0.044 * size) * 0.45, -0.23, 0.23) + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
     // body centre height: belly clearance + half the trunk depth
     let targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
@@ -346,17 +405,27 @@ export class LizardRig {
     // legs), but never down into what it walks over.
     if (this.initialised) {
       const spineBind = this.spineBindYAt(this.rootX);
+      const inverseBody = new THREE.Matrix4().copy(this.body).invert();
+      const orientation = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
       let cap = Infinity;
       for (const leg of this.legs) {
-        if (leg.swing || leg.planted.y < base - 0.02) continue; // (a foot hanging over the side)
+        // Start lowering toward a landing before the forefoot touches down.
+        const foot = leg.swing ? leg.to : leg.planted;
+        if ((leg.swing && leg.swingT < 0.5) || foot.y < base - 0.02) continue;
         const r = leg.data.root;
-        const along = (r[0] - this.rootX) * K, out = r[2] * K;
-        const sx = I.x + fwd.x * along + right.x * out, sz = I.z + fwd.z * along + right.z * out;
-        const dh = Math.hypot(leg.planted.x - sx, leg.planted.z - sz);
-        const R = leg.reach * (this.sprint > 0.3 ? 0.92 : leg.front ? 0.78 : 0.84);
+        const shoulder = this.hasPose
+          ? new THREE.Vector3().setFromMatrixPosition(this.boneWorld[leg.data.bones.upper]).applyMatrix4(inverseBody)
+          : new THREE.Vector3((r[0] - this.rootX) * K, r[1] * K, r[2] * K);
+        shoulder.applyQuaternion(orientation);
+        const sx = I.x + shoulder.x, sz = I.z + shoulder.z;
+        const dh = Math.hypot(foot.x - sx, foot.z - sz);
+        // Extend the bent limbs during locomotion. Their resting sprawl remains
+        // lower; neither pose asks the IK for a straight, fully extended limb.
+        const extension = leg.front ? 0.78 + this.walkExtension * 0.10 : 0.84 + this.walkExtension * 0.06;
+        const R = leg.reach * (extension + (0.92 - extension) * this.sprint);
         const dv = Math.sqrt(Math.max(0, R * R - dh * dh));
         // the wrist sits half a centimetre above the sole; the shoulder a little below the spine
-        cap = Math.min(cap, leg.planted.y + 0.47 * K + dv - (r[1] - spineBind) * K);
+        cap = Math.min(cap, foot.y + 0.47 * K + dv - (shoulder.y - spineBind * K));
       }
       // (however low it sprawls, the belly stays on top of the highest thing under
       // its midline; across a slope the body rolls with it, so the flanks are left
@@ -397,14 +466,27 @@ export class LizardRig {
   update(dt: number) {
     if (!this.initialised) this.reset();
     dt = Math.min(dt, 1 / 20);
+    this.poseDt = dt;
     this.time += dt;
     const I = this.inputs;
     const speedCm = Math.abs(I.speed) / K;
-    this.moving = speedCm > 0.6 || Math.abs(I.turnRate) > 0.25;
+    this.moving = speedCm > 0.45 || Math.abs(I.turnRate) > 0.12;
     this.sprint = damp(this.sprint, smooth(clamp((speedCm - 12) / 14, 0, 1)), 6, dt);
-    // Stride frequency rises with speed; lizards take quick, short steps.
-    const freq = clamp(1.3 + speedCm / 11, 1.3, 5.2) * (Math.abs(I.turnRate) > 0.25 && speedCm < 2 ? 1.5 : 1);
-    const duty = clamp(0.68 - speedCm / 260, 0.5, 0.68);
+    this.walkExtension = damp(this.walkExtension, this.moving ? 1 : 0, 5, dt);
+    // Cadence follows speed and the adult model's reachable stride. Loose ground
+    // and uneven stone use slightly shorter steps, with smoothly changing timing.
+    const kind = this.ground.kindAt?.(I.x, I.z);
+    const shortSteps = kind === 0 ? 1.03 : kind === 1 ? 1.07 : 1;
+    const targetHz = clamp((0.60 + speedCm / 6.6 + Math.max(0, speedCm - 7.5) * 0.04 + (speedCm < 2 ? Math.abs(I.turnRate) * 0.55 : 0)) * shortSteps, 0.65, 5);
+    this.strideHz = damp(this.strideHz, targetHz, 8, dt);
+    const freq = this.strideHz;
+    // P. vitticeps walking measurements average 63% forefoot and 74% hindfoot
+    // stance at 0.30 m/s (Bonnan et al., doi:10.1002/ar.25588). Slower creeping
+    // keeps more support; sand adds stance time. These are separate limb timings.
+    const pace = clamp(speedCm / 18.75, 0, 1);
+    const extraSupport = kind === 0 ? 0.02 : 0;
+    const frontDuty = 0.77 - 0.14 * pace + extraSupport;
+    const hindDuty = 0.83 - 0.09 * pace + extraSupport;
     if (this.moving) this.phase = (this.phase + dt * freq) % 1;
     // The glass is solid: if the head or chest reached it last frame (a look out
     // of the front, a turn by the side), the body is nudged back off it.
@@ -423,7 +505,7 @@ export class LizardRig {
       for (const a of [0.035, 0, -0.035]) for (const sd of [-0.022, 0.022]) {
         const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
         const rise = this.ground.heightAt(sx, sz) - mid;
-        if (rise > 0.03 && (rise > 0.12 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
+        if (rise > 0.085 && (rise > 0.14 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
           const k = Math.sign(sd) * 0.1 * Math.min(1, dt * 30);
           I.x -= right.x * k * 0.035;
           I.z -= right.z * k * 0.035;
@@ -434,14 +516,14 @@ export class LizardRig {
 
     // Lateral standing wave in the trunk, synchronised with the diagonal pairs:
     // a sprawling lizard swings its shoulders and hips to lengthen each stride.
-    const amp = this.moving ? clamp(0.08 + speedCm / 90, 0.08, 0.38) : 0;
-    const steer = clamp(I.turnRate * 0.12, -0.35, 0.35);
+    const amp = this.moving ? clamp(0.035 + speedCm / 160, 0.035, 0.18) : 0;
+    const steer = clamp(I.turnRate * 0.09, -0.18, 0.18);
     this.bend = damp(this.bend, -amp * Math.cos(this.phase * Math.PI * 2) + steer, 14, dt);
 
     this.updateHead(dt);
     this.solveSpine(dt);
     this.updateTail(dt, speedCm);
-    this.updateLegs(dt, freq, duty, speedCm);
+    this.updateLegs(dt, freq, frontDuty, hindDuty);
     this.updateFace(dt);
     this.commit();
   }
@@ -595,83 +677,27 @@ export class LizardRig {
         continue;
       }
       ahead = k > 0 ? this.spinePos[k - 1] : this.spinePos[k];
-      behind = k < 5 ? this.spinePos[k + 1] : this.tailPts.length ? this.tailPts[0] : this.spinePos[k];
+      // The pelvis belongs to the trunk. Tail contact must not rotate the hips
+      // and feed an alternating correction back through the hind-leg IK.
+      behind = k < 5 ? this.spinePos[k + 1] : this.spinePos[k];
       const up = this.bodyUp.clone();
       frameMatrix(ahead.clone().sub(behind), up, tmpM);
       this.spineFrame[k].copy(tmpM).multiply(tmpM2.copy(this.bindTilt[this.spineIdx[k]]).transpose());
     }
   }
 
-  private updateTail(dt: number, speedCm: number) {
-    // A lizard's tail is not a snake's: no wave runs down it, and it never curls
-    // into an S. Its base swings with the hips and the rest follows, fairly stiff,
-    // in one smooth curve. Where it is dragged (each joint keeps its place on the
-    // ground, follow-the-leader) gives how much it bends in all; the tail is then
-    // laid out as a single arc with that bend, curling a little more toward the tip.
+  private updateTail(dt: number, _speedCm: number) {
     const pelvis = this.spinePos[5];
-    const back = new THREE.Vector3().copy(this.spinePos[4]).sub(pelvis);
-    back.y = 0;
-    back.normalize().negate();
-    const N = this.tailPts.length;
-    if (!N) return;
-    const relax = 1 - Math.exp(-dt * (this.moving ? 3.2 : 1.6));
-    // 1. the drag: how far the rope, pulled from its old place, wants to bend
-    let prev = new THREE.Vector2(pelvis.x, pelvis.z);
-    let prevDir = new THREE.Vector2(back.x, back.z);
-    let total = 0;
-    for (let i = 0; i < N; i++) {
-      const p = this.tailPts[i];
-      const drag = new THREE.Vector2(p.x - prev.x, p.z - prev.y);
-      if (drag.lengthSq() < 1e-12) drag.copy(prevDir);
-      drag.normalize();
-      const straight = clamp(0.55 - i * 0.025, 0.25, 0.55);
-      const dir = drag.lerp(prevDir, clamp(straight * relax * 6, 0, 1)).normalize();
-      const ang = clamp(Math.atan2(prevDir.x * dir.y - prevDir.y * dir.x, prevDir.x * dir.x + prevDir.y * dir.y), -0.22, 0.22);
-      total += ang;
-      const ca = Math.cos(ang), sa = Math.sin(ang);
-      dir.set(prevDir.x * ca - prevDir.y * sa, prevDir.x * sa + prevDir.y * ca);
-      prev = new THREE.Vector2(prev.x + dir.x * this.tailLen[i], prev.y + dir.y * this.tailLen[i]);
-      prevDir = dir;
-    }
-    // (no more than ~95° in all, and eased, so the curve swings over smoothly)
-    total = clamp(total, -1.65, 1.65);
-    this.tailBend = damp(this.tailBend, total, 6, dt);
-    // 2. lay it out as one arc
-    let wsum = 0;
-    for (let i = 0; i < N; i++) wsum += 0.7 + 0.6 * i / Math.max(1, N - 1);
-    let prev3 = pelvis.clone();
-    let dir3 = back.clone();
-    for (let i = 0; i < N; i++) {
-      const p = this.tailPts[i];
-      const L = this.tailLen[i];
-      let ang = this.tailBend * (0.7 + 0.6 * i / Math.max(1, N - 1)) / wsum;
-      // a hunting lizard flicks the tip of its tail
-      if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
-      const ca = Math.cos(ang), sa = Math.sin(ang);
-      dir3 = new THREE.Vector3(dir3.x * ca - dir3.z * sa, 0, dir3.x * sa + dir3.z * ca);
-      // rest on the ground; the base hangs from the raised pelvis
-      // (the tail slides along the glass rather than through it)
-      const gp = insideGlass(new THREE.Vector3(prev3.x + dir3.x * L, 0, prev3.z + dir3.z * L), this.tailRadius[i] + 0.002);
-      // walking, it carries the base of its tail clear of the ground, the tip trailing
-      const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
-      const g = this.ground.heightAt(gp.x, gp.z) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
-      let y = Math.max(g, prev3.y - L * 0.55);
-      y = Math.min(y, prev3.y + L * 0.5);
-      const dy = y - prev3.y;
-      const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
-      p.set(prev3.x + dir3.x * h, y, prev3.z + dir3.z * h);
-      insideGlass(p, this.tailRadius[i] + 0.002);
-      prev3 = p;
-    }
+    const back = new THREE.Vector3().subVectors(pelvis, this.spinePos[4]).normalize();
+    this.tailDynamics.update(dt, pelvis, back, this.inputs.tailTwitch);
   }
-
-  private updateLegs(dt: number, freq: number, duty: number, speedCm: number) {
+  private updateLegs(dt: number, freq: number, frontDuty: number, hindDuty: number) {
     const I = this.inputs;
-    const vel = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading)).multiplyScalar(I.speed);
-    const swingDur = (1 - duty) / freq;
-    const stanceDur = duty / freq;
     const home = new THREE.Vector3();
     for (const leg of this.legs) {
+      const duty = leg.front ? frontDuty : hindDuty;
+      const swingDur = (1 - duty) / freq;
+      const stanceDur = duty / freq;
       const ph = (this.phase + leg.offset) % 1;
       if (leg.swing) {
         leg.swingT += dt / leg.swingDur;
@@ -685,10 +711,10 @@ export class LizardRig {
           leg.planted.copy(leg.to);
           // set down on what is under it, unless that is out of reach: then it hangs
           // where homeWorld held it, against the side of the perch
-          leg.planted.y = Math.max(this.ground.heightAt(leg.to.x, leg.to.z), leg.to.y);
+          const support = this.footSupport(leg.to.x, leg.to.z);
+          leg.planted.y = Math.max(support.y, leg.to.y);
           leg.plantedYaw = leg.toYaw;
-          this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
-          leg.forcedStep = false;
+          leg.normal.copy(support.normal);
           this.onFootDown?.(leg.planted, leg.front);
         }
       } else {
@@ -701,7 +727,7 @@ export class LizardRig {
         // A foot with nothing under it (over the side of the log) stays hanging,
         // gripping the flank, instead of pawing the air: it steps again only when
         // there is something to step onto, or when the body has left it far behind.
-        const hangs = this.homeHangs && leg.planted.y - this.ground.heightAt(leg.planted.x, leg.planted.z) > 0.008;
+        const hangs = this.homeHangs && leg.planted.y - this.footSupport(leg.planted.x, leg.planted.z).y > 0.008;
         if (hangs) {
           // touching nothing, it is simply carried along with the body
           const k = 1 - Math.exp(-dt * 10);
@@ -711,19 +737,27 @@ export class LizardRig {
           leg.heel = damp(leg.heel, 0.25, 8, dt);
           continue;
         }
-        const gaitLift = this.moving && ph >= duty && leg.lastPhase < duty;
+        if (!this.moving) leg.stepDue = false;
+        else if (ph >= duty && leg.lastPhase < duty) leg.stepDue = true;
         const strained = drift > leg.reach * 0.55 || yawErr > 0.9;
         // When standing still, tidy up feet that are badly out of place one at a time.
         // (but not just to lift a foot off solid footing and hang it over an edge)
         const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && (!homeInAir || drift > 0.035) && !this.legs.some((l) => l.swing);
-        if (gaitLift || strained || settle) {
+        const freeSupports = this.legs.filter(l => !l.swing).length;
+        // Correction steps retain at least two supports; no three-foot air shuffle.
+        if ((leg.stepDue || strained || settle) && freeSupports > 2) {
+          // A phase crossing can occur between rendered frames. Include that
+          // fraction so 60 Hz rendering doesn't add a frame to every swing.
+          const elapsed = leg.stepDue && ph >= duty ? clamp((ph - duty) / (1 - duty), 0, 0.3) : 0;
+          leg.stepDue = false;
           leg.swing = true;
-          leg.swingT = 0;
+          leg.swingT = elapsed;
           leg.swingDur = this.moving ? swingDur : 0.16;
           leg.from.copy(leg.planted);
           leg.fromYaw = leg.plantedYaw;
-          this.homeWorld(leg, leg.to, this.moving ? I.speed * (stanceDur * 0.5 + swingDur) : 0);
+          this.homeWorld(leg, leg.to, this.moving ? I.speed * (stanceDur * 0.5 + swingDur * (1 - elapsed)) : 0);
           leg.toYaw = I.heading;
+          leg.stepTop = this.stepObstacle(leg);
         }
       }
       leg.lastPhase = ph;
@@ -731,7 +765,6 @@ export class LizardRig {
       const peel = this.moving && !leg.swing ? smooth(clamp((ph - (duty - 0.18)) / 0.18, 0, 1)) : 0;
       leg.heel = damp(leg.heel, leg.swing ? 0.35 : peel, 20, dt);
     }
-    void vel; void speedCm;
   }
 
   private updateFace(dt: number) {
@@ -782,14 +815,22 @@ export class LizardRig {
       const sz = (k === 2 || k === 3 || k === 4 ? flank : 1) * (1 + 0.17 * flat);
       this.setBone(bi, this.spinePos[k], this.spineFrame[k], sy, sz);
     }
-    // tail
+    // Parallel transport carries the tail's cross-section from the pelvis.
+    // Rebuilding every bone from world-up flips its roll at a vertical hang.
+    const tailForward = this.spinePos[4].clone().sub(this.spinePos[5]).normalize();
+    const tailSide = new THREE.Vector3().setFromMatrixColumn(frameMatrix(tailForward, this.bodyUp, new THREE.Matrix4()), 2);
     for (let i = 0; i < this.tailIdx.length; i++) {
       const bi = this.tailIdx[i];
       const ahead = i === 0 ? this.spinePos[5] : this.tailPts[i - 1];
       const behind = this.tailPts[Math.min(i + 1, this.tailPts.length - 1)];
-      frameMatrix(tmpV3.copy(ahead).sub(behind), this.bodyUp, tmpM);
-      const rot = tmpM.clone().multiply(tmpM2.copy(this.bindTilt[bi]).transpose());
+      const tangent = ahead.clone().sub(behind).normalize();
+      if (tangent.lengthSq() < .5) tangent.copy(tailForward);
+      tailSide.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(tailForward, tangent));
+      tailSide.addScaledVector(tangent, -tailSide.dot(tangent)).normalize();
+      const up = new THREE.Vector3().crossVectors(tailSide, tangent).normalize();
+      const rot = new THREE.Matrix4().makeBasis(tangent, up, tailSide).multiply(tmpM2.copy(this.bindTilt[bi]).transpose());
       this.setBone(bi, this.tailPts[i], rot);
+      tailForward.copy(tangent);
     }
     // jaw and gular hang from head and neck
     const head = model.bone('head'), neck = model.bone('neck');
@@ -818,6 +859,7 @@ export class LizardRig {
       e.look.x = clamp(e.look.x, -0.3, 0.3);
     }
     model.syncAttachments();
+    this.hasPose = true;
   }
 
   private solveLeg(leg: Leg) {
@@ -837,13 +879,22 @@ export class LizardRig {
     const normal = leg.normal.clone();
     let lift = 0;
     if (leg.swing) {
-      const t = smooth(clamp(leg.swingT, 0, 1));
+      const phase = clamp(leg.swingT, 0, 1);
+      const climbing = Math.abs(leg.to.y - leg.from.y) > .008 || leg.stepTop > Math.min(leg.to.y, leg.from.y) + .008;
+      const t = smooth(climbing ? clamp((phase - .16) / .68, 0, 1) : phase);
       foot.lerpVectors(leg.from, leg.to, t);
-      const gy = this.ground.heightAt(foot.x, foot.z);
-      lift = Math.sin(Math.PI * clamp(leg.swingT, 0, 1)) * leg.liftScale * K * (this.moving ? 1 : 0.6);
-      foot.y = Math.max(gy, leg.from.y + (leg.to.y - leg.from.y) * t) + lift;
+      const gy = this.footSupport(foot.x, foot.z).y;
+      lift = Math.sin(Math.PI * phase) * leg.liftScale * K * (this.moving ? 1 : 0.6);
+      if (climbing) {
+        // Lift clear before advancing over a riser; lower onto the new foothold.
+        const peak = Math.max(leg.stepTop, leg.from.y, leg.to.y) + leg.liftScale * K;
+        foot.y = phase < .42 ? THREE.MathUtils.lerp(leg.from.y, peak, smooth(phase / .42))
+          : THREE.MathUtils.lerp(peak, leg.to.y, smooth((phase - .42) / .58));
+        foot.y = Math.max(gy + .0005, foot.y);
+      } else foot.y = Math.max(gy, leg.from.y + (leg.to.y - leg.from.y) * t) + lift;
       yaw = leg.fromYaw + wrapAngle(leg.toYaw - leg.fromYaw) * t;
-      normal.lerp(UP, 0.5).normalize();
+      normal.lerp(this.footSupport(leg.to.x, leg.to.z).normal, smooth(phase));
+      normal.lerp(UP, Math.sin(Math.PI * phase) * .35).normalize();
     } else {
       foot.copy(leg.planted);
       yaw = leg.plantedYaw;
@@ -863,15 +914,33 @@ export class LizardRig {
     // Hand frame: forward along the foot's yaw (plus its bind splay), up along the ground normal.
     const splay = Math.atan2(-d.forward[2], d.forward[0]);
     const fYaw = yaw + splay;
-    const fwd = new THREE.Vector3(Math.cos(fYaw), 0, -Math.sin(fYaw));
-    fwd.addScaledVector(normal, -fwd.dot(normal)).normalize();
+    const wantedNormal = normal.clone();
+    if (leg.handNormal.lengthSq() > .5) normal.copy(leg.handNormal).lerp(wantedNormal, 1 - Math.exp(-18 * this.poseDt)).normalize();
+    const wantedForward = new THREE.Vector3(Math.cos(fYaw), 0, -Math.sin(fYaw));
+    wantedForward.addScaledVector(normal, -wantedForward.dot(normal));
+    const handConfidence = smooth(clamp(wantedForward.length() / .3, 0, 1));
+    const fwd = leg.handForward.clone();
+    if (leg.handNormal.lengthSq() > .5) fwd.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.handNormal, normal));
+    fwd.addScaledVector(normal, -fwd.dot(normal));
+    if (fwd.lengthSq() < 1e-10) fwd.copy(wantedForward);
+    if (fwd.lengthSq() < 1e-10) fwd.copy(this.bodyFwd).addScaledVector(normal, -this.bodyFwd.dot(normal));
+    if (fwd.lengthSq() < 1e-10) fwd.crossVectors(this.bodyRight, normal);
+    if (fwd.lengthSq() < 1e-10) fwd.crossVectors(UP, normal);
+    fwd.normalize();
+    if (wantedForward.lengthSq() > 1e-10) {
+      wantedForward.normalize();
+      const angle = Math.atan2(normal.dot(new THREE.Vector3().crossVectors(fwd, wantedForward)), fwd.dot(wantedForward));
+      fwd.applyAxisAngle(normal, angle * handConfidence * (1 - Math.exp(-20 * this.poseDt)));
+    }
+    leg.handForward.copy(fwd); leg.handNormal.copy(normal);
     let handRot = frameMatrix(fwd, normal, new THREE.Matrix4()).clone();
     // Heel peel: rotate the hand about the toe line (lifts the wrist end).
     const peelAngle = leg.heel * (leg.front ? 0.45 : 0.6) + waveLift * 0.5;
     const toeLine = new THREE.Vector3(d.palm[0] - d.wrist[0], 0, d.palm[2] - d.wrist[2]).length() * K * 2.2;
     const side = new THREE.Vector3().setFromMatrixColumn(handRot, 2);
     const pivot = foot.clone().addScaledVector(fwd, toeLine);
-    const rq = tmpQ.setFromAxisAngle(side, peelAngle);
+    // The heel is behind the toe pivot: a negative rotation raises it.
+    const rq = tmpQ.setFromAxisAngle(side, -peelAngle);
     const handPos = foot.clone().sub(pivot).applyQuaternion(rq).add(pivot);
     handRot = new THREE.Matrix4().makeRotationFromQuaternion(rq).multiply(handRot);
     // The hand bind origin sits slightly above the sole.
@@ -886,25 +955,42 @@ export class LizardRig {
     const toW = W.clone().sub(S);
     let dist = toW.length();
     const maxR = (a + b) * 0.999, minR = Math.abs(a - b) + 1e-4;
-    if (dist > maxR) {
+    if (dist > maxR || dist < minR) {
       // Out of reach: the whole foot follows the wrist rather than stretching the skin.
-      const clamped = S.clone().addScaledVector(toW.clone().normalize(), maxR);
+      const clamped = S.clone().addScaledVector(toW.lengthSq() > 1e-12 ? toW.clone().normalize() : this.bodyUp.clone().negate(), clamp(dist, minR, maxR));
       handPos.add(clamped.clone().sub(W));
       W.copy(clamped);
-      dist = maxR;
+      dist = clamp(dist, minR, maxR);
       this.setBone(d.bones.hand, handPos, handRot);
     }
     if (dist < minR) dist = minR;
     const dir = W.clone().sub(S).normalize();
     // (the elbow out and back, the knee out and forward, both held up near the level of the shoulder and hip)
-    const pole = S.clone().addScaledVector(this.bodyRight, leg.side * 0.045).addScaledVector(this.bodyUp, 0.045).addScaledVector(this.bodyFwd, leg.front ? -0.018 : 0.022);
-    const toPole = pole.sub(S);
-    const perp = toPole.addScaledVector(dir, -toPole.dot(dir)).normalize();
+    const toPole = leg.front
+      ? new THREE.Vector3(d.mid[0] - d.root[0], d.mid[1] - d.root[1], d.mid[2] - d.root[2]).transformDirection(g)
+      : this.bodyRight.clone().multiplyScalar(leg.side * .045).addScaledVector(this.bodyUp, .045).addScaledVector(this.bodyFwd, .022);
+    const poleLength = toPole.length();
+    const preferred = toPole.addScaledVector(dir, -toPole.dot(dir));
+    const confidence = smooth(clamp((preferred.length() / poleLength - .04) / .28, 0, 1));
+    const perp = leg.bendDirection.clone();
+    if (leg.wristDirection.lengthSq() > .5) perp.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection, dir));
+    perp.addScaledVector(dir, -perp.dot(dir));
+    if (perp.lengthSq() < 1e-10) {
+      perp.copy(preferred);
+      if (perp.lengthSq() < 1e-10) perp.copy(this.bodyRight).multiplyScalar(leg.side).addScaledVector(dir, -this.bodyRight.dot(dir) * leg.side);
+    }
+    perp.normalize();
+    if (preferred.lengthSq() > 1e-10) {
+      preferred.normalize();
+      const angle = Math.atan2(dir.dot(new THREE.Vector3().crossVectors(perp, preferred)), perp.dot(preferred));
+      perp.applyAxisAngle(dir, angle * confidence * (1 - Math.exp(-14 * this.poseDt)));
+    }
+    leg.bendDirection.copy(perp); leg.wristDirection.copy(dir);
     const x = (a * a - b * b + dist * dist) / (2 * dist);
     const y = Math.sqrt(Math.max(0, a * a - x * x));
     const E = S.clone().addScaledVector(dir, x).addScaledVector(perp, y);
     // Bone frames: x along the segment, z = limb plane normal (as in the bind).
-    const plane = new THREE.Vector3().crossVectors(E.clone().sub(S), W.clone().sub(E)).normalize();
+    const plane = new THREE.Vector3().crossVectors(perp, dir).normalize();
     const upperRot = new THREE.Matrix4();
     {
       const X = E.clone().sub(S).normalize();
