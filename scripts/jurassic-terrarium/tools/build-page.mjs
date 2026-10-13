@@ -191,6 +191,10 @@ patch('  H *= 1.0 - 0.55 * snowFlat;\n  // drowned', '  H *= 1.0 - 0.55 * snowFl
 patch('  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45);', '  float droop = aShape.w * (1.0 + snowFlat * 1.8 + G.y * 0.45 + jtTr * 3.0);', 'trodden grass droops');
 patch('  float bareM = smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24) * (1.0 - rockM);',
   '  float bareM = max(smoothstep(0.3, 0.62, D.b + (nB - 0.5) * 0.46 + (nC - 0.5) * 0.24), smoothstep(0.3, 0.85, jtTrample(p.xz) + (nB - 0.5) * 0.25) * (1.0 - riverBed)) * (1.0 - rockM);', 'worn trails');
+// Mouse: the right button slides the view (pans) and the left turns it, as in most 3D viewers;
+// shift + right still turns it. The pan reaches the ends of the wider case.
+patch('this.orbiting=t.button===2&&!t.shiftKey?"orbit":"pan"', 'this.orbiting=t.button===2&&t.shiftKey?"orbit":"pan"', 'right button pans');
+patch('this.goalTarget.x=it(this.goalTarget.x,-5,5)', 'this.goalTarget.x=it(this.goalTarget.x,-N.halfW+1,N.halfW-1)', 'pan the whole case');
 // The wind tool blows where the stroke is drawn on the ground, so a stroke drawn across the smoke in the
 // air landed far behind the cabin, and the smoke, caught in the side-draught of that gust, went the other
 // way. A stroke that passes over the plume now blows at the plume itself (window.__jtWindPick, weather.js).

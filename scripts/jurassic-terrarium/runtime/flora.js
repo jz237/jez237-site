@@ -290,7 +290,7 @@ export class Flora {
           } else col.setRGB(k, k * (0.97 + ((i * 0.13) % 0.06)), k * 0.95);
           im.setColorAt(i, col);
           p.top = p.y + H * s.y; // crown height, for browsers
-          const rec = { x: p.x, z: p.z, y: p.y, H: Math.max(0.02, H * s.y), give: mo.give, k: mo.k, crown: !!mo.crown,
+          const rec = { kind, x: p.x, z: p.z, y: p.y, H: Math.max(0.02, H * s.y), give: mo.give, k: mo.k, crown: !!mo.crown,
             attr, i, bx: 0, bz: 0, vx: 0, vz: 0, tx: 0, tz: 0, live: false };
           this.plants.push(rec);
           const key = Math.floor(p.x / this.cell) * 4096 + Math.floor(p.z / this.cell);
@@ -564,6 +564,107 @@ attribute vec2 aBend;
     }
   }
 
+  // The hand tool: grab any planted tree by its crown and pull it about, as with Weatherglass's own
+  // trees (the same priority, so whichever crown is nearest under the pointer is taken). It leans after
+  // the hand, shakes leaves loose and startles the birds as it goes; let go, it whips back and sways to
+  // rest; a click without a drag flicks it.
+  installHand() {
+    const input = this.ctx.input;
+    if (!input?.addHandler || this._hand) return;
+    this._hand = true;
+    this.held = new Map();
+    const trees = this.plants.filter((p) => p.crown || p.kind === 'cycad' || p.H > 0.3);
+    const tmp = new Vector3(), R = new Vector3(), Z = new Vector3(), D = new Vector3();
+    const axes = () => {
+      const cam = this.ctx.camera;
+      R.setFromMatrixColumn(cam.matrixWorld, 0).setY(0).normalize();
+      Z.set(-R.z, 0, R.x);
+      if (Z.dot(cam.getWorldDirection(D)) < 0) Z.negate();
+    };
+    const crown = (p) => tmp.set(p.x, p.y + p.H * 0.68, p.z);
+    const shake = (p, k) => {
+      const c = crown(p);
+      this.ctx.events?.emit?.('tree:shake', { x: c.x, y: c.y, z: c.z, kind: 'pine', strength: Math.min(1.5, k) });
+      this.mod?.effects?.leafBurst?.(c.clone(), 2 + Math.floor(k * 4));
+    };
+    input.addHandler({
+      name: 'jt-flora', priority: 25, tools: ['hand'], cursor: 'grab', activeCursor: 'grabbing',
+      hitTest: (ptr) => {
+        const ray = ptr.ray, o = ray.origin, d = ray.direction;
+        let best = null, bt = Infinity;
+        for (const p of trees) {
+          const c = crown(p), r = Math.max(0.07, p.H * (p.crown ? 0.3 : 0.4));
+          const ox = o.x - c.x, oy = o.y - c.y, oz = o.z - c.z, b = ox * d.x + oy * d.y + oz * d.z;
+          const disc = b * b - (ox * ox + oy * oy + oz * oz - r * r);
+          if (disc < 0) continue;
+          let t = -b - Math.sqrt(disc);
+          if (t < 0) t = -b + Math.sqrt(disc);
+          if (t > 0 && t < bt) (bt = t), (best = p);
+        }
+        if (!best) return null;
+        const g = this.ctx.terrain.raycast(ray, D);
+        if (g && g.distanceTo(o) < bt - 0.15) return null;
+        return { distance: bt, p: best, point: o.clone().addScaledVector(d, bt) };
+      },
+      onHover: (hit) => {
+        if (hit && hit.p !== this._hov) this.held.has(hit.p) || this.nudge(hit.p, 0.06);
+        this._hov = hit?.p || null;
+      },
+      onDown: (hit) => {
+        this.grab = { p: hit.p, anchor: hit.point.clone(), lx: 0, lz: 0, travel: 0, emitT: 0 };
+        this.held.set(hit.p, { x: 0, z: 0 });
+        this.ctx.audio?.play?.('whoosh', { volume: 0.1, pitch: 1.3 });
+        return true;
+      },
+      onMove: () => {
+        const g = this.grab;
+        if (!g) return;
+        const pt = this.ctx.input.rayToCameraPlane(g.anchor, D);
+        if (!pt) return;
+        axes();
+        const dx = pt.x - g.anchor.x, dy = pt.y - g.anchor.y, dz = pt.z - g.anchor.z;
+        const across = dx * R.x + dz * R.z, push = dy + dx * Z.x + dz * Z.z;
+        const p = g.p, f = Math.max(0.3, Math.min(1, (g.anchor.y - p.y) / p.H));
+        let bx = (R.x * across + Z.x * push) / (p.H * 0.6 * f), bz = (R.z * across + Z.z * push) / (p.H * 0.6 * f);
+        const m = Math.hypot(bx, bz), lim = p.crown ? 0.85 : 1.1;
+        if (m > 1e-5) (bx *= (lim * Math.tanh(m / lim)) / m), (bz *= (lim * Math.tanh(m / lim)) / m);
+        const step = Math.hypot(bx - g.lx, bz - g.lz);
+        g.travel += step;
+        g.lx = bx;
+        g.lz = bz;
+        this.held.set(p, { x: bx, z: bz });
+        if (g.emitT <= 0 && step > 0.05) (g.emitT = 0.15), shake(p, Math.min(0.8, step * 3));
+      },
+      onFrame: (ptr, dt) => {
+        if (this.grab) this.grab.emitT -= dt;
+      },
+      onUp: () => {
+        const g = this.grab;
+        if (!g) return;
+        this.grab = null;
+        this.held.delete(g.p);
+        // a click: a flick away from us; a drag: let go to whip back
+        if (g.travel < 0.05) {
+          axes();
+          g.p.vx += Z.x * 9;
+          g.p.vz += Z.z * 9;
+        }
+        shake(g.p, Math.max(0.4, Math.hypot(g.lx, g.lz)));
+        this.ctx.audio?.play?.('whoosh', { volume: 0.22 });
+      },
+    });
+  }
+
+  // a light touch (the pointer passing over a crown)
+  nudge(p, k) {
+    p.vx += (Math.random() - 0.5) * k * 20;
+    p.vz += (Math.random() - 0.5) * k * 20;
+    if (!p.live) {
+      p.live = true;
+      this.live.push(p);
+    }
+  }
+
   // a roar at (x, z): plants within r shiver, fading out
   shiver(x, z, r, strength = 1) {
     this.uniforms.uShiver.value.set(x, z, r, strength);
@@ -612,6 +713,16 @@ attribute vec2 aBend;
             }
           }
         }
+      }
+    }
+    // a tree held in the hand: driven towards where it is being pulled
+    for (const [p, t] of this.held || []) {
+      p.tx = t.x;
+      p.tz = t.z;
+      touched.add(p);
+      if (!p.live) {
+        p.live = true;
+        this.live.push(p);
       }
     }
     const dirty = this._dirty || (this._dirty = new Set());

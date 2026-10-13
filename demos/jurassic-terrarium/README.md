@@ -274,3 +274,7 @@ v1.35: Pteranodon wings:
 v1.36: game trails:
 - **Trample map:** a low-resolution map of the whole case that every walking animal presses into round its body, the heavy ones harder. It recovers over a few minutes, so a route used again and again becomes a trail and an abandoned one grows back.
 - **What it changes:** Weatherglass's grass lies short and flat along a trail, the planted ferns are trodden down and splayed out, and the ground wears to bare earth. `?trails=0` turns it off for comparison.
+
+v1.37: every tree in hand; right-drag pans:
+- **Grab any tree:** with the hand, any tree can be grabbed by its crown and pulled about: the conifers, redwoods, tree ferns, cycads and the rest of the planting, as well as Weatherglass's own trees. It leans after the hand, shakes leaves loose and startles the birds. Let go and it whips back and sways to rest; a click without a drag flicks it.
+- **Mouse:** the right button now slides the view around (pan) while the left button turns it; Shift + right still turns it. The pan reaches the ends of the wider case.

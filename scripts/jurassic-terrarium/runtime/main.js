@@ -2764,6 +2764,7 @@ class Dinosaurs {
   update(dt) {
     if (!this.ready) return;
     const env = this.env();
+    if (!this.flora._hand && this.flora.plants?.length) (this.flora.mod = this), this.flora.installHand();
     this.flora.update(dt);
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
