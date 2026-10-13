@@ -323,7 +323,7 @@ export class Aquatic {
   updateSpray(dt) {
     if (!this.spray) this.buildSpray();
     const g = this.sprayGeo, pos = g.attributes.position.array, al = g.attributes.aAlpha.array, sz = g.attributes.aSize.array;
-    const rnd = this.rand, wind = this.ctx.world?.wind || 0;
+    const rnd = this.rand, wv = this._wv || (this._wv = { x: 0, z: 0 });
     const life = this.ctx.modules.life?.env, night = life?.night ?? 0;
     this.sprayMat.uniforms.uLight.value.setRGB(1, 1, 1).lerp(new Color(0.16, 0.2, 0.3), night);
     this.sprayMat.uniforms.uScale.value = (this.ctx.renderer?.domElement?.height || 900) * 0.33;
@@ -344,7 +344,11 @@ export class Aquatic {
         p.age = 0;
       }
       if (p.mist) {
-        p.vx += (0.05 * wind - p.vx) * dt; p.vy *= 1 - 0.3 * dt;
+        // the fine mist goes where the wind takes it
+        const v = this.ctx.wind?.sample?.(p.x, p.z, wv, 0.15) || wv;
+        p.vx += ((Number.isFinite(v.x) ? v.x : 0) * 0.8 - p.vx) * 1.5 * dt;
+        p.vz += ((Number.isFinite(v.z) ? v.z : 0) * 0.8 - p.vz) * 1.5 * dt;
+        p.vy *= 1 - 0.3 * dt;
       } else {
         p.vy -= 1.1 * dt; p.vx *= 1 - 1.5 * dt; p.vz *= 1 - 1.5 * dt;
       }
