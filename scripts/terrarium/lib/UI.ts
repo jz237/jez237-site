@@ -21,6 +21,7 @@ const ICON: Record<string, string> = {
   pause: '<path d="M8 5v14M16 5v14"/>',
   reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/>',
   morph: '<path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.9 1.4-2-.5-1.3.2-2.5 1.7-2.5h1.8a3.6 3.6 0 0 0 3.6-3.6C20.5 7.3 16.7 3.5 12 3.5z"/><circle cx="7.6" cy="11" r="1.1"/><circle cx="10.5" cy="7.3" r="1.1"/><circle cx="15" cy="7.6" r="1.1"/>',
+  tornado: '<path d="M3 4.5h18M4.8 8.5h14.4M7.6 12.5h9.6M10.2 16.5h5.6M12.4 20.5h2.2"/>',
   mist: '<path d="M9 9h5v11a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1zM10 9V6h3v3M13 6.5h3.5l1 1.5M17.5 5l3-1M17.5 8l3 1M17.5 6.5h3.5"/>',
 };
 const svg = (k: string) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
@@ -47,6 +48,13 @@ export class UI {
   private drag: {kind: 'cloud' | 'water' | 'tool' | 'condense' | 'shrink'; last: THREE.Vector2; lastWorld?: THREE.Vector3; lastT: number; moved: number; downT: number; cloud?: Cloud | null; puffT?: number} | null = null;
   private coached = false;
   private coachedShrink = false;
+  private tornadoBtn: HTMLButtonElement;
+  private tornadoLabel: HTMLElement;
+  private tornadoState = '';
+  /** When the last storm began (for a word about the tornado button), s. */
+  private stormSaidT = -1e9;
+  private wasStormy = false;
+  private clockT = 0;
   private ray = new THREE.Raycaster();
   private ndc = new THREE.Vector2();
   onSound?: () => void;
@@ -68,6 +76,7 @@ export class UI {
   <button data-a="hide" title="Hide controls (H)">${svg('hide')}</button>
 </div>
 <div class="toast panel" role="status"></div>
+<button class="storm-btn panel" data-a="tornado" aria-pressed="false" title="Tornado (T)">${svg('tornado')}<span>Tornado</span></button>
 <div class="tools panel" role="toolbar" aria-label="Weather tools">
   ${TOOLS.map((x) => `<button data-tool="${x.id}" aria-pressed="${x.id === 'hand'}" title="${x.label}">${svg(x.id)}<span>${x.label}</span></button>`).join('')}
 </div>
@@ -86,6 +95,9 @@ export class UI {
     this.readout = {temp: q('[data-r="temp"]'), hum: q('[data-r="hum"]'), time: q('[data-r="time"]')};
     this.slider = this.root.querySelector('input[type=range]')!;
     this.play = q('[data-a="play"]') as HTMLButtonElement;
+    this.tornadoBtn = q('[data-a="tornado"]') as HTMLButtonElement;
+    this.tornadoLabel = this.tornadoBtn.querySelector('span')!;
+    this.tornadoBtn.onclick = () => this.toggleTornado();
     this.root.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => (b.onclick = () => this.setTool(b.dataset.tool as Tool)));
     q('[data-a="reset"]').onclick = () => t.resetView();
     q('[data-a="sound"]').onclick = () => this.onSound?.();
@@ -97,6 +109,7 @@ export class UI {
     q('.show-ui').onclick = () => document.body.classList.remove('no-ui');
     addEventListener('keydown', (e) => {
       if (e.key === 'h' || e.key === 'H') document.body.classList.toggle('no-ui');
+      if (e.key === 't' || e.key === 'T') this.toggleTornado();
       const idx = Number(e.key) - 1;
       if (idx >= 0 && idx < TOOLS.length) this.setTool(TOOLS[idx].id);
     });
@@ -108,6 +121,18 @@ export class UI {
     this.bindPointer(host);
     this.say(TOOLS[0].hint, 6);
     // A second tip once the first has been read.
+  }
+
+  /** Brings a tornado down from the storm (brewing one first under a calm sky), or sends it back up. */
+  toggleTornado() {
+    const t = this.t, tw = t.weather.tornado;
+    if (!t.audio.running) {t.audio.start(); this.setSoundState(!t.audio.muted);}
+    if (tw.live) {tw.dissipate(); this.say('The tornado ropes out and lifts back into the storm', 4); return;}
+    if (tw.phase === 'brewing') {tw.dissipate(); this.say('The storm settles without a tornado', 3); return;}
+    if (tw.phase === 'roping') return;
+    const stormy = t.weather.clouds.storminess > 0.4;
+    if (tw.request(t.weather.clouds) === 'brewing') this.say('Feeding the biggest cloud into a rotating storm… a funnel will lower from its base', 6);
+    else this.say(stormy ? 'The storm starts to rotate: a funnel is lowering' : 'A funnel is lowering from the storm', 5);
   }
 
   setSoundState(on: boolean) {
@@ -358,6 +383,32 @@ export class UI {
     if (document.activeElement !== this.slider) this.slider.value = String(w.hours);
     this.readout.temp.textContent = `${t.temperature.toFixed(0)}°C`;
     this.readout.hum.textContent = `${Math.round(w.humidity * 100)}%`;
-    this.status.textContent = t.weather.rainAmount > 0.1 ? 'Rain over the rainforest' : t.weather.daylight < 0.2 ? 'Night in the rainforest' : 'A living rainforest under glass';
+    const tw = t.weather.tornado;
+    this.status.textContent =
+      tw.phase === 'brewing' ? 'A storm is building' :
+      tw.phase === 'forming' ? (tw.touch > 0.5 ? 'Touchdown!' : 'A funnel cloud is lowering') :
+      tw.phase === 'mature' ? (tw.water > 0.5 ? 'A waterspout over the pool' : 'Tornado on the ground') :
+      tw.phase === 'roping' ? 'The tornado is roping out' :
+      t.weather.clouds.storminess > 0.4 ? 'A storm is rotating over the rainforest' :
+      t.weather.rainAmount > 0.1 ? 'Rain over the rainforest' : t.weather.daylight < 0.2 ? 'Night in the rainforest' : 'A living rainforest under glass';
+    // the tornado button: lit while a storm could drop one, pressed while one is down
+    this.clockT += dt;
+    const stormy = w.clouds.storminess > 0.4;
+    const state = tw.live || tw.phase === 'brewing' ? 'active' : tw.phase === 'roping' ? 'roping' : stormy ? 'ready' : 'calm';
+    if (state !== this.tornadoState) {
+      this.tornadoState = state;
+      const b = this.tornadoBtn;
+      b.dataset.state = state;
+      b.setAttribute('aria-pressed', String(state === 'active'));
+      b.disabled = state === 'roping';
+      this.tornadoLabel.textContent = state === 'active' ? 'Calm it' : 'Tornado';
+      b.title = state === 'active' ? 'Send the tornado back up (T)' : state === 'ready' ? 'Bring a tornado down from the storm (T)' : 'Brew a storm and bring a tornado down (T)';
+    }
+    // a word, once in a while, when a storm gets going on its own
+    if (stormy && !this.wasStormy && !tw.active && this.clockT - this.stormSaidT > 60) {
+      this.stormSaidT = this.clockT;
+      this.say('The storm is rotating · press Tornado to bring one down', 5);
+    }
+    this.wasStormy = stormy;
   }
 }
