@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import {TailContacts} from '../lib/TailContacts';
 import {TailDynamics} from '../lib/TailDynamics';
 import {archGeometry} from '../lib/DesertDetails';
+import {TANK} from '../lib/Case';
 
 const v = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
 const lengths = Array.from({length: 11}, (_, i) => i === 10 ? .013 : .026);
@@ -106,7 +107,7 @@ test('a confined half-turn bends around the shelter without climbing its roof or
   tail.points.forEach((p, i) => {
     largestError = Math.max(largestError, Math.abs(a.distanceTo(p) - lengths[i])); a = p;
     assert.ok(p.y < .05, `tail settles beneath the chamber ceiling (joint ${i}, y=${p.y})`);
-    assert.ok(Math.abs(p.z) < .291, 'tail remains inside the glass');
+    assert.ok(Math.abs(p.z) < TANK.d / 2 - .009, 'tail remains inside the glass');
   });
   assert.ok(largestError < .004, `confined turn retains tail length (${largestError} m error)`);
 });

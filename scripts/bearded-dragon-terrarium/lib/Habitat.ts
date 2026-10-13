@@ -72,7 +72,7 @@ export class Habitat {
   readonly group = new THREE.Group();
   readonly panes = new THREE.Group();
   readonly hard: {mesh: THREE.Mesh; kind: SurfaceKind}[] = [];
-  readonly obstacles = [{x:-.075,z:-.085,r:.066},{x:.018,z:-.035,r:.049},{x:.68,z:-.16,r:.050}];
+  readonly obstacles = [{x:-.075,z:-.085,r:.066},{x:.018,z:-.035,r:.049},{x:.68,z:-TANK.d/2+.14,r:.050}];
   readonly ground: THREE.Mesh;
   readonly warm: THREE.SpotLight;
   readonly daylight: THREE.SpotLight;
@@ -83,7 +83,7 @@ export class Habitat {
   private ripples: THREE.Mesh[] = [];
 
   constructor() {
-    const g=this.group;
+    const g=this.group, frontZ=TANK.d/2, backZ=-TANK.d/2;
     const black=new THREE.MeshStandardMaterial({color:0x121617,roughness:.3,metalness:.72});
     const steel=new THREE.MeshStandardMaterial({color:0x42494b,roughness:.35,metalness:.9});
     const rock=sandstone();
@@ -114,10 +114,10 @@ export class Habitat {
     const sandMap=dataTexture(512,512,(x,y,o)=>{
       const k=.86+tileFbm(x/32,y/32,16,4,32)*.17+noise(x,y,3)*.07;
       o[0]=213*k;o[1]=177*k;o[2]=126*k;
-    });sandMap.repeat.set(12,5);
-    const bump=dataTexture(512,512,(x,y,o)=>{o[0]=o[1]=o[2]=100+Math.sin(x*127.1+y*311.7)*55;},false);bump.repeat.set(13,5);
+    });sandMap.repeat.set(12,TANK.d/0.12);
+    const bump=dataTexture(512,512,(x,y,o)=>{o[0]=o[1]=o[2]=100+Math.sin(x*127.1+y*311.7)*55;},false);bump.repeat.set(13,TANK.d/0.12);
     const groundMat=new THREE.MeshStandardMaterial({map:sandMap,bumpMap:bump,bumpScale:.0012,roughness:.97});
-    const gg=new THREE.PlaneGeometry(TANK.w-.014,TANK.d-.014,220,82);gg.rotateX(-Math.PI/2);
+    const gg=new THREE.PlaneGeometry(TANK.w-.014,TANK.d-.014,220,Math.ceil((TANK.d-.014)/.0072));gg.rotateX(-Math.PI/2);
     const gp=gg.attributes.position as THREE.BufferAttribute;
     for(let i=0;i<gp.count;i++) gp.setY(i,groundHeight(gp.getX(i),gp.getZ(i)));gg.computeVertexNormals();
     this.ground=new THREE.Mesh(gg,groundMat);this.ground.receiveShadow=true;g.add(this.ground);
@@ -140,22 +140,22 @@ export class Habitat {
     addRock(-.060,.096,.210,.093,.063,.023,28,true,-.10);
     addRock(-.59,.191,-.096,.120,.087,.030,17);
     const coolArch=new THREE.Mesh(archGeometry(.38,.205,.218,.143,.230,41),rock);coolArch.position.set(.475,.073,-.16);coolArch.castShadow=coolArch.receiveShadow=true;g.add(coolArch);this.hard.push({mesh:coolArch,kind:SurfaceKind.Rock});
-    const coolBack=box(.34,.196,.004,.475,.171,-.293,interior);this.hard.push({mesh:coolBack,kind:SurfaceKind.Rock});
+    const coolBack=box(.34,.196,.004,.475,.171,backZ+.007,interior);this.hard.push({mesh:coolBack,kind:SurfaceKind.Rock});
     addRock(.450,.269,-.045,.155,.124,.043,29);
     for(const [x,z,w,d] of [[-.46,.033,.215,.20],[.475,-.045,.205,.21]]){
       const floor=new THREE.Mesh(new THREE.PlaneGeometry(w,d),interior);floor.rotation.x=-Math.PI/2;floor.position.set(x,groundHeight(x,z)+.001,z);floor.receiveShadow=true;g.add(floor);
     }
     addRock(.659,.093,.058,.069,.078,.029,72);
-    addRock(.008,.089,.251,.077,.047,.026,18);
-    addRock(-.245,.087,.275,.063,.029,.025,67);
+    addRock(.008,.089,frontZ-.049,.077,.047,.026,18);
+    addRock(-.245,.087,frontZ-.025,.063,.029,.025,67);
     // A few small smooth rocks and scatter pebbles, leaving most floor clear.
-    const rnd=mulberry32(51), pebble=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),rock,290);
+    const rnd=mulberry32(51), pebbleCount=Math.round(290*TANK.d/.6), pebble=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),rock,pebbleCount);
     const mat=new THREE.Matrix4(),q=new THREE.Quaternion();
-    for(let i=0;i<290;i++) {const x=(rnd()-.5)*1.56,z=(rnd()-.5)*.55,r=.0012+rnd()*.0038;mat.compose(new THREE.Vector3(x,groundHeight(x,z)+r*.28,z),q.setFromEuler(new THREE.Euler(rnd()*3,rnd()*3,rnd()*3)),new THREE.Vector3(r,r*.52,r*.8));pebble.setMatrixAt(i,mat);}
+    for(let i=0;i<pebbleCount;i++) {const x=(rnd()-.5)*(TANK.w-.04),z=(rnd()-.5)*(TANK.d-.05),r=.0012+rnd()*.0038;mat.compose(new THREE.Vector3(x,groundHeight(x,z)+r*.28,z),q.setFromEuler(new THREE.Euler(rnd()*3,rnd()*3,rnd()*3)),new THREE.Vector3(r,r*.52,r*.8));pebble.setMatrixAt(i,mat);}
     pebble.receiveShadow=true;g.add(pebble);
-    this.addRosette(-.712,-.13,.128,21);this.addRosette(.696,.160,.144,22);this.addRosette(-.015,-.214,.108,23);this.addRosette(-.700,.234,.066,24);this.addRosette(.228,.184,.055,26);
-    g.add(dryShrub(-.728,.08,.183,61),dryShrub(-.066,-.170,.174,62),dryShrub(-.244,-.207,.12,63));
-    g.add(cactus(.682,-.158,.278,.030,41),cactus(.741,-.122,.220,.025,42),cactus(.613,-.213,.181,.022,43),cactus(.649,.102,.053,.027,44,true));
+    this.addRosette(-.712,backZ+.17,.128,21);this.addRosette(.696,frontZ-.14,.144,22);this.addRosette(-.015,backZ+.086,.108,23);this.addRosette(-.700,frontZ-.066,.066,24);this.addRosette(.228,frontZ-.116,.055,26);
+    g.add(dryShrub(-.728,.08,.183,61),dryShrub(-.066,backZ+.13,.174,62),dryShrub(-.244,backZ+.093,.12,63));
+    g.add(cactus(.682,backZ+.142,.278,.030,41),cactus(.741,backZ+.178,.220,.025,42),cactus(.613,backZ+.087,.181,.022,43),cactus(.649,.102,.053,.027,44,true));
 
     // Low stone water dish at the cool end, separated from the food and lamp.
     const profile:THREE.Vector2[]=[];
@@ -167,12 +167,12 @@ export class Habitat {
     this.warm=this.lamp(-.46,.050,0xffc37d,true);
     this.daylight=this.lamp(.52,-.035,0xcfeaff,false);
     // UVB fluorescent fixture sits inside, above the warm half of the habitat.
-    box(.72,.013,.032,-.27,TANK.h-.026,-.265,steel);
+    box(.72,.013,.032,-.27,TANK.h-.026,backZ+.035,steel);
     const uvMat=new THREE.MeshStandardMaterial({color:0xe5f3ff,emissive:0xc9e7ff,emissiveIntensity:.45,roughness:.3});this.bulbs.push(uvMat);
-    const tube=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.67,16),uvMat);tube.rotation.z=Math.PI/2;tube.position.set(-.27,TANK.h-.032,-.263);g.add(tube);
+    const tube=new THREE.Mesh(new THREE.CylinderGeometry(.003,.003,.67,16),uvMat);tube.rotation.z=Math.PI/2;tube.position.set(-.27,TANK.h-.032,backZ+.037);g.add(tube);
     const cv=document.createElement('canvas');cv.width=256;cv.height=256;const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;this.readout={canvas:cv,texture:tex};
-    box(.088,.107,.023,.715,.521,.282,black);
-    const lcd=new THREE.Mesh(new THREE.PlaneGeometry(.074,.088),new THREE.MeshBasicMaterial({map:tex}));lcd.position.set(.715,.521,.297);g.add(lcd);this.drawReadout(41,24,34);
+    box(.088,.107,.023,.715,.521,frontZ-.018,black);
+    const lcd=new THREE.Mesh(new THREE.PlaneGeometry(.074,.088),new THREE.MeshBasicMaterial({map:tex}));lcd.position.set(.715,.521,frontZ-.003);g.add(lcd);this.drawReadout(41,24,34);
     // A simple neutral room and tabletop catch warm and cool reflections.
     const table=new THREE.Mesh(new THREE.PlaneGeometry(15,15),new THREE.MeshStandardMaterial({color:0x77716a,roughness:.43,metalness:.1}));table.rotation.x=-Math.PI/2;table.position.y=-.025;table.receiveShadow=true;g.add(table);
     const wall=new THREE.Mesh(new THREE.PlaneGeometry(14,8),new THREE.MeshStandardMaterial({color:0x585753,roughness:1}));wall.position.set(0,3,-3);g.add(wall);
@@ -186,7 +186,7 @@ export class Habitat {
     const bulb=new THREE.Mesh(new THREE.CircleGeometry(.093,64),bm);bulb.rotation.x=Math.PI/2;bulb.position.set(x,TANK.h-.009,z);this.group.add(bulb);
     const hook=new THREE.Mesh(new THREE.TorusGeometry(.014,.0027,8,24),new THREE.MeshStandardMaterial({color:0x11191b,roughness:.3,metalness:.7}));hook.position.set(x,TANK.h+.167,z);this.group.add(hook);
     for(const side of [-1,1]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.0024,.0024,.146,8),new THREE.MeshStandardMaterial({color:0x151a1f,metalness:.7,roughness:.4}));p.position.set(x+side*.075,TANK.h+.057,z-.024);p.rotation.z=side*.48;this.group.add(p);}
-    const cable=new THREE.CatmullRomCurve3([new THREE.Vector3(x,TANK.h+.116,z),new THREE.Vector3(x+.014,TANK.h+.13,z-.03),new THREE.Vector3(x+.022,TANK.h+.1,z-.105),new THREE.Vector3(x+.035,TANK.h+.025,-.31)]);
+    const cable=new THREE.CatmullRomCurve3([new THREE.Vector3(x,TANK.h+.116,z),new THREE.Vector3(x+.014,TANK.h+.13,z-.03),new THREE.Vector3(x+.022,TANK.h+.1,z-.105),new THREE.Vector3(x+.035,TANK.h+.025,-TANK.d/2-.01)]);
     this.group.add(new THREE.Mesh(new THREE.TubeGeometry(cable,20,.0028,6,false),new THREE.MeshStandardMaterial({color:0x080b0e,roughness:.6})));
     const l=new THREE.SpotLight(color,basking?2.4:1.65,2,basking?.67:1.0,.75,2);l.position.set(x,TANK.h-.014,z);l.target.position.set(x,.09,z);l.castShadow=true;l.shadow.mapSize.setScalar(2048);l.shadow.bias=-.00012;l.shadow.normalBias=.0009;l.shadow.camera.near=.03;l.shadow.camera.far=2;this.group.add(l,l.target);return l;
   }

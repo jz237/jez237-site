@@ -49,7 +49,7 @@ export class DesertTerrarium {
   private async load() {
     await this.habitat.ready;
     this.surface=new Surface(this.habitat.ground,this.habitat.hard,.004);
-    this.dish=new Dish(this.surface,-.58,.212);this.scene.add(this.dish.group);
+    this.dish=new Dish(this.surface,-.58,TANK.d/2-.088);this.scene.add(this.dish.group);
     this.nav=new Nav(this.surface,this.habitat.obstacles);
     this.insects=new Insects(this.surface,this.nav);this.scene.add(this.insects.group);
     this.lizard=await LizardModel.load('./lizard/');this.lizard.setMorph(params.get('morph')??'normal');this.scene.add(this.lizard.root);
@@ -93,7 +93,7 @@ export class DesertTerrarium {
     const atHome=!this.follow&&this.camera.position.distanceTo(this.home)<.025;
     const w=innerWidth,h=innerHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.post.setSize(w,h,this.renderer.getPixelRatio());
     const z=Math.max(1.9,((TANK.w+.20)/2)/Math.tan(THREE.MathUtils.degToRad(this.camera.fov/2))/this.camera.aspect);
-    this.home.set(.015,.40,z+.24);if(w<640)this.home.y=.71;
+    this.home.set(.015,.64,z+TANK.d/2-.06);if(w<640)this.home.y=.82;
     this.controls.maxDistance=Math.max(4.5,z+1);
     if(reset||atHome){this.camera.position.copy(this.home);this.controls.target.copy(this.homeTarget);this.controls.update();}
   }
