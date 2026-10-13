@@ -166,3 +166,30 @@ test('route following keeps an obstructed corner instead of cutting ahead into t
   assert.equal(brain.pathI, 1, 'retain the corner until the next segment is visible');
   assert.ok(lineClear(inputs.x, inputs.z, brain.tmp2[0], brain.tmp2[1]), 'steering aim remains in the usable corridor');
 });
+
+test('front elbows remain outside the shoulders while descending a narrow stone ramp', () => {
+  const lizard = model();
+  const height = (x: number, z: number) => Math.abs(z) < .03 ? .16 - THREE.MathUtils.clamp(x * .55, 0, .09) : 0;
+  const rig = new LizardRig(lizard, {
+    heightAt: height,
+    normalAt: (x, z, out = new THREE.Vector3()) => out.set(x > 0 && x < .16 && Math.abs(z) < .03 ? .55 : 0, 1, 0).normalize(),
+  });
+  Object.assign(rig.inputs, {x: -.14, speed: .055, clearance: 1.15, chestLift: .15, breath: 0});
+  type Arm = {front: boolean; side: number; data: LizardData['limbs'][number]};
+  const arms = (rig as unknown as {legs: Arm[]}).legs.filter(l => l.front);
+  let highest = -Infinity, innermost = Infinity;
+  const axes = rig as unknown as {bodyUp: THREE.Vector3; bodyRight: THREE.Vector3};
+  for (let i = 0; i < 420; i++) {
+    rig.inputs.x += rig.inputs.speed / 60; rig.update(1 / 60);
+    if (i < 60) continue;
+    for (const arm of arms) {
+      const shoulder = new THREE.Vector3().setFromMatrixPosition(lizard.bones[arm.data.bones.upper].matrix);
+      const elbow = new THREE.Vector3().setFromMatrixPosition(lizard.bones[arm.data.bones.lower].matrix);
+      const upper = elbow.sub(shoulder);
+      highest = Math.max(highest, upper.dot(axes.bodyUp));
+      innermost = Math.min(innermost, upper.dot(axes.bodyRight) * arm.side);
+    }
+  }
+  assert.ok(innermost >= 0, `no inward shoulder fold (${innermost} m)`);
+  assert.ok(highest < .012, `no arm folded up over the shoulder (${highest} m)`);
+});

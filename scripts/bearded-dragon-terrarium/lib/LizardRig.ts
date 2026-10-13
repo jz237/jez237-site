@@ -297,7 +297,10 @@ export class LizardRig {
     let wall = false;
     for (let k = 0; k <= 6; k++) {
       const w = (1 - k * 0.12) * (1 - this.walkExtension * 0.045);
-      out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, h.z * K * w);
+      // A forepaw may grip the side of a narrow perch, but cannot be folded
+      // inward underneath its shoulder just to find the perch's upper surface.
+      const lateral = leg.front ? Math.sign(h.z) * Math.max(Math.abs(h.z * K * w), (Math.abs(leg.data.root[2]) + .6) * K) : h.z * K * w;
+      out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, lateral);
       out.x += this.inputs.x;
       out.z += this.inputs.z;
       insideGlass(out, 0.009); // a foot never steps through the glass
@@ -315,7 +318,9 @@ export class LizardRig {
       return out;
     }
     // Nothing within reach: hold the foot against the side of the perch.
-    out.y = Math.max(out.y, this.bodyY - reachDown);
+    const shoulder = this.bodyToWorld(new THREE.Vector3(...leg.data.root as [number, number, number]), new THREE.Vector3());
+    const hangingHeight = leg.front ? shoulder.y - (leg.data.root[1] - leg.data.wrist[1]) * K - .007 : this.bodyY - reachDown;
+    out.y = Math.max(out.y, hangingHeight);
     this.homeHangs = true;
     return out;
   }
@@ -961,8 +966,9 @@ export class LizardRig {
     if (dist < minR) dist = minR;
     const dir = W.clone().sub(S).normalize();
     // (the elbow out and back, the knee out and forward, both held up near the level of the shoulder and hip)
-    const pole = S.clone().addScaledVector(this.bodyRight, leg.side * 0.045).addScaledVector(this.bodyUp, 0.045).addScaledVector(this.bodyFwd, leg.front ? -0.018 : 0.022);
-    const toPole = pole.sub(S);
+    const toPole = leg.front
+      ? new THREE.Vector3(d.mid[0] - d.root[0], d.mid[1] - d.root[1], d.mid[2] - d.root[2]).transformDirection(g)
+      : this.bodyRight.clone().multiplyScalar(leg.side * .045).addScaledVector(this.bodyUp, .045).addScaledVector(this.bodyFwd, .022);
     const poleLength = toPole.length();
     const preferred = toPole.addScaledVector(dir, -toPole.dot(dir));
     const confidence = smooth(clamp((preferred.length() / poleLength - .04) / .28, 0, 1));
