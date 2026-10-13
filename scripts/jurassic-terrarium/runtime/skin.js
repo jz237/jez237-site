@@ -19,6 +19,9 @@
 //     crevices. Worked out per pixel from the skin's own bind-pose position, it sharpens in as the camera
 //     comes closer and fades out where a scale would be smaller than a few pixels (so far views neither
 //     shimmer nor pay for it).
+//   - snow settling on the back, the neck, the tops of the tail and plates (a little thickness to it,
+//     sparkling), melting off in a thaw or shaken off; frost rimed on frills, plates and horns in a hard
+//     cold;
 //   - flesh in motion: the belly, the throat and the mass of the thighs are soft (aSoft, found from the
 //     bone each vertex hangs from and which way it faces) and are moved by per-animal springs that lag
 //     behind the body as it speeds up, slows, turns and lands each foot; the ribcage swells with each
@@ -293,6 +296,9 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uLegFlex: { value: new Vector4() }, // bunching at the top of each leg (thigh L, R, upper arm L, R), metres
     uLegIdx: { value: new Vector4(-1, -1, -1, -1) }, // their bone indices in the skeleton
     uInvUnit: { value: 1 / (info?.perUnit || 1) }, // stored units per metre
+    uSnow: { value: 0 }, // 0..1 snow lying on it
+    uSnowH: { value: 0 }, // how thick, metres
+    uFrost: { value: 0 }, // 0..1 rime in a hard frost
     uWet: { value: 0 }, // 0..1 how wet the skin is (rain, a wade)
     uRain: { value: 0 }, // 0..1 rain falling on it now
   };
@@ -322,6 +328,8 @@ uniform float uBreath;
 uniform vec4 uLegFlex;
 uniform vec4 uLegIdx;
 uniform float uInvUnit;
+uniform float uSnow;
+uniform float uSnowH;
 uniform float uFlare;
 uniform float uNosDepth;
 varying float vThin;
@@ -345,6 +353,9 @@ varying vec3 vLocal;`)
     }
     // strongest where the leg's bone shares the vertex with the body: the muscle at the joint
     jd += jn * dot(lw * (1.0 - lw) * 4.0, uLegFlex);
+    // snow lying on the upward faces has a little thickness, thinning at its ragged edge
+    float jtUpB = smoothstep(0.25, 0.8, jn.y + (fract(sin(dot(aBind, vec3(12.9, 78.2, 37.7))) * 4375.85) - 0.5) * 0.15);
+    jd += jn * uSnow * jtUpB * uSnowH;
     transformed += jd * uInvUnit;
   }`);
     sh.fragmentShader = sh.fragmentShader
@@ -360,6 +371,8 @@ uniform float uWet;
 uniform float uRain;
 uniform float uTime;
 uniform float uFlash;
+uniform float uSnow;
+uniform float uFrost;
 uniform vec3 uWarmPos[4];
 uniform vec4 uWarmCol[4];
 uniform vec4 uScales;
@@ -403,12 +416,19 @@ float jtNoise(vec3 p) {
   diffuseColor.rgb = mix(diffuseColor.rgb, jtMudCol * (0.7 + 0.6 * jtN), jtMud * 0.9);
   // creases across the neck, deepening as it bends
   float jtCr = vNeck * uBend * smoothstep(0.55, 1.0, 0.5 + 0.5 * sin(vLocal.z * 46.0 + sin(vLocal.y * 23.0) * 1.6));
-  diffuseColor.rgb *= 1.0 - jtCr * 0.32;`)
+  diffuseColor.rgb *= 1.0 - jtCr * 0.32;
+  float jtUpF = dot(normalize(vNormal), normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz));
+  // snow on whatever faces up, broken at its edge; frost on thin skin and ridges in a hard cold
+  float jtSnowM = uSnow * smoothstep(0.3, 0.7, jtUpF + (jtNoise(vLocal * 5.0) * 0.6 + jtNoise(vLocal * 19.0) * 0.4 - 0.5) * 0.55);
+  float jtFrostM = uFrost * clamp(vThin * 0.9 + smoothstep(0.2, 0.9, jtUpF) * 0.35, 0.0, 1.0) * smoothstep(0.35, 0.75, jtNoise(vLocal * 37.0));
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.86, 0.9, 0.97), max(jtSnowM, jtFrostM * 0.75));`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
   // the sheen breaks up over the scales; wet mud glistens
   roughnessFactor = clamp(roughnessFactor + (jtNoise(vLocal * 17.0) - 0.5) * 0.22 - jtMud * uMudWet * 0.7 + jtMud * (1.0 - uMudWet) * 0.3 + jtCr * 0.15, 0.05, 1.0);
+  // snow is matt; frost a little glassy
+  roughnessFactor = mix(roughnessFactor, 0.8, jtSnowM);
+  roughnessFactor = mix(roughnessFactor, 0.45, jtFrostM * 0.7);
   // wet: rivulets running down the steep flanks, beads standing on the top surfaces, both glassy
-  float jtUpF = dot(normalize(vNormal), normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz));
   float jtRiv = 0.0;
   if (uWet > 0.02) {
     float rv = jtNoise(vec3(vLocal.x * 7.0, vLocal.y * 0.9 + uTime * 0.35, vLocal.z * 7.0));
@@ -481,6 +501,11 @@ float jtNoise(vec3 p) {
     float ndl = clamp(dot(normal, wl * inversesqrt(max(d2, 1e-6))) * 0.75 + 0.25, 0.0, 1.0);
     reflectedLight.directDiffuse += diffuseColor.rgb * wc.rgb * ndl * att * att;
     reflectedLight.directSpecular += wc.rgb * pow(ndl, 12.0) * att * att * 0.08 * (1.0 - roughnessFactor);
+  }
+  // glints off snow crystals and rime
+  if (jtSnowM + jtFrostM > 0.02) {
+    float gl = step(0.985, jtHash(floor(vLocal * 260.0))) * max(jtSnowM, jtFrostM);
+    reflectedLight.directSpecular += uLightColor * gl * 0.6 * (1.0 - uNight * 0.8);
   }
   // lightning: a hard cold rim round the silhouette
   if (uFlash > 0.01) {

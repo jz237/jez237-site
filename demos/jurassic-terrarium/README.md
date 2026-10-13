@@ -245,3 +245,8 @@ v1.31: flesh in motion:
 - **Breathing:** the ribcage swells and falls with each breath, deeper and quicker after a run.
 - **Muscle:** the muscle at the top of each leg bunches as the leg swings away from rest.
 - `?flesh=0` turns it off for comparison (and `?flesh=3` exaggerates it).
+
+v1.32: snow and frost on the animals:
+- **Snow lying:** while it snows, snow settles on whatever faces up (backs, necks, the tops of tails, plates and frills), with a little thickness to it, a ragged edge and glints of crystals in the light. Very little settles on animals sheltering or in the den. It melts off in a thaw or when they wade.
+- **Shaking it off:** an animal with snow piling up shakes it off now and then in a burst of powder.
+- **Frost:** in a hard cold, rime forms on frills, plates and horns and lightly on the back.

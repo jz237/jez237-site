@@ -735,6 +735,17 @@ class Dino {
       this.skinU.uRain.value = (env.rain || 0) * (this.state === 'shelter' ? 0.15 : this.sp.den && this.state === 'sleep' && this.inDen() ? 0 : 1);
     }
     if (env.rain > 0.3) this._shookRain = false;
+    // snow settles on it while it falls (hardly at all under shelter or in the den), melts in a thaw
+    {
+      const w = mod.ctx.world, temp = mod.ctx.modules.life?.env?.temp ?? 15, fall = w.snowfall || 0;
+      const under = this.state === 'shelter' || (this.sp.den && this.inDen?.());
+      this.snow = MathUtils.clamp((this.snow || 0) + dt * (fall * 0.025 * (under ? 0.1 : 1) - Math.max(0, temp - 1) * 0.004 - (this.inWater > 0.35 ? 0.2 : 0)), 0, 1);
+      if (this.skinU) {
+        this.skinU.uSnow.value = this.snow;
+        this.skinU.uSnowH.value = (this.info?.length || 6) * 0.004;
+        this.skinU.uFrost.value = MathUtils.clamp((1 - temp) / 6, 0, 1);
+      }
+    }
     // the wind where it stands (for turning tail to a gale, and narrowed eyes)
     if (mod.weather) {
       this.windV = mod.weather.windAt(this.pos.x, this.pos.z, 0.3);
@@ -841,6 +852,11 @@ class Dino {
         if (env.rain < 0.08 && (this.wet || 0) > 0.5 && !this._shookRain && !this.swimming && this.inWater < 0.05) {
           this._shookRain = true;
           this._shookT = 45;
+          this.perform('shake');
+          break;
+        }
+        // snow piling up on its back: shake it off now and then
+        if ((this.snow || 0) > 0.45 && !this.swimming && rand() < dt * 0.06) {
           this.perform('shake');
           break;
         }
@@ -1583,7 +1599,16 @@ class Dino {
       if (P.dropT <= 0 && env > 0.3) {
         P.dropT = 0.05;
         const src = [...fx.spine, ...fx.neck][Math.floor(rand() * (fx.spine.length + fx.neck.length))];
-        if (src) this.mod.effects.spray(src.getWorldPosition(_kd), 3, 0.25 + this.length * 0.08, this.mod.ctx.terrain.height(this.pos.x, this.pos.z));
+        if (src) {
+          const at = src.getWorldPosition(_kd);
+          // snow flies off in puffs; water in drops
+          if ((this.snow || 0) > 0.05) {
+            const s = Math.max(0.03, this.length * 0.05);
+            this.mod.weather?.puff(at, new Vector3((rand() - 0.5) * s * 8, s * 3, (rand() - 0.5) * s * 8), s * 0.8, 0.55, 1.1 + rand() * 0.6);
+            this.snow = Math.max(0, this.snow - dt * 2.2);
+          }
+          if ((this.wet || 0) > 0.2 || (this.snow || 0) < 0.05) this.mod.effects.spray(at, 3, 0.25 + this.length * 0.08, this.mod.ctx.terrain.height(this.pos.x, this.pos.z));
+        }
       }
     } else if (P.kind === 'yawn') {
       // the head lifts, the jaw gapes slowly, eyes squeezed shut, then it closes
