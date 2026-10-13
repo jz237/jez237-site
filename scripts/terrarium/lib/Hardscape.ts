@@ -24,6 +24,11 @@ const ROCKS: RockSpec[] = [
   {rock: 4, pos: [-0.025, 0, 0.115], rot: [0.15, 1.7, 0.1], scale: 0.026, sink: 0.01},
   {rock: 5, pos: [0.43, 0, 0.15], rot: [0.05, 0.3, 0.1], scale: 0.024, sink: 0.035},
   {rock: 2, pos: [0.15, 0, 0.12], rot: [0.0, 2.6, 0.05], scale: 0.02, sink: 0.03},
+  // the wings at either end of the case: a few mossy stones among the ferns
+  {rock: 3, pos: [-0.71, 0, -0.1], rot: [0.15, 0.9, 0.05], scale: 0.038, sink: 0.014},
+  {rock: 5, pos: [-0.64, 0, 0.13], rot: [0.1, -0.4, 0.05], scale: 0.026, sink: 0.012, walkable: true},
+  {rock: 2, pos: [0.72, 0, -0.11], rot: [0.05, 2.2, 0.1], scale: 0.036, sink: 0.014},
+  {rock: 4, pos: [0.67, 0, 0.14], rot: [0.12, 0.3, 0.0], scale: 0.025, sink: 0.012, walkable: true},
 ];
 
 export class Hardscape {

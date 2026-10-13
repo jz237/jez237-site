@@ -66,6 +66,12 @@ export class LizardBrain {
   private replans = 0;
   private blockedT = 0;
   private stallT = 0;
+  /** Time spent walking into something the body is pushed back off (the glass, a tall stone). */
+  private pushedT = 0;
+  /** Closest it has come to the end of the current route, and how long since it got closer. */
+  private nearPath: [number, number][] | null = null;
+  private nearBest = Infinity;
+  private nearT = 0;
   private stallRef = new THREE.Vector2();
   private leadT = 0;
   private lickT = 0;
@@ -382,11 +388,14 @@ export class LizardBrain {
   }
 
   /** Recent time spent near a point (decays over a couple of minutes). */
-  private visited = new Float32Array(12 * 5);
-  private visitedAt(x: number, z: number) {
-    const i = clamp(Math.floor((x + TANK.w / 2) / 0.1), 0, 11), j = clamp(Math.floor((z + TANK.d / 2) / 0.1), 0, 4);
-    return this.visited[j * 12 + i] / 60;
+  private static readonly VX = Math.ceil(TANK.w / 0.1);
+  private static readonly VZ = Math.ceil(TANK.d / 0.1);
+  private visited = new Float32Array(LizardBrain.VX * LizardBrain.VZ);
+  private visitedCell(x: number, z: number) {
+    const i = clamp(Math.floor((x + TANK.w / 2) / 0.1), 0, LizardBrain.VX - 1), j = clamp(Math.floor((z + TANK.d / 2) / 0.1), 0, LizardBrain.VZ - 1);
+    return j * LizardBrain.VX + i;
   }
+  private visitedAt(x: number, z: number) {return this.visited[this.visitedCell(x, z)] / 60;}
 
   startHunt(c: Cricket) {
     if (this.prey?.caught && !this.prey.eaten) return; // one mouthful at a time
@@ -458,8 +467,7 @@ export class LizardBrain {
     {
       const decay = Math.exp(-dt / 150);
       for (let k = 0; k < this.visited.length; k++) this.visited[k] *= decay;
-      const i = clamp(Math.floor((I.x + TANK.w / 2) / 0.1), 0, 11), j = clamp(Math.floor((I.z + TANK.d / 2) / 0.1), 0, 4);
-      this.visited[j * 12 + i] += dt;
+      this.visited[this.visitedCell(I.x, I.z)] += dt;
     }
     I.jaw = damp(I.jaw, 0, 6, dt);
     I.tongue = damp(I.tongue, 0, 12, dt);
@@ -745,6 +753,7 @@ export class LizardBrain {
     else if (this.nav.walkable(nx, I.z)) I.x = nx; // slide along the obstacle
     else if (this.nav.walkable(I.x, nz)) I.z = nz;
     else {this.speed *= 0.5; this.blockedT += dt;}
+    const movedX = I.x, movedZ = I.z;
     // stall watchdog: trying to travel but getting nowhere
     if ((this.mode === 'travel' || this.mode === 'startle' || (this.mode === 'hunt' && this.huntPhase === 'approach')) && this.pauseT <= 0 && this.leadT <= 0) {
       this.stallT += dt;
@@ -763,6 +772,10 @@ export class LizardBrain {
     I.lid = p.lid;
     I.breath = p.breath;
     this.rig.update(dt);
+    // Walking on the spot: the rig shoved the body back off the glass or a stone
+    // it was walking into (see travel)
+    const back = -((I.x - movedX) * Math.cos(I.heading) - (I.z - movedZ) * Math.sin(I.heading));
+    this.pushedT = this.speed > 0.01 && back > 0.5 * this.speed * dt ? this.pushedT + dt : Math.max(0, this.pushedT - dt);
     // A caught cricket is held crosswise in the jaws, sticking out of one side
     // and drawn further in with every bite.
     if (this.prey && this.prey.caught && this.onTongue) {
@@ -884,8 +897,11 @@ export class LizardBrain {
     const I = this.rig.inputs;
     if (!this.path.length || this.pathI >= this.path.length) {this.arrive(); return {speed: 0, turn: 0};}
     // Blocked or stalled: plan again from here, and give up if that keeps failing.
-    if (this.blockedT > 0.35 || this.stallT > 2.5) {
+    // (walking on the spot against the glass or a stone counts too; close to the
+    // end of the route that is simply as far as it can go, see below)
+    if (this.blockedT > 0.35 || this.stallT > 2.5 || (this.pushedT > 0.5 && this.remaining() > 0.06)) {
       this.stallT = 0;
+      this.pushedT = 0;
       if (!this.replan()) {
         this.path = [];
         if (this.mode === 'hunt') return {speed: 0, turn: 0};
@@ -941,6 +957,17 @@ export class LizardBrain {
     if (this.leadT > 0) {
       this.leadT -= dt;
       return {speed: 0, turn: Math.abs(err) > 1.2 ? Math.sign(err) * 1.6 : 0};
+    }
+    // Nearly there: a lizard does not wheel round for the last step or two, nor
+    // keep circling or pushing at a spot it cannot quite reach (tucked against
+    // the log, up at the glass). That is as far as it goes: it has arrived.
+    if (this.path !== this.nearPath) {this.nearPath = this.path; this.nearBest = Infinity; this.nearT = 0;}
+    if (remaining < this.nearBest - 0.005) {this.nearBest = remaining; this.nearT = 0;}
+    else this.nearT += dt;
+    if (remaining < 0.06 && ((remaining < 0.035 && Math.abs(err) > 1.0) || this.nearT > 1.5 || this.pushedT > 0.25)) {
+      this.pushedT = 0;
+      this.arrive();
+      return {speed: 0, turn: 0};
     }
     let speed = this.cruise * Math.max(0, Math.cos(err)) ** 2;
     // Too far off course: pivot on the spot with short steps, as lizards do.
@@ -1003,7 +1030,7 @@ export class LizardBrain {
           // this side, try another side.
           if (Math.abs(err) > 0.3) return {speed: 0, turn: clamp(err * 5, -2.5, 2.5)};
           if (mouthD < 0.085) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
-          const ahead = this.nav.walkable(I.x + Math.cos(I.heading) * 0.02, I.z - Math.sin(I.heading) * 0.02);
+          const ahead = this.nav.walkable(I.x + Math.cos(I.heading) * 0.02, I.z - Math.sin(I.heading) * 0.02) && this.pushedT < 0.3;
           if (ahead) return {speed: 0.035, turn: clamp(err * 5, -2.5, 2.5)};
           this.standTries++;
           if (this.standTries > 3) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}

@@ -57,6 +57,9 @@ function landHeight(x: number, z: number) {
   h += 0.032 * gauss(x - 0.43, z + 0.17, 0.15, 0.09);
   h += 0.04 * gauss(x + 0.46, z + 0.17, 0.13, 0.09);
   h += 0.012 * gauss(x + 0.34, z - 0.04, 0.2, 0.12);
+  // the wings at either end: a mossy mound against each side glass and a low bank at the back
+  h += 0.04 * gauss(x + 0.7, z + 0.12, 0.11, 0.11) + 0.018 * gauss(x + 0.66, z - 0.1, 0.1, 0.08);
+  h += 0.035 * gauss(x - 0.7, z + 0.13, 0.12, 0.1) + 0.014 * gauss(x - 0.68, z - 0.08, 0.09, 0.08);
   // low hummocks and a root-raised bank give the floor some relief
   h += 0.008 * gauss(x + 0.22, z - 0.12, 0.07, 0.05) + 0.006 * gauss(x - 0.47, z - 0.02, 0.06, 0.06);
   h += (fbm(x * 14 + 3, z * 14) - 0.5) * 0.012 + (fbm(x * 55, z * 55) - 0.5) * 0.003;
@@ -97,7 +100,7 @@ export class Ground {
   readonly uniforms = {uTime: {value: 0}, uWet: {value: 0}, uCaustic: {value: 1}, tMoss: {value: null as THREE.Texture | null}, tWetMap: {value: null as THREE.Texture | null}};
 
   constructor() {
-    const NX = 360, NZ = 150;
+    const NX = Math.round(300 * TANK.w), NZ = 150;
     const geo = new THREE.PlaneGeometry(HX * 2, HZ * 2, NX, NZ);
     geo.rotateX(-Math.PI / 2);
     const pos = geo.attributes.position as THREE.BufferAttribute;

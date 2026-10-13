@@ -338,6 +338,10 @@ export class Plants {
       // ferns where big heart-leaf plants stood: the case is mostly fern
       [-0.17, -0.13, 0.22, 2], [-0.04, -0.15, 0.2, 3], [0.36, -0.1, 0.22, 2], [-0.43, -0.05, 0.2, 3], [-0.22, 0.02, 0.15, 2],
       [0.28, -0.03, 0.16, 3], [0.43, -0.03, 0.18, 2], [-0.08, -0.205, 0.3, 1], [0.52, -0.19, 0.34, 0],
+      // the wings at either end of the wider case: a screen of tall ferns at the
+      // back and sides, smaller clumps toward the front, moss between them
+      [-0.76, -0.2, 0.36, 0], [-0.64, -0.21, 0.32, 1], [-0.77, -0.04, 0.3, 1], [-0.69, 0.04, 0.22, 2], [-0.77, 0.15, 0.24, 3], [-0.6, -0.12, 0.2, 2],
+      [0.76, -0.2, 0.36, 1], [0.63, -0.21, 0.32, 0], [0.77, -0.03, 0.3, 0], [0.68, 0.05, 0.2, 3], [0.77, 0.16, 0.22, 2], [0.6, -0.12, 0.2, 3],
     ];
     const byVariant = new Map<number, THREE.Matrix4[]>();
     for (const [x, z, s, v] of spots) {
