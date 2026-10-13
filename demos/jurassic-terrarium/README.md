@@ -223,3 +223,8 @@ v1.27: skin up close:
   - Brachiosaurus: large rosettes;
   - Pteranodon: a fine grain.
 - **Only when close:** the detail sharpens in as the camera comes closer (Documentary mode especially) and fades out wherever a scale would be smaller than a few pixels, so wide views don't shimmer. It costs about 0.4 ms in a full-screen close-up. `?scales=0` turns it off for comparison.
+
+v1.28: footprints that last:
+- **Real hollows:** prints have flat floors, steep walls and a rim of mud pushed up round them, all lit by the sun: the wall and rim facing it catch the light, the far wall falls into shadow. Heavier animals press deeper.
+- **Tracks:** prints last for 6–10 minutes instead of about a minute and a half, so the animals' comings and goings build up into tracks along the banks, the trail and wet ground.
+- **Rain:** rain fills the prints with water that mirrors the dark trees at a low angle and the sky from above, catches the sun as a glint and rings with raindrops while it rains. Mud by the water seeps a little in straight away. Afterwards they dry out over a few minutes, and heavy rain slowly wears them away.
