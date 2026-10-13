@@ -12,7 +12,7 @@ export const BASE_H = { fern: 0.106, fernlet: 0.062, redplant: 0.057, horsetail:
 // atlas cells (4 x 4 grid)
 export const CELL = {
   fernPinna: 0, treePinna: 1, cycadLeaf: 2, strap: 3, horsetail: 4, ginkgo: 5, araucaria: 6, vineLeaf: 7,
-  moss: 8, stem: 9, fiddle: 10, fernPinnaB: 11,
+  moss: 8, stem: 9, fiddle: 10, fernPinnaB: 11, deadPinna: 12, stub: 13, fibre: 14,
 };
 const GRID = 4;
 
@@ -74,6 +74,46 @@ export function frondAtlas(size = 2048) {
   leaflet(CELL.treePinna, { base: '#3a6e24', tip: '#8cbc4c', vein: 'rgba(200,230,140,0.5)', lobes: 12, width: 0.12, shape: 0.7 });
   leaflet(CELL.cycadLeaf, { base: '#24481a', tip: '#4f7d2c', vein: 'rgba(150,190,100,0.6)', width: 0.08, shape: 0.5 });
   leaflet(CELL.vineLeaf, { base: '#2d6324', tip: '#6aa043', vein: 'rgba(190,230,140,0.5)', width: 0.34, shape: 0.9 });
+  leaflet(CELL.deadPinna, { base: '#4a3018', tip: '#8a6232', vein: 'rgba(200,160,100,0.4)', lobes: 12, width: 0.11, shape: 0.7 });
+  // frond-base stub: a short, tapering, scaly stalk end, dark and hairy
+  {
+    const { x, y } = at(CELL.stub);
+    const cx = x + h / 2, y0 = y + h - 4, y1 = y + h * 0.15;
+    const grd = g.createLinearGradient(0, y0, 0, y1);
+    grd.addColorStop(0, '#5a3c22');
+    grd.addColorStop(1, '#9c7448');
+    g.fillStyle = grd;
+    g.beginPath();
+    g.moveTo(cx - h * 0.2, y0);
+    g.lineTo(cx - h * 0.08, y1);
+    g.lineTo(cx + h * 0.08, y1);
+    g.lineTo(cx + h * 0.2, y0);
+    g.closePath();
+    g.fill();
+    g.strokeStyle = 'rgba(150,100,50,0.7)';
+    g.lineWidth = 1.2;
+    for (let k = 0; k < 40; k++) {
+      const t = rnd(), yy = y0 + (y1 - y0) * t, w = h * (0.2 - 0.12 * t);
+      const s = rnd() < 0.5 ? -1 : 1;
+      g.beginPath();
+      g.moveTo(cx + s * w * 0.9, yy);
+      g.lineTo(cx + s * (w + h * 0.06), yy - h * 0.04);
+      g.stroke();
+    }
+  }
+  // root fibres: a dense tangle of thin dark strands, for the flared foot of the trunk
+  {
+    const { x, y } = at(CELL.fibre);
+    for (let k = 0; k < 220; k++) {
+      const x0 = x + rnd() * h, w = (rnd() - 0.5) * h * 0.2;
+      g.strokeStyle = mixHex('#1e140c', '#5a3e24', rnd());
+      g.lineWidth = 1 + rnd() * 2;
+      g.beginPath();
+      g.moveTo(x0, y + 4);
+      g.quadraticCurveTo(x0 + w, y + h * 0.5, x0 + w * 0.4, y + h - 4);
+      g.stroke();
+    }
+  }
 
   // strap leaf (red bromeliad)
   {
@@ -397,7 +437,7 @@ const bark = (rnd, dark, light, mossy = 0.6) => {
     // fibrous: dark vertical fibres around the trunk, faint rings of old frond bases along it
     const fibre = 0.5 + 0.5 * Math.sin(k * 41.0 + Math.sin(s * 9) * 2);
     const ring = 0.5 + 0.5 * Math.sin(s * 70 + k * 3);
-    const v = (dark + (light - dark) * (0.2 + 0.35 * fibre + 0.2 * ring)) * (0.8 + rnd() * 0.35) * 0.55;
+    const v = (dark + (light - dark) * (0.2 + 0.35 * fibre + 0.2 * ring)) * (0.8 + rnd() * 0.35);
     b.setRGB(v * 1.2, v * 0.85, v * 0.55);
     const moss = mossy * Math.max(0, 1 - s * 3.2) * (0.6 + 0.4 * Math.sin(k * 6.3 + s * 20));
     // these are display (sRGB) colours; vertex colours are linear light
@@ -459,35 +499,82 @@ export function plantGeometry(kind, variant, { far = false } = {}) {
       return b.build();
     }
     case 'cycad': {
+      // a short, tapering trunk armoured in a spiral of old leaf bases (like a pineapple), a crown of
+      // stiff, many-leafleted fronds, and in some a cone in the middle of the crown
       const b = new Builder();
-      const th = H * (0.25 + rnd() * 0.15), r = H * 0.13;
-      b.tube([0, 0.33, 0.66, 1].map((s) => new Vector3(0, th * s, 0)), [r * 1.15, r, r * 0.95, r * 0.8], { color: bark(rnd, 0.28, 0.6, 0.5), t1: 0.15 });
-      b.moss(new Vector3(0, 0, 0), r * 1.3, 6, rnd, 0);
-      const top = new Vector3(0, th, 0);
+      const th = H * (0.16 + rnd() * 0.12), r = H * 0.075;
+      const pts = [0, 0.25, 0.5, 0.75, 1].map((s) => new Vector3(Math.sin(s * 3 + rnd()) * r * 0.08, th * s, 0));
+      b.tube(pts, [r * 1.2, r * 1.1, r * 1.0, r * 0.9, r * 0.75], { color: bark(rnd, 0.22, 0.42, 0.4), t1: 0.05, sides: 10 });
+      const nb = 64;
+      for (let i = 0; i < nb; i++) {
+        const s = 0.04 + 0.94 * (i / nb), a = i * 2.39996;
+        const rr = r * (1.2 - 0.45 * s);
+        const rad = new Vector3(Math.cos(a), 0, Math.sin(a));
+        const out = rad.clone().multiplyScalar(0.55).add(new Vector3(0, 0.85, 0)).normalize();
+        b.card(new Vector3(rad.x * rr * 0.9, th * s, rad.z * rr * 0.9), out, new Vector3(-Math.sin(a), 0, Math.cos(a)), r * 0.7, r * 0.75, CELL.stub, 0.45, 0.02, 0);
+      }
+      b.moss(new Vector3(0, 0, 0), r * 1.4, 5, rnd, 0);
+      const top = new Vector3(pts[4].x, th, 0);
+      // a cone (male or female) in some crowns: a stack of scale rings
+      if (rnd() < 0.55) {
+        const ch = H * 0.18, cr = r * 0.45;
+        const cp = [0, 0.25, 0.5, 0.75, 1].map((s) => new Vector3(top.x, th + ch * s, 0));
+        b.tube(cp, [cr * 0.8, cr, cr * 0.95, cr * 0.7, cr * 0.15], {
+          color: (s, k) => new Color(0.62 + 0.1 * Math.sin(k * 20 + s * 30), 0.48 + 0.08 * Math.sin(k * 20 + s * 30), 0.2).convertSRGBToLinear(), t0: 0.05, t1: 0.1, sides: 10,
+        });
+      }
       const n = 13 + Math.floor(rnd() * 5);
       for (let i = 0; i < n; i++) {
         const yaw = (i / n) * Math.PI * 2 + (rnd() - 0.5) * 0.4;
-        b.frond(top, { yaw, rise: 0.55 + rnd() * 0.5, droop: 0.45, length: H * (0.7 + rnd() * 0.3), segs: 6, pairs: 18, pinna: 0.22, pinnaW: 0.16, spread: 1.3, cell: CELL.cycadLeaf, tBase: 0.15, tSpan: 0.85, aoBase: 0.45, ph: rnd() * 6.28, rnd });
+        b.frond(top, { yaw, rise: 0.5 + rnd() * 0.55, droop: 0.45, length: H * (0.7 + rnd() * 0.3), segs: 6, pairs: 18, pinna: 0.22, pinnaW: 0.16, spread: 1.3, cell: CELL.cycadLeaf, tBase: 0.1, tSpan: 0.9, aoBase: 0.45, ph: rnd() * 6.28, rnd });
       }
       return b.build();
     }
     case 'treefern': {
+      // A slender, shaggy trunk (it stays straight: only the crown moves): a flared foot of root
+      // fibres, a spiral of old frond-base stubs up the trunk, a skirt of dead brown fronds hanging under
+      // the crown, and a crown of living fronds, a few young ones unrolling in the middle.
       const b = new Builder();
-      const th = H * 0.78, r = H * 0.045;
-      const lean = (rnd() - 0.5) * 0.12, pts = [];
-      for (let i = 0; i <= 8; i++) {
-        const s = i / 8;
-        pts.push(new Vector3(Math.sin(lean) * th * s * s, th * s, Math.cos(lean) * th * s * s * 0.3));
+      const th = H * 0.8, r = H * 0.022;
+      const lean = (rnd() - 0.5) * 0.08, pts = [];
+      for (let i = 0; i <= 10; i++) {
+        const s = i / 10;
+        pts.push(new Vector3(Math.sin(lean) * th * s + Math.sin(s * 5 + rnd()) * r * 0.25, th * s, Math.sin(s * 4 + rnd()) * r * 0.25));
       }
-      b.tube(pts, pts.map((_, i) => r * (1.55 - i * 0.07)), { color: bark(rnd, 0.2, 0.5, 0.8), t1: 0.75, sides: 12 });
-      b.moss(new Vector3(0, 0, 0), r * 1.6, 9, rnd, 0);
+      b.tube(pts, pts.map((_, i) => r * (1.25 - i * 0.03) * (i === 0 ? 1.9 : i === 1 ? 1.3 : 1)), { color: bark(rnd, 0.14, 0.32, 0.5), t0: 0, t1: 0.02, sides: 9 });
+      // root mantle: fibre cards flaring round the foot
+      for (let i = 0; i < 14; i++) {
+        const a = (i / 14) * Math.PI * 2 + rnd() * 0.3;
+        const out = new Vector3(Math.cos(a) * 0.55, -0.85, Math.sin(a) * 0.55).normalize();
+        b.card(new Vector3(Math.cos(a) * r * 0.9, th * (0.1 + rnd() * 0.06), Math.sin(a) * r * 0.9), out,
+          new Vector3(-Math.sin(a), 0, Math.cos(a)), th * 0.12, r * 2.2, CELL.fibre, 0.45, 0, 0);
+      }
+      b.moss(new Vector3(0, 0, 0), r * 2.2, 7, rnd, 0);
+      // frond-base stubs, spiralling up the trunk (golden angle), pointing up and out
+      const nStub = 70;
+      for (let i = 0; i < nStub; i++) {
+        const s = 0.22 + 0.74 * (i / nStub), a = i * 2.39996;
+        const c = pts[Math.min(9, Math.floor(s * 10))].clone().lerp(pts[Math.min(10, Math.floor(s * 10) + 1)], (s * 10) % 1);
+        const rad = new Vector3(Math.cos(a), 0, Math.sin(a));
+        const out = rad.clone().multiplyScalar(0.7).add(new Vector3(0, 0.7, 0)).normalize();
+        b.card(c.clone().addScaledVector(rad, r * 0.8), out, new Vector3(-Math.sin(a), 0, Math.cos(a)), r * (2.2 + rnd()), r * 1.4, CELL.stub, 0.5, 0.02, 0);
+      }
       const top = pts[pts.length - 1].clone();
+      // the skirt: dead fronds hanging down round the top of the trunk
+      const nd = 7 + Math.floor(rnd() * 4);
+      for (let i = 0; i < nd; i++) {
+        const yaw = (i / nd) * Math.PI * 2 + rnd() * 0.5;
+        b.frond(top.clone().add(new Vector3(0, -th * 0.03, 0)), {
+          yaw, rise: -0.9 - rnd() * 0.4, droop: 0.15, length: H * (0.32 + rnd() * 0.12), segs: 5, pairs: 12, pinna: 0.18, pinnaW: 0.22,
+          spread: 0.7, cell: CELL.deadPinna, tBase: 0.55, tSpan: 0.15, aoBase: 0.35, ph: rnd() * 6.28, rnd,
+        });
+      }
       const n = 15 + Math.floor(rnd() * 5);
       for (let i = 0; i < n; i++) {
         const yaw = (i / n) * Math.PI * 2 + (rnd() - 0.5) * 0.35, young = i % 7 === 0;
         b.frond(top, {
-          yaw, rise: young ? 1.15 : 0.35 + rnd() * 0.45, droop: young ? 0.4 : 1.6 + rnd() * 0.5, length: H * (0.52 + rnd() * 0.18) * (young ? 0.6 : 1),
-          segs: 8, pairs: 22, pinna: 0.2, pinnaW: 0.2, cell: CELL.treePinna, tBase: 0.75, tSpan: 0.45, aoBase: 0.45, ph: rnd() * 6.28, rnd,
+          yaw, rise: young ? 1.15 : 0.35 + rnd() * 0.45, droop: young ? 0.4 : 1.6 + rnd() * 0.5, length: H * (0.5 + rnd() * 0.18) * (young ? 0.6 : 1),
+          segs: 8, pairs: 22, pinna: 0.2, pinnaW: 0.2, cell: CELL.treePinna, tBase: 0.6, tSpan: 0.6, aoBase: 0.45, ph: rnd() * 6.28, rnd,
         });
       }
       return b.build();

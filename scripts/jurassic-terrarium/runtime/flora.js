@@ -82,7 +82,7 @@ export class Flora {
         break;
       }
     }
-    // browse trees: tall tree ferns on open, gentle ground, their crowns at the height a Brachiosaurus
+    // browse trees: tall monkey puzzles on open, gentle ground, their crowns at the height a Brachiosaurus
     // feeds (scaled to fit when the mesh loads), placed so it can stand beside them inside the glass
     const browse = [];
     for (let tries = 0; tries < 4000 && browse.length < 5; tries++) {
@@ -98,8 +98,9 @@ export class Flora {
       }
       if (open < 2) continue;
       browse.push({ x, z });
-      add('treefern', x, z, 1.6, 0.25, 0.06);
-      P.treefern[P.treefern.length - 1].wantTop = 2.2; // crown this far above its foot
+      // a tall monkey-puzzle conifer: what a Brachiosaurus actually browsed
+      add('araucaria', x, z, 1.6, 0.25, 0.06);
+      P.araucaria[P.araucaria.length - 1].wantTop = 2.35; // crown top this far above its foot
     }
     // Jurassic conifers and ginkgos among the tree ferns: monkey puzzles at the back and on the
     // foothills, ginkgos at the meadow edges
@@ -302,7 +303,7 @@ export class Flora {
     horsetail: { flex: 0.5, give: 0.9, curve: 1.1, k: 60 },
     treefern: { flex: 0.15, give: 0.22, curve: 3.0, k: 25, crown: true },
     cycad: { flex: 0.12, give: 0.35, curve: 2.0, k: 45 },
-    araucaria: { flex: 0.07, give: 0.0, curve: 2.6, k: 30 },
+    araucaria: { flex: 0.07, give: 0.2, curve: 2.6, k: 30, crown: true },
     ginkgo: { flex: 0.12, give: 0.15, curve: 2.2, k: 35, crown: true },
     vine: { flex: 0.5, give: 0.0, curve: 1.2, k: 40 },
   };

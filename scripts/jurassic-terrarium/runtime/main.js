@@ -1335,9 +1335,11 @@ class Dinosaurs {
   // stand where a browsing head reaches into a tree-fern crown at the height it feeds
   nearTree(d) {
     const reach = d.browseReach;
-    const ferns = (this.flora.placements.treefern || []).filter((t) => t.top);
+    const ferns = [...(this.flora.placements.araucaria || []), ...(this.flora.placements.treefern || [])].filter((t) => t.top);
     if (reach && ferns.length) {
-      ferns.sort((a, b) => Math.hypot(a.x - d.pos.x, a.z - d.pos.z) - Math.hypot(b.x - d.pos.x, b.z - d.pos.z));
+      // the tall conifers grown for browsing come first (what it really ate), then anything else in reach
+      const dd = (t) => Math.hypot(t.x - d.pos.x, t.z - d.pos.z) - (t.wantTop ? 100 : 0);
+      ferns.sort((a, b) => dd(a) - dd(b));
       const T = this.ctx.terrain, half = d.length * 0.25;
       for (const t of ferns.slice(0, 12)) {
         for (let i = 0; i < 10; i++) {
