@@ -146,3 +146,5 @@ v1.21:
   - Footprints are pressed into the dirt path.
   - Hatchlings paddle when they swim, bobbing with rings spreading round them.
 - Branches react to bodies. Monkey-puzzle, redwood, ginkgo, tree-fern and cycad branches part round a passing back, neck or head, shiver while it moves and are dragged its way. Heads in a crown sway the whole tree, and a body pushing through at pace shakes a few leaves loose. Conifer trunks are solid up through the crown.
+
+v1.21.1: the field guide minimises to a small pill (tap its heading; phones start minimised, and your choice is remembered). Minimised, it hides the Drop food and Photo mode row too.

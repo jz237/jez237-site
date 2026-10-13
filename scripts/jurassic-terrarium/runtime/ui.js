@@ -12,7 +12,12 @@ const CSS = `
 .jt-guide h3{margin:2px 6px 8px;font:400 15px/1 var(--serif,Georgia,serif);letter-spacing:.06em;
   display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .jt-guide h3 small{font:500 10px/1 var(--font,system-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2,#cfc8bb)}
-.jt-guide.closed .jt-list,.jt-guide.closed .jt-card{display:none}
+.jt-guide.closed .jt-list,.jt-guide.closed .jt-card,.jt-guide.closed .jt-actions{display:none}
+.jt-guide h3 .jt-t{display:flex;align-items:center;gap:7px}
+.jt-chev{display:inline-block;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s;opacity:.75}
+.jt-guide.closed .jt-chev{transform:rotate(-45deg)}
+.jt-guide h3:focus-visible{outline:2px solid var(--accent,#ffd98a);outline-offset:3px;border-radius:8px}
 .jt-list{display:flex;flex-direction:column;gap:2px}
 .jt-item{display:flex;align-items:center;gap:9px;padding:7px 8px;border:0;border-radius:12px;background:none;
   color:inherit;text-align:left;cursor:pointer;font:inherit;transition:background .2s}
@@ -30,7 +35,11 @@ const CSS = `
   font:600 11px var(--font,system-ui);letter-spacing:.04em;cursor:pointer}
 .jt-card button:hover{background:#ffffff22}
 body.no-ui .jt-guide{display:none}
-@media (max-width:700px){.jt-guide{top:auto;bottom:calc(var(--gut,16px) + 150px);width:min(260px,calc(100vw - 24px))}}
+@media (max-width:700px){.jt-guide{top:auto;bottom:calc(var(--gut,16px) + 150px);width:min(260px,calc(100vw - 24px));
+    max-height:calc(100vh - 300px)}
+  /* minimised: a small pill that stays out of the way of the case */
+  .jt-guide.closed{width:auto;padding:9px 14px;border-radius:999px}
+  .jt-guide.closed h3{margin:0;gap:10px}.jt-guide.closed h3 small{display:none}}
 `;
 
 export class Guide {
@@ -45,13 +54,25 @@ export class Guide {
     const host = document.querySelector('.wg-hud') || document.getElementById('ui') || document.body;
     const el = (this.el = document.createElement('div'));
     el.className = 'wg-panel jt-guide';
-    el.innerHTML = `<h3><span>Field guide</span><small>Dinosaurs</small></h3><div class="jt-list"></div><div class="jt-card" hidden></div>`;
+    el.innerHTML = `<h3 role="button" tabindex="0" aria-expanded="true"><span class="jt-t"><i class="jt-chev"></i>Field guide</span><small>Dinosaurs</small></h3><div class="jt-list"></div><div class="jt-card" hidden></div>`;
     host.append(el);
     // keep pointer events on the panel from reaching the scene's tools
     for (const ev of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'click'])
       el.addEventListener(ev, (e) => e.stopPropagation());
-    el.querySelector('h3').addEventListener('click', () => el.classList.toggle('closed'));
-    if (window.matchMedia?.('(max-width: 700px)').matches) el.classList.add('closed');
+    // minimise / restore by tapping the heading; phones start minimised, and the choice is remembered
+    const head = el.querySelector('h3');
+    const setClosed = (c, save = true) => {
+      el.classList.toggle('closed', c);
+      head.setAttribute('aria-expanded', String(!c));
+      if (save) try { localStorage.setItem('jt-guide-closed', c ? '1' : '0'); } catch {}
+    };
+    head.addEventListener('click', () => setClosed(!el.classList.contains('closed')));
+    head.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') (e.preventDefault(), setClosed(!el.classList.contains('closed')));
+    });
+    let saved = null;
+    try { saved = localStorage.getItem('jt-guide-closed'); } catch {}
+    setClosed(saved != null ? saved === '1' : !!window.matchMedia?.('(max-width: 700px)').matches, false);
     this.list = el.querySelector('.jt-list');
     this.card = el.querySelector('.jt-card');
     this.render();
