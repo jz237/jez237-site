@@ -296,6 +296,8 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uLegFlex: { value: new Vector4() }, // bunching at the top of each leg (thigh L, R, upper arm L, R), metres
     uLegIdx: { value: new Vector4(-1, -1, -1, -1) }, // their bone indices in the skeleton
     uInvUnit: { value: 1 / (info?.perUnit || 1) }, // stored units per metre
+    uFlapW: { value: new Vector2() }, // wing membranes: each side's stroke speed (rad/s, + = rising)
+    uSpan: { value: 3 }, // half the wingspan, metres
     uSnow: { value: 0 }, // 0..1 snow lying on it
     uSnowH: { value: 0 }, // how thick, metres
     uFrost: { value: 0 }, // 0..1 rime in a hard frost
@@ -328,6 +330,9 @@ uniform float uBreath;
 uniform vec4 uLegFlex;
 uniform vec4 uLegIdx;
 uniform float uInvUnit;
+uniform vec2 uFlapW;
+uniform float uSpan;
+uniform float uTime;
 uniform float uSnow;
 uniform float uSnowH;
 uniform float uFlare;
@@ -356,6 +361,12 @@ varying vec3 vLocal;`)
     // snow lying on the upward faces has a little thickness, thinning at its ragged edge
     float jtUpB = smoothstep(0.25, 0.8, jn.y + (fract(sin(dot(aBind, vec3(12.9, 78.2, 37.7))) * 4375.85) - 0.5) * 0.15);
     jd += jn * uSnow * jtUpB * uSnowH;
+    ${membrane ? `// the membrane bellies against the air: lifted on a downstroke, pressed down on an upstroke, most
+    // out across the span and in the thin of the membrane; a light flutter in a glide
+    float sf = clamp(abs(aBind.x) / uSpan, 0.0, 1.0);
+    float wSide = aBind.x < 0.0 ? uFlapW.x : uFlapW.y;
+    float bil = aThin * sf * (1.0 - sf * 0.45);
+    jd.y += bil * (-wSide * 0.022 * uSpan / 3.0 + sin(uTime * 13.0 + aBind.z * 6.0 + aBind.x * 2.0) * 0.012);` : ''}
     transformed += jd * uInvUnit;
   }`);
     sh.fragmentShader = sh.fragmentShader
@@ -421,7 +432,16 @@ float jtNoise(vec3 p) {
   // snow on whatever faces up, broken at its edge; frost on thin skin and ridges in a hard cold
   float jtSnowM = uSnow * smoothstep(0.3, 0.7, jtUpF + (jtNoise(vLocal * 5.0) * 0.6 + jtNoise(vLocal * 19.0) * 0.4 - 0.5) * 0.55);
   float jtFrostM = uFrost * clamp(vThin * 0.9 + smoothstep(0.2, 0.9, jtUpF) * 0.35, 0.0, 1.0) * smoothstep(0.35, 0.75, jtNoise(vLocal * 37.0));
-  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.86, 0.9, 0.97), max(jtSnowM, jtFrostM * 0.75));`)
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.86, 0.9, 0.97), max(jtSnowM, jtFrostM * 0.75));
+  // wing membranes: fine stiffening fibres (actinofibrils) running out across the membrane, slanting
+  // back towards the trailing edge; they show as faint lines, and dark against the light behind
+  float jtFib = 0.0;
+  ${membrane ? `{
+    float fq = (vLocal.x * 0.45 + vLocal.z) * 34.0 + jtNoise(vLocal * 3.0) * 2.0;
+    float px = fwidth(fq);
+    jtFib = vThin * smoothstep(0.55, 0.95, abs(sin(fq))) * (1.0 - smoothstep(0.35, 0.9, px));
+    diffuseColor.rgb *= 1.0 - 0.28 * jtFib;
+  }` : ''}`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
   // the sheen breaks up over the scales; wet mud glistens
   roughnessFactor = clamp(roughnessFactor + (jtNoise(vLocal * 17.0) - 0.5) * 0.22 - jtMud * uMudWet * 0.7 + jtMud * (1.0 - uMudWet) * 0.3 + jtCr * 0.15, 0.05, 1.0);
@@ -466,8 +486,13 @@ float jtNoise(vec3 p) {
         h -= groove * 1.2;
         crev = max(crev, groove * 0.8);
       }
+      ${membrane ? `// a wing is skin, not scales: the cells only on the body; the membrane has its fibres
+      float body = 1.0 - smoothstep(0.1, 0.35, vThin);
+      h *= body;
+      crev *= body;` : ''}
       h *= jtSee;
       crev *= jtSee;
+      h += jtFib * 0.35;
       // relief: tilt the normal by the height's slope across the pixel (a bump map without a map)
       vec2 dH = vec2(dFdx(h), dFdy(h)) * uScaleH;
       vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition);
@@ -488,7 +513,7 @@ float jtNoise(vec3 p) {
     vec3 Vv = normalize(vViewPosition);
     float back = pow(clamp(dot(Vv, -Lv), 0.0, 1.0), 2.5);
     float wrap = clamp(dot(-normal, Lv), 0.0, 1.0);
-    float th = vThin${membrane ? ' * (1.0 - 0.55 * smoothstep(0.82, 0.97, abs(sin(vLocal.x * 18.0 + sin(vLocal.z * 7.0) * 2.4))))' : ''};
+    float th = vThin${membrane ? ' * (1.0 - 0.55 * smoothstep(0.82, 0.97, abs(sin(vLocal.x * 18.0 + sin(vLocal.z * 7.0) * 2.4)))) * (1.0 - 0.35 * jtFib)' : ''};
     vec3 blood = mix(diffuseColor.rgb, vec3(0.85, 0.2, 0.08), 0.7);
     reflectedLight.directDiffuse += blood * uLightColor * th * (back * 0.75 + wrap * 0.25) * (1.0 - jtMud * 0.8) * (1.0 - uNight * 0.7);
   }

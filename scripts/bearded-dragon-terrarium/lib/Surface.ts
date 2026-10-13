@@ -154,6 +154,11 @@ export class Surface {
   }
   kindAt(x: number, z: number): SurfaceKind {return this.kind[this.idx(x, z)];}
 
+  /** Actual foothold below the rig's reach, without height-grid interpolation. */
+  supportAt(x: number, z: number, fromY: number, out: {y: number; normal: THREE.Vector3}) {
+    return this.cast(x, z, fromY, out);
+  }
+
   /** Precise downward ray against everything (for feet). */
   cast(x: number, z: number, fromY: number, out: {y: number; normal: THREE.Vector3}) {
     let best = groundHeight(x, z);
@@ -165,7 +170,7 @@ export class Surface {
       const hit = this.ray.intersectObject(h.mesh, false)[0];
       if (hit && hit.point.y > best) {
         best = hit.point.y;
-        out.normal.copy(hit.face!.normal).transformDirection(h.mesh.matrixWorld);
+        out.normal.copy(hit.normal ?? hit.face!.normal).transformDirection(h.mesh.matrixWorld);
         if (out.normal.y < 0) out.normal.negate();
       }
     }

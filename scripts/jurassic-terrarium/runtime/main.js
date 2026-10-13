@@ -87,6 +87,7 @@ import { Backdrop } from './backdrop.js';
 import { DinoWeather } from './weather.js';
 import { Night } from './night.js';
 import { Social } from './social.js';
+import { Trails } from './trails.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
@@ -98,6 +99,7 @@ export const METRES_PER_UNIT = 5.5;
 const S = 1 / METRES_PER_UNIT;
 // The den: must match DEN in tools/build-page.mjs (the terrain shelf under it).
 const _jv = new Vector3(), _ja = new Vector3();
+const _fa = new Vector3(), _fb = new Vector3(), _tq3 = new Quaternion();
 const FLESH = Number(new URLSearchParams(location.search).get('flesh') ?? 1); // ?flesh=0 off, >1 exaggerated (testing)
 const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
 
@@ -2009,6 +2011,68 @@ class Flyer {
     this.fishHold = 3.5;
   }
 
+  // ------------------------------------------------------------ flexible wings
+  // Each wing is a chain of springs on top of the flap clip: the joints further out lag behind the
+  // stroke, more towards the tip, so on the downstroke the tips trail upward and the wing curves like a
+  // bow, and on the upstroke they trail down and whip through at the top. The stroke's speed also goes
+  // to the skin shader, where the membrane bellies against the air (see skin.js).
+  wingFlex(dt) {
+    if (dt <= 0) return;
+    const W = this._wf || (this._wf = this.initWings());
+    if (!W) return;
+    const fold = this.perch?.fold || 0, live = 1 - fold;
+    const qr = this.root.getWorldQuaternion(_tq1), qi = _tq2.copy(qr).invert();
+    W.sides.forEach((sd, si) => {
+      sd.shoulder.getWorldPosition(_fa);
+      sd.tip.getWorldPosition(_fb);
+      _fb.sub(_fa).applyQuaternion(qi); // in the body's own frame
+      const elev = Math.atan2(_fb.y, Math.hypot(_fb.x, _fb.z));
+      if (sd.prev === undefined) (sd.prev = elev), (sd.w = 0);
+      const w = (elev - sd.prev) / dt;
+      sd.prev = elev;
+      const acc = MathUtils.clamp((w - sd.w) / dt, -400, 400);
+      sd.w += (w - sd.w) * Math.min(1, dt * 20);
+      let total = 0;
+      for (const j of sd.joints) {
+        // a damped spring for how far this joint's segment is bent (+ = tip up), driven by the stroke
+        // (inertia: it lags the stroke's turnarounds; drag: the air holds it bent against the stroke)
+        const c = 2 * 0.32 * Math.sqrt(j.k);
+        j.v += (-j.k * j.a - c * j.v - acc * j.g - sd.w * j.d) * dt;
+        j.a = MathUtils.clamp(j.a + j.v * dt, -0.45, 0.45);
+        total += j.a;
+        // about the body's long axis: for a wing on the +x side a positive turn lifts its tip
+        _tv.set(0, 0, 1).applyQuaternion(qr).applyQuaternion(j.b.getWorldQuaternion(_tq3).invert());
+        j.b.rotateOnAxis(_tv.normalize(), j.a * sd.sign * live);
+      }
+      sd.bend = total;
+      if (this.skinU) this.skinU.uFlapW.value.setComponent(si, sd.w * live);
+    });
+  }
+
+  initWings() {
+    const bones = {};
+    this.model.traverse((o) => o.isBone && (bones[o.name] = o));
+    const sides = [];
+    for (const L of ['L', 'R']) {
+      const chain = ['forearm', 'hand', 'wingfinger1', 'wingfinger2', 'wingfinger3'].map((n) => bones[n + L]);
+      const shoulder = bones['upperarm' + L];
+      if (!shoulder || chain.some((b) => !b)) return null;
+      // which side of the body it lies on (in the body's frame)
+      this.root.updateMatrixWorld(true);
+      const p = chain[4].getWorldPosition(new Vector3()), o = this.root.getWorldPosition(new Vector3());
+      const side = Math.sign(p.sub(o).applyQuaternion(this.root.getWorldQuaternion(new Quaternion()).invert()).x) || 1;
+      // stiffer near the body, softer and more lagging out towards the tip
+      const G = [[260, 0.2, 3], [240, 0.25, 4], [220, 0.3, 5], [200, 0.35, 6], [180, 0.4, 7]];
+      sides.push({
+        shoulder, tip: chain[4], sign: side,
+        joints: chain.map((b, i) => ({ b, q0: b.quaternion.clone(), k: G[i][0], g: G[i][1], d: G[i][2], a: 0, v: 0 })),
+      });
+    }
+    // half the wingspan in the bind pose's metres (for the membrane's billow)
+    if (this.skinU) this.skinU.uSpan.value = Math.max(1, (this.info?.span || 6) * 0.5);
+    return { sides };
+  }
+
   // ------------------------------------------------------------ perching
   // Now and then a Pteranodon glides in to land on a big boulder, the cabin's ridge or the den rock: a
   // curving approach that slows, a flare with a few wingbeats, then it folds its wings and stands on all
@@ -2222,7 +2286,9 @@ class Flyer {
     }
     this.root.position.copy(this.pos);
     this.root.rotation.set(this.pitch, this.heading, this.roll, 'YXZ');
+    for (const sd of this._wf?.sides || []) for (const j of sd.joints) j.b.quaternion.copy(j.q0); // (in case a clip leaves one unkeyed)
     this.mixer.update(dt);
+    this.wingFlex(dt);
     // the fold blends in as it lands and out as it leaves
     if (this.perch) {
       const want = this.state === 'perch' ? 1 : this.state === 'toPerch' ? Math.max(0, (this.perch.u - 0.85) / 0.15) * 0.6 : Math.max(0, 1 - this.perch.u * 4);
@@ -2277,6 +2343,7 @@ class Dinosaurs {
     this.weather = new DinoWeather(this);
     this.night = new Night(this);
     this.social = new Social(this);
+    this.trails = new Trails(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2697,6 +2764,7 @@ class Dinosaurs {
   update(dt) {
     if (!this.ready) return;
     const env = this.env();
+    if (!this.flora._hand && this.flora.plants?.length) (this.flora.mod = this), this.flora.installHand();
     this.flora.update(dt);
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
@@ -2747,6 +2815,7 @@ class Dinosaurs {
     this.branchPush(dt);
     this.lamps?.update(dt);
     this.social.update(dt);
+    this.trails.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

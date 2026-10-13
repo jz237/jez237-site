@@ -760,7 +760,7 @@ export class LizardBrain {
     const oldX = I.x, oldZ = I.z;
     const nx = I.x + Math.cos(I.heading) * this.speed * dt;
     const nz = I.z - Math.sin(I.heading) * this.speed * dt;
-    if (this.speed < 1e-4 || this.nav.walkable(nx, nz) || !this.nav.walkable(I.x, I.z)) {I.x = nx; I.z = nz; this.blockedT = 0;}
+    if (this.speed < 1e-4 || (this.nav.walkable(nx, nz) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z)) {I.x = nx; I.z = nz; this.blockedT = 0;}
     else {this.speed *= 0.5; this.blockedT += dt;}
     // The gait follows actual progress; an obstacle cannot make it paddle in place.
     I.speed = Math.hypot(I.x - oldX, I.z - oldZ) / Math.max(dt, 1e-6);
@@ -943,11 +943,12 @@ export class LizardBrain {
     // advance past waypoints we have reached or overtaken
     while (this.pathI < this.path.length - 1) {
       const [wx, wz] = this.path[this.pathI];
-      if (Math.hypot(wx - I.x, wz - I.z) < 0.018) {this.pathI++; continue;}
       const [nx, nz] = this.path[this.pathI + 1];
+      const nextVisible = this.nav.lineClear(I.x, I.z, nx, nz, Infinity);
+      if (Math.hypot(wx - I.x, wz - I.z) < 0.018 && nextVisible) {this.pathI++; continue;}
       // past the waypoint along the next segment?
       const sx = nx - wx, sz = nz - wz;
-      if ((I.x - wx) * sx + (I.z - wz) * sz > 0) {this.pathI++; continue;}
+      if ((I.x - wx) * sx + (I.z - wz) * sz > 0 && nextVisible) {this.pathI++; continue;}
       break;
     }
     const remaining = this.remaining();
@@ -962,7 +963,11 @@ export class LizardBrain {
     // (and over a dip, a hollow or the pool, at about the level it walks on)
     this.lookPoint.set(lx, Math.max(this.surface.heightAt(lx, lz), this.surface.heightAt(I.x, I.z) - 0.01) + 0.02, lz);
     I.look = this.lookPoint;
-    const aim = this.pathPoint(Math.min(0.062, remaining), this.tmp2);
+    let aim = this.pathPoint(Math.min(0.062, remaining), this.tmp2);
+    for (const ahead of [.04, .025, .012, .005]) {
+      if (this.nav.lineClear(I.x, I.z, aim[0], aim[1], Infinity)) break;
+      aim = this.pathPoint(Math.min(ahead, remaining), this.tmp2);
+    }
     const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x);
     const err = wrap(want - I.heading);
     if (this.leadT > 0) {
@@ -986,6 +991,8 @@ export class LizardBrain {
     // ease off on the final approach and through the water
     speed *= clamp(remaining / 0.05, 0.4, 1);
     if (this.nav.isWet(I.x, I.z)) speed *= 0.6;
+    const rise = this.surface.heightAt(I.x + Math.cos(I.heading) * .04, I.z - Math.sin(I.heading) * .04) - this.surface.heightAt(I.x, I.z);
+    speed *= clamp(1 / (1 + Math.abs(rise) / .03), .35, 1);
     const maxTurn = this.mode === 'startle' ? 2.0 : 1.15;
     const turn = clamp(err * 3.3, -maxTurn, maxTurn);
     this.burstLeft -= this.speed * dt;

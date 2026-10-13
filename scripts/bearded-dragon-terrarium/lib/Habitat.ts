@@ -4,7 +4,9 @@ import {TANK} from './Case';
 import {groundHeight, BASK, POOL, WATER_LEVEL} from './Ground';
 import {SurfaceKind} from './Surface';
 import {mulberry32, dataTexture, tileFbm} from './Textures';
-import {archGeometry, cactus, dryShrub, driftwood} from './DesertDetails';
+import {archGeometry} from './DesertDetails';
+import {loadDriftwood} from './Driftwood';
+import {cactus, dryShrub, rosette, loadPlantReferences} from './DesertPlants';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const noise = (x: number, y: number, z: number) => Math.sin(x * 37 + z * 19 + y * 63) * Math.sin(x * 71 - z * 43 + y * 97);
@@ -176,7 +178,7 @@ export class Habitat {
     // A simple neutral room and tabletop catch warm and cool reflections.
     const table=new THREE.Mesh(new THREE.PlaneGeometry(15,15),new THREE.MeshStandardMaterial({color:0x77716a,roughness:.43,metalness:.1}));table.rotation.x=-Math.PI/2;table.position.y=-.025;table.receiveShadow=true;g.add(table);
     const wall=new THREE.Mesh(new THREE.PlaneGeometry(14,8),new THREE.MeshStandardMaterial({color:0x585753,roughness:1}));wall.position.set(0,3,-3);g.add(wall);
-    this.ready=Promise.all([this.loadLog(),sceneryReady,rock.userData.ready]).then(()=>{});
+    this.ready=Promise.all([this.loadLog(),loadPlantReferences(),sceneryReady,rock.userData.ready]).then(()=>{});
   }
 
   private lamp(x:number,z:number,color:number,basking:boolean) {
@@ -192,19 +194,11 @@ export class Habitat {
   }
 
   private addRosette(x:number,z:number,size:number,seed:number) {
-    const rnd=mulberry32(seed),m=new THREE.MeshStandardMaterial({color:0x71877c,roughness:.84,side:THREE.DoubleSide,vertexColors:true});
-    for(let i=0;i<31;i++) {const a=i*2.4,layer=i/31,len=size*(.68+rnd()*.32),w=len*.047,verts:number[]=[],uv:number[]=[],colors:number[]=[],idx:number[]=[];
-      for(let j=0;j<=14;j++){const t=j/14,ww=Math.sin(Math.PI*t)*w,reach=len*t*(1-layer*.73),height=len*((.26+layer*.72)*t+Math.sin(t*Math.PI)*.24);for(const s of [-1,0,1]){verts.push(Math.cos(a)*reach+Math.sin(a)*ww*s,height+(s===0?ww*.7:0),Math.sin(a)*reach-Math.cos(a)*ww*s);uv.push(t,s*.5+.5);const c=s===0?.72:.96;colors.push(c,c,c);}}
-      for(let j=0;j<14;j++)for(let s=0;s<2;s++){const k=j*3+s;idx.push(k,k+1,k+3,k+1,k+4,k+3);}
-      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(idx);g.computeVertexNormals();
-      const leaf=new THREE.Mesh(g,m);leaf.position.set(x,groundHeight(x,z),z);leaf.castShadow=leaf.receiveShadow=true;this.group.add(leaf);
-    }
+    this.group.add(rosette(x,z,size,seed));
   }
 
   private async loadLog() {
-    const bark=await new THREE.TextureLoader().loadAsync('./driftwood-grain-v2.png');bark.colorSpace=THREE.SRGBColorSpace;bark.wrapS=bark.wrapT=THREE.RepeatWrapping;bark.anisotropy=8;
-    const material=new THREE.MeshStandardMaterial({map:bark,bumpMap:bark,bumpScale:.0018});
-    for(const mesh of driftwood(material)){this.group.add(mesh);this.hard.push({mesh,kind:SurfaceKind.Wood});}
+    for(const mesh of await loadDriftwood()){this.group.add(mesh);this.hard.push({mesh,kind:SurfaceKind.Wood});}
   }
 
   drawReadout(warm:number,cool:number,rh:number) {

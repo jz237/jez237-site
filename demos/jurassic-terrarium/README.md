@@ -265,3 +265,16 @@ v1.34: painted end walls:
 - **Ends:** both end walls now carry the painted valley, carried on from the back wall round each corner (mirrored there, so the horizon and colours meet without a seam), with the same haze where it meets the ground.
 - **Ground mist:** the mist bands now run round the back corners and part way down each end.
 - **See-through when turned:** like the back, each end is painted only on its inside. Turn the case to look along its length and the near end is clear glass while the far end is the backdrop.
+
+v1.35: Pteranodon wings:
+- **Flexible curving:** each wing is a chain of springs on top of the flapping animation. The joints further out lag behind the stroke and the air holds them bent against it, so on the downstroke the wing bows and the tips trail upward, and at the top of the upstroke they trail down and whip through. Folded on a perch, the wing stays still.
+- **Billowing membrane:** the membrane bellies against the air: lifted on each downstroke, pressed down on the upstroke, most across the middle of the span, with a light flutter in a glide.
+- **Detail:** fine stiffening fibres (actinofibrils) run out across the membrane, slanting back towards the trailing edge. They show as faint ridges close up and as dark lines when the wing is against the light, alongside the veins. The wing is smooth skin; scales are on the body only.
+
+v1.36: game trails:
+- **Trample map:** a low-resolution map of the whole case that every walking animal presses into round its body, the heavy ones harder. It recovers over a few minutes, so a route used again and again becomes a trail and an abandoned one grows back.
+- **What it changes:** Weatherglass's grass lies short and flat along a trail, the planted ferns are trodden down and splayed out, and the ground wears to bare earth. `?trails=0` turns it off for comparison.
+
+v1.37: every tree in hand; right-drag pans:
+- **Grab any tree:** with the hand, any tree can be grabbed by its crown and pulled about: the conifers, redwoods, tree ferns, cycads and the rest of the planting, as well as Weatherglass's own trees. It leans after the hand, shakes leaves loose and startles the birds. Let go and it whips back and sways to rest; a click without a drag flicks it.
+- **Mouse:** the right button now slides the view around (pan) while the left button turns it; Shift + right still turns it. The pan reaches the ends of the wider case.
