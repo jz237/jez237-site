@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {computeBoundsTree, acceleratedRaycast} from 'three-mesh-bvh';
 import {TANK} from './Case';
 import {poolDistance, groundHeight, CAVE} from './Ground';
+import {TailContacts} from './TailContacts';
 
 declare module 'three' {
   interface BufferGeometry {computeBoundsTree: typeof computeBoundsTree}
@@ -18,6 +19,7 @@ export const enum SurfaceKind {Ground = 0, Rock = 1, Wood = 2, Water = 3, Cave =
  * camera). Used for planting, by the lizard's feet and by the weather.
  */
 export class Surface {
+  readonly tailContacts: TailContacts;
   readonly nx: number;
   readonly nz: number;
   readonly height: Float32Array;
@@ -77,6 +79,7 @@ export class Surface {
       this.kind[k] = kind;
     }
     this.findCave();
+    this.tailContacts = new TailContacts(hard.map(h => h.mesh), groundHeight);
     void ground;
   }
 

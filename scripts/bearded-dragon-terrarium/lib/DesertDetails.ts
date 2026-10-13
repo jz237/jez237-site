@@ -55,6 +55,10 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.55,.47,.37)*(value*.48+.70),.08);`);
     const curve=new THREE.CatmullRomCurve3(points),N=90,S=24,frames=curve.computeFrenetFrames(N,false),verts:number[]=[],uv:number[]=[],idx:number[]=[];
     for(let i=0;i<=N;i++){const t=i/N,p=curve.getPoint(t),r=THREE.MathUtils.lerp(r0,r1,t)*(1+.12*Math.sin(t*17+seed));for(let j=0;j<=S;j++){const a=j/S*Math.PI*2,ridge=1+.085*Math.sin(a*13+t*3)+.045*Math.sin(a*23-t*8),q=p.clone().addScaledVector(frames.normals[i],Math.cos(a)*r*ridge).addScaledVector(frames.binormals[i],Math.sin(a)*r*ridge);verts.push(q.x,q.y,q.z);uv.push(j/S,t*3.2);}}
     for(let i=0;i<N;i++)for(let j=0;j<S;j++){const k=i*(S+1)+j;idx.push(k,k+1,k+S+1,k+1,k+S+2,k+S+1);}
+    // Closed ends make the visible timber a solid collider, including the cut base.
+    const start=verts.length/3,end=start+1;
+    verts.push(points[0].x,points[0].y,points[0].z,points[points.length-1].x,points[points.length-1].y,points[points.length-1].z);uv.push(.5,0,.5,3.2);
+    for(let j=0;j<S;j++){idx.push(start,j+1,j);const k=N*(S+1)+j;idx.push(end,k,k+1);}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
     const mesh=new THREE.Mesh(geo,material);mesh.castShadow=mesh.receiveShadow=true;mesh.name='branching-pale-driftwood';meshes.push(mesh);
     const tip=new THREE.ConeGeometry(r1,.032,9,1),positions=tip.attributes.position as THREE.BufferAttribute;

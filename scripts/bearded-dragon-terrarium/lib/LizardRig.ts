@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {LizardModel, LIZARD_SCALE, LizardLimbData} from './LizardModel';
 import {TANK} from './Case';
+import {TailDynamics} from './TailDynamics';
+import type {TailCollision} from './TailContacts';
 
 /** Keeps a point (with a radius) inside the glass. */
 function insideGlass(p: THREE.Vector3, r: number) {
@@ -28,6 +30,7 @@ export interface GroundQuery {
   /** What is there (SurfaceKind: 1 rock, 2 wood); optional. */
   kindAt?(x: number, z: number): number;
   heightBelow?(x: number, z: number, ceiling: number): number;
+  tailContacts?: TailCollision;
 }
 const WOOD = 2;
 
@@ -127,9 +130,7 @@ export class LizardRig {
   private tailIdx: number[];
   private tailBind: THREE.Vector3[];
   private tailPts: THREE.Vector3[] = [];
-  /** How far the tail bends along its length (rad, signed), eased. */
-  private tailBend = 0;
-  private tailPrev: THREE.Vector3[] = [];
+  private tailDynamics: TailDynamics;
   private tailLen: number[] = [];
   private tailRadius: number[] = [];
   private bindTilt: THREE.Matrix4[] = [];
@@ -204,7 +205,18 @@ export class LizardRig {
       const i = clamp(Math.round((x + 17.2) / 0.5), 0, prof.length - 1);
       return Math.max(prof[i][1], prof[i][3]);
     };
-    this.tailRadius = this.tailBind.map((p) => radiusAt(p.x) * K * 0.85);
+    // Include the visible scale/spine thickness, rather than testing just the
+    // thinner centre line that could leave the rendered skin inside a branch.
+    this.tailRadius = this.tailBind.map((p) => radiusAt(p.x) * K * 1.06 + .0004);
+    const collision = source.tailContacts ?? {
+      projectPoint: (_previous: THREE.Vector3, point: THREE.Vector3, radius: number, normal: THREE.Vector3) => {
+        insideGlass(point, radius + .010);
+        const floor = (source.heightBelow ? source.heightBelow(point.x, point.z, point.y + radius) : source.heightAt(point.x, point.z)) + radius;
+        if (point.y >= floor) return false;
+        point.y = floor; normal.y += 1; return true;
+      },
+    };
+    this.tailDynamics = new TailDynamics(this.tailLen, this.tailRadius, collision);
 
     const offsets: Record<string, number> = {'front-1': 0.0, 'hind1': 0.06, 'front1': 0.5, 'hind-1': 0.56};
     for (const limb of d.limbs) {
@@ -291,16 +303,9 @@ export class LizardRig {
       leg.swing = false;
       this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
     }
-    this.tailPts = [];
-    this.tailPrev = [];
     const pelvis = this.bodyToWorld(new THREE.Vector3(0.9, this.spineBindY[5], 0), new THREE.Vector3());
-    let p = pelvis.clone();
-    for (let i = 0; i < this.tailBind.length; i++) {
-      p = p.clone().addScaledVector(this.bodyFwd, -this.tailLen[i]);
-      p.y = this.ground.heightAt(p.x, p.z) + this.tailRadius[i];
-      this.tailPts.push(p.clone());
-      this.tailPrev.push(p.clone());
-    }
+    this.tailDynamics.reset(pelvis, this.bodyFwd.clone().negate());
+    this.tailPts = this.tailDynamics.points;
     this.initialised = true;
   }
 
@@ -618,69 +623,11 @@ export class LizardRig {
     }
   }
 
-  private updateTail(dt: number, speedCm: number) {
-    // A lizard's tail is not a snake's: no wave runs down it, and it never curls
-    // into an S. Its base swings with the hips and the rest follows, fairly stiff,
-    // in one smooth curve. Where it is dragged (each joint keeps its place on the
-    // ground, follow-the-leader) gives how much it bends in all; the tail is then
-    // laid out as a single arc with that bend, curling a little more toward the tip.
+  private updateTail(dt: number, _speedCm: number) {
     const pelvis = this.spinePos[5];
-    const back = new THREE.Vector3().copy(this.spinePos[4]).sub(pelvis);
-    back.y = 0;
-    back.normalize().negate();
-    const N = this.tailPts.length;
-    if (!N) return;
-    const relax = 1 - Math.exp(-dt * (this.moving ? 3.2 : 1.6));
-    // 1. the drag: how far the rope, pulled from its old place, wants to bend
-    let prev = new THREE.Vector2(pelvis.x, pelvis.z);
-    let prevDir = new THREE.Vector2(back.x, back.z);
-    let total = 0;
-    for (let i = 0; i < N; i++) {
-      const p = this.tailPts[i];
-      const drag = new THREE.Vector2(p.x - prev.x, p.z - prev.y);
-      if (drag.lengthSq() < 1e-12) drag.copy(prevDir);
-      drag.normalize();
-      const straight = clamp(0.55 - i * 0.025, 0.25, 0.55);
-      const dir = drag.lerp(prevDir, clamp(straight * relax * 6, 0, 1)).normalize();
-      const ang = clamp(Math.atan2(prevDir.x * dir.y - prevDir.y * dir.x, prevDir.x * dir.x + prevDir.y * dir.y), -0.22, 0.22);
-      total += ang;
-      const ca = Math.cos(ang), sa = Math.sin(ang);
-      dir.set(prevDir.x * ca - prevDir.y * sa, prevDir.x * sa + prevDir.y * ca);
-      prev = new THREE.Vector2(prev.x + dir.x * this.tailLen[i], prev.y + dir.y * this.tailLen[i]);
-      prevDir = dir;
-    }
-    // (no more than ~95° in all, and eased, so the curve swings over smoothly)
-    total = clamp(total, -1.65, 1.65);
-    this.tailBend = damp(this.tailBend, total, 6, dt);
-    // 2. lay it out as one arc
-    let wsum = 0;
-    for (let i = 0; i < N; i++) wsum += 0.7 + 0.6 * i / Math.max(1, N - 1);
-    let prev3 = pelvis.clone();
-    let dir3 = back.clone();
-    for (let i = 0; i < N; i++) {
-      const p = this.tailPts[i];
-      const L = this.tailLen[i];
-      let ang = this.tailBend * (0.7 + 0.6 * i / Math.max(1, N - 1)) / wsum;
-      // a hunting lizard flicks the tip of its tail
-      if (this.inputs.tailTwitch > 0 && i >= N - 4) ang += Math.sin(this.time * 19 + i * 1.3) * 0.22 * this.inputs.tailTwitch * ((i - (N - 5)) / 4);
-      const ca = Math.cos(ang), sa = Math.sin(ang);
-      dir3 = new THREE.Vector3(dir3.x * ca - dir3.z * sa, 0, dir3.x * sa + dir3.z * ca);
-      // rest on the ground; the base hangs from the raised pelvis
-      // (the tail slides along the glass rather than through it)
-      const gp = insideGlass(new THREE.Vector3(prev3.x + dir3.x * L, 0, prev3.z + dir3.z * L), this.tailRadius[i] + 0.010);
-      // walking, it carries the base of its tail clear of the ground, the tip trailing
-      const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
-      const g = this.ground.heightAt(gp.x, gp.z) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
-      let y = Math.max(g, prev3.y - L * 0.92);
-      y = Math.min(y, prev3.y + L * 0.5);
-      const dy = y - prev3.y;
-      const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
-      p.set(prev3.x + dir3.x * h, y, prev3.z + dir3.z * h);
-      insideGlass(p, this.tailRadius[i] + 0.010);
-      prev3 = p;
-    }
+    const back = new THREE.Vector3().subVectors(pelvis, this.spinePos[4]).normalize();
+    this.tailDynamics.update(dt, pelvis, back, this.inputs.tailTwitch);
   }
-
   private updateLegs(dt: number, freq: number, duty: number, speedCm: number) {
     const I = this.inputs;
     const vel = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading)).multiplyScalar(I.speed);
