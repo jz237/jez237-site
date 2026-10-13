@@ -904,8 +904,9 @@ class Dino {
       });
       // feet onto the real ground (not while lying down), and breathing
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch', moving: stepping || this.state === 'turn' });
+      // the idles sway the body first; the feet are then planted under it
       this.performFrame(dt);
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch', moving: stepping || this.state === 'turn', plant: /^(shake|rub|yawn)$/.test(this.perf?.kind || '') });
       this.keepOffTrunks();
       this.keepInside();
       this.skinFrame(dt);
@@ -1389,7 +1390,8 @@ class Dino {
     this.pos.x += Math.sin(this.heading) * this.speed * dt;
     this.pos.z += Math.cos(this.heading) * this.speed * dt;
     this.play(gait, 0.5);
-    if (this.current) this.current.timeScale = Math.max(0.25, this.speed / v) * (this.swimming ? 1.7 : 1); // paddling legs
+    // the clip's steps match the ground actually covered, down to a slow, careful step
+    if (this.current) this.current.timeScale = Math.max(0.06, this.speed / v) * (this.swimming ? 1.7 : 1); // paddling legs
     if (this.state === 'flee' && this.pathIdx >= this.path.length - 1) this.state = 'walk';
   }
 

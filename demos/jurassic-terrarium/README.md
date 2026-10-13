@@ -184,3 +184,9 @@ v1.24 (Documentary mode replaces Photo mode):
 - **Shots.** Each story is filmed in a few shots chosen to suit it: a side tracking shot, a slow push-in, a low hero angle, an orbit, a long-lens shot from across the case, a high crane shot, a chase behind a flier.
 - **Clear views.** The crew searches for a clear line of sight past plants, rocks, the den, hills and other animals, and moves or cuts if the view gets blocked mid-shot.
 - **Look.** Shallow focus, letterbox bars, and a caption naming the animal (with its Latin name) and what it's doing. Esc or a click leaves.
+
+v1.24.1: smooth legs:
+- A planted foot that would over-stretch its leg now drags a little instead of popping free in one frame.
+- Feet ease out of the hold when they lift off.
+- The walk clip slows right down to match a slow start, rather than running ahead of the body.
+- Standing feet stay planted during a shake, a rub or a yawn.

@@ -75,11 +75,12 @@ export class Feet {
   //  - every leg: the ground under the foot replaces the clip's flat floor (slopes, banks).
   //  - touch-down: a small dip of the body that springs back (heavier animals dip more), and onPlant for
   //    sound, dust and shake.
-  update(dt, { running = false, enabled = true, moving = false } = {}) {
+  // plant: hold standing feet where they are even though it isn't walking (a shake, a rub: the body moves)
+  update(dt, { running = false, enabled = true, moving = false, plant = false } = {}) {
     if (dt <= 0) return;
     this.breathe(dt, running);
     if (!enabled || !this.legs.length) {
-      for (const L of this.legs) (L.lock = null), (L.lockW = 0);
+      for (const L of this.legs) (L.lock = null), (L.rel = null), (L.lockW = 0);
       return;
     }
     const root = this.root, T = this.T;
@@ -97,21 +98,32 @@ export class Feet {
       L.pz = local.z;
       L.vz = L.vz === undefined ? vz : L.vz + (vz - L.vz) * Math.min(1, dt * 20);
       const stance = moving ? L.vz < 0 && lift < tol * 2.5 : lift < tol;
-      if (stance && !L.lock && moving) {
+      const hold = moving || plant;
+      if (stance && !L.lock && hold) {
         L.lock = { x: _p.x, z: _p.z };
         if (moving && L.wasSwing) this.plant(L, _p, running);
-      } else if ((!stance || !moving) && L.lock) L.lock = null;
+      } else if ((!stance || !hold) && L.lock) (L.rel = L.lock), (L.lock = null); // lifting off: ease out of the hold
       L.wasSwing = !stance;
-      L.lockW += ((L.lock ? 1 : 0) - (L.lockW || 0)) * Math.min(1, dt * 18);
+      L.lockW += ((L.lock ? 1 : 0) - (L.lockW || 0)) * Math.min(1, dt * (L.lock ? 18 : 7));
       let cx = 0, cz = 0;
       if (L.lock) {
         cx = (L.lock.x - _p.x) * L.lockW;
         cz = (L.lock.z - _p.z) * L.lockW;
-        if (Math.hypot(cx, cz) > maxSlip) {
-          L.lock = { x: _p.x, z: _p.z }; // too far: let it go, step afresh
-          cx = cz = 0;
+        // holding it would over-stretch the leg (a turn, a stop, a stride the clip and the body disagree
+        // on): the planted foot drags a little with the body instead of popping free in one frame
+        const m = Math.hypot(cx, cz), lim = maxSlip * 0.55;
+        if (m > lim) {
+          const k = lim / m;
+          cx *= k;
+          cz *= k;
+          const w = Math.max(L.lockW, 1e-3);
+          L.lock.x = _p.x + cx / w;
+          L.lock.z = _p.z + cz / w;
         }
-      }
+      } else if (L.rel && L.lockW > 0.01) {
+        cx = (L.rel.x - _p.x) * L.lockW;
+        cz = (L.rel.z - _p.z) * L.lockW;
+      } else L.rel = null;
       L.cx = cx;
       L.cz = cz;
       // the swing lifted higher than the clip has it, only while actually stepping (a raised paw in an
