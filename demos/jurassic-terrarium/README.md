@@ -135,3 +135,14 @@ v1.20 (animals no longer pass through trees or sink into the stream):
 - The stream is no longer walked along or down the cascades, which buried the legs in the falls. It's crossed at two shin-deep fords and on the footpath's stepping stones. The path doubles as the corridor between the two halves of the case, and trees are kept back from it.
 - Hatchlings swim, with the water at mid-leg, where the water is deeper than their legs.
 - If an animal stops making progress, it re-plans its route, and after a second failure it stops and rests.
+
+v1.21:
+
+- The Brachiosaurus roams the whole case again (about 93% of the floor, up from about 70%). The den rock is now solid for every animal except the T. rex, so the wide no-go margin round the rock is gone. It's too big to run from the T. rex: it turns and watches instead.
+- On the trail:
+  - Animals sometimes walk the footpath and cross the stream on the stepping stones; a herd follows in single file a few seconds apart.
+  - An animal slows behind one moving ahead of it instead of walking into its tail.
+  - Feet splash wherever they come down in water.
+  - Footprints are pressed into the dirt path.
+  - Hatchlings paddle when they swim, bobbing with rings spreading round them.
+- Branches react to bodies. Monkey-puzzle, redwood, ginkgo, tree-fern and cycad branches part round a passing back, neck or head, shiver while it moves and are dragged its way. Heads in a crown sway the whole tree, and a body pushing through at pace shakes a few leaves loose. Conifer trunks are solid up through the crown.

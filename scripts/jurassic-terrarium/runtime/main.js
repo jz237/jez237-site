@@ -49,7 +49,7 @@ const DEN = window.__jtDen || { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s
 const SPECIES = [
   {
     id: 'trex', bodyR: 0.19, ready: true, count: 1, clearance: 0.1, maxWater: 0.7, maxSlope: 0.32, predator: true, den: true, gaitSwing: 0.035,
-    acts: { wander: 5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
+    acts: { wander: 4, trail: 1.5, sniff: 2, roar: 1, drink: 1, hunt: 2 },
     sounds: { roar: 'roar', sniff: 'sniff', idle: 'boom' }, step: 3, feet: [0, 0.5],
     common: 'Tyrannosaurus', badge: 'predator', dot: '#8a6a45',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
@@ -58,7 +58,7 @@ const SPECIES = [
   },
   {
     id: 'triceratops', bodyR: 0.18, ready: true, count: 3, clearance: 0.07, maxWater: 0.6, maxSlope: 0.3, herd: true, flex: 0.9, gaitSwing: 0.05,
-    acts: { wander: 3, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
+    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, threat: 1 }, standsGround: 0.45,
     sounds: { alert: 'grunt', threat: 'bellow' }, step: 2, feet: [0, 0.22, 0.5, 0.72],
     common: 'Triceratops', badge: 'herd', dot: '#7d6a4f',
     era: 'Late Cretaceous, 68–66 million years ago · western North America',
@@ -67,7 +67,7 @@ const SPECIES = [
   },
   {
     id: 'stegosaurus', bodyR: 0.12, ready: true, count: 2, clearance: 0.06, maxWater: 0.6, maxSlope: 0.3, herd: true,
-    acts: { wander: 3, graze: 4, drink: 1, alert: 1, tailswing: 1 },
+    acts: { wander: 2, trail: 1.5, graze: 4, drink: 1, alert: 1, tailswing: 1 },
     sounds: { alert: 'grunt', tailswing: 'hiss' }, step: 1.4, feet: [0, 0.25, 0.5, 0.75],
     common: 'Stegosaurus', badge: 'browser', dot: '#a5603a',
     era: 'Late Jurassic, 155–150 million years ago · western North America',
@@ -76,7 +76,7 @@ const SPECIES = [
   },
   {
     id: 'brachiosaurus', bodyR: 0.16, ready: true, count: 1, clearance: 0.1, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.03,
-    acts: { wander: 3, browse: 4, drink: 1, alert: 1 },
+    acts: { wander: 2, trail: 1.5, browse: 4, drink: 1, alert: 1 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
     era: 'Late Jurassic, 154–153 million years ago · western North America',
@@ -178,6 +178,12 @@ class Dino {
       const T = mod.ctx.terrain;
       if (Math.max(T.lakeMask(p.x, p.z), T.riverMask(p.x, p.z)) > 0.35)
         mod.ctx.modules.water?.ripple?.(p.x, p.z, Math.min(0.12, 0.025 + this.length * 0.02), running ? 1.4 : 0.9);
+      // a foot coming down in water throws up a splash (bigger at a run, and for the big animals)
+      const sy = mod.waterSurface(p.x, p.z);
+      if (sy != null && sy > T.height(p.x, p.z) + 0.012 && (this.splashT ?? 0) < performance.now()) {
+        this.splashT = performance.now() + 140;
+        mod.effects.splash(p.x, p.z, sy, Math.min(1.3, 0.25 + this.length * 0.22) * (running ? 1.5 : 1));
+      }
       if (this.length > 1.3 || running) mod.effects.dust(p, this.length * (running ? 0.05 : 0.035));
       if (this.length > 2) {
         const cam = mod.ctx.camera.position, d = cam.distanceTo(p);
@@ -269,7 +275,7 @@ class Dino {
     const acts = this.sp.acts || { wander: 1 };
     const prey = this.mod.walkers?.some((d) => !d.sp.predator && !d.sp.tooBig);
     const opts = Object.entries(acts).filter(
-      ([k]) => k === 'wander' || k === 'drink' || (k === 'hunt' && prey) || this.actions[k],
+      ([k]) => k === 'wander' || k === 'drink' || k === 'trail' || (k === 'hunt' && prey) || this.actions[k],
     );
     let tot = opts.reduce((a, [, w]) => a + w, 0);
     let r = rand() * tot;
@@ -411,6 +417,23 @@ class Dino {
           }
         }
     }
+    // solid rock (the den, for all but its owner): push the body back out through the nearest face
+    if (!this.sp.den)
+      for (const B of this.mod.solidBoxes || []) {
+        for (const c of this._caps) {
+          const a = c.a.getWorldPosition(_ka), b = c.b ? c.b.getWorldPosition(_kb) : _kb.copy(a), r = c.r * scale;
+          for (const u of [0, 0.5, 1]) {
+            const x = a.x + (b.x - a.x) * u + px, z = a.z + (b.z - a.z) * u + pz, y = a.y + (b.y - a.y) * u;
+            if (y - r > B.top || x < B.x0 - r || x > B.x1 + r || z < B.z0 - r || z > B.z1 + r) continue;
+            const ox = [x - (B.x0 - r), B.x1 + r - x], oz = [z - (B.z0 - r), B.z1 + r - z];
+            const mn = Math.min(ox[0], ox[1], oz[0], oz[1]);
+            if (mn === oz[1]) pz += oz[1];
+            else if (mn === ox[0]) px -= ox[0];
+            else if (mn === ox[1]) px += ox[1];
+            else pz -= oz[0];
+          }
+        }
+      }
     if (!px && !pz) return;
     const m = Math.hypot(px, pz), cap = 0.08;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
@@ -485,7 +508,14 @@ class Dino {
       const p = mod.predator.pos;
       const dd = Math.hypot(p.x - this.pos.x, p.z - this.pos.z);
       const charging = mod.predator.state === 'hunt' && mod.predator.prey === this;
-      if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
+      if (this.sp.tooBig) {
+        // too big to be prey: it doesn't run, it turns its head to watch (lookTarget follows the predator)
+        const awake = mod.predator.state !== 'sleep' && mod.predator.speed > 0.03;
+        if (awake && dd < 2.2 && this.state === 'idle' && this.actions.alert && (this.watchT ?? 0) < performance.now() && rand() < dt * 0.25) {
+          this.watchT = performance.now() + 20000;
+          this.oneShot('alert');
+        }
+      } else if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
         if (charging && this.sp.standsGround && this.actions.threat && rand() < this.sp.standsGround) {
           // face the predator and present the horns
           this.heading = Math.atan2(p.x - this.pos.x, p.z - this.pos.z);
@@ -748,7 +778,7 @@ class Dino {
       });
       // feet onto the real ground (not while lying down), and breathing
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest', moving: stepping || this.state === 'turn' });
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming, moving: stepping || this.state === 'turn' });
       this.keepOffTrunks();
       this.keepInside();
     }
@@ -808,6 +838,12 @@ class Dino {
     const W = this.mod.ctx.modules.water;
     if (!W?.ripple) return;
     this.wakeT = (this.wakeT ?? 0) - dt;
+    // swimming: rings spreading round the body as it paddles
+    if (this.swimming && this.wakeT <= 0) {
+      this.wakeT = 0.45;
+      const sy = this.mod.waterSurface(this.pos.x, this.pos.z);
+      if (sy != null) this.mod.effects.splash(this.pos.x, this.pos.z, sy, 0.28);
+    }
     if (this.inWater > 0.35 && this.speed > 0.02 && this.wakeT <= 0) {
       this.wakeT = 0.35;
       const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
@@ -952,6 +988,8 @@ class Dino {
       if (!shore || !this.goTo(shore.x, shore.z, () => this.oneShot(this.actions.drink ? 'drink' : 'sniff')))
         this.timer = 1;
       else this.faceWater = shore.water;
+    } else if (kind === 'trail') {
+      if (!this.walkTrail()) this.act('wander');
     } else if (kind === 'browse') {
       const tree = mod.nearTree(this);
       if (tree && this.goTo(tree.x, tree.z, () => {
@@ -962,6 +1000,53 @@ class Dino {
       })) return;
       this.oneShot('browse') || (this.timer = 1);
     } else if (!this.oneShot(kind)) this.timer = 1;
+  }
+
+  // A walk along the footpath: from the nearest point of the trail, a few units one way or the other
+  // (over the stepping stones, if they lie that way). A herd follows in single file, one after another.
+  walkTrail(pts = null) {
+    if (!pts) {
+      const lines = window.__jtPathLines;
+      if (!lines) return false;
+      let best = null;
+      lines.forEach((l, li) => l.forEach(([x, z], i) => {
+        const d = Math.hypot(x - this.pos.x, z - this.pos.z);
+        if (!best || d < best.d) best = { li, i, d };
+      }));
+      if (!best || best.d > 3.5) return false;
+      const line = lines[best.li];
+      let dir = rand() < 0.5 ? 1 : -1;
+      if (best.i + dir < 0 || best.i + dir >= line.length) dir = -dir;
+      const want = 2.5 + rand() * 3;
+      pts = [{ x: line[best.i][0], z: line[best.i][1] }];
+      for (let i = best.i, acc = 0; acc < want; ) {
+        const j = i + dir;
+        if (j < 0 || j >= line.length) break;
+        acc += Math.hypot(line[j][0] - line[i][0], line[j][1] - line[i][1]);
+        i = j;
+        const [x, z] = line[i], last = pts[pts.length - 1];
+        if (!this.layer.walkable(x, z) || !this.clearOfGlass(x, z)) break;
+        if (Math.hypot(x - last.x, z - last.z) > 0.3) pts.push({ x, z });
+      }
+      if (pts.length < 3) return false;
+      if (this.sp.herd) {
+        // the others fall in behind, a few seconds apart
+        const mates = this.mod.dinos.filter((d) => d !== this && d.sp.id === this.sp.id && !d.parent);
+        mates.forEach((m, k) =>
+          this.mod.later((k + 1) * (2.2 + rand() * 0.8), () => {
+            if ((m.state === 'idle' || m.state === 'walk') && !m.guarding) m.walkTrail(pts);
+          }));
+      }
+    }
+    const start = this.layer.path(this.pos.x, this.pos.z, pts[0].x, pts[0].z);
+    if (!start) return false;
+    this.path = start.concat(pts.slice(1).map((p) => ({ x: p.x, z: p.z })));
+    this.pathIdx = 1;
+    this.yawRate = 0;
+    this.state = 'walk';
+    this.gait = 'walk';
+    this.then = null;
+    return true;
   }
 
   // the point `dist` further along the route from where the animal stands
@@ -1029,11 +1114,26 @@ class Dino {
     this.yawRate += (wantRate - this.yawRate) * Math.min(1, dt * 4);
     this.heading += this.yawRate * dt;
     const align = Math.max(0.2, Math.cos(Math.min(Math.abs(dh), Math.PI / 2)));
-    this.speed += (v * align - this.speed) * Math.min(1, dt * 1.5);
+    // queueing: slow down behind an animal in the way (single file on the trail, a herd bunching up),
+    // rather than walking into its tail
+    let room = 1;
+    if (!this.parent && !hunting && this.state === 'walk') {
+      const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
+      for (const o of this.mod.walkers) {
+        if (o === this || o.parent || o.sp.flyer || o.speed < 0.03) continue; // only behind one that is moving
+        const dx = o.pos.x - this.pos.x, dz = o.pos.z - this.pos.z, ahead = dx * fx + dz * fz;
+        if (ahead <= 0) continue;
+        const side = Math.abs(dx * fz - dz * fx), wide = ((this.sp.bodyR ?? 0.12) + (o.sp.bodyR ?? 0.12)) * 1.3;
+        if (side > wide) continue;
+        const gap = ahead - (this.length + o.length) * 0.45;
+        room = Math.min(room, MathUtils.clamp(gap / 0.35, 0, 1));
+      }
+    }
+    this.speed += (v * align * room - this.speed) * Math.min(1, dt * 1.5);
     this.pos.x += Math.sin(this.heading) * this.speed * dt;
     this.pos.z += Math.cos(this.heading) * this.speed * dt;
     this.play(gait, 0.5);
-    if (this.current) this.current.timeScale = Math.max(0.25, this.speed / v);
+    if (this.current) this.current.timeScale = Math.max(0.25, this.speed / v) * (this.swimming ? 1.7 : 1); // paddling legs
     if (this.state === 'flee' && this.pathIdx >= this.path.length - 1) this.state = 'walk';
   }
 
@@ -1062,8 +1162,11 @@ class Dino {
     const sy = this.mod.waterSurface?.(this.pos.x, this.pos.z);
     if (sy != null) {
       const hip = this.hipHeight();
-      if (hip > 0 && sy - y > hip * 0.5) y = sy - hip * 0.5;
-    }
+      if (hip > 0 && sy - y > hip * 0.5) {
+        y = sy - hip * 0.5 + 0.004 * Math.sin(performance.now() * 0.006 + this.k * 9); // a gentle bob
+        this.swimming = true;
+      } else this.swimming = false;
+    } else this.swimming = false;
     this.root.position.set(this.pos.x, y, this.pos.z);
     this.root.rotation.set(pitch, this.heading, 0, 'YXZ');
   }
@@ -1358,7 +1461,7 @@ class Dinosaurs {
     // reach over or through the overhang
     const denRect = { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds };
     for (const sp of SPECIES.filter((s) => !s.flyer)) {
-      const m = sp.den ? null : sp.tooBig ? 1.8 : 0.25;
+      const m = sp.den ? null : sp.tooBig ? 0.6 : 0.25; // (the body guard keeps necks off the rock itself)
       const blockRects = m === null ? [] : [{ x0: denRect.x0 - m, x1: denRect.x1 + m, z0: denRect.z0 - m, z1: denRect.z1 + m }];
       this.layers[sp.id] = this.nav.layer({ clearance: sp.clearance, maxWater: sp.maxWater, maxSlope: sp.maxSlope, blockRects, bodyR: sp.bodyR ?? 0.12 });
     }
@@ -1406,6 +1509,9 @@ class Dinosaurs {
         });
         m.name = 'den';
         this.group.add(m);
+        // the rock is solid for every animal but its owner: a long neck may not reach over or into it
+        const bb = new Box3().setFromObject(m);
+        this.solidBoxes = [{ x0: bb.min.x + 0.15, x1: bb.max.x - 0.15, z0: bb.min.z, z1: bb.max.z - 0.12, top: bb.max.y - 0.1 }];
       })
       .catch((e) => console.warn('[den] load failed', e));
     await Promise.all(
@@ -1481,6 +1587,54 @@ class Dinosaurs {
 
   // the T. rex roars: the planting round it shivers and every herbivore in earshot turns to look; the
   // nearest ones start up in alarm
+  // Bodies among the trees, for the branch shader: head, chest and hips of each grown animal near a tree
+  // (nearest first, up to the shader's slots); a head or back pushing hard through a crown shakes a few
+  // leaves loose
+  branchPush(dt) {
+    const U = this.flora.uniforms, N = U.uBPush.value.length, list = [];
+    const grid = this.trunkGrid;
+    for (const d of this.walkers || []) {
+      if (d.parent || d.sp.flyer) continue;
+      if (!d._bpBones) {
+        const b = {};
+        d.model.traverse((o) => o.isBone && (b[o.name] = o));
+        d._bpBones = [[d.headBone, 0.1], [b.spine3 || b.spine2, (d.sp.bodyR ?? 0.12) * 1.1], [b.pelvis, (d.sp.bodyR ?? 0.12)], [b.neck2, 0.08]].filter((x) => x[0]);
+      }
+      const vx = Math.sin(d.heading) * d.speed, vz = Math.cos(d.heading) * d.speed;
+      for (const [bone, r] of d._bpBones) {
+        const p = bone.getWorldPosition(new Vector3());
+        // nearest tree crown
+        let near = 9;
+        const gx = Math.floor(p.x / 0.5), gz = Math.floor(p.z / 0.5);
+        for (let a = -2; a <= 2; a++)
+          for (let c = -2; c <= 2; c++)
+            for (const t of grid.get(gx + a + ',' + (gz + c)) || []) {
+              if (t.kind === 'stand' || t.kind === 'cabin') continue;
+              const top = t.top ?? t.crownY + 0.5;
+              if (p.y < t.y0 || p.y > top + 0.2) continue;
+              const dd = Math.hypot(p.x - t.x, p.z - t.z) - t.r;
+              if (dd < near) near = dd;
+              // leaves shaken loose: a body moving at pace through the crown itself
+              if (dd < r * d.k + 0.12 && p.y > (t.leafY ?? t.crownY) && d.speed > 0.08 && (d.leafT ?? 0) < this.clock) {
+                d.leafT = this.clock + 2.5 + Math.random() * 2.5;
+                this.effects.leafBurst(p, 2 + Math.floor(Math.random() * 3));
+              }
+            }
+        if (near < 0.8) list.push({ p, r: r * d.k, vx, vz, s: d.speed, near });
+      }
+    }
+    list.sort((a, b) => a.near - b.near);
+    for (let i = 0; i < N; i++) {
+      const e = list[i];
+      if (!e) {
+        U.uBPush.value[i].w = 0;
+        continue;
+      }
+      U.uBPush.value[i].set(e.p.x, e.p.y, e.p.z, e.r);
+      U.uBPushV.value[i].set(e.vx, e.vz, e.s, 0);
+    }
+  }
+
   // the water's surface height at (x, z), or null on dry ground
   waterSurface(x, z) {
     const g = this.nav;
@@ -1591,6 +1745,7 @@ class Dinosaurs {
         T.fn();
       }
     }
+    this.clock = (this.clock || 0) + dt;
     // bodies that push the planting aside: hips and chest of every walker
     const pushers = [];
     for (const d of this.walkers || []) {
@@ -1605,7 +1760,14 @@ class Dinosaurs {
       d.headBone.getWorldPosition(this._pv);
       pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: 0.2 });
     }
+    // heads and long necks brush through tree crowns too (the springs sway the whole tree a little)
+    for (const d of this.walkers || []) {
+      if (d.parent || !d.headBone) continue;
+      d.headBone.getWorldPosition(this._pv);
+      pushers.push({ x: this._pv.x, y: this._pv.y, z: this._pv.z, r: 0.12 * d.k });
+    }
     this.flora.setPushers(pushers);
+    this.branchPush(dt);
     this.lamps?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.guide?.update(dt);

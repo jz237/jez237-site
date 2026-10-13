@@ -116,7 +116,9 @@ export class Contact {
     const T = this.ctx.terrain, w = this.ctx.world;
     const nearWater = Math.max(T.lakeMask(p.x + 0.25, p.z), T.lakeMask(p.x - 0.25, p.z), T.lakeMask(p.x, p.z + 0.25), T.lakeMask(p.x, p.z - 0.25), T.riverMask(p.x, p.z) * 1.2);
     const inWater = Math.max(T.lakeMask(p.x, p.z), T.riverMask(p.x, p.z)) > 0.5;
-    const soft = Math.max(nearWater, (w.groundWetness || 0) * 0.9);
+    // the trodden earth of the footpath takes a print too
+    const onPath = window.__jtPathAt?.(p.x, p.z, 0.02) ? 0.75 : 0;
+    const soft = Math.max(nearWater, (w.groundWetness || 0) * 0.9, onPath);
     if (inWater || soft < 0.3) return;
     const i = this.printNext;
     this.printNext = (i + 1) % 260;

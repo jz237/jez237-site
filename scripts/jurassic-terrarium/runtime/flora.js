@@ -34,6 +34,9 @@ export class Flora {
       uFWindDir: { value: new Vector2(0.94, 0.34) },
       // a roar close by: plants within the radius shiver (x, z, radius, strength 0..1)
       uShiver: { value: new Vector4(0, 0, 0, 0) },
+      // bodies among the trees, for the branches to part round: (x, y, z, radius) and (vx, vz, speed, 0)
+      uBPush: { value: Array.from({ length: Flora.BRANCH_PUSHERS }, () => new Vector4()) },
+      uBPushV: { value: Array.from({ length: Flora.BRANCH_PUSHERS }, () => new Vector4()) },
     };
     this.obstacles = []; // {x, z, r} trunks for the dinosaurs' route finder
     this.placements = {};
@@ -42,12 +45,14 @@ export class Flora {
     // crown begins (above it only fronds and branches, which part)
     const RAD = { treefern: 0.035, cycad: 0.085, araucaria: 0.05, redwood: 0.05, ginkgo: 0.04 };
     const CROWN = { treefern: 0.75, cycad: 0.25, araucaria: 0.35, redwood: 0.2, ginkgo: 0.4 };
+    // how high the trunk is solid: a conifer's runs up through its crown to near the top
+    const SOLID = { araucaria: 0.9, redwood: 0.9 };
     this.trunks = [];
     for (const [kind, list] of Object.entries(this.placements)) {
       if (!RAD[kind]) continue;
       for (const p of list) {
         const H = p.wantTop || p.scale * BASE_H[kind];
-        this.trunks.push({ x: p.x, z: p.z, r: RAD[kind] * H, y0: p.y, crownY: p.y + CROWN[kind] * H, kind });
+        this.trunks.push({ x: p.x, z: p.z, r: RAD[kind] * H, y0: p.y, crownY: p.y + (SOLID[kind] ?? CROWN[kind]) * H, leafY: p.y + CROWN[kind] * H, top: p.y + H, kind });
       }
     }
     // each conifer stand is closed as a whole to the route finder (animals go round a grove, not between
@@ -350,6 +355,7 @@ export class Flora {
   // aside (0 = not at all); curve: how the bend is spread up the plant (higher = stiff stem, supple top);
   // k: spring stiffness, i.e. how fast it swings back once released.
   // full-detail ferns within this distance of the camera (units), fading to the simpler version over the band
+  static BRANCH_PUSHERS = 24;
   static LOD_NEAR = 7.0;
   static LOD_BAND = 3.0;
 
@@ -404,7 +410,33 @@ export class Flora {
     float c = cos(ang), s = sin(ang);
     vec3 rr = r * c + cross(axis, r) * s + axis * dot(axis, r) * (1.0 - c);
     transformed += inverse(mat3(toW)) * (rr - r);
-  }`;
+  }${M.crown || kind === 'cycad' ? `
+  // branches part round a body moving through them (a back, a neck, a head), shivering while it moves
+  // and dragged a little its way; the trunk and the branch roots stay put
+  #ifndef VINE
+  {
+    vec3 bw = (toW * vec4(transformed, 1.0)).xyz;
+    float wB = (1.0 - aTrunk) * smoothstep(0.03, 0.22, length(bw.xz - base.xz));
+    if (wB > 0.0) {
+      vec3 disp = vec3(0.0);
+      for (int i = 0; i < 24; i++) {
+        vec4 P = uBPush[i];
+        if (P.w <= 0.0) continue;
+        vec3 dv = bw - P.xyz;
+        float d = length(dv), R = P.w + 0.18;
+        if (d >= R) continue;
+        float f = 1.0 - d / R;
+        vec3 away = dv / max(d, 1e-4);
+        away.y *= 0.4;
+        vec4 V = uBPushV[i];
+        disp += away * f * f * 0.12;
+        disp += vec3(sin(uFTime * 19.0 + aPh * 7.0 + d * 30.0), 0.5 * sin(uFTime * 23.0 + aPh * 5.0), cos(uFTime * 17.0 + aPh * 6.0)) * f * min(V.z, 0.5) * 0.06;
+        disp.xz += V.xy * f * 0.08;
+      }
+      transformed += inverse(mat3(toW)) * (disp * wB);
+    }
+  }
+  #endif` : ''}`;
   }
 
   head() {
@@ -412,6 +444,8 @@ export class Flora {
 uniform float uFTime;
 uniform vec2 uFWindDir;
 uniform vec4 uShiver;
+uniform vec4 uBPush[24];
+uniform vec4 uBPushV[24];
 attribute float aT;
 attribute float aPh;
 attribute float aTrunk;
@@ -434,6 +468,8 @@ attribute vec2 aBend;
     sh.uniforms.uFWindDir = U.uFWindDir;
     sh.uniforms.uShiver = U.uShiver;
     sh.uniforms.uTint = U.uTint;
+    sh.uniforms.uBPush = U.uBPush;
+    sh.uniforms.uBPushV = U.uBPushV;
   }
 
   // Shaded like Weatherglass's foliage: frond atlas with alpha-to-coverage, ambient occlusion in the heart
