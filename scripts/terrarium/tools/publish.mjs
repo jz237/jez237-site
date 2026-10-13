@@ -16,7 +16,7 @@ const files = [];
 async function walk(dir) {
   for (const e of await readdir(dir, {withFileTypes: true})) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) await walk(p); else files.push(path.relative(target, p));
+    if (e.isDirectory()) await walk(p); else files.push(path.relative(target, p).replaceAll('\\', '/'));
   }
 }
 await walk(target);

@@ -1,0 +1,25 @@
+{
+  "name": "bearded-dragon-terrarium",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node tools/publish.mjs",
+    "test": "node --import tsx --test tests/*.test.mjs tests/*.test.ts"
+  },
+  "dependencies": {
+    "three": "0.185.1",
+    "three-mesh-bvh": "0.9.15"
+  },
+  "devDependencies": {
+    "@types/three": "0.185.1",
+    "meshoptimizer": "1.1.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  }
+}

@@ -409,25 +409,49 @@
     "note": "WebGL 2 · Desktop & touch controls · Preview captured from the running demo"
   },
   {
+    "id": "021",
+    "title": "Bearded Dragon · Desert Terrarium",
+    "category": "3D · Living desert habitat",
+    "description": "A dry desert world for one living bearded dragon. Warm sandstone ledges, shaded rock hides, weathered driftwood and a mountain backdrop fill a wide black-framed enclosure. Watch the dragon bask, breathe, blink, explore, hunt crickets and graze greens, then settle into its cool hide when the lamps go out.",
+    "url": "bearded-dragon-terrarium/",
+    "image": "assets/bearded-dragon-terrarium.jpg",
+    "imageAlt": "The actual desert terrarium with a bearded dragon on a sandstone ledge, overhead lamps, rock hides, driftwood, food and a shallow water dish",
+    "imageWidth": 1440,
+    "imageHeight": 900,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/bearded-dragon-terrarium",
+    "features": [
+      "Sandstone basking ledge & cool hide",
+      "Living dragon with four colour morphs",
+      "Cricket hunting & fresh greens",
+      "Follow camera & day / night lighting"
+    ],
+    "facts": [
+      "One bearded dragon",
+      "Three.js · WebGL 2",
+      "Mouse & touch"
+    ],
+    "note": "Desktop & touch · Real-time 3D · Habitat and motion are illustrative · Preview captured from the running demo"
+  },
+  {
     "id": "019",
-    "title": "Weatherglass Terrarium",
+    "title": "Weatherglass · Rainforest Terrarium",
     "category": "3D · Living terrarium",
-    "description": "A photoreal rainforest under glass with a living bearded dragon. It basks until warm, changes colour with temperature and mood, snaps up crickets with its tongue, grazes greens, licks raindrops off the leaves and runs for its rock cave when you squeeze clouds into a storm. Neon tetras school in the pool and a fire-bellied toad flashes its red belly. Wring out rain, shake out lightning, mist the plants, stir the wind and ripple the pool.",
+    "description": "A living rainforest under glass. Wring rain from clouds, shake out lightning, mist the ferns, stir the wind and ripple a waterfall-fed pool. Neon tetras school through the water while a fire-bellied toad explores the bank. The bearded dragon now has its own separate desert habitat.",
     "url": "terrarium/",
     "image": "assets/terrarium.jpg",
-    "imageAlt": "Actual Weatherglass Terrarium scene: a bearded dragon on driftwood, rain falling from a cloud, mossy basalt peaks with a cave, grass, bromeliads and a waterfall inside a glass case",
+    "imageAlt": "The actual Weatherglass rainforest: lush ferns, mossy rock peaks, a waterfall and a pool inside a brass-framed glass case, with no bearded dragon",
     "imageWidth": 1440,
     "imageHeight": 900,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/terrarium",
     "features": [
-      "Sculpted bearded dragon, four colour morphs",
-      "Storms, puddles, rainbows & a cave",
-      "Wind through grass, leaves & dust",
-      "Hunting, grazing & basking to warm up"
+      "Rain, mist, wind & thunderstorms",
+      "Living rainforest, waterfall & pool",
+      "Schooling neon tetras & a fire-bellied toad",
+      "Feed fish & explore the glass case"
     ],
     "facts": [
+      "Rainforest habitat",
       "Three.js · WebGL 2",
-      "Procedural + CC0 scans",
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Best on desktop GPUs · Preview captured from the running demo"

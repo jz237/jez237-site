@@ -5,12 +5,10 @@ import {Room} from './Room';
 import {Case, TANK, type Pane} from './Case';
 import {Ground, poolDistance, CAVE} from './Ground';
 import {Meadow} from './Meadow';
-import {Dish} from './Dish';
 import {Motes} from './Motes';
 import {LeafDrift} from './LeafDrift';
 import {Hardscape} from './Hardscape';
 import {loadScans} from './Assets';
-import {LizardModel} from './LizardModel';
 import {Surface, SurfaceKind} from './Surface';
 import {Plants} from './Plants';
 import {Flora} from './Flora';
@@ -20,8 +18,6 @@ import {Peaks} from './Peaks';
 import {MossShells} from './MossShells';
 import {Nav} from './Nav';
 import {Insects} from './Insects';
-import {LizardRig} from './LizardRig';
-import {LizardBrain} from './LizardBrain';
 import {Weather} from './Weather';
 import {TerrariumAudio} from './Audio';
 import {AirGlow} from './AirGlow';
@@ -38,7 +34,6 @@ const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
 const DUSK_SKY = new THREE.Color(0.62, 0.42, 0.36);
 const CLOUD_TINT = new THREE.Color(1.0, 0.95, 0.87);
 const NIGHT_GLOW = new THREE.Color(0.035, 0.05, 0.11);
-const CAVE_VIEW = new THREE.Vector3(CAVE.view.x, CAVE.view.y, CAVE.view.z);
 
 export class Terrarium {
   readonly renderer: THREE.WebGLRenderer;
@@ -59,22 +54,12 @@ export class Terrarium {
   rockMoss!: MossShells;
   nav!: Nav;
   insects!: Insects;
-  rig!: LizardRig;
-  brain!: LizardBrain;
   weather!: Weather;
   readonly audio = new TerrariumAudio();
   readonly air = new AirGlow();
   readonly cloudShadow = new CloudShadow();
   /** Where the hand brushes the plants (null: it's elsewhere); it eases in and out. */
   private hand = {target: null as THREE.Vector3 | null, pos: new THREE.Vector3(), w: 0};
-  /** The lizard's wake: where its body and tail were a moment ago, for the plants to spring back from. */
-  private wakeA = new THREE.Vector3();
-  private wakeB = new THREE.Vector3();
-  private wakeT = new THREE.Vector3();
-  private wakeInit = false;
-  private tmpFocus = new THREE.Vector3();
-  private wadeT = 0;
-  follow = false;
   temperature = 27;
   private plaqueT = 0;
   readonly moon: THREE.DirectionalLight;
@@ -83,17 +68,15 @@ export class Terrarium {
   /** Draw the panes facing the eye after the clouds, over a fresh copy of the view (one more full-screen copy). */
   private glassOverClouds = true;
   private tmpEye = new THREE.Vector3();
-  lizard!: LizardModel;
   readonly key: THREE.SpotLight;
   meadow!: Meadow;
-  dish!: Dish;
   motes!: Motes;
   leafDrift!: LeafDrift;
   rainbow!: Rainbow;
   fish!: FishSchool;
   toad!: Toad;
   private poolWind = new THREE.Vector2();
-  /** Leaf tips that hold rain: drips fall from them and the dragon licks them. */
+  /** Leaf tips that hold rain and drip it onto the ground. */
   leafTips: THREE.Vector3[] = [];
   private dripT = 0;
   readonly heat: THREE.SpotLight;
@@ -233,11 +216,7 @@ export class Terrarium {
     this.scene.add(this.plants.group);
     this.flora = new Flora(this.surface, this.hardscape.placed.filter((p) => p.mesh !== this.hardscape.log).map((p) => p.mesh), this.hardscape.log);
     this.scene.add(this.flora.group);
-    // a dish of greens on open ground at the front
-    const ds = Dish.findSpot(this.surface, [...this.plants.obstacles, ...this.flora.obstacles]);
-    this.dish = new Dish(this.surface, ds[0], ds[1]);
-    this.scene.add(this.dish.group);
-    this.meadow = new Meadow(this.surface, 720, [{x: ds[0], z: ds[1], r: this.dish.radius + 0.012}]);
+    this.meadow = new Meadow(this.surface, 720, []);
     this.scene.add(this.meadow.mesh);
     this.moss = new MossShells(this.surface, this.plants.moss, Number(new URLSearchParams(location.search).get('shells') || (LITE ? 8 : 14)));
     this.scene.add(this.moss.mesh);
@@ -266,23 +245,9 @@ export class Terrarium {
     };
     this.toad.onCall = (pan) => this.audio.toadCall(pan);
     this.resize();
-    this.lizard = await LizardModel.load('./lizard/');
-    this.lizard.setMorph(new URLSearchParams(location.search).get('morph') ?? 'normal');
-    this.scene.add(this.lizard.root);
-    this.nav = new Nav(this.surface, [...this.plants.obstacles, ...this.flora.obstacles, {x: this.dish.centre.x, z: this.dish.centre.z, r: this.dish.radius * 0.9}]);
+    this.nav = new Nav(this.surface, [...this.plants.obstacles, ...this.flora.obstacles]);
     this.insects = new Insects(this.surface, this.nav);
     this.scene.add(this.insects.group);
-    this.rig = new LizardRig(this.lizard, this.surface);
-    this.brain = new LizardBrain(this.rig, this.nav, this.surface, this.insects, this.water);
-    this.brain.dish = this.dish;
-    this.brain.onLap = (p) => this.water.addRipple(p.x, p.z, 1, this.time);
-    // feet in the shallows ring the water; the body pushes a little wake
-    this.rig.onFootDown = (p) => {
-      if (poolDistance(p.x, p.z) < 0) {
-        this.water.ripples.add(p.x, p.z, 0.004, -2.2);
-        if (Math.random() < 0.3) this.water.flick(p.x, p.z, 1, 0.08);
-      }
-    };
     this.insects.onSplash = (x, z) => {this.water.ripples.add(x, z, 0.004, -2.5); this.water.flick(x, z, 3, 0.15); this.fish.startle(x, z, 0.7, 0.09);};
     this.weather = new Weather(this.surface, this.water);
     {
@@ -303,9 +268,6 @@ export class Terrarium {
     this.rainbow = new Rainbow((x, z) => this.surface.topAt(x, z));
     this.scene.add(this.rainbow.mesh);
     this.collectLeafTips();
-    this.brain.leafTips = this.leafTips;
-    // a lick knocks the odd drop off the leaf
-    this.brain.onSip = (p) => {if (Math.random() < 0.35) this.weather.rain.drip(p.x, p.y - 0.002, p.z);};
     this.weather.lightning.light.layers.enable(1);
     this.weather.lightning.light.layers.enable(3);
     foliageUniforms.tWind.value = this.weather.wind.texture;
@@ -376,11 +338,10 @@ export class Terrarium {
     const from = at.clone().addScaledVector(toEye, 0.08).add(new THREE.Vector3(0, 0.07, 0));
     this.weather.mistPuff(from, at);
     this.rainbow.spray(from, at);
-    this.brain.misted(at);
     this.audio.mist();
   }
 
-  /** Sound and the lizard follow the weather's events. */
+  /** Sound responds to the weather's events. */
   private hookWeather() {
     const w = this.weather, a = this.audio;
     const pan = (x: number) => THREE.MathUtils.clamp(x / (TANK.w / 2), -1, 1) * 0.7;
@@ -390,13 +351,11 @@ export class Terrarium {
     w.clouds.events.merge = (c) => a.merge(c.size);
     w.clouds.events.pop = (c, big) => a.pop(big);
     w.clouds.events.shrink = (c, amt) => a.shrink(amt);
-    this.brain.onCrunch = (p, strength) => a.crunch(strength, pan(p.x));
     w.clouds.events.zap = (c) => a.zap(c.charge);
     w.onStrike = (end, strength, water, first) => {
       if (!first) return;
       const dist = this.camera.position.distanceTo(end);
       a.thunder(Math.min(1.2, strength), 0.12 + dist * 0.16, pan(end.x));
-      this.brain.lightning(end, strength);
       this.insects.scatter(end, 0.25);
       if (water) this.fish.startle(end.x, end.z, 2, 0.45);
     };
@@ -409,36 +368,16 @@ export class Terrarium {
     this.applyClimate(dt);
     this.motes.update(dt, this.weather.daylight, this.key.position, this.key.target.position, this.key.color);
     this.leafDrift.update(dt);
-    this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
-    this.brain.update(dt);
-    this.wake(dt);
     this.updateFish(dt);
     this.water.update(dt, this.time, 1);
   }
 
-  /** The fish: they keep clear of the dragon when it wades. */
+  /** Fish and toad retain their own motion and weather reactions. */
   private updateFish(dt: number) {
-    const I = this.rig.inputs;
-    const threats: {p: THREE.Vector3; r: number}[] = [];
-    if (poolDistance(I.x, I.z) < 0.15) threats.push({p: this.rig.spinePoints()[2], r: 0.11}, {p: this.rig.snout, r: 0.08});
     this.weather.wind.sample(0.3, 0.1, this.poolWind);
-    this.fish.update(dt, threats, this.weather.daylight, this.poolWind);
-    // the toad flashes its belly at the dragon's head or chest coming close
-    this.toad.update(dt, {threats: [{p: this.rig.snout, r: 0.075}, {p: this.rig.spinePoints()[2], r: 0.06}], night: 1 - this.weather.daylight});
-  }
-
-  /** The lizard wading: a bow wave at the chest and a trail behind. */
-  private wake(dt: number) {
-    const I = this.rig.inputs;
-    if (poolDistance(I.x, I.z) > -0.01) return;
-    this.wadeT -= dt;
-    const sp = Math.abs(I.speed);
-    if (this.wadeT > 0) return;
-    this.wadeT = sp > 0.01 ? 0.05 : 0.6;
-    const chest = this.rig.spinePoints()[2];
-    this.water.ripples.add(chest.x, chest.z, 0.008, -(0.6 + sp * 25));
-    if (sp < 0.01) this.water.ripples.add(I.x, I.z, 0.01, -0.5);
+    this.fish.update(dt, [], this.weather.daylight, this.poolWind);
+    this.toad.update(dt, {threats: [], night: 1 - this.weather.daylight});
   }
 
   /** Lights, wetness and condensation follow the weather and the lamp's day. */
@@ -487,8 +426,6 @@ export class Terrarium {
     foliageUniforms.uWet.value = w.wet;
     foliageUniforms.uHumid.value = THREE.MathUtils.clamp((w.humidity - 0.45) * 2.2 + w.mist * 0.3, 0, 1);
     this.peaks.uniforms.uWet.value = w.wet * 0.8;
-    this.lizard.skin.uWet.value = w.wet * 0.5;
-    this.brain.leavesWet = w.wet;
     // after rain the leaves drip for a while
     if (w.wet > 0.12 && this.leafTips.length) {
       this.dripT -= dt * 9 * (w.wet - 0.1);
@@ -501,22 +438,6 @@ export class Terrarium {
     // a bow in the rain wherever the lamp shines through it
     this.rainbow.update(dt, w.clouds.sources, this.camera, this.key.position, this.key.target.position, this.key.color,
       THREE.MathUtils.clamp(this.key.intensity / 11, 0, 1.3) * (1 - 0.8 * w.clouds.storminess) * 0.9);
-    this.brain.night = day < 0.2;
-    this.brain.raining = w.rainAmount > 0.1;
-    this.brain.storm = w.clouds.storminess;
-    this.brain.heat = day;
-    {
-      // how warm the dragon's spot is: the basking lamp's pool of light, the
-      // sun-lamp unless it is in the cave, minus rain on its back
-      const I = this.rig.inputs;
-      const hx = this.heat.target.position.x, hz = this.heat.target.position.z;
-      const lamp = THREE.MathUtils.smoothstep(0.2 - Math.hypot(I.x - hx, I.z - hz), 0, 0.14) * (this.heat.intensity / 0.75);
-      const roofed = this.surface.roofed(I.x, I.z);
-      const sun = day * (1 - gloom * 0.6) * (roofed ? 0.2 : 1);
-      this.brain.lampOnIt = lamp;
-      // (the rock of the cave holds the day's warmth)
-      this.brain.envTemp = THREE.MathUtils.clamp(0.14 + 0.3 * sun + 0.5 * lamp + (roofed ? 0.12 * day : 0) - (roofed ? 0 : 0.22 * Math.min(1, w.rainAmount)) - 0.08 * w.wet, 0, 1);
-    }
     this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0);
     const warmth = day * 0.7;
     for (const pane of this.case.panes) pane.fog.update(dt, this.glassHumidity(), warmth);
@@ -559,12 +480,6 @@ export class Terrarium {
     this.controls.update();
   }
 
-  /** Does a ray pass close to the lizard's spine? */
-  hitLizard(ray: THREE.Ray) {
-    const pts = [this.rig.snout, ...this.rig.spinePoints()];
-    return pts.some((p) => ray.distanceToPoint(p) < 0.022);
-  }
-
   /** Where a ray meets the ground or hardscape inside the case. */
   /** The hand is over the plants at `p` (a point on the ground, stones or log), or has left them (null). */
   setHand(p: THREE.Vector3 | null) {
@@ -573,7 +488,7 @@ export class Terrarium {
   }
 
   /**
-   * What parts the plants: the hand, the lizard's head, body and tail (as
+   * What parts the plants: the hand (as
    * capsules, so overlapping spheres never double the push), and its wake,
    * which lags behind so the plants it passed spring back over a moment
    * instead of snapping upright.
@@ -590,22 +505,7 @@ export class Terrarium {
     // (held a little above the surface: a hand brushing through, not raking the soil)
     A[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, 0.04);
     B[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, h.w);
-    const sp = this.rig.spinePoints(), sn = this.rig.snout;
-    const tail = this.rig.tailPoint(2), tail2 = this.rig.tailPoint(5);
-    // (the head from the snout back to the neck, then the body from the neck to the hips: no gap between them)
-    A[1].set(sn.x, sn.y, sn.z, 0.04); B[1].set(sp[1].x, sp[1].y, sp[1].z, 1);
-    A[2].set(sp[1].x, sp[1].y, sp[1].z, 0.062); B[2].set(sp[5].x, sp[5].y, sp[5].z, 1);
-    A[3].set(sp[5].x, sp[5].y, sp[5].z, 0.035); B[3].set(tail.x, tail.y, tail.z, 1);
-    A[4].set(tail.x, tail.y, tail.z, 0.022); B[4].set(tail2.x, tail2.y, tail2.z, 1);
-    // the wake: chest, hips and tail as they were a moment ago, fading as the body catches up
-    if (!this.wakeInit) {this.wakeA.copy(sp[2]); this.wakeB.copy(sp[5]); this.wakeT.copy(tail); this.wakeInit = true;}
-    const k = 1 - Math.exp(-dt / 0.35);
-    this.wakeA.lerp(sp[2], k); this.wakeB.lerp(sp[5], k); this.wakeT.lerp(tail, k);
-    const lag = Math.max(this.wakeA.distanceTo(sp[2]), this.wakeB.distanceTo(sp[5]));
-    const wake = 0.7 * THREE.MathUtils.smoothstep(lag, 0.004, 0.035);
-    A[5].set(this.wakeA.x, this.wakeA.y, this.wakeA.z, 0.058); B[5].set(this.wakeB.x, this.wakeB.y, this.wakeB.z, wake);
-    A[6].set(this.wakeB.x, this.wakeB.y, this.wakeB.z, 0.032); B[6].set(this.wakeT.x, this.wakeT.y, this.wakeT.z, wake);
-    A[7].w = 0; B[7].w = 0;
+
   }
 
   pickInside(ray: THREE.Ray): THREE.Vector3 | null {
@@ -613,12 +513,6 @@ export class Terrarium {
     (rc as any).firstHitOnly = true;
     const hits = rc.intersectObjects([this.ground.mesh, ...this.hardscape.placed.map((p) => p.mesh)], false);
     return hits.length ? hits[0].point : null;
-  }
-
-  feed(at: {x: number; z: number} | null) {
-    const c = this.insects.release();
-    if (at) {c.pos.x = THREE.MathUtils.clamp(at.x, -0.5, 0.5); c.pos.z = THREE.MathUtils.clamp(at.z, -0.2, 0.2);}
-    return c;
   }
 
   wipeGlass(ray: THREE.Ray) {
@@ -633,25 +527,6 @@ export class Terrarium {
       if (!best || d < best.d) best = {pane, uv, d};
     }
     if (best) best.pane.fog.wipe(best.uv.x, best.uv.y, 0.035);
-  }
-
-  /** The follow camera keeps the lizard centred and eases in to a close view. */
-  updateFollow(dt: number) {
-    if (!this.follow) return;
-    const head = this.rig.snout;
-    const body = new THREE.Vector3(this.rig.inputs.x, head.y - 0.01, this.rig.inputs.z);
-    const focus = body.lerp(head, 0.45);
-    const before = this.controls.target.clone();
-    this.controls.target.lerp(focus, 1 - Math.exp(-dt * 3));
-    // carry the camera along with the target so the framing does not swing
-    this.camera.position.add(this.controls.target.clone().sub(before));
-    const d = this.camera.position.distanceTo(this.controls.target);
-    if (d > 0.42) this.camera.position.lerp(this.controls.target, 1 - Math.exp(-dt * 1.2));
-    // in the cave: come round to the front to look in at the mouth
-    if (this.brain.mode === 'shelter') this.camera.position.lerp(CAVE_VIEW, 1 - Math.exp(-dt * 0.5));
-    // never let the follow camera dip into the ground or a rock
-    const floor = this.surface.topAt(this.camera.position.x, this.camera.position.z) + 0.012;
-    if (this.camera.position.y < floor) this.camera.position.y = floor;
   }
 
   addFrameHandler(f: (dt: number, t: number) => void) {this.onFrame.push(f);}
@@ -741,30 +616,14 @@ export class Terrarium {
     this.air.moisture = THREE.MathUtils.clamp(this.weather.humidity * 0.8 + this.weather.mist * 0.5 + this.weather.rainAmount * 0.3, 0, 1);
     this.air.update(this.key, this.cloudShadow.target.texture, this.post.distRT.texture, this.post.width, this.post.height, this.framesDrawn);
     this.applyClimate(dt);
-    this.updateFollow(dt);
-    this.brain.cameraPos.copy(this.camera.position);
     this.insects.update(dt);
-    this.brain.update(dt);
-    this.wake(dt);
     this.updateFish(dt);
     this.updatePush(dt);
-    // The depth of field focuses on the lizard while it is in view (it is what one
-    // looks at), otherwise on the middle of the picture (see Post).
-    {
-      const sp = this.rig.spinePoints();
-      const body = this.tmpFocus.copy(sp[2]).lerp(this.rig.snout, 0.35);
-      const ndc = body.clone().project(this.camera);
-      // (its depth along the view, as the depth of field measures it)
-      const d = -body.clone().applyMatrix4(this.camera.matrixWorldInverse).z;
-      this.post.subject = ndc.z < 1 && d > 0 && Math.abs(ndc.x) < 0.8 && Math.abs(ndc.y) < 0.8 ? d : 0;
-      this.post.subjectUv.set(ndc.x * 0.5 + 0.5, ndc.y * 0.5 + 0.5);
-    }
     this.renderer.shadowMap.needsUpdate = true;
     const keyDir = this.key.position.clone().sub(this.key.target.position).normalize();
     this.water.uniforms.uKeyDir.value.copy(keyDir);
     this.water.update(dt, this.time, 1);
     this.water.stepRipples(this.renderer, dt);
-    this.lizard.root.updateMatrixWorld(true);
     this.cloudShadow.update(this.renderer, this.weather.clouds, this.key);
     // the pool mirrors the clouds too (without the main view's depth)
     this.weather.setDistance(null);

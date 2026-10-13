@@ -54,7 +54,6 @@ try {
     };
     t.addFrameHandler((dt) => ui.update(dt));
     ui.update(0);
-    if (params.get('follow') === '1') ui.setFollow(true);
     const debug = diagnostics(t);
     if (params.has('debug')) debug.show('');
     // nothing drawn, or every fallback used up: show what we know instead of a blank case

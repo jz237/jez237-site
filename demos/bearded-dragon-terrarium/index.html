@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Bearded Dragon · Desert Terrarium — Jez237</title>
+  <meta name="description" content="A living bearded dragon in a spacious desert terrarium. Explore sandstone basking ledges, shaded hides and weathered driftwood. Feed crickets, offer greens and watch its day unfold.">
+  <meta name="theme-color" content="#262827">
+  <link rel="canonical" href="https://jez237.com/demos/bearded-dragon-terrarium/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bearded Dragon · Desert Terrarium">
+  <meta property="og:description" content="Sandstone, driftwood and a living dragon. A dry desert habitat under glass.">
+  <meta property="og:url" content="https://jez237.com/demos/bearded-dragon-terrarium/">
+  <meta property="og:image" content="https://jez237.com/demos/assets/bearded-dragon-terrarium.jpg">
+  <script type="module" crossorigin src="./assets/index-CXbmHN9c.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DrWwH_Wy.css">
+</head>
+<body>
+  <main id="scene" aria-label="Interactive three-dimensional desert terrarium with one bearded dragon"></main>
+  <div id="veil"><span>Bearded Dragon</span><small>Warming the sandstone</small><i></i></div>
+  <div id="fatal" role="alert" hidden></div>
+  <header class="hud brand">
+    <a class="back" href="../">JEZ237 / LIVING WORLDS</a>
+    <h1>Bearded Dragon</h1>
+    <p>Desert terrarium</p>
+  </header>
+  <nav class="hud actions" aria-label="View controls">
+    <button id="follow" aria-pressed="false" title="Follow the dragon (F)">Follow dragon</button>
+    <button id="reset" title="Reset view (R)">Reset view</button>
+    <button id="full" title="Full screen">⛶</button>
+    <button id="hide" title="Hide controls (H)">Hide</button>
+  </nav>
+  <section class="hud climate" aria-label="Habitat conditions">
+    <div><small>BASKING LEDGE</small><b id="warm">41°C</b><i class="warm"></i></div>
+    <div><small>COOL HIDE</small><b id="cool">24°C</b><i class="cool"></i></div>
+    <div><small>HUMIDITY</small><b id="rh">34%</b><i class="neutral"></i></div>
+  </section>
+  <footer class="hud bottom">
+    <div class="clock"><button id="play" aria-pressed="false" title="Run the day">▶</button><div><label for="hours">LAMP SCHEDULE <b id="time">11:30</b></label><input id="hours" type="range" min="0" max="24" step="0.05" value="11.5" aria-label="Time of day"></div></div>
+    <div class="tools" role="toolbar" aria-label="Dragon interactions">
+      <button id="observe" aria-pressed="true">Observe</button>
+      <button id="feed" aria-pressed="false">Feed cricket</button>
+      <button id="greens">Fresh greens</button>
+      <button id="morph">Colour · Normal</button>
+    </div>
+    <div class="status"><span class="dot"></span><span id="behavior">Basking under the lamp</span><small id="hint">Drag to orbit · scroll to explore</small></div>
+  </footer>
+  <button id="show" class="show" hidden>Show controls</button>
+  <div id="toast" role="status"></div>
+  <noscript><p>Enable JavaScript to explore the terrarium.</p></noscript>
+</body>
+</html>
