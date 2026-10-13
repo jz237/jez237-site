@@ -14,7 +14,7 @@ function dress(owner) {
   owner.model.traverse((o) => {
     if (!o.isSkinnedMesh || !/_skin/.test(o.material?.name || '') || !o.geometry.userData.jtSkin) return;
     if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
-    owner.skinU = skinUniforms(o.geometry.userData.jtSkin);
+    owner.skinU = skinUniforms(o.geometry.userData.jtSkin, SCALES[owner.sp.id]);
     owner.skinMesh = o;
     skinShader(o.material, owner.skinU, owner.mod.ctx.uniforms, { membrane: !!owner.sp.flyer });
     owner.lidColour = o.geometry.userData.jtLid || (o.geometry.userData.jtLid = averageColour(o.material.map));
@@ -87,7 +87,7 @@ import { Backdrop } from './backdrop.js';
 import { DinoWeather } from './weather.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
-import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms } from './skin.js';
+import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
 import { BufferGeometry as BG3, BufferAttribute as BA3, DoubleSide as DS3 } from 'three';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
@@ -443,6 +443,8 @@ class Dino {
       if (name === 'sniff') flare = 0.45 + 0.45 * Math.sin(t * 15);
       if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
       U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
+      // the scales' relief, from metres in the bind pose to the view's units
+      if (U.uScaleH.value > 0) U.uScaleH.value = (SCALES[this.sp.id]?.h ?? 0.012) * (this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x);
     }
     // the throat pulses with each call
     if ((this._callT || 0) > 0) {

@@ -214,3 +214,12 @@ v1.26: weather on the animals, breath, a softer backdrop:
 - **Wind:** in a strong wind the animals turn their tails to it and mostly hunker down rather than wander. Their eyes narrow against the wind, and a little against the rain. Footfall and dust-bath dust blows away downwind.
 - **Breath:** on cold mornings, in winter and in rain-cooled air, each breath leaves the nostrils as a puff of vapour in time with the breathing (quicker after a run), carried off on the wind. A roar blows out a great cloud.
 - **Backdrop:** the painting melts into the case. It hazes towards the case's own mist colour where it meets the ground, and two bands of ground mist follow the rise and fall of the ground along the back and drift with the wind, so there is no hard line where the ground ends and the picture starts. `?blend=0` shows the plain painting for comparison.
+
+v1.27: skin up close:
+- **Scales in relief:** each species has its own scale pattern, worked out per pixel from the skin's own body coordinates, raised in relief and shaded dark in the crevices:
+  - T. rex: fine pebbly scales with scattered tubercles along the back;
+  - Triceratops: big polygonal plates, with grooves branching over the frill like blood vessels;
+  - Stegosaurus: pebbly scales and bony knobs, with smoother grooved plates;
+  - Brachiosaurus: large rosettes;
+  - Pteranodon: a fine grain.
+- **Only when close:** the detail sharpens in as the camera comes closer (Documentary mode especially) and fades out wherever a scale would be smaller than a few pixels, so wide views don't shimmer. It costs about 0.4 ms in a full-screen close-up. `?scales=0` turns it off for comparison.

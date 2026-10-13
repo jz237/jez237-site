@@ -14,6 +14,11 @@
 //   - nostrils that flare a little with each breath and wide on a roar;
 //   - wet skin: rivulets trickling down the flanks and beads standing on the back, glossy; in rain, tiny
 //     splash rings popping on the upward faces.
+//   - close up, the scales themselves: each species' own pattern (pebbly scales and scattered tubercles,
+//     big polygonal plates, bony knobs, rosettes; grooves on a frill), in relief and shaded into the
+//     crevices. Worked out per pixel from the skin's own bind-pose position, it sharpens in as the camera
+//     comes closer and fades out where a scale would be smaller than a few pixels (so far views neither
+//     shimmer nor pay for it).
 // Also kept per model, for weather.js: the nostril and snout-tip vertices (breath) and a spread of the
 // lowest, downward-facing vertices (chin, throat, belly, tail underside) where water drips from.
 // Eyes: a lid of skin closes over the eyeball (blinks, drowsy half-closed, shut in sleep) and the
@@ -201,9 +206,22 @@ export function averageColour(tex) {
   }
 }
 
+// the scales, per species (in the bind pose's metres): f = scales per metre, kf = knobs per metre,
+// k = how many cells carry a knob, frill = grooves on thin skin, h = relief height in metres
+const NO_SCALES = new URLSearchParams(location.search).get('scales') === '0'; // for comparison
+export const SCALES = {
+  trex: { f: 15, kf: 4.2, k: 0.45, frill: 0, h: 0.016 },
+  triceratops: { f: 7.5, kf: 2.6, k: 0.25, frill: 1, h: 0.02 },
+  stegosaurus: { f: 16, kf: 4, k: 0.6, frill: 1, h: 0.016 },
+  brachiosaurus: { f: 5, kf: 1.5, k: 0.35, frill: 0, h: 0.035 },
+  pteranodon: { f: 26, kf: 0, k: 0, frill: 0, h: 0.003 },
+};
+
 // per-animal uniforms for the skin shader
-export function skinUniforms(info) {
+export function skinUniforms(info, sc = SCALES.trex) {
   return {
+    uScales: { value: new Vector4(sc.f, sc.kf, sc.k, sc.frill) },
+    uScaleH: { value: NO_SCALES ? 0 : sc.h }, // relief height in metres, before the model's scale (set per animal)
     uMudLine: { value: 0 }, // metres above the feet (model space)
     uMudAmt: { value: 0 }, // 0..1 how much mud there is
     uMudWet: { value: 0 }, // 1 fresh and glistening, 0 dried
@@ -254,10 +272,30 @@ uniform float uBend;
 uniform float uWet;
 uniform float uRain;
 uniform float uTime;
+uniform vec4 uScales;
+uniform float uScaleH;
 varying float vThin;
 varying float vNeck;
 varying vec3 vLocal;
 float jtHash(vec3 p) { return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
+vec3 jtHash3(vec3 p) {
+  p = vec3(dot(p, vec3(127.1, 311.7, 74.7)), dot(p, vec3(269.5, 183.3, 246.1)), dot(p, vec3(113.5, 271.9, 124.6)));
+  return fract(sin(p) * 43758.5453);
+}
+// cellular: x = distance to the nearest cell centre, y = gap to the second (0 on a border), z = cell id
+vec3 jtCells(vec3 x) {
+  vec3 p = floor(x), f = fract(x);
+  float d1 = 8.0, d2 = 8.0, id = 0.0;
+  for (int k = -1; k <= 1; k++) for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+    vec3 b = vec3(float(i), float(j), float(k));
+    vec3 h = jtHash3(p + b);
+    vec3 r = b + 0.15 + h * 0.7 - f;
+    float d = dot(r, r);
+    if (d < d1) { d2 = d1; d1 = d; id = h.x; } else if (d < d2) d2 = d;
+  }
+  d1 = sqrt(d1);
+  return vec3(d1, sqrt(d2) - d1, id);
+}
 float jtNoise(vec3 p) {
   vec3 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
   return mix(mix(mix(jtHash(i), jtHash(i + vec3(1,0,0)), f.x), mix(jtHash(i + vec3(0,1,0)), jtHash(i + vec3(1,1,0)), f.x), f.y),
@@ -289,6 +327,48 @@ float jtNoise(vec3 p) {
     jtRiv = max(jtRiv, bead) * uWet;
     roughnessFactor = mix(roughnessFactor, 0.03, jtRiv);
     diffuseColor.rgb *= 1.0 - 0.25 * jtRiv;
+  }`)
+      .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+  {
+    // the scales: only where one is big enough on screen to see (a few pixels), sharpening in closer
+    float jtPx = length(fwidth(vLocal)) * uScales.x;
+    float jtSee = 1.0 - smoothstep(0.12, 0.35, jtPx);
+    if (jtSee > 0.01 && uScaleH > 0.0) {
+      vec3 c = jtCells(vLocal * uScales.x);
+      // domed scales with grooves between them
+      float h = smoothstep(0.0, 0.16, c.y) * (0.55 + 0.45 * (1.0 - c.x));
+      float crev = 1.0 - smoothstep(0.0, 0.12, c.y);
+      // knobs: big round tubercles (osteoderms) on some cells of a coarser grid, mostly on the upper body
+      if (uScales.z > 0.0) {
+        vec3 k = jtCells(vLocal * uScales.y + 11.0);
+        float on = step(1.0 - uScales.z, k.z) * smoothstep(-0.2, 0.5, jtUpF);
+        float knob = on * smoothstep(0.42, 0.05, k.x);
+        h = max(h, knob * 1.8);
+        crev = max(crev * (1.0 - knob), on * smoothstep(0.38, 0.46, k.x) * smoothstep(0.55, 0.46, k.x) * 0.8);
+      }
+      // a frill or plate: smoother, with grooves branching over it like blood vessels
+      if (uScales.w > 0.0 && vThin > 0.3) {
+        float plate = smoothstep(0.45, 0.85, vThin);
+        h *= 1.0 - 0.6 * plate;
+        crev *= 1.0 - 0.6 * plate;
+        float g = jtNoise(vLocal * 9.0 + vec3(0.0, jtNoise(vLocal * 4.0) * 2.0, 0.0));
+        float groove = smoothstep(0.08, 0.0, abs(g - 0.5)) * smoothstep(0.3, 0.6, vThin) * uScales.w;
+        h -= groove * 1.2;
+        crev = max(crev, groove * 0.8);
+      }
+      h *= jtSee;
+      crev *= jtSee;
+      // relief: tilt the normal by the height's slope across the pixel (a bump map without a map)
+      vec2 dH = vec2(dFdx(h), dFdy(h)) * uScaleH;
+      vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition);
+      vec3 r1 = cross(sy, normal), r2 = cross(normal, sx);
+      float det = dot(sx, r1) * faceDirection;
+      vec3 grad = sign(det) * (dH.x * r1 + dH.y * r2);
+      normal = normalize(abs(det) * normal - grad);
+      // dirt and shadow in the crevices, the scale tops a touch paler and a little glossier
+      diffuseColor.rgb *= (1.0 - 0.32 * crev) * (1.0 + 0.08 * h * (1.0 - crev));
+      roughnessFactor = clamp(roughnessFactor + crev * 0.12 - h * 0.05, 0.03, 1.0);
+    }
   }`)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
   {
