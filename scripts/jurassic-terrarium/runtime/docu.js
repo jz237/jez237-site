@@ -55,6 +55,16 @@ export class Docu {
         continue;
       }
       if (st === 'circle' || (st === 'standoff' && mod.duel)) continue; // filmed as a pair, below
+      if (st === 'social' && d.soc) {
+        const k = d.soc.kind;
+        if (d !== d.soc.cast[0]) continue; // one story per scene
+        if (k === 'play') add(9, 'play', 'Triceratops calves — at play', ['low', 'push', 'orbit']);
+        else if (k === 'nuzzle') add(8.5, 'nuzzle', 'Triceratops — mother and calf', ['push', 'low', 'orbit']);
+        else if (k === 'spar') add(9.5, 'spar', 'Stegosaurus — sparring', ['tele', 'low', 'orbit']);
+        continue;
+      }
+      if (d.sp.tooBig && d._liftT > 0) add(8, 'lift', `${name} — letting a calf pass`, ['low', 'tele']);
+      else if (st === 'sleep' && d.sp.herd && d._huddled && !baby) add(4.5, 'sleep', `${name} — the herd asleep together`, ['crane', 'orbit', 'tele']);
       if (st === 'hunt') add(10, 'hunt', `${name} — on the hunt`, ['track', 'low', 'tele']);
       else if (st === 'standoff' || an === 'threat') add(9.5, 'standoff', `${name} — standing its ground`, ['low', 'push', 'tele']);
       else if (st === 'flee') add(8, 'flee', `${name} — running for cover`, ['track', 'tele']);

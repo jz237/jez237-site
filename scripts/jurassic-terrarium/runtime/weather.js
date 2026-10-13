@@ -44,6 +44,25 @@ export class DinoWeather {
     }
     this.next = 0;
     this.w = { x: 0, z: 0 };
+    // the wind tool: a stroke passing over the chimney smoke blows at the smoke, not at the ground behind it
+    window.__jtWindPick = (ray, out) => {
+      const sm = this.ctx.modules.life?.smoke;
+      if (!sm?.origin || !ray) return false;
+      let best = 0.35, bt = -1;
+      const test = (x, y, z, r) => {
+        const t = (x - ray.origin.x) * ray.direction.x + (y - ray.origin.y) * ray.direction.y + (z - ray.origin.z) * ray.direction.z;
+        if (t <= 0) return;
+        const dx = ray.origin.x + ray.direction.x * t - x, dy = ray.origin.y + ray.direction.y * t - y, dz = ray.origin.z + ray.direction.z * t - z;
+        const d = Math.hypot(dx, dy, dz) - r;
+        if (d < best) (best = d), (bt = t);
+      };
+      const o = sm.origin;
+      for (let k = 0; k <= 6; k++) test(o.x, o.y + k * 0.2, o.z, 0.1); // the column above the chimney
+      for (let i = 0; i < sm.N; i++) if (sm.alive[i]) test(sm.px[i], sm.py[i], sm.pz[i], 0.15); // the puffs
+      if (bt < 0) return false;
+      out.copy(ray.origin).addScaledVector(ray.direction, bt);
+      return true;
+    };
   }
 
   // how much breath shows: cold air (below about 15 °C), early mornings, rain-cooled air

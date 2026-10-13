@@ -86,6 +86,7 @@ import { Interact } from './interact.js';
 import { Backdrop } from './backdrop.js';
 import { DinoWeather } from './weather.js';
 import { Night } from './night.js';
+import { Social } from './social.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
@@ -824,6 +825,8 @@ class Dino {
       case 'circle':
         this.circleStep(dt);
         break;
+      case 'social': // driven by its scene (social.js)
+        break;
       case 'hunt':
         this.huntStep(dt);
         break;
@@ -875,6 +878,21 @@ class Dino {
         if ((night || env.storm > 0.6 || env.rain > 0.35) && this.sp.den && !this.inDen()) {
           this.goDen();
           break;
+        }
+        // nightfall: the herd gathers side by side to sleep
+        if (!night) this._huddled = false;
+        if (night && this.sp.herd && !this.parent && !this._huddled) {
+          this._huddled = true;
+          const spot = mod.huddleSpot(this);
+          const sleep = () => {
+            this.state = 'sleep';
+            this.play('rest', 1.5);
+          };
+          if (spot && Math.hypot(spot.x - this.pos.x, spot.z - this.pos.z) > 0.2 && this.goTo(spot.x, spot.z, () => {
+            this.turnTo = spot.face;
+            this.turnThen = sleep;
+            this.state = 'turn';
+          })) break;
         }
         if (night || (this.sp.den && (env.storm > 0.6 || env.rain > 0.35))) {
           this.state = 'sleep';
@@ -1136,7 +1154,7 @@ class Dino {
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
       // the idles sway the body first; the feet are then planted under it
       this.performFrame(dt);
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch' && this.perf?.kind !== 'stamp', moving: stepping || this.state === 'turn', plant: /^(shake|rub|yawn)$/.test(this.perf?.kind || '') });
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch' && this.perf?.kind !== 'stamp', moving: stepping || this.state === 'turn' || !!this._socTurn, plant: /^(shake|rub|yawn)$/.test(this.perf?.kind || '') });
       this.keepOffTrunks();
       this.keepInside();
       this.skinFrame(dt);
@@ -1559,6 +1577,18 @@ class Dino {
       if (n[1]) this.turnBone(n[1], 'x', dip * 0.3);
       if (n[2]) this.turnBone(n[2], 'x', dip * 0.15);
       this.turnBone(this.headBone, 'x', -dip * 0.35);
+    }
+    // a social scene's pose (social.js); the Brachiosaurus lifting its neck clear of a calf
+    if (this.socialPose && this.state === 'social') {
+      const B = this._pfb || (this._pfb = (() => { const b = {}; this.model.traverse((o) => o.isBone && (b[o.name] = o)); return b; })());
+      this.socialPose(dt, (b, a, x) => this.turnBone(b, a, x), B, this.flex);
+    }
+    if ((this._liftT || 0) > 0 || (this._liftK || 0) > 0.01) {
+      this._liftK = (this._liftK || 0) + (((this._liftT || 0) > 0 ? 1 : 0) - (this._liftK || 0)) * Math.min(1, dt * 1.5);
+      const n = this.flex.neck;
+      if (n[0]) this.turnBone(n[0], 'x', -0.32 * this._liftK);
+      if (n[1]) this.turnBone(n[1], 'x', -0.16 * this._liftK);
+      this.turnBone(this.headBone, 'x', 0.35 * this._liftK); // looking down at it
     }
     if (this.perf && this.state !== 'perform' && this.perf.kind !== 'stamp') (this.perf = null), (this.rubTrunk = null); // interrupted
     if (!this.perf && this.rubTrunk && this.state !== 'walk') this.rubTrunk = null;
@@ -2246,6 +2276,7 @@ class Dinosaurs {
     this.contact = new Contact(ctx, this);
     this.weather = new DinoWeather(this);
     this.night = new Night(this);
+    this.social = new Social(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2385,6 +2416,31 @@ class Dinosaurs {
   }
 
   // a walkable spot at the water's edge, near the animal
+  // where a herd animal lies down for the night: the first to settle lies down where it is and chooses
+  // the way they all face; each of the others takes the nearest free place beside the ones already down,
+  // side by side, alternately left and right (far-off stragglers just sleep where they are)
+  huddleSpot(d) {
+    const mates = this.walkers.filter((o) => o.sp.id === d.sp.id && !o.parent && o.root.visible);
+    if (mates.length < 2) return null;
+    const H = (this._huddle ||= {});
+    let h = H[d.sp.id];
+    if (!h || this.clock - h.t > 300) {
+      h = H[d.sp.id] = { t: this.clock, face: d.heading, taken: [{ x: d.pos.x, z: d.pos.z }] };
+      return null; // the first: here
+    }
+    const lead = h.taken[0];
+    if (Math.hypot(d.pos.x - lead.x, d.pos.z - lead.z) > 16) return null;
+    const gap = Math.max((d.sp.bodyR ?? 0.15) * d.k * 2.8, d.length * 0.36), sx = Math.cos(h.face), sz = -Math.sin(h.face);
+    for (let k = 1; k <= 6; k++)
+      for (const side of [1, -1]) {
+        const t = d.layer.nearestOpen(lead.x + sx * gap * k * side, lead.z + sz * gap * k * side);
+        if (!t || h.taken.some((o) => Math.hypot(o.x - t.x, o.z - t.z) < gap * 0.85)) continue;
+        h.taken.push({ x: t.x, z: t.z });
+        return { x: t.x, z: t.z, face: h.face };
+      }
+    return null;
+  }
+
   // A standoff: the Triceratops charged stands its ground; the rest of the herd runs to its side and
   // lines up facing the predator; the predator prowls round them (Dino.circleStep).
   standoff(def, rex) {
@@ -2690,6 +2746,7 @@ class Dinosaurs {
     this.flora.setPushers(pushers);
     this.branchPush(dt);
     this.lamps?.update(dt);
+    this.social.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

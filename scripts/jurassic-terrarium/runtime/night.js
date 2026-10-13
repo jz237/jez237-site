@@ -44,6 +44,9 @@ export class Night {
       this.pools.push(mesh);
     }
     this.t = 0;
+    // the sky's additive HDR layers (stars, meteors): an invalid pixel there would be bloomed into a
+    // full-screen flash, as the water's once was
+    this.ctx.scene.traverse((o) => /^sky-(meteor|stars)$/.test(o.name) && guardMaterial(o.material));
   }
 
   update(dt) {

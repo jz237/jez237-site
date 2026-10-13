@@ -250,3 +250,13 @@ v1.32: snow and frost on the animals:
 - **Snow lying:** while it snows, snow settles on whatever faces up (backs, necks, the tops of tails, plates and frills), with a little thickness to it, a ragged edge and glints of crystals in the light. Very little settles on animals sheltering or in the den. It melts off in a thaw or when they wade.
 - **Shaking it off:** an animal with snow piling up shakes it off now and then in a burst of powder.
 - **Frost:** in a hard cold, rime forms on frills, plates and horns and lightly on the back.
+
+v1.33: family and social moments; two fixes:
+- **Calves at play:** two Triceratops calves square up and butt heads, backing off and charging in with little hops and puffs of dust.
+- **Mother and calf:** the mother turns to a calf and bows her head to it; it comes up under her muzzle and reaches up to her.
+- **Sparring:** the two Stegosaurus take turns turning their tails to each other and swinging the spikes, the other rearing back.
+- **The herd asleep together:** at nightfall the first to settle lies down where it is; the rest come over and lie side by side with it, all facing the same way. (The mother sleeps by her nest.)
+- **Mind the calf:** the Brachiosaurus lifts its neck and looks down to let a calf or small animal walk underneath.
+- **Documentary:** it films each of these with its own caption.
+- **Fix: smoke against the wind tool.** A wind stroke drawn across the chimney smoke used to land on the ground behind the cabin, and the smoke, caught in that gust's side-draught, blew the wrong way. A stroke passing over the plume now blows at the plume itself.
+- **Fix: screen flicker when a meteor crosses the night sky.** The meteor's shader could produce an invalid pixel at its tail, which the bloom spread over the whole screen as black frames. It's clamped, and the sky's glowing layers are now guarded like the water's.

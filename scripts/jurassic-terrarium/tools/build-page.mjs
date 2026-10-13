@@ -177,6 +177,15 @@ patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.
 patch('const v=.55+.45*Math.min(1,d*3),g=(1.1+d*1.5)*t;', 'const v=(.6+.55*Math.min(1,d*3))*1.25,g=(1.4+d*1.8)*t;', 'smoke carried by the wind');
 patch('const x=(.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12;', 'const x=((.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12)/(1+.9*Math.hypot(Kf.x,Kf.z));', 'smoke laid down by the wind');
 patch('_=(.12+d*.25)*t;', '_=(.12+d*.25)*(1+1.6*Math.min(1.5,Math.hypot(Kf.x,Kf.z)))*t;', 'smoke torn by gusts');
+// Meteors at night made the whole screen flicker: the streak's fragment shader raised vT (interpolated,
+// so a hair below 0 at the tail) to a power, a NaN, which the bloom spread over the whole frame (black
+// frames while one crossed). Clamp it, and keep the streak's direction defined at launch.
+patch('float a = pow(vT, 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'float a = pow(clamp(vT, 0.0, 1.0), 2.2) * exp(-vSide * vSide * 3.0) * uAlpha;', 'meteor NaN');
+patch('vec3 dir = normalize(uHead - uTail);\n  vec3 toCam', 'vec3 dir = normalize(uHead - uTail + vec3(1e-4, 0.0, 0.0));\n  vec3 toCam', 'meteor direction');
+// The wind tool blows where the stroke is drawn on the ground, so a stroke drawn across the smoke in the
+// air landed far behind the cabin, and the smoke, caught in the side-draught of that gust, went the other
+// way. A stroke that passes over the plume now blows at the plume itself (window.__jtWindPick, weather.js).
+patch('function l(c){return t.rayToTerrain(c)?(c.y+=.4,c):t.rayToPlaneY(1.2,c)}', 'function l(c){return window.__jtWindPick&&window.__jtWindPick(t.pointer.ray,c)?c:t.rayToTerrain(c)?(c.y+=.4,c):t.rayToPlaneY(1.2,c)}', 'wind at the smoke');
 // In a wind the chimney puffs out faster and each puff swells and thins sooner, so the smoke streams
 // off as one ribbon instead of separate balls (this._ws: the wind at the chimney, 0..1.6).
 patch('_sim(t,e){if(t<=0)return;this.time+=t;const i=(2.2+e.fire*9)*(1-e.rain*.35);',
