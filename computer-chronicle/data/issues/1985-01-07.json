@@ -1,0 +1,437 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 128 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of January 7-13, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Winter CES home-computing newspaper",
+    "motifs": [
+      "Nintendo AVS proposal",
+      "Atari ST",
+      "Commodore C128",
+      "CRT screens",
+      "joysticks",
+      "telephone modem"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Atari ST prototype dominates; gaming demonstrations beside hardware",
+    "secondaryRail": "Nintendo AVS, Commodore C128, online games, rock and cinema",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "currentDate": "2026-10-13",
+  "historicDate": "1985-01-07",
+  "displayDate": "Week of January 7-13, 1985",
+  "edition": "Issue 128 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Kathryn Harris, Atari Chief Takes on Apple, IBM and Commodore",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-01-08-fi-7499-story.html",
+      "date": "1985-01-08"
+    },
+    {
+      "title": "David H. Ahl, 1985 Winter Consumer Electronic Show, Creative Computing vol.11 no.4 p.50",
+      "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+      "date": "1985-04"
+    },
+    {
+      "title": "Arlan R. Levitan, Smokey & The Modem—Part 8086, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "Nintendo AVS publicity folder, VGHF catalog",
+      "url": "https://library.gamehistory.org/repositories/2/archival_objects/21014",
+      "date": "1985-01-05/1985-01-08"
+    },
+    {
+      "title": "Frank Cifaldi, Nintendo’s Lost 8-Bit Console, VGHF retrospective",
+      "url": "https://gamehistory.org/nintendos-lost-8-bit-console/",
+      "date": "2023-12-02"
+    },
+    {
+      "title": "Billboard vol.97 no.2, Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf",
+      "date": "1985-01-12"
+    },
+    {
+      "title": "The Numbers domestic weekend chart",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/01/11",
+      "date": "1985-01-11/1985-01-13"
+    },
+    {
+      "title": "FRUS document 363, Shultz telephone call to Reagan",
+      "url": "https://history.state.gov/historicaldocuments/frus1981-88v04/d363",
+      "date": "1985-01-08"
+    },
+    {
+      "title": "Stereo Review New Products, preserved transcription",
+      "url": "https://www.gammaelectronics.xyz/sr_1985-01-new.html",
+      "date": "1985-01"
+    }
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-01-07.png",
+    "alt": "GPT Image 2 Computer Chronicle front page for January 7–13, 1985",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Winter CES closes with competing visions for the home computer: a new 68000 machine, a compatible Commodore, and Nintendo’s gaming proposal.",
+  "morningLine": "LAS VEGAS — Lower prices, new keyboards and telephone-line play crowd the winter show floor.",
+  "lead": {
+    "headline": "Atari challenges Macintosh with a $400–$600 ST family",
+    "dek": "Jack Tramiel puts a new 68000 computer family against the established names; software and delivery will decide the contest.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Atari is taking aim at the price of personal computing. As Winter CES closes January 8, Jack Tramiel’s company is promoting an ST family announced at $400–$600. The demonstrations began over the preceding weekend; the quoted range is an announced computer price, not a complete system already sitting on a dealer’s shelf.",
+      "The ST uses Motorola’s MC68000, the processor also found in Apple’s Macintosh. Sharing a processor does not mean sharing a software library. Electronic Arts president Trip Hawkins estimates that 30–50 percent of a Macintosh program might need rewriting for the ST, making publishers’ support a central part of Atari’s wager.",
+      "Atari software chief Sigmund Hartmann promises 25–30 software products when the machines reach stores and reports an agreement with Matrix Software. That is a promise of a coming catalog, not a count of packages buyers can take home this week. Retail orders and financing remain important questions alongside the new hardware.",
+      "Atari is also announcing XE repackaging and expansion of its 800XL line, with second-quarter shipments planned. The company is therefore courting both established eight-bit users and buyers considering a new architecture. Its rivals have an immediate answer: existing programs and familiar machines still carry considerable weight in the purchasing decision."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Commodore answers with the C128—and a portable proposal",
+      "body": [
+        "Commodore’s C128 offers a different answer to the upgrade question. The Winter CES machine combines 128K RAM, C64 compatibility, CP/M-80 compatibility and an 80-column display capability. For owners with an established library, continuity is a selling point as tangible as additional memory.",
+        "An 80-column setup requires a monitor. No confirmed final retail price is established in this issue’s reporting. Commodore is also showing an LCD portable proposal with a 16-line, 80-character display, 32K RAM, 96K ROM and a built-in modem. Word processing, spreadsheet, file manager and BASIC are built in; the target is well under $1,000, but it is a demonstration proposal rather than a machine available to buy."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        0
+      ]
+    },
+    {
+      "headline": "Nintendo proposes an Advanced Video System for America",
+      "body": [
+        "Nintendo has brought an Advanced Video System proposal to America’s Winter CES, held January 5–8. The display combines console gaming with optional keyboard and tape-drive additions, presenting games as the heart of a broader home system.",
+        "The AVS publicity folder documents this show appearance. The displayed design should not be mistaken for a finished American retail launch: neither a verified U.S. sale date nor a price is established. For dealers considering the battered video-game business, Nintendo’s demonstration is a proposal to watch, not a shipment to count."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "headline": "PlayNet puts C64 board games on the telephone line",
+      "body": [
+        "PlayNet puts familiar board games on the Commodore 64’s telephone connection. Winter CES reporting lists backgammon, checkers, chess, bridge and go among its offerings, alongside electronic mail, CB-style chat and program transfers.",
+        "The listed charge is $40 initially plus $6 per month. Those figures do not establish the full cost of a session, since telephone and other usage charges are not specified. The attraction is clear nonetheless: a home computer can find an opponent beyond the living room without requiring an arcade visit."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari ST",
+      "summary": "MC68000-based family announced at $400–$600; incompatible with existing systems, software support still being arranged.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Commodore C128",
+      "summary": "128K RAM; C64 compatibility, CP/M-80 and 80-column capability; confirmed final retail price not established here.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Wico SmartBoard",
+      "summary": "IBM PC/Apple II keyboard-trackball peripheral; ten programmable function keys, each holding up to 126 characters; cursor movement and mouse emulation.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Racing Destruction Set",
+      "summary": "Electronic Arts displayed a game allowing players to design race tracks and cars at Winter CES; display is not proof of first retail release.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Adventure Construction Set",
+      "summary": "Named among Electronic Arts CES offerings; no precise retail release day verified.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Break Street",
+      "summary": "Creative Software breakdancing game used consultation from Seattle’s DeRoxy Crew; movement examples in the report include tut, scorpion, windmill and moonwalk.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "F-15 Strike Eagle",
+      "summary": "MicroProse flight-combat game featured at CES. The report’s linked-computer dogfight claim is explicitly hearsay; do not repeat it as demonstrated functionality.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SkiWriter II",
+      "detail": "Ken Skier demonstrated word processing with built-in telecommunications to import online database material. Listed platforms: C64, PC, PCjr and Apple; $69.95.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Smart Start",
+      "detail": "Muse founder Ed Zaron’s C64 package was presented as making the machine’s capabilities more accessible.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "The Print Shop Graphics Library",
+      "detail": "Cathy Carlston of Brøderbund reported strong sales for The Print Shop and its add-on graphics/font package; no unit totals verified.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Computer games at CES — selected titles, not a sales chart",
+      "items": [
+        "Racing Destruction Set — Electronic Arts displayed a game allowing players to design race tracks and cars at Winter CES; display is not proof of first retail release.",
+        "Adventure Construction Set — Named among Electronic Arts CES offerings; no precise retail release day verified.",
+        "Break Street — Creative Software breakdancing game used consultation from Seattle’s DeRoxy Crew; movement examples in the report include tut, scorpion, windmill and moonwalk.",
+        "F-15 Strike Eagle — MicroProse flight-combat game featured at CES. The report’s linked-computer dogfight claim is explicitly hearsay; do not repeat it as demonstrated functionality.",
+        "PlayNet chess — one of the online board games named in CES reporting."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — January 11–13 domestic weekend",
+      "items": [
+        "1. Beverly Hills Cop",
+        "2. The River",
+        "3. The Flamingo Kid",
+        "4. Micki + Maude",
+        "5. Protocol"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari ST announced range",
+      "price": "$400–$600 announced",
+      "note": "$400–$600; announced computer-only range, configuration and delivery caveats apply.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "SkiWriter II",
+      "price": "$69.95",
+      "note": "$69.95, as reported in the retrospective CES report.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "PlayNet",
+      "price": "$40 initial + $6 monthly",
+      "note": "$40 initial fee plus $6 monthly service charge; other usage and telephone costs not established.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Modem market",
+      "price": "$50–$1,500 by speed and features",
+      "note": "January COMPUTE! reports 300-bps models at $50–$280; some full-featured 300/1200-bps models below $300; 2400-bps models at $800–$1,500.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-12",
+      "rank": 1,
+      "title": "The Boys of Summer",
+      "artist": "Don Henley",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf"
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-12",
+      "rank": 2,
+      "title": "Run to You",
+      "artist": "Bryan Adams",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf"
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-12",
+      "rank": 3,
+      "title": "I Want to Know What Love Is",
+      "artist": "Foreigner",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf"
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-12",
+      "rank": 4,
+      "title": "Do It Again",
+      "artist": "The Kinks",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf"
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-01-12",
+      "rank": 5,
+      "title": "Call to the Heart",
+      "artist": "Giuffria",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-12.pdf"
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "MSX exhibitors ask Americans to wait",
+      "summary": "Microsoft showed Japanese and Korean MSX computers at Winter CES but no orders were being taken; Ahl reports the official line was to wait until Summer CES. Not a verified U.S. retail launch.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "worldAnchor": {
+    "headline": "Washington and Moscow agree to resume nuclear and space arms negotiations",
+    "summary": "On January 8 in Geneva, George Shultz reported agreement with Moscow to begin new negotiations covering nuclear and space arms. This is an agreement to negotiate, not an arms-reduction treaty.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "2400 bps needs someone at the other end",
+    "summary": "Arlan R. Levitan’s January 1985 COMPUTE! column contrasts expensive 2400-bps hardware with the better-supported 1200-bps market and identifies hobbyist BBSs as possible early adopters.",
+    "posts": [
+      {
+        "topic": "Price and service support",
+        "platform": "COMPUTE! January 1985, Telecomputing Today",
+        "text": "The column puts 2400-bps units at $800–$1,500 and says the commercial services it discusses—CompuServe, The Source, Delphi and Dow Jones News/Retrieval—do not yet offer 2400-bps access. Attribute this statement to the January column rather than assume it applies to all of 1985."
+      },
+      {
+        "topic": "Sysop seed programs",
+        "platform": "Hobbyist BBSs, as reported by Arlan R. Levitan",
+        "text": "Several unnamed manufacturers reportedly were arranging discounted 2400-bps modems for selected bulletin-board operators. No named BBS, sysop or completed rollout is documented; do not invent one."
+      },
+      {
+        "topic": "Online games",
+        "platform": "PlayNet / Commodore 64",
+        "text": "CES reporting names backgammon, checkers, chess, bridge and go on PlayNet, with a $40 initial fee and $6 monthly service charge. These are editorial source summaries, not recovered user posts."
+      }
+    ],
+    "sourceRefs": [
+      2,
+      1
+    ]
+  },
+  "curiosity": {
+    "headline": "A tiny robot that remembers its shape",
+    "summary": "Toki’s CES biometal robot used a titanium-nickel alloy rather than ordinary miniature motors.",
+    "detail": "Ahl reports that pulse-current heating extended the robot’s joints and cooling restored their earlier shape. Toki also showed a light-driven interface for robots, motors and household appliances. The writer doubted commercial availability; no sale or price is verified.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Technics brings CD players to $400",
+    "summary": "Stereo Review’s January 1985 New Products column lists SL-P1 at $400, SL-P2 at $500 and SL-P3 at $600. SL-P1 offers fifteen-step programming; SL-P2 adds wireless remote and headphone volume control; SL-P3 adds advanced cueing. These are same-month magazine product announcements, not verified CES or January 7 launches.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "periodAd": {
+    "headline": "SkiWriter II: words meet the modem",
+    "summary": "Ken Skier’s CES demonstration joins word processing with built-in telecommunications for importing online database material. Listed for C64, PC, PCjr and Apple at $69.95.",
+    "tagline": "A software-shelf spotlight from the winter show.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "A low price still needs programs",
+    "summary": "Atari’s announced ST price range intensifies competition, but retailer commitments, financing and a fresh software catalog remain unsettled. Commodore’s compatibility pitch gives existing C64 owners a different route forward.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "The CES began January 5, outside this issue week, and ended January 8 inside it. Describe ongoing/show-closing news accurately.",
+      "Creative Computing evidence is an April retrospective of January CES; distinguish event date from source publication.",
+      "No underground candidate passed the period-reportage verification threshold; scene database hits alone were not promoted.",
+      "No milestone flag: ST is a strong lead but rarity is preserved; prior-issue milestone history was not needed for an omitted flag.",
+      "Tunecaster is not Billboard. Use the inspected January 12 Billboard Top Rock Tracks table, whose number one is Don Henley, not the different Tunecaster ranking.",
+      "Exact game release dates and finalized C128 pricing remain unverified; do not fill them from memory.",
+      "Games are CES selections, not a verified ranked sales chart.",
+      "April Creative Computing coverage documents January CES; show claims are not asserted as January publication."
+    ]
+  }
+}

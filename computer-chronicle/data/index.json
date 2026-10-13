@@ -2,6 +2,202 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-13",
+      "historicDate": "1985-01-07",
+      "displayDate": "Week of January 7-13, 1985",
+      "edition": "Issue 128 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "LAS VEGAS — Lower prices, new keyboards and telephone-line play crowd the winter show floor.",
+      "leadHeadline": "Atari challenges Macintosh with a $400–$600 ST family",
+      "storyHeadlines": [
+        "Commodore answers with the C128—and a portable proposal",
+        "Nintendo proposes an Advanced Video System for America",
+        "PlayNet puts C64 board games on the telephone line"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-07.png",
+      "thumb": "media/thumbs/1985-01-07.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-12",
+      "historicDate": "1984-12-31",
+      "displayDate": "Week of December 31, 1984-January 6, 1985",
+      "edition": "Issue 127 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Atari brings a mouse, windows and a $599 challenge to Las Vegas.",
+      "leadHeadline": "Atari shows a $599 512K ST, challenging the high-end divide",
+      "storyHeadlines": [
+        "Commodore 128 promises three computers in one",
+        "Coleco pulls out of Adam; inventory sale points to bargains",
+        "Epyx puts young players in charge of its CES demonstrations",
+        "Commodore’s LCD portable packs office tools and a modem"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-31.png",
+      "thumb": "media/thumbs/1984-12-31.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-11",
+      "historicDate": "1984-12-24",
+      "displayDate": "Week of December 24-30, 1984",
+      "edition": "Issue 126 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The Commodore 64 has a new line of work: catching ghosts.",
+      "leadHeadline": "Ghostbusters turns the Commodore 64 into a movie franchise",
+      "storyHeadlines": [
+        "MSX promises a common language for incompatible home computers",
+        "A Commodore can switch the lights and watch the windows",
+        "Year-end editors still choose the under-$200 Commodore 64"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-24.png",
+      "thumb": "media/thumbs/1984-12-24.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-10",
+      "historicDate": "1984-12-17",
+      "displayDate": "Week of December 17-23, 1984",
+      "edition": "Issue 125 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "At the Macintosh, a novice magician wins by thinking rather than fighting.",
+      "leadHeadline": "Enchanter brings a spellbook to the Macintosh",
+      "storyHeadlines": [
+        "MSX promises a common language for home computers",
+        "Plus/4 improves BASIC but leaves C64 software behind",
+        "A modem makes the home computer social"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-17.png",
+      "thumb": "media/thumbs/1984-12-17.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-09",
+      "historicDate": "1984-12-10",
+      "displayDate": "Week of December 10-16, 1984",
+      "edition": "Issue 124 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Who buys the ghostbusting gear? The player at the Commodore keyboard.",
+      "leadHeadline": "Ghostbusters turns the Commodore 64 into a paranormal franchise",
+      "storyHeadlines": [
+        "Tandy 1000 offers a $1,200 challenge to IBM’s junior",
+        "Plus/4’s improved BASIC runs into Commodore’s compatibility wall",
+        "Archon II: Adept trades the chessboard for elemental combat"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-10.png",
+      "thumb": "media/thumbs/1984-12-10.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-08",
+      "historicDate": "1984-12-03",
+      "displayDate": "Week of December 3-9, 1984",
+      "edition": "Issue 123 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "A combat cockpit on the home computer; a price challenge on the PC shelf.",
+      "leadHeadline": "F-15 Strike Eagle brings combat flying to Atari and Commodore desktops",
+      "storyHeadlines": [
+        "Tandy 1000 challenges IBM on price and bundled software",
+        "MSX promises common software across competing home computers",
+        "A Commodore can watch the house as well as run games"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-12-03.png",
+      "thumb": "media/thumbs/1984-12-03.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-07",
+      "historicDate": "1984-11-26",
+      "displayDate": "Week of November 26-December 2, 1984",
+      "edition": "Issue 122 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Elite looks toward new machines as Britain’s cartridge business contracts.",
+      "leadHeadline": "British Telecom’s Firebird wins the rights to take Elite to Z80 computers",
+      "storyHeadlines": [
+        "Coleco and Parker Brothers retreat from the British games market",
+        "LaserJet wins a 119-printer showdown as laser output reaches the PC desk",
+        "Home bulletin boards become a social network—and an arcade",
+        "Borland sells a pop-up desk—and charges extra for an unprotected disk"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-26.png",
+      "thumb": "media/thumbs/1984-11-26.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-06",
+      "historicDate": "1984-11-19",
+      "displayDate": "Week of November 19-25, 1984",
+      "edition": "Issue 121 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "PC price pressure, satellite promises and the busy signal of a growing online world.",
+      "leadHeadline": "After Comdex, personal computing faces an IBM-shaped market",
+      "storyHeadlines": [
+        "A $795 dish promises satellite data for the personal computer",
+        "The bulletin board becomes a neighborhood without borders",
+        "CompuServe brings more than 80 merchants into the living room",
+        "VisiCalc publisher faces merger and founders' departure"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-19.png",
+      "thumb": "media/thumbs/1984-11-19.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-05",
+      "historicDate": "1984-11-12",
+      "displayDate": "Week of November 12-18, 1984",
+      "edition": "Issue 120 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "PC compatibility meets home color and sound; the modem opens a shopping mall after hours.",
+      "leadHeadline": "Tandy 1000 brings PC compatibility home",
+      "storyHeadlines": [
+        "A shopping mall arrives on the home-computer screen",
+        "KoalaPad gives PCjr owners a drawing surface in their laps",
+        "Copy protection must not punish the buyer"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-12.png",
+      "thumb": "media/thumbs/1984-11-12.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-02",
+      "historicDate": "1984-11-05",
+      "displayDate": "Week of November 5-11, 1984",
+      "edition": "Issue 119 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Radio Shack enters the compatible contest; home computers draw, dial and shop.",
+      "leadHeadline": "Tandy brings a $1,199 IBM-compatible into Radio Shack",
+      "storyHeadlines": [
+        "The bulletin board becomes a neighborhood without boundaries",
+        "Shopping from the keyboard enters the living room",
+        "KoalaPad gives the PCjr a drawing surface",
+        "WizType turns typing practice into a cartoon duel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-11-05.png",
+      "thumb": "media/thumbs/1984-11-05.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-01",
+      "historicDate": "1984-10-29",
+      "displayDate": "Week of October 29-November 4, 1984",
+      "edition": "Issue 118 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Ghostbusters takes the holiday spotlight; the modem opens a door to games, neighbors and shopping.",
+      "leadHeadline": "Ghostbusters leads Activision’s million-dollar holiday comeback bid",
+      "storyHeadlines": [
+        "The bulletin board becomes a neighborhood without borders",
+        "Shopping by modem: CompuServe’s Electronic Mall is open all night",
+        "Commodore’s Plus/4 trades game features for built-in office tools"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-29.png",
+      "thumb": "media/thumbs/1984-10-29.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-30",
+      "historicDate": "1984-10-22",
+      "displayDate": "Week of October 22-28, 1984",
+      "edition": "Issue 117 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Ghostbusters heads for the C64; Commodore pitches an office in ROM, and local bulletin boards connect the neighborhood.",
+      "leadHeadline": "Ghostbusters Haunts the Commodore 64",
+      "storyHeadlines": [
+        "Commodore Puts a $300 Office in the Plus/4",
+        "The Neighborhood Bulletin Board Takes Shape",
+        "BYTE Measures the IBM PC/AT’s 6 MHz Pace"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-10-22.png",
+      "thumb": "media/thumbs/1984-10-22.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-29",
       "historicDate": "1984-10-15",
       "displayDate": "Week of October 15-21, 1984",
