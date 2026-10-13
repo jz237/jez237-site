@@ -27,6 +27,7 @@ export interface GroundQuery {
   normalAt(x: number, z: number, out?: THREE.Vector3): THREE.Vector3;
   /** What is there (SurfaceKind: 1 rock, 2 wood); optional. */
   kindAt?(x: number, z: number): number;
+  heightBelow?(x: number, z: number, ceiling: number): number;
 }
 const WOOD = 2;
 
@@ -156,10 +157,24 @@ export class LizardRig {
   /** 0 walking .. 1 full sprint: the body rises, the nose lifts and the tail comes off the ground. */
   private sprint = 0;
   private initialised = false;
+  readonly ground: GroundQuery;
   /** Called whenever a foot is put down (world position). */
   onFootDown?: (p: THREE.Vector3, front: boolean) => void;
 
-  constructor(readonly model: LizardModel, readonly ground: GroundQuery) {
+  constructor(readonly model: LizardModel, source: GroundQuery) {
+    const ceiling=()=>this.initialised ? this.bodyY+.055 : source.heightAt(this.inputs.x,this.inputs.z)+.055;
+    const height=(x:number,z:number)=>source.heightBelow
+      ? source.heightBelow(x,z,ceiling()) : source.heightAt(x,z);
+    this.ground={
+      heightAt:height,
+      kindAt:source.kindAt?.bind(source),
+      normalAt:(x,z,out=new THREE.Vector3())=>{
+        if(source.heightBelow && source.heightAt(x,z)>ceiling()){
+          const e=.002;return out.set(height(x-e,z)-height(x+e,z),2*e,height(x,z-e)-height(x,z+e)).normalize();
+        }
+        return source.normalAt(x,z,out);
+      },
+    };
     const d = model.data;
     this.spineIdx = this.spineNames.map((n) => model.bone(n));
     this.spineBindX = this.spineIdx.map((i) => d.bones[i].origin[0]);
@@ -295,7 +310,8 @@ export class LizardRig {
     const right = new THREE.Vector3(-fwd.z, 0, fwd.x); // +Z when facing +X
     // Sample the surface under the chest, pelvis and flanks.
     // (each a little patch, so a crack in the log is bridged rather than dropped into)
-    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a + right.x * sd, I.z + fwd.z * a + right.z * sd);
+    const size = K / 0.0105;
+    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a * size + right.x * sd * size, I.z + fwd.z * a * size + right.z * sd * size);
     // ground under the chest and hips; a rise just beyond the trunk counts for less
     // with distance (a 35° slope), so a step coming up is met smoothly, not all at once
     const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0), H(0.06, 0) - 0.0105, H(0.075, 0) - 0.021);
@@ -311,7 +327,7 @@ export class LizardRig {
     // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
     let under = mid, underMid = mid, ramp = -Infinity;
     // (pitched nose-up on the climb, the belly ahead of the middle is that much higher)
-    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065), -0.9, 0.9));
+    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58));
     for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
       const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
       const h = this.ground.heightAt(sx, sz);
@@ -335,8 +351,8 @@ export class LizardRig {
       }
     }
     const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006, ramp);
-    const pitch = Math.atan2(c - p, 0.065) + this.sprint * 0.14;
-    const roll = Math.atan2(l - r, 0.044) * 0.6 + I.sideLean;
+    const pitch = clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58) + this.sprint * 0.08;
+    const roll = clamp(Math.atan2(l - r, 0.044 * size) * 0.45, -0.23, 0.23) + I.sideLean;
     const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
     // body centre height: belly clearance + half the trunk depth
     let targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
@@ -400,11 +416,11 @@ export class LizardRig {
     this.time += dt;
     const I = this.inputs;
     const speedCm = Math.abs(I.speed) / K;
-    this.moving = speedCm > 0.6 || Math.abs(I.turnRate) > 0.25;
+    this.moving = speedCm > 0.45 || Math.abs(I.turnRate) > 0.12;
     this.sprint = damp(this.sprint, smooth(clamp((speedCm - 12) / 14, 0, 1)), 6, dt);
     // Stride frequency rises with speed; lizards take quick, short steps.
-    const freq = clamp(1.3 + speedCm / 11, 1.3, 5.2) * (Math.abs(I.turnRate) > 0.25 && speedCm < 2 ? 1.5 : 1);
-    const duty = clamp(0.68 - speedCm / 260, 0.5, 0.68);
+    const freq = clamp(.70 + speedCm / 5.8 + (speedCm < 2 ? Math.abs(I.turnRate) * .60 : 0), .75, 4.5);
+    const duty = clamp(.78 - speedCm / 230, .55, .78);
     if (this.moving) this.phase = (this.phase + dt * freq) % 1;
     // The glass is solid: if the head or chest reached it last frame (a look out
     // of the front, a turn by the side), the body is nudged back off it.
@@ -423,7 +439,7 @@ export class LizardRig {
       for (const a of [0.035, 0, -0.035]) for (const sd of [-0.022, 0.022]) {
         const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
         const rise = this.ground.heightAt(sx, sz) - mid;
-        if (rise > 0.03 && (rise > 0.12 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
+        if (rise > 0.085 && (rise > 0.14 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
           const k = Math.sign(sd) * 0.1 * Math.min(1, dt * 30);
           I.x -= right.x * k * 0.035;
           I.z -= right.z * k * 0.035;
@@ -434,8 +450,8 @@ export class LizardRig {
 
     // Lateral standing wave in the trunk, synchronised with the diagonal pairs:
     // a sprawling lizard swings its shoulders and hips to lengthen each stride.
-    const amp = this.moving ? clamp(0.08 + speedCm / 90, 0.08, 0.38) : 0;
-    const steer = clamp(I.turnRate * 0.12, -0.35, 0.35);
+    const amp = this.moving ? clamp(0.035 + speedCm / 160, 0.035, 0.18) : 0;
+    const steer = clamp(I.turnRate * 0.09, -0.18, 0.18);
     this.bend = damp(this.bend, -amp * Math.cos(this.phase * Math.PI * 2) + steer, 14, dt);
 
     this.updateHead(dt);
@@ -655,7 +671,7 @@ export class LizardRig {
       // walking, it carries the base of its tail clear of the ground, the tip trailing
       const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
       const g = this.ground.heightAt(gp.x, gp.z) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
-      let y = Math.max(g, prev3.y - L * 0.55);
+      let y = Math.max(g, prev3.y - L * 0.92);
       y = Math.min(y, prev3.y + L * 0.5);
       const dy = y - prev3.y;
       const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
@@ -716,7 +732,9 @@ export class LizardRig {
         // When standing still, tidy up feet that are badly out of place one at a time.
         // (but not just to lift a foot off solid footing and hang it over an edge)
         const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && (!homeInAir || drift > 0.035) && !this.legs.some((l) => l.swing);
-        if (gaitLift || strained || settle) {
+        const freeSupports = this.legs.filter(l => !l.swing).length;
+        // Correction steps retain at least two supports; no three-foot air shuffle.
+        if ((gaitLift || strained || settle) && freeSupports > 2) {
           leg.swing = true;
           leg.swingT = 0;
           leg.swingDur = this.moving ? swingDur : 0.16;

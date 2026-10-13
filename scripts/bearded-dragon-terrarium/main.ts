@@ -50,7 +50,7 @@ export class DesertTerrarium {
     await this.habitat.ready;
     this.surface=new Surface(this.habitat.ground,this.habitat.hard,.004);
     this.dish=new Dish(this.surface,-.58,.212);this.scene.add(this.dish.group);
-    this.nav=new Nav(this.surface,[]);
+    this.nav=new Nav(this.surface,this.habitat.obstacles);
     this.insects=new Insects(this.surface,this.nav);this.scene.add(this.insects.group);
     this.lizard=await LizardModel.load('./lizard/');this.lizard.setMorph(params.get('morph')??'normal');this.scene.add(this.lizard.root);
     this.rig=new LizardRig(this.lizard,this.surface);this.brain=new LizardBrain(this.rig,this.nav,this.surface,this.insects);this.brain.dish=this.dish;
@@ -80,7 +80,7 @@ export class DesertTerrarium {
     const daylight=THREE.MathUtils.smoothstep(Math.sin((this.hours-6)/12*Math.PI),0,.18),night=daylight<.1;
     this.habitat.warm.intensity=2.4*daylight;this.habitat.daylight.intensity=1.65*daylight;
     for(const b of this.habitat.bulbs)b.emissiveIntensity=daylight*2.3;
-    this.ambient.intensity=.16+.79*daylight;this.fill.intensity=.16+.94*daylight;
+    this.ambient.intensity=.10+.48*daylight;this.fill.intensity=.10+.52*daylight;
     this.brain.night=night;this.brain.heat=daylight;this.brain.storm=0;this.brain.raining=false;this.brain.leavesWet=0;
     const I=this.rig.inputs,shade=this.surface.roofed(I.x,I.z);
     const lamp=(1-THREE.MathUtils.smoothstep(Math.hypot(I.x-BASK.x,I.z-BASK.z),.05,.29))*daylight*(shade?.04:1);
@@ -93,7 +93,7 @@ export class DesertTerrarium {
     const atHome=!this.follow&&this.camera.position.distanceTo(this.home)<.025;
     const w=innerWidth,h=innerHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.post.setSize(w,h,this.renderer.getPixelRatio());
     const z=Math.max(1.9,((TANK.w+.20)/2)/Math.tan(THREE.MathUtils.degToRad(this.camera.fov/2))/this.camera.aspect);
-    this.home.set(.055,.57,z+.16);if(w<640)this.home.y=.71;
+    this.home.set(.015,.40,z+.24);if(w<640)this.home.y=.71;
     this.controls.maxDistance=Math.max(4.5,z+1);
     if(reset||atHome){this.camera.position.copy(this.home);this.controls.target.copy(this.homeTarget);this.controls.update();}
   }

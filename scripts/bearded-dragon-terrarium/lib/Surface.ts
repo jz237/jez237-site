@@ -135,6 +135,12 @@ export class Surface {
   }
   /** Bilinear floor height (what feet stand on). */
   heightAt(x: number, z: number) {return this.bilinear(this.height, x, z);}
+  /** Support below the animal: overhead branches are ceilings, not a floor. */
+  heightBelow(x: number, z: number, ceiling: number) {
+    const floor=this.heightAt(x,z);
+    if(floor<=ceiling || this.kindAt(x,z)===SurfaceKind.Cave)return floor;
+    return this.cast(x,z,ceiling,{y:0,normal:new THREE.Vector3()}).y;
+  }
   /** Bilinear height of the uppermost surface (what rain lands on). */
   topAt(x: number, z: number) {return this.bilinear(this.top, x, z);}
   /** True under the cave's roof. */

@@ -88,3 +88,39 @@ test('the jaw opens around its hinge and the beard puffs', () => {
   rig.update(1 / 60);
   assert.ok(rig.mouth.y < closed.y - 0.002, 'the lower jaw drops');
 });
+
+test('a slow upright turn retains at least two planted feet', () => {
+  const rig = new LizardRig(model(), flat);
+  const legs = (rig as unknown as {legs: {swing: boolean}[]}).legs;
+  rig.inputs.turnRate = 0.85;
+  let lifted = 0;
+  for (let i = 0; i < 180; i++) {
+    rig.inputs.heading += rig.inputs.turnRate / 60;
+    rig.update(1 / 60);
+    const inAir = legs.filter(l => l.swing).length;
+    lifted += inAir;
+    assert.ok(inAir <= 2, 'retains two supports while repositioning its feet');
+  }
+  assert.ok(lifted > 4, 'takes correction steps during the turn');
+});
+
+test('walking under an overhead branch keeps the body on the floor', () => {
+  const branchHeight = (x: number) => x > 0.05 && x < 0.35 ? 0.45 : 0;
+  const rig = new LizardRig(model(), {
+    ...flat,
+    heightAt: branchHeight,
+    heightBelow: (x, _z, ceiling) => branchHeight(x) <= ceiling ? branchHeight(x) : 0,
+  });
+  let previous = 0, largestStep = 0, highestBody = 0;
+  for (let i = 0; i < 450; i++) {
+    rig.inputs.speed = 0.08;
+    rig.inputs.x += 0.08 / 60;
+    rig.update(1 / 60);
+    const y = rig.spinePoints()[3].y;
+    if (i > 15) largestStep = Math.max(largestStep, Math.abs(y - previous));
+    highestBody = Math.max(highestBody, y);
+    previous = y;
+  }
+  assert.ok(highestBody < 0.07, `stays below the branch (${highestBody.toFixed(3)} m)`);
+  assert.ok(largestStep < 0.005, `no upward pop (${largestStep.toFixed(3)} m/frame)`);
+});

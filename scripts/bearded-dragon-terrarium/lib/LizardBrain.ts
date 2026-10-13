@@ -43,8 +43,8 @@ export class LizardBrain {
   private lookT = 0;
   private lookPoint = new THREE.Vector3();
   private looking = false;
-  private pose: Pose = {clearance: 0.1, chestLift: 1.3, headPitch: 0.22, lid: 1, breath: 1};
-  private poseGoal: Pose = {clearance: 0.1, chestLift: 1.3, headPitch: 0.22, lid: 1, breath: 1};
+  private pose: Pose = {clearance: 0.1, chestLift: 2.3, headPitch: 0.45, lid: 1, breath: 1};
+  private poseGoal: Pose = {clearance: 0.1, chestLift: 2.3, headPitch: 0.45, lid: 1, breath: 1};
   private faceHeading: number | null = null;
   private prey: Cricket | null = null;
   private huntPhase: 'notice' | 'approach' | 'fix' | 'strike' | 'grip' | 'chew' | 'swallow' | 'lick' = 'notice';
@@ -116,7 +116,7 @@ export class LizardBrain {
   pointer: THREE.Vector3 | null = null;
   private pointerPrev = new THREE.Vector3();
   private baskSpot: [number, number, number] = [-0.4, 0.085, 0];
-  private sleepSpot: [number, number, number] = [0.46, -0.095, -Math.PI / 2];
+  private sleepSpot: [number, number, number] = [0.475, -0.018, -Math.PI / 2];
   onLap?: (p: THREE.Vector3) => void;
   /** Each bite through a cricket's shell. */
   onCrunch?: (p: THREE.Vector3, strength: number) => void;
@@ -126,9 +126,9 @@ export class LizardBrain {
     // body (head to hips, both flanks) must lie on wood, level and without a
     // crack under it, so it lies along the sandstone ledge rather than hanging off its edge.
     let best = -Infinity;
-    for (let x = -0.5; x <= -0.26; x += 0.005) for (let z = 0.02; z <= 0.15; z += 0.005) {
+    for (let x = -0.52; x <= -0.39; x += 0.005) for (let z = 0.02; z <= 0.07; z += 0.005) {
       if (surface.kindAt(x, z) !== SurfaceKind.Rock || !nav.reachable(x, z)) continue;
-      for (let h = -0.3; h <= 0.71; h += 0.1) {
+      for (let h = Math.PI - 0.32; h <= Math.PI - 0.12; h += 0.10) {
         const fx = Math.cos(h), fz = -Math.sin(h);
         let lo = Infinity, hi = -Infinity, sum = 0, n = 0, dip = 0, ok = true;
         for (const sd of [-0.01, 0, 0.01]) {
@@ -145,7 +145,7 @@ export class LizardBrain {
           if (!ok) break;
         }
         if (!ok || dip > 0.005 || hi - lo > 0.03) continue;
-        const score = sum / n - (hi - lo) * 3 - dip * 4 - Math.abs(x + 0.38) * 0.2;
+        const score = sum / n - (hi - lo) * 3 - dip * 4 - Math.abs(x + 0.465) * 0.4;
         if (score > best) {best = score; this.baskSpot = [x, z, h];}
       }
     }
@@ -157,7 +157,9 @@ export class LizardBrain {
     I.z = this.baskSpot[1];
     I.heading = this.baskSpot[2];
     I.clearance = 0.1;
-    I.chestLift = 1.3;
+    I.chestLift = 2.3;
+    I.headPitch = 0.45;
+    this.lookT = 4;
     rig.reset();
   }
 
@@ -183,7 +185,7 @@ export class LizardBrain {
 
   private posePreset(kind: 'bask' | 'alert' | 'walk' | 'rest' | 'sleep' | 'drink') {
     const p: Record<string, Pose> = {
-      bask: {clearance: 0.05, chestLift: 1.35, headPitch: 0.24, lid: 0.85, breath: 1},
+      bask: {clearance: 0.05, chestLift: 2.3, headPitch: 0.45, lid: 0.85, breath: 1},
       alert: {clearance: 0.35, chestLift: 0.9, headPitch: 0.12, lid: 1, breath: 1},
       walk: {clearance: 0.6, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
       rest: {clearance: 0.12, chestLift: 0.45, headPitch: 0.02, lid: 1, breath: 1},
@@ -378,7 +380,7 @@ export class LizardBrain {
     for (let k = 0; k < 16; k++) {
       const a = (k / 16) * Math.PI * 2 + this.standTries * 0.7;
       const dx = Math.cos(a), dz = Math.sin(a);
-      const sx = c.pos.x + dx * 0.075, sz = c.pos.z + dz * 0.075;
+      const sx = c.pos.x + dx * 0.12, sz = c.pos.z + dz * 0.12;
       const ki = this.nav.idx(sx, sz);
       if (ki < 0 || this.nav.region[ki] !== region || this.nav.isWet(sx, sz)) continue;
       // the head must have room to reach in
@@ -628,6 +630,12 @@ export class LizardBrain {
         break;
       }
       case 'sleep': {
+        if (this.modeT < 5 && Math.abs(wrap(FACE_OUT - I.heading)) > 0.12) {
+          targetTurn = this.turnToward(FACE_OUT);
+          this.posePreset('rest');
+          I.look = null;
+          break;
+        }
         this.posePreset('sleep');
         I.look = null;
         this.status = this.modeT < 4 ? 'Falling asleep' : 'Asleep';
@@ -745,16 +753,17 @@ export class LizardBrain {
 
     // Snappy acceleration and braking: bursts, not glides.
     this.speed = damp(this.speed, targetSpeed, targetSpeed > this.speed ? 9 : 14, dt);
-    this.turn = damp(this.turn, targetTurn, 12, dt);
+    this.turn = damp(this.turn, targetTurn, 5, dt);
     I.speed = this.speed;
     I.turnRate = this.turn;
     I.heading = wrap(I.heading + this.turn * dt);
+    const oldX = I.x, oldZ = I.z;
     const nx = I.x + Math.cos(I.heading) * this.speed * dt;
     const nz = I.z - Math.sin(I.heading) * this.speed * dt;
     if (this.speed < 1e-4 || this.nav.walkable(nx, nz) || !this.nav.walkable(I.x, I.z)) {I.x = nx; I.z = nz; this.blockedT = 0;}
-    else if (this.nav.walkable(nx, I.z)) I.x = nx; // slide along the obstacle
-    else if (this.nav.walkable(I.x, nz)) I.z = nz;
     else {this.speed *= 0.5; this.blockedT += dt;}
+    // The gait follows actual progress; an obstacle cannot make it paddle in place.
+    I.speed = Math.hypot(I.x - oldX, I.z - oldZ) / Math.max(dt, 1e-6);
     const movedX = I.x, movedZ = I.z;
     // stall watchdog: trying to travel but getting nowhere
     if ((this.mode === 'travel' || this.mode === 'startle' || (this.mode === 'hunt' && this.huntPhase === 'approach')) && this.pauseT <= 0 && this.leadT <= 0) {
@@ -801,7 +810,7 @@ export class LizardBrain {
 
   private turnToward(h: number) {
     const e = wrap(h - this.rig.inputs.heading);
-    return Math.abs(e) < 0.05 ? 0 : clamp(e * 5, -2.8, 2.8);
+    return Math.abs(e) < 0.06 ? 0 : clamp(e * 3.2, -1.25, 1.25);
   }
 
   private idleLook(dt: number, cameraBias: number) {
@@ -934,7 +943,7 @@ export class LizardBrain {
     // advance past waypoints we have reached or overtaken
     while (this.pathI < this.path.length - 1) {
       const [wx, wz] = this.path[this.pathI];
-      if (Math.hypot(wx - I.x, wz - I.z) < 0.03) {this.pathI++; continue;}
+      if (Math.hypot(wx - I.x, wz - I.z) < 0.018) {this.pathI++; continue;}
       const [nx, nz] = this.path[this.pathI + 1];
       // past the waypoint along the next segment?
       const sx = nx - wx, sz = nz - wz;
@@ -953,12 +962,12 @@ export class LizardBrain {
     // (and over a dip, a hollow or the pool, at about the level it walks on)
     this.lookPoint.set(lx, Math.max(this.surface.heightAt(lx, lz), this.surface.heightAt(I.x, I.z) - 0.01) + 0.02, lz);
     I.look = this.lookPoint;
-    const aim = this.pathPoint(Math.min(0.045, remaining), this.tmp2);
+    const aim = this.pathPoint(Math.min(0.062, remaining), this.tmp2);
     const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x);
     const err = wrap(want - I.heading);
     if (this.leadT > 0) {
       this.leadT -= dt;
-      return {speed: 0, turn: Math.abs(err) > 1.2 ? Math.sign(err) * 1.6 : 0};
+      return {speed: 0, turn: Math.abs(err) > 1.2 ? Math.sign(err) * 1.1 : 0};
     }
     // Nearly there: a lizard does not wheel round for the last step or two, nor
     // keep circling or pushing at a spot it cannot quite reach (tucked against
@@ -977,8 +986,8 @@ export class LizardBrain {
     // ease off on the final approach and through the water
     speed *= clamp(remaining / 0.05, 0.4, 1);
     if (this.nav.isWet(I.x, I.z)) speed *= 0.6;
-    const maxTurn = this.mode === 'startle' ? 4 : 2.6;
-    const turn = clamp(err * 5, -maxTurn, maxTurn);
+    const maxTurn = this.mode === 'startle' ? 2.0 : 1.15;
+    const turn = clamp(err * 3.3, -maxTurn, maxTurn);
     this.burstLeft -= this.speed * dt;
     if (this.burstLeft <= 0 && this.mode !== 'startle' && !this.hurry && remaining > 0.08) {
       this.pauseT = rnd() < 0.25 ? 1.2 + rnd() * 2.5 : 0.25 + rnd() * 0.7;

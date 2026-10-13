@@ -35,7 +35,7 @@ export const MORPHS: Record<string, [number, number, number][]> = {
 };
 
 /** Lizard length is 30.5 cm in the sculpt; scene units are metres. */
-export const LIZARD_SCALE = 0.0126;
+export const LIZARD_SCALE = 0.016;
 
 function irisTexture(): THREE.DataTexture {
   const W = 256, H = 256;

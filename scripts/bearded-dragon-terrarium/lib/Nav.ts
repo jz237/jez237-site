@@ -51,10 +51,11 @@ export class Nav {
       const slope = Math.hypot(hx, hz) / (2 * e);
       // the lizard clambers up the sides of the log and onto rough stone readily,
       // but not up steep soil
-      const limit = kind === SurfaceKind.Wood ? 12 : kind === SurfaceKind.Rock ? 2.4 : 0.9;
+      const limit = kind === SurfaceKind.Wood ? 1.7 : kind === SurfaceKind.Rock ? 2.4 : 0.9;
       if (slope > limit) c = Infinity;
       else c += Math.min(slope, 1.5) * 3;
-      if (kind === SurfaceKind.Rock) c = y > 0.24 ? Infinity : c + 2;
+      if (kind === SurfaceKind.Rock) c = y > 0.335 ? Infinity : c + 2;
+      if (kind === SurfaceKind.Wood && y > 0.25) c = Infinity;
       for (const o of obstacles) {
         const d = Math.hypot(x - o.x, z - o.z);
         if (d < o.r * 1.3) c += 6 * (1 - d / (o.r * 1.3));
