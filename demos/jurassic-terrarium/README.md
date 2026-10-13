@@ -265,3 +265,8 @@ v1.34: painted end walls:
 - **Ends:** both end walls now carry the painted valley, carried on from the back wall round each corner (mirrored there, so the horizon and colours meet without a seam), with the same haze where it meets the ground.
 - **Ground mist:** the mist bands now run round the back corners and part way down each end.
 - **See-through when turned:** like the back, each end is painted only on its inside. Turn the case to look along its length and the near end is clear glass while the far end is the backdrop.
+
+v1.35: Pteranodon wings:
+- **Flexible curving:** each wing is a chain of springs on top of the flapping animation. The joints further out lag behind the stroke and the air holds them bent against it, so on the downstroke the wing bows and the tips trail upward, and at the top of the upstroke they trail down and whip through. Folded on a perch, the wing stays still.
+- **Billowing membrane:** the membrane bellies against the air: lifted on each downstroke, pressed down on the upstroke, most across the middle of the span, with a light flutter in a glide.
+- **Detail:** fine stiffening fibres (actinofibrils) run out across the membrane, slanting back towards the trailing edge. They show as faint ridges close up and as dark lines when the wing is against the light, alongside the veins. The wing is smooth skin; scales are on the body only.
