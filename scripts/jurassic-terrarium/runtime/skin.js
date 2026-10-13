@@ -26,6 +26,17 @@
 import { BufferAttribute, BufferGeometry, Matrix4, Vector3, Vector2, Vector4, Color } from 'three';
 
 const _v = new Vector3(), _n = new Vector3();
+
+// warm lights at night that only the animals feel (the cabin's hearth through its windows, the jetty
+// lantern, a lightning strike): view-space position, and colour with its reach in w. Shared by every
+// skin; night.js fills them in each frame. Done in the skin's own shader so the rest of the scene pays
+// nothing for them.
+export const WARM = {
+  uWarmPos: { value: [new Vector3(), new Vector3(), new Vector3(), new Vector3()] },
+  uWarmCol: { value: [new Vector4(), new Vector4(), new Vector4(), new Vector4()] },
+};
+// eyeshine colour per species (light thrown back from behind the retina, in the dark)
+export const SHINE = { trex: [1.0, 0.45, 0.12], triceratops: [0.55, 1.0, 0.35], stegosaurus: [0.9, 0.85, 0.3], brachiosaurus: [0.45, 0.9, 1.0], pteranodon: [1.0, 0.7, 0.3] };
 const DEBUG = new URLSearchParams(location.search).get('skindebug') === '1'; // thin = red, mud = green, neck = blue
 
 // positions and normals of a skinned mesh in the model's own space, in metres, in the bind pose. (The
@@ -242,6 +253,9 @@ export function skinShader(mat, U, shared, { membrane = false } = {}) {
     sh.uniforms.uLightColor = shared.uLightColor;
     sh.uniforms.uNight = shared.uNight;
     sh.uniforms.uTime = shared.uTime;
+    sh.uniforms.uFlash = shared.uFlash;
+    sh.uniforms.uWarmPos = WARM.uWarmPos;
+    sh.uniforms.uWarmCol = WARM.uWarmCol;
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>
 attribute float aThin;
@@ -272,6 +286,9 @@ uniform float uBend;
 uniform float uWet;
 uniform float uRain;
 uniform float uTime;
+uniform float uFlash;
+uniform vec3 uWarmPos[4];
+uniform vec4 uWarmCol[4];
 uniform vec4 uScales;
 uniform float uScaleH;
 varying float vThin;
@@ -382,6 +399,22 @@ float jtNoise(vec3 p) {
     vec3 blood = mix(diffuseColor.rgb, vec3(0.85, 0.2, 0.08), 0.7);
     reflectedLight.directDiffuse += blood * uLightColor * th * (back * 0.75 + wrap * 0.25) * (1.0 - jtMud * 0.8) * (1.0 - uNight * 0.7);
   }
+  // warm light from the hearth and the lantern on a passing body (wrapped a little round the form)
+  for (int i = 0; i < 4; i++) {
+    vec4 wc = uWarmCol[i];
+    if (wc.w <= 0.0) continue;
+    vec3 wl = uWarmPos[i] + vViewPosition;
+    float d2 = dot(wl, wl), att = max(0.0, 1.0 - d2 / (wc.w * wc.w));
+    float ndl = clamp(dot(normal, wl * inversesqrt(max(d2, 1e-6))) * 0.75 + 0.25, 0.0, 1.0);
+    reflectedLight.directDiffuse += diffuseColor.rgb * wc.rgb * ndl * att * att;
+    reflectedLight.directSpecular += wc.rgb * pow(ndl, 12.0) * att * att * 0.08 * (1.0 - roughnessFactor);
+  }
+  // lightning: a hard cold rim round the silhouette
+  if (uFlash > 0.01) {
+    float rim = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 2.2);
+    reflectedLight.directDiffuse += vec3(0.75, 0.82, 1.0) * smoothstep(0.35, 0.9, rim) * min(uFlash, 1.0) * 0.9;
+    reflectedLight.directDiffuse *= 1.0 - 0.45 * min(uFlash, 1.0) * (1.0 - rim); // the near side falls dark: a silhouette
+  }
   if (uRain > 0.02) {
     // raindrops landing: little rings that spread and fade on the back, head and tail tops
     vec2 q = vLocal.xz * 9.0 + vec2(vLocal.y * 4.0, 0.0);
@@ -424,6 +457,7 @@ mat3 jtRotZ(float a) { float c = cos(a), s = sin(a); return mat3(c, s, 0.0, -s, 
       .replace('#include <common>', `#include <common>
 uniform float uBlink;
 uniform vec3 uLidColor;
+uniform vec3 uShine;
 varying vec3 vEyeRel;`)
       .replace('#include <map_fragment>', `#include <map_fragment>
   // the lids: the upper comes down, the lower rises a little; a dark line where they meet the ball
@@ -434,6 +468,8 @@ varying vec3 vEyeRel;`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
   roughnessFactor = mix(roughnessFactor, 0.75, jtLid);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+  // eyeshine: in the dark, light thrown straight back from behind the retina, strongest looking right at us
+  totalEmissiveRadiance += uShine * pow(clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 3.0);
   totalEmissiveRadiance *= 1.0 - jtLid;`)
       .replace('#include <clearcoat_normal_fragment_begin>', `#include <clearcoat_normal_fragment_begin>`)
       .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
@@ -447,7 +483,7 @@ varying vec3 vEyeRel;`)
 }
 
 export function eyeUniforms(lid) {
-  return { uEyeRot: { value: new Vector2() }, uBlink: { value: 0 }, uLidColor: { value: lid || new Color(0.12, 0.1, 0.08) } };
+  return { uEyeRot: { value: new Vector2() }, uBlink: { value: 0 }, uLidColor: { value: lid || new Color(0.12, 0.1, 0.08) }, uShine: { value: new Color(0, 0, 0) } };
 }
 
 // Saliva: strands strung between upper and lower teeth as the jaw opens on a roar. Each stretches and sags

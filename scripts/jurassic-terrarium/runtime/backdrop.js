@@ -150,6 +150,9 @@ export class Backdrop {
     c.lerp(new Color(1.15, 0.92, 0.72), golden * 0.6);
     c.lerp(new Color(0.62, 0.66, 0.7), storm * 0.5);
     c.lerp(new Color(0.07, 0.09, 0.15), night);
+    // lightning flares the painted sky, so the animals stand out against it for an instant
+    const flash = Math.min(1, w.flash || 0);
+    if (flash > 0) c.lerp(new Color(1.6, 1.7, 1.95), flash * 0.85);
     this.farMat.color.copy(c);
     this.nearMat.color.copy(c).multiplyScalar(0.92);
     // the mist colour: the same as the case's own valley mist (see atmosphere.js), or a soft day haze
