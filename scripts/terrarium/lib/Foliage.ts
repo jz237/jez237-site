@@ -13,7 +13,7 @@ export const foliageUniforms = {
   /** 0..1: the moisture the case's humid air leaves on the leaves (a film and, close up, dew). */
   uHumid: {value: 0.5},
   tWind: {value: null as THREE.Texture | null},
-  uWindBox: {value: new THREE.Vector4(-0.6, -0.25, 1.2, 0.5)},
+  uWindBox: {value: new THREE.Vector4(-TANK.w / 2, -TANK.d / 2, TANK.w, TANK.d)},
   uGust: {value: new THREE.Vector3()},
   /**
    * What pushes the foliage aside: capsules from (x, y, z, radius) to uPushB's

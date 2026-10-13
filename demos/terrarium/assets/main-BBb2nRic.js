@@ -5125,7 +5125,7 @@ vec2 windAt(vec2 xz, float t){
   float g = wgn(xz * 3.5 - uGust.xy * t * 5.0 + vec2(t * 0.05, 0.0));
   return w.xy + uGust.xy * (0.55 + 0.9 * g - 1.0) * (0.6 + uGust.z);
 }
-`,T_={uTime:{value:0},uKeyDirView:{value:new U(0,1,0)},uKeyColor:{value:new K(1,.8,.6)},uWet:{value:0},uHumid:{value:.5},tWind:{value:null},uWindBox:{value:new W(-.6,-.25,1.2,.5)},uGust:{value:new U},uPush:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uPushB:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uGlass:{value:new H($.w/2-.004,$.d/2-.004)},tTop:{value:null},uTopBox:{value:new W(-$.w/2,-$.d/2,$.w,$.d)},uFolKeyPos:{value:new U(0,1,0)}};function E_(e,t,n,r){let i=e.attributes.position.count,a=new Float32Array(i*3);for(let e=0;e<i;e++)a[e*3]=t,a[e*3+1]=n,a[e*3+2]=r;e.setAttribute(`aRoot`,new q(a,3))}var D_=`
+`,T_={uTime:{value:0},uKeyDirView:{value:new U(0,1,0)},uKeyColor:{value:new K(1,.8,.6)},uWet:{value:0},uHumid:{value:.5},tWind:{value:null},uWindBox:{value:new W(-$.w/2,-$.d/2,$.w,$.d)},uGust:{value:new U},uPush:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uPushB:{value:Array.from({length:8},()=>new W(0,-1,0,0))},uGlass:{value:new H($.w/2-.004,$.d/2-.004)},tTop:{value:null},uTopBox:{value:new W(-$.w/2,-$.d/2,$.w,$.d)},uFolKeyPos:{value:new U(0,1,0)}};function E_(e,t,n,r){let i=e.attributes.position.count,a=new Float32Array(i*3);for(let e=0;e<i;e++)a[e*3]=t,a[e*3+1]=n,a[e*3+2]=r;e.setAttribute(`aRoot`,new q(a,3))}var D_=`
 float pinnate(float u, float v, float n, float s, float w, vec2 fw){ return folLine(u * n - abs(v) * s, w, fw.x * n + fw.y * s); }`,O_=w_+`
 vec3 foliageWind(vec3 root, float flex, float Hw, float phase, float stiff, vec3 n, vec3 rest, out float gust){
   vec2 w = windAt(root.xz, uTime);
