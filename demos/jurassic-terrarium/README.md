@@ -201,3 +201,10 @@ v1.24.3: phones and tablets (desktop unchanged):
 - **Smaller skins on phones and tablets.** The cast's 4096 px skins need about 1.3 GB of graphics memory, more than a phone has; running out lost the WebGL context and Chrome then blocked WebGL on the page ("Error creating WebGL context"). On phones and tablets each skin is now shrunk to 2048 px as it loads (1024 px on devices with 4 GB of RAM or less), one species at a time. `?skins=1024|2048` forces a size and `?skins=4096` full size.
 - **No reload loop.** On phones and tablets a lost WebGL context no longer reloads the page automatically; it shows a message with a reload and a lighter reload (`?quality=low&skins=1024`).
 - **Plain-words message.** When a phone or tablet browser won't provide WebGL 2 at all, the page explains what happened and what to do instead of showing the raw three.js error.
+
+v1.25: wind:
+- **Chimney smoke:** in a wind the cabin's smoke streams off as one long ribbon instead of separate puffs. It lies down flatter the harder it blows and is torn ragged by gusts. In still air it rises in a column.
+- **Mist and wisps:** the valley mist, low haze, peak wisps and waterfall mist ride Weatherglass's wind field instead of drifting on their own. They slide downwind, lean away from where they lie and settle back when it calms. In a gale they are drawn into ragged streaks and thinned, and the peak wisps stream off the summits like banner clouds. The haze travels across the case and wraps round.
+- **Steam and spray:** steam rising after rain, and the fine spray at the foot of the cascades, blow where the wind takes them.
+- **Plants:** the idle sway follows the prevailing wind, so plants, smoke and mist all lean the same way.
+- Weatherglass's own clouds and fog already followed the wind and still do.

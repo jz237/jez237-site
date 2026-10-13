@@ -648,9 +648,10 @@ attribute vec2 aBend;
     U.uFTime.value += dt;
     this.simulate(dt);
     this.updateLod();
-    // the prevailing wind swings slowly round
-    const wa = 0.35 + 0.5 * Math.sin(U.uFTime.value * 0.031) + 0.25 * Math.sin(U.uFTime.value * 0.083);
-    U.uFWindDir.value.set(Math.cos(wa), Math.sin(wa));
+    // the idle sway follows Weatherglass's prevailing wind, so plants, smoke and mist all lean one way
+    const amb = this.ctx.wind?.ambient, al = amb ? Math.hypot(amb.x, amb.y) : 0;
+    const wd = U.uFWindDir.value, k = 1 - Math.exp(-dt * 0.8);
+    if (al > 1e-3) wd.set(wd.x + (amb.x / al - wd.x) * k, wd.y + (amb.y / al - wd.y) * k).normalize();
     U.uShiver.value.w = Math.max(0, U.uShiver.value.w - dt * 0.6);
     // seasons: ferns brown a little in autumn and dull in winter
     const env = this.ctx.modules.life?.env;

@@ -1,7 +1,9 @@
 // Air in the case, as in the concept: warm shafts of light falling from the lid spotlights through humid
 // jungle air, specks of dust turning in them, a low haze lying between the trees, mist drifting off the
 // waterfall and the cascades, and at night faint cool moonbeams through the glass and fireflies over the
-// pool. Every material here is additive and soft, and guarded against invalid pixels (see safety.js):
+// pool. Everything that floats (haze, valley mist, peak wisps, waterfall mist) rides Weatherglass's
+// wind field: it leans and streams downwind, streaks out and thins in a gale, settles back when calm.
+// Every material here is additive and soft, and guarded against invalid pixels (see safety.js):
 // a bad pixel in an additive HDR layer would be bloomed into a full-screen flash.
 import {
   Group, Mesh, Points, CylinderGeometry, BufferGeometry, BufferAttribute, ShaderMaterial, AdditiveBlending,
@@ -178,7 +180,7 @@ void main() {
       const s = new Sprite(new SpriteMaterial({ map: this.soft, color: 0xdfe6dc, transparent: true, opacity: 0, depthWrite: false }));
       s.position.set(x, Math.max(h, 0.1) + 0.2 + Math.random() * 0.25, z);
       s.scale.set(2.2 + Math.random() * 1.6, 0.55 + Math.random() * 0.3, 1);
-      s.userData = { base: s.position.clone(), ph: Math.random() * 6.28, k: 0.5 + Math.random() * 0.5 };
+      s.userData = { base: s.position.clone(), ph: Math.random() * 6.28, k: 0.5 + Math.random() * 0.5, dx: 0, dz: 0, wx: 0, wz: 0, dy: s.position.y - Math.max(h, 0.1) };
       s.renderOrder = 6;
       s.name = 'atmosphere-haze';
       this.group.add(s);
@@ -206,32 +208,43 @@ void main() {
   buildCurtains() {
     const T = this.ctx.terrain, box = this.ctx.box;
     const vs = (bill) => `
+uniform float uWide;
 varying vec2 vUv;
 void main() {
   vUv = uv;
   ${bill
-    ? 'vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0); mv.xy += position.xy; gl_Position = projectionMatrix * mv;'
+    ? 'vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0); mv.xy += position.xy * vec2(uWide, 1.0); gl_Position = projectionMatrix * mv;'
     : 'gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);'}
 }`;
     const fs = `
 uniform vec3 uColor; uniform float uAmount; uniform float uTime; uniform float uSeed; uniform vec2 uStretch;
+uniform vec2 uDrift; uniform float uStreak;
 varying vec2 vUv;
 float hh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float vn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
   return mix(mix(hh(i), hh(i + vec2(1, 0)), f.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), f.x), f.y); }
 float fbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * vn(p); p = p * 2.03 + 7.1; a *= 0.5; } return s; }
 void main() {
-  vec2 p = vUv * uStretch + vec2(uTime * 0.012 + uSeed, uSeed * 0.37);
-  float n = fbm(p + vec2(fbm(p * 0.7 + uTime * 0.006), 0.0) * 0.6);
-  float band = smoothstep(0.0, 0.4, vUv.y) * smoothstep(1.0, 0.5, vUv.y);
-  float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
-  float a = band * edge * smoothstep(0.32, 0.72, n) * uAmount;
+  // carried along by the wind (uDrift integrates it), drawn out into streaks as it strengthens
+  vec2 p = vUv * uStretch;
+  p.x /= 1.0 + 0.8 * uStreak;
+  p.y *= 1.0 + 0.6 * uStreak;
+  p += uDrift + vec2(uSeed, uSeed * 0.37);
+  float n = fbm(p + vec2(fbm(p * 0.7 + uTime * 0.006), 0.0) * (0.6 - 0.3 * uStreak));
+  // ragged top and bottom edges, ragged ends: never a straight-edged bar however hard it blows
+  float ry = vUv.y + (n - 0.5) * 0.45, rx = vUv.x + (fbm(p * 1.9 + 3.3) - 0.5) * 0.25;
+  float band = smoothstep(0.0, 0.42, ry) * smoothstep(1.0, 0.52, ry);
+  float edge = smoothstep(0.0, 0.25, rx) * smoothstep(1.0, 0.75, rx);
+  float a = band * edge * smoothstep(0.32 + 0.1 * uStreak, 0.72, n) * uAmount;
   if (a < 0.003) discard;
   gl_FragColor = vec4(uColor, a);
 }`;
     const mk = (bill, stretch, seed) => {
       const m = new ShaderMaterial({
-        uniforms: { uColor: { value: new Color(1, 1, 1) }, uAmount: { value: 0 }, uTime: { value: 0 }, uSeed: { value: seed }, uStretch: { value: new Vector2(...stretch) } },
+        uniforms: {
+          uColor: { value: new Color(1, 1, 1) }, uAmount: { value: 0 }, uTime: { value: 0 }, uSeed: { value: seed },
+          uStretch: { value: new Vector2(...stretch) }, uDrift: { value: new Vector2() }, uStreak: { value: 0 }, uWide: { value: 1 },
+        },
         vertexShader: vs(bill), fragmentShader: fs, transparent: true, depthWrite: false, side: DoubleSide, fog: false,
       });
       guardMaterial(m);
@@ -252,7 +265,7 @@ void main() {
         const m = new Mesh(new PlaneGeometry(w, hgt), mk(false, [w * 1.1, hgt * 2.2], Math.random() * 50));
         m.position.set(cx, Math.max(h, 0.05) + hgt * 0.32, z + (Math.random() - 0.5) * 0.25);
         m.rotation.y = (Math.random() - 0.5) * 0.2;
-        m.userData = { k: (0.75 + 0.25 * Math.random()) * (0.55 + 0.45 * (1 - ri / rows.length)), base: m.position.clone(), ph: Math.random() * 6.28 };
+        m.userData = { k: (0.75 + 0.25 * Math.random()) * (0.55 + 0.45 * (1 - ri / rows.length)), base: m.position.clone(), ph: Math.random() * 6.28, nu: 1.1, lift: 0.15, w, wx: 0, wz: 0 };
         m.renderOrder = 5;
         m.name = 'atmosphere-curtain';
         this.group.add(m);
@@ -277,7 +290,7 @@ void main() {
         const w = 1.3 + Math.random() * 1.1, hgt = 0.32 + Math.random() * 0.2;
         const m = new Mesh(new PlaneGeometry(w, hgt), mk(true, [w * 1.4, hgt * 3.0], Math.random() * 50));
         m.position.set(p.x + (Math.random() - 0.5) * 0.5, p.h * (0.62 + 0.22 * i / n) + 0.05, p.z + 0.25 + Math.random() * 0.3);
-        m.userData = { k: 0.6 + 0.4 * Math.random(), base: m.position.clone(), ph: Math.random() * 6.28 };
+        m.userData = { k: 0.6 + 0.4 * Math.random(), base: m.position.clone(), ph: Math.random() * 6.28, nu: 1.4, lift: 0.8, w, wx: 0, wz: 0, bill: true };
         m.renderOrder = 5;
         m.frustumCulled = false;
         m.name = 'atmosphere-wisp';
@@ -346,6 +359,16 @@ void main() {
     this.group.add(this.flies);
   }
 
+  // Weatherglass's wind (units/s) at a point, eased into u.wx/u.wz so a gust swells and dies away
+  // rather than flickering; lift (0..1) is how high above the floor, where it blows harder
+  windAt(x, z, lift, u, dt, rate = 1.5) {
+    const v = this.ctx.wind?.sample?.(x, z, this._w || (this._w = { x: 0, z: 0 }), lift);
+    const k = 1 - Math.exp(-dt * rate);
+    u.wx += ((Number.isFinite(v?.x) ? v.x : 0) - u.wx) * k;
+    u.wz += ((Number.isFinite(v?.z) ? v.z : 0) - u.wz) * k;
+    return Math.hypot(u.wx, u.wz);
+  }
+
   update(dt) {
     this.t += dt;
     const life = this.ctx.modules.life?.env, w = this.ctx.world;
@@ -365,10 +388,25 @@ void main() {
     // haze: thicker in the morning and after rain, lit warm by day and blue-grey at night
     const morning = Math.max(0, 1 - Math.abs((w.timeOfDay ?? 0.5) - 0.3) * 6);
     const hz = 0.05 + 0.1 * hum + 0.08 * morning + 0.05 * night;
+    // the haze is carried by the wind: it streams across the case and wraps round, sinking out of sight
+    // where it meets a mountainside and fading at the glass
+    const T = this.ctx.terrain, box = this.ctx.box, X = box.halfW - 1.2, Z = box.halfD - 0.9;
     for (const s of this.haze) {
       const u = s.userData;
-      s.position.x = u.base.x + Math.sin(this.t * 0.03 + u.ph) * 0.4;
-      s.material.opacity = hz * u.k * (0.7 + 0.3 * Math.sin(this.t * 0.07 + u.ph));
+      const sp = this.windAt(u.base.x + u.dx, u.base.z + u.dz, 0.1, u, dt);
+      u.dx += u.wx * 0.6 * dt;
+      u.dz += u.wz * 0.6 * dt;
+      let x = u.base.x + u.dx, z = u.base.z + u.dz;
+      if (x > X) u.dx -= 2 * X; else if (x < -X) u.dx += 2 * X;
+      if (z > Z) u.dz -= 2 * Z; else if (z < -Z) u.dz += 2 * Z;
+      x = u.base.x + u.dx + Math.sin(this.t * 0.03 + u.ph) * 0.4 / (1 + sp * 3);
+      z = u.base.z + u.dz;
+      const h = T.height(x, z);
+      s.position.set(x, Math.max(h, 0.1) + u.dy, z);
+      const fade = Math.min(1, (X - Math.abs(x)) / 0.8, (Z - Math.abs(z)) / 0.5) * Math.min(1, Math.max(0, (1.6 - h) / 0.4));
+      s.scale.x = u.sx || (u.sx = s.scale.x);
+      s.scale.x = u.sx * (1 + 0.5 * Math.min(1, sp / 1.5));
+      s.material.opacity = hz * u.k * (0.7 + 0.3 * Math.sin(this.t * 0.07 + u.ph)) * Math.max(0, fade) * (1 - 0.35 * Math.min(1, Math.max(0, sp - 1) / 1.5));
       s.material.color.setRGB(0.85 - 0.3 * night, 0.88 - 0.25 * night, 0.84 - 0.1 * night);
     }
     // valley mist and peak wisps: heaviest in the morning and after rain, still present all day; warm
@@ -377,13 +415,27 @@ void main() {
     const mist = (0.42 + 0.35 * morning + 0.25 * hum) * (1 - 0.45 * night);
     const mc = this.mc || (this.mc = new Color());
     mc.setRGB(0.92, 0.94, 0.93).lerp(new Color(1.0, 0.86, 0.7), (life?.golden || 0) * 0.6).lerp(new Color(0.6, 0.63, 0.66), storm * 0.5).lerp(new Color(0.14, 0.17, 0.24), night);
+    // the mist slides along with the wind, leans downwind of where it lies, and in a strong wind is
+    // drawn out into streaks and thinned; the peak wisps stream off the summits as banner clouds
+    const cam = this.ctx.camera, right = this._right || (this._right = new Vector3());
+    right.setFromMatrixColumn(cam.matrixWorld, 0).setY(0).normalize();
     for (const set of [this.curtains, this.wisps])
       for (const m of set) {
-        const u = m.userData;
-        m.position.x = u.base.x + Math.sin(this.t * 0.02 + u.ph) * 0.25;
-        m.material.uniforms.uTime.value = this.t;
-        m.material.uniforms.uAmount.value = mist * u.k;
-        m.material.uniforms.uColor.value.copy(mc);
+        const u = m.userData, U = m.material.uniforms;
+        const sp = this.windAt(u.base.x, u.base.z, u.lift, u, dt, 0.8);
+        const streak = Math.min(1, Math.max(0, (sp - 0.4) / 1.8));
+        const along = u.bill ? u.wx * right.x + u.wz * right.z : u.wx * Math.cos(m.rotation.y) - u.wz * Math.sin(m.rotation.y);
+        const calm = sp > 1e-3 ? 0.012 / sp : 0;
+        U.uDrift.value.x -= (along * 0.5 + along * calm) * u.nu * dt;
+        U.uDrift.value.y += 0.004 * dt;
+        U.uStreak.value = streak;
+        const lean = u.bill ? 0.35 + 0.35 * streak : 0.25, cap = u.bill ? 0.9 : 0.45;
+        const ox = Math.max(-cap, Math.min(cap, u.wx * lean)), oz = Math.max(-cap / 2, Math.min(cap / 2, u.wz * lean * 0.6));
+        m.position.set(u.base.x + ox + Math.sin(this.t * 0.02 + u.ph) * 0.25 / (1 + sp * 4), u.base.y, u.base.z + oz);
+        if (u.bill) U.uWide.value = 1 + 0.9 * streak;
+        U.uTime.value = this.t;
+        U.uAmount.value = mist * u.k * (1 - 0.35 * Math.min(1, Math.max(0, sp - 1) / 1.5));
+        U.uColor.value.copy(mc);
       }
     // waterfall mist: puffs born at the foot of each fall, rising and spreading as they fade
     for (const s of this.mist) {
@@ -393,9 +445,15 @@ void main() {
         u.life = 0;
         u.ox = (Math.random() - 0.5) * 0.12;
         u.oz = (Math.random() - 0.5) * 0.12;
+        u.dx = u.dz = 0;
       }
       const k = u.life / u.max;
-      s.position.set(u.x + (u.ox || 0) + k * 0.1, u.y + 0.04 + k * 0.28, u.z + (u.oz || 0));
+      // blown off downwind as it rises
+      if (u.wx === undefined) u.wx = u.wz = u.dx = u.dz = 0;
+      const sp = this.windAt(u.x + u.dx, u.z + u.dz, 0.2, u, dt, 3);
+      u.dx += u.wx * 0.8 * dt;
+      u.dz += u.wz * 0.8 * dt;
+      s.position.set(u.x + (u.ox || 0) + u.dx, u.y + 0.04 + k * 0.28 / (1 + sp), u.z + (u.oz || 0) + u.dz);
       s.scale.setScalar(u.s0 * (0.4 + k));
       s.material.opacity = 0.16 * Math.sin(Math.PI * k) * (0.7 + 0.5 * hum);
     }

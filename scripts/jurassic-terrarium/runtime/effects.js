@@ -107,7 +107,7 @@ export class Effects {
     const sun = (life?.sunny ?? 0) * (1 - (life?.rain || 0));
     const amount = Math.min(1, wet * 1.6) * sun * Math.min(1, ((life?.temp ?? 20) - 8) / 10);
     this.steamAcc += dt * amount * 14;
-    const T = this.ctx.terrain, box = this.ctx.box, wind = w.windEnergy || 0;
+    const T = this.ctx.terrain, box = this.ctx.box, wv = this._wv || (this._wv = { x: 0, z: 0 });
     while (this.steamAcc >= 1) {
       this.steamAcc -= 1;
       const S = this.steam[this.steamNext];
@@ -123,8 +123,12 @@ export class Effects {
       if (S.life <= 0) continue;
       S.life -= dt;
       const t = 1 - S.life / S.max;
-      S.p.y += dt * 0.12;
-      S.p.x += dt * (0.03 + wind * 0.08);
+      // rising, and carried off on Weatherglass's wind; a strong wind flattens it along the ground
+      const v = this.ctx.wind?.sample?.(S.p.x, S.p.z, wv, 0.2) || wv;
+      const sp = Math.hypot(v.x, v.z) || 0;
+      S.p.y += dt * 0.12 / (1 + sp);
+      S.p.x += dt * (Number.isFinite(v.x) ? v.x : 0) * 0.7;
+      S.p.z += dt * (Number.isFinite(v.z) ? v.z : 0) * 0.7;
       S.s.position.copy(S.p);
       S.s.scale.setScalar(S.size * (1 + t * 1.8));
       S.s.material.opacity = 0.2 * Math.sin(Math.PI * t);

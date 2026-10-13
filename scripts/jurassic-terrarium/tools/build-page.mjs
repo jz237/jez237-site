@@ -172,6 +172,19 @@ patch(`    roots = max(tRoots(u, d - rimB, 22.0, 0.75, mix(0.34, 0.12, m), 0.004
                 tRoots(u + 3.1, d - rimB, 4.0, 0.5, mix(0.5, 0.2, m), 0.014, fw)) * rootZone;`, 'more hanging roots');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
+// The cabin's chimney smoke follows the wind harder: carried closer to the wind's own speed, laid
+// down flatter as the wind strengthens (rising slower against it), and torn ragged by gusts.
+patch('const v=.55+.45*Math.min(1,d*3),g=(1.1+d*1.5)*t;', 'const v=(.6+.55*Math.min(1,d*3))*1.25,g=(1.4+d*1.8)*t;', 'smoke carried by the wind');
+patch('const x=(.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12;', 'const x=((.36*(1-d)+.07)*(.7+e.fire*.5)-e.rain*.12)/(1+.9*Math.hypot(Kf.x,Kf.z));', 'smoke laid down by the wind');
+patch('_=(.12+d*.25)*t;', '_=(.12+d*.25)*(1+1.6*Math.min(1.5,Math.hypot(Kf.x,Kf.z)))*t;', 'smoke torn by gusts');
+// In a wind the chimney puffs out faster and each puff swells and thins sooner, so the smoke streams
+// off as one ribbon instead of separate balls (this._ws: the wind at the chimney, 0..1.6).
+patch('_sim(t,e){if(t<=0)return;this.time+=t;const i=(2.2+e.fire*9)*(1-e.rain*.35);',
+  '_sim(t,e){if(t<=0)return;this.time+=t;this.ctx.wind.sample(this.origin.x,this.origin.z,Kf,.4);this._ws=Math.min(1.6,Math.hypot(Kf.x,Kf.z))||0;const i=(2.2+e.fire*9)*(1-e.rain*.35)*(1+2.4*this._ws);', 'smoke puffs faster in wind');
+patch('this.age[u]+=t;const d=this.age[u]/this.life[u];', 'this.age[u]+=t*(1+.9*this._ws);const d=this.age[u]/this.life[u];', 'smoke thins sooner in wind');
+patch('p=this.s0[u]+(this.s1[u]-this.s0[u])*Math.sqrt(d),v=$(0,.05,d)*Math.pow(1-d,1.6)*this.dens[u];',
+  'p=(this.s0[u]+(this.s1[u]-this.s0[u])*Math.sqrt(d))*(1+1.1*(this._ws||0)*Math.sqrt(d)),v=$(0,.05,d)*Math.pow(1-d,1.6)*this.dens[u]/(1+.45*(this._ws||0));', 'smoke swells in wind');
+
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
 // tall 12 x 8 x 7.4 box. Everything in Weatherglass sizes itself from this one constant; the clouds'
 // band drops to sit beside the peaks, and the camera fit frames the wider case.
