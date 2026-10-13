@@ -11,7 +11,11 @@
 //     glistens, then dries paler and slowly flakes away;
 //   - neck creases that deepen as the neck bends;
 //   - a broken-up sheen (scales catch the light unevenly), glossier where wet;
-//   - nostrils that flare a little with each breath and wide on a roar.
+//   - nostrils that flare a little with each breath and wide on a roar;
+//   - wet skin: rivulets trickling down the flanks and beads standing on the back, glossy; in rain, tiny
+//     splash rings popping on the upward faces.
+// Also kept per model, for weather.js: the nostril and snout-tip vertices (breath) and a spread of the
+// lowest, downward-facing vertices (chin, throat, belly, tail underside) where water drips from.
 // Eyes: a lid of skin closes over the eyeball (blinks, drowsy half-closed, shut in sleep) and the
 // eyeballs dart about in small, quick saccades.
 import { BufferAttribute, BufferGeometry, Matrix4, Vector3, Vector2, Vector4, Color } from 'three';
@@ -130,11 +134,22 @@ export function prepareSkinGeometry(mesh) {
       const d = Math.hypot(P[i * 3] - c.x, P[i * 3 + 1] - c.y, P[i * 3 + 2] - c.z);
       if (d < nr) nos[i] = Math.max(nos[i], (1 - d / nr) ** 2);
     }
+  // the vertex nearest each nostril, the snout's tip, and drip points (downward-facing, low on the body)
+  const nearest = (c) => head.reduce((b, i) => {
+    const d = (P[i * 3] - c.x) ** 2 + (P[i * 3 + 1] - c.y) ** 2 + (P[i * 3 + 2] - c.z) ** 2;
+    return d < b.d ? { i, d } : b;
+  }, { i: -1, d: 1e9 }).i;
+  const nosIdx = nostrils.map(nearest).filter((i) => i >= 0);
+  const snoutIdx = head.length ? head.reduce((b, i) => (P[i * 3 + 2] > P[b * 3 + 2] ? i : b), head[0]) : -1;
+  const down = [];
+  for (let i = 0; i < n; i++) if (N[i * 3 + 1] < -0.55) down.push(i);
+  const dripIdx = [];
+  for (let k = 0; k < 160 && down.length; k++) dripIdx.push(down[Math.floor((k * 7919) % down.length)]);
   g.setAttribute('aBind', new BufferAttribute(P, 3)); // the bind pose in metres: mud, creases and veins stay put on the skin
   g.setAttribute('aThin', new BufferAttribute(thin, 1));
   g.setAttribute('aNeck', new BufferAttribute(neck, 1));
   g.setAttribute('aNos', new BufferAttribute(nos, 1));
-  return (g.userData.jtSkin = { nostrils, nostrilDepth: nr * 0.3 / perUnit });
+  return (g.userData.jtSkin = { nostrils, nostrilDepth: nr * 0.3 / perUnit, nosIdx, snoutIdx, dripIdx });
 }
 
 // the eyeballs: centre and radius of the ball each vertex belongs to (two balls, split by side)
@@ -195,6 +210,8 @@ export function skinUniforms(info) {
     uBend: { value: 0 }, // neck bend, 0..1
     uFlare: { value: 0 }, // nostril flare, 0..1
     uNosDepth: { value: info?.nostrilDepth || 0 }, // how deep a full flare dips, in stored units
+    uWet: { value: 0 }, // 0..1 how wet the skin is (rain, a wade)
+    uRain: { value: 0 }, // 0..1 rain falling on it now
   };
 }
 
@@ -206,6 +223,7 @@ export function skinShader(mat, U, shared, { membrane = false } = {}) {
     sh.uniforms.uLightDir = shared.uLightDir;
     sh.uniforms.uLightColor = shared.uLightColor;
     sh.uniforms.uNight = shared.uNight;
+    sh.uniforms.uTime = shared.uTime;
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>
 attribute float aThin;
@@ -233,6 +251,9 @@ uniform float uMudLine;
 uniform float uMudAmt;
 uniform float uMudWet;
 uniform float uBend;
+uniform float uWet;
+uniform float uRain;
+uniform float uTime;
 varying float vThin;
 varying float vNeck;
 varying vec3 vLocal;
@@ -257,7 +278,18 @@ float jtNoise(vec3 p) {
   diffuseColor.rgb *= 1.0 - jtCr * 0.32;`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
   // the sheen breaks up over the scales; wet mud glistens
-  roughnessFactor = clamp(roughnessFactor + (jtNoise(vLocal * 17.0) - 0.5) * 0.22 - jtMud * uMudWet * 0.7 + jtMud * (1.0 - uMudWet) * 0.3 + jtCr * 0.15, 0.05, 1.0);`)
+  roughnessFactor = clamp(roughnessFactor + (jtNoise(vLocal * 17.0) - 0.5) * 0.22 - jtMud * uMudWet * 0.7 + jtMud * (1.0 - uMudWet) * 0.3 + jtCr * 0.15, 0.05, 1.0);
+  // wet: rivulets running down the steep flanks, beads standing on the top surfaces, both glassy
+  float jtUpF = dot(normalize(vNormal), normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz));
+  float jtRiv = 0.0;
+  if (uWet > 0.02) {
+    float rv = jtNoise(vec3(vLocal.x * 7.0, vLocal.y * 0.9 + uTime * 0.35, vLocal.z * 7.0));
+    jtRiv = smoothstep(0.6, 0.82, rv) * smoothstep(0.92, 0.35, abs(jtUpF));
+    float bead = smoothstep(0.78, 0.86, jtNoise(vLocal * 24.0 + 3.7)) * smoothstep(0.15, 0.7, jtUpF);
+    jtRiv = max(jtRiv, bead) * uWet;
+    roughnessFactor = mix(roughnessFactor, 0.03, jtRiv);
+    diffuseColor.rgb *= 1.0 - 0.25 * jtRiv;
+  }`)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
   {
     // light through thin skin: frills, plates${membrane ? ', wing membranes (with their veins)' : ''}; warm and red when
@@ -269,6 +301,17 @@ float jtNoise(vec3 p) {
     float th = vThin${membrane ? ' * (1.0 - 0.55 * smoothstep(0.82, 0.97, abs(sin(vLocal.x * 18.0 + sin(vLocal.z * 7.0) * 2.4))))' : ''};
     vec3 blood = mix(diffuseColor.rgb, vec3(0.85, 0.2, 0.08), 0.7);
     reflectedLight.directDiffuse += blood * uLightColor * th * (back * 0.75 + wrap * 0.25) * (1.0 - jtMud * 0.8) * (1.0 - uNight * 0.7);
+  }
+  if (uRain > 0.02) {
+    // raindrops landing: little rings that spread and fade on the back, head and tail tops
+    vec2 q = vLocal.xz * 9.0 + vec2(vLocal.y * 4.0, 0.0);
+    vec2 c = floor(q);
+    float h = jtHash(vec3(c, 3.1));
+    float ph = fract(uTime * (1.6 + 1.2 * h) + h * 7.0);
+    vec2 o = vec2(jtHash(vec3(c, 1.0)), jtHash(vec3(c, 2.0))) * 0.5 + 0.25;
+    float r = length(fract(q) - o);
+    float ring = smoothstep(0.035, 0.0, abs(r - ph * 0.22)) * (1.0 - ph) * (1.0 - ph) * step(h, uRain * 0.6 + 0.05) * smoothstep(0.25, 0.75, jtUpF);
+    reflectedLight.directSpecular += (uLightColor * 0.12 + vec3(0.08)) * ring * (1.0 - uNight * 0.6);
   }${DEBUG ? '\n  reflectedLight.directDiffuse = vec3(vThin, jtMud, vNeck * 0.5); reflectedLight.indirectDiffuse = vec3(0.0); reflectedLight.directSpecular = vec3(0.0); reflectedLight.indirectSpecular = vec3(0.0);' : ''}`);
   };
   const key = mat.customProgramCacheKey?.bind(mat);

@@ -57,17 +57,26 @@ export class Effects {
       const a = Math.random() * Math.PI * 2;
       D.p = new Vector3(p.x + Math.cos(a) * size * 0.4, p.y + 0.01, p.z + Math.sin(a) * size * 0.4);
       D.v = new Vector3(Math.cos(a) * size * 0.6, size * 0.5, Math.sin(a) * size * 0.6);
-      D.life = D.max = 0.8 + Math.random() * 0.5;
+      const wv = this.ctx.wind?.sample?.(p.x, p.z, this._dw || (this._dw = { x: 0, z: 0 }), 0.1);
+      D.life = D.max = (0.8 + Math.random() * 0.5) * (1 + Math.min(1.5, Math.hypot(wv?.x || 0, wv?.z || 0)));
       D.size = size * (0.8 + Math.random() * 0.6) * (1 - wet);
     }
   }
 
   updateDust(dt) {
+    const w = this._dw || (this._dw = { x: 0, z: 0 });
     for (const D of this.dusts) {
       if (D.life <= 0) continue;
       D.life -= dt;
       const t = 1 - D.life / D.max;
       D.v.multiplyScalar(1 - dt * 3);
+      // and the wind carries it off
+      const v = this.ctx.wind?.sample?.(D.p.x, D.p.z, w, 0.1);
+      if (v && Number.isFinite(v.x + v.z)) {
+        const k = Math.min(1, dt * 2.5);
+        D.v.x += v.x * 0.8 * k;
+        D.v.z += v.z * 0.8 * k;
+      }
       D.p.addScaledVector(D.v, dt);
       D.s.position.copy(D.p);
       D.s.scale.setScalar(D.size * (0.6 + t * 1.6));
@@ -170,7 +179,7 @@ export class Effects {
 
   // ---------------------------------------------------------------- splashes
   buildSplash() {
-    const NR = 8, ND = 40;
+    const NR = 8, ND = 140;
     this.ringMat = new MeshBasicMaterial({ color: 0xe8f4f2, transparent: true, opacity: 0.6, depthWrite: false, side: DoubleSide });
     this.rings = [];
     for (let i = 0; i < NR; i++) {
@@ -204,7 +213,19 @@ export class Effects {
       D.v = new Vector3(Math.cos(a) * s + (out?.x || 0) * speed, (0.2 + Math.random() * 0.5) * speed * 1.5, Math.sin(a) * s + (out?.z || 0) * speed);
       D.life = 1.4;
       D.y0 = y0;
+      D.drip = 0;
     }
+  }
+
+  // a drop of water falling from a wet body at p to the ground at y0, drawn out as it falls
+  drip(p, y0, size = 1) {
+    const D = this.drops[this.dropNext];
+    this.dropNext = (this.dropNext + 1) % this.drops.length;
+    D.p = new Vector3(p.x, p.y, p.z);
+    D.v = new Vector3(0, -0.04, 0);
+    D.life = 3;
+    D.y0 = y0;
+    D.drip = size;
   }
 
   splash(x, z, y = 0, size = 1) {
@@ -224,6 +245,7 @@ export class Effects {
       D.v = new Vector3(Math.cos(a) * s, (0.35 + Math.random() * 0.4) * size, Math.sin(a) * s);
       D.life = 1.2;
       D.y0 = y;
+      D.drip = 0;
     }
   }
 
@@ -309,7 +331,9 @@ export class Effects {
       D.v.y -= 2.4 * dt;
       D.p.addScaledVector(D.v, dt);
       if (D.p.y < D.y0) D.life = 0;
-      M.compose(D.p, Q.identity(), Sc.set(1, 1, 1));
+      // a falling drip stretches with its speed
+      const st = D.drip ? Math.min(3.2, 1 + -D.v.y * 2.2) : 1, sz = D.drip || 1;
+      M.compose(D.p, Q.identity(), Sc.set(0.75 * sz / Math.sqrt(st), sz * st, 0.75 * sz / Math.sqrt(st)));
       this.dropMesh.setMatrixAt(i, D.life > 0 ? M : HIDE);
     });
     if (dropsLive || this._dropsWere) this.dropMesh.instanceMatrix.needsUpdate = true;

@@ -15,6 +15,7 @@ function dress(owner) {
     if (!o.isSkinnedMesh || !/_skin/.test(o.material?.name || '') || !o.geometry.userData.jtSkin) return;
     if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
     owner.skinU = skinUniforms(o.geometry.userData.jtSkin);
+    owner.skinMesh = o;
     skinShader(o.material, owner.skinU, owner.mod.ctx.uniforms, { membrane: !!owner.sp.flyer });
     owner.lidColour = o.geometry.userData.jtLid || (o.geometry.userData.jtLid = averageColour(o.material.map));
   });
@@ -83,6 +84,7 @@ import { Contact } from './contact.js';
 import { GroundCover } from './groundcover.js';
 import { Interact } from './interact.js';
 import { Backdrop } from './backdrop.js';
+import { DinoWeather } from './weather.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms } from './skin.js';
@@ -450,6 +452,8 @@ class Dino {
     }
     let shut = this.state === 'sleep' ? 1 : this.state === 'shelter' ? 0.35 : this.state === 'idle' && (env.night || 0) > 0.4 ? 0.45 : 0;
     if (this.perf?.kind === 'yawn') shut = Math.max(shut, (this._yawnShut || 0) * 0.9);
+    // eyes narrowed against a strong wind, and a little against the rain
+    shut = Math.max(shut, MathUtils.smoothstep(this.windS || 0, 0.5, 1.6) * 0.5, (env.rain || 0) * (this.state === 'shelter' ? 0.1 : 0.25));
     faceEyes(this, dt, { shut });
     if (this.saliva) this.saliva.update(dt, this.currentName === 'roar', mod.ctx.camera.position, this.model.scale.x, { x: Math.sin(this.heading), z: Math.cos(this.heading) });
   }
@@ -606,11 +610,23 @@ class Dino {
     this.inWater = Math.max(T.lakeMask(this.pos.x, this.pos.z), T.riverMask(this.pos.x, this.pos.z));
     if (this.inWater > 0.35) this._dripT = 8;
     else if (this._dripT > 0) this._dripT -= dt;
-    const wantWet = Math.min(1, Math.max(env.rain * 1.5 + env.wet * 0.6, this.inWater > 0.35 ? 0.85 : 0));
+    let wantWet = Math.min(1, Math.max(env.rain * 1.5 + env.wet * 0.6, this.inWater > 0.35 ? 0.85 : 0));
+    if ((this._shookT || 0) > 0) (this._shookT -= dt), (wantWet = Math.min(wantWet, 0.3)); // shaken off: damp, not dripping
     this.wet = (this.wet || 0) + (wantWet - (this.wet || 0)) * Math.min(1, dt * (wantWet > (this.wet || 0) ? 0.5 : 0.08));
     for (const m of this.skins) {
       m.roughness = 1 - 0.45 * this.wet;
       m.color.setScalar(1 - 0.22 * this.wet);
+    }
+    if (this.skinU) {
+      this.skinU.uWet.value = this.wet;
+      // under the fronds (or asleep in the den) the rain hardly reaches it
+      this.skinU.uRain.value = (env.rain || 0) * (this.state === 'shelter' ? 0.15 : this.sp.den && this.state === 'sleep' && this.inDen() ? 0 : 1);
+    }
+    if (env.rain > 0.3) this._shookRain = false;
+    // the wind where it stands (for turning tail to a gale, and narrowed eyes)
+    if (mod.weather) {
+      this.windV = mod.weather.windAt(this.pos.x, this.pos.z, 0.3);
+      this.windS = Math.hypot(this.windV.x, this.windV.z);
     }
     // a lightning strike close by: flinch and run from it
     const bolt = mod.bolt;
@@ -683,6 +699,23 @@ class Dino {
           this.perform('shake');
           break;
         }
+        // the rain has stopped: shake the water off
+        if (env.rain < 0.08 && (this.wet || 0) > 0.5 && !this._shookRain && !this.swimming && this.inWater < 0.05) {
+          this._shookRain = true;
+          this._shookT = 45;
+          this.perform('shake');
+          break;
+        }
+        // a strong wind: turn tail to it, head down, and wait it out
+        if ((this.windS || 0) > 0.75 && rand() < dt * 0.8) {
+          const down = Math.atan2(this.windV.x, this.windV.z);
+          if (Math.abs(Math.atan2(Math.sin(down - this.heading), Math.cos(down - this.heading))) > 0.6) {
+            this.turnTo = down;
+            this.turnThen = 'idle';
+            this.state = 'turn';
+            break;
+          }
+        }
         // rain: the herbivores get under the tree ferns (sauropods don't bother)
         if (env.rain > 0.35 && !this.sp.predator && !this.sp.tooBig && this.shelter()) break;
         if ((night || env.storm > 0.6 || env.rain > 0.35) && this.sp.den && !this.inDen()) {
@@ -694,6 +727,8 @@ class Dino {
           this.play('rest', 1.5);
           break;
         }
+        // in a gale they mostly hunker down where they are rather than wander about
+        if (this.timer <= 0 && (this.windS || 0) > 0.75 && rand() < 0.6) this.timer = 4 + rand() * 5;
         if (this.timer <= 0) this.act(this.chooseAct());
         break;
       case 'oneshot':
@@ -733,8 +768,14 @@ class Dino {
         this.play('walk', 0.4);
         if (this.current) this.current.timeScale = 0.45;
         if (Math.abs(dh) < 0.05) {
-          this.state = 'sleep';
-          this.play('rest', 1.2);
+          if (this.turnThen === 'idle') {
+            this.turnThen = null;
+            this.rest(0.6);
+            this.timer = 5 + rand() * 6;
+          } else {
+            this.state = 'sleep';
+            this.play('rest', 1.2);
+          }
         }
         break;
       }
@@ -1872,6 +1913,7 @@ class Dinosaurs {
     this.effects = new Effects(ctx);
     this.backdrop = params.get('backdrop') === '0' ? null : new Backdrop(ctx, new URL('models/', document.baseURI));
     this.contact = new Contact(ctx, this);
+    this.weather = new DinoWeather(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2257,6 +2299,7 @@ class Dinosaurs {
     this.branchPush(dt);
     this.lamps?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
+    this.weather.update(dt);
     this.guide?.update(dt);
   }
 }

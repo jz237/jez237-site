@@ -208,3 +208,9 @@ v1.25: wind:
 - **Steam and spray:** steam rising after rain, and the fine spray at the foot of the cascades, blow where the wind takes them.
 - **Plants:** the idle sway follows the prevailing wind, so plants, smoke and mist all lean the same way.
 - Weatherglass's own clouds and fog already followed the wind and still do.
+
+v1.26: weather on the animals, breath, a softer backdrop:
+- **Rain on the animals:** wet skin shows rivulets trickling down the flanks and beads on the back, and tiny splash rings pop on the upward faces while it rains. Water drips from chins, throats, bellies and tails, drawn out as it falls. When the rain stops, each animal gives a wet-dog shake and is only damp afterwards.
+- **Wind:** in a strong wind the animals turn their tails to it and mostly hunker down rather than wander. Their eyes narrow against the wind, and a little against the rain. Footfall and dust-bath dust blows away downwind.
+- **Breath:** on cold mornings, in winter and in rain-cooled air, each breath leaves the nostrils as a puff of vapour in time with the breathing (quicker after a run), carried off on the wind. A roar blows out a great cloud.
+- **Backdrop:** the painting melts into the case. It hazes towards the case's own mist colour where it meets the ground, and two bands of ground mist follow the rise and fall of the ground along the back and drift with the wind, so there is no hard line where the ground ends and the picture starts. `?blend=0` shows the plain painting for comparison.
