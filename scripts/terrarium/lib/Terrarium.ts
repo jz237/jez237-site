@@ -34,6 +34,8 @@ const STORM_LIGHT = new THREE.Color(0.86, 0.9, 1.0);
 const DUSK_SKY = new THREE.Color(0.62, 0.42, 0.36);
 const CLOUD_TINT = new THREE.Color(1.0, 0.95, 0.87);
 const NIGHT_GLOW = new THREE.Color(0.035, 0.05, 0.11);
+/** The sickly green-grey light under a tornadic storm. */
+const TORNADO_LIGHT = new THREE.Color(0.72, 0.86, 0.74);
 
 export class Terrarium {
   readonly renderer: THREE.WebGLRenderer;
@@ -253,6 +255,8 @@ export class Terrarium {
     {
       const h = Number(new URLSearchParams(location.search).get('hours'));
       if (h > 0) this.weather.hours = this.weather.sunHours = h % 24;
+      // ?tornado: brew a storm and bring one down (for a presentation or a check)
+      if (new URLSearchParams(location.search).has('tornado')) this.weather.tornado.request(this.weather.clouds);
     }
     this.scene.add(this.weather.group);
     {
@@ -264,6 +268,7 @@ export class Terrarium {
     this.motes = new Motes(this.weather.wind, (x, z) => this.surface.topAt(x, z));
     this.scene.add(this.motes.points);
     this.leafDrift = new LeafDrift(this.surface, this.weather.wind);
+    this.leafDrift.airflow = (p, out) => this.weather.tornado.airflow(p, out);
     this.scene.add(this.leafDrift.mesh);
     this.rainbow = new Rainbow((x, z) => this.surface.topAt(x, z));
     this.scene.add(this.rainbow.mesh);
@@ -359,6 +364,15 @@ export class Terrarium {
       this.insects.scatter(end, 0.25);
       if (water) this.fish.startle(end.x, end.z, 2, 0.45);
     };
+    // the tornado scours the ground and whips the pool into spray
+    const tw = w.tornado;
+    tw.onGround = (p) => this.insects.scatter(p, 0.16);
+    tw.onWater = (x, z, s) => {
+      this.water.ripples.add(x, z, 0.003 + 0.003 * s, -(1.5 + 3 * s));
+      if (Math.random() < 0.25) this.water.flick(x, z, 2, 0.12 + 0.2 * s);
+      if (Math.random() < 0.15) this.fish.startle(x, z, 1.2, 0.18);
+    };
+    tw.onTouchdown = () => a.thunder(0.5, 0.05, pan(tw.ground.x));
   }
 
   /** Advances the living parts of the scene (no rendering). */
@@ -377,7 +391,9 @@ export class Terrarium {
   private updateFish(dt: number) {
     this.weather.wind.sample(0.3, 0.1, this.poolWind);
     this.fish.update(dt, [], this.weather.daylight, this.poolWind);
-    this.toad.update(dt, {threats: [], night: 1 - this.weather.daylight});
+    // (the toad flashes its warning at a tornado coming close, and is never under it)
+    const tw = this.weather.tornado;
+    this.toad.update(dt, {threats: tw.touch > 0.3 && tw.intensity > 0.3 ? [{p: tw.ground, r: 0.11}] : [], night: 1 - this.weather.daylight});
   }
 
   /** Lights, wetness and condensation follow the weather and the lamp's day. */
@@ -385,7 +401,8 @@ export class Terrarium {
     const w = this.weather;
     const day = w.daylight;
     // clouds and storms dim the lamp; lightning flashes the whole case
-    const gloom = THREE.MathUtils.smoothstep(w.clouds.cover * 0.55 + w.clouds.storminess * 0.75, 0, 1);
+    const tornado = w.tornado.intensity;
+    const gloom = THREE.MathUtils.smoothstep(w.clouds.cover * 0.55 + w.clouds.storminess * 0.75 + tornado * 0.3, 0, 1);
     const flash = w.flash * (1 - 0.55 * day);
     const overcast = gloom;
     // the lamp follows its arc like a sun: shadows swing through the day and
@@ -394,7 +411,7 @@ export class Terrarium {
     const lift = Math.max(sd.y, 0.42);
     this.key.position.set(sd.x * 0.85, lift, Math.max(0.12, sd.z)).normalize().multiplyScalar(1.12).add(this.key.target.position);
     this.key.intensity = 11 * day * (1 - gloom * 0.55) * (1 + 0.25 * w.golden);
-    this.key.color.copy(w.sunColor).lerp(STORM_LIGHT, gloom * 0.5);
+    this.key.color.copy(w.sunColor).lerp(STORM_LIGHT, gloom * 0.5).lerp(TORNADO_LIGHT, tornado * 0.28);
     this.heat.intensity = 0.75 * day * (1 - gloom * 0.4);
     this.hemi.intensity = (0.15 + 0.35 * day) * (1 - gloom * 0.4) + 2.2 * flash * 0.4;
     this.hemi.color.setRGB(0.55, 0.45, 0.35).lerp(DUSK_SKY, w.golden * 0.7);
@@ -438,13 +455,19 @@ export class Terrarium {
     // a bow in the rain wherever the lamp shines through it
     this.rainbow.update(dt, w.clouds.sources, this.camera, this.key.position, this.key.target.position, this.key.color,
       THREE.MathUtils.clamp(this.key.intensity / 11, 0, 1.3) * (1 - 0.8 * w.clouds.storminess) * 0.9);
-    this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0);
+    this.temperature = 22 + 7 * day - overcast * 2 - w.mist * 1.5 - (w.rainAmount > 0.1 ? 1 : 0) - tornado * 1.5;
     const warmth = day * 0.7;
     for (const pane of this.case.panes) pane.fog.update(dt, this.glassHumidity(), warmth);
     this.case.shared.uHaze.value.setRGB(0.012 + 0.02 * day, 0.011 + 0.016 * day, 0.01 + 0.012 * day);
     this.plaqueT -= dt;
     if (this.plaqueT < 0) {this.plaqueT = 2; this.case.drawPlaque(this.temperature, w.humidity * 100);}
     this.audio.update(dt, {rain: w.rainAmount, wind: w.wind.energy, crickets: this.insects.crickets.length, night: 1 - day, flow: 1});
+    {
+      // louder close up, and from the side it is on
+      const g = w.tornado.ground;
+      const near = THREE.MathUtils.clamp(1.9 / (0.6 + this.camera.position.distanceTo(g)), 0.5, 1.6);
+      this.audio.tornado(tornado * w.tornado.touch * near + tornado * 0.25, THREE.MathUtils.clamp(g.x / (TANK.w / 2), -1, 1) * 0.7, w.tornado.water, dt);
+    }
   }
 
   /** How hard the glass fogs: the case's usual humid air keeps it mostly clear; rain and fog steam it up. */
@@ -505,6 +528,13 @@ export class Terrarium {
     // (held a little above the surface: a hand brushing through, not raking the soil)
     A[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, 0.04);
     B[0].set(h.pos.x, h.pos.y + 0.012, h.pos.z, h.w);
+    // (5: the tornado's foot, which flattens the plants round it)
+    const tw = this.weather?.tornado;
+    if (tw && tw.touch > 0.01 && tw.water < 0.5) {
+      const g = tw.ground;
+      A[5].set(g.x, g.y, g.z, 0.026 + 0.014 * tw.intensity);
+      B[5].set(g.x, g.y, g.z, Math.min(1, tw.touch * tw.intensity * 0.9));
+    } else B[5].w = 0;
 
   }
 
@@ -581,7 +611,7 @@ export class Terrarium {
     q.level++;
     const r = this.renderer;
     if (q.level === 1) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.5));
-    else if (q.level === 2) {this.post.settings.dof = false; this.glassOverClouds = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
+    else if (q.level === 2) {this.post.settings.dof = false; this.glassOverClouds = false; this.weather.clouds.shared.uSteps.value = 24; this.weather.tornado.uniforms.uSteps.value = 40; this.weather.fogVolume.uniforms.uSteps.value = 26; this.air.uniforms.uSteps.value = 8;}
     else if (q.level === 3) r.setPixelRatio(Math.min(r.getPixelRatio(), 1.15));
     else if (q.level === 4) {this.post.settings.ao = false; this.air.enabled = false;}
     else if (q.level === 5) {for (const m of [this.moss, this.rockMoss]) {m.mesh.count = 8; m.uniforms.uShells.value = 8;}}
@@ -657,7 +687,10 @@ export class Terrarium {
         for (const p of near) p.mesh.layers.set(1);
       }
       this.camera.layers.mask = mask;
-    }, (target) => this.weather.clouds.renderDistance(this.renderer, this.camera, target));
+    }, (target) => {
+      this.weather.tornado.renderDistance(this.renderer, this.camera, target);
+      this.weather.clouds.renderDistance(this.renderer, this.camera, target);
+    });
     this.framesDrawn++;
     this.checkBlack();
   }

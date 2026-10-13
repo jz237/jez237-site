@@ -10,6 +10,7 @@ import {Lightning} from './Lightning';
 import {FogField} from './FogField';
 import {FogVolume} from './FogVolume';
 import {Wisps} from './Wisps';
+import {Tornado} from './Tornado';
 import {noise3D} from './Noise3D';
 
 const smooth = (a: number, b: number, x: number) => {const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t);};
@@ -29,6 +30,7 @@ export class Weather {
   readonly fog: FogField;
   readonly fogVolume: FogVolume;
   readonly wisps: Wisps;
+  readonly tornado: Tornado;
   readonly group = new THREE.Group();
   humidity = 0.72; // 0..1 (a rainforest case runs humid)
   wet = 0; // overall wetness (leaves, rock, skin)
@@ -66,7 +68,11 @@ export class Weather {
     this.fog = new FogField((x, z) => surface.topAt(x, z), this.wind);
     this.fogVolume = new FogVolume(this.fog, noise, this.wind);
     this.wisps = new Wisps(this.wind, (x, z) => Math.max(surface.topAt(x, z), poolDistance(x, z) < 0 ? WATER_LEVEL : 0));
-    this.group.add(this.clouds.group, this.rain.group, this.lightning.group, this.wisps.mesh, this.fogVolume.mesh, this.fogVolume.puffs);
+    this.tornado = new Tornado(
+      (x, z) => Math.max(surface.topAt(x, z), poolDistance(x, z) < 0 ? WATER_LEVEL : 0),
+      (x, z) => poolDistance(x, z) < -0.01 && surface.topAt(x, z) <= WATER_LEVEL + 0.001,
+      this.clouds.shared, this.rain.uniforms);
+    this.group.add(this.clouds.group, this.tornado.group, this.rain.group, this.lightning.group, this.wisps.mesh, this.fogVolume.mesh, this.fogVolume.puffs);
     this.clouds.events.strike = (c, start, strength) => this.strike(c.pos, c.radius, start, strength);
     this.lightning.onStroke = (amp, b, first) => {
       if (first) {
@@ -159,9 +165,11 @@ export class Weather {
     this.hours = (this.hours + this.timeFlow * dt + 24) % 24;
     this.updateSun(dt);
     const day = this.daylight;
-    this.wind.storm = this.clouds.storminess;
+    this.wind.storm = Math.max(this.clouds.storminess, this.tornado.intensity);
+    this.tornado.force(this.wind, dt);
     this.wind.update(dt, day);
     this.clouds.update(dt, time, this.wind, this.humidity, day);
+    this.tornado.update(dt, this.clouds, this.wind, camera);
     this.rain.update(dt, this.clouds.sources, camera, day);
     this.lightning.update(dt, day);
     this.fog.update(dt, day, this.humidity);
