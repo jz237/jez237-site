@@ -79,7 +79,7 @@ interface Leg {
   bindUpper: THREE.Matrix4;
   bindLower: THREE.Matrix4;
   reach: number;
-  forcedStep: boolean;
+  stepDue: boolean;
 }
 
 export interface RigInputs {
@@ -157,7 +157,10 @@ export class LizardRig {
   moving = false;
   /** 0 walking .. 1 full sprint: the body rises, the nose lifts and the tail comes off the ground. */
   private sprint = 0;
+  private walkExtension = 0;
+  private strideHz = 0.85;
   private initialised = false;
+  private hasPose = false;
   readonly ground: GroundQuery;
   /** Called whenever a foot is put down (world position). */
   onFootDown?: (p: THREE.Vector3, front: boolean) => void;
@@ -234,7 +237,7 @@ export class LizardRig {
         bindUpper: model.bind[limb.bones.upper].clone(),
         bindLower: model.bind[limb.bones.lower].clone(),
         reach: (limb.upperLength + limb.lowerLength) * K,
-        forcedStep: false,
+        stepDue: false,
       };
       this.legs.push(leg);
     }
@@ -269,7 +272,7 @@ export class LizardRig {
     const lineY = Math.max(this.ground.heightAt(mx, mz), this.bodyY - (1.05 + 0.3) * K - this.inputs.clearance * K);
     let wall = false;
     for (let k = 0; k <= 6; k++) {
-      const w = 1 - k * 0.12;
+      const w = (1 - k * 0.12) * (1 - this.walkExtension * 0.045);
       out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, h.z * K * w);
       out.x += this.inputs.x;
       out.z += this.inputs.z;
@@ -296,11 +299,15 @@ export class LizardRig {
   /** Teleports the lizard: feet planted at their homes, tail laid out behind. */
   reset() {
     const I = this.inputs;
+    this.initialised = false;
+    this.hasPose = false;
     this.computeBodyFrame(1, true);
     for (const leg of this.legs) {
       this.homeWorld(leg, leg.planted);
       leg.plantedYaw = I.heading;
       leg.swing = false;
+      leg.stepDue = false;
+      leg.lastPhase = (this.phase + leg.offset) % 1;
       this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
     }
     const pelvis = this.bodyToWorld(new THREE.Vector3(0.9, this.spineBindY[5], 0), new THREE.Vector3());
@@ -367,17 +374,27 @@ export class LizardRig {
     // legs), but never down into what it walks over.
     if (this.initialised) {
       const spineBind = this.spineBindYAt(this.rootX);
+      const inverseBody = new THREE.Matrix4().copy(this.body).invert();
+      const orientation = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
       let cap = Infinity;
       for (const leg of this.legs) {
-        if (leg.swing || leg.planted.y < base - 0.02) continue; // (a foot hanging over the side)
+        // Start lowering toward a landing before the forefoot touches down.
+        const foot = leg.swing ? leg.to : leg.planted;
+        if ((leg.swing && leg.swingT < 0.5) || foot.y < base - 0.02) continue;
         const r = leg.data.root;
-        const along = (r[0] - this.rootX) * K, out = r[2] * K;
-        const sx = I.x + fwd.x * along + right.x * out, sz = I.z + fwd.z * along + right.z * out;
-        const dh = Math.hypot(leg.planted.x - sx, leg.planted.z - sz);
-        const R = leg.reach * (this.sprint > 0.3 ? 0.92 : leg.front ? 0.78 : 0.84);
+        const shoulder = this.hasPose
+          ? new THREE.Vector3().setFromMatrixPosition(this.boneWorld[leg.data.bones.upper]).applyMatrix4(inverseBody)
+          : new THREE.Vector3((r[0] - this.rootX) * K, r[1] * K, r[2] * K);
+        shoulder.applyQuaternion(orientation);
+        const sx = I.x + shoulder.x, sz = I.z + shoulder.z;
+        const dh = Math.hypot(foot.x - sx, foot.z - sz);
+        // Extend the bent limbs during locomotion. Their resting sprawl remains
+        // lower; neither pose asks the IK for a straight, fully extended limb.
+        const extension = leg.front ? 0.78 + this.walkExtension * 0.10 : 0.84 + this.walkExtension * 0.06;
+        const R = leg.reach * (extension + (0.92 - extension) * this.sprint);
         const dv = Math.sqrt(Math.max(0, R * R - dh * dh));
         // the wrist sits half a centimetre above the sole; the shoulder a little below the spine
-        cap = Math.min(cap, leg.planted.y + 0.47 * K + dv - (r[1] - spineBind) * K);
+        cap = Math.min(cap, foot.y + 0.47 * K + dv - (shoulder.y - spineBind * K));
       }
       // (however low it sprawls, the belly stays on top of the highest thing under
       // its midline; across a slope the body rolls with it, so the flanks are left
@@ -423,9 +440,21 @@ export class LizardRig {
     const speedCm = Math.abs(I.speed) / K;
     this.moving = speedCm > 0.45 || Math.abs(I.turnRate) > 0.12;
     this.sprint = damp(this.sprint, smooth(clamp((speedCm - 12) / 14, 0, 1)), 6, dt);
-    // Stride frequency rises with speed; lizards take quick, short steps.
-    const freq = clamp(.70 + speedCm / 5.8 + (speedCm < 2 ? Math.abs(I.turnRate) * .60 : 0), .75, 4.5);
-    const duty = clamp(.78 - speedCm / 230, .55, .78);
+    this.walkExtension = damp(this.walkExtension, this.moving ? 1 : 0, 5, dt);
+    // Cadence follows speed and the adult model's reachable stride. Loose ground
+    // and uneven stone use slightly shorter steps, with smoothly changing timing.
+    const kind = this.ground.kindAt?.(I.x, I.z);
+    const shortSteps = kind === 0 ? 1.03 : kind === 1 ? 1.07 : 1;
+    const targetHz = clamp((0.60 + speedCm / 6.6 + Math.max(0, speedCm - 7.5) * 0.04 + (speedCm < 2 ? Math.abs(I.turnRate) * 0.55 : 0)) * shortSteps, 0.65, 5);
+    this.strideHz = damp(this.strideHz, targetHz, 8, dt);
+    const freq = this.strideHz;
+    // P. vitticeps walking measurements average 63% forefoot and 74% hindfoot
+    // stance at 0.30 m/s (Bonnan et al., doi:10.1002/ar.25588). Slower creeping
+    // keeps more support; sand adds stance time. These are separate limb timings.
+    const pace = clamp(speedCm / 18.75, 0, 1);
+    const extraSupport = kind === 0 ? 0.02 : 0;
+    const frontDuty = 0.77 - 0.14 * pace + extraSupport;
+    const hindDuty = 0.83 - 0.09 * pace + extraSupport;
     if (this.moving) this.phase = (this.phase + dt * freq) % 1;
     // The glass is solid: if the head or chest reached it last frame (a look out
     // of the front, a turn by the side), the body is nudged back off it.
@@ -462,7 +491,7 @@ export class LizardRig {
     this.updateHead(dt);
     this.solveSpine(dt);
     this.updateTail(dt, speedCm);
-    this.updateLegs(dt, freq, duty, speedCm);
+    this.updateLegs(dt, freq, frontDuty, hindDuty);
     this.updateFace(dt);
     this.commit();
   }
@@ -628,13 +657,13 @@ export class LizardRig {
     const back = new THREE.Vector3().subVectors(pelvis, this.spinePos[4]).normalize();
     this.tailDynamics.update(dt, pelvis, back, this.inputs.tailTwitch);
   }
-  private updateLegs(dt: number, freq: number, duty: number, speedCm: number) {
+  private updateLegs(dt: number, freq: number, frontDuty: number, hindDuty: number) {
     const I = this.inputs;
-    const vel = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading)).multiplyScalar(I.speed);
-    const swingDur = (1 - duty) / freq;
-    const stanceDur = duty / freq;
     const home = new THREE.Vector3();
     for (const leg of this.legs) {
+      const duty = leg.front ? frontDuty : hindDuty;
+      const swingDur = (1 - duty) / freq;
+      const stanceDur = duty / freq;
       const ph = (this.phase + leg.offset) % 1;
       if (leg.swing) {
         leg.swingT += dt / leg.swingDur;
@@ -651,7 +680,6 @@ export class LizardRig {
           leg.planted.y = Math.max(this.ground.heightAt(leg.to.x, leg.to.z), leg.to.y);
           leg.plantedYaw = leg.toYaw;
           this.ground.normalAt(leg.planted.x, leg.planted.z, leg.normal);
-          leg.forcedStep = false;
           this.onFootDown?.(leg.planted, leg.front);
         }
       } else {
@@ -674,20 +702,25 @@ export class LizardRig {
           leg.heel = damp(leg.heel, 0.25, 8, dt);
           continue;
         }
-        const gaitLift = this.moving && ph >= duty && leg.lastPhase < duty;
+        if (!this.moving) leg.stepDue = false;
+        else if (ph >= duty && leg.lastPhase < duty) leg.stepDue = true;
         const strained = drift > leg.reach * 0.55 || yawErr > 0.9;
         // When standing still, tidy up feet that are badly out of place one at a time.
         // (but not just to lift a foot off solid footing and hang it over an edge)
         const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && (!homeInAir || drift > 0.035) && !this.legs.some((l) => l.swing);
         const freeSupports = this.legs.filter(l => !l.swing).length;
         // Correction steps retain at least two supports; no three-foot air shuffle.
-        if ((gaitLift || strained || settle) && freeSupports > 2) {
+        if ((leg.stepDue || strained || settle) && freeSupports > 2) {
+          // A phase crossing can occur between rendered frames. Include that
+          // fraction so 60 Hz rendering doesn't add a frame to every swing.
+          const elapsed = leg.stepDue && ph >= duty ? clamp((ph - duty) / (1 - duty), 0, 0.3) : 0;
+          leg.stepDue = false;
           leg.swing = true;
-          leg.swingT = 0;
+          leg.swingT = elapsed;
           leg.swingDur = this.moving ? swingDur : 0.16;
           leg.from.copy(leg.planted);
           leg.fromYaw = leg.plantedYaw;
-          this.homeWorld(leg, leg.to, this.moving ? I.speed * (stanceDur * 0.5 + swingDur) : 0);
+          this.homeWorld(leg, leg.to, this.moving ? I.speed * (stanceDur * 0.5 + swingDur * (1 - elapsed)) : 0);
           leg.toYaw = I.heading;
         }
       }
@@ -696,7 +729,6 @@ export class LizardRig {
       const peel = this.moving && !leg.swing ? smooth(clamp((ph - (duty - 0.18)) / 0.18, 0, 1)) : 0;
       leg.heel = damp(leg.heel, leg.swing ? 0.35 : peel, 20, dt);
     }
-    void vel; void speedCm;
   }
 
   private updateFace(dt: number) {
@@ -783,6 +815,7 @@ export class LizardRig {
       e.look.x = clamp(e.look.x, -0.3, 0.3);
     }
     model.syncAttachments();
+    this.hasPose = true;
   }
 
   private solveLeg(leg: Leg) {
@@ -836,7 +869,8 @@ export class LizardRig {
     const toeLine = new THREE.Vector3(d.palm[0] - d.wrist[0], 0, d.palm[2] - d.wrist[2]).length() * K * 2.2;
     const side = new THREE.Vector3().setFromMatrixColumn(handRot, 2);
     const pivot = foot.clone().addScaledVector(fwd, toeLine);
-    const rq = tmpQ.setFromAxisAngle(side, peelAngle);
+    // The heel is behind the toe pivot: a negative rotation raises it.
+    const rq = tmpQ.setFromAxisAngle(side, -peelAngle);
     const handPos = foot.clone().sub(pivot).applyQuaternion(rq).add(pivot);
     handRot = new THREE.Matrix4().makeRotationFromQuaternion(rq).multiply(handRot);
     // The hand bind origin sits slightly above the sole.

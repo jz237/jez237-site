@@ -187,7 +187,7 @@ export class LizardBrain {
     const p: Record<string, Pose> = {
       bask: {clearance: 0.05, chestLift: 2.3, headPitch: 0.45, lid: 0.85, breath: 1},
       alert: {clearance: 0.35, chestLift: 0.9, headPitch: 0.12, lid: 1, breath: 1},
-      walk: {clearance: 0.6, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
+      walk: {clearance: 0.95, chestLift: 0.15, headPitch: 0.05, lid: 1, breath: 1.2},
       rest: {clearance: 0.12, chestLift: 0.45, headPitch: 0.02, lid: 1, breath: 1},
       sleep: {clearance: -0.15, chestLift: -0.2, headPitch: -0.22, lid: 0, breath: 0.6},
       drink: {clearance: 0.25, chestLift: -0.6, headPitch: -0.55, lid: 1, breath: 1},

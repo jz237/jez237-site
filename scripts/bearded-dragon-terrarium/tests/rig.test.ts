@@ -21,6 +21,8 @@ test('walking: feet stay planted in stance, limbs keep their length, the body ad
   const rig = new LizardRig(lizard, flat);
   const I = rig.inputs;
   I.speed = 0.12;
+  I.clearance = 1.15; // walking preset plus the brain's 0.2 cm motion lift
+  I.chestLift = 0.15;
   const dt = 1 / 60;
   const legs = (rig as unknown as {legs: {swing: boolean; data: {bones: {hand: number; upper: number; lower: number}; upperLength: number; lowerLength: number}}[]}).legs;
   const planted = new Map<number, THREE.Vector3>();
@@ -38,6 +40,10 @@ test('walking: feet stay planted in stance, limbs keep their length, the body ad
       // IK keeps both limb segments at their sculpted length
       const s = pos(lizard.bones[leg.data.bones.upper].matrix), e = pos(lizard.bones[leg.data.bones.lower].matrix);
       assert.ok(Math.abs(s.distanceTo(e) - leg.data.upperLength * LIZARD_SCALE) < 1e-4, 'upper limb length preserved');
+      const wrist = new THREE.Vector3(0, 0.35, 0).applyMatrix4(lizard.bones[leg.data.bones.hand].matrix);
+      assert.ok(Math.abs(e.distanceTo(wrist) - leg.data.lowerLength * LIZARD_SCALE) < 1e-4, 'lower limb length preserved');
+      assert.ok(s.distanceTo(wrist) < (leg.data.upperLength + leg.data.lowerLength) * LIZARD_SCALE * 0.97, 'stance limb remains bent');
+      assert.ok(hand.y >= 0.0018, 'heel peel raises the hand above its sole');
     });
   }
   assert.ok(steps >= 12, `took ${steps} steps`);
@@ -45,6 +51,92 @@ test('walking: feet stay planted in stance, limbs keep their length, the body ad
   assert.ok(maxSlide < 0.006, `planted feet slid ${(maxSlide * 1000).toFixed(1)} mm`);
   assert.ok(Math.abs(I.x - 0.48) < 1e-6);
   for (const b of lizard.bones) for (const v of b.matrix.elements) assert.ok(Number.isFinite(v));
+});
+
+function bellySamples(speed: number, clearance: number, chestLift: number) {
+  const lizard = model(), rig = new LizardRig(lizard, flat);
+  Object.assign(rig.inputs, {x: -0.4, speed, clearance, chestLift});
+  const a = lizard.mesh.geometry.getAttribute('position'), ids: number[] = [];
+  for (let i = 0; i < a.count; i++) {
+    if (a.getX(i) > 2.2 && a.getX(i) < 6.8 && a.getY(i) < 1.4 && Math.abs(a.getZ(i)) < 1.1) ids.push(i);
+  }
+  assert.ok(ids.length > 100, 'samples the visible belly skin');
+  const v = new THREE.Vector3(), samples: number[] = [];
+  for (let i = 0; i < 240; i++) {
+    rig.inputs.x += speed / 60;
+    rig.update(1 / 60);
+    lizard.root.updateMatrixWorld(true);
+    if (i < 60) continue;
+    let lowest = Infinity;
+    for (const id of ids) {
+      v.fromBufferAttribute(a, id);
+      lizard.mesh.applyBoneTransform(id, v);
+      lowest = Math.min(lowest, v.applyMatrix4(lizard.mesh.matrixWorld).y);
+    }
+    samples.push(lowest);
+  }
+  samples.sort((a, b) => a - b);
+  return {lowest: samples[0], median: samples[Math.floor(samples.length / 2)]};
+}
+
+test('walking visibly lifts the skinned belly above the resting crouch', () => {
+  const rest = bellySamples(0, 0.12, 0.45);
+  for (const speed of [0.075, 0.12]) {
+    const walk = bellySamples(speed, 1.15, 0.15);
+    assert.ok(rest.median < 0.004, 'resting posture stays low');
+    assert.ok(walk.median > rest.median + 0.009, `visible lift at ${speed} m/s`);
+    assert.ok(walk.lowest > 0.008 && walk.median < 0.026, 'walk clears the floor while retaining a sprawl');
+  }
+});
+
+test('footfall cadence follows speed and hind feet retain longer stance', () => {
+  type TestLeg = {front: boolean; swing: boolean; planted: THREE.Vector3};
+  const periods: number[] = [];
+  for (const speed of [0.025, 0.075, 0.30]) {
+    const rig = new LizardRig(model(), flat);
+    Object.assign(rig.inputs, {x: -0.5, speed, clearance: 1.15, chestLift: 0.15});
+    const legs = (rig as unknown as {legs: TestLeg[]}).legs;
+    const downs: number[][] = legs.map(() => []);
+    let time = 0, frontStance = 0, hindStance = 0, frames = 0;
+    rig.onFootDown = p => downs[legs.findIndex(leg => leg.planted === p)].push(time);
+    const duration = speed > 0.2 ? 2.8 : 5;
+    for (let i = 0; i < duration * 60; i++) {
+      time += 1 / 60;
+      rig.inputs.x += speed / 60;
+      rig.update(1 / 60);
+      assert.ok(legs.filter(leg => !leg.swing).length >= 2, 'never lifts three supports');
+      if (time < 1) continue;
+      frames++;
+      for (const leg of legs) if (!leg.swing) {if (leg.front) frontStance++; else hindStance++;}
+    }
+    const intervals = downs.flatMap(times => times.slice(2).map((t, i) => t - times[i + 1]));
+    intervals.sort((a, b) => a - b);
+    assert.ok(intervals.length >= 4, 'observed repeated full strides');
+    const median = intervals[Math.floor(intervals.length / 2)];
+    assert.ok(intervals.every(t => Math.abs(t - median) < median * 0.2), 'steady movement produces complete strides without extra shuffles');
+    periods.push(median);
+    assert.ok(hindStance / (frames * 2) > frontStance / (frames * 2) + 0.04, 'hind feet stay down longer');
+    if (speed === 0.30) {
+      assert.ok(Math.abs(frontStance / (frames * 2) - 0.63) < 0.055, 'forefoot stance matches the measured walking range');
+      assert.ok(Math.abs(hindStance / (frames * 2) - 0.74) < 0.055, 'hindfoot stance matches the measured walking range');
+    }
+  }
+  assert.ok(periods[0] > periods[1] * 1.4 && periods[1] > periods[2] * 2, 'steps speed up with forward travel');
+});
+
+test('stopping completes the last steps and rests without marching in place', () => {
+  const rig = new LizardRig(model(), flat);
+  Object.assign(rig.inputs, {x: -0.3, speed: 0.075, clearance: 1.15, chestLift: 0.15});
+  for (let i = 0; i < 120; i++) {rig.inputs.x += rig.inputs.speed / 60; rig.update(1 / 60);}
+  Object.assign(rig.inputs, {speed: 0, clearance: 0.12, chestLift: 0.45});
+  const phase = rig.phase;
+  for (let i = 0; i < 90; i++) rig.update(1 / 60);
+  let extraSteps = 0;
+  rig.onFootDown = () => extraSteps++;
+  for (let i = 0; i < 120; i++) rig.update(1 / 60);
+  assert.equal(rig.phase, phase, 'stride clock stops with the body');
+  assert.equal(extraSteps, 0, 'no repeated stepping after settling');
+  assert.equal((rig as unknown as {legs: {swing: boolean}[]}).legs.some(leg => leg.swing), false, 'all four feet planted');
 });
 
 test('the tail drags on the ground behind the body and never sinks into it', () => {
