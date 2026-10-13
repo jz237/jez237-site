@@ -47,13 +47,14 @@ export class Docu {
       const name = d.sp.common, st = d.state, an = d.currentName, baby = !!d.parent;
       const add = (score, kind, caption, shots) => out.push({ d, score, kind, caption, shots });
       if (d.sp.flyer) {
-        if (st === 'dive') add(9, 'dive', `${name} — fishing`, ['chase', 'tele', 'track']);
+        if (st === 'dive') add(d.dive?.leg >= 1 ? 10 : 9, 'dive', d.dive?.leg >= 1 ? `${name} — skimming for fish` : `${name} — fishing`, ['chase', 'tele', 'track']);
         else if (st === 'toPerch') add(8.5, 'land', `${name} — coming in to land`, ['tele', 'chase']);
         else if (st === 'perch') add(4.5, 'perch', `${name} — at rest`, ['orbit', 'low', 'push']);
         else if (st === 'takeoff') add(8, 'takeoff', `${name} — taking off`, ['tele', 'low']);
         else add(2.5, 'fly', `${name} — soaring`, ['chase', 'tele']);
         continue;
       }
+      if (st === 'circle' || (st === 'standoff' && mod.duel)) continue; // filmed as a pair, below
       if (st === 'hunt') add(10, 'hunt', `${name} — on the hunt`, ['track', 'low', 'tele']);
       else if (st === 'standoff' || an === 'threat') add(9.5, 'standoff', `${name} — standing its ground`, ['low', 'push', 'tele']);
       else if (st === 'flee') add(8, 'flee', `${name} — running for cover`, ['track', 'tele']);
@@ -64,6 +65,17 @@ export class Docu {
         const what = { dustbath: 'a dust bath', rub: 'scratching on a tree', shake: 'shaking off the water', yawn: '', scratch: 'an itch' }[d.perf?.kind] ?? '';
         add(d.perf?.kind === 'yawn' ? 4 : 6.5, 'perform', what ? `${name} — ${what}` : name, ['push', 'orbit', 'low']);
       } else if (an === 'browse') add(6, 'browse', `${name} — browsing the canopy`, ['low', 'tele', 'crane']);
+      else if (st === 'drinking') {
+        // framed on the head down at the water (and its reflection), not the body high above
+        const w = mod.weather, idx = d.skinMesh?.geometry.userData.jtSkin?.snoutIdx ?? -1;
+        d._drinkSubj = d._drinkSubj || {
+          sp: {}, info: d.info, height: 0.25, speed: 0,
+          root: { visible: true, getWorldPosition: (v) => (w?.vert(d, idx, v) || d.headBone.getWorldPosition(v)).setY(Math.max(0.03, v.y - 0.1)) },
+          get length() { return Math.max(0.8, d.length * 0.4); },
+          get heading() { return d.heading; },
+        };
+        out.push({ d: d._drinkSubj, score: 8.5, kind: 'drink', caption: `${name} — drinking at the pool`, shots: ['low', 'push', 'tele'] });
+      }
       else if (an === 'drink') add(5, 'drink', `${name} — at the water`, ['push', 'tele', 'low']);
       else if (baby && st === 'walk' && d.parent) out.push({ d: d.parent, score: 6, kind: 'follow', caption: `${name} — mother and young`, shots: ['track', 'crane', 'tele'] });
       else if (st === 'walk' && d.path && d._trailWalk) add(5.5, 'trail', `${name} — on the trail`, ['track', 'tele', 'crane']);
@@ -71,6 +83,20 @@ export class Docu {
       else if (an === 'graze') add(3, 'graze', `${name} — grazing`, ['push', 'orbit', 'tele']);
       else if (st === 'walk') add(3, 'walk', name, ['track', 'tele']);
       else add(1.5, 'idle', name, ['orbit', 'push']);
+    }
+    // a standoff: both of them in the frame, filmed from the side of the line between them
+    const duel = mod.duel;
+    if (duel && duel.def.root.visible && duel.rex.root.visible && duel.t < duel.len + 3) {
+      const a = duel.def, b = duel.rex;
+      this.duelSubject = this.duelSubject?.duel === duel ? this.duelSubject : {
+        duel, sp: {}, info: { name: 'Tyrannosaurus rex · Triceratops horridus' },
+        root: { visible: true, getWorldPosition: (v) => v.copy(a.root.position).add(b.root.position).multiplyScalar(0.5) },
+        get length() { return Math.max(1.2, Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z) * 0.8); },
+        get height() { return Math.max(a.height, b.height); },
+        get heading() { return Math.atan2(b.pos.x - a.pos.x, b.pos.z - a.pos.z) + Math.PI / 2; },
+        speed: 0,
+      };
+      out.push({ d: this.duelSubject, score: 12, kind: 'standoff', caption: 'Tyrannosaurus and Triceratops — a standoff', shots: ['tele', 'low', 'orbit', 'push'] });
     }
     // a hatching: the nest itself
     if (mod.nest?.hatching) {
@@ -141,6 +167,14 @@ export class Docu {
       const q = cam.clone().addScaledVector(dir, (dist * i) / 12);
       if (T.height(q.x, q.z) > q.y - 0.02) return false;
     }
+    // inside a tree's crown, or looking out through one close by (crowns are leaf cards: the raycast
+    // below slips between them)
+    if (!this.crowns)
+      this.crowns = (mod.trunks || []).filter((t) => t.kind !== 'stand' && t.kind !== 'cabin').map((t) => {
+        const top = t.top ?? t.y0 + (t.crownY - t.y0) / 0.3, low = t.leafY ?? t.crownY;
+        return { x: t.x, z: t.z, low: low - 0.08, top: top + 0.08, r: Math.max(0.15, (top - t.y0) * 0.42) };
+      });
+    for (let i = 0; i <= 7; i++) if (this.inCrown(cam.clone().addScaledVector(dir, (dist * 0.6 * i) / 7))) return false;
     // other animals in the way (a cheap body sphere each)
     const c = new Vector3(), w = new Vector3();
     for (const o of mod.dinos || []) {
@@ -157,6 +191,11 @@ export class Docu {
     this.ray.set(cam, dir);
     this.ray.far = dist * 0.9;
     return !this.ray.intersectObjects(this.blockers, true).length;
+  }
+
+  inCrown(q) {
+    for (const c of this.crowns || []) if (q.y > c.low && q.y < c.top && (q.x - c.x) ** 2 + (q.z - c.z) ** 2 < c.r * c.r) return true;
+    return false;
   }
 
   caption(e) {
@@ -211,6 +250,11 @@ export class Docu {
     if (S.checkT <= 0 && S.shotT > 1.5) {
       S.checkT = 0.6;
       if (!this.clear(want)) return void this.newShot();
+    }
+    // the camera itself (lagging its mark) wandered into a tree: cut away
+    if (S.shotT > 0.5 && (S.inT = (S.inT || 0) - dt) <= 0) {
+      S.inT = 0.25;
+      if (this.inCrown(this.cam)) return void this.newShot();
     }
     if (S.cut) {
       this.cam.copy(want);

@@ -128,7 +128,7 @@ const SPECIES = [
   },
   {
     id: 'brachiosaurus', bodyR: 0.16, ready: true, count: 1, clearance: 0.1, maxWater: 0.75, maxSlope: 0.28, noRun: true, tooBig: true, flex: 0.8, gaitSwing: 0.04,
-    acts: { wander: 2, trail: 1.5, browse: 4, drink: 1, alert: 1, yawn: 0.5, rub: 0.6 },
+    acts: { wander: 2, trail: 1.5, browse: 4, drink: 1.6, alert: 1, yawn: 0.5, rub: 0.6 },
     sounds: { alert: 'rumble', browse: 'rumble' }, step: 6, feet: [0, 0.25, 0.5, 0.75],
     common: 'Brachiosaurus', badge: 'giant', dot: '#7a7866',
     era: 'Late Jurassic, 154–153 million years ago · western North America',
@@ -260,6 +260,17 @@ class Dino {
     this.model.traverse((o) => o.isBone && o.name === 'head' && (this.headBone = o));
     // where the head is at the height of a browse (measured on the clip once): up and forward of the feet
     if (this.actions.browse && this.headBone) this.browseReach = this.measureReach('browse');
+    // how far ahead of its feet the muzzle comes down to drink (the lowest point of the drink clip)
+    if (this.actions.drink && this.headBone) {
+      const p = new Vector3();
+      let low = null;
+      this.sampleClip('drink', [0.3, 0.4, 0.5, 0.6, 0.7], () => {
+        this.headBone.getWorldPosition(p);
+        if (!low || p.y < low.y) low = { y: p.y, fwd: Math.hypot(p.x, p.z) };
+      });
+      this.drinkLow = low;
+      this.drinkReach = Math.max(0.2, low.fwd * 0.95);
+    }
     // the hips and the chest press the ferns aside as the animal pushes through
     this.pushBones = [this.flex.spine[this.flex.spine.length - 1], null].filter(Boolean);
     this.model.traverse((o) => o.isBone && o.name === 'pelvis' && this.pushBones.unshift(o));
@@ -410,6 +421,39 @@ class Dino {
     this.root.updateMatrixWorld(true);
   }
 
+  // A muzzle in the water: rings spread from it while it drinks; lifted, water runs off the chin
+  drinkFx(dt) {
+    const mod = this.mod, h = this.headBone;
+    if (!h) return;
+    // the extra bow: steered by how far the muzzle still is above the water, through the middle of the sip
+    const sipping = this.currentName === 'drink' && this.current && this.state === 'drinking';
+    const u = sipping ? this.current.time / this.current.getClip().duration : 0;
+    // (measured at the snout's tip, where the skin has one; otherwise the head)
+    const tip = () => mod.weather?.vert(this, this.skinMesh?.geometry.userData.jtSkin?.snoutIdx ?? -1, _kd) || h.getWorldPosition(_kd);
+    if (sipping && u > 0.2 && u < 0.8) {
+      const p = tip(), sy = mod.waterSurface(p.x, p.z) ?? mod.ctx.terrain.height(p.x, p.z);
+      const err = p.y - (sy - 0.005);
+      this.drinkDip = MathUtils.clamp((this.drinkDip || 0) + err * dt * 0.9, 0, 1.2);
+    } else this.drinkDip = Math.max(0, (this.drinkDip || 0) - dt * (sipping ? 0.8 : 0.5));
+    if (this.currentName === 'drink') {
+      const p = tip(), sy = mod.waterSurface(p.x, p.z);
+      if (sy != null && p.y < sy + 0.03) {
+        this._chin = 2.5;
+        if ((this._ripT = (this._ripT || 0) - dt) <= 0) {
+          this._ripT = 0.3 + rand() * 0.3;
+          mod.ctx.modules.water?.ripple?.(p.x, p.z, Math.min(0.1, 0.03 + this.length * 0.012), 0.8);
+        }
+      }
+    } else if ((this._chin || 0) > 0) {
+      this._chin -= dt;
+      if ((this._dripC = (this._dripC || 0) + dt * 9) >= 1) {
+        this._dripC -= 1;
+        const p = h.getWorldPosition(_kd);
+        mod.effects.drip(p, Math.max(mod.ctx.terrain.height(p.x, p.z), mod.waterSurface(p.x, p.z) ?? -9), Math.min(1.8, 0.8 + this.length * 0.25));
+      }
+    }
+  }
+
   // Skin and face, each frame: mud up to the water line (fresh and wet, then drying paler and slowly
   // wearing off; rain washes it), neck creases with the bend, nostrils flaring with each breath, a sniff or
   // a roar, the throat pulsing while it calls, and the eyes
@@ -552,11 +596,11 @@ class Dino {
         }
       }
     if (!px && !pz) return;
-    const m = Math.hypot(px, pz), walking = this.state === 'walk' || this.state === 'flee' || this.state === 'hunt';
+    const m = Math.hypot(px, pz), walking = this.state === 'walk' || this.state === 'flee' || this.state === 'hunt' || this.state === 'circle';
     const cap = walking ? 0.03 : 0.012;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
     // standing and being pressed off something: take a step away rather than slide
-    if (!walking && this.state !== 'sleep' && this.state !== 'perform' && !this.parent) {
+    if (!walking && !/^(sleep|perform|standoff|drinking)$/.test(this.state) && !this.parent) {
       this._pressed = (this._pressed || 0) + m;
       if (this._pressed > 0.03 * this.length) {
         this._pressed = 0;
@@ -646,7 +690,7 @@ class Dino {
       }
     }
     // herbivores watch the predator: alert when it is near, run when it is close
-    if (!this.sp.predator && mod.predator && this.state !== 'flee' && this.state !== 'sleep') {
+    if (!this.sp.predator && mod.predator && this.state !== 'flee' && this.state !== 'sleep' && this.state !== 'standoff' && !this.rally) {
       const p = mod.predator.pos;
       const dd = Math.hypot(p.x - this.pos.x, p.z - this.pos.z);
       const charging = mod.predator.state === 'hunt' && mod.predator.prey === this;
@@ -659,12 +703,9 @@ class Dino {
         }
       } else if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
         if (charging && this.sp.standsGround && this.actions.threat && rand() < this.sp.standsGround) {
-          // face the predator and present the horns
+          // face the predator and present the horns: a standoff (see Dinosaurs.standoff)
           this.heading = Math.atan2(p.x - this.pos.x, p.z - this.pos.z);
-          this.oneShot('threat', 0.25);
-          this.state = 'standoff';
-          this.timer = this.actions.threat.getClip().duration;
-          mod.predator.deterred = this;
+          mod.standoff(this, mod.predator);
           return this.finish(dt);
         }
         const ax = this.pos.x - p.x, az = this.pos.z - p.z;
@@ -674,8 +715,37 @@ class Dino {
       } else if (dd < 3 && this.state === 'idle' && this.actions.alert && rand() < dt * 0.3) this.oneShot('alert');
     }
     switch (this.state) {
-      case 'standoff':
-        if (this.timer <= 0) this.rest(0.6);
+      case 'standoff': {
+        // stand square to the predator: horns lowered, a bellow, a forefoot stamped, again and again
+        const f = this.foe;
+        if (f) {
+          const want = Math.atan2(f.pos.x - this.pos.x, f.pos.z - this.pos.z);
+          const dh = Math.atan2(Math.sin(want - this.heading), Math.cos(want - this.heading));
+          this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 0.9);
+        }
+        this.showT = (this.showT ?? 0) - dt;
+        if (this.perf?.kind === 'stamp' && (this.perf.t += dt) >= this.perf.len) this.perf = null;
+        if (this.showT <= 0 && !this.perf) {
+          this.showT = 1.8 + rand() * 1.8;
+          if (rand() < 0.55 && this.actions.threat) {
+            this.play('idle', 0.3);
+            this.play('threat', 0.25);
+            if (rand() < 0.6) this.mod.voice.play(this.sp.sounds?.threat || 'grunt', this.root.position, this.stepSize);
+          } else {
+            this.play('idle', 0.4);
+            this.perf = { kind: 'stamp', t: 0, len: 1.1, side: rand() < 0.5 ? -1 : 1 };
+          }
+        }
+        if (this.timer <= 0 || !f || (f.state !== 'circle' && f.state !== 'oneshot')) {
+          this.foe = null;
+          this.rally = null;
+          this.perf = null;
+          this.rest(0.6);
+        }
+        break;
+      }
+      case 'circle':
+        this.circleStep(dt);
         break;
       case 'hunt':
         this.huntStep(dt);
@@ -736,6 +806,23 @@ class Dino {
       case 'oneshot':
         if (this.timer <= 0) this.rest(0.6);
         break;
+      case 'drinking':
+        // sip, lift the head a moment (water running off the chin), sip again
+        if (this.timer <= 0) {
+          if (this.currentName === 'drink') {
+            // a sip done: the last, or the head comes up a moment
+            if (--this.sips <= 0) {
+              this.rest(0.8);
+              break;
+            }
+            this.play('idle', 0.7);
+            this.timer = 1.2 + rand() * 1.2;
+          } else {
+            this.play('drink', 0.6);
+            this.timer = this.actions.drink.getClip().duration - 0.3;
+          }
+        }
+        break;
       case 'perform':
         this.perf.t += dt;
         if (this.perf.t >= this.perf.len) {
@@ -770,7 +857,12 @@ class Dino {
         this.play('walk', 0.4);
         if (this.current) this.current.timeScale = 0.45;
         if (Math.abs(dh) < 0.05) {
-          if (this.turnThen === 'idle') {
+          if (typeof this.turnThen === 'function') {
+            const fn = this.turnThen;
+            this.turnThen = null;
+            this.rest(0.4);
+            fn();
+          } else if (this.turnThen === 'idle') {
             this.turnThen = null;
             this.rest(0.6);
             this.timer = 5 + rand() * 6;
@@ -792,6 +884,7 @@ class Dino {
         this.walkStep(dt);
         break;
     }
+    this.drinkFx(dt);
     this.finish(dt);
   }
 
@@ -961,7 +1054,7 @@ class Dino {
       const stepping = (this.state === 'walk' || this.state === 'flee' || this.state === 'hunt') && this.speed > 0.01;
       // the idles sway the body first; the feet are then planted under it
       this.performFrame(dt);
-      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch', moving: stepping || this.state === 'turn', plant: /^(shake|rub|yawn)$/.test(this.perf?.kind || '') });
+      this.feet.update(dt, { running: this.currentName === 'run', enabled: this.currentName !== 'rest' && !this.swimming && this.perf?.kind !== 'scratch' && this.perf?.kind !== 'stamp', moving: stepping || this.state === 'turn', plant: /^(shake|rub|yawn)$/.test(this.perf?.kind || '') });
       this.keepOffTrunks();
       this.keepInside();
       this.skinFrame(dt);
@@ -1057,7 +1150,7 @@ class Dino {
     // browsing a lower crown: the neck bows down into it
     if (this.currentName === 'browse' && this.browseDip) return { yaw: 0, pitch: this.browseDip, maxPitch: 1.2 };
     if (this.state === 'sleep' || this.state === 'oneshot') return null;
-    if (this.sp.predator && this.prey) tgt = this.prey;
+    if (this.sp.predator && (this.prey || this.foe)) tgt = this.prey || this.foe;
     else if (!this.sp.predator && mod.predator) {
       const p = mod.predator;
       if (Math.hypot(p.pos.x - this.pos.x, p.pos.z - this.pos.z) < 3.2 && p.state !== 'sleep') tgt = p;
@@ -1119,6 +1212,85 @@ class Dino {
     if (this.path) this.walkStep(dt, true);
   }
 
+  // The predator's half of a standoff: it prowls round the animal standing its ground at a wary distance,
+  // head low and watching it, stops to roar at it, makes one feinting rush that pulls up short, then
+  // roars once more and stalks off (and won't hunt again for a while).
+  circleStep(dt) {
+    const C = this.circle, f = this.foe;
+    if (!C || !f) return this.rest(0.5);
+    C.t += dt;
+    const face = () => {
+      const want = Math.atan2(f.pos.x - this.pos.x, f.pos.z - this.pos.z);
+      const dh = Math.atan2(Math.sin(want - this.heading), Math.cos(want - this.heading));
+      this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 1.2);
+    };
+    // the end: one last roar, then away
+    if (C.t >= C.len || f.state !== 'standoff') {
+      this.huntCool = this.mod.clock + 45 + rand() * 30;
+      this.circle = null;
+      const away = this.layer.nearestOpen(this.pos.x + (this.pos.x - f.pos.x) * 2.5, this.pos.z + (this.pos.z - f.pos.z) * 2.5);
+      this.foe = null;
+      this.path = null;
+      this.speed = 0;
+      if (!this.oneShot('roar', 0.3)) this.rest(0.5);
+      if (away) this.mod.later(2.6, () => this.state === 'idle' || this.state === 'oneshot' ? this.goTo(away.x, away.z, null, 'walk') : 0);
+      return;
+    }
+    // a roar at it, standing still
+    if (C.hold > 0) {
+      C.hold -= dt;
+      this.speed *= Math.max(0, 1 - dt * 5);
+      face();
+      if (C.hold <= 0) this.play('walk', 0.4);
+      return;
+    }
+    if (!C.roared && C.t > C.len * 0.22) {
+      C.roared = true;
+      this.path = null;
+      this.play('roar', 0.3);
+      C.hold = (this.actions.roar?.getClip().duration || 2) * 0.9;
+      this.mod.voice.play(this.sp.sounds?.roar || 'roar', this.root.position, this.stepSize);
+      this.mod.roared(this);
+      f.showT = 0.2; // it answers
+      return;
+    }
+    // the feint: a short rush straight at it, pulled up short
+    if (!C.feinted && C.t > C.feint) {
+      C.feinted = true;
+      const dx = this.pos.x - f.pos.x, dz = this.pos.z - f.pos.z, d = Math.hypot(dx, dz) || 1, stop = f.length * 0.5 + this.length * 0.5;
+      const t = this.layer.nearestOpen(f.pos.x + (dx / d) * stop, f.pos.z + (dz / d) * stop);
+      const path = t && this.layer.path(this.pos.x, this.pos.z, t.x, t.z);
+      if (path && path.length > 1) (this.path = path), (this.pathIdx = 1), (C.rush = 1.4);
+      f.showT = 0.5;
+      for (const m of this.mod.duel?.mates || []) if (m.state === 'standoff') m.showT = 0.3 + rand() * 0.5;
+    }
+    if (C.rush > 0) {
+      C.rush -= dt;
+      this.gait = 'run';
+      if (!this.path || C.rush <= 0) {
+        C.rush = 0;
+        this.path = null;
+        C.hold = 1.2; // pulled up short, glaring
+        this.play('idle', 0.3);
+        return;
+      }
+      return this.walkStep(dt, true);
+    }
+    // prowling: the next point on an arc round it
+    if (!this.path) {
+      const a0 = Math.atan2(this.pos.x - f.pos.x, this.pos.z - f.pos.z), a = a0 + C.dir * 0.6;
+      const R = (f.length * 0.5 + this.length * 0.6) * (1.15 + 0.15 * Math.sin(C.t * 0.6));
+      const t = this.layer.nearestOpen(f.pos.x + Math.sin(a) * R, f.pos.z + Math.cos(a) * R);
+      const path = t && this.layer.path(this.pos.x, this.pos.z, t.x, t.z);
+      if (path && path.length > 1) (this.path = path), (this.pathIdx = 1);
+      else (C.dir *= -1), (C.hold = 0.8);
+      if (!this.path) return;
+    }
+    this.gait = 'walk';
+    this.walkStep(dt, true);
+    if (this.current) this.current.timeScale *= 0.8; // a slow, deliberate prowl
+  }
+
   // footfalls synced to the gait clip's contact phases, and the odd idle call
   sounds(dt) {
     const a = this.current;
@@ -1157,6 +1329,7 @@ class Dino {
       }
       if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
     } else if (kind === 'hunt') {
+      if ((this.huntCool || 0) > this.mod.clock) return void this.act('wander'); // still smarting from the last standoff
       const prey = mod.walkers
         .filter((d) => !d.sp.predator && !d.sp.tooBig && !d.parent && d.state !== 'sleep')
         .sort((a, b) => Math.hypot(a.pos.x - this.pos.x, a.pos.z - this.pos.z) - Math.hypot(b.pos.x - this.pos.x, b.pos.z - this.pos.z))[0];
@@ -1168,10 +1341,22 @@ class Dino {
       this.path = null;
       this.deterred = null;
     } else if (kind === 'drink') {
-      const shore = mod.shore(this);
-      if (!shore || !this.goTo(shore.x, shore.z, () => this.oneShot(this.actions.drink ? 'drink' : 'sniff')))
-        this.timer = 1;
-      else this.faceWater = shore.water;
+      // the Brachiosaurus goes down to the pool itself and drinks long, sip after sip
+      const big = this.sp.tooBig && this.actions.drink;
+      const shore = mod.shore(this, big);
+      const drink = () => {
+        if (!big) return this.oneShot(this.actions.drink ? 'drink' : 'sniff');
+        this.sips = 3 + Math.floor(rand() * 2);
+        this.oneShot('drink', 0.6);
+        this.state = 'drinking';
+      };
+      // on arrival, turn to face the water, then drink
+      const faceIt = () => {
+        this.turnTo = shore.face;
+        this.turnThen = drink;
+        this.state = 'turn';
+      };
+      if (!shore || !this.goTo(shore.x, shore.z, faceIt)) this.timer = 1;
     } else if (kind === 'rub') {
       // to the nearest trunk, flank to it
       const t = (this.mod.trunks || []).filter((t) => t.kind !== 'stand' && t.kind !== 'cabin' && t.kind !== 'cycad' && Math.hypot(t.x - this.pos.x, t.z - this.pos.z) < 6)
@@ -1284,14 +1469,44 @@ class Dino {
 
   // the motion of each, layered on the pose after the bends and feet (bones are restored each frame)
   performFrame(dt) {
-    if (this.perf && this.state !== 'perform') (this.perf = null), (this.rubTrunk = null); // interrupted
+    // drinking: the neck bows on down from its base until the muzzle meets the water (the clip alone
+    // stops short for the long-necked), the head tipped back up a little to keep the muzzle level
+    if ((this.drinkDip || 0) > 0.005 && this.flex.neck.length) {
+      const n = this.flex.neck, dip = this.drinkDip;
+      this.turnBone(n[0], 'x', dip * 0.55);
+      if (n[1]) this.turnBone(n[1], 'x', dip * 0.3);
+      if (n[2]) this.turnBone(n[2], 'x', dip * 0.15);
+      this.turnBone(this.headBone, 'x', -dip * 0.35);
+    }
+    if (this.perf && this.state !== 'perform' && this.perf.kind !== 'stamp') (this.perf = null), (this.rubTrunk = null); // interrupted
     if (!this.perf && this.rubTrunk && this.state !== 'walk') this.rubTrunk = null;
     const P = this.perf;
     if (!P) return;
     const fx = this.flex, t = P.t, k = Math.min(1, t / Math.min(0.6, P.len * 0.25), (P.len - t) / Math.min(0.6, P.len * 0.25));
     const env = Math.max(0, k), turn = (b, a, x) => this.turnBone(b, a, x);
     const B = this._pfb || (this._pfb = (() => { const b = {}; this.model.traverse((o) => o.isBone && (b[o.name] = o)); return b; })());
-    if (P.kind === 'shake') {
+    if (P.kind === 'stamp') {
+      // a forefoot lifted high and slammed down: dust, a thud, the ground shaking a little
+      const u = t / P.len, L = P.side > 0, up = Math.sin(Math.PI * Math.min(1, u / 0.55)) * (u < 0.55 ? 1 : 0);
+      const ua = B[L ? 'upperarmL' : 'upperarmR'], fa = B[L ? 'forearmL' : 'forearmR'];
+      turn(ua, 'x', -0.75 * up);
+      turn(fa, 'x', 0.9 * up);
+      fx.spine.forEach((b) => turn(b, 'z', (L ? -1 : 1) * 0.04 * up));
+      turn(B.head, 'x', 0.18 * Math.sin(Math.PI * u)); // horns dipped
+      if (!P.hit && u > 0.58) {
+        P.hit = true;
+        const foot = (fa || ua)?.getWorldPosition(_kd);
+        if (foot) {
+          foot.y = this.mod.ctx.terrain.height(foot.x, foot.z);
+          this.mod.effects.dust(foot, this.length * 0.08);
+          this.mod.effects.dust(foot, this.length * 0.06);
+          this.mod.voice.play('step', this.root.position, this.stepSize * 1.6);
+          const cam = this.mod.ctx.camera.position, dd = cam.distanceTo(foot);
+          if (dd < 6) this.mod.ctx.cameraRig?.shake?.(0.02 * (1 - dd / 6));
+        }
+      }
+      this.root.position.y -= 0.01 * this.k * (u > 0.55 && u < 0.75 ? 1 : 0);
+    } else if (P.kind === 'shake') {
       // a wet-dog shake travelling down the body, drops flying off
       const w = 2 * Math.PI * 7;
       fx.spine.forEach((b, i) => turn(b, 'z', 0.1 * env * Math.sin(w * t - i * 0.7)));
@@ -1429,7 +1644,7 @@ class Dino {
     // queueing: slow down behind an animal in the way (single file on the trail, a herd bunching up),
     // rather than walking into its tail
     let room = 1;
-    if (!this.parent && !hunting && this.state === 'walk') {
+    if (!this.parent && !hunting && !this.rally && this.state === 'walk') {
       const fx = Math.sin(this.heading), fz = Math.cos(this.heading);
       for (const o of this.mod.walkers) {
         if (o === this || o.parent || o.sp.flyer || o.speed < 0.03) continue; // only behind one that is moving
@@ -1571,8 +1786,9 @@ class Flyer {
 
   // ------------------------------------------------------------ fishing
   // Now and then a Pteranodon leaves its circuit, glides down to the pool, skims the surface and snatches
-  // a fish, then climbs away with it and rejoins the circuit. The dive is two Bezier legs (down to the
-  // water, up and away) whose route is checked against the terrain before it commits.
+  // a fish, then climbs away with it and rejoins the circuit. The dive is three Bezier legs: down to the
+  // water; a level skim along it with the lower beak cutting a wake through the surface; up and away with
+  // the catch. The whole route is checked against the terrain before it commits.
   planDive() {
     const T = this.mod.ctx.terrain, box = this.box;
     let target = null;
@@ -1585,39 +1801,51 @@ class Flyer {
     const fwd = new Vector3(Math.sin(this.heading), 0, Math.cos(this.heading));
     const app = target.clone().sub(p0).setY(0);
     const dist = app.length();
-    if (dist < 2.2) return false;
+    if (dist < 2.4) return false;
     app.normalize();
+    // the skim: a straight, level run through the target, over open water all the way
+    const SK = 1.0, s0 = target.clone().addScaledVector(app, -SK / 2).setY(0.06), s1 = target.clone().addScaledVector(app, SK / 2).setY(0.06);
+    for (const q of [s0, s1, target]) if (T.lakeMask(q.x, q.z) < 0.9 || T.height(q.x, q.z) > -0.12) return false;
     const exitDir = app.clone().lerp(fwd, 0.3).normalize();
     const legs = [
-      [p0, p0.clone().addScaledVector(fwd, dist * 0.35), target.clone().addScaledVector(app, -1.1).setY(0.25), target],
-      [target, target.clone().addScaledVector(exitDir, 0.7).setY(0.1), target.clone().addScaledVector(exitDir, 1.6).setY(1.1),
-        target.clone().addScaledVector(exitDir, 2.6).setY(2.3)],
+      [p0, p0.clone().addScaledVector(fwd, dist * 0.35), s0.clone().addScaledVector(app, -1.1).setY(0.28), s0],
+      [s0, s0.clone().addScaledVector(app, SK / 3), s1.clone().addScaledVector(app, -SK / 3), s1],
+      [s1, s1.clone().addScaledVector(exitDir, 0.7).setY(0.12), s1.clone().addScaledVector(exitDir, 1.6).setY(1.1),
+        s1.clone().addScaledVector(exitDir, 2.6).setY(2.3)],
     ];
-    // the whole route must clear the ground (except the water it skims) and stay inside the glass
+    // the whole route must clear the ground (and, away from the skim, the water) and stay inside the glass
     const q = new Vector3();
+    const nearSkim = (p) => segDist2D(p.x, p.z, s0.x, s0.z, s1.x, s1.z) < 0.6;
     for (const L of legs) {
       for (let i = 1; i < 20; i++) {
         bez(L, i / 20, q);
         if (Math.abs(q.x) > box.halfW - 0.7 || Math.abs(q.z) > box.halfD - 0.45) return false;
         const g = T.height(q.x, q.z);
-        if (q.y < Math.max(g, 0) + (q.distanceTo(target) < 0.5 ? 0.03 : 0.2)) return false;
+        if (q.y < Math.max(g, 0) + (nearSkim(q) ? 0.03 : 0.2)) return false;
       }
     }
-    this.dive = { legs, leg: 0, u: 0, target, lens: legs.map((L) => bezLen(L)) };
+    this.dive = { legs, leg: 0, u: 0, target, lens: legs.map((L) => bezLen(L)), wakeT: 0 };
     this.state = 'dive';
     return true;
   }
 
   diveStep(dt) {
     const D = this.dive;
-    const speed = D.leg === 0 ? 1.15 : 0.85;
+    const speed = [1.15, 0.95, 0.85][D.leg];
     D.u += (dt * speed) / D.lens[D.leg];
     if (D.u >= 1) {
       if (D.leg === 0) {
+        // touching down onto the skim: the beak enters the water
         D.leg = 1;
         D.u = 0;
-        this.mod.effects.splash(D.target.x, D.target.z, 0, 1);
-        this.mod.voice.play('splash', D.target, 1);
+        this.mod.voice.play('splash', D.target, 0.6);
+      } else if (D.leg === 1) {
+        // the snatch: a burst of spray and the fish comes up in the beak
+        D.leg = 2;
+        D.u = 0;
+        const e = D.legs[1][3];
+        this.mod.effects.splash(e.x, e.z, 0, 1);
+        this.mod.voice.play('splash', e, 1);
         this.catchFish();
       } else {
         // rejoin the circuit from wherever the climb ended
@@ -1629,6 +1857,14 @@ class Flyer {
       }
     }
     bez(D.legs[D.leg], Math.min(1, D.u), this.pos);
+    // skimming: a wake of rings behind the beak, and spray flicked up now and then
+    if (D.leg === 1 && (D.wakeT -= dt) <= 0) {
+      D.wakeT = 0.05;
+      const b = this.headBone ? this.headBone.getWorldPosition(_kd) : this.pos;
+      const water = this.mod.ctx.modules.water;
+      water?.ripple?.(b.x, b.z, 0.045, 1.4);
+      if (rand() < 0.35) this.mod.effects.spray(new Vector3(b.x, 0.02, b.z), 2, 0.25, 0, { x: Math.sin(this.heading) * 0.5, z: Math.cos(this.heading) * 0.5 });
+    }
   }
 
   // the fish it carries: made at load (held at zero size) so its shader is compiled before it is needed
@@ -1797,6 +2033,8 @@ class Flyer {
   update(dt, env) {
     if (this.fishHold !== undefined) {
       this.fishHold -= dt;
+      // the fish thrashes in the beak, weaker as it goes
+      if (this.fish) this.fish.rotation.z = Math.sin(this.fishHold * 31) * 0.6 * Math.min(1, this.fishHold / 2);
       if (this.fishHold <= 0) {
         this.fish?.scale.setScalar(1e-5); // swallowed
         this.fishHold = undefined;
@@ -2055,15 +2293,71 @@ class Dinosaurs {
   }
 
   // a walkable spot at the water's edge, near the animal
-  shore(d) {
-    const nav = this.nav, L = d.layer;
+  // A standoff: the Triceratops charged stands its ground; the rest of the herd runs to its side and
+  // lines up facing the predator; the predator prowls round them (Dino.circleStep).
+  standoff(def, rex) {
+    const len = 14 + rand() * 5;
+    const mates = [];
+    this.duel = { def, rex, t: 0, len, mates };
+    def.state = 'standoff';
+    def.timer = len;
+    def.foe = rex;
+    def.showT = 0;
+    def.speed = 0;
+    def.path = null;
+    def.play('threat', 0.25);
+    this.voice.play(def.sp.sounds?.threat || 'grunt', def.root.position, def.stepSize);
+    rex.prey = null;
+    rex.deterred = null;
+    rex.path = null;
+    rex.foe = def;
+    rex.state = 'circle';
+    rex.circle = { t: 0, len, dir: rand() < 0.5 ? -1 : 1, feint: len * (0.5 + 0.15 * rand()), hold: 0.8 };
+    // the herd closes ranks: to either side of it, a little behind, facing the same way
+    const fx = rex.pos.x - def.pos.x, fz = rex.pos.z - def.pos.z, fl = Math.hypot(fx, fz) || 1;
+    let side = rand() < 0.5 ? -1 : 1, k = 0;
+    for (const m of this.walkers) {
+      if (m === def || m.sp.id !== def.sp.id || m.parent || m.state === 'sleep' || Math.hypot(m.pos.x - def.pos.x, m.pos.z - def.pos.z) > 4.5) continue;
+      k++;
+      const off = (m.sp.bodyR ?? 0.15) * 2 * def.k * (1.3 + 0.4 * Math.ceil(k / 2)), back = 0.12 * Math.ceil(k / 2);
+      const spot = m.layer.nearestOpen(def.pos.x + (-fz / fl) * off * side - (fx / fl) * back, def.pos.z + (fx / fl) * off * side - (fz / fl) * back);
+      side *= -1;
+      if (!spot) continue;
+      m.rally = def;
+      const join = () => {
+        if (!this.duel || this.duel.def !== def) return void (m.rally = null);
+        m.state = 'standoff';
+        m.foe = rex;
+        m.timer = Math.max(3, this.duel.len - this.duel.t);
+        m.showT = 0.3 + rand();
+        m.speed = 0;
+        m.play('threat', 0.3);
+      };
+      if (m.goTo(spot.x, spot.z, join, 'run')) mates.push(m);
+      else m.rally = null;
+    }
+  }
+
+  // somewhere to drink from: open ground (for this animal) with water within reach of its muzzle, and
+  // which way the water lies. pool: the big pool only (the Brachiosaurus, reaching out with its neck)
+  shore(d, pool = false) {
+    const nav = this.nav, L = d.layer, T = this.ctx.terrain;
+    const reach = d.drinkReach ?? Math.max(0.25, d.length * 0.22);
+    const wet = (x, z) => (pool ? T.lakeMask(x, z) : Math.max(T.lakeMask(x, z), T.riverMask(x, z)));
     let best = null, bd = Infinity;
-    for (let tries = 0; tries < 400; tries++) {
-      const k = L.open[Math.floor(rand() * L.open.length)];
-      if (nav.water[k] < 0.15 || nav.water[k] > 0.55 || nav.slope[k] > 0.25) continue;
+    for (const k of L.open) {
+      if (nav.water[k] > 0.55 || nav.slope[k] > 0.3) continue;
       const c = L.centre(k);
-      const dist = Math.hypot(c.x - d.pos.x, c.z - d.pos.z) + rand();
-      if (dist < bd) (bd = dist), (best = c);
+      let face = 0, wv = 0;
+      for (let a = 0; a < 12; a++) {
+        const ang = (a * Math.PI) / 6, sx = Math.sin(ang), sz = Math.cos(ang);
+        // water all along where the muzzle comes down (a bowed neck brings it back towards the feet)
+        const v = pool ? Math.min(wet(c.x + sx * reach, c.z + sz * reach), wet(c.x + sx * reach * 0.65, c.z + sz * reach * 0.65)) : wet(c.x + sx * reach, c.z + sz * reach);
+        if (v > wv) (wv = v), (face = ang);
+      }
+      if (wv < 0.6 || !d.clearOfGlass(c.x, c.z)) continue;
+      const dist = Math.hypot(c.x - d.pos.x, c.z - d.pos.z) + rand() * 1.5;
+      if (dist < bd) (bd = dist), (best = { ...c, face });
     }
     return best ? { ...best, water: true } : null;
   }
@@ -2186,7 +2480,7 @@ class Dinosaurs {
         d.glance = rex;
         d.glanceUntil = 2.5 + rand();
         d.glanceT = 4 + rand() * 2;
-        if (dd < 3 && (d.state === 'idle' || d.state === 'walk') && d.actions.alert && rand() < 0.7) {
+        if (dd < 3 && (d.state === 'idle' || d.state === 'walk') && !d.rally && d.actions.alert && rand() < 0.7) {
           d.heading = Math.atan2(p.x - d.pos.x, p.z - d.pos.z) * 0.3 + d.heading * 0.7;
           d.oneShot('alert');
         }
@@ -2274,6 +2568,10 @@ class Dinosaurs {
       }
     }
     this.clock = (this.clock || 0) + dt;
+    if (this.duel && (this.duel.t += dt) > this.duel.len + 6) {
+      for (const m of this.duel.mates) m.rally = null;
+      this.duel = null;
+    }
     // bodies that push the planting aside: hips and chest of every walker
     const pushers = [];
     for (const d of this.walkers || []) {
