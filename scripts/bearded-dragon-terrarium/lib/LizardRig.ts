@@ -667,7 +667,7 @@ export class LizardRig {
       dir3 = new THREE.Vector3(dir3.x * ca - dir3.z * sa, 0, dir3.x * sa + dir3.z * ca);
       // rest on the ground; the base hangs from the raised pelvis
       // (the tail slides along the glass rather than through it)
-      const gp = insideGlass(new THREE.Vector3(prev3.x + dir3.x * L, 0, prev3.z + dir3.z * L), this.tailRadius[i] + 0.002);
+      const gp = insideGlass(new THREE.Vector3(prev3.x + dir3.x * L, 0, prev3.z + dir3.z * L), this.tailRadius[i] + 0.010);
       // walking, it carries the base of its tail clear of the ground, the tip trailing
       const carry = (this.moving ? 0.9 : 0) + this.sprint * 1.6;
       const g = this.ground.heightAt(gp.x, gp.z) + this.tailRadius[i] + carry * K * Math.max(0, 1 - i / (N * 0.7)) * 0.8;
@@ -676,7 +676,7 @@ export class LizardRig {
       const dy = y - prev3.y;
       const h = Math.sqrt(Math.max(1e-10, L * L - dy * dy));
       p.set(prev3.x + dir3.x * h, y, prev3.z + dir3.z * h);
-      insideGlass(p, this.tailRadius[i] + 0.002);
+      insideGlass(p, this.tailRadius[i] + 0.010);
       prev3 = p;
     }
   }

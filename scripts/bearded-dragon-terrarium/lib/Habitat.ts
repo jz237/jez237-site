@@ -140,7 +140,7 @@ export class Habitat {
     addRock(-.060,.096,.210,.093,.063,.023,28,true,-.10);
     addRock(-.59,.191,-.096,.120,.087,.030,17);
     const coolArch=new THREE.Mesh(archGeometry(.38,.205,.218,.143,.230,41),rock);coolArch.position.set(.475,.073,-.16);coolArch.castShadow=coolArch.receiveShadow=true;g.add(coolArch);this.hard.push({mesh:coolArch,kind:SurfaceKind.Rock});
-    const coolBack=box(.34,.196,.023,.475,.171,-.178,interior);this.hard.push({mesh:coolBack,kind:SurfaceKind.Rock});
+    const coolBack=box(.34,.196,.004,.475,.171,-.293,interior);this.hard.push({mesh:coolBack,kind:SurfaceKind.Rock});
     addRock(.450,.269,-.045,.155,.124,.043,29);
     for(const [x,z,w,d] of [[-.46,.033,.215,.20],[.475,-.045,.205,.21]]){
       const floor=new THREE.Mesh(new THREE.PlaneGeometry(w,d),interior);floor.rotation.x=-Math.PI/2;floor.position.set(x,groundHeight(x,z)+.001,z);floor.receiveShadow=true;g.add(floor);
