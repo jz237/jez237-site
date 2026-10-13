@@ -6,6 +6,7 @@ import {
   Group, Mesh, InstancedMesh, MeshStandardMaterial, MeshDepthMaterial, RGBADepthPacking, Matrix4, Quaternion, Vector3,
   Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage,
 } from 'three';
+import { pathAt } from './paths.js';
 import { frondAtlas, plantGeometry, vineGeometry, BASE_H } from './floragen.js';
 
 const UP = new Vector3(0, 1, 0);
@@ -45,13 +46,16 @@ export class Flora {
     const sh = T.shape;
     const box = ctx.box;
     const cabin = sh.CABIN;
-    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [], fernlet: [], redplant: [], araucaria: [], ginkgo: [] });
+    const P = (this.placements = { treefern: [], cycad: [], fern: [], horsetail: [], fernlet: [], redplant: [], araucaria: [], ginkgo: [], redwood: [] });
     const taken = [];
-    const free = (x, z, r) => taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
+    // the view into the cave stays open: nothing tall grows in the strip in front of its mouth
+    const dn = window.__jtDen;
+    const denFront = (x, z) => dn && Math.abs(x - dn.x) < 1.3 && z > dn.z && z < dn.z + dn.hz * 2.6;
+    const free = (x, z, r) => !(r >= 0.1 && denFront(x, z)) && !pathAt(x, z, r) && taken.every((t) => Math.hypot(t.x - x, t.z - z) > t.r + r);
     const inBox = (x, z, m) => Math.abs(x) < box.halfW - m && Math.abs(z) < box.halfD - m;
     const denAt = window.__jtDenAt || (() => false);
     const nearCabin = (x, z, r) =>
-      (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + r) || denAt(x, z, r);
+      (cabin && Math.hypot(x - cabin.x, z - cabin.z) < (cabin.padRadius || 0.75) + r) || denAt(x, z, r) || pathAt(x, z, r);
     const water = (x, z) => Math.max(T.lakeMask(x, z), T.riverMask(x, z));
     const add = (kind, x, z, scale, r, block) => {
       P[kind].push({ x, z, y: T.height(x, z), scale, rot: rand() * Math.PI * 2, v: Math.floor(rand() * 8) });
@@ -115,6 +119,30 @@ export class Flora {
     };
     tall('araucaria', 6, [-3.4, -0.6], [1.1, 1.8]);
     tall('ginkgo', 5, [-1.6, 2.6], [1.0, 1.5]);
+    // conifer stands, as in the reference's receding forest: close groups of monkey puzzles and
+    // redwood-type conifers at the back of the meadows and climbing the foothills
+    {
+      const tier = ctx.quality?.tier ?? 1, centres = [];
+      for (let t = 0; t < 6000 && centres.length < (tier === 0 ? 5 : 9); t++) {
+        const x = (rand() * 2 - 1) * (box.halfW - 0.8), z = -box.halfD + 0.5 + rand() * (box.halfD + 0.2);
+        const h = T.height(x, z);
+        if (h < 0.1 || h > 1.7 || T.slope(x, z) > 0.45 || water(x, z) > 0.05 || nearCabin(x, z, 0.8)) continue;
+        if (centres.some((c) => Math.hypot(c.x - x, c.z - z) < 1.7)) continue;
+        centres.push({ x, z });
+      }
+      for (const c of centres) {
+        let n = (tier === 0 ? 3 : 5) + Math.floor(rand() * 3);
+        for (let t = 0; t < 120 && n > 0; t++) {
+          const a = rand() * Math.PI * 2, d = 0.75 * Math.sqrt(rand()), x = c.x + Math.cos(a) * d, z = c.z + Math.sin(a) * d;
+          const h = T.height(x, z);
+          if (h < 0.05 || h > 1.9 || T.slope(x, z) > 0.5 || water(x, z) > 0.05 || nearCabin(x, z, 0.4) || !inBox(x, z, 0.35) || !free(x, z, 0.15)) continue;
+          const kind = rand() < 0.6 ? 'redwood' : 'araucaria';
+          add(kind, x, z, kind === 'redwood' ? 0.75 + rand() * 0.75 : 0.7 + rand() * 0.6, 0.15, 0.05);
+          n--;
+        }
+      }
+      this.stands = centres;
+    }
     // where Weatherglass's hero trees stood, and a few groves
     groveAt(-3.95, 0.25, 4, 0.6);
     groveAt(-3.75, 2.4, 3, 0.45);
@@ -195,7 +223,7 @@ export class Flora {
     this.atlas = frondAtlas(tier === 0 ? 1024 : 2048);
     const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3(), col = new Color();
     for (const [kind, list] of Object.entries(this.placements)) {
-      const variants = kind === 'treefern' || kind === 'cycad' ? 4 : kind === 'araucaria' || kind === 'ginkgo' ? 3 : 3;
+      const variants = kind === 'treefern' || kind === 'cycad' ? 4 : kind === 'araucaria' || kind === 'ginkgo' || kind === 'redwood' ? 3 : 3;
       for (let vi = 0; vi < variants; vi++) {
         const mine = list.filter((p) => p.v % variants === vi);
         if (!mine.length) continue;
@@ -236,7 +264,7 @@ export class Flora {
         });
         im.instanceMatrix.needsUpdate = true;
         if (im.instanceColor) im.instanceColor.needsUpdate = true;
-        im.castShadow = kind === 'treefern' || kind === 'cycad' || kind === 'araucaria' || kind === 'ginkgo';
+        im.castShadow = kind === 'treefern' || kind === 'cycad' || kind === 'araucaria' || kind === 'ginkgo' || kind === 'redwood';
         if (im.castShadow) im.customDepthMaterial = this.depthMaterial(kind);
         im.receiveShadow = true;
         im.frustumCulled = false;
@@ -305,6 +333,7 @@ export class Flora {
     cycad: { flex: 0.12, give: 0.35, curve: 2.0, k: 45 },
     araucaria: { flex: 0.07, give: 0.2, curve: 2.6, k: 30, crown: true },
     ginkgo: { flex: 0.12, give: 0.15, curve: 2.2, k: 35, crown: true },
+    redwood: { flex: 0.06, give: 0.18, curve: 2.6, k: 30, crown: true },
     vine: { flex: 0.5, give: 0.0, curve: 1.2, k: 40 },
   };
 

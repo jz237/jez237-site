@@ -7,12 +7,12 @@
 import { BufferGeometry, BufferAttribute, CanvasTexture, SRGBColorSpace, Vector3, Color } from 'three';
 
 // heights at scale 1, matching the planting they replace (world units)
-export const BASE_H = { fern: 0.106, fernlet: 0.062, redplant: 0.057, horsetail: 0.26, cycad: 0.392, treefern: 0.945, araucaria: 1.0, ginkgo: 0.85 };
+export const BASE_H = { fern: 0.106, fernlet: 0.062, redplant: 0.057, horsetail: 0.26, cycad: 0.392, treefern: 0.945, araucaria: 1.0, ginkgo: 0.85, redwood: 1.0 };
 
 // atlas cells (4 x 4 grid)
 export const CELL = {
   fernPinna: 0, treePinna: 1, cycadLeaf: 2, strap: 3, horsetail: 4, ginkgo: 5, araucaria: 6, vineLeaf: 7,
-  moss: 8, stem: 9, fiddle: 10, fernPinnaB: 11, deadPinna: 12, stub: 13, fibre: 14,
+  moss: 8, stem: 9, fiddle: 10, fernPinnaB: 11, deadPinna: 12, stub: 13, fibre: 14, sprig: 15,
 };
 const GRID = 4;
 
@@ -265,9 +265,70 @@ export function frondAtlas(size = 2048) {
     }
     g.stroke();
   }
+  // redwood-type spray: a flat, feathery shoot, short needles in two ranks along a main axis and its
+  // side shoots, dark blue-green
+  {
+    const { x, y } = at(CELL.sprig);
+    const cx = x + h / 2, y0 = y + h - 4, y1 = y + 6;
+    const shoot = (sx, sy, ang, len, nl, w) => {
+      g.strokeStyle = '#3a3420';
+      g.lineWidth = h * 0.012;
+      g.beginPath();
+      g.moveTo(sx, sy);
+      g.lineTo(sx + Math.sin(ang) * len, sy - Math.cos(ang) * len);
+      g.stroke();
+      for (let i = 1; i <= nl; i++) {
+        const t = i / (nl + 1), px = sx + Math.sin(ang) * len * t, py = sy - Math.cos(ang) * len * t, ww = w * (1 - 0.55 * t);
+        for (const s of [-1, 1]) {
+          g.strokeStyle = mixHex('#1c3a24', '#4a7446', 0.25 + 0.75 * rnd());
+          g.lineWidth = h * 0.011;
+          g.beginPath();
+          g.moveTo(px, py);
+          const a2 = ang + s * 1.25;
+          g.lineTo(px + Math.sin(a2) * ww, py - Math.cos(a2) * ww);
+          g.stroke();
+        }
+      }
+    };
+    shoot(cx, y0, 0, y0 - y1, 30, h * 0.075);
+    for (let i = 0; i < 7; i++) {
+      const t = 0.12 + i * 0.11, sy = y0 - (y0 - y1) * t, L = h * (0.26 - 0.025 * i);
+      for (const s of [-1, 1]) shoot(cx, sy, s * 0.75, L, 12, h * 0.05);
+    }
+  }
+  // Transparent texels keep the colour of their cell's leaves, not black: the mip chain and the
+  // distance alpha boost would otherwise pull black into every leaf's fringe (dark edges, black halves)
+  {
+    const img = g.getImageData(0, 0, size, size), d = img.data;
+    for (let cy = 0; cy < GRID; cy++)
+      for (let cx = 0; cx < GRID; cx++) {
+        let r = 0, gg = 0, b = 0, n = 0;
+        const x0 = cx * h, y0 = cy * h;
+        for (let y = y0; y < y0 + h; y += 2)
+          for (let x = x0; x < x0 + h; x += 2) {
+            const k = (y * size + x) * 4;
+            if (d[k + 3] > 200) (r += d[k]), (gg += d[k + 1]), (b += d[k + 2]), n++;
+          }
+        if (!n) continue;
+        r /= n;
+        gg /= n;
+        b /= n;
+        for (let y = y0; y < y0 + h; y++)
+          for (let x = x0; x < x0 + h; x++) {
+            const k = (y * size + x) * 4, a = d[k + 3] / 255;
+            if (a > 0.98) continue;
+            // blend the texel's own colour (if any) with the cell average by coverage
+            d[k] = d[k] * a + r * (1 - a);
+            d[k + 1] = d[k + 1] * a + gg * (1 - a);
+            d[k + 2] = d[k + 2] * a + b * (1 - a);
+          }
+      }
+    g.putImageData(img, 0, 0);
+  }
   const tex = new CanvasTexture(c);
   tex.colorSpace = SRGBColorSpace;
   tex.anisotropy = 8;
+  tex.premultiplyAlpha = false;
   return tex;
 }
 
@@ -598,7 +659,13 @@ export function plantGeometry(kind, variant, { far = false } = {}) {
             const u = j / 4;
             bp.push(new Vector3(d.x * reach * u, y - reach * 0.18 * Math.sin(Math.PI * u * 0.8) + reach * 0.35 * u * u * u, d.z * reach * u));
           }
-          b.tube(bp, bp.map((_, j) => r * 0.35 * (1 - j * 0.18)), { color: bark(rnd, 0.25, 0.5, 0), sides: 4, t0: s * 0.6, t1: s * 0.6 + 0.35 });
+          // a monkey puzzle's limbs are clad in overlapping scale-leaves right back to the trunk: dark
+          // green, not bark
+          const clad = new Color(), cladFn = (q, kk) => {
+            const v = 0.55 + 0.45 * Math.sin(q * 60 + kk * 7) * Math.sin(q * 23 - kk * 3);
+            return clad.setRGB(0.035 + 0.02 * v, 0.07 + 0.04 * v, 0.025 + 0.012 * v);
+          };
+          b.tube(bp, bp.map((_, j) => r * 0.42 * (1 - j * 0.16)), { color: cladFn, sides: 6, t0: s * 0.6, t1: s * 0.6 + 0.35 });
           // branchlets: two rows of upturned scale-leaved shoots along the branch, plus one at the tip
           for (let j = 1; j <= 11; j++) {
             const u = j / 12, p = bp[Math.min(3, Math.floor(u * 4))].clone().lerp(bp[Math.min(4, Math.floor(u * 4) + 1)], (u * 4) % 1);
@@ -607,17 +674,76 @@ export function plantGeometry(kind, variant, { far = false } = {}) {
               const side = new Vector3().crossVectors(along, UPV).normalize().multiplyScalar(sg);
               const out = side.clone().multiplyScalar(0.75).addScaledVector(along, 0.45).add(new Vector3(0, 0.35, 0)).normalize();
               const L = reach * (0.42 - 0.18 * u);
-              b.card(p, out, new Vector3().crossVectors(out, UPV).normalize().lerp(UPV, 0.35).normalize(), L, L * 0.55, CELL.araucaria, 0.5, s * 0.6 + 0.35 * u, rnd() * 6, s * 0.6 + 0.35 * u + 0.1);
+              const sd = new Vector3().crossVectors(out, UPV).normalize().lerp(UPV, 0.35).normalize();
+              const ph = rnd() * 6, t0 = s * 0.6 + 0.35 * u;
+              // two crossed cards per shoot, so it reads as a rope of leaves from any side, never edge-on
+              b.card(p, out, sd, L, L * 0.55, CELL.araucaria, 0.5, t0, ph, t0 + 0.1);
+              b.card(p, out, new Vector3().crossVectors(out, sd).normalize(), L, L * 0.5, CELL.araucaria, 0.45, t0, ph, t0 + 0.1);
             }
           }
           const tipDir = bp[4].clone().sub(bp[3]).normalize();
-          b.card(bp[4], tipDir, new Vector3().crossVectors(tipDir, UPV).normalize(), reach * 0.35, reach * 0.14, CELL.araucaria, 0.7, s * 0.6 + 0.35, rnd() * 6);
+          const tside = new Vector3().crossVectors(tipDir, UPV).normalize(), tph = rnd() * 6;
+          b.card(bp[4], tipDir, tside, reach * 0.35, reach * 0.16, CELL.araucaria, 0.7, s * 0.6 + 0.35, tph);
+          b.card(bp[4], tipDir, new Vector3().crossVectors(tipDir, tside).normalize(), reach * 0.35, reach * 0.16, CELL.araucaria, 0.7, s * 0.6 + 0.35, tph);
         }
       }
       // the crown tuft
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * Math.PI * 2, dir = new Vector3(Math.cos(a) * 0.5, 1, Math.sin(a) * 0.5).normalize();
         b.card(new Vector3(0, th * 0.98, 0), dir, new Vector3(-Math.sin(a), 0, Math.cos(a)), H * 0.14, H * 0.05, CELL.araucaria, 0.8, 0.95, rnd() * 6);
+      }
+      return b.build();
+    }
+    case 'redwood': {
+      // a redwood-type conifer of the cypress family (the family is known from the Jurassic): a straight,
+      // tapering, red-brown fibrous trunk on a buttressed foot, and a narrow cone of whorled limbs that
+      // droop and lift at the tips, each carrying flat feathery sprays
+      const b = new Builder();
+      const th = H, r = H * 0.024;
+      const pts = [0, 0.12, 0.4, 0.7, 1].map((s) => new Vector3(0, th * s, 0));
+      const red = new Color(), redFn = (q, kk) => {
+        const f = 0.5 + 0.5 * Math.sin(kk * 37 + Math.sin(q * 11) * 2);
+        const v = (0.16 + 0.12 * f) * (0.85 + rnd() * 0.3);
+        return red.setRGB(v * 1.35, v * 0.72, v * 0.48);
+      };
+      b.tube(pts, [r * 2.0, r * 1.25, r * 0.95, r * 0.6, r * 0.12], { color: redFn, t1: 0.6, sides: 9 });
+      b.moss(new Vector3(0, 0, 0), r * 2.3, 8, rnd, 0);
+      const tiers = 15;
+      const limb = new Color(), limbFn = () => limb.setRGB(0.08, 0.055, 0.035);
+      for (let k = 0; k < tiers; k++) {
+        const s = 0.2 + (0.78 * k) / (tiers - 1), y = th * s, nb = 5 + Math.floor(rnd() * 2);
+        const reach = H * (0.045 + 0.26 * Math.pow(1 - s, 0.85)) * (0.85 + rnd() * 0.3);
+        for (let i = 0; i < nb; i++) {
+          const a = (i / nb) * Math.PI * 2 + k * 1.1 + (rnd() - 0.5) * 0.4;
+          const d = new Vector3(Math.cos(a), 0, Math.sin(a));
+          const bp = [];
+          for (let j = 0; j <= 3; j++) {
+            const u = j / 3;
+            bp.push(new Vector3(d.x * reach * u, y - reach * 0.3 * u + reach * 0.2 * u * u * u, d.z * reach * u));
+          }
+          const t0 = s * 0.6;
+          b.tube(bp, bp.map((_, j) => r * 0.26 * (1 - j * 0.24)), { color: limbFn, sides: 4, t0, t1: t0 + 0.35 });
+          const along = bp[3].clone().sub(bp[0]).normalize();
+          for (let j = 1; j <= 5; j++) {
+            const u = j / 6, f = u * 3, p = bp[Math.floor(f)].clone().lerp(bp[Math.min(3, Math.floor(f) + 1)], f % 1);
+            for (const sg of [-1, 1]) {
+              const side = new Vector3().crossVectors(along, UPV).normalize().multiplyScalar(sg);
+              const out = side.clone().multiplyScalar(0.8).addScaledVector(along, 0.55).add(new Vector3(0, -0.12, 0)).normalize();
+              const L = reach * (0.5 - 0.22 * u) + H * 0.02;
+              const sd = new Vector3().crossVectors(out, UPV).normalize().lerp(UPV, 0.25).normalize();
+              const ph = rnd() * 6, tt = t0 + 0.35 * u;
+              b.card(p, out, sd, L, L * 0.75, CELL.sprig, 0.45, tt, ph, tt + 0.1);
+              b.card(p, out, new Vector3().crossVectors(out, sd).normalize(), L * 0.9, L * 0.45, CELL.sprig, 0.4, tt, ph, tt + 0.1);
+            }
+          }
+          const tipDir = bp[3].clone().sub(bp[2]).normalize(), tside = new Vector3().crossVectors(tipDir, UPV).normalize();
+          b.card(bp[3], tipDir, tside, reach * 0.4 + H * 0.02, reach * 0.3 + H * 0.015, CELL.sprig, 0.65, t0 + 0.35, rnd() * 6);
+        }
+      }
+      // the leader
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2, dir = new Vector3(Math.cos(a) * 0.25, 1, Math.sin(a) * 0.25).normalize();
+        b.card(new Vector3(0, th * 0.96, 0), dir, new Vector3(-Math.sin(a), 0, Math.cos(a)), H * 0.08, H * 0.05, CELL.sprig, 0.8, 0.95, rnd() * 6);
       }
       return b.build();
     }
@@ -638,11 +764,11 @@ export function plantGeometry(kind, variant, { far = false } = {}) {
           const u = 0.25 + 0.75 * (j / 8), p = lp[0].clone().lerp(lp[3], u);
           const spurA = rnd() * 6.28;
           const centre = p.clone().add(new Vector3(Math.cos(spurA) * H * 0.04, H * 0.02, Math.sin(spurA) * H * 0.04));
-          const leaves = 6 + Math.floor(rnd() * 5);
+          const leaves = 9 + Math.floor(rnd() * 6);
           for (let k = 0; k < leaves; k++) {
             const la = (k / leaves) * Math.PI * 2 + rnd(), tilt = 0.3 + rnd() * 0.7;
             const out = new Vector3(Math.cos(la) * Math.cos(tilt), Math.sin(tilt), Math.sin(la) * Math.cos(tilt));
-            const s = H * (0.07 + rnd() * 0.03);
+            const s = H * (0.045 + rnd() * 0.02);
             b.card(centre, out, new Vector3(-Math.sin(la), 0, Math.cos(la)), s, s * 0.95, CELL.ginkgo, 0.55, 0.35 + 0.55 * u, rnd() * 6, 0.45 + 0.55 * u);
           }
         }

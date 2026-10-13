@@ -70,7 +70,15 @@ patch('pine:e.pick(16,24,30)', 'pine:e.pick(9,13,16)', 'fewer pines');
 // dinos.js places there. The terrain function is shared by the mesh bake, water, planting and routing,
 // so everything agrees about the new ground. DEN must match DEN in runtime/main.js.
 const DEN = { x: 5.4, z: -1.55, hx: 1.25, hz: 0.95, y: 0.66, s: 1 / 6.2 };
-patch('h=(w,y,_,M,A)=>!(!a(w,y,M)||', 'h=(w,y,_,M,A)=>!(!a(w,y,M)||window.__jtDenAt&&window.__jtDenAt(w,y,M)||', 'no trees in the den');
+// Footpaths (x, z): cabin door -> jetty, and a branch from it over the stream on stepping stones to the
+// cave. runtime/paths.js builds them from window.__jtPath; planting keeps PATH_HALF (+ its radius) off.
+const PATHS = [
+  [[-2.62, 1.66], [-2.4, 2.02], [-1.85, 2.24], [-1.25, 2.3], [-0.7, 2.44], [-0.3, 2.47], [0.0, 2.43]],
+  [[-1.25, 2.3], [-0.85, 1.95], [-0.35, 1.62], [0.25, 1.42], [0.75, 1.2], [1.3, 0.92], [1.95, 0.62], [2.6, 0.42],
+    [3.3, 0.28], [3.95, 0.12], [4.55, -0.12], [5.05, -0.36], [5.38, -0.5]],
+];
+const PATH_HALF = 0.09;
+patch('h=(w,y,_,M,A)=>!(!a(w,y,M)||', 'h=(w,y,_,M,A)=>!(!a(w,y,M)||window.__jtDenAt&&window.__jtDenAt(w,y,M)||window.__jtPathAt&&window.__jtPathAt(w,y,M*.5)||', 'no trees in the den');
 // Jurassic rock: the concept's mountains are dark volcanic stone thick with moss on every ledge and
 // upward face (moss rule after the reptile terrarium's rocks), not pale alpine limestone
 patch(
@@ -134,13 +142,29 @@ patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
 patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');
 patch('float tw = wgHash(gc + floor(uTime * 5.0 + wgHash(gc) * 5.0) * 0.731);', 'float tw = wgHash(gc + floor(uTime * 1.2 + wgHash(gc) * 5.0) * 0.731);', 'slower glitter twinkle');
 patch('float k = (g * 5.0 * fade + pdf * 1.1) * F * amount;', 'float k = (g * 1.8 * fade + pdf * 1.1) * F * amount;', 'softer glitter');
+// A shallower substrate, as in the Terramundi reference: the case floor is raised (bottomY -0.42) and the
+// pool made shallower to fit; the cut-away reads topsoil with hanging roots, loam, a clay band and a bed of
+// rounded pebbles at the bottom (bedrock only shows under the mountains)
+patch('De={cx:2.75,cz:2.65,rx:2.35,rz:1.75,bottomY:-.85}', 'De={cx:2.75,cz:2.65,rx:2.35,rz:1.75,bottomY:-.34}', 'shallower pool');
+patch('float yRock = mix(-0.98 + w3 * 0.22, S - 0.13 - abs(w1) * 0.12, m);', 'float yRock = mix(-0.64 + w3 * 0.08, S - 0.13 - abs(w1) * 0.12, m);', 'bedrock below the floor');
+patch('float yLoam = min(max(-0.16 + (S - 0.6) * 0.5 + w2 * 0.12 + w4 * 0.02, yRock), yTop - 0.02);', 'float yLoam = min(max(-0.02 + (S - 0.6) * 0.4 + w2 * 0.06 + w4 * 0.015, yRock), yTop - 0.02);', 'loam higher');
+patch('float yClay = min(max(yLoam - (0.16 + w1 * 0.06 + w3 * 0.05), yRock), yLoam);', 'float yClay = min(max(yLoam - (0.09 + w1 * 0.03 + w3 * 0.03), yRock), yLoam);', 'thinner clay');
+patch('float yGrav = min(max(-0.9 + (S - 0.6) * 0.15 + w3 * 0.2 + w1 * 0.04, yRock), yClay);', 'float yGrav = min(max(-0.6, yRock), yClay);', 'pebble bed at the bottom');
+// gravel fills everything from the clay down to the floor (it lies above yGrav; bedrock below it is
+// pushed under the floor), the stones rounder and larger, shaded as domes
+patch('vec3 gc = tCell(q * vec2(8.0, 10.5), toF);', 'vec3 gc = tCell(q * vec2(7.0, 7.6), toF);', 'rounder pebbles');
+patch('vec3 gravel = mix(mix(grit, stone, gIn), cobble, cIn);', 'vec3 gravel = mix(mix(grit, stone * (0.5 + 0.65 * gDome), gIn), cobble * (0.5 + 0.65 * cDome), cIn);', 'domed pebbles');
+patch(`    roots = max(tRoots(u, d - rimB, 22.0, 0.75, mix(0.34, 0.12, m), 0.0045, fw),
+                tRoots(u + 7.3, d - rimB, 7.0, 0.45, mix(0.5, 0.16, m), 0.009, fw)) * rootZone;`, `    roots = max(max(tRoots(u, d - rimB, 26.0, 0.85, mix(0.3, 0.12, m), 0.0045, fw),
+                tRoots(u + 7.3, d - rimB, 9.0, 0.6, mix(0.42, 0.16, m), 0.009, fw)),
+                tRoots(u + 3.1, d - rimB, 4.0, 0.5, mix(0.5, 0.2, m), 0.014, fw)) * rootZone;`, 'more hanging roots');
 patch('function We(r,t){let e=zp(r,t);', 'function We(r,t){let e=zp(r,t);window.__jtCave&&(e=window.__jtCave(r,t,e));', 'den shelf');
 
 // The case: a long, low display cabinet (18 x 8 units under a lid at 5.6) instead of Weatherglass's
 // tall 12 x 8 x 7.4 box. Everything in Weatherglass sizes itself from this one constant; the clouds'
 // band drops to sit beside the peaks, and the camera fit frames the wider case.
 if (!process.env.JT_TALL) {
-  patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-1.15,topY:5.0,glass:.08}', 'wide case');
+  patch('N={halfW:6,halfD:4,bottomY:-1.8,topY:7.4,glass:.08}', 'N={halfW:9,halfD:4,bottomY:-0.42,topY:5.0,glass:.08}', 'wide case');
   patch('on={minY:4.5,maxY:6.5,defaultY:5.5}', 'on={minY:3.2,maxY:4.25,defaultY:3.75}', 'cloud band');
   patch('const i=12.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'const i=22.5/(2*Math.tan(Mr.degToRad(e/2))*t);', 'camera fit');
   patch('me={top:Ci.y0,coreW:6.36,', 'me={top:Ci.y0,coreW:9.36,', 'plinth width');
@@ -163,7 +187,16 @@ patch(
     `function s(a,b,t){t=Math.min(1,Math.max(0,(t-a)/(b-a)));return t*t*(3-2*t)}` +
     `var m=(1-s(0.75,1.3,u))*(1-s(0.75,1.3,v));return e+(d.y-e)*m};` +
     `window.__jtDenAt=function(x,z,r){var d=window.__jtDen;r=r||0;` +
-    `return Math.abs(x-d.x)<d.hx*1.65+r&&z>d.z-d.hz*2.3-r&&z<d.z+d.hz*1.25+r}</script>`,
+    `return Math.abs(x-d.x)<d.hx*1.65+r&&z>d.z-d.hz*2.3-r&&z<d.z+d.hz*1.25+r};` +
+    // the footpaths: control points, smoothed (Chaikin) into a winding line; __jtPathAt tells planting
+    // (Weatherglass's and ours) to keep off them
+    `window.__jtPath=${JSON.stringify(PATHS)};window.__jtPathLines=window.__jtPath.map(function(l){` +
+    `for(var k=0;k<3;k++){var o=[l[0]];for(var i=0;i<l.length-1;i++){var a=l[i],c=l[i+1];` +
+    `o.push([a[0]*.75+c[0]*.25,a[1]*.75+c[1]*.25],[a[0]*.25+c[0]*.75,a[1]*.25+c[1]*.75])}o.push(l[l.length-1]);l=o}return l});` +
+    `window.__jtPathDist=function(x,z){var b=1e9;window.__jtPathLines.forEach(function(l){for(var i=0;i<l.length-1;i++){` +
+    `var a=l[i],c=l[i+1],dx=c[0]-a[0],dz=c[1]-a[1],t=((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz||1);t=t<0?0:t>1?1:t;` +
+    `var ex=a[0]+dx*t-x,ez=a[1]+dz*t-z,d=ex*ex+ez*ez;if(d<b)b=d}});return Math.sqrt(b)};` +
+    `window.__jtPathAt=function(x,z,r){return window.__jtPathDist(x,z)<${PATH_HALF}+(r||0)}</script>`,
   'den terrain hook',
 );
 patch(

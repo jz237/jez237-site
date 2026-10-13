@@ -47,6 +47,7 @@ export class Nest {
       if (h < 0.06 || h > 0.9 || T.slope(x, z) > 0.1) continue;
       if (Math.max(T.lakeMask(x, z), T.riverMask(x, z)) > 0.02) continue;
       if (den && Math.hypot(x - den.x, z - den.z) < 3.5) continue;
+      if (window.__jtPathAt?.(x, z, 0.4)) continue; // not on the footpaths
       const cab = T.shape?.CABIN;
       if (cab && Math.hypot(x - cab.x, z - cab.z) < 1.4) continue;
       if (trunks.some((t) => Math.hypot(t.x - x, t.z - z) < 0.55)) continue;

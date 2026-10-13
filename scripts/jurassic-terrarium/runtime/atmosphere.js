@@ -5,7 +5,7 @@
 // a bad pixel in an additive HDR layer would be bloomed into a full-screen flash.
 import {
   Group, Mesh, Points, CylinderGeometry, BufferGeometry, BufferAttribute, ShaderMaterial, AdditiveBlending,
-  Vector3, Color, DoubleSide, Sprite, SpriteMaterial, CanvasTexture,
+  Vector3, Color, DoubleSide, Sprite, SpriteMaterial, CanvasTexture, PlaneGeometry, Vector2,
 } from 'three';
 import { guardMaterial } from './safety.js';
 
@@ -71,6 +71,7 @@ export class Atmosphere {
     this.buildBeams();
     this.buildMotes();
     this.buildHaze();
+    this.buildCurtains();
     this.buildMoonbeams();
     this.buildFireflies();
     ctx.scene.add(this.group);
@@ -198,6 +199,94 @@ void main() {
     }
   }
 
+  // mist lying in bands between the rows of trees at the back, as in a diorama's receding layers, and
+  // cloud wisps wrapped round the peaks. Soft noise-edged sheets: the curtains stand fixed (so they
+  // part and shift against the trees as the view moves), the wisps always face the viewer. Both drift
+  // slowly; normal blending, guarded.
+  buildCurtains() {
+    const T = this.ctx.terrain, box = this.ctx.box;
+    const vs = (bill) => `
+varying vec2 vUv;
+void main() {
+  vUv = uv;
+  ${bill
+    ? 'vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0); mv.xy += position.xy; gl_Position = projectionMatrix * mv;'
+    : 'gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);'}
+}`;
+    const fs = `
+uniform vec3 uColor; uniform float uAmount; uniform float uTime; uniform float uSeed; uniform vec2 uStretch;
+varying vec2 vUv;
+float hh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float vn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hh(i), hh(i + vec2(1, 0)), f.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), f.x), f.y); }
+float fbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * vn(p); p = p * 2.03 + 7.1; a *= 0.5; } return s; }
+void main() {
+  vec2 p = vUv * uStretch + vec2(uTime * 0.012 + uSeed, uSeed * 0.37);
+  float n = fbm(p + vec2(fbm(p * 0.7 + uTime * 0.006), 0.0) * 0.6);
+  float band = smoothstep(0.0, 0.4, vUv.y) * smoothstep(1.0, 0.5, vUv.y);
+  float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
+  float a = band * edge * smoothstep(0.32, 0.72, n) * uAmount;
+  if (a < 0.003) discard;
+  gl_FragColor = vec4(uColor, a);
+}`;
+    const mk = (bill, stretch, seed) => {
+      const m = new ShaderMaterial({
+        uniforms: { uColor: { value: new Color(1, 1, 1) }, uAmount: { value: 0 }, uTime: { value: 0 }, uSeed: { value: seed }, uStretch: { value: new Vector2(...stretch) } },
+        vertexShader: vs(bill), fragmentShader: fs, transparent: true, depthWrite: false, side: DoubleSide, fog: false,
+      });
+      guardMaterial(m);
+      return m;
+    };
+    this.curtains = [];
+    // rows of mist in the valleys behind the meadow, lower and thinner towards the front
+    const rows = this.tier === 0 ? [-2.9, -1.7] : [-3.3, -2.7, -2.1, -1.5, -0.9];
+    rows.forEach((z, ri) => {
+      for (let x = -box.halfW + 1.2; x < box.halfW - 1.2; x += 2.4 + Math.random() * 1.6) {
+        const w = 2.6 + Math.random() * 2.2, cx = Math.min(box.halfW - 0.4 - w / 2, x + w / 2);
+        let h = 0;
+        for (let k = -2; k <= 2; k++) h += T.height(cx + (k * w) / 5, z) / 5;
+        if (h > 1.5) continue; // a mountain stands here: wisps cover the peaks instead
+        const dn = window.__jtDen; // the view into the cave stays clear
+        if (dn && z > dn.z - 0.6 && Math.abs(cx - dn.x) < w / 2 + 1.4) continue;
+        const hgt = 0.55 + Math.random() * 0.35;
+        const m = new Mesh(new PlaneGeometry(w, hgt), mk(false, [w * 1.1, hgt * 2.2], Math.random() * 50));
+        m.position.set(cx, Math.max(h, 0.05) + hgt * 0.32, z + (Math.random() - 0.5) * 0.25);
+        m.rotation.y = (Math.random() - 0.5) * 0.2;
+        m.userData = { k: (0.75 + 0.25 * Math.random()) * (0.55 + 0.45 * (1 - ri / rows.length)), base: m.position.clone(), ph: Math.random() * 6.28 };
+        m.renderOrder = 5;
+        m.name = 'atmosphere-curtain';
+        this.group.add(m);
+        this.curtains.push(m);
+      }
+    });
+    // wisps on the peaks: find the summits, then hang two or three ribbons of cloud around each
+    const peaks = [];
+    for (let x = -box.halfW + 0.6; x < box.halfW - 0.6; x += 0.15)
+      for (let z = -box.halfD + 0.4; z < box.halfD - 0.4; z += 0.15) {
+        const h = T.height(x, z);
+        if (h < 2.0) continue;
+        let top = true;
+        for (let a = 0; a < 8 && top; a++) if (T.height(x + Math.cos(a * 0.785) * 0.5, z + Math.sin(a * 0.785) * 0.5) > h) top = false;
+        if (top && !peaks.some((p) => Math.hypot(p.x - x, p.z - z) < 1.2)) peaks.push({ x, z, h });
+      }
+    this.peaks = peaks;
+    this.wisps = [];
+    for (const p of peaks) {
+      const n = this.tier === 0 ? 1 : 3;
+      for (let i = 0; i < n; i++) {
+        const w = 1.3 + Math.random() * 1.1, hgt = 0.32 + Math.random() * 0.2;
+        const m = new Mesh(new PlaneGeometry(w, hgt), mk(true, [w * 1.4, hgt * 3.0], Math.random() * 50));
+        m.position.set(p.x + (Math.random() - 0.5) * 0.5, p.h * (0.62 + 0.22 * i / n) + 0.05, p.z + 0.25 + Math.random() * 0.3);
+        m.userData = { k: 0.6 + 0.4 * Math.random(), base: m.position.clone(), ph: Math.random() * 6.28 };
+        m.renderOrder = 5;
+        m.frustumCulled = false;
+        m.name = 'atmosphere-wisp';
+        this.group.add(m);
+        this.wisps.push(m);
+      }
+    }
+  }
+
   // two faint cool shafts slanting in through the front glass at night
   buildMoonbeams() {
     this.moonMat = this.beamMaterial(0x9fb8e8);
@@ -282,6 +371,20 @@ void main() {
       s.material.opacity = hz * u.k * (0.7 + 0.3 * Math.sin(this.t * 0.07 + u.ph));
       s.material.color.setRGB(0.85 - 0.3 * night, 0.88 - 0.25 * night, 0.84 - 0.1 * night);
     }
+    // valley mist and peak wisps: heaviest in the morning and after rain, still present all day; warm
+    // at golden hour, grey under storm cloud, faint blue at night
+    const storm = Math.min(1, (w.storminess || 0) + (w.cloudCover || 0) * 0.4);
+    const mist = (0.42 + 0.35 * morning + 0.25 * hum) * (1 - 0.45 * night);
+    const mc = this.mc || (this.mc = new Color());
+    mc.setRGB(0.92, 0.94, 0.93).lerp(new Color(1.0, 0.86, 0.7), (life?.golden || 0) * 0.6).lerp(new Color(0.6, 0.63, 0.66), storm * 0.5).lerp(new Color(0.14, 0.17, 0.24), night);
+    for (const set of [this.curtains, this.wisps])
+      for (const m of set) {
+        const u = m.userData;
+        m.position.x = u.base.x + Math.sin(this.t * 0.02 + u.ph) * 0.25;
+        m.material.uniforms.uTime.value = this.t;
+        m.material.uniforms.uAmount.value = mist * u.k;
+        m.material.uniforms.uColor.value.copy(mc);
+      }
     // waterfall mist: puffs born at the foot of each fall, rising and spreading as they fade
     for (const s of this.mist) {
       const u = s.userData;

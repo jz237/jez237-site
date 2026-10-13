@@ -116,3 +116,14 @@ v1.17:
 - Distant ferns swap smoothly to a simpler version, so the full-detail leaflets don't shimmer from afar.
 - Voices: every call has five variants and never repeats twice running; herd contact calls answered by a herd mate, hatchling peeps (urgent when lost, and the mother answers), the T. rex's stalking growl, sleepers' breathing, the Brachiosaurus rumbling as it browses.
 - Things to do (in the field guide): Drop food, and the plant-eaters come to eat it bite by bite; tap the glass and nearby animals startle, the closest shy away and the T. rex may roar back; Photo mode for a slow, letterboxed, shallow-focus camera drifting round one animal after another (Esc or click to leave).
+
+v1.19 (after the "Terrarium Terramundi" reference):
+
+- A painted backdrop inside the back glass: misty layered mountains and forest in two layers that shift against each other as you turn the case. It follows the time of day and the weather (`?backdrop=0` to hide it).
+- Rockwork: hundreds of rounded, moss-capped boulders stacked on the mountainsides, lining the stream banks and the pool's rim; rubble heaped either side of the cave mouth, with a flickering amber glow inside the den (`?rocks=0`).
+- Frothier cascades: a broad churned plunge with a foam tongue downstream, droplets thrown up and falling back, and mist drifting off.
+- Mist lying in bands between the rows of trees at the back, thickest in the morning and after rain, and cloud wisps wrapped round the peaks.
+- A shallower substrate, half as deep. The soil cut-away has more dangling roots, and a bed of rounded pebbles at the bottom.
+- Footpaths: a winding dirt track from the cabin door down to the jetty, and a branch that crosses the stream on stepping stones and climbs to the cave. Lantern posts along the way light up at dusk (`?paths=0`).
+- More fallen logs, sawn stumps by the cabin and snapped ones in the forest (roots, moss, bracket fungi), and a woodpile stacked against the cabin wall.
+- Dense conifer stands at the back and on the foothills: monkey puzzles and a redwood-type conifer of the cypress family (a Jurassic group), with a buttressed red-brown trunk and flat, feathery sprays. Monkey-puzzle limbs are now clad in leaves, with crossed shoots that never vanish edge-on.

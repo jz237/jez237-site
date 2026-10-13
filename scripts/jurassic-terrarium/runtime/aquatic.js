@@ -8,8 +8,10 @@
 // pool wherever it is. Water level is y = 0.
 import {
   Group, Mesh, InstancedMesh, BufferGeometry, BufferAttribute, IcosahedronGeometry, MeshStandardMaterial,
-  Matrix4, Quaternion, Vector3, Euler, Color, DoubleSide, CircleGeometry,
+  Matrix4, Quaternion, Vector3, Euler, Color, DoubleSide, CircleGeometry, Points, ShaderMaterial,
 } from 'three';
+import { guardMaterial } from './safety.js';
+import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 const WATER_Y = 0;
 // lip -> foot of each river cascade, with the water height at the foot; must match the 'tiered
@@ -27,7 +29,10 @@ function hash3(x, y, z) {
 
 // a lumpy rock: an icosahedron pushed in and out by smooth noise, moss in the vertex colours
 function rockGeometry(seed, mossy, wet) {
-  const g = new IcosahedronGeometry(1, 3);
+  let g = new IcosahedronGeometry(1, 3);
+  g.deleteAttribute('normal');
+  g.deleteAttribute('uv');
+  g = mergeVertices(g); // smooth, rounded stones rather than facets
   const p = g.attributes.position;
   const v = new Vector3();
   const lump = (x, y, z) =>
@@ -45,10 +50,11 @@ function rockGeometry(seed, mossy, wet) {
   g.computeVertexNormals();
   const n = g.attributes.normal;
   const col = new Float32Array(p.count * 3);
-  const rock = wet ? new Color(0x4f5148) : new Color(0x77736a);
-  const rock2 = wet ? new Color(0x3c4238) : new Color(0x5d5a54);
-  const moss = wet ? new Color(0x3d5a2a) : new Color(0x4f7a2c);
-  const moss2 = wet ? new Color(0x2c4420) : new Color(0x6f9437);
+  // display colours, converted to the linear vertex-colour space
+  const rock = new Color(wet ? 0x5a5c52 : 0x8a857a).convertSRGBToLinear();
+  const rock2 = new Color(wet ? 0x44493f : 0x6a665e).convertSRGBToLinear();
+  const moss = new Color(wet ? 0x3d5a2a : 0x4a6a28).convertSRGBToLinear();
+  const moss2 = new Color(wet ? 0x2c4420 : 0x6a8a34).convertSRGBToLinear();
   const c = new Color();
   for (let i = 0; i < p.count; i++) {
     v.fromBufferAttribute(p, i);
@@ -261,8 +267,16 @@ export class Aquatic {
     const src = this.ctx.scene.getObjectByName('water:plunge-pool');
     if (!src) return false;
     for (const c of CASCADES) {
-      const g = new CircleGeometry(0.15, 32);
+      // a broad churned disc where the fall lands, trailing a tongue of foam downstream
+      const g = new CircleGeometry(0.24, 40);
       g.rotateX(-Math.PI / 2);
+      const dx = c.foot.x - c.lip.x, dz = c.foot.z - c.lip.z, dl = Math.hypot(dx, dz) || 1;
+      const p = g.attributes.position;
+      for (let i = 0; i < p.count; i++) {
+        const x = p.getX(i), z = p.getZ(i), along = (x * dx + z * dz) / dl;
+        const s = along > 0 ? 1 + along * 2.2 : 1; // stretch the downstream half
+        p.setXYZ(i, x + (dx / dl) * along * (s - 1), 0, z + (dz / dl) * along * (s - 1));
+      }
       g.translate(c.foot.x, c.foot.y + 0.008, c.foot.z);
       const m = new Mesh(g, src.material);
       m.name = 'aquatic-cascade-foam';
@@ -273,8 +287,81 @@ export class Aquatic {
     return true;
   }
 
+  // spray and mist thrown up where each cascade lands: soft droplets kicked up and out, falling back,
+  // and a slower mist that drifts up and away on the wind
+  buildSpray() {
+    const per = (this.ctx.quality?.tier ?? 1) === 0 ? 40 : 90, n = per * CASCADES.length;
+    const pos = new Float32Array(n * 3), alpha = new Float32Array(n), size = new Float32Array(n);
+    const g = new BufferGeometry();
+    g.setAttribute('position', new BufferAttribute(pos, 3));
+    g.setAttribute('aAlpha', new BufferAttribute(alpha, 1));
+    g.setAttribute('aSize', new BufferAttribute(size, 1));
+    const mat = new ShaderMaterial({
+      uniforms: { uLight: { value: new Color(1, 1, 1) }, uScale: { value: 300 } },
+      vertexShader: `attribute float aAlpha; attribute float aSize; varying float vA;
+        uniform float uScale;
+        void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vA = aAlpha;
+          gl_PointSize = clamp(aSize * uScale / max(0.1, -mv.z), 0.0, 48.0); gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: `uniform vec3 uLight; varying float vA;
+        void main() { vec2 d = gl_PointCoord - 0.5; float r = dot(d, d) * 4.0; if (r > 1.0) discard;
+          gl_FragColor = vec4(uLight, vA * (1.0 - r) * (1.0 - r)); }`,
+      transparent: true,
+      depthWrite: false,
+    });
+    guardMaterial(mat);
+    this.sprayMat = mat;
+    const pts = new Points(g, mat);
+    pts.name = 'aquatic-cascade-spray';
+    pts.frustumCulled = false;
+    pts.renderOrder = 3;
+    this.ctx.scene.add(pts);
+    const rnd = this.rand;
+    this.spray = Array.from({ length: n }, (_, i) => ({ c: CASCADES[Math.floor(i / per)], age: rnd() * 2, life: 1, x: 0, y: -9, z: 0, vx: 0, vy: 0, vz: 0, mist: rnd() < 0.35 }));
+    this.sprayGeo = g;
+  }
+
+  updateSpray(dt) {
+    if (!this.spray) this.buildSpray();
+    const g = this.sprayGeo, pos = g.attributes.position.array, al = g.attributes.aAlpha.array, sz = g.attributes.aSize.array;
+    const rnd = this.rand, wind = this.ctx.world?.wind || 0;
+    const life = this.ctx.modules.life?.env, night = life?.night ?? 0;
+    this.sprayMat.uniforms.uLight.value.setRGB(1, 1, 1).lerp(new Color(0.16, 0.2, 0.3), night);
+    this.sprayMat.uniforms.uScale.value = (this.ctx.renderer?.domElement?.height || 900) * 0.33;
+    this.spray.forEach((p, i) => {
+      p.age += dt;
+      if (p.age > p.life) {
+        const c = p.c, a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * 0.1;
+        p.x = c.foot.x + Math.cos(a) * r;
+        p.z = c.foot.z + Math.sin(a) * r;
+        p.y = c.foot.y + 0.01;
+        if (p.mist) {
+          p.vx = (rnd() - 0.5) * 0.04; p.vy = 0.05 + rnd() * 0.08; p.vz = (rnd() - 0.5) * 0.04;
+          p.life = 1.8 + rnd() * 1.6;
+        } else {
+          p.vx = Math.cos(a) * (0.08 + rnd() * 0.18); p.vy = 0.18 + rnd() * 0.32; p.vz = Math.sin(a) * (0.08 + rnd() * 0.18);
+          p.life = 0.5 + rnd() * 0.5;
+        }
+        p.age = 0;
+      }
+      if (p.mist) {
+        p.vx += (0.05 * wind - p.vx) * dt; p.vy *= 1 - 0.3 * dt;
+      } else {
+        p.vy -= 1.1 * dt; p.vx *= 1 - 1.5 * dt; p.vz *= 1 - 1.5 * dt;
+      }
+      p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+      const u = p.age / p.life, fade = Math.min(1, u * 6) * (1 - u);
+      pos[i * 3] = p.x; pos[i * 3 + 1] = p.y; pos[i * 3 + 2] = p.z;
+      al[i] = p.mist ? 0.22 * fade : 0.6 * fade;
+      sz[i] = p.mist ? 0.05 + u * 0.09 : 0.012 + rnd() * 0.004;
+    });
+    g.attributes.position.needsUpdate = true;
+    g.attributes.aAlpha.needsUpdate = true;
+    g.attributes.aSize.needsUpdate = true;
+  }
+
   update(dt) {
     this.uniforms.uTime.value += dt;
     if (!this.foamed) this.foamed = this.buildFoam();
+    this.updateSpray(Math.min(dt, 0.1));
   }
 }

@@ -28,6 +28,9 @@ import { Atmosphere } from './atmosphere.js';
 import { Contact } from './contact.js';
 import { GroundCover } from './groundcover.js';
 import { Interact } from './interact.js';
+import { Backdrop } from './backdrop.js';
+import { Rocks } from './rocks.js';
+import { Paths } from './paths.js';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
 // the animals are shown large against the landscape (Weatherglass pines become 6-8 m saplings).
@@ -1189,15 +1192,18 @@ class Dinosaurs {
     this.den = { ...DEN, inside: { x: DEN.x, z: DEN.z - 0.12 * ds }, mouth: { x: DEN.x, z: DEN.z + 0.75 * ds } };
     this.aquatic = params.get('aquatic') === '0' ? null : new Aquatic(ctx, rand);
     this.ground = params.get('ground') === '0' ? null : new GroundCover(ctx, this.flora, rand);
+    this.rocks = params.get('rocks') === '0' ? null : new Rocks(ctx, rand, { den: this.den });
+    this.paths = params.get('paths') === '0' ? null : new Paths(ctx, rand);
     const hatch = params.get('hatch');
     this.nest = params.get('nest') === '0' ? null : new Nest(ctx, this.flora, rand, { hatchAt: hatch != null ? Number(hatch) : undefined });
     this.room = params.get('room') === '0' ? null : new Room(ctx, new URL('models/room.webp', document.baseURI).href);
     this.effects = new Effects(ctx);
+    this.backdrop = params.get('backdrop') === '0' ? null : new Backdrop(ctx, new URL('models/', document.baseURI));
     this.contact = new Contact(ctx, this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     this.nav = new NavGrid(ctx, {
-      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.ground?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
+      obstacles: [...this.flora.obstacles, ...(this.aquatic?.obstacles || []), ...(this.ground?.obstacles || []), ...(this.rocks?.obstacles || []), ...(this.nest?.obstacle ? [this.nest.obstacle] : [])],
       rects: [
         { x0: DEN.x - 1.45 * ds, x1: DEN.x + 1.45 * ds, z0: DEN.z - 1.5 * ds, z1: DEN.z + 0.55 * ds, block: true },
         { x0: DEN.x - 0.72 * ds, x1: DEN.x + 0.72 * ds, z0: DEN.z - 0.6 * ds, z1: DEN.z + 0.62 * ds, block: false },
@@ -1397,6 +1403,9 @@ class Dinosaurs {
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
     this.contact.update(dt);
+    this.backdrop?.update(dt);
+    this.rocks?.update(dt);
+    this.paths?.update(dt);
     this.interact?.update(dt);
     this.atmosphere?.update(dt);
     this.nest?.update(dt, (p, a) => this.hatchling(p, a));
