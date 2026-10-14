@@ -76,7 +76,11 @@ export class DesertTerrarium {
     if(count){for(let i=0;i<count;i++){this.simulate(1/30);this.draw();}return;}
     this.startAnimation();
   }
-  private startAnimation(){this.renderer.setAnimationLoop(ms=>{const dt=this.lastTime?Math.min(.05,(ms-this.lastTime)/1000):.016;this.lastTime=ms;this.simulate(dt);this.draw();});}
+  private startAnimation(){this.renderer.setAnimationLoop(ms=>{
+    if(document.hidden){this.lastTime=0;return;}
+    const dt=this.lastTime?(ms-this.lastTime)/1000:1/60;
+    this.lastTime=ms;this.simulate(dt);this.draw();
+  });}
   simulate(dt:number) {
     this.simulationClock.advance(dt, step => this.simulationStep(step));
   }

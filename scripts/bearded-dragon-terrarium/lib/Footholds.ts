@@ -21,12 +21,17 @@ export class Footholds {
     let best: Foothold | null = null, score = Infinity;
     // Prefer the intended step, then nearby patches. Never invent a contact in air.
     for (const radius of [0, .008, .016, .024, .032, .040, .048, .056, .064, .072]) {
+      // Horizontal distance alone is a lower bound on the score. Once it
+      // exceeds the best patch, no expensive toe/corridor cast can improve it.
+      if(best && radius*radius>score+1e-12)break;
       for (let i = 0; i < (radius ? 24 : 1); i++) {
         const angle = i * Math.PI / 12;
         const x = wanted.x + radius * Math.cos(angle), z = wanted.z + radius * Math.sin(angle);
         const support = this.support(x, z, shoulder.y + .035);
         if(support.y>maximumHeight)continue;
         const point = new THREE.Vector3(x, support.y, z);
+        const s = point.distanceToSquared(wanted) + Math.abs(point.y - wanted.y) * .006;
+        if(s>=score)continue;
         const ankle = point.clone().addScaledVector(support.normal, .0075);
         const extension=ankle.distanceTo(shoulder);
         if (extension > reach * .92 || extension < reach * .31 || support.normal.y < .48) continue;
@@ -75,7 +80,6 @@ export class Footholds {
           }
           if (top > Math.max(from.y, point.y) + .025) continue;
         }
-        const s = point.distanceToSquared(wanted) + Math.abs(point.y - wanted.y) * .006;
         const hold={point,normal,top};
         if (s < score && (!usable||usable(hold))) {score = s; best = hold;}
       }

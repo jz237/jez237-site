@@ -73,6 +73,7 @@ export class LizardBrain {
   private caveApproach = false;
   private caveBacking = false;
   private caveExit = 0;
+  private bowlExit: {x:number;z:number;heading:number;time:number}|null=null;
   /** Closest it has come to the end of the current route, and how long since it got closer. */
   private nearPath: [number, number][] | null = null;
   private nearBest = Infinity;
@@ -202,8 +203,8 @@ export class LizardBrain {
   }
 
   /** Plans a route; returns false if there is no way there. */
-  // (an unhurried walk: about 7 cm/s; it dashes only after prey or when startled)
-  private goTo(x: number, z: number, then: Mode, cruise = 0.075) {
+  // A normal walk between pauses; prey pursuit and startles still use bursts.
+  private goTo(x: number, z: number, then: Mode, cruise = 0.12) {
     const I = this.rig.inputs;
     const path = this.nav.path(I.x, I.z, x, z);
     if (!path || path.length < 2) return false;
@@ -216,6 +217,8 @@ export class LizardBrain {
     this.caveBacking=false;
     this.caveExit=!this.caveApproach && Math.abs(I.x-.475)<.11 && I.z<.11 && this.surface.heightAt(I.x,I.z)<.12
       ? (Math.sin(I.heading)>0 ? -1 : 1) : 0;
+    this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&x<.40
+      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0} : null;
     this.replans = 0;
     this.blockedT = 0;
     this.stallT = 0;
@@ -933,6 +936,17 @@ export class LizardBrain {
    */
   private travel(dt: number) {
     const I = this.rig.inputs;
+    if(this.bowlExit){
+      const exit=this.bowlExit;exit.time+=dt;
+      // Withdraw into open sand before turning away from the water. Pivoting
+      // beside the rim can trap a hind foot between the bowl and front glass.
+      if(Math.hypot(I.x-exit.x,I.z-exit.z)>.012 && exit.time<6){
+        const err=wrap(exit.heading-I.heading);
+        this.posePreset('walk');
+        return {speed:Math.abs(err)<.3 ? -.05 : 0,turn:clamp(err*3,-.6,.6)};
+      }
+      this.bowlExit=null;this.replan();
+    }
     // The hide is wide enough to rest in, but not to turn the full animal
     // sideways. Turn on the open sand, then back in with the head facing out.
     if(this.caveApproach && (this.caveBacking || (I.z<.22 && Math.abs(I.x-.485)<.02))){

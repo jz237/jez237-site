@@ -95,8 +95,10 @@ export class TailContacts implements TailCollision {
     if (point.z < -mz) {point.z = -mz; normal.z += 1; contact = true;}
     if (point.z > mz) {point.z = mz; normal.z -= 1; contact = true;}
     if (contact) this.touchesSolid = true; // glass
+    // Most samples are clear of every solid. Build their swept bounds once,
+    // rebuilding only when a real contact changes the point.
+    this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
     for (const solid of this.solids) {
-      this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
       if (!solid.box.intersectsBox(this.box)) continue;
       // Catch a moving joint before it tunnels through a thin branch or stone face.
       this.direction.subVectors(point, previous);
@@ -108,6 +110,7 @@ export class TailContacts implements TailCollision {
           point.copy(hit.point).addScaledVector(hit.face!.normal, margin);
           normal.add(hit.face!.normal); contact = true;
           this.touchesSolid = true;
+          this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
         }
       }
       const hit = solid.tree.closestPointToPoint(point, this.closest, 0, 0.08);
@@ -132,6 +135,7 @@ export class TailContacts implements TailCollision {
       } else point.addScaledVector(this.direction, amount);
       normal.add(this.direction); contact = true;
       this.touchesSolid = true;
+      this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
     }
     const ground = this.floor(point.x, point.z) + margin;
     if (point.y < ground) {point.y = ground; normal.y += 1; contact = true;}

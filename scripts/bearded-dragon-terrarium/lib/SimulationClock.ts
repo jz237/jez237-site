@@ -4,7 +4,10 @@ export class SimulationClock {
   readonly step = 1 / 60;
   advance(elapsed: number, update: (dt: number) => void) {
     if (!Number.isFinite(elapsed) || elapsed <= 0) return;
-    this.remainder += Math.min(elapsed, .05);
+    // Keep real time through ordinary 10–20 fps rendering. Only a genuine
+    // suspension discards elapsed time; capping every frame at 50 ms made a
+    // busy GPU slow the animal itself down.
+    this.remainder += elapsed > .25 ? .05 : Math.min(elapsed, .1);
     let count = 0;
     while (this.remainder + 1e-10 >= this.step && count < 6) {
       update(this.step); this.remainder -= this.step; count++;

@@ -6,14 +6,43 @@ import {SimulationClock} from '../lib/SimulationClock';
 import {Surface} from '../lib/Surface';
 import {groundHeight} from '../lib/Ground';
 import {LizardRig} from '../lib/LizardRig';
+import {Footholds} from '../lib/Footholds';
 import {habitat, model, Audit, SkinAudit} from './locomotion-fixture';
 
-test('simulation is identical at 30, 60, 144 Hz and uneven frame cadence; suspended tabs do not catch up',()=>{
+test('resting on the basking rock settles without alternating vertical corrections',()=>{
+  const {rig,brain}=habitat(),r=rig as any,b=brain as any;
+  b.boredom=1e6;
+  let previous=0,maxDelta=0,min=Infinity,max=-Infinity;
+  const audit=new Audit();
+  for(let i=0;i<300;i++){
+    b.update(1/60);
+    if(i>=180){
+      if(previous)maxDelta=Math.max(maxDelta,Math.abs(r.bodyY-previous));
+      previous=r.bodyY;min=Math.min(min,r.bodyY);max=Math.max(max,r.bodyY);
+      audit.sample(rig);
+    }
+  }
+  assert.ok(maxDelta<.00005,`resting vertical correction ${maxDelta} m per tick`);
+  assert.ok(max-min<.00015,`resting height range ${max-min} m`);
+  assert.ok(audit.maxSlide<.0001,'settling still preserves planted contacts');
+});
+
+test('an exact foothold avoids scanning inferior patches without changing the landing',()=>{
+  let casts=0;
+  const finder=new Footholds({heightAt:()=>0,normalAt:(_x,_z,out=new THREE.Vector3())=>out.set(0,1,0),
+    supportAt:(_x,_z,_ceiling,out)=>{casts++;out.y=0;out.normal.set(0,1,0);return out;}});
+  const wanted=new THREE.Vector3(.02,0,.03);
+  const hold=finder.find(wanted,new THREE.Vector3(0,.03,0),.1,0,1);
+  assert.ok(hold);assert.ok(hold.point.equals(wanted));
+  assert.equal(casts,5,'one landing and its four sole samples are sufficient');
+});
+
+test('simulation keeps real time at 10, 15, 30, 60, 144 Hz and uneven cadence; suspended tabs do not catch up',()=>{
   const run=(pattern:number[])=>{const clock=new SimulationClock();let elapsed=0,steps=0,x=0,v=0;
     for(let i=0;elapsed<3-1e-10;i++){const dt=Math.min(pattern[i%pattern.length],3-elapsed);elapsed+=dt;clock.advance(dt,h=>{v+=(.1-v)*(1-Math.exp(-h*5));x+=v*h;steps++;});}
     return {steps,x,v};};
   const expected=run([1/60]);
-  for(const p of [[1/30],[1/144],[.008,.043,.019,.012,.031]])assert.deepEqual(run(p),expected);
+  for(const p of [[1/10],[1/15],[1/30],[1/144],[.008,.083,.019,.012,.061]])assert.deepEqual(run(p),expected);
   const clock=new SimulationClock();let steps=0;clock.advance(30,()=>steps++);assert.equal(steps,3);
 });
 

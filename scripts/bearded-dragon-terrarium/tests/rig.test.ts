@@ -16,6 +16,19 @@ function model() {
 const flat = {heightAt: () => 0, normalAt: (_x: number, _z: number, out = new THREE.Vector3()) => out.set(0, 1, 0)};
 const pos = (m: THREE.Matrix4) => new THREE.Vector3().setFromMatrixPosition(m);
 
+test('a movement request without actual travel does not pump the torso up and down',()=>{
+  const rig=new LizardRig(model(),flat),r=rig as any;
+  Object.assign(rig.inputs,{speed:.12,clearance:1.15,chestLift:.15});
+  let lo=Infinity,hi=-Infinity;
+  for(let i=0;i<300;i++){
+    // The navigation/controller has held the body in place while arranging feet.
+    rig.update(1/60);
+    if(i>=180){lo=Math.min(lo,r.bodyY);hi=Math.max(hi,r.bodyY);}
+  }
+  assert.ok(hi-lo<.00015,`stationary torso height varied by ${hi-lo} m`);
+  assert.ok(Math.abs(r.bend)<.001,'no traveling body wave without travel');
+});
+
 test('walking: feet stay planted in stance, limbs keep their length, the body advances', () => {
   const lizard = model();
   const rig = new LizardRig(lizard, flat);
