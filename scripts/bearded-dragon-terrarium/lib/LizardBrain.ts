@@ -681,9 +681,10 @@ export class LizardBrain {
           this.grazePhase = 'reach'; this.grazeT = 0;
         }
         // head down to the dish, eyeing a piece, then a sideways nip and a few chews
-        this.lookPoint.copy(d.centre); this.looking = true; I.look = this.lookPoint;
-        this.posePreset('drink');
-        this.poseGoal.headPitch = -0.5;
+        this.lookPoint.copy(d.centre); this.lookPoint.y += d.foodHeight; this.looking = true; I.look = this.lookPoint;
+        this.posePreset('alert');
+        this.poseGoal.chestLift = .65;
+        this.poseGoal.headPitch = -0.10;
         if (this.grazePhase === 'reach') {
           I.lunge = Math.max(I.lunge, Math.min(1, this.grazeT / 0.4) * 0.35);
           I.jaw = Math.max(I.jaw, Math.min(1, this.grazeT / 0.4) * 0.38);

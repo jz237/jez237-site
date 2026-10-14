@@ -19,6 +19,7 @@ function sandstone() {
     photo=new THREE.TextureLoader().load('./sandstone-v2.png',()=>resolve(),undefined,reject);
     photo.colorSpace=THREE.SRGBColorSpace;photo.wrapS=photo.wrapT=THREE.RepeatWrapping;photo.anisotropy=8;
   });
+  m.userData.photo=photo!;
   m.onBeforeCompile = (s) => {
     s.uniforms.uStonePhoto={value:photo};
     s.vertexShader = s.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vStone; varying vec3 vStoneNormal;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvStone = position; vStoneNormal=normal;');
@@ -83,6 +84,7 @@ export class Habitat {
   readonly bulbs: THREE.MeshStandardMaterial[] = [];
   readonly readout: {canvas: HTMLCanvasElement; texture: THREE.CanvasTexture};
   readonly water: THREE.Mesh;
+  readonly stonePhoto: THREE.Texture;
   readonly ready: Promise<void>;
   private ripples: THREE.Mesh[] = [];
 
@@ -91,6 +93,7 @@ export class Habitat {
     const black=new THREE.MeshStandardMaterial({color:0x121617,roughness:.3,metalness:.72});
     const steel=new THREE.MeshStandardMaterial({color:0x42494b,roughness:.35,metalness:.9});
     const rock=sandstone();
+    this.stonePhoto=rock.userData.photo;
     const box=(w:number,h:number,d:number,x:number,y:number,z:number,m:THREE.Material=black)=>{
       const mesh=new THREE.Mesh(new RoundedBoxGeometry(w,h,d,2,.003),m);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;g.add(mesh);return mesh;
     };

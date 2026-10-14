@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {Habitat} from './lib/Habitat';
-import {Surface} from './lib/Surface';
+import {Surface, SurfaceKind} from './lib/Surface';
 import {Nav} from './lib/Nav';
 import {Dish} from './lib/Dish';
 import {Insects} from './lib/Insects';
@@ -13,7 +13,7 @@ import {LizardBrain} from './lib/LizardBrain';
 import {Post} from './lib/Post';
 import {foliageUniforms} from './lib/Foliage';
 import {TANK} from './lib/Case';
-import {BASK} from './lib/Ground';
+import {BASK, groundHeight} from './lib/Ground';
 import {plantLightStrength} from './lib/DesertPlants';
 import type {PlantContact} from './lib/PlantFlex';
 
@@ -52,8 +52,8 @@ export class DesertTerrarium {
   }
   private async load() {
     await this.habitat.ready;
-    this.surface=new Surface(this.habitat.ground,this.habitat.hard,.004);
-    this.dish=new Dish(this.surface,-.58,TANK.d/2-.088);this.scene.add(this.dish.group);
+    this.dish=new Dish({heightAt:groundHeight},-.58,TANK.d/2-.088,this.habitat.stonePhoto);this.scene.add(this.dish.group);
+    this.surface=new Surface(this.habitat.ground,[...this.habitat.hard,{mesh:this.dish.bowl,kind:SurfaceKind.Rock}],.004);
     this.nav=new Nav(this.surface,this.habitat.obstacles);
     this.insects=new Insects(this.surface,this.nav);this.scene.add(this.insects.group);
     this.lizard=await LizardModel.load('./lizard/');this.lizard.setMorph(params.get('morph')??'normal');this.scene.add(this.lizard.root);
