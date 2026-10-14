@@ -304,3 +304,18 @@ v1.39: feeding:
 - **From your hand:** a quick click drops the food. Press and hold to feed from your hand: the food stays in the hand, follows it, and the animals come to it there. The Brachiosaurus browses the branch you hold up, a Pteranodon swoops at a fish dangled over the water, and the T. rex snatches the meat out of your hand. Let go and whatever is left falls (or the branch stays hung).
 - **Eating you can see:** jaws work between mouthfuls, scraps fall (fronds, seeds, meat), the food shrinks bite by bite, with crop and tear sounds. Each animal's belly fills as it eats and slowly goes down over a few minutes. A full animal lies down to sleep it off.
 - **Documentary:** it films the feeding ("feeding", "stripping a branch", "tearing at a meal") and the nap afterwards ("sleeping it off").
+
+v1.40: hot days, jostling at the food, colours through the year:
+- **Cooling off:** on hot, sunny days the animals go to cool off:
+  - the plant-eaters wade into the shallows of the pool or at the stream's fords, stand in the water, stamp up splashes and dip to drink, and the calves hop and splash about beside their mother;
+  - Triceratops and Stegosaurus go to the mud hole on the pool's bank and roll in it, coming out caked from head to tail (it dries pale and flakes away over a few minutes);
+  - the T. rex lies down in the stream and soaks;
+  - the Brachiosaurus wades in.
+
+  The documentary films them ("cooling off in the shallows", "wallowing in the stream", "a mud bath").
+- **Jostling at the food:**
+  - at a shared pile the bigger animal pushes in, so a smaller one gets a threat display, starts back, and edges in again a few seconds later;
+  - a Stegosaurus swings its tail at anyone crowding it;
+  - calves dart in for a stolen mouthful and scamper back to their mother;
+  - when the T. rex comes for its meat, every plant-eater near it scatters.
+- **Colours through the year:** in spring the frills, plates and crests flush bright red-orange for the breeding season (stronger on the males). In winter the hide goes duller, greyer and dustier. Calves are mottled and dappled, with pale broken bands across the back, fading as they grow up.

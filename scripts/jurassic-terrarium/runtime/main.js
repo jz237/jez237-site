@@ -90,6 +90,7 @@ import { Social } from './social.js';
 import { Trails } from './trails.js';
 import { Touch } from './touch.js';
 import { Feeding } from './feeding.js';
+import { Cooling } from './cooling.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
@@ -156,7 +157,7 @@ const params = new URLSearchParams(location.search);
 const rand = mulberry32(Number(params.get('seed') || 20261011));
 
 // procedural idles (no clip of their own): played on top of idle (or rest) by Dino.performFrame
-const PERFORM = new Set(['yawn', 'rub', 'dustbath', 'scratch', 'shake']);
+const PERFORM = new Set(['yawn', 'rub', 'dustbath', 'scratch', 'shake', 'mudbath']);
 
 class Dino {
   // opts.scale: size relative to the adult (hatchlings); opts.parent: the adult it follows;
@@ -361,6 +362,8 @@ class Dino {
     const opts = Object.entries(acts).filter(
       ([k]) => k === 'wander' || k === 'drink' || k === 'trail' || PERFORM.has(k) || (k === 'hunt' && prey) || this.actions[k],
     );
+    // a hot, sunny day: off to cool off in the water or the mud (cooling.js)
+    if (this.mod.cooling?.hot() && !this.parent && !this._cooled) opts.push(['cool', 3]);
     let tot = opts.reduce((a, [, w]) => a + w, 0);
     let r = rand() * tot;
     for (const [k, w] of opts) if ((r -= w) <= 0) return k;
@@ -558,6 +561,15 @@ class Dino {
       if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
       U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
       this.flesh(dt);
+      // colours through the year (skin.js): the breeding flush in spring, winter's dull coat, a calf's
+      // mottling fading as it grows (over about half an hour)
+      {
+        const le = mod.ctx.modules.life?.env || {};
+        this._age = (this._age || 0) + dt;
+        const male = this._male ??= rand() < 0.5;
+        U.uColour.value.set((le.spring || 0) * (male ? 1 : 0.65) * (this.parent ? 0 : 1), (le.winter || 0) * 0.85,
+          this.parent ? Math.max(0.15, 1 - this._age / 1800) : 0, 0);
+      }
       // a full belly (feeding.js), going down slowly as it digests
       this.full = Math.max(0, (this.full || 0) - dt / 300);
       U.uBelly.value = this.full * (this.info?.length || 6) * 0.012 * FLESH;
@@ -676,7 +688,7 @@ class Dino {
     const cap = walking ? 0.03 : 0.012;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
     // standing and being pressed off something: take a step away rather than slide
-    if (!walking && !/^(sleep|perform|standoff|drinking)$/.test(this.state) && !this.parent && !this._tear && !this._eating && !this._peer && !this._lean) {
+    if (!walking && !/^(sleep|perform|standoff|drinking|wading|soak)$/.test(this.state) && !this.parent && !this._tear && !this._eating && !this._peer && !this._lean) {
       this._pressed = (this._pressed || 0) + m;
       if (this._pressed > 0.03 * this.length) {
         this._pressed = 0;
@@ -833,6 +845,34 @@ class Dino {
       }
       case 'circle':
         this.circleStep(dt);
+        break;
+      case 'wading': {
+        // standing in the water: a stamp and a splash now and then, a drink, the head about
+        if (this.wadeIn(dt)) break;
+        if ((this._wadeT -= dt) <= 0) {
+          this._wadeT = 2.5 + rand() * 3;
+          if (this.currentName === 'drink') this.play('idle', 0.6);
+          else if (rand() < 0.35 && this.actions.drink) this.play('drink', 0.6);
+          else {
+            const sy = mod.waterSurface(this.pos.x, this.pos.z), fw = this.length * 0.3;
+            if (sy != null) {
+              mod.effects.splash(this.pos.x + Math.sin(this.heading) * fw, this.pos.z + Math.cos(this.heading) * fw, sy, Math.min(1.2, 0.4 + this.length * 0.25));
+              mod.voice.play('step', this.root.position, this.stepSize * 1.2, 'water');
+            }
+            this._flinch = 0.2;
+          }
+        }
+        if (this.timer <= 0) this.rest(0.6);
+        break;
+      }
+      case 'soak':
+        // lying in the stream: rings spreading from the body, a slow breath
+        if (this.wadeIn(dt)) break;
+        if ((this._wadeT = (this._wadeT || 0) - dt) <= 0) {
+          this._wadeT = 1.2 + rand();
+          mod.ctx.modules.water?.ripple?.(this.pos.x + (rand() - 0.5) * this.length * 0.5, this.pos.z + (rand() - 0.5) * this.length * 0.5, 0.06, 0.7);
+        }
+        if (this.timer <= 0) this.rest(1.2);
         break;
       case 'social': // driven by its scene (social.js)
         break;
@@ -1450,6 +1490,10 @@ class Dino {
         (tx = t.x), (tz = t.z);
       }
       if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
+    } else if (kind === 'cool') {
+      this._cooled = true;
+      this.mod.later(240, () => (this._cooled = false)); // not again for a while
+      if (!mod.cooling.start(this)) this.act('wander');
     } else if (kind === 'hunt') {
       if ((this.huntCool || 0) > this.mod.clock) return void this.act('wander'); // still smarting from the last standoff
       const prey = mod.walkers
@@ -1562,8 +1606,46 @@ class Dino {
   }
 
   // ---------------------------------------------------------------- idles without clips
+  // cooling off (cooling.js): standing in the shallows; the T. rex lying down in the stream
+  // (`at`: the spot in the water; the route ends a little short of it, so the last steps are taken here)
+  beginWade(at) {
+    this.state = 'wading';
+    this.timer = 15 + rand() * 15;
+    this.speed = 0;
+    this._wadeAt = at || null;
+    this.play(at ? 'walk' : 'idle', 0.5, 0.45);
+    this._wadeT = 1 + rand() * 2;
+  }
+
+  beginSoak(at) {
+    this.state = 'soak';
+    this.timer = 30 + rand() * 20;
+    this.speed = 0;
+    this._wadeAt = at || null;
+    this.play(at ? 'walk' : 'rest', 0.5, 0.45);
+  }
+
+  // the last few steps into the water; true while still stepping
+  wadeIn(dt) {
+    const at = this._wadeAt;
+    if (!at) return false;
+    const dx = at.x - this.pos.x, dz = at.z - this.pos.z, d = Math.hypot(dx, dz);
+    if (d < 0.03) {
+      this._wadeAt = null;
+      this.play(this.state === 'soak' ? 'rest' : 'idle', this.state === 'soak' ? 1.4 : 0.5);
+      return false;
+    }
+    const want = Math.atan2(dx, dz), dh = Math.atan2(Math.sin(want - this.heading), Math.cos(want - this.heading));
+    this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 1.2);
+    const step = Math.min(d, dt * 0.16);
+    this.pos.x += (dx / d) * step;
+    this.pos.z += (dz / d) * step;
+    this.timer += dt;
+    return true;
+  }
+
   perform(kind, opts = {}) {
-    const len = { yawn: 2.8, rub: 6 + rand() * 3, dustbath: 7 + rand() * 3, scratch: 3.2, shake: 1.7 }[kind];
+    const len = { yawn: 2.8, rub: 6 + rand() * 3, dustbath: 7 + rand() * 3, scratch: 3.2, shake: 1.7, mudbath: 8 + rand() * 3 }[kind];
     this.perf = { kind, t: 0, len, side: rand() < 0.5 ? -1 : 1, ...opts };
     if (kind === 'rub') {
       // turn so the trunk is at the flank
@@ -1577,7 +1659,7 @@ class Dino {
     this.state = 'perform';
     this.speed = 0;
     this.path = null;
-    this.play(kind === 'dustbath' ? 'rest' : 'idle', 0.6);
+    this.play(kind === 'dustbath' || kind === 'mudbath' ? 'rest' : 'idle', 0.6);
   }
 
   // turn a bone about one of the animal's own axes ('x' across, 'y' up, 'z' forward), whatever the rig's
@@ -1720,19 +1802,32 @@ class Dino {
         P.leafT = 1.2 + rand();
         this.mod.effects.leafBurst(new Vector3(tr.x, tr.crownY + (tr.top ? (tr.top - tr.crownY) * 0.3 : 0.2), tr.z), 2 + Math.floor(rand() * 3));
       }
-    } else if (P.kind === 'dustbath') {
+    } else if (P.kind === 'dustbath' || P.kind === 'mudbath') {
       // lying down, it rolls onto one side and back, kicking up dust, and comes up dusty
       const roll = P.side * 0.5 * env * (0.6 + 0.4 * Math.sin(t * 1.3));
       this.root.rotateZ(roll);
       this.root.position.y += Math.abs(roll) * this.height * 0.08;
       P.dustT = (P.dustT || 0) - dt;
+      const mud = P.kind === 'mudbath';
       if (P.dustT <= 0 && env > 0.2) {
-        P.dustT = 0.22;
+        P.dustT = mud ? 0.35 : 0.22;
         const a = rand() * Math.PI * 2, r = this.length * 0.3;
-        this.mod.effects.dust(new Vector3(this.pos.x + Math.cos(a) * r, this.mod.ctx.terrain.height(this.pos.x, this.pos.z), this.pos.z + Math.sin(a) * r), this.length * 0.09);
+        const at = new Vector3(this.pos.x + Math.cos(a) * r, this.mod.ctx.terrain.height(this.pos.x, this.pos.z) + 0.02, this.pos.z + Math.sin(a) * r);
+        if (mud) {
+          // mud flung about: dark clods and wet splats, and the squelch of it
+          this.mod.effects.bits?.(at, 0x2c1d10, 4);
+          this.mod.effects.spray(at, 3, 0.25, at.y - 0.02);
+          if (rand() < 0.5) this.mod.voice.play('step', this.root.position, this.stepSize, 'mud');
+        } else this.mod.effects.dust(at, this.length * 0.09);
       }
       const U = this.skinU;
-      if (U && env > 0.5) {
+      if (U && env > 0.5 && mud) {
+        // caked from head to tail, glistening wet (it dries pale and flakes off, skinFrame)
+        U.uMudLine.value = (this.hipHeight() / this.model.scale.x) * 3;
+        U.uMudAmt.value = 1;
+        U.uMudWet.value = 1;
+        this.wet = Math.max(this.wet || 0, 0.6);
+      } else if (U && env > 0.5) {
         U.uMudLine.value = Math.max(U.uMudAmt.value > 0.05 ? U.uMudLine.value : 0, (this.hipHeight() / this.model.scale.x) * 1.3);
         U.uMudAmt.value = Math.max(U.uMudAmt.value, 0.6);
         U.uMudWet.value = Math.min(U.uMudWet.value, 0.05);
@@ -2401,6 +2496,7 @@ class Dinosaurs {
     this.social = new Social(this);
     this.trails = new Trails(this);
     this.touch = new Touch(this);
+    this.cooling = new Cooling(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2889,6 +2985,7 @@ class Dinosaurs {
     this.trails.update(dt);
     this.touch.update(dt);
     this.feeding?.update(dt);
+    this.cooling.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

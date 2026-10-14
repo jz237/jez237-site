@@ -22,6 +22,8 @@
 //   - snow settling on the back, the neck, the tops of the tail and plates (a little thickness to it,
 //     sparkling), melting off in a thaw or shaken off; frost rimed on frills, plates and horns in a hard
 //     cold;
+//   - colours through the year: in spring frills, plates and crests flush bright for the breeding
+//     season; in winter the hide is duller and dustier; calves are mottled, fading as they grow;
 //   - flesh in motion: the belly, the throat and the mass of the thighs are soft (aSoft, found from the
 //     bone each vertex hangs from and which way it faces) and are moved by per-animal springs that lag
 //     behind the body as it speeds up, slows, turns and lands each foot; the ribcage swells with each
@@ -299,6 +301,7 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uInvUnit: { value: 1 / (info?.perUnit || 1) }, // stored units per metre
     uFlapW: { value: new Vector2() }, // wing membranes: each side's stroke speed (rad/s, + = rising)
     uSpan: { value: 3 }, // half the wingspan, metres
+    uColour: { value: new Vector4() }, // x breeding flush, y winter dullness, z calf mottling
     uSnow: { value: 0 }, // 0..1 snow lying on it
     uSnowH: { value: 0 }, // how thick, metres
     uFrost: { value: 0 }, // 0..1 rime in a hard frost
@@ -384,6 +387,7 @@ uniform float uWet;
 uniform float uRain;
 uniform float uTime;
 uniform float uFlash;
+uniform vec4 uColour;
 uniform float uSnow;
 uniform float uFrost;
 uniform vec3 uWarmPos[4];
@@ -430,6 +434,26 @@ float jtNoise(vec3 p) {
   // creases across the neck, deepening as it bends
   float jtCr = vNeck * uBend * smoothstep(0.55, 1.0, 0.5 + 0.5 * sin(vLocal.z * 46.0 + sin(vLocal.y * 23.0) * 1.6));
   diffuseColor.rgb *= 1.0 - jtCr * 0.32;
+  {
+    float jtUpF0 = dot(normalize(vNormal), normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz));
+    // the season: a breeding flush on the thin display skin (frills, plates, crests), richer at their
+    // edges; winter's dull, dusty coat; a calf's camouflage blotches and dapples
+    float disp = smoothstep(0.25, 0.75, vThin);
+    float vein = jtNoise(vLocal * 6.0);
+    vec3 flush = diffuseColor.rgb * vec3(1.9, 0.72, 0.42) + vec3(0.16, 0.03, 0.0) * (0.6 + 0.8 * vein);
+    diffuseColor.rgb = mix(diffuseColor.rgb, flush, uColour.x * disp);
+    float lum = dot(diffuseColor.rgb, vec3(0.3, 0.55, 0.15));
+    vec3 dusty = mix(vec3(lum), diffuseColor.rgb, 0.4) * vec3(1.06, 1.0, 0.9) * 0.85 + vec3(0.05, 0.04, 0.028) * jtNoise(vLocal * 11.0);
+    diffuseColor.rgb = mix(diffuseColor.rgb, dusty, uColour.y);
+    if (uColour.z > 0.01) {
+      float bl = jtNoise(vLocal * 2.0 + 7.3) * 0.65 + jtNoise(vLocal * 5.5) * 0.35;
+      float dark = smoothstep(0.48, 0.58, bl);
+      // pale dapples and broken bands across the back, as on a young animal hiding in dappled shade
+      float band = smoothstep(0.55, 0.85, sin(vLocal.z * 5.0 + jtNoise(vLocal * 3.0) * 3.0)) * smoothstep(-0.1, 0.5, jtUpF0);
+      float pale = max(smoothstep(0.4, 0.28, bl) * smoothstep(0.5, 0.68, jtNoise(vLocal * 8.0 + 2.1)), band * 0.8);
+      diffuseColor.rgb *= mix(vec3(1.0), (1.0 - 0.6 * dark) * (1.0 + vec3(0.7, 0.6, 0.45) * pale), uColour.z);
+    }
+  }
   float jtUpF = dot(normalize(vNormal), normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz));
   // snow on whatever faces up, broken at its edge; frost on thin skin and ridges in a hard cold
   float jtSnowM = uSnow * smoothstep(0.3, 0.7, jtUpF + (jtNoise(vLocal * 5.0) * 0.6 + jtNoise(vLocal * 19.0) * 0.4 - 0.5) * 0.55);

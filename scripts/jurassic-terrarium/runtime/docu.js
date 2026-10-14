@@ -64,6 +64,9 @@ export class Docu {
         continue;
       }
       if (d.sp.tooBig && d._liftT > 0) add(8, 'lift', `${name} — letting a calf pass`, ['low', 'tele']);
+      if (st === 'wading') add(6.5, 'wade', `${name} — cooling off in the shallows`, ['low', 'tele', 'push']);
+      else if (st === 'soak') add(8, 'soak', `${name} — wallowing in the stream`, ['low', 'push', 'orbit']);
+      else if (st === 'perform' && d.perf?.kind === 'mudbath') add(8.5, 'mud', `${name} — a mud bath`, ['low', 'push', 'orbit']);
       if (d._eating) add(d._eating === 'meat' ? 9.5 : 8.5, 'eat', `${name} — ${{ ferns: 'feeding', branch: 'stripping a branch', meat: 'tearing at a meal' }[d._eating]}`, ['low', 'push', 'orbit']);
       else if (st === 'sleep' && d._napT > 0) add(5.5, 'nap', `${name} — sleeping it off`, ['push', 'orbit']);
       else if (st === 'sleep' && d.sp.herd && d._huddled && !baby) add(4.5, 'sleep', `${name} — the herd asleep together`, ['crane', 'orbit', 'tele']);
