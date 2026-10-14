@@ -10,6 +10,10 @@
 // what's left falls.
 // Eating shows: jaws working between bites, bits dropping, the food shrinking, crop, chew and tear
 // sounds; each animal's belly fills as it eats (skin.js) and a full one lies down to sleep it off.
+// At a shared pile there is jostling: the biggest pushes in and a smaller one is shoved aside (it edges
+// back a little later); a Stegosaurus claims its space with a swing of the tail; calves dart in to snatch
+// a mouthful and scamper back to their mother; and when the T. rex comes for its meat, every plant-eater
+// near it scatters.
 import { Group, Mesh, SphereGeometry, CylinderGeometry, ConeGeometry, MeshStandardMaterial, Vector3, BufferAttribute, Color } from 'three';
 import { plantGeometry } from './floragen.js';
 
@@ -236,7 +240,7 @@ export class Feeding {
     const mod = this.mod;
     f.callT = 1.2;
     if (f.kind === 'ferns') {
-      const cand = (mod.walkers || []).filter((d) => !d.sp.predator && !d.sp.tooBig && d.actions.graze && d.state !== 'sleep' && !d.guarding && !/standoff|circle|social|drinking/.test(d.state));
+      const cand = (mod.walkers || []).filter((d) => !d.parent && !d.sp.predator && !d.sp.tooBig && d.actions.graze && d.state !== 'sleep' && !d.guarding && !/standoff|circle|social|drinking/.test(d.state));
       cand.sort((a, b) => a.pos.distanceTo(f.p) - b.pos.distanceTo(f.p));
       for (const d of cand) {
         if (f.eaters.length >= 3 || f.eaters.includes(d) || d.pos.distanceTo(f.p) > 7) continue;
@@ -301,9 +305,42 @@ export class Feeding {
     if (f.bites >= f.maxBites) this.finish(f);
   }
 
+  // jostling at a pile: a bigger animal shoves a smaller one aside; a Stegosaurus swings its tail at
+  // whoever crowds it
+  jostle(d, f) {
+    if (d.parent) return false;
+    const rivals = f.eaters.filter((o) => o !== d && !o.parent && o._eating === 'ferns' && this.near(o, f, 1.3) && !(o._shovedT > 0));
+    for (const o of rivals) {
+      const steg = d.sp.id === 'stegosaurus' && o.sp.id !== 'stegosaurus';
+      if (!(steg ? Math.random() < 0.35 : o.length < d.length * 0.97 && Math.random() < 0.45)) continue;
+      d.heading = Math.atan2(o.pos.x - d.pos.x, o.pos.z - d.pos.z) * 0.4 + d.heading * 0.6;
+      if (steg) (d.oneShot('tailswing', 0.25), this.mod.voice.play(d.sp.sounds?.tailswing || 'hiss', d.root.position, d.stepSize));
+      else (d.oneShot(d.actions.threat ? 'threat' : 'alert', 0.25), this.mod.voice.play(d.sp.sounds?.threat || 'grunt', d.root.position, d.stepSize));
+      this.backOff(o, f);
+      d.mod.later(1.8, () => !f.gone && (d.state === 'oneshot' || d.state === 'idle') && this.graze(d, f));
+      return true;
+    }
+    return false;
+  }
+
+  // shoved aside: a start, a few steps back, then it edges in again
+  backOff(o, f) {
+    o._flinch = 0.35;
+    o._eating = null;
+    o._shovedT = 8;
+    this.mod.voice.play('grunt', o.root.position, o.stepSize * 0.8);
+    const a = Math.atan2(o.pos.x - f.p.x, o.pos.z - f.p.z), r = o.length * 0.9 + 0.3;
+    const t = o.layer.nearestOpen(f.p.x + Math.sin(a) * r, f.p.z + Math.cos(a) * r);
+    if (t) o.goTo(t.x, t.z, () => {
+      o.heading = Math.atan2(f.p.x - o.pos.x, f.p.z - o.pos.z);
+      o.mod.later(3 + Math.random() * 3, () => !f.gone && o.state === 'idle' && this.approach(o, f, o.length * 0.42 + 0.05, () => this.graze(o, f)));
+    });
+  }
+
   // ferns: head down, a mouthful, chew, again
   graze(d, f) {
     if (f.gone || !this.near(d, f, 1.3)) return d.rest(0.6);
+    if (Math.random() < 0.5 && this.jostle(d, f)) return;
     d.oneShot('graze');
     d._eating = 'ferns';
     d.mod.later(0.9, () => {
@@ -444,6 +481,45 @@ export class Feeding {
         }
       }
     }
+    for (const d of this.mod.walkers || []) if (d._shovedT > 0) d._shovedT -= dt;
+    if ((this.scanT = (this.scanT || 0) - dt) <= 0) {
+      this.scanT = 1.5;
+      for (const f of this.foods) {
+        if (f.gone || f.held || !f.landed) continue;
+        // calves dart in for a mouthful while the grown-ups eat, then scamper back to their mother
+        if (f.kind === 'ferns' && f.eaters.some((e) => !e.parent && e._eating === 'ferns')) {
+          for (const c of this.mod.walkers || []) {
+            if (!c.parent || c._stealT > 0 || c.swimming || !/idle|walk/.test(c.state) || Math.random() > 0.3) continue;
+            if (Math.hypot(c.pos.x - f.p.x, c.pos.z - f.p.z) > 3) continue;
+            c._stealT = 12;
+            this.approach(c, f, 0.12, () => {
+              c.oneShot('graze', 0.3) || c.rest(0.3);
+              c.mod.later(0.8, () => {
+                if (f.gone) return;
+                f.bites += 0.5;
+                this.mod.effects.bits?.(f.g.position.clone(), 0x4f7a2c, 2);
+                this.mod.voice.play('peep', c.root.position, 0.5);
+                c.full = Math.min(1.2, (c.full || 0) + 0.1);
+              });
+              c.mod.later(1.6, () => (c.state = 'idle', c.timer = 0, c.follow()));
+            });
+          }
+        }
+        // the T. rex coming for its meat: every plant-eater near it scatters
+        if (f.kind === 'meat' && this.mod.predator && (this.mod.predator._eating === 'meat' || f.eaters.includes(this.mod.predator))) {
+          const rex = this.mod.predator;
+          for (const d of this.mod.walkers || []) {
+            if (d.sp.predator || d.sp.tooBig || d.state === 'flee' || d.state === 'sleep') continue;
+            const near = Math.min(Math.hypot(d.pos.x - f.p.x, d.pos.z - f.p.z), Math.hypot(d.pos.x - rex.pos.x, d.pos.z - rex.pos.z));
+            if (near > 2.6) continue;
+            const ax = d.pos.x - rex.pos.x, az = d.pos.z - rex.pos.z, k = 2.5 / Math.max(0.1, Math.hypot(ax, az));
+            const t = d.layer.nearestOpen(d.pos.x + ax * k, d.pos.z + az * k);
+            if (t && d.goTo(t.x, t.z, null, 'run')) (d.state = 'flee', d._eating = null);
+          }
+        }
+      }
+    }
+    for (const d of this.mod.walkers || []) if (d._stealT > 0) d._stealT -= dt;
     // the T. rex at its meat: bending to it, tearing a mouthful every so often
     for (const d of this.mod.walkers || []) {
       const R = d._tear;
