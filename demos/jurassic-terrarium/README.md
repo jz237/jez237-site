@@ -201,3 +201,106 @@ v1.24.3: phones and tablets (desktop unchanged):
 - **Smaller skins on phones and tablets.** The cast's 4096 px skins need about 1.3 GB of graphics memory, more than a phone has; running out lost the WebGL context and Chrome then blocked WebGL on the page ("Error creating WebGL context"). On phones and tablets each skin is now shrunk to 2048 px as it loads (1024 px on devices with 4 GB of RAM or less), one species at a time. `?skins=1024|2048` forces a size and `?skins=4096` full size.
 - **No reload loop.** On phones and tablets a lost WebGL context no longer reloads the page automatically; it shows a message with a reload and a lighter reload (`?quality=low&skins=1024`).
 - **Plain-words message.** When a phone or tablet browser won't provide WebGL 2 at all, the page explains what happened and what to do instead of showing the raw three.js error.
+
+v1.25: wind:
+- **Chimney smoke:** in a wind the cabin's smoke streams off as one long ribbon instead of separate puffs. It lies down flatter the harder it blows and is torn ragged by gusts. In still air it rises in a column.
+- **Mist and wisps:** the valley mist, low haze, peak wisps and waterfall mist ride Weatherglass's wind field instead of drifting on their own. They slide downwind, lean away from where they lie and settle back when it calms. In a gale they are drawn into ragged streaks and thinned, and the peak wisps stream off the summits like banner clouds. The haze travels across the case and wraps round.
+- **Steam and spray:** steam rising after rain, and the fine spray at the foot of the cascades, blow where the wind takes them.
+- **Plants:** the idle sway follows the prevailing wind, so plants, smoke and mist all lean the same way.
+- Weatherglass's own clouds and fog already followed the wind and still do.
+
+v1.26: weather on the animals, breath, a softer backdrop:
+- **Rain on the animals:** wet skin shows rivulets trickling down the flanks and beads on the back, and tiny splash rings pop on the upward faces while it rains. Water drips from chins, throats, bellies and tails, drawn out as it falls. When the rain stops, each animal gives a wet-dog shake and is only damp afterwards.
+- **Wind:** in a strong wind the animals turn their tails to it and mostly hunker down rather than wander. Their eyes narrow against the wind, and a little against the rain. Footfall and dust-bath dust blows away downwind.
+- **Breath:** on cold mornings, in winter and in rain-cooled air, each breath leaves the nostrils as a puff of vapour in time with the breathing (quicker after a run), carried off on the wind. A roar blows out a great cloud.
+- **Backdrop:** the painting melts into the case. It hazes towards the case's own mist colour where it meets the ground, and two bands of ground mist follow the rise and fall of the ground along the back and drift with the wind, so there is no hard line where the ground ends and the picture starts. `?blend=0` shows the plain painting for comparison.
+
+v1.27: skin up close:
+- **Scales in relief:** each species has its own scale pattern, worked out per pixel from the skin's own body coordinates, raised in relief and shaded dark in the crevices:
+  - T. rex: fine pebbly scales with scattered tubercles along the back;
+  - Triceratops: big polygonal plates, with grooves branching over the frill like blood vessels;
+  - Stegosaurus: pebbly scales and bony knobs, with smoother grooved plates;
+  - Brachiosaurus: large rosettes;
+  - Pteranodon: a fine grain.
+- **Only when close:** the detail sharpens in as the camera comes closer (Documentary mode especially) and fades out wherever a scale would be smaller than a few pixels, so wide views don't shimmer. It costs about 0.4 ms in a full-screen close-up. `?scales=0` turns it off for comparison.
+
+v1.28: footprints that last:
+- **Real hollows:** prints have flat floors, steep walls and a rim of mud pushed up round them, all lit by the sun: the wall and rim facing it catch the light, the far wall falls into shadow. Heavier animals press deeper.
+- **Tracks:** prints last for 6–10 minutes instead of about a minute and a half, so the animals' comings and goings build up into tracks along the banks, the trail and wet ground.
+- **Rain:** rain fills the prints with water that mirrors the dark trees at a low angle and the sky from above, catches the sun as a glint and rings with raindrops while it rains. Mud by the water seeps a little in straight away. Afterwards they dry out over a few minutes, and heavy rain slowly wears them away.
+
+v1.29: set pieces:
+- **Standoff:** when the T. rex charges a Triceratops that stands its ground, they have a real standoff. The Triceratops faces it square, lowers its horns, bellows and stamps a forefoot (dust, a thud, a tremor). The rest of the herd runs to its side and lines up facing the predator. The T. rex prowls round them at a wary distance, head low and watching, stops to roar, makes one feinting rush that pulls up short, then roars again and stalks off. It won't hunt again for a while. Over 20 simulated minutes this happened about four times.
+- **Brachiosaurus at the pool:** it now walks down to the big pool, turns to face the water and drinks sip after sip. Its neck bows from the base until the muzzle meets the surface (the clip alone stopped more than a metre short), rings spread from the muzzle, and water runs off its chin between sips. Before this, the giant couldn't find a drinking spot at all. Every drinker now turns to face the water first.
+- **Pteranodon skimming:** a fishing dive is now a low, level skim across the pool, the beak cutting a wake of rings and flicking spray, then the snatch, a burst of spray and the climb away with a fish thrashing in its beak.
+- **Documentary:** the director treats these as top stories. The standoff is filmed as a two-shot with both animals in frame, the drinking on the head down at the water, and the skim with its own caption. The crew no longer parks the camera inside a tree's crown.
+
+v1.30: nights:
+- **Warm light on the animals:** after dark, the cabin's hearth glows out through its windows and lights animals passing close, warm and flickering, with a pool of firelight on the ground round the cabin. The jetty lantern does the same, and so do the lanterns along the footpath (the two with an animal nearest them). This is worked out in the animals' own skin shader, so the rest of the scene costs nothing extra.
+- **Eyeshine:** awake animals' eyes throw light back in the dark: amber for the T. rex, green for Triceratops, gold for Stegosaurus, blue for Brachiosaurus. It's brightest when they look straight at you and flares near a light. Shut eyes don't shine, so you'll mostly see it on the T. rex prowling at night.
+- **Lightning:** a strike rims every animal in hard cold light, darkens its near side and flares the painted sky behind it, so for an instant they stand out as silhouettes.
+
+v1.31: flesh in motion:
+- **Soft flesh:** each animal's belly, throat and the mass of its thighs are soft. They lag behind the body as it speeds up, slows and turns, drop and bounce back with each footfall (harder at a run and for the heavy animals), and settle when it stops. The soft regions are found from the bone each part of the skin hangs from and which way it faces, then blended smoothly into the rest of the body.
+- **Breathing:** the ribcage swells and falls with each breath, deeper and quicker after a run.
+- **Muscle:** the muscle at the top of each leg bunches as the leg swings away from rest.
+- `?flesh=0` turns it off for comparison (and `?flesh=3` exaggerates it).
+
+v1.32: snow and frost on the animals:
+- **Snow lying:** while it snows, snow settles on whatever faces up (backs, necks, the tops of tails, plates and frills), with a little thickness to it, a ragged edge and glints of crystals in the light. Very little settles on animals sheltering or in the den. It melts off in a thaw or when they wade.
+- **Shaking it off:** an animal with snow piling up shakes it off now and then in a burst of powder.
+- **Frost:** in a hard cold, rime forms on frills, plates and horns and lightly on the back.
+
+v1.33: family and social moments; two fixes:
+- **Calves at play:** two Triceratops calves square up and butt heads, backing off and charging in with little hops and puffs of dust.
+- **Mother and calf:** the mother turns to a calf and bows her head to it; it comes up under her muzzle and reaches up to her.
+- **Sparring:** the two Stegosaurus take turns turning their tails to each other and swinging the spikes, the other rearing back.
+- **The herd asleep together:** at nightfall the first to settle lies down where it is; the rest come over and lie side by side with it, all facing the same way. (The mother sleeps by her nest.)
+- **Mind the calf:** the Brachiosaurus lifts its neck and looks down to let a calf or small animal walk underneath.
+- **Documentary:** it films each of these with its own caption.
+- **Fix: smoke against the wind tool.** A wind stroke drawn across the chimney smoke used to land on the ground behind the cabin, and the smoke, caught in that gust's side-draught, blew the wrong way. A stroke passing over the plume now blows at the plume itself.
+- **Fix: screen flicker when a meteor crosses the night sky.** The meteor's shader could produce an invalid pixel at its tail, which the bloom spread over the whole screen as black frames. It's clamped, and the sky's glowing layers are now guarded like the water's.
+
+v1.34: painted end walls:
+- **Ends:** both end walls now carry the painted valley, carried on from the back wall round each corner (mirrored there, so the horizon and colours meet without a seam), with the same haze where it meets the ground.
+- **Ground mist:** the mist bands now run round the back corners and part way down each end.
+- **See-through when turned:** like the back, each end is painted only on its inside. Turn the case to look along its length and the near end is clear glass while the far end is the backdrop.
+
+v1.35: Pteranodon wings:
+- **Flexible curving:** each wing is a chain of springs on top of the flapping animation. The joints further out lag behind the stroke and the air holds them bent against it, so on the downstroke the wing bows and the tips trail upward, and at the top of the upstroke they trail down and whip through. Folded on a perch, the wing stays still.
+- **Billowing membrane:** the membrane bellies against the air: lifted on each downstroke, pressed down on the upstroke, most across the middle of the span, with a light flutter in a glide.
+- **Detail:** fine stiffening fibres (actinofibrils) run out across the membrane, slanting back towards the trailing edge. They show as faint ridges close up and as dark lines when the wing is against the light, alongside the veins. The wing is smooth skin; scales are on the body only.
+
+v1.36: game trails:
+- **Trample map:** a low-resolution map of the whole case that every walking animal presses into round its body, the heavy ones harder. It recovers over a few minutes, so a route used again and again becomes a trail and an abandoned one grows back.
+- **What it changes:** Weatherglass's grass lies short and flat along a trail, the planted ferns are trodden down and splayed out, and the ground wears to bare earth. `?trails=0` turns it off for comparison.
+
+v1.37: every tree in hand; right-drag pans:
+- **Grab any tree:** with the hand, any tree can be grabbed by its crown and pulled about: the conifers, redwoods, tree ferns, cycads and the rest of the planting, as well as Weatherglass's own trees. It leans after the hand, shakes leaves loose and startles the birds. Let go and it whips back and sways to rest; a click without a drag flicks it.
+- **Mouse:** the right button now slides the view around (pan) while the left button turns it; Shift + right still turns it. The pan reaches the ends of the wider case.
+
+v1.37.1: the view stays put:
+- **No idle drift:** Weatherglass slowly swung the camera round after 30 seconds without input. Once the view could be slid off-centre with the right button, that swing carried the whole case across the screen, and it came back every time you stopped. It's off: the view only moves when you move it.
+- **No stuck drags:** a mouse drag now ends the moment no button is held, even if the release was missed (let go outside the window, a context menu), so the view can't get stuck sliding with the mouse.
+
+v1.38: touching the animals; footsteps by surface:
+- **Touch:** with the hand, click an animal to poke it, or hold and move over it to stroke it. Animals under the hand take priority over trees. Each answers in character:
+  - Triceratops: poked, it swings round and lowers its horns with a bellow; stroked, it leans into the hand with its eyes half-closed and honks softly.
+  - A calf: poked, it starts, peeps and scampers to its mother; stroked, it leans in and peeps.
+  - Stegosaurus: poked, it turns its tail on you and swings it with a hiss.
+  - T. rex: poked, it snaps round and roars; stroked, it puts up with it for a moment, growls, then rounds on you.
+  - Brachiosaurus: it rumbles, turns and bows its long neck down to peer at the hand.
+  - Pteranodon: on a perch it takes off; in the air it croaks and beats its wings.
+
+  Hovering makes an animal glance at the hand. An animal busy with something bigger (a standoff, a hunt, drinking, a family moment) only looks round.
+- **Footsteps:** each footfall sounds like what it lands on: a splash and plop in water, a sucking squelch in mud on the banks or wet ground, crunching gravel on the footpath, packed snow, or a thud with planting brushed aside on ordinary ground. The big animals are deeper and heavier on all of them.
+
+v1.39: feeding:
+- **A food for each:** "Feed" opens a menu of four foods:
+  - Ferns (fronds and red cycad seeds): for the Triceratops and Stegosaurus.
+  - A branch, hung on a rope from the lid at the height the Brachiosaurus browses: it reaches up and strips it.
+  - A fish, tossed into the pool, flopping and splashing until a Pteranodon dives and snatches it.
+  - Meat: the T. rex stalks over, sniffs it, pulls it in under its jaws, stoops to it and tears at it, wrenching its head from side to side.
+- **From your hand:** a quick click drops the food. Press and hold to feed from your hand: the food stays in the hand, follows it, and the animals come to it there. The Brachiosaurus browses the branch you hold up, a Pteranodon swoops at a fish dangled over the water, and the T. rex snatches the meat out of your hand. Let go and whatever is left falls (or the branch stays hung).
+- **Eating you can see:** jaws work between mouthfuls, scraps fall (fronds, seeds, meat), the food shrinks bite by bite, with crop and tear sounds. Each animal's belly fills as it eats and slowly goes down over a few minutes. A full animal lies down to sleep it off.
+- **Documentary:** it films the feeding ("feeding", "stripping a branch", "tearing at a meal") and the nap afterwards ("sleeping it off").

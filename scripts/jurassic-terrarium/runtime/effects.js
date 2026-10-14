@@ -57,17 +57,26 @@ export class Effects {
       const a = Math.random() * Math.PI * 2;
       D.p = new Vector3(p.x + Math.cos(a) * size * 0.4, p.y + 0.01, p.z + Math.sin(a) * size * 0.4);
       D.v = new Vector3(Math.cos(a) * size * 0.6, size * 0.5, Math.sin(a) * size * 0.6);
-      D.life = D.max = 0.8 + Math.random() * 0.5;
+      const wv = this.ctx.wind?.sample?.(p.x, p.z, this._dw || (this._dw = { x: 0, z: 0 }), 0.1);
+      D.life = D.max = (0.8 + Math.random() * 0.5) * (1 + Math.min(1.5, Math.hypot(wv?.x || 0, wv?.z || 0)));
       D.size = size * (0.8 + Math.random() * 0.6) * (1 - wet);
     }
   }
 
   updateDust(dt) {
+    const w = this._dw || (this._dw = { x: 0, z: 0 });
     for (const D of this.dusts) {
       if (D.life <= 0) continue;
       D.life -= dt;
       const t = 1 - D.life / D.max;
       D.v.multiplyScalar(1 - dt * 3);
+      // and the wind carries it off
+      const v = this.ctx.wind?.sample?.(D.p.x, D.p.z, w, 0.1);
+      if (v && Number.isFinite(v.x + v.z)) {
+        const k = Math.min(1, dt * 2.5);
+        D.v.x += v.x * 0.8 * k;
+        D.v.z += v.z * 0.8 * k;
+      }
       D.p.addScaledVector(D.v, dt);
       D.s.position.copy(D.p);
       D.s.scale.setScalar(D.size * (0.6 + t * 1.6));
@@ -107,7 +116,7 @@ export class Effects {
     const sun = (life?.sunny ?? 0) * (1 - (life?.rain || 0));
     const amount = Math.min(1, wet * 1.6) * sun * Math.min(1, ((life?.temp ?? 20) - 8) / 10);
     this.steamAcc += dt * amount * 14;
-    const T = this.ctx.terrain, box = this.ctx.box, wind = w.windEnergy || 0;
+    const T = this.ctx.terrain, box = this.ctx.box, wv = this._wv || (this._wv = { x: 0, z: 0 });
     while (this.steamAcc >= 1) {
       this.steamAcc -= 1;
       const S = this.steam[this.steamNext];
@@ -123,8 +132,12 @@ export class Effects {
       if (S.life <= 0) continue;
       S.life -= dt;
       const t = 1 - S.life / S.max;
-      S.p.y += dt * 0.12;
-      S.p.x += dt * (0.03 + wind * 0.08);
+      // rising, and carried off on Weatherglass's wind; a strong wind flattens it along the ground
+      const v = this.ctx.wind?.sample?.(S.p.x, S.p.z, wv, 0.2) || wv;
+      const sp = Math.hypot(v.x, v.z) || 0;
+      S.p.y += dt * 0.12 / (1 + sp);
+      S.p.x += dt * (Number.isFinite(v.x) ? v.x : 0) * 0.7;
+      S.p.z += dt * (Number.isFinite(v.z) ? v.z : 0) * 0.7;
       S.s.position.copy(S.p);
       S.s.scale.setScalar(S.size * (1 + t * 1.8));
       S.s.material.opacity = 0.2 * Math.sin(Math.PI * t);
@@ -164,9 +177,57 @@ export class Effects {
     }
   }
 
+  // ---------------------------------------------------------------- bits of food
+  // scraps dropping from a mouthful: little tumbling flakes, tinted for what is being eaten
+  bits(pos, color, n = 4) {
+    if (!this.bitMesh) {
+      const N = 60;
+      this.bitMesh = new InstancedMesh(new BoxGeometry(0.012, 0.006, 0.009), new MeshStandardMaterial({ roughness: 0.7 }), N);
+      this.bitMesh.name = 'effects-bits';
+      this.bitMesh.frustumCulled = false;
+      for (let i = 0; i < N; i++) (this.bitMesh.setMatrixAt(i, HIDE), this.bitMesh.setColorAt(i, new Color(1, 1, 1)));
+      this.bitList = Array.from({ length: N }, () => ({ life: 0 }));
+      this.bitNext = 0;
+      this.group.add(this.bitMesh);
+    }
+    const c = new Color(color);
+    for (let k = 0; k < n; k++) {
+      const i = this.bitNext, B = this.bitList[i];
+      this.bitNext = (i + 1) % this.bitList.length;
+      B.p = new Vector3(pos.x, pos.y, pos.z);
+      B.v = new Vector3((Math.random() - 0.5) * 0.25, 0.1 + Math.random() * 0.2, (Math.random() - 0.5) * 0.25);
+      B.r = new Vector3(Math.random() * 6, Math.random() * 6, 0);
+      B.life = 1.6;
+      B.ground = this.ctx.terrain.height(pos.x, pos.z);
+      this.bitMesh.setColorAt(i, c.clone().multiplyScalar(0.8 + Math.random() * 0.4));
+    }
+    this.bitMesh.instanceColor.needsUpdate = true;
+  }
+
+  updateBits(dt) {
+    if (!this.bitMesh) return;
+    let any = false;
+    this.bitList.forEach((B, i) => {
+      if (B.life <= 0) return;
+      any = true;
+      B.life -= dt;
+      if (B.p.y > B.ground + 0.004) {
+        B.v.y -= 2.4 * dt;
+        B.p.addScaledVector(B.v, dt);
+        B.r.x += dt * 9;
+        B.r.y += dt * 7;
+      } else B.p.y = B.ground + 0.003;
+      const s = B.life > 0.4 ? 1 : B.life / 0.4;
+      M.compose(B.p, Q.setFromEuler(E.set(B.r.x, B.r.y, 0)), Sc.set(s, s, s));
+      this.bitMesh.setMatrixAt(i, B.life > 0 ? M : HIDE);
+    });
+    if (any || this._bitsWere) this.bitMesh.instanceMatrix.needsUpdate = true;
+    this._bitsWere = any;
+  }
+
   // ---------------------------------------------------------------- splashes
   buildSplash() {
-    const NR = 8, ND = 40;
+    const NR = 8, ND = 140;
     this.ringMat = new MeshBasicMaterial({ color: 0xe8f4f2, transparent: true, opacity: 0.6, depthWrite: false, side: DoubleSide });
     this.rings = [];
     for (let i = 0; i < NR; i++) {
@@ -200,7 +261,19 @@ export class Effects {
       D.v = new Vector3(Math.cos(a) * s + (out?.x || 0) * speed, (0.2 + Math.random() * 0.5) * speed * 1.5, Math.sin(a) * s + (out?.z || 0) * speed);
       D.life = 1.4;
       D.y0 = y0;
+      D.drip = 0;
     }
+  }
+
+  // a drop of water falling from a wet body at p to the ground at y0, drawn out as it falls
+  drip(p, y0, size = 1) {
+    const D = this.drops[this.dropNext];
+    this.dropNext = (this.dropNext + 1) % this.drops.length;
+    D.p = new Vector3(p.x, p.y, p.z);
+    D.v = new Vector3(0, -0.04, 0);
+    D.life = 3;
+    D.y0 = y0;
+    D.drip = size;
   }
 
   splash(x, z, y = 0, size = 1) {
@@ -220,6 +293,7 @@ export class Effects {
       D.v = new Vector3(Math.cos(a) * s, (0.35 + Math.random() * 0.4) * size, Math.sin(a) * s);
       D.life = 1.2;
       D.y0 = y;
+      D.drip = 0;
     }
   }
 
@@ -264,6 +338,7 @@ export class Effects {
   update(dt, env) {
     this.updateSteam(dt);
     this.updateDust(dt);
+    this.updateBits(dt);
     // leaves tumble and drift down, then lie on the ground a moment and vanish
     let leavesLive = false;
     this.leaves.forEach((L, i) => {
@@ -305,7 +380,9 @@ export class Effects {
       D.v.y -= 2.4 * dt;
       D.p.addScaledVector(D.v, dt);
       if (D.p.y < D.y0) D.life = 0;
-      M.compose(D.p, Q.identity(), Sc.set(1, 1, 1));
+      // a falling drip stretches with its speed
+      const st = D.drip ? Math.min(3.2, 1 + -D.v.y * 2.2) : 1, sz = D.drip || 1;
+      M.compose(D.p, Q.identity(), Sc.set(0.75 * sz / Math.sqrt(st), sz * st, 0.75 * sz / Math.sqrt(st)));
       this.dropMesh.setMatrixAt(i, D.life > 0 ? M : HIDE);
     });
     if (dropsLive || this._dropsWere) this.dropMesh.instanceMatrix.needsUpdate = true;
