@@ -6,8 +6,9 @@ import {SurfaceKind} from './Surface';
 import {mulberry32, dataTexture, tileFbm} from './Textures';
 import {archGeometry, caveBackingGeometry} from './DesertDetails';
 import {loadDriftwood} from './Driftwood';
-import {cactus, dryShrub, rosette, loadPlantReferences} from './DesertPlants';
+import {desertPlanting, loadPlantReferences} from './DesertPlants';
 import {PlantFlex, plantFlexFor, type PlantContact} from './PlantFlex';
+import {climbingStoneGeometry} from './ClimbingStone';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const noise = (x: number, y: number, z: number) => Math.sin(x * 37 + z * 19 + y * 63) * Math.sin(x * 71 - z * 43 + y * 97);
@@ -145,11 +146,7 @@ export class Habitat {
     addRock(-.46,.226,.048,.253,.168,.049,3);
     addRock(-.48,.262,.025,.232,.147,.025,83);
     addRock(-.655,.108,.155,.085,.098,.045,13);
-    addRock(-.235,.168,.153,.132,.111,.041,9,true,-.18);
-    addRock(-.140,.122,.207,.120,.085,.036,21,true,-.16);
-    // The slope is an irregular weathered stone, never a rectangular ramp.
-    addRock(-.24,.143,.205,.160,.065,.030,71,true,-.39);
-    addRock(-.060,.096,.210,.093,.063,.023,28,true,-.10);
+    const incline=new THREE.Mesh(climbingStoneGeometry(),rock);incline.name='worn-climbing-sandstone';incline.castShadow=incline.receiveShadow=true;g.add(incline);this.hard.push({mesh:incline,kind:SurfaceKind.Rock});
     addRock(-.59,.191,-.096,.120,.087,.030,17);
     const coolArch=new THREE.Mesh(archGeometry(.38,.205,.218,.143,.230,41),rock);coolArch.position.set(.475,.073,-.16);coolArch.castShadow=coolArch.receiveShadow=true;g.add(coolArch);this.hard.push({mesh:coolArch,kind:SurfaceKind.Rock});
     caveBack(coolArch, .218, .143);
@@ -158,21 +155,23 @@ export class Habitat {
       const floor=new THREE.Mesh(new THREE.PlaneGeometry(w,d),interior);floor.rotation.x=-Math.PI/2;floor.position.set(x,groundHeight(x,z)+.001,z);floor.receiveShadow=true;g.add(floor);
     }
     addRock(.659,.093,.058,.069,.078,.029,72);
-    addRock(.008,.089,frontZ-.049,.077,.047,.026,18);
-    addRock(-.245,.087,frontZ-.025,.063,.029,.025,67);
+    // Keep decorative stones in the corners, clear of the full walking stance.
+    addRock(-.709,.089,frontZ-.049,.077,.047,.026,18);
+    addRock(.720,.087,-.25,.063,.029,.025,67);
     // A few small smooth rocks and scatter pebbles, leaving most floor clear.
     const rnd=mulberry32(51), pebbleCount=Math.round(290*TANK.d/.6), pebble=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),rock,pebbleCount);
     const mat=new THREE.Matrix4(),q=new THREE.Quaternion();
     for(let i=0;i<pebbleCount;i++) {const x=(rnd()-.5)*(TANK.w-.04),z=(rnd()-.5)*(TANK.d-.05),r=.0012+rnd()*.0038;mat.compose(new THREE.Vector3(x,groundHeight(x,z)+r*.28,z),q.setFromEuler(new THREE.Euler(rnd()*3,rnd()*3,rnd()*3)),new THREE.Vector3(r,r*.52,r*.8));pebble.setMatrixAt(i,mat);}
     pebble.receiveShadow=true;g.add(pebble);
-    this.addRosette(-.712,backZ+.17,.128,21);this.addRosette(.696,frontZ-.14,.144,22);this.addRosette(-.015,backZ+.086,.108,23);this.addRosette(-.700,frontZ-.066,.066,24);this.addRosette(.228,frontZ-.116,.055,26);
-    for (const shrub of [dryShrub(-.728,.08,.183,61),dryShrub(-.066,backZ+.13,.174,62),dryShrub(-.244,backZ+.093,.12,63)]) this.addSoftPlant(shrub);
-    g.add(cactus(.682,backZ+.142,.278,.030,41),cactus(.741,backZ+.178,.220,.025,42),cactus(.613,backZ+.087,.181,.022,43),cactus(.649,.102,.053,.027,44,true));
+    for(const plant of desertPlanting()){
+      g.add(plant);const flex=plantFlexFor(plant);if(flex)this.plants.push(flex);
+    }
 
     // Low stone water dish at the cool end, separated from the food and lamp.
     const profile:THREE.Vector2[]=[];
     for(const [r,y] of [[0,.075],[.078,.075],[.086,.082],[.088,.099],[.078,.105],[.071,.096],[.068,.085],[0,.085]]) profile.push(new THREE.Vector2(r,y));
     const bowl=new THREE.Mesh(new THREE.LatheGeometry(profile,64),rock);bowl.position.set(POOL.cx,0,POOL.cz);bowl.scale.z=.72;bowl.castShadow=bowl.receiveShadow=true;g.add(bowl);
+    this.hard.push({mesh:bowl,kind:SurfaceKind.Rock});
     this.water=new THREE.Mesh(new THREE.CircleGeometry(.071,64),new THREE.MeshPhysicalMaterial({color:0x4c726a,transparent:true,opacity:.68,roughness:.12,metalness:.1,clearcoat:1}));this.water.rotation.x=-Math.PI/2;this.water.scale.y=.72;this.water.position.set(POOL.cx,WATER_LEVEL,POOL.cz);g.add(this.water);
     for(let i=0;i<4;i++){const m=new THREE.Mesh(new THREE.RingGeometry(.018,.019,64),new THREE.MeshBasicMaterial({color:0xe2e5c5,transparent:true,opacity:.1,depthWrite:false,side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.scale.y=.72;m.position.set(POOL.cx,WATER_LEVEL+.0003,POOL.cz);m.visible=false;g.add(m);this.ripples.push(m);}
 
@@ -203,11 +202,6 @@ export class Habitat {
     const l=new THREE.SpotLight(color,basking?2.4:1.65,2,basking?.67:1.0,.75,2);l.position.set(x,TANK.h-.014,z);l.target.position.set(x,.09,z);l.castShadow=true;l.shadow.mapSize.setScalar(2048);l.shadow.bias=-.00012;l.shadow.normalBias=.0009;l.shadow.camera.near=.03;l.shadow.camera.far=2;this.group.add(l,l.target);return l;
   }
 
-  private addRosette(x:number,z:number,size:number,seed:number) {
-    this.addSoftPlant(rosette(x,z,size,seed));
-  }
-
-  private addSoftPlant(group: THREE.Group) {this.group.add(group); this.plants.push(plantFlexFor(group)!);}
   bendPlants(dt: number, contacts: readonly PlantContact[]) {for (const plant of this.plants) plant.update(dt, contacts);}
 
   private async loadLog() {
