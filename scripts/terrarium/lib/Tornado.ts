@@ -65,6 +65,8 @@ export class Tornado {
   onTouchdown?: (water: boolean) => void;
   private age = 0;
   private life = 40;
+  /** The storm the brewed cloud was heading for before brewing (it goes back to it if no tornado comes). */
+  private brewedFrom = 0;
   private time = 0;
   private ext = 0;
   private groundR = 0.004;
@@ -180,6 +182,7 @@ export class Tornado {
     } else {
       this.cloud = live.reduce<Cloud | null>((a, c) => (!a || c.size * (0.5 + c.water) > a.size * (0.5 + a.water) ? c : a), null)
         ?? clouds.spawn({x: (Math.random() - 0.5) * 0.4, z: (Math.random() - 0.5) * 0.12, size: 0.5, water: 0.7, fadeIn: true});
+      this.brewedFrom = this.cloud.stormTarget;
       this.phase = 'brewing';
     }
     this.placeUnder(this.cloud);
@@ -188,8 +191,15 @@ export class Tornado {
 
   /** Sends it back up: the funnel ropes out and lifts into the cloud. */
   dissipate() {
-    if (this.phase === 'brewing') {this.phase = 'idle'; return;}
+    if (this.phase === 'brewing') {this.unbrew(); return;}
     if (this.live) {this.phase = 'roping'; this.age = 0;}
+  }
+
+  /** No tornado after all: the storm the brewing built settles back to what the cloud had. */
+  private unbrew() {
+    const c = this.cloud;
+    if (c && !c.dissolving) c.stormTarget = Math.min(c.stormTarget, this.brewedFrom);
+    this.phase = 'idle';
   }
 
   private reset() {
@@ -269,7 +279,7 @@ export class Tornado {
       this.placeUnder(c);
       this.hide();
       if (this.age > 3 && c.storm > 0.5) {this.phase = 'forming'; this.age = 0;}
-      else if (this.age > 30) this.phase = 'idle';
+      else if (this.age > 30) this.unbrew();
       return;
     }
     if (!c && this.live) {this.phase = 'roping'; this.age = 0;}
