@@ -17,6 +17,7 @@ import {BASK, groundHeight} from './lib/Ground';
 import {plantLightStrength} from './lib/DesertPlants';
 import type {PlantContact} from './lib/PlantFlex';
 import {SimulationClock} from './lib/SimulationClock';
+import {PoseInterpolation} from './lib/PoseInterpolation';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -33,7 +34,10 @@ export class DesertTerrarium {
   surface!:Surface; nav!:Nav; lizard!:LizardModel; rig!:LizardRig; brain!:LizardBrain; insects!:Insects; dish!:Dish;
   hours=Number(params.get('hours')??11.5);time=0;follow=false;dayRunning=false;feeding=false;frames=0;
   private lastTime=0;private nextReadout=0;private toastTimer=0;private home=new THREE.Vector3();private homeTarget=new THREE.Vector3(0,.32,0);private wasNight=false;private lap=0;
-  private simulationClock = new SimulationClock();
+  // Keep the validated contact increments, but present their cautious gait at
+  // a livelier tempo. Raising root speed alone outruns the planted supports.
+  private simulationClock = new SimulationClock(1.5);
+  private poseInterpolation?:PoseInterpolation;
   private fill=new THREE.DirectionalLight(0xe3dccf,1.1);
   private ambient=new THREE.HemisphereLight(0xcbdbe9,0x63503c,.95);
   private plantContacts: PlantContact[] = [];
@@ -64,6 +68,7 @@ export class DesertTerrarium {
     this.insects=new Insects(this.surface,this.nav);this.scene.add(this.insects.group);
     this.lizard=await LizardModel.load('./lizard/');this.lizard.setMorph(params.get('morph')??'normal');this.scene.add(this.lizard.root);
     this.rig=new LizardRig(this.lizard,this.surface);this.brain=new LizardBrain(this.rig,this.nav,this.surface,this.insects);this.brain.dish=this.dish;
+    this.poseInterpolation=new PoseInterpolation([...this.lizard.bones,this.camera]);
     this.brain.onLap=()=>this.lap=1;
     this.bind();this.applyClimate(0);
     const sim=Number(params.get('sim')??0);for(let t=0;t<sim;t+=1/30)this.simulate(1/30);
@@ -79,7 +84,10 @@ export class DesertTerrarium {
   private startAnimation(){this.renderer.setAnimationLoop(ms=>{
     if(document.hidden){this.lastTime=0;return;}
     const dt=this.lastTime?(ms-this.lastTime)/1000:1/60;
-    this.lastTime=ms;this.simulate(dt);this.draw();
+    this.lastTime=ms;this.simulate(dt);
+    this.poseInterpolation!.render(this.simulationClock.alpha,()=>this.draw(),()=>{
+      this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
+    });
   });}
   simulate(dt:number) {
     this.simulationClock.advance(dt, step => this.simulationStep(step));
@@ -93,6 +101,7 @@ export class DesertTerrarium {
     this.controls.update();this.camera.updateMatrixWorld();foliageUniforms.uKeyDirView.value.copy(this.habitat.warm.position).sub(this.habitat.warm.target.position).normalize().transformDirection(this.camera.matrixWorldInverse);
     foliageUniforms.uKeyColor.value.copy(this.habitat.warm.color);this.lizard.root.updateMatrixWorld(true);
     if(this.time>this.nextReadout){this.nextReadout=this.time+.5;this.updateUI();}
+    this.poseInterpolation?.capture();
   }
   updatePlants(dt: number) {
     let index = 0;

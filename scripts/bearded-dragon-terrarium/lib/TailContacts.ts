@@ -113,12 +113,16 @@ export class TailContacts implements TailCollision {
           this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
         }
       }
-      const hit = solid.tree.closestPointToPoint(point, this.closest, 0, 0.08);
+      // Outside a solid's bounds, only surfaces within the contact radius can
+      // matter. Do not traverse distant triangles for a thin toe or tail tip.
+      // Keep the wider search inside the bounds so deep overlaps still escape.
+      const inBounds=solid.box.containsPoint(point);
+      const hit = solid.tree.closestPointToPoint(point, this.closest, 0, inBounds ? .08 : Math.min(.08,margin));
       if (!hit) continue;
       const n = this.triangleNormal(solid.geometry, hit.faceIndex);
       this.direction.subVectors(point, hit.point);
       let inside = false;
-      if (solid.box.containsPoint(point) && this.direction.dot(n) < -0.00001) {
+      if (inBounds && this.direction.dot(n) < -0.00001) {
         // At a concave rim the nearest triangle can face away from a point that
         // is still in free air. Confirm volume occupancy before ejecting it.
         inside = this.contains(solid.tree, point);

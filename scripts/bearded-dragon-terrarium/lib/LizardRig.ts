@@ -94,6 +94,7 @@ interface Leg {
   nextPlanTime: number;
   footprint: THREE.Vector3[];
   limbSkin: THREE.Vector3[][];
+  digitHand: THREE.Matrix4 | null;
 }
 
 export interface RigInputs {
@@ -269,6 +270,7 @@ export class LizardRig {
         handForward: new THREE.Vector3(), handNormal: new THREE.Vector3(),
         nextPlanTime: 0,
         footprint: limb.digits.flatMap(d=>[d.base,d.tip]).map(p=>new THREE.Vector3((p[0]-limb.wrist[0]) * K,0,(p[2]-limb.wrist[2]) * K)),
+        digitHand:null,
         limbSkin:[limb.bones.upper,limb.bones.lower].map(bone=>{
           const g=model.mesh.geometry,p=g.attributes.position,ids=g.attributes.skinIndex,weights=g.attributes.skinWeight;
           const inverse=model.bind[bone].clone().invert(),points:THREE.Vector3[]=[];
@@ -504,6 +506,7 @@ export class LizardRig {
       leg.bendDirection.set(0, 0, 0); leg.wristDirection.set(0, 0, 0);
       leg.handForward.set(0, 0, 0); leg.handNormal.set(0, 0, 0);
       leg.lastPhase = (this.phase + leg.offset) % 1;
+      leg.digitHand=null;
       leg.normal.copy(this.footSupport(leg.planted.x, leg.planted.z).normal);
     }
     const pelvis = this.bodyToWorld(new THREE.Vector3(0.9, this.spineBindY[5], 0), new THREE.Vector3());
@@ -1214,6 +1217,13 @@ export class LizardRig {
     this.setBone(d.bones.lower, E, lowerRot);
     // Digits follow the hand; toes stay flat while the heel peels, curl a little in swing.
     const hw = this.boneWorld[d.bones.hand];
+    // The habitat is static. A planted hand's toe contacts do not change when
+    // the shoulder moves; retain that solved grip until the hand actually moves.
+    const sameGrip=!leg.swing && waveLift===0 && leg.digitHand!==null
+      && hw.elements.every((v,i)=>Math.abs(v-leg.digitHand!.elements[i])<1e-12);
+    if(sameGrip)return;
+    if(!leg.swing && waveLift===0)(leg.digitHand??=new THREE.Matrix4()).copy(hw);
+    else leg.digitHand=null;
     d.bones.digits.forEach((bi, i) => {
       const rel = leg.digitRel[i];
       const base = hw.clone().multiply(rel);

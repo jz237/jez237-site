@@ -7,6 +7,7 @@ import {Surface} from '../lib/Surface';
 import {groundHeight} from '../lib/Ground';
 import {LizardRig} from '../lib/LizardRig';
 import {Footholds} from '../lib/Footholds';
+import {PoseInterpolation} from '../lib/PoseInterpolation';
 import {habitat, model, Audit, SkinAudit} from './locomotion-fixture';
 
 test('resting on the basking rock settles without alternating vertical corrections',()=>{
@@ -78,6 +79,7 @@ test('the complete habitat supports a continuous tour with real planted feet', {
   let seed=12345;const random=Math.random;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   try{
     const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard);
+    const presentation=new PoseInterpolation(a.lizard.bones);
     const drink=b.drinkSpot(); assert.ok(drink,'a dry drinking approach is available');
     b.dish={centre:new THREE.Vector3(-.58,groundHeight(-.58,.362),.362)};
     const food=b.grazeSpot();assert.ok(food,'a feeding approach is available');
@@ -92,7 +94,12 @@ test('the complete habitat supports a continuous tour with real planted feet', {
       const goal=[...b.goal];let arrived=false,seconds=0;
       for(let i=0;i<limit*60;i++){
         b.update(1/60);audit.sample(r,a.surface);
-        if(frame%6===0)skin.sample(r,a.surface,frame);frame++;
+        presentation.capture();
+        if(frame%6===0){
+          skin.sample(r,a.surface,frame);
+          presentation.render(.5,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
+        }
+        frame++;
         seconds=(i+1)/60;
         if(i%600===0)report({name,seconds,x:r.inputs.x,z:r.inputs.z});
         if(b.mode==='idle' && Math.hypot(r.inputs.x-goal[0],r.inputs.z-goal[1])<.06){arrived=true;break;}
