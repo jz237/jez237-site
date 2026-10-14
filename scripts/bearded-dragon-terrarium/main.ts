@@ -84,13 +84,16 @@ export class DesertTerrarium {
   private startAnimation(){this.renderer.setAnimationLoop(ms=>{
     if(document.hidden){this.lastTime=0;return;}
     const dt=this.lastTime?(ms-this.lastTime)/1000:1/60;
-    this.lastTime=ms;this.simulate(dt);
+    this.lastTime=ms;this.simulate(dt,8);
     this.poseInterpolation!.render(this.simulationClock.alpha,()=>this.draw(),()=>{
       this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
     });
   });}
-  simulate(dt:number) {
-    this.simulationClock.advance(dt, step => this.simulationStep(step));
+  simulate(dt:number,budget=Infinity) {
+    // A slow contact solve must not trigger nine more solves before the next
+    // picture. Carry the time debt and give rendering a turn after ~8 ms.
+    const start=performance.now();
+    this.simulationClock.advance(dt, step => this.simulationStep(step),()=>performance.now()-start<budget);
   }
   private simulationStep(dt:number) {
     this.time+=dt;

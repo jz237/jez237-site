@@ -46,3 +46,16 @@ test('the livelier tempo preserves fixed contact increments through uneven displ
   const expected=run([1/60]);assert.equal(expected.steps,360);
   for(const cadence of [[1/10],[1/30],[1/144],[.012,.15,.008,.04,.02]])assert.deepEqual(run(cadence),expected);
 });
+
+test('an expensive frame yields to rendering and repays its time without a catch-up burst',()=>{
+  const clock=new SimulationClock(1.5);let cost=0,steps=0;
+  const tick=()=>{steps++;cost+=20;};
+  clock.advance(.1,tick,()=>cost<8);
+  assert.equal(steps,1,'a slow first solve yields instead of blocking on all nine');
+  for(let frame=0;frame<30;frame++){
+    cost=0;
+    clock.advance(1/60,()=>{steps++;cost+=3;},()=>cost<8);
+    assert.ok(cost<=9,'catch-up stays within one solve of the render budget');
+  }
+  assert.equal(steps,54,'all 0.6 seconds are simulated at the requested 1.5 tempo');
+});
