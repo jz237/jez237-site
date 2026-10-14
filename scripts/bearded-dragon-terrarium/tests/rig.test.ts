@@ -16,6 +16,19 @@ function model() {
 const flat = {heightAt: () => 0, normalAt: (_x: number, _z: number, out = new THREE.Vector3()) => out.set(0, 1, 0)};
 const pos = (m: THREE.Matrix4) => new THREE.Vector3().setFromMatrixPosition(m);
 
+test('a movement request without actual travel does not pump the torso up and down',()=>{
+  const rig=new LizardRig(model(),flat),r=rig as any;
+  Object.assign(rig.inputs,{speed:.12,clearance:1.15,chestLift:.15});
+  let lo=Infinity,hi=-Infinity;
+  for(let i=0;i<300;i++){
+    // The navigation/controller has held the body in place while arranging feet.
+    rig.update(1/60);
+    if(i>=180){lo=Math.min(lo,r.bodyY);hi=Math.max(hi,r.bodyY);}
+  }
+  assert.ok(hi-lo<.00015,`stationary torso height varied by ${hi-lo} m`);
+  assert.ok(Math.abs(r.bend)<.001,'no traveling body wave without travel');
+});
+
 test('walking: feet stay planted in stance, limbs keep their length, the body advances', () => {
   const lizard = model();
   const rig = new LizardRig(lizard, flat);
@@ -43,13 +56,14 @@ test('walking: feet stay planted in stance, limbs keep their length, the body ad
       const wrist = new THREE.Vector3(0, 0.35, 0).applyMatrix4(lizard.bones[leg.data.bones.hand].matrix);
       assert.ok(Math.abs(e.distanceTo(wrist) - leg.data.lowerLength * LIZARD_SCALE) < 1e-4, 'lower limb length preserved');
       assert.ok(s.distanceTo(wrist) < (leg.data.upperLength + leg.data.lowerLength) * LIZARD_SCALE * 0.97, 'stance limb remains bent');
-      assert.ok(hand.y >= 0.0018, 'heel peel raises the hand above its sole');
+      assert.ok(hand.y >= 0.0018, 'hand origin retains the sculpted sole thickness');
     });
   }
   assert.ok(steps >= 12, `took ${steps} steps`);
-  // the heel peels about the toes, so allow a few millimetres at the hand origin
-  assert.ok(maxSlide < 0.006, `planted feet slid ${(maxSlide * 1000).toFixed(1)} mm`);
-  assert.ok(Math.abs(I.x - 0.48) < 1e-6);
+  assert.ok(maxSlide < 0.000001, `planted feet slid ${(maxSlide * 1000).toFixed(1)} mm`);
+  // A sudden speed request may wait one tick for support; it still traverses
+  // essentially the requested distance without sacrificing anchored contacts.
+  assert.ok(I.x > .475 && I.x <= .480001, `advanced ${I.x} m`);
   for (const b of lizard.bones) for (const v of b.matrix.elements) assert.ok(Number.isFinite(v));
 });
 
@@ -94,22 +108,25 @@ test('footfall cadence follows speed and hind feet retain longer stance', () => 
   const periods: number[] = [];
   for (const speed of [0.025, 0.075, 0.30]) {
     const rig = new LizardRig(model(), flat);
-    Object.assign(rig.inputs, {x: -0.5, speed, clearance: 1.15, chestLift: 0.15});
+    Object.assign(rig.inputs, {x: -0.6, speed: 0, clearance: 1.15, chestLift: 0.15});
     const legs = (rig as unknown as {legs: TestLeg[]}).legs;
     const downs: number[][] = legs.map(() => []);
     let time = 0, frontStance = 0, hindStance = 0, frames = 0;
     rig.onFootDown = p => downs[legs.findIndex(leg => leg.planted === p)].push(time);
-    const duration = speed > 0.2 ? 2.8 : 5;
+    const duration = speed > 0.2 ? 3 : 5;
     for (let i = 0; i < duration * 60; i++) {
       time += 1 / 60;
-      rig.inputs.x += speed / 60;
+      // Exercise a physical launch, then measure steady gait. Instantaneously
+      // demanding full sprint from four stationary feet now correctly brakes.
+      rig.inputs.speed = speed * (1 - Math.exp(-time * 5));
+      rig.inputs.x += rig.inputs.speed / 60;
       rig.update(1 / 60);
       assert.ok(legs.filter(leg => !leg.swing).length >= 2, 'never lifts three supports');
-      if (time < 1) continue;
+      if (time < 1.4) continue;
       frames++;
       for (const leg of legs) if (!leg.swing) {if (leg.front) frontStance++; else hindStance++;}
     }
-    const intervals = downs.flatMap(times => times.slice(2).map((t, i) => t - times[i + 1]));
+    const intervals = downs.flatMap(times => {const steady=times.filter(t=>t>=1.4);return steady.slice(1).map((t,i)=>t-steady[i]);});
     intervals.sort((a, b) => a - b);
     assert.ok(intervals.length >= 4, 'observed repeated full strides');
     const median = intervals[Math.floor(intervals.length / 2)];
