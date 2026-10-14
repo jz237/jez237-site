@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 14 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 14-20, 1985 — Nintendo puts games at the heart of its Advanced Video System</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-01-14</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-14</guid>
+      <pubDate>Wed, 14 Oct 2026 12:00:00 GMT</pubDate>
+      <description>January’s winter show offers a game machine with a home-computing ambition. Nintendo’s Advanced Video System offers a striking proposal for the living room: a sleek game unit that can be joined by an optional keyboard and tape-drive accessories. Demonstrated at the January 5–8 Winter Consumer Electronics Show in Las Vegas, the design remains one of the month’s notable consumer-computing talking points. Also this week: Atari challenges Macintosh prices with the ST · Commodore 128 offers three paths from one keyboard · Rails West! and Questron take the long route.</description>
+    </item>
     <item>
       <title>Week of January 7-13, 1985 — Atari challenges Macintosh with a $400–$600 ST family</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-01-07</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-03</guid>
       <pubDate>Tue, 22 Sep 2026 12:00:00 GMT</pubDate>
       <description>Hubot brings a smiling electronic companion, a serving tray, and a steep price into the consumer marketplace. A mobile robot called Hubot went on sale this week for $4,000, offering households a distinctly 1984 vision of electronic companionship. The machine could move around the home, speak through a synthesized voice, and carry objects on a tray while presenting a friendly face on its display. Also this week: Digital Equipment Pays $1.1 Million Export Fine · September&apos;s PC Market Fills With Compatibles and Databases · Hard Disks Promise to End Macintosh Floppy Shuffling.</description>
-    </item>
-    <item>
-      <title>Week of August 27-September 2, 1984 — Commodore Bets on Amiga&apos;s High-Tech Macintosh Rival</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-08-27</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-27</guid>
-      <pubDate>Mon, 21 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The rescued Lorraine project promises vivid color, 32-bit ambition, and a fresh answer to Apple and Atari. Commodore International has agreed to acquire privately held Amiga Corporation, bringing one of the personal-computer industry’s most closely watched experimental machines under the company that made the VIC-20 and Commodore 64. Terms were not disclosed, but the purchase gives Commodore a dramatic new technology platform just as competition in home computing is being rearranged. Also this week: IBM&apos;s PC/AT Launch Echoes Through the Week · Home-Computer Games Move Beyond the Arcade Formula · Macintosh and PCjr Face the Review Bench.</description>
     </item>
   </channel>
 </rss>

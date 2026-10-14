@@ -9,6 +9,451 @@
         "secondary": "royal blue",
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
+      "visualProfile": {
+        "tone": "Winter CES home-computing newspaper",
+        "motifs": [
+          "Nintendo Advanced Video System",
+          "cartridges",
+          "railway strategy",
+          "C64 MIDI",
+          "CRT screens",
+          "telephone modem"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Nintendo Advanced Video System dominates, with game controls and optional keyboard/tape accessories; Atari and Commodore side features",
+        "secondaryRail": "Nintendo AVS, Commodore C128, online games, rock and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "currentDate": "2026-10-14",
+      "historicDate": "1985-01-14",
+      "displayDate": "Week of January 14-20, 1985",
+      "edition": "Issue 129 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Atari Chief Takes on Apple, IBM and Commodore — Kathryn Harris, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-01-08-fi-7499-story.html",
+          "date": "1985-01-08"
+        },
+        {
+          "title": "The Next Generation — Tom R. Halfhill, COMPUTE! issue 59, p.25",
+          "url": "https://www.atarimagazines.com/compute/issue59/next_generation.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "Nintendo’s Lost 8-Bit Console — Frank Cifaldi, VGHF",
+          "url": "https://gamehistory.org/nintendos-lost-8-bit-console/",
+          "date": "2023-12-02"
+        },
+        {
+          "title": "Nintendo AVS publicity folder — VGHF archival catalog",
+          "url": "https://library.gamehistory.org/repositories/2/archival_objects/21014",
+          "date": "1985-01-05/1985-01-08"
+        },
+        {
+          "title": "COMPUTE! issue 56, p.166: SSI strategy/adventure games",
+          "url": "https://www.atarimagazines.com/compute/issue56/162_3_News_Products_Apple_Atari_Commodore_Strategy_Adventure_Games.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "COMPUTE! issue 56, p.160: Arlan R. Levitan, Telecomputing Today",
+          "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "COMPUTE! issue 56: Richard Mansfield, Sequential Circuits review",
+          "url": "https://www.atarimagazines.com/compute/issue56/124_1_Reviews_Sequential_Circuits_Music_Sequencer_For_Commodore_64.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Billboard, volume 97 no.3: Top Rock Tracks; Sony CD production, p.3",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf",
+          "date": "1985-01-19"
+        },
+        {
+          "title": "Box Office Mojo: Domestic 1985 Weekend 3",
+          "url": "https://www.boxofficemojo.com/weekend/1985W03/",
+          "date": "1985-01-18/1985-01-20"
+        },
+        {
+          "title": "Associated Press: Brazil Chooses Civilian Leader — Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-01-15-mn-7350-story.html",
+          "date": "1985-01-15"
+        },
+        {
+          "title": "InfoWorld retrospective: Macintosh Product of Year (original 1/14/1985)",
+          "url": "https://www.infoworld.com/article/2173129/apples-first-macintosh-infoworld-product-of-the-year-winner-1-14-1985.html",
+          "date": "2014-01-24"
+        },
+        {
+          "title": "COMPUTE! issue 56: Rescue Of Blondell, p.80",
+          "url": "https://www.atarimagazines.com/compute/issue56/121_1_Rescue_Of_Blondell.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "David H. Ahl, 1985 Winter Consumer Electronic Show, Creative Computing vol.11 no.4 p.50",
+          "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+          "date": "1985-04"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 129 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of January 14-20, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-01-14.png",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for January 14–20, 1985",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A winter week of games, home computers and music-making.",
+      "morningLine": "Nintendo offers a fresh vision for home play; the computer makers sharpen their pitches.",
+      "lead": {
+        "headline": "Nintendo puts games at the heart of its Advanced Video System",
+        "dek": "January’s winter show offers a game machine with a home-computing ambition.",
+        "body": [
+          "Nintendo’s Advanced Video System offers a striking proposal for the living room: a sleek game unit that can be joined by an optional keyboard and tape-drive accessories. Demonstrated at the January 5–8 Winter Consumer Electronics Show in Las Vegas, the design remains one of the month’s notable consumer-computing talking points.",
+          "The publicity folder presents more than a stand-alone toy. Its accessories suggest a path from games toward home computing, placing familiar game play and the promise of a keyboard within the same design. This is a show presentation, however, rather than an American retail launch.",
+          "For buyers, the unanswered questions are practical ones. A verified retail price and shipping date are not established by the preserved presentation material. A display floor can show what a manufacturer wants to build; it cannot by itself tell a family when the machine will be available at the local store.",
+          "Against the new Atari and Commodore proposals, Nintendo’s emphasis gives games their own place in the winter conversation. The Advanced Video System is the name on this January proposal, and its optional computing accessories are part of that proposal—not proof that a complete system is already on sale."
+        ],
+        "sourceRefs": [
+          2,
+          3
+        ],
+        "confidence": "same-month"
+      },
+      "stories": [
+        {
+          "headline": "Atari challenges Macintosh prices with the ST",
+          "dek": "A lower announced price still demands a new software library.",
+          "body": [
+            "Atari’s January CES announcement puts the ST family in an announced $400–$600 price range. The Motorola MC68000 processor also powers Macintosh, but sharing a processor does not make the machines compatible with one another’s software. The figures describe announced computers, not verified complete retail packages.",
+            "Sigmund Hartmann has promised 25–30 software products by the time the computers reach stores. Electronic Arts president Trip Hawkins estimated that 30–50 percent of a Macintosh program might require reworking for the ST. The low-price challenge therefore depends on programmers as well as hardware.",
+            "Jack Tramiel is making an ambitious bid with constrained finances: the January 8 report says Atari lacks a bank line of credit, while Tramiel has set a $1 billion sales goal for 1985. Those are reported conditions and a target, not results already achieved."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore 128 offers three paths from one keyboard",
+          "dek": "Compatibility is the winter pitch to existing C64 owners.",
+          "body": [
+            "Commodore’s January show machine combines a C64-compatible mode with a 128K mode and a Z80-based CP/M mode. The January 8 newspaper account confirms a computer with twice the C64’s memory; the detailed configuration is documented in later reporting on the winter presentation.",
+            "BASIC 7.0 adds sound, graphics and disk commands in 128 mode, while C64 mode retains BASIC 2.0. The new mode offers a choice of 40- or 80-column displays; that 80-column option does not belong to C64 mode. A separate numeric keypad helps distinguish the 92-key keyboard.",
+            "An under-$300 indication and a spring introduction schedule should not be mistaken for an official show price or accomplished availability. For the C64 owner, the central attraction is a proposed upgrade path that preserves a familiar mode while opening other uses."
+          ],
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Rails West! and Questron take the long route",
+          "dek": "January’s software shelf offers finance and fantasy.",
+          "body": [
+            "SSI’s January magazine announcement offers two ways to spend an evening far from arcade reflexes. Rails West! models late-nineteenth-century American railway development for as many as eight players, making corporations and capital as important as tracks.",
+            "Players can found or take over companies, trade stocks and bonds, seek loans and float securities. Booms and panics alter the financial landscape. Apple, Atari and Commodore 64 disk editions are advertised at $39.95.",
+            "Questron sends the player against Wizard Mantor to recover the Book of Evil Magic and save an empire. Its advertised disk prices are $39.95 for C64 and $49.95 for Apple or Atari. The January listing is a period shelf announcement, not evidence that either game first appeared during this particular week."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari ST family",
+          "summary": "Announced $400–$600 family; MC68000; new software ecosystem required; not yet verified shipping.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "128K, C64 compatibility and Z80 CP/M mode; announced at CES, projected spring introduction.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Rails West!",
+          "summary": "Railway-finance strategy for up to eight players; $39.95 disk.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Questron",
+          "summary": "Fantasy RPG; $39.95 C64, $49.95 Apple/Atari disk; period announcement, not exact release date.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Rescue Of Blondell",
+          "summary": "Grant Albrecht machine-language scrolling type-in game for Atari, C64 and VIC-20 with 8K or more expansion; COMPUTE! January 1985, page 80.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Sequential Circuits Music Sequencer",
+          "detail": "Richard Mansfield’s January COMPUTE! review: C64 plus MIDI synthesizer, six editable tracks, eight chainable sequences, tempo changes without pitch changes, tape/disk storage, adjustable rhythmic Autocorrection; $225.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial shelf selections, not a sales chart",
+          "items": [
+            "Rails West! — Railway-finance strategy for up to eight players; $39.95 disk.",
+            "Questron — Fantasy RPG; $39.95 C64, $49.95 Apple/Atari disk; period announcement, not exact release date.",
+            "Rescue Of Blondell — Grant Albrecht machine-language scrolling type-in game for Atari, C64 and VIC-20 with 8K or more expansion; COMPUTE! January 1985, page 80.",
+            "Racing Destruction Set — Electronic Arts track-and-car design game displayed at January CES.",
+            "Adventure Construction Set — Electronic Arts adventure-building title displayed at January CES."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            4,
+            11,
+            12
+          ]
+        },
+        {
+          "label": "Top 5 Movies — January 18–20 domestic weekend",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. A Nightmare on Elm Street",
+            "3. The River",
+            "4. Micki + Maude",
+            "5. The Flamingo Kid"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Rails West!",
+          "price": "$39.95",
+          "note": "Apple/Atari/C64 disk list price",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "Questron",
+          "price": "$39.95 / $49.95",
+          "note": "C64 disk / Apple or Atari disk",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "Sequential Circuits Music Sequencer",
+          "price": "$225",
+          "note": "Price printed in January review",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "300-bps modems",
+          "price": "$50–$280",
+          "note": "Column’s market range",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "2400-bps modems",
+          "price": "$800–$1,500",
+          "note": "Column’s market range",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "Atari ST family",
+          "price": "$400–$600",
+          "note": "Announced computer-family pricing; not a shipped complete bundle",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "Foreigner",
+          "title": "I Want to Know What Love Is",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-01-19",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Don Henley",
+          "title": "The Boys of Summer",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-01-19",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "Giuffria",
+          "title": "Call to the Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-01-19",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "John Fogerty",
+          "title": "The Old Man Down the Road",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-01-19",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Philip Bailey",
+          "title": "Easy Lover",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-01-19",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-01-19.pdf"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "InfoWorld honors Macintosh",
+          "summary": "Macintosh is identified as InfoWorld’s January 14 Product of the Year winner.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Brazil elects a civilian president after 21 years",
+        "summary": "On January 15, Tancredo Neves won the Electoral College vote, 480 to 180 over Paulo Maluf. His inauguration is scheduled for March 15.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Sony plans a sharp jump in CD-player production",
+        "summary": "Billboard January 19, page 3, reports Sony’s plan to increase production from around 150,000 players in 1984 to a projected 700,000 in 1985, with roughly half destined for Japan and half Europe/US. A forecast, not achieved output.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "2400-bps ambitions run ahead of commercial access",
+        "summary": "January’s telecomputing column places hobbyist bulletin boards ahead of commercial services in the race toward 2400 bps.",
+        "posts": [
+          {
+            "topic": "Sysop equipment",
+            "platform": "Hobbyist BBSs (no board names supplied)",
+            "text": "The column reports seed-program talks offering selected sysops 2400-bps modems near 1200-bps prices; no named board or confirmed rollout date."
+          },
+          {
+            "topic": "Commercial-service limits",
+            "platform": "CompuServe / The Source / Delphi / Dow Jones News/Retrieval",
+            "text": "January publication says these services do not yet offer 2400 bps; verify any later change before stating it as a January 20 fact."
+          }
+        ],
+        "sourceRefs": [
+          5
+        ]
+      },
+      "curiosity": {
+        "headline": "A home computer can straighten a musician’s rhythm",
+        "summary": "The $225 Sequential Circuits package turns a C64 into a six-track MIDI sequencer.",
+        "detail": "Richard Mansfield describes adjustable Autocorrection ranging from quarter-note to thirty-second-triplet resolution, letting players choose how tightly the computer moves notes onto the beat. This is a January review, not a release this week.",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "periodAd": {
+        "headline": "Sequential Circuits: six tracks at the keyboard",
+        "summary": "The $225 C64 MIDI Music Sequencer offers six editable tracks and eight chainable sequences, with tape or disk storage.",
+        "tagline": "A January software-shelf spotlight.",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "market": {
+        "headline": "Speed has a price—and needs a destination",
+        "summary": "January’s modem column quotes $50–$280 for 300 bps and $800–$1,500 for 2400 bps. CompuServe, The Source, Delphi and Dow Jones News/Retrieval were not yet offering 2400-bps access at publication; a faster modem alone cannot accelerate every service.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "No milestone designated: CES launches were January 5–8, outside this issue week; do not announce them as January 14–20 events.",
+          "April COMPUTE! CES reporting is explicitly retrospective; contemporaneous January 8 Times is the main Atari source.",
+          "Billboard is the actual January 19 Top Rock Tracks chart, not Tunecaster’s different weekly ranking. Primary PDF text verifies top five.",
+          "Underground check found no adequately dated January scene story or named crews; omit beat rather than repurpose February piracy television or November Phrack.",
+          "Game Entertainer January PDF was located but scanned text could not be extracted; OCR executable unavailable. No detailed claims imported from it.",
+          "Complete means a usable sourced dossier, not an exhaustive archive survey; exact-week computer product news remains thin.",
+          "Five game shelf selections are editorial picks, not ranked sales. Two additional titles use April retrospective coverage of January CES.",
+          "The Nintendo gaming proposal is the visual and editorial lead; all CES material is explicitly same-month aftermath."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
       "masthead": {
         "title": "Computer Chronicle",
         "subtitle": "Issue 128 - Weekly 1985 Computer & Culture Chronicle",

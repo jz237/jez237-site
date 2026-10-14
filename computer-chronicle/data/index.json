@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-14",
+      "historicDate": "1985-01-14",
+      "displayDate": "Week of January 14-20, 1985",
+      "edition": "Issue 129 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Nintendo offers a fresh vision for home play; the computer makers sharpen their pitches.",
+      "leadHeadline": "Nintendo puts games at the heart of its Advanced Video System",
+      "storyHeadlines": [
+        "Atari challenges Macintosh prices with the ST",
+        "Commodore 128 offers three paths from one keyboard",
+        "Rails West! and Questron take the long route"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-14.png",
+      "thumb": "media/thumbs/1985-01-14.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-13",
       "historicDate": "1985-01-07",
       "displayDate": "Week of January 7-13, 1985",
