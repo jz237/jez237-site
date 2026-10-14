@@ -64,6 +64,8 @@ export class Docu {
         continue;
       }
       if (d.sp.tooBig && d._liftT > 0) add(8, 'lift', `${name} — letting a calf pass`, ['low', 'tele']);
+      if (d._eating) add(d._eating === 'meat' ? 9.5 : 8.5, 'eat', `${name} — ${{ ferns: 'feeding', branch: 'stripping a branch', meat: 'tearing at a meal' }[d._eating]}`, ['low', 'push', 'orbit']);
+      else if (st === 'sleep' && d._napT > 0) add(5.5, 'nap', `${name} — sleeping it off`, ['push', 'orbit']);
       else if (st === 'sleep' && d.sp.herd && d._huddled && !baby) add(4.5, 'sleep', `${name} — the herd asleep together`, ['crane', 'orbit', 'tele']);
       if (st === 'hunt') add(10, 'hunt', `${name} — on the hunt`, ['track', 'low', 'tele']);
       else if (st === 'standoff' || an === 'threat') add(9.5, 'standoff', `${name} — standing its ground`, ['low', 'push', 'tele']);

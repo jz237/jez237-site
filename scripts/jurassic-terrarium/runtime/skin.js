@@ -293,6 +293,7 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uNosDepth: { value: info?.nostrilDepth || 0 }, // how deep a full flare dips, in stored units
     uJig: { value: [new Vector3(), new Vector3(), new Vector3()] }, // belly, throat, thigh offsets (metres, model frame)
     uBreath: { value: 0 }, // ribcage swell, metres
+    uBelly: { value: 0 }, // a full belly after a meal, metres
     uLegFlex: { value: new Vector4() }, // bunching at the top of each leg (thigh L, R, upper arm L, R), metres
     uLegIdx: { value: new Vector4(-1, -1, -1, -1) }, // their bone indices in the skeleton
     uInvUnit: { value: 1 / (info?.perUnit || 1) }, // stored units per metre
@@ -327,6 +328,7 @@ attribute vec3 aBind;
 attribute vec4 aSoft;
 uniform vec3 uJig[3];
 uniform float uBreath;
+uniform float uBelly;
 uniform vec4 uLegFlex;
 uniform vec4 uLegIdx;
 uniform float uInvUnit;
@@ -350,7 +352,7 @@ varying vec3 vLocal;`)
   {
     // soft flesh lagging the body, the ribcage breathing, the muscle at the top of each leg bunching
     vec3 jn = normalize(objectNormal);
-    vec3 jd = uJig[0] * aSoft.x + uJig[1] * aSoft.y + uJig[2] * aSoft.z + jn * (uBreath * aSoft.w);
+    vec3 jd = uJig[0] * aSoft.x + uJig[1] * aSoft.y + uJig[2] * aSoft.z + jn * (uBreath * aSoft.w + uBelly * aSoft.x);
     vec4 lw = vec4(0.0);
     for (int c = 0; c < 4; c++) {
       float bi = skinIndex[c], bw = skinWeight[c];

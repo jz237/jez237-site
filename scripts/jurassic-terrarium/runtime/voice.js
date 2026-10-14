@@ -257,6 +257,18 @@ export class Voices {
           s.connect(this.bp(ac, 2400 + Math.random() * 1500, 1.2)).connect(g).connect(out);
         }
         break;
+      case 'tear': // meat torn: a wet rip and a low growl through the teeth
+        {
+          const s = this.noiseSrc(ac, t0, t0 + 0.45);
+          const g = this.env(ac, t0, 0.02, 0.12, 0.25, 0.6);
+          s.connect(this.bp(ac, 900 * V.f, 0.7)).connect(g).connect(out);
+          for (let k = 0; k < 3 + V.n; k++) {
+            const t = t0 + 0.05 + k * 0.06 + Math.random() * 0.03, n2 = this.noiseSrc(ac, t, t + 0.06);
+            n2.connect(this.bp(ac, 2200 + Math.random() * 1500, 2)).connect(this.env(ac, t, 0.003, 0.01, 0.04, 0.3)).connect(out);
+          }
+          this.growl(e, out, t0, 0.7 * V.d, 70 * V.p, 55 * V.p, { formants: [300 * V.f, 760 * V.f], rasp: 0.6, level: 0.4 });
+        }
+        break;
       case 'step': // a footfall, by what it lands on; big animals deeper and heavier on all of them
         {
           const lv = Math.min(1, 0.25 * size), deep = 1 / Math.sqrt(size);

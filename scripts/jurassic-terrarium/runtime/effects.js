@@ -177,6 +177,54 @@ export class Effects {
     }
   }
 
+  // ---------------------------------------------------------------- bits of food
+  // scraps dropping from a mouthful: little tumbling flakes, tinted for what is being eaten
+  bits(pos, color, n = 4) {
+    if (!this.bitMesh) {
+      const N = 60;
+      this.bitMesh = new InstancedMesh(new BoxGeometry(0.012, 0.006, 0.009), new MeshStandardMaterial({ roughness: 0.7 }), N);
+      this.bitMesh.name = 'effects-bits';
+      this.bitMesh.frustumCulled = false;
+      for (let i = 0; i < N; i++) (this.bitMesh.setMatrixAt(i, HIDE), this.bitMesh.setColorAt(i, new Color(1, 1, 1)));
+      this.bitList = Array.from({ length: N }, () => ({ life: 0 }));
+      this.bitNext = 0;
+      this.group.add(this.bitMesh);
+    }
+    const c = new Color(color);
+    for (let k = 0; k < n; k++) {
+      const i = this.bitNext, B = this.bitList[i];
+      this.bitNext = (i + 1) % this.bitList.length;
+      B.p = new Vector3(pos.x, pos.y, pos.z);
+      B.v = new Vector3((Math.random() - 0.5) * 0.25, 0.1 + Math.random() * 0.2, (Math.random() - 0.5) * 0.25);
+      B.r = new Vector3(Math.random() * 6, Math.random() * 6, 0);
+      B.life = 1.6;
+      B.ground = this.ctx.terrain.height(pos.x, pos.z);
+      this.bitMesh.setColorAt(i, c.clone().multiplyScalar(0.8 + Math.random() * 0.4));
+    }
+    this.bitMesh.instanceColor.needsUpdate = true;
+  }
+
+  updateBits(dt) {
+    if (!this.bitMesh) return;
+    let any = false;
+    this.bitList.forEach((B, i) => {
+      if (B.life <= 0) return;
+      any = true;
+      B.life -= dt;
+      if (B.p.y > B.ground + 0.004) {
+        B.v.y -= 2.4 * dt;
+        B.p.addScaledVector(B.v, dt);
+        B.r.x += dt * 9;
+        B.r.y += dt * 7;
+      } else B.p.y = B.ground + 0.003;
+      const s = B.life > 0.4 ? 1 : B.life / 0.4;
+      M.compose(B.p, Q.setFromEuler(E.set(B.r.x, B.r.y, 0)), Sc.set(s, s, s));
+      this.bitMesh.setMatrixAt(i, B.life > 0 ? M : HIDE);
+    });
+    if (any || this._bitsWere) this.bitMesh.instanceMatrix.needsUpdate = true;
+    this._bitsWere = any;
+  }
+
   // ---------------------------------------------------------------- splashes
   buildSplash() {
     const NR = 8, ND = 140;
@@ -290,6 +338,7 @@ export class Effects {
   update(dt, env) {
     this.updateSteam(dt);
     this.updateDust(dt);
+    this.updateBits(dt);
     // leaves tumble and drift down, then lie on the ground a moment and vanish
     let leavesLive = false;
     this.leaves.forEach((L, i) => {

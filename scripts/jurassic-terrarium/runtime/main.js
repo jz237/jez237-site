@@ -89,6 +89,7 @@ import { Night } from './night.js';
 import { Social } from './social.js';
 import { Trails } from './trails.js';
 import { Touch } from './touch.js';
+import { Feeding } from './feeding.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
@@ -503,7 +504,7 @@ class Dino {
       const p = tip(), sy = mod.waterSurface(p.x, p.z) ?? mod.ctx.terrain.height(p.x, p.z);
       const err = p.y - (sy - 0.005);
       this.drinkDip = MathUtils.clamp((this.drinkDip || 0) + err * dt * 0.9, 0, 1.2);
-    } else if (!this._peer) this.drinkDip = Math.max(0, (this.drinkDip || 0) - dt * (sipping ? 0.8 : 0.5));
+    } else if (!this._peer && !this._tear) this.drinkDip = Math.max(0, (this.drinkDip || 0) - dt * (sipping ? 0.8 : 0.5));
     if (this.currentName === 'drink') {
       const p = tip(), sy = mod.waterSurface(p.x, p.z);
       if (sy != null && p.y < sy + 0.03) {
@@ -557,6 +558,9 @@ class Dino {
       if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
       U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
       this.flesh(dt);
+      // a full belly (feeding.js), going down slowly as it digests
+      this.full = Math.max(0, (this.full || 0) - dt / 300);
+      U.uBelly.value = this.full * (this.info?.length || 6) * 0.012 * FLESH;
       // the scales' relief, from metres in the bind pose to the view's units
       if (U.uScaleH.value > 0) U.uScaleH.value = (SCALES[this.sp.id]?.h ?? 0.012) * (this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x);
     }
@@ -672,7 +676,7 @@ class Dino {
     const cap = walking ? 0.03 : 0.012;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
     // standing and being pressed off something: take a step away rather than slide
-    if (!walking && !/^(sleep|perform|standoff|drinking)$/.test(this.state) && !this.parent) {
+    if (!walking && !/^(sleep|perform|standoff|drinking)$/.test(this.state) && !this.parent && !this._tear && !this._eating && !this._peer && !this._lean) {
       this._pressed = (this._pressed || 0) + m;
       if (this._pressed > 0.03 * this.length) {
         this._pressed = 0;
@@ -868,6 +872,15 @@ class Dino {
           this.perform('shake');
           break;
         }
+        // a big meal: lie down and sleep it off
+        if ((this.full || 0) > 0.85 && !this._napped && !this.parent) {
+          this._napped = true;
+          this._napT = 25 + rand() * 20;
+          this.state = 'sleep';
+          this.play('rest', 1.5);
+          break;
+        }
+        if ((this.full || 0) < 0.3) this._napped = false;
         // a strong wind: turn tail to it, head down, and wait it out
         if ((this.windS || 0) > 0.75 && rand() < dt * 0.8) {
           const down = Math.atan2(this.windV.x, this.windV.z);
@@ -937,6 +950,10 @@ class Dino {
         }
         break;
       case 'sleep':
+        if (this._napT > 0) {
+          if ((this._napT -= dt) <= 0) this.rest(1.2);
+          break;
+        }
         if (this.parent) {
           if (this.parent.state !== 'sleep') this.rest(1.0);
           break;
@@ -1583,6 +1600,30 @@ class Dino {
       if (n[2]) this.turnBone(n[2], 'x', dip * 0.15);
       this.turnBone(this.headBone, 'x', -dip * 0.35);
     }
+    // eating (feeding.js): the jaw working between bites; tearing meat, the head wrenched side to side
+    if ((this._chew || 0) > 0 || this._tear) {
+      const B = this._pfb || (this._pfb = (() => { const b = {}; this.model.traverse((o) => o.isBone && (b[o.name] = o)); return b; })());
+      this._ct = (this._ct || 0) + dt;
+      if (this._chew > 0) {
+        this._chew -= dt;
+        const k = Math.min(1, this._chew / 0.4);
+        this.turnBone(B.jaw, 'x', (0.12 + 0.1 * Math.sin(this._ct * 13)) * k);
+        this.turnBone(B.head, 'x', 0.04 * Math.sin(this._ct * 13 + 1) * k);
+      }
+      const R = this._tear;
+      if (R?.bow > 0) {
+        // stooped to the meat: back tipped forward, neck down, head down to it
+        this.flex.spine.forEach((b) => this.turnBone(b, 'x', 0.1 * R.bow));
+        this.flex.neck.forEach((b) => this.turnBone(b, 'x', 0.32 * R.bow));
+        this.turnBone(B.head, 'x', 0.2 * R.bow);
+      }
+      if (R?.shake > 0) {
+        const k = Math.min(1, R.shake / 0.25);
+        this.turnBone(B.head, 'y', 0.35 * Math.sin(this._ct * 16) * k);
+        this.turnBone(B.jaw, 'x', 0.35 * k);
+        if (this.flex.neck[0]) this.turnBone(this.flex.neck[0], 'x', -0.12 * k);
+      }
+    }
     // touched (touch.js): a start at a poke; leaning into a stroking hand
     if (this._flinch > 0) this.root.position.y += Math.sin((this._flinch / 0.35) * Math.PI) * this.height * 0.06;
     if (this._lean) {
@@ -1924,9 +1965,9 @@ class Flyer {
   // a fish, then climbs away with it and rejoins the circuit. The dive is three Bezier legs: down to the
   // water; a level skim along it with the lower beak cutting a wake through the surface; up and away with
   // the catch. The whole route is checked against the terrain before it commits.
-  planDive() {
+  planDive(want = null) {
     const T = this.mod.ctx.terrain, box = this.box;
-    let target = null;
+    let target = want ? new Vector3(want.x, 0.07, want.z) : null;
     for (let i = 0; i < 60 && !target; i++) {
       const x = 0.8 + rand() * 3.8, z = 1.3 + rand() * 1.9;
       if (T.lakeMask(x, z) > 0.9 && T.height(x, z) < -0.2 && z < box.halfD - 0.6) target = new Vector3(x, 0.07, z);
@@ -1939,8 +1980,10 @@ class Flyer {
     if (dist < 2.4) return false;
     app.normalize();
     // the skim: a straight, level run through the target, over open water all the way
-    const SK = 1.0, s0 = target.clone().addScaledVector(app, -SK / 2).setY(0.06), s1 = target.clone().addScaledVector(app, SK / 2).setY(0.06);
-    for (const q of [s0, s1, target]) if (T.lakeMask(q.x, q.z) < 0.9 || T.height(q.x, q.z) > -0.12) return false;
+    // (a fish held out over the water: the run passes at the height it is held, to snatch it)
+    const sy = want?.y != null ? want.y + 0.02 : 0.06;
+    const SK = 1.0, s0 = target.clone().addScaledVector(app, -SK / 2).setY(sy), s1 = target.clone().addScaledVector(app, SK / 2).setY(sy);
+    if (want?.y == null) for (const q of [s0, s1, target]) if (T.lakeMask(q.x, q.z) < (want ? 0.4 : 0.9) || T.height(q.x, q.z) > (want ? 0 : -0.12)) return false;
     const exitDir = app.clone().lerp(fwd, 0.3).normalize();
     const legs = [
       [p0, p0.clone().addScaledVector(fwd, dist * 0.35), s0.clone().addScaledVector(app, -1.1).setY(0.28), s0],
@@ -1959,7 +2002,7 @@ class Flyer {
         if (q.y < Math.max(g, 0) + (nearSkim(q) ? 0.03 : 0.2)) return false;
       }
     }
-    this.dive = { legs, leg: 0, u: 0, target, lens: legs.map((L) => bezLen(L)), wakeT: 0 };
+    this.dive = { legs, leg: 0, u: 0, target, lens: legs.map((L) => bezLen(L)), wakeT: 0, food: want?.food || null };
     this.state = 'dive';
     return true;
   }
@@ -1982,6 +2025,7 @@ class Flyer {
         this.mod.effects.splash(e.x, e.z, 0, 1);
         this.mod.voice.play('splash', e, 1);
         this.catchFish();
+        if (D.food && !D.food.gone) (this.mod.feeding?.finish(D.food), (D.food.g.visible = false));
       } else {
         // rejoin the circuit from wherever the climb ended
         this.state = 'rejoin';
@@ -2488,6 +2532,8 @@ class Dinosaurs {
     this.guide = new Guide(this, SPECIES);
     this.interact = new Interact(this, this.flora);
     this.interact.mountButtons(this.guide.el);
+    this.feeding = new Feeding(this, this.flora);
+    this.feeding.mount(this.interact.feedBtn, this.guide.el);
     // the water's shaders can produce NaN/Inf pixels on some GPUs (bloomed into full-screen flashes)
     if (params.get('waterguard') !== '0') this.guarded = guardWater(this.ctx.scene);
     this.atmosphere = params.get('air') === '0' ? null : new Atmosphere(this.ctx, this);
@@ -2842,6 +2888,7 @@ class Dinosaurs {
     this.social.update(dt);
     this.trails.update(dt);
     this.touch.update(dt);
+    this.feeding?.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

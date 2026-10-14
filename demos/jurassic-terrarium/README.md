@@ -294,3 +294,13 @@ v1.38: touching the animals; footsteps by surface:
 
   Hovering makes an animal glance at the hand. An animal busy with something bigger (a standoff, a hunt, drinking, a family moment) only looks round.
 - **Footsteps:** each footfall sounds like what it lands on: a splash and plop in water, a sucking squelch in mud on the banks or wet ground, crunching gravel on the footpath, packed snow, or a thud with planting brushed aside on ordinary ground. The big animals are deeper and heavier on all of them.
+
+v1.39: feeding:
+- **A food for each:** "Feed" opens a menu of four foods:
+  - Ferns (fronds and red cycad seeds): for the Triceratops and Stegosaurus.
+  - A branch, hung on a rope from the lid at the height the Brachiosaurus browses: it reaches up and strips it.
+  - A fish, tossed into the pool, flopping and splashing until a Pteranodon dives and snatches it.
+  - Meat: the T. rex stalks over, sniffs it, pulls it in under its jaws, stoops to it and tears at it, wrenching its head from side to side.
+- **From your hand:** a quick click drops the food. Press and hold to feed from your hand: the food stays in the hand, follows it, and the animals come to it there. The Brachiosaurus browses the branch you hold up, a Pteranodon swoops at a fish dangled over the water, and the T. rex snatches the meat out of your hand. Let go and whatever is left falls (or the branch stays hung).
+- **Eating you can see:** jaws work between mouthfuls, scraps fall (fronds, seeds, meat), the food shrinks bite by bite, with crop and tear sounds. Each animal's belly fills as it eats and slowly goes down over a few minutes. A full animal lies down to sleep it off.
+- **Documentary:** it films the feeding ("feeding", "stripping a branch", "tearing at a meal") and the nap afterwards ("sleeping it off").

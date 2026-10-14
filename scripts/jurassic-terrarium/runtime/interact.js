@@ -1,6 +1,5 @@
 // Things to do in the case:
-//   - Drop food: pick a spot and a bundle of fern fronds and red cycad seeds drops in; the nearest
-//     plant-eaters come over and eat it bite by bite.
+//   - Feed: the button opens the food menu (feeding.js).
 //   - Tap the glass (Weatherglass's own glass tap): animals near the tap startle: heads snap round, the
 //     closest shy away, sleepers wake, the Pteranodons flap off, and the T. rex may roar back.
 //   - Documentary mode (docu.js): the interface hides, the view letterboxes, and a director picks what is
@@ -32,9 +31,8 @@ export class Interact {
   mountButtons(panel) {
     const row = document.createElement('div');
     row.className = 'jt-actions';
-    row.innerHTML = `<button data-a="feed">Drop food</button><button data-a="photo">Documentary</button>
+    row.innerHTML = `<button data-a="feed">Feed</button><button data-a="photo">Documentary</button>
       <div class="jt-hint">Tap the glass to startle them</div>`;
-    row.querySelector('[data-a=feed]').addEventListener('click', () => this.setMode(this.mode === 'feed' ? null : 'feed'));
     row.querySelector('[data-a=photo]').addEventListener('click', () => this.enterPhoto());
     panel.appendChild(row);
     this.feedBtn = row.querySelector('[data-a=feed]');
