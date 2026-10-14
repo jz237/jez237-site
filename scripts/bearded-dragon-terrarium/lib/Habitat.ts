@@ -6,7 +6,7 @@ import {SurfaceKind} from './Surface';
 import {mulberry32, dataTexture, tileFbm} from './Textures';
 import {archGeometry, caveBackingGeometry} from './DesertDetails';
 import {loadDriftwood} from './Driftwood';
-import {cactus, dryShrub, rosette, loadPlantReferences} from './DesertPlants';
+import {desertPlanting, loadPlantReferences} from './DesertPlants';
 import {PlantFlex, plantFlexFor, type PlantContact} from './PlantFlex';
 import {climbingStoneGeometry} from './ClimbingStone';
 
@@ -163,9 +163,9 @@ export class Habitat {
     const mat=new THREE.Matrix4(),q=new THREE.Quaternion();
     for(let i=0;i<pebbleCount;i++) {const x=(rnd()-.5)*(TANK.w-.04),z=(rnd()-.5)*(TANK.d-.05),r=.0012+rnd()*.0038;mat.compose(new THREE.Vector3(x,groundHeight(x,z)+r*.28,z),q.setFromEuler(new THREE.Euler(rnd()*3,rnd()*3,rnd()*3)),new THREE.Vector3(r,r*.52,r*.8));pebble.setMatrixAt(i,mat);}
     pebble.receiveShadow=true;g.add(pebble);
-    this.addRosette(-.712,backZ+.17,.128,21);this.addRosette(.696,frontZ-.14,.144,22);this.addRosette(-.015,backZ+.086,.108,23);this.addRosette(-.700,frontZ-.066,.066,24);this.addRosette(.228,frontZ-.116,.055,26);
-    for (const shrub of [dryShrub(-.728,.08,.183,61),dryShrub(-.066,backZ+.13,.174,62),dryShrub(-.244,backZ+.093,.12,63)]) this.addSoftPlant(shrub);
-    g.add(cactus(.682,backZ+.142,.278,.030,41),cactus(.741,backZ+.178,.220,.025,42),cactus(.613,backZ+.087,.181,.022,43),cactus(.649,.102,.053,.027,44,true));
+    for(const plant of desertPlanting()){
+      g.add(plant);const flex=plantFlexFor(plant);if(flex)this.plants.push(flex);
+    }
 
     // Low stone water dish at the cool end, separated from the food and lamp.
     const profile:THREE.Vector2[]=[];
@@ -202,11 +202,6 @@ export class Habitat {
     const l=new THREE.SpotLight(color,basking?2.4:1.65,2,basking?.67:1.0,.75,2);l.position.set(x,TANK.h-.014,z);l.target.position.set(x,.09,z);l.castShadow=true;l.shadow.mapSize.setScalar(2048);l.shadow.bias=-.00012;l.shadow.normalBias=.0009;l.shadow.camera.near=.03;l.shadow.camera.far=2;this.group.add(l,l.target);return l;
   }
 
-  private addRosette(x:number,z:number,size:number,seed:number) {
-    this.addSoftPlant(rosette(x,z,size,seed));
-  }
-
-  private addSoftPlant(group: THREE.Group) {this.group.add(group); this.plants.push(plantFlexFor(group)!);}
   bendPlants(dt: number, contacts: readonly PlantContact[]) {for (const plant of this.plants) plant.update(dt, contacts);}
 
   private async loadLog() {

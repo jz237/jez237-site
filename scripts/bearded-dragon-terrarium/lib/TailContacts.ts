@@ -9,10 +9,13 @@ export interface TailCollision {
   projectSegment?(a: THREE.Vector3, b: THREE.Vector3, ra: number, rb: number, pinnedA: boolean, na: THREE.Vector3, nb: THREE.Vector3): boolean;
 }
 
+const CELL = .006;
+type Nearby = {face: number; clearance: number};
+
 /** Static, world-space colliders. Contacts only push out; they never attract a tail to a surface. */
 export class TailContacts implements TailCollision {
   touchesSolid = false;
-  private solids: {geometry: THREE.BufferGeometry; tree: MeshBVH; box: THREE.Box3}[];
+  private solids: {geometry: THREE.BufferGeometry; tree: MeshBVH; box: THREE.Box3; nearby: Map<number, Nearby>; nx: number; ny: number}[];
   private ray = new THREE.Ray();
   private insideRay = new THREE.Ray();
   private insideChecks = [new THREE.Vector3(0, 1, 0), new THREE.Vector3(.91, .21, .35).normalize(), new THREE.Vector3(-.35, .31, -.89).normalize()];
@@ -40,11 +43,24 @@ export class TailContacts implements TailCollision {
       const geometry = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
       const tree = new MeshBVH(geometry);
       geometry.computeBoundingBox();
-      return {geometry, tree, box: geometry.boundingBox!.clone()};
+      const box = geometry.boundingBox!.clone();
+      return {geometry, tree, box, nearby: new Map<number, Nearby>(), nx: Math.ceil((box.max.x-box.min.x)/CELL)+1, ny: Math.ceil((box.max.y-box.min.y)/CELL)+1};
     });
   }
 
   beginStep() {this.touchesSolid = false;}
+
+  /** Static plant clearance, excluding the substrate their roots grow from. */
+  overlapsSolid(point: THREE.Vector3, radius = .002) {
+    for(const solid of this.solids){
+      if(solid.box.distanceToPoint(point)>radius)continue;
+      const hit=solid.tree.closestPointToPoint(point,this.closest,0,solid.box.containsPoint(point)?Infinity:radius+1e-8);
+      if(!hit)continue;
+      if(hit.distance<radius)return true;
+      if(solid.box.containsPoint(point) && this.contains(solid.tree,point))return true;
+    }
+    return false;
+  }
 
   private contains(tree: MeshBVH, point: THREE.Vector3) {
     // A ray grazing a rough bevel can meet a reversed sliver before the entry
@@ -77,13 +93,13 @@ export class TailContacts implements TailCollision {
     return Number.isFinite(shortest);
   }
 
-  private triangleNormal(geometry: THREE.BufferGeometry, face: number) {
+  private triangle(geometry: THREE.BufferGeometry, face: number) {
     const p = geometry.attributes.position, index = geometry.index;
     const vertex = (i: number) => index ? index.getX(face * 3 + i) : face * 3 + i;
     this.tri.a.fromBufferAttribute(p, vertex(0));
     this.tri.b.fromBufferAttribute(p, vertex(1));
     this.tri.c.fromBufferAttribute(p, vertex(2));
-    return this.tri.getNormal(this.faceNormal);
+    return this.tri;
   }
 
   projectPoint(previous: THREE.Vector3, point: THREE.Vector3, radius: number, normal: THREE.Vector3) {
@@ -117,15 +133,45 @@ export class TailContacts implements TailCollision {
       // matter. Do not traverse distant triangles for a thin toe or tail tip.
       // Keep the wider search inside the bounds so deep overlaps still escape.
       const inBounds=solid.box.containsPoint(point);
-      const hit = solid.tree.closestPointToPoint(point, this.closest, 0, inBounds ? .08 : Math.min(.08,margin));
+      let maximum = inBounds ? .08 : Math.min(.08,margin), cell = -1, cellRadius = 0;
+      let cached: Nearby | undefined;
+      if (inBounds) {
+        const x=(point.x-solid.box.min.x)/CELL,y=(point.y-solid.box.min.y)/CELL,z=(point.z-solid.box.min.z)/CELL;
+        const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z);
+        cell = ix + solid.nx*(iy + solid.ny*iz);
+        cached = solid.nearby.get(cell);
+        // A ball around a proven exterior point cannot cross the surface before
+        // its nearest triangle distance. Subtract the farthest cell corner to
+        // obtain a conservative clearance for EVERY point in this cell.
+        if(cached && cached.clearance>=margin)continue;
+        cellRadius=CELL*Math.hypot(.5+Math.abs(x-ix-.5),.5+Math.abs(y-iy-.5),.5+Math.abs(z-iz-.5));
+        if (cached) {
+          // Any real triangle supplies an upper bound on nearest distance.
+          // Seed the exact BVH search with a nearby face; never reuse its answer
+          // or approximate the contact, including across edges and concavities.
+          this.triangle(solid.geometry, cached.face).closestPointToPoint(point, this.surfacePoint);
+          maximum = Math.min(maximum, point.distanceTo(this.surfacePoint)+1e-8);
+        }
+      }
+      const hit = solid.tree.closestPointToPoint(point, this.closest, 0, maximum);
       if (!hit) continue;
-      const n = this.triangleNormal(solid.geometry, hit.faceIndex);
+      const n = this.triangle(solid.geometry, hit.faceIndex).getNormal(this.faceNormal);
       this.direction.subVectors(point, hit.point);
       let inside = false;
       if (inBounds && this.direction.dot(n) < -0.00001) {
         // At a concave rim the nearest triangle can face away from a point that
         // is still in free air. Confirm volume occupancy before ejecting it.
         inside = this.contains(solid.tree, point);
+      }
+      if(cell>=0){
+        if(solid.nearby.size>=32768)solid.nearby.clear();
+        let clearance=inside ? 0 : Math.max(0,hit.distance-cellRadius);
+        // A reversed bevel may have an outward nearest-face normal even for
+        // an interior point. Only volume-confirmed exterior cells can bypass
+        // future contact queries, regardless of that face's orientation.
+        if(clearance>(cached?.clearance??0) && this.contains(solid.tree,point))clearance=0;
+        if(cached){cached.face=hit.faceIndex;cached.clearance=Math.max(cached.clearance,clearance);}
+        else solid.nearby.set(cell,{face:hit.faceIndex,clearance});
       }
       if (!inside && hit.distance >= margin) continue;
       if (!inside && hit.distance > 0.000001) this.direction.divideScalar(hit.distance);

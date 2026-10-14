@@ -18,6 +18,8 @@ import {plantLightStrength} from './lib/DesertPlants';
 import type {PlantContact} from './lib/PlantFlex';
 import {SimulationClock} from './lib/SimulationClock';
 import {PoseInterpolation} from './lib/PoseInterpolation';
+import {PlaybackStats} from './lib/PlaybackStats';
+import {FrameDriver} from './lib/FrameDriver';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -38,6 +40,8 @@ export class DesertTerrarium {
   // a livelier tempo. Raising root speed alone outruns the planted supports.
   private simulationClock = new SimulationClock(1.5);
   private poseInterpolation?:PoseInterpolation;
+  private playbackStats=params.has('profile')?new PlaybackStats():undefined;
+  private animation?:FrameDriver;
   private fill=new THREE.DirectionalLight(0xe3dccf,1.1);
   private ambient=new THREE.HemisphereLight(0xcbdbe9,0x63503c,.95);
   private plantContacts: PlantContact[] = [];
@@ -53,7 +57,8 @@ export class DesertTerrarium {
     this.post=new Post(r,this.scene,this.camera,params.has('lite')?0:4);this.post.settings.dof=false;this.post.settings.bloomStrength=.10;this.post.settings.exposure=1.05;
     if(params.has('lite')) this.post.settings.ao=false;
     this.resize(true);new ResizeObserver(()=>this.resize(false)).observe($('scene'));
-    r.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();r.setAnimationLoop(null);this.say('The display is paused while graphics recover…');});
+    document.addEventListener('visibilitychange',()=>this.lastTime=0);
+    r.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();this.stopAnimation();this.say('The display is paused while graphics recover…');});
     r.domElement.addEventListener('webglcontextrestored',()=>{void this.ready.then(async()=>{
       await r.compileAsync(this.scene,this.camera);this.lastTime=0;this.draw();
       if(!Number(params.get('frames')))this.startAnimation();this.say('Display restored');
@@ -64,6 +69,7 @@ export class DesertTerrarium {
     await this.habitat.ready;
     this.dish=new Dish({heightAt:groundHeight},-.58,TANK.d/2-.088,this.habitat.stonePhoto);this.scene.add(this.dish.group);
     this.surface=new Surface(this.habitat.ground,[...this.habitat.hard,{mesh:this.dish.bowl,kind:SurfaceKind.Rock}],.004);
+    for(const plant of this.habitat.plants)plant.constrainToHardscape((point,radius)=>this.surface.tailContacts.overlapsSolid(point,radius));
     this.nav=new Nav(this.surface,this.habitat.obstacles);
     this.insects=new Insects(this.surface,this.nav);this.scene.add(this.insects.group);
     this.lizard=await LizardModel.load('./lizard/');this.lizard.setMorph(params.get('morph')??'normal');this.scene.add(this.lizard.root);
@@ -81,14 +87,16 @@ export class DesertTerrarium {
     if(count){for(let i=0;i<count;i++){this.simulate(1/30);this.draw();}return;}
     this.startAnimation();
   }
-  private startAnimation(){this.renderer.setAnimationLoop(ms=>{
+  private stopAnimation(){this.animation?.stop();this.lastTime=0;}
+  private startAnimation(){this.stopAnimation();this.animation=new FrameDriver(ms=>{
     if(document.hidden){this.lastTime=0;return;}
     const dt=this.lastTime?(ms-this.lastTime)/1000:1/60;
-    this.lastTime=ms;this.simulate(dt,8);
+    this.lastTime=ms;const cpuStart=performance.now();this.simulate(dt,8);
     this.poseInterpolation!.render(this.simulationClock.alpha,()=>this.draw(),()=>{
       this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
     });
-  });}
+    this.playbackStats?.record(ms,this.time,performance.now()-cpuStart);
+  });this.animation.start();}
   simulate(dt:number,budget=Infinity) {
     // A slow contact solve must not trigger nine more solves before the next
     // picture. Carry the time debt and give rendering a turn after ~8 ms.

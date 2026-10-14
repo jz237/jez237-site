@@ -37,10 +37,13 @@ export class PlantFlex {
   private bounds = new THREE.Box3();
   private contactBounds = new THREE.Box3();
   private reach = 0;
-  private active = false;
+  private bendLimits: number[];
+  private drawnBends: number[];
 
   constructor(readonly group: THREE.Group, readonly shoots: FlexibleShoot[], instances: FlexibleInstances[] = []) {
     this.bends = shoots.map(() => 0);
+    this.drawnBends = shoots.map(() => 0);
+    this.bendLimits = shoots.map(s => s.maxBend);
     this.rotations = shoots.map(() => new THREE.Quaternion());
     for (const child of group.children) {
       if (!(child instanceof THREE.Mesh) || child instanceof THREE.InstancedMesh) continue;
@@ -60,6 +63,41 @@ export class PlantFlex {
   }
 
   private weight(t: number) {return THREE.MathUtils.smoothstep(t, .015, .22);}
+
+  /** Bake each shoot's continuous safe bending range against static scenery.
+   * This runs once on load, never in the animation's collision solver. */
+  constrainToHardscape(blocked: (world: THREE.Vector3, radius: number) => boolean) {
+    const samples = this.shoots.map(()=>new Map<string,{point:THREE.Vector3;weight:number}>());
+    const add=(shoot:number,point:THREE.Vector3,weight:number)=>{
+      const key=`${Math.round(point.x/.002)},${Math.round(point.y/.002)},${Math.round(point.z/.002)}`;
+      samples[shoot].set(key,{point:point.clone(),weight:this.weight(weight)});
+    };
+    for(const b of this.meshes)for(let i=0;i<b.rest.length/3;i++)add(b.shoots.getX(i),this.point.fromArray(b.rest,i*3),b.weights.getX(i));
+    for(const {binding,rest} of this.decorations)for(let i=0;i<rest.length;i++)add(binding.shoots[i],this.point.setFromMatrixPosition(rest[i]),binding.weights[i]);
+    let restingOverlaps=0;
+    for(let i=0;i<this.shoots.length;i++){
+      const shoot=this.shoots[i], points=[...samples[i].values()];
+      const hits=(bend:number)=>points.some(sample=>{
+        this.q.setFromAxisAngle(shoot.axis,bend*sample.weight);
+        this.point.copy(sample.point).applyQuaternion(this.q);
+        this.point.y=Math.max(Math.min(.001,sample.point.y),this.point.y);
+        this.point.add(this.group.position);
+        return blocked(this.point,.0035);
+      });
+      if(hits(0)){this.bendLimits[i]=0;restingOverlaps++;continue;}
+      let safe=0;
+      // No more than 1 degree between probes, with a 3.5 mm margin covering
+      // the swept arc, blade width, thorns and sample spacing between probes.
+      const steps=Math.ceil(shoot.maxBend/(Math.PI/180));
+      for(let j=1;j<=steps;j++){
+        const angle=shoot.maxBend*j/steps;
+        if(hits(angle))break;
+        safe=angle;
+      }
+      this.bendLimits[i]=safe;
+    }
+    return restingOverlaps;
+  }
 
   private intersects(point: THREE.Vector3, padding: number) {
     for (const contact of this.contacts) {
@@ -85,13 +123,13 @@ export class PlantFlex {
       // Plants are rooted in world-aligned groups; solve pressure in the plant's local space.
       this.contacts.push({a: c.a.clone().sub(this.group.position), b: c.b.clone().sub(this.group.position), radius: c.radius, verticalRadius: c.verticalRadius});
     }
-    let dirty = this.active;
+    let dirty = false;
     for (let i = 0; i < this.shoots.length; i++) {
       const shoot = this.shoots[i]; let target = 0;
       if (this.contacts.length) {
         // Anticipate contact by 8 mm, giving the leaf time to yield before the skin arrives.
         for (let trial = 0; trial <= 24; trial++) {
-          target = shoot.maxBend * trial / 24;
+          target = this.bendLimits[i] * trial / 24;
           let hit = false;
           for (let j = 1; j < shoot.samples.length; j++) {
             this.q.setFromAxisAngle(shoot.axis, target * this.weight(shoot.sampleWeights?.[j] ?? j / (shoot.samples.length - 1)));
@@ -104,10 +142,11 @@ export class PlantFlex {
       const previous = this.bends[i], rate = target > previous ? 45 : 2.6;
       this.bends[i] = THREE.MathUtils.lerp(previous, target, 1 - Math.exp(-rate * dt));
       if (this.bends[i] < .00003 && target === 0) this.bends[i] = 0;
-      dirty ||= this.bends[i] > 0;
+      dirty ||= Math.abs(this.bends[i]-this.drawnBends[i])>1e-6 || (this.bends[i]===0 && this.drawnBends[i]!==0);
       this.rotations[i].setFromAxisAngle(shoot.axis, this.bends[i]);
     }
     if (!dirty) return;
+    this.drawnBends.splice(0,this.drawnBends.length,...this.bends);
     for (const binding of this.meshes) {
       const geometry = binding.mesh.geometry, p = geometry.getAttribute('position'), n = geometry.getAttribute('normal');
       for (let i = 0; i < p.count; i++) {
@@ -131,6 +170,5 @@ export class PlantFlex {
       binding.mesh.instanceMatrix.needsUpdate = true;
       binding.mesh.computeBoundingSphere();
     }
-    this.active = this.bends.some(x => x > 0);
   }
 }

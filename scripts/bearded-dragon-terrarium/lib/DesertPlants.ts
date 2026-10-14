@@ -8,6 +8,15 @@ import {PlantFlex, bindShoot, type FlexibleShoot} from './PlantFlex';
 
 const TAU = Math.PI * 2, UP = new THREE.Vector3(0, 1, 0);
 export const plantLightStrength = {value: 0};
+
+/** Roots on clear substrate; bending clearance is baked after the rocks load. */
+export function desertPlanting() {
+  const back=-TANK.d/2,front=TANK.d/2;
+  return [rosette(-.712,back+.17,.128,21),rosette(.715,.23,.110,22),rosette(-.015,back+.086,.108,23),
+    rosette(-.725,.28,.055,24),rosette(.228,front-.116,.055,26),
+    dryShrub(-.740,0,.120,61),dryShrub(-.066,back+.13,.174,62),dryShrub(-.244,back+.093,.12,63),
+    cactus(.682,back+.142,.278,.030,41),cactus(.741,-.31,.220,.025,42),cactus(.613,back+.087,.181,.022,43),cactus(.75,.16,.053,.027,44,true)];
+}
 const aloePhoto = {value: new THREE.Texture()}, cactusPhoto = {value: new THREE.Texture()};
 
 export async function loadPlantReferences() {

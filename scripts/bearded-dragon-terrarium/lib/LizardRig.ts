@@ -424,6 +424,19 @@ export class LizardRig {
       this.bodyY=p.y; this.bodyPitch=p.pitch; this.bodyRoll=p.roll; this.bend=p.bend;
       this.composeBody(); this.solveSpine(0);
     };
+    // Once resting, retain a supported posture instead of requesting the same
+    // slightly lower crouch and refitting all four limbs every single tick.
+    // Breathing still changes the shoulders, so validate the held posture and
+    // fall back to the full fitter whenever its contacts actually change.
+    if (!this.moving && !this.legs.some(l=>l.swing)
+      && Math.hypot(wanted.x-old.x,wanted.z-old.z)<.00001
+      && Math.abs(wrapAngle(wanted.heading-old.heading))<.0001
+      && Math.abs(wanted.lift-old.lift)<.0001 && Math.abs(wanted.lunge-old.lunge)<.0001
+      && Math.abs(wanted.y-old.y)<.0015 && Math.abs(wanted.pitch-old.pitch)<.015 && Math.abs(wanted.roll-old.roll)<.015) {
+      set({...wanted,y:old.y,pitch:old.pitch,roll:old.roll});
+      if(errorAt(.0001)<=.0001){this.accepted=this.poseState();return;}
+      set(wanted);
+    }
     // Fit the whole torso to its supports. Lowering alone cannot resolve a
     // descent with front feet on the next step and hind feet on the upper step.
     const fit = () => {
@@ -434,7 +447,7 @@ export class LizardRig {
         if(error<=.0001)break;
         for(const sign of [-1,1]) {
           const candidate={...best,[key]:clamp(best[key]+sign*rate*this.poseDt,old[key]-rate*this.poseDt,old[key]+rate*this.poseDt)};
-          set(candidate); const e=errorAt();
+          set(candidate); const e=errorAt(error-1e-7);
           if(e<error-1e-7){error=e;best=candidate;}
         }
         set(best);
@@ -1060,12 +1073,12 @@ export class LizardRig {
     const a = leg.data.upperLength * K, b = leg.data.lowerLength * K;
     const x = (a*a-b*b+dist*dist)/(2*Math.max(dist,.0001)), y = Math.sqrt(Math.max(0,a*a-x*x));
     const knee = (p:THREE.Vector3)=>S.clone().addScaledVector(direction,x).addScaledVector(p,y);
-    const penetration = (p:THREE.Vector3)=>this.limbObstruction(leg,S,W,p);
+    const penetration = (p:THREE.Vector3,limit=Infinity)=>this.limbObstruction(leg,S,W,p,limit);
     let score=penetration(plane);
     if(leg.bendDirection.lengthSq()>.5 && leg.wristDirection.lengthSq()>.5){
       const previous=leg.bendDirection.clone().applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection,direction));
       previous.addScaledVector(direction,-previous.dot(direction)).normalize();
-      const depth=penetration(previous);
+      const depth=penetration(previous,score-.00005);
       if(depth<score-.00005){plane.copy(previous);score=depth;}
     }
     let best=plane.clone(), angle=0;
@@ -1073,7 +1086,7 @@ export class LizardRig {
     for(const turn of [.2,-.2,.45,-.45,.75,-.75,1.05,-1.05,1.4,-1.4]) {
       const p=plane.clone().applyAxisAngle(direction,turn),E=knee(p),upper=E.clone().sub(S);
       if(upper.dot(this.bodyRight)*leg.side<.001 || (leg.front && upper.dot(this.bodyUp)>.011))continue;
-      const s=penetration(p)+Math.abs(turn)*.0003;
+      const s=penetration(p,score-Math.abs(turn)*.0003)+Math.abs(turn)*.0003;
       if(s<score){score=s;best=p;angle=turn;}
     }
     // Contact can change the elbow plane, but cannot snap it around the wrist axis.

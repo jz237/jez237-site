@@ -15,7 +15,7 @@ export function model() {
 }
 
 /** Actual habitat meshes, including both bowls; geometry only, with coordinates rounded to one micron. */
-export function habitat() {
+export function hardscape() {
   const data = JSON.parse(gunzipSync(readFileSync(new URL('./fixtures/habitat-collision.json.gz', import.meta.url))).toString());
   const hard = data.hard.map((h:any) => {
     const geometry = new THREE.BufferGeometry();
@@ -26,7 +26,12 @@ export function habitat() {
     mesh.applyMatrix4(new THREE.Matrix4().fromArray(h.matrix));
     return {mesh, kind:h.kind};
   });
-  const surface = new Surface(new THREE.Mesh(), hard), nav = new Nav(surface, data.obstacles);
+  return {hard,obstacles:data.obstacles};
+}
+
+export function habitat() {
+  const data=hardscape();
+  const surface = new Surface(new THREE.Mesh(), data.hard), nav = new Nav(surface, data.obstacles);
   const lizard = model(), rig = new LizardRig(lizard, surface);
   const brain = new LizardBrain(rig, nav, surface, {nearest:()=>null} as any);
   return {surface, nav, lizard, rig, brain};

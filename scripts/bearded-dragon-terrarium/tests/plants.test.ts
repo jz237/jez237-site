@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import {rosette, dryShrub} from '../lib/DesertPlants';
+import {rosette, dryShrub, desertPlanting} from '../lib/DesertPlants';
 import {plantFlexFor, type PlantContact} from '../lib/PlantFlex';
 import {caveBackingGeometry} from '../lib/DesertDetails';
+import {hardscape} from './locomotion-fixture';
+import {TailContacts} from '../lib/TailContacts';
 
 const distance = (p: THREE.Vector3, c: PlantContact) => {
   const scale = c.radius / (c.verticalRadius ?? c.radius), stretch = (v: THREE.Vector3) => v.clone().multiply(new THREE.Vector3(1, scale, 1));
@@ -87,4 +89,35 @@ test('cave backings follow the rounded opening and fit inside the stone arch', (
       assert.ok(p.getZ(i) >= -.00001 && p.getZ(i) <= .00801, 'thin rear wall stays within the arch depth');
     }
   }
+});
+
+test('all habitat plants clear the rocks and log at rest and throughout a pressure/recovery sweep',()=>{
+  const collision=new TailContacts(hardscape().hard.map(h=>h.mesh),()=>-Infinity,-Infinity);
+  const p=new THREE.Vector3(),matrix=new THREE.Matrix4();let limited=0,checked=0;
+  for(const group of desertPlanting()){
+    const flex=plantFlexFor(group);
+    if(flex){
+      assert.equal(flex.constrainToHardscape((p,r)=>collision.overlapsSolid(p,r)),0,`${group.name} roots and resting shoots have clearance`);
+      limited+=(flex as any).bendLimits.filter((v:number,i:number)=>v<flex.shoots[i].maxBend-.001).length;
+    }
+    const inspect=()=>{
+      group.updateMatrixWorld(true);
+      for(const child of group.children){
+        const mesh=child as THREE.Mesh,positions=mesh.geometry.attributes.position;
+        if(mesh instanceof THREE.InstancedMesh){
+          for(let i=0;i<mesh.count;i++){mesh.getMatrixAt(i,matrix);p.setFromMatrixPosition(matrix).applyMatrix4(mesh.matrixWorld);assert.equal(collision.overlapsSolid(p,.0001),false,'thorns and seed attachments clear solid scenery');checked++;}
+        }else for(let i=0;i<positions.count;i++){
+          p.fromBufferAttribute(positions,i).applyMatrix4(mesh.matrixWorld);
+          assert.equal(collision.overlapsSolid(p,.0001),false,`${group.name} at ${group.position.toArray()} intersects scenery at ${p.toArray()}`);checked++;
+        }
+      }
+    };
+    inspect();
+    if(flex){
+      const contact={a:group.position.clone(),b:group.position.clone().add(new THREE.Vector3(0,.2,0)),radius:.3};
+      for(let j=0;j<8;j++){flex.update(1/60,[contact]);inspect();}
+      for(let j=0;j<8;j++){flex.update(.12,[]);inspect();}
+    }
+  }
+  assert.ok(limited>0,'hardscape genuinely limits some shoots');assert.ok(checked>500000);
 });
