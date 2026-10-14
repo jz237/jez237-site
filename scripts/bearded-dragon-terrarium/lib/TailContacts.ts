@@ -34,7 +34,7 @@ export class TailContacts implements TailCollision {
   private sampleCorrection = new THREE.Vector3();
   private segmentNormal = new THREE.Vector3();
 
-  constructor(meshes: THREE.Mesh[], private floor: (x: number, z: number) => number) {
+  constructor(meshes: THREE.Mesh[], private floor: (x: number, z: number) => number, private floorCeiling=Infinity) {
     this.solids = meshes.map(mesh => {
       mesh.updateMatrixWorld(true);
       const geometry = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
@@ -134,15 +134,19 @@ export class TailContacts implements TailCollision {
       this.candidate.copy(point).addScaledVector(this.direction, amount);
       // A buried rock/log base is not an available exit. Resolve into free space
       // beside it instead of fighting the sand with alternating down/up pushes.
-      if (inside && this.candidate.y < this.floor(this.candidate.x, this.candidate.z) + margin && this.exitAboveFloor(solid.tree, point, margin)) {
+      if (inside && this.candidate.y < this.floorCeiling + margin && this.candidate.y < this.floor(this.candidate.x, this.candidate.z) + margin && this.exitAboveFloor(solid.tree, point, margin)) {
         point.copy(this.bestPoint); this.direction.copy(this.bestNormal);
       } else point.addScaledVector(this.direction, amount);
       normal.add(this.direction); contact = true;
       this.touchesSolid = true;
       this.box.makeEmpty().expandByPoint(previous).expandByPoint(point).expandByScalar(margin);
     }
-    const ground = this.floor(point.x, point.z) + margin;
-    if (point.y < ground) {point.y = ground; normal.y += 1; contact = true;}
+    // Noise-based sand height is expensive. Its known upper bound rejects
+    // elevated limb/tail samples without changing any possible ground contact.
+    if(point.y < this.floorCeiling + margin){
+      const ground = this.floor(point.x, point.z) + margin;
+      if (point.y < ground) {point.y = ground; normal.y += 1; contact = true;}
+    }
     return contact;
   }
 

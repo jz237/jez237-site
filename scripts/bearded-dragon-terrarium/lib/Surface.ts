@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {computeBoundsTree, acceleratedRaycast} from 'three-mesh-bvh';
 import {TANK} from './Case';
-import {poolDistance, groundHeight, CAVE} from './Ground';
+import {poolDistance, groundHeight, MAX_GROUND_HEIGHT, CAVE} from './Ground';
 import {TailContacts} from './TailContacts';
 
 declare module 'three' {
@@ -80,7 +80,7 @@ export class Surface {
       this.kind[k] = kind;
     }
     this.findCave();
-    this.tailContacts = new TailContacts(hard.map(h => h.mesh), groundHeight);
+    this.tailContacts = new TailContacts(hard.map(h => h.mesh), groundHeight, MAX_GROUND_HEIGHT);
     void ground;
   }
 
