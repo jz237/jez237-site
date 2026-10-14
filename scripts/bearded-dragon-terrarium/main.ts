@@ -16,6 +16,7 @@ import {TANK} from './lib/Case';
 import {BASK, groundHeight} from './lib/Ground';
 import {plantLightStrength} from './lib/DesertPlants';
 import type {PlantContact} from './lib/PlantFlex';
+import {SimulationClock} from './lib/SimulationClock';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -32,6 +33,7 @@ export class DesertTerrarium {
   surface!:Surface; nav!:Nav; lizard!:LizardModel; rig!:LizardRig; brain!:LizardBrain; insects!:Insects; dish!:Dish;
   hours=Number(params.get('hours')??11.5);time=0;follow=false;dayRunning=false;feeding=false;frames=0;
   private lastTime=0;private nextReadout=0;private toastTimer=0;private home=new THREE.Vector3();private homeTarget=new THREE.Vector3(0,.32,0);private wasNight=false;private lap=0;
+  private simulationClock = new SimulationClock();
   private fill=new THREE.DirectionalLight(0xe3dccf,1.1);
   private ambient=new THREE.HemisphereLight(0xcbdbe9,0x63503c,.95);
   private plantContacts: PlantContact[] = [];
@@ -47,7 +49,11 @@ export class DesertTerrarium {
     this.post=new Post(r,this.scene,this.camera,params.has('lite')?0:4);this.post.settings.dof=false;this.post.settings.bloomStrength=.10;this.post.settings.exposure=1.05;
     if(params.has('lite')) this.post.settings.ao=false;
     this.resize(true);new ResizeObserver(()=>this.resize(false)).observe($('scene'));
-    r.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();r.setAnimationLoop(null);if(!params.has('lite')){params.set('lite','1');this.say('Reopening in lighter graphics…');setTimeout(()=>location.replace(`${location.pathname}?${params}`),800);}else this.fail('The graphics processor reset. Reload to reopen the terrarium.');});
+    r.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();r.setAnimationLoop(null);this.say('The display is paused while graphics recover…');});
+    r.domElement.addEventListener('webglcontextrestored',()=>{void this.ready.then(async()=>{
+      await r.compileAsync(this.scene,this.camera);this.lastTime=0;this.draw();
+      if(!Number(params.get('frames')))this.startAnimation();this.say('Display restored');
+    }).catch(e=>{console.error(e);this.fail('The graphics processor could not restore the display. Reload to reopen the terrarium.');});});
     this.ready=this.load();
   }
   private async load() {
@@ -68,9 +74,13 @@ export class DesertTerrarium {
     this.draw();document.body.classList.add('ready');Object.assign(window,{desertReady:true});
     const count=Number(params.get('frames')??0);
     if(count){for(let i=0;i<count;i++){this.simulate(1/30);this.draw();}return;}
-    this.renderer.setAnimationLoop(ms=>{const dt=this.lastTime?Math.min(.05,(ms-this.lastTime)/1000):.016;this.lastTime=ms;this.simulate(dt);this.draw();});
+    this.startAnimation();
   }
+  private startAnimation(){this.renderer.setAnimationLoop(ms=>{const dt=this.lastTime?Math.min(.05,(ms-this.lastTime)/1000):.016;this.lastTime=ms;this.simulate(dt);this.draw();});}
   simulate(dt:number) {
+    this.simulationClock.advance(dt, step => this.simulationStep(step));
+  }
+  private simulationStep(dt:number) {
     this.time+=dt;
     if(this.dayRunning)this.hours=(this.hours+dt*.1)%24;
     this.applyClimate(dt);this.insects.update(dt);this.brain.cameraPos.copy(this.camera.position);this.brain.update(dt);this.updatePlants(dt);

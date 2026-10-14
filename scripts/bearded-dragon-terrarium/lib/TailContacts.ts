@@ -15,7 +15,7 @@ export class TailContacts implements TailCollision {
   private solids: {geometry: THREE.BufferGeometry; tree: MeshBVH; box: THREE.Box3}[];
   private ray = new THREE.Ray();
   private insideRay = new THREE.Ray();
-  private insideDirection = new THREE.Vector3(.373, .827, .421).normalize();
+  private insideChecks = [new THREE.Vector3(0, 1, 0), new THREE.Vector3(.91, .21, .35).normalize(), new THREE.Vector3(-.35, .31, -.89).normalize()];
   private line = new THREE.Line3();
   private box = new THREE.Box3();
   private closest = {point: new THREE.Vector3(), distance: 0, faceIndex: 0};
@@ -46,6 +46,19 @@ export class TailContacts implements TailCollision {
 
   beginStep() {this.touchesSolid = false;}
 
+  private contains(tree: MeshBVH, point: THREE.Vector3) {
+    // A ray grazing a rough bevel can meet a reversed sliver before the entry
+    // face. Require agreement from independent directions before ejecting a
+    // point from a volume, especially inside an open arch or concave bowl.
+    let inside = 0;
+    for (const direction of this.insideChecks) {
+      this.insideRay.set(point, direction);
+      const exit = tree.raycastFirst(this.insideRay, THREE.DoubleSide);
+      if (exit && exit.face!.normal.dot(direction) > .00001) inside++;
+    }
+    return inside >= 2;
+  }
+
   private exitAboveFloor(tree: MeshBVH, point: THREE.Vector3, margin: number) {
     let shortest = Infinity;
     for (const direction of this.escapes) {
@@ -53,7 +66,10 @@ export class TailContacts implements TailCollision {
       const hit = tree.raycastFirst(this.ray, THREE.DoubleSide);
       if (!hit || hit.face!.normal.dot(direction) <= 0) continue;
       this.candidate.copy(hit.point).addScaledVector(hit.face!.normal, margin);
-      if (this.candidate.y < this.floor(this.candidate.x, this.candidate.z) + margin - .0001) continue;
+      // A side exit can sit just beneath uneven sand. Lift that exit onto the
+      // floor and verify it is free instead of ejecting to a distant rock top.
+      this.candidate.y=Math.max(this.candidate.y,this.floor(this.candidate.x,this.candidate.z)+margin);
+      if(this.contains(tree,this.candidate))continue;
       const distance = point.distanceToSquared(this.candidate);
       if (distance >= shortest) continue;
       shortest = distance; this.bestPoint.copy(this.candidate); this.bestNormal.copy(hit.face!.normal);
@@ -102,9 +118,7 @@ export class TailContacts implements TailCollision {
       if (solid.box.containsPoint(point) && this.direction.dot(n) < -0.00001) {
         // At a concave rim the nearest triangle can face away from a point that
         // is still in free air. Confirm volume occupancy before ejecting it.
-        this.insideRay.set(point, this.insideDirection);
-        const exit = solid.tree.raycastFirst(this.insideRay, THREE.DoubleSide);
-        inside = !!exit && exit.face!.normal.dot(this.insideDirection) > 0;
+        inside = this.contains(solid.tree, point);
       }
       if (!inside && hit.distance >= margin) continue;
       if (!inside && hit.distance > 0.000001) this.direction.divideScalar(hit.distance);
@@ -163,9 +177,7 @@ export class TailContacts implements TailCollision {
           else triangle.getNormal(this.direction);
           triangle.getNormal(this.faceNormal);
           if (this.direction.dot(this.faceNormal) < -.00001 && solid.box.containsPoint(this.axisPoint)) {
-            this.insideRay.set(this.axisPoint, this.insideDirection);
-            const exit = solid.tree.raycastFirst(this.insideRay, THREE.DoubleSide);
-            if (exit && exit.face!.normal.dot(this.insideDirection) > 0) this.direction.copy(this.faceNormal);
+            if (this.contains(solid.tree, this.axisPoint)) this.direction.copy(this.faceNormal);
           }
           const wa = pinnedA ? 0 : 1 - t, wb = t;
           const denominator = wa * (1 - t) + wb * t;

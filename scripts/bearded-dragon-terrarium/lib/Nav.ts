@@ -30,10 +30,9 @@ export class Nav {
     this.wet = new Uint8Array(N);
     for (let j = 0; j < this.nz; j++) for (let i = 0; i < this.nx; i++) {
       const x = this.x0 + i * this.cell, z = this.z0 + j * this.cell;
-      // keep the body (≈ 4 cm wide, with legs splayed wider) clear of the glass
-      const margin = Math.min(x + TANK.w / 2, TANK.w / 2 - x, z + TANK.d / 2, TANK.d / 2 - z);
+      // Reserve room for the head's swept arc as the animal turns; the tail can bend.
       let c = 1;
-      if (margin < 0.042) c = Infinity;
+      if (Math.min(x+TANK.w/2,TANK.w/2-x,z+TANK.d/2)<.142 || TANK.d/2-z<.085) c=Infinity;
       const kind = surface.kindAt(x, z);
       const y = surface.heightAt(x, z);
       if (kind === SurfaceKind.Water) {
@@ -56,6 +55,9 @@ export class Nav {
       else c += Math.min(slope, 1.5) * 3;
       if (kind === SurfaceKind.Rock) c = y > 0.335 ? Infinity : c + 2;
       if (kind === SurfaceKind.Wood && y > 0.25) c = Infinity;
+      // The strip beside the front face of the warm steps is narrower than a
+      // complete stance. Its clear sand crossing is farther forward at z=.355.
+      if(kind===SurfaceKind.Ground && x>-.38 && x<-.09 && z>.28 && z<.345)c=Infinity;
       // Route the trunk around tall faces before the rig has to shove it away.
       // Low risers and the sides of a climbable log remain available footholds.
       for (let a = 0; a < 8 && Number.isFinite(c); a++) {
@@ -63,6 +65,18 @@ export class Nav {
         const rise = surface.heightAt(px, pz) - y;
         const limit = surface.kindAt(px, pz) === SurfaceKind.Wood ? .12 : .075;
         if (rise > limit) c = Infinity;
+      }
+      // A ground route must clear the whole stance around the end of a log.
+      // A centre line can fit underneath while a thigh still strikes its side.
+      if(kind===SurfaceKind.Ground)for(let a=0;a<12&&Number.isFinite(c);a++){
+        const angle=a*Math.PI/6,px=x+Math.cos(angle)*.075,pz=z+Math.sin(angle)*.075;
+        if(surface.kindAt(px,pz)===SurfaceKind.Wood && surface.heightAt(px,pz)>y+.03)c=Infinity;
+      }
+      // The sand in front of the steps is a walking corridor. Keep the whole
+      // sprawling stance away from their sides instead of scraping along them.
+      if(kind===SurfaceKind.Ground)for(let a=0;a<8;a++){
+        const angle=a*Math.PI/4,px=x+Math.cos(angle)*.09,pz=z+Math.sin(angle)*.09;
+        if(surface.heightAt(px,pz)>y+.03)c+=2;
       }
       for (const o of obstacles) {
         const d = Math.hypot(x - o.x, z - o.z);
@@ -162,6 +176,17 @@ export class Nav {
     return k >= 0 ? this.cost[k] : Infinity;
   }
 
+  /** A route can be traversable for a point yet fail for the full animal.
+   * Remember that approach so replanning does not repeat the same failed step. */
+  avoidApproach(x: number, z: number, heading: number) {
+    const cx=x+Math.cos(heading)*.045, cz=z-Math.sin(heading)*.045;
+    for(let j=0;j<this.nz;j++)for(let i=0;i<this.nx;i++){
+      const px=this.x0+i*this.cell,pz=this.z0+j*this.cell;
+      const k=j*this.nx+i;
+      if(Math.hypot(px-cx,pz-cz)<.027 && Math.hypot(px-x,pz-z)>.025 && Number.isFinite(this.cost[k]))this.cost[k]=Math.max(this.cost[k],50);
+    }
+  }
+
   /** Nearest walkable point to (x, z), optionally restricted to one region. */
   nearestWalkable(x: number, z: number, region = -1): [number, number] | null {
     for (let r = 0; r < 40; r++) {
@@ -192,6 +217,40 @@ export class Nav {
 
   /** A* path from a to b as a list of smoothed waypoints, or null. */
   path(ax: number, az: number, bx: number, bz: number): [number, number][] | null {
+    // The wide stone steps are the usable connection between the warm ledge
+    // and the sand. The nearby fork of driftwood has a narrower, obstructed exit.
+    // These gateways are checked by the same A* and contact controller as every
+    // other route; no position is snapped to a waypoint.
+    const highA=ax<.05 && this.surface.heightAt(ax,az)>.11;
+    const highB=bx<-.22 && this.surface.heightAt(bx,bz)>.20;
+    const lowA=this.surface.heightAt(ax,az)<.12,lowB=this.surface.heightAt(bx,bz)<.12;
+    const stair:[number,number][]=[[-.40,.055],[-.31,.09],[-.20,.13],[-.08,.17],[.075,.23]];
+    const gates:[number,number][] = highA&&lowB ? stair.filter(([x])=>ax<x-.012) : [];
+    if(highB && (ax>bx+.04 || lowA)){
+      for(const gate of [...stair].reverse())if(ax>gate[0]+.012 || (lowA&&(az>.28||ax<-.38)))gates.push(gate);
+    }
+    // Cross the sand in front of the steps with the feet on the same level.
+    // A centre-only shortest route otherwise straddles the step's vertical side.
+    if(lowA&&lowB&&ax>-.08&&bx<-.38)gates.push([-.04,.355],[-.38,.355]);
+    if(lowA&&lowB&&ax<-.38&&bx>-.08)gates.push([-.38,.355],[-.04,.355]);
+    if(lowA&&highB&&ax<-.38)gates.unshift([-.38,.355],[-.04,.355]);
+    const caveA=Math.abs(ax-.475)<.11 && az<.11 && this.surface.heightAt(ax,az)<.12;
+    const caveB=Math.abs(bx-.475)<.11 && bz<.11 && this.surface.heightAt(bx,bz)<.12;
+    if(caveA&&!caveB)gates.unshift([.485,.18]);
+    if(caveB&&!caveA)gates.push([.485,.18]);
+    if(ax>.45&&ax<.52&&az>=.11&&az<.23&&bx<.45)gates.unshift([.36,.29]);
+    if(gates.length){
+      const points:[number,number][]=[[ax,az],...gates,[bx,bz]], route:[number,number][]=[];
+      for(let i=1;i<points.length;i++){
+        const part=this.directPath(...points[i-1],...points[i]);if(!part)return null;
+        route.push(...(i===1?part:part.slice(1)));
+      }
+      return route;
+    }
+    return this.directPath(ax,az,bx,bz);
+  }
+
+  private directPath(ax: number, az: number, bx: number, bz: number): [number, number][] | null {
     const start = this.nearestWalkable(ax, az);
     if (!start) return null;
     const s = this.idx(start[0], start[1]);

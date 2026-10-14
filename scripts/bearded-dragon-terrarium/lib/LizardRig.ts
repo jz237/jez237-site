@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {LizardModel, LIZARD_SCALE, LizardLimbData} from './LizardModel';
 import {TANK} from './Case';
 import {TailDynamics} from './TailDynamics';
+import {Footholds} from './Footholds';
 import type {TailCollision} from './TailContacts';
 
 /** Keeps a point (with a radius) inside the glass. */
@@ -16,7 +17,7 @@ function insideGlass(p: THREE.Vector3, r: number) {
  * Procedural skeleton for the agamid. The brain sets intentions (where the
  * body is, which way it faces, how fast it goes, where it looks); the rig turns
  * them into bone matrices every frame:
- *  - trot-like gait with diagonal limb pairs, planted feet, heel peel and toe roll
+ *  - anchored soles, diagonal walking steps and deliberate contact transfers on climbs
  *  - two-bone IK for each sprawling limb with an outward elbow/knee
  *  - a standing wave in the trunk synchronised with the steps, head stabilised
  *  - a simulated tail that drags on the ground and follows the body's path
@@ -33,7 +34,6 @@ export interface GroundQuery {
   supportAt?(x: number, z: number, ceiling: number, out: {y: number; normal: THREE.Vector3}): {y: number; normal: THREE.Vector3};
   tailContacts?: TailCollision;
 }
-const WOOD = 2;
 
 const K = LIZARD_SCALE; // metres per sculpt centimetre
 const UP = new THREE.Vector3(0, 1, 0);
@@ -66,10 +66,15 @@ interface Leg {
   swing: boolean;
   swingT: number;
   swingDur: number;
+  swingStall: number;
+  avoiding: boolean;
+  returning: boolean;
   from: THREE.Vector3;
   to: THREE.Vector3;
   fromYaw: number;
   toYaw: number;
+  toNormal: THREE.Vector3;
+  fromNormal: THREE.Vector3;
   heel: number; // 0 flat .. 1 heel raised (late stance)
   homeLocal: THREE.Vector3; // hand origin in the body frame (sculpt cm)
   lastPhase: number;
@@ -86,6 +91,9 @@ interface Leg {
   wristDirection: THREE.Vector3;
   handForward: THREE.Vector3;
   handNormal: THREE.Vector3;
+  nextPlanTime: number;
+  footprint: THREE.Vector3[];
+  limbSkin: THREE.Vector3[][];
 }
 
 export interface RigInputs {
@@ -168,6 +176,13 @@ export class LizardRig {
   private initialised = false;
   private hasPose = false;
   private poseDt = 1 / 60;
+  private footholds: Footholds;
+  private collision?: TailCollision;
+  private accepted: {x:number; z:number; heading:number; y:number; pitch:number; roll:number; bend:number; lift:number; lunge:number} | null = null;
+  /** Motion rejected by support/clearance constraints; the brain can replan. */
+  blocked = false;
+  private climbing = false;
+  get placingFoot() {return this.climbing && this.legs.some(l => l.swing);}
   readonly ground: GroundQuery;
   /** Called whenever a foot is put down (world position). */
   onFootDown?: (p: THREE.Vector3, front: boolean) => void;
@@ -187,6 +202,8 @@ export class LizardRig {
         return source.normalAt(x,z,out);
       },
     };
+    this.footholds = new Footholds(this.ground);
+    this.collision = source.tailContacts;
     const d = model.data;
     this.spineIdx = this.spineNames.map((n) => model.bone(n));
     this.spineBindX = this.spineIdx.map((i) => d.bones[i].origin[0]);
@@ -236,7 +253,7 @@ export class LizardRig {
       const leg: Leg = {
         data: limb, front, side: limb.side, offset: offsets[`${limb.kind}${limb.side}`] ?? 0,
         planted: new THREE.Vector3(), plantedYaw: 0, normal: new THREE.Vector3(0, 1, 0),
-        swing: false, swingT: 0, swingDur: 0.2, from: new THREE.Vector3(), to: new THREE.Vector3(), fromYaw: 0, toYaw: 0,
+        swing: false, swingT: 0, swingDur: 0.2, swingStall:0, avoiding:false, returning:false, from: new THREE.Vector3(), to: new THREE.Vector3(), fromYaw: 0, toYaw: 0, toNormal: new THREE.Vector3(0, 1, 0), fromNormal:new THREE.Vector3(0,1,0),
         heel: 0,
         homeLocal: new THREE.Vector3(limb.wrist[0] + limb.forward[0] * 0.05, 0, limb.wrist[2] * 1.02),
         lastPhase: 0, liftScale: front ? 0.55 : 0.75, wristAbove: limb.wrist[1] - 0.13,
@@ -249,6 +266,25 @@ export class LizardRig {
         stepTop: 0,
         bendDirection: new THREE.Vector3(), wristDirection: new THREE.Vector3(),
         handForward: new THREE.Vector3(), handNormal: new THREE.Vector3(),
+        nextPlanTime: 0,
+        footprint: limb.digits.flatMap(d=>[d.base,d.tip]).map(p=>new THREE.Vector3((p[0]-limb.wrist[0]) * K,0,(p[2]-limb.wrist[2]) * K)),
+        limbSkin:[limb.bones.upper,limb.bones.lower].map(bone=>{
+          const g=model.mesh.geometry,p=g.attributes.position,ids=g.attributes.skinIndex,weights=g.attributes.skinWeight;
+          const inverse=model.bind[bone].clone().invert(),points:THREE.Vector3[]=[];
+          for(let i=0;i<p.count;i++)for(let j=0;j<4;j++)if(ids.getComponent(i,j)===bone&&weights.getComponent(i,j)>.7){points.push(new THREE.Vector3().fromBufferAttribute(p,i).applyMatrix4(inverse).multiplyScalar(K));break;}
+          const envelope=new Set<THREE.Vector3>();
+          for(let latitude=0;latitude<=8;latitude++)for(let longitude=0;longitude<16;longitude++){
+            const theta=latitude*Math.PI/8,phi=longitude*Math.PI/8,direction=new THREE.Vector3(Math.cos(theta),Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi));
+            let best=points[0],score=-Infinity;for(const p of points){const s=p.dot(direction);if(s>score){score=s;best=p;}}envelope.add(best);
+          }
+          const min=Math.min(...points.map(p=>p.x)),max=Math.max(...points.map(p=>p.x));
+          for(let slice=0;slice<6;slice++)for(let angle=0;angle<8;angle++){
+            const cy=Math.cos(angle*Math.PI/4),cz=Math.sin(angle*Math.PI/4);let best:THREE.Vector3|undefined,score=-Infinity;
+            for(const p of points)if(Math.min(5,Math.floor((p.x-min)/(max-min)*6))===slice){const s=p.y*cy+p.z*cz;if(s>score){score=s;best=p;}}
+            if(best)envelope.add(best);
+          }
+          return [...envelope];
+        }),
       };
       this.legs.push(leg);
     }
@@ -266,76 +302,174 @@ export class LizardRig {
     return out.set((p.x - this.rootX) * K, p.y * K, p.z * K).applyMatrix4(this.body);
   }
 
-  /** Set by homeWorld: the last foot target had nothing under it within reach. */
-  private homeHangs = false;
   private footSupport(x: number, z: number, out = {y: 0, normal: new THREE.Vector3()}) {
-    if (this.ground.supportAt) return this.ground.supportAt(x, z, this.bodyY + .055, out);
-    out.y = this.ground.heightAt(x, z); this.ground.normalAt(x, z, out.normal); return out;
+    const hit = this.footholds.support(x, z, this.bodyY + .055);
+    out.y = hit.y; out.normal.copy(hit.normal); return out;
   }
 
-  private stepObstacle(leg: Leg) {
-    let top = Math.max(leg.from.y, leg.to.y);
-    for (const t of [.25, .5, .75]) {
-      top = Math.max(top, this.footSupport(THREE.MathUtils.lerp(leg.from.x, leg.to.x, t), THREE.MathUtils.lerp(leg.from.z, leg.to.z, t)).y);
-    }
-    return top;
+  private shoulder(leg: Leg) {
+    const k = leg.front ? 2 : 5;
+    const origin = this.model.data.bones[this.spineIdx[k]].origin;
+    const flank=1+.035*(Math.sin(this.time*Math.PI*2/2.6)*.5+.5)*this.inputs.breath;
+    const flat=this.inputs.flatten*(k===5?.5:1);
+    const sy=(k===2?1+(flank-1)*.6:1)*(1-.14*flat),sz=(k===2?flank:1)*(1+.17*flat);
+    return new THREE.Vector3(leg.data.root[0] - origin[0], leg.data.root[1] - origin[1], leg.data.root[2] - origin[2])
+      .multiply(new THREE.Vector3(K,K*sy,K*sz)).applyMatrix4(this.spineFrame[k]).add(this.spinePos[k]);
   }
 
   private homeWorld(leg: Leg, out: THREE.Vector3, ahead = 0) {
     const h = leg.homeLocal;
-    const along = (h.x - this.rootX) * K + ahead;
-    // On a narrow perch (a log) the outer support may be far below: bring the
-    // foot inward until it lands on something within reach, so it grips the edge.
-    const reachDown = (leg.front ? 1.9 : 2.1) * K + this.inputs.clearance * K;
-    // Walking on the ground beside the log, a foot stays on the ground: the log is
-    // a wall it keeps off, not something to plant two feet on. Only where the log
-    // is under the body's own midline (climbing it head on, or on top) do the feet
-    // step up onto the wood.
-    const hd = this.inputs.heading;
-    const mx = this.inputs.x + Math.cos(hd) * along, mz = this.inputs.z - Math.sin(hd) * along;
-    const lineY = Math.max(this.ground.heightAt(mx, mz), this.bodyY - (1.05 + 0.3) * K - this.inputs.clearance * K);
-    let wall = false;
-    for (let k = 0; k <= 6; k++) {
-      const w = (1 - k * 0.12) * (1 - this.walkExtension * 0.045);
-      // A forepaw may grip the side of a narrow perch, but cannot be folded
-      // inward underneath its shoulder just to find the perch's upper surface.
-      const lateral = leg.front ? Math.sign(h.z) * Math.max(Math.abs(h.z * K * w), (Math.abs(leg.data.root[2]) + .6) * K) : h.z * K * w;
-      out.copy(this.bodyFwd).multiplyScalar(along).addScaledVector(this.bodyRight, lateral);
-      out.x += this.inputs.x;
-      out.z += this.inputs.z;
-      insideGlass(out, 0.009); // a foot never steps through the glass
-      out.y = this.footSupport(out.x, out.z).y;
-      // (wood well above the midline beside it: bring the foot in, toward the ground under the body)
-      wall = out.y - lineY > 0.012 && this.ground.kindAt?.(out.x, out.z) === WOOD;
-      if (wall) continue;
-      if (this.bodyY - out.y < reachDown + 1.2 * K) {this.homeHangs = false; return out;}
-    }
-    if (wall) {
-      // (still on the wood at its innermost: plant it on the ground at the midline)
-      out.x = mx; out.z = mz;
-      out.y = this.ground.heightAt(mx, mz);
-      this.homeHangs = false;
-      return out;
-    }
-    // Nothing within reach: hold the foot against the side of the perch.
-    const shoulder = this.bodyToWorld(new THREE.Vector3(...leg.data.root as [number, number, number]), new THREE.Vector3());
-    const hangingHeight = leg.front ? shoulder.y - (leg.data.root[1] - leg.data.wrist[1]) * K - .007 : this.bodyY - reachDown;
-    out.y = Math.max(out.y, hangingHeight);
-    this.homeHangs = true;
+    const I=this.inputs, floor=this.ground.heightAt(I.x,I.z);
+    const sideX=I.x+this.bodyRight.x*h.z*K,sideZ=I.z+this.bodyRight.z*h.z*K;
+    const sideHeight=this.ground.heightAt(sideX,sideZ),kind=this.ground.kindAt?.(I.x,I.z);
+    const besideFace=floor<.12 && sideHeight>floor+.03;
+    const narrowPerch=(kind===1||kind===2)&&sideHeight<floor-.025;
+    const nearGlass=Math.min(TANK.w/2-Math.abs(I.x),TANK.d/2-Math.abs(I.z))<.12;
+    const inHide=!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&floor<.12;
+    const width=nearGlass||inHide||narrowPerch ? .55 : besideFace ? .70 : 1;
+    out.copy(this.bodyFwd).multiplyScalar((h.x - this.rootX) * K + ahead)
+      .addScaledVector(this.bodyRight, h.z * K * width * (1 - this.walkExtension * .045));
+    out.x += this.inputs.x; out.z += this.inputs.z;
+    insideGlass(out, .028);
+    out.y = this.footSupport(out.x, out.z).y;
     return out;
+  }
+
+  private footYaw(leg:Leg){
+    const I=this.inputs;
+    const narrow=Math.min(TANK.w/2-Math.abs(I.x),TANK.d/2-Math.abs(I.z))<.12
+      ||(!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&this.ground.heightAt(I.x,I.z)<.12)
+      ||this.ground.kindAt?.(I.x,I.z)===1||this.ground.kindAt?.(I.x,I.z)===2;
+    // Turn the toe fan forward in a tight passage instead of spreading it
+    // sideways into the wall. This orientation is chosen before lift-off.
+    return I.heading+(narrow ? leg.side*.55 : 0);
+  }
+
+  private poseState() {
+    const I = this.inputs;
+    return {x:I.x, z:I.z, heading:I.heading, y:this.bodyY, pitch:this.bodyPitch, roll:this.bodyRoll,
+      bend:this.bend, lift:I.chestLift, lunge:I.lunge};
+  }
+
+  private composeBody() {
+    const I = this.inputs;
+    const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
+    const thrust = I.lunge * 1.6 * K;
+    this.body.compose(new THREE.Vector3(I.x + Math.cos(I.heading) * thrust, this.bodyY - this.spineBindYAt(this.rootX) * K,
+      I.z - Math.sin(I.heading) * thrust), q, new THREE.Vector3(1, 1, 1));
+    this.bodyFwd.set(1, 0, 0).applyQuaternion(q); this.bodyUp.set(0, 1, 0).applyQuaternion(q);
+    this.bodyRight.set(0, 0, 1).applyQuaternion(q);
+  }
+
+  /** Test the proposed torso against planted contacts and solid geometry BEFORE committing it. */
+  private supportError() {
+    let error = 0;
+    for (const leg of this.legs) {
+      if (this.collision) {
+        const p=this.shoulder(leg), q=p.clone();
+        this.collision.projectPoint(p,q,leg.front?.012:.016,new THREE.Vector3());
+        error=Math.max(error,p.distanceTo(q)-.0015);
+      }
+      if (leg.front && leg.side < 0 && this.inputs.wave > .01) continue;
+      // The landing remains reachable throughout swing. Releasing its support
+      // constraint until late swing can strand a paw above the sand indefinitely.
+      const wrist = (leg.swing ? leg.to.clone() : leg.planted.clone()).addScaledVector(leg.swing ? leg.toNormal : leg.normal, (.12 + leg.wristAbove) * K);
+      const S=this.shoulder(leg),distance=S.distanceTo(wrist);
+      // Reach is a hard constraint. A pre-existing soft skin contact must never
+      // give the optimizer permission to stretch a different planted limb.
+      error = Math.max(error, 100*(distance - leg.reach * (leg.swing ? .94 : .96)), 100*(leg.reach*.30-distance));
+      if(this.collision && leg.bendDirection.lengthSq()>.5){
+        const contactWrist=leg.swing ? this.transferPose(leg,leg.swingT).W : wrist;
+        const dir=contactWrist.clone().sub(S).normalize(),plane=leg.bendDirection.clone();
+        if(leg.wristDirection.lengthSq()>.5)plane.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection,dir));
+        plane.addScaledVector(dir,-plane.dot(dir)).normalize();
+        error=Math.max(error,this.limbObstruction(leg,S,contactWrist,plane)-.0008);
+      }
+    }
+    for (const k of [2, 3, 4, 5]) for (const side of [-1, 0, 1]) {
+      const p = this.spinePos[k].clone().addScaledVector(this.bodyRight, side * (k === 3 || k === 4 ? .016 : .010));
+      const radius = k === 3 || k === 4 ? .014 : .012;
+      if (this.collision) {
+        const q = p.clone(); this.collision.projectPoint(p, q, radius, new THREE.Vector3());
+        error = Math.max(error, p.distanceTo(q) - .0015);
+      } else error = Math.max(error, this.ground.heightAt(p.x, p.z) + radius - p.y - .0015);
+      const inside = insideGlass(p.clone(), radius + .004);
+      error = Math.max(error, inside.distanceTo(p));
+    }
+    return error;
+  }
+
+  private supportPose() {
+    let wanted = this.poseState(); const old = this.accepted;
+    this.blocked = false;
+    if (!old) {this.accepted = wanted; return;}
+    const set = (p: typeof wanted) => {
+      Object.assign(this.inputs, {x:p.x,z:p.z,heading:p.heading,chestLift:p.lift,lunge:p.lunge});
+      this.bodyY=p.y; this.bodyPitch=p.pitch; this.bodyRoll=p.roll; this.bend=p.bend;
+      this.composeBody(); this.solveSpine(0);
+    };
+    // Fit the whole torso to its supports. Lowering alone cannot resolve a
+    // descent with front feet on the next step and hind feet on the upper step.
+    const fit = () => {
+      let best=this.poseState(), error=this.supportError();
+      const ranges = [['y', .085], ['pitch', .9], ['roll', .65]] as const;
+      for(let pass=0;pass<3 && error>.0001;pass++) for(const [key,rate] of ranges) {
+        for(const sign of [-1,1]) {
+          const candidate={...best,[key]:clamp(best[key]+sign*rate*this.poseDt,old[key]-rate*this.poseDt,old[key]+rate*this.poseDt)};
+          set(candidate); const e=this.supportError();
+          if(e<error-1e-7){error=e;best=candidate;}
+        }
+        set(best);
+      }
+      return error;
+    };
+    if(this.supportError()>.0001) {fit(); wanted=this.poseState();}
+    const apply = (t: number, advance = t) => {
+      const I = this.inputs;
+      I.x = THREE.MathUtils.lerp(old.x, wanted.x, advance); I.z = THREE.MathUtils.lerp(old.z, wanted.z, advance);
+      I.heading = old.heading + wrapAngle(wanted.heading - old.heading) * advance;
+      this.bodyY = THREE.MathUtils.lerp(old.y, wanted.y, t);
+      this.bodyPitch = THREE.MathUtils.lerp(old.pitch, wanted.pitch, t); this.bodyRoll = THREE.MathUtils.lerp(old.roll, wanted.roll, t);
+      this.bend = THREE.MathUtils.lerp(old.bend, wanted.bend, t);
+      I.chestLift = THREE.MathUtils.lerp(old.lift, wanted.lift, t); I.lunge = THREE.MathUtils.lerp(old.lunge, wanted.lunge, t);
+      this.composeBody(); this.solveSpine(0);
+    };
+    if (this.supportError() > .0001) {
+      apply(0); const previousError = this.supportError();
+      const allowed = Math.max(.0001, previousError - .00001);
+      // Shift weight vertically before advancing over a riser, if the supports permit it.
+      apply(1, 0);
+      fit();
+      if (this.supportError() > allowed) {
+        let low = 0, high = 1;
+        for (let i = 0; i < 8; i++) {const t = (low + high) / 2; apply(t); if (this.supportError() <= allowed) low = t; else high = t;}
+        apply(low);
+      }
+      this.blocked = Math.hypot(this.inputs.x - wanted.x, this.inputs.z - wanted.z) > .00005
+        || Math.abs(wrapAngle(this.inputs.heading - wanted.heading)) > .001;
+    }
+    this.accepted = this.poseState();
+    // The brain retains its desired posture; the accepted pose converges as feet reposition.
+    this.inputs.chestLift = wanted.lift; this.inputs.lunge = wanted.lunge;
   }
 
   /** Teleports the lizard: feet planted at their homes, tail laid out behind. */
   reset() {
     const I = this.inputs;
     this.initialised = false;
-    this.hasPose = false;
+    this.hasPose = false; this.accepted = null;
     this.computeBodyFrame(1, true);
+    this.solveSpine(0);
     for (const leg of this.legs) {
       this.homeWorld(leg, leg.planted);
+      const foothold = this.footholds.find(leg.planted, this.shoulder(leg), leg.reach, I.heading, leg.side, undefined, leg.footprint);
+      if (foothold) {leg.planted.copy(foothold.point); leg.normal.copy(foothold.normal);}
+      leg.from.copy(leg.planted); leg.to.copy(leg.planted); leg.toNormal.copy(leg.normal);leg.fromNormal.copy(leg.normal);
       leg.plantedYaw = I.heading;
       leg.swing = false;
+      leg.swingStall=0;leg.avoiding=false;leg.returning=false;
       leg.stepDue = false;
+      leg.nextPlanTime = 0;
       leg.bendDirection.set(0, 0, 0); leg.wristDirection.set(0, 0, 0);
       leg.handForward.set(0, 0, 0); leg.handNormal.set(0, 0, 0);
       leg.lastPhase = (this.phase + leg.offset) % 1;
@@ -345,115 +479,51 @@ export class LizardRig {
     this.tailDynamics.reset(pelvis, this.bodyFwd.clone().negate());
     this.tailPts = this.tailDynamics.points;
     this.initialised = true;
+    this.accepted = this.poseState();
   }
 
   private computeBodyFrame(dt: number, snap = false) {
-    const I = this.inputs;
-    const fwd = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading));
-    const right = new THREE.Vector3(-fwd.z, 0, fwd.x); // +Z when facing +X
-    // Sample the surface under the chest, pelvis and flanks.
-    // (each a little patch, so a crack in the log is bridged rather than dropped into)
-    const size = K / 0.0105;
-    const H = (a: number, sd: number) => this.ground.heightAt(I.x + fwd.x * a * size + right.x * sd * size, I.z + fwd.z * a * size + right.z * sd * size);
-    // ground under the chest and hips; a rise just beyond the trunk counts for less
-    // with distance (a 35° slope), so a step coming up is met smoothly, not all at once
-    const c = Math.max(H(0.025, 0), H(0.035, 0), H(0.045, 0), H(0.06, 0) - 0.0105, H(0.075, 0) - 0.021);
-    const p = Math.max(H(-0.02, 0), H(-0.03, 0), H(-0.042, 0), H(-0.055, 0) - 0.009, H(-0.07, 0) - 0.0196);
-    const mid = this.ground.heightAt(I.x, I.z);
-    // (the ground either side; something tall beside it, like the log it walks
-    // along, is a wall it keeps off, not ground to tilt onto)
-    const side = (h: number) => (h - mid > 0.03 ? mid : h);
-    const l = Math.max(side(H(0.01, -0.022)), side(H(-0.012, -0.022)));
-    const r = Math.max(side(H(0.01, 0.022)), side(H(-0.012, 0.022)));
-    // the trunk never sinks into what it straddles (the log, a stone): its belly
-    // stays above the highest point anywhere under its footprint
-    // (a low step, or the log; a tall stone beside it is a wall it keeps off instead, see update)
-    let under = mid, underMid = mid, ramp = -Infinity;
-    // (pitched nose-up on the climb, the belly ahead of the middle is that much higher)
-    const tanP = Math.tan(clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58));
-    for (const a of [0.07, 0.045, 0.02, -0.005, -0.03, -0.05, -0.07]) for (const sd of [-0.021, 0, 0.021]) {
-      const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
-      const h = this.ground.heightAt(sx, sz);
-      // climbing onto (or down off) the log is a ramp, not a step: the log ahead or
-      // behind lifts the body by its height less a 35° slope back to it, so the
-      // body rises steadily, nose up, as it climbs, and comes down the same way
-      // (to the side as well as ahead, angling up onto it, though a log only brushing
-      // the flank lifts it little: the side counts three times as far off)
-      if (h - mid > 0.006 && h - mid < 0.12 && this.ground.kindAt?.(sx, sz) === WOOD) ramp = Math.max(ramp, h - (Math.abs(a) + 3 * Math.abs(sd)) * 0.7);
-      // (the log counts only right under the belly: climbing onto it, the chest
-      // rises first with the forelegs, and the body follows as it gets on top,
-      // rather than the whole lizard popping up the moment its nose is over it)
-      if (h - mid < 0.03) {
-        under = Math.max(under, h);
-        if (sd === 0) underMid = Math.max(underMid, h);
-      } else if (h - mid < 0.12 && Math.abs(a) <= 0.045 && this.ground.kindAt?.(sx, sz) === WOOD) {
-        // (the trunk stays on top of the log under it, pitched as it is; its flanks may tuck a little)
-        const need = h - a * tanP - (sd !== 0 ? 0.008 : 0);
-        under = Math.max(under, need);
-        if (sd === 0) underMid = Math.max(underMid, need);
-      }
+    const I = this.inputs, f = new THREE.Vector3(Math.cos(I.heading), 0, -Math.sin(I.heading));
+    const right = new THREE.Vector3(-f.z, 0, f.x);
+    const H = (along: number, side = 0) => this.ground.heightAt(I.x + f.x * along + right.x * side, I.z + f.z * along + right.z * side);
+    const front = (H(.045) + H(.065)) / 2, rear = (H(-.035) + H(-.055)) / 2;
+    const pitch = clamp(Math.atan2(front - rear, .10), -.65, .65);
+    const roll = clamp(Math.atan2(H(0, -.025) - H(0, .025), .05), -.22, .22) + I.sideLean;
+    const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * .10 : 0;
+    let y = H(0) + (I.clearance + 1.05 + bob + this.sprint * .6) * K;
+    // Anticipate the belly's approach to a rise without instantly lifting the skeleton.
+    for (const along of [-.055, -.035, -.015, .015, .035, .055]) {
+      y = Math.max(y, H(along) + .018 - along * Math.sin(pitch));
     }
-    const base = Math.max(mid, (c + p) / 2, (l + r) / 2 - 0.004, under - 0.006, ramp);
-    const pitch = clamp(Math.atan2(c - p, 0.065 * size), -0.58, 0.58) + this.sprint * 0.08;
-    const roll = clamp(Math.atan2(l - r, 0.044 * size) * 0.45, -0.23, 0.23) + I.sideLean;
-    const bob = this.moving ? Math.abs(Math.sin(this.phase * Math.PI * 2)) * 0.18 : 0;
-    // body centre height: belly clearance + half the trunk depth
-    let targetY = base + (I.clearance + 1.05 + bob + this.sprint * 0.9) * K;
-    // A lizard sprawls: its elbows and knees stay bent, out to the side, and the
-    // body rides low between its feet. No higher, then, than lets every planted
-    // foot be reached with the limb bent (never stood on straight, pillar-like
-    // legs), but never down into what it walks over.
-    if (this.initialised) {
-      const spineBind = this.spineBindYAt(this.rootX);
-      const inverseBody = new THREE.Matrix4().copy(this.body).invert();
-      const orientation = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
-      let cap = Infinity;
-      for (const leg of this.legs) {
-        // Start lowering toward a landing before the forefoot touches down.
-        const foot = leg.swing ? leg.to : leg.planted;
-        if ((leg.swing && leg.swingT < 0.5) || foot.y < base - 0.02) continue;
-        const r = leg.data.root;
-        const shoulder = this.hasPose
-          ? new THREE.Vector3().setFromMatrixPosition(this.boneWorld[leg.data.bones.upper]).applyMatrix4(inverseBody)
-          : new THREE.Vector3((r[0] - this.rootX) * K, r[1] * K, r[2] * K);
-        shoulder.applyQuaternion(orientation);
-        const sx = I.x + shoulder.x, sz = I.z + shoulder.z;
-        const dh = Math.hypot(foot.x - sx, foot.z - sz);
-        // Extend the bent limbs during locomotion. Their resting sprawl remains
-        // lower; neither pose asks the IK for a straight, fully extended limb.
-        const extension = leg.front ? 0.78 + this.walkExtension * 0.10 : 0.84 + this.walkExtension * 0.06;
-        const R = leg.reach * (extension + (0.92 - extension) * this.sprint);
-        const dv = Math.sqrt(Math.max(0, R * R - dh * dh));
-        // the wrist sits half a centimetre above the sole; the shoulder a little below the spine
-        cap = Math.min(cap, foot.y + 0.47 * K + dv - (shoulder.y - spineBind * K));
-      }
-      // (however low it sprawls, the belly stays on top of the highest thing under
-      // its midline; across a slope the body rolls with it, so the flanks are left
-      // to the roll)
-      const floor = Math.max(base, underMid) + (1.05 + 0.15) * K;
-      targetY = Math.max(floor, Math.min(targetY, cap));
-    }
-    if (snap) {this.bodyY = targetY; this.bodyPitch = pitch; this.bodyRoll = roll;}
+    if (snap) {this.bodyY = y; this.bodyPitch = pitch; this.bodyRoll = roll;}
     else {
-      this.bodyY = damp(this.bodyY, targetY, 9, dt);
-      this.bodyPitch = damp(this.bodyPitch, pitch, 7, dt);
-      this.bodyRoll = damp(this.bodyRoll, roll, 6, dt);
-      // the smoothing never lets the chest or hips lag down into a bank it is
-      // climbing (a low rise under them, not a wall it keeps off)
-      if (this.initialised) {
-        const sp = Math.sin(this.bodyPitch), belly = (1.05 + 0.1) * K;
-        if (c - mid < 0.03) this.bodyY = Math.max(this.bodyY, c + belly - 0.04 * sp);
-        if (p - mid < 0.03) this.bodyY = Math.max(this.bodyY, p + belly + 0.035 * sp);
+      const old = this.accepted;
+      this.bodyY = damp(this.bodyY, y, 8, dt);
+      this.bodyPitch = damp(this.bodyPitch, pitch, 7, dt); this.bodyRoll = damp(this.bodyRoll, roll, 6, dt);
+      if (old) {
+        this.bodyY = clamp(this.bodyY, old.y - .085 * dt, old.y + .085 * dt);
+        this.bodyPitch = clamp(this.bodyPitch, old.pitch - .9 * dt, old.pitch + .9 * dt);
+        this.bodyRoll = clamp(this.bodyRoll, old.roll - .65 * dt, old.roll + .65 * dt);
       }
     }
-    const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(this.bodyRoll, I.heading, this.bodyPitch, 'YZX'));
-    // a lunge throws the whole body forward on its planted feet, as a real dragon
-    // strikes; the short, thick neck itself barely lengthens (see solveSpine)
-    const thrust = I.lunge * 1.6 * K;
-    this.body.compose(new THREE.Vector3(I.x + fwd.x * thrust, this.bodyY - this.spineBindYAt(this.rootX) * K, I.z + fwd.z * thrust), q, new THREE.Vector3(1, 1, 1));
-    this.bodyFwd.set(1, 0, 0).applyQuaternion(q);
-    this.bodyUp.set(0, 1, 0).applyQuaternion(q);
-    this.bodyRight.set(0, 0, 1).applyQuaternion(q);
+    this.composeBody();
+  }
+
+  private fitBodyHeight(dt: number) {
+    let lo = -Infinity, hi = Infinity;
+    for (const leg of this.legs) {
+      const s = this.shoulder(leg), w = (leg.swing ? leg.to.clone() : leg.planted.clone()).addScaledVector(leg.swing ? leg.toNormal : leg.normal, (.12 + leg.wristAbove) * K);
+      const horizontal = (s.x - w.x) ** 2 + (s.z - w.z) ** 2;
+      const reach = leg.reach * .94;
+      if (horizontal >= reach * reach) continue;
+      const dy = Math.sqrt(reach * reach - horizontal), offset = s.y - this.bodyY;
+      lo = Math.max(lo, w.y - dy - offset); hi = Math.min(hi, w.y + dy - offset);
+    }
+    if (lo <= hi) {
+      const y = clamp(this.bodyY, lo, hi), old = this.accepted;
+      this.bodyY = old ? clamp(y, old.y - .085 * dt, old.y + .085 * dt) : y;
+      this.composeBody(); this.solveSpine(0);
+    }
   }
 
   private spineBindYAt(x: number) {
@@ -470,6 +540,10 @@ export class LizardRig {
     this.time += dt;
     const I = this.inputs;
     const speedCm = Math.abs(I.speed) / K;
+    const heights = this.legs.map(l => l.planted.y);
+    const kindHere = this.ground.kindAt?.(I.x, I.z);
+    this.climbing = kindHere === 1 || kindHere === 2 || (!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&this.ground.heightAt(I.x,I.z)<.12) || Math.max(...heights) - Math.min(...heights) > .009
+      || Math.abs(this.ground.heightAt(I.x + Math.cos(I.heading) * .06, I.z - Math.sin(I.heading) * .06) - this.ground.heightAt(I.x, I.z)) > .008;
     this.moving = speedCm > 0.45 || Math.abs(I.turnRate) > 0.12;
     this.sprint = damp(this.sprint, smooth(clamp((speedCm - 12) / 14, 0, 1)), 6, dt);
     this.walkExtension = damp(this.walkExtension, this.moving ? 1 : 0, 5, dt);
@@ -488,29 +562,16 @@ export class LizardRig {
     const frontDuty = 0.77 - 0.14 * pace + extraSupport;
     const hindDuty = 0.83 - 0.09 * pace + extraSupport;
     if (this.moving) this.phase = (this.phase + dt * freq) % 1;
-    // The glass is solid: if the head or chest reached it last frame (a look out
-    // of the front, a turn by the side), the body is nudged back off it.
-    if (this.initialised) {
-      for (const [p, r] of [[this.snout, 0.006], [this.spinePos[1], 0.014], [this.spinePos[2], 0.018]] as [THREE.Vector3, number][]) {
-        const q = insideGlass(p.clone(), r);
-        I.x += q.x - p.x;
-        I.z += q.z - p.z;
-      }
-      // Stone is solid as well: a flank that has strayed over a tall rock beside
-      // it is eased back off (the log, which it can climb, is left to lift it,
-      // except its tall root end).
-      const fwd = tmpV.set(Math.cos(I.heading), 0, -Math.sin(I.heading));
-      const right = tmpV2.set(-fwd.z, 0, fwd.x);
-      const mid = this.ground.heightAt(I.x, I.z);
-      for (const a of [0.035, 0, -0.035]) for (const sd of [-0.022, 0.022]) {
-        const sx = I.x + fwd.x * a + right.x * sd, sz = I.z + fwd.z * a + right.z * sd;
-        const rise = this.ground.heightAt(sx, sz) - mid;
-        if (rise > 0.085 && (rise > 0.14 || this.ground.kindAt?.(sx, sz) !== WOOD)) {
-          const k = Math.sign(sd) * 0.1 * Math.min(1, dt * 30);
-          I.x -= right.x * k * 0.035;
-          I.z -= right.z * k * 0.035;
-        }
-      }
+    if (this.accepted) {
+      const dx = I.x - this.accepted.x, dz = I.z - this.accepted.z, distance = Math.hypot(dx, dz);
+      const placingFoot = this.climbing && this.legs.some(l => l.swing);
+      // Three planted feet can support a small weight shift while the fourth
+      // clears a riser. Freezing the torso here can trap a descending hind shin
+      // against the edge even though a few millimetres forward would clear it.
+      const maximum = (placingFoot ? .022 : this.climbing ? .045 : .36) * dt;
+      if (distance > maximum) {I.x = this.accepted.x + dx * maximum / distance; I.z = this.accepted.z + dz * maximum / distance;}
+      const turn = placingFoot ? .3 : this.climbing ? .8 : 2.2;
+      I.heading = this.accepted.heading + clamp(wrapAngle(I.heading - this.accepted.heading), -turn * dt, turn * dt);
     }
     this.computeBodyFrame(dt);
 
@@ -522,8 +583,10 @@ export class LizardRig {
 
     this.updateHead(dt);
     this.solveSpine(dt);
-    this.updateTail(dt, speedCm);
+    this.fitBodyHeight(dt);
+    this.supportPose();
     this.updateLegs(dt, freq, frontDuty, hindDuty);
+    this.updateTail(dt, speedCm);
     this.updateFace(dt);
     this.commit();
   }
@@ -626,10 +689,10 @@ export class LizardRig {
       const p = this.spinePos[k];
       const need = this.ground.heightAt(p.x, p.z) + (k === 0 ? 0.75 : 0.95) * K;
       const lift = need - p.y;
-      if (lift > 0) {
+      if (lift > 0 && dt > 0) {
         this.headLift[k] = Math.max(this.headLift[k], lift);
       }
-      this.headLift[k] = Math.max(0, this.headLift[k] - 0.02 * K);
+      this.headLift[k] = Math.max(0, this.headLift[k] - 1.2 * K * dt);
       p.y += this.headLift[k];
       if (k === 1) this.spinePos[0].y += this.headLift[1];
     }
@@ -647,20 +710,6 @@ export class LizardRig {
       this.spinePos[0].add(keepLen(this.spinePos[1], this.spinePos[2], len12));
       keepLen(this.spinePos[0], this.spinePos[1], len01);
     }
-    // Last of all, the trunk never sinks into what it lies across: pitched steeply
-    // down off the log (to the dish, say) the hips can come lower than the floor
-    // under the root allows for, so the whole body is lifted to keep every
-    // vertebra's belly on top of the wood or stone under it.
-    let sink = 0;
-    for (const k of [2, 3, 4, 5]) {
-      const p = this.spinePos[k];
-      sink = Math.max(sink, this.ground.heightAt(p.x, p.z) + 1.05 * K - p.y);
-    }
-    if (sink > 0) {
-      for (const p of this.spinePos) p.y += sink;
-      this.bodyY += sink;
-      this.body.elements[13] += sink;
-    }
     // Frames from neighbouring joints (tangent toward the head).
     const snoutLocal = new THREE.Vector3(12.68 - this.spineBindX[0], 2.44 - this.spineBindY[0], 0);
     for (let k = 0; k < 6; k++) {
@@ -676,7 +725,9 @@ export class LizardRig {
         this.headForward.copy(t.normalize());
         continue;
       }
-      ahead = k > 0 ? this.spinePos[k - 1] : this.spinePos[k];
+      // Looking up or lifting the head over a rim cannot rotate the shoulder
+      // girdle and pull the forefeet out of their accepted support pose.
+      ahead = k === 2 ? this.spinePos[2] : k > 0 ? this.spinePos[k - 1] : this.spinePos[k];
       // The pelvis belongs to the trunk. Tail contact must not rotate the hips
       // and feed an alternating correction back through the hind-leg IK.
       behind = k < 5 ? this.spinePos[k + 1] : this.spinePos[k];
@@ -692,78 +743,113 @@ export class LizardRig {
     this.tailDynamics.update(dt, pelvis, back, this.inputs.tailTwitch);
   }
   private updateLegs(dt: number, freq: number, frontDuty: number, hindDuty: number) {
-    const I = this.inputs;
-    const home = new THREE.Vector3();
-    for (const leg of this.legs) {
-      const duty = leg.front ? frontDuty : hindDuty;
-      const swingDur = (1 - duty) / freq;
-      const stanceDur = duty / freq;
-      const ph = (this.phase + leg.offset) % 1;
+    const I = this.inputs, home = new THREE.Vector3();
+    const need=(leg:Leg)=>{
+      const wrist=leg.planted.clone().addScaledVector(leg.normal,(.12+leg.wristAbove)*K);
+      const ratio=this.shoulder(leg).distanceTo(wrist)/leg.reach;
+      return Math.max(ratio,1.25-ratio)+Math.abs(wrapAngle(this.footYaw(leg)-leg.plantedYaw))*.3;
+    };
+    // Transfer the support that most limits the next body motion. A fixed
+    // front-to-back order can repeatedly move the front feet and starve a hind step.
+    const order=this.climbing ? [...this.legs].sort((a,b)=>Number(b.swing)-Number(a.swing)||need(b)-need(a)) : this.legs;
+    for (const leg of order) {
+      const duty = leg.front ? frontDuty : hindDuty, ph = (this.phase + leg.offset) % 1;
+      leg.avoiding=false;
       if (leg.swing) {
-        leg.swingT += dt / leg.swingDur;
-        // keep re-aiming at the predicted landing spot
-        const remaining = Math.max(0, 1 - leg.swingT) * leg.swingDur;
-        this.homeWorld(leg, home, (I.speed * stanceDur * 0.5 + I.speed * remaining));
-        leg.to.lerp(home, clamp(dt * 20, 0, 1));
-        leg.toYaw = I.heading + I.turnRate * remaining;
+        const previous=leg.swingT,next=Math.min(1,previous+dt/leg.swingDur);
+        leg.swingT=next;
+        if(this.collision && leg.bendDirection.lengthSq()>.5){
+          const depth=(t:number)=>{const p=this.transferPose(leg,t);return this.limbObstruction(leg,p.S,p.W,p.plane);};
+          const allowed=Math.max(.0008,depth(previous)+.00002);
+          if(depth(next)>allowed){
+            let lo=previous,hi=next;
+            for(let pass=0;pass<6;pass++){const mid=(lo+hi)/2;if(depth(mid)<=allowed)lo=mid;else hi=mid;}
+            leg.swingT=lo;leg.avoiding=true;
+            const ahead=this.transferPose(leg,next),now=this.transferPose(leg,lo);
+            const prepared=this.clearLimbPlane(leg,ahead.S,ahead.W,ahead.plane)
+              .applyQuaternion(new THREE.Quaternion().setFromUnitVectors(ahead.direction,now.direction));
+            if(this.limbObstruction(leg,now.S,now.W,prepared)<=allowed){leg.bendDirection.copy(prepared);leg.wristDirection.copy(now.direction);}
+          }
+          leg.swingStall=leg.swingT-previous<dt/leg.swingDur*.1 ? leg.swingStall+dt : 0;
+          if(leg.swingStall>.65){
+            // Put a blocked transfer down safely, then let another leg change
+            // the support pose. Never leave a paw hanging indefinitely.
+            const current=this.footPosition(leg),hold=this.footholds.find(leg.planted,this.shoulder(leg),leg.reach,I.heading,leg.side,undefined,leg.footprint,leg.plantedYaw,Infinity,leg.plantedYaw);
+            if(hold){leg.fromNormal.lerp(leg.toNormal,smooth(leg.swingT)).normalize();leg.from.copy(current);leg.to.copy(hold.point);leg.toNormal.copy(hold.normal);leg.stepTop=hold.top;leg.fromYaw=leg.fromYaw+wrapAngle(leg.toYaw-leg.fromYaw)*smooth(leg.swingT);leg.toYaw=leg.plantedYaw;leg.swingT=0;leg.swingDur=.3;leg.returning=true;}
+            leg.swingStall=0;
+          }
+        }
         if (leg.swingT >= 1) {
-          leg.swing = false;
-          leg.planted.copy(leg.to);
-          // set down on what is under it, unless that is out of reach: then it hangs
-          // where homeWorld held it, against the side of the perch
-          const support = this.footSupport(leg.to.x, leg.to.z);
-          leg.planted.y = Math.max(support.y, leg.to.y);
-          leg.plantedYaw = leg.toYaw;
-          leg.normal.copy(support.normal);
+          const wrist = leg.to.clone().addScaledVector(leg.toNormal, (.12 + leg.wristAbove) * K);
+          if (this.shoulder(leg).distanceTo(wrist) > leg.reach * .955) {
+            // A turn or a blocked advance can invalidate a predicted landing.
+            // Retarget from the current foot pose; never declare an airborne foot planted.
+            const current = this.footPosition(leg, .98);
+            if(this.time < leg.nextPlanTime){leg.swingT=.98;continue;}
+            leg.nextPlanTime=this.time+.12;
+            const hold = this.footholds.find(leg.to, this.shoulder(leg), leg.reach, I.heading, leg.side, undefined, leg.footprint,leg.toYaw,Infinity,leg.toYaw);
+            if (hold) {
+              leg.fromNormal.lerp(leg.toNormal,smooth(leg.swingT)).normalize();
+              leg.from.copy(current); leg.to.copy(hold.point); leg.toNormal.copy(hold.normal);
+              leg.stepTop = hold.top; leg.swingT = 0; leg.swingDur = .24; leg.fromYaw = leg.toYaw;
+            } else leg.swingT = .98;
+            leg.lastPhase = ph; continue;
+          }
+          leg.swing = false; leg.planted.copy(leg.to); leg.plantedYaw = leg.toYaw;
+          if(leg.returning){leg.nextPlanTime=this.time+1;leg.returning=false;}
+          leg.normal.copy(leg.toNormal); leg.heel = 0;
           this.onFootDown?.(leg.planted, leg.front);
         }
       } else {
         this.homeWorld(leg, home);
-        const homeInAir = this.homeHangs;
-        // (in 3-D: a foot left on the floor as the body climbs onto the log must
-        // follow it up; a hanging foot is dealt with separately below)
-        const drift = home.distanceTo(leg.planted);
-        const yawErr = Math.abs(wrapAngle(I.heading - leg.plantedYaw));
-        // A foot with nothing under it (over the side of the log) stays hanging,
-        // gripping the flank, instead of pawing the air: it steps again only when
-        // there is something to step onto, or when the body has left it far behind.
-        const hangs = this.homeHangs && leg.planted.y - this.footSupport(leg.planted.x, leg.planted.z).y > 0.008;
-        if (hangs) {
-          // touching nothing, it is simply carried along with the body
-          const k = 1 - Math.exp(-dt * 10);
-          leg.planted.lerp(home, k);
-          leg.plantedYaw += wrapAngle(I.heading - leg.plantedYaw) * k;
-          leg.lastPhase = ph;
-          leg.heel = damp(leg.heel, 0.25, 8, dt);
-          continue;
-        }
-        if (!this.moving) leg.stepDue = false;
+        const footYaw=this.footYaw(leg);
+        const drift = home.distanceTo(leg.planted), yawErr = Math.abs(wrapAngle(footYaw - leg.plantedYaw));
+        const wrist = leg.planted.clone().addScaledVector(leg.normal, (.12 + leg.wristAbove) * K);
+        const extension=this.shoulder(leg).distanceTo(wrist)/leg.reach;
+        const strained = extension > (this.climbing ? .90 : .955) || extension<.40 || yawErr > (this.climbing ? .32 : .65);
+        if (!this.moving || this.climbing) leg.stepDue = false;
         else if (ph >= duty && leg.lastPhase < duty) leg.stepDue = true;
-        const strained = drift > leg.reach * 0.55 || yawErr > 0.9;
-        // When standing still, tidy up feet that are badly out of place one at a time.
-        // (but not just to lift a foot off solid footing and hang it over an edge)
-        const settle = !this.moving && (drift > 0.012 || yawErr > 0.35) && (!homeInAir || drift > 0.035) && !this.legs.some((l) => l.swing);
-        const freeSupports = this.legs.filter(l => !l.swing).length;
-        // Correction steps retain at least two supports; no three-foot air shuffle.
-        if ((leg.stepDue || strained || settle) && freeSupports > 2) {
-          // A phase crossing can occur between rendered frames. Include that
-          // fraction so 60 Hz rendering doesn't add a frame to every swing.
-          const elapsed = leg.stepDue && ph >= duty ? clamp((ph - duty) / (1 - duty), 0, 0.3) : 0;
-          leg.stepDue = false;
-          leg.swing = true;
-          leg.swingT = elapsed;
-          leg.swingDur = this.moving ? swingDur : 0.16;
-          leg.from.copy(leg.planted);
-          leg.fromYaw = leg.plantedYaw;
-          this.homeWorld(leg, leg.to, this.moving ? I.speed * (stanceDur * 0.5 + swingDur * (1 - elapsed)) : 0);
-          leg.toYaw = I.heading;
-          leg.stepTop = this.stepObstacle(leg);
+        const settle = !this.moving && (drift > .016 || yawErr > .35) && !this.legs.some(l => l.swing);
+        const free = this.legs.filter(l => !l.swing).length;
+        if ((leg.stepDue || strained || settle || (this.blocked && this.moving && this.climbing)) && free >= (this.climbing ? 4 : 3) && this.time >= leg.nextPlanTime) {
+          leg.nextPlanTime=this.time+.12;
+          const swingDur = (1 - duty) / freq;
+          const ahead = this.moving ? this.climbing ? Math.sign(I.speed || 1) * .012 : clamp(I.speed * (duty / freq * .5 + swingDur),-.07,.07) : 0;
+          this.homeWorld(leg, home, ahead);
+          const predicted = this.shoulder(leg);
+          // Walking beside a ledge is different from climbing toward it. Keep
+          // the lateral feet on the sand when the trunk's route remains level.
+          const floor=this.ground.heightAt(I.x,I.z),forward=this.ground.heightAt(I.x+Math.cos(I.heading)*.09,I.z-Math.sin(I.heading)*.09);
+          const maximumHeight=floor<.12 && forward<floor+.025 ? floor+.025 : Infinity;
+          const hold = this.footholds.find(home, predicted, leg.reach, I.heading, leg.side, leg.planted, leg.footprint,leg.plantedYaw,maximumHeight,footYaw,h=>{
+            if(!this.collision||leg.bendDirection.lengthSq()<.5)return true;
+            const W=h.point.clone().addScaledVector(h.normal,(.12+leg.wristAbove)*K),direction=W.clone().sub(predicted).normalize(),plane=leg.bendDirection.clone();
+            if(leg.wristDirection.lengthSq()>.5)plane.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection,direction));
+            plane.addScaledVector(direction,-plane.dot(direction)).normalize();
+            // A clear sole is insufficient when the shin or elbow would be
+            // buried at touchdown. Leave this support planted and try another
+            // patch (or another leg) before beginning that impossible transfer.
+            return this.limbObstruction(leg,predicted,W,plane)<.0015;
+          });
+          if (hold && (hold.point.distanceTo(leg.planted) > (this.climbing ? .009 : .004) || yawErr > .2)) {
+            const climbing = Math.abs(hold.point.y - leg.planted.y) > .008 || hold.top > Math.min(hold.point.y, leg.planted.y) + .008;
+            if (!climbing || free >= 3) {
+              const elapsed = leg.stepDue && ph >= duty ? clamp((ph - duty) / (1 - duty), 0, .15) : 0;
+              leg.swing = true; leg.swingT = climbing ? 0 : elapsed; leg.stepDue = false;
+              leg.swingStall=0;
+              leg.returning=false;
+              leg.swingDur = climbing ? Math.max(.32, swingDur) : this.moving ? swingDur : .22;
+              leg.from.copy(leg.planted); leg.to.copy(hold.point); leg.fromYaw = leg.plantedYaw;
+              leg.fromNormal.copy(leg.normal);
+              leg.toYaw = footYaw; leg.toNormal.copy(hold.normal); leg.stepTop = hold.top;
+              leg.heel = 0;
+            }
+          }
         }
       }
       leg.lastPhase = ph;
-      // Heel peel during the last fifth of stance.
-      const peel = this.moving && !leg.swing ? smooth(clamp((ph - (duty - 0.18)) / 0.18, 0, 1)) : 0;
-      leg.heel = damp(leg.heel, leg.swing ? 0.35 : peel, 20, dt);
+      // A fixed sole in stance; toes articulate only after lift-off.
+      leg.heel = 0;
     }
   }
 
@@ -862,6 +948,101 @@ export class LizardRig {
     this.hasPose = true;
   }
 
+  private footPosition(leg: Leg, phase = leg.swingT) {
+    if (!leg.swing) return leg.planted.clone();
+    const climbing = Math.abs(leg.to.y - leg.from.y) > .008 || leg.stepTop > Math.min(leg.to.y, leg.from.y) + .008;
+    const t = smooth(climbing ? clamp((phase - .28) / .44, 0, 1) : phase);
+    const foot = leg.from.clone().lerp(leg.to, t);
+    if (climbing) {
+      const peak = Math.max(leg.stepTop, leg.from.y, leg.to.y) + .012;
+      foot.y = phase < .28 ? THREE.MathUtils.lerp(leg.from.y, peak, smooth(phase / .28))
+        : phase > .72 ? THREE.MathUtils.lerp(peak, leg.to.y, smooth((phase - .72) / .28)) : peak;
+    } else foot.y += Math.sin(Math.PI * phase) ** 2 * leg.liftScale * K;
+    // A turning paw sweeps a wider arc than either endpoint. Keep the complete
+    // toe fan inside the glass throughout the transfer, not only at touchdown.
+    const yaw=leg.fromYaw+wrapAngle(leg.toYaw-leg.fromYaw)*smooth(phase),c=Math.cos(yaw),s=Math.sin(yaw);
+    let minX=0,maxX=0,minZ=0,maxZ=0;
+    for(const p of leg.footprint){const x=c*p.x+s*p.z,z=-s*p.x+c*p.z;minX=Math.min(minX,x);maxX=Math.max(maxX,x);minZ=Math.min(minZ,z);maxZ=Math.max(maxZ,z);}
+    foot.x=clamp(foot.x,-TANK.w/2+.014-minX,TANK.w/2-.014-maxX);
+    foot.z=clamp(foot.z,-TANK.d/2+.014-minZ,TANK.d/2-.014-maxZ);
+    return foot;
+  }
+
+  private limbObstruction(leg:Leg,S:THREE.Vector3,W:THREE.Vector3,plane:THREE.Vector3){
+    if(!this.collision)return 0;
+    const direction=W.clone().sub(S),dist=direction.length();direction.normalize();
+    const a=leg.data.upperLength*K,b=leg.data.lowerLength*K;
+    const x=(a*a-b*b+dist*dist)/(2*Math.max(dist,.0001)),y=Math.sqrt(Math.max(0,a*a-x*x));
+    const E=S.clone().addScaledVector(direction,x).addScaledVector(plane,y);
+    let broad=0;
+    for(const [from,to,r0,r1] of [[S,E,leg.front?.016:.020,leg.front?.014:.018],[E,W,leg.front?.011:.012,.006]] as [THREE.Vector3,THREE.Vector3,number,number][]){
+      for(const t of [0,.25,.5,.75,1]){
+        const p=from.clone().lerp(to,t),q=p.clone();
+        this.collision.projectPoint(p,q,THREE.MathUtils.lerp(r0,r1,t),new THREE.Vector3());broad=Math.max(broad,p.distanceTo(q));
+      }
+    }
+    if(broad===0)return 0;
+    // Capsules are only a broad phase: their empty corners must not trap a
+    // perfectly clear bent leg. Test an envelope sampled from the actual sculpt.
+    const Z=new THREE.Vector3().crossVectors(plane,direction).normalize();
+    let depth=0;
+    // The skinned shoulder/hip blend extends behind the upper-bone origin.
+    // Cover that rounded joint separately from the rigid limb envelope.
+    const joint=S.clone().addScaledVector(E.clone().sub(S).normalize(),-.005),jointOut=joint.clone();
+    this.collision.projectPoint(joint,jointOut,leg.front?.0135:.0165,new THREE.Vector3());
+    depth=Math.max(depth,joint.distanceTo(jointOut));
+    for(let part=0;part<2;part++){
+      const origin=part?E:S,X=(part?W.clone().sub(E):E.clone().sub(S)).normalize(),Y=new THREE.Vector3().crossVectors(Z,X).normalize();
+      for(const local of leg.limbSkin[part]){
+        const p=origin.clone().addScaledVector(X,local.x).addScaledVector(Y,local.y).addScaledVector(Z,local.z),q=p.clone();
+        this.collision.projectPoint(p,q,.0015,new THREE.Vector3());depth=Math.max(depth,p.distanceTo(q));
+      }
+    }
+    return depth;
+  }
+
+  private transferPose(leg:Leg,phase:number){
+    const S=this.shoulder(leg),normal=leg.fromNormal.clone().lerp(leg.toNormal,smooth(phase)).normalize();
+    const W=this.footPosition(leg,phase).addScaledVector(normal,(.12+leg.wristAbove)*K);
+    const delta=W.clone().sub(S),a=leg.data.upperLength*K,b=leg.data.lowerLength*K;
+    const distance=delta.length();
+    if(distance>0)W.copy(S).addScaledVector(delta.divideScalar(distance),clamp(distance,Math.abs(a-b)+.0001,(a+b)*.999));
+    const direction=W.clone().sub(S).normalize(),plane=leg.bendDirection.clone();
+    if(leg.wristDirection.lengthSq()>.5)plane.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection,direction));
+    plane.addScaledVector(direction,-plane.dot(direction)).normalize();
+    return {S,W,direction,plane};
+  }
+
+  private clearLimbPlane(leg: Leg, S: THREE.Vector3, W: THREE.Vector3, plane: THREE.Vector3) {
+    if (!this.collision) return plane;
+    const direction = W.clone().sub(S), dist = direction.length(); direction.normalize();
+    const a = leg.data.upperLength * K, b = leg.data.lowerLength * K;
+    const x = (a*a-b*b+dist*dist)/(2*Math.max(dist,.0001)), y = Math.sqrt(Math.max(0,a*a-x*x));
+    const knee = (p:THREE.Vector3)=>S.clone().addScaledVector(direction,x).addScaledVector(p,y);
+    const penetration = (p:THREE.Vector3)=>this.limbObstruction(leg,S,W,p);
+    let score=penetration(plane);
+    if(leg.bendDirection.lengthSq()>.5 && leg.wristDirection.lengthSq()>.5){
+      const previous=leg.bendDirection.clone().applyQuaternion(new THREE.Quaternion().setFromUnitVectors(leg.wristDirection,direction));
+      previous.addScaledVector(direction,-previous.dot(direction)).normalize();
+      const depth=penetration(previous);
+      if(depth<score-.00005){plane.copy(previous);score=depth;}
+    }
+    let best=plane.clone(), angle=0;
+    if(score<.001) return plane;
+    for(const turn of [.2,-.2,.45,-.45,.75,-.75,1.05,-1.05,1.4,-1.4]) {
+      const p=plane.clone().applyAxisAngle(direction,turn),E=knee(p),upper=E.clone().sub(S);
+      if(upper.dot(this.bodyRight)*leg.side<.001 || (leg.front && upper.dot(this.bodyUp)>.011))continue;
+      const s=penetration(p)+Math.abs(turn)*.0003;
+      if(s<score){score=s;best=p;angle=turn;}
+    }
+    // Contact can change the elbow plane, but cannot snap it around the wrist axis.
+    if(angle){
+      const next=plane.clone().applyAxisAngle(direction,clamp(angle,-3*this.poseDt,3*this.poseDt));
+      return penetration(next)<=penetration(plane)+.00002 ? next : plane;
+    }
+    return best;
+  }
+
   private solveLeg(leg: Leg) {
     const I = this.inputs;
     const model = this.model;
@@ -874,29 +1055,14 @@ export class LizardRig {
     const S = new THREE.Vector3(d.root[0] - gOrigin[0], d.root[1] - gOrigin[1], d.root[2] - gOrigin[2]);
     S.applyMatrix4(g);
     // Foot: planted or swinging.
-    const foot = new THREE.Vector3();
+    const foot = this.footPosition(leg);
     let yaw: number;
-    const normal = leg.normal.clone();
-    let lift = 0;
+    const normal = (leg.swing ? leg.fromNormal : leg.normal).clone();
     if (leg.swing) {
       const phase = clamp(leg.swingT, 0, 1);
-      const climbing = Math.abs(leg.to.y - leg.from.y) > .008 || leg.stepTop > Math.min(leg.to.y, leg.from.y) + .008;
-      const t = smooth(climbing ? clamp((phase - .16) / .68, 0, 1) : phase);
-      foot.lerpVectors(leg.from, leg.to, t);
-      const gy = this.footSupport(foot.x, foot.z).y;
-      lift = Math.sin(Math.PI * phase) * leg.liftScale * K * (this.moving ? 1 : 0.6);
-      if (climbing) {
-        // Lift clear before advancing over a riser; lower onto the new foothold.
-        const peak = Math.max(leg.stepTop, leg.from.y, leg.to.y) + leg.liftScale * K;
-        foot.y = phase < .42 ? THREE.MathUtils.lerp(leg.from.y, peak, smooth(phase / .42))
-          : THREE.MathUtils.lerp(peak, leg.to.y, smooth((phase - .42) / .58));
-        foot.y = Math.max(gy + .0005, foot.y);
-      } else foot.y = Math.max(gy, leg.from.y + (leg.to.y - leg.from.y) * t) + lift;
-      yaw = leg.fromYaw + wrapAngle(leg.toYaw - leg.fromYaw) * t;
-      normal.lerp(this.footSupport(leg.to.x, leg.to.z).normal, smooth(phase));
-      normal.lerp(UP, Math.sin(Math.PI * phase) * .35).normalize();
+      yaw = leg.fromYaw + wrapAngle(leg.toYaw - leg.fromYaw) * smooth(phase);
+      normal.lerp(leg.toNormal, smooth(phase)).normalize();
     } else {
-      foot.copy(leg.planted);
       yaw = leg.plantedYaw;
     }
     // Arm wave: the left front limb lifts and circles slowly.
@@ -914,8 +1080,7 @@ export class LizardRig {
     // Hand frame: forward along the foot's yaw (plus its bind splay), up along the ground normal.
     const splay = Math.atan2(-d.forward[2], d.forward[0]);
     const fYaw = yaw + splay;
-    const wantedNormal = normal.clone();
-    if (leg.handNormal.lengthSq() > .5) normal.copy(leg.handNormal).lerp(wantedNormal, 1 - Math.exp(-18 * this.poseDt)).normalize();
+
     const wantedForward = new THREE.Vector3(Math.cos(fYaw), 0, -Math.sin(fYaw));
     wantedForward.addScaledVector(normal, -wantedForward.dot(normal));
     const handConfidence = smooth(clamp(wantedForward.length() / .3, 0, 1));
@@ -930,7 +1095,7 @@ export class LizardRig {
     if (wantedForward.lengthSq() > 1e-10) {
       wantedForward.normalize();
       const angle = Math.atan2(normal.dot(new THREE.Vector3().crossVectors(fwd, wantedForward)), fwd.dot(wantedForward));
-      fwd.applyAxisAngle(normal, angle * handConfidence * (1 - Math.exp(-20 * this.poseDt)));
+      fwd.applyAxisAngle(normal, angle * handConfidence);
     }
     leg.handForward.copy(fwd); leg.handNormal.copy(normal);
     let handRot = frameMatrix(fwd, normal, new THREE.Matrix4()).clone();
@@ -955,15 +1120,15 @@ export class LizardRig {
     const toW = W.clone().sub(S);
     let dist = toW.length();
     const maxR = (a + b) * 0.999, minR = Math.abs(a - b) + 1e-4;
-    if (dist > maxR || dist < minR) {
+    if ((leg.swing || waveLift > 0) && (dist > maxR || dist < minR)) {
       // Out of reach: the whole foot follows the wrist rather than stretching the skin.
       const clamped = S.clone().addScaledVector(toW.lengthSq() > 1e-12 ? toW.clone().normalize() : this.bodyUp.clone().negate(), clamp(dist, minR, maxR));
       handPos.add(clamped.clone().sub(W));
       W.copy(clamped);
-      dist = clamp(dist, minR, maxR);
+      dist = S.distanceTo(W);
       this.setBone(d.bones.hand, handPos, handRot);
     }
-    if (dist < minR) dist = minR;
+    dist = clamp(dist, minR, maxR);
     const dir = W.clone().sub(S).normalize();
     // (the elbow out and back, the knee out and forward, both held up near the level of the shoulder and hip)
     const toPole = leg.front
@@ -980,11 +1145,12 @@ export class LizardRig {
       if (perp.lengthSq() < 1e-10) perp.copy(this.bodyRight).multiplyScalar(leg.side).addScaledVector(dir, -this.bodyRight.dot(dir) * leg.side);
     }
     perp.normalize();
-    if (preferred.lengthSq() > 1e-10) {
+    if (!leg.avoiding && preferred.lengthSq() > 1e-10) {
       preferred.normalize();
       const angle = Math.atan2(dir.dot(new THREE.Vector3().crossVectors(perp, preferred)), perp.dot(preferred));
       perp.applyAxisAngle(dir, angle * confidence * (1 - Math.exp(-14 * this.poseDt)));
     }
+    perp.copy(this.clearLimbPlane(leg, S, W, perp));
     leg.bendDirection.copy(perp); leg.wristDirection.copy(dir);
     const x = (a * a - b * b + dist * dist) / (2 * dist);
     const y = Math.sqrt(Math.max(0, a * a - x * x));
@@ -1012,8 +1178,42 @@ export class LizardRig {
     const hw = this.boneWorld[d.bones.hand];
     d.bones.digits.forEach((bi, i) => {
       const rel = leg.digitRel[i];
-      const curl = leg.swing ? -0.25 : -peelAngle * 0.95;
-      const m = hw.clone().multiply(rel).multiply(tmpM.makeRotationZ(curl + (leg.swing ? 0 : 0.03 * Math.sin(this.time * 3 + i))));
+      const base = hw.clone().multiply(rel);
+      const tip = new THREE.Vector3(...d.digits[i].tip as [number,number,number]).applyMatrix4(model.bind[bi].clone().invert());
+      let curl = leg.swing ? -.25 * Math.sin(Math.PI*leg.swingT) : 0;
+      // Each toe meets the local surface separately on rounded wood and broken
+      // stone. A single palm normal cannot describe all five long, splayed toes.
+      for(let pass=0;pass<2;pass++) {
+        const m=base.clone().multiply(new THREE.Matrix4().makeRotationZ(curl));
+        let correction=0;
+        for(const t of [.4,.7,1]) {
+          const point=tip.clone().multiplyScalar(t).applyMatrix4(m);
+          const support=this.footholds.support(point.x,point.z,point.y+.018);
+          correction=Math.max(correction,Math.atan2(support.y+.0006-point.y,Math.max(.003,tip.length()*K*t)));
+        }
+        curl=clamp(curl+correction,-.3,1.0);
+      }
+      const rotation=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),curl);
+      const m = base.clone().multiply(new THREE.Matrix4().makeRotationFromQuaternion(rotation));
+      if(this.collision){
+        const inverse=base.clone().invert();
+        // Curl is enough for a rounded top, but a cave wall also needs a small
+        // sideways toe flex. Keep the toe base and its length fixed.
+        for(let pass=0;pass<3;pass++){
+          let deepest=0,target:THREE.Vector3|null=null;
+          for(const t of [.5,.75,1]){
+            const p=tip.clone().multiplyScalar(t).applyMatrix4(m),q=p.clone();
+            this.collision.projectPoint(p,q,.0012,new THREE.Vector3());
+            const depth=p.distanceTo(q);
+            if(depth>deepest+.0001){deepest=depth;target=q.applyMatrix4(inverse).normalize();}
+          }
+          if(!target || deepest<.0002)break;
+          const wanted=new THREE.Quaternion().setFromUnitVectors(tip.clone().normalize(),target);
+          if(wanted.angleTo(new THREE.Quaternion())>1.25)break;
+          rotation.rotateTowards(wanted,.35);
+          m.copy(base).multiply(new THREE.Matrix4().makeRotationFromQuaternion(rotation));
+        }
+      }
       model.bones[bi].matrix.copy(m);
       this.boneWorld[bi].copy(m);
     });

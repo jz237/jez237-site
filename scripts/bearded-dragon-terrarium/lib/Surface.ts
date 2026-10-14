@@ -32,7 +32,8 @@ export class Surface {
   readonly z0 = -TANK.d / 2 + 0.002;
   readonly cell: number;
   private ray = new THREE.Raycaster();
-  private meshes: {mesh: THREE.Mesh; kind: SurfaceKind}[];
+  private upward = new THREE.Raycaster();
+  private meshes: {mesh: THREE.Mesh; kind: SurfaceKind; box: THREE.Box3; normalMatrix: THREE.Matrix3}[];
 
   constructor(ground: THREE.Mesh, hard: {mesh: THREE.Mesh; kind: SurfaceKind}[], cell = 0.004) {
     this.cell = cell;
@@ -47,7 +48,7 @@ export class Surface {
       h.mesh.updateMatrixWorld(true);
       if (!h.mesh.geometry.boundsTree) h.mesh.geometry.computeBoundsTree();
     }
-    this.meshes = hard;
+    this.meshes = hard.map(h=>({...h,box:new THREE.Box3().setFromObject(h.mesh),normalMatrix:new THREE.Matrix3().getNormalMatrix(h.mesh.matrixWorld)}));
     (this.ray as any).firstHitOnly = true;
     const boxes = hard.map((h) => new THREE.Box3().setFromObject(h.mesh));
     const o = new THREE.Vector3(), down = new THREE.Vector3(0, -1, 0);
@@ -167,11 +168,20 @@ export class Surface {
     this.ray.set(new THREE.Vector3(x, fromY, z), new THREE.Vector3(0, -1, 0));
     this.ray.far = fromY - best + 0.001;
     for (const h of this.meshes) {
-      const hit = this.ray.intersectObject(h.mesh, false)[0];
+      if(x<h.box.min.x || x>h.box.max.x || z<h.box.min.z || z>h.box.max.z || h.box.max.y<best)continue;
+      let hit: THREE.Intersection | undefined = this.ray.intersectObject(h.mesh, false)[0];
+      // Back faces are the underside of a branch, not a surface a foot can stand
+      // on. If the query starts inside a solid, return its actual upper face so
+      // the reach/clearance checks reject the overlapping pose.
+      const outward = (candidate:THREE.Intersection)=>candidate.face!.normal.clone().applyNormalMatrix(h.normalMatrix);
+      if(hit && outward(hit).y <= .05) {
+        this.upward.set(new THREE.Vector3(x,fromY,z),new THREE.Vector3(0,1,0));
+        const exit=this.upward.intersectObject(h.mesh,false)[0];
+        hit=exit && outward(exit).y>.05 ? exit : undefined;
+      }
       if (hit && hit.point.y > best) {
         best = hit.point.y;
-        out.normal.copy(hit.normal ?? hit.face!.normal).transformDirection(h.mesh.matrixWorld);
-        if (out.normal.y < 0) out.normal.negate();
+        out.normal.copy(outward(hit)).normalize();
       }
     }
     this.ray.far = Infinity;

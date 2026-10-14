@@ -1,7 +1,7 @@
 import {tileFbm} from './Textures';
 import {TANK} from './Case';
 
-export const POOL = {cx: 0.57, cz: TANK.d / 2 - 0.11, rx: 0.079, rz: 0.054};
+export const POOL = {cx: 0.64, cz: TANK.d / 2 - 0.075, rx: 0.079, rz: 0.054};
 export const WATER_LEVEL = 0.095;
 export const CAVE = {
   x: 0.475, z: -0.055, floor: 0.073, rx: 0.14, rz: 0.11, h: 0.075,
