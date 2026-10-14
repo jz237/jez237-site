@@ -88,6 +88,7 @@ import { DinoWeather } from './weather.js';
 import { Night } from './night.js';
 import { Social } from './social.js';
 import { Trails } from './trails.js';
+import { Touch } from './touch.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
@@ -502,7 +503,7 @@ class Dino {
       const p = tip(), sy = mod.waterSurface(p.x, p.z) ?? mod.ctx.terrain.height(p.x, p.z);
       const err = p.y - (sy - 0.005);
       this.drinkDip = MathUtils.clamp((this.drinkDip || 0) + err * dt * 0.9, 0, 1.2);
-    } else this.drinkDip = Math.max(0, (this.drinkDip || 0) - dt * (sipping ? 0.8 : 0.5));
+    } else if (!this._peer) this.drinkDip = Math.max(0, (this.drinkDip || 0) - dt * (sipping ? 0.8 : 0.5));
     if (this.currentName === 'drink') {
       const p = tip(), sy = mod.waterSurface(p.x, p.z);
       if (sy != null && p.y < sy + 0.03) {
@@ -567,6 +568,8 @@ class Dino {
     }
     let shut = this.state === 'sleep' ? 1 : this.state === 'shelter' ? 0.35 : this.state === 'idle' && (env.night || 0) > 0.4 ? 0.45 : 0;
     if (this.perf?.kind === 'yawn') shut = Math.max(shut, (this._yawnShut || 0) * 0.9);
+    // half-closed, being stroked
+    shut = Math.max(shut, (this._calm || 0) * 0.55);
     // eyes narrowed against a strong wind, and a little against the rain
     shut = Math.max(shut, MathUtils.smoothstep(this.windS || 0, 0.5, 1.6) * 0.5, (env.rain || 0) * (this.state === 'shelter' ? 0.1 : 0.25));
     faceEyes(this, dt, { shut });
@@ -955,8 +958,8 @@ class Dino {
       case 'turn': {
         // turn on the spot (small steps) to face the den's mouth
         let dh = Math.atan2(Math.sin(this.turnTo - this.heading), Math.cos(this.turnTo - this.heading));
-        this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 0.7);
-        this.play('walk', 0.4);
+        this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * (this.turnRate || 0.7));
+        this.play(this.turnRate > 1.5 ? 'run' : 'walk', 0.3);
         if (this.current) this.current.timeScale = 0.45;
         if (Math.abs(dh) < 0.05) {
           if (typeof this.turnThen === 'function') {
@@ -1403,7 +1406,7 @@ class Dino {
       const prev = this._stepPhase ?? p;
       for (const f of this.sp.feet) {
         const crossed = prev <= p ? prev < f && f <= p : prev < f || f <= p;
-        if (crossed) this.mod.voice.play('step', this.root.position, this.stepSize * (name === 'run' ? 1.3 : 1));
+        if (crossed) this.mod.voice.play('step', this.root.position, this.stepSize * (name === 'run' ? 1.3 : 1), this.mod.surfaceAt(this.pos.x, this.pos.z));
       }
       this._stepPhase = p;
     } else this._stepPhase = undefined;
@@ -1579,6 +1582,15 @@ class Dino {
       if (n[1]) this.turnBone(n[1], 'x', dip * 0.3);
       if (n[2]) this.turnBone(n[2], 'x', dip * 0.15);
       this.turnBone(this.headBone, 'x', -dip * 0.35);
+    }
+    // touched (touch.js): a start at a poke; leaning into a stroking hand
+    if (this._flinch > 0) this.root.position.y += Math.sin((this._flinch / 0.35) * Math.PI) * this.height * 0.06;
+    if (this._lean) {
+      const dx = this._lean.x - this.pos.x, dz = this._lean.z - this.pos.z, dd = Math.hypot(dx, dz) || 1, k = this._lean.k;
+      this.root.position.x += (dx / dd) * this.length * 0.035 * k;
+      this.root.position.z += (dz / dd) * this.length * 0.035 * k;
+      const side = Math.sign((dx / dd) * Math.cos(this.heading) - (dz / dd) * Math.sin(this.heading)) || 1;
+      this.flex.spine.forEach((b) => this.turnBone(b, 'z', -side * 0.05 * k));
     }
     // a social scene's pose (social.js); the Brachiosaurus lifting its neck clear of a calf
     if (this.socialPose && this.state === 'social') {
@@ -2344,6 +2356,7 @@ class Dinosaurs {
     this.night = new Night(this);
     this.social = new Social(this);
     this.trails = new Trails(this);
+    this.touch = new Touch(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2483,6 +2496,18 @@ class Dinosaurs {
   }
 
   // a walkable spot at the water's edge, near the animal
+  // what a foot lands on, for its sound: water, mud on the banks and in the wet, the gravel of the
+  // footpath, snow, or ordinary ground
+  surfaceAt(x, z) {
+    const T = this.ctx.terrain, g = T.height(x, z), sy = this.waterSurface(x, z);
+    if (sy != null && sy > g + 0.008) return 'water';
+    if ((this.ctx.fields?.snowAt?.(x, z) ?? 0) > 0.06) return 'snow';
+    const bank = Math.max(T.lakeMask(x + 0.2, z), T.lakeMask(x - 0.2, z), T.lakeMask(x, z + 0.2), T.lakeMask(x, z - 0.2), T.riverMask(x, z) * 1.2);
+    if (bank > 0.15 || (this.ctx.world.groundWetness || 0) > 0.65) return 'mud';
+    if (window.__jtPathAt?.(x, z, 0)) return 'gravel';
+    return 'ground';
+  }
+
   // where a herd animal lies down for the night: the first to settle lies down where it is and chooses
   // the way they all face; each of the others takes the nearest free place beside the ones already down,
   // side by side, alternately left and right (far-off stragglers just sleep where they are)
@@ -2816,6 +2841,7 @@ class Dinosaurs {
     this.lamps?.update(dt);
     this.social.update(dt);
     this.trails.update(dt);
+    this.touch.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

@@ -164,7 +164,7 @@ export class Voices {
   }
 
   // ------------------------------------------------------------------ public
-  play(kind, pos, size = 1) {
+  play(kind, pos, size = 1, surface = 'ground') {
     const e = this.engine;
     if (!e) return;
     const ac = e.ac;
@@ -257,8 +257,43 @@ export class Voices {
           s.connect(this.bp(ac, 2400 + Math.random() * 1500, 1.2)).connect(g).connect(out);
         }
         break;
-      case 'step':
-        this.thump(e, out, t0, 48 / Math.sqrt(size), Math.min(1, 0.25 * size), 0.3);
+      case 'step': // a footfall, by what it lands on; big animals deeper and heavier on all of them
+        {
+          const lv = Math.min(1, 0.25 * size), deep = 1 / Math.sqrt(size);
+          const burst = (t, len, f, q, lvl, attack = 0.004) => {
+            const s = this.noiseSrc(ac, t, t + len + 0.05);
+            const g = this.env(ac, t, attack, len * 0.25, len * 0.75, lvl);
+            s.connect(this.bp(ac, f, q)).connect(g).connect(out);
+          };
+          if (surface === 'water') {
+            // a slap and spray, and a low plop as the foot goes in
+            burst(t0, 0.28 * V.d, 1300 * V.f, 0.8, 0.7 * lv + 0.08);
+            const o = this.osc(ac, 'sine', 260 * deep * V.p, t0 + 0.02, t0 + 0.3);
+            o.frequency.exponentialRampToValueAtTime(90 * deep, t0 + 0.24);
+            o.connect(this.env(ac, t0 + 0.02, 0.006, 0.03, 0.18, 0.5 * lv + 0.05)).connect(out);
+            this.thump(e, out, t0, 40 * deep, lv * 0.5, 0.25);
+          } else if (surface === 'mud') {
+            // a soft, sucking squelch: a low wet thud, then the foot pulling free
+            this.thump(e, out, t0, 42 * deep, lv * 0.8, 0.3);
+            burst(t0 + 0.02, 0.18, 520 * V.f, 1.5, 0.45 * lv + 0.05, 0.03);
+            const o = this.osc(ac, 'sine', 180 * V.p, t0 + 0.2, t0 + 0.36);
+            o.frequency.exponentialRampToValueAtTime(320 * V.p, t0 + 0.3);
+            o.connect(this.env(ac, t0 + 0.2, 0.01, 0.02, 0.08, 0.25 * lv + 0.03)).connect(out);
+          } else if (surface === 'gravel') {
+            // stones shifting: a scatter of short, bright ticks over the thud
+            this.thump(e, out, t0, 50 * deep, lv * 0.7, 0.22);
+            for (let k = 0; k < 5 + V.n * 2; k++) burst(t0 + Math.random() * 0.09, 0.025, 2800 + Math.random() * 2600, 2.5, (0.22 + Math.random() * 0.2) * (lv + 0.1));
+          } else if (surface === 'snow') {
+            // packed snow: a muffled, squeaky crunch and hardly any thud
+            this.thump(e, out, t0, 46 * deep, lv * 0.35, 0.2);
+            burst(t0, 0.16 * V.d, 1800 * V.f, 1.1, 0.4 * lv + 0.06, 0.03);
+            burst(t0 + 0.05, 0.06, 4200, 3, 0.15 * lv + 0.03);
+          } else {
+            // ordinary ground: the thud, and the planting brushed aside
+            this.thump(e, out, t0, 48 * deep, lv, 0.3);
+            burst(t0, 0.12, 2600 * V.f, 0.9, 0.1 * lv + 0.02);
+          }
+        }
         break;
     }
   }

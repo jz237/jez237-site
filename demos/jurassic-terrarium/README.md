@@ -282,3 +282,15 @@ v1.37: every tree in hand; right-drag pans:
 v1.37.1: the view stays put:
 - **No idle drift:** Weatherglass slowly swung the camera round after 30 seconds without input. Once the view could be slid off-centre with the right button, that swing carried the whole case across the screen, and it came back every time you stopped. It's off: the view only moves when you move it.
 - **No stuck drags:** a mouse drag now ends the moment no button is held, even if the release was missed (let go outside the window, a context menu), so the view can't get stuck sliding with the mouse.
+
+v1.38: touching the animals; footsteps by surface:
+- **Touch:** with the hand, click an animal to poke it, or hold and move over it to stroke it. Animals under the hand take priority over trees. Each answers in character:
+  - Triceratops: poked, it swings round and lowers its horns with a bellow; stroked, it leans into the hand with its eyes half-closed and honks softly.
+  - A calf: poked, it starts, peeps and scampers to its mother; stroked, it leans in and peeps.
+  - Stegosaurus: poked, it turns its tail on you and swings it with a hiss.
+  - T. rex: poked, it snaps round and roars; stroked, it puts up with it for a moment, growls, then rounds on you.
+  - Brachiosaurus: it rumbles, turns and bows its long neck down to peer at the hand.
+  - Pteranodon: on a perch it takes off; in the air it croaks and beats its wings.
+
+  Hovering makes an animal glance at the hand. An animal busy with something bigger (a standoff, a hunt, drinking, a family moment) only looks round.
+- **Footsteps:** each footfall sounds like what it lands on: a splash and plop in water, a sucking squelch in mud on the banks or wet ground, crunching gravel on the footpath, packed snow, or a thud with planting brushed aside on ordinary ground. The big animals are deeper and heavier on all of them.
