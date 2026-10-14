@@ -15,6 +15,7 @@ import {foliageUniforms} from './lib/Foliage';
 import {TANK} from './lib/Case';
 import {BASK} from './lib/Ground';
 import {plantLightStrength} from './lib/DesertPlants';
+import type {PlantContact} from './lib/PlantFlex';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -33,6 +34,8 @@ export class DesertTerrarium {
   private lastTime=0;private nextReadout=0;private toastTimer=0;private home=new THREE.Vector3();private homeTarget=new THREE.Vector3(0,.32,0);private wasNight=false;private lap=0;
   private fill=new THREE.DirectionalLight(0xe3dccf,1.1);
   private ambient=new THREE.HemisphereLight(0xcbdbe9,0x63503c,.95);
+  private plantContacts: PlantContact[] = [];
+  private plantJointA = new THREE.Vector3(); private plantJointB = new THREE.Vector3(); private plantJointC = new THREE.Vector3();
   constructor() {
     const r=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',preserveDrawingBuffer:params.has('capture')});
     r.setPixelRatio(Math.min(devicePixelRatio,params.has('lite')?1:1.75));r.outputColorSpace=THREE.SRGBColorSpace;r.toneMapping=THREE.NoToneMapping;r.autoClear=false;r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFShadowMap;r.setClearColor(0x343633);this.renderer=r;
@@ -70,12 +73,32 @@ export class DesertTerrarium {
   simulate(dt:number) {
     this.time+=dt;
     if(this.dayRunning)this.hours=(this.hours+dt*.1)%24;
-    this.applyClimate(dt);this.insects.update(dt);this.brain.cameraPos.copy(this.camera.position);this.brain.update(dt);
+    this.applyClimate(dt);this.insects.update(dt);this.brain.cameraPos.copy(this.camera.position);this.brain.update(dt);this.updatePlants(dt);
     this.lap=Math.max(0,this.lap-dt*.45);this.habitat.ripple(this.lap);
     if(this.follow){const focus=this.rig.spinePoints()[2].clone().lerp(this.rig.snout,.3),before=this.controls.target.clone();this.controls.target.lerp(focus,1-Math.exp(-dt*3));this.camera.position.add(this.controls.target.clone().sub(before));const d=this.camera.position.distanceTo(this.controls.target);if(d>.42)this.camera.position.lerp(this.controls.target,1-Math.exp(-dt*1.2));}
     this.controls.update();this.camera.updateMatrixWorld();foliageUniforms.uKeyDirView.value.copy(this.habitat.warm.position).sub(this.habitat.warm.target.position).normalize().transformDirection(this.camera.matrixWorldInverse);
     foliageUniforms.uKeyColor.value.copy(this.habitat.warm.color);this.lizard.root.updateMatrixWorld(true);
     if(this.time>this.nextReadout){this.nextReadout=this.time+.5;this.updateUI();}
+  }
+  updatePlants(dt: number) {
+    let index = 0;
+    const capsule = (a: THREE.Vector3, b: THREE.Vector3, radius: number, verticalRadius = radius) => {
+      const c = this.plantContacts[index] ??= {a: new THREE.Vector3(), b: new THREE.Vector3(), radius};
+      c.a.copy(a); c.b.copy(b); c.radius = radius; c.verticalRadius = verticalRadius; index++;
+    };
+    const spine = this.rig.spinePoints();
+    capsule(this.rig.snout, spine[0], .015, .011);
+    for (let i = 0; i < spine.length - 1; i++) capsule(spine[i], spine[i + 1], [.019, .022, .030, .036, .031][i], [.011, .013, .016, .018, .018][i]);
+    for (let i = 0; i < 10; i++) capsule(i === 0 ? spine[5] : this.rig.tailPoint(i - 1), this.rig.tailPoint(i), .016 * (1 - i / 11));
+    for (const limb of this.lizard.data.limbs) {
+      this.plantJointA.setFromMatrixPosition(this.lizard.bones[limb.bones.upper].matrix);
+      this.plantJointB.setFromMatrixPosition(this.lizard.bones[limb.bones.lower].matrix);
+      this.plantJointC.setFromMatrixPosition(this.lizard.bones[limb.bones.hand].matrix);
+      capsule(this.plantJointA, this.plantJointB, .010);
+      capsule(this.plantJointB, this.plantJointC, .007);
+      capsule(this.plantJointC, this.plantJointC, .011, .003);
+    }
+    this.habitat.bendPlants(dt, this.plantContacts);
   }
   private applyClimate(dt:number) {
     const daylight=THREE.MathUtils.smoothstep(Math.sin((this.hours-6)/12*Math.PI),0,.18),night=daylight<.1;

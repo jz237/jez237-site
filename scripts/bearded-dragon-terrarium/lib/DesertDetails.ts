@@ -15,5 +15,17 @@ export function archGeometry(width:number,height:number,openingWidth:number,open
   geo.computeVertexNormals();return geo;
 }
 
+/** A closed rear wall tucked into the arch, rather than an exposed rectangular panel. */
+export function caveBackingGeometry(openingWidth: number, openingHeight: number) {
+  const shape = new THREE.Shape(), radius = openingWidth / 2 + .015, height = openingHeight + .012;
+  shape.moveTo(-radius, 0);
+  for (let i = 0; i <= 48; i++) {
+    const angle = Math.PI - i / 48 * Math.PI;
+    shape.lineTo(Math.cos(angle) * radius, Math.sin(angle) * height);
+  }
+  shape.lineTo(-radius, 0);
+  return new THREE.ExtrudeGeometry(shape, {depth: .008, steps: 1, bevelEnabled: false});
+}
+
 export {cactus, dryShrub} from './DesertPlants';
 export {driftwood} from './Driftwood';

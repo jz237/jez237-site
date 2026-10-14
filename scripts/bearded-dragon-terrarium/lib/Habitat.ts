@@ -4,9 +4,10 @@ import {TANK} from './Case';
 import {groundHeight, BASK, POOL, WATER_LEVEL} from './Ground';
 import {SurfaceKind} from './Surface';
 import {mulberry32, dataTexture, tileFbm} from './Textures';
-import {archGeometry} from './DesertDetails';
+import {archGeometry, caveBackingGeometry} from './DesertDetails';
 import {loadDriftwood} from './Driftwood';
 import {cactus, dryShrub, rosette, loadPlantReferences} from './DesertPlants';
+import {PlantFlex, plantFlexFor, type PlantContact} from './PlantFlex';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const noise = (x: number, y: number, z: number) => Math.sin(x * 37 + z * 19 + y * 63) * Math.sin(x * 71 - z * 43 + y * 97);
@@ -74,6 +75,7 @@ export class Habitat {
   readonly group = new THREE.Group();
   readonly panes = new THREE.Group();
   readonly hard: {mesh: THREE.Mesh; kind: SurfaceKind}[] = [];
+  readonly plants: PlantFlex[] = [];
   readonly obstacles = [{x:-.075,z:-.085,r:.066},{x:.018,z:-.035,r:.049},{x:.68,z:-TANK.d/2+.14,r:.050}];
   readonly ground: THREE.Mesh;
   readonly warm: THREE.SpotLight;
@@ -131,7 +133,12 @@ export class Habitat {
     // A layered warm cave and worn stone steps, matching the photograph.
     const warmArch=new THREE.Mesh(archGeometry(.42,.15,.22,.112,.24,5),rock);warmArch.position.set(-.46,.073,-.072);warmArch.castShadow=warmArch.receiveShadow=true;g.add(warmArch);this.hard.push({mesh:warmArch,kind:SurfaceKind.Rock});
     const interior=new THREE.MeshStandardMaterial({color:0x372718,roughness:1});
-    const warmBack=box(.37,.148,.022,-.46,.146,-.091,interior);this.hard.push({mesh:warmBack,kind:SurfaceKind.Rock});
+    const caveBack = (arch: THREE.Mesh, width: number, height: number) => {
+      const mesh = new THREE.Mesh(caveBackingGeometry(width, height), interior); mesh.name = 'inset-curved-cave-back';
+      mesh.position.copy(arch.position); mesh.position.z += .006; mesh.castShadow = mesh.receiveShadow = true;
+      g.add(mesh); this.hard.push({mesh, kind: SurfaceKind.Rock});
+    };
+    caveBack(warmArch, .22, .112);
     addRock(-.46,.226,.048,.253,.168,.049,3);
     addRock(-.48,.262,.025,.232,.147,.025,83);
     addRock(-.655,.108,.155,.085,.098,.045,13);
@@ -142,7 +149,7 @@ export class Habitat {
     addRock(-.060,.096,.210,.093,.063,.023,28,true,-.10);
     addRock(-.59,.191,-.096,.120,.087,.030,17);
     const coolArch=new THREE.Mesh(archGeometry(.38,.205,.218,.143,.230,41),rock);coolArch.position.set(.475,.073,-.16);coolArch.castShadow=coolArch.receiveShadow=true;g.add(coolArch);this.hard.push({mesh:coolArch,kind:SurfaceKind.Rock});
-    const coolBack=box(.34,.196,.004,.475,.171,backZ+.007,interior);this.hard.push({mesh:coolBack,kind:SurfaceKind.Rock});
+    caveBack(coolArch, .218, .143);
     addRock(.450,.269,-.045,.155,.124,.043,29);
     for(const [x,z,w,d] of [[-.46,.033,.215,.20],[.475,-.045,.205,.21]]){
       const floor=new THREE.Mesh(new THREE.PlaneGeometry(w,d),interior);floor.rotation.x=-Math.PI/2;floor.position.set(x,groundHeight(x,z)+.001,z);floor.receiveShadow=true;g.add(floor);
@@ -156,7 +163,7 @@ export class Habitat {
     for(let i=0;i<pebbleCount;i++) {const x=(rnd()-.5)*(TANK.w-.04),z=(rnd()-.5)*(TANK.d-.05),r=.0012+rnd()*.0038;mat.compose(new THREE.Vector3(x,groundHeight(x,z)+r*.28,z),q.setFromEuler(new THREE.Euler(rnd()*3,rnd()*3,rnd()*3)),new THREE.Vector3(r,r*.52,r*.8));pebble.setMatrixAt(i,mat);}
     pebble.receiveShadow=true;g.add(pebble);
     this.addRosette(-.712,backZ+.17,.128,21);this.addRosette(.696,frontZ-.14,.144,22);this.addRosette(-.015,backZ+.086,.108,23);this.addRosette(-.700,frontZ-.066,.066,24);this.addRosette(.228,frontZ-.116,.055,26);
-    g.add(dryShrub(-.728,.08,.183,61),dryShrub(-.066,backZ+.13,.174,62),dryShrub(-.244,backZ+.093,.12,63));
+    for (const shrub of [dryShrub(-.728,.08,.183,61),dryShrub(-.066,backZ+.13,.174,62),dryShrub(-.244,backZ+.093,.12,63)]) this.addSoftPlant(shrub);
     g.add(cactus(.682,backZ+.142,.278,.030,41),cactus(.741,backZ+.178,.220,.025,42),cactus(.613,backZ+.087,.181,.022,43),cactus(.649,.102,.053,.027,44,true));
 
     // Low stone water dish at the cool end, separated from the food and lamp.
@@ -194,8 +201,11 @@ export class Habitat {
   }
 
   private addRosette(x:number,z:number,size:number,seed:number) {
-    this.group.add(rosette(x,z,size,seed));
+    this.addSoftPlant(rosette(x,z,size,seed));
   }
+
+  private addSoftPlant(group: THREE.Group) {this.group.add(group); this.plants.push(plantFlexFor(group)!);}
+  bendPlants(dt: number, contacts: readonly PlantContact[]) {for (const plant of this.plants) plant.update(dt, contacts);}
 
   private async loadLog() {
     for(const mesh of await loadDriftwood()){this.group.add(mesh);this.hard.push({mesh,kind:SurfaceKind.Wood});}

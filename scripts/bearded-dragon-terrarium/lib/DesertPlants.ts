@@ -4,6 +4,7 @@ import {dataTexture, mulberry32, tileFbm, tileNoise} from './Textures';
 import {groundHeight} from './Ground';
 import {TANK} from './Case';
 import {foliageUniforms} from './Foliage';
+import {PlantFlex, bindShoot, type FlexibleShoot} from './PlantFlex';
 
 const TAU = Math.PI * 2, UP = new THREE.Vector3(0, 1, 0);
 export const plantLightStrength = {value: 0};
@@ -83,11 +84,13 @@ function joined(parts: THREE.BufferGeometry[], material: THREE.Material, group: 
   const geometry = mergeGeometries(parts)!;
   const mesh = new THREE.Mesh(geometry, material); mesh.name = name; mesh.castShadow = mesh.receiveShadow = true; group.add(mesh);
   for (const part of parts) part.dispose();
+  return mesh;
 }
 function instances(geometry: THREE.BufferGeometry, material: THREE.Material, matrices: THREE.Matrix4[], group: THREE.Group, name: string) {
   if (!matrices.length) {geometry.dispose(); return;}
   const mesh = new THREE.InstancedMesh(geometry, material, matrices.length); mesh.name = name;
   matrices.forEach((matrix, i) => mesh.setMatrixAt(i, matrix)); mesh.castShadow = mesh.receiveShadow = true; group.add(mesh);
+  return mesh;
 }
 function matrix(position: THREE.Vector3, direction: THREE.Vector3, scale: THREE.Vector3) {
   return new THREE.Matrix4().compose(position, new THREE.Quaternion().setFromUnitVectors(UP, direction.clone().normalize()), scale);
@@ -96,6 +99,7 @@ function matrix(position: THREE.Vector3, direction: THREE.Vector3, scale: THREE.
 /** Fleshy upper and lower surfaces, a closed rim, and a curved pointed blade. */
 export function rosette(x: number, z: number, size: number, seed: number) {
   const group = new THREE.Group(), random = mulberry32(seed), leaves: THREE.BufferGeometry[] = [], teeth: THREE.Matrix4[] = [];
+  const shoots: FlexibleShoot[] = [], toothShoots: number[] = [], toothWeights: number[] = [];
   group.name = 'photographic-aloe-rosette'; group.position.set(x, groundHeight(x, z), z);
   const count = size > 0.09 ? 22 : 17;
   for (let leaf = 0; leaf < count; leaf++) {
@@ -142,14 +146,18 @@ export function rosette(x: number, z: number, size: number, seed: number) {
     }
     const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); geometry.setIndex(index); geometry.computeVertexNormals(); leaves.push(geometry);
+    bindShoot(geometry, leaf, i => geometry.getAttribute('uv').getY(i));
+    shoots.push({axis: new THREE.Vector3(dz, 0, -dx), samples: Array.from({length: 15}, (_, j) => point(j / 14, 0)), maxBend: inclination + .07});
     for (let k = 0; k < 10; k++) for (const side of [-1, 1]) {
       const t = 0.14 + k * 0.075, base = point(t, side), direction = new THREE.Vector3(-dz * side, 0.30, dx * side).normalize();
       const length = size * (0.010 + random() * 0.004) * (1 - t * 0.4);
       teeth.push(matrix(base.addScaledVector(direction, length * 0.45), direction, new THREE.Vector3(1, length, 1)));
+      toothShoots.push(leaf); toothWeights.push(t);
     }
   }
   joined(leaves, mats().aloe, group, 'fleshy-curved-aloe-leaves');
-  instances(new THREE.ConeGeometry(size * 0.0018, 1, 5), mats().teeth, teeth, group, 'fine-aloe-margin-teeth');
+  const margins = instances(new THREE.ConeGeometry(size * 0.0018, 1, 5), mats().teeth, teeth, group, 'fine-aloe-margin-teeth')!;
+  new PlantFlex(group, shoots, [{mesh: margins, shoots: toothShoots, weights: toothWeights}]);
   return group;
 }
 
@@ -221,6 +229,7 @@ function twig(curve: THREE.CatmullRomCurve3, radius: number) {
 
 export function dryShrub(x: number, z: number, height: number, seed: number) {
   const group = new THREE.Group(), random = mulberry32(seed), stems: THREE.BufferGeometry[] = [], leaves: THREE.BufferGeometry[] = [], seeds: THREE.Matrix4[] = [];
+  const shoots: FlexibleShoot[] = [], seedShoots: number[] = [], seedWeights: number[] = [];
   group.name = 'photographic-desert-shrub'; group.position.set(x, groundHeight(x, z), z);
   const leaf = (base: THREE.Vector3, direction: THREE.Vector3, length: number, dried: boolean) => {
     const vertices: number[] = [], uv: number[] = [], colors: number[] = [], index: number[] = [], side = new THREE.Vector3().crossVectors(direction, UP).normalize();
@@ -233,22 +242,30 @@ export function dryShrub(x: number, z: number, height: number, seed: number) {
     const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3)); geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); geometry.setIndex(index); geometry.computeVertexNormals(); leaves.push(geometry);
   };
   for (let stem = 0; stem < 18; stem++) {
+    const firstStem = stems.length, firstLeaf = leaves.length;
     const angle = stem * 2.4 + random() * 0.5, h = height * (0.38 + random() * 0.62), spread = h * (0.27 + random() * 0.16);
     const curve = new THREE.CatmullRomCurve3([new THREE.Vector3((random() - 0.5) * 0.009, 0, (random() - 0.5) * 0.009), new THREE.Vector3(Math.cos(angle) * spread * 0.3, h * 0.48, Math.sin(angle) * spread * 0.3), new THREE.Vector3(Math.cos(angle) * spread, h, Math.sin(angle) * spread)]);
+    const samples = curve.getPoints(14);
     stems.push(twig(curve, 0.0008 + random() * 0.0004));
     for (let shoot = 0; shoot < 4; shoot++) {
       const t = 0.27 + shoot * 0.17, base = curve.getPoint(t), a = angle + (shoot % 2 ? 1 : -1) * (0.65 + random() * 0.7);
       const dir = new THREE.Vector3(Math.cos(a) * 0.72, 0.52 + random() * 0.4, Math.sin(a) * 0.72).normalize(), reach = height * (0.10 + random() * 0.13);
       const end = base.clone().addScaledVector(dir, reach), sideTwig = new THREE.CatmullRomCurve3([base, base.clone().lerp(end, 0.5).add(new THREE.Vector3(0, 0.003, 0)), end]);
+      samples.push(end.clone());
       stems.push(twig(sideTwig, 0.00042));
       for (let i = 0; i < 3; i++) {
         const p = sideTwig.getPoint(0.25 + i * 0.25), turn = a + (i % 2 ? 0.7 : -0.7);
         leaf(p, new THREE.Vector3(Math.cos(turn), 0.24 + random() * 0.5, Math.sin(turn)).normalize(), 0.009 + random() * 0.008, random() < 0.35);
+        const blade = leaves[leaves.length - 1].getAttribute('position');
+        samples.push(new THREE.Vector3().fromBufferAttribute(blade, blade.count - 2));
       }
-      if (random() < 0.45) for (let k = 0; k < 5; k++) {const p = end.clone().add(new THREE.Vector3((random() - 0.5) * 0.004, random() * 0.009, (random() - 0.5) * 0.004)); seeds.push(matrix(p, dir, new THREE.Vector3(0.0008, 0.0014, 0.0008)));}
+      if (random() < 0.45) for (let k = 0; k < 5; k++) {const p = end.clone().add(new THREE.Vector3((random() - 0.5) * 0.004, random() * 0.009, (random() - 0.5) * 0.004)); seeds.push(matrix(p, dir, new THREE.Vector3(0.0008, 0.0014, 0.0008))); seedShoots.push(stem); seedWeights.push(p.y / h);}
     }
+    for (const geometry of [...stems.slice(firstStem), ...leaves.slice(firstLeaf)]) bindShoot(geometry, stem, i => geometry.getAttribute('position').getY(i) / h);
+    shoots.push({axis: new THREE.Vector3(Math.sin(angle), 0, -Math.cos(angle)), samples, sampleWeights: samples.map(p => p.y / h), maxBend: Math.atan2(h, spread) + .07});
   }
   joined(stems, mats().bark, group, 'tapered-branching-dry-twigs'); joined(leaves, mats().sage, group, 'curled-silver-olive-leaves');
-  instances(new THREE.IcosahedronGeometry(1, 0), mats().seeds, seeds, group, 'papery-dry-seed-clusters');
+  const clusters = instances(new THREE.IcosahedronGeometry(1, 0), mats().seeds, seeds, group, 'papery-dry-seed-clusters')!;
+  new PlantFlex(group, shoots, [{mesh: clusters, shoots: seedShoots, weights: seedWeights}]);
   return group;
 }
