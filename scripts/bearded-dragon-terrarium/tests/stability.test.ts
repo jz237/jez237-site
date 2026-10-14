@@ -87,10 +87,11 @@ test('a hind foot approaches its landing orientation while still in flight', () 
   const lizard = model(), landingNormal = new THREE.Vector3(.6, .7, .3).normalize();
   const rig = new LizardRig(lizard, {...flat, normalAt: (_x, _z, out = new THREE.Vector3()) => out.copy(landingNormal)});
   rig.inputs.breath = 0; rig.update(1 / 60);
-  type Foot = {front: boolean; swing: boolean; swingT: number; from: THREE.Vector3; to: THREE.Vector3; planted: THREE.Vector3; normal: THREE.Vector3; fromYaw: number; toYaw: number; plantedYaw: number; stepTop: number; data: LizardData['limbs'][number]};
+  type Foot = {front: boolean; swing: boolean; swingT: number; from: THREE.Vector3; to: THREE.Vector3; planted: THREE.Vector3; normal: THREE.Vector3; toNormal: THREE.Vector3; fromYaw: number; toYaw: number; plantedYaw: number; stepTop: number; data: LizardData['limbs'][number]};
   const leg = (rig as unknown as {legs: Foot[]}).legs.find(l => !l.front)!;
   leg.from.copy(leg.planted); leg.to.copy(leg.planted); leg.stepTop = 0;
   leg.fromYaw = leg.toYaw = leg.plantedYaw; leg.normal.set(0, 1, 0);
+  leg.toNormal.copy(landingNormal);
   leg.swing = true; leg.swingT = .98;
   (rig as unknown as PoseAccess).commit();
   const flying = rotation(lizard.bones[leg.data.bones.hand].matrix);
