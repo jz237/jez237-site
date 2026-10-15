@@ -1221,3 +1221,111 @@ course sign-offs and hardware checks remain open. ROM bytes, disassembly and
 original art stay private. Default gameplay remains modern; native admission
 remains Sunny Beach time trials and two-player races. No production release
 or spending occurred. The goal remains active.
+
+## AI setup, source standings and action history — October 15, 2026
+
+Five further numeric components now close source dependencies around the
+selected-racer input producer. They remain isolated from playable admission
+until the earlier primary lap/finish logic, source geometry/context producers
+and complete action-pose lifecycle are composed.
+
+`native-ai-initialization.js` returns exact partial setup writes and the shared
+unsigned32 RNG step. It distinguishes source slot, selected avatar, physical
+profile, source setup order, rank order and human identity. All four stored
+slots receive the source's actual setup mask, including when active count is
+zero. Unwritten motion history, slow/contact flags, prior raw input and action
+phase remain retained. Unknown physical-profile words leave the turn budget
+untouched. Nested motion patches must be merged explicitly with actual prior
+state; the initializer supplies no fabricated cold/reset history or seed.
+
+The role/trait selector preserves actual two-draw consumption and its unusual
+modulo fallback, including explicit reads/writes of the adjacent slot-four
+scratch word. Repeating prepared scans reject atomically; no wrap correction
+or fifth racer is invented. The field-60 setup loop writes only the retained
+slot-three context. Setup also returns exact inverse-order stores, the
+qualifying runtime-type index prefix and camera byte masks. Those indices are
+separate from the later raw-prefix proximity scan. Camera XZ/alpha and omitted
+words remain retained. Private comparison covers **992 exact returning cases**,
+**130 matching deterministic source-repeat rejections**, **10,062 RNG words**
+and 509,950 serialized field entries. Boot memory clearing and the external
+boot seed word are recorded separately as provenance, not later setup defaults.
+
+`native-ai-context.js` selects and refreshes the actual target-table window.
+Setup state 21 or source mode 1 forces primary. Port Blue's avatar-one branch
+selects secondary except at source difficulty 2. Ordinary Twilight City keeps
+its native variant selector, five ordered open regions, retained route flag
+and late finished override; Reverse retains the record's family. Table
+overrides never overwrite the record family or persistent navigation row.
+Compiled table/window ownership and current source row validity are explicit.
+All **12,120** prepared original context/helper executions agree, including
+**96,960** window fields. No arithmetic helper is intercepted in this audit.
+
+`native-primary-standings.js` reconstructs the final ordinary primary tail's
+legal-lap/finish-plane history, selected progress row, projection distance and
+ranking metric. It consumes the earlier judge's retained row, actual lap and
+the separate primary next/previous links, with complete current displaced
+centers. Coarse region sharing preserves only the first/last matches; course 2
+uses its longer finish neighborhood. Previous-link traversal is bounded by
+the actual primary count. The Fortress alternate branch changes the segment
+reference while retaining the craft-to-selected-node delta. Signed32 prefix
+arithmetic precedes binary32 conversion; only the upper fraction is clamped.
+Finished/DQ records retain metric and distance while legal history and the
+selected row still update. All **2,638** prepared original tail executions
+agree, including actual region helpers and rounded host square root.
+
+`native-race-ranking.js` provides the separate finish reconciliation and
+ordinary sort, in source order after all ascending primary tails. Finish
+reconciliation can displace a metric through signed integer truncation and
+adjust equal finish times using old places and the selected primary human.
+The rank phase uses immediate nested strict comparisons, so equal metrics can
+change relative order after another swap. Activity, main-state, mode, phase,
+finish flag and count gates preserve inactive fields and array suffixes.
+All **1,429** prepared original-prefix/public comparisons agree. Prior timing
+and primary calls are supplied as completed inputs in that audit; persistent
+record saving and later versus finalization remain outside its scope. The
+later versus branch can overwrite the two human places without rewriting the
+order array, so their inverse relationship is only a sort-boundary guarantee.
+
+A coherent synthetic integration fixture now passes four actual primary
+metrics through one native rank phase and then the next full AI input calls.
+Source places [3,0,1,2] drive the expected role-dependent power values while
+selected human slot 2 remains independent of slot zero. It preserves the
+separate primary and AI tables/rows and explicit retained state. This verifies
+producer boundaries, not a source-initialized grid or complete race.
+
+`native-rider-action-dispatch.js` supplies the missing common-input gesture
+history tail, conditional eligible post-hull action dispatch, inversion/arc
+history, numeric actor initializers and the dive-return request. Raw and
+pre-curve axes, filtered held bits and the actual engine mask stay distinct.
+There must be one direction-history owner when it is wired into input latching.
+Short counters wrap; exact diagonal edges are not decomposed. Source action
+clearing precedes scene/alternate rejection, manipulation-three retains its
+request, and idle RNG is consumed only on its actual eligible branch. The
+private comparison passes **5,036** cases plus **2,237** conditional RNG checks
+and eight pose-dispatch argument checks. Returned actor requests and joint
+type/mode recipes are numeric consumers, not completed physical poses.
+
+Three independent reviews found no concrete defects within these contracts.
+The complete suite is **1,533/1,544 in 71.14 s** (private
+`full-tests-native-ai-context-standings-final.tap`). All **77** new tests pass;
+the eleven failure names match both preceding full runs exactly. The prior
+milestone's additional moved-center test is also included in this full run.
+All 223 module versions are regenerated in the three HTML import maps.
+
+Fresh browser imports execute prepared samples of all five new modules at
+High 1280×720. Both player windows retain the same 11.05 s contact, tick 1105,
+frame 221, C40 values and all 49,152 water heights/hash 2879715165. Their native
+HUD, coordinates, sampled heights and physical rider rendering agree. The
+child console is clear; the reloaded parent records only the favicon 404.
+The playable host is unchanged from the preceding completed Normal match.
+
+Remaining integration is concrete: the earlier ordinary primary lap/finish/
+timing and table-family effects; source setup and shared RNG scheduling;
+native camera/circle/object coordinate producers; one latched action/history
+owner; and equivalent physical targets plus post-pose completion for actors
+8/9/17/10/25. Ordinary Sunny race has no direct Stunt-tail request 1/2, but
+gesture sequences and idle selection are alternate actor triggers, so their
+absence is not a reachability proof. Unsupported actions must be implemented
+before admission. Other native modes/venues, course geometry/sign-offs, the
+eleven existing failures and hardware checks remain open. No original bytes
+or art are published, no money was spent, and production remains unchanged.
